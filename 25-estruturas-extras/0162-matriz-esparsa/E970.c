@@ -1,24 +1,21 @@
 // 0162 · Matriz esparsa
 // Exercício E970 · ★★☆
 //
-// Ache o bug. Este programa tem a sua própria versão de define (sem usar o
-// esparsa.h) e grava as vendas de 2 vendedores em 7 dias da semana. A tela
-// mostra só 2 vendas, o contador diz 5 e o AddressSanitizer acusa vazamento
-// de memória (memory leak) no fim:
+// Escreva do zero uma matriz esparsa de vendas, sem usar o esparsa.h: uma
+// lista encadeada por linha, células ordenadas por coluna, com os campos
+// col, valor e prox, e a struct Esparsa (linhas, colunas, nao_zeros e o
+// vetor de listas). Faça cria, define (insere no lugar certo ou troca o
+// valor), mostra_linha (cada valor com %3d, zeros inclusos) e libera.
+// Grave, nesta ordem, as vendas (vendedor, dia, valor) de 2 vendedores em 7
+// dias: (0,5,30) (1,4,40) (0,2,20) (1,1,12) (0,0,15). Compile com
+// -fsanitize=address: não pode haver vazamento nem acesso inválido.
 //
-//   Saída que aparece:
-//   Vendedor 0: 15  0  0  0  0  0  0
-//   Vendedor 1:  0 12  0  0  0  0  0
-//   Células: 5
-//
-//   Saída esperada (sem nenhum erro do sanitizer):
+//   Saída esperada:
 //   Vendedor 0: 15  0 20  0  0 30  0
 //   Vendedor 1:  0 12  0  0 40  0  0
 //   Células: 5
 //
-// Ache a linha errada, conserte e rode de novo.
-//
-// Escreva sua resposta abaixo (conserte o código):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,88 +30,7 @@ typedef struct {
     Celula **linha;
 } Esparsa;
 
-Esparsa *cria(int linhas, int colunas) {
-    Esparsa *m = malloc(sizeof(Esparsa));
-    if (m == NULL) {
-        exit(1);
-    }
-    m->linha = calloc(linhas, sizeof(Celula *)); // calloc: tudo NULL
-    if (m->linha == NULL) {
-        exit(1);
-    }
-    m->linhas = linhas;
-    m->colunas = colunas;
-    m->nao_zeros = 0;
-    return m;
-}
-
-// só insere ou troca (este programa nunca grava zero)
-void define(Esparsa *m, int i, int j, int valor) {
-    Celula *ant = NULL;
-    Celula *p = m->linha[i];
-    while (p != NULL && p->col < j) {
-        ant = p;
-        p = p->prox;
-    }
-    if (p != NULL && p->col == j) {
-        p->valor = valor;
-        return;
-    }
-    Celula *nova = malloc(sizeof(Celula));
-    if (nova == NULL) {
-        exit(1);
-    }
-    nova->col = j;
-    nova->valor = valor;
-    nova->prox = NULL;
-    if (ant == NULL) {
-        m->linha[i] = nova;
-    } else {
-        nova->prox = ant->prox;
-        ant->prox = nova;
-    }
-    m->nao_zeros++;
-}
-
-void mostra_linha(const Esparsa *m, int i) {
-    const Celula *p = m->linha[i];
-    for (int j = 0; j < m->colunas; j++) {
-        if (p != NULL && p->col == j) {
-            printf("%3d", p->valor);
-            p = p->prox;
-        } else {
-            printf("%3d", 0);
-        }
-    }
-    printf("\n");
-}
-
-void libera(Esparsa *m) {
-    for (int i = 0; i < m->linhas; i++) {
-        while (m->linha[i] != NULL) {
-            Celula *prox = m->linha[i]->prox;
-            free(m->linha[i]);
-            m->linha[i] = prox;
-        }
-    }
-    free(m->linha);
-    free(m);
-}
-
 int main(void) {
-    Esparsa *vendas = cria(2, 7);
-    define(vendas, 0, 5, 30);
-    define(vendas, 1, 4, 40);
-    define(vendas, 0, 2, 20);
-    define(vendas, 1, 1, 12);
-    define(vendas, 0, 0, 15);
 
-    for (int i = 0; i < vendas->linhas; i++) {
-        printf("Vendedor %d:", i);
-        mostra_linha(vendas, i);
-    }
-    printf("Células: %d\n", vendas->nao_zeros);
-
-    libera(vendas);
     return 0;
 }

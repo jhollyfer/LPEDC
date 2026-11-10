@@ -2,62 +2,47 @@
 
 # Módulo 24 · Busca de padrões em texto
 
-Ctrl+F no navegador, `grep` no terminal, o antivírus procurando a assinatura de
-um vírus, o filtro que esconde palavrões no chat, o laboratório procurando um
-trecho de DNA num genoma de 3 bilhões de letras. Tudo isso é o mesmo problema:
-achar um **padrão** de `m` letras dentro de um **texto** de `n` letras.
+Ctrl+F, `grep`, o antivírus, o filtro de palavrões do chat, o trecho de DNA
+num genoma de 3 bilhões de letras: tudo é achar um **padrão** de `m` letras
+num **texto** de `n` letras.
 
-A solução óbvia, testar cada posição, funciona, mas tem pior caso O(n·m), e
-em textos grandes isso pesa. Este módulo mostra três ideias para fazer
-melhor, cada uma com um truque que serve além de strings: **não reler** o que já foi visto (KMP),
-**pular** o que não pode dar certo (Horspool) e **comparar números** em vez de
-letras (Rabin-Karp).
-
-O módulo junta várias peças anteriores: strings e `string.h` (0041), ponteiros
-e aritmética de endereços (0047), o `size_t` e seus perigos (0003), a análise de
-custo (0072), invariantes (0073), hashing (0105) e ponteiros para função (0050).
-No fim, os quatro algoritmos viram um TAD e você monta um **mini-grep** que
-mede qual trabalha menos.
+Testar cada posição funciona, mas o pior caso é O(n·m). Este módulo traz três
+ideias melhores: **não reler** o que já foi visto (KMP), **pular** o que não
+pode dar certo (Horspool) e **comparar números** em vez de letras
+(Rabin-Karp). No fim, os quatro algoritmos viram um TAD e você monta um
+**mini-grep** que mede qual trabalha menos.
 
 ## O que você vai aprender
 
-- a **força bruta** e o `strstr`: ocorrências sobrepostas, o laço até `n - m` e
-  a armadilha do `size_t`
-- o **KMP**: bordas, a tabela π e uma busca O(n + m) que nunca volta no texto
+- a **força bruta** e o `strstr`: ocorrências sobrepostas e a armadilha do
+  `size_t`
+- o **KMP**: bordas, tabela π e busca O(n + m) sem voltar no texto
 - o **Horspool**: comparar da direita para a esquerda e saltar com uma tabela
-  de 256 posições, com o cuidado do `unsigned char`
-- o **Rabin-Karp**: hash rolante, aritmética modular em C e falsos positivos
-- a comparar algoritmos por **comparações de letra** e por tempo com `clock()`,
-  e a escolher o certo para cada texto
+  de 256 posições
+- o **Rabin-Karp**: hash rolante, aritmética modular e falsos positivos
+- a comparar algoritmos por **comparações de letra** e por `clock()`
 
 ## Antes de começar
 
-Nos diagramas da ideia, o texto é uma fileira de gavetas, uma letra em cada,
-com o padrão encostado embaixo. **Verde** é letra que bateu (ou ocorrência
-achada), **vermelha** a que falhou (ou o falso positivo), **amarela** a letra
-que decide o próximo passo, **roxa** o padrão, **azul** texto ainda não
-comparado e **cinza** o que o algoritmo não precisou olhar. Faça o passo a
-passo no papel antes de rodar.
+Usa strings (0041), ponteiros (0047), `size_t` (0003), análise de custo (0072),
+invariantes (0073), hashing (0105) e ponteiros para função (0050).
 
-Este módulo é complemento: busca de padrões não cai direto na prova do
-PPGI (o que mais cai está em `PPGI.md`, na raiz do curso).
+Nos diagramas, o texto é uma fileira de gavetas com o padrão embaixo. **Verde**
+é letra que bateu ou ocorrência achada, **vermelha** a que falhou (ou o falso
+positivo), **amarela** a que decide o próximo passo, **roxa** o padrão,
+**azul** texto ainda não comparado e **cinza** o que não precisou ser olhado.
+Faça o passo a passo no papel antes de rodar.
 
-Os exemplos dos quatro primeiros assuntos cabem cada um num arquivo só: os
-algoritmos são funções curtas, e ver a função inteira junto do `main` ajuda
-mais do que separar em `.h` e `.c`. No assunto 0161 eles viram o TAD
-`padroes.h`, que o comando do exemplo compila junto com os exemplos e exercícios da pasta.
+Este módulo é complemento: não cai direto na prova do PPGI (o que mais cai
+está em `PPGI.md`, na raiz do curso).
 
-Vários exemplos contam **comparações de letra**. A contagem não faz parte do
-algoritmo: é o "cronômetro" que mede o custo com o mesmo número em qualquer
-máquina. Tempo de relógio só aparece no A321.
-
-Os algoritmos trabalham com **bytes**. Em UTF-8, uma letra acentuada ocupa dois
-bytes acima de 127, e num `char` com sinal eles viram números negativos. Isso
-não atrapalha comparar, mas atrapalha usar a letra como índice de tabela: o
-assunto 0159 mostra o problema e o conserto.
-
-Alguns exercícios de "ache o erro" trazem o bug de propósito, e o
-AddressSanitizer (ou o UBSan) do gcc com as flags de estudo para o programa. O enunciado avisa.
+Os quatro primeiros assuntos têm um arquivo só por exemplo; no 0161 os
+algoritmos viram o TAD `padroes.h`, compilado junto com os exemplos e
+exercícios da pasta. Os exemplos contam **comparações de letra**, um custo que
+dá o mesmo número em qualquer máquina; o tempo de relógio só aparece no A321.
+Os algoritmos trabalham com **bytes**: em UTF-8, letra acentuada tem dois
+bytes acima de 127, que num `char` com sinal viram negativos e quebram o uso
+como índice de tabela (assunto 0159).
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
@@ -71,39 +56,33 @@ AddressSanitizer (ou o UBSan) do gcc com as flags de estudo para o programa. O e
 
 ## 0157 · Força bruta
 
-Você aperta Ctrl+F no PDF do contrato de aluguel e digita "multa". Em menos de
-um segundo, o leitor pinta todas as ocorrências. Por trás disso há um problema
-clássico: achar um **padrão** (a palavra procurada) dentro de um **texto**, o
-mesmo que o `grep` e o antivírus resolvem.
+Você aperta Ctrl+F no PDF do contrato de aluguel e digita "multa": o leitor
+pinta todas as ocorrências. É achar um **padrão** dentro de um **texto**, o
+problema do `grep` e do antivírus.
 
-Os nomes de sempre: o texto tem `n` letras e o padrão tem `m`, com `m <= n`. Um
-**alinhamento** é encostar o padrão no texto a partir de uma posição `i`. Se as
-`m` letras batem com `texto[i..i+m-1]`, há uma **ocorrência** em `i`.
+O texto tem `n` letras e o padrão tem `m`, com `m <= n`. Um **alinhamento**
+encosta o padrão no texto a partir de uma posição `i`. Se as `m` letras batem
+com `texto[i..i+m-1]`, há uma **ocorrência** em `i`.
 
-A **força bruta** (ou busca ingênua) testa todos os alinhamentos, um por um:
-`i = 0, 1, 2, ..., n - m`. Em cada um, compara letra a letra da esquerda para a
-direita e desiste na primeira diferença. São `n - m + 1` alinhamentos: o último
-começa em `n - m`, porque depois dele o padrão não cabe mais.
+A **força bruta** (ou busca ingênua) testa todos os alinhamentos, `i = 0, 1,
+..., n - m`. Em cada um, compara da esquerda para a direita e desiste na
+primeira diferença. O último alinhamento começa em `n - m`, porque depois dele
+o padrão não cabe.
 
-Ocorrências podem se **sobrepor**: em "banana", o "ana" aparece em 1 e em 3,
-dividindo o "a" do meio. A força bruta acha as duas porque avança o alinhamento
-de 1 em 1, aconteça o que acontecer.
+As ocorrências podem se **sobrepor**: em "banana", "ana" aparece em 1 e em 3.
+A força bruta acha as duas porque avança de 1 em 1.
 
-Quanto custa? Num texto comum, quase todo alinhamento falha na primeira ou na
-segunda letra, e o total fica perto de `n` comparações. No **pior caso**, cada
-alinhamento compara quase o padrão inteiro antes de falhar: até
-`(n - m + 1) · m` comparações, que é **O(n·m)** (o Cormen chama cada
-alinhamento de **deslocamento**, e o algoritmo de **ingênuo**). Procurar `"00001"` num código
-de vinte zeros faz isso (veja o A314). Os próximos três assuntos trabalham
-menos que isso.
+Num texto comum, quase todo alinhamento falha na primeira ou na segunda letra:
+perto de `n` comparações. No **pior caso**, cada alinhamento compara quase o
+padrão inteiro: até `(n - m + 1) · m`, ou **O(n·m)**. Procurar `"00001"` num
+código de vinte zeros faz isso (A314).
 
-A placa da feira diz "banana bacana" e você procura "ana".
-São 11 alinhamentos. No 0, o "b" já não bate. No 1, as três letras batem:
-ocorrência. No 5, o "a" bate e o espaço não. No 10, ocorrência de novo:
+Procure "ana" em "banana bacana": são 11 alinhamentos, com ocorrências no 1,
+no 3 e no 10. O 0 falha no "b" e o 5 falha no espaço:
 
 <p align="center"><img src="24-busca-de-padroes/0157-forca-bruta/ideia.svg" alt="Diagrama da ideia: Força bruta" width="858"></p>
 
-O mesmo exemplo em C, contando as comparações de letra:
+Em C, contando as comparações de letra:
 
 ```c
 #include <stdio.h>
@@ -151,8 +130,7 @@ int main(void) {
 
 ### Passo a passo
 
-As 19 comparações, alinhamento por alinhamento (o texto tem `n = 13` letras, o
-padrão `m = 3`):
+As 19 comparações, alinhamento por alinhamento (`n = 13`, `m = 3`):
 
 | i | trecho do texto | comparações | resultado |
 | --- | --- | --- | --- |
@@ -167,42 +145,31 @@ padrão `m = 3`):
 | 9 | `can` | 1 | falha |
 | 10 | `ana` | 3 | **ocorrência** |
 
-O teto seria `11 · 3 = 33`. Deu 19 porque a maioria dos alinhamentos falha cedo.
+O teto seria `11 · 3 = 33`; deu 19 porque quase todo alinhamento falha cedo.
 
-O fluxograma tem dois laços, um dentro do outro. O de fora anda o
-alinhamento `i`; o de dentro anda a letra `j`. O `i` sempre avança 1, tenha
-achado ou não:
+O laço de fora anda o alinhamento `i`, o de dentro anda a letra `j`. O `i`
+sempre avança 1, tenha achado ou não:
 
 <p align="center"><img src="24-busca-de-padroes/0157-forca-bruta/fluxograma.svg" alt="Fluxograma: Força bruta" width="503"></p>
 
-A biblioteca já tem essa busca pronta: `strstr(texto, padrao)`, de `string.h`,
-devolve um ponteiro para a primeira ocorrência, ou `NULL` se não houver. A
-posição é a diferença de endereços, `p - texto`. Para achar a próxima, chame de
-novo a partir de `p + 1` (o exemplo A313 mostra a diferença entre recomeçar em
-`p + 1` e em `p + m`).
+`strstr(texto, padrao)`, de `string.h`, devolve um ponteiro para a primeira
+ocorrência ou `NULL`; a posição é `p - texto`. Para a próxima, chame de novo
+a partir de `p + 1` (o A313 compara `p + 1` e `p + m`).
 
 > [!WARNING]
-> O laço vai até `i <= n - m`, **inclusive**. Com `i < n - m`, a ocorrência que
-> encosta no fim do texto (o "ana" da posição 10) some. E guarde `n` e `m` em
-> `int`: o `strlen` devolve `size_t`, que não tem sinal. Se o padrão for maior
-> que o texto, `n - m` em `size_t` não fica negativo, **dá a volta** e vira um
-> número enorme. O laço sai lendo memória além do `'\0'` (o exercício E941 cai
-> nessa).
+> O laço vai até `i <= n - m`, **inclusive**: com `i < n - m`, o "ana" da
+> posição 10 some. Guarde `n` e `m` em `int`: `strlen` devolve `size_t`, sem
+> sinal, e com padrão maior que o texto `n - m` **dá a volta** e o laço lê além
+> do `'\0'`.
 
 > [!TIP]
-> **Por dentro do C:** o texto é um vetor de `char` contíguo, então o laço de
-> dentro lê bytes vizinhos, o que favorece o cache do processador. A força
-> bruta não gasta memória extra: O(1). O `strstr` da glibc não é a força bruta
-> deste assunto: para padrões maiores ele usa o algoritmo **Two-Way**, que é
-> linear no pior caso, e instruções que comparam vários bytes de uma vez. E
-> `strstr` recebe `const char *` e devolve `char *` sem `const`: se
-> o texto era um literal, escrever pelo ponteiro devolvido é comportamento
-> indefinido (assunto 0048).
+> A força bruta usa memória O(1). Escrever pelo ponteiro que o `strstr`
+> devolve, num literal, é comportamento indefinido (assunto 0048).
 
 > [!NOTE]
 > **Pergunta para você:** quantas comparações a força bruta faz para procurar
 > "aaab" em "aaaaaaaaab" (nove "a" e um "b")? E para procurar "baaa" no mesmo
-> texto? Conte no papel e depois troque os valores no código para conferir.
+> texto? Conte no papel e troque os valores no código para conferir.
 
 ### Hora de praticar
 
@@ -323,42 +290,8 @@ gol: 0 4 8 18 (4 vezes)
 o: 1 5 9 13 16 19 (6 vezes)
 ```
 
-**Dicas:**
-
-1. n = strlen(texto), m = strlen(padrao); guarde os dois em int.
-2. Os alinhamentos vão de i = 0 até i = n - m, inclusive.
-3. Para cada i, avance j enquanto j < m e texto[i + j] == padrao[j]. Se j
-   chegou a m, achou em i.
-4. O "gol" de "golaco" conta.
-
 ```bash
 gcc ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/E937.c -o ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/E937 && ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/E937
-```
-
-**Exercício E938** · ★☆☆
-
-O extrato do mês veio numa linha só. Complete o laço para mostrar a posição
-de cada "R$" e o valor que vem depois dele (as letras a partir de 3 casas
-depois do "R$", até o ';' ou o fim do texto). Use strstr.
-
-
-```text
-Saída esperada:
-posição 4: 50,00
-posição 19: 23,90
-posição 37: 187,45
-3 valores
-```
-
-**Dicas:**
-
-1. A posição é a diferença de endereços p - extrato; mostre com %td.
-2. Para o valor, um ponteiro c começa em p + 3 e anda até achar ';' ou '\0',
-   mostrando cada letra com putchar.
-3. A próxima busca começa depois do "R$" atual: strstr(p + 2, "R$").
-
-```bash
-gcc ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/E938.c -o ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/E938 && ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/E938
 ```
 
 **Exercício E939** · ★★☆
@@ -383,14 +316,6 @@ posição 28: Pix
 posição 41: pix
 3 ocorrências
 ```
-
-**Dicas:**
-
-1. Compare tolower(texto[i + j]) com tolower(padrao[j]) (ctype.h, 0040).
-2. Passe o char convertido para unsigned char antes do tolower: char
-   negativo (letra acentuada) é comportamento indefinido nas funções de
-   ctype.h.
-3. printf("%.*s", m, texto + i) mostra só as m letras a partir de i.
 
 ```bash
 gcc ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/E939.c -o ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/E939 && ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/E939
@@ -425,46 +350,8 @@ você vem? se você não vier, você avisa
 3 trocas
 ```
 
-**Dicas:**
-
-1. Uma função auxiliar casa_em(texto, i, velho, m) responde se as m letras
-   de velho estão em texto a partir de i (é o miolo da força bruta).
-2. Ande com dois índices: i no texto e k na saída. Se casou, copie novo
-   letra a letra e faça i += m (não conta sobreposição: o pedaço sumiu).
-   Senão, copie uma letra só.
-3. Só teste casa_em quando i <= n - m. E termine saida com '\0'.
-4. "você" tem 5 bytes em UTF-8 (o 'ê' ocupa 2), e tudo bem: o código só
-   copia bytes. Resposta esperada: a saída acima.
-
 ```bash
 gcc ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/E940.c -o ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/E940 && ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/E940
-```
-
-**Exercício E941** · ★★★
-
-Ache o bug. Esta força bruta usa size_t, o tipo que o strlen devolve. Os
-dois primeiros testes dão certo, mas no terceiro o AddressSanitizer do gcc com as flags de estudo para o programa com "global-buffer-overflow" (é de propósito). Rode,
-leia o erro, conserte e rode de novo.
-
-
-```text
-Saída esperada (depois de consertar):
-2
-2
-0
-```
-
-**Dicas:**
-
-1. No terceiro teste, n = 3 e m = 9. Quanto vale n - m em size_t?
-2. size_t não tem sinal: 3 - 9 dá a volta e vira um número enorme
-   (18446744073709551610 em 64 bits). O laço segue lendo além do '\0'.
-3. Dois consertos possíveis: sair cedo com "if (m > n) return 0;" antes
-   do laço, ou escrever a condição como i + m <= n, que nunca dá a volta.
-4. Resposta esperada: 2, 2 e 0, sem erro do sanitizer.
-
-```bash
-gcc ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/E941.c -o ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/E941 && ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/E941
 ```
 
 **Exercício E942** · ★★★
@@ -498,18 +385,6 @@ CEU: linha 4, coluna 3, horizontal
 RIO: não está na grade
 ```
 
-**Dicas:**
-
-1. Declare const char grade[5][9] = {"SOLXMARZ", ...}: 8 letras + '\0'.
-2. Uma função casa(grade, l, c, dl, dc, palavra) testa a palavra a partir
-   de (l, c) andando dl linhas e dc colunas por letra: (0, 1) é horizontal,
-   (1, 0) é vertical.
-3. Antes de comparar, veja se a última letra cabe na grade:
-   l + dl * (m - 1) < 5 e c + dc * (m - 1) < 8. Sem isso, você lê fora da
-   matriz.
-4. Percorra as casas linha por linha e, em cada casa, teste horizontal e
-   depois vertical. Resposta esperada: a saída acima.
-
 ```bash
 gcc ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/E942.c -o ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/E942 && ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/E942
 ```
@@ -518,49 +393,41 @@ gcc ~/LPEDC/24-busca-de-padroes/0157-forca-bruta/E942.c -o ~/LPEDC/24-busca-de-p
 
 ## 0158 · KMP
 
-A central do alarme de casa desarma quando a senha `12123` aparece no teclado.
-Ninguém aperta "Enter": a central olha as teclas uma a uma, conforme chegam, e
-não guarda o histórico. Você digita `1 2 1 2`, erra e aperta `1`. A central
-precisa recomeçar do zero?
+A central do alarme desarma quando a senha `12123` aparece no teclado. Ela
+não guarda o histórico. Você digita `1 2 1 2`, erra e aperta `1`: precisa
+recomeçar do zero?
 
-Não. As últimas teclas foram `1 2 1`, e `1 2 1` é o começo da senha.
-A força bruta jogaria isso fora: voltaria ao alinhamento seguinte e compararia
-de novo letras que já tinha visto. O **KMP** (Knuth, Morris e Pratt, 1977)
-nunca volta no texto. Cada letra do texto é lida uma vez, e a busca custa
-**O(n + m)**, sempre.
+Não. As últimas teclas foram `1 2 1`, o começo da senha. O **KMP** (Knuth,
+Morris e Pratt, 1977) aproveita isso: nunca volta no texto, lê cada letra uma
+vez e custa **O(n + m)**, sempre.
 
-O truque está no padrão. Se `k` letras do padrão já casaram e a próxima
-falhou, o fim do texto lido é `padrao[0..k-1]`. A
-pergunta "quanto disso ainda serve como começo do padrão?" depende **só do
-padrão**, então dá para responder antes de ler o texto.
+Se `k` letras já casaram e a próxima falhou, o fim do texto lido é
+`padrao[0..k-1]`. O quanto disso ainda serve depende **só do padrão**, e dá
+para calcular antes de ler o texto.
 
-A resposta é a **borda**: o maior prefixo próprio de uma string que também é
-sufixo dela. Em `1212`, o prefixo `12` também é o fim: a borda tem 2 letras. Em
-`121` a borda é `1`. Em `1213`, não há borda. A **tabela π** (pi) guarda isso
-para cada pedaço do padrão: `pi[j]` é o tamanho da borda de `padrao[0..j]`.
-Para `12123`, `pi = [0, 0, 1, 2, 0]`.
+Essa resposta é a **borda**: o maior prefixo próprio de uma string que também
+é sufixo dela. Em `1212` é `12`; em `121`, é `1`; em `1213`, não há. A
+**tabela π** (pi) guarda a borda de cada pedaço: `pi[j]` é o tamanho da borda
+de `padrao[0..j]`. Para `12123`, `pi = [0, 0, 1, 2, 0]`.
 
-A busca guarda um número só, `k`, quantas letras já casaram. Para cada letra do
-texto:
+A busca guarda só `k`, quantas letras já casaram. Para cada letra do texto:
 
 - se ela é `padrao[k]`, o casamento cresce: `k++`;
-- se não é e `k > 0`, recua para a borda, `k = pi[k - 1]`, e tenta de novo com
-  a **mesma** letra (pode recuar várias vezes);
-- se `k` chega a `m`, achou; recua para `pi[m - 1]` e segue, para pegar
-  ocorrências sobrepostas.
+- se não é e `k > 0`, recua para a borda, `k = pi[k - 1]`, e tenta de novo a
+  **mesma** letra (pode recuar várias vezes);
+- se `k` chega a `m`, achou; recua para `pi[m - 1]` para pegar as ocorrências
+  sobrepostas.
 
-A própria tabela π sai do mesmo jeito: é o padrão sendo procurado dentro dele
-mesmo. Por isso as duas funções do código se parecem tanto.
+A tabela π sai do mesmo jeito: o padrão é procurado nele mesmo.
 
-No exemplo, as teclas são `1 2 1 2 1 2 3`. As quatro primeiras casam
-(`k = 4`). A quinta, `1`, não é o `3` esperado. Em vez de recomeçar, a central
-olha `pi[3] = 2`: o `1 2` do fim continua valendo, e o padrão "escorrega" duas
-casas para a frente sem reler nada. A mesma tecla `1` agora casa com
-`padrao[2]`, e a senha se completa na sétima tecla:
+Teclas `1 2 1 2 1 2 3`. As quatro primeiras casam (`k = 4`). A quinta, `1`,
+não é o `3` esperado: a central usa `pi[3] = 2`, o `1 2` do fim continua
+valendo e o padrão escorrega duas casas. O `1` casa com `padrao[2]` e a senha
+se completa na sétima tecla:
 
 <p align="center"><img src="24-busca-de-padroes/0158-kmp/ideia.svg" alt="Diagrama da ideia: KMP" width="858"></p>
 
-Em C, o `printf` dentro do laço mostra o `k` depois de cada tecla:
+Em C, o `printf` do laço mostra o `k` depois de cada tecla:
 
 ```c
 #include <stdio.h>
@@ -639,7 +506,7 @@ int main(void) {
 
 ### Passo a passo
 
-A tabela π de `12123`, letra por letra. O `k` é a borda do pedaço anterior:
+A tabela π de `12123`; o `k` é a borda do pedaço anterior:
 
 | j | pedaço `p[0..j]` | `p[j]` vs `p[k]` | k depois | `pi[j]` | borda |
 | --- | --- | --- | --- | --- | --- |
@@ -649,43 +516,29 @@ A tabela π de `12123`, letra por letra. O `k` é a borda do pedaço anterior:
 | 3 | `1212` | `2` vs `2`: sim | 2 | 2 | `12` |
 | 4 | `12123` | `3` vs `1`: não, recua para `pi[1] = 0`; `3` vs `1`: não | 0 | 0 | nenhuma |
 
-Na busca, foram 8 comparações para 7 teclas: uma a mais por causa do recuo na
-quinta. A força bruta faria 11 (5 no alinhamento 0, 1 no alinhamento 1, 5 no
-alinhamento 2).
+Na busca, foram 8 comparações para 7 teclas (uma a mais pelo recuo). A força
+bruta faria 11.
 
-No fluxograma, o texto avança num laço só, e o recuo é um laço **dentro**
-dele que mexe apenas em `k`. O índice `i` do texto nunca anda para trás:
+O recuo é um laço **dentro** do laço do texto e mexe só em `k`. O índice `i`
+nunca anda para trás:
 
 <p align="center"><img src="24-busca-de-padroes/0158-kmp/fluxograma.svg" alt="Fluxograma: KMP" width="647"></p>
 
-Por que é O(n)? O `k` sobe no máximo 1 por letra do texto, então sobe no máximo
-`n` vezes no total. Cada recuo diminui o `k`, e ele nunca fica negativo: não dá
-para descer mais do que subiu. Somando avanços e recuos, a busca faz no máximo
-`2n` comparações, por pior que seja o texto. A tabela custa O(m) pelo mesmo
-argumento.
+Por que é O(n)? O `k` sobe no máximo 1 por letra, ou seja, `n` vezes no total.
+Cada recuo o diminui e ele nunca fica negativo, então os recuos não passam
+disso: no máximo `2n` comparações. A tabela custa O(m) pelo mesmo argumento.
 
 > [!WARNING]
-> O recuo é um `while`, não um `if`. Depois de `k = pi[k - 1]`, a letra do
-> texto pode continuar não servindo, e aí é preciso recuar de novo, até ela
-> casar ou `k` chegar a 0. Com `if`, o `k` fica maior do que deveria, e a
-> busca "acha" ocorrências que não existem (o E947 mostra um alarme desarmando
-> sem a senha). Outro tropeço comum: a tabela tem várias convenções nos livros
-> (começando em 1, deslocada, com -1 na primeira casa). Misturar a tabela de um
-> livro com a busca de outro dá erro de um.
-
-> [!TIP]
-> **Por dentro do C:** a tabela π é um vetor de `m` inteiros: para um padrão de
-> 32 letras são 128 bytes na pilha, e ela não depende do tamanho do texto. O
-> texto é lido **uma vez, em ordem, sem voltar**. Isso deixa o KMP
-> trabalhar sobre um fluxo de `getchar()` ou de `fgetc()` sem guardar o texto
-> em lugar nenhum: um arquivo de 10 GB passa por ele com a memória da tabela e
-> de um `int`. A força bruta não consegue isso, porque volta `j - 1` letras a
-> cada falha.
+> O recuo é um `while`, não um `if`: depois de `k = pi[k - 1]` a letra pode
+> continuar não servindo. Com `if`, a busca "acha" ocorrências que não existem
+> (o E947 testa isso num alarme). Os livros usam convenções diferentes para a
+> tabela (começando em 1, deslocada, com -1): misturar convenções dá erro de
+> um.
 
 > [!NOTE]
 > **Pergunta para você:** qual é a tabela π de `aabaaab`? E quantas vezes o
-> `k` recua quando o texto é `aabaaaab`? Calcule no papel, depois troque a senha
-> e as teclas no código e confira.
+> `k` recua quando o texto é `aabaaaab`? Calcule no papel, depois troque a
+> senha e as teclas no código e confira.
 
 ### Hora de praticar
 
@@ -820,9 +673,10 @@ gcc ~/LPEDC/24-busca-de-padroes/0158-kmp/A316.c -o ~/LPEDC/24-busca-de-padroes/0
 
 **Exercício E943** · ★☆☆
 
-Complete calcula_pi(p, m, pi): pi[j] é o tamanho da maior borda de
-p[0..j], isto é, do maior prefixo próprio de p[0..j] que também é sufixo
-dele. O main já mostra a tabela de cinco palavras:
+Escreva void calcula_pi(const char *p, int m, int pi[]): pi[j] é o
+tamanho da maior borda de p[0..j], isto é, do maior prefixo próprio de
+p[0..j] que também é sufixo dele. No main, mostre a tabela de cinco
+palavras:
 
 
 ```text
@@ -834,56 +688,25 @@ pix: 0 0 0
 tatuta: 0 0 1 0 1 2
 ```
 
-**Dicas:**
-
-1. pi[0] é sempre 0: um prefixo PRÓPRIO de uma letra só é vazio.
-2. Guarde em k o tamanho da borda de p[0..j-1]. Se p[j] == p[k], a borda
-   cresce: k++. Se não, tente a borda menor, k = pi[k - 1], enquanto k > 0.
-3. Confira "tatuta" no papel: em j = 3 ('u') o k cai de 1 para 0; em
-   j = 4 ('t') volta a 1.
-
 ```bash
 gcc ~/LPEDC/24-busca-de-padroes/0158-kmp/E943.c -o ~/LPEDC/24-busca-de-padroes/0158-kmp/E943 && ~/LPEDC/24-busca-de-padroes/0158-kmp/E943
 ```
 
-**Exercício E944** · ★☆☆
-
-A lista de compras virou "ananas, banana e mais banana". Escreva
-int kmp(const char *texto, const char *padrao), que mostra as posições de
-todas as ocorrências (inclusive as sobrepostas) e devolve o total. Use a
-calcula_pi pronta e procure "ana":
-
-
-```text
-Saída esperada:
-posições: 0 2 9 11 23 25
-total: 6
-```
-
-**Dicas:**
-
-1. k guarda quantas letras do padrão já casaram. Para cada texto[i]:
-   enquanto k > 0 e texto[i] != padrao[k], faça k = pi[k - 1]; depois, se
-   texto[i] == padrao[k], k++.
-2. Quando k chega a m, a ocorrência começou em i - m + 1.
-3. Depois de achar, NÃO zere o k: faça k = pi[m - 1]. É isso que encontra
-   o "ana" da posição 2, que divide o 'a' com o da posição 0.
-
-```bash
-gcc ~/LPEDC/24-busca-de-padroes/0158-kmp/E944.c -o ~/LPEDC/24-busca-de-padroes/0158-kmp/E944 && ~/LPEDC/24-busca-de-padroes/0158-kmp/E944
-```
-
 **Exercício E945** · ★★☆
 
-O log do servidor chega pelo teclado (ou por um cano), letra por letra, e
-pode ser enorme: não dá para guardar tudo num vetor. Escreva um programa
-que lê com getchar até o EOF e, usando KMP, mostra a linha e a coluna
-(contando de 1) de cada "erro". Ele não guarda o texto: só o k, a linha e a
-coluna. Teste assim:
+O log do servidor chega pelo teclado, letra por letra, e pode ser enorme:
+não dá para guardar tudo num vetor. Escreva um programa que lê com getchar
+até o EOF e, usando KMP (calcula_pi incluída), mostra a linha e a coluna
+(contando de 1) de cada "erro". Ele não guarda o texto: só o k, a linha e
+a coluna.
 
 
 ```text
-printf 'ok\nerro 42\nok\nterror no erro\n' | ./programa
+Entrada:
+ok
+erro 42
+ok
+terror no erro
 ```
 
 
@@ -896,25 +719,18 @@ linha 4, coluna 11
 3 ocorrências
 ```
 
-**Dicas:**
-
-1. Guarde o getchar num int, não num char: o EOF não cabe num char.
-2. Em cada '\n': linha++, coluna = 0 e k = 0 (a palavra não atravessa a
-   quebra). Nas outras letras: coluna++ e o passo do KMP.
-3. Quando k == m, a palavra começou na coluna coluna - m + 1.
-4. O "erro" dentro de "terror" conta. Resposta esperada: a saída acima.
-
 ```bash
 gcc ~/LPEDC/24-busca-de-padroes/0158-kmp/E945.c -o ~/LPEDC/24-busca-de-padroes/0158-kmp/E945 && ~/LPEDC/24-busca-de-padroes/0158-kmp/E945
 ```
 
 **Exercício E946** · ★★☆
 
-O programa abaixo conta as comparações de letra da força bruta num texto
-de 29 'a' seguidos de um 'b'. Estenda: escreva
-long kmp(const char *t, const char *p, int *achados), que conta cada
-comparação t[i] com p[k] (as do recuo também) e as ocorrências, e mostre os
-dois lado a lado no main:
+Meça quanto o KMP economiza. Escreva
+long forca_bruta(const char *t, const char *p, int *achados) e
+long kmp(const char *t, const char *p, int *achados): as duas devolvem
+quantas comparações de letra fizeram (no KMP, conte também as do recuo
+pela tabela pi) e guardam em *achados as ocorrências. No main, use um
+texto de 29 'a' seguidos de um 'b' e mostre os dois lado a lado:
 
 
 ```text
@@ -924,35 +740,19 @@ baaaa: força bruta  26, KMP 30 (achou 0 e 0)
 aaaaa: força bruta 130, KMP 34 (achou 25 e 25)
 ```
 
-**Dicas:**
-
-1. Um jeito limpo de contar: para cada i, um laço while (1) que compara
-   (comp++) t[i] com p[k]; se bateu, k++ e sai; se k == 0, sai; senão,
-   k = pi[k - 1] e compara de novo.
-2. O KMP nunca passa de 2n = 60 comparações: cada recuo gasta um k que
-   algum avanço criou antes.
-3. Em "baaaa" o KMP faz MAIS comparações que a força bruta: em texto sem
-   repetição, a força bruta já falha na primeira letra. O ganho do KMP é
-   a garantia no pior caso.
-
 ```bash
 gcc ~/LPEDC/24-busca-de-padroes/0158-kmp/E946.c -o ~/LPEDC/24-busca-de-padroes/0158-kmp/E946 && ~/LPEDC/24-busca-de-padroes/0158-kmp/E946
 ```
 
 **Exercício E947** · ★★★
 
-Ache o bug. A central do alarme usa KMP para desarmar quando a senha 1112
-aparece nas teclas. O cliente digitou 1, 1, 2, 1, 1, 2, 1, 1, 1 e o alarme
-DESARMOU, mas a senha nunca foi digitada. O programa não quebra: o erro é
-de lógica, numa linha só da função central. Conserte e rode.
-
-
-```text
-Saída que aparece:
-1121112: desarmou na tecla 7 (a senha começou na posição 3)
-112112111: desarmou na tecla 6 (a senha começou na posição 2)
-```
-
+A central do alarme desarma quando a senha 1112 aparece nas teclas. Escreva
+void central(const char *senha, const char *teclas), que usa KMP
+(calcula_pi incluída) e recebe as teclas uma a uma, sem voltar atrás: ao
+achar a senha, mostra a tecla (contando de 1) em que desarmou e a posição
+onde a senha começou (contando de 0) e para; se nunca achar, avisa que
+continua armado. Atenção a sequências como 1, 1, 2, 1, 1, 2: o recuo pela
+tabela pode ter de se repetir. Teste com duas sequências:
 
 
 ```text
@@ -961,93 +761,43 @@ Saída esperada:
 112112111: continua armado
 ```
 
-**Dicas:**
-
-1. pi de "1112" é 0 1 2 0. Siga a central com 112112111 e anote o k depois
-   de cada tecla.
-2. Na 3ª tecla (2), k vale 2 e não serve. O código recua para pi[1] = 1,
-   mas o 2 também não continua "1". O que deveria acontecer em seguida?
-3. Na calcula_pi o recuo está certo. Compare as duas.
-4. Resposta esperada: o recuo da central precisa ser um while, não um if.
-   Com o if, o k fica em 1 depois do 2, a central "acha" que um 1 já foi
-   digitado e aceita 2112 como se fosse 1112.
-
 ```bash
 gcc ~/LPEDC/24-busca-de-padroes/0158-kmp/E947.c -o ~/LPEDC/24-busca-de-padroes/0158-kmp/E947 && ~/LPEDC/24-busca-de-padroes/0158-kmp/E947
-```
-
-**Exercício E948** · ★★★
-
-Uma brincadeira de palavras: acrescentar o MÍNIMO de letras no começo de
-uma palavra para ela virar palíndromo. "ovos" vira "sovos"; "arara" já é.
-O segredo é achar o maior prefixo da palavra que é palíndromo: o resto vai,
-ao contrário, para a frente. E a tabela pi acha esse prefixo em O(m).
-Escreva void completa(const char *s, char saida[]) e teste com "ovos",
-"arara", "abacaxi" e "assar":
-
-
-```text
-Saída esperada:
-ovos     -> sovos        (prefixo palíndromo: 3 letras, +1)
-arara    -> arara        (prefixo palíndromo: 5 letras, +0)
-abacaxi  -> ixacabacaxi  (prefixo palíndromo: 3 letras, +4)
-assar    -> rassar       (prefixo palíndromo: 4 letras, +1)
-```
-
-**Dicas:**
-
-1. Monte aux = s + "#" + (s ao contrário). Para "ovos": "ovos#sovo".
-2. Uma borda de aux é um prefixo de s que, lido ao contrário, é o fim do
-   reverso, ou seja, é igual a ele mesmo invertido: um palíndromo. O '#'
-   impede a borda de passar do meio. Logo, pi[último] de aux é o tamanho do
-   maior prefixo palíndromo (3 para "ovos": "ovo").
-3. A saída é s[pal..m-1] ao contrário, seguida de s inteira.
-4. printf("%-8s -> %-12s ...") alinha as colunas. Resposta esperada: a
-   saída acima.
-
-```bash
-gcc ~/LPEDC/24-busca-de-padroes/0158-kmp/E948.c -o ~/LPEDC/24-busca-de-padroes/0158-kmp/E948 && ~/LPEDC/24-busca-de-padroes/0158-kmp/E948
 ```
 
 ---
 
 ## 0159 · Horspool
 
-Na feira, você passa os olhos pelas placas procurando "MANGA". Ninguém lê letra
-por letra: você bate o olho numa placa, vê que ela termina com uma letra que
-nem existe em "MANGA" e já pula para a próxima. A força bruta e o KMP leem
-todas as letras do texto. Dá para ler **menos**?
+Na feira, você procura "MANGA" nas placas. Se a placa termina com uma letra
+que não existe em "MANGA", pule para a próxima. Dá para ler **menos** letras
+que a força bruta e o KMP?
 
-Dá: compare o padrão **da direita para a esquerda**. Encoste o
-padrão no texto e olhe primeiro a letra que está sob a **última** casa dele. Se
-essa letra nem aparece no padrão, nenhum alinhamento que a cubra pode dar
-certo, e o padrão inteiro pula para depois dela: `m` casas de uma vez.
+Dá: compare o padrão **da direita para a esquerda**. Olhe a letra do texto
+sob a **última** casa do padrão. Se ela não aparece no padrão, nenhum
+alinhamento que a cubra dá certo, e o padrão pula `m` casas. Se aparece, o
+salto leva a ocorrência **mais à direita** dela no padrão até ficar sob a
+mesma letra do texto. É o algoritmo de **Horspool** (1980), versão simples do
+**Boyer-Moore** (1977).
 
-Se a letra aparece no padrão, o salto é menor: o suficiente para levar a
-ocorrência **mais à direita** dela no padrão até ficar embaixo dessa mesma
-letra do texto. Esse é o algoritmo de **Horspool** (1980), a versão simplificada
-do **Boyer-Moore** (1977) usada em editores e no `grep`.
-
-Os saltos dependem só do padrão, então vão para uma **tabela de saltos** feita
-antes da busca, com uma casa para cada valor de byte (256):
+Os saltos dependem só do padrão e ficam numa **tabela de saltos**, uma casa
+por valor de byte (256):
 
 - toda letra começa com `salto = m`;
 - para cada `j` de 0 até `m - 2`, `salto[padrao[j]] = m - 1 - j`, a distância
-  de `j` até a última casa. Como `j` cresce, uma letra repetida fica com a
+  de `j` até a última casa. Como `j` cresce, a letra repetida fica com a
   ocorrência mais à direita.
 
-A última letra do padrão fica de fora de propósito: se entrasse, o salto dela
-seria 0, e a busca ficaria parada no mesmo lugar para sempre.
+A última letra fica de fora: seu salto seria 0 e a busca não andaria.
 
-Na busca, cada alinhamento `i` compara de `j = m - 1` para trás. Achando ou
-não, o próximo alinhamento é `i + salto[texto[i + m - 1]]`: a letra que
-decide é sempre a que está sob a última casa da janela.
+Cada alinhamento `i` compara de `j = m - 1` para trás. Achando ou não, o
+próximo é `i + salto[texto[i + m - 1]]`.
 
-A placa do exemplo é "A BANCA VENDE MANGA" (19 letras) e o padrão é
-"MANGA" (`m = 5`). Os saltos são M = 4, A = 3, N = 2, G = 1 e 5 para as outras.
-No alinhamento 0, sob a última casa está o `N`: salta 2. No 2, o `A` bate, o `C`
-não, e o `A` manda saltar 3. No 5, o `E` não está em "MANGA": salta 5. No 10,
-o `M` manda saltar 4. No 14, as cinco letras batem:
+A placa é "A BANCA VENDE MANGA" (19 letras) e o padrão é "MANGA" (`m = 5`).
+Os saltos são M = 4, A = 3, N = 2, G = 1 e 5 para as outras. No alinhamento 0,
+sob a última casa está o `N`: salta 2. No 2, o `A` bate, o `C` não, e o `A`
+manda saltar 3. No 5, o `E` salta 5. No 10, o `M` salta 4. No 14, as cinco
+letras batem:
 
 <p align="center"><img src="24-busca-de-padroes/0159-horspool/ideia.svg" alt="Diagrama da ideia: Horspool" width="865"></p>
 
@@ -1118,8 +868,7 @@ int main(void) {
 
 ### Passo a passo
 
-Os cinco alinhamentos. A janela é `texto[i..i+4]` e a letra que decide o salto
-é a última dela:
+Os cinco alinhamentos; a última letra de `texto[i..i+4]` decide o salto:
 
 | i | janela | comparações (da direita) | última letra | salto |
 | --- | --- | --- | --- | --- |
@@ -1129,43 +878,30 @@ Os cinco alinhamentos. A janela é `texto[i..i+4]` e a letra que decide o salto
 | 10 | `NDE M` | 1 | `M` | 4 |
 | 14 | `MANGA` | 5: **achou** | `A` | 3 (passa do fim) |
 
-Foram 10 comparações de letra. A força bruta faz 19 no mesmo texto e passa por
-todas as letras; aqui, 10 das 19 letras da placa nunca foram olhadas.
-
-No fluxograma, ao contrário da força bruta, o `i` não anda de 1 em 1. O
-passo vem da tabela, e quem decide é a última letra da janela, tenha
-o alinhamento dado certo ou não:
+Foram 10 comparações; a força bruta faz 19. O passo do `i` vem da tabela,
+pela última letra da janela:
 
 <p align="center"><img src="24-busca-de-padroes/0159-horspool/fluxograma.svg" alt="Fluxograma: Horspool" width="495"></p>
 
-O custo depende do texto. No caso comum, com alfabeto grande e padrão
-comprido, muitas letras não aparecem no padrão e o salto fica perto de `m`:
-a busca olha umas `n / m` letras, menos que o tamanho do texto. Quanto **maior**
-o padrão, **mais rápida** a busca (o exemplo A317 mede isso). O pior caso
-continua O(n·m): procurar "baaa" num texto só de `a` compara 4 letras e salta 1
-em cada alinhamento (é o exercício E952).
+Com alfabeto grande e padrão comprido, o salto fica perto de `m` e a busca
+olha umas `n / m` letras: quanto **maior** o padrão, **mais rápida** a busca
+(o A317 mede). O pior caso continua O(n·m): "baaa" num texto só de `a`
+compara 4 letras e salta 1 por alinhamento (E952).
 
 > [!WARNING]
-> O índice da tabela tem que ser `unsigned char`. Em UTF-8, letras acentuadas
-> viram dois bytes acima de 127, e no gcc para x86 o `char` tem sinal: o `ã`
-> começa com o byte 0xC3, que num `char` vale **-61**. `salto[-61]` escreve
-> fora do vetor, em memória de outra variável, sem erro de compilação
-> (o E953 mostra o estrago). Converta sempre: `salto[(unsigned char) c]`. E não
-> ponha a última letra do padrão na tabela, ou o salto dela vira 0.
+> O índice da tabela tem que ser `unsigned char`. Em UTF-8, o `ã` começa com
+> o byte 0xC3, que num `char` com sinal (gcc em x86) vale **-61**, e
+> `salto[-61]` escreve fora do vetor sem erro de compilação. Converta:
+> `salto[(unsigned char) c]`. E não ponha a última letra do padrão na tabela.
 
 > [!TIP]
-> **Por dentro do C:** a tabela é `int salto[256]`, 1 KB na pilha, não importa o
-> tamanho do padrão nem do texto. Montar custa O(256 + m). O Boyer-Moore
-> completo acrescenta uma segunda tabela, a do **bom sufixo**, que olha também
-> as letras que já bateram e garante busca linear; o Horspool troca essa
-> garantia por um código de dez linhas que, em texto comum, é tão rápido quanto.
-> Ferramentas como o GNU `grep` usam variações do Boyer-Moore para procurar
-> palavras fixas, e por isso ficam mais rápidas com padrões compridos.
+> O Boyer-Moore completo acrescenta a tabela do **bom sufixo**, que garante
+> busca linear; o Horspool troca essa garantia por um código curto.
 
 > [!NOTE]
 > **Pergunta para você:** qual é a tabela de saltos de "BANANA"? E quantos
 > alinhamentos o Horspool testa para procurar "BANANA" em "BANDANA BANANA"?
-> Faça no papel e depois troque os valores no código para conferir.
+> Faça no papel e confira no código.
 
 ### Hora de praticar
 
@@ -1315,9 +1051,11 @@ gcc ~/LPEDC/24-busca-de-padroes/0159-horspool/A318.c -o ~/LPEDC/24-busca-de-padr
 
 **Exercício E949** · ★☆☆
 
-Complete monta_saltos(p, m, salto): todas as 256 casas começam com m e,
-para cada letra p[j] com j de 0 até m - 2, salto[p[j]] = m - 1 - j. O main
-mostra a tabela de "PIPOCA" e de "ARARA":
+Escreva void monta_saltos(const char *p, int m, int salto[]), a tabela do
+Horspool: as 256 casas começam com m e, para cada letra p[j] com j de 0
+até m - 2, salto[p[j]] = m - 1 - j (a letra mais à direita vence). No main,
+mostre a tabela de "PIPOCA" e de "ARARA" ("outras" é qualquer letra que
+não está no padrão):
 
 
 ```text
@@ -1326,48 +1064,8 @@ P=3 I=4 O=2 C=1 A=6 outras=6
 A=2 R=1 outras=5
 ```
 
-**Dicas:**
-
-1. O índice da tabela é a letra convertida: salto[(unsigned char) p[j]].
-2. Como j cresce, uma letra repetida fica com o valor da ocorrência mais à
-   direita: o 'P' de PIPOCA aparece em 0 e em 2, e vale 6 - 1 - 2 = 3.
-3. A última letra não entra no laço (senão o salto dela seria 0). Por isso
-   o 'A' de PIPOCA, que só aparece no fim, vale 6. Já o 'A' de ARARA vale 2:
-   ele também aparece na posição 2.
-
 ```bash
 gcc ~/LPEDC/24-busca-de-padroes/0159-horspool/E949.c -o ~/LPEDC/24-busca-de-padroes/0159-horspool/E949 && ~/LPEDC/24-busca-de-padroes/0159-horspool/E949
-```
-
-**Exercício E950** · ★☆☆
-
-No cinema, a tela de pedidos mostra "COMPRE PIPOCA DOCE". Escreva
-int horspool(const char *texto, const char *padrao), que procura a PRIMEIRA
-ocorrência, mostra cada alinhamento (a letra sob a última casa e o salto)
-e devolve quantos alinhamentos testou. Procure "PIPOCA":
-
-
-```text
-Saída esperada:
-i =  0: 'E' sob a última casa, salta 6
-i =  6: 'C' sob a última casa, salta 1
-i =  7: achou
-3 alinhamentos
-```
-
-**Dicas:**
-
-1. Monte a tabela como no texto: tudo m, depois m - 1 - j para j de 0 até
-   m - 2.
-2. Em cada alinhamento i, compare de j = m - 1 descendo enquanto as letras
-   batem. Se j ficou negativo, achou: mostre e devolva.
-3. Senão, a letra sob a última casa é texto[i + m - 1], com ou sem acerto
-   antes. Some salto[dela] ao i.
-4. O 'E' de COMPRE não está em PIPOCA:
-   o padrão pula inteiro.
-
-```bash
-gcc ~/LPEDC/24-busca-de-padroes/0159-horspool/E950.c -o ~/LPEDC/24-busca-de-padroes/0159-horspool/E950 && ~/LPEDC/24-busca-de-padroes/0159-horspool/E950
 ```
 
 **Exercício E951** · ★★☆
@@ -1392,25 +1090,18 @@ posição 38: BANANA
 3 ocorrências
 ```
 
-**Dicas:**
-
-1. Faça uma função baixa(c) que devolve tolower((unsigned char) c).
-2. A tabela precisa usar a MESMA conversão nos dois lados: monte-a com
-   baixa(padrao[j]) e consulte com baixa(texto[i + m - 1]). Montar com as
-   letras originais e consultar convertida faz o salto errar.
-3. Depois de achar, não pare: salte como num alinhamento qualquer.
-4. O "BANANE" de BANANEIRA não conta.
-
 ```bash
 gcc ~/LPEDC/24-busca-de-padroes/0159-horspool/E951.c -o ~/LPEDC/24-busca-de-padroes/0159-horspool/E951 && ~/LPEDC/24-busca-de-padroes/0159-horspool/E951
 ```
 
 **Exercício E952** · ★★☆
 
-O Horspool também tem pior caso. O programa abaixo conta as comparações da
-força bruta num texto de trinta 'a'. Estenda: escreva
-long horspool(const char *t, const char *p, int *alinhamentos), que conta
-as comparações de letra e os alinhamentos, e mostre tudo no main:
+O Horspool também tem pior caso. Escreva
+long forca_bruta(const char *t, const char *p) e
+long horspool(const char *t, const char *p, int *alinhamentos): as duas
+devolvem o número de comparações de letra; a segunda guarda também em
+*alinhamentos quantas janelas examinou. Use um texto de trinta 'a' e
+mostre tudo no main:
 
 
 ```text
@@ -1420,60 +1111,18 @@ aaab: força bruta 108, Horspool  27 (27 alinhamentos)
 abbb: força bruta  54, Horspool   9 (9 alinhamentos)
 ```
 
-**Dicas:**
-
-1. Conte uma comparação a cada t[i + j] comparado com p[j], inclusive a que
-   falha.
-2. Em "baaa", o Horspool compara da direita: casa três 'a' e só falha no
-   'b'. E como a letra sob a última casa é 'a', que aparece no fim do
-   padrão, o salto é 1. É o pior caso dele: m comparações e salto 1.
-3. Em "abbb", o 'a' do texto só aparece no começo do padrão: salto 3.
-4. Cada algoritmo tem o seu pior caso.
-
 ```bash
 gcc ~/LPEDC/24-busca-de-padroes/0159-horspool/E952.c -o ~/LPEDC/24-busca-de-padroes/0159-horspool/E952 && ~/LPEDC/24-busca-de-padroes/0159-horspool/E952
 ```
 
-**Exercício E953** · ★★★
-
-Ache o bug. Este Horspool funciona para "pao", mas quando o padrão tem
-acento o sanitizer reclama de "index -61 out of bounds for type
-'int [256]'" e depois o AddressSanitizer para o programa (é de propósito).
-Rode, leia a mensagem, conserte as DUAS linhas com o mesmo problema e rode
-de novo.
-
-
-```text
-Saída esperada (depois de consertar):
-pao: 2
-feijão: 2
-açaí: 2
-```
-
-**Dicas:**
-
-1. Em UTF-8, o 'ã' são dois bytes, 0xC3 e 0xA3. Num char com sinal (o
-   padrão no gcc para x86), 0xC3 vale -61.
-2. "int c = padrao[j];" copia o -61 para o int. salto[-61] escreve antes
-   do começo do vetor, em memória de outra variável.
-3. Converta para unsigned char antes de virar índice. O mesmo vale para
-   a letra do texto usada no salto. (Se você escrever salto[padrao[j]]
-   direto, o gcc avisa: "array subscript has type 'char'".)
-4. Resposta esperada: a saída acima, sem erro do sanitizer.
-
-```bash
-gcc ~/LPEDC/24-busca-de-padroes/0159-horspool/E953.c -o ~/LPEDC/24-busca-de-padroes/0159-horspool/E953 && ~/LPEDC/24-busca-de-padroes/0159-horspool/E953
-```
-
 **Exercício E954** · ★★★
 
-Uma variação esperta: o algoritmo de Sunday (1990). Em vez da letra sob a
-ÚLTIMA casa da janela, ele olha a letra logo DEPOIS da janela, t[i + m],
-que vai entrar de qualquer jeito no próximo alinhamento. A tabela muda:
-tudo começa com m + 1 e, para j de 0 até m - 1 (agora a última entra),
-salto[p[j]] = m - j. A comparação pode ser em qualquer ordem; use da
-esquerda para a direita. Escreva int sunday(t, p, &achados), que devolve
-os alinhamentos, e compare com a horspool pronta no cardápio abaixo:
+Compare o Horspool com o algoritmo de Sunday (1990). O Sunday olha a letra
+logo DEPOIS da janela, t[i + m]: a tabela começa com m + 1 e, para j de 0
+até m - 1 (agora a última letra entra), salto[p[j]] = m - j; compare da
+esquerda para a direita. Escreva int horspool(t, p, &achados) e
+int sunday(t, p, &achados), que devolvem o número de alinhamentos e
+guardam as ocorrências. Procure três padrões no cardápio:
 
 
 ```text
@@ -1489,16 +1138,6 @@ PASTEL: Horspool  9 alinhamentos, Sunday  8 (achou 3 e 3)
 FRANGO: Horspool  9 alinhamentos, Sunday  8 (achou 0 e 0)
 ```
 
-**Dicas:**
-
-1. Uma letra fora do padrão deixa pular m + 1: o padrão passa inteiro por
-   cima dela.
-2. E quando i = n - m? Então t[i + m] é o '\0' do fim da string, que existe
-   e pode ser lido: ele não está no padrão, o salto é m + 1 e o laço acaba.
-   Sem esse '\0' (um texto lido para um vetor sem terminador), seria
-   leitura fora do vetor.
-3. Use printf("%-6s: ...") para alinhar os nomes.
-
 ```bash
 gcc ~/LPEDC/24-busca-de-padroes/0159-horspool/E954.c -o ~/LPEDC/24-busca-de-padroes/0159-horspool/E954 && ~/LPEDC/24-busca-de-padroes/0159-horspool/E954
 ```
@@ -1507,36 +1146,29 @@ gcc ~/LPEDC/24-busca-de-padroes/0159-horspool/E954.c -o ~/LPEDC/24-busca-de-padr
 
 ## 0160 · Rabin-Karp
 
-Para saber se dois arquivos de 1 GB são iguais, você não compara byte a byte
-toda vez: calcula uma **impressão digital** de cada um (um hash) e compara dois
-números. Se os números diferem, os arquivos com certeza diferem. Se batem,
-muito provavelmente são iguais, e só aí vale conferir de verdade.
+Dois arquivos de 1 GB são iguais? Compare o hash de cada um (uma **impressão
+digital**): se diferem, os arquivos diferem; se batem, só então vale conferir.
 
-O **Rabin-Karp** (1987) usa essa ideia na busca de padrões. Calcula o hash do
-padrão uma vez. Depois calcula o hash de cada **janela** de `m` letras do texto
-e só compara letra a letra quando os hashes batem. É o assunto 0105 (hashing)
-aplicado a pedaços de texto.
+O **Rabin-Karp** (1987) aplica isso à busca (hashing, assunto 0105): calcula
+o hash do padrão e o de cada **janela** de `m` letras do texto, e só compara
+letra a letra quando os hashes batem.
 
-Calcular o hash de cada janela do zero custa `m` passos, e aí não se ganha
-nada da força bruta. A saída é o **hash rolante**: a janela seguinte
-perde uma letra na esquerda e ganha uma na direita, e o hash novo sai do antigo
-em O(1).
+Recalcular cada janela custa `m` passos, sem ganho. A saída é o **hash
+rolante**: a janela seguinte perde uma letra à esquerda e ganha outra à
+direita, e o hash novo sai do antigo em O(1).
 
-Com dígitos fica fácil ver. A janela `271` é o número 271. A próxima, `718`, é
-`(271 - 2·100)·10 + 8`: tira o dígito que sai (pesando 10^(m-1)), desloca uma
-casa e soma o que entra. Com letras é igual, só que na base 256, uma "casa" por
-byte. Como esses números ficam enormes, tudo é feito **módulo um primo `q`**:
-o hash é o resto, e a regra continua valendo com `% q` a cada passo.
+Com dígitos: a janela `271` é o número 271, e a próxima, `718`, é
+`(271 - 2·100)·10 + 8`: tira o dígito que sai (peso 10^(m-1)), desloca e soma
+o que entra. Com letras é igual, na base 256, tudo **módulo um primo `q`**,
+pois os números ficam enormes.
 
-O preço do resto é a **colisão**: duas janelas diferentes podem ter o mesmo
-resto. Isso é um **falso positivo**, e por isso a conferência letra a letra
-nunca pode ser pulada. Com `q` grande, colisões ficam raras, e a busca
-custa O(n + m) na média. No pior caso (tudo colidindo), volta a O(n·m).
+Janelas diferentes podem ter o mesmo resto: é a **colisão**, ou **falso
+positivo**, e por isso a conferência letra a letra nunca pode ser pulada. Com
+`q` grande, a busca custa O(n + m) na média; com tudo colidindo, O(n·m).
 
-No exemplo, você procura `182` na sequência `2718281828459`, com
-`q = 13` (pequeno de propósito, para aparecer colisão). O hash do padrão é
-`182 % 13 = 0`. Rolando a janela pelas 11 posições, o hash 0 aparece três
-vezes: duas são o `182` de verdade, e uma é o `845`, que também deixa resto 0:
+Procure `182` em `2718281828459` com `q = 13` (pequeno, para aparecer
+colisão). O hash do padrão é `182 % 13 = 0`. Nas 11 janelas, o 0 aparece três
+vezes: duas são o `182` e uma é o `845`, que também deixa resto 0:
 
 <p align="center"><img src="24-busca-de-padroes/0160-rabin-karp/ideia.svg" alt="Diagrama da ideia: Rabin-Karp" width="870"></p>
 
@@ -1625,37 +1257,28 @@ A primeira rolada, de `271` (hash 11) para `718`. O `pot` é `10² % 13 = 9`:
 | desloca e põe o 8 | `(6 · 10 + 8) % 13 = 68 % 13` | **3** |
 | confere do zero | `718 % 13 = 718 - 715` | 3 |
 
-Duas operações por janela, não importa o tamanho do padrão. Com `m = 1000`, a
-força bruta pode gastar até mil comparações por janela; o hash rolante continua
-gastando duas contas.
-
-No fluxograma, o caminho comum é calcular, comparar dois números e rolar. A comparação letra a letra fica num desvio que quase nunca é tomado
-quando `q` é grande:
+São duas operações por janela, com qualquer `m`. A conferência letra a letra
+quase nunca roda quando `q` é grande:
 
 <p align="center"><img src="24-busca-de-padroes/0160-rabin-karp/fluxograma.svg" alt="Fluxograma: Rabin-Karp" width="677"></p>
 
 > [!WARNING]
 > Em C, o resto de número negativo é negativo: `-7 % 13` vale `-7`, não `6`.
-> Na rolagem, `ht - t[i] * pot` fica negativo com frequência, e um hash
-> negativo nunca bate com o do padrão: a busca **perde ocorrências** sem dar
-> erro (o E959 cai nisso). Por isso a linha é
-> `(ht - t[i] * pot % Q + Q) % Q`: reduz o produto, soma `Q` e só então tira o
-> resto. E nunca pule a conferência letra a letra: sem ela, o `845` acima
-> seria contado como ocorrência.
+> `ht - t[i] * pot` fica negativo com frequência, e um hash negativo nunca bate
+> com o do padrão: a busca **perde ocorrências** sem erro. Por isso a linha é
+> `(ht - t[i] * pot % Q + Q) % Q`. E sem a conferência letra a letra, o `845`
+> seria contado.
 
 > [!TIP]
-> **Por dentro do C:** com letras, a base é 256 e o módulo deve ser um primo
-> grande, como 1.000.003. O maior valor intermediário é `ht * 256`, perto de
-> 2,6·10⁸: cabe num `int` de 32 bits, mas com folga pequena. Use `long long`
-> (assunto 0003) e você pode subir o `q` sem medo de overflow, que em `int`
-> com sinal é comportamento indefinido. Escolher o `q` primo e distante de
-> potências de 2 espalha melhor os restos. O exemplo A319 mostra os falsos
-> positivos caindo de 48 para 0 conforme o `q` cresce.
+> Com letras, `q` deve ser um primo grande, como 1.000.003. Use `long long`
+> (assunto 0003) para subir o `q`: overflow de `int` com sinal é
+> comportamento indefinido. O A319 mostra os falsos positivos caindo de 48
+> para 0 conforme o `q` cresce.
 
 > [!NOTE]
 > **Pergunta para você:** com `q = 13`, procurando `828` na mesma sequência,
-> quantos falsos positivos aparecem? Use os hashes da saída acima para
-> responder sem rodar, e depois troque o padrão no código para conferir.
+> quantos falsos positivos aparecem? Responda com os hashes da saída e confira
+> no código.
 
 ### Hora de praticar
 
@@ -1834,52 +1457,23 @@ Saída esperada:
 2026 -> 86
 ```
 
-**Dicas:**
-
-1. Horner: h = (h * 10 + dígito) % q, para cada dígito, da esquerda para a
-   direita. O dígito é s[j] - '0'.
-2. Tirar o resto a cada passo dá o mesmo que tirar só no fim, e o h nunca
-   passa de 10 * q. É o que deixa usar janelas enormes sem estourar o int.
-3. Passe data + i para a função: o ponteiro já começa na janela.
-4. Resposta esperada: a saída acima (1810 = 18 * 97 + 64).
-
 ```bash
 gcc ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/E955.c -o ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/E955 && ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/E955
 ```
 
-**Exercício E956** · ★☆☆
+**Exercício E957** · ★★☆
 
-Este Rabin-Karp com letras (base 256, Q = 101) está quase pronto, mas o
-hash da janela nunca muda: falta rolar. Complete as duas linhas que tiram
-a letra t[i] e põem a letra t[i + m] no hash ht. Procure "rato":
+Quanto o tamanho do módulo pesa? Escreva void rabin_karp(const char *t,
+const char *p, int q), o Rabin-Karp de dígitos (base 10, hash rolante
+módulo q) que conta as ocorrências e os falsos positivos (hash igual, texto
+diferente). Procure "2026" nesta série de 48 dígitos, com q = 7, 13, 101 e
+10007:
 
 
 ```text
-Saída esperada:
-achou na posição 2
-achou na posição 23
-3 verificações letra a letra
+"902620261187420263355926102026738920261049582026"
 ```
 
-**Dicas:**
-
-1. Tirar: ht - t[i] * pot, onde pot = BASE^(m-1) % Q já está calculado.
-   Para não ficar negativo, faça (ht - t[i] * pot % Q + Q) % Q.
-2. Pôr: (ht * BASE + t[i + m]) % Q.
-3. Converta as letras com (unsigned char), como no resto do código.
-4. Uma das 3 verificações é um falso
-   positivo: hash igual ao de "rato", letras diferentes.
-
-```bash
-gcc ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/E956.c -o ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/E956 && ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/E956
-```
-
-**Exercício E957** · ★★☆
-
-Quanto o tamanho do módulo pesa? O programa abaixo procura "2026" numa
-série de 48 dígitos com Q fixo em 13 e só conta as ocorrências. Estenda:
-troque o Q fixo por um parâmetro int q, conte também os falsos positivos e
-rode para q = 7, 13, 101 e 10007:
 
 
 ```text
@@ -1889,14 +1483,6 @@ q =    13: 5 ocorrências,  3 falsos positivos
 q =   101: 5 ocorrências,  0 falsos positivos
 q = 10007: 5 ocorrências,  0 falsos positivos
 ```
-
-**Dicas:**
-
-1. Toda conta com Q passa a usar q, inclusive o pot.
-2. Falso positivo: ht == hp, mas iguais() devolve 0.
-3. As ocorrências não mudam com q: o que muda é o trabalho jogado fora com
-   conferências inúteis. Com q pequeno, uma janela qualquer tem chance de
-   1 em q de colidir.
 
 ```bash
 gcc ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/E957.c -o ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/E957 && ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/E957
@@ -1924,58 +1510,8 @@ nosso trabalhO MEDE A AGUA DA CHUVA COM um balde
 27 de 48 letras em trechos copiados (56%)
 ```
 
-**Dicas:**
-
-1. Uma função int hashes(const char *s, long long h[]) que enche h com o
-   hash rolante de cada janela e devolve quantas são (n - 8 + 1). Use
-   BASE 256 e Q 1000003, em long long.
-2. Para cada janela i do suspeito, procure o hash dela no vetor do
-   original (um laço simples basta aqui) e confira as letras antes de
-   marcar.
-3. Guarde as marcas num vetor int copiada[] e só converta para maiúscula
-   no fim, com toupper((unsigned char) c).
-4. O 'o' de "trabalho" também é marcado:
-   a janela "o mede a" existe no original ("projeto mede a").
-
 ```bash
 gcc ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/E958.c -o ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/E958 && ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/E958
-```
-
-**Exercício E959** · ★★★
-
-Ache o bug. A função conta as ocorrências de um número de telefone dentro
-de uma sequência de dígitos. Nos dois testes o padrão aparece DUAS vezes,
-mas a função acha 0 no primeiro e 1 no segundo. O programa não quebra: o
-erro está nas contas do hash rolante. Conserte e rode.
-
-
-```text
-Saída que aparece:
-8922: 0
-800: 1
-```
-
-
-
-```text
-Saída esperada:
-8922: 2
-800: 2
-```
-
-**Dicas:**
-
-1. Acrescente um printf("%d ", ht) em cada volta e compare com o hp.
-2. Em C, o resto de um número negativo é negativo: -7 % 101 vale -7, e
-   não 94. Um hash negativo nunca vai ser igual ao hp, que é positivo.
-3. ht - dígito * pot fica negativo sempre que o dígito que sai pesa mais
-   que o hash atual. Some Q antes de tirar o resto (e reduza o produto
-   com % Q, para a soma com Q bastar).
-4. Resposta esperada: ht = (ht - (t[i] - '0') * pot % Q + Q) % Q; e a
-   saída acima.
-
-```bash
-gcc ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/E959.c -o ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/E959 && ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/E959
 ```
 
 **Exercício E960** · ★★★
@@ -1994,15 +1530,6 @@ soma:       7 verificações, 2 ocorrências
 polinomial: 2 verificações, 2 ocorrências
 ```
 
-**Dicas:**
-
-1. Soma: hp e ht começam com a soma dos m primeiros bytes; para rolar,
-   ht += t[i + m] - t[i] (converta para unsigned char).
-2. Com a soma, todo anagrama de "amor" tem o mesmo hash: roma, mora, ramo,
-   omar e até o "mora" de "amora". Cada um vira uma conferência inútil.
-3. No polinômio, cada letra é multiplicada por uma potência diferente da
-   base: trocar duas letras de lugar muda o valor.
-
 ```bash
 gcc ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/E960.c -o ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/E960 && ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/E960
 ```
@@ -2011,14 +1538,10 @@ gcc ~/LPEDC/24-busca-de-padroes/0160-rabin-karp/E960.c -o ~/LPEDC/24-busca-de-pa
 
 ## 0161 · Juntando tudo
 
-O síndico digitou os avisos do condomínio num arquivo, uma linha por aviso, e
-quer saber quais falam da garagem. No terminal, isso é `grep garagem
-avisos.txt`: o programa lê o arquivo linha por linha e mostra as que têm o
-padrão. Aqui você monta o seu **mini-grep** com os quatro algoritmos
-do módulo e mede qual trabalha menos.
-
-O primeiro passo é dar aos quatro a **mesma cara**. Eles ficam num TAD,
-`padroes.h` e `padroes.c`, todos com a mesma assinatura:
+O síndico quer os avisos do condomínio que falam da garagem: `grep garagem
+avisos.txt`. Aqui você monta o seu **mini-grep** com os quatro algoritmos do
+módulo e mede qual trabalha menos. Os quatro ficam num TAD, `padroes.h` e
+`padroes.c`, com a mesma assinatura:
 
 ```c
 typedef int (*Busca)(const char *texto, int n, const char *padrao, int m,
@@ -2032,13 +1555,10 @@ int pb_rabin_karp(...);
 
 Cada função devolve quantas ocorrências achou, guarda as posições das
 primeiras `max` em `pos` (ou nada, se `pos` for `NULL`) e **soma** em
-`*comparacoes` as comparações de letra que fez. Somar, e não zerar, deixa
-acumular o custo de um arquivo inteiro, linha após linha.
-
-Com a mesma assinatura, o algoritmo vira um **dado**. `Busca` é um tipo
-ponteiro para função (assunto 0050), e um vetor de structs `{nome, busca}`
-guarda os quatro. O grep chama `algs[a].busca(...)` sem saber qual está do outro
-lado: para trocar de algoritmo, basta trocar o índice.
+`*comparacoes` as comparações de letra, acumulando o custo do arquivo inteiro.
+`Busca` é um ponteiro para função (assunto 0050), e um vetor de structs
+`{nome, busca}` guarda os quatro: para trocar de algoritmo, troque o índice
+em `algs[a].busca(...)`.
 
 Cada um vence numa situação:
 
@@ -2049,13 +1569,13 @@ Cada um vence numa situação:
 | Horspool | saltos, O(256 + m) | 256 inteiros | O(n·m) | perto de `n / m` | pula letras; melhora com padrão longo |
 | Rabin-Karp | hash do padrão, O(m) | nenhuma | O(n·m) | O(n + m) | vários padrões de uma vez; texto como números |
 
-São 8 avisos e o padrão é "garagem". O grep mostra as
-linhas 3, 5 e 8 (a 3 tem duas ocorrências). Depois, as mesmas linhas passam pelos
-quatro algoritmos: o resultado é igual, o trabalho não:
+São 8 avisos e o padrão é "garagem". O grep mostra as linhas 3, 5 e 8 (a 3
+tem duas ocorrências). Os quatro algoritmos dão o mesmo resultado, com
+trabalho diferente:
 
 <p align="center"><img src="24-busca-de-padroes/0161-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
 
-O programa, usando o TAD:
+O programa:
 
 ```c
 #include <stdio.h>
@@ -2124,42 +1644,33 @@ int main(void) {
 //   4 ocorrências,  28 comparações: Rabin-Karp
 ```
 
-O fluxograma do grep é um laço sobre as linhas com uma chamada de busca no
-meio. Os quatro algoritmos do módulo ficam atrás dessa chamada:
+O grep é um laço sobre as linhas com uma chamada de busca no meio:
 
 <p align="center"><img src="24-busca-de-padroes/0161-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="649"></p>
 
-Leia os números com cuidado. O KMP fez **mais** comparações que a força bruta:
-em texto comum, a força bruta já falha na primeira letra, e o KMP só ganha
-quando há muita repetição parcial (o pior caso da força bruta). O Horspool
-pulou letras: com 7 letras no padrão, ele olhou menos de um quarto do que a
-força bruta olhou. E o Rabin-Karp parece imbatível, mas o número dele só conta
-as letras da conferência: as duas contas de hash em cada uma das 317 janelas
-não entram. O exemplo A321 liga o **cronômetro** de verdade, com `clock()`,
-em textos de 2 milhões de letras.
+O KMP fez **mais** comparações que a força bruta: em texto comum ela falha
+na primeira letra, e o KMP só ganha com muita repetição parcial. O Rabin-Karp
+parece imbatível, mas seu número só conta a conferência: as contas de hash das
+317 janelas não entram. O A321 usa o **cronômetro** `clock()` em textos de 2
+milhões de letras.
 
 > [!WARNING]
-> Comparação de letra é um bom modelo, mas não é o tempo. O Rabin-Karp troca
-> comparações por multiplicações e restos, que custam mais caro; o Horspool lê
-> a tabela de saltos a cada alinhamento. E os algoritmos trabalham com
-> **bytes**, não com letras: em UTF-8, "Reunião" tem 8 bytes, as posições
-> devolvidas são posições de byte, e "garagem" não acha "GARAGEM" (o E963 e o
-> E951 mostram os cuidados). O `grep` de verdade ainda trata acentos,
-> maiúsculas e expressões regulares; o seu trata padrões fixos.
+> Comparação de letra não é tempo: o Rabin-Karp troca comparações por
+> multiplicações e restos, e o Horspool lê a tabela a cada alinhamento. Os
+> algoritmos trabalham com **bytes**: em UTF-8, "Reunião" tem 8 bytes, as
+> posições são de byte, e "garagem" não acha "GARAGEM" (E963 e E951). O seu
+> grep trata só padrões fixos.
 
 > [!TIP]
-> **Por dentro do C:** `clock()`, de `<time.h>`, devolve o tempo de processador
-> gasto pelo programa (não o tempo do relógio da parede), em "tiques";
-> dividindo a diferença por `CLOCKS_PER_SEC`, você tem segundos. Três cuidados: meça trechos grandes (abaixo de alguns milissegundos é ruído); o
-> a compilação com AddressSanitizer (flags de estudo) confere cada acesso à memória e
-> deixa o programa umas duas vezes mais lento; e com `-O2` o `gcc` pode apagar uma busca cujo
-> resultado ninguém usa. Por isso o A321 imprime o total achado junto com o
-> tempo.
+> `clock()`, de `<time.h>`, devolve o tempo de processador em "tiques";
+> divida a diferença por `CLOCKS_PER_SEC` para ter segundos. Meça trechos
+> grandes. Com `-O2`, o `gcc` pode apagar uma busca cujo resultado ninguém
+> usa; por isso o A321 imprime o total achado.
 
 > [!NOTE]
 > **Pergunta para você:** se o padrão fosse "a", com uma letra só, qual dos
-> quatro faria menos comparações nos 8 avisos? E com "de"? Pense antes, depois
-> troque o padrão no código e confira.
+> quatro faria menos comparações nos 8 avisos? E com "de"? Pense antes e
+> confira trocando o padrão no código.
 
 ### Hora de praticar
 
@@ -2358,8 +1869,8 @@ int main(int argc, char *argv[]) {
 // horspool: 3 ocorrência(s) em 2 linha(s), 54 comparações
 //
 // Outros jeitos de rodar:
-//   ./programa pastel /tmp/lpedc-pedidos.txt kmp
-//   ./programa include ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/A322.c bruta
+//   ~/LPEDC/rodar A322.c pastel /tmp/lpedc-pedidos.txt kmp
+//   ~/LPEDC/rodar A322.c include ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/A322.c bruta
 ```
 
 ```bash
@@ -2370,8 +1881,8 @@ gcc ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/A322.c ~/LPEDC/24-busca-de-pa
 
 **Exercício E961** · ★☆☆
 
-Use o TAD padroes.h (ele já está na pasta e o comando do exemplo compila junto). Conte
-quantas vezes "pix" aparece no extrato abaixo com os QUATRO algoritmos,
+Use o TAD padroes.h (compile com o padroes.c da pasta). Conte quantas
+vezes "pix" aparece no extrato abaixo com os QUATRO algoritmos,
 mostre as comparações de cada um e confira se todos acharam o mesmo total:
 
 
@@ -2390,46 +1901,8 @@ Saída esperada:
 os quatro concordam
 ```
 
-**Dicas:**
-
-1. As quatro funções têm a mesma assinatura (o tipo Busca de padroes.h).
-   Guarde-as num vetor: Busca buscas[] = {pb_forca_bruta, pb_kmp, ...}.
-2. As funções SOMAM em *comparacoes: zere o contador antes de cada uma.
-   Se só quer contar, passe NULL e 0 no lugar de pos e max.
-3. O Rabin-Karp parece imbatível, mas só conta as comparações de letra da
-   conferência: as duas contas do hash por janela não entram no número.
-
 ```bash
 gcc ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/E961.c ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/padroes.c -o ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/E961 && ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/E961
-```
-
-**Exercício E962** · ★☆☆
-
-O caderno de receitas virou um vetor de linhas. Complete o laço para fazer
-um "grep -n" com o pb_horspool: mostre o número (contando de 1) e o texto de
-cada linha que tem "ovo" e, no fim, quantas linhas e quantas ocorrências:
-
-
-```text
-Saída esperada:
-1: bolo de cenoura: 3 ovos, 2 xícaras de farinha
-2: pão de queijo: polvilho, queijo, ovo e leite
-4: omelete: 2 ovos e queijo
-5: pudim: leite, ovos e açúcar; ovo extra se quiser
-6: farofa: farinha, manteiga e ovo cozido
-5 linhas, 6 ocorrências
-```
-
-**Dicas:**
-
-1. O n de cada linha é (int) strlen(receitas[l]).
-2. A função devolve quantas vezes o padrão aparece na linha: maior que 0
-   quer dizer que a linha entra.
-3. Linhas e ocorrências são contadores diferentes: a linha 5 tem duas.
-4. "ovos" contém "ovo" e conta.
-
-```bash
-gcc ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/E962.c ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/padroes.c -o ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/E962 && ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/E962
 ```
 
 **Exercício E963** · ★★☆
@@ -2458,18 +1931,6 @@ Saída esperada:
 3: pouco sal, por favor
 5: faltou sal!
 ```
-
-**Dicas:**
-
-1. Peça as posições: int pos[16]; pb_kmp(linha, n, padrao, m, pos, 16, &comp).
-2. Para a ocorrência em ini, o lado esquerdo está livre se ini == 0 ou se
-   linha[ini - 1] não é de palavra. O direito, se ini + m == n ou se
-   linha[ini + m] não é de palavra. Confira os limites ANTES de ler.
-3. "De palavra": isalnum((unsigned char) c) || c == '_'. Por isso
-   "sal_marinho" não conta.
-4. (Com acentos isso complica: o 'ã' em
-   UTF-8 são dois bytes que o isalnum não reconhece como letra. Esta lista
-   foi escolhida sem esse problema.)
 
 ```bash
 gcc ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/E963.c ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/padroes.c -o ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/E963 && ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/E963
@@ -2500,14 +1961,6 @@ terça: [chuva] forte à tarde; depois da [chuva], frio   (2)
 quinta: [chuva]rada de manhã   (1)
 ```
 
-**Dicas:**
-
-1. Percorra a linha letra a letra com um índice prox para a próxima
-   ocorrência: quando i == pos[prox], escreva '[' antes da letra.
-2. Guarde onde fechar (i + m) e escreva ']' quando chegar lá, inclusive no
-   fim da linha (por isso o laço vai até i <= n).
-3. As letras acentuadas passam intactas: você só copia bytes com putchar.
-
 ```bash
 gcc ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/E964.c ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/padroes.c -o ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/E964 && ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/E964
 ```
@@ -2530,59 +1983,8 @@ Saída esperada:
  32   133184   125044     47243          32            1
 ```
 
-**Dicas:**
-
-1. Aloque o texto com malloc(N + 1), preencha com bases[sorteia(4)], ponha
-   o '\0' e não esqueça o free.
-2. Use um vetor Busca buscas[4] e um vetor long comp[4], zerado antes de
-   cada busca.
-3. No Horspool, com só 4 letras, todas aparecem perto do fim do padrão,
-   e os saltos ficam curtos. Padrão maior não garante ganho aqui,
-   ao contrário da prosa do A321. E a força bruta fica perto de 1,33 n:
-   a chance de a 1ª letra bater é 1/4.
-4. Resposta esperada: a tabela acima (o Rabin-Karp quase só confere as
-   ocorrências de verdade).
-
 ```bash
 gcc ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/E965.c ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/padroes.c -o ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/E965 && ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/E965
-```
-
-**Exercício E966** · ★★★
-
-O narrador falou o jogo inteiro. Conte quantas vezes cada palavra da lista
-{"gol", "bola", "juiz", "falta", "trave"} aparece na narração com o
-pb_horspool, guarde num vetor de struct {palavra, vezes} e ordene com qsort:
-mais vezes primeiro; empate em ordem alfabética. Mostre o ranking e o total
-de comparações de letra das cinco buscas:
-
-
-```text
-"gol! a bola bateu na trave, o juiz deu falta, a bola voltou e foi gol
- de novo; falta na entrada da area, bola na trave e gol"
-```
-
-
-
-```text
-Saída esperada:
-1º bola  3
-2º gol   3
-3º falta 2
-4º trave 2
-5º juiz  1
-(218 comparações de letra no total)
-```
-
-**Dicas:**
-
-1. typedef struct { const char *palavra; int vezes; } Contagem;
-2. A compara recebe const void * (assunto 0050). Para "mais vezes
-   primeiro" sem o risco de overflow do b - a, use
-   (y->vezes > x->vezes) - (y->vezes < x->vezes); no empate, strcmp.
-3. O mesmo long comp pode acumular as cinco buscas: as funções somam.
-
-```bash
-gcc ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/E966.c ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/padroes.c -o ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/E966 && ~/LPEDC/24-busca-de-padroes/0161-juntando-tudo/E966
 ```
 
 ---

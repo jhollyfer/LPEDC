@@ -1,58 +1,48 @@
 # Módulo 26 · Notação assintótica, somatórios e espaço
 
-No módulo 10 você aprendeu a contar passos e a dizer "isso é O(n²)" olhando
-os laços. No módulo 17, a resolver recorrências e a usar Θ e Ω. Este módulo
-fecha três pontas: as **definições formais** de O, Ω e Θ, com as constantes
-`c` e `n₀`; os **somatórios** que dão o número exato de vezes que um laço
-roda; e a **complexidade espacial**, que mede memória como se mede tempo.
+Nos módulos 10 e 17 você contou passos, disse "isso é O(n²)" e resolveu
+recorrências. Este módulo fecha três pontas: as **definições formais** de O,
+Ω e Θ, com `c` e `n₀`; os **somatórios** que dão o número exato de vezes que
+um laço roda; e a **complexidade espacial**, que mede memória como se mede
+tempo.
 
-A mudança na cabeça é trocar o "parece n²" pela conta. Dizer que
-`3n² + 10n + 20` é Θ(n²) vira uma afirmação que se **prova** (exibindo `c₁`,
-`c₂` e `n₀`) ou se **refuta** (mostrando que nenhum par serve). O laço
-dependente que roda "umas n²/2 vezes" passa a rodar `n(n-1)/2` vezes, conferido
-por um contador. E a função que "não usa memória" obriga a olhar a pilha da
-recursão, que gasta espaço mesmo sem vetor nenhum.
-
-Cada fórmula tem um programa em C que conta e confere. O último assunto junta
-as três ideias na ficha de cinco funções: passos, bytes e frames medidos e
-comparados com a fórmula.
+A mudança é trocar o "parece n²" pela conta: dizer que `3n² + 10n + 20` é
+Θ(n²) vira uma afirmação que se **prova** ou se **refuta**. O laço que roda
+"umas n²/2 vezes" passa a rodar `n(n-1)/2`, conferido por um contador. E a
+função que "não usa memória" obriga a olhar a pilha da recursão. O último
+assunto junta as três ideias na ficha de cinco funções.
 
 ## O que você vai aprender
 
-- as definições de **O**, **Ω** e **Θ** com `c` e `n₀`, e como **provar** e **refutar** um limite
-- a diferença entre **melhor caso**, **pior caso** e **caso médio**, e por que isso não é a mesma coisa que O, Ω e Θ
-- achar `c` e `n₀` com um programa, e entender por que o programa não substitui a prova
-- transformar laços em **somatórios**: aritmética, quadrados, geométrica e harmônica, com laços dependentes
-- calcular o número **exato** de execuções de um laço e conferir com um contador
-- a **complexidade espacial**: espaço extra, algoritmos **in-place**, o espaço da **pilha da recursão**
+- as definições de **O**, **Ω** e **Θ** com `c` e `n₀`; **provar** e
+  **refutar** um limite
+- **melhor**, **pior** e **médio** caso, que não são O, Ω e Θ
+- achar `c` e `n₀` com um programa e por que ele não substitui a prova
+- transformar laços em **somatórios**: aritmético, quadrático, geométrico,
+  harmônico e laços dependentes
+- a **complexidade espacial**: espaço extra, **in-place** e pilha da recursão
 - a troca de **tempo por espaço**: tabelas, prefixos e memoização
-- conferir uma ficha de complexidade inteira medindo passos, bytes e frames
+- conferir uma ficha de complexidade medindo passos, bytes e frames
 
 ## Antes de começar
 
-Este módulo usa: contagem de passos e notação O (0071 e 0072), pilha de
-chamadas e recursão (0031 a 0033), pilha, heap, `malloc` e `free` (0053 e 0054),
-ponteiro para função (0050), busca binária (0090), insertion sort e merge
-sort (0093 e 0094), recorrências e a notação Θ (0114 a 0117), permutações
-por backtracking (0126), potência rápida (0131) e memoização (0138).
+Usa contagem de passos e notação O (0071, 0072), pilha de chamadas e recursão
+(0031 a 0033), pilha, heap, `malloc` e `free` (0053, 0054), ponteiro para
+função (0050), busca binária (0090), insertion e merge sort (0093, 0094),
+recorrências e Θ (0114 a 0117), backtracking (0126), potência rápida (0131) e
+memoização (0138).
 
-Faça as contas no papel **antes** de rodar (a desigualdade do `n₀`, o
-somatório do laço, os bytes extras);
-depois mude o `n`, dobre, e veja se o contador acompanha a fórmula. Nos
-diagramas da ideia, verde é o que vale (o teto que já segura, o espaço
-constante), vermelho é o que falha ou cresce com `n`, amarelo marca o ponto de
-virada (o `n₀`, a razão ao dobrar `n`) e roxo é trabalho sendo contado.
+Faça as contas no papel **antes** de rodar; depois dobre o `n` e veja se o
+contador acompanha a fórmula. Nos diagramas, verde é o que vale (teto que
+segura, espaço constante), vermelho é o que falha ou cresce com `n`, amarelo
+marca a virada (o `n₀`, a razão ao dobrar `n`) e roxo é trabalho contado.
 
-Matemática: potências, logaritmos e somas. Lembre que `log₂ n` é quantas
-vezes dá para dividir `n` por 2 até chegar em 1, e que `ln n` é o logaritmo
-natural (`log` em `<math.h>`). O gcc com as flags de estudo já liga a biblioteca matemática.
+Lembre que `log₂ n` é quantas vezes dá para dividir `n` por 2 até chegar em 1,
+e que `ln n` é o logaritmo natural (`log` em `<math.h>`).
 
-O último assunto tem um TAD na pasta, `custo.h` e `custo.c`, com cinco
-funções instrumentadas. O comando do exemplo compila o `custo.c` junto com qualquer
-exemplo ou exercício da pasta; por isso, nos exercícios de lá, não dê os
-nomes `custo_passos`, `custo_bytes` e `custo_prof_max` a variáveis suas.
-Os exercícios de "conserte" trazem o erro de propósito, e o enunciado
-avisa.
+O último assunto tem um TAD, `custo.h` e `custo.c`, compilado junto com os
+exemplos e exercícios da pasta: não dê os nomes `custo_passos`, `custo_bytes`
+e `custo_prof_max` a variáveis suas.
 
 {{indice}}
 
@@ -426,6 +416,28 @@ O número médio de comparações é:
 pior. Veja 0166 (exemplo A331).
 
 </details>
+
+## Questões de provas do PPGI
+
+Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.
+
+**Edital 055/2017 · Questão 13**
+
+Marque a alternativa CORRETA.
+Considerando-se para cada algoritmo o pior cenário possível em termos de uso de espaço, são algoritmos que utilizam espaço extra constante, independentemente do número de elementos do vetor de entrada a ser ordenado:
+
+- A) Mergesort e Seleção.
+- B) Quicksort e Mergesort.
+- C) Mergesort e Heapsort.
+- D) Inserção e Quicksort.
+- E) Nenhuma das alternativas acima está correta.
+
+<details><summary>Gabarito</summary>
+
+**E.** O(1) de espaço no pior caso: seleção, inserção, heap; merge usa O(n) e quick usa pilha de recursão (O(n) no pior caso) Assunto 0168.
+
+</details>
+
 
 ## Para ler mais
 

@@ -1,40 +1,34 @@
 ## 0169 · Juntando tudo: passos e bytes conferidos
 
-A loja de material de construção vai trocar o sistema do caixa. O
-fornecedor entregou cinco funções que trabalham sobre o vetor de preços
-(em centavos) e, para cada uma, uma ficha: "tempo Θ(...), espaço extra
-Θ(...)". Antes de assinar, você quer conferir as fichas com o programa
-rodando.
+O fornecedor do caixa da loja de material de construção entregou cinco
+funções sobre o vetor de preços (em centavos), cada uma com uma ficha "tempo
+Θ(...), espaço extra Θ(...)". Confira as fichas rodando o programa.
 
-O roteiro de conferência usa o módulo inteiro:
+O roteiro usa o módulo inteiro:
 
-1. **Leia o código** e escreva a fórmula exata de passos, com os
-   somatórios do assunto 0167. Escreva também o espaço extra: vetores,
-   `malloc` e a profundidade máxima da recursão (assunto 0168).
-2. **Instrumente**: um contador de passos dentro do laço mais interno, um
-   contador de bytes ao lado de cada `malloc` e um contador de frames vivos
-   na entrada e na saída de cada função.
-3. **Meça e compare** com a fórmula. Se bater, a ficha está certa para
-   aquele `n`.
-4. **Dobre o `n`** e olhe a razão, a versão prática da definição de Θ do
-   assunto 0166: se `f(n)` é Θ(n²), a razão `f(2n) / f(n)` vai para 4; se é
-   Θ(n log n), fica um pouco acima de 2; se é Θ(log n), soma 1.
+1. **Leia o código** e escreva a fórmula exata de passos (somatórios do
+   assunto 0167) e o espaço extra: vetores, `malloc` e profundidade máxima da
+   recursão (0168).
+2. **Instrumente**: contadores de passos no laço mais interno, de bytes em
+   cada `malloc` e de frames vivos.
+3. **Meça e compare** com a fórmula.
+4. **Dobre o `n`** e olhe a razão (a versão prática do Θ do assunto 0166): em
+   Θ(n²), `f(2n) / f(n)` vai para 4; em Θ(n log n), fica um pouco acima de 2;
+   em Θ(log n), soma 1.
 
-As cinco funções ficam num TAD, `custo.h` e `custo.c`, na pasta do assunto.
-Elas compartilham três medidas: `custo_passos`, `custo_bytes` (pedidos ao
-`malloc`) e `custo_prof_max` (frames vivos ao mesmo tempo). Cada uma conta
-um passo num lugar escolhido de propósito: a soma conta por elemento, a
-busca binária por elemento olhado, os pares por par testado, o merge sort
-por elemento copiado na intercalação, e a soma recursiva por chamada.
+As cinco funções ficam no TAD `custo.h` e `custo.c`, com três medidas:
+`custo_passos`, `custo_bytes` (pedidos ao `malloc`) e `custo_prof_max` (frames
+vivos ao mesmo tempo). Passo é: na soma, um elemento; na busca binária, um
+elemento olhado; nos pares, um par testado; no merge sort, um elemento
+copiado na intercalação; na soma recursiva, uma chamada.
 
-A tabela é a ficha conferida: passos com `n = 1024`
-e `n = 2048`, a razão entre eles, e o espaço extra medido. Em vermelho, o
-que cresce com `n` no espaço; em verde, o que fica constante:
+Passos com `n = 1024` e `n = 2048`, razão e espaço extra medido. Em vermelho,
+o que cresce com `n`; em verde, o constante:
 
 {{ideia}}
 
-O programa roda as cinco com 1024 e 2048 preços e imprime, para cada uma,
-os passos, a fórmula, os frames e os bytes:
+O programa roda as cinco com 1024 e 2048 preços e imprime passos, fórmula,
+frames e bytes:
 
 ```c
 #include <stdio.h>
@@ -97,10 +91,8 @@ int main(void) {
 // soma_rec      2049     2049    2049       0
 ```
 
-Aqui o fluxograma desenha o roteiro, não uma função. A pergunta "a medida
-bate com a fórmula?" vem antes da pergunta sobre a classe: uma fórmula
-errada com a classe certa passa despercebida no "parece n²", e a
-conferência exata pega o erro na hora:
+O fluxograma é o roteiro, não uma função. "A medida bate com a fórmula?" vem
+antes da classe: fórmula errada com classe certa passa no "parece n²":
 
 {{fluxograma}}
 
@@ -116,34 +108,23 @@ Lendo a saída de `n = 1024` para `n = 2048`:
 | merge | 10.240 → 22.528 | × 2,2 | Θ(n log n) | 12 → 13 | 4096 → 8192 | Θ(n) |
 | soma_rec | 1025 → 2049 | × 2 | Θ(n) | 1025 → 2049 | 0 | Θ(n) |
 
-As cinco fichas conferem. A soma e a soma recursiva têm o **mesmo tempo**
-e espaços diferentes: a recursiva empilha um frame por elemento. O merge
-sort tem dois espaços extras: o vetor auxiliar (Θ(n), que domina) e a
-pilha (Θ(log n), 12 e 13 frames).
+As cinco fichas conferem. A soma e a soma recursiva têm o **mesmo tempo** e
+espaços diferentes: a recursiva empilha um frame por elemento. O merge sort
+usa o vetor auxiliar (Θ(n), que domina) e a pilha (Θ(log n), 12 e 13 frames).
 
 > [!WARNING]
-> A medida só vale para o que você mede. A busca conferida aqui é o **pior
-> caso** (procurar 1 centavo, que não está no vetor); procurando o preço do
-> meio, ela faz 1 passo. Os pares fazem `n(n-1)/2` testes em **qualquer**
-> entrada, então ali melhor e pior coincidem. Antes de comparar com a
-> fórmula, decida qual caso a entrada do teste representa, senão você
-> "confirma" um Θ(log n) com uma busca que achou de primeira.
+> A medida vale para a entrada testada. A busca é o **pior caso** (1 centavo,
+> que não está no vetor); com o preço do meio, faz 1 passo. Os pares fazem
+> `n(n-1)/2` testes em **qualquer** entrada. Decida qual caso a entrada
+> representa.
 
 > [!TIP]
-> **Por dentro do C:** os contadores são variáveis globais do `custo.c`.
-> `custo_passos` é declarada com `extern` no `.h` e definida uma vez só no
-> `.c`; o `prof` é `static`, invisível fora do arquivo. Os bytes da pilha
-> não aparecem em `custo_bytes`: o `malloc` mede o **heap**, e a pilha
-> só dá para medir em frames. Cada frame da `custo_soma_rec`
-> guarda o endereço de retorno, o `v`, o `n` e o `s`, umas dezenas de bytes
-> (o tamanho exato depende do compilador e das opções). Com o
-> AddressSanitizer ligado, os frames ficam maiores, porque ele põe zonas de
-> proteção em volta das variáveis locais.
+> O `custo_bytes` mede o **heap**; a pilha só dá para medir em frames, que o
+> AddressSanitizer aumenta com zonas de proteção.
 
 > [!NOTE]
-> **Pergunta para você:** se o fornecedor trocasse a busca binária com laço
-> por uma busca binária **recursiva**, quais colunas da linha "busca"
-> mudariam com `n = 2048`? Escreva os números que você espera antes de
+> **Pergunta para você:** se a busca binária virasse **recursiva**, quais
+> colunas da linha "busca" mudariam com `n = 2048`? Escreva os números antes de
 > trocar.
 
 {{pratique}}

@@ -1,13 +1,9 @@
 ## 0161 · Juntando tudo
 
-O síndico digitou os avisos do condomínio num arquivo, uma linha por aviso, e
-quer saber quais falam da garagem. No terminal, isso é `grep garagem
-avisos.txt`: o programa lê o arquivo linha por linha e mostra as que têm o
-padrão. Aqui você monta o seu **mini-grep** com os quatro algoritmos
-do módulo e mede qual trabalha menos.
-
-O primeiro passo é dar aos quatro a **mesma cara**. Eles ficam num TAD,
-`padroes.h` e `padroes.c`, todos com a mesma assinatura:
+O síndico quer os avisos do condomínio que falam da garagem: `grep garagem
+avisos.txt`. Aqui você monta o seu **mini-grep** com os quatro algoritmos do
+módulo e mede qual trabalha menos. Os quatro ficam num TAD, `padroes.h` e
+`padroes.c`, com a mesma assinatura:
 
 ```c
 typedef int (*Busca)(const char *texto, int n, const char *padrao, int m,
@@ -21,13 +17,10 @@ int pb_rabin_karp(...);
 
 Cada função devolve quantas ocorrências achou, guarda as posições das
 primeiras `max` em `pos` (ou nada, se `pos` for `NULL`) e **soma** em
-`*comparacoes` as comparações de letra que fez. Somar, e não zerar, deixa
-acumular o custo de um arquivo inteiro, linha após linha.
-
-Com a mesma assinatura, o algoritmo vira um **dado**. `Busca` é um tipo
-ponteiro para função (assunto 0050), e um vetor de structs `{nome, busca}`
-guarda os quatro. O grep chama `algs[a].busca(...)` sem saber qual está do outro
-lado: para trocar de algoritmo, basta trocar o índice.
+`*comparacoes` as comparações de letra, acumulando o custo do arquivo inteiro.
+`Busca` é um ponteiro para função (assunto 0050), e um vetor de structs
+`{nome, busca}` guarda os quatro: para trocar de algoritmo, troque o índice
+em `algs[a].busca(...)`.
 
 Cada um vence numa situação:
 
@@ -38,13 +31,13 @@ Cada um vence numa situação:
 | Horspool | saltos, O(256 + m) | 256 inteiros | O(n·m) | perto de `n / m` | pula letras; melhora com padrão longo |
 | Rabin-Karp | hash do padrão, O(m) | nenhuma | O(n·m) | O(n + m) | vários padrões de uma vez; texto como números |
 
-São 8 avisos e o padrão é "garagem". O grep mostra as
-linhas 3, 5 e 8 (a 3 tem duas ocorrências). Depois, as mesmas linhas passam pelos
-quatro algoritmos: o resultado é igual, o trabalho não:
+São 8 avisos e o padrão é "garagem". O grep mostra as linhas 3, 5 e 8 (a 3
+tem duas ocorrências). Os quatro algoritmos dão o mesmo resultado, com
+trabalho diferente:
 
 {{ideia}}
 
-O programa, usando o TAD:
+O programa:
 
 ```c
 #include <stdio.h>
@@ -113,41 +106,32 @@ int main(void) {
 //   4 ocorrências,  28 comparações: Rabin-Karp
 ```
 
-O fluxograma do grep é um laço sobre as linhas com uma chamada de busca no
-meio. Os quatro algoritmos do módulo ficam atrás dessa chamada:
+O grep é um laço sobre as linhas com uma chamada de busca no meio:
 
 {{fluxograma}}
 
-Leia os números com cuidado. O KMP fez **mais** comparações que a força bruta:
-em texto comum, a força bruta já falha na primeira letra, e o KMP só ganha
-quando há muita repetição parcial (o pior caso da força bruta). O Horspool
-pulou letras: com 7 letras no padrão, ele olhou menos de um quarto do que a
-força bruta olhou. E o Rabin-Karp parece imbatível, mas o número dele só conta
-as letras da conferência: as duas contas de hash em cada uma das 317 janelas
-não entram. O exemplo A321 liga o **cronômetro** de verdade, com `clock()`,
-em textos de 2 milhões de letras.
+O KMP fez **mais** comparações que a força bruta: em texto comum ela falha
+na primeira letra, e o KMP só ganha com muita repetição parcial. O Rabin-Karp
+parece imbatível, mas seu número só conta a conferência: as contas de hash das
+317 janelas não entram. O A321 usa o **cronômetro** `clock()` em textos de 2
+milhões de letras.
 
 > [!WARNING]
-> Comparação de letra é um bom modelo, mas não é o tempo. O Rabin-Karp troca
-> comparações por multiplicações e restos, que custam mais caro; o Horspool lê
-> a tabela de saltos a cada alinhamento. E os algoritmos trabalham com
-> **bytes**, não com letras: em UTF-8, "Reunião" tem 8 bytes, as posições
-> devolvidas são posições de byte, e "garagem" não acha "GARAGEM" (o E963 e o
-> E951 mostram os cuidados). O `grep` de verdade ainda trata acentos,
-> maiúsculas e expressões regulares; o seu trata padrões fixos.
+> Comparação de letra não é tempo: o Rabin-Karp troca comparações por
+> multiplicações e restos, e o Horspool lê a tabela a cada alinhamento. Os
+> algoritmos trabalham com **bytes**: em UTF-8, "Reunião" tem 8 bytes, as
+> posições são de byte, e "garagem" não acha "GARAGEM" (E963 e E951). O seu
+> grep trata só padrões fixos.
 
 > [!TIP]
-> **Por dentro do C:** `clock()`, de `<time.h>`, devolve o tempo de processador
-> gasto pelo programa (não o tempo do relógio da parede), em "tiques";
-> dividindo a diferença por `CLOCKS_PER_SEC`, você tem segundos. Três cuidados: meça trechos grandes (abaixo de alguns milissegundos é ruído); o
-> a compilação com AddressSanitizer (flags de estudo) confere cada acesso à memória e
-> deixa o programa umas duas vezes mais lento; e com `-O2` o `gcc` pode apagar uma busca cujo
-> resultado ninguém usa. Por isso o A321 imprime o total achado junto com o
-> tempo.
+> `clock()`, de `<time.h>`, devolve o tempo de processador em "tiques";
+> divida a diferença por `CLOCKS_PER_SEC` para ter segundos. Meça trechos
+> grandes. Com `-O2`, o `gcc` pode apagar uma busca cujo resultado ninguém
+> usa; por isso o A321 imprime o total achado.
 
 > [!NOTE]
 > **Pergunta para você:** se o padrão fosse "a", com uma letra só, qual dos
-> quatro faria menos comparações nos 8 avisos? E com "de"? Pense antes, depois
-> troque o padrão no código e confira.
+> quatro faria menos comparações nos 8 avisos? E com "de"? Pense antes e
+> confira trocando o padrão no código.
 
 {{pratique}}

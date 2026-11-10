@@ -1,32 +1,24 @@
 ## 0172 · Vetor de tamanho variável (VLA)
 
-A academia do bairro quer uma planilha de treinos: uma linha por aluno, uma
-coluna por semana. Só que o número de alunos e de semanas muda a cada
-turma, e só é conhecido quando o professor digita. Até aqui, você teria duas
-saídas: reservar uma matriz enorme "por garantia" ou chamar o `malloc`.
+Numa planilha de treinos, alunos e semanas só são conhecidos na digitação.
+Até aqui, as saídas eram uma matriz enorme "por garantia" ou o `malloc`.
 
-O C99 trouxe uma terceira: o **VLA** (*variable length array*, vetor de
-tamanho variável). É um vetor local cujo tamanho é uma expressão calculada
-na hora, não uma constante: `int treinos[alunos][semanas];`. Ele mora na
-**pilha**, como qualquer variável local, e some sozinho no fim do bloco. Não
-tem `free`.
+O C99 trouxe o **VLA** (*variable length array*): um vetor local cujo tamanho
+é uma expressão calculada na hora, como `int treinos[alunos][semanas];`. Ele
+mora na **pilha** e some no fim do bloco, sem `free`.
 
-Com o VLA, o `sizeof` deixa de ser uma constante do compilador: `sizeof
-treinos` é calculado **em tempo de execução**, e vale `alunos * semanas *
-sizeof(int)`. O VLA também tem limites: não pode ser `static` nem global, e
-não aceita inicialização (`int v[n] = {0};` é erro no C17). Preencha com um
-laço.
+Com VLA, `sizeof treinos` é calculado **na execução**: `alunos * semanas *
+sizeof(int)`. O VLA não pode ser `static` nem global e não aceita
+inicialização (`int v[n] = {0};` é erro no C17): use um laço.
 
-O uso mais útil é como **parâmetro**. Uma função comum precisa saber a
-largura da matriz já ao compilar (`int m[][4]`). Com VLA, a função recebe as
-dimensões e a matriz: `void f(int l, int c, int m[l][c])`. A ordem importa:
-`l` e `c` vêm **antes**, porque o tipo `m[l][c]` usa os dois. Assim uma
-só função serve para matrizes de qualquer tamanho.
+O uso mais útil é como **parâmetro**. Uma função comum precisa da largura da
+matriz ao compilar (`int m[][4]`); com VLA, ela recebe as dimensões e a
+matriz: `void f(int l, int c, int m[l][c])`. `l` e `c` vêm **antes**, porque o
+tipo `m[l][c]` usa os dois.
 
-Um detalhe de versão: no C99 o VLA é obrigatório; no C11 e no C17 virou
-**opcional**. Um compilador sem VLA define a macro `__STDC_NO_VLA__`. O gcc
-e o clang suportam; o compilador da Microsoft, não. Quem quer garantir
-escreve:
+O VLA é obrigatório no C99 e **opcional** no C11 e no C17: o compilador sem
+VLA define `__STDC_NO_VLA__` (o da Microsoft não suporta; gcc e clang sim).
+Para exigir VLA:
 
 ```c
 #ifdef __STDC_NO_VLA__
@@ -34,13 +26,11 @@ escreve:
 #endif
 ```
 
-Com 3 alunos e 4 semanas, a planilha tem 12 `int`:
-48 bytes, reservados na pilha no momento em que a linha do VLA roda. O
-desenho mostra a matriz e onde ela fica:
+Com 3 alunos e 4 semanas, a planilha tem 12 `int`: 48 bytes na pilha:
 
 {{ideia}}
 
-O programa lê as dimensões, confere, cria o VLA e passa para as funções:
+O programa lê as dimensões, confere, cria o VLA e o passa às funções:
 
 ```c
 #include <stdio.h>
@@ -93,33 +83,25 @@ int main(void) {
 // aluno 3: 2 4 1 3  total 10
 ```
 
-No fluxograma, a validação vem **antes** do VLA. Depois que a linha
-`int treinos[alunos][semanas];` roda, não há como desistir nem como saber se
-deu certo:
+No fluxograma, a validação vem **antes** do VLA: depois da linha, não há como
+desistir nem saber se deu certo:
 
 {{fluxograma}}
 
 > [!WARNING]
-> O VLA não avisa quando falha. O `malloc` devolve `NULL` se não houver
-> memória; o VLA pede o espaço à pilha, e a pilha de um programa
-> no Linux tem uns **8 MB** (confira com `ulimit -s`). Um `int v[n]` com `n`
-> igual a 3 milhões pede 12 MB e derruba o programa com *segmentation
-> fault*, sem chance de tratar. E um `n` que veio do usuário pode ser 0,
-> negativo ou gigante. Regra prática: VLA só para tamanhos **pequenos e
-> conferidos**; para dados grandes ou de tamanho desconhecido, `malloc`.
+> O VLA não avisa quando falha. A pilha no Linux tem uns **8 MB** (veja com
+> `ulimit -s`): `int v[n]` com `n` igual a 3 milhões pede 12 MB e derruba o
+> programa com *segmentation fault*. Um `n` do usuário pode ser 0, negativo
+> ou gigante. Use VLA só para tamanhos **pequenos e conferidos**; para o
+> resto, `malloc`, que devolve `NULL` quando falta memória.
 
 > [!TIP]
-> **Por dentro do C:** um vetor comum tem tamanho fixo, e o compilador já
-> sabe, ao compilar, quanto descer o ponteiro da pilha (`sub rsp, 48`). Com
-> VLA, ele gera código que calcula `alunos * semanas * 4` na hora e desce o
-> ponteiro da pilha por esse valor: é tão rápido quanto uma variável local,
-> muito mais que o `malloc`. Dá para ter o melhor dos dois: `int (*m)[c] =
-> malloc(l * sizeof *m);` cria a matriz no heap, com tipo VLA, e você
-> continua escrevendo `m[i][j]` (veja o A344).
+> `int (*m)[c] = malloc(l * sizeof *m);` cria no heap uma matriz com tipo
+> VLA, e `m[i][j]` continua valendo (veja o A344).
 
 > [!NOTE]
-> **Pergunta para você:** se o professor digitar `100 52`, quantos bytes
-> o `sizeof treinos` mostra? E quantas planilhas desse tamanho caberiam numa
+> **Pergunta para você:** se o professor digitar `100 52`, quantos bytes o
+> `sizeof treinos` mostra? E quantas planilhas desse tamanho caberiam numa
 > pilha de 8 MB?
 
 {{pratique}}

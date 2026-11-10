@@ -27,7 +27,7 @@ void central(const char *senha, const char *teclas) {
     int k = 0;
     calcula_pi(senha, m, pi);
     for (int i = 0; teclas[i] != '\0'; i++) {
-        while (k > 0 && teclas[i] != senha[k]) {   // era um if: recuava uma vez só
+        while (k > 0 && teclas[i] != senha[k]) {
             k = pi[k - 1];
         }
         if (teclas[i] == senha[k]) {

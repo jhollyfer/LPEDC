@@ -1,7 +1,7 @@
 // 0169 · Juntando tudo: passos e bytes conferidos
 // Exercício E1009 · ★☆☆
 //
-// Use o TAD custo.h desta pasta (o rodar compila o custo.c junto). Para
+// Use o TAD custo.h desta pasta (compile com o custo.c). Para
 // n = 1000, 2000, 4000 e 8000, meça os passos de custo_soma e de
 // custo_busca no pior caso (procure o valor 1, menor que todos os preços)
 // e mostre ao lado a fórmula floor(log2 n) + 1 da busca:

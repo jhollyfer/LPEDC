@@ -2,10 +2,11 @@
 // Exercício E987 · ★★☆
 //
 // Um quinto concorrente: a tabela hash com encadeamento (assunto 0106).
-// Complete as quatro funções do hash com 101 baldes, h(chave) = chave % 101,
-// e a chave nova entrando no INÍCIO da lista do balde. O custo de uma busca
-// é quantos nós da lista do balde ela comparou (balde vazio custa 0). O
-// main já põe o hash no fim da tabela de concorrentes.
+// Escreva do zero as quatro funções do hash (hash_cria, hash_insere,
+// hash_busca e hash_libera) com 101 baldes, h(chave) = chave % 101, e a chave
+// nova entrando no INÍCIO da lista do balde. O custo de uma busca é quantos
+// nós da lista do balde ela comparou (balde vazio custa 0). O esqueleto já
+// traz o teste (mede e main), com o hash no fim da tabela de concorrentes.
 //
 //   Saída esperada:
 //               embaralhada  crescente
@@ -15,7 +16,7 @@
 //   lista MTF         114.6      114.5
 //   hash                6.4        4.7
 //
-// Escreva sua resposta abaixo (complete as funções do hash):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,23 +28,23 @@
 #define BALDES 101
 
 void *hash_cria(void) {
-    return NULL; // troque: aloque e devolva a estrutura vazia
+    return NULL;
 }
 
 void hash_insere(void *e, int chave) {
-    (void)e; // apague estas duas linhas
+    (void)e;
     (void)chave;
 }
 
 bool hash_busca(void *e, int chave, int *custo) {
-    (void)e; // apague estas duas linhas
+    (void)e;
     (void)chave;
     *custo = 0;
     return false;
 }
 
 void hash_libera(void *e) {
-    free(e); // troque: libere tudo o que a estrutura alocou
+    (void)e;
 }
 
 double mede(const Estrutura *e, const int ordem[], const int buscas[]) {

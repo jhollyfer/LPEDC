@@ -1,18 +1,20 @@
 // 0189 · Juntando tudo
 // Exercício E1132 · ★★☆
 //
-// Este Held-Karp para a padaria do E1129 calcula a menor volta, mas não
-// guardou a tabela de anteriores, e a memória do servidor não comporta
-// outra tabela do mesmo tamanho. Reconstrua a rota só com dp[][]: o
-// ponto que veio antes de k no conjunto s é um j (de s sem k) tal que
-// dp[s sem k][j] + d[j][k] == dp[s][k]. Comece em (todos, fim) e ande
-// para trás até sobrar só a padaria.
+// Escreva o Held-Karp para a padaria do E1129 (cinco pontos, distância
+// |dx| + |dy|) com a tabela dp[1 << N][N], sem guardar a tabela de
+// anteriores (a memória do servidor não comporta outra do mesmo tamanho).
+// Mostre a menor volta e reconstrua a rota só com dp[][]: o ponto que veio
+// antes de k no conjunto s é o primeiro j (de s sem k) tal que
+// dp[s sem k][j] + d[j][k] == dp[s][k]. Comece em (todos, fim) e ande para
+// trás até sobrar só a padaria. No empate do último ponto, vale o menor
+// índice.
 //
 //   Saída esperada:
 //   Menor volta: 22 quarteirões
 //   Rota: Padaria Feira Escola Posto Banco Padaria
 //
-// Escreva sua resposta abaixo (complete o main):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,25 +29,6 @@ int d[N][N];
 int dp[1 << N][N];
 
 int main(void) {
-    for (int a = 0; a < N; a++)
-        for (int b = 0; b < N; b++) d[a][b] = abs(px[a] - px[b]) + abs(py[a] - py[b]);
-
-    for (int s = 0; s < (1 << N); s++)
-        for (int j = 0; j < N; j++) dp[s][j] = INF;
-    dp[1][0] = 0;
-    for (int s = 1; s < (1 << N); s += 2)
-        for (int j = 0; j < N; j++) {
-            if (!(s >> j & 1) || dp[s][j] == INF) continue;
-            for (int k = 1; k < N; k++)
-                if (!(s >> k & 1) && dp[s][j] + d[j][k] < dp[s | 1 << k][k])
-                    dp[s | 1 << k][k] = dp[s][j] + d[j][k];
-        }
-    int todos = (1 << N) - 1, fim = 1;
-    for (int j = 2; j < N; j++)
-        if (dp[todos][j] + d[j][0] < dp[todos][fim] + d[fim][0]) fim = j;
-    printf("Menor volta: %d quarteirões\n", dp[todos][fim] + d[fim][0]);
-
-    // FALTA: reconstruir a rota só com dp[][] e mostrá-la
 
     return 0;
 }

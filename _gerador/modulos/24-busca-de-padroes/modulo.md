@@ -1,61 +1,46 @@
 # Módulo 24 · Busca de padrões em texto
 
-Ctrl+F no navegador, `grep` no terminal, o antivírus procurando a assinatura de
-um vírus, o filtro que esconde palavrões no chat, o laboratório procurando um
-trecho de DNA num genoma de 3 bilhões de letras. Tudo isso é o mesmo problema:
-achar um **padrão** de `m` letras dentro de um **texto** de `n` letras.
+Ctrl+F, `grep`, o antivírus, o filtro de palavrões do chat, o trecho de DNA
+num genoma de 3 bilhões de letras: tudo é achar um **padrão** de `m` letras
+num **texto** de `n` letras.
 
-A solução óbvia, testar cada posição, funciona, mas tem pior caso O(n·m), e
-em textos grandes isso pesa. Este módulo mostra três ideias para fazer
-melhor, cada uma com um truque que serve além de strings: **não reler** o que já foi visto (KMP),
-**pular** o que não pode dar certo (Horspool) e **comparar números** em vez de
-letras (Rabin-Karp).
-
-O módulo junta várias peças anteriores: strings e `string.h` (0041), ponteiros
-e aritmética de endereços (0047), o `size_t` e seus perigos (0003), a análise de
-custo (0072), invariantes (0073), hashing (0105) e ponteiros para função (0050).
-No fim, os quatro algoritmos viram um TAD e você monta um **mini-grep** que
-mede qual trabalha menos.
+Testar cada posição funciona, mas o pior caso é O(n·m). Este módulo traz três
+ideias melhores: **não reler** o que já foi visto (KMP), **pular** o que não
+pode dar certo (Horspool) e **comparar números** em vez de letras
+(Rabin-Karp). No fim, os quatro algoritmos viram um TAD e você monta um
+**mini-grep** que mede qual trabalha menos.
 
 ## O que você vai aprender
 
-- a **força bruta** e o `strstr`: ocorrências sobrepostas, o laço até `n - m` e
-  a armadilha do `size_t`
-- o **KMP**: bordas, a tabela π e uma busca O(n + m) que nunca volta no texto
+- a **força bruta** e o `strstr`: ocorrências sobrepostas e a armadilha do
+  `size_t`
+- o **KMP**: bordas, tabela π e busca O(n + m) sem voltar no texto
 - o **Horspool**: comparar da direita para a esquerda e saltar com uma tabela
-  de 256 posições, com o cuidado do `unsigned char`
-- o **Rabin-Karp**: hash rolante, aritmética modular em C e falsos positivos
-- a comparar algoritmos por **comparações de letra** e por tempo com `clock()`,
-  e a escolher o certo para cada texto
+  de 256 posições
+- o **Rabin-Karp**: hash rolante, aritmética modular e falsos positivos
+- a comparar algoritmos por **comparações de letra** e por `clock()`
 
 ## Antes de começar
 
-Nos diagramas da ideia, o texto é uma fileira de gavetas, uma letra em cada,
-com o padrão encostado embaixo. **Verde** é letra que bateu (ou ocorrência
-achada), **vermelha** a que falhou (ou o falso positivo), **amarela** a letra
-que decide o próximo passo, **roxa** o padrão, **azul** texto ainda não
-comparado e **cinza** o que o algoritmo não precisou olhar. Faça o passo a
-passo no papel antes de rodar.
+Usa strings (0041), ponteiros (0047), `size_t` (0003), análise de custo (0072),
+invariantes (0073), hashing (0105) e ponteiros para função (0050).
 
-Este módulo é complemento: busca de padrões não cai direto na prova do
-PPGI (o que mais cai está em `PPGI.md`, na raiz do curso).
+Nos diagramas, o texto é uma fileira de gavetas com o padrão embaixo. **Verde**
+é letra que bateu ou ocorrência achada, **vermelha** a que falhou (ou o falso
+positivo), **amarela** a que decide o próximo passo, **roxa** o padrão,
+**azul** texto ainda não comparado e **cinza** o que não precisou ser olhado.
+Faça o passo a passo no papel antes de rodar.
 
-Os exemplos dos quatro primeiros assuntos cabem cada um num arquivo só: os
-algoritmos são funções curtas, e ver a função inteira junto do `main` ajuda
-mais do que separar em `.h` e `.c`. No assunto 0161 eles viram o TAD
-`padroes.h`, que o comando do exemplo compila junto com os exemplos e exercícios da pasta.
+Este módulo é complemento: não cai direto na prova do PPGI (o que mais cai
+está em `PPGI.md`, na raiz do curso).
 
-Vários exemplos contam **comparações de letra**. A contagem não faz parte do
-algoritmo: é o "cronômetro" que mede o custo com o mesmo número em qualquer
-máquina. Tempo de relógio só aparece no A321.
-
-Os algoritmos trabalham com **bytes**. Em UTF-8, uma letra acentuada ocupa dois
-bytes acima de 127, e num `char` com sinal eles viram números negativos. Isso
-não atrapalha comparar, mas atrapalha usar a letra como índice de tabela: o
-assunto 0159 mostra o problema e o conserto.
-
-Alguns exercícios de "ache o erro" trazem o bug de propósito, e o
-AddressSanitizer (ou o UBSan) do gcc com as flags de estudo para o programa. O enunciado avisa.
+Os quatro primeiros assuntos têm um arquivo só por exemplo; no 0161 os
+algoritmos viram o TAD `padroes.h`, compilado junto com os exemplos e
+exercícios da pasta. Os exemplos contam **comparações de letra**, um custo que
+dá o mesmo número em qualquer máquina; o tempo de relógio só aparece no A321.
+Os algoritmos trabalham com **bytes**: em UTF-8, letra acentuada tem dois
+bytes acima de 127, que num `char` com sinal viram negativos e quebram o uso
+como índice de tabela (assunto 0159).
 
 {{indice}}
 

@@ -1,38 +1,32 @@
 ## 0157 · Força bruta
 
-Você aperta Ctrl+F no PDF do contrato de aluguel e digita "multa". Em menos de
-um segundo, o leitor pinta todas as ocorrências. Por trás disso há um problema
-clássico: achar um **padrão** (a palavra procurada) dentro de um **texto**, o
-mesmo que o `grep` e o antivírus resolvem.
+Você aperta Ctrl+F no PDF do contrato de aluguel e digita "multa": o leitor
+pinta todas as ocorrências. É achar um **padrão** dentro de um **texto**, o
+problema do `grep` e do antivírus.
 
-Os nomes de sempre: o texto tem `n` letras e o padrão tem `m`, com `m <= n`. Um
-**alinhamento** é encostar o padrão no texto a partir de uma posição `i`. Se as
-`m` letras batem com `texto[i..i+m-1]`, há uma **ocorrência** em `i`.
+O texto tem `n` letras e o padrão tem `m`, com `m <= n`. Um **alinhamento**
+encosta o padrão no texto a partir de uma posição `i`. Se as `m` letras batem
+com `texto[i..i+m-1]`, há uma **ocorrência** em `i`.
 
-A **força bruta** (ou busca ingênua) testa todos os alinhamentos, um por um:
-`i = 0, 1, 2, ..., n - m`. Em cada um, compara letra a letra da esquerda para a
-direita e desiste na primeira diferença. São `n - m + 1` alinhamentos: o último
-começa em `n - m`, porque depois dele o padrão não cabe mais.
+A **força bruta** (ou busca ingênua) testa todos os alinhamentos, `i = 0, 1,
+..., n - m`. Em cada um, compara da esquerda para a direita e desiste na
+primeira diferença. O último alinhamento começa em `n - m`, porque depois dele
+o padrão não cabe.
 
-Ocorrências podem se **sobrepor**: em "banana", o "ana" aparece em 1 e em 3,
-dividindo o "a" do meio. A força bruta acha as duas porque avança o alinhamento
-de 1 em 1, aconteça o que acontecer.
+As ocorrências podem se **sobrepor**: em "banana", "ana" aparece em 1 e em 3.
+A força bruta acha as duas porque avança de 1 em 1.
 
-Quanto custa? Num texto comum, quase todo alinhamento falha na primeira ou na
-segunda letra, e o total fica perto de `n` comparações. No **pior caso**, cada
-alinhamento compara quase o padrão inteiro antes de falhar: até
-`(n - m + 1) · m` comparações, que é **O(n·m)** (o Cormen chama cada
-alinhamento de **deslocamento**, e o algoritmo de **ingênuo**). Procurar `"00001"` num código
-de vinte zeros faz isso (veja o A314). Os próximos três assuntos trabalham
-menos que isso.
+Num texto comum, quase todo alinhamento falha na primeira ou na segunda letra:
+perto de `n` comparações. No **pior caso**, cada alinhamento compara quase o
+padrão inteiro: até `(n - m + 1) · m`, ou **O(n·m)**. Procurar `"00001"` num
+código de vinte zeros faz isso (A314).
 
-A placa da feira diz "banana bacana" e você procura "ana".
-São 11 alinhamentos. No 0, o "b" já não bate. No 1, as três letras batem:
-ocorrência. No 5, o "a" bate e o espaço não. No 10, ocorrência de novo:
+Procure "ana" em "banana bacana": são 11 alinhamentos, com ocorrências no 1,
+no 3 e no 10. O 0 falha no "b" e o 5 falha no espaço:
 
 {{ideia}}
 
-O mesmo exemplo em C, contando as comparações de letra:
+Em C, contando as comparações de letra:
 
 ```c
 #include <stdio.h>
@@ -80,8 +74,7 @@ int main(void) {
 
 ### Passo a passo
 
-As 19 comparações, alinhamento por alinhamento (o texto tem `n = 13` letras, o
-padrão `m = 3`):
+As 19 comparações, alinhamento por alinhamento (`n = 13`, `m = 3`):
 
 | i | trecho do texto | comparações | resultado |
 | --- | --- | --- | --- |
@@ -96,41 +89,30 @@ padrão `m = 3`):
 | 9 | `can` | 1 | falha |
 | 10 | `ana` | 3 | **ocorrência** |
 
-O teto seria `11 · 3 = 33`. Deu 19 porque a maioria dos alinhamentos falha cedo.
+O teto seria `11 · 3 = 33`; deu 19 porque quase todo alinhamento falha cedo.
 
-O fluxograma tem dois laços, um dentro do outro. O de fora anda o
-alinhamento `i`; o de dentro anda a letra `j`. O `i` sempre avança 1, tenha
-achado ou não:
+O laço de fora anda o alinhamento `i`, o de dentro anda a letra `j`. O `i`
+sempre avança 1, tenha achado ou não:
 
 {{fluxograma}}
 
-A biblioteca já tem essa busca pronta: `strstr(texto, padrao)`, de `string.h`,
-devolve um ponteiro para a primeira ocorrência, ou `NULL` se não houver. A
-posição é a diferença de endereços, `p - texto`. Para achar a próxima, chame de
-novo a partir de `p + 1` (o exemplo A313 mostra a diferença entre recomeçar em
-`p + 1` e em `p + m`).
+`strstr(texto, padrao)`, de `string.h`, devolve um ponteiro para a primeira
+ocorrência ou `NULL`; a posição é `p - texto`. Para a próxima, chame de novo
+a partir de `p + 1` (o A313 compara `p + 1` e `p + m`).
 
 > [!WARNING]
-> O laço vai até `i <= n - m`, **inclusive**. Com `i < n - m`, a ocorrência que
-> encosta no fim do texto (o "ana" da posição 10) some. E guarde `n` e `m` em
-> `int`: o `strlen` devolve `size_t`, que não tem sinal. Se o padrão for maior
-> que o texto, `n - m` em `size_t` não fica negativo, **dá a volta** e vira um
-> número enorme. O laço sai lendo memória além do `'\0'` (o exercício E941 cai
-> nessa).
+> O laço vai até `i <= n - m`, **inclusive**: com `i < n - m`, o "ana" da
+> posição 10 some. Guarde `n` e `m` em `int`: `strlen` devolve `size_t`, sem
+> sinal, e com padrão maior que o texto `n - m` **dá a volta** e o laço lê além
+> do `'\0'`.
 
 > [!TIP]
-> **Por dentro do C:** o texto é um vetor de `char` contíguo, então o laço de
-> dentro lê bytes vizinhos, o que favorece o cache do processador. A força
-> bruta não gasta memória extra: O(1). O `strstr` da glibc não é a força bruta
-> deste assunto: para padrões maiores ele usa o algoritmo **Two-Way**, que é
-> linear no pior caso, e instruções que comparam vários bytes de uma vez. E
-> `strstr` recebe `const char *` e devolve `char *` sem `const`: se
-> o texto era um literal, escrever pelo ponteiro devolvido é comportamento
-> indefinido (assunto 0048).
+> A força bruta usa memória O(1). Escrever pelo ponteiro que o `strstr`
+> devolve, num literal, é comportamento indefinido (assunto 0048).
 
 > [!NOTE]
 > **Pergunta para você:** quantas comparações a força bruta faz para procurar
 > "aaab" em "aaaaaaaaab" (nove "a" e um "b")? E para procurar "baaa" no mesmo
-> texto? Conte no papel e depois troque os valores no código para conferir.
+> texto? Conte no papel e troque os valores no código para conferir.
 
 {{pratique}}

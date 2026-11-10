@@ -1,45 +1,35 @@
 ## 0184 · Pontes e articulações
 
-A operadora de internet ligou sete bairros de Manaus com fibra óptica. Uma
-retroescavadora corta um cabo na obra da avenida: quais cabos, se cortados,
-deixam bairros sem sinal? E se a central de um bairro pegar fogo, quais
-centrais derrubam a rede dos outros?
+A operadora ligou sete bairros de Manaus com fibra. Se um cabo for cortado,
+algum bairro fica sem sinal? E se a central de um bairro pegar fogo? São as
+duas perguntas de **conectividade** do edital:
 
-Essas são as duas perguntas de **conectividade** que o edital pede pelo nome:
-
-- **ponte** (ou aresta de corte): uma aresta cuja remoção aumenta o número de
+- **ponte** (aresta de corte): aresta cuja remoção aumenta o número de
   componentes conexos (0150);
-- **vértice de articulação** (ou ponto de corte): um vértice cuja remoção,
-  junto com as arestas dele, aumenta o número de componentes.
+- **vértice de articulação** (ponto de corte): vértice cuja remoção, com as
+  arestas dele, aumenta o número de componentes.
 
-O jeito ingênuo é tirar cada cabo, rodar uma DFS e ver se a rede partiu:
-O(E · (V + E)). O A368 faz isso para conferir. O jeito bom faz **uma DFS
-só**, O(V + E), e anota dois números por vértice.
+Tirar cada cabo e rodar uma DFS custa O(E · (V + E)) (o A368 confere). **Uma
+DFS só**, O(V + E), anota dois números por vértice.
 
-**tin[u]** é o tempo de descoberta: o relógio da DFS no momento em que ela
-entra em `u` (a ordem de visita). **low[u]** é o menor `tin` que a
-subárvore de `u` consegue alcançar usando arestas da árvore para descer e
-**uma** aresta de volta (para um ancestral) para subir.
+**tin[u]** é o tempo de descoberta: o relógio da DFS ao entrar em `u`.
+**low[u]** é o menor `tin` que a subárvore de `u` alcança descendo pela árvore
+e usando **uma** aresta de volta para um ancestral.
 
-Numa DFS de grafo não dirigido só existem dois tipos de aresta: as da
-**árvore** (levam a um vértice novo) e as de **volta** (levam a um ancestral
-já visitado). Nenhuma aresta "cruza" para o lado. Por isso `low` mede
-quanto a subárvore consegue escapar para cima sem passar pelo pai.
+Numa DFS não dirigida só há arestas da **árvore** (a um vértice novo) e de
+**volta** (a um ancestral); nenhuma "cruza" para o lado. `low` mede quanto a
+subárvore escapa para cima sem passar pelo pai.
 
-As duas regras, para uma aresta da árvore `u - v` (v filho de u):
+Para uma aresta da árvore `u - v` (v filho de u):
 
-- **ponte** se `low[v] > tin[u]`: nada abaixo de `v` volta a `u` ou acima.
-  Cortar `u - v` isola a subárvore de `v`.
+- **ponte** se `low[v] > tin[u]`: nada abaixo de `v` volta a `u` ou acima;
 - **articulação** se `low[v] >= tin[u]`, com `u` diferente da raiz: a
-  subárvore de `v` consegue no máximo voltar ao próprio `u`. Sem `u`, ela
-  fica sozinha.
-- **raiz**: a regra acima vale para ela sempre (nada tem `tin` menor que o
-  dela), então não serve. A raiz é articulação **só se tiver dois ou mais
-  filhos** na árvore da DFS: sem ela, os filhos não têm como se falar.
+  subárvore de `v` volta no máximo ao próprio `u`. Sem `u`, fica sozinha;
+- **raiz**: a regra anterior vale sempre para ela, então não serve. A raiz é
+  articulação **só com dois ou mais filhos** na árvore da DFS.
 
-Do Centro, a DFS desce em ordem de índice. Ao lado de
-cada bairro, `tin/low`. As arestas verdes são as pontes; os bairros em
-amarelo, as articulações:
+Do Centro, a DFS desce em ordem de índice. Ao lado de cada bairro, `tin/low`.
+As arestas verdes são as pontes; os bairros em amarelo, as articulações:
 
 {{ideia}}
 
@@ -101,9 +91,8 @@ int main(void) {
 // Ponta Negra: tin 7, low 7
 ```
 
-No fluxograma, as duas perguntas acontecem **na volta** da recursão,
-depois de `dfs(v, u)`. Só então `low[v]` está completo, porque a subárvore
-inteira de `v` já foi explorada:
+No fluxograma, as duas perguntas vêm **na volta** da recursão, com `low[v]`
+completo:
 
 {{fluxograma}}
 
@@ -122,29 +111,17 @@ inteira de `v` já foi explorada:
 | volta a Aleixo | low[Flores] = 4 | 4 > 2: **ponte** Aleixo - Flores; Aleixo é **articulação** |
 | volta ao Centro (raiz) | | um filho só: **não** é articulação |
 
-Flores é articulação, mas Flores - Cidade Nova não é ponte (o triângulo dela
-tem dois caminhos). As duas perguntas parecem iguais; o que as separa é o
-`>` contra o `>=`.
+Flores é articulação, mas Flores - Cidade Nova não é ponte (o triângulo tem
+dois caminhos): a diferença é o `>` contra o `>=`.
 
 > [!WARNING]
-> Dois erros clássicos. Primeiro: usar a regra `low[v] >= tin[u]` também na
-> raiz. Ela sempre dá verdadeiro lá, e o Centro apareceria como articulação
-> sem ser (tire o Centro e o resto continua ligado). O A367 mostra o
-> estrago. Segundo: trocar `>` por `>=` na ponte; aí toda aresta que sai da
-> raiz para um ciclo vira ponte falsa. É o bug do E1103.
-
-> [!TIP]
-> **Por dentro do C:** `tin`, `low` e `corte` são vetores globais, zerados
-> antes do `main`, e por isso `tin[v] == 0` serve de "não visitado". A
-> variável `filhos` é **local**: cada frame de `dfs` na pilha tem a sua, e
-> assim a contagem da raiz não se mistura com a dos outros vértices.
-> A recursão pode descer V níveis; numa rede com um milhão de bairros em fila
-> isso estoura a pilha (8 MB por padrão no Linux), e a versão de produção
-> troca a recursão por uma pilha explícita.
+> Dois erros clássicos. Usar `low[v] >= tin[u]` também na raiz: sempre dá
+> verdadeiro, e o Centro apareceria como articulação sem ser (o A367 mostra).
+> E trocar `>` por `>=` na ponte: toda aresta que sai da raiz para um ciclo
+> vira ponte falsa.
 
 > [!NOTE]
 > **Pergunta para você:** a operadora vai passar um cabo novo entre Ponta
-> Negra e o Centro (`{6, 0}`). Quais pontes e articulações sobram? Responda
-> antes de rodar.
+> Negra e o Centro (`{6, 0}`). Quais pontes e articulações sobram?
 
 {{pratique}}

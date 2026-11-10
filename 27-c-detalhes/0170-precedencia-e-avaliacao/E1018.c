@@ -1,34 +1,24 @@
 // 0170 · Precedência e ordem de avaliação
 // Exercício E1018 · ★★☆
 //
-// Quatro amigos alugaram uma casa de praia por R$ 2400 para 3 dias. O
-// programa abaixo compila sem nenhum aviso, mas as três contas estão
-// erradas. Conserte cada uma:
+// Quatro amigos alugaram uma casa de praia por R$ 2400 para 3 dias.
+// Escreva um programa, com int total, pessoas e dias, que mostre:
 //
-//   - o custo por pessoa por dia é o total dividido por (pessoas x dias);
-//   - cada um paga a sua parte do total mais R$ 50 de limpeza quando a
-//     estadia passa de 2 dias;
-//   - pagando à vista, o grupo ganha 10% de desconto sobre o total.
+//   - o custo por pessoa por dia: o total dividido por (pessoas x dias);
+//   - quanto cada um paga: a sua parte do total mais R$ 50 de limpeza
+//     quando a estadia passa de 2 dias;
+//   - o desconto à vista: 10% do total.
 //
 //   Saída esperada:
 //   por pessoa por dia: R$ 200
 //   cada um paga: R$ 650
 //   desconto à vista: R$ 240
 //
-// Escreva sua resposta abaixo (conserte o código):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 
 int main(void) {
-    int total = 2400, pessoas = 4, dias = 3;
 
-    int por_dia = total / pessoas * dias;
-    printf("por pessoa por dia: R$ %d\n", por_dia);
-
-    int cada_um = total / pessoas + dias > 2 ? 50 : 0;
-    printf("cada um paga: R$ %d\n", cada_um);
-
-    int desconto = 10 / 100 * total;
-    printf("desconto à vista: R$ %d\n", desconto);
     return 0;
 }

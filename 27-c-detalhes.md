@@ -2,52 +2,38 @@
 
 # Módulo 27 · Detalhes de C que caem em prova
 
-Você já escreve C há 26 módulos. Mesmo assim, uma linha como
-`x & 1 == 0`, `i < u` ou `n - 1` com `size_t` pode enganar, porque o
-compilador lê a expressão por regras que o olho não aplica sozinho. Uma prova
-de múltipla escolha adora esse tipo de linha: o código é curto, compila, e
-as alternativas trazem justamente o resultado que a intuição sugere.
+Linhas como `x & 1 == 0`, `i < u` ou `n - 1` com `size_t` compilam e enganam:
+o compilador as lê por regras que o olho não aplica sozinho. A prova de
+múltipla escolha explora isso com código curto e uma alternativa que traz o
+resultado intuitivo.
 
-Este módulo junta as regras que decidem o valor dessas linhas: quem pega os
-operandos primeiro (precedência e associatividade), em que ordem as partes
-rodam e quando a resposta é "comportamento indefinido"; o que acontece quando
-um número com sinal encontra um sem sinal, e por que `-1 > 0u` é verdadeiro;
-e o vetor de tamanho variável (VLA), o único vetor do C cujo `sizeof` é
-calculado com o programa rodando.
-
-O truque é ler a expressão como o compilador, e não como
-matemática: primeiro os tipos (promoção e conversão), depois a árvore
-(precedência), e só então os valores. Aí a pegadinha vira conta.
+O módulo reúne essas regras: precedência e ordem de avaliação, a mistura de
+inteiros com e sem sinal (por que `-1 > 0u` é verdadeiro) e o vetor de
+tamanho variável (VLA), o único vetor do C com `sizeof` calculado na
+execução. Leia como o compilador: primeiro os tipos, depois a árvore, só
+então os valores.
 
 ## O que você vai aprender
 
-- ler qualquer expressão com a **tabela de precedência e associatividade**, incluindo bit a bit, `?:`, vírgula e atribuição composta
-- separar **agrupamento** de **ordem de avaliação**, reconhecer **efeito colateral** e o **comportamento indefinido** de `i = i++`
-- prever o que acontece quando **com sinal e sem sinal** se misturam: promoção inteira, conversão aritmética usual, `-1 > 0u`
-- usar `>>`, máscaras e `size_t` sem cair nas armadilhas do negativo e do laço que desce
-- criar e passar **VLAs** (`void f(int l, int c, int m[l][c])`), entender o `sizeof` em tempo de execução, o `__STDC_NO_VLA__` e o risco da pilha
+- ler expressões pela **tabela de precedência e associatividade**
+- separar **agrupamento** de **ordem de avaliação**, e reconhecer **efeito colateral** e o comportamento indefinido de `i = i++`
+- prever a mistura de **com sinal e sem sinal**: promoção inteira, conversão aritmética usual, `-1 > 0u`
+- usar `>>`, máscaras e `size_t` sem cair no negativo e no laço que desce
+- criar e passar **VLAs** (`void f(int l, int c, int m[l][c])`) e conhecer o risco da pilha
 - juntar tudo num controle de acesso com struct, enum, máscaras e VLA
 
 ## Antes de começar
 
-Este módulo usa os operadores dos módulos 01 e 02 (aritmética, atribuição,
-`++`, lógicos, ternário), os bits e máscaras do 0065, struct e enum do
-módulo 08, e `malloc`/`free` do módulo 07. Se `p &= ~MASCARA;` ainda não
-parece natural, revise o 0065 antes.
+Usa os operadores dos módulos 01 e 02, os bits e máscaras do 0065, struct e
+enum do módulo 08 e `malloc`/`free` do módulo 07.
 
-Os valores dos comentários são os de um PC de 64 bits com Linux e gcc: `int`
-e `unsigned` de 4 bytes, `long` e `size_t` de 8. Algumas respostas (como
-`-17 >> 2`) dependem do compilador, e o texto avisa quando for o caso.
+**Progressão.** Este módulo relê os módulos 01 a 08 com mais rigor. Prepara o
+28, que completa listas, árvores e hash, e o 29, que completa grafos e
+apresenta P e NP; os dois reusam máscaras e inteiros sem sinal.
 
-O comando do exemplo compila com `-Wall -Wextra`, e esses avisos pegam vários erros
-deste módulo. Os exemplos compilam limpos; quando o texto mostra uma linha
-que o gcc avisaria, ela aparece fora do programa ou com a conversão escrita
-à vista. Ao rodar, tire um parêntese, troque `unsigned` por `int`, aumente o
-VLA e leia o que o gcc diz.
-
-```bash
-gcc ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/A339.c -o ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/A339 && ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/A339
-```
+Os valores dos comentários são de um PC de 64 bits com Linux e gcc: `int` e
+`unsigned` com 4 bytes, `long` e `size_t` com 8. Compile com o gcc e as flags
+de estudo `-Wall -Wextra`: os avisos pegam vários erros do módulo.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
@@ -60,17 +46,12 @@ gcc ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/A339.c -o ~/LPEDC/27-c-de
 
 ## 0170 · Precedência e ordem de avaliação
 
-Você pede 3 pacotes de café a R$ 18 no app do mercado, e o frete é R$ 12. A
-conta é `18 * 3 + 12`. Ninguém pensa duas vezes: dá 66. Mas por que não
-`18 * (3 + 12)`, que dá 270? Porque o C, como a matemática da escola, tem uma
-regra fixa de quem vai primeiro, e a prova gosta de esconder essa regra numa
-linha só.
+Três pacotes de café a R$ 18 mais R$ 12 de frete: `18 * 3 + 12` dá 66, não
+270. A ordem entre operadores é fixa, e a prova a esconde numa linha só.
 
-Duas regras decidem como o C **agrupa** uma expressão. A **precedência** diz
-qual operador pega os operandos primeiro: `*` antes de `+`. A
-**associatividade** desempata operadores do mesmo nível: `100 - 66 - 20` é
-`(100 - 66) - 20`, da esquerda para a direita, mas `a = b = 5` é
-`a = (b = 5)`, da direita para a esquerda.
+A **precedência** diz qual operador pega os operandos primeiro: `*` antes de
+`+`. A **associatividade** desempata operadores do mesmo nível: `100 - 66 -
+20` é `(100 - 66) - 20`, mas `a = b = 5` é `a = (b = 5)`.
 
 | Nível | Operadores | Agrupa |
 | --- | --- | --- |
@@ -90,33 +71,27 @@ qual operador pega os operandos primeiro: `*` antes de `+`. A
 | 14 | `=` `+=` `-=` `*=` `/=` `%=` `<<=` `>>=` `&=` `^=` `\|=` | direita → esquerda |
 | 15 | `,` | esquerda → direita |
 
-Três pontos dessa tabela caem em prova. Os bit a bit `&`, `^` e `|` ficam
-**abaixo** do `==`. O `?:` fica abaixo de quase tudo, então
-`compra + compra >= 50 ? 0 : frete` é uma pergunta sobre a soma inteira. E a
-atribuição composta trata o lado direito como um bloco: `a *= 2 + 1` é
-`a = a * (2 + 1)`.
+Três pontos da tabela caem em prova. Os bit a bit `&`, `^` e `|` ficam
+**abaixo** do `==`. O `?:` fica abaixo de quase tudo, então `compra + compra
+>= 50 ? 0 : frete` pergunta pela soma inteira. E `a *= 2 + 1` é `a = a * (2 +
+1)`.
 
-Agrupar não é calcular. A precedência diz que em `f() + g()` a soma junta os
-dois resultados, mas **não** diz qual função roda primeiro: a **ordem de
-avaliação** dos operandos não é especificada, e cada compilador escolhe. Só
-alguns pontos fixam a ordem: `&&`, `||`, `?:` e a vírgula avaliam o lado
-esquerdo inteiro antes do direito, e uma função só começa depois de todos os
-argumentos prontos.
+Agrupar não é calcular. Em `f() + g()`, a soma junta os dois resultados, mas a
+**ordem de avaliação** deles não é especificada. Só `&&`, `||`, `?:` e a
+vírgula avaliam o lado esquerdo antes do direito, e uma função só começa
+depois de todos os argumentos prontos.
 
-Um **efeito colateral** é tudo que uma expressão muda além de produzir valor:
-`i++` muda `i`, `x = 3` muda `x`, `printf` escreve na tela. Mudar a mesma
-variável duas vezes, ou mudar e ler sem ordem garantida, na mesma expressão,
-é **comportamento indefinido**: `i = i++`, `v[i] = i++` e
-`printf("%d %d", i, i++)` não têm resposta certa. O programa pode dar
-qualquer coisa.
+**Efeito colateral** é o que a expressão muda além de produzir valor: `i++`
+muda `i`, `printf` escreve na tela. Mudar a mesma variável duas vezes, ou
+mudar e ler sem ordem garantida, é **comportamento indefinido**: `i = i++`,
+`v[i] = i++`, `printf("%d %d", i, i++)`.
 
-O desenho mostra como o C monta a árvore de cada conta:
-o operador de menor precedência fica na raiz e é o último a agir. Na
-pegadinha do frete grátis, a raiz é o `?:`, e o `+` foi parar lá embaixo:
+O operador de menor precedência fica na raiz da árvore e age por último. No
+frete grátis, é o `?:`:
 
 <p align="center"><img src="27-c-detalhes/0170-precedencia-e-avaliacao/ideia.svg" alt="Diagrama da ideia: Precedência e ordem de avaliação" width="882"></p>
 
-O programa faz as contas do carrinho e mostra cada agrupamento:
+O programa mostra cada agrupamento:
 
 ```c
 #include <stdio.h>
@@ -154,35 +129,25 @@ int main(void) {
 // frete grátis? 1
 ```
 
-No fluxograma, o `?:` aparece como o que ele é: uma pergunta escondida dentro
-da expressão. O que entra na pergunta depende só dos parênteses, e no `certo`
-ela olha apenas o `compra`:
-
+No fluxograma, o `?:` é uma pergunta escondida; no `certo`, ela olha só o
+`compra`:
 
 <p align="center"><img src="27-c-detalhes/0170-precedencia-e-avaliacao/fluxograma.svg" alt="Fluxograma: Precedência e ordem de avaliação" width="529"></p>
 
 > [!WARNING]
-> `i = i++` não "soma 1 e guarda", nem "guarda o antigo": é comportamento
-> indefinido, e a pergunta "quanto vale `i`?" não tem resposta. Com `-Wall`, o
-> gcc avisa:
+> `i = i++` é comportamento indefinido. Com `-Wall`, o gcc avisa:
 >
 > ```text
 > warning: operation on 'i' may be undefined [-Wsequence-point]
 > ```
 >
-> Ele também avisa `x & 3 == 3` ("suggest parentheses around comparison") e
-> `a || b && c`. Mas **não** avisa `compra + compra >= 50 ? 0 : frete`. Na
-> dúvida, ponha parênteses: eles não custam nada no programa pronto.
+> Ele também avisa `x & 3 == 3` e `a || b && c`, mas **não**
+> `compra + compra >= 50 ? 0 : frete`. Na dúvida, use parênteses.
 
 > [!TIP]
-> **Por dentro do C:** o compilador transforma cada expressão numa árvore,
-> como a do desenho, e gera instruções de baixo para cima. A precedência fixa
-> o **formato** da árvore; a ordem em que ele visita os galhos é livre, e o gcc
-> usa essa liberdade para guardar valores em registradores e economizar
-> instruções. É por isso que o padrão não promete a ordem de `f() + g()`. Os
-> pontos que fixam a ordem (`&&`, `||`, `?:`, `,` e o fim de cada instrução)
-> viram, no código de máquina, um teste e um salto: o lado direito do `&&`
-> nem chega a rodar quando o esquerdo dá 0.
+> O compilador visita os galhos da árvore na ordem que quiser, por isso `f()
+> + g()` não tem ordem prometida. Já em `&&`, o lado direito nem roda se o
+> esquerdo der 0.
 
 > [!NOTE]
 > **Pergunta para você:** quanto vale `x` depois de `int x = 10; x -= 2 * 3 - 1;`?
@@ -326,31 +291,6 @@ gcc ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/A340.c -o ~/LPEDC/27-c-de
 
 #### Exercícios
 
-**Exercício E1015** · ★☆☆
-
-As três fórmulas abaixo foram digitadas sem parênteses e dão resultados
-absurdos. Conserte cada uma pondo parênteses só onde precisa, para que a
-média das notas 7, 8 e 9 dê 8, os 104 °F virem 40 °C (C = (F - 32) * 5 / 9)
-e a área de um quadro de 4 x 3 com 1 de moldura de cada lado dê 30.
-
-
-```text
-Saída esperada:
-media = 8
-celsius = 40
-area = 30
-```
-
-**Dicas:**
-
-1. Rode antes de mexer: sai 18, 87 e 12. Descubra por que, olhando a
-   tabela de precedência.
-2. Na moldura, cada lado ganha 2: (4 + 2) * (3 + 2).
-
-```bash
-gcc ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/E1015.c -o ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/E1015 && ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/E1015
-```
-
 **Exercício E1016** · ★☆☆
 
 Escreva um programa que mostre, para cada expressão abaixo, o valor dela
@@ -375,20 +315,14 @@ a = b = c = 7 -> a = 7, b = 7, c = 7
 x -= 1 + 2 -> x = 2
 ```
 
-**Dicas:**
-
-1. *, / e % estão no mesmo nível e agrupam da esquerda para a direita.
-2. A atribuição agrupa da direita: a = (b = (c = 7)).
-3. x -= 1 + 2 é x = x - (1 + 2), não x = x - 1 + 2.
-
 ```bash
 gcc ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/E1016.c -o ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/E1016 && ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/E1016
 ```
 
 **Exercício E1017** · ★★☆
 
-Para entender de vez o x++ e o ++x, escreva duas funções que fazem o
-mesmo trabalho que eles, recebendo o endereço da variável:
+Escreva as duas funções abaixo, que fazem o trabalho de x++ e ++x
+recebendo o endereço da variável:
 
 
 ```text
@@ -397,8 +331,9 @@ int pre_incremento(int *p)  // soma 1, depois devolve o valor novo
 ```
 
 
-O main já calcula b e c com os operadores. Refaça as mesmas contas com as
-suas funções, em variáveis a2, b2 e c2, e mostre as duas linhas.
+No main, comece com a = 5, calcule b = a++ * 2 e c = ++a * 2 com os
+operadores e mostre a linha "com ++". Refaça as mesmas contas com as
+suas funções, em a2, b2 e c2, e mostre a linha "com funcoes".
 
 
 ```text
@@ -407,27 +342,21 @@ com ++:      a = 7, b = 10, c = 14
 com funcoes: a = 7, b = 10, c = 14
 ```
 
-**Dicas:**
-
-1. Em pos_incremento, guarde *p numa variável antes de somar.
-2. b2 = pos_incremento(&a2) * 2; c2 = pre_incremento(&a2) * 2;
-
 ```bash
 gcc ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/E1017.c -o ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/E1017 && ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/E1017
 ```
 
 **Exercício E1018** · ★★☆
 
-Quatro amigos alugaram uma casa de praia por R$ 2400 para 3 dias. O
-programa abaixo compila sem nenhum aviso, mas as três contas estão
-erradas. Conserte cada uma:
+Quatro amigos alugaram uma casa de praia por R$ 2400 para 3 dias.
+Escreva um programa, com int total, pessoas e dias, que mostre:
 
 
 ```text
-- o custo por pessoa por dia é o total dividido por (pessoas x dias);
-- cada um paga a sua parte do total mais R$ 50 de limpeza quando a
-  estadia passa de 2 dias;
-- pagando à vista, o grupo ganha 10% de desconto sobre o total.
+- o custo por pessoa por dia: o total dividido por (pessoas x dias);
+- quanto cada um paga: a sua parte do total mais R$ 50 de limpeza
+  quando a estadia passa de 2 dias;
+- o desconto à vista: 10% do total.
 ```
 
 
@@ -439,49 +368,8 @@ cada um paga: R$ 650
 desconto à vista: R$ 240
 ```
 
-**Dicas:**
-
-1. Rode antes: sai 1800, 50 e 0. Para cada linha, escreva no papel a
-   árvore que o C montou.
-2. O ?: fica abaixo do + e do >: ele engoliu a conta inteira.
-3. 10 / 100 em inteiros é 0. Multiplique antes de dividir.
-
 ```bash
 gcc ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/E1018.c -o ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/E1018 && ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/E1018
-```
-
-**Exercício E1019** · ★★★
-
-As três macros abaixo têm defeito. #define só troca texto: DOBRO(n) vira
-"n + n" colado no meio da expressão, e MAIOR(fila++, limite) copia o
-fila++ duas vezes. Conserte:
-
-
-```text
-- DOBRO e AREA: ponha parênteses em volta de cada parâmetro e do
-  resultado inteiro;
-- MAIOR: troque a macro por uma função int maior(int a, int b), que
-  avalia cada argumento uma vez só.
-```
-
-
-
-```text
-Saída esperada:
-100 / DOBRO(5) = 10
-AREA(2 + 1, 4) = 12
-maior = 3, fila = 4
-```
-
-**Dicas:**
-
-1. Rode antes: sai 25, 6 e "maior = 4, fila = 5". Escreva no papel o
-   texto que cada macro gera.
-2. #define DOBRO(x) ((x) + (x))
-3. Com a função, a chamada fica maior(fila++, limite).
-
-```bash
-gcc ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/E1019.c -o ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/E1019 && ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/E1019
 ```
 
 **Exercício E1020** · ★★★
@@ -515,14 +403,6 @@ procurar 99: indice -1, leituras 5
 vetor vazio: indice -1, leituras 0
 ```
 
-**Dicas:**
-
-1. Troque a ordem: i < n tem que vir antes, porque o && só avalia o lado
-   direito se o esquerdo der verdadeiro.
-2. Para contar só as leituras que acontecem, use o operador vírgula no
-   lado direito: (++*lidos, v[i] != alvo).
-3. Comece *lidos em 0 dentro da função.
-
 ```bash
 gcc ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/E1020.c -o ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/E1020 && ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/E1020
 ```
@@ -531,47 +411,39 @@ gcc ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/E1020.c -o ~/LPEDC/27-c-d
 
 ## 0171 · Com sinal e sem sinal
 
-A loja virtual tinha 2 fones em estoque e vendeu 3 numa promoção relâmpago.
-O sistema, em vez de mostrar -1, passou a anunciar **4294967295 fones
-disponíveis**. Ninguém errou a conta: o estoque era `unsigned`, e um número
-sem sinal não sabe ser negativo.
+A loja vendeu 3 fones de um estoque de 2, e o sistema anunciou **4294967295
+fones**. O estoque era `unsigned`, e número sem sinal não é negativo.
 
-Todo inteiro do C vem em duas versões. O **com sinal** (`int`, `signed char`,
-`long`) guarda negativos: num `int` de 32 bits, de -2147483648 a 2147483647. O
-**sem sinal** (`unsigned`, `unsigned char`, `size_t`) usa os mesmos 32 bits só
-para o zero e os positivos: de 0 a 4294967295 (`UINT_MAX`). O `size_t`, que o
-`sizeof` e o `strlen` devolvem, é sem sinal.
+O **com sinal** (`int`, `signed char`, `long`) guarda negativos: num `int` de
+32 bits, de -2147483648 a 2147483647. O **sem sinal** (`unsigned`, `unsigned
+char`, `size_t`) vai de 0 a 4294967295 (`UINT_MAX`). `sizeof` e `strlen`
+devolvem `size_t`.
 
-Os bits não sabem que tipo são. O -1 de um `int` são 32 bits ligados, e os
-mesmos 32 bits lidos como `unsigned` valem 4294967295. Por isso a conta sem
-sinal **dá a volta**, como um odômetro: `2u - 3u` é 4294967295, e
-`UINT_MAX + 1u` é 0. Isso é definido pelo padrão (conta módulo 2³²). Já
-estourar um `int` com sinal, como `INT_MAX + 1`, é comportamento indefinido.
+O -1 de um `int` são 32 bits ligados, que como `unsigned` valem 4294967295. A
+conta sem sinal **dá a volta**, como um odômetro: `2u - 3u` é 4294967295 e
+`UINT_MAX + 1u` é 0 (módulo 2³², definido). Estourar um `int` com sinal, como
+`INT_MAX + 1`, é comportamento indefinido.
 
-Quando uma conta mistura tipos, o C aplica duas regras antes de calcular:
+Com tipos misturados, o C aplica duas regras antes de calcular:
 
 1. **Promoção inteira**: `char`, `short`, `unsigned char`, `bool` e `enum`
-   viram `int` antes de qualquer conta. `unsigned char` 200 + 100 dá 300, um
-   `int`, e só perde o excesso se você guardar o resultado num byte.
-2. **Conversão aritmética usual**: os dois operandos viram o tipo "maior".
-   Entre `int` e `unsigned` do mesmo tamanho, ganha o `unsigned`: o `int`
-   vira sem sinal. Se o com sinal for maior e couber todo o sem sinal (um
-   `long` de 64 bits contra um `unsigned` de 32), ganha o com sinal. E se
-   houver um `double`, tudo vira `double`.
+   viram `int`. `unsigned char` 200 + 100 dá 300, um `int`; só guardar num
+   byte corta o excesso.
+2. **Conversão aritmética usual**: os operandos viram o tipo "maior". Entre
+   `int` e `unsigned` do mesmo tamanho, ganha o `unsigned`. Se o com sinal
+   for maior e couber todo o sem sinal (`long` de 64 bits contra `unsigned`
+   de 32), ganha o com sinal. Com `double`, tudo vira `double`.
 
-A regra 2 produz a pegadinha mais famosa de C: `-1 > 0u` é **verdadeiro**. O
-`-1` vira `unsigned`, 4294967295, que é maior que 0. Já `-1L < 1u`
-é verdadeiro no Linux de 64 bits, porque ali o `unsigned` cabe no `long` e
-nada vira sem sinal.
+A regra 2 gera a pegadinha mais famosa: `-1 > 0u` é **verdadeiro**, porque o
+`-1` vira 4294967295. Já `-1L < 1u` é verdadeiro no Linux de 64 bits: o `unsigned`
+cabe no `long`.
 
-O desenho mostra os 4 bytes do saldo -1, todos com os
-oito bits ligados, e as duas leituras possíveis deles. A comparação com
-`0u` escolhe a leitura sem sinal:
+O desenho mostra os 4 bytes do saldo -1 e as duas leituras. A comparação com
+`0u` usa a sem sinal:
 
 <p align="center"><img src="27-c-detalhes/0171-com-e-sem-sinal/ideia.svg" alt="Diagrama da ideia: Com sinal e sem sinal" width="858"></p>
 
-O programa repete as três situações: o estoque que dá a volta, a comparação
-misturada e a promoção do `unsigned char`:
+O programa repete as três situações:
 
 ```c
 #include <limits.h>
@@ -605,31 +477,23 @@ int main(void) {
 // c = 44
 ```
 
-No fluxograma, a comparação não pergunta "-1 é maior que 0?". Antes dela já
-houve uma conversão, e a pergunta real é sobre 4294967295:
+No fluxograma, a pergunta real é sobre 4294967295:
 
 <p align="center"><img src="27-c-detalhes/0171-com-e-sem-sinal/fluxograma.svg" alt="Fluxograma: Com sinal e sem sinal" width="435"></p>
 
 > [!WARNING]
-> O laço que desce com `size_t` nunca termina:
-> `for (size_t i = n - 1; i >= 0; i--)`. Um `size_t` é sempre `>= 0`; quando
-> `i` passa de 0, ele vira 18446744073709551615 e o laço lê fora do vetor. O
-> gcc avisa ("comparison of unsigned expression in '>= 0' is always true").
-> Escreva `for (size_t i = n; i-- > 0;)`: testa e depois desce, e funciona até
-> com `n = 0`. Primo do mesmo erro, e sem aviso nenhum:
-> `if (strlen(a) - strlen(b) > 0)` é verdadeiro sempre que os tamanhos são
-> diferentes, porque a subtração de dois `size_t` nunca dá negativo.
+> `for (size_t i = n - 1; i >= 0; i--)` nunca termina: o `size_t` é sempre
+> `>= 0` e, ao passar de 0, vira 18446744073709551615 e o laço lê fora do
+> vetor. O gcc avisa ("comparison of unsigned expression in '>= 0' is always
+> true"). Escreva `for (size_t i = n; i-- > 0;)`, que funciona até com `n =
+> 0`.
+>
+> Sem aviso: `if (strlen(a) - strlen(b) > 0)` é verdadeiro sempre que os
+> tamanhos diferem, porque a subtração de `size_t` nunca dá negativo.
 
 > [!TIP]
-> **Por dentro do C:** o processador usa o **complemento de dois**: o negativo
-> de `x` é `~x + 1`. Com isso, somar com ou sem sinal é **a mesma
-> instrução** (`add`), e a conversão entre `int` e `unsigned` não custa
-> nada: os bits ficam iguais. O que muda é a instrução que lê o
-> resultado: comparações com sinal usam `jl`/`jg`, sem sinal usam `jb`/`ja`,
-> e o deslocamento à direita vira `sar` (copia o bit de sinal: `-16 >> 2` dá
-> -4 no gcc) ou `shr` (entra zero). Deslocar um negativo para a direita é
-> "definido pela implementação"; para a esquerda, é indefinido. Para bits e
-> máscaras, use sempre `unsigned`.
+> Para bits e máscaras, use `unsigned`: deslocar negativo é indefinido ou
+> depende da implementação.
 
 > [!NOTE]
 > **Pergunta para você:** com `unsigned char x = 0x0F;`, quanto vale `~x`? É
@@ -760,47 +624,8 @@ contador: 251 252 253 254 255 0 1 2 3 4
 vidas: 1 0 255
 ```
 
-**Dicas:**
-
-1. contador++ num unsigned char: 255 + 1 dá a volta para 0, e isso é
-   definido pelo padrão (conta módulo 256).
-2. Para mostrar, %d serve: o byte vira int ao entrar no printf.
-
 ```bash
 gcc ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/E1021.c -o ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/E1021 && ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/E1021
-```
-
-**Exercício E1022** · ★☆☆
-
-Usando as constantes de <limits.h> (SCHAR_MIN, SCHAR_MAX, UCHAR_MAX,
-SHRT_MIN, SHRT_MAX, USHRT_MAX, INT_MIN, INT_MAX, UINT_MAX, LONG_MIN,
-LONG_MAX, ULONG_MAX) e o sizeof, mostre o tamanho e a faixa de cada tipo
-inteiro, com e sem sinal. Os valores abaixo são os de um PC de 64 bits com
-Linux.
-
-
-```text
-Saída esperada:
-signed char:    1 bytes, -128 a 127
-unsigned char:  1 bytes, 0 a 255
-short:          2 bytes, -32768 a 32767
-unsigned short: 2 bytes, 0 a 65535
-int:            4 bytes, -2147483648 a 2147483647
-unsigned:       4 bytes, 0 a 4294967295
-long:           8 bytes, -9223372036854775808 a 9223372036854775807
-unsigned long:  8 bytes, 0 a 18446744073709551615
-```
-
-**Dicas:**
-
-1. sizeof devolve size_t: mostre com %zu.
-2. Formato certo: %d para o que cabe em int (inclusive UCHAR_MAX e
-   USHRT_MAX), %u para UINT_MAX, %ld para long, %lu para unsigned long.
-3. O mesmo número de bits dá a mesma quantidade de valores: o com sinal
-   só divide metade para os negativos.
-
-```bash
-gcc ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/E1022.c -o ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/E1022 && ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/E1022
 ```
 
 **Exercício E1023** · ★★☆
@@ -837,31 +662,27 @@ ultimo par em {3, 8, 5, 4, 7}: indice 3
 ultimo par em {1, 3}: nenhum
 ```
 
-**Dicas:**
-
-1. for (size_t i = n; i-- > 0;) testa i > 0 e só então desce: dentro do
-   laço, i vai de n - 1 até 0.
-2. "Não achei" com size_t não pode ser -1: devolva n, que nunca é um
-   índice válido.
-
 ```bash
 gcc ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/E1023.c -o ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/E1023 && ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/E1023
 ```
 
 **Exercício E1024** · ★★☆
 
-As duas funções abaixo compilam sem nenhum aviso, mas erram por causa do
-size_t, que nunca é negativo:
+Escreva duas funções que não caiam na armadilha do size_t, que nunca é
+negativo:
 
 
 ```text
-- mais_longo devolve o nome mais comprido (no empate, o segundo);
-- restantes diz quantos caracteres ainda cabem numa mensagem de até
-  limite caracteres, e deve dar 0 quando a mensagem já passou.
+const char *mais_longo(const char *a, const char *b)
+size_t restantes(const char *msg, size_t limite)
 ```
 
 
-Conserte as duas sem mudar a assinatura nem o main.
+mais_longo devolve o nome mais comprido (no empate, o segundo).
+restantes diz quantos caracteres ainda cabem numa mensagem de até
+limite caracteres, e dá 0 quando a mensagem já passou. No main, chame
+mais_longo com ("Ana", "Bernardo") e ("Bernardo", "Ana"), e restantes com
+"Oi, tudo bem?" e com "Chego em 15 minutos, me espera", ambas com limite 20.
 
 
 ```text
@@ -871,13 +692,6 @@ mais longo: Bernardo
 restam 7 caracteres
 restam 0 caracteres
 ```
-
-**Dicas:**
-
-1. Rode antes: a primeira linha sai Ana, e a última, um número enorme.
-2. strlen(a) - strlen(b) > 0 é verdadeiro sempre que os tamanhos são
-   diferentes. Compare os dois direto.
-3. Em restantes, teste se a mensagem passou do limite ANTES de subtrair.
 
 ```bash
 gcc ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/E1024.c -o ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/E1024 && ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/E1024
@@ -908,89 +722,33 @@ original: confere
 alterado: nao confere
 ```
 
-**Dicas:**
-
-1. A soma dos bytes é 482, e 482 % 256 = 226. Falta 30 (0x1E) para 256.
-2. Some num unsigned char e devolva (unsigned char)(0u - soma): a conta
-   sem sinal dá a volta exatamente como precisa.
-3. Cuidado com a promoção: soma + v vira int, e 226 + 30 = 256, que não é
-   0. Escreva (unsigned char)(soma + v) == 0.
-
 ```bash
 gcc ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/E1025.c -o ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/E1025 && ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/E1025
-```
-
-**Exercício E1026** · ★★★
-
-Escreva três funções que fazem contas com unsigned sem cair nas
-pegadinhas, e teste com os valores da saída:
-
-
-```text
-- unsigned sub_saturada(unsigned a, unsigned b): a - b, mas para em 0
-  em vez de dar a volta;
-- bool soma_cabe(unsigned a, unsigned b): diz se a + b cabe num
-  unsigned, SEM fazer a soma que estoura;
-- int compara(int a, unsigned b): devolve -1, 0 ou 1 conforme a é menor,
-  igual ou maior que b na matemática de verdade (-1 é menor que 0u!).
-```
-
-
-
-```text
-Saída esperada:
-sub_saturada(2, 3) = 0
-sub_saturada(10, 3) = 7
-soma_cabe(4000000000, 300000000) = nao
-soma_cabe(4000000000, 294967295) = sim
-compara(-1, 0) = -1
-compara(5, 5) = 0
-compara(7, 3) = 1
-```
-
-**Dicas:**
-
-1. sub_saturada: se a < b, devolva 0.
-2. a + b cabe quando a <= UINT_MAX - b (essa subtração nunca dá a volta).
-3. compara: trate a < 0 primeiro. Depois a já é positivo, e
-   (unsigned)a é seguro.
-4. (x > y) - (x < y) dá -1, 0 ou 1 numa linha só.
-
-```bash
-gcc ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/E1026.c -o ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/E1026 && ~/LPEDC/27-c-detalhes/0171-com-e-sem-sinal/E1026
 ```
 
 ---
 
 ## 0172 · Vetor de tamanho variável (VLA)
 
-A academia do bairro quer uma planilha de treinos: uma linha por aluno, uma
-coluna por semana. Só que o número de alunos e de semanas muda a cada
-turma, e só é conhecido quando o professor digita. Até aqui, você teria duas
-saídas: reservar uma matriz enorme "por garantia" ou chamar o `malloc`.
+Numa planilha de treinos, alunos e semanas só são conhecidos na digitação.
+Até aqui, as saídas eram uma matriz enorme "por garantia" ou o `malloc`.
 
-O C99 trouxe uma terceira: o **VLA** (*variable length array*, vetor de
-tamanho variável). É um vetor local cujo tamanho é uma expressão calculada
-na hora, não uma constante: `int treinos[alunos][semanas];`. Ele mora na
-**pilha**, como qualquer variável local, e some sozinho no fim do bloco. Não
-tem `free`.
+O C99 trouxe o **VLA** (*variable length array*): um vetor local cujo tamanho
+é uma expressão calculada na hora, como `int treinos[alunos][semanas];`. Ele
+mora na **pilha** e some no fim do bloco, sem `free`.
 
-Com o VLA, o `sizeof` deixa de ser uma constante do compilador: `sizeof
-treinos` é calculado **em tempo de execução**, e vale `alunos * semanas *
-sizeof(int)`. O VLA também tem limites: não pode ser `static` nem global, e
-não aceita inicialização (`int v[n] = {0};` é erro no C17). Preencha com um
-laço.
+Com VLA, `sizeof treinos` é calculado **na execução**: `alunos * semanas *
+sizeof(int)`. O VLA não pode ser `static` nem global e não aceita
+inicialização (`int v[n] = {0};` é erro no C17): use um laço.
 
-O uso mais útil é como **parâmetro**. Uma função comum precisa saber a
-largura da matriz já ao compilar (`int m[][4]`). Com VLA, a função recebe as
-dimensões e a matriz: `void f(int l, int c, int m[l][c])`. A ordem importa:
-`l` e `c` vêm **antes**, porque o tipo `m[l][c]` usa os dois. Assim uma
-só função serve para matrizes de qualquer tamanho.
+O uso mais útil é como **parâmetro**. Uma função comum precisa da largura da
+matriz ao compilar (`int m[][4]`); com VLA, ela recebe as dimensões e a
+matriz: `void f(int l, int c, int m[l][c])`. `l` e `c` vêm **antes**, porque o
+tipo `m[l][c]` usa os dois.
 
-Um detalhe de versão: no C99 o VLA é obrigatório; no C11 e no C17 virou
-**opcional**. Um compilador sem VLA define a macro `__STDC_NO_VLA__`. O gcc
-e o clang suportam; o compilador da Microsoft, não. Quem quer garantir
-escreve:
+O VLA é obrigatório no C99 e **opcional** no C11 e no C17: o compilador sem
+VLA define `__STDC_NO_VLA__` (o da Microsoft não suporta; gcc e clang sim).
+Para exigir VLA:
 
 ```c
 #ifdef __STDC_NO_VLA__
@@ -998,13 +756,11 @@ escreve:
 #endif
 ```
 
-Com 3 alunos e 4 semanas, a planilha tem 12 `int`:
-48 bytes, reservados na pilha no momento em que a linha do VLA roda. O
-desenho mostra a matriz e onde ela fica:
+Com 3 alunos e 4 semanas, a planilha tem 12 `int`: 48 bytes na pilha:
 
 <p align="center"><img src="27-c-detalhes/0172-vla/ideia.svg" alt="Diagrama da ideia: Vetor de tamanho variável (VLA)" width="858"></p>
 
-O programa lê as dimensões, confere, cria o VLA e passa para as funções:
+O programa lê as dimensões, confere, cria o VLA e o passa às funções:
 
 ```c
 #include <stdio.h>
@@ -1057,33 +813,25 @@ int main(void) {
 // aluno 3: 2 4 1 3  total 10
 ```
 
-No fluxograma, a validação vem **antes** do VLA. Depois que a linha
-`int treinos[alunos][semanas];` roda, não há como desistir nem como saber se
-deu certo:
+No fluxograma, a validação vem **antes** do VLA: depois da linha, não há como
+desistir nem saber se deu certo:
 
 <p align="center"><img src="27-c-detalhes/0172-vla/fluxograma.svg" alt="Fluxograma: Vetor de tamanho variável (VLA)" width="532"></p>
 
 > [!WARNING]
-> O VLA não avisa quando falha. O `malloc` devolve `NULL` se não houver
-> memória; o VLA pede o espaço à pilha, e a pilha de um programa
-> no Linux tem uns **8 MB** (confira com `ulimit -s`). Um `int v[n]` com `n`
-> igual a 3 milhões pede 12 MB e derruba o programa com *segmentation
-> fault*, sem chance de tratar. E um `n` que veio do usuário pode ser 0,
-> negativo ou gigante. Regra prática: VLA só para tamanhos **pequenos e
-> conferidos**; para dados grandes ou de tamanho desconhecido, `malloc`.
+> O VLA não avisa quando falha. A pilha no Linux tem uns **8 MB** (veja com
+> `ulimit -s`): `int v[n]` com `n` igual a 3 milhões pede 12 MB e derruba o
+> programa com *segmentation fault*. Um `n` do usuário pode ser 0, negativo
+> ou gigante. Use VLA só para tamanhos **pequenos e conferidos**; para o
+> resto, `malloc`, que devolve `NULL` quando falta memória.
 
 > [!TIP]
-> **Por dentro do C:** um vetor comum tem tamanho fixo, e o compilador já
-> sabe, ao compilar, quanto descer o ponteiro da pilha (`sub rsp, 48`). Com
-> VLA, ele gera código que calcula `alunos * semanas * 4` na hora e desce o
-> ponteiro da pilha por esse valor: é tão rápido quanto uma variável local,
-> muito mais que o `malloc`. Dá para ter o melhor dos dois: `int (*m)[c] =
-> malloc(l * sizeof *m);` cria a matriz no heap, com tipo VLA, e você
-> continua escrevendo `m[i][j]` (veja o A344).
+> `int (*m)[c] = malloc(l * sizeof *m);` cria no heap uma matriz com tipo
+> VLA, e `m[i][j]` continua valendo (veja o A344).
 
 > [!NOTE]
-> **Pergunta para você:** se o professor digitar `100 52`, quantos bytes
-> o `sizeof treinos` mostra? E quantas planilhas desse tamanho caberiam numa
+> **Pergunta para você:** se o professor digitar `100 52`, quantos bytes o
+> `sizeof treinos` mostra? E quantas planilhas desse tamanho caberiam numa
 > pilha de 8 MB?
 
 ### Hora de praticar
@@ -1206,50 +954,8 @@ Saída esperada:
 9: 9 18 27 36 45 (20 bytes)
 ```
 
-**Dicas:**
-
-1. t[i] = base * (i + 1).
-2. sizeof t de um VLA é calculado na hora: n * sizeof(int). Mostre com
-   %zu.
-
 ```bash
 gcc ~/LPEDC/27-c-detalhes/0172-vla/E1027.c -o ~/LPEDC/27-c-detalhes/0172-vla/E1027 && ~/LPEDC/27-c-detalhes/0172-vla/E1027
-```
-
-**Exercício E1028** · ★☆☆
-
-Uma rede tem 3 lojas, e a matriz guarda as vendas (em mil reais) de cada
-loja em cada trimestre. Escreva, com a matriz como parâmetro VLA:
-
-
-```text
-int soma_linha(int l, int c, int m[l][c], int i)   // total da loja i
-int soma_coluna(int l, int c, int m[l][c], int j)  // total do trimestre j
-```
-
-
-e mostre o total de cada loja e de cada trimestre.
-
-
-```text
-Saída esperada:
-loja 1: 100
-loja 2: 80
-loja 3: 32
-trimestre 1: 23
-trimestre 2: 43
-trimestre 3: 63
-trimestre 4: 83
-```
-
-**Dicas:**
-
-1. Uma matriz comum int m[3][4] pode ser passada para um parâmetro VLA:
-   soma_linha(3, 4, vendas, 0).
-2. As dimensões vêm antes da matriz na lista de parâmetros.
-
-```bash
-gcc ~/LPEDC/27-c-detalhes/0172-vla/E1028.c -o ~/LPEDC/27-c-detalhes/0172-vla/E1028 && ~/LPEDC/27-c-detalhes/0172-vla/E1028
 ```
 
 **Exercício E1029** · ★★☆
@@ -1279,42 +985,22 @@ transposta (3 x 2):
   3  6
 ```
 
-**Dicas:**
-
-1. Um VLA não aceita "= {...}": preencha com a[i][j] = i * c + j + 1.
-2. Cuidado: t tem as dimensões trocadas, t[c][l].
-3. Cada número com %3d.
-
 ```bash
 gcc ~/LPEDC/27-c-detalhes/0172-vla/E1029.c -o ~/LPEDC/27-c-detalhes/0172-vla/E1029 && ~/LPEDC/27-c-detalhes/0172-vla/E1029
 ```
 
 **Exercício E1030** · ★★☆
 
-O programa abaixo calcula o preço médio de n produtos guardados num VLA.
-Com n = 10 ele funciona. Mas o cliente tem 3 milhões de produtos: 24 MB,
-três vezes a pilha. Refatore:
-
-
-```text
-- troque o VLA por double *precos = malloc(...), confira NULL e libere
-  com free no fim;
-- mude n para 3000000.
-```
-
+Escreva um programa que calcule o preço médio de n = 3000000 produtos.
+Guarde os preços num vetor double *precos obtido com malloc (24 MB não
+cabem na pilha, por isso nada de VLA), confira se deu NULL e libere com
+free no fim. O preço do produto i é i % 100 + 0.5.
 
 
 ```text
 Saída esperada:
 n = 3000000, media = R$ 50.00
 ```
-
-**Dicas:**
-
-1. Rode antes, com n = 10: sai media = R$ 5.00.
-2. malloc(n * sizeof *precos). Se der NULL, mostre "sem memória" e
-   devolva 1.
-3. O resto do código não muda: precos[i] funciona igual com o ponteiro.
 
 ```bash
 gcc ~/LPEDC/27-c-detalhes/0172-vla/E1030.c -o ~/LPEDC/27-c-detalhes/0172-vla/E1030 && ~/LPEDC/27-c-detalhes/0172-vla/E1030
@@ -1349,91 +1035,39 @@ loja 1: A = R$ 40, B = R$ 45 -> melhor A
 loja 2: A = R$ 62, B = R$ 52 -> melhor B
 ```
 
-**Dicas:**
-
-1. r[i][j] é a soma, para k de 0 a m - 1, de a[i][k] * b[k][j].
-2. As três dimensões vêm antes das matrizes. Crie r como VLA no main,
-   com int lojas = 2, fornecedores = 2.
-3. Zere r[i][j] antes de acumular: VLA não pode ser inicializado com {0}.
-
 ```bash
 gcc ~/LPEDC/27-c-detalhes/0172-vla/E1031.c -o ~/LPEDC/27-c-detalhes/0172-vla/E1031 && ~/LPEDC/27-c-detalhes/0172-vla/E1031
-```
-
-**Exercício E1032** · ★★★
-
-Escreva long long soma_quadrados(int n), que soma 1² + 2² + ... + n²
-guardando os quadrados num vetor antes de somar. A função escolhe onde
-pôr o vetor:
-
-
-```text
-- n <= 0: não cria nada e devolve -1;
-- n <= 1000: um VLA long long v[n] na pilha (mostra "pilha, ");
-- n maior: malloc (mostra "heap, "), com NULL conferido e free.
-```
-
-
-No main, para n = 0, 10 e 100000, mostre "n = ...: " e depois "invalido"
-ou "soma = ...".
-
-
-```text
-Saída esperada:
-n = 0: invalido
-n = 10: pilha, soma = 385
-n = 100000: heap, soma = 333338333350000
-```
-
-**Dicas:**
-
-1. O VLA vai dentro do bloco do if: ele só existe ali, e só é criado
-   quando o n já foi conferido.
-2. Para o quadrado não estourar o int, converta antes de multiplicar:
-   (long long)(i + 1) * (i + 1).
-3. Confira com a fórmula n(n + 1)(2n + 1) / 6.
-
-```bash
-gcc ~/LPEDC/27-c-detalhes/0172-vla/E1032.c -o ~/LPEDC/27-c-detalhes/0172-vla/E1032 && ~/LPEDC/27-c-detalhes/0172-vla/E1032
 ```
 
 ---
 
 ## 0173 · Juntando tudo: o controle de acesso
 
-O coworking do centro tem porta com crachá, sala de reunião, impressora,
-garagem e painel de configuração. Cada pessoa tem um papel (visitante, membro
-ou admin), e o papel dá um pacote de permissões. Mas há exceções: o Bruno,
-membro, aluga uma vaga na garagem; a Carla estourou a cota da impressora.
+O coworking tem porta com crachá, reunião, impressora, garagem e configuração.
+O papel (visitante, membro ou admin) dá um pacote de permissões, com exceções:
+o Bruno aluga vaga na garagem, e a Carla estourou a cota da impressora.
 
-Cada peça do módulo entra numa parte. As permissões são **bits** num
-`unsigned`, e o papel é um **enum** que indexa o vetor `base` com o pacote de
-cada um. A **struct** `Usuario` guarda o papel e duas máscaras de exceção:
-`extra` (o que ganhou a mais) e `bloqueio` (o que perdeu). A permissão
-efetiva sai de uma expressão só:
+As permissões são **bits** num `unsigned`, e o papel é um **enum** que indexa
+o vetor `base`. A **struct** `Usuario` guarda o papel e duas máscaras: `extra`
+(o que ganhou) e `bloqueio` (o que perdeu). A permissão efetiva sai de uma
+expressão:
 
 `(base[u->papel] | u->extra) & ~u->bloqueio`
 
-Leia com a tabela de precedência na mão. O `|` junta o pacote e os extras;
-os parênteses são obrigatórios, porque `&` vem antes de `|`. O `~` (nível 2)
-inverte o bloqueio antes de tudo, e o `&` com ele apaga os bits bloqueados:
-**o bloqueio vence**. E a pergunta "pode tudo desta máscara?" é
-`(efetivas & mascara) == mascara`, de novo com parênteses, porque o `==` vem
-antes do `&`.
+O `|` junta pacote e extras (com parênteses, porque `&` vem antes de `|`). O
+`~` (nível 2) inverte o bloqueio, e o `&` apaga esses bits: **o bloqueio
+vence**. "Pode tudo desta máscara?" é `(efetivas & mascara) == mascara`:
+parênteses de novo, porque o `==` vem antes do `&`.
 
-Tudo é `unsigned`, de propósito: `~` num `int` daria um negativo, e misturar
-com sinal e sem sinal abre a porta para o `-1 > 0u`. A planilha final,
-usuário × permissão, é um **VLA** `bool
-acesso[n][QTD_PERMS]`: o `n` é uma variável, o tamanho é decidido na hora, e
-uma equipe maior não muda o código.
+Tudo é `unsigned`: `~` num `int` daria negativo, e misturar sinais abre a
+porta para o `-1 > 0u`. A planilha é um **VLA** `bool acesso[n][QTD_PERMS]`.
 
-A Carla é membro (`00111`: imprimir, reunião, entrar),
-sem extras e com a impressora bloqueada. O desenho faz a conta bit a bit:
+A Carla é membro (`00111`: imprimir, reunião, entrar) com a impressora
+bloqueada. O desenho faz a conta bit a bit:
 
 <p align="center"><img src="27-c-detalhes/0173-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: o controle de acesso" width="858"></p>
 
-O programa monta a planilha e responde quem pode usar a sala de reunião **e**
-imprimir:
+O programa monta a planilha e mostra quem pode usar a reunião **e** imprimir:
 
 ```c
 #include <stdbool.h>
@@ -1515,26 +1149,15 @@ int main(void) {
 // pode REUNIAO | IMPRIMIR: Ana Bruno
 ```
 
-O fluxograma responde "pode `REUNIAO | IMPRIMIR`?" com um laço pela equipe e
-uma única comparação de bits por pessoa. A máscara pode ter uma permissão ou
-cinco, e o custo é o mesmo:
+O fluxograma é um laço pela equipe com uma comparação de bits por pessoa:
 
 <p align="center"><img src="27-c-detalhes/0173-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: o controle de acesso" width="553"></p>
 
 > [!WARNING]
-> Duas linhas parecidas, dois programas diferentes. `efetivas(u) & mascara ==
-> mascara` é lido como `efetivas(u) & (mascara == mascara)`, isto é,
-> `efetivas(u) & 1`: só olha o bit de ENTRAR (o gcc avisa). E
-> `p = p | ~IMPRIMIR` em vez de `p = p & ~IMPRIMIR` não tira a impressora:
-> **liga todas as outras** permissões, até as que não existem. Esse erro
-> compila sem aviso nenhum.
-
-> [!TIP]
-> **Por dentro do C:** um `Usuario` ocupa 28 bytes: 16 do nome, 4 do enum e 4
-> de cada máscara. Cinco permissões como `bool` seriam 5 campos e cinco `if`;
-> como bits, são 4 bytes para até 32 permissões, e `pode` vira três
-> instruções (`or`, `and`, `cmp`). O VLA `acesso[4][5]` são 20 bytes na
-> pilha; com 10 milhões de usuários, troque por `malloc`.
+> `efetivas(u) & mascara == mascara` é lido como `efetivas(u) & (mascara ==
+> mascara)`, isto é, `efetivas(u) & 1`: só olha o bit de ENTRAR (o gcc
+> avisa). E `p = p | ~IMPRIMIR` no lugar de `p = p & ~IMPRIMIR` **liga todas
+> as outras** permissões, até as que não existem, e compila sem aviso.
 
 > [!NOTE]
 > **Pergunta para você:** que máscara de `extra` o Davi precisaria para poder
@@ -1731,58 +1354,23 @@ tem R? sim
 tem R|I? nao
 ```
 
-**Dicas:**
-
-1. Ligar: *p |= m. Desligar: *p &= ~m.
-2. "Todos": (p & m) == m, com os parênteses (o == vem antes do &).
-
 ```bash
 gcc ~/LPEDC/27-c-detalhes/0173-juntando-tudo/E1033.c -o ~/LPEDC/27-c-detalhes/0173-juntando-tudo/E1033 && ~/LPEDC/27-c-detalhes/0173-juntando-tudo/E1033
 ```
 
-**Exercício E1034** · ★☆☆
-
-Escreva as duas conversões entre as permissões e o texto do relatório,
-na ordem E R I G C (bit 0 a bit 4), com '-' para a que falta:
-
-
-```text
-void para_texto(unsigned p, char s[QTD_PERMS + 1])  // 21 -> "E-I-C"
-unsigned de_texto(const char *s)                     // "ER-G-" -> 11
-```
-
-
-
-```text
-Saída esperada:
-E-I-C
-ER-G- = 11
-```
-
-**Dicas:**
-
-1. Guarde as letras numa string "ERIGC": a letra do bit b é letras[b].
-2. Em de_texto, qualquer caractere diferente de '-' na posição b liga o
-   bit b: p |= 1u << b.
-3. Não esqueça o '\0' em s[QTD_PERMS].
-
-```bash
-gcc ~/LPEDC/27-c-detalhes/0173-juntando-tudo/E1034.c -o ~/LPEDC/27-c-detalhes/0173-juntando-tudo/E1034 && ~/LPEDC/27-c-detalhes/0173-juntando-tudo/E1034
-```
-
 **Exercício E1035** · ★★☆
 
-As duas funções abaixo compilam sem nenhum aviso, mas estão erradas:
+Escreva duas funções sobre as permissões:
 
 
 ```text
-- revogar deveria tirar as permissões de m, e devolve um número enorme;
-- tem_todas deveria responder se p tem TODAS as permissões de m, e
-  responde se tem ALGUMA.
+unsigned revogar(unsigned p, unsigned m)  // p sem os bits de m
+bool tem_todas(unsigned p, unsigned m)    // p tem TODOS os bits de m?
 ```
 
 
-Conserte as duas, sem mexer no main.
+No main, comece com p = ENTRAR | REUNIAO | IMPRIMIR, revogue IMPRIMIR,
+mostre p e teste REUNIAO | IMPRIMIR e depois ENTRAR | REUNIAO.
 
 
 ```text
@@ -1792,22 +1380,15 @@ tem R e I? nao
 tem E e R? sim
 ```
 
-**Dicas:**
-
-1. Rode antes: sai 4294967295 e "sim" duas vezes.
-2. p | ~m liga todos os bits que NÃO estão em m. Para apagar, o
-   operador é outro.
-3. (p & m) != 0 é "sobrou algum". "Sobraram todos" compara com m.
-
 ```bash
 gcc ~/LPEDC/27-c-detalhes/0173-juntando-tudo/E1035.c -o ~/LPEDC/27-c-detalhes/0173-juntando-tudo/E1035 && ~/LPEDC/27-c-detalhes/0173-juntando-tudo/E1035
 ```
 
 **Exercício E1036** · ★★☆
 
-O coworking quer descobrir permissões que ninguém usa. A matriz uso guarda,
-para cada pessoa (linha) e cada dia (coluna), a máscara dos recursos que
-ela usou. Escreva, com a matriz como parâmetro VLA:
+O coworking quer descobrir permissões que ninguém usa. A matriz uso
+guarda, para cada pessoa (linha) e cada dia (coluna), a máscara dos
+recursos que ela usou. Escreva, com a matriz como parâmetro VLA:
 
 
 ```text
@@ -1826,12 +1407,6 @@ Ana: usou ER--C, nunca usou --IG-
 Bruno: usou ERIG-, nunca usou -----
 Carla: usou E----, nunca usou -R---
 ```
-
-**Dicas:**
-
-1. Comece com 0 e faça m |= uso[i][j] para cada dia.
-2. "Tem mas não usou" = efetivas[i] & ~usado(...).
-3. Uma função que escreve a máscara como texto ajuda (veja o E1034).
 
 ```bash
 gcc ~/LPEDC/27-c-detalhes/0173-juntando-tudo/E1036.c -o ~/LPEDC/27-c-detalhes/0173-juntando-tudo/E1036 && ~/LPEDC/27-c-detalhes/0173-juntando-tudo/E1036
@@ -1865,60 +1440,8 @@ pedido ---G-: admin (falta ao visitante: ---G-)
 pedido -----: nenhum (falta ao visitante: -----)
 ```
 
-**Dicas:**
-
-1. Percorra p de 0 a QTD_PAPEIS - 1 e teste (base[p] & pedido) == pedido.
-2. Falta = pedido & ~base[VISITANTE].
-3. Na última linha, o bit 5 não aparece no texto de 5 letras, mas ainda
-   impede todos os papéis. Só os 5 bits de baixo viram texto.
-
 ```bash
 gcc ~/LPEDC/27-c-detalhes/0173-juntando-tudo/E1037.c -o ~/LPEDC/27-c-detalhes/0173-juntando-tudo/E1037 && ~/LPEDC/27-c-detalhes/0173-juntando-tudo/E1037
-```
-
-**Exercício E1038** · ★★★
-
-Em vez de papel único, agora cada pessoa participa de vários grupos. Um
-grupo concede algumas permissões e pode negar outras, e a negação de
-qualquer grupo vence a concessão de qualquer outro. Escreva:
-
-
-```text
-unsigned calcular(int k, const int ids[k], const Grupo grupos[])
-```
-
-
-que recebe os índices dos k grupos da pessoa (um parâmetro VLA) e devolve
-as permissões finais: (OU de todos os concede) & ~(OU de todos os nega).
-
-
-```text
-grupos: equipe   concede E R
-        financeiro concede I
-        estagio  nega G C
-        motorista concede G
-Lia participa de equipe, financeiro e motorista.
-Teo participa de equipe, motorista e estagio.
-```
-
-
-
-```text
-Saída esperada:
-Lia: ERIG-
-Teo: ER---
-```
-
-**Dicas:**
-
-1. Acumule duas máscaras separadas no laço: concede e nega. Só no fim
-   aplique a negação; se aplicar grupo a grupo, a ordem dos grupos
-   mudaria o resultado.
-2. No main, os ids podem ser VLAs: int k = 3; int ids_lia[k]; e preencha
-   um por um (VLA não aceita = {...}).
-
-```bash
-gcc ~/LPEDC/27-c-detalhes/0173-juntando-tudo/E1038.c -o ~/LPEDC/27-c-detalhes/0173-juntando-tudo/E1038 && ~/LPEDC/27-c-detalhes/0173-juntando-tudo/E1038
 ```
 
 ---
@@ -2880,7 +2403,7 @@ triângulo 3.0, 4.0, 5.0: 6.00
 1. Leia a letra com fscanf(f, " %c", &letra) e, conforme ela, leia 1, 2
    ou 3 números.
 2. Heron: s = (a + b + c) / 2 e área = sqrt(s(s - a)(s - b)(s - c)).
-3. Use acos(-1.0) para o pi; o gcc com as flags de estudo já liga a libm (-lm).
+3. Use acos(-1.0) para o pi; o rodar já liga a libm (-lm).
 
 ```bash
 gcc ~/LPEDC/27-c-detalhes/lista/P2724.c -o ~/LPEDC/27-c-detalhes/lista/P2724 -lm && ~/LPEDC/27-c-detalhes/lista/P2724
@@ -3348,7 +2871,7 @@ printf("%d", QUAD(2 + 3));
 
 **(E).** O `#define` só troca texto: `QUAD(2 + 3)` vira `2 + 3 * 2 + 3`, que
 pela precedência é 2 + 6 + 3 = 11. Para dar 25, a macro precisa de
-parênteses: `#define QUAD(x) ((x) * (x))`. Veja 0170 (E1019) e 0004.
+parênteses: `#define QUAD(x) ((x) * (x))`. Veja 0170 e 0004.
 
 </details>
 

@@ -1,25 +1,21 @@
 ## 0162 · Matriz esparsa
 
-Um serviço de streaming quer guardar a nota (de 1 a 5) que cada cliente deu a
-cada filme. São 1 milhão de clientes e 50 mil filmes. Uma matriz `int` cheia,
-com uma linha por cliente e uma coluna por filme, ocupa 5 × 10¹⁰ posições de 4
-bytes: **200 GB**. Só que cada cliente avalia, em média, uns 20 filmes. Mais de
-99,9% dessa matriz é zero.
+Um streaming guarda a nota (1 a 5) de cada cliente para cada filme: 1 milhão
+de clientes, 50 mil filmes. A matriz `int` cheia ocupa 5 × 10¹⁰ posições de 4
+bytes: **200 GB**. Cada cliente avalia uns 20 filmes, então mais de 99,9% é
+zero.
 
-Uma matriz assim, quase toda de zeros, é uma **matriz esparsa**: quem segue
-quem numa rede social, voos diretos entre aeroportos, as ligações de um grafo
-grande. A regra para guardá-la: **zero não se guarda**. Só os valores diferentes de zero
-ocupam memória, e quem não está guardado vale 0.
+Uma matriz quase toda de zeros é uma **matriz esparsa** (a rede social, o grafo
+grande). A regra: **zero não se guarda**. Só os valores diferentes de zero
+ocupam memória; o resto vale 0.
 
-O jeito mais simples é uma lista de **triplas** `(linha, coluna, valor)`, num
-vetor de structs em ordem de linha e coluna. Serve bem para gravar em arquivo ou
-para uma matriz que não muda. Inserir no meio do vetor, porém, obriga a empurrar
-todo mundo, como em qualquer vetor ordenado.
+O jeito mais simples é um vetor de **triplas** `(linha, coluna, valor)` em
+ordem: serve para gravar em arquivo ou matriz que não muda, pois inserir no
+meio empurra todo mundo.
 
-Quando a matriz muda o tempo todo, a escolha é a **lista por linha**: um vetor
-de ponteiros, um por linha, e em cada linha uma lista encadeada (módulo 11) com
-as células daquela linha, em ordem de coluna. Cada célula guarda a coluna, o
-valor e o ponteiro para a próxima:
+Quando a matriz muda, use a **lista por linha**: um vetor de ponteiros, um por
+linha, e em cada uma uma lista encadeada (módulo 11) com as células em ordem
+de coluna:
 
 ```c
 typedef struct Celula {
@@ -34,19 +30,18 @@ typedef struct {
 } Esparsa;
 ```
 
-Ler `m[i][j]` é percorrer a lista da linha `i` até passar da coluna `j`. Se a
-célula não aparecer, a resposta é 0. Gravar é uma **inserção ordenada** (assunto
-0078) com uma regra a mais: gravar 0 numa célula que existe **remove** a célula.
+Ler `m[i][j]` é percorrer a lista da linha `i` até passar da coluna `j`; se
+a célula não aparece, vale 0. Gravar é uma **inserção ordenada** (assunto
+0078) com uma regra a mais: gravar 0 numa célula existente a **remove**.
 
-Uma locadora pequena tem 4 clientes (Ana, Bruno, Carla e
-Davi, linhas 0 a 3) e 8 filmes (colunas 0 a 7). Chegam seis notas; depois Bruno
-apaga a dele. Das 32 posições, sobram 5 células. A linha de Carla nem tem lista:
-o ponteiro dela é `NULL`, e a linha inteira vale zero:
+Uma locadora tem 4 clientes (Ana, Bruno, Carla e Davi, linhas 0 a 3) e 8
+filmes (colunas 0 a 7). Chegam seis notas e Bruno apaga a dele: das 32
+posições, sobram 5 células. A linha de Carla é `NULL`:
 
 {{ideia}}
 
-O TAD fica em `esparsa.h` e `esparsa.c`. A função central é `esp_define`, que
-anda na linha com dois ponteiros, `ant` e `p`, como na lista ordenada:
+No TAD (`esparsa.h`, `esparsa.c`), `esp_define` anda na linha com dois
+ponteiros, `ant` e `p`, como na lista ordenada:
 
 ```c
 void esp_define(Esparsa *m, int i, int j, int valor) {
@@ -86,8 +81,7 @@ void esp_define(Esparsa *m, int i, int j, int valor) {
 }
 ```
 
-(A versão do `esparsa.c` também confere se `i` e `j` estão dentro da matriz.)
-O programa da locadora só usa a interface:
+(O `esparsa.c` também confere `i` e `j`.) O programa da locadora:
 
 ```c
 #include <stdio.h>
@@ -123,31 +117,24 @@ int main(void) {
 //   5  0  0  4  0  0  0  1
 ```
 
-No fluxograma, depois de andar pela linha, `esp_define` cai em um de quatro
-casos (trocar, remover, ignorar ou criar). O caminho verde é o de Bruno
-apagando a nota: a coluna 3 existe e o valor novo é 0, então a célula sai:
+`esp_define` cai em um de quatro casos (trocar, remover, ignorar ou criar). O
+verde é Bruno apagando a nota: a coluna 3 existe e o valor novo é 0:
 
 {{fluxograma}}
 
 > [!WARNING]
-> Esquecer a regra do zero é o erro clássico. Se `esp_define(m, 1, 3, 0)`
-> trocasse o valor, a célula ficaria na lista guardando um 0: `nao_zeros`
-> mentiria, e uma matriz que recebe muitas atualizações acabaria cheia de células
-> inúteis, gastando mais memória que a matriz cheia. Toda operação que pode gerar
-> zero (gravar, somar, subtrair) precisa remover a célula.
+> Se `esp_define(m, 1, 3, 0)` trocasse o valor, a célula guardaria um 0 e
+> `nao_zeros` mentiria. Toda operação que pode gerar zero (gravar, somar,
+> subtrair) precisa remover a célula.
 
 > [!TIP]
-> **Por dentro do C:** cada `Celula` ocupa 16 bytes numa máquina de 64 bits (4
-> da coluna, 4 do valor, 8 do ponteiro), contra 4 bytes de um `int` na matriz
-> cheia. Fora isso, o vetor `linha` gasta 8 bytes por linha. A locadora gasta
-> 5 × 16 + 4 × 8 = 112 bytes contra 32 × 4 = 128: quase empate, porque a matriz
-> é pequena e 16% dela está ocupado. A conta só compensa quando menos de 1/4 das
-> posições tem valor. No streaming, 2 × 10⁷ células de 16 bytes dão 320 MB, mais
-> 8 MB de ponteiros de linha: de 200 GB para menos de 1 GB.
+> Cada `Celula` ocupa 16 bytes em 64 bits, contra 4 do `int` da matriz cheia.
+> A conta só compensa quando menos de 1/4 das posições tem valor: no
+> streaming, 2 × 10⁷ células dão 320 MB, contra 200 GB.
 
 > [!NOTE]
 > **Pergunta para você:** quantas células são visitadas por
-> `esp_valor(notas, 3, 5)`? E por `esp_valor(notas, 2, 5)`? O custo de uma
-> leitura depende do tamanho da matriz ou de quantas células a linha tem?
+> `esp_valor(notas, 3, 5)`? E por `esp_valor(notas, 2, 5)`? O custo depende
+> do tamanho da matriz ou das células da linha?
 
 {{pratique}}

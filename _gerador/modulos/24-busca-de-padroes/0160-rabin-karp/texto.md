@@ -1,35 +1,28 @@
 ## 0160 · Rabin-Karp
 
-Para saber se dois arquivos de 1 GB são iguais, você não compara byte a byte
-toda vez: calcula uma **impressão digital** de cada um (um hash) e compara dois
-números. Se os números diferem, os arquivos com certeza diferem. Se batem,
-muito provavelmente são iguais, e só aí vale conferir de verdade.
+Dois arquivos de 1 GB são iguais? Compare o hash de cada um (uma **impressão
+digital**): se diferem, os arquivos diferem; se batem, só então vale conferir.
 
-O **Rabin-Karp** (1987) usa essa ideia na busca de padrões. Calcula o hash do
-padrão uma vez. Depois calcula o hash de cada **janela** de `m` letras do texto
-e só compara letra a letra quando os hashes batem. É o assunto 0105 (hashing)
-aplicado a pedaços de texto.
+O **Rabin-Karp** (1987) aplica isso à busca (hashing, assunto 0105): calcula
+o hash do padrão e o de cada **janela** de `m` letras do texto, e só compara
+letra a letra quando os hashes batem.
 
-Calcular o hash de cada janela do zero custa `m` passos, e aí não se ganha
-nada da força bruta. A saída é o **hash rolante**: a janela seguinte
-perde uma letra na esquerda e ganha uma na direita, e o hash novo sai do antigo
-em O(1).
+Recalcular cada janela custa `m` passos, sem ganho. A saída é o **hash
+rolante**: a janela seguinte perde uma letra à esquerda e ganha outra à
+direita, e o hash novo sai do antigo em O(1).
 
-Com dígitos fica fácil ver. A janela `271` é o número 271. A próxima, `718`, é
-`(271 - 2·100)·10 + 8`: tira o dígito que sai (pesando 10^(m-1)), desloca uma
-casa e soma o que entra. Com letras é igual, só que na base 256, uma "casa" por
-byte. Como esses números ficam enormes, tudo é feito **módulo um primo `q`**:
-o hash é o resto, e a regra continua valendo com `% q` a cada passo.
+Com dígitos: a janela `271` é o número 271, e a próxima, `718`, é
+`(271 - 2·100)·10 + 8`: tira o dígito que sai (peso 10^(m-1)), desloca e soma
+o que entra. Com letras é igual, na base 256, tudo **módulo um primo `q`**,
+pois os números ficam enormes.
 
-O preço do resto é a **colisão**: duas janelas diferentes podem ter o mesmo
-resto. Isso é um **falso positivo**, e por isso a conferência letra a letra
-nunca pode ser pulada. Com `q` grande, colisões ficam raras, e a busca
-custa O(n + m) na média. No pior caso (tudo colidindo), volta a O(n·m).
+Janelas diferentes podem ter o mesmo resto: é a **colisão**, ou **falso
+positivo**, e por isso a conferência letra a letra nunca pode ser pulada. Com
+`q` grande, a busca custa O(n + m) na média; com tudo colidindo, O(n·m).
 
-No exemplo, você procura `182` na sequência `2718281828459`, com
-`q = 13` (pequeno de propósito, para aparecer colisão). O hash do padrão é
-`182 % 13 = 0`. Rolando a janela pelas 11 posições, o hash 0 aparece três
-vezes: duas são o `182` de verdade, e uma é o `845`, que também deixa resto 0:
+Procure `182` em `2718281828459` com `q = 13` (pequeno, para aparecer
+colisão). O hash do padrão é `182 % 13 = 0`. Nas 11 janelas, o 0 aparece três
+vezes: duas são o `182` e uma é o `845`, que também deixa resto 0:
 
 {{ideia}}
 
@@ -118,36 +111,27 @@ A primeira rolada, de `271` (hash 11) para `718`. O `pot` é `10² % 13 = 9`:
 | desloca e põe o 8 | `(6 · 10 + 8) % 13 = 68 % 13` | **3** |
 | confere do zero | `718 % 13 = 718 - 715` | 3 |
 
-Duas operações por janela, não importa o tamanho do padrão. Com `m = 1000`, a
-força bruta pode gastar até mil comparações por janela; o hash rolante continua
-gastando duas contas.
-
-No fluxograma, o caminho comum é calcular, comparar dois números e rolar. A comparação letra a letra fica num desvio que quase nunca é tomado
-quando `q` é grande:
+São duas operações por janela, com qualquer `m`. A conferência letra a letra
+quase nunca roda quando `q` é grande:
 
 {{fluxograma}}
 
 > [!WARNING]
 > Em C, o resto de número negativo é negativo: `-7 % 13` vale `-7`, não `6`.
-> Na rolagem, `ht - t[i] * pot` fica negativo com frequência, e um hash
-> negativo nunca bate com o do padrão: a busca **perde ocorrências** sem dar
-> erro (o E959 cai nisso). Por isso a linha é
-> `(ht - t[i] * pot % Q + Q) % Q`: reduz o produto, soma `Q` e só então tira o
-> resto. E nunca pule a conferência letra a letra: sem ela, o `845` acima
-> seria contado como ocorrência.
+> `ht - t[i] * pot` fica negativo com frequência, e um hash negativo nunca bate
+> com o do padrão: a busca **perde ocorrências** sem erro. Por isso a linha é
+> `(ht - t[i] * pot % Q + Q) % Q`. E sem a conferência letra a letra, o `845`
+> seria contado.
 
 > [!TIP]
-> **Por dentro do C:** com letras, a base é 256 e o módulo deve ser um primo
-> grande, como 1.000.003. O maior valor intermediário é `ht * 256`, perto de
-> 2,6·10⁸: cabe num `int` de 32 bits, mas com folga pequena. Use `long long`
-> (assunto 0003) e você pode subir o `q` sem medo de overflow, que em `int`
-> com sinal é comportamento indefinido. Escolher o `q` primo e distante de
-> potências de 2 espalha melhor os restos. O exemplo A319 mostra os falsos
-> positivos caindo de 48 para 0 conforme o `q` cresce.
+> Com letras, `q` deve ser um primo grande, como 1.000.003. Use `long long`
+> (assunto 0003) para subir o `q`: overflow de `int` com sinal é
+> comportamento indefinido. O A319 mostra os falsos positivos caindo de 48
+> para 0 conforme o `q` cresce.
 
 > [!NOTE]
 > **Pergunta para você:** com `q = 13`, procurando `828` na mesma sequência,
-> quantos falsos positivos aparecem? Use os hashes da saída acima para
-> responder sem rodar, e depois troque o padrão no código para conferir.
+> quantos falsos positivos aparecem? Responda com os hashes da saída e confira
+> no código.
 
 {{pratique}}

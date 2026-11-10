@@ -1,61 +1,52 @@
 ## 0180 · Pigeonhole e chave composta
 
-A professora do cursinho corrigiu o simulado e quer a lista da turma pela
-nota, da menor para a maior. As notas são inteiras, de 0 a 10. A lista de
-chamada já está em ordem alfabética, e quem tirou a mesma nota deve continuar
-assim. Com 11 notas possíveis, dá para ordenar sem comparar um aluno com outro.
+A professora quer a turma pela nota do simulado, da menor para a maior. As
+notas vão de 0 a 10, e quem empata continua na ordem alfabética da chamada.
+Com só 11 notas, dá para ordenar sem comparar alunos.
 
-O **pigeonhole sort** (ordenação por casas de pombo) serve quando a chave é um
-inteiro num intervalo pequeno `[min, max]`. Ele cria uma **casa** para cada
-valor possível, `r = max - min + 1` casas, e faz duas passadas:
+O **pigeonhole sort** (casas de pombo) serve quando a chave é um inteiro num
+intervalo pequeno `[min, max]`. Ele cria uma **casa** para cada valor, `r =
+max - min + 1` casas, e faz duas passadas:
 
-1. percorre a entrada e põe cada registro **no fim da fila** da casa da sua
-   chave (`chave - min`);
+1. põe cada registro **no fim da fila** da casa da sua chave (`chave - min`);
 2. percorre as casas em ordem e devolve os registros, **na ordem em que
    entraram**.
 
-O custo é **O(n + r)**: uma passada nos registros e uma nas casas. Se `r` for
-pequeno perto de `n` (notas, idades, dias do mês), é linear. Ele é primo do
-**counting sort** (0120): o counting só **conta** quantos caem em cada valor e
-calcula posições; o pigeonhole **guarda os próprios registros** nas casas. Com
-número solto, a casa só precisa contar; com registro (nome e nota), cada casa
-vira uma fila.
+O custo é **O(n + r)**, linear se `r` for pequeno perto de `n`. Ele é primo do
+**counting sort** (0120): o counting só **conta** e calcula posições; o
+pigeonhole **guarda os registros**, cada casa uma fila.
 
-Como cada casa é uma fila, quem entrou primeiro sai primeiro: o pigeonhole é
-**estável**. Uma ordenação é **estável** quando registros com **chaves
-iguais** saem na mesma ordem relativa em que entraram. Os clássicos:
+Por isso é **estável**: uma ordenação é **estável** quando registros com
+**chaves iguais** saem na ordem relativa em que entraram. Os clássicos:
 
 | Estáveis | Não estáveis |
 | --- | --- |
 | bubble, inserção, merge sort, counting, radix (LSD), bucket (com filas), pigeonhole | seleção, shell sort, quick sort, heapsort |
 
-O merge é estável se, no empate, pegar primeiro da metade da esquerda; a
-inserção, se só deslocar quem é **estritamente** maior. Os não estáveis
-**trocam elementos distantes**: a troca pula por cima de quem está no meio.
+O merge é estável se, no empate, pegar primeiro da esquerda; a inserção, se só
+deslocar quem é **estritamente** maior. Os não estáveis **trocam elementos
+distantes**.
 
-Estabilidade importa quando há mais de uma chave. A **chave simples** é um
-campo só (a nota). A **chave composta** junta campos em ordem de prioridade:
-nota e, no empate, nome; ou turma, depois nota. Há dois jeitos de ordenar por
-ela:
+A **chave composta** junta campos em ordem de prioridade: nota e, no empate,
+nome. Há dois jeitos:
 
-- **um comparador composto**: compara o campo principal; se empatar, o
-  secundário; e assim por diante. É o jeito do `qsort` (que **não** é estável
-  pelo padrão C, então o desempate tem que estar no comparador);
+- **um comparador composto**: compara o campo principal e, no empate, o
+  secundário. É o jeito do `qsort`, que **não** é estável pelo padrão C: o
+  desempate tem que estar no comparador;
 - **várias passadas estáveis, da chave menos importante para a mais
-  importante**: ordene pela secundária e depois, com um método estável, pela
-  principal. A última passada manda; as anteriores só desempatam. É o
-  raciocínio do radix LSD.
+  importante**: ordene pela secundária e, com método estável, pela principal.
+  A última passada manda; as anteriores desempatam. É o raciocínio do radix
+  LSD.
 
-A lista de chamada (Ana 7, Bruno 5, Carla 9, Diego 5,
-Elisa 7, Fabio 3, Gabi 9, Hugo 5) já está em ordem de nome. Uma passada
-**estável** pela nota entrega a chave composta (nota, nome) de graça. No
-desenho, os alunos entrando nas casas 3, 5, 7 e 9 e saindo em ordem:
+A chamada (Ana 7, Bruno 5, Carla 9, Diego 5, Elisa 7, Fabio 3, Gabi 9, Hugo 5)
+já está em ordem de nome, então uma passada **estável** pela nota entrega a
+chave composta (nota, nome):
 
 {{ideia}}
 
-O TAD é o `pombal.h`. A casa é uma fila de **índices**, montada com três
-vetores (`primeiro`, `ultimo` e `prox`), sem um `malloc` por aluno. As duas
-passadas, no `pombal.c`:
+No `pombal.h`, a casa é uma fila de **índices**, montada com três vetores
+(`primeiro`, `ultimo` e `prox`), sem `malloc` por aluno. As duas passadas, no
+`pombal.c`:
 
 ```c
     for (int i = 0; i < n; i++) { // 1. cada aluno entra no fim da fila da sua casa
@@ -76,7 +67,7 @@ passadas, no `pombal.c`:
     }
 ```
 
-A professora compara o resultado com o da seleção:
+A seleção, para comparar:
 
 ```c
 #include <stdio.h>
@@ -108,33 +99,24 @@ int main(void) {
 // Seleção:    Fabio(3) Bruno(5) Diego(5) Hugo(5) Elisa(7) Ana(7) Gabi(9) Carla(9)
 ```
 
-Na seleção, a Elisa passou na frente da Ana, e a Gabi na frente da Carla. Na
-primeira volta, o Fabio (posição 5) trocou com a Ana (posição 0), e a Ana foi
-parar depois da Elisa: a troca pulou por cima dela.
+Na seleção, a Elisa passou na frente da Ana: na primeira volta, o Fabio
+(posição 5) trocou com a Ana (posição 0), que foi parar depois da Elisa.
 
-O fluxograma tem as duas passadas do pigeonhole, sem nenhuma comparação entre
-alunos. A primeira põe cada um na sua casa; a segunda esvazia as 11 casas em
-ordem:
+O fluxograma tem as duas passadas, sem comparação entre alunos: a primeira
+põe cada um na sua casa; a segunda esvazia as 11 casas em ordem:
 
 {{fluxograma}}
 
 > [!WARNING]
 > Nas passadas em sequência, a ordem é **da menos importante para a mais
 > importante**. Para "por cidade e, dentro dela, por nota", ordene primeiro
-> pela nota e **por último** pela cidade. Trocar a ordem dá uma lista por
-> nota com as cidades misturadas (é o bug do E1079). E a última passada
-> **tem** que ser estável: com a seleção, ela embaralha o que a primeira
-> arrumou (o A360 mostra).
+> pela nota e **por último** pela cidade. E a última passada **tem** que ser
+> estável: com a seleção, ela embaralha o que a primeira arrumou (o A360
+> mostra).
 
 > [!TIP]
-> **Por dentro do C:** o pigeonhole gasta memória proporcional a `r`, o
-> tamanho do intervalo, não a `n`. Para notas, 11 casas de dois `int` são 88
-> bytes. Para CPF (11 dígitos), seriam 100 bilhões de casas: não cabe. Por
-> isso ele só serve para intervalos pequenos. O radix (0121) existe para esse
-> caso: ele quebra a chave grande em pedaços pequenos e faz uma passada estável
-> por pedaço. Outro custo: o `pb_pigeonhole` copia structs inteiras
-> (`saida[k++] = v[i]`, 24 bytes cada): com registros grandes, ordene um vetor
-> de índices ou de ponteiros e mova só eles.
+> A memória é proporcional a `r`: CPF (11 dígitos) pediria 100 bilhões de
+> casas. Para chaves grandes existe o radix (0121).
 
 > [!NOTE]
 > **Pergunta para você:** se a lista de chamada estivesse em ordem

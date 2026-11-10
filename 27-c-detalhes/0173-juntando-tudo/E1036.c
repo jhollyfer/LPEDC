@@ -1,9 +1,9 @@
 // 0173 · Juntando tudo: o controle de acesso
 // Exercício E1036 · ★★☆
 //
-// O coworking quer descobrir permissões que ninguém usa. A matriz uso guarda,
-// para cada pessoa (linha) e cada dia (coluna), a máscara dos recursos que
-// ela usou. Escreva, com a matriz como parâmetro VLA:
+// O coworking quer descobrir permissões que ninguém usa. A matriz uso
+// guarda, para cada pessoa (linha) e cada dia (coluna), a máscara dos
+// recursos que ela usou. Escreva, com a matriz como parâmetro VLA:
 //
 //   unsigned usado(int n, int d, unsigned uso[n][d], int i)
 //
@@ -16,7 +16,7 @@
 //   Bruno: usou ERIG-, nunca usou -----
 //   Carla: usou E----, nunca usou -R---
 //
-// Escreva sua resposta abaixo (complete o código):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 
@@ -27,18 +27,19 @@
 #define CONFIG   (1u << 4) // C
 #define QTD_PERMS 5
 
+const char *nomes[] = {"Ana", "Bruno", "Carla"};
+unsigned efetivas[] = {
+    ENTRAR | REUNIAO | IMPRIMIR | GARAGEM | CONFIG,
+    ENTRAR | REUNIAO | IMPRIMIR | GARAGEM,
+    ENTRAR | REUNIAO,
+};
+unsigned uso[3][4] = {
+    {ENTRAR, ENTRAR | REUNIAO, ENTRAR | CONFIG, ENTRAR},
+    {ENTRAR | GARAGEM, ENTRAR | GARAGEM | IMPRIMIR, ENTRAR | GARAGEM, ENTRAR | REUNIAO},
+    {ENTRAR, ENTRAR, ENTRAR, ENTRAR},
+};
+
 int main(void) {
-    const char *nomes[] = {"Ana", "Bruno", "Carla"};
-    unsigned efetivas[] = {
-        ENTRAR | REUNIAO | IMPRIMIR | GARAGEM | CONFIG,
-        ENTRAR | REUNIAO | IMPRIMIR | GARAGEM,
-        ENTRAR | REUNIAO,
-    };
-    unsigned uso[3][4] = {
-        {ENTRAR, ENTRAR | REUNIAO, ENTRAR | CONFIG, ENTRAR},
-        {ENTRAR | GARAGEM, ENTRAR | GARAGEM | IMPRIMIR, ENTRAR | GARAGEM, ENTRAR | REUNIAO},
-        {ENTRAR, ENTRAR, ENTRAR, ENTRAR},
-    };
-    (void)nomes; (void)efetivas; (void)uso; // apague esta linha
+
     return 0;
 }

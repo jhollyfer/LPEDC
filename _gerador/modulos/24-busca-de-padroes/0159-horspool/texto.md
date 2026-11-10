@@ -1,40 +1,34 @@
 ## 0159 · Horspool
 
-Na feira, você passa os olhos pelas placas procurando "MANGA". Ninguém lê letra
-por letra: você bate o olho numa placa, vê que ela termina com uma letra que
-nem existe em "MANGA" e já pula para a próxima. A força bruta e o KMP leem
-todas as letras do texto. Dá para ler **menos**?
+Na feira, você procura "MANGA" nas placas. Se a placa termina com uma letra
+que não existe em "MANGA", pule para a próxima. Dá para ler **menos** letras
+que a força bruta e o KMP?
 
-Dá: compare o padrão **da direita para a esquerda**. Encoste o
-padrão no texto e olhe primeiro a letra que está sob a **última** casa dele. Se
-essa letra nem aparece no padrão, nenhum alinhamento que a cubra pode dar
-certo, e o padrão inteiro pula para depois dela: `m` casas de uma vez.
+Dá: compare o padrão **da direita para a esquerda**. Olhe a letra do texto
+sob a **última** casa do padrão. Se ela não aparece no padrão, nenhum
+alinhamento que a cubra dá certo, e o padrão pula `m` casas. Se aparece, o
+salto leva a ocorrência **mais à direita** dela no padrão até ficar sob a
+mesma letra do texto. É o algoritmo de **Horspool** (1980), versão simples do
+**Boyer-Moore** (1977).
 
-Se a letra aparece no padrão, o salto é menor: o suficiente para levar a
-ocorrência **mais à direita** dela no padrão até ficar embaixo dessa mesma
-letra do texto. Esse é o algoritmo de **Horspool** (1980), a versão simplificada
-do **Boyer-Moore** (1977) usada em editores e no `grep`.
-
-Os saltos dependem só do padrão, então vão para uma **tabela de saltos** feita
-antes da busca, com uma casa para cada valor de byte (256):
+Os saltos dependem só do padrão e ficam numa **tabela de saltos**, uma casa
+por valor de byte (256):
 
 - toda letra começa com `salto = m`;
 - para cada `j` de 0 até `m - 2`, `salto[padrao[j]] = m - 1 - j`, a distância
-  de `j` até a última casa. Como `j` cresce, uma letra repetida fica com a
+  de `j` até a última casa. Como `j` cresce, a letra repetida fica com a
   ocorrência mais à direita.
 
-A última letra do padrão fica de fora de propósito: se entrasse, o salto dela
-seria 0, e a busca ficaria parada no mesmo lugar para sempre.
+A última letra fica de fora: seu salto seria 0 e a busca não andaria.
 
-Na busca, cada alinhamento `i` compara de `j = m - 1` para trás. Achando ou
-não, o próximo alinhamento é `i + salto[texto[i + m - 1]]`: a letra que
-decide é sempre a que está sob a última casa da janela.
+Cada alinhamento `i` compara de `j = m - 1` para trás. Achando ou não, o
+próximo é `i + salto[texto[i + m - 1]]`.
 
-A placa do exemplo é "A BANCA VENDE MANGA" (19 letras) e o padrão é
-"MANGA" (`m = 5`). Os saltos são M = 4, A = 3, N = 2, G = 1 e 5 para as outras.
-No alinhamento 0, sob a última casa está o `N`: salta 2. No 2, o `A` bate, o `C`
-não, e o `A` manda saltar 3. No 5, o `E` não está em "MANGA": salta 5. No 10,
-o `M` manda saltar 4. No 14, as cinco letras batem:
+A placa é "A BANCA VENDE MANGA" (19 letras) e o padrão é "MANGA" (`m = 5`).
+Os saltos são M = 4, A = 3, N = 2, G = 1 e 5 para as outras. No alinhamento 0,
+sob a última casa está o `N`: salta 2. No 2, o `A` bate, o `C` não, e o `A`
+manda saltar 3. No 5, o `E` salta 5. No 10, o `M` salta 4. No 14, as cinco
+letras batem:
 
 {{ideia}}
 
@@ -105,8 +99,7 @@ int main(void) {
 
 ### Passo a passo
 
-Os cinco alinhamentos. A janela é `texto[i..i+4]` e a letra que decide o salto
-é a última dela:
+Os cinco alinhamentos; a última letra de `texto[i..i+4]` decide o salto:
 
 | i | janela | comparações (da direita) | última letra | salto |
 | --- | --- | --- | --- | --- |
@@ -116,42 +109,29 @@ Os cinco alinhamentos. A janela é `texto[i..i+4]` e a letra que decide o salto
 | 10 | `NDE M` | 1 | `M` | 4 |
 | 14 | `MANGA` | 5: **achou** | `A` | 3 (passa do fim) |
 
-Foram 10 comparações de letra. A força bruta faz 19 no mesmo texto e passa por
-todas as letras; aqui, 10 das 19 letras da placa nunca foram olhadas.
-
-No fluxograma, ao contrário da força bruta, o `i` não anda de 1 em 1. O
-passo vem da tabela, e quem decide é a última letra da janela, tenha
-o alinhamento dado certo ou não:
+Foram 10 comparações; a força bruta faz 19. O passo do `i` vem da tabela,
+pela última letra da janela:
 
 {{fluxograma}}
 
-O custo depende do texto. No caso comum, com alfabeto grande e padrão
-comprido, muitas letras não aparecem no padrão e o salto fica perto de `m`:
-a busca olha umas `n / m` letras, menos que o tamanho do texto. Quanto **maior**
-o padrão, **mais rápida** a busca (o exemplo A317 mede isso). O pior caso
-continua O(n·m): procurar "baaa" num texto só de `a` compara 4 letras e salta 1
-em cada alinhamento (é o exercício E952).
+Com alfabeto grande e padrão comprido, o salto fica perto de `m` e a busca
+olha umas `n / m` letras: quanto **maior** o padrão, **mais rápida** a busca
+(o A317 mede). O pior caso continua O(n·m): "baaa" num texto só de `a`
+compara 4 letras e salta 1 por alinhamento (E952).
 
 > [!WARNING]
-> O índice da tabela tem que ser `unsigned char`. Em UTF-8, letras acentuadas
-> viram dois bytes acima de 127, e no gcc para x86 o `char` tem sinal: o `ã`
-> começa com o byte 0xC3, que num `char` vale **-61**. `salto[-61]` escreve
-> fora do vetor, em memória de outra variável, sem erro de compilação
-> (o E953 mostra o estrago). Converta sempre: `salto[(unsigned char) c]`. E não
-> ponha a última letra do padrão na tabela, ou o salto dela vira 0.
+> O índice da tabela tem que ser `unsigned char`. Em UTF-8, o `ã` começa com
+> o byte 0xC3, que num `char` com sinal (gcc em x86) vale **-61**, e
+> `salto[-61]` escreve fora do vetor sem erro de compilação. Converta:
+> `salto[(unsigned char) c]`. E não ponha a última letra do padrão na tabela.
 
 > [!TIP]
-> **Por dentro do C:** a tabela é `int salto[256]`, 1 KB na pilha, não importa o
-> tamanho do padrão nem do texto. Montar custa O(256 + m). O Boyer-Moore
-> completo acrescenta uma segunda tabela, a do **bom sufixo**, que olha também
-> as letras que já bateram e garante busca linear; o Horspool troca essa
-> garantia por um código de dez linhas que, em texto comum, é tão rápido quanto.
-> Ferramentas como o GNU `grep` usam variações do Boyer-Moore para procurar
-> palavras fixas, e por isso ficam mais rápidas com padrões compridos.
+> O Boyer-Moore completo acrescenta a tabela do **bom sufixo**, que garante
+> busca linear; o Horspool troca essa garantia por um código curto.
 
 > [!NOTE]
 > **Pergunta para você:** qual é a tabela de saltos de "BANANA"? E quantos
 > alinhamentos o Horspool testa para procurar "BANANA" em "BANDANA BANANA"?
-> Faça no papel e depois troque os valores no código para conferir.
+> Faça no papel e confira no código.
 
 {{pratique}}

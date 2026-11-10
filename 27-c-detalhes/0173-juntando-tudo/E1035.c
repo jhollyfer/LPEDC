@@ -1,20 +1,20 @@
 // 0173 · Juntando tudo: o controle de acesso
 // Exercício E1035 · ★★☆
 //
-// As duas funções abaixo compilam sem nenhum aviso, mas estão erradas:
+// Escreva duas funções sobre as permissões:
 //
-//   - revogar deveria tirar as permissões de m, e devolve um número enorme;
-//   - tem_todas deveria responder se p tem TODAS as permissões de m, e
-//     responde se tem ALGUMA.
+//   unsigned revogar(unsigned p, unsigned m)  // p sem os bits de m
+//   bool tem_todas(unsigned p, unsigned m)    // p tem TODOS os bits de m?
 //
-// Conserte as duas, sem mexer no main.
+// No main, comece com p = ENTRAR | REUNIAO | IMPRIMIR, revogue IMPRIMIR,
+// mostre p e teste REUNIAO | IMPRIMIR e depois ENTRAR | REUNIAO.
 //
 //   Saída esperada:
 //   depois de revogar: 3
 //   tem R e I? nao
 //   tem E e R? sim
 //
-// Escreva sua resposta abaixo (conserte o código):
+// Escreva sua resposta abaixo:
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -26,19 +26,7 @@
 #define CONFIG   (1u << 4) // C
 #define QTD_PERMS 5
 
-unsigned revogar(unsigned p, unsigned m) {
-    return p | ~m;
-}
-
-bool tem_todas(unsigned p, unsigned m) {
-    return (p & m) != 0;
-}
-
 int main(void) {
-    unsigned p = ENTRAR | REUNIAO | IMPRIMIR;
-    p = revogar(p, IMPRIMIR);
-    printf("depois de revogar: %u\n", p);
-    printf("tem R e I? %s\n", tem_todas(p, REUNIAO | IMPRIMIR) ? "sim" : "nao");
-    printf("tem E e R? %s\n", tem_todas(p, ENTRAR | REUNIAO) ? "sim" : "nao");
+
     return 0;
 }

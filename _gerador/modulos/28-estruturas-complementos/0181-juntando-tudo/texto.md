@@ -1,41 +1,33 @@
 ## 0181 · Juntando tudo
 
-A recepção do posto de saúde do bairro tem três perguntas o dia inteiro.
-"Esse CPF já tem cadastro?" "Qual é a próxima consulta depois das 8h45?" "A
-dona Ana desmarcou: quem estava esperando?" Cada pergunta pede uma estrutura
-diferente, e este programa usa as três que o módulo construiu:
+A recepção do posto de saúde responde a três perguntas o dia inteiro: "Esse
+CPF já tem cadastro?", "Qual a próxima consulta depois das 8h45?" e "A dona
+Ana desmarcou: quem estava esperando?". Cada uma pede uma estrutura do módulo:
 
-- os **pacientes** ficam numa **tabela hash com dispersão dupla** (0179),
-  pelo CPF: cadastro e busca exata em O(1) em média. O `m` é 101, primo, e a
-  carga fica abaixo de 1/2;
+- os **pacientes** ficam numa **tabela hash com dispersão dupla** (0179), pelo
+  CPF: busca exata em O(1) em média. O `m` é 101, primo, e a carga fica abaixo
+  de 1/2;
 - os **horários** ficam numa **rubro-negra clássica** com sentinela (0177),
-  pela hora em HHMM: marcar custa O(log n) mesmo que a recepção marque tudo
-  em ordem, e "a próxima depois de tal hora" é o **teto** seguido do
-  **sucessor** (0175), O(log n);
+  pela hora em HHMM: marcar custa O(log n), e "a próxima depois de tal hora" é
+  o **teto** seguido do **sucessor** (0175);
 - a **fila de espera** é uma **lista dupla circular com sentinela** (0174):
-  entra no fim, sai do começo ou do meio (quando o paciente consegue horário
-  por outro caminho), sem caso especial.
+  entra no fim e sai do começo ou do meio, sem caso especial.
 
 As estruturas conversam por **chaves**, não por ponteiros: o nó da árvore
-guarda o CPF de quem marcou, o paciente na hash guarda o horário dele, a fila
-guarda CPFs. Assim, cada uma pode mudar por dentro (uma rotação, uma
-sondagem) sem invalidar nada nas outras.
+guarda o CPF de quem marcou, o paciente na hash guarda o horário, a fila
+guarda CPFs. Rotação ou sondagem não invalidam as outras.
 
-Uma decisão de projeto: a rubro-negra do 0177 não tem remoção. Em vez de remover, a consulta desmarcada deixa o **horário vago**
-na árvore (`cpf = 0`): o nó continua lá e pode ser reaproveitado na próxima
-marcação. É a mesma ideia da lápide da hash, numa árvore. A agenda de um dia
-tem poucas dezenas de horários; o custo de guardar os vagos é pequeno.
+A rubro-negra do 0177 não tem remoção: a consulta desmarcada deixa o
+**horário vago** na árvore (`cpf = 0`), como a lápide da hash.
 
-Cinco pacientes se cadastram. Carla marca às 8h00, Ana
-às 9h00, Bruno às 10h30. Diego quer as 9h00, já ocupadas, e vai para a espera;
-Elisa também. Ana desmarca: o primeiro da fila, Diego, assume. No desenho, as
-três estruturas depois disso:
+Cinco pacientes se cadastram. Carla marca às 8h00, Ana às 9h00, Bruno às
+10h30. Diego quer as 9h00 e vai para a espera; Elisa também. Ana desmarca, e
+Diego assume. No desenho, as estruturas depois disso:
 
 {{ideia}}
 
-O TAD é o `agenda.h`, e o `agenda.c` reúne as três implementações (com
-`static`, para os nomes não vazarem). A operação que junta as três é o
-cancelamento:
+O `agenda.c` reúne as três implementações (com `static`). A operação que as
+junta é o cancelamento:
 
 ```c
 int ag_cancela(Agenda *a, int horario) {
@@ -110,31 +102,21 @@ int main(void) {
 // Na fila de espera: 1
 ```
 
-O fluxograma segue o cancelamento das 9h00. O horário existe e tem
-consulta, a Ana fica sem horário, e como a fila não está vazia, o Diego (o
-primeiro) assume e sai da fila:
+O fluxograma segue o cancelamento das 9h00: a Ana fica sem horário e, como a
+fila não está vazia, o Diego assume e sai dela:
 
 {{fluxograma}}
 
 > [!WARNING]
-> Quando duas estruturas guardam a mesma informação, elas têm que mudar
-> **juntas**. Aqui, o horário do paciente está na hash (`p->horario`) e na
-> árvore (`x->cpf`). Se o cancelamento zerar só a árvore, a Ana continua
-> "com consulta" na hash e nunca mais consegue marcar. Toda operação da
-> agenda que mexe numa das duas mexe na outra antes de voltar. Um
-> `ag_confere` que percorre a árvore e compara com a hash é um bom teste
-> para esse tipo de programa.
-
+> Quando duas estruturas guardam a mesma informação, elas mudam **juntas**.
+> O horário do paciente está na hash (`p->horario`) e na árvore (`x->cpf`):
+> se o cancelamento zerar só a árvore, a Ana continua "com consulta" na hash e
+> nunca mais consegue marcar.
 
 > [!TIP]
-> **Por dentro do C:** a `struct Agenda` guarda a tabela de 101 pacientes
-> **dentro dela** (101 × 40 bytes, cerca de 4 KB), mais as duas sentinelas:
-> um `calloc` só cria tudo, e o zero do `calloc` já deixa toda posição da
-> hash como `LIVRE`. Os nós da árvore e da fila vêm de `malloc`, um por
-> horário e um por pessoa na fila, e `ag_libera` devolve cada um. Como o
 > `Agenda` é um **tipo opaco** (o `.h` só declara `typedef struct Agenda
-> Agenda`), quem usa a agenda não enxerga nenhuma das três estruturas: dá
-> para trocar a rubro-negra por uma AVL sem mudar uma linha do cliente.
+> Agenda`): o cliente não enxerga as estruturas, e dá para trocar a
+> rubro-negra por uma AVL sem mudar uma linha dele.
 
 > [!NOTE]
 > **Pergunta para você:** depois do exemplo, a Elisa ainda está na espera. Se

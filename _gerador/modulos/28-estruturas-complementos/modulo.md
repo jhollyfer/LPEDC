@@ -1,60 +1,52 @@
 # Módulo 28 · Estruturas: o que faltava
 
 Os módulos 11, 14 e 15 construíram listas, árvores e tabelas hash do jeito
-mais direto: o que funciona e cabe numa primeira leitura. Este módulo volta
-a essas três estruturas e preenche o que ficou de fora, com o olhar do
-Cormen, o livro da prova do PPGI. As estruturas são as mesmas, agora nas
-versões que aparecem nos livros, nas bibliotecas e nas questões de concurso.
+mais direto. Este módulo volta a elas e preenche o que ficou de fora, com o
+olhar do Cormen, o livro da prova do PPGI: as versões dos livros, das
+bibliotecas e dos concursos.
 
-Três ideias atravessam o módulo. A primeira é a **sentinela**: um nó falso que
-fica onde estaria o `NULL` e apaga os casos especiais do código, na lista
-(`L.nil`) e na rubro-negra (`T.nil`). A segunda é o **conserto na volta**: a
-AVL e a rubro-negra quebram uma regra ao inserir ou remover e consertam
-subindo, com rotações e recolorações. A terceira é que **a escolha do número
-importa**: o `m` da tabela hash, a constante `A` da multiplicação, o passo da
-dispersão dupla e a ordem das passadas numa chave composta mudam o custo de
-O(1) para O(n) sem mudar uma linha da lógica.
+Três ideias atravessam o módulo. A **sentinela** é um nó falso no lugar do
+`NULL` que apaga os casos especiais, na lista (`L.nil`) e na rubro-negra
+(`T.nil`). O **conserto na volta**: AVL e rubro-negra quebram uma regra ao
+inserir ou remover e consertam subindo, com rotações e recolorações. E **a
+escolha do número importa**: o `m` da hash, a constante `A`, o passo da
+dispersão dupla e a ordem das passadas numa chave composta levam o custo de
+O(1) a O(n) sem mudar a lógica.
 
-O que muda na cabeça é a pergunta "por quê?". Por que `m` primo e longe de
-potência de 2? Por que a dupla só quando o filho pende para dentro? Por que a
-altura da rubro-negra é no máximo 2 log₂(n + 1)? A prova cobra esses
-porquês, e o módulo termina com uma agenda de consultas que usa a lista
-com sentinela, a rubro-negra e a dispersão dupla no mesmo programa.
+A pergunta do módulo é "por quê?": por que `m` primo, por que a dupla só
+quando o filho pende para dentro, por que h ≤ 2 log₂(n + 1). Ele termina com
+uma agenda de consultas que junta lista com sentinela, rubro-negra e
+dispersão dupla.
 
 ## O que você vai aprender
 
-- a **lista dupla circular com sentinela** (`L.nil`): inserir, remover e
-  buscar sem nenhum caso especial, e o truque da chave guardada na sentinela
-- o vocabulário das árvores: **grau** do nó e da árvore, **nível**,
-  **profundidade**, **altura**, **fator de balanceamento**; e **sucessor** e
-  **antecessor** com ponteiro para o pai (`TREE-SUCCESSOR`)
-- a **remoção na AVL**: o filho com fator 0, a rotação que encurta a subárvore
-  e as **várias rotações** até a raiz
-- a **rubro-negra clássica**: as **cinco propriedades**, a sentinela `T.nil`,
-  a inserção com os **casos do tio**, a **altura negra** e a prova de que
-  h ≤ 2 log₂(n + 1)
+- a **lista dupla circular com sentinela** (`L.nil`) e o truque da chave
+  guardada nela
+- o vocabulário das árvores (**grau**, **nível**, **profundidade**,
+  **altura**, **fator de balanceamento**), **sucessor** e **antecessor** com
+  ponteiro para o pai
+- a **remoção na AVL**: filho com fator 0 e rotações até a raiz
+- a **rubro-negra clássica**: as **cinco propriedades**, os **casos do tio**,
+  a **altura negra** e h ≤ 2 log₂(n + 1)
 - as funções hash do Cormen: **divisão** (por que `m` primo) e
-  **multiplicação** (`A` de Knuth e a versão em inteiros com deslocamento)
-- **sondagem linear, quadrática e dispersão dupla**, agrupamento primário e
-  secundário, **lápide** e **fator de carga** com as fórmulas de custo
-- o **pigeonhole sort**, ordenação **estável** e não estável (quais dos
-  clássicos são o quê) e **chave composta**: comparador composto e passadas
-  estáveis em sequência
+  **multiplicação** (`A` de Knuth, versão em inteiros)
+- **sondagem linear, quadrática e dupla**, **lápide** e **fator de carga**
+- o **pigeonhole sort**, ordenação **estável** e **chave composta**
 
 ## Antes de começar
 
-Este módulo é uma revisão por dentro. Ele supõe que você já fez a **lista
-dupla** e a **lista circular** (0079 e 0080), a **BST** com busca, inserção e
-remoção (0099 e 0100), a **AVL** com as rotações (0101), a **tabela hash** com
-encadeamento e com sondagem linear (0105 a 0107) e as ordenações dos módulos
-13 e 18, em especial a **estabilidade** (0096 e 0120). **Ponteiro para struct**
-(0062), `malloc`/`free` e **TAD** (0074) aparecem em todo assunto.
+Supõe a **lista dupla** e a **circular** (0079 e 0080), a **BST** (0099 e
+0100), a **AVL** com rotações (0101), a **tabela hash** (0105 a 0107), a
+**estabilidade** das ordenações (0096 e 0120), **ponteiro para struct**
+(0062), `malloc`/`free` e **TAD** (0074).
+
+**Progressão.** Este módulo completa os 11, 14 e 15. Prepara o 29, que
+completa os grafos, e retoma o 27 nos bits e nos inteiros sem sinal.
 
 Cada assunto tem um **TAD** na pasta (`sentinela.h`, `arvpai.h`, `avlrem.h`,
-`vermelhopreto.h`, `espalha.h`, `sondagem.h`, `pombal.h`, `agenda.h`). O
-texto mostra só o pedaço do `.c` que importa: abra o `.c` inteiro também. O
-comando do exemplo compila junto os `.c` de apoio da pasta (como `vermelhopreto.c`),
-então os comandos são os de sempre:
+`vermelhopreto.h`, `espalha.h`, `sondagem.h`, `pombal.h`, `agenda.h`). O texto
+mostra só o pedaço do `.c` que importa. Compile junto os `.c` de apoio da
+pasta, como `vermelhopreto.c`:
 
 ```bash
 gcc ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/A353.c ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/vermelhopreto.c -o ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/A353 -lm && ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/A353
@@ -63,14 +55,12 @@ gcc ~/LPEDC/28-estruturas-complementos/0177-rubro-negra-classica/A353.c ~/LPEDC/
 As convenções são as do Cormen: **altura conta arestas** (folha tem altura 0,
 árvore vazia tem -1), a raiz está no **nível 0** e o **fator de
 balanceamento** é `altura(esq) - altura(dir)`. Alguns livros contam o nível a
-partir de 1 ou o fator ao contrário: na prova, leia a definição do enunciado
-antes de fazer a conta.
+partir de 1 ou o fator ao contrário: leia a definição do enunciado.
 
-Nos assuntos 0176 e 0177, refaça o **Passo a passo** no papel antes de rodar,
-desenhando a árvore inteira a cada rotação, com as alturas (AVL) ou as cores
-(rubro-negra). Nos desenhos, a sentinela das listas é o nó cinza; na
-rubro-negra, o nó preto aparece em cinza; nas tabelas hash, amarelo marca as
-posições que a busca olhou e verde, onde achou a chave.
+Nos assuntos 0176 e 0177, refaça o **Passo a passo** no papel, desenhando a
+árvore a cada rotação. Nos desenhos, a sentinela das listas e o nó preto da
+rubro-negra são cinza; nas tabelas hash, amarelo marca as posições olhadas e
+verde, onde achou a chave.
 
 {{indice}}
 

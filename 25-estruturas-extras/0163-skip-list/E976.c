@@ -1,45 +1,26 @@
 // 0163 · Skip list
 // Exercício E976 · ★★☆
 //
-// Ache o bug. A concessionária desativou a parada do km 23. A função
-// remove_parada abaixo tira o nó da lista e libera a memória, mas a busca
-// seguinte quebra: o AddressSanitizer acusa heap-use-after-free dentro de
-// skip_busca. Conserte remove_parada (sem usar skip_remove) e rode de novo.
+// A concessionária desativou a parada do km 23. Escreva, sem usar
+// skip_remove, void remove_parada(Skip *s, int chave): guarda o nó anterior
+// de cada andar, tira o nó de TODOS os andares em que ele aparece e só então
+// libera a memória. Escreva também void procura(const Skip *s, int km), que
+// mostra se há parada. No main (a linha já está montada), remova o km 23,
+// procure os km 47 e 23 e mostre a skip list com skip_mostra. Compile com
+// -fsanitize=address: não pode haver acesso a memória liberada.
 //
-//   Saída esperada (sem nenhum erro do sanitizer):
+//   Saída esperada:
 //   km 47: tem parada
 //   km 23: não tem parada
 //   andar 2:                          56
 //   andar 1:      12          40      56
 //   andar 0:   5  12  18  31  40  47  56
 //
-// Escreva sua resposta abaixo (conserte o código):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "skip.h"
-
-void remove_parada(Skip *s, int chave) {
-    NoSkip *antes[SKIP_MAX];
-    NoSkip *x = &s->cabeca;
-    for (int k = SKIP_MAX - 1; k >= 0; k--) {
-        while (x->prox[k] != NULL && x->prox[k]->chave < chave) {
-            x = x->prox[k];
-        }
-        antes[k] = x;
-    }
-    x = x->prox[0];
-    if (x == NULL || x->chave != chave) {
-        return;
-    }
-    antes[0]->prox[0] = x->prox[0]; // tira o nó da lista
-    free(x);
-    s->n--;
-}
-
-void procura(const Skip *s, int km) {
-    printf("km %d: %s\n", km, skip_busca(s, km, NULL) ? "tem parada" : "não tem parada");
-}
 
 int main(void) {
     int km[] = {5, 12, 18, 23, 31, 40, 47, 56};
@@ -48,11 +29,6 @@ int main(void) {
     for (int i = 0; i < 8; i++) {
         skip_insere_andares(linha, km[i], andares[i]);
     }
-
-    remove_parada(linha, 23);
-    procura(linha, 47);
-    procura(linha, 23);
-    skip_mostra(linha);
 
     skip_libera(linha);
     return 0;

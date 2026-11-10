@@ -1,63 +1,48 @@
 # Módulo 25 · Estruturas especiais
 
-Os módulos anteriores montaram a caixa de ferramentas clássica: listas, pilhas,
-filas, árvores, heaps, tabelas hash e grafos. Este módulo mostra três estruturas
-que nascem de um problema específico e o resolvem com uma ideia simples, quase
-sempre uma lista encadeada com um truque a mais.
+Os módulos anteriores montaram a caixa de ferramentas clássica: listas,
+pilhas, filas, árvores, tabelas hash e grafos. Este traz três estruturas que
+nascem de um problema específico, quase sempre uma lista encadeada com um
+truque a mais.
 
-A **matriz esparsa** aparece quando quase tudo é zero: notas de clientes para
-filmes, voos entre aeroportos, produtos por pedido. Guardar os zeros desperdiça
-gigabytes; guardar só o que existe cabe em megabytes. A **skip list** é uma lista
-ordenada com linhas expressas sorteadas por uma moeda: busca em O(log n) na
-média, sem nenhuma rotação. E as **listas autoajustáveis** aproveitam o fato de
-que, na vida real, poucos itens recebem quase todas as buscas: cada busca arruma
-a lista um pouco para a próxima.
-
-O assunto final coloca tudo na mesma bancada: BST, AVL, skip list e lista com
-mover para a frente respondem ao mesmo teste, atrás da mesma interface de
-ponteiros para função. A melhor estrutura depende do padrão de uso, e para
-descobrir qual é, o jeito honesto é medir.
+A **matriz esparsa** guarda só o que não é zero. A **skip list** é uma lista
+ordenada com linhas expressas sorteadas por uma moeda: busca O(log n) na
+média, sem rotação. As **listas autoajustáveis** aproveitam que poucos itens
+recebem quase todas as buscas. No fim, BST, AVL, skip list e lista com mover
+para a frente respondem ao mesmo teste: a melhor estrutura depende do uso, e
+o jeito honesto de descobrir é medir.
 
 ## O que você vai aprender
 
-- guardar uma **matriz esparsa** em **triplas** e em **listas por linha**, sem nunca guardar zero
+- guardar uma **matriz esparsa** em **triplas** e em **listas por linha**
 - somar, transpor e multiplicar matrizes esparsas visitando só o que existe
-- a **skip list**: andares, a moeda que sorteia a altura e a busca que desce como um elevador
-- inserir e remover numa skip list ligando e desligando o nó em todos os andares
-- as três políticas autoajustáveis: **mover para a frente**, **transposição** e **contagem**
+- a **skip list**: andares, moeda e busca que desce como um elevador
+- inserir e remover numa skip list em todos os andares do nó
+- as políticas **mover para a frente**, **transposição** e **contagem**
 - quando cada política ganha e quando perde (o cache **LRU** é uma delas)
 - comparar estruturas com justiça: mesmas chaves, mesmas buscas, mesma medida
 
 ## Antes de começar
 
-Este módulo é complemento: matriz esparsa, skip list e listas autoajustáveis
-não caem direto na prova do PPGI (o que mais cai está em `PPGI.md`, na raiz do
-curso).
+Este módulo é complemento: não cai direto na prova do PPGI (o que mais cai
+está em `PPGI.md`, na raiz do curso).
 
-Cada assunto tem um **TAD** na pasta (`esparsa.h`, `skip.h`, `autolista.h`,
-`bancada.h`); abra o `.c` dele, que guarda os ponteiros. Desenhe antes e depois
-de cada operação: uma linha da matriz é uma lista, um nó da skip list é uma
-torre de ponteiros, e uma busca autoajustável muda a lista. Nos desenhos de
-lista, o nó verde é o achado, os amarelos são os comparados pelo caminho e os
-cinza, os que a busca nem tocou.
+Usa **lista encadeada** com o par `ant` e `p` (0076 a 0078), `malloc` e `free`
+(0054), **ponteiro para ponteiro** (0049), **TAD** (0074), busca sequencial
+(0089), BST (0099), AVL (0101), ponteiros para função (0050) e `void *` (0051).
 
-O módulo é uma síntese. Você vai usar o tempo todo a **lista encadeada** com o
-par `ant` e `p` (assuntos 0076 a 0078), `malloc` e `free` (0054), **ponteiro para
-ponteiro** (0049) e a ideia de **TAD** (0074). O 0164 conversa com a busca
-sequencial (0089), e o 0165 usa a BST (0099), a AVL (0101), ponteiros para função
-(0050) e `void *` (0051).
-
-O comando do exemplo compila junto os `.c` de apoio da pasta (como `skip.c`). Por isso os
-comandos são os de sempre:
+Cada assunto tem um TAD na pasta (`esparsa.h`, `skip.h`, `autolista.h`,
+`bancada.h`). Desenhe antes e depois de cada operação. Nos desenhos de lista,
+o nó verde é o achado, os amarelos são os comparados e os cinza, os que a
+busca nem tocou. Os exemplos compilam junto os `.c` de apoio da pasta:
 
 ```bash
 gcc ~/LPEDC/25-estruturas-extras/0163-skip-list/A325.c ~/LPEDC/25-estruturas-extras/0163-skip-list/skip.c -o ~/LPEDC/25-estruturas-extras/0163-skip-list/A325 && ~/LPEDC/25-estruturas-extras/0163-skip-list/A325
 ```
 
-Uma convenção vale para o módulo todo: o **custo** de uma busca é quantas chaves
-ela comparou. Contar comparações dá o mesmo número em qualquer computador, ao
-contrário do cronômetro. E os sorteios usam um gerador próprio de uma linha, em
-vez de `rand`, para a mesma semente dar a mesma saída em qualquer máquina.
+O **custo** de uma busca é quantas chaves ela comparou: o mesmo número em
+qualquer computador. Os sorteios usam um gerador próprio de uma linha, para a
+mesma semente dar a mesma saída em qualquer máquina.
 
 {{indice}}
 
@@ -216,8 +201,8 @@ num catálogo que muda o dia todo; (c) saber se um CPF já votou, entre 10 milh�
 
 (a) **lista MTF**: poucos itens, acessos muito concentrados (ou hash, se a lista
 crescer); (b) **AVL ou skip list**: as duas mantêm a ordem e fazem a busca por
-faixa (E974); a skip list com um código mais simples; (c) **hash**: só pergunta
-"está ou não está", sem ordem; (d) **lista MTF com corte**, o LRU do E983.
+faixa; a skip list com um código mais simples; (c) **hash**: só pergunta
+"está ou não está", sem ordem; (d) **lista MTF com corte**, o LRU.
 
 </details>
 

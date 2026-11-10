@@ -1,49 +1,38 @@
 ## 0163 · Skip list
 
-A linha de ônibus da rodovia tem paradas nos km 5, 12, 18, 23, 31, 40, 47 e 56.
-O ônibus **parador** para em todas. O **semidireto** só em algumas, e o
-**direto** só nas principais. Quem vai para o km 47 não pega o parador desde o
-começo: vai de direto até onde der sem passar do destino, troca para o
-semidireto, e só no fim pega o parador.
+A rodovia tem paradas nos km 5, 12, 18, 23, 31, 40, 47 e 56. O **parador**
+para em todas, o **semidireto** em algumas, o **direto** só nas principais.
+Para o km 47, você vai de direto até onde der, troca para o semidireto e só
+no fim pega o parador.
 
-Uma lista encadeada ordenada (assunto 0078) é o ônibus parador. Para achar uma
-chave, você passa por todas as anteriores: O(n). A busca binária não serve,
-porque lista não tem índice: não dá para pular para o meio. A BST e a AVL
-(módulo 14) resolvem isso, mas trocam a lista por uma árvore com rotações.
+Uma lista ordenada (assunto 0078) é o ônibus parador: achar uma chave custa
+O(n), e a busca binária não serve, pois lista não tem índice. A BST e a AVL
+(módulo 14) resolvem com rotações.
 
-A **skip list** fica com a lista e acrescenta as linhas expressas. Ela tem vários
-**andares**. O andar 0 é a lista completa, em ordem. O andar 1 é uma lista com
-só parte dos nós, o andar 2 com menos ainda, e assim por diante. Cada nó tem um
-vetor de ponteiros `prox`: `prox[0]` é o próximo no andar 0, `prox[1]` o próximo
-no andar 1, `prox[k]` o próximo no andar `k`. Uma **cabeça** sem chave está em todos os andares
-e é por onde toda busca começa.
+A **skip list** fica com a lista e acrescenta as linhas expressas, os
+**andares**. O andar 0 é a lista completa; o andar 1 tem parte dos nós, o 2
+menos ainda. Cada nó tem um vetor `prox`: `prox[k]` é o próximo no andar `k`.
+Uma **cabeça** sem chave está em todos os andares e começa toda busca.
 
 **Buscar** é a viagem de ônibus. Comece no andar mais alto da cabeça. Se o
-próximo nó do andar ainda é menor que a chave, avance. Se ele já passou da chave
-(ou não existe), desça um andar. No andar 0, o próximo nó é a chave ou ela não
-existe.
+próximo nó do andar é menor que a chave, avance; se já passou (ou não existe),
+desça. No andar 0, o próximo nó é a chave ou ela não existe.
 
-Quem decide em quais andares cada nó aparece? Se fosse "um nó sim, um não"
-em cada andar, a busca seria uma busca binária, mas qualquer inserção quebraria o
-padrão e obrigaria a refazer tudo. A skip list usa uma **moeda**: todo nó novo
-entra no andar 0; enquanto a moeda der cara, ele sobe mais um andar. Em média,
-metade dos nós chega ao andar 1, um quarto ao andar 2, um oitavo ao andar 3. É o
-padrão "um sim, um não" sem nunca precisar arrumar nada.
+Os andares de cada nó saem de uma **moeda**: todo nó novo entra no andar 0 e,
+enquanto der cara, sobe mais um. Em média, metade chega ao andar 1, um quarto
+ao 2, um oitavo ao 3, sem nunca arrumar nada.
 
 **Inserir** é buscar guardando, em cada andar, o último nó visitado antes de
-descer (o vetor `antes`). Depois sorteie os andares do nó novo e ligue-o depois
-de `antes[k]` em cada andar `k` dele. A remoção usa o mesmo vetor para desligar
-o nó em todos os andares.
+descer (o vetor `antes`). Sorteie os andares do nó novo e ligue-o depois de
+`antes[k]` em cada andar `k`. A remoção usa o mesmo vetor para desligar o nó.
 
-O custo é **O(log n) esperado**: com 1 milhão de chaves, cerca de 20 andares e uns
-40 nós olhados por busca, contra meio milhão em média na lista simples. "Esperado"
-quer dizer na média dos sorteios, sem garantia: uma sequência de azar absurda
-poderia deixar todos os nós no andar 0, mas na prática isso não acontece.
+O custo é **O(log n) esperado**: com 1 milhão de chaves, uns 40 nós olhados
+por busca, contra meio milhão na lista simples. "Esperado" é na média dos
+sorteios, sem garantia.
 
-No exemplo, as oito paradas entram com os andares que a moeda "deu":
-o 23 e o 56 em 3 andares, o 12 e o 40 em 2, os outros só no andar 0. A busca
-pelo 47 anda no andar 2 até o 23 (o próximo, 56, já passou), desce, anda até o
-40, desce, e o próximo no andar 0 é o 47:
+As paradas entram com os andares sorteados: o 23 e o 56 em 3 andares, o 12 e
+o 40 em 2, os outros só no 0. A busca pelo 47 anda no andar 2 até o 23 (o 56
+já passou), desce, anda até o 40, desce, e o próximo no andar 0 é o 47:
 
 {{ideia}}
 
@@ -78,9 +67,9 @@ bool skip_busca(const Skip *s, int chave, int *passos) {
 }
 ```
 
-Para o desenho ficar igual em toda execução, o exemplo usa
-`skip_insere_andares`, que recebe os andares prontos. No uso normal, `skip_insere`
-joga a moeda sozinha. O `skip_mostra` imprime cada chave sempre na mesma coluna:
+Para o desenho sair igual em toda execução, o exemplo usa
+`skip_insere_andares`, com andares prontos; no uso normal, `skip_insere` joga
+a moeda. O `skip_mostra` imprime cada chave sempre na mesma coluna:
 
 ```c
 #include <stdio.h>
@@ -115,32 +104,25 @@ int main(void) {
 // km 20: não tem parada, 5 nós olhados
 ```
 
-O fluxograma tem dois laços, um dentro do outro: o de dentro avança no andar,
-o de fora desce. O caminho verde é a busca do 47: avança uma vez no andar
-2, uma no andar 1, nenhuma no andar 0, e o próximo é o 47:
+O laço de dentro avança no andar, o de fora desce. O caminho verde é a busca
+do 47: uma vez no andar 2, uma no andar 1, nenhuma no andar 0:
 
 {{fluxograma}}
 
 > [!WARNING]
-> Na remoção, o nó tem que sair de **todos** os andares em que aparece, não só do
-> andar 0. Se o 23 for removido só do andar 0 e liberado com `free`, a cabeça
-> continua apontando para ele no andar 2, e o 12 no andar 1. A próxima busca entra
-> num nó que não existe mais: é um ponteiro solto (assunto 0057), e o
-> AddressSanitizer acusa *heap-use-after-free*. O exercício E976 traz esse bug.
+> Na remoção, o nó sai de **todos** os andares em que aparece. Se o 23 sair só
+> do andar 0 e for liberado, a cabeça continua apontando para ele no andar 2:
+> ponteiro solto (assunto 0057). O E976 pede essa remoção.
 
 > [!TIP]
-> **Por dentro do C:** com `prox[SKIP_MAX]`, todo nó ocupa 4 + 4 + 12 × 8 = 104
-> bytes, mesmo que use só 1 ou 2 ponteiros (a média é 2). Dá para alocar só o
-> necessário com um **membro vetor flexível**, `struct NoSkip *prox[];` no fim da
-> struct, e `malloc(sizeof(NoSkip) + andares * sizeof(NoSkip *))`: o exercício
-> E978 faz essa troca. E a moeda? `skip.c` não usa `rand`: tem um gerador próprio
-> de uma linha (`semente = semente * 1103515245u + 12345u`). Cada biblioteca C
-> implementa `rand` de um jeito, e com o gerador próprio a mesma semente monta a
-> mesma skip list em qualquer máquina, o que deixa os testes repetíveis.
+> Com `prox[SKIP_MAX]`, todo nó ocupa 104 bytes mesmo usando em média 2
+> ponteiros. Um **membro vetor flexível**, `struct NoSkip *prox[];`, com
+> `malloc(sizeof(NoSkip) + andares * sizeof(NoSkip *))`, aloca só o
+> necessário.
 
 > [!NOTE]
-> **Pergunta para você:** se o km 35 entrar com 2 andares, quais ponteiros mudam?
-> Quem fica em `antes[0]` e em `antes[1]`? Desenhe antes de conferir com
+> **Pergunta para você:** se o km 35 entrar com 2 andares, quais ponteiros
+> mudam? Quem fica em `antes[0]` e em `antes[1]`? Desenhe antes de conferir com
 > `skip_insere_andares` e `skip_mostra`.
 
 {{pratique}}

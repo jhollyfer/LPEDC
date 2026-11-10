@@ -1,12 +1,17 @@
 // 0182 · Caminhos e ciclos
 // Exercício E1089 · ★★☆
 //
-// O programa abaixo já monta quatro grafos (com arestas paralelas contadas
-// na matriz): o bairro do texto, a casinha do A364, dois triângulos
-// separados e as sete pontes de Königsberg (4 margens, 7 pontes). Escreva a
-// função analisa, que mostra se o grafo tem circuito euleriano, trajeto
-// euleriano aberto (dizendo entre quais vértices) ou nenhum dos dois, e por
-// quê. Ela precisa conferir a conexidade antes dos graus.
+// Escreva um programa com o tipo Grafo (nome, v e a matriz m[MAXV][MAXV], em
+// que m[a][b] conta as arestas paralelas entre a e b) e a função
+// analisa(const Grafo *g), que diz se o grafo tem circuito euleriano,
+// trajeto euleriano aberto (entre quais vértices) ou nenhum dos dois, e
+// por quê. Confira a conexidade (por DFS) antes dos graus. Analise, nesta
+// ordem, quatro grafos (arestas entre vértices numerados a partir de 0):
+//
+//   bairro (6 vértices): 0-1 0-2 1-2 1-3 1-5 2-4 2-5 3-4
+//   casinha (5): 0-1 0-2 1-3 2-3 0-3 1-2 2-4 3-4
+//   triângulos (6): 0-1 1-2 2-0 3-4 4-5 5-3
+//   pontes (4): 0-1 0-1 0-2 0-2 0-3 1-3 2-3
 //
 //   Saída esperada:
 //   bairro: circuito euleriano
@@ -14,7 +19,7 @@
 //   triângulos: nenhum (desconexo)
 //   pontes: nenhum (4 vértices ímpares)
 //
-// Escreva sua resposta abaixo (complete a função analisa):
+// Escreva sua resposta abaixo:
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -24,33 +29,10 @@
 typedef struct {
     const char *nome;
     int v;
-    int m[MAXV][MAXV]; // m[a][b] = quantas arestas ligam a e b
+    int m[MAXV][MAXV];
 } Grafo;
 
-void analisa(const Grafo *g) {
-    (void)g; // apague esta linha ao escrever a função
-}
-
-void liga(Grafo *g, int a, int b) {
-    g->m[a][b]++;
-    g->m[b][a]++;
-}
-
 int main(void) {
-    Grafo bairro = {"bairro", 6, {{0}}}, casinha = {"casinha", 5, {{0}}};
-    Grafo triangulos = {"triângulos", 6, {{0}}}, pontes = {"pontes", 4, {{0}}};
-    int r1[][2] = {{0, 1}, {0, 2}, {1, 2}, {1, 3}, {1, 5}, {2, 4}, {2, 5}, {3, 4}};
-    for (int k = 0; k < 8; k++) liga(&bairro, r1[k][0], r1[k][1]);
-    int r2[][2] = {{0, 1}, {0, 2}, {1, 3}, {2, 3}, {0, 3}, {1, 2}, {2, 4}, {3, 4}};
-    for (int k = 0; k < 8; k++) liga(&casinha, r2[k][0], r2[k][1]);
-    int r3[][2] = {{0, 1}, {1, 2}, {2, 0}, {3, 4}, {4, 5}, {5, 3}};
-    for (int k = 0; k < 6; k++) liga(&triangulos, r3[k][0], r3[k][1]);
-    int r4[][2] = {{0, 1}, {0, 1}, {0, 2}, {0, 2}, {0, 3}, {1, 3}, {2, 3}};
-    for (int k = 0; k < 7; k++) liga(&pontes, r4[k][0], r4[k][1]);
 
-    analisa(&bairro);
-    analisa(&casinha);
-    analisa(&triangulos);
-    analisa(&pontes);
     return 0;
 }

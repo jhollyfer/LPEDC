@@ -1,38 +1,30 @@
 ## 0173 · Juntando tudo: o controle de acesso
 
-O coworking do centro tem porta com crachá, sala de reunião, impressora,
-garagem e painel de configuração. Cada pessoa tem um papel (visitante, membro
-ou admin), e o papel dá um pacote de permissões. Mas há exceções: o Bruno,
-membro, aluga uma vaga na garagem; a Carla estourou a cota da impressora.
+O coworking tem porta com crachá, reunião, impressora, garagem e configuração.
+O papel (visitante, membro ou admin) dá um pacote de permissões, com exceções:
+o Bruno aluga vaga na garagem, e a Carla estourou a cota da impressora.
 
-Cada peça do módulo entra numa parte. As permissões são **bits** num
-`unsigned`, e o papel é um **enum** que indexa o vetor `base` com o pacote de
-cada um. A **struct** `Usuario` guarda o papel e duas máscaras de exceção:
-`extra` (o que ganhou a mais) e `bloqueio` (o que perdeu). A permissão
-efetiva sai de uma expressão só:
+As permissões são **bits** num `unsigned`, e o papel é um **enum** que indexa
+o vetor `base`. A **struct** `Usuario` guarda o papel e duas máscaras: `extra`
+(o que ganhou) e `bloqueio` (o que perdeu). A permissão efetiva sai de uma
+expressão:
 
 `(base[u->papel] | u->extra) & ~u->bloqueio`
 
-Leia com a tabela de precedência na mão. O `|` junta o pacote e os extras;
-os parênteses são obrigatórios, porque `&` vem antes de `|`. O `~` (nível 2)
-inverte o bloqueio antes de tudo, e o `&` com ele apaga os bits bloqueados:
-**o bloqueio vence**. E a pergunta "pode tudo desta máscara?" é
-`(efetivas & mascara) == mascara`, de novo com parênteses, porque o `==` vem
-antes do `&`.
+O `|` junta pacote e extras (com parênteses, porque `&` vem antes de `|`). O
+`~` (nível 2) inverte o bloqueio, e o `&` apaga esses bits: **o bloqueio
+vence**. "Pode tudo desta máscara?" é `(efetivas & mascara) == mascara`:
+parênteses de novo, porque o `==` vem antes do `&`.
 
-Tudo é `unsigned`, de propósito: `~` num `int` daria um negativo, e misturar
-com sinal e sem sinal abre a porta para o `-1 > 0u`. A planilha final,
-usuário × permissão, é um **VLA** `bool
-acesso[n][QTD_PERMS]`: o `n` é uma variável, o tamanho é decidido na hora, e
-uma equipe maior não muda o código.
+Tudo é `unsigned`: `~` num `int` daria negativo, e misturar sinais abre a
+porta para o `-1 > 0u`. A planilha é um **VLA** `bool acesso[n][QTD_PERMS]`.
 
-A Carla é membro (`00111`: imprimir, reunião, entrar),
-sem extras e com a impressora bloqueada. O desenho faz a conta bit a bit:
+A Carla é membro (`00111`: imprimir, reunião, entrar) com a impressora
+bloqueada. O desenho faz a conta bit a bit:
 
 {{ideia}}
 
-O programa monta a planilha e responde quem pode usar a sala de reunião **e**
-imprimir:
+O programa monta a planilha e mostra quem pode usar a reunião **e** imprimir:
 
 ```c
 #include <stdbool.h>
@@ -114,26 +106,15 @@ int main(void) {
 // pode REUNIAO | IMPRIMIR: Ana Bruno
 ```
 
-O fluxograma responde "pode `REUNIAO | IMPRIMIR`?" com um laço pela equipe e
-uma única comparação de bits por pessoa. A máscara pode ter uma permissão ou
-cinco, e o custo é o mesmo:
+O fluxograma é um laço pela equipe com uma comparação de bits por pessoa:
 
 {{fluxograma}}
 
 > [!WARNING]
-> Duas linhas parecidas, dois programas diferentes. `efetivas(u) & mascara ==
-> mascara` é lido como `efetivas(u) & (mascara == mascara)`, isto é,
-> `efetivas(u) & 1`: só olha o bit de ENTRAR (o gcc avisa). E
-> `p = p | ~IMPRIMIR` em vez de `p = p & ~IMPRIMIR` não tira a impressora:
-> **liga todas as outras** permissões, até as que não existem. Esse erro
-> compila sem aviso nenhum.
-
-> [!TIP]
-> **Por dentro do C:** um `Usuario` ocupa 28 bytes: 16 do nome, 4 do enum e 4
-> de cada máscara. Cinco permissões como `bool` seriam 5 campos e cinco `if`;
-> como bits, são 4 bytes para até 32 permissões, e `pode` vira três
-> instruções (`or`, `and`, `cmp`). O VLA `acesso[4][5]` são 20 bytes na
-> pilha; com 10 milhões de usuários, troque por `malloc`.
+> `efetivas(u) & mascara == mascara` é lido como `efetivas(u) & (mascara ==
+> mascara)`, isto é, `efetivas(u) & 1`: só olha o bit de ENTRAR (o gcc
+> avisa). E `p = p | ~IMPRIMIR` no lugar de `p = p & ~IMPRIMIR` **liga todas
+> as outras** permissões, até as que não existem, e compila sem aviso.
 
 > [!NOTE]
 > **Pergunta para você:** que máscara de `extra` o Davi precisaria para poder

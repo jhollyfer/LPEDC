@@ -23,14 +23,13 @@
 
 #define N 100000
 
-static unsigned long semente = 2026;
-static int sorteia(int limite) {
+unsigned long semente = 2026;
+int sorteia(int limite) {
     semente = (semente * 1103515245UL + 12345UL) % 2147483648UL;
     return (int) (semente / 65536 % (unsigned long) limite);
 }
 
 int main(void) {
-    (void)sorteia; // apague esta linha quando usar o sorteia
 
     return 0;
 }

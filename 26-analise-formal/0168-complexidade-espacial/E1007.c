@@ -2,45 +2,20 @@
 // Exercício E1007 · ★★★
 //
 // O estacionamento registrou as placas (números) que entraram no dia, em
-// ordem crescente, com repetições. A função sem_repetidas deixa uma cópia
-// de cada placa no começo do vetor e devolve quantas sobraram, mas faz
-// isso com um vetor auxiliar de n posições. Reescreva a função para usar
-// Θ(1) de espaço extra, sem malloc, mexendo no próprio vetor. A saída não
-// muda:
+// ordem crescente, com repetições: 1020 1020 1033 1047 1047 1047 1050 1062
+// 1062 1071 1088 1088. Escreva int sem_repetidas(int placas[], int n), que
+// deixa uma cópia de cada placa no começo do vetor e devolve quantas
+// sobraram, com Θ(1) de espaço extra: sem malloc e sem vetor auxiliar,
+// mexendo no próprio vetor. No main, mostre o resultado:
 //
 //   Saída esperada:
 //   12 placas, 7 distintas: 1020 1033 1047 1050 1062 1071 1088
 //
-// Escreva sua resposta abaixo (reescreva a função):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
-#include <stdlib.h>
-
-int sem_repetidas(int placas[], int n) {
-    int *aux = malloc(n * sizeof(int));
-    if (aux == NULL) {
-        return 0;
-    }
-    int m = 0;
-    for (int i = 0; i < n; i++) {
-        if (m == 0 || placas[i] != aux[m - 1]) {
-            aux[m++] = placas[i];
-        }
-    }
-    for (int i = 0; i < m; i++) {
-        placas[i] = aux[i];
-    }
-    free(aux);
-    return m;
-}
 
 int main(void) {
-    int placas[12] = {1020, 1020, 1033, 1047, 1047, 1047, 1050, 1062, 1062, 1071, 1088, 1088};
-    int m = sem_repetidas(placas, 12);
-    printf("12 placas, %d distintas:", m);
-    for (int i = 0; i < m; i++) {
-        printf(" %d", placas[i]);
-    }
-    printf("\n");
+
     return 0;
 }

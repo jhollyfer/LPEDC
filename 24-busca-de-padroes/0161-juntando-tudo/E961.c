@@ -1,8 +1,8 @@
 // 0161 · Juntando tudo
 // Exercício E961 · ★☆☆
 //
-// Use o TAD padroes.h (ele já está na pasta e o rodar compila junto). Conte
-// quantas vezes "pix" aparece no extrato abaixo com os QUATRO algoritmos,
+// Use o TAD padroes.h (compile com o padroes.c da pasta). Conte quantas
+// vezes "pix" aparece no extrato abaixo com os QUATRO algoritmos,
 // mostre as comparações de cada um e confira se todos acharam o mesmo total:
 //
 //   "pix recebido; pix enviado; boleto pago; pix agendado; tarifa pix"

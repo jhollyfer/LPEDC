@@ -1,10 +1,10 @@
 // 0169 · Juntando tudo: passos e bytes conferidos
 // Exercício E1012 · ★★☆
 //
-// Três funções misteriosas. Acrescente um contador global de passos
-// (passos++ no laço mais interno de cada uma), rode cada função com
-// n = 1024 e n = 2048, e escreva classe(razao), que devolve um texto
-// conforme a razão p(2048) / p(1024):
+// Três funções misteriosas estão no esqueleto. Declare um contador global
+// de passos e acrescente passos++ ao laço mais interno de cada uma. Rode
+// cada função com n = 1024 e n = 2048 e escreva const char *classe(double
+// razao), que devolve um texto conforme a razão p(2048) / p(1024):
 // menor que 1.5: "constante ou log n"; menor que 2.1: "n";
 // menor que 3.0: "n log n"; menor que 5.0: "n²"; senão: "pior que n²".
 //
@@ -13,7 +13,7 @@
 //   b:  261632 -> 1047552, razão 4.00, classe n²
 //   c:    2047 ->    4095, razão 2.00, classe n
 //
-// Escreva sua resposta abaixo (mude o programa):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 
@@ -39,9 +39,6 @@ void misterio_c(int n) {
 }
 
 int main(void) {
-    misterio_a(1024);
-    misterio_b(1024);
-    misterio_c(1024);
-    printf("três mistérios rodados\n");
+
     return 0;
 }

@@ -1,44 +1,36 @@
 ## 0164 · Listas autoajustáveis
 
-Na cozinha, o sal e o óleo ficam na frente do armário, e o cravo que você usa uma
-vez por ano fica lá no fundo. Ninguém planejou isso: cada vez que você usa um
-pote, ele volta para a frente.
+Na cozinha, o sal fica na frente do armário e o cravo, no fundo: cada pote
+usado volta para a frente.
 
-A busca sequencial (assunto 0089) custa a **posição** do item: o primeiro sai com
-1 comparação, o décimo com 10. Se todo item fosse procurado com a mesma
-frequência, a ordem não faria diferença. Quase nunca é assim: na agenda do
-celular, meia dúzia de contatos recebe quase todas as ligações. Se eles
-estivessem na frente, a busca média cairia muito.
+A busca sequencial (assunto 0089) custa a **posição** do item. Se todos fossem
+procurados na mesma frequência, a ordem não importaria; na agenda do celular,
+meia dúzia de contatos recebe quase todas as ligações.
 
-Só que você não sabe de antemão quem são os mais procurados, e isso muda com
-o tempo. A **lista autoajustável** descobre sozinha: a cada busca
-bem-sucedida, ela muda a ordem para aproximar o item achado do começo, então a
-busca também escreve na lista. Há três políticas clássicas:
+A **lista autoajustável** descobre sozinha quem são: a cada busca
+bem-sucedida, aproxima o item achado do começo, então a busca também escreve
+na lista. Há três políticas clássicas:
 
 - **mover para a frente** (*move-to-front*): o item achado vira o primeiro.
-  Reage rápido, mas um item procurado uma única vez também vai parar na frente;
-- **transposição**: o item achado troca de lugar com o anterior, subindo uma
-  casa por acesso. É conservadora: um acesso isolado quase não bagunça a lista,
-  mas um item popular demora para chegar à frente;
-- **contagem**: cada nó guarda quantas vezes foi achado, e a lista fica em ordem
-  decrescente de acessos. Converge para a melhor ordem fixa, mas gasta um campo
-  a mais e se apega ao passado: um item que foi popular demora a descer.
+  Reage rápido, mas um item procurado uma vez também vai para a frente;
+- **transposição**: o item achado troca de lugar com o anterior. Um acesso
+  isolado quase não bagunça, mas um item popular demora a chegar à frente;
+- **contagem**: cada nó guarda quantas vezes foi achado, e a lista fica em
+  ordem decrescente. Converge para a melhor ordem fixa, com um campo a mais.
 
-Mover para a frente combina com **lista encadeada**: achado o nó, tirá-lo do lugar
-e pendurá-lo no início são três atribuições de ponteiro. Num vetor, seria
-preciso empurrar todos os anteriores uma casa para trás. Já a transposição é uma
-troca de dois vizinhos e funciona bem nos dois.
+Mover para a frente combina com **lista encadeada**: tirar o nó e pendurá-lo
+no início são três atribuições de ponteiro; num vetor, empurraria todos os
+anteriores. A transposição é a troca de dois vizinhos e serve aos dois.
 
-A agenda do exemplo tem Ana, Bia, Caio, Duda e Edu, nessa ordem. As
-ligações do dia são para Edu, Edu, Caio, Edu e Edu. Na terceira, Caio é achado na
-quarta comparação e passa para a frente; Edu, que estava em primeiro, desce para
-o segundo lugar:
+A agenda tem Ana, Bia, Caio, Duda e Edu. As ligações são para Edu, Edu, Caio,
+Edu e Edu. Na terceira, Caio é achado na quarta comparação e vai para a
+frente; Edu desce para o segundo lugar:
 
 {{ideia}}
 
-O TAD fica em `autolista.h` e `autolista.c`, com as três políticas e uma busca
-que não mexe em nada (`al_busca`), para comparar. Mover para a frente é a busca da
-lista com o par `ant` e `p` (assunto 0077) e três linhas no fim:
+O TAD (`autolista.h`, `autolista.c`) tem as três políticas e uma busca que não
+mexe em nada (`al_busca`), para comparar. Mover para a frente é a busca com
+`ant` e `p` (assunto 0077) e três linhas no fim:
 
 ```c
 bool al_busca_mtf(AutoLista *l, const char *nome, int *custo) {
@@ -68,8 +60,8 @@ bool al_busca_mtf(AutoLista *l, const char *nome, int *custo) {
 }
 ```
 
-O programa faz as cinco ligações em duas agendas iguais, uma que se ajusta e uma
-fixa, e soma as comparações:
+O programa faz as cinco ligações numa agenda que se ajusta e numa fixa, e soma
+as comparações:
 
 ```c
 #include <stdio.h>
@@ -111,29 +103,21 @@ int main(void) {
 // Total: 13 comparações (sem ajuste: 23)
 ```
 
-No fluxograma, até achar, é a busca sequencial de sempre. A diferença vem
-depois do "Sim": se o nó não é o primeiro, ele é desligado e religado no início.
-O caminho verde é a chamada para Caio, achado na quarta volta:
+Até achar, é a busca de sempre. Depois do "Sim", o nó que não é o primeiro é
+religado no início. O verde é Caio, achado na quarta volta:
 
 {{fluxograma}}
 
 > [!WARNING]
-> O caso do **primeiro nó** pega todo mundo. Se o nó achado já é o primeiro,
-> `ant` é `NULL`, e `ant->prox = p->prox` derruba o programa (o exercício E982
-> traz esse bug). E se você esquecer `l->inicio = p`, o nó achado sai do lugar
-> mas ninguém aponta para ele: ele some da lista e vaza memória. Por isso a
-> função recebe `AutoLista *` e não `const`: a busca muda o começo da lista.
+> Se o nó achado já é o primeiro, `ant` é `NULL` e `ant->prox = p->prox`
+> derruba o programa (o E982 cobre esse caso). Sem `l->inicio = p`, o nó some
+> da lista e vaza memória.
 
 > [!TIP]
-> **Por dentro do C:** mover para a frente custa três atribuições de ponteiro,
-> 8 bytes cada, não importa onde o nó estava; os nomes (20 bytes cada) nunca
-> saem do lugar na memória. No vetor, levar o décimo item para a frente obriga a
-> copiar os nove anteriores, e cada cópia move a struct inteira (o exemplo A327
-> conta isso). A contagem custa um `int` a mais por nó e, a cada acesso, uma
-> caminhada extra para reinserir o nó no lugar certo. Um resultado clássico
-> (Sleator e Tarjan, 1985) diz que mover para a frente nunca gasta mais que o
-> dobro da melhor ordem fixa, aquela escolhida por quem já conhece todas as
-> buscas de antemão.
+> No vetor, levar o décimo item para a frente copia os nove anteriores (o
+> A327 conta isso). Sleator e Tarjan (1985) provaram que mover para a frente
+> nunca gasta mais que o dobro da melhor ordem fixa, escolhida por quem conhece
+> todas as buscas de antemão.
 
 > [!NOTE]
 > **Pergunta para você:** com as mesmas cinco ligações, quanto custaria a

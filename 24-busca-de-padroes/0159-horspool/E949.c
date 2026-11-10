@@ -1,35 +1,24 @@
 // 0159 · Horspool
 // Exercício E949 · ★☆☆
 //
-// Complete monta_saltos(p, m, salto): todas as 256 casas começam com m e,
-// para cada letra p[j] com j de 0 até m - 2, salto[p[j]] = m - 1 - j. O main
-// mostra a tabela de "PIPOCA" e de "ARARA":
+// Escreva void monta_saltos(const char *p, int m, int salto[]), a tabela do
+// Horspool: as 256 casas começam com m e, para cada letra p[j] com j de 0
+// até m - 2, salto[p[j]] = m - 1 - j (a letra mais à direita vence). No main,
+// mostre a tabela de "PIPOCA" e de "ARARA" ("outras" é qualquer letra que
+// não está no padrão):
 //
 //   Saída esperada:
 //   P=3 I=4 O=2 C=1 A=6 outras=6
 //   A=2 R=1 outras=5
 //
-// Escreva sua resposta abaixo (complete monta_saltos):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include <string.h>
 
 #define ALFABETO 256
 
-void monta_saltos(const char *p, int m, int salto[]) {
-    (void)p; // apague estas linhas
-    (void)m;
-    for (int c = 0; c < ALFABETO; c++) {
-        salto[c] = 0;
-    }
-}
-
 int main(void) {
-    int salto[ALFABETO];
-    monta_saltos("PIPOCA", 6, salto);
-    printf("P=%d I=%d O=%d C=%d A=%d outras=%d\n",
-           salto['P'], salto['I'], salto['O'], salto['C'], salto['A'], salto['X']);
-    monta_saltos("ARARA", 5, salto);
-    printf("A=%d R=%d outras=%d\n", salto['A'], salto['R'], salto['X']);
+
     return 0;
 }

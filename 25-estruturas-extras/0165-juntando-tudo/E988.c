@@ -2,10 +2,11 @@
 // Exercício E988 · ★★☆
 //
 // Um quinto concorrente: o vetor ordenado com busca binária (assuntos 0075
-// e 0090). Complete as quatro funções: o vetor cresce com realloc (começa
-// com 16 posições e dobra quando enche), insere mantém a ordem empurrando
-// os maiores uma casa para a direita, e o custo de uma busca é quantas
-// vezes a busca binária comparou a chave com v[meio].
+// e 0090). Escreva do zero as quatro funções (vet_cria, vet_insere, vet_busca
+// e vet_libera): o vetor cresce com realloc (começa com 16 posições e dobra
+// quando enche), insere mantém a ordem empurrando os maiores uma casa para a
+// direita, e o custo de uma busca é quantas vezes a busca binária comparou a
+// chave com v[meio]. O esqueleto já traz o teste (mede e main).
 //
 //   Saída esperada:
 //               embaralhada  crescente
@@ -15,7 +16,7 @@
 //   lista MTF         114.6      114.5
 //   vetor               8.7        8.7
 //
-// Escreva sua resposta abaixo (complete as funções do vetor):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,23 +27,23 @@
 #define QUENTES 20
 
 void *vet_cria(void) {
-    return NULL; // troque: aloque e devolva a estrutura vazia
+    return NULL;
 }
 
 void vet_insere(void *e, int chave) {
-    (void)e; // apague estas duas linhas
+    (void)e;
     (void)chave;
 }
 
 bool vet_busca(void *e, int chave, int *custo) {
-    (void)e; // apague estas duas linhas
+    (void)e;
     (void)chave;
     *custo = 0;
     return false;
 }
 
 void vet_libera(void *e) {
-    free(e); // troque: libere tudo o que a estrutura alocou
+    (void)e;
 }
 
 double mede(const Estrutura *e, const int ordem[], const int buscas[]) {

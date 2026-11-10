@@ -1,14 +1,12 @@
 ## 0167 · Somatórios que saem de laços
 
-Reunião de condomínio. Os moradores chegam um por vez, e cada um que entra
-aperta a mão de todo mundo que já está na sala. O primeiro não cumprimenta
-ninguém, o segundo cumprimenta 1, o terceiro 2... Com 8 moradores, quantos
-apertos de mão acontecem? E com os 1000 moradores de um conjunto grande?
+Na reunião de condomínio, cada morador que chega aperta a mão de quem já está
+na sala: o primeiro ninguém, o segundo 1, o terceiro 2... Quantos apertos com
+8 moradores? E com 1000?
 
-Contar passos, como no assunto 0071, é fácil quando o laço de dentro roda
-sempre o mesmo número de vezes: `n` vezes `n` dá `n²`. Aqui não: o laço de
-dentro depende de `i`. É um **laço dependente**, e a contagem vira uma soma
-de parcelas diferentes, um **somatório**:
+Contar passos (assunto 0071) é fácil quando o laço de dentro roda sempre o
+mesmo número de vezes. Aqui ele depende de `i`: é um **laço dependente**, e a
+conta vira um **somatório**:
 
 ```text
  n-1
@@ -16,18 +14,16 @@ de parcelas diferentes, um **somatório**:
  i=0
 ```
 
-O `Σ` (sigma) quer dizer "some a expressão da direita para cada valor de
-`i`, do de baixo até o de cima". Cada laço `for` vira um `Σ`: os limites do
-laço viram os limites da soma, e o que o corpo faz vira a parcela.
+O `Σ` (sigma) soma a expressão da direita para cada `i`, do limite de baixo ao
+de cima. Cada `for` vira um `Σ`: os limites do laço são os da soma, e o corpo
+é a parcela.
 
-A fórmula fechada da soma de `0` a `n-1` sai de um truque antigo: escreva a
-soma de frente para trás e de trás para frente, uma embaixo da outra. Cada
-coluna soma `n-1`, e são `n` colunas. Isso é o dobro da soma: `n(n-1)/2`.
-Para 8 moradores, `8 · 7 / 2 = 28`. Para 1000, 499.500. É **Θ(n²)**: o
-"só metade" do laço dependente corta a constante pela metade, mas não muda
-a classe.
+A fórmula da soma de `0` a `n-1` vem de um truque: escreva a soma de frente
+para trás e de trás para frente, uma embaixo da outra. Cada coluna soma `n-1`,
+são `n` colunas, e isso é o dobro: `n(n-1)/2`. Para 8 moradores, 28; para
+1000, 499.500. É **Θ(n²)**: a metade corta a constante, não a classe.
 
-As quatro somas que mais aparecem quando você lê laços:
+As quatro somas que mais aparecem em laços:
 
 | laço | somatório | fórmula | classe |
 | --- | --- | --- | --- |
@@ -36,14 +32,12 @@ As quatro somas que mais aparecem quando você lê laços:
 | `for (t = 1; t < n; t *= 2)`, `for j < t` | geométrica: `1 + 2 + 4 + ...` | `2^k - 1` (menos que `2n`) | Θ(n) |
 | `for p = 1..n`, `for (j = 0; j < n; j += p)` | harmônica: `Σ n/p` | `≈ n ln n` | Θ(n log n) |
 
-A **geométrica** engana: dois laços aninhados, e mesmo assim linear, porque
-a última parcela sozinha é maior que todas as outras juntas
-(`512 > 1 + 2 + ... + 256`). A **harmônica** é a soma `1 + 1/2 + 1/3 + ... +
-1/n`, que cresce como `ln n`; multiplicada por `n`, dá `n ln n`.
+A **geométrica** engana: dois laços aninhados e mesmo assim linear, pois a
+última parcela supera todas as outras juntas (`512 > 1 + 2 + ... + 256`). A **harmônica**, `1 + 1/2 + ... + 1/n`, cresce como `ln n`;
+multiplicada por `n`, dá `n ln n`.
 
-No desenho, cada linha é um morador que chega e cada quadradinho roxo é um
-aperto de mão com quem já estava na sala. O triângulo roxo é metade do
-quadrado de 8 por 8, sem a diagonal:
+Cada linha é um morador e cada quadradinho roxo, um aperto de mão. O
+triângulo é metade do quadrado de 8 por 8, sem a diagonal:
 
 {{ideia}}
 
@@ -80,9 +74,8 @@ int main(void) {
 //  20000  199990000  199990000
 ```
 
-O teste `j < i?` do fluxograma é o que torna o laço dependente. Na volta de
-`i = 0`, ele dá "Não" de cara; na volta de `i = 7`, dá "Sim" sete vezes. A
-soma dos "Sim" de todas as voltas é o somatório:
+O teste `j < i?` torna o laço dependente: em `i = 0` dá "Não" de cara; em
+`i = 7`, "Sim" sete vezes. A soma dos "Sim" é o somatório:
 
 {{fluxograma}}
 
@@ -102,28 +95,19 @@ Com `n = 8`, cada volta de `i` soma `i` apertos ao total:
 | 7 | 7 | **28** |
 
 > [!WARNING]
-> A pegadinha está nos limites. `for (j = 0; j < i; j++)` roda `i` vezes, e
-> a soma de `i = 0` até `n-1` dá `n(n-1)/2`. Troque para `j <= i` e cada volta
-> ganha um a mais: `n(n+1)/2`. Comece `i` em 1 em vez de 0 e some de novo.
-> Na classe, tanto faz (tudo é Θ(n²)); numa questão que pede o **número
-> exato** de execuções, a diferença de `n` é a resposta errada. Antes de
-> aplicar a fórmula, teste com `n = 1` e `n = 2` à mão.
+> Cuidado com os limites. `for (j = 0; j < i; j++)` roda `i` vezes e soma
+> `n(n-1)/2`. Com `j <= i`, cada volta ganha um a mais: `n(n+1)/2`. Na
+> classe tanto faz (Θ(n²)); no **número exato**, é resposta errada. Teste com
+> `n = 1` e `n = 2` à mão.
 
 > [!TIP]
-> **Por dentro do C:** a fórmula também tem armadilha. Com `int n = 70000`,
-> o produto `n * (n - 1)` passa de 4,8 bilhões e estoura o `int` (máximo de
-> 2.147.483.647) **antes** da divisão por 2, mesmo que o resultado final
-> (2,4 bilhões) caiba num `long`. Estouro de `int` com sinal é comportamento
-> indefinido: o programa pode mostrar um número negativo ou qualquer outra
-> coisa. Por isso o `main` guarda `n` num `long` antes de multiplicar. Outro
-> detalhe: com `-O2`, o compilador pode reconhecer o laço que só
-> incrementa um contador e trocar os dois `for` pela própria fórmula
-> fechada. O laço de Θ(n²) vira uma conta de Θ(1) no código de máquina.
+> Com `int n = 70000`, `n * (n - 1)` estoura o `int` **antes** da divisão por
+> 2, embora o resultado caiba num `long`. Estouro de `int` com sinal é
+> comportamento indefinido; por isso o `main` guarda `n` num `long`.
 
 > [!NOTE]
-> **Pergunta para você:** se cada morador que chega apertasse a mão de quem
-> já está **e** a dele mesmo (troque `j < i` por `j <= i`), quantos apertos
-> seriam com 8 moradores? E se cada um formasse trios com dois que já estão
-> (três laços, `k < j < i`)? Escreva o somatório antes de mudar o programa.
+> **Pergunta para você:** com `j <= i`, quantos apertos seriam com 8
+> moradores? E trios com dois que já estão (três laços, `k < j < i`)? Escreva
+> o somatório antes de mudar o programa.
 
 {{pratique}}

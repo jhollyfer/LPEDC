@@ -1,51 +1,37 @@
 # Módulo 27 · Detalhes de C que caem em prova
 
-Você já escreve C há 26 módulos. Mesmo assim, uma linha como
-`x & 1 == 0`, `i < u` ou `n - 1` com `size_t` pode enganar, porque o
-compilador lê a expressão por regras que o olho não aplica sozinho. Uma prova
-de múltipla escolha adora esse tipo de linha: o código é curto, compila, e
-as alternativas trazem justamente o resultado que a intuição sugere.
+Linhas como `x & 1 == 0`, `i < u` ou `n - 1` com `size_t` compilam e enganam:
+o compilador as lê por regras que o olho não aplica sozinho. A prova de
+múltipla escolha explora isso com código curto e uma alternativa que traz o
+resultado intuitivo.
 
-Este módulo junta as regras que decidem o valor dessas linhas: quem pega os
-operandos primeiro (precedência e associatividade), em que ordem as partes
-rodam e quando a resposta é "comportamento indefinido"; o que acontece quando
-um número com sinal encontra um sem sinal, e por que `-1 > 0u` é verdadeiro;
-e o vetor de tamanho variável (VLA), o único vetor do C cujo `sizeof` é
-calculado com o programa rodando.
-
-O truque é ler a expressão como o compilador, e não como
-matemática: primeiro os tipos (promoção e conversão), depois a árvore
-(precedência), e só então os valores. Aí a pegadinha vira conta.
+O módulo reúne essas regras: precedência e ordem de avaliação, a mistura de
+inteiros com e sem sinal (por que `-1 > 0u` é verdadeiro) e o vetor de
+tamanho variável (VLA), o único vetor do C com `sizeof` calculado na
+execução. Leia como o compilador: primeiro os tipos, depois a árvore, só
+então os valores.
 
 ## O que você vai aprender
 
-- ler qualquer expressão com a **tabela de precedência e associatividade**, incluindo bit a bit, `?:`, vírgula e atribuição composta
-- separar **agrupamento** de **ordem de avaliação**, reconhecer **efeito colateral** e o **comportamento indefinido** de `i = i++`
-- prever o que acontece quando **com sinal e sem sinal** se misturam: promoção inteira, conversão aritmética usual, `-1 > 0u`
-- usar `>>`, máscaras e `size_t` sem cair nas armadilhas do negativo e do laço que desce
-- criar e passar **VLAs** (`void f(int l, int c, int m[l][c])`), entender o `sizeof` em tempo de execução, o `__STDC_NO_VLA__` e o risco da pilha
+- ler expressões pela **tabela de precedência e associatividade**
+- separar **agrupamento** de **ordem de avaliação**, e reconhecer **efeito colateral** e o comportamento indefinido de `i = i++`
+- prever a mistura de **com sinal e sem sinal**: promoção inteira, conversão aritmética usual, `-1 > 0u`
+- usar `>>`, máscaras e `size_t` sem cair no negativo e no laço que desce
+- criar e passar **VLAs** (`void f(int l, int c, int m[l][c])`) e conhecer o risco da pilha
 - juntar tudo num controle de acesso com struct, enum, máscaras e VLA
 
 ## Antes de começar
 
-Este módulo usa os operadores dos módulos 01 e 02 (aritmética, atribuição,
-`++`, lógicos, ternário), os bits e máscaras do 0065, struct e enum do
-módulo 08, e `malloc`/`free` do módulo 07. Se `p &= ~MASCARA;` ainda não
-parece natural, revise o 0065 antes.
+Usa os operadores dos módulos 01 e 02, os bits e máscaras do 0065, struct e
+enum do módulo 08 e `malloc`/`free` do módulo 07.
 
-Os valores dos comentários são os de um PC de 64 bits com Linux e gcc: `int`
-e `unsigned` de 4 bytes, `long` e `size_t` de 8. Algumas respostas (como
-`-17 >> 2`) dependem do compilador, e o texto avisa quando for o caso.
+**Progressão.** Este módulo relê os módulos 01 a 08 com mais rigor. Prepara o
+28, que completa listas, árvores e hash, e o 29, que completa grafos e
+apresenta P e NP; os dois reusam máscaras e inteiros sem sinal.
 
-O comando do exemplo compila com `-Wall -Wextra`, e esses avisos pegam vários erros
-deste módulo. Os exemplos compilam limpos; quando o texto mostra uma linha
-que o gcc avisaria, ela aparece fora do programa ou com a conversão escrita
-à vista. Ao rodar, tire um parêntese, troque `unsigned` por `int`, aumente o
-VLA e leia o que o gcc diz.
-
-```bash
-gcc ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/A339.c -o ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/A339 && ~/LPEDC/27-c-detalhes/0170-precedencia-e-avaliacao/A339
-```
+Os valores dos comentários são de um PC de 64 bits com Linux e gcc: `int` e
+`unsigned` com 4 bytes, `long` e `size_t` com 8. Compile com o gcc e as flags
+de estudo `-Wall -Wextra`: os avisos pegam vários erros do módulo.
 
 {{indice}}
 
@@ -426,7 +412,7 @@ printf("%d", QUAD(2 + 3));
 
 **(E).** O `#define` só troca texto: `QUAD(2 + 3)` vira `2 + 3 * 2 + 3`, que
 pela precedência é 2 + 6 + 3 = 11. Para dar 25, a macro precisa de
-parênteses: `#define QUAD(x) ((x) * (x))`. Veja 0170 (E1019) e 0004.
+parênteses: `#define QUAD(x) ((x) * (x))`. Veja 0170 e 0004.
 
 </details>
 

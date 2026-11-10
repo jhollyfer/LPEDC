@@ -3,80 +3,65 @@
 # Módulo 29 · Grafos: ciclos e cortes; problemas difíceis
 
 Os módulos 16 e 23 ensinaram a andar pelo grafo e a tirar dele caminhos,
-árvores e ordens. Este módulo fecha o assunto com duas perguntas que a prova
-do PPGI cobra pelo nome. A primeira é sobre a **forma** do grafo: dá para
-passar por toda aresta uma vez só? E por todo vértice? Qual cabo, se
-cortado, parte a rede? A segunda é sobre o **custo** de responder: por que
-umas perguntas se resolvem em O(V + E) e outras, muito parecidas, parecem
-exigir testar tudo?
+árvores e ordens. Este módulo fecha o assunto com duas perguntas da prova do
+PPGI. Sobre a **forma**: dá para passar por toda aresta uma vez? E por todo
+vértice? Qual cabo, se cortado, parte a rede? Sobre o **custo**: por que umas
+perguntas se resolvem em O(V + E) e outras, parecidas, parecem exigir testar
+tudo?
 
-A primeira metade (0182 a 0185) é algoritmo puro: graus e o teorema de
-Euler, o backtracking do ciclo hamiltoniano, a DFS com `tin` e `low` que
-acha pontes e articulações numa passada só, e a programação dinâmica da
-cadeia de matrizes. A segunda metade (0186 a 0189) é a teoria por trás da
-frase "esse problema é NP-completo": problemas de decisão, verificação em
-tempo polinomial, P e NP, reduções, e o que fazer quando o problema é
-difícil e a resposta é para hoje: aproximar com garantia ou resolver exato
-só quando a entrada é pequena.
+A primeira metade (0182 a 0185) é algoritmo: graus e o teorema de Euler, o
+backtracking do ciclo hamiltoniano, a DFS com `tin` e `low` que acha pontes e
+articulações, e a programação dinâmica da cadeia de matrizes. A segunda (0186
+a 0189) é a teoria por trás de "esse problema é NP-completo": decisão,
+verificação polinomial, P e NP, reduções, e o que fazer quando o problema é
+difícil: aproximar com garantia ou resolver exato só com entrada pequena.
 
-Antes de perguntar "qual o algoritmo?", pergunte se o problema
-**tem** algoritmo rápido. Euler e Hamilton parecem gêmeos, mas um é fácil e o
-outro não. Conferir uma resposta custa menos que achá-la. E quando não se
-conhece algoritmo rápido, ainda dá para aproximar ou podar em C.
+Antes de perguntar "qual o algoritmo?", pergunte se o problema **tem**
+algoritmo rápido. Euler e Hamilton parecem gêmeos, mas um é fácil e o outro
+não.
 
 ## O que você vai aprender
 
-- **grau**, grau de entrada e de saída, o **lema do aperto de mãos**, e a
-  diferença entre **passeio, trajeto, caminho, circuito e ciclo** (com a
-  tabela de nomes do Cormen e do edital)
-- a condição de **Euler** e o **circuito euleriano** pelo algoritmo de
-  **Hierholzer**
-- o **ciclo hamiltoniano** por backtracking, o custo fatorial, e por que ele
-  é difícil quando o euleriano é fácil
-- **pontes** e **vértices de articulação** com uma DFS só (`tin` e `low`),
-  incluindo o caso especial da raiz
-- a **multiplicação de cadeia de matrizes** por programação dinâmica: as
-  tabelas `m[i][j]` e `s[i][j]` e a parentização ótima
-- **problema de decisão**, **certificado** e **verificação polinomial**; as
-  classes **P**, **NP**, **NP-difícil** e **NP-completo**; **SAT** e
-  **3-SAT**
-- **redução polinomial**: conjunto independente, **clique** (pelo grafo
-  complemento) e **cobertura de vértices**; 3-SAT para clique
-- **algoritmos aproximados**: cobertura de vértices 2-aproximada, **bin
-  packing** (first fit e first fit decrescente) e **caixeiro viajante**
-  métrico pela árvore mínima
-- o caixeiro viajante exato pela PD de **Held-Karp** e quando trocar o exato
-  pelo aproximado
+- **grau**, o **lema do aperto de mãos** e **passeio, trajeto, caminho,
+  circuito e ciclo** (nomes do Cormen e do edital)
+- a condição de **Euler** e o **Hierholzer**
+- o **ciclo hamiltoniano** por backtracking e por que é difícil quando o
+  euleriano é fácil
+- **pontes** e **articulações** com uma DFS só (`tin` e `low`), com o caso
+  especial da raiz
+- a **cadeia de matrizes** por programação dinâmica
+- **certificado**, **verificação polinomial**, **P**, **NP**, **NP-difícil**,
+  **NP-completo**, **SAT** e **3-SAT**
+- **redução polinomial**: conjunto independente, **clique** e **cobertura de
+  vértices**; 3-SAT para clique
+- **algoritmos aproximados**: cobertura 2-aproximada, **bin packing** e
+  **caixeiro viajante** métrico
+- o caixeiro viajante exato por **Held-Karp** e quando trocar pelo
+  aproximado
 
 ## Antes de começar
 
-Este módulo usa a matriz de adjacência e a DFS (0109, 0111),
-os componentes conexos (0150), o Prim (0153), a recursão e o backtracking
-(0032, 0126, 0127), a programação dinâmica (0138 a 0140), o `qsort` (0096) e
-as máscaras de bits (0065). Se a DFS recursiva estiver enferrujada, releia o
-0111 antes do 0184.
+Usa a matriz de adjacência e a DFS (0109, 0111), os componentes conexos
+(0150), o Prim (0153), o backtracking (0032, 0126, 0127), a programação
+dinâmica (0138 a 0140), o `qsort` (0096) e as máscaras de bits (0065).
 
-Nada fica escondido em TAD: cada arquivo traz o algoritmo completo. Refaça no
-papel o **passo a passo** quando houver (a pilha do Hierholzer, os
-`tin`/`low` da DFS, a tabela da cadeia de matrizes).
-Nos grafos, a origem fica roxa, as arestas verdes
-são as escolhidas (o circuito, o ciclo, as pontes, a clique) e, nas
-articulações, o amarelo marca os vértices de corte.
+**Progressão.** Este módulo completa os grafos do 16 e do 23 e, com as
+máscaras e o `qsort` do 27, fecha o curso.
 
-Convenções que valem para o módulo todo:
+Cada arquivo traz o algoritmo completo, sem TAD. Refaça no papel o **passo a
+passo**. Nos grafos, a origem é roxa, as arestas verdes são as escolhidas e o
+amarelo marca os vértices de corte.
 
-- os vértices são números de 0 a V-1, com os nomes num vetor de strings à
-  parte, e os vizinhos são examinados em **ordem crescente de índice**. Isso
-  decide os empates: numere diferente e a resposta pode mudar, sem estar
-  errada;
-- grafo não dirigido guarda cada aresta **duas vezes** na matriz
-  (`g[a][b]` e `g[b][a]`); grafo dirigido, uma vez;
-- conjuntos pequenos (de vértices ou de variáveis) são **máscaras de bits**
-  num `int`: o bit `v` ligado quer dizer "v está no conjunto";
-- nas rotas, a distância é em **quarteirões**, `|dx| + |dy|`, que respeita
-  a desigualdade triangular;
-- os nomes seguem o **Cormen**. Quando o edital ou outro livro usa outro
-  nome (trajeto, circuito, percurso de Euler...), o texto avisa.
+Convenções do módulo:
+
+- vértices de 0 a V-1, nomes num vetor à parte, vizinhos em **ordem crescente
+  de índice** (decide os empates);
+- grafo não dirigido guarda cada aresta **duas vezes** na matriz; dirigido,
+  uma;
+- conjuntos pequenos são **máscaras de bits** num `int`;
+- distâncias em **quarteirões**, `|dx| + |dy|`, que respeita a desigualdade
+  triangular;
+- os nomes seguem o **Cormen**, e o texto avisa quando o edital usa outro.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
@@ -93,26 +78,19 @@ Convenções que valem para o módulo todo:
 
 ## 0182 · Caminhos e ciclos
 
-O caminhão da coleta de lixo sai da garagem, precisa passar por **todas as
-ruas** do bairro e voltar. Cada rua repetida é diesel jogado fora e meia hora
-a mais de turno. A pergunta da prefeitura: existe um roteiro que passa por
-cada rua **exatamente uma vez** e termina na garagem?
+O caminhão da coleta de lixo precisa passar por **todas as ruas** do bairro e
+voltar à garagem. Existe um roteiro que usa cada rua **exatamente uma vez**?
+Euler respondeu em 1736, sobre as pontes de Königsberg, com uma contagem.
 
-Leonhard Euler respondeu essa pergunta em 1736, sobre as pontes de
-Königsberg, e a resposta sai de uma contagem, sem testar roteiro nenhum.
+**Grau** de um vértice é quantas arestas tocam nele (um laço conta 2). No
+dirigido, há o **grau de entrada** e o **de saída** (0109).
 
-**Grau.** O **grau** de um vértice é quantas arestas tocam nele (um laço, aresta
-de um vértice para ele mesmo, conta 2). Num grafo dirigido o grau se divide em
-dois: o **grau de entrada** (setas que chegam) e o **grau de saída** (setas que
-saem). O 0109 já calculou os dois.
+**Lema do aperto de mãos.** Cada aresta conta duas vezes, uma em cada ponta:
+a soma dos graus é **2 × E**, sempre par, e o número de vértices de **grau
+ímpar** é par. No dirigido, a soma dos graus de entrada é E, e a dos de saída
+também.
 
-**Lema do aperto de mãos.** Some os graus de todos os vértices: cada aresta é
-contada duas vezes, uma em cada ponta. Então a soma é **2 × E**, sempre par. Uma
-consequência que cai em prova: o número de vértices de **grau ímpar** é par.
-No dirigido, a soma dos graus de entrada é E, e a dos de saída também.
-
-**Andar pelo grafo.** Os livros não concordam nos nomes, e a prova pode usar
-qualquer um. O que muda é **o que pode se repetir**:
+**Andar pelo grafo.** Os nomes variam conforme **o que pode se repetir**:
 
 | O que pode repetir | Cormen | Edital e teoria dos grafos | Também chamado |
 | --- | --- | --- | --- |
@@ -122,38 +100,34 @@ qualquer um. O que muda é **o que pode se repetir**:
 | fechado, nenhuma aresta repetida | (sem nome) | **circuito** | trilha fechada |
 | fechado, nenhum vértice repetido | ciclo simples | **ciclo** | |
 
-No Cormen, "caminho" aceita repetição e "ciclo" é qualquer caminho fechado
-com pelo menos uma aresta; o adjetivo **simples** proíbe repetir vértice.
-Neste módulo, quando a diferença importa, vale a coluna do meio (a do
-edital), com o nome do Cormen ao lado. O **comprimento** é o número de
-arestas, não de vértices.
+No Cormen, "ciclo" é qualquer caminho fechado com pelo menos uma aresta, e
+**simples** proíbe repetir vértice. Aqui vale a coluna do meio (a do edital).
+O **comprimento** é o número de arestas.
 
 **Circuito euleriano** é um circuito que usa **toda aresta exatamente uma
-vez** (o Cormen chama de *percurso de Euler*). Teorema de Euler, para um grafo
-**conexo** (ignorando vértices isolados):
+vez**. Teorema de Euler, para um grafo **conexo** (ignorando vértices
+isolados):
 
 - existe circuito euleriano ⇔ **todos os graus são pares**;
 - existe trajeto euleriano aberto ⇔ **exatamente dois** vértices de grau
   ímpar, e ele começa num e termina no outro.
 
-O porquê vem do aperto de mãos: toda vez que o caminhão entra numa esquina,
-sai por outra rua, e as ruas de cada esquina se gastam aos pares. Só a saída
-e a chegada escapam disso. No dirigido, a condição vira "entrada
-= saída em todo vértice".
+O porquê: o caminhão entra numa esquina e sai por outra rua, então as ruas de
+cada esquina se gastam aos pares; só a saída e a chegada escapam. No
+dirigido, a condição é "entrada = saída em todo vértice".
 
-**Hierholzer** monta o circuito em O(V + E) com lista (O(V²) com matriz). Ele
-anda por ruas ainda não usadas, apagando cada uma, até travar. Com graus pares,
-só se trava no ponto de partida. Aí volta pela pilha até achar uma esquina com
-rua sobrando, faz um desvio a partir dela e **encaixa** o desvio no circuito.
+O **Hierholzer** monta o circuito em O(V + E) com lista (O(V²) com matriz):
+anda por ruas não usadas, apagando-as, até travar (com graus pares, só na
+partida). Volta pela pilha até uma esquina com rua sobrando e **encaixa** o
+desvio feito dali.
 
-O bairro tem 6 esquinas e 8 ruas. Os números em roxo são
-os graus; os números nas ruas, a ordem em que o caminhão passa por elas:
+O bairro tem 6 esquinas e 8 ruas. Em roxo, os graus; nas ruas, a ordem da
+passagem:
 
 <p align="center"><img src="29-grafos-e-np/0182-caminhos-e-ciclos/ideia.svg" alt="Diagrama da ideia: Caminhos e ciclos" width="870"></p>
 
-O código guarda as ruas numa matriz de contagem (`rua[u][v]` é quantas ruas
-ligam `u` e `v`), confere a condição de Euler e roda o Hierholzer com uma
-pilha explícita:
+O código guarda as ruas numa matriz de contagem (`rua[u][v]` é quantas ligam
+`u` e `v`), confere Euler e roda o Hierholzer com pilha explícita:
 
 ```c
 #include <stdbool.h>
@@ -230,17 +204,15 @@ int main(void) {
 // (8 ruas, cada uma uma vez)
 ```
 
-No fluxograma, cada volta do laço olha o topo da pilha. Se há rua livre,
-avança e apaga a rua; se não há, a esquina sai da pilha e vai para o
-circuito. Ninguém escolhe rota, e mesmo assim nenhuma rua sobra:
+No fluxograma, cada volta olha o topo da pilha: com rua livre, avança e a
+apaga; sem, a esquina vai para o circuito:
 
 <p align="center"><img src="29-grafos-e-np/0182-caminhos-e-ciclos/fluxograma.svg" alt="Fluxograma: Caminhos e ciclos" width="1045"></p>
 
 ### Passo a passo
 
-A pilha depois de cada passo (o topo à direita). O primeiro passeio fecha cedo,
-em Garagem Praça Feira Garagem, e deixa 5 ruas para trás. O desvio sai da
-Feira e é encaixado ali:
+A pilha depois de cada passo (topo à direita). O primeiro passeio fecha cedo
+e deixa 5 ruas para trás; o desvio sai da Feira e é encaixado ali:
 
 | Passo | Pilha | Circuito (ao contrário) |
 | --- | --- | --- |
@@ -249,31 +221,25 @@ Feira e é encaixado ali:
 | F → I → E → P → S → F | G P F I E P S F | G |
 | todos travam, um a um | | G F S P E I F P G |
 
-Invertido, o circuito é Garagem Praça Feira Igreja Escola Praça Posto Feira
-Garagem. A Praça e a Feira aparecem duas vezes: é um **circuito**, não um
-**ciclo**. O A363 faz as contas de grau num grafo dirigido; o A364 desenha a
-casinha "sem tirar o lápis do papel", um trajeto aberto.
+Invertido: Garagem Praça Feira Igreja Escola Praça Posto Feira Garagem. Praça
+e Feira repetem: é um **circuito**, não um **ciclo**. O A363 faz as contas de
+grau num dirigido; o A364 desenha a casinha "sem tirar o lápis", um trajeto
+aberto.
 
 > [!WARNING]
-> "Todos os graus pares" só garante o circuito se o grafo for **conexo**. Dois
-> triângulos separados têm todos os graus iguais a 2 e nenhum circuito passa
-> pelas 6 arestas. Confira a conexidade (uma DFS, 0111) antes de confiar nos
-> graus. E não confunda: euleriano passa por toda **aresta** uma vez;
-> hamiltoniano (0183) passa por todo **vértice** uma vez.
+> "Todos os graus pares" só garante o circuito se o grafo for **conexo**: dois
+> triângulos separados têm todos os graus 2 e nenhum circuito passa pelas 6
+> arestas. Confira a conexidade (DFS, 0111). E não confunda: euleriano passa
+> por toda **aresta** uma vez; hamiltoniano (0183), por todo **vértice**.
 
 > [!TIP]
-> **Por dentro do C:** apagar a rua é só `rua[u][v]--` e `rua[v][u]--`, dois
-> acessos a uma matriz de `int` que mora num bloco contínuo de 6 × 6 × 4 =
-> 144 bytes. Como cada rua é empilhada e desempilhada uma vez, a pilha nunca
-> passa de E + 1 posições, e por isso `pilha[MAX_RUAS + 1]` cabe na pilha do
-> programa sem `malloc`. A busca do próximo vizinho recomeça do 0
-> a cada volta; com lista de adjacência e um ponteiro "próxima aresta" por
-> vértice, o total cai para O(V + E).
+> Com matriz, a busca do vizinho recomeça do 0 a cada volta. Com lista de
+> adjacência e um ponteiro "próxima aresta" por vértice, o total é O(V + E).
 
 > [!NOTE]
-> **Pergunta para você:** se a prefeitura abrir uma rua nova entre a Escola e
-> o Posto, quantas esquinas ficam com grau ímpar? Ainda existe circuito? E
-> trajeto aberto, entre quais esquinas? Responda antes de rodar.
+> **Pergunta para você:** se abrirem uma rua entre a Escola e o Posto, quantas
+> esquinas ficam com grau ímpar? Ainda existe circuito? E trajeto aberto,
+> entre quais esquinas?
 
 ### Hora de praticar
 
@@ -433,60 +399,27 @@ Soma dos graus: 14 (2 x 7 trechos)
 Pontos de grau ímpar: 4
 ```
 
-**Dicas:**
-
-1. Cada trecho {a, b} acende duas casas: ciclovia[a][b] e ciclovia[b][a].
-2. O grau de u é a soma da linha u da matriz.
-3. A soma é sempre o dobro dos trechos, e
-   o número de pontos de grau ímpar é sempre par (aqui, 4).
-
 ```bash
 gcc ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1087.c -o ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1087 && ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1087
 ```
 
-**Exercício E1088** · ★☆☆
+**Exercício E1089** · ★★☆
 
-Use o bairro do texto (G Garagem, P Praça, F Feira, E Escola, I Igreja,
-S Posto) com as ruas G-P, G-F, P-F, P-E, P-S, F-I, F-S, E-I. Escreva a
-função const char *classifica(const char *seq), que recebe uma sequência
-de letras e devolve o nome mais preciso da tabela do texto:
-"não é passeio" (falta alguma rua), "passeio" ou "passeio fechado" (repete
-rua), "trajeto" ou "circuito" (não repete rua, repete esquina), "caminho"
-ou "ciclo" (não repete nada). Teste com estas seis sequências:
+Escreva um programa com o tipo Grafo (nome, v e a matriz m[MAXV][MAXV], em
+que m[a][b] conta as arestas paralelas entre a e b) e a função
+analisa(const Grafo *g), que diz se o grafo tem circuito euleriano,
+trajeto euleriano aberto (entre quais vértices) ou nenhum dos dois, e
+por quê. Confira a conexidade (por DFS) antes dos graus. Analise, nesta
+ordem, quatro grafos (arestas entre vértices numerados a partir de 0):
 
 
 ```text
-Saída esperada:
-GPFG      ciclo
-GPEIFPS   trajeto
-GPFPS     passeio
-PEIF      caminho
-GPFIEPSFG circuito
-GE        não é passeio
+bairro (6 vértices): 0-1 0-2 1-2 1-3 1-5 2-4 2-5 3-4
+casinha (5): 0-1 0-2 1-3 2-3 0-3 1-2 2-4 3-4
+triângulos (6): 0-1 1-2 2-0 3-4 4-5 5-3
+pontes (4): 0-1 0-1 0-2 0-2 0-3 1-3 2-3
 ```
 
-**Dicas:**
-
-1. Converta cada letra para o índice e confira se cada par vizinho tem
-   rua. A sequência é fechada quando a primeira letra é igual à última.
-2. Rua repetida: os pares (s[i], s[i+1]) e (s[j], s[j+1]) são a mesma rua
-   se forem iguais em qualquer ordem. Esquina repetida: compare as letras,
-   mas no fechado não conte a última (ela é a primeira de novo).
-3. GPFIEPSFG é o circuito do texto: a
-   Praça e a Feira aparecem duas vezes, mas nenhuma rua.
-
-```bash
-gcc ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1088.c -o ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1088 && ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1088
-```
-
-**Exercício E1089** · ★★☆
-
-O programa abaixo já monta quatro grafos (com arestas paralelas contadas
-na matriz): o bairro do texto, a casinha do A364, dois triângulos
-separados e as sete pontes de Königsberg (4 margens, 7 pontes). Escreva a
-função analisa, que mostra se o grafo tem circuito euleriano, trajeto
-euleriano aberto (dizendo entre quais vértices) ou nenhum dos dois, e por
-quê. Ela precisa conferir a conexidade antes dos graus.
 
 
 ```text
@@ -496,15 +429,6 @@ casinha: trajeto euleriano de 0 a 1
 triângulos: nenhum (desconexo)
 pontes: nenhum (4 vértices ímpares)
 ```
-
-**Dicas:**
-
-1. Conexidade: rode uma DFS a partir do primeiro vértice com grau > 0 e
-   confira se todo vértice com grau > 0 foi visitado.
-2. Depois guarde os vértices de grau ímpar num vetor: 0 ímpares dá
-   circuito; 2 dá trajeto entre eles; outro número, nenhum.
-3. Os triângulos têm todos os graus
-   iguais a 2 e mesmo assim não têm circuito.
 
 ```bash
 gcc ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1089.c -o ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1089 && ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1089
@@ -539,50 +463,8 @@ Escola: entram 0, saem 2
 Sem circuito
 ```
 
-**Dicas:**
-
-1. No dirigido, a condição de Euler (com o grafo conexo) é: entrada igual
-   a saída em todo vértice. Saída de u é a linha u; entrada, a coluna u.
-2. O Hierholzer é o do texto, mas apaga só mao[u][v]: a volta v -> u não
-   existe. Remonte a matriz antes da obra, porque o circuito apaga tudo.
-
 ```bash
 gcc ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1090.c -o ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1090 && ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1090
-```
-
-**Exercício E1091** · ★★★
-
-Ache o bug. Este Hierholzer roda no bairro do texto, que tem 8 ruas de
-mão dupla, mas o circuito sai com o dobro do tamanho e passa duas vezes
-pela mesma rua (veja o G P G logo no começo):
-
-
-```text
-Saída que aparece:
-Circuito: G P G F P F I F S P E I E P S F G
-Ruas percorridas: 16 de 8
-```
-
-
-
-```text
-Saída esperada:
-Circuito: G P F I E P S F G
-Ruas percorridas: 8 de 8
-```
-
-
-O programa compila e roda sem erro do sanitizer; o problema é de lógica.
-Conserte-o.
-
-**Dicas:**
-
-1. Numa matriz de grafo NÃO dirigido, cada rua ocupa duas casas.
-2. Quando o caminhão passa de u para v, qual casa é apagada? E a outra?
-3. Basta apagar também rua[v][u].
-
-```bash
-gcc ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1091.c -o ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1091 && ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1091
 ```
 
 **Exercício E1092** · ★★★
@@ -610,14 +492,6 @@ Traço 1: A B C A D C
 Traço 2: D B
 ```
 
-**Dicas:**
-
-1. Use uma matriz 5 x 5 (índice 4 é o X) e o Hierholzer do A364, sempre
-   escolhendo o vizinho de menor índice.
-2. Na hora de mostrar, percorra o trajeto invertido: ao encontrar o X,
-   pule-o e comece a linha do próximo traço.
-3. Os dois traços somam as 6 arestas.
-
 ```bash
 gcc ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1092.c -o ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1092 && ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1092
 ```
@@ -626,23 +500,18 @@ gcc ~/LPEDC/29-grafos-e-np/0182-caminhos-e-ciclos/E1092.c -o ~/LPEDC/29-grafos-e
 
 ## 0183 · Hamiltoniano
 
-O carro-forte sai da base, abastece os caixas eletrônicos de cinco agências e
-volta. Aqui a pergunta mudou: ninguém se importa em repetir rua, mas parar
-duas vezes na mesma agência é perder tempo com escolta e papelada. Existe uma
-rota que passa por **cada agência exatamente uma vez** e volta para a base?
-
-Parece o problema do caminhão de lixo (0182), trocando "aresta" por
-"vértice", mas a dificuldade é outra.
+O carro-forte abastece cinco agências e volta à base. Repetir rua não importa;
+parar duas vezes na mesma agência, sim. Existe uma rota que passa por **cada
+agência exatamente uma vez** e volta? É o caminhão de lixo (0182) com
+"vértice" no lugar de "aresta", mas a dificuldade é outra.
 
 **Ciclo hamiltoniano** é um ciclo (simples, no Cormen) que passa por **todos
-os vértices**, cada um uma vez. **Caminho hamiltoniano** é o mesmo sem a
-obrigação de voltar ao começo. O nome é do matemático William Hamilton, que
-vendia um quebra-cabeça com um dodecaedro: achar um ciclo pelos 20 vértices.
+os vértices**, cada um uma vez. **Caminho hamiltoniano** é o mesmo sem voltar
+ao começo.
 
-Para Euler bastava contar graus. Para Hamilton **não se conhece nenhuma
-condição simples** que seja necessária e suficiente, nem algoritmo
-polinomial. Existem condições suficientes, como a de **Dirac**: se V ≥ 3 e
-todo vértice tem grau ≥ V/2, o ciclo existe. Mas um ciclo puro de 100
+Para Hamilton **não se conhece condição simples** necessária e suficiente, nem
+algoritmo polinomial. Há condições suficientes, como a de **Dirac**: se V ≥ 3
+e todo vértice tem grau ≥ V/2, o ciclo existe. Mas um ciclo puro de 100
 vértices tem grau 2 em todos e é hamiltoniano mesmo assim.
 
 | | Euler (0182) | Hamilton |
@@ -652,24 +521,23 @@ vértices tem grau 2 em todos e é hamiltoniano mesmo assim.
 | custo para achar | O(V + E) | exponencial no pior caso |
 | classe (0186) | P | NP-completo |
 
-Sem atalho, sobra testar. O **backtracking** do módulo 19 monta a rota uma
-posição por vez: põe na posição `pos` um vizinho ainda não usado do último
-vértice, desce para `pos + 1` e, se lá na frente travar, **desfaz** a escolha
-e tenta a próxima. Quando a rota tem os V vértices, só falta conferir se o
-último liga de volta ao primeiro.
+Sobra testar. O **backtracking** do módulo 19 monta a rota por posição: põe em
+`pos` um vizinho ainda não usado do último vértice, desce para `pos + 1` e, se
+travar, **desfaz** a escolha e tenta a próxima. Com os V vértices na rota, só
+falta o último ligar ao primeiro.
 
-Há duas economias que não custam nada. Todo ciclo pode começar em qualquer vértice, então
-fixe o primeiro (`rota[0] = 0`): isso divide o trabalho por V. E o vetor
-`usada[]` corta na hora qualquer rota que repete agência. Mesmo assim, no
-pior caso sobram (V - 1)! ordens: com 15 agências, 87 bilhões.
+Duas economias não custam nada: fixe `rota[0] = 0` (todo ciclo pode começar
+em qualquer vértice, o que divide o trabalho por V) e use `usada[]` para
+cortar rota que repete agência. No pior caso sobram (V - 1)! ordens: com 15
+agências, 87 bilhões.
 
-A primeira tentativa, Base Centro Orla Mercado Porto
-Shopping, trava: não há via do Shopping para a Base. O backtracking volta ao
-Mercado, troca Porto por Shopping e fecha o ciclo pelo Porto:
+A primeira tentativa, Base Centro Orla Mercado Porto Shopping, trava: não há
+via do Shopping para a Base. O backtracking volta ao Mercado, troca Porto por
+Shopping e fecha o ciclo pelo Porto:
 
 <p align="center"><img src="29-grafos-e-np/0183-hamiltoniano/ideia.svg" alt="Diagrama da ideia: Hamiltoniano" width="864"></p>
 
-O código conta as chamadas da recursão, para você ver quanto ele tentou:
+O código conta as chamadas da recursão:
 
 ```c
 #include <stdbool.h>
@@ -718,38 +586,26 @@ int main(void) {
 // Chamadas da recursão: 8
 ```
 
-O fluxograma mostra uma chamada de `hamilton(pos)`. A pergunta "rota
-completa?" só confere a volta; o trabalho todo está no laço que escolhe o
-vizinho, e na linha que desfaz a escolha quando a descida não deu certo:
+O fluxograma mostra uma chamada de `hamilton(pos)`. "Rota completa?" só
+confere a volta; o trabalho está no laço que escolhe o vizinho e na linha que
+desfaz a escolha quando a descida falha:
 
 <p align="center"><img src="29-grafos-e-np/0183-hamiltoniano/fluxograma.svg" alt="Fluxograma: Hamiltoniano" width="805"></p>
 
-Oito chamadas parece pouco porque a primeira tentativa quase deu certo. Mas
-este grafo não tem circuito euleriano (quatro agências têm grau ímpar), e
-mesmo assim tem ciclo hamiltoniano. O A365 mostra o contrário: um grafo com
-circuito euleriano e **sem** ciclo hamiltoniano, em que o backtracking só
-descobre isso depois de tentar tudo. O A366 mede o crescimento das chamadas
-quando a resposta é "não".
+Este grafo não tem circuito euleriano (quatro agências têm grau ímpar) e tem
+ciclo hamiltoniano. O A365 mostra o contrário, e o backtracking só descobre
+depois de tentar tudo. O A366 mede o crescimento das chamadas quando a
+resposta é "não".
 
 > [!WARNING]
-> Esquecer o `usada[v] = false` depois da chamada recursiva é o erro clássico.
-> O programa continua compilando e rodando, mas cada agência visitada numa
-> tentativa que falhou fica "queimada" para as tentativas seguintes, e ele
-> responde "não existe" para grafos que têm ciclo. O E1097 traz esse bug.
-
-> [!TIP]
-> **Por dentro do C:** a recursão desce no máximo V níveis, então a pilha de
-> chamadas nunca passa de V frames de `hamilton`, cada um com `pos`, `v` e o
-> endereço de retorno. A memória fica pequena; o que explode é o
-> **tempo**: o número de chamadas pode chegar a (V - 1)!. `rota` e `usada` são globais e
-> compartilhados por todas as chamadas, e por isso cada uma precisa desfazer
-> o que fez antes de voltar. O `long` em `chamadas` está ali porque
-> 13! já não cabe num `int` de 32 bits.
+> Esquecer o `usada[v] = false` depois da chamada recursiva é o erro clássico:
+> cada agência de uma tentativa que falhou fica "queimada", e o programa
+> responde "não existe" para grafos que têm ciclo.
 
 > [!NOTE]
 > **Pergunta para você:** se a via Porto-Base for fechada (apague `{0, 4}`),
 > ainda existe ciclo hamiltoniano? A Base fica com grau 2: por quais agências
-> o ciclo teria de entrar e sair dela? Responda antes de rodar.
+> o ciclo teria de entrar e sair dela?
 
 ### Hora de praticar
 
@@ -897,12 +753,20 @@ gcc ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/A366.c -o ~/LPEDC/29-grafos-e-np/01
 
 **Exercício E1093** · ★☆☆
 
-Achar um ciclo hamiltoniano é difícil; conferir um é fácil. Escreva a
-função bool eh_ciclo_hamiltoniano(const int rota[], int n), que recebe
-uma rota (sem repetir o primeiro no fim) do mapa das agências do texto e
-responde se ela é um ciclo hamiltoniano: tem os V vértices, nenhum
-repetido, e cada vizinho da rota (inclusive o último com o primeiro) tem
-via. Teste com as quatro rotas do main.
+Achar um ciclo hamiltoniano é difícil; conferir um é fácil. O mapa das
+agências tem 6 vértices (0 a 5) e as vias 0-1, 0-2, 0-4, 1-2, 1-3, 2-3,
+3-4, 3-5 e 4-5, guardadas na matriz via. Escreva
+bool eh_ciclo_hamiltoniano(const int rota[], int n), que recebe uma rota
+(sem repetir o primeiro no fim) e responde se ela é um ciclo
+hamiltoniano: tem os V vértices, nenhum repetido, e cada vizinho da rota
+(inclusive o último com o primeiro) tem via. Teste as quatro rotas:
+
+
+```text
+rota 1: 0 1 2 3 5 4    rota 2: 0 1 2 3 4 5
+rota 3: 0 2 1 3 5 4    rota 4: 0 1 3 5 4 1
+```
+
 
 
 ```text
@@ -913,45 +777,8 @@ Rota 3: válida
 Rota 4: inválida
 ```
 
-**Dicas:**
-
-1. Use um vetor bool visto[V] para pegar vértice repetido.
-2. A volta é o par (rota[n - 1], rota[0]); com (i + 1) % n o laço trata
-   todos os pares de uma vez.
-3. A rota 2 falha na volta (Shopping
-   para Base); a 4 repete o Centro.
-
 ```bash
 gcc ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1093.c -o ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1093 && ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1093
-```
-
-**Exercício E1094** · ★☆☆
-
-A gravata do A365 (Mirante, Cachoeira, Gruta, Lagoa, Pedra; trilhas
-Mirante-Cachoeira, Cachoeira-Gruta, Gruta-Mirante, Mirante-Lagoa,
-Lagoa-Pedra, Pedra-Mirante) não tem ciclo hamiltoniano. Mas talvez tenha
-CAMINHO hamiltoniano: passar por todos os pontos uma vez, sem voltar.
-Escreva o backtracking caminho(pos) e tente cada ponto de partida, em
-ordem de índice, até achar um. Mostre as tentativas.
-
-
-```text
-Saída esperada:
-Começando em Mirante: não dá
-Começando em Cachoeira: Cachoeira Gruta Mirante Lagoa Pedra
-```
-
-**Dicas:**
-
-1. Parta do hamilton do texto. Duas mudanças: quando pos == V, devolva
-   true direto (não há volta para conferir); e o laço dos vizinhos começa
-   no 0, porque o início não é mais fixo.
-2. Para cada início, zere usado[], ponha rota[0] = inicio e marque-o.
-3. O Mirante no meio do caminho é a
-   única saída: começando nele, você nunca volta ao outro triângulo.
-
-```bash
-gcc ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1094.c -o ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1094 && ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1094
 ```
 
 **Exercício E1095** · ★★☆
@@ -969,15 +796,6 @@ Saída esperada:
 Agências: 4 rotas, 2 ciclos distintos
 Completo com 5: 24 rotas, 12 ciclos distintos
 ```
-
-**Dicas:**
-
-1. Quando pos == n, devolva 1 se o último liga na Base, senão 0. No
-   laço, some conta(pos + 1) em vez de devolver true.
-2. Use uma matriz MAXV x MAXV e uma variável global n para reaproveitar o
-   mesmo código nos dois grafos (lembre de zerar usado[]).
-3. No completo com n vértices são
-   (n - 1)! rotas, ou (n - 1)! / 2 ciclos: 24 e 12 para n = 5.
 
 ```bash
 gcc ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1095.c -o ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1095 && ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1095
@@ -1008,61 +826,8 @@ Saída esperada:
 Bahia > Ceará > Fortaleza > Sport > Remo
 ```
 
-**Dicas:**
-
-1. venceu[a][b] = 1 só num sentido. O teste do vizinho é
-   venceu[ordem[pos - 1]][v].
-2. É o caminho hamiltoniano do E1094, sem volta e com início variável.
-3. Curiosidade: num torneio todos
-   contra todos essa fila SEMPRE existe (teorema de Rédei), mas achar o
-   ciclo hamiltoniano continua sendo trabalho de backtracking.
-
 ```bash
 gcc ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1096.c -o ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1096 && ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1096
-```
-
-**Exercício E1097** · ★★★
-
-Ache o bug. A van escolar sai da Escola, pega seis crianças (Ana, Bia,
-Caio, Davi, Elis, Fabi), uma parada cada, e volta. As ruas são:
-
-
-```text
-Escola-Ana, Escola-Bia, Escola-Elis, Ana-Caio, Ana-Fabi, Bia-Caio,
-Bia-Davi, Caio-Davi, Davi-Elis, Davi-Fabi
-```
-
-
-Existe rota, mas o programa diz que não:
-
-
-```text
-Saída que aparece:
-Não existe rota
-```
-
-
-
-```text
-Saída esperada:
-Rota da van: Escola Bia Caio Ana Fabi Davi Elis Escola
-```
-
-
-O programa compila e roda sem erro; o problema é de lógica. Conserte-o.
-
-**Dicas:**
-
-1. Acrescente um printf no começo de hamilton mostrando pos e a rota até
-   ali. Depois da primeira tentativa que falha, algumas crianças nunca
-   mais são tentadas.
-2. Toda escolha feita antes da chamada recursiva precisa ser desfeita
-   depois dela, se a chamada voltar com false.
-3. Falta uma linha depois do
-   if (hamilton(pos + 1)) return true;
-
-```bash
-gcc ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1097.c -o ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1097 && ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1097
 ```
 
 **Exercício E1098** · ★★★
@@ -1094,15 +859,6 @@ Saída esperada:
 Chamadas: 8840
 ```
 
-**Dicas:**
-
-1. Guarde os saltos em dois vetores dl[8] e dc[8]. Uma casa é candidata
-   se está dentro do tabuleiro e ainda vale 0.
-2. Marque casa[l][c] = k ao entrar; se k == 25, acabou. Se nenhum salto
-   der certo, volte casa[l][c] para 0 antes de devolver false.
-3. Mude a ordem dos saltos e o número
-   de chamadas muda muito: no backtracking, a ordem das tentativas pesa.
-
 ```bash
 gcc ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1098.c -o ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1098 && ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1098
 ```
@@ -1111,46 +867,36 @@ gcc ~/LPEDC/29-grafos-e-np/0183-hamiltoniano/E1098.c -o ~/LPEDC/29-grafos-e-np/0
 
 ## 0184 · Pontes e articulações
 
-A operadora de internet ligou sete bairros de Manaus com fibra óptica. Uma
-retroescavadora corta um cabo na obra da avenida: quais cabos, se cortados,
-deixam bairros sem sinal? E se a central de um bairro pegar fogo, quais
-centrais derrubam a rede dos outros?
+A operadora ligou sete bairros de Manaus com fibra. Se um cabo for cortado,
+algum bairro fica sem sinal? E se a central de um bairro pegar fogo? São as
+duas perguntas de **conectividade** do edital:
 
-Essas são as duas perguntas de **conectividade** que o edital pede pelo nome:
-
-- **ponte** (ou aresta de corte): uma aresta cuja remoção aumenta o número de
+- **ponte** (aresta de corte): aresta cuja remoção aumenta o número de
   componentes conexos (0150);
-- **vértice de articulação** (ou ponto de corte): um vértice cuja remoção,
-  junto com as arestas dele, aumenta o número de componentes.
+- **vértice de articulação** (ponto de corte): vértice cuja remoção, com as
+  arestas dele, aumenta o número de componentes.
 
-O jeito ingênuo é tirar cada cabo, rodar uma DFS e ver se a rede partiu:
-O(E · (V + E)). O A368 faz isso para conferir. O jeito bom faz **uma DFS
-só**, O(V + E), e anota dois números por vértice.
+Tirar cada cabo e rodar uma DFS custa O(E · (V + E)) (o A368 confere). **Uma
+DFS só**, O(V + E), anota dois números por vértice.
 
-**tin[u]** é o tempo de descoberta: o relógio da DFS no momento em que ela
-entra em `u` (a ordem de visita). **low[u]** é o menor `tin` que a
-subárvore de `u` consegue alcançar usando arestas da árvore para descer e
-**uma** aresta de volta (para um ancestral) para subir.
+**tin[u]** é o tempo de descoberta: o relógio da DFS ao entrar em `u`.
+**low[u]** é o menor `tin` que a subárvore de `u` alcança descendo pela árvore
+e usando **uma** aresta de volta para um ancestral.
 
-Numa DFS de grafo não dirigido só existem dois tipos de aresta: as da
-**árvore** (levam a um vértice novo) e as de **volta** (levam a um ancestral
-já visitado). Nenhuma aresta "cruza" para o lado. Por isso `low` mede
-quanto a subárvore consegue escapar para cima sem passar pelo pai.
+Numa DFS não dirigida só há arestas da **árvore** (a um vértice novo) e de
+**volta** (a um ancestral); nenhuma "cruza" para o lado. `low` mede quanto a
+subárvore escapa para cima sem passar pelo pai.
 
-As duas regras, para uma aresta da árvore `u - v` (v filho de u):
+Para uma aresta da árvore `u - v` (v filho de u):
 
-- **ponte** se `low[v] > tin[u]`: nada abaixo de `v` volta a `u` ou acima.
-  Cortar `u - v` isola a subárvore de `v`.
+- **ponte** se `low[v] > tin[u]`: nada abaixo de `v` volta a `u` ou acima;
 - **articulação** se `low[v] >= tin[u]`, com `u` diferente da raiz: a
-  subárvore de `v` consegue no máximo voltar ao próprio `u`. Sem `u`, ela
-  fica sozinha.
-- **raiz**: a regra acima vale para ela sempre (nada tem `tin` menor que o
-  dela), então não serve. A raiz é articulação **só se tiver dois ou mais
-  filhos** na árvore da DFS: sem ela, os filhos não têm como se falar.
+  subárvore de `v` volta no máximo ao próprio `u`. Sem `u`, fica sozinha;
+- **raiz**: a regra anterior vale sempre para ela, então não serve. A raiz é
+  articulação **só com dois ou mais filhos** na árvore da DFS.
 
-Do Centro, a DFS desce em ordem de índice. Ao lado de
-cada bairro, `tin/low`. As arestas verdes são as pontes; os bairros em
-amarelo, as articulações:
+Do Centro, a DFS desce em ordem de índice. Ao lado de cada bairro, `tin/low`.
+As arestas verdes são as pontes; os bairros em amarelo, as articulações:
 
 <p align="center"><img src="29-grafos-e-np/0184-pontes-e-articulacoes/ideia.svg" alt="Diagrama da ideia: Pontes e articulações" width="875"></p>
 
@@ -1212,9 +958,8 @@ int main(void) {
 // Ponta Negra: tin 7, low 7
 ```
 
-No fluxograma, as duas perguntas acontecem **na volta** da recursão,
-depois de `dfs(v, u)`. Só então `low[v]` está completo, porque a subárvore
-inteira de `v` já foi explorada:
+No fluxograma, as duas perguntas vêm **na volta** da recursão, com `low[v]`
+completo:
 
 <p align="center"><img src="29-grafos-e-np/0184-pontes-e-articulacoes/fluxograma.svg" alt="Fluxograma: Pontes e articulações" width="809"></p>
 
@@ -1233,30 +978,18 @@ inteira de `v` já foi explorada:
 | volta a Aleixo | low[Flores] = 4 | 4 > 2: **ponte** Aleixo - Flores; Aleixo é **articulação** |
 | volta ao Centro (raiz) | | um filho só: **não** é articulação |
 
-Flores é articulação, mas Flores - Cidade Nova não é ponte (o triângulo dela
-tem dois caminhos). As duas perguntas parecem iguais; o que as separa é o
-`>` contra o `>=`.
+Flores é articulação, mas Flores - Cidade Nova não é ponte (o triângulo tem
+dois caminhos): a diferença é o `>` contra o `>=`.
 
 > [!WARNING]
-> Dois erros clássicos. Primeiro: usar a regra `low[v] >= tin[u]` também na
-> raiz. Ela sempre dá verdadeiro lá, e o Centro apareceria como articulação
-> sem ser (tire o Centro e o resto continua ligado). O A367 mostra o
-> estrago. Segundo: trocar `>` por `>=` na ponte; aí toda aresta que sai da
-> raiz para um ciclo vira ponte falsa. É o bug do E1103.
-
-> [!TIP]
-> **Por dentro do C:** `tin`, `low` e `corte` são vetores globais, zerados
-> antes do `main`, e por isso `tin[v] == 0` serve de "não visitado". A
-> variável `filhos` é **local**: cada frame de `dfs` na pilha tem a sua, e
-> assim a contagem da raiz não se mistura com a dos outros vértices.
-> A recursão pode descer V níveis; numa rede com um milhão de bairros em fila
-> isso estoura a pilha (8 MB por padrão no Linux), e a versão de produção
-> troca a recursão por uma pilha explícita.
+> Dois erros clássicos. Usar `low[v] >= tin[u]` também na raiz: sempre dá
+> verdadeiro, e o Centro apareceria como articulação sem ser (o A367 mostra).
+> E trocar `>` por `>=` na ponte: toda aresta que sai da raiz para um ciclo
+> vira ponte falsa.
 
 > [!NOTE]
 > **Pergunta para você:** a operadora vai passar um cabo novo entre Ponta
-> Negra e o Centro (`{6, 0}`). Quais pontes e articulações sobram? Responda
-> antes de rodar.
+> Negra e o Centro (`{6, 0}`). Quais pontes e articulações sobram?
 
 ### Hora de praticar
 
@@ -1434,52 +1167,8 @@ Articulações:
   Rio Preto da Eva
 ```
 
-**Dicas:**
-
-1. Escreva int componentes(int fora): uma DFS por recomeço, pulando o
-   vértice fora (use -1 para não pular nenhum).
-2. Uma rodovia é ponte se, sem ela, componentes(-1) aumenta. Uma cidade
-   é articulação se componentes(cidade) é maior que o da rede inteira.
-3. Iranduba não é articulação: o
-   triângulo com Manaus e Manacapuru dá outro caminho.
-
 ```bash
 gcc ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1099.c -o ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1099 && ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1099
-```
-
-**Exercício E1100** · ★☆☆
-
-O programa abaixo já faz a DFS com tin e low nas rodovias do E1099, mas
-faltam as três linhas que dão sentido ao low. Hoje ele não acha ponte
-nenhuma e mostra low igual a tin em todo mundo. Complete as linhas
-marcadas com FALTA.
-
-
-```text
-Saída esperada:
-Ponte: Manacapuru - Novo Airão
-Ponte: Rio Preto da Eva - Itacoatiara
-Ponte: Manaus - Rio Preto da Eva
-Manaus: tin 1, low 1
-Iranduba: tin 2, low 1
-Manacapuru: tin 3, low 1
-Novo Airão: tin 4, low 4
-Rio Preto da Eva: tin 5, low 5
-Itacoatiara: tin 6, low 6
-```
-
-**Dicas:**
-
-1. Aresta de volta (v já visitado e não é o pai): low[u] pode cair para
-   tin[v].
-2. Depois de dfs(v, u): low[u] pode cair para low[v]. E a aresta é
-   ponte se low[v] > tin[u].
-3. As pontes saem na ordem em que a
-   DFS VOLTA, não na ordem das rodovias: Itacoatiara termina antes de
-   Rio Preto da Eva.
-
-```bash
-gcc ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1100.c -o ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1100 && ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1100
 ```
 
 **Exercício E1101** · ★★☆
@@ -1497,15 +1186,6 @@ Cortar Tarumã - Ponta Negra isola 1 bairro(s)
 Cortar Aleixo - Flores isola 4 bairro(s)
 Bairros alcançados: 7
 ```
-
-**Dicas:**
-
-1. Cada chamada começa com tamanho = 1 (o próprio u) e soma o valor
-   devolvido por cada dfs(v, u) da árvore. Arestas de volta não somam.
-2. Quando low[v] > tin[u], a subárvore de v é exatamente o pedaço que
-   perde a ligação: o tamanho dela é o número procurado.
-3. Resposta esperada: a saída acima (Flores, Cidade Nova, Tarumã e Ponta
-   Negra ficam do outro lado do cabo Aleixo - Flores).
 
 ```bash
 gcc ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1101.c -o ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1101 && ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1101
@@ -1535,34 +1215,26 @@ Sem Sul, a rede parte em 2 pedaços
 Sem Porto, a rede parte em 3 pedaços
 ```
 
-**Dicas:**
-
-1. Num vértice que não é a raiz, cada filho v com low[v] >= tin[u] vira
-   um pedaço; some 1 pelo pedaço de cima, onde está o pai.
-2. Na raiz, cada filho da árvore é um pedaço (não há pedaço de cima).
-3. A Usina tem um filho só na DFS, e
-   a rede sem ela continua inteira.
-
 ```bash
 gcc ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1102.c -o ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1102 && ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1102
 ```
 
 **Exercício E1103** · ★★★
 
-Ache o bug. A rede de energia do E1102 tem três linhas críticas (pontes):
-Sul-Porto, Porto-Vila e Porto-Serra. Mas o programa abaixo acusa mais
-duas, que estão dentro de triângulos e têm caminho alternativo:
+A rede de energia do E1102 tem oito subestações: Usina, Norte, Sul,
+Leste, Oeste, Porto, Vila e Serra (0 a 7). As linhas:
 
 
 ```text
-Saída que aparece:
-Linha crítica: Porto - Vila
-Linha crítica: Porto - Serra
-Linha crítica: Sul - Porto
-Linha crítica: Norte - Leste
-Linha crítica: Usina - Norte
+Usina-Norte, Usina-Sul, Norte-Sul, Norte-Leste, Norte-Oeste,
+Leste-Oeste, Sul-Porto, Porto-Vila, Porto-Serra
 ```
 
+
+Escreva a DFS com tin e low (raiz na Usina, vizinhos em ordem de índice,
+ignorando só o pai) que mostra as linhas críticas (pontes). Cada ponte é
+mostrada ao voltar da recursão, no formato "Linha crítica: u - v".
+Linhas dentro de um triângulo têm caminho alternativo e não aparecem.
 
 
 ```text
@@ -1571,103 +1243,47 @@ Linha crítica: Porto - Vila
 Linha crítica: Porto - Serra
 Linha crítica: Sul - Porto
 ```
-
-
-O programa compila e roda sem erro; o problema é de lógica. Conserte-o.
-
-**Dicas:**
-
-1. Mostre tin e low de Norte e Leste. Leste e Oeste formam triângulo com
-   o Norte: o Oeste volta ao Norte, e low[Leste] fica igual a tin[Norte].
-2. "Voltar ao próprio u" basta para u - v não ser ponte: existe outro
-   caminho entre u e v. A regra com igualdade é a da articulação.
-3. Troque um >= por >.
 
 ```bash
 gcc ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1103.c -o ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1103 && ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1103
-```
-
-**Exercício E1104** · ★★★
-
-A operadora passou um cabo reserva entre Tarumã e Ponta Negra, ao lado do
-antigo. Agora são dois cabos entre os mesmos bairros (arestas
-paralelas), e cortar um deles não isola ninguém. O programa abaixo guarda
-os cabos numa lista (a matriz 0/1 não consegue representar dois cabos
-iguais), mas continua dizendo que Tarumã - Ponta Negra é ponte:
-
-
-```text
-Saída que aparece:
-Ponte: Tarumã - Ponta Negra
-Ponte: Aleixo - Flores
-```
-
-
-
-```text
-Saída esperada:
-Ponte: Aleixo - Flores
-```
-
-
-Conserte a DFS para que ela funcione com cabos paralelos.
-
-**Dicas:**
-
-1. O teste v == pai pula TODOS os cabos que voltam ao pai, inclusive o
-   reserva, que é uma aresta de volta legítima.
-2. Em vez do vértice pai, passe o ÍNDICE do cabo pelo qual a DFS chegou
-   (dfs(v, k)) e pule só esse cabo (k == cabo_pai). A raiz recebe -1.
-
-```bash
-gcc ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1104.c -o ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1104 && ~/LPEDC/29-grafos-e-np/0184-pontes-e-articulacoes/E1104
 ```
 
 ---
 
 ## 0185 · Cadeia de matrizes
 
-O analista de dados de uma rede de farmácias precisa multiplicar quatro
-tabelas em sequência: 10 regiões × 30 lojas, 30 lojas × 5 categorias,
-5 categorias × 60 produtos e 60 produtos × 10 fornecedores. O resultado é um só,
-uma tabela 10 × 10, qualquer que seja a ordem das contas. Mas numa ordem o
-servidor faz 5 mil multiplicações; noutra, 33 mil. É a diferença entre
-pagar um minuto ou sete de nuvem.
+Uma rede de farmácias multiplica quatro tabelas: 10 × 30, 30 × 5, 5 × 60 e 60
+× 10. O resultado é 10 × 10 em qualquer ordem, mas numa o servidor faz 5 mil
+multiplicações e noutra, 33 mil.
 
-**Custo de uma multiplicação.** Multiplicar uma matriz `p × q` por uma
-`q × r` dá uma `p × r`, e cada uma das `p · r` casas é uma soma de `q`
-produtos: **p · q · r** multiplicações. As colunas da primeira precisam ser
-iguais às linhas da segunda.
+**Custo de uma multiplicação.** Uma matriz `p × q` por uma `q × r` dá uma `p ×
+r`, e cada uma das `p · r` casas soma `q` produtos: **p · q · r**
+multiplicações.
 
-**A ordem importa.** A multiplicação de matrizes é **associativa**:
-`(A B) C = A (B C)`. Os parênteses não mudam o resultado, só o trabalho. Com quatro matrizes existem 5 parentizações; com 10, 4862; com 20,
-mais de 1,7 bilhão (são os números de Catalan). Testar todas está fora de
-questão.
+**A ordem importa.** A multiplicação é **associativa**, `(A B) C = A (B C)`:
+os parênteses mudam só o trabalho. Quatro matrizes têm 5 parentizações; 10,
+4862; 20, mais de 1,7 bilhão (números de Catalan). Testar todas é inviável.
 
-**Subestrutura ótima.** A última multiplicação da melhor ordem corta a
-cadeia em algum ponto `k`: `(A1..Ak)(Ak+1..An)`. Cada metade, por sua vez,
-tem que estar na melhor ordem dela, senão trocar a metade por uma melhor
-baixaria o total. Isso dá a recorrência, com `Ai` de tamanho
-`p[i-1] × p[i]`:
+**Subestrutura ótima.** A última multiplicação da melhor ordem corta a cadeia
+em algum `k`: `(A1..Ak)(Ak+1..An)`, e cada metade também está na melhor
+ordem. Com `Ai` de tamanho `p[i-1] × p[i]`, a recorrência é:
 
 ```text
 m[i][i] = 0
 m[i][j] = min sobre k de i até j-1:  m[i][k] + m[k+1][j] + p[i-1] · p[k] · p[j]
 ```
 
-O último termo é o custo de juntar as duas metades: uma `p[i-1] × p[k]` com
-uma `p[k] × p[j]`. A tabela `s[i][j]` guarda o `k` vencedor, para remontar
-os parênteses no fim.
+O último termo é o custo de juntar as metades: uma `p[i-1] × p[k]` com uma
+`p[k] × p[j]`. A tabela `s[i][j]` guarda o `k` vencedor, para remontar os
+parênteses.
 
-**A ordem de preencher.** `m[i][j]` depende de cadeias **menores** que ela.
-Por isso o laço externo é o **tamanho** da cadeia (2, 3, ..., n), e não a
-linha `i`: a tabela é preenchida diagonal por diagonal. São O(n²) casas,
-cada uma com até n cortes: **O(n³)** de tempo e O(n²) de espaço, contra
-o crescimento exponencial da força bruta (o A369 compara).
+**A ordem de preencher.** `m[i][j]` depende de cadeias **menores**, então o
+laço externo é o **tamanho** da cadeia (2, 3, ..., n): a tabela enche diagonal
+por diagonal. São O(n²) casas com até n cortes: **O(n³)** de tempo e O(n²) de
+espaço, contra o exponencial da força bruta (o A369 compara).
 
-No desenho, a diagonal principal é zero (uma matriz sozinha não
-custa nada); cada diagonal acima usa as de baixo. A casa do canto, `m[1][4]`,
-é a resposta, e a seta mostra de onde ela veio:
+No desenho, a diagonal principal é zero e cada diagonal acima usa as de
+baixo. A casa do canto, `m[1][4]`, é a resposta:
 
 <p align="center"><img src="29-grafos-e-np/0185-cadeia-de-matrizes/ideia.svg" alt="Diagrama da ideia: Cadeia de matrizes" width="864"></p>
 
@@ -1731,15 +1347,15 @@ int main(void) {
 // Custo: 5000 multiplicações
 ```
 
-O fluxograma tem três laços aninhados, e o de fora é o tamanho da cadeia. O
-de dentro testa cada corte `k` e guarda o menor:
+O fluxograma tem três laços: tamanho da cadeia, início `i` e corte `k`, que
+guarda o menor:
 
 <p align="center"><img src="29-grafos-e-np/0185-cadeia-de-matrizes/fluxograma.svg" alt="Fluxograma: Cadeia de matrizes" width="654"></p>
 
 ### Passo a passo
 
-Com `p = {10, 30, 5, 60, 10}`. Cada linha é uma casa da tabela, na ordem em
-que o programa preenche; o vencedor de cada uma está em negrito:
+Com `p = {10, 30, 5, 60, 10}`. Cada linha é uma casa, na ordem em que o
+programa preenche; o vencedor está em negrito:
 
 | Casa | Cortes testados (k) | m | s |
 | --- | --- | --- | --- |
@@ -1750,35 +1366,24 @@ que o programa preenche; o vencedor de cada uma está em negrito:
 | m[2][4] | **k=2: 0 + 3000 + 30·5·10 = 4500**; k=3: 9000 + 0 + 30·60·10 = 27000 | 4500 | 2 |
 | m[1][4] | k=1: 0 + 4500 + 3000 = 7500; **k=2: 1500 + 3000 + 500 = 5000**; k=3: 4500 + 0 + 6000 = 10500 | 5000 | 2 |
 
-`s[1][4] = 2` corta em `(A1 A2)(A3 A4)`. A conta da esquerda para a direita,
-`((A1 A2) A3) A4`, custaria 1500 + 3000 + 6000 = 10500; a pior ordem,
-`(A1 (A2 A3)) A4`, custa 9000 + 18000 + 6000 = 33000. O A370 multiplica
-matrizes reais na ordem ótima, contando as multiplicações.
-
+`s[1][4] = 2` corta em `(A1 A2)(A3 A4)`. Da esquerda para a direita, `((A1 A2)
+A3) A4` custaria 10500; a pior ordem, `(A1 (A2 A3)) A4`, 33000. O A370
+multiplica matrizes reais na ordem ótima.
 
 > [!WARNING]
-> O erro clássico é preencher a tabela linha por linha (`for i`, `for j`).
-> Aí `m[1][3]` é calculado antes de `m[2][3]` existir, e o programa usa um
-> zero no lugar de 9000: a resposta sai menor do que é possível. Preencha por
-> tamanho de cadeia (ou de baixo para cima nas linhas, com `i` decrescente).
-> E cuidado com os índices: `Ai` é `p[i-1] × p[i]`, então `p` tem n + 1
-> números. É o bug do E1109.
+> Preencher linha por linha (`for i`, `for j`) calcula `m[1][3]` antes de
+> `m[2][3]` existir, usa zero no lugar de 9000, e a resposta sai menor do que
+> é possível. Preencha por tamanho de cadeia. E `Ai` é `p[i-1] × p[i]`: `p`
+> tem n + 1 números.
 
 > [!TIP]
-> **Por dentro do C:** `m` e `s` usam só a metade de cima da matriz, sem a
-> linha e a coluna 0: 10 das 25 casas. As outras 15 ficam desperdiçadas, o que
-> para n pequeno não importa. O
-> `(long)` antes de `p[i - 1] * p[k] * p[j]` está ali porque o produto de
-> três `int` é calculado em `int`: com dimensões de 2000 já passa de 2³¹ e
-> estoura **antes** de ser guardado no `long`. Converter o primeiro fator
-> faz a conta inteira em `long`. E `LONG_MAX`, de `<limits.h>`, é o
-> "infinito" inicial do mínimo.
+> O `(long)` antes de `p[i - 1] * p[k] * p[j]` evita que o produto de três
+> `int` estoure antes de ir para o `long`.
 
 > [!NOTE]
-> **Pergunta para você:** se a última tabela tivesse 60 × 100 em vez de
-> 60 × 10 (troque o último 10 de `p` por 100), a melhor ordem continua a
-> mesma? Qual a casa da tabela que muda primeiro?
-
+> **Pergunta para você:** se a última tabela tivesse 60 × 100 em vez de 60 ×
+> 10 (troque o último 10 de `p` por 100), a melhor ordem continua a mesma?
+> Qual a casa da tabela que muda primeiro?
 
 ### Hora de praticar
 
@@ -1943,46 +1548,8 @@ A (B C): 27000 multiplicações
 Melhor: A (B C), 3.0 vezes mais barata
 ```
 
-**Dicas:**
-
-1. (A B) é 50 x 40; multiplicá-la por C custa 50 · 40 · 30.
-2. (B C) é 10 x 30; A vezes ela custa 50 · 10 · 30.
-3. Faça a divisão em double.
-
 ```bash
 gcc ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1105.c -o ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1105 && ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1105
-```
-
-**Exercício E1106** · ★☆☆
-
-A tabela s diz onde cortar; o servidor precisa da LISTA de
-multiplicações, na ordem em que vão ser feitas. O programa abaixo já
-preenche m e s para cinco matrizes (p = 8, 20, 4, 15, 6, 25). Escreva a
-função int executa(int i, int j), que percorre a árvore de cortes em
-pós-ordem (primeiro as duas metades, depois a junção), numera cada
-intermediária (M1, M2, ...) e mostra cada multiplicação com as dimensões
-e o custo. Ela devolve o número da intermediária criada, ou 0 quando
-i == j (aí a "matriz" é a própria Ai).
-
-
-```text
-Saída esperada:
-M1 = A1 x A2  (8x20 por 20x4: 640)
-M2 = A3 x A4  (4x15 por 15x6: 360)
-M3 = M1 x M2  (8x4 por 4x6: 192)
-M4 = M3 x A5  (8x6 por 6x25: 1200)
-Total: 2392
-```
-
-**Dicas:**
-
-1. Com k = s[i][j], chame executa(i, k) e executa(k + 1, j) ANTES de
-   mostrar a multiplicação atual. Um contador global dá o número da nova.
-2. A junção é uma p[i-1] x p[k] por uma p[k] x p[j].
-3. Os custos somam m[1][5] = 2392.
-
-```bash
-gcc ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1106.c -o ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1106 && ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1106
 ```
 
 **Exercício E1107** · ★★☆
@@ -2001,14 +1568,6 @@ Custo mínimo: 3464
 Chamadas com memória: 113
 Casas calculadas: 21
 ```
-
-**Dicas:**
-
-1. Encha memo com -1 antes de começar (custo 0 é um valor válido, para
-   i == j). Conte chamadas na entrada da função e casas só quando for
-   calcular de verdade.
-2. As casas com i < j são n(n-1)/2 = 21. Sem a memória (A369), seriam
-   3^6 = 729 chamadas.
 
 ```bash
 gcc ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1107.c -o ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1107 && ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1107
@@ -2030,53 +1589,8 @@ Pior:   (((A1 A2) (A3 A4)) A5) = 82600
 A pior custa 40.9 vezes a melhor
 ```
 
-**Dicas:**
-
-1. A recorrência do máximo é a mesma, trocando min por max (e começando
-   com -1 em vez de LONG_MAX). A subestrutura ótima vale para os dois.
-2. Uma função mostra(s, i, j) recebe a tabela de cortes como parâmetro:
-   void mostra(int s[N + 1][N + 1], int i, int j).
-
 ```bash
 gcc ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1108.c -o ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1108 && ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1108
-```
-
-**Exercício E1109** · ★★★
-
-Ache o bug. Este programa calcula a cadeia do texto (p = 10, 30, 5, 60,
-10), mas preenche a tabela linha por linha. Ele diz que dá para fazer
-tudo com 2000 multiplicações, menos do que o ótimo de verdade:
-
-
-```text
-Saída que aparece:
-m[1][3] = 4500
-m[1][4] = 2000 (corte em k = 2)
-```
-
-
-
-```text
-Saída esperada:
-m[1][3] = 4500
-m[1][4] = 5000 (corte em k = 2)
-```
-
-
-O programa compila e roda sem erro; o problema é de lógica. Conserte-o
-mudando só a ordem dos laços (a recorrência está certa).
-
-**Dicas:**
-
-1. Ao calcular m[1][4] com k = 2, o programa precisa de m[3][4]. Em que
-   momento a linha 3 é preenchida?
-2. Casas ainda não calculadas valem 0 (a matriz é global): elas fingem
-   que a metade de baixo é de graça.
-3. Percorra as linhas de
-   baixo para cima (i de N até 1) ou faça o laço externo pelo tamanho.
-
-```bash
-gcc ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1109.c -o ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1109 && ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1109
 ```
 
 **Exercício E1110** · ★★★
@@ -2104,17 +1618,6 @@ Guloso: 6200
 PD: 3400
 ```
 
-**Dicas:**
-
-1. No guloso, trabalhe numa cópia do vetor de dimensões. Juntar as
-   matrizes de dimensões p[i-1] x p[i] e p[i] x p[i+1] custa
-   p[i-1] · p[i] · p[i+1] e simplesmente apaga p[i] do vetor.
-2. Em caso de empate, fique com o par mais à esquerda (o primeiro).
-3. O guloso gasta quase o dobro: a
-   escolha barata de agora (10x20 por 20x5) deixa a dimensão 10 presa no
-   resultado. A PD começa pelo fim: A1 (A2 (A3 (A4 A5))), usando o 2
-   para eliminar o 30, o 40, o 5 e o 20, um de cada vez.
-
 ```bash
 gcc ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1110.c -o ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1110 && ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1110
 ```
@@ -2123,37 +1626,29 @@ gcc ~/LPEDC/29-grafos-e-np/0185-cadeia-de-matrizes/E1110.c -o ~/LPEDC/29-grafos-
 
 ## 0186 · P e NP
 
-Você organiza o churrasco da firma e quer um grupo que respeite cinco
-condições: alguém leva a churrasqueira, dois colegas brigados não vão
-juntos, alguém sabe acender o carvão... Um amigo diz "chama a Ana e o Davi".
-Conferir o palpite leva dez segundos: basta passar condição por condição.
-Achar um grupo que funcione, sem palpite nenhum, pode exigir testar todas as
-combinações de quem vai e quem não vai.
+Você organiza o churrasco da firma com cinco condições: alguém leva a
+churrasqueira, dois colegas brigados não vão juntos... Um amigo diz "chama a
+Ana e o Davi", e conferir leva dez segundos. Achar um grupo sem palpite pode
+exigir todas as combinações. A pergunta mais famosa da computação gira em
+torno dessa assimetria entre **achar** e **conferir**.
 
-A pergunta mais famosa da computação gira em torno dessa assimetria entre
-**achar** e **conferir**.
-
-**Problema de decisão** é um problema cuja resposta é **sim ou não**: "existe
-um grupo que satisfaz as condições?", "existe ciclo hamiltoniano?", "existe
-rota de no máximo 300 km?". Os problemas de otimização ("qual a menor rota?")
-viram decisão com um limite, e a teoria toda é feita com eles.
+**Problema de decisão** é o de resposta **sim ou não**: "existe ciclo
+hamiltoniano?", "existe rota de no máximo 300 km?". Otimização ("qual a menor
+rota?") vira decisão com um limite.
 
 **P** é a classe dos problemas de decisão que se **resolvem** em tempo
 polinomial, O(n^k) para algum k fixo: ordenar, achar caminho mínimo, testar
-se há circuito euleriano (0182), achar pontes (0184).
+circuito euleriano (0182), achar pontes (0184).
 
-**NP** é a classe dos problemas em que, quando a resposta é sim, existe um
-**certificado** (uma prova curta) que um **verificador** confere em tempo
-polinomial. No churrasco, o certificado é a lista de quem vai; no
-hamiltoniano, a rota (o E1093 é um verificador). Todo problema de P está em
-NP: quem resolve rápido também confere rápido, então **P ⊆ NP**.
+**NP** é a classe em que um "sim" tem um **certificado** (prova curta) que um
+**verificador** confere em tempo polinomial: no churrasco, a lista de quem
+vai; no hamiltoniano, a rota (o E1093 é um verificador). Quem resolve rápido
+também confere rápido: **P ⊆ NP**.
 
-**NP-difícil** é um problema ao qual **todo** problema de NP pode ser reduzido
-em tempo polinomial (0187): resolvê-lo rápido resolveria todos. **NP-completo**
-é quem está em NP **e** é NP-difícil: os mais difíceis de NP. Se um único
-NP-completo tiver algoritmo polinomial, então P = NP. Ninguém sabe se isso é
-verdade; a maioria aposta que P ≠ NP, e a questão vale um prêmio de um
-milhão de dólares.
+**NP-difícil** é o problema ao qual **todo** problema de NP se reduz em tempo
+polinomial (0187). **NP-completo** é quem está em NP **e** é NP-difícil. Se um
+NP-completo tiver algoritmo polinomial, P = NP. Ninguém sabe; a maioria aposta
+que P ≠ NP, e a questão vale um milhão de dólares.
 
 | Classe | O que se exige | Exemplos |
 | --- | --- | --- |
@@ -2162,22 +1657,20 @@ milhão de dólares.
 | NP-completo | estar em NP e ser NP-difícil | SAT, 3-SAT, clique, cobertura de vértices, ciclo hamiltoniano |
 | NP-difícil | todo NP se reduz a ele (pode nem estar em NP) | os NP-completos, caixeiro viajante (otimização) |
 
-**SAT** (satisfatibilidade) foi o primeiro NP-completo (teorema de
-Cook-Levin, 1971). A fórmula está em **forma normal conjuntiva** (FNC): um E
-de **cláusulas**, cada cláusula um OU de **literais** (`x` ou `não x`). A
-pergunta: existe uma atribuição de verdadeiro e falso que deixa todas as
-cláusulas verdadeiras? **3-SAT** é o caso em que toda cláusula tem no máximo
-três literais (no Cormen, exatamente três), e continua NP-completo.
+**SAT** (satisfatibilidade) foi o primeiro NP-completo (Cook-Levin, 1971). A
+fórmula está em **forma normal conjuntiva** (FNC): um E de **cláusulas**,
+cada uma um OU de **literais** (`x` ou `não x`). Existe uma atribuição que
+deixa todas verdadeiras? **3-SAT** tem no máximo três literais por cláusula
+(no Cormen, exatamente três) e continua NP-completo.
 
-As quatro variáveis são Ana, Beto, Caio e Davi. O
-palpite do amigo cai na quinta cláusula; a força bruta percorre as 2⁴ = 16
-atribuições como os bits de um contador e acha uma na décima primeira:
+As variáveis são Ana, Beto, Caio e Davi. O palpite do amigo falha na quinta
+cláusula; a força bruta percorre as 2⁴ = 16 atribuições e acha uma na décima
+primeira:
 
 <p align="center"><img src="29-grafos-e-np/0186-p-e-np/ideia.svg" alt="Diagrama da ideia: P e NP" width="870"></p>
 
-A fórmula fica numa matriz com os literais no formato `+v` / `-v` (o mesmo
-dos arquivos DIMACS usados pelos programas que resolvem SAT), e o zero
-encerra cada cláusula:
+A fórmula é uma matriz de literais `+v` / `-v` (como no DIMACS), com zero ao
+fim de cada cláusula:
 
 ```c
 #include <stdbool.h>
@@ -2242,36 +1735,28 @@ int main(void) {
 // Achei depois de 11 de 16 tentativas: Ana=não Beto=sim Caio=não Davi=sim
 ```
 
-O fluxograma é o verificador. Ele passa uma vez por cada literal e custa
-O(tamanho da fórmula). A força bruta o chama até 2ⁿ vezes, e daí vem o
-exponencial:
-
+O fluxograma é o verificador, O(tamanho da fórmula). A força bruta o chama
+até 2ⁿ vezes:
 
 <p align="center"><img src="29-grafos-e-np/0186-p-e-np/fluxograma.svg" alt="Fluxograma: P e NP" width="467"></p>
 
-O A371 mede quanto 2ⁿ cresce. O A372 mostra outro problema NP-completo com
-o mesmo par verificador e força bruta: escolher boletos que somam
-exatamente o valor de um Pix.
+O A371 mede o crescimento de 2ⁿ. O A372 mostra outro NP-completo: boletos que
+somam exatamente o valor de um Pix.
 
 > [!WARNING]
-> **NP não quer dizer "não polinomial".** Quer dizer *polinomial não
-> determinístico*: um "chute" certo verificado em tempo polinomial. Outro
-> tropeço de prova: NP-completo não é "impossível", é "não se conhece algoritmo polinomial". E reduzir A a B
-> mostra que B é **pelo menos tão difícil** quanto A, não o contrário (0187).
+> **NP não quer dizer "não polinomial"**, e sim *polinomial não
+> determinístico*. NP-completo não é "impossível", é "sem algoritmo
+> polinomial conhecido". E reduzir A a B mostra que B é **pelo menos tão
+> difícil** quanto A, não o contrário (0187).
 
 > [!TIP]
-> **Por dentro do C:** `1 << NV` é 2ⁿ, e a máscara é a atribuição: o bit
-> `v - 1` diz se a variável `v` é verdadeira, lido com `(mascara >> (v - 1)) & 1`.
-> Percorrer de 0 a 2ⁿ - 1 visita cada atribuição uma vez, sem recursão. Num
-> `int` de 32 bits isso funciona até n = 30; com `1 << 31` o resultado não
-> cabe num `int` com sinal (comportamento indefinido). Para mais variáveis
-> use `unsigned long long` e `1ULL << n`, e espere sentado: 2⁶⁰ testes a um
-> bilhão por segundo levam 36 anos.
+> A máscara é a atribuição: o bit `v - 1` diz se `v` é verdadeira, lido com
+> `(mascara >> (v - 1)) & 1`.
 
 > [!NOTE]
 > **Pergunta para você:** se você trocar a ordem dos bits (Ana no bit mais
 > alto e Davi no mais baixo), a força bruta acha a mesma atribuição? Em
-> quantas tentativas? Responda antes de rodar.
+> quantas tentativas?
 
 ### Hora de praticar
 
@@ -2446,55 +1931,8 @@ Atribuição 2: não satisfaz (cláusula 4 falsa)
 Atribuição 3: não satisfaz (cláusula 3 falsa)
 ```
 
-**Dicas:**
-
-1. Use vetores bool x[4] com a posição 0 sobrando, para que x[v] seja a
-   variável v.
-2. O literal lit é verdadeiro se lit > 0 ? x[lit] : !x[-lit]. Uma
-   cláusula é verdadeira se ALGUM literal for; a fórmula, se TODAS forem.
-
 ```bash
 gcc ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1111.c -o ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1111 && ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1111
-```
-
-**Exercício E1112** · ★☆☆
-
-CLIQUE é NP-completo: "existe um grupo de k pessoas em que todo mundo é
-amigo de todo mundo?". Achar é difícil; conferir é fácil. Seis colegas
-(Ana, Bia, Cadu, Dani, Edu, Fê; 0 a 5) têm estas amizades:
-
-
-```text
-Ana-Bia, Ana-Cadu, Bia-Cadu, Bia-Dani, Cadu-Dani, Ana-Dani,
-Dani-Edu, Edu-Fê, Cadu-Edu
-```
-
-
-Escreva o verificador bool eh_clique(const int grupo[], int k), que
-confere todos os pares do grupo e, ao achar um par que não é amigo,
-mostra o par e devolve false. Teste os três grupos da saída.
-
-
-```text
-Saída esperada:
-Grupo: Ana Bia Cadu Dani
-  é clique
-Grupo: Bia Cadu Dani Edu
-  Bia e Edu não são amigos
-  não é clique
-Grupo: Cadu Dani Edu
-  é clique
-```
-
-**Dicas:**
-
-1. Dois laços, j começando em i + 1: são k(k-1)/2 pares, O(k²). Isso é
-   polinomial no tamanho do certificado.
-2. Mostre o nome do grupo antes de chamar o verificador, porque ele
-   imprime o par culpado.
-
-```bash
-gcc ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1112.c -o ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1112 && ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1112
 ```
 
 **Exercício E1113** · ★★☆
@@ -2513,13 +1951,6 @@ Grupo 1: Beto Davi
 Grupo 2: Beto Caio Davi
 Total: 2 de 16 atribuições
 ```
-
-**Dicas:**
-
-1. Copie o verificador do texto. O laço externo vai de 0 a (1 << 4) - 1
-   e não para no primeiro sim.
-2. A Ana nunca aparece: com ela, a cláusula 2 tira o Caio, a 3 obriga o
-   Davi e a 5 exige o Caio de volta. Confira isso nos números.
 
 ```bash
 gcc ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1113.c -o ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1113 && ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1113
@@ -2567,13 +1998,6 @@ Primeira escala válida (tentativa 141):
   Desenho: manhã
 ```
 
-**Dicas:**
-
-1. Base 3: turno[p] = resto % 3; resto /= 3, para p de 0 a 5. É o mesmo
-   truque da máscara de bits, com três valores por posição.
-2. Com k cores e n vértices, a força bruta testa k^n escalas; o
-   verificador, só os pares, O(n²).
-
 ```bash
 gcc ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1114.c -o ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1114 && ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1114
 ```
@@ -2610,114 +2034,53 @@ Saída esperada:
 Equivalentes em 32 de 32 atribuições dos x
 ```
 
-**Dicas:**
-
-1. Padrão: a primeira é (x1, x2, y1); a do meio c é (não y_c, x_(c+2),
-   y_(c+1)); a última é (não y_(K-3), x_(K-1), x_K). Escreva com K e um
-   #define, e o programa serve para qualquer K >= 4.
-2. Para cada máscara dos x, um laço interno tenta as 2^(K-3) máscaras
-   dos y. O y funciona como "ainda devo um verdadeiro mais à frente".
-3. A transformação cria K - 3
-   variáveis e K - 2 cláusulas: tamanho linear, logo polinomial.
-
 ```bash
 gcc ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1115.c -o ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1115 && ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1115
-```
-
-**Exercício E1116** · ★★★
-
-Ache o bug. Este verificador do churrasco do texto aprova qualquer
-palpite. Só o palpite 2 satisfaz todas as cláusulas, mas a saída diz que
-os três satisfazem:
-
-
-```text
-Saída que aparece:
-Palpite 1: Ana Davi -> satisfaz
-Palpite 2: Beto Davi -> satisfaz
-Palpite 3: Ana Beto Caio -> satisfaz
-```
-
-
-
-```text
-Saída esperada:
-Palpite 1: Ana Davi -> não satisfaz
-Palpite 2: Beto Davi -> satisfaz
-Palpite 3: Ana Beto Caio -> não satisfaz
-```
-
-
-O programa compila e roda sem erro; o problema é de lógica. Conserte o
-verificador.
-
-**Dicas:**
-
-1. Uma fórmula em FNC é um E de cláusulas. Quantas cláusulas verdadeiras
-   bastam para este verificador dizer "satisfaz"?
-2. Dentro da cláusula vale o OU (basta um literal); entre as cláusulas
-   vale o E (todas). O laço pode sair cedo só no "não".
-
-```bash
-gcc ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1116.c -o ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1116 && ~/LPEDC/29-grafos-e-np/0186-p-e-np/E1116
 ```
 
 ---
 
 ## 0187 · Reduções
 
-A síndica quer montar a comissão do condomínio com o **maior** número de
-moradores possível, sem nenhum par que já brigou em assembleia. Ela não
-sabe resolver isso. Mas o sobrinho dela tem um programa que acha o **maior
-grupo de amigos** numa rede social. Dá para usar o programa do sobrinho no
-problema da síndica? Dá, se ela souber **traduzir** a pergunta.
+A síndica quer a **maior** comissão do condomínio sem nenhum par que já
+brigou. O sobrinho tem um programa que acha o **maior grupo de amigos** numa
+rede social. Dá para usá-lo, se ela **traduzir** a pergunta: uma **redução**.
 
-Traduzir um problema em outro é uma **redução**, a ferramenta que separa os
-problemas fáceis dos difíceis.
-
-**Redução polinomial.** Reduzir A a B (escreve-se **A ≤p B**) é dar um
-algoritmo de tempo polinomial que transforma qualquer instância de A numa
-instância de B com **a mesma resposta**. Com isso, um resolvedor de B
-resolve A: transforma, resolve, devolve. A redução diz que A **não é mais
-difícil** que B.
-
-Ela serve para duas coisas, em sentidos opostos:
+**Redução polinomial.** Reduzir A a B (**A ≤p B**) é dar um algoritmo
+polinomial que transforma toda instância de A numa de B com **a mesma
+resposta**. A **não é mais difícil** que B. Serve em dois sentidos:
 
 - **resolver**: tenho um programa para B e quero resolver A;
-- **provar dificuldade**: se A já é NP-difícil e A ≤p B, então B também é
-  NP-difícil. Se B fosse fácil, A seria fácil, e A não é (até onde se sabe).
+- **provar dificuldade**: se A é NP-difícil e A ≤p B, então B também é. Se B
+  fosse fácil, A seria fácil.
 
-Três problemas de grafo, todos NP-completos na versão de decisão ("existe
-um de tamanho k?"):
+Três problemas de grafo, NP-completos na versão de decisão ("existe um de
+tamanho k?"):
 
-- **conjunto independente**: vértices sem **nenhuma** aresta entre eles
-  (a comissão sem brigas);
-- **clique**: vértices com **todas** as arestas entre eles (o grupo de
-  amigos);
-- **cobertura de vértices**: vértices que **tocam toda aresta** (quem
-  precisa de um mediador para que toda briga tenha um lado vigiado).
+- **conjunto independente**: vértices sem **nenhuma** aresta entre eles (a
+  comissão sem brigas);
+- **clique**: vértices com **todas** as arestas entre eles (os amigos);
+- **cobertura de vértices**: vértices que **tocam toda aresta**.
 
-As duas pontes entre eles cabem numa linha cada. O **complemento** de G tem
-aresta entre os pares que G não liga, e só entre eles. Então:
+O **complemento** de G tem aresta entre os pares que G não liga, e só entre
+eles. Então:
 
 - S é independente em G ⇔ S é **clique no complemento** de G;
-- S é independente em G ⇔ **V − S** é uma **cobertura** de G (se uma aresta
-  não tivesse ponta fora de S, as duas pontas estariam em S, e S não seria
-  independente).
+- S é independente em G ⇔ **V − S** é uma **cobertura** de G (sem ponta fora
+  de S, uma aresta teria as duas pontas em S).
 
-Logo, um conjunto independente de tamanho k existe ⇔ uma clique de tamanho
-k existe no complemento ⇔ uma cobertura de tamanho n − k existe em G. Montar
-o complemento custa O(V²): é uma redução polinomial.
+Logo, um independente de tamanho k existe ⇔ uma clique de tamanho k existe no
+complemento ⇔ uma cobertura de tamanho n − k existe em G. O complemento custa
+O(V²).
 
-Seis moradores, sete brigas. À esquerda, G e a maior
-comissão; no meio, o complemento, em que a mesma comissão vira uma clique; à
-direita, os outros três formam a cobertura:
+Seis moradores, sete brigas. À esquerda, G e a maior comissão; no meio, o
+complemento, em que ela vira clique; à direita, os outros três são a
+cobertura:
 
 <p align="center"><img src="29-grafos-e-np/0187-reducoes/ideia.svg" alt="Diagrama da ideia: Reduções" width="914"></p>
 
-O programa usa a força bruta de clique como uma **caixa-preta**: ele nem
-sabe que existe "conjunto independente". A redução se resume à montagem de
-`paz`:
+O programa usa a força bruta de clique como **caixa-preta**. A redução é a
+montagem de `paz`:
 
 ```c
 #include <stdbool.h>
@@ -2773,40 +2136,31 @@ int main(void) {
 // Mediadores (cobertura): Jorge Léo Nina (3)
 ```
 
-Toda redução segue os três passos do fluxograma: transformar a entrada,
-chamar o resolvedor do outro problema e traduzir a resposta de volta. Só o
-primeiro e o último são novos, e os dois são polinomiais:
+O fluxograma mostra os três passos de toda redução: transformar a entrada,
+chamar o resolvedor do outro problema e traduzir a resposta:
 
 <p align="center"><img src="29-grafos-e-np/0187-reducoes/fluxograma.svg" alt="Fluxograma: Reduções" width="484"></p>
 
-**Do 3-SAT à clique.** A prova clássica de que clique é NP-completo reduz 3-SAT a
-clique. Para cada cláusula, um grupo de vértices, um por literal; ligue dois
-vértices quando estão em cláusulas **diferentes** e **não se contradizem**
-(`x` e `não x` nunca se ligam). Uma clique com um vértice de cada cláusula
-escolhe um literal verdadeiro por cláusula sem contradição: é uma atribuição
-que satisfaz a fórmula. O A373 faz essa construção em C; o A374 reduz
-caminho hamiltoniano a ciclo hamiltoniano.
+**Do 3-SAT à clique.** Cada cláusula vira um grupo de vértices, um por
+literal; ligue vértices de cláusulas **diferentes** que **não se
+contradizem**. Uma clique com um vértice por cláusula escolhe um literal
+verdadeiro por cláusula: uma atribuição que satisfaz a fórmula. O A373 faz
+essa construção; o A374 reduz caminho hamiltoniano a ciclo hamiltoniano.
 
 > [!WARNING]
-> A pegadinha mais comum é o sentido da redução. Para provar que um problema
-> novo X é difícil, reduza um difícil conhecido **a X** (conhecido ≤p X),
-> nunca o contrário. Reduzir X a SAT só mostra que X não é mais difícil que
-> SAT, o que vale para qualquer problema de NP. E a redução precisa ser
-> polinomial: transformar em tempo exponencial não prova nada.
+> A pegadinha é o sentido. Para provar que X é difícil, reduza um difícil
+> conhecido **a X** (conhecido ≤p X). Reduzir X a SAT só mostra que X não é
+> mais difícil que SAT, o que vale para todo NP. E a redução precisa ser
+> polinomial.
 
 > [!TIP]
-> **Por dentro do C:** os conjuntos são máscaras de bits num `int`: o bit
-> `v` ligado quer dizer "v está no grupo". O complemento de um conjunto é
-> `todos & ~comissao`, em que `todos = (1 << V) - 1` tem os V bits de baixo
-> ligados; sem o `& todos`, o `~` ligaria também os 26 bits de cima. Já o
-> complemento do **grafo** é outra matriz, `paz[a][b] = a != b && !briga[a][b]`:
-> o `a != b` evita o laço de um vértice para ele mesmo.
+> Os conjuntos são máscaras de bits: o complemento é `todos & ~comissao`, com
+> `todos = (1 << V) - 1`. O do **grafo** é `paz[a][b] = a != b && !briga[a][b]`.
 
 > [!NOTE]
-> **Pergunta para você:** se a Kátia e o Márcio também brigarem
-> (`{2, 4}`), qual o tamanho da maior comissão? E da menor cobertura? A
-> soma dos dois continua sendo 6?
-
+> **Pergunta para você:** se a Kátia e o Márcio também brigarem (`{2, 4}`),
+> qual o tamanho da maior comissão? E da menor cobertura? A soma dos dois
+> continua sendo 6?
 
 ### Hora de praticar
 
@@ -2987,73 +2341,18 @@ Jogos que faltam:
 6 jogos feitos + 4 faltando = 10
 ```
 
-**Dicas:**
-
-1. c[a][b] = 1 quando a != b e g[a][b] == 0. Sem o a != b, todo time
-   "jogaria contra si mesmo" no complemento.
-2. O grafo completo com V vértices tem V(V-1)/2 arestas: G e o
-   complemento dividem essas arestas entre si.
-
 ```bash
 gcc ~/LPEDC/29-grafos-e-np/0187-reducoes/E1117.c -o ~/LPEDC/29-grafos-e-np/0187-reducoes/E1117 && ~/LPEDC/29-grafos-e-np/0187-reducoes/E1117
-```
-
-**Exercício E1118** · ★☆☆
-
-A prefeitura quer câmeras em esquinas de modo que toda rua tenha câmera
-em pelo menos uma ponta (uma cobertura de vértices). Esquinas A a G
-(0 a 6) e ruas:
-
-
-```text
-A-B, B-C, C-D, D-E, E-F, F-G, B-F, C-E
-```
-
-
-Escreva dois verificadores, bool cobre(const bool em[]) e
-bool independente(const bool em[]), e confira o teorema do texto nos
-dois planos abaixo: um conjunto é cobertura exatamente quando as
-esquinas que sobram formam um conjunto independente.
-
-
-```text
-Plano 1: câmeras em B, D, E, F
-Plano 2: câmeras em B, D, F
-```
-
-
-
-```text
-Saída esperada:
-Plano 1: câmeras em B D E F
-  cobre todas as ruas? sim
-  sem câmera: A C G
-  independente? sim
-Plano 2: câmeras em B D F
-  cobre todas as ruas? não
-  sem câmera: A C E G
-  independente? não
-```
-
-**Dicas:**
-
-1. Cobertura falha se existe rua a-b com nenhuma das pontas marcada.
-   Independente falha se existe rua a-b com as duas pontas marcadas.
-2. O "resto" é o vetor com cada posição negada: resto[v] = !em[v].
-3. No plano 2, a rua C-E fica sem
-   câmera, e é a mesma rua que liga C e E no resto.
-
-```bash
-gcc ~/LPEDC/29-grafos-e-np/0187-reducoes/E1118.c -o ~/LPEDC/29-grafos-e-np/0187-reducoes/E1118 && ~/LPEDC/29-grafos-e-np/0187-reducoes/E1118
 ```
 
 **Exercício E1119** · ★★☆
 
 O shopping vai abrir um corredor temático e quer o MAIOR grupo de lojas
-sem concorrência entre si (um conjunto independente). Você só tem a
-função maior_clique, pronta, que devolve a maior clique de um grafo como
-máscara de bits. Complete o main: monte o complemento de concorre em g2,
-chame a caixa-preta e mostre as lojas escolhidas e quantas são.
+sem concorrência entre si (um conjunto independente). Resolva por
+redução a clique: escreva int maior_clique(int g[V][V]), que testa as
+máscaras de bits de 1 a 2^V - 1 e devolve a da maior clique (no empate,
+a primeira máscara), monte o complemento de concorre em g2, chame
+maior_clique e mostre as lojas escolhidas e quantas são.
 
 Lojas: Açaí, Bazar, Café, Doces, Ervas, Farmácia, Gelato (0 a 6).
 Concorrem: Açaí-Café, Açaí-Doces, Açaí-Gelato, Bazar-Ervas, Café-Gelato,
@@ -3064,13 +2363,6 @@ Doces-Gelato, Ervas-Farmácia, Farmácia-Gelato.
 Saída esperada:
 Lojas no corredor: Bazar Café Doces Farmácia (4)
 ```
-
-**Dicas:**
-
-1. Não mexa em maior_clique: a graça da redução é usar o resolvedor de
-   outro problema sem abrir a caixa.
-2. g2[a][b] = a != b && !concorre[a][b]. O bit v da máscara devolvida
-   diz se a loja v está no grupo: (s >> v) & 1.
 
 ```bash
 gcc ~/LPEDC/29-grafos-e-np/0187-reducoes/E1119.c -o ~/LPEDC/29-grafos-e-np/0187-reducoes/E1119 && ~/LPEDC/29-grafos-e-np/0187-reducoes/E1119
@@ -3100,54 +2392,8 @@ F1: 12 vértices, 42 arestas, clique de 4? sim (satisfatível)
 F2: 24 vértices, 204 arestas, clique de 8? não (insatisfatível)
 ```
 
-**Dicas:**
-
-1. O vértice a corresponde ao literal f[a / 3][a % 3]; a / 3 é a
-   cláusula dele. Use uma matriz global adj[24][24].
-2. Para procurar a clique, conte em base 3 com m algarismos (3^m
-   escolhas): o algarismo c diz qual literal da cláusula c entra.
-3. F2 é insatisfatível: cada
-   atribuição dos três x torna falsa exatamente uma das 8 cláusulas.
-
 ```bash
 gcc ~/LPEDC/29-grafos-e-np/0187-reducoes/E1120.c -o ~/LPEDC/29-grafos-e-np/0187-reducoes/E1120 && ~/LPEDC/29-grafos-e-np/0187-reducoes/E1120
-```
-
-**Exercício E1121** · ★★★
-
-Ache o bug. Este programa monta o grafo da redução 3-SAT -> clique para a
-fórmula (x1 ou x2) (x1 ou não x2) (não x1 ou x2) (não x1 ou não x2), que
-não tem solução (cada atribuição de x1, x2 derruba uma cláusula). Mas o
-programa acha uma clique de tamanho 4 e diz que ela é satisfatível:
-
-
-```text
-Saída que aparece:
-Clique: v0 v1 v2 v3 -> satisfatível
-```
-
-
-
-```text
-Saída esperada:
-Sem clique de tamanho 4 -> insatisfatível
-```
-
-
-O programa compila e roda sem erro; o problema é de lógica, numa linha só
-da construção do grafo. Conserte-a.
-
-**Dicas:**
-
-1. Os vértices v0, v1, v2 são os três literais da PRIMEIRA cláusula. Uma
-   clique que usa dois vértices da mesma cláusula escolhe o quê?
-2. A regra da redução tem duas condições: cláusulas diferentes E sem
-   contradição. O código só confere uma.
-3. Troque a != b por
-   a / 3 != b / 3.
-
-```bash
-gcc ~/LPEDC/29-grafos-e-np/0187-reducoes/E1121.c -o ~/LPEDC/29-grafos-e-np/0187-reducoes/E1121 && ~/LPEDC/29-grafos-e-np/0187-reducoes/E1121
 ```
 
 **Exercício E1122** · ★★★
@@ -3182,15 +2428,6 @@ Completo K4: 12 variáveis, 34 cláusulas
   sem 3-coloração
 ```
 
-**Dicas:**
-
-1. Guarde as cláusulas numa matriz int clausula[64][3] com um contador
-   nc; as de dois literais ficam com 0 na terceira posição.
-2. São V·(1 + 3) + 3E cláusulas: 16 + 15 = 31 e 16 + 18 = 34. A
-   redução é polinomial; quem paga o exponencial é a força bruta.
-3. Percorra as máscaras de 0 em
-   diante, com o bit i - 1 sendo a variável i.
-
 ```bash
 gcc ~/LPEDC/29-grafos-e-np/0187-reducoes/E1122.c -o ~/LPEDC/29-grafos-e-np/0187-reducoes/E1122 && ~/LPEDC/29-grafos-e-np/0187-reducoes/E1122
 ```
@@ -3199,51 +2436,38 @@ gcc ~/LPEDC/29-grafos-e-np/0187-reducoes/E1122.c -o ~/LPEDC/29-grafos-e-np/0187-
 
 ## 0188 · Aproximação
 
-O barco de carga sai de Manaus para Parintins e leva no máximo 10 toneladas
-por viagem. No porto chegam oito cargas: 4, 4, 6, 9, 2, 6, 7 e 7 toneladas.
-Cada viagem custa caro, então o dono quer o menor número de viagens. Esse é
-o **bin packing** (empacotamento em caixas), e ele é NP-difícil: ninguém
-conhece um jeito rápido de achar sempre o mínimo.
+O barco de Manaus a Parintins leva no máximo 10 toneladas por viagem. Chegam
+oito cargas: 4, 4, 6, 9, 2, 6, 7 e 7, e o dono quer o menor número de viagens.
+É o **bin packing** (empacotamento em caixas), NP-difícil. Ele aceita uma
+resposta **um pouco pior**, se for rápida e com **garantia**.
 
-O dono do barco não pode esperar a força bruta. Ele aceita uma resposta
-**um pouco pior**, desde que venha rápido e com **garantia** de não ser
-muito pior.
+**Algoritmo de aproximação** é um algoritmo polinomial com custo no máximo
+**ρ vezes o ótimo** (minimização). O ρ é o **fator de aproximação**: um
+2-aproximado nunca gasta mais que o dobro do ótimo, em **qualquer** entrada. A
+prova compara com um **limite inferior** do ótimo.
 
-**Algoritmo de aproximação.** É um algoritmo polinomial que devolve uma
-solução viável com custo no máximo **ρ vezes o ótimo** (num problema de
-minimização). O ρ é o **fator de aproximação**: um algoritmo
-2-aproximado nunca gasta mais que o dobro do ótimo, em **qualquer**
-entrada. O truque é provar isso sem conhecer o ótimo, comparando com um
-**limite inferior** dele.
+**Bin packing.** Com capacidade C, nenhuma solução usa menos que `soma / C`
+caixas, arredondado para cima: o limite inferior. Dois gulosos:
 
-**Bin packing.** Com capacidade C, nenhuma solução usa menos que
-`soma / C` caixas, arredondado para cima: é o limite inferior. Dois gulosos:
+- **first fit** (FF): cada item vai para a **primeira** caixa em que cabe, ou
+  abre outra. Nunca sobram duas caixas com metade ou menos (a segunda caberia
+  na primeira): no máximo 2 × ótimo, e cerca de 1,7 × na análise fina;
+- **first fit decrescente** (FFD): ordena do maior para o menor e faz o mesmo.
+  A garantia é de cerca de 11/9 × ótimo (mais uma constante).
 
-- **first fit** (FF): cada item vai para a **primeira** caixa em que cabe;
-  se não cabe em nenhuma, abre outra. Nunca sobram duas caixas com metade
-  ou menos (o conteúdo da segunda caberia na primeira), e isso já garante
-  no máximo 2 × ótimo; a análise fina dá cerca de 1,7 × ótimo;
-- **first fit decrescente** (FFD): ordena os itens do maior para o menor e
-  faz o mesmo. Os itens grandes abrem as caixas e os pequenos tapam os
-  buracos. A garantia sobe para cerca de 11/9 × ótimo (mais uma constante).
+**Cobertura de vértices 2-aproximada** (0187): enquanto houver aresta
+descoberta u-v, ponha **as duas pontas**. As arestas escolhidas não têm ponta
+em comum, e o ótimo precisa de uma de cada: no máximo o dobro (A375).
 
-**Cobertura de vértices 2-aproximada** (0187). Enquanto houver aresta
-descoberta u-v, ponha **as duas pontas** na cobertura. As arestas escolhidas
-não têm ponta em comum, e o ótimo precisa de pelo menos uma ponta de cada:
-a resposta tem no máximo o dobro. O A375 roda isso contra a força bruta.
+**Caixeiro viajante métrico 2-aproximado.** Com a **desigualdade triangular**
+(ir direto nunca é mais longo que dar a volta), monte a árvore geradora mínima
+(Prim, 0153), percorra-a em **pré-ordem** e volte ao começo. A árvore custa
+menos que o ciclo ótimo, a volta pela árvore custa o dobro dela, e os atalhos
+só encurtam: no máximo 2 × ótimo (A376). Sem a desigualdade triangular, nenhum
+fator constante é possível, a menos que P = NP.
 
-**Caixeiro viajante métrico 2-aproximado.** Quando as distâncias respeitam a
-**desigualdade triangular** (ir direto nunca é mais longo que dar a volta),
-monte a árvore geradora mínima (Prim, 0153), percorra-a em **pré-ordem** e
-volte ao começo. A árvore custa menos que o ciclo ótimo (tire uma aresta do
-ciclo e sobra uma árvore), a volta completa pela árvore custa o dobro dela, e
-os atalhos da pré-ordem só encurtam. Total: no máximo 2 × ótimo. É o A376.
-Sem a desigualdade triangular, nenhum fator constante é possível, a menos
-que P = NP.
-
-No desenho, em cima, está o first fit na ordem de chegada: os dois 4 e
-o 2 lotam a primeira viagem, e cada carga grande acaba sozinha. Embaixo, o
-first fit decrescente bate o limite inferior, 45 / 10 → 5 viagens: ótimo.
+No desenho, em cima, o first fit na ordem de chegada; embaixo, o decrescente,
+que bate o limite inferior, 45 / 10 → 5 viagens: ótimo.
 
 <p align="center"><img src="29-grafos-e-np/0188-aproximacao/ideia.svg" alt="Diagrama da ideia: Aproximação" width="864"></p>
 
@@ -3314,34 +2538,21 @@ int main(void) {
 //   viagem 5: 6 4  (10 t)
 ```
 
-O fluxograma mostra o first fit para uma carga. Ele procura a primeira
-viagem com espaço; se chegar ao fim da lista, abre uma nova. Com n cargas,
-custa O(n²) no pior caso, nada perto do exponencial:
+O fluxograma é o first fit para uma carga: procura a primeira viagem com
+espaço ou abre uma nova. Custa O(n²) no pior caso:
 
 <p align="center"><img src="29-grafos-e-np/0188-aproximacao/fluxograma.svg" alt="Fluxograma: Aproximação" width="611"></p>
 
 > [!WARNING]
 > "Aproximado" não é "chute": o fator vale para **toda** entrada e vem com
-> prova. E o fator é do pior caso; na prática o resultado costuma ser bem
-> melhor. A pegadinha inversa também cai em prova: o guloso "pega o vértice
-> de maior grau" para cobertura parece bom, mas **não** tem fator
-> constante; pode ficar log n vezes pior que o ótimo. O 2-aproximado
-> correto é o "pega as duas pontas".
-
-> [!TIP]
-> **Por dentro do C:** `livre[]` guarda quanto cabe em cada viagem aberta, e
-> `viagem[N][N]` é uma matriz de 8 × 8 `int` na pilha (256 bytes): no pior
-> caso cada carga vai sozinha, por isso N viagens de até N cargas. O
-> `qsort` recebe `compara_desc`, que devolve `b - a` para inverter a ordem;
-> com valores pequenos a subtração não estoura, mas para valores grandes
-> use `(x < y) - (x > y)`. Ordenar custa O(n log n), menos que o próprio
-> first fit.
+> prova, mas é do pior caso. A pegadinha inversa: o guloso "pega o vértice de
+> maior grau" para cobertura **não** tem fator constante e pode ficar log n
+> vezes pior que o ótimo. O 2-aproximado correto é o "pega as duas pontas".
 
 > [!NOTE]
-> **Pergunta para você:** se chegar uma nona carga de 5 toneladas no fim
-> da fila, quantas viagens o first fit usa? E o decrescente? O limite
-> inferior muda?
-
+> **Pergunta para você:** se chegar uma nona carga de 5 toneladas no fim da
+> fila, quantas viagens o first fit usa? E o decrescente? O limite inferior
+> muda?
 
 ### Hora de praticar
 
@@ -3525,51 +2736,14 @@ Next fit: 7 viagens
 First fit: 5 viagens
 ```
 
-**Dicas:**
-
-1. O next fit só guarda o espaço livre da viagem ATUAL: uma variável, não
-   um vetor. Se a carga não cabe, conta uma viagem nova e volta a 10.
-2. Limite inferior: (soma + 9) / 10, a divisão arredondada para cima.
-3. O next fit é O(n) e também é
-   2-aproximado, mas joga fora espaço que o first fit aproveita.
-
 ```bash
 gcc ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1123.c -o ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1123 && ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1123
 ```
 
-**Exercício E1124** · ★☆☆
-
-Você vai copiar oito pastas para pendrives de 16 GB. Tamanhos, na ordem:
-9, 7, 5, 8, 3, 6, 4, 2 GB. Implemente o BEST FIT: cada pasta vai para o
-pendrive em que ela cabe e que fica MAIS cheio depois de recebê-la (o de
-menor espaço livre suficiente); se não couber em nenhum, use um novo.
-Mostre o conteúdo de cada pendrive e quanto sobra.
-
-
-```text
-Saída esperada:
-Best fit: 3 pendrives
-  pendrive 1: 9 7  (sobram 0 GB)
-  pendrive 2: 5 8 3  (sobram 0 GB)
-  pendrive 3: 6 4 2  (sobram 4 GB)
-```
-
-**Dicas:**
-
-1. Guarde livre[p], qtd[p] e conteudo[p][k] para cada pendrive aberto.
-2. Percorra todos os pendrives abertos e fique com o de menor livre[p]
-   entre os que têm livre[p] >= tamanho. Empate: o primeiro.
-3. O limite inferior é 44 / 16 -> 3,
-   então esta resposta é ótima.
-
-```bash
-gcc ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1124.c -o ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1124 && ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1124
-```
-
 **Exercício E1125** · ★★☆
 
-Volte às câmeras do E1118 (esquinas A a G; ruas A-B, B-C, C-D, D-E, E-F,
-F-G, B-F, C-E). Escreva a cobertura 2-aproximada do texto como função
+Considere as câmeras de uma cidade (esquinas A a G; ruas A-B, B-C, C-D,
+D-E, E-F, F-G, B-F, C-E). Escreva a cobertura 2-aproximada do texto como função
 int cobertura(int rua[E][2], bool em[]), que examina as ruas na ordem do
 vetor, e uma força bruta int otimo(int rua[E][2]). Rode a aproximação
 com duas ordens das mesmas ruas:
@@ -3588,13 +2762,6 @@ Ordem 1: 6 câmeras em A B C D E F
 Ordem 2: 4 câmeras em B C E F
 Ótimo: 4 câmeras
 ```
-
-**Dicas:**
-
-1. Na aproximação, pule a rua se uma das pontas já tem câmera; senão,
-   ponha câmera nas duas.
-2. A ordem muda as arestas escolhidas, e com elas o resultado. As duas
-   respostas respeitam a garantia: no máximo 2 x 4 = 8.
 
 ```bash
 gcc ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1125.c -o ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1125 && ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1125
@@ -3624,32 +2791,25 @@ Lista 2: FF 7, FFD 6, limite 6
 Lista 3: FF 6, FFD 6, limite 5
 ```
 
-**Dicas:**
-
-1. Comparador decrescente sem risco de estouro:
-   return (x < y) - (x > y);
-2. FF recebe a lista original; FFD, a cópia ordenada.
-3. Na lista 3 nem o FFD acha o ótimo:
-   5 viagens dão certo com (3 3 4) três vezes, (4 5) e (4 4). O FFD faz
-   (5 4), (4 4), (4 4), (4 3 3), (3 3 3), (3): as viagens de 8 t perdem
-   2 t cada, e sobra um 3 sozinho.
-
 ```bash
 gcc ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1126.c -o ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1126 && ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1126
 ```
 
 **Exercício E1127** · ★★★
 
-Complete a 2-aproximação do caixeiro viajante métrico para um passeio
-turístico com sete pontos (coordenadas em quarteirões). O programa já
-tem a matriz de distâncias, o Prim (vetor pai[]) e a força bruta.
-Faltam duas funções:
+Escreva a 2-aproximação do caixeiro viajante métrico para um passeio
+turístico com sete pontos (coordenadas em quarteirões; a distância é
+|dx| + |dy|). O programa deve:
 
 
 ```text
-void preordem(int u): a rota é a pré-ordem da árvore (u primeiro,
+- montar a matriz d de distâncias;
+- rodar o Prim O(N²) a partir da Base, guardando pai[] (no empate,
+  vale o menor índice);
+- void preordem(int u): a rota é a pré-ordem da árvore (u primeiro,
   depois os filhos de u em ordem de índice);
-int custo(const int r[]): o tamanho da rota fechada.
+- int custo(const int r[]): o tamanho da rota fechada;
+- achar o ótimo por força bruta, fixando a Base no começo.
 ```
 
 
@@ -3662,80 +2822,32 @@ Rota aproximada: Base Feira Igreja Zoo Museu Teatro Praia Base = 34 quarteirões
 Garantia: rota <= 2 x árvore = 42
 ```
 
-**Dicas:**
-
-1. Os filhos de u são os v com pai[v] == u (e v != u). A recursão
-   preordem(v) cuida dos netos.
-2. No custo, o último trecho é d[r[N - 1]][r[0]]: use (i + 1) % N.
-3. 34 fica entre o ótimo (30) e a
-   garantia (42): 13% acima do ótimo.
-
 ```bash
 gcc ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1127.c -o ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1127 && ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1127
-```
-
-**Exercício E1128** · ★★★
-
-Ache o bug. Esta cobertura 2-aproximada das câmeras (ruas na ordem 2 do
-E1125) põe câmera em todas as sete esquinas, e as ruas escolhidas têm
-pontas em comum (B aparece em B-F e em A-B):
-
-
-```text
-Saída que aparece:
-Ruas escolhidas: B-F C-E A-B C-D F-G
-Câmeras em: A B C D E F G (7)
-```
-
-
-
-```text
-Saída esperada:
-Ruas escolhidas: B-F C-E
-Câmeras em: B C E F (4)
-```
-
-
-O programa compila e roda sem erro; o problema é de lógica. Conserte-o.
-
-**Dicas:**
-
-1. Quando uma rua já está vigiada? Basta uma das pontas ter câmera, ou
-   as duas precisam ter?
-2. A prova do fator 2 depende de as ruas escolhidas não terem pontas em
-   comum. Com o bug, isso deixa de valer e a garantia vai embora.
-3. Troque && por ||.
-
-```bash
-gcc ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1128.c -o ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1128 && ~/LPEDC/29-grafos-e-np/0188-aproximacao/E1128
 ```
 
 ---
 
 ## 0189 · Juntando tudo
 
-A farmácia do bairro faz entregas de moto. Às oito da manhã o entregador
-recebe sete endereços e quer a volta mais curta: sair da farmácia, passar em
-todo mundo e voltar. Às seis da tarde, na hora do pico, são quarenta. É o
-**caixeiro viajante** (TSP, de *traveling salesman problem*), o problema
-NP-difícil mais famoso, e ele junta o módulo inteiro:
+O entregador da farmácia recebe sete endereços e quer a volta mais curta,
+saindo e voltando à farmácia. No pico da tarde, são quarenta. É o **caixeiro
+viajante** (TSP), NP-difícil, e junta o módulo:
 
 - é um **ciclo hamiltoniano** de custo mínimo (0183);
-- a versão de decisão ("existe volta de no máximo L?") está em **NP** e é
-  NP-completa (0186), e a prova vem por **redução** do ciclo hamiltoniano
-  (0187): arestas do grafo custam 1, as que faltam custam 2;
-- com distâncias **métricas**, a árvore mínima dá uma **2-aproximação**
-  (0188);
-- e a solução exata usa **programação dinâmica**, como a cadeia de
-  matrizes (0185).
+- a versão de decisão ("existe volta de no máximo L?") é NP-completa (0186),
+  por **redução** do ciclo hamiltoniano (0187): arestas do grafo custam 1, as
+  que faltam custam 2;
+- com distâncias **métricas**, a árvore mínima dá uma **2-aproximação** (0188);
+- a solução exata é **programação dinâmica**, como a cadeia de matrizes
+  (0185).
 
-**Força bruta.** Fixe a farmácia e teste as (n − 1)! ordens dos clientes.
-Com 7 clientes são 5040 rotas; com 15, 87 bilhões.
+**Força bruta.** Fixe a farmácia e teste as (n − 1)! ordens: 5040 rotas com 7
+clientes, 87 bilhões com 15.
 
-**Held-Karp** (PD sobre subconjuntos). `dp[S][j]` é o menor caminho que sai
-da farmácia, passa **exatamente** pelos pontos do conjunto S e termina em j.
-O subproblema não precisa saber a **ordem** em que S foi visitado, só o
-conjunto e o último ponto, e por isso o fatorial some. A recorrência:
+**Held-Karp** (PD sobre subconjuntos). `dp[S][j]` é o menor caminho que sai da
+farmácia, passa **exatamente** pelos pontos de S e termina em j. Só importam o
+conjunto e o último ponto, não a **ordem**, e por isso o fatorial some:
 
 ```text
 dp[{0}][0] = 0
@@ -3743,8 +2855,8 @@ dp[S ∪ {k}][k] = min sobre j em S:  dp[S][j] + d[j][k]
 resposta = min sobre j:  dp[todos][j] + d[j][0]
 ```
 
-São 2ⁿ conjuntos × n finais × n extensões: **O(n² · 2ⁿ)** de tempo e
-**O(n · 2ⁿ)** de memória. Ainda exponencial, mas muito menos que n!.
+São 2ⁿ conjuntos × n finais × n extensões: **O(n² · 2ⁿ)** de tempo e **O(n ·
+2ⁿ)** de memória, bem menos que n!.
 
 | n | (n − 1)! rotas | n² · 2ⁿ (Held-Karp) | n² (aproximado) |
 | --- | --- | --- | --- |
@@ -3753,18 +2865,17 @@ São 2ⁿ conjuntos × n finais × n extensões: **O(n² · 2ⁿ)** de tempo e
 | 20 | 1,2 · 10¹⁷ | 4,2 · 10⁸ | 400 |
 | 30 | 8,8 · 10³⁰ | 9,7 · 10¹¹ | 900 |
 
-A tabela dá a regra prática: até uns 20 pontos, Held-Karp resolve em
-segundos (e o limite é a memória); acima disso, aproximação, de preferência
-seguida de uma melhoria local como o 2-opt do A378.
+Até uns 20 pontos, Held-Karp resolve em segundos (o limite é a memória);
+acima, aproximação, de preferência com uma melhoria local como o 2-opt do
+A378.
 
-As distâncias são em quarteirões (|dx| + |dy|), que
-respeitam a desigualdade triangular. À esquerda a rota exata; à direita a da
-árvore mínima, que dá voltas desnecessárias no fim:
+As distâncias são em quarteirões (|dx| + |dy|), métricas. À esquerda, a rota
+exata; à direita, a da árvore mínima, com voltas desnecessárias no fim:
 
 <p align="center"><img src="29-grafos-e-np/0189-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="875"></p>
 
-O conjunto S é uma máscara de bits, igual às do 0186; o bit 0 (a farmácia)
-está sempre ligado, por isso o laço anda de 2 em 2:
+S é uma máscara de bits (0186); o bit 0, a farmácia, está sempre ligado, por
+isso o laço anda de 2 em 2:
 
 ```c
 #include <stdbool.h>
@@ -3867,38 +2978,29 @@ int main(void) {
 // O aproximado gasta 29% a mais
 ```
 
-O fluxograma é a decisão que um programa de entregas real toma antes de
-calcular: poucos pontos, exato; muitos, aproximado e melhorado. A fronteira
-é o tempo e a memória que você tem:
+O fluxograma é a decisão de um programa real: poucos pontos, exato; muitos,
+aproximado e melhorado:
 
 <p align="center"><img src="29-grafos-e-np/0189-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo" width="502"></p>
 
 O aproximado errou por 29%, longe do dobro permitido, e fez 64 passos contra
 1351. Com 20 pontos seriam uns 400 contra 400 milhões. O A377 mede
-crescimento e memória de cada método; o A378 aplica o 2-opt na rota
-aproximada e mostra quanto ela melhora.
+crescimento e memória; o A378 aplica o 2-opt.
 
 > [!WARNING]
 > A garantia de 2 × ótimo só vale com a **desigualdade triangular**. Com
-> distâncias quaisquer (uma balsa que só sai de um lado, um pedágio caro), o
-> atalho da pré-ordem pode sair muito mais caro que a volta pela árvore, e
-> nenhum algoritmo polinomial tem fator constante, a menos que P = NP.
-> Held-Karp é **exato** e exponencial; a árvore é **aproximada** e polinomial.
+> distâncias quaisquer, nenhum algoritmo polinomial tem fator constante, a
+> menos que P = NP. Held-Karp é **exato** e exponencial; a árvore é
+> **aproximada** e polinomial.
 
 > [!TIP]
-> **Por dentro do C:** `dp[1 << N][N]` e `ant[1 << N][N]` são globais: 256 × 8
-> × 4 bytes = 8 KB cada, guardados na área de dados estáticos, não na pilha.
-> Com N = 20 cada um teria 80 MB, que estouraria a pilha se fosse local
-> (8 MB no Linux) e já pede `malloc`. Os testes `s >> j & 1` e
-> `s | 1 << k` dependem da precedência: `>>` e `<<` vêm antes de `&` e `|`,
-> então não precisam de parênteses (o 0170 tem a tabela). `s &= ~(1 << j)`
-> apaga o bit j na reconstrução da rota.
+> `s >> j & 1` e `s | 1 << k` funcionam sem parênteses porque `>>` e `<<` vêm
+> antes de `&` e `|` (0170).
 
 > [!NOTE]
-> **Pergunta para você:** se o Gil mudar para (3, 5), perto do Fábio, a
-> rota exata ainda começa pela farmácia indo ao Gil? E a diferença do
-> aproximado aumenta ou diminui?
-
+> **Pergunta para você:** se o Gil mudar para (3, 5), perto do Fábio, a rota
+> exata ainda começa pela farmácia indo ao Gil? E a diferença do aproximado
+> aumenta ou diminui?
 
 ### Hora de praticar
 
@@ -4083,44 +3185,8 @@ Rota 1: 26 quarteirões
 Rota 2: 22 quarteirões
 ```
 
-**Dicas:**
-
-1. abs() de <stdlib.h> dá o valor absoluto de um int.
-2. No custo, some d[r[i]][r[(i + 1) % N]] para i de 0 a N - 1: o último
-   termo é a volta para a padaria.
-3. A primeira linha começa com 8
-   espaços (printf("%8s", "")).
-
 ```bash
 gcc ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1129.c -o ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1129 && ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1129
-```
-
-**Exercício E1130** · ★☆☆
-
-O entregador da farmácia do texto usa a regra "vou sempre para o cliente
-mais perto que ainda não visitei" (o VIZINHO MAIS PRÓXIMO, um guloso).
-Escreva o programa com os mesmos oito pontos e distâncias do texto,
-mostre a rota e o custo da volta completa.
-
-
-```text
-Saída esperada:
-Farmácia Ana Bruno Clara Edna Gil Dênis Fábio Farmácia
-Vizinho mais próximo: 40 quarteirões
-```
-
-**Dicas:**
-
-1. Um vetor visitado[] e um laço de N - 1 passos; em cada passo, procure
-   o v não visitado com menor d[atual][v] (empate: menor índice).
-2. Não esqueça a volta: some d[atual][0] no fim.
-3. Pior que a árvore (36) e que o
-   ótimo (28): perto do fim, os clientes que sobraram estão longe uns dos
-   outros (Dênis -> Fábio custa 11). O vizinho mais próximo não tem
-   fator de aproximação constante, nem com distâncias métricas.
-
-```bash
-gcc ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1130.c -o ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1130 && ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1130
 ```
 
 **Exercício E1131** · ★★☆
@@ -4139,28 +3205,20 @@ Sem poda: ótimo 28, 5040 rotas completas, 13700 chamadas
 Com poda: ótimo 28, 110 rotas completas, 6977 chamadas
 ```
 
-**Dicas:**
-
-1. Conte a chamada na primeira linha da função, antes do teste da poda.
-   Uma rota é completa quando pos == N; aí some a volta d[rota[N-1]][0].
-2. Tente os vizinhos v = 1 a N - 1 em ordem, com usado[] e desfazendo
-   a marca na volta. Zere melhor (1 << 30) e os contadores entre as duas
-   rodadas.
-3. Sem poda são (8 - 1)! = 5040 rotas;
-   a poda corta metade das chamadas, mas continua exponencial.
-
 ```bash
 gcc ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1131.c -o ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1131 && ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1131
 ```
 
 **Exercício E1132** · ★★☆
 
-Este Held-Karp para a padaria do E1129 calcula a menor volta, mas não
-guardou a tabela de anteriores, e a memória do servidor não comporta
-outra tabela do mesmo tamanho. Reconstrua a rota só com dp[][]: o
-ponto que veio antes de k no conjunto s é um j (de s sem k) tal que
-dp[s sem k][j] + d[j][k] == dp[s][k]. Comece em (todos, fim) e ande
-para trás até sobrar só a padaria.
+Escreva o Held-Karp para a padaria do E1129 (cinco pontos, distância
+|dx| + |dy|) com a tabela dp[1 << N][N], sem guardar a tabela de
+anteriores (a memória do servidor não comporta outra do mesmo tamanho).
+Mostre a menor volta e reconstrua a rota só com dp[][]: o ponto que veio
+antes de k no conjunto s é o primeiro j (de s sem k) tal que
+dp[s sem k][j] + d[j][k] == dp[s][k]. Comece em (todos, fim) e ande para
+trás até sobrar só a padaria. No empate do último ponto, vale o menor
+índice.
 
 
 ```text
@@ -4168,15 +3226,6 @@ Saída esperada:
 Menor volta: 22 quarteirões
 Rota: Padaria Feira Escola Posto Banco Padaria
 ```
-
-**Dicas:**
-
-1. s sem k é s & ~(1 << k). Preencha rota[] de trás para frente:
-   rota[N - 1] = fim, depois o anterior, até rota[0] = 0.
-2. Em caso de empate, fique com o primeiro j (menor índice) que bate.
-   Pule os j fora do conjunto e os que valem INF.
-3. Trocar memória por tempo: cada
-   passo da reconstrução custa O(n) a mais, mas só são n passos.
 
 ```bash
 gcc ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1132.c -o ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1132 && ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1132
@@ -4214,54 +3263,8 @@ Manhã (8 pontos): exato, 28 quarteirões
 Tarde (30 pontos): aproximado, árvore 111, rota 172, com 2-opt 148
 ```
 
-**Dicas:**
-
-1. A tabela do Held-Karp só precisa ser dp[1 << 12][12] (192 KB):
-   declare-a global. Com 30 pontos ela teria 2^30 x 30 ints (120 GB).
-2. No 2-opt, recomece a busca do começo a cada melhoria (i de 1 a n - 2,
-   j de i + 1 a n - 1, aresta de volta com (j + 1) % n) e inverta o
-   trecho rota[i..j].
-3. A rota da árvore (172) respeita a
-   garantia (no máximo 2 x 111 = 222), e o 2-opt tira 24 quarteirões.
-
 ```bash
 gcc ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1133.c -o ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1133 && ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1133
-```
-
-**Exercício E1134** · ★★★
-
-Ache o bug. Este Held-Karp para a farmácia do texto promete uma volta de
-24 quarteirões, menos que o ótimo de 28 que o texto e a força bruta do
-E1131 confirmam:
-
-
-```text
-Saída que aparece:
-Menor volta: 24 quarteirões (último cliente: Ana)
-```
-
-
-
-```text
-Saída esperada:
-Menor volta: 28 quarteirões (último cliente: Ana)
-```
-
-
-O programa compila e roda sem erro; o problema é de lógica. Conserte-o.
-
-**Dicas:**
-
-1. dp[todos][j] é o menor CAMINHO que sai da farmácia, passa por todo
-   mundo e termina em j. A moto termina em j?
-2. O resultado errado (24) é o caminho até a Ana; da Ana à farmácia são
-   mais 4 quarteirões. Uma resposta abaixo do ótimo provado é sinal de
-   que o programa resolveu outro problema (aqui, o caminho hamiltoniano).
-3. Some d[j][0] na escolha
-   do último cliente e no valor.
-
-```bash
-gcc ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1134.c -o ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1134 && ~/LPEDC/29-grafos-e-np/0189-juntando-tudo/E1134
 ```
 
 ---

@@ -1,55 +1,45 @@
 ## 0178 · Hash: divisão e multiplicação
 
-No atacadão, os produtos saem em fardos de 16 unidades, e cada fardo é
-registrado pelo número do último item: 16, 32, 48, até 160. O sistema guarda
-os fardos numa tabela hash de 16 baldes com `k % 16`, a função do 0105. Resultado:
-os dez fardos caem **todos no balde 0**. A tabela virou uma lista, e a busca
-voltou a ser O(n).
+No atacadão, fardos de 16 unidades são registrados pelo número do último
+item: 16, 32, 48, até 160. A tabela tem 16 baldes e usa `k % 16` (0105): os
+dez fardos caem **todos no balde 0**, e a busca volta a ser O(n). O problema
+está no `m`.
 
-O problema está no `m`. O Cormen descreve duas famílias clássicas
-de função hash para chaves inteiras, e cada uma tem a sua regra para escolher
-`m`.
+O **método da divisão** é o que você já conhece: **h(k) = k mod m**. É rápido,
+mas o `m` decide tudo:
 
-O **método da divisão** é o que você já conhece: **h(k) = k mod m**. É rápido
-(uma divisão), mas o `m` decide tudo:
-
-- **m = 2^p é ruim**: `k % 2^p` são os **p bits de baixo** de `k` (o mesmo
-  que `k & (m - 1)`). A função ignora todo o resto da chave. Chaves que
-  só diferem nos bits de cima, como os fardos de 16 em 16 (os 4 bits de baixo
-  são sempre zero), colidem todas;
-- pela mesma razão, **m = 10^d** só olha os d últimos dígitos (preços
-  redondos em centavos, todos terminados em 00, caem no balde 0 com m = 100);
-- **m = 2^p - 1** também é ruim para textos: trocar duas letras de lugar não
-  muda o balde;
-- a regra do livro: escolha um **primo que não fique perto de uma potência de
-  2**. Para 2000 chaves com uns 3 por balde, um primo perto de 667, como 673
-  (longe de 512 e de 1024).
+- **m = 2^p é ruim**: `k % 2^p` são os **p bits de baixo** de `k` (`k & (m -
+  1)`), e o resto é ignorado. Os fardos de 16 em 16 (4 bits de baixo sempre
+  zero) colidem todos;
+- **m = 10^d** só olha os d últimos dígitos (com m = 100, preços terminados
+  em 00 caem no balde 0);
+- **m = 2^p - 1** é ruim para textos: trocar duas letras de lugar não muda o
+  balde;
+- a regra do livro: um **primo longe de uma potência de 2**. Para 2000 chaves,
+  com uns 3 por balde, serve 673 (longe de 512 e de 1024).
 
 O **método da multiplicação** tira a dependência do `m`. Multiplique a chave
-por uma constante `A` entre 0 e 1, fique só com a **parte fracionária** e
+por uma constante `A` entre 0 e 1, fique com a **parte fracionária** e
 multiplique por `m`:
 
 **h(k) = ⌊m · (k·A mod 1)⌋**
 
-A parte fracionária de `k·A` mistura todos os dígitos de `k`, e aí o `m` pode
-ser qualquer um, inclusive uma **potência de 2**. Knuth sugere
-**A ≈ (√5 − 1) / 2 = 0,6180339887...**, a parte fracionária da razão áurea:
-com ela, chaves seguidas pulam pela tabela inteira, sem se amontoar.
+A parte fracionária de `k·A` mistura todos os dígitos de `k`, então o `m` pode
+ser qualquer um, até uma **potência de 2**. Knuth sugere **A ≈ (√5 − 1) / 2 =
+0,6180339887...**: chaves seguidas pulam pela tabela inteira.
 
-Com `double`, a fórmula tem erro de arredondamento e é lenta. A versão usada
-na prática é em **inteiros**: com palavras de w = 32 bits e m = 2^p, troque `A`
-por **s = ⌊A · 2^32⌋ = 2654435769**. O produto `k · s` tem 64 bits; os 32 de
-baixo são o "k·A mod 1" (a parte fracionária, em binário), e os **p bits mais
-altos** deles são o balde. Em C: `(k * s) >> (32 - p)`, com `uint32_t`, que
-já descarta os 32 bits de cima de graça.
+Em `double` a fórmula é lenta e arredonda. Use **inteiros**: com w = 32 bits
+e m = 2^p, troque `A` por **s = ⌊A · 2^32⌋ = 2654435769**. Dos 64
+bits de `k · s`, os 32 de baixo são o "k·A mod 1" em binário, e os **p bits
+mais altos** deles são o balde: `(k * s) >> (32 - p)`, com `uint32_t`, que já
+descarta os 32 de cima.
 
-O exemplo passa os dez fardos por três funções: divisão por 16,
-divisão por 13 (primo) e multiplicação com m = 16 (p = 4). No desenho, a conta
-da multiplicação para o fardo 48:
+Os dez fardos passam por divisão por 16, divisão por 13 (primo) e
+multiplicação com m = 16 (p = 4). No desenho, a conta do fardo 48:
 
 {{ideia}}
 
-O TAD é o `espalha.h`. As duas multiplicações do `espalha.c`:
+No `espalha.c`, as duas multiplicações:
 
 ```c
 int esp_multiplicacao(uint32_t k, int m) {
@@ -99,35 +89,20 @@ int main(void) {
 // Balde mais cheio: 10 | 1 | 2
 ```
 
-Com 16, os dez num balde só. Com 13, nenhuma colisão. Com a multiplicação e
-m = 16, uma colisão (16 e 160), normal para 10 chaves em 16 baldes: o que ela
-garante é que o padrão das chaves deixa de importar.
+Com 16, os dez num balde só. Com 13, nenhuma colisão. Com a multiplicação,
+uma (16 e 160), normal para 10 chaves em 16 baldes.
 
-O fluxograma faz a conta do fardo 48 pela multiplicação em inteiros.
-Depois de conferir o `p` (deslocar 32 bits ou mais é indefinido em C), são
-três operações: multiplica, deixa o `uint32_t` cortar os bits de cima,
-desloca. Nenhuma divisão:
+O fluxograma faz a conta do fardo 48: confere o `p` (deslocar 32 bits ou mais
+é indefinido), multiplica, deixa o `uint32_t` cortar e desloca. Nenhuma
+divisão:
 
 {{fluxograma}}
 
 > [!WARNING]
-> Na versão em inteiros, o produto **tem que ser `unsigned`**. Com `int`,
-> `k * 2654435769` estoura, e estouro de inteiro com sinal é comportamento
-> indefinido em C (o sanitizer reclama). Com `uint32_t`, o padrão garante a
-> conta mod 2^32, que é o "mod 1" da fórmula. E pegue os bits **de
-> cima** (`>> (32 - p)`), não os de baixo (`& (m - 1)`): os de baixo do
-> produto dependem só dos bits de baixo de `k`, e você volta ao problema da
-> divisão por 2^p (é o bug do E1067).
-
-> [!TIP]
-> **Por dentro do C:** uma divisão inteira de 32 bits custa dezenas de ciclos
-> num processador x86 moderno; uma multiplicação, uns 3; um deslocamento, 1. Por
-> isso a multiplicação com deslocamento é a função hash preferida quando a
-> tabela tem tamanho 2^p. O compilador sabe disso: quando o `m` da divisão é
-> uma **constante**, ele troca o `%` por multiplicações e deslocamentos
-> (tente `gcc -O2 -S` com `k % 13`). Com `m` numa variável, ele não pode, e a
-> divisão acontece a cada busca.
-
+> O produto **tem que ser `unsigned`**: com `int`, `k * 2654435769` estoura, e
+> estouro com sinal é comportamento indefinido. E pegue os bits **de cima**
+> (`>> (32 - p)`), não os de baixo (`& (m - 1)`): os de baixo dependem só dos
+> bits de baixo de `k`, o problema da divisão por 2^p.
 
 > [!NOTE]
 > **Pergunta para você:** com m = 32 (p = 5), em que balde cai o fardo 48 pela

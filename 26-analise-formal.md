@@ -2,59 +2,49 @@
 
 # Módulo 26 · Notação assintótica, somatórios e espaço
 
-No módulo 10 você aprendeu a contar passos e a dizer "isso é O(n²)" olhando
-os laços. No módulo 17, a resolver recorrências e a usar Θ e Ω. Este módulo
-fecha três pontas: as **definições formais** de O, Ω e Θ, com as constantes
-`c` e `n₀`; os **somatórios** que dão o número exato de vezes que um laço
-roda; e a **complexidade espacial**, que mede memória como se mede tempo.
+Nos módulos 10 e 17 você contou passos, disse "isso é O(n²)" e resolveu
+recorrências. Este módulo fecha três pontas: as **definições formais** de O,
+Ω e Θ, com `c` e `n₀`; os **somatórios** que dão o número exato de vezes que
+um laço roda; e a **complexidade espacial**, que mede memória como se mede
+tempo.
 
-A mudança na cabeça é trocar o "parece n²" pela conta. Dizer que
-`3n² + 10n + 20` é Θ(n²) vira uma afirmação que se **prova** (exibindo `c₁`,
-`c₂` e `n₀`) ou se **refuta** (mostrando que nenhum par serve). O laço
-dependente que roda "umas n²/2 vezes" passa a rodar `n(n-1)/2` vezes, conferido
-por um contador. E a função que "não usa memória" obriga a olhar a pilha da
-recursão, que gasta espaço mesmo sem vetor nenhum.
-
-Cada fórmula tem um programa em C que conta e confere. O último assunto junta
-as três ideias na ficha de cinco funções: passos, bytes e frames medidos e
-comparados com a fórmula.
+A mudança é trocar o "parece n²" pela conta: dizer que `3n² + 10n + 20` é
+Θ(n²) vira uma afirmação que se **prova** ou se **refuta**. O laço que roda
+"umas n²/2 vezes" passa a rodar `n(n-1)/2`, conferido por um contador. E a
+função que "não usa memória" obriga a olhar a pilha da recursão. O último
+assunto junta as três ideias na ficha de cinco funções.
 
 ## O que você vai aprender
 
-- as definições de **O**, **Ω** e **Θ** com `c` e `n₀`, e como **provar** e **refutar** um limite
-- a diferença entre **melhor caso**, **pior caso** e **caso médio**, e por que isso não é a mesma coisa que O, Ω e Θ
-- achar `c` e `n₀` com um programa, e entender por que o programa não substitui a prova
-- transformar laços em **somatórios**: aritmética, quadrados, geométrica e harmônica, com laços dependentes
-- calcular o número **exato** de execuções de um laço e conferir com um contador
-- a **complexidade espacial**: espaço extra, algoritmos **in-place**, o espaço da **pilha da recursão**
+- as definições de **O**, **Ω** e **Θ** com `c` e `n₀`; **provar** e
+  **refutar** um limite
+- **melhor**, **pior** e **médio** caso, que não são O, Ω e Θ
+- achar `c` e `n₀` com um programa e por que ele não substitui a prova
+- transformar laços em **somatórios**: aritmético, quadrático, geométrico,
+  harmônico e laços dependentes
+- a **complexidade espacial**: espaço extra, **in-place** e pilha da recursão
 - a troca de **tempo por espaço**: tabelas, prefixos e memoização
-- conferir uma ficha de complexidade inteira medindo passos, bytes e frames
+- conferir uma ficha de complexidade medindo passos, bytes e frames
 
 ## Antes de começar
 
-Este módulo usa: contagem de passos e notação O (0071 e 0072), pilha de
-chamadas e recursão (0031 a 0033), pilha, heap, `malloc` e `free` (0053 e 0054),
-ponteiro para função (0050), busca binária (0090), insertion sort e merge
-sort (0093 e 0094), recorrências e a notação Θ (0114 a 0117), permutações
-por backtracking (0126), potência rápida (0131) e memoização (0138).
+Usa contagem de passos e notação O (0071, 0072), pilha de chamadas e recursão
+(0031 a 0033), pilha, heap, `malloc` e `free` (0053, 0054), ponteiro para
+função (0050), busca binária (0090), insertion e merge sort (0093, 0094),
+recorrências e Θ (0114 a 0117), backtracking (0126), potência rápida (0131) e
+memoização (0138).
 
-Faça as contas no papel **antes** de rodar (a desigualdade do `n₀`, o
-somatório do laço, os bytes extras);
-depois mude o `n`, dobre, e veja se o contador acompanha a fórmula. Nos
-diagramas da ideia, verde é o que vale (o teto que já segura, o espaço
-constante), vermelho é o que falha ou cresce com `n`, amarelo marca o ponto de
-virada (o `n₀`, a razão ao dobrar `n`) e roxo é trabalho sendo contado.
+Faça as contas no papel **antes** de rodar; depois dobre o `n` e veja se o
+contador acompanha a fórmula. Nos diagramas, verde é o que vale (teto que
+segura, espaço constante), vermelho é o que falha ou cresce com `n`, amarelo
+marca a virada (o `n₀`, a razão ao dobrar `n`) e roxo é trabalho contado.
 
-Matemática: potências, logaritmos e somas. Lembre que `log₂ n` é quantas
-vezes dá para dividir `n` por 2 até chegar em 1, e que `ln n` é o logaritmo
-natural (`log` em `<math.h>`). O gcc com as flags de estudo já liga a biblioteca matemática.
+Lembre que `log₂ n` é quantas vezes dá para dividir `n` por 2 até chegar em 1,
+e que `ln n` é o logaritmo natural (`log` em `<math.h>`).
 
-O último assunto tem um TAD na pasta, `custo.h` e `custo.c`, com cinco
-funções instrumentadas. O comando do exemplo compila o `custo.c` junto com qualquer
-exemplo ou exercício da pasta; por isso, nos exercícios de lá, não dê os
-nomes `custo_passos`, `custo_bytes` e `custo_prof_max` a variáveis suas.
-Os exercícios de "conserte" trazem o erro de propósito, e o enunciado
-avisa.
+O último assunto tem um TAD, `custo.h` e `custo.c`, compilado junto com os
+exemplos e exercícios da pasta: não dê os nomes `custo_passos`, `custo_bytes`
+e `custo_prof_max` a variáveis suas.
 
 | # | Assunto | Pasta |
 | --- | --- | --- |
@@ -67,15 +57,11 @@ avisa.
 
 ## 0166 · O, Ω e Θ de verdade
 
-A empresa que vendeu o sistema de caixa do mercadinho escreveu no contrato:
-"o fechamento do dia com `n` vendas faz no máximo `4n²` operações, a partir
-de 12 vendas". Você mediu o programa e contou exatamente
-`f(n) = 3n² + 10n + 20` operações. A promessa vale? Para 10 vendas, o
-fechamento faz 420 operações e `4 · 10² = 400`: estourou. O contrato mentiu?
-
-Não. Ele disse "a partir de 12", e as definições de **O**, **Ω** e **Θ**
-funcionam assim, com duas constantes que você escolhe: o fator **c** e o
-ponto de partida **n₀**.
+O contrato do caixa do mercadinho diz: "o fechamento com `n` vendas faz no
+máximo `4n²` operações, a partir de 12 vendas". Você contou
+`f(n) = 3n² + 10n + 20`. Com 10 vendas são 420 contra 400: estourou? Não, ele
+disse "a partir de 12". **O**, **Ω** e **Θ** funcionam assim, com duas
+constantes: o fator **c** e o ponto de partida **n₀**.
 
 - **f(n) é O(g(n))** se existem `c > 0` e `n₀` tais que
   `f(n) ≤ c · g(n)` para todo `n ≥ n₀`. É um **teto**.
@@ -84,36 +70,29 @@ ponto de partida **n₀**.
 - **f(n) é Θ(g(n))** se é O e Ω ao mesmo tempo: existem `c₁`, `c₂` e `n₀`
   com `c₁ · g(n) ≤ f(n) ≤ c₂ · g(n)` para todo `n ≥ n₀`. É um **sanduíche**.
 
-O **n₀** existe porque só interessa o que acontece com `n` grande: para
-poucas vendas, os termos `10n` e `20` ainda pesam. O **c** existe porque a
-constante depende da máquina e de detalhes do código; o formato do
-crescimento, não.
+O **n₀** existe porque só interessa o `n` grande, onde `10n` e `20` já não
+pesam. O **c** existe porque a constante depende da máquina.
 
-**Provar** um limite é exibir um par `c`, `n₀` que funciona e mostrar a conta.
-Para o teto com `c = 4`: `3n² + 10n + 20 ≤ 4n²` vira `n² - 10n - 20 ≥ 0`, que
-vale para `n ≥ 12` (a raiz é 11,7). Para o piso com `c = 3`: `3n² + 10n + 20 ≥
-3n²` vale para todo `n ≥ 1`. Logo `f(n)` é **Θ(n²)**, com `c₁ = 3`, `c₂ = 4` e
-`n₀ = 12`.
+**Provar** é exibir `c` e `n₀` e mostrar a conta. Teto com `c = 4`:
+`3n² + 10n + 20 ≤ 4n²` vira `n² - 10n - 20 ≥ 0`, que vale para `n ≥ 12` (a
+raiz é 11,7). Piso com `c = 3`: vale para todo `n ≥ 1`. Logo `f(n)` é
+**Θ(n²)**, com `c₁ = 3`, `c₂ = 4` e `n₀ = 12`.
 
-**Refutar** é o contrário: mostrar que **nenhum** par serve. `f(n)` é O(n)?
-Seria preciso `3n² + 10n + 20 ≤ c · n`, isto é, `3n + 10 + 20/n ≤ c`. Para
-qualquer `c` que alguém escolha, basta `n > c/3` e a desigualdade quebra. Não
-existe teto linear.
+**Refutar** é mostrar que **nenhum** par serve. `f(n)` é O(n)? Exigiria
+`3n + 10 + 20/n ≤ c`, e `n > c/3` quebra para qualquer `c`.
 
-Há ainda um terceiro eixo, independente de O, Ω e Θ: **qual entrada**.
-O **melhor caso** é a entrada de tamanho `n` que dá menos trabalho, o **pior
-caso** é a que dá mais, e o **caso médio** é a média sobre todas as entradas
-(com alguma hipótese de probabilidade). Cada caso é uma **função de n
-diferente**, e cada uma ganha o seu O, Ω ou Θ. Na busca sequencial, o melhor
-caso é Θ(1) e o pior é Θ(n).
+Outro eixo, independente, é **qual entrada**: o **melhor caso** dá menos
+trabalho, o **pior caso** mais, e o **caso médio** é a média. Cada caso é uma
+**função de n diferente**, com seu próprio O, Ω ou Θ. Na busca sequencial, o
+melhor caso é Θ(1) e o pior é Θ(n).
 
-A tabela mostra o custo medido e o teto `4n²` para `n` de 6 a 15. Até 11, o teto fica abaixo do custo (vermelho); de 12 em
-diante, fica acima e não cruza mais (verde). O `n₀` é a primeira coluna verde:
+Custo medido e teto `4n²` para `n` de 6 a 15: até 11 o teto fica abaixo
+(vermelho); de 12 em diante, acima (verde). O `n₀` é a primeira coluna verde:
 
 <p align="center"><img src="26-analise-formal/0166-o-omega-theta/ideia.svg" alt="Diagrama da ideia: O, Ω e Θ de verdade" width="858"></p>
 
-O programa faz a busca que você faria à mão: testa todo `n` até 100 mil e
-guarda o último que falhou. O `n₀` é o seguinte a ele:
+O programa testa todo `n` até 100 mil e guarda o último que falhou; o `n₀` é
+o seguinte:
 
 ```c
 #include <stdio.h>
@@ -193,38 +172,27 @@ int main(void) {
 // O(n) com c = 1000: falha de n = 330 em diante
 ```
 
-O fluxograma é a função `n0_teto`. Ela não para no primeiro `n` que funciona:
-percorre tudo e **empurra** o `n₀` para depois de cada falha, que é como se
-escreve "para todo `n ≥ n₀`" num laço. Na última parte da saída, com
-`c = 1000`, o teto linear aguenta até 329 e depois quebra para sempre. Com
-qualquer `c` acontece o mesmo, só que mais longe:
+A função `n0_teto` **empurra** o `n₀` para depois de cada falha: é "para
+todo `n ≥ n₀`" num laço. Com `c = 1000`, o teto linear aguenta até 329 e
+quebra para sempre:
 
 
 <p align="center"><img src="26-analise-formal/0166-o-omega-theta/fluxograma.svg" alt="Fluxograma: O, Ω e Θ de verdade" width="588"></p>
 
 > [!WARNING]
-> O, Ω e Θ **não** são "pior, melhor e médio". São tipos de limite (teto,
-> piso, sanduíche), e você pode aplicar qualquer um deles a qualquer caso.
-> "O pior caso da busca sequencial é Θ(n)" e "o melhor caso é Θ(1)" são duas
-> frases certas. "A busca sequencial é Ω(n)" é falsa, porque o melhor caso
-> termina em 1 comparação. E um programa que testa até 100 mil **não prova**
-> nada para 100 mil e um: ele só acha candidatos. A prova é a conta
-> `n² - 10n - 20 ≥ 0`.
+> O, Ω e Θ **não** são "pior, melhor e médio": são teto, piso e sanduíche, e
+> valem para qualquer caso. "A busca sequencial é Ω(n)" é falsa, pois o melhor
+> caso faz 1 comparação. E testar até 100 mil **não prova** nada além: só acha
+> candidatos. A prova é a conta `n² - 10n - 20 ≥ 0`.
 
 > [!TIP]
-> **Por dentro do C:** o `c` esconde a máquina. As 20 operações fixas e o
-> `3` do `3n²` dependem de quantas instruções o `gcc` gera para cada linha, e
-> isso muda com `-O0` ou `-O2`, com o processador, com o tipo (`int` ou
-> `double`). O `g(n)` não muda: dobrar `n` quadruplica o trabalho em qualquer
-> máquina. Um cuidado de C no próprio teste: `3 * n * n` com `n` do tipo
-> `int` estoura perto de `n = 26.755` (passa de 2.147.483.647, o maior `int`),
-> e estouro de `int` com sinal é comportamento indefinido. Por isso o
-> programa usa `long`, que no Linux de 64 bits tem 8 bytes.
+> No teste, `3 * n * n` com `int` estoura perto de `n = 26.755`
+> (comportamento indefinido); por isso o programa usa `long`.
 
 > [!NOTE]
 > **Pergunta para você:** com `c = 3.1`, qual é o menor `n₀` do teto? Faça a
 > conta `0,1 n² - 10n - 20 ≥ 0` antes de trocar o `3.5` por `3.1` no programa.
-> O que acontece com o `n₀` quando o `c` chega perto de 3?
+> O que acontece com o `n₀` quando `c` chega perto de 3?
 
 ### Hora de praticar
 
@@ -354,44 +322,8 @@ c = 10: n0 = 8
 c = 45: n0 = 1
 ```
 
-**Dicas:**
-
-1. Comece com n0 = 1. Toda vez que custo(n) > c * n, faça n0 = n + 1:
-   o n0 tem que ficar depois da última falha.
-2. Use long para n, custo e c * n.
-3. Confira à mão: 5n + 40 <= 6n vira n >= 40. Quanto maior o c, menor o
-   n0; com c = 45, já vale em n = 1.
-
 ```bash
 gcc ~/LPEDC/26-analise-formal/0166-o-omega-theta/E991.c -o ~/LPEDC/26-analise-formal/0166-o-omega-theta/E991 && ~/LPEDC/26-analise-formal/0166-o-omega-theta/E991
-```
-
-**Exercício E992** · ★☆☆
-
-Montar as duplas de um campeonato de n jogadores faz f(n) = n² - 6n
-comparações. Agora o limite é de baixo: prove que f(n) é Ω(n²). Escreva
-acha_n0(c), que testa todo n de 1 até 10000 e devolve o menor n0 a
-partir do qual custo(n) >= c * n² sempre vale (ou LIMITE + 1 se não
-houver). Mostre o resultado para c = 0.5, 0.9 e 1.0:
-
-
-```text
-Saída esperada:
-c = 0.5: n0 = 12
-c = 0.9: n0 = 60
-c = 1.0: nenhum n0 até 10000
-```
-
-**Dicas:**
-
-1. É a mesma busca do texto, com o sinal trocado: a falha agora é
-   custo(n) < c * n * n.
-2. Use double para c; n * n em long vira double na conta c * n * n.
-3. À mão: n² - 6n >= 0.5 n² vira 0.5 n >= 6, n >= 12. Com c = 1, seria
-   -6n >= 0, que nunca vale para n >= 1. O piso precisa de c < 1.
-
-```bash
-gcc ~/LPEDC/26-analise-formal/0166-o-omega-theta/E992.c -o ~/LPEDC/26-analise-formal/0166-o-omega-theta/E992 && ~/LPEDC/26-analise-formal/0166-o-omega-theta/E992
 ```
 
 **Exercício E993** · ★★☆
@@ -412,15 +344,6 @@ n = 6:  720 ordens | melhor 5 | pior 15 | média 11.05
 n = 7: 5040 ordens | melhor 6 | pior 21 | média 14.91
 ```
 
-**Dicas:**
-
-1. Gere as ordens com backtracking (assunto 0126): um vetor perm, um
-   vetor bool usado e uma função permuta(perm, usado, pos, n).
-2. No insertion sort, conte uma comparação a cada vez que v[j] é
-   comparado com x, e saia do while com break quando v[j] <= x.
-3. O melhor caso (já ordenado) é n - 1: Θ(n). O pior (ao contrário) é
-   n(n-1)/2: Θ(n²). A média fica perto de n²/4: também Θ(n²).
-
 ```bash
 gcc ~/LPEDC/26-analise-formal/0166-o-omega-theta/E993.c -o ~/LPEDC/26-analise-formal/0166-o-omega-theta/E993 && ~/LPEDC/26-analise-formal/0166-o-omega-theta/E993
 ```
@@ -440,35 +363,18 @@ c =  8: falha de n = 257 em diante
 c = 16: falha de n = 65537 em diante
 ```
 
-**Dicas:**
-
-1. log2 está em <math.h>; o gcc com as flags de estudo já liga a biblioteca matemática.
-2. Guarde ultimo_ok = n sempre que a desigualdade valer; a quebra
-   começa em ultimo_ok + 1.
-3. n log n <= c n é o mesmo que log n <= c, isto é, n <= 2^c. Para
-   qualquer c, o n = 2^c + 1 quebra o teto. Nenhum c serve.
-
 ```bash
 gcc ~/LPEDC/26-analise-formal/0166-o-omega-theta/E994.c -o ~/LPEDC/26-analise-formal/0166-o-omega-theta/E994 -lm && ~/LPEDC/26-analise-formal/0166-o-omega-theta/E994
 ```
 
 **Exercício E995** · ★★★
 
-Conserte o programa. O sistema do torneio de futsal monta a rodada com
-2n² operações; com n ímpar, um time folga e a tabela é refeita (30n a
-mais). O programa diz que custo(n) <= 3n² vale "a partir de n0 = 2",
-mas a conferência logo abaixo acha falhas:
-
-
-```text
-Saída que aparece:
-custo(n) <= 3n² a partir de n0 = 2
-falhas de n0 até 1000: 14
-```
-
-
-Corrija a função acha_n0 para que ela respeite o "para todo n >= n0" da
-definição de O:
+O sistema do torneio de futsal monta a rodada com 2n² operações; com n
+ímpar, um time folga e a tabela é refeita (30n a mais). Escreva long
+custo(long n) e long acha_n0(long c), que devolve o menor n0 tal que
+custo(n) <= c * n² para TODO n de n0 até LIMITE (1000), como pede a
+definição de O. No main, mostre o n0 para c = 3 e confira, com um laço de
+n0 até LIMITE, quantas falhas existem:
 
 
 ```text
@@ -477,60 +383,21 @@ custo(n) <= 3n² a partir de n0 = 30
 falhas de n0 até 1000: 0
 ```
 
-**Dicas:**
-
-1. A função para no primeiro n que funciona. Com n = 2 (par) funciona,
-   mas n = 3 (ímpar) volta a falhar.
-2. Percorra todos os n até LIMITE e faça n0 = n + 1 a cada falha.
-3. À mão: com n ímpar, 2n² + 30n <= 3n² vira n >= 30, então o último
-   ímpar que falha é 29 e o n0 é 30.
-
 ```bash
 gcc ~/LPEDC/26-analise-formal/0166-o-omega-theta/E995.c -o ~/LPEDC/26-analise-formal/0166-o-omega-theta/E995 && ~/LPEDC/26-analise-formal/0166-o-omega-theta/E995
-```
-
-**Exercício E996** · ★★★
-
-Ache as duas fatias do sanduíche do Θ por busca. A função abaixo confere
-cada cliente da fila e cada par de clientes uma vez. Acrescente um
-contador global de passos (um passo para o cliente sozinho e um para
-cada par), rode confere_pares para todo n de 10 até 2000 e guarde o
-menor (c1) e o maior (c2) valor de passos / n². Depois mostre a
-contagem para n = 1000 ao lado da fórmula n(n+1)/2:
-
-
-```text
-Saída esperada:
-de n = 10 a 2000: c1 = 0.5002, c2 = 0.5500
-n = 1000: 500500 passos, n(n+1)/2 = 500500
-f(n) = Θ(n²) com c1 = 0.5, c2 = 0.55 e n0 = 10
-```
-
-**Dicas:**
-
-1. passos++ antes do laço de dentro (o cliente sozinho) e passos++ dentro
-   dele (o par).
-2. A razão é (n + 1) / (2n): começa em 0.55 com n = 10 e desce para 0.5
-   sem nunca chegar lá. Por isso c1 = 0.5 serve para todo n.
-3. Calcule a razão em double: (double)passos / ((double)n * n).
-
-```bash
-gcc ~/LPEDC/26-analise-formal/0166-o-omega-theta/E996.c -o ~/LPEDC/26-analise-formal/0166-o-omega-theta/E996 && ~/LPEDC/26-analise-formal/0166-o-omega-theta/E996
 ```
 
 ---
 
 ## 0167 · Somatórios que saem de laços
 
-Reunião de condomínio. Os moradores chegam um por vez, e cada um que entra
-aperta a mão de todo mundo que já está na sala. O primeiro não cumprimenta
-ninguém, o segundo cumprimenta 1, o terceiro 2... Com 8 moradores, quantos
-apertos de mão acontecem? E com os 1000 moradores de um conjunto grande?
+Na reunião de condomínio, cada morador que chega aperta a mão de quem já está
+na sala: o primeiro ninguém, o segundo 1, o terceiro 2... Quantos apertos com
+8 moradores? E com 1000?
 
-Contar passos, como no assunto 0071, é fácil quando o laço de dentro roda
-sempre o mesmo número de vezes: `n` vezes `n` dá `n²`. Aqui não: o laço de
-dentro depende de `i`. É um **laço dependente**, e a contagem vira uma soma
-de parcelas diferentes, um **somatório**:
+Contar passos (assunto 0071) é fácil quando o laço de dentro roda sempre o
+mesmo número de vezes. Aqui ele depende de `i`: é um **laço dependente**, e a
+conta vira um **somatório**:
 
 ```text
  n-1
@@ -538,18 +405,16 @@ de parcelas diferentes, um **somatório**:
  i=0
 ```
 
-O `Σ` (sigma) quer dizer "some a expressão da direita para cada valor de
-`i`, do de baixo até o de cima". Cada laço `for` vira um `Σ`: os limites do
-laço viram os limites da soma, e o que o corpo faz vira a parcela.
+O `Σ` (sigma) soma a expressão da direita para cada `i`, do limite de baixo ao
+de cima. Cada `for` vira um `Σ`: os limites do laço são os da soma, e o corpo
+é a parcela.
 
-A fórmula fechada da soma de `0` a `n-1` sai de um truque antigo: escreva a
-soma de frente para trás e de trás para frente, uma embaixo da outra. Cada
-coluna soma `n-1`, e são `n` colunas. Isso é o dobro da soma: `n(n-1)/2`.
-Para 8 moradores, `8 · 7 / 2 = 28`. Para 1000, 499.500. É **Θ(n²)**: o
-"só metade" do laço dependente corta a constante pela metade, mas não muda
-a classe.
+A fórmula da soma de `0` a `n-1` vem de um truque: escreva a soma de frente
+para trás e de trás para frente, uma embaixo da outra. Cada coluna soma `n-1`,
+são `n` colunas, e isso é o dobro: `n(n-1)/2`. Para 8 moradores, 28; para
+1000, 499.500. É **Θ(n²)**: a metade corta a constante, não a classe.
 
-As quatro somas que mais aparecem quando você lê laços:
+As quatro somas que mais aparecem em laços:
 
 | laço | somatório | fórmula | classe |
 | --- | --- | --- | --- |
@@ -558,14 +423,12 @@ As quatro somas que mais aparecem quando você lê laços:
 | `for (t = 1; t < n; t *= 2)`, `for j < t` | geométrica: `1 + 2 + 4 + ...` | `2^k - 1` (menos que `2n`) | Θ(n) |
 | `for p = 1..n`, `for (j = 0; j < n; j += p)` | harmônica: `Σ n/p` | `≈ n ln n` | Θ(n log n) |
 
-A **geométrica** engana: dois laços aninhados, e mesmo assim linear, porque
-a última parcela sozinha é maior que todas as outras juntas
-(`512 > 1 + 2 + ... + 256`). A **harmônica** é a soma `1 + 1/2 + 1/3 + ... +
-1/n`, que cresce como `ln n`; multiplicada por `n`, dá `n ln n`.
+A **geométrica** engana: dois laços aninhados e mesmo assim linear, pois a
+última parcela supera todas as outras juntas (`512 > 1 + 2 + ... + 256`). A **harmônica**, `1 + 1/2 + ... + 1/n`, cresce como `ln n`;
+multiplicada por `n`, dá `n ln n`.
 
-No desenho, cada linha é um morador que chega e cada quadradinho roxo é um
-aperto de mão com quem já estava na sala. O triângulo roxo é metade do
-quadrado de 8 por 8, sem a diagonal:
+Cada linha é um morador e cada quadradinho roxo, um aperto de mão. O
+triângulo é metade do quadrado de 8 por 8, sem a diagonal:
 
 <p align="center"><img src="26-analise-formal/0167-somatorios/ideia.svg" alt="Diagrama da ideia: Somatórios que saem de laços" width="858"></p>
 
@@ -602,9 +465,8 @@ int main(void) {
 //  20000  199990000  199990000
 ```
 
-O teste `j < i?` do fluxograma é o que torna o laço dependente. Na volta de
-`i = 0`, ele dá "Não" de cara; na volta de `i = 7`, dá "Sim" sete vezes. A
-soma dos "Sim" de todas as voltas é o somatório:
+O teste `j < i?` torna o laço dependente: em `i = 0` dá "Não" de cara; em
+`i = 7`, "Sim" sete vezes. A soma dos "Sim" é o somatório:
 
 <p align="center"><img src="26-analise-formal/0167-somatorios/fluxograma.svg" alt="Fluxograma: Somatórios que saem de laços" width="549"></p>
 
@@ -624,29 +486,20 @@ Com `n = 8`, cada volta de `i` soma `i` apertos ao total:
 | 7 | 7 | **28** |
 
 > [!WARNING]
-> A pegadinha está nos limites. `for (j = 0; j < i; j++)` roda `i` vezes, e
-> a soma de `i = 0` até `n-1` dá `n(n-1)/2`. Troque para `j <= i` e cada volta
-> ganha um a mais: `n(n+1)/2`. Comece `i` em 1 em vez de 0 e some de novo.
-> Na classe, tanto faz (tudo é Θ(n²)); numa questão que pede o **número
-> exato** de execuções, a diferença de `n` é a resposta errada. Antes de
-> aplicar a fórmula, teste com `n = 1` e `n = 2` à mão.
+> Cuidado com os limites. `for (j = 0; j < i; j++)` roda `i` vezes e soma
+> `n(n-1)/2`. Com `j <= i`, cada volta ganha um a mais: `n(n+1)/2`. Na
+> classe tanto faz (Θ(n²)); no **número exato**, é resposta errada. Teste com
+> `n = 1` e `n = 2` à mão.
 
 > [!TIP]
-> **Por dentro do C:** a fórmula também tem armadilha. Com `int n = 70000`,
-> o produto `n * (n - 1)` passa de 4,8 bilhões e estoura o `int` (máximo de
-> 2.147.483.647) **antes** da divisão por 2, mesmo que o resultado final
-> (2,4 bilhões) caiba num `long`. Estouro de `int` com sinal é comportamento
-> indefinido: o programa pode mostrar um número negativo ou qualquer outra
-> coisa. Por isso o `main` guarda `n` num `long` antes de multiplicar. Outro
-> detalhe: com `-O2`, o compilador pode reconhecer o laço que só
-> incrementa um contador e trocar os dois `for` pela própria fórmula
-> fechada. O laço de Θ(n²) vira uma conta de Θ(1) no código de máquina.
+> Com `int n = 70000`, `n * (n - 1)` estoura o `int` **antes** da divisão por
+> 2, embora o resultado caiba num `long`. Estouro de `int` com sinal é
+> comportamento indefinido; por isso o `main` guarda `n` num `long`.
 
 > [!NOTE]
-> **Pergunta para você:** se cada morador que chega apertasse a mão de quem
-> já está **e** a dele mesmo (troque `j < i` por `j <= i`), quantos apertos
-> seriam com 8 moradores? E se cada um formasse trios com dois que já estão
-> (três laços, `k < j < i`)? Escreva o somatório antes de mudar o programa.
+> **Pergunta para você:** com `j <= i`, quantos apertos seriam com 8
+> moradores? E trios com dois que já estão (três laços, `k < j < i`)? Escreva
+> o somatório antes de mudar o programa.
 
 ### Hora de praticar
 
@@ -776,41 +629,8 @@ pelo laço:    R$ 66795
 pela fórmula: R$ 66795
 ```
 
-**Dicas:**
-
-1. O laço vai de dia = 1 até dia <= 365, somando dia ao cofre.
-2. A soma de 1 até n é n(n+1)/2 (de 1 até n, não de 0 até n-1).
-3. Resposta esperada: R$ 66795 nas duas linhas.
-
 ```bash
 gcc ~/LPEDC/26-analise-formal/0167-somatorios/E997.c -o ~/LPEDC/26-analise-formal/0167-somatorios/E997 && ~/LPEDC/26-analise-formal/0167-somatorios/E997
-```
-
-**Exercício E998** · ★☆☆
-
-A função abaixo compara cada produto da prateleira com ele mesmo e com
-os que vêm depois. O laço de dentro começa em j = i. Conte os
-passos com um contador global (passos++ dentro do laço de dentro) e
-mostre a contagem ao lado da fórmula n(n+1)/2 para n = 10, 100 e 1000:
-
-
-```text
-Saída esperada:
-    n  passos  n(n+1)/2
-   10      55        55
-  100    5050      5050
- 1000  500500    500500
-```
-
-**Dicas:**
-
-1. Zere o contador antes de cada chamada.
-2. Para i = 0, o laço de dentro roda n vezes; para i = n-1, uma vez.
-   A soma é n + (n-1) + ... + 1.
-3. Calcule a fórmula com n do tipo long.
-
-```bash
-gcc ~/LPEDC/26-analise-formal/0167-somatorios/E998.c -o ~/LPEDC/26-analise-formal/0167-somatorios/E998 && ~/LPEDC/26-analise-formal/0167-somatorios/E998
 ```
 
 **Exercício E999** · ★★☆
@@ -828,13 +648,6 @@ Saída esperada:
  30    4060           4060
 100  161700         161700
 ```
-
-**Dicas:**
-
-1. for i < n, for j < i, for k < j: cada trio aparece uma vez só, em
-   ordem decrescente de índice.
-2. O somatório é a soma, para cada i, de i(i-1)/2 (os pares abaixo de
-   i). Isso dá n(n-1)(n-2)/6: três laços, Θ(n³), com constante 1/6.
 
 ```bash
 gcc ~/LPEDC/26-analise-formal/0167-somatorios/E999.c -o ~/LPEDC/26-analise-formal/0167-somatorios/E999 && ~/LPEDC/26-analise-formal/0167-somatorios/E999
@@ -858,50 +671,8 @@ Saída esperada:
 100    338350          338350
 ```
 
-**Dicas:**
-
-1. O laço de dentro depende de i de um jeito novo: roda i² vezes.
-2. 1 + 4 + 9 + ... + n² = n(n+1)(2n+1)/6, que é Θ(n³).
-
 ```bash
 gcc ~/LPEDC/26-analise-formal/0167-somatorios/E1000.c -o ~/LPEDC/26-analise-formal/0167-somatorios/E1000 && ~/LPEDC/26-analise-formal/0167-somatorios/E1000
-```
-
-**Exercício E1001** · ★★★
-
-Conserte as fórmulas. O programa conta as execuções de três laços com
-n = 1024 e compara com uma fórmula fechada para cada um. Os laços estão
-certos; as três fórmulas, erradas:
-
-
-```text
-Saída que aparece:
-a: 523776 e 524800, confere: não
-b: 1023 e 10240, confere: não
-c: 342 e 341, confere: não
-```
-
-
-Corrija só as linhas formula_a, formula_b e formula_c (sem laço, só
-conta com n) até as três conferirem:
-
-
-```text
-Saída esperada:
-a: 523776 e 523776, confere: sim
-b: 1023 e 1023, confere: sim
-c: 342 e 342, confere: sim
-```
-
-**Dicas:**
-
-1. a: some i para i de 0 até n-1. Teste com n = 2: o laço roda 1 vez.
-2. b: 1 + 2 + 4 + ... + 512. Quanto falta para 1024?
-3. c: i = 0, 3, 6, ..., 1023 são quantos valores? n / 3 em inteiro
-   corta a parte quebrada; você quer arredondar para cima: (n + 2) / 3.
-
-```bash
-gcc ~/LPEDC/26-analise-formal/0167-somatorios/E1001.c -o ~/LPEDC/26-analise-formal/0167-somatorios/E1001 && ~/LPEDC/26-analise-formal/0167-somatorios/E1001
 ```
 
 **Exercício E1002** · ★★★
@@ -930,14 +701,6 @@ Saída esperada:
 1000000   13970034  13970034  13815511  1.011
 ```
 
-**Dicas:**
-
-1. O fiscal p visita n / p bancas (divisão inteira).
-2. visitas é Θ(n log n): a soma harmônica n/1 + n/2 + ... + n/n.
-   visitas_rapido é Θ(n): uma conta por fiscal.
-3. log de <math.h> é o logaritmo natural (ln). A razão desce para 1
-   devagar: é isso que "≈ n ln n" quer dizer.
-
 ```bash
 gcc ~/LPEDC/26-analise-formal/0167-somatorios/E1002.c -o ~/LPEDC/26-analise-formal/0167-somatorios/E1002 -lm && ~/LPEDC/26-analise-formal/0167-somatorios/E1002
 ```
@@ -946,34 +709,27 @@ gcc ~/LPEDC/26-analise-formal/0167-somatorios/E1002.c -o ~/LPEDC/26-analise-form
 
 ## 0168 · Complexidade espacial
 
-O motorista de entregas sai do centro de distribuição com a rota do dia: as
-paradas 12, 7, 30, 5, 18 e 9, nessa ordem. Na volta, ele quer fazer o
-caminho ao contrário. Dá para escrever a rota invertida numa folha nova,
-de baixo para cima, e jogar a velha fora. Ou dá para riscar e trocar na
-própria folha: a primeira com a última, a segunda com a penúltima... A
-segunda opção não gasta papel. Com 6 paradas, tanto faz. Com 1 milhão, a
-folha nova pesa 4 MB.
+O motorista tem a rota do dia: paradas 12, 7, 30, 5, 18 e 9. Na volta, quer o
+caminho ao contrário: pode copiar a rota invertida numa folha nova ou trocar
+na própria folha (a primeira com a última, a segunda com a penúltima...), sem
+gastar papel. Com 1 milhão de paradas, a folha nova pesa 4 MB.
 
-Até aqui, a análise contou **tempo** (passos). A **complexidade espacial**
-conta **memória**: quantos bytes a função usa, em função de `n`, com as
-mesmas notações O, Ω e Θ e as mesmas constantes `c` e `n₀`.
+A **complexidade espacial** conta **memória** em função de `n`, com as
+mesmas notações O, Ω e Θ.
 
-Quase sempre interessa o **espaço extra** (também chamado de espaço
-**auxiliar**): o que a função usa **além da entrada**. A rota de `n` paradas
-já existe antes da chamada; o que conta é o que a função pede a mais. Uma
-função que usa um número fixo de variáveis simples tem espaço extra **Θ(1)**: é um algoritmo **in-place** (no lugar). Uma que faz uma cópia
-da entrada tem espaço extra **Θ(n)**.
+Quase sempre interessa o **espaço extra** (ou **auxiliar**): o que a função
+usa **além da entrada**. Número fixo de variáveis simples é **Θ(1)**: o
+algoritmo é **in-place** (no lugar). Uma cópia da entrada é **Θ(n)**.
 
 O espaço extra aparece em três lugares:
 
 - **vetores e `malloc`**: um auxiliar de `n` posições é Θ(n), uma matriz
   `n × n` é Θ(n²);
-- **a pilha de chamadas**: cada chamada recursiva ainda ativa ocupa um
-  frame (assunto 0031). O espaço é a **profundidade máxima** vezes o tamanho
-  do frame, mesmo que o total de chamadas seja muito maior;
-- **tabelas para ganhar tempo**: memoização, vetor de contagem, tabela
-  hash. É a troca clássica de **tempo por espaço**: pagar memória para não
-  repetir trabalho.
+- **a pilha de chamadas**: cada chamada recursiva ativa ocupa um frame
+  (assunto 0031). O espaço é a **profundidade máxima** vezes o tamanho do
+  frame, não o total de chamadas;
+- **tabelas para ganhar tempo**: memoização, vetor de contagem, tabela hash.
+  É a troca de **tempo por espaço**.
 
 | algoritmo | tempo | espaço extra |
 | --- | --- | --- |
@@ -986,14 +742,13 @@ O espaço extra aparece em três lugares:
 | quick sort | Θ(n log n) em média | Θ(log n) em média, Θ(n) no pior, da pilha |
 | counting sort com valores de 0 a k | Θ(n + k) | Θ(n + k) |
 
-No desenho, em cima, está a rota invertida numa folha nova: 6 gavetas a
-mais, `6 · 4 = 24` bytes. Embaixo, a mesma inversão no lugar: só a caixinha
-`tmp`, 4 bytes, para qualquer tamanho de rota:
+Em cima, a cópia: 6 gavetas a mais, `6 · 4 = 24` bytes. Embaixo, a inversão
+no lugar: só a caixinha `tmp`, 4 bytes, para qualquer rota:
 
 <p align="center"><img src="26-analise-formal/0168-complexidade-espacial/ideia.svg" alt="Diagrama da ideia: Complexidade espacial" width="858"></p>
 
-O programa faz as duas inversões e devolve quantos bytes extras cada uma
-pediu. Depois repete com 1 milhão de paradas:
+O programa faz as duas inversões e devolve os bytes extras de cada uma.
+Depois repete com 1 milhão de paradas:
 
 ```c
 #include <stdio.h>
@@ -1055,38 +810,27 @@ int main(void) {
 // bytes extras com 1 milhão: 4000000 e 4
 ```
 
-O fluxograma segue a `inverte_no_lugar`, e nenhuma caixa dele cria memória.
-O laço anda com duas marcas, `i` da esquerda e `j` da direita, e para quando
-elas se cruzam: com 6 paradas, são 3 trocas. Tempo Θ(n), espaço extra Θ(1):
+Nenhuma caixa cria memória. O `i` anda da esquerda e o `j` da direita, até se
+cruzarem: 3 trocas para 6 paradas. Tempo Θ(n), espaço extra Θ(1):
 
 <p align="center"><img src="26-analise-formal/0168-complexidade-espacial/fluxograma.svg" alt="Fluxograma: Complexidade espacial" width="528"></p>
 
 > [!WARNING]
-> Recursão **custa** espaço, mesmo sem vetor. A soma recursiva
-> `soma(v, n) = v[n-1] + soma(v, n-1)` não declara vetor nenhum e tem
-> espaço extra Θ(n): `n` frames empilhados ao mesmo tempo. Com 1 milhão
-> de elementos, a pilha (8 MB por padrão no Linux) pode estourar e o
-> programa morre com *segmentation fault*. O laço equivalente usa Θ(1). Ao
-> analisar espaço, procure a **profundidade máxima** da recursão, não só os
-> `malloc`.
+> Recursão **custa** espaço, mesmo sem vetor. `soma(v, n) = v[n-1] + soma(v,
+> n-1)` tem espaço extra Θ(n): `n` frames empilhados. Com 1 milhão de
+> elementos, a pilha (8 MB no Linux) estoura em *segmentation fault*; o laço
+> usa Θ(1). Procure a **profundidade máxima**, não só os `malloc`.
 
 > [!TIP]
-> **Por dentro do C:** a memória de um programa C tem três regiões que
-> importam aqui. As variáveis locais e os frames ficam na **pilha**
-> (*stack*), que é pequena e fixa: `ulimit -s` mostra 8192 KB na maioria
-> dos Linux. O `malloc` pega memória do **heap**, que pode crescer até a
-> RAM disponível. E o `static int grande[1000000]` do exemplo fica na área
-> de **dados estáticos**, reservada antes do `main` começar: declarar esse
-> vetor sem `static`, dentro do `main`, colocaria 4 MB na pilha, metade do
-> limite. Por isso um Θ(n) de espaço feito com `malloc` costuma funcionar, e
-> o mesmo Θ(n) feito com recursão funda costuma quebrar.
-
+> Locais e frames ficam na **pilha**, pequena e fixa (`ulimit -s` mostra 8192
+> KB). O `malloc` usa o **heap**, que cresce até a RAM. O `static int
+> grande[1000000]` fica nos **dados estáticos**; sem `static`, seriam 4 MB na
+> pilha, metade do limite.
 
 > [!NOTE]
 > **Pergunta para você:** quantos bytes extras a `inverte_copiando` pediria
-> para inverter 1 milhão de `double` em vez de `int`? E a
-> `inverte_no_lugar`, com `tmp` do tipo `double`? Calcule e depois troque os
-> tipos no programa.
+> com 1 milhão de `double` em vez de `int`? E a `inverte_no_lugar`, com `tmp`
+> `double`? Calcule e troque os tipos no programa.
 
 ### Hora de praticar
 
@@ -1234,10 +978,11 @@ gcc ~/LPEDC/26-analise-formal/0168-complexidade-espacial/A336.c -o ~/LPEDC/26-an
 
 **Exercício E1003** · ★☆☆
 
-A função potencia abaixo faz uma multiplicação por chamada. Meça quanto
-ela empilha: acrescente dois contadores globais, prof (frames vivos
-agora) e prof_max (o maior valor que prof já teve), e mostre a
-profundidade máxima para 3^10, 3^20 e 3^30:
+Escreva a recursiva long potencia(long base, int e), com uma multiplicação
+por chamada (potencia(base, 0) = 1). Meça quanto ela empilha: use dois
+contadores globais, prof (frames vivos agora) e prof_max (o maior valor que
+prof já teve). No main, mostre o resultado e a profundidade máxima para
+3^10, 3^20 e 3^30:
 
 
 ```text
@@ -1247,42 +992,8 @@ Saída esperada:
 3^30 = 205891132094649, profundidade 31
 ```
 
-**Dicas:**
-
-1. No começo da função: prof++ e, se prof > prof_max, prof_max = prof.
-   Antes de sair: prof--. Para isso, guarde o resultado numa variável r
-   e tenha um return só, no fim.
-2. Zere prof_max antes de cada potência.
-3. De e até 0 são e + 1 chamadas vivas ao mesmo tempo: Θ(e) de espaço
-   na pilha, sem nenhum vetor.
-
 ```bash
 gcc ~/LPEDC/26-analise-formal/0168-complexidade-espacial/E1003.c -o ~/LPEDC/26-analise-formal/0168-complexidade-espacial/E1003 && ~/LPEDC/26-analise-formal/0168-complexidade-espacial/E1003
-```
-
-**Exercício E1004** · ★☆☆
-
-A função separa abaixo copia as senhas pares para um vetor e as ímpares
-para outro, só para depois contar quantas há em cada um. Isso gasta
-2n inteiros de espaço extra (80 bytes para 10 senhas, 8 MB para 1 milhão).
-Reescreva separa SEM malloc e sem nenhum vetor auxiliar: Θ(1) de espaço
-extra. O main e a saída não mudam:
-
-
-```text
-Saída esperada:
-pares: 6, ímpares: 4
-```
-
-**Dicas:**
-
-1. Para contar, não é preciso guardar: basta somar 1 no contador certo.
-2. Faça *pares = 0 e *impares = 0 no começo e percorra senhas uma vez.
-3. Tire o #include <stdlib.h> quando não usar mais malloc.
-4. Resposta esperada: pares: 6, ímpares: 4.
-
-```bash
-gcc ~/LPEDC/26-analise-formal/0168-complexidade-espacial/E1004.c -o ~/LPEDC/26-analise-formal/0168-complexidade-espacial/E1004 && ~/LPEDC/26-analise-formal/0168-complexidade-espacial/E1004
 ```
 
 **Exercício E1005** · ★★☆
@@ -1300,14 +1011,6 @@ Saída esperada:
 3^1000000 mod p = 64935414, profundidade 21
 3^1000000000 mod p = 235939645, profundidade 31
 ```
-
-**Dicas:**
-
-1. #define MOD 1000000007L. Depois de cada multiplicação, faça % MOD:
-   meia * meia é menor que 10^18 e cabe num long de 8 bytes.
-2. O e cai pela metade a cada chamada: 10, 5, 2, 1, 0 são 5 frames.
-3. Profundidade floor(log2 e) + 2: Θ(log e) de pilha. Com a versão
-   do E1003, 3^1000000000 empilharia 1 bilhão de frames.
 
 ```bash
 gcc ~/LPEDC/26-analise-formal/0168-complexidade-espacial/E1005.c -o ~/LPEDC/26-analise-formal/0168-complexidade-espacial/E1005 && ~/LPEDC/26-analise-formal/0168-complexidade-espacial/E1005
@@ -1329,14 +1032,6 @@ Saída esperada:
 1 2 3 4 5 6 7
 ```
 
-**Dicas:**
-
-1. Escreva antes inverte(v, ini, fim), que troca as pontas como a
-   inverte_no_lugar do texto, mas só entre ini e fim.
-2. 1 2 3 4 5 6 7 → (inteiro) 7 6 5 4 3 2 1 → (3 primeiros) 5 6 7 4 3 2 1
-   → (resto) 5 6 7 1 2 3 4.
-3. Girar 11 é o mesmo que girar 11 % 7 = 4. 3 + 4 = 7: volta ao início.
-
 ```bash
 gcc ~/LPEDC/26-analise-formal/0168-complexidade-espacial/E1006.c -o ~/LPEDC/26-analise-formal/0168-complexidade-espacial/E1006 && ~/LPEDC/26-analise-formal/0168-complexidade-espacial/E1006
 ```
@@ -1344,11 +1039,11 @@ gcc ~/LPEDC/26-analise-formal/0168-complexidade-espacial/E1006.c -o ~/LPEDC/26-a
 **Exercício E1007** · ★★★
 
 O estacionamento registrou as placas (números) que entraram no dia, em
-ordem crescente, com repetições. A função sem_repetidas deixa uma cópia
-de cada placa no começo do vetor e devolve quantas sobraram, mas faz
-isso com um vetor auxiliar de n posições. Reescreva a função para usar
-Θ(1) de espaço extra, sem malloc, mexendo no próprio vetor. A saída não
-muda:
+ordem crescente, com repetições: 1020 1020 1033 1047 1047 1047 1050 1062
+1062 1071 1088 1088. Escreva int sem_repetidas(int placas[], int n), que
+deixa uma cópia de cada placa no começo do vetor e devolve quantas
+sobraram, com Θ(1) de espaço extra: sem malloc e sem vetor auxiliar,
+mexendo no próprio vetor. No main, mostre o resultado:
 
 
 ```text
@@ -1356,96 +1051,43 @@ Saída esperada:
 12 placas, 7 distintas: 1020 1033 1047 1050 1062 1071 1088
 ```
 
-**Dicas:**
-
-1. Use dois índices: le, que percorre todo o vetor, e escreve, que marca
-   a próxima posição livre do resultado.
-2. Como o vetor está ordenado, uma placa é nova quando é diferente da
-   última que você escreveu, placas[escreve - 1].
-3. escreve nunca passa de le: você só sobrescreve posições que já leu.
-
 ```bash
 gcc ~/LPEDC/26-analise-formal/0168-complexidade-espacial/E1007.c -o ~/LPEDC/26-analise-formal/0168-complexidade-espacial/E1007 && ~/LPEDC/26-analise-formal/0168-complexidade-espacial/E1007
-```
-
-**Exercício E1008** · ★★★
-
-De quantas formas dá para subir uma escada de n degraus, de 1 em 1 ou de
-2 em 2? formas(0) = formas(1) = 1 e formas(n) = formas(n-1) + formas(n-2).
-Escreva três versões e meça tempo e espaço de cada uma para n = 30:
-- formas_rec(n): recursão pura, contando as chamadas e a profundidade
-
-```text
-máxima da pilha;
-```
-
-- formas_tabela(n, &bytes): um vetor de n + 1 long com malloc, preenchido
-
-```text
-de baixo para cima; devolve em bytes o tamanho do vetor;
-```
-
-- formas_duas(n): só duas variáveis long (os dois últimos valores).
-
-
-```text
-Saída esperada:
-recursão: 1346269 formas, 2692537 chamadas, 30 frames na pilha
-tabela:   1346269 formas, 248 bytes na tabela
-duas:     1346269 formas, 16 bytes extras
-```
-
-**Dicas:**
-
-1. A recursão é Θ(1,618ⁿ) de tempo, mas só Θ(n) de pilha: o ramo mais
-   fundo desce de 30 até 1.
-2. A tabela troca espaço por tempo: Θ(n) de tempo e (30 + 1) · 8 = 248
-   bytes. Não esqueça o free.
-3. Duas variáveis: Θ(n) de tempo e 2 · 8 = 16 bytes, para qualquer n.
-
-```bash
-gcc ~/LPEDC/26-analise-formal/0168-complexidade-espacial/E1008.c -o ~/LPEDC/26-analise-formal/0168-complexidade-espacial/E1008 && ~/LPEDC/26-analise-formal/0168-complexidade-espacial/E1008
 ```
 
 ---
 
 ## 0169 · Juntando tudo: passos e bytes conferidos
 
-A loja de material de construção vai trocar o sistema do caixa. O
-fornecedor entregou cinco funções que trabalham sobre o vetor de preços
-(em centavos) e, para cada uma, uma ficha: "tempo Θ(...), espaço extra
-Θ(...)". Antes de assinar, você quer conferir as fichas com o programa
-rodando.
+O fornecedor do caixa da loja de material de construção entregou cinco
+funções sobre o vetor de preços (em centavos), cada uma com uma ficha "tempo
+Θ(...), espaço extra Θ(...)". Confira as fichas rodando o programa.
 
-O roteiro de conferência usa o módulo inteiro:
+O roteiro usa o módulo inteiro:
 
-1. **Leia o código** e escreva a fórmula exata de passos, com os
-   somatórios do assunto 0167. Escreva também o espaço extra: vetores,
-   `malloc` e a profundidade máxima da recursão (assunto 0168).
-2. **Instrumente**: um contador de passos dentro do laço mais interno, um
-   contador de bytes ao lado de cada `malloc` e um contador de frames vivos
-   na entrada e na saída de cada função.
-3. **Meça e compare** com a fórmula. Se bater, a ficha está certa para
-   aquele `n`.
-4. **Dobre o `n`** e olhe a razão, a versão prática da definição de Θ do
-   assunto 0166: se `f(n)` é Θ(n²), a razão `f(2n) / f(n)` vai para 4; se é
-   Θ(n log n), fica um pouco acima de 2; se é Θ(log n), soma 1.
+1. **Leia o código** e escreva a fórmula exata de passos (somatórios do
+   assunto 0167) e o espaço extra: vetores, `malloc` e profundidade máxima da
+   recursão (0168).
+2. **Instrumente**: contadores de passos no laço mais interno, de bytes em
+   cada `malloc` e de frames vivos.
+3. **Meça e compare** com a fórmula.
+4. **Dobre o `n`** e olhe a razão (a versão prática do Θ do assunto 0166): em
+   Θ(n²), `f(2n) / f(n)` vai para 4; em Θ(n log n), fica um pouco acima de 2;
+   em Θ(log n), soma 1.
 
-As cinco funções ficam num TAD, `custo.h` e `custo.c`, na pasta do assunto.
-Elas compartilham três medidas: `custo_passos`, `custo_bytes` (pedidos ao
-`malloc`) e `custo_prof_max` (frames vivos ao mesmo tempo). Cada uma conta
-um passo num lugar escolhido de propósito: a soma conta por elemento, a
-busca binária por elemento olhado, os pares por par testado, o merge sort
-por elemento copiado na intercalação, e a soma recursiva por chamada.
+As cinco funções ficam no TAD `custo.h` e `custo.c`, com três medidas:
+`custo_passos`, `custo_bytes` (pedidos ao `malloc`) e `custo_prof_max` (frames
+vivos ao mesmo tempo). Passo é: na soma, um elemento; na busca binária, um
+elemento olhado; nos pares, um par testado; no merge sort, um elemento
+copiado na intercalação; na soma recursiva, uma chamada.
 
-A tabela é a ficha conferida: passos com `n = 1024`
-e `n = 2048`, a razão entre eles, e o espaço extra medido. Em vermelho, o
-que cresce com `n` no espaço; em verde, o que fica constante:
+Passos com `n = 1024` e `n = 2048`, razão e espaço extra medido. Em vermelho,
+o que cresce com `n`; em verde, o constante:
 
 <p align="center"><img src="26-analise-formal/0169-juntando-tudo/ideia.svg" alt="Diagrama da ideia: Juntando tudo: passos e bytes conferidos" width="870"></p>
 
-O programa roda as cinco com 1024 e 2048 preços e imprime, para cada uma,
-os passos, a fórmula, os frames e os bytes:
+O programa roda as cinco com 1024 e 2048 preços e imprime passos, fórmula,
+frames e bytes:
 
 ```c
 #include <stdio.h>
@@ -1508,10 +1150,8 @@ int main(void) {
 // soma_rec      2049     2049    2049       0
 ```
 
-Aqui o fluxograma desenha o roteiro, não uma função. A pergunta "a medida
-bate com a fórmula?" vem antes da pergunta sobre a classe: uma fórmula
-errada com a classe certa passa despercebida no "parece n²", e a
-conferência exata pega o erro na hora:
+O fluxograma é o roteiro, não uma função. "A medida bate com a fórmula?" vem
+antes da classe: fórmula errada com classe certa passa no "parece n²":
 
 <p align="center"><img src="26-analise-formal/0169-juntando-tudo/fluxograma.svg" alt="Fluxograma: Juntando tudo: passos e bytes conferidos" width="657"></p>
 
@@ -1527,34 +1167,23 @@ Lendo a saída de `n = 1024` para `n = 2048`:
 | merge | 10.240 → 22.528 | × 2,2 | Θ(n log n) | 12 → 13 | 4096 → 8192 | Θ(n) |
 | soma_rec | 1025 → 2049 | × 2 | Θ(n) | 1025 → 2049 | 0 | Θ(n) |
 
-As cinco fichas conferem. A soma e a soma recursiva têm o **mesmo tempo**
-e espaços diferentes: a recursiva empilha um frame por elemento. O merge
-sort tem dois espaços extras: o vetor auxiliar (Θ(n), que domina) e a
-pilha (Θ(log n), 12 e 13 frames).
+As cinco fichas conferem. A soma e a soma recursiva têm o **mesmo tempo** e
+espaços diferentes: a recursiva empilha um frame por elemento. O merge sort
+usa o vetor auxiliar (Θ(n), que domina) e a pilha (Θ(log n), 12 e 13 frames).
 
 > [!WARNING]
-> A medida só vale para o que você mede. A busca conferida aqui é o **pior
-> caso** (procurar 1 centavo, que não está no vetor); procurando o preço do
-> meio, ela faz 1 passo. Os pares fazem `n(n-1)/2` testes em **qualquer**
-> entrada, então ali melhor e pior coincidem. Antes de comparar com a
-> fórmula, decida qual caso a entrada do teste representa, senão você
-> "confirma" um Θ(log n) com uma busca que achou de primeira.
+> A medida vale para a entrada testada. A busca é o **pior caso** (1 centavo,
+> que não está no vetor); com o preço do meio, faz 1 passo. Os pares fazem
+> `n(n-1)/2` testes em **qualquer** entrada. Decida qual caso a entrada
+> representa.
 
 > [!TIP]
-> **Por dentro do C:** os contadores são variáveis globais do `custo.c`.
-> `custo_passos` é declarada com `extern` no `.h` e definida uma vez só no
-> `.c`; o `prof` é `static`, invisível fora do arquivo. Os bytes da pilha
-> não aparecem em `custo_bytes`: o `malloc` mede o **heap**, e a pilha
-> só dá para medir em frames. Cada frame da `custo_soma_rec`
-> guarda o endereço de retorno, o `v`, o `n` e o `s`, umas dezenas de bytes
-> (o tamanho exato depende do compilador e das opções). Com o
-> AddressSanitizer ligado, os frames ficam maiores, porque ele põe zonas de
-> proteção em volta das variáveis locais.
+> O `custo_bytes` mede o **heap**; a pilha só dá para medir em frames, que o
+> AddressSanitizer aumenta com zonas de proteção.
 
 > [!NOTE]
-> **Pergunta para você:** se o fornecedor trocasse a busca binária com laço
-> por uma busca binária **recursiva**, quais colunas da linha "busca"
-> mudariam com `n = 2048`? Escreva os números que você espera antes de
+> **Pergunta para você:** se a busca binária virasse **recursiva**, quais
+> colunas da linha "busca" mudariam com `n = 2048`? Escreva os números antes de
 > trocar.
 
 ### Hora de praticar
@@ -1699,7 +1328,7 @@ gcc ~/LPEDC/26-analise-formal/0169-juntando-tudo/A338.c ~/LPEDC/26-analise-forma
 
 **Exercício E1009** · ★☆☆
 
-Use o TAD custo.h desta pasta (o comando do exemplo compila o custo.c junto). Para
+Use o TAD custo.h desta pasta (compile com o custo.c). Para
 n = 1000, 2000, 4000 e 8000, meça os passos de custo_soma e de
 custo_busca no pior caso (procure o valor 1, menor que todos os preços)
 e mostre ao lado a fórmula floor(log2 n) + 1 da busca:
@@ -1714,42 +1343,8 @@ Saída esperada:
  8000  8000     13         13
 ```
 
-**Dicas:**
-
-1. Preencha preco[i] = 50 + 2 * i (ordenado, para a busca binária).
-2. Chame custo_zera() antes de cada medida e leia custo_passos depois.
-3. floor e log2 estão em <math.h>. A soma dobra; a busca ganha 1.
-
 ```bash
 gcc ~/LPEDC/26-analise-formal/0169-juntando-tudo/E1009.c ~/LPEDC/26-analise-formal/0169-juntando-tudo/custo.c -o ~/LPEDC/26-analise-formal/0169-juntando-tudo/E1009 -lm && ~/LPEDC/26-analise-formal/0169-juntando-tudo/E1009
-```
-
-**Exercício E1010** · ★☆☆
-
-O depósito anotou o preço do saco de cimento em 1000 dias (em centavos,
-preco[i] = 500 + (i * 37) % 1000). Qual foi a maior diferença entre dois
-preços? Escreva duas funções, cada uma com seu contador global de
-passos:
-- diferenca_pares: testa todos os pares i < j (um passo por par);
-- diferenca_uma: acha o menor e o maior numa passada (um passo por dia).
-
-
-```text
-Saída esperada:
-pares: diferença 999 em 499500 passos
-uma:   diferença 999 em 1000 passos
-```
-
-**Dicas:**
-
-1. Não use os nomes custo_passos e companhia: eles já existem no
-   custo.c desta pasta. Use, por exemplo, passos_pares e passos_uma.
-2. A maior diferença é o maior preço menos o menor.
-3. n(n-1)/2 = 499500 contra n = 1000: as duas usam Θ(1) de espaço extra,
-   mas uma é Θ(n²) e a outra Θ(n).
-
-```bash
-gcc ~/LPEDC/26-analise-formal/0169-juntando-tudo/E1010.c ~/LPEDC/26-analise-formal/0169-juntando-tudo/custo.c -o ~/LPEDC/26-analise-formal/0169-juntando-tudo/E1010 && ~/LPEDC/26-analise-formal/0169-juntando-tudo/E1010
 ```
 
 **Exercício E1011** · ★★☆
@@ -1769,23 +1364,16 @@ Saída esperada:
  8000  32000 32000      15              15
 ```
 
-**Dicas:**
-
-1. custo_bytes é size_t: mostre com %zu.
-2. Os frames são: o custo_merge (1), mais a recursão do ordena, que
-   desce até pedaços de 1 elemento: teto(log2 n) + 1 níveis.
-3. O espaço extra total é Θ(n) + Θ(log n) = Θ(n): o vetor auxiliar domina.
-
 ```bash
 gcc ~/LPEDC/26-analise-formal/0169-juntando-tudo/E1011.c ~/LPEDC/26-analise-formal/0169-juntando-tudo/custo.c -o ~/LPEDC/26-analise-formal/0169-juntando-tudo/E1011 -lm && ~/LPEDC/26-analise-formal/0169-juntando-tudo/E1011
 ```
 
 **Exercício E1012** · ★★☆
 
-Três funções misteriosas. Acrescente um contador global de passos
-(passos++ no laço mais interno de cada uma), rode cada função com
-n = 1024 e n = 2048, e escreva classe(razao), que devolve um texto
-conforme a razão p(2048) / p(1024):
+Três funções misteriosas estão no esqueleto. Declare um contador global
+de passos e acrescente passos++ ao laço mais interno de cada uma. Rode
+cada função com n = 1024 e n = 2048 e escreva const char *classe(double
+razao), que devolve um texto conforme a razão p(2048) / p(1024):
 menor que 1.5: "constante ou log n"; menor que 2.1: "n";
 menor que 3.0: "n log n"; menor que 5.0: "n²"; senão: "pior que n²".
 
@@ -1797,62 +1385,16 @@ b:  261632 -> 1047552, razão 4.00, classe n²
 c:    2047 ->    4095, razão 2.00, classe n
 ```
 
-**Dicas:**
-
-1. Um vetor de ponteiros para função (assunto 0050) deixa o main com um
-   laço só: void (*f[3])(int) = {misterio_a, misterio_b, misterio_c};
-2. a: o laço de fora dobra (log n voltas), o de dentro anda n.
-   b: laço dependente, i/2 por volta: uns n²/4.
-   c: soma geométrica n + n/2 + ... + 1, menos de 2n (assunto 0167).
-
 ```bash
 gcc ~/LPEDC/26-analise-formal/0169-juntando-tudo/E1012.c ~/LPEDC/26-analise-formal/0169-juntando-tudo/custo.c -o ~/LPEDC/26-analise-formal/0169-juntando-tudo/E1012 && ~/LPEDC/26-analise-formal/0169-juntando-tudo/E1012
-```
-
-**Exercício E1013** · ★★★
-
-Conserte a instrumentação. O programa deveria conferir que o insertion
-sort faz n(n-1)/2 comparações no pior caso (vetor ao contrário), mas o
-contador está no lugar errado:
-
-
-```text
-Saída que aparece:
-n =  500:     499 comparações, n(n-1)/2 =  124750, confere: não
-n = 1000:     999 comparações, n(n-1)/2 =  499500, confere: não
-n = 2000:    1999 comparações, n(n-1)/2 = 1999000, confere: não
-```
-
-
-Mova o contador para que ele conte cada comparação entre elementos
-(cada vez que v[j] é comparado com x). Sem mudar o algoritmo:
-
-
-```text
-Saída esperada:
-n =  500:  124750 comparações, n(n-1)/2 =  124750, confere: sim
-n = 1000:  499500 comparações, n(n-1)/2 =  499500, confere: sim
-n = 2000: 1999000 comparações, n(n-1)/2 = 1999000, confere: sim
-```
-
-**Dicas:**
-
-1. A comparação v[j] > x está na condição do while, junto com j >= 0.
-   Para contar só quando ela acontece, reescreva o while com o teste
-   j >= 0 na condição e o v[j] > x num if dentro, com break.
-2. Conte antes do if, toda vez que for comparar.
-3. No pior caso, o elemento i compara com todos os i anteriores:
-   1 + 2 + ... + (n-1) = n(n-1)/2 (assunto 0167).
-
-```bash
-gcc ~/LPEDC/26-analise-formal/0169-juntando-tudo/E1013.c ~/LPEDC/26-analise-formal/0169-juntando-tudo/custo.c -o ~/LPEDC/26-analise-formal/0169-juntando-tudo/E1013 && ~/LPEDC/26-analise-formal/0169-juntando-tudo/E1013
 ```
 
 **Exercício E1014** · ★★★
 
 A padaria tem as vendas de 1000 dias e recebe 1000 perguntas do tipo
-"quanto vendemos do dia ini ao dia fim?". Complete o programa com os
-dois jeitos de responder, contando passos e bytes extras:
+"quanto vendemos do dia ini ao dia fim?". Escreva, no main, os dois jeitos
+de responder, contando passos e bytes extras (o esqueleto já gera as vendas
+e as perguntas em ini e fim):
 - sem prefixos: para cada pergunta, some os dias de ini a fim (um passo
 
 ```text
@@ -1867,7 +1409,8 @@ cada pergunta com prefixo[fim + 1] - prefixo[ini] (um passo por
 pergunta). Θ(n + q) de tempo, Θ(n) de espaço.
 ```
 
-Os dois totais (a soma de todas as respostas) têm que bater:
+Mostre os dois resultados; os totais (a soma de todas as respostas) têm
+que bater:
 
 
 ```text
@@ -1875,14 +1418,6 @@ Saída esperada:
 sem prefixos:  335094 passos,     0 bytes, total 185862850
 com prefixos:    2000 passos,  8008 bytes, total 185862850
 ```
-
-**Dicas:**
-
-1. Os dados e as perguntas já estão prontos no main; não mude o
-   sorteia nem a ordem dos sorteios, senão os números mudam.
-2. Os bytes extras do segundo jeito são (N + 1) * sizeof(long) = 8008.
-   Não esqueça o free.
-3. Use long para os totais: passam de 185 milhões.
 
 ```bash
 gcc ~/LPEDC/26-analise-formal/0169-juntando-tudo/E1014.c ~/LPEDC/26-analise-formal/0169-juntando-tudo/custo.c -o ~/LPEDC/26-analise-formal/0169-juntando-tudo/E1014 && ~/LPEDC/26-analise-formal/0169-juntando-tudo/E1014
@@ -3171,6 +2706,28 @@ O número médio de comparações é:
 pior. Veja 0166 (exemplo A331).
 
 </details>
+
+## Questões de provas do PPGI
+
+Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.
+
+**Edital 055/2017 · Questão 13**
+
+Marque a alternativa CORRETA.
+Considerando-se para cada algoritmo o pior cenário possível em termos de uso de espaço, são algoritmos que utilizam espaço extra constante, independentemente do número de elementos do vetor de entrada a ser ordenado:
+
+- A) Mergesort e Seleção.
+- B) Quicksort e Mergesort.
+- C) Mergesort e Heapsort.
+- D) Inserção e Quicksort.
+- E) Nenhuma das alternativas acima está correta.
+
+<details><summary>Gabarito</summary>
+
+**E.** O(1) de espaço no pior caso: seleção, inserção, heap; merge usa O(n) e quick usa pilha de recursão (O(n) no pior caso) Assunto 0168.
+
+</details>
+
 
 ## Para ler mais
 

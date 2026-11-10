@@ -1,54 +1,27 @@
 // 0164 · Listas autoajustáveis
 // Exercício E982 · ★★☆
 //
-// Ache o bug. A função liga faz mover para a frente na agenda, mas o
-// programa quebra na segunda ligação: o sanitizer acusa "member access
-// within null pointer" e SEGV (acesso a um endereço inválido) dentro de
-// liga. Conserte a função e rode de novo.
+// Escreva void liga(AutoLista *l, const char *nome), o mover para a frente
+// de uma agenda, andando pelos nós do autolista.h (sem usar al_busca_mtf).
+// Cuide do contato que já é o primeiro e do que não está na agenda. No
+// main, monte a agenda Ana Bia Caio Duda e ligue para Bia, Bia, Duda, Ana e
+// Ana, mostrando a agenda depois de cada ligação. Compile com
+// -fsanitize=address: não pode haver acesso inválido.
 //
-//   Saída esperada (sem nenhum erro do sanitizer):
+//   Saída esperada:
 //   Bia: Bia Ana Caio Duda
 //   Bia: Bia Ana Caio Duda
 //   Duda: Duda Bia Ana Caio
 //   Ana: Ana Duda Bia Caio
 //   Ana: Ana Duda Bia Caio
 //
-// Escreva sua resposta abaixo (conserte o código):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include <string.h>
 #include "autolista.h"
 
-void liga(AutoLista *l, const char *nome) {
-    NoAuto *ant = NULL;
-    NoAuto *p = l->inicio;
-    while (p != NULL && strcmp(p->nome, nome) != 0) {
-        ant = p;
-        p = p->prox;
-    }
-    if (p == NULL) {
-        return; // não está na agenda
-    }
-    ant->prox = p->prox;
-    p->prox = l->inicio;
-    l->inicio = p;
-}
-
 int main(void) {
-    const char *contatos[] = {"Ana", "Bia", "Caio", "Duda"};
-    const char *chamadas[] = {"Bia", "Bia", "Duda", "Ana", "Ana"};
-    AutoLista *agenda = al_cria();
-    for (int i = 0; i < 4; i++) {
-        al_insere_fim(agenda, contatos[i]);
-    }
 
-    for (int i = 0; i < 5; i++) {
-        liga(agenda, chamadas[i]);
-        printf("%s: ", chamadas[i]);
-        al_mostra(agenda);
-        printf("\n");
-    }
-
-    al_libera(agenda);
     return 0;
 }

@@ -1,25 +1,18 @@
 ## 0182 · Caminhos e ciclos
 
-O caminhão da coleta de lixo sai da garagem, precisa passar por **todas as
-ruas** do bairro e voltar. Cada rua repetida é diesel jogado fora e meia hora
-a mais de turno. A pergunta da prefeitura: existe um roteiro que passa por
-cada rua **exatamente uma vez** e termina na garagem?
+O caminhão da coleta de lixo precisa passar por **todas as ruas** do bairro e
+voltar à garagem. Existe um roteiro que usa cada rua **exatamente uma vez**?
+Euler respondeu em 1736, sobre as pontes de Königsberg, com uma contagem.
 
-Leonhard Euler respondeu essa pergunta em 1736, sobre as pontes de
-Königsberg, e a resposta sai de uma contagem, sem testar roteiro nenhum.
+**Grau** de um vértice é quantas arestas tocam nele (um laço conta 2). No
+dirigido, há o **grau de entrada** e o **de saída** (0109).
 
-**Grau.** O **grau** de um vértice é quantas arestas tocam nele (um laço, aresta
-de um vértice para ele mesmo, conta 2). Num grafo dirigido o grau se divide em
-dois: o **grau de entrada** (setas que chegam) e o **grau de saída** (setas que
-saem). O 0109 já calculou os dois.
+**Lema do aperto de mãos.** Cada aresta conta duas vezes, uma em cada ponta:
+a soma dos graus é **2 × E**, sempre par, e o número de vértices de **grau
+ímpar** é par. No dirigido, a soma dos graus de entrada é E, e a dos de saída
+também.
 
-**Lema do aperto de mãos.** Some os graus de todos os vértices: cada aresta é
-contada duas vezes, uma em cada ponta. Então a soma é **2 × E**, sempre par. Uma
-consequência que cai em prova: o número de vértices de **grau ímpar** é par.
-No dirigido, a soma dos graus de entrada é E, e a dos de saída também.
-
-**Andar pelo grafo.** Os livros não concordam nos nomes, e a prova pode usar
-qualquer um. O que muda é **o que pode se repetir**:
+**Andar pelo grafo.** Os nomes variam conforme **o que pode se repetir**:
 
 | O que pode repetir | Cormen | Edital e teoria dos grafos | Também chamado |
 | --- | --- | --- | --- |
@@ -29,38 +22,34 @@ qualquer um. O que muda é **o que pode se repetir**:
 | fechado, nenhuma aresta repetida | (sem nome) | **circuito** | trilha fechada |
 | fechado, nenhum vértice repetido | ciclo simples | **ciclo** | |
 
-No Cormen, "caminho" aceita repetição e "ciclo" é qualquer caminho fechado
-com pelo menos uma aresta; o adjetivo **simples** proíbe repetir vértice.
-Neste módulo, quando a diferença importa, vale a coluna do meio (a do
-edital), com o nome do Cormen ao lado. O **comprimento** é o número de
-arestas, não de vértices.
+No Cormen, "ciclo" é qualquer caminho fechado com pelo menos uma aresta, e
+**simples** proíbe repetir vértice. Aqui vale a coluna do meio (a do edital).
+O **comprimento** é o número de arestas.
 
 **Circuito euleriano** é um circuito que usa **toda aresta exatamente uma
-vez** (o Cormen chama de *percurso de Euler*). Teorema de Euler, para um grafo
-**conexo** (ignorando vértices isolados):
+vez**. Teorema de Euler, para um grafo **conexo** (ignorando vértices
+isolados):
 
 - existe circuito euleriano ⇔ **todos os graus são pares**;
 - existe trajeto euleriano aberto ⇔ **exatamente dois** vértices de grau
   ímpar, e ele começa num e termina no outro.
 
-O porquê vem do aperto de mãos: toda vez que o caminhão entra numa esquina,
-sai por outra rua, e as ruas de cada esquina se gastam aos pares. Só a saída
-e a chegada escapam disso. No dirigido, a condição vira "entrada
-= saída em todo vértice".
+O porquê: o caminhão entra numa esquina e sai por outra rua, então as ruas de
+cada esquina se gastam aos pares; só a saída e a chegada escapam. No
+dirigido, a condição é "entrada = saída em todo vértice".
 
-**Hierholzer** monta o circuito em O(V + E) com lista (O(V²) com matriz). Ele
-anda por ruas ainda não usadas, apagando cada uma, até travar. Com graus pares,
-só se trava no ponto de partida. Aí volta pela pilha até achar uma esquina com
-rua sobrando, faz um desvio a partir dela e **encaixa** o desvio no circuito.
+O **Hierholzer** monta o circuito em O(V + E) com lista (O(V²) com matriz):
+anda por ruas não usadas, apagando-as, até travar (com graus pares, só na
+partida). Volta pela pilha até uma esquina com rua sobrando e **encaixa** o
+desvio feito dali.
 
-O bairro tem 6 esquinas e 8 ruas. Os números em roxo são
-os graus; os números nas ruas, a ordem em que o caminhão passa por elas:
+O bairro tem 6 esquinas e 8 ruas. Em roxo, os graus; nas ruas, a ordem da
+passagem:
 
 {{ideia}}
 
-O código guarda as ruas numa matriz de contagem (`rua[u][v]` é quantas ruas
-ligam `u` e `v`), confere a condição de Euler e roda o Hierholzer com uma
-pilha explícita:
+O código guarda as ruas numa matriz de contagem (`rua[u][v]` é quantas ligam
+`u` e `v`), confere Euler e roda o Hierholzer com pilha explícita:
 
 ```c
 #include <stdbool.h>
@@ -137,17 +126,15 @@ int main(void) {
 // (8 ruas, cada uma uma vez)
 ```
 
-No fluxograma, cada volta do laço olha o topo da pilha. Se há rua livre,
-avança e apaga a rua; se não há, a esquina sai da pilha e vai para o
-circuito. Ninguém escolhe rota, e mesmo assim nenhuma rua sobra:
+No fluxograma, cada volta olha o topo da pilha: com rua livre, avança e a
+apaga; sem, a esquina vai para o circuito:
 
 {{fluxograma}}
 
 ### Passo a passo
 
-A pilha depois de cada passo (o topo à direita). O primeiro passeio fecha cedo,
-em Garagem Praça Feira Garagem, e deixa 5 ruas para trás. O desvio sai da
-Feira e é encaixado ali:
+A pilha depois de cada passo (topo à direita). O primeiro passeio fecha cedo
+e deixa 5 ruas para trás; o desvio sai da Feira e é encaixado ali:
 
 | Passo | Pilha | Circuito (ao contrário) |
 | --- | --- | --- |
@@ -156,30 +143,24 @@ Feira e é encaixado ali:
 | F → I → E → P → S → F | G P F I E P S F | G |
 | todos travam, um a um | | G F S P E I F P G |
 
-Invertido, o circuito é Garagem Praça Feira Igreja Escola Praça Posto Feira
-Garagem. A Praça e a Feira aparecem duas vezes: é um **circuito**, não um
-**ciclo**. O A363 faz as contas de grau num grafo dirigido; o A364 desenha a
-casinha "sem tirar o lápis do papel", um trajeto aberto.
+Invertido: Garagem Praça Feira Igreja Escola Praça Posto Feira Garagem. Praça
+e Feira repetem: é um **circuito**, não um **ciclo**. O A363 faz as contas de
+grau num dirigido; o A364 desenha a casinha "sem tirar o lápis", um trajeto
+aberto.
 
 > [!WARNING]
-> "Todos os graus pares" só garante o circuito se o grafo for **conexo**. Dois
-> triângulos separados têm todos os graus iguais a 2 e nenhum circuito passa
-> pelas 6 arestas. Confira a conexidade (uma DFS, 0111) antes de confiar nos
-> graus. E não confunda: euleriano passa por toda **aresta** uma vez;
-> hamiltoniano (0183) passa por todo **vértice** uma vez.
+> "Todos os graus pares" só garante o circuito se o grafo for **conexo**: dois
+> triângulos separados têm todos os graus 2 e nenhum circuito passa pelas 6
+> arestas. Confira a conexidade (DFS, 0111). E não confunda: euleriano passa
+> por toda **aresta** uma vez; hamiltoniano (0183), por todo **vértice**.
 
 > [!TIP]
-> **Por dentro do C:** apagar a rua é só `rua[u][v]--` e `rua[v][u]--`, dois
-> acessos a uma matriz de `int` que mora num bloco contínuo de 6 × 6 × 4 =
-> 144 bytes. Como cada rua é empilhada e desempilhada uma vez, a pilha nunca
-> passa de E + 1 posições, e por isso `pilha[MAX_RUAS + 1]` cabe na pilha do
-> programa sem `malloc`. A busca do próximo vizinho recomeça do 0
-> a cada volta; com lista de adjacência e um ponteiro "próxima aresta" por
-> vértice, o total cai para O(V + E).
+> Com matriz, a busca do vizinho recomeça do 0 a cada volta. Com lista de
+> adjacência e um ponteiro "próxima aresta" por vértice, o total é O(V + E).
 
 > [!NOTE]
-> **Pergunta para você:** se a prefeitura abrir uma rua nova entre a Escola e
-> o Posto, quantas esquinas ficam com grau ímpar? Ainda existe circuito? E
-> trajeto aberto, entre quais esquinas? Responda antes de rodar.
+> **Pergunta para você:** se abrirem uma rua entre a Escola e o Posto, quantas
+> esquinas ficam com grau ímpar? Ainda existe circuito? E trajeto aberto,
+> entre quais esquinas?
 
 {{pratique}}

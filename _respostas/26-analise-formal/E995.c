@@ -15,8 +15,7 @@ long custo(long n) {
     return base;
 }
 
-// O bug: a versão antiga devolvia o PRIMEIRO n em que valia (n = 2).
-// O certo é empurrar o n0 para depois de cada falha.
+// o n0 vai para depois de cada falha: vale para TODO n >= n0
 long acha_n0(long c) {
     long n0 = 1;
     for (long n = 1; n <= LIMITE; n++) {

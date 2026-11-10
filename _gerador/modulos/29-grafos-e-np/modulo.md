@@ -1,80 +1,65 @@
 # Módulo 29 · Grafos: ciclos e cortes; problemas difíceis
 
 Os módulos 16 e 23 ensinaram a andar pelo grafo e a tirar dele caminhos,
-árvores e ordens. Este módulo fecha o assunto com duas perguntas que a prova
-do PPGI cobra pelo nome. A primeira é sobre a **forma** do grafo: dá para
-passar por toda aresta uma vez só? E por todo vértice? Qual cabo, se
-cortado, parte a rede? A segunda é sobre o **custo** de responder: por que
-umas perguntas se resolvem em O(V + E) e outras, muito parecidas, parecem
-exigir testar tudo?
+árvores e ordens. Este módulo fecha o assunto com duas perguntas da prova do
+PPGI. Sobre a **forma**: dá para passar por toda aresta uma vez? E por todo
+vértice? Qual cabo, se cortado, parte a rede? Sobre o **custo**: por que umas
+perguntas se resolvem em O(V + E) e outras, parecidas, parecem exigir testar
+tudo?
 
-A primeira metade (0182 a 0185) é algoritmo puro: graus e o teorema de
-Euler, o backtracking do ciclo hamiltoniano, a DFS com `tin` e `low` que
-acha pontes e articulações numa passada só, e a programação dinâmica da
-cadeia de matrizes. A segunda metade (0186 a 0189) é a teoria por trás da
-frase "esse problema é NP-completo": problemas de decisão, verificação em
-tempo polinomial, P e NP, reduções, e o que fazer quando o problema é
-difícil e a resposta é para hoje: aproximar com garantia ou resolver exato
-só quando a entrada é pequena.
+A primeira metade (0182 a 0185) é algoritmo: graus e o teorema de Euler, o
+backtracking do ciclo hamiltoniano, a DFS com `tin` e `low` que acha pontes e
+articulações, e a programação dinâmica da cadeia de matrizes. A segunda (0186
+a 0189) é a teoria por trás de "esse problema é NP-completo": decisão,
+verificação polinomial, P e NP, reduções, e o que fazer quando o problema é
+difícil: aproximar com garantia ou resolver exato só com entrada pequena.
 
-Antes de perguntar "qual o algoritmo?", pergunte se o problema
-**tem** algoritmo rápido. Euler e Hamilton parecem gêmeos, mas um é fácil e o
-outro não. Conferir uma resposta custa menos que achá-la. E quando não se
-conhece algoritmo rápido, ainda dá para aproximar ou podar em C.
+Antes de perguntar "qual o algoritmo?", pergunte se o problema **tem**
+algoritmo rápido. Euler e Hamilton parecem gêmeos, mas um é fácil e o outro
+não.
 
 ## O que você vai aprender
 
-- **grau**, grau de entrada e de saída, o **lema do aperto de mãos**, e a
-  diferença entre **passeio, trajeto, caminho, circuito e ciclo** (com a
-  tabela de nomes do Cormen e do edital)
-- a condição de **Euler** e o **circuito euleriano** pelo algoritmo de
-  **Hierholzer**
-- o **ciclo hamiltoniano** por backtracking, o custo fatorial, e por que ele
-  é difícil quando o euleriano é fácil
-- **pontes** e **vértices de articulação** com uma DFS só (`tin` e `low`),
-  incluindo o caso especial da raiz
-- a **multiplicação de cadeia de matrizes** por programação dinâmica: as
-  tabelas `m[i][j]` e `s[i][j]` e a parentização ótima
-- **problema de decisão**, **certificado** e **verificação polinomial**; as
-  classes **P**, **NP**, **NP-difícil** e **NP-completo**; **SAT** e
-  **3-SAT**
-- **redução polinomial**: conjunto independente, **clique** (pelo grafo
-  complemento) e **cobertura de vértices**; 3-SAT para clique
-- **algoritmos aproximados**: cobertura de vértices 2-aproximada, **bin
-  packing** (first fit e first fit decrescente) e **caixeiro viajante**
-  métrico pela árvore mínima
-- o caixeiro viajante exato pela PD de **Held-Karp** e quando trocar o exato
-  pelo aproximado
+- **grau**, o **lema do aperto de mãos** e **passeio, trajeto, caminho,
+  circuito e ciclo** (nomes do Cormen e do edital)
+- a condição de **Euler** e o **Hierholzer**
+- o **ciclo hamiltoniano** por backtracking e por que é difícil quando o
+  euleriano é fácil
+- **pontes** e **articulações** com uma DFS só (`tin` e `low`), com o caso
+  especial da raiz
+- a **cadeia de matrizes** por programação dinâmica
+- **certificado**, **verificação polinomial**, **P**, **NP**, **NP-difícil**,
+  **NP-completo**, **SAT** e **3-SAT**
+- **redução polinomial**: conjunto independente, **clique** e **cobertura de
+  vértices**; 3-SAT para clique
+- **algoritmos aproximados**: cobertura 2-aproximada, **bin packing** e
+  **caixeiro viajante** métrico
+- o caixeiro viajante exato por **Held-Karp** e quando trocar pelo
+  aproximado
 
 ## Antes de começar
 
-Este módulo usa a matriz de adjacência e a DFS (0109, 0111),
-os componentes conexos (0150), o Prim (0153), a recursão e o backtracking
-(0032, 0126, 0127), a programação dinâmica (0138 a 0140), o `qsort` (0096) e
-as máscaras de bits (0065). Se a DFS recursiva estiver enferrujada, releia o
-0111 antes do 0184.
+Usa a matriz de adjacência e a DFS (0109, 0111), os componentes conexos
+(0150), o Prim (0153), o backtracking (0032, 0126, 0127), a programação
+dinâmica (0138 a 0140), o `qsort` (0096) e as máscaras de bits (0065).
 
-Nada fica escondido em TAD: cada arquivo traz o algoritmo completo. Refaça no
-papel o **passo a passo** quando houver (a pilha do Hierholzer, os
-`tin`/`low` da DFS, a tabela da cadeia de matrizes).
-Nos grafos, a origem fica roxa, as arestas verdes
-são as escolhidas (o circuito, o ciclo, as pontes, a clique) e, nas
-articulações, o amarelo marca os vértices de corte.
+**Progressão.** Este módulo completa os grafos do 16 e do 23 e, com as
+máscaras e o `qsort` do 27, fecha o curso.
 
-Convenções que valem para o módulo todo:
+Cada arquivo traz o algoritmo completo, sem TAD. Refaça no papel o **passo a
+passo**. Nos grafos, a origem é roxa, as arestas verdes são as escolhidas e o
+amarelo marca os vértices de corte.
 
-- os vértices são números de 0 a V-1, com os nomes num vetor de strings à
-  parte, e os vizinhos são examinados em **ordem crescente de índice**. Isso
-  decide os empates: numere diferente e a resposta pode mudar, sem estar
-  errada;
-- grafo não dirigido guarda cada aresta **duas vezes** na matriz
-  (`g[a][b]` e `g[b][a]`); grafo dirigido, uma vez;
-- conjuntos pequenos (de vértices ou de variáveis) são **máscaras de bits**
-  num `int`: o bit `v` ligado quer dizer "v está no conjunto";
-- nas rotas, a distância é em **quarteirões**, `|dx| + |dy|`, que respeita
-  a desigualdade triangular;
-- os nomes seguem o **Cormen**. Quando o edital ou outro livro usa outro
-  nome (trajeto, circuito, percurso de Euler...), o texto avisa.
+Convenções do módulo:
+
+- vértices de 0 a V-1, nomes num vetor à parte, vizinhos em **ordem crescente
+  de índice** (decide os empates);
+- grafo não dirigido guarda cada aresta **duas vezes** na matriz; dirigido,
+  uma;
+- conjuntos pequenos são **máscaras de bits** num `int`;
+- distâncias em **quarteirões**, `|dx| + |dy|`, que respeita a desigualdade
+  triangular;
+- os nomes seguem o **Cormen**, e o texto avisa quando o edital usa outro.
 
 {{indice}}
 

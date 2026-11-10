@@ -1,50 +1,37 @@
 ## 0188 · Aproximação
 
-O barco de carga sai de Manaus para Parintins e leva no máximo 10 toneladas
-por viagem. No porto chegam oito cargas: 4, 4, 6, 9, 2, 6, 7 e 7 toneladas.
-Cada viagem custa caro, então o dono quer o menor número de viagens. Esse é
-o **bin packing** (empacotamento em caixas), e ele é NP-difícil: ninguém
-conhece um jeito rápido de achar sempre o mínimo.
+O barco de Manaus a Parintins leva no máximo 10 toneladas por viagem. Chegam
+oito cargas: 4, 4, 6, 9, 2, 6, 7 e 7, e o dono quer o menor número de viagens.
+É o **bin packing** (empacotamento em caixas), NP-difícil. Ele aceita uma
+resposta **um pouco pior**, se for rápida e com **garantia**.
 
-O dono do barco não pode esperar a força bruta. Ele aceita uma resposta
-**um pouco pior**, desde que venha rápido e com **garantia** de não ser
-muito pior.
+**Algoritmo de aproximação** é um algoritmo polinomial com custo no máximo
+**ρ vezes o ótimo** (minimização). O ρ é o **fator de aproximação**: um
+2-aproximado nunca gasta mais que o dobro do ótimo, em **qualquer** entrada. A
+prova compara com um **limite inferior** do ótimo.
 
-**Algoritmo de aproximação.** É um algoritmo polinomial que devolve uma
-solução viável com custo no máximo **ρ vezes o ótimo** (num problema de
-minimização). O ρ é o **fator de aproximação**: um algoritmo
-2-aproximado nunca gasta mais que o dobro do ótimo, em **qualquer**
-entrada. O truque é provar isso sem conhecer o ótimo, comparando com um
-**limite inferior** dele.
+**Bin packing.** Com capacidade C, nenhuma solução usa menos que `soma / C`
+caixas, arredondado para cima: o limite inferior. Dois gulosos:
 
-**Bin packing.** Com capacidade C, nenhuma solução usa menos que
-`soma / C` caixas, arredondado para cima: é o limite inferior. Dois gulosos:
+- **first fit** (FF): cada item vai para a **primeira** caixa em que cabe, ou
+  abre outra. Nunca sobram duas caixas com metade ou menos (a segunda caberia
+  na primeira): no máximo 2 × ótimo, e cerca de 1,7 × na análise fina;
+- **first fit decrescente** (FFD): ordena do maior para o menor e faz o mesmo.
+  A garantia é de cerca de 11/9 × ótimo (mais uma constante).
 
-- **first fit** (FF): cada item vai para a **primeira** caixa em que cabe;
-  se não cabe em nenhuma, abre outra. Nunca sobram duas caixas com metade
-  ou menos (o conteúdo da segunda caberia na primeira), e isso já garante
-  no máximo 2 × ótimo; a análise fina dá cerca de 1,7 × ótimo;
-- **first fit decrescente** (FFD): ordena os itens do maior para o menor e
-  faz o mesmo. Os itens grandes abrem as caixas e os pequenos tapam os
-  buracos. A garantia sobe para cerca de 11/9 × ótimo (mais uma constante).
+**Cobertura de vértices 2-aproximada** (0187): enquanto houver aresta
+descoberta u-v, ponha **as duas pontas**. As arestas escolhidas não têm ponta
+em comum, e o ótimo precisa de uma de cada: no máximo o dobro (A375).
 
-**Cobertura de vértices 2-aproximada** (0187). Enquanto houver aresta
-descoberta u-v, ponha **as duas pontas** na cobertura. As arestas escolhidas
-não têm ponta em comum, e o ótimo precisa de pelo menos uma ponta de cada:
-a resposta tem no máximo o dobro. O A375 roda isso contra a força bruta.
+**Caixeiro viajante métrico 2-aproximado.** Com a **desigualdade triangular**
+(ir direto nunca é mais longo que dar a volta), monte a árvore geradora mínima
+(Prim, 0153), percorra-a em **pré-ordem** e volte ao começo. A árvore custa
+menos que o ciclo ótimo, a volta pela árvore custa o dobro dela, e os atalhos
+só encurtam: no máximo 2 × ótimo (A376). Sem a desigualdade triangular, nenhum
+fator constante é possível, a menos que P = NP.
 
-**Caixeiro viajante métrico 2-aproximado.** Quando as distâncias respeitam a
-**desigualdade triangular** (ir direto nunca é mais longo que dar a volta),
-monte a árvore geradora mínima (Prim, 0153), percorra-a em **pré-ordem** e
-volte ao começo. A árvore custa menos que o ciclo ótimo (tire uma aresta do
-ciclo e sobra uma árvore), a volta completa pela árvore custa o dobro dela, e
-os atalhos da pré-ordem só encurtam. Total: no máximo 2 × ótimo. É o A376.
-Sem a desigualdade triangular, nenhum fator constante é possível, a menos
-que P = NP.
-
-No desenho, em cima, está o first fit na ordem de chegada: os dois 4 e
-o 2 lotam a primeira viagem, e cada carga grande acaba sozinha. Embaixo, o
-first fit decrescente bate o limite inferior, 45 / 10 → 5 viagens: ótimo.
+No desenho, em cima, o first fit na ordem de chegada; embaixo, o decrescente,
+que bate o limite inferior, 45 / 10 → 5 viagens: ótimo.
 
 {{ideia}}
 
@@ -115,33 +102,20 @@ int main(void) {
 //   viagem 5: 6 4  (10 t)
 ```
 
-O fluxograma mostra o first fit para uma carga. Ele procura a primeira
-viagem com espaço; se chegar ao fim da lista, abre uma nova. Com n cargas,
-custa O(n²) no pior caso, nada perto do exponencial:
+O fluxograma é o first fit para uma carga: procura a primeira viagem com
+espaço ou abre uma nova. Custa O(n²) no pior caso:
 
 {{fluxograma}}
 
 > [!WARNING]
 > "Aproximado" não é "chute": o fator vale para **toda** entrada e vem com
-> prova. E o fator é do pior caso; na prática o resultado costuma ser bem
-> melhor. A pegadinha inversa também cai em prova: o guloso "pega o vértice
-> de maior grau" para cobertura parece bom, mas **não** tem fator
-> constante; pode ficar log n vezes pior que o ótimo. O 2-aproximado
-> correto é o "pega as duas pontas".
-
-> [!TIP]
-> **Por dentro do C:** `livre[]` guarda quanto cabe em cada viagem aberta, e
-> `viagem[N][N]` é uma matriz de 8 × 8 `int` na pilha (256 bytes): no pior
-> caso cada carga vai sozinha, por isso N viagens de até N cargas. O
-> `qsort` recebe `compara_desc`, que devolve `b - a` para inverter a ordem;
-> com valores pequenos a subtração não estoura, mas para valores grandes
-> use `(x < y) - (x > y)`. Ordenar custa O(n log n), menos que o próprio
-> first fit.
+> prova, mas é do pior caso. A pegadinha inversa: o guloso "pega o vértice de
+> maior grau" para cobertura **não** tem fator constante e pode ficar log n
+> vezes pior que o ótimo. O 2-aproximado correto é o "pega as duas pontas".
 
 > [!NOTE]
-> **Pergunta para você:** se chegar uma nona carga de 5 toneladas no fim
-> da fila, quantas viagens o first fit usa? E o decrescente? O limite
-> inferior muda?
-
+> **Pergunta para você:** se chegar uma nona carga de 5 toneladas no fim da
+> fila, quantas viagens o first fit usa? E o decrescente? O limite inferior
+> muda?
 
 {{pratique}}

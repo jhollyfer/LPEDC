@@ -1,22 +1,17 @@
 ## 0183 · Hamiltoniano
 
-O carro-forte sai da base, abastece os caixas eletrônicos de cinco agências e
-volta. Aqui a pergunta mudou: ninguém se importa em repetir rua, mas parar
-duas vezes na mesma agência é perder tempo com escolta e papelada. Existe uma
-rota que passa por **cada agência exatamente uma vez** e volta para a base?
-
-Parece o problema do caminhão de lixo (0182), trocando "aresta" por
-"vértice", mas a dificuldade é outra.
+O carro-forte abastece cinco agências e volta à base. Repetir rua não importa;
+parar duas vezes na mesma agência, sim. Existe uma rota que passa por **cada
+agência exatamente uma vez** e volta? É o caminhão de lixo (0182) com
+"vértice" no lugar de "aresta", mas a dificuldade é outra.
 
 **Ciclo hamiltoniano** é um ciclo (simples, no Cormen) que passa por **todos
-os vértices**, cada um uma vez. **Caminho hamiltoniano** é o mesmo sem a
-obrigação de voltar ao começo. O nome é do matemático William Hamilton, que
-vendia um quebra-cabeça com um dodecaedro: achar um ciclo pelos 20 vértices.
+os vértices**, cada um uma vez. **Caminho hamiltoniano** é o mesmo sem voltar
+ao começo.
 
-Para Euler bastava contar graus. Para Hamilton **não se conhece nenhuma
-condição simples** que seja necessária e suficiente, nem algoritmo
-polinomial. Existem condições suficientes, como a de **Dirac**: se V ≥ 3 e
-todo vértice tem grau ≥ V/2, o ciclo existe. Mas um ciclo puro de 100
+Para Hamilton **não se conhece condição simples** necessária e suficiente, nem
+algoritmo polinomial. Há condições suficientes, como a de **Dirac**: se V ≥ 3
+e todo vértice tem grau ≥ V/2, o ciclo existe. Mas um ciclo puro de 100
 vértices tem grau 2 em todos e é hamiltoniano mesmo assim.
 
 | | Euler (0182) | Hamilton |
@@ -26,24 +21,23 @@ vértices tem grau 2 em todos e é hamiltoniano mesmo assim.
 | custo para achar | O(V + E) | exponencial no pior caso |
 | classe (0186) | P | NP-completo |
 
-Sem atalho, sobra testar. O **backtracking** do módulo 19 monta a rota uma
-posição por vez: põe na posição `pos` um vizinho ainda não usado do último
-vértice, desce para `pos + 1` e, se lá na frente travar, **desfaz** a escolha
-e tenta a próxima. Quando a rota tem os V vértices, só falta conferir se o
-último liga de volta ao primeiro.
+Sobra testar. O **backtracking** do módulo 19 monta a rota por posição: põe em
+`pos` um vizinho ainda não usado do último vértice, desce para `pos + 1` e, se
+travar, **desfaz** a escolha e tenta a próxima. Com os V vértices na rota, só
+falta o último ligar ao primeiro.
 
-Há duas economias que não custam nada. Todo ciclo pode começar em qualquer vértice, então
-fixe o primeiro (`rota[0] = 0`): isso divide o trabalho por V. E o vetor
-`usada[]` corta na hora qualquer rota que repete agência. Mesmo assim, no
-pior caso sobram (V - 1)! ordens: com 15 agências, 87 bilhões.
+Duas economias não custam nada: fixe `rota[0] = 0` (todo ciclo pode começar
+em qualquer vértice, o que divide o trabalho por V) e use `usada[]` para
+cortar rota que repete agência. No pior caso sobram (V - 1)! ordens: com 15
+agências, 87 bilhões.
 
-A primeira tentativa, Base Centro Orla Mercado Porto
-Shopping, trava: não há via do Shopping para a Base. O backtracking volta ao
-Mercado, troca Porto por Shopping e fecha o ciclo pelo Porto:
+A primeira tentativa, Base Centro Orla Mercado Porto Shopping, trava: não há
+via do Shopping para a Base. O backtracking volta ao Mercado, troca Porto por
+Shopping e fecha o ciclo pelo Porto:
 
 {{ideia}}
 
-O código conta as chamadas da recursão, para você ver quanto ele tentou:
+O código conta as chamadas da recursão:
 
 ```c
 #include <stdbool.h>
@@ -92,37 +86,25 @@ int main(void) {
 // Chamadas da recursão: 8
 ```
 
-O fluxograma mostra uma chamada de `hamilton(pos)`. A pergunta "rota
-completa?" só confere a volta; o trabalho todo está no laço que escolhe o
-vizinho, e na linha que desfaz a escolha quando a descida não deu certo:
+O fluxograma mostra uma chamada de `hamilton(pos)`. "Rota completa?" só
+confere a volta; o trabalho está no laço que escolhe o vizinho e na linha que
+desfaz a escolha quando a descida falha:
 
 {{fluxograma}}
 
-Oito chamadas parece pouco porque a primeira tentativa quase deu certo. Mas
-este grafo não tem circuito euleriano (quatro agências têm grau ímpar), e
-mesmo assim tem ciclo hamiltoniano. O A365 mostra o contrário: um grafo com
-circuito euleriano e **sem** ciclo hamiltoniano, em que o backtracking só
-descobre isso depois de tentar tudo. O A366 mede o crescimento das chamadas
-quando a resposta é "não".
+Este grafo não tem circuito euleriano (quatro agências têm grau ímpar) e tem
+ciclo hamiltoniano. O A365 mostra o contrário, e o backtracking só descobre
+depois de tentar tudo. O A366 mede o crescimento das chamadas quando a
+resposta é "não".
 
 > [!WARNING]
-> Esquecer o `usada[v] = false` depois da chamada recursiva é o erro clássico.
-> O programa continua compilando e rodando, mas cada agência visitada numa
-> tentativa que falhou fica "queimada" para as tentativas seguintes, e ele
-> responde "não existe" para grafos que têm ciclo. O E1097 traz esse bug.
-
-> [!TIP]
-> **Por dentro do C:** a recursão desce no máximo V níveis, então a pilha de
-> chamadas nunca passa de V frames de `hamilton`, cada um com `pos`, `v` e o
-> endereço de retorno. A memória fica pequena; o que explode é o
-> **tempo**: o número de chamadas pode chegar a (V - 1)!. `rota` e `usada` são globais e
-> compartilhados por todas as chamadas, e por isso cada uma precisa desfazer
-> o que fez antes de voltar. O `long` em `chamadas` está ali porque
-> 13! já não cabe num `int` de 32 bits.
+> Esquecer o `usada[v] = false` depois da chamada recursiva é o erro clássico:
+> cada agência de uma tentativa que falhou fica "queimada", e o programa
+> responde "não existe" para grafos que têm ciclo.
 
 > [!NOTE]
 > **Pergunta para você:** se a via Porto-Base for fechada (apague `{0, 4}`),
 > ainda existe ciclo hamiltoniano? A Base fica com grau 2: por quais agências
-> o ciclo teria de entrar e sair dela? Responda antes de rodar.
+> o ciclo teria de entrar e sair dela?
 
 {{pratique}}

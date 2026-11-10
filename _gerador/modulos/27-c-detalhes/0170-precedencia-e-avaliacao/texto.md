@@ -1,16 +1,11 @@
 ## 0170 · Precedência e ordem de avaliação
 
-Você pede 3 pacotes de café a R$ 18 no app do mercado, e o frete é R$ 12. A
-conta é `18 * 3 + 12`. Ninguém pensa duas vezes: dá 66. Mas por que não
-`18 * (3 + 12)`, que dá 270? Porque o C, como a matemática da escola, tem uma
-regra fixa de quem vai primeiro, e a prova gosta de esconder essa regra numa
-linha só.
+Três pacotes de café a R$ 18 mais R$ 12 de frete: `18 * 3 + 12` dá 66, não
+270. A ordem entre operadores é fixa, e a prova a esconde numa linha só.
 
-Duas regras decidem como o C **agrupa** uma expressão. A **precedência** diz
-qual operador pega os operandos primeiro: `*` antes de `+`. A
-**associatividade** desempata operadores do mesmo nível: `100 - 66 - 20` é
-`(100 - 66) - 20`, da esquerda para a direita, mas `a = b = 5` é
-`a = (b = 5)`, da direita para a esquerda.
+A **precedência** diz qual operador pega os operandos primeiro: `*` antes de
+`+`. A **associatividade** desempata operadores do mesmo nível: `100 - 66 -
+20` é `(100 - 66) - 20`, mas `a = b = 5` é `a = (b = 5)`.
 
 | Nível | Operadores | Agrupa |
 | --- | --- | --- |
@@ -30,33 +25,27 @@ qual operador pega os operandos primeiro: `*` antes de `+`. A
 | 14 | `=` `+=` `-=` `*=` `/=` `%=` `<<=` `>>=` `&=` `^=` `\|=` | direita → esquerda |
 | 15 | `,` | esquerda → direita |
 
-Três pontos dessa tabela caem em prova. Os bit a bit `&`, `^` e `|` ficam
-**abaixo** do `==`. O `?:` fica abaixo de quase tudo, então
-`compra + compra >= 50 ? 0 : frete` é uma pergunta sobre a soma inteira. E a
-atribuição composta trata o lado direito como um bloco: `a *= 2 + 1` é
-`a = a * (2 + 1)`.
+Três pontos da tabela caem em prova. Os bit a bit `&`, `^` e `|` ficam
+**abaixo** do `==`. O `?:` fica abaixo de quase tudo, então `compra + compra
+>= 50 ? 0 : frete` pergunta pela soma inteira. E `a *= 2 + 1` é `a = a * (2 +
+1)`.
 
-Agrupar não é calcular. A precedência diz que em `f() + g()` a soma junta os
-dois resultados, mas **não** diz qual função roda primeiro: a **ordem de
-avaliação** dos operandos não é especificada, e cada compilador escolhe. Só
-alguns pontos fixam a ordem: `&&`, `||`, `?:` e a vírgula avaliam o lado
-esquerdo inteiro antes do direito, e uma função só começa depois de todos os
-argumentos prontos.
+Agrupar não é calcular. Em `f() + g()`, a soma junta os dois resultados, mas a
+**ordem de avaliação** deles não é especificada. Só `&&`, `||`, `?:` e a
+vírgula avaliam o lado esquerdo antes do direito, e uma função só começa
+depois de todos os argumentos prontos.
 
-Um **efeito colateral** é tudo que uma expressão muda além de produzir valor:
-`i++` muda `i`, `x = 3` muda `x`, `printf` escreve na tela. Mudar a mesma
-variável duas vezes, ou mudar e ler sem ordem garantida, na mesma expressão,
-é **comportamento indefinido**: `i = i++`, `v[i] = i++` e
-`printf("%d %d", i, i++)` não têm resposta certa. O programa pode dar
-qualquer coisa.
+**Efeito colateral** é o que a expressão muda além de produzir valor: `i++`
+muda `i`, `printf` escreve na tela. Mudar a mesma variável duas vezes, ou
+mudar e ler sem ordem garantida, é **comportamento indefinido**: `i = i++`,
+`v[i] = i++`, `printf("%d %d", i, i++)`.
 
-O desenho mostra como o C monta a árvore de cada conta:
-o operador de menor precedência fica na raiz e é o último a agir. Na
-pegadinha do frete grátis, a raiz é o `?:`, e o `+` foi parar lá embaixo:
+O operador de menor precedência fica na raiz da árvore e age por último. No
+frete grátis, é o `?:`:
 
 {{ideia}}
 
-O programa faz as contas do carrinho e mostra cada agrupamento:
+O programa mostra cada agrupamento:
 
 ```c
 #include <stdio.h>
@@ -94,35 +83,25 @@ int main(void) {
 // frete grátis? 1
 ```
 
-No fluxograma, o `?:` aparece como o que ele é: uma pergunta escondida dentro
-da expressão. O que entra na pergunta depende só dos parênteses, e no `certo`
-ela olha apenas o `compra`:
-
+No fluxograma, o `?:` é uma pergunta escondida; no `certo`, ela olha só o
+`compra`:
 
 {{fluxograma}}
 
 > [!WARNING]
-> `i = i++` não "soma 1 e guarda", nem "guarda o antigo": é comportamento
-> indefinido, e a pergunta "quanto vale `i`?" não tem resposta. Com `-Wall`, o
-> gcc avisa:
+> `i = i++` é comportamento indefinido. Com `-Wall`, o gcc avisa:
 >
 > ```text
 > warning: operation on 'i' may be undefined [-Wsequence-point]
 > ```
 >
-> Ele também avisa `x & 3 == 3` ("suggest parentheses around comparison") e
-> `a || b && c`. Mas **não** avisa `compra + compra >= 50 ? 0 : frete`. Na
-> dúvida, ponha parênteses: eles não custam nada no programa pronto.
+> Ele também avisa `x & 3 == 3` e `a || b && c`, mas **não**
+> `compra + compra >= 50 ? 0 : frete`. Na dúvida, use parênteses.
 
 > [!TIP]
-> **Por dentro do C:** o compilador transforma cada expressão numa árvore,
-> como a do desenho, e gera instruções de baixo para cima. A precedência fixa
-> o **formato** da árvore; a ordem em que ele visita os galhos é livre, e o gcc
-> usa essa liberdade para guardar valores em registradores e economizar
-> instruções. É por isso que o padrão não promete a ordem de `f() + g()`. Os
-> pontos que fixam a ordem (`&&`, `||`, `?:`, `,` e o fim de cada instrução)
-> viram, no código de máquina, um teste e um salto: o lado direito do `&&`
-> nem chega a rodar quando o esquerdo dá 0.
+> O compilador visita os galhos da árvore na ordem que quiser, por isso `f()
+> + g()` não tem ordem prometida. Já em `&&`, o lado direito nem roda se o
+> esquerdo der 0.
 
 > [!NOTE]
 > **Pergunta para você:** quanto vale `x` depois de `int x = 10; x -= 2 * 3 - 1;`?

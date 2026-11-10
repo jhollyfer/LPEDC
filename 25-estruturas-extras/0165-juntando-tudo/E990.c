@@ -3,12 +3,13 @@
 //
 // A lista MTF leva o achado para a frente. Dá para fazer o mesmo numa BST:
 // depois de achar a chave, suba o nó até a RAIZ com rotações (as do assunto
-// 0101), uma por nível. As chaves procuradas há pouco ficam perto do topo.
-// Escreva esse concorrente, "para raiz":
+// 0101), uma por nível. Escreva do zero esse concorrente, "para raiz"
+// (raiz_cria, raiz_insere, raiz_busca e raiz_libera):
 // - insere: a inserção comum da BST, com laço (sem rotação);
 // - busca: desce contando os nós comparados e, se achar, sobe o nó até a
 //   raiz; se não achar, a árvore fica como está;
 // - libera: solta todos os nós e a struct.
+// O esqueleto já traz o teste (mede e main).
 //
 //   Saída esperada:
 //               embaralhada  crescente
@@ -18,7 +19,7 @@
 //   lista MTF         114.6      114.5
 //   para raiz           6.6        7.0
 //
-// Escreva sua resposta abaixo (complete as funções):
+// Escreva sua resposta abaixo:
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,23 +30,23 @@
 #define QUENTES 20
 
 void *raiz_cria(void) {
-    return NULL; // troque: aloque e devolva a estrutura vazia
+    return NULL;
 }
 
 void raiz_insere(void *e, int chave) {
-    (void)e; // apague estas duas linhas
+    (void)e;
     (void)chave;
 }
 
 bool raiz_busca(void *e, int chave, int *custo) {
-    (void)e; // apague estas duas linhas
+    (void)e;
     (void)chave;
     *custo = 0;
     return false;
 }
 
 void raiz_libera(void *e) {
-    free(e); // troque: libere tudo o que a estrutura alocou
+    (void)e;
 }
 
 double mede(const Estrutura *e, const int ordem[], const int buscas[]) {

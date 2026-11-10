@@ -8,8 +8,8 @@
 // do strcmp) com andares sorteados por moeda(); palavra repetida só soma 1.
 // No fim, mostre as palavras em ordem e libere tudo.
 //
-// Teste com:
-//   printf 'o rato roeu a roupa do rei de roma e o rei riu\n' | ~/LPEDC/rodar 25-estruturas-extras/0163-skip-list/E977.c
+//   Entrada:
+//   o rato roeu a roupa do rei de roma e o rei riu
 //
 //   Saída esperada:
 //   a 1

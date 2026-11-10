@@ -26,18 +26,18 @@ unsigned usado(int n, int d, unsigned uso[n][d], int i) {
     return m;
 }
 
+const char *nomes[] = {"Ana", "Bruno", "Carla"};
+unsigned efetivas[] = {
+    ENTRAR | REUNIAO | IMPRIMIR | GARAGEM | CONFIG,
+    ENTRAR | REUNIAO | IMPRIMIR | GARAGEM,
+    ENTRAR | REUNIAO,
+};
+unsigned uso[3][4] = {
+    {ENTRAR, ENTRAR | REUNIAO, ENTRAR | CONFIG, ENTRAR},
+    {ENTRAR | GARAGEM, ENTRAR | GARAGEM | IMPRIMIR, ENTRAR | GARAGEM, ENTRAR | REUNIAO},
+    {ENTRAR, ENTRAR, ENTRAR, ENTRAR},
+};
 int main(void) {
-    const char *nomes[] = {"Ana", "Bruno", "Carla"};
-    unsigned efetivas[] = {
-        ENTRAR | REUNIAO | IMPRIMIR | GARAGEM | CONFIG,
-        ENTRAR | REUNIAO | IMPRIMIR | GARAGEM,
-        ENTRAR | REUNIAO,
-    };
-    unsigned uso[3][4] = {
-        {ENTRAR, ENTRAR | REUNIAO, ENTRAR | CONFIG, ENTRAR},
-        {ENTRAR | GARAGEM, ENTRAR | GARAGEM | IMPRIMIR, ENTRAR | GARAGEM, ENTRAR | REUNIAO},
-        {ENTRAR, ENTRAR, ENTRAR, ENTRAR},
-    };
     for (int i = 0; i < 3; i++) {
         unsigned u = usado(3, 4, uso, i);
         char s_usou[QTD_PERMS + 1], s_nunca[QTD_PERMS + 1];

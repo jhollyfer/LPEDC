@@ -1,27 +1,23 @@
 ## 0189 · Juntando tudo
 
-A farmácia do bairro faz entregas de moto. Às oito da manhã o entregador
-recebe sete endereços e quer a volta mais curta: sair da farmácia, passar em
-todo mundo e voltar. Às seis da tarde, na hora do pico, são quarenta. É o
-**caixeiro viajante** (TSP, de *traveling salesman problem*), o problema
-NP-difícil mais famoso, e ele junta o módulo inteiro:
+O entregador da farmácia recebe sete endereços e quer a volta mais curta,
+saindo e voltando à farmácia. No pico da tarde, são quarenta. É o **caixeiro
+viajante** (TSP), NP-difícil, e junta o módulo:
 
 - é um **ciclo hamiltoniano** de custo mínimo (0183);
-- a versão de decisão ("existe volta de no máximo L?") está em **NP** e é
-  NP-completa (0186), e a prova vem por **redução** do ciclo hamiltoniano
-  (0187): arestas do grafo custam 1, as que faltam custam 2;
-- com distâncias **métricas**, a árvore mínima dá uma **2-aproximação**
-  (0188);
-- e a solução exata usa **programação dinâmica**, como a cadeia de
-  matrizes (0185).
+- a versão de decisão ("existe volta de no máximo L?") é NP-completa (0186),
+  por **redução** do ciclo hamiltoniano (0187): arestas do grafo custam 1, as
+  que faltam custam 2;
+- com distâncias **métricas**, a árvore mínima dá uma **2-aproximação** (0188);
+- a solução exata é **programação dinâmica**, como a cadeia de matrizes
+  (0185).
 
-**Força bruta.** Fixe a farmácia e teste as (n − 1)! ordens dos clientes.
-Com 7 clientes são 5040 rotas; com 15, 87 bilhões.
+**Força bruta.** Fixe a farmácia e teste as (n − 1)! ordens: 5040 rotas com 7
+clientes, 87 bilhões com 15.
 
-**Held-Karp** (PD sobre subconjuntos). `dp[S][j]` é o menor caminho que sai
-da farmácia, passa **exatamente** pelos pontos do conjunto S e termina em j.
-O subproblema não precisa saber a **ordem** em que S foi visitado, só o
-conjunto e o último ponto, e por isso o fatorial some. A recorrência:
+**Held-Karp** (PD sobre subconjuntos). `dp[S][j]` é o menor caminho que sai da
+farmácia, passa **exatamente** pelos pontos de S e termina em j. Só importam o
+conjunto e o último ponto, não a **ordem**, e por isso o fatorial some:
 
 ```text
 dp[{0}][0] = 0
@@ -29,8 +25,8 @@ dp[S ∪ {k}][k] = min sobre j em S:  dp[S][j] + d[j][k]
 resposta = min sobre j:  dp[todos][j] + d[j][0]
 ```
 
-São 2ⁿ conjuntos × n finais × n extensões: **O(n² · 2ⁿ)** de tempo e
-**O(n · 2ⁿ)** de memória. Ainda exponencial, mas muito menos que n!.
+São 2ⁿ conjuntos × n finais × n extensões: **O(n² · 2ⁿ)** de tempo e **O(n ·
+2ⁿ)** de memória, bem menos que n!.
 
 | n | (n − 1)! rotas | n² · 2ⁿ (Held-Karp) | n² (aproximado) |
 | --- | --- | --- | --- |
@@ -39,18 +35,17 @@ São 2ⁿ conjuntos × n finais × n extensões: **O(n² · 2ⁿ)** de tempo e
 | 20 | 1,2 · 10¹⁷ | 4,2 · 10⁸ | 400 |
 | 30 | 8,8 · 10³⁰ | 9,7 · 10¹¹ | 900 |
 
-A tabela dá a regra prática: até uns 20 pontos, Held-Karp resolve em
-segundos (e o limite é a memória); acima disso, aproximação, de preferência
-seguida de uma melhoria local como o 2-opt do A378.
+Até uns 20 pontos, Held-Karp resolve em segundos (o limite é a memória);
+acima, aproximação, de preferência com uma melhoria local como o 2-opt do
+A378.
 
-As distâncias são em quarteirões (|dx| + |dy|), que
-respeitam a desigualdade triangular. À esquerda a rota exata; à direita a da
-árvore mínima, que dá voltas desnecessárias no fim:
+As distâncias são em quarteirões (|dx| + |dy|), métricas. À esquerda, a rota
+exata; à direita, a da árvore mínima, com voltas desnecessárias no fim:
 
 {{ideia}}
 
-O conjunto S é uma máscara de bits, igual às do 0186; o bit 0 (a farmácia)
-está sempre ligado, por isso o laço anda de 2 em 2:
+S é uma máscara de bits (0186); o bit 0, a farmácia, está sempre ligado, por
+isso o laço anda de 2 em 2:
 
 ```c
 #include <stdbool.h>
@@ -153,37 +148,28 @@ int main(void) {
 // O aproximado gasta 29% a mais
 ```
 
-O fluxograma é a decisão que um programa de entregas real toma antes de
-calcular: poucos pontos, exato; muitos, aproximado e melhorado. A fronteira
-é o tempo e a memória que você tem:
+O fluxograma é a decisão de um programa real: poucos pontos, exato; muitos,
+aproximado e melhorado:
 
 {{fluxograma}}
 
 O aproximado errou por 29%, longe do dobro permitido, e fez 64 passos contra
 1351. Com 20 pontos seriam uns 400 contra 400 milhões. O A377 mede
-crescimento e memória de cada método; o A378 aplica o 2-opt na rota
-aproximada e mostra quanto ela melhora.
+crescimento e memória; o A378 aplica o 2-opt.
 
 > [!WARNING]
 > A garantia de 2 × ótimo só vale com a **desigualdade triangular**. Com
-> distâncias quaisquer (uma balsa que só sai de um lado, um pedágio caro), o
-> atalho da pré-ordem pode sair muito mais caro que a volta pela árvore, e
-> nenhum algoritmo polinomial tem fator constante, a menos que P = NP.
-> Held-Karp é **exato** e exponencial; a árvore é **aproximada** e polinomial.
+> distâncias quaisquer, nenhum algoritmo polinomial tem fator constante, a
+> menos que P = NP. Held-Karp é **exato** e exponencial; a árvore é
+> **aproximada** e polinomial.
 
 > [!TIP]
-> **Por dentro do C:** `dp[1 << N][N]` e `ant[1 << N][N]` são globais: 256 × 8
-> × 4 bytes = 8 KB cada, guardados na área de dados estáticos, não na pilha.
-> Com N = 20 cada um teria 80 MB, que estouraria a pilha se fosse local
-> (8 MB no Linux) e já pede `malloc`. Os testes `s >> j & 1` e
-> `s | 1 << k` dependem da precedência: `>>` e `<<` vêm antes de `&` e `|`,
-> então não precisam de parênteses (o 0170 tem a tabela). `s &= ~(1 << j)`
-> apaga o bit j na reconstrução da rota.
+> `s >> j & 1` e `s | 1 << k` funcionam sem parênteses porque `>>` e `<<` vêm
+> antes de `&` e `|` (0170).
 
 > [!NOTE]
-> **Pergunta para você:** se o Gil mudar para (3, 5), perto do Fábio, a
-> rota exata ainda começa pela farmácia indo ao Gil? E a diferença do
-> aproximado aumenta ou diminui?
-
+> **Pergunta para você:** se o Gil mudar para (3, 5), perto do Fábio, a rota
+> exata ainda começa pela farmácia indo ao Gil? E a diferença do aproximado
+> aumenta ou diminui?
 
 {{pratique}}
