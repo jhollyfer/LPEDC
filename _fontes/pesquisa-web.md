@@ -326,7 +326,7 @@ Formato de cada ficha: definição, por que importa, passo a passo com exemplo, 
 - **O que é:** constrói a solução tomando, a cada passo, a escolha que parece melhor agora, sem
   nunca voltar atrás.
 - **Por que importa:** quando funciona, é o algoritmo mais simples e rápido; e saber quando
-  **não** funciona é uma lição central de projeto.
+  **não** funciona também faz parte do que se aprende.
 - **Exemplo 1 (seleção de atividades):** intervalos (1,4) (3,5) (0,6) (5,7) (3,9) (5,9) (6,10)
   (8,11) (8,12) (2,14) (12,16). Ordene pelo fim e pegue o próximo que começa depois do último
   escolhido: (1,4), (5,7), (8,11), (12,16) → 4 atividades (ótimo).

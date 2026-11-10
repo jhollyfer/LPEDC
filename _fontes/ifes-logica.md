@@ -1,4 +1,4 @@
-# Fichamento — Lógica de Programação (IFES / e-Tec Brasil)
+# Fichamento: Lógica de Programação (IFES / e-Tec Brasil)
 
 - **Autor:** Victorio Albani de Carvalho
 - **Edição:** IFES / CEAD Colatina, e-Tec Brasil, 2010, 104 p. (Curso Técnico em Informática)
@@ -35,13 +35,13 @@ abaixo, as respostas foram calculadas por mim.
   trocadas sem prejuízo (pegar a lâmpada antes ou depois da escada), outras não.
 
 **Analogias/explicações boas (parafraseadas)**
-- **Trocar uma lâmpada — a progressão em três atos** (usar como fio condutor do módulo 00):
+- **Trocar uma lâmpada: a progressão em três atos** (usar como fio condutor do módulo 00):
   1. *Sequência pura:* pegar escada, posicionar, pegar lâmpada nova, subir, tirar a velha,
      colocar a nova. Funciona, mas troca a lâmpada mesmo se ela estiver boa.
   2. *Com decisão:* ligar o interruptor; **se** a lâmpada não acender, executar os passos.
      Agora só troca quando precisa.
   3. *Com repetição:* e se a lâmpada nova também estiver queimada? Encadear "se não
-     acender, troque de novo; se ainda não acender..." não tem fim — "até quando ficaremos
+     acender, troque de novo; se ainda não acender..." não tem fim: "até quando ficaremos
      nesses testes?". Solução: **enquanto** a lâmpada não acender, retire e coloque outra.
   Mostra por que existem as três estruturas (sequencial, seleção, repetição) a partir de
   um único problema. Também ilustra **abstração**: o algoritmo ignora descer e subir a
@@ -59,7 +59,7 @@ abaixo, as respostas foram calculadas por mim.
   resolve, senão pula para a próxima.
 
 **Ideias de exercícios**
-- **Dedução** (Ativ. 1.1): todos os filhos de João são mais altos que Maria; Antônio é
+- **Dedução** (Ativ. 1.1, serve de aquecimento antes de 0001): todos os filhos de João são mais altos que Maria; Antônio é
   filho de João → *Antônio é mais alto que Maria*.
 - **Dedução** (Ativ. 1.2): aprovação exige nota ≥ 60 **e** frequência > 75%; José teve 80
   e 100% → *José foi aprovado*. (Prepara o operador E.)
@@ -100,21 +100,21 @@ abaixo, as respostas foram calculadas por mim.
 **Analogias/explicações boas**
 - Comparação lado a lado Portugol × C, linha a linha, do algoritmo "multiplicação" (ler
   dois inteiros, multiplicar, mostrar). Ótimo para a transição do módulo 00 para o 01.
-- Dica: testar parênteses numa planilha (Excel) — boa ferramenta de conferência.
+- Dica: testar parênteses numa planilha (Excel), boa ferramenta de conferência.
 - "Guarde esses algoritmos, você vai usá-los depois": reaproveitar em vez de reinventar.
 
 **Pegadinhas e erros comuns**
 - Tipo errado para o dado: idade como real, altura 1.80 como inteiro, nota 7.5 como inteiro.
 - Confundir caractere ('F') com cadeia ("Jose").
 - Atribuir valor de tipo diferente (`inteiro ALTURA ← 1.80`).
-- No exemplo do livro, peso foi declarado inteiro — discutir se faz sentido.
+- No exemplo do livro, peso foi declarado inteiro; discutir se faz sentido.
 
 **Ideias de exercícios** (respostas calculadas)
 - **Nomes válidos** (Ativ. 2.1): válidos `nome`, `telefone_celular`, `conta1`; inválidos
   `telefone-celular`, `nome+sobrenome`, `2taxa`.
 - **Valor × tipo** (Ativ. 2.2): corretos a (2.5 real), c (−2 inteiro), d ('M' caractere),
-  f (−10.35 real), h ('Jose' cadeia — com a ressalva das aspas), i (135 inteiro); errados
-  b ('F' inteiro), e (5 cadeia), g (38 real — aceitável, mas não ideal), j (7.5 inteiro).
+  f (−10.35 real), h ('Jose' cadeia, com a ressalva das aspas), i (135 inteiro); errados
+  b ('F' inteiro), e (5 cadeia), g (38 real; aceitável, mas não ideal), j (7.5 inteiro).
 - Declarar notas inteiras 0–10 e média real com nomes sugestivos (Ativ. 2.3):
   `var nota1, nota2 : inteiro; media : real`.
 - Algoritmo nome e idade → "Seu nome é Pedro" / "Você tem 32 anos" (Ativ. 2.6).
@@ -184,7 +184,7 @@ abaixo, as respostas foram calculadas por mim.
 
 **Pegadinhas e erros comuns**
 - Esquecer `\n` junta as mensagens numa linha.
-- Para string o livro manda usar `gets` — substituir por `fgets` no LPEDC.
+- Para string o livro manda usar `gets`; substituir por `fgets` no LPEDC.
 
 ### 0007-aritmetica / 0009-atribuicao
 
@@ -261,12 +261,12 @@ abaixo, as respostas foram calculadas por mim.
 - `if...else` aninhados: um if dentro do bloco de outro.
 - Exemplo: aumento por faixa + gratificação se tem filhos (até 1500: 10% + R$ 80 com
   filho; acima: 8% + R$ 50). 1300 com filho → 1300 + 130 + 80 = **1510.00**. Um único
-  `printf` no fim, fora dos ifs — bom hábito.
+  `printf` no fim, fora dos ifs, bom hábito.
 - Conselho: testar sempre com vários valores e situações diferentes.
 
 **Ideias de exercícios** (com respostas)
 - **Categoria de atleta** (Ativ. 4 aula 3): 5–10 infantil; 11–17 juvenil; 18–30
-  profissional; acima de 30 sênior. Testes: 4 (fora da tabela — o que fazer?), 5, 10, 11,
+  profissional; acima de 30 sênior. Testes: 4 (fora da tabela: o que fazer?), 5, 10, 11,
   17, 18, 30, 31.
 - Menor de três valores distintos (Ativ. 6.10): 7, 3, 9 → 3.
 
@@ -290,13 +290,13 @@ abaixo, as respostas foram calculadas por mim.
 - Portugol `enquanto <condição> faca ... fim enquanto`; C `while (cond) { }`.
 - Testa antes de cada execução; serve quando não se sabe quantas vezes repetir.
 - Contador de 1 a 10 com while precisa inicializar fora (`contador ← 1`) e incrementar
-  dentro — no `para` isso era automático; por isso o while ficou maior.
+  dentro (no `para` isso era automático, por isso o while ficou maior).
 - Padrão "**deseja continuar? (S/N)**": iniciar `resposta ← 'S'` para entrar no laço na
   primeira vez; ao fim de cada volta perguntar de novo.
 
 **Pegadinhas e erros comuns**
 - Variável de controle não inicializada → laço não executa (ou executa com lixo).
-- Só o "S" maiúsculo continua; qualquer outra tecla (inclusive "s") encerra — discutir
+- Só o "S" maiúsculo continua; qualquer outra tecla (inclusive "s") encerra; discutir
   aceitar as duas.
 
 **Ideias de exercícios** (com respostas)
@@ -307,7 +307,7 @@ abaixo, as respostas foram calculadas por mim.
 - Idade e sexo de várias pessoas até não querer mais; contar M e F e médias de idade por
   sexo (Ativ. 2).
 - Estado civil (S, C, V, D) e idade até estado inválido **ou** idade < 0; quantidade e
-  média de idade por estado civil (Ativ. 3) — condição de parada composta.
+  média de idade por estado civil (Ativ. 3), com condição de parada composta.
 - Fatorial com while (Ativ. 7.12).
 
 ### 0021-do-while
@@ -326,14 +326,14 @@ abaixo, as respostas foram calculadas por mim.
 **Conceitos-chave**
 - Portugol `para <var> de <ini> ate <fim> passo <inc> faca ... fim para`: a variável de
   controle deve ser inteira e declarada; repete enquanto ≤ valor final.
-- C: `for (inicialização; teste; incremento)` — inicialização uma vez, teste antes de cada
+- C: `for (inicialização; teste; incremento)`: inicialização uma vez, teste antes de cada
   volta, incremento ao fim de cada volta.
 - Exemplo: média de 10 notas com `for (conta = 0; conta <= 9; conta++)`; ao sair, `conta`
   vale 10 e é usada como divisor (cuidado: só funciona porque começa em 0).
 - Motivação: sem laço, calcular média de 20 alunos exigiria copiar o bloco 20 vezes.
 
 **Pegadinhas e erros comuns**
-- O livro mostra a saída de 1 a 10 como "12345678910" (sem separador) — usar como alerta
+- O livro mostra a saída de 1 a 10 como "12345678910" (sem separador); usar como alerta
   de formatação.
 - Usar a variável de controle depois do laço exige saber exatamente o valor final dela.
 
@@ -375,14 +375,14 @@ abaixo, as respostas foram calculadas por mim.
 
 **Pegadinhas e erros comuns**
 - O livro grafa o nulo como `'/0'` (barra errada); o certo é `'\0'`.
-- Recomenda `gets` para ler string — evitar.
+- Recomenda `gets` para ler string; evitar.
 
 **Ideias de exercícios**
 - Soma posição a posição de dois vetores de 5 (Ativ. 1 aula 8).
 - Guardar 20 reais e consultar por índice até digitar índice inválido (fora de 0–19).
 - Listar múltiplos de 2, de 3 e de 5 de um vetor de 10.
 - Vetor de 10: maior, menor, média, quantos acima e abaixo da média (precisa guardar os
-  valores — justificativa perfeita para vetor).
+  valores; justificativa perfeita para vetor).
 
 ---
 
@@ -392,12 +392,3 @@ abaixo, as respostas foram calculadas por mim.
 - `system("PAUSE")` e `#include <stdlib.h>` "para evitar problemas" (incluir só o que usa).
 - `gets()` para ler strings.
 - `main()` sem `int` em alguns exemplos; `int` de 4 bytes apresentado como regra fixa.
-
-## Extras que não cabem no sumário
-
-- Deduções lógicas em linguagem natural (silogismos do armário e das idades) — podem abrir
-  o módulo 00 como "aquecimento" antes de 0001.
-- Missionários e canibais e separação de bolas: desafios de "pensar em estados" que
-  servem de bônus no módulo 00.
-- Conselho de método: resolver no papel antes de digitar; testar com vários valores;
-  reaproveitar algoritmos antigos.

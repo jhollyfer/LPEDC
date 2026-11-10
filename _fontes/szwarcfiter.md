@@ -31,7 +31,7 @@ criados (ou recalculados) para o curso e conferidos à mão.
 
 ---
 
-## Parte A — assuntos que já existem no sumário
+## Parte A: assuntos que já existem no sumário
 
 ### 0037-recursao
 **Conceitos-chave**
@@ -255,13 +255,13 @@ criados (ou recalculados) para o curso e conferidos à mão.
 ### 0092-deque
 **Conceitos-chave:** Inserção e remoção apenas nas extremidades (E1, E2); em vetor, implementar circular.
 **Explicações boas:** Pilha e fila são casos particulares do deque.
-**Pegadinhas:** Exercício de pesquisa: caracterizar permutações obtidas com deque (•2.28) — difícil; usar só como curiosidade.
+**Pegadinhas:** Exercício de pesquisa: caracterizar permutações obtidas com deque (•2.28), difícil; usar só como curiosidade.
 **Ideias de exemplos:** Deque em vetor M = 5: insere 7 em E1, 8 em E2, 9 em E1 ⇒ 9 7 8.
 **Ideias de exercícios:** Com deque, a partir de 1,2,3, é possível obter 3,1,2? → Sim: insere 1, 2 em E2, 3 em E1, retira tudo por E1.
 
 ### 0094-busca-sequencial
 Ver 0080 (sentinela, caso médio) e 0085 (versão circular). Exercício extra do livro: se a probabilidade de cada chave é o
-dobro da anterior, a busca não ordenada fica muito melhor se a lista for posta em ordem decrescente de probabilidade —
+dobro da anterior, a busca não ordenada fica muito melhor se a lista for posta em ordem decrescente de probabilidade,
 gancho para listas autoajustáveis (NOVO).
 
 ### 0095-busca-binaria
@@ -412,7 +412,7 @@ O livro **não** apresenta seleção. Usar outra fonte. O heapsort (0108) pode s
 - Lista ordenada já é heap, mas construir ordenando custa O(n log n); construir "de baixo para cima" é linear.
 - Variações: heap min-max (níveis alternados min/max; mínimo na raiz, máximo num dos filhos), m-heap (árvore m-ária:
   subir O(log_m n), descer O(m log_m n)), lista de prioridades (L,U)-limitada (vetor de listas indexado pela prioridade,
-  O(t + Δ) para t inserções — primeira aparição de análise amortizada).
+  O(t + Δ) para t inserções; primeira aparição de análise amortizada).
 **Pegadinhas:** Construir com n inserções (subir) é O(n log n); com `descer` a partir do meio é O(n).
 **Ideias de exemplos:** Construir heap de 18 25 41 34 14 10 52 50 48 (exercício 6.9): i=4: 34↔50; i=3: 41↔52; i=2: 25↔50, depois 25↔48;
   i=1: 18↔52, depois 18↔41 ⇒ 52 50 41 48 14 10 18 34 25.
@@ -470,13 +470,13 @@ O livro **não** apresenta seleção. Usar outra fonte. O heapsort (0108) pode s
 **Ideias de exercícios:** Com α = 0,9, quantas tentativas em média numa busca sem sucesso? → 10.
 
 ### 0114-grafos / 0115-bfs / 0116-dfs / 0117-dijkstra
-O livro não tem capítulo de grafos. Aproveitáveis: (a) a ordenação topológica (cap. 2) já usa listas de sucessores
-— é uma lista de adjacência com contador de grau de entrada; (b) percurso em nível com fila (ex. 3.27) é a BFS
+O livro não tem capítulo de grafos. Aproveitáveis: (a) a ordenação topológica (cap. 2) já usa listas de sucessores,
+ou seja, uma lista de adjacência com contador de grau de entrada; (b) percurso em nível com fila (ex. 3.27) é a BFS
 restrita a árvores; (c) heaps de Fibonacci são citados como motivados por Dijkstra/árvore geradora mínima.
 
 ---
 
-## Parte B — candidatos a assuntos novos
+## Parte B: candidatos a assuntos novos
 
 ### NOVO: recorrências (sem teorema mestre)
 **Conceitos-chave**
@@ -502,7 +502,7 @@ restrita a árvores; (c) heaps de Fibonacci são citados como motivados por Dijk
   c(i, j) = min_k [c(i, k−1) + c(k, j)] + F(i, j), c(i, i) = 0; preencher por diagonais (diferença j − i crescente);
   O(n³), O(n²) com o princípio da monotonicidade; guardar o k minimizante para reconstruir a árvore.
 - A recursão direta é exponencial porque recalcula subproblemas; a tabela calcula cada um uma vez.
-- Versão bem mais difícil: árvore de partilha ótima, O(n⁵) — fora do escopo.
+- Versão bem mais difícil: árvore de partilha ótima, O(n⁵), fora do escopo.
 **Explicações boas:** Dois critérios intuitivos (raiz = mais frequente; raiz = mediana) são contraditórios e nenhum garante o ótimo.
 **Pegadinhas:** Árvore ótima pode ser bem desbalanceada; e pode haver mais de uma ótima (empates em k).
 **Ideias de exemplos:** Chaves s1 < s2 < s3 com frequências 1, 2, 5 (externas 0). c(0,1)=1, c(1,2)=2, c(2,3)=5; c(0,2)=min(5, 4)=4 (raiz
@@ -515,7 +515,7 @@ restrita a árvores; (c) heaps de Fibonacci são citados como motivados por Dijk
 **Conceitos-chave**
 - Nomeado no Huffman: a cada passo junta as duas subárvores de menor frequência. Prova de otimalidade: lema da troca
   (as duas menores podem ser irmãs no último nível) + indução.
-- Exercício 12.27 (intercalação ótima de arquivos): sempre intercalar os dois menores — mesmo esquema do Huffman.
+- Exercício 12.27 (intercalação ótima de arquivos): sempre intercalar os dois menores, mesmo esquema do Huffman.
 **Explicações boas:** O guloso precisa de prova; os critérios "intuitivos" da BST ótima (seção de PD) mostram um guloso que falha.
 **Pegadinhas:** Guloso de frequência para BST (pôr o mais frequente na raiz) não é ótimo, ao contrário do Huffman.
 **Ideias de exemplos:** Arquivos com 20, 30, 10, 5 chaves: junta 5+10 = 15 (custo 15), 15+20 = 35 (35), 30+35 = 65 (65) ⇒ 115 comparações;
@@ -576,7 +576,7 @@ restrita a árvores; (c) heaps de Fibonacci são citados como motivados por Dijk
 - Inserção: novo nó rubro; pai negro ⇒ fim; pai rubro e tio rubro ⇒ recolorir (pode subir até a raiz, O(log n)
   vezes); tio negro ⇒ uma rotação (simples ou dupla) + troca de duas cores, e acabou. Raiz sempre negra. 1 bit por nó.
 - Exercício 5.25: juntando cada rubro ao pai obtém-se uma árvore 2-4 (ponte com árvore B).
-**Explicações boas:** Nó externo único compartilhado (sentinela `externo`, cor negra) para economizar memória — o NIL do Cormen.
+**Explicações boas:** Nó externo único compartilhado (sentinela `externo`, cor negra) para economizar memória (é o NIL do Cormen).
 **Pegadinhas:** Nem toda AVL "precisa" de recoloração para ser rubro-negra, mas toda AVL é rubro-negra e a recíproca é falsa (ex. 5.26).
 **Ideias de exemplos:** Inserir 19, 18, 16, 15, 17, 2, 6 (exercício 5.17): 16 ⇒ rotação direita em 19 ⇒ 18N(16R, 19R); 15 ⇒ tio 19 rubro,
   recolore e raiz volta a negra ⇒ 18N(16N(15R), 19N); 17 entra sem problema; 2 ⇒ recolore 15N, 17N, 16R; 6 (filho
@@ -608,7 +608,7 @@ restrita a árvores; (c) heaps de Fibonacci são citados como motivados por Dijk
 - Árvore digital binária; árvore binária de prefixo (nenhuma chave é prefixo de outra); Patricia: comprime zigue-zagues
   e guarda em cada nó o índice do próximo dígito a testar; como pula dígitos, compara a chave inteira na folha.
   Folhas da esquerda para a direita = ordem lexicográfica.
-**Explicações boas:** A trie é única para um conjunto, independentemente da ordem de inserção (exercício 11.2) — contraste com a BST.
+**Explicações boas:** A trie é única para um conjunto, independentemente da ordem de inserção (exercício 11.2), ao contrário da BST.
 **Pegadinhas**
 - Sem o campo "terminal", o prefixo "ar" seria dado como achado só por existir "arara".
 - Na Patricia, uma chave inválida pode chegar a uma folha: sem a comparação final daria falso positivo.
@@ -670,7 +670,7 @@ restrita a árvores; (c) heaps de Fibonacci são citados como motivados por Dijk
   recuar o índice do texto; d é calculado casando o padrão consigo mesmo; total O(n + m) (argumento amortizado:
   decrementos de j ≤ incrementos).
 - Boyer-Moore e Karp-Rabin só citados (não sustenta módulo sobre eles).
-**Explicações boas:** O deslocamento seguro depende só do padrão, não do texto — por isso dá para pré-processar.
+**Explicações boas:** O deslocamento seguro depende só do padrão, não do texto; por isso dá para pré-processar.
 **Pegadinhas:** Índices: o livro usa padrão de 1..m; em C (0..m−1) o vetor de falha muda de deslocamento.
 **Ideias de exemplos**
 - d para "ababaca": 0 0 1 2 3 0 1.
@@ -692,7 +692,7 @@ restrita a árvores; (c) heaps de Fibonacci são citados como motivados por Dijk
 - Usos: listas de colisão em hash, política LRU de memória virtual.
 **Explicações boas:** Nó raro movido para a frente atrapalha todos os outros (custo do MF); TR é bom em vetor, CF converge para a ordem
   estática ótima.
-**Pegadinhas:** "MF é o melhor método" — errado, o teorema só limita a 2× (exercício 8.6).
+**Pegadinhas:** "MF é o melhor método" é errado: o teorema só limita a 2× (exercício 8.6).
 **Ideias de exemplos:** Lista a b c d e, acessos e e d e. MF: custos 5, 1, 5, 2 = 13 (final e d a b c). TR: 5, 4, 5, 3 = 17. CF: 5, 1, 5,
   1 = 12 (final e d a b c).
 **Ideias de exercícios:** a b c d e f g com acessos g f d f b f f d c, configuração final com MF (exercício 8.4). → c d f b g a e.
@@ -710,7 +710,7 @@ restrita a árvores; (c) heaps de Fibonacci são citados como motivados por Dijk
   5, filho esquerdo 2 com filhos 1 e 4, 4 com filho 3. Altura cai de 5 para 4 e o caminho fica pela metade.
 **Ideias de exercícios:** Por que a árvore splay não precisa guardar altura nem cor? → O ajuste não depende de padrão de balanceamento.
 
-### NOVO: heaps fundíveis (esquerdista, binomial, Fibonacci) — opcional/avançado
+### NOVO: heaps fundíveis (esquerdista, binomial, Fibonacci; opcional/avançado)
 **Conceitos-chave**
 - Esquerdista: CC(v) (caminho curto) do filho esquerdo ≥ do direito; caminho direito O(log n); fusão recursiva pelo
   caminho direito trocando filhos quando preciso; inserir e remover = fusão.
@@ -727,7 +727,7 @@ restrita a árvores; (c) heaps de Fibonacci são citados como motivados por Dijk
 **Conceitos-chave:** Expande um compartimento por vez (ponteiro p): divide a lista de p entre p e p + m·2ˡ com h_{ℓ+1}(x) = x mod (m·2^{ℓ+1});
   endereço = h_ℓ(x), e se < p, recalcula com h_{ℓ+1}. Diretório de segmentos de tamanho fixo. Só funciona bem com
   encadeamento exterior.
-**Explicações boas:** Evita o "rehash" de tudo de uma vez (custo diluído — liga com análise amortizada).
+**Explicações boas:** Evita o "rehash" de tudo de uma vez (custo diluído; liga com análise amortizada).
 **Pegadinhas:** Com endereçamento aberto a expansão exige copiar chaves e não há listas bem definidas.
 **Ideias de exemplos:** m = 5: chaves 10, 15, 3. Expandir p = 0: com mod 10, 10 fica em 0 e 15 vai para 5; p passa a 1.
 **Ideias de exercícios:** Com m = 3, ℓ = 0, p = 1, onde fica a chave 12? → h₀ = 0 < p ⇒ h₁ = 12 mod 6 = 0.
@@ -770,11 +770,8 @@ Ordem sugerida, encaixando no sumário atual:
 5. **Novo módulo "árvores especiais":** splay (usa rotações da AVL + amortizada), trie e Patricia (pode vir junto de hash
    como "outra forma de buscar").
 6. **Módulo 15 (hash):** tabela dinâmica (dispersão linear) como extensão de 0113.
-7. **Novo módulo "conjuntos e grafos" (antes ou junto do 16):** union-find e ordenação topológica — esta última pode ser o
+7. **Novo módulo "conjuntos e grafos" (antes ou junto do 16):** union-find e ordenação topológica; esta última pode ser o
    primeiro algoritmo do módulo de grafos, já que só precisa de listas de adjacência e uma fila.
 8. **Novo módulo "técnicas de projeto":** programação dinâmica com a BST ótima (e um exemplo mais simples de outra fonte),
    guloso com intercalação ótima de arquivos, e KMP como fecho (texto), com força bruta antes.
 9. **Opcional/avançado:** heaps min-max, esquerdista, binomial, Fibonacci.
-
-Para backtracking, shell/counting/bucket sort, k-ésimo, teorema mestre, Prim/Kruskal, Bellman-Ford, Floyd-Warshall,
-componentes conexos, Boyer-Moore, Rabin-Karp e skip list, usar outra fonte (este livro não ajuda).

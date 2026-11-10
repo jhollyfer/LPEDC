@@ -1,4 +1,4 @@
-# Fichamento — Algoritmos e Estruturas de Dados: conceitos e aplicações (Hélio Pedrini — Editora da Unicamp)
+# Fichamento de *Algoritmos e Estruturas de Dados: conceitos e aplicações* (Hélio Pedrini, Editora da Unicamp)
 
 - **Autor:** Hélio Pedrini (IC/Unicamp).
 - **Edição:** Editora da Unicamp, Campinas, 2024. ISBN 978-85-268-1626-8. Direitos reservados (não reproduzir texto).
@@ -11,8 +11,8 @@
 
 Livro recente (2024), em C, que cobre **todo** o arco do LPEDC num só volume: Parte I (fundamentos de C: variáveis,
 E/S, operadores, condicionais, laços, vetores/matrizes, strings, funções e modificadores `auto/extern/register/static/
-volatile`, ponteiros, enum/struct/union, arquivos), Parte II (recursão e **retrocesso** — n damas, passeio do cavalo,
-labirinto, soma de subconjuntos —, análise assintótica com O, Ω, Θ, o, ω, listas de vários tipos, pilhas, filas e filas de
+volatile`, ponteiros, enum/struct/union, arquivos), Parte II (recursão e **retrocesso** (n damas, passeio do cavalo,
+labirinto, soma de subconjuntos), análise assintótica com O, Ω, Θ, o, ω, listas de vários tipos, pilhas, filas e filas de
 prioridade, ordenação incluindo shellsort e ordenação linear, hashing com vários métodos, árvores até AVL, rubro-negra,
 splay e B/B*/B+, grafos até Kruskal, Prim, Dijkstra e Bellman-Ford) e Parte III (apêndices de matemática: piso/teto,
 somatórios, logaritmos, bases, complemento de 2, IEEE 754, indução, ASCII/EBCDIC/Unicode). Estilo do trecho lido: denso,
@@ -72,21 +72,21 @@ for obtido, como fonte para os módulos 10–16.
 
 **Pegadinhas**
 - O texto afirma que erros semânticos "se manifestam em tempo de execução" e que o depurador ajuda a achar erros
-  **sintáticos** — impreciso: erros de tipo são pegos na compilação; erros de lógica aparecem na execução; o depurador
+  **sintáticos**, o que é impreciso: erros de tipo são pegos na compilação; erros de lógica aparecem na execução; o depurador
   serve para estes últimos. Não reproduzir.
 
 ### 0049-memoria
 
 **Conceitos-chave**
 - Memória principal: cada posição tem endereço único; memória **lógica** (endereços que as instruções usam) × **física**
-  (circuitos); endereços lógicos são traduzidos para físicos durante a execução — base para explicar por que `%p` mostra
+  (circuitos); endereços lógicos são traduzidos para físicos durante a execução, base para explicar por que `%p` mostra
   endereços "estranhos" e diferentes a cada execução.
 
 ### NOVO: organização básica do computador
 
 **Conceitos-chave**
 - Quatro blocos: unidade de processamento (ULA + unidade de controle), armazenamento (registradores, cache, memória
-  principal, memória secundária — do mais rápido/caro ao mais lento/barato), E/S, e barramento (dados, endereços,
+  principal, memória secundária; do mais rápido/caro ao mais lento/barato), E/S, e barramento (dados, endereços,
   controle). Dado da memória secundária precisa ir para a principal antes de ser usado.
 - Sistema operacional como gerente de recursos e mediador entre programas e hardware.
 
@@ -103,16 +103,15 @@ Não existe no sumário do LPEDC; candidato a assunto extra depois de 0038 ou co
 ## Obsoleto / evitar
 
 - Nada obsoleto no trecho (livro de 2024), exceto citar EBCDIC (só curiosidade histórica) e "C padronizada em 1989/1990"
-  sem mencionar C99/C11/C17/C23 — o curso deve usar C11 ou C17.
+  sem mencionar C99/C11/C17/C23; o curso deve usar C11 ou C17.
 - As duas afirmações imprecisas sobre erros semânticos/depurador (ver 0005).
 
 ## Recomendações
 
 1. Usar o **sumário** como checagem de escopo dos módulos 10–16 (o livro inclui shellsort, ordenação linear, métodos de
-   hashing — divisão, meio do quadrado, multiplicação, particionamento —, rubro-negra, splay, B-trees e Bellman-Ford, que o
+   hashing (divisão, meio do quadrado, multiplicação, particionamento), rubro-negra, splay, B-trees e Bellman-Ford, que o
    LPEDC não tem; decidir conscientemente o que fica fora).
 2. Aproveitar a lista de **modificadores de armazenamento** (`auto`, `extern`, `register`, `static`, `volatile`) para
    o 0035 e os apêndices (complemento de 2, IEEE 754, ASCII/Unicode) para 0004/0008/0045.
-3. O diagrama do pipeline de compilação serve para o 0005.
-4. Se o curso quiser este livro como fonte de verdade para estruturas de dados, **obter o volume completo**: a amostra não
+3. Se o curso quiser este livro como fonte de verdade para estruturas de dados, **obter o volume completo**: a amostra não
    tem nenhum código nem exercício.

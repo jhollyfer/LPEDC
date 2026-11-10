@@ -1,4 +1,4 @@
-# Fichamento — Deitel & Deitel, *C: Como Programar* ("6ª edição" no nome do arquivo)
+# Fichamento: Deitel & Deitel, *C: Como Programar* ("6ª edição" no nome do arquivo)
 
 **Autores:** Paul J. Deitel e Harvey M. Deitel. Tradução brasileira, arquivo .md de 17.211 linhas
 (caps. 1–13 + Apêndices A–D), vindo de OCR com muitos erros de digitação.
@@ -14,7 +14,7 @@ no meio do bloco, `for (int i...)`, `long long`, VLA, `snprintf`, `fgets` no lug
 
 ---
 
-## 00 — Lógica
+## 00 · Lógica
 
 ### logica1-algoritmo
 - **Conceitos-chave:** um algoritmo é um procedimento definido por duas coisas: *quais ações* e *em que ordem*. "Controle do programa" é justamente especificar essa ordem.
@@ -50,7 +50,7 @@ no meio do bloco, `for (int i...)`, `long long`, VLA, `snprintf`, `fgets` no lug
 
 ---
 
-## 01 — Fundamentos
+## 01 · Fundamentos
 
 ### 0001-primeiro-programa
 - **Conceitos-chave:** comentários `/* */`, `#include <stdio.h>`, `main` como função onde a execução começa, bloco `{}`, instrução termina em `;`, `\n`, `return 0` como sinal de sucesso para o sistema.
@@ -73,7 +73,7 @@ no meio do bloco, `for (int i...)`, `long long`, VLA, `snprintf`, `fgets` no lug
 - **Pegadinhas:** `#define` com `;` final (o `;` entra na substituição); `#define PI = 3.14159` (o `=` entra no texto); atribuir a uma constante simbólica é erro, porque não é variável; aspas duplas em constante de caractere geram uma string de 2 bytes.
 - **Exercício:** 9.14 testar cada escape imprimindo um caractere antes e outro depois. 9.15/9.19: `?` precisa de `\?`?
 
-### 0005-printf (Cap. 9 — o melhor do livro sobre o assunto)
+### 0005-printf (Cap. 9, o melhor do livro sobre o assunto)
 - **Conceitos-chave:** especificadores `d i o u x X e E f g G c s p n %`; modificadores `h l L`; **largura** (alinha à direita e cresce se o valor não couber), **precisão** (inteiros: mínimo de dígitos com zeros; `e`/`f`: casas decimais; `g`: dígitos significativos; `s`: máximo de caracteres), `*` para largura ou precisão vindas de argumentos (`%*.*f`, 7, 2, 98.736 → `  98.74`). Flags `- + espaço # 0`. Regra do `%g`: usa notação `e` se o expoente < −4 ou ≥ precisão (0.0000875 → 8.75e−05, 8750000.0 → 8.75e+06). `printf` **retorna** o número de caracteres impressos; `%n` guarda essa contagem.
 - **Analogia boa:** o problema do dinheiro em float: 14.234 + 18.673 aparecem como 14.23 + 18.67 = **32.91**. A soma "visível" não fecha. É a melhor motivação para usar centavos em inteiros (4.23).
 - **Pegadinhas:** `%c` com string, `%s` com char (violação de acesso), `%` sozinho, `%d` com 10.987, esquecer o argumento, vírgula dentro das aspas, precisão no `scanf`.
@@ -109,7 +109,7 @@ no meio do bloco, `for (int i...)`, `long long`, VLA, `snprintf`, `fgets` no lug
 
 ---
 
-## 02 — Condicionais
+## 02 · Condicionais
 
 ### 0012-relacionais
 - **Conceitos-chave:** `== != < > <= >=`; os relacionais têm precedência maior que os de igualdade; qualquer expressão serve de condição (0 é falso, não zero é verdadeiro); comparações resultam em 0 ou 1.
@@ -149,7 +149,7 @@ no meio do bloco, `for (int i...)`, `long long`, VLA, `snprintf`, `fgets` no lug
 
 ---
 
-## 03 — Repetições
+## 03 · Repetições
 
 ### 0020-while
 - **Conceitos-chave:** condição testada antes; o corpo deve tornar a condição falsa em algum momento.
@@ -186,7 +186,7 @@ no meio do bloco, `for (int i...)`, `long long`, VLA, `snprintf`, `fgets` no lug
 
 ---
 
-## 04 — Funções
+## 04 · Funções
 
 ### 0028-funcoes
 - **Conceitos-chave:** dividir para conquistar; função definida pelo programador × biblioteca; formato da definição; `return;` × `return expr;` × fim pela chave; **protótipo** (o compilador verifica tipo de retorno, quantidade, tipos e ordem dos argumentos).
@@ -230,7 +230,7 @@ no meio do bloco, `for (int i...)`, `long long`, VLA, `snprintf`, `fgets` no lug
 
 ---
 
-## 05 — Vetores e strings
+## 05 · Vetores e strings
 
 ### 0037-vetores
 - **Conceitos-chave:** índices de 0 a n−1; "sétimo elemento" (c[6]) × "elemento sete" (c[7]); `[]` é operador; inicializadores (os que faltam viram 0; `int n[10] = {0}`; inicializadores demais são erro; tamanho omitido é deduzido); `#define TAMANHO` torna o programa "escalável"; **C não verifica limites**; array static local é zerado uma vez e mantém valores (Fig. 6.11 compara static × automático).
@@ -267,7 +267,7 @@ no meio do bloco, `for (int i...)`, `long long`, VLA, `snprintf`, `fgets` no lug
 
 ---
 
-## 06 — Ponteiros
+## 06 · Ponteiros
 
 ### 0044-memoria
 - **Conceitos-chave:** referência direta (pelo nome) × indireta (pelo ponteiro), Fig. 7.1; diagrama com endereços (y em 600000, yPtr em 500000 guardando 600000); `%p`; `&` e `*` se complementam (`&*aPtr` == `*&aPtr`).
@@ -308,7 +308,7 @@ no meio do bloco, `for (int i...)`, `long long`, VLA, `snprintf`, `fgets` no lug
 
 ---
 
-## 07 — Memória dinâmica
+## 07 · Memória dinâmica
 
 ### 0053-pilha-e-heap
 - **Pouco conteúdo:** só a menção de que arrays têm tamanho fixo em compilação e listas crescem até acabar a memória (física ou virtual). Usar outra fonte.
@@ -326,7 +326,7 @@ no meio do bloco, `for (int i...)`, `long long`, VLA, `snprintf`, `fgets` no lug
 
 ---
 
-## 08 — Structs
+## 08 · Structs
 
 ### 0059-struct
 - **Conceitos-chave:** tag; membros; struct auto-referenciada (só ponteiro para si mesma); a definição não reserva memória; variáveis declaradas junto da definição; inicialização por lista (os membros que faltam viram 0/NULL); operações válidas: atribuir struct de mesmo tipo, `&`, acesso a membros e sizeof. **Não se comparam structs com `==`** por causa dos "buracos" de alinhamento (Fig. 10.1: `char c; int i;` com byte indefinido); `.` × `->`; `aPtr->naipe` == `(*aPtr).naipe`; `*aPtr.naipe` é erro.
@@ -362,7 +362,7 @@ no meio do bloco, `for (int i...)`, `long long`, VLA, `snprintf`, `fgets` no lug
 
 ---
 
-## 09 — Arquivos
+## 09 · Arquivos
 
 ### 0067-arquivos-texto
 - **Conceitos-chave:** hierarquia de dados (bit → caractere → campo → registro → arquivo → banco de dados) e campo-chave; C vê o arquivo como fluxo de bytes com marca de fim; `FILE *`, descritor e tabela de arquivos abertos (Fig. 11.5, ótimo diagrama); modos r, w, a, r+, w+, a+ (e os binários no Apêndice); fopen testando NULL; fprintf/fscanf; feof; rewind; fclose; teclas de EOF por sistema.
@@ -383,7 +383,7 @@ no meio do bloco, `for (int i...)`, `long long`, VLA, `snprintf`, `fgets` no lug
 
 ---
 
-## 10 — Análise
+## 10 · Análise
 
 ### 0071-eficiencia / 0072-big-o
 - **Não há notação O**, mas há muita intuição de custo para aproveitar:
@@ -405,7 +405,7 @@ no meio do bloco, `for (int i...)`, `long long`, VLA, `snprintf`, `fgets` no lug
 
 ---
 
-## 11 — Listas
+## 11 · Listas
 
 ### 0076-lista-encadeada / 0077-lista-busca-remocao / 0078-lista-ordenada
 - **Conceitos-chave:** nó auto-referenciado; o último link é NULL; acesso pelo ponteiro do início; vantagens e desvantagens frente ao array (tamanho dinâmico × sem acesso direto; inserção sem deslocar × ponteiros ocupam espaço).
@@ -418,7 +418,7 @@ no meio do bloco, `for (int i...)`, `long long`, VLA, `snprintf`, `fgets` no lug
 
 ---
 
-## 12 — Pilhas e filas
+## 12 · Pilhas e filas
 
 ### 0083-pilha-encadeada
 - **Conceitos-chave:** LIFO; topo; push em 3 passos e pop em 5 passos, com diagramas (Figs. 12.10/12.11); aplicações: endereços de retorno e variáveis automáticas na chamada de funções, compiladores.
@@ -437,7 +437,7 @@ no meio do bloco, `for (int i...)`, `long long`, VLA, `snprintf`, `fgets` no lug
 
 ---
 
-## 13 — Busca e ordenação
+## 13 · Busca e ordenação
 
 ### 0089-busca-sequencial / 0090-busca-binaria
 - **Conceitos-chave:** linear para arrays pequenos ou desordenados; binária só em array ordenado, com `menor`, `maior` e `meio`, reduzindo à metade (a figura de código falta no arquivo, mas o texto descreve a função de 4 parâmetros que imprime o subarray marcando o meio com `*`).
@@ -462,7 +462,7 @@ no meio do bloco, `for (int i...)`, `long long`, VLA, `snprintf`, `fgets` no lug
 
 ---
 
-## 14 — Árvores
+## 14 · Árvores
 
 ### 0097-arvores / 0098-arvore-binaria / 0099-bst-busca-insercao
 - **Conceitos-chave:** raiz, filho esquerdo e direito, subárvores, irmãos, folha; árvore desenhada de cabeça para baixo; BST sem duplicatas (insere só como folha); o percurso **em ordem imprime ordenado** ("binary tree sort"); duplicatas são descartadas naturalmente (o programa imprime "dup"); a forma da árvore depende da ordem de inserção.

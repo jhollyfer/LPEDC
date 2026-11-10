@@ -1,11 +1,11 @@
-# Fichamento — Deitel & Deitel, *C: Como Programar* (parte 1: caps. 1 a 6)
+# Fichamento: Deitel & Deitel, *C: Como Programar* (parte 1: caps. 1 a 6)
 
 - **Obra:** Paul Deitel e Harvey Deitel, *C: Como Programar*. Trad. Daniel Vieira, rev. téc. César Caetano. São Paulo: Pearson Prentice Hall.
 - **Atenção à edição:** o arquivo se chama "7ed", mas o texto lido é a **6ª edição** (Pearson BR 2011, original de 2010, 2ª reimpressão de 2014). O código foi testado em Visual C++ 2008 e GCC 4.3.
 - **Trecho lido:** linhas 1 a 13034 do `.md`, lidas inteiras, mais algumas linhas além, até o começo do cap. 7. O trecho cobre a capa, o prefácio e os caps. 1 (computadores e linguagens), 2 (introdução a C), 3 (programação estruturada, if/else, while), 4 (for, switch, do-while, break/continue, operadores lógicos), 5 (funções, rand, escopo, recursão) e 6 (arrays, ordenação, busca, matrizes). Também passa pelos exercícios de cada capítulo.
 - **Avaliação geral:**
   - *Pontos fortes:* todo conceito vem com um programa completo e a saída real da execução ("código vivo"). Os exemplos têm valores concretos e fáceis de reaproveitar em teste de mesa. As caixas "Erro comum de programação" formam um catálogo valioso de pegadinhas. O refinamento top-down vem com pseudocódigo (média com contador, com sentinela e com estruturas aninhadas). O livro distingue ordem de avaliação de precedência. Os exercícios são muitos e graduados, de "ache o erro" até o passeio do cavalo, as oito rainhas e o crivo.
-  - *Obsoleto ou fraco:* a base é o C89. O C99 fica num apêndice opcional por causa do MSVC. Daí vem a regra "declare tudo no início do bloco". O livro não usa `for (int i...)` nem `stdbool.h` e recomenda `register`. Os nomes misturam inglês e português, e o código usa identificadores com acento (`número`, `média`). A tradução tem **erros dentro do código**: vírgula decimal (`3,446`), aspas tipográficas (“ ”) e saídas impressas como `82,50`. Há bugs de digitação nos exemplos: `aCont` declarado e `aCount` usado; `n == 0 | n == 1`; `nota` inteira impressa com `%f`. A quantidade de propaganda e links da Deitel é grande. A parte de "tendências" do cap. 1 está datada (Visual Basic, .NET, Java criando páginas dinâmicas). Strings e `fgets` só aparecem no cap. 8 (fora deste trecho). Aqui as strings são lidas com `scanf("%s")`.
+  - *Obsoleto ou fraco:* a base é o C89. O C99 fica num apêndice opcional por causa do MSVC. Daí vem a regra "declare tudo no início do bloco". O livro não usa `for (int i...)` nem `stdbool.h` e recomenda `register`. Os nomes misturam inglês e português, e o código usa identificadores com acento (`número`, `média`). A tradução tem **erros dentro do código**: vírgula decimal (`3,446`), aspas tipográficas (“ ”) e saídas impressas como `82,50`. Há bugs de digitação nos exemplos (lista em "Obsoleto / evitar"). A quantidade de propaganda e links da Deitel é grande. A parte de "tendências" do cap. 1 está datada (Visual Basic, .NET, Java criando páginas dinâmicas). Strings e `fgets` só aparecem no cap. 8 (fora deste trecho). Aqui as strings são lidas com `scanf("%s")`.
 
 ---
 
@@ -15,7 +15,7 @@
 **Conceitos-chave**
 - Algoritmo = *ações* + *ordem* em que são executadas. Especificar essa ordem é o "controle do programa".
 - Antes de codificar, é preciso entender o problema e planejar a solução. O livro defende que a parte difícil é chegar ao algoritmo certo, e que a tradução para C vem quase direto depois disso.
-- Teorema de Böhm-Jacopini (1966): todo programa pode ser escrito só com três estruturas — sequência, seleção e repetição. Daí veio o movimento "programar sem `goto`".
+- Teorema de Böhm-Jacopini (1966): todo programa pode ser escrito só com três estruturas: sequência, seleção e repetição. Daí veio o movimento "programar sem `goto`".
 - C tem 7 estruturas: sequência, `if`, `if…else`, `switch`, `while`, `do…while` e `for`. Todas têm entrada única e saída única. Elas se combinam de só **dois** jeitos: empilhamento (uma depois da outra) e aninhamento (uma dentro da outra).
 - Em tese, `if` basta para qualquer seleção e `while` basta para qualquer repetição. Então sequência + `if` + `while` cobrem tudo.
 
@@ -154,7 +154,7 @@
 - O livro manda declarar tudo antes de qualquer instrução, uma regra do C89. Em C99+ pode-se declarar perto do uso. Avisar o aluno.
 
 **Ideias de exercícios**
-- Classificar identificadores como válidos ou inválidos. `_sub_barra_`, `m928134`, `t5`, `j7`, `suas_vendas`, `z2` são válidos. `3g`, `87`, `67h2` e `2h` são inválidos. **`h22` é válido** — essa é a pegadinha do item.
+- Classificar identificadores como válidos ou inválidos. `_sub_barra_`, `m928134`, `t5`, `j7`, `suas_vendas`, `z2` são válidos. `3g`, `87`, `67h2` e `2h` são inválidos. **`h22` é válido**, e essa é a pegadinha do item.
 - V/F: "`numero` e `NuMeRo` são a mesma variável". Resposta: falso.
 
 ### 0003-tipos-e-limites
@@ -339,7 +339,7 @@
 - O contrário também engana: `x == 1;` sozinho não faz nada. O valor se perde, e alguns compiladores avisam.
 - Dica do livro: depois de escrever o programa, procure cada `=` e confira.
 - `;` logo após `if (cond)`: o corpo vira a instrução vazia e o `printf` seguinte roda sempre. No `if` simples é erro de lógica; com `else` vira erro de sintaxe.
-- Esquecer as chaves no `else`: só a primeira instrução fica dentro. Exemplo do livro: "Reprovado." e "Você precisa refazer o curso." — a segunda frase sairia sempre.
+- Esquecer as chaves no `else`: só a primeira instrução fica dentro. Exemplo do livro: "Reprovado." e "Você precisa refazer o curso."; a segunda frase sairia sempre.
 - Dica: digite `{` e `}` antes de escrever o conteúdo.
 
 **Ideias de exercícios**
@@ -377,7 +377,7 @@
 - `break` sai do `switch`. Sem ele, a execução **cai** nos `case` seguintes (fall-through). O livro brinca que isso só serve para canção cumulativa.
 - Exemplo central: contar conceitos A–F lidos com `getchar` até EOF, ignorando `\n`, `\t` e espaço.
   - Entrada `a b c C A d f C E D A b` → A 3, B 2, C 3, D 2, F 1, com uma mensagem de nota inválida para o `E`.
-  - Atenção: o código do livro declara `aCont` e incrementa `aCount` — bug de tradução.
+  - Atenção: o código do livro declara `aCont` e incrementa `aCount` (bug de tradução).
 - Na seção de aleatórios, o `switch` de 6 casos para contar faces do dado vira, no cap. 6, `++frequencia[face]`. Ótimo "antes e depois".
 
 **Pegadinhas**
@@ -491,7 +491,7 @@
 - **Craps** como projeto do módulo:
   - Regras: 7 ou 11 no 1º lançamento vence; 2, 3 ou 12 perde; outra soma vira o "ponto", e o jogador relança até tirar o ponto (vence) ou 7 (perde).
   - Estrutura: `enum Status {CONTINUE, WON, LOST}`, uma função que lança os dois dados, um `switch` para o 1º lançamento e um `while` para os seguintes.
-  - Extensões: apostas com banca de 1000 e mensagens de "conversa" (exercício 5.47); 1000 partidas automáticas com estatísticas — em que lançamento ganha ou perde, média de lançamentos, chance de vitória (exercício 6.20).
+  - Extensões: apostas com banca de 1000 e mensagens de "conversa" (exercício 5.47); 1000 partidas automáticas com estatísticas (em que lançamento ganha ou perde, média de lançamentos, chance de vitória; exercício 6.20).
 
 ---
 
@@ -598,7 +598,7 @@
 - **Euclides:** `mdc(x, y) = (y == 0) ? x : mdc(y, x % y)`.
 
 **Pegadinhas**
-- O código de Fibonacci do livro usa `n == 0 | n == 1`, com OU bit a bit — erro de digitação. Usar `||`.
+- O código de Fibonacci do livro usa `n == 0 | n == 1`, com OU bit a bit (erro de digitação). Usar `||`.
 
 **Ideias de exercícios**
 - Fibonacci iterativo e "até onde dá" com `int` e `double`. Pesquisar a recursão de cauda.
