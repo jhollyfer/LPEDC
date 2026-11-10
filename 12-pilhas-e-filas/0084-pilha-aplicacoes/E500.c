@@ -6,7 +6,7 @@
 // "(", tira 1 no ")". Teste com as quatro strings abaixo. Depois escreva
 // uma segunda versão, bool contador_ok(const char *s), que conta os três
 // tipos juntos (abre: "(", "[" ou "{"; fecha: ")", "]" ou "}") e teste com
-// "( [ ) ]": repare que o contador aprova uma expressão errada.
+// "( [ ) ]": o contador aprova uma expressão errada.
 //
 //   Saída esperada:
 //   (a+(b*c))  ok

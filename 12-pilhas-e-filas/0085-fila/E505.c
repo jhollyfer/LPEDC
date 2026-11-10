@@ -21,7 +21,7 @@
 //
 // Dicas:
 // 1. Um for de 0 a CAP - 1: se itens[i] == -1, mostre "_"; senão, o número.
-// 2. Repare que retirar não apaga a gaveta: o 1 continua lá depois de sair.
+// 2. Retirar não apaga a gaveta: o 1 continua lá depois de sair.
 // 3. A próxima vaga é (inicio + n) % CAP: mostre no fim do main.
 // 4. Resposta esperada: as dez linhas acima.
 //

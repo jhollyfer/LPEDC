@@ -25,7 +25,7 @@
 //    v[inicio]; inicio = (inicio + 1) % CAP; n--.
 // 2. Com n você distingue cheia (n == CAP) de vazia (n == 0), mesmo quando
 //    inicio == fim nos dois casos.
-// 3. Repare em "insere 50": o fim deu a volta e foi para 0. E em
+// 3. Em "insere 50", o fim deu a volta e foi para 0. Em
 //    "insere 70": inicio == fim == 2 com a fila cheia.
 // 4. Resposta esperada: a saída acima.
 //

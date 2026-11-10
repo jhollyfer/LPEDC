@@ -33,7 +33,7 @@
 //    como uma pilha.
 // 2. A inserção ordenada é a mesma da lista com ponteiros, trocando p->prox
 //    por l->c[p].prox e NULL por -1.
-// 3. Repare na célula 1: o 10 saiu e o 25 reaproveitou a mesma célula.
+// 3. Na célula 1, o 10 saiu e o 25 reaproveitou a mesma célula.
 // 4. Resposta esperada: a saída acima.
 //
 // Escreva sua resposta abaixo:

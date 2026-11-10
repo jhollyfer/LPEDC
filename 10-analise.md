@@ -2244,7 +2244,7 @@ Saída esperada:
 
 1. Conte uma volta a cada divisão; com n = 1 o laço nem começa (0 voltas).
 2. O cabeçalho é printf("%8s %4s %4s\n", "n", "/2", "/3").
-3. Repare: multiplicar n por 1000 só soma umas 10 voltas no /2. Trocar a
+3. Multiplicar n por 1000 só soma umas 10 voltas no /2. Trocar a
    base do log muda a conta por uma constante (log₃ n = log₂ n / log₂ 3),
    por isso as duas funções são O(log n).
 

@@ -165,8 +165,8 @@ int main(void) {
 ```
 
 No fluxograma, a leitura é um laço que pergunta ao próprio `fgets` se ele
-conseguiu ler. Quem avisa que o arquivo acabou é a leitura que falhou, e não
-uma pergunta feita antes dela:
+conseguiu ler: o fim do arquivo é anunciado pela leitura que falhou, sem
+pergunta antes dela:
 
 <p align="center"><img src="09-arquivos/0067-arquivos-texto/fluxograma.svg" alt="Fluxograma: Arquivos texto" width="730"></p>
 
@@ -1299,7 +1299,7 @@ Soma dos atoi: 10
    i, e strlen(argv[i]) dá o tamanho.
 2. atoi lê enquanto encontra dígitos e para no primeiro que não é. Sem
    nenhum dígito, devolve 0. Ele não avisa nada em nenhum dos casos.
-3. Repare que "+" e "3a" passaram sem
+3. Os argumentos "+" e "3a" passaram sem
    nenhum aviso: é por isso que entrada de usuário pede strtol.
 
 ```bash

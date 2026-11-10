@@ -17,7 +17,7 @@
 //    i, e strlen(argv[i]) dá o tamanho.
 // 2. atoi lê enquanto encontra dígitos e para no primeiro que não é. Sem
 //    nenhum dígito, devolve 0. Ele não avisa nada em nenhum dos casos.
-// 3. Resposta esperada: a saída acima. Repare que "+" e "3a" passaram sem
+// 3. Resposta esperada: a saída acima. Os argumentos "+" e "3a" passaram sem
 //    nenhum aviso: é por isso que entrada de usuário pede strtol.
 //
 // Escreva sua resposta abaixo:

@@ -20,7 +20,7 @@
 // 1. primeiro(d) é v[inicio] e ultimo(d) é v[(inicio + n - 1) % CAP];
 //    as duas só olham, sem tirar.
 // 2. Use int vez = 0 e troque com vez = 1 - vez a cada jogada.
-// 3. Repare que pegar sempre a maior ponta NÃO é a melhor estratégia: Ana
+// 3. Pegar sempre a maior ponta NÃO é a melhor estratégia: Ana
 //    perdeu porque, ao pegar o 3, deixou o 9 para o Beto. (A estratégia
 //    ótima é assunto de programação dinâmica.)
 // 4. Resposta esperada: a saída acima.

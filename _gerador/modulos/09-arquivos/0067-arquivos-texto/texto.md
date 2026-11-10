@@ -100,8 +100,8 @@ int main(void) {
 ```
 
 No fluxograma, a leitura é um laço que pergunta ao próprio `fgets` se ele
-conseguiu ler. Quem avisa que o arquivo acabou é a leitura que falhou, e não
-uma pergunta feita antes dela:
+conseguiu ler: o fim do arquivo é anunciado pela leitura que falhou, sem
+pergunta antes dela:
 
 {{fluxograma}}
 

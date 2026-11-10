@@ -1279,7 +1279,7 @@ bool parenteses_ok(const char *s) usando só um contador int: soma 1 no
 "(", tira 1 no ")". Teste com as quatro strings abaixo. Depois escreva
 uma segunda versão, bool contador_ok(const char *s), que conta os três
 tipos juntos (abre: "(", "[" ou "{"; fecha: ")", "]" ou "}") e teste com
-"( [ ) ]": repare que o contador aprova uma expressão errada.
+"( [ ) ]": o contador aprova uma expressão errada.
 
 
 ```text
@@ -1724,7 +1724,7 @@ próxima vaga: gaveta 1
 **Dicas:**
 
 1. Um for de 0 a CAP - 1: se itens[i] == -1, mostre "_"; senão, o número.
-2. Repare que retirar não apaga a gaveta: o 1 continua lá depois de sair.
+2. Retirar não apaga a gaveta: o 1 continua lá depois de sair.
 3. A próxima vaga é (inicio + n) % CAP: mostre no fim do main.
 
 ```bash
@@ -3566,7 +3566,7 @@ insere 80: fila cheia
    v[inicio]; inicio = (inicio + 1) % CAP; n--.
 2. Com n você distingue cheia (n == CAP) de vazia (n == 0), mesmo quando
    inicio == fim nos dois casos.
-3. Repare em "insere 50": o fim deu a volta e foi para 0. E em
+3. Em "insere 50", o fim deu a volta e foi para 0. Em
    "insere 70": inicio == fim == 2 com a fila cheia.
 
 ```bash
@@ -4007,7 +4007,7 @@ Ana: 10 pontos, Beto: 17 pontos
 1. primeiro(d) é v[inicio] e ultimo(d) é v[(inicio + n - 1) % CAP];
    as duas só olham, sem tirar.
 2. Use int vez = 0 e troque com vez = 1 - vez a cada jogada.
-3. Repare que pegar sempre a maior ponta NÃO é a melhor estratégia: Ana
+3. Pegar sempre a maior ponta NÃO é a melhor estratégia: Ana
    perdeu porque, ao pegar o 3, deixou o 9 para o Beto. (A estratégia
    ótima é assunto de programação dinâmica.)
 
