@@ -4,7 +4,7 @@
 
 > Atualiza no mesmo commit em que a tarefa começa ou termina.
 
-**Resumo:** 16 tarefas · 16 feitas · 0 em andamento · 0 a fazer · atualizado 2026-11-09
+**Resumo:** 17 tarefas · 17 feitas · 0 em andamento · 0 a fazer · atualizado 2026-11-09
 
 Status: `A fazer` · `Em andamento` · `Feita` · `Bloqueada` (com motivo nas notas).
 Prioridade: `Alta` · `Média` · `Baixa`.
@@ -19,13 +19,14 @@ Prioridade: `Alta` · `Média` · `Baixa`.
 | 1.4 | Lista prática de 30 exercícios por módulo | Alta | Feita | |
 | 1.5 | Mapa edital → assuntos | Alta | Feita | `PPGI.md` |
 
-## Fase 2 · Revisão (4/4)
+## Fase 2 · Revisão (5/5)
 
 | # | Tarefa | Prioridade | Status | Notas |
 |---|---|---|---|---|
 | 2.1 | Um `.md` por módulo na raiz, sem markdown em subpasta | Alta | Feita | `DECISIONS.md` #1 |
 | 2.2 | Revisão de texto: repetição e vícios de linguagem | Alta | Feita | verificador `conferir-texto.py` |
 | 2.3 | Humanizer (`humanizer-pt` e `humanizer`) em todo o texto e nos enunciados | Alta | Feita | callouts quebrados unidos |
+| 2.5 | Passada estrita de humanizer em cada `.md` (texto, enunciados, fichamentos) e dica repetida tirada pelo gerador | Alta | Feita | registro por arquivo conferido |
 | 2.4 | Filosofia do `maiyu-pattern`: `AGENTS.md`, `docs/`, autor único | Alta | Feita | `DECISIONS.md` #3 e #4 |
 
 ## Fase 3 · Acertos apontados na revisão (3/3)

@@ -11,7 +11,8 @@
 
 ## Parou em
 
-Fase 4 concluída: `PROVAS.md` (11 provas), frequência em `PPGI.md`, questões dos 29 módulos ajustadas e `SIMULADOS.md`.
+Curso pronto para a prova. Última rodada: humanizer estrito em cada `.md`, com registro por
+arquivo, e o plano "Comece aqui" no `PPGI.md` (09/11 a 27/11).
 
 ## Próximos passos
 
@@ -32,6 +33,7 @@ Fase 4 concluída: `PROVAS.md` (11 provas), frequência em `PPGI.md`, questões 
 |---|---|---|---|
 | 2026-11-09 | Conteúdo em `README.md` dentro de cada pasta de módulo | Todo markdown de conteúdo fica na raiz, um `.md` por módulo | gerador e qualquer `.md` novo |
 | 2026-11-09 | Trabalho deixado em outra branch | Só existe a `main`; commit e push direto nela | todo commit |
+| 2026-11-10 | Revisão por busca de padrão (sed/grep) apresentada como leitura | Cada arquivo é lido inteiro; o agente entrega um registro por arquivo e a cobertura é conferida | revisão de texto em lote |
 | 2026-11-09 | Commits com agente como autor e coautor | Autor único Jhollyfer, sem linha de coautoria | todo commit |
 
 ## Problemas conhecidos

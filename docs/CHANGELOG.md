@@ -18,6 +18,9 @@ Mudanças do LPEDC que quem estuda percebe. Formato
 
 ### Alterado
 
+- Dicas "Resposta esperada: a saída acima." saem do `.md` dos módulos: repetiam a saída já mostrada
+  no enunciado (cerca de 980 linhas a menos).
+- Revisão de linguagem em cada texto, enunciado e fichamento, sem repetição e sem travessão.
 - "Questões no estilo da prova" dos 29 módulos no formato da prova real: afirmações I, II e III
   combinadas, simulação, cálculo e código C com erro; árvores, listas, ordenação e hash
   reescritos por inteiro.
