@@ -1,4 +1,4 @@
-# Fichamento — "Linguagem C: Descomplicada" (apostila)
+# Fichamento: "Linguagem C: Descomplicada" (apostila)
 
 - **Autor:** Prof. André R. Backes (apostila, ~345 páginas, 12 capítulos).
 - **Lido:** integralmente (8089 linhas do .md convertido).
@@ -7,10 +7,10 @@
   esqueleto do programa até alocação dinâmica, arquivos e um capítulo "Avançado" bem rico
   (diretivas, ponteiro para função, argc/argv, printf/scanf completos, classes de armazenamento,
   campos de bits, volatile, funções variádicas). **Não cobre estruturas de dados** (listas, pilhas,
-  filas, árvores, hash, grafos), nem busca/ordenação, nem análise de algoritmos — só C.
-  Pontos fracos: estilo Windows/Code::Blocks dos anos 2010 (`system("pause")` em todo exemplo,
-  `gets`, `fflush(stdin)`, `setbuf(stdin,NULL)`), tabelas com erros factuais e vários exemplos com
-  bugs ou comportamento indefinido (listados abaixo — ótimos como material de "ache o erro").
+  filas, árvores, hash, grafos), nem busca/ordenação, nem análise de algoritmos: só C.
+  Pontos fracos: estilo Windows/Code::Blocks dos anos 2010, tabelas com erros factuais e vários
+  exemplos com bugs ou comportamento indefinido (listados abaixo, ótimos como material de "ache o
+  erro").
 - **O que a apostila tem de mais útil em relação ao livro (para nosso curso):**
   1. Catálogo comentado das bibliotecas padrão (stdio, stdlib, math, ctype, string, time) logo no cap. 1.
   2. Passo a passo do *debugger* (breakpoint, watches, next line, step into/out, continue).
@@ -69,8 +69,8 @@
 - **Conceitos-chave:** esqueleto (`#include`, `int main()`, chaves delimitam bloco, `return 0`
   avisa que terminou bem); quase todo comando termina em `;`; parênteses delimitam argumentos de
   função; indentação mostra hierarquia (o mesmo programa em 3 linhas compila, mas é ilegível);
-  comentários `//` (linha) e `/* */` (bloco) — servem de documentação interna.
-- **Pegadinhas:** `system("pause")` aparece em todo exemplo — é só do Windows; **não usar** no curso.
+  comentários `//` (linha) e `/* */` (bloco), que servem de documentação interna.
+- **Pegadinhas:** `system("pause")` aparece em todo exemplo, mas é só do Windows; **não usar** no curso.
 - **Ideias de exercícios:** reescrever um programa "achatado" em uma linha com indentação correta.
 
 ### 0002-variaveis
@@ -91,13 +91,13 @@
 - **Conceitos-chave:** tipos básicos `char`, `int`, `float`, `double`, `void`; modificadores
   `signed`, `unsigned`, `short`, `long` (podem combinar: `unsigned long int`). `unsigned` "ganha" o
   bit de sinal e dobra o máximo positivo. `void` não serve para variável.
-- **Pegadinhas (erros da própria apostila — não copiar):** tabela diz `signed int` 32 bits com faixa
+- **Pegadinhas (erros da própria apostila, não copiar):** tabela diz `signed int` 32 bits com faixa
   −32768..32767 (incoerente); `void` com "8 bits"; afirma que `short` tem 16 e `long` 32 bits
   "independente do processador" (o padrão só garante mínimos); diz que `float` ocupa mais memória
   que `int` (em geral ambos têm 4 bytes). A lista de palavras reservadas traz `typeof` no lugar de
   `typedef`. Usar `limits.h`/`stdint.h` para mostrar os valores reais da máquina.
 - **Ideias de exemplos:** `unsigned int n = 2147483647; n = n + 1;` impresso com `%d` e com `%u`
-  (−2147483648 × 2147483648) — mostra que o mesmo bit-padrão é lido de jeitos diferentes.
+  (−2147483648 × 2147483648): mostra que o mesmo bit-padrão é lido de jeitos diferentes.
 - **Ideias de exercícios:** prever a saída do exemplo acima; escrever programa que imprime
   `sizeof` de todos os tipos e compara com a tabela.
 
@@ -138,12 +138,12 @@
   para datas. `getchar()` lê um caractere e devolve `int` (EOF em erro).
   **Avançado:** retorno = nº de itens lidos (ou EOF); `%*d` lê e descarta (ex.: "nome idade curso"
   guardando só nome e curso); largura máxima (`%2d` para dia; `%10s` num `char[11]` evita estouro);
-  *scanset*: `%[aeiou]` só aceita vogais, `%[A-Z0-9]` intervalos — para no primeiro caractere fora
+  *scanset*: `%[aeiou]` só aceita vogais, `%[A-Z0-9]` intervalos; para no primeiro caractere fora
   da lista; `%i` aceita `0x..` e octal; modificadores `h`, `l`, `L` (`%lf` para double!).
-- **Pegadinhas:** esquecer `&`; ler `double` com `%f` (a apostila faz isso num exemplo — está errado,
-  é `%lf`); ler `char` com `%d` (a apostila sugere — escreve 4 bytes num `char`, UB); sobras no
+- **Pegadinhas:** esquecer `&`; ler `double` com `%f` (a apostila faz isso num exemplo, e está errado:
+  é `%lf`); ler `char` com `%d` (a apostila sugere, mas escreve 4 bytes num `char`: UB); sobras no
   buffer depois de `%d` atrapalham `%c`/`gets` seguintes. **A apostila recomenda `fflush(stdin)` e
-  `setbuf(stdin, NULL)` para "limpar o buffer" — ambos errados** (`fflush` em entrada é indefinido;
+  `setbuf(stdin, NULL)` para "limpar o buffer": ambos errados** (`fflush` em entrada é indefinido;
   `setbuf` só muda o modo de buffer, a explicação dada é falsa). Ensinar: `scanf(" %c", &c)` ou laço
   `while ((c = getchar()) != '\n' && c != EOF);`.
 - **Ideias de exercícios:** ler data `dd/mm/aaaa` e imprimir `aaaa-mm-dd`; ler "Ana 20 Computação"
@@ -154,7 +154,7 @@
   fracionária (`5/4` = 1, `5/4.0` = 1.25); `%` só para inteiros; precedência segue a matemática,
   parênteses forçam ordem. Tabela grande de precedência no fim do cap. 2.
 - **Pegadinhas:** `float x = 5/4;` dá 1.000000 (a divisão acontece antes da conversão). A tabela de
-  precedência da apostila coloca pré-incremento **acima** de `()` e `[]` — está errada (pós-fixos
+  precedência da apostila coloca pré-incremento **acima** de `()` e `[]`, o que está errado (pós-fixos
   têm a maior precedência).
 - **Ideias de exercícios:** média de 3 notas inteiras: por que `(a+b+c)/3` erra e `(a+b+c)/3.0`
   acerta?
@@ -171,7 +171,7 @@
   compostos `+= -= *= /= %= &= |= ^= <<= >>=` (`x += 10*y` ≡ `x = x + 10*y`); `++x` incrementa antes
   de usar, `x++` depois (`y = ++x` → x=11,y=11; `y = x++` → x=11,y=10). Operador vírgula:
   `x = (y = 2, y + 3)` → x = 5; vírgula separa, ponto e vírgula termina.
-- **Pegadinhas:** a apostila mostra `*p = (*p)++;` e `index = (index==3) ? 0 : ++index;` — ambos
+- **Pegadinhas:** a apostila mostra `*p = (*p)++;` e `index = (index==3) ? 0 : ++index;`: ambos
   modificam a mesma variável duas vezes sem ponto de sequência (comportamento indefinido). Corrigir
   para `(*p)++;` e `index = (index + 1) % 4;`.
 - **Ideias de exercícios:** prever x e y após `x=10; y = x++ + 1;` (x=11, y=11).
@@ -197,13 +197,13 @@
 ### 0013-logicos
 - **Conceitos-chave:** `&&`, `||`, `!` com tabela-verdade; intervalo 0 < x < 10 vira `x > 0 && x < 10`.
 - **Pegadinhas:** escrever `0 < x < 10` em C compila mas não faz o que parece. (A apostila não fala
-  de curto-circuito — completar com outra fonte.)
+  de curto-circuito; completar com outra fonte.)
 - **Ideias de exercícios:** montar a tabela-verdade de `!a || b`.
 
 ### 0014-if / 0015-if-else
 - **Conceitos-chave:** `if` executa só o comando seguinte, a menos que haja bloco `{}`; `else` não
   tem condição (é o "caso contrário"); cada um tem seu próprio par de chaves.
-- **Pegadinhas (todas com exemplo certo × errado):** `if (num > 10);` — o `;` vira o corpo do if e o
+- **Pegadinhas (todas com exemplo certo × errado):** `if (num > 10);`: o `;` vira o corpo do if e o
   printf roda sempre (compila sem erro!); `else (num != 10) {` é erro; `else;` também esvazia o
   else; usar `=` no lugar de `==` compila e quebra a lógica (o contrário dá erro de compilação).
 - **Ideias de exemplos:** "número digitado é igual a 10?" em versão certa e nas três versões erradas.
@@ -227,7 +227,7 @@
   opcional; mais elegante que cadeia de if-else para igualdades. Sem `break` a execução "cai" nos
   cases seguintes. Se o primeiro comando de um case declara variável, envolver o case em `{}`
   (um salto não pode pular uma declaração no mesmo escopo).
-- **Analogias/explicações boas:** o fall-through como recurso: contagem regressiva por extenso —
+- **Analogias/explicações boas:** o fall-through como recurso: contagem regressiva por extenso:
   digitar 5 imprime "Cinco, Quatro, …, Zero" (cases de 9 a 0 sem break).
 - **Ideias de exemplos:** classificar pontuação (`.`, `,`, `:`, `;`); calculadora com `+ - * /`.
 - **Ideias de exercícios:** o exemplo de pontuação **sem** break: o que sai digitando `.`? (todas as
@@ -241,7 +241,7 @@
 - **Conceitos-chave:** testa antes, repete 0 ou mais vezes; atua só no comando seguinte sem `{}`.
   Laço infinito: falta condição de parada ou ela nunca é atingida (variável da condição não muda, ou
   muda no sentido errado).
-- **Pegadinhas:** `while (a < b); { ... }` — laço infinito vazio.
+- **Pegadinhas:** `while (a < b); { ... }`: laço infinito vazio.
 - **Ideias de exercícios:** imprimir os inteiros entre a e b (exclusivo) com while.
 
 ### 0021-do-while
@@ -255,7 +255,7 @@
   atualização (`c = c + 2`, ou até `scanf`); vírgula permite duas variáveis
   (`for (i=0, j=100; i<j; i++, j--)`); variável de controle pode ser `char` (`for (c='A'; c<='Z'; c++)`).
   Comparação lado a lado for × while (soma de 1 a 10).
-- **Ideias de exercícios:** imprimir o alfabeto; i sobe de 0 e j desce de 100 até se cruzarem —
+- **Ideias de exercícios:** imprimir o alfabeto; i sobe de 0 e j desce de 100 até se cruzarem:
   quantas linhas? (50).
 
 ### 0023-break-continue
@@ -279,7 +279,7 @@
 
 ### 0026-aleatorios
 - **Conceitos-chave:** apenas listados (`rand`, `srand` em stdlib; `time`, `clock`, `difftime`,
-  `CLOCKS_PER_SEC` em time.h). Sem exemplos — completar com outra fonte.
+  `CLOCKS_PER_SEC` em time.h). Sem exemplos; completar com outra fonte.
 
 ---
 
@@ -296,7 +296,7 @@
 - **Analogias/explicações boas:** função deve fazer só sua tarefa: cálculo do fatorial recebe n e
   devolve o resultado; `scanf`/`printf` ficam em quem chama (generalidade). Exceção legítima: função
   cujo objetivo é a interação (ex.: `menu()` que valida a opção).
-- **Pegadinhas:** `int soma(int x, y)` é erro — cada parâmetro precisa de tipo. `void f()` ×
+- **Pegadinhas:** `int soma(int x, y)` é erro: cada parâmetro precisa de tipo. `void f()` ×
   `void f(void)`: com parênteses vazios o compilador aceita `f(5)` sem reclamar; com `void` é erro.
 - **Ideias de exercícios:** extrair o fatorial do `main` para uma função; escrever `int maior(int,int)`
   com um e com dois `return`.
@@ -305,7 +305,7 @@
 - **Conceitos-chave:** em C tudo é passado por valor (cópia); alterar o parâmetro não altera a
   variável original (`soma_mais_um(x)`: antes 5, dentro 6, depois 5). Parâmetro é variável local.
 - **Ideias de exercícios:** prever a saída do exemplo `Troca(x, y)` por valor (dentro troca, fora
-  não) — ponte para ponteiros.
+  não): ponte para ponteiros.
 
 ### 0030-escopo
 - **Conceitos-chave:** escopo = onde e quando a variável vale. Global (fora de funções) vive o
@@ -314,7 +314,7 @@
   `int x = 4` no main, depois bloco interno `int x = 3`, e de volta: saída 5, 4, 3, 4 (o primeiro
   printf vem antes da declaração local, por isso enxerga a global).
   **Avançado (12.6):** `auto` (padrão das locais), `extern` (avisa que a variável global foi definida
-  em outro arquivo, não pode ser inicializada ali), `static` local (mantém valor entre chamadas — o
+  em outro arquivo, não pode ser inicializada ali), `static` local (mantém valor entre chamadas; o
   exemplo imprime 0..9 em 10 chamadas), `static` em função/global (visível só no arquivo),
   `register` (dica de usar registrador; não aceita `&`; compiladores ignoram).
 - **Pegadinhas:** evitar globais (qualquer parte altera, difícil manter, ocupam memória o tempo todo)
@@ -333,7 +333,7 @@
   Dois cuidados: **critério de parada** (0! = 1) e **parâmetro que muda** a cada chamada (n−1).
   Versões recursiva e iterativa de fatorial e Fibonacci.
 - **Analogias/explicações boas:** a árvore de chamadas de `fibo(4)` e `fibo(5)` com os
-  sub-cálculos repetidos destacados — "elegância não é eficiência".
+  sub-cálculos repetidos destacados: "elegância não é eficiência".
 - **Ideias de exercícios:** contar quantas chamadas `fibo(5)` faz (15); escrever Fibonacci
   iterativo com a, b, c.
 
@@ -347,13 +347,13 @@
   (só para testar com `#ifdef`), constante, macro com parâmetros. `#undef` apaga para redefinir.
   `#ifdef/#ifndef/#if/#elif/#else/#endif`. Macro multilinha com `\` no fim. `#x` transforma
   parâmetro em string; `x ## y` cola tokens (`concatena(print, f)` vira `printf`). `#line`, `#error`
-  (aborta a compilação com mensagem — ex.: "PI não definido"), `#pragma` (específico do compilador,
+  (aborta a compilação com mensagem, ex.: "PI não definido"), `#pragma` (específico do compilador,
   ignorado se desconhecido). Macros pré-definidas `__LINE__`, `__FILE__`, `__DATE__`, `__TIME__`.
 - **Analogias/explicações boas:** "macro não é função, é substituição de texto": `prod1(a+2, b)` com
   `x*y` vira `a+2*b` = 5; com `(x)*(y)` vira `(a+2)*(b)` = 6 (a = 1, b = 2).
-- **Pegadinhas:** parâmetros sem parênteses; a apostila põe `;` no fim do `#define prod1` (gera `;;`
-  — mau hábito). Macro de troca genérica `TROCA(a,b,tipo)` precisa de `{}` para criar escopo do
-  temporário. **Erro da apostila:** diz que `#if` não resolve expressões matemáticas — resolve
+- **Pegadinhas:** parâmetros sem parênteses; a apostila põe `;` no fim do `#define prod1` (gera `;;`,
+  mau hábito). Macro de troca genérica `TROCA(a,b,tipo)` precisa de `{}` para criar escopo do
+  temporário. **Erro da apostila:** diz que `#if` não resolve expressões matemáticas: resolve
   expressões inteiras constantes (`#if TAMANHO > 100` é exatamente isso).
 - **Ideias de exercícios:** prever c e d no exemplo prod1/prod2; escrever `QUADRADO(x)` e testar com
   `QUADRADO(1+2)`; usar `#ifndef TAMANHO / #define TAMANHO 100`; macro `DEBUG` que imprime
@@ -376,7 +376,7 @@
 - **Ideias de exercícios:** ler 5 notas, calcular média e listar as acima da média.
 
 ### 0038-vetores-e-funcoes
-- **Conceitos-chave:** vetor é sempre passado por "referência" (vai o endereço do 1º elemento) —
+- **Conceitos-chave:** vetor é sempre passado por "referência" (vai o endereço do 1º elemento),
   evita cópia e a função altera o original; passar o tamanho em outro parâmetro.
   `int *m`, `int m[]`, `int m[5]` são equivalentes no parâmetro (o 5 é ignorado). Na chamada, só o
   nome, sem colchetes.
@@ -387,7 +387,7 @@
   dimensão; armazenamento linear, **o índice mais à direita varia mais rápido**; inicialização com
   um único `{}` (preenche linha a linha) ou com chaves aninhadas; só a 1ª dimensão pode ficar sem
   tamanho (`int m[][2] = {1,...,10}` → 5 linhas). Em parâmetro precisa de todas as dimensões menos a
-  primeira (`int m[][5]`) — matriz é "vetor de vetores" e o compilador precisa do tamanho de cada
+  primeira (`int m[][5]`): matriz é "vetor de vetores" e o compilador precisa do tamanho de cada
   linha. Pode-se passar `&mat[0][0]` e tratar como vetor 1D de L·C elementos.
 - **Ideias de exercícios:** zerar um cubo 5×5×5; somar matriz 3×3; imprimir matriz 3×2 via função
   com `int m[][2]` e via ponteiro 1D.
@@ -417,7 +417,7 @@
   stdin)` lê até ENTER ou tam−1 caracteres e **guarda o `'\n'`**; `fputs(str, stdout)`.
 - **Pegadinhas:** a apostila apresenta `gets` como "alternativa mais eficiente" e a usa em dezenas
   de exemplos (inclusive `gets` depois de `scanf("%d")`, que lê a linha vazia). **gets foi removida
-  do C11** — no curso, sempre `fgets` + remover o `'\n'` (`str[strcspn(str, "\n")] = '\0'`).
+  do C11**; no curso, sempre `fgets` + remover o `'\n'` (`str[strcspn(str, "\n")] = '\0'`).
   Não ensinar `setbuf(stdin, NULL)`.
 - **Ideias de exercícios:** ler nome completo com fgets e imprimir quantas letras tem (sem contar o
   `'\n'`).
@@ -434,22 +434,22 @@
   endereço).
 
 ### 0045-ponteiros
-- **Conceitos-chave:** variável guarda valor; ponteiro guarda endereço. `tipo *p;` — o tipo diz para
+- **Conceitos-chave:** variável guarda valor; ponteiro guarda endereço. `tipo *p;`: o tipo diz para
   que tipo ele pode apontar. `*` tem três papéis conforme o contexto: multiplicação (binário),
   declaração, acesso ao conteúdo. Ponteiro não inicializado aponta para lugar indefinido (UB);
   `NULL` = endereço de lugar nenhum (≠ não inicializado). `p = &count; *p = 12;` muda `count`.
   Atribuir endereço de `float` a `int*` compila mas lê lixo (1101004800); com cast `*(float*)p`
   funciona. Ponteiros do mesmo tipo podem ser atribuídos entre si. Pode-se pôr um endereço literal
-  (`0x3F8`) — útil em microcontroladores, perigoso em PC.
-- **Pegadinhas:** `int soma, *p2;` — o `*` vale só para p2. Na apostila os exemplos de endereço
+  (`0x3F8`), útil em microcontroladores, perigoso em PC.
+- **Pegadinhas:** `int soma, *p2;`: o `*` vale só para p2. Na apostila os exemplos de endereço
   literal fazem `int *p = 0x5DC;` sem cast (gera aviso) e imprimem ponteiro com `%d` (errado).
 - **Ideias de exercícios:** tabela "o que vale" para `x`, `&x`, `p`, `*p`, `&p` após `p = &x`.
 
 ### 0046-passagem-por-referencia
 - **Conceitos-chave:** passar o endereço (`&x` na chamada) e receber ponteiro (`int *n`), usando
-  `*n` dentro; é o que `scanf` faz — por isso o `&`. Troca (swap) por valor (não funciona fora) ×
+  `*n` dentro; é o que `scanf` faz, por isso o `&`. Troca (swap) por valor (não funciona fora) ×
   por referência (funciona): saídas "Antes 2 e 3 / Dentro 3 e 2 / Depois 2 e 3" × "... Depois 3 e 2".
-  Struct por referência: `(*p).x` — os parênteses são obrigatórios porque `.` tem precedência maior
+  Struct por referência: `(*p).x`: os parênteses são obrigatórios porque `.` tem precedência maior
   que `*` (`*p.x` significa `*(p.x)`); `p->x` substitui `(*p).x`.
 - **Ideias de exercícios:** `void minmax(int *v, int n, int *min, int *max)`; função que zera uma
   struct ponto recebida por ponteiro, nas duas notações.
@@ -458,7 +458,7 @@
 - **Conceitos-chave:** nome do vetor = endereço do 1º elemento (`p = vet` ≡ `p = &vet[0]`);
   `p[i]` ≡ `*(p+i)`; `&vet[i]` ≡ `vet + i`. Aritmética só soma/subtrai inteiros e anda em unidades
   do tipo (int* +1 → +4 bytes; double* +1 → +8). `void*` anda de 1 em 1 byte (extensão do GCC; no
-  padrão é proibido). Comparação: `==`/`!=` (mesma posição), `< >` (mais adiante na memória — só faz
+  padrão é proibido). Comparação: `==`/`!=` (mesma posição), `< >` (mais adiante na memória; só faz
   sentido dentro do mesmo vetor). Matriz via ponteiro: `*(*(mat + l) + c)` ou `int *p =
   &mat[0][0]` percorrendo L·C posições.
 - **Pegadinhas:** comparar com `>` ponteiros de variáveis diferentes (como faz a apostila) não tem
@@ -475,13 +475,13 @@
   `typedef int vetor[10];`).
 
 ### 0049-ponteiro-para-ponteiro
-- **Conceitos-chave:** `int **p2 = &p;` — `*p2` é o endereço de x, `**p2` é x; nº de `*` =
+- **Conceitos-chave:** `int **p2 = &p;`: `*p2` é o endereço de x, `**p2` é x; nº de `*` =
   níveis; evitar muitos níveis. Base para matriz dinâmica (cada nível = uma dimensão).
 - **Ideias de exemplos:** `char letra = 'a'` acessada por `*ptrChar`, `**ptrPtrChar`, `***ptrPtr`.
 
 ### 0050-ponteiro-para-funcao
 - **Conceitos-chave:** função também está na memória; o nome da função é seu endereço (`p = max;`
-  sem `&`); declaração `int (*p)(int, int);` — parênteses obrigatórios (sem eles é função que
+  sem `&`); declaração `int (*p)(int, int);`, parênteses obrigatórios (sem eles é função que
   retorna `int*`); só aponta para funções com o mesmo protótipo; chamar `p(x, y)`; pode ser NULL;
   passar como parâmetro: `int executa(int (*op)(int,int), int x, int y)`; vetor de ponteiros para
   função: `int (*ops[4])(int,int) = {soma, sub, prod, div}`.
@@ -500,7 +500,7 @@
 ## 07-memoria-dinamica
 
 ### 0053-pilha-e-heap
-- **Conceitos-chave:** motivação: salários de uma empresa — `float salarios[1000]` desperdiça se
+- **Conceitos-chave:** motivação: salários de uma empresa: `float salarios[1000]` desperdiça se
   houver menos e não cabe se houver mais; alocação dinâmica pede memória em tempo de execução e
   devolve o endereço num ponteiro. Variáveis comuns são liberadas automaticamente; dinâmicas não.
   `exit(1)` encerra o programa (fecha arquivos abertos). Locais ficam na pilha (dito no capítulo de
@@ -512,7 +512,7 @@
   ponteiro do início do bloco; o sistema sabe o tamanho por uma tabela interna. Depois de `free`, o
   ponteiro continua com o endereço antigo (pode "funcionar" e ler lixo) → fazer `p = NULL`.
   `sizeof` funciona com tipo ou variável.
-- **Pegadinhas:** usar memória após `free` (a apostila mostra que "nenhum erro ocorre" — é UB
+- **Pegadinhas:** usar memória após `free` (a apostila mostra que "nenhum erro ocorre", um UB
   silencioso, ótimo para discutir); esquecer de liberar. A apostila chama `sizeof` de "função" (é
   operador) e tem o typo "50 * 4 bytes" para 5 ints.
 - **Ideias de exercícios:** ler N, alocar N notas, calcular média, liberar.
@@ -524,19 +524,19 @@
   `malloc(t)`; se falhar, devolve NULL e o bloco antigo fica intacto.
 - **Pegadinhas:** `p = realloc(p, t)` (como na apostila) perde o bloco original se falhar → usar
   ponteiro temporário. `realloc(p, 0)` como `free` é dependente da implementação (e indefinido no
-  C23) — não ensinar.
+  C23); não ensinar.
 - **Ideias de exemplos:** vetor 1..5, encolhe para 3, cresce para 10 e imprime (as 7 novas posições
   com lixo).
 - **Ideias de exercícios:** ler números até 0, dobrando a capacidade com realloc quando encher.
 
 ### 0056-matriz-dinamica (destaque da apostila)
-- **Conceitos-chave — três soluções:**
+- **Conceitos-chave (três soluções):**
   1. **Vetor 1D** de L·C elementos, acesso `p[i*ncol + j]` (perde-se `p[i][j]`; um `malloc`, um
      `free`).
   2. **`int **p`**: `malloc(L * sizeof(int*))` para as linhas e, para cada linha,
      `malloc(C * sizeof(int))`. Mantém `p[i][j]`. Liberar na ordem inversa: cada `p[i]` e depois
      `p` (se liberar `p` primeiro perde os endereços das linhas). Permite linhas de tamanhos
-     diferentes — matriz triangular inferior com `malloc((i+1)*sizeof(int))`.
+     diferentes: matriz triangular inferior com `malloc((i+1)*sizeof(int))`.
   3. **Bloco único + vetor de ponteiros**: `v = malloc(L*C*sizeof(int))`, `p = malloc(L*sizeof(int*))`,
      `p[i] = v + i*C`. Mantém `p[i][j]`, só dois `malloc` e dois `free`, memória contígua.
 - **Analogias/explicações boas:** "o que se aloca tem sempre um nível de ponteiro a menos que o
@@ -546,7 +546,7 @@
 
 ### 0057-erros-de-memoria
 - **Conceitos-chave:** ponteiro solto (*dangling*) após free; ponteiro não inicializado; usar
-  memória liberada; esquecer free. (Sem valgrind/ASan — completar.)
+  memória liberada; esquecer free. (Sem valgrind/ASan; completar.)
 
 ---
 
@@ -565,10 +565,10 @@
 - **Ideias de exercícios:** struct `endereco` dentro de `cadastro`; ler e imprimir.
 
 ### 0060-typedef
-- **Conceitos-chave:** `typedef` cria sinônimo, não tipo novo (`typedef int inteiro;` — int e
+- **Conceitos-chave:** `typedef` cria sinônimo, não tipo novo (`typedef int inteiro;`: int e
   inteiro se misturam livremente). Uso principal: `typedef struct cadastro cad;` ou tudo junto
   `typedef struct { ... } cad;` (nome da struct pode ser omitido).
-- **Pegadinhas:** sinônimos que escondem demais confundem: `typedef unsigned int positivos[5];` —
+- **Pegadinhas:** sinônimos que escondem demais confundem: `typedef unsigned int positivos[5];`:
   `positivos v;` não deixa claro que v é vetor.
 
 ### 0061-vetor-de-structs
@@ -602,7 +602,7 @@
   Compostos `&= |= ^= <<= >>=`. **Campos de bits** (12.7): membros de struct/union com largura em
   bits (`unsigned int ligado:1; signed int valor:4; unsigned int :3;`); campo sem nome preenche
   (*padding*); largura 0 força alinhamento; não têm endereço (sem `&`, ponteiro, vetor ou `sizeof`);
-  `signed` de 1 bit não faz sentido — preferir `unsigned`. Usos: flags, hardware, formatos de arquivo.
+  `signed` de 1 bit não faz sentido; preferir `unsigned`. Usos: flags, hardware, formatos de arquivo.
 - **Ideias de exercícios:** fazer as contas de 44 com 167/129 à mão em binário; struct `status` com
   campo ligado e valor de −8 a 7.
 
@@ -620,15 +620,15 @@
   testar NULL e `exit(1)`. `fclose` grava o que restou no buffer (0 = sucesso).
   `fputc/fgetc` (um caractere; `fgetc` devolve **int** para caber o `EOF`, que vale −1 em muitos
   sistemas); `stdin`, `stdout`, `stderr` são arquivos já abertos. `fputs` (não acrescenta `\n` nem
-  espaço — "Hello"+"World" vira "HelloWorld"), `fgets` (para no `\n`, que fica na string, ou em
+  espaço: "Hello"+"World" vira "HelloWorld"), `fgets` (para no `\n`, que fica na string, ou em
   tam−1; NULL no fim). `fprintf/fscanf` = printf/scanf com `FILE*` na frente.
 - **Analogias/explicações boas:** buffer = área intermediária; gravar caractere a caractere no disco
-  exigiria mover a cabeça de leitura a cada byte — junta-se tudo e grava de uma vez; `fflush(fp)`
+  exigiria mover a cabeça de leitura a cada byte; junta-se tudo e grava de uma vez; `fflush(fp)`
   força a gravação.
-- **Pegadinhas (erros presentes nos exemplos — usar como "ache o erro"):**
-  `char c; while ((c = fgetc(arq)) != EOF)` — `c` deve ser `int`; `while (!feof(fp)) { c = fgetc(fp);
+- **Pegadinhas (erros presentes nos exemplos, para usar como "ache o erro"):**
+  `char c; while ((c = fgetc(arq)) != EOF)`: `c` deve ser `int`; `while (!feof(fp)) { c = fgetc(fp);
   printf(...) }` imprime um lixo a mais no fim (feof só fica verdadeiro **depois** de uma leitura
-  falhar) — o mesmo bug soma o último número duas vezes no exemplo da matriz com `fscanf`;
+  falhar); o mesmo bug soma o último número duas vezes no exemplo da matriz com `fscanf`;
   comparar o retorno de `fgets` com `EOF` (é ponteiro, compara-se com NULL); `fflush` em arquivo de
   leitura é indefinido. `stdaux`/`stdprn` não são padrão.
 - **Ideias de exemplos:** gravar "Nome: Ricardo / Idade: 30 / Altura: 1.74" com fprintf e reler com
@@ -641,7 +641,7 @@
   foram processados (menor que qtd = erro/fim). Variáveis simples e structs com `&`, vetores sem.
   Pode gravar parte de vetor (qtd = 2 grava só as 2 primeiras posições). Ao ler string, pôr o
   `'\0'` manualmente; **gravar o tamanho antes da string/vetor** facilita a leitura (`fwrite(&t,...)`
-  e depois os t caracteres). `ftell` (posição; em binário = bytes desde o início) — com
+  e depois os t caracteres). `ftell` (posição; em binário = bytes desde o início); com
   `fseek(arq, 0, SEEK_END)` dá o tamanho do arquivo. `fseek(fp, n, origem)` com `SEEK_SET`,
   `SEEK_CUR`, `SEEK_END` (n pode ser negativo); `rewind`; `remove(nome)`; `ferror(fp)` (testar logo
   após cada operação) e `perror("msg")` (imprime "msg: No such file or directory").
@@ -662,7 +662,7 @@
 
 ---
 
-## Funções variádicas (12.9) — encaixar como extra do módulo 04
+## Funções variádicas (12.9): encaixar como extra do módulo 04
 - **Conceitos-chave:** `tipo f(int n, ...)`; precisa de ao menos um parâmetro fixo (que diz quantos
   e/ou de que tipo são os demais, como o formato do printf); `stdarg.h`: `va_list`, `va_start(lista,
   ultimo_fixo)`, `va_arg(lista, tipo)`, `va_end(lista)`. Sem verificação de tipo → perigoso;
@@ -689,14 +689,10 @@
 - Ler `char` com `%d` e `double` com `%f` no scanf.
 
 ## Extras que não cabem no sumário
-- Catálogo de funções por biblioteca (stdio, stdlib — `atof atoi atol strtod strtol strtoul abort
-  atexit exit getenv system bsearch qsort abs div` —, math, ctype, string, time — `clock difftime
+- Catálogo de funções por biblioteca (stdio, stdlib: `atof atoi atol strtod strtol strtoul abort
+  atexit exit getenv system bsearch qsort abs div`; math, ctype, string, time: `clock difftime
   mktime time asctime ctime gmtime localtime strftime`, `struct tm`, `CLOCKS_PER_SEC`). Bom para um
   apêndice de referência.
 - História/influência de C (Ritchie, 1972, ANSI 1989; C++, Java, C#, PHP herdaram a sintaxe).
-- Roteiro de debugger (pode virar um "bônus" no módulo 01 ou 04 com gdb).
-- Diretivas `#line`, `#pragma`, macros pré-definidas, operadores `#`/`##`.
-- `printf`/`scanf` avançados: flags, `%*d`, `%.*f`, `%.3s`, `%*d` no scanf, scanset `%[A-Z0-9]`.
-- Classes de armazenamento completas, campos de bits, `volatile`, funções variádicas.
 - Dica de segurança: ponteiros soltos podem ser explorados; strings de formato controladas pelo
   usuário vazam memória.

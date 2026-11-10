@@ -1,4 +1,4 @@
-# Fichamento — Algoritmos e Estruturas de Dados 1 (Castilho, Silva, Weingaertner — UFPR)
+# Fichamento: Algoritmos e Estruturas de Dados 1 (Castilho, Silva, Weingaertner, UFPR)
 
 - **Autores:** Marcos A. Castilho, Fabiano Silva, Daniel Weingaertner (DINF/UFPR, disciplina CI1055).
 - **Edição:** recurso eletrônico, Curitiba, 2020, 345 p. Licença CC BY-NC-ND 2.5 BR (não pode ser copiado nem adaptado para
@@ -13,7 +13,7 @@ inteiros, um único laço (`while`) na parte 1, e os mesmos problemas reaparecem
 contador, acumulador, menor, histograma). Trunfos: (1) **cap. 6**, que dá nome aos padrões de raciocínio (espinha dorsal do
 0030); (2) **cap. 7**, em que a primeira solução é ruim e vai sendo melhorada com custo comparado (inverter número,
 fatorial, primos); (3) **banco de exercícios** em ordem de dificuldade, quase todos com casos de teste. Fracos: Pascal em
-linha corrida (conversão do PDF), figuras e fórmulas perdidas, e **muitos bugs/inconsistências** em códigos e enunciados —
+linha corrida (conversão do PDF), figuras e fórmulas perdidas, e **muitos bugs/inconsistências** em códigos e enunciados,
 anotados nas "Pegadinhas" e em "Obsoleto"; rendem bons exercícios de "ache o erro".
 
 ---
@@ -29,7 +29,7 @@ anotados nas "Pegadinhas" e em "Obsoleto"; rendem bons exercícios de "ache o er
 
 **Explicações boas**
 - **Contar os presentes (7 soluções):** um a um; carteiras vazias; área × densidade (inexato); catraca; filas × alunos por
-  fila; cada primeiro de fila conta a sua (paralelo); **todos com 1, juntam-se em pares, somam, um senta** — ~log₂(n)
+  fila; cada primeiro de fila conta a sua (paralelo); **todos com 1, juntam-se em pares, somam, um senta**: ~log₂(n)
   rodadas (1000 → 10; 1 milhão → 20). Eficiência e paralelismo sem fórmula.
 - **Receita de bolo** no "formato padrão" (uma ação por linha, em ordem, tudo explícito) e o "algoritmo das claras em neve"
   para o novato: o detalhe depende de quem executa ("como separar a clara?"). Vago ("aos poucos", "até ficar homogêneo") não
@@ -51,7 +51,7 @@ anotados nas "Pegadinhas" e em "Obsoleto"; rendem bons exercícios de "ache o er
 - Teste de mesa do "conta até o zero" (5 8 3 9 0) com o teste do laço como linha própria ("5≠0, entra no laço"). A tabela
   do livro tem um erro (n=5 onde deveria ser 8): "ache o erro no teste de mesa".
 - Maior segmento crescente em 6 versões incrementais (ler; lembrar anterior; contar; memorizar; guardar máximo; testar o
-  último) — modelo de construção gradual.
+  último): modelo de construção gradual.
 
 **Ideias de exercícios**
 - Teste de mesa de `y=0; m=1; enquanto x>0 { y += (x%2)*m; x /= 2; m *= 10 }` para x = 0, 10, −1. **Resposta:** 0; 1010;
@@ -67,7 +67,7 @@ anotados nas "Pegadinhas" e em "Obsoleto"; rendem bons exercícios de "ache o er
 
 **Explicações boas**
 - 22 = 1·2⁴ + 0·2³ + 1·2² + 1·2¹ + 0·2⁰ = 10110₂, percorrido passo a passo com as diferenças.
-- Inverter a saída dos restos usando a técnica de "multiplicar por 10 e somar" (a mesma de inverter número) — reaproveita
+- Inverter a saída dos restos usando a técnica de "multiplicar por 10 e somar" (a mesma de inverter número), reaproveita
   padrão.
 
 **Pegadinhas**
@@ -95,7 +95,7 @@ anotados nas "Pegadinhas" e em "Obsoleto"; rendem bons exercícios de "ache o er
   trata Δ < 0.)
 
 **Ideias de exemplos**
-- Simulador da BCC em C: `int mem[64]`, `while (mem[p] != 9) switch (mem[p]) {...}` — `switch`, vetor e "código é dado".
+- Simulador da BCC em C: `int mem[64]`, `while (mem[p] != 9) switch (mem[p]) {...}`: `switch`, vetor e "código é dado".
 
 **Ideias de exercícios**
 - Executar a memória à mão com b=5, c=6. **Resposta:** escreve 2 e 3. Adaptar para ax² + bx + c = 0.
@@ -163,7 +163,7 @@ anotados nas "Pegadinhas" e em "Obsoleto"; rendem bons exercícios de "ache o er
 - Parar o laço por dois motivos: `enquanto (i <= n) && !achou`.
 
 **Pegadinhas**
-- Condição de fim "dois zeros" é `(a != 0) || (b != 0)` (continua se *algum* não é zero) — muitos escrevem `&&` e param no
+- Condição de fim "dois zeros" é `(a != 0) || (b != 0)` (continua se *algum* não é zero); muitos escrevem `&&` e param no
   primeiro zero.
 
 ### 0019-if
@@ -179,8 +179,8 @@ anotados nas "Pegadinhas" e em "Obsoleto"; rendem bons exercícios de "ache o er
 
 **Ideias de exercícios**
 - Raiz quadrada se ≥ 0, quadrado se negativo (4 → 2.00; −5 → 25.00).
-- Soma > 20 → soma+8; senão soma−5. **Resposta:** 13.14 e 5 → 13.14; −3 e −4 → −12.00; 16 e 5 → 29.00 (o livro imprime 20.00
-  — erro do caso de teste).
+- Soma > 20 → soma+8; senão soma−5. **Resposta:** 13.14 e 5 → 13.14; −3 e −4 → −12.00; 16 e 5 → 29.00 (o livro imprime 20.00,
+  erro do caso de teste).
 
 ### 0021-else-if
 
@@ -192,7 +192,7 @@ anotados nas "Pegadinhas" e em "Obsoleto"; rendem bons exercícios de "ache o er
 
 **Explicações boas**
 - No menor de três, quando `a >= b` e depois `b < c` é falso, imprimir c funciona mesmo com empates "porque no pior caso são
-  iguais" — inferência lógica com igualdade.
+  iguais": inferência lógica com igualdade.
 
 **Ideias de exercícios**
 - Triângulo inválido/equilátero/isósceles/escaleno (7 7 5 → ISOSCELES; 5 4 15 → INVALIDO); média de 2 notas (≥7 APROVADO,
@@ -202,7 +202,7 @@ anotados nas "Pegadinhas" e em "Obsoleto"; rendem bons exercícios de "ache o er
 ### 0023-switch
 
 **Conceitos-chave**
-- O `case` do Pascal aceita **faixas** (`0..2: bebe++`); o `switch` de C não — faixas exigem `if/else if` (ou `case 0: case
+- O `case` do Pascal aceita **faixas** (`0..2: bebe++`); o `switch` de C não: faixas exigem `if/else if` (ou `case 0: case
   1: case 2:`).
 
 **Ideias de exercícios**
@@ -222,7 +222,7 @@ anotados nas "Pegadinhas" e em "Obsoleto"; rendem bons exercícios de "ache o er
 **Explicações boas**
 - "Imprimir de 1 a 5" com 5 `writeln` → de 1 a 10 → de 1 a 100 milhões: o computador passa a atrapalhar; o raciocínio tem
   que deixar o trabalho repetitivo para a máquina.
-- Duas versões lado a lado do "somar vários pares": com contador e com sentinela — o miolo (ler e somar) é idêntico; só muda
+- Duas versões lado a lado do "somar vários pares": com contador e com sentinela; o miolo (ler e somar) é idêntico; só muda
   o controle do laço.
 
 **Ideias de exercícios**
@@ -236,7 +236,7 @@ anotados nas "Pegadinhas" e em "Obsoleto"; rendem bons exercícios de "ache o er
   a, b, c até a ≠ 0 (garante equação do 2º grau).
 
 **Pegadinhas**
-- `until cond` do Pascal para quando a condição fica verdadeira; `do {} while (cond)` de C continua enquanto é verdadeira —
+- `until cond` do Pascal para quando a condição fica verdadeira; `do {} while (cond)` de C continua enquanto é verdadeira;
   inverter a condição ao traduzir.
 
 **Ideias de exercícios**
@@ -251,20 +251,20 @@ anotados nas "Pegadinhas" e em "Obsoleto"; rendem bons exercícios de "ache o er
 
 **Pegadinhas**
 - Depois de sair por flag, o índice já foi incrementado: a busca simples devolve `i - 1`.
-- (`for`) Em Pascal a variável do `for` fica indefinida após o laço — o livro usa `j` assim em `imprimir_transposta` (bug).
+- (`for`) Em Pascal a variável do `for` fica indefinida após o laço; o livro usa `j` assim em `imprimir_transposta` (bug).
   O `for` só aparece na parte de vetores.
 
 ### 0029-lacos-aninhados
 
 **Conceitos-chave**
-- Tabuada do 7 (um laço) → tabuadas de 1 a 10 (dois laços: o 7 vira i). O comando interno roda 100 vezes, o externo 10 —
+- Tabuada do 7 (um laço) → tabuadas de 1 a 10 (dois laços: o 7 vira i). O comando interno roda 100 vezes, o externo 10:
   primeira menção a custo **quadrático**.
 - **Cuidado ao "colocar um laço dentro de outro" sem pensar:** fatorial de 1 a n com laço aninhado recalcula 2×1 seis vezes,
   3×2 cinco vezes... A versão esperta usa fat(n+1) = (n+1)·fat(n) e um só laço (linear).
 
 **Explicações boas**
 - Gerar palíndromos de 1 a 1000 por **formato** (9 de um dígito; 11·i; i·100 + j·10 + i com dois laços) em vez de testar
-  todos — contadores em vários níveis.
+  todos, com contadores em vários níveis.
 - Primos entre si para 2 ≤ a ≤ 100, a ≤ b ≤ 100: primeiro escrever os dois laços com o teste em pseudocódigo, depois
   "encaixar" Euclides.
 
@@ -287,9 +287,9 @@ Assunto central do livro (cap. 6 nomeia, cap. 7 aplica).
 3. **Árvore de decisão** (0021): só quando a quantidade de dados é fixa e pequena.
 4. **Definir a priori e corrigir ("chute"):** o primeiro lido **é** o menor "dos lidos até agora"; a cada novo valor,
    corrigir. Tratar entrada vazia. Mesmo padrão: flag `eh_primo = 1` corrigida ao achar divisor; `maiortam = 0`.
-5. **Lembrar de duas informações:** Fibonacci (último, penúltimo — a ordem da atualização importa); Euclides.
+5. **Lembrar de duas informações:** Fibonacci (último, penúltimo; a ordem da atualização importa); Euclides.
 6. **Processar parte dos dados** (`if` no corpo) e **parte de um jeito, parte de outro** (`if/else`): o controle do laço não
-   muda — "dois subproblemas".
+   muda: "dois subproblemas".
 7. **Múltiplos acumuladores:** histograma por faixa etária, um contador por faixa.
 8. **Lembrar o anterior:** `anterior = atual` no **fim** do corpo; antes do laço, valor seguro (0 para naturais).
 9. **Destruir uma cópia** (contar dígitos) e **construir enquanto destrói** (`inv = inv*10 + n%10; n /= 10`).
@@ -321,7 +321,7 @@ Assunto central do livro (cap. 6 nomeia, cap. 7 aplica).
 - Os dois maiores (1 2 3 4 5 6 0 → 6 5). Maior potência de p que divide n (3, 45 → 9; não divide → 1).
 - Populações com crescimento anual inteiro desde 2009: a menor alcança a maior? quando? **Livro:** 100 80 2 3 → 2036; 100 20
   10 50 → 2015; 100 20 50 10 → nao. **Atenção:** 2036 sai com `enquanto menor < maior`; com "ultrapassar" (`<=`) dá 2037;
-  com contas reais, 2032 — discutir enunciado.
+  com contas reais, 2032; discutir enunciado.
 - K primeiros perfeitos (6 28 496 8128). Histograma 4 faixas (347 200 3 32000 400 10 20 25 0 → 4 1 2 1).
 - Segmentos de iguais consecutivos (2 2 3 3 5 1 1 1 → 4). Maior segmento crescente (5 10 3 2 4 7 9 8 5 → 4).
 - k-alternante (k=2: 1 3 6 8 9 11 2 4 1 7 6 8 → é; 1 2 3 3 4 6 3 2 → não). Amigos quadráticos (13 16 → sim).
@@ -332,11 +332,11 @@ Assunto central do livro (cap. 6 nomeia, cap. 7 aplica).
 
 **Conceitos-chave**
 - Gerar uma permutação aleatória de 1..n, em 4 versões cada vez melhores:
-  1. sortear o vetor inteiro e testar se é permutação — "infernalmente" lento a partir de n≈14;
-  2. sortear cada posição e repetir se já existe — ok até ~30 mil;
-  3. partir da identidade e fazer de 0 a 999 trocas aleatórias — rápido, **mas enviesado**;
+  1. sortear o vetor inteiro e testar se é permutação: "infernalmente" lento a partir de n≈14;
+  2. sortear cada posição e repetir se já existe: ok até ~30 mil;
+  3. partir da identidade e fazer de 0 a 999 trocas aleatórias: rápido, **mas enviesado**;
   4. vetor auxiliar com os números restantes; sorteia um **índice** do auxiliar, copia o último para o buraco e diminui o
-     tamanho — é o **Fisher–Yates**: linear e uniforme.
+     tamanho; é o **Fisher–Yates**: linear e uniforme.
 - Espalhar minas sem repetir: sortear (x, y) até cair numa casa vazia.
 
 **Pegadinhas**
@@ -345,7 +345,7 @@ Assunto central do livro (cap. 6 nomeia, cap. 7 aplica).
 
 **Ideias de exercícios**
 - Desafio "tabela hash didática": inserir n valores aleatórios em posições aleatórias; se a posição estiver ocupada,
-  procurar a próxima livre circularmente — é **sondagem linear** (liga com 0112).
+  procurar a próxima livre circularmente: é **sondagem linear** (liga com 0112).
 
 ### 0033-funcoes
 
@@ -360,7 +360,7 @@ Assunto central do livro (cap. 6 nomeia, cap. 7 aplica).
 
 **Explicações boas**
 - **Oito maneiras de escrever `eh_par`** (if/else com `=0`, `<>0`, `<>1`, `=1`; "assume falso e corrige"; "assume verdadeiro
-  e corrige"...) — todas equivalentes; ótimo para mostrar que o contrato importa mais que o corpo (em C: `return n % 2 ==
+  e corrige"...), todas equivalentes; ótimo para mostrar que o contrato importa mais que o corpo (em C: `return n % 2 ==
   0;`).
 - Dígito verificador: o programa principal fica "em alto nível" (ler, separar número e DV, calcular o correto, comparar) e
   cada passo é uma função curta.
@@ -380,23 +380,23 @@ Assunto central do livro (cap. 6 nomeia, cap. 7 aplica).
   pode destruir `n` dividindo por 10 sem estragar o original.
 - **Por referência** (Pascal `var`; em C, ponteiro): a função mexe na variável original. Obrigatório para **ler** dentro de
   uma função e para "devolver mais de um resultado".
-- Função que devolve **quantas** raízes há (0, 1 ou 2) e as raízes por referência — padrão "retorno = status, saída por
+- Função que devolve **quantas** raízes há (0, 1 ou 2) e as raízes por referência: padrão "retorno = status, saída por
   parâmetro" (em C, como `scanf`).
 
 **Pegadinhas**
 - Efeito colateral escondido: `num_vezes_que_divide(p, &n)` também divide `n` (o próprio livro critica).
 - "Passe vetores sempre por referência para não copiar" é regra de Pascal: em C o vetor já vai como ponteiro (o que se
-  copia é a `struct` que o contém). O `var` de Pascal confunde com declaração — em C, o `*` da declaração × o do uso.
+  copia é a `struct` que o contém). O `var` de Pascal confunde com declaração; em C, o `*` da declaração × o do uso.
 
 **Ideias de exercícios**
 - `incrementa(&n)` usada num laço que imprime de 1 a 10 (resposta: `void incrementa(int *n){(*n)++;}`).
-- Trocar x e y com procedimento — e depois testar passando por valor para ver que não troca.
+- Trocar x e y com procedimento e depois testar passando por valor para ver que não troca.
 - (0035) O `temp` global da troca "não faz sentido": subprograma não deve depender de globais; vira local.
 
 ### 0038-recursao-na-pratica
 
 (O livro deixa recursão para AED2, mas o **flood fill** e o "abrir vizinhos" do campo minado, feitos com pilha explícita,
-são alvos naturais para a versão recursiva — ver 0116.)
+são alvos naturais para a versão recursiva; ver 0116.)
 
 **Explicações boas**
 - **Euclides em grade:** escrever a e b, anotar quociente em cima e resto embaixo, copiar o resto para a direita e repetir
@@ -409,7 +409,7 @@ são alvos naturais para a versão recursiva — ver 0116.)
 ### 0042-vetores
 
 **Conceitos-chave**
-- Motivação: imprimir na ordem inversa é **impossível** com uma variável — quando se lê o segundo, o primeiro foi perdido.
+- Motivação: imprimir na ordem inversa é **impossível** com uma variável: quando se lê o segundo, o primeiro foi perdido.
   Vetor = muitas posições com um só nome + deslocamento.
 - Endereço do elemento = início + índice × tamanho do tipo (explicado em bytes).
 - **Tamanho alocado × tamanho útil:** declara-se 200, usam-se 10; o resto é lixo. Não deixar "buracos". O tamanho máximo é
@@ -419,9 +419,9 @@ são alvos naturais para a versão recursiva — ver 0116.)
 - Copiar vetor é copiar elemento por elemento.
 
 **Pegadinhas**
-- `v[201]` num vetor de 200: Pascal acusa; **C não confere** — cai no 0042.
+- `v[201]` num vetor de 200: Pascal acusa; **C não confere** (cai no 0042).
 - `v[v[13]]` só é válido se o conteúdo for inteiro e um índice válido.
-- O livro usa vetores começando em 1 e posições extras (0 ou n+1) para **sentinela** — em C, reservar `MAX+1`.
+- O livro usa vetores começando em 1 e posições extras (0 ou n+1) para **sentinela**; em C, reservar `MAX+1`.
 
 **Ideias de exercícios**
 - Índices pares recebem o dobro do índice, ímpares o triplo (base 1, n=5 → 3 4 9 8 15).
@@ -434,11 +434,11 @@ são alvos naturais para a versão recursiva — ver 0116.)
 
 **Conceitos-chave**
 - Passar o vetor **e o tamanho útil**; a leitura recebe o tamanho por referência (lê `tam` dentro do procedimento).
-- `struct { int tam; T dados[MAX]; }` — "o vetor que sabe o próprio tamanho" (seção 11.2).
+- `struct { int tam; T dados[MAX]; }`: "o vetor que sabe o próprio tamanho" (seção 11.2).
 
 **Ideias de exercícios**
 - Remover a posição p de vetor **não ordenado** em O(1): copiar o último para p. **Resposta:** 1 3 4 8 8 10 15, p=4 → 1 3 4
-  15 8 10. (O caso de teste do livro remove o *valor* 4, que está na posição 3 — confusão índice × conteúdo; e o primeiro
+  15 8 10. (O caso de teste do livro remove o *valor* 4, que está na posição 3, confusão índice × conteúdo; e o primeiro
   caso saiu embaralhado na extração.)
 - Mesmo problema com vetor ordenado: deslocar para trás (1 3 4 8 10 15).
 - Soma e produto escalar de vetores (o livro: produto escalar do exemplo = 28).
@@ -481,7 +481,7 @@ são alvos naturais para a versão recursiva — ver 0116.)
 
 **Conceitos-chave**
 - O livro quase não trata strings (só `string[50]` em registros e a leitura de "P2"). Vale como analogia: "busca de uma
-  sequência dentro de outra" e "localizar e substituir" são feitos com **vetores de inteiros** — os mesmos algoritmos servem
+  sequência dentro de outra" e "localizar e substituir" são feitos com **vetores de inteiros**; os mesmos algoritmos servem
   para `char[]`.
 
 **Ideias de exercícios**
@@ -495,15 +495,15 @@ são alvos naturais para a versão recursiva — ver 0116.)
 - Registro = estrutura **heterogênea** (campos de tipos diferentes); vetor/matriz são homogêneos. Acesso por
   `variavel.campo`; combinação `v[i].cpf`, `v.dados[i]`.
 - **Chave:** o campo usado para buscar/ordenar (CPF) pode ser diferente do que se imprime (telefone).
-- Ao ordenar vetor de registros, **trocar o registro inteiro** — trocar só a chave mistura dados de clientes.
+- Ao ordenar vetor de registros, **trocar o registro inteiro**: trocar só a chave mistura dados de clientes.
 
 **Pegadinhas**
-- Usar um tipo antes de declará-lo (`corte: Tamanho` antes de `Tamanho = (mini,medio,maxi)`) — em C também é erro.
+- Usar um tipo antes de declará-lo (`corte: Tamanho` antes de `Tamanho = (mini,medio,maxi)`); em C também é erro.
 - Campo com mesmo nome de variável é permitido (escopos diferentes).
 
 **Ideias de exercícios**
 - Nome/DDD/telefone: imprimir os de DDD 41 ou 21; com data de nascimento (struct aninhada), o mais jovem (exemplo: Fulano,
-  2001 — o livro diz Beltrano, errado); ordenar por nome imprimindo `nome, DDD, tel, d/m/aaaa`; inserir mantendo a ordem.
+  2001; o livro diz Beltrano, errado); ordenar por nome imprimindo `nome, DDD, tel, d/m/aaaa`; inserir mantendo a ordem.
 - (0066) Busca por CPF imprimindo o telefone; seleção pela chave CPF. Imagem PGM como struct (lin, col, maior, matriz):
   binarizar pela média e compactar sequências de 1s em contagens (run-length).
 
@@ -516,7 +516,7 @@ são alvos naturais para a versão recursiva — ver 0116.)
 **Explicações boas**
 - Tabela de comparações no pior caso: busca simples com flag 2n, com sentinela n, em vetor ordenado n, binária ~log₂n (n=10⁸
   → 200 milhões × 19).
-- Primos: testar até n−1, só ímpares (n/2) ou até √n — para n = 10¹² são 10¹² contra 10⁶.
+- Primos: testar até n−1, só ímpares (n/2) ou até √n; para n = 10¹² são 10¹² contra 10⁶.
 - Fatorial de 1..n: aninhado (quadrático) × reaproveitando o anterior (linear).
 
 ### 0077-big-o
@@ -529,7 +529,7 @@ são alvos naturais para a versão recursiva — ver 0116.)
 ### 0078-invariantes
 
 **Conceitos-chave** (o livro não usa a palavra "invariante", mas as frases estão lá)
-- "De todos os números lidos **até agora**, `menor` é o menor" — invariante do padrão chute.
+- "De todos os números lidos **até agora**, `menor` é o menor", invariante do padrão chute.
 - Seleção: ao fim da etapa i, as i primeiras posições estão na ordem **final** (definitiva).
 - Inserção: ao fim da etapa i, as i primeiras estão ordenadas **entre si** (relativa).
 - Busca binária: se x existe, está entre `inicio` e `fim`; quando `fim < inicio`, não existe.
@@ -538,7 +538,7 @@ são alvos naturais para a versão recursiva — ver 0116.)
 
 **Conceitos-chave**
 - TAD = definir **o que** as operações fazem (protótipos + semântica), não **como**. Primeiro a interface, depois **usar** o
-  TAD para resolver problemas, só no fim implementar — e mostrar mais de uma implementação com custos diferentes.
+  TAD para resolver problemas, só no fim implementar e mostrar mais de uma implementação com custos diferentes.
 - TAD **conjunto**: vazio, cardinalidade, inserir, remover, união, interseção, diferença, pertence, iguais, contido, copiar;
   para percorrer: `retirar_um_elemento` (destrutivo) ou **iterador** (`iniciar_iterador` + `incrementar_iterador(c, &x)` que
   devolve falso no fim).
@@ -555,7 +555,7 @@ são alvos naturais para a versão recursiva — ver 0116.)
   um laço O(n). Com matriz seria O(n²).
 
 **Pegadinhas**
-- O registro declara `tam` e o código usa `c.card`; a celebridade chama `inserir_do_conjunto` — inconsistências do livro.
+- O registro declara `tam` e o código usa `c.card`; a celebridade chama `inserir_do_conjunto`: inconsistências do livro.
 - A pilha é melhor que o conjunto na celebridade porque não paga o teste de repetição.
 
 **Ideias de exercícios**
@@ -566,7 +566,7 @@ são alvos naturais para a versão recursiva — ver 0116.)
 
 **Conceitos-chave**
 - `struct { int tam; T dados[MAX]; }` é o embrião da lista sequencial; o livro reconhece a limitação do tamanho fixo
-  ("estimar o máximo, testar, recompilar") — motivação perfeita para `realloc` (0060).
+  ("estimar o máximo, testar, recompilar"); motivação perfeita para `realloc` (0060).
 
 **Ideias de exercícios**
 - TAD lista: inserir no início/fim/posição p, remover, tamanho, vazia/cheia, imprimir, imprimir ordenada, fundir,
@@ -594,7 +594,7 @@ são alvos naturais para a versão recursiva — ver 0116.)
   vazia e topo igual ao módulo. No fim, bem formada **e** pilha vazia. Exemplos bons: `({[]})[(){}]` ok; `({)` e `}{` erro.
 - Pilha como "memória de decisões" no labirinto (empilhar a escolha; no beco sem saída, desempilhar e tentar a outra) e
   `begin`/`end` do compilador.
-- **Pilha de coordenadas** para abrir as casas vazias do campo minado e para o flood fill — é DFS iterativa.
+- **Pilha de coordenadas** para abrir as casas vazias do campo minado e para o flood fill; é DFS iterativa.
 
 **Ideias de exercícios**
 - Testar com 1 2 3 −3 −2 −1 2 1 −1 3 −3 −2 0 → bem formada; 1 3 −1 0 → não.
@@ -625,7 +625,7 @@ são alvos naturais para a versão recursiva — ver 0116.)
   mesma casa, "Efeito Gita" (Raul Seixas: "eu sou o início, o fim e o meio").
 
 **Pegadinhas**
-- Só funciona em vetor ordenado — e ordenar/manter ordenado tem custo.
+- Só funciona em vetor ordenado, e ordenar/manter ordenado tem custo.
 - O livro compara reais com `<>` na binária.
 
 **Ideias de exercícios**
@@ -727,7 +727,7 @@ são alvos naturais para a versão recursiva — ver 0116.)
 
 **Conceitos-chave**
 - Polinômio de grau n = vetor de n+1 coeficientes, `p[i]` = coeficiente de xⁱ.
-- Valor em x acumulando a potência (`potx *= x`) — ou Horner; derivada `d[i] = (i+1)p[i+1]`; valor da derivada sem montar o
+- Valor em x acumulando a potência (`potx *= x`) ou Horner; derivada `d[i] = (i+1)p[i+1]`; valor da derivada sem montar o
   vetor; soma com graus diferentes; produto `m[i+j] += p[i]*q[j]` com o vetor zerado antes.
 
 **Ideias de exercícios**
@@ -758,7 +758,7 @@ são alvos naturais para a versão recursiva — ver 0116.)
 - Constantes nomeadas (MINA = −1, BORDA = −2, símbolos de impressão).
 
 **Ideias de exercícios**
-- Jogo da vida (vizinhos vivos 3 → nasce; 2 → mantém; resto → morre; usar duas matrizes e **trocar** em vez de copiar — em
+- Jogo da vida (vizinhos vivos 3 → nasce; 2 → mantém; resto → morre; usar duas matrizes e **trocar** em vez de copiar; em
   C, trocar ponteiros).
 - Jogo da velha; batalha naval; gotas de chuva descendo na janela; flood fill com jogador automático (escolher a cor mais
   frequente na fronteira).

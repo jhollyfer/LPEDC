@@ -1,8 +1,8 @@
-# Fichamento — Tenenbaum, Langsam, Augenstein: "Estruturas de Dados Usando C" (parte 2)
+# Fichamento (Tenenbaum, Langsam, Augenstein): "Estruturas de Dados Usando C" (parte 2)
 
 - **Título:** Estruturas de Dados Usando C (tradução brasileira, Makron Books).
 - **Autores:** Aaron M. Tenenbaum, Yedidyah Langsam, Moshe J. Augenstein.
-- **Arquivo lido:** `0aea0b0f-ebookEstruturas_de_Dados_Usando_C_Tenenbaum.md`, linhas **9590 a 17802**
+- **Arquivo lido:** `0aea0b0f-ebookEstruturas_de_Dados_Usando_C_Tenenbaum.md`, linhas 9590 a 17802
   (lidas por completo): cap. 6 (classificação), cap. 7 (busca), cap. 8 (grafos), cap. 9 (gerenciamento de
   armazenamento), mais bibliografia e índice analítico (só referências, sem conteúdo didático).
 - **Avaliação geral:** obra de referência densa e rigorosa, muito mais profunda que o necessário para um
@@ -14,8 +14,8 @@
   pseudocódigo misturado com C, tradução com jargão estranho ("classificação" = ordenação,
   "espalhamento" = hashing, "reespalhamento" = endereçamento aberto, "provas" = sondagens,
   "sistema em turma" = buddy system, "hiperpaginação" = thrashing) e o OCR introduziu muitos erros
-  nos códigos e fórmulas. Há também **bugs reais** em alguns códigos (listados em "Obsoleto / evitar").
-  Use como fonte de ideias, análises e exercícios — nunca copie código daqui sem revisar.
+  nos códigos e fórmulas. Há também bugs reais em alguns códigos (listados em "Obsoleto / evitar").
+  Use como fonte de ideias, análises e exercícios; nunca copie código daqui sem revisar.
 
 ---
 
@@ -48,7 +48,7 @@
 
 ### 0071-eficiencia
 - **Conceitos-chave:** três custos competem: tempo do programador, tempo de máquina e espaço. Para
-  arquivos pequenos ou programas rodados uma única vez, o método simples basta — mas "ineficiente" é
+  arquivos pequenos ou programas rodados uma única vez, o método simples basta, mas "ineficiente" é
   aceitável, "incorreto" nunca. Mede-se o tempo não em segundos (dependem da máquina), mas pelo número
   de **operações críticas**: comparações de chaves, trocas, movimentações. Duas formas de estimar:
   análise matemática (melhor/pior/médio) ou medição empírica com vários arquivos de teste.
@@ -56,7 +56,7 @@
   ~dobra o tempo); em n = 1000 os dois termos empatam (10.000 cada); depois o `n²` domina e dobrar n
   ~quadruplica o tempo. Mostra visualmente por que só o termo de maior ordem importa "no limite" e por
   que para n pequeno as constantes podem inverter a escolha.
-- **Ideia didática forte:** "ordenar ou não ordenar?" — se vou buscar UMA vez, uma busca sequencial
+- **Ideia didática forte:** "ordenar ou não ordenar?": se vou buscar UMA vez, uma busca sequencial
   custa menos que ordenar; se vou buscar milhares de vezes, ordenar uma vez e usar busca binária
   compensa. Não há resposta universal; depende do uso.
 - **Pegadinhas:** escolher um algoritmo "porque é O(n log n)" sem olhar constantes e tamanho real da
@@ -70,7 +70,7 @@
     resolver numericamente para a = 1, b = 100: n ≈ 997.)
   - Ordenar as condições de `if (c1 && c2 && c3)`: sabendo o custo de avaliar cada uma e a
     probabilidade de ser falsa, qual ordem minimiza o tempo médio? (Resp.: avaliar primeiro as baratas
-    e com alta chance de serem falsas — razão custo / P(falsa) crescente; bom gancho com curto-circuito.)
+    e com alta chance de serem falsas, razão custo / P(falsa) crescente; bom gancho com curto-circuito.)
 
 ### 0072-big-o
 - **Conceitos-chave:** definição formal: f(n) é O(g(n)) se existem constantes positivas a e b tais que
@@ -78,13 +78,13 @@
   Propriedades: transitividade; constantes são O(1); polinômio de grau k é O(nᵏ); todos os logaritmos
   são da mesma ordem (log_m n = log_m k · log_k n), por isso se omite a base. Hierarquia:
   1 < log n < (log n)ᵏ < n < n log n < n² < nᵏ < dⁿ. Polinomial × exponencial: 2¹⁰ = 1024, mas 2¹⁰⁰ tem
-  31 dígitos — problemas exponenciais são "intratáveis".
+  31 dígitos: problemas exponenciais são "intratáveis".
 - **Analogia boa:** multiplicar a entrada por 100 multiplica o tempo por menos de 200 num algoritmo
   O(n log n), mas por 10.000 num O(n²).
 - **Resultado bonito para bônus:** qualquer ordenação baseada em comparações precisa de pelo menos
   log₂(n!) ≈ n log n comparações no pior caso (árvore de decisão com n! folhas; uma árvore binária com
   n! folhas tem altura ≥ log₂ n!). Para n = 3: 6 permutações → pelo menos 3 comparações.
-- **Pegadinhas:** O(·) é limite superior — n² também é O(n³), mas se pede o limite mais justo, com
+- **Pegadinhas:** O(·) é limite superior: n² também é O(n³), mas se pede o limite mais justo, com
   coeficiente 1; achar que O(n log n) é sempre mais rápido que O(n²) para qualquer n.
 - **Exercícios:**
   - Mostrar a, b para provar que 10n² + 37n + 153 é O(n²). (Ex.: a = 11, b = 41.)
@@ -94,7 +94,7 @@
 
 ### 0073-invariantes
 - **Gancho do livro:** o particionamento do quicksort mantém o invariante "tudo acima de `up` é ≥ pivô,
-  tudo abaixo de `down` é ≤ pivô" — ótimo exemplo de invariante de laço que prova corretude.
+  tudo abaixo de `down` é ≤ pivô"; ótimo exemplo de invariante de laço que prova corretude.
 - **Outro:** após a passada i do bubble sort, `x[n−i..n−1]` estão na posição final; após a iteração k do
   insertion sort, `x[0..k]` está ordenado (não necessariamente na posição final).
 - **Exercício:** provar que, se o pivô a fica na posição j com tudo à esquerda ≤ a e tudo à direita ≥ a,
@@ -112,10 +112,10 @@
   (disco); "busca e inserção" (insere se não achar).
 
 ### 0075-vetor-dinamico / 0078-lista-ordenada (ganchos)
-- Remover de um vetor **desordenado**: copiar o último elemento para o buraco e decrementar n — O(1).
+- Remover de um vetor **desordenado**: copiar o último elemento para o buraco e decrementar n: O(1).
   Num vetor que precisa manter ordem, remover move metade dos elementos em média. Em lista ligada,
   remover é barato em qualquer caso.
-- "Inserção de lista": insertion sort sobre um vetor auxiliar `link[]` — insere ajustando índices, sem
+- "Inserção de lista": insertion sort sobre um vetor auxiliar `link[]`: insere ajustando índices, sem
   deslocar dados (comparações continuam O(n²), mas movimentações caem para O(n)). Bom exercício de
   lista ordenada em vetor.
 
@@ -148,19 +148,19 @@
 ### 0090-busca-binaria
 - **Conceitos-chave:** versão iterativa com `low`, `hi`, `mid = (low+hi)/2`; ~log₂ n iterações. Em C cada
   iteração faz duas comparações de chave (`==` e `<`), então são ~2 log₂ n comparações. Só funciona em
-  vetor (precisa de índice consecutivo) — inútil se há muitas inserções/remoções.
-- **Visão bonita:** um vetor ordenado é uma BST implícita — o meio é a raiz, as metades são as subárvores.
+  vetor (precisa de índice consecutivo); inútil se há muitas inserções/remoções.
+- **Visão bonita:** um vetor ordenado é uma BST implícita: o meio é a raiz, as metades são as subárvores.
 - **Variações (bônus):**
   - **Busca por interpolação:** estima a posição por regra de três:
     `mid = low + (high−low)·(key−k[low])/(k[high]−k[low])`. Com chaves uniformes: ~log₂(log₂ n)
-    comparações; com chaves aglomeradas degenera para O(n). Dado real do livro: lista de ~40.000 nomes —
+    comparações; com chaves aglomeradas degenera para O(n). Dado real do livro: lista de ~40.000 nomes,
     binária ~16 comparações, interpolação 134 (nomes não são uniformes: muitos "Silva", poucos "Quiroga"),
     interpolação robusta 12,5.
   - "Lista preenchida": vetor ordenado com buracos marcados por flag, para permitir inserções sem
     deslocar tudo.
   - Busca de Fibonacci (divide pelos números de Fibonacci em vez de pela metade).
 - **Pegadinhas:** `mid = (low + hi)/2` pode estourar `int` para vetores gigantes (usar
-  `low + (hi−low)/2` — o livro não menciona); laço `while (low <= hi)` vs `<` (erro de um).
+  `low + (hi−low)/2`; o livro não menciona); laço `while (low <= hi)` vs `<` (erro de um).
 - **Exercícios:**
   - Modificar a busca binária para, em caso de falha, devolver o índice i tal que k[i] < key < k[i+1]
     (ponto de inserção; −1 se key < k[0]).
@@ -198,7 +198,7 @@
   independentemente da entrada (não melhora com vetor ordenado).
 - **Analogia/insight:** heapsort = mesma ideia com a fila de prioridade implementada por heap;
   insertion sort = fila de prioridade como vetor ordenado (a "seleção" fica trivial).
-- **Quando usar:** registros grandes (trocas caras) e chaves baratas de comparar — selection faz bem
+- **Quando usar:** registros grandes (trocas caras) e chaves baratas de comparar: selection faz bem
   menos movimentações que insertion.
 - **Pegadinhas:** no código do livro há `x[ind]` em vez de `x[indx]` (erro); selection **não é estável**
   na forma clássica de troca.
@@ -210,9 +210,9 @@
 ### 0093-insertion-sort
 - **Conceitos-chave:** insere `x[k]` no trecho já ordenado `x[0..k−1]` deslocando os maiores uma casa.
   Ordenado: n−1 comparações (O(n)); invertido: n(n−1)/2; médio O(n²). Espaço O(1). Quanto mais perto
-  de ordenado, mais rápido — é o melhor algoritmo simples para entradas quase ordenadas.
+  de ordenado, mais rápido; é o melhor algoritmo simples para entradas quase ordenadas.
 - **Insight importante:** usar busca binária para achar a posição reduz as comparações para O(n log n),
-  mas o deslocamento continua O(n²) — portanto não melhora a ordem global. Ótima pegadinha conceitual.
+  mas o deslocamento continua O(n²); portanto não melhora a ordem global. Ótima pegadinha conceitual.
 - **Número prático do livro:** o ponto de equilíbrio com o quicksort fica em torno de 20–30 elementos
   (com o heapsort, 60–70). Otimização clássica: quicksort que passa a usar insertion em subvetores
   pequenos.
@@ -227,7 +227,7 @@
   seguintes. Os incrementos não devem ter divisores comuns; custo empírico ~n^1,25, O(n^1,5) para
   certas sequências. Recomendado para algumas centenas de elementos.
 - **Pegadinhas:** no laço `for (i = k−1; i >= 0 && y < x[i]; i--)` inverter a ordem das condições acessa
-  `x[−1]` (o curto-circuito protege!) — ótimo gancho com 0013-logicos.
+  `x[−1]` (o curto-circuito protege!); ótimo gancho com 0013-logicos.
 - **Exercícios:**
   - Rastrear o insertion sort em `5 2 4 6 1 3` mostrando o vetor após cada k. (Resp.: `2 5 4 6 1 3`,
     `2 4 5 6 1 3`, `2 4 5 6 1 3`, `1 2 4 5 6 3`, `1 2 3 4 5 6`.)
@@ -248,7 +248,7 @@
   (intercalar); quicksort = dividir difícil (particionar), juntar fácil (já está no lugar). Insertion é
   um merge "desequilibrado" (1 elemento + resto); selection é um quick "desequilibrado" (maior + resto).
 - **Variações:** alternar x→aux e aux→x para evitar cópia de volta; **merge natural** (aproveita trechos
-  já crescentes); merge sort em **lista ligada** dispensa o vetor auxiliar e só mexe em ponteiros —
+  já crescentes); merge sort em **lista ligada** dispensa o vetor auxiliar e só mexe em ponteiros;
   ideal para registros grandes.
 - **Pegadinhas:** último bloco de tamanho menor quando n não é potência de 2; usar `<` em vez de `<=`
   na comparação quebra a estabilidade.
@@ -264,7 +264,7 @@
   achar elemento > pivô, `up` desce até achar ≤ pivô, troca se `down < up`; no fim troca o pivô com
   `x[up]`. Exemplo: `25 57 48 37 12 92 86 33` com pivô 25 vira `12 25 48 37 57 92 86 33`.
 - **Análise:** pivô sempre no meio → n log₂ n; vetor **já ordenado** (ou invertido) com pivô = primeiro
-  elemento → partições 0 e n−1 → O(n²). "O quicksort funciona melhor no caos e pior na ordem" — o oposto
+  elemento → partições 0 e n−1 → O(n²). "O quicksort funciona melhor no caos e pior na ordem"; o oposto
   do bubble. Média ~1,386 n log₂ n; na prática costuma ser o mais rápido.
 - **Escolha de pivô:** mediana-de-três (primeiro, meio, último) evita o pior caso em vetor ordenado;
   pivô aleatório; "meansort" (média do subvetor); Bsort (pivô do meio + pequenas trocas que detectam
@@ -306,7 +306,7 @@
 - **Exercício:** dados 5 cenários (ex.: "10 milhões de inteiros aleatórios", "planilha de 50 linhas
   quase ordenada", "registros de 2 KB", "precisa ser estável"), escolher o algoritmo e justificar.
 - **Exercício bônus:** ordenação por **contagem** (count[i] = nº de elementos menores que x[i]) e por
-  **distribuição** (histograma de inteiros entre a e b) — O(n + faixa), sem comparações.
+  **distribuição** (histograma de inteiros entre a e b): O(n + faixa), sem comparações.
 
 ### 0097-arvores / 0099-bst-busca-insercao
 - **Conceitos-chave:** BST: à esquerda chaves menores, à direita maiores ou iguais; percurso em ordem
@@ -319,7 +319,7 @@
 - **Medidas:** comprimento interno de caminhos i (soma dos níveis); busca com sucesso média = (i + n)/n.
   Estendendo a árvore com "nós externos" nos n+1 ponteiros nulos, o comprimento externo e satisfaz
   **e = i + 2n**, e a busca sem sucesso média = e/(n+1). Em BST aleatória, busca média ≈ 2 ln n ≈
-  1,386 log₂ n — só ~39% pior que a árvore perfeitamente balanceada.
+  1,386 log₂ n, só ~39% pior que a árvore perfeitamente balanceada.
 - **Pegadinhas:** toda BST com n nós tem n+1 ponteiros nulos; inserir dados já ordenados degenera em
   lista (O(n)); chave repetida vai sempre para a direita.
 - **Exercícios:**
@@ -331,7 +331,7 @@
 
 ### 0100-bst-remocao
 - **Conceitos-chave:** três casos: folha (remove), um filho (o filho sobe), dois filhos (o **sucessor em
-  ordem** — mais à esquerda da subárvore direita — ocupa o lugar; o filho direito do sucessor sobe para
+  ordem**, mais à esquerda da subárvore direita, ocupa o lugar; o filho direito do sucessor sobe para
   o lugar dele, pois o sucessor nunca tem filho esquerdo).
 - **Exemplo do livro:** árvore com raiz 8; nível 1: 3, 11; nível 2: 1, 5, 9, 14; nível 3: 6, 10, 12, 15;
   nível 4: 7, 13 (6 é filho direito de 5, 7 filho direito de 6, 12 filho esquerdo de 14, 13 filho
@@ -353,14 +353,14 @@
   AVL exige |bal| ≤ 1 em todos os nós. Após inserção, só desbalanceia se o novo nó entra do lado
   "pesado" de um ancestral; o mais jovem ancestral desbalanceado (ya) é o único a consertar. Dois casos:
   mesmo lado (rotação simples) e lados opostos (rotação dupla: primeiro no filho, depois no ancestral).
-  Rotação esquerda em p: `q = right(p); hold = left(q); left(q) = p; right(p) = hold;` — preserva a ordem
+  Rotação esquerda em p: `q = right(p); hold = left(q); left(q) = p; right(p) = hold;`; preserva a ordem
   do percurso em ordem.
 - **Números úteis:** altura máxima ≈ 1,44 log₂ n (nunca mais que 44% pior que a perfeita); na prática
   ~log₂ n + 0,25. Rotação em ~46,5% das inserções; inserção precisa de no máximo uma rotação (simples
   ou dupla), remoção pode precisar de O(log n) (média 0,214 por remoção). Árvore de Fibonacci = AVL com
   o menor número de nós para dada altura.
 - **Outras árvores balanceadas citadas (bônus):** balanceada por peso (wb[α]) e a de Tarjan
-  (caminho mais longo até nó externo ≤ 2× o mais curto — é a ideia da rubro-negra; no máximo uma
+  (caminho mais longo até nó externo ≤ 2× o mais curto: é a ideia da rubro-negra; no máximo uma
   rotação por inserção ou remoção).
 - **Pegadinhas:** atualizar os campos `bal` errado após rotação dupla (três subcasos); esquecer de
   religar a subárvore rotacionada ao pai.
@@ -391,7 +391,7 @@
 ### 0103-heapsort
 - **Conceitos-chave:** fase 1 constrói o heap no próprio vetor (inserções sucessivas); fase 2 troca a
   raiz com o último elemento do heap, encolhe o heap e desce o novo topo. In loco, O(n log n) mesmo no
-  pior caso. O livro dá o código com todas as sub-rotinas "em linha" (inlined) — hoje desnecessário.
+  pior caso. O livro dá o código com todas as sub-rotinas "em linha" (inlined), hoje desnecessário.
 - **Comparação:** ~2× mais lento que o quicksort na média, mas sem o pior caso O(n²); ruim para n
   pequeno (sobrecarga).
 - **Exercício:** rastrear o heapsort completo em `25 57 48 37 12 92 86 33` desenhando a árvore após
@@ -433,7 +433,7 @@
   417, 227; lista 9: 49.
 - **Insights:** o fator de carga "engana" no encadeamento (α pode passar de 1 e o espaço dos nós não
   entra na conta); manter cada lista ordenada reduz o custo de busca sem sucesso; truque de guardar só
-  o quociente `k / m` no nó (a chave se reconstrói com o índice) — só funciona no encadeamento.
+  o quociente `k / m` no nó (a chave se reconstrói com o índice); só funciona no encadeamento.
 - **Espalhamento combinado (coalesced, bônus):** a lista fica dentro da própria tabela, com campo
   `next` e alocação de posições livres de baixo para cima. Exemplo do livro: m = 10, inserindo
   `14 29 34 28 42 39 84 38` → as cadeias de 4 e 8 se fundem (4→8→7→5→3). Com "porão" (área extra só
@@ -450,7 +450,7 @@
   "reespalhamento". **Sondagem linear:** `i = (i + 1) % m`. Ex. do livro: 0596397 cai em 397 (ocupada)
   e vai para 398; depois 8764397 e 2194398 vão ambos parar em 400.
 - **Laço infinito (ótimo exemplo):** com `rh(i) = (i + 2) % 1000`, chave que cai em posição ímpar só
-  visita ímpares — se as ímpares encherem, não insere mesmo com metade vazia; com `(i + 200) % 1000`
+  visita ímpares; se as ímpares encherem, não insere mesmo com metade vazia; com `(i + 200) % 1000`
   cada chave só tem 5 posições possíveis. Regra: passo c com mdc(c, m) = 1, e contar elementos para
   detectar tabela cheia.
 - **Agrupamento primário:** na linear, uma sequência de ocupadas "atrai" mais chaves (no exemplo, a
@@ -470,7 +470,7 @@
   Fórmulas da linear: sucesso ≈ 0,5/(1−α) + 0,5; fracasso ≈ 0,5/(1−α)² + 0,5. Conclusão do livro:
   evitar sondagem linear acima de ~75% de ocupação. Para disco, porém, a linear acessa blocos vizinhos
   (menos movimento da cabeça).
-- **Remoção (pegadinha central):** não se pode simplesmente esvaziar a posição — uma chave que tinha
+- **Remoção (pegadinha central):** não se pode simplesmente esvaziar a posição: uma chave que tinha
   "pulado" por ela deixaria de ser encontrada. Solução: marcar como "removido" (lápide/tombstone) e
   continuar a busca ao passar por ela; com muitas remoções, buscas sem sucesso percorrem a tabela toda.
 - **Melhorias (bônus):** tabela ordenada de Amble-Knuth (busca sem sucesso para cedo), método de Brent e
@@ -503,7 +503,7 @@
   10⁵ vértices (10¹⁰ células!); esquecer de pôr a aresta nos dois sentidos em grafo não dirigido.
 - **Exercícios:**
   - Grafo dirigido A→C, A→D, B→C, C→D, C→E, D→E, E→D: montar matriz, calcular adj², o fecho transitivo
-    por potências e por Warshall. (Resp.: A e B alcançam {C, D, E}; C alcança {D, E}; D e E alcançam {D, E} —
+    por potências e por Warshall. (Resp.: A e B alcançam {C, D, E}; C alcança {D, E}; D e E alcançam {D, E},
     inclusive a si mesmos, pelo ciclo D↔E.)
   - Decidir se uma relação é simétrica / transitiva olhando a matriz.
   - Contar quantos caminhos de comprimento k existem entre dois vértices (produto de matrizes inteiras).
@@ -514,7 +514,7 @@
   caminho na árvore BFS da origem ao alvo é o **menor caminho em número de arestas**. Custo O(n²) com
   matriz, O(n + e) com listas. Árvore BFS não tem arestas "para frente".
 - **Três dificuldades de percorrer grafos (boa explicação do livro):** não há primeiro vértice natural
-  (e nem todos são alcançáveis — precisa de `select()` para recomeçar de um não visitado); não há ordem
+  (e nem todos são alcançáveis; precisa de `select()` para recomeçar de um não visitado); não há ordem
   natural entre sucessores; um vértice pode ser alcançado por vários caminhos (precisa de flag
   `visited`).
 - **Exemplo:** grafo não dirigido A–B, A–C, B–D, C–D, D–E, vizinhos em ordem alfabética. BFS de A:
@@ -533,21 +533,20 @@
   Classificação das arestas: de árvore, para frente (para descendente não filho), para trás (para
   ancestral) e cruzadas. Em grafo não dirigido, DFS só gera arestas de árvore e para trás.
 - **Aplicações:** componentes conexos; **detecção de ciclo** (existe ciclo ⇔ existe aresta para trás;
-  em não dirigido, ignorar a aresta para o pai); **ordenação topológica** (a ordem de término — pós-ordem
-  — é a ordem topológica invertida); pontos de articulação (bônus).
+  em não dirigido, ignorar a aresta para o pai); **ordenação topológica** (a ordem de término, pós-ordem, é a ordem topológica invertida); pontos de articulação (bônus).
 - **Exemplo:** mesmo grafo do BFS (A–B, A–C, B–D, C–D, D–E). DFS de A: A, B, D, C, E.
-- **Exemplo do livro de escalonamento (topológica por contagem — ótimo para aula):** fritar um ovo com
+- **Exemplo do livro de escalonamento (topológica por contagem, ótimo para aula):** fritar um ovo com
   subtarefas e precedências ("pegar o ovo" antes de "quebrar o ovo", "esquentar o óleo" antes de "pôr o
   ovo na frigideira"…). Guardar em cada vértice o nº de predecessores; a cada "período" executar todos
   com contagem 0 e decrementar os sucessores. Resultado: 6 períodos com no máximo 2 ajudantes. Se
   sobrarem vértices, há ciclo. (É o algoritmo de Kahn.)
 - **Pegadinhas:** recursão profunda em grafo grande estoura a pilha; em dirigido, `visited[nd] == true`
-  não basta para dizer que há ciclo (pode ser aresta cruzada) — precisa do estado "em andamento" (cinza).
+  não basta para dizer que há ciclo (pode ser aresta cruzada); precisa do estado "em andamento" (cinza).
 - **Exercícios:**
   - Implementar DFS recursiva e iterativa e comparar as ordens de visita (podem diferir!).
   - Ordenação topológica das disciplinas de um curso com pré-requisitos.
   - Detectar ciclo em grafo dirigido com três cores (branco/cinza/preto).
-  - Exercício do livro: algoritmo de DFS que empilha todos os sucessores de uma vez — gera a mesma
+  - Exercício do livro: algoritmo de DFS que empilha todos os sucessores de uma vez: gera a mesma
     ordem da recursiva? (Resp.: não necessariamente; a ordem dos sucessores fica invertida.)
 
 ### 0112-dijkstra
@@ -555,7 +554,7 @@
   `perm` dos vértices com distância definitiva; a cada passo relaxa os sucessores do vértice atual
   (`distance[current] + w < distance[i]` → atualiza e grava `precede[i]`) e escolhe o não permanente de
   menor distância. Com matriz: O(n²). Com listas de adjacência + heap (fila de prioridade com ajuste de
-  chave): O((n + e) log n) — muito melhor em grafos esparsos.
+  chave): O((n + e) log n), muito melhor em grafos esparsos.
 - **Exemplo próprio:** dirigido A→B 4, A→C 1, C→B 2, B→D 1, C→D 5, D→E 3. A partir de A: C = 1,
   B = 3 (via C, melhor que 4 direto), D = 4 (via B), E = 7. Caminho A→C→B→D→E.
 - **Pegadinhas (várias no próprio código do livro):** usar `INT_MAX` como ∞ e somar peso → overflow;
@@ -570,7 +569,7 @@
 ### 0113-juntando-tudo (ideias de projeto)
 - **Árvore geradora mínima (bônus forte):** Prim (cresce uma árvore, sempre a aresta mais barata que sai
   dela; O(n²) com matriz, O((n+e) log n) com heap) e Kruskal (ordena arestas, junta árvores diferentes;
-  usa campo `father` — union-find; O(e log e)). O livro prova o Prim pela troca de arestas. Projeto:
+  usa campo `father`: union-find; O(e log e)). O livro prova o Prim pela troca de arestas. Projeto:
   "ligar todas as cidades com o menor custo de cabo".
 - **Escalonamento PERT/caminho crítico:** tempo mais cedo (máximo sobre predecessores) e mais tarde
   (mínimo sobre sucessores); caminho crítico onde os dois coincidem.
@@ -597,11 +596,11 @@
     último (sobram 50 e 75).
   - Livres 110 e 354; pedidos 300, 25, 100: best fit atende, first fit falha no 100.
 - **Liberação e fusão:** lista livre ordenada por endereço (percorre metade em média) ou **boundary tag**
-  (flag + tamanho no início E no fim de cada bloco, lista duplamente ligada → fusão em O(1)) —
+  (flag + tamanho no início E no fim de cada bloco, lista duplamente ligada → fusão em O(1));
   é exatamente o que os `malloc` reais fazem com os cabeçalhos.
 - **Pegadinhas para o curso:** fragmentação externa × interna; por que `free(p)` não precisa do tamanho
   (está no cabeçalho escondido antes de p); por que escrever antes do início ou depois do fim de um bloco
-  corrompe o heap (estraga as tags do vizinho) — gancho direto com 0057.
+  corrompe o heap (estraga as tags do vizinho); gancho direto com 0057.
 - **Exercícios:**
   - Simulador: vetor `memory[1024]`, entrada com "A tamanho id" e "L id"; implementar first fit e best
     fit com fusão na liberação; imprimir o mapa da memória.
@@ -621,7 +620,7 @@
   coletor"); se quase tudo está em uso, o coletor roda sem parar (**thrashing**). Compactação move os
   blocos vivos para um lado e corrige os ponteiros (duas passadas, O(n)).
 - **Ideia para o curso:** contrastar C (o programador é o "coletor") com linguagens com GC; explicar
-  vazamento como "nó inalcançável que ninguém liberou" — exatamente o que valgrind reporta como
+  vazamento como "nó inalcançável que ninguém liberou", exatamente o que valgrind reporta como
   "definitely lost".
 - **Exercícios:**
   - Desenhar as listas `l1 = (3,4,7)` e `l2 = addon(l1, 5)` pelo método do ponteiro e da cópia; depois
@@ -643,7 +642,7 @@
 
 ## Obsoleto / evitar
 
-- **C pré-ANSI (K&R):** `bubble(x, n) int x[], n; { … }` — declarar parâmetros entre o cabeçalho e a
+- **C pré-ANSI (K&R):** `bubble(x, n) int x[], n; { … }`: declarar parâmetros entre o cabeçalho e a
   chave. Usar protótipos modernos `void bubble(int x[], int n)`.
 - `#define TRUE 1 / FALSE 0` → `stdbool.h`. `exit(1)` dentro de funções de biblioteca (`tail`, `head`)
   → devolver código de erro.
@@ -659,15 +658,14 @@
   - `selectsort`: usa `x[ind]` em vez de `x[indx]`.
   - `quicksort` não recursivo: `newbnds.up` em vez de `newbnds.ub`.
   - Hash linear: diz `rh(i) = (i + 1) % 100` onde deveria ser `% 1000`.
-  - `maxflow`: grava `forward[nd]` em vez de `forward[i]` e depois lê `forward[pred]` — inconsistente.
+  - `maxflow`: grava `forward[nd]` em vez de `forward[i]` e depois lê `forward[pred]`: inconsistente.
   - `shortpath` (Dijkstra): `dc + weight[current][i]` com `weight = INFINITY` estoura `int`; se t não é
     alcançável, `k` fica sem valor.
   - Prim: usa `distance = INFINITY` tanto para "já está na árvore" quanto para "ainda não alcançado" e
-    só atualiza se `distance[nd] < INFINITY` — vértices não adjacentes à raiz nunca seriam atualizados.
+    só atualiza se `distance[nd] < INFINITY`: vértices não adjacentes à raiz nunca seriam atualizados.
     Usar um vetor `naarvore[]` separado.
   - "Sistema Decimal de Davey" (é Dewey); "aproximadamente 31 comparações" na BST (é ≈ 3,3); muitas
     fórmulas com sobrescritos perdidos (ler com desconfiança).
-- **Busca binária com `mid = (low + hi) / 2`** sem comentar overflow.
 - **Recomendação de "classificação por média" e Bsort:** curiosidades; hoje o padrão é quicksort com
   mediana-de-três/introsort ou o `qsort` da biblioteca.
 
@@ -690,12 +688,12 @@
 
 ### Árvores B, B*, B+, tries
 - **Árvore de busca multidirecional de ordem n:** nó com até n filhos e n−1 chaves ordenadas. Motivação:
-  disco — ler um bloco grande custa quase o mesmo que um pequeno; minimizar nº de nós lidos. Exemplo do
+  disco: ler um bloco grande custa quase o mesmo que um pequeno; minimizar nº de nós lidos. Exemplo do
   livro: 4000 chaves → ordem 5 precisa de profundidade ≥ 5; ordem 11, só 3; ordem 100 guarda > 1 milhão
   de chaves com profundidade 2.
 - **Árvore B de ordem n:** balanceada (todas as folhas no mesmo nível) e todo nó não raiz tem pelo menos
   n/2 chaves. Inserção na folha; se encher, **divide** em duas e **promove a chave do meio** ao pai (que
-  pode dividir também, até a raiz — é assim que a árvore cresce em altura). Remoção: empréstimo do
+  pode dividir também, até a raiz; é assim que a árvore cresce em altura). Remoção: empréstimo do
   irmão ou fusão (concatenação) com o irmão + chave separadora do pai. Árvore 2-3 = B de ordem 3.
   Utilização média ~69% (pior 50%). Atenção: autores diferentes definem "ordem" de jeitos diferentes.
 - **B\*:** redistribui com o irmão antes de dividir; divide 2 nós cheios em 3 → utilização ≥ 67%.
@@ -721,7 +719,7 @@
 - **Hash linear (Litwin, LH2P):** cresce um balde por vez, sem diretório.
 - **Hash perfeito:** sem colisões para um conjunto fixo (palavras reservadas de um compilador!).
   Cichelli: h = val(1ª letra) + val(última letra) + comprimento, com valores das letras achados por
-  backtracking — ótimo desafio. Sprugnoli: `(k + s) / d` (ex.: `(k + 25)/64` para
+  backtracking, ótimo desafio. Sprugnoli: `(k + s) / d` (ex.: `(k + 25)/64` para
   17, 138, 173, 294, 306, 472, 540, 551, 618). Jaeschke: `(c / k) % n` (para 3, 5, 11, 14, c = 11).
 - **Hashing universal (Carter-Wegman):** escolher aleatoriamente `h(k) = ((s·k + t) % p) % m` com p primo
   > maior chave; garante bom desempenho esperado para qualquer conjunto de entrada (defesa contra
@@ -747,7 +745,7 @@
 
 ## Achados mais valiosos para o LPEDC
 1. O vetor-padrão `25 57 48 37 12 92 86 33` com o estado após cada passo de bubble, quick, shell, heap
-   (vetor do heap: `92 37 86 33 12 48 57 25`), merge e radix — permite um quadro comparativo único.
+   (vetor do heap: `92 37 86 33 12 48 57 25`), merge e radix, permite um quadro comparativo único.
 2. Exemplos-armadilha prontos: inserção binária não melhora o insertion sort (deslocamentos continuam
    O(n²)); passo de sondagem com divisor comum causa laço infinito com tabela meio vazia; remoção
    ingênua em endereçamento aberto "perde" chaves; 256 % 17 == 1 faz anagramas colidirem; first fit ×

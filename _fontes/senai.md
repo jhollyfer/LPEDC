@@ -1,13 +1,13 @@
-# Fichamento — SENAI-RS: "Fundamentos de Linguagem C"
+# Fichamento: SENAI-RS, "Fundamentos de Linguagem C"
 
 - **Título:** Fundamentos de Linguagem C ("Tudo que você precisa saber sobre C para não passar vergonha!")
-- **Autor:** Adalberto A. Dornelles F. — Centro Tecnológico de Mecatrônica, SENAI-RS, Caxias do Sul, nov./1997.
+- **Autor:** Adalberto A. Dornelles F., Centro Tecnológico de Mecatrônica, SENAI-RS, Caxias do Sul, nov./1997.
 - **Arquivo lido:** `2948665d-apostila_C.md` (2967 linhas, lido por completo).
 - **Avaliação geral:** apostila curta e didática, com boa progressão (constantes → operadores → E/S →
   controle → funções → vetores → ponteiros) e uma lista final de exercícios muito boa (jogo de adivinhação,
-  número por extenso, Morse, 8 damas, calculadora RPN, jogo "Reverse"). Porém é **muito datada**: Turbo C++
-  3.0/DOS, `int` de 2 bytes, `void main`, `conio.h`, `dos.h`, `alloc.h`, `random()`. Contém **vários erros
-  factuais** (listados abaixo) que servem, ao contrário, como material de "ache o erro". Não cobre structs,
+  número por extenso, Morse, 8 damas, calculadora RPN, jogo "Reverse"). Porém é muito datada: Turbo C++
+  3.0/DOS, `int` de 2 bytes, `void main`, `conio.h`, `dos.h`, `alloc.h`, `random()`. Contém vários erros
+  factuais (listados abaixo) que servem, ao contrário, como material de "ache o erro". Não cobre structs,
   arquivos, nem estruturas de dados.
 
 ---
@@ -18,14 +18,14 @@
   (legível, portátil, precisa de compilador/interpretador). Interpretador executa instrução a instrução;
   compilador traduz tudo e gera executável.
 - **Boa ideia didática:** mostrar o MESMO algoritmo (tabuada de um número) em pseudocódigo, C, BASIC,
-  Fortran e Assembly 8088, lado a lado — evidencia que o algoritmo é independente da linguagem.
+  Fortran e Assembly 8088, lado a lado; evidencia que o algoritmo é independente da linguagem.
 - **Ideia de exemplo:** tabuada do `num` lido, de 1 a 10, nas várias "línguas".
 
 ### logica2-pseudocodigo
 - **Conceitos-chave:** tabela de correspondência pseudocódigo ↔ C: `se/então/senão/fim se` ↔ `if/else`;
   `faça ... até condição` ↔ `do { } while (condição)` (atenção: "até" inverte a condição!); `←` ↔ `=`.
 - **Pegadinha:** o "repita... até X" do Portugol termina quando X fica verdadeiro; o `do...while(X)` do C
-  continua enquanto X é verdadeiro. A apostila coloca lado a lado sem alertar — bom ponto para o curso.
+  continua enquanto X é verdadeiro. A apostila coloca lado a lado sem alertar; bom ponto para o curso.
 
 ### logica3-fluxograma
 - Fluxogramas simples de `do...while`, `while`, `if`, `if-else`, `else if` encadeado e `switch` (rótulos
@@ -44,7 +44,7 @@
   simbólicas. Programa = cabeçalho com diretivas + bloco principal + rotinas + comentários.
 
 ### 0001-primeiro-programa
-- **Conceitos-chave:** estrutura geral; comentários `/* */` e `//` (a apostila diz que `//` é "só C++" —
+- **Conceitos-chave:** estrutura geral; comentários `/* */` e `//` (a apostila diz que `//` é "só C++";
   hoje é C padrão desde C99).
 - **Conjunto de caracteres:** acentos e `@`, `$` só valem dentro de strings/char, não em identificadores.
 
@@ -54,9 +54,9 @@
   Regras de identificadores (letra ou `_` no início; letras, dígitos e `_`; maiúsculas ≠ minúsculas).
   Palavras reservadas (inclui lixo de C++/Borland: `near`, `far`, `huge`, `class`, `new`...).
 - **Analogia boa:** a variável tem nome, tipo, tamanho do bloco, valor e endereço do primeiro byte
-  (exemplo `int num = 17` decomposto nesses 5 atributos — ótimo para 0002 e 0044).
+  (exemplo `int num = 17` decomposto nesses 5 atributos; ótimo para 0002 e 0044).
 - **Exercício:** quais nomes são válidos? `abc`, `y24`, `nota_1`, `3dia`, `vetor-1`, `pao&leite`,
-  `iteração`, `do`, `new`. (Válidos: abc, y24, nota_1, new — em C, `new` NÃO é reservada; `do` é.)
+  `iteração`, `do`, `new`. (Válidos: abc, y24, nota_1, new; em C, `new` NÃO é reservada, `do` é.)
 - **Exercício divertido:** "posso declarar `int do, re, mi, fa, sol, la, si;`?" (Não: `do` é reservada.)
 
 ### 0003-tipos-e-limites
@@ -65,7 +65,7 @@
   positiva). `limits.h` com `INT_MAX`/`INT_MIN`.
 - **Pegadinha (overflow):** com `int` de 16 bits, `5000 + 30000` vira `-30536` sem nenhum aviso. Adaptar ao
   `int` de 32 bits: `2147483647 + 1`. Em C, estourar a faixa não é tratado como erro (e em `signed` é
-  comportamento indefinido — a apostila não diz isso).
+  comportamento indefinido, o que a apostila não diz).
 - **Atualizar no curso:** tamanhos dependem da plataforma; hoje `int` costuma ter 4 bytes; usar `sizeof`.
 
 ### 0004-constantes
@@ -84,7 +84,7 @@
 - **Conceitos-chave:** `printf` devolve o nº de caracteres impressos; string de controle = máscara;
   um especificador por argumento; formato `%[flag][largura][.precisão]tipo`; flags `-` (alinha à esquerda),
   `+` (sempre sinal), espaço; `0n` completa com zeros; tipos `d o x f e c s`.
-- **ERRO da apostila (bom para "ache o erro"):** usa `"%f.2"` achando que dá 2 casas — imprime o número com
+- **ERRO da apostila (bom para "ache o erro"):** usa `"%f.2"` achando que dá 2 casas; imprime o número com
   6 casas seguido do texto ".2". O correto é `%.2f`.
 - **Ideia de exemplo:** recibo de troco: total 12.30, dinheiro 15.00, troco 2.70 com `%.2f`.
 
@@ -124,13 +124,13 @@
 ### 0010-math
 - **Conceitos-chave:** `abs`, `fabs`, trigonométricas em radianos, `ceil`, `floor`, `log` (natural),
   `log10`, `pow`, `sqrt`. Protótipo como "contrato": `double cos(double)`.
-- **ERRO da apostila:** exemplos trocados — diz `ceil(3.2) == 3.0` e `floor(3.2) == 4.0`. Correto: ceil=4.0,
+- **ERRO da apostila:** exemplos trocados: diz `ceil(3.2) == 3.0` e `floor(3.2) == 4.0`. Correto: ceil=4.0,
   floor=3.0. Ótimo para "ache o erro". (Também: `abs` está em `stdlib.h`, não em `math.h`.)
 - **Exercício (6.1):** função de arredondamento: 5.4 → 5, 6.5 → 7 (hoje existe `round`).
 
 ### 0011-juntando-tudo
 - Ideias: calcular raiz quadrada pelo método de Newton; épsilon da máquina (`eps=1.0; while(1.0+eps>1.0)
-  eps/=2;`) — exemplo excelente e curto de `while` com reais.
+  eps/=2;`), exemplo excelente e curto de `while` com reais.
 
 ### 0012-relacionais
 - **Conceitos-chave:** 6 operadores; em C (antigo) não há tipo lógico: verdadeiro vale 1, falso 0; qualquer
@@ -143,7 +143,7 @@
 - **Conceitos-chave:** `&& || !` = AND, OR, NOT; tabelas-verdade; `&&` tem precedência sobre `||`; ambos
   abaixo dos relacionais; `!` no nível dos unários.
 - **Exercício (a=0,b=1,c=2):** `a&&b`→0; `c>b||a<c`→1; `a+b && !c-b`→1; `!b && c || a`→0.
-- **Lacuna:** não fala de curto-circuito — complementar com outra fonte.
+- **Lacuna:** não fala de curto-circuito; complementar com outra fonte.
 
 ### 0014-if / 0015-if-else / 0016-else-if
 - **Conceitos-chave:** condição de controle é qualquer expressão numérica (0 falso, resto verdadeiro); if de
@@ -161,10 +161,10 @@
 
 ### 0018-switch
 - **Conceitos-chave:** expressão inteira, rótulos constantes inteiros distintos; execução começa no rótulo e
-  segue para baixo; `default` opcional. Usa o fall-through **de propósito**: estágios de usinagem
-  (desbaste grosso → fino → acabamento → polimento) — começar no estágio N executa todos os seguintes.
+  segue para baixo; `default` opcional. Usa o fall-through **de propósito: estágios de usinagem
+  (desbaste grosso → fino → acabamento → polimento): começar no estágio N executa todos os seguintes.
   Ótima analogia para ensinar que fall-through pode ser útil.
-- **ERRO da apostila:** o exemplo "switch com break" da pizza (M/C/A) não tem nenhum `break` — escolher
+- **ERRO da apostila:** o exemplo "switch com break" da pizza (M/C/A) não tem nenhum `break`: escolher
   muçarela prepara as três pizzas e ainda imprime "Opção incorreta". Excelente para "ache o erro".
 - **Ideia de exemplo:** valor de um lanche escolhido no cardápio; "piano" no teclado.
 
@@ -187,7 +187,7 @@
   (amplitude). Exercícios: ímpares em [a,b] (5.4); 10 primeiros primos (5.3); N primeiros Fibonacci (5.7).
 
 ### 0026-aleatorios
-- Usa `random(num)` (Turbo C, não padrão). Ideia boa: **jogo de adivinhação 1–100** que informa o novo
+- Usa `random(num)` (Turbo C, não padrão). Ideia boa: **jogo de adivinhação 1–100 que informa o novo
   intervalo a cada palpite e conta tentativas (5.12): "entre 1 e 100" → palpite 45 → "entre 1 e 44" →
   27 → "entre 28 e 44" → 36 → acertou em 3. Também o algoritmo de embaralhar (Fisher-Yates) do Ex. 7.11:
   para i de n-1 até 0, j aleatório em [0,i], troca v[i] e v[j] (baralho).
@@ -207,7 +207,7 @@
 ### 0030-escopo
 - Local (criada ao entrar no bloco, destruída ao sair; mesmo nome em funções diferentes = variáveis
   diferentes), formal (parâmetro) e global (vive o programa todo). Exemplo de `media2` usando globais
-  `a, b, med` — bom para mostrar por que globais acoplam o código.
+  `a, b, med`, bom para mostrar por que globais acoplam o código.
 
 ### 0032-recursao / 0033-recursao-na-pratica
 - Fatorial via `n! = n·(n-1)!`; cada chamada cria novo conjunto de locais; recursão não ganha velocidade;
@@ -218,9 +218,9 @@
 - **Conceitos-chave:** conjunto de variáveis do mesmo tipo com nome e índice; índice 0..tam-1, inteiro;
   memória = tamanho do tipo × nº de elementos; inicialização com `{}`; C não confere limites.
 - **Analogia boa:** memória como fila de segmentos; `vet[i]` é "base + i"; `vet[7]` num vetor de 3 cai em
-  área de outra variável ou lixo — e pode destruí-la, sem aviso do compilador.
+  área de outra variável ou lixo, e pode destruí-la sem aviso do compilador.
 - **Pegadinha:** índice com `sqrt(MAX)` (double) é inválido.
-- **Desatualizado:** diz que `float valor[num]` com `num` lido é sempre errado — em C99 é VLA (válido, mas
+- **Desatualizado:** diz que `float valor[num]` com `num` lido é sempre errado; em C99 é VLA (válido, mas
   arriscado e opcional desde C11). Recomenda tamanho via `#define MAX`.
 - **Exercícios:** inverter o vetor de fato, não só imprimir ao contrário ({1,3,5,7} → {7,5,3,1});
   multiplicar vetor por k ({1,2,3}, k=5 → {5,10,15}); corrigir prova com gabarito de 10 questões.
@@ -230,12 +230,12 @@
 - **Exercícios:** `min_vet` (índice do menor); `remove_dup` (retorna nº removidos); `insert(v,n,valor,pos)`
   deslocando; `merge` (união ordenada sem duplicatas); `intersec`; `find` de padrão em texto ("As bananas
   do Panamá são bacanas", "anas" → 6); produto escalar.
-- **ERRO recorrente:** protótipos `void le_vet(int v, int n)` — faltou `[]`/`*` (bom "ache o erro").
+- **ERRO recorrente:** protótipos `void le_vet(int v, int n)`: faltou `[]`/`*` (bom "ache o erro").
 
 ### 0039-matrizes
 - Tabela de notas 5 alunos × 3 provas; 1º índice = linha, 2º = coluna; inicialização com listas
   aninhadas; na função é obrigatório informar as dimensões (exceto, de fato, a primeira).
-- **ERRO:** escreve `nota[2,1]` como notação — em C isso é o operador vírgula (vale `nota[1]`)! Pegadinha
+- **ERRO:** escreve `nota[2,1]` como notação; em C isso é o operador vírgula (vale `nota[1]`)! Pegadinha
   excelente para o curso.
 - **Exercícios:** produto de matrizes; 8 damas; jogo "Reverse" 3×3 (tabela de quais casas invertem).
 
@@ -246,7 +246,7 @@
 
 ### 0041-strings
 - String = vetor de char terminado em `'\0'`; declarada como `char nome[tam]` ou `char *nome`.
-- **Pegadinha não apontada:** `char* nome; nome = "João..."` aponta para literal (só leitura) — não se
+- **Pegadinha não apontada:** `char* nome; nome = "João..."` aponta para literal (só leitura), logo não se
   pode modificá-lo nem ler para dentro dele com `scanf`.
 - **Exercícios:** relatório de frase (nº palavras, vogais, letras) (5.5); número por extenso 0–1000
   (279 → "duzentos e setenta e nove"); Morse.
@@ -258,12 +258,12 @@
 - **ERRO GRAVE da apostila:** afirma que `float* s_1, s_2;` declara DOIS ponteiros porque o `*` está colado
   ao tipo. Falso: só `s_1` é ponteiro; `s_2` é `float`. Pegadinha clássica para o curso.
 - Outros erros: `&(a+b)` inválido (correto); atribuição de endereço absoluto `0x03F8` (porta serial) e
-  `int *p = 0x3f8` — não portável, não usar.
+  `int *p = 0x3f8`, não portável, não usar.
 
 ### 0046-passagem-por-referencia
 - `troca(int *p1, int *p2)` com `temp`; passagem por valor = cópia em bloco diferente; por referência =
   endereço. Retornar vários valores: `stat(vet, N, &med, &dsvpd)`; `extremos(vet, N, &max, &min)`.
-- **ERRO de digitação na apostila:** `void troca(int *p1, int *p1)` (dois p1) — "ache o erro".
+- **ERRO de digitação na apostila:** `void troca(int *p1, int *p1)` (dois p1), bom para "ache o erro".
 - **Exercício:** `void round(float *r)` que arredonda o próprio número.
 
 ### 0047-ponteiros-e-vetores
@@ -276,12 +276,12 @@
 
 ### 0054-malloc-free
 - `vet = (int*)malloc(num * sizeof(int))`; retorna NULL se falhar; `free(pont)`.
-- **Pegadinha:** a apostila mostra `malloc(num*2)` assumindo int de 2 bytes — motivo para SEMPRE usar
+- **Pegadinha:** a apostila mostra `malloc(num*2)` assumindo int de 2 bytes, motivo para SEMPRE usar
   `sizeof`. Biblioteca citada `alloc.h` → padrão é `stdlib.h`. Em C o cast do `malloc` é desnecessário.
 - **Exercício:** vetor de N elementos aleatórios em [0,10] com N lido, e reaproveitar `remove_dup`.
 
 ### 0082-pilha / 0084-pilha-aplicacoes
-- Ex. 7.16: **calculadora RPN** (HP) com pilha em vetor: `2+5*3` → 5 Enter 3 `*` → 15; 2 `+` → 17.
+- Ex. 7.16: calculadora RPN (HP) com pilha em vetor: `2+5*3` → 5 Enter 3 `*` → 15; 2 `+` → 17.
 
 ---
 
@@ -303,9 +303,9 @@
 | arquivos `.cpp` | é C++ | usar `.c` e `gcc` |
 
 ## Extras que não cabem no sumário
-- Precisão da máquina (épsilon) e raiz por Newton — bons exemplos numéricos de laço.
-- Tabela ASCII estendida e caracteres de moldura (179–218) — curiosidade; não portáveis (UTF-8 hoje).
-- Códigos de tecla especiais (F1 = 0 seguido de 59) — histórico.
+- Precisão da máquina (épsilon) e raiz por Newton: bons exemplos numéricos de laço.
+- Tabela ASCII estendida e caracteres de moldura (179–218): curiosidade; não portáveis (UTF-8 hoje).
+- Códigos de tecla especiais (F1 = 0 seguido de 59): histórico.
 - `goto` com rótulos e `exit(status)` (valor vai para o sistema operacional, `errorlevel` no DOS; hoje
   `echo $?`).
 - Desafios: proteção de tela, mover caractere com setas, 8 damas, Morse sonoro, jogo Reverse,

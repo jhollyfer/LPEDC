@@ -1,4 +1,4 @@
-# Fichamento — Lintzmayer & Mota, *Análise de Algoritmos e de Estruturas de Dados*
+# Fichamento: Lintzmayer & Mota, *Análise de Algoritmos e de Estruturas de Dados*
 
 - **Obra:** Carla Negri Lintzmayer (CMCC-UFABC) e Guilherme Oliveira Mota (IME-USP), *Análise de
   Algoritmos e de Estruturas de Dados*. Rascunho de 4 de agosto de 2023 (o próprio texto avisa
@@ -14,7 +14,7 @@
   V. técnicas (divisão e conquista/Karatsuba, guloso, programação dinâmica) · VI. grafos (conceitos,
   BFS, DFS, componentes, fortemente conexas, ordenação topológica, Kruskal, Prim, Euler/Fleury,
   Dijkstra, Bellman-Ford, Floyd-Warshall, Johnson) · VII. redução, P, NP, NP-completo.
-- **Avaliação geral:** é a fonte mais **rigorosa** que temos para a parte de análise e para os
+- **Avaliação geral:** é a fonte mais rigorosa que temos para a parte de análise e para os
   módulos novos de técnicas e grafos. Três qualidades que o LPEDC deve herdar:
   (1) **todo algoritmo vem com invariante de laço ou indução**, sempre no mesmo molde
   ("antes da t-ésima iteração começar, vale que...", caso base, passo, uso de P(T+1) no fim);
@@ -23,8 +23,8 @@
   tabela, primeiro *top-down* e depois *bottom-up*;
   (3) **análise separada para matriz e lista de adjacências** em todo algoritmo de grafo.
   Pontos fracos: texto denso e formal (prova longa até para somatório), quase nenhuma analogia do
-  cotidiano, pseudocódigo com vetores **1..n** (no C do curso será 0..n-1), a seção de **árvores
-  balanceadas está vazia** ("ainda em construção"), **hash tem uma página só**, o capítulo 30
+  cotidiano, pseudocódigo com vetores 1..n (no C do curso será 0..n-1), a seção de árvores
+  balanceadas está vazia ("ainda em construção"), hash tem uma página só, o capítulo 30
   (como lidar com NP-difíceis) diz apenas "Em breve", e não há nada de backtracking, análise
   amortizada formal, strings/busca de padrões, trie, B-tree, rubro-negra, skip list ou matriz esparsa.
   Há alguns erros de rascunho (listados nas pegadinhas de cada seção) que viram bons exercícios de "ache o erro".
@@ -425,7 +425,7 @@
 **Conceitos-chave (só o que o livro traz)**
 - Motivação com **CPF**: endereçamento direto seria Θ(1) mas exigiria bilhões de posições.
 - Colisões são inevitáveis (universo grande, tabela pequena) e aparecem mesmo com poucas chaves:
-  **paradoxo do aniversário** — 2450 chaves em tabela de 1 milhão têm ~95% de chance de colisão.
+  **paradoxo do aniversário**: 2450 chaves em tabela de 1 milhão têm ~95% de chance de colisão.
 - Busca, inserção e remoção em O(1) **no caso médio**.
 - **Lacuna**: o capítulo tem uma página; não há encadeamento, sondagem, fator de carga nem funções.
 

@@ -1,4 +1,4 @@
-# Fichamento — Feofiloff, *Algoritmos em linguagem C*
+# Fichamento: Feofiloff, *Algoritmos em linguagem C*
 
 - **Obra:** Paulo Feofiloff, *Algoritmos em linguagem C*. Rio de Janeiro: Elsevier/Campus, 2009 (2ª impressão corrigida). Nasceu das notas de aula do IME-USP (www.ime.usp.br/~pf/algoritmos/).
 - **Público original:** quem já programa um pouco em C (segundo semestre de computação). Os apêndices resumem a linguagem.
@@ -59,7 +59,7 @@
   exemplo concreto do problema (um conjunto de dados). Tamanho da instância (ex.: n).
 - **Ideia de exemplo:** mostrar a mesma tarefa (máximo de um vetor) com documentação boa e ruim.
 
-### 0001-primeiro-programa (leiaute — Apêndice A)
+### 0001-primeiro-programa (leiaute, Apêndice A)
 - **Conceitos-chave:** leiaute é para humanos; dois pilares: **espaços** na linha e **indentação**.
   Regras tipográficas de livro: espaço entre palavras (`while`, `=`, `<=` contam como palavras);
   espaço depois (não antes) de pontuação; espaço antes de abrir parêntese e depois de fechá-lo.
@@ -79,7 +79,7 @@
   **relógio** de 16 posições; −8..7 para `int`, 0..15 para `unsigned`; 6+1 = 7, 6+2 = −8 (overflow),
   2*6 = −4. Desenhar o círculo é muito didático.
 - **Pegadinhas:** `unsigned n = -1` vira o maior unsigned; `m - n` com unsigned m=2, n=3 vale −1 em
-  aritmética int (no livro) — na prática moderna o resultado é um unsigned enorme se a expressão
+  aritmética int (no livro); no C moderno o resultado é um unsigned enorme se a expressão
   ficar unsigned (ver "Obsoleto").
 - **Exercícios:** (a) com unsigned de 16 bits, por que `for (n = 0; n < 65536; n++)` nunca termina?
   (resposta: n nunca chega a 65536, volta a 0); (b) imprimir n², n³, ... até não caber em unsigned;
@@ -135,8 +135,8 @@
   O papel deles deve estar na documentação. Frases como "a primeira chamada deve ser com i = 0" são
   proibidas como documentação.
 - **Pegadinhas (exercícios "critique"):**
-  - caso base redundante (tratar n == 2 além de n == 1) — deselegante;
-  - chamar a recursão **duas vezes** com o mesmo argumento (`if (max(v,n-1) < v[n-1]) ... else return max(v,n-1)`) — vira exponencial;
+  - caso base redundante (tratar n == 2 além de n == 1): deselegante;
+  - chamar a recursão **duas vezes** com o mesmo argumento (`if (max(v,n-1) < v[n-1]) ... else return max(v,n-1)`): vira exponencial;
   - recursão que **não diminui** a instância: `XX(n/3 + 1)` com n = 1 chama XX(1) para sempre;
   - `if (n = 1)` (atribuição) dentro de uma função recursiva de rastreio;
   - caso base em n == 1 quando o problema faz sentido para n == 0 (busca recursiva "feia").
@@ -152,21 +152,21 @@
 - **Exponenciação rápida:** k^n = (k^(n/2))² vezes k se n ímpar; no máximo ≈ 2·log2 n
   multiplicações (contra n−1 da ingênua). Ótimo exemplo ligando recursão e log.
 - **Exercício de rastreio:** função ff que imprime sua chamada com recuo proporcional à
-  profundidade — rodar com (7, 0). (Usar com o `=`/`==` corrigido ou como pegadinha.)
+  profundidade; rodar com (7, 0). (Usar com o `=`/`==` corrigido ou como pegadinha.)
 
 ### 0034-modulos / 0074-tad (visão do Feofiloff)
 - O livro não monta TADs completos, mas dá o fundamento: **documentação = interface (.h)**,
   **código = implementação (.c)**. O Apêndice K mostra amostras comentadas de `stdlib.h`,
-  `stdio.h`, `string.h`, `limits.h`, `time.h` — bom material para mostrar "um .h é um contrato".
+  `stdio.h`, `string.h`, `limits.h`, `time.h`, bom material para mostrar "um .h é um contrato".
 - Exercício útil: "uma fila é um pacote com três objetos (vetor e dois índices); escreva as funções
-  sem variáveis globais" — prepara a passagem para struct + TAD.
+  sem variáveis globais": prepara a passagem para struct + TAD.
 
 ### 0037-vetores / 0038-vetores-e-funcoes (Capítulo 3)
 - **Vetor** = sequência de objetos do mesmo tipo em posições consecutivas. Espaço `v[N]`, conteúdo
   `v[0..n-1]`, com 0 ≤ n ≤ N; vazio se n = 0, cheio se n = N.
 - **Busca** (decisão: devolver −1 se não achar): varrer **do fim para o começo**, `k = n-1` e
   decrementar enquanto `k >= 0 && v[k] != x`. Funciona com n = 0 sem `if` especial.
-  **Invariante:** x é diferente de todos os elementos de v[k+1..n-1].
+  Invariante: ver 0073-invariantes.
 - **Maus exemplos (exercício "classifique: deselegante / ineficiente / errado"):**
   - flag `achou` desnecessária (deselegante);
   - `if (n == 0) return -1;` antes do laço (deselegante);
@@ -183,8 +183,7 @@
 - **Inserção** de y entre k−1 e k (0 ≤ k ≤ n, e n < N): deslocar v[k..n-1] uma casa para a direita
   **começando do fim**, pôr y em v[k], devolver n+1.
 - **Remover todos os zeros** (busca + remoção), algoritmo de dois índices: i marca o fim da parte
-  "limpa", j varre; se v[j] != 0, copia para v[i] e avança i. **Invariantes:** i ≤ j e v[0..i-1] é
-  v[0..j-1] original sem zeros. Linear e sem vetor auxiliar.
+  "limpa", j varre; se v[j] != 0, copia para v[i] e avança i. Invariantes: ver 0073-invariantes. Linear e sem vetor auxiliar.
   Maus exemplos: copiar para um vetor auxiliar fixo `w[1000]`; remover cada zero deslocando o resto
   (quadrático); versão com `v[i-z] = v[i]` que acessa v[−1].
 - **Ideias de exemplos:** vetor 111, 222, 0, 0, 333, 0, 444, 0 → 111, 222, 333, 444 (n passa de 8 a 4).
@@ -247,7 +246,7 @@
 
 ### 0060-typedef (J.3)
 - **Truque para ler typedef:** escreva a declaração de uma variável do tipo desejado e ponha
-  `typedef` na frente — o nome da variável vira nome de tipo.
+  `typedef` na frente: o nome da variável vira nome de tipo.
 - Tipo de dado = conjunto de valores + operações (definição que conecta com TAD).
 
 ### 0035-preprocessador (J.4)
@@ -259,7 +258,7 @@
   `stdin`/`stdout` são arquivos já abertos.
 - **Lição de projeto (getc):** `getc` devolve **int**, não char, porque precisa de um valor fora
   dos 256 caracteres para sinalizar fim: EOF. "Devolver um objeto de um superconjunto do que
-  realmente interessa" é truque geral. **Pegadinha:** guardar o retorno de getc em `char` —
+  realmente interessa" é truque geral. **Pegadinha:** guardar o retorno de getc em `char`:
   arquivo vazio ou byte 255 quebram o programa.
 - argv: `prog a bb 999` → argc = 4, argv[0] = "prog". Exemplo: média dos números passados na linha
   de comando com `atoi`.
@@ -277,7 +276,7 @@
   - n log n (mergesort): para 16n, menos de 32t; para 128n, menos de 352t, contra 256t e 16384t
     dos quadráticos.
 - Soma 1 + 2 + ... + (n−1) = n(n−1)/2 ≈ n²/2 (inserção, seleção).
-- **Observação honesta:** constantes importam para n pequeno — mergesort só ganha dos elementares
+- **Observação honesta:** constantes importam para n pequeno: mergesort só ganha dos elementares
   a partir de certo n.
 - Exercícios: tabela de ⌊log2 n⌋ para n = 10..10^5; se a busca binária leva t em n elementos, quanto
   leva em n²? (≈ 2t).
@@ -331,13 +330,13 @@
 - **Exercícios do 4.7 (todos em versão com/sem cabeça e iterativa/recursiva):** vetor → lista
   (dica da solução: percorrer o vetor **de trás para frente** inserindo no início); lista → vetor;
   cópia; comparação; concatenação; contagem; **ponto médio sem contar n** (dois ponteiros: um anda
-  1, outro anda 2 — técnica "lebre e tartaruga"); remover a k-ésima; inserir após a k-ésima;
+  1, outro anda 2, técnica "lebre e tartaruga"); remover a k-ésima; inserir após a k-ésima;
   **inverter só mexendo nos ponteiros**; projeto: contar ocorrências de cada palavra de um texto.
 
 ### 0077-lista-busca-remocao
 - **Busca** (com cabeça): p = lst->seg; avança enquanto `p != NULL && p->conteudo != x`; devolve
   p (NULL se não achou). Correta com lista vazia. Versão recursiva olha lst->seg.
-- **Remoção — decisão de projeto importante:** em vez de receber a célula a remover, receber a
+- **Remoção (decisão de projeto importante):** em vez de receber a célula a remover, receber a
   **anterior** p e remover p->seg (exige p e p->seg não nulos). Tempo constante, sem copiar nada,
   ao contrário do vetor.
 - **Busca seguida de remoção:** dois ponteiros p (anterior) e q (atual), com invariante q == p->seg;
@@ -352,8 +351,8 @@
 ### 0078-lista-ordenada
 - **Inserção:** nova célula **depois** de p (aloca, nova->seg = p->seg, p->seg = nova). Funciona no
   fim da lista; com cabeça, inserir após a cabeça = inserir no início. Inserir *antes* de p numa lista
-  simples: "não há como" (resposta do livro ao 4.5.2) — bom exercício de reflexão.
-- **Pegadinha forte:** usar uma `célula nova;` **local** em vez de malloc — a célula some quando a
+  simples: "não há como" (resposta do livro ao 4.5.2); bom exercício de reflexão.
+- **Pegadinha forte:** usar uma `célula nova;` **local** em vez de malloc: a célula some quando a
   função termina e a lista aponta para lixo.
 - **BuscaEInsere:** inserir y antes da 1ª célula com x, ou no fim se não houver x; mesmo esquema
   p/q.
@@ -361,7 +360,7 @@
   ordenada = BuscaEInsere com critério "primeiro maior que y".
 - **Ordenar lista por inserção** (solução 8.4.4 do livro): rearranja só ponteiros; com cabeça não
   precisa devolver nada.
-- **Intercalar duas listas crescentes sem alocar** (9.1.10) e **mergesort de lista** (9.4.3) —
+- **Intercalar duas listas crescentes sem alocar** (9.1.10) e **mergesort de lista** (9.4.3):
   exercícios de "juntando tudo".
 
 ### 0079-lista-dupla / 0080-lista-circular
@@ -413,8 +412,8 @@
 - **Definição:** remove-se sempre o que está há **mais** tempo (FIFO). Vetor f[0..N-1], ocupado
   f[s..t-1]; vazia s == t; cheia t == N (versão não circular). Remover `x = f[s++]`; inserir
   `f[t++] = y`. Inserir em fila cheia = **transbordamento**.
-- **Circular:** s e t em 0..N-1, sem supor s ≤ t; vazia t == s; **cheia quando (t+1) % N == s**
-  — a posição t fica sempre livre para distinguir cheia de vazia (capacidade N−1). Avanço:
+- **Circular:** s e t em 0..N-1, sem supor s ≤ t; vazia t == s; **cheia quando (t+1) % N == s**;
+  a posição t fica sempre livre para distinguir cheia de vazia (capacidade N−1). Avanço:
   `t++; if (t == N) t = 0;`.
 - Exercício: com a convenção f[s..t] (fechada), escrever remover/inserir; funções tamanho,
   remove e insere da fila circular sem globais.
@@ -427,7 +426,7 @@
 - Exercícios: fila em lista com cabeça; em lista circular com cabeça (só o ponteiro da cabeça);
   em lista dupla sem cabeça.
 
-### 0110-bfs (5.2 — "distâncias em uma rede") ⭐
+### 0110-bfs (5.2, "distâncias em uma rede") ⭐
 - **Cenário:** n cidades, estradas de mão única em matriz A (A[x][y] = 1 se há estrada x→y).
   Distância de o a x = menor nº de estradas. d[x] = −1 representa ∞.
 - **Algoritmo (descrever passo a passo):** d[] = −1; d[o] = 0; fila f com o; enquanto a fila não
@@ -436,7 +435,7 @@
 - **Invariantes:** f[0..s-1] já saíram; as distâncias na fila são não decrescentes e diferem no
   máximo de 1; toda estrada que sai de f[0..s-1] chega em f[0..t-1].
 - **Exercício:** formiga num tabuleiro 10×10 com casas bloqueadas (−1) indo de (1,1) a (10,10),
-  movendo-se para cima/baixo/esquerda/direita — labirinto via BFS.
+  movendo-se para cima/baixo/esquerda/direita (labirinto via BFS).
 - (Para 0109: a matriz de adjacência aparece aqui naturalmente.)
 
 ### 0089-busca-sequencial / 0090-busca-binaria ⭐
@@ -486,8 +485,8 @@
   deselegante); procurar a posição da esquerda para a direita e depois deslocar (correto mas
   deselegante/menos eficiente).
 - Exercícios: invariante alternativo (v[j+1..n-1] crescente, varrendo da direita); **busca binária
-  para achar a posição** (economiza comparações mas não movimentações — continua n²); ordem
-  estritamente crescente (impossível com repetidos — resposta do livro); versão recursiva;
+  para achar a posição** (economiza comparações mas não movimentações; continua n²); ordem
+  estritamente crescente (impossível com repetidos, resposta do livro); versão recursiva;
   ordenar strings, structs, linhas de um arquivo; ordenar lista encadeada.
 
 ### 0094-merge-sort ⭐
@@ -517,7 +516,7 @@
   com v[k] e j++; no fim troca v[j] com v[r]; devolve j. Comparar com RemoveZeros (mesma ideia de
   dois índices!). Tempo ∝ número de elementos.
 - **Quicksort(p, r, v):** se p < r: j = Separa; ordena v[p..j-1] e v[j+1..r]. Chamada:
-  Quicksort(0, n−1, v) — intervalo **fechado**, diferente do mergesort.
+  Quicksort(0, n−1, v), intervalo **fechado**, diferente do mergesort.
 - **Desempenho:** se j cai sempre perto do meio, ≈ n log n comparações; **vetor já ordenado (ou
   decrescente) dá ≈ n²**; média n log n.
 - **Altura da pilha:** no pior caso chega a n (pode estourar a memória). Remédio: recursão só na
@@ -526,7 +525,7 @@
 - **Pegadinhas:** `if (p != r)` em vez de `p < r` (pode não parar quando p > r); chamar
   Quicksort(p, j) ou (j, r) incluindo o pivô (não para); separação com vetor auxiliar fixo
   `w[1000]`; versões de separação de livros diferentes (Gries, CLRS 1ª ed. com índices que se
-  cruzam, Sedgewick com pivô do meio) resolvem **formulações diferentes** — trocar uma pela outra
+  cruzam, Sedgewick com pivô do meio) resolvem **formulações diferentes**; trocar uma pela outra
   sem ajustar as chamadas recursivas quebra o algoritmo.
 - **Estável?** Não.
 - Exercícios: aplicar Separa a vetor todo igual, só com dois valores, crescente, decrescente;
@@ -548,8 +547,8 @@
 - **Nó** com conteúdo, esq e dir; filho, pai, folha (sem filhos). Definição formal de árvore
   binária como conjunto de nós sem ciclos, cada nó com no máximo um pai, exatamente uma raiz e
   filhos esquerdo/direito distintos ("o programador raramente pensa nisso porque constrói nó a nó").
-- **Folclore usado como abertura:** as árvores da computação crescem para baixo — raiz no ar,
-  folhas enterradas no chão.
+- **Folclore usado como abertura:** as árvores da computação crescem para baixo, com a raiz no ar e
+  as folhas enterradas no chão.
 - **Natureza recursiva:** r é NULL ou r->esq e r->dir são árvores. Caminho, comprimento,
   descendente, subárvore. Endereço da árvore = endereço da raiz; `typedef nó *árvore`.
 - **Varredura e-r-d (in-order), r-e-d (pré), e-d-r (pós).** e-r-d recursiva é imediata.
@@ -601,7 +600,7 @@
   raiz 1, pai de f é f/2, filhos de p são 2p e 2p+1. Todo pai é pelo menos tão valioso quanto os
   filhos; v[1] é um máximo. Nº de camadas = 1 + ⌊log2 m⌋; mais da metade dos elementos fica na
   última camada.
-- Observação do livro: a palavra **heap** também nomeia a área de alocação dinâmica — **não tem
+- Observação do livro: a palavra **heap** também nomeia a área de alocação dinâmica, **sem
   relação** (pegadinha de vocabulário para 0053).
 - **Inserção (sobe):** pôr o novo em v[m+1]; enquanto f > 1 e pai < filho, troca e sobe. ≤ log2(m+1).
 - **Sacode (desce) em quase-heap** (só a raiz pode estar fora do lugar): f = 2; enquanto f ≤ m: se
@@ -632,7 +631,7 @@
 - **Divisão de negativos "na maioria dos computadores":** desde C99 o truncamento para zero é
   **garantido**.
 - **Amostras de .h simplificadas:** `NULL 0`, `RAND_MAX 32767`, `void *malloc(unsigned int)`,
-  `unsigned int strlen`, `long time(long *)`, `qsort` com `void *` sem `const` — hoje é `size_t`,
+  `unsigned int strlen`, `long time(long *)`, `qsort` com `void *` sem `const`; hoje é `size_t`,
   `time_t`, `const void *`. RAND_MAX costuma ser 2147483647 no gcc/glibc.
 - **`malloc` sem checar NULL e `free` omitido** nos exemplos (assumido pelo livro "para não cansar").
   No LPEDC: sempre checar e liberar; usar Valgrind/ASan.
@@ -651,7 +650,7 @@
     se s[k] < n, empilha s[k] + 1; senão desempilha e incrementa o novo topo.
     Lista para n = 4: 1; 1 2; 1 2 3; 1 2 3 4; 1 2 4; 1 3; 1 3 4; 1 4; 2; 2 3; 2 3 4; 2 4; 3; 3 4; 4.
   - Versão recursiva SseqR(s, k, m, n): imprime prefixo + m; depois "inclui m" (recursão com k+1) e
-    "não inclui m" (recursão com k). A documentação precisa explicar o papel do prefixo s[1..k] —
+    "não inclui m" (recursão com k). A documentação precisa explicar o papel do prefixo s[1..k]:
     exemplo perfeito de **generalizar o problema** para recursão.
   - Ordem lexicográfica especial (mais longas primeiro): 1 2 3 4; 1 2 3; 1 2 4; 1 2; ...
   - Exercícios: combinações k a k (solução no livro com poda m ≤ n − k + j + 1); permutações (n!);
@@ -667,12 +666,11 @@
   - **Boyer-Moore 2 (bom sufixo):** tabela T2[i] pelo maior "índice bom"; pré-processamento m² no
     código simples; caso médio linear. BM3 = máximo dos dois saltos; com T2 aperfeiçoada fica m + n.
   - Projeto: implementar BM3 e conferir contra o trivial. Pode entrar como extra de strings/vetores.
-- **Problema de Josephus** (lista circular) e **permutações por pilha** (empilha 1..n) — desafios.
-- **Contador de base 100/256 em lista encadeada** para contar além de UINT_MAX (exercício C.1.2) —
-  bom "aritmética de precisão arbitrária" introdutória.
+- **Contador de base 100/256 em lista encadeada** para contar além de UINT_MAX (exercício C.1.2):
+  introdução à aritmética de precisão arbitrária.
 - **CWEB / programação literária (Knuth)** e citações de Dijkstra sobre programa como "metade de uma
-  conjectura" — material de motivação para o módulo de documentação/invariantes.
-- **Medição de tempo com `clock()` / CLOCKS_PER_SEC** (K.6), repetindo o bloco 100 vezes — útil para
+  conjectura", material de motivação para o módulo de documentação/invariantes.
+- **Medição de tempo com `clock()` / CLOCKS_PER_SEC** (K.6), repetindo o bloco 100 vezes, útil para
   o projeto "comparar ordenações na prática" (0101).
 - **Anagramas:** maior classe de palavras equivalentes num dicionário (ordenar as letras de cada
-  palavra como "assinatura" e depois ordenar a lista) — projeto de juntando-tudo de ordenação/hash.
+  palavra como "assinatura" e depois ordenar a lista); projeto de juntando-tudo de ordenação/hash.

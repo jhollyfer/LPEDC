@@ -1,4 +1,4 @@
-# Fichamento — Celes & Rangel, *Apostila de Estruturas de Dados* (PUC-Rio)
+# Fichamento: Celes & Rangel, *Apostila de Estruturas de Dados* (PUC-Rio)
 
 - **Obra:** Waldemar Celes e José Lucas Rangel (cap. 9 com R. Cerqueira), *Apostila de Estruturas
   de Dados*, Curso de Engenharia, PUC-Rio, 2002. Segunda disciplina de programação (a primeira era
@@ -15,7 +15,7 @@
   com alerta repetido para não esquecer a atribuição; (4) generalização com `void*`, ponteiro para
   função, `qsort`/`bsearch` e **callbacks**; (5) uma aplicação completa de hash (contagem de
   palavras). Pontos fracos: texto de 2002 (Turbo C, Windows 2000, int de 4 bytes "na maioria"),
-  **vários erros de digitação no código** (listados em cada seção — viram ótimos exercícios de
+  **vários erros de digitação no código** (listados em cada seção, viram ótimos exercícios de
   "ache o bug"), não tem insertion/selection/merge sort, nem heap, nem AVL com rotações, nem grafos;
   pouca análise de corretude (nada de invariantes).
 - **Convenções da apostila:** nó de lista chamado `Lista`/`No` com campos `info` e `prox`; árvore
@@ -31,12 +31,12 @@
   roda em outra (Linux).
 - **Ciclo:** editar → compilar → ligar → testar (repete). IDE junta tudo.
 - **Compilação separada (excelente para 0034):** `gcc -c converte.c`, `gcc -c principal.c`,
-  `gcc -o prog converte.o principal.o` — se só um módulo muda, só ele é recompilado. O ligador junta
+  `gcc -o prog converte.o principal.o`: se só um módulo muda, só ele é recompilado. O ligador junta
   objetos e bibliotecas (ex.: código de printf/scanf).
 - **Exemplo:** conversor Celsius → Fahrenheit (F = 1,8·C + 32), primeiro num arquivo só, depois
   separado em `converte.c` + `principal.c` com o protótipo repetido.
 - Modelo de computador (CPU, memória principal de acesso aleatório e volátil, armazenamento
-  secundário persistente e lento, E/S, barramento) — bom para 0001/0004.
+  secundário persistente e lento, E/S, barramento), bom para 0001/0004.
 
 ### 0002-variaveis / 0003-tipos-e-limites / 0004-constantes
 - Variável = espaço de memória com nome e tipo. Tabela de tamanhos: char 1, short 2, long 4,
@@ -51,7 +51,7 @@
 ### 0005-printf / 0006-scanf
 - Especificadores %c %d %u %f %e %g %s; `%%`; largura e precisão (`%4d`, `%7.2f`). printf devolve
   nº de campos (a rigor, de caracteres) impressos.
-- **scanf:** precisa de endereços (&); `%f` é float e **`%lf` é double** (no printf ambos são %f —
+- **scanf:** precisa de endereços (&); `%f` é float e **`%lf` é double** (no printf ambos são %f;
   pegadinha clássica); scanf devolve nº de campos lidos; literal no formato obriga o separador
   (`"%d:%d"` para hora); espaço no formato pula brancos; `%d`/`%f` pulam brancos sozinhos, **`%c` não**
   (use `" %c"`).
@@ -59,7 +59,7 @@
 ### 0007..0014 operadores
 - Divisão na precisão dos operandos (5/2 = 2; 5.0/2.0 = 2.5); % só para inteiros (paridade com
   x % 2); precedência; atribuição é expressão (`y = x = 5`, da direita para a esquerda).
-- **`x *= y + 1` equivale a `x = x * (y + 1)`, não a `x*y + 1`** — pegadinha boa.
+- **`x *= y + 1` equivale a `x = x * (y + 1)`, não a `x*y + 1`**; pegadinha boa.
 - `x = n++` × `x = ++n` (n = 5 → x = 5 ou 6; n vira 6 nos dois). `(i+1)++` é ilegal.
 - Postura da apostila: evitar formas compactas quando atrapalham a leitura; compilador otimiza igual.
 - Cast: `(int) 3.5 % 2` → 1; conversão automática para o tipo "mais representativo" (3/1.5).
@@ -91,7 +91,7 @@
 ### 0028 / 0029 funções e passagem por valor
 - Protótipo antes do uso (repetir a linha da definição + `;`; nomes dos parâmetros opcionais mas
   documentam); `void` em parâmetros e retorno; main devolve 0 em sucesso.
-- **Exemplo:** fat que zera n dentro da função (while n != 0, n--) e o main continua com n = 5 —
+- **Exemplo:** fat que zera n dentro da função (while n != 0, n--) e o main continua com n = 5:
   prova visual da passagem por valor.
 
 ### 0030-escopo
@@ -105,7 +105,7 @@
   (a em 104, b em 108, c em 112) e a pilha mostrada em 6 quadros: pilha vazia → main com n, r →
   chamada copia o parâmetro → local f da função → fim do laço (n = 0 só na cópia) → retorno desempilha.
 - Repetir o mesmo formato para a função **troca** com ponteiros (px = 104, py = 108 apontando para
-  a e b do main) — mostra *por que* o scanf precisa de &.
+  a e b do main), o que mostra *por que* o scanf precisa de &.
 
 ### 0032-recursao
 - Recursão direta × indireta (A chama B que chama A). Cada chamada tem seu próprio ambiente local.
@@ -123,7 +123,7 @@
   diretório atual).
 - **Exemplo:** str.c com comprimento/copia/concatena e prog1.c lendo duas linhas, copiando,
   concatenando e imprimindo o comprimento.
-- Lacuna: a apostila **não fala em include guards** — acrescentar no LPEDC.
+- Lacuna: a apostila **não fala em include guards**; acrescentar no LPEDC.
 
 ### 0035-preprocessador ⭐
 - `#define PI 3.14159` (constante simbólica recomendada). Macros com parâmetros: `MAX(a,b)`.
@@ -131,7 +131,7 @@
   (não 8); `#define PROD(a,b) (a * b)` → `PROD(3+4, 2)` dá **11** (não 14). Regra: parênteses em
   cada parâmetro e na macro inteira: `((a) * (b))`. Erro de sintaxe em macro aparece na linha de uso,
   não na definição.
-- (Faltou: macro que avalia argumento duas vezes, ex.: `MAX(i++, j)` — acrescentar.)
+- (Faltou: macro que avalia argumento duas vezes, ex.: `MAX(i++, j)`; acrescentar.)
 
 ### 0037 / 0038 vetores e funções
 - Vetor = espaço **contínuo**; índice 0..n−1; `v[10]` num vetor de 10 é invasão de memória.
@@ -159,7 +159,7 @@
 - Implementações didáticas: imprime, comprimento, copia (não esquecer de **fechar** com '\0'),
   concatena, **duplica** (malloc de n+1 + strcpy; quem chama libera).
 - **Bug na apostila (exercício "ache o erro"):** `concatena` procura o fim usando `s[i]` em vez de
-  `dest[i]` — não compila.
+  `dest[i]`; não compila.
 
 ### 0042-lendo-strings
 - `scanf("%s")` lê só até o primeiro branco ("Rio de Janeiro" → "Rio"). A apostila usa
@@ -171,7 +171,7 @@
 
 ### 0044..0051 ponteiros e passagem por referência
 - `&` = "endereço de"; `*` = "conteúdo de". Desenho com p = 104 apontando para a; `*p = 6` muda a.
-- **ERRO típico (bom exemplo):** `int *p; *p = 3;` com p não inicializado — às vezes "funciona",
+- **ERRO típico (bom exemplo):** `int *p; *p = 3;` com p não inicializado: às vezes "funciona",
   escreve num lugar desconhecido; programas que "voam".
 - Troca errada (por valor) × certa (por endereço), com o passo a passo da memória.
 
@@ -183,7 +183,7 @@
 ### 0048-ponteiros-e-strings ⭐
 - **Diferença sutil e importante:** `char s1[] = "Rio de Janeiro";` é um vetor local de 15 bytes,
   modificável (`s1[0] = 'X'` vale); `char* s2 = "Rio de Janeiro";` é um ponteiro (4/8 bytes) para uma
-  constante na **área de constantes** — `s2[0] = 'X'` é inválido. `sizeof(s1)` × `sizeof(s2)` mostra
+  constante na **área de constantes**; `s2[0] = 'X'` é inválido. `sizeof(s1)` × `sizeof(s2)` mostra
   a diferença.
 - Vetor de strings: `char alunos[50][81]` (desperdício) × `char* alunos[MAX]` com cada nome alocado
   por `duplica` (lelinha + lenomes + imprimenomes + liberanomes).
@@ -195,7 +195,7 @@
 
 ### 0050-ponteiro-para-funcao ⭐ / 0051-void-generico ⭐
 - **Construção passo a passo do bubble sort genérico** (ótima sequência didática):
-  1. bolha de int com `>`; 2. extrair a comparação para `compara(a, b)` (devolve 1 se há inversão) —
+  1. bolha de int com `>`; 2. extrair a comparação para `compara(a, b)` (devolve 1 se há inversão):
      ordem decrescente = só trocar a função; 3. versões de compara para strings (strcmp) e para
      Aluno* (por nome); 4. tornar tudo `void*`: a ordenação recebe também `tam` (bytes por elemento);
      5. `acessa(v, i, tam)` converte para `char*` e soma i·tam (aritmética byte a byte);
@@ -221,7 +221,7 @@
 - `v = malloc(10*4)` → depois `10*sizeof(int)` (independência de máquina); malloc devolve `void*`.
   Checar NULL e sair com mensagem "Memória insuficiente".
 - free só em endereço alocado dinamicamente; não acessar depois de liberar.
-- **Exemplo:** média/variância de n reais com n lido do teclado — as funções media/variancia não
+- **Exemplo:** média/variância de n reais com n lido do teclado; as funções media/variancia não
   mudam (não importa se o vetor é estático ou dinâmico).
 - `realloc(v, m*sizeof(int))` preserva o conteúdo. Pegadinha a acrescentar: `v = realloc(v, ...)`
   perde o bloco original se realloc devolver NULL (usar ponteiro temporário). calloc não é tratado.
@@ -234,9 +234,7 @@
   - **vetor de ponteiros:** aloca m ponteiros e depois cada linha; acesso natural `mat[i][j]`;
     liberar cada linha e depois o vetor de ponteiros.
 - **Bugs na apostila:** `m[i] = malloc(...)` em vez de `mat[i]`; `Matriz mat = (Matriz*) malloc` sem `*`.
-- **Matriz simétrica (extra, ver final):** guardar só o triângulo inferior: s = n(n+1)/2 elementos;
-  acesso a (i, j) com i ≥ j em `i*(i+1)/2 + j`, e se i < j troca os papéis. Com vetor de ponteiros,
-  a linha i tem i+1 elementos.
+- **Matriz simétrica:** ver "Extras que não cabem no sumário".
 
 ### 0057-erros-de-memoria
 - Itens espalhados: lixo em variável, ponteiro não inicializado, invasão (v[10], scanf sem limite),
@@ -251,19 +249,19 @@
   mesmo quando só lê; para ler (captura) é obrigatório ponteiro. **Bug:** `captura` usa `&p->x`
   com parâmetro chamado `pp`.
 - typedef: `typedef float Real;`, `typedef int* PInt;`, `typedef float Vetor[4];`,
-  `typedef struct ponto Ponto, *PPonto;` — mesma regra de leitura (sem typedef seria declaração de
+  `typedef struct ponto Ponto, *PPonto;`, com a mesma regra de leitura (sem typedef seria declaração de
   variável). Estilo: tipos com inicial maiúscula.
-- **Vetor de structs — área de polígono:** soma das "áreas" dos trapézios (x[i+1]−x[i])(y[i+1]+y[i])/2
+- **Vetor de structs (área de polígono):** soma das "áreas" dos trapézios (x[i+1]−x[i])(y[i+1]+y[i])/2
   com índice circular `j = (i+1) % n`; valor absoluto no fim. Exemplo: triângulo (1,1), (5,1), (4,3)
   → área 4. Exercício: ler n, alocar o vetor de pontos dinamicamente.
-- **Vetor de ponteiros para structs — tabela de alunos:** Aluno ocupa ≥ 227 bytes (81+4+121+21, mais
+- **Vetor de ponteiros para structs (tabela de alunos):** Aluno ocupa ≥ 227 bytes (81+4+121+21, mais
   alinhamento); `Aluno tab[100]` desperdiça; `Aluno* tab[100]` com NULL = posição livre;
   funções inicializa / preenche(i) (aloca se NULL) / remove(i) (free + NULL) / imprime(i) /
   imprime_tudo. Exercício: reescrever **sem variável global** criando um tipo Tabela.
 
 ### 0063-enum / 0064-union
 - union: campos compartilham a mesma memória; tamanho ≥ maior campo; só um campo válido por vez.
-- enum: constantes nomeadas (0, 1, ... por padrão); exemplo `enum bool { FALSE, TRUE }` — vantagem
+- enum: constantes nomeadas (0, 1, ... por padrão); exemplo `enum bool { FALSE, TRUE }`, com a vantagem
   sobre `#define` + `typedef int Bool` (documenta os valores legais). Usado também para RET, TRI, CIR.
 
 ### 0067-arquivos-texto ⭐
@@ -295,7 +293,7 @@
   checando argc != 2).
 
 ### 0071-eficiencia / 0072-big-o
-- Notação O introduzida na busca: pior caso, melhor caso (não serve para análise — "situação muito
+- Notação O introduzida na busca: pior caso, melhor caso (não serve para análise: "situação muito
   particular") e **caso médio** (n/2 comparações na busca linear ainda é O(n), pois O(kn) = O(n)).
 - Bubble: (n−1) + (n−2) + ... + 1 → O(n²). Quicksort: O(n log n) melhor/médio, recai no bolha no
   pior. Busca binária: tabela "repetição × tamanho" (n, n/2, n/4, ..., 1) → log n repetições.
@@ -306,9 +304,9 @@
 - **Definição:** módulo que define um tipo e suas operações; "abstrato" = "esquecida a forma de
   implementação". O cliente só conhece a funcionalidade. Facilita manutenção e reuso.
 - **Receita da apostila (usar como template do LPEDC):**
-  - `x.h`: comentário com o nome do TAD; `typedef struct x X;` (**tipo opaco** — a composição da
+  - `x.h`: comentário com o nome do TAD; `typedef struct x X;` (**tipo opaco**: a composição da
     struct não é exportada, então o cliente não acessa campos); protótipos, cada um com comentário
-    "Função nome — o que faz".
+    "Função nome: o que faz".
   - `x.c`: inclui as bibliotecas que usa **e o próprio `x.h`** (por dois motivos: precisa das
     definições e o compilador confere que as implementações batem com os protótipos); define a
     `struct x` completa; implementa.
@@ -318,7 +316,7 @@
   (sqrt(dx² + dy²)). Exercícios: usar o TAD; soma/subtração de pontos; coordenadas polares; Ponto 3D.
 - **TAD Matriz:** cria(m, n), libera, acessa(i, j) e atribui(i, j, v) **com verificação de limites**
   (mensagem + exit), linhas, colunas. Duas implementações (`matriz1.c` vetor simples,
-  `matriz2.c` vetor de ponteiros) com **a mesma** `matriz.h` — o cliente não muda.
+  `matriz2.c` vetor de ponteiros) com **a mesma** `matriz.h`, e o cliente não muda.
   Exercícios: testar com as duas; função "é simétrica?" e "transposta" usando só a interface;
   TAD MatSim.
 - **Calculadora pós-fixa** como TAD (`calc.h`) construído **em cima** do TAD pilha: mostra TAD
@@ -331,7 +329,7 @@
 
 ### 0076-lista-encadeada ⭐
 - **Motivação:** vetor dá acesso aleatório mas é rígido; lista cresce e diminui, gasta memória
-  proporcional ao nº de elementos, mas **sem acesso direto** — só seguindo o encadeamento.
+  proporcional ao nº de elementos, mas **sem acesso direto**, só seguindo o encadeamento.
 - Nó auto-referenciado `struct lista { int info; struct lista* prox; }` + `typedef struct lista
   Lista;`; a lista é um `Lista*` para o 1º nó; vazia = NULL.
 - Operações (lista sem cabeça, todas devolvem a lista atualizada quando ela pode mudar):
@@ -341,7 +339,7 @@
 - **Exemplo-roteiro:** insere 23, 45, 56, 78 → imprime 78 56 45 23 (ordem inversa da inserção);
   retira 78 → 56 45 23; retira 45 → 56 23; libera.
 - **Pegadinhas destacadas pela apostila:**
-  - **esquecer `l = insere(l, x)`** — a variável fica apontando para o nó antigo; se retira o 1º, fica
+  - **esquecer `l = insere(l, x)`**: a variável fica apontando para o nó antigo; se retira o 1º, fica
     apontando para nó **já liberado**;
   - no libera, **guardar o próximo antes do free** (acessar p->prox depois de free(p) é usar memória
     que não é mais sua).
@@ -376,14 +374,14 @@
   Exercício: inserir e retirar em lista circular dupla.
 
 ### 0080-lista-circular
-- Último aponta para o primeiro; não há "primeiro" de verdade — guarda-se um ponteiro para um nó
+- Último aponta para o primeiro; não há "primeiro" de verdade; guarda-se um ponteiro para um nó
   qualquer. Percorrer com **do-while** a partir de l até voltar a l, tratando lista vazia (NULL) antes.
 - Aplicação citada: arestas que delimitam uma face (computação gráfica).
 - **Bug na apostila:** `if (p) { {` com chave sobrando em imprime_circular.
 - Exercício: inserir e retirar em lista circular.
 
 ### 0082-pilha ⭐
-- **Analogia:** pilha de pratos — põe e tira só do topo. LIFO. Operações push/pop. "Talvez a estrutura
+- **Analogia:** pilha de pratos, em que se põe e tira só do topo. LIFO. Operações push/pop. "Talvez a estrutura
   mais usada; implementada até em hardware"; a própria pilha de execução do C é exemplo.
 - Figura-roteiro: push(a), push(b), push(c), pop() → c, push(d), pop() → d.
 - **Interface `pilha.h`:** `typedef struct pilha Pilha;` cria, push, pop, vazia, libera.
@@ -405,7 +403,7 @@
 - Rastreio: `(1-2)*(4+5)` = `1 2 - 4 5 + *` → pilha: 1 | 1 2 | −1 | −1 4 | −1 4 5 | −1 9 | −9.
   Sessão: `3 5 8 * +` → 3.00 5.00 8.00 40.00 43.00; `7 /` → 7.00 6.14; `q` sai.
 - Leitura do cliente: `scanf(" %c")`; se não for operador, **`ungetc`** devolve o caractere ao buffer e
-  tenta `scanf("%f")` — truque de E/S que vale mostrar.
+  tenta `scanf("%f")`, truque de E/S que vale mostrar.
 - **Pegadinha:** inverter v1 e v2 em − e /.
 - Exercício: operadores `~` (menos unário), `#` (raiz), `^` (potência).
 
@@ -421,7 +419,7 @@
   21.2, 24.3 no início (posições 98, 99, 0, 1 com N = 100).
 - `imprime` com `for (i = ini; i != fim; i = incr(i))`.
 - (Observação: a alternativa "contador n" na apostila diz cheia quando n == N−1; com contador dá
-  para usar todas as N posições — corrigir no LPEDC.)
+  para usar todas as N posições; corrigir no LPEDC.)
 
 ### 0086-fila-encadeada
 - Dois ponteiros `ini` e `fim`; retira do início (fácil) e insere no fim (fácil porque guardamos
@@ -436,7 +434,7 @@
 - Fila dupla: insere e retira nas duas pontas ("duas filas em ordem inversa na mesma estrutura").
   Interface `fila2.h`: cria, insere_ini, insere_fim, retira_ini, retira_fim, vazia, libera.
 - Com vetor: exercício; **dica**: o decremento circular **não** pode ser `(i-1) % N` (em C o resto de
-  negativo é negativo) — decrementar e, se ficou negativo, pôr N−1 (ou usar `(i - 1 + N) % N`).
+  negativo é negativo); decrementar e, se ficou negativo, pôr N−1 (ou usar `(i - 1 + N) % N`).
 - Com lista: precisa de **lista dupla** por causa do retira_fim. Auxiliares ins2_ini, ins2_fim,
   ret2_ini, ret2_fim (acertando ant/prox e o NULL nas pontas); as funções da fila2 atualizam ini e
   fim quando a fila estava/ficou vazia.
@@ -460,7 +458,7 @@
 - **imprime em pré-ordem** → `a b d c e f`; exercício: imprimir com a notação `<...>`; versões
   simétrica e pós-ordem.
 - **libera em pós-ordem** (subárvores antes da raiz) e devolve NULL; o cliente faz
-  `a->dir->esq = libera(a->dir->esq)` — mesma lição de atribuir o retorno.
+  `a->dir->esq = libera(a->dir->esq)`, mesma lição de atribuir o retorno.
 - "Enxertar" com `a->esq->esq = cria('x', cria('y',...), cria('z',...))` e "podar" com libera.
   Exercício: desenhar o resultado.
 - **busca com curto-circuito:** `return a->info == c || busca(a->esq, c) || busca(a->dir, c);` para
@@ -468,7 +466,7 @@
 - Ordens: pré (raiz, sae, sad), simétrica (sae, raiz, sad), pós (sae, sad, raiz). Exercício: altura.
 - **Árvores genéricas (13.2):** cada nó com qualquer nº de filhos; definição sem árvore vazia (folha =
   nó com zero subárvores). Representações: campos fixos f1, f2, f3 (desperdício e limite) ×
-  **"primeiro filho / próximo irmão"** (`prim`, `prox`) — que na prática é uma árvore binária.
+  **"primeiro filho / próximo irmão"** (`prim`, `prox`), que na prática é uma árvore binária.
   TAD arvgen: cria (folha), insere(a, sa) (no início da lista de filhos), imprime (pré-ordem; não
   existe ordem simétrica com nº variável de filhos), busca, libera (pós-ordem guardando o próximo
   irmão). Exemplo: `<a <b <c <d>> <e>> <f> <g <h> <i <j>>>>` montado com 9 inserts (atenção: inserir
@@ -523,7 +521,7 @@
 - `qsort(v, n, tam, cmp)` com `int cmp(const void*, const void*)` devolvendo **negativo, 0, positivo**
   (a apostila diz −1, 0, 1). `const` = a função não altera os elementos.
 - Exemplos: vetor de float; vetor de Aluno (cmp converte para `Aluno*` e devolve strcmp dos nomes);
-  vetor de `Aluno*` (cmp converte para `Aluno**` — uma indireção a mais).
+  vetor de `Aluno*` (cmp converte para `Aluno**`, uma indireção a mais).
 - **Pegadinha de contrato:** a `compara` da bolha devolvia 1/0 ("há inversão?"); a do qsort devolve
   <0/0/>0. Misturar os contratos ordena errado.
 - **Bug:** no exemplo de `Aluno*` usa `*p1`/`*p2` em vez de `*pa1`/`*pa2`; falta `{`.
@@ -531,7 +529,7 @@
 
 ### 0099-bst-busca-insercao
 - Motivação: busca binária é ótima em vetor ordenado, mas inserir/remover exige deslocar; lista
-  permite inserir mas não busca rápido; BST junta as duas coisas — **se balanceada** (altura O(log n));
+  permite inserir mas não busca rápido; BST junta as duas coisas, **se balanceada** (altura O(log n));
   degenerada vira O(n).
 - Propriedade: raiz > tudo na sae e < tudo na sad; ordem simétrica dá crescente. Variante com
   repetidos: sad com ≥, simétrica dá não decrescente. Com dados complexos, usar função de comparação.
@@ -563,7 +561,7 @@
 ### 0105-hashing ⭐
 - **Motivação com números (ótima):** matrícula PUC de 7 dígitos efetivos + verificador
   (9711234-4). Indexar direto `vet[mat]` exige 10.000.000 de posições × ≥127 bytes ≈ 1,27 GB para ~50
-  alunos (6.350 bytes). Vetor de ponteiros reduz para ~40 MB — ainda proibitivo.
+  alunos (6.350 bytes). Vetor de ponteiros reduz para ~40 MB, ainda proibitivo.
 - **Ideia central:** usar a parte da chave que mais varia: ano/período de ingresso (primeiros dígitos)
   se repetem na turma; os **últimos** dígitos sequenciais variam mais. Tabela de 100 → índice
   `mat % 100`. Preço: **colisões**, que não dá para eliminar, só minimizar e tratar.
@@ -578,10 +576,10 @@
   depois copia os dados (nome, email, turma). Sempre há posição livre porque a ocupação é ≤ 75%.
 - Problema: concentra as ocupadas (agrupamento).
 - **Dispersão dupla:** passo h'(x) = N − 2 − x % (N − 2); cuidados: h' nunca pode ser 0 e não deve ser
-  divisor de N (senão só visita um subconjunto) — por isso N primo é preferível (a apostila usa
+  divisor de N (senão só visita um subconjunto); por isso N primo é preferível (a apostila usa
   N = 100, que não é primo: comentar). Exercício: escrever o insere com dispersão dupla.
 - **Lacuna importante (acrescentar no LPEDC):** a apostila não trata **remoção** em endereçamento
-  aberto — apagar pondo NULL quebra a cadeia de busca dos que vieram depois; é preciso marca de
+  aberto: apagar pondo NULL quebra a cadeia de busca dos que vieram depois; é preciso marca de
   "removido" (lápide).
 
 ### 0106-encadeamento
@@ -621,7 +619,7 @@
 - **`return;` em `int main`** (exemplo de ponteiro) e `main` sem `return 0` em alguns trechos.
 - **Funções sem `const`** em parâmetros de string (`char* orig`); prefira `const char*`.
 - **Nomes genéricos `cria`, `libera`, `insere` iguais em vários TADs**: colidem se dois módulos forem
-  ligados juntos — prefixar (`pilha_cria`, `fila_cria`).
+  ligados juntos; prefixar (`pilha_cria`, `fila_cria`).
 - **Erros de digitação no código** (bons para "ache o bug", ruins para copiar): concatena com `s[i]`;
   captura com `p->x`; `scanf(" %c", %a)`; `m[i] = malloc`; `Matriz mat =` sem `*`;
   `typedef struct Lista2`; `(Circulo)p->info` sem `*`; `p->info>b` (falta `-`); chaves sobrando em
@@ -638,11 +636,5 @@
   `i*(i+1)/2 + j` (i ≥ j); versão com linhas de tamanhos diferentes (linha i com i+1 elementos);
   exercícios: TAD MatSim, triangular inferior/superior (o lado de fora devolve 0). Exemplo: n = 4 →
   10 elementos em vez de 16; (i, j) = (3, 1) → k = 3·4/2 + 1 = 7; (1, 3) → mesmo k = 7.
-- **Árvores genéricas** (primeiro filho / próximo irmão) — ver 0098; serve para árvore de diretórios.
-- **Balanceamento por contagem de nós** (não-AVL) — ver 0101.
-- **Callbacks com `void* dado`** como padrão de "iterador" para qualquer estrutura (17.5).
-- **Área de polígono por trapézios** (vetor de structs com índice circular) — exemplo de 0061.
-- **Formatos de arquivo com palavras-chave e comentários `#`** — mini-parser (14.3), bom projeto de
+- **Formatos de arquivo com palavras-chave e comentários `#`**: mini-parser (14.3), bom projeto de
   juntando-tudo do módulo 09 (salvar e recarregar a lista heterogênea de figuras).
-- **Calculadora HP como TAD sobre TAD** e uso de `ungetc`.
-- **Tabela de alunos com vetor de ponteiros e NULL = livre** — ponte natural para hash.

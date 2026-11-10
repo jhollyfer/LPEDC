@@ -1,12 +1,12 @@
-# Fichamento — "Introdução à Linguagem C" (versão 2.0)
+# Fichamento: "Introdução à Linguagem C" (versão 2.0)
 
 - **Autor:** Gerência de Atendimento ao Cliente (GACLI), Centro de Computação da UNICAMP (sem data,
   anos 1990; bibliografia: K&R 1986, Schildt Turbo C 1988, Mizrahi 1990).
 - **Avaliação geral:** apostila-resumo curta, quase só sintaxe + um exemplo por tópico, sem
-  exercícios. Escrita em **C pré-ANSI (K&R)**: `main()` sem tipo, definições de função no estilo
+  exercícios. Escrita em C pré-ANSI (K&R): `main()` sem tipo, definições de função no estilo
   `int f(a, b) int a, b; {...}`, protótipos sem parâmetros, `#include <stdio>`. Vários exemplos têm
-  erros de digitação ou de lógica. Serve como **fonte de exemplos curtos de printf e ponteiros** e
-  como **material de "isto é C antigo, não faça assim"**. Não cobre estruturas de dados.
+  erros de digitação ou de lógica. Serve como fonte de exemplos curtos de printf e ponteiros e
+  como material de "isto é C antigo, não faça assim". Não cobre estruturas de dados.
 
 ### logica5-compilacao
 - **Conceitos-chave:** cadeia editor → pré-processador (fonte expandido) → compilador (objeto) →
@@ -16,7 +16,7 @@
 ### 0002-variaveis / 0003-tipos-e-limites
 - **Conceitos-chave:** identificadores começam com letra ou `_`, case sensitive; árvore de tipos
   (escalares: aritméticos e ponteiros; não escalares: struct, union, matriz). Tabela de faixas
-  **mínimas** garantidas (int ≥ 16 bits, long ≥ 32) — boa ideia, ao contrário de tabelas "fixas".
+  mínimas garantidas (int ≥ 16 bits, long ≥ 32), boa ideia, ao contrário de tabelas "fixas".
   Programa que imprime `sizeof` de cada tipo.
 - **Pegadinhas (erros da fonte):** `char` com faixa `[0,128)`; 2^32 escrito como 4.294.967.298
   (é …296); "unsigned sort/log"; `sizeof` impresso com `%d` (o correto é `%zu`).
@@ -54,7 +54,7 @@
 - **Ideias de exemplos:** imprimir `i == j é 0/1` para todos os relacionais com dois números lidos.
 
 ### 0017-ternario
-- **Pegadinhas:** o exemplo `max = (x>y) ? 1 : 0` não calcula o máximo (devolve um indicador) — bom
+- **Pegadinhas:** o exemplo `max = (x>y) ? 1 : 0` não calcula o máximo (devolve um indicador); bom
   "ache o erro": corrigir para `max = (x > y) ? x : y`.
 
 ### 0018-switch / 0021-do-while
@@ -69,19 +69,19 @@
 ### 0026-aleatorios
 - **Ideias de exemplos:** jogo "adivinhe o número" com `srand(time(NULL))` e dicas "muito alto /
   muito baixo".
-- **Pegadinhas:** `segredo = rand()/100` gera números enormes — usar `rand() % 100 + 1`.
+- **Pegadinhas:** `segredo = rand()/100` gera números enormes; usar `rand() % 100 + 1`.
 
 ### 0037-vetores / 0039-matrizes
 - **Conceitos-chave:** memória contígua, índice de 0 a N−1, C não verifica limites (exemplo que
   escreve 100 posições num vetor de 10).
 - **Pegadinhas:** média de notas com `soma/5` inteira; afirmação de que vetor local só pode ser
-  inicializado se `static` — restrição do C pré-ANSI, **obsoleta**. Exemplo de matriz percorre só a
+  inicializado se `static`: restrição do C pré-ANSI, obsoleta. Exemplo de matriz percorre só a
   diagonal sem dizer.
 
 ### 0041-strings / 0042-lendo-strings
 - **Conceitos-chave:** string = vetor de char com `'\0'`; constante entre aspas recebe o `'\0'`
   automático; `puts` acrescenta `\n`; `strcpy`, `strcat` (não verifica tamanho), `strcmp` (0 se
-  iguais — exemplo de senha "laranja").
+  iguais; exemplo de senha "laranja").
 - **Pegadinhas:** usa `gets` (e admite que não testa limites); `static re[] = "lagarto"` sem tipo.
 
 ### 0045-ponteiros / 0047-ponteiros-e-vetores
@@ -100,8 +100,8 @@
 - **Conceitos-chave:** `char *texto = "composto"` aponta para constante; vetor de ponteiros para
   mensagens de erro (`char *erro[] = {"arquivo não encontrado\n", "erro de leitura\n"}`);
   `int x, *p, **q; q = &p; **q` → 10.
-- **Pegadinhas:** a fonte diz que `char *texto = "..."` "funciona como `static char texto[]`" —
-  falso: o literal é só leitura, o vetor é modificável.
+- **Pegadinhas:** a fonte diz que `char *texto = "..."` "funciona como `static char texto[]`".
+  Falso: o literal é só leitura, o vetor é modificável.
 
 ### 0028-funcoes / 0029-parametros / 0030-escopo
 - **Conceitos-chave:** void para função sem retorno; chamada por valor (`sqr(t)` não altera t) e por

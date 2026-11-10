@@ -1,4 +1,4 @@
-# Fichamento — Deitel & Deitel, *C: Como Programar* (parte 2)
+# Fichamento: Deitel & Deitel, *C: Como Programar* (parte 2)
 
 - **Obra:** *C: Como Programar* (6ª ed. americana, com introdução a C++ nos caps. 15–24).
   Pearson, tradução brasileira. O arquivo .md foi gerado por OCR de PDF.
@@ -16,7 +16,7 @@
 
 ## Avaliação geral
 
-É o livro mais **"enciclopédico"** das fontes: cobre a biblioteca padrão quase função por
+É o livro mais "enciclopédico" das fontes: cobre a biblioteca padrão quase função por
 função (ctype, stdlib, string.h, stdio, stdarg, signal), sempre com um programa completo e a
 saída. Os pontos fortes são as caixas **"Erro comum de programação"** e **"Dica de prevenção
 de erro"** (uma mina de pegadinhas), os quadros de resumo (especificadores de `printf`/`scanf`,
@@ -25,9 +25,9 @@ modos de `fopen`, operadores bit a bit) e os **exercícios**, muitos e bons: Sim
 simulação de fila de supermercado, remoção em BST, percurso por nível.
 
 Pontos fracos para o LPEDC:
-- C datado: **ints de 4 bytes e ponteiros de 4 bytes** assumidos (máquina de 32 bits, Visual
-  C++), `while (!feof(f))` como padrão de leitura, `atoi`/`atof` sem verificação de erro, `%n`,
-  `register`, nenhum `const` em vários lugares e nenhum teste de retorno de `scanf`/`fread`.
+- C datado: **ints de 4 bytes e ponteiros de 4 bytes** (máquina de 32 bits, Visual C++),
+  nenhum `const` em vários lugares e nenhum teste de retorno de `scanf`/`fread`. O resto está
+  em "Obsoleto / evitar".
 - **Muitos erros de OCR e de tradução no código** (identificadores trocados no meio do
   programa, `naipe` declarado duas vezes, `count` × `contador`), além de **alguns erros
   conceituais reais** (listados na seção final). Use o livro para ideias e exercícios; nunca
@@ -244,7 +244,7 @@ Pontos fracos para o LPEDC:
   `'a'`=97, `'&'`=38). Dígitos vêm antes das maiúsculas, que vêm antes das minúsculas.
 - `<ctype.h>`: `isdigit isalpha isalnum isxdigit islower isupper isspace iscntrl ispunct
   isprint isgraph tolower toupper`. Recebem `int` (por causa do `EOF`).
-- Retornam "não zero" para verdadeiro — **não necessariamente 1**.
+- Retornam "não zero" para verdadeiro, **não necessariamente 1**.
 - `toupper` de algo que não é minúscula devolve o mesmo caractere.
 - `isprint` inclui o espaço; `isgraph` não. `isspace`: espaço, `\f \n \r \t \v`.
 - **Pegadinhas e erros comuns:** Testar `if (isdigit(c) == 1)`.
@@ -300,7 +300,7 @@ Pontos fracos para o LPEDC:
 - O livro menciona `gets` no início do cap. 9 sem alertar; ver "Obsoleto".
 
 ### 0044-memoria / 0045-ponteiros
-- **Conceitos-chave:** Ponteiro é uma variável cujo valor é um endereço; acessar um valor através dele é
+- **Conceitos-chave:** Ponteiro é uma variável cujo valor é um endereço; acessar um valor por ele é
   **indireção**. `&` dá o endereço; `*` desreferencia. `&*p` e `*&p` dão o mesmo.
 - `int *a, b;` → só `a` é ponteiro (o `*` não "distribui").
 - Inicialize ponteiros: `NULL`, `0` ou um endereço. O único inteiro atribuível é 0.
@@ -548,8 +548,7 @@ Pontos fracos para o LPEDC:
 - Exercício 12.18: eliminar duplicatas com vetor × com BST e comparar os custos.
 
 ### 0074-tad
-- **Conceitos-chave (cap. 18, parte C++, mas a ideia é de C):** TAD = representação dos dados + operações permitidas. O próprio `int` é um TAD: aproxima o
-  inteiro matemático com faixa limitada.
+- **Conceitos-chave (cap. 18, parte C++, mas a ideia é de C):** TAD = representação dos dados + operações permitidas. O próprio `int` é um TAD (ver 0003-tipos-e-limites).
 - O cliente de uma pilha/fila só quer saber **o que** ela faz (push/pop, enqueue/dequeue), não
   **como**; a implementação pode trocar sem afetar o resto. O TAD protege sua estrutura
   interna: operações fora da interface não existem para o cliente.

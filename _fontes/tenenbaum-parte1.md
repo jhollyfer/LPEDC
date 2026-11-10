@@ -1,4 +1,4 @@
-# Fichamento — Tenenbaum, Langsam, Augenstein, *Estruturas de Dados Usando C* (parte 1)
+# Fichamento: Tenenbaum, Langsam, Augenstein, *Estruturas de Dados Usando C* (parte 1)
 
 - **Obra:** *Estruturas de Dados Usando C* (orig. *Data Structures Using C*, Prentice Hall, 1989). Tradução de Teresa C. F. de Souza; revisão técnica de Roberto C. Mayer. MAKRON Books, 1995.
 - **Autores:** Aaron M. Tenenbaum, Yedidyah Langsam, Moshe J. Augenstein.
@@ -6,17 +6,17 @@
 
 ## Avaliação geral
 
-Livro clássico, denso e muito bom de **conceito**: separa sempre o TDA (o que a estrutura faz)
+Livro clássico, denso e muito bom de conceito: separa sempre o TDA (o que a estrutura faz)
 da implementação (como é feita), mostra duas ou três implementações da mesma ideia e discute
 os compromissos de tempo e espaço. Os traços passo a passo (pilha de avaliação posfixa,
 conversão infixa→posfixa, pilha de recursão do fatorial e do Fibonacci, eliminação de
 recursão) são excelentes e valem ser adaptados.
 
-O que é **datado**: C de K&R (1ª edição) com parâmetros declarados fora dos parênteses,
+O que é datado: C de K&R (1ª edição) com parâmetros declarados fora dos parênteses,
 `extern char *malloc()`, structs nunca passadas por valor nem atribuídas, `#define TRUE 1`,
 `return(x)` com parênteses, `goto` nas simulações, uso de `exit(1)` dentro de rotinas de
-biblioteca. A versão .md tem **muitos erros de OCR** (`l` no lugar de `1`, `—` no lugar de
-`--`, `1=` no lugar de `!=`) e alguns **bugs reais de código e de tradução** (listados abaixo,
+biblioteca. A versão .md tem muitos erros de OCR (`l` no lugar de `1`, `—` no lugar de
+`--`, `1=` no lugar de `!=`) e alguns bugs reais de código e de tradução (listados abaixo,
 em cada assunto e na seção final). Use o livro para ideias e exercícios, nunca para copiar código.
 A terminologia também difere da usada hoje ("completa" e "quase completa", "linha" para
 *thread*, "classificação" para ordenação, "espalhamento" para hashing).
@@ -688,7 +688,6 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
 - Leitura com `while ((expr[pos++] = getchar()) != '\n');` sem limite de tamanho (estouro de buffer) e `scanf("%s", &symb)` com `symb` sendo um `char` (estouro garantido).
 - Globais como otimização (passar `a` e `x` como globais na busca binária, tabelas globais).
 - Modelo de ponto flutuante didático (mantissa de 24 bits, base 10): não é o IEEE 754.
-- Tamanhos supostos (`float` de 8 bytes) nos exemplos de deslocamento.
 - **Bugs a não copiar** (bons para exercícios de "ache o erro"):
   - comparação de strings com `==` em structs (`e.nameaddr.name.first == s.nmad.name.first`);
   - `avg = total / NUMELTS` com inteiros e `printf("%d", float)`;
@@ -699,11 +698,11 @@ A terminologia também difere da usada hoje ("completa" e "quase completa", "lin
   - `follower` (Josephus em árvore) usa `k` em vez de `*pk`;
   - `remove` da fila e textos com início/final trocados na tradução;
   - `push(&s, &currarea.x)` na simulação do fatorial (deveria empilhar a área inteira).
-- O .md tem muito ruído de OCR (`1=` por `!=`, `—` por `--`, `l` por `1`, `prdc` por `prcd`); qualquer código tirado dele precisa ser reescrito e compilado.
+- Qualquer código tirado do .md precisa ser reescrito e compilado: além dos erros de OCR já citados, há `prdc` no lugar de `prcd`.
 
 ## Extras que não cabem no sumário (candidatos a assuntos bônus)
 
-### Simulação e eliminação da recursão (seção 3.4) — bônus muito bom
+### Simulação e eliminação da recursão (seção 3.4): bônus muito bom
 Mostra **como o compilador implementa a recursão** e como transformá-la em iteração:
 1. Defina uma `struct dataarea` com parâmetros, locais e **endereço de retorno** (codificado como inteiro 1, 2, 3...), e uma pilha dessas áreas.
 2. "Chamar" = empilhar a área atual, preencher os novos parâmetros, marcar o endereço de retorno e `goto start`. "Retornar" = guardar o resultado, ler o endereço de retorno, desempilhar e usar um `switch` de `goto`s para o rótulo certo.
@@ -748,7 +747,7 @@ chamadas virando pilha de `h(n)`.
 - Josephus revisitado: próxima posição = `1 + (k - 2 + m) % size`; custo ≈ (n−1)·log2 n contra (n−1)·m da lista circular. Precursor de árvores de ordem estatística.
 
 ### Outros extras curtos
-- **Reconhecedor recursivo** expr/termo/fator (descida recursiva) e **árvore sintática** (exercício 5.5.9) — semente de compiladores.
+- **Reconhecedor recursivo** expr/termo/fator (descida recursiva) e **árvore sintática** (exercício 5.5.9), semente de compiladores.
 - **Árvores encadeadas** (*threaded*) e percurso por inversão de ponteiros (Deutsch–Schorr–Waite).
 - **Expressões gerais** como árvores ordenadas (operadores de qualquer aridade, `f(g,h,i,j)`) com `replace`/`evaltree` e as operações `setsons`/`addson` (lista de filhos do mais novo para o mais velho deixa `addson` O(1)).
 - **Backtracking**: oito rainhas e labirinto (exercícios 3.3.10 e 3.3.11).
