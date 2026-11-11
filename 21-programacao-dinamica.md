@@ -2,6 +2,20 @@
 
 # Módulo 21 · Programação dinâmica
 
+> [!IMPORTANT]
+> **Mundo 8 · Técnicas de projeto · Rota do jogo: etapa 27 de 29**
+>
+> **Missão:** guardar subproblemas repetidos para ganhar velocidade.
+>
+> **Vem de:** [Módulo 20 · Divisão e conquista e algoritmos gulosos](20-dc-e-gulosos.md). **Segue para:** [Módulo 24 · Busca de padrões em texto](24-busca-de-padroes.md).
+>
+> **Checkpoints desta fase:**
+> - [ ] Ler os assuntos 0138 a 0143 e refazer os exemplos
+> - [ ] Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho
+> - [ ] Fechar a lista prática (P2101 a P2130)
+> - [ ] Enfrentar os desafios do módulo
+> - [ ] Chefão: resolver as questões de prova do módulo sem consultar
+
 No módulo 04, `fib(40)` recursivo levou centenas de milhões de chamadas
 porque resolve as **mesmas** perguntas várias vezes. A **programação
 dinâmica** (PD) corrige isso: anota cada resposta na primeira vez e consulta

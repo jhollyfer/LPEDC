@@ -2,6 +2,20 @@
 
 # Módulo 14 · Árvores
 
+> [!IMPORTANT]
+> **Mundo 5 · Árvores · Rota do jogo: etapa 17 de 29**
+>
+> **Missão:** montar árvore binária, ABB, AVL e heap.
+>
+> **Vem de:** [Módulo 18 · Ordenação além da comparação e seleção](18-ordenacao-linear.md). **Segue para:** [Módulo 22 · Árvores e conjuntos avançados](22-arvores-avancadas.md).
+>
+> **Checkpoints desta fase:**
+> - [ ] Ler os assuntos 0097 a 0104 e refazer os exemplos
+> - [ ] Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho
+> - [ ] Fechar a lista prática (P1401 a P1430)
+> - [ ] Enfrentar os desafios do módulo
+> - [ ] Chefão: resolver as questões de prova do módulo sem consultar
+
 Pastas, organograma e sumário de livro são **hierarquias**, e a estrutura para
 elas é a **árvore**. Ela também resolve um problema do módulo 13: a busca
 binária exige vetor ordenado, e inserir no meio dele custa caro. A **árvore

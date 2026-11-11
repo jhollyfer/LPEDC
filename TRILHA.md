@@ -1,7 +1,7 @@
 # Trilha de estudo para a prova do PPGI
 
 O curso tem 29 módulos. A prova cobra um recorte deles. Esta trilha põe o recorte em **ordem de
-dependência**: cada etapa usa o que a anterior ensinou, e cada uma termina com o que você precisa
+dependência**: cada bloco usa o que a anterior ensinou, e cada uma termina com o que você precisa
 saber de cabeça e com um treino.
 
 Ela complementa o [plano dia a dia](PPGI.md#comece-aqui), que ordena pelo **peso** de cada tópico
@@ -10,14 +10,14 @@ perde tempo na AVL. Use a trilha para saber **o que vem antes de quê**, e o pla
 **quanto tempo dar a cada coisa**. Os números de assunto (0090, 0101...) levam ao módulo; o mapa
 completo do edital está em [`PPGI.md`](PPGI.md#tópico-por-tópico).
 
-## Como ler cada etapa
+## Como ler cada bloco
 
-- **Antes:** o que a etapa supõe. Se travar, volte a ele.
+- **Antes:** o que a bloco supõe. Se travar, volte a ele.
 - **Estude:** os assuntos, na ordem em que se apoiam.
 - **De cabeça:** o que a prova cobra sem consulta.
 - **Treino:** questões do módulo e provas antigas ([`PROVAS.md`](PROVAS.md)).
 
-## Etapa 1 · A base de C que as questões usam
+## Bloco 1 · A base de C que as questões usam
 
 **Antes:** nada.
 
@@ -35,9 +35,9 @@ VLA (0172).
 
 **Treino:** `[!WARNING]` de cada assunto e a prova 061/2018.
 
-## Etapa 2 · Custo: a régua de todas as outras etapas
+## Bloco 2 · Custo: a régua de todas as outras blocos
 
-**Antes:** etapa 1, principalmente laços e recursão.
+**Antes:** bloco 1, principalmente laços e recursão.
 
 **Estude:** contar passos (0071), notação O (0072), O, Ω e Θ (0166), somatórios (0167),
 complexidade espacial (0168) e recorrências (0114, 0115).
@@ -51,10 +51,10 @@ complexidade espacial (0168) e recorrências (0114, 0115).
 
 **Treino:** questões do módulo 10; as questões de cálculo de 2022 e 2023.
 
-## Etapa 3 · Estruturas lineares
+## Bloco 3 · Estruturas lineares
 
-**Antes:** etapas 1 e 2. A lista encadeada é ponteiro e `malloc`; o custo de cada operação é a
-régua da etapa 2.
+**Antes:** blocos 1 e 2. A lista encadeada é ponteiro e `malloc`; o custo de cada operação é a
+régua da bloco 2.
 
 **Estude, nesta ordem:**
 
@@ -80,13 +80,13 @@ régua da etapa 2.
 
 **Treino:** questões dos módulos 11 e 12; provas 053/2016 e 024/2017.
 
-## Etapa 4 · Busca e ordenação
+## Bloco 4 · Busca e ordenação
 
-**Antes:** etapa 2 (custo) e etapa 3 (vetor).
+**Antes:** bloco 2 (custo) e bloco 3 (vetor).
 
 **Estude:** busca sequencial e binária (0089, 0090); bubble, selection e insertion (0091-0093);
 merge e quick (0094, 0095); estabilidade e espaço (0096); counting, radix e bucket (0119-0121);
-chave composta e pigeonhole (0180). O heapsort (0103) fica para a etapa 5, porque usa o heap.
+chave composta e pigeonhole (0180). O heapsort (0103) fica para a bloco 5, porque usa o heap.
 
 **De cabeça:**
 
@@ -105,9 +105,9 @@ chave composta e pigeonhole (0180). O heapsort (0103) fica para a etapa 5, porqu
 
 **Treino:** questões dos módulos 13 e 18; provas 055/2017 e 032/2016.
 
-## Etapa 5 · Árvores
+## Bloco 5 · Árvores
 
-**Antes:** etapa 3 (ponteiros e recursão) e etapa 4 (a busca binária, que a ABB reproduz em
+**Antes:** bloco 3 (ponteiros e recursão) e bloco 4 (a busca binária, que a ABB reproduz em
 ponteiros).
 
 **Estude, nesta ordem, porque cada uma conserta o defeito da anterior:**
@@ -133,9 +133,9 @@ ponteiros).
 **Treino:** questões dos módulos 14, 22 e 28; provas 032/2016 e 057/2022. Árvores somam um terço
 das questões: refaça cada inserção no papel.
 
-## Etapa 6 · Tabelas hash
+## Bloco 6 · Tabelas hash
 
-**Antes:** etapa 3 (a lista do encadeamento) e etapa 2 (custo esperado).
+**Antes:** bloco 3 (a lista do encadeamento) e bloco 2 (custo esperado).
 
 **Estude:** função hash e divisão (0105); encadeamento (0106); endereçamento aberto com sondagem
 linear (0107); multiplicação (0178); sondagem quadrática e dispersão dupla (0179).
@@ -149,9 +149,9 @@ linear (0107); multiplicação (0178); sondagem quadrática e dispersão dupla (
 
 **Treino:** questões do módulo 15; prova 023/2018.
 
-## Etapa 7 · Grafos
+## Bloco 7 · Grafos
 
-**Antes:** etapa 3 (fila e pilha: a BFS usa fila, a DFS usa pilha ou recursão) e etapa 5 (heap, para
+**Antes:** bloco 3 (fila e pilha: a BFS usa fila, a DFS usa pilha ou recursão) e bloco 5 (heap, para
 o Dijkstra).
 
 **Estude, nesta ordem:** representação (0109); BFS e DFS (0110, 0111); Dijkstra (0112);
@@ -180,9 +180,9 @@ hamiltoniano (0182, 0183); pontes e articulações (0184).
 
 **Treino:** questões dos módulos 16, 23 e 29; as questões de grafo de 2022 e 2023.
 
-## Etapa 8 · Técnicas de projeto e NP (o que o cursinho acrescenta)
+## Bloco 8 · Técnicas de projeto e NP (o que o cursinho acrescenta)
 
-**Antes:** etapas 2 e 7. Recorrência e grafos aparecem em tudo daqui.
+**Antes:** blocos 2 e 7. Recorrência e grafos aparecem em tudo daqui.
 
 **Estude:** divisão e conquista (0131, 0132); método guloso (0133-0136); programação dinâmica,
 mochila e LCS (0138-0142); cadeia de matrizes (0185); P, NP e reduções (0186, 0187);
@@ -196,15 +196,15 @@ aproximação e caixeiro viajante (0188).
 - Reduzir A a B mostra que B é pelo menos tão difícil quanto A.
 
 **Treino:** questões dos módulos 20, 21 e 29. Como esse bloco está no cursinho e fora do edital,
-só entre nele depois das etapas 1 a 7.
+só entre nele depois dos blocos 1 a 7.
 
-## Etapa 9 · Fechamento
+## Bloco 9 · Fechamento
 
 1. Refaça os `[!WARNING]` dos assuntos que mais caem: 0090, 0095, 0099, 0101, 0102 e 0106.
 2. Rode os três simulados de [`SIMULADOS.md`](SIMULADOS.md), cronometrando 3 minutos por questão.
-3. Para cada erro, volte à etapa que ensina o assunto, não só ao assunto.
+3. Para cada erro, volte ao bloco que ensina o assunto, não só ao assunto.
 4. Resolva as provas antigas em [`PROVAS.md`](PROVAS.md), das mais antigas às mais recentes, e
    releia o [formato de cada questão](PPGI.md#o-que-caiu-de-2016-a-2023).
 
-Se faltar tempo, mantenha as etapas 3, 4, 5 e 6, que juntas somam mais de 80% das questões, e
+Se faltar tempo, mantenha os blocos 3, 4, 5 e 6, que juntas somam mais de 80% das questões, e
 corte o treino antes de cortar o assunto.

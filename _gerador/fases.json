@@ -1,0 +1,176 @@
+[
+ {
+  "modulo": "01-fundamentos",
+  "mundo": "Mundo 1 · Primeiros passos",
+  "bonus": 0,
+  "missao": "compilar o primeiro programa, guardar valores em variáveis e mostrar resultados"
+ },
+ {
+  "modulo": "02-condicionais",
+  "mundo": "Mundo 1 · Primeiros passos",
+  "bonus": 0,
+  "missao": "fazer o programa escolher caminhos com `if`, `else` e `switch`"
+ },
+ {
+  "modulo": "03-repeticoes",
+  "mundo": "Mundo 1 · Primeiros passos",
+  "bonus": 0,
+  "missao": "repetir tarefas com `while`, `do...while` e `for`"
+ },
+ {
+  "modulo": "04-funcoes",
+  "mundo": "Mundo 1 · Primeiros passos",
+  "bonus": 0,
+  "missao": "dividir o programa em funções, entender escopo e pilha de chamadas e usar recursão"
+ },
+ {
+  "modulo": "05-vetores-e-strings",
+  "mundo": "Mundo 2 · Memória e dados",
+  "bonus": 0,
+  "missao": "guardar vários valores juntos e trabalhar com texto"
+ },
+ {
+  "modulo": "06-ponteiros",
+  "mundo": "Mundo 2 · Memória e dados",
+  "bonus": 0,
+  "missao": "enxergar endereços de memória e usá-los"
+ },
+ {
+  "modulo": "07-memoria-dinamica",
+  "mundo": "Mundo 2 · Memória e dados",
+  "bonus": 0,
+  "missao": "pedir e devolver memória durante a execução, sem vazar"
+ },
+ {
+  "modulo": "08-structs",
+  "mundo": "Mundo 2 · Memória e dados",
+  "bonus": 0,
+  "missao": "agrupar dados com `struct`, `union`, `enum` e operações com bits"
+ },
+ {
+  "modulo": "27-c-detalhes",
+  "mundo": "Mundo 2 · Memória e dados",
+  "bonus": 1,
+  "missao": "dominar as pegadinhas de precedência, sinal e VLA que a prova cobra"
+ },
+ {
+  "modulo": "09-arquivos",
+  "mundo": "Mundo 2 · Memória e dados",
+  "bonus": 0,
+  "missao": "ler e gravar arquivos e receber argumentos na linha de comando"
+ },
+ {
+  "modulo": "10-analise",
+  "mundo": "Mundo 3 · Custo e estruturas lineares",
+  "bonus": 0,
+  "missao": "medir o custo de um algoritmo e escrever tipos abstratos de dado"
+ },
+ {
+  "modulo": "26-analise-formal",
+  "mundo": "Mundo 3 · Custo e estruturas lineares",
+  "bonus": 1,
+  "missao": "provar custos com O, Ω, Θ e somatórios"
+ },
+ {
+  "modulo": "11-listas",
+  "mundo": "Mundo 3 · Custo e estruturas lineares",
+  "bonus": 0,
+  "missao": "montar listas encadeadas simples, duplas e circulares"
+ },
+ {
+  "modulo": "12-pilhas-e-filas",
+  "mundo": "Mundo 3 · Custo e estruturas lineares",
+  "bonus": 0,
+  "missao": "usar pilhas, filas e deques"
+ },
+ {
+  "modulo": "13-busca-e-ordenacao",
+  "mundo": "Mundo 4 · Buscar e ordenar",
+  "bonus": 0,
+  "missao": "buscar e ordenar com os algoritmos clássicos e comparar seus custos"
+ },
+ {
+  "modulo": "18-ordenacao-linear",
+  "mundo": "Mundo 4 · Buscar e ordenar",
+  "bonus": 0,
+  "missao": "ordenar sem comparar: counting, radix e bucket sort"
+ },
+ {
+  "modulo": "14-arvores",
+  "mundo": "Mundo 5 · Árvores",
+  "bonus": 0,
+  "missao": "montar árvore binária, ABB, AVL e heap"
+ },
+ {
+  "modulo": "22-arvores-avancadas",
+  "mundo": "Mundo 5 · Árvores",
+  "bonus": 0,
+  "missao": "conhecer rubro-negra, árvore B, trie e union-find"
+ },
+ {
+  "modulo": "15-hash",
+  "mundo": "Mundo 6 · Tabelas hash",
+  "bonus": 0,
+  "missao": "montar tabelas hash com encadeamento e endereçamento aberto"
+ },
+ {
+  "modulo": "28-estruturas-complementos",
+  "mundo": "Mundo 6 · Tabelas hash",
+  "bonus": 1,
+  "missao": "fechar as lacunas de listas, árvores e hash que a prova cobra"
+ },
+ {
+  "modulo": "16-grafos",
+  "mundo": "Mundo 7 · Grafos",
+  "bonus": 0,
+  "missao": "representar grafos e percorrer com BFS, DFS e Dijkstra"
+ },
+ {
+  "modulo": "23-grafos-avancados",
+  "mundo": "Mundo 7 · Grafos",
+  "bonus": 0,
+  "missao": "ordenar topologicamente, achar árvore geradora mínima e caminhos mínimos"
+ },
+ {
+  "modulo": "29-grafos-e-np",
+  "mundo": "Mundo 7 · Grafos",
+  "bonus": 0,
+  "missao": "separar problemas fáceis dos NP-completos e entender aproximação"
+ },
+ {
+  "modulo": "17-analise-avancada",
+  "mundo": "Mundo 8 · Técnicas de projeto",
+  "bonus": 0,
+  "missao": "resolver recorrências e aplicar o teorema mestre"
+ },
+ {
+  "modulo": "19-backtracking",
+  "mundo": "Mundo 8 · Técnicas de projeto",
+  "bonus": 0,
+  "missao": "explorar todas as soluções com poda"
+ },
+ {
+  "modulo": "20-dc-e-gulosos",
+  "mundo": "Mundo 8 · Técnicas de projeto",
+  "bonus": 0,
+  "missao": "dividir para conquistar e escolher o melhor local"
+ },
+ {
+  "modulo": "21-programacao-dinamica",
+  "mundo": "Mundo 8 · Técnicas de projeto",
+  "bonus": 0,
+  "missao": "guardar subproblemas repetidos para ganhar velocidade"
+ },
+ {
+  "modulo": "24-busca-de-padroes",
+  "mundo": "Mundo 8 · Técnicas de projeto",
+  "bonus": 0,
+  "missao": "achar padrões em texto com KMP, Horspool e Rabin-Karp"
+ },
+ {
+  "modulo": "25-estruturas-extras",
+  "mundo": "Mundo 8 · Técnicas de projeto",
+  "bonus": 0,
+  "missao": "conhecer matriz esparsa, skip list e listas autoajustáveis"
+ }
+]

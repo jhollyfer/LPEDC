@@ -2,6 +2,20 @@
 
 # Módulo 09 · Arquivos e linha de comando
 
+> [!IMPORTANT]
+> **Mundo 2 · Memória e dados · Rota do jogo: etapa 10 de 29**
+>
+> **Missão:** ler e gravar arquivos e receber argumentos na linha de comando.
+>
+> **Vem de:** [Módulo 27 · Detalhes de C que caem em prova](27-c-detalhes.md). **Segue para:** [Módulo 10 · Pensar como cientista da computação](10-analise.md).
+>
+> **Checkpoints desta fase:**
+> - [ ] Ler os assuntos 0067 a 0070 e refazer os exemplos
+> - [ ] Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho
+> - [ ] Fechar a lista prática (P0901 a P0930)
+> - [ ] Enfrentar os desafios do módulo
+> - [ ] Chefão: resolver as questões de prova do módulo sem consultar
+
 Até aqui, todo programa do curso nasce, faz a conta e morre levando tudo
 junto: as variáveis moram na RAM, esvaziada quando o processo termina. Para
 **lembrar** de algo (cadastro, configuração, placar), o programa grava em

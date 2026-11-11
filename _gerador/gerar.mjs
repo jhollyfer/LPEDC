@@ -148,6 +148,35 @@ const lista = (modulo) => {
 }
 
 const pastaModulos = join(AQUI, 'modulos')
+
+// Rota do jogo: a ordem de estudo, com os módulos bônus (★) no ponto em que destravam
+const FASES = JSON.parse(readFileSync(join(AQUI, 'fases.json'), 'utf8'))
+const tituloDoModulo = (m) => readFileSync(join(pastaModulos, m, 'modulo.md'), 'utf8').match(/^# (.+)$/m)[1]
+const mapaDaFase = (modulo, assuntos, qtdLista) => {
+  const i = FASES.findIndex((f) => f.modulo === modulo)
+  if (i < 0) return ''
+  const f = FASES[i]
+  const link = (x) => `[${tituloDoModulo(x.modulo)}](${x.modulo}.md)`
+  const ordem = `Rota do jogo: etapa ${i + 1} de ${FASES.length}${f.bonus ? ' · módulo bônus ★' : ''}`
+  const numeros = assuntos.map((a) => a.slice(0, 4))
+  const lista = qtdLista ? `${modulo.slice(0, 2).padStart(2, '0')}01 a ${modulo.slice(0, 2)}${String(qtdLista).padStart(2, '0')}` : null
+  return [
+    '> [!IMPORTANT]',
+    `> **${f.mundo} · ${ordem}**`,
+    '>',
+    `> **Missão:** ${f.missao}.`,
+    '>',
+    `> **Vem de:** ${i ? link(FASES[i - 1]) : 'o começo da rota'}. **Segue para:** ${i < FASES.length - 1 ? link(FASES[i + 1]) : 'a prova: simulados e provas antigas'}.`,
+    '>',
+    '> **Checkpoints desta fase:**',
+    `> - [ ] Ler os assuntos ${numeros[0]} a ${numeros.at(-1)} e refazer os exemplos`,
+    '> - [ ] Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho',
+    lista ? `> - [ ] Fechar a lista prática (P${lista.replace(' a ', ' a P')})` : null,
+    '> - [ ] Enfrentar os desafios do módulo',
+    '> - [ ] Chefão: resolver as questões de prova do módulo sem consultar',
+    '',
+  ].filter((l) => l !== null).join('\n')
+}
 for (const modulo of readdirSync(pastaModulos).filter((n) => /^\d{2}-/.test(n)).sort()) {
   const origem = join(pastaModulos, modulo)
   const assuntos = readdirSync(origem)
@@ -196,6 +225,7 @@ for (const modulo of readdirSync(pastaModulos).filter((n) => /^\d{2}-/.test(n)).
   texto = texto
     .replace('{{indice}}', () => ['| # | Assunto |', '| --- | --- |', ...indice].join('\n'))
     .replace('{{assuntos}}', () => partes.join('\n\n---\n\n'))
+  texto = texto.replace(/^(# .+\n)/, (t) => `${t}\n${mapaDaFase(modulo, assuntos, secaoLista ? (secaoLista.match(/^(\d+) exercícios/m)?.[1] ?? 0) : 0)}`)
   const aviso = `<!-- Gerado por _gerador. Para mudar este arquivo, edite _gerador/modulos/${modulo}/ e rode: cd _gerador && npm run gerar -->\n\n`
   writeFileSync(join(RAIZ, `${modulo}.md`), aviso + texto)
   console.log(`ok  ${modulo}.md`)

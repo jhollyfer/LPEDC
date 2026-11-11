@@ -18,6 +18,7 @@ LPEDC/
 ├── _respostas/<modulo>/       uma resolução de cada exercício (e os apoios das respostas)
 ├── _gerador/modulos/<modulo>/ FONTE dos .md: modulo.md, e por assunto texto.md e desenhos.mjs
 ├── _gerador/arquivos.json     quais A, E e apoios pertencem a cada assunto
+├── _gerador/fases.json        a rota do jogo: ordem das etapas, mundo e missão de cada módulo
 ├── _fontes/                   sumário, fichamentos dos livros e provas do PPGI
 ├── docs/  AGENTS.md  rodar    documentação viva, instruções de agentes e auxiliar do conferir.sh
 ```

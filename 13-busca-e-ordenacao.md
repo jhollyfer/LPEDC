@@ -2,6 +2,20 @@
 
 # Módulo 13 · Busca e ordenação
 
+> [!IMPORTANT]
+> **Mundo 4 · Buscar e ordenar · Rota do jogo: etapa 15 de 29**
+>
+> **Missão:** buscar e ordenar com os algoritmos clássicos e comparar seus custos.
+>
+> **Vem de:** [Módulo 12 · Pilhas e filas](12-pilhas-e-filas.md). **Segue para:** [Módulo 18 · Ordenação além da comparação e seleção](18-ordenacao-linear.md).
+>
+> **Checkpoints desta fase:**
+> - [ ] Ler os assuntos 0089 a 0096 e refazer os exemplos
+> - [ ] Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho
+> - [ ] Fechar a lista prática (P1301 a P1330)
+> - [ ] Enfrentar os desafios do módulo
+> - [ ] Chefão: resolver as questões de prova do módulo sem consultar
+
 Procurar e ordenar estão em toda lista de contatos, extrato bancário e busca
 de loja virtual. Aqui você abre essas caixas pretas: a busca binária acha um
 item entre um milhão em 20 passos, e a comparação `a - b` pode dar errado no C.

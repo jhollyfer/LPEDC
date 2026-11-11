@@ -2,6 +2,20 @@
 
 # Módulo 17 · Medindo algoritmos recursivos
 
+> [!IMPORTANT]
+> **Mundo 8 · Técnicas de projeto · Rota do jogo: etapa 24 de 29**
+>
+> **Missão:** resolver recorrências e aplicar o teorema mestre.
+>
+> **Vem de:** [Módulo 29 · Grafos: ciclos e cortes; problemas difíceis](29-grafos-e-np.md). **Segue para:** [Módulo 19 · Enumeração e backtracking](19-backtracking.md).
+>
+> **Checkpoints desta fase:**
+> - [ ] Ler os assuntos 0114 a 0118 e refazer os exemplos
+> - [ ] Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho
+> - [ ] Fechar a lista prática (P1701 a P1730)
+> - [ ] Enfrentar os desafios do módulo
+> - [ ] Chefão: resolver as questões de prova do módulo sem consultar
+
 O módulo 10 contou passos e leu a classe pelos laços. Isso falha numa função
 que chama a si mesma: quanto custa o merge sort? O "n log n" do módulo 13 veio
 de um desenho; aqui vira conta.

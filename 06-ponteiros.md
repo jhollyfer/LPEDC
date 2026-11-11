@@ -2,6 +2,20 @@
 
 # Módulo 06 · Ponteiros
 
+> [!IMPORTANT]
+> **Mundo 2 · Memória e dados · Rota do jogo: etapa 6 de 29**
+>
+> **Missão:** enxergar endereços de memória e usá-los.
+>
+> **Vem de:** [Módulo 05 · Vetores, matrizes e strings](05-vetores-e-strings.md). **Segue para:** [Módulo 07 · Memória dinâmica](07-memoria-dinamica.md).
+>
+> **Checkpoints desta fase:**
+> - [ ] Ler os assuntos 0044 a 0052 e refazer os exemplos
+> - [ ] Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho
+> - [ ] Fechar a lista prática (P0601 a P0630)
+> - [ ] Enfrentar os desafios do módulo
+> - [ ] Chefão: resolver as questões de prova do módulo sem consultar
+
 Até aqui você usou variáveis pelo **nome**; o compilador trocava cada nome por
 um endereço e escondia isso. Neste módulo a cortina abre: toda variável mora
 numa gaveta numerada da memória, e guardar o número dessa gaveta em outra

@@ -2,6 +2,20 @@
 
 # Módulo 19 · Enumeração e backtracking
 
+> [!IMPORTANT]
+> **Mundo 8 · Técnicas de projeto · Rota do jogo: etapa 25 de 29**
+>
+> **Missão:** explorar todas as soluções com poda.
+>
+> **Vem de:** [Módulo 17 · Medindo algoritmos recursivos](17-analise-avancada.md). **Segue para:** [Módulo 20 · Divisão e conquista e algoritmos gulosos](20-dc-e-gulosos.md).
+>
+> **Checkpoints desta fase:**
+> - [ ] Ler os assuntos 0125 a 0130 e refazer os exemplos
+> - [ ] Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho
+> - [ ] Fechar a lista prática (P1901 a P1930)
+> - [ ] Enfrentar os desafios do módulo
+> - [ ] Chefão: resolver as questões de prova do módulo sem consultar
+
 Muito problema não tem fórmula: que produtos fecham o crédito exato, onde
 ficam as rainhas, como sair do labirinto. É preciso **testar as
 possibilidades** sem esquecer, sem repetir e sem perder tempo com as que já

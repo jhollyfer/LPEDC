@@ -2,6 +2,20 @@
 
 # Módulo 23 · Grafos: estrutura e caminhos
 
+> [!IMPORTANT]
+> **Mundo 7 · Grafos · Rota do jogo: etapa 22 de 29**
+>
+> **Missão:** ordenar topologicamente, achar árvore geradora mínima e caminhos mínimos.
+>
+> **Vem de:** [Módulo 16 · Grafos](16-grafos.md). **Segue para:** [Módulo 29 · Grafos: ciclos e cortes; problemas difíceis](29-grafos-e-np.md).
+>
+> **Checkpoints desta fase:**
+> - [ ] Ler os assuntos 0150 a 0156 e refazer os exemplos
+> - [ ] Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho
+> - [ ] Fechar a lista prática (P2301 a P2330)
+> - [ ] Enfrentar os desafios do módulo
+> - [ ] Chefão: resolver as questões de prova do módulo sem consultar
+
 O módulo 16 ensinou BFS, DFS e Dijkstra: "como eu ando pelo grafo?". Aqui a
 pergunta é "**o que ele esconde?**": pedaços soltos, ciclos, ordem das
 tarefas, o jeito mais barato de ligar todos, pesos negativos e caminhos de

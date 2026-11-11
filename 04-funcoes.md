@@ -2,6 +2,20 @@
 
 # Módulo 04 · Funções e modularização
 
+> [!IMPORTANT]
+> **Mundo 1 · Primeiros passos · Rota do jogo: etapa 4 de 29**
+>
+> **Missão:** dividir o programa em funções, entender escopo e pilha de chamadas e usar recursão.
+>
+> **Vem de:** [Módulo 03 · Laços](03-repeticoes.md). **Segue para:** [Módulo 05 · Vetores, matrizes e strings](05-vetores-e-strings.md).
+>
+> **Checkpoints desta fase:**
+> - [ ] Ler os assuntos 0028 a 0036 e refazer os exemplos
+> - [ ] Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho
+> - [ ] Fechar a lista prática (P0401 a P0430)
+> - [ ] Enfrentar os desafios do módulo
+> - [ ] Chefão: resolver as questões de prova do módulo sem consultar
+
 Até aqui, todo programa foi um `main` só. Com duzentas linhas, o mesmo cálculo
 aparece copiado em três lugares, um conserto esquece uma cópia e ninguém acha
 mais nada. Este módulo ensina a **dividir**: dar nome a cada tarefa, escrever

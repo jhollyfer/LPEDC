@@ -2,6 +2,20 @@
 
 # Módulo 11 · Listas
 
+> [!IMPORTANT]
+> **Mundo 3 · Custo e estruturas lineares · Rota do jogo: etapa 13 de 29**
+>
+> **Missão:** montar listas encadeadas simples, duplas e circulares.
+>
+> **Vem de:** [Módulo 26 · Notação assintótica, somatórios e espaço](26-analise-formal.md). **Segue para:** [Módulo 12 · Pilhas e filas](12-pilhas-e-filas.md).
+>
+> **Checkpoints desta fase:**
+> - [ ] Ler os assuntos 0075 a 0081 e refazer os exemplos
+> - [ ] Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho
+> - [ ] Fechar a lista prática (P1101 a P1130)
+> - [ ] Enfrentar os desafios do módulo
+> - [ ] Chefão: resolver as questões de prova do módulo sem consultar
+
 O vetor tem tamanho fixo, mas você quase nunca sabe quantos itens vão chegar.
 O módulo começa pelo vetor que dobra quando enche.
 

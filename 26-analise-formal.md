@@ -2,6 +2,20 @@
 
 # Módulo 26 · Notação assintótica, somatórios e espaço
 
+> [!IMPORTANT]
+> **Mundo 3 · Custo e estruturas lineares · Rota do jogo: etapa 12 de 29 · módulo bônus ★**
+>
+> **Missão:** provar custos com O, Ω, Θ e somatórios.
+>
+> **Vem de:** [Módulo 10 · Pensar como cientista da computação](10-analise.md). **Segue para:** [Módulo 11 · Listas](11-listas.md).
+>
+> **Checkpoints desta fase:**
+> - [ ] Ler os assuntos 0166 a 0169 e refazer os exemplos
+> - [ ] Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho
+> - [ ] Fechar a lista prática (P2601 a P2630)
+> - [ ] Enfrentar os desafios do módulo
+> - [ ] Chefão: resolver as questões de prova do módulo sem consultar
+
 Nos módulos 10 e 17 você contou passos, disse "isso é O(n²)" e resolveu
 recorrências. Este módulo fecha três pontas: as **definições formais** de O,
 Ω e Θ, com `c` e `n₀`; os **somatórios** que dão o número exato de vezes que

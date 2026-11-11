@@ -2,6 +2,20 @@
 
 # Módulo 29 · Grafos: ciclos e cortes; problemas difíceis
 
+> [!IMPORTANT]
+> **Mundo 7 · Grafos · Rota do jogo: etapa 23 de 29**
+>
+> **Missão:** separar problemas fáceis dos NP-completos e entender aproximação.
+>
+> **Vem de:** [Módulo 23 · Grafos: estrutura e caminhos](23-grafos-avancados.md). **Segue para:** [Módulo 17 · Medindo algoritmos recursivos](17-analise-avancada.md).
+>
+> **Checkpoints desta fase:**
+> - [ ] Ler os assuntos 0182 a 0189 e refazer os exemplos
+> - [ ] Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho
+> - [ ] Fechar a lista prática (P2901 a P2930)
+> - [ ] Enfrentar os desafios do módulo
+> - [ ] Chefão: resolver as questões de prova do módulo sem consultar
+
 Os módulos 16 e 23 ensinaram a andar pelo grafo e a tirar dele caminhos,
 árvores e ordens. Este módulo fecha o assunto com duas perguntas da prova do
 PPGI. Sobre a **forma**: dá para passar por toda aresta uma vez? E por todo

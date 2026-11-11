@@ -2,6 +2,20 @@
 
 # Módulo 01 · Fundamentos de C
 
+> [!IMPORTANT]
+> **Mundo 1 · Primeiros passos · Rota do jogo: etapa 1 de 29**
+>
+> **Missão:** compilar o primeiro programa, guardar valores em variáveis e mostrar resultados.
+>
+> **Vem de:** o começo da rota. **Segue para:** [Módulo 02 · Decisões](02-condicionais.md).
+>
+> **Checkpoints desta fase:**
+> - [ ] Ler os assuntos 0001 a 0011 e refazer os exemplos
+> - [ ] Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho
+> - [ ] Fechar a lista prática (P0101 a P0130)
+> - [ ] Enfrentar os desafios do módulo
+> - [ ] Chefão: resolver as questões de prova do módulo sem consultar
+
 Programar é quebrar um problema em passos tão claros que uma máquina consegue
 segui-los. Essa sequência finita de passos sem ambiguidade é um
 **algoritmo**: a receita do bolo, o roteiro do GPS, o passo a passo de um Pix.

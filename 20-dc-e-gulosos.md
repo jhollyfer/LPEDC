@@ -2,6 +2,20 @@
 
 # Módulo 20 · Divisão e conquista e algoritmos gulosos
 
+> [!IMPORTANT]
+> **Mundo 8 · Técnicas de projeto · Rota do jogo: etapa 26 de 29**
+>
+> **Missão:** dividir para conquistar e escolher o melhor local.
+>
+> **Vem de:** [Módulo 19 · Enumeração e backtracking](19-backtracking.md). **Segue para:** [Módulo 21 · Programação dinâmica](21-programacao-dinamica.md).
+>
+> **Checkpoints desta fase:**
+> - [ ] Ler os assuntos 0131 a 0137 e refazer os exemplos
+> - [ ] Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho
+> - [ ] Fechar a lista prática (P2001 a P2030)
+> - [ ] Enfrentar os desafios do módulo
+> - [ ] Chefão: resolver as questões de prova do módulo sem consultar
+
 Este módulo trata de **técnicas**. Diante de um problema novo, pergunte: "isso
 se divide em pedaços iguais menores?" ou "dá para decidir um passo de cada vez,
 sem voltar atrás?".

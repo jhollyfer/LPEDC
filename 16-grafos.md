@@ -2,6 +2,20 @@
 
 # Módulo 16 · Grafos
 
+> [!IMPORTANT]
+> **Mundo 7 · Grafos · Rota do jogo: etapa 21 de 29**
+>
+> **Missão:** representar grafos e percorrer com BFS, DFS e Dijkstra.
+>
+> **Vem de:** [Módulo 28 · Estruturas: o que faltava](28-estruturas-complementos.md). **Segue para:** [Módulo 23 · Grafos: estrutura e caminhos](23-grafos-avancados.md).
+>
+> **Checkpoints desta fase:**
+> - [ ] Ler os assuntos 0109 a 0113 e refazer os exemplos
+> - [ ] Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho
+> - [ ] Fechar a lista prática (P1601 a P1630)
+> - [ ] Enfrentar os desafios do módulo
+> - [ ] Chefão: resolver as questões de prova do módulo sem consultar
+
 Ruas se cruzam, pessoas se seguem sem reciprocidade, pacotes dependem uns dos
 outros. Para isso existe o **grafo**: pontos e ligações, sem regra de forma.
 GPS, rede social e gerenciador de pacotes rodam os algoritmos deste módulo.

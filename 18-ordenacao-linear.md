@@ -2,6 +2,20 @@
 
 # Módulo 18 · Ordenação além da comparação e seleção
 
+> [!IMPORTANT]
+> **Mundo 4 · Buscar e ordenar · Rota do jogo: etapa 16 de 29**
+>
+> **Missão:** ordenar sem comparar: counting, radix e bucket sort.
+>
+> **Vem de:** [Módulo 13 · Busca e ordenação](13-busca-e-ordenacao.md). **Segue para:** [Módulo 14 · Árvores](14-arvores.md).
+>
+> **Checkpoints desta fase:**
+> - [ ] Ler os assuntos 0119 a 0124 e refazer os exemplos
+> - [ ] Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho
+> - [ ] Fechar a lista prática (P1801 a P1830)
+> - [ ] Enfrentar os desafios do módulo
+> - [ ] Chefão: resolver as questões de prova do módulo sem consultar
+
 No módulo 13 você ordenou comparando, e o módulo 17 mostrou o piso: quem só
 compara faz uns n log₂ n comparações no pior caso. Este módulo sai desse piso
 olhando para os **dados**.

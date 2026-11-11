@@ -2,6 +2,20 @@
 
 # Módulo 05 · Vetores, matrizes e strings
 
+> [!IMPORTANT]
+> **Mundo 2 · Memória e dados · Rota do jogo: etapa 5 de 29**
+>
+> **Missão:** guardar vários valores juntos e trabalhar com texto.
+>
+> **Vem de:** [Módulo 04 · Funções e modularização](04-funcoes.md). **Segue para:** [Módulo 06 · Ponteiros](06-ponteiros.md).
+>
+> **Checkpoints desta fase:**
+> - [ ] Ler os assuntos 0037 a 0043 e refazer os exemplos
+> - [ ] Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho
+> - [ ] Fechar a lista prática (P0501 a P0530)
+> - [ ] Enfrentar os desafios do módulo
+> - [ ] Chefão: resolver as questões de prova do módulo sem consultar
+
 Até aqui, cada variável guardava um valor. Para as notas de uma turma ou os
 passos de um mês, seriam dezenas de variáveis. Este módulo traz a primeira
 **estrutura de dados** do curso: o **vetor**, várias variáveis do mesmo tipo

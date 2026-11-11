@@ -107,39 +107,43 @@ começar", o que elas têm de próprio nos desenhos dele.
 <p align="center"><img src="material/legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
 
 
-## Os módulos
+## Mapa do jogo
 
-| Módulo | Assuntos | O que você sai sabendo |
-| --- | --- | --- |
-| [01 · Fundamentos de C](01-fundamentos.md) | 0001–0011 | algoritmo, compilação, variáveis, tipos, limites, `printf`, `scanf`, operadores, conversão |
-| [02 · Decisões](02-condicionais.md) | 0012–0019 | relacionais, lógicos, `if`, `else if`, ternário, `switch` |
-| [03 · Laços](03-repeticoes.md) | 0020–0027 | `while`, `do...while`, `for`, `break`, padrões de laço, aleatórios |
-| [04 · Funções](04-funcoes.md) | 0028–0036 | funções, escopo, pilha de chamadas, recursão, módulos `.h`/`.c`, macros |
-| [05 · Vetores e strings](05-vetores-e-strings.md) | 0037–0043 | vetores, matrizes, caracteres, strings, leitura segura |
-| [06 · Ponteiros](06-ponteiros.md) | 0044–0052 | endereços, `*` e `&`, aritmética, ponteiro para ponteiro e para função |
-| [07 · Memória dinâmica](07-memoria-dinamica.md) | 0053–0058 | stack e heap, `malloc`, `realloc`, `free`, valgrind e ASan |
-| [08 · Tipos compostos](08-structs.md) | 0059–0066 | `struct`, `typedef`, `enum`, `union`, operações com bits |
-| [09 · Arquivos](09-arquivos.md) | 0067–0070 | arquivos texto e binários, `argc` e `argv` |
-| [10 · Análise de algoritmos](10-analise.md) | 0071–0074 | contar passos, Big-O, invariantes, tipo abstrato de dado |
-| [11 · Listas](11-listas.md) | 0075–0081 | vetor dinâmico, listas encadeadas simples, dupla e circular |
-| [12 · Pilhas e filas](12-pilhas-e-filas.md) | 0082–0088 | pilha, fila circular, deque e suas aplicações |
-| [13 · Busca e ordenação](13-busca-e-ordenacao.md) | 0089–0096 | busca binária, bubble, selection, insertion, merge, quick |
-| [14 · Árvores](14-arvores.md) | 0097–0104 | árvore binária, BST, AVL, heap, heapsort |
-| [15 · Tabelas hash](15-hash.md) | 0105–0108 | função hash, encadeamento, endereçamento aberto |
-| [16 · Grafos](16-grafos.md) | 0109–0113 | representação, BFS, DFS, Dijkstra |
-| [17 · Análise avançada](17-analise-avancada.md) | 0114–0118 | recorrências, teorema mestre, análise amortizada, limite inferior |
-| [18 · Ordenação linear](18-ordenacao-linear.md) | 0119–0124 | shell, counting, radix e bucket sort, quickselect |
-| [19 · Backtracking](19-backtracking.md) | 0125–0130 | subconjuntos, permutações, poda, N-rainhas, labirinto, sudoku |
-| [20 · Divisão e conquista e gulosos](20-dc-e-gulosos.md) | 0131–0137 | potência rápida, inversões, troco, intervalos, mochila fracionária, Huffman |
-| [21 · Programação dinâmica](21-programacao-dinamica.md) | 0138–0143 | memoização, troco, mochila 0/1, LCS, distância de edição |
-| [22 · Árvores avançadas](22-arvores-avancadas.md) | 0144–0149 | árvores gerais, rubro-negra, árvore B, trie, union-find |
-| [23 · Grafos avançados](23-grafos-avancados.md) | 0150–0156 | componentes, ordenação topológica, Kruskal, Prim, Bellman-Ford, Floyd-Warshall |
-| [24 · Busca de padrões](24-busca-de-padroes.md) | 0157–0161 | força bruta, KMP, Horspool, Rabin-Karp |
-| [25 · Estruturas extras](25-estruturas-extras.md) | 0162–0165 | matriz esparsa, skip list, listas autoajustáveis |
-| [26 · Análise formal](26-analise-formal.md) | 0166–0169 | O, Ω e Θ com c e n₀, somatórios, complexidade espacial |
-| [27 · Detalhes de C](27-c-detalhes.md) | 0170–0173 | precedência e avaliação, com e sem sinal, VLA |
-| [28 · Estruturas: o que faltava](28-estruturas-complementos.md) | 0174–0181 | sentinela, sucessor, remoção AVL, rubro-negra clássica, hash por multiplicação, sondagem quadrática e dupla, pigeonhole |
-| [29 · Grafos e NP](29-grafos-e-np.md) | 0182–0189 | euleriano, hamiltoniano, pontes e articulações, cadeia de matrizes, P e NP, reduções, aproximação |
+O curso é uma rota de **29 etapas**, agrupadas em **8 mundos**. Cada etapa é um módulo: você só avança quando fecha os checkpoints dela, e cada uma usa o que a anterior ensinou. Os módulos com ★ são **bônus**: o número do arquivo vem depois, mas a etapa destrava antes, no ponto da rota em que ela ajuda. Cada módulo abre com o mapa da fase (missão, de onde você vem, para onde vai e checkpoints) e fecha com o **chefão**: as questões reais de prova.
+
+| Etapa | Mundo | Módulo | Assuntos | Missão |
+| --- | --- | --- | --- | --- |
+| 1 | Mundo 1 · Primeiros passos | [01 · Fundamentos de C](01-fundamentos.md) | 0001–0011 | Compilar o primeiro programa, guardar valores em variáveis e mostrar resultados |
+| 2 | Mundo 1 · Primeiros passos | [02 · Decisões](02-condicionais.md) | 0012–0019 | Fazer o programa escolher caminhos com `if`, `else` e `switch` |
+| 3 | Mundo 1 · Primeiros passos | [03 · Laços](03-repeticoes.md) | 0020–0027 | Repetir tarefas com `while`, `do...while` e `for` |
+| 4 | Mundo 1 · Primeiros passos | [04 · Funções e modularização](04-funcoes.md) | 0028–0036 | Dividir o programa em funções, entender escopo e pilha de chamadas e usar recursão |
+| 5 | Mundo 2 · Memória e dados | [05 · Vetores, matrizes e strings](05-vetores-e-strings.md) | 0037–0043 | Guardar vários valores juntos e trabalhar com texto |
+| 6 | Mundo 2 · Memória e dados | [06 · Ponteiros](06-ponteiros.md) | 0044–0052 | Enxergar endereços de memória e usá-los |
+| 7 | Mundo 2 · Memória e dados | [07 · Memória dinâmica](07-memoria-dinamica.md) | 0053–0058 | Pedir e devolver memória durante a execução, sem vazar |
+| 8 | Mundo 2 · Memória e dados | [08 · Tipos compostos](08-structs.md) | 0059–0066 | Agrupar dados com `struct`, `union`, `enum` e operações com bits |
+| 9 | Mundo 2 · Memória e dados | [27 · Detalhes de C que caem em prova](27-c-detalhes.md) ★ | 0170–0173 | Dominar as pegadinhas de precedência, sinal e VLA que a prova cobra |
+| 10 | Mundo 2 · Memória e dados | [09 · Arquivos e linha de comando](09-arquivos.md) | 0067–0070 | Ler e gravar arquivos e receber argumentos na linha de comando |
+| 11 | Mundo 3 · Custo e estruturas lineares | [10 · Pensar como cientista da computação](10-analise.md) | 0071–0074 | Medir o custo de um algoritmo e escrever tipos abstratos de dado |
+| 12 | Mundo 3 · Custo e estruturas lineares | [26 · Notação assintótica, somatórios e espaço](26-analise-formal.md) ★ | 0166–0169 | Provar custos com O, Ω, Θ e somatórios |
+| 13 | Mundo 3 · Custo e estruturas lineares | [11 · Listas](11-listas.md) | 0075–0081 | Montar listas encadeadas simples, duplas e circulares |
+| 14 | Mundo 3 · Custo e estruturas lineares | [12 · Pilhas e filas](12-pilhas-e-filas.md) | 0082–0088 | Usar pilhas, filas e deques |
+| 15 | Mundo 4 · Buscar e ordenar | [13 · Busca e ordenação](13-busca-e-ordenacao.md) | 0089–0096 | Buscar e ordenar com os algoritmos clássicos e comparar seus custos |
+| 16 | Mundo 4 · Buscar e ordenar | [18 · Ordenação além da comparação e seleção](18-ordenacao-linear.md) | 0119–0124 | Ordenar sem comparar: counting, radix e bucket sort |
+| 17 | Mundo 5 · Árvores | [14 · Árvores](14-arvores.md) | 0097–0104 | Montar árvore binária, ABB, AVL e heap |
+| 18 | Mundo 5 · Árvores | [22 · Árvores e conjuntos avançados](22-arvores-avancadas.md) | 0144–0149 | Conhecer rubro-negra, árvore B, trie e union-find |
+| 19 | Mundo 6 · Tabelas hash | [15 · Tabelas hash](15-hash.md) | 0105–0108 | Montar tabelas hash com encadeamento e endereçamento aberto |
+| 20 | Mundo 6 · Tabelas hash | [28 · Estruturas: o que faltava](28-estruturas-complementos.md) ★ | 0174–0181 | Fechar as lacunas de listas, árvores e hash que a prova cobra |
+| 21 | Mundo 7 · Grafos | [16 · Grafos](16-grafos.md) | 0109–0113 | Representar grafos e percorrer com BFS, DFS e Dijkstra |
+| 22 | Mundo 7 · Grafos | [23 · Grafos: estrutura e caminhos](23-grafos-avancados.md) | 0150–0156 | Ordenar topologicamente, achar árvore geradora mínima e caminhos mínimos |
+| 23 | Mundo 7 · Grafos | [29 · Grafos: ciclos e cortes; problemas difíceis](29-grafos-e-np.md) | 0182–0189 | Separar problemas fáceis dos NP-completos e entender aproximação |
+| 24 | Mundo 8 · Técnicas de projeto | [17 · Medindo algoritmos recursivos](17-analise-avancada.md) | 0114–0118 | Resolver recorrências e aplicar o teorema mestre |
+| 25 | Mundo 8 · Técnicas de projeto | [19 · Enumeração e backtracking](19-backtracking.md) | 0125–0130 | Explorar todas as soluções com poda |
+| 26 | Mundo 8 · Técnicas de projeto | [20 · Divisão e conquista e algoritmos gulosos](20-dc-e-gulosos.md) | 0131–0137 | Dividir para conquistar e escolher o melhor local |
+| 27 | Mundo 8 · Técnicas de projeto | [21 · Programação dinâmica](21-programacao-dinamica.md) | 0138–0143 | Guardar subproblemas repetidos para ganhar velocidade |
+| 28 | Mundo 8 · Técnicas de projeto | [24 · Busca de padrões em texto](24-busca-de-padroes.md) | 0157–0161 | Achar padrões em texto com KMP, Horspool e Rabin-Karp |
+| 29 | Mundo 8 · Técnicas de projeto | [25 · Estruturas especiais](25-estruturas-extras.md) | 0162–0165 | Conhecer matriz esparsa, skip list e listas autoajustáveis |
+
+Depois da etapa 29 vêm os [simulados](SIMULADOS.md) e as [provas antigas](PROVAS.md). A rota por peso na prova está em [`TRILHA.md`](TRILHA.md) e o plano dia a dia em [`PPGI.md`](PPGI.md#comece-aqui).
 
 O sumário detalhado, assunto por assunto, está em
 [`_fontes/sumario.md`](_fontes/sumario.md).

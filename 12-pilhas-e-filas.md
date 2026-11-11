@@ -2,6 +2,20 @@
 
 # Módulo 12 · Pilhas e filas
 
+> [!IMPORTANT]
+> **Mundo 3 · Custo e estruturas lineares · Rota do jogo: etapa 14 de 29**
+>
+> **Missão:** usar pilhas, filas e deques.
+>
+> **Vem de:** [Módulo 11 · Listas](11-listas.md). **Segue para:** [Módulo 13 · Busca e ordenação](13-busca-e-ordenacao.md).
+>
+> **Checkpoints desta fase:**
+> - [ ] Ler os assuntos 0082 a 0088 e refazer os exemplos
+> - [ ] Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho
+> - [ ] Fechar a lista prática (P1201 a P1230)
+> - [ ] Enfrentar os desafios do módulo
+> - [ ] Chefão: resolver as questões de prova do módulo sem consultar
+
 A lista encadeada do módulo 11 deixa inserir e remover em qualquer lugar.
 Este módulo **proíbe**: a pilha só mexe no topo, e a fila entra por um lado e
 sai pelo outro. A restrição dá uma garantia: o desfazer desfaz o último

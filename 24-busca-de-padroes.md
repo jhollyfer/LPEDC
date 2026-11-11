@@ -2,6 +2,20 @@
 
 # Módulo 24 · Busca de padrões em texto
 
+> [!IMPORTANT]
+> **Mundo 8 · Técnicas de projeto · Rota do jogo: etapa 28 de 29**
+>
+> **Missão:** achar padrões em texto com KMP, Horspool e Rabin-Karp.
+>
+> **Vem de:** [Módulo 21 · Programação dinâmica](21-programacao-dinamica.md). **Segue para:** [Módulo 25 · Estruturas especiais](25-estruturas-extras.md).
+>
+> **Checkpoints desta fase:**
+> - [ ] Ler os assuntos 0157 a 0161 e refazer os exemplos
+> - [ ] Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho
+> - [ ] Fechar a lista prática (P2401 a P2430)
+> - [ ] Enfrentar os desafios do módulo
+> - [ ] Chefão: resolver as questões de prova do módulo sem consultar
+
 Ctrl+F, `grep`, o antivírus, o filtro de palavrões do chat, o trecho de DNA
 num genoma de 3 bilhões de letras: tudo é achar um **padrão** de `m` letras
 num **texto** de `n` letras.

@@ -2,6 +2,20 @@
 
 # Módulo 22 · Árvores e conjuntos avançados
 
+> [!IMPORTANT]
+> **Mundo 5 · Árvores · Rota do jogo: etapa 18 de 29**
+>
+> **Missão:** conhecer rubro-negra, árvore B, trie e union-find.
+>
+> **Vem de:** [Módulo 14 · Árvores](14-arvores.md). **Segue para:** [Módulo 15 · Tabelas hash](15-hash.md).
+>
+> **Checkpoints desta fase:**
+> - [ ] Ler os assuntos 0144 a 0149 e refazer os exemplos
+> - [ ] Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho
+> - [ ] Fechar a lista prática (P2201 a P2230)
+> - [ ] Enfrentar os desafios do módulo
+> - [ ] Chefão: resolver as questões de prova do módulo sem consultar
+
 No módulo 14, a árvore era binária e guardava números. Aqui o formato do nó
 muda conforme a operação que vai rodar milhões de vezes: **qualquer número de
 filhos** (orçamento de obra), **um bit por nó** (rubro-negra), **nós gordos**

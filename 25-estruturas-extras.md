@@ -2,6 +2,20 @@
 
 # Módulo 25 · Estruturas especiais
 
+> [!IMPORTANT]
+> **Mundo 8 · Técnicas de projeto · Rota do jogo: etapa 29 de 29**
+>
+> **Missão:** conhecer matriz esparsa, skip list e listas autoajustáveis.
+>
+> **Vem de:** [Módulo 24 · Busca de padrões em texto](24-busca-de-padroes.md). **Segue para:** a prova: simulados e provas antigas.
+>
+> **Checkpoints desta fase:**
+> - [ ] Ler os assuntos 0162 a 0165 e refazer os exemplos
+> - [ ] Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho
+> - [ ] Fechar a lista prática (P2501 a P2530)
+> - [ ] Enfrentar os desafios do módulo
+> - [ ] Chefão: resolver as questões de prova do módulo sem consultar
+
 Os módulos anteriores montaram a caixa de ferramentas clássica: listas,
 pilhas, filas, árvores, tabelas hash e grafos. Este traz três estruturas que
 nascem de um problema específico, quase sempre uma lista encadeada com um

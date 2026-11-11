@@ -2,6 +2,20 @@
 
 # Módulo 27 · Detalhes de C que caem em prova
 
+> [!IMPORTANT]
+> **Mundo 2 · Memória e dados · Rota do jogo: etapa 9 de 29 · módulo bônus ★**
+>
+> **Missão:** dominar as pegadinhas de precedência, sinal e VLA que a prova cobra.
+>
+> **Vem de:** [Módulo 08 · Tipos compostos](08-structs.md). **Segue para:** [Módulo 09 · Arquivos e linha de comando](09-arquivos.md).
+>
+> **Checkpoints desta fase:**
+> - [ ] Ler os assuntos 0170 a 0173 e refazer os exemplos
+> - [ ] Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho
+> - [ ] Fechar a lista prática (P2701 a P2730)
+> - [ ] Enfrentar os desafios do módulo
+> - [ ] Chefão: resolver as questões de prova do módulo sem consultar
+
 Linhas como `x & 1 == 0`, `i < u` ou `n - 1` com `size_t` compilam e enganam:
 o compilador as lê por regras que o olho não aplica sozinho. A prova de
 múltipla escolha explora isso com código curto e uma alternativa que traz o

@@ -2,6 +2,20 @@
 
 # Módulo 15 · Tabelas hash
 
+> [!IMPORTANT]
+> **Mundo 6 · Tabelas hash · Rota do jogo: etapa 19 de 29**
+>
+> **Missão:** montar tabelas hash com encadeamento e endereçamento aberto.
+>
+> **Vem de:** [Módulo 22 · Árvores e conjuntos avançados](22-arvores-avancadas.md). **Segue para:** [Módulo 28 · Estruturas: o que faltava](28-estruturas-complementos.md).
+>
+> **Checkpoints desta fase:**
+> - [ ] Ler os assuntos 0105 a 0108 e refazer os exemplos
+> - [ ] Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho
+> - [ ] Fechar a lista prática (P1501 a P1530)
+> - [ ] Enfrentar os desafios do módulo
+> - [ ] Chefão: resolver as questões de prova do módulo sem consultar
+
 Achar um item custou até aqui O(n) na lista e O(log n) na busca binária e na
 árvore equilibrada. A tabela hash troca a procura por uma **conta**: uma
 função transforma a chave num índice de vetor, e o acesso custa O(1).

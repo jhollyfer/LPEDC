@@ -2,6 +2,20 @@
 
 # Módulo 10 · Pensar como cientista da computação
 
+> [!IMPORTANT]
+> **Mundo 3 · Custo e estruturas lineares · Rota do jogo: etapa 11 de 29**
+>
+> **Missão:** medir o custo de um algoritmo e escrever tipos abstratos de dado.
+>
+> **Vem de:** [Módulo 09 · Arquivos e linha de comando](09-arquivos.md). **Segue para:** [Módulo 26 · Notação assintótica, somatórios e espaço](26-analise-formal.md).
+>
+> **Checkpoints desta fase:**
+> - [ ] Ler os assuntos 0071 a 0074 e refazer os exemplos
+> - [ ] Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho
+> - [ ] Fechar a lista prática (P1001 a P1030)
+> - [ ] Enfrentar os desafios do módulo
+> - [ ] Chefão: resolver as questões de prova do módulo sem consultar
+
 Até aqui a pergunta foi "como escrevo isso em C?". Daqui em diante, com
 listas, pilhas, árvores e grafos, passa a ser "**qual** jeito de escrever é o
 certo?". Vetor ou lista encadeada, busca sequencial, binária ou hash: todos

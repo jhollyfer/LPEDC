@@ -2,6 +2,20 @@
 
 # Módulo 02 · Decisões
 
+> [!IMPORTANT]
+> **Mundo 1 · Primeiros passos · Rota do jogo: etapa 2 de 29**
+>
+> **Missão:** fazer o programa escolher caminhos com `if`, `else` e `switch`.
+>
+> **Vem de:** [Módulo 01 · Fundamentos de C](01-fundamentos.md). **Segue para:** [Módulo 03 · Laços](03-repeticoes.md).
+>
+> **Checkpoints desta fase:**
+> - [ ] Ler os assuntos 0012 a 0019 e refazer os exemplos
+> - [ ] Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho
+> - [ ] Fechar a lista prática (P0201 a P0230)
+> - [ ] Enfrentar os desafios do módulo
+> - [ ] Chefão: resolver as questões de prova do módulo sem consultar
+
 Até aqui, todo programa descia de cima para baixo, sempre pelo mesmo caminho.
 Agora ele **escolhe**: cobrar ou não o frete, liberar ou barrar a catraca,
 achar a faixa da multa. É a segunda das três peças de qualquer algoritmo.

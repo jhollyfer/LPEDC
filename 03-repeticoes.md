@@ -2,6 +2,20 @@
 
 # Módulo 03 · Laços
 
+> [!IMPORTANT]
+> **Mundo 1 · Primeiros passos · Rota do jogo: etapa 3 de 29**
+>
+> **Missão:** repetir tarefas com `while`, `do...while` e `for`.
+>
+> **Vem de:** [Módulo 02 · Decisões](02-condicionais.md). **Segue para:** [Módulo 04 · Funções e modularização](04-funcoes.md).
+>
+> **Checkpoints desta fase:**
+> - [ ] Ler os assuntos 0020 a 0027 e refazer os exemplos
+> - [ ] Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho
+> - [ ] Fechar a lista prática (P0301 a P0330)
+> - [ ] Enfrentar os desafios do módulo
+> - [ ] Chefão: resolver as questões de prova do módulo sem consultar
+
 Sequência e decisão você já tem. Falta a **repetição**: somar 10 preços,
 validar uma senha até acertar, desenhar uma tabela, sortear dados até sair
 dupla. Sem laço, você copiaria o mesmo código cem vezes. Com laço, escreve uma

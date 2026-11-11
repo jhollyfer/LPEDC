@@ -2,6 +2,20 @@
 
 # Módulo 28 · Estruturas: o que faltava
 
+> [!IMPORTANT]
+> **Mundo 6 · Tabelas hash · Rota do jogo: etapa 20 de 29 · módulo bônus ★**
+>
+> **Missão:** fechar as lacunas de listas, árvores e hash que a prova cobra.
+>
+> **Vem de:** [Módulo 15 · Tabelas hash](15-hash.md). **Segue para:** [Módulo 16 · Grafos](16-grafos.md).
+>
+> **Checkpoints desta fase:**
+> - [ ] Ler os assuntos 0174 a 0181 e refazer os exemplos
+> - [ ] Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho
+> - [ ] Fechar a lista prática (P2801 a P2830)
+> - [ ] Enfrentar os desafios do módulo
+> - [ ] Chefão: resolver as questões de prova do módulo sem consultar
+
 Os módulos 11, 14 e 15 construíram listas, árvores e tabelas hash do jeito
 mais direto. Este módulo volta a elas e preenche o que ficou de fora, com o
 olhar do Cormen, o livro da prova do PPGI: as versões dos livros, das

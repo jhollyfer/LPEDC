@@ -2,6 +2,20 @@
 
 # Módulo 07 · Memória dinâmica
 
+> [!IMPORTANT]
+> **Mundo 2 · Memória e dados · Rota do jogo: etapa 7 de 29**
+>
+> **Missão:** pedir e devolver memória durante a execução, sem vazar.
+>
+> **Vem de:** [Módulo 06 · Ponteiros](06-ponteiros.md). **Segue para:** [Módulo 08 · Tipos compostos](08-structs.md).
+>
+> **Checkpoints desta fase:**
+> - [ ] Ler os assuntos 0053 a 0058 e refazer os exemplos
+> - [ ] Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho
+> - [ ] Fechar a lista prática (P0701 a P0730)
+> - [ ] Enfrentar os desafios do módulo
+> - [ ] Chefão: resolver as questões de prova do módulo sem consultar
+
 Até aqui, todo vetor tinha tamanho fixo no código. `int notas[50]` é uma
 aposta: com 12 alunos desperdiça, com 51 estoura. Este módulo ensina a pedir
 memória **enquanto o programa roda**, do tamanho exato, e a devolvê-la ao

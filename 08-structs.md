@@ -2,6 +2,20 @@
 
 # Módulo 08 · Tipos compostos
 
+> [!IMPORTANT]
+> **Mundo 2 · Memória e dados · Rota do jogo: etapa 8 de 29**
+>
+> **Missão:** agrupar dados com `struct`, `union`, `enum` e operações com bits.
+>
+> **Vem de:** [Módulo 07 · Memória dinâmica](07-memoria-dinamica.md). **Segue para:** [Módulo 27 · Detalhes de C que caem em prova](27-c-detalhes.md).
+>
+> **Checkpoints desta fase:**
+> - [ ] Ler os assuntos 0059 a 0066 e refazer os exemplos
+> - [ ] Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho
+> - [ ] Fechar a lista prática (P0801 a P0830)
+> - [ ] Enfrentar os desafios do módulo
+> - [ ] Chefão: resolver as questões de prova do módulo sem consultar
+
 Até aqui, cada variável guardava uma coisa só: um número, um caractere, um
 vetor de itens iguais. Os dados reais vêm em pacotes: um pedido tem tamanho,
 quantidade e preço; um time tem nome, vitórias e empates. Este módulo ensina o
