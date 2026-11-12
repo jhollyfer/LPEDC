@@ -36,6 +36,7 @@ o `PROVAS.md` à mão. As 11 provas foram conferidas com os PDFs da banca e toda
 | 2026-11-09 | Conteúdo em `README.md` dentro de cada pasta de módulo | Todo markdown de conteúdo fica na raiz, um `.md` por módulo | gerador e qualquer `.md` novo |
 | 2026-11-09 | Trabalho deixado em outra branch | Só existe a `main`; commit e push direto nela | todo commit |
 | 2026-11-10 | Revisão por busca de padrão (sed/grep) apresentada como leitura | Cada arquivo é lido inteiro; o agente entrega um registro por arquivo e a cobertura é conferida | revisão de texto em lote |
+| 2026-11-12 | Dica do quiz encurtada até virar tautologia, e bloco de código colado no texto quebrou o exemplo no celular; testei uma questão só | Cada conceito tem definição de 10+ palavras e `Ex.:`, conferido pelo `quiz.mjs --check`; toda mudança no quiz roda `quiz-navegador.mjs` nas 210 questões | quiz das provas |
 | 2026-11-09 | Commits com agente como autor e coautor | Autor único Jhollyfer, sem linha de coautoria | todo commit |
 
 ## Problemas conhecidos

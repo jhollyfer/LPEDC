@@ -26,6 +26,13 @@ resposta é conferida). Passa com `<modulo>: 0 com problema`.
 | links | links e imagens relativos dos `.md` da raiz apontam para arquivo que existe | nenhum quebrado |
 | desenho | `ver.mjs` e abrir o PNG (`DESIGN.md`) | sem sobreposição, texto cortado ou seta solta (`DESIGN.md`) |
 
+## 3.1 Quiz das provas
+
+| O quê | Como | Passa quando |
+|---|---|---|
+| dados do quiz | `cd _gerador && node quiz.mjs --check` (letra igual ao `PROVAS.md`, porquê de toda alternativa, dica no formato com 2 a 4 conceitos, cada um com definição e `Ex.:`, assunto `[NNNN]` que existe, cerca de código na própria linha) | `0 erros` |
+| quiz no navegador | `cd _gerador && node quiz-navegador.mjs` (as 210 questões a 390px e a 1440px) | `0 com problema, 0 erros de script` nas duas larguras |
+
 ## 4. Definição de pronto
 
 - [ ] `conferir.sh` do módulo tocado com 0 problema, rodado no `HEAD` atual.
