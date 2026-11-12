@@ -1,0 +1,788 @@
+{
+  "edital": "057/2022",
+  "slug": "2022-057",
+  "ano": 2022,
+  "oficial": false,
+  "questoes": [
+    {
+      "numero": 1,
+      "topico": 3,
+      "formato": "código",
+      "enunciado": "(Python) Qual a saída do código abaixo?\n\n```python\nclass Vector():\n    def __init__(self, row: list()):\n        self.row = row\n    def dot_product(self, column):\n        return sum(self.row[i] * column.row[i] for i in range(len(self.row)))\n```\n```python\nvec_1 = Vector([0,2,0,0,5])\nvec_2 = Vector([1,0,3,4,0])\nprint(vec_1.dot_product(vec_2))\n```",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "15",
+          "porque": "Seria o resultado se alguém somasse os elementos de um só vetor (0+2+0+0+5 = 7) ou trocasse o produto por soma. O método multiplica posição a posição e depois soma, e nenhum par dá 15."
+        },
+        {
+          "letra": "B",
+          "texto": "[0, 0, 0, 0, 0]",
+          "porque": "`sum` devolve um número, não uma lista. O método nunca monta um vetor de produtos para imprimir; ele já soma tudo dentro do `sum`."
+        },
+        {
+          "letra": "C",
+          "texto": "[1, 2, 3, 4, 5]",
+          "porque": "Isso seria imprimir `range(1, 6)` ou um vetor qualquer. O código só imprime o valor devolvido por `dot_product`, que é um inteiro."
+        },
+        {
+          "letra": "D",
+          "texto": "0",
+          "porque": "O produto escalar é 0·1 + 2·0 + 0·3 + 0·4 + 5·0 = 0. Em cada posição um dos dois fatores é zero, então toda parcela é zero. Rodado em Python: imprime 0."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "Produto escalar é a soma dos produtos posição a posição. Quando os zeros de um vetor caem onde o outro tem valor, tudo se anula. Na prova, monte a tabela de parcelas antes de somar, em vez de adivinhar pelo formato.",
+      "assuntos": [
+        {
+          "num": "0039",
+          "modulo": "05-vetores-e-strings.md"
+        }
+      ]
+    },
+    {
+      "numero": 2,
+      "topico": 4,
+      "formato": "afirmações",
+      "enunciado": "Sobre árvores de pesquisa binária, considere:\n\n1. TODOS os nós da subárvore à esquerda são menores que o pai.\n2. O nó mais à esquerda é o menor de TODOS os nós, e o mais à direita é o maior.\n3. O sucessor de x (menor chave maior que a de x) está SEMPRE em um nível acima de x, mais próximo da raiz.\n\nQuais são verdadeiras?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas 2 e 3",
+          "porque": "Propõe 2 e 3 como verdadeiras e deixa a 1 de fora. A 1 é verdadeira, e a 3 é falsa, então essa combinação falha nos dois pontos."
+        },
+        {
+          "letra": "B",
+          "texto": "Todas",
+          "porque": "Inclui a 3, que é falsa. Se x tem subárvore direita, o sucessor é o nó mais à esquerda dessa subárvore, que fica abaixo de x."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas 1 e 2",
+          "porque": "A 1 é a propriedade que define a ABB. A 2 decorre dela: descendo sempre à esquerda você chega ao mínimo, e sempre à direita ao máximo. A 3 é falsa, então só 1 e 2 valem."
+        },
+        {
+          "letra": "D",
+          "texto": "Apenas 1",
+          "porque": "Deixa a 2 de fora, mas ela é verdadeira: o mínimo está no fim do caminho pela esquerda e o máximo no fim do caminho pela direita."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "1 verdadeira (definição da ABB). 2 verdadeira (mínimo e máximo ficam nas pontas). 3 falsa: o sucessor só sobe até um ancestral quando x não tem filho direito; com filho direito, ele desce. Dica: palavras como SEMPRE e TODOS pedem que você procure um contraexemplo.",
+      "assuntos": [
+        {
+          "num": "0099",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0175",
+          "modulo": "28-estruturas-complementos.md"
+        }
+      ]
+    },
+    {
+      "numero": 3,
+      "topico": 7,
+      "formato": "afirmações",
+      "enunciado": "Sobre algoritmos de ordenação, considere:\n\n1. O Quicksort tem complexidade de pior caso O(n log n).\n2. Quicksort e Mergesort usam divisão e conquista.\n3. O Mergesort é Θ(n log n) no caso médio.\n4. Com a lista já ordenada, o Selectionsort é O(n).\n\nAs afirmações são, respectivamente:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "V, V, V, V",
+          "porque": "Marca a 1 e a 4 como verdadeiras, e as duas são falsas. O pior caso do Quicksort é O(n²), e a seleção sempre faz Θ(n²) comparações."
+        },
+        {
+          "letra": "B",
+          "texto": "F, V, V, F",
+          "porque": "1 falsa: com pivô ruim (lista já ordenada e pivô no extremo) o Quicksort chega a O(n²). 2 verdadeira: os dois dividem o problema e resolvem as partes. 3 verdadeira: o Mergesort é Θ(n log n) em qualquer caso. 4 falsa: a seleção varre o resto do vetor a cada passo, mesmo ordenado, e fica em Θ(n²)."
+        },
+        {
+          "letra": "C",
+          "texto": "V, F, F, V",
+          "porque": "É o oposto do certo nas quatro. O Quicksort é O(n²) no pior caso, os dois usam divisão e conquista, o Mergesort é Θ(n log n) e a seleção não melhora com a entrada ordenada."
+        },
+        {
+          "letra": "D",
+          "texto": "F, F, F, F",
+          "porque": "Acerta a 1 e a 4, mas erra a 2 e a 3: Quicksort e Mergesort são de divisão e conquista, e o Mergesort é Θ(n log n)."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Decore a tabela: Quicksort O(n log n) médio e O(n²) pior; Mergesort Θ(n log n) sempre; seleção Θ(n²) sempre; inserção O(n) no melhor caso (quase ordenada). A seleção é o algoritmo que não ganha nada com entrada ordenada, e a pegadinha da 4 é confundi-la com a inserção.",
+      "assuntos": [
+        {
+          "num": "0094",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0095",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0092",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0096",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 4,
+      "topico": 4,
+      "formato": "simulação",
+      "enunciado": "Os itens 8, 3, 4, 9, 5, 6, 2, 1, 7 são inseridos, nessa ordem, numa árvore binária de busca. Qual item fica na raiz?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "1",
+          "porque": "O 1 é o penúltimo a entrar e vira folha (filho esquerdo do 2). Numa ABB sem balanceamento, ninguém sobe para a raiz depois."
+        },
+        {
+          "letra": "B",
+          "texto": "4",
+          "porque": "O 4 entra como filho direito do 3 e fica abaixo da raiz. Seria raiz se a árvore fosse reorganizada pela mediana, o que não acontece aqui."
+        },
+        {
+          "letra": "C",
+          "texto": "8",
+          "porque": "O primeiro inserido é a raiz, e a ABB comum não faz rotações. Todo o resto desce: 3 e 4 à esquerda, 9 à direita, e assim por diante."
+        },
+        {
+          "letra": "D",
+          "texto": "9",
+          "porque": "O 9 é filho direito do 8. Ele só seria raiz numa árvore em que fosse o primeiro a entrar."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Em ABB sem balanceamento, a raiz é sempre o primeiro valor inserido. Não precisa desenhar a árvore inteira. Isso muda em AVL ou rubro-negra, onde rotações podem trocar a raiz.",
+      "assuntos": [
+        {
+          "num": "0099",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 5,
+      "topico": 3,
+      "formato": "conceito",
+      "enunciado": "Para implementar uma pilha com operações de custo O(1) usando uma lista simplesmente encadeada, onde devem ficar as operações push e pop?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "push depois do último, pop no último",
+          "porque": "Remover o último exige achar o penúltimo, e numa lista simples isso é percorrer tudo: O(n). Só o push seria constante, e ainda assim com ponteiro para o fim."
+        },
+        {
+          "letra": "B",
+          "texto": "push antes do primeiro, pop no primeiro",
+          "porque": "Inserir e remover na cabeça só mexe no ponteiro inicial, sem percorrer nada: O(1) nas duas. Além disso, quem entra por último sai primeiro, que é o LIFO da pilha."
+        },
+        {
+          "letra": "C",
+          "texto": "push antes do primeiro, pop no último",
+          "porque": "O pop no último é O(n) numa lista simples, pelo motivo da primeira alternativa. Além disso, entrar na cabeça e sair pela cauda é comportamento de fila, não de pilha."
+        },
+        {
+          "letra": "D",
+          "texto": "push depois do último, pop no primeiro",
+          "porque": "Inserir no fim exige ponteiro para a cauda ou percurso, e retirar do começo é o contrário do LIFO. Isso é uma fila (FIFO), não uma pilha."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Lista simples só tem acesso O(1) à cabeça. Por isso a pilha usa a cabeça para push e pop. Se a prova pedir uma fila O(1), a resposta muda: precisa de ponteiro para a cauda e se insere por ali.",
+      "assuntos": [
+        {
+          "num": "0083",
+          "modulo": "12-pilhas-e-filas.md"
+        }
+      ]
+    },
+    {
+      "numero": 6,
+      "topico": 3,
+      "formato": "código",
+      "enunciado": "(Python) Considere a classe `Vector` da questão 1. Qual a saída?\n\n```python\nvec_1 = Vector([1,2,3,4,5])\nvec_2 = vec_1\nvec_2.row[2] = 15\nprint(vec_1.row)\n```",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "[ 2 15 4 5]",
+          "porque": "Faltam o 1 e o formato de lista com vírgulas. Nada remove elementos: a atribuição só troca o valor da posição 2."
+        },
+        {
+          "letra": "B",
+          "texto": "[ 0 1 2 15 4 5]",
+          "porque": "Tem seis elementos e um 0 que nunca existiu. A lista original tem cinco posições e só a de índice 2 muda."
+        },
+        {
+          "letra": "C",
+          "texto": "[ 1 2 15 4 15]",
+          "porque": "Mudaria a última posição também, mas o código altera só `row[2]`. O outro 15 não tem de onde vir."
+        },
+        {
+          "letra": "D",
+          "texto": "[ 1 2 15 4 5]",
+          "porque": "`vec_2 = vec_1` não copia: as duas variáveis apontam para o mesmo objeto. Mudar `row[2]` por uma aparece na outra. A posição 2 (o 3) vira 15 e o resto fica igual."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "Atribuição de objeto em Python copia a referência, não o conteúdo. É o mesmo efeito de dois ponteiros para o mesmo bloco em C. Para ter cópia independente, use `list(...)` ou `copy`.",
+      "assuntos": [
+        {
+          "num": "0044",
+          "modulo": "06-ponteiros.md"
+        },
+        {
+          "num": "0062",
+          "modulo": "08-structs.md"
+        }
+      ]
+    },
+    {
+      "numero": 7,
+      "topico": 2,
+      "formato": "conceito",
+      "enunciado": "Sejam f(n) = (n+1)(n−1) e g(n) = 8·log2(n) + 1, com n > 0. Assinale a alternativa correta:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "f e g são exponenciais",
+          "porque": "Nenhuma das duas é: f(n) = n² − 1 é polinomial e g cresce com o logaritmo. Exponencial seria algo como 2ⁿ."
+        },
+        {
+          "letra": "B",
+          "texto": "f é quadrática e g é linear",
+          "porque": "Acerta f (n² − 1), mas g não é linear: 8·log2(n) + 1 é logarítmica, que cresce bem mais devagar que n."
+        },
+        {
+          "letra": "C",
+          "texto": "g(n) = Ω(f(n))",
+          "porque": "Ω é limite inferior. Dizer isso é afirmar que g cresce pelo menos como n², e o logaritmo cresce muito menos. A relação é a inversa."
+        },
+        {
+          "letra": "D",
+          "texto": "g(n) = O(f(n))",
+          "porque": "Como log n cresce mais devagar que n², existe constante c tal que 8·log2(n) + 1 ≤ c·(n² − 1) para n grande. Logo g = O(f)."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "Expanda f: (n+1)(n−1) = n² − 1, quadrática. g é logarítmica. Ordem de crescimento: log n, n, n log n, n², 2ⁿ. O de cima é limite superior; o que cresce mais devagar é O do que cresce mais rápido.",
+      "assuntos": [
+        {
+          "num": "0072",
+          "modulo": "10-analise.md"
+        },
+        {
+          "num": "0166",
+          "modulo": "26-analise-formal.md"
+        }
+      ]
+    },
+    {
+      "numero": 8,
+      "topico": 1,
+      "formato": "código",
+      "enunciado": "(Python) Considere `fibonacci(n)`: se n == 1 devolve 0; se n == 2 devolve 1; senão devolve fibonacci(n-1) + fibonacci(n-2). Qual a saída de `print(fibonacci(7))`?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "13",
+          "porque": "É o oitavo termo (0, 1, 1, 2, 3, 5, 8, 13). Aqui a sequência começa com f(1) = 0, então f(7) é o sétimo."
+        },
+        {
+          "letra": "B",
+          "texto": "5",
+          "porque": "É f(6). Quem conta a partir do 1 como primeiro termo, em vez do 0, erra por uma posição."
+        },
+        {
+          "letra": "C",
+          "texto": "0",
+          "porque": "É o caso base de n = 1. A chamada com 7 passa pela recursão e soma os dois anteriores."
+        },
+        {
+          "letra": "D",
+          "texto": "8",
+          "porque": "A sequência com f(1) = 0 e f(2) = 1 é 0, 1, 1, 2, 3, 5, 8. O sétimo termo é 8. Rodado em Python: imprime 8."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "Escreva a sequência com os casos base do enunciado e conte as posições. Atenção ao ponto de partida: aqui f(1) = 0, e não f(0) = 0, o que desloca tudo uma casa.",
+      "assuntos": [
+        {
+          "num": "0032",
+          "modulo": "04-funcoes.md"
+        },
+        {
+          "num": "0033",
+          "modulo": "04-funcoes.md"
+        }
+      ]
+    },
+    {
+      "numero": 9,
+      "topico": 8,
+      "formato": "conceito",
+      "enunciado": "Um grafo é uma árvore se e somente se:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "é planar",
+          "porque": "Planar é poder desenhar sem cruzar arestas. Toda árvore é planar, mas muito grafo planar tem ciclos e não é árvore."
+        },
+        {
+          "letra": "B",
+          "texto": "é conexo, não direcionado e não contém ciclos",
+          "porque": "Essa é a definição: conexo (um caminho entre quaisquer dois vértices), não direcionado e acíclico. Resulta em n − 1 arestas para n vértices."
+        },
+        {
+          "letra": "C",
+          "texto": "é completamente conectado",
+          "porque": "Grafo completo tem aresta entre todo par de vértices e, com três ou mais vértices, tem ciclos. É o oposto de uma árvore."
+        },
+        {
+          "letra": "D",
+          "texto": "todo grafo é uma árvore",
+          "porque": "Falso: grafos com ciclos, desconexos ou com arestas demais não são árvore. A árvore é um caso particular."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Árvore = conexo + sem ciclos (+ não direcionado). Se faltar qualquer uma das três condições, não é árvore. Grafo com ciclo ou desconexo é a pegadinha clássica.",
+      "assuntos": [
+        {
+          "num": "0109",
+          "modulo": "16-grafos.md"
+        },
+        {
+          "num": "0150",
+          "modulo": "23-grafos-avancados.md"
+        }
+      ]
+    },
+    {
+      "numero": 10,
+      "topico": 3,
+      "formato": "conceito",
+      "enunciado": "Sobre matrizes bidimensionais de inteiros, assinale a alternativa INCORRETA:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "O produto de uma matriz m×n por uma matriz x×y resulta numa matriz de n linhas e y colunas",
+          "porque": "É a incorreta. Para o produto existir, n deve ser igual a x, e o resultado tem m linhas (da primeira) e y colunas (da segunda), não n linhas."
+        },
+        {
+          "letra": "B",
+          "texto": "A soma dos elementos pode ser feita com dois laços aninhados e um acumulador",
+          "porque": "Correta. Um laço percorre as linhas, outro as colunas, e o acumulador soma cada elemento."
+        },
+        {
+          "letra": "C",
+          "texto": "Uma matriz pode ser representada com listas encadeadas",
+          "porque": "Correta. É possível usar lista de listas ou nós com ponteiros para o vizinho de baixo e da direita, útil em matrizes esparsas."
+        },
+        {
+          "letra": "D",
+          "texto": "Uma matriz m×n tem m·n espaços para inteiros",
+          "porque": "Correta. São m linhas de n colunas, ou seja, m·n posições."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Em questão de INCORRETA, ache a única afirmação falsa. Produto de matrizes: (m×n)·(n×y) = m×y. Guarde isso e a questão fecha em segundos.",
+      "assuntos": [
+        {
+          "num": "0039",
+          "modulo": "05-vetores-e-strings.md"
+        }
+      ]
+    },
+    {
+      "numero": 11,
+      "topico": 6,
+      "formato": "afirmações",
+      "enunciado": "O pseudocódigo abaixo insere `novo` num vetor ordenado `vetor[1..N]`. Primeiro uma busca binária acha a posição `i`; depois `vetor[N+1] = novo` e um laço desloca os elementos.\n\n```\ni = 1; j = N\nenquanto (i <= j):\n  meio = floor((i + j) / 2)\n  se vetor[meio] > novo: j = meio - 1\n  senão: i = meio + 1\nvetor[N+1] = novo\nfor (k = N+1; k == i; k--)\n  trocar(vetor, k, k-1);\n```\n\n(O laço está assim no original. O texto do pseudocódigo veio resumido, com a mesma estrutura.)\n\nCompare com a ordenação por inserção:\n\n1. Insere com menos comparações que a ordenação por inserção.\n2. Insere com o mesmo número de comparações.\n3. Insere com o mesmo número de movimentações.",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Somente 1",
+          "porque": "Está certa quanto às comparações, mas deixa de fora a 3: as movimentações são as mesmas nos dois."
+        },
+        {
+          "letra": "B",
+          "texto": "2 e 3",
+          "porque": "A 2 é falsa. A busca binária faz cerca de log n comparações, e a inserção sequencial pode fazer até n."
+        },
+        {
+          "letra": "C",
+          "texto": "Somente 3",
+          "porque": "A 3 é verdadeira, mas a 1 também. Faltou ela."
+        },
+        {
+          "letra": "D",
+          "texto": "1 e 3",
+          "porque": "Busca binária reduz as comparações a O(log n) contra O(n) da inserção (1 verdadeira). Os elementos maiores que `novo` precisam ser deslocados do mesmo jeito (3 verdadeira). A 2 é falsa."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "1 verdadeira: busca binária é O(log n) em comparações. 2 falsa. 3 verdadeira: o deslocamento continua O(n). O `for (...; k == i; ...)` está estranho no original (executaria no máximo uma vez), e a banca pode ter tratado como erro de digitação. Dica: busca binária corta as comparações, não as movimentações.",
+      "assuntos": [
+        {
+          "num": "0090",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0093",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 12,
+      "topico": 7,
+      "formato": "conceito",
+      "enunciado": "Qual o limite superior assintótico do Quick Sort no pior caso?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "O(n)",
+          "porque": "Seria o custo de uma passada só. O Quicksort particiona em O(n), mas faz isso em muitos níveis."
+        },
+        {
+          "letra": "B",
+          "texto": "O(n log n)",
+          "porque": "É o caso médio e o melhor caso, com partições equilibradas. No pior caso a partição é desbalanceada e a recursão tem n níveis."
+        },
+        {
+          "letra": "C",
+          "texto": "O(n!)",
+          "porque": "Cresce muito além do que o Quicksort faz. Nenhum caso dele chega perto de fatorial."
+        },
+        {
+          "letra": "D",
+          "texto": "O(n²)",
+          "porque": "Se o pivô é sempre o menor ou o maior (por exemplo, vetor já ordenado com pivô nas pontas), a recursão tem n níveis de custo até n cada: O(n²)."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "Quicksort: O(n log n) médio, O(n²) pior. A banca repete esse fato em várias provas. Mergesort e Heapsort são os que garantem O(n log n) no pior caso.",
+      "assuntos": [
+        {
+          "num": "0095",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 13,
+      "topico": 3,
+      "formato": "código",
+      "enunciado": "O que faz o código C abaixo?\n\n```c\n#include <stdio.h>\n#define MAX 50\nint main() {\n  int m, soma=0;\n  int mat[MAX][MAX];\n  scanf(\"%d\", &m);\n  for (int i=0; i<m; i++)\n    for (int j=0; j<m; j++)\n      scanf(\"%d\", &mat[i][j]);\n  for (int i=0; i<m; i++)\n    for (int j=i; j<m; j++)\n      soma += mat[i][j];\n  printf(\"%d\\n\", soma);\n}\n```",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Soma dos elementos iguais ou acima da diagonal principal",
+          "porque": "O segundo laço roda j de i até m−1, ou seja, colunas iguais ou à direita da diagonal, o que fica na diagonal e acima dela."
+        },
+        {
+          "letra": "B",
+          "texto": "Soma de todos os elementos",
+          "porque": "Somaria tudo se `j` começasse em 0. Como começa em `i`, os elementos abaixo da diagonal ficam de fora."
+        },
+        {
+          "letra": "C",
+          "texto": "Imprime só mat[m][m]",
+          "porque": "Nenhum índice é fixo em m, e `mat[m][m]` está fora da matriz (os índices vão até m−1). O código soma muitos elementos."
+        },
+        {
+          "letra": "D",
+          "texto": "Soma dos elementos iguais ou abaixo da diagonal principal",
+          "porque": "Para somar a parte de baixo, o laço interno iria de 0 até `i`. Aqui `j` parte de `i` e vai até `m`, a parte de cima."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Em laço duplo sobre matriz, olhe o início e o fim do laço interno: j de i até m é a diagonal e acima; j de 0 até i é a diagonal e abaixo. Teste com uma matriz 2x2 se tiver dúvida.",
+      "assuntos": [
+        {
+          "num": "0039",
+          "modulo": "05-vetores-e-strings.md"
+        },
+        {
+          "num": "0024",
+          "modulo": "03-repeticoes.md"
+        }
+      ]
+    },
+    {
+      "numero": 14,
+      "topico": 1,
+      "formato": "código",
+      "enunciado": "Qual a saída do programa C?\n\n```c\nvoid func1 (int x) { x = 9 * x; }\nvoid func2 (int v[]) { v[0] = 3 * v[0]; }\nvoid main (void) {\n  int x, v[2];\n  x = 222;\n  func1(x);\n  printf(\"x: %d\\n\", x);\n  v[0] = 333;\n  func2(v);\n  printf(\"v[0]: %d\\n\", v[0]);\n}\n```",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "x: 222 e v[0]: 999",
+          "porque": "`func1` recebe cópia de x, então o x do `main` continua 222. `func2` recebe o endereço do vetor e altera o original: 3·333 = 999. Rodado em C."
+        },
+        {
+          "letra": "B",
+          "texto": "x: 222 e v[0]: 222",
+          "porque": "Acerta o x, mas o vetor muda. Vetor em C passa como ponteiro, então a função altera o v[0] original."
+        },
+        {
+          "letra": "C",
+          "texto": "x: 222 e v[0]: 666",
+          "porque": "666 seria 2·333. O código multiplica por 3, e 3·333 = 999."
+        },
+        {
+          "letra": "D",
+          "texto": "x: 222 e v[0]: 333",
+          "porque": "Essa seria a saída se o vetor também fosse passado por valor. Em C não é: o parâmetro `int v[]` vira `int *v`."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Escalar passa por valor (cópia), vetor passa por endereço. Mudança em escalar dentro da função some; em vetor, aparece fora. Isso cai em toda prova de C.",
+      "assuntos": [
+        {
+          "num": "0029",
+          "modulo": "04-funcoes.md"
+        },
+        {
+          "num": "0038",
+          "modulo": "05-vetores-e-strings.md"
+        }
+      ]
+    },
+    {
+      "numero": 15,
+      "topico": 3,
+      "formato": "código",
+      "enunciado": "O que faz a função abaixo?\n\n```c\nLista* abracadabra (Lista* l, int v) {\n  Lista* novo = (Lista*) malloc(sizeof(Lista));\n  novo->info = v;\n  novo->prox = l;\n  novo->ant = NULL;\n  if (l) { l->ant = novo };\n  return novo;\n}\n```",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Insere no início de uma lista duplamente encadeada",
+          "porque": "O nó novo aponta `prox` para a antiga cabeça, tem `ant = NULL` e a antiga cabeça passa a ter `ant = novo`. Isso é inserção na cabeça de uma lista dupla."
+        },
+        {
+          "letra": "B",
+          "texto": "Insere no final de uma lista duplamente encadeada",
+          "porque": "Para inserir no final, o `prox` do novo seria NULL e o antigo último apontaria para ele. Aqui o `prox` do novo é a lista inteira."
+        },
+        {
+          "letra": "C",
+          "texto": "Insere no início de uma lista simples",
+          "porque": "Lista simples não tem o campo `ant`. O código ajusta `ant` nos dois nós, logo a lista é dupla."
+        },
+        {
+          "letra": "D",
+          "texto": "Insere no fim de uma lista simples",
+          "porque": "Além de usar `ant`, o novo nó vira a cabeça (é o valor devolvido) e não o último."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Leia os ponteiros: `novo->prox = l` coloca o novo na frente; `ant` mostra que é lista dupla. O `l->ant = novo` fecha a ligação de volta. Devolver `novo` indica que a cabeça mudou.",
+      "assuntos": [
+        {
+          "num": "0079",
+          "modulo": "11-listas.md"
+        }
+      ]
+    },
+    {
+      "numero": 16,
+      "topico": 5,
+      "formato": "simulação",
+      "enunciado": "Tabela hash com m = 9, endereçamento aberto com sondagem linear e h(k) = k mod 9. Inserindo as chaves 73, 24, 16, 46, 28, nessa ordem, qual a tabela final (posições 0 a 8)?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "ø 73 16 ø ø 28 24 46 ø",
+          "porque": "O 46 não pode estar na 7: ela já é do 16. Pela sondagem linear, o 46 (h = 1) colide com o 73 e vai para a posição 2, e o 28 (h = 1) vai para a 3."
+        },
+        {
+          "letra": "B",
+          "texto": "28 46 73 ø ø ø ø 24 16",
+          "porque": "73 mod 9 é 1, e não 2. A tabela não confere com os restos das divisões."
+        },
+        {
+          "letra": "C",
+          "texto": "ø 73 46 28 ø ø 24 16 ø",
+          "porque": "73 mod 9 = 1, 24 mod 9 = 6, 16 mod 9 = 7. O 46 também dá 1, colide e vai para 2; o 28 dá 1, colide com 73 e 46 e vai para 3. Tabela: ø 73 46 28 ø ø 24 16 ø."
+        },
+        {
+          "letra": "D",
+          "texto": "73 46 ø ø ø ø 28 24 16",
+          "porque": "Põe 73 na posição 0, mas 73 mod 9 = 1. Todos os valores estão deslocados."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Calcule o resto de cada chave e, havendo colisão, ande uma casa para a direita até achar vazio. Inserir na ordem do enunciado importa: quem chega primeiro fica com a posição natural. Observação: a alternativa C aparece no texto com 8 células (falta o ø final); tratei como erro de extração.",
+      "assuntos": [
+        {
+          "num": "0107",
+          "modulo": "15-hash.md"
+        }
+      ]
+    },
+    {
+      "numero": 17,
+      "topico": 4,
+      "formato": "conceito",
+      "enunciado": "Sobre árvores vermelho-preto, considere:\n\n1. A raiz é preta.\n2. Toda subárvore nula é preta.\n3. Se um nó é vermelho, os filhos são pretos.",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas 2 e 3",
+          "porque": "Deixa a 1 de fora, mas ela também é propriedade da árvore rubro-negra: a raiz é sempre preta."
+        },
+        {
+          "letra": "B",
+          "texto": "Todas",
+          "porque": "As três são propriedades da árvore vermelho-preto (a versão do Cormen): raiz preta, folhas nulas pretas e nenhum vermelho com filho vermelho."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas 1 e 2",
+          "porque": "Deixa a 3 de fora. A regra de que o filho de um nó vermelho é preto é justamente o que limita a altura."
+        },
+        {
+          "letra": "D",
+          "texto": "Apenas 1",
+          "porque": "As propriedades 2 e 3 também valem, então a 1 sozinha é incompleta."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "São as propriedades da definição do Cormen: nó vermelho ou preto, raiz preta, folha nula preta, vermelho só tem filho preto, e mesmo número de nós pretos em todo caminho. Quando a banca lista propriedades assim, geralmente são todas verdadeiras.",
+      "assuntos": [
+        {
+          "num": "0177",
+          "modulo": "28-estruturas-complementos.md"
+        }
+      ]
+    },
+    {
+      "numero": 18,
+      "topico": 8,
+      "formato": "afirmações",
+      "enunciado": "Sobre grafos, considere:\n\n1. O algoritmo de Dijkstra encontra o menor caminho, mas só serve para casos pequenos ou médios por ter complexidade exponencial.\n2. A busca em largura normalmente usa uma fila.\n3. Em grafos esparsos, a matriz de adjacências consome mais memória do que a lista de adjacências.",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas 2 e 3",
+          "porque": "A 1 é falsa: Dijkstra é polinomial, O((V+E) log V) com heap. A 2 é verdadeira (BFS usa fila). A 3 é verdadeira: a matriz gasta V² mesmo com poucas arestas, e a lista gasta V + E."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas 1 e 2",
+          "porque": "Inclui a 1 (falsa) e exclui a 3 (verdadeira)."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas 1",
+          "porque": "Só a 1 é falsa, então essa alternativa marca exatamente a errada como certa."
+        },
+        {
+          "letra": "D",
+          "texto": "Nenhuma",
+          "porque": "As afirmações 2 e 3 são verdadeiras, então não é verdade que nenhuma vale."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "1 falsa: Dijkstra é eficiente (polinomial), o que não funciona é com pesos negativos. 2 e 3 verdadeiras. Grafo esparso: use lista de adjacências. Grafo denso: matriz.",
+      "assuntos": [
+        {
+          "num": "0110",
+          "modulo": "16-grafos.md"
+        },
+        {
+          "num": "0112",
+          "modulo": "16-grafos.md"
+        },
+        {
+          "num": "0109",
+          "modulo": "16-grafos.md"
+        }
+      ]
+    },
+    {
+      "numero": 19,
+      "topico": 4,
+      "formato": "cálculo",
+      "enunciado": "Em uma árvore AVL, já tendo a referência para o nó a ser removido (sem fazer busca), quais são o melhor e o pior caso da remoção?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "O(log n), O(log n)",
+          "porque": "Supõe que o melhor caso também gasta log n. Mas se a remoção não desbalanceia nenhum nó, o trabalho é constante."
+        },
+        {
+          "letra": "B",
+          "texto": "O(1), O(log n)",
+          "porque": "No melhor caso, remover um nó sem filhos não desbalanceia nada: O(1). No pior caso, o rebalanceamento sobe até a raiz com rotações, e a altura é O(log n)."
+        },
+        {
+          "letra": "C",
+          "texto": "O(1), O(n)",
+          "porque": "O pior caso não passa de O(log n), porque a AVL tem altura logarítmica e o rebalanceamento só percorre um caminho."
+        },
+        {
+          "letra": "D",
+          "texto": "O(log n), O(n)",
+          "porque": "Nenhum dos dois: o pior caso é logarítmico (a árvore é balanceada) e o melhor é constante."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Banca aponta B. Observação: se a remoção de um nó com dois filhos exigir achar o sucessor, o melhor caso também seria O(log n) (alternativa A). Fique com B e saiba que depende do que se conta. Altura da AVL é O(log n), e isso limita o pior caso.",
+      "assuntos": [
+        {
+          "num": "0176",
+          "modulo": "28-estruturas-complementos.md"
+        },
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 20,
+      "topico": 3,
+      "formato": "cálculo",
+      "enunciado": "Numa lista implementada com vetor, qual o pior caso de: busca por um elemento, acesso por índice, inserção no início, inserção no final e remoção por índice, nessa ordem?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "O(n), O(1), O(1), O(n), O(n)",
+          "porque": "Erra a inserção no início e no final. Inserir no início desloca todos os elementos (O(n)), e no final basta escrever na próxima posição livre (O(1))."
+        },
+        {
+          "letra": "B",
+          "texto": "O(n), O(1), O(n), O(1), O(n)",
+          "porque": "Busca varre o vetor: O(n). Índice vai direto: O(1). Início desloca tudo: O(n). Final escreve na posição livre: O(1). Remoção por índice fecha o buraco deslocando: O(n)."
+        },
+        {
+          "letra": "C",
+          "texto": "O(1), O(n), O(n), O(n), O(1)",
+          "porque": "Inverte quase tudo: busca não é O(1) num vetor sem ordem, e acesso por índice não é O(n)."
+        },
+        {
+          "letra": "D",
+          "texto": "O(n), O(n), O(1), O(n), O(1)",
+          "porque": "O acesso por índice é O(1), e a inserção no início é O(n). Aqui estão trocados."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Vetor: acesso por índice O(1), final O(1) (se houver espaço), todo o resto que desloca ou varre é O(n). Memorize esse quadro, ele aparece de várias formas.",
+      "assuntos": [
+        {
+          "num": "0075",
+          "modulo": "11-listas.md"
+        },
+        {
+          "num": "0072",
+          "modulo": "10-analise.md"
+        }
+      ]
+    }
+  ]
+}

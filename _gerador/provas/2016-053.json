@@ -1,0 +1,911 @@
+{
+  "edital": "053/2016",
+  "slug": "2016-053",
+  "ano": 2016,
+  "oficial": true,
+  "questoes": [
+    {
+      "numero": 1,
+      "topico": 6,
+      "formato": "cálculo",
+      "enunciado": "Seja um vetor de inteiros com 400 elementos distintos ordenados em ordem crescente. Qual é o número máximo de iterações necessárias para encontrar um elemento qualquer desse vetor, caso seja utilizado o algoritmo de busca binária?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "9",
+          "porque": "Correta. O máximo é ⌊log2 400⌋ + 1. Como 2^8 = 256 e 2^9 = 512, log2 400 está entre 8 e 9, então 8 + 1 = 9 iterações."
+        },
+        {
+          "letra": "B",
+          "texto": "8",
+          "porque": "É só ⌊log2 400⌋ e esquece a última comparação. Com 8 iterações você cobre 255 elementos (2^8 - 1), e o vetor tem 400."
+        },
+        {
+          "letra": "C",
+          "texto": "7",
+          "porque": "Cobre só 127 elementos (2^7 - 1). Não chega a 400."
+        },
+        {
+          "letra": "D",
+          "texto": "200",
+          "porque": "É o custo médio da busca sequencial, cerca de n/2, não da binária."
+        },
+        {
+          "letra": "E",
+          "texto": "400",
+          "porque": "É o pior caso da busca sequencial. A binária descarta metade do vetor a cada passo."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Cada iteração da busca binária corta o intervalo ao meio, então o pior caso é ⌊log2 n⌋ + 1. Para 400 elementos são 9 iterações. Conferido em C: o máximo medido, testando todos os 400 alvos, foi 9.",
+      "assuntos": [
+        {
+          "num": "0090",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0072",
+          "modulo": "10-analise.md"
+        }
+      ]
+    },
+    {
+      "numero": 2,
+      "topico": 1,
+      "formato": "conceito",
+      "enunciado": "Sobre as funções abaixo,\n\n```c\nFunção I\nint fatorial(int i) {\n  if (i <= 1) {\n    return 1;\n  } else {\n    fatorial(i-1);\n  }\n}\n\nFunção II\nvoid fatorial() {\n  int fat[0] = 1;\n  for (int j=1; ; j++) {\n    fat[j] = j * fat[j-1];\n  }\n}\n```\n\nAssinale a alternativa CORRETA:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Somente a função I é recursiva.",
+          "porque": "Correta. Recursiva é a função que chama a si mesma, e a I chama `fatorial(i-1)`. Mesmo sem `return` no `else` (o fatorial dela está errado), ela é recursiva."
+        },
+        {
+          "letra": "B",
+          "texto": "Ambas as funções são recursivas.",
+          "porque": "A II só tem um laço `for`, e nenhuma chamada a si mesma."
+        },
+        {
+          "letra": "C",
+          "texto": "Somente a função II é recursiva.",
+          "porque": "É o contrário: a II é iterativa (usa laço)."
+        },
+        {
+          "letra": "D",
+          "texto": "A função I não é recursivo e a função II é orientada a objeto.",
+          "porque": "A I é recursiva, e C não é orientada a objeto. A frase é absurda de propósito."
+        },
+        {
+          "letra": "E",
+          "texto": "Ambas as funções não são recursivas.",
+          "porque": "A I chama a si mesma, então é recursiva."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "O que define recursão é a função chamar a si mesma. Isso vale mesmo que a lógica esteja errada: a função I não devolve valor no `else`, mas continua recursiva. Dica: não deixe os erros do código desviarem da pergunta.",
+      "assuntos": [
+        {
+          "num": "0032",
+          "modulo": "04-funcoes.md"
+        }
+      ]
+    },
+    {
+      "numero": 3,
+      "topico": 8,
+      "formato": "conceito",
+      "enunciado": "As seguintes afirmações sobre árvores estão corretas, com EXCEÇÃO de:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "É um grafo conexo que admite ciclos.",
+          "porque": "Correta (é a exceção). Árvore é grafo conexo e acíclico: se tivesse ciclo, deixaria de ser árvore."
+        },
+        {
+          "letra": "B",
+          "texto": "É um grafo conexo e há exatamente um caminho entre dois vértices quaisquer.",
+          "porque": "Verdadeira. Sem ciclos e conexa, existe um único caminho entre quaisquer dois vértices."
+        },
+        {
+          "letra": "C",
+          "texto": "Uma árvore com n vértices possui n-1 arestas.",
+          "porque": "Verdadeira. É uma propriedade da árvore."
+        },
+        {
+          "letra": "D",
+          "texto": "Toda árvore é um grafo, mas nem todo grafo é uma árvore.",
+          "porque": "Verdadeira. Árvore é um tipo particular de grafo."
+        },
+        {
+          "letra": "E",
+          "texto": "Uma união disjunta de árvores forma uma floresta",
+          "porque": "Verdadeira. É a definição de floresta."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Questão de 'EXCEÇÃO': procure a afirmação falsa. Árvore é grafo conexo e sem ciclos, com n-1 arestas e caminho único entre dois vértices. 'Admite ciclos' é o que ela não faz.",
+      "assuntos": [
+        {
+          "num": "0097",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0109",
+          "modulo": "16-grafos.md"
+        },
+        {
+          "num": "0150",
+          "modulo": "23-grafos-avancados.md"
+        }
+      ]
+    },
+    {
+      "numero": 4,
+      "topico": 7,
+      "formato": "simulação",
+      "enunciado": "Considere que o vetor abaixo será ordenado com o algoritmo de ordenação por seleção.\n\n`4 5 5 3 17 2 1 22`\n\nConsiderando-se que o vetor tem sua primeira posição contada como 0 (zero), a segunda troca de valores entre posições do vetor ocorrerá entre:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Posição 0 e posição 2",
+          "porque": "O menor da primeira passada é o 1 (posição 6), não o 5 da posição 2."
+        },
+        {
+          "letra": "B",
+          "texto": "Posição 0 e posição 7",
+          "porque": "O 22 é o maior valor, e a seleção leva o menor para a frente."
+        },
+        {
+          "letra": "C",
+          "texto": "Posição 1 e posição 5",
+          "porque": "Correta. 1ª troca: posições 0 e 6, e o vetor vira 1 5 5 3 17 2 4 22. 2ª passada: o menor de v[1..7] é o 2 (posição 5), que troca com a posição 1."
+        },
+        {
+          "letra": "D",
+          "texto": "Posição 1 e posição 6",
+          "porque": "Na segunda passada o 1 já está na frente. O 4 que foi parar na posição 6 não é o menor de v[1..7]."
+        },
+        {
+          "letra": "E",
+          "texto": "Posição 3 e posição 5",
+          "porque": "A troca entre 3 e 5 seria só da quarta passada em diante."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Simule passada por passada: a seleção acha o menor de v[i..n-1] e troca com v[i]. Passada 0: o menor é 1 (posição 6). Passada 1: o menor de 5 5 3 17 2 4 22 é o 2, na posição 5. Conferido em C: trocas (0,6) e (1,5).",
+      "assuntos": [
+        {
+          "num": "0092",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 5,
+      "topico": 3,
+      "formato": "simulação",
+      "enunciado": "Considere uma estrutura de fila (disciplina FIFO) de números inteiros com duas operações: INSERE(n) e RETIRA( ). Considere, também, que a representação do estado da fila em um instante qualquer é realizada listando os elementos, de forma que o primeiro elemento, da esquerda para a direita, é o mais antigo presente na fila.\n\nSe a fila começa vazia, a sequência:\n\nINSERE(2) → INSERE(3) → RETIRA() → INSERE(1) → RETIRA() → INSERE(4) → INSERE(5) → RETIRA() → RETIRA()\n\nO estado final da fila será:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "1 2 3 4 5",
+          "porque": "Seria a fila sem nenhuma retirada. Foram 4 retiradas."
+        },
+        {
+          "letra": "B",
+          "texto": "2 3 1 4 5",
+          "porque": "Também ignora as retiradas. A RETIRA tira o mais antigo, o da esquerda."
+        },
+        {
+          "letra": "C",
+          "texto": "3 1 4",
+          "porque": "Seria o estado depois de só uma retirada a menos. Faltam duas retiradas (do 1 e do 4)."
+        },
+        {
+          "letra": "D",
+          "texto": "4 5",
+          "porque": "É o estado antes da última RETIRA. Falta tirar o 4."
+        },
+        {
+          "letra": "E",
+          "texto": "5",
+          "porque": "Correta. Estados: [2], [2 3], [3], [3 1], [1], [1 4], [1 4 5], [4 5], [5]. Tirou 2, 3, 1 e 4, nessa ordem."
+        }
+      ],
+      "gabarito": "E",
+      "resumo": "Na fila sai o mais antigo, o da esquerda. Escreva o estado depois de cada operação e não pule nenhuma: 4 inserções antes de [1 4 5] e 4 retiradas no total, sobra só o 5.",
+      "assuntos": [
+        {
+          "num": "0085",
+          "modulo": "12-pilhas-e-filas.md"
+        },
+        {
+          "num": "0086",
+          "modulo": "12-pilhas-e-filas.md"
+        }
+      ]
+    },
+    {
+      "numero": 6,
+      "topico": 3,
+      "formato": "conceito",
+      "enunciado": "Marque a alternativa CORRETA.\nUma lista duplamente encadeada tem como característica ser formada por elementos que:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "se concatenam de forma circular, de tal maneira que, ao chegar ao final da lista, o próximo elemento volta a ser o primeiro.",
+          "porque": "Descreve lista circular, não duplamente encadeada."
+        },
+        {
+          "letra": "B",
+          "texto": "contêm, além de um ou mais campos chave, mais um campo de ponteiro: o próximo, que permite o acesso ao elemento que sucede o atual (o próximo) presente na mesma lista.",
+          "porque": "Descreve lista simplesmente encadeada, com um só ponteiro por nó."
+        },
+        {
+          "letra": "C",
+          "texto": "contêm, além de um campo chave, mais um campo de ponteiro: o próximo, que permite o acesso ao elemento que sucede o atual (o próximo) presente na mesma lista, de tal forma que os campos chave estão ordenados, ou seja, a chave do próximo é sempre maior ou igual à chave do atual elemento.",
+          "porque": "Descreve lista simples e ordenada. Ordem das chaves não tem relação com ser dupla."
+        },
+        {
+          "letra": "D",
+          "texto": "contêm, além de um ou mais campos chave, dois outros campos de ponteiros: próximo e anterior, que permitem o acesso aos elementos adjacentes (próximo e anterior) presentes na mesma lista.",
+          "porque": "Correta. É a definição: dois ponteiros por nó, `prox` e `ant`, o que permite andar nos dois sentidos."
+        },
+        {
+          "letra": "E",
+          "texto": "Estão em posições adjacentes da memória, permitindo o acesso sequencial ao próximo e ao anterior de cada elemento pelo simples uso de um índice.",
+          "porque": "Descreve vetor. Nó de lista não fica em posições contíguas e não se acessa por índice."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "O que faz a lista ser dupla é o par de ponteiros `prox` e `ant` em cada nó. Circular, ordenada e contígua são outras características, que podem ou não aparecer junto.",
+      "assuntos": [
+        {
+          "num": "0079",
+          "modulo": "11-listas.md"
+        }
+      ]
+    },
+    {
+      "numero": 7,
+      "topico": 4,
+      "formato": "simulação",
+      "enunciado": "Considere a estrutura de dados Árvore Binária de Busca (ABB). Se inserirmos numa ABB inicialmente vazia os nós: 60, 10, 20, 80, 15, 75, 12 e 77, nessa ordem. Dado que a raiz encontra-se no nível 1, a altura da árvore e o nível do nó 15, respectivamente, serão:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "5 e 4",
+          "porque": "Correta. A árvore: 60 raiz; 10 à esquerda; 20 à direita de 10; 15 à esquerda de 20; 12 à esquerda de 15; 80 à direita de 60; 75 à esquerda de 80; 77 à direita de 75. O caminho 60-10-20-15-12 tem 5 níveis, e o 15 está no nível 4."
+        },
+        {
+          "letra": "B",
+          "texto": "5 e 5",
+          "porque": "A altura está certa, mas o 15 está no nível 4 (60, 10, 20, 15), e não no 5."
+        },
+        {
+          "letra": "C",
+          "texto": "6 e 5",
+          "porque": "Contaria um nível a mais nos dois valores."
+        },
+        {
+          "letra": "D",
+          "texto": "6 e 4",
+          "porque": "O nível do 15 está certo, mas a altura é 5: o caminho mais longo tem 5 nós."
+        },
+        {
+          "letra": "E",
+          "texto": "7 e 3",
+          "porque": "Nem a altura nem o nível batem com a árvore montada."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Monte a árvore na ordem dada, sempre comparando com a raiz e descendo. O enunciado define raiz no nível 1, então a altura é a quantidade de nós no maior caminho: 5. Se contasse arestas, como no Cormen, daria 4. Conferido em C: altura 5.",
+      "assuntos": [
+        {
+          "num": "0099",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0097",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0175",
+          "modulo": "28-estruturas-complementos.md"
+        }
+      ]
+    },
+    {
+      "numero": 8,
+      "topico": 3,
+      "formato": "simulação",
+      "enunciado": "Sabendo que as seguintes operações foram realizadas:\n\n1. Dados foram inseridos numa PILHA na seguinte ordem: 11, 12, 23, 14, 25, 50, 8, 18, 29, 10.\n2. Repetiu-se 10 vezes o par de operações: retirada da PILHA; inserção na FILA.\n3. A FILA foi exibida (impressa).\n4. Repetiu-se 10 vezes o par de operações: retirada da FILA; inserção na PILHA.\n5. A PILHA foi exibida (impressa).\n\nAs possíveis estruturas exibidas nas operações 3 e 5 são:\n\nI) FILA (começo) 10 - 29 - 18 - 8 - 50 - 25 - 14 - 23 - 12 - 11 (fim)\nII) PILHA: (topo) 11 - 12 - 23 - 14 - 25 - 50 - 8 - 18 - 29 - 10\nIII) PILHA: (topo) 10 - 29 - 18 - 8 - 50 - 25 - 14 - 23 - 12 - 11\nIV) FILA: (começo) 11 - 12 - 23 - 14 - 25 - 50 - 8 - 18 - 29 – 10 (fim)\nV) A PILHA mostrada fica com os elementos em ordem invertida dos dados de entrada\n\nAs estruturas exibidas CORRETAMENTE nas operações 3 e 5 são:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "I e II",
+          "porque": "Correta. Tirar da pilha entrega 10 primeiro: a fila fica 10 29 18 ... 12 11 (I). Tirar da fila e empilhar põe o 10 no fundo e o 11 no topo: topo 11, 12, 23 ... 29, 10 (II)."
+        },
+        {
+          "letra": "B",
+          "texto": "I e",
+          "porque": "Texto truncado no caderno. Ele parece repetir I, e a combinação certa (I e II) está na letra A."
+        },
+        {
+          "letra": "C",
+          "texto": "II e III",
+          "porque": "II está certa, mas III está errada: a pilha final tem o 11 no topo, e não o 10. Essa letra também deixa de fora a fila certa (I)."
+        },
+        {
+          "letra": "D",
+          "texto": "III e IV",
+          "porque": "IV está errada: a fila impressa começa pelo 10 (o último a entrar na pilha), e não pelo 11."
+        },
+        {
+          "letra": "E",
+          "texto": "III e IV",
+          "porque": "É idêntica à D no caderno. Mesmo erro: III e IV estão ambas erradas."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Passar uma pilha para uma fila inverte a ordem, e passar a fila de volta para uma pilha inverte de novo. Então a fila sai 10 ... 11 e a pilha final tem topo 11, a mesma ordem em que os dados entraram. No caderno as letras D e E são iguais e a B está cortada, mas a resposta A não depende disso.",
+      "assuntos": [
+        {
+          "num": "0082",
+          "modulo": "12-pilhas-e-filas.md"
+        },
+        {
+          "num": "0085",
+          "modulo": "12-pilhas-e-filas.md"
+        }
+      ]
+    },
+    {
+      "numero": 9,
+      "topico": 3,
+      "formato": "código",
+      "enunciado": "Os registros em uma lista duplamente encadeada com 20 elementos possuem, cada um, três campos:\n\n1. próximo: um ponteiro para o próximo elemento da lista;\n2. valor: informação armazenada pelo elemento;\n3. anterior: um ponteiro para o elemento anterior da lista.\n\nSendo \"Z\" o décimo elemento desta lista e \"X\" e \"Y\" dois outros elementos que não pertencem à lista, sendo apontados, respectivamente, pelos seguintes ponteiros \"PZ\", \"PX\" e \"PY\", considere o trecho de código abaixo.\n\n```\nPY->próximo = PX;\nPX->anterior = PY;\nPX->próximo = PZ->próximo;\nPZ->próximo->anterior = PX;\nPZ->próximo = PY;\nPY->anterior = PZ;\n```\n\nEste trecho de código é usado para inserir na lista os elementos:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Y, logo após o Z, e X, logo após o Y.",
+          "porque": "Correta. `PZ->próximo = PY` e `PY->anterior = PZ` colocam o Y logo depois do Z. `PY->próximo = PX` e `PX->anterior = PY` colocam o X logo depois do Y. O X ainda herda o antigo próximo do Z. Ordem final: Z, Y, X, resto."
+        },
+        {
+          "letra": "B",
+          "texto": "Y, antes do Z, e X, logo após o Z",
+          "porque": "O Y fica depois do Z, e não antes. O `PY->anterior = PZ` mostra isso."
+        },
+        {
+          "letra": "C",
+          "texto": "Y, antes do Z, e X, antes do Y.",
+          "porque": "Nenhuma das ligações põe elementos antes do Z."
+        },
+        {
+          "letra": "D",
+          "texto": "X, logo após o Z, e Y, logo após o X.",
+          "porque": "Inverte a ordem. O Z aponta para o Y (`PZ->próximo = PY`), e não para o X."
+        },
+        {
+          "letra": "E",
+          "texto": "X, antes do Z, e Y, logo após o Z.",
+          "porque": "O X não vai antes do Z: ele aponta para o antigo seguinte do Z."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Em inserção em lista dupla, siga os ponteiros: o primeiro que muda em `PZ` diz quem fica logo depois dele. Aqui `PZ->próximo = PY`, então o Y vem logo após o Z, e o X vem depois do Y e antes do antigo seguinte. Dica: desenhe quatro caixinhas e as setas das seis linhas.",
+      "assuntos": [
+        {
+          "num": "0079",
+          "modulo": "11-listas.md"
+        },
+        {
+          "num": "0062",
+          "modulo": "08-structs.md"
+        }
+      ]
+    },
+    {
+      "numero": 10,
+      "topico": 5,
+      "formato": "afirmações",
+      "enunciado": "Considere as afirmações sobre um hash linear (sem encadeamento):\n\nI) É obrigatório o uso de várias funções de hash\nII) Não funciona com número de chaves maior que o tamanho da tabela hash\nIII) Quando acontece uma colisão, o valor a ser inserido é colocado no local no lugar do já existente.\n\nSobre as afirmações, sabe-se que:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Todas são verdadeiras",
+          "porque": "I e III são falsas."
+        },
+        {
+          "letra": "B",
+          "texto": "Todas são falsas",
+          "porque": "II é verdadeira: sem encadeamento a tabela é um vetor de tamanho M e não guarda mais do que M chaves."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas I e III são verdadeiras",
+          "porque": "Os dois erram. I é falsa (uma função basta, a sondagem linear só anda para a posição seguinte). III é falsa (colisão não sobrescreve)."
+        },
+        {
+          "letra": "D",
+          "texto": "Apenas II é verdadeira",
+          "porque": "Correta. II é verdadeira (endereçamento aberto não passa de M chaves). I é falsa e III é falsa: em colisão a chave vai para a próxima posição livre."
+        },
+        {
+          "letra": "E",
+          "texto": "Apenas I e II são verdadeiras",
+          "porque": "I é falsa: o hash linear usa uma função, e a sondagem linear resolve as colisões."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "No hash linear (endereçamento aberto com sondagem linear) tudo mora no vetor de M posições, então C > M é impossível. Colisão manda a chave para a próxima posição livre, e uma função de hash basta. Cuidado: a mesma afirmação II sobre o hash encadeado seria falsa.",
+      "assuntos": [
+        {
+          "num": "0107",
+          "modulo": "15-hash.md"
+        }
+      ]
+    },
+    {
+      "numero": 11,
+      "topico": 4,
+      "formato": "simulação",
+      "enunciado": "As sequências que representam os percursos da árvore da figura em pós-ordem e in-ordem são, respectivamente:",
+      "figuras": [
+        "2016-053-q11"
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "P Q S T R e P Q S T R",
+          "porque": "As duas sequências são iguais e começam por P, que é o percurso em pré-ordem. Pós-ordem termina na raiz, e a in-ordem tem a raiz no meio."
+        },
+        {
+          "letra": "B",
+          "texto": "S T Q P R e S T Q R P",
+          "porque": "Em pós-ordem a raiz P é a última, e aqui ela é a quarta. A segunda (S T Q R P) é a própria pós-ordem, e não a in-ordem."
+        },
+        {
+          "letra": "C",
+          "texto": "S T Q R P e S Q T P R",
+          "porque": "Correta. Pós-ordem (esquerda, direita, raiz): subárvore de Q dá S T Q, depois R, depois P. In-ordem (esquerda, raiz, direita): S Q T, depois P, depois R."
+        },
+        {
+          "letra": "D",
+          "texto": "R P Q T S e S T Q R P",
+          "porque": "A primeira sequência não é pós-ordem (a raiz P deveria ser a última). A segunda (S T Q R P) é a pós-ordem, e não a in-ordem."
+        },
+        {
+          "letra": "E",
+          "texto": "P T Q R S e P Q S T R",
+          "porque": "Nenhuma das duas começa certo: pós-ordem não pode começar pela raiz P."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Memorize: pré-ordem visita a raiz primeiro, in-ordem no meio, pós-ordem por último. A figura é a árvore P com filhos Q e R, e Q com filhos S e T. Pós-ordem: S T Q R P. In-ordem: S Q T P R. O gabarito é C. Atenção: o curso antes tratava a figura como ausente, mas ela está no caderno e confirma a letra C.",
+      "assuntos": [
+        {
+          "num": "0098",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 12,
+      "topico": 5,
+      "formato": "afirmações",
+      "enunciado": "Considere as afirmações sobre hash linear e hash encadeado\n\nI) Hash encadeado funciona melhor em disco, pois as chaves sempre ficam próximas uma das outras, facilitando a varredura.\nII) Para uma tabela hash de tamanho M, tanto o hash linear quanto o hash encadeado podem receber uma quantidade de chaves C, onde C > M.\nIII) Quanto acontece uma colisão no hash encadeado, a chave é inserida na posição livre mais próxima da chave original.\n\nSobre as afirmações, sabe-se que:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Todas são verdadeiras",
+          "porque": "As três são falsas."
+        },
+        {
+          "letra": "B",
+          "texto": "Todas são falsas",
+          "porque": "Correta. I é falsa: listas encadeadas ficam espalhadas pela memória, e o que vai melhor em disco é o acesso contíguo. II é falsa: o linear não aceita C > M. III é falsa: no encadeado a chave entra na lista do balde, e não numa posição livre."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas I e III são verdadeiras",
+          "porque": "Os dois erram: o encadeado não é 'próximo' em disco, e a colisão não procura posição livre."
+        },
+        {
+          "letra": "D",
+          "texto": "Apenas II é verdadeira",
+          "porque": "II só vale para o encadeado. O linear (aberto) tem no máximo M chaves."
+        },
+        {
+          "letra": "E",
+          "texto": "Apenas I e II são verdadeiras",
+          "porque": "I é falsa, e II também."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Hash linear (aberto): tudo no vetor, no máximo M chaves, colisão procura a próxima posição livre. Hash encadeado: cada balde é uma lista, aceita C > M e a colisão só aumenta a lista. Nenhuma das três afirmações é verdadeira.",
+      "assuntos": [
+        {
+          "num": "0106",
+          "modulo": "15-hash.md"
+        },
+        {
+          "num": "0107",
+          "modulo": "15-hash.md"
+        }
+      ]
+    },
+    {
+      "numero": 13,
+      "topico": 4,
+      "formato": "conceito",
+      "enunciado": "Em uma árvore AVL, todos os nós têm grau",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "0, 1 ou 2.",
+          "porque": "Correta. A AVL é uma árvore binária de busca: cada nó tem no máximo dois filhos. Grau é a quantidade de filhos: 0 (folha), 1 ou 2."
+        },
+        {
+          "letra": "B",
+          "texto": "divisível por 2.",
+          "porque": "Grau 1 existe na AVL (um nó com um filho só), e 1 não é divisível por 2."
+        },
+        {
+          "letra": "C",
+          "texto": "2",
+          "porque": "Só os nós internos com dois filhos teriam grau 2. Folhas têm 0."
+        },
+        {
+          "letra": "D",
+          "texto": "1 e 2",
+          "porque": "Esquece as folhas, que têm grau 0."
+        },
+        {
+          "letra": "E",
+          "texto": "maior ou igual a 2.",
+          "porque": "Isso valeria para árvore com ramificação mínima (como a B). Na AVL as folhas têm 0."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Grau de um nó é o número de filhos. Em árvore binária o grau vai de 0 a 2. Não confunda grau com altura nem com fator de balanceamento.",
+      "assuntos": [
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0175",
+          "modulo": "28-estruturas-complementos.md"
+        }
+      ]
+    },
+    {
+      "numero": 14,
+      "topico": 4,
+      "formato": "conceito",
+      "enunciado": "A estrutura de dados conhecida como Árvore Binária de Busca (ABB) encontra diversas aplicações em soluções práticas. Sobre esta estrutura é CORRETO afirmar:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Uma ABB é um conjunto finito de nós que possui um nó especial, chamado raiz, do qual partem os nós de duas árvores binárias distintas: a da esquerda e a da direita.",
+          "porque": "Correta pelo gabarito. É a definição recursiva de árvore binária: raiz mais duas subárvores binárias, esquerda e direita."
+        },
+        {
+          "letra": "B",
+          "texto": "Quando os elementos a serem inseridos na ABB estão em ordem crescente, resulta em uma ABB com altura mínima.",
+          "porque": "Falso. Em ordem crescente a ABB degenera em lista e tem a altura máxima, n."
+        },
+        {
+          "letra": "C",
+          "texto": "Para se utilizar uma ABB como método de ordenação, basta fazer o caminhamento ou percurso \"em-ordem\" e obter todos os elementos ordenados.",
+          "porque": "É uma ideia verdadeira (o percurso em ordem entrega as chaves ordenadas) e foi a escolha do curso. A banca preferiu A, talvez porque 'basta' ignora o custo de montar a árvore antes."
+        },
+        {
+          "letra": "D",
+          "texto": "Uma característica que confere à ABB grande agilidade na pesquisa e recuperação de elementos é que seus nós são sempre rearranjados de forma que a árvore resultante é sempre perfeitamente balanceada.",
+          "porque": "Falso. A ABB comum não rearranja nada. Quem se rebalanceia é a AVL."
+        },
+        {
+          "letra": "E",
+          "texto": "ABB são um caso especial de listas encadeadas em que nenhum nó aponta para mais de 2 sucessores.",
+          "porque": "Falso. Lista tem um único sucessor por nó. Árvore é outra estrutura, não caso especial de lista."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Gabarito oficial A. Atenção à divergência: o curso tinha chegado na C (percurso em ordem dá as chaves ordenadas, o que é verdade). A banca marcou A, a definição de árvore binária. Em prova, se duas alternativas parecem certas, a que é definição formal tende a ser a preferida.",
+      "assuntos": [
+        {
+          "num": "0099",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0098",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 15,
+      "topico": 7,
+      "formato": "afirmações",
+      "enunciado": "Considere as afirmações a seguir sobre os algoritmos de ordenação Quicksort, MergeSort, HeapSort e InsertionSort\n\nI) São algoritmos estáveis: InsertionSort, QuickSort e MergeSorte\nII) Pior caso tem número de operações quadrático (proporcional a uma constante vezes n²): InsertionSort, QuickSort\nIII) Utiliza um espaço extra proporcional a n² (proporcional ao quadrado do número de elementos): HeapSort,\nIV) A ordem das entradas é incapaz de influenciar o desempenho do algoritmo: InsertionSort, MergeSort\n\nMarque a alternativa que indica TODAS as afirmações INCORRETAS feitas:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "I e IV",
+          "porque": "Falta o III, que também é incorreta."
+        },
+        {
+          "letra": "B",
+          "texto": "I , III e IV",
+          "porque": "Correta. I é incorreta (o Quicksort usual não é estável). II é correta (inserção e Quicksort têm pior caso O(n²)). III é incorreta (o Heapsort usa O(1) de espaço extra). IV é incorreta (a inserção depende muito da ordem de entrada)."
+        },
+        {
+          "letra": "C",
+          "texto": "I, II e III",
+          "porque": "II é correta, então não entra na lista de incorretas. Falta o IV."
+        },
+        {
+          "letra": "D",
+          "texto": "I, II, III e IV",
+          "porque": "II é correta. Só três das quatro estão incorretas."
+        },
+        {
+          "letra": "E",
+          "texto": "II e IV",
+          "porque": "II é correta. Falta incluir I e III."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "A pergunta pede as INCORRETAS. I incorreta (Quicksort não é estável), II correta (pior caso quadrático da inserção e do Quicksort), III incorreta (Heapsort é in-place, O(1) extra), IV incorreta (a inserção faz n-1 comparações em vetor ordenado e n²/2 em invertido). Leia o comando: 'incorretas'.",
+      "assuntos": [
+        {
+          "num": "0096",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0093",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0094",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0095",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0103",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0168",
+          "modulo": "26-analise-formal.md"
+        }
+      ]
+    },
+    {
+      "numero": 16,
+      "topico": 4,
+      "formato": "cálculo",
+      "enunciado": "Uma árvore AVL é uma árvore binária de busca com balanceamento automático que respeita algumas propriedades fundamentais. Como todas as árvores, ela tem uma propriedade chamada altura. Sabendo que a altura de uma folha é igual a um e que a altura de um nó pai é igual ao máximo das alturas de seus filhos mais um, qual estrutura NÃO pode representar uma árvore AVL?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Uma árvore com três nós e altura igual a três",
+          "porque": "Correta. Três nós em altura 3 formam uma cadeia (um nó por nível). A raiz teria subárvores de alturas 2 e 0, fator de balanceamento 2: não é AVL."
+        },
+        {
+          "letra": "B",
+          "texto": "Uma árvore com seis nós e altura igual a três",
+          "porque": "Pode ser AVL. Por exemplo, raiz com 3 nós de um lado e 2 do outro, todos com diferença de altura até 1."
+        },
+        {
+          "letra": "C",
+          "texto": "Uma árvore com três nós e altura igual a dois",
+          "porque": "É a árvore completa: raiz com duas folhas. É AVL."
+        },
+        {
+          "letra": "D",
+          "texto": "Uma árvore vazia",
+          "porque": "A árvore vazia é AVL por vacuidade."
+        },
+        {
+          "letra": "E",
+          "texto": "Uma árvore com dois nós",
+          "porque": "Uma raiz com um filho tem fator 1. É AVL."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "AVL exige diferença de altura de no máximo 1 entre as subárvores de cada nó. Com 3 nós, só a árvore completa (altura 2) cumpre. Cadeia de 3 nós (altura 3) quebra a regra na raiz.",
+      "assuntos": [
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0175",
+          "modulo": "28-estruturas-complementos.md"
+        }
+      ]
+    },
+    {
+      "numero": 17,
+      "topico": 6,
+      "formato": "código",
+      "enunciado": "Considere os códigos de funções abaixo, assumindo que os mesmos são usados dentro de um programa e que os todos os cabeçalhos necessários são incluídos:\n\n```c\n/*QUADRO I) função que retorna 1 se a chave\nde busca chave, passada como parâmetro, ocorre\ndentro de um vetor de inteiros ordenado e\nretorna 0 caso a chave não ocorra no vetor. O\nvetor tem tamanho determinado pelo parâmetro\ntm */\nint buscaChave(int v[],int chave,int tm) {\n  while((tm>= 0) && (v[tm]!= chave)) tm--;\n  if (tm >= 0) return 0;\n  return 1;\n}\n```\n\n```c\n/* QUADRO II) Conta ocorrências de uma\nchave na lista encadeada, retornando o total de\nocorrências , zero caso a chave não ocorra\n*/\nint ContaOcorrenciasChave(tipoNo *prim, int\nchave) {\n  tipoNo *aux = prim;\n  int cont = 0;\n  int x;\n  for (x = 0; aux[x] != NULL; x++){\n    if(aux[x]. dado == chave) cont++;\n  }\n  return x;\n}\n```\n\nMarque a alternativa correta dentre as afirmações abaixo:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Os dois códigos executam as tarefas propostas sem gerar qualquer tipo de erro de lógica ou de vazamento de memória",
+          "porque": "Nenhum acerta: o I devolve 0 quando acha e 1 quando não acha, e o II devolve `x`, e não `cont`."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas o código I executa sem erros a tarefa proposta",
+          "porque": "O I tem a lógica de retorno invertida. Se `tm >= 0` a chave foi achada, e o código devolve 0."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas o código II executa sem erros a tarefa proposta",
+          "porque": "O II percorre lista como se fosse vetor (`aux[x]`), compara struct com `NULL` e devolve `x` em vez de `cont`."
+        },
+        {
+          "letra": "D",
+          "texto": "Os dois códigos geram erros de vazamento de memória ou falha de segmentação",
+          "porque": "Nenhum aloca memória, então não há vazamento. Os erros são de lógica (retorno invertido, retorno de `x`) e, no II, de compilação. Não é isso que a alternativa afirma."
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma das alternativas anteriores",
+          "porque": "Correta. Ambos têm erro (I: retorno invertido; II: `aux[x]` em lista e `return x`), mas nenhum dos erros é o que A a D descrevem."
+        }
+      ],
+      "gabarito": "E",
+      "resumo": "Gabarito oficial E. Atenção à divergência: o curso tinha chegado em D. O D diz que os dois geram vazamento ou falha de segmentação, mas os erros reais são outros: retorno invertido no I, e no II a lista tratada como vetor (a struct comparada com `NULL` nem compila) e retorno de `x` no lugar de `cont`. Nenhuma das letras A a D descreve isso.",
+      "assuntos": [
+        {
+          "num": "0089",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0076",
+          "modulo": "11-listas.md"
+        },
+        {
+          "num": "0057",
+          "modulo": "07-memoria-dinamica.md"
+        }
+      ]
+    },
+    {
+      "numero": 18,
+      "topico": 4,
+      "formato": "cálculo",
+      "enunciado": "Considere as definições a seguir.\n\nI) O nível do nó raiz de uma árvore é 1.\nII) O nível de qualquer nó subsequente é igual ao nível do seu nó pai mais 1.\nIII) A profundidade de uma árvore é igual ao maior nível encontrado dentre todos os seus nós\n\nPartindo-se das premissas acima, a menor e a maior quantidade de nós, respectivamente, que poderiam existir em uma árvore binária de profundidade 4 são:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "4 e 15",
+          "porque": "Correta. Mínimo: um nó por nível, 4 nós. Máximo: 1 + 2 + 4 + 8 = 15 = 2^4 - 1."
+        },
+        {
+          "letra": "B",
+          "texto": "3 e 15",
+          "porque": "Com profundidade 4 você precisa de pelo menos um nó em cada um dos 4 níveis, então o mínimo é 4."
+        },
+        {
+          "letra": "C",
+          "texto": "3 e 16",
+          "porque": "Os dois valores estão errados."
+        },
+        {
+          "letra": "D",
+          "texto": "4 e 16",
+          "porque": "O máximo de 4 níveis é 2^4 - 1 = 15, e não 16."
+        },
+        {
+          "letra": "E",
+          "texto": "5 e 14",
+          "porque": "O mínimo é 4, e o máximo é 15."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Com a raiz no nível 1: o mínimo de nós para ter profundidade d é d (uma cadeia), e o máximo é 2^d - 1 (árvore cheia). Para d = 4 são 4 e 15.",
+      "assuntos": [
+        {
+          "num": "0097",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0175",
+          "modulo": "28-estruturas-complementos.md"
+        }
+      ]
+    },
+    {
+      "numero": 19,
+      "topico": 4,
+      "formato": "cálculo",
+      "enunciado": "Uma árvore binária completa tem no 5º nível uma quantidade de nós igual a",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "16",
+          "porque": "Correta. O nível k tem 2^(k-1) nós, com a raiz no nível 1. No nível 5: 2^4 = 16."
+        },
+        {
+          "letra": "B",
+          "texto": "15",
+          "porque": "É o total de nós até o nível 4 (1 + 2 + 4 + 8), e não o número de nós do nível 5."
+        },
+        {
+          "letra": "C",
+          "texto": "31",
+          "porque": "É o total de nós até o nível 5 (2^5 - 1)."
+        },
+        {
+          "letra": "D",
+          "texto": "64",
+          "porque": "Seria o nível 7."
+        },
+        {
+          "letra": "E",
+          "texto": "32",
+          "porque": "Seria o nível 6, ou 2^5. O nível 5 tem 2^4."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Nível k de uma árvore binária completa tem 2^(k-1) nós (raiz no nível 1). Não confunda com o total acumulado até o nível k, que é 2^k - 1.",
+      "assuntos": [
+        {
+          "num": "0097",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 20,
+      "topico": 4,
+      "formato": "simulação",
+      "enunciado": "Considere uma árvore binária de busca cujos nós armazenam números inteiros variando de 1 a 100, na qual se quer buscar o número 54. Qual das seguintes sequências representa uma sequência de busca válida dentro desta árvore?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "5, 18, 34, 60, 40, 52, 54",
+          "porque": "Correta. 54 > 5, 18 e 34: vai sempre para a direita. 54 < 60: esquerda. 54 > 40 e 54 > 52: direita, chega no 54. Todos os nós estão dentro dos limites que a ABB impõe."
+        },
+        {
+          "letra": "B",
+          "texto": "25, 27, 28, 26, 60, 50, 58, 54",
+          "porque": "Depois do 28, o 54 vai para a direita (54 > 28), e o 26 não pode estar lá, porque 26 < 28."
+        },
+        {
+          "letra": "C",
+          "texto": "37, 70, 32, <não encontrou>",
+          "porque": "O 54 é maior que 37 e vai para a direita, e então o 70 vai para a esquerda. O 32 é menor que 37, e não pode estar na subárvore direita do 37."
+        },
+        {
+          "letra": "D",
+          "texto": "40, 70, 43, 44, 73, 57, 54",
+          "porque": "O 73 é maior que 70, então não pode estar na subárvore esquerda do 70, por onde a busca passa."
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma das alternativas anteriores",
+          "porque": "Existe sequência válida (A)."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Na busca, cada nó visitado limita os valores possíveis dos nós seguintes: ao ir para a esquerda de x, tudo o que vem depois é menor que x, e ao ir para a direita, maior. Teste cada sequência com os limites (mínimo, máximo) atualizados. Só A cumpre todos os limites.",
+      "assuntos": [
+        {
+          "num": "0099",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    }
+  ]
+}

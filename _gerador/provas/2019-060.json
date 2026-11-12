@@ -1,0 +1,878 @@
+{
+  "edital": "060/2019",
+  "slug": "2019-060",
+  "ano": 2019,
+  "oficial": true,
+  "questoes": [
+    {
+      "numero": 1,
+      "topico": 5,
+      "formato": "simulação",
+      "enunciado": "Suponha que você tenha a seguinte tabela hash implementada utilizando endereçamento aberto com sondagem linear (linear probing). A função hash que você está usando é uma função modular, h(x) = x MOD 9.\n\nQual das ordens abaixo pode ser a ordem em que os elementos foram adicionados à hash? Assuma que a hash nunca tenha sido redimensionada e que nenhum elemento tenha sido excluído ainda.",
+      "figuras": [
+        "2019-060-q01"
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "9, 14, 4, 18, 21, 3, 12",
+          "porque": "Simulando: 9 vai para 0, 14 para 5, 4 para 4, 18 para 1, 21 (hash 3) para 3, 3 (hash 3) vai para 6, 12 (hash 3) vai para 7. Resulta em 9 18 _ 21 4 14 3 12 _, diferente da figura."
+        },
+        {
+          "letra": "B",
+          "texto": "12, 3, 14, 18, 4, 9, 21",
+          "porque": "12 vai para 3 e 3 para 4. Mas 18 e 9 têm hash 0: o primeiro a chegar (18) fica no 0 e o 9 vai para o 1, o contrário da figura (9 no 0, 18 no 1)."
+        },
+        {
+          "letra": "C",
+          "texto": "12, 14, 3, 9, 4, 18, 21",
+          "porque": "Correta. 12 vai para 3; 14 para 5; 3 colide no 3 e vai para 4; 9 vai para 0; 4 colide no 4 e no 5 e vai para 6; 18 colide no 0 e vai para 1; 21 colide em 3, 4, 5, 6 e vai para 7. Resulta em 9 18 _ 12 3 14 4 21 _."
+        },
+        {
+          "letra": "D",
+          "texto": "9, 12, 14, 3, 21, 18, 4",
+          "porque": "Na simulação o 18 ainda chega ao 1, mas o 4 e o 21 trocam de lugar: 21 ocuparia o 6 e o 4 o 7, contra a figura (4 no 6, 21 no 7)."
+        },
+        {
+          "letra": "E",
+          "texto": "18, 9, 12, 3, 14, 4, 21",
+          "porque": "O 18 entra primeiro no 0 e o 9 vai para o 1, o contrário da figura."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Em hash com sondagem linear, quem chega primeiro fica na posição própria e quem chega depois anda para a frente. Daí, pares com mesmo hash (9 e 18; 3, 12, 21) fixam a ordem relativa: 9 antes de 18; 12 antes de 3 antes de 4 antes de 21 na ordem de chegada ao grupo. Rodei as cinco ordens em código e só a C dá a tabela da figura (12 está na posição 3).",
+      "assuntos": [
+        {
+          "num": "0107",
+          "modulo": "15-hash.md"
+        }
+      ]
+    },
+    {
+      "numero": 2,
+      "topico": 4,
+      "formato": "simulação",
+      "enunciado": "Dado os seguintes elementos (10, 20, 15, 25, 30, 16, 18, 19), qual desenho representa uma árvore AVL, inicialmente vazia, que é preenchida com esses elementos, na ordem apresentada, e que tem as devidas rotações efetuadas?",
+      "figuras": [
+        "2019-060-q02-1",
+        "2019-060-q02-2",
+        "2019-060-q02-3",
+        "2019-060-q02-4"
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "1",
+          "porque": "Correta. 10, 20, 15: rotação dupla, raiz 15 (10 e 20). 25 e 30: rotação simples no 20, e o 25 sobe (20 e 30). 16: rotação dupla na raiz, que vira 20 (15 com 10 e 16; 25 com 30 à direita). 18 entra sem rotação. 19: rotação simples no 16, o 18 sobe com 16 e 19. Resultado: raiz 20; 15 e 25; 10, 18 e 30; 16 e 19 sob o 18. É a figura 1.",
+          "figura": "2019-060-q02-1"
+        },
+        {
+          "letra": "B",
+          "texto": "2",
+          "porque": "Não é nem ABB: o 15 está na subárvore direita do 18 (sob o 16), mas 15 < 18 e devia ficar à esquerda.",
+          "figura": "2019-060-q02-2"
+        },
+        {
+          "letra": "C",
+          "texto": "3",
+          "porque": "É ABB, mas o 18 tem só filho esquerdo (o 15 com dois filhos): subárvore esquerda de altura 2 e direita vazia, diferença 3. Não é AVL.",
+          "figura": "2019-060-q02-3"
+        },
+        {
+          "letra": "D",
+          "texto": "4",
+          "porque": "É ABB, mas na raiz 20 a subárvore esquerda tem altura 3 e a direita altura 1, diferença 2. Não é AVL.",
+          "figura": "2019-060-q02-4"
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma das árvores desenhadas representa uma AVL",
+          "porque": "Existe a figura 1, que corresponde à simulação."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Simule inserindo uma a uma, calculando o fator de balanceamento no caminho de volta e rotacionando no primeiro nó com fator ±2. O gabarito oficial é A, e o programa que escrevi confirma: raiz 20; 15 e 25; 10, 18, 30; 16 e 19 (filhos do 18). Dica: antes de simular tudo, descarte figuras desbalanceadas.",
+      "assuntos": [
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 3,
+      "topico": 2,
+      "formato": "conceito",
+      "enunciado": "Qual a alternativa que completa corretamente a seguinte frase: Um algoritmo que possui número de operações _______________ em função de uma entrada de tamanho n é linear.",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "n³ + 9",
+          "porque": "É cúbico, O(n³): o termo dominante é n³."
+        },
+        {
+          "letra": "B",
+          "texto": "3n² + 3n + 2",
+          "porque": "É quadrático, O(n²): o termo dominante é n²."
+        },
+        {
+          "letra": "C",
+          "texto": "6",
+          "porque": "É constante, O(1): não depende de n."
+        },
+        {
+          "letra": "D",
+          "texto": "2n + 1",
+          "porque": "Correta. O termo dominante é n com coeficiente constante, então é Θ(n), linear."
+        },
+        {
+          "letra": "E",
+          "texto": "n² + 1",
+          "porque": "É quadrático, O(n²)."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "Para classificar, olhe o termo de maior grau e ignore coeficientes e constantes: 2n + 1 → n. Polinômio de grau 1 é linear.",
+      "assuntos": [
+        {
+          "num": "0071",
+          "modulo": "10-analise.md"
+        },
+        {
+          "num": "0072",
+          "modulo": "10-analise.md"
+        }
+      ]
+    },
+    {
+      "numero": 4,
+      "topico": 6,
+      "formato": "cálculo",
+      "enunciado": "Considere um vetor com 25 elementos (posição 0 até a posição 24) que representam os números primos entre 1 a 100, em ordem crescente (Ex: [2, 3, 5, 7, 11, 13, ..., 89, 97]). Empregando pesquisa binária, quantos itens do vetor precisam ser examinados antes de se concluir que o número 52 não está no vetor e, portanto, não é primo?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "12",
+          "porque": "Doze é a posição do primeiro elemento examinado, não a quantidade de itens."
+        },
+        {
+          "letra": "B",
+          "texto": "7",
+          "porque": "É a ordem de grandeza do pior caso para outros tamanhos, mas aqui a busca termina antes."
+        },
+        {
+          "letra": "C",
+          "texto": "5",
+          "porque": "Correta. Intervalo 0 a 24: examina a posição 12 (41 < 52), depois 18 (67 > 52), 15 (53 > 52), 13 (43 < 52) e 14 (47 < 52). O intervalo fica vazio: 5 itens examinados."
+        },
+        {
+          "letra": "D",
+          "texto": "1",
+          "porque": "Um só item examinado só se a busca acertasse de primeira."
+        },
+        {
+          "letra": "E",
+          "texto": "4",
+          "porque": "Faltou o último exame (a posição 14, valor 47), que ainda é feito antes de o intervalo ficar vazio."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Busca binária faz no máximo ⌊log2 n⌋ + 1 comparações: com 25 elementos, 5. Aqui o 52 é ausente, então ela usa o máximo. Conte cada posição do meio, inclusive a última que esvazia o intervalo.",
+      "assuntos": [
+        {
+          "num": "0090",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 5,
+      "topico": 3,
+      "formato": "código",
+      "enunciado": "Considere o código da função abaixo:\n\n```c\nvoid fun1(struct node* head)\n{\n  if(head == NULL)\n    return;\n  fun1(head->next);\n  printf(\"%d \", head->data);\n}\n```\n\nO que essa função faz, dada uma lista encadeada de valores inteiros como entrada?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Imprime todos os nós da lista encadeada, começando com primeiro o nó da lista",
+          "porque": "Só imprimiria na ordem se o printf viesse antes da chamada recursiva. Aqui vem depois."
+        },
+        {
+          "letra": "B",
+          "texto": "Imprime todos os nós da lista encadeada, começando com o último nó da lista",
+          "porque": "Correta. A função desce até o NULL sem imprimir nada e, ao voltar, imprime cada nó, do último para o primeiro."
+        },
+        {
+          "letra": "C",
+          "texto": "Imprime apenas os nós de posições pares da lista encadeada",
+          "porque": "Não tem salto: toda chamada avança um nó e todo nó é impresso."
+        },
+        {
+          "letra": "D",
+          "texto": "Imprime apenas os nós de posições impares da lista encadeada",
+          "porque": "Idem: nenhum nó é pulado."
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma das alternativas anteriores",
+          "porque": "Existe a B."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Printf depois da chamada recursiva imprime na ordem inversa (na volta); printf antes imprime na ordem direta (na ida). Padrão clássico para imprimir lista ao contrário.",
+      "assuntos": [
+        {
+          "num": "0076",
+          "modulo": "11-listas.md"
+        },
+        {
+          "num": "0032",
+          "modulo": "04-funcoes.md"
+        }
+      ]
+    },
+    {
+      "numero": 6,
+      "topico": 5,
+      "formato": "conceito",
+      "enunciado": "Marque a alternativa CORRETA. Sobre um hash com encadeamento e com tabela de tamanho 100, pode-se dizer que:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Para casos em que se insere um número n muito grande de chaves, o tempo no caso médio de busca será O(1)",
+          "porque": "Só valeria se a tabela crescesse junto com n (fator de carga constante). Com m fixo em 100, cada cadeia tem n/100 nós, então não é O(1)."
+        },
+        {
+          "letra": "B",
+          "texto": "Para casos em que se insere um número n muito grande de chaves, o tempo de busca no pior caso será O(1)",
+          "porque": "No pior caso todas as chaves caem na mesma cadeia e a busca percorre n nós, O(n)."
+        },
+        {
+          "letra": "C",
+          "texto": "Para casos em que se insere um número n muito grande de chaves, o tempo no caso médio de busca será O(n)",
+          "porque": "Correta. Com m = 100 fixo, o fator de carga é n/100 e a cadeia média tem n/100 nós. Como 1/100 é constante, o custo é O(n)."
+        },
+        {
+          "letra": "D",
+          "texto": "Para casos em que se insere um número n muito grande de chaves, o tempo de busca no pior caso será O(log n)",
+          "porque": "Cadeia é lista encadeada: o pior caso é O(n), não O(log n)."
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma das alternativas anteriores",
+          "porque": "Existe a C."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "No encadeamento, o custo médio de busca é Θ(1 + α), com α = n/m. O(1) exige α limitado, o que significa redimensionar a tabela. Com m fixo e n crescendo, o tempo vira linear (embora com constante pequena).",
+      "assuntos": [
+        {
+          "num": "0106",
+          "modulo": "15-hash.md"
+        }
+      ]
+    },
+    {
+      "numero": 7,
+      "topico": 3,
+      "formato": "código",
+      "enunciado": "A seguinte função em C usa uma lista simplesmente encadeada como argumento de entrada. Ela modifica a lista, movendo o último elemento para a frente da lista e retorna a lista modificada.\n\n```c\ntypedef struct node {\n  int value;\n  struct node *next;\n}Node;\n\nNode *move_to_front(Node *head) {\n  Node *p, *q;\n  if ((head == NULL || (head->next == NULL))\n    return head;\n  q = NULL; p = head;\n  while (p-> next !=NULL)\n  {\n    q = p;\n    p = p->next;\n  }\n  _ _ _ _ _ _ _ _ _ _ _ _ _ _\n  return head;\n}\n```\n\nCerta parte do código foi deixada em branco (linha tracejada). Escolha a alternativa CORRETA para substituir a linha em branco.",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "q = NULL; p->next = head; head = p;",
+          "porque": "`q = NULL` só perde a referência ao penúltimo. O penúltimo continua apontando para o último, formando um ciclo."
+        },
+        {
+          "letra": "B",
+          "texto": "q->next = NULL; head = p; p->next = head;",
+          "porque": "Atualizar `head = p` antes de `p->next = head` faz p apontar para si mesmo e perde a lista antiga."
+        },
+        {
+          "letra": "C",
+          "texto": "head = p; p->next = q; q->next = NULL;",
+          "porque": "Inverte a ligação do último com o penúltimo e perde o resto da lista (o antigo `head` fica órfão)."
+        },
+        {
+          "letra": "D",
+          "texto": "q->next = NULL; p->next = head; head = p;",
+          "porque": "Correta. Ao sair do laço, p é o último e q o penúltimo. `q->next = NULL` corta o último da cauda, `p->next = head` liga o último ao antigo primeiro e `head = p` o torna o novo início. A ordem importa."
+        },
+        {
+          "letra": "E",
+          "texto": "A função não precisa ser complementada.",
+          "porque": "Sem o trecho, a função não move nada: só retorna o head original."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "Em manipulação de ponteiros em lista, a ordem das atribuições decide tudo. Primeiro desligue o último (q->next = NULL), depois ligue-o na frente (p->next = head) e só então atualize head. Desenhe os nós e as setas antes de escolher.",
+      "assuntos": [
+        {
+          "num": "0076",
+          "modulo": "11-listas.md"
+        }
+      ]
+    },
+    {
+      "numero": 8,
+      "topico": 7,
+      "formato": "conceito",
+      "enunciado": "Qual dos seguintes algoritmos apresenta tempo O(n) quando ordenando um vetor com n elementos idênticos de texto?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Heapsort",
+          "porque": "Também pode ser O(n) com elementos iguais (o max-heapify para na hora, pois a comparação é estrita), por isso é defensável. A banca esperava a B."
+        },
+        {
+          "letra": "B",
+          "texto": "Insertion sort",
+          "porque": "Correta. Com todos os elementos iguais, cada inserção compara uma vez com o anterior e para (não é maior), então são n-1 comparações e nenhuma movimentação: Θ(n)."
+        },
+        {
+          "letra": "C",
+          "texto": "Mergesort",
+          "porque": "Divide e intercala sempre, sem atalho para entradas iguais: Θ(n log n) em qualquer entrada."
+        },
+        {
+          "letra": "D",
+          "texto": "Quicksort",
+          "porque": "Com particionamento que manda os iguais para um lado, degenera em O(n²). Só variantes com partição em três vias ficam O(n)."
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhum dos algoritmos apresenta tempo O(n) para essa entrada",
+          "porque": "Falso: pelo menos o insertion sort faz n-1 comparações."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Algoritmos adaptativos como o insertion sort ficam O(n) em entradas já ordenadas ou com todos os elementos iguais. Merge sort não é adaptativo. Heap sort com chaves iguais também tende a O(n), então A e B são defensáveis, mas o gabarito é B.",
+      "assuntos": [
+        {
+          "num": "0093",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 9,
+      "topico": 4,
+      "formato": "conceito",
+      "enunciado": "Qual das afirmações a seguir é VERDADEIRA sobre árvores rubro-negra (vermelho e preto)?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "O caminho do nó raiz até o nó folha mais distante não é maior que o dobro do número de nós do caminho da raiz para a folha mais próxima",
+          "porque": "Correta. Todos os caminhos têm o mesmo número de nós pretos, e vermelhos não são consecutivos, então o caminho mais longo tem no máximo o dobro do mais curto. Isso garante a altura O(log n)."
+        },
+        {
+          "letra": "B",
+          "texto": "O caminho do nó raiz para um nó folha ou para um nó nulo deve conter o mesmo número de nós pretos e vermelhos.",
+          "porque": "É o mesmo número de nós pretos (altura negra) em todos os caminhos, não igual quantidade de pretos e vermelhos."
+        },
+        {
+          "letra": "C",
+          "texto": "A raiz pode ser vermelha",
+          "porque": "Pela definição, a raiz é sempre preta."
+        },
+        {
+          "letra": "D",
+          "texto": "Se um nó for vermelho, os nós filhos somente serão pretos. O inverso também acontece, ou seja, se um nó for preto, seus nós filhos somente serão vermelhos.",
+          "porque": "A primeira parte vale, mas o inverso não: um nó preto pode ter filhos pretos."
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhumas das afirmações é verdadeira",
+          "porque": "A afirmação A é verdadeira."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "As cinco regras da rubro-negra: nó vermelho ou preto; raiz preta; folhas (nulos) pretas; vermelho tem filhos pretos; todo caminho tem a mesma quantidade de pretos. Disso sai que o maior caminho é no máximo 2 vezes o menor.",
+      "assuntos": [
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 10,
+      "topico": 3,
+      "formato": "conceito",
+      "enunciado": "Qual das seguintes estruturas de dados é mais usada para implementar recursão?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Heap binário",
+          "porque": "Estrutura de prioridade; não controla o fluxo das chamadas."
+        },
+        {
+          "letra": "B",
+          "texto": "Hash table",
+          "porque": "Estrutura de busca por chave, sem ordem LIFO."
+        },
+        {
+          "letra": "C",
+          "texto": "Fila",
+          "porque": "FIFO: a ordem de retorno das chamadas é LIFO, o oposto."
+        },
+        {
+          "letra": "D",
+          "texto": "Árvore de busca",
+          "porque": "Organiza chaves ordenadas, não o fluxo de execução."
+        },
+        {
+          "letra": "E",
+          "texto": "Pilha",
+          "porque": "Correta. Cada chamada empilha seu registro de ativação e o retorno o desempilha: é LIFO."
+        }
+      ],
+      "gabarito": "E",
+      "resumo": "Recursão usa a pilha de chamadas. Recursão muito funda estoura a pilha, e toda recursão pode ser trocada por laço com pilha explícita.",
+      "assuntos": [
+        {
+          "num": "0031",
+          "modulo": "04-funcoes.md"
+        },
+        {
+          "num": "0032",
+          "modulo": "04-funcoes.md"
+        }
+      ]
+    },
+    {
+      "numero": 11,
+      "topico": 4,
+      "formato": "conceito",
+      "enunciado": "Qual das alternativas a seguir é FALSA sobre a árvores B e B+",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Árvores B e B+ criando um novo nível raiz (crescem para cima) sempre que sua altura muda, enquanto as árvores de pesquisa binária crescem adicionando novos nós folhas (para baixo) sempre que sua altura muda.",
+          "porque": "Verdadeira: a altura da árvore B só aumenta quando a raiz se divide, criando uma nova raiz acima; a ABB cresce por baixo."
+        },
+        {
+          "letra": "B",
+          "texto": "A complexidade de tempo para busca por uma chave é diferente das árvores rubro-negras, se considerarmos o pior caso",
+          "porque": "É a mais provável da banca para a FALSA: a busca em B/B+ é O(log n) no pior caso, igual à rubro-negra. Então a afirmação de que é diferente é falsa."
+        },
+        {
+          "letra": "C",
+          "texto": "O número de ponteiros filhos em um nó da árvore B é sempre igual ao número de chaves nele mais uma.",
+          "porque": "Vale para nó interno. Em folha não há filhos, então 'sempre' é questionável, o que torna a C uma segunda candidata a falsa."
+        },
+        {
+          "letra": "D",
+          "texto": "Uma árvore B+, de ordem n, é uma árvore com as seguintes propriedades: (i) todos os nós das folhas são armazenados na mesma profundidade; (ii) todos as chaves são armazenadas em nós folha.",
+          "porque": "Verdadeira para a B+: todas as folhas no mesmo nível, e as chaves de dados ficam nas folhas (os nós internos têm só cópias para guiar)."
+        },
+        {
+          "letra": "E",
+          "texto": "Uma árvore B, de ordem n, é uma árvore com as seguintes propriedades: (i) todos os nós das folhas são armazenados na mesma profundidade; (ii) todos os nós não raiz têm entre n - 1 e 2n – 1 chaves; (iii) a raiz tem no máximo 2n – 1 chaves.",
+          "porque": "Verdadeira na definição de grau mínimo n (Cormen): não raiz entre n-1 e 2n-1 chaves, raiz até 2n-1."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "A banca anulou. B é a mais provável de ser a 'falsa' (a busca em B e em rubro-negra é O(log n) nos dois casos), mas C também se contesta: folhas não têm filhos. Em questões de 'FALSA', leia cada alternativa e marque a única com erro claro.",
+      "assuntos": [
+        {
+          "num": "0097",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 12,
+      "topico": 4,
+      "formato": "simulação",
+      "enunciado": "Quais das seguintes árvores abaixo respeita as regras básicas de balanceamento de árvores AVL?",
+      "figuras": [
+        "2019-060-q12-a",
+        "2019-060-q12-b",
+        "2019-060-q12-c"
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Somente B",
+          "porque": "Em B, o 50 tem subárvore esquerda de altura 2 (10 → 5) e direita vazia (-1): diferença 3 em módulo, desbalanceada. B não é AVL."
+        },
+        {
+          "letra": "B",
+          "texto": "A, B e C",
+          "porque": "Inclui a B, que viola a regra."
+        },
+        {
+          "letra": "C",
+          "texto": "B e C",
+          "porque": "Inclui a B, que viola a regra."
+        },
+        {
+          "letra": "D",
+          "texto": "A e C",
+          "porque": "Correta. Em A, todos os nós têm diferença de alturas até 1 (o 50 com esquerda 10 e direita vazia: diferença 1; o 200 com só o 300: diferença 1). Em C, a raiz tem alturas 3 e 2, o 50 tem 2 e 1, o 200 tem 2 e 2, o 10 tem 1 e vazio, o 150 e o 300 têm 1 e vazio, tudo dentro de 1."
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma das árvores é AVL",
+          "porque": "A e C respeitam a regra."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "AVL exige que, em todo nó, as alturas das duas subárvores difiram em no máximo 1. Procure o nó mais alto onde isso falha: em B é o 50, com esquerda de altura 2 (10 → 5) e direita vazia. Basta achar um nó violando e eliminar a árvore.",
+      "assuntos": [
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 13,
+      "topico": 4,
+      "formato": "afirmações",
+      "enunciado": "Quais das seguintes afirmações sobre árvores é INCORRETA?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "O tempo de busca, no pior caso, para uma árvore AVL é O(log n)",
+          "porque": "Correta como afirmação: a altura da AVL é O(log n)."
+        },
+        {
+          "letra": "B",
+          "texto": "No pior caso, uma inserção de árvore rubro-negra requer O(1) rotações",
+          "porque": "Correta como afirmação: a inserção faz no máximo 2 rotações (o resto são recolorações)."
+        },
+        {
+          "letra": "C",
+          "texto": "Uma árvore B+ tem todos as chaves armazenadas em nós folha",
+          "porque": "Correta como afirmação: é a definição da B+."
+        },
+        {
+          "letra": "D",
+          "texto": "A busca por uma chave em uma árvore de pesquisa binária sem balanceamento com n nós leva tempo O(log n) no pior caso.",
+          "porque": "É a única incorreta: sem balanceamento o pior caso é O(n), com a árvore degenerada em lista. A banca anulou mesmo assim."
+        },
+        {
+          "letra": "E",
+          "texto": "Pode-se dizer que uma árvore B é uma árvore balanceada",
+          "porque": "Correta como afirmação: todas as folhas ficam à mesma profundidade."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "A única alternativa claramente incorreta é a D (ABB sem balanceamento tem pior caso O(n)). A banca anulou assim mesmo. Em perguntas com 'INCORRETA', troque o sinal: ache a que contradiz a teoria.",
+      "assuntos": [
+        {
+          "num": "0099",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 14,
+      "topico": 6,
+      "formato": "cálculo",
+      "enunciado": "O número mínimo de comparações necessárias para determinar se um número inteiro aparece mais de n/2 vezes em um vetor ordenado de n números inteiros é:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Θ(n)",
+          "porque": "Percorrer tudo é suficiente mas não é o mínimo, pois o vetor está ordenado."
+        },
+        {
+          "letra": "B",
+          "texto": "Θ(log n)",
+          "porque": "É a resposta esperada: se um valor aparece mais de n/2 vezes, ele ocupa a posição a[n/2]. Você acha o início do bloco por busca binária e confere se o bloco passa de n/2. Isso custa Θ(log n)."
+        },
+        {
+          "letra": "C",
+          "texto": "Θ(log *n)",
+          "porque": "Logaritmo iterado, que não corresponde ao problema."
+        },
+        {
+          "letra": "D",
+          "texto": "Θ(1)",
+          "porque": "Um número constante de comparações não basta para localizar o bloco do candidato."
+        },
+        {
+          "letra": "E",
+          "texto": "Θ(n/2)",
+          "porque": "É linear, igual a Θ(n)."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "A banca anulou. O candidato a maioria é sempre a[n/2], e a verificação (achar o primeiro e o último índice do bloco) usa busca binária, Θ(log n). A ideia útil: vetor ordenado permite usar busca binária em vez de varredura.",
+      "assuntos": [
+        {
+          "num": "0090",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0072",
+          "modulo": "10-analise.md"
+        }
+      ]
+    },
+    {
+      "numero": 15,
+      "topico": 4,
+      "formato": "conceito",
+      "enunciado": "Comparando árvores AVL e rubro-negras, qual das seguintes afirmações é VERDADEIRA:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "As árvores AVL tendem a ter altura menor em comparação com as árvores rubro-negras, mas podem causar mais rotações durante operações de inserção e exclusão.",
+          "porque": "Correta. A AVL é mais rígida (diferença de altura ≤ 1), então fica mais baixa e a busca é um pouco mais rápida, mas rotaciona mais ao inserir e remover."
+        },
+        {
+          "letra": "B",
+          "texto": "As alturas das árvores AVL e rubro-negras são as mesmas, mas as árvores AVL podem causar mais rotações durante a inserção e exclusão.",
+          "porque": "As alturas não são as mesmas: a rubro-negra pode chegar a 2 log n, enquanto a AVL fica em cerca de 1,44 log n."
+        },
+        {
+          "letra": "C",
+          "texto": "As árvores rubro-negras tendem a ter altura menor em comparação com as árvores AVL, mas podem causar mais rotações durante a inserção e exclusão.",
+          "porque": "Está invertida: a AVL é a mais baixa e a rubro-negra rotaciona menos."
+        },
+        {
+          "letra": "D",
+          "texto": "As alturas das árvores AVL e rubro-negras são as mesmas, mas as árvores rubro-negras podem causar mais rotações durante a inserção e exclusão.",
+          "porque": "Erra nas duas partes: alturas diferentes e a rubro-negra faz menos rotações."
+        },
+        {
+          "letra": "E",
+          "texto": "Todas as afirmações anteriores são falsas",
+          "porque": "A A é verdadeira."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "AVL: balanceamento rígido, altura menor, mais rotações. Rubro-negra: balanceamento mais frouxo, altura até 2 log n, no máximo 2 rotações por inserção. Escolha AVL para muita busca e rubro-negra para muita escrita.",
+      "assuntos": [
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 16,
+      "topico": 4,
+      "formato": "simulação",
+      "enunciado": "Dada a seguinte árvore binária de busca (figura abaixo) e ao se realizar as seguintes operações em sequência - adicionar o nó 5, adicionar o nó 17, remover o nó 23 e remover o nó 9. Qual das alternativas representa a lista de nós desta árvore em pré-ordem e pós-ordem, respectivamente?\n\n(a figura não veio no caderno)",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "3, 9, 10, 12, 15, 19, 21, 23 e 23, 21, 19, 15, 12, 10, 9, 3",
+          "porque": "É uma lista ordenada e sua inversa, o que não é pré nem pós-ordem. Ainda inclui o 9 e o 23, que foram removidos, e não tem o 5 nem o 17, que foram inseridos."
+        },
+        {
+          "letra": "B",
+          "texto": "15, 9, 23, 3, 12, 19, 10, 21 e 21, 10, 19, 12, 3, 23, 9, 15",
+          "porque": "Contém o 9 e o 23 (removidos) e não tem o 5 e o 17 (inseridos)."
+        },
+        {
+          "letra": "C",
+          "texto": "15, 10, 21, 3, 12, 19, 9, 23 e 15, 21, 10, 19, 12, 3, 23, 9",
+          "porque": "Contém o 9 e o 23 (removidos) e não tem o 5 e o 17."
+        },
+        {
+          "letra": "D",
+          "texto": "10, 12, 9, 3, 15, 23, 19, 21 e 21, 19, 23, 15, 9, 3, 12, 10",
+          "porque": "Contém o 9 e o 23 e não tem o 5 e o 17."
+        },
+        {
+          "letra": "E",
+          "texto": "15, 10, 3, 5, 12, 21, 19, 17 e 5, 3, 12, 10, 17, 19, 21, 15",
+          "porque": "É a única sem 9 e 23 e com 5 e 17. Pré e pós-ordem batem com a mesma árvore (15; 10 com 3 e 12; 3 com filho direito 5; 21 com filho 19; 19 com filho 17)."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "Sem a figura, dá para resolver por exclusão: as operações tiram o 9 e o 23 e põem o 5 e o 17, então só a E tem essa combinação de nós. A banca anulou, provavelmente por causa da figura ausente. Pré-ordem: raiz, esquerda, direita. Pós-ordem: esquerda, direita, raiz.",
+      "assuntos": [
+        {
+          "num": "0099",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0100",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0098",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 17,
+      "topico": 7,
+      "formato": "cálculo",
+      "enunciado": "Suponha que, no pior caso, um algoritmo Merge Sort leve 30 segundos para ordenar uma entrada de tamanho 64. Qual das opções a seguir se aproxima mais do tamanho máximo de entrada de um problema que pode ser resolvido em 6 minutos?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "256",
+          "porque": "256 × log2(256) = 2048, que dá 30 × 2048/384 = 160 s, abaixo de 360 s. Dá para resolver mais que isso."
+        },
+        {
+          "letra": "B",
+          "texto": "1024",
+          "porque": "1024 × 10 = 10240 unidades, o que levaria cerca de 800 s, mais que 6 minutos."
+        },
+        {
+          "letra": "C",
+          "texto": "512",
+          "porque": "Correta. T = c × n log n. Com n = 64: 64 × 6 = 384 unidades ↔ 30 s. Em 360 s cabem 12 vezes mais: 4608 unidades. E 512 × 9 = 4608."
+        },
+        {
+          "letra": "D",
+          "texto": "2048",
+          "porque": "2048 × 11 = 22528 unidades, cerca de 1760 s."
+        },
+        {
+          "letra": "E",
+          "texto": "4096",
+          "porque": "4096 × 12 = 49152 unidades, cerca de 3840 s."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Se o tempo é c·n·log n, calcule c com o dado (30 s para 64 × 6 = 384) e resolva n·log n = 360/30 × 384 = 4608. Teste potências de 2: 512 × 9 = 4608. Em prova, vale testar as alternativas em vez de resolver a equação.",
+      "assuntos": [
+        {
+          "num": "0094",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0072",
+          "modulo": "10-analise.md"
+        }
+      ]
+    },
+    {
+      "numero": 18,
+      "topico": 7,
+      "formato": "simulação",
+      "enunciado": "Considere que os seguintes elementos {5,4,3,2,1} foram inseridos nesta ordem em um vetor. Em seguida, você aplicou o algoritmo Insertion Sort nele. Qual é a sequência de passos feitos durante o uso do Insertion Sort neste vetor?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "4 5 3 2 1 / 3 4 5 2 1 / 2 3 4 5 1 / 1 2 3 4 5",
+          "porque": "Correta. A cada rodada, o próximo elemento é inserido no prefixo ordenado: insere o 4 (4 5 3 2 1), o 3 (3 4 5 2 1), o 2 (2 3 4 5 1) e o 1 (1 2 3 4 5)."
+        },
+        {
+          "letra": "B",
+          "texto": "5 4 3 1 2 / 5 4 1 2 3 / 5 1 2 3 4 / 1 2 3 4 5",
+          "porque": "Parece um insertion sort que processa o final do vetor para o começo, o que não é o algoritmo."
+        },
+        {
+          "letra": "C",
+          "texto": "4 3 2 1 5 / 3 2 1 5 4 / 2 1 5 4 3 / 1 5 4 3 2",
+          "porque": "É uma rotação do vetor, não uma inserção ordenada."
+        },
+        {
+          "letra": "D",
+          "texto": "4 5 3 2 1 / 2 3 4 5 1 / 3 4 5 2 1 / 1 2 3 4 5",
+          "porque": "Troca a ordem das rodadas: o 2 não pode ser inserido antes do 3."
+        },
+        {
+          "letra": "E",
+          "texto": "4 5 3 1 2 / 2 3 4 5 1 / 3 4 5 2 1 / 1 2 3 4 5",
+          "porque": "Mistura posições aleatórias (4 5 3 1 2) que não aparecem em nenhuma rodada do insertion sort."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Insertion sort processa da esquerda para a direita e deixa o prefixo ordenado. A cada rodada o prefixo cresce em um elemento. Confira o segundo passo: o prefixo precisa ter 3 elementos ordenados (3 4 5) e o resto intacto (2 1).",
+      "assuntos": [
+        {
+          "num": "0093",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 19,
+      "topico": 3,
+      "formato": "afirmações",
+      "enunciado": "Considere uma lista duplamente encadeada não ordenada (com ponteiros na início e final da lista). Qual das seguintes operações a seguir pode ser implementada no tempo O(1)? Marque a alternativa CORRETA.\n\nI. Inserção na frente da lista encadeada\nII. Inserção no final da lista encadeada\nIII. Exclusão do nó frontal da lista encadeada\nIV. Exclusão do último nó da lista encadeada",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "I e II",
+          "porque": "Verdadeiras, mas incompletas: III e IV também são O(1)."
+        },
+        {
+          "letra": "B",
+          "texto": "I e III",
+          "porque": "Verdadeiras, mas incompletas."
+        },
+        {
+          "letra": "C",
+          "texto": "I, II e III",
+          "porque": "Faltam a IV, que também é O(1)."
+        },
+        {
+          "letra": "D",
+          "texto": "I, II e IV",
+          "porque": "Falta a III, que também é O(1)."
+        },
+        {
+          "letra": "E",
+          "texto": "Todas as afirmativa estão corretas",
+          "porque": "Correta. Com ponteiros para o início e para o fim e elo para o anterior em cada nó, as quatro operações são O(1). A exclusão do último nó é O(1) porque o penúltimo vem do campo `prev`, sem percorrer a lista."
+        }
+      ],
+      "gabarito": "E",
+      "resumo": "Numa lista duplamente encadeada com início e fim, todas as inserções e exclusões nas pontas são O(1). Em lista simples, só a exclusão do último nó é O(n), porque precisa achar o penúltimo.",
+      "assuntos": [
+        {
+          "num": "0079",
+          "modulo": "11-listas.md"
+        }
+      ]
+    },
+    {
+      "numero": 20,
+      "topico": 3,
+      "formato": "conceito",
+      "enunciado": "Suponha que uma fila circular de elementos com capacidade (n - 1) seja implementada com um vetor de n elementos. Suponha que a operação de inserção e exclusão seja realizada usando REAR (último elemento da fila) e FRONT (primeiro elemento da fila) como variáveis de índice do vetor, respectivamente. Inicialmente, REAR = FRONT = 0. As condições para detectar a fila cheia e a fila vazia são:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Full: (REAR+1) mod n == FRONT, empty: (FRONT+1) mod n == REAR",
+          "porque": "A condição de cheia está certa, mas a de vazia não: o teste de vazia é REAR == FRONT."
+        },
+        {
+          "letra": "B",
+          "texto": "Full: REAR == FRONT, empty: (REAR+1) mod n == FRONT",
+          "porque": "Trocou as duas condições."
+        },
+        {
+          "letra": "C",
+          "texto": "Full: (FRONT+1) mod n == REAR, empty: REAR == FRONT",
+          "porque": "A de vazia está certa, mas a de cheia está com os índices trocados: é (REAR+1) mod n == FRONT."
+        },
+        {
+          "letra": "D",
+          "texto": "Full: REAR == FRONT, empty: (FRONT+1) mod n == REAR",
+          "porque": "Trocou as duas e ainda inverteu os índices."
+        },
+        {
+          "letra": "E",
+          "texto": "Full: (REAR+1) mod n == FRONT, empty: REAR == FRONT",
+          "porque": "Correta. Inicialmente REAR = FRONT = 0 e isso significa fila vazia. Para distinguir de fila cheia, sacrifica-se uma posição (capacidade n-1): a fila está cheia quando avançar REAR um passo alcançaria FRONT, isto é, (REAR+1) mod n == FRONT."
+        }
+      ],
+      "gabarito": "E",
+      "resumo": "Em fila circular com um vetor de n posições, REAR == FRONT quer dizer vazia. Para não confundir com cheia, uma posição fica sempre livre, daí a capacidade n-1 e o teste (REAR+1) mod n == FRONT para cheia.",
+      "assuntos": [
+        {
+          "num": "0085",
+          "modulo": "12-pilhas-e-filas.md"
+        }
+      ]
+    }
+  ]
+}

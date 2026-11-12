@@ -3,7 +3,8 @@
 As 11 provas de conhecimento de 2016 a 2023, resolvidas questão por questão: editais 032/2016,
 053/2016, 024/2017, 055/2017, 023/2018, 061/2018, 033/2019, 060/2019, 057/2022, 020/2023 e
 071/2023. O enunciado de cada uma está em [`_fontes/provas-ppgi.md`](_fontes/provas-ppgi.md):
-abra a prova lá, resolva cronometrando e só depois confira aqui.
+abra a prova lá, resolva cronometrando e só depois confira aqui. Para fazer as provas em formato de quiz, com
+o porquê de cada alternativa, use [jhollyfer.github.io/LPEDC](https://jhollyfer.github.io/LPEDC/).
 
 > [!IMPORTANT]
 > Os editais de 2016 a 2019 e o 071/2023 têm gabarito oficial: as letras são da banca (as de 2016
@@ -283,7 +284,7 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 
 
 **Observações**
-- Q01: a tabela do enunciado põe 12 na posição 2, mas 12 mod 9 = 3 e a sondagem só chegaria lá dando a volta. A transcrição perdeu um vazio (provável `9 18 _ 12 3 14 4 21 _`). A letra C vale com essa leitura.
+- Q01: a tabela do enunciado põe 12 na posição 2, mas 12 mod 9 = 3 e a sondagem só chegaria lá dando a volta. A transcrição perdeu um vazio: o recorte da prova (`provas-ppgi-ufam/2019-060/figuras/q01-tabela-hash.png`) mostra `9 18 _ 12 3 14 4 21 _`, com o 12 na posição 3. A letra C vale.
 - Q02 e Q16 dependem de figura ausente. Q16 foi inferida por exclusão.
 - Q08: heapsort com elementos todos iguais também é O(n) (o max-heapify para na hora). A e B são defensáveis; B é a esperada.
 - Q11: C também é questionável (folha não tem filhos, então "sempre chaves + 1" só vale em nó interno). B é a mais provável.

@@ -1,0 +1,889 @@
+{
+  "edital": "061/2018",
+  "slug": "2018-061",
+  "ano": 2018,
+  "oficial": true,
+  "questoes": [
+    {
+      "numero": 1,
+      "topico": 5,
+      "formato": "cálculo",
+      "enunciado": "Considere um arquivo sequencial com 10.000 registros, cujas chaves identificadoras são números inteiros de até 8 dígitos. Para criar um índice tipo hashing para esse arquivo, contendo endereços de 0 até 11.999, a mais adequada definição para uma função de hashing f(x), onde x é uma chave e (a mod b) é o resto da divisão de a por b, seria:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "f = x mod 1000 + 12",
+          "porque": "Gera endereços de 12 a 1011: só 1000 endereços para 10.000 registros, com muitas colisões, e a faixa 0 a 11.999 fica quase toda sem uso."
+        },
+        {
+          "letra": "B",
+          "texto": "f = x mod 12000",
+          "porque": "Correta. O resto da divisão por 12000 vai de 0 a 11.999, exatamente a faixa pedida, e espalha as chaves por ela."
+        },
+        {
+          "letra": "C",
+          "texto": "f = x / 10000",
+          "porque": "Com chaves de até 8 dígitos, a divisão inteira dá no máximo 9999 e agrupa 10.000 chaves consecutivas no mesmo endereço. Não cobre até 11.999 e concentra chaves."
+        },
+        {
+          "letra": "D",
+          "texto": "f = x / 11999",
+          "porque": "Dá endereços de 0 a cerca de 8333, não cobre a faixa e junta milhares de chaves seguidas no mesmo endereço."
+        },
+        {
+          "letra": "E",
+          "texto": "f = (x – 11999) /10000",
+          "porque": "Dá valores negativos para chaves pequenas e, de resto, só chega até cerca de 9999. Não é uma função de hash válida para essa faixa."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Função de hash por divisão: x mod M devolve sempre um valor de 0 a M-1, então para a faixa 0 a 11.999 use M = 12000. Divisão simples (x / k) agrupa chaves vizinhas e não cobre a faixa. Em projeto real se prefere M primo, mas aqui só a B cobre exatamente os endereços pedidos.",
+      "assuntos": [
+        {
+          "num": "0105",
+          "modulo": "15-hash.md"
+        },
+        {
+          "num": "0178",
+          "modulo": "28-estruturas-complementos.md"
+        }
+      ]
+    },
+    {
+      "numero": 2,
+      "topico": 3,
+      "formato": "conceito",
+      "enunciado": "Matrizes são estruturas de dados de n-dimensões. Por simplicidade, chamaremos de matrizes as matrizes bidimensionais numéricas (que armazenam números inteiros). Sendo assim, marque a alternativa INCORRETA.",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Uma matriz de m linhas e n colunas contêm (m * n) dados.",
+          "porque": "Verdadeira: m linhas vezes n colunas dá m·n elementos."
+        },
+        {
+          "letra": "B",
+          "texto": "Uma matriz pode ser representada utilizando listas ligadas.",
+          "porque": "Verdadeira: dá para usar lista de listas, ou lista só dos elementos não nulos (matriz esparsa)."
+        },
+        {
+          "letra": "C",
+          "texto": "A soma dos elementos de uma matriz pode ser calculada fazendo dois laços aninhados, um sobre as linhas e o outro sobre as colunas.",
+          "porque": "Verdadeira: é a varredura padrão de matriz."
+        },
+        {
+          "letra": "D",
+          "texto": "A soma de duas matrizes de m linhas e n colunas resulta em uma matriz de 2*m linhas e 2*n colunas.",
+          "porque": "Correta (é a incorreta pedida). A soma é elemento a elemento, então o resultado tem as mesmas m linhas e n colunas, não o dobro."
+        },
+        {
+          "letra": "E",
+          "texto": "O produto de duas matrizes de n linhas e n colunas resulta em uma matriz de n linhas e n colunas.",
+          "porque": "Verdadeira: (n×n)·(n×n) dá n×n."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "Soma de matrizes é elemento a elemento: o tamanho do resultado é o mesmo das parcelas. O produto de (m×p) por (p×n) dá (m×n). A questão pede a incorreta, então atenção ao sentido do enunciado.",
+      "assuntos": [
+        {
+          "num": "0039",
+          "modulo": "05-vetores-e-strings.md"
+        }
+      ]
+    },
+    {
+      "numero": 3,
+      "topico": 4,
+      "formato": "simulação",
+      "enunciado": "Considere a árvore AVL abaixo para responder à questão.\n\nQual é a sequência de chaves que constrói a referida árvore AVL, inicialmente vazia?",
+      "figuras": [
+        "2018-061-q03"
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "23 – 7 – 29 – 15 – 4 – 25 – 35 – 13 – 17",
+          "porque": "Constrói a árvore da figura (raiz 23, esquerda 7 com 4 e 15, direita 29 com 25 e 35, e o 15 com 13 e 17)."
+        },
+        {
+          "letra": "B",
+          "texto": "23 – 13 – 35 – 7 – 4 – 29 – 15 – 25 – 17",
+          "porque": "Também constrói a árvore da figura, depois das rotações."
+        },
+        {
+          "letra": "C",
+          "texto": "23 – 29 – 7 – 17 – 13 – 4 – 35 – 25 – 15",
+          "porque": "Gera outra árvore: uma rotação com 13 e 17 leva o 13 à raiz."
+        },
+        {
+          "letra": "D",
+          "texto": "23 – 25 – 7 – 15 – 4 – 13 – 35 – 29 – 17",
+          "porque": "Gera outra árvore, com raiz 15."
+        },
+        {
+          "letra": "E",
+          "texto": "23 – 7 – 29 – 17 – 4 – 35 -15 – 25 – 13",
+          "porque": "Também constrói a árvore da figura."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "Para achar a sequência que gera uma AVL, simule as inserções com as rotações. Simulei em Python: A, B e E geram exatamente a árvore da figura; C gera raiz 13 e D, raiz 15. Com três respostas possíveis, a banca anulou. Na prova, desconfie quando a raiz da figura aparece como primeira chave de todas as opções.",
+      "assuntos": [
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 4,
+      "topico": [
+        7,
+        2
+      ],
+      "formato": "conceito",
+      "enunciado": "Considere as afirmativas sobre métodos de ordenação. Sabendo que N se refere ao número de elementos do conjunto, a alternativa INCORRETA é:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Os algoritmos Bubble sort e Selection sort são ambos O(N²).",
+          "porque": "Verdadeira: os dois têm laços aninhados e custo quadrático."
+        },
+        {
+          "letra": "B",
+          "texto": "O Selection sort é o método mais rápido para qualquer tamanho de N se os elementos já estão ordenados, pois este é o seu melhor caso, que é O(Log2 N).",
+          "porque": "É a incorreta. O selection sort faz da ordem de N² comparações em qualquer caso, ordenado ou não: o melhor caso também é O(N²). Nenhuma ordenação por comparação é O(log N), porque nem para ler a entrada ela basta."
+        },
+        {
+          "letra": "C",
+          "texto": "No método Quicksort, inicialmente o vetor é dividido em uma sublista da direita e uma da esquerda, de modo que todo elemento da sublista da esquerda seja menor que os da direita. Em seguida, ordenam-se, pelo mesmo processo, as duas sublistas de forma recursiva.",
+          "porque": "Verdadeira: descreve a partição em torno do pivô seguida de recursão."
+        },
+        {
+          "letra": "D",
+          "texto": "O tempo de execução dos algoritmos de ordenação aumenta na medida em que aumentamos o número de chaves se considerarmos o pior caso.",
+          "porque": "Verdadeira: mais chaves, mais trabalho."
+        },
+        {
+          "letra": "E",
+          "texto": "O método Quicksort é, essencialmente, uma aplicação do princípio \"dividir para conquistar\".",
+          "porque": "Verdadeira: divide em partes pela partição e resolve cada uma recursivamente."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "Valores: A V, B F, C V, D V, E V. A incorreta é a B, porque o selection sort é O(N²) sempre, até com o vetor ordenado (ele não aproveita a ordem). A banca anulou a questão. Lembre: quem ganha no vetor já ordenado é a inserção (O(N)), não a seleção.",
+      "assuntos": [
+        {
+          "num": "0092",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0096",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 5,
+      "topico": 4,
+      "formato": "simulação",
+      "enunciado": "A árvore binária de busca, formada pela inserção dos números 100, 80, 25, 72, 23, 42 e 5, nesta ordem, terá como nós folha os números __I__ e __II__, e como pai do nó 72 o número __III__. As lacunas I, II e III são preenchidas CORRETAMENTE e, respectivamente, por:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "100 – 80 – 100",
+          "porque": "100 e 80 são nós internos: o 100 é a raiz e o 80 tem o 25 como filho."
+        },
+        {
+          "letra": "B",
+          "texto": "5 – 42 – 25",
+          "porque": "Correta. A árvore: 100 → 80 (esquerda) → 25 (esquerda) → 72 (direita) e 23 (esquerda); 42 fica à esquerda do 72 e 5 à esquerda do 23. As folhas são 5 e 42, e o pai do 72 é o 25."
+        },
+        {
+          "letra": "C",
+          "texto": "23 – 25 – 72",
+          "porque": "23 tem o filho 5, 25 tem filhos e 72 tem o filho 42: nenhum é folha."
+        },
+        {
+          "letra": "D",
+          "texto": "25 – 72 – 100",
+          "porque": "Nenhum desses é folha, e o pai do 72 é o 25."
+        },
+        {
+          "letra": "E",
+          "texto": "72 – 5 – 23",
+          "porque": "O 72 tem o filho 42, então não é folha, e o pai do 72 é o 25, não o 23."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Insira na ordem dada: cada número vai à esquerda se menor e à direita se maior que o nó atual. Folha é nó sem filhos. O 42 é maior que 25 (vai à direita, para o 72) e menor que 72 (vai à esquerda do 72).",
+      "assuntos": [
+        {
+          "num": "0099",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 6,
+      "topico": 7,
+      "formato": "conceito",
+      "enunciado": "Marque a alternativa CORRETA. O método de ordenação QuickSort (ordenação rápida) é um método sofisticado de ordenação de vetores que:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Considera em cada passo somente um único elemento sucessor na sequência fonte e todos os elementos do vetor destino para encontrar o ponto correto da inserção.",
+          "porque": "Descreve a inserção direta, não o quicksort."
+        },
+        {
+          "letra": "B",
+          "texto": "Ordena todos os elementos que estiverem a intervalos de 4 posições entre si na sequência corrente.",
+          "porque": "Descreve uma passada do Shellsort com incremento 4."
+        },
+        {
+          "letra": "C",
+          "texto": "É baseado nos princípios de ordenação por inserção direta através de incrementos decrescentes.",
+          "porque": "É a definição do Shellsort."
+        },
+        {
+          "letra": "D",
+          "texto": "O Quicksort é um algoritmo que pode usar espaço extra linear no pior caso.",
+          "porque": "Correta. O quicksort ordena no próprio vetor, mas a recursão usa pilha. No pior caso (partições muito desiguais) a profundidade chega a n, e o espaço extra a O(n)."
+        },
+        {
+          "letra": "E",
+          "texto": "É baseado nos princípios de ordenação por seleção direta que consiste na seleção repetitiva da menor dentre as chaves de n elementos, e depois dentre os n-1 elementos restantes, e assim por diante.",
+          "porque": "Descreve a seleção direta."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "O quicksort faz partição e recursão. Como cada chamada recursiva ocupa pilha, o espaço extra é O(log n) em média e O(n) no pior caso. As outras alternativas descrevem outros métodos (inserção, Shellsort, seleção): identifique pela descrição.",
+      "assuntos": [
+        {
+          "num": "0095",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0168",
+          "modulo": "26-analise-formal.md"
+        }
+      ]
+    },
+    {
+      "numero": 7,
+      "topico": [
+        3,
+        4,
+        5
+      ],
+      "formato": "afirmações",
+      "enunciado": "Avaliando as sentenças seguintes a respeito de estrutura de dados,\n\nI. A diferença entre árvore binária simples e árvores AVL é o fato de que a segunda pode se reconfigurar dinamicamente, com o intuito de manter um bom nível de balanceamento.\nII. Uma pilha garante que o último elemento inserido seja localizado no seu topo.\nIII. Do ponto de vista conceitual, não há diferença alguma entre uma estrutura de array e uma lista encadeada.\nIV. Tabelas hash são estruturas de dados indicadas para armazenar grande volume de dados.\n\nVerifica-se que:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "As sentenças I e IV são verdadeiras.",
+          "porque": "A II também é verdadeira: pilha é LIFO."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas a sentença I é verdadeira.",
+          "porque": "II e IV também são verdadeiras."
+        },
+        {
+          "letra": "C",
+          "texto": "As sentenças III e IV são verdadeiras",
+          "porque": "A III é falsa: array é contíguo com acesso por índice, e lista encadeada tem nós ligados por ponteiros, com acesso sequencial."
+        },
+        {
+          "letra": "D",
+          "texto": "As sentenças II e III são verdadeiras.",
+          "porque": "A III é falsa."
+        },
+        {
+          "letra": "E",
+          "texto": "Apenas I, II e IV são verdadeiras.",
+          "porque": "Correta. I: a AVL se rebalanceia com rotações. II: na pilha, o último inserido fica no topo. IV: hash dá acesso rápido mesmo com muitos dados. III é falsa."
+        }
+      ],
+      "gabarito": "E",
+      "resumo": "Valores: I V, II V, III F, IV V. Array e lista encadeada diferem em acesso (índice contra sequencial), em memória (contígua contra nós espalhados) e no custo de inserir e remover.",
+      "assuntos": [
+        {
+          "num": "0082",
+          "modulo": "12-pilhas-e-filas.md"
+        },
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0105",
+          "modulo": "15-hash.md"
+        }
+      ]
+    },
+    {
+      "numero": 8,
+      "topico": 3,
+      "formato": "conceito",
+      "enunciado": "É INCORRETO afirmar que:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "A fila de prioridade, uma estrutura de dados linear, é uma versão especial da fila.",
+          "porque": "Aceitável como definição conceitual (ela é uma fila em que a ordem de saída vem da prioridade), embora a implementação em heap seja uma árvore."
+        },
+        {
+          "letra": "B",
+          "texto": "Uma lista linear é uma estrutura de dados onde elementos do mesmo tipo são organizados de forma sequencial.",
+          "porque": "Verdadeira."
+        },
+        {
+          "letra": "C",
+          "texto": "Na pilha, uma estrutura não linear, os elementos são colocados e retirados por um único lado da lista, ou seja, pelo topo.",
+          "porque": "Incorreta: a pilha é uma estrutura linear (elementos em sequência), e o acesso só pelo topo é o que a caracteriza."
+        },
+        {
+          "letra": "D",
+          "texto": "Na tabela de Hash por endereçamento aberto, a chave é transformada num índice inteiro que é usado para acessar os dados.",
+          "porque": "Verdadeira: a função de hash converte a chave em índice."
+        },
+        {
+          "letra": "E",
+          "texto": "Um array pode ser alocado dinamicamente, situação na qual ele passa a ser denominado lista ligada ou lista encadeada.",
+          "porque": "Também incorreta: um array alocado dinamicamente continua sendo um array (bloco contíguo), e não vira lista ligada."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "Duas alternativas são incorretas, a C (pilha é linear) e a E (array dinâmico não é lista ligada), e a A é discutível. Por isso a banca anulou. Lembre: pilha, fila e lista são lineares; árvore e grafo, não.",
+      "assuntos": [
+        {
+          "num": "0082",
+          "modulo": "12-pilhas-e-filas.md"
+        },
+        {
+          "num": "0054",
+          "modulo": "07-memoria-dinamica.md"
+        }
+      ]
+    },
+    {
+      "numero": 9,
+      "topico": 4,
+      "formato": "cálculo",
+      "enunciado": "Para uma árvore B, de ordem \"m\", o número mínimo de descendentes para um nível \"d\" da árvore é de:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "2 * (m/2)^(d-1)",
+          "porque": "É a única fórmula que cresce exponencialmente com o nível. A raiz tem pelo menos 2 filhos e cada outro nó, pelo menos m/2, então a cada nível o mínimo é multiplicado por m/2."
+        },
+        {
+          "letra": "B",
+          "texto": "d * m/2",
+          "porque": "Cresce linearmente com d, mas o mínimo se multiplica por m/2 a cada nível, não se soma."
+        },
+        {
+          "letra": "C",
+          "texto": "(m*d/2)^2",
+          "porque": "Não tem a estrutura da contagem por nível: o expoente 2 é fixo e não depende de d como expoente."
+        },
+        {
+          "letra": "D",
+          "texto": "[(m*d/2)^2]/2",
+          "porque": "Mesmo problema da C, só dividida por 2."
+        },
+        {
+          "letra": "E",
+          "texto": "d*(m/2)^2",
+          "porque": "O expoente deveria depender de d, não ser fixo em 2."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "Pela regra da árvore B, a raiz tem pelo menos 2 filhos e os demais nós pelo menos ⌈m/2⌉, então o número mínimo de nós por nível cresce como uma potência de m/2: a fórmula da A. A banca anulou, provavelmente porque os expoentes se perderam na impressão do caderno (as alternativas aqui foram reconstruídas com `^`). O padrão para lembrar: mínimo por nível = 2 · (m/2) elevado a (nível menos 1).",
+      "assuntos": [
+        {
+          "num": "0146",
+          "modulo": "22-arvores-avancadas.md"
+        }
+      ]
+    },
+    {
+      "numero": 10,
+      "topico": [
+        3,
+        4
+      ],
+      "formato": "simulação",
+      "enunciado": "Dois vetores, v1 e v2, capazes de armazenar N inteiros cada um, estão ordenados de forma crescente e têm a propriedade de que o último elemento de v1 (v1[N-1]) é menor que o primeiro elemento de v2 (v2[0]). É retirado um elemento de cada vez de cada um desses vetores alternadamente, e cada elemento retirado é colocado em uma fila. Posteriormente, os elementos são retirados da fila e inseridos em uma árvore binária de busca. A árvore é percorrida em ordem simétrica, e os elementos são inseridos, assim que retirados, em uma pilha. Depois, cada elemento é retirado da pilha e inserido alternadamente em um dos vetores, começando por v1. Diante do exposto, conclui-se que:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "v1[i] ≥ v2[i], ∀ i = 0,1,...,N-1",
+          "porque": "Correta. A ordem simétrica da ABB devolve tudo crescente: v1 inteiro e depois v2 inteiro. Empilhar e desempilhar inverte: sai decrescente. Alternando começando por v1, v1[i] recebe a posição 2i e v2[i] a posição 2i+1 dessa sequência decrescente, logo v1[i] > v2[i]."
+        },
+        {
+          "letra": "B",
+          "texto": "v1[i] ≤ v2[i], ∀ i = 0,1,...,N-1",
+          "porque": "É o contrário: como a sequência sai decrescente, o elemento da posição 2i é maior que o da posição 2i+1."
+        },
+        {
+          "letra": "C",
+          "texto": "v1[N-1] > v2[0]",
+          "porque": "Em v1[N-1] cai um dos menores valores e em v2[0], um dos maiores: v1[N-1] é menor que v2[0]."
+        },
+        {
+          "letra": "D",
+          "texto": "As listas não estão mais ordenadas.",
+          "porque": "Estão ordenadas, só que agora em ordem decrescente."
+        },
+        {
+          "letra": "E",
+          "texto": "Todos os elementos de v1 estão armazenados em v2 e vice-versa.",
+          "porque": "Não: v1 fica com os elementos das posições pares da sequência e v2 com os das ímpares. Eles se misturam, mas não se trocam por inteiro."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Acompanhe cada estrutura: a fila preserva a ordem de entrada; a ABB percorrida em ordem simétrica devolve tudo crescente; a pilha inverte, ficando decrescente; ao distribuir alternando, v1 pega as posições pares e v2 as ímpares. Logo cada v1[i] vem imediatamente antes de v2[i] numa sequência decrescente, então v1[i] ≥ v2[i]. Dica: transforme em exemplo com N = 2.",
+      "assuntos": [
+        {
+          "num": "0082",
+          "modulo": "12-pilhas-e-filas.md"
+        },
+        {
+          "num": "0085",
+          "modulo": "12-pilhas-e-filas.md"
+        },
+        {
+          "num": "0098",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 11,
+      "topico": 4,
+      "formato": "afirmações",
+      "enunciado": "Para remoção de uma chave cuja página esteja com o número mínimo, em árvore B, é CORRETO afirmar que:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Deve-se fazer o processo de SPLIT sempre na página onde se encontrar a chave.",
+          "porque": "Split é da inserção (página cheia), não da remoção."
+        },
+        {
+          "letra": "B",
+          "texto": "Deve-se fazer o processo de SPLIT na página onde se encontrar a chave, exceto quanto é um elemento da raiz da árvore.",
+          "porque": "Mesmo erro: remoção não usa split."
+        },
+        {
+          "letra": "C",
+          "texto": "Se a página onde se encontrar a chave não é folha, deve-se fazer procedimento de concatenação ou redistribuição, considerando os irmãos.",
+          "porque": "Impreciso: em nó interno a chave é substituída pela sucessora ou antecessora da folha, e a redistribuição ou concatenação ocorre depois, na folha."
+        },
+        {
+          "letra": "D",
+          "texto": "Remove-se a chave, e a substitui por uma chave do nó irmão.",
+          "porque": "A redistribuição passa pelo pai: a chave do pai desce e a do irmão sobe. Trocar direto com o irmão quebra a ordem."
+        },
+        {
+          "letra": "E",
+          "texto": "No caso de só haver uma única página, a remoção não causa a necessidade de balanceamento.",
+          "porque": "Correta. Com uma única página (a raiz, que é folha) não há mínimo a respeitar, então a remoção não exige redistribuir nem concatenar."
+        }
+      ],
+      "gabarito": "E",
+      "resumo": "Remoção em árvore B: se a página fica abaixo do mínimo, redistribua com o irmão ou concatene; split é da inserção; a raiz é a exceção ao mínimo. Aqui a questão não foi anulada e a letra é E (na 055/2017 a mesma questão foi anulada).",
+      "assuntos": [
+        {
+          "num": "0146",
+          "modulo": "22-arvores-avancadas.md"
+        }
+      ]
+    },
+    {
+      "numero": 12,
+      "topico": 3,
+      "formato": "conceito",
+      "enunciado": "Lista circular encadeada é uma das estruturas de dados dinâmicas básicas. Uma questão que deve ser resolvida pelo algoritmo de busca em lista circular encadeada é:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Saber quando finalizar a busca, se o elemento procurado não estiver na lista circular.",
+          "porque": "Correta. Na lista circular o último nó aponta para o primeiro e não existe ponteiro nulo. Se o elemento não está na lista, a busca daria voltas sem fim, então é preciso marcar o ponto de parada (voltar ao nó inicial)."
+        },
+        {
+          "letra": "B",
+          "texto": "Retornar o elemento anterior ao buscado, dada a propriedade de circularidade da lista.",
+          "porque": "Não é um problema da busca. A circularidade não força devolver o anterior."
+        },
+        {
+          "letra": "C",
+          "texto": "Devolver o número de elementos constantes na lista.",
+          "porque": "Contar elementos é outra operação, não a questão específica da busca."
+        },
+        {
+          "letra": "D",
+          "texto": "Parar a busca assim que encontrar um elemento cujo ponteiro para o próximo elemento tenha valor nulo, o que indica o fim da lista.",
+          "porque": "Numa lista circular não há ponteiro nulo (o último aponta para o primeiro), então essa condição nunca ocorre."
+        },
+        {
+          "letra": "E",
+          "texto": "Devolver o ponteiro de marcação de início, em sua nova posição",
+          "porque": "Não faz parte do problema de buscar um elemento."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Em lista simples o fim é o ponteiro nulo; na circular não há nulo, então a busca precisa de outra condição de parada (voltar ao ponto de partida), senão entra em laço infinito quando o elemento não existe.",
+      "assuntos": [
+        {
+          "num": "0080",
+          "modulo": "11-listas.md"
+        }
+      ]
+    },
+    {
+      "numero": 13,
+      "topico": 4,
+      "formato": "simulação",
+      "enunciado": "Suponha que uma Árvore Binária de Busca possui números entre 1 e 1000 e que se quer procurar pelo número 363. Qual sequência abaixo NÃO poderia ser a sequência de nós examinados?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "2, 252, 401, 398, 330, 344, 397, 363.",
+          "porque": "Possível: cada nó cabe no intervalo aberto pelas decisões anteriores (397 em (344, 398))."
+        },
+        {
+          "letra": "B",
+          "texto": "924, 220, 911, 244, 898, 258, 362, 363.",
+          "porque": "Possível: 911 em (220, 924), 244 em (220, 911), 898 em (244, 911), 258 em (244, 898) e 362 em (258, 898)."
+        },
+        {
+          "letra": "C",
+          "texto": "925, 202, 911, 240, 912, 245, 363.",
+          "porque": "Correta (é a que não pode ocorrer). Depois do 911 a busca vai à esquerda, então os nós seguintes estão abaixo de 911; o 240 está à direita de 202 e o 912 sairia do intervalo (240, 911)."
+        },
+        {
+          "letra": "D",
+          "texto": "2, 399, 387, 219, 266, 382, 381, 278, 363.",
+          "porque": "Possível: 219 em (2, 387), 266 em (219, 387), 382 em (266, 387), 381 em (266, 382) e 278 em (266, 381)."
+        },
+        {
+          "letra": "E",
+          "texto": "935, 278, 347, 621, 350, 392, 358, 363.",
+          "porque": "Possível: 350 em (347, 621), 392 em (350, 621) e 358 em (350, 392). Esta versão corrige a da prova de 055/2017, que trazia 299."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Para validar a sequência, mantenha o intervalo (mínimo, máximo): ao ir à esquerda de x, o máximo vira x; à direita, o mínimo vira x. Todo nó seguinte precisa caber nele. Só a C viola isso (912 > 911, no ramo à esquerda de 911). É a mesma questão da 055/2017, lá anulada por ter duas impossíveis.",
+      "assuntos": [
+        {
+          "num": "0099",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 14,
+      "topico": 4,
+      "formato": "afirmações",
+      "enunciado": "Analise as afirmativas a seguir sobre árvores B e árvores binárias\n\nI. Diferente das árvores binárias, cada nó de uma árvore B deverá sempre ter mais de dois filhos.\nII. Um nó de árvore B tem um campo ou um método para indicar se é um nó folha ou não. Característica esta herdada da AVL.\nIII. As folhas da árvore B são dispostas mais flexivelmente que as da árvore binária: suas folhas poderão estar em níveis diferentes, desde zero até o valor da altura da árvore.\nIV. A árvore B tem um método de balanceamento muito custoso, por isso, sua indicação para trabalhar com dispositivos de armazenamento secundário, deve ser avaliada com muita cautela.\n\ne assinale a alternativa CORRETA.",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Todas as afirmativas estão corretas.",
+          "porque": "As quatro são falsas."
+        },
+        {
+          "letra": "B",
+          "texto": "Somente as afirmativas II e III estão corretas",
+          "porque": "II e III são falsas."
+        },
+        {
+          "letra": "C",
+          "texto": "Somente as afirmativas I, II e IV estão corretas.",
+          "porque": "I, II e IV são falsas."
+        },
+        {
+          "letra": "D",
+          "texto": "Somente as afirmativas I, III e IV estão corretas.",
+          "porque": "I, III e IV são falsas."
+        },
+        {
+          "letra": "E",
+          "texto": "Todas as afirmativas estão incorretas",
+          "porque": "Correta. I falsa: um nó pode ter só 2 filhos (a raiz sempre pode). II falsa: a AVL não tem campo de folha. III falsa: todas as folhas ficam no mesmo nível. IV falsa: o balanceamento é barato e a árvore B foi feita para armazenamento secundário."
+        }
+      ],
+      "gabarito": "E",
+      "resumo": "Valores: I F, II F, III F, IV F. Árvore B: folhas todas no mesmo nível, nós com entre ⌈m/2⌉ e m filhos (raiz com pelo menos 2) e balanceamento local por split e concatenação. É a estrutura típica de disco.",
+      "assuntos": [
+        {
+          "num": "0146",
+          "modulo": "22-arvores-avancadas.md"
+        },
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 15,
+      "topico": 4,
+      "formato": "conceito",
+      "enunciado": "Se em uma árvore binária de pesquisa a diferença de altura entre a subárvore à esquerda e a subarvore à direita de um dos nós for maior que 1, pode-se concluir que:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "A árvore é uma árvore AVL.",
+          "porque": "É o contrário: diferença maior que 1 num nó viola a regra, então não é AVL."
+        },
+        {
+          "letra": "B",
+          "texto": "Trata-se com certeza de uma árvore binária sem balanceamento.",
+          "porque": "Não há certeza: a rubro-negra é uma árvore balanceada e admite essa diferença em alguns nós. Só dá para dizer que não é AVL."
+        },
+        {
+          "letra": "C",
+          "texto": "Trata-se com certeza de uma árvore vermelho e preto.",
+          "porque": "Também sem certeza: pode ser uma ABB comum."
+        },
+        {
+          "letra": "D",
+          "texto": "Tal árvore não pode existir por não se tratar de uma árvore binária de pesquisa.",
+          "porque": "Pode existir: ABB não restringe as alturas."
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma das alternativas anteriores está correta.",
+          "porque": "Correta. Com a informação dada você só descarta a AVL; não dá para afirmar com certeza se é rubro-negra ou ABB sem balanceamento."
+        }
+      ],
+      "gabarito": "E",
+      "resumo": "Diferença de altura maior que 1 num nó exclui AVL, mas nada mais. A rubro-negra é balanceada de outro jeito e admite essa diferença, e uma ABB comum também. Cuidado com as palavras 'com certeza'.",
+      "assuntos": [
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0145",
+          "modulo": "22-arvores-avancadas.md"
+        }
+      ]
+    },
+    {
+      "numero": 16,
+      "topico": 5,
+      "formato": "afirmações",
+      "enunciado": "Considere as seguintes afirmações:\n\nI. Hash por encadeamento nunca apresenta colisões secundárias\nII. Hash por encadeamento jamais permite que o número de comparações entre chaves em uma operação de busca passe de log n, onde n é o número de chaves inseridas no hash.\nIII. Hash por encadeamento realiza sempre menos comparações entre chaves do que qualquer hash por endereçamento aberto.\n\nAgora marque a alternativa CORRETA:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas a afirmação I é verdadeira",
+          "porque": "Correta. Colisão secundária (chaves de endereços diferentes disputando posições) é fenômeno do endereçamento aberto; no encadeamento só dividem lista as chaves com o mesmo endereço. II e III são falsas."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas a afirmação II é verdadeira",
+          "porque": "A II é falsa: no pior caso todas as n chaves caem numa só lista e a busca faz n comparações, mais que log n."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas a afirmação III é verdadeira",
+          "porque": "A III é falsa: 'sempre' e 'qualquer' são exagero, e com poucas chaves e tabela esparsa o endereçamento aberto pode fazer menos."
+        },
+        {
+          "letra": "D",
+          "texto": "Apenas as afirmações II e III são verdadeiras",
+          "porque": "As duas são falsas."
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma das alternativas anteriores está correta",
+          "porque": "A A está correta."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Valores: I V, II F, III F. Palavras absolutas ('nunca', 'jamais', 'sempre') pedem um contraexemplo: na II, a lista única com n chaves; na III, uma tabela aberta pouco ocupada. A I é verdadeira porque colisão secundária é conceito de endereçamento aberto.",
+      "assuntos": [
+        {
+          "num": "0106",
+          "modulo": "15-hash.md"
+        }
+      ]
+    },
+    {
+      "numero": 17,
+      "topico": 7,
+      "formato": "afirmações",
+      "enunciado": "Considere as afirmações abaixo:\n\nI. O RADIX sort não realiza comparação entre chaves para realizar a ordenação de um vetor\nII. O número de vezes que é necessário passar por todos os elementos do vetor no RADIX sort é proporcional ao número médio de dígitos dos elementos do vetor na base utilizada pelo algoritmo para ordenação\nIII. O RADIX sort requer um espaço extra de armazenamento proporcional ao tamanho do vetor\n\nSobre as afirmações, sabe-se que:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas a afirmação I é verdadeira",
+          "porque": "A III também é verdadeira (vetor auxiliar de tamanho n)."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas a afirmação II é verdadeira",
+          "porque": "A II não é a única, e é falsa como escrita: o número de passadas é o de dígitos da maior chave, não a média."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas a afirmação III é verdadeira",
+          "porque": "A I também é verdadeira."
+        },
+        {
+          "letra": "D",
+          "texto": "Apenas as afirmações II e III são verdadeiras",
+          "porque": "A I é verdadeira e a II, como escrita, é falsa."
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma das afirmações é verdadeira",
+          "porque": "I e III são verdadeiras, então não é o caso."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "Valores: I V (radix distribui por dígito, sem comparar chaves), II F (as passadas seguem os dígitos da maior chave, não a média), III V (vetor auxiliar proporcional a n). Como I e III são verdadeiras, nenhuma alternativa serve, e a banca anulou. Para radix: O(d·(n+k)) tempo e O(n+k) espaço.",
+      "assuntos": [
+        {
+          "num": "0121",
+          "modulo": "18-ordenacao-linear.md"
+        }
+      ]
+    },
+    {
+      "numero": 18,
+      "topico": 5,
+      "formato": "afirmações",
+      "enunciado": "Considere as afirmações sobre um hash por encadeamento:\n\nI. Tem como desvantagem o fato de não ordenar as chaves inseridas\nII. O número médio de operações esperado para realizar uma busca é constante se o hash for bem projetado\nIII. Mesmo quando bem implementado, ocupa mais espaço extra do que uma árvore B em memória.\n\nSobre as afirmações, sabe-se que:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Todas as afirmações são verdadeiras",
+          "porque": "A III é discutível, e a banca não a aceitou como verdadeira."
+        },
+        {
+          "letra": "B",
+          "texto": "Todas as afirmações são falsas",
+          "porque": "I e II são verdadeiras."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas as afirmações I e III são verdadeiras",
+          "porque": "A II também é verdadeira e a III é discutível."
+        },
+        {
+          "letra": "D",
+          "texto": "Apenas a afirmação III é verdadeira",
+          "porque": "I e II são verdadeiras."
+        },
+        {
+          "letra": "E",
+          "texto": "Apenas as afirmações I e II são verdadeiras",
+          "porque": "Correta pela banca. I: hash não mantém ordem. II: com boa função e fator de carga controlado a busca média é O(1). III é duvidosa: depende da comparação de espaço entre ponteiros de listas e páginas parcialmente vazias da árvore B."
+        }
+      ],
+      "gabarito": "E",
+      "resumo": "Hash: busca média O(1) se bem projetado, mas sem ordem entre as chaves (sem percurso ordenado, sem busca por intervalo). A III é discutível e a banca a tratou como falsa; fique com E nesta questão.",
+      "assuntos": [
+        {
+          "num": "0106",
+          "modulo": "15-hash.md"
+        }
+      ]
+    },
+    {
+      "numero": 19,
+      "topico": 4,
+      "formato": "afirmações",
+      "enunciado": "Quanto ao algoritmo e estrutura de dados no caso de árvore AVL, analise as afirmativas abaixo como verdadeiras (V) ou falsas (F) e assinale a alternativa que apresenta a sequência CORRETA de cima para baixo:\n\n( ) Uma árvore AVL é dita balanceada quando, para cada nó da árvore, a diferença entre as alturas das suas sub-árvores (direita e esquerda) não é maior do que um.\n( ) Caso haja diferença de altura maior que 1 ente as sub-árvores à direita e à esquerda de qualquer nó, é necessário que se realizem rotações com o objetivo de reduzir tal diferença.\n( ) A operação de rotação realizada em um ponto da árvore, após a inserção, pode resultar em uma árvore ainda desbalanceada, podendo ser necessária a realização de novas rotações que, na pior das hipóteses, podem ser propagadas até a raiz.",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "F-V-V",
+          "porque": "A 1ª é V (é a definição) e a 3ª é F."
+        },
+        {
+          "letra": "B",
+          "texto": "F-F-V",
+          "porque": "A 1ª é V e a 2ª também."
+        },
+        {
+          "letra": "C",
+          "texto": "V-F-F",
+          "porque": "A 2ª é V: diferença maior que 1 exige rotação."
+        },
+        {
+          "letra": "D",
+          "texto": "V-V-F",
+          "porque": "Correta. 1ª V: é a definição de AVL. 2ª V: diferença maior que 1 pede rotação. 3ª F: depois de uma inserção, uma rotação (simples ou dupla) restaura o balanceamento; a propagação até a raiz é característica da remoção."
+        },
+        {
+          "letra": "E",
+          "texto": "V-V-V",
+          "porque": "A 3ª é falsa para a inserção."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "Sequência V, V, F. Inserção em AVL: no máximo uma rotação (simples ou dupla) conserta a árvore. Remoção: pode exigir rotações em vários níveis, subindo até a raiz. Essa diferença é pergunta recorrente.",
+      "assuntos": [
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0176",
+          "modulo": "28-estruturas-complementos.md"
+        }
+      ]
+    },
+    {
+      "numero": 20,
+      "topico": 3,
+      "formato": "simulação",
+      "enunciado": "Dados os seguinte valores de entrada - 11, 12, 23, 14, 25, 50, 8, 18, 29, 10 -, insira-os em uma PILHA. Em seguida retire cada um dos valores da PILHA e insira numa FILA. Mostre a FILA. Depois retire os dados da FILA e insira na PILHA. Mostre a PILHA.\n\nAs valores MOSTRADOS ficam\n\nI. FILA (começo) 10 - 29 - 18 - 8 - 50 - 25 - 14 - 23 - 12 - 11 (fim)\nII. PILHA: (topo) 11 - 12 - 23 - 14 - 25 - 50 - 8 - 18 - 29 - 10\nIII. PILHA: (topo) 10 - 29 - 18 - 8 - 50 - 25 - 14 - 23 - 12 - 11\nIV. FILA: (começo) 11 - 12 - 23 - 14 - 25 - 50 - 8 - 18 - 29 – 10 (fim)\n\nEstá CORRETO o que se afirma APENAS em:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "I e II",
+          "porque": "Correta. Pilha com topo 10: ao desempilhar, sai 10, 29, 18, ..., 11, e a fila fica com 10 no começo e 11 no fim (I). Retirando da fila e empilhando de novo, o 10 entra primeiro e o 11 por último, então o topo é 11 (II)."
+        },
+        {
+          "letra": "B",
+          "texto": "I e IV",
+          "porque": "A I é verdadeira, mas a IV é falsa: a fila começa em 10, não em 11."
+        },
+        {
+          "letra": "C",
+          "texto": "II e III",
+          "porque": "A II é verdadeira, mas a III é falsa: o topo da pilha final é 11, não 10."
+        },
+        {
+          "letra": "D",
+          "texto": "III e IV",
+          "porque": "As duas são falsas."
+        },
+        {
+          "letra": "E",
+          "texto": "III e IV",
+          "porque": "Repetida da D (as duas são falsas)."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Duas inversões voltam à ordem original: empilhar inverte, a fila preserva a ordem de saída da pilha, e empilhar de novo inverte outra vez. A fila tem 10 no começo (I) e a pilha final tem o 11 no topo (II). Atenção: as alternativas D e E do caderno são iguais, e a letra A é inferência a partir da conta.",
+      "assuntos": [
+        {
+          "num": "0082",
+          "modulo": "12-pilhas-e-filas.md"
+        },
+        {
+          "num": "0085",
+          "modulo": "12-pilhas-e-filas.md"
+        }
+      ]
+    }
+  ]
+}

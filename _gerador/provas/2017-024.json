@@ -1,0 +1,928 @@
+{
+  "edital": "024/2017",
+  "slug": "2017-024",
+  "ano": 2017,
+  "oficial": true,
+  "questoes": [
+    {
+      "numero": 1,
+      "topico": 3,
+      "formato": "afirmações",
+      "enunciado": "Avaliando as seguintes sentenças a respeito de estrutura de dados:\n\nI. A diferença entre árvore binária de busca e árvores AVL é o fato de que a segunda pode se reconfigurar dinamicamente, com o intuito de manter um bom nível de balanceamento.\nII. Uma pilha garante que o último elemento inserido seja localizado no seu topo. Porém, do ponto de vista conceitual, qualquer elemento da pilha pode ser removido, ainda que não esteja no seu topo.\nIII. Do ponto de vista conceitual, não há diferença alguma entre uma estrutura de array e uma lista encadeada.\nIV. Tabelas hash são estruturas de dados indicadas para armazenar grande volume de dados. Apesar dessas estruturas permitirem acesso indexado, mais de um elemento pode ter o mesmo índice. Elementos com o mesmo índice podem ser armazenados em uma mesma lista encadeada.\n\nÉ CORRETO afirmar que:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "apenas I e IV são verdadeiras.",
+          "porque": "Correta. I é verdadeira (a AVL rotaciona para se manter balanceada) e IV é verdadeira (colisões no encadeamento ficam numa lista no mesmo balde). II e III são falsas."
+        },
+        {
+          "letra": "B",
+          "texto": "apenas I é verdadeira.",
+          "porque": "Deixa IV de fora, mas IV descreve o hash com encadeamento corretamente."
+        },
+        {
+          "letra": "C",
+          "texto": "apenas III e IV são verdadeiras.",
+          "porque": "III é falsa: array é contíguo e acessado por índice, a lista é encadeada por ponteiros, com custos diferentes."
+        },
+        {
+          "letra": "D",
+          "texto": "apenas II e III são verdadeiras.",
+          "porque": "As duas são falsas. Pilha só remove do topo, e array e lista são diferentes."
+        },
+        {
+          "letra": "E",
+          "texto": "apenas I, II e IV são verdadeiras.",
+          "porque": "Inclui II, que é falsa: remover do meio da pilha contradiz a definição de pilha, que só retira do topo."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "I verdadeira, II falsa (pilha só remove do topo, LIFO), III falsa (array é contíguo e acessa por índice; lista usa ponteiros e não é contígua), IV verdadeira (hash com encadeamento guarda as colisões numa lista). Dica: 'qualquer elemento ... ainda que não esteja no topo' desmente a pilha.",
+      "assuntos": [
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0082",
+          "modulo": "12-pilhas-e-filas.md"
+        },
+        {
+          "num": "0076",
+          "modulo": "11-listas.md"
+        },
+        {
+          "num": "0106",
+          "modulo": "15-hash.md"
+        }
+      ]
+    },
+    {
+      "numero": 2,
+      "topico": 7,
+      "formato": "conceito",
+      "enunciado": "Marque a alternativa CORRETA.\nQual dos algoritmos abaixo apresenta o menor custo (em termos de número comparações entre elementos) ao considerar-se, para cada algoritmo, a pior disposição possível para os elementos do vetor a ser ordenado. Considere que o vetor a ser ordenado é muito grande, acima de 1 milhão de elementos.",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Heapsort",
+          "porque": "Correta. O pior caso do Heapsort é O(n log n). Para 1 milhão de elementos isso é da ordem de 20 milhões de comparações, contra cerca de 10^12 dos quadráticos."
+        },
+        {
+          "letra": "B",
+          "texto": "Quicksort",
+          "porque": "O pior caso (pivô ruim, como vetor ordenado com pivô na ponta) é O(n²). Na média é rápido, mas a pergunta é sobre o pior caso."
+        },
+        {
+          "letra": "C",
+          "texto": "Inserção",
+          "porque": "O pior caso (vetor invertido) é O(n²)."
+        },
+        {
+          "letra": "D",
+          "texto": "Seleção",
+          "porque": "Faz n(n-1)/2 comparações sempre, ou seja, O(n²)."
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma das anteriores porque todos apresentam custo igual",
+          "porque": "Os custos são bem diferentes para n grande: O(n log n) no Heapsort contra O(n²) nos outros."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "A pergunta é pelo pior caso, não pelo caso médio. Dos quatro, só o Heapsort mantém O(n log n) nessa situação. O Quicksort é o que mais confunde, porque na média costuma ganhar.",
+      "assuntos": [
+        {
+          "num": "0103",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0095",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0093",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0092",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0096",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 3,
+      "topico": 7,
+      "formato": "conceito",
+      "enunciado": "Marque a alternativa CORRETA.\nQual dos algoritmos abaixo apresenta o menor custo (em termos de número movimentações de elementos realizadas) ao considerar-se, para cada algoritmo, a pior disposição possível para os elementos do vetor a ser ordenado. Considere que o vetor a ser ordenado é muito grande, acima de 1 milhão de elementos.",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Heapsort",
+          "porque": "Move elementos a cada descida na heap, algo como O(n log n) movimentações."
+        },
+        {
+          "letra": "B",
+          "texto": "Quicksort",
+          "porque": "No pior caso faz O(n²) comparações e muitas movimentações, mais que a seleção."
+        },
+        {
+          "letra": "C",
+          "texto": "Inserção",
+          "porque": "No pior caso (vetor invertido) desloca elementos O(n²) vezes."
+        },
+        {
+          "letra": "D",
+          "texto": "Seleção",
+          "porque": "Correta. A seleção faz no máximo n-1 trocas, uma por passada. Para ordenar 1 milhão de elementos são no máximo 1 milhão de trocas."
+        },
+        {
+          "letra": "E",
+          "texto": "Mergesort",
+          "porque": "Copia elementos para o vetor auxiliar a cada nível, O(n log n) movimentações."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "Aqui a conta é de movimentações, não de comparações. A seleção compara muito (n²/2), mas troca pouco: no máximo n-1 vezes. É o algoritmo indicado quando mover registro é caro.",
+      "assuntos": [
+        {
+          "num": "0092",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0096",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 4,
+      "topico": 3,
+      "formato": "afirmações",
+      "enunciado": "Considere as seguintes afirmações sobre a estrutura lista encadeada dinâmica e marque a alternativa CORRETA.\n\nI. A busca em tal estrutura realiza menos comparações do que a melhor opção de algoritmo de busca em um vetor ordenado quando se considera o pior cenário para cada estrutura.\nII. É uma estrutura de dados usada para ordenar chaves por ser mais eficiente no processo de ordenação que o heapsort\nIII. É tipicamente utilizada como estrutura de dados básica na implementação de hash por endereçamento aberto",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "As três afirmações são falsas",
+          "porque": "Correta. I é falsa: a lista exige O(n) no pior caso, e a busca binária no vetor ordenado faz O(log n). II é falsa: lista não ordena nada, e o Heapsort é O(n log n). III é falsa: endereçamento aberto usa vetor."
+        },
+        {
+          "letra": "B",
+          "texto": "As três afirmações são verdadeiras",
+          "porque": "Nenhuma é verdadeira."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas a afirmação I é verdadeira",
+          "porque": "I é falsa: a lista não aceita busca binária, e a busca sequencial faz até n comparações."
+        },
+        {
+          "letra": "D",
+          "texto": "Apenas a afirmação II é verdadeira",
+          "porque": "Lista encadeada é estrutura de armazenamento, não de ordenação. Ordenar uma lista custa pelo menos O(n log n)."
+        },
+        {
+          "letra": "E",
+          "texto": "Apenas a afirmação III é verdadeira",
+          "porque": "O hash por endereçamento aberto usa um vetor. A lista encadeada aparece no hash com encadeamento."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "I falsa (busca em lista é O(n), em vetor ordenado é O(log n)), II falsa (lista não 'ordena'), III falsa (endereçamento aberto trabalha em vetor). Quando todas as afirmações fazem uma comparação favorável à lista, desconfie.",
+      "assuntos": [
+        {
+          "num": "0076",
+          "modulo": "11-listas.md"
+        },
+        {
+          "num": "0090",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0107",
+          "modulo": "15-hash.md"
+        }
+      ]
+    },
+    {
+      "numero": 5,
+      "topico": 3,
+      "formato": "código",
+      "enunciado": "Dada uma lista encadeada onde cada nó da lista é do tipo No, cujos campos são um ponteiro para o próximo elemento (campo prox) e um dado do tipo inteiro (campo dado). Dado também quatro (4) opções (versões) de funções para realizar a busca por um elemento em uma lista encadeada, onde recebe-se um ponteiro para o primeiro elemento da lista e uma chave. A função de busca deve retornar 1 (um) caso encontre o elemento buscado e 0 (zero) em caso contrário.\n\nCom base nas informações anteriores, considere que: (1) a lista encadeada não possui um nó cabeça de lista, portanto todos os nós contém valores presentes na lista; (2) todos os tipos de dados foram previamente declarados no programa; (3) a função não deve ter problemas de alocação de memória, seja por deixar de alocar dinamicamente dados necessários ou por causar alocação dinâmica de dados desnecessária.\n\nAnalise as funções abaixo e marque a alternativa CORRETA\n\n```c\n/* versão I */\nint busca(No *prim, int chave) {\n  No *aux = (No *) malloc(sizeof(No));\n  aux = prim;\n  while(aux!= NULL) {\n    if(aux->dado == chave) return 1;\n    aux = aux>prox;\n  }\n  return 0;\n}\n\n/* versão II */\nint busca(No *prim, int chave) {\n  while(prim!= NULL) {\n    if(prim->dado == chave) return 1;\n    prim = prim->prox;\n  }\n  return 0;\n}\n\n/* versão III */\nint busca(No *prim, int chave) {\n  No * aux = prim;\n  while(prim->prox!= NULL) {\n    if(prim->dado == chave) return 1;\n    aux = aux->prox;\n  }\n  return 0;\n}\n\n/* versão IV */\nint busca(No *prim, int chave) {\n  No *aux = (No *) malloc(sizeof(No));\n  while(aux->prox!= NULL) {\n    if(aux->dado == chave) return 1;\n    aux = aux>prox;\n  }\n  return 0;\n}\n```",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "A versão I está correta e não apresenta problemas de alocação de memória.",
+          "porque": "A I faz `malloc` e logo sobrescreve `aux` com `prim`, perdendo o bloco alocado (vazamento). E `aux>prox` é erro de digitação: o certo é `aux->prox`."
+        },
+        {
+          "letra": "B",
+          "texto": "A versão II está correta e não apresenta problemas de alocação de memória.",
+          "porque": "Correta. Não aloca nada e anda com o próprio parâmetro `prim` (que é uma cópia local do ponteiro), comparando até `NULL`. Devolve 1 se achou e 0 se acabou a lista."
+        },
+        {
+          "letra": "C",
+          "texto": "A versão III está correta e não apresenta problemas de alocação de memória.",
+          "porque": "O laço testa `prim->prox`, mas avança `aux`. Como `prim` nunca muda, o laço não termina (ou roda sem avançar), e o último nó nunca é comparado."
+        },
+        {
+          "letra": "D",
+          "texto": "A versão IV está correta e não apresenta problemas de alocação de memória.",
+          "porque": "Aloca um nó sem necessidade (vazamento) e percorre esse nó novo com campos sem valor, e não a lista. Também tem `aux>prox`."
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma das alternativas anteriores está correta",
+          "porque": "A versão II está correta."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Busca em lista sem nó cabeça: percorra com o ponteiro recebido (`while (p != NULL) { ...; p = p->prox; }`). Não precisa de `malloc`: alocar só serve para criar nó novo. Dica: procure `malloc` sobrando, laço que não avança e teste de `->prox` no lugar do próprio nó.",
+      "assuntos": [
+        {
+          "num": "0076",
+          "modulo": "11-listas.md"
+        },
+        {
+          "num": "0077",
+          "modulo": "11-listas.md"
+        },
+        {
+          "num": "0054",
+          "modulo": "07-memoria-dinamica.md"
+        }
+      ]
+    },
+    {
+      "numero": 6,
+      "topico": 3,
+      "formato": "simulação",
+      "enunciado": "Após a inserção da sequencia de números 3, 4, 6, 8 e 9 em uma pilha, o resultado CORRETO de 3 remoções sucessivas seria:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "3, 4 e 6, nesta ordem",
+          "porque": "Seria a saída de uma fila (FIFO). Pilha tira o último que entrou."
+        },
+        {
+          "letra": "B",
+          "texto": "6, 3 e 4, nesta ordem",
+          "porque": "Não segue nenhuma disciplina de pilha ou de fila."
+        },
+        {
+          "letra": "C",
+          "texto": "6, 8 e 9, nesta ordem",
+          "porque": "Está na ordem contrária da pilha: o 9 sai primeiro."
+        },
+        {
+          "letra": "D",
+          "texto": "9, 8 e 6, nesta ordem",
+          "porque": "Correta. LIFO: o último a entrar (9) é o primeiro a sair, depois 8 e depois 6."
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma das alternativas anteriores",
+          "porque": "A letra D descreve a saída certa."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "Pilha é LIFO. Depois de empilhar 3, 4, 6, 8, 9, o topo é o 9, e as três remoções devolvem 9, 8, 6.",
+      "assuntos": [
+        {
+          "num": "0082",
+          "modulo": "12-pilhas-e-filas.md"
+        }
+      ]
+    },
+    {
+      "numero": 7,
+      "topico": 5,
+      "formato": "afirmações",
+      "enunciado": "Considere as seguintes afirmações:\n\nI. Hash por encadeamento nunca apresenta colisões secundárias\nII. Hash por encadeamento jamais permite que o número de comparações entre chaves em uma operação de busca passe de log n, onde n é o número de chaves inseridas no hash.\nIII. Hash por encadeamento realiza sempre menos comparações entre chaves do que qualquer hash por endereçamento aberto.\n\nMarque a alternativa CORRETA:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas a afirmação I é verdadeira",
+          "porque": "Correta. Colisão secundária (aglomerado de posições) é problema do endereçamento aberto. No encadeamento as colisões ficam na lista do balde. II e III são falsas."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas a afirmação II é verdadeira",
+          "porque": "II é falsa: no pior caso todas as chaves caem no mesmo balde e a busca compara n chaves."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas a afirmação III é verdadeira",
+          "porque": "III é falsa: com tabela folgada, o endereçamento aberto pode fazer menos comparações que o encadeamento. 'Sempre' e 'qualquer' denunciam a falsidade."
+        },
+        {
+          "letra": "D",
+          "texto": "Apenas as afirmações II e III são verdadeiras",
+          "porque": "Ambas são falsas."
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma das alternativas anteriores está correta",
+          "porque": "I é verdadeira, então A está certa."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "I verdadeira (colisão secundária é de endereçamento aberto). II falsa (o pior caso do encadeamento é n comparações, não log n). III falsa ('sempre menos' que 'qualquer' outro). Dica: 'nunca', 'jamais', 'sempre' e 'qualquer' pedem desconfiança.",
+      "assuntos": [
+        {
+          "num": "0106",
+          "modulo": "15-hash.md"
+        },
+        {
+          "num": "0107",
+          "modulo": "15-hash.md"
+        }
+      ]
+    },
+    {
+      "numero": 8,
+      "topico": 4,
+      "formato": "afirmações",
+      "enunciado": "Considere as seguintes árvores onde são apresentados apenas os valores das chaves em cada nó, sem mostrar o valor de outros campos eventualmente existentes. Considerando em todos os casos que as árvores não estão em processo de rotação por inserção de chaves, estando portanto em seu estado final após a inserção do conjunto de chaves mostrado.\n\nÉ CORRETO afirmar que:",
+      "figuras": [
+        "2017-024-q08-i",
+        "2017-024-q08-ii",
+        "2017-024-q08-iii",
+        "2017-024-q08-iv"
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas a árvore do quadro I poderia ser uma árvore AVL",
+          "porque": "Não só a I. A II (pelo formato) e a IV também são AVL: em todos os nós a diferença de altura é no máximo 1."
+        },
+        {
+          "letra": "B",
+          "texto": "Todas as opções apresentadas nos quadros de I a IV podem ser exemplos de árvores AVL",
+          "porque": "A III não é AVL: o nó 10 tem subárvore esquerda vazia (altura 0) e subárvore direita com altura 2, diferença 2."
+        },
+        {
+          "letra": "C",
+          "texto": "Nenhuma das 4 opções apresentadas podem ser exemplos de árvores AVL",
+          "porque": "I, II e IV podem ser AVL."
+        },
+        {
+          "letra": "D",
+          "texto": "Apenas as opções I e III podem ser exemplos de árvores AVL",
+          "porque": "A III não pode, por causa do nó 10, e a IV pode. Falta incluir II e IV e tirar a III."
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma das alternativas anteriores (de A até D) está correta",
+          "porque": "Correta. Os quadros I, II e IV podem ser AVL, e só o III não pode. Nenhuma das letras A a D diz isso."
+        }
+      ],
+      "gabarito": "E",
+      "resumo": "Confira o fator de balanceamento (altura da esquerda menos a da direita) de cada nó. I: árvore cheia, tudo 0. II: B tem só filho direito e E só filho esquerdo, mas as diferenças são 1; A tem alturas 2 e 3. IV: 4 (2 e 2), 12 (2 e 1), 8 (3 e 3). III: o nó 10 tem esquerda vazia e direita de altura 2, então quebra a AVL. Resultado: I, II e IV podem ser AVL.",
+      "assuntos": [
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 9,
+      "topico": 3,
+      "formato": "simulação",
+      "enunciado": "Marque a alternativa CORRETA:\nConsidere uma estrutura de fila (disciplina FIFO) de números inteiros com duas operações: INSERE (n) e RETIRA ( ). Considere, também, que a representação do estado da fila em um instante qualquer é realizada listando os elementos, de forma que o primeiro elemento, da esquerda para a direita, é o mais antigo presente na fila.\n\nSe a fila começa vazia, a sequência:\n\nINSERE (b) → INSERE (c) → RETIRA ( ) → INSERE (a) → RETIRA ( ) → INSERE (e) → INSERE (e) → RETIRA ( ) → RETIRA ( )\n\nlevará a uma fila no estado:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "a b c e",
+          "porque": "Não é alcançável: o b e o c entraram primeiro e já foram retirados nas operações 3 e 5."
+        },
+        {
+          "letra": "B",
+          "texto": "e a",
+          "porque": "O a entrou antes dos dois e, então a ordem 'e a' é impossível. Além disso o a sai na 8ª operação."
+        },
+        {
+          "letra": "C",
+          "texto": "a",
+          "porque": "O a é retirado na 8ª operação, então ele não está na fila no final. O que sobra é um e."
+        },
+        {
+          "letra": "D",
+          "texto": "b c a e",
+          "porque": "O b e o c são retirados nas operações 3 e 5, então não estão no final."
+        },
+        {
+          "letra": "E",
+          "texto": "c a e",
+          "porque": "O c sai na operação 5 e o a na operação 8, então não restam no final."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "Anulada pela banca. A simulação dá: [b], [b c], [c], [c a], [a], [a e], [a e e], [e e], [e]. O estado final é só 'e', que não aparece em nenhuma alternativa. Questão de fila: anote o estado depois de cada operação.",
+      "assuntos": [
+        {
+          "num": "0085",
+          "modulo": "12-pilhas-e-filas.md"
+        }
+      ]
+    },
+    {
+      "numero": 10,
+      "topico": 4,
+      "formato": "afirmações",
+      "enunciado": "Considere as seguintes árvores onde são apresentados apenas os valores das chaves em cada nó, sem mostrar o valor de outros campos eventualmente existentes. Considerando em todos os casos que as árvores não estão em processo de rotação por inserção de chaves, estando portanto em seu estado final após a inserção do conjunto de chaves mostrado.\n\nÉ CORRETO afirmar que:",
+      "figuras": [
+        "2017-024-q10-i",
+        "2017-024-q10-ii",
+        "2017-024-q10-iii",
+        "2017-024-q10-iv"
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas a árvore do quadro I poderia ser uma árvore binária de pesquisa sem balanceamento",
+          "porque": "Não só a I. A III e a IV também respeitam a regra da ABB em todos os nós (esquerda menor, direita maior)."
+        },
+        {
+          "letra": "B",
+          "texto": "Todas as 4 opções podem ser exemplos de árvores binárias de pesquisa sem balanceamento",
+          "porque": "A II não é ABB: com as letras em ordem alfabética, B está à esquerda de A, mas o D (filho direito de B) fica na subárvore esquerda e D > A. O E, na subárvore esquerda de C, também é maior que C."
+        },
+        {
+          "letra": "C",
+          "texto": "Nenhuma das 4 opções pode ser uma árvore binária de pesquisa sem balanceamento",
+          "porque": "I, III e IV são ABB válidas."
+        },
+        {
+          "letra": "D",
+          "texto": "Apenas as opções II e III podem de árvores binárias de pesquisa sem balanceamento",
+          "porque": "A II não é ABB e a I e a IV são. A combinação está trocada."
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma das alternativas anteriores (de A até D) está correta",
+          "porque": "Correta. I, III e IV são ABB, e a II (letras fora de ordem) não é. Isso não coincide com nenhuma das letras A a D."
+        }
+      ],
+      "gabarito": "E",
+      "resumo": "Gabarito oficial E. Teste a regra em todos os nós: tudo à esquerda é menor e tudo à direita é maior. I, III (o 13 fica à direita do 10 e à esquerda do 14) e IV passam. Na II, a árvore só seria ABB se as letras estivessem em ordem de percurso; com ordem alfabética, D (filho de B, à esquerda de A) é maior que A. Dica: verifique a subárvore inteira, não só pai e filho.",
+      "assuntos": [
+        {
+          "num": "0099",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 11,
+      "topico": 4,
+      "formato": "simulação",
+      "enunciado": "Sabendo que um arvore binária com 5 nós tem como resultados dos seus percursos pós-ordem e in-ordem, respectivamente S T Q R P e S Q T P R.\nÉ CORRETO afirmar:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "O nó raiz tem o valor P",
+          "porque": "Correta. A pós-ordem termina na raiz: o último é P. Na in-ordem, S Q T ficam à esquerda de P, e R à direita. Q tem S e T como filhos, e R é folha."
+        },
+        {
+          "letra": "B",
+          "texto": "Q é um nó folha",
+          "porque": "Falso. Q tem filhos: S à esquerda e T à direita."
+        },
+        {
+          "letra": "C",
+          "texto": "S é um nó interno",
+          "porque": "Falso. S é folha (não tem filhos)."
+        },
+        {
+          "letra": "D",
+          "texto": "T é filho de S",
+          "porque": "Falso. T é filho de Q, irmão de S."
+        },
+        {
+          "letra": "E",
+          "texto": "Todas as alternativas estão corretas",
+          "porque": "Só A está correta."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Para reconstruir: o último da pós-ordem é a raiz (P). Na in-ordem, o que fica à esquerda de P forma a subárvore esquerda (S Q T) e à direita a subárvore direita (R). Repita: na pós-ordem S T Q, a raiz é Q, com S à esquerda e T à direita. Árvore: P(Q(S,T), R).",
+      "assuntos": [
+        {
+          "num": "0098",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 12,
+      "topico": 6,
+      "formato": "afirmações",
+      "enunciado": "Sobre as afirmações abaixo:\n\nI. A busca sequencial só pode ser realizada corretamente em vetores que não estejam ordenados\nII. A busca por uma chave em um vetor ordenado pode ser realizada corretamente com número constante de operações, não dependendo do tamanho do vetor.\nIII. Pode-se encontrar o maior elemento de um vetor não ordenado com um algoritmo que realiza um número de operações proporcional ao tamanho do vetor na pior das situação possível para o algoritmo.\n\nPode-se dizer que:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas I está correta",
+          "porque": "I é falsa: a busca sequencial funciona em qualquer vetor, ordenado ou não."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas II está correta",
+          "porque": "II é falsa: a busca binária faz O(log n), e o custo depende do tamanho, mesmo que cresça devagar."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas III está correta",
+          "porque": "Correta. I falsa, II falsa. III é verdadeira: achar o maior de um vetor sem ordem exige varrer tudo, O(n)."
+        },
+        {
+          "letra": "D",
+          "texto": "Apenas II e III estão corretas",
+          "porque": "II é falsa."
+        },
+        {
+          "letra": "E",
+          "texto": "Apenas I e III estão corretas",
+          "porque": "I é falsa."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "I falsa (a sequencial vale em qualquer vetor), II falsa (busca em vetor ordenado é O(log n), não constante), III verdadeira (varredura linear para achar o máximo). 'Só pode' e 'constante' são pistas de afirmação falsa.",
+      "assuntos": [
+        {
+          "num": "0089",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0090",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 13,
+      "topico": 3,
+      "formato": "código",
+      "enunciado": "Dada uma lista encadeada onde cada nó da lista é do tipo No, cujos campos são um ponteiro para o próximo elemento (campo prox) e um dado do tipo inteiro (campo dado). Considere que: (1) a lista encadeada não possui um nó cabeça de lista, portanto todos os nós contém valores presentes na lista; (2) todos os tipos de dados foram previamente declarados no programa; (3) a função não deve ter problemas de alocação de memória, seja por deixar de alocar dinamicamente dados necessários ou por causar alocação dinâmica de dados desnecessária.\n\nMarque a alternativa CORRETA sobre as funções função I e função II\n\n```c\n/* função I */\nvoid funcaoI(No *prim, int chave) {\n  No *aux = (No *) malloc(sizeof(No));\n  aux ->chave = chave;\n  aux->prox = prim;\n  prim = aux;\n}\n\n/* função II */\nvoid funcaoI(No **prim, int chave) {\n  No *aux = (No *) malloc(sizeof(No));\n  aux ->chave = chave;\n  aux->prox = *prim;\n  *prim = aux;\n}\n```",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas a função função I pode ser usada para inserir corretamente elementos em uma pilha sem gerar qualquer problema de alocação de memória ou erro na pilha.",
+          "porque": "A I recebe `prim` por valor: a atribuição `prim = aux` muda só a cópia local. O topo da pilha não se altera fora da função, e o nó alocado vaza."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas a função função II pode ser usada para inserir corretamente elementos em uma pilha sem gerar qualquer problema de alocação de memória ou erro na pilha.",
+          "porque": "Correta. A II recebe o endereço do ponteiro (`No **`) e atualiza `*prim`, então a mudança aparece para quem chamou. Empilhar é inserir no início da lista."
+        },
+        {
+          "letra": "C",
+          "texto": "Ambas as funções podem ser usadas para inserir elementos em uma pilha sem gerar qualquer problema de alocação de memória ou erro na pilha.",
+          "porque": "A I não atualiza o topo de quem chamou e vaza memória."
+        },
+        {
+          "letra": "D",
+          "texto": "Apenas a função função I serve para inserir corretamente elementos em uma lista encadeada sem gerar erros, mas não em uma pilha.",
+          "porque": "A I falha também para lista: inserir no início também precisa mudar o ponteiro de quem chamou."
+        },
+        {
+          "letra": "E",
+          "texto": "Apenas a função função II serve para inserir corretamente elementos em uma lista encadeada sem gerar erros, mas não em uma pilha.",
+          "porque": "A II serve para a pilha também: push é inserção no início da lista."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Em C, parâmetro é passado por valor. Para uma função mudar o ponteiro do início da lista, ela precisa receber o endereço dele (`No **`) e escrever em `*prim`. É o mesmo erro clássico do `remove` e do `insere`. Ignore o nome do campo (`chave` no código, `dado` no texto).",
+      "assuntos": [
+        {
+          "num": "0083",
+          "modulo": "12-pilhas-e-filas.md"
+        },
+        {
+          "num": "0049",
+          "modulo": "06-ponteiros.md"
+        },
+        {
+          "num": "0062",
+          "modulo": "08-structs.md"
+        }
+      ]
+    },
+    {
+      "numero": 14,
+      "topico": 5,
+      "formato": "afirmações",
+      "enunciado": "Considere as afirmações sobre um hash linear (sem encadeamento):\n\nI. No evento de uma colisão, o valor a ser inserido é sempre colocado no início do array;\nII. A busca pela chave é realizada utilizando busca binária (mais eficiente)\nIII. É obrigatório o uso de funções diferentes para inserção e remoção de chaves\nIV. É projetado para funcionar com arrays de tamanho previamente definido.\n\nSobre as afirmações, sabe-se que:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Todas são verdadeiras",
+          "porque": "Só a IV é verdadeira."
+        },
+        {
+          "letra": "B",
+          "texto": "Todas são falsas",
+          "porque": "IV é verdadeira: o hash linear trabalha com um vetor de tamanho fixo definido de antemão."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas II e IV são verdadeiras",
+          "porque": "II é falsa: a busca recalcula a posição pelo hash e sonda as seguintes, sem busca binária (a tabela nem fica ordenada)."
+        },
+        {
+          "letra": "D",
+          "texto": "Apenas IV é verdadeira",
+          "porque": "Correta. I é falsa (a chave vai para a próxima posição livre, não para o início). II é falsa. III é falsa (a mesma função de hash serve para inserir e remover). IV é verdadeira."
+        },
+        {
+          "letra": "E",
+          "texto": "Apenas I e II são verdadeiras",
+          "porque": "As duas são falsas."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "No hash linear, a colisão manda a chave para a próxima posição livre (sondagem), a busca recalcula o hash e sonda do mesmo jeito, e o vetor tem tamanho fixo. Isso torna IV a única verdadeira.",
+      "assuntos": [
+        {
+          "num": "0107",
+          "modulo": "15-hash.md"
+        }
+      ]
+    },
+    {
+      "numero": 15,
+      "topico": 5,
+      "formato": "afirmações",
+      "enunciado": "Considere as afirmações sobre hash linear vs hash encadeado\n\nI. Para uma tabela hash de tamanho M, tanto o hash linear quanto o hash encadeado podem receber uma quantidade de chaves C, onde C > M.\nII. Quanto acontece uma colisão no hash encadeado, a chave é inserida na posição livre mais próxima da chave original.\nIII. Hash linear funciona melhor em disco, pois as chaves obrigatoriamente ficam em espaços separados de memória, facilitando a varredura.\nIV. O uso de uma segunda função de hash (no hash encadeado), garante um melhor espalhamento das chaves pela tabela hash\n\nSobre as afirmações, sabe-se que:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Todas são verdadeiras",
+          "porque": "As quatro são falsas."
+        },
+        {
+          "letra": "B",
+          "texto": "Todas são falsas",
+          "porque": "Correta. I é falsa (o linear não aceita C > M). II descreve o hash linear, e não o encadeado. III é uma frase sem sentido (chaves 'obrigatoriamente em espaços separados' não ajuda varredura). IV descreve dispersão dupla, que é do endereçamento aberto, e não do encadeado."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas I e III são verdadeiras",
+          "porque": "I é falsa para o linear, e III não faz sentido."
+        },
+        {
+          "letra": "D",
+          "texto": "Apenas III é verdadeira",
+          "porque": "III é falsa."
+        },
+        {
+          "letra": "E",
+          "texto": "Apenas I e II são verdadeiras",
+          "porque": "I é falsa para o linear, e II descreve o linear, não o encadeado."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "I falsa, II falsa (a 'posição livre mais próxima' é o linear), III sem sentido, IV falsa (segunda função de hash é a dispersão dupla, do endereçamento aberto). Em afirmações trocadas entre as duas técnicas, confira a que técnica cada propriedade pertence.",
+      "assuntos": [
+        {
+          "num": "0106",
+          "modulo": "15-hash.md"
+        },
+        {
+          "num": "0107",
+          "modulo": "15-hash.md"
+        },
+        {
+          "num": "0179",
+          "modulo": "28-estruturas-complementos.md"
+        }
+      ]
+    },
+    {
+      "numero": 16,
+      "topico": 4,
+      "formato": "cálculo",
+      "enunciado": "Considere que o vetor a seguir é uma heap mínima (assuma índice do array iniciando em zero)\n\n`4 5 7 10 13 11 15 22`\n\nMarque a alternativa que contem a afirmativa CORRETA:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Essa heap possui todos os nós folhas na mesma altura",
+          "porque": "Falso. Os índices 4, 5, 6 são folhas no nível 2, e o índice 7 (22) é folha no nível 3."
+        },
+        {
+          "letra": "B",
+          "texto": "Ao alterar o valor 22 por 6, 2 trocas são necessárias para corrigir a heap",
+          "porque": "Falso. O 6 no índice 7 tem pai 10 (índice 3): troca. Agora o pai é 5 (índice 1), e 6 > 5, então para. É uma troca só."
+        },
+        {
+          "letra": "C",
+          "texto": "O valor no índice 7 precisa ser necessariamente menor que o do índice 4",
+          "porque": "Falso. Os índices 7 e 4 estão em ramos diferentes (7 desce de 3, e 4 é irmão de 3). Heap mínima só compara pai e filho."
+        },
+        {
+          "letra": "D",
+          "texto": "O valor no índice 6 precisa ser obrigatoriamente maior que o do índice 1",
+          "porque": "Falso. O índice 6 é descendente do índice 2, e não do 1. Sem relação direta."
+        },
+        {
+          "letra": "E",
+          "texto": "Ao alterar o valor 13 por 8, nada precisa ser feito para corrigir a heap",
+          "porque": "Correta. O índice 4 é folha e seu pai (índice 1) vale 5. Como 8 > 5, a regra da heap mínima continua valendo."
+        }
+      ],
+      "gabarito": "E",
+      "resumo": "Em heap mínima (índices de 0): o pai de i é (i-1)/2, e a única regra é pai menor ou igual aos filhos. Mudou um valor: compare só com o pai (e com os filhos, se houver). Troca de 13 por 8: folha, pai 5, 8 > 5, nada a fazer.",
+      "assuntos": [
+        {
+          "num": "0102",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 17,
+      "topico": 4,
+      "formato": "conceito",
+      "enunciado": "As árvores são estruturas de dados poderosas e se subdividem em vários tipos, cada um dos quais com suas características próprias. Relacione os tipos de árvores, apresentados na coluna da esquerda, com as suas respectivas características, indicadas na coluna da direita:\n\n| Tipo de árvore | Característica |\n|---|---|\n| I – Heap | W – Pode degenerar se os elementos forem inseridos de forma ordenada. |\n| II – Rubro-Negra | X – É balanceada. |\n| III – Avore AVL | Y – Têm altura sempre proporcional/próxima a O(log2 n), onde n é o número de nós que contém. |\n| IV – Árvores binária de busca | Z – São sempre completas. |\n\nEstão CORRETAS as associações:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "I –X, IV – Z , II – Y",
+          "porque": "IV (ABB) – Z está errada: a ABB comum pode degenerar e não é sempre completa."
+        },
+        {
+          "letra": "B",
+          "texto": "I – Z , IV– X , III – W",
+          "porque": "IV – X e III – W estão trocadas: a ABB é quem degenera (W), e a AVL é balanceada."
+        },
+        {
+          "letra": "C",
+          "texto": "I – Z , IV– X , III – Y",
+          "porque": "IV – X está errada: a ABB sem balanceamento não é balanceada."
+        },
+        {
+          "letra": "D",
+          "texto": "I –Y , IV– W , III – X",
+          "porque": "Defensável: heap tem altura O(log n), ABB degenera e AVL é balanceada. Falta só o par canônico I – Z (heap é completa)."
+        },
+        {
+          "letra": "E",
+          "texto": "I –X , IV– W , II – Y",
+          "porque": "Também defensável: heap é balanceada, ABB degenera, rubro-negra tem altura O(log n). Como D e E se sustentam, a banca anulou."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "Anulada pela banca. W é da ABB (degenera com chaves em ordem), Z é da heap (árvore completa), e X e Y servem para AVL e rubro-negra. Como o par canônico I – Z não aparece junto com IV – W, as letras D e E ficam ambas defensáveis.",
+      "assuntos": [
+        {
+          "num": "0099",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0102",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0177",
+          "modulo": "28-estruturas-complementos.md"
+        }
+      ]
+    },
+    {
+      "numero": 18,
+      "topico": 3,
+      "formato": "código",
+      "enunciado": "Considere o código abaixo, assumindo que o mesmo é usado dentro de um programa e que os todos os cabeçalhos necessários são incluídos:\n\n```c\n// Conta ocorrências de uma chave na lista encadeada, retornando o total de ocorrências , zero caso a chave não ocorra\nint ContaOcorrenciasChave(tipoNo *prim, int chave) {\n  tipoNo *aux = prim;\n  int cont = 0;\n  int x;\n  for (x = 0; aux[x] != NULL; x++){\n    if(aux[x].dado == chave)\n      cont++;\n  }\n  return x;\n}\n```\n\nMarque a alternativa CORRETA dentre as afirmações abaixo:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "O código executa a tarefas proposta sem gerar qualquer tipo de erro de lógica ou de vazamento de memória",
+          "porque": "O código percorre lista como vetor e devolve `x` (posições percorridas) no lugar de `cont`."
+        },
+        {
+          "letra": "B",
+          "texto": "O código nem compila",
+          "porque": "Na prática o compilador rejeita `aux[x] != NULL` (struct comparada com ponteiro). A banca, porém, tratou o erro como de lógica e execução, e marcou E."
+        },
+        {
+          "letra": "C",
+          "texto": "O código executa a tarefa proposta sem erros de lógica",
+          "porque": "Há erros: o retorno é `x` e não `cont`, e a lista é percorrida por índice em vez de `prox`."
+        },
+        {
+          "letra": "D",
+          "texto": "O código não gera erro de segmentação",
+          "porque": "Ler `aux[x]` além do primeiro nó acessa memória que não é da lista, e pode derrubar o programa."
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma das alternativas anteriores",
+          "porque": "Correta pelo gabarito: nenhuma das letras A a D descreve o código de forma aceita pela banca."
+        }
+      ],
+      "gabarito": "E",
+      "resumo": "Gabarito oficial E. Divergência: o curso tinha chegado em B, e de fato o gcc recusa `aux[x] != NULL` (struct contra ponteiro). A banca preferiu E, lendo o código como uma lista tratada como vetor, com retorno `x` em vez de `cont`. Em prova, o essencial: lista encadeada se percorre por `prox`, nunca por índice.",
+      "assuntos": [
+        {
+          "num": "0076",
+          "modulo": "11-listas.md"
+        },
+        {
+          "num": "0077",
+          "modulo": "11-listas.md"
+        }
+      ]
+    },
+    {
+      "numero": 19,
+      "topico": 3,
+      "formato": "conceito",
+      "enunciado": "Uma lista encadeada simples é uma estrutura que corresponde a uma sequência lógica de entradas ou nós. Cada nó armazena a localização do próximo elemento na sequência, ou seja, de seu nó sucessor.\n\nMarque a alternativa CORRETA:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "A existência de um ponteiro apontando para o 1º elemento e outro para o fim da lista permite que a inserção ou deleção de dados de um nó que esteja nas extremidades da lista seja rapidamente executada",
+          "porque": "Correta. Com ponteiros para o início e para o fim, inserir nas pontas é O(1), sem percorrer a lista. É essa a vantagem que a alternativa descreve. Remover do fim, na lista simples, ainda exige achar o penúltimo nó."
+        },
+        {
+          "letra": "B",
+          "texto": "Enquanto a entrada que determina o topo da lista é mantida em um nó descritor dessa lista, a entrada que marca o fim da lista é mantida em todos os nós da lista.",
+          "porque": "O fim não é guardado em todos os nós. Cada nó guarda só o ponteiro para o próximo."
+        },
+        {
+          "letra": "C",
+          "texto": "O armazenamento de uma lista requer uma área contígua de memória para permitir a otimização no processamento de busca de valores chaves na lista",
+          "porque": "Lista encadeada não é contígua. Quem usa memória contígua é o vetor."
+        },
+        {
+          "letra": "D",
+          "texto": "O armazenamento de uma lista requer uma área contígua de memória. Como listas são estruturas previamente projetadas e definidas, normalmente são definidos procedimentos que permitem inserir e remover valores com eficiência.",
+          "porque": "Mesmo erro: lista encadeada dinâmica não precisa de área contígua."
+        },
+        {
+          "letra": "E",
+          "texto": "Para estabelecer a ligação entre um nó já pertencente a uma lista e um novo nó, basta fazer com que o novo nó referencie no campo next, o nó que anteriormente era referenciado pelo nó original, desde que esse campo não tenha o valor nulo",
+          "porque": "Está incompleta: também é preciso fazer o nó original apontar para o novo. O 'desde que não seja nulo' também não é condição: inserir no fim (campo nulo) funciona."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Guardar o ponteiro do início e do fim da lista dá inserção em O(1) nas duas pontas (e remoção no início). As demais letras mentem sobre memória contígua, que é característica de vetor, não de lista encadeada.",
+      "assuntos": [
+        {
+          "num": "0076",
+          "modulo": "11-listas.md"
+        }
+      ]
+    },
+    {
+      "numero": 20,
+      "topico": 3,
+      "formato": "conceito",
+      "enunciado": "Marque a alternativa CORRETA. Uma lista duplamente encadeada tem como característica ser formada por elementos que:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Se concatenam de forma circular, de tal maneira que, ao chegar ao final da lista, o próximo elemento volta a ser o primeiro.",
+          "porque": "Descreve lista circular."
+        },
+        {
+          "letra": "B",
+          "texto": "Contêm, além de um ou mais campos chave, mais um campo de ponteiro: o próximo, que permite o acesso ao elemento que sucede o atual (o próximo) presente na mesma lista.",
+          "porque": "Descreve lista simplesmente encadeada (um só ponteiro)."
+        },
+        {
+          "letra": "C",
+          "texto": "Contêm, além de um campo chave, mais um campo de ponteiro: o próximo, que permite o acesso ao elemento que sucede o atual (o próximo) presente na mesma lista, de tal forma que os campos chave estão ordenados, ou seja, a chave do próximo é sempre maior ou igual à chave do atual elemento.",
+          "porque": "Descreve lista simples e ordenada."
+        },
+        {
+          "letra": "D",
+          "texto": "Contêm, além de um ou mais campos chave, dois outros campos de ponteiros: próximo e anterior, que permitem o acesso aos elementos adjacentes (próximo e anterior) presentes na mesma lista.",
+          "porque": "Correta. Dois ponteiros por nó, `prox` e `ant`, e o percurso nos dois sentidos."
+        },
+        {
+          "letra": "E",
+          "texto": "Estão em posições adjacentes da memória, permitindo o acesso sequencial ao próximo e ao anterior de cada elemento pelo simples uso de um índice.",
+          "porque": "Descreve vetor, não lista encadeada."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "Mesma questão da prova 053/2016 (Q06). Lista dupla = `prox` e `ant` em cada nó. Alternativas que falam em circular, ordenada ou memória contígua descrevem outras coisas.",
+      "assuntos": [
+        {
+          "num": "0079",
+          "modulo": "11-listas.md"
+        }
+      ]
+    }
+  ]
+}

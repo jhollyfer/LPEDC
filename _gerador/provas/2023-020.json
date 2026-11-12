@@ -1,0 +1,392 @@
+{
+  "edital": "020/2023",
+  "slug": "2023-020",
+  "ano": 2023,
+  "oficial": false,
+  "questoes": [
+    {
+      "numero": 1,
+      "topico": 6,
+      "formato": "cálculo",
+      "enunciado": "Dado o vetor ordenado `10 30 50 60 70 80 90 100 120 130` (posições 0 a 9), quantas comparações a busca binária faz no pior caso?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "6",
+          "porque": "Seis comparações é mais do que a busca binária precisa para 10 elementos. A cada passo o intervalo cai pela metade: 10, 5, 2, 1."
+        },
+        {
+          "letra": "B",
+          "texto": "10",
+          "porque": "É o pior caso da busca sequencial, que pode olhar todos os elementos. A binária descarta metade a cada comparação."
+        },
+        {
+          "letra": "C",
+          "texto": "4",
+          "porque": "O pior caso é ⌊log2 10⌋ + 1 = 3 + 1 = 4 comparações: o intervalo vai de 10 para 5, 2, 1 e depois para vazio."
+        },
+        {
+          "letra": "D",
+          "texto": "1",
+          "porque": "É o melhor caso, quando a chave está exatamente no meio na primeira tentativa. A pergunta é o pior caso."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Busca binária faz no máximo ⌊log2 n⌋ + 1 comparações. Para 10 elementos, ⌊3,32⌋ + 1 = 4. Decore a fórmula e a conta sai sem simular.",
+      "assuntos": [
+        {
+          "num": "0090",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 2,
+      "topico": 7,
+      "formato": "conceito",
+      "enunciado": "Sobre a ordenação por inserção, assinale a correta:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Fica mais rápida com o vetor quase ordenado e é mais lenta com o vetor invertido",
+          "porque": "Cada elemento só anda até achar seu lugar. Quase ordenado, quase não anda nada: O(n). Invertido, cada um percorre tudo à esquerda: O(n²)."
+        },
+        {
+          "letra": "B",
+          "texto": "O tempo independe da ordem inicial, sempre quadrático",
+          "porque": "Isso vale para a seleção, não para a inserção. Na inserção a quantidade de deslocamentos depende de quantos elementos estão fora de ordem."
+        },
+        {
+          "letra": "C",
+          "texto": "O tempo independe da ordem, sempre linear",
+          "porque": "No pior caso (invertido) é quadrático. Linear só no melhor caso."
+        },
+        {
+          "letra": "D",
+          "texto": "Não ordena chaves negativas",
+          "porque": "Ordena normalmente: só usa comparação entre chaves, e o sinal não importa."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Inserção é adaptativa: custo de O(n + inversões). Melhor caso O(n) (ordenado), pior O(n²) (invertido). É a diferença chave em relação à seleção, que é sempre O(n²).",
+      "assuntos": [
+        {
+          "num": "0093",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 3,
+      "topico": 3,
+      "formato": "simulação",
+      "enunciado": "Uma pilha contém `[4, 16, 1, 7, 8, 13]`, com o topo à esquerda. Três desempilhamentos são feitos, depois empilha-se 5 e depois 2. Como fica a pilha?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "[7, 8, 13, 5, 2]",
+          "porque": "Colocou o 5 e o 2 no fundo da pilha. O topo é a esquerda, então os novos entram na frente."
+        },
+        {
+          "letra": "B",
+          "texto": "[4, 16, 2, 5, 2]",
+          "porque": "Não é possível: os elementos 4 e 16 já saíram nos desempilhamentos, e há dois 2."
+        },
+        {
+          "letra": "C",
+          "texto": "[5, 2, 7, 8, 13]",
+          "porque": "Deixou o 5 na frente do 2. O último a entrar (2) fica no topo, antes do 5."
+        },
+        {
+          "letra": "D",
+          "texto": "[2, 5, 7, 8, 13]",
+          "porque": "Três pops tiram 4, 16 e 1, sobrando [7, 8, 13]. Push 5 dá [5, 7, 8, 13]; push 2 dá [2, 5, 7, 8, 13]."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "LIFO: o último a entrar é o primeiro a sair. Faça um passo por vez: pop, pop, pop, push, push. Atenção a qual lado é o topo.",
+      "assuntos": [
+        {
+          "num": "0082",
+          "modulo": "12-pilhas-e-filas.md"
+        }
+      ]
+    },
+    {
+      "numero": 4,
+      "topico": 5,
+      "formato": "afirmações",
+      "enunciado": "Sobre tabela hash com encadeamento, considere:\n\nI. Não gera colisões secundárias.\nII. Tem custo O(n) no pior caso.\nIII. Ao contrário do endereçamento aberto, aceita mais chaves que o tamanho da tabela.",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Nenhuma",
+          "porque": "As três são verdadeiras, então não é o caso."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas II",
+          "porque": "Deixa de fora a I e a III, que também são verdadeiras."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas I e II",
+          "porque": "Falta a III: cada posição guarda uma lista, então dá para ter mais chaves que posições."
+        },
+        {
+          "letra": "D",
+          "texto": "Todas",
+          "porque": "I: colisão secundária (agrupamento) é problema de endereçamento aberto; no encadeamento, quem colide só entra na lista do balde. II: se todas as chaves caírem no mesmo balde, a busca varre uma lista de n itens. III: cada balde é uma lista, sem limite de tamanho."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "Encadeamento: sem agrupamento, fator de carga pode passar de 1, pior caso O(n) se tudo cair no mesmo balde. Endereçamento aberto exige n ≤ m. Esta é uma das provas sem gabarito oficial, então a letra é conferida pelo conteúdo do curso.",
+      "assuntos": [
+        {
+          "num": "0106",
+          "modulo": "15-hash.md"
+        },
+        {
+          "num": "0107",
+          "modulo": "15-hash.md"
+        }
+      ]
+    },
+    {
+      "numero": 5,
+      "topico": 4,
+      "formato": "afirmações",
+      "enunciado": "Compare um vetor mantido ordenado com uma árvore binária de pesquisa balanceada:\n\nI. O vetor tem inserção e remoção mais baratas por não alocar nós.\nII. No pior caso, a busca custa assintoticamente o mesmo nos dois.",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas I",
+          "porque": "A I é falsa e a II é verdadeira, então essa combinação erra nas duas."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas II",
+          "porque": "I falsa: inserir ou remover no vetor ordenado desloca elementos, O(n), enquanto na árvore balanceada é O(log n). Alocar nó custa pouco perto disso. II verdadeira: busca binária no vetor e busca na árvore balanceada são O(log n)."
+        },
+        {
+          "letra": "C",
+          "texto": "As duas",
+          "porque": "Aceita a I, que é falsa: o custo do deslocamento no vetor é maior que o da alocação do nó."
+        },
+        {
+          "letra": "D",
+          "texto": "Nenhuma",
+          "porque": "A II é verdadeira: os dois têm busca O(log n)."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Vetor ordenado: busca O(log n), inserção e remoção O(n). ABB balanceada: tudo O(log n). O que o vetor ganha é localidade de memória, não o custo assintótico.",
+      "assuntos": [
+        {
+          "num": "0090",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0099",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 6,
+      "topico": 4,
+      "formato": "conceito",
+      "enunciado": "Considere uma árvore com três nós e raiz 5 (a figura não veio no caderno). Assinale a alternativa correta:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Pode ser rubro-negra, pois está balanceada",
+          "porque": "Estar balanceada não basta: rubro-negra depende das cores dos nós e das regras de coloração. Sem a figura, não dá para afirmar."
+        },
+        {
+          "letra": "B",
+          "texto": "Pode representar uma árvore binária de pesquisa, com ou sem balanceamento",
+          "porque": "Três nós com raiz 5 cabem numa ABB de várias formas, balanceada ou não. É a afirmação mais geral e a que sempre pode valer."
+        },
+        {
+          "letra": "C",
+          "texto": "Pode representar uma heap mínima",
+          "porque": "Heap mínima pede raiz menor ou igual aos filhos. Se a raiz 5 tiver filho menor, não é. A afirmação depende dos valores, que estão na figura ausente."
+        },
+        {
+          "letra": "D",
+          "texto": "É AVL, pois está balanceada",
+          "porque": "Dizer que É AVL exige que a diferença de altura seja no máximo 1 e que seja ABB. Sem a figura não se prova."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "A figura não veio, então a letra B foi inferida (as outras exigem informação que só a figura traria). Quando a figura some, a alternativa mais geral e com 'pode' costuma ser a segura. Sem gabarito oficial desta prova.",
+      "assuntos": [
+        {
+          "num": "0099",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0102",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 7,
+      "topico": 2,
+      "formato": "conceito",
+      "enunciado": "Sobre complexidade, assinale a alternativa correta:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "A busca binária é O(N/2) no pior caso",
+          "porque": "N/2 é linear, equivale a O(N). A busca binária é O(log N)."
+        },
+        {
+          "letra": "B",
+          "texto": "Inserir sem ordem numa lista encadeada custa constante no pior caso",
+          "porque": "Inserindo na cabeça (ou na cauda com ponteiro para o fim), só se ajustam ponteiros, sem percorrer nada: O(1)."
+        },
+        {
+          "letra": "C",
+          "texto": "Inserir no início de um vetor custa constante no pior caso",
+          "porque": "É preciso deslocar todos os elementos uma casa: O(n)."
+        },
+        {
+          "letra": "D",
+          "texto": "Inserir numa árvore binária de pesquisa custa constante no pior caso",
+          "porque": "Tem que descer até a posição certa: O(log n) balanceada, O(n) degenerada."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Lista encadeada: inserção na cabeça é O(1). Vetor: início é O(n). ABB: depende da altura. Busca binária é O(log n); cuidado com 'N/2', que parece logarítmico mas é linear.",
+      "assuntos": [
+        {
+          "num": "0072",
+          "modulo": "10-analise.md"
+        },
+        {
+          "num": "0076",
+          "modulo": "11-listas.md"
+        }
+      ]
+    },
+    {
+      "numero": 8,
+      "topico": 7,
+      "formato": "código",
+      "enunciado": "Considere o código (resumido): `par` intercala `v[inicio..meio]` e `v[meio+1..fim]`, ambas ordenadas, usando o vetor auxiliar `vaux`; `sortR` calcula o meio, chama a si mesma nas duas metades e depois chama `par`; `sort` aloca `vaux`, chama `sortR` e libera `vaux`. Que algoritmo é esse?\n\n(O código completo não veio no texto; vale esta descrição.)",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Quick Sort",
+          "porque": "O Quick Sort escolhe um pivô e particiona antes de recursar, sem vetor auxiliar para intercalar."
+        },
+        {
+          "letra": "B",
+          "texto": "Radix Sort",
+          "porque": "O Radix ordena por dígito, sem comparação entre elementos nem recursão em metades."
+        },
+        {
+          "letra": "C",
+          "texto": "Merge Sort",
+          "porque": "Divide o vetor ao meio, ordena cada metade recursivamente e intercala as duas com um vetor auxiliar. É o Merge Sort."
+        },
+        {
+          "letra": "D",
+          "texto": "Não ordena o vetor",
+          "porque": "Se a intercalação está correta, o vetor sai ordenado. A banca trata o código como correto."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Divisão ao meio + recursão nas duas partes + intercalação com vetor auxiliar = Merge Sort. A letra assume que o código está correto, e o resumo do enunciado não permite conferir linha a linha.",
+      "assuntos": [
+        {
+          "num": "0094",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 9,
+      "topico": 1,
+      "formato": "código",
+      "enunciado": "O pseudocódigo recursivo (com `len`, `max` e `lista[1:]`) aparecia como imagem, que não veio no caderno. Qual a saída?\n\n(a figura não veio no caderno)",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "13",
+          "porque": "Sem o pseudocódigo não dá para conferir este valor."
+        },
+        {
+          "letra": "B",
+          "texto": "3",
+          "porque": "Sem o pseudocódigo não dá para conferir este valor."
+        },
+        {
+          "letra": "C",
+          "texto": "11",
+          "porque": "Sem o pseudocódigo não dá para conferir este valor."
+        },
+        {
+          "letra": "D",
+          "texto": "2",
+          "porque": "Sem o pseudocódigo não dá para conferir este valor."
+        }
+      ],
+      "gabarito": null,
+      "resumo": "Questão sem resposta: a figura não veio, e a letra não foi definida. Em recursão com fatia `lista[1:]`, o caso base é lista vazia ou de um elemento e cada chamada trata o primeiro elemento. Na prova, desenhe a pilha de chamadas.",
+      "assuntos": [
+        {
+          "num": "0032",
+          "modulo": "04-funcoes.md"
+        }
+      ]
+    },
+    {
+      "numero": 10,
+      "topico": 3,
+      "formato": "simulação",
+      "enunciado": "O pseudocódigo (que não veio no caderno) calcula o produto de uma matriz m×n por uma n×p, com m = 2, n = 3 e p = 2. Qual o valor de `resultMatrix`?\n\n(a figura não veio no caderno)",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "{{0, 0}, {0, 0}}",
+          "porque": "Tem a forma certa (2×2), mas todos zeros só ocorre se os produtos se anularem. Sem o código, é possível, não confirmado."
+        },
+        {
+          "letra": "B",
+          "texto": "{{0, 30, 0}, {45, 0, 0}}",
+          "porque": "Tem 2 linhas e 3 colunas. O produto de uma 2×3 por uma 3×2 é 2×2."
+        },
+        {
+          "letra": "C",
+          "texto": "{{0, 30}, {45, 0}, {9, 8}}",
+          "porque": "Tem 3 linhas e 2 colunas. O resultado deveria ter m = 2 linhas."
+        },
+        {
+          "letra": "D",
+          "texto": "{{0, 30}, {45, 0}}",
+          "porque": "É 2×2, a forma que m = 2 e p = 2 impõem. A letra D é um palpite: só A e D têm essa forma e as matrizes não estão no texto."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "Antes de simular, confira a forma do resultado: (m×n)·(n×p) é m×p, e aqui 2×2. Isso descarta B e C. A letra D tem confiança baixa, sem a figura, e a prova não tem gabarito oficial.",
+      "assuntos": [
+        {
+          "num": "0039",
+          "modulo": "05-vetores-e-strings.md"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,904 @@
+{
+  "edital": "023/2018",
+  "slug": "2018-023",
+  "ano": 2018,
+  "oficial": true,
+  "questoes": [
+    {
+      "numero": 1,
+      "topico": [
+        2,
+        7
+      ],
+      "formato": "cálculo",
+      "enunciado": "Dois vetores ordenados, contendo, cada um deles, N números inteiros, precisam ser unidos em outro vetor maior, que conterá os 2N números, que também serão armazenados de forma ordenada. A complexidade de tempo de melhor caso desse processo será, então,",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "O(1), pois se precisa fazer apenas uma cópia simples de cada um dos elementos originais.",
+          "porque": "Copiar 2N elementos custa proporcional a N, não constante. Uma cópia por elemento ainda é N cópias."
+        },
+        {
+          "letra": "B",
+          "texto": "O(log N), pois se usa a busca binária para determinar qual será o próximo elemento copiado para o vetor de destino.",
+          "porque": "A intercalação não usa busca binária: ela compara os dois elementos da frente de cada vetor. E, de qualquer jeito, nenhum algoritmo copia 2N elementos em tempo logarítmico."
+        },
+        {
+          "letra": "C",
+          "texto": "O(N), pois se precisa fazer uma cópia de cada um dos elementos originais, o que implica uma varredura completa de cada vetor de origem.",
+          "porque": "Correta. Os dois vetores precisam ser percorridos por inteiro e cada elemento é copiado uma vez: 2N cópias, que é O(N), mesmo no melhor caso."
+        },
+        {
+          "letra": "D",
+          "texto": "O(Nlog N), pois se precisa fazer uma busca de cada elemento para depois inseri-lo no vetor de destino.",
+          "porque": "Não há busca por elemento. Com dois índices avançando em um único laço, o custo é linear."
+        },
+        {
+          "letra": "E",
+          "texto": "O(N²), pois, como há dois vetores, precisam-se fazer dois laços de forma aninhada (um dentro do outro), gerando uma multiplicação das quantidades de elementos.",
+          "porque": "Os laços não são aninhados: cada passo avança um dos dois índices e o total de passos é 2N."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Intercalar dois vetores ordenados (o merge do mergesort) é linear: um laço, dois índices, 2N cópias. Mesmo no melhor caso (um vetor inteiro menor que o outro) você ainda copia todo mundo. Todo algoritmo que produz uma saída de tamanho 2N custa pelo menos O(N).",
+      "assuntos": [
+        {
+          "num": "0094",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0072",
+          "modulo": "10-analise.md"
+        }
+      ]
+    },
+    {
+      "numero": 2,
+      "topico": 4,
+      "formato": "afirmações",
+      "enunciado": "Dadas as seguintes afirmações a respeito de árvores B,\n\nI. Em uma árvore B de ordem \"m\" cada nó tem, no máximo, \"m\" filhos.\nII. Em uma árvore B de ordem \"m\" cada nó (exceto a raíz e as folhas) tem pelo menos \"m/2\" filhos.\nIII. Árvores B precisam ser rebalanceadas frequentemente.\nIV. Um nó não-folha com \"k\" filhos deve ter k chaves.\nV. Todas as folhas aparecem no mesmo nível e carregam informação.\n\nestão CORRETOS os itens",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "I e III, apenas.",
+          "porque": "I é verdadeira, mas III é falsa e a II e a V ficaram de fora."
+        },
+        {
+          "letra": "B",
+          "texto": "I, III, IV e V.",
+          "porque": "III e IV são falsas."
+        },
+        {
+          "letra": "C",
+          "texto": "I, II e V, apenas.",
+          "porque": "Correta. I, II e V são propriedades da árvore B. III e IV são falsas."
+        },
+        {
+          "letra": "D",
+          "texto": "III, IV e V.",
+          "porque": "III e IV são falsas."
+        },
+        {
+          "letra": "E",
+          "texto": "II, III e IV, apenas.",
+          "porque": "III e IV são falsas."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Valores: I V, II V, III F, IV F, V V. Propriedades da árvore B: no máximo m filhos, pelo menos ⌈m/2⌉ (menos raiz e folhas), um nó com k filhos tem k-1 chaves, e todas as folhas no mesmo nível. O rebalanceamento só acontece quando a página estoura ou fica abaixo do mínimo, e isso é raro, não frequente.",
+      "assuntos": [
+        {
+          "num": "0146",
+          "modulo": "22-arvores-avancadas.md"
+        }
+      ]
+    },
+    {
+      "numero": 3,
+      "topico": 4,
+      "formato": "conceito",
+      "enunciado": "Analise as duas afirmativas a seguir, relacionadas a árvores de busca:\n\nI. Uma árvore AVL é uma árvore binária de busca autobalanceada que respeita algumas propriedades fundamentais.\nII. Como todas as árvores, ela tem uma propriedade chamada altura, que é igual ao valor da altura de sua raiz.\n\nSabendo que a altura de uma folha é igual a um (01) e que a altura de um nó pai é igual ao máximo das alturas de seus filhos mais um, qual estrutura NÃO pode representar uma árvore AVL?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Uma árvore vazia",
+          "porque": "A árvore vazia é AVL (não há nó para violar a regra)."
+        },
+        {
+          "letra": "B",
+          "texto": "Uma árvore com dois nós",
+          "porque": "Raiz com um filho: alturas 0 e 1, diferença 1. É AVL."
+        },
+        {
+          "letra": "C",
+          "texto": "Uma árvore com três nós e altura igual a dois",
+          "porque": "Raiz com dois filhos: diferença 0. É AVL."
+        },
+        {
+          "letra": "D",
+          "texto": "Uma árvore com três nós e altura igual a três",
+          "porque": "Correta. Com três nós e altura 3 a árvore é uma cadeia: a raiz tem uma subárvore de altura 2 e outra vazia (altura 0). A diferença é 2, o que viola a regra."
+        },
+        {
+          "letra": "E",
+          "texto": "Uma árvore com seis nós e altura igual a três",
+          "porque": "É possível montar: por exemplo, raiz com dois filhos e mais três nós distribuídos nos netos. Todos os nós ficam com diferença até 1. É AVL."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "Numa AVL, em todo nó a diferença de altura entre as subárvores é no máximo 1. Altura 3 com só 3 nós obriga uma cadeia, então não existe AVL assim. Uma AVL de altura h precisa de um número mínimo de nós (h=3 pede pelo menos 4).",
+      "assuntos": [
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0175",
+          "modulo": "28-estruturas-complementos.md"
+        }
+      ]
+    },
+    {
+      "numero": 4,
+      "topico": 4,
+      "formato": "afirmações",
+      "enunciado": "Um heap (fila de prioridade) é uma estrutura de dados muito importante, que tem duas utilidades principais: organizar acesso a um recurso com base na prioridade dos requerentes (processos, impressões, etc.) ou servir como base a um algoritmo de ordenação muito eficiente denominado heapsort. Para poder servir a esses propósitos, um heap possui uma série de propriedades especiais que têm que ser mantidas por todas as operações nelas realizadas. Levando em consideração estas propriedades, analise as afirmativas abaixo.\n\nI. `50 40 49 39 45 46` representa um heap sintaticamente correto\nII. Dado o heap `21 14 10 9 5`, a inserção do elemento 12 se dá através dos passos `21 14 10 9 5 12` ⇒ `21 14 12 9 5 10`\nIII. Dado o heap `21 14 10 9 5`, a retirada do elemento do topo se dá através dos passos `5 14 10 9` ⇒ `14 5 12 9` ⇒ `14 9 12 5`\n\nÉ CORRETO APENAS o que se afirma em:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "I.",
+          "porque": "A I é falsa: no vetor, o 45 (índice 4) é filho do 40 (índice 1) e é maior que ele, o que quebra a regra de max-heap."
+        },
+        {
+          "letra": "B",
+          "texto": "II.",
+          "porque": "Correta. O 12 entra no fim (índice 5), seu pai é o 10 (índice 2) e 12 > 10, então eles trocam: `21 14 12 9 5 10`. Passos corretos. I e III são falsas."
+        },
+        {
+          "letra": "C",
+          "texto": "III.",
+          "porque": "A III é falsa. O último elemento (5) vai para a raiz: `5 14 10 9`. Aí o 5 desce trocando com o maior filho (14): `14 5 10 9`. O vetor da prova traz um 12 que não existe no heap."
+        },
+        {
+          "letra": "D",
+          "texto": "I e II.",
+          "porque": "A II vale, mas a I é falsa (45 maior que o pai 40)."
+        },
+        {
+          "letra": "E",
+          "texto": "II e III.",
+          "porque": "A II vale, mas a III é falsa (aparece um 12 do nada no segundo passo)."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Valores: I falsa, II verdadeira, III falsa. No vetor de um max-heap, os filhos de i estão em 2i+1 e 2i+2 e nunca podem ser maiores que o pai. Inserção: entra no fim e sobe trocando com o pai. Remoção do topo: o último vai para a raiz e desce trocando com o maior filho. Cuidado com a I: o 45 é filho do 40 e é maior, então ela é falsa.",
+      "assuntos": [
+        {
+          "num": "0102",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 5,
+      "topico": 4,
+      "formato": "conceito",
+      "enunciado": "Analise as duas afirmativas a seguir, relacionadas a árvores de busca:\n\nI. Uma árvore AVL é uma árvore binária de busca autobalanceada que respeita algumas propriedades fundamentais.\nII. Como todas as árvores, ela tem uma propriedade chamada altura, que é igual ao valor da altura de sua raiz.\n\nSabendo que a altura de uma folha é igual a um (01) e que a altura de um nó pai é igual ao máximo das alturas de seus filhos mais um, qual estrutura NÃO pode representar uma árvore AVL?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Uma árvore vazia",
+          "porque": "É AVL: sem nós, nada viola a regra."
+        },
+        {
+          "letra": "B",
+          "texto": "Uma árvore com dois nós",
+          "porque": "É AVL: raiz com um filho, diferença 1."
+        },
+        {
+          "letra": "C",
+          "texto": "Uma árvore com três nós e altura igual a dois",
+          "porque": "É AVL: raiz com dois filhos, diferença 0."
+        },
+        {
+          "letra": "D",
+          "texto": "Uma árvore com três nós e altura igual a três",
+          "porque": "É a que não pode ser AVL (é uma cadeia, com diferença 2 na raiz), por isso seria a resposta. A banca anulou por ser repetição da questão 3."
+        },
+        {
+          "letra": "E",
+          "texto": "Uma árvore com seis nós e altura igual a três",
+          "porque": "É possível e balanceada: é AVL."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "É a mesma questão da 3, repetida no caderno, e a resposta continua sendo a D (cadeia de três nós, diferença 2). A banca anulou.",
+      "assuntos": [
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0175",
+          "modulo": "28-estruturas-complementos.md"
+        }
+      ]
+    },
+    {
+      "numero": 6,
+      "topico": [
+        4,
+        6
+      ],
+      "formato": "conceito",
+      "enunciado": "Uma lista ordenada de N números é inserida em uma pilha e depois retirada, sendo que, a cada POP, o elemento retirado é inserido em uma árvore de busca binária. Após a completa inserção de todos os elementos nesta árvore, são feitas buscas de números na mesma. O tempo médio de busca de um número nesta árvore é",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "O(1)",
+          "porque": "Busca em árvore de busca não é constante. Isso seria o caso médio de um hash."
+        },
+        {
+          "letra": "B",
+          "texto": "O(log N)",
+          "porque": "É o tempo de uma árvore balanceada. Aqui a árvore sai degenerada."
+        },
+        {
+          "letra": "C",
+          "texto": "O(N)",
+          "porque": "Correta. A pilha inverte a ordem: a lista ordenada sai em ordem decrescente. Inserir chaves em ordem decrescente faz cada uma ir à esquerda da anterior, e a árvore vira uma lista. A busca percorre em média cerca de N/2 nós, que é O(N)."
+        },
+        {
+          "letra": "D",
+          "texto": "O(Nlog N)",
+          "porque": "É o custo de construir ou ordenar, não o de uma busca."
+        },
+        {
+          "letra": "E",
+          "texto": "O(N2)",
+          "porque": "N² (soma de 1 até N) é o custo total das N inserções na árvore degenerada, não o de uma busca."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Entrada ordenada (crescente ou decrescente) numa ABB sem balanceamento gera uma árvore degenerada, igual a uma lista: a busca vira O(N). Pilha só inverte a ordem, não embaralha. Para ter O(log N) seria preciso AVL ou outra árvore balanceada.",
+      "assuntos": [
+        {
+          "num": "0099",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0082",
+          "modulo": "12-pilhas-e-filas.md"
+        }
+      ]
+    },
+    {
+      "numero": 7,
+      "topico": 4,
+      "formato": "afirmações",
+      "enunciado": "Assinale cada afirmativa abaixo como verdadeira (V) ou falsa (F). Em seguida, marque a opção que corresponde à sequência CORRETA.\n\n( ) Uma árvore não-vazia é balanceada AVL se, pelo menos, uma de suas árvores, esquerda ou direita, for balanceada AVL;\n( ) As árvores cheias são árvores balanceadas AVL;\n( ) Uma boa condição de balanceamento AVL deve assegurar que a altura de uma árvore com n nós é da ordem de O(log n);\n( ) Uma árvore AVL é uma árvore balanceada pela altura;\n( ) Ao inserir ou remover um item em uma árvore AVL, o custo adicional para balancear esta árvore é da ordem de O(n/2).",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "V - V - F - V - V",
+          "porque": "Erra a 1ª (é F), a 3ª (é V) e a 5ª (é F)."
+        },
+        {
+          "letra": "B",
+          "texto": "F - V - V - V - F",
+          "porque": "Correta. 1ª F: as duas subárvores precisam ser AVL, não só uma. 2ª V: árvore cheia tem diferença zero em todos os nós. 3ª V: a altura é O(log n). 4ª V: o balanceamento é pela altura. 5ª F: o custo extra é O(log n)."
+        },
+        {
+          "letra": "C",
+          "texto": "V - F - F - V - F",
+          "porque": "Erra a 1ª, a 2ª e a 3ª."
+        },
+        {
+          "letra": "D",
+          "texto": "F - V - V - F - V",
+          "porque": "Erra a 4ª (é V) e a 5ª (é F)."
+        },
+        {
+          "letra": "E",
+          "texto": "F - F - V - V - F",
+          "porque": "Erra a 2ª: árvore cheia é AVL, então a afirmação é V."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Sequência: F, V, V, V, F. A AVL exige que as duas subárvores sejam AVL e que a diferença de altura no nó seja no máximo 1. Disso sai altura O(log n), e o custo de balancear uma inserção ou remoção é O(log n) (rotações no caminho), não O(n/2).",
+      "assuntos": [
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0176",
+          "modulo": "28-estruturas-complementos.md"
+        }
+      ]
+    },
+    {
+      "numero": 8,
+      "topico": 4,
+      "formato": "simulação",
+      "enunciado": "Considere uma estrutura do tipo árvore binária que começa vazia. Nela são introduzidos os números 2, 10, 5, 7, 1, 0 e 8, exatamente nessa ordem. Se essa árvore for lida em pós-ordem, que sequência de números será impressa?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "2, 1, 0, 8, 7, 5, 10",
+          "porque": "Começa pela raiz (2), o que é característica da pré-ordem, não da pós-ordem."
+        },
+        {
+          "letra": "B",
+          "texto": "2, 1, 0, 10, 5, 7, 8",
+          "porque": "Também começa pela raiz e não corresponde a nenhum percurso desta árvore."
+        },
+        {
+          "letra": "C",
+          "texto": "0, 1, 8, 7, 5, 10, 2",
+          "porque": "Correta. A árvore: raiz 2, esquerda 1 (com 0 à esquerda), direita 10 (com 5 à esquerda, que tem 7 à direita, que tem 8 à direita). Pós-ordem: subárvore esquerda (0, 1), depois a direita (8, 7, 5, 10) e por último a raiz (2)."
+        },
+        {
+          "letra": "D",
+          "texto": "0, 1, 2, 8, 7, 5, 10",
+          "porque": "A raiz 2 não pode vir no meio na pós-ordem: ela é a última."
+        },
+        {
+          "letra": "E",
+          "texto": "0, 1, 2, 10, 5, 7, 8",
+          "porque": "Não corresponde ao percurso: a raiz tem de ser a última."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Monte a árvore na ordem de inserção e leia filhos antes do pai (esquerda, direita, raiz). Rodei o programa em C e confirmei: 0 1 8 7 5 10 2. Na pós-ordem a última chave é sempre a raiz, o que já elimina A, B, D e E.",
+      "assuntos": [
+        {
+          "num": "0098",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0099",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 9,
+      "topico": 3,
+      "formato": "código",
+      "enunciado": "Os registros em uma lista, duplamente encadeada com 20 elementos possuem cada um três campos:\n\n- próximo: um ponteiro para o próximo elemento da lista;\n- valor: informação armazenada pelo elemento;\n- anterior: um ponteiro para o elemento anterior da lista.\n\nSendo \"Z\" o décimo elemento desta lista e \"X\" e \"Y\" dois outros elementos que não pertencem à lista, com seus respectivos ponteiros \"pZ\", \"pX\" e \"pY\", considere o trecho de código abaixo.\n\n```\npY↑.próximo = pX;\npX↑.anterior = pY;\npX↑.próximo = pZ↑.próximo;\npZ↑.próximo↑.anterior = pX;\npZ↑.próximo = pY;\npY↑.anterior = pZ;\n```\n\nEste trecho de código é usado para inserir na lista os elementos:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Y, logo após o Z, e X, logo após o Y.",
+          "porque": "Correta. Chame de W o antigo sucessor de Z. As linhas ligam Y ao X, X ao W, W de volta ao X, Z ao Y e Y de volta ao Z. O resultado é Z, Y, X, W."
+        },
+        {
+          "letra": "B",
+          "texto": "Y, antes do Z, e X, logo após o Z.",
+          "porque": "Z.próximo passa a ser Y, então o Y fica depois de Z, não antes."
+        },
+        {
+          "letra": "C",
+          "texto": "Y, antes do Z, e X, antes do Y.",
+          "porque": "Nada no código liga elementos antes do Z: só o `próximo` de Z muda."
+        },
+        {
+          "letra": "D",
+          "texto": "X, logo após o Z, e Y, logo após o X.",
+          "porque": "Ordem trocada: logo após o Z vem o Y (`pZ↑.próximo = pY`), e o X vem depois do Y."
+        },
+        {
+          "letra": "E",
+          "texto": "X, antes do Z, e Y, logo após o Z.",
+          "porque": "O X fica depois do Y, entre o Y e o antigo sucessor de Z, e não antes do Z."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Em inserção em lista dupla, desenhe os quatro elos: Z, novo, novo, antigo sucessor, e confira os dois sentidos (próximo e anterior). Aqui Z.próximo vira Y, Y.próximo vira X e X.próximo vira o antigo sucessor de Z, com os `anterior` espelhando isso.",
+      "assuntos": [
+        {
+          "num": "0079",
+          "modulo": "11-listas.md"
+        }
+      ]
+    },
+    {
+      "numero": 10,
+      "topico": 4,
+      "formato": "simulação",
+      "enunciado": "Considere a seguinte árvore de pesquisa binária:\n\nAo executarmos o procedimento de remoção da raiz, na nova árvore binária de busca, teremos como novo nó raiz:",
+      "figuras": [
+        "2018-023-q10"
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "11",
+          "porque": "O 11 é filho da raiz. Se ele subisse, os valores 17 e 18 (maiores que 11) ficariam à esquerda dele, o que quebra a ordem de uma ABB."
+        },
+        {
+          "letra": "B",
+          "texto": "2",
+          "porque": "É o menor valor da árvore. Como raiz, deixaria quase tudo à direita e desrespeitaria a ordem."
+        },
+        {
+          "letra": "C",
+          "texto": "17",
+          "porque": "O 17 não é o maior da subárvore esquerda: ele tem o 18 à direita, que é maior."
+        },
+        {
+          "letra": "D",
+          "texto": "18",
+          "porque": "Correta. Raiz com dois filhos: assume o antecessor, que é o maior da subárvore esquerda (desce uma vez à esquerda, até 11, e depois sempre à direita: 17, 18)."
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma das anteriores",
+          "porque": "A D está correta: o novo raiz é o 18."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "Remoção de nó com dois filhos: troca pelo antecessor (maior da esquerda) ou pelo sucessor (menor da direita). Aqui o antecessor é 18 e o sucessor seria 21. Como o 21 não está nas alternativas, a banca usou o antecessor. Atenção: o curso (assunto 0100) usa o sucessor, e com ele a resposta seria 21; na prova, confira qual dos dois candidatos aparece nas alternativas. A figura não veio no texto, mas o PNG confirma a árvore.",
+      "assuntos": [
+        {
+          "num": "0100",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 11,
+      "topico": 1,
+      "formato": "simulação",
+      "enunciado": "Considere o algoritmo a seguir que define a função recursiva \"f\".\n\n```\nfunção f(n){\n  se n igual a 1 então retorne 0\n  se n igual a 2 então retorne 1\n  setorne f(n-1) + f(n-2)\n}\n```\n\nQual o valor retornado pela função \"f\" ao ser invocada passando o valor 4 como argumento?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "0",
+          "porque": "É o valor de f(1), o caso base mais baixo."
+        },
+        {
+          "letra": "B",
+          "texto": "1",
+          "porque": "É o valor de f(2). Para n = 4 há duas somas."
+        },
+        {
+          "letra": "C",
+          "texto": "2",
+          "porque": "Correta. f(4) = f(3) + f(2). f(3) = f(2) + f(1) = 1 + 0 = 1. Então f(4) = 1 + 1 = 2."
+        },
+        {
+          "letra": "D",
+          "texto": "3",
+          "porque": "É o valor de f(5): f(4) + f(3) = 2 + 1. Você andou um passo a mais na sequência."
+        },
+        {
+          "letra": "E",
+          "texto": "4",
+          "porque": "Não corresponde a nenhum termo da sequência até f(5). A conta de f(4) dá 2."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Isso é Fibonacci deslocado: f(1)=0, f(2)=1, f(3)=1, f(4)=2, f(5)=3. Na recursão, desça até os casos base e some de baixo para cima.",
+      "assuntos": [
+        {
+          "num": "0032",
+          "modulo": "04-funcoes.md"
+        },
+        {
+          "num": "0033",
+          "modulo": "04-funcoes.md"
+        }
+      ]
+    },
+    {
+      "numero": 12,
+      "topico": 6,
+      "formato": "simulação",
+      "enunciado": "Considere o vetor ordenado abaixo e indique quais os valores serão comparados com a chave de busca de valor 20 se for realizada uma busca binária no vetor. Considere que a primeira posição do vetor é a posição 0.\n\n`32 | 8 | 12 | 16 | 20 | 24 | 28 | 16 | 36`",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Chaves 20, 12, 8 e 4, nessa ordem",
+          "porque": "Não é uma sequência de busca binária: o primeiro valor comparado é o do meio, e se ele é 20 a busca acaba."
+        },
+        {
+          "letra": "B",
+          "texto": "Chaves 20, 28,32 e 36, nessa ordem",
+          "porque": "Só o primeiro (20) é comparado, e é nele que a busca termina."
+        },
+        {
+          "letra": "C",
+          "texto": "Chaves 4, 8, 12, 16 e 20, nessa ordem",
+          "porque": "Isso lembra uma busca sequencial, não a binária."
+        },
+        {
+          "letra": "D",
+          "texto": "Chaves 36, 32, 28 e 24, nessa ordem",
+          "porque": "Também não segue a busca binária."
+        },
+        {
+          "letra": "E",
+          "texto": "Apenas a chave 20",
+          "porque": "Correta. O vetor tem 9 posições (0 a 8) e o meio é a posição 4, que vale 20. Uma comparação só e a busca termina."
+        }
+      ],
+      "gabarito": "E",
+      "resumo": "Busca binária: compare com o elemento do meio ((0+8)/2 = 4). Se for a chave, acabou. O vetor veio com erros no caderno (`32 8 12 16 20 24 28 16 36`), mas nas duas versões a posição 4 vale 20, então a resposta E não muda.",
+      "assuntos": [
+        {
+          "num": "0090",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 13,
+      "topico": 3,
+      "formato": "conceito",
+      "enunciado": "Considere uma estrutura de dados do tipo vetor. Com respeito a tal estrutura, é CORRETO que seus componentes são, caracteristicamente:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "heterogêneos e com acesso FIFO.",
+          "porque": "Os elementos de um vetor são do mesmo tipo (homogêneos), e FIFO é regra de fila."
+        },
+        {
+          "letra": "B",
+          "texto": "heterogêneos e com acesso LIFO.",
+          "porque": "Homogêneos, não heterogêneos, e LIFO é regra de pilha."
+        },
+        {
+          "letra": "C",
+          "texto": "heterogêneos e com acesso indexado-sequencial.",
+          "porque": "Heterogêneos é o termo de struct. Vetor é homogêneo."
+        },
+        {
+          "letra": "D",
+          "texto": "homogêneos e acesso não indexado.",
+          "porque": "Homogêneos está certo, mas o acesso é por índice."
+        },
+        {
+          "letra": "E",
+          "texto": "homogêneos e de acesso aleatório por intermédio de índices.",
+          "porque": "Correta. Todos os elementos têm o mesmo tipo e qualquer posição é acessada direto pelo índice, em tempo constante."
+        }
+      ],
+      "gabarito": "E",
+      "resumo": "Vetor: homogêneo e acesso direto por índice. Struct é o heterogêneo. FIFO e LIFO são políticas de fila e pilha, não de vetor.",
+      "assuntos": [
+        {
+          "num": "0037",
+          "modulo": "05-vetores-e-strings.md"
+        }
+      ]
+    },
+    {
+      "numero": 14,
+      "topico": 6,
+      "formato": "afirmações",
+      "enunciado": "Considere as afirmações sobre busca binária:\n\nI) é utilizada apenas sobre vetores ordenados\nII) pode determinar se uma chave está ou não com um número de comparações de chave inferior a 2log2 n passos, onde n é o tamanho do vetor.\nIII) Supera a busca sequencial quando o vetor é grande, por exemplo com mais que mil elementos, e está ordenado.",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas as afirmações II e III estão corretas",
+          "porque": "A I também é verdadeira: a busca binária só funciona com o vetor ordenado."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas as afirmações I e II estão corretas",
+          "porque": "A III também é verdadeira."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas as afirmações I e III estão corretas",
+          "porque": "A II também é verdadeira."
+        },
+        {
+          "letra": "D",
+          "texto": "Todas as afirmações estão corretas",
+          "porque": "Correta. I: exige ordem. II: o máximo é cerca de log2 n + 1 comparações, que fica abaixo de 2 log2 n quando n cresce. III: com mais de mil elementos ordenados, cerca de 10 comparações contra até mil."
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma das alternativas anteriores",
+          "porque": "As três afirmações são verdadeiras, então D vale."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "Valores: I V, II V, III V. A busca binária exige vetor ordenado, faz no máximo cerca de log2 n + 1 comparações e ganha da sequencial em vetores grandes. Quando todas as afirmações parecem boas, desconfie dos exageros (aqui nenhum falha).",
+      "assuntos": [
+        {
+          "num": "0090",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 15,
+      "topico": 4,
+      "formato": "conceito",
+      "enunciado": "As árvores são estruturas de dados poderosas e se subdividem em vários tipos, cada um dos quais com suas características próprias. Relacione os tipos de árvores, apresentados na coluna da esquerda, com as suas respectivas características, indicadas na coluna da direita:\n\n| Tipo de árvore | Característica |\n|---|---|\n| I – Heap | W – Pode degenerar se os elementos forem inseridos de forma ordenada. |\n| II – Rubro-Negra | X – É balanceada. |\n| III – Avore AVL | Y – Têm altura sempre proporcional/próxima a O(log2 n), onde n é o número de nós que contém. |\n| IV – Árvores binária de busca | Z – São sempre completas. |\n\nEstão CORRETAS as associações:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "I–X, IV–Z, II–Y",
+          "porque": "IV–Z é falsa: uma ABB comum não é completa."
+        },
+        {
+          "letra": "B",
+          "texto": "I–Z, IV–X, III–W",
+          "porque": "IV–X é falsa (ABB não é balanceada) e III–W é falsa (AVL não degenera)."
+        },
+        {
+          "letra": "C",
+          "texto": "I–Z, IV–X, III–Y",
+          "porque": "IV–X é falsa: a ABB simples não garante balanceamento."
+        },
+        {
+          "letra": "D",
+          "texto": "I–Y, IV–W, III–X",
+          "porque": "Correta pela banca. Heap tem altura O(log n), ABB pode degenerar com entrada ordenada e AVL é balanceada."
+        },
+        {
+          "letra": "E",
+          "texto": "I–X, IV–W, II–Y",
+          "porque": "Também é defensável: heap é balanceado, ABB degenera, rubro-negra tem altura O(log n). A banca marcou D."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "Heap: sempre completa (Z) e altura O(log n). ABB comum: pode degenerar (W). AVL e rubro-negra: balanceadas, altura O(log n). Aqui D e E se sustentam, e nenhuma alternativa usa o 'sempre completa' do heap. O curso teria ficado com o heap em Z, mas na prova vale a letra D da banca. Em questão de associar, marque as certezas e descarte alternativas com um erro.",
+      "assuntos": [
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0102",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0145",
+          "modulo": "22-arvores-avancadas.md"
+        }
+      ]
+    },
+    {
+      "numero": 16,
+      "topico": 7,
+      "formato": "conceito",
+      "enunciado": "Sobre o algoritmo de ordenação heapsort, marque a alternativa CORRETA:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Utiliza ordenação por árvore de decisão, ao invés de ordenação por comparação",
+          "porque": "Heapsort é um algoritmo de ordenação por comparação. A árvore de decisão é um modelo usado para provar o limite Ω(n log n), não um algoritmo."
+        },
+        {
+          "letra": "B",
+          "texto": "A estrutura de dados que utiliza, chamada heap, pode ser interpretada como uma árvore binária",
+          "porque": "Correta. O heap é guardado em vetor, mas se interpreta como árvore binária quase completa (filhos de i em 2i+1 e 2i+2)."
+        },
+        {
+          "letra": "C",
+          "texto": "Seu desempenho de pior caso é pior do que o do algoritmo quicksort",
+          "porque": "O pior caso do heapsort é O(n log n), melhor que o O(n²) do quicksort."
+        },
+        {
+          "letra": "D",
+          "texto": "Todas as alternativas estão corretas",
+          "porque": "A e C são falsas."
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma das alternativas está correta",
+          "porque": "A B está correta."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Heapsort: constrói um max-heap no vetor (árvore binária implícita) e extrai o maior repetidamente. É por comparação e tem O(n log n) no pior caso, melhor que o quicksort nesse quesito.",
+      "assuntos": [
+        {
+          "num": "0103",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 17,
+      "topico": 7,
+      "formato": "afirmações",
+      "enunciado": "Considerando os algoritmos de ordenação Quicksort, MergeSort, HeapSort e InsertionSort\n\nI. São algoritmos estáveis: HeapSort, QuickSort e MergeSort\nII. A complexidade de uso de espaço é O(n²): HeapSort,\nIII. A ordem das entradas é incapaz de influenciar o desempenho do algoritmo: InsertionSort, MergeSort\nIV. Melhor caso da complexidade de tempo em Ω(n) : InsertionSort\nV. A complexidade de uso de espaço é O(n): MergeSort\n\nMarque a alternativa que indica SOMENTE afirmações INCORRETAS feitas:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "I IV e V",
+          "porque": "IV e V são verdadeiras, então não são afirmações incorretas."
+        },
+        {
+          "letra": "B",
+          "texto": "I , III e IV",
+          "porque": "A IV é verdadeira."
+        },
+        {
+          "letra": "C",
+          "texto": "I, II, III e IV",
+          "porque": "A IV é verdadeira."
+        },
+        {
+          "letra": "D",
+          "texto": "I, II e III",
+          "porque": "Correta. A lista só com as incorretas: I é falsa (heapsort e quicksort não são estáveis), II é falsa (heapsort usa O(1) de espaço extra) e III é falsa (a ordem de entrada muda o desempenho da inserção: O(n) ordenado contra O(n²) invertido)."
+        },
+        {
+          "letra": "E",
+          "texto": "II e V",
+          "porque": "A V é verdadeira (o merge usa vetor auxiliar de tamanho n)."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "Valores: I F, II F, III F, IV V, V V. A pergunta pede as incorretas, então a resposta é a lista I, II, III. Resumo útil: estáveis são inserção e mergesort; heapsort é in-place; inserção vai de n a n².",
+      "assuntos": [
+        {
+          "num": "0096",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0103",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0093",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 18,
+      "topico": 5,
+      "formato": "simulação",
+      "enunciado": "Considere uma tabela de espalhamento (hash table) de comprimento igual a 11, na qual a técnica de resolução de colisões utilizada é a de encadeamento. Nessa tabela, as posições são numeradas (indexadas) com os valores 0, 1, 2, ..., 10, o mapeamento de chaves para posições usa a função hash definida por h(k) = k mod 11, onde k é o valor da chave, e mod é o operador de módulo, e os números 1, 5, 18, 20, 4, 12, 10, 34, 15, 28 e 17 foram as chaves inseridas, nessa ordem, nessa tabela de espalhamento que estava inicialmente vazia. Qual a quantidade de posições em que houve colisão durante as inserções das chaves?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "0",
+          "porque": "Há colisões, por exemplo 1, 12 e 34 caem todos na posição 1."
+        },
+        {
+          "letra": "B",
+          "texto": "1",
+          "porque": "Só a posição 1 ficou na conta. Faltam as posições 4 e 6."
+        },
+        {
+          "letra": "C",
+          "texto": "2",
+          "porque": "Falta uma posição: além da 1 e da 4, a 6 recebe 28 e 17."
+        },
+        {
+          "letra": "D",
+          "texto": "3",
+          "porque": "Correta. Posição 1: 1, 12 e 34. Posição 4: 4 e 15. Posição 6: 28 e 17. As demais (5, 7, 9, 10) têm uma chave só."
+        },
+        {
+          "letra": "E",
+          "texto": "4",
+          "porque": "Só existem três posições com mais de uma chave."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "Calcule k mod 11: 1→1, 5→5, 18→7, 20→9, 4→4, 12→1, 10→10, 34→1, 15→4, 28→6, 17→6. Conte posições com mais de uma chave, não colisões individuais: 1, 4 e 6. Rodei em C e deu 3.",
+      "assuntos": [
+        {
+          "num": "0105",
+          "modulo": "15-hash.md"
+        },
+        {
+          "num": "0106",
+          "modulo": "15-hash.md"
+        }
+      ]
+    },
+    {
+      "numero": 19,
+      "topico": 3,
+      "formato": "conceito",
+      "enunciado": "Marque a alternativa CORRETA. Uma lista encadeada simples é uma estrutura que corresponde a uma sequência lógica de entradas ou nós. Cada nó armazena a localização do próximo elemento na sequência, ou seja, de seu nó sucessor. Nessa estrutura:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Para estabelecer a ligação entre um nó já pertencente a uma lista e um novo nó, basta fazer com que o novo nó referencie no, campo next, o nó que anteriormente era referenciado pelo nó original, desde que esse campo não tenha o valor nulo.",
+          "porque": "Incompleta e com condição errada: falta fazer o nó original apontar para o novo, e a ligação também funciona quando o próximo é nulo (inserção no fim)."
+        },
+        {
+          "letra": "B",
+          "texto": "A existência de um ponteiro apontando para o 1º elemento e outro para o fim da lista permite que a inserção ou deleção de dados de um nó que esteja no meio da lista seja rapidamente executada.",
+          "porque": "Os ponteiros de início e fim só aceleram as pontas. Para chegar ao meio você percorre a lista, e na simples ainda precisa do nó anterior."
+        },
+        {
+          "letra": "C",
+          "texto": "Enquanto a entrada que determina o topo da lista é mantida em um nó descritor dessa lista, a entrada que marca o fim da lista é mantida fora do descritor.",
+          "porque": "Sem base: um descritor guarda os dois, início e fim."
+        },
+        {
+          "letra": "D",
+          "texto": "O armazenamento de uma lista requer uma área contígua de memória para permitir a otimização no processamento de criação e remoção de nós da lista.",
+          "porque": "Memória contígua é exigência do vetor. A lista justamente dispensa isso."
+        },
+        {
+          "letra": "E",
+          "texto": "O armazenamento de uma lista não requer uma área contígua de memória. Como listas são estruturas dinâmicas, normalmente são definidos procedimentos que permitem criar e remover nós na memória.",
+          "porque": "Correta. Cada nó pode estar em qualquer lugar da memória, ligado pelo ponteiro, e a lista cresce ou encolhe criando e removendo nós em tempo de execução."
+        }
+      ],
+      "gabarito": "E",
+      "resumo": "Lista encadeada: nós alocados dinamicamente, espalhados na memória e ligados por ponteiro. Isso dá inserção e remoção baratas, mas acesso ao meio é O(n). Contígua é característica de vetor.",
+      "assuntos": [
+        {
+          "num": "0076",
+          "modulo": "11-listas.md"
+        },
+        {
+          "num": "0077",
+          "modulo": "11-listas.md"
+        }
+      ]
+    },
+    {
+      "numero": 20,
+      "topico": [
+        3,
+        4
+      ],
+      "formato": "afirmações",
+      "enunciado": "A estrutura de dados é um modo de armazenamento e organização de dados para que possam ser usados eficientemente. Dentre as alternativas abaixo, sobre as afirmações de estrutura de dados, escolha a CORRETA:\n\nI. Uma fila é uma estrutura de dados em que cada elemento tem um ou mais elementos associados.\nII. A árvore é uma estrutura de dados baseada no princípio Last-in, First-out (LIFO), na qual os dados que foram inseridos primeiro serão os últimos a serem removidos.\nIII. Uma lista é uma estrutura de dados linear, que pode ser encadeada, a qual é composta por nós que apontam para o próximo elemento e o último elemento apontará para nulo.\nIV. As pilhas são estruturas baseadas no princípio First-in, First-out (FIFO), em que os elementos que foram inseridos no início são os primeiros a serem removidos.",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Somente a afirmação I é verdadeira.",
+          "porque": "A I descreve uma estrutura em que um elemento se relaciona com vários (árvore ou grafo). Fila é linear e segue FIFO."
+        },
+        {
+          "letra": "B",
+          "texto": "Somente a afirmação II é verdadeira.",
+          "porque": "LIFO é regra da pilha. A árvore é hierárquica e não tem essa política."
+        },
+        {
+          "letra": "C",
+          "texto": "Somente a afirmação III é verdadeira.",
+          "porque": "Correta. Lista linear encadeada: cada nó aponta para o próximo e o último aponta para nulo. I, II e IV trocam as definições."
+        },
+        {
+          "letra": "D",
+          "texto": "Somente a afirmação IV é verdadeira.",
+          "porque": "A pilha é LIFO: o último a entrar é o primeiro a sair."
+        },
+        {
+          "letra": "E",
+          "texto": "Todas as afirmativas são verdadeiras.",
+          "porque": "I, II e IV são falsas."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Valores: I falsa (fila é linear, FIFO), II falsa (árvore não é LIFO, pilha é), III verdadeira, IV falsa (pilha é LIFO, não FIFO). Questões desse tipo trocam as definições entre estruturas: decore a política de cada uma.",
+      "assuntos": [
+        {
+          "num": "0076",
+          "modulo": "11-listas.md"
+        },
+        {
+          "num": "0082",
+          "modulo": "12-pilhas-e-filas.md"
+        },
+        {
+          "num": "0085",
+          "modulo": "12-pilhas-e-filas.md"
+        },
+        {
+          "num": "0097",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,869 @@
+{
+  "edital": "033/2019",
+  "slug": "2019-033",
+  "ano": 2019,
+  "oficial": true,
+  "questoes": [
+    {
+      "numero": 1,
+      "topico": 7,
+      "formato": "simulação",
+      "enunciado": "Sabendo que o algoritmo Quick Sort classifica os elementos em ordem crescente usando o primeiro elemento como pivô, qual das seguintes sequências de entrada irá requerer o maior número de comparações quando o algoritmo for aplicado?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "22 25 33 42 56 67 89",
+          "porque": "A sequência já está em ordem crescente. O pivô (primeiro elemento) é sempre o menor, então cada partição deixa 0 elementos de um lado e todo o resto do outro: 6+5+4+3+2+1 = 21 comparações. É o pior caso, Θ(n²)."
+        },
+        {
+          "letra": "B",
+          "texto": "63 70 47 42 36 38 73",
+          "porque": "O pivô 63 separa 4 menores de 2 maiores, e as partições seguintes também ficam razoavelmente equilibradas. Contando n-1 por partição, dá 13 comparações, bem abaixo de 21."
+        },
+        {
+          "letra": "C",
+          "texto": "42 25 22 33 67 56 89",
+          "porque": "O pivô 42 cai quase no meio (3 menores, 3 maiores) e os subproblemas também se dividem bem. Dá 10 comparações, o melhor caso das cinco."
+        },
+        {
+          "letra": "D",
+          "texto": "13 52 25 58 10 22 17",
+          "porque": "O pivô 13 deixa só o 10 à esquerda, mas o resto se divide de forma desigual sem chegar à degeneração total. Dá 13 comparações."
+        },
+        {
+          "letra": "E",
+          "texto": "23 25 33 42 11 22 30",
+          "porque": "O pivô 23 separa 2 menores de 4 maiores e as partições seguintes ficam curtas. Dá 12 comparações."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Com o pivô no primeiro elemento, a entrada já ordenada (crescente ou decrescente) é o pior caso do Quick Sort: cada partição tira só 1 elemento e o total vai a n(n-1)/2 comparações. Contei n-1 comparações por partição; outras variantes do particionamento mudam um pouco os números das outras alternativas, mas a ordenada continua sendo a pior. Na prova, procure primeiro a sequência já ordenada.",
+      "assuntos": [
+        {
+          "num": "0095",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 2,
+      "topico": 4,
+      "formato": "simulação",
+      "enunciado": "A parte essencial do Heap Sort é a construção do heap máximo. Considerando a árvore mostrada abaixo, o nó 24 viola a propriedade do heap máximo. Uma vez que o procedimento de heap é aplicado a ele, em que posição ele estará?",
+      "figuras": [
+        "2019-033-q02"
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "4",
+          "porque": "A posição 4 é onde o 24 chega depois da primeira troca (com o 44, o maior filho). Mas ali os filhos são 5 e 28, e 28 > 24, então ele ainda desce mais uma vez."
+        },
+        {
+          "letra": "B",
+          "texto": "5",
+          "porque": "A posição 5 guarda o 7, que é o filho menor do 24. O sift-down sempre troca com o maior filho (44), nunca com o menor."
+        },
+        {
+          "letra": "C",
+          "texto": "8",
+          "porque": "A posição 8 guarda o 5, que é menor que 28. Dos dois filhos da posição 4 (5 e 28), o maior é o 28, que está na posição 9."
+        },
+        {
+          "letra": "D",
+          "texto": "9",
+          "porque": "Correta. O 24 troca com o maior filho, o 44 (posição 4). Aí seus filhos são 5 e 28; troca com o 28 (posição 9). A posição 9 é folha, então o 24 para ali."
+        },
+        {
+          "letra": "E",
+          "texto": "6",
+          "porque": "A posição 6 guarda o 11, que fica na subárvore direita (sob o 30). O 24 só desce pela subárvore onde está, a esquerda."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "O sift-down (heapify) compara o nó com seus dois filhos e troca com o maior, repetindo até o nó ser maior que os filhos ou virar folha. Aqui: 24 troca com 44 (posição 4) e depois com 28 (posição 9). Em questões assim, acompanhe a posição a cada troca e confira se o novo nó ainda tem filho maior.",
+      "assuntos": [
+        {
+          "num": "0102",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 3,
+      "topico": 3,
+      "formato": "simulação",
+      "enunciado": "Considere a seguinte operação em uma pilha de tamanho 5:\nPush(1); Pop(); Push(2); Push(3); Pop(); Push(4); Pop(); Pop(); Push(5);\nApós a todos as operações serem realizadas, o número de elementos presentes na pilha é:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "1",
+          "porque": "Correta. São 5 push e 4 pop, e nenhum pop acontece com a pilha vazia. 5 - 4 = 1 elemento: o 5. Passo a passo: [1] → [] → [2] → [2 3] → [2] → [2 4] → [2] → [] → [5]."
+        },
+        {
+          "letra": "B",
+          "texto": "2",
+          "porque": "Daria 2 se um dos pops tivesse sido ignorado. Os quatro pops removem elementos reais, então sobra 5 - 4 = 1."
+        },
+        {
+          "letra": "C",
+          "texto": "3",
+          "porque": "Não bate com a conta: 5 inserções menos 4 remoções dão 1, não 3."
+        },
+        {
+          "letra": "D",
+          "texto": "4",
+          "porque": "Quatro é o número de pops, não o de elementos que sobram."
+        },
+        {
+          "letra": "E",
+          "texto": "5",
+          "porque": "Cinco é o número de push. Você precisa descontar os pops."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Em pilha, o tamanho final é pushes menos pops, desde que nunca haja pop em pilha vazia nem push em pilha cheia. Faça a trilha passo a passo, que leva menos de um minuto. A capacidade 5 não é atingida em nenhum momento.",
+      "assuntos": [
+        {
+          "num": "0082",
+          "modulo": "12-pilhas-e-filas.md"
+        }
+      ]
+    },
+    {
+      "numero": 4,
+      "topico": 4,
+      "formato": "simulação",
+      "enunciado": "A figura abaixo mostra uma árvore B de ordem 5. Qual é o resultado da remoção do nó 130 dessa árvore?",
+      "figuras": [
+        "2019-033-q04"
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "árvore da figura a)",
+          "porque": "Deixa a folha com só o 110 e o resto da árvore igual. Com ordem 5, cada nó (fora a raiz) precisa de no mínimo 2 chaves, então um nó com 1 chave viola a regra. O correto é tratar o underflow.",
+          "figura": "2019-033-q04-a"
+        },
+        {
+          "letra": "B",
+          "texto": "árvore da figura b)",
+          "porque": "É uma árvore ordenada, mas não sai de nenhuma operação padrão de remoção: aqui o 100 desceu para a folha da esquerda e o 110 subiu para a raiz. A remoção padrão funde a folha com um irmão, desce o separador e não sobe chave de folha.",
+          "figura": "2019-033-q04-b"
+        },
+        {
+          "letra": "C",
+          "texto": "árvore da figura c)",
+          "porque": "Correta. Ao tirar o 130, a folha fica com só o 110 (mínimo é 2). Os dois irmãos vizinhos têm exatamente 2 chaves e não podem emprestar. Então funde com o da direita, descendo o separador 140: folha `110 140 144 156` (4 chaves, o máximo). A raiz perde o 140 e fica `100 160`.",
+          "figura": "2019-033-q04-c"
+        },
+        {
+          "letra": "D",
+          "texto": "árvore da figura d)",
+          "porque": "Tem o 110 repetido (na raiz e na folha) e o 140 aparece na raiz sem ser separador de nada coerente. Chave duplicada não existe em árvore B.",
+          "figura": "2019-033-q04-d"
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma das anteriores",
+          "porque": "Existe a alternativa c) que é o resultado correto."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Na remoção em árvore B: se a folha fica abaixo do mínimo, tente emprestar de um irmão que tenha mais que o mínimo (rotação pelo pai). Se os irmãos estão no mínimo, funda com um irmão e desça o separador do pai. Na ordem 5 o mínimo é 2 chaves e o máximo 4. O enunciado original tem as figuras desalinhadas, e b) também é um B-tree válido, mas só c) sai da fusão padrão.",
+      "assuntos": [
+        {
+          "num": "0097",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 5,
+      "topico": 3,
+      "formato": "conceito",
+      "enunciado": "No pior dos casos, o número de comparações necessárias para pesquisar uma lista simplesmente encadeada de comprimento n para um dado elemento é",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "log2 n",
+          "porque": "Esse é o custo da busca binária em vetor ordenado. Lista encadeada não tem acesso direto ao meio, então não dá para dividir ao meio em O(1)."
+        },
+        {
+          "letra": "B",
+          "texto": "n/2",
+          "porque": "Seria o número médio se o elemento estivesse em posição uniformemente aleatória. O pior caso (último elemento ou ausente) é maior."
+        },
+        {
+          "letra": "C",
+          "texto": "log2 n - 1",
+          "porque": "Não corresponde a nenhuma busca em lista encadeada."
+        },
+        {
+          "letra": "D",
+          "texto": "n",
+          "porque": "Vale: no pior caso o elemento é o último ou não existe, e você percorre os n nós. A banca anulou a questão, mas esse é o resultado conceitual."
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma das anteriores",
+          "porque": "Falsa, porque a alternativa d) descreve o pior caso corretamente."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "A banca anulou. Conceitualmente, a busca sequencial em lista simplesmente encadeada faz n comparações no pior caso, Θ(n), e n/2 em média. Lista não permite busca binária.",
+      "assuntos": [
+        {
+          "num": "0076",
+          "modulo": "11-listas.md"
+        },
+        {
+          "num": "0077",
+          "modulo": "11-listas.md"
+        }
+      ]
+    },
+    {
+      "numero": 6,
+      "topico": 3,
+      "formato": "código",
+      "enunciado": "Qual é a saída da seguinte função que inicia apontando para o primeiro nó da seguinte lista encadeada?\n\n`1->2->3->4->5->6`\n\n```c\nvoid fun(struct node* start)\n{\n  if(start == NULL)\n    return;\n  printf(\"%d \", start->data);\n  if(start->next != NULL )\n    fun(start->next->next);\n  printf(\"%d \", start->data);\n}\n```",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "1 4 6 6 4 1",
+          "porque": "A função pula de dois em dois (`next->next`): visita 1, 3, 5, não 1, 4, 6."
+        },
+        {
+          "letra": "B",
+          "texto": "1 3 5 1 3 5",
+          "porque": "Os nós certos, mas a ordem da volta está errada. O segundo printf roda depois da chamada recursiva, então imprime na ordem inversa: 5 3 1."
+        },
+        {
+          "letra": "C",
+          "texto": "1 2 3 5",
+          "porque": "Não tem relação com o código: a função nunca imprime o 2."
+        },
+        {
+          "letra": "D",
+          "texto": "1 3 5 5 3 1",
+          "porque": "Correta. Na ida imprime 1, 3, 5. No 5, `next` é o 6 (não nulo), então chama `fun(NULL)`, que retorna. Na volta, cada chamada imprime de novo: 5, 3, 1."
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma das anteriores",
+          "porque": "Existe a d), que bate com o resultado."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "Recursão com print antes e depois da chamada produz um espelho: ida na ordem, volta ao contrário. Aqui o passo é de 2 em 2 nós, e o 5 ainda imprime duas vezes porque seu `next` (o 6) não é nulo. Rodei em C para conferir.",
+      "assuntos": [
+        {
+          "num": "0076",
+          "modulo": "11-listas.md"
+        },
+        {
+          "num": "0032",
+          "modulo": "04-funcoes.md"
+        }
+      ]
+    },
+    {
+      "numero": 7,
+      "topico": 3,
+      "formato": "conceito",
+      "enunciado": "Qual estrutura de dados é comumente usada para implementar recursão?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Queue (fila)",
+          "porque": "Fila é FIFO. A última chamada feita precisa ser a primeira a terminar (LIFO), o oposto."
+        },
+        {
+          "letra": "B",
+          "texto": "Stack (pilha)",
+          "porque": "Correta. Cada chamada empilha um registro de ativação (parâmetros, variáveis locais, endereço de retorno) e, ao retornar, desempilha. LIFO é exatamente a ordem das chamadas aninhadas."
+        },
+        {
+          "letra": "C",
+          "texto": "Array (vetor)",
+          "porque": "Vetor é a estrutura de armazenamento, mas não define o comportamento de empilhar e desempilhar chamadas."
+        },
+        {
+          "letra": "D",
+          "texto": "Lista",
+          "porque": "Lista encadeada genérica não impõe a ordem LIFO que a recursão exige."
+        },
+        {
+          "letra": "E",
+          "texto": "Matriz",
+          "porque": "Estrutura bidimensional sem relação com o controle de chamadas."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Recursão usa a pilha de chamadas (call stack). Por isso recursão muito funda estoura a pilha (stack overflow), e por isso toda recursão pode virar iteração com uma pilha explícita.",
+      "assuntos": [
+        {
+          "num": "0031",
+          "modulo": "04-funcoes.md"
+        },
+        {
+          "num": "0032",
+          "modulo": "04-funcoes.md"
+        }
+      ]
+    },
+    {
+      "numero": 8,
+      "topico": 4,
+      "formato": "conceito",
+      "enunciado": "Quais são, respectivamente, o pior caso e o caso médio de uma árvore de busca binária em termos de complexidade?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "O(n), O(n)",
+          "porque": "O pior caso é O(n), mas o caso médio (inserções em ordem aleatória) tem altura esperada O(log n), não O(n)."
+        },
+        {
+          "letra": "B",
+          "texto": "O(logn), O(logn)",
+          "porque": "O pior caso não é O(log n): inserir chaves em ordem crescente faz a árvore virar uma lista, com altura n."
+        },
+        {
+          "letra": "C",
+          "texto": "O(logn), O(n)",
+          "porque": "Está invertida: o pior caso é o O(n), e o médio é o O(log n)."
+        },
+        {
+          "letra": "D",
+          "texto": "O(n), O(logn)",
+          "porque": "Correta. Sem balanceamento, chaves ordenadas degeneram a árvore em lista (altura n, pior caso O(n)). Com chaves aleatórias a altura esperada é O(log n)."
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma das respostas anteriores.",
+          "porque": "Existe a d)."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "ABB comum: pior caso O(n) (árvore degenerada), médio O(log n). Para garantir O(log n) no pior caso você precisa de balanceamento (AVL, rubro-negra).",
+      "assuntos": [
+        {
+          "num": "0099",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 9,
+      "topico": 4,
+      "formato": "cálculo",
+      "enunciado": "Uma árvore B de ordem 4 e de altura 3, onde ordem é o número máximo de filhos em cada nó, terá um máximo de chaves igual a?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "255",
+          "porque": "Correta. Ordem 4: cada nó tem até 4 filhos e 3 chaves. Altura 3 (em arestas) dá 4 níveis: 1 + 4 + 16 + 64 = 85 nós, e 85 × 3 = 255 chaves."
+        },
+        {
+          "letra": "B",
+          "texto": "63",
+          "porque": "Resulta de contar 'altura 3' como 3 níveis: 1 + 4 + 16 = 21 nós × 3 = 63. Mas a convenção do Cormen (altura em arestas) dá 4 níveis."
+        },
+        {
+          "letra": "C",
+          "texto": "127",
+          "porque": "É 2^7 - 1, número de nós de uma árvore binária cheia com 7 níveis. Não vale para ordem 4."
+        },
+        {
+          "letra": "D",
+          "texto": "188",
+          "porque": "Não vem de nenhuma fórmula coerente com ordem 4 e altura 3."
+        },
+        {
+          "letra": "E",
+          "texto": "256",
+          "porque": "É 4^4. Seria 255 + 1, mas o máximo de chaves é nós × 3, sem 'chave extra'."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Máximo de chaves = (nós de uma árvore completa) × (ordem - 1). Com ordem m e altura h em arestas, os nós são (m^(h+1) - 1)/(m - 1). Aqui (4^4 - 1)/3 = 85. Se a banca contasse altura em níveis, a resposta seria a B (63); o gabarito oficial é a A, que bate com a convenção das arestas.",
+      "assuntos": [
+        {
+          "num": "0097",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 10,
+      "topico": 5,
+      "formato": "afirmações",
+      "enunciado": "Suponha uma tabela hash vazia com tamanho m = 17, utilizando o método da divisão para chaves de valores naturais e endereçamento aberto. Considere as sentenças abaixo:\n\nI. Após inserir as chaves 5, 10, 22, 42 e 39, utilizando sondagem linear, terá havido um total de 2 colisões\nII. As chaves 5, 10, 22, 42 e 39 poderiam ser inseridas sem colisão se utilizássemos uma função dispersão dupla (double hash)\nIII. É possível inserir 17 chaves nessa tabela sem que ocorra nenhuma colisão.\n\nMarque a alternativa CORRETA",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Somente a sentença I está correta",
+          "porque": "Propõe só I verdadeira. Mas I depende de como contar: os endereços são 5, 10, 5, 8, 5. O 22 colide uma vez e o 39 colide duas (com 5 e 22 nas posições 5 e 6), total de 3 colisões. Além disso III é verdadeira."
+        },
+        {
+          "letra": "B",
+          "texto": "As sentenças I e II estão correta",
+          "porque": "Propõe I e II. II é falsa: 5, 22 e 39 têm o mesmo h1 (= 5), e a primeira tentativa do hash duplo é sempre h1, então 22 e 39 colidem de qualquer jeito."
+        },
+        {
+          "letra": "C",
+          "texto": "Somente a sentença III está correta",
+          "porque": "Contando eventos de colisão (3), I é falsa; II é falsa; III é verdadeira (as chaves 0 a 16 caem em endereços todos diferentes). Essa é a leitura mais natural, mas a banca anulou."
+        },
+        {
+          "letra": "D",
+          "texto": "As sentenças I e III estão correta",
+          "porque": "Só funciona se 'colisões' contar as chaves que colidiram (22 e 39, ou seja, 2). Aí I vira verdadeira, junto com III."
+        },
+        {
+          "letra": "E",
+          "texto": "Todas as sentenças estão corretas",
+          "porque": "Exige II verdadeira, que falha: 22 e 39 colidem já na primeira sondagem."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "Valores: I depende de como contar (3 colisões se cada passo em posição ocupada conta; 2 se contar chaves que colidiram). II é falsa, porque a 1ª posição do hash duplo é a mesma do linear. III é verdadeira. Contando eventos, a resposta é C; contando chaves, é D. Essa ambiguidade é o provável motivo da anulação.",
+      "assuntos": [
+        {
+          "num": "0105",
+          "modulo": "15-hash.md"
+        },
+        {
+          "num": "0107",
+          "modulo": "15-hash.md"
+        }
+      ]
+    },
+    {
+      "numero": 11,
+      "topico": 3,
+      "formato": "código",
+      "enunciado": "Qual a função do seguinte trecho de código?\n\n```java\npublic void function(int data)\n{\n  int flag = 0;\n  if( head != null)\n  {\n    Node temp = head.getNext();\n    while((temp != head) && (!(temp.getItem() == data)))\n    {\n      temp = temp.getNext();\n      flag = 1;\n      break;\n    }\n  }\n  if(flag)\n    System.out.println(\"success\");\n  else\n    System.out.println(\"fail\");\n}\n```",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Imprimir sucess se um determinado elemento não for encontrado",
+          "porque": "O código imprime success quando `flag` vale 1, e isso acontece quando o laço entra uma vez, sem relação direta com 'não encontrado'."
+        },
+        {
+          "letra": "B",
+          "texto": "Imprimir fail se um determinado elemento não for encontrado",
+          "porque": "Gabarito oficial. A intenção é uma busca em lista circular que imprime fail quando não acha. O código real está truncado e com `break` incondicional, então a leitura é a mais próxima do que a banca quis."
+        },
+        {
+          "letra": "C",
+          "texto": "Imprimir sucess se um elemento em particular for igual a 1",
+          "porque": "O 1 é o valor da `flag`, não do dado buscado."
+        },
+        {
+          "letra": "D",
+          "texto": "Imprimir fail se a lista estiver vazia e success caso contrário",
+          "porque": "Lista vazia imprime fail, mas lista não vazia também pode imprimir fail (se o segundo nó for a cabeça ou o dado)."
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma das respostas anteriores.",
+          "porque": "Era a leitura do curso: o `break` incondicional faz o laço rodar no máximo uma vez, então o código não busca de forma coerente. A banca preferiu a B."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "O gabarito oficial é B, mas o código é estranho: é Java misturado com C (`if(flag)` com inteiro não compila em Java) e o `break` incondicional impede a busca de verdade. Na análise do curso, a resposta seria E. Em prova, quando o código é torto assim, escolha a alternativa que descreve a intenção (buscar em lista circular e imprimir fail se não achar).",
+      "assuntos": [
+        {
+          "num": "0080",
+          "modulo": "11-listas.md"
+        }
+      ]
+    },
+    {
+      "numero": 12,
+      "topico": 4,
+      "formato": "cálculo",
+      "enunciado": "Qual é a altura máxima de qualquer árvore AVL com 7 nós? Assuma que a altura de uma árvore com um único nó seja 0.",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "2",
+          "porque": "Altura 2 é a altura mínima possível: uma árvore perfeita de altura 2 tem exatamente 7 nós. Mas a pergunta é a altura máxima."
+        },
+        {
+          "letra": "B",
+          "texto": "3",
+          "porque": "Correta. O mínimo de nós para uma AVL de altura h é N(h) = N(h-1) + N(h-2) + 1, com N(0) = 1 e N(1) = 2: dá 1, 2, 4, 7. Com 7 nós cabe altura 3, e para altura 4 você precisaria de 12."
+        },
+        {
+          "letra": "C",
+          "texto": "4",
+          "porque": "Uma AVL de altura 4 exige no mínimo 12 nós."
+        },
+        {
+          "letra": "D",
+          "texto": "5",
+          "porque": "Altura 5 exige no mínimo 20 nós."
+        },
+        {
+          "letra": "E",
+          "texto": "6",
+          "porque": "Altura 6 exige no mínimo 33 nós."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Para altura máxima com n nós, use a recorrência da AVL mais esparsa (árvore de Fibonacci): N(h) = N(h-1) + N(h-2) + 1. Os valores 1, 2, 4, 7, 12, 20, 33 valem a pena decorar. Veja o maior h com N(h) ≤ n.",
+      "assuntos": [
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 13,
+      "topico": 4,
+      "formato": "afirmações",
+      "enunciado": "Dadas as sentenças abaixo, marque a alternativa CORRETA.\n\nI. As raízes dos elementos das subárvores são menores que a raiz do heap.\nII. Para restaurar a propriedade AVL depois de inserir um elemento, começamos no ponto de inserção e nos movemos em direção a raiz dessa árvore.\nIII. A árvore B e a árvore AVL têm a mesma complexidade de tempo do pior caso para inserção e exclusão.",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Somente a sentença I está correta",
+          "porque": "I só vale para heap máximo (e com 'menor ou igual'), e o enunciado não diz qual. II e III também são verdadeiras, então 'somente I' não fecha."
+        },
+        {
+          "letra": "B",
+          "texto": "As sentenças II e III estão correta",
+          "porque": "Seria a combinação certa se I fosse tomada como falsa. II é verdadeira (retrocede do ponto de inserção até a raiz atualizando fatores e rotacionando). III é verdadeira (ambas O(log n) no pior caso)."
+        },
+        {
+          "letra": "C",
+          "texto": "Somente a sentença III está correta",
+          "porque": "III é verdadeira, mas II também, então 'somente III' fica incompleta."
+        },
+        {
+          "letra": "D",
+          "texto": "As sentenças I e III estão correta",
+          "porque": "Depende de I, que só vale em heap máximo, e ignora que II é verdadeira."
+        },
+        {
+          "letra": "E",
+          "texto": "Somente a sentença II está correta",
+          "porque": "II é verdadeira, mas III também."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "II e III são verdadeiras. I só vale para heap máximo (no mínimo, a raiz é a menor) e com 'menor ou igual' se houver chaves repetidas; o enunciado não diz qual. Se I fosse considerada falsa, B seria a resposta. Por essa ambiguidade a banca anulou.",
+      "assuntos": [
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0102",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 14,
+      "topico": 7,
+      "formato": "simulação",
+      "enunciado": "Dada a seguinte entrada (34, 8, 64, 51, 32, 21) e empregando o algoritmo Insertion Sort, qual será a aparência do array de elementos após a segunda rodada de ordenação?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "8, 21, 32, 34, 51, 64",
+          "porque": "É o vetor final, depois de todas as rodadas. Após a segunda, só os dois ou três primeiros elementos foram tratados."
+        },
+        {
+          "letra": "B",
+          "texto": "8, 32, 34, 51, 64, 21",
+          "porque": "Não é produzido por insertion sort: o 32 ainda nem foi processado nesse ponto."
+        },
+        {
+          "letra": "C",
+          "texto": "8, 34, 51, 64, 32, 21",
+          "porque": "Aqui o 51 foi colocado antes do 64, o que corresponde a uma rodada além da segunda."
+        },
+        {
+          "letra": "D",
+          "texto": "8, 34, 64, 51, 32, 21",
+          "porque": "Correta. Rodada 1: insere o 8 antes do 34 (8 34 64 51 32 21). Rodada 2: insere o 64, que já está no lugar certo, e nada se move."
+        },
+        {
+          "letra": "E",
+          "texto": "8, 51, 64, 34, 32, 21",
+          "porque": "Não vem do insertion sort: o 51 pularia o 34 sem ter sido processado."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "Insertion sort mantém um prefixo ordenado e a cada rodada insere o próximo elemento nele. Em 2 rodadas, só os 3 primeiros ficam ordenados, e o resto do vetor continua como estava. Confira que os elementos após o prefixo não mudaram.",
+      "assuntos": [
+        {
+          "num": "0093",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 15,
+      "topico": 7,
+      "formato": "conceito",
+      "enunciado": "Qual é a vantagem do Bubble Sort em relação aos outros algoritmos de ordenação?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "É o mais rápido",
+          "porque": "O bubble sort é O(n²) no pior e no médio caso, mais lento que merge, quick e heap sort."
+        },
+        {
+          "letra": "B",
+          "texto": "Consome menos memória",
+          "porque": "Consome O(1) extra, mas insertion e selection sort também, e o heap sort é in-place também. Não é uma vantagem exclusiva."
+        },
+        {
+          "letra": "C",
+          "texto": "Pode detectar se a entrada já está ordenada",
+          "porque": "É a resposta esperada. Com uma flag de troca, se uma passada inteira não trocar nada, o vetor já está ordenado e o laço para: O(n) no melhor caso. A banca anulou a questão."
+        },
+        {
+          "letra": "D",
+          "texto": "É o mais complexo em termos de implementação",
+          "porque": "É um dos mais simples, o oposto da afirmação."
+        },
+        {
+          "letra": "E",
+          "texto": "Não possui vantagens",
+          "porque": "Tem alguma: simplicidade e a parada antecipada."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "A banca anulou. Conceitualmente, a única 'vantagem' razoável do bubble sort é a versão com flag, que detecta vetor ordenado e termina em O(n). Em prova de múltipla escolha, essa costuma ser a resposta esperada.",
+      "assuntos": [
+        {
+          "num": "0091",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 16,
+      "topico": 4,
+      "formato": "conceito",
+      "enunciado": "Ao se representar a heap máxima da figura abaixo em um array, a ordem dos elementos no array será a seguinte:",
+      "figuras": [
+        "2019-033-q16"
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "88 66 33 44 30 22 5 77 55 75",
+          "porque": "Põe a subárvore esquerda inteira antes da direita (em profundidade). O vetor de heap usa ordem por níveis."
+        },
+        {
+          "letra": "B",
+          "texto": "86 77 55 75 66 33 44 30 22 5",
+          "porque": "Começa em 86, que não é a raiz (88)."
+        },
+        {
+          "letra": "C",
+          "texto": "86 77 75 66 55 44 33 30 22 5",
+          "porque": "Começa em 86 e é só a lista em ordem decrescente, que não respeita a posição dos nós."
+        },
+        {
+          "letra": "D",
+          "texto": "5 22 30 75 55 44 33 77 66 86",
+          "porque": "Está invertida e com o 86, que não existe na figura."
+        },
+        {
+          "letra": "E",
+          "texto": "88 66 77 33 44 55 75 30 22 5",
+          "porque": "Correta. A ordem por níveis (esquerda para direita) fica: nível 0: 88; nível 1: 66, 77; nível 2: 33, 44, 55, 75; nível 3: 30, 22, 5."
+        }
+      ],
+      "gabarito": "E",
+      "resumo": "Heap em vetor é a leitura da árvore por níveis, da esquerda para a direita. O nó i tem filhos em 2i e 2i+1 (base 1). Descarte logo as alternativas que citam valores inexistentes (86).",
+      "assuntos": [
+        {
+          "num": "0102",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 17,
+      "topico": 3,
+      "formato": "conceito",
+      "enunciado": "Quantas pilhas são necessárias para implementar uma fila. Considere a situação em que nenhuma outra estrutura de dados, como matrizes, lista encadeada está disponível.",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "0",
+          "porque": "Sem nenhuma estrutura de apoio não há onde guardar os elementos."
+        },
+        {
+          "letra": "B",
+          "texto": "1",
+          "porque": "Uma pilha só inverte a ordem (LIFO) e não consegue entregar o mais antigo primeiro sem uma segunda estrutura."
+        },
+        {
+          "letra": "C",
+          "texto": "2",
+          "porque": "Correta. Uma pilha de entrada recebe os enfileirar. Ao desenfileirar, se a de saída estiver vazia, você move tudo da entrada para a saída (invertendo a ordem) e desempilha dela. A inversão dupla restaura a ordem FIFO."
+        },
+        {
+          "letra": "D",
+          "texto": "3",
+          "porque": "Funciona, mas não é o mínimo."
+        },
+        {
+          "letra": "E",
+          "texto": "4",
+          "porque": "Funciona, mas não é o mínimo."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Fila com duas pilhas é clássica: enfileirar empilha na pilha A; desenfileirar desempilha de B, e se B estiver vazia, despeja A em B antes. O custo amortizado de cada operação é O(1).",
+      "assuntos": [
+        {
+          "num": "0085",
+          "modulo": "12-pilhas-e-filas.md"
+        },
+        {
+          "num": "0082",
+          "modulo": "12-pilhas-e-filas.md"
+        }
+      ]
+    },
+    {
+      "numero": 18,
+      "topico": 7,
+      "formato": "conceito",
+      "enunciado": "Qual das afirmações abaixo sobre Insertion Sort está CORRETA?",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Existem arrays de tamanhos variados N tais que o Insertion Sort é executado em Θ(N).",
+          "porque": "Correta. Em um vetor já ordenado, cada inserção faz uma comparação só, o que dá N-1 comparações e Θ(N) no total. É o melhor caso."
+        },
+        {
+          "letra": "B",
+          "texto": "Existem arrays de tamanhos variados N tais que o Insertion Sort é executado em Θ(1).",
+          "porque": "Você precisa ler os N elementos pelo menos uma vez, então o custo cresce com N."
+        },
+        {
+          "letra": "C",
+          "texto": "Existem arrays de tamanhos variados N tais que o Insertion Sort é executado em Θ(N³).",
+          "porque": "O pior caso é Θ(N²) (vetor invertido). Nunca chega a N³."
+        },
+        {
+          "letra": "D",
+          "texto": "Existem arrays de tamanhos variados N tais que o Insertion Sort é executado em Θ(2^N).",
+          "porque": "Exponencial não ocorre: o máximo de movimentos é N(N-1)/2."
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma das sentenças anteriores está correta.",
+          "porque": "Existe a A."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Insertion sort: melhor caso Θ(N) (já ordenado), pior e médio Θ(N²). Ele é adaptativo, o que o torna bom para entradas quase ordenadas.",
+      "assuntos": [
+        {
+          "num": "0093",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 19,
+      "topico": 4,
+      "formato": "simulação",
+      "enunciado": "Ao se construir uma árvore AVL, inicialmente vazia, com as seguintes chaves na ordem indicada - 2, 3, 5, 6, 9, 8, 7, 4, 1 – e sabendo que que se uma inserção fizer com que a árvore fique desequilibrada, é necessário executar as rotações para manter o equilíbrio, o resultado final da árvore AVL é:",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "árvore da figura a)",
+          "porque": "Correta. Inserindo e rotacionando a cada desequilíbrio, a árvore final tem raiz 6; filhos 3 e 8; netos 2, 5 (sob o 3) e 7, 9 (sob o 8); o 1 sob o 2 e o 4 sob o 5. Conferi rodando uma AVL em código.",
+          "figura": "2019-033-q19-a"
+        },
+        {
+          "letra": "B",
+          "texto": "árvore da figura b)",
+          "porque": "Não é uma ABB: a raiz 2 tem o 3 à esquerda, e 3 > 2. Qualquer filho esquerdo precisa ser menor que o pai.",
+          "figura": "2019-033-q19-b"
+        },
+        {
+          "letra": "C",
+          "texto": "árvore da figura c)",
+          "porque": "Não é uma ABB: a raiz 9 tem o 7 à direita, e 7 < 9. Parece uma árvore espelhada.",
+          "figura": "2019-033-q19-c"
+        },
+        {
+          "letra": "D",
+          "texto": "árvore da figura d)",
+          "porque": "Não é uma ABB (o 6 está à esquerda da raiz 5, mas 6 > 5), e o 2 está desbalanceado (esquerda altura 0, direita altura 2).",
+          "figura": "2019-033-q19-d"
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma das alternativas anteriores",
+          "porque": "Existe a a)."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Para AVL passo a passo: insira como numa ABB, suba atualizando fatores de balanceamento e, no primeiro nó com fator 2 ou -2, aplique a rotação (simples ou dupla) conforme o caso. Antes de simular, elimine as figuras que nem são ABB (esquerdo maior ou direito menor que o pai): sobra só a a).",
+      "assuntos": [
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 20,
+      "topico": 4,
+      "formato": "afirmações",
+      "enunciado": "Sobre as afirmações abaixo, marque a alternativa CORRETA\n\nI. A subárvore da raiz de um árvore vermelho e preto é sempre uma árvore vermelha e preta.\nII. O irmão de uma referência de filho nulo em uma árvore vermelha e preta é outra referência de filho nulo ou um nó vermelho.\nIII. A pior complexidade de tempo da operação de inserção em uma árvore AVL é O(log n), onde n é o número de nós na árvore.",
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Somente a sentença I está correta",
+          "porque": "I é falsa: a raiz de uma subárvore pode ser vermelha, e uma árvore rubro-negra exige raiz preta. II e III são verdadeiras."
+        },
+        {
+          "letra": "B",
+          "texto": "As sentenças II e III estão correta",
+          "porque": "Correta. II vale: se um filho é nulo (conta como preto), o irmão precisa manter a mesma altura negra, então só pode ser nulo ou um vermelho com filhos nulos. III vale: a AVL tem altura O(log n) e a inserção faz uma descida mais no máximo uma rotação (simples ou dupla)."
+        },
+        {
+          "letra": "C",
+          "texto": "Somente a sentença III está correta",
+          "porque": "III é verdadeira, mas II também."
+        },
+        {
+          "letra": "D",
+          "texto": "As sentenças I e III estão correta",
+          "porque": "Depende de I, que é falsa."
+        },
+        {
+          "letra": "E",
+          "texto": "Somente a sentença II está correta",
+          "porque": "II é verdadeira, mas III também."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "I é falsa (subárvore com raiz vermelha não é rubro-negra, pois a raiz precisa ser preta). II é verdadeira pela igualdade de altura negra. III é verdadeira. Em afirmações sobre rubro-negra, desconfie de 'sempre' e de regras que mencionam a raiz.",
+      "assuntos": [
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    }
+  ]
+}
