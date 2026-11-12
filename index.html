@@ -209,6 +209,9 @@ code { font-family: var(--mono); font-size: .9em; }
 .ref:hover { text-decoration: underline; }
 .ref .n { font-variant-numeric: tabular-nums; }
 .conceito { display: flex; flex-direction: column; gap: 2px; }
+.conceito .def { line-height: 1.5; }
+.conceito .ex { margin-top: 6px; padding: 8px 10px; border-radius: 10px; background: var(--surface); font-size: 14px; line-height: 1.5; }
+.conceito .ex-rot { font-weight: 600; color: var(--accent); margin-right: 4px; }
 .conceito .refs { display: flex; flex-direction: column; gap: 2px; margin-top: 4px; }
 .conceito .ref { white-space: normal; }
 .conceito .ref::before { content: "Estude: "; color: var(--muted); font-weight: 400; }
@@ -403,7 +406,8 @@ function md(texto) {
         const m = t.match(/^\*\*(.+?)\*\*\s*((?:\[\d{4}\][,\s]*)+):\s*(.*)$/)
         if (!m) return `<li>${emLinha(t)}</li>`
         const refs = [...m[2].matchAll(/\d{4}/g)].map((x) => linkAssunto(x[0])).join('')
-        return `<li class="conceito"><strong>${emLinha(m[1])}</strong><span class="def">${emLinha(m[3])}</span><span class="refs">${refs}</span></li>`
+        const [def, ex] = m[3].split(/\s*Ex\.:\s*/)
+        return `<li class="conceito"><strong>${emLinha(m[1])}</strong><span class="def">${emLinha(def)}</span>${ex ? `<span class="ex"><span class="ex-rot">Exemplo</span> ${emLinha(ex)}</span>` : ''}<span class="refs">${refs}</span></li>`
       }).join('')}</ul>`)
       continue
     }
