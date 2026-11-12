@@ -168,6 +168,15 @@ code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-si
 .veredito.certo { color: var(--certo); }
 .veredito.errado { color: var(--errado); }
 .veredito.neutro { color: var(--aviso); }
+.dica {
+  border: 1px solid var(--borda); border-left: 4px solid var(--aviso); border-radius: 10px;
+  background: var(--aviso-fundo); margin: 0 0 14px; font-size: 15.5px;
+}
+.dica summary { cursor: pointer; padding: 10px 14px; font-weight: 600; color: var(--aviso); }
+.dica summary .nota { font-weight: 400; }
+.dica .corpo { padding: 0 14px 10px; color: var(--tinta); }
+.dica .corpo p { margin: 0 0 8px; }
+.dica pre { background: var(--cartao); }
 .ideia { padding: 14px 16px; margin-top: 10px; border-left: 4px solid var(--destaque); }
 .ideia h3 { margin: 0 0 6px; font-size: 16px; }
 .ideia p { margin: 0 0 8px; }
@@ -420,6 +429,7 @@ function telaQuestao(id) {
       <div class="enunciado">${md(q.enunciado)}</div>
       ${figs ? `<div class="figuras">${figs}</div>` : ''}
       ${originais ? `<p class="original">Recorte da prova: ${originais}</p>` : ''}
+      ${q.dica ? `<details class="dica"${respondida ? ' open' : ''}><summary>💡 Conceito e exemplo <span class="nota">(abre sem entregar a resposta)</span></summary><div class="corpo">${md(q.dica)}</div></details>` : ''}
       <ul class="alternativas" role="list">
         ${q.alternativas.map((a, k) => `
           <li class="alt" data-letra="${esc(a.letra)}">
@@ -437,7 +447,7 @@ function telaQuestao(id) {
       <button class="botao" id="voltar">Provas</button>
       <button class="botao principal" id="proxima">${rodada.i + 1 < total ? 'Próxima →' : 'Ver resultado'}</button>
     </nav>
-    <p class="atalhos"><kbd>A</kbd>–<kbd>E</kbd> ou <kbd>1</kbd>–<kbd>5</kbd> responde · <kbd>→</kbd> próxima · <kbd>←</kbd> anterior</p>
+    <p class="atalhos"><kbd>A</kbd>–<kbd>E</kbd> ou <kbd>1</kbd>–<kbd>5</kbd> responde · <kbd>H</kbd> abre a dica · <kbd>→</kbd> próxima · <kbd>←</kbd> anterior</p>
   `
   app.querySelectorAll('.alt').forEach((li) => { li.querySelector('.escolher').onclick = () => responder(q, li.dataset.letra) })
   app.querySelector('#anterior').onclick = () => irPara(rodada.i - 1)
@@ -546,6 +556,7 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'ArrowRight') return irPara(rodada.i + 1)
   if (e.key === 'ArrowLeft') return irPara(rodada.i - 1)
   const k = e.key.toUpperCase()
+  if (k === 'H') { const d = document.querySelector('.dica'); if (d) d.open = !d.open; return }
   const porNumero = /^[1-5]$/.test(k) ? q.alternativas[Number(k) - 1]?.letra : null
   const letra = porNumero ?? (q.alternativas.some((a) => a.letra === k) ? k : null)
   if (letra) responder(q, letra)
