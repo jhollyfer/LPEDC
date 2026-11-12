@@ -51,7 +51,7 @@
           "modulo": "10-analise.md"
         }
       ],
-      "dica": "**Cobra:** o custo de melhor caso de intercalar dois vetores ordenados num vetor maior.\n\n- **Merge sort** [0094]: a intercalação leva o menor dos dois da frente ao vetor de saída, um por vez.\n- **Notação O** [0072]: o custo conta os passos do processo todo, não só as comparações.\n\n**Exemplo:** `1 3` com `2 4`: compara 1 e 2, 3 e 2, 3 e 4; o 4 restante é copiado.\n\n**Como atacar:** conte as comparações do melhor caso e some as cópias que todo elemento ainda faz."
+      "dica": "**Cobra:** o custo de juntar dois vetores ordenados num só, também ordenado, no melhor caso.\n\n- **Intercalação** [0094]: compara os elementos da frente dos dois vetores, copia o menor e avança só naquele vetor; cada elemento é copiado uma vez. Ex.: com `[1 4]` e `[2 3]`: 1, 2, 3 e a sobra 4, resultando em `1 2 3 4`.\n- **Laços em sequência** [0072]: o custo vem de quantas vezes cada elemento é visitado: laços um depois do outro somam, e só laços aninhados multiplicam. Ex.: dois laços de `n` passos em sequência custam `2n`, que é O(n).\n\n**Como atacar:** conte quantas vezes cada elemento é visitado, e lembre que a intercalação nunca busca nem aninha laços."
     },
     {
       "numero": 2,
@@ -93,7 +93,7 @@
           "modulo": "22-arvores-avancadas.md"
         }
       ],
-      "dica": "**Cobra:** comparar árvore B e binária em filhos, folhas e balanceamento.\n\n- **Tamanho do nó** [0146]: com grau mínimo `t`, cada nó (menos a raiz) tem de `t-1` a `2t-1` chaves; com `k` chaves, `k+1` filhos.\n- **Folhas** [0146]: todas no mesmo nível.\n- **AVL** [0101]: balanceia por rotações; a árvore B, por divisão de páginas.\n\n**Exemplo:** `t = 2`: nós de 1 a 3 chaves, de 2 a 4 filhos.\n\n**Como atacar:** traduza cada afirmativa em chaves, filhos ou nível das folhas."
+      "dica": "**Cobra:** as regras de uma árvore B: filhos e chaves por nó, nível das folhas e frequência de rebalanceamento.\n\n- **Grau mínimo t** [0146]: nó que não é raiz tem de `t - 1` a `2t - 1` chaves, e um nó interno com `k` chaves tem `k + 1` filhos; na \"ordem m\" (máximo de filhos), `m = 2t`. Ex.: com `t = 3`, de 2 a 5 chaves e de 3 a 6 filhos.\n- **Folhas no mesmo nível** [0146]: todas as folhas ficam à mesma profundidade, e a chave do meio sobe na divisão. Ex.: a árvore cresce por cima.\n- **Rebalanceamento raro** [0146]: só há divisão quando um nó cheio recebe chave, ou junção abaixo do mínimo. Ex.: com `t = 2`, a folha `[10 20]` aceita o 30 sem dividir; só a próxima chave, com a folha cheia, divide.\n\n**Como atacar:** compare cada afirmação com `t - 1` a `2t - 1` chaves e com `k + 1` filhos."
     },
     {
       "numero": 3,
@@ -139,7 +139,7 @@
           "modulo": "28-estruturas-complementos.md"
         }
       ],
-      "dica": "**Cobra:** achar a estrutura que NÃO pode ser uma AVL.\n\n- **AVL** [0101]: BST em que, em todo nó, as alturas das subárvores diferem no máximo 1.\n- **Altura** [0175]: aqui folha vale 1 e pai vale o máximo dos filhos mais 1.\n- **BST** [0099]: esquerda menor, direita maior.\n\n**Exemplo:** raiz com só um filho esquerdo, que tem um filho esquerdo: alturas 2 e 0 na raiz, diferença 2.\n\n**Como atacar:** calcule as alturas de baixo para cima e confira a diferença em todos os nós."
+      "dica": "**Cobra:** reconhecer se uma forma de árvore (nós e altura) pode ser uma AVL, contando a altura como o enunciado manda.\n\n- **Altura** [0175]: é o maior caminho do nó até uma folha; o curso conta arestas (folha 0), mas esta questão conta nós (folha 1), então leia a convenção. Ex.: raiz com um único filho tem altura 2 contando nós e 1 contando arestas.\n- **Regra da AVL** [0101]: em todo nó, as alturas das duas subárvores diferem de no máximo 1; basta um nó violar para a árvore não ser AVL. Ex.: uma cadeia reta de 4 nós tem diferença 3 no topo, logo não é AVL.\n\n**Como atacar:** desenhe a forma de menor desequilíbrio possível com aquele número de nós e confira os fatores."
     },
     {
       "numero": 4,
@@ -181,7 +181,7 @@
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** conferir se vetores são heaps e se inserir e remover o topo seguem as regras.\n\n- **Heap** [0102]: árvore completa em vetor, pai ≥ filhos; os filhos de `i` estão em `2i+1` e `2i+2`.\n- **Inserir e remover** [0102]: o novo entra no fim e sobe; na remoção, o último vai para a raiz e desce.\n\n**Exemplo:** em `50 30 40 10`, inserir 45: pai do índice 4 é o 1 (30); troca: `50 45 40 10 30`.\n\n**Como atacar:** refaça cada passo afirmado."
+      "dica": "**Cobra:** ler um vetor como heap e simular a inserção e a remoção do topo.\n\n- **Heap de máximo** [0102]: árvore binária completa guardada em vetor, em que todo pai é maior ou igual aos filhos; os filhos de `i` estão em `2i + 1` e `2i + 2`. Ex.: em `9 5 7 1`, 9 ≥ 5 e 7, e 5 ≥ 1.\n- **Inserção sobe** [0102]: o novo elemento entra no fim do vetor e troca com o pai enquanto for maior que ele. Ex.: em `9 5 7`, inserir 8: `9 5 7 8` vira `9 8 7 5`.\n- **Remoção do topo desce** [0102]: o último elemento vai para a raiz e desce, trocando com o maior filho enquanto for menor que ele. Ex.: `9 8 7 5` sem o 9: `5 8 7` vira `8 5 7`.\n\n**Como atacar:** confira a regra pai ≥ filhos em cada afirmação e refaça os passos de subida e de descida."
     },
     {
       "numero": 5,
@@ -227,7 +227,7 @@
           "modulo": "28-estruturas-complementos.md"
         }
       ],
-      "dica": "**Cobra:** achar a estrutura que NÃO pode ser uma AVL.\n\n- **AVL** [0101]: BST em que, em todo nó, as alturas das subárvores diferem no máximo 1.\n- **Altura** [0175]: aqui folha vale 1 e pai vale o máximo dos filhos mais 1.\n- **BST** [0099]: esquerda menor, direita maior.\n\n**Exemplo:** raiz com só um filho esquerdo, que tem um filho esquerdo: alturas 2 e 0 na raiz, diferença 2.\n\n**Como atacar:** calcule as alturas de baixo para cima e confira a diferença em todos os nós."
+      "dica": "**Cobra:** reconhecer se uma forma de árvore (nós e altura) pode ser uma AVL, contando a altura como o enunciado manda.\n\n- **Altura** [0175]: é o maior caminho do nó até uma folha; o curso conta arestas (folha 0), mas esta questão conta nós (folha 1), então leia a convenção. Ex.: raiz com um único filho tem altura 2 contando nós e 1 contando arestas.\n- **Regra da AVL** [0101]: em todo nó, as alturas das duas subárvores diferem de no máximo 1; basta um nó violar para a árvore não ser AVL. Ex.: uma cadeia reta de 4 nós tem diferença 3 no topo, logo não é AVL.\n\n**Como atacar:** desenhe a forma de menor desequilíbrio possível com aquele número de nós e confira os fatores."
     },
     {
       "numero": 6,
@@ -276,7 +276,7 @@
           "modulo": "12-pilhas-e-filas.md"
         }
       ],
-      "dica": "**Cobra:** o tempo médio de busca numa BST montada a partir de uma pilha de elementos ordenados.\n\n- **Pilha** [0082]: LIFO, inverte a ordem; uma lista ordenada sai em ordem contrária.\n- **BST** [0099]: chaves inseridas em ordem crescente ou decrescente degeneram a árvore numa cadeia.\n\n**Exemplo:** inserir 4, 3, 2, 1 numa BST: cada nó é filho esquerdo do anterior.\n\n**Como atacar:** simule a inserção com 3 ou 4 elementos e veja o formato antes de falar em tempo."
+      "dica": "**Cobra:** o que uma lista ordenada passada por uma pilha faz com a forma da BST e com o custo da busca.\n\n- **Pilha inverte** [0082]: sai pelo topo, então a ordem de saída é a inversa da de entrada. Ex.: entrada 1, 2, 3 sai como 3, 2, 1.\n- **BST com chaves em ordem** [0099]: cada valor novo é sempre maior (ou sempre menor) que todos, vai para o mesmo lado e a árvore vira uma lista de altura `n - 1`, com busca O(n). Ex.: inserir 3, 2, 1 gera `3 → 2 → 1` só pela esquerda, e achar o 1 compara 3 vezes.\n\n**Como atacar:** desenhe a árvore resultante da ordem de inserção e conte as comparações de uma busca típica."
     },
     {
       "numero": 7,
@@ -322,7 +322,7 @@
           "modulo": "28-estruturas-complementos.md"
         }
       ],
-      "dica": "**Cobra:** marcar V ou F para afirmações sobre balanceamento e custo da AVL.\n\n- **AVL** [0101]: balanceada quando, em todo nó, as alturas das subárvores diferem no máximo 1; altura O(log n).\n- **Remoção na AVL** [0176]: também pode exigir rotações.\n- **Árvores** [0097]: árvore cheia tem todos os níveis completos.\n\n**Exemplo:** raiz com só um filho esquerdo: alturas 1 e 0, diferença 1, é AVL.\n\n**Como atacar:** teste cada afirmação com uma árvore pequena e leia \"pelo menos\"."
+      "dica": "**Cobra:** as propriedades da AVL: regra do balanceamento, altura e custo de rebalancear.\n\n- **Regra da AVL** [0101]: em todo nó, as alturas das duas subárvores diferem de no máximo 1; não vale \"em pelo menos uma\". Ex.: raiz com subárvores de altura 0 e 2, mesmo com cada lado equilibrado, desequilibra na raiz.\n- **Altura O(log n)** [0101]: a altura de uma AVL não passa de cerca de `1,44 · log₂ n`; é isso que garante busca O(log n). Ex.: com 1000 nós, altura no máximo cerca de 14, contra 999 numa BST degenerada.\n- **Custo do balanceamento** [0176]: cada rotação custa O(1) e o caminho tem altura O(log n), então o balanceamento custa O(log n) no pior caso. Ex.: numa AVL de 1000 nós, a remoção confere no máximo cerca de 14 ancestrais.\n\n**Como atacar:** confira cada afirmação contra a regra \"em todo nó\" e contra a altura O(log n)."
     },
     {
       "numero": 8,
@@ -368,7 +368,7 @@
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** o percurso em pós-ordem de uma BST montada por inserções.\n\n- **Inserção na BST** [0099]: menor à esquerda, maior à direita, na ordem dada.\n- **Percursos** [0098]: pós-ordem visita esquerda, direita e só depois a raiz.\n\n**Exemplo:** inserindo 50, 30, 70, 20, 40: raiz 50, o 30 tem 20 e 40, o 70 está à direita. Pós-ordem: `20 40 30 70 50`.\n\n**Como atacar:** monte a árvore completa e aplique a regra a cada subárvore, da esquerda para a direita."
+      "dica": "**Cobra:** montar a BST pela ordem de inserção e escrever o percurso em pós-ordem.\n\n- **Pós-ordem** [0098]: visita a subárvore esquerda, depois a direita e só então a raiz. Ex.: na árvore 5 com filhos 3 e 8, a pós-ordem é 3, 8, 5.\n- **BST pela ordem de inserção** [0099]: o primeiro valor é a raiz; cada seguinte desce comparando e vira folha onde parar. Ex.: inserir 4, 6, 2, 5: o 6 vai à direita, o 2 à esquerda e o 5 à esquerda do 6.\n\n**Como atacar:** desenhe a árvore e percorra recursivamente: esquerda, direita, raiz."
     },
     {
       "numero": 9,
@@ -410,7 +410,7 @@
           "modulo": "11-listas.md"
         }
       ],
-      "dica": "**Cobra:** descobrir quais nós um trecho de ponteiros insere numa lista duplamente encadeada.\n\n- **Lista dupla** [0079]: cada nó tem `próximo` e `anterior`; inserir entre dois nós exige acertar os quatro ponteiros.\n- **Ponteiro para struct** [0062]: `p->campo` lê ou altera o campo do nó apontado.\n\n**Exemplo:** inserir `n` entre `a` e `b`: `n->ant = a; n->prox = b; b->ant = n; a->prox = n;`.\n\n**Como atacar:** desenhe a lista com setas e execute uma linha por vez, lembrando que as linhas seguintes leem o ponteiro já alterado."
+      "dica": "**Cobra:** descobrir onde cada elemento entra numa lista duplamente encadeada ao seguir as atribuições de ponteiro.\n\n- **Lista duplamente encadeada** [0079]: cada nó tem `prox` e `ant`; inserir um nó entre dois vizinhos exige acertar 4 ponteiros. Ex.: inserir `N` entre `A` e `B`: `N->ant = A`, `N->prox = B`, `A->prox = N`, `B->ant = N`.\n- **Ordem das atribuições** [0079]: um ponteiro lido depois de ser sobrescrito aponta para outro nó; guarde ou use o valor antigo antes de mudá-lo. Ex.: `A->prox = N` antes de `N->prox = A->prox` faz o `N` apontar para si mesmo.\n\n**Como atacar:** desenhe a lista e as setas, e redesenhe depois de cada linha do trecho."
     },
     {
       "numero": 10,
@@ -455,7 +455,7 @@
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** qual nó vira a raiz quando se remove a raiz de uma BST.\n\n- **BST: remoção** [0100]: nó com dois filhos é trocado pelo sucessor, que sai de onde estava.\n- **Sucessor** [0175]: o menor da subárvore direita: desce uma vez à direita e depois tudo à esquerda.\n\n**Exemplo:** raiz 50, com 30 à esquerda e 70 à direita; o 70 tem o 60 à esquerda. O sucessor de 50 é o 60.\n\n**Como atacar:** veja quantos filhos a raiz tem e aplique o caso certo."
+      "dica": "**Cobra:** achar a nova raiz de uma BST depois de remover a raiz.\n\n- **Remoção na BST** [0100]: folha some, nó com um filho é substituído pelo filho, e nó com dois filhos recebe a chave do sucessor, que é removido de onde estava. Ex.: remover a raiz 10, com filhos 5 e 15 (o 15 tem filho esquerdo 12): o 12 vira a raiz.\n- **Sucessor** [0175]: é a menor chave maior que a do nó: desce uma vez à direita e depois tudo à esquerda. Ex.: raiz 40 com direita 60 (filhos 50 e 70): o sucessor é o 50.\n\n**Como atacar:** veja quantos filhos a raiz tem e siga o caso certo da remoção."
     },
     {
       "numero": 11,
@@ -501,7 +501,7 @@
           "modulo": "04-funcoes.md"
         }
       ],
-      "dica": "**Cobra:** o valor de uma função recursiva com duas chamadas, com seus casos base.\n\n- **Recursão** [0032]: cada chamada reduz o problema até chegar a um caso base.\n- **Fibonacci** [0033]: `f(n)` soma `f(n-1)` e `f(n-2)`, e os casos base decidem os valores.\n\n**Exemplo:** `h(1)=2`, `h(2)=3`, `h(n)=h(n-1)+h(n-2)`: `h(3) = h(2) + h(1) = 3 + 2 = 5`.\n\n**Como atacar:** desça a árvore de chamadas até os casos base e some de baixo para cima."
+      "dica": "**Cobra:** calcular uma função recursiva do tipo Fibonacci com casos base dados no enunciado.\n\n- **Casos base** [0032]: são os valores que a função devolve sem recursão; o resultado depende deles, então use os do enunciado e não os de Fibonacci clássico. Ex.: com `f(1) = 2` e `f(2) = 3`, vale `f(3) = 5` e `f(4) = 8`.\n- **Árvore de chamadas** [0033]: `f(n)` chama `f(n-1)` e `f(n-2)`; resolva de baixo para cima, dos casos base até o `n` pedido. Ex.: `f(4)` chama `f(3)` e `f(2)`, e `f(3)` chama `f(2)` e `f(1)`.\n\n**Como atacar:** calcule f(3) e depois f(4), a partir dos casos base do enunciado."
     },
     {
       "numero": 12,
@@ -543,7 +543,7 @@
           "modulo": "13-busca-e-ordenacao.md"
         }
       ],
-      "dica": "**Cobra:** a sequência de elementos comparados numa busca binária.\n\n- **Busca binária** [0090]: compara com o meio, `(ini + fim) / 2` em divisão inteira, e descarta a metade que não serve.\n- **Vetores** [0037]: a primeira posição é a 0.\n\n**Exemplo:** `2 4 6 8 10 12 14`, chave 12: meio na posição 3 (8), vai para 4 a 6; meio na posição 5 (12). Comparou 8 e 12.\n\n**Como atacar:** siga o algoritmo nos valores como aparecem, anotando só os comparados."
+      "dica": "**Cobra:** listar as chaves que a busca binária compara com a chave procurada.\n\n- **Busca binária** [0090]: calcula o índice do meio, compara a chave com `v[meio]` e continua à esquerda se for menor ou à direita se for maior. Ex.: buscando 8 em `2 4 6 8 10`: meio `v[2] = 6`, depois meio `v[3] = 8`.\n- **Índice × valor** [0037]: `v[i]` é o conteúdo da posição `i`; o meio é um índice, e a chave é comparada com o valor guardado nele. Ex.: em `5 9 14`, `v[1]` vale 9: a comparação é com 9, não com 1.\n\n**Como atacar:** a cada passo, calcule o índice do meio, leia `v[meio]` e escreva o valor comparado."
     },
     {
       "numero": 13,
@@ -585,7 +585,7 @@
           "modulo": "05-vetores-e-strings.md"
         }
       ],
-      "dica": "**Cobra:** a característica dos componentes de um vetor.\n\n- **Vetores** [0037]: um bloco único na memória, e `v[i]` fica a `i` posições do começo.\n- **Struct** [0059]: agrupa campos que podem ter tipos diferentes; o contraste ajuda a ler as opções.\n\n**Exemplo:** `int v[4]` ocupa `4 * sizeof(int)` bytes seguidos, e `v[2]` é o terceiro elemento.\n\n**Como atacar:** compare cada opção com o que `int v[4]` faz na memória."
+      "dica": "**Cobra:** as características de um vetor: tipo dos elementos e forma de acesso.\n\n- **Vetor homogêneo** [0037]: guarda elementos do mesmo tipo em posições contíguas da memória. Ex.: `int v[4]` guarda 4 inteiros, nunca um `int` e um `char`.\n- **Acesso por índice** [0037]: `v[i]` vai direto à posição `i`, em O(1), sem percorrer as anteriores (acesso aleatório). Ex.: `v[3]` salta direto ao 4º elemento.\n- **FIFO e LIFO** [0085]: são regras de remoção da fila (primeiro a entrar, primeiro a sair) e da pilha (último a entrar, primeiro a sair), não do vetor. Ex.: fila `A, B, C` entrega o A primeiro; pilha `A, B, C` entrega o C.\n\n**Como atacar:** descarte as alternativas que descrevem pilha ou fila e fique com a que fala de índice."
     },
     {
       "numero": 14,
@@ -627,7 +627,7 @@
           "modulo": "13-busca-e-ordenacao.md"
         }
       ],
-      "dica": "**Cobra:** afirmações sobre quando a busca binária vale e quantas comparações faz.\n\n- **Busca binária** [0090]: só vale em vetor ordenado e faz no máximo ⌊log₂ n⌋ + 1 comparações.\n- **Busca sequencial** [0089]: no pior caso olha os n elementos.\n\n**Exemplo:** vetor ordenado de 64 posições: a busca binária faz até 7 comparações; a sequencial, até 64.\n\n**Como atacar:** confira o \"apenas\" da afirmação I e calcule o número de comparações com um n pequeno."
+      "dica": "**Cobra:** a pré-condição e o custo da busca binária, comparada à sequencial.\n\n- **Pré-condição: vetor ordenado** [0090]: descartar metade só é correto se o vetor está em ordem; fora de ordem, a busca pode perder uma chave que existe. Ex.: buscando o 4 em `9 2 7 4`, o meio 2 manda ir à direita, depois o 7 manda ir à esquerda, e a busca termina sem achar o 4.\n- **Custo O(log n)** [0090]: cada passo descarta metade, então o máximo é `⌊log₂ n⌋ + 1` comparações. Ex.: com 1000 elementos, no máximo 10.\n- **Busca sequencial** [0089]: no pior caso olha os `n` elementos, e por isso perde para a binária em vetores grandes e ordenados. Ex.: com 1.000.000 de elementos, até 1.000.000 contra 20.\n\n**Como atacar:** confira cada afirmação com a pré-condição da ordem e com o `log₂ n`."
     },
     {
       "numero": 15,
@@ -677,7 +677,7 @@
           "modulo": "22-arvores-avancadas.md"
         }
       ],
-      "dica": "**Cobra:** associar heap, rubro-negra, AVL e BST às suas características.\n\n- **BST** [0099]: inserções em ordem podem degenerá-la numa cadeia.\n- **Heap** [0102]: árvore completa em vetor, com pai maior ou igual aos filhos.\n- **AVL** [0101] e **rubro-negra** [0145]: cada uma tem uma regra própria que mantém a altura em O(log n).\n\n**Exemplo:** 1000 nós: uma árvore equilibrada tem altura perto de 10; uma cadeia, 1000.\n\n**Como atacar:** para cada característica, ache qual árvore a garante e qual falha."
+      "dica": "**Cobra:** associar cada tipo de árvore à sua característica de forma e de altura.\n\n- **Heap** [0102]: árvore binária completa, guardada em vetor, em que o pai é maior ou igual aos filhos; não é uma BST. Ex.: `9 5 7`: cada nível se enche da esquerda para a direita.\n- **AVL e rubro-negra** [0101]: ambas são balanceadas e garantem altura O(log n), cada uma com a sua regra de equilíbrio. Ex.: numa AVL com 1000 nós, a altura é de no máximo cerca de 14.\n- **BST comum** [0099]: não balanceia: chaves inseridas em ordem formam uma lista e a altura vai a `n - 1`. Ex.: inserir 1, 2, 3, 4 gera uma cadeia de altura 3.\n\n**Como atacar:** para cada tipo, fixe a propriedade que o define e leia só as linhas que a citam."
     },
     {
       "numero": 16,
@@ -719,7 +719,7 @@
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** o que o heapsort faz e qual o seu custo.\n\n- **Heapsort** [0103]: monta um heap no vetor, troca a raiz com o último, diminui o heap e conserta.\n- **Heap** [0102]: o máximo fica na raiz; consertar custa a altura.\n- **Estabilidade** [0096]: ordenador estável mantém a ordem relativa dos iguais.\n\n**Exemplo:** heap `9 5 7 1`: troca raiz e último, `1 5 7 9`; o 1 desce: `7 5 1 9`.\n\n**Como atacar:** teste cada opção contra o passo a passo, olhando custo, espaço e estabilidade."
+      "dica": "**Cobra:** as propriedades do heapsort: como usa o heap, o custo e se é por comparação.\n\n- **Heapsort** [0103]: monta um heap de máximo e repete: troca a raiz com o último elemento, encolhe o heap e desce a nova raiz; custa O(n log n) em todos os casos. Ex.: `9 5 7` vira `7 5 | 9`, e o 9 já está na posição final.\n- **Heap como árvore** [0102]: o vetor é lido como árvore binária completa pelos índices de pai e filhos. Ex.: no vetor, os filhos do índice 1 estão nos índices 3 e 4.\n- **Limite inferior** [0117]: qualquer ordenação por comparação precisa de Ω(n log n) no pior caso; a árvore de decisão é a prova, não um algoritmo. Ex.: 3 elementos têm 6 ordens possíveis, e `⌈log₂ 6⌉ = 3` comparações.\n\n**Como atacar:** compare cada alternativa com o custo O(n log n) e com a definição do heap."
     },
     {
       "numero": 17,
@@ -769,7 +769,7 @@
           "modulo": "13-busca-e-ordenacao.md"
         }
       ],
-      "dica": "**Cobra:** achar as afirmações INCORRETAS sobre estabilidade, espaço, custo e melhor caso de ordenadores.\n\n- **Estabilidade e custo** [0096]: compare os algoritmos lado a lado.\n- **Complexidade espacial** [0168]: memória extra além do vetor.\n- **Insertion sort** [0093]: o custo depende da ordem da entrada.\n\n**Exemplo:** estável: ordenando `3a 1 3b`, os iguais ficam `3a` antes de `3b`; instável pode trocar a ordem.\n\n**Como atacar:** marque cada afirmação como V ou F e escolha as opções só com as falsas."
+      "dica": "**Cobra:** estabilidade, uso de espaço e sensibilidade à ordem de entrada nos algoritmos de ordenação.\n\n- **Estabilidade** [0096]: o algoritmo é estável quando chaves iguais saem na mesma ordem relativa em que entraram. Ex.: ordenando `(A,2) (B,1) (C,2)` pelo número, o estável dá B, A, C; o instável pode dar B, C, A.\n- **Espaço extra** [0168]: é a memória além da entrada: `O(1)` se in-place, `O(n)` se há vetor auxiliar; `O(n²)` nunca é o caso. Ex.: inverter trocando as pontas gasta O(1); copiar para outro vetor gasta O(n).\n- **Melhor caso e ordem** [0093]: o insertion sort faz O(n) no vetor já ordenado, então a ordem da entrada muda o custo; o merge sort faz sempre O(n log n). Ex.: insertion em `1 2 3 4` faz 3 comparações.\n\n**Como atacar:** monte uma tabela de estável, espaço e melhor caso por algoritmo e confira afirmação por afirmação."
     },
     {
       "numero": 18,
@@ -815,7 +815,7 @@
           "modulo": "15-hash.md"
         }
       ],
-      "dica": "**Cobra:** quantas posições da tabela hash tiveram colisão durante as inserções.\n\n- **Função hash** [0105]: aqui, `h(k) = k mod 11`.\n- **Encadeamento** [0106]: chaves com o mesmo endereço ficam na lista da mesma posição.\n\n**Exemplo:** `m = 5`, chaves 3, 8, 13, 4: as chaves 3, 8 e 13 caem na posição 3 e a 4 cai na posição 4. Uma posição teve colisão.\n\n**Como atacar:** calcule `h(k)` de cada chave e conte as posições que receberam duas ou mais chaves, não as chaves."
+      "dica": "**Cobra:** contar em quantas posições da tabela hash houve colisão no encadeamento.\n\n- **Método da divisão** [0105]: `h(k) = k mod m` devolve o resto da chave pelo tamanho da tabela. Ex.: com `m = 7`, as chaves 15, 22 e 9 vão para os índices 1, 1 e 2.\n- **Posição com colisão** [0106]: é um balde que recebeu 2 ou mais chaves; contam-se baldes, e não chaves. Ex.: 15, 22 e 29 em `m = 7` caem no balde 1: 1 posição com colisão, ainda que 2 chaves colidam.\n\n**Como atacar:** calcule o índice de cada chave, agrupe por balde e conte os baldes com mais de uma chave."
     },
     {
       "numero": 19,
@@ -861,7 +861,7 @@
           "modulo": "11-listas.md"
         }
       ],
-      "dica": "**Cobra:** o que caracteriza a lista encadeada simples.\n\n- **Lista encadeada** [0076]: cada nó guarda o dado e o ponteiro para o sucessor; o último aponta para `NULL`.\n- **Busca** [0077]: percorre os nós desde a cabeça, só para a frente.\n\n**Exemplo:** lista `4 → 9 → 2 → NULL`: para chegar ao 2, passa pelo 4 e pelo 9; do 9 não há como voltar ao 4.\n\n**Como atacar:** teste cada opção desenhando a lista e seguindo só os ponteiros `prox`."
+      "dica": "**Cobra:** as propriedades da lista encadeada simples: memória, ligações e inserção.\n\n- **Nós ligados por ponteiros** [0076]: cada nó guarda o `prox`, e os nós podem estar em qualquer lugar do heap; não há memória contígua. Ex.: `3 → 7 → NULL` pode ter o 3 e o 7 em endereços distantes.\n- **Inserir no meio** [0076]: o novo nó recebe o `prox` do anterior e só depois o anterior aponta para o novo; sem ponteiro para o anterior não há como ligar. Ex.: inserir 5 entre 3 e 7: `n->prox = a->prox; a->prox = n;`.\n- **Chegar ao meio** [0077]: a lista só anda para frente a partir da cabeça, então chegar a um nó no meio custa O(n), mesmo com ponteiro para o fim. Ex.: para chegar ao 3º nó são 2 passos a partir da cabeça.\n\n**Como atacar:** compare cada alternativa com a regra de ligar por ponteiros e de andar só para frente."
     },
     {
       "numero": 20,
@@ -918,7 +918,7 @@
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** associar corretamente a definição às estruturas fila, árvore, lista e pilha.\n\n- **Fila** [0085]: FIFO, primeiro a entrar, primeiro a sair.\n- **Pilha** [0082]: LIFO, último a entrar, primeiro a sair.\n- **Lista** [0076]: sequência de nós, cada um apontando para o próximo.\n- **Árvore** [0097]: hierarquia de pais e filhos.\n\n**Exemplo:** pilha de pratos: o último colocado é o primeiro retirado. Fila do caixa: quem chegou antes sai antes.\n\n**Como atacar:** leia cada afirmação e veja se a definição é da estrutura citada."
+      "dica": "**Cobra:** casar o nome de cada estrutura com a sua definição.\n\n- **Pilha e fila** [0082]: a pilha é LIFO (último a entrar, primeiro a sair) e a fila é FIFO (primeiro a entrar, primeiro a sair). Ex.: empilhar A, B, C e retirar dá C; enfileirar A, B, C e retirar dá A.\n- **Árvore** [0097]: cada nó pode ter vários filhos, formando uma hierarquia; não é uma sequência. Ex.: a pasta `casa` com 3 subpastas.\n- **Lista encadeada** [0076]: estrutura linear de nós em que cada um aponta para o próximo e o último aponta para `NULL`. Ex.: `4 → 9 → NULL`.\n\n**Como atacar:** escreva a definição correta de cada estrutura e compare com cada afirmação."
     }
   ]
 }
