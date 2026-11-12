@@ -430,7 +430,9 @@ function arvore(q, c) {
     const cor = estado === 'apagado' ? { borda: '#ced4da', fundo: '#f8f9fa' } : (CORES[estado] ?? CORES[c.cor ?? 'azul'])
     q.forma(q.gen.circle(cx, cy, r * 2, q.opcoes({ stroke: cor.borda, fill: cor.fundo, fillStyle: 'solid' })))
     q.texto(cx, cy + 10, String(no.n.v), { tam: 28, ancora: 'middle', cor: estado === 'apagado' ? '#adb5bd' : undefined })
-    if (no.n.nota) q.texto(cx, cy + r + 30, no.n.nota, { tam: 20, cor: TINTA.roxo, ancora: 'middle' })
+    // notaAoLado: a nota fica no alto, à direita do nó (ex.: a posição no heap), longe das arestas
+    if (no.n.nota && c.notaAoLado) q.texto(cx + r + 4, cy - r + 8, no.n.nota, { tam: 22, cor: TINTA.roxo })
+    else if (no.n.nota) q.texto(cx, cy + r + 30, no.n.nota, { tam: 20, cor: TINTA.roxo, ancora: 'middle' })
     registro[`${c.id}:${no.n.v}`] = { x: cx - r, y: cy - r, w: 2 * r, h: 2 * r }
     delete no.n.__no
   }
@@ -514,4 +516,54 @@ function tabela(q, c) {
   return registro
 }
 
-Object.assign(ICONES, { memoria, lista, pilha, arvore, grafo, tabela })
+// árvore B: cada nó é uma caixa com as chaves em gavetas; as folhas ficam lado a
+// lado e cada pai fica centrado sobre os filhos. raiz: { chaves: [..], filhos: [..] }
+function arvoreB(q, c) {
+  const { x, y } = c
+  const wChave = c.celula ?? 76
+  const h = 64
+  const dy = c.dy ?? 150
+  const folga = c.folga ?? 40
+  const cor = CORES[c.cor ?? 'azul']
+  const larguraNo = (n) => Math.max(1, n.chaves.length) * wChave
+  // posição x de cada nó: folhas em fila, pai no meio dos filhos
+  let proximoX = x
+  const posicionar = (n, nivel) => {
+    n.__nivel = nivel
+    if (!n.filhos?.length) {
+      n.__x = proximoX
+      proximoX += larguraNo(n) + folga
+      return
+    }
+    n.filhos.forEach((f) => posicionar(f, nivel + 1))
+    const primeiro = n.filhos[0]
+    const ultimo = n.filhos.at(-1)
+    const meio = (primeiro.__x + ultimo.__x + larguraNo(ultimo)) / 2
+    n.__x = meio - larguraNo(n) / 2
+  }
+  posicionar(c.raiz, 0)
+  let niveis = 0
+  const desenhar = (n) => {
+    const nx = n.__x
+    const ny = y + n.__nivel * dy
+    niveis = Math.max(niveis, n.__nivel)
+    const w = larguraNo(n)
+    q.caixa(nx, ny, w, h, cor, 10)
+    n.chaves.forEach((k, i) => {
+      if (i > 0) q.forma(q.gen.line(nx + i * wChave, ny + 8, nx + i * wChave, ny + h - 8, q.opcoes({ stroke: cor.borda, strokeWidth: 1.5 })))
+      q.texto(nx + i * wChave + wChave / 2, ny + h / 2 + 10, String(k), { tam: 26, ancora: 'middle' })
+    })
+    ;(n.filhos ?? []).forEach((f, i) => {
+      // o ponteiro sai da divisa entre as chaves i-1 e i
+      const sx = nx + Math.min(i * wChave, w)
+      q.forma(q.gen.line(sx, ny + h, f.__x + larguraNo(f) / 2, y + f.__nivel * dy, q.opcoes({ stroke: '#495057', strokeWidth: 2 })))
+      desenhar(f)
+    })
+    delete n.__x
+    delete n.__nivel
+  }
+  desenhar(c.raiz)
+  return { [c.id]: { x, y, w: proximoX - folga - x, h: niveis * dy + h } }
+}
+
+Object.assign(ICONES, { memoria, lista, pilha, arvore, arvoreB, grafo, tabela })
