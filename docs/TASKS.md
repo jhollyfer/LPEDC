@@ -4,7 +4,7 @@
 
 > Atualiza no mesmo commit em que a tarefa começa ou termina.
 
-**Resumo:** 17 tarefas · 17 feitas · 0 em andamento · 0 a fazer · atualizado 2026-11-09
+**Resumo:** 18 tarefas · 18 feitas · 0 em andamento · 0 a fazer · atualizado 2026-11-12
 
 Status: `A fazer` · `Em andamento` · `Feita` · `Bloqueada` (com motivo nas notas).
 Prioridade: `Alta` · `Média` · `Baixa`.
@@ -47,6 +47,12 @@ Provas recebidas: 11 cadernos de 2016 a 2023 em `_fontes/provas-ppgi.md`; só a 
 | 4.2 | Registrar no `PPGI.md` o que cai e com que frequência, ligado a módulo e assunto | Alta | Feita | `PPGI.md`, "O que caiu de 2016 a 2023" |
 | 4.3 | Simulados completos de 20 questões com gabarito comentado | Alta | Feita | `SIMULADOS.md`: 3 simulados, 4 alternativas |
 | 4.4 | Resolver as 210 questões das 11 provas, com letra, justificativa e assunto do curso | Alta | Feita | `PROVAS.md`: 13 sem letra (figura ausente); 071/2023 com gabarito oficial |
+
+## Fase 5 · Quiz das provas (1/1)
+
+| # | Tarefa | Prioridade | Status | Notas |
+|---|---|---|---|---|
+| 5.1 | Quiz das 11 provas no GitHub Pages, com o porquê de cada alternativa e as figuras no traço do curso | Alta | Feita | `index.html`, `quiz/`, fonte em `_gerador/provas/`, gerado por `_gerador/quiz.mjs` |
 
 ---
 

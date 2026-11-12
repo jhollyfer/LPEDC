@@ -103,9 +103,9 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 | 05 | B | código | 3 | [0076](11-listas.md), [0077](11-listas.md), [0054](07-memoria-dinamica.md) | só a versão II percorre sem malloc e sem erro; I vaza memória e tem `aux>prox`, III e IV têm laço errado |
 | 06 | D | simulação | 3 | [0082](12-pilhas-e-filas.md) | LIFO: sai 9, 8, 6 |
 | 07 | A | afirmações | 5 | [0106](15-hash.md), [0107](15-hash.md) | colisão secundária é de endereçamento aberto, então I é verdadeira; II e III falsas (pior caso é n, e aberto pode ganhar do encadeado) |
-| 08 | E | afirmações | 4 | [0101](14-arvores.md) | Gabarito oficial E. A figura não veio no texto, então o curso não tinha letra. |
+| 08 | E | afirmações | 4 | [0101](14-arvores.md) | Gabarito oficial E. Letra conferida com o recorte da prova em `provas-ppgi-ufam/`; o porquê de cada alternativa está no quiz. |
 | 09 | anulada | simulação | 3 | [0085](12-pilhas-e-filas.md) | Anulada pela banca. a simulação dá estado final `e`, que não está em nenhuma alternativa |
-| 10 | E | afirmações | 4 | [0099](14-arvores.md) | Gabarito oficial E. A figura não veio no texto, então o curso não tinha letra. |
+| 10 | E | afirmações | 4 | [0099](14-arvores.md) | Gabarito oficial E. Letra conferida com o recorte da prova em `provas-ppgi-ufam/`; o porquê de cada alternativa está no quiz. |
 | 11 | A | simulação | 4 | [0098](14-arvores.md) | pós-ordem dá raiz P; Q tem filhos S e T; S e T são folhas |
 | 12 | C | afirmações | 6 | [0089](13-busca-e-ordenacao.md), [0090](13-busca-e-ordenacao.md) | I falsa (sequencial vale em ordenado), II falsa (busca em vetor ordenado é O(log n)), III verdadeira (varredura O(n)) |
 | 13 | B | código | 3 | [0083](12-pilhas-e-filas.md), [0049](06-ponteiros.md), [0062](08-structs.md) | a função I altera cópia de `prim`; a II usa `No **` e empilha certo |
@@ -128,10 +128,10 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 ## Edital 055/2017
 | Q | Letra | Formato | Tópico | Assuntos | Por quê |
 |---|---|---|---|---|---|
-| 01 | E | simulação | 1 | [0032](04-funcoes.md) | Gabarito oficial E. A figura não veio no texto, então o curso não tinha letra. pseudocódigo em figura ausente |
+| 01 | E | simulação | 1 | [0032](04-funcoes.md) | Gabarito oficial E. Letra conferida com o recorte da prova em `provas-ppgi-ufam/`; o porquê de cada alternativa está no quiz. pseudocódigo em figura ausente |
 | 02 | C | conceito | 3 | [0085](12-pilhas-e-filas.md), [0086](12-pilhas-e-filas.md), [0097](14-arvores.md) | hierarquia de diretórios é árvore, não fila |
 | 03 | anulada | simulação | 4 | [0099](14-arvores.md) | Anulada pela banca. na alternativa C, 912 aparece depois de ir à esquerda de 911; ver observações |
-| 04 | B | afirmações | 4 | [0099](14-arvores.md) | Gabarito oficial B. A figura não veio no texto, então o curso não tinha letra. |
+| 04 | B | afirmações | 4 | [0099](14-arvores.md) | Gabarito oficial B. Letra conferida com o recorte da prova em `provas-ppgi-ufam/`; o porquê de cada alternativa está no quiz. |
 | 05 | D | conceito | 5 | [0105](15-hash.md) | endereço já ocupado é colisão |
 | 06 | C | cálculo | 5 | [0106](15-hash.md) | posições: K=0, N=3 (não B), T=9 sozinho, nada em 6; I, II e IV verdadeiras, III falsa |
 | 07 | D | simulação | 4 | [0098](14-arvores.md), [0099](14-arvores.md) | raiz 30, esquerda 20 (10, 25), direita 50 (40, 60); pré-ordem 30 20 10 25 50 40 60 |
@@ -142,8 +142,8 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 | 12 | C | cálculo | 7 | [0093](13-busca-e-ordenacao.md), [0096](13-busca-e-ordenacao.md) | inserção faz cerca de n comparações; heap e quick fazem n log n ou pior; seleção n² |
 | 13 | E | conceito | 7 | [0168](26-analise-formal.md), [0092](13-busca-e-ordenacao.md), [0093](13-busca-e-ordenacao.md), [0103](14-arvores.md), [0094](13-busca-e-ordenacao.md), [0095](13-busca-e-ordenacao.md) | O(1) de espaço no pior caso: seleção, inserção, heap; merge usa O(n) e quick usa pilha de recursão (O(n) no pior caso) |
 | 14 | B | afirmações | 6 | [0089](13-busca-e-ordenacao.md), [0090](13-busca-e-ordenacao.md) | I falsa (pior caso n), II verdadeira, III falsa (mesma contagem) |
-| 15 | B | afirmações | 5 | [0106](15-hash.md), [0107](15-hash.md) | Gabarito oficial B. A figura não veio no texto, então o curso não tinha letra. nenhuma afirmação é verdadeira pelas definições; ver observações |
-| 16 | B | afirmações | 4 | [0101](14-arvores.md) | Gabarito oficial B. A figura não veio no texto, então o curso não tinha letra. |
+| 15 | B | afirmações | 5 | [0106](15-hash.md), [0107](15-hash.md) | Gabarito oficial B. I falsa (colisão secundária é do endereçamento aberto), II verdadeira (no pior caso as n chaves caem na mesma lista, e n passa de √n), III falsa. |
+| 16 | B | afirmações | 4 | [0101](14-arvores.md) | Gabarito oficial B. Letra conferida com o recorte da prova em `provas-ppgi-ufam/`; o porquê de cada alternativa está no quiz. |
 | 17 | E | simulação | 3 | [0082](12-pilhas-e-filas.md) | Gabarito oficial E. O curso tinha chegado em C: LIFO: sai 9, 8, 6 |
 | 18 | E | código | 3 | [0086](12-pilhas-e-filas.md), [0083](12-pilhas-e-filas.md), [0049](06-ponteiros.md) | a funcaoII (`No **`) insere no início, serve para lista e pilha, mas fila insere no fim |
 | 19 | A | simulação | 7 | [0095](13-busca-e-ordenacao.md) | 18 (índice 3) e 13 (índice 4) separam maiores à esquerda e menores à direita |
@@ -163,13 +163,13 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 | 01 | C | cálculo | 2, 7 | [0094](13-busca-e-ordenacao.md), [0072](10-analise.md) | Intercalar dois vetores ordenados copia 2N elementos, então O(N) mesmo no melhor caso. |
 | 02 | C | afirmações | 4 | [0146](22-arvores-avancadas.md) | I, II e V são as propriedades da árvore B; III é falsa (balanceia pouco) e IV é falsa (k filhos têm k-1 chaves). |
 | 03 | D | conceito | 4 | [0101](14-arvores.md), [0175](28-estruturas-complementos.md) | Com folha de altura 1, três nós em altura três é uma cadeia, com fator de balanceamento 2 na raiz. |
-| 04 | B | afirmações | 4 | [0102](14-arvores.md) | Gabarito oficial B. O curso tinha chegado em D: I é max-heap válido; II confere (12 sobe e troca com 10); III é falsa (o 12 não existe no heap, o certo é `14 9 10 5`). |
+| 04 | B | afirmações | 4 | [0102](14-arvores.md) | Gabarito oficial B. I é falsa: o 45 (posição 4) é filho do 40 (posição 1) e é maior; II confere (12 sobe e troca com 10); III é falsa (o 12 não existe no heap, o certo é `14 9 10 5`). Só a II: B. |
 | 05 | anulada | conceito | 4 | [0101](14-arvores.md), [0175](28-estruturas-complementos.md) | Anulada pela banca. Repetida da 03, mesma resposta. |
 | 06 | C | conceito | 4, 6 | [0099](14-arvores.md), [0082](12-pilhas-e-filas.md) | Lista ordenada pela pilha sai ordenada ao contrário e a ABB degenera em lista: busca O(N). |
 | 07 | B | afirmações | 4 | [0101](14-arvores.md), [0176](28-estruturas-complementos.md) | F-V-V-V-F: AVL exige as duas subárvores AVL, cheias são AVL e o custo de balancear é O(log n), não O(n/2). |
 | 08 | C | simulação | 4 | [0098](14-arvores.md), [0099](14-arvores.md) | Rodado em C: pós-ordem `0 1 8 7 5 10 2`. |
 | 09 | A | código | 3 | [0079](11-listas.md) | Ficam Z, Y, X, antigo próximo de Z: Y logo após Z e X logo após Y. |
-| 10 | D | simulação | 4 | [0100](14-arvores.md) | Gabarito oficial D. A figura não veio no texto, então o curso não tinha letra. |
+| 10 | D | simulação | 4 | [0100](14-arvores.md) | Gabarito oficial D. Letra conferida com o recorte da prova em `provas-ppgi-ufam/`; o porquê de cada alternativa está no quiz. |
 | 11 | C | simulação | 1 | [0032](04-funcoes.md), [0033](04-funcoes.md) | f(4)=f(3)+f(2)=(1+0)+1=2. |
 | 12 | E | simulação | 6 | [0090](13-busca-e-ordenacao.md) | A posição do meio (índice 4) já vale 20: uma única comparação. |
 | 13 | E | conceito | 3 | [0037](05-vetores-e-strings.md) | Vetor: homogêneo e acesso aleatório por índice. |
@@ -226,7 +226,7 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 | Q | Letra | Formato | Tópico | Assuntos | Por quê |
 |---|---|---|---|---|---|
 | 01 | A | simulação | 7 | [0095](13-busca-e-ordenacao.md) | Com pivô no primeiro, a entrada já ordenada é o pior caso: 21 comparações contra 11 a 12 nas outras (rodado em C). |
-| 02 | D | simulação | 4 | [0102](14-arvores.md) | Gabarito oficial D. A figura não veio no texto, então o curso não tinha letra. |
+| 02 | D | simulação | 4 | [0102](14-arvores.md) | Gabarito oficial D. Letra conferida com o recorte da prova em `provas-ppgi-ufam/`; o porquê de cada alternativa está no quiz. |
 | 03 | A | simulação | 3 | [0082](12-pilhas-e-filas.md) | 5 push menos 4 pop deixa 1 elemento (o 1). |
 | 04 | C | simulação | 4 | [0097](14-arvores.md) | Folha `110` fica com 1 chave; irmãos têm o mínimo (2) e não emprestam, então funde com a direita: `110 140 144 156`, raiz `100 160`. |
 | 05 | anulada | conceito | 3 | [0076](11-listas.md), [0077](11-listas.md) | Anulada pela banca. Pior caso da busca sequencial em lista é n comparações. |
@@ -262,7 +262,7 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 | Q | Letra | Formato | Tópico | Assuntos | Por quê |
 |---|---|---|---|---|---|
 | 01 | C | simulação | 5 | [0107](15-hash.md) | Rodado em C: só a ordem de C gera 9 18 _ 12 3 14 4 21 (as de b e e trocam 9 e 18). |
-| 02 | A | simulação | 4 | [0101](14-arvores.md) | Gabarito oficial A. A figura não veio no texto, então o curso não tinha letra. O programa dá: raiz 20; 15 e 25; 10, 18, 30; 16 e 19 (filhos de 18). |
+| 02 | A | simulação | 4 | [0101](14-arvores.md) | Gabarito oficial A. Letra conferida com o recorte da prova em `provas-ppgi-ufam/`; o porquê de cada alternativa está no quiz. O programa dá: raiz 20; 15 e 25; 10, 18, 30; 16 e 19 (filhos de 18). |
 | 03 | D | conceito | 2 | [0071](10-analise.md), [0072](10-analise.md) | 2n+1 é linear. |
 | 04 | C | cálculo | 6 | [0090](13-busca-e-ordenacao.md) | Posições examinadas: 12, 18, 15, 13, 14 = 5. |
 | 05 | B | código | 3 | [0076](11-listas.md), [0032](04-funcoes.md) | Recursão antes do printf imprime do último ao primeiro. |

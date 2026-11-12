@@ -8,6 +8,11 @@ Mudanças do LPEDC que quem estuda percebe. Formato
 
 ### Adicionado
 
+- Quiz das 11 provas do PPGI em `index.html`, publicado no GitHub Pages: você marca a alternativa
+  e vê na hora se acertou, o porquê de cada alternativa e o módulo onde estudar. Tem filtro por
+  tópico do edital, modo "refazer as que errei" e progresso salvo no navegador. As figuras das
+  provas foram redesenhadas no traço do curso.
+
 - `TRILHA.md`: trilha de estudo em 9 etapas, em ordem de dependência, com o que saber de cabeça e o
   treino de cada uma; complementa o plano por peso do `PPGI.md`.
 - `PPGI.md`, "Comece aqui": plano de estudo dia a dia de 09/11 até a prova (27/11), com

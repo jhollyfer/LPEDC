@@ -4782,7 +4782,7 @@ window.PROVAS = [
      {
       "letra": "C",
       "texto": "23 – 29 – 7 – 17 – 13 – 4 – 35 – 25 – 15",
-      "porque": "Gera outra árvore: uma rotação com 13 e 17 leva o 13 à raiz."
+      "porque": "Gera outra árvore, com raiz 13 depois das rotações."
      },
      {
       "letra": "D",

@@ -11,13 +11,15 @@
 
 ## Parou em
 
-Nada em andamento. O curso está pronto para a prova; o estudo segue o "Comece aqui" do
-`PPGI.md`.
+Quiz das provas publicado (`index.html` + `quiz/`, fonte em `_gerador/provas/`). Nada em
+andamento; o estudo segue o "Comece aqui" do `PPGI.md`, agora com o quiz no lugar de conferir
+o `PROVAS.md` à mão.
 
 ## Próximos passos
 
 1. Se chegarem provas novas ou o gabarito oficial de outras, gravar em `_fontes/provas-ppgi.md` e atualizar `PROVAS.md` e a frequência do `PPGI.md`.
-2. As questões dos módulos ainda usam 5 alternativas (A a E); as provas desde 2022 usam 4. Os simulados já usam 4.
+2. Mudou letra ou explicação de questão: edite `_gerador/provas/<slug>.json`, rode `node quiz.mjs --check` e `node quiz.mjs`, e mantenha o `PROVAS.md` igual.
+3. As questões dos módulos ainda usam 5 alternativas (A a E); as provas desde 2022 usam 4. Os simulados já usam 4.
 
 ## Contexto importante
 
@@ -42,4 +44,5 @@ Nada em andamento. O curso está pronto para a prova; o estudo segue o "Comece a
 
 ## Links úteis
 
+- Quiz: https://jhollyfer.github.io/LPEDC/ (Pages: `main`, raiz)
 - Repositório: https://github.com/jhollyfer/LPEDC · Padrão: https://github.com/jhollyfer/maiyu-pattern

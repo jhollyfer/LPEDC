@@ -152,6 +152,9 @@ As provas do PPGI de 2016 a 2023 estão resolvidas, com o gabarito comentado e o
 módulo de cada questão, em [`PROVAS.md`](PROVAS.md). Para treinar no formato atual (4 alternativas), há
 3 simulados de 20 questões com gabarito comentado em [`SIMULADOS.md`](SIMULADOS.md).
 
+Para treinar com as provas em formato de quiz, com o porquê de cada alternativa logo depois de responder:
+**[jhollyfer.github.io/LPEDC](https://jhollyfer.github.io/LPEDC/)**.
+
 ## De onde veio o conteúdo
 
 O texto, os exemplos e os exercícios foram escritos do zero, tomando como

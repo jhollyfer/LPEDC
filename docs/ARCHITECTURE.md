@@ -21,6 +21,10 @@ LPEDC/
 ├── _gerador/fases.json        a rota do jogo: ordem das etapas, mundo e missão de cada módulo
 ├── _fontes/                   sumário, fichamentos dos livros e provas do PPGI
 ├── docs/  AGENTS.md  rodar    documentação viva, instruções de agentes e auxiliar do conferir.sh
+├── index.html  .nojekyll      quiz das provas (GitHub Pages, raiz da main)
+├── quiz/                      gerado: questoes.js e figuras/*.svg do quiz
+├── _gerador/provas/           FONTE do quiz: <slug>.json (questões e porquês) e <slug>.figuras.json
+├── provas-ppgi-ufam/          provas de 2016 a 2019 com os recortes das figuras
 ```
 
 Gerar: `cd _gerador && npm run gerar -- 01-` (só o módulo 01). Nunca edite o
@@ -31,7 +35,7 @@ Ao criar assunto ou exercício novo, acrescente os nomes em `_gerador/arquivos.j
 
 Ferramentas: `gcc` (C17) com as flags de estudo (AddressSanitizer e UBSan), Node para o gerador
 (`_gerador/gerar.mjs`, com `roughjs` e `dagre` para os desenhos) e Python 3 para
-`_gerador/conferir-texto.py`. Não há servidor, banco nem deploy: o curso é lido no GitHub ou
+`_gerador/conferir-texto.py`. O quiz sai de `cd _gerador && node quiz.mjs` (`--check` confere letra contra o `PROVAS.md`, porquê de toda alternativa e figura citada); `index.html` e `quiz/` vão para o GitHub Pages pela `main`, sem build. Não há servidor nem banco: o curso é lido no GitHub ou
 num editor de markdown.
 
 ## 2. Numeração
