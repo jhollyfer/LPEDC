@@ -12,8 +12,9 @@ Mudanças do LPEDC que quem estuda percebe. Formato
   e vê na hora se acertou, o porquê de cada alternativa e o módulo onde estudar. Tem filtro por
   tópico do edital, modo "refazer as que errei" e progresso salvo no navegador. As figuras das
   provas foram redesenhadas no traço do curso.
-- Quiz: botão "Conceito e exemplo" em todas as 210 questões, com a regra cobrada e um exemplo
-  resolvido com outros dados, para você responder sem ver a resposta.
+- Quiz: painel "Antes de responder" em todas as 210 questões: o que a questão cobra, de 2 a 4
+  conceitos curtos com o link para o assunto do curso onde cada um é ensinado, um exemplo com outros
+  dados e como atacar. Interface nova, com acerto por tópico e modo prova.
 - Cadernos completos de 057/2022, 020/2023 e 071/2023 em `provas-ppgi-ufam/`; as 11 provas agora usam
   o gabarito oficial.
 
