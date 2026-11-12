@@ -5744,7 +5744,7 @@ window.PROVAS = [
       "modulo": "13-busca-e-ordenacao.md"
      }
     ],
-    "dica": "**Cobra:** qual entrada faz o Quick Sort com pivô no primeiro elemento comparar mais.\n\n- **Quick sort** [0095]: cada partição compara o pivô com todo o trecho; pivô no meio dá cerca de n·log n.\n- **Pior caso** [0095]: pivô sempre no extremo do trecho deixa um trecho quase do tamanho original, perto de n².\n\n**Exemplo:** `2 1 4 3` faz 3 comparações com o pivô 2 e 1 com o 4.\n\n**Como atacar:** simule o pivô em cada opção e veja qual deixa trechos desbalanceados repetidamente.",
+    "dica": "**Cobra:** achar a entrada em que o quick sort, com o primeiro elemento como pivô, faz mais comparações.\n\n- **Separação em torno do pivô** [0095]: cada separação compara o pivô com todos os outros elementos do pedaço e deixa o pivô na posição final, com os menores à esquerda e os maiores à direita. Ex.: pivô 5 em `5 2 8 1` faz 3 comparações e deixa `2 1 5 8`.\n- **Pior caso do quick sort** [0095]: quando o pivô é sempre o menor ou o maior do pedaço, um lado fica vazio e o outro com n - 1 elementos, e o custo vira O(n²). Ex.: `4 3 2 1` com pivô no primeiro: 3 + 2 + 1 = 6 comparações.\n\n**Como atacar:** simule o pivô em cada entrada e some as comparações de cada separação até os pedaços acabarem.",
     "originais": []
    },
    {
@@ -5790,7 +5790,7 @@ window.PROVAS = [
       "modulo": "14-arvores.md"
      }
     ],
-    "dica": "**Cobra:** onde para um nó que viola o heap máximo depois de ser reorganizado.\n\n- **Heap máximo** [0102]: todo pai é maior ou igual aos filhos; no vetor base 1, os filhos de i estão em 2i e 2i+1.\n- **Descer (heapify)** [0102]: troque o nó com o maior filho e repita até ele ser maior que os filhos ou virar folha.\n\n**Exemplo:** `[2,9,7,4,5]`: o 2 troca com o 9 (posição 2), depois com o 5 (posição 5): `[9,5,7,4,2]`.\n\n**Como atacar:** numere os nós por níveis e siga as trocas com o maior filho.",
+    "dica": "**Cobra:** descobrir onde para um nó que viola a ordem do heap máximo depois do ajuste.\n\n- **Heap máximo no vetor** [0102]: árvore completa em que todo pai é maior ou igual aos filhos; guardada por níveis, os filhos de `i` ficam em `2i+1` e `2i+2` quando o vetor começa em 0. Ex.: em `[9 3 8 5 4]`, os filhos do 3 (índice 1) são 5 e 4 (índices 3 e 4).\n- **Descer (heapify)** [0102]: o elemento fora do lugar troca com o MAIOR dos filhos enquanto for menor que algum deles, e para quando é maior ou igual aos dois ou vira folha. Ex.: o 3 troca com o 5 e vai para o índice 3, dando `[9 5 8 3 4]`.\n\n**Como atacar:** troque sempre com o maior filho e confira se a figura numera as posições a partir de 0 ou de 1.",
     "originais": [
      "provas-ppgi-ufam/2019-033/figuras/q02-heap.png"
     ]
@@ -5835,7 +5835,7 @@ window.PROVAS = [
       "modulo": "12-pilhas-e-filas.md"
      }
     ],
-    "dica": "**Cobra:** quantos elementos sobram depois de uma sequência de Push e Pop.\n\n- **Pilha** [0082]: LIFO; Push empilha no topo e Pop remove o topo.\n- **Tamanho final** [0082]: número de Push menos número de Pop, se nunca há Pop em pilha vazia nem Push em pilha cheia.\n\n**Exemplo:** `Push(7); Push(8); Pop(); Push(9); Push(1); Pop()` deixa `[7,9]`, ou seja, 4 Push menos 2 Pop.\n\n**Como atacar:** anote o estado da pilha após cada operação, sem pular nenhuma.",
+    "dica": "**Cobra:** contar quantos elementos sobram numa pilha depois de uma sequência de Push e Pop.\n\n- **Pilha (LIFO)** [0082]: só o topo está ao alcance: Push põe no topo e Pop tira o último que entrou, devolvendo o valor. Ex.: Push(7); Push(8); Pop() tira o 8 e deixa só o 7.\n- **Overflow e underflow** [0082]: Push numa pilha cheia estoura (overflow) e Pop numa pilha vazia não tem o que tirar (underflow); o tamanho é sempre pushes menos pops. Ex.: com capacidade 2, o terceiro Push seguido estoura.\n\n**Como atacar:** anote a pilha depois de cada operação e confira se algum Pop pega a pilha vazia ou algum Push passa da capacidade.",
     "originais": []
    },
    {
@@ -5885,7 +5885,7 @@ window.PROVAS = [
       "modulo": "14-arvores.md"
      }
     ],
-    "dica": "**Cobra:** o efeito de remover uma chave numa árvore B de ordem 5.\n\n- **Árvore B** [0146]: ordem 5 é no máximo 5 filhos e 4 chaves por nó; fora da raiz, mínimo de 2.\n- **Remoção em folha** [0146]: se a folha fica abaixo do mínimo, empreste de um irmão com sobra, girando pelo pai, ou funda com um irmão descendo o separador.\n\n**Exemplo:** ordem 3 (mínimo 1 chave), pai `[10]`, filhos `[5]` e `[12]`. Remover 5 funde tudo em `[10,12]`.\n\n**Como atacar:** remova, confira o mínimo e só então empreste ou funda.",
+    "dica": "**Cobra:** aplicar a remoção de uma chave numa árvore B e escolher o desenho resultante.\n\n- **Nó da árvore B** [0146]: cada nó tem várias chaves em ordem e um filho a mais que chaves; fora a raiz, tem no mínimo t - 1 chaves, e todas as folhas ficam no mesmo nível. Ex.: com t = 2, um nó tem de 1 a 3 chaves, e `[40 70]` tem 3 filhos.\n- **Remoção e conserto** [0146]: tirar de folha com chaves acima do mínimo é direto; se a folha fica abaixo do mínimo, ela empresta do irmão (passando pelo pai) ou funde com ele. A remoção é o caminho inverso da divisão. Ex.: pai `[15]`, folhas `[10]` e `[20 30]`: remover 10 puxa o 15 para a folha e sobe o 20, ficando `[20]` com `[15]` e `[30]`.\n\n**Como atacar:** ache a chave, veja se a folha fica abaixo do mínimo e só então empreste ou funda, conferindo se as folhas seguem no mesmo nível.",
     "originais": [
      "provas-ppgi-ufam/2019-033/figuras/q04-arvore-b.png",
      "provas-ppgi-ufam/2019-033/figuras/q04-opcoes-ab.png",
@@ -5936,7 +5936,7 @@ window.PROVAS = [
       "modulo": "11-listas.md"
      }
     ],
-    "dica": "**Cobra:** o custo de buscar um elemento numa lista simplesmente encadeada no pior caso.\n\n- **Lista encadeada** [0076]: só se chega a um nó a partir do primeiro, seguindo `next`; não há índice.\n- **Busca** [0077]: compara nó a nó; o pior caso é o valor ser o último ou não existir.\n\n**Exemplo:** na lista `4 -> 8 -> 15 -> 16`, buscar 99 passa por todos os nós até chegar ao `NULL`.\n\n**Como atacar:** ponha o valor no pior lugar e conte as comparações.",
+    "dica": "**Cobra:** dizer quantas comparações a busca faz no pior caso numa lista simplesmente encadeada de n nós.\n\n- **Acesso sequencial** [0076]: a lista não tem índice: para chegar a um nó é preciso seguir as setas `prox` a partir do início, uma por vez. Ex.: o terceiro nó exige seguir 2 setas.\n- **Busca e pior caso** [0077]: sem ordem e sem acesso direto ao meio, a busca compara nó a nó; o pior caso é a chave ser a última ou não estar na lista, e aí todos os n nós são comparados. Ex.: buscar 7 em `4 → 9 → 2` termina depois de 3 comparações.\n\n**Como atacar:** pergunte se dá para pular nós; se não dá, o pior caso é olhar todos.",
     "originais": []
    },
    {
@@ -5983,7 +5983,7 @@ window.PROVAS = [
       "modulo": "04-funcoes.md"
      }
     ],
-    "dica": "**Cobra:** a saída de uma função recursiva que pula nós e imprime antes e depois da chamada.\n\n- **Recursão** [0032]: o que vem antes da chamada roda na ida; o que vem depois roda na volta, na ordem inversa.\n- **Lista encadeada** [0076]: `next->next` pula um nó.\n\n**Exemplo:** a mesma função com `1->2->3` imprime `1 3 3 1`, pois o nó 3 já não tem `next`.\n\n**Como atacar:** liste o que cada chamada imprime na ida e na volta.",
+    "dica": "**Cobra:** seguir a recursão que imprime antes e depois da chamada e anda de dois em dois nós.\n\n- **Impressão na ida e na volta** [0032]: o que vem antes da chamada recursiva roda na descida, na ordem das chamadas; o que vem depois roda na subida, na ordem inversa, porque cada chamada espera a seguinte terminar. Ex.: `g(n)` imprime n, chama `g(n-1)` e imprime n de novo; `g(2)` escreve 2 1 1 2.\n- **Pular um nó na lista** [0076]: `p->next->next` salta um nó; o teste `p->next != NULL` evita ler um ponteiro nulo antes do salto, então a chamada só ocorre se houver ao menos mais um nó. Ex.: em `1 → 2 → 3 → 4`, de 1 o salto chega ao 3.\n\n**Como atacar:** anote cada chamada com o nó que ela recebe e escreva a saída da ida e da volta em colunas.",
     "originais": []
    },
    {
@@ -6030,7 +6030,7 @@ window.PROVAS = [
       "modulo": "04-funcoes.md"
      }
     ],
-    "dica": "**Cobra:** qual estrutura de dados sustenta a recursão.\n\n- **Pilha de chamadas** [0031]: cada chamada guarda parâmetros, variáveis locais e endereço de retorno; a última chamada é a primeira a terminar.\n- **Recursão** [0032]: a retomada segue a ordem inversa das chamadas.\n- **Pilha (TAD)** [0082]: LIFO, último a entrar, primeiro a sair.\n\n**Exemplo:** `fat(3)` chama `fat(2)`, que chama `fat(1)`; o `fat(1)` termina primeiro.\n\n**Como atacar:** pergunte qual estrutura devolve primeiro o que entrou por último.",
+    "dica": "**Cobra:** dizer qual estrutura guarda o estado das chamadas de função, inclusive das recursivas.\n\n- **Pilha de chamadas** [0031]: a cada chamada o programa empilha um quadro com parâmetros, variáveis locais e endereço de retorno; o quadro do topo roda e, ao retornar, sai, voltando ao de baixo. Ex.: `main` chama `f` e `f` chama `g`: `g` termina primeiro, depois `f`.\n- **Recursão** [0032]: cada chamada recursiva empilha um quadro novo, com cópia própria dos parâmetros, e a pilha desfaz na ordem inversa; sem caso base, ela estoura. Ex.: `fat(3)` empilha `fat(3)`, `fat(2)` e `fat(1)` e desempilha na ordem contrária.\n\n**Como atacar:** pergunte qual estrutura tem a regra último a entrar, primeiro a sair.",
     "originais": []
    },
    {
@@ -6073,7 +6073,7 @@ window.PROVAS = [
       "modulo": "14-arvores.md"
      }
     ],
-    "dica": "**Cobra:** pior caso e caso médio da busca numa árvore binária de busca.\n\n- **ABB** [0099]: busca, inserção e remoção descem um caminho, então o custo é a altura.\n- **Altura** [0099]: árvore equilibrada tem cerca de log₂ n; se cada nó tem um só filho, a altura é n-1.\n\n**Exemplo:** inserir 1, 2, 3, 4 em ordem faz uma cadeia de altura 3; inserir 3, 1, 4, 2 dá altura 2.\n\n**Como atacar:** pense no formato mais torto e no formato típico.",
+    "dica": "**Cobra:** trocar o pior caso e o caso médio da árvore binária de busca pelas suas complexidades.\n\n- **Custo igual à altura** [0099]: buscar e inserir descem um caminho da raiz até uma folha, então o custo máximo é a altura da árvore mais um. Ex.: 7 chaves em `4 2 6 1 3 5 7` dão altura 2: no máximo 3 comparações.\n- **Árvore degenerada** [0099]: sem balanceamento, chaves inseridas em ordem crescente viram sempre filho direito e a árvore vira uma lista de altura n - 1; em chaves misturadas ela fica perto de log n. Ex.: inserir 1, 2, 3, 4 dá altura 3, e achar o 4 custa 4 comparações.\n\n**Como atacar:** ligue o pior caso à entrada em ordem e o caso médio à entrada embaralhada.",
     "originais": []
    },
    {
@@ -6116,7 +6116,7 @@ window.PROVAS = [
       "modulo": "14-arvores.md"
      }
     ],
-    "dica": "**Cobra:** o máximo de chaves de uma árvore B cheia, dados a ordem e a altura.\n\n- **Árvore B** [0146]: ordem m é o máximo de filhos, então cada nó guarda no máximo m-1 chaves.\n- **Altura** [0097]: contada em arestas, a raiz está no nível 0, e o nível k de uma árvore cheia tem m^k nós.\n\n**Exemplo:** ordem 3, altura 2: 1 + 3 + 9 = 13 nós, e 13 × 2 = 26 chaves.\n\n**Como atacar:** some os nós de todos os níveis e multiplique por m-1.",
+    "dica": "**Cobra:** calcular o máximo de chaves de uma árvore B dada a ordem e a altura.\n\n- **Chaves por nó** [0146]: numa árvore B de ordem m (no máximo m filhos), um nó guarda no máximo m - 1 chaves, sempre uma a menos que seus filhos. Ex.: m = 3: no máximo 2 chaves por nó.\n- **Nós por nível** [0146]: a árvore está cheia quando todo nó interno tem m filhos: 1 nó na raiz, m no nível seguinte, m² no outro, e assim por diante; confira se a raiz conta como altura 0 ou 1. Ex.: m = 3 com 3 níveis: 1 + 3 + 9 = 13 nós, 26 chaves.\n\n**Como atacar:** some os nós de todos os níveis e multiplique pelas chaves de cada nó.",
     "originais": []
    },
    {
@@ -6163,7 +6163,7 @@ window.PROVAS = [
       "modulo": "15-hash.md"
      }
     ],
-    "dica": "**Cobra:** conferir três sentenças sobre colisões numa tabela hash de endereçamento aberto, m = 17.\n\n- **Método da divisão** [0105]: h(k) = k mod m.\n- **Sondagem linear** [0107]: posição ocupada manda tentar a seguinte, de forma circular; cada tentativa em posição ocupada é uma colisão.\n- **Hash duplo** [0179]: a primeira posição é h1(k); só o passo seguinte muda.\n\n**Exemplo:** m = 7, chaves 3, 10, 5: o 10 cai em 3, colide e vai para 4.\n\n**Como atacar:** calcule o mod de cada chave e simule posição por posição, uma sentença por vez.",
+    "dica": "**Cobra:** simular inserções numa tabela de 17 posições e julgar três afirmações sobre colisões.\n\n- **Método da divisão** [0105]: a posição é `k mod m`; só cabem sem colisão chaves de restos diferentes; mesmo resto disputa o mesmo balde. Ex.: m = 7: 45 mod 7 = 3.\n- **Sondagem linear** [0107]: com a posição ocupada, a chave tenta a seguinte, dando a volta no fim da tabela; cada posição ocupada encontrada conta como uma colisão. Ex.: m = 7: 10 vai para 3 e 17 também dá 3, então tenta o 4: 1 colisão.\n- **Dispersão dupla** [0179]: o passo da tentativa vem de uma segunda função, `(h1 + i·h2) mod m`, e muda de chave para chave. Ex.: m = 7, h1 = 3 e h2 = 3: a segunda tentativa cai em (3 + 3) mod 7 = 6.\n\n**Como atacar:** calcule o resto de cada chave e some as colisões; para a dupla, calcule o passo de cada chave.",
     "originais": []
    },
    {
@@ -6206,7 +6206,7 @@ window.PROVAS = [
       "modulo": "11-listas.md"
      }
     ],
-    "dica": "**Cobra:** ler o laço de busca numa lista circular e dizer o que o código imprime.\n\n- **Lista circular** [0080]: o último nó aponta para o primeiro, então a busca termina ao achar o dado ou voltar ao início.\n- **While** [0020]: o corpo só roda se a condição é verdadeira na entrada.\n- **Break** [0023]: sai do laço na primeira volta em que é executado.\n\n**Exemplo:**\n```c\nint i = 5, f = 0;\nwhile (i < 3) { f = 1; break; }\nprintf(\"%d\", f);\n```\nO corpo nunca roda, então `f` continua 0.\n\n**Como atacar:** siga a variável `flag` linha a linha, nos dois caminhos do `if`.",
+    "dica": "**Cobra:** ler o que o código faz de verdade com a lista circular, o laço, o break e a flag.\n\n- **Lista circular** [0080]: o último nó aponta para o primeiro, sem NULL, então percorrer termina quando se volta ao ponto de partida. Ex.: na lista `3 → 7 → 12 → (3)`, o laço para ao voltar ao 3.\n- **break dentro do laço** [0023]: o break encerra o laço na hora; um comando escrito antes dele no corpo roda no máximo uma vez. Ex.: `while (c) { x = 1; break; }` faz `x = 1` uma vez só.\n- **Condição com inteiro** [0012]: `if (flag)` é falso só quando flag vale 0 e verdadeiro para qualquer outro valor; vale o valor da flag no fim, não a intenção do código. Ex.: `flag = 0` cai no else; `flag = 1` entra no if.\n\n**Como atacar:** execute o código à mão numa lista de 3 nós e veja que valor a flag tem quando o laço termina.",
     "originais": []
    },
    {
@@ -6249,7 +6249,7 @@ window.PROVAS = [
       "modulo": "14-arvores.md"
      }
     ],
-    "dica": "**Cobra:** a altura máxima de uma AVL com 7 nós.\n\n- **AVL** [0101]: em cada nó, as alturas das subárvores diferem em no máximo 1.\n- **Menor AVL de altura h** [0101]: N(h) = N(h-1) + N(h-2) + 1, com N(0) = 1 e N(1) = 2.\n\n**Exemplo:** n = 3: N(1) = 2 cabe, mas N(2) = 4 não. A altura máxima com 3 nós é 1.\n\n**Como atacar:** calcule N(h) para h crescente e pare no maior h com N(h) menor ou igual a n.",
+    "dica": "**Cobra:** achar a maior altura possível de uma árvore AVL com 7 nós.\n\n- **Regra da AVL** [0101]: em todo nó, as alturas das duas subárvores diferem de no máximo 1; para ter a árvore mais alta, cada nó deve ficar o mais desequilibrado que a regra permite. Ex.: uma raiz com um filho esquerdo e nenhum direito é AVL; com neto também no filho, não.\n- **Menos nós para uma altura h** [0101]: N(h) = N(h-1) + N(h-2) + 1, com N(0) = 1 e N(1) = 2: uma subárvore de altura h-1, uma de h-2 e a raiz. A altura máxima com n nós é o maior h com N(h) ≤ n; a folha tem altura 0. Ex.: N(2) = 2 + 1 + 1 = 4.\n\n**Como atacar:** calcule N(h) para h crescente até passar de 7.",
     "originais": []
    },
    {
@@ -6296,7 +6296,7 @@ window.PROVAS = [
       "modulo": "14-arvores.md"
      }
     ],
-    "dica": "**Cobra:** julgar três sentenças sobre heap, AVL e árvore B.\n\n- **Heap máximo** [0102]: cada pai é maior ou igual aos filhos.\n- **AVL** [0101]: depois de inserir, você sobe do ponto de inserção até a raiz, atualizando os fatores e rotacionando no primeiro nó desequilibrado.\n- **Árvore B** [0146]: altura logarítmica, com todas as folhas no mesmo nível.\n\n**Exemplo:** inserir 1, 2, 3 numa AVL: o desequilíbrio é achado subindo do 3 até a raiz.\n\n**Como atacar:** avalie cada sentença sozinha e só depois escolha a combinação.",
+    "dica": "**Cobra:** julgar três afirmações sobre heap, rebalanceamento da AVL e a complexidade da árvore B.\n\n- **Ordem do heap** [0102]: num heap de máximo, todo pai é maior ou igual aos filhos; os dois filhos não se comparam entre si. Ex.: `9` acima de `5` e `7`, em qualquer ordem.\n- **Rebalancear a AVL** [0101]: a inserção pendura uma folha e, na volta da recursão, cada ancestral atualiza a altura e confere o fator, rotacionando se achar 2 ou -2. Ex.: inserir 30 sob `10 → 20` confere o 20 e depois o 10.\n- **Custo de AVL e B** [0146]: as duas são árvores equilibradas, e cada operação segue um caminho da raiz até uma folha, então o custo é limitado pela altura. Ex.: com 1 milhão de chaves, uma AVL tem no máximo uns 29 níveis, e uma B com t = 100 tem uns 3.\n\n**Como atacar:** julgue cada afirmação separadamente e descarte as alternativas que a contradizem.",
     "originais": []
    },
    {
@@ -6339,7 +6339,7 @@ window.PROVAS = [
       "modulo": "13-busca-e-ordenacao.md"
      }
     ],
-    "dica": "**Cobra:** o estado do vetor depois de duas rodadas do Insertion Sort.\n\n- **Insertion sort** [0093]: mantém um prefixo ordenado; a cada rodada insere o próximo elemento no lugar certo, deslocando os maiores.\n- **Resto do vetor** [0093]: o que está depois do prefixo ainda não foi tocado.\n\n**Exemplo:** `9 4 7 2 6`. Rodada 1 insere o 4: `4 9 7 2 6`. Rodada 2 insere o 7: `4 7 9 2 6`.\n\n**Como atacar:** aplique as rodadas na mão e compare com as opções.",
+    "dica": "**Cobra:** simular as duas primeiras rodadas do insertion sort e escrever o vetor.\n\n- **Rodada do insertion sort** [0093]: a parte da esquerda fica ordenada, e a cada rodada o próximo elemento é encaixado nela; o resto do vetor não é tocado. Ex.: em `7 4 9 2`, a rodada 1 encaixa o 4 (`4 7 9 2`) e a 2 deixa o 9 onde está.\n- **Deslocamento** [0093]: guarda-se o elemento, empurram-se para a direita os maiores que ele e só então ele é escrito no buraco. Ex.: encaixar 5 em `3 7 9` desloca 9 e 7 e dá `3 5 7 9`.\n\n**Como atacar:** conte as rodadas com cuidado: a primeira encaixa o segundo elemento do vetor.",
     "originais": []
    },
    {
@@ -6382,7 +6382,7 @@ window.PROVAS = [
       "modulo": "13-busca-e-ordenacao.md"
      }
     ],
-    "dica": "**Cobra:** a vantagem que o Bubble Sort tem sobre outros algoritmos de ordenação.\n\n- **Bubble sort** [0091]: compara vizinhos e troca; cada passada leva o maior para o fim; em geral é Θ(n²).\n- **Comparação entre sorts** [0096]: confronte velocidade, memória extra e estabilidade.\n\n**Exemplo:** vetor `1 2 3 4`: uma passada faz 3 comparações e nenhuma troca. Pense no que isso permite saber.\n\n**Como atacar:** teste cada alternativa contra o custo e a memória dos outros algoritmos.",
+    "dica": "**Cobra:** dizer qual é a vantagem do bubble sort sobre os outros algoritmos de ordenação.\n\n- **Bandeira no bubble sort** [0091]: uma passada sem nenhuma troca prova que o vetor está ordenado, então o laço para e o melhor caso custa uma passada, O(n). Ex.: `1 2 3 4` faz 3 comparações, nenhuma troca, e termina.\n- **Comparar algoritmos** [0096]: merge e quick custam O(n log n) contra O(n²) do bubble, mas o merge precisa de memória extra e o bubble troca no próprio vetor. Ex.: merge sort de n itens usa um rascunho de n posições.\n\n**Como atacar:** compare velocidade, memória e complexidade de código de cada alternativa antes de escolher.",
     "originais": []
    },
    {
@@ -6428,7 +6428,7 @@ window.PROVAS = [
       "modulo": "14-arvores.md"
      }
     ],
-    "dica": "**Cobra:** escrever a heap máxima da figura como vetor.\n\n- **Heap em vetor** [0102]: leitura por níveis, da esquerda para a direita; em base 1, os filhos de i estão em 2i e 2i+1.\n- **Heap máximo** [0102]: a raiz é o maior valor e todo pai é maior ou igual aos filhos.\n\n**Exemplo:** raiz 50, filhos 30 e 40, netos 10 e 20 sob o 30: o vetor é `[50,30,40,10,20]`.\n\n**Como atacar:** descarte vetores com raiz que não é o maior ou pai menor que filho; confira o resto nível a nível.",
+    "dica": "**Cobra:** escrever em ordem de vetor um heap máximo desenhado.\n\n- **Heap no vetor** [0102]: o vetor guarda o heap nível por nível, da esquerda para a direita, sem buracos, com a raiz primeiro; o filho esquerdo de `i` é `2i+1` e o direito, `2i+2`. Ex.: raiz 9, filhos 7 e 8, netos 3 e 5 sob o 7: `[9 7 8 3 5]`.\n- **Conferir a ordem** [0102]: num heap de máximo, todo pai é maior ou igual aos filhos; vale conferir cada par pai e filho no vetor candidato. Ex.: `[9 7 8 3 5]` passa: 9 ≥ 7 e 8, e 7 ≥ 3 e 5.\n\n**Como atacar:** leia a figura por níveis e confira, em cada alternativa, o 1º nível, depois o 2º.",
     "originais": [
      "provas-ppgi-ufam/2019-033/figuras/q16-heap-maxima.png"
     ]
@@ -6477,7 +6477,7 @@ window.PROVAS = [
       "modulo": "12-pilhas-e-filas.md"
      }
     ],
-    "dica": "**Cobra:** quantas pilhas bastam para implementar uma fila.\n\n- **Pilha** [0082]: LIFO, último a entrar, primeiro a sair.\n- **Fila** [0085]: FIFO, primeiro a entrar, primeiro a sair.\n- **Inversão** [0082]: passar os elementos de uma pilha para outra inverte a ordem.\n\n**Exemplo:** empilhe 1, 2, 3 em P (topo 3). Desempilhe tudo para Q: o topo de Q é o 1, o primeiro que entrou.\n\n**Como atacar:** descubra onde ficam os elementos que chegam e onde ficam os que vão sair.",
+    "dica": "**Cobra:** dizer o número mínimo de pilhas que implementam uma fila.\n\n- **Pilha e fila** [0082]: a pilha devolve o último que entrou (LIFO) e a fila devolve o primeiro (FIFO): as duas ordens são inversas. Ex.: entram 1, 2, 3: a pilha devolve 3 primeiro e a fila, 1.\n- **Inverter duas vezes** [0085]: passar os itens de uma pilha para outra inverte a ordem, e inverter duas vezes devolve a ordem original. Ex.: empilhar 1, 2, 3 em A e desempilhar A para B deixa o 1 no topo de B.\n\n**Como atacar:** descubra o que uma pilha sozinha não consegue e o que mais uma pilha permite.",
     "originais": []
    },
    {
@@ -6520,7 +6520,7 @@ window.PROVAS = [
       "modulo": "13-busca-e-ordenacao.md"
      }
     ],
-    "dica": "**Cobra:** qual afirmação sobre o custo do Insertion Sort é correta.\n\n- **Insertion sort** [0093]: o custo vem de comparações e deslocamentos.\n- **Θ** [0166]: limita o custo por cima e por baixo, para uma família de entradas.\n- **Notação O** [0072]: compare os crescimentos de n, n³ e 2^n.\n\n**Exemplo:** em `1 2 3 4` cada elemento só é comparado com o anterior; em `4 3 2 1` cada um percorre o prefixo todo.\n\n**Como atacar:** para cada alternativa, procure uma entrada com aquele custo; se não existir, descarte.",
+    "dica": "**Cobra:** escolher a afirmação correta sobre o custo do insertion sort.\n\n- **Custo do insertion sort** [0093]: no melhor caso (vetor já ordenado) faz n - 1 comparações e nenhum deslocamento, O(n); no pior (invertido), n(n - 1)/2. Ex.: n = 5: 4 comparações se ordenado e 10 se invertido.\n- **Notação Θ** [0072]: Θ é teto e piso juntos: o custo cresce exatamente nessa classe; a pergunta pede se EXISTE alguma entrada com esse custo, não se toda entrada tem. Ex.: a busca sequencial é Θ(1) se a chave é a primeira e Θ(n) se é a última.\n\n**Como atacar:** para cada Θ, procure uma entrada de tamanho n que dê esse custo.",
     "originais": []
    },
    {
@@ -6567,7 +6567,7 @@ window.PROVAS = [
       "modulo": "14-arvores.md"
      }
     ],
-    "dica": "**Cobra:** montar a AVL com as inserções dadas e escolher a figura.\n\n- **Fator de balanceamento** [0101]: altura esquerda menos direita; ±2 exige rotação.\n- **Rotações** [0101]: esquerda-esquerda gira à direita; direita-direita gira à esquerda; os casos mistos usam rotação dupla.\n\n**Exemplo:** inserir 5, 3, 4 cria o caso esquerda-direita; a rotação dupla deixa o 4 na raiz com 3 e 5.\n\n**Como atacar:** insira uma chave por vez, rotacione no primeiro nó desequilibrado subindo e só no fim compare com as figuras.",
+    "dica": "**Cobra:** montar uma AVL inserindo uma sequência de chaves, aplicando as rotações.\n\n- **Fator de balanceamento** [0101]: `fb = altura(esq) - altura(dir)`; a AVL exige -1, 0 ou 1 em todos os nós, e ao chegar a 2 ou -2 é preciso rotacionar. Ex.: `5 → 6 → 7` deixa o 5 com fb = -2.\n- **Rotação simples** [0101]: quando o peso e o filho pesado estão do mesmo lado, uma rotação no nó resolve: o filho sobe e o pai desce, sem quebrar a ordem da BST. Ex.: `5 → 6 → 7`: rotação à esquerda no 5, e o 6 vira raiz.\n- **Rotação dupla** [0101]: no zigue-zague, rotaciona-se o filho para um lado e depois o nó para o outro. Ex.: `7` com filho esquerdo `5` e neto `6`: esquerda no 5, direita no 7, e o 6 vira raiz.\n\n**Como atacar:** insira uma chave por vez e confira o fator dos ancestrais da folha nova, de baixo para cima.",
     "originais": [
      "provas-ppgi-ufam/2019-033/figuras/q19-arvores.png"
     ]
@@ -6612,7 +6612,7 @@ window.PROVAS = [
       "modulo": "14-arvores.md"
      }
     ],
-    "dica": "**Cobra:** julgar sentenças sobre árvores rubro-negras e AVL.\n\n- **Rubro-negra** [0177]: raiz preta, folhas nulas pretas, vermelho não tem filho vermelho, e todo caminho até um nulo tem o mesmo número de pretos.\n- **AVL** [0101]: a inserção desce e sobe um caminho de tamanho logarítmico, com rotação em um ponto.\n\n**Exemplo:** raiz P com filhos V e P, todos com filhos nulos: pela esquerda são 2 pretos, pela direita 3. Não é rubro-negra.\n\n**Como atacar:** teste cada sentença com uma árvore pequena e desconfie de \"sempre\".",
+    "dica": "**Cobra:** julgar três afirmações sobre árvores rubro-negras e AVL.\n\n- **Propriedades da rubro-negra** [0177]: a raiz é preta, vermelho só tem filhos pretos e todos os caminhos de um nó às folhas têm o mesmo número de pretos; as folhas são sentinelas `nil` pretas. Ex.: raiz preta com dois filhos pretos: cada caminho tem 2 pretos.\n- **Folha nil** [0177]: as folhas da rubro-negra são o nó sentinela `nil`, preto e sem chave, que ocupa o lugar de todo NULL; ele conta na altura negra de cada caminho. Ex.: nó preto com dois filhos `nil`: os dois caminhos têm 1 preto.\n- **Inserção na AVL** [0101]: a altura é limitada a cerca de 1,44 · log₂ n, então a inserção custa O(log n) no pior caso. Ex.: 1 milhão de chaves: no máximo uns 29 níveis.\n\n**Como atacar:** julgue cada afirmação isolada, citando a propriedade que a sustenta ou quebra.",
     "originais": []
    }
   ]
@@ -6666,7 +6666,7 @@ window.PROVAS = [
       "modulo": "15-hash.md"
      }
     ],
-    "dica": "**Cobra:** qual ordem de inserção explica a tabela hash dada.\n\n- **Sondagem linear** [0107]: a chave vai para h(k) ou para a próxima posição livre, de forma circular.\n- **Chave deslocada** [0107]: se uma chave não está em h(k), as posições entre h(k) e a dela já estavam ocupadas antes.\n\n**Exemplo:** m = 5, com 10 na posição 0 e 15 na 1: como 15 mod 5 = 0, o 10 entrou antes.\n\n**Como atacar:** ache as chaves deslocadas e ordene seus ocupantes anteriores antes delas.",
+    "dica": "**Cobra:** descobrir, pela tabela final, uma ordem de inserção possível com sondagem linear.\n\n- **Método da divisão** [0105]: a posição natural de uma chave é `x mod m`; é daí que ela começa a tentar, e uma chave que está em outro lugar foi deslocada. Ex.: m = 9: 23 mod 9 = 5.\n- **Sondagem linear** [0107]: se a posição natural está ocupada, a chave tenta a seguinte, dando a volta no fim; logo, uma chave fora da sua posição natural entrou depois de quem ocupava as posições do caminho. Ex.: m = 5: 7 vai para 2 e 12 para 3, então o 7 entrou antes do 12.\n\n**Como atacar:** para cada chave deslocada, ache quem ocupa o caminho e exija que esses tenham entrado antes; descarte as ordens que violam.",
     "originais": [
      "provas-ppgi-ufam/2019-060/figuras/q01-tabela-hash.png"
     ]
@@ -6721,7 +6721,7 @@ window.PROVAS = [
       "modulo": "14-arvores.md"
      }
     ],
-    "dica": "**Cobra:** qual desenho é a AVL resultante das inserções dadas, com rotações.\n\n- **Fator de balanceamento** [0101]: altura esquerda menos direita; ±2 exige rotação.\n- **Rotações** [0101]: simples nos casos esquerda-esquerda e direita-direita; dupla nos mistos.\n\n**Exemplo:** inserir 8, 9, 10 é o caso direita-direita; a rotação à esquerda deixa o 9 na raiz com 8 e 10.\n\n**Como atacar:** insira uma chave por vez, rotacione no primeiro nó desequilibrado e compare o resultado com os desenhos.",
+    "dica": "**Cobra:** montar uma AVL com a sequência dada, aplicando as rotações, e achar o desenho.\n\n- **Fator de balanceamento** [0101]: `fb = altura(esq) - altura(dir)` deve ficar entre -1 e 1 em todos os nós; ao chegar a 2 ou -2, é preciso rotacionar. Ex.: `3 → 4 → 5` deixa o 3 com fb = -2.\n- **Rotação simples** [0101]: quando o peso e o filho pesado estão do mesmo lado, uma rotação no nó resolve, e o filho sobe. Ex.: `3 → 4 → 5`: rotação à esquerda no 3, e o 4 vira raiz.\n- **Rotação dupla** [0101]: no zigue-zague, rotaciona-se primeiro o filho e depois o nó, e o neto vira raiz da subárvore. Ex.: `9` com filho esquerdo `5` e neto `7`: esquerda no 5, direita no 9, e o 7 sobe.\n\n**Como atacar:** insira uma chave por vez e confira os ancestrais da folha nova; a mesma lista de chaves em outra ordem dá outra árvore.",
     "originais": [
      "provas-ppgi-ufam/2019-060/figuras/q02-arvores.png"
     ]
@@ -6770,7 +6770,7 @@ window.PROVAS = [
       "modulo": "10-analise.md"
      }
     ],
-    "dica": "**Cobra:** reconhecer qual contagem de operações é linear em n.\n\n- **Contar passos** [0071]: o número de operações é uma função do tamanho n da entrada.\n- **Notação O** [0072]: vale o termo que mais cresce; constantes e termos menores são descartados.\n\n**Exemplo:** `8n + 3` é linear, `n² + n` é quadrática e `50` é constante.\n\n**Como atacar:** em cada opção, ache o termo dominante e veja a potência de n.",
+    "dica": "**Cobra:** identificar a expressão que cresce de modo linear com a entrada.\n\n- **Notação O** [0072]: ignora constantes multiplicativas e termos menores, que perdem peso quando n cresce, e fica só com o termo dominante. Ex.: `3n + 5` é O(n); `n² + 50n` é O(n²).\n- **Contar passos** [0071]: a função de complexidade conta as operações em função de n; se não depende de n, é constante, e se cresce na mesma proporção que n, é linear. Ex.: uma conta fixa de 100 passos é O(1) para qualquer n.\n\n**Como atacar:** olhe o termo de maior expoente de n em cada alternativa.",
     "originais": []
    },
    {
@@ -6813,7 +6813,7 @@ window.PROVAS = [
       "modulo": "13-busca-e-ordenacao.md"
      }
     ],
-    "dica": "**Cobra:** quantas posições a busca binária examina até concluir que o número não está no vetor.\n\n- **Busca binária** [0090]: examina o meio do intervalo e descarta metade, até achar ou esvaziar o intervalo.\n- **Intervalo** [0090]: acompanhe ini, fim e meio, com meio = (ini + fim) / 2 inteiro.\n\n**Exemplo:** `[2,3,5,7,11,13,17]`, buscando 8: meio 3 (7), depois 5 (13), depois 4 (11), intervalo vazio. São 3 posições.\n\n**Como atacar:** simule passo a passo e conte cada posição examinada.",
+    "dica": "**Cobra:** contar quantos elementos a busca binária examina até concluir que a chave não existe.\n\n- **Busca binária** [0090]: olha o elemento do meio do intervalo `ini..fim`, descarta metade e repete; cada volta examina um elemento, e termina ao achar ou quando `ini > fim`. Ex.: em `2 3 5 7 11 13 17` com chave 4: examina 7, 3 e 5 e para, 3 itens.\n- **Meio com divisão inteira** [0007]: o índice do meio vem de uma divisão inteira, que arredonda para baixo. Ex.: `ini = 0` e `fim = 3` dão meio 1.\n\n**Como atacar:** simule ini, fim e meio a cada volta e conte as posições lidas.",
     "originais": []
    },
    {
@@ -6860,7 +6860,7 @@ window.PROVAS = [
       "modulo": "04-funcoes.md"
      }
     ],
-    "dica": "**Cobra:** o que imprime uma função recursiva que chama a si mesma antes do `printf`.\n\n- **Recursão** [0032]: o que vem antes da chamada roda na ida; o que vem depois roda na volta, na ordem inversa.\n- **Pilha de chamadas** [0031]: cada chamada fica esperando a seguinte terminar.\n- **Lista encadeada** [0076]: `head->next` leva ao nó seguinte.\n\n**Exemplo:** `void f(int n){ if(n==0) return; f(n-1); printf(\"%d \", n); }` com `f(3)` imprime `1 2 3`.\n\n**Como atacar:** desça até o `NULL` e imprima na volta.",
+    "dica": "**Cobra:** dizer o que uma função recursiva que imprime depois da chamada faz com uma lista.\n\n- **Imprimir na volta** [0032]: o `printf` depois da chamada recursiva só roda quando as chamadas seguintes terminam, então os valores saem na ordem inversa das chamadas. Ex.: `g(n)` chama `g(n-1)` e depois imprime n: `g(3)` escreve 1 2 3.\n- **Recursão na lista** [0076]: o caso base é `head == NULL`, e cada chamada recebe `head->next`, descendo um nó por vez até o fim. Ex.: em `4 → 5`, `f(4)` chama `f(5)`, que chama `f(NULL)` e retorna.\n\n**Como atacar:** anote a ordem das chamadas e a ordem das impressões na volta.",
     "originais": []
    },
    {
@@ -6903,7 +6903,7 @@ window.PROVAS = [
       "modulo": "15-hash.md"
      }
     ],
-    "dica": "**Cobra:** o custo de buscar numa tabela hash com encadeamento de tamanho fixo e muitas chaves.\n\n- **Encadeamento** [0106]: cada posição guarda uma lista; a busca calcula h(k) e percorre a lista.\n- **Fator de carga** [0106]: n/m; o custo médio é cerca de 1 + n/m.\n\n**Exemplo:** m = 10 e n = 1000: cada lista tem em média 100 nós. Se todas as chaves caem na mesma posição, a lista tem n.\n\n**Como atacar:** separe caso médio e pior, e veja qual cresce com n.",
+    "dica": "**Cobra:** dizer como a busca cresce num hash com encadeamento de tabela de tamanho fixo.\n\n- **Encadeamento** [0106]: cada balde guarda uma lista; a busca vai ao balde e percorre só a lista dele, com custo médio Θ(1 + α), onde α = n/m. Ex.: m = 5 e n = 10: α = 2, e cada lista tem 2 nós em média.\n- **Tabela de tamanho fixo** [0106]: com m fixo e n crescendo, α cresce junto com n, e as listas viram proporcionais a n; o custo só é constante se m cresce junto com n. Ex.: m = 100: n = 1000 dá α = 10 e n = 100000 dá α = 1000.\n\n**Como atacar:** troque m e n por números concretos e veja o que acontece com o tamanho médio da lista.",
     "originais": []
    },
    {
@@ -6946,7 +6946,7 @@ window.PROVAS = [
       "modulo": "11-listas.md"
      }
     ],
-    "dica": "**Cobra:** completar o código que move o último nó de uma lista para a frente.\n\n- **Lista encadeada** [0076]: depois do laço, `p` é o último nó e `q` o penúltimo.\n- **Religar nós** [0077]: a ordem das atribuições importa; cortar um elo cedo demais perde o resto da lista.\n\n**Exemplo:** mover o primeiro nó para o fim em `1->2->3`: `h = head; head = head->next; tail->next = h; h->next = NULL;` dá `2->3->1`.\n\n**Como atacar:** desenhe a lista, execute cada alternativa e veja se a lista termina em `NULL`.",
+    "dica": "**Cobra:** completar o trecho que move o último nó da lista simples para a frente.\n\n- **Ponteiros p e q** [0076]: o laço deixa `p` no último nó e `q` no penúltimo, que anda um passo atrás de `p`. Ex.: em `1 → 2 → 3`, `p` termina no 3 e `q` no 2.\n- **Anterior aponta para o seguinte** [0077]: para tirar um nó, o anterior passa a apontar para o seguinte dele; o último tem seguinte NULL. Ex.: tirar o 5 de `4 → 5 → 6` faz `q->prox = p->prox`.\n- **Ordem das ligações** [0076]: guarde o endereço de um nó antes de sobrescrever o ponteiro que o guarda, senão a lista antiga se perde ou aponta para si mesma. Ex.: `head = p;` antes de `p->next = head;` faria `p` apontar para ele mesmo.\n\n**Como atacar:** desenhe a lista com p e q e refaça cada alternativa, uma seta por vez.",
     "originais": []
    },
    {
@@ -6989,7 +6989,7 @@ window.PROVAS = [
       "modulo": "13-busca-e-ordenacao.md"
      }
     ],
-    "dica": "**Cobra:** qual algoritmo de ordenação faz tempo O(n) com n elementos idênticos.\n\n- **Insertion sort** [0093]: o custo vem de comparações e deslocamentos de elementos.\n- **Merge sort** [0094]: divide sempre ao meio, com log n níveis, qualquer que seja a entrada.\n- **Quick sort** [0095]: o custo depende de onde o pivô cai em cada partição.\n\n**Exemplo:** insertion em `2 1 3`: o 1 desloca o 2; o 3 só é comparado com o anterior.\n\n**Como atacar:** para cada algoritmo, pergunte se a entrada toda igual muda o trabalho feito.",
+    "dica": "**Cobra:** achar o algoritmo que ordena n elementos idênticos em O(n).\n\n- **Insertion sort no melhor caso** [0093]: encaixa cada elemento parando ao achar um menor ou igual; com valores iguais, ele para na primeira comparação, sem deslocar nada. Ex.: `7 7 7 7`: 3 comparações e 0 deslocamentos.\n- **Merge sort** [0094]: divide ao meio e intercala em todos os casos, com log₂ n níveis de n elementos, então custa O(n log n) mesmo com o vetor já ordenado. Ex.: 8 elementos: 3 níveis de 8, ou 24.\n- **Quick sort com iguais** [0095]: na separação com `<=`, todos os iguais ao pivô vão para o mesmo lado, o outro fica vazio e o custo vira O(n²). Ex.: `7 7 7` com pivô 7: sobram 2 elementos, depois 1.\n\n**Como atacar:** descubra qual algoritmo tem um melhor caso O(n) e confira se a entrada igual o provoca.",
     "originais": []
    },
    {
@@ -7032,7 +7032,7 @@ window.PROVAS = [
       "modulo": "14-arvores.md"
      }
     ],
-    "dica": "**Cobra:** qual afirmação sobre as regras da árvore rubro-negra é verdadeira.\n\n- **Rubro-negra** [0177]: raiz preta, folhas nulas pretas e vermelho nunca tem filho vermelho.\n- **Altura negra** [0177]: todo caminho da raiz até um nulo tem o mesmo número de nós pretos.\n\n**Exemplo:** raiz P com dois filhos V, cada um com filhos nulos: ambos os caminhos têm 2 pretos, e a árvore é válida.\n\n**Como atacar:** confronte cada afirmação com as regras, uma por vez, e desconfie de \"inverso\" e \"sempre\".",
+    "dica": "**Cobra:** escolher a afirmação verdadeira sobre as propriedades da árvore rubro-negra.\n\n- **Regras das cores** [0177]: a raiz é preta, os filhos de um nó vermelho são pretos e todos os caminhos de um nó às folhas têm o mesmo número de nós pretos; o que não se exige dos filhos de um nó preto é a cor. Ex.: um nó vermelho sob um nó preto é permitido; vermelho sob vermelho, não.\n- **Caminho mais longo e mais curto** [0177]: como os pretos são iguais em todos os caminhos e não há dois vermelhos seguidos, o caminho mais longo tem no máximo o dobro dos nós do mais curto, e h ≤ 2 log₂(n + 1). Ex.: altura negra 3: o caminho mais curto tem 3 nós e o mais longo, no máximo 6.\n\n**Como atacar:** confira cada alternativa contra as cinco propriedades.",
     "originais": []
    },
    {
@@ -7079,7 +7079,7 @@ window.PROVAS = [
       "modulo": "04-funcoes.md"
      }
     ],
-    "dica": "**Cobra:** qual estrutura de dados sustenta a recursão.\n\n- **Pilha de chamadas** [0031]: cada chamada guarda parâmetros, variáveis locais e endereço de retorno.\n- **Recursão** [0032]: a última chamada feita é a primeira a terminar.\n- **Pilha (TAD)** [0082]: LIFO, último a entrar, primeiro a sair.\n\n**Exemplo:** `fat(3)` chama `fat(2)`, que chama `fat(1)`; o `fat(1)` termina primeiro.\n\n**Como atacar:** pergunte qual estrutura devolve primeiro o que entrou por último.",
+    "dica": "**Cobra:** dizer qual estrutura de dados é a mais usada para implementar recursão.\n\n- **Pilha de chamadas** [0031]: a cada chamada o programa empilha um quadro com parâmetros, variáveis locais e endereço de retorno, e o desempilha ao retornar. Ex.: `main` chama `f`, que chama `g`: `g` sai primeiro.\n- **Recursão** [0032]: cada chamada recursiva ganha o seu próprio quadro, e eles se desfazem na ordem inversa, último a entrar e primeiro a sair. Ex.: `fat(3)` empilha `fat(3)`, `fat(2)`, `fat(1)`.\n\n**Como atacar:** pergunte qual estrutura tem a regra último a entrar, primeiro a sair.",
     "originais": []
    },
    {
@@ -7122,7 +7122,7 @@ window.PROVAS = [
       "modulo": "14-arvores.md"
      }
     ],
-    "dica": "**Cobra:** achar a afirmação falsa sobre árvores B e B+.\n\n- **Árvore B** [0146]: ordem m é o máximo de filhos; todas as folhas ficam no mesmo nível.\n- **Crescimento** [0146]: ao dividir a raiz, nasce um novo nível acima, e a árvore cresce para cima.\n- **Busca** [0146]: custa a altura, logarítmica; compare com a rubro-negra [0177].\n\n**Exemplo:** ordem 3, raiz `[10,20]` cheia: inserir 30 divide a raiz e cria um novo nível com raiz `[20]`.\n\n**Como atacar:** a questão pede a FALSA: teste cada alternativa e escolha a que falha.",
+    "dica": "**Cobra:** achar a afirmação falsa sobre árvores B e B+.\n\n- **Nó da árvore B** [0146]: um nó com k chaves tem k + 1 filhos; todo nó, exceto a raiz, tem de t - 1 a 2t - 1 chaves, e todas as folhas ficam no mesmo nível. Ex.: com t = 2, `[40 70]` tem 3 filhos.\n- **Crescimento por cima** [0146]: quando a raiz está cheia, ela se divide e a chave do meio vira a nova raiz, então a árvore B cresce por cima e as folhas seguem no mesmo nível. Ex.: raiz `[10 20 30]` recebe 40: o 20 sobe e a altura aumenta em 1.\n- **BST cresce por baixo** [0099]: a BST pendura o nó novo como folha, aumentando a altura por baixo, sem criar uma nova raiz. Ex.: em `50 → 30`, inserir 20 pendura o 20 abaixo do 30.\n\n**Como atacar:** confira cada alternativa contra a regra dos nós e a do crescimento.",
     "originais": []
    },
    {
@@ -7170,7 +7170,7 @@ window.PROVAS = [
       "modulo": "14-arvores.md"
      }
     ],
-    "dica": "**Cobra:** quais árvores respeitam o balanceamento AVL.\n\n- **Fator de balanceamento** [0101]: altura esquerda menos direita de cada nó; só vale -1, 0 ou 1.\n- **Altura** [0101]: contada em arestas, a folha tem altura 0.\n\n**Exemplo:** raiz 5 com filho esquerdo 3, que tem filho esquerdo 1, e sem filho direito: a raiz tem fator 2, então não é AVL.\n\n**Como atacar:** calcule as alturas de baixo para cima e confira todos os nós, não só a raiz.",
+    "dica": "**Cobra:** escolher quais árvores respeitam a regra de balanceamento da AVL.\n\n- **Regra da AVL** [0101]: em TODO nó, as alturas das subárvores diferem de no máximo 1, não só na raiz; subárvore vazia tem altura -1. Ex.: um nó com filho esquerdo que tem um filho e sem filho direito dá diferença 2, e viola.\n- **A AVL é uma BST** [0099]: esquerda tem chaves menores e direita tem maiores, em todo nó; o balanceamento vem por cima dessa ordem. Ex.: um `5` com filho esquerdo `8` não é BST.\n\n**Como atacar:** calcule a altura de cada subárvore, das folhas para a raiz, e confira cada nó.",
     "originais": [
      "provas-ppgi-ufam/2019-060/figuras/q12-arvores.png"
     ]
@@ -7219,7 +7219,7 @@ window.PROVAS = [
       "modulo": "14-arvores.md"
      }
     ],
-    "dica": "**Cobra:** achar a afirmação incorreta sobre árvores de busca, AVL, rubro-negra e B.\n\n- **ABB** [0099]: o custo é a altura; sem balanceamento ela pode chegar a n-1.\n- **AVL** [0101]: altura O(log n), com rotações para rebalancear.\n- **Rubro-negra** [0177]: a inserção corrige com recolorações e rotações.\n\n**Exemplo:** inserir 1, 2, 3, 4 em ordem numa ABB dá altura 3; numa AVL dá altura 2.\n\n**Como atacar:** a questão pede a INCORRETA: teste cada alternativa e escolha a que falha.",
+    "dica": "**Cobra:** achar a afirmação incorreta sobre árvores de busca, AVL, rubro-negra e B.\n\n- **Pior caso da BST** [0099]: sem balanceamento, chaves em ordem crescente formam uma lista de altura n - 1, e a busca no pior caso custa O(n). Ex.: inserir 1, 2, 3, 4 e buscar o 4 faz 4 comparações.\n- **Altura da AVL** [0101]: a altura é no máximo cerca de 1,44 · log₂ n, então a busca custa O(log n) no pior caso. Ex.: 1 milhão de chaves: no máximo uns 29 níveis.\n- **Rotações na rubro-negra** [0177]: a inserção faz no máximo duas rotações: o caso do tio vermelho só recolore e sobe, e os outros dois rotacionam e acabam. Ex.: tio vermelho: pinta pai e tio de preto, o avô de vermelho, sem rotação.\n\n**Como atacar:** procure a afirmação que troca o custo do pior caso de uma estrutura por outro.",
     "originais": []
    },
    {
@@ -7266,7 +7266,7 @@ window.PROVAS = [
       "modulo": "10-analise.md"
      }
     ],
-    "dica": "**Cobra:** quantas comparações, no mínimo, decidem se um valor aparece mais de n/2 vezes num vetor ordenado.\n\n- **Vetor ordenado** [0090]: valores iguais ficam contíguos, então a posição de um valor limita onde estão suas cópias.\n- **Busca binária** [0090]: acha uma posição em log n passos.\n- **Θ** [0166]: o limite exato do custo.\n\n**Exemplo:** em `1 1 2 2 2 2 3` (n = 7), o 2 ocupa as posições 2 a 5.\n\n**Como atacar:** pense em quais posições uma maioria precisa cobrir e quantas bastam olhar.",
+    "dica": "**Cobra:** estimar o mínimo de comparações para saber se um valor aparece em mais da metade de um vetor ordenado.\n\n- **Iguais ficam juntos** [0090]: num vetor ordenado, valores iguais ocupam posições seguidas, então se `v[i] == v[j]` tudo entre i e j é igual, sem olhar o meio. Ex.: `1 2 2 2 2 3 3`: `v[1] == v[4]` prova 4 ocorrências com uma comparação.\n- **Classes de custo** [0072]: O(1) não depende de n, O(log n) vem de dividir ao meio, como na busca binária, e O(n) é olhar tudo. Ex.: `v[i]` é O(1); a busca binária é O(log n).\n\n**Como atacar:** use a ordenação para saber onde um valor com mais da metade das ocorrências teria de estar.",
     "originais": []
    },
    {
@@ -7309,7 +7309,7 @@ window.PROVAS = [
       "modulo": "14-arvores.md"
      }
     ],
-    "dica": "**Cobra:** comparar altura e rotações entre AVL e rubro-negra.\n\n- **AVL** [0101]: em cada nó, a diferença entre as alturas das subárvores é no máximo 1.\n- **Rubro-negra** [0177]: mesmo número de pretos em todo caminho e nenhum vermelho seguido de vermelho.\n\n**Exemplo:** uma AVL aceita subárvores de altura 3 e 2 sob o mesmo nó, mas não 3 e 1.\n\n**Como atacar:** pergunte qual regra é mais rígida e quanto trabalho cada uma faz para se manter.",
+    "dica": "**Cobra:** comparar a altura e as rotações das árvores AVL e rubro-negra.\n\n- **AVL** [0101]: exige diferença de altura de no máximo 1 em todo nó, o que a mantém mais baixa, com h ≤ 1,44 · log₂ n, mas pode rotacionar mais. Ex.: 1 milhão de chaves: até uns 29 níveis.\n- **Rubro-negra** [0177]: as regras de cor são mais folgadas (h ≤ 2 log₂(n + 1)), então a árvore pode ser mais alta, com poucas rotações (no máximo 2 na inserção). Ex.: 1 milhão de chaves: até uns 39 níveis.\n\n**Como atacar:** relacione regra mais rígida com altura menor e mais consertos.",
     "originais": []
    },
    {
@@ -7360,7 +7360,7 @@ window.PROVAS = [
       "modulo": "14-arvores.md"
      }
     ],
-    "dica": "**Cobra:** aplicar inserções e remoções numa ABB e escrever os percursos pré-ordem e pós-ordem.\n\n- **Inserção e remoção** [0099]: a inserção desce comparando; na remoção [0100], nó com dois filhos é trocado pelo sucessor ou antecessor.\n- **Percursos** [0098]: pré-ordem é raiz, esquerda, direita; pós-ordem é esquerda, direita, raiz.\n\n**Exemplo:** raiz 4, filhos 2 e 6, e 1 e 3 sob o 2: pré `4 2 1 3 6`, pós `1 3 2 6 4`.\n\n**Como atacar:** refaça a árvore passo a passo antes de gerar os percursos.",
+    "dica": "**Cobra:** aplicar inserções e remoções numa BST e escrever as listas de pré-ordem e pós-ordem.\n\n- **Pré-ordem e pós-ordem** [0098]: pré-ordem visita a raiz, a esquerda e a direita; pós-ordem visita a esquerda, a direita e a raiz. Ex.: raiz 2, filhos 1 e 3: pré 2 1 3 e pós 1 3 2.\n- **Remover da BST** [0100]: folha sai direto; com um filho, o filho sobe; com dois, o nó é trocado pelo sucessor (o menor da direita) ou pelo antecessor. Ex.: remover 50 de `50 (30, 70 (60, 80))` põe o 60 na raiz.\n- **Inserir na BST** [0099]: desce comparando como na busca e pendura o nó como folha onde achar NULL. Ex.: inserir 25 em `20 → 30` entra à esquerda do 30.\n\n**Como atacar:** refaça a árvore passo a passo, uma operação por vez, e só depois percorra.",
     "originais": []
    },
    {
@@ -7407,7 +7407,7 @@ window.PROVAS = [
       "modulo": "10-analise.md"
      }
     ],
-    "dica": "**Cobra:** o tamanho de entrada que o Merge Sort resolve num tempo maior, dado um tempo conhecido.\n\n- **Merge sort** [0094]: custo Θ(n log n) em todos os casos.\n- **Escala** [0072]: T(n) = c · n · log₂ n; descubra c com os dados.\n\n**Exemplo:** n = 4 leva 3 s (n·log₂ n = 8). Em 24 s cabem 64 unidades, e n = 16 dá 16 · 4 = 64.\n\n**Como atacar:** calcule c, ache o novo valor de n·log₂ n e procure o n da opção que o iguala.",
+    "dica": "**Cobra:** estimar o maior tamanho de entrada do merge sort que cabe em um tempo maior.\n\n- **Custo do merge sort** [0094]: custa c · n · log₂ n em todos os casos; com um tempo conhecido para um n, a regra de três acha a constante c. Ex.: 16 itens em 8 s: 16 · 4 = 64 unidades, então 32 itens custam 32 · 5 · 0,125 = 20 s.\n- **Logaritmo de potência de 2** [0072]: `log₂ 2^k = k`, então testar potências de 2 evita calculadora. Ex.: `log₂ 1024` = 10.\n\n**Como atacar:** descubra o valor de n · log₂ n que cabe no tempo novo e teste as potências de 2.",
     "originais": []
    },
    {
@@ -7450,7 +7450,7 @@ window.PROVAS = [
       "modulo": "13-busca-e-ordenacao.md"
      }
     ],
-    "dica": "**Cobra:** a sequência de estados do vetor a cada rodada do Insertion Sort.\n\n- **Insertion sort** [0093]: o prefixo ordenado cresce uma posição por rodada, e cada rodada insere o próximo elemento deslocando os maiores.\n- **Resto do vetor** [0093]: o que está depois do prefixo não é tocado.\n\n**Exemplo:** `3 2 1`: rodada 1 dá `2 3 1`; rodada 2 dá `1 2 3`.\n\n**Como atacar:** aplique a regra rodada a rodada e descarte as opções que mexem fora do prefixo.",
+    "dica": "**Cobra:** listar o vetor depois de cada passo do insertion sort em `5 4 3 2 1`.\n\n- **Passo do insertion sort** [0093]: a cada passo, o próximo elemento é encaixado na parte da esquerda, que fica em ordem, e o que está à direita dele não se mexe. Ex.: em `3 1 2`: depois de encaixar o 1, `1 3 2`.\n- **Entrada invertida** [0093]: é o pior caso: cada novo elemento é menor que todos os da esquerda e atravessa a parte pronta até o início. Ex.: encaixar 1 em `2 3` dá `1 2 3`.\n\n**Como atacar:** escreva o vetor depois de cada encaixe e confira só o que mudou.",
     "originais": []
    },
    {
@@ -7493,7 +7493,7 @@ window.PROVAS = [
       "modulo": "11-listas.md"
      }
     ],
-    "dica": "**Cobra:** quais operações numa lista duplamente encadeada custam O(1) com ponteiros para o início e o fim.\n\n- **Lista dupla** [0079]: cada nó tem `prev` e `next`; com início e fim guardados, as duas pontas são acessíveis direto.\n- **Religar nós** [0077]: uma operação é O(1) se só mexe em ponteiros que você já tem em mãos.\n\n**Exemplo:** inserir X depois de B em `A <-> B <-> C`: `X->prev=B; X->next=C; C->prev=X; B->next=X;`. Sem laço.\n\n**Como atacar:** para cada operação, pergunte se ela exige percorrer a lista.",
+    "dica": "**Cobra:** dizer quais operações numa lista duplamente encadeada com ponteiros para as duas pontas custam O(1).\n\n- **Lista duplamente encadeada** [0079]: cada nó tem `prox` e `ant`, e a lista guarda as duas pontas; remover um nó conhecido só mexe nos vizinhos, sem percorrer. Ex.: remover o último nó faz `fim = fim->ant; fim->prox = NULL`.\n- **Inserir nas pontas** [0079]: com ponteiro para as duas pontas, não é preciso andar: o nó novo liga-se ao vizinho e a ponta da lista é atualizada. Ex.: inserir 9 antes do primeiro: `9->prox = inicio` e `inicio->ant = 9`.\n- **Acesso por posição** [0076]: chegar ao k-ésimo nó exige seguir k - 1 setas, então só mexer nas pontas é O(1). Ex.: o 5º nó exige 4 setas.\n\n**Como atacar:** para cada operação, veja se precisa andar pela lista ou só mexer nas pontas.",
     "originais": []
    },
    {
@@ -7536,7 +7536,7 @@ window.PROVAS = [
       "modulo": "12-pilhas-e-filas.md"
      }
     ],
-    "dica": "**Cobra:** as condições de fila cheia e fila vazia numa fila circular de capacidade n-1 num vetor de n posições.\n\n- **Fila circular** [0085]: os índices avançam com `(i + 1) mod n`.\n- **Posição sacrificada** [0085]: com uma posição sempre livre, cheia e vazia têm condições diferentes.\n\n**Exemplo:** n = 4. Se cheia e vazia usassem a mesma condição `REAR == FRONT`, seriam indistinguíveis.\n\n**Como atacar:** teste cada par com a fila recém-criada (vazia) e com n-1 elementos (cheia).",
+    "dica": "**Cobra:** escrever as condições de fila cheia e fila vazia numa fila circular com capacidade n - 1.\n\n- **Fila circular** [0085]: os índices avançam com `(i + 1) mod n`, voltando ao 0 depois da última posição. Ex.: n = 8: depois da posição 7 vem `(7 + 1) % 8 = 0`.\n- **Posição sacrificada** [0085]: se cheia e vazia tivessem a mesma condição entre FRONT e REAR, seriam indistinguíveis; deixar uma posição livre dá condições diferentes. Ex.: n = 4: a fila vazia tem `REAR == FRONT`; com 4 itens, REAR daria a volta e também ficaria igual.\n\n**Como atacar:** teste cada par de condições com a fila recém-criada e com a fila de n - 1 itens.",
     "originais": []
    }
   ]
