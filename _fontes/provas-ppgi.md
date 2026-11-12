@@ -2,7 +2,7 @@
 
 Cadernos de questões enviados pelo dono. Os editais de 2016 a 2019 estão na íntegra, com o gabarito
 oficial lido nas folhas de resposta, as questões anuladas marcadas e as figuras em
-`_fontes/provas-figuras/`. Os editais 057/2022, 020/2023 e 071/2023 vêm do texto dos cadernos.
+`_fontes/provas-figuras/`. Os editais 057/2022, 020/2023 e 071/2023 aqui são um resumo; o caderno completo está em `provas-ppgi-ufam/`.
 Erros de digitação do original foram mantidos.
 
 ---

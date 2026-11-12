@@ -2,18 +2,17 @@
 
 As 11 provas de conhecimento de 2016 a 2023, resolvidas questão por questão: editais 032/2016,
 053/2016, 024/2017, 055/2017, 023/2018, 061/2018, 033/2019, 060/2019, 057/2022, 020/2023 e
-071/2023. O enunciado de cada uma está em [`_fontes/provas-ppgi.md`](_fontes/provas-ppgi.md):
+071/2023. O caderno de cada uma está em [`provas-ppgi-ufam/`](provas-ppgi-ufam/):
 abra a prova lá, resolva cronometrando e só depois confira aqui. Para fazer as provas em formato de quiz, com
 o porquê de cada alternativa, use [jhollyfer.github.io/LPEDC](https://jhollyfer.github.io/LPEDC/).
 
 > [!IMPORTANT]
-> Os editais de 2016 a 2019 e o 071/2023 têm gabarito oficial: as letras são da banca (as de 2016
-> a 2019 foram lidas nas folhas de resposta; as questões anuladas aparecem como "anulada"). Só os
-> editais 057/2022 e 020/2023 não têm letra oficial; as letras deles são do curso. Onde o curso
-> tinha chegado a outra letra, a coluna "Por quê" avisa. As questões de código e de simulação
-> foram conferidas rodando o programa. As provas completas, com as figuras, estão em
-> [`_fontes/provas-ppgi.md`](_fontes/provas-ppgi.md) e cada módulo traz as questões reais do seu
-> tema.
+> As 11 provas têm gabarito oficial: as letras são da banca. As de 2016 a 2019 foram lidas nas
+> folhas de resposta, a 071/2023 no gabarito definitivo, e a 057/2022 e a 020/2023 na marcação em
+> negrito do caderno de respostas. As anuladas aparecem como "anulada". Onde o curso tinha chegado
+> a outra letra, a coluna "Por quê" avisa. As questões de código e de simulação foram conferidas
+> rodando o programa. O caderno de cada prova, com as figuras, está em
+> [`provas-ppgi-ufam/`](provas-ppgi-ufam/) e cada módulo traz as questões reais do seu tema.
 
 Desde 2022 as provas têm **4 alternativas** (de 2016 a 2019 eram 5) e trazem trechos em
 Python. Aqui cada trecho em Python aponta para o assunto de C que treina a mesma ideia.
@@ -290,7 +289,7 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 - Q11: C também é questionável (folha não tem filhos, então "sempre chaves + 1" só vale em nó interno). B é a mais provável.
 - Q12: figura parcial; B reconstruída com a interrogação no texto. D se a reconstrução estiver certa.
 - Anuladas (4, não identificadas): candidatas Q02, Q08, Q11, Q12.
-## Edital 057/2022
+## Edital 057/2022 (gabarito oficial)
 | Q | Letra | Formato | Tópico | Assuntos | Por quê |
 |---|---|---|---|---|---|
 | 01 | d | código | 3 | [0039](05-vetores-e-strings.md) | (Python) produto escalar 0·1+2·0+0·3+0·4+5·0 = 0; rodado. |
@@ -316,12 +315,14 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 
 
 **Observações**
-- Q16: a alternativa c vem com 8 células no texto (falta o ø final da posição 8); tratada como erro de transcrição.
-- Q19: depende do que se conta. Se a remoção do nó com dois filhos precisar achar o sucessor, o melhor caso também seria O(log n) (alternativa a). Fico com b.
-- Q11: o `for (k = N+1; k == i; k--)` está assim no original; se for erro de enunciado, a questão pode ter sido anulada.
+- As 20 letras em negrito do caderno oficial batem com as que o curso tinha chegado.
+- Q16: a alternativa c tem 8 células no próprio caderno (falta o ø final da posição 8); a banca marcou c mesmo assim.
+- Q19: depende do que se conta. Se a remoção do nó com dois filhos precisar achar o sucessor, o melhor caso também seria O(log n) (alternativa a). A banca marcou b.
+- Q11: o `for (k = N+1; k == i; k--)` está assim no original e só roda se `novo` for o maior; a banca não anulou e marcou d.
+- Q15: falta o `;` depois de `l->ant = novo` no caderno (não compila como está); a banca marcou a.
 - Q06 e Q08 são Python mas o conteúdo é de C (alias de ponteiro, Fibonacci recursivo). Q01 também.
 
-## Edital 020/2023
+## Edital 020/2023 (gabarito oficial)
 | Q | Letra | Formato | Tópico | Assuntos | Por quê |
 |---|---|---|---|---|---|
 | 01 | C | cálculo | 6 | [0090](13-busca-e-ordenacao.md) | 10 elementos: ⌊log2 10⌋ + 1 = 4 comparações no pior caso. |
@@ -329,18 +330,16 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 | 03 | D | simulação | 3 | [0082](12-pilhas-e-filas.md) | Pop 3 vezes deixa [7, 8, 13]; push 5 e 2 dá [2, 5, 7, 8, 13]. |
 | 04 | D | afirmações | 5 | [0106](15-hash.md), [0107](15-hash.md) | Encadeamento não tem agrupamento secundário, pior caso O(n) e aceita mais chaves que a tabela. |
 | 05 | B | afirmações | 4 | [0090](13-busca-e-ordenacao.md), [0099](14-arvores.md), [0101](14-arvores.md) | I falsa: vetor ordenado insere em O(n). II verdadeira: busca O(log n) nos dois. |
-| 06 | B | conceito | 4 | [0099](14-arvores.md), [0101](14-arvores.md), [0102](14-arvores.md) | Figura ausente. Três nós com raiz 5 é o caso mais geral para ABB; as outras dependem dos valores e cores. Inferida. |
+| 06 | C | conceito | 4 | [0099](14-arvores.md), [0101](14-arvores.md), [0102](14-arvores.md) | Gabarito oficial C. O curso tinha inferido B sem a figura: a árvore é 5 com filhos 7 (esquerda) e 6 (direita). Não é ABB (7 > 5 à esquerda), logo nem AVL nem rubro-negra; 5 ≤ 7 e 5 ≤ 6 fazem dela uma heap mínima. |
 | 07 | B | conceito | 2 | [0072](10-analise.md), [0076](11-listas.md) | Inserir no início de lista encadeada é O(1). Busca binária é O(log n); vetor e ABB são piores. |
 | 08 | C | código | 7 | [0094](13-busca-e-ordenacao.md) | Divide ao meio, recursão nas duas metades e intercalação com vetor auxiliar: Merge Sort. |
-| 09 | sem resposta | código | 1 | [0032](04-funcoes.md) | Figura ausente, o pseudocódigo recursivo não veio. |
-| 10 | D | simulação | 3 | [0039](05-vetores-e-strings.md) | Figura ausente. m=2 e p=2 pedem resultado 2×2; só A e D têm essa forma. Palpite com baixa confiança. |
+| 09 | A | código | 1 | [0032](04-funcoes.md) | Gabarito oficial A. O pseudocódigo devolve recursivamente o maior elemento da lista: 13; rodado em Python. |
+| 10 | D | simulação | 3 | [0039](05-vetores-e-strings.md) | Gabarito oficial D. Produto de matrizes 2×3 por 3×2 rodado em Python: {{0, 30}, {45, 0}}. |
 
 
 **Observações**
-- Q09: figura ausente, sem como resolver.
-- Q10: figura ausente. D só por forma 2×2; A (todos zeros) também é possível.
-- Q06: figura ausente; B é inferência.
-- Q08: o código não veio na íntegra no resumo; assumi que está correto.
+- O caderno com a marcação oficial trouxe as figuras e o código que faltavam no texto (Q06, Q08, Q09, Q10).
+- Q04 e Q05: o caderno numera os itens como a, b, c, mas as alternativas falam em I, II, III.
 
 ## Edital 071/2023 (gabarito oficial)
 | Q | Letra | Formato | Tópico | Assuntos | Por quê |
@@ -349,7 +348,7 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 | 02 | A | afirmações | 7 | [0103](14-arvores.md) | Heapsort é O(n log n) no pior caso, em duas etapas (construir heap, extrair); III é falsa. |
 | 03 | B | cálculo | 4 | [0102](14-arvores.md) | Troca a raiz com o último e desce: O(log N), sem deslocar o vetor. |
 | 04 | C | cálculo | 2 | [0072](10-analise.md), [0166](26-analise-formal.md) | (300/100)³ = 27, logo 27 minutos. |
-| 05 | B | afirmações | 2 | [0166](26-analise-formal.md) | I e III valem para algoritmo não vazio; II é falsa na prática, pois há custos acima de nⁿ (os símbolos vieram ilegíveis, conferir). |
+| 05 | B | afirmações | 2 | [0166](26-analise-formal.md) | No caderno os símbolos são Ω(1), O(nⁿ) e o(2): I e III valem; II é falsa, pois há custos acima de nⁿ. |
 | 06 | B | simulação | 6 | [0090](13-busca-e-ordenacao.md) | meio=4 (10), depois 1 (4), 2 (6), 3 (8): compara com 10, 4, 6 e 8. |
 | 07 | anulada | afirmações | 4 | [0177](28-estruturas-complementos.md), [0101](14-arvores.md) | Altura máxima é 2·log(n+1), não log n (I falsa); II é defensável e III falsa; texto ambíguo. Provavelmente anulada por ambiguidade. |
 | 08 | D | afirmações | 3 | [0083](12-pilhas-e-filas.md) | Pilha retira o último inserido (10), em custo constante na cabeça da lista. |
@@ -369,7 +368,6 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 
 **Observações**
 - Q01 anulada: o código tem erro de sintaxe e de lógica; não vejo discordância da anulação.
-- Q05: os símbolos de I vieram ilegíveis; conferir no PDF.
 - Q07 e Q10: motivos de anulação são conjectura minha.
 - Q12: concordo com B; confere com as quatro alternativas.
 - Q15, Q17 a Q20 rodadas com `python3 -I`; todas batem com o gabarito oficial. Sem discordância das letras oficiais.

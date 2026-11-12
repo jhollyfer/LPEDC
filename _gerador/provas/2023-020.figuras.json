@@ -1,0 +1,16 @@
+{
+  "2023-020-q06": {
+    "tipo": "arvore",
+    "titulo": "árvore da questão 6",
+    "raiz": {
+      "v": 5,
+      "nota": "x",
+      "e": {
+        "v": 7
+      },
+      "d": {
+        "v": 6
+      }
+    }
+  }
+}

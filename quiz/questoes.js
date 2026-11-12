@@ -7384,13 +7384,13 @@ window.PROVAS = [
   "edital": "057/2022",
   "slug": "2022-057",
   "ano": 2022,
-  "oficial": false,
+  "oficial": true,
   "questoes": [
    {
     "numero": 1,
     "topico": 3,
     "formato": "código",
-    "enunciado": "(Python) Qual a saída do código abaixo?\n\n```python\nclass Vector():\n    def __init__(self, row: list()):\n        self.row = row\n    def dot_product(self, column):\n        return sum(self.row[i] * column.row[i] for i in range(len(self.row)))\n```\n```python\nvec_1 = Vector([0,2,0,0,5])\nvec_2 = Vector([1,0,3,4,0])\nprint(vec_1.dot_product(vec_2))\n```",
+    "enunciado": "Indique qual é a saída correta do seguinte programa em python:\n\n```python\nclass Vector():\n   def __init__(self, row: list()):\n       self.row = row\n\n   def dot_product(self, column):\n       return sum(self.row[i] * column.row[i] for i in range(len(self.row)))\n\nvec_1 = Vector([0,2,0,0,5])\nvec_2 = Vector([1,0,3,4,0])\nprint(vec_1.dot_product(vec_2))\n```",
     "alternativas": [
      {
       "letra": "A",
@@ -7427,26 +7427,26 @@ window.PROVAS = [
     "numero": 2,
     "topico": 4,
     "formato": "afirmações",
-    "enunciado": "Sobre árvores de pesquisa binária, considere:\n\n1. TODOS os nós da subárvore à esquerda são menores que o pai.\n2. O nó mais à esquerda é o menor de TODOS os nós, e o mais à direita é o maior.\n3. O sucessor de x (menor chave maior que a de x) está SEMPRE em um nível acima de x, mais próximo da raiz.\n\nQuais são verdadeiras?",
+    "enunciado": "Sobre as características das árvores de pesquisa binária, considere as afirmações:\n\n1. TODOS os nós da subárvore à esquerda são menores que o pai\n2. O nó mais à esquerda é o menor de TODOS os nós, enquanto que o nó mais à direita é o maior de TODOS\n3. O sucessor de um nó x é o nó com a menor chave maior que a chave de x, e este sucessor estará SEMPRE em um nível (altura) acima de x, ou seja, mais próximo da raiz.\n\nQuais são verdadeiras?",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "Apenas 2 e 3",
+      "texto": "Apenas as afirmações 2 e 3",
       "porque": "Propõe 2 e 3 como verdadeiras e deixa a 1 de fora. A 1 é verdadeira, e a 3 é falsa, então essa combinação falha nos dois pontos."
      },
      {
       "letra": "B",
-      "texto": "Todas",
+      "texto": "Todas as afirmações",
       "porque": "Inclui a 3, que é falsa. Se x tem subárvore direita, o sucessor é o nó mais à esquerda dessa subárvore, que fica abaixo de x."
      },
      {
       "letra": "C",
-      "texto": "Apenas 1 e 2",
+      "texto": "Apenas as afirmações 1 e 2",
       "porque": "A 1 é a propriedade que define a ABB. A 2 decorre dela: descendo sempre à esquerda você chega ao mínimo, e sempre à direita ao máximo. A 3 é falsa, então só 1 e 2 valem."
      },
      {
       "letra": "D",
-      "texto": "Apenas 1",
+      "texto": "Apenas a afirmação 1",
       "porque": "Deixa a 2 de fora, mas ela é verdadeira: o mínimo está no fim do caminho pela esquerda e o máximo no fim do caminho pela direita."
      }
     ],
@@ -7468,26 +7468,26 @@ window.PROVAS = [
     "numero": 3,
     "topico": 7,
     "formato": "afirmações",
-    "enunciado": "Sobre algoritmos de ordenação, considere:\n\n1. O Quicksort tem complexidade de pior caso O(n log n).\n2. Quicksort e Mergesort usam divisão e conquista.\n3. O Mergesort é Θ(n log n) no caso médio.\n4. Com a lista já ordenada, o Selectionsort é O(n).\n\nAs afirmações são, respectivamente:",
+    "enunciado": "Sobre ordenação, considere as afirmações:\n\n1. O Quicksort é um dos algoritmos mais conhecidos, pois possui complexidade, no pior caso, de O(n log n)\n2. O Quicksort e Mergesort usam a técnica de divisão e conquista\n3. O Mergesort possui complexidade assintótica Θ(n log n) no caso médio.\n4. Caso a lista já esteja ordenada, o Selectionsort têm complexidade de O(n).\n\nTais afirmações são, respectivamente:",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "V, V, V, V",
+      "texto": "Verdadeira, verdadeira, verdadeira, verdadeira",
       "porque": "Marca a 1 e a 4 como verdadeiras, e as duas são falsas. O pior caso do Quicksort é O(n²), e a seleção sempre faz Θ(n²) comparações."
      },
      {
       "letra": "B",
-      "texto": "F, V, V, F",
+      "texto": "Falsa, verdadeira, verdadeira, falsa",
       "porque": "1 falsa: com pivô ruim (lista já ordenada e pivô no extremo) o Quicksort chega a O(n²). 2 verdadeira: os dois dividem o problema e resolvem as partes. 3 verdadeira: o Mergesort é Θ(n log n) em qualquer caso. 4 falsa: a seleção varre o resto do vetor a cada passo, mesmo ordenado, e fica em Θ(n²)."
      },
      {
       "letra": "C",
-      "texto": "V, F, F, V",
+      "texto": "Verdadeira, falsa, falsa, verdadeira",
       "porque": "É o oposto do certo nas quatro. O Quicksort é O(n²) no pior caso, os dois usam divisão e conquista, o Mergesort é Θ(n log n) e a seleção não melhora com a entrada ordenada."
      },
      {
       "letra": "D",
-      "texto": "F, F, F, F",
+      "texto": "Falsa, falsa, falsa, falsa",
       "porque": "Acerta a 1 e a 4, mas erra a 2 e a 3: Quicksort e Mergesort são de divisão e conquista, e o Mergesort é Θ(n log n)."
      }
     ],
@@ -7517,7 +7517,7 @@ window.PROVAS = [
     "numero": 4,
     "topico": 4,
     "formato": "simulação",
-    "enunciado": "Os itens 8, 3, 4, 9, 5, 6, 2, 1, 7 são inseridos, nessa ordem, numa árvore binária de busca. Qual item fica na raiz?",
+    "enunciado": "Os seguintes itens são inseridos em uma árvore binária de busca: 8, 3, 4, 9, 5, 6, 2, 1, 7. Qual item é colocado na raiz?",
     "alternativas": [
      {
       "letra": "A",
@@ -7554,26 +7554,26 @@ window.PROVAS = [
     "numero": 5,
     "topico": 3,
     "formato": "conceito",
-    "enunciado": "Para implementar uma pilha com operações de custo O(1) usando uma lista simplesmente encadeada, onde devem ficar as operações push e pop?",
+    "enunciado": "Para a implementação eficiente (O(1)) de uma pilha usando lista simplesmente encadeada, onde os push's e pop's são executados?",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "push depois do último, pop no último",
+      "texto": "Push depois do último elemento, pop no último elemento",
       "porque": "Remover o último exige achar o penúltimo, e numa lista simples isso é percorrer tudo: O(n). Só o push seria constante, e ainda assim com ponteiro para o fim."
      },
      {
       "letra": "B",
-      "texto": "push antes do primeiro, pop no primeiro",
+      "texto": "Push antes do primeiro elemento, pop no primeiro elemento",
       "porque": "Inserir e remover na cabeça só mexe no ponteiro inicial, sem percorrer nada: O(1) nas duas. Além disso, quem entra por último sai primeiro, que é o LIFO da pilha."
      },
      {
       "letra": "C",
-      "texto": "push antes do primeiro, pop no último",
+      "texto": "Push antes do primeiro elemento, pop no último elemento",
       "porque": "O pop no último é O(n) numa lista simples, pelo motivo da primeira alternativa. Além disso, entrar na cabeça e sair pela cauda é comportamento de fila, não de pilha."
      },
      {
       "letra": "D",
-      "texto": "push depois do último, pop no primeiro",
+      "texto": "Push depois do último elemento, pop no primeiro elemento",
       "porque": "Inserir no fim exige ponteiro para a cauda ou percurso, e retirar do começo é o contrário do LIFO. Isso é uma fila (FIFO), não uma pilha."
      }
     ],
@@ -7591,7 +7591,7 @@ window.PROVAS = [
     "numero": 6,
     "topico": 3,
     "formato": "código",
-    "enunciado": "(Python) Considere a classe `Vector` da questão 1. Qual a saída?\n\n```python\nvec_1 = Vector([1,2,3,4,5])\nvec_2 = vec_1\nvec_2.row[2] = 15\nprint(vec_1.row)\n```",
+    "enunciado": "Indique qual é a saída correta do seguinte programa escrito em python:\n\n```python\nclass Vector():\n   def __init__(self, row: list()):\n       self.row = row\n\n   def dot_product(self, column):\n       return sum(self.row[i] * column.row[i] for i in range(len(self.row)))\n\nvec_1 = Vector([1,2,3,4,5])\nvec_2 = vec_1\nvec_2.row[2] = 15\nprint(vec_1.row)\n```",
     "alternativas": [
      {
       "letra": "A",
@@ -7632,26 +7632,26 @@ window.PROVAS = [
     "numero": 7,
     "topico": 2,
     "formato": "conceito",
-    "enunciado": "Sejam f(n) = (n+1)(n−1) e g(n) = 8·log2(n) + 1, com n > 0. Assinale a alternativa correta:",
+    "enunciado": "Considere as funções f(n)=(n+1)(n−1) e g(n)=8log2(n)+1, sendo n>0. Podemos afirmar que:",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "f e g são exponenciais",
+      "texto": "f(n) é exponencial e g(n) é exponencial",
       "porque": "Nenhuma das duas é: f(n) = n² − 1 é polinomial e g cresce com o logaritmo. Exponencial seria algo como 2ⁿ."
      },
      {
       "letra": "B",
-      "texto": "f é quadrática e g é linear",
+      "texto": "f(n) é quadrática e g(n) é linear",
       "porque": "Acerta f (n² − 1), mas g não é linear: 8·log2(n) + 1 é logarítmica, que cresce bem mais devagar que n."
      },
      {
       "letra": "C",
-      "texto": "g(n) = Ω(f(n))",
+      "texto": "g(n)=Ω(f(n))",
       "porque": "Ω é limite inferior. Dizer isso é afirmar que g cresce pelo menos como n², e o logaritmo cresce muito menos. A relação é a inversa."
      },
      {
       "letra": "D",
-      "texto": "g(n) = O(f(n))",
+      "texto": "g(n)=O(f(n))",
       "porque": "Como log n cresce mais devagar que n², existe constante c tal que 8·log2(n) + 1 ≤ c·(n² − 1) para n grande. Logo g = O(f)."
      }
     ],
@@ -7673,7 +7673,7 @@ window.PROVAS = [
     "numero": 8,
     "topico": 1,
     "formato": "código",
-    "enunciado": "(Python) Considere `fibonacci(n)`: se n == 1 devolve 0; se n == 2 devolve 1; senão devolve fibonacci(n-1) + fibonacci(n-2). Qual a saída de `print(fibonacci(7))`?",
+    "enunciado": "Indique qual é a saída correta do seguinte programa escrito em python:\n\n```python\ndef fibonacci(n):\n   if n==1:\n        return 0\n   elif n==2:\n        return 1\n   else:\n        return fibonacci(n-1) + fibonacci(n-2)\n\n\nn = 7\nprint(fibonacci(n))\n```",
     "alternativas": [
      {
       "letra": "A",
@@ -7718,22 +7718,22 @@ window.PROVAS = [
     "alternativas": [
      {
       "letra": "A",
-      "texto": "é planar",
+      "texto": "É planar",
       "porque": "Planar é poder desenhar sem cruzar arestas. Toda árvore é planar, mas muito grafo planar tem ciclos e não é árvore."
      },
      {
       "letra": "B",
-      "texto": "é conexo, não direcionado e não contém ciclos",
+      "texto": "É conexo, não direcionado e não contém ciclos",
       "porque": "Essa é a definição: conexo (um caminho entre quaisquer dois vértices), não direcionado e acíclico. Resulta em n − 1 arestas para n vértices."
      },
      {
       "letra": "C",
-      "texto": "é completamente conectado",
+      "texto": "É completamente conectado",
       "porque": "Grafo completo tem aresta entre todo par de vértices e, com três ou mais vértices, tem ciclos. É o oposto de uma árvore."
      },
      {
       "letra": "D",
-      "texto": "todo grafo é uma árvore",
+      "texto": "Todo grafo é uma árvore",
       "porque": "Falso: grafos com ciclos, desconexos ou com arestas demais não são árvore. A árvore é um caso particular."
      }
     ],
@@ -7755,26 +7755,26 @@ window.PROVAS = [
     "numero": 10,
     "topico": 3,
     "formato": "conceito",
-    "enunciado": "Sobre matrizes bidimensionais de inteiros, assinale a alternativa INCORRETA:",
+    "enunciado": "Matrizes são estruturas de dados de n-dimensões que podem ser implementadas utilizando arrays (vetores). Por simplicidade, chamaremos de matrizes as matrizes bidimensionais numéricas (que armazenam números inteiros). Sendo assim, marque a alternativa INCORRETA.",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "O produto de uma matriz m×n por uma matriz x×y resulta numa matriz de n linhas e y colunas",
+      "texto": "O produto de duas matrizes, a primeira com ‘m’ linhas e ‘n’ colunas e a segunda com ‘x’ linhas e ‘y’ colunas, resulta em uma matriz de ‘n’ linhas e ‘y’ colunas.",
       "porque": "É a incorreta. Para o produto existir, n deve ser igual a x, e o resultado tem m linhas (da primeira) e y colunas (da segunda), não n linhas."
      },
      {
       "letra": "B",
-      "texto": "A soma dos elementos pode ser feita com dois laços aninhados e um acumulador",
+      "texto": "Uma das formas triviais de implementar a soma dos elementos de uma matriz pode ser realizada através de dois laços aninhados (um sobre as linhas e o outro sobre as colunas) e um acumulador de valores.",
       "porque": "Correta. Um laço percorre as linhas, outro as colunas, e o acumulador soma cada elemento."
      },
      {
       "letra": "C",
-      "texto": "Uma matriz pode ser representada com listas encadeadas",
+      "texto": "Uma matriz também pode ser representada utilizando listas encadeadas (utilizando referências ou ponteiros).",
       "porque": "Correta. É possível usar lista de listas ou nós com ponteiros para o vizinho de baixo e da direita, útil em matrizes esparsas."
      },
      {
       "letra": "D",
-      "texto": "Uma matriz m×n tem m·n espaços para inteiros",
+      "texto": "Uma matriz de ‘m’ linhas e ‘n’ colunas contêm ‘m*n’ espaços para alocação de números inteiros.",
       "porque": "Correta. São m linhas de n colunas, ou seja, m·n posições."
      }
     ],
@@ -7792,31 +7792,31 @@ window.PROVAS = [
     "numero": 11,
     "topico": 6,
     "formato": "afirmações",
-    "enunciado": "O pseudocódigo abaixo insere `novo` num vetor ordenado `vetor[1..N]`. Primeiro uma busca binária acha a posição `i`; depois `vetor[N+1] = novo` e um laço desloca os elementos.\n\n```\ni = 1; j = N\nenquanto (i <= j):\n  meio = floor((i + j) / 2)\n  se vetor[meio] > novo: j = meio - 1\n  senão: i = meio + 1\nvetor[N+1] = novo\nfor (k = N+1; k == i; k--)\n  trocar(vetor, k, k-1);\n```\n\n(O laço está assim no original. O texto do pseudocódigo veio resumido, com a mesma estrutura.)\n\nCompare com a ordenação por inserção:\n\n1. Insere com menos comparações que a ordenação por inserção.\n2. Insere com o mesmo número de comparações.\n3. Insere com o mesmo número de movimentações.",
+    "enunciado": "Considere o pseudo algoritmo abaixo:\n\n```c\nvoid Inserir(int vetor[], int N, int novo) {\n   /* tamanho do vetor N+1*/\n   i = 1;\n   j = N; /* ocupação do vetor */\n   while (i <= j){\n     meio = (int) floor((i+j)/2); /* função piso, exemplo: (int) floor(2.6) retorna 2 */\n     if (vetor[meio] > novo) { j = meio-1; }\n     else { i = meio + 1; }\n   }\n   vetor[N+1] = novo;\n   for (k=N+1; k == i; k--) {\n     trocar(vetor,k,k-1); /* Função que inverte a ordem dos elementos da posição k, k-1 */\n   }\n}\n```\n\nConsidere as afirmações:\n\n1. Realiza a inserção do novo elemento com menos comparações que o algoritmo da ordenação por inserção.\n2. Realiza a inserção com o mesmo número de comparações que o algoritmo da ordenação por inserção.\n3. Realiza a inserção do novo elemento com o mesmo número de movimentações que o algoritmo da ordenação por inserção.\n\nSobre as afirmações anteriores, é correto dizer que:",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "Somente 1",
+      "texto": "Somente a 1 é correta",
       "porque": "Está certa quanto às comparações, mas deixa de fora a 3: as movimentações são as mesmas nos dois."
      },
      {
       "letra": "B",
-      "texto": "2 e 3",
+      "texto": "2 e 3 são corretas",
       "porque": "A 2 é falsa. A busca binária faz cerca de log n comparações, e a inserção sequencial pode fazer até n."
      },
      {
       "letra": "C",
-      "texto": "Somente 3",
+      "texto": "Somente a 3 é correta",
       "porque": "A 3 é verdadeira, mas a 1 também. Faltou ela."
      },
      {
       "letra": "D",
-      "texto": "1 e 3",
+      "texto": "1 e 3 são corretas",
       "porque": "Busca binária reduz as comparações a O(log n) contra O(n) da inserção (1 verdadeira). Os elementos maiores que `novo` precisam ser deslocados do mesmo jeito (3 verdadeira). A 2 é falsa."
      }
     ],
     "gabarito": "D",
-    "resumo": "1 verdadeira: busca binária é O(log n) em comparações. 2 falsa. 3 verdadeira: o deslocamento continua O(n). O `for (...; k == i; ...)` está estranho no original (executaria no máximo uma vez), e a banca pode ter tratado como erro de digitação. Dica: busca binária corta as comparações, não as movimentações.",
+    "resumo": "1 verdadeira: a busca binária faz O(log n) comparações, contra até n da inserção sequencial. 2 falsa, pelo mesmo motivo. 3 verdadeira: os elementos maiores que `novo` são deslocados do mesmo jeito nos dois. O `for (k=N+1; k == i; k--)` está assim no caderno oficial e, lido ao pé da letra, só roda se `novo` for o maior (k == i só no começo), então o pseudocódigo tem erro de digitação (o certo seria `k > i`). A banca ignorou isso e marcou D, a leitura de quem entendeu a intenção. Dica: busca binária corta as comparações, não as movimentações.",
     "assuntos": [
      {
       "num": "0090",
@@ -7833,7 +7833,7 @@ window.PROVAS = [
     "numero": 12,
     "topico": 7,
     "formato": "conceito",
-    "enunciado": "Qual o limite superior assintótico do Quick Sort no pior caso?",
+    "enunciado": "Qual das opções melhor representa o limite superior assintótico do tempo de execução do algoritmo Quick Sort no pior caso?",
     "alternativas": [
      {
       "letra": "A",
@@ -7852,7 +7852,7 @@ window.PROVAS = [
      },
      {
       "letra": "D",
-      "texto": "O(n²)",
+      "texto": "O(n^2)",
       "porque": "Se o pivô é sempre o menor ou o maior (por exemplo, vetor já ordenado com pivô nas pontas), a recursão tem n níveis de custo até n cada: O(n²)."
      }
     ],
@@ -7870,26 +7870,26 @@ window.PROVAS = [
     "numero": 13,
     "topico": 3,
     "formato": "código",
-    "enunciado": "O que faz o código C abaixo?\n\n```c\n#include <stdio.h>\n#define MAX 50\nint main() {\n  int m, soma=0;\n  int mat[MAX][MAX];\n  scanf(\"%d\", &m);\n  for (int i=0; i<m; i++)\n    for (int j=0; j<m; j++)\n      scanf(\"%d\", &mat[i][j]);\n  for (int i=0; i<m; i++)\n    for (int j=i; j<m; j++)\n      soma += mat[i][j];\n  printf(\"%d\\n\", soma);\n}\n```",
+    "enunciado": "O que faz o código C abaixo?\n\n```c\n#include <stdio.h>\n#define MAX 50\n\nint main() {\n    int m, soma=0;\n    int mat[MAX][MAX];\n    scanf(\"%d\", &m);\n    for (int i=0; i<m; i++)\n        for (int j=0; j<m; j++)\n             scanf(\"%d\", &mat[i][j]);\n    for (int i=0; i<m; i++)\n        for (int j=i; j<m; j++)\n             soma += mat[i][j];\n    printf(\"%d\\n\", soma);\n}\n```",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "Soma dos elementos iguais ou acima da diagonal principal",
+      "texto": "Calcula e imprime a soma dos elementos iguais ou acima da diagonal principal da matriz.",
       "porque": "O segundo laço roda j de i até m−1, ou seja, colunas iguais ou à direita da diagonal, o que fica na diagonal e acima dela."
      },
      {
       "letra": "B",
-      "texto": "Soma de todos os elementos",
+      "texto": "Calcula e imprime a soma dos elementos da matriz.",
       "porque": "Somaria tudo se `j` começasse em 0. Como começa em `i`, os elementos abaixo da diagonal ficam de fora."
      },
      {
       "letra": "C",
-      "texto": "Imprime só mat[m][m]",
+      "texto": "Imprime somente o último valor da matriz, ou seja, mat[m][m].",
       "porque": "Nenhum índice é fixo em m, e `mat[m][m]` está fora da matriz (os índices vão até m−1). O código soma muitos elementos."
      },
      {
       "letra": "D",
-      "texto": "Soma dos elementos iguais ou abaixo da diagonal principal",
+      "texto": "Calcula e imprime a soma dos elementos iguais ou abaixo da diagonal principal da matriz.",
       "porque": "Para somar a parte de baixo, o laço interno iria de 0 até `i`. Aqui `j` parte de `i` e vai até `m`, a parte de cima."
      }
     ],
@@ -7911,7 +7911,7 @@ window.PROVAS = [
     "numero": 14,
     "topico": 1,
     "formato": "código",
-    "enunciado": "Qual a saída do programa C?\n\n```c\nvoid func1 (int x) { x = 9 * x; }\nvoid func2 (int v[]) { v[0] = 3 * v[0]; }\nvoid main (void) {\n  int x, v[2];\n  x = 222;\n  func1(x);\n  printf(\"x: %d\\n\", x);\n  v[0] = 333;\n  func2(v);\n  printf(\"v[0]: %d\\n\", v[0]);\n}\n```",
+    "enunciado": "Analise o seguinte programa em C e indique a saída correta:\n\n```c\nvoid func1 (int x) { x = 9 * x; }\nvoid func2 (int v[]) { v[0] = 3 * v[0]; }\nvoid main (void) {\n  int x, v[2];\n  x = 222;\n  func1(x);\n  printf(\"x: %d\\n\", x);\n  v[0] = 333;\n  func2(v);\n  printf(\"v[0]: %d\\n\", v[0]);\n}\n```",
     "alternativas": [
      {
       "letra": "A",
@@ -7952,31 +7952,31 @@ window.PROVAS = [
     "numero": 15,
     "topico": 3,
     "formato": "código",
-    "enunciado": "O que faz a função abaixo?\n\n```c\nLista* abracadabra (Lista* l, int v) {\n  Lista* novo = (Lista*) malloc(sizeof(Lista));\n  novo->info = v;\n  novo->prox = l;\n  novo->ant = NULL;\n  if (l) { l->ant = novo };\n  return novo;\n}\n```",
+    "enunciado": "O que faz o seguinte código em C?\n\n```c\nLista* abracadabra (Lista* l, int v) {\n  Lista* novo = (Lista*) malloc(sizeof(Lista));\n  novo->info = v;\n  novo->prox = l;\n  novo->ant = NULL;\n  if (l) { l->ant = novo };\n  return novo;\n}\n```",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "Insere no início de uma lista duplamente encadeada",
+      "texto": "Insere inteiros em uma lista duplamente encadeada, onde tais elementos são sempre inseridos no início da lista.",
       "porque": "O nó novo aponta `prox` para a antiga cabeça, tem `ant = NULL` e a antiga cabeça passa a ter `ant = novo`. Isso é inserção na cabeça de uma lista dupla."
      },
      {
       "letra": "B",
-      "texto": "Insere no final de uma lista duplamente encadeada",
+      "texto": "Insere inteiros em uma lista duplamente encadeada, onde tais elementos são sempre inseridos no final da lista.",
       "porque": "Para inserir no final, o `prox` do novo seria NULL e o antigo último apontaria para ele. Aqui o `prox` do novo é a lista inteira."
      },
      {
       "letra": "C",
-      "texto": "Insere no início de uma lista simples",
+      "texto": "Insere inteiros em uma lista simplesmente encadeada, onde tais elementos são sempre inseridos no início da lista.",
       "porque": "Lista simples não tem o campo `ant`. O código ajusta `ant` nos dois nós, logo a lista é dupla."
      },
      {
       "letra": "D",
-      "texto": "Insere no fim de uma lista simples",
+      "texto": "Insere inteiros em uma lista simplesmente encadeada, onde tais elementos são sempre inseridos no fim da lista.",
       "porque": "Além de usar `ant`, o novo nó vira a cabeça (é o valor devolvido) e não o último."
      }
     ],
     "gabarito": "A",
-    "resumo": "Leia os ponteiros: `novo->prox = l` coloca o novo na frente; `ant` mostra que é lista dupla. O `l->ant = novo` fecha a ligação de volta. Devolver `novo` indica que a cabeça mudou.",
+    "resumo": "Leia os ponteiros: `novo->prox = l` coloca o novo na frente; `ant` mostra que é lista dupla. O `l->ant = novo` fecha a ligação de volta. Devolver `novo` indica que a cabeça mudou. Detalhe do caderno: falta o `;` depois de `l->ant = novo` dentro das chaves, então o trecho não compila como está. A banca tratou como erro de digitação e marcou A.",
     "assuntos": [
      {
       "num": "0079",
@@ -7989,31 +7989,31 @@ window.PROVAS = [
     "numero": 16,
     "topico": 5,
     "formato": "simulação",
-    "enunciado": "Tabela hash com m = 9, endereçamento aberto com sondagem linear e h(k) = k mod 9. Inserindo as chaves 73, 24, 16, 46, 28, nessa ordem, qual a tabela final (posições 0 a 8)?",
+    "enunciado": "Considere uma tabela hash de comprimento m=9, que usa endereçamento aberto e a técnica de sondagem linear (linear probing) para resolver colisões. Considere também a função de dispersão h(k) = k mod m, onde k é a chave a ser inserida. Por fim, as seguintes chaves foram inseridas: 73, 24, 16, 46, 28 (nesta ordem). Escolha a opção que representa esta tabela após estas operações:",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "ø 73 16 ø ø 28 24 46 ø",
+      "texto": "ø – 73 – 16 – ø – ø – 28 – 24 – 46 – ø",
       "porque": "O 46 não pode estar na 7: ela já é do 16. Pela sondagem linear, o 46 (h = 1) colide com o 73 e vai para a posição 2, e o 28 (h = 1) vai para a 3."
      },
      {
       "letra": "B",
-      "texto": "28 46 73 ø ø ø ø 24 16",
+      "texto": "28 – 46 – 73 – ø – ø – ø – ø – 24 – 16",
       "porque": "73 mod 9 é 1, e não 2. A tabela não confere com os restos das divisões."
      },
      {
       "letra": "C",
-      "texto": "ø 73 46 28 ø ø 24 16 ø",
+      "texto": "ø – 73 – 46 – 28 – ø – ø – 24 – 16",
       "porque": "73 mod 9 = 1, 24 mod 9 = 6, 16 mod 9 = 7. O 46 também dá 1, colide e vai para 2; o 28 dá 1, colide com 73 e 46 e vai para 3. Tabela: ø 73 46 28 ø ø 24 16 ø."
      },
      {
       "letra": "D",
-      "texto": "73 46 ø ø ø ø 28 24 16",
+      "texto": "73 – 46 – ø – ø – ø – ø – 28 – 24 – 16",
       "porque": "Põe 73 na posição 0, mas 73 mod 9 = 1. Todos os valores estão deslocados."
      }
     ],
     "gabarito": "C",
-    "resumo": "Calcule o resto de cada chave e, havendo colisão, ande uma casa para a direita até achar vazio. Inserir na ordem do enunciado importa: quem chega primeiro fica com a posição natural. Observação: a alternativa C aparece no texto com 8 células (falta o ø final); tratei como erro de extração.",
+    "resumo": "Calcule o resto de cada chave e, havendo colisão, ande uma casa para a direita até achar vazio. Inserir na ordem do enunciado importa: quem chega primeiro fica com a posição natural. Detalhe do caderno oficial: a alternativa c traz só 8 células (falta o ø final da posição 8); a banca marcou c mesmo assim, porque é a única que bate com as posições 1, 2, 3, 6 e 7.",
     "assuntos": [
      {
       "num": "0107",
@@ -8026,26 +8026,26 @@ window.PROVAS = [
     "numero": 17,
     "topico": 4,
     "formato": "conceito",
-    "enunciado": "Sobre árvores vermelho-preto, considere:\n\n1. A raiz é preta.\n2. Toda subárvore nula é preta.\n3. Se um nó é vermelho, os filhos são pretos.",
+    "enunciado": "Sobre árvores vermelho-preto, considere as afirmações:\n\n1. A raiz é preta\n2. Toda subárvore nula é preta,\n3. Se um nó é vermelho, então os filhos são pretos.\n\nQual são verdadeiras:",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "Apenas 2 e 3",
+      "texto": "Apenas as afirmações 2 e 3",
       "porque": "Deixa a 1 de fora, mas ela também é propriedade da árvore rubro-negra: a raiz é sempre preta."
      },
      {
       "letra": "B",
-      "texto": "Todas",
+      "texto": "Todas as afirmações",
       "porque": "As três são propriedades da árvore vermelho-preto (a versão do Cormen): raiz preta, folhas nulas pretas e nenhum vermelho com filho vermelho."
      },
      {
       "letra": "C",
-      "texto": "Apenas 1 e 2",
+      "texto": "Apenas as afirmações 1 e 2",
       "porque": "Deixa a 3 de fora. A regra de que o filho de um nó vermelho é preto é justamente o que limita a altura."
      },
      {
       "letra": "D",
-      "texto": "Apenas 1",
+      "texto": "Apenas a afirmação 1",
       "porque": "As propriedades 2 e 3 também valem, então a 1 sozinha é incompleta."
      }
     ],
@@ -8063,26 +8063,26 @@ window.PROVAS = [
     "numero": 18,
     "topico": 8,
     "formato": "afirmações",
-    "enunciado": "Sobre grafos, considere:\n\n1. O algoritmo de Dijkstra encontra o menor caminho, mas só serve para casos pequenos ou médios por ter complexidade exponencial.\n2. A busca em largura normalmente usa uma fila.\n3. Em grafos esparsos, a matriz de adjacências consome mais memória do que a lista de adjacências.",
+    "enunciado": "Sobre os grafos, considere as afirmações:\n\n1. O algoritmo de Dijkstra é conhecido por descobrir o menor caminho entre dois vértices, mas só funciona para casos pequenos ou médios, por possuir complexidade exponencial.\n2. Na implementação da busca em largura, uma fila é normalmente utilizada.\n3. Em grafos esparsos, a implementação por matriz de adjacências consome mais memória do que a implementação por lista de adjacências.\n\nQuais são verdadeiras?",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "Apenas 2 e 3",
+      "texto": "Apenas as afirmações 2 e 3",
       "porque": "A 1 é falsa: Dijkstra é polinomial, O((V+E) log V) com heap. A 2 é verdadeira (BFS usa fila). A 3 é verdadeira: a matriz gasta V² mesmo com poucas arestas, e a lista gasta V + E."
      },
      {
       "letra": "B",
-      "texto": "Apenas 1 e 2",
+      "texto": "Apenas as afirmações 1 e 2",
       "porque": "Inclui a 1 (falsa) e exclui a 3 (verdadeira)."
      },
      {
       "letra": "C",
-      "texto": "Apenas 1",
+      "texto": "Apenas a afirmação 1",
       "porque": "Só a 1 é falsa, então essa alternativa marca exatamente a errada como certa."
      },
      {
       "letra": "D",
-      "texto": "Nenhuma",
+      "texto": "Nenhuma das afirmações",
       "porque": "As afirmações 2 e 3 são verdadeiras, então não é verdade que nenhuma vale."
      }
     ],
@@ -8108,7 +8108,7 @@ window.PROVAS = [
     "numero": 19,
     "topico": 4,
     "formato": "cálculo",
-    "enunciado": "Em uma árvore AVL, já tendo a referência para o nó a ser removido (sem fazer busca), quais são o melhor e o pior caso da remoção?",
+    "enunciado": "Em uma árvore AVL, considerando que já possuímos a referência para um nó que queremos remover da árvore (não precisa fazer busca), o melhor e o pior caso para remover este elemento são, respectivamente:",
     "alternativas": [
      {
       "letra": "A",
@@ -8132,7 +8132,7 @@ window.PROVAS = [
      }
     ],
     "gabarito": "B",
-    "resumo": "Banca aponta B. Observação: se a remoção de um nó com dois filhos exigir achar o sucessor, o melhor caso também seria O(log n) (alternativa A). Fique com B e saiba que depende do que se conta. Altura da AVL é O(log n), e isso limita o pior caso.",
+    "resumo": "A banca marcou B. Observação: se a remoção de um nó com dois filhos exigir achar o sucessor, o melhor caso também seria O(log n) (alternativa A). Fique com B e saiba que depende do que se conta. Altura da AVL é O(log n), e isso limita o pior caso.",
     "assuntos": [
      {
       "num": "0176",
@@ -8149,7 +8149,7 @@ window.PROVAS = [
     "numero": 20,
     "topico": 3,
     "formato": "cálculo",
-    "enunciado": "Numa lista implementada com vetor, qual o pior caso de: busca por um elemento, acesso por índice, inserção no início, inserção no final e remoção por índice, nessa ordem?",
+    "enunciado": "Considere as seguintes operações em uma lista implementada usando vetores: busca por um elemento, acesso por índice, inserção no início da lista, inserção no final da lista, remoção por índice. As complexidades do pior caso dessas operações, na ordem mencionada, são:",
     "alternativas": [
      {
       "letra": "A",
@@ -8192,37 +8192,37 @@ window.PROVAS = [
   "edital": "020/2023",
   "slug": "2023-020",
   "ano": 2023,
-  "oficial": false,
+  "oficial": true,
   "questoes": [
    {
     "numero": 1,
     "topico": 6,
     "formato": "cálculo",
-    "enunciado": "Dado o vetor ordenado `10 30 50 60 70 80 90 100 120 130` (posições 0 a 9), quantas comparações a busca binária faz no pior caso?",
+    "enunciado": "Dado o vetor abaixo, uma busca binária realizará a comparação de uma chave qualquer com elementos do vetor. Quantas comparações serão necessárias no pior caso (aquele que maximiza o número de comparações feitas pelo algoritmo)?\n\n| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |\n|---|---|---|---|---|---|---|---|---|---|\n| 10 | 30 | 50 | 60 | 70 | 80 | 90 | 100 | 120 | 130 |",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "6",
+      "texto": "6 comparações",
       "porque": "Seis comparações é mais do que a busca binária precisa para 10 elementos. A cada passo o intervalo cai pela metade: 10, 5, 2, 1."
      },
      {
       "letra": "B",
-      "texto": "10",
+      "texto": "10 comparações",
       "porque": "É o pior caso da busca sequencial, que pode olhar todos os elementos. A binária descarta metade a cada comparação."
      },
      {
       "letra": "C",
-      "texto": "4",
+      "texto": "4 comparações",
       "porque": "O pior caso é ⌊log2 10⌋ + 1 = 3 + 1 = 4 comparações: o intervalo vai de 10 para 5, 2, 1 e depois para vazio."
      },
      {
       "letra": "D",
-      "texto": "1",
+      "texto": "1 comparação",
       "porque": "É o melhor caso, quando a chave está exatamente no meio na primeira tentativa. A pergunta é o pior caso."
      }
     ],
     "gabarito": "C",
-    "resumo": "Busca binária faz no máximo ⌊log2 n⌋ + 1 comparações. Para 10 elementos, ⌊3,32⌋ + 1 = 4. Decore a fórmula e a conta sai sem simular.",
+    "resumo": "Busca binária faz no máximo ⌊log2 n⌋ + 1 comparações. Para 10 elementos, ⌊3,32⌋ + 1 = 4. Decore a fórmula e a conta sai sem simular. Gabarito oficial: C.",
     "assuntos": [
      {
       "num": "0090",
@@ -8235,26 +8235,26 @@ window.PROVAS = [
     "numero": 2,
     "topico": 7,
     "formato": "conceito",
-    "enunciado": "Sobre a ordenação por inserção, assinale a correta:",
+    "enunciado": "Sobre o algoritmo de ordenação por inserção (Insertion Sort), marque a alternativa **correta**.",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "Fica mais rápida com o vetor quase ordenado e é mais lenta com o vetor invertido",
+      "texto": "Ele tende a ficar mais rápido para vetores que estão quase ordenados de acordo com o critério usado pelo algoritmo é mais lento quando o vetor está invertido",
       "porque": "Cada elemento só anda até achar seu lugar. Quase ordenado, quase não anda nada: O(n). Invertido, cada um percorre tudo à esquerda: O(n²)."
      },
      {
       "letra": "B",
-      "texto": "O tempo independe da ordem inicial, sempre quadrático",
+      "texto": "O tempo de ordenação independe da ordem inicial dos elementos, sendo sempre quadrático",
       "porque": "Isso vale para a seleção, não para a inserção. Na inserção a quantidade de deslocamentos depende de quantos elementos estão fora de ordem."
      },
      {
       "letra": "C",
-      "texto": "O tempo independe da ordem, sempre linear",
+      "texto": "O tempo de ordenação independe da ordem dos elementos, sendo sempre linear",
       "porque": "No pior caso (invertido) é quadrático. Linear só no melhor caso."
      },
      {
       "letra": "D",
-      "texto": "Não ordena chaves negativas",
+      "texto": "Ele não ordena chaves de valor negativo, dado que a inserção em posições negativas é inviável",
       "porque": "Ordena normalmente: só usa comparação entre chaves, e o sinal não importa."
      }
     ],
@@ -8272,7 +8272,7 @@ window.PROVAS = [
     "numero": 3,
     "topico": 3,
     "formato": "simulação",
-    "enunciado": "Uma pilha contém `[4, 16, 1, 7, 8, 13]`, com o topo à esquerda. Três desempilhamentos são feitos, depois empilha-se 5 e depois 2. Como fica a pilha?",
+    "enunciado": "Dada a pilha de números inteiros [4, 16, 1, 7, 8, 13] onde o topo é o elemento mais à esquerda, após a realização de três (3) operações de desempilhar elementos, uma (1) operação de empilhar que insere o valor 5 e uma (1) operação de empilhar que insere o valor 2, a pilha ficará com qual configuração?",
     "alternativas": [
      {
       "letra": "A",
@@ -8309,31 +8309,31 @@ window.PROVAS = [
     "numero": 4,
     "topico": 5,
     "formato": "afirmações",
-    "enunciado": "Sobre tabela hash com encadeamento, considere:\n\nI. Não gera colisões secundárias.\nII. Tem custo O(n) no pior caso.\nIII. Ao contrário do endereçamento aberto, aceita mais chaves que o tamanho da tabela.",
+    "enunciado": "Sobre um Hash por Encadeamento, pode-se afirmar que:\n\nI. Ele não gera colisões secundárias\nII. Ele tem custo temporal O(n) no pior caso, sendo n o número de elementos na tabela\nIII. Ao contrário do endereçamento aberto, o encadeamento permite trabalhar com quantidade de chaves superior ao tamanho da tabela\n\n(No caderno os itens vêm rotulados a, b, c, mas as alternativas os chamam de I, II e III.)",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "Nenhuma",
+      "texto": "Nenhuma alternativa é verdadeira",
       "porque": "As três são verdadeiras, então não é o caso."
      },
      {
       "letra": "B",
-      "texto": "Apenas II",
+      "texto": "Apenas II é verdadeira",
       "porque": "Deixa de fora a I e a III, que também são verdadeiras."
      },
      {
       "letra": "C",
-      "texto": "Apenas I e II",
+      "texto": "Apenas I e II são verdadeiras",
       "porque": "Falta a III: cada posição guarda uma lista, então dá para ter mais chaves que posições."
      },
      {
       "letra": "D",
-      "texto": "Todas",
+      "texto": "Todas são verdadeiras",
       "porque": "I: colisão secundária (agrupamento) é problema de endereçamento aberto; no encadeamento, quem colide só entra na lista do balde. II: se todas as chaves caírem no mesmo balde, a busca varre uma lista de n itens. III: cada balde é uma lista, sem limite de tamanho."
      }
     ],
     "gabarito": "D",
-    "resumo": "Encadeamento: sem agrupamento, fator de carga pode passar de 1, pior caso O(n) se tudo cair no mesmo balde. Endereçamento aberto exige n ≤ m. Esta é uma das provas sem gabarito oficial, então a letra é conferida pelo conteúdo do curso.",
+    "resumo": "Encadeamento: sem agrupamento, fator de carga pode passar de 1, pior caso O(n) se tudo cair no mesmo balde. Endereçamento aberto exige n ≤ m. Gabarito oficial: D, e bate com o curso.",
     "assuntos": [
      {
       "num": "0106",
@@ -8350,26 +8350,26 @@ window.PROVAS = [
     "numero": 5,
     "topico": 4,
     "formato": "afirmações",
-    "enunciado": "Compare um vetor mantido ordenado com uma árvore binária de pesquisa balanceada:\n\nI. O vetor tem inserção e remoção mais baratas por não alocar nós.\nII. No pior caso, a busca custa assintoticamente o mesmo nos dois.",
+    "enunciado": "Considerando-se as operações com um vetor, mantido ordenado a cada inserção de chave, e uma árvore binária de pesquisa balanceada, pode-se dizer que:\n\nI. O vetor ordenado apresenta custo de inserção e de remoção menores que o da árvore, pois não exigir alocação dinâmica de nós\nII. No pior caso, o custo da operação de busca por uma chave é assintoticamente igual tanto no vetor ordenado quanto na árvore\n\n(No caderno os itens vêm rotulados a e b, mas as alternativas os chamam de I e II.)",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "Apenas I",
+      "texto": "Apenas I é verdadeira",
       "porque": "A I é falsa e a II é verdadeira, então essa combinação erra nas duas."
      },
      {
       "letra": "B",
-      "texto": "Apenas II",
+      "texto": "Apenas II é verdadeira",
       "porque": "I falsa: inserir ou remover no vetor ordenado desloca elementos, O(n), enquanto na árvore balanceada é O(log n). Alocar nó custa pouco perto disso. II verdadeira: busca binária no vetor e busca na árvore balanceada são O(log n)."
      },
      {
       "letra": "C",
-      "texto": "As duas",
+      "texto": "As duas são verdadeiras",
       "porque": "Aceita a I, que é falsa: o custo do deslocamento no vetor é maior que o da alocação do nó."
      },
      {
       "letra": "D",
-      "texto": "Nenhuma",
+      "texto": "Nenhuma é verdadeira",
       "porque": "A II é verdadeira: os dois têm busca O(log n)."
      }
     ],
@@ -8395,31 +8395,31 @@ window.PROVAS = [
     "numero": 6,
     "topico": 4,
     "formato": "conceito",
-    "enunciado": "Considere uma árvore com três nós e raiz 5 (a figura não veio no caderno). Assinale a alternativa correta:",
+    "enunciado": "Considere a figura abaixo, que ilustra uma árvore com três nós contendo chaves inteiras, sendo que a raiz da árvore (marcada com \"x\") contém a chave 5, e marque a alternativa **correta**.\n\nNa figura, a raiz 5 tem o 7 como filho esquerdo e o 6 como filho direito.",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "Pode ser rubro-negra, pois está balanceada",
-      "porque": "Estar balanceada não basta: rubro-negra depende das cores dos nós e das regras de coloração. Sem a figura, não dá para afirmar."
+      "texto": "A árvore pode ser uma árvore vermelho e preto (RB-tree), visto que está balanceada (lembrando que não é necessário representar os nós com as cores vermelho e preto no desenho)",
+      "porque": "Rubro-negra é um tipo de árvore binária de pesquisa, e esta não é ABB: o filho esquerdo (7) é maior que a raiz (5). Estar balanceada não basta; sem ser ABB, não há como ser rubro-negra, seja qual for a coloração."
      },
      {
       "letra": "B",
-      "texto": "Pode representar uma árvore binária de pesquisa, com ou sem balanceamento",
-      "porque": "Três nós com raiz 5 cabem numa ABB de várias formas, balanceada ou não. É a afirmação mais geral e a que sempre pode valer."
+      "texto": "A árvore pode representar uma árvore binária de pesquisa, a qual pode estar com ou sem balanceamento",
+      "porque": "Para ser ABB, tudo à esquerda da raiz tem que ser menor que 5 e tudo à direita, maior. Aqui o 7 está à esquerda e é maior que 5, então a ordem de ABB está violada. Trocar de lado resolveria, mas a figura é como é. A banca não aceita esta alternativa."
      },
      {
       "letra": "C",
-      "texto": "Pode representar uma heap mínima",
-      "porque": "Heap mínima pede raiz menor ou igual aos filhos. Se a raiz 5 tiver filho menor, não é. A afirmação depende dos valores, que estão na figura ausente."
+      "texto": "A árvore pode representar uma heap mínima",
+      "porque": "Em heap mínima cada pai é menor ou igual aos filhos, e a árvore é completa. A raiz 5 é menor que 7 e que 6, e os dois filhos ocupam as posições esperadas. Entre 7 e 6 não há relação exigida na heap. Vale, e é a letra oficial."
      },
      {
       "letra": "D",
-      "texto": "É AVL, pois está balanceada",
-      "porque": "Dizer que É AVL exige que a diferença de altura seja no máximo 1 e que seja ABB. Sem a figura não se prova."
+      "texto": "A árvore é do tipo AVL, pois está balanceada",
+      "porque": "AVL é uma ABB com diferença de altura entre as subárvores de no máximo 1. A altura está ok, mas a árvore não é ABB (7 à esquerda de 5), então não é AVL. Estar balanceada é condição necessária, não suficiente."
      }
     ],
-    "gabarito": "B",
-    "resumo": "A figura não veio, então a letra B foi inferida (as outras exigem informação que só a figura traria). Quando a figura some, a alternativa mais geral e com 'pode' costuma ser a segura. Sem gabarito oficial desta prova.",
+    "gabarito": "C",
+    "resumo": "Com a figura: raiz 5, filho esquerdo 7, filho direito 6. Não é ABB (7 > 5 à esquerda), logo também não é AVL nem rubro-negra. É heap mínima, pois 5 ≤ 7 e 5 ≤ 6. Para árvores pequenas, teste primeiro a regra de ordem (ABB: esquerda menor, direita maior; heap mínima: pai menor que os filhos) antes de olhar o balanceamento. Gabarito oficial: C.",
     "assuntos": [
      {
       "num": "0099",
@@ -8434,32 +8434,37 @@ window.PROVAS = [
       "modulo": "14-arvores.md"
      }
     ],
-    "originais": []
+    "figuras": [
+     "2023-020-q06"
+    ],
+    "originais": [
+     "provas-ppgi-ufam/2023-020/figuras/q06-arvore.png"
+    ]
    },
    {
     "numero": 7,
     "topico": 2,
     "formato": "conceito",
-    "enunciado": "Sobre complexidade, assinale a alternativa correta:",
+    "enunciado": "Sobre a complexidade de algoritmos, marque a alternativa **correta**:",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "A busca binária é O(N/2) no pior caso",
+      "texto": "A busca binária em vetor ordenado é realizada em tempo O(N/2) no pior caso, sendo N o tamanho do vetor de chaves",
       "porque": "N/2 é linear, equivale a O(N). A busca binária é O(log N)."
      },
      {
       "letra": "B",
-      "texto": "Inserir sem ordem numa lista encadeada custa constante no pior caso",
+      "texto": "É possível inserir elementos de forma não ordenada em uma lista encadeada a custo constante no pior caso, independentemente da quantidade de elementos da lista encadeada",
       "porque": "Inserindo na cabeça (ou na cauda com ponteiro para o fim), só se ajustam ponteiros, sem percorrer nada: O(1)."
      },
      {
       "letra": "C",
-      "texto": "Inserir no início de um vetor custa constante no pior caso",
+      "texto": "A inserção de elementos no início de um vetor é feita a custo constante no pior caso, independentemente da quantidade de elementos do vetor",
       "porque": "É preciso deslocar todos os elementos uma casa: O(n)."
      },
      {
       "letra": "D",
-      "texto": "Inserir numa árvore binária de pesquisa custa constante no pior caso",
+      "texto": "A inserção em uma árvore binária de pesquisa pode ser realizada a custo constante no pior caso, independentemente da quantidade de elementos da árvore",
       "porque": "Tem que descer até a posição certa: O(log n) balanceada, O(n) degenerada."
      }
     ],
@@ -8481,31 +8486,31 @@ window.PROVAS = [
     "numero": 8,
     "topico": 7,
     "formato": "código",
-    "enunciado": "Considere o código (resumido): `par` intercala `v[inicio..meio]` e `v[meio+1..fim]`, ambas ordenadas, usando o vetor auxiliar `vaux`; `sortR` calcula o meio, chama a si mesma nas duas metades e depois chama `par`; `sort` aloca `vaux`, chama `sortR` e libera `vaux`. Que algoritmo é esse?\n\n(O código completo não veio no texto; vale esta descrição.)",
+    "enunciado": "Considere o pseudo-código abaixo e escolha a opção **correta**:\n\n```c\nvoid par ( int v[], int inicio, int meio, int fim, int vaux[]) {\n    unsigned i=inicio, j=meio+1, k=inicio;\n    while((i <= meio) && (j <= fim) ) {\n        if ( v[i] < v[j]) { vaux[k] = v[i]; i++; }\n        else { vaux[k] = v[j]; j++; }\n        k++;\n    }\n    while(i <= meio) { vaux[k] = v[i]; i++; k++; }\n    while(j <= fim) { vaux[k] = v[j]; j++; k++; }\n    for(i = inicio; i <= fim ; i++) { v[i] = vaux[i]; }\n}\n\nvoid sortR (int v[], int inicio, int fim, int vaux[]) {\n    int meio;\n    if(inicio < fim) {\n        meio = (inicio+fim)/2;\n        sortR(v, inicio, meio, vaux);\n        sortR(v, meio+1, fim, vaux);\n        par (v, inicio, meio, fim, vaux);\n    }\n}\n\nvoid sort (int v[], int tam) {\n    int * vaux;\n    vaux = (int*) malloc (sizeof(int) * tam);\n    sortR( v, 0, tam -1 , vaux);\n    free(vaux);\n}\n```",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "Quick Sort",
+      "texto": "Ela implementa um algoritmo recursivo conhecido como Quick Sort ao chamar a função recursiva sortR para ordenar o vetor v",
       "porque": "O Quick Sort escolhe um pivô e particiona antes de recursar, sem vetor auxiliar para intercalar."
      },
      {
       "letra": "B",
-      "texto": "Radix Sort",
+      "texto": "Ela implementa um algoritmo recursivo conhecido como Radix Sort ao chamar a função recursiva sortR para ordenar o vetor v",
       "porque": "O Radix ordena por dígito, sem comparação entre elementos nem recursão em metades."
      },
      {
       "letra": "C",
-      "texto": "Merge Sort",
+      "texto": "Ela implementa um algoritmo recursivo conhecido como Merge Sort ao chamar a função recursiva sortR para ordenar o vetor v",
       "porque": "Divide o vetor ao meio, ordena cada metade recursivamente e intercala as duas com um vetor auxiliar. É o Merge Sort."
      },
      {
       "letra": "D",
-      "texto": "Não ordena o vetor",
-      "porque": "Se a intercalação está correta, o vetor sai ordenado. A banca trata o código como correto."
+      "texto": "Ela não ordena o vetor v",
+      "porque": "O código está correto: `par` intercala as duas metades já ordenadas, e `sortR` garante que cada metade chegou ordenada. Rodei o código em C com {5,3,9,1,7,2,8,2,0,4} e saiu 0 1 2 2 3 4 5 7 8 9."
      }
     ],
     "gabarito": "C",
-    "resumo": "Divisão ao meio + recursão nas duas partes + intercalação com vetor auxiliar = Merge Sort. A letra assume que o código está correto, e o resumo do enunciado não permite conferir linha a linha.",
+    "resumo": "Divisão ao meio + recursão nas duas partes + intercalação com vetor auxiliar (`par`) = Merge Sort. Conferi rodando em C: o vetor sai ordenado, então D é falsa. O `unsigned i` em `par` não atrapalha, porque i nunca fica negativo. Gabarito oficial: C.",
     "assuntos": [
      {
       "num": "0094",
@@ -8518,31 +8523,31 @@ window.PROVAS = [
     "numero": 9,
     "topico": 1,
     "formato": "código",
-    "enunciado": "O pseudocódigo recursivo (com `len`, `max` e `lista[1:]`) aparecia como imagem, que não veio no caderno. Qual a saída?\n\n(a figura não veio no caderno)",
+    "enunciado": "Qual é a saída do seguinte pseudo-código? Considere que:\n\n- `len(lista)` retorna o número de elementos em uma lista\n- `max(a, b)` retorna o maior dos argumentos. Por exemplo, max(5, 8) retorna 8 e max(3, 1) retorna 3\n- A notação `lista[1:]` equivale a uma cópia da lista sem o primeiro elemento. Por exemplo, se a lista for lista = [1, 2, 3], então lista[1:] será a lista [2, 3]\n\n```python\ndef recursao(lista):\n    if len(lista) == 1:\n        return lista[0]\n    else:\n        return max(lista[0], recursao(lista[1:]))\n\nprint(recursao([11, 2, 13, 5, 7, 3]))\n```",
     "alternativas": [
      {
       "letra": "A",
       "texto": "13",
-      "porque": "Sem o pseudocódigo não dá para conferir este valor."
+      "porque": "A função devolve o maior elemento da lista. Desce até [3], que devolve 3; na volta: max(7,3)=7, max(5,7)=7, max(13,7)=13, max(2,13)=13, max(11,13)=13. Rodei em Python e imprimiu 13."
      },
      {
       "letra": "B",
       "texto": "3",
-      "porque": "Sem o pseudocódigo não dá para conferir este valor."
+      "porque": "3 é o último elemento, o valor do caso base. Ele sobe pela recursão, mas cada `max` o compara com um elemento maior e descarta."
      },
      {
       "letra": "C",
       "texto": "11",
-      "porque": "Sem o pseudocódigo não dá para conferir este valor."
+      "porque": "11 é o primeiro elemento. `max(11, recursao([2, 13, ...]))` só devolveria 11 se o resto da lista não tivesse nada maior, mas tem o 13."
      },
      {
       "letra": "D",
       "texto": "2",
-      "porque": "Sem o pseudocódigo não dá para conferir este valor."
+      "porque": "2 é o segundo elemento e o menor da lista, e a função devolve o maior. `max` nunca escolhe o 2 aqui."
      }
     ],
-    "gabarito": null,
-    "resumo": "Questão sem resposta: a figura não veio, e a letra não foi definida. Em recursão com fatia `lista[1:]`, o caso base é lista vazia ou de um elemento e cada chamada trata o primeiro elemento. Na prova, desenhe a pilha de chamadas.",
+    "gabarito": "A",
+    "resumo": "Recursão que devolve o maior elemento: caso base com um elemento, e cada chamada faz `max(primeiro, maior do resto)`. Os valores sobem na volta: 3, 7, 7, 13, 13, 13. Na prova, escreva a pilha de chamadas de baixo para cima. Gabarito oficial: A.",
     "assuntos": [
      {
       "num": "0032",
@@ -8555,31 +8560,31 @@ window.PROVAS = [
     "numero": 10,
     "topico": 3,
     "formato": "simulação",
-    "enunciado": "O pseudocódigo (que não veio no caderno) calcula o produto de uma matriz m×n por uma n×p, com m = 2, n = 3 e p = 2. Qual o valor de `resultMatrix`?\n\n(a figura não veio no caderno)",
+    "enunciado": "Qual é o resultado do seguinte pseudo-código na variável resultMatrix quando as entradas são duas matrizes \"matrixA\" e \"matrixB\" de dimensões m x n e n x p, respectivamente? Sendo m=2, n=3 e p=2\n\n```java\nint[][] matrixA = {{1, 0, 2}, {0, 5, 0}};\nint[][] matrixB = {{0, 8}, {9, 0}, {0, 11}};\nint[][] resultMatrix = new int[m][p];\n\nfor (int i = 0; i < m; i++) {\n    for (int j = 0; j < p; j++) {\n        int sum = 0;\n        for (int k = 0; k < n; k++) {\n            sum += matrixA[i][k] * matrixB[k][j];\n        }\n        resultMatrix[i][j] = sum;\n    }\n}\n```",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "{{0, 0}, {0, 0}}",
-      "porque": "Tem a forma certa (2×2), mas todos zeros só ocorre se os produtos se anularem. Sem o código, é possível, não confirmado."
+      "texto": "resultMatrix = {{0 , 0}, {0, 0}}",
+      "porque": "A forma 2x2 está certa, mas os valores não: há produtos não nulos, como 1·8 + 0·0 + 2·11 = 30 em [0][1]."
      },
      {
       "letra": "B",
-      "texto": "{{0, 30, 0}, {45, 0, 0}}",
-      "porque": "Tem 2 linhas e 3 colunas. O produto de uma 2×3 por uma 3×2 é 2×2."
+      "texto": "resultMatrix = {{0 , 30, 0}, {45, 0, 0}}",
+      "porque": "Tem 2 linhas e 3 colunas. O produto de uma 2x3 por uma 3x2 é 2x2 (m x p)."
      },
      {
       "letra": "C",
-      "texto": "{{0, 30}, {45, 0}, {9, 8}}",
-      "porque": "Tem 3 linhas e 2 colunas. O resultado deveria ter m = 2 linhas."
+      "texto": "resultMatrix = {{0 , 30}, {45, 0}, {9, 8}}",
+      "porque": "Tem 3 linhas e 2 colunas, mas o resultado tem m = 2 linhas. O {9, 8} não aparece em nenhuma conta."
      },
      {
       "letra": "D",
-      "texto": "{{0, 30}, {45, 0}}",
-      "porque": "É 2×2, a forma que m = 2 e p = 2 impõem. A letra D é um palpite: só A e D têm essa forma e as matrizes não estão no texto."
+      "texto": "resultMatrix = {{0 , 30}, {45, 0}}",
+      "porque": "[0][0] = 1·0 + 0·9 + 2·0 = 0; [0][1] = 1·8 + 0·0 + 2·11 = 30; [1][0] = 0·0 + 5·9 + 0·0 = 45; [1][1] = 0·8 + 5·0 + 0·11 = 0. Rodei em Python e deu [[0, 30], [45, 0]]."
      }
     ],
     "gabarito": "D",
-    "resumo": "Antes de simular, confira a forma do resultado: (m×n)·(n×p) é m×p, e aqui 2×2. Isso descarta B e C. A letra D tem confiança baixa, sem a figura, e a prova não tem gabarito oficial.",
+    "resumo": "Produto de matrizes: (m x n)·(n x p) dá m x p, aqui 2x2, o que já descarta B e C. Depois calcule cada célula como soma de linha de A por coluna de B: 0, 30, 45, 0. Conferi rodando. Gabarito oficial: D.",
     "assuntos": [
      {
       "num": "0039",
@@ -8600,31 +8605,31 @@ window.PROVAS = [
     "numero": 1,
     "topico": 7,
     "formato": "código",
-    "enunciado": "Considere o código que deveria ordenar por seleção, de forma crescente:\n\n```c\nvoid algoritmo(int v[], int n) {\n  int i,j,k, tmp;\n  for(i = 0; i < n-1; i++) {\n    k = i;\n    for(j = 0; j < n; j++) {\n      if(v[k] > v[j]) { k = j }\n    }\n    tmp = v[k];\n    v[k] = v[i];\n    v[i] = tmp;\n  }\n```",
+    "enunciado": "Considere o código abaixo cujo objetivo é ordenar um vetor de inteiros com n elementos de maneira crescente:\n\n```c\nvoid algoritmo(int v[], int n) {\n  int i,j,k, tmp;\n\n for(i = 0; i < n-1; i++) {\n  k = i;\n    for(j = 0; j < n; j++) {\n        if(v[k] > v[j]) {  k = j  }\n    }\n    tmp = v[k];\n    v[k] = v[i];\n    v[i] = tmp;\n}\n```",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "Ordena por seleção de forma crescente",
-      "porque": "Não ordena: o laço interno começa em `j = 0`, e não em `i+1`, então acha o mínimo do vetor inteiro a cada passo e o troca com a posição `i`. Além disso, faltam `;` depois de `k = j` e a chave `}` final."
+      "texto": "O código ordena o vetor por seleção de maneira crescente",
+      "porque": "Não ordena: o laço interno começa em `j = 0`, e não em `i+1`, então acha o mínimo do vetor inteiro a cada passo e o troca com a posição `i`. Além disso, falta `;` depois de `k = j` e falta uma `}`."
      },
      {
       "letra": "B",
-      "texto": "Não ordena e não se corrige mudando uma linha",
-      "porque": "Há dois erros de sintaxe (o `;` e o `}`) além do `j = 0`, então corrigir exigiria mexer em mais de uma linha."
+      "texto": "O código não ordena o vetor por seleção e não pode ser modificado para ordenar por seleção de maneira crescente com correção em uma única linha de código.",
+      "porque": "Há dois erros de sintaxe (o `;` e a `}`) além do `j = 0`, então corrigir exigiria mexer em mais de uma linha."
      },
      {
       "letra": "C",
-      "texto": "Pode ser corrigido em uma única linha",
+      "texto": "O código pode ser alterado em uma única linha para ordenar o vetor de maneira crescente por seleção",
       "porque": "O erro lógico se corrige trocando `j = 0` por `j = i + 1`, mas os erros de sintaxe ficam em outras linhas. Daí a ambiguidade."
      },
      {
       "letra": "D",
-      "texto": "Ordena, mas não usa seleção",
+      "texto": "O código ordena corretamente o vetor, mas não usa o algoritmo de seleção",
       "porque": "Procura o mínimo e troca, que é seleção. O que falha é o início do laço interno."
      }
     ],
     "gabarito": "anulada",
-    "resumo": "Anulada pela banca. Rodando com {5,3,4,1,2}, o código (já com `;` e `}`) devolve 3 4 5 1 2, ou seja, não ordena. Há erro de lógica e de sintaxe, então B e C ficam ambíguas. Moral: na seleção, o laço interno começa em i+1.",
+    "resumo": "Anulada pela banca. O código do caderno tem erros de lógica e de sintaxe: o laço interno começa em `j = 0` em vez de `i+1`, falta `;` depois de `k = j` e falta uma `}`. Rodando com {5,3,4,1,2} (já com `;` e `}`), devolve 3 4 5 1 2, ou seja, não ordena. Com mais de um erro, B e C ficam ambíguas. Moral: na seleção, o laço interno começa em i+1.",
     "assuntos": [
      {
       "num": "0092",
@@ -8637,26 +8642,26 @@ window.PROVAS = [
     "numero": 2,
     "topico": 7,
     "formato": "afirmações",
-    "enunciado": "Sobre o Heapsort, considere:\n\nI. Tem custo O(n log n) no pior caso.\nII. Tem duas etapas: construir o heap e usá-lo para uma seleção eficiente.\nIII. Tem custo máximo quadrático no pior caso.",
+    "enunciado": "Sobre o heapsort, é correto afirmar que:\n\nI) Seu custo no pior caso é O(n log n), onde n é o tamanho do vetor\nII) O algoritmo pode ser dividido em duas etapas, sendo a primeira usada para construir um heap e a segunda para usar o heap como forma eficiente de executar uma estratégia de ordenação por seleção\nIII) Tem custo máximo quadrático no pior caso",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "Apenas I e II",
+      "texto": "Apenas I e II estão corretas",
       "porque": "I verdadeira: construir o heap é O(n) e cada uma das n extrações custa O(log n). II verdadeira: monta o heap e depois extrai o máximo ou mínimo repetidamente. III falsa: o pior caso não passa de O(n log n)."
      },
      {
       "letra": "B",
-      "texto": "Apenas II e III",
+      "texto": "Apenas II e III estão corretas",
       "porque": "Inclui a III, que é falsa, e deixa de fora a I, que é verdadeira."
      },
      {
       "letra": "C",
-      "texto": "Apenas I",
+      "texto": "Apenas I está correta",
       "porque": "I é verdadeira, mas a II também. Falta ela."
      },
      {
       "letra": "D",
-      "texto": "Apenas III",
+      "texto": "Apenas III está correta",
       "porque": "A III é falsa: o Heapsort garante O(n log n), nunca quadrático."
      }
     ],
@@ -8674,7 +8679,7 @@ window.PROVAS = [
     "numero": 3,
     "topico": 4,
     "formato": "cálculo",
-    "enunciado": "Um heap binário de mínimo com N elementos está num vetor, com o mínimo na posição zero. Remover a raiz e deixar o heap correto custa, da melhor forma:",
+    "enunciado": "Em um heap binário de mínimo contendo N elementos e implementado em um vetor, sabendo-se que o elemento mínimo está na posição zero do vetor, a operação de remover o elemento da raiz (o da posição zero) e deixar a estrutura do heap correta ao final, com o restante das chaves formando um heap, pode ser implementada, na melhor maneira possível, a custo:",
     "alternativas": [
      {
       "letra": "A",
@@ -8683,17 +8688,17 @@ window.PROVAS = [
      },
      {
       "letra": "B",
-      "texto": "log N no pior caso, mesmo sabendo que deslocar todo o vetor custa N",
+      "texto": "Log N no pior caso, mesmo sabendo-se que o custo de mover todos os elementos de um vetor para o lado é N",
       "porque": "Troca-se a raiz com o último elemento, diminui-se o tamanho e desce-se o novo topo (heapify). Isso percorre no máximo a altura, O(log N), sem deslocar o vetor."
      },
      {
       "letra": "C",
-      "texto": "N no pior caso",
+      "texto": "N no pior caso, mesmo sabendo-se que o custo de mover todos os elementos de um vetor para o lado é N",
       "porque": "Só seria N se todo o vetor fosse deslocado ou reconstruído. O heap permite reorganizar em O(log N)."
      },
      {
       "letra": "D",
-      "texto": "O(1), pois o elemento está na posição zero",
+      "texto": "A custo O(1) no pior caso, pois sabemos que o elemento está na posição zero",
       "porque": "Ler o mínimo é O(1), mas remover exige restaurar a propriedade do heap, que custa O(log N)."
      }
     ],
@@ -8711,26 +8716,26 @@ window.PROVAS = [
     "numero": 4,
     "topico": 2,
     "formato": "cálculo",
-    "enunciado": "Um programa de complexidade Θ(n³) leva 1 minuto com n = 100. Quanto leva com n = 300?",
+    "enunciado": "Se um programador fez testes para avaliar o tempo de execução para entradas de tamanho 100 em um programa Θ(n³) e obteve tempo de 1 minuto, quanto tempo demoraria para uma entrada de tamanho 300? (Considere que 100 é suficientemente grande para desprezar fatores menores na função de custo, e que o custo unitário por operação não variou com o tamanho do problema entre os dois experimentos.)",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "3 min",
+      "texto": "3 minutos",
       "porque": "Seria o caso linear: n triplicou, o tempo triplicou. O programa é cúbico."
      },
      {
       "letra": "B",
-      "texto": "9 min",
+      "texto": "9 minutos",
       "porque": "Seria o caso quadrático (3² = 9)."
      },
      {
       "letra": "C",
-      "texto": "27 min",
+      "texto": "27 minutos",
       "porque": "Triplicar n multiplica o tempo por 3³ = 27, logo 27 minutos."
      },
      {
       "letra": "D",
-      "texto": "300 min",
+      "texto": "300 minutos",
       "porque": "Não tem relação com a razão 3³; seria multiplicar por 300."
      }
     ],
@@ -8752,31 +8757,31 @@ window.PROVAS = [
     "numero": 5,
     "topico": 2,
     "formato": "afirmações",
-    "enunciado": "Considere:\n\nI. Todo algoritmo não vazio tem custo Ω(1).\nII. Todo algoritmo tem custo O(nⁿ).\nIII. Nenhum algoritmo não vazio tem custo o(2), \"ó pequeno de 2\".\n\n(Os símbolos de I vieram ilegíveis no texto do caderno.)",
+    "enunciado": "Sobre as afirmativas abaixo:\n\nI) Todo algoritmo que não seja vazio tem custo Ω(1)\nII) Todo algoritmo tem custo O(nⁿ)\nIII) Nenhum algoritmo que não seja vazio tem custo o(2) – \"ó pequeno de 2\"",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "I e II",
+      "texto": "Apenas I e II estão corretas",
       "porque": "Inclui a II, que é falsa, e deixa de fora a III, que é verdadeira."
      },
      {
       "letra": "B",
-      "texto": "I e III",
+      "texto": "Apenas I e III estão corretas",
       "porque": "I verdadeira: qualquer algoritmo não vazio executa ao menos uma operação, custo mínimo constante. III verdadeira: o(2) é o mesmo que o(1), e um algoritmo com ao menos um passo não cresce mais devagar que uma constante. II falsa: existem algoritmos que custam mais que nⁿ, como 2^(n²)."
      },
      {
       "letra": "C",
-      "texto": "II e III",
+      "texto": "Apenas II e III estão corretas",
       "porque": "II falsa. Não há limite superior que valha para todos os algoritmos."
      },
      {
       "letra": "D",
-      "texto": "Todas",
+      "texto": "Todas estão corretas",
       "porque": "A II é falsa, então não valem as três."
      }
     ],
     "gabarito": "B",
-    "resumo": "Cuidado com 'todo' e 'nenhum' em notação assintótica. Ω(1) vale sempre para algoritmo não vazio, e não existe limite O universal. Como os símbolos de I vieram ilegíveis, a conferência de I foi pelo gabarito oficial.",
+    "resumo": "Cuidado com \"todo\" e \"nenhum\" em notação assintótica. I e III valem: Ω(1) vale para qualquer algoritmo não vazio, e o(2) é o mesmo que o(1), que um algoritmo com ao menos um passo não satisfaz. II é falsa: não existe limite O universal, há algoritmos acima de nⁿ. Resposta oficial B.",
     "assuntos": [
      {
       "num": "0166",
@@ -8789,7 +8794,7 @@ window.PROVAS = [
     "numero": 6,
     "topico": 6,
     "formato": "simulação",
-    "enunciado": "Dado o vetor `2 4 6 8 10 12 14 16 18` (posições 0 a 8), uma busca binária pela chave 9 compara com quais valores?",
+    "enunciado": "Considere o vetor abaixo, o qual é apresentado em uma tabela onde a primeira linha indica a posição dos elementos e a segunda linha os valores armazenados.\n\n| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |\n|---|---|---|---|---|---|---|---|---|\n| 2 | 4 | 6 | 8 | 10 | 12 | 14 | 16 | 18 |\n\nUma busca binária nesse vetor compararia a chave 9 com os seguintes valores do vetor:",
     "alternativas": [
      {
       "letra": "A",
@@ -8803,7 +8808,7 @@ window.PROVAS = [
      },
      {
       "letra": "C",
-      "texto": "nenhum, porque a chave não existe",
+      "texto": "Nenhuma porque a chave não existe no vetor",
       "porque": "A busca precisa comparar para descobrir que a chave não existe."
      },
      {
@@ -8826,26 +8831,26 @@ window.PROVAS = [
     "numero": 7,
     "topico": 4,
     "formato": "afirmações",
-    "enunciado": "Sobre a busca em árvore vermelho e preto, considere:\n\nI. A altura máxima é log n.\nII. A altura máxima é inferior a 3 log n.\nIII. Pode degenerar no pior caso, com busca linear, em situações raras.",
+    "enunciado": "Sobre o custo das operações de busca por uma chave em árvores vermelho e preto, sabe-se que:\n\nI) Uma árvore vermelho e preto tem altura máxima log n, onde n é o número de chaves, pois a mesma é balanceada\nII) Uma árvore vermelho e preto tem altura máxima inferior a 3 log n, onde n é o número de chaves, pois a mesma é balanceada\nIII) Uma árvore vermelho e preto pode ser degenerada no pior caso, tendo custo de busca crescendo linearmente com o número de elementos, mas em situações muito raras, pois a mesma é balanceada",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "Apenas I",
+      "texto": "Apenas I é verdadeira",
       "porque": "A I é falsa: a altura máxima da rubro-negra é 2·log2(n+1), o dobro do ideal, e não log n."
      },
      {
       "letra": "B",
-      "texto": "Apenas II",
+      "texto": "Apenas II é verdadeira",
       "porque": "Tecnicamente 2·log2(n+1) fica abaixo de 3 log n para n razoável, então II é defensável. A banca anulou a questão por ambiguidade."
      },
      {
       "letra": "C",
-      "texto": "Apenas III",
+      "texto": "Apenas III é verdadeira",
       "porque": "A III é falsa: a rubro-negra nunca degenera em lista, as regras de coloração garantem altura logarítmica."
      },
      {
       "letra": "D",
-      "texto": "Apenas I e II",
+      "texto": "Apenas I e II são verdadeiras",
       "porque": "A I é falsa, então essa combinação falha."
      }
     ],
@@ -8867,26 +8872,26 @@ window.PROVAS = [
     "numero": 8,
     "topico": 3,
     "formato": "afirmações",
-    "enunciado": "Uma pilha em lista encadeada recebe 2, 4, 6, 8 e 10, nessa ordem. Sobre uma remoção, considere:\n\nI. Retira o 2.\nII. Retira o 10.\nIII. Tem custo proporcional ao tamanho.\nIV. Tem custo constante.",
+    "enunciado": "Considere uma pilha que inicialmente estava vazia e na qual inseriu-se as chaves 2, 4 e 6, 8 e 10 nessa ordem. Sobre uma operação de remoção de elemento da mesma (retirada padrão de uma pilha), considerando-se que a estrutura de dados usada é uma lista encadeada, pode-se afirmar que:\n\nI) A remoção retira a chave 2\nII) A remoção da chave 10\nIII) Custo computacional proporcional ao tamanho da pilha\nIV) Custo computacional constante, não importando o tamanho da pilha",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "I e III",
+      "texto": "Apenas I e III estão corretas",
       "porque": "Retirar o 2 é o comportamento de fila. Pilha é LIFO, e o custo proporcional ao tamanho seria de uma implementação ruim."
      },
      {
       "letra": "B",
-      "texto": "I e IV",
+      "texto": "Apenas I e IV estão corretas",
       "porque": "O custo constante está certo, mas pilha não retira o primeiro inserido."
      },
      {
       "letra": "C",
-      "texto": "II e III",
+      "texto": "Apenas II e III estão corretas",
       "porque": "O elemento removido está certo (10), mas o custo não é proporcional ao tamanho: remover na cabeça só mexe no ponteiro inicial."
      },
      {
       "letra": "D",
-      "texto": "II e IV",
+      "texto": "Apenas II e IV estão corretas",
       "porque": "Pilha retira o último inserido, o 10 (II). Na lista encadeada, a cabeça é o topo, então a remoção é O(1) (IV)."
      }
     ],
@@ -8904,26 +8909,26 @@ window.PROVAS = [
     "numero": 9,
     "topico": 6,
     "formato": "conceito",
-    "enunciado": "Sobre um vetor mantido ordenado, com os melhores algoritmos:",
+    "enunciado": "Sobre um vetor que se mantém de forma ordenada a cada inserção, remoção ou alteração feita, qual a alternativa verdadeira ao usarmos os algoritmos mais eficientes para cada operação:",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "Inserção, remoção e busca lineares",
+      "texto": "A inserção tem custo linear no pior caso, a remoção tem custo linear no pior caso e a busca mais eficiente possível tem custo linear",
       "porque": "A busca pode ser logarítmica (binária), então não é linear."
      },
      {
       "letra": "B",
-      "texto": "Inserção e remoção lineares, busca logarítmica",
+      "texto": "A inserção tem custo linear no pior caso, a remoção tem custo linear no pior caso e a busca tem custo logarítmico no pior caso",
       "porque": "Inserir e remover deslocam elementos, O(n). A busca binária aproveita a ordem: O(log n)."
      },
      {
       "letra": "C",
-      "texto": "Inserção e remoção logarítmicas, busca constante",
+      "texto": "A inserção tem custo logarítmico no pior caso, a remoção tem custo logarítmico no pior caso e a busca mais eficiente possível tem custo constante",
       "porque": "Nem a busca é O(1) nem as mudanças são O(log n), por causa dos deslocamentos."
      },
      {
       "letra": "D",
-      "texto": "Inserção linear, remoção logarítmica, busca logarítmica",
+      "texto": "A inserção tem custo linear no pior caso, a remoção tem custo logarítmico no pior caso e a busca mais eficiente possível tem custo logarítmico",
       "porque": "A remoção também desloca elementos, O(n). Inserção e remoção têm o mesmo custo."
      }
     ],
@@ -8945,26 +8950,26 @@ window.PROVAS = [
     "numero": 10,
     "topico": 7,
     "formato": "afirmações",
-    "enunciado": "Sobre quicksort, mergesort e ordenação por inserção, considere:\n\nI. O quicksort tem o melhor pior caso dos três.\nII. A inserção tende a ser a mais rápida quando os elementos fora de ordem são menos de um décimo de log N.\nIII. O mergesort tem o menor custo assintótico de pior caso dos três.",
+    "enunciado": "Sobre os algoritmos de ordenação quicksort, mergesort e inserção, é correto afirmar que:\n\nI) O quicksort é o que apresenta melhor desempenho no pior caso dentre os três algoritmos, sendo por isso o algoritmo mais usado\nII) A ordenação por inserção tende a ser a mais rápida em casos de ordenação de um vetor onde o número de elementos fora de ordem é menor que um décimo de log N, sendo N o número de elementos do vetor e N um valor grande\nIII) O mergesort é o que tem menor custo assintótico no pior caso quando comparamos os três algoritmos",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "Apenas I",
+      "texto": "Apenas I é verdadeira",
       "porque": "A I é falsa: o quicksort tem pior caso O(n²), pior que o O(n log n) do mergesort."
      },
      {
       "letra": "B",
-      "texto": "Apenas II",
+      "texto": "Apenas II é verdadeira",
       "porque": "Depende de uma condição confusa sobre log N e do que significa 'fora de ordem'."
      },
      {
       "letra": "C",
-      "texto": "Apenas III",
+      "texto": "Apenas III é verdadeira",
       "porque": "Entre os três, o mergesort é O(n log n) no pior caso, e os outros são O(n²). Mas a banca anulou a questão."
      },
      {
       "letra": "D",
-      "texto": "Nenhuma das anteriores",
+      "texto": "As alternativas A, B e C não são corretas",
       "porque": "Se a III é verdadeira, essa não vale."
      }
     ],
@@ -8990,26 +8995,26 @@ window.PROVAS = [
     "numero": 11,
     "topico": 3,
     "formato": "cálculo",
-    "enunciado": "Num vetor sempre ordenado com n elementos, quais os piores casos de inserção, remoção e busca pelo campo de ordenação?",
+    "enunciado": "Marque a alternativa correta sobre os custos, no pior caso, dos melhores algoritmos conhecidos para inserir um elemento, remover um elemento e pesquisar por uma chave em um vetor que contenha n elementos, sendo a busca feita pelo campo usado para ordenar o vetor. Considere que o vetor sempre esteja ordenado antes da operação e permaneça ordenado após a operação. Pode-se dizer que as operações de inserção, remoção e busca nesse cenário têm, respectivamente, custo no pior caso:",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "O(n log n), O(n log n), O(log n)",
+      "texto": "O(n. log(n)), O(n. log(n)) e O(log(n))",
       "porque": "Inserir e remover custam O(n) (deslocamento), e não n log n."
      },
      {
       "letra": "B",
-      "texto": "O(n log n), O(n log n), O(n)",
+      "texto": "O(n. log(n)), O(n. log(n)) e O(n)",
       "porque": "Erra os três: nem n log n nas mudanças, nem O(n) na busca."
      },
      {
       "letra": "C",
-      "texto": "O(n), O(n), O(n)",
+      "texto": "O(n), O(n) e O(n)",
       "porque": "A busca é O(log n) porque o vetor está ordenado."
      },
      {
       "letra": "D",
-      "texto": "O(n), O(n), O(log n)",
+      "texto": "O(n), O(n) e O(log(n))",
       "porque": "Inserção e remoção deslocam elementos (O(n)); a busca binária usa a ordem (O(log n))."
      }
     ],
@@ -9031,26 +9036,26 @@ window.PROVAS = [
     "numero": 12,
     "topico": 7,
     "formato": "simulação",
-    "enunciado": "Um quicksort crescente tem, depois do primeiro particionamento, o vetor `2 5 9 1 7 2 1 9`. Qual pode ter sido o pivô?",
+    "enunciado": "Considere que um vetor de 8 elementos está sendo ordenado de forma crescente pelo algoritmo quicksort, e que após a escolha do pivot (elemento usado como chave para o particionamento) e ao final do primeiro particionamento, o vetor tenha ficado com os seguintes valores:\n\n| 2 | 5 | 9 | 1 | 7 | 2 | 1 | 9 |\n|---|---|---|---|---|---|---|---|\n\nDado o resultado, pode-se afirmar que:",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "2",
+      "texto": "O valor 2 pode ter sido o pivô que gerou a partição",
       "porque": "Um pivô 2 na posição 0 exigiria tudo à direita maior ou igual a 2, mas há 1 depois dele."
      },
      {
       "letra": "B",
-      "texto": "9",
+      "texto": "O valor 9 pode ter sido o pivô que gerou a partição",
       "porque": "O 9 da última posição tem todos os elementos à esquerda menores ou iguais. É compatível com um particionamento em que o pivô vai para o fim ou nele fica."
      },
      {
       "letra": "C",
-      "texto": "1",
+      "texto": "O valor 1 pode ter sido o pivô que gerou a partição",
       "porque": "Um pivô 1 na posição 3 exigiria esquerda menor ou igual a 1, mas há 2, 5 e 9 antes."
      },
      {
       "letra": "D",
-      "texto": "7",
+      "texto": "O valor 7 pode ter sido o pivô que gerou a partição",
       "porque": "O 7 na posição 4 exigiria esquerda menor ou igual a 7, mas há 9 à esquerda."
      }
     ],
@@ -9068,26 +9073,26 @@ window.PROVAS = [
     "numero": 13,
     "topico": 5,
     "formato": "simulação",
-    "enunciado": "Uma tabela hash com encadeamento, tamanho 5 e h(k) = k mod 5 recebe as chaves 2, 5, 9, 20 e 7. Quantas colisões ocorrem?",
+    "enunciado": "Considere uma tabela hash por encadeamento onde os elementos inseridos são números inteiros positivos. Considere que a tabela tem tamanho 5 e que a função de espalhamento (função de hash) calcula o resto da divisão do valor do elemento por 5 para determinar a posição de inserção na tabela. Quantas colisões de chaves teremos se a tabela estiver inicialmente vazia e inserirmos as chaves 2, 5, 9, 20 e 7?",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "Nenhuma",
+      "texto": "Não há colisões",
       "porque": "O 20 cai na posição 0, que já tem o 5; o 7 cai na 2, que já tem o 2."
      },
      {
       "letra": "B",
-      "texto": "Uma",
+      "texto": "Uma colisão",
       "porque": "Há duas colisões, não uma."
      },
      {
       "letra": "C",
-      "texto": "Duas",
+      "texto": "Duas colisões",
       "porque": "2 vai para 2, 5 para 0, 9 para 4, 20 para 0 (colide com o 5) e 7 para 2 (colide com o 2). Duas colisões."
      },
      {
       "letra": "D",
-      "texto": "Três",
+      "texto": "Três colisões",
       "porque": "O 9 vai sozinho para a posição 4. Só o 20 e o 7 colidem."
      }
     ],
@@ -9105,26 +9110,26 @@ window.PROVAS = [
     "numero": 14,
     "topico": 4,
     "formato": "simulação",
-    "enunciado": "Numa árvore binária de pesquisa sem balanceamento, inserem-se 10, 5, 20, 1, 30, 7 e 15, nessa ordem. No pior caso, uma busca compara a chave com quantos nós?",
+    "enunciado": "Considere uma árvore binária de pesquisa sem balanceamento contendo como dado números inteiros, que começou vazia, e onde foram inseridos posteriormente, nesta ordem, os valores 10, 5, 20, 1, 30, 7 e 15. Uma chave de busca nessa árvore sem balanceamento terá que comparar a chave de busca, na pior das hipóteses, com:",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "7 nós",
+      "texto": "7 nós da árvore",
       "porque": "Seria a árvore degenerada em lista. Aqui a altura é menor."
      },
      {
       "letra": "B",
-      "texto": "6 nós",
+      "texto": "6 nós da árvore",
       "porque": "Não há caminho com 6 nós: o mais longo tem 3."
      },
      {
       "letra": "C",
-      "texto": "2 nós",
+      "texto": "2 nós da árvore",
       "porque": "Há caminhos de 3 nós (10-5-7 e 10-20-30)."
      },
      {
       "letra": "D",
-      "texto": "3 nós",
+      "texto": "3 nós da árvore",
       "porque": "A raiz é 10, com 5 e 20. Os caminhos mais longos são 10-5-7 e 10-20-30, com 3 nós. A altura é 3."
      }
     ],
@@ -9142,31 +9147,31 @@ window.PROVAS = [
     "numero": 15,
     "topico": 6,
     "formato": "código",
-    "enunciado": "(Python) Uma busca binária recursiva é executada no vetor fora de ordem `A = [0, 100, 20, 30, 40, 50, 60, 70]`, procurando 100, com `meio = (esquerda + direita) // 2`. Qual a saída de `print(\"Pesquisa com sucesso:\", ...)`?\n\n```python\ndef pesquisa_binaria_recursiva(A, x, esquerda, direita):\n    if esquerda > direita:\n        return -1\n    meio = (esquerda + direita) // 2\n    if A[meio] == x:\n        return meio\n    if A[meio] < x:\n        return pesquisa_binaria_recursiva(A, x, meio + 1, direita)\n    return pesquisa_binaria_recursiva(A, x, esquerda, meio - 1)\n\nA = [0, 100, 20, 30, 40, 50, 60, 70]\n```\n\n(O texto do código não veio por extenso no caderno; esta é a busca binária recursiva padrão descrita no enunciado.)",
+    "enunciado": "Dado o seguinte pseudocódigo Python de busca binária recursiva, indique qual das opções abaixo é impressa pela linha final print().\n\n```python\ndef pesquisa_binaria_recursiva(A, esquerda, direita, item):\n    if direita < esquerda:\n        return -1\n    meio = (esquerda + direita) // 2\n    if A[meio] == item:\n        return meio\n    elif A[meio] > item:\n        return pesquisa_binaria_recursiva(A, esquerda, meio - 1, item)\n    else:\n        return pesquisa_binaria_recursiva(A, meio + 1, direita, item)\n\nA = [0, 100, 20, 30, 40, 50, 60, 70]\nprint(\"Pesquisa com sucesso:\", pesquisa_binaria_recursiva(A, 0, len(A) - 1, 100))\n```",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "100",
+      "texto": "Pesquisa com sucesso: 100",
       "porque": "100 é a chave, não a posição devolvida."
      },
      {
       "letra": "B",
-      "texto": "-1",
-      "porque": "Meio = 3 (30), menor que 100, vai para a direita; 5 (50), 6 (60), 7 (70), e depois para. O 100 está na posição 1, que a busca nunca visita porque o vetor está fora de ordem. Devolve -1."
+      "texto": "Pesquisa com sucesso: -1",
+      "porque": "Chamadas: (0,7) meio 3 (30), menor que 100, vai para a direita; (4,7) meio 5 (50); (6,7) meio 6 (60); (7,7) meio 7 (70); (8,7) já tem direita < esquerda e devolve -1. O 100 está na posição 1, que a busca nunca visita porque o vetor está fora de ordem. Rodado em Python."
      },
      {
       "letra": "C",
-      "texto": "1",
+      "texto": "Pesquisa com sucesso: 1",
       "porque": "Seria a posição correta do 100, mas a busca binária não chega lá num vetor desordenado."
      },
      {
       "letra": "D",
-      "texto": "2",
+      "texto": "Pesquisa com sucesso: 2",
       "porque": "Não há razão para devolver 2: nenhum passo para nessa posição."
      }
     ],
     "gabarito": "B",
-    "resumo": "Busca binária só funciona em vetor ordenado. Em vetor desordenado, ela pode falhar mesmo com a chave presente. Simule os passos: o valor 100 está na posição 1, mas a busca vai sempre para a direita. (Código reconstruído da descrição, rodado em Python.)",
+    "resumo": "Busca binária só funciona em vetor ordenado. Aqui o vetor está fora de ordem: o valor 100 está na posição 1, mas a busca só vai para a direita (30, 50, 60, 70) e devolve -1. Simule os extremos a cada chamada. Código conferido contra o caderno e rodado em Python.",
     "assuntos": [
      {
       "num": "0090",
@@ -9179,7 +9184,7 @@ window.PROVAS = [
     "numero": 16,
     "topico": 5,
     "formato": "cálculo",
-    "enunciado": "Numa tabela hash com encadeamento por lista, sem chave repetida, o pior caso de inserção é __ e o de busca é __. Trocando a lista por árvore rubro-negra, a inserção passa a __ e a busca a __.",
+    "enunciado": "Considere a seguinte afirmação:\n\nConsiderando o pior caso no custo das operações, em uma tabela hash com encadeamento na qual uma lista encadeada é usada para tratamento de colisões e uma chave no hash não pode se repetir, uma inserção tem custo de __, enquanto que uma busca tem custo de __. Entretanto, se tirarmos a lista encadeada e usarmos uma árvore rubro-negra para o tratamento de colisões, o custo de inserção na tabela hash passa a ser __ e o custo de busca passa a ser __.\n\nAssinale a opção que preenche corretamente os campos em branco:",
     "alternativas": [
      {
       "letra": "A",
@@ -9220,31 +9225,31 @@ window.PROVAS = [
     "numero": 17,
     "topico": 6,
     "formato": "simulação",
-    "enunciado": "(Python) Com a mesma busca binária recursiva e o mesmo vetor da questão anterior, agora procurando 70, quantas vezes `pesquisa_binaria_recursiva()` é chamada?\n\n(O texto do código não veio por extenso no caderno; esta é a busca binária recursiva padrão descrita no enunciado.)",
+    "enunciado": "Dado o seguinte pseudocódigo Python de busca binária recursiva, indique quantas vezes ocorre a chamada da função pesquisa_binaria_recursiva():\n\n```python\ndef pesquisa_binaria_recursiva(A, esquerda, direita, item):\n    if direita < esquerda:\n        return -1\n    meio = (esquerda + direita) // 2\n    if A[meio] == item:\n        return meio\n    elif A[meio] > item:\n        return pesquisa_binaria_recursiva(A, esquerda, meio - 1, item)\n    else:\n        return pesquisa_binaria_recursiva(A, meio + 1, direita, item)\n\nA = [0, 100, 20, 30, 40, 50, 60, 70]\nprint(\"Pesquisa com sucesso:\", pesquisa_binaria_recursiva(A, 0, len(A) - 1, 70))\n```",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "0",
+      "texto": "0 vezes",
       "porque": "A função é chamada ao menos uma vez, na chamada inicial."
      },
      {
       "letra": "B",
-      "texto": "3",
+      "texto": "3 vezes",
       "porque": "Faltou contar uma chamada."
      },
      {
       "letra": "C",
-      "texto": "4",
+      "texto": "4 vezes",
       "porque": "Chamadas: [0..7] meio 3 (30), [4..7] meio 5 (50), [6..7] meio 6 (60), [7..7] meio 7 (70) achou. Quatro chamadas. Rodado em Python."
      },
      {
       "letra": "D",
-      "texto": "5",
+      "texto": "5 vezes",
       "porque": "São 5 chamadas só se o 70 não estivesse no vetor (caso 100). Aqui acha na quarta."
      }
     ],
     "gabarito": "C",
-    "resumo": "Conte as chamadas com os extremos de cada uma. A chave 70 está na última posição, então a busca desce quatro vezes até achá-la.",
+    "resumo": "Conte as chamadas, a inicial incluída, com os extremos de cada uma: (0,7), (4,7), (6,7) e (7,7), onde acha o 70 na posição 7. São 4 chamadas. Código conferido contra o caderno e rodado em Python.",
     "assuntos": [
      {
       "num": "0090",
@@ -9257,31 +9262,31 @@ window.PROVAS = [
     "numero": 18,
     "topico": 3,
     "formato": "código",
-    "enunciado": "(Python) Produto de A = [[0, 2, 1], [1, 0, 0]] por B = [[7, 0], [0, 10], [11, 0]] com três laços. Qual o resultado?\n\n(O código dos três laços não veio por extenso; é o produto de matrizes padrão.)",
+    "enunciado": "Dado o seguinte pseudocódigo Python, indique a saída correta que será impressa na tela do computador:\n\n```python\nimport numpy as np\n\nA = [[0, 2, 1],[1, 0, 0]]\nB = [[7, 0],[0, 10],[11, 0]]\n\ndef operacao_com_matrizes():\n    resultado = np.zeros((2,2))\n    for i in range(len(A)):\n        for j in range(len(B[0])):\n            for k in range(len(B)):\n                resultado[i][j] += A[i][k] * B[k][j]\n    return resultado\n\nprint(operacao_com_matrizes())\n```",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "[[0. 2. 1.] [1. 0. 0.]]",
+      "texto": "```\n[[0. 2. 1.]\n [1. 0. 0.]]\n```",
       "porque": "É a própria matriz A, não o produto."
      },
      {
       "letra": "B",
-      "texto": "[[7. 0.] [0. 10.] [11. 0.]]",
+      "texto": "```\n[[ 7.  0.]\n [ 0. 10.]\n [11.  0.]]\n```",
       "porque": "É a própria B. O produto de uma 2×3 por uma 3×2 é 2×2."
      },
      {
       "letra": "C",
-      "texto": "[[7. 0.] [11. 20.]]",
+      "texto": "```\n[[ 7.  0.]\n [11. 20.]]\n```",
       "porque": "Linhas trocadas e valores errados. Linha 0 = [0·7+2·0+1·11, 0·0+2·10+1·0] = [11, 20]."
      },
      {
       "letra": "D",
-      "texto": "[[11. 20.] [7. 0.]]",
+      "texto": "```\n[[11. 20.]\n [ 7.  0.]]\n```",
       "porque": "Linha 0: [0·7+2·0+1·11, 0·0+2·10+1·0] = [11, 20]. Linha 1: [1·7+0+0, 0+0+0] = [7, 0]. Rodado em Python."
      }
     ],
     "gabarito": "D",
-    "resumo": "Forma do resultado: 2×3 por 3×2 = 2×2. Depois calcule cada célula como linha de A vezes coluna de B. Cuidado com a ordem das linhas na hora de montar.",
+    "resumo": "Forma do resultado: 2×3 por 3×2 = 2×2. Depois calcule cada célula como linha de A vezes coluna de B: linha 0 = [11, 20], linha 1 = [7, 0]. Rodado em Python; o numpy imprime floats com ponto, como nas alternativas.",
     "assuntos": [
      {
       "num": "0039",
@@ -9294,7 +9299,7 @@ window.PROVAS = [
     "numero": 19,
     "topico": 3,
     "formato": "código",
-    "enunciado": "(Python) Uma classe `Stack` guarda os itens numa lista; `popit` numa pilha vazia imprime \"empty stack\". Os comandos são: push 1, push 3, pop, pop, pop, push 2, push 1, pop, e por fim `print(stack.stack)`. Qual o resultado?\n\n(O código da classe não veio por extenso.)",
+    "enunciado": "Dado o seguinte pseudocódigo Python, indique a saída correta que será impressa na tela do computador quando a seguinte sequência de comandos é executada:\n\n```python\nclass Stack:\n    def __init__(self):\n        self.stack = []\n\n    def pushit(self,value):\n        self.stack.append(value)\n\n    def popit(self):\n        try:\n            self.stack.pop()\n        except:\n            print('empty stack')\n            self.stack = []\n```\n\nOs comandos executados são:\n\n```python\nstack = Stack(); stack.pushit(1); stack.pushit(3); stack.popit(); stack.popit(); stack.popit(); stack.pushit(2); stack.pushit(1); stack.popit(); print(stack.stack)\n```",
     "alternativas": [
      {
       "letra": "A",
@@ -9303,12 +9308,12 @@ window.PROVAS = [
      },
      {
       "letra": "B",
-      "texto": "\"empty stack\" e [2]",
+      "texto": "empty stack\n[2]",
       "porque": "Os dois primeiros pops tiram 3 e 1. O terceiro pop, em pilha vazia, imprime \"empty stack\". Depois entram 2 e 1, o pop tira o 1, e a pilha termina [2]."
      },
      {
       "letra": "C",
-      "texto": "\"empty stack\" e []",
+      "texto": "empty stack\n[]",
       "porque": "A pilha não termina vazia: depois do aviso entram 2 e 1, e só o 1 sai."
      },
      {
@@ -9318,7 +9323,7 @@ window.PROVAS = [
      }
     ],
     "gabarito": "B",
-    "resumo": "Simule com uma lista, pop tira o último. O terceiro pop acontece com a pilha vazia. Rodado em Python.",
+    "resumo": "Simule com uma lista, pop tira o último. Os dois primeiros pops esvaziam a pilha, o terceiro cai no except: imprime \"empty stack\" e zera a lista. Depois entram 2 e 1, o pop tira o 1 e sobra [2]. Rodado em Python.",
     "assuntos": [
      {
       "num": "0082",
@@ -9331,31 +9336,31 @@ window.PROVAS = [
     "numero": 20,
     "topico": 1,
     "formato": "código",
-    "enunciado": "(Python) `func1(fator)` devolve `func2`, que recebe `x` e retorna `x * fator`. Com `funcao = func1(3)`, qual a saída de `print(funcao(5))`?\n\n(O código não veio por extenso.)",
+    "enunciado": "Dado o seguinte pseudocódigo Python, indique qual seria a saída correta no terminal do computador:\n\n```python\ndef func1(fator):\n    def func2(x):\n        return x * fator\n    return func2\n\nfuncao = func1(3)\nprint(funcao(5))\n```",
     "alternativas": [
      {
       "letra": "A",
-      "texto": "Erro, porque não passou `fator`",
+      "texto": "A saída é um erro pois a primeira função retorna outra função mas não passou o argumento 'fator'",
       "porque": "`fator` foi passado em `func1(3)` e fica guardado no fechamento de `func2`."
      },
      {
       "letra": "B",
-      "texto": "15",
+      "texto": "A saída é 15",
       "porque": "`func1(3)` devolve uma função que lembra `fator = 3`. Chamar `funcao(5)` calcula 5 * 3 = 15. Rodado em Python."
      },
      {
       "letra": "C",
-      "texto": "3",
+      "texto": "A saída é 3",
       "porque": "3 é só o fator. A função multiplica por x, que vale 5."
      },
      {
       "letra": "D",
-      "texto": "0",
+      "texto": "A saída é 0",
       "porque": "Não há operação que gere zero."
      }
     ],
     "gabarito": "B",
-    "resumo": "Isso é um fechamento (closure): a função interna guarda o valor do escopo externo. Em C, o equivalente é ponteiro para função, mas sem closure.",
+    "resumo": "Isso é um fechamento (closure): a função interna guarda o valor `fator` do escopo externo, mesmo depois de func1 terminar. func1(3) devolve func2, e funcao(5) dá 5 * 3 = 15. Em C, o equivalente é ponteiro para função, mas sem closure. Rodado em Python.",
     "assuntos": [
      {
       "num": "0029",
