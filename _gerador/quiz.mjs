@@ -12,6 +12,7 @@
 import { readFileSync, writeFileSync, readdirSync, mkdirSync, existsSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { createHash } from 'node:crypto'
 import { novoQuadro, CORES } from './quadro.mjs'
 import { ICONES } from './tipos/icones.mjs'
 
@@ -186,4 +187,8 @@ writeFileSync(
   join(SAIDA, 'questoes.js'),
   `// Gerado por _gerador/quiz.mjs a partir de _gerador/provas/. Não edite à mão.\nwindow.ASSUNTOS = ${JSON.stringify(ASSUNTOS)}\nwindow.PROVAS = ${JSON.stringify(dados, null, 1)}\n`,
 )
+// versão do questoes.js no index.html, para o navegador não misturar dados novos com cache velho
+const versao = createHash('sha1').update(readFileSync(join(SAIDA, 'questoes.js'))).digest('hex').slice(0, 8)
+const pagina = join(RAIZ, 'index.html')
+writeFileSync(pagina, readFileSync(pagina, 'utf8').replace(/quiz\/questoes\.js\?v=[\w]+/, `quiz/questoes.js?v=${versao}`))
 console.log(`quiz/questoes.js: ${dados.length} provas · quiz/figuras: ${Object.keys(figuras).length} svg${erros.length ? ` · ${erros.length} erros` : ''}`)

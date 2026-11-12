@@ -67,6 +67,9 @@ a:hover { text-decoration-color: currentColor; }
 button { font: inherit; color: inherit; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .num { font-variant-numeric: tabular-nums; }
+.so-curto { display: none; }
+.chave .lua { display: none; }
+@media (max-width: 560px) { .chave .lua { display: block; } .chave { padding: 0 12px; } }
 
 /* coluna e cabeçalho */
 .coluna { max-width: 1132px; margin: 0 auto; padding: 0 16px; }
@@ -76,6 +79,7 @@ button { font: inherit; color: inherit; }
 .marca small { font-weight: 400; color: var(--muted); }
 .espaco { flex: 1; }
 .chave {
+  white-space: nowrap;
   display: inline-flex; align-items: center; gap: 8px; height: var(--control-height);
   padding: 0 14px; border: 1px solid var(--control); border-radius: var(--radius-control);
   background: var(--ground); cursor: pointer; font-size: 14px;
@@ -122,7 +126,7 @@ h1.saudacao { font: 400 48px/1.08 var(--serif); letter-spacing: -0.01em; margin:
 .topico:hover { background: var(--raised); }
 .topico[aria-pressed="true"] { background: var(--raised); border-color: var(--accent); }
 .topico .nome { font-size: 14px; }
-.topico .pct { font-size: 14px; color: var(--muted); }
+.topico .pct { font-size: 14px; color: var(--muted); white-space: nowrap; }
 .topico .trilho { grid-column: 1 / -1; }
 .acoes { display: flex; flex-wrap: wrap; gap: 10px; }
 .botao {
@@ -252,17 +256,28 @@ kbd { font: 12px var(--font); border: 1px solid var(--control); border-radius: 4
 .grande { font-size: 32px; margin: 0; }
 
 @media (max-width: 960px) {
-  .s3 { grid-column: span 6; } .s9, .s4, .s6, .s8 { grid-column: span 12; }
+  .s3, .s9, .s4, .s6, .s8 { grid-column: span 12; }
+  .ct { grid-column: span 6; }
   .questao { grid-template-areas: "enun" "antes" "alts" "res"; grid-template-columns: 1fr; grid-template-rows: auto; }
   .antes { position: static; }
 }
 @media (max-width: 560px) {
   body { font-size: 15px; }
+  .so-largo { display: none; }
+  .so-curto { display: inline; }
+  .contador { min-height: 0; padding: 14px 16px; }
+  .contador .valor { font-size: 28px; }
+  .contador .legenda { margin-top: 6px; }
+  .painel { padding: 16px; }
+  .painel h2 { flex-wrap: wrap; row-gap: 12px; }
+  .painel h2 .acao { margin-left: 0; flex-basis: 100%; }
+  .painel h2 .acao .botao { width: 100%; justify-content: center; }
+  .linha-prova { grid-template-columns: auto 1fr; row-gap: 8px; column-gap: 12px; padding: 12px 14px; }
+  .linha-prova .nome { grid-column: 1 / -1; }
+  .linha-prova .placar-prova { white-space: nowrap; text-align: left; font-size: 13px; }
   h1.saudacao { font-size: 32px; }
-  h1.titulo-questao { font-size: 26px; }
+  h1.titulo-questao { font-size: 24px; }
   main { padding-top: 28px; }
-  .linha-prova { grid-template-columns: 1fr auto; }
-  .linha-prova .trilho { grid-column: 1 / -1; }
   .porque { margin-left: 16px; }
   .navegar .botao { flex: 1; justify-content: center; }
   .marca small { display: none; }
@@ -281,13 +296,13 @@ kbd { font: 12px var(--font); border: 1px solid var(--control); border-radius: 4
       LPEDC <small>· provas PPGI</small>
     </a>
     <span class="espaco"></span>
-    <button class="chave" id="modo-prova" type="button" aria-pressed="false" title="Modo prova: o conceito começa fechado"><span class="bola"></span><span class="texto-chave">Modo prova</span></button>
-    <button class="chave" id="tema" type="button" aria-label="Trocar tema claro ou escuro">Tema</button>
+    <button class="chave" id="modo-prova" type="button" aria-pressed="false" title="Modo prova: o conceito começa fechado"><span class="bola"></span><span class="so-largo">Modo prova</span><span class="so-curto">Prova</span></button>
+    <button class="chave" id="tema" type="button" aria-label="Trocar tema claro ou escuro"><svg class="lua" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5a6.5 6.5 0 1 0 0 13z" fill="currentColor"/><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><span class="so-largo">Tema</span></button>
   </header>
   <main id="app" aria-live="polite"></main>
 </div>
 
-<script src="quiz/questoes.js"></script>
+<script src="quiz/questoes.js?v=eef6c774"></script>
 <script>
 'use strict'
 const REPO = 'https://github.com/jhollyfer/LPEDC/blob/main/'
@@ -463,10 +478,10 @@ function telaInicial() {
     <p class="linha-cinza">${QUESTOES.length} questões das 11 provas de 2016 a 2023, com gabarito oficial. Leia o conceito, responda e veja o porquê de cada alternativa.</p>
 
     <section class="grade" aria-label="Seu andamento">
-      <div class="contador s3"><span class="rotulo">Respondidas</span><span class="valor num">${feitas.length} <small>de ${contam.length}</small></span><span class="legenda">${contam.length - feitas.length} ainda por fazer</span></div>
-      <div class="contador s3"><span class="rotulo">Acerto</span><span class="valor num">${feitas.length ? `${pct(certas.length, feitas.length)}%` : '–'}</span><span class="legenda">${feitas.length ? `${certas.length} certas` : 'Responda a primeira para ver'}</span></div>
-      <div class="contador s3"><span class="rotulo">Para refazer</span><span class="valor num">${erradas.length}</span><span class="legenda">${erradas.length ? 'questões que você errou' : 'Nenhum erro guardado'}</span></div>
-      <div class="contador s3"><span class="rotulo">Anuladas e sem nota</span><span class="valor num">${QUESTOES.length - contam.length}</span><span class="legenda">valem pela explicação</span></div>
+      <div class="contador s3 ct"><span class="rotulo">Respondidas</span><span class="valor num">${feitas.length} <small>de ${contam.length}</small></span><span class="legenda">${contam.length - feitas.length} ainda por fazer</span></div>
+      <div class="contador s3 ct"><span class="rotulo">Acerto</span><span class="valor num">${feitas.length ? `${pct(certas.length, feitas.length)}%` : '–'}</span><span class="legenda">${feitas.length ? `${certas.length} certas` : 'Responda a primeira para ver'}</span></div>
+      <div class="contador s3 ct"><span class="rotulo">Para refazer</span><span class="valor num">${erradas.length}</span><span class="legenda">${erradas.length ? 'questões que você errou' : 'Nenhum erro guardado'}</span></div>
+      <div class="contador s3 ct"><span class="rotulo">Anuladas e sem nota</span><span class="valor num">${QUESTOES.length - contam.length}</span><span class="legenda">valem pela explicação</span></div>
 
       <section class="painel s9" aria-labelledby="t-provas">
         <h2 id="t-provas">Provas <span class="conta num">${PROVAS.length}</span><span class="acao"><button class="botao principal" id="todas">Todas embaralhadas${filtroTopicos.size ? ` · ${filtradas.length}` : ''}</button></span></h2>
@@ -485,7 +500,7 @@ function telaInicial() {
         </ul>
       </section>
 
-      <section class="painel s3" aria-labelledby="t-topicos">
+      <section class="painel s3 tp" aria-labelledby="t-topicos">
         <h2 id="t-topicos">Acerto por tópico</h2>
         <p class="texto-painel" style="color:var(--muted)">Toque para filtrar as provas e as embaralhadas.</p>
         ${Object.entries(TOPICOS).map(topicoLinha).join('')}
@@ -570,7 +585,7 @@ function telaQuestao(id) {
       <span class="num">${esc(rodada.titulo)} · ${rodada.i + 1} de ${total}</span>
       <span class="trilho" aria-hidden="true"><span style="width:${pct(rodada.i + 1, total)}%"></span></span>
     </div>
-    <h1 class="titulo-questao">Edital ${esc(q.edital)}, questão ${doisDigitos(q.numero)}</h1>
+    <h1 class="titulo-questao">Edital ${esc(q.edital)}<span class="so-largo">, questão ${doisDigitos(q.numero)}</span><span class="so-curto"> · Q${doisDigitos(q.numero)}</span></h1>
     <p class="meta-questao">${esc(q.formato ?? '')}${topicos ? ` · tópico ${esc(topicos)}` : ''} ${q.gabarito === 'anulada' ? '<span class="pilula aviso">anulada</span>' : ''}</p>
     <div class="questao">
       <div class="enunciado">
