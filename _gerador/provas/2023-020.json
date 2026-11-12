@@ -9,7 +9,7 @@
       "topico": 6,
       "formato": "cálculo",
       "enunciado": "Dado o vetor abaixo, uma busca binária realizará a comparação de uma chave qualquer com elementos do vetor. Quantas comparações serão necessárias no pior caso (aquele que maximiza o número de comparações feitas pelo algoritmo)?\n\n| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |\n|---|---|---|---|---|---|---|---|---|---|\n| 10 | 30 | 50 | 60 | 70 | 80 | 90 | 100 | 120 | 130 |",
-      "dica": "**Cobra:** o máximo de comparações de uma busca binária em um vetor ordenado.\n\n- **Busca binária** [0090]: cada comparação descarta metade do intervalo.\n- **Notação O** [0072]: o número de metades até sobrar 1 elemento é cerca de log₂ n.\n\n**Exemplo:** com 15 elementos o intervalo cai 15 → 7 → 3 → 1: 4 comparações no pior caso.\n\n**Como atacar:** conte quantas vezes o intervalo se divide até restar um elemento.",
+      "dica": "**Cobra:** o número máximo de comparações da busca binária em 10 elementos.\n\n- **Busca binária** [0090]: exige vetor ordenado; compara com o meio e descarta metade, até achar ou esvaziar o intervalo. Ex.: buscar 7 em 1, 3, 5, 7, 9: meio 5, vai à direita, meio 7: 2 comparações.\n- **Pior caso: ⌊log₂ n⌋ + 1** [0090]: cada volta corta o intervalo ao meio, então o máximo cresce com o log₂ de n. Ex.: n = 7 dá 3 comparações e n = 8 dá 4.\n\n**Como atacar:** aplique a fórmula ao tamanho do vetor; os valores guardados não importam.",
       "alternativas": [
         {
           "letra": "A",
@@ -46,7 +46,7 @@
       "topico": 7,
       "formato": "conceito",
       "enunciado": "Sobre o algoritmo de ordenação por inserção (Insertion Sort), marque a alternativa **correta**.",
-      "dica": "**Cobra:** julgar afirmações sobre o Insertion sort.\n\n- **Insertion sort** [0093]: insere cada elemento na parte já ordenada, deslocando os maiores.\n- **Eficiência: contar passos** [0071]: o custo depende da ordem inicial.\n- **Comparando: estabilidade, custo e qsort** [0096]: estável é manter a ordem relativa dos iguais.\n\n**Exemplo:** em `[1,2,3,4]` há 3 comparações; em `[4,3,2,1]` há 6.\n\n**Como atacar:** teste cada alternativa com um vetor pequeno, ordenado e invertido.",
+      "dica": "**Cobra:** como o tempo do insertion sort depende da ordem inicial.\n\n- **Insertion sort** [0093]: pega cada elemento e o desloca para trás até o lugar certo no prefixo ordenado, parando quando o vizinho não é maior. Ex.: em 2, 3, 1 o 1 passa pelo 3 e pelo 2; em 1, 2, 3 ninguém se move.\n- **Melhor e pior caso** [0093]: já ordenado custa O(n), com uma comparação por elemento; invertido custa O(n²). Ex.: com n = 5, ordenado faz 4 comparações e invertido faz 4 + 3 + 2 + 1 = 10.\n\n**Como atacar:** teste cada afirmação com um vetor ordenado e outro invertido.",
       "alternativas": [
         {
           "letra": "A",
@@ -83,7 +83,7 @@
       "topico": 3,
       "formato": "simulação",
       "enunciado": "Dada a pilha de números inteiros [4, 16, 1, 7, 8, 13] onde o topo é o elemento mais à esquerda, após a realização de três (3) operações de desempilhar elementos, uma (1) operação de empilhar que insere o valor 5 e uma (1) operação de empilhar que insere o valor 2, a pilha ficará com qual configuração?",
-      "dica": "**Cobra:** simular desempilhar e empilhar e dizer como a pilha fica.\n\n- **Pilha** [0082]: LIFO: empilha e desempilha pelo topo.\n- **Pilha encadeada** [0083]: o topo é a cabeça da lista.\n\n**Exemplo:** pilha `[9, 6, 3]` (topo à esquerda): desempilhar dá `[6, 3]`; empilhar 1 dá `[1, 6, 3]`.\n\n**Como atacar:** aplique as operações uma a uma, na ordem, reescrevendo a pilha a cada passo.",
+      "dica": "**Cobra:** simular push e pop numa pilha em que o topo é o elemento mais à esquerda.\n\n- **Pilha (LIFO)** [0082]: push empilha e pop desempilha sempre no topo; o último a entrar é o primeiro a sair. Ex.: com topo à esquerda em `[3, 1]`, push 7 dá `[7, 3, 1]` e pop volta a `[3, 1]`.\n- **Onde fica o topo** [0082]: o enunciado diz de que lado está o topo; operar nele não move o resto. Ex.: com topo à direita em `[1, 2, 3]`, pop tira o 3 e push 9 deixa `[1, 2, 9]`.\n\n**Como atacar:** reescreva a pilha depois de cada operação, na ordem pedida.",
       "alternativas": [
         {
           "letra": "A",
@@ -120,7 +120,7 @@
       "topico": 5,
       "formato": "afirmações",
       "enunciado": "Sobre um Hash por Encadeamento, pode-se afirmar que:\n\nI. Ele não gera colisões secundárias\nII. Ele tem custo temporal O(n) no pior caso, sendo n o número de elementos na tabela\nIII. Ao contrário do endereçamento aberto, o encadeamento permite trabalhar com quantidade de chaves superior ao tamanho da tabela\n\n(No caderno os itens vêm rotulados a, b, c, mas as alternativas os chamam de I, II e III.)",
-      "dica": "**Cobra:** julgar afirmações sobre tabela hash com encadeamento.\n\n- **A ideia e a função hash** [0105]: colisão é duas chaves na mesma posição.\n- **Encadeamento** [0106]: cada posição guarda uma lista de chaves.\n- **Endereçamento aberto** [0107]: guarda tudo na própria tabela.\n\n**Exemplo:** m = 4: as chaves 3, 7 e 11 caem na posição 3 e formam a lista `3 -> 7 -> 11`.\n\n**Como atacar:** compare o encadeamento com o endereçamento aberto em cada afirmação, pensando no pior caso.",
+      "dica": "**Cobra:** propriedades do hash com encadeamento.\n\n- **Encadeamento** [0106]: cada posição guarda uma lista, e chaves com o mesmo hash entram na mesma lista, então cabem mais chaves que posições. Ex.: com m = 3, as chaves 1, 4 e 7 ficam todas na lista 1 (`k mod 3`).\n- **Pior caso do hash** [0106]: se todas as chaves caem na mesma posição, a lista tem n nós e a busca os percorre todos. Ex.: com m = 4 e chaves 4, 8, 12, 16, tudo cai na posição 0 e achar o 16 passa por 4 nós.\n- **Agrupamento no endereçamento aberto** [0107]: a chave que ocupa a vaga de outro hash faz a seguinte colidir com ela. Ex.: com m = 5, o 6 (hash 1) vai para a posição 2 e a chave 2 já nasce colidindo.\n\n**Como atacar:** teste cada afirmação com uma tabela pequena.",
       "alternativas": [
         {
           "letra": "A",
@@ -161,7 +161,7 @@
       "topico": 4,
       "formato": "afirmações",
       "enunciado": "Considerando-se as operações com um vetor, mantido ordenado a cada inserção de chave, e uma árvore binária de pesquisa balanceada, pode-se dizer que:\n\nI. O vetor ordenado apresenta custo de inserção e de remoção menores que o da árvore, pois não exigir alocação dinâmica de nós\nII. No pior caso, o custo da operação de busca por uma chave é assintoticamente igual tanto no vetor ordenado quanto na árvore\n\n(No caderno os itens vêm rotulados a e b, mas as alternativas os chamam de I e II.)",
-      "dica": "**Cobra:** comparar vetor ordenado e árvore binária de pesquisa balanceada.\n\n- **Busca binária** [0090]: o vetor ordenado busca em O(log n).\n- **Vetor dinâmico** [0075]: inserir no meio desloca elementos.\n- **AVL: balanceamento e rotações** [0101]: a árvore balanceada tem altura O(log n).\n\n**Exemplo:** inserir 5 em `[1,3,7,9]` exige deslocar o 7 e o 9.\n\n**Como atacar:** separe, para cada estrutura, o custo de achar a posição e o de ajustar a estrutura.",
+      "dica": "**Cobra:** comparar vetor ordenado e árvore binária de busca balanceada em custo de inserção, remoção e busca.\n\n- **Vetor ordenado** [0075]: a busca binária custa O(log n), mas inserir ou remover desloca elementos, O(n). Ex.: inserir 4 em `[1, 3, 5, 7]` empurra o 5 e o 7 uma casa à direita.\n- **BST balanceada** [0101]: a altura é O(log n), então busca, inserção e remoção custam O(log n), com um nó alocado por chave. Ex.: com 1.000 chaves, cerca de 10 níveis.\n- **Igualdade assintótica** [0072]: duas operações têm o mesmo custo se crescem na mesma ordem, ignorando constantes. Ex.: 3 log n e 10 log n são ambos O(log n).\n\n**Como atacar:** escreva o O de cada operação nas duas estruturas e compare lado a lado.",
       "alternativas": [
         {
           "letra": "A",
@@ -206,7 +206,7 @@
       "topico": 4,
       "formato": "conceito",
       "enunciado": "Considere a figura abaixo, que ilustra uma árvore com três nós contendo chaves inteiras, sendo que a raiz da árvore (marcada com \"x\") contém a chave 5, e marque a alternativa **correta**.\n\nNa figura, a raiz 5 tem o 7 como filho esquerdo e o 6 como filho direito.",
-      "dica": "**Cobra:** ver quais propriedades a árvore da figura cumpre.\n\n- **BST: busca e inserção** [0099]: esquerda menor e direita maior que o pai.\n- **AVL: balanceamento e rotações** [0101]: alturas dos filhos diferem em no máximo 1.\n- **Heap e fila de prioridade** [0102]: heap de mínimo tem pai menor ou igual aos filhos.\n\n**Exemplo:** raiz 8, filho esquerdo 3, direito 10: cumpre a regra de ABB (3 < 8 < 10) e não a de heap de mínimo.\n\n**Como atacar:** teste a figura contra cada propriedade, nó por nó.",
+      "dica": "**Cobra:** dizer a que tipos de árvore uma árvore de 3 nós pode pertencer.\n\n- **Regra da BST** [0099]: o filho esquerdo é menor que o pai e o direito é maior. Ex.: raiz 8 com filhos 3 e 10 serve; com 10 à esquerda e 3 à direita não serve.\n- **Heap mínimo** [0102]: árvore completa em que cada pai é menor ou igual aos filhos, sem relação entre irmãos. Ex.: raiz 2 com filhos 9 e 4 é um heap mínimo válido.\n- **AVL e rubro-negra** [0101]: ambas são BSTs, então exigem a regra da BST além do equilíbrio. Ex.: raiz 4 com filhos 9 (esquerda) e 1 (direita) é equilibrada, mas não é BST, logo não é AVL.\n\n**Como atacar:** teste a regra de cada estrutura contra as três chaves da figura.",
       "alternativas": [
         {
           "letra": "A",
@@ -254,7 +254,7 @@
       "topico": 2,
       "formato": "conceito",
       "enunciado": "Sobre a complexidade de algoritmos, marque a alternativa **correta**:",
-      "dica": "**Cobra:** julgar afirmações sobre o custo de algoritmos e estruturas.\n\n- **Notação O** [0072]: como o custo cresce com n, no pior caso.\n- **Lista encadeada** [0076]: chegar ao k-ésimo nó percorre k saltos.\n\n**Exemplo:** acessar o 1000º nó de uma lista encadeada custa até 999 saltos; no vetor é um cálculo.\n\n**Como atacar:** associe cada operação ao seu custo no pior caso e confira com a afirmação.",
+      "dica": "**Cobra:** custos de inserção e busca em lista encadeada, vetor e árvore.\n\n- **Inserção em lista encadeada** [0076]: com o lugar já conhecido, basta religar ponteiros, sem deslocar nada. Ex.: inserir após o nó 4 em 4 → 9 é `novo->prox = n->prox; n->prox = novo;`.\n- **Vetor: deslocamento** [0075]: inserir no início exige mover todos os elementos uma casa, então custa O(n). Ex.: inserir no início de `[1, 2, 3]` desloca 3 elementos.\n- **Notação O ignora constantes** [0072]: O(n/2) é O(n), e a busca binária é O(log n). Ex.: 5n + 3 e n/2 são ambos O(n).\n\n**Como atacar:** para cada alternativa, escreva o custo exato do pior caso e simplifique.",
       "alternativas": [
         {
           "letra": "A",
@@ -295,7 +295,7 @@
       "topico": 7,
       "formato": "código",
       "enunciado": "Considere o pseudo-código abaixo e escolha a opção **correta**:\n\n```c\nvoid par ( int v[], int inicio, int meio, int fim, int vaux[]) {\n    unsigned i=inicio, j=meio+1, k=inicio;\n    while((i <= meio) && (j <= fim) ) {\n        if ( v[i] < v[j]) { vaux[k] = v[i]; i++; }\n        else { vaux[k] = v[j]; j++; }\n        k++;\n    }\n    while(i <= meio) { vaux[k] = v[i]; i++; k++; }\n    while(j <= fim) { vaux[k] = v[j]; j++; k++; }\n    for(i = inicio; i <= fim ; i++) { v[i] = vaux[i]; }\n}\n\nvoid sortR (int v[], int inicio, int fim, int vaux[]) {\n    int meio;\n    if(inicio < fim) {\n        meio = (inicio+fim)/2;\n        sortR(v, inicio, meio, vaux);\n        sortR(v, meio+1, fim, vaux);\n        par (v, inicio, meio, fim, vaux);\n    }\n}\n\nvoid sort (int v[], int tam) {\n    int * vaux;\n    vaux = (int*) malloc (sizeof(int) * tam);\n    sortR( v, 0, tam -1 , vaux);\n    free(vaux);\n}\n```",
-      "dica": "**Cobra:** reconhecer o algoritmo de ordenação do código e seu custo.\n\n- **Merge sort** [0094]: divide ao meio, ordena cada metade e intercala com vetor auxiliar.\n- **Quick sort** [0095]: escolhe um pivô e particiona antes de recursar.\n- **Recursão** [0032]: cada chamada trabalha em um intervalo menor.\n\n**Exemplo:** `[4,1,3,2]` vira `[4,1]` e `[3,2]`, ordena cada um (`[1,4]`, `[2,3]`) e intercala em `[1,2,3,4]`.\n\n**Como atacar:** ache no código o que cada função faz (dividir, recursar, intercalar) e compare com as alternativas.",
+      "dica": "**Cobra:** reconhecer que algoritmo de ordenação o código implementa.\n\n- **Merge sort** [0094]: divide o vetor ao meio, ordena cada metade recursivamente e intercala as duas num vetor auxiliar. Ex.: 4, 1 | 3, 2 vira 1, 4 | 2, 3 e depois 1, 2, 3, 4.\n- **Intercalação** [0094]: dois índices avançam sobre as metades ordenadas, copiando sempre o menor para o auxiliar; depois vêm as sobras e a cópia de volta. Ex.: de 1, 4 e 2, 3 saem 1, 2, 3 e depois sobra o 4.\n- **Quick sort** [0095]: escolhe um pivô e particiona antes das chamadas recursivas, sem intercalar depois. Ex.: pivô 5 em 7, 2, 9, 1 separa menores e maiores antes de descer.\n\n**Como atacar:** veja se o trabalho vem antes das chamadas recursivas (partição) ou depois (intercalação).",
       "alternativas": [
         {
           "letra": "A",
@@ -332,7 +332,7 @@
       "topico": 1,
       "formato": "código",
       "enunciado": "Qual é a saída do seguinte pseudo-código? Considere que:\n\n- `len(lista)` retorna o número de elementos em uma lista\n- `max(a, b)` retorna o maior dos argumentos. Por exemplo, max(5, 8) retorna 8 e max(3, 1) retorna 3\n- A notação `lista[1:]` equivale a uma cópia da lista sem o primeiro elemento. Por exemplo, se a lista for lista = [1, 2, 3], então lista[1:] será a lista [2, 3]\n\n```python\ndef recursao(lista):\n    if len(lista) == 1:\n        return lista[0]\n    else:\n        return max(lista[0], recursao(lista[1:]))\n\nprint(recursao([11, 2, 13, 5, 7, 3]))\n```",
-      "dica": "**Cobra:** calcular a saída de uma recursão que reduz a lista a cada chamada.\n\n- **Recursão** [0032]: caso base para parar e caso recursivo com a lista menor.\n- **A pilha de chamadas** [0031]: as chamadas esperam o retorno da seguinte.\n\n**Exemplo:** `f([3,9,5])` = max(3, f([9,5])) = max(3, max(9, 5)) = 9.\n\n**Como atacar:** expanda as chamadas até o caso base e volte resolvendo cada `max`.",
+      "dica": "**Cobra:** a saída de uma recursão que reduz uma lista a cada chamada.\n\n- **Recursão** [0032]: caso base para uma lista de 1 elemento e passo que chama a si mesma numa lista menor. Ex.: `soma(l)` devolve `l[0]` se `len(l) == 1`, senão `l[0] + soma(l[1:])`.\n- **Pilha de chamadas** [0031]: cada chamada espera a de baixo voltar, então a combinação acontece na volta, do último elemento para o primeiro. Ex.: `max(3, max(8, 5))` resolve de dentro para fora: `max(8, 5) = 8` e depois `max(3, 8)`.\n\n**Como atacar:** desça escrevendo cada fatia da lista e depois combine de baixo para cima.",
       "alternativas": [
         {
           "letra": "A",
@@ -369,7 +369,7 @@
       "topico": 3,
       "formato": "simulação",
       "enunciado": "Qual é o resultado do seguinte pseudo-código na variável resultMatrix quando as entradas são duas matrizes \"matrixA\" e \"matrixB\" de dimensões m x n e n x p, respectivamente? Sendo m=2, n=3 e p=2\n\n```java\nint[][] matrixA = {{1, 0, 2}, {0, 5, 0}};\nint[][] matrixB = {{0, 8}, {9, 0}, {0, 11}};\nint[][] resultMatrix = new int[m][p];\n\nfor (int i = 0; i < m; i++) {\n    for (int j = 0; j < p; j++) {\n        int sum = 0;\n        for (int k = 0; k < n; k++) {\n            sum += matrixA[i][k] * matrixB[k][j];\n        }\n        resultMatrix[i][j] = sum;\n    }\n}\n```",
-      "dica": "**Cobra:** calcular o produto de duas matrizes com três laços.\n\n- **Matrizes** [0039]: `C[i][j]` soma `A[i][k] * B[k][j]` para todo `k`.\n- **Laços aninhados** [0024]: o laço de fora fixa a linha, o do meio a coluna, o de dentro soma.\n\n**Exemplo:** A = `[[1,2],[0,3]]`, B = `[[4,0],[1,5]]`: C[0][1] = 1·0 + 2·5 = 10.\n\n**Como atacar:** calcule cada posição do resultado separadamente, de C[0][0] até a última.",
+      "dica": "**Cobra:** o resultado do produto de duas matrizes calculado por três laços.\n\n- **Produto de matrizes** [0039]: cada `c[i][j]` é a soma de `a[i][k] * b[k][j]` para todo `k`, linha de `A` com coluna de `B`; o resultado é m×p. Ex.: linha `[1, 2]` com coluna `[3, 4]` dá 1*3 + 2*4 = 11.\n- **Três laços aninhados** [0024]: `i` percorre as linhas de `A`, `j` as colunas de `B` e `k` faz a soma, que zera a cada par (i, j). Ex.: matrizes 2×2 fazem 2*2*2 = 8 multiplicações.\n\n**Como atacar:** calcule cada posição do resultado como linha vezes coluna, na ordem de i e j.",
       "alternativas": [
         {
           "letra": "A",
