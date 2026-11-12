@@ -129,7 +129,15 @@ function conferir(provas, figuras) {
       for (const [, num] of (q.dica ?? '').matchAll(/\[(\d{4})\]/g))
         if (!ASSUNTOS[num]) erros.push(`${id}: a dica cita [${num}], que não é assunto do curso`)
       const palavras = (q.dica ?? '').replace(/```[\s\S]*?```/g, '').split(/\s+/).filter(Boolean).length
-      if (palavras > 110) erros.push(`${id}: dica com ${palavras} palavras (máximo 110)`)
+      if (palavras > 170) erros.push(`${id}: dica com ${palavras} palavras (máximo 170)`)
+      // cada conceito ensina: definição de verdade (10+ palavras) e um exemplo breve ("Ex.:")
+      const conceitos = (q.dica ?? '').split('\n').filter((l) => /^- \*\*/.test(l))
+      if (q.dica && (conceitos.length < 2 || conceitos.length > 4)) erros.push(`${id}: dica com ${conceitos.length} conceitos (de 2 a 4)`)
+      for (const c of conceitos) {
+        const m = c.match(/^- \*\*(.+?)\*\*\s*((?:\[\d{4}\][,\s]*)+):\s*(.*?)\s*Ex\.:\s*(.+)$/)
+        if (!m) { erros.push(`${id}: conceito fora do formato "- **Nome** [NNNN]: definição. Ex.: exemplo" → ${c.slice(0, 50)}`); continue }
+        if (m[3].split(/\s+/).length < 10) erros.push(`${id}: definição curta demais em "${m[1]}"`)
+      }
       if (q.dica && !/\[\d{4}\]/.test(q.dica)) erros.push(`${id}: a dica não cita nenhum assunto [NNNN]`)
       for (const [campo, texto] of [['dica', q.dica], ['resumo', q.resumo], ['enunciado', q.enunciado], ...q.alternativas.map((x) => [`porquê ${x.letra}`, x.porque])]) {
         const t = texto ?? ''
