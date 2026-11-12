@@ -278,7 +278,7 @@ window.PROVAS = [
     "numero": 7,
     "topico": 6,
     "formato": "afirmações",
-    "enunciado": "Considere as afirmações sobre busca binária:\n\ni) é utilizada apenas sobre vetores ordenados\nii) pode determinar se uma chave está ou não com um número de comparações de chave inferior a 2log2 n passos, onde n é o tamanho do vetor.\niii) Supera a busca sequencial quando o vetor é grande, por exemplo com mais que mil elementos, e está ordenado.",
+    "enunciado": "Considere as afirmações sobre busca binária:\n\ni) é utilizada apenas sobre vetores ordenados\nii) pode determinar se uma chave está ou não com um número de comparações de chave inferior a 2log₂ n passos, onde n é o tamanho do vetor.\niii) Supera a busca sequencial quando o vetor é grande, por exemplo com mais que mil elementos, e está ordenado.",
     "alternativas": [
      {
       "letra": "A",
@@ -439,7 +439,7 @@ window.PROVAS = [
      },
      {
       "letra": "D",
-      "texto": "Os dois códigos geram erros de vazamento de memória ou falha de segmentação",
+      "texto": "Os dois códigos geram erros de vazamento de memória ou de falha de segmentação",
       "porque": "Nenhum dos dois aloca memória, então não há vazamento. O I é correto na leitura da banca."
      },
      {
@@ -1101,7 +1101,7 @@ window.PROVAS = [
      {
       "letra": "E",
       "texto": "Posição 3 e posição 5",
-      "porque": "A troca entre 3 e 5 seria só da quarta passada em diante."
+      "porque": "Essa troca não acontece em nenhuma passada. Simulando: a 3ª troca é entre as posições 2 e 3, e a 4ª entre 3 e 6."
      }
     ],
     "gabarito": "C",
@@ -1123,17 +1123,17 @@ window.PROVAS = [
      {
       "letra": "A",
       "texto": "1 2 3 4 5",
-      "porque": "Seria a fila sem nenhuma retirada. Foram 4 retiradas."
+      "porque": "É a ordem crescente dos valores, e a fila guarda ordem de chegada. Além disso, houve 4 retiradas."
      },
      {
       "letra": "B",
       "texto": "2 3 1 4 5",
-      "porque": "Também ignora as retiradas. A RETIRA tira o mais antigo, o da esquerda."
+      "porque": "É a ordem de chegada de todos os elementos inseridos, como se não houvesse retirada. A RETIRA tira o mais antigo, o da esquerda, e foram 4."
      },
      {
       "letra": "C",
       "texto": "3 1 4",
-      "porque": "Seria o estado depois de só uma retirada a menos. Faltam duas retiradas (do 1 e do 4)."
+      "porque": "O 3 já saiu na segunda RETIRA (logo depois do INSERE(1)), então não pode sobrar. A fila passa por [1 4 5], depois [4 5] e termina em [5]."
      },
      {
       "letra": "D",
@@ -1575,7 +1575,7 @@ window.PROVAS = [
     "numero": 15,
     "topico": 7,
     "formato": "afirmações",
-    "enunciado": "Considere as afirmações a seguir sobre os algoritmos de ordenação Quicksort, MergeSort, HeapSort e InsertionSort\n\nI) São algoritmos estáveis: InsertionSort, QuickSort e MergeSorte\nII) Pior caso tem número de operações quadrático (proporcional a uma constante vezes n²): InsertionSort, QuickSort\nIII) Utiliza um espaço extra proporcional a n² (proporcional ao quadrado do número de elementos): HeapSort,\nIV) A ordem das entradas é incapaz de influenciar o desempenho do algoritmo: InsertionSort, MergeSort\n\nMarque a alternativa que indica TODAS as afirmações INCORRETAS feitas:",
+    "enunciado": "Considere as afirmações a seguir sobre os algoritmos de ordenação Quicksort, MergeSort, HeapSort e InsertionSort\n\nI) São algoritmos estáveis: InsertionSort, QuickSort e MergeSorte\nII) Pior caso tem número de operações quadrático (proporcional a uma constante vezes n² : InsertionSort, QuickSort\nIII) Utiliza um espaço extra proporcional a n² (proporcional ao quadrado do número de elementos): HeapSort,\nIV) A ordem das entradas é incapaz de influenciar o desempenho do algoritmo: InsertionSort, MergeSort\n\nMarque a alternativa que indica TODAS as afirmações INCORRETAS feitas:",
     "alternativas": [
      {
       "letra": "A",
@@ -2631,7 +2631,7 @@ window.PROVAS = [
     "numero": 17,
     "topico": 4,
     "formato": "conceito",
-    "enunciado": "As árvores são estruturas de dados poderosas e se subdividem em vários tipos, cada um dos quais com suas características próprias. Relacione os tipos de árvores, apresentados na coluna da esquerda, com as suas respectivas características, indicadas na coluna da direita:\n\n| Tipo de árvore | Característica |\n|---|---|\n| I – Heap | W – Pode degenerar se os elementos forem inseridos de forma ordenada. |\n| II – Rubro-Negra | X – É balanceada. |\n| III – Avore AVL | Y – Têm altura sempre proporcional/próxima a O(log2 n), onde n é o número de nós que contém. |\n| IV – Árvores binária de busca | Z – São sempre completas. |\n\nEstão CORRETAS as associações:",
+    "enunciado": "As árvores são estruturas de dados poderosas e se subdividem em vários tipos, cada um dos quais com suas características próprias. Relacione os tipos de árvores, apresentados na coluna da esquerda, com as suas respectivas características, indicadas na coluna da direita:\n\n| Tipo de árvore | Característica |\n|---|---|\n| I – Heap | W – Pode degenerar se os elementos forem inseridos de forma ordenada. |\n| II – Rubro-Negra | X – É balanceada. |\n| III – Avore AVL | Y – Têm altura sempre proporcional/próxima a O(log₂ n), onde n é o número de nós que contém. |\n| IV – Árvores binária de busca | Z – São sempre completas. |\n\nEstão CORRETAS as associações:",
     "alternativas": [
      {
       "letra": "A",
@@ -3422,7 +3422,7 @@ window.PROVAS = [
     "numero": 14,
     "topico": 6,
     "formato": "afirmações",
-    "enunciado": "Sobre as afirmações abaixo:\n\nI. Pode-se implementar uma busca em um vetor não ordenado a custo máximo inferior a n/2 operações, onde n é o número de elementos do vetor, desde que a chave buscada ocorra no vetor, não importando qual a posição em que a mesma ocorre.\nII. A busca por uma chave em um vetor ordenado pode ser realizada corretamente com um número de operações proporcional a log2 n, onde n é o número de elementos do vetor.\nIII. O número de comparações realizadas para determinar se uma chave de busca está ou não em um vetor não ordenado é sempre menor do que o número de comparações envolvendo a mesma chave de busca em uma lista encadeada dinâmica, desde que a quantidade e a ordem dos elementos inseridos nas duas estruturas seja a mesma.\n\nMarque a alternativa CORRETA:",
+    "enunciado": "Sobre as afirmações abaixo:\n\nI. Pode-se implementar uma busca em um vetor não ordenado a custo máximo inferior a n/2 operações, onde n é o número de elementos do vetor, desde que a chave buscada ocorra no vetor, não importando qual a posição em que a mesma ocorre.\nII. A busca por uma chave em um vetor ordenado pode ser realizada corretamente com um número de operações proporcional a log₂ n, onde n é o número de elementos do vetor.\nIII. O número de comparações realizadas para determinar se uma chave de busca está ou não em um vetor não ordenado é sempre menor do que o número de comparações envolvendo a mesma chave de busca em uma lista encadeada dinâmica, desde que a quantidade e a ordem dos elementos inseridos nas duas estruturas seja a mesma.\n\nMarque a alternativa CORRETA:",
     "alternativas": [
      {
       "letra": "A",
@@ -3775,7 +3775,7 @@ window.PROVAS = [
      },
      {
       "letra": "E",
-      "texto": "O(N²), pois, como há dois vetores, precisam-se fazer dois laços de forma aninhada (um dentro do outro), gerando uma multiplicação das quantidades de elementos.",
+      "texto": "O(N²), pois, como há dois vetores, precisa-se fazer dois laços de forma aninhada (um dentro do outro), gerando uma multiplicação das quantidades de elementos.",
       "porque": "Os laços não são aninhados: cada passo avança um dos dois índices e o total de passos é 2N."
      }
     ],
@@ -3816,7 +3816,7 @@ window.PROVAS = [
      },
      {
       "letra": "D",
-      "texto": "III, IV e V.",
+      "texto": "III, IV e V, apenas.",
       "porque": "III e IV são falsas."
      },
      {
@@ -5052,8 +5052,8 @@ window.PROVAS = [
     "alternativas": [
      {
       "letra": "A",
-      "texto": "2 * (m/2)^(d-1)",
-      "porque": "É a única fórmula que cresce exponencialmente com o nível. A raiz tem pelo menos 2 filhos e cada outro nó, pelo menos m/2, então a cada nível o mínimo é multiplicado por m/2."
+      "texto": "2 * m/2^(d-1)",
+      "porque": "É a única fórmula com o nível no expoente, e a que mais se aproxima da regra (lida como 2 · (m/2)^(d-1), provável intenção da banca). A raiz tem pelo menos 2 filhos e cada outro nó, pelo menos m/2, então a cada nível o mínimo é multiplicado por m/2."
      },
      {
       "letra": "B",
@@ -5077,7 +5077,7 @@ window.PROVAS = [
      }
     ],
     "gabarito": "anulada",
-    "resumo": "Pela regra da árvore B, a raiz tem pelo menos 2 filhos e os demais nós pelo menos ⌈m/2⌉, então o número mínimo de nós por nível cresce como uma potência de m/2: a fórmula da A. A banca anulou, provavelmente porque os expoentes se perderam na impressão do caderno (as alternativas aqui foram reconstruídas com `^`). O padrão para lembrar: mínimo por nível = 2 · (m/2) elevado a (nível menos 1).",
+    "resumo": "Pela regra da árvore B, a raiz tem pelo menos 2 filhos e os demais nós pelo menos ⌈m/2⌉, então o número mínimo de nós por nível cresce como uma potência de m/2: a fórmula da A. A banca anulou. No caderno o expoente (d-1) da A está só no 2 de m/2, o que lido ao pé da letra dá outra conta (`^` marca o expoente aqui), e é provável que isso tenha pesado. O padrão para lembrar: mínimo por nível = 2 · (m/2) elevado a (nível menos 1).",
     "assuntos": [
      {
       "num": "0146",
@@ -5562,7 +5562,7 @@ window.PROVAS = [
      }
     ],
     "gabarito": "A",
-    "resumo": "Duas inversões voltam à ordem original: empilhar inverte, a fila preserva a ordem de saída da pilha, e empilhar de novo inverte outra vez. A fila tem 10 no começo (I) e a pilha final tem o 11 no topo (II). Atenção: as alternativas D e E do caderno são iguais, e a letra A é inferência a partir da conta.",
+    "resumo": "Duas inversões voltam à ordem original: empilhar inverte, a fila preserva a ordem de saída da pilha, e empilhar de novo inverte outra vez. A fila tem 10 no começo (I) e a pilha final tem o 11 no topo (II). Atenção: as alternativas D e E do caderno são iguais. A letra A é a da folha oficial e bate com a conta.",
     "assuntos": [
      {
       "num": "0082",
@@ -6411,7 +6411,7 @@ window.PROVAS = [
      {
       "letra": "D",
       "texto": "árvore da figura d)",
-      "porque": "Não é uma ABB (o 6 está à esquerda da raiz 5, mas 6 > 5), e o 2 está desbalanceado (esquerda altura 0, direita altura 2).",
+      "porque": "Não é uma ABB: o 6 está na subárvore esquerda da raiz 5, mas 6 > 5. Os fatores de balanceamento até estão dentro do limite, então o defeito é só a ordem das chaves.",
       "figura": "2019-033-q19-d"
      },
      {

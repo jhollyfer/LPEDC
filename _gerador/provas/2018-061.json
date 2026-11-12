@@ -374,8 +374,8 @@
       "alternativas": [
         {
           "letra": "A",
-          "texto": "2 * (m/2)^(d-1)",
-          "porque": "É a única fórmula que cresce exponencialmente com o nível. A raiz tem pelo menos 2 filhos e cada outro nó, pelo menos m/2, então a cada nível o mínimo é multiplicado por m/2."
+          "texto": "2 * m/2^(d-1)",
+          "porque": "É a única fórmula com o nível no expoente, e a que mais se aproxima da regra (lida como 2 · (m/2)^(d-1), provável intenção da banca). A raiz tem pelo menos 2 filhos e cada outro nó, pelo menos m/2, então a cada nível o mínimo é multiplicado por m/2."
         },
         {
           "letra": "B",
@@ -399,7 +399,7 @@
         }
       ],
       "gabarito": "anulada",
-      "resumo": "Pela regra da árvore B, a raiz tem pelo menos 2 filhos e os demais nós pelo menos ⌈m/2⌉, então o número mínimo de nós por nível cresce como uma potência de m/2: a fórmula da A. A banca anulou, provavelmente porque os expoentes se perderam na impressão do caderno (as alternativas aqui foram reconstruídas com `^`). O padrão para lembrar: mínimo por nível = 2 · (m/2) elevado a (nível menos 1).",
+      "resumo": "Pela regra da árvore B, a raiz tem pelo menos 2 filhos e os demais nós pelo menos ⌈m/2⌉, então o número mínimo de nós por nível cresce como uma potência de m/2: a fórmula da A. A banca anulou. No caderno o expoente (d-1) da A está só no 2 de m/2, o que lido ao pé da letra dá outra conta (`^` marca o expoente aqui), e é provável que isso tenha pesado. O padrão para lembrar: mínimo por nível = 2 · (m/2) elevado a (nível menos 1).",
       "assuntos": [
         {
           "num": "0146",
@@ -873,7 +873,7 @@
         }
       ],
       "gabarito": "A",
-      "resumo": "Duas inversões voltam à ordem original: empilhar inverte, a fila preserva a ordem de saída da pilha, e empilhar de novo inverte outra vez. A fila tem 10 no começo (I) e a pilha final tem o 11 no topo (II). Atenção: as alternativas D e E do caderno são iguais, e a letra A é inferência a partir da conta.",
+      "resumo": "Duas inversões voltam à ordem original: empilhar inverte, a fila preserva a ordem de saída da pilha, e empilhar de novo inverte outra vez. A fila tem 10 no começo (I) e a pilha final tem o 11 no topo (II). Atenção: as alternativas D e E do caderno são iguais. A letra A é a da folha oficial e bate com a conta.",
       "assuntos": [
         {
           "num": "0082",

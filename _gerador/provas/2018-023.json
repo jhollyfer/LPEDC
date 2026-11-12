@@ -35,7 +35,7 @@
         },
         {
           "letra": "E",
-          "texto": "O(N²), pois, como há dois vetores, precisam-se fazer dois laços de forma aninhada (um dentro do outro), gerando uma multiplicação das quantidades de elementos.",
+          "texto": "O(N²), pois, como há dois vetores, precisa-se fazer dois laços de forma aninhada (um dentro do outro), gerando uma multiplicação das quantidades de elementos.",
           "porque": "Os laços não são aninhados: cada passo avança um dos dois índices e o total de passos é 2N."
         }
       ],
@@ -75,7 +75,7 @@
         },
         {
           "letra": "D",
-          "texto": "III, IV e V.",
+          "texto": "III, IV e V, apenas.",
           "porque": "III e IV são falsas."
         },
         {

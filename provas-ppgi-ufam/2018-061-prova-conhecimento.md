@@ -106,13 +106,13 @@ e) Um array pode ser alocado dinamicamente, situação na qual ele passa a ser d
 ### QUESTÃO 09 (anulada)
 Para uma árvore B, de ordem "m", o número mínimo de descendentes para um nível "d" da árvore é de:
 
-a) 2 * m/2 (d-1)
+a) 2 * m/2^(d-1)
 b) d * m/2
-c) (m*d/2) 2
-d) [(m*d/2) 2 ]/2
-e) d*(m/2) 2
+c) (m*d/2)^2
+d) [(m*d/2)^2]/2
+e) d*(m/2)^2
 
-*(Nota: as alternativas usam expoentes e possivelmente símbolos de teto que a extração de texto não preservou. Os expoentes aparecem soltos acima, e vale conferir a notação no PDF original.)*
+*(Nota: `^` marca o expoente, que no PDF aparece sobrescrito. Na alternativa A o sobrescrito (d-1) está só no 2 de `m/2`, como no caderno.)*
 
 ### QUESTÃO 10
 Dois vetores, v1 e v2, capazes de armazenar N inteiros cada um, estão ordenados de forma crescente e têm a propriedade de que o último elemento de v1 (v1[N-1]) é menor que o primeiro elemento de v2 (v2[0]). É retirado um elemento de cada vez de cada um desses vetores alternadamente, e cada elemento retirado é colocado em uma fila. Posteriormente, os elementos são retirados da fila e inseridos em uma árvore binária de busca. A árvore é percorrida em ordem simétrica, e os elementos são inseridos, assim que retirados, em uma pilha. Depois, cada elemento é retirado da pilha e inserido alternadamente em um dos vetores, começando por v1. Diante do exposto, conclui-se que:
