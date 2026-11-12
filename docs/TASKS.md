@@ -4,7 +4,7 @@
 
 > Atualiza no mesmo commit em que a tarefa começa ou termina.
 
-**Resumo:** 19 tarefas · 19 feitas · 0 em andamento · 0 a fazer · atualizado 2026-11-12
+**Resumo:** 20 tarefas · 20 feitas · 0 em andamento · 0 a fazer · atualizado 2026-11-12
 
 Status: `A fazer` · `Em andamento` · `Feita` · `Bloqueada` (com motivo nas notas).
 Prioridade: `Alta` · `Média` · `Baixa`.
@@ -48,12 +48,13 @@ Provas recebidas: 11 cadernos de 2016 a 2023 em `_fontes/provas-ppgi.md`; só a 
 | 4.3 | Simulados completos de 20 questões com gabarito comentado | Alta | Feita | `SIMULADOS.md`: 3 simulados, 4 alternativas |
 | 4.4 | Resolver as 210 questões das 11 provas, com letra, justificativa e assunto do curso | Alta | Feita | `PROVAS.md`: 13 sem letra (figura ausente); 071/2023 com gabarito oficial |
 
-## Fase 5 · Quiz das provas (2/2)
+## Fase 5 · Quiz das provas (3/3)
 
 | # | Tarefa | Prioridade | Status | Notas |
 |---|---|---|---|---|
 | 5.1 | Quiz das 11 provas no GitHub Pages, com o porquê de cada alternativa e as figuras no traço do curso | Alta | Feita | `index.html`, `quiz/`, fonte em `_gerador/provas/`, gerado por `_gerador/quiz.mjs` |
 | 5.2 | Conferir as 11 provas com os PDFs da banca (Drive do PPGI): cadernos de 2022 e 2023, gabarito oficial, texto, figuras e observações | Alta | Feita | 020/2023 Q06 B→C e Q09 →A; 2016 a 2019 sem divergência de letra |
+| 5.3 | Conceito e exemplo antes de responder, em cada questão | Alta | Feita | campo `dica` no JSON; `quiz.mjs --check` exige |
 
 ---
 

@@ -43,7 +43,8 @@
           "num": "0032",
           "modulo": "04-funcoes.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Em recursão, você resolve os argumentos de dentro para fora e registra cada `Imprimir` na ordem em que a chamada começa. Se o `Imprimir` vem antes do `Se`, o valor aparece antes de qualquer descida adicional. O caso base devolve um valor fixo, que depois entra na conta de quem chamou.\n\n**Exemplo:**\n```c\nint g(int k) {\n  printf(\"%d \", k);\n  if (k > 0) return g(k - 1) + 2;\n  return 5;\n}\n```\n`g(2)` imprime `2 1 0` e retorna 9 (5 + 2 + 2). Em `g(g(0))`, o `g(0)` de dentro roda primeiro: imprime `0` e devolve 5, e só então `g(5)` começa.\n\n**Como atacar:** liste cada chamada na ordem em que ela inicia, anotando o que imprime e o que ela espera para devolver."
     },
     {
       "numero": 2,
@@ -92,7 +93,8 @@
           "num": "0097",
           "modulo": "14-arvores.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Fila é FIFO: quem chega primeiro é atendido primeiro. Pilha é LIFO: o último a entrar é o primeiro a sair. Fila, pilha e lista guardam os elementos em sequência; uma hierarquia com pais e filhos é de outra família. O enunciado mistura \"INCORRETA\" com \"EXCETO\", então procure o item que não é uso típico de fila.\n\n**Exemplo:** para \"qual NÃO é uso de fila?\" com as opções fila do caixa, desfazer edição (Ctrl+Z) e fila de impressão: no caixa e na impressão vale a ordem de chegada. No desfazer, o mais recente é revertido primeiro, ou seja, LIFO: é pilha.\n\n**Como atacar:** para cada item pergunte \"alguém espera a vez por ordem de chegada?\" e marque o que não segue essa ideia."
     },
     {
       "numero": 3,
@@ -133,7 +135,8 @@
           "num": "0099",
           "modulo": "14-arvores.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Na busca em ABB, cada comparação manda para a esquerda (chave menor que o nó) ou para a direita (maior). Cada decisão restringe um intervalo: ir à esquerda de x faz de x o máximo permitido; ir à direita faz de x o mínimo. Todo nó examinado depois precisa caber nesse intervalo.\n\n**Exemplo:** buscando 50 com `10, 80, 40, 60, 50`:\n\n| nó | decisão | intervalo |\n|---|---|---|\n| 10 | direita | (10, ∞) |\n| 80 | esquerda | (10, 80) |\n| 40 | direita | (40, 80) |\n| 60 | esquerda | (40, 60) |\n| 50 | achou | |\n\nSe depois do 40 viesse o 30, seria impossível: está fora de (40, 80).\n\n**Como atacar:** percorra cada alternativa atualizando o intervalo e pare no primeiro nó que sai dele."
     },
     {
       "numero": 4,
@@ -177,7 +180,8 @@
           "num": "0099",
           "modulo": "14-arvores.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Numa ABB, nós irmãos têm o mesmo pai, e só existe uma raiz: o nó sem pai. Para achar onde uma chave nova entra, desça comparando (menor à esquerda, maior à direita) até encontrar um lugar vazio. Esse lugar é a posição de inserção.\n\n**Exemplo:** árvore com raiz 7, filhos 3 (esquerda) e 9 (direita), e o 5 como filho direito do 3. Os nós 3 e 9 são irmãos, pois o pai é o 7. Inserir 4: 4 < 7, esquerda; 4 > 3, direita; 4 < 5, esquerda. Ele vira filho esquerdo do 5.\n\n**Como atacar:** julgue cada afirmativa sozinha: ache o pai na figura e, para inserção, simule a descida."
     },
     {
       "numero": 5,
@@ -218,7 +222,8 @@
           "num": "0105",
           "modulo": "15-hash.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** A função de hash transforma a chave num endereço da tabela. Chaves diferentes podem gerar o mesmo endereço, e aí o programa precisa de uma estratégia extra. Não confunda o evento com o tratamento (sondagem, encadeamento) nem com a tabela lotada (estouro de capacidade).\n\n**Exemplo:** tabela de 5 posições, h(k) = k mod 5. A chave 7 vai para a posição 2. Depois chega a 12, que também dá 2, e esse endereço já está ocupado. O que aconteceu com a 12 é o fenômeno que a questão pede para nomear. Ir parar na posição 3, por exemplo, é o tratamento, outro conceito.\n\n**Como atacar:** complete a frase com suas palavras antes de olhar as opções e depois ache o termo técnico dela."
     },
     {
       "numero": 6,
@@ -259,7 +264,8 @@
           "num": "0106",
           "modulo": "15-hash.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** No hash com encadeamento, cada posição da tabela guarda uma lista. Para cada chave, calcule o endereço (aqui, posição da letra mod tamanho) e coloque-a na lista dele. Duas chaves colidem quando caem no mesmo endereço, não em endereços vizinhos. Para conferir \"nenhuma chave na posição x\" ou \"só uma na posição y\", monte a tabela inteira.\n\n**Exemplo:** tabela de 7 posições, h = posição da letra mod 7, chaves C, G, J, N, E (posições 3, 7, 10, 14, 5):\n\n| índice | lista |\n|---|---|\n| 0 | G, N |\n| 3 | C, J |\n| 5 | E |\n\nAs demais ficam vazias. G e N colidiram na posição 0.\n\n**Como atacar:** tabele todas as letras primeiro e só depois julgue cada afirmativa olhando a tabela."
     },
     {
       "numero": 7,
@@ -304,7 +310,8 @@
           "num": "0099",
           "modulo": "14-arvores.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Insira as chaves na ordem dada (menor à esquerda, maior à direita) e só depois percorra. Pré-ordem: raiz, esquerda, direita. Em ordem: esquerda, raiz, direita, e devolve as chaves ordenadas. Pós-ordem: esquerda, direita, raiz.\n\n**Exemplo:** inserindo 40, 20, 60, 10, 30: a raiz é 40, os filhos são 20 e 60, e 10 e 30 ficam sob o 20.\n- Pré-ordem: `40 20 10 30 60`\n- Em ordem: `10 20 30 40 60`\n- Pós-ordem: `10 30 20 60 40`\n\n**Como atacar:** o formato já descarta opções (pré começa na raiz, em ordem é crescente, pós termina na raiz); confirme o resto na árvore."
     },
     {
       "numero": 8,
@@ -345,7 +352,8 @@
           "num": "0090",
           "modulo": "13-busca-e-ordenacao.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** A busca binária compara com o elemento do meio e descarta metade do vetor a cada passo. No pior caso, o número de acessos é floor(log2 n) + 1. Potências de 2 para a conta: 2^5 = 32, 2^6 = 64, 2^7 = 128, 2^10 = 1024, e cada 10 expoentes multiplicam por cerca de mil.\n\n**Exemplo:** n = 100. Como 2^6 = 64 ≤ 100 < 128 = 2^7, floor(log2 100) = 6 e o máximo é 6 + 1 = 7 acessos. Conferindo, o que sobra após cada acesso: 50, 25, 12, 6, 3, 1, 0. São 7 passos.\n\n**Como atacar:** ache a maior potência de 2 que cabe em n e some 1 ao expoente."
     },
     {
       "numero": 9,
@@ -386,7 +394,8 @@
           "num": "0146",
           "modulo": "22-arvores-avancadas.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Em árvore B, toda página (menos a raiz) tem um mínimo de chaves. Se a remoção deixa a página abaixo dele, tenta-se redistribuir: pegar uma chave do irmão que tem folga, passando pelo pai. Sem folga no irmão, concatena-se a página, o irmão e a chave separadora do pai. Split é da inserção, quando a página estoura.\n\n**Exemplo:** ordem 4 (de 1 a 3 chaves por página). Pai `[20]`, folhas `[10]` e `[30,35,38]`. Remover 10 esvazia a folha. O irmão tem folga: 20 desce e 30 sobe, ficando pai `[30]` e folhas `[20]` e `[35,38]`. Se o irmão fosse só `[30]`, a concatenação daria `[20,30]` como nova raiz.\n\n**Como atacar:** para cada alternativa, veja se descreve inserção ou remoção e se usa o irmão como a regra manda."
     },
     {
       "numero": 10,
@@ -427,7 +436,8 @@
           "num": "0146",
           "modulo": "22-arvores-avancadas.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Árvore B de ordem m: cada nó tem no máximo m filhos e, exceto a raiz, no mínimo ⌈m/2⌉; a raiz, não sendo folha, tem no mínimo 2. Um nó com k filhos guarda k-1 chaves. Todas as folhas ficam no mesmo nível. O balanceamento é local (split e concatenação) e a estrutura foi pensada para disco.\n\n**Exemplo:** ordem 5: nós internos (fora a raiz) têm de 3 a 5 filhos, ou seja, de 2 a 4 chaves. Um nó com 4 filhos tem 3 chaves. Se uma folha recebe a 5ª chave, ela se divide em duas e sobe uma chave; as outras folhas nem são tocadas.\n\n**Como atacar:** compare cada afirmativa com essas propriedades; uma palavra absoluta errada já a torna falsa."
     },
     {
       "numero": 11,
@@ -476,7 +486,8 @@
           "num": "0106",
           "modulo": "15-hash.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Numa lista encadeada, chegar a um elemento exige percorrer os nós desde o início, então a busca faz até n comparações. Num vetor ordenado a busca binária faz cerca de log2 n. Listas também servem de bloco para outras estruturas: pilha, fila e tabela hash por encadeamento. Palavras como \"unicamente\" e \"sempre\" pedem um contraexemplo.\n\n**Exemplo:** com 64 elementos, a lista faz até 64 comparações e o vetor ordenado, até 7 (log2 64 = 6, mais 1). Já na hash por encadeamento cada posição guarda uma lista, então a lista aparece dentro dela.\n\n**Como atacar:** julgue cada afirmação sozinha e, nas absolutas, procure um contraexemplo."
     },
     {
       "numero": 12,
@@ -521,7 +532,8 @@
           "num": "0096",
           "modulo": "13-busca-e-ordenacao.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Alguns ordenadores aproveitam a ordem que o vetor já tem (adaptativos); outros fazem o mesmo trabalho em qualquer entrada. Compare, para cada algoritmo, o custo de comparações num vetor quase pronto, que é o seu melhor caso ou algo próximo dele. Para quicksort, lembre que o custo depende da escolha do pivô.\n\n**Exemplo:** vetor `1 2 3 5 4 6`. Bubble sort com parada antecipada: a 1ª passada troca 5 e 4, a 2ª não troca nada e o algoritmo para: 2 passadas. Seleção, por outro lado, sempre faz n(n-1)/2 = 15 comparações, esteja o vetor como estiver.\n\n**Como atacar:** para cada algoritmo da lista, pergunte se ele consegue parar cedo num vetor quase ordenado."
     },
     {
       "numero": 13,
@@ -582,7 +594,8 @@
           "num": "0095",
           "modulo": "13-busca-e-ordenacao.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Espaço extra constante significa ordenar trocando elementos no próprio vetor, com poucas variáveis auxiliares. Algoritmo que copia o vetor, ou parte dele, usa espaço proporcional a n. Recursão também gasta memória: cada chamada ocupa um quadro na pilha, e conta a profundidade que ela alcança no pior caso.\n\n**Exemplo:** o bubble sort só troca vizinhos com uma variável temporária: O(1). Um algoritmo que copia as duas metades do vetor e depois as junta precisa de um vetor auxiliar de tamanho n: O(n). Uma recursão de profundidade n ocupa n quadros, mesmo sem vetor auxiliar.\n\n**Como atacar:** para cada algoritmo, pergunte \"tem vetor auxiliar?\" e \"qual a profundidade máxima da recursão no pior caso?\"."
     },
     {
       "numero": 14,
@@ -627,7 +640,8 @@
           "num": "0090",
           "modulo": "13-busca-e-ordenacao.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Em vetor não ordenado a busca sequencial varre elemento a elemento; no pior caso (chave na última posição) são n comparações. Em vetor ordenado a busca binária faz um número proporcional a log2 n. Vetor e lista encadeada com os mesmos elementos na mesma ordem são percorridos na mesma sequência. Leia o quantificador de cada afirmação (pior caso, \"qualquer posição\", \"sempre\").\n\n**Exemplo:** vetor `[8, 3, 5, 1]` e lista `8 -> 3 -> 5 -> 1`: buscar o 1 faz 4 comparações nos dois; buscar o 8 faz 1 nos dois. Em vetor ordenado de 16 elementos, a binária faz no máximo 5 comparações.\n\n**Como atacar:** julgue cada afirmativa pelo pior caso e teste com um vetor pequeno."
     },
     {
       "numero": 15,
@@ -672,7 +686,8 @@
           "num": "0107",
           "modulo": "15-hash.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Colisão primária: chaves com o mesmo endereço de hash. Colisão secundária: chaves com endereços de hash diferentes que se esbarram porque a sondagem do endereçamento aberto já ocupou posições. No encadeamento cada posição tem uma lista, e uma busca pode percorrê-la inteira, no pior caso com as n chaves. Dizer \"sempre menos\" entre duas técnicas exige valer em todos os casos.\n\n**Exemplo:** endereçamento aberto com sondagem linear, tabela de 5, h = k mod 5. Insira 5 (vai a 0), 10 (hash 0, ocupado, vai a 1) e 1 (hash 1, ocupado pelo 10, vai a 2). O 1 esbarrou num 10 que nem tinha o mesmo hash dele: colisão secundária.\n\n**Como atacar:** em \"pode\", basta um caso possível; em \"sempre\", basta um contraexemplo."
     },
     {
       "numero": 16,
@@ -719,7 +734,8 @@
           "num": "0101",
           "modulo": "14-arvores.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Numa AVL, para todo nó, a diferença entre as alturas das subárvores esquerda e direita é no máximo 1 (nó vazio vale 0 e folha vale 1). Confira cada nó, não só a raiz. A árvore também precisa ser uma ABB: esquerda menor, direita maior.\n\n**Exemplo:** raiz 10 com filho esquerdo 5, que tem filho esquerdo 3, e nada à direita do 10: alturas 2 e 0 na raiz, diferença 2, então não é AVL. Se o 10 ganhar o filho direito 15, ficam alturas 2 e 1 na raiz, e todos os outros nós têm diferença até 1: passa a ser AVL.\n\n**Como atacar:** escreva a altura de cada nó, de baixo para cima, e confira a diferença em todos."
     },
     {
       "numero": 17,
@@ -760,7 +776,8 @@
           "num": "0082",
           "modulo": "12-pilhas-e-filas.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Pilha é LIFO: a remoção devolve o último elemento inserido, o do topo. Três remoções seguidas devolvem os três últimos inseridos, do mais recente para o mais antigo. Cuidado com alternativas que mostram os números certos na ordem errada e com a opção \"nenhuma das anteriores\".\n\n**Exemplo:** insira 5, 2, 8, 1, 7. O topo é o 7. Três remoções: `7, 1, 8`, nessa ordem. Já `5, 2, 8` é o que uma fila devolveria.\n\n**Como atacar:** desenhe a pilha de baixo para cima e risque o topo três vezes."
     },
     {
       "numero": 18,
@@ -809,7 +826,8 @@
           "num": "0049",
           "modulo": "06-ponteiros.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Em C, os parâmetros são copiados. Uma função que recebe `No *prim` altera só a cópia do ponteiro, e quem chamou não vê a nova cabeça. Para mudar o ponteiro de quem chamou, receba `No **prim` e escreva em `*prim`. Inserir na cabeça serve a lista e pilha; fila insere num extremo e remove no outro (FIFO). Memória alocada cujo ponteiro se perde é vazamento.\n\n**Exemplo:**\n```c\nvoid a(int x)  { x = 9; }\nvoid b(int *x) { *x = 9; }\nint n = 1;\na(n);   // n continua 1\nb(&n);  // n vira 9\n```\nCom ponteiros de nó vale o mesmo: `No *p` altera a cópia de `p`; `No **p` altera o original.\n\n**Como atacar:** para cada função, pergunte se o ponteiro de quem chamou muda e se o ponto de inserção respeita a política da fila."
     },
     {
       "numero": 19,
@@ -850,7 +868,8 @@
           "num": "0095",
           "modulo": "13-busca-e-ordenacao.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Depois de uma partição, o pivô fica na posição final dele: tudo à esquerda cumpre a ordem pedida em relação a ele e tudo à direita cumpre a ordem oposta. Em ordem decrescente, a esquerda é ≥ pivô e a direita é ≤ pivô. Um valor só pode ter sido o pivô se passar nesse teste. Mais de um valor pode passar, e a pergunta diz \"pode\".\n\n**Exemplo:** vetor `9 8 7 5 6 2` após uma partição decrescente. Candidato 7 (posição 2): à esquerda 9 e 8 são ≥ 7; à direita 5, 6 e 2 são ≤ 7: pode ser o pivô. Candidato 5 (posição 3): à direita há o 6, maior que 5: não pode.\n\n**Como atacar:** teste cada valor citado olhando todos os elementos de cada lado dele."
     },
     {
       "numero": 20,
@@ -891,7 +910,8 @@
           "num": "0101",
           "modulo": "14-arvores.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Na AVL, quando uma inserção deixa algum nó com diferença de altura 2, uma rotação restabelece o equilíbrio. Chaves em ordem crescente empurram tudo para a direita, e o conserto é a rotação simples à esquerda no primeiro nó desbalanceado. Depois de cada inserção, confira as alturas de baixo para cima.\n\n**Exemplo:** inserir 1, 2, 3, 4, 5. Após 1, 2, 3 o nó 1 desbalanceia; rotação à esquerda: raiz 2 com filhos 1 e 3. O 4 entra à direita do 3. O 5 entra à direita do 4, e o 3 fica com diferença 2: rotação à esquerda nele, subindo o 4 com filhos 3 e 5. Final: raiz 2, altura 1 à esquerda e 2 à direita: diferença 1.\n\n**Como atacar:** simule inserção por inserção, rotacionando ao ver diferença 2, e só no fim compare as alturas sob a raiz."
     }
   ]
 }

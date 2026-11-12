@@ -50,7 +50,8 @@
           "num": "0072",
           "modulo": "10-analise.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Intercalar dois vetores ordenados: mantenha um índice em cada um, compare os elementos atuais, copie o menor para o destino e avance só o índice dele. Quando um vetor acaba, copie o resto do outro. Para estimar o custo, conte quantas cópias e quantas comparações acontecem, mesmo no melhor caso.\n\n**Exemplo:** A = `1 4`, B = `2 3` (N = 2). Compara 1 e 2, copia 1; compara 4 e 2, copia 2; compara 4 e 3, copia 3; B acabou, copia o 4. São 4 cópias para 4 elementos. No melhor caso, A = `1 2` e B = `3 4`: só 2 comparações, e o resto de B é copiado direto, mas as 4 cópias continuam.\n\n**Como atacar:** pergunte quantas posições do destino precisam ser escritas, mesmo no melhor caso, e se alguma busca é realmente necessária."
     },
     {
       "numero": 2,
@@ -91,7 +92,8 @@
           "num": "0146",
           "modulo": "22-arvores-avancadas.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Árvore B de ordem m: no máximo m filhos por nó; no mínimo ⌈m/2⌉ filhos nos nós internos (a raiz pode ter só 2); um nó com k filhos tem k-1 chaves; todas as folhas no mesmo nível. Na árvore B (não na B+), todos os nós guardam chaves, folhas inclusive. O rebalanceamento só ocorre quando uma página estoura ou fica abaixo do mínimo.\n\n**Exemplo:** ordem 6: nós internos têm de 3 a 6 filhos. Um nó com 4 filhos tem 3 chaves. Uma folha comporta até 5 chaves; ao receber a 6ª, ela se divide e sobe uma chave. Inserções que cabem na página não rebalanceiam nada.\n\n**Como atacar:** marque V ou F em cada item pela propriedade correspondente e só depois procure a alternativa com esse conjunto."
     },
     {
       "numero": 3,
@@ -136,7 +138,8 @@
           "num": "0175",
           "modulo": "28-estruturas-complementos.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Na AVL, a diferença de altura entre as subárvores de qualquer nó é no máximo 1 (aqui, folha vale 1 e árvore vazia vale 0). Uma AVL de altura h precisa de um número mínimo de nós: N(h) = N(h-1) + N(h-2) + 1, com N(1) = 1 e N(2) = 2. Altura grande com poucos nós forçaria uma cadeia, que quebra a regra.\n\n**Exemplo:** para altura 4 você precisa de N(3) + N(2) + 1 nós. Calcule N(3) pela mesma fórmula (N(2) + N(1) + 1) e some: o mínimo de nós para altura 4 sai 7.\n\n**Como atacar:** para cada alternativa, compare a quantidade de nós com o mínimo que a altura exige."
     },
     {
       "numero": 4,
@@ -177,7 +180,8 @@
           "num": "0102",
           "modulo": "14-arvores.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Num max-heap guardado em vetor, o pai está na posição i e os filhos em 2i+1 e 2i+2, e nenhum filho pode ser maior que o pai. Inserir: coloque no fim e troque com o pai enquanto for maior. Remover o topo: o último elemento vai para a raiz e desce, trocando com o maior filho enquanto algum filho for maior.\n\n**Exemplo:** heap `30 20 25 10 15`. Inserir 28: `30 20 25 10 15 28`; o pai do índice 5 é o índice 2 (valor 25); 28 > 25, troca: `30 20 28 10 15 25`. Remover o topo: o 15 vai para a raiz, `15 20 25 10`; o maior filho é o 25, troca: `25 20 15 10`.\n\n**Como atacar:** para cada afirmativa, confira a regra pai ≥ filhos e refaça cada troca passo a passo."
     },
     {
       "numero": 5,
@@ -222,7 +226,8 @@
           "num": "0175",
           "modulo": "28-estruturas-complementos.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Na AVL, a diferença de altura entre as subárvores de qualquer nó é no máximo 1 (aqui, folha vale 1 e árvore vazia vale 0). Uma AVL de altura h precisa de um número mínimo de nós: N(h) = N(h-1) + N(h-2) + 1, com N(1) = 1 e N(2) = 2. Altura grande com poucos nós forçaria uma cadeia, que quebra a regra.\n\n**Exemplo:** para altura 4 você precisa de N(3) + N(2) + 1 nós. Calcule N(3) pela mesma fórmula (N(2) + N(1) + 1) e some: o mínimo de nós para altura 4 sai 7.\n\n**Como atacar:** para cada alternativa, compare a quantidade de nós com o mínimo que a altura exige."
     },
     {
       "numero": 6,
@@ -270,7 +275,8 @@
           "num": "0082",
           "modulo": "12-pilhas-e-filas.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Numa ABB sem balanceamento, a forma da árvore depende da ordem de inserção. Chaves que chegam em ordem crescente ou decrescente formam uma cadeia, na prática uma lista. A busca desce da raiz até o nó, então o custo é a altura da árvore. A pilha só inverte a ordem (LIFO): uma ordem invertida continua sendo uma ordem.\n\n**Exemplo:** inserindo 4, 2, 6, 1, 3, 5, 7 a altura é 3. Inserindo 1, 2, 3, 4, 5, 6, 7, cada nó vai à direita do anterior e a altura é 7.\n\n**Como atacar:** desenhe a árvore com 4 ou 5 elementos na ordem em que chegam à ABB e veja a forma que sai."
     },
     {
       "numero": 7,
@@ -315,7 +321,8 @@
           "num": "0176",
           "modulo": "28-estruturas-complementos.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Uma árvore é AVL quando é ABB e, em todo nó, as duas subárvores são AVL e a diferença de altura entre elas é no máximo 1. Essa regra mantém a altura proporcional a log n. Quando inserção ou remoção quebra a regra, rotações no caminho do nó alterado restauram o equilíbrio.\n\n**Exemplo:** uma árvore cheia com 3 níveis (7 nós) tem alturas iguais nas duas subárvores de todo nó, ou seja, diferença 0 em qualquer ponto.\n\n**Como atacar:** julgue cada item com a definição, procurando contraexemplo, e só depois compare a sequência V/F com as alternativas."
     },
     {
       "numero": 8,
@@ -360,7 +367,8 @@
           "num": "0099",
           "modulo": "14-arvores.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Monte a árvore inserindo as chaves na ordem dada (menor à esquerda, maior à direita). A pós-ordem lê esquerda, direita e, por último, a raiz. Por isso a última chave de uma pós-ordem é sempre a raiz da árvore.\n\n**Exemplo:** inserindo 5, 3, 8, 1, 4: raiz 5; à esquerda o 3 (com filhos 1 e 4); à direita o 8. Pós-ordem: `1 4 3 8 5`.\n\n**Como atacar:** olhe a raiz primeiro, para descartar alternativas, e confirme o resto lendo a árvore em pós-ordem."
     },
     {
       "numero": 9,
@@ -401,7 +409,8 @@
           "num": "0079",
           "modulo": "11-listas.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Na lista duplamente encadeada, cada nó tem `próximo` e `anterior`. Inserir um nó entre A e B pede quatro ligações: A.próximo, novo.anterior, novo.próximo e B.anterior. A ordem das atribuições importa: se você mudar `A.próximo` antes de ler o antigo sucessor, perde a referência a B.\n\n**Exemplo:** inserir N logo após A, com B = A.próximo:\n```\nN.próximo = A.próximo      (N aponta para B)\nA.próximo.anterior = N     (B volta para N)\nN.anterior = A\nA.próximo = N\n```\nResultado: A ⇄ N ⇄ B.\n\n**Como atacar:** desenhe a lista com setas nos dois sentidos e execute o trecho linha a linha, atualizando o desenho."
     },
     {
       "numero": 10,
@@ -445,7 +454,8 @@
           "num": "0100",
           "modulo": "14-arvores.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Remover um nó com dois filhos: substitua a chave pelo antecessor (maior da subárvore esquerda: desça à esquerda e depois sempre à direita) ou pelo sucessor (menor da subárvore direita: desça à direita e depois sempre à esquerda). Os dois mantêm a ABB válida. Depois, o nó de onde a chave veio é removido.\n\n**Exemplo:** árvore 50 (30 (20, 40), 70 (60, 80)). Antecessor da raiz: esquerda no 30, depois direita, o 40. Sucessor: direita no 70, depois esquerda, o 60. Removendo o 50 pelo antecessor, a nova raiz é o 40.\n\n**Como atacar:** ache o antecessor e o sucessor na árvore da figura e veja quais aparecem entre as alternativas."
     },
     {
       "numero": 11,
@@ -490,7 +500,8 @@
           "num": "0033",
           "modulo": "04-funcoes.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Numa função recursiva com dois casos base e uma soma de duas chamadas anteriores, desça até os casos base e some de baixo para cima. Anote o valor de cada chamada para não recalcular.\n\n**Exemplo:** `h(1) = 2`, `h(2) = 3` e `h(n) = h(n-1) + h(n-2)`.\n- h(3) = h(2) + h(1) = 3 + 2 = 5\n- h(4) = h(3) + h(2) = 5 + 3 = 8\n\n**Como atacar:** monte uma tabela com os valores de 1 até n, usando os casos base primeiro."
     },
     {
       "numero": 12,
@@ -531,7 +542,8 @@
           "num": "0090",
           "modulo": "13-busca-e-ordenacao.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** A busca binária compara a chave com o elemento do meio, índice (início + fim) / 2 com divisão inteira. Se for igual, termina; se a chave for menor, segue pela esquerda; se maior, pela direita. A lista de chaves comparadas é a sequência dos elementos do meio visitados.\n\n**Exemplo:** vetor `3 6 9 12 15 18 21`, buscando 21. Meio de 0..6 é o índice 3, valor 12; 21 é maior, vai a 4..6. Meio é o índice 5, valor 18; maior, vai a 6..6. Meio é o índice 6, valor 21: achou. Comparou 12, 18 e 21.\n\n**Como atacar:** calcule o primeiro meio e veja se a chave já está lá antes de olhar as opções."
     },
     {
       "numero": 13,
@@ -572,7 +584,8 @@
           "num": "0037",
           "modulo": "05-vetores-e-strings.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Vetor: elementos do mesmo tipo (homogêneos) em posições consecutivas, com acesso direto pelo índice. O endereço de `v[i]` é calculado, sem percorrer os anteriores. Registros (struct) misturam tipos. FIFO e LIFO são políticas de fila e pilha, não do vetor.\n\n**Exemplo:** `int v[5]` guarda só inteiros, e `v[3]` vai direto à posição 3, sem passar por `v[0]` a `v[2]`. Já `struct aluno { char nome[20]; int idade; }` mistura tipos.\n\n**Como atacar:** pergunte \"os elementos têm o mesmo tipo?\" e \"como chego ao elemento i?\", e descarte as opções com política de fila ou pilha."
     },
     {
       "numero": 14,
@@ -613,7 +626,8 @@
           "num": "0090",
           "modulo": "13-busca-e-ordenacao.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** A busca binária só funciona em vetor ordenado: descarta metade do vetor a cada comparação e, no pior caso, faz floor(log2 n) + 1 comparações. A busca sequencial faz até n. Confira cada afirmação contra esses números e contra o que ela exige do vetor.\n\n**Exemplo:** n = 256. A binária faz no máximo 9 comparações (log2 256 = 8, mais 1), abaixo de 2·log2 256 = 16. A sequencial pode chegar a 256.\n\n**Como atacar:** troque n por um número concreto e teste cada afirmação com ele."
     },
     {
       "numero": 15,
@@ -662,7 +676,8 @@
           "num": "0145",
           "modulo": "22-arvores-avancadas.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Heap: árvore binária completa guardada em vetor. ABB comum: a forma depende da ordem de inserção e pode virar cadeia. AVL e rubro-negra: balanceadas, com altura da ordem de log n. Ao relacionar, associe cada tipo à característica que vale para todos os casos dele, e desconfie de pares que valem só às vezes.\n\n**Exemplo:** inserir 1, 2, 3, 4, 5 em ABB comum dá altura 5; em AVL dá altura 3. Um heap com 6 elementos ocupa as posições 0 a 5 do vetor, sem buracos.\n\n**Como atacar:** faça primeiro os pares de que você tem certeza e elimine as alternativas que os contradizem."
     },
     {
       "numero": 16,
@@ -703,7 +718,8 @@
           "num": "0103",
           "modulo": "14-arvores.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Heapsort constrói um max-heap no vetor (uma árvore binária implícita) e depois repete: troca a raiz com o último elemento, reduz o heap em um e faz a nova raiz descer até restaurar a propriedade. Ordena por comparação de chaves e tem pior caso O(n log n). Compare o pior caso dele com o do quicksort.\n\n**Exemplo:** vetor `4 10 3`. Heap máximo: `10 4 3`. Troca a raiz com o último: `3 4 | 10`; o 3 desce: `4 3 | 10`. Troca de novo: `3 | 4 10`. Resultado: `3 4 10`.\n\n**Como atacar:** confira cada alternativa, uma a uma, contra essas características."
     },
     {
       "numero": 17,
@@ -752,7 +768,8 @@
           "num": "0093",
           "modulo": "13-busca-e-ordenacao.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Quatro propriedades de uma ordenação: estabilidade (chaves iguais mantêm a ordem original); espaço extra (O(1) se troca no próprio vetor, O(n) se usa vetor auxiliar); influência da ordem de entrada (alguns têm melhor e pior caso diferentes, outros custam o mesmo sempre); e melhor caso de tempo. Faça uma tabelinha por algoritmo. A pergunta pede as INCORRETAS.\n\n**Exemplo:** seleção em `2a 2b 1` (2a e 2b são iguais): troca o menor, o 1, com o primeiro e dá `1 2b 2a`. A ordem dos dois 2 mudou, então é instável. E ela faz o mesmo trabalho com qualquer entrada.\n\n**Como atacar:** marque V ou F em cada item e só depois procure a alternativa que lista os F."
     },
     {
       "numero": 18,
@@ -797,7 +814,8 @@
           "num": "0106",
           "modulo": "15-hash.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Com encadeamento, cada posição guarda uma lista. Há colisão numa posição quando mais de uma chave cai nela. A pergunta conta posições com colisão, não o número de colisões: uma posição que recebe três chaves conta uma vez. Calcule k mod 11 para cada chave e agrupe.\n\n**Exemplo:** tabela de 5 posições, h = k mod 5, chaves 3, 8, 13, 4, 9, 6. Endereços: 3, 3, 3, 4, 4, 1. A posição 3 tem três chaves e a 4 tem duas: duas posições com colisão (a 1 tem só uma chave).\n\n**Como atacar:** escreva k mod 11 de cada chave e conte as posições que aparecem mais de uma vez."
     },
     {
       "numero": 19,
@@ -842,7 +860,8 @@
           "num": "0077",
           "modulo": "11-listas.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Lista encadeada simples: cada nó tem o dado e um ponteiro `prox`; os nós são alocados um a um e ligados por ponteiros. Inserir depois de um nó conhecido custa poucas atribuições. Acessar o i-ésimo exige percorrer a lista, e remover um nó do meio precisa do anterior. Compare com o vetor: quem exige posições consecutivas na memória e quem não exige?\n\n**Exemplo:** inserir N depois de P: `N->prox = P->prox; P->prox = N;`. Se você inverter a ordem das duas linhas, perde o resto da lista.\n\n**Como atacar:** para cada alternativa, desenhe os ponteiros e veja se ela descreve a lista ou outra estrutura."
     },
     {
       "numero": 20,
@@ -898,7 +917,8 @@
           "num": "0097",
           "modulo": "14-arvores.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Fila: linear, FIFO (primeiro a entrar, primeiro a sair). Pilha: LIFO (último a entrar, primeiro a sair). Lista encadeada: nós com ponteiro para o próximo, e o último aponta para nulo. Árvore: hierárquica, cada nó com filhos, sem política de entrada e saída. A questão costuma trocar as definições entre as estruturas.\n\n**Exemplo:** a fila do banco é FIFO; a pilha de pratos é LIFO; `A -> B -> C -> NULL` é uma lista; o organograma de uma empresa é uma árvore.\n\n**Como atacar:** confira cada afirmação com a definição da estrutura que ela cita, sem se deixar levar pela estrutura vizinha."
     }
   ]
 }
