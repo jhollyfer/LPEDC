@@ -99,6 +99,7 @@ function conferir(provas, figuras) {
       if (letras && (q.gabarito ?? null) !== esperado) erros.push(`${id}: gabarito ${q.gabarito}, PROVAS.md diz ${letras[q.numero]}`)
       if (!q.enunciado?.trim()) erros.push(`${id}: sem enunciado`)
       if (!q.resumo?.trim()) erros.push(`${id}: sem resumo`)
+      if (!q.dica?.trim()) erros.push(`${id}: sem dica (conceito e exemplo)`)
       if (q.alternativas.length < 4) erros.push(`${id}: só ${q.alternativas.length} alternativas`)
       const letrasAlt = q.alternativas.map((a) => a.letra)
       if (/^[A-E]$/.test(q.gabarito ?? '') && !letrasAlt.includes(q.gabarito)) erros.push(`${id}: gabarito fora das alternativas`)
