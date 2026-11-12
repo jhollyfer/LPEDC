@@ -55,7 +55,8 @@
           "num": "0106",
           "modulo": "15-hash.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Avalie cada afirmação sozinha. ABB comum não se reconfigura, AVL sim. Pilha só remove do topo. Vetor é memória contígua com acesso por índice; lista usa ponteiros. Hash por encadeamento guarda colisões em listas.\n\n**Exemplo:** pilha com push `1, 2, 3`: o único pop possível devolve o 3. Vetor: `v[2]` vai direto à posição 2. Lista: para chegar ao terceiro nó segue-se `prox` duas vezes.\n\n**Como atacar:** marque V ou F em cada afirmação antes de procurar a combinação."
     },
     {
       "numero": 2,
@@ -112,7 +113,8 @@
           "num": "0096",
           "modulo": "13-busca-e-ordenacao.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Pior caso é a entrada mais desfavorável para aquele algoritmo, não a média. Compare as ordens de crescimento: `n²` cresce muito mais rápido que `n log n`. Alguns algoritmos têm pior caso bem pior que o caso médio.\n\n**Exemplo:** `n = 1000`: `n²` é cerca de 1 000 000 e `n log2 n` é cerca de 10 000. Um algoritmo `O(n²)` no pior caso, como a bolha, perde para um `O(n log n)` garantido, como o Mergesort, mesmo que o primeiro seja bom em alguns casos.\n\n**Como atacar:** escreva o pior caso de comparações de cada opção e escolha o de menor ordem."
     },
     {
       "numero": 3,
@@ -157,7 +159,8 @@
           "num": "0096",
           "modulo": "13-busca-e-ordenacao.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Aqui conta quantas vezes elementos mudam de lugar, não quantas comparações. Seleção faz no máximo `n-1` trocas. Bolha e inserção podem mover da ordem de `n²` elementos no pior caso.\n\n**Exemplo:** vetor invertido `4 3 2 1`: seleção faz 2 trocas (`4` com `1`, depois `3` com `2`). Bolha faz 6 trocas.\n\n**Como atacar:** conte as movimentações no pior caso de cada algoritmo, ignorando as comparações."
     },
     {
       "numero": 4,
@@ -206,7 +209,8 @@
           "num": "0107",
           "modulo": "15-hash.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Lista encadeada não tem acesso direto por posição, então a busca em lista é O(n). Vetor ordenado permite busca binária, O(log n). Hash por endereçamento aberto usa vetor; o encadeado usa listas. Lista não é, por si, método de ordenação.\n\n**Exemplo:** pior caso com `n = 500`: lista, 500 comparações; vetor ordenado com binária, `⌊log2 500⌋ + 1 = 9`.\n\n**Como atacar:** julgue cada afirmação comparando custos de busca e o tipo de estrutura usada por cada técnica."
     },
     {
       "numero": 5,
@@ -255,7 +259,8 @@
           "num": "0054",
           "modulo": "07-memoria-dinamica.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Busca em lista sem nó cabeça: percorra com o próprio ponteiro recebido (ou uma cópia) enquanto não for `NULL`. Não precisa de `malloc`, que só serve para criar nó. Trate lista vazia (início `NULL`).\n\n**Exemplo:** ```c\nint busca(No *p, int x) {\n  while (p != NULL) {\n    if (p->dado == x) return 1;\n    p = p->prox;\n  }\n  return 0;\n}\n```\n\nLista `4 -> 9 -> 2`: `busca(l, 9)` vale 1; `busca(l, 5)` vale 0.\n\n**Como atacar:** para cada versão, confira laço, parada em `NULL`, retorno e se há `malloc` sobrando."
     },
     {
       "numero": 6,
@@ -296,7 +301,8 @@
           "num": "0082",
           "modulo": "12-pilhas-e-filas.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Pilha é LIFO: o último a entrar é o primeiro a sair. A inserção (empilhar) e a remoção (desempilhar) acontecem sempre no topo, e o elemento do topo é o que entrou por último. Não existe remoção pelo meio nem pela base.\n\n**Exemplo:** empilhar `2, 5, 7, 1`: o topo é o 1. Duas remoções devolvem `1` e depois `7`, e sobra a pilha `2, 5` com topo 5. Cada remoção mexe só no topo atual.\n\n**Como atacar:** simule a pilha anotando o topo a cada operação."
     },
     {
       "numero": 7,
@@ -341,7 +347,8 @@
           "num": "0107",
           "modulo": "15-hash.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Colisão secundária é termo do endereçamento aberto, não do encadeamento. No encadeamento, o pior caso é todas as chaves na mesma lista: até `n` comparações. Palavras como \"nunca\", \"jamais\" e \"sempre\" exigem que a afirmação valha sem exceção.\n\n**Exemplo:** `M = 4`, chaves `4, 8, 12, 16`, todas com `h = 0`: lista de 4 nós; buscar o 16 faz 4 comparações. Aqui `n = 4`, e `log2 4 = 2`, menor que 4.\n\n**Como atacar:** ache um contraexemplo para cada afirmação absoluta."
     },
     {
       "numero": 8,
@@ -388,7 +395,8 @@
           "num": "0101",
           "modulo": "14-arvores.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Fator de balanceamento de um nó é a altura da subárvore esquerda menos a da direita. Em AVL, todo nó tem valor entre -1 e 1. Nó com um só filho pode estar balanceado, desde que a diferença seja 1.\n\n**Exemplo:** `10(5(3, -), 15)`: no 5, esquerda 1 e direita 0, fator 1; no 10, esquerda 2 e direita 1, fator 1. É AVL. Em `10(5(3(1, -), -), 15)`, no 10 as alturas são 3 e 1, fator 2, e não é AVL.\n\n**Como atacar:** calcule altura e fator de cada nó, de baixo para cima, em cada árvore."
     },
     {
       "numero": 9,
@@ -429,7 +437,8 @@
           "num": "0085",
           "modulo": "12-pilhas-e-filas.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Fila é FIFO: INSERE põe no fim (direita) e RETIRA tira o mais antigo (o da esquerda na representação). Valores repetidos são elementos distintos e ocupam posições diferentes. Escreva o estado depois de cada operação e confira ao final se o resultado que você obteve aparece nas opções.\n\n**Exemplo:** INSERE(4), INSERE(4), INSERE(9), RETIRA, RETIRA: `[4]`, `[4 4]`, `[4 4 9]`, `[4 9]`, `[9]`.\n\n**Como atacar:** anote o estado da fila depois de cada operação."
     },
     {
       "numero": 10,
@@ -476,7 +485,8 @@
           "num": "0099",
           "modulo": "14-arvores.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** ABB: para todo nó, todas as chaves da subárvore esquerda são menores e todas da direita são maiores. A regra vale para todos os descendentes, não só para os filhos diretos.\n\n**Exemplo:** `10(5(2, 12), 15)`: o 12 é maior que o pai (5), mas está na subárvore esquerda do 10 e é maior que 10. Não é ABB.\n\n**Como atacar:** confira cada nó contra todos os antepassados, não só contra o pai."
     },
     {
       "numero": 11,
@@ -517,7 +527,8 @@
           "num": "0098",
           "modulo": "14-arvores.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Pós-ordem termina na raiz. A in-ordem coloca à esquerda da raiz a subárvore esquerda e à direita a subárvore direita. Com isso, reconstrua recursivamente, separando as sequências pelos tamanhos de cada lado.\n\n**Exemplo:** pós `D B E C A`, in `B D A E C`. Raiz: `A`. Na in-ordem, esquerda `B D` e direita `E C`. Pós da esquerda `D B`: raiz `B`, e `D` fica à direita (vem depois de `B` na in-ordem). Pós da direita `E C`: raiz `C`, com `E` à esquerda.\n\n**Como atacar:** ache a raiz pelo último da pós-ordem, divida a in-ordem e repita em cada lado."
     },
     {
       "numero": 12,
@@ -562,7 +573,8 @@
           "num": "0090",
           "modulo": "13-busca-e-ordenacao.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Busca sequencial funciona em qualquer vetor, ordenado ou não. Busca em vetor ordenado é O(log n) com binária, não constante. Achar o maior elemento de um vetor sem ordem exige varrer todos: custo proporcional a `n`.\n\n**Exemplo:** vetor `3 8 2`: máximo parcial `3`, depois `8`, depois continua `8`. São 2 comparações, `n - 1`, e cresce linearmente com o tamanho.\n\n**Como atacar:** decida cada afirmação com um vetor pequeno e pergunte o custo em função de `n`."
     },
     {
       "numero": 13,
@@ -611,7 +623,8 @@
           "num": "0062",
           "modulo": "08-structs.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Em C, parâmetros são passados por valor: a função recebe uma cópia. Para alterar o ponteiro de início da lista, ela recebe o endereço dele (`No **prim`) e escreve em `*prim`. Só aloque (`malloc`) quando precisar de nó novo.\n\n**Exemplo:** ```c\nvoid t1(int x)  { x = 9; }\nvoid t2(int *x) { *x = 9; }\n```\n\nCom `int a = 1;`, `t1(a)` deixa `a == 1` e `t2(&a)` deixa `a == 9`. O mesmo vale para o ponteiro do início: sem `**`, a mudança se perde ao sair da função.\n\n**Como atacar:** pergunte se a função precisa mudar o início da lista e se o parâmetro permite isso."
     },
     {
       "numero": 14,
@@ -652,7 +665,8 @@
           "num": "0107",
           "modulo": "15-hash.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Hash linear: vetor de tamanho fixo `M`; na colisão, usa a próxima posição livre; a busca refaz o hash e sonda do mesmo jeito até achar a chave ou uma posição vazia. A mesma função de hash serve para inserir, buscar e remover.\n\n**Exemplo:** `M = 7`, `h(k) = k % 7`: o 15 vai para a posição 1; o 22 colide e vai para a 2. Buscar 22: `h = 1` tem o 15, segue para 2 e acha.\n\n**Como atacar:** reconstrua a inserção e a busca de uma chave que colidiu para avaliar cada afirmação."
     },
     {
       "numero": 15,
@@ -701,7 +715,8 @@
           "num": "0179",
           "modulo": "28-estruturas-complementos.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Hash linear guarda tudo no vetor (no máximo `M` chaves; colisão vai para a próxima posição livre). Hash encadeado guarda listas por posição (aceita `C > M`). Segunda função de hash é técnica de dispersão dupla, do endereçamento aberto.\n\n**Exemplo:** `M = 2`, chaves `2, 4, 6, 8` (`h = 0`): encadeado forma lista de 4; linear só comportaria 2 chaves no total.\n\n**Como atacar:** classifique cada afirmação como sobre linear ou encadeado e confira se foi trocada."
     },
     {
       "numero": 16,
@@ -742,7 +757,8 @@
           "num": "0102",
           "modulo": "14-arvores.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Heap mínima em vetor (índices a partir de 0): pai de `i` é `(i-1)/2` (inteiro), filhos de `i` são `2i+1` e `2i+2`. Regra única: pai menor ou igual aos filhos. Não é um vetor ordenado.\n\n**Exemplo:** heap mínima `2 6 3 9 8 7`. O índice 4 (valor 8) tem pai no índice `(4-1)/2 = 1` (valor 6), e 6 ≤ 8, ok. Trocar o 9 (índice 3) por 1: o pai é 6 e 1 < 6, regra quebrada.\n\n**Como atacar:** ao mudar um valor, compare com o pai e com os filhos pelas fórmulas de índice."
     },
     {
       "numero": 17,
@@ -795,7 +811,8 @@
           "num": "0177",
           "modulo": "28-estruturas-complementos.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Heap: árvore binária completa com regra de ordem entre pai e filhos. ABB sem balanceamento pode degenerar. AVL e rubro-negra são balanceadas, com altura próxima de log2 n; cada uma usa um critério (diferença de altura, cores). Relacione cada tipo com a descrição que só ele satisfaz.\n\n**Exemplo:** inserir `1, 2, 3, 4` em ABB comum dá cadeia de altura 4. Na AVL, a mesma sequência é rebalanceada por rotações e dá altura 3.\n\n**Como atacar:** procure a propriedade mais específica de cada tipo e relacione primeiro as que só cabem em um."
     },
     {
       "numero": 18,
@@ -840,7 +857,8 @@
           "num": "0077",
           "modulo": "11-listas.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Lista encadeada não é vetor: os nós não são contíguos, então `aux[x]` não percorre a lista; o avanço é `aux = aux->prox`. Verifique também o que a função devolve e se conta o que promete.\n\n**Exemplo:** soma dos elementos:\n\n```c\nint soma(No *p) {\n  int s = 0;\n  while (p != NULL) { s += p->dado; p = p->prox; }\n  return s;\n}\n```\n\nLista `3 -> 4 -> 5` devolve 12.\n\n**Como atacar:** compare o código com a forma correta de percorrer lista e com o que a função deve retornar."
     },
     {
       "numero": 19,
@@ -881,7 +899,8 @@
           "num": "0076",
           "modulo": "11-listas.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Lista simples guarda para cada nó só o próximo. Com ponteiro para o primeiro e para o último, inserir nas duas pontas custa O(1). Sem o ponteiro do último, inserir no fim exige percorrer. Nós não são contíguos na memória.\n\n**Exemplo:** lista `1 -> 2 -> 3` com `ult` apontando para o 3. Inserir 4 no fim:\n\n```c\nult->prox = novo;\nult = novo;\n```\n\nSem percorrer nada.\n\n**Como atacar:** pense no custo de cada operação com e sem ponteiro para o último."
     },
     {
       "numero": 20,
@@ -922,7 +941,8 @@
           "num": "0079",
           "modulo": "11-listas.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Lista duplamente encadeada: cada nó tem dois ponteiros, para o sucessor (`prox`) e para o antecessor (`ant`). Circular, ordenada e contígua são outras propriedades.\n\n**Exemplo:** dois nós `X` e `Y` ligados: `X->prox == Y` e `Y->ant == X`. Do `Y` dá para voltar ao `X` sem percorrer a lista desde o início.\n\n**Como atacar:** procure a alternativa que fala em dois ponteiros, para o próximo e para o anterior."
     }
   ]
 }

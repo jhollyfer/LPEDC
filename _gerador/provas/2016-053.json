@@ -47,7 +47,8 @@
           "num": "0072",
           "modulo": "10-analise.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** A busca binária corta o intervalo ao meio a cada iteração. No pior caso, o número de iterações é `⌊log2 n⌋ + 1`. Para achar o `⌊log2 n⌋`, procure a maior potência de 2 que não passa de `n`.\n\n**Exemplo:** `n = 100`: `2^6 = 64` e `2^7 = 128`, então `⌊log2 100⌋ = 6` e o máximo de iterações é `6 + 1 = 7`.\n\n**Como atacar:** ache as duas potências de 2 que cercam `n` e aplique `⌊log2 n⌋ + 1`."
     },
     {
       "numero": 2,
@@ -88,7 +89,8 @@
           "num": "0032",
           "modulo": "04-funcoes.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Função recursiva é a que chama a si mesma, direta ou indiretamente, e precisa de um caso base. Função iterativa repete com laço. A classificação depende da estrutura (chama a si mesma?), não de a função estar certa ou errada.\n\n**Exemplo:** recursiva: `int soma(int n) { if (n == 0) return 0; return n + soma(n-1); }` com `soma(3) = 3 + 2 + 1 = 6`. Iterativa: `for (i = 1; i <= n; i++) s += i;`, que não chama a si mesma.\n\n**Como atacar:** veja se o corpo de cada função contém uma chamada a ela própria ou um laço."
     },
     {
       "numero": 3,
@@ -137,7 +139,8 @@
           "num": "0150",
           "modulo": "23-grafos-avancados.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Árvore é um grafo conexo e sem ciclos. Com `n` nós tem exatamente `n-1` arestas, e entre dois nós quaisquer existe um único caminho. Tem uma raiz e folhas. Questão de \"EXCEÇÃO\" pede a afirmação falsa.\n\n**Exemplo:** 5 nós, 4 arestas ligando todos: é árvore. Acrescente uma 5ª aresta: aparece um ciclo e há dois caminhos entre dois nós, então deixou de ser árvore.\n\n**Como atacar:** teste cada afirmação com uma árvore pequena e marque a que não vale."
     },
     {
       "numero": 4,
@@ -178,7 +181,8 @@
           "num": "0092",
           "modulo": "13-busca-e-ordenacao.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Seleção: na passada `i`, ache o menor de `v[i..n-1]` e troque com `v[i]`. Se o menor já está na posição `i`, não há troca real. Contar a segunda troca exige simular as passadas em ordem.\n\n**Exemplo:** vetor `7 4 9 2 6`. Passada 0: menor é 2 (posição 3), troca 0 e 3 e dá `2 4 9 7 6`. Passada 1: o menor é o 4, já no lugar, sem troca. Passada 2: menor é 6 (posição 4), troca 2 e 4. A segunda troca real foi entre 2 e 4.\n\n**Como atacar:** escreva o vetor depois de cada passada e anote só as trocas efetivas."
     },
     {
       "numero": 5,
@@ -223,7 +227,8 @@
           "num": "0086",
           "modulo": "12-pilhas-e-filas.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Fila é FIFO: INSERE põe no fim (direita) e RETIRA tira o mais antigo (esquerda). O estado depende só da ordem das operações; escreva o estado depois de cada uma.\n\n**Exemplo:** INSERE(7), INSERE(8), RETIRA, INSERE(9), RETIRA: `[7]`, `[7 8]`, `[8]`, `[8 9]`, `[9]`. O 7 saiu primeiro por ser o mais antigo.\n\n**Como atacar:** anote o estado da fila depois de cada operação, sem pular nenhuma."
     },
     {
       "numero": 6,
@@ -264,7 +269,8 @@
           "num": "0079",
           "modulo": "11-listas.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Lista duplamente encadeada: cada nó tem dois ponteiros, um para o sucessor (`prox`) e outro para o antecessor (`ant`). Isso permite percorrer nos dois sentidos. Ser circular, ordenada ou ter memória contígua são propriedades diferentes.\n\n**Exemplo:** ```c\ntypedef struct no { int dado; struct no *ant, *prox; } No;\n```\n\nCom três nós `A <-> B <-> C`: `B->ant == A`, `B->prox == C`, `A->ant == NULL`, `C->prox == NULL`.\n\n**Como atacar:** procure a alternativa que cita um ponteiro para o sucessor e outro para o antecessor em cada nó."
     },
     {
       "numero": 7,
@@ -313,7 +319,8 @@
           "num": "0175",
           "modulo": "28-estruturas-complementos.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** ABB: insira cada chave comparando com a raiz e descendo (menor para a esquerda, maior ou igual para a direita) até achar posição vazia. Nível da raiz é 1, e a altura aqui é a quantidade de nós no maior caminho da raiz a uma folha.\n\n**Exemplo:** inserir `50, 30, 70, 20, 40, 35`: 30 e 70 ficam nos filhos de 50; 20 e 40 nos de 30; 35 fica à esquerda de 40. O maior caminho é `50, 30, 40, 35`, altura 4; o nó 40 está no nível 3.\n\n**Como atacar:** desenhe a árvore na ordem dada e conte níveis a partir de 1 na raiz."
     },
     {
       "numero": 8,
@@ -358,7 +365,8 @@
           "num": "0085",
           "modulo": "12-pilhas-e-filas.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Pilha desempilha o topo primeiro; fila devolve o mais antigo primeiro. Ao passar os dados de uma pilha para uma fila, o primeiro a entrar na fila é o topo da pilha. Ao passar da fila para uma pilha, o primeiro a ser empilhado fica no fundo. Acompanhe cada transferência separadamente.\n\n**Exemplo:** empilhar `1, 2, 3` (topo 3). Retirar da pilha e inserir na fila dá fila `3, 2, 1` (começo 3). Retirar da fila e empilhar dá pilha com 3 no fundo e 1 no topo.\n\n**Como atacar:** faça cada transferência em uma pequena tabela de estados e compare com as opções."
     },
     {
       "numero": 9,
@@ -403,7 +411,8 @@
           "num": "0062",
           "modulo": "08-structs.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Inserir um nó entre dois vizinhos em lista dupla exige atualizar quatro ponteiros: dois do nó novo e um de cada vizinho. Siga cada linha do código e desenhe as setas depois de cada atribuição.\n\n**Exemplo:** inserir `B` entre `A` e `C` (`A <-> C`):\n\n```c\nB->prox = C;\nB->ant  = A;\nA->prox = B;\nC->ant  = B;\n```\n\nResultado: `A <-> B <-> C`. Quem está logo depois de `A` é quem `A->prox` aponta.\n\n**Como atacar:** desenhe a lista e aplique as atribuições na ordem, uma por uma."
     },
     {
       "numero": 10,
@@ -444,7 +453,8 @@
           "num": "0107",
           "modulo": "15-hash.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Hash linear é endereçamento aberto com sondagem linear: todas as chaves ficam no vetor de `M` posições. Na colisão, usa a próxima posição livre (circular). Uma função de hash basta, e não cabem mais chaves que `M`.\n\n**Exemplo:** `M = 5`, `h(k) = k % 5`: o 7 vai para a posição 2; o 12 colide e vai para a 3; o 17 vai para a 4. A tabela só aceita mais 2 chaves, e a 6ª não teria lugar.\n\n**Como atacar:** pergunte, para cada afirmação, o que acontece com o vetor de tamanho fixo."
     },
     {
       "numero": 11,
@@ -488,7 +498,8 @@
           "num": "0098",
           "modulo": "14-arvores.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Pré-ordem: raiz, esquerda, direita. In-ordem: esquerda, raiz, direita. Pós-ordem: esquerda, direita, raiz. Em cada subárvore se aplica a mesma regra recursivamente.\n\n**Exemplo:** árvore `A(B(-, D), C(E, -))` (B é filho esquerdo de A e tem D à direita; C é filho direito de A e tem E à esquerda). Pós-ordem: `D B E C A`. In-ordem: `B D A E C`.\n\n**Como atacar:** faça cada percurso separadamente, começando pelas folhas e subindo."
     },
     {
       "numero": 12,
@@ -533,7 +544,8 @@
           "num": "0107",
           "modulo": "15-hash.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Hash linear (endereçamento aberto): tudo fica no vetor, no máximo `M` chaves, e a colisão procura a próxima posição livre. Hash encadeado: cada posição guarda uma lista, aceita `C > M` e a colisão só alonga a lista.\n\n**Exemplo:** `M = 3`, chaves `3, 6, 9, 12` (todas com `h = 0`). Encadeado: lista `3 -> 6 -> 9 -> 12` na posição 0, cabe. Linear: 3, 6 e 9 ocupam as posições 0, 1 e 2, e o 12 não tem onde entrar.\n\n**Como atacar:** para cada afirmação, decida se descreve o linear ou o encadeado."
     },
     {
       "numero": 13,
@@ -578,7 +590,8 @@
           "num": "0175",
           "modulo": "28-estruturas-complementos.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Grau de um nó é o número de filhos dele. Em árvore binária o grau vai de 0 (folha) a 2. Não confunda com altura nem com fator de balanceamento.\n\n**Exemplo:** árvore `5(3, 8(-, 9))`: o 5 tem grau 2, o 3 tem grau 0, o 8 tem grau 1 e o 9 tem grau 0. Ela é AVL (diferença de altura 1 na raiz) e mesmo assim os graus variam.\n\n**Como atacar:** lembre que AVL exige balanceamento, não nós com grau fixo."
     },
     {
       "numero": 14,
@@ -623,7 +636,8 @@
           "num": "0098",
           "modulo": "14-arvores.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** ABB: cada nó tem no máximo dois filhos; tudo na subárvore esquerda é menor e tudo na direita é maior. Percurso em ordem visita as chaves em ordem crescente. Busca custa a altura da árvore. Leia cada alternativa com a definição na mão.\n\n**Exemplo:** ABB `8(3(1, 6), 10)`: percurso em ordem dá `1 3 6 8 10`. Buscar 6: 6 < 8, esquerda; 6 > 3, direita; achou, em 3 comparações.\n\n**Como atacar:** confronte cada alternativa com a definição de ABB e com o que cada percurso produz."
     },
     {
       "numero": 15,
@@ -684,7 +698,8 @@
           "num": "0168",
           "modulo": "26-analise-formal.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Estável: chaves iguais mantêm a ordem relativa original. Pior caso quadrático: custo proporcional a `n²` na pior entrada. Espaço extra: memória além do vetor. Sensibilidade à entrada: o custo muda conforme a ordem inicial. Aqui você procura as afirmações INCORRETAS.\n\n**Exemplo:** seleção não é estável: no vetor `4a 4b 2`, a primeira troca leva o 2 para a posição 0 e manda o `4a` para o fim, depois do `4b`. A ordem original dos 4 se perdeu.\n\n**Como atacar:** avalie cada afirmação em cada algoritmo citado e marque as que têm algum erro."
     },
     {
       "numero": 16,
@@ -729,7 +744,8 @@
           "num": "0175",
           "modulo": "28-estruturas-complementos.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** AVL: ABB em que, em todo nó, as alturas das subárvores esquerda e direita diferem no máximo em 1 (folha tem altura 1, nó pai tem o máximo dos filhos mais 1). Basta um nó fora disso para a árvore não ser AVL.\n\n**Exemplo:** `10(5(2(1, -), -), 12)`: no nó 5 a esquerda tem altura 2 e a direita 0, diferença 2, não é AVL. Já `10(5(2, -), 12)`: no 10 as alturas são 2 e 1, e no 5 são 1 e 0, então é AVL.\n\n**Como atacar:** calcule a altura de cada subárvore e confira a diferença nó por nó."
     },
     {
       "numero": 17,
@@ -778,7 +794,8 @@
           "num": "0057",
           "modulo": "07-memoria-dinamica.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Para cada função: leia como ela percorre (vetor por índice, lista por ponteiro), em que condição para e o que devolve. Confira também se há `malloc` sem necessidade ou acesso fora dos limites.\n\n**Exemplo:** busca em vetor com último índice `i`:\n\n```c\nint tem(int v[], int n, int x) {\n  int i = n - 1;\n  while (i >= 0 && v[i] != x) i--;\n  return i >= 0;\n}\n```\n\n`tem({4,6,9}, 3, 6)` devolve 1; com `x = 5` devolve 0.\n\n**Como atacar:** rode cada quadro à mão com um vetor e uma lista de 3 elementos, achando e não achando a chave."
     },
     {
       "numero": 18,
@@ -823,7 +840,8 @@
           "num": "0175",
           "modulo": "28-estruturas-complementos.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Com raiz no nível 1, profundidade `d` significa que o maior nível é `d`. O mínimo de nós é `d` (uma cadeia, um por nível). O máximo é a árvore cheia, com `2^(k-1)` nós no nível `k`, somando `2^d - 1`.\n\n**Exemplo:** profundidade 3: mínimo 3 nós (um por nível); máximo `1 + 2 + 4 = 7`, que é `2^3 - 1`.\n\n**Como atacar:** pense a menor árvore (cadeia) e a maior (cheia) para a profundidade pedida."
     },
     {
       "numero": 19,
@@ -864,7 +882,8 @@
           "num": "0097",
           "modulo": "14-arvores.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Em árvore binária completa, o nível `k` tem `2^(k-1)` nós (a raiz está no nível 1). O total até o nível `k` é a soma disso, `2^k - 1`. Não confunda quantidade no nível com total acumulado.\n\n**Exemplo:** níveis 1 a 4 têm `1, 2, 4, 8` nós. O nível 3 tem `2^2 = 4`.\n\n**Como atacar:** aplique `2^(k-1)` ao nível pedido."
     },
     {
       "numero": 20,
@@ -905,7 +924,8 @@
           "num": "0099",
           "modulo": "14-arvores.md"
         }
-      ]
+      ],
+      "dica": "**Conceito:** Numa ABB, cada nó visitado na busca restringe o intervalo possível dos próximos: ir para a esquerda de `x` obriga todos os seguintes a serem menores que `x`; ir para a direita, maiores. Uma sequência é válida se todos respeitam todos os limites acumulados.\n\n**Exemplo:** buscando 30: sequência `50, 20, 40, 35, 30` é válida: 20 < 50 (esquerda), 40 > 20 mas < 50, 35 < 40, 30 < 35. Já `50, 20, 60` é inválida: 60 > 50, mas está dentro da subárvore esquerda do 50.\n\n**Como atacar:** percorra cada sequência mantendo um intervalo (mínimo, máximo) e rejeite a que o violar."
     }
   ]
 }
