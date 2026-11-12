@@ -588,7 +588,7 @@
       "numero": 14,
       "topico": 6,
       "formato": "afirmações",
-      "enunciado": "Sobre as afirmações abaixo:\n\nI. Pode-se implementar uma busca em um vetor não ordenado a custo máximo inferior a n/2 operações, onde n é o número de elementos do vetor, desde que a chave buscada ocorra no vetor, não importando qual a posição em que a mesma ocorre.\nII. A busca por uma chave em um vetor ordenado pode ser realizada corretamente com um número de operações proporcional a log2 n, onde n é o número de elementos do vetor.\nIII. O número de comparações realizadas para determinar se uma chave de busca está ou não em um vetor não ordenado é sempre menor do que o número de comparações envolvendo a mesma chave de busca em uma lista encadeada dinâmica, desde que a quantidade e a ordem dos elementos inseridos nas duas estruturas seja a mesma.\n\nMarque a alternativa CORRETA:",
+      "enunciado": "Sobre as afirmações abaixo:\n\nI. Pode-se implementar uma busca em um vetor não ordenado a custo máximo inferior a n/2 operações, onde n é o número de elementos do vetor, desde que a chave buscada ocorra no vetor, não importando qual a posição em que a mesma ocorre.\nII. A busca por uma chave em um vetor ordenado pode ser realizada corretamente com um número de operações proporcional a log₂ n, onde n é o número de elementos do vetor.\nIII. O número de comparações realizadas para determinar se uma chave de busca está ou não em um vetor não ordenado é sempre menor do que o número de comparações envolvendo a mesma chave de busca em uma lista encadeada dinâmica, desde que a quantidade e a ordem dos elementos inseridos nas duas estruturas seja a mesma.\n\nMarque a alternativa CORRETA:",
       "alternativas": [
         {
           "letra": "A",

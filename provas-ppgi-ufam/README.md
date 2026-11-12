@@ -24,7 +24,10 @@ Cada prova tem um arquivo Markdown com o gabarito e as questões na ordem do cad
 
 ## Pontos de atenção
 
-- 2016-053 Q08: as alternativas b), d) e e) estão incompletas ou repetidas no PDF.
-- 2018-023: as Questões 03 e 05 têm enunciado idêntico, e o vetor da Q12 vem como `32 8 12 16 20 24 28 16 36`.
-- 2018-061 Q09: expoentes e símbolos das alternativas se perderam na extração de texto.
-- 2019-060 Q16: o enunciado cita uma figura que não existe no PDF.
+Conferidos contra os PDFs oficiais em 2026-11-12: todos são do caderno original, não da extração.
+
+- 2016-053 Q08: no caderno a alternativa b) está cortada ("I e") e d) e e) são iguais.
+- 2018-023: as Questões 03 e 05 têm enunciado idêntico (a 05 foi anulada), e o vetor da Q12 vem como `32 8 12 16 20 24 28 16 36`.
+- 2018-061 Q09: os expoentes estão no caderno; `^` marca o expoente no texto.
+- 2019-060 Q16: o enunciado cita uma figura que não existe no PDF (questão anulada).
+- 2023-020 Q04 e Q05: os itens vêm numerados a, b, c, mas as alternativas falam em I, II, III.

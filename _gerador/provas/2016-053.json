@@ -168,7 +168,7 @@
         {
           "letra": "E",
           "texto": "Posição 3 e posição 5",
-          "porque": "A troca entre 3 e 5 seria só da quarta passada em diante."
+          "porque": "Essa troca não acontece em nenhuma passada. Simulando: a 3ª troca é entre as posições 2 e 3, e a 4ª entre 3 e 6."
         }
       ],
       "gabarito": "C",
@@ -189,17 +189,17 @@
         {
           "letra": "A",
           "texto": "1 2 3 4 5",
-          "porque": "Seria a fila sem nenhuma retirada. Foram 4 retiradas."
+          "porque": "É a ordem crescente dos valores, e a fila guarda ordem de chegada. Além disso, houve 4 retiradas."
         },
         {
           "letra": "B",
           "texto": "2 3 1 4 5",
-          "porque": "Também ignora as retiradas. A RETIRA tira o mais antigo, o da esquerda."
+          "porque": "É a ordem de chegada de todos os elementos inseridos, como se não houvesse retirada. A RETIRA tira o mais antigo, o da esquerda, e foram 4."
         },
         {
           "letra": "C",
           "texto": "3 1 4",
-          "porque": "Seria o estado depois de só uma retirada a menos. Faltam duas retiradas (do 1 e do 4)."
+          "porque": "O 3 já saiu na segunda RETIRA (logo depois do INSERE(1)), então não pode sobrar. A fila passa por [1 4 5], depois [4 5] e termina em [5]."
         },
         {
           "letra": "D",
@@ -629,7 +629,7 @@
       "numero": 15,
       "topico": 7,
       "formato": "afirmações",
-      "enunciado": "Considere as afirmações a seguir sobre os algoritmos de ordenação Quicksort, MergeSort, HeapSort e InsertionSort\n\nI) São algoritmos estáveis: InsertionSort, QuickSort e MergeSorte\nII) Pior caso tem número de operações quadrático (proporcional a uma constante vezes n²): InsertionSort, QuickSort\nIII) Utiliza um espaço extra proporcional a n² (proporcional ao quadrado do número de elementos): HeapSort,\nIV) A ordem das entradas é incapaz de influenciar o desempenho do algoritmo: InsertionSort, MergeSort\n\nMarque a alternativa que indica TODAS as afirmações INCORRETAS feitas:",
+      "enunciado": "Considere as afirmações a seguir sobre os algoritmos de ordenação Quicksort, MergeSort, HeapSort e InsertionSort\n\nI) São algoritmos estáveis: InsertionSort, QuickSort e MergeSorte\nII) Pior caso tem número de operações quadrático (proporcional a uma constante vezes n² : InsertionSort, QuickSort\nIII) Utiliza um espaço extra proporcional a n² (proporcional ao quadrado do número de elementos): HeapSort,\nIV) A ordem das entradas é incapaz de influenciar o desempenho do algoritmo: InsertionSort, MergeSort\n\nMarque a alternativa que indica TODAS as afirmações INCORRETAS feitas:",
       "alternativas": [
         {
           "letra": "A",

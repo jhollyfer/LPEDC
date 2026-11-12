@@ -185,7 +185,7 @@ E) Nenhuma das alternativas acima está correta.
 Sobre as afirmações abaixo:
 
 I. Pode-se implementar uma busca em um vetor não ordenado a custo máximo inferior a n/2 operações, onde n é o número de elementos do vetor, desde que a chave buscada ocorra no vetor, não importando qual a posição em que a mesma ocorre.
-II. A busca por uma chave em um vetor ordenado pode ser realizada corretamente com um número de operações proporcional a log2 n, onde n é o número de elementos do vetor.
+II. A busca por uma chave em um vetor ordenado pode ser realizada corretamente com um número de operações proporcional a log₂ n, onde n é o número de elementos do vetor.
 III. O número de comparações realizadas para determinar se uma chave de busca está ou não em um vetor não ordenado é sempre menor do que o número de comparações envolvendo a mesma chave de busca em uma lista encadeada dinâmica, desde que a quantidade e a ordem dos elementos inseridos nas duas estruturas seja a mesma.
 
 Marque a alternativa CORRETA:
@@ -210,8 +210,6 @@ B) Apenas a afirmação II é verdadeira.
 C) Apenas a afirmação III é verdadeira.
 D) Apenas as afirmações II e III são verdadeiras.
 E) Apenas as afirmações I e III são verdadeiras.
-
-*(Nota: o símbolo da raiz em "√n" não aparece na extração de texto; confirmei no PDF renderizado.)*
 
 ### QUESTÃO 16
 Considere as seguintes árvores onde são apresentados apenas os valores das chaves em cada nó, sem mostrar o valor de outros campos eventualmente existentes. Além disso, note que em todos os casos, as árvores não estão em processo de rotação por inserção de chaves, estando portanto em seu estado final após a inserção do conjunto de chaves mostrado.

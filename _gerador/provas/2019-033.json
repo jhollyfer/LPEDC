@@ -806,7 +806,7 @@
         {
           "letra": "D",
           "texto": "árvore da figura d)",
-          "porque": "Não é uma ABB (o 6 está à esquerda da raiz 5, mas 6 > 5), e o 2 está desbalanceado (esquerda altura 0, direita altura 2).",
+          "porque": "Não é uma ABB: o 6 está na subárvore esquerda da raiz 5, mas 6 > 5. Os fatores de balanceamento até estão dentro do limite, então o defeito é só a ordem das chaves.",
           "figura": "2019-033-q19-d"
         },
         {

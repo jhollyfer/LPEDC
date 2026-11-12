@@ -95,7 +95,7 @@ e) Uma árvore vermelho e preto
 Considere as afirmações sobre busca binária:
 
 i) é utilizada apenas sobre vetores ordenados
-ii) pode determinar se uma chave está ou não com um número de comparações de chave inferior a 2log2 n passos, onde n é o tamanho do vetor.
+ii) pode determinar se uma chave está ou não com um número de comparações de chave inferior a 2log₂ n passos, onde n é o tamanho do vetor.
 iii) Supera a busca sequencial quando o vetor é grande, por exemplo com mais que mil elementos, e está ordenado.
 
 a) Apenas as afirmações II e III estão corretas

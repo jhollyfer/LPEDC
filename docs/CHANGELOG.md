@@ -12,6 +12,14 @@ Mudanças do LPEDC que quem estuda percebe. Formato
   e vê na hora se acertou, o porquê de cada alternativa e o módulo onde estudar. Tem filtro por
   tópico do edital, modo "refazer as que errei" e progresso salvo no navegador. As figuras das
   provas foram redesenhadas no traço do curso.
+- Cadernos completos de 057/2022, 020/2023 e 071/2023 em `provas-ppgi-ufam/`; as 11 provas agora usam
+  o gabarito oficial.
+
+### Corrigido
+
+- 020/2023: Q06 passa de B para C e Q09 ganha a letra A, pelo gabarito oficial.
+- Provas de 2016 a 2019 conferidas com os PDFs: subscritos e palavras que faltavam, recortes de figura
+  sem sobra, porquês do quiz e observações do `PROVAS.md` que ainda falavam em figura ausente.
 
 - `TRILHA.md`: trilha de estudo em 9 etapas, em ordem de dependência, com o que saber de cabeça e o
   treino de cada uma; complementa o plano por peso do `PPGI.md`.

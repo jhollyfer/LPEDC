@@ -13,7 +13,7 @@
 
 Quiz das provas publicado (`index.html` + `quiz/`, fonte em `_gerador/provas/`). Nada em
 andamento; o estudo segue o "Comece aqui" do `PPGI.md`, agora com o quiz no lugar de conferir
-o `PROVAS.md` à mão.
+o `PROVAS.md` à mão. As 11 provas foram conferidas com os PDFs da banca e todas têm gabarito oficial.
 
 ## Próximos passos
 

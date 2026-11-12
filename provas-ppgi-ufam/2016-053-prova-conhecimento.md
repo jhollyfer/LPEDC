@@ -231,7 +231,7 @@ e) ABB são um caso especial de listas encadeadas em que nenhum nó aponta para 
 Considere as afirmações a seguir sobre os algoritmos de ordenação Quicksort, MergeSort, HeapSort e InsertionSort
 
 I) São algoritmos estáveis: InsertionSort, QuickSort e MergeSorte
-II) Pior caso tem número de operações quadrático (proporcional a uma constante vezes n²): InsertionSort, QuickSort
+II) Pior caso tem número de operações quadrático (proporcional a uma constante vezes n² : InsertionSort, QuickSort
 III) Utiliza um espaço extra proporcional a n² (proporcional ao quadrado do número de elementos): HeapSort,
 IV) A ordem das entradas é incapaz de influenciar o desempenho do algoritmo: InsertionSort, MergeSort
 

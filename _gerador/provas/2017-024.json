@@ -748,7 +748,7 @@
       "numero": 17,
       "topico": 4,
       "formato": "conceito",
-      "enunciado": "As árvores são estruturas de dados poderosas e se subdividem em vários tipos, cada um dos quais com suas características próprias. Relacione os tipos de árvores, apresentados na coluna da esquerda, com as suas respectivas características, indicadas na coluna da direita:\n\n| Tipo de árvore | Característica |\n|---|---|\n| I – Heap | W – Pode degenerar se os elementos forem inseridos de forma ordenada. |\n| II – Rubro-Negra | X – É balanceada. |\n| III – Avore AVL | Y – Têm altura sempre proporcional/próxima a O(log2 n), onde n é o número de nós que contém. |\n| IV – Árvores binária de busca | Z – São sempre completas. |\n\nEstão CORRETAS as associações:",
+      "enunciado": "As árvores são estruturas de dados poderosas e se subdividem em vários tipos, cada um dos quais com suas características próprias. Relacione os tipos de árvores, apresentados na coluna da esquerda, com as suas respectivas características, indicadas na coluna da direita:\n\n| Tipo de árvore | Característica |\n|---|---|\n| I – Heap | W – Pode degenerar se os elementos forem inseridos de forma ordenada. |\n| II – Rubro-Negra | X – É balanceada. |\n| III – Avore AVL | Y – Têm altura sempre proporcional/próxima a O(log₂ n), onde n é o número de nós que contém. |\n| IV – Árvores binária de busca | Z – São sempre completas. |\n\nEstão CORRETAS as associações:",
       "alternativas": [
         {
           "letra": "A",

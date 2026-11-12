@@ -50,13 +50,12 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 
 
 **Observações**
-- Q01: IV poderia ser aceita se "particionamento completo" admitir pivô ainda não posicionado; nesse caso a letra seria D. Escolhi C.
-- Q09: "colisões secundárias" é termo do endereçamento aberto. Se o autor leu como "cadeias longas prejudicam", a letra seria C.
-- Q10: dois erros distintos (leitura fora do vetor e `aux[x]` em ponteiro). D é a mais próxima; E também é defensável. Provável anulada ou resposta frouxa.
-- Q13: com I e III verdadeiras não há letra certa. A letra A só vale se o autor considerou III falsa. Provável anulada.
-- Q17: sem "I e III" entre as letras; E por exclusão. Se o autor tratou III como falsa (radix in-place), seria A.
-- Q11: depende do autor ter considerado III falsa (árvore B ocupa mais espaço por nó semicheio e ponteiros).
-- O caderno diz 5 questões anuladas; prováveis: 05, 10, 13, 17 e uma de 09/11.
+- Anuladas pela banca (folha oficial): 01, 05, 07, 11 e 17. A Q09 (D), a Q10 (B) e a Q13 (E) foram mantidas.
+- Q01: I é o particionamento de Hoare e III o de Lomuto; a anulação vem de IV, que pode ser aceita se "particionamento completo" admitir o pivô ainda fora do lugar.
+- Q09: "colisões secundárias" é termo do endereçamento aberto; a banca leu I e II como falsas (D).
+- Q10: a banca tratou `tm` como índice do último elemento, e não como tamanho; com essa leitura, só II erra (B).
+- Q13: I e III verdadeiras, e "I e III" não existe entre as letras; a banca marcou E (nenhuma das anteriores).
+- Q11 e Q17: dependem de considerar a III falsa (árvore B ocupa espaço com nós semicheios; radix in-place); anuladas.
 
 ## Edital 053/2016
 
@@ -72,7 +71,7 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 | 08 | A | simulação | 3 | [0082](12-pilhas-e-filas.md), [0085](12-pilhas-e-filas.md) | Pilha → fila: 10 29 18 8 50 25 14 23 12 11 (I). Fila → pilha: topo 11 12 23 ... 10 (II). |
 | 09 | A | código | 3 | [0079](11-listas.md), [0062](08-structs.md) | As linhas ligam Z → Y → X → antigo próximo de Z. |
 | 10 | D | afirmações | 5 | [0107](15-hash.md) | I falsa, II verdadeira (endereçamento aberto não passa de M chaves), III falsa (vai para a próxima posição livre). |
-| 11 | C | simulação | 4 | [0098](14-arvores.md) | Figura ausente. Só C e D (e A, B) são árvores consistentes; C é a árvore natural: raiz P, esquerda Q(S,T), direita R. |
+| 11 | C | simulação | 4 | [0098](14-arvores.md) | A figura do caderno é P com Q(S, T) à esquerda e R à direita: pós-ordem S T Q R P e in-ordem S Q T P R. |
 | 12 | B | afirmações | 5 | [0106](15-hash.md), [0107](15-hash.md) | I falsa (disco), II falsa (o linear não aceita C>M), III falsa (colisão no encadeado entra na lista). |
 | 13 | A | conceito | 4 | [0101](14-arvores.md), [0175](28-estruturas-complementos.md) | Nó de AVL é binário: grau 0, 1 ou 2. |
 | 14 | A | conceito | 4 | [0099](14-arvores.md), [0098](14-arvores.md) | Gabarito oficial A. O curso tinha chegado em C: Em ordem na ABB dá chaves ordenadas. |
@@ -85,11 +84,12 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 
 
 **Observações**
-- Q11: figura ausente. A letra C é inferência (única com árvore "equilibrada" de 5 nós); A, B e D também formam árvores válidas (cadeias). Confiança média.
-- Q14: A também é defensável (definição de árvore binária). Escolhi C por ser a propriedade característica da ABB.
+- Nenhuma questão anulada; as 20 letras conferem com a folha oficial.
+- Q11: a figura está no caderno: P com filhos Q (S, T) e R. Pós-ordem S T Q R P, in-ordem S Q T P R: C.
+- Q14: o gabarito oficial é A (definição de árvore binária); a C (percurso em ordem) também é verdadeira.
 - Q10 (hash linear): II é verdadeira, contrariando a mesma afirmação nas questões de encadeamento; aqui a resposta é D.
-- Q17: mesma ambiguidade da Q10 de 032 (ver lá); D por coerência.
-- Q08: o texto original da letra B está truncado; as letras D e E repetem o texto. A resposta A não depende disso.
+- Q17: mesma leitura de `tm` da Q10 de 032/2016: a banca o trata como índice do último elemento.
+- Q08: a letra B está cortada e D e E repetem o texto no próprio caderno. A resposta A não depende disso.
 - Q01: se o autor contou comparações e não iterações do laço, a conta é a mesma (9).
 - Q07: a altura em arestas (Cormen) seria 4; o enunciado define raiz no nível 1, então vale 5.
 ## Edital 024/2017
@@ -118,16 +118,16 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 
 
 **Observações**
-- Q08 e Q10: figuras ausentes, sem como resolver.
-- Q09: o estado final correto é só `e` (b, c, RETIRA, a, RETIRA, e, e, RETIRA, RETIRA), e nenhuma alternativa traz isso. Provável anulada.
-- Q17: D e E são ambas defensáveis (heap pode ser dita balanceada ou de altura O(log n); falta o par I-Z que seria o canônico). Provável anulada. D escolhida por AVL ser a "balanceada" clássica.
-- Q19: a letra e está truncada no original; a escolhida é a única inteira correta.
-- Q20: alternativas dependem da 053/2016 Q06; a certa é a que cita próximo e anterior.
+- Q08 e Q10: as figuras estão no caderno (árvores I a IV); a letra E confere nas duas.
+- Q09: anulada pela banca. O estado final correto é só `e` (b, c, RETIRA, a, RETIRA, e, e, RETIRA, RETIRA), e nenhuma alternativa traz isso.
+- Q17: anulada pela banca. D e E são ambas defensáveis (falta o par I-Z, que seria o canônico).
+- Q19: a letra e está completa no caderno; a única correta continua sendo a A.
+- Q20: alternativas iguais às da 053/2016 Q06; a certa é a que cita próximo e anterior.
 
 ## Edital 055/2017
 | Q | Letra | Formato | Tópico | Assuntos | Por quê |
 |---|---|---|---|---|---|
-| 01 | E | simulação | 1 | [0032](04-funcoes.md) | Gabarito oficial E. Letra conferida com o recorte da prova em `provas-ppgi-ufam/`; o porquê de cada alternativa está no quiz. pseudocódigo em figura ausente |
+| 01 | E | simulação | 1 | [0032](04-funcoes.md) | Gabarito oficial E. Letra conferida com o recorte da prova em `provas-ppgi-ufam/`; o porquê de cada alternativa está no quiz. |
 | 02 | C | conceito | 3 | [0085](12-pilhas-e-filas.md), [0086](12-pilhas-e-filas.md), [0097](14-arvores.md) | hierarquia de diretórios é árvore, não fila |
 | 03 | anulada | simulação | 4 | [0099](14-arvores.md) | Anulada pela banca. na alternativa C, 912 aparece depois de ir à esquerda de 911; ver observações |
 | 04 | B | afirmações | 4 | [0099](14-arvores.md) | Gabarito oficial B. Letra conferida com o recorte da prova em `provas-ppgi-ufam/`; o porquê de cada alternativa está no quiz. |
@@ -150,12 +150,11 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 
 
 **Observações**
-- Q01, Q04, Q16: figuras ou pseudocódigo ausentes.
-- Q03: C (912 na subárvore esquerda de 911) e E (299 abaixo de 347 vai à direita, mas 299 < 347) são ambas impossíveis. É o exercício 12.2-1 do Cormen, que também tem as duas. Provável anulada.
-- Q15: pelas definições, encadeamento não tem colisão secundária (I falsa) e busca nunca passa de n comparações (II falsa); III falsa. Nenhuma alternativa certa. Se o autor tratou I como verdadeira, seria A. Provável anulada.
+- Anuladas pela banca: 03, 09 e 10. O pseudocódigo da Q01 e as árvores da Q04 e da Q16 estão no caderno.
+- Q03: C (912 na subárvore esquerda de 911) e E (299 abaixo de 347 vai à direita, mas 299 < 347) são ambas impossíveis. É o exercício 12.2-1 do Cormen, que também tem as duas.
+- Q15: a II pede mais que √n comparações, não mais que n. Com todas as chaves na mesma lista a busca faz até n comparações, que passa de √n; por isso a II é verdadeira e a letra B da banca está certa.
 - Q13: E depende de contar a pilha de recursão do quicksort como espaço extra, o que é o padrão do Cormen.
 - Q18: gabarito defensável é E; C só serviria se fila inserisse no início e retirasse no fim.
-- Gabarito original diz que 3 foram anuladas; candidatas: Q03, Q15 e uma das que dependem de figura (01, 04, 16).
 ## Edital 023/2018
 | Q | Letra | Formato | Tópico | Assuntos | Por quê |
 |---|---|---|---|---|---|
@@ -182,11 +181,11 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 
 
 **Observações**
-- Q10: depende da figura da árvore. Sem como inferir.
-- Q03 e Q05 são a mesma questão repetida no caderno.
-- Q15: D (I-Y, IV-W, III-X) e E (I-X, IV-W, II-Y) são defensáveis, e nenhuma associa o heap a "sempre completa" (Z). Provável anulada. Fica D.
-- Q04: o vetor do item III veio embaralhado no original, mas o 12 não pertence a esse heap, então III é falsa de qualquer jeito.
-- Q12: o vetor veio com erros (`32 8 12 16 20 ...`). Nas duas versões o índice 4 vale 20, então E vale.
+- Anulada pela banca: Q05, que repete o enunciado da Q03 no próprio caderno.
+- Q10: a figura está no caderno; a remoção pelo antecessor dá 18 (D). O curso (0100) remove pelo sucessor, que daria 21.
+- Q15: gabarito oficial D, apesar de E também ser defensável; nenhuma alternativa associa o heap a "sempre completa" (Z).
+- Q04: o 12 não pertence ao heap do item III, então III é falsa de qualquer jeito.
+- Q12: o vetor `32 8 12 16 20 24 28 16 36` é assim no caderno. O índice 4 vale 20, então E vale.
 - Q17: a pergunta pede a alternativa que lista só as afirmações incorretas.
 
 ## Edital 061/2018
@@ -194,7 +193,7 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 |---|---|---|---|---|---|
 | 01 | B | cálculo | 5 | [0105](15-hash.md), [0178](28-estruturas-complementos.md) | `x mod 12000` cobre exatamente 0 a 11.999; a A só gera 1000 endereços. |
 | 02 | D | conceito | 3 | [0039](05-vetores-e-strings.md) | Soma de matrizes m×n dá m×n, não 2m×2n. |
-| 03 | anulada | simulação | 4 | [0101](14-arvores.md) | Anulada pela banca. Figura ausente. Rodado em C: A, B e E geram a mesma árvore (raiz 23); C gera raiz 13 e D, raiz 15. |
+| 03 | anulada | simulação | 4 | [0101](14-arvores.md) | Anulada pela banca. A figura do caderno é a AVL de raiz 23. Rodado em C: A, B e E geram a mesma árvore (raiz 23); C gera raiz 13 e D, raiz 15. |
 | 04 | anulada | conceito | 7, 2 | [0092](13-busca-e-ordenacao.md), [0096](13-busca-e-ordenacao.md) | Anulada pela banca. O melhor caso do selection sort é O(N²), não O(log N). |
 | 05 | B | simulação | 4 | [0099](14-arvores.md) | Folhas 5 e 42, pai do 72 é o 25. |
 | 06 | D | conceito | 7 | [0095](13-busca-e-ordenacao.md), [0168](26-analise-formal.md) | No pior caso a pilha de recursão do quicksort chega a O(n). |
@@ -215,18 +214,20 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 
 
 **Observações**
-- Q03: figura ausente e três alternativas (A, B, E) dão a mesma árvore. Se a figura for a delas, a questão tem três certas (anulada). Se for a da C ou da D, a resposta é única.
-- Q08: C e E estão incorretas (pilha é linear, e array dinâmico não vira lista ligada). Duas alternativas erradas: provável anulada. Fica C.
-- Q17: a E original era "Nenhuma das alternativas anteriores" (certa, com I, II e III verdadeiras). Aqui foi trocada por "nenhuma das afirmações é verdadeira", o que deixa a questão sem resposta. Provável anulada.
+- Anuladas pela banca: 03, 04, 08, 09 e 17.
+- Q03: a figura existe no caderno (árvore AVL de raiz 23). A, B e E dão a mesma árvore: três certas, anulada.
+- Q08: C e E estão incorretas (pilha é linear, e array dinâmico não vira lista ligada). Duas alternativas erradas: anulada.
+- Q09: os expoentes estão no caderno; na A o sobrescrito fica só no 2 de `m/2`, o que deixa a fórmula ambígua.
+- Q17: com I, II e III verdadeiras, nenhuma alternativa serve (a E diz que nenhuma é verdadeira). Anulada.
 - Q18: a III é discutível (hash encadeado ocupa mais espaço que árvore B em memória?). Fica E (I e II); a alternativa A só vale se a III for aceita.
-- Q20: o texto de 061 não traz as alternativas. As afirmações corretas são I e II; a letra A é a mesma da Q08 de 053/2016 (I e II), então é inferência.
+- Q20: o caderno traz as alternativas (D e E repetidas, ambas "III e IV"). A letra A é a da folha oficial.
 ## Edital 033/2019
 
 | Q | Letra | Formato | Tópico | Assuntos | Por quê |
 |---|---|---|---|---|---|
-| 01 | A | simulação | 7 | [0095](13-busca-e-ordenacao.md) | Com pivô no primeiro, a entrada já ordenada é o pior caso: 21 comparações contra 11 a 12 nas outras (rodado em C). |
+| 01 | A | simulação | 7 | [0095](13-busca-e-ordenacao.md) | Com pivô no primeiro, a entrada já ordenada é o pior caso: 21 comparações contra 10 a 13 nas outras (rodado em C). |
 | 02 | D | simulação | 4 | [0102](14-arvores.md) | Gabarito oficial D. Letra conferida com o recorte da prova em `provas-ppgi-ufam/`; o porquê de cada alternativa está no quiz. |
-| 03 | A | simulação | 3 | [0082](12-pilhas-e-filas.md) | 5 push menos 4 pop deixa 1 elemento (o 1). |
+| 03 | A | simulação | 3 | [0082](12-pilhas-e-filas.md) | 5 push menos 4 pop deixa 1 elemento (o 5). |
 | 04 | C | simulação | 4 | [0097](14-arvores.md) | Folha `110` fica com 1 chave; irmãos têm o mínimo (2) e não emprestam, então funde com a direita: `110 140 144 156`, raiz `100 160`. |
 | 05 | anulada | conceito | 3 | [0076](11-listas.md), [0077](11-listas.md) | Anulada pela banca. Pior caso da busca sequencial em lista é n comparações. |
 | 06 | D | código | 3 | [0076](11-listas.md), [0032](04-funcoes.md) | Imprime 1, 3, 5, chama com NULL e volta imprimindo 5, 3, 1: `1 3 5 5 3 1`. |
@@ -247,14 +248,13 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 
 
 **Observações**
-- Q02 depende de figura ausente.
-- Q04: os blocos vieram desalinhados. A letra C é a única que bate com a fusão padrão, mas B também é um B-tree válido; a leitura das letras é provável.
+- Anuladas pela banca: 05, 10, 13 e 15. As figuras da Q02, Q04, Q16 e Q19 estão no caderno.
+- Q04: só C sai da fusão padrão; B é uma árvore B válida, mas não sai de remoção padrão.
 - Q09: se "altura 3" contasse níveis, daria 21 x 3 = 63 (letra B). Pelo Cormen (arestas) é 255.
-- Q10: depende de como se conta colisão. Contando chaves que colidiram (22 e 39) a afirmação I vira verdadeira e a resposta passa a D. Provável anulada.
-- Q11: código em Java e truncado, enunciado confuso. Provável anulada.
-- Q13: I só é verdadeira em heap máximo (e com "menor ou igual"). Se valesse, as três seriam verdadeiras e nenhuma opção bateria, o que faz dela candidata a anulada. B vale se I for tomada como falsa.
+- Q10: depende de como se conta colisão. Contando chaves que colidiram (22 e 39) a afirmação I vira verdadeira e a resposta passa a D.
+- Q11: o gabarito oficial é B; o curso chegaria em E (código em Java e truncado, enunciado confuso).
+- Q13: I só é verdadeira em heap máximo (e com "menor ou igual"). Se valesse, as três seriam verdadeiras e nenhuma opção bateria.
 - Q20: I é falsa porque a raiz de uma subárvore pode ser vermelha; só B bate com II e III verdadeiras.
-- Anuladas (4, não identificadas no original): candidatas Q02, Q10, Q11, Q13.
 
 ## Edital 060/2019
 
@@ -284,11 +284,10 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 
 **Observações**
 - Q01: a tabela do enunciado põe 12 na posição 2, mas 12 mod 9 = 3 e a sondagem só chegaria lá dando a volta. A transcrição perdeu um vazio: o recorte da prova (`provas-ppgi-ufam/2019-060/figuras/q01-tabela-hash.png`) mostra `9 18 _ 12 3 14 4 21 _`, com o 12 na posição 3. A letra C vale.
-- Q02 e Q16 dependem de figura ausente. Q16 foi inferida por exclusão.
+- Anuladas pela banca: 11, 13, 14 e 16. A figura da Q02 existe; a da Q16 não está no caderno ("figura abaixo" sem figura), o que explica a anulação.
 - Q08: heapsort com elementos todos iguais também é O(n) (o max-heapify para na hora). A e B são defensáveis; B é a esperada.
-- Q11: C também é questionável (folha não tem filhos, então "sempre chaves + 1" só vale em nó interno). B é a mais provável.
-- Q12: figura parcial; B reconstruída com a interrogação no texto. D se a reconstrução estiver certa.
-- Anuladas (4, não identificadas): candidatas Q02, Q08, Q11, Q12.
+- Q11: C também é questionável (folha não tem filhos, então "sempre chaves + 1" só vale em nó interno).
+- Q12: figura completa no caderno: A e C são AVL, B não é (50 com esquerda de altura 2 e direita vazia).
 ## Edital 057/2022 (gabarito oficial)
 | Q | Letra | Formato | Tópico | Assuntos | Por quê |
 |---|---|---|---|---|---|

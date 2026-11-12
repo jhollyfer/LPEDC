@@ -298,7 +298,7 @@ As árvores são estruturas de dados poderosas e se subdividem em vários tipos,
 |---|---|
 | I – Heap | W – Pode degenerar se os elementos forem inseridos de forma ordenada. |
 | II – Rubro-Negra | X – É balanceada. |
-| III – Avore AVL | Y – Têm altura sempre proporcional/próxima a O(log2 n), onde n é o número de nós que contém. |
+| III – Avore AVL | Y – Têm altura sempre proporcional/próxima a O(log₂ n), onde n é o número de nós que contém. |
 | IV – Árvores binária de busca | Z – São sempre completas. |
 
 Estão CORRETAS as associações:

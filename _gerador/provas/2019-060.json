@@ -69,19 +69,19 @@
         {
           "letra": "B",
           "texto": "2",
-          "porque": "Não é nem ABB: o 15 está na subárvore direita do 18 (sob o 16), mas 15 < 18 e devia ficar à esquerda.",
+          "porque": "Não é nem ABB: o 15 está na subárvore direita do 18 (sob o 16), mas 15 < 18, e o 25 está à esquerda do 20, mas 25 > 20.",
           "figura": "2019-060-q02-2"
         },
         {
           "letra": "C",
           "texto": "3",
-          "porque": "É ABB, mas o 18 tem só filho esquerdo (o 15 com dois filhos): subárvore esquerda de altura 2 e direita vazia, diferença 3. Não é AVL.",
+          "porque": "Não é ABB: o 25 está à esquerda do 20, mas 25 > 20. Também não é AVL: o 18 tem só o filho esquerdo 15, que tem dois filhos, então a subárvore esquerda tem altura 2 e a direita é vazia.",
           "figura": "2019-060-q02-3"
         },
         {
           "letra": "D",
           "texto": "4",
-          "porque": "É ABB, mas na raiz 20 a subárvore esquerda tem altura 3 e a direita altura 1, diferença 2. Não é AVL.",
+          "porque": "Não é ABB: o 15 está à direita do 16, mas 15 < 16. O balanceamento até fica dentro do limite, então o defeito é só a ordem das chaves.",
           "figura": "2019-060-q02-4"
         },
         {
@@ -494,7 +494,7 @@
         {
           "letra": "A",
           "texto": "Somente B",
-          "porque": "Em B, o 50 tem subárvore esquerda de altura 2 (10 → 5) e direita vazia (-1): diferença 3 em módulo, desbalanceada. B não é AVL."
+          "porque": "Em B, o 50 tem subárvore esquerda de altura 2 (10 → 5) e direita vazia (altura 0): diferença 2, desbalanceada. B não é AVL."
         },
         {
           "letra": "B",
@@ -509,7 +509,7 @@
         {
           "letra": "D",
           "texto": "A e C",
-          "porque": "Correta. Em A, todos os nós têm diferença de alturas até 1 (o 50 com esquerda 10 e direita vazia: diferença 1; o 200 com só o 300: diferença 1). Em C, a raiz tem alturas 3 e 2, o 50 tem 2 e 1, o 200 tem 2 e 2, o 10 tem 1 e vazio, o 150 e o 300 têm 1 e vazio, tudo dentro de 1."
+          "porque": "Correta. Em A, todos os nós têm diferença de alturas até 1 (o 50 com esquerda 10 e direita vazia: diferença 1; o 200 com só o 300: diferença 1). Em C, a raiz tem alturas 3 e 3, o 50 tem 2 e 1, o 200 tem 2 e 2, o 10 tem 1 e vazio, o 150 e o 300 têm 1 e vazio, tudo dentro de 1."
         },
         {
           "letra": "E",

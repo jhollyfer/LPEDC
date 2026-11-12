@@ -270,7 +270,7 @@
       "numero": 7,
       "topico": 6,
       "formato": "afirmações",
-      "enunciado": "Considere as afirmações sobre busca binária:\n\ni) é utilizada apenas sobre vetores ordenados\nii) pode determinar se uma chave está ou não com um número de comparações de chave inferior a 2log2 n passos, onde n é o tamanho do vetor.\niii) Supera a busca sequencial quando o vetor é grande, por exemplo com mais que mil elementos, e está ordenado.",
+      "enunciado": "Considere as afirmações sobre busca binária:\n\ni) é utilizada apenas sobre vetores ordenados\nii) pode determinar se uma chave está ou não com um número de comparações de chave inferior a 2log₂ n passos, onde n é o tamanho do vetor.\niii) Supera a busca sequencial quando o vetor é grande, por exemplo com mais que mil elementos, e está ordenado.",
       "alternativas": [
         {
           "letra": "A",
@@ -428,7 +428,7 @@
         },
         {
           "letra": "D",
-          "texto": "Os dois códigos geram erros de vazamento de memória ou falha de segmentação",
+          "texto": "Os dois códigos geram erros de vazamento de memória ou de falha de segmentação",
           "porque": "Nenhum dos dois aloca memória, então não há vazamento. O I é correto na leitura da banca."
         },
         {
