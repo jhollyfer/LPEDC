@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quiz das provas PPGI</title>
+<meta name="description" content="As provas de conhecimento do PPGI/UFAM de 2016 a 2023 em formato de quiz, com o porquê de cada alternativa e o módulo do LPEDC onde estudar.">
+<style>
+:root {
+  --fundo: #f6f5f1;
+  --cartao: #ffffff;
+  --tinta: #1e1e1e;
+  --suave: #5c5f66;
+  --borda: #dcd9d0;
+  --destaque: #1971c2;
+  --destaque-fundo: #e7f1fb;
+  --certo: #2b8a3e;
+  --certo-fundo: #e6f6e9;
+  --errado: #c92a2a;
+  --errado-fundo: #fdecec;
+  --aviso: #b35c00;
+  --aviso-fundo: #fff4e0;
+  --codigo-fundo: #f1f0ea;
+  --sombra: 0 1px 2px rgb(0 0 0 / .06), 0 4px 16px rgb(0 0 0 / .05);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --fundo: #15171a; --cartao: #1e2125; --tinta: #e9eaec; --suave: #a3a8b0; --borda: #33373d;
+    --destaque: #74b3f0; --destaque-fundo: #1b2a3a; --certo: #69db7c; --certo-fundo: #16301c;
+    --errado: #ff8787; --errado-fundo: #3a1c1c; --aviso: #ffc078; --aviso-fundo: #3a2a14;
+    --codigo-fundo: #171a1d; --sombra: none;
+  }
+}
+:root[data-theme="dark"] {
+  --fundo: #15171a; --cartao: #1e2125; --tinta: #e9eaec; --suave: #a3a8b0; --borda: #33373d;
+  --destaque: #74b3f0; --destaque-fundo: #1b2a3a; --certo: #69db7c; --certo-fundo: #16301c;
+  --errado: #ff8787; --errado-fundo: #3a1c1c; --aviso: #ffc078; --aviso-fundo: #3a2a14;
+  --codigo-fundo: #171a1d; --sombra: none;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--fundo); color: var(--tinta);
+  font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+a { color: var(--destaque); }
+button { font: inherit; color: inherit; }
+.topo {
+  position: sticky; top: 0; z-index: 5; background: var(--fundo);
+  border-bottom: 1px solid var(--borda);
+}
+.topo .linha {
+  max-width: 820px; margin: 0 auto; padding: 10px 16px;
+  display: flex; align-items: center; gap: 12px;
+}
+.marca { font-weight: 700; text-decoration: none; color: var(--tinta); white-space: nowrap; }
+.marca small { font-weight: 400; color: var(--suave); }
+.espaco { flex: 1; }
+.placar { font-size: 14px; color: var(--suave); white-space: nowrap; }
+.icone {
+  border: 1px solid var(--borda); background: var(--cartao); border-radius: 8px;
+  width: 36px; height: 36px; cursor: pointer; display: grid; place-items: center;
+}
+main { max-width: 820px; margin: 0 auto; padding: 20px 16px 80px; }
+h1 { font-size: 28px; line-height: 1.25; margin: 8px 0 6px; }
+h2 { font-size: 19px; margin: 28px 0 10px; }
+.lead { color: var(--suave); margin: 0 0 18px; }
+.cartao {
+  background: var(--cartao); border: 1px solid var(--borda); border-radius: 14px;
+  box-shadow: var(--sombra);
+}
+.grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+.prova {
+  text-align: left; padding: 14px 16px; cursor: pointer; display: flex; flex-direction: column; gap: 4px;
+}
+.prova:hover, .prova:focus-visible { border-color: var(--destaque); outline: none; }
+.prova strong { font-size: 18px; }
+.prova .info { font-size: 14px; color: var(--suave); }
+.barra { height: 6px; border-radius: 3px; background: var(--borda); overflow: hidden; margin-top: 6px; }
+.barra span { display: block; height: 100%; background: var(--certo); }
+.etiqueta {
+  display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 999px;
+  border: 1px solid var(--borda); color: var(--suave); white-space: nowrap;
+}
+.etiqueta.oficial { border-color: var(--certo); color: var(--certo); }
+.etiqueta.curso { border-color: var(--aviso); color: var(--aviso); }
+.acoes { display: flex; flex-wrap: wrap; gap: 10px; margin: 6px 0 4px; }
+.botao {
+  border: 1px solid var(--borda); background: var(--cartao); border-radius: 10px;
+  padding: 10px 16px; cursor: pointer; font-weight: 600;
+}
+.botao.principal { background: var(--destaque); border-color: var(--destaque); color: #fff; }
+:root[data-theme="dark"] .botao.principal { color: #0d1b2a; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .botao.principal { color: #0d1b2a; } }
+.botao:disabled { opacity: .45; cursor: default; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  border: 1px solid var(--borda); background: var(--cartao); border-radius: 999px;
+  padding: 5px 12px; cursor: pointer; font-size: 14px;
+}
+.chip[aria-pressed="true"] { background: var(--destaque-fundo); border-color: var(--destaque); color: var(--destaque); font-weight: 600; }
+.nota { font-size: 14px; color: var(--suave); }
+
+/* questão */
+.progresso { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--suave); margin-bottom: 12px; }
+.progresso .barra { flex: 1; margin: 0; }
+.progresso .barra span { background: var(--destaque); }
+.questao { padding: 20px; }
+.meta { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.enunciado p { margin: 0 0 12px; }
+.enunciado table, .porque table { border-collapse: collapse; margin: 0 0 12px; font-size: 15px; display: block; overflow-x: auto; }
+.enunciado th, .enunciado td, .porque th, .porque td { border: 1px solid var(--borda); padding: 6px 10px; vertical-align: top; text-align: left; }
+pre {
+  background: var(--codigo-fundo); border: 1px solid var(--borda); border-radius: 10px;
+  padding: 12px 14px; overflow-x: auto; font-size: 14.5px; line-height: 1.5; margin: 0 0 12px;
+}
+code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: .92em; }
+:not(pre) > code { background: var(--codigo-fundo); padding: 1px 5px; border-radius: 5px; }
+.tok-k { color: #9c36b5; font-weight: 600; }
+.tok-c { color: #868e96; font-style: italic; }
+.tok-s { color: #2b8a3e; }
+.tok-n { color: #d9480f; }
+.figuras { display: flex; flex-wrap: wrap; gap: 12px; margin: 4px 0 14px; }
+.figura {
+  background: #fff; border: 1px solid var(--borda); border-radius: 12px; padding: 6px;
+  max-width: 100%;
+}
+.figura img { display: block; max-width: 100%; height: auto; }
+.original { font-size: 13px; margin: -6px 0 14px; }
+.aviso {
+  background: var(--aviso-fundo); color: var(--aviso); border-radius: 10px;
+  padding: 10px 14px; font-size: 15px; margin-bottom: 14px;
+}
+.alternativas { list-style: none; padding: 0; margin: 6px 0 0; display: flex; flex-direction: column; gap: 10px; }
+.alt {
+  border: 1.5px solid var(--borda); background: var(--cartao); border-radius: 12px;
+}
+.alt:has(.escolher:hover:not(:disabled)), .alt:has(.escolher:focus-visible) { border-color: var(--destaque); }
+.escolher {
+  width: 100%; text-align: left; display: flex; gap: 12px; align-items: flex-start;
+  border: 0; background: none; padding: 12px 14px; cursor: pointer; border-radius: 12px;
+}
+.escolher:focus-visible { outline: 2px solid var(--destaque); outline-offset: -2px; }
+.escolher:disabled { cursor: default; }
+.letra {
+  flex: none; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center;
+  border: 1.5px solid var(--borda); font-weight: 700; font-size: 15px;
+}
+.alt .texto { flex: 1; min-width: 0; }
+.alt .texto p { margin: 0 0 6px; }
+.alt .texto p:last-child { margin: 0; }
+.alt .texto .figura { margin-top: 6px; display: inline-block; }
+.alt.certa { border-color: var(--certo); background: var(--certo-fundo); }
+.alt.certa .letra { background: var(--certo); border-color: var(--certo); color: var(--cartao); }
+.alt.errada { border-color: var(--errado); background: var(--errado-fundo); }
+.alt.errada .letra { background: var(--errado); border-color: var(--errado); color: var(--cartao); }
+.alt.apagada { opacity: .9; }
+.porque {
+  margin: 0 14px 0 56px; padding: 8px 0 12px; border-top: 1px dashed var(--borda);
+  font-size: 15.5px; color: var(--tinta);
+}
+.porque p { margin: 0 0 6px; }
+.porque .rotulo { font-weight: 700; }
+.certa .porque .rotulo { color: var(--certo); }
+.errada .porque .rotulo, .apagada .porque .rotulo { color: var(--suave); }
+.errada .porque .rotulo { color: var(--errado); }
+.veredito { font-size: 20px; font-weight: 700; margin: 18px 0 8px; }
+.veredito.certo { color: var(--certo); }
+.veredito.errado { color: var(--errado); }
+.veredito.neutro { color: var(--aviso); }
+.ideia { padding: 14px 16px; margin-top: 10px; border-left: 4px solid var(--destaque); }
+.ideia h3 { margin: 0 0 6px; font-size: 16px; }
+.ideia p { margin: 0 0 8px; }
+.estude { margin: 10px 0 0; font-size: 15px; }
+.navegar { display: flex; gap: 10px; justify-content: space-between; margin-top: 18px; }
+.atalhos { font-size: 13px; color: var(--suave); margin-top: 14px; text-align: center; }
+kbd { border: 1px solid var(--borda); border-bottom-width: 2px; border-radius: 4px; padding: 0 5px; font-size: 12px; }
+.lista-erros { padding-left: 20px; }
+.lista-erros li { margin-bottom: 6px; }
+.grande { font-size: 44px; font-weight: 800; margin: 4px 0; }
+@media (max-width: 520px) {
+  .porque { margin-left: 14px; }
+  body { font-size: 16px; }
+  h1 { font-size: 24px; }
+  .questao { padding: 16px 14px; }
+  .placar { display: none; }
+  .navegar .botao { flex: 1; }
+}
+</style>
+</head>
+<body>
+<header class="topo">
+  <div class="linha">
+    <a class="marca" href="#" id="inicio">LPEDC <small>· provas PPGI</small></a>
+    <span class="espaco"></span>
+    <span class="placar" id="placar"></span>
+    <button class="icone" id="tema" type="button" aria-label="Trocar tema claro ou escuro" title="Tema">◐</button>
+  </div>
+</header>
+<main id="app" aria-live="polite"></main>
+
+<script src="quiz/questoes.js"></script>
+<script>
+'use strict'
+const REPO = 'https://github.com/jhollyfer/LPEDC/blob/main/'
+const CHAVE = 'lpedc-quiz-v1'
+const TOPICOS = {
+  1: 'Fundamentos', 2: 'Eficiência', 3: 'Lista, pilha, fila', 4: 'Árvores',
+  5: 'Hash', 6: 'Busca', 7: 'Ordenação', 8: 'Grafos',
+}
+const PROVAS = window.PROVAS ?? []
+const QUESTOES = PROVAS.flatMap((p) =>
+  p.questoes.map((q) => ({
+    ...q,
+    id: `${p.slug}-q${String(q.numero).padStart(2, '0')}`,
+    edital: p.edital, slug: p.slug, ano: p.ano, oficial: p.oficial,
+    topicos: String(q.topico ?? '').split(/[^0-9]+/).filter(Boolean).map(Number),
+  })),
+)
+const porId = new Map(QUESTOES.map((q) => [q.id, q]))
+const valeNota = (q) => /^[A-E]$/.test(q.gabarito ?? '')
+
+// ---------- memória do navegador (pode falhar em aba privada) ----------
+const ler = (k, padrao) => { try { return JSON.parse(localStorage.getItem(k)) ?? padrao } catch { return padrao } }
+const gravar = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)) } catch { /* sem memória: segue sem salvar */ } }
+let respostas = ler(CHAVE, {})
+
+// ---------- tema ----------
+const raiz = document.documentElement
+const temaSalvo = ler('lpedc-tema', null)
+if (temaSalvo) raiz.dataset.theme = temaSalvo
+document.getElementById('tema').onclick = () => {
+  const escuroAgora = raiz.dataset.theme === 'dark' || (!raiz.dataset.theme && matchMedia('(prefers-color-scheme: dark)').matches)
+  raiz.dataset.theme = escuroAgora ? 'light' : 'dark'
+  gravar('lpedc-tema', raiz.dataset.theme)
+}
+
+// ---------- mini-markdown: parágrafo, código, tabela, `inline`, **negrito** ----------
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c])
+const PALAVRAS = /\b(int|char|float|double|void|struct|return|if|else|while|for|do|switch|case|break|continue|typedef|NULL|sizeof|const|unsigned|long|static|def|class|self|in|range|print|len|and|or|not|None|True|False|elif|import|from|lambda|function|procedimento|fim|se|senão|então|enquanto|para|faça|retorne|início|algoritmo|var|inteiro|real|até|de)\b/g
+function realcar(codigo) {
+  // comentário e string primeiro; o resto ganha palavra-chave e número
+  const partes = codigo.split(/(\/\/[^\n]*|\/\*[\s\S]*?\*\/|#[^\n]*|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')/g)
+  return partes.map((p, i) => {
+    if (i % 2 === 1) {
+      const comentario = p.startsWith('//') || p.startsWith('/*') || (p.startsWith('#') && !/^#\s*(include|define)/.test(p))
+      return `<span class="${comentario ? 'tok-c' : 'tok-s'}">${esc(p)}</span>`
+    }
+    return esc(p).replace(PALAVRAS, '<span class="tok-k">$1</span>').replace(/\b(\d+(?:\.\d+)?)\b/g, '<span class="tok-n">$1</span>')
+  }).join('')
+}
+const emLinha = (s) => esc(s)
+  .replace(/`([^`]+)`/g, '<code>$1</code>')
+  .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+function md(texto) {
+  if (!texto) return ''
+  const linhas = String(texto).replace(/\r/g, '').split('\n')
+  const out = []
+  let par = []
+  const fecharPar = () => { if (par.length) out.push(`<p>${par.map(emLinha).join('<br>')}</p>`); par = [] }
+  for (let i = 0; i < linhas.length; i++) {
+    const l = linhas[i]
+    if (/^```/.test(l.trim())) {
+      fecharPar()
+      const corpo = []
+      for (i++; i < linhas.length && !/^```/.test(linhas[i].trim()); i++) corpo.push(linhas[i])
+      out.push(`<pre><code>${realcar(corpo.join('\n'))}</code></pre>`)
+      continue
+    }
+    if (/^\s*\|.*\|\s*$/.test(l)) {
+      fecharPar()
+      const tab = []
+      for (; i < linhas.length && /^\s*\|.*\|\s*$/.test(linhas[i]); i++) tab.push(linhas[i])
+      i--
+      const celulas = (r) => r.trim().replace(/^\||\|$/g, '').split('|').map((c) => c.trim())
+      const corpo = tab.filter((r) => !/^\s*\|[\s:|-]+\|\s*$/.test(r))
+      const temCabecalho = tab.length > 1 && /^\s*\|[\s:|-]+\|\s*$/.test(tab[1])
+      const html = corpo.map((r, k) => {
+        const tag = temCabecalho && k === 0 ? 'th' : 'td'
+        return `<tr>${celulas(r).map((c) => `<${tag}>${emLinha(c)}</${tag}>`).join('')}</tr>`
+      }).join('')
+      out.push(`<table>${html}</table>`)
+      continue
+    }
+    if (!l.trim()) { fecharPar(); continue }
+    par.push(l)
+  }
+  fecharPar()
+  return out.join('')
+}
+
+const figura = (nome, alt) => `<div class="figura"><img src="quiz/figuras/${encodeURIComponent(nome)}.svg" alt="${esc(alt)}" loading="lazy" onload="this.width=Math.round(this.naturalWidth*0.55)"></div>`
+
+// ---------- estado da rodada ----------
+let rodada = null // { titulo, ids, i }
+
+function placarGeral() {
+  const vistos = QUESTOES.filter((q) => valeNota(q) && respostas[q.id])
+  const certos = vistos.filter((q) => respostas[q.id].certo).length
+  document.getElementById('placar').textContent = vistos.length ? `${certos}/${vistos.length} certas · ${QUESTOES.filter(valeNota).length} no total` : ''
+}
+
+function embaralhar(v) {
+  const a = [...v]
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]] }
+  return a
+}
+
+function iniciar(titulo, ids) {
+  if (!ids.length) { alert('Nenhuma questão nesse filtro.'); return }
+  rodada = { titulo, ids, i: 0 }
+  location.hash = `q/${ids[0]}`
+}
+
+// ---------- tela inicial ----------
+let filtroTopicos = new Set(ler('lpedc-topicos', []))
+
+function telaInicial() {
+  rodada = null
+  const app = document.getElementById('app')
+  const erradas = QUESTOES.filter((q) => respostas[q.id] && valeNota(q) && !respostas[q.id].certo)
+  const naoVistas = QUESTOES.filter((q) => !respostas[q.id])
+  const filtradas = QUESTOES.filter((q) => !filtroTopicos.size || q.topicos.some((t) => filtroTopicos.has(t)))
+  app.innerHTML = `
+    <h1>Provas do PPGI/UFAM em quiz</h1>
+    <p class="lead">${QUESTOES.length} questões de ${PROVAS.length} provas (2016 a 2023). Escolha uma alternativa e veja na hora se acertou, o porquê de cada alternativa e onde estudar no curso.</p>
+    <div class="acoes">
+      <button class="botao principal" id="todas">Todas embaralhadas${filtroTopicos.size ? ` (${filtradas.length})` : ''}</button>
+      <button class="botao" id="novas" ${naoVistas.length ? '' : 'disabled'}>Só as que não fiz (${naoVistas.length})</button>
+      <button class="botao" id="erros" ${erradas.length ? '' : 'disabled'}>Refazer as que errei (${erradas.length})</button>
+    </div>
+    <h2>Filtrar por tópico do edital</h2>
+    <div class="chips" id="chips">
+      ${Object.entries(TOPICOS).map(([n, nome]) => {
+        const qtd = QUESTOES.filter((q) => q.topicos.includes(Number(n))).length
+        return `<button class="chip" data-t="${n}" aria-pressed="${filtroTopicos.has(Number(n))}">${n} · ${nome} <span class="nota">${qtd}</span></button>`
+      }).join('')}
+    </div>
+    <p class="nota">O filtro vale para "Todas embaralhadas" e para as provas abaixo.</p>
+    <h2>Por prova, na ordem do caderno</h2>
+    <div class="grade">
+      ${PROVAS.map((p) => {
+        const qs = QUESTOES.filter((q) => q.slug === p.slug)
+        const feitas = qs.filter((q) => respostas[q.id] && valeNota(q))
+        const certas = feitas.filter((q) => respostas[q.id].certo).length
+        const contam = qs.filter(valeNota).length
+        return `<button class="cartao prova" data-slug="${p.slug}">
+          <strong>Edital ${esc(p.edital)}</strong>
+          <span class="info">${qs.length} questões · ${qs[0]?.alternativas.length ?? 0} alternativas</span>
+          <span><span class="etiqueta ${p.oficial ? 'oficial' : 'curso'}">${p.oficial ? 'gabarito oficial' : 'letra do curso'}</span></span>
+          <span class="info">${feitas.length ? `${certas} de ${feitas.length} certas` : 'não começada'}</span>
+          <span class="barra"><span style="width:${contam ? Math.round((100 * certas) / contam) : 0}%"></span></span>
+        </button>`
+      }).join('')}
+    </div>
+    <h2>Como funciona</h2>
+    <p class="nota">Questão anulada ou sem letra aparece com a análise completa, mas não entra no placar. As provas de 2016 a 2019 e a 071/2023 usam o gabarito da banca; nas de 2022 e 020/2023 a letra é a do curso. As figuras foram redesenhadas no traço do curso, e o recorte original da prova fica no link "ver original". O progresso fica salvo só neste navegador.</p>
+    <div class="acoes"><button class="botao" id="zerar" ${Object.keys(respostas).length ? '' : 'disabled'}>Zerar meu progresso</button></div>
+  `
+  const comFiltro = (lista) => lista.filter((q) => !filtroTopicos.size || q.topicos.some((t) => filtroTopicos.has(t)))
+  app.querySelector('#todas').onclick = () => iniciar('Todas embaralhadas', embaralhar(comFiltro(QUESTOES)).map((q) => q.id))
+  app.querySelector('#novas').onclick = () => iniciar('Só as que não fiz', embaralhar(comFiltro(naoVistas)).map((q) => q.id))
+  app.querySelector('#erros').onclick = () => iniciar('As que errei', embaralhar(erradas).map((q) => q.id))
+  app.querySelectorAll('.prova').forEach((b) => {
+    b.onclick = () => {
+      const p = PROVAS.find((x) => x.slug === b.dataset.slug)
+      iniciar(`Edital ${p.edital}`, comFiltro(QUESTOES.filter((q) => q.slug === p.slug)).map((q) => q.id))
+    }
+  })
+  app.querySelectorAll('.chip').forEach((c) => {
+    c.onclick = () => {
+      const t = Number(c.dataset.t)
+      if (filtroTopicos.has(t)) filtroTopicos.delete(t)
+      else filtroTopicos.add(t)
+      gravar('lpedc-topicos', [...filtroTopicos])
+      telaInicial()
+    }
+  })
+  app.querySelector('#zerar').onclick = () => {
+    if (!confirm('Apagar todas as suas respostas salvas neste navegador?')) return
+    respostas = {}
+    gravar(CHAVE, respostas)
+    placarGeral()
+    telaInicial()
+  }
+  placarGeral()
+  window.scrollTo(0, 0)
+}
+
+// ---------- questão ----------
+function telaQuestao(id) {
+  const q = porId.get(id)
+  if (!q) { location.hash = ''; return }
+  if (!rodada || !rodada.ids.includes(id)) rodada = { titulo: `Edital ${q.edital}`, ids: QUESTOES.filter((x) => x.slug === q.slug).map((x) => x.id), i: 0 }
+  rodada.i = rodada.ids.indexOf(id)
+  const salva = respostas[id]
+  const respondida = Boolean(salva)
+  const app = document.getElementById('app')
+  const total = rodada.ids.length
+  const meta = [
+    `<span class="etiqueta">Edital ${esc(q.edital)} · Q${String(q.numero).padStart(2, '0')}</span>`,
+    q.formato ? `<span class="etiqueta">${esc(q.formato)}</span>` : '',
+    ...q.topicos.map((t) => `<span class="etiqueta">tópico ${t} · ${esc(TOPICOS[t] ?? '')}</span>`),
+    q.oficial ? '' : '<span class="etiqueta curso">letra do curso</span>',
+  ].join('')
+  let aviso = ''
+  if (q.gabarito === 'anulada') aviso = '<div class="aviso">Questão anulada pela banca. Responda mesmo assim: a análise mostra o que está certo e errado em cada alternativa. Não conta no placar.</div>'
+  else if (!valeNota(q)) aviso = '<div class="aviso">Questão sem letra definida (figura ausente no caderno ou sem gabarito). Vale pela análise; não conta no placar.</div>'
+  const figs = (q.figuras ?? []).map((f) => figura(f, `figura da questão ${q.numero}`)).join('')
+  const originais = (q.originais ?? []).map((o, k) => `<a href="${esc(o)}" target="_blank" rel="noopener">ver original${q.originais.length > 1 ? ` ${k + 1}` : ''}</a>`).join(' · ')
+
+  app.innerHTML = `
+    <div class="progresso">
+      <span>${esc(rodada.titulo)} · ${rodada.i + 1} de ${total}</span>
+      <span class="barra"><span style="width:${Math.round((100 * (rodada.i + 1)) / total)}%"></span></span>
+    </div>
+    <article class="cartao questao">
+      <div class="meta">${meta}</div>
+      ${aviso}
+      <div class="enunciado">${md(q.enunciado)}</div>
+      ${figs ? `<div class="figuras">${figs}</div>` : ''}
+      ${originais ? `<p class="original">Recorte da prova: ${originais}</p>` : ''}
+      <ul class="alternativas" role="list">
+        ${q.alternativas.map((a, k) => `
+          <li class="alt" data-letra="${esc(a.letra)}">
+            <button class="escolher" ${respondida ? 'disabled' : ''} aria-keyshortcuts="${k + 1} ${a.letra}">
+              <span class="letra">${esc(a.letra)}</span>
+              <span class="texto">${md(a.texto)}${a.figura ? figura(a.figura, `alternativa ${a.letra}`) : ''}</span>
+            </button>
+            <div class="porque" hidden></div>
+          </li>`).join('')}
+      </ul>
+      <div id="resultado"></div>
+    </article>
+    <nav class="navegar">
+      <button class="botao" id="anterior" ${rodada.i ? '' : 'disabled'}>← Anterior</button>
+      <button class="botao" id="voltar">Provas</button>
+      <button class="botao principal" id="proxima">${rodada.i + 1 < total ? 'Próxima →' : 'Ver resultado'}</button>
+    </nav>
+    <p class="atalhos"><kbd>A</kbd>–<kbd>E</kbd> ou <kbd>1</kbd>–<kbd>5</kbd> responde · <kbd>→</kbd> próxima · <kbd>←</kbd> anterior</p>
+  `
+  app.querySelectorAll('.alt').forEach((li) => { li.querySelector('.escolher').onclick = () => responder(q, li.dataset.letra) })
+  app.querySelector('#anterior').onclick = () => irPara(rodada.i - 1)
+  app.querySelector('#proxima').onclick = () => irPara(rodada.i + 1)
+  app.querySelector('#voltar').onclick = () => { location.hash = '' }
+  if (respondida) mostrarAnalise(q, salva.escolha)
+  window.scrollTo(0, 0)
+}
+
+function responder(q, letra) {
+  if (respostas[q.id]) return
+  const certo = q.gabarito === letra
+  respostas[q.id] = { escolha: letra, certo, quando: Date.now() }
+  gravar(CHAVE, respostas)
+  mostrarAnalise(q, letra)
+  placarGeral()
+}
+
+function mostrarAnalise(q, escolha) {
+  const app = document.getElementById('app')
+  const nota = valeNota(q)
+  app.querySelectorAll('.alt').forEach((b) => {
+    b.querySelector('.escolher').disabled = true
+    const a = q.alternativas.find((x) => x.letra === b.dataset.letra)
+    const correta = nota && a.letra === q.gabarito
+    const escolhida = a.letra === escolha
+    if (correta) b.classList.add('certa')
+    else if (escolhida && nota) b.classList.add('errada')
+    else b.classList.add('apagada')
+    if (escolhida && !nota) b.style.borderColor = 'var(--aviso)'
+    let rotulo = 'Por que não'
+    if (correta) rotulo = escolhida ? 'Você acertou. Por quê' : 'Esta é a certa. Por quê'
+    else if (escolhida && nota) rotulo = 'Sua escolha. Por que está errada'
+    else if (!nota) rotulo = escolhida ? 'Sua escolha. Análise' : 'Análise'
+    const p = b.querySelector('.porque')
+    p.innerHTML = `<p><span class="rotulo">${rotulo}:</span></p>${md(a.porque)}`
+    p.hidden = false
+  })
+  let veredito = ''
+  if (!nota) veredito = `<p class="veredito neutro">${q.gabarito === 'anulada' ? 'Questão anulada' : 'Sem letra definida'}: você marcou ${esc(escolha)}.</p>`
+  else if (escolha === q.gabarito) veredito = '<p class="veredito certo">✓ Certo!</p>'
+  else veredito = `<p class="veredito errado">✗ Errado: você marcou ${esc(escolha)}, a resposta é ${esc(q.gabarito)}.</p>`
+  const estude = (q.assuntos ?? []).map((s) => `<a href="${REPO}${encodeURI(s.modulo)}" target="_blank" rel="noopener">${esc(s.num)} · ${esc(s.modulo.replace(/\.md$/, ''))}</a>`).join(' · ')
+  app.querySelector('#resultado').innerHTML = `
+    ${veredito}
+    <section class="cartao ideia">
+      <h3>A ideia da questão</h3>
+      ${md(q.resumo)}
+      ${estude ? `<p class="estude"><strong>Estude no curso:</strong> ${estude}</p>` : ''}
+    </section>`
+}
+
+function irPara(i) {
+  if (i < 0) return
+  if (i >= rodada.ids.length) { location.hash = 'fim'; return }
+  location.hash = `q/${rodada.ids[i]}`
+}
+
+// ---------- resultado da rodada ----------
+function telaFim() {
+  if (!rodada) { location.hash = ''; return }
+  const qs = rodada.ids.map((id) => porId.get(id))
+  const contam = qs.filter((q) => valeNota(q) && respostas[q.id])
+  const certas = contam.filter((q) => respostas[q.id].certo)
+  const erradas = contam.filter((q) => !respostas[q.id].certo)
+  const pct = contam.length ? Math.round((100 * certas.length) / contam.length) : 0
+  const assuntos = new Map()
+  for (const q of erradas) for (const s of q.assuntos ?? []) assuntos.set(s.num, s)
+  const app = document.getElementById('app')
+  app.innerHTML = `
+    <h1>${esc(rodada.titulo)}: resultado</h1>
+    <div class="cartao questao">
+      <p class="grande">${certas.length} de ${contam.length}</p>
+      <p class="nota">${pct}% de acerto nas questões que valem nota${qs.length - contam.length ? ` · ${qs.length - contam.length} sem nota (anuladas, sem letra ou puladas)` : ''}</p>
+      ${erradas.length ? `<h2>Revise estas</h2><ul class="lista-erros">${erradas.map((q) => `<li><a href="#q/${q.id}">Edital ${esc(q.edital)} · Q${String(q.numero).padStart(2, '0')}</a> <span class="nota">(marcou ${esc(respostas[q.id].escolha)}, era ${esc(q.gabarito)})</span></li>`).join('')}</ul>` : ''}
+      ${assuntos.size ? `<h2>Assuntos para reforçar</h2><p>${[...assuntos.values()].map((s) => `<a href="${REPO}${encodeURI(s.modulo)}" target="_blank" rel="noopener">${esc(s.num)} · ${esc(s.modulo.replace(/\.md$/, ''))}</a>`).join(' · ')}</p>` : ''}
+      <div class="acoes">
+        ${erradas.length ? '<button class="botao principal" id="refazer">Refazer as erradas desta rodada</button>' : ''}
+        <button class="botao" id="voltar">Voltar às provas</button>
+      </div>
+    </div>`
+  const refazer = app.querySelector('#refazer')
+  if (refazer) refazer.onclick = () => {
+    for (const q of erradas) delete respostas[q.id]
+    gravar(CHAVE, respostas)
+    iniciar(`${rodada.titulo} · erradas`, erradas.map((q) => q.id))
+  }
+  app.querySelector('#voltar').onclick = () => { location.hash = '' }
+  window.scrollTo(0, 0)
+}
+
+// ---------- rotas e teclado ----------
+function rotear() {
+  placarGeral()
+  const h = location.hash.slice(1)
+  if (h.startsWith('q/')) telaQuestao(h.slice(2))
+  else if (h === 'fim') telaFim()
+  else telaInicial()
+}
+window.addEventListener('hashchange', rotear)
+document.getElementById('inicio').onclick = (e) => { e.preventDefault(); location.hash = '' }
+document.addEventListener('keydown', (e) => {
+  if (!location.hash.startsWith('#q/') || e.ctrlKey || e.metaKey || e.altKey) return
+  const q = porId.get(location.hash.slice(3))
+  if (!q) return
+  if (e.key === 'ArrowRight') return irPara(rodada.i + 1)
+  if (e.key === 'ArrowLeft') return irPara(rodada.i - 1)
+  const k = e.key.toUpperCase()
+  const porNumero = /^[1-5]$/.test(k) ? q.alternativas[Number(k) - 1]?.letra : null
+  const letra = porNumero ?? (q.alternativas.some((a) => a.letra === k) ? k : null)
+  if (letra) responder(q, letra)
+})
+rotear()
+</script>
+</body>
+</html>
