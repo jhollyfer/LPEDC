@@ -462,7 +462,7 @@
           "modulo": "07-memoria-dinamica.md"
         }
       ],
-      "dica": "**Cobra:** Achar o erro em dois códigos: busca em vetor e contagem em lista.\n\n- **Busca sequencial** [0089]: percorre por índice; confira onde o laço para e o que retorna.\n- **Lista encadeada** [0076]: percorre por ponteiro, `p = p->prox`, nunca por `p[i]`.\n- **Erros de memória** [0057]: acesso inválido e comparação de tipos incompatíveis.\n\n**Exemplo:** ```c\nint soma(No *p) {\n  int s = 0;\n  while (p != NULL) { s += p->dado; p = p->prox; }\n  return s;\n}\n```\n\n**Como atacar:** teste cada quadro com 3 elementos, incluindo o caso de a chave não existir."
+      "dica": "**Cobra:** Achar o erro em dois códigos: busca em vetor e contagem em lista.\n\n- **Busca sequencial** [0089]: percorre por índice; confira onde o laço para e o que retorna.\n- **Lista encadeada** [0076]: percorre por ponteiro, `p = p->prox`, nunca por `p[i]`.\n- **Erros de memória** [0057]: acesso inválido e comparação de tipos incompatíveis.\n\n**Exemplo:**\n```c\nint soma(No *p) {\n  int s = 0;\n  while (p != NULL) { s += p->dado; p = p->prox; }\n  return s;\n}\n```\n\n**Como atacar:** teste cada quadro com 3 elementos, incluindo o caso de a chave não existir."
     },
     {
       "numero": 11,

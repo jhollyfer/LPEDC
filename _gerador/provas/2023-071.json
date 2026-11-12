@@ -666,7 +666,7 @@
       "topico": 3,
       "formato": "código",
       "enunciado": "Dado o seguinte pseudocódigo Python, indique a saída correta que será impressa na tela do computador:\n\n```python\nimport numpy as np\n\nA = [[0, 2, 1],[1, 0, 0]]\nB = [[7, 0],[0, 10],[11, 0]]\n\ndef operacao_com_matrizes():\n    resultado = np.zeros((2,2))\n    for i in range(len(A)):\n        for j in range(len(B[0])):\n            for k in range(len(B)):\n                resultado[i][j] += A[i][k] * B[k][j]\n    return resultado\n\nprint(operacao_com_matrizes())\n```",
-      "dica": "**Cobra:** calcular o produto de duas matrizes com `numpy` e como a saída aparece.\n\n- **Matrizes** [0039]: `resultado[i][j]` soma `A[i][k] * B[k][j]` sobre `k`.\n- **Laços aninhados** [0024]: três laços: linha, coluna e soma.\n- **Tipos e limites** [0003]: `np.zeros` cria floats, e o `print` mostra o ponto decimal.\n\n**Exemplo:** ```python\nA=[[1,2],[3,0]]; B=[[0,1],[4,0]]\n# resultado: [[8., 1.], [0., 3.]]\n```\n\n**Como atacar:** calcule cada posição à mão e depois escreva no formato do `print` de `numpy`.",
+      "dica": "**Cobra:** calcular o produto de duas matrizes com `numpy` e como a saída aparece.\n\n- **Matrizes** [0039]: `resultado[i][j]` soma `A[i][k] * B[k][j]` sobre `k`.\n- **Laços aninhados** [0024]: três laços: linha, coluna e soma.\n- **Tipos e limites** [0003]: `np.zeros` cria floats, e o `print` mostra o ponto decimal.\n\n**Exemplo:**\n```python\nA=[[1,2],[3,0]]; B=[[0,1],[4,0]]\n# resultado: [[8., 1.], [0., 3.]]\n```\n\n**Como atacar:** calcule cada posição à mão e depois escreva no formato do `print` de `numpy`.",
       "alternativas": [
         {
           "letra": "A",
@@ -740,7 +740,7 @@
       "topico": 1,
       "formato": "código",
       "enunciado": "Dado o seguinte pseudocódigo Python, indique qual seria a saída correta no terminal do computador:\n\n```python\ndef func1(fator):\n    def func2(x):\n        return x * fator\n    return func2\n\nfuncao = func1(3)\nprint(funcao(5))\n```",
-      "dica": "**Cobra:** a saída de uma função que devolve outra função.\n\n- **Ponteiro para função** [0050]: uma função pode ser devolvida e chamada depois.\n- **Parâmetros e passagem por valor** [0029]: `fator` é guardado pela função interna.\n\n**Exemplo:** ```python\ndef soma(a):\n    def g(x): return x + a\n    return g\nprint(soma(10)(1))  # 11\n```\n\n**Como atacar:** resolva `func1(3)` primeiro e depois chame o resultado com 5.",
+      "dica": "**Cobra:** a saída de uma função que devolve outra função.\n\n- **Ponteiro para função** [0050]: uma função pode ser devolvida e chamada depois.\n- **Parâmetros e passagem por valor** [0029]: `fator` é guardado pela função interna.\n\n**Exemplo:**\n```python\ndef soma(a):\n    def g(x): return x + a\n    return g\nprint(soma(10)(1))  # 11\n```\n\n**Como atacar:** resolva `func1(3)` primeiro e depois chame o resultado com 5.",
       "alternativas": [
         {
           "letra": "A",

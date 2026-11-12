@@ -131,6 +131,11 @@ function conferir(provas, figuras) {
       const palavras = (q.dica ?? '').replace(/```[\s\S]*?```/g, '').split(/\s+/).filter(Boolean).length
       if (palavras > 110) erros.push(`${id}: dica com ${palavras} palavras (máximo 110)`)
       if (q.dica && !/\[\d{4}\]/.test(q.dica)) erros.push(`${id}: a dica não cita nenhum assunto [NNNN]`)
+      for (const [campo, texto] of [['dica', q.dica], ['resumo', q.resumo], ['enunciado', q.enunciado], ...q.alternativas.map((x) => [`porquê ${x.letra}`, x.porque])]) {
+        const t = texto ?? ''
+        if ((t.match(/```/g) ?? []).length % 2) erros.push(`${id}: ${campo} com bloco de código sem fechar`)
+        if (t.split('\n').some((l) => l.includes('```') && !l.trim().startsWith('```'))) erros.push(`${id}: ${campo} com \`\`\` no meio da linha`)
+      }
       if (q.alternativas.length < 4) erros.push(`${id}: só ${q.alternativas.length} alternativas`)
       const letrasAlt = q.alternativas.map((a) => a.letra)
       if (/^[A-E]$/.test(q.gabarito ?? '') && !letrasAlt.includes(q.gabarito)) erros.push(`${id}: gabarito fora das alternativas`)

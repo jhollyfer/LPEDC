@@ -474,7 +474,7 @@ window.PROVAS = [
       "modulo": "07-memoria-dinamica.md"
      }
     ],
-    "dica": "**Cobra:** Achar o erro em dois códigos: busca em vetor e contagem em lista.\n\n- **Busca sequencial** [0089]: percorre por índice; confira onde o laço para e o que retorna.\n- **Lista encadeada** [0076]: percorre por ponteiro, `p = p->prox`, nunca por `p[i]`.\n- **Erros de memória** [0057]: acesso inválido e comparação de tipos incompatíveis.\n\n**Exemplo:** ```c\nint soma(No *p) {\n  int s = 0;\n  while (p != NULL) { s += p->dado; p = p->prox; }\n  return s;\n}\n```\n\n**Como atacar:** teste cada quadro com 3 elementos, incluindo o caso de a chave não existir.",
+    "dica": "**Cobra:** Achar o erro em dois códigos: busca em vetor e contagem em lista.\n\n- **Busca sequencial** [0089]: percorre por índice; confira onde o laço para e o que retorna.\n- **Lista encadeada** [0076]: percorre por ponteiro, `p = p->prox`, nunca por `p[i]`.\n- **Erros de memória** [0057]: acesso inválido e comparação de tipos incompatíveis.\n\n**Exemplo:**\n```c\nint soma(No *p) {\n  int s = 0;\n  while (p != NULL) { s += p->dado; p = p->prox; }\n  return s;\n}\n```\n\n**Como atacar:** teste cada quadro com 3 elementos, incluindo o caso de a chave não existir.",
     "originais": []
    },
    {
@@ -1764,7 +1764,7 @@ window.PROVAS = [
       "modulo": "07-memoria-dinamica.md"
      }
     ],
-    "dica": "**Cobra:** Achar o erro de lógica em uma busca em vetor e uma contagem em lista.\n\n- **Busca sequencial** [0089]: confira o índice de partida, o fim do laço e o valor devolvido.\n- **Lista encadeada** [0076]: percorre por ponteiro, nunca por `p[i]`.\n- **Erros de memória** [0057]: acessos inválidos e comparações entre tipos incompatíveis.\n\n**Exemplo:** ```c\nint soma(No *p) {\n  int s = 0;\n  while (p != NULL) { s += p->dado; p = p->prox; }\n  return s;\n}\n```\n\n**Como atacar:** teste cada quadro com 3 elementos, incluindo o caso de a chave não existir.",
+    "dica": "**Cobra:** Achar o erro de lógica em uma busca em vetor e uma contagem em lista.\n\n- **Busca sequencial** [0089]: confira o índice de partida, o fim do laço e o valor devolvido.\n- **Lista encadeada** [0076]: percorre por ponteiro, nunca por `p[i]`.\n- **Erros de memória** [0057]: acessos inválidos e comparações entre tipos incompatíveis.\n\n**Exemplo:**\n```c\nint soma(No *p) {\n  int s = 0;\n  while (p != NULL) { s += p->dado; p = p->prox; }\n  return s;\n}\n```\n\n**Como atacar:** teste cada quadro com 3 elementos, incluindo o caso de a chave não existir.",
     "originais": []
    },
    {
@@ -2785,7 +2785,7 @@ window.PROVAS = [
       "modulo": "11-listas.md"
      }
     ],
-    "dica": "**Cobra:** Achar o erro e dizer o que acontece em uma função que conta ocorrências na lista.\n\n- **Lista encadeada** [0076]: percorre por ponteiro; `p[i]` trata como vetor.\n- **Busca** [0077]: confira o que o laço compara e o que retorna.\n- **Contador** [0025]: o retorno deve ser o contador, não o índice do laço.\n\n**Exemplo:** ```c\nint soma(No *p) {\n  int s = 0;\n  while (p != NULL) { s += p->dado; p = p->prox; }\n  return s;\n}\n```\n\n**Como atacar:** confira percurso, comparação e retorno, e teste com 3 nós.",
+    "dica": "**Cobra:** Achar o erro e dizer o que acontece em uma função que conta ocorrências na lista.\n\n- **Lista encadeada** [0076]: percorre por ponteiro; `p[i]` trata como vetor.\n- **Busca** [0077]: confira o que o laço compara e o que retorna.\n- **Contador** [0025]: o retorno deve ser o contador, não o índice do laço.\n\n**Exemplo:**\n```c\nint soma(No *p) {\n  int s = 0;\n  while (p != NULL) { s += p->dado; p = p->prox; }\n  return s;\n}\n```\n\n**Como atacar:** confira percurso, comparação e retorno, e teste com 3 nós.",
     "originais": []
    },
    {
@@ -7758,7 +7758,7 @@ window.PROVAS = [
     "topico": 3,
     "formato": "código",
     "enunciado": "Indique qual é a saída correta do seguinte programa escrito em python:\n\n```python\nclass Vector():\n   def __init__(self, row: list()):\n       self.row = row\n\n   def dot_product(self, column):\n       return sum(self.row[i] * column.row[i] for i in range(len(self.row)))\n\nvec_1 = Vector([1,2,3,4,5])\nvec_2 = vec_1\nvec_2.row[2] = 15\nprint(vec_1.row)\n```",
-    "dica": "**Cobra:** prever a saída quando duas variáveis apontam para o mesmo objeto.\n\n- **Memória e endereços** [0044]: cada variável vive em um endereço.\n- **Ponteiros** [0045]: dois nomes para o mesmo endereço enxergam a mesma mudança.\n\n**Exemplo:** ```python\na = [1, 2]\nb = a\nb[0] = 7\nprint(a)   # [7, 2]\n```\n\n**Como atacar:** veja se `=` copia o dado ou só o endereço e aplique a mudança com índice contado de 0.",
+    "dica": "**Cobra:** prever a saída quando duas variáveis apontam para o mesmo objeto.\n\n- **Memória e endereços** [0044]: cada variável vive em um endereço.\n- **Ponteiros** [0045]: dois nomes para o mesmo endereço enxergam a mesma mudança.\n\n**Exemplo:**\n```python\na = [1, 2]\nb = a\nb[0] = 7\nprint(a)   # [7, 2]\n```\n\n**Como atacar:** veja se `=` copia o dado ou só o endereço e aplique a mudança com índice contado de 0.",
     "alternativas": [
      {
       "letra": "A",
@@ -8086,7 +8086,7 @@ window.PROVAS = [
     "topico": 1,
     "formato": "código",
     "enunciado": "Analise o seguinte programa em C e indique a saída correta:\n\n```c\nvoid func1 (int x) { x = 9 * x; }\nvoid func2 (int v[]) { v[0] = 3 * v[0]; }\nvoid main (void) {\n  int x, v[2];\n  x = 222;\n  func1(x);\n  printf(\"x: %d\\n\", x);\n  v[0] = 333;\n  func2(v);\n  printf(\"v[0]: %d\\n\", v[0]);\n}\n```",
-    "dica": "**Cobra:** dizer o que muda depois de chamar funções com `int` e com vetor.\n\n- **Parâmetros e passagem por valor** [0029]: a função recebe uma cópia do `int`.\n- **Vetores e funções** [0038]: o vetor vira ponteiro para o primeiro elemento.\n\n**Exemplo:** ```c\nvoid a(int x){ x = x + 1; }\nvoid b(int v[]){ v[0] = v[0] + 1; }\nint n = 5, w[1] = {5};\na(n); b(w);\nprintf(\"%d %d\", n, w[0]);  // 5 6\n```\n\n**Como atacar:** para cada função, pergunte se ela recebe uma cópia ou o endereço do dado.",
+    "dica": "**Cobra:** dizer o que muda depois de chamar funções com `int` e com vetor.\n\n- **Parâmetros e passagem por valor** [0029]: a função recebe uma cópia do `int`.\n- **Vetores e funções** [0038]: o vetor vira ponteiro para o primeiro elemento.\n\n**Exemplo:**\n```c\nvoid a(int x){ x = x + 1; }\nvoid b(int v[]){ v[0] = v[0] + 1; }\nint n = 5, w[1] = {5};\na(n); b(w);\nprintf(\"%d %d\", n, w[0]);  // 5 6\n```\n\n**Como atacar:** para cada função, pergunte se ela recebe uma cópia ou o endereço do dado.",
     "alternativas": [
      {
       "letra": "A",
@@ -8128,7 +8128,7 @@ window.PROVAS = [
     "topico": 3,
     "formato": "código",
     "enunciado": "O que faz o seguinte código em C?\n\n```c\nLista* abracadabra (Lista* l, int v) {\n  Lista* novo = (Lista*) malloc(sizeof(Lista));\n  novo->info = v;\n  novo->prox = l;\n  novo->ant = NULL;\n  if (l) { l->ant = novo };\n  return novo;\n}\n```",
-    "dica": "**Cobra:** dizer o que uma função faz com os campos `prox` e `ant` de uma lista dupla.\n\n- **Lista dupla** [0079]: cada nó tem `prox` e `ant`.\n- **Lista encadeada** [0076]: inserir no início liga o novo nó à cabeça; no fim exige percorrer até `prox == NULL`.\n\n**Exemplo:** ```c\np = l; while (p->prox) p = p->prox;\np->prox = novo; novo->ant = p; novo->prox = NULL;\nreturn l;\n```\n\n**Como atacar:** veja quais campos são preenchidos e o que a função devolve.",
+    "dica": "**Cobra:** dizer o que uma função faz com os campos `prox` e `ant` de uma lista dupla.\n\n- **Lista dupla** [0079]: cada nó tem `prox` e `ant`.\n- **Lista encadeada** [0076]: inserir no início liga o novo nó à cabeça; no fim exige percorrer até `prox == NULL`.\n\n**Exemplo:**\n```c\np = l; while (p->prox) p = p->prox;\np->prox = novo; novo->ant = p; novo->prox = NULL;\nreturn l;\n```\n\n**Como atacar:** veja quais campos são preenchidos e o que a função devolve.",
     "alternativas": [
      {
       "letra": "A",
@@ -9471,7 +9471,7 @@ window.PROVAS = [
     "topico": 3,
     "formato": "código",
     "enunciado": "Dado o seguinte pseudocódigo Python, indique a saída correta que será impressa na tela do computador:\n\n```python\nimport numpy as np\n\nA = [[0, 2, 1],[1, 0, 0]]\nB = [[7, 0],[0, 10],[11, 0]]\n\ndef operacao_com_matrizes():\n    resultado = np.zeros((2,2))\n    for i in range(len(A)):\n        for j in range(len(B[0])):\n            for k in range(len(B)):\n                resultado[i][j] += A[i][k] * B[k][j]\n    return resultado\n\nprint(operacao_com_matrizes())\n```",
-    "dica": "**Cobra:** calcular o produto de duas matrizes com `numpy` e como a saída aparece.\n\n- **Matrizes** [0039]: `resultado[i][j]` soma `A[i][k] * B[k][j]` sobre `k`.\n- **Laços aninhados** [0024]: três laços: linha, coluna e soma.\n- **Tipos e limites** [0003]: `np.zeros` cria floats, e o `print` mostra o ponto decimal.\n\n**Exemplo:** ```python\nA=[[1,2],[3,0]]; B=[[0,1],[4,0]]\n# resultado: [[8., 1.], [0., 3.]]\n```\n\n**Como atacar:** calcule cada posição à mão e depois escreva no formato do `print` de `numpy`.",
+    "dica": "**Cobra:** calcular o produto de duas matrizes com `numpy` e como a saída aparece.\n\n- **Matrizes** [0039]: `resultado[i][j]` soma `A[i][k] * B[k][j]` sobre `k`.\n- **Laços aninhados** [0024]: três laços: linha, coluna e soma.\n- **Tipos e limites** [0003]: `np.zeros` cria floats, e o `print` mostra o ponto decimal.\n\n**Exemplo:**\n```python\nA=[[1,2],[3,0]]; B=[[0,1],[4,0]]\n# resultado: [[8., 1.], [0., 3.]]\n```\n\n**Como atacar:** calcule cada posição à mão e depois escreva no formato do `print` de `numpy`.",
     "alternativas": [
      {
       "letra": "A",
@@ -9547,7 +9547,7 @@ window.PROVAS = [
     "topico": 1,
     "formato": "código",
     "enunciado": "Dado o seguinte pseudocódigo Python, indique qual seria a saída correta no terminal do computador:\n\n```python\ndef func1(fator):\n    def func2(x):\n        return x * fator\n    return func2\n\nfuncao = func1(3)\nprint(funcao(5))\n```",
-    "dica": "**Cobra:** a saída de uma função que devolve outra função.\n\n- **Ponteiro para função** [0050]: uma função pode ser devolvida e chamada depois.\n- **Parâmetros e passagem por valor** [0029]: `fator` é guardado pela função interna.\n\n**Exemplo:** ```python\ndef soma(a):\n    def g(x): return x + a\n    return g\nprint(soma(10)(1))  # 11\n```\n\n**Como atacar:** resolva `func1(3)` primeiro e depois chame o resultado com 5.",
+    "dica": "**Cobra:** a saída de uma função que devolve outra função.\n\n- **Ponteiro para função** [0050]: uma função pode ser devolvida e chamada depois.\n- **Parâmetros e passagem por valor** [0029]: `fator` é guardado pela função interna.\n\n**Exemplo:**\n```python\ndef soma(a):\n    def g(x): return x + a\n    return g\nprint(soma(10)(1))  # 11\n```\n\n**Como atacar:** resolva `func1(3)` primeiro e depois chame o resultado com 5.",
     "alternativas": [
      {
       "letra": "A",
