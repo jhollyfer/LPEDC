@@ -46,6 +46,31 @@ const normalizar = (letra) => {
   return null
 }
 
+// mapa dos assuntos do curso: '0102' -> { titulo, modulo, ancora, ideia }
+// (mesma regra de âncora do GitHub que o gerar.mjs usa)
+const ancora = (titulo) =>
+  titulo
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}\- ]/gu, '')
+    .replaceAll(' ', '-')
+const mapaAssuntos = () => {
+  const mapa = {}
+  for (const modulo of readdirSync(RAIZ).filter((a) => /^\d{2}-.*\.md$/.test(a)).sort()) {
+    for (const linha of readFileSync(join(RAIZ, modulo), 'utf8').split('\n')) {
+      const m = linha.match(/^## (\d{4}) · (.+)$/)
+      if (!m) continue
+      mapa[m[1]] = {
+        titulo: m[2].trim(),
+        modulo,
+        ancora: ancora(linha.slice(3)),
+        ideia: existsSync(join(RAIZ, 'material', `${m[1]}-ideia.svg`)),
+      }
+    }
+  }
+  return mapa
+}
+const ASSUNTOS = mapaAssuntos()
+
 // ---------------------------------------------------------------------------
 // figuras
 // ---------------------------------------------------------------------------
@@ -100,6 +125,11 @@ function conferir(provas, figuras) {
       if (!q.enunciado?.trim()) erros.push(`${id}: sem enunciado`)
       if (!q.resumo?.trim()) erros.push(`${id}: sem resumo`)
       if (!q.dica?.trim()) erros.push(`${id}: sem dica (conceito e exemplo)`)
+      for (const [, num] of (q.dica ?? '').matchAll(/\[(\d{4})\]/g))
+        if (!ASSUNTOS[num]) erros.push(`${id}: a dica cita [${num}], que não é assunto do curso`)
+      const palavras = (q.dica ?? '').replace(/```[\s\S]*?```/g, '').split(/\s+/).filter(Boolean).length
+      if (palavras > 110) erros.push(`${id}: dica com ${palavras} palavras (máximo 110)`)
+      if (q.dica && !/\[\d{4}\]/.test(q.dica)) erros.push(`${id}: a dica não cita nenhum assunto [NNNN]`)
       if (q.alternativas.length < 4) erros.push(`${id}: só ${q.alternativas.length} alternativas`)
       const letrasAlt = q.alternativas.map((a) => a.letra)
       if (/^[A-E]$/.test(q.gabarito ?? '') && !letrasAlt.includes(q.gabarito)) erros.push(`${id}: gabarito fora das alternativas`)
@@ -154,6 +184,6 @@ const dados = provas.map((p) => ({
 }))
 writeFileSync(
   join(SAIDA, 'questoes.js'),
-  `// Gerado por _gerador/quiz.mjs a partir de _gerador/provas/. Não edite à mão.\nwindow.PROVAS = ${JSON.stringify(dados, null, 1)}\n`,
+  `// Gerado por _gerador/quiz.mjs a partir de _gerador/provas/. Não edite à mão.\nwindow.ASSUNTOS = ${JSON.stringify(ASSUNTOS)}\nwindow.PROVAS = ${JSON.stringify(dados, null, 1)}\n`,
 )
 console.log(`quiz/questoes.js: ${dados.length} provas · quiz/figuras: ${Object.keys(figuras).length} svg${erros.length ? ` · ${erros.length} erros` : ''}`)
