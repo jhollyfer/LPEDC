@@ -56,7 +56,7 @@
           "modulo": "15-hash.md"
         }
       ],
-      "dica": "**Cobra:** Julgar quatro sentenças sobre AVL, pilha, array versus lista e hash.\n\n- **AVL** [0101]: é uma ABB que se rebalancia com rotações.\n- **Pilha** [0082]: só mexe no topo.\n- **Lista encadeada** [0076]: acesso por percurso, ao contrário do vetor.\n- **Encadeamento** [0106]: chaves de mesma posição ficam numa lista.\n\n**Exemplo:** vetor: `v[3]` direto; lista: três saltos `prox` até o quarto nó.\n\n**Como atacar:** julgue cada sentença sozinha contra a definição da estrutura."
+      "dica": "**Cobra:** Julgar quatro sentenças sobre AVL, pilha, array versus lista e hash.\n\n- **AVL** [0101]: é uma ABB que se rebalancia sozinha com rotações depois de inserções e remoções. Ex.: inserir `1, 2, 3` numa ABB dá cadeia; numa AVL, `2(1, 3)`.\n- **Pilha** [0082]: LIFO: o acesso conceitual é só pelo topo, e o último que entrou é o primeiro que sai. Ex.: pilha `1 2 3` com 3 no topo: só o 3 pode sair agora.\n- **Lista encadeada × vetor** [0076]: vetor ocupa bloco contíguo e dá `v[i]` direto; lista usa nós ligados por ponteiros e exige percorrer até o `k`-ésimo. Ex.: o 4º elemento: `v[3]` direto; na lista, 3 saltos de `prox`.\n- **Encadeamento** [0106]: chaves com a mesma posição na tabela ficam numa mesma lista encadeada. Ex.: `M = 4`: as chaves 5 e 9 vão à posição 1.\n\n**Como atacar:** julgue cada sentença sozinha contra a definição da estrutura."
     },
     {
       "numero": 2,
@@ -114,7 +114,7 @@
           "modulo": "13-busca-e-ordenacao.md"
         }
       ],
-      "dica": "**Cobra:** Achar o algoritmo de menor número de comparações no pior caso para vetor enorme.\n\n- **Comparando ordenações** [0096]: tabela de comparações por algoritmo e caso.\n- **Heapsort** [0103]: pior caso `O(n log n)`.\n- **Quick, inserção e seleção** [0095]: `n²` no pior caso.\n\n**Exemplo:** `n = 1 000 000`: `n²` é `10^12`; `n log₂ n` é cerca de `2 · 10^7`.\n\n**Como atacar:** ponha o pior caso de cada algoritmo em `n²` ou `n log n` e escolha o menor."
+      "dica": "**Cobra:** Achar o algoritmo de menor número de comparações no pior caso, para vetor enorme.\n\n- **Pior caso** [0072]: a disposição de entrada que mais custa; compare algoritmos pelo pior caso de cada um. Ex.: inserção: vetor invertido; Quick sort: pivô ruim.\n- **Heapsort** [0103]: monta uma heap e retira a raiz `n` vezes, com `O(n log n)` até no pior caso. Ex.: `n = 1 000 000`: cerca de `2 · 10^7`.\n- **Quick, inserção e seleção** [0095]: os três chegam a `n²` comparações no pior caso, em alguma entrada. Ex.: `n = 1 000 000`: `n² = 10^12`.\n\n**Como atacar:** ponha o pior caso de cada algoritmo em `n²` ou `n log n` e escolha o menor."
     },
     {
       "numero": 3,
@@ -160,7 +160,7 @@
           "modulo": "13-busca-e-ordenacao.md"
         }
       ],
-      "dica": "**Cobra:** Achar o algoritmo de menor número de movimentações no pior caso para vetor enorme.\n\n- **Seleção** [0092]: uma troca por passada, no máximo.\n- **Inserção** [0093]: desloca elementos a cada inserção.\n- **Comparando ordenações** [0096]: movimentações por algoritmo.\n\n**Exemplo:** vetor invertido de 5 elementos: a inserção faz 10 deslocamentos; a seleção faz no máximo 4 trocas.\n\n**Como atacar:** conte movimentações, não comparações, no pior caso de cada algoritmo."
+      "dica": "**Cobra:** Achar o algoritmo de menor número de movimentações no pior caso, para vetor enorme.\n\n- **Seleção** [0092]: faz uma troca por passada, no máximo `n - 1` trocas no total, qualquer que seja a entrada. Ex.: `n = 6`: no máximo 5 trocas.\n- **Inserção** [0093]: cada elemento desloca os maiores à sua esquerda; no pior caso (invertido) chega a `n(n-1)/2` deslocamentos. Ex.: vetor invertido de 6: `5 + 4 + 3 + 2 + 1 = 15` deslocamentos.\n- **Ordenações de `n log n`** [0096]: merge sort e heapsort movem em torno de `n log n` elementos; o Quick sort chega a `n²` no pior caso. Ex.: `n = 1 000 000`: `n log n` fica perto de `2 · 10^7`.\n\n**Como atacar:** conte movimentações, não comparações, no pior caso de cada algoritmo."
     },
     {
       "numero": 4,
@@ -210,7 +210,7 @@
           "modulo": "15-hash.md"
         }
       ],
-      "dica": "**Cobra:** Julgar afirmações sobre lista encadeada: busca, ordenação e hash.\n\n- **Lista encadeada** [0076]: busca percorre os nós em sequência.\n- **Busca binária** [0090]: exige acesso por índice a um vetor ordenado.\n- **Endereçamento aberto** [0107]: usa um vetor, não uma lista.\n\n**Exemplo:** `n = 256`: lista, até 256 comparações; vetor ordenado, no máximo 9.\n\n**Como atacar:** compare o pior caso de cada estrutura e veja em que base cada técnica se apoia."
+      "dica": "**Cobra:** Julgar afirmações sobre lista encadeada: busca, ordenação e hash.\n\n- **Busca na lista** [0076]: percorre os nós em sequência, então o pior caso olha todos os `n`. Ex.: lista de 1000 nós: até 1000 comparações.\n- **Busca binária** [0090]: exige vetor ordenado com acesso por índice e custa no máximo `⌊log₂ n⌋ + 1` comparações. Ex.: `n = 1000`: no máximo 10.\n- **Endereçamento aberto** [0107]: guarda as chaves num vetor e resolve colisão sondando outras posições, sem listas. Ex.: `M = 5`: a chave 12 vai à posição 3 se a 2 está ocupada.\n\n**Como atacar:** compare o pior caso de cada estrutura e veja em que base cada técnica se apoia."
     },
     {
       "numero": 5,
@@ -260,7 +260,7 @@
           "modulo": "07-memoria-dinamica.md"
         }
       ],
-      "dica": "**Cobra:** Escolher a versão correta da busca em lista encadeada, sem erro de memória.\n\n- **Lista encadeada** [0076]: percorre com `p = p->prox` até `NULL`.\n- **Busca** [0077]: a busca só lê; não aloca nem libera.\n- **malloc e free** [0054]: alocação desnecessária é vazamento.\n\n**Exemplo:** `while (p->dado != c && p != NULL)` quebra no fim da lista: lê `p->dado` com `p` nulo.\n\n**Como atacar:** confira em cada versão: ordem das condições, avanço do ponteiro, retorno e alocação."
+      "dica": "**Cobra:** Escolher a versão correta da busca em lista encadeada, sem erro de memória.\n\n- **Percurso da lista** [0076]: teste `p != NULL` e avance o mesmo ponteiro que testou, com `p = p->prox`; testar `p->prox` deixa o último nó sem verificar. Ex.: `while (p->prox != NULL)` numa lista de 1 nó nem entra no laço.\n- **Busca não aloca** [0054]: `malloc` serve para criar nó novo; numa busca só lê, e alocar sem usar vira vazamento. Ex.: `aux = malloc(...); aux = prim;` perde o bloco alocado.\n- **Seta e ponteiro nulo** [0062]: `->` acessa o campo; `>` sozinho é comparação, e `p->dado` com `p` nulo derruba o programa. Ex.: `aux>prox` compara `aux` com uma variável `prox` que não existe.\n\n**Como atacar:** confira em cada versão: ordem das condições, avanço do ponteiro, retorno e alocação."
     },
     {
       "numero": 6,
@@ -302,7 +302,7 @@
           "modulo": "12-pilhas-e-filas.md"
         }
       ],
-      "dica": "**Cobra:** Dizer o resultado de três remoções sucessivas de uma pilha.\n\n- **Pilha** [0082]: LIFO: remove sempre o do topo.\n- **Operações** [0082]: empilha no topo e desempilha do topo.\n\n**Exemplo:** empilhando `1, 2, 3, 4, 5`, duas remoções tiram `5` e depois `4`.\n\n**Como atacar:** o último inserido sai primeiro; liste as remoções na ordem."
+      "dica": "**Cobra:** Dizer o resultado de três remoções sucessivas de uma pilha.\n\n- **Pilha** [0082]: LIFO: o último a entrar é o primeiro a sair, e a remoção sempre tira o do topo. Ex.: empilhar `10, 20, 30, 40` e remover duas vezes devolve `40` e `30`.\n- **Operações** [0082]: empilhar põe no topo e desempilhar tira do topo, então a ordem de saída é a inversa da de entrada. Ex.: entrada `a, b, c`: saída `c, b, a`.\n\n**Como atacar:** o último inserido sai primeiro; liste as remoções na ordem."
     },
     {
       "numero": 7,
@@ -348,7 +348,7 @@
           "modulo": "15-hash.md"
         }
       ],
-      "dica": "**Cobra:** Julgar afirmações sobre colisões e comparações no hash encadeado.\n\n- **Encadeamento** [0106]: chaves da mesma posição ficam numa lista.\n- **Endereçamento aberto** [0107]: colisão secundária vem do aglomerado de posições.\n- **Pior caso** [0072]: com todas as chaves numa posição, a busca percorre a lista toda.\n\n**Exemplo:** `M = 4`, chaves `4, 8, 12, 16`: todas na posição 0; achar a 16 leva 4 comparações.\n\n**Como atacar:** procure o pior caso e compare as duas técnicas antes de aceitar \"nunca\" e \"sempre\"."
+      "dica": "**Cobra:** Julgar afirmações sobre colisões e comparações no hash encadeado.\n\n- **Encadeamento** [0106]: chaves da mesma posição ficam numa lista, e a colisão só aumenta essa lista. Ex.: `M = 3`: as chaves 3, 6, 9 e 12 caem na posição 0.\n- **Colisão secundária** [0107]: aglomerado em que chaves de hashes diferentes disputam as mesmas posições; é problema do endereçamento aberto. Ex.: `M = 5`, `k % 5`: com o 7 na 2, o 12 vai à 3; o 3 chega à 3 já ocupada.\n- **Pior caso da busca** [0072]: com todas as chaves numa posição, a busca percorre a lista toda: custo `n`. Ex.: no exemplo da posição 0, achar o 12 custa 4 comparações.\n\n**Como atacar:** procure o pior caso e compare as duas técnicas antes de aceitar \"nunca\" e \"sempre\"."
     },
     {
       "numero": 8,
@@ -396,7 +396,7 @@
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** Dizer quais das árvores mostradas são AVL válidas.\n\n- **AVL** [0101]: diferença de altura entre -1 e 1 em todos os nós.\n- **BST** [0099]: a ordem das chaves também precisa valer.\n- **Fator de balanceamento** [0101]: calcule em cada nó.\n\n**Exemplo:** raiz 20, filho esquerdo 10 e neto 5: na raiz, as alturas são 2 e 0. Não é AVL.\n\n**Como atacar:** em cada árvore, verifique a ordem das chaves e o fator de cada nó."
+      "dica": "**Cobra:** Dizer quais das árvores mostradas são AVL válidas.\n\n- **Fator de balanceamento** [0101]: diferença entre as alturas das subárvores de cada nó, que numa AVL fica entre -1 e 1 em todos os nós. Ex.: raiz 30, filho direito 40, neto 50 à direita: fator -2 na raiz.\n- **ABB válida** [0099]: a AVL também é ABB, então os menores ficam à esquerda de cada nó e os maiores à direita, em toda a subárvore. Ex.: `10(15, 20)` não serve: o 15 está à esquerda do 10 e é maior.\n\n**Como atacar:** em cada árvore, verifique a ordem das chaves e o fator de cada nó."
     },
     {
       "numero": 9,
@@ -438,7 +438,7 @@
           "modulo": "12-pilhas-e-filas.md"
         }
       ],
-      "dica": "**Cobra:** Dar o estado final de uma fila após uma sequência de INSERE e RETIRA.\n\n- **Fila** [0085]: FIFO: INSERE no fim, RETIRA no início.\n- **Estado** [0085]: o primeiro da esquerda é o mais antigo.\n\n**Exemplo:** `INSERE(x), INSERE(y), RETIRA(), INSERE(z)`: `x`, `x y`, `y`, `y z`.\n\n**Como atacar:** escreva a fila a cada operação, repetindo valores iguais como itens distintos."
+      "dica": "**Cobra:** Dar o estado final de uma fila depois de uma sequência de INSERE e RETIRA.\n\n- **Fila** [0085]: FIFO: INSERE põe no fim e RETIRA tira do início. Ex.: `INSERE(p), INSERE(q), RETIRA(), INSERE(r)` deixa `q r`.\n- **Estado da fila** [0085]: o primeiro elemento da esquerda é o mais antigo, e valores repetidos são itens distintos. Ex.: `INSERE(5), INSERE(5), RETIRA()` deixa um 5.\n\n**Como atacar:** escreva a fila a cada operação, repetindo valores iguais como itens diferentes."
     },
     {
       "numero": 10,
@@ -486,7 +486,7 @@
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** Dizer quais das árvores mostradas são ABB válidas.\n\n- **BST** [0099]: todos da subárvore esquerda são menores; todos da direita, maiores.\n- **Subárvore inteira** [0099]: olhar só pai e filho não basta.\n\n**Exemplo:** `10(5(3,12),15)`: o 12 é filho do 5, mas está à esquerda do 10 e é maior que ele; não é ABB.\n\n**Como atacar:** em cada árvore, confira cada nó contra todos os seus ancestrais."
+      "dica": "**Cobra:** Dizer quais das árvores mostradas são árvores binárias de pesquisa.\n\n- **ABB** [0099]: todo nó da subárvore esquerda é menor que a raiz dela, e todo nó da direita é maior. Ex.: `6(2, 9)` é ABB.\n- **Subárvore inteira** [0099]: olhar só pai e filho não basta: cada nó precisa respeitar todos os ancestrais. Ex.: `20(10(5, 25), 30)`: o 25 está à esquerda do 20 e é maior que ele.\n\n**Como atacar:** em cada árvore, confira cada nó contra todos os seus ancestrais."
     },
     {
       "numero": 11,
@@ -528,7 +528,7 @@
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** Reconstruir uma árvore a partir dos percursos pós-ordem e em ordem.\n\n- **Pós-ordem** [0098]: esquerda, direita, raiz: a raiz é o último.\n- **Em ordem** [0098]: esquerda, raiz, direita: a raiz separa os lados.\n\n**Exemplo:** pós `A C B`, em ordem `A B C`: a raiz é `B`, com `A` à esquerda e `C` à direita.\n\n**Como atacar:** ache a raiz no pós, separe os lados no em ordem e repita em cada lado."
+      "dica": "**Cobra:** Reconstruir uma árvore a partir dos percursos pós-ordem e em ordem.\n\n- **Pós-ordem** [0098]: esquerda, direita, raiz: o último elemento do percurso é a raiz. Ex.: pós `2 4 3 5`: a raiz é `5`.\n- **Em ordem** [0098]: esquerda, raiz, direita: a raiz separa o que é subárvore esquerda do que é direita. Ex.: em ordem `2 3 4 5`: tudo antes do 5 está à esquerda dele.\n- **Reconstrução recursiva** [0098]: ache a raiz no pós, separe os lados no em ordem e repita em cada lado com os pedaços do pós. Ex.: no lado `2 3 4`, o pós `2 4 3` dá raiz 3, com 2 e 4 como filhos.\n\n**Como atacar:** ache a raiz no pós, separe os lados no em ordem e repita em cada lado."
     },
     {
       "numero": 12,
@@ -574,7 +574,7 @@
           "modulo": "13-busca-e-ordenacao.md"
         }
       ],
-      "dica": "**Cobra:** Julgar afirmações sobre busca sequencial, busca em vetor ordenado e maior elemento.\n\n- **Busca sequencial** [0089]: funciona em qualquer vetor.\n- **Busca binária** [0090]: em vetor ordenado, custa `O(log n)`.\n- **Maior elemento** [0089]: varre o vetor uma vez; custo proporcional a `n`.\n\n**Exemplo:** maior de `4 9 2 7`: 3 comparações para 4 elementos.\n\n**Como atacar:** julgue cada afirmação pelo custo e pelo requisito de ordenação."
+      "dica": "**Cobra:** Julgar afirmações sobre busca sequencial, busca em vetor ordenado e maior elemento.\n\n- **Busca sequencial** [0089]: compara a chave com cada posição e funciona em qualquer vetor, ordenado ou não. Ex.: `4 9 2`: achar o 2 passa por 3 posições.\n- **Busca binária** [0090]: em vetor ordenado custa `O(log n)`, bem menos que `n`, mas continua dependendo de `n`. Ex.: `n = 1024`: no máximo 11 comparações.\n- **Custo constante** [0072]: `O(1)` é o custo que não muda conforme o tamanho `n` do vetor. Ex.: ler `v[0]` custa o mesmo em 10 ou 1 000 000 de elementos.\n- **Maior elemento** [0089]: num vetor sem ordem, é preciso olhar cada posição uma vez; custo proporcional a `n`. Ex.: maior de `3 8 1 6 5`: 4 comparações para 5 elementos.\n\n**Como atacar:** julgue cada afirmação pelo custo e pelo requisito de ordenação."
     },
     {
       "numero": 13,
@@ -624,7 +624,7 @@
           "modulo": "08-structs.md"
         }
       ],
-      "dica": "**Cobra:** Comparar duas funções de inserção no início da lista.\n\n- **Passagem por valor** [0029]: a função recebe uma cópia do parâmetro.\n- **Ponteiro para ponteiro** [0049]: `**prim` altera o ponteiro original.\n- **Pilha encadeada** [0083]: o topo é o início da lista.\n\n**Exemplo:** `void zera(int x) { x = 0; }` não altera o original; `void zera(int *x) { *x = 0; }` altera.\n\n**Como atacar:** veja qual versão muda o `prim` de quem chamou."
+      "dica": "**Cobra:** Comparar duas funções de inserção no início da lista e a pilha encadeada.\n\n- **Passagem por valor** [0029]: a função recebe uma cópia do parâmetro, e mudar a cópia não muda o original. Ex.: `void zera(int x) { x = 0; }` não altera a variável do chamador.\n- **Ponteiro para ponteiro** [0049]: `**prim` dá o endereço do ponteiro de início, e `*prim = novo;` altera o ponteiro do chamador. Ex.: `void zera(int *x) { *x = 0; }` altera o original.\n- **Pilha encadeada** [0083]: empilhar é inserir no início da lista, e o topo é o primeiro nó. Ex.: pilha `5 -> 8` (topo 5): empilhar 2 dá `2 -> 5 -> 8`.\n\n**Como atacar:** veja qual versão altera o `prim` de quem chamou e o que sobra do nó alocado na outra."
     },
     {
       "numero": 14,
@@ -666,7 +666,7 @@
           "modulo": "15-hash.md"
         }
       ],
-      "dica": "**Cobra:** Julgar afirmações sobre hash linear, sem encadeamento.\n\n- **Endereçamento aberto** [0107]: na colisão, procura outra posição livre da própria tabela.\n- **Função hash** [0105]: calcula a posição inicial.\n- **Tabela** [0107]: vetor de tamanho fixo.\n\n**Exemplo:** `M = 6`, `h(k) = k % 6`: o 8 vai à 2; o 14 acha a 2 ocupada e vai à 3.\n\n**Como atacar:** julgue cada afirmação sozinha e confira o tratamento da colisão."
+      "dica": "**Cobra:** Julgar afirmações sobre hash linear, sem encadeamento.\n\n- **Endereçamento aberto** [0107]: na colisão, procura outra posição livre da própria tabela por sondagem, em vez de guardar listas. Ex.: `M = 7`, `k % 7`: o 9 vai à 2; o 16 acha a 2 ocupada e vai à 3.\n- **Busca no hash** [0105]: recalcula a posição da chave e repete a sondagem até achar a chave ou uma posição vazia; não usa busca binária. Ex.: buscar 16 acima: posição 2 (é o 9), posição 3 (é o 16), achou.\n- **Tabela de tamanho fixo** [0107]: a tabela é um vetor com `M` posições, definido de antemão. Ex.: `M = 7`: no máximo 7 chaves.\n\n**Como atacar:** julgue cada afirmação sozinha e confira o tratamento da colisão."
     },
     {
       "numero": 15,
@@ -716,7 +716,7 @@
           "modulo": "28-estruturas-complementos.md"
         }
       ],
-      "dica": "**Cobra:** Julgar afirmações sobre hash linear versus encadeado.\n\n- **Encadeamento** [0106]: a colisão aumenta a lista da posição.\n- **Endereçamento aberto** [0107]: a colisão leva a chave para outra posição da tabela.\n- **Hash duplo** [0179]: a segunda função define o passo da sondagem.\n\n**Exemplo:** `M = 7`, `h1 = k % 7`, `h2 = 1 + k % 5`, `k = 17`: tenta as posições 3, 6, 2.\n\n**Como atacar:** para cada afirmação, pergunte a qual técnica ela se refere."
+      "dica": "**Cobra:** Julgar afirmações sobre hash linear versus hash encadeado.\n\n- **Encadeamento** [0106]: colisão acrescenta a chave à lista da própria posição, e a tabela aceita mais chaves que posições. Ex.: `M = 5`, 8 chaves: `α = 1,6`.\n- **Endereçamento aberto** [0107]: colisão leva a chave para outra posição livre da tabela, e o total de chaves não passa de `M`. Ex.: o 8 colide com o 3 na posição 3 e vai à 4.\n- **Hash duplo** [0179]: segunda função define o passo da sondagem, e só existe no endereçamento aberto. Ex.: `M = 7`, `h1 = k % 7`, `h2 = 1 + k % 5`, `k = 22`: tenta as posições 1, 4, 0.\n\n**Como atacar:** para cada afirmação, pergunte a qual técnica ela se refere."
     },
     {
       "numero": 16,
@@ -758,7 +758,7 @@
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** Achar a afirmação correta sobre uma heap mínima guardada em vetor.\n\n- **Heap** [0102]: em heap mínima, todo pai é menor ou igual aos filhos.\n- **Índices** [0102]: índice 0: filhos de `i` em `2i+1` e `2i+2`; pai em `(i-1)/2`.\n- **Vetor** [0038]: a heap é uma árvore completa guardada por posição.\n\n**Exemplo:** `2 5 3 9 6`: os filhos da posição 1 são as posições 3 e 4, com 9 e 6.\n\n**Como atacar:** confira com a fórmula de pai e filhos e a regra do mínimo."
+      "dica": "**Cobra:** Achar a afirmação correta sobre uma heap mínima guardada em vetor.\n\n- **Heap mínima** [0102]: árvore completa em que todo pai é menor ou igual aos filhos; só a raiz é garantidamente o menor. Ex.: `2 5 3 9 6`: o 2 é o menor, e o 5 e o 3 não têm ordem entre si.\n- **Índices** [0102]: com índice a partir de 0, os filhos de `i` ficam em `2i+1` e `2i+2`, e o pai em `(i-1)/2`. Ex.: os filhos da posição 1 são as posições 3 e 4.\n- **Corrigir depois de alterar** [0102]: valor menor que o pai sobe trocando com ele; valor maior que um filho desce. Ex.: em `2 5 3 9 6`, trocar o 9 por 1 dá `1 2 3 5 6` com 2 trocas.\n\n**Como atacar:** confira com a fórmula de pai e filhos e a regra do mínimo, valor a valor."
     },
     {
       "numero": 17,
@@ -812,7 +812,7 @@
           "modulo": "28-estruturas-complementos.md"
         }
       ],
-      "dica": "**Cobra:** Associar cada tipo de árvore à sua característica.\n\n- **ABB** [0099]: pode degenerar em ordem crescente.\n- **AVL** [0101]: balanceia com rotações.\n- **Heap** [0102]: árvore completa em vetor.\n- **Rubro-negra** [0177]: balanceada por cores; altura `O(log n)`.\n\n**Exemplo:** `1, 2, 3, 4` numa ABB comum dão uma cadeia de altura 4; na AVL, altura 3.\n\n**Como atacar:** faça a lista das propriedades de cada árvore e cruze com as características."
+      "dica": "**Cobra:** Associar cada tipo de árvore à sua característica.\n\n- **ABB** [0099]: não se balanceia sozinha, e chaves em ordem formam uma cadeia. Ex.: inserir `1, 2, 3, 4`: altura 4.\n- **AVL** [0101]: balanceia com rotações, e a altura fica perto de `log₂ n`. Ex.: inserir `1, 2, 3, 4`: altura 3.\n- **Heap** [0102]: árvore completa guardada em vetor, com ordem pai-filho, mas sem ordem total. Ex.: `1 3 2`: filhos do 1 são 3 e 2.\n- **Rubro-negra** [0177]: balanceada por cores dos nós, com altura `O(log n)` em qualquer ordem de inserção. Ex.: o caminho mais longo tem no máximo o dobro do mais curto.\n\n**Como atacar:** liste as propriedades de cada árvore e cruze com as características."
     },
     {
       "numero": 18,
@@ -858,7 +858,7 @@
           "modulo": "11-listas.md"
         }
       ],
-      "dica": "**Cobra:** Achar o erro e dizer o que acontece em uma função que conta ocorrências na lista.\n\n- **Lista encadeada** [0076]: percorre por ponteiro; `p[i]` trata como vetor.\n- **Busca** [0077]: confira o que o laço compara e o que retorna.\n- **Contador** [0025]: o retorno deve ser o contador, não o índice do laço.\n\n**Exemplo:**\n```c\nint soma(No *p) {\n  int s = 0;\n  while (p != NULL) { s += p->dado; p = p->prox; }\n  return s;\n}\n```\n\n**Como atacar:** confira percurso, comparação e retorno, e teste com 3 nós."
+      "dica": "**Cobra:** Achar o erro e dizer o que acontece numa função que conta ocorrências na lista.\n\n- **Percurso de lista** [0076]: anda por ponteiro, `p = p->prox`, até `NULL`; `p[i]` trata a lista como vetor. Ex.: `while (p != NULL) { s += p->dado; p = p->prox; }`.\n- **Struct não é ponteiro** [0062]: `p[i]` é um nó inteiro, não um endereço, então compará-lo com `NULL` não compila; só ponteiro se compara com `NULL`. Ex.: `No x; if (x != NULL)` não compila.\n- **Retorno do contador** [0025]: devolva o contador, e não a variável do laço, que anda mesmo sem acerto. Ex.: contar os `7` de `7 3 7`: o contador vale 2, o índice vai a 3.\n\n**Como atacar:** confira percurso, comparação e retorno, e teste com 3 nós."
     },
     {
       "numero": 19,
@@ -900,7 +900,7 @@
           "modulo": "11-listas.md"
         }
       ],
-      "dica": "**Cobra:** Achar a afirmação correta sobre a lista encadeada simples.\n\n- **Lista encadeada** [0076]: cada nó guarda o endereço do sucessor.\n- **Inserção no início** [0076]: custo constante, sem deslocar nada.\n- **Acesso** [0076]: chegar ao `k`-ésimo nó exige percorrer.\n\n**Exemplo:** `3 -> 5 -> 8`, inserir 1 no início: `novo->prox = prim; prim = novo;`.\n\n**Como atacar:** compare cada alternativa com o custo de percorrer e com o papel dos ponteiros."
+      "dica": "**Cobra:** Achar a afirmação correta sobre a lista encadeada simples.\n\n- **Lista encadeada** [0076]: cada nó guarda o endereço do sucessor, e os nós podem estar em qualquer lugar do heap. Ex.: `3 -> 5 -> 8`: o 3 aponta para o 5.\n- **Ponteiros de ponta** [0076]: guardar `prim` e `ult` dá acesso direto às duas pontas da lista, sem percorrer. Ex.: inserir no fim de `3 -> 5`: `ult->prox = novo; ult = novo;`.\n- **Memória contígua** [0037]: só o vetor exige bloco contíguo de memória; os nós da lista ficam espalhados. Ex.: `v[2]` calcula o endereço; na lista, `prox` o guarda.\n\n**Como atacar:** compare cada alternativa com o papel dos ponteiros e com o que exige memória contígua."
     },
     {
       "numero": 20,
@@ -942,7 +942,7 @@
           "modulo": "11-listas.md"
         }
       ],
-      "dica": "**Cobra:** Reconhecer a característica da lista duplamente encadeada.\n\n- **Lista dupla** [0079]: cada nó tem dois ponteiros: `ant` e `prox`.\n- **Lista encadeada** [0076]: um ponteiro só, para o sucessor.\n- **Lista circular** [0080]: o último nó aponta de volta para o primeiro.\n\n**Exemplo:** `struct No { int dado; struct No *ant, *prox; };`\n\n**Como atacar:** descarte as alternativas que descrevem a lista simples e a circular."
+      "dica": "**Cobra:** Reconhecer a característica da lista duplamente encadeada.\n\n- **Lista duplamente encadeada** [0079]: cada nó guarda, além da chave, um ponteiro para o próximo (`prox`) e outro para o anterior (`ant`), e daí se anda nos dois sentidos. Ex.: `struct No { int dado; struct No *ant, *prox; };`.\n- **Lista encadeada simples** [0076]: cada nó tem só o ponteiro para o sucessor, e só se anda para a frente. Ex.: `3 -> 8 -> 5`: do 8 não se chega ao 3.\n- **Lista circular** [0080]: o último nó aponta de volta para o primeiro, então a lista não tem `NULL` no fim. Ex.: `3 -> 8 -> 5 -> 3 ...`.\n- **Vetor** [0037]: elementos em posições contíguas de memória, acessados por índice; lista encadeada não é assim. Ex.: `v[2]` é acesso direto; numa lista, 2 saltos de `prox`.\n\n**Como atacar:** descarte as alternativas que descrevem a lista simples, a circular ou o vetor."
     }
   ]
 }
