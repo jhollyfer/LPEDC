@@ -1,31 +1,33 @@
 ## 0127 · Backtracking
 
-Um cartão-presente de R$ 35 não dá troco: ou você gasta o valor exato, ou o
-resto se perde. Na vitrine há um atlas (R$ 30), um mangá (R$ 20), um livro de
-poesia (R$ 15) e um marcador (R$ 5). Que combinações fecham R$ 35?
+- **Backtracking** (retrocesso, ou **tentativa e erro**): enumeração que
+  **desiste cedo**. A cada escolha, pergunta se o começo ainda pode virar
+  solução; se não, volta um passo (ZIVIANI, 2010, cap. 2).
+- **Poda**: cortar um galho inteiro da árvore de decisões sem visitá-lo
+  (WIRTH, 1989).
+- **Esqueleto**: (1) **parada**: a solução está completa? mostre e volte;
+  (2) **poda**: o começo é inviável? volte sem descer; (3) **escolha**: para
+  cada opção, escolha, desça e **desfaça** (FEOFILOFF, 2009).
+- **Soma de subconjuntos**: achar os itens que somam um alvo exato. Com
+  preços positivos, soma acima do alvo não tem conserto e pode ser podada
+  (FEOFILOFF, 2009).
+- **Estado na volta**: o que é **parâmetro** se desfaz sozinho; o que é
+  global (`leva[]`) precisa ser desfeito à mão (KERNIGHAN; RITCHIE, 1989).
+- **Custo**: o pior caso continua **O(2ⁿ)**. A poda muda o quanto da árvore
+  você visita, não a garantia (ROVAI, 2018).
 
-Pelo assunto 0125, bastaria somar os 2⁴ = 16 subconjuntos. Mas atlas e mangá
-já somam R$ 50, e a enumeração cega continua até o fim de cada subconjunto que
-começa assim.
+> [!WARNING]
+> A poda só corta o que **com certeza** não leva a solução. Poda com `>=` no
+> lugar de `>` descarta as somas que batem o alvo, e a saída fica vazia. A
+> ordem dos testes também importa: teste "fechou" antes de "acabaram os itens".
 
-O **backtracking** (retrocesso; o Ziviani chama de **tentativa e erro**) é a
-enumeração que **desiste cedo**: a cada escolha, pergunta se o começo ainda
-pode virar solução e, se não, volta um passo. Cortar um galho inteiro da
-árvore de decisões se chama **poda**. O esqueleto tem três partes:
+{{exemplo}}
 
-1. **caso de parada**: a solução está completa? Mostre (ou conte) e volte;
-2. **poda**: o começo já é inviável? Volte sem descer;
-3. **escolha**: para cada opção, escolha, desça e **desfaça**.
-
-Aqui os preços são positivos: se a soma **passou** de 35, acrescentar itens só
-piora, e se bateu **exatamente** 35, também não precisa descer. Na árvore, a
-esquerda leva o item e a direita não. As caixas vermelhas são podas, as verdes
-são soluções e as cinzas são becos sem saída (os itens acabaram antes de a soma
-chegar a 35):
+Um cartão-presente de R$ 35 não dá troco. Na vitrine: atlas (R$ 30), mangá
+(R$ 20), poesia (R$ 15) e marcador (R$ 5). Na árvore, a esquerda leva o item;
+caixas vermelhas são podas, verdes são soluções e cinzas, becos sem saída:
 
 {{ideia}}
-
-A poda é o primeiro `if`: a chamada que passou do alvo volta na hora:
 
 ```c
 #include <stdbool.h>
@@ -75,27 +77,7 @@ int main(void) {
 // 21 chamadas (sem poda seriam 31)
 ```
 
-A árvore completa de 4 itens tem 31 nós, e a poda deixou 21. O ganho cresce
-com `n`: uma poda perto da raiz corta metade da árvore, e com 30 itens e um
-alvo pequeno são alguns milhares de chamadas em vez de um bilhão:
+A árvore completa de 4 itens tem 31 nós, e a poda deixou 21. Com 30 itens e um
+alvo pequeno, são alguns milhares de chamadas em vez de um bilhão:
 
 {{fluxograma}}
-
-> [!WARNING]
-> A ordem dos testes importa. Com `if (i == N) return;` **antes** de
-> `if (soma == ALVO)`, a solução que fecha com o último item (`atlas
-> marcador`, com `i` valendo 4) seria descartada. Poda com `>=` no lugar de
-> `>` corta toda soma que bate o alvo, e a saída fica vazia. A poda só pode
-> cortar o que **com certeza** não leva a solução.
-
-> [!TIP]
-> **Por dentro do C:** a soma é **parâmetro**, e voltar a desfaz de graça;
-> `leva[]` é global, por isso `leva[i] = false` antes do segundo caminho. O
-> pior caso continua **O(2ⁿ)**: a poda muda o quanto da árvore você visita, não
-> a garantia.
-
-> [!NOTE]
-> **Pergunta para você:** se o cartão fosse de R$ 50, quais combinações
-> sairiam? A primeira linha da saída ainda seria a do atlas?
-
-{{pratique}}

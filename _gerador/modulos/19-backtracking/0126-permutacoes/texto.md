@@ -1,26 +1,35 @@
 ## 0126 · Permutações
 
-Num sarau, três grupos (rap, samba e forró) se apresentam, e a organização quer
-todas as ordens possíveis: 3 × 2 × 1 = **6**. Cada ordem é uma
-**permutação**, e `n` elementos têm **n!** delas.
+- **Permutação**: uma ordem dos `n` elementos. Há **n!** delas: `n` escolhas
+  para a primeira posição, `n - 1` para a segunda, e assim por diante
+  (FEOFILOFF, 2009).
+- **Uma posição por vez**: `permuta(v, i)` sabe que `0..i-1` já estão
+  decididas; os candidatos à posição `i` estão em `v[i..n-1]`
+  (WIRTH, 1989).
+- **Escolhe, desce, desfaz**: para cada `j` de `i` a `n - 1`, troca `v[i]` com
+  `v[j]`, chama `permuta(v, i + 1)` e troca de novo (FEOFILOFF, 2009).
+- **Desfazer**: a troca mexe no **vetor**, que é um só para todas as chamadas.
+  Sem destrocar, as chamadas seguintes recebem o vetor bagunçado
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 3).
+- **Ordem de saída**: o método da troca **não** gera a ordem de dicionário
+  (KNUTH, 2011).
+- **Custo**: `n!` folhas com `n` passos cada, **O(n · n!)**, pior que os 2ⁿ
+  dos subconjuntos. 13! já não cabe num `int` de 32 bits (FEOFILOFF, 2009).
 
-A recursão decide **uma posição por vez**. `permuta(v, i)` sabe que `0..i-1`
-já estão decididas, e os candidatos à posição `i` são os de `v[i..n-1]`. Para
-cada `j` de `i` até `n - 1`:
+> [!WARNING]
+> Sem o **desfaz**, o programa ainda mostra n! linhas, mas com ordens
+> repetidas e outras faltando. Toda alteração feita antes da chamada recursiva
+> é desfeita depois dela, na ordem inversa.
 
-1. **escolhe**: troca `v[i]` com `v[j]`;
-2. **desce**: chama `permuta(v, i + 1)`;
-3. **desfaz**: troca `v[i]` com `v[j]` de novo.
+{{exemplo}}
 
-O passo 3 é indispensável: no assunto anterior, a escolha se desfazia sozinha
-por estar num parâmetro; aqui ela mexe no **vetor**, que é um só para todas as
-chamadas. Quando `i` chega a `n`, a ordem é mostrada. As 6 folhas da árvore
-são as 6 ordens, na sequência em que o programa as mostra:
+Num sarau, três grupos (rap, samba e forró) se apresentam em todas as ordens
+possíveis. As 6 folhas da árvore são as 6 ordens, na sequência da saída:
 
 {{ideia}}
 
-O vetor guarda ponteiros para os nomes (assunto 0048): trocar dois elementos
-é trocar dois ponteiros, e os textos não saem do lugar.
+O vetor guarda ponteiros para os nomes (assunto 0048): trocar dois elementos é
+trocar dois ponteiros, e os textos não saem do lugar.
 
 ```c
 #include <stdio.h>
@@ -66,28 +75,7 @@ int main(void) {
 ```
 
 Na última linha, o vetor voltou a ser `Rap, Samba, Forró`: cada chamada
-desfez o que fez. A ordem de saída **não** é a de dicionário (quem precisa
-dela usa o exemplo A251).
-
-O laço do `j` abre os ramos, e cada volta tem o par troca e destroca em volta
-da chamada recursiva:
+desfez o que fez. O laço do `j` abre os ramos, com troca e destroca em volta da
+chamada recursiva:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Sem o **desfaz**, o programa ainda mostra 6 linhas, mas com ordens repetidas
-> e outras faltando, e o vetor termina bagunçado. Toda alteração feita antes
-> da chamada recursiva precisa ser desfeita depois dela, na ordem inversa.
-
-> [!TIP]
-> **Por dentro do C:** são `n!` folhas, e cada uma gasta `n` passos para
-> mostrar: o custo é **O(n · n!)**, pior que os 2ⁿ dos subconjuntos. 13!
-> (6.227.020.800) não cabe num `int` de 32 bits, e 20! (cerca de 2,4 · 10¹⁸)
-> fica no limite de um `long long`. Trocar ponteiros custa 8 bytes por
-> elemento, qualquer que seja o tamanho do nome.
-
-> [!NOTE]
-> **Pergunta para você:** com um quarto grupo, de pagode, no fim do vetor,
-> quantas linhas saem? Qual grupo abre o sarau na linha 7? E na 19?
-
-{{pratique}}

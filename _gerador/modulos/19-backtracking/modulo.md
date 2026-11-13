@@ -1,19 +1,10 @@
 # Módulo 19 · Enumeração e backtracking
 
-Muito problema não tem fórmula: que produtos fecham o crédito exato, onde
-ficam as rainhas, como sair do labirinto. É preciso **testar as
-possibilidades** sem esquecer, sem repetir e sem perder tempo com as que já
-não servem.
-
-O módulo começa pela **enumeração** de subconjuntos e permutações com
-recursão. Daí vem o **backtracking**, que constrói a solução uma escolha por
-vez e **volta atrás** quando o caminho falha: soma de subconjuntos,
-N-rainhas, labirinto, flood fill e sudoku.
-
-O problema vira uma **árvore de decisões**: cada nível é uma escolha e cada
-caminho da raiz a uma folha é uma tentativa. Enumerar visita a árvore
-inteira; o backtracking **poda** os galhos sem solução. Tudo o que você muda
-antes de descer, **desfaça** depois de voltar.
+Problema sem fórmula pede **testar as possibilidades** sem esquecer nem
+repetir. O módulo enumera subconjuntos e permutações com recursão e chega ao
+**backtracking**, que volta atrás e **poda** o que não serve: soma de
+subconjuntos, N-rainhas, labirinto, flood fill e sudoku. Depende da recursão
+(módulos 04 e 13) e da DFS (módulo 16).
 
 ## O que você vai aprender
 
@@ -28,21 +19,15 @@ antes de descer, **desfaça** depois de voltar.
 ## Antes de começar
 
 Revise a recursão (0031 a 0033), as matrizes (0039), os operadores de bits
-(0065) e o vetor de `bool` de `<stdbool.h>`. O labirinto é a DFS do 0111 com
-uma matriz no lugar do grafo; a BFS (0110) dá o menor caminho.
-
-**Progressão.** O módulo 18 ordenou sem enumerar; aqui você enumera e poda,
-com a recursão dos módulos 4 e 13 e a DFS do 16. O 20 retoma a recursão como
-divisão e conquista e troca a busca exaustiva por escolhas gulosas.
+(0065) e o vetor de `bool` de `<stdbool.h>`.
 
 Em cada função recursiva, ache onde ela **para**, onde **poda** e onde
-**escolhe e desfaz**. Os programas contam as **chamadas**: com a poda, a
-saída é a mesma e o número cai. Nas árvores de decisão, amarelo é uma decisão
-aberta, verde uma solução, vermelho um galho podado e cinza um beco sem
-saída; nos tabuleiros, verde é a solução e vermelho, casa proibida.
+**escolhe e desfaz**. Os programas contam as **chamadas**: com a poda, a saída
+é a mesma e o número cai.
 
-Se sobrou um `true` no vetor de marcação ao fim da busca, faltou um
-desfazer.
+Nas árvores de decisão, amarelo é decisão aberta, verde solução, vermelho
+galho podado e cinza beco sem saída; nos tabuleiros, verde é a solução e
+vermelho, casa proibida.
 
 {{indice}}
 

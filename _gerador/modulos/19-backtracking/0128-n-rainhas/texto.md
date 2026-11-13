@@ -1,29 +1,34 @@
 ## 0128 · N-rainhas
 
-No clube de xadrez, o desafio é pôr 4 rainhas num tabuleiro 4 × 4 sem que uma
-ataque outra (linha, coluna ou diagonal). Quantas arrumações existem?
+- **Problema das N-rainhas**: pôr `N` rainhas num tabuleiro `N × N` sem que
+  uma ataque outra na linha, na coluna ou na diagonal. É o exemplo clássico de
+  tentativa e erro (WIRTH, 1989).
+- **Uma por linha**: duas rainhas na mesma linha se atacam, então a solução é
+  um vetor `pos` com a coluna da rainha de cada linha
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 3).
+- **Busca**: `rainha(l)` tenta cada coluna, **poda** as casas atacadas e, na
+  casa livre, marca, desce para `l + 1` e desmarca na volta (FEOFILOFF, 2009).
+- **Diagonais**: na ↗, `l + c` é igual em todas as casas (0 a `2N - 2`); na ↘,
+  `l - c` é igual, e somar `N - 1` dá um índice válido (WIRTH, 1989).
+- **Ataque em O(1)**: três vetores de `bool` (`coluna[N]`, `diag1[2N - 1]`,
+  `diag2[2N - 1]`) trocam o laço pelas rainhas anteriores por três leituras
+  (WIRTH, 1989).
+- **Atribuição em cadeia**: `a = b = c = true` funciona porque a atribuição
+  devolve o valor atribuído, da direita para a esquerda
+  (KERNIGHAN; RITCHIE, 1989).
 
-A força bruta escolheria 4 das 16 casas: 1820 jeitos. Mas duas rainhas na
-mesma linha se atacam, então cada linha tem **exatamente uma**, e a solução é
-um vetor `pos` com a coluna da rainha de cada linha.
+> [!WARNING]
+> O índice da ↘ é `l - c + N - 1`, não `l - c`: para (0, 3), `diag2[-3]`
+> escreve **fora** do vetor. Desmarcar só a coluna e esquecer as diagonais faz
+> o programa achar menos soluções.
 
-`rainha(l)` tenta cada coluna `c` e **poda** as casas atacadas pelas rainhas
-de cima; se a casa está livre, marca, desce para a linha `l + 1` e desmarca na
-volta. Para testar o ataque em O(1), cada casa `(l, c)` tem um índice de
-coluna e de diagonais:
+{{exemplo}}
 
-- na diagonal **↗**, `l + c` é igual em todas as casas, de 0 a `2N - 2`;
-- na diagonal **↘**, `l - c` é igual, de `-(N - 1)` a `N - 1`; somar `N - 1`
-  dá um índice válido.
-
-Três vetores de `bool` guardam o que está ocupado: `coluna[N]`, `diag1[2N - 1]`
-e `diag2[2N - 1]`. No desenho, à esquerda está a primeira solução; no meio,
-`l + c` de cada casa; à direita, `l - c + 3`. A rainha da linha 1, coluna 3,
-ocupa a diagonal ↗ 4 e a ↘ 1, e as casas destacadas ficam proibidas:
+Quatro rainhas num tabuleiro 4 × 4. À esquerda do desenho, a primeira solução;
+no meio, `l + c` de cada casa; à direita, `l - c + 3`. A rainha da linha 1,
+coluna 3, ocupa a ↗ 4 e a ↘ 1:
 
 {{ideia}}
-
-O programa mostra cada solução como tabuleiro e conta as chamadas:
 
 ```c
 #include <stdbool.h>
@@ -85,6 +90,12 @@ int main(void) {
 // 2 soluções, 17 chamadas
 ```
 
+A rainha em (0, 0) nunca dá certo: a busca gasta 4 chamadas para descobrir e
+esquece o galho. O fluxograma é o do assunto anterior, com um laço pelas
+colunas:
+
+{{fluxograma}}
+
 ### Passo a passo
 
 O começo da busca, até a primeira solução. "Atacada" quer dizer que a poda
@@ -100,26 +111,3 @@ cortou a casa antes de qualquer chamada:
 | 2 | coluna 1 | livre: marca e desce |
 | 3 | colunas 0 a 3 | todas atacadas: volta; na linha 2, as colunas 2 e 3 também estão atacadas, e a linha 1 já tentou tudo: volta à linha 0 |
 | 0 | coluna 1 | livre: desce, e o caminho 3, 0, 2 fecha a solução 1 |
-
-A rainha em (0, 0) nunca dá certo: a busca gasta 4 chamadas para descobrir e
-esquece o galho. O fluxograma é o do assunto anterior, com um laço pelas
-colunas no lugar de "leva ou não leva":
-
-{{fluxograma}}
-
-> [!WARNING]
-> O índice da diagonal ↘ é `l - c + N - 1`, não `l - c`: para (0, 3), `diag2[-3]`
-> escreve **fora** do vetor. Outro erro é desmarcar só a coluna e esquecer as
-> diagonais: o programa acha menos soluções do que devia.
-
-> [!TIP]
-> **Por dentro do C:** cada teste de ataque são três leituras, sem laço pelas
-> rainhas anteriores. A atribuição em cadeia funciona porque, em C, ela devolve
-> o valor atribuído, da direita para a esquerda. O 8-rainhas acha as 92
-> soluções com 2057 chamadas.
-
-> [!NOTE]
-> **Pergunta para você:** com `N` igual a 5 e a 6, quantas soluções você
-> espera? O número sobe sempre que o tabuleiro cresce?
-
-{{pratique}}

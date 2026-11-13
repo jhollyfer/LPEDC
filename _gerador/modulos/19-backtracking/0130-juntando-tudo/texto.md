@@ -1,27 +1,35 @@
 ## 0130 · Juntando tudo
 
-No sudoku, completa-se a grade 9 × 9 com dígitos de 1 a 9 sem repetir numa
-linha, numa coluna ou numa das nove caixas 3 × 3. Ele junta o que o módulo
-mostrou: a grade é uma **matriz** `int g[9][9]` (0 é casa vazia), cada casa
-vazia é uma decisão com 9 opções, e a **poda** é a regra do jogo, testada em
-O(1) com **vetores de marcação**, como nas N-rainhas:
+- **Sudoku**: completar a grade 9 × 9 com dígitos de 1 a 9 sem repetir numa
+  linha, numa coluna ou numa das nove caixas 3 × 3. É problema de satisfação
+  de restrições, resolvido por tentativa e erro (DEITEL; DEITEL, 2011).
+- **Grade**: matriz `int g[9][9]`, com 0 de casa vazia. Cada casa vazia é uma
+  decisão com 9 opções (DEITEL; DEITEL, 2011).
+- **Vetores de marcação**: `na_linha[l][d]`, `na_coluna[c][d]` e
+  `na_caixa[b][d]` dizem se o dígito `d` já aparece; a poda vira três
+  leituras, como nas N-rainhas (WIRTH, 1989).
+- **Caixa**: a casa `(l, c)` está na caixa `b = (l / 3) * 3 + c / 3`, de 0 a 8.
+- **`resolve(k)`**: percorre as casas em ordem de leitura (linha `k / 9`,
+  coluna `k % 9`), pula as dadas e, na primeira vazia, tenta os dígitos que
+  passam pela poda: **escreve e marca**, desce, **apaga e desmarca**
+  (FEOFILOFF, 2009).
+- **Ordem das casas**: escolher a casa com menos candidatos poda muito mais
+  cedo (ZIVIANI, 2010, cap. 2).
+- **Dígito para número**: `jogo[l][c] - '0'` funciona porque os dígitos são
+  consecutivos na tabela de caracteres (assunto 0040) (KERNIGHAN; RITCHIE, 1989).
 
-- `na_linha[l][d]` diz se o dígito `d` já está na linha `l`;
-- `na_coluna[c][d]`, para a coluna `c`;
-- `na_caixa[b][d]`, para a caixa `b = (l / 3) * 3 + c / 3`, de 0 a 8.
+> [!WARNING]
+> No desfazer, as duas coisas voltam: `g[l][c] = 0` **e**
+> `marca(..., false)`. Sem o `g[l][c] = 0`, a casa fica com o último dígito
+> tentado e o `while` passa a tratá-la como **dada**: a grade sai errada.
 
-`resolve(k)` percorre as casas em ordem de leitura (a casa `k` é a linha
-`k / 9`, coluna `k % 9`), pula as preenchidas e, na primeira vazia, tenta os
-dígitos que passam pela poda: **escreve e marca**, desce para `resolve(k + 1)`
-e, se não deu certo, **apaga e desmarca**. Sem casa vazia, o `true` sobe até o
-`main`, como no exemplo A254.
+{{exemplo}}
 
-Na casa (0, 1), a poda deixa só o 5 e o 7. O programa tenta o 5 e, só depois
-de muitos retrocessos, descobre que é o 7:
+Um jogo com 51 casas vazias, escrito como texto (`.` é casa vazia). Na casa
+(0, 1), a poda deixa só o 5 e o 7. O programa tenta o 5 e, só depois de muitos
+retrocessos, descobre que é o 7:
 
 {{ideia}}
-
-O programa, com o jogo escrito como texto (`.` é casa vazia):
 
 ```c
 #include <stdbool.h>
@@ -108,27 +116,8 @@ int main(void) {
 // 2999 chamadas
 ```
 
-São 51 casas vazias e 2999 chamadas; a força bruta testaria até 9⁵¹
-preenchimentos. Escolher **qual** casa preencher (a com menos candidatos)
-derruba este jogo para 64 chamadas (exemplo A260). O fluxograma é o esqueleto
-do módulo, com a casa no lugar do item e a regra do jogo no da poda:
+São 2999 chamadas; a força bruta testaria até 9⁵¹ preenchimentos. Escolher a
+casa com menos candidatos derruba este jogo para 64 chamadas (exemplo A260). O
+fluxograma é o esqueleto do módulo, com a regra do jogo no lugar da poda:
 
 {{fluxograma}}
-
-> [!WARNING]
-> No desfazer, as duas coisas precisam voltar: `g[l][c] = 0` **e**
-> `marca(..., false)`. Sem o `g[l][c] = 0`, uma casa sem dígito possível fica
-> com o último tentado e, na volta, o `while` de `resolve` a trata como casa
-> **dada**: o programa termina em 64 chamadas com uma grade "resolvida" errada.
-
-> [!TIP]
-> **Por dentro do C:** o índice 0 de cada linha dos vetores de marcação fica
-> sem uso para o dígito servir de índice. `jogo[l][c] - '0'` dá o número do
-> caractere porque os dígitos são consecutivos na tabela ASCII (assunto 0040).
-
-> [!NOTE]
-> **Pergunta para você:** troque `"164.9...5"` por `"164.9...."`. O programa
-> mostra a mesma grade? As chamadas sobem ou descem? O jogo continua com uma
-> solução só? (Para a última, faça o exercício E778.)
-
-{{pratique}}

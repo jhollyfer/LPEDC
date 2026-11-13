@@ -1,25 +1,17 @@
 ## 0125 · Subconjuntos
 
-Na fila do açaí, você pode pôr qualquer combinação de três complementos:
-granola (R$ 2), banana (R$ 3) e paçoca (R$ 4). Quantos copos existem e quanto
-custa cada um?
-
-Cada complemento é um sim ou não: 2 × 2 × 2 = **8** copos. Cada copo é um
-**subconjunto** de {granola, banana, paçoca}, e a lista de todos é o
-**conjunto das partes**: com `n` itens, **2ⁿ** subconjuntos, contando o vazio
-e o conjunto inteiro.
-
-**Enumerar** é gerar todos sem esquecer nem repetir. Na recursão (assunto
-0032), `gera(i, k)` cuida do item `i` e abre dois caminhos: com o item **de
-fora** e com o item **dentro**, ambos chamando `gera(i + 1, ...)`. Quando `i`
-chega a `n`, o subconjunto é mostrado.
-
-Os itens escolhidos ficam em `cesta`, e `k` conta os lugares ocupados. Como `k`
-é **parâmetro**, a escolha se **desfaz sozinha** quando a chamada termina.
-
-Sem recursão, use os bits de um número (assunto 0065): conte `m` de 0 a
-2ⁿ - 1 e leia o bit `i` de `m` como "o item `i` entra". O 5 é `101`: granola
-e paçoca.
+- **Subconjunto**: cada item entra ou não entra. Com `n` itens há **2ⁿ**
+  subconjuntos, contando o vazio e o conjunto inteiro; a lista de todos é o
+  **conjunto das partes** (FEOFILOFF, 2009).
+- **Enumerar**: gerar todos os casos sem esquecer nem repetir nenhum
+  (FEOFILOFF, 2009).
+- **Árvore de decisões**: cada nível decide um item; um ramo deixa o item de
+  fora e o outro o põe. As folhas são os subconjuntos (ZIVIANI, 2010, cap. 2).
+- **Versão recursiva**: `gera(i, k)` abre dois caminhos para o item `i`, sem
+  ele e com ele, e mostra a escolha quando `i` chega a `n`. Como `k` é
+  **parâmetro**, a escolha se desfaz sozinha na volta (KERNIGHAN; RITCHIE, 1989).
+- **Versão por bits**: conte `m` de 0 a 2ⁿ - 1 e leia o bit `i` de `m` como "o
+  item `i` entra" (assunto 0065). O 5 é `101`: itens 0 e 2 (KNUTH, 2011).
 
 ```c
 for (int m = 0; m < (1 << N); m++)      // 1 << 3 vale 8
@@ -27,13 +19,21 @@ for (int m = 0; m < (1 << N); m++)      // 1 << 3 vale 8
         if (m & (1 << i)) { /* o item i está no subconjunto m */ }
 ```
 
-Na árvore de decisões, cada nível é um complemento: o ramo da esquerda deixa o
-item de fora e o da direita o põe. As 8 folhas são os 8 copos, na ordem em que
-o programa os mostra:
+- **Custo**: 2ⁿ⁺¹ - 1 chamadas e 2ⁿ folhas; mostrar cada uma custa até `n`,
+  logo **O(n · 2ⁿ)**. Só serve para `n` pequeno (FEOFILOFF, 2009).
+
+> [!WARNING]
+> `m & (1 << i)` não dá 1 com o bit ligado: dá o próprio `1 << i`. Com `== 1`,
+> só o item 0 é reconhecido. Com `int`, `1 << i` vale até `i = 30`; acima,
+> use `1ULL << i`.
+
+{{exemplo}}
+
+Na fila do açaí há três complementos: granola (R$ 2), banana (R$ 3) e paçoca
+(R$ 4). São 8 copos possíveis, as 8 folhas da árvore, na ordem em que o
+programa os mostra:
 
 {{ideia}}
-
-O programa percorre a árvore da esquerda para a direita:
 
 ```c
 #include <stdio.h>
@@ -81,27 +81,7 @@ int main(void) {
 // 15 chamadas
 ```
 
-A árvore tem 1 + 2 + 4 + 8 = 15 nós, um por chamada: em geral, 2ⁿ⁺¹ - 1
-chamadas e 2ⁿ folhas. Cada folha gasta até `n` passos para mostrar a cesta: o
-custo é **O(n · 2ⁿ)**, e com 40 itens passa de um trilhão de subconjuntos.
-Enumerar tudo só serve para `n` pequeno. O fluxograma não tem laço: quem
-repete é a recursão:
+A árvore tem 1 + 2 + 4 + 8 = 15 nós, um por chamada, e a pilha nunca passa de
+4 frames. O fluxograma não tem laço: quem repete é a recursão:
 
 {{fluxograma}}
-
-> [!WARNING]
-> No jeito por bits, `m & (1 << i)` não dá 1 quando o bit está ligado: dá o
-> próprio `1 << i` (1, 2, 4, 8...). Com `== 1`, só o item 0 é reconhecido.
-> Teste `if (m & (1 << i))`, com os parênteses: o `==` é avaliado antes do `&`.
-
-> [!TIP]
-> **Por dentro do C:** a pilha nunca passa de `n + 1` frames (aqui, 4), mesmo
-> com 15 chamadas. Com `int`, `1 << i` só vale até `i = 30`; para mais itens,
-> use `1ULL << i`.
-
-> [!NOTE]
-> **Pergunta para você:** com um quarto complemento, leite em pó (R$ 1), no
-> fim da lista, quantas linhas o programa mostra e quantas chamadas faz? Qual
-> é a segunda linha da saída?
-
-{{pratique}}
