@@ -1,25 +1,34 @@
 ## 0067 · Arquivos texto
 
-- **Arquivo**: sequência de bytes guardada no disco. Variáveis moram na RAM e
-  somem quando o programa termina; o arquivo fica (BACKES, 2013, cap. 12).
-- **Arquivo texto**: os bytes são caracteres legíveis no editor. O número
-  152.40 vira `'1' '5' '2' '.' '4' '0'` (BACKES, 2013, cap. 12).
-- **Três passos**: abrir, ler ou escrever, fechar. Tudo vem do `<stdio.h>`
-  (KERNIGHAN; RITCHIE, 1989, cap. 7).
-- **`fopen(caminho, modo)`**: devolve um `FILE *` ou `NULL` se não abrir. Todo
-  `fopen` leva um `if`; `perror("texto")` mostra o motivo
-  (CELES; RANGEL, 2002).
-- **Escrever**: `fprintf(arq, ...)` é o `printf` com o arquivo na frente;
-  `fputs` grava uma string (sem `\n`) e `fputc`, um caractere
-  (BACKES, 2013, cap. 12).
-- **Ler**: `fgets` traz uma linha com o `\n` e devolve `NULL` no fim; `fscanf`
-  devolve quantos campos leu; `fgetc` devolve `int`, que vale `EOF` no fim
-  (CELES; RANGEL, 2002).
-- **Buffer e `fclose`**: a escrita para numa área da RAM e o `fclose` (ou
-  `fflush`) a descarrega no disco. Se o programa cair antes, perde-se o que
-  estava no buffer (BACKES, 2013, cap. 12).
-- **`stdin`, `stdout`, `stderr`**: `FILE *` já abertos; `printf("oi")` equivale
-  a `fprintf(stdout, "oi")` (FEOFILOFF, 2009, ap. H).
+Todo programa que você escreveu até aqui esquece tudo ao terminar. As
+variáveis moram na RAM, a memória de trabalho do computador, e **somem quando
+o programa acaba**. Se ele calcula as despesas do mês, na próxima execução
+começa do zero. Para lembrar de uma vez para outra, o programa precisa
+guardar os dados no disco, que mantém o conteúdo mesmo com a máquina
+desligada.
+
+É a diferença entre anotar as despesas de cabeça e anotar num caderno. O
+caderno do programa é o **arquivo**: uma sequência de bytes guardada no
+disco, com um nome, que continua lá depois que o programa termina (BACKES,
+2013, cap. 12). Num **arquivo texto**, esses bytes são caracteres que você
+lê num editor comum. O número 152.40 não fica guardado como um `double` de 8
+bytes, mas como os seis caracteres `'1' '5' '2' '.' '4' '0'` (BACKES, 2013,
+cap. 12). O assunto 0068 mostra a outra opção, o arquivo binário.
+
+Trabalhar com arquivo sempre segue três passos: **abrir**, **ler ou
+escrever** e **fechar**. Todas as funções vêm do `<stdio.h>`, o mesmo
+cabeçalho do `printf` (KERNIGHAN; RITCHIE, 1989, cap. 7).
+
+Para abrir, use `fopen(caminho, modo)`. O caminho é o nome do arquivo, como
+`"despesas.txt"` ou `"/tmp/despesas.txt"`. O modo diz o que você quer fazer:
+`"r"` para ler, `"w"` para escrever do zero, `"a"` para acrescentar no fim.
+O `fopen` devolve um `FILE *`, um ponteiro para uma struct que a biblioteca
+usa para controlar o arquivo; você nunca mexe nos campos dela, só passa o
+ponteiro adiante. Se o arquivo não abrir, porque a pasta não existe, falta
+permissão ou o disco encheu, o `fopen` devolve `NULL`. Por isso todo `fopen`
+vem seguido de um `if`, e o `perror("Erro ao abrir")` escreve o motivo, como
+`No such file or directory` (CELES; RANGEL, 2002). A tabela mostra o que
+cada modo faz com um arquivo que existe ou não:
 
 | modo | o que faz | se o arquivo não existe | se já existe |
 | --- | --- | --- | --- |
@@ -28,10 +37,37 @@
 | `"a"` | escrita no fim (*append*) | cria vazio | mantém e escreve depois do fim |
 | `"r+"` `"w+"` `"a+"` | leitura e escrita | como `r`, `w` e `a` | como `r`, `w` e `a` |
 
+Para escrever, você já conhece quase tudo. `fprintf(arq, "Luz %.2f\n",
+98.75)` é o `printf` com o arquivo como primeiro argumento, e usa o mesmo
+molde do assunto 0005. `fputs(texto, arq)` grava uma string inteira, sem
+acrescentar `\n`, e `fputc(c, arq)` grava um caractere (BACKES, 2013,
+cap. 12).
+
+Para ler, há três jeitos, e cada um devolve um valor que diz se deu certo
+(CELES; RANGEL, 2002). `fgets(linha, tamanho, arq)` traz uma linha inteira,
+com o `\n` no fim, e devolve `NULL` quando o arquivo acaba; é o mesmo `fgets`
+do assunto 0042, lendo do arquivo. `fscanf(arq, "%s %lf", nome, &valor)` lê
+campos com formato, como o `scanf`, e devolve quantos campos conseguiu ler.
+`fgetc(arq)` lê um caractere e devolve um `int`, que vale a constante `EOF`
+(*end of file*, fim de arquivo) quando não há mais nada.
+
+Por fim, `fclose(arq)` fecha. Ele importa mais do que parece, por causa do
+**buffer**: o `fprintf` não vai ao disco a cada chamada, porque o disco é
+lento. Ele copia os bytes para uma área na RAM, e só quando essa área enche,
+ou no `fflush(arq)`, ou no `fclose`, os bytes descem para o disco. Se o
+programa cair antes do `fclose`, o que estava no buffer se perde (BACKES,
+2013, cap. 12). Como no `malloc`: abriu, fecha.
+
+Você já usou três arquivos sem abrir nenhum. `stdin` (o teclado), `stdout` (a
+tela) e `stderr` (a saída de erros) são `FILE *` que o programa recebe
+abertos. `printf("oi")` é o mesmo que `fprintf(stdout, "oi")`, e
+`fgets(linha, 100, stdin)` lê do teclado (FEOFILOFF, 2009, ap. H).
+
 > [!WARNING]
 > Não use `while (!feof(arq))`: o `feof` só fica verdadeiro **depois** que uma
 > leitura falhou, e a última linha é processada duas vezes. Teste o retorno da
-> leitura (`fgets(...) != NULL`). Com `fgetc`, guarde em `int`, não em `char`.
+> leitura (`fgets(...) != NULL`, `fscanf(...) == 2`). Com `fgetc`, guarde em
+> `int`, não em `char`: num `char`, o `EOF` (-1) se confunde com um byte real.
 
 {{exemplo}}
 

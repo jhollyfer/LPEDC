@@ -65,26 +65,35 @@ sudo apt install strace     # Debian / Ubuntu
 
 ### Conceito
 
-- **Arquivo**: sequência de bytes guardada no disco. Variáveis moram na RAM e
-  somem quando o programa termina; o arquivo fica (BACKES, 2013, cap. 12).
-- **Arquivo texto**: os bytes são caracteres legíveis no editor. O número
-  152.40 vira `'1' '5' '2' '.' '4' '0'` (BACKES, 2013, cap. 12).
-- **Três passos**: abrir, ler ou escrever, fechar. Tudo vem do `<stdio.h>`
-  (KERNIGHAN; RITCHIE, 1989, cap. 7).
-- **`fopen(caminho, modo)`**: devolve um `FILE *` ou `NULL` se não abrir. Todo
-  `fopen` leva um `if`; `perror("texto")` mostra o motivo
-  (CELES; RANGEL, 2002).
-- **Escrever**: `fprintf(arq, ...)` é o `printf` com o arquivo na frente;
-  `fputs` grava uma string (sem `\n`) e `fputc`, um caractere
-  (BACKES, 2013, cap. 12).
-- **Ler**: `fgets` traz uma linha com o `\n` e devolve `NULL` no fim; `fscanf`
-  devolve quantos campos leu; `fgetc` devolve `int`, que vale `EOF` no fim
-  (CELES; RANGEL, 2002).
-- **Buffer e `fclose`**: a escrita para numa área da RAM e o `fclose` (ou
-  `fflush`) a descarrega no disco. Se o programa cair antes, perde-se o que
-  estava no buffer (BACKES, 2013, cap. 12).
-- **`stdin`, `stdout`, `stderr`**: `FILE *` já abertos; `printf("oi")` equivale
-  a `fprintf(stdout, "oi")` (FEOFILOFF, 2009, ap. H).
+Todo programa que você escreveu até aqui esquece tudo ao terminar. As
+variáveis moram na RAM, a memória de trabalho do computador, e **somem quando
+o programa acaba**. Se ele calcula as despesas do mês, na próxima execução
+começa do zero. Para lembrar de uma vez para outra, o programa precisa
+guardar os dados no disco, que mantém o conteúdo mesmo com a máquina
+desligada.
+
+É a diferença entre anotar as despesas de cabeça e anotar num caderno. O
+caderno do programa é o **arquivo**: uma sequência de bytes guardada no
+disco, com um nome, que continua lá depois que o programa termina (BACKES,
+2013, cap. 12). Num **arquivo texto**, esses bytes são caracteres que você
+lê num editor comum. O número 152.40 não fica guardado como um `double` de 8
+bytes, mas como os seis caracteres `'1' '5' '2' '.' '4' '0'` (BACKES, 2013,
+cap. 12). O assunto 0068 mostra a outra opção, o arquivo binário.
+
+Trabalhar com arquivo sempre segue três passos: **abrir**, **ler ou
+escrever** e **fechar**. Todas as funções vêm do `<stdio.h>`, o mesmo
+cabeçalho do `printf` (KERNIGHAN; RITCHIE, 1989, cap. 7).
+
+Para abrir, use `fopen(caminho, modo)`. O caminho é o nome do arquivo, como
+`"despesas.txt"` ou `"/tmp/despesas.txt"`. O modo diz o que você quer fazer:
+`"r"` para ler, `"w"` para escrever do zero, `"a"` para acrescentar no fim.
+O `fopen` devolve um `FILE *`, um ponteiro para uma struct que a biblioteca
+usa para controlar o arquivo; você nunca mexe nos campos dela, só passa o
+ponteiro adiante. Se o arquivo não abrir, porque a pasta não existe, falta
+permissão ou o disco encheu, o `fopen` devolve `NULL`. Por isso todo `fopen`
+vem seguido de um `if`, e o `perror("Erro ao abrir")` escreve o motivo, como
+`No such file or directory` (CELES; RANGEL, 2002). A tabela mostra o que
+cada modo faz com um arquivo que existe ou não:
 
 | modo | o que faz | se o arquivo não existe | se já existe |
 | --- | --- | --- | --- |
@@ -93,10 +102,37 @@ sudo apt install strace     # Debian / Ubuntu
 | `"a"` | escrita no fim (*append*) | cria vazio | mantém e escreve depois do fim |
 | `"r+"` `"w+"` `"a+"` | leitura e escrita | como `r`, `w` e `a` | como `r`, `w` e `a` |
 
+Para escrever, você já conhece quase tudo. `fprintf(arq, "Luz %.2f\n",
+98.75)` é o `printf` com o arquivo como primeiro argumento, e usa o mesmo
+molde do assunto 0005. `fputs(texto, arq)` grava uma string inteira, sem
+acrescentar `\n`, e `fputc(c, arq)` grava um caractere (BACKES, 2013,
+cap. 12).
+
+Para ler, há três jeitos, e cada um devolve um valor que diz se deu certo
+(CELES; RANGEL, 2002). `fgets(linha, tamanho, arq)` traz uma linha inteira,
+com o `\n` no fim, e devolve `NULL` quando o arquivo acaba; é o mesmo `fgets`
+do assunto 0042, lendo do arquivo. `fscanf(arq, "%s %lf", nome, &valor)` lê
+campos com formato, como o `scanf`, e devolve quantos campos conseguiu ler.
+`fgetc(arq)` lê um caractere e devolve um `int`, que vale a constante `EOF`
+(*end of file*, fim de arquivo) quando não há mais nada.
+
+Por fim, `fclose(arq)` fecha. Ele importa mais do que parece, por causa do
+**buffer**: o `fprintf` não vai ao disco a cada chamada, porque o disco é
+lento. Ele copia os bytes para uma área na RAM, e só quando essa área enche,
+ou no `fflush(arq)`, ou no `fclose`, os bytes descem para o disco. Se o
+programa cair antes do `fclose`, o que estava no buffer se perde (BACKES,
+2013, cap. 12). Como no `malloc`: abriu, fecha.
+
+Você já usou três arquivos sem abrir nenhum. `stdin` (o teclado), `stdout` (a
+tela) e `stderr` (a saída de erros) são `FILE *` que o programa recebe
+abertos. `printf("oi")` é o mesmo que `fprintf(stdout, "oi")`, e
+`fgets(linha, 100, stdin)` lê do teclado (FEOFILOFF, 2009, ap. H).
+
 > [!WARNING]
 > Não use `while (!feof(arq))`: o `feof` só fica verdadeiro **depois** que uma
 > leitura falhou, e a última linha é processada duas vezes. Teste o retorno da
-> leitura (`fgets(...) != NULL`). Com `fgetc`, guarde em `int`, não em `char`.
+> leitura (`fgets(...) != NULL`, `fscanf(...) == 2`). Com `fgetc`, guarde em
+> `int`, não em `char`: num `char`, o `EOF` (-1) se confunde com um byte real.
 
 ### Exemplos de uso
 
@@ -365,23 +401,60 @@ Comprar:
 
 ### Conceito
 
-- **Arquivo binário**: grava os bytes **exatamente como estão na memória**, sem
-  converter em texto. Um `int` ocupa sempre 4 bytes (BACKES, 2013, cap. 12).
-- **Registro de tamanho fixo**: o registro `i` começa no byte
-  `i * sizeof(registro)`, e dá para ir direto a ele
-  (DEITEL; DEITEL, 2011, cap. 11).
-- **Modo com `b`**: `"wb"`, `"rb"`, `"ab"`, `"rb+"`. No Linux não muda nada; no
-  Windows, sem ele, `\n` vira `\r\n` e estraga os bytes (BACKES, 2013, cap. 12).
-- **`fwrite(endereco, tamanho, quantidade, arq)`** e **`fread`**: copiam
-  `tamanho * quantidade` bytes e devolvem **quantos itens** processaram. Menos
-  que o pedido indica fim ou erro (BACKES, 2013, cap. 12).
-- **`fseek(arq, deslocamento, origem)`**: muda a posição a partir de `SEEK_SET`
-  (começo), `SEEK_CUR` (atual) ou `SEEK_END` (fim). Não lê nada: pular para o
-  registro 2 custa o mesmo que para o 2 milhões (DEITEL; DEITEL, 2011, cap. 11).
-- **`ftell`** devolve a posição em bytes e **`rewind`** volta ao byte 0.
-  `fseek` até o fim e `ftell` medem o arquivo (BACKES, 2013, cap. 12).
-- **Busca binária no arquivo**: com registros em ordem, uns 20 `fread` acham
-  um em 1 milhão, sem carregar tudo na RAM (assunto 0090) (ZIVIANI, 2010).
+O arquivo texto tem um limite. Cada linha tem um tamanho diferente: "Luz
+98.75" tem 9 caracteres, "Internet 99.90" tem 14. Para chegar à linha 500, o
+programa precisa ler as 499 anteriores, contando os `\n`, porque não há como
+saber em que byte ela começa. E cada número passa por uma conversão na ida
+(`double` para texto) e outra na volta (texto para `double`).
+
+Pense no estoque do mercadinho guardado em fichas todas do mesmo tamanho,
+numa gaveta. Para pegar a terceira ficha, ninguém lê as duas primeiras: mede
+com o dedo e puxa. O **arquivo binário** permite isso. Ele grava os bytes
+**exatamente como estão na memória**, sem converter nada em texto, e por
+isso um `int` ocupa sempre 4 bytes no disco, e uma struct ocupa sempre o seu
+`sizeof` (BACKES, 2013, cap. 12).
+
+Quando todos os registros têm o mesmo tamanho, a posição de cada um vira uma
+conta. Um **registro** aqui é uma struct gravada no arquivo, como um
+`Produto` de 32 bytes. O registro 0 começa no byte 0, o registro 1 no byte
+32, e o registro `i` começa no byte `i * sizeof(Produto)` (DEITEL; DEITEL,
+2011, cap. 11). Com essa conta, o programa vai direto ao registro que quer.
+
+Para abrir um arquivo binário, acrescente um `b` ao modo: `"wb"`, `"rb"`,
+`"ab"`, `"rb+"`. No Linux e no Mac, o `b` não muda nada. No Windows, sem ele,
+a biblioteca troca cada `\n` por `\r\n` ao gravar, e qualquer byte de valor
+10 no meio de um número sai estragado (BACKES, 2013, cap. 12). Escreva o `b`
+sempre, e o programa funciona nos dois sistemas.
+
+Para gravar, use `fwrite(endereco, tamanho, quantidade, arq)`. Ele copia
+`tamanho * quantidade` bytes a partir do endereço que você deu. Uma variável
+ou uma struct vai com `&` (`fwrite(&p, sizeof p, 1, arq)`); um vetor já é
+endereço e vai sem `&` (`fwrite(estoque, sizeof(Produto), 3, arq)` grava os
+três produtos de uma vez). O `fread`, com os mesmos argumentos, faz o caminho
+de volta. Os dois devolvem **quantos itens** processaram, e não quantos
+bytes. Se o `fread` devolver menos que o pedido, o arquivo acabou ou deu erro,
+e é esse retorno que vai na condição do `while` (BACKES, 2013, cap. 12).
+
+Para pular até um registro, use `fseek(arq, deslocamento, origem)`. A origem
+diz de onde contar: `SEEK_SET` é o começo do arquivo, `SEEK_CUR` é a posição
+atual e `SEEK_END` é o fim. O deslocamento é um `long` e pode ser negativo.
+`fseek(arq, 2 * sizeof(Produto), SEEK_SET)` põe a posição no byte 64, e o
+próximo `fread` traz o registro 2. O `fseek` não lê nada: ele só troca um
+número guardado no `FILE`. Pular para o registro 2 custa o mesmo que pular
+para o registro 2 milhões (DEITEL; DEITEL, 2011, cap. 11).
+
+Duas funções completam o conjunto. `ftell(arq)` devolve a posição atual em
+bytes, e `rewind(arq)` volta ao byte 0. Juntando `fseek(arq, 0, SEEK_END)` e
+`ftell(arq)`, você mede o arquivo; dividindo pelo `sizeof` do registro,
+descobre quantos registros ele tem (BACKES, 2013, cap. 12).
+
+O acesso direto abre uma possibilidade grande. Com os registros gravados em
+ordem de código, dá para fazer **busca binária direto no arquivo**: `fseek`
+no registro do meio, `fread`, compara, descarta a metade que não serve e
+repete. Uns 20 `fread` acham um registro entre 1 milhão, sem carregar o
+arquivo na RAM (ZIVIANI, 2010). A busca binária é o assunto 0090.
+
+A tabela resume o que muda entre os dois tipos de arquivo:
 
 | | texto (`fprintf`) | binário (`fwrite`) |
 | --- | --- | --- |
@@ -393,8 +466,9 @@ Comprar:
 
 > [!WARNING]
 > `fwrite` copia bytes, não dados. Struct com ponteiro (`char *nome`) grava o
-> **endereço**, que não vale na próxima execução: use `char nome[20]`. E um
-> `.bin` pode não ser lido igual em outra máquina; para trocar dados, use texto.
+> **endereço**, que não aponta para nada na próxima execução: use
+> `char nome[20]`. E um `.bin` pode não ser lido igual em outra máquina
+> (tamanho do `int`, alinhamento, ordem dos bytes): para trocar dados, use texto.
 
 ### Exemplos de uso
 
@@ -676,34 +750,71 @@ Saldo: R$ 1876.20
 
 ### Conceito
 
-- **Argumentos da linha de comando**: dados que vão junto do comando, como em
-  `cp origem destino`. Chegam como parâmetros do `main`
-  (BACKES, 2013, cap. 13).
+Fim do rodízio de pizza, conta de R$ 187,40 para 4 pessoas. Um programa
+poderia perguntar o total e o número de pessoas com `scanf`. Mas repare nos
+programas de terminal que você já usa: `cp origem destino`,
+`gcc -o prog prog.c`, `git commit -m "msg"`. Nenhum deles pergunta nada. Os
+dados vão escritos **junto do comando**, na mesma linha, e o programa já
+começa sabendo o que fazer. Isso permite usar o programa dentro de scripts,
+sem ninguém digitando.
+
+É como pedir um café no balcão já dizendo tudo de uma vez: "um expresso
+duplo, sem açúcar". O atendente não precisa fazer perguntas. Os dados que vão
+junto do comando se chamam **argumentos da linha de comando**, e no C eles
+chegam como parâmetros do `main` (BACKES, 2013, cap. 13). Até aqui o `main`
+tinha `void` entre os parênteses; para receber argumentos, ele ganha dois
+parâmetros:
 
 ```c
 int main(int argc, char *argv[])
 ```
 
-- **`argc`** (*argument count*): quantos itens vieram, **contando o nome do
-  programa**. Vale pelo menos 1 (FEOFILOFF, 2009, ap. H).
-- **`argv`** (*argument vector*): vetor de `char *`, uma string por item.
-  `argv[0]` é o nome do programa e `argv[argc]` é `NULL`
-  (KERNIGHAN; RITCHIE, 1989).
-- **Shell**: corta a linha antes de o programa começar. Separa nos espaços,
-  tira as aspas e expande coringas: `"São Paulo"` chega como um argumento só.
-- **Tudo é texto**: o `4` chega como `"4"`. `strtol(texto, &fim, 10)` e
-  `strtod(texto, &fim)` convertem e apontam `fim` para o que sobrou; se
-  `*fim != '\0'`, veio lixo (LINUX MAN-PAGES PROJECT, s.d.).
-- **`atoi` e `atof`**: não avisam erro, `atoi("quatro")` devolve 0. Servem para
-  teste rápido (BACKES, 2013, cap. 13).
-- **`stderr` e código de saída**: erros vão para `stderr`, que aparece mesmo com
-  `> saida.txt`. O `return` do `main` é 0 no sucesso e outro valor na falha; o
-  shell guarda em `$?` (BACKES, 2013, cap. 12).
+O primeiro, `argc` (*argument count*, contagem de argumentos), diz quantos
+itens vieram na linha, **contando o nome do programa**. Por isso ele vale
+pelo menos 1 (FEOFILOFF, 2009, ap. H). Em `./racha 187.40 4`, `argc` vale 3:
+o nome do programa e os dois números.
+
+O segundo, `argv` (*argument vector*, vetor de argumentos), é um vetor de
+`char *`, com uma string por item. `argv[0]` é o nome do programa,
+`./racha`; `argv[1]` é `"187.40"`, o primeiro argumento seu; `argv[2]` é
+`"4"`. Depois do último vem `argv[argc]`, que vale `NULL` e marca o fim do
+vetor, do mesmo jeito que o `'\0'` marca o fim de uma string (KERNIGHAN;
+RITCHIE, 1989). Como vetor em parâmetro vira ponteiro, `char **argv` é outra
+forma de escrever a mesma coisa.
+
+Quem separa a linha em pedaços não é o seu programa, é o **shell**, o
+programa que lê o que você digita no terminal (bash, zsh). Antes de o seu
+programa começar, o shell corta a linha nos espaços, tira as aspas e troca
+coringas como `*` pelos nomes de arquivos. Assim, `"São Paulo"` entre aspas
+chega como um argumento só; sem aspas, chega como dois. E o `> saida.txt` de
+um redirecionamento é tratado pelo shell e nem aparece no `argv`.
+
+Tudo no `argv` é **texto**. O `4` chega como a string `"4"`, e
+`argv[2] * 2` nem compila. Para virar número, é preciso converter. A função
+`strtol(texto, &fim, 10)` converte para `long` na base 10, e
+`strtod(texto, &fim)` converte para `double`. As duas apontam `fim` para o
+primeiro caractere que não conseguiram converter. Se `*fim` não for `'\0'`,
+sobrou lixo no texto, como em `"4x"` ou `"quatro"`, e o programa pode recusar
+a entrada (LINUX MAN-PAGES PROJECT, s.d.).
+
+Existem atalhos mais curtos, `atoi` e `atof`, mas eles não avisam erro:
+`atoi("quatro")` devolve 0, igual a `atoi("0")`, e o programa não tem como
+saber se o usuário digitou zero ou bobagem. Servem para um teste rápido, não
+para entrada de usuário (BACKES, 2013, cap. 13).
+
+Dois costumes de programas de terminal fecham o assunto (BACKES, 2013,
+cap. 12). Mensagens de erro vão para o `stderr`, com
+`fprintf(stderr, ...)`. Quem redireciona a saída para um arquivo continua
+vendo o erro na tela, porque o `>` só desvia o `stdout`. E o `return` do
+`main` vira o **código de saída** do programa: 0 quer dizer sucesso, e
+qualquer outro valor quer dizer falha. O shell guarda esse número na variável
+`$?`, e o `&&` só roda o comando seguinte se o anterior devolveu 0.
 
 > [!WARNING]
 > Nunca use `argv[1]` sem conferir o `argc`: sem argumentos, ele é `NULL` e
 > `atoi(NULL)` derruba o programa. E em `./calc 9 * 3` o shell troca o `*`
-> pelos nomes dos arquivos da pasta; use aspas (`'*'`) ou `x`.
+> pelos nomes dos arquivos da pasta antes de o programa rodar; use aspas
+> (`'*'`) ou outro símbolo, como `x`.
 
 ### Exemplos de uso
 
@@ -972,28 +1083,69 @@ Saída esperada (em stderr):
 
 ### Conceito
 
-- **Argumentos** (0069): `argv[1]` diz **o que** fazer e os seguintes trazem os
-  dados, como nos subcomandos do `git`. O `main` confere o `argc` e chama a
-  função certa (FEOFILOFF, 2009, ap. H).
-- **Arquivo binário** (0068): cada gasto é um registro `Gasto` de tamanho fixo,
-  gravado com `fwrite` em modo `"ab"`, sempre no fim. `ftell / sizeof(Gasto)`
-  diz quantos já existem (DEITEL; DEITEL, 2011, cap. 11).
-- **Arquivo texto** (0067): o `exporta` lê os registros e escreve com `fprintf`
-  um **CSV** separado por `;`, que as planilhas abrem direto
-  (BACKES, 2013, cap. 12).
-- **Validar antes de gravar**: `strtod` com `*fim != '\0'` impede que "abc"
-  entre como R$ 0,00 (LINUX MAN-PAGES PROJECT, s.d.).
-- **Não gravar lixo**: o `memset` zera `categoria` antes do `strncpy`, então os
-  bytes que sobram são zeros, não restos da pilha.
-- **Arquivo inexistente nem sempre é erro**: no `lista`, significa "nenhum
-  gasto ainda".
-- **`"ab"` vai sempre para o fim**, mesmo depois de um `fseek`: dois programas
-  anotando ao mesmo tempo não se sobrescrevem (LINUX MAN-PAGES PROJECT, s.d.).
+Fim de mês, e a pergunta de sempre: para onde foi o dinheiro? Com o que o
+módulo mostrou, você monta um controle de gastos de terminal. Cada comando é
+uma execução separada do programa, e os dados ficam guardados num arquivo
+entre uma execução e outra:
+
+```bash
+gastos novo mercado 152.40     # anota um gasto
+gastos lista                   # mostra tudo e o total
+gastos exporta /tmp/gastos.csv # gera uma planilha
+gastos limpa                   # começa do zero
+```
+
+Pense numa caderneta de papel que mora na gaveta. Cada vez que você gasta,
+abre, anota no fim e guarda. No fim do mês, abre e soma. O programa faz o
+mesmo, e cada peça do módulo cuida de uma parte do trabalho.
+
+A primeira peça são os argumentos do assunto 0069. O `argv[1]` diz **o que**
+fazer (`novo`, `lista`, `exporta`, `limpa`), e os argumentos seguintes trazem
+os dados daquele comando. É o mesmo arranjo do `git`, um programa só com
+vários **subcomandos** (`git commit`, `git log`). O `main` confere o `argc`,
+compara o `argv[1]` com cada nome e chama a função certa; se nada bater, ou
+se faltar argumento, mostra a mensagem de uso (FEOFILOFF, 2009, ap. H).
+
+A segunda peça é o arquivo binário do assunto 0068, que serve de caderneta.
+Cada gasto é um registro `Gasto`, de tamanho fixo, gravado com `fwrite`. O
+modo `"ab"` abre para acrescentar no fim, sem ler nem apagar o que já existe.
+Como todos os registros têm o mesmo tamanho, `ftell(arq) / sizeof(Gasto)`
+diz quantos já estão gravados: logo depois de gravar o terceiro, a posição é
+96 e a conta dá 3 (DEITEL; DEITEL, 2011, cap. 11).
+
+A terceira peça é o arquivo texto do assunto 0067, para a exportação.
+Ninguém abre um `.dat` numa planilha. O comando `exporta` lê os registros
+binários com `fread` e escreve cada um com `fprintf` numa linha de **CSV**
+(*comma-separated values*, valores separados por um sinal), um formato de
+texto em que cada linha é uma linha da planilha e um separador divide as
+colunas. Aqui o separador é o `;`, que as planilhas em português abrem direto
+(BACKES, 2013, cap. 12).
+
+Quem guarda dados precisa de três cuidados. O primeiro é **validar antes de
+gravar**: `strtod` com o teste `*fim != '\0'` impede que um "abc" digitado
+por engano entre na caderneta como R$ 0,00 (LINUX MAN-PAGES PROJECT, s.d.).
+Depois de gravado, o erro fica lá para sempre.
+
+O segundo cuidado é **não gravar lixo**. O campo `categoria` tem 20 bytes, e
+"luz" ocupa só 4 com o `'\0'`. Os outros 16 guardariam o que estivesse antes
+naquela parte da memória. O `memset` zera o campo inteiro antes do
+`strncpy`, e os bytes que sobram vão para o arquivo como zeros.
+
+O terceiro é lembrar que **arquivo inexistente nem sempre é erro**. Se o
+`fopen` em `"rb"` devolve `NULL` no comando `lista`, quase sempre quer dizer
+que ninguém anotou nada ainda. O programa responde "Nenhum gasto ainda." e
+termina com sucesso, em vez de mostrar uma mensagem de falha.
+
+Um detalhe do modo `"ab"` protege a caderneta: nele, **toda** escrita vai
+para o fim do arquivo, mesmo que alguém tenha chamado `fseek` antes. O
+sistema garante isso, e por isso dois programas anotando gastos ao mesmo
+tempo não escrevem um por cima do outro (LINUX MAN-PAGES PROJECT, s.d.).
 
 > [!WARNING]
-> Trocar `"ab"` por `"wb"` no `novo` apaga os gastos anteriores, sem aviso. E não
-> leia, por outro `FILE *`, o que acabou de escrever antes do `fclose` (ou
-> `fflush`): os bytes ainda estão no buffer.
+> Trocar `"ab"` por `"wb"` no `novo` apaga os gastos anteriores a cada
+> anotação, sem aviso. E não leia, por outro `FILE *`, o que acabou de
+> escrever antes do `fclose` (ou `fflush`): os bytes ainda estão no buffer, e
+> a leitura acha o arquivo vazio ou pela metade.
 
 ### Exemplos de uso
 

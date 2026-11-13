@@ -1,27 +1,68 @@
 ## 0070 · Juntando tudo: a caderneta de gastos
 
-- **Argumentos** (0069): `argv[1]` diz **o que** fazer e os seguintes trazem os
-  dados, como nos subcomandos do `git`. O `main` confere o `argc` e chama a
-  função certa (FEOFILOFF, 2009, ap. H).
-- **Arquivo binário** (0068): cada gasto é um registro `Gasto` de tamanho fixo,
-  gravado com `fwrite` em modo `"ab"`, sempre no fim. `ftell / sizeof(Gasto)`
-  diz quantos já existem (DEITEL; DEITEL, 2011, cap. 11).
-- **Arquivo texto** (0067): o `exporta` lê os registros e escreve com `fprintf`
-  um **CSV** separado por `;`, que as planilhas abrem direto
-  (BACKES, 2013, cap. 12).
-- **Validar antes de gravar**: `strtod` com `*fim != '\0'` impede que "abc"
-  entre como R$ 0,00 (LINUX MAN-PAGES PROJECT, s.d.).
-- **Não gravar lixo**: o `memset` zera `categoria` antes do `strncpy`, então os
-  bytes que sobram são zeros, não restos da pilha.
-- **Arquivo inexistente nem sempre é erro**: no `lista`, significa "nenhum
-  gasto ainda".
-- **`"ab"` vai sempre para o fim**, mesmo depois de um `fseek`: dois programas
-  anotando ao mesmo tempo não se sobrescrevem (LINUX MAN-PAGES PROJECT, s.d.).
+Fim de mês, e a pergunta de sempre: para onde foi o dinheiro? Com o que o
+módulo mostrou, você monta um controle de gastos de terminal. Cada comando é
+uma execução separada do programa, e os dados ficam guardados num arquivo
+entre uma execução e outra:
+
+```bash
+gastos novo mercado 152.40     # anota um gasto
+gastos lista                   # mostra tudo e o total
+gastos exporta /tmp/gastos.csv # gera uma planilha
+gastos limpa                   # começa do zero
+```
+
+Pense numa caderneta de papel que mora na gaveta. Cada vez que você gasta,
+abre, anota no fim e guarda. No fim do mês, abre e soma. O programa faz o
+mesmo, e cada peça do módulo cuida de uma parte do trabalho.
+
+A primeira peça são os argumentos do assunto 0069. O `argv[1]` diz **o que**
+fazer (`novo`, `lista`, `exporta`, `limpa`), e os argumentos seguintes trazem
+os dados daquele comando. É o mesmo arranjo do `git`, um programa só com
+vários **subcomandos** (`git commit`, `git log`). O `main` confere o `argc`,
+compara o `argv[1]` com cada nome e chama a função certa; se nada bater, ou
+se faltar argumento, mostra a mensagem de uso (FEOFILOFF, 2009, ap. H).
+
+A segunda peça é o arquivo binário do assunto 0068, que serve de caderneta.
+Cada gasto é um registro `Gasto`, de tamanho fixo, gravado com `fwrite`. O
+modo `"ab"` abre para acrescentar no fim, sem ler nem apagar o que já existe.
+Como todos os registros têm o mesmo tamanho, `ftell(arq) / sizeof(Gasto)`
+diz quantos já estão gravados: logo depois de gravar o terceiro, a posição é
+96 e a conta dá 3 (DEITEL; DEITEL, 2011, cap. 11).
+
+A terceira peça é o arquivo texto do assunto 0067, para a exportação.
+Ninguém abre um `.dat` numa planilha. O comando `exporta` lê os registros
+binários com `fread` e escreve cada um com `fprintf` numa linha de **CSV**
+(*comma-separated values*, valores separados por um sinal), um formato de
+texto em que cada linha é uma linha da planilha e um separador divide as
+colunas. Aqui o separador é o `;`, que as planilhas em português abrem direto
+(BACKES, 2013, cap. 12).
+
+Quem guarda dados precisa de três cuidados. O primeiro é **validar antes de
+gravar**: `strtod` com o teste `*fim != '\0'` impede que um "abc" digitado
+por engano entre na caderneta como R$ 0,00 (LINUX MAN-PAGES PROJECT, s.d.).
+Depois de gravado, o erro fica lá para sempre.
+
+O segundo cuidado é **não gravar lixo**. O campo `categoria` tem 20 bytes, e
+"luz" ocupa só 4 com o `'\0'`. Os outros 16 guardariam o que estivesse antes
+naquela parte da memória. O `memset` zera o campo inteiro antes do
+`strncpy`, e os bytes que sobram vão para o arquivo como zeros.
+
+O terceiro é lembrar que **arquivo inexistente nem sempre é erro**. Se o
+`fopen` em `"rb"` devolve `NULL` no comando `lista`, quase sempre quer dizer
+que ninguém anotou nada ainda. O programa responde "Nenhum gasto ainda." e
+termina com sucesso, em vez de mostrar uma mensagem de falha.
+
+Um detalhe do modo `"ab"` protege a caderneta: nele, **toda** escrita vai
+para o fim do arquivo, mesmo que alguém tenha chamado `fseek` antes. O
+sistema garante isso, e por isso dois programas anotando gastos ao mesmo
+tempo não escrevem um por cima do outro (LINUX MAN-PAGES PROJECT, s.d.).
 
 > [!WARNING]
-> Trocar `"ab"` por `"wb"` no `novo` apaga os gastos anteriores, sem aviso. E não
-> leia, por outro `FILE *`, o que acabou de escrever antes do `fclose` (ou
-> `fflush`): os bytes ainda estão no buffer.
+> Trocar `"ab"` por `"wb"` no `novo` apaga os gastos anteriores a cada
+> anotação, sem aviso. E não leia, por outro `FILE *`, o que acabou de
+> escrever antes do `fclose` (ou `fflush`): os bytes ainda estão no buffer, e
+> a leitura acha o arquivo vazio ou pela metade.
 
 {{exemplo}}
 
