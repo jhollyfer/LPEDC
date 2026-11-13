@@ -1,40 +1,36 @@
 ## 0134 · Seleção de intervalos
 
-A quadra do condomínio atende uma reserva por vez, e no sábado chegaram nove
-pedidos, cada um com início e fim. Alguns horários se chocam. O síndico quer
-aceitar o **maior número possível** de pedidos. Quais?
+- **Seleção de atividades**: dado um conjunto de intervalos `[início, fim)`,
+  achar o maior subconjunto sem sobreposição (CORMEN et al., 2024, cap. 15).
+- **Critério guloso**: aceitar primeiro quem **termina** mais cedo. Ele
+  devolve o recurso mais cedo e deixa mais espaço para os outros
+  (CORMEN et al., 2024, cap. 15).
+- **Prova por troca**: numa escolha ótima, troque o primeiro intervalo pelo
+  que termina primeiro; ele não choca com os outros e o tamanho se mantém. É o
+  argumento de "ficar à frente" (KLEINBERG; TARDOS, 2006, cap. 4).
+- **`GREEDY-ACTIVITY-SELECTOR`**: ordene pelo fim; guarde `livre_em` (começa
+  em 0); aceite quem começa em `livre_em` ou depois e mova `livre_em` para o
+  fim dele (CORMEN et al., 2024, cap. 15).
+- **Custo**: a ordenação, O(n log n), mais uma passada O(n). Testar todos os
+  subconjuntos seria O(2ⁿ) (CORMEN et al., 2024, cap. 15).
+- **Intervalo semiaberto**: quem sai às 10h libera às 10h, por isso o teste é
+  `ini >= livre_em`, com o igual (CORMEN et al., 2024, cap. 15).
 
-É a **seleção de atividades**: dado um conjunto de intervalos `[início, fim)`,
-achar o maior subconjunto sem sobreposição.
+> [!WARNING]
+> Os outros critérios falham sem erro, só com resposta pior. "Começa primeiro"
+> pega um pedido longo que bloqueia o dia; "mais curto primeiro" pode pegar um
+> que choca com dois outros que cabiam juntos.
 
-Testar todos os subconjuntos (0125) dá 512 casos para nove pedidos e mais de
-um bilhão para trinta. Um **guloso** ordena uma vez, mas por qual critério?
+{{exemplo}}
 
-- aceitar primeiro quem **começa** mais cedo;
-- aceitar primeiro o pedido mais **curto**;
-- aceitar primeiro quem **termina** mais cedo.
-
-Só o terceiro funciona sempre: o pedido que termina primeiro **devolve a
-quadra mais cedo** e deixa mais espaço. A prova é uma troca: numa escolha
-ótima, troque o primeiro pedido pelo que termina primeiro. Ele termina antes
-(ou junto), não choca com os outros e a escolha mantém o tamanho.
-
-O algoritmo (`GREEDY-ACTIVITY-SELECTOR`, do Cormen):
-
-1. **ordene** os pedidos pela hora de **fim**;
-2. guarde a hora em que a quadra fica livre (`livre_em`, começando em 0);
-3. percorra os pedidos: se começa em `livre_em` ou depois, **aceite** e mova
-   `livre_em` para o fim dele; senão, recuse.
-
-O custo é a ordenação, O(n log n), mais uma passada O(n).
-
-No desenho, verdes foram aceitas e cinzas chocaram com alguém aceito. O pedido
-da Iara (7h às 17h) seria o primeiro pelo critério "começa antes":
+Nove pedidos de reserva da quadra do condomínio no sábado. No desenho, verdes
+foram aceitos e cinzas chocaram com alguém aceito. O pedido da Iara (7h às 17h)
+seria o primeiro pelo critério "começa antes":
 
 {{ideia}}
 
-Os pedidos são structs, ordenados com `qsort` (0096) por uma função que
-compara os fins:
+Os pedidos são structs, ordenados com `qsort` (0096) pelo fim. A comparação
+usa `(x > y) - (x < y)`, que não estoura como a subtração:
 
 ```c
 #include <stdio.h>
@@ -89,28 +85,8 @@ int main(void) {
 // Reservas aceitas: 5 de 9
 ```
 
-A Carla (10h às 11h) entra logo depois da Ana (8h às 10h): os intervalos são
-**semiabertos** e a Ana libera a quadra às 10h. Por isso o teste é
-`ini >= livre_em`, com o igual.
-
-No fluxograma, depois da ordenação, o laço tem uma pergunta só. O caminho
-marcado mostra a Ana aceita e o Bruno recusado:
+"Começa primeiro" aceitaria a Iara e depois só o Hugo: 1 pedido em vez de 5.
+Depois da ordenação, o laço tem uma pergunta só; o caminho marcado mostra a
+Ana aceita e o Bruno recusado:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Os outros critérios falham. "Começa primeiro" aceita a Iara (7h às 17h) e
-> depois só o Hugo cabe: 1 pedido em vez de 5. "Mais curto primeiro" falha com
-> 8h às 12h, 11h às 13h e 12h às 16h: o mais curto (11h às 13h) choca com os
-> outros dois, que cabem juntos. O programa roda sem reclamar; só a resposta
-> piora.
-
-> [!TIP]
-> **Por dentro do C:** compare com `(x > y) - (x < y)`, e não
-> `x->fim - y->fim`: a subtração pode estourar o `int`.
-
-> [!NOTE]
-> **Pergunta para você:** se o pedido do Hugo fosse das 14h às 18h, quantas
-> reservas seriam aceitas? Quais? E se fosse das 16h às 18h?
-
-{{pratique}}

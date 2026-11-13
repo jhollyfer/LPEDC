@@ -1,31 +1,36 @@
 ## 0137 · Juntando tudo
 
-A feira do bairro manda a lista de preços por um rádio lento, e cada byte
-economizado conta. Um **compactador** grava uma versão menor de um arquivo e
-um **descompactador** devolve o original, byte por byte.
+- **Compactador**: grava uma versão menor de um arquivo; o
+  **descompactador** devolve o original, byte por byte
+  (SZWARCFITER; MARKENZON, 2010).
+- **Bits de verdade**: o código vira bits, juntados 8 por vez num
+  `unsigned char` com `<<` e `|`; o último byte quase nunca enche e vai
+  completado com zeros (KERNIGHAN; RITCHIE, 1989).
+- **Cabeçalho**: o arquivo começa com a assinatura `HUF1`, o tamanho original
+  e as 256 frequências, para o descompactador montar a **mesma** árvore
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, seção 5.3).
+- **Fim dos dados**: os zeros do último byte não são dados; o descompactador
+  para ao escrever o tamanho original (LINTZMAYER; MOTA, 2023).
+- **Duas leituras**: o compactador conta as frequências e depois, com a
+  árvore pronta, troca cada byte pelo código; `rewind` volta ao começo
+  (KERNIGHAN; RITCHIE, 1989).
+- **Decodificar**: anda na árvore bit a bit (`0` esquerda, `1` direita); na
+  folha, escreve o byte e volta à raiz (CORMEN et al., 2024, cap. 15).
+- **Tamanho fixo**: `uint64_t` e `uint32_t` de `stdint.h` têm sempre o mesmo
+  tamanho; `long` varia entre sistemas (CPPREFERENCE, s.d.).
+- **Limite**: nenhum código sem perda comprime abaixo da **entropia** da
+  fonte (SHANNON, 1948).
 
-O Huffman do 0136 usava códigos em texto (`"1110"`). Num arquivo, o código
-vira **bits de verdade**, e surgem três problemas:
+> [!WARNING]
+> Sem o `descarrega` no fim, os bits do byte incompleto se perdem. Teste a ida
+> e volta comparando **byte a byte**, e abra os arquivos em modo binário
+> (`"rb"`, `"wb"`).
 
-- **o arquivo é feito de bytes**: junte os bits, 8 por vez, num `unsigned
-  char` e grave-o quando enche. O último quase nunca enche e vai com zeros;
-- **o descompactador precisa da mesma árvore**: o arquivo começa com um
-  **cabeçalho** (assinatura `HUF1`, tamanho original e 256 frequências), e o
-  `huf_constroi` desempata sempre igual;
-- **os zeros do fim não são dados**: o descompactador para ao escrever o
-  tamanho original.
+{{exemplo}}
 
-O compactador lê o arquivo **duas vezes**: conta as frequências e, com a
-árvore pronta, troca cada byte pelo código. O descompactador monta a árvore
-do cabeçalho e anda nela bit a bit (`0` esquerda, `1` direita); na folha,
-escreve o byte e volta à raiz.
-
-O projeto reúne `fread`/`fwrite` (0068), bits (0065), árvore binária (0098),
-heap (0102), Huffman (0136) e TADs (0074). O `compactador.h` oferece
-`huf_compacta` e `huf_descompacta`.
-
-A lista da feira (6 linhas repetidas 40 vezes) tem 9560 bytes e compactada,
-6156: 1036 de cabeçalho e 5120 de bits:
+A feira do bairro manda a lista de preços por um rádio lento. A lista (6
+linhas repetidas 40 vezes) tem 9560 bytes; compactada, 6156: 1036 de
+cabeçalho e 5120 de bits:
 
 {{ideia}}
 
@@ -121,30 +126,8 @@ int main(void) {
 // feira2.txt: 9560 bytes, igual ao original
 ```
 
-Os bits ocupam 53,6% do original, porque há poucos símbolos e alguns muito
-frequentes. O cabeçalho é um custo fixo: pesado em arquivos pequenos,
-irrelevante nos grandes.
-
-No fluxograma do `huf_descompacta`, cada byte começa na raiz e lê bits até uma
-folha; o laço de fora para no tamanho original:
+O cabeçalho é custo fixo: pesado em arquivo pequeno, irrelevante nos grandes.
+No `huf_descompacta`, cada byte começa na raiz e lê bits até uma folha; o laço
+de fora para no tamanho original:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Sem o `descarrega` no fim, os bits do byte incompleto (até 7) se perdem. O
-> teste de ida e volta pega o erro: compare **byte a byte**, como o `iguais`.
-> Abra os arquivos em modo binário (`"rb"`, `"wb"`): no Windows, em modo texto,
-> o byte 26 é lido como fim de arquivo.
-
-> [!TIP]
-> **Por dentro do C:** o cabeçalho usa `uint64_t` e `uint32_t` (`stdint.h`)
-> porque o tamanho de `long` varia (8 bytes no Linux de 64 bits, 4 no
-> Windows): são sempre 4 + 8 + 1024 = 1036 bytes. O `rewind` volta ao começo
-> para a segunda leitura.
-
-> [!NOTE]
-> **Pergunta para você:** um arquivo tem as 26 letras maiúsculas, cada uma
-> repetida 100 vezes (2600 bytes). Quantos bits o Huffman dá a cada letra, e
-> quantos bytes tem o `.huf`? Compensa compactar? Calcule e depois teste.
-
-{{pratique}}

@@ -1,39 +1,34 @@
 ## 0131 · Divisão e conquista
 
-Uma corrente do grupo da família: quem recebe repassa para 3 contatos.
-Quantas mensagens saem na rodada 20? A conta é 3²⁰, e um laço que multiplica
-por 3 vinte vezes gasta multiplicação demais.
+- **Divisão e conquista** (*divide and conquer*): resolve o problema
+  quebrando-o em pedaços menores do mesmo tipo (CORMEN et al., 2024, cap. 4).
+- **Três passos**: **dividir** em pedaços menores; **conquistar** cada pedaço
+  com a própria função (recursão, assunto 0032); **combinar** as respostas
+  (CORMEN et al., 2024, cap. 4).
+- **Caso base**: o pedaço pequeno o bastante para resolver direto
+  (ZIVIANI, 2010, cap. 2).
+- **Onde fica o esforço**: o merge sort (0094) gasta na combinação; o quick
+  sort (0095), na divisão, e não combina; a busca binária (0090) descarta uma
+  metade (FEOFILOFF, 2009).
+- **Potência rápida**: xⁿ = (x^(n/2))², com mais um `x` se `n` é ímpar. O
+  caso base é `n == 0`, pois x⁰ = 1 (LINTZMAYER; MOTA, 2023).
+- **Custo**: T(n) = T(n/2) + O(1), que dá **O(log n)** pelo teorema mestre
+  (assunto 0115). Para n = 1 milhão, uns 20 níveis (CORMEN et al., 2024, cap. 4).
+- **Pedaços repetidos**: divisão e conquista só compensa quando os pedaços
+  **não se repetem** (ZIVIANI, 2010, cap. 2).
 
-Mas 3²⁰ = 3¹⁰ · 3¹⁰: quem sabe 3¹⁰ resolve 3²⁰ com **uma** multiplicação. E
-3¹⁰ = 3⁵ · 3⁵, e 3⁵ = 3² · 3² · 3 (expoente ímpar deixa sobrar um 3). O
-problema vira outro do mesmo tipo, com metade do tamanho.
+> [!WARNING]
+> `return potencia(x, n / 2) * potencia(x, n / 2);` dá o resultado certo, mas
+> faz **duas** chamadas por nível: T(n) = 2T(n/2) + O(1), que é O(n). Guarde a
+> metade numa variável.
 
-Essa é a **divisão e conquista** (*divide and conquer*), com três passos que
-você já viu no merge sort (0094):
+{{exemplo}}
 
-1. **dividir**: quebre o problema em pedaços menores do mesmo tipo;
-2. **conquistar**: resolva cada pedaço com a própria função (recursão, 0032).
-   Pedaço pequeno o bastante é o **caso base**, resolvido direto;
-3. **combinar**: junte as respostas dos pedaços na resposta do todo.
-
-A busca binária (0090) divide e descarta uma metade. O merge sort gasta o
-esforço na combinação; o quick sort (0095), na divisão, e não combina nada.
-
-Na potência, dividir é cortar o expoente ao meio e combinar é elevar ao
-quadrado (com mais um `x` se o expoente é ímpar). O caso base é `n == 0`,
-porque x⁰ = 1.
-
-Cada chamada corta `n` pela metade: T(n) = T(n/2) + O(1), que dá
-**O(log n)** pelo assunto 0115. Para n = 1 milhão, são uns 20 níveis contra
-1 milhão de voltas do laço.
-
-No desenho, a recursão desce dividindo o expoente (20, 10, 5, 2, 1, 0) e sobe
-combinando: o 1 do caso base vira 3, 9, 243, e assim até 3²⁰.
+Numa corrente de mensagens, cada um repassa para 3 contatos: na rodada 20,
+saem 3²⁰. A recursão desce dividindo o expoente (20, 10, 5, 2, 1, 0) e sobe
+combinando: o 1 do caso base vira 3, 9, 243, até 3²⁰.
 
 {{ideia}}
-
-O `printf` mostra cada resultado parcial quando a chamada termina, e `mult`
-soma as multiplicações:
 
 ```c
 #include <stdio.h>
@@ -74,27 +69,8 @@ int main(void) {
 // 7 multiplicações (o laço simples faria 19)
 ```
 
-Os resultados saem de baixo para cima, pela pilha de chamadas (0031).
-
-O fluxograma segue a chamada com `n = 20`: ela chama a si mesma com 10,
-recebe 59049 e, como 20 é par, só eleva ao quadrado:
+Os resultados saem de baixo para cima, pela pilha de chamadas (0031). Cuidado
+com o estouro: 3³⁹ cabe num `long long`, 3⁴⁰ não. O fluxograma segue a chamada
+com `n = 20`:
 
 {{fluxograma}}
-
-> [!WARNING]
-> `return potencia(x, n / 2) * potencia(x, n / 2);` dá o resultado certo, mas
-> faz **duas** chamadas por nível: T(n) = 2T(n/2) + O(1), que é O(n). Guarde a
-> metade numa variável. Divisão e conquista só compensa quando os pedaços
-> **não se repetem**.
-
-> [!TIP]
-> **Por dentro do C:** o perigo é o **estouro do `long long`**:
-> 3³⁹ cabe, 3⁴⁰ não, e o gcc com as flags de estudo acusa `runtime error`.
-> Para só os últimos dígitos, use `% m` após cada multiplicação (A261).
-
-> [!NOTE]
-> **Pergunta para você:** quantas multiplicações a função faz para 3¹⁶? E para
-> 3¹⁵? Por que o expoente 15, menor, dá mais trabalho? Pista: escreva 16 e 15
-> em binário.
-
-{{pratique}}

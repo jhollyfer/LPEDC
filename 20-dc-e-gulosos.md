@@ -16,17 +16,11 @@
 > - [ ] Enfrentar os desafios do módulo
 > - [ ] Chefão: resolver as questões de prova do módulo sem consultar
 
-Este módulo trata de **técnicas**. Diante de um problema novo, pergunte: "isso
-se divide em pedaços iguais menores?" ou "dá para decidir um passo de cada vez,
-sem voltar atrás?".
-
-A **divisão e conquista** quebra o problema em pedaços do mesmo tipo, resolve
-cada um e combina as respostas, como no merge sort. Aqui ela calcula
-potências em O(log n), conta inversões e acha o melhor trecho de um vetor.
-
-A **estratégia gulosa** escolhe, a cada passo, o que parece melhor e nunca
-desfaz. Quando falha, erra sem avisar; por isso o módulo treina o
-**contraexemplo** e o argumento de **troca**, que prova o critério.
+Duas técnicas de projeto. A **divisão e conquista** quebra o problema em
+pedaços do mesmo tipo e combina as respostas: potência rápida, inversões,
+subvetor máximo. A **estratégia gulosa** escolhe o melhor agora e nunca
+desfaz: troco, intervalos, mochila fracionária e Huffman. Depende da recursão
+e do merge sort (módulos 04 e 13) e do heap (módulo 14).
 
 ## O que você vai aprender
 
@@ -44,20 +38,14 @@ Revise recursão (0032 e 0033), merge sort (0094), `qsort` (0050 e 0096), heap
 (0102) e arquivos binários (0068). Os custos usam as recorrências do módulo
 17 (0114 e 0115).
 
-**Progressão.** Do módulo 18 vem a ordenação, primeiro passo dos gulosos; do
-19, a recursão, aqui sem enumerar tudo. O 21 apresenta a programação
-dinâmica.
-
-Os dois últimos assuntos trazem um TAD na pasta (`huffman.h`,
-`compactador.h`); o comando compila junto o `.c` de apoio:
+Os dois últimos assuntos trazem um TAD (`huffman.h`, `compactador.h`); o
+comando compila junto o `.c` de apoio:
 
 ```bash
 gcc ~/LPEDC/material/A271.c ~/LPEDC/material/0136-huffman.c -o ~/LPEDC/material/A271 && ~/LPEDC/material/A271
 ```
 
-O último assunto cria arquivos de teste na pasta atual e os apaga no fim.
-
-Nos gulosos, tente quebrar o critério com casos pequenos no papel. Nos
+O último assunto cria arquivos de teste na pasta atual e os apaga no fim. Nos
 desenhos, verde é o escolhido, cinza o que ficou de fora e vermelho a escolha
 errada.
 
@@ -73,42 +61,196 @@ errada.
 
 ---
 
-## 0131 · Divisão e conquista
+## 1. Conceitos gerais
 
-Uma corrente do grupo da família: quem recebe repassa para 3 contatos.
-Quantas mensagens saem na rodada 20? A conta é 3²⁰, e um laço que multiplica
-por 3 vinte vezes gasta multiplicação demais.
+### 0131 · Divisão e conquista
 
-Mas 3²⁰ = 3¹⁰ · 3¹⁰: quem sabe 3¹⁰ resolve 3²⁰ com **uma** multiplicação. E
-3¹⁰ = 3⁵ · 3⁵, e 3⁵ = 3² · 3² · 3 (expoente ímpar deixa sobrar um 3). O
-problema vira outro do mesmo tipo, com metade do tamanho.
+- **Divisão e conquista** (*divide and conquer*): resolve o problema
+  quebrando-o em pedaços menores do mesmo tipo (CORMEN et al., 2024, cap. 4).
+- **Três passos**: **dividir** em pedaços menores; **conquistar** cada pedaço
+  com a própria função (recursão, assunto 0032); **combinar** as respostas
+  (CORMEN et al., 2024, cap. 4).
+- **Caso base**: o pedaço pequeno o bastante para resolver direto
+  (ZIVIANI, 2010, cap. 2).
+- **Onde fica o esforço**: o merge sort (0094) gasta na combinação; o quick
+  sort (0095), na divisão, e não combina; a busca binária (0090) descarta uma
+  metade (FEOFILOFF, 2009).
+- **Potência rápida**: xⁿ = (x^(n/2))², com mais um `x` se `n` é ímpar. O
+  caso base é `n == 0`, pois x⁰ = 1 (LINTZMAYER; MOTA, 2023).
+- **Custo**: T(n) = T(n/2) + O(1), que dá **O(log n)** pelo teorema mestre
+  (assunto 0115). Para n = 1 milhão, uns 20 níveis (CORMEN et al., 2024, cap. 4).
+- **Pedaços repetidos**: divisão e conquista só compensa quando os pedaços
+  **não se repetem** (ZIVIANI, 2010, cap. 2).
 
-Essa é a **divisão e conquista** (*divide and conquer*), com três passos que
-você já viu no merge sort (0094):
+> [!WARNING]
+> `return potencia(x, n / 2) * potencia(x, n / 2);` dá o resultado certo, mas
+> faz **duas** chamadas por nível: T(n) = 2T(n/2) + O(1), que é O(n). Guarde a
+> metade numa variável.
 
-1. **dividir**: quebre o problema em pedaços menores do mesmo tipo;
-2. **conquistar**: resolva cada pedaço com a própria função (recursão, 0032).
-   Pedaço pequeno o bastante é o **caso base**, resolvido direto;
-3. **combinar**: junte as respostas dos pedaços na resposta do todo.
+### 0132 · Inversões e subvetor de soma máxima
 
-A busca binária (0090) divide e descarta uma metade. O merge sort gasta o
-esforço na combinação; o quick sort (0095), na divisão, e não combina nada.
+- **Inversão**: par de posições `i < j` com `v[i] > v[j]`. O vetor ordenado
+  tem zero; o vetor ao contrário tem `n(n - 1)/2`
+  (CORMEN et al., 2024).
+- **Contar por divisão e conquista**: toda inversão está inteira na metade
+  esquerda, inteira na direita ou **cruza** o meio. A recursão conta as duas
+  primeiras (KLEINBERG; TARDOS, 2006, cap. 5).
+- **Contar na intercalação**: com as metades ordenadas, quando um elemento da
+  direita sai antes, ele forma inversão com todos os `q - i` que sobram na
+  esquerda (KLEINBERG; TARDOS, 2006, cap. 5).
+- **Custo**: é o merge sort com um contador, **O(n log n)**, contra O(n²) de
+  testar todos os pares (KLEINBERG; TARDOS, 2006, cap. 5).
+- **Subvetor de soma máxima**: a faixa de posições **seguidas** com a maior
+  soma. Está na esquerda, na direita ou cruzando o meio; o caso que cruza é o
+  melhor final da esquerda mais o melhor começo da direita, um laço O(n), e o
+  total fica O(n log n) (CORMEN et al., 2012, seção 4.1).
+- **Contador largo**: 100 000 elementos ao contrário dão 4 999 950 000
+  inversões. Use `long long` (KERNIGHAN; RITCHIE, 1989).
 
-Na potência, dividir é cortar o expoente ao meio e combinar é elevar ao
-quadrado (com mais um `x` se o expoente é ímpar). O caso base é `n == 0`,
-porque x⁰ = 1.
+> [!WARNING]
+> A soma é `inv += q - i`, e não `inv++`: o `v[j]` que sai está fora de ordem
+> com **todos** de `v[i]` a `v[q - 1]`. E o `<=` importa: valores iguais
+> **não** são inversão.
 
-Cada chamada corta `n` pela metade: T(n) = T(n/2) + O(1), que dá
-**O(log n)** pelo assunto 0115. Para n = 1 milhão, são uns 20 níveis contra
-1 milhão de voltas do laço.
+### 0133 · Algoritmos gulosos
 
-No desenho, a recursão desce dividindo o expoente (20, 10, 5, 2, 1, 0) e sobe
-combinando: o 1 do caso base vira 3, 9, 243, e assim até 3²⁰.
+- **Algoritmo guloso** (*greedy*): a cada passo faz a escolha que parece a
+  **melhor agora** e **nunca volta atrás** (CORMEN et al., 2024, cap. 15).
+- **Diferença**: não desfaz, como o backtracking (0127), nem divide em
+  subproblemas, como a divisão e conquista (0131). O Dijkstra (0112) é guloso
+  (ZIVIANI, 2010, cap. 2).
+- **Propriedade da escolha gulosa**: alguma solução ótima começa pela escolha
+  do guloso (CORMEN et al., 2024, cap. 15).
+- **Subestrutura ótima**: o que sobra depois da escolha é um problema do
+  mesmo tipo (CORMEN et al., 2024, cap. 15).
+- **Prova por troca**: troque um pedaço da solução ótima pela escolha gulosa
+  e mostre que ela não piora. **Um contraexemplo derruba; só uma prova
+  garante** (KLEINBERG; TARDOS, 2006, cap. 4).
+- **Troco guloso**: dá sempre a maior moeda que cabe. Acerta o mínimo nos
+  sistemas **canônicos**, como o Real; com fichas {1, 3, 4}, o troco de 6 sai
+  4 + 1 + 1, e o ótimo é 3 + 3 (KOZEN; ZAKS, 1994).
+- **Quando falha**: a programação dinâmica (módulo 21) resolve o troco de
+  qualquer sistema (CORMEN et al., 2024, cap. 15).
+
+> [!WARNING]
+> O troco guloso **depende da ordem** do vetor: com `{5, 10, 25, 50, 100}`, a
+> função dá 38 moedas de 5 centavos para R$ 1,90. E use **centavos** em `int`:
+> em `double`, `1.90 - 1.00 - 0.50 - 0.25 - 0.10` não dá 0,05 exato.
+
+### 0134 · Seleção de intervalos
+
+- **Seleção de atividades**: dado um conjunto de intervalos `[início, fim)`,
+  achar o maior subconjunto sem sobreposição (CORMEN et al., 2024, cap. 15).
+- **Critério guloso**: aceitar primeiro quem **termina** mais cedo. Ele
+  devolve o recurso mais cedo e deixa mais espaço para os outros
+  (CORMEN et al., 2024, cap. 15).
+- **Prova por troca**: numa escolha ótima, troque o primeiro intervalo pelo
+  que termina primeiro; ele não choca com os outros e o tamanho se mantém. É o
+  argumento de "ficar à frente" (KLEINBERG; TARDOS, 2006, cap. 4).
+- **`GREEDY-ACTIVITY-SELECTOR`**: ordene pelo fim; guarde `livre_em` (começa
+  em 0); aceite quem começa em `livre_em` ou depois e mova `livre_em` para o
+  fim dele (CORMEN et al., 2024, cap. 15).
+- **Custo**: a ordenação, O(n log n), mais uma passada O(n). Testar todos os
+  subconjuntos seria O(2ⁿ) (CORMEN et al., 2024, cap. 15).
+- **Intervalo semiaberto**: quem sai às 10h libera às 10h, por isso o teste é
+  `ini >= livre_em`, com o igual (CORMEN et al., 2024, cap. 15).
+
+> [!WARNING]
+> Os outros critérios falham sem erro, só com resposta pior. "Começa primeiro"
+> pega um pedido longo que bloqueia o dia; "mais curto primeiro" pode pegar um
+> que choca com dois outros que cabiam juntos.
+
+### 0135 · Mochila fracionária
+
+- **Mochila fracionária**: capacidade `W`, `n` itens com peso e valor, e pode
+  levar qualquer **fração** de cada um, com valor proporcional. Objetivo: o
+  maior valor sem passar de `W` (CORMEN et al., 2024, cap. 15).
+- **Razão**: `valor / peso`, o valor por unidade de espaço. Cada quilo vai
+  para quem paga mais (CORMEN et al., 2024, cap. 15).
+- **Guloso**: ordene pela razão, da maior para a menor; leve cada item
+  **inteiro** enquanto couber; no primeiro que não couber, leve **só a
+  fração** que completa o espaço e pare (ZIVIANI, 2010, cap. 2).
+- **No máximo um item partido**: o último. O custo é a ordenação,
+  O(n log n) (CORMEN et al., 2024, cap. 15).
+- **Prova por troca**: trocar 1 kg de um item caro por 1 kg de um barato
+  perde valor sem ganhar espaço, então a carga ótima segue a razão
+  (KLEINBERG; TARDOS, 2006, cap. 4).
+- **Mochila 0/1**: itens indivisíveis. Ali o guloso pela razão pode errar e a
+  solução é programação dinâmica (módulo 21) (CORMEN et al., 2024, cap. 15).
+
+> [!WARNING]
+> Esse guloso só vale na versão **fracionária**. Com capacidade 10 e itens
+> (6, R$ 30), (5, R$ 20) e (5, R$ 20) indivisíveis, ele leva o primeiro e faz
+> R$ 30, mas os dois de 5 dão R$ 40.
+
+### 0136 · Código de Huffman
+
+- **Código de tamanho variável**: curto para o símbolo frequente, comprido
+  para o raro, como no Morse. Gasta menos bits que o código fixo
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, seção 5.3).
+- **Código livre de prefixo**: nenhum código é o começo de outro, e a leitura
+  não tem dúvida. Com A = `0` e N = `01`, `001` seria ambíguo
+  (CORMEN et al., 2024, cap. 15).
+- **Árvore de código**: cada símbolo é uma **folha**; o código é o caminho da
+  raiz até ela, `0` à esquerda e `1` à direita. O total de bits é a soma de
+  `frequência × profundidade` (SZWARCFITER; MARKENZON, 2010).
+- **Algoritmo de Huffman**: ponha uma folha por símbolo num **heap de mínimo**
+  (0102); enquanto houver mais de um nó, tire os dois menores e devolva um pai
+  com a soma; o que sobra é a raiz. Esse guloso acha a melhor árvore
+  (HUFFMAN, 1952).
+- **Custo**: `k - 1` junções com heap O(log k), logo **O(k log k)**; a árvore
+  tem `2k - 1` nós (CORMEN et al., 2024, cap. 15).
+- **Desempate**: frequências iguais permitem árvores diferentes, todas
+  ótimas. Quem decodifica precisa da **mesma** árvore
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, seção 5.3).
+
+> [!WARNING]
+> Se o desempate mudar entre codificar e decodificar, os códigos mudam e a
+> frase sai trocada. E indexe a frequência por `(unsigned char)*p`: com
+> `char` com sinal, os bytes de acento em UTF-8 são negativos e `freq[*p]` lê
+> fora do vetor.
+
+### 0137 · Juntando tudo
+
+- **Compactador**: grava uma versão menor de um arquivo; o
+  **descompactador** devolve o original, byte por byte
+  (SZWARCFITER; MARKENZON, 2010).
+- **Bits de verdade**: o código vira bits, juntados 8 por vez num
+  `unsigned char` com `<<` e `|`; o último byte quase nunca enche e vai
+  completado com zeros (KERNIGHAN; RITCHIE, 1989).
+- **Cabeçalho**: o arquivo começa com a assinatura `HUF1`, o tamanho original
+  e as 256 frequências, para o descompactador montar a **mesma** árvore
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, seção 5.3).
+- **Fim dos dados**: os zeros do último byte não são dados; o descompactador
+  para ao escrever o tamanho original (LINTZMAYER; MOTA, 2023).
+- **Duas leituras**: o compactador conta as frequências e depois, com a
+  árvore pronta, troca cada byte pelo código; `rewind` volta ao começo
+  (KERNIGHAN; RITCHIE, 1989).
+- **Decodificar**: anda na árvore bit a bit (`0` esquerda, `1` direita); na
+  folha, escreve o byte e volta à raiz (CORMEN et al., 2024, cap. 15).
+- **Tamanho fixo**: `uint64_t` e `uint32_t` de `stdint.h` têm sempre o mesmo
+  tamanho; `long` varia entre sistemas (CPPREFERENCE, s.d.).
+- **Limite**: nenhum código sem perda comprime abaixo da **entropia** da
+  fonte (SHANNON, 1948).
+
+> [!WARNING]
+> Sem o `descarrega` no fim, os bits do byte incompleto se perdem. Teste a ida
+> e volta comparando **byte a byte**, e abra os arquivos em modo binário
+> (`"rb"`, `"wb"`).
+
+---
+
+## 2. Exemplos de uso
+
+Cada exemplo compila sozinho. Rode com o comando abaixo dele e compare com a saída no fim do código.
+
+### 0131 · Divisão e conquista
+
+Numa corrente de mensagens, cada um repassa para 3 contatos: na rodada 20,
+saem 3²⁰. A recursão desce dividindo o expoente (20, 10, 5, 2, 1, 0) e sobe
+combinando: o 1 do caso base vira 3, 9, 243, até 3²⁰.
 
 <p align="center"><img src="material/0131-ideia.svg" alt="Diagrama da ideia: Divisão e conquista" width="858"></p>
-
-O `printf` mostra cada resultado parcial quando a chamada termina, e `mult`
-soma as multiplicações:
 
 ```c
 #include <stdio.h>
@@ -149,30 +291,11 @@ int main(void) {
 // 7 multiplicações (o laço simples faria 19)
 ```
 
-Os resultados saem de baixo para cima, pela pilha de chamadas (0031).
-
-O fluxograma segue a chamada com `n = 20`: ela chama a si mesma com 10,
-recebe 59049 e, como 20 é par, só eleva ao quadrado:
+Os resultados saem de baixo para cima, pela pilha de chamadas (0031). Cuidado
+com o estouro: 3³⁹ cabe num `long long`, 3⁴⁰ não. O fluxograma segue a chamada
+com `n = 20`:
 
 <p align="center"><img src="material/0131-fluxograma.svg" alt="Fluxograma: Divisão e conquista" width="584"></p>
-
-> [!WARNING]
-> `return potencia(x, n / 2) * potencia(x, n / 2);` dá o resultado certo, mas
-> faz **duas** chamadas por nível: T(n) = 2T(n/2) + O(1), que é O(n). Guarde a
-> metade numa variável. Divisão e conquista só compensa quando os pedaços
-> **não se repetem**.
-
-> [!TIP]
-> **Por dentro do C:** o perigo é o **estouro do `long long`**:
-> 3³⁹ cabe, 3⁴⁰ não, e o gcc com as flags de estudo acusa `runtime error`.
-> Para só os últimos dígitos, use `% m` após cada multiplicação (A261).
-
-> [!NOTE]
-> **Pergunta para você:** quantas multiplicações a função faz para 3¹⁶? E para
-> 3¹⁵? Por que o expoente 15, menor, dá mais trabalho? Pista: escreva 16 e 15
-> em binário.
-
-### Hora de praticar
 
 **Exemplo A261 · Potência rápida sem recursão: os bits do expoente**
 
@@ -308,143 +431,13 @@ int main(void) {
 gcc ~/LPEDC/material/A262.c -o ~/LPEDC/material/A262 && ~/LPEDC/material/A262
 ```
 
-#### Exercícios
+### 0132 · Inversões e subvetor de soma máxima
 
-**Exercício E781** · ★☆☆
-
-A barraca de pastel anotou as vendas de 8 dias, em reais:
-
-
-```text
-320 415 280 510 390 605 720 460
-```
-
-
-Escreva a função int soma(const int v[], int ini, int fim), que soma
-v[ini..fim] por divisão e conquista: se o pedaço tem um elemento só, a
-soma é ele; senão, divida ao meio, some cada metade com a própria função e
-junte as duas respostas. Conte as chamadas numa variável global e mostre:
-
-
-```text
-Saída esperada:
-Total: R$ 3700
-Chamadas: 15
-```
-
-```bash
-gcc ~/LPEDC/material/E781.c -o ~/LPEDC/material/E781 && ~/LPEDC/material/E781
-```
-
-**Exercício E783** · ★★☆
-
-Escreva long long potencia(long long x, int n), a potência por divisão e
-conquista: caso base n == 0; senão, UMA só chamada recursiva para n / 2,
-guardada numa variável, e o resultado é o quadrado dela (vezes x, se n é
-ímpar). Conte as chamadas numa variável static e mostre 3^20 e o número
-de chamadas. Depois troque 20 por 39 e confira que as chamadas sobem só
-para 7. (Não vá além de 39: 3^40 estoura o long long.)
-
-
-```text
-Saída esperada:
-3^20 = 3486784401
-Chamadas: 6
-```
-
-```bash
-gcc ~/LPEDC/material/E783.c -o ~/LPEDC/material/E783 && ~/LPEDC/material/E783
-```
-
-**Exercício E784** · ★★☆
-
-Uma trilha de 10 km foi medida a cada quilômetro. A altitude só sobe até
-o pico e depois só desce (o pico não fica nas pontas):
-
-
-```text
-km:       0    1    2    3    4    5    6    7    8    9   10
-altitude: 820  905 1010 1180 1340 1415 1390 1250 1100  960  870
-```
-
-
-Escreva int pico(const int v[], int ini, int fim), que acha o índice do
-ponto mais alto SEM olhar todos os pontos. Divisão e conquista com um
-pedaço só, como a busca binária: olhe o meio e o vizinho da direita. Se
-ainda está subindo, o pico está à direita do meio; senão, está no meio ou
-à esquerda. Conte numa variável global quantas vezes comparou v[meio] com
-v[meio + 1].
-
-
-```text
-Saída esperada:
-Pico: 1415 m no km 5
-Comparações: 3
-```
-
-```bash
-gcc ~/LPEDC/material/E784.c -o ~/LPEDC/material/E784 && ~/LPEDC/material/E784
-```
-
-**Exercício E785** · ★★★
-
-Fibonacci rápido: a matriz {1 1; 1 0} elevada a n tem F(n) na primeira
-linha, segunda coluna (F(1) = F(2) = 1). Calcule-o com a potência rápida,
-multiplicando matrizes. Escreva:
-- typedef struct Matriz com quatro long long (a, b, c, d);
-- Matriz multiplica(Matriz x, Matriz y), que soma 1 num contador global;
-- Matriz potencia(Matriz m, int n), recursiva, com {1, 0, 0, 1} no caso base;
-- long long fib(int n).
-Mostre F(10), F(50) e F(90), zerando o contador antes de cada um.
-
-
-```text
-Saída esperada:
-F(10) = 55 (6 produtos de matriz)
-F(50) = 12586269025 (9 produtos de matriz)
-F(90) = 2880067194370816120 (11 produtos de matriz)
-```
-
-```bash
-gcc ~/LPEDC/material/E785.c -o ~/LPEDC/material/E785 && ~/LPEDC/material/E785
-```
-
----
-
-## 0132 · Inversões e subvetor de soma máxima
-
-Você e o Caio montaram o top 8 de séries do ano. Os gostos batem? Se você
-põe "Sintonia" antes de "Cidade Invisível" e o Caio faz o contrário, o par
-está em desacordo.
-
-Escreva as suas séries e, embaixo, a posição de cada uma no ranking do Caio:
-se concordasse com tudo, o vetor seria `1 2 3 4 5 6 7 8`. Cada par em desacordo é uma **inversão**: posições `i < j` com `v[i] > v[j]`.
-São zero inversões no vetor ordenado e `n(n - 1)/2` no vetor ao contrário.
-
-Testar todos os pares é O(n²). Pegando carona no merge sort (0094), a divisão
-e conquista faz em **O(n log n)**.
-
-Divida o vetor ao meio. Toda inversão é de um destes tipos:
-
-1. os dois elementos estão na metade **esquerda**;
-2. os dois estão na metade **direita**;
-3. um em cada metade: a inversão **cruza** o meio.
-
-A recursão resolve os tipos 1 e 2. No tipo 3, com as metades **ordenadas**, a
-intercalação conta de graça: quando um elemento da direita sai antes, ele é
-menor que **todos** os `q - i` que sobram na esquerda, ou seja, `q - i`
-inversões de uma vez.
-
-A função devolve a contagem **e** deixa o pedaço ordenado: é a recorrência do
-merge sort, O(n log n).
-
-No vetor do Caio, são 3 inversões na esquerda, 4 na direita e mais 6 na
-intercalação (o 2 passa na frente de 3, o 4 de 2 e o 6 de 1):
+Você e o Caio montaram o top 8 de séries. Embaixo de cada série sua vai a
+posição dela no ranking do Caio. São 3 inversões na esquerda, 4 na direita e 6
+na intercalação:
 
 <p align="center"><img src="material/0132-ideia.svg" alt="Diagrama da ideia: Inversões e subvetor de soma máxima" width="858"></p>
-
-É o merge sort com um contador; o `printf` mostra as inversões da esquerda,
-da direita e as cruzadas:
 
 ```c
 #include <stdio.h>
@@ -508,7 +501,13 @@ int main(void) {
 // Pares em desacordo: 13 de 28
 ```
 
-### Passo a passo
+Contar também **ordena**; para manter a ordem original, conte numa cópia. As
+duas chamadas recursivas contam dentro de cada metade e a intercalação conta o
+que cruza:
+
+<p align="center"><img src="material/0132-fluxograma.svg" alt="Fluxograma: Inversões e subvetor de soma máxima" width="478"></p>
+
+#### Passo a passo
 
 Última intercalação: `1 3 5 7` com `2 4 6 8`. Quando o menor vem da direita,
 soma os que sobram na esquerda:
@@ -524,42 +523,9 @@ soma os que sobram na esquerda:
 | 7 | esquerda | | 6 |
 | 8 | direita | (nenhum) | 6 |
 
-No fluxograma, as duas chamadas recursivas contam dentro de cada metade e a
-intercalação conta o que cruza:
-
-<p align="center"><img src="material/0132-fluxograma.svg" alt="Fluxograma: Inversões e subvetor de soma máxima" width="478"></p>
-
-### O subvetor de soma máxima
-
-Os mesmos três tipos resolvem outro problema. Um food truck anotou o lucro de
-8 dias: `4 -6 3 5 -2 6 -9 2`. Qual faixa de dias **seguidos** deu o maior
-lucro somado? Dividindo ao meio, ela está:
-
-1. inteira na **esquerda** (`4 -6 3 5`): `3 5`, soma 8;
-2. inteira na **direita** (`-2 6 -9 2`): `6`, soma 6;
-3. **cruzando** o meio: melhor final da esquerda (`3 5`, 8) mais melhor
-   começo da direita (`-2 6`, 4): `3 5 -2 6`, soma **12**.
-
-A resposta é o maior dos três: 12, do dia 2 ao 5. O caso 3 é um laço do meio
-para fora, O(n), e o total é O(n log n). O A263 traz o algoritmo em C e o
-A264, um jeito em O(n).
-
-> [!WARNING]
-> A soma é `inv += q - i`, e não `inv++`: o `v[j]` que sai está fora de ordem
-> com **todos** os elementos de `v[i]` a `v[q - 1]`. E o `<=` importa: valores
-> iguais **não** são inversão.
-
-> [!TIP]
-> **Por dentro do C:** o contador é `long long`: 100 000 elementos ao contrário
-> dão 4 999 950 000 inversões, mais que um `int` suporta. Contar também
-> **ordena**; para manter a ordem original, conte numa cópia (`memcpy`).
-
-> [!NOTE]
-> **Pergunta para você:** quantas inversões tem o vetor `8 7 6 5 4 3 2 1`? E
-> quanto o `printf` mostra na linha do `[0, 8)`? Confira a sua conta com a
-> fórmula `n(n - 1)/2`.
-
-### Hora de praticar
+No subvetor de soma máxima, com o lucro de 8 dias `4 -6 3 5 -2 6 -9 2`: a
+esquerda dá `3 5` (8), a direita `6` (6) e o que cruza, `3 5 -2 6`, dá **12**,
+do dia 2 ao 5. O A263 traz o algoritmo em C e o A264, um jeito em O(n).
 
 **Exemplo A263 · A melhor sequência de dias, dividindo ao meio**
 
@@ -684,160 +650,13 @@ int main(void) {
 gcc ~/LPEDC/material/A264.c -o ~/LPEDC/material/A264 && ~/LPEDC/material/A264
 ```
 
-#### Exercícios
+### 0133 · Algoritmos gulosos
 
-**Exercício E787** · ★☆☆
-
-A lista de entregas de um motoboy deveria estar em ordem de horário, mas
-foi montada às pressas. Os horários (minutos depois das 18h), na ordem da
-lista, são:
-
-
-```text
-14 9 17 12 20 11 15
-```
-
-
-Escreva o jeito direto, O(n²): dois laços que testam todos os pares
-i < j e mostram cada par fora de ordem (horario[i] > horario[j]), na ordem
-em que os laços os encontram. No fim, mostre o total e quantos pares
-existem.
-
-
-```text
-Saída esperada:
-Fora de ordem: (14, 9) (14, 12) (14, 11) (17, 12) (17, 11) (17, 15) (12, 11) (20, 11) (20, 15)
-Inversões: 9 de 21 pares
-```
-
-```bash
-gcc ~/LPEDC/material/E787.c -o ~/LPEDC/material/E787 && ~/LPEDC/material/E787
-```
-
-**Exercício E789** · ★★☆
-
-Você e a Bia ranquearam os mesmos seis pratos, do favorito ao último:
-
-
-```text
-você: Feijoada, Moqueca, Coxinha, Acarajé, Pastel, Pão de queijo
-Bia:  Moqueca, Coxinha, Feijoada, Pão de queijo, Acarajé, Pastel
-```
-
-
-Mostre cada par de pratos em que vocês discordam (no formato "A x B", com
-A antes de B no SEU ranking) e o total. Monte um vetor v em que
-v[i] é a posição, no ranking da Bia, do seu i-ésimo prato. Os pares em
-desacordo são exatamente as inversões de v.
-
-
-```text
-Saída esperada:
-Feijoada x Moqueca
-Feijoada x Coxinha
-Acarajé x Pão de queijo
-Pastel x Pão de queijo
-Pares em desacordo: 4 de 15
-```
-
-```bash
-gcc ~/LPEDC/material/E789.c -o ~/LPEDC/material/E789 && ~/LPEDC/material/E789
-```
-
-**Exercício E790** · ★★☆
-
-Cada deslocamento do insertion sort (assunto 0093) desfaz uma inversão,
-então o número de deslocamentos é o número de inversões do vetor.
-Confira no computador. Escreva long long insercao(int v[], int n), que
-devolve quantos deslocamentos fez, e o merge sort que conta inversões, do
-texto (sem os printf). Aplique os dois, cada um numa cópia do vetor
-(memcpy), aos pesos de 12 encomendas, em kg:
-
-
-```text
-31 12 45 27 8 39 19 50 4 23 36 15
-```
-
-
-
-```text
-Saída esperada:
-Deslocamentos do insertion sort: 36
-Inversões pelo merge sort: 36
-```
-
-```bash
-gcc ~/LPEDC/material/E790.c -o ~/LPEDC/material/E790 && ~/LPEDC/material/E790
-```
-
-**Exercício E791** · ★★★
-
-Um analista quer contar as quedas fortes no preço de uma ação: pares de
-dias i < j em que o preço do dia i era MAIS QUE O DOBRO do preço do dia j
-(preco[i] > 2 * preco[j]). Os preços de 8 dias, em reais:
-
-
-```text
-40 18 25 9 30 12 50 20
-```
-
-
-Escreva a versão O(n log n), adaptando o merge sort que conta inversões,
-e confira com uma força bruta O(n²) feita ANTES de ordenar.
-
-
-```text
-Saída esperada:
-Quedas de mais da metade: 7
-Força bruta: 7
-```
-
-```bash
-gcc ~/LPEDC/material/E791.c -o ~/LPEDC/material/E791 && ~/LPEDC/material/E791
-```
-
----
-
-## 0133 · Algoritmos gulosos
-
-Na padaria, o pão deu R$ 3,10 e você pagou com uma nota de 5. O caixa devolve
-R$ 1,90 com o **menor número de moedas** pegando sempre a maior que cabe no
-que falta: 100 + 50 + 25 + 10 + 5, cinco moedas, o mínimo possível.
-
-Isso é um **algoritmo guloso** (*greedy*): a cada passo faz a escolha que
-parece a **melhor agora** e **nunca volta atrás**. Não desfaz, como o
-backtracking (0127), nem divide em subproblemas, como a divisão e conquista
-(0131).
-
-O Dijkstra (0112) é guloso: fixa o vértice mais perto da origem e nunca mais
-mexe nele. Os próximos assuntos trazem reuniões numa sala, mochila e Huffman.
-
-Quando funciona, o guloso é curto e barato: um laço, O(k + moedas dadas) para
-`k` tipos de moeda. Mas uma escolha boa agora pode estragar o resto, e ele
-não percebe.
-
-Num fliperama com fichas de **1, 3 e 4 créditos**, o troco de 6 créditos pelo
-guloso é 4 + 1 + 1, **três fichas**. Mas 3 + 3 dá **duas**: o 4 parecia ótimo
-e fechou o caminho bom.
-
-No Real dá certo porque o sistema é **canônico**: dá para provar que o guloso
-acha o mínimo. A prova é por "troca": se um troco usasse duas moedas de 25 no
-lugar de uma de 50, trocá-las pela de 50 diminuiria a conta. Com {1, 3, 4}, a
-troca falha: duas fichas de 3 não viram uma de 4.
-
-Vale para todo guloso: **um contraexemplo derruba, e só uma prova garante**.
-O Cormen pede a **propriedade da escolha gulosa** (alguma solução ótima começa
-pela escolha do guloso) e a **subestrutura ótima** (o que sobra é um problema
-do mesmo tipo); a troca prova a primeira. Quando o guloso não serve, a
-programação dinâmica (módulo 21) resolve o troco de qualquer sistema.
-
-No desenho, em cima o troco de R$ 1,90 (o guloso acerta); embaixo, as fichas:
-o 4 deixa um resto de 2 que custa duas fichas, e o 3 + 3 nunca é visto:
+O troco de R$ 1,90 na padaria (o guloso acerta) e o de 6 créditos no
+fliperama com fichas de 1, 3 e 4 (o 4 deixa um resto de 2, e o 3 + 3 nunca é
+visto):
 
 <p align="center"><img src="material/0133-ideia.svg" alt="Diagrama da ideia: Algoritmos gulosos" width="858"></p>
-
-A função recebe as moedas em ordem **decrescente**: se a moeda cabe, dá e
-continua nela; se não, passa para a próxima menor:
 
 ```c
 #include <stdio.h>
@@ -875,30 +694,9 @@ int main(void) {
 ```
 
 O código não sabe que errou: só o contraexemplo mostra que 3 não é o mínimo.
-
-No fluxograma, "ainda falta troco?" controla o laço e "a moeda da vez cabe?"
-decide entre dar a moeda ou descer para a próxima. Não há volta a uma moeda
-maior:
+No fluxograma não há volta a uma moeda maior:
 
 <p align="center"><img src="material/0133-fluxograma.svg" alt="Fluxograma: Algoritmos gulosos" width="922"></p>
-
-> [!WARNING]
-> O guloso do troco **depende da ordem** do vetor: com `{5, 10, 25, 50, 100}`,
-> a função dá 38 moedas de 5 centavos para R$ 1,90. Ordene da maior para a
-> menor (`qsort`, 0096), e lembre que, mesmo ordenado, o guloso só garante o
-> mínimo em sistema canônico.
-
-> [!TIP]
-> **Por dentro do C:** use **centavos** em `int`, não reais em `double`:
-> `1.90 - 1.00 - 0.50 - 0.25 - 0.10` dá `0.049999999999999906`, e a moeda de 5
-> centavos "não cabe" (`0.05 <= 0.0499...` é falso).
-
-> [!NOTE]
-> **Pergunta para você:** com moedas de 1, 10 e 25 centavos (sem a de 5), o
-> guloso acerta o troco de 30? E o de 40? Faça as contas no papel e depois
-> rode a função com `{25, 10, 1}`.
-
-### Hora de praticar
 
 **Exemplo A265 · Postos na estrada: parar o mínimo de vezes**
 
@@ -1001,159 +799,16 @@ int main(void) {
 gcc ~/LPEDC/material/A266.c -o ~/LPEDC/material/A266 && ~/LPEDC/material/A266
 ```
 
-#### Exercícios
+### 0134 · Seleção de intervalos
 
-**Exercício E793** · ★☆☆
-
-O caixa eletrônico tem notas de R$ 200, 100, 50, 20, 10, 5 e 2, e entrega
-o saque com o menor número de notas, pelo guloso: a maior nota que cabe,
-de novo e de novo. Escreva a função void saque(int valor), que mostra
-quantas notas de cada valor saem (só as que aparecem) e o total, e chame
-para R$ 380 e R$ 1270.
-
-
-```text
-Saída esperada:
-Saque de R$ 380:
-  1 de R$ 200
-  1 de R$ 100
-  1 de R$ 50
-  1 de R$ 20
-  1 de R$ 10
-  total: 5 notas
-Saque de R$ 1270:
-  6 de R$ 200
-  1 de R$ 50
-  1 de R$ 20
-  total: 8 notas
-```
-
-```bash
-gcc ~/LPEDC/material/E793.c -o ~/LPEDC/material/E793 && ~/LPEDC/material/E793
-```
-
-**Exercício E795** · ★★☆
-
-Numa enchente, cada barco de resgate leva no máximo 2 pessoas e no máximo
-150 kg. Os pesos das 8 pessoas a resgatar, em kg:
-
-
-```text
-60 95 80 120 45 70 100 55
-```
-
-
-Use o menor número de barcos com este guloso: ordene os pesos; a pessoa
-mais pesada que falta SEMPRE vai no próximo barco; se a mais leve que
-falta couber junto, vai junto. Mostre cada barco (o mais pesado primeiro)
-e o total.
-
-
-```text
-Saída esperada:
-Barco 1: 120
-Barco 2: 100 + 45
-Barco 3: 95 + 55
-Barco 4: 80 + 60
-Barco 5: 70
-Total: 5 barcos
-```
-
-```bash
-gcc ~/LPEDC/material/E795.c -o ~/LPEDC/material/E795 && ~/LPEDC/material/E795
-```
-
-**Exercício E796** · ★★☆
-
-O sistema da lanchonete lê as moedas de um arquivo de configuração, e elas
-chegam fora de ordem: {10, 50, 5, 100, 25}. Escreva
-int troco_guloso(const int moedas[], int k, int valor), que supõe as
-moedas em ordem DECRESCENTE: mostra as moedas usadas, uma a uma (a maior
-que cabe, de novo e de novo), e devolve quantas foram. No main, ordene
-as moedas em ordem decrescente com qsort (escreva a função de
-comparação) e calcule o troco de 190 e de 65.
-
-
-```text
-Saída esperada:
-Troco de 190: 100 50 25 10 5 (5 moedas)
-Troco de 65: 50 10 5 (3 moedas)
-```
-
-```bash
-gcc ~/LPEDC/material/E796.c -o ~/LPEDC/material/E796 && ~/LPEDC/material/E796
-```
-
-**Exercício E798** · ★★★
-
-Depois do churrasco, a conta foi dividida igualmente entre 6 amigos, mas
-cada um pagou uma parte diferente no mercado:
-
-
-```text
-Ana R$ 180, Bruno R$ 0, Carla R$ 60, Davi R$ 120, Eva R$ 0, Fábio R$ 90
-```
-
-
-Monte os Pix para acertar as contas com este guloso: enquanto alguém deve,
-quem MAIS deve paga para quem MAIS tem a receber o menor dos dois valores
-(a dívida de um ou o crédito do outro). Em caso de empate, vale o que vem
-primeiro na lista. Trabalhe em centavos, num int.
-
-
-```text
-Saída esperada:
-Total R$ 450.00, cada um R$ 75.00
-Bruno -> Ana: R$ 75.00
-Eva -> Davi: R$ 45.00
-Eva -> Ana: R$ 30.00
-Carla -> Fábio: R$ 15.00
-4 Pix
-```
-
-```bash
-gcc ~/LPEDC/material/E798.c -o ~/LPEDC/material/E798 && ~/LPEDC/material/E798
-```
-
----
-
-## 0134 · Seleção de intervalos
-
-A quadra do condomínio atende uma reserva por vez, e no sábado chegaram nove
-pedidos, cada um com início e fim. Alguns horários se chocam. O síndico quer
-aceitar o **maior número possível** de pedidos. Quais?
-
-É a **seleção de atividades**: dado um conjunto de intervalos `[início, fim)`,
-achar o maior subconjunto sem sobreposição.
-
-Testar todos os subconjuntos (0125) dá 512 casos para nove pedidos e mais de
-um bilhão para trinta. Um **guloso** ordena uma vez, mas por qual critério?
-
-- aceitar primeiro quem **começa** mais cedo;
-- aceitar primeiro o pedido mais **curto**;
-- aceitar primeiro quem **termina** mais cedo.
-
-Só o terceiro funciona sempre: o pedido que termina primeiro **devolve a
-quadra mais cedo** e deixa mais espaço. A prova é uma troca: numa escolha
-ótima, troque o primeiro pedido pelo que termina primeiro. Ele termina antes
-(ou junto), não choca com os outros e a escolha mantém o tamanho.
-
-O algoritmo (`GREEDY-ACTIVITY-SELECTOR`, do Cormen):
-
-1. **ordene** os pedidos pela hora de **fim**;
-2. guarde a hora em que a quadra fica livre (`livre_em`, começando em 0);
-3. percorra os pedidos: se começa em `livre_em` ou depois, **aceite** e mova
-   `livre_em` para o fim dele; senão, recuse.
-
-O custo é a ordenação, O(n log n), mais uma passada O(n).
-
-No desenho, verdes foram aceitas e cinzas chocaram com alguém aceito. O pedido
-da Iara (7h às 17h) seria o primeiro pelo critério "começa antes":
+Nove pedidos de reserva da quadra do condomínio no sábado. No desenho, verdes
+foram aceitos e cinzas chocaram com alguém aceito. O pedido da Iara (7h às 17h)
+seria o primeiro pelo critério "começa antes":
 
 <p align="center"><img src="material/0134-ideia.svg" alt="Diagrama da ideia: Seleção de intervalos" width="858"></p>
 
-Os pedidos são structs, ordenados com `qsort` (0096) por uma função que
-compara os fins:
+Os pedidos são structs, ordenados com `qsort` (0096) pelo fim. A comparação
+usa `(x > y) - (x < y)`, que não estoura como a subtração:
 
 ```c
 #include <stdio.h>
@@ -1208,31 +863,11 @@ int main(void) {
 // Reservas aceitas: 5 de 9
 ```
 
-A Carla (10h às 11h) entra logo depois da Ana (8h às 10h): os intervalos são
-**semiabertos** e a Ana libera a quadra às 10h. Por isso o teste é
-`ini >= livre_em`, com o igual.
-
-No fluxograma, depois da ordenação, o laço tem uma pergunta só. O caminho
-marcado mostra a Ana aceita e o Bruno recusado:
+"Começa primeiro" aceitaria a Iara e depois só o Hugo: 1 pedido em vez de 5.
+Depois da ordenação, o laço tem uma pergunta só; o caminho marcado mostra a
+Ana aceita e o Bruno recusado:
 
 <p align="center"><img src="material/0134-fluxograma.svg" alt="Fluxograma: Seleção de intervalos" width="651"></p>
-
-> [!WARNING]
-> Os outros critérios falham. "Começa primeiro" aceita a Iara (7h às 17h) e
-> depois só o Hugo cabe: 1 pedido em vez de 5. "Mais curto primeiro" falha com
-> 8h às 12h, 11h às 13h e 12h às 16h: o mais curto (11h às 13h) choca com os
-> outros dois, que cabem juntos. O programa roda sem reclamar; só a resposta
-> piora.
-
-> [!TIP]
-> **Por dentro do C:** compare com `(x > y) - (x < y)`, e não
-> `x->fim - y->fim`: a subtração pode estourar o `int`.
-
-> [!NOTE]
-> **Pergunta para você:** se o pedido do Hugo fosse das 14h às 18h, quantas
-> reservas seriam aceitas? Quais? E se fosse das 16h às 18h?
-
-### Hora de praticar
 
 **Exemplo A267 · Quantas salas? Todas as aulas, o mínimo de salas**
 
@@ -1381,165 +1016,16 @@ int main(void) {
 gcc ~/LPEDC/material/A268.c -o ~/LPEDC/material/A268 && ~/LPEDC/material/A268
 ```
 
-#### Exercícios
+### 0135 · Mochila fracionária
 
-**Exercício E799** · ★☆☆
-
-A sala de reunião do escritório recebeu 8 pedidos para amanhã, já
-ORDENADOS pela hora de fim (o início está em ini[i], o fim em fim[i]):
-
-
-```text
-8-9  8-10  9-11  10-12  11-12  12-14  13-15  14-16
-```
-
-
-Escreva o laço guloso que escolhe o maior número de reuniões sem choque:
-guarde a hora em que a sala fica livre (começa em 0) e aceite cada pedido
-que começa nessa hora ou depois. Os intervalos são [ini, fim): quem
-termina às 9h libera a sala às 9h.
-
-
-```text
-Saída esperada:
-Escolhidas: 8-9 9-11 11-12 12-14 14-16
-Total: 5
-```
-
-```bash
-gcc ~/LPEDC/material/E799.c -o ~/LPEDC/material/E799 && ~/LPEDC/material/E799
-```
-
-**Exercício E801** · ★★☆
-
-Coloque os três critérios do texto para competir no mesmo conjunto de
-pedidos, [ini, fim):
-
-
-```text
-[0, 10) [1, 4) [4, 7) [7, 10) [3, 5) [6, 8) [10, 12)
-```
-
-
-Escreva int seleciona(const Pedido p[], int n, int (*criterio)(const void *,
-const void *)), que copia os pedidos (memcpy), ordena a cópia com qsort
-usando o critério recebido (ponteiro para função, assunto 0050) e aceita
-cada pedido que não choca com NENHUM dos já aceitos. Escreva também as
-três comparações: por_inicio, por_duracao e por_fim.
-
-
-```text
-Saída esperada:
-Começa primeiro: 2
-Mais curto:      3
-Termina primeiro: 4
-```
-
-```bash
-gcc ~/LPEDC/material/E801.c -o ~/LPEDC/material/E801 && ~/LPEDC/material/E801
-```
-
-**Exercício E802** · ★★☆
-
-A fiscal da vigilância sanitária precisa passar por todas as feiras de
-domingo. Ela anda rápido: numa visita, num certo horário, fiscaliza todas
-as feiras abertas naquela hora. Os horários são FECHADOS, [abre, fecha]:
-
-
-```text
-Pinheiros 7-12, Lapa 6-9, Tatuapé 10-14, Mooca 8-11,
-Liberdade 13-18, Butantã 15-17, Santana 16-20
-```
-
-
-Qual é o menor número de visitas? Guloso: ordene pela hora de
-fechamento; pegue a feira que fecha primeiro e ainda não foi vista e
-marque uma visita na hora em que ela FECHA (o mais tarde possível, para
-pegar o maior número de outras abertas). Mostre cada visita com as feiras
-abertas naquela hora, olhando só as que vêm dali em diante na ordem.
-
-
-```text
-Saída esperada:
-Visita às 9h: Lapa Mooca Pinheiros
-Visita às 14h: Tatuapé Liberdade
-Visita às 17h: Butantã Liberdade Santana
-Total: 3 visitas
-```
-
-```bash
-gcc ~/LPEDC/material/E802.c -o ~/LPEDC/material/E802 && ~/LPEDC/material/E802
-```
-
-**Exercício E804** · ★★★
-
-O clube tem DUAS quadras iguais e recebeu 10 pedidos de jogos, [ini, fim):
-
-
-```text
-Leões 8-10, Tubarões 8-11, Águias 9-12, Lobos 10-12, Falcões 11-13,
-Panteras 12-14, Touros 10-15, Corujas 13-16, Raposas 14-16, Ursos 15-17
-```
-
-
-Aceite o maior número de jogos. O guloso do texto se estende assim:
-ordene pela hora de fim (em caso de empate, quem começa antes vem antes);
-para cada jogo, entre as quadras já livres na hora em que ele começa,
-escolha a que ficou livre MAIS TARDE; se nenhuma está livre, recuse.
-
-
-```text
-Saída esperada:
- 8h-10h quadra 1  Leões
- 8h-11h quadra 2  Tubarões
- 9h-12h recusado  Águias
-10h-12h quadra 1  Lobos
-11h-13h quadra 2  Falcões
-12h-14h quadra 1  Panteras
-10h-15h recusado  Touros
-13h-16h quadra 2  Corujas
-14h-16h quadra 1  Raposas
-15h-17h recusado  Ursos
-Jogos aceitos: 7 de 10
-```
-
-```bash
-gcc ~/LPEDC/material/E804.c -o ~/LPEDC/material/E804 && ~/LPEDC/material/E804
-```
-
----
-
-## 0135 · Mochila fracionária
-
-Um feirante leva **60 kg** na caminhonete e tem café, castanha, feijão,
-açafrão e arroz a granel, então pode levar **parte** de um saco. O que levar
-para voltar com o máximo de dinheiro?
-
-É a **mochila fracionária**: capacidade `W`, `n` itens com peso e valor e
-qualquer fração de cada um, com valor proporcional. O objetivo é o maior
-valor total sem passar de `W`.
-
-Decide o **valor por quilo**: cada quilo de espaço deve ir para quem paga
-mais. O guloso:
-
-1. calcule a **razão** `valor / peso` de cada item;
-2. **ordene** os itens pela razão, da maior para a menor;
-3. leve cada item **inteiro** enquanto couber; no primeiro que não couber,
-   leve **só a fração** que preenche o espaço que sobrou, e pare.
-
-No máximo um item fica partido, o último. O custo é a ordenação, O(n log n).
-
-A prova é por troca: levar 1 kg de feijão (R$ 9/kg) e deixar 1 kg de castanha
-(R$ 50/kg) perde R$ 41 sem ganhar peso. Uma carga ótima nunca deixa de fora um
-quilo que paga mais enquanto leva um que paga menos.
-
-Por razão: açafrão R$ 80/kg, castanha R$ 50, café R$ 30, feijão R$ 9, arroz
-R$ 5. Os três primeiros cabem inteiros (5 + 15 + 20 = 40 kg). Sobram 20 kg e
-o feijão tem 30: vão dois terços do saco. O arroz nem entra:
+Um feirante leva 60 kg na caminhonete. Por razão: açafrão R$ 80/kg, castanha
+R$ 50, café R$ 30, feijão R$ 9, arroz R$ 5. Os três primeiros cabem inteiros
+(40 kg); do feijão vão dois terços do saco; o arroz nem entra:
 
 <p align="center"><img src="material/0135-ideia.svg" alt="Diagrama da ideia: Mochila fracionária" width="858"></p>
 
-A comparação calcula a razão de cada lado e ordena do maior para o menor:
+A comparação calcula a razão de cada lado e ordena do maior para o menor.
+Nunca devolva `(int)(ry - rx)`: razões 4,7 e 4,2 virariam 0.
 
 ```c
 #include <stdio.h>
@@ -1589,30 +1075,11 @@ int main(void) {
 // Total: R$ 1930.00
 ```
 
-O nome vai no fim da linha de propósito: `%-10s` conta **bytes**, e em UTF-8
-o "ç" e o "ã" ocupam dois bytes cada.
-
-No fluxograma, o caminho marcado leva tudo três vezes (açafrão, castanha, café)
-e a fração uma vez (feijão), que zera o espaço e encerra o laço:
+O nome vai no fim da linha de propósito: `%-10s` conta **bytes**, e em UTF-8 o
+"ç" e o "ã" ocupam dois. O caminho marcado leva tudo três vezes e a fração uma
+vez, que zera o espaço:
 
 <p align="center"><img src="material/0135-fluxograma.svg" alt="Fluxograma: Mochila fracionária" width="736"></p>
-
-> [!WARNING]
-> Esse guloso só vale para a mochila **fracionária**. Com itens indivisíveis é
-> a **mochila 0/1**, e ordenar pela razão pode errar: com capacidade 10 e
-> itens (peso 6, R$ 30), (5, R$ 20) e (5, R$ 20), o guloso leva o primeiro
-> (R$ 5/kg) e o total é R$ 30, mas os dois de 5 dão R$ 40. A mochila 0/1 se
-> resolve com programação dinâmica (módulo 21).
-
-> [!TIP]
-> **Por dentro do C:** nunca devolva `(int)(ry - rx)` na comparação: razões
-> 4,7 e 4,2 viram 0 e o `qsort` as trata como iguais.
-
-> [!NOTE]
-> **Pergunta para você:** se a caminhonete levasse 100 kg, quanto o feirante
-> faria? E com 110 kg? A partir de que capacidade o arroz começa a entrar?
-
-### Hora de praticar
 
 **Exemplo A269 · Três critérios para a mesma carga**
 
@@ -1759,168 +1226,13 @@ int main(void) {
 gcc ~/LPEDC/material/A270.c -o ~/LPEDC/material/A270 && ~/LPEDC/material/A270
 ```
 
-#### Exercícios
+### 0136 · Código de Huffman
 
-**Exercício E805** · ★☆☆
-
-A cooperativa de reciclagem vende para uma usina, e o caminhão leva 1000
-kg. No depósito há três lotes, já em ordem decrescente de R$/kg:
-
-
-```text
-PET: 300 kg, R$ 750 o lote
-papelão: 500 kg, R$ 400 o lote
-vidro: 800 kg, R$ 160 o lote
-```
-
-
-Escreva o laço da mochila fracionária: leve cada lote inteiro enquanto
-couber e, no primeiro que não couber, só a parte que completa o
-caminhão. Mostre o que vai de cada material e o total.
-
-
-```text
-Saída esperada:
-300 kg de PET: R$ 750.00
-500 kg de papelão: R$ 400.00
-200 kg de vidro: R$ 40.00
-Total: R$ 1190.00
-```
-
-```bash
-gcc ~/LPEDC/material/E805.c -o ~/LPEDC/material/E805 && ~/LPEDC/material/E805
-```
-
-**Exercício E807** · ★★☆
-
-O feirante tem 15 kg de espaço e três caixas de fruta de 10 kg: uva
-(R$ 42, ou R$ 4,20/kg), caqui (R$ 20) e ameixa (R$ 48, ou R$ 4,80/kg).
-Escreva a mochila fracionária: guarde as caixas numa struct Caixa
-(fruta, kg, valor), ordene por R$/kg decrescente com qsort (escreva a
-função de comparação) e leve
-caixas inteiras enquanto couber, e só a parte que completa no primeiro
-que não couber. Mostre os kg levados de cada fruta e o total.
-
-
-```text
-Saída esperada:
-10 kg de ameixa
-5 kg de uva
-Total: R$ 69.00
-```
-
-```bash
-gcc ~/LPEDC/material/E807.c -o ~/LPEDC/material/E807 && ~/LPEDC/material/E807
-```
-
-**Exercício E808** · ★★☆
-
-A mochila fracionária ao contrário: em vez de MAXIMIZAR o valor levado,
-MINIMIZAR o custo de uma compra. Um posto precisa de 30 000 litros de
-gasolina. Quatro distribuidoras vendem, cada uma, até um limite de litros
-por um preço fixo por litro:
-
-
-```text
-A: até 12 000 L a R$ 5,10    B: até 8 000 L a R$ 4,95
-C: até 15 000 L a R$ 5,25    D: até 6 000 L a R$ 4,89
-```
-
-
-Compre da mais barata para a mais cara, até completar. Guarde os preços
-em CENTAVOS (int) e o custo em centavos num long long; mostre em reais
-com / 100 e % 100.
-
-
-```text
-Saída esperada:
-D:  6000 L a R$ 4.89 = R$ 29340.00
-B:  8000 L a R$ 4.95 = R$ 39600.00
-A: 12000 L a R$ 5.10 = R$ 61200.00
-C:  4000 L a R$ 5.25 = R$ 21000.00
-Total: R$ 151140.00
-```
-
-```bash
-gcc ~/LPEDC/material/E808.c -o ~/LPEDC/material/E808 && ~/LPEDC/material/E808
-```
-
-**Exercício E809** · ★★★
-
-Uma transportadora tem 8 tipos de carga esperando e um caminhão com 700
-kg livres. Ordenar as 8 pela razão funciona, mas, quando o caminhão
-enche logo, quase toda a ordenação é desperdício. Use um HEAP DE MÁXIMO
-pela razão (assunto 0102): monte o heap em O(n), com a descida a partir
-do último pai, e tire o topo só enquanto houver espaço.
-
-
-```text
-móveis 400 kg R$ 2000      eletrônicos 150 kg R$ 4500
-roupas 200 kg R$ 3000      cimento 900 kg R$ 900
-remédios 50 kg R$ 2500     livros 300 kg R$ 1800
-brinquedos 250 kg R$ 2750  areia 1000 kg R$ 300
-```
-
-
-
-```text
-Saída esperada:
- 50 de   50 kg  R$ 2500.00  remédios
-150 de  150 kg  R$ 4500.00  eletrônicos
-200 de  200 kg  R$ 3000.00  roupas
-250 de  250 kg  R$ 2750.00  brinquedos
- 50 de  300 kg  R$  300.00  livros
-Total: R$ 13050.00
-Itens tirados do heap: 5 de 8
-```
-
-```bash
-gcc ~/LPEDC/material/E809.c -o ~/LPEDC/material/E809 && ~/LPEDC/material/E809
-```
-
----
-
-## 0136 · Código de Huffman
-
-Na placa da barraca está `BANANA NA CABANA`: 16 letras de 8 bits, 128 bits.
-Mas há só **5 símbolos** (A, N, B, C e o espaço), e o A aparece 7 vezes e o C
-uma. Com 3 bits por símbolo seriam 48, e dá para gastar menos.
-
-Basta dar códigos de tamanho **diferente**: curto para o frequente, comprido
-para o raro, como no Morse. Mas onde um código termina? Se A = `0` e N = `01`,
-`001` pode ser "A A ..." ou "A N".
-
-A saída é o **código livre de prefixo**: nenhum código é o começo de outro, e
-a leitura não tem dúvida. Ele é uma **árvore binária**: cada símbolo é uma
-**folha** e o código é o caminho da raiz até ela, com `0` para a esquerda e
-`1` para a direita.
-
-O total de bits é a soma de `frequência × profundidade` de cada folha. David
-Huffman mostrou em 1952 que um **guloso** acha a melhor árvore:
-
-1. crie uma folha por símbolo, com a frequência, e ponha todas num **heap de
-   mínimo** (0102);
-2. enquanto houver mais de um nó, **tire os dois menores**, crie um pai com
-   os dois como filhos e a **soma** das frequências, e devolva-o ao heap;
-3. o nó que sobrar é a **raiz**.
-
-Para `k` símbolos são `k - 1` junções com heap de O(log k): **O(k log k)**.
-
-Aqui, A = 7, N = 4, B = 2, espaço = 2 e C = 1: C e espaço viram 3; com o B,
-5; com o N, 9; com o A, a raiz 16. O A ganha `0` e o C, `1110`:
+A placa `BANANA NA CABANA` tem 16 letras e só 5 símbolos: A = 7, N = 4, B = 2,
+espaço = 2 e C = 1. C e espaço viram 3; com o B, 5; com o N, 9; com o A, a raiz
+16. O A ganha `0` e o C, `1110`:
 
 <p align="center"><img src="material/0136-ideia.svg" alt="Diagrama da ideia: Código de Huffman" width="858"></p>
-
-### Passo a passo
-
-Heap a cada junção. No empate, desempata o byte (espaço, 32, antes do B, 66):
-
-| junção | heap antes | tira | cria |
-| --- | --- | --- | --- |
-| 1 | C:1, esp:2, B:2, N:4, A:7 | C:1 e esp:2 | 3 |
-| 2 | B:2, 3, N:4, A:7 | B:2 e 3 | 5 |
-| 3 | N:4, 5, A:7 | N:4 e 5 | 9 |
-| 4 | A:7, 9 | A:7 e 9 | 16 (a raiz) |
 
 O TAD está em `huffman.h` e `huffman.c`. A parte central é o laço do guloso,
 com um heap de mínimo de ponteiros para nó:
@@ -1947,9 +1259,8 @@ NoHuf *huf_constroi(const long freq[256]) {
 ```
 
 O campo `ordem` (terceiro argumento de `novo_no`) desempata frequências
-iguais: folhas usam o próprio byte e nós internos, 256 em diante, a ordem de
-criação. Os códigos saem de uma descida recursiva que acumula `0` e `1`. O
-cliente conta as frequências, monta a árvore e mostra os códigos:
+iguais: folhas usam o próprio byte e nós internos, 256 em diante. O cliente
+conta as frequências, monta a árvore e mostra os códigos:
 
 ```c
 #include <stdio.h>
@@ -1993,31 +1304,21 @@ int main(void) {
 // 33 bits, contra 128 com 8 bits por letra
 ```
 
-São 7·1 + 4·2 + 2·3 + 1·4 + 2·4 = 33 bits, contra 48 do código fixo.
-
-No fluxograma do `huf_constroi`, cada volta tira dois nós e põe um: 4 voltas
-para 5 folhas:
+São 7·1 + 4·2 + 2·3 + 1·4 + 2·4 = 33 bits, contra 48 do código fixo de 3 bits.
+No `huf_constroi`, cada volta tira dois nós e põe um: 4 voltas para 5 folhas:
 
 <p align="center"><img src="material/0136-fluxograma.svg" alt="Fluxograma: Código de Huffman" width="588"></p>
 
-> [!WARNING]
-> Quem decodifica precisa da **mesma árvore**: se o desempate mudar, os
-> códigos mudam e a frase sai trocada. O arquivo guarda a árvore, ou as
-> frequências e a regra de desempate. Com um símbolo só (`AAAA`), o
-> `huf_codigos` dá o código `0`.
+#### Passo a passo
 
-> [!TIP]
-> **Por dentro do C:** indexe a frequência por `(unsigned char)*p`: com `char`
-> com sinal, os bytes de acentos em UTF-8 (`ã` é `0xC3 0xA3`) são negativos e
-> `freq[*p]` leria fora do vetor. A árvore tem `2k - 1` nós, e `huf_libera`
-> devolve todos em pós-ordem.
+Heap a cada junção. No empate, desempata o byte (espaço, 32, antes do B, 66):
 
-> [!NOTE]
-> **Pergunta para você:** monte, no papel, a árvore de Huffman de
-> `ARARA AZUL`. Quantos bits ela dá? Depois troque a frase no programa e
-> confira.
-
-### Hora de praticar
+| junção | heap antes | tira | cria |
+| --- | --- | --- | --- |
+| 1 | C:1, esp:2, B:2, N:4, A:7 | C:1 e esp:2 | 3 |
+| 2 | B:2, 3, N:4, A:7 | B:2 e 3 | 5 |
+| 3 | N:4, 5, A:7 | N:4 e 5 | 9 |
+| 4 | A:7, 9 | A:7 e 9 | 16 (a raiz) |
 
 **Exemplo A271 · Decodificar descendo a árvore (e o estrago de um bit errado)**
 
@@ -2168,142 +1469,11 @@ int main(void) {
 gcc ~/LPEDC/material/A272.c ~/LPEDC/material/0136-huffman.c -o ~/LPEDC/material/A272 && ~/LPEDC/material/A272
 ```
 
-#### Exercícios
+### 0137 · Juntando tudo
 
-**Exercício E811** · ★☆☆
-
-Use o TAD huffman.h da pasta para comprimir a frase "PAPAI PAGOU A
-PIPOCA": conte as frequências, monte a árvore, gere os códigos e mostre,
-para cada símbolo que aparece (na ordem da tabela ASCII), a frequência e
-o código. No fim, o total de bits, o tamanho original (8 bits por letra)
-e a porcentagem.
-
-
-```text
-Saída esperada:
-' ' 3: 110
-'A' 5: 01
-'C' 1: 0010
-'G' 1: 0011
-'I' 2: 1111
-'O' 2: 000
-'P' 5: 10
-'U' 1: 1110
-55 bits de 160 (34.4%)
-```
-
-```bash
-gcc ~/LPEDC/material/E811.c ~/LPEDC/material/0136-huffman.c -o ~/LPEDC/material/E811 && ~/LPEDC/material/E811
-```
-
-**Exercício E813** · ★★☆
-
-Chegou uma mensagem compactada, junto com a TABELA de códigos (sem a
-árvore). Decodifique usando só a tabela:
-
-
-```text
-E 00   S 01   T 100   O 101   U 1100   espaço 1101   B 1110   M 1111
-```
-
-
-
-```text
-Bits: 0001100101110011011110001111
-```
-
-
-Como o código é livre de prefixo, dá para ler assim: vá juntando os bits
-num buffer, um por um; a cada bit, compare o buffer com todos os códigos
-(strcmp). Quando bater, escreva o símbolo e esvazie o buffer. No fim, se
-sobrar algo no buffer, avise.
-
-
-```text
-Saída esperada:
-Mensagem: ESTOU BEM
-```
-
-```bash
-gcc ~/LPEDC/material/E813.c ~/LPEDC/material/0136-huffman.c -o ~/LPEDC/material/E813 && ~/LPEDC/material/E813
-```
-
-**Exercício E814** · ★★☆
-
-Cinco arquivos de log, de 8, 3, 15, 6 e 10 MB, precisam ser juntados
-(intercalados) dois a dois, e juntar dois custa a soma dos tamanhos. Use
-o guloso do Huffman: sempre as duas MENORES. Escreva um heap de mínimo
-sobre vetor (poe e tira) e junte até sobrar um arquivo só, devolvendo
-cada soma ao heap. Mostre cada junção (a menor primeiro) e o custo total.
-
-
-```text
-Saída esperada:
-junta 3 + 6
-junta 8 + 9
-junta 10 + 15
-junta 17 + 25
-Custo: 93 MB lidos
-```
-
-```bash
-gcc ~/LPEDC/material/E814.c ~/LPEDC/material/0136-huffman.c -o ~/LPEDC/material/E814 && ~/LPEDC/material/E814
-```
-
-**Exercício E815** · ★★★
-
-Código canônico: o compactador guarda só o COMPRIMENTO do código de cada
-símbolo e refaz os códigos por uma regra fixa:
-1. ordene por comprimento e, no empate, pelo byte;
-2. o primeiro recebe o código 0;
-3. cada próximo recebe codigo = (codigo + 1) << (l - l_ant).
-Use huffman.h na frase "BANANA NA CABANA" só para obter os comprimentos
-(strlen dos códigos); gere os canônicos e mostre ao lado dos do Huffman.
-
-
-```text
-Saída esperada:
-'A' 1 bits: 0  (Huffman deu 0)
-'N' 2 bits: 10  (Huffman deu 10)
-'B' 3 bits: 110  (Huffman deu 110)
-' ' 4 bits: 1110  (Huffman deu 1111)
-'C' 4 bits: 1111  (Huffman deu 1110)
-```
-
-```bash
-gcc ~/LPEDC/material/E815.c ~/LPEDC/material/0136-huffman.c -o ~/LPEDC/material/E815 && ~/LPEDC/material/E815
-```
-
----
-
-## 0137 · Juntando tudo
-
-A feira do bairro manda a lista de preços por um rádio lento, e cada byte
-economizado conta. Um **compactador** grava uma versão menor de um arquivo e
-um **descompactador** devolve o original, byte por byte.
-
-O Huffman do 0136 usava códigos em texto (`"1110"`). Num arquivo, o código
-vira **bits de verdade**, e surgem três problemas:
-
-- **o arquivo é feito de bytes**: junte os bits, 8 por vez, num `unsigned
-  char` e grave-o quando enche. O último quase nunca enche e vai com zeros;
-- **o descompactador precisa da mesma árvore**: o arquivo começa com um
-  **cabeçalho** (assinatura `HUF1`, tamanho original e 256 frequências), e o
-  `huf_constroi` desempata sempre igual;
-- **os zeros do fim não são dados**: o descompactador para ao escrever o
-  tamanho original.
-
-O compactador lê o arquivo **duas vezes**: conta as frequências e, com a
-árvore pronta, troca cada byte pelo código. O descompactador monta a árvore
-do cabeçalho e anda nela bit a bit (`0` esquerda, `1` direita); na folha,
-escreve o byte e volta à raiz.
-
-O projeto reúne `fread`/`fwrite` (0068), bits (0065), árvore binária (0098),
-heap (0102), Huffman (0136) e TADs (0074). O `compactador.h` oferece
-`huf_compacta` e `huf_descompacta`.
-
-A lista da feira (6 linhas repetidas 40 vezes) tem 9560 bytes e compactada,
-6156: 1036 de cabeçalho e 5120 de bits:
+A feira do bairro manda a lista de preços por um rádio lento. A lista (6
+linhas repetidas 40 vezes) tem 9560 bytes; compactada, 6156: 1036 de
+cabeçalho e 5120 de bits:
 
 <p align="center"><img src="material/0137-ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
 
@@ -2399,33 +1569,11 @@ int main(void) {
 // feira2.txt: 9560 bytes, igual ao original
 ```
 
-Os bits ocupam 53,6% do original, porque há poucos símbolos e alguns muito
-frequentes. O cabeçalho é um custo fixo: pesado em arquivos pequenos,
-irrelevante nos grandes.
-
-No fluxograma do `huf_descompacta`, cada byte começa na raiz e lê bits até uma
-folha; o laço de fora para no tamanho original:
+O cabeçalho é custo fixo: pesado em arquivo pequeno, irrelevante nos grandes.
+No `huf_descompacta`, cada byte começa na raiz e lê bits até uma folha; o laço
+de fora para no tamanho original:
 
 <p align="center"><img src="material/0137-fluxograma.svg" alt="Fluxograma: Juntando tudo" width="487"></p>
-
-> [!WARNING]
-> Sem o `descarrega` no fim, os bits do byte incompleto (até 7) se perdem. O
-> teste de ida e volta pega o erro: compare **byte a byte**, como o `iguais`.
-> Abra os arquivos em modo binário (`"rb"`, `"wb"`): no Windows, em modo texto,
-> o byte 26 é lido como fim de arquivo.
-
-> [!TIP]
-> **Por dentro do C:** o cabeçalho usa `uint64_t` e `uint32_t` (`stdint.h`)
-> porque o tamanho de `long` varia (8 bytes no Linux de 64 bits, 4 no
-> Windows): são sempre 4 + 8 + 1024 = 1036 bytes. O `rewind` volta ao começo
-> para a segunda leitura.
-
-> [!NOTE]
-> **Pergunta para você:** um arquivo tem as 26 letras maiúsculas, cada uma
-> repetida 100 vezes (2600 bytes). Quantos bits o Huffman dá a cada letra, e
-> quantos bytes tem o `.huf`? Compensa compactar? Calcule e depois teste.
-
-### Hora de praticar
 
 **Exemplo A273 · O compactador na linha de comando**
 
@@ -2541,7 +1689,553 @@ int main(void) {
 gcc ~/LPEDC/material/A274.c ~/LPEDC/material/0137-compactador.c ~/LPEDC/material/0137-huffman.c -o ~/LPEDC/material/A274 && ~/LPEDC/material/A274
 ```
 
-#### Exercícios
+---
+
+## 3. Exercícios práticos
+
+Cada exercício é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta. Compile como os exemplos: `gcc ~/LPEDC/material/E007.c -o ~/LPEDC/material/E007 && ~/LPEDC/material/E007`. Resoluções em `_respostas/20-dc-e-gulosos/`.
+
+### 0131 · Divisão e conquista
+
+**Exercício E781** · ★☆☆
+
+A barraca de pastel anotou as vendas de 8 dias, em reais:
+
+```text
+320 415 280 510 390 605 720 460
+```
+
+Escreva a função int soma(const int v[], int ini, int fim), que soma
+v[ini..fim] por divisão e conquista: se o pedaço tem um elemento só, a
+soma é ele; senão, divida ao meio, some cada metade com a própria função e
+junte as duas respostas. Conte as chamadas numa variável global e mostre:
+
+```text
+Saída esperada:
+Total: R$ 3700
+Chamadas: 15
+```
+
+**Exercício E783** · ★★☆
+
+Escreva long long potencia(long long x, int n), a potência por divisão e
+conquista: caso base n == 0; senão, UMA só chamada recursiva para n / 2,
+guardada numa variável, e o resultado é o quadrado dela (vezes x, se n é
+ímpar). Conte as chamadas numa variável static e mostre 3^20 e o número
+de chamadas. Depois troque 20 por 39 e confira que as chamadas sobem só
+para 7. (Não vá além de 39: 3^40 estoura o long long.)
+
+```text
+Saída esperada:
+3^20 = 3486784401
+Chamadas: 6
+```
+
+**Exercício E784** · ★★☆
+
+Uma trilha de 10 km foi medida a cada quilômetro. A altitude só sobe até
+o pico e depois só desce (o pico não fica nas pontas):
+
+```text
+km:       0    1    2    3    4    5    6    7    8    9   10
+altitude: 820  905 1010 1180 1340 1415 1390 1250 1100  960  870
+```
+
+Escreva int pico(const int v[], int ini, int fim), que acha o índice do
+ponto mais alto SEM olhar todos os pontos. Divisão e conquista com um
+pedaço só, como a busca binária: olhe o meio e o vizinho da direita. Se
+ainda está subindo, o pico está à direita do meio; senão, está no meio ou
+à esquerda. Conte numa variável global quantas vezes comparou v[meio] com
+v[meio + 1].
+
+```text
+Saída esperada:
+Pico: 1415 m no km 5
+Comparações: 3
+```
+
+**Exercício E785** · ★★★
+
+Fibonacci rápido: a matriz {1 1; 1 0} elevada a n tem F(n) na primeira
+linha, segunda coluna (F(1) = F(2) = 1). Calcule-o com a potência rápida,
+multiplicando matrizes. Escreva:
+- typedef struct Matriz com quatro long long (a, b, c, d);
+- Matriz multiplica(Matriz x, Matriz y), que soma 1 num contador global;
+- Matriz potencia(Matriz m, int n), recursiva, com {1, 0, 0, 1} no caso base;
+- long long fib(int n).
+Mostre F(10), F(50) e F(90), zerando o contador antes de cada um.
+
+```text
+Saída esperada:
+F(10) = 55 (6 produtos de matriz)
+F(50) = 12586269025 (9 produtos de matriz)
+F(90) = 2880067194370816120 (11 produtos de matriz)
+```
+
+### 0132 · Inversões e subvetor de soma máxima
+
+**Exercício E787** · ★☆☆
+
+A lista de entregas de um motoboy deveria estar em ordem de horário, mas
+foi montada às pressas. Os horários (minutos depois das 18h), na ordem da
+lista, são:
+
+```text
+14 9 17 12 20 11 15
+```
+
+Escreva o jeito direto, O(n²): dois laços que testam todos os pares
+i < j e mostram cada par fora de ordem (horario[i] > horario[j]), na ordem
+em que os laços os encontram. No fim, mostre o total e quantos pares
+existem.
+
+```text
+Saída esperada:
+Fora de ordem: (14, 9) (14, 12) (14, 11) (17, 12) (17, 11) (17, 15) (12, 11) (20, 11) (20, 15)
+Inversões: 9 de 21 pares
+```
+
+**Exercício E789** · ★★☆
+
+Você e a Bia ranquearam os mesmos seis pratos, do favorito ao último:
+
+```text
+você: Feijoada, Moqueca, Coxinha, Acarajé, Pastel, Pão de queijo
+Bia:  Moqueca, Coxinha, Feijoada, Pão de queijo, Acarajé, Pastel
+```
+
+Mostre cada par de pratos em que vocês discordam (no formato "A x B", com
+A antes de B no SEU ranking) e o total. Monte um vetor v em que
+v[i] é a posição, no ranking da Bia, do seu i-ésimo prato. Os pares em
+desacordo são exatamente as inversões de v.
+
+```text
+Saída esperada:
+Feijoada x Moqueca
+Feijoada x Coxinha
+Acarajé x Pão de queijo
+Pastel x Pão de queijo
+Pares em desacordo: 4 de 15
+```
+
+**Exercício E790** · ★★☆
+
+Cada deslocamento do insertion sort (assunto 0093) desfaz uma inversão,
+então o número de deslocamentos é o número de inversões do vetor.
+Confira no computador. Escreva long long insercao(int v[], int n), que
+devolve quantos deslocamentos fez, e o merge sort que conta inversões, do
+texto (sem os printf). Aplique os dois, cada um numa cópia do vetor
+(memcpy), aos pesos de 12 encomendas, em kg:
+
+```text
+31 12 45 27 8 39 19 50 4 23 36 15
+```
+
+```text
+Saída esperada:
+Deslocamentos do insertion sort: 36
+Inversões pelo merge sort: 36
+```
+
+**Exercício E791** · ★★★
+
+Um analista quer contar as quedas fortes no preço de uma ação: pares de
+dias i < j em que o preço do dia i era MAIS QUE O DOBRO do preço do dia j
+(preco[i] > 2 * preco[j]). Os preços de 8 dias, em reais:
+
+```text
+40 18 25 9 30 12 50 20
+```
+
+Escreva a versão O(n log n), adaptando o merge sort que conta inversões,
+e confira com uma força bruta O(n²) feita ANTES de ordenar.
+
+```text
+Saída esperada:
+Quedas de mais da metade: 7
+Força bruta: 7
+```
+
+### 0133 · Algoritmos gulosos
+
+**Exercício E793** · ★☆☆
+
+O caixa eletrônico tem notas de R$ 200, 100, 50, 20, 10, 5 e 2, e entrega
+o saque com o menor número de notas, pelo guloso: a maior nota que cabe,
+de novo e de novo. Escreva a função void saque(int valor), que mostra
+quantas notas de cada valor saem (só as que aparecem) e o total, e chame
+para R$ 380 e R$ 1270.
+
+```text
+Saída esperada:
+Saque de R$ 380:
+  1 de R$ 200
+  1 de R$ 100
+  1 de R$ 50
+  1 de R$ 20
+  1 de R$ 10
+  total: 5 notas
+Saque de R$ 1270:
+  6 de R$ 200
+  1 de R$ 50
+  1 de R$ 20
+  total: 8 notas
+```
+
+**Exercício E795** · ★★☆
+
+Numa enchente, cada barco de resgate leva no máximo 2 pessoas e no máximo
+150 kg. Os pesos das 8 pessoas a resgatar, em kg:
+
+```text
+60 95 80 120 45 70 100 55
+```
+
+Use o menor número de barcos com este guloso: ordene os pesos; a pessoa
+mais pesada que falta SEMPRE vai no próximo barco; se a mais leve que
+falta couber junto, vai junto. Mostre cada barco (o mais pesado primeiro)
+e o total.
+
+```text
+Saída esperada:
+Barco 1: 120
+Barco 2: 100 + 45
+Barco 3: 95 + 55
+Barco 4: 80 + 60
+Barco 5: 70
+Total: 5 barcos
+```
+
+**Exercício E796** · ★★☆
+
+O sistema da lanchonete lê as moedas de um arquivo de configuração, e elas
+chegam fora de ordem: {10, 50, 5, 100, 25}. Escreva
+int troco_guloso(const int moedas[], int k, int valor), que supõe as
+moedas em ordem DECRESCENTE: mostra as moedas usadas, uma a uma (a maior
+que cabe, de novo e de novo), e devolve quantas foram. No main, ordene
+as moedas em ordem decrescente com qsort (escreva a função de
+comparação) e calcule o troco de 190 e de 65.
+
+```text
+Saída esperada:
+Troco de 190: 100 50 25 10 5 (5 moedas)
+Troco de 65: 50 10 5 (3 moedas)
+```
+
+**Exercício E798** · ★★★
+
+Depois do churrasco, a conta foi dividida igualmente entre 6 amigos, mas
+cada um pagou uma parte diferente no mercado:
+
+```text
+Ana R$ 180, Bruno R$ 0, Carla R$ 60, Davi R$ 120, Eva R$ 0, Fábio R$ 90
+```
+
+Monte os Pix para acertar as contas com este guloso: enquanto alguém deve,
+quem MAIS deve paga para quem MAIS tem a receber o menor dos dois valores
+(a dívida de um ou o crédito do outro). Em caso de empate, vale o que vem
+primeiro na lista. Trabalhe em centavos, num int.
+
+```text
+Saída esperada:
+Total R$ 450.00, cada um R$ 75.00
+Bruno -> Ana: R$ 75.00
+Eva -> Davi: R$ 45.00
+Eva -> Ana: R$ 30.00
+Carla -> Fábio: R$ 15.00
+4 Pix
+```
+
+### 0134 · Seleção de intervalos
+
+**Exercício E799** · ★☆☆
+
+A sala de reunião do escritório recebeu 8 pedidos para amanhã, já
+ORDENADOS pela hora de fim (o início está em ini[i], o fim em fim[i]):
+
+```text
+8-9  8-10  9-11  10-12  11-12  12-14  13-15  14-16
+```
+
+Escreva o laço guloso que escolhe o maior número de reuniões sem choque:
+guarde a hora em que a sala fica livre (começa em 0) e aceite cada pedido
+que começa nessa hora ou depois. Os intervalos são [ini, fim): quem
+termina às 9h libera a sala às 9h.
+
+```text
+Saída esperada:
+Escolhidas: 8-9 9-11 11-12 12-14 14-16
+Total: 5
+```
+
+**Exercício E801** · ★★☆
+
+Coloque os três critérios do texto para competir no mesmo conjunto de
+pedidos, [ini, fim):
+
+```text
+[0, 10) [1, 4) [4, 7) [7, 10) [3, 5) [6, 8) [10, 12)
+```
+
+Escreva int seleciona(const Pedido p[], int n, int (*criterio)(const void *,
+const void *)), que copia os pedidos (memcpy), ordena a cópia com qsort
+usando o critério recebido (ponteiro para função, assunto 0050) e aceita
+cada pedido que não choca com NENHUM dos já aceitos. Escreva também as
+três comparações: por_inicio, por_duracao e por_fim.
+
+```text
+Saída esperada:
+Começa primeiro: 2
+Mais curto:      3
+Termina primeiro: 4
+```
+
+**Exercício E802** · ★★☆
+
+A fiscal da vigilância sanitária precisa passar por todas as feiras de
+domingo. Ela anda rápido: numa visita, num certo horário, fiscaliza todas
+as feiras abertas naquela hora. Os horários são FECHADOS, [abre, fecha]:
+
+```text
+Pinheiros 7-12, Lapa 6-9, Tatuapé 10-14, Mooca 8-11,
+Liberdade 13-18, Butantã 15-17, Santana 16-20
+```
+
+Qual é o menor número de visitas? Guloso: ordene pela hora de
+fechamento; pegue a feira que fecha primeiro e ainda não foi vista e
+marque uma visita na hora em que ela FECHA (o mais tarde possível, para
+pegar o maior número de outras abertas). Mostre cada visita com as feiras
+abertas naquela hora, olhando só as que vêm dali em diante na ordem.
+
+```text
+Saída esperada:
+Visita às 9h: Lapa Mooca Pinheiros
+Visita às 14h: Tatuapé Liberdade
+Visita às 17h: Butantã Liberdade Santana
+Total: 3 visitas
+```
+
+**Exercício E804** · ★★★
+
+O clube tem DUAS quadras iguais e recebeu 10 pedidos de jogos, [ini, fim):
+
+```text
+Leões 8-10, Tubarões 8-11, Águias 9-12, Lobos 10-12, Falcões 11-13,
+Panteras 12-14, Touros 10-15, Corujas 13-16, Raposas 14-16, Ursos 15-17
+```
+
+Aceite o maior número de jogos. O guloso do texto se estende assim:
+ordene pela hora de fim (em caso de empate, quem começa antes vem antes);
+para cada jogo, entre as quadras já livres na hora em que ele começa,
+escolha a que ficou livre MAIS TARDE; se nenhuma está livre, recuse.
+
+```text
+Saída esperada:
+ 8h-10h quadra 1  Leões
+ 8h-11h quadra 2  Tubarões
+ 9h-12h recusado  Águias
+10h-12h quadra 1  Lobos
+11h-13h quadra 2  Falcões
+12h-14h quadra 1  Panteras
+10h-15h recusado  Touros
+13h-16h quadra 2  Corujas
+14h-16h quadra 1  Raposas
+15h-17h recusado  Ursos
+Jogos aceitos: 7 de 10
+```
+
+### 0135 · Mochila fracionária
+
+**Exercício E805** · ★☆☆
+
+A cooperativa de reciclagem vende para uma usina, e o caminhão leva 1000
+kg. No depósito há três lotes, já em ordem decrescente de R$/kg:
+
+```text
+PET: 300 kg, R$ 750 o lote
+papelão: 500 kg, R$ 400 o lote
+vidro: 800 kg, R$ 160 o lote
+```
+
+Escreva o laço da mochila fracionária: leve cada lote inteiro enquanto
+couber e, no primeiro que não couber, só a parte que completa o
+caminhão. Mostre o que vai de cada material e o total.
+
+```text
+Saída esperada:
+300 kg de PET: R$ 750.00
+500 kg de papelão: R$ 400.00
+200 kg de vidro: R$ 40.00
+Total: R$ 1190.00
+```
+
+**Exercício E807** · ★★☆
+
+O feirante tem 15 kg de espaço e três caixas de fruta de 10 kg: uva
+(R$ 42, ou R$ 4,20/kg), caqui (R$ 20) e ameixa (R$ 48, ou R$ 4,80/kg).
+Escreva a mochila fracionária: guarde as caixas numa struct Caixa
+(fruta, kg, valor), ordene por R$/kg decrescente com qsort (escreva a
+função de comparação) e leve
+caixas inteiras enquanto couber, e só a parte que completa no primeiro
+que não couber. Mostre os kg levados de cada fruta e o total.
+
+```text
+Saída esperada:
+10 kg de ameixa
+5 kg de uva
+Total: R$ 69.00
+```
+
+**Exercício E808** · ★★☆
+
+A mochila fracionária ao contrário: em vez de MAXIMIZAR o valor levado,
+MINIMIZAR o custo de uma compra. Um posto precisa de 30 000 litros de
+gasolina. Quatro distribuidoras vendem, cada uma, até um limite de litros
+por um preço fixo por litro:
+
+```text
+A: até 12 000 L a R$ 5,10    B: até 8 000 L a R$ 4,95
+C: até 15 000 L a R$ 5,25    D: até 6 000 L a R$ 4,89
+```
+
+Compre da mais barata para a mais cara, até completar. Guarde os preços
+em CENTAVOS (int) e o custo em centavos num long long; mostre em reais
+com / 100 e % 100.
+
+```text
+Saída esperada:
+D:  6000 L a R$ 4.89 = R$ 29340.00
+B:  8000 L a R$ 4.95 = R$ 39600.00
+A: 12000 L a R$ 5.10 = R$ 61200.00
+C:  4000 L a R$ 5.25 = R$ 21000.00
+Total: R$ 151140.00
+```
+
+**Exercício E809** · ★★★
+
+Uma transportadora tem 8 tipos de carga esperando e um caminhão com 700
+kg livres. Ordenar as 8 pela razão funciona, mas, quando o caminhão
+enche logo, quase toda a ordenação é desperdício. Use um HEAP DE MÁXIMO
+pela razão (assunto 0102): monte o heap em O(n), com a descida a partir
+do último pai, e tire o topo só enquanto houver espaço.
+
+```text
+móveis 400 kg R$ 2000      eletrônicos 150 kg R$ 4500
+roupas 200 kg R$ 3000      cimento 900 kg R$ 900
+remédios 50 kg R$ 2500     livros 300 kg R$ 1800
+brinquedos 250 kg R$ 2750  areia 1000 kg R$ 300
+```
+
+```text
+Saída esperada:
+ 50 de   50 kg  R$ 2500.00  remédios
+150 de  150 kg  R$ 4500.00  eletrônicos
+200 de  200 kg  R$ 3000.00  roupas
+250 de  250 kg  R$ 2750.00  brinquedos
+ 50 de  300 kg  R$  300.00  livros
+Total: R$ 13050.00
+Itens tirados do heap: 5 de 8
+```
+
+### 0136 · Código de Huffman
+
+**Exercício E811** · ★☆☆
+
+Use o TAD huffman.h da pasta para comprimir a frase "PAPAI PAGOU A
+PIPOCA": conte as frequências, monte a árvore, gere os códigos e mostre,
+para cada símbolo que aparece (na ordem da tabela ASCII), a frequência e
+o código. No fim, o total de bits, o tamanho original (8 bits por letra)
+e a porcentagem.
+
+```text
+Saída esperada:
+' ' 3: 110
+'A' 5: 01
+'C' 1: 0010
+'G' 1: 0011
+'I' 2: 1111
+'O' 2: 000
+'P' 5: 10
+'U' 1: 1110
+55 bits de 160 (34.4%)
+```
+
+```bash
+gcc ~/LPEDC/material/E811.c ~/LPEDC/material/0136-huffman.c -o ~/LPEDC/material/E811 && ~/LPEDC/material/E811
+```
+
+**Exercício E813** · ★★☆
+
+Chegou uma mensagem compactada, junto com a TABELA de códigos (sem a
+árvore). Decodifique usando só a tabela:
+
+```text
+E 00   S 01   T 100   O 101   U 1100   espaço 1101   B 1110   M 1111
+```
+
+```text
+Bits: 0001100101110011011110001111
+```
+
+Como o código é livre de prefixo, dá para ler assim: vá juntando os bits
+num buffer, um por um; a cada bit, compare o buffer com todos os códigos
+(strcmp). Quando bater, escreva o símbolo e esvazie o buffer. No fim, se
+sobrar algo no buffer, avise.
+
+```text
+Saída esperada:
+Mensagem: ESTOU BEM
+```
+
+```bash
+gcc ~/LPEDC/material/E813.c ~/LPEDC/material/0136-huffman.c -o ~/LPEDC/material/E813 && ~/LPEDC/material/E813
+```
+
+**Exercício E814** · ★★☆
+
+Cinco arquivos de log, de 8, 3, 15, 6 e 10 MB, precisam ser juntados
+(intercalados) dois a dois, e juntar dois custa a soma dos tamanhos. Use
+o guloso do Huffman: sempre as duas MENORES. Escreva um heap de mínimo
+sobre vetor (poe e tira) e junte até sobrar um arquivo só, devolvendo
+cada soma ao heap. Mostre cada junção (a menor primeiro) e o custo total.
+
+```text
+Saída esperada:
+junta 3 + 6
+junta 8 + 9
+junta 10 + 15
+junta 17 + 25
+Custo: 93 MB lidos
+```
+
+```bash
+gcc ~/LPEDC/material/E814.c ~/LPEDC/material/0136-huffman.c -o ~/LPEDC/material/E814 && ~/LPEDC/material/E814
+```
+
+**Exercício E815** · ★★★
+
+Código canônico: o compactador guarda só o COMPRIMENTO do código de cada
+símbolo e refaz os códigos por uma regra fixa:
+1. ordene por comprimento e, no empate, pelo byte;
+2. o primeiro recebe o código 0;
+3. cada próximo recebe codigo = (codigo + 1) << (l - l_ant).
+Use huffman.h na frase "BANANA NA CABANA" só para obter os comprimentos
+(strlen dos códigos); gere os canônicos e mostre ao lado dos do Huffman.
+
+```text
+Saída esperada:
+'A' 1 bits: 0  (Huffman deu 0)
+'N' 2 bits: 10  (Huffman deu 10)
+'B' 3 bits: 110  (Huffman deu 110)
+' ' 4 bits: 1110  (Huffman deu 1111)
+'C' 4 bits: 1111  (Huffman deu 1110)
+```
+
+```bash
+gcc ~/LPEDC/material/E815.c ~/LPEDC/material/0136-huffman.c -o ~/LPEDC/material/E815 && ~/LPEDC/material/E815
+```
+
+### 0137 · Juntando tudo
 
 **Exercício E817** · ★☆☆
 
@@ -2551,7 +2245,6 @@ num arquivo "cardapio.txt", compacte para "cardapio.huf", descompacte
 para "cardapio2.txt" e mostre os três tamanhos. No fim, apague os três
 arquivos com remove.
 
-
 ```text
 PRATO DO DIA
 Segunda: feijoada com couve e laranja
@@ -2560,8 +2253,6 @@ Quarta: feijoada com couve e laranja
 Quinta: peixe com pirão
 Sexta: feijoada com couve e laranja
 ```
-
-
 
 ```text
 Saída esperada:
@@ -2581,12 +2272,9 @@ compactação compensa? Grave num arquivo "padaria.txt" a linha abaixo 1,
 10, 30, 60, 100 e 300 vezes (um arquivo novo a cada caso), compacte cada
 um com o TAD compactador.h e monte a tabela:
 
-
 ```text
 Pão francês ..... R$ 0,75 a unidade
 ```
-
-
 
 ```text
 Saída esperada:
@@ -2613,7 +2301,6 @@ bit e grava o byte quando juntar 8, e fecha_bits(Saida *s), que grava o
 byte incompleto. Os bits que sobram devem ir para a ESQUERDA do último
 byte, completados com zeros à direita (por isso 10 vira 10000000). Apague
 o arquivo no fim.
-
 
 ```text
 Saída esperada:
@@ -2649,8 +2336,6 @@ original usando memcmp;
 fechar) e se as frequências voltaram iguais. Apague o arquivo no fim.
 ```
 
-
-
 ```text
 Saída esperada:
 Símbolos: 5
@@ -2662,9 +2347,831 @@ Frequências iguais
 gcc ~/LPEDC/material/E821.c ~/LPEDC/material/0137-compactador.c ~/LPEDC/material/0137-huffman.c -o ~/LPEDC/material/E821 && ~/LPEDC/material/E821
 ```
 
+### Lista do módulo
+
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P2001.c a P2030.c, em `material/`; resoluções em `_respostas/20-dc-e-gulosos/lista/`.
+
+#### ★☆☆ Aquecimento
+
+**Exercício P2001** · ★☆☆ · A senha do painel
+
+No painel do posto de saúde, as senhas chamadas hoje estão em ordem
+crescente: 3 8 12 15 21 27 33 40 46 52 58 64 71 79 85 90. Escreva do
+zero a busca binária RECURSIVA busca(v, ini, fim, x): olha o meio; se é
+x, devolve o índice; se x é menor, procura só na metade da esquerda;
+senão, só na da direita. Pedaço vazio (ini > fim) devolve -1. Conte as
+chamadas e procure as senhas 64, 3 e 50.
+
+```text
+Saída esperada:
+Senha 64: posição 11 (2 chamadas)
+Senha 3: posição 0 (4 chamadas)
+Senha 50: não chamada (5 chamadas)
+```
+
+**Resposta esperada:** 64 na posição 11 (2 chamadas), 3 na posição 0 (4 chamadas) e 50 não chamada (5 chamadas, a última com o pedaço vazio).
+
 ---
 
-## Desafios do módulo
+**Exercício P2002** · ★☆☆ · Maior e menor temperatura, dividindo ao meio
+
+A estação de Manaus registrou as máximas de 8 dias: 31 34 29 36 33 30 35
+32 graus. Complete a função recursiva extremos(v, ini, fim, &menor,
+&maior), que acha os DOIS de uma vez por divisão e conquista: um
+elemento só é menor e maior ao mesmo tempo (0 comparações); dois
+elementos custam 1 comparação; com mais, divida ao meio, resolva cada
+metade e junte com 2 comparações (menor com menor, maior com maior).
+Conte as comparações entre temperaturas.
+
+```text
+Saída esperada:
+Menor: 29 graus
+Maior: 36 graus
+Comparações: 10
+```
+
+**Resposta esperada:** menor 29, maior 36 e 10 comparações, que é 3n/2 - 2 para n = 8. Achar os dois com dois laços separados custaria 2(n - 1) = 14.
+
+---
+
+**Exercício P2003** · ★☆☆ · Os três últimos dígitos de 3^200
+
+3^200 tem 96 dígitos e não cabe em nenhum inteiro do C. Mas para saber
+só os três últimos dígitos basta fazer a conta módulo 1000, reduzindo
+depois de cada multiplicação: (a · b) % m = ((a % m) · (b % m)) % m.
+Complete potmod(b, e, m), a potência rápida recursiva do assunto 0131
+com o resto em cada passo, e conte as multiplicações. Mostre 3^200,
+7^222 e 2^1000, todos módulo 1000.
+
+```text
+Saída esperada:
+3^200 termina em 001 (11 multiplicações)
+7^222 termina em 049 (14 multiplicações)
+2^1000 termina em 376 (16 multiplicações)
+```
+
+**Resposta esperada:** 3^200 termina em 001, 7^222 em 049 e 2^1000 em 376; as multiplicações estão na saída de cima.
+
+---
+
+**Exercício P2004** · ★☆☆ · O caixa da feira com poucas moedas
+
+A barraca de tapioca tem no caixa só 2 notas de R$ 10, 3 de R$ 5, 4
+moedas de R$ 2 e 5 de R$ 1. O guloso do troco continua valendo (sempre a
+maior que cabe), mas agora ele precisa respeitar o estoque: uma nota só
+sai se ainda há dela. Complete troco(valor), que mostra o que sai, tira
+do estoque e devolve 1 se conseguiu pagar tudo (0 se faltou). Dê, nesta
+ordem, os trocos de R$ 27, R$ 18 e R$ 9.
+
+```text
+Saída esperada:
+Troco de R$ 27: 10 10 5 2
+Troco de R$ 18: 5 5 2 2 2 1 1
+Troco de R$ 9: 1 1 1
+  faltou troco!
+Sobrou no caixa: 0 de 10, 0 de 5, 0 de 2, 0 de 1
+```
+
+**Resposta esperada:** 27 = 10 + 10 + 5 + 2; 18 = 5 + 5 + 2 + 2 + 2 + 1 + 1; o de 9 falha, porque sobram só 3 moedas de R$ 1.
+
+---
+
+**Exercício P2005** · ★☆☆ · A melhor semana da lanchonete
+
+A lanchonete anotou o lucro (ou prejuízo) de 10 dias, em reais:
+
+```text
+dia:    0    1    2    3    4    5    6    7    8    9
+lucro: -40  120  -30   80  -150  60   90  -20   70  -60
+```
+
+Qual sequência de dias SEGUIDOS deu o maior lucro somado? Escreva do
+zero o subvetor de soma máxima por divisão e conquista (assunto 0132),
+mas devolvendo também ONDE ele começa e termina: use um struct Trecho {
+int ini, fim, soma; }. O trecho que cruza o meio é o melhor final da
+esquerda grudado no melhor começo da direita.
+
+```text
+Saída esperada:
+Melhor trecho: dias 1 a 8
+Lucro: R$ 220
+```
+
+**Resposta esperada:** dias 1 a 8, lucro de R$ 220. Vale a pena atravessar o prejuízo de R$ 150 do dia 4: os dias 5 a 8 sozinhos dão R$ 200.
+
+---
+
+**Exercício P2006** · ★☆☆ · O barco de Parintins
+
+Um barco sai de Manaus para Parintins com 500 kg livres no porão. O dono
+pode levar qualquer quantidade (dá para fracionar) de cinco produtos:
+
+```text
+produto     kg disponíveis   valor total (R$)
+castanha         200              3000
+farinha          300              1500
+guaraná          100              2500
+pirarucu         150              4200
+cupuaçu          250              2000
+```
+
+Escreva do zero a mochila fracionária: um struct Produto com nome, kg e
+valor; ordene com qsort pela razão valor/kg, da maior para a menor; leve
+inteiro enquanto couber e, no primeiro que não cabe, só a parte que
+cabe. Mostre o que vai e o valor total.
+
+```text
+Saída esperada:
+pirarucu: 150 kg, R$ 4200.00
+guaraná: 100 kg, R$ 2500.00
+castanha: 200 kg, R$ 3000.00
+cupuaçu: 50 kg, R$ 400.00
+Total: R$ 10100.00
+```
+
+**Resposta esperada:** pirarucu, guaraná e castanha inteiros (450 kg) e 50 kg de cupuaçu: R$ 10100.00.
+
+---
+
+**Exercício P2007** · ★☆☆ · O código que confunde
+
+O código de Huffman é LIVRE DE PREFIXO: nenhum código é o começo de
+outro, e por isso dá para ler a sequência de bits sem separador. Um
+estagiário montou três tabelas para os símbolos A, B, C, D e E e quer
+saber quais servem. Escreva do zero livre_de_prefixo(cod, n), que
+compara cada par de códigos e devolve 0 ao achar um que é começo do
+outro (mostrando qual), ou 1 se a tabela serve.
+
+```text
+Tabela 1: A=0   B=10  C=110  D=1110  E=1111
+Tabela 2: A=0   B=01  C=110  D=111   E=10
+Tabela 3: A=00  B=01  C=10   D=110   E=111
+```
+
+```text
+Saída esperada:
+Tabela 1:
+  serve
+Tabela 2:
+  A=0 é começo de B=01
+  não serve
+Tabela 3:
+  serve
+```
+
+**Resposta esperada:** as tabelas 1 e 3 servem; na 2, o 0 do A é começo do 01 do B (e "01" poderia ser AE... ou B).
+
+---
+
+**Exercício P2008** · ★☆☆ · Os consertos da oficina
+
+O mecânico faz um conserto por dia e tem 6 pedidos. Cada pedido tem um
+prazo (até que dia o cliente aceita esperar) e um valor; se ficar para
+depois do prazo, o cliente vai embora. Os pedidos JÁ estão em ordem
+decrescente de valor:
+
+```text
+pedido   A    B    C    D    E    F
+valor   300  250  200  150  100   80
+prazo    2    1    2    3    3    1
+```
+
+O guloso do AGENDAMENTO COM PRAZOS pega os pedidos do mais valioso para
+o menos e põe cada um no ÚLTIMO dia livre que ainda está dentro do prazo
+dele (deixando os dias cedo para quem tem prazo curto). Se não há dia
+livre, o pedido é recusado. Complete o laço que procura o dia.
+
+```text
+Saída esperada:
+Recusado: C (R$ 200)
+Recusado: E (R$ 100)
+Recusado: F (R$ 80)
+Dia 1: B (R$ 250)
+Dia 2: A (R$ 300)
+Dia 3: D (R$ 150)
+Total: R$ 700
+```
+
+**Resposta esperada:** dia 1 B, dia 2 A, dia 3 D, total R$ 700.
+
+---
+
+**Exercício P2009** · ★☆☆ · Quando a razão engana
+
+A mochila fracionária é resolvida pelo guloso da razão valor/peso. Na
+mochila 0/1 (cada item vai inteiro ou não vai), o mesmo guloso pode
+errar. Uma mochila de 50 kg e três itens:
+
+```text
+item   peso   valor
+TV      10     600
+som     20    1000
+PC      30    1200
+```
+
+O programa abaixo já tem o guloso 0/1 (pega pela razão, inteiro, se
+couber). Complete otimo(), que testa os 2^3 subconjuntos por máscara de
+bits (assunto 0125) e devolve o maior valor que cabe. Mostre os dois.
+
+```text
+Saída esperada:
+Guloso pela razão: R$ 1600
+Ótimo (força bruta): R$ 2200
+```
+
+**Resposta esperada:** guloso R$ 1600, ótimo R$ 2200 (som + PC).
+
+---
+
+**Exercício P2010** · ★☆☆ · A poltrona com o próprio número
+
+No teatro, os ingressos vendidos (já em ordem crescente e sem repetição)
+foram para as poltronas -5 -2 0 1 2 5 9 12 15 18 (o negativo é o
+camarote). O gerente desconfia que algum ingresso está na POSIÇÃO igual
+ao próprio número: v[i] == i. Escreva do zero pos_fixa(v, ini, fim), por
+divisão e conquista como a busca binária: se v[meio] < meio, a resposta
+só pode estar à direita; se v[meio] > meio, só à esquerda. Conte as
+chamadas.
+
+```text
+Saída esperada:
+Posição 5: v[5] = 5
+Chamadas: 3
+```
+
+**Resposta esperada:** posição 5 (v[5] = 5), em 3 chamadas.
+
+#### ★★☆ Para pensar
+
+**Exercício P2011** · ★★☆ · Mínimo e máximo de dois em dois
+
+O aplicativo da corrida de rua guarda os tempos dos 10 atletas da
+categoria, em segundos: 1520 1384 1702 1455 1611 1398 1830 1290 1477
+1563. Achar o menor com um laço e o maior com outro custa 2(n - 1) = 18
+comparações. Dá para fazer com 3n/2 - 2: ande de DOIS em DOIS, compare
+os dois entre si (1 comparação), depois o menor deles com o mínimo e o
+maior com o máximo (mais 2). São 3 comparações para cada 2 elementos.
+Escreva do zero as duas versões, contando as comparações, e mostre os
+resultados.
+
+```text
+Saída esperada:
+Ingênuo: menor 1290, maior 1830, 18 comparações
+Aos pares: menor 1290, maior 1830, 13 comparações
+```
+
+**Resposta esperada:** 1290 e 1830 nas duas; 18 comparações contra 13 (3 · 10 / 2 - 2). É o limite inferior para achar os dois (Cormen 9.1).
+
+---
+
+**Exercício P2012** · ★★☆ · As duas antenas mais próximas
+
+A operadora tem 8 antenas de celular num bairro, em coordenadas (em
+centenas de metros): (2, 3) (12, 30) (40, 50) (5, 1) (12, 10) (3, 4)
+(31, 33) (18, 21). Duas antenas muito perto se atrapalham. Qual é o PAR
+MAIS PRÓXIMO? A força bruta testa os 28 pares. Escreva do zero a divisão
+e conquista simples: ordene por x, divida ao meio, resolva cada metade,
+e depois olhe só os pontos da FAIXA a menos de d da linha do meio (d é a
+menor distância das metades), comparando cada um com os da faixa. Use
+força bruta quando houver 3 pontos ou menos. Mostre o par, a distância e
+quantas distâncias cada método calculou.
+
+```text
+Saída esperada:
+Força bruta: (2, 3) e (3, 4), 1.41, 28 distâncias
+Divisão e conquista: (2, 3) e (3, 4), 1.41, 6 distâncias
+```
+
+**Resposta esperada:** (2, 3) e (3, 4), distância 1.41 (raiz de 2).
+
+```bash
+gcc ~/LPEDC/material/P2012.c -o ~/LPEDC/material/P2012 -lm && ~/LPEDC/material/P2012
+```
+
+---
+
+**Exercício P2013** · ★★☆ · A mediana sem ordenar tudo
+
+Na fila do banco, o gerente cronometrou o atendimento de 11 clientes, em
+minutos: 7 15 3 22 9 4 18 11 6 13 2. Ele quer a MEDIANA (o 6º menor) sem
+ordenar o vetor inteiro. O SELECT pela partição do quicksort faz isso:
+particione em volta de um pivô; se o pivô caiu na posição k, achou; se
+k está à esquerda, continue só na esquerda; senão, só na direita. Uma
+metade só, a cada passo. Complete seleciona(v, ini, fim, k), usando a
+particao (Lomuto, pivô = último) que já está no programa.
+
+```text
+Saída esperada:
+ 6º menor: 9 (partições: 3)
+ 1º menor: 2 (partições: 1)
+11º menor: 22 (partições: 5)
+```
+
+**Resposta esperada:** mediana 9; o 1º menor é 2 e o 11º é 22.
+
+---
+
+**Exercício P2014** · ★★☆ · Quantas salas para o congresso?
+
+O congresso de computação em Manaus tem 9 palestras, cada uma num
+intervalo [ini, fim) em horas:
+
+```text
+[9, 11) [9, 10) [10, 12) [11, 13) [10, 11) [12, 14) [13, 15) [9, 12)
+[14, 16)
+```
+
+Qual é o MENOR número de salas para que nenhuma palestra tenha choque?
+Diferente da seleção de atividades (que escolhe um subconjunto), aqui
+todas acontecem. O guloso: ordene pelo início e ponha cada palestra
+numa sala que já ficou livre (fim da última palestra dela <= ini); se
+nenhuma está livre, abra uma sala nova. Escreva do zero e mostre a sala
+de cada palestra e o total.
+
+```text
+Saída esperada:
+[9, 10) -> sala 1
+[9, 11) -> sala 2
+[9, 12) -> sala 3
+[10, 11) -> sala 1
+[10, 12) -> sala 4
+[11, 13) -> sala 1
+[12, 14) -> sala 2
+[13, 15) -> sala 1
+[14, 16) -> sala 2
+Salas: 4
+```
+
+**Resposta esperada:** 4 salas. Entre 10h e 11h há quatro palestras ao mesmo tempo ([9, 11), [9, 12), [10, 11) e [10, 12)), então nenhum arranjo usa menos: o guloso acerta o ótimo.
+
+---
+
+**Exercício P2015** · ★★☆ · Huffman sem heap, para poucos símbolos
+
+Com só 6 símbolos, o heap é exagero: dá para achar os dois nós de menor
+frequência com um laço simples, O(n) por passo. A rádio comunitária vai
+transmitir boletins com as letras A, E, M, N, O e S, com estas
+frequências (em cada 100 letras):
+
+```text
+A: 30   E: 20   M: 5   N: 10   O: 25   S: 10
+```
+
+Escreva do zero a árvore de Huffman num vetor de nós (folhas nas
+posições 0 a 5, nós internos de 6 em diante), cada nó com freq, esq, dir
+e um flag de "já usado". Em cada passo, junte os dois de menor
+frequência ainda não usados. Depois, calcule a profundidade de cada
+folha (o tamanho do código) e o total de bits.
+
+```text
+Saída esperada:
+A: freq 30, código de 2 bits
+E: freq 20, código de 2 bits
+M: freq  5, código de 4 bits
+N: freq 10, código de 4 bits
+O: freq 25, código de 2 bits
+S: freq 10, código de 3 bits
+Total: 240 bits (código fixo: 300)
+```
+
+**Resposta esperada:** 240 bits para as 100 letras, contra 300 de um código fixo de 3 bits.
+
+---
+
+**Exercício P2016** · ★★☆ · O menor atraso da gráfica
+
+A gráfica tem 5 encomendas e uma impressora só. Cada encomenda tem a
+duração (em horas) e o prazo (a hora, contando do início do dia, em que
+o cliente vem buscar):
+
+```text
+encomenda   convites  cardápios  banner  folhetos  crachás
+duração         3          2        4        1         2
+prazo           6          4       10        3         7
+```
+
+O atraso de uma encomenda é max(0, fim - prazo). O guloso PRAZO MAIS
+CEDO PRIMEIRO (ordenar por prazo) minimiza o MAIOR atraso. Escreva do
+zero: compare a ordem da tabela com a ordem por prazo, mostrando o
+início e o fim de cada encomenda e o maior atraso de cada ordem.
+
+```text
+Saída esperada:
+Ordem da tabela:
+  convites: 0 a 3 (prazo 6, atraso 0)
+  cardápios: 3 a 5 (prazo 4, atraso 1)
+  banner: 5 a 9 (prazo 10, atraso 0)
+  folhetos: 9 a 10 (prazo 3, atraso 7)
+  crachás: 10 a 12 (prazo 7, atraso 5)
+  Maior atraso: 7 h
+Prazo mais cedo primeiro:
+  folhetos: 0 a 1 (prazo 3, atraso 0)
+  cardápios: 1 a 3 (prazo 4, atraso 0)
+  convites: 3 a 6 (prazo 6, atraso 0)
+  crachás: 6 a 8 (prazo 7, atraso 1)
+  banner: 8 a 12 (prazo 10, atraso 2)
+  Maior atraso: 2 h
+```
+
+**Resposta esperada:** a ordem da tabela tem atraso máximo 7 (os folhetos ficam prontos às 10, com prazo 3) e a ordem por prazo, só 2.
+
+---
+
+**Exercício P2017** · ★★☆ · Os postos da BR-319
+
+Um carro sai de Manaus pela BR-319 rumo a Porto Velho, 880 km, e o
+tanque cheio dá 250 km. Os postos ficam nos quilômetros 90, 180, 240,
+330, 420, 470, 560, 650, 700 e 790. O motorista quer parar o MENOR
+número de vezes. O guloso: só pare quando o próximo posto ficar fora do
+alcance, e pare no posto mais distante que ainda dá para alcançar.
+Escreva do zero e mostre as paradas e o total; se algum trecho entre
+postos for maior que 250 km, avise que é impossível.
+
+```text
+Saída esperada:
+Parada 1: km 240
+Parada 2: km 470
+Parada 3: km 700
+Chegou a Porto Velho com 3 paradas
+```
+
+**Resposta esperada:** 3 paradas, nos km 240, 470 e 700.
+
+---
+
+**Exercício P2018** · ★★☆ · Quem tem maioria absoluta?
+
+Na eleição do síndico, os 15 votos (números dos candidatos) foram:
+
+```text
+4 7 4 4 2 4 7 4 9 4 4 2 4 7 4
+```
+
+Um candidato tem MAIORIA ABSOLUTA se recebeu mais da metade dos votos.
+Escreva do zero por divisão e conquista: se v[ini..fim] tem majoritário,
+ele é majoritário de pelo menos uma das metades. Então resolva as duas
+metades e, para cada candidato que voltar, conte os votos dele no
+pedaço inteiro. Devolva -1 se não houver. Mostre o resultado também para
+a apuração da segunda urna: 1 2 3 1 2 3 1 2.
+
+```text
+Saída esperada:
+Urna 1: candidato 4, com 9 de 15 votos
+Urna 2: ninguém tem maioria
+```
+
+**Resposta esperada:** na primeira urna, o 4, com 9 de 15 votos; na segunda, ninguém.
+
+---
+
+**Exercício P2019** · ★★☆ · Rotas de ônibus com potência de matriz
+
+Quatro terminais de ônibus (T0 a T3) são ligados por linhas diretas,
+dadas pela matriz de adjacência A (A[i][j] = 1 se há linha de Ti para
+Tj). Um fato bonito: o elemento (i, j) de A^k conta quantas rotas de
+EXATAMENTE k trechos vão de Ti a Tj. Calcule A^k pela potência rápida
+(assunto 0131), trocando a multiplicação de números pela de matrizes 4 ×
+4, e mostre quantas rotas de T0 a T3 existem com 3, 6 e 12 trechos, e
+quantos produtos de matriz cada potência custou.
+
+```text
+A = | 0 1 1 0 |
+    | 1 0 1 1 |
+    | 1 1 0 1 |
+    | 0 1 1 0 |
+```
+
+```text
+Saída esperada:
+ 3 trechos: 2 rotas de T0 a T3 (4 produtos)
+ 6 trechos: 58 rotas de T0 a T3 (5 produtos)
+12 trechos: 15178 rotas de T0 a T3 (6 produtos)
+```
+
+**Resposta esperada:** com 3 trechos são 2 rotas (T0 T1 T2 T3 e T0 T2 T1 T3); com 12 trechos, 15178, em só 6 produtos de matriz.
+
+---
+
+**Exercício P2020** · ★★☆ · A fila do cartório
+
+Seis pessoas chegaram juntas ao cartório e há um atendente só. Os
+serviços levam 12, 3, 8, 1, 20 e 5 minutos, na ordem de chegada. A
+espera de cada um é a soma das durações de quem foi atendido antes. O
+guloso que minimiza a ESPERA MÉDIA é atender primeiro o serviço mais
+curto. O programa abaixo já calcula a espera média na ordem de chegada.
+Estenda-o: ordene as durações (qsort) e mostre a nova ordem e a nova
+espera média.
+
+```text
+Saída esperada:
+Ordem de chegada: 12 3 8 1 20 5 -> espera média 19.67 min
+Mais curto primeiro: 1 3 5 8 12 20 -> espera média 10.00 min
+```
+
+**Resposta esperada:** de 19.67 para 10.00 minutos.
+
+#### ★★★ Desafio
+
+**Exercício P2021** · ★★★ · Karatsuba contra os quatro produtos
+
+Para multiplicar x e y de n dígitos por divisão e conquista, escreva x =
+a·p + b e y = c·p + d, com p = 10^(n/2). O jeito direto faz QUATRO
+produtos menores (ac, ad, bc, bd): T(n) = 4T(n/2) + O(n), que é O(n²) e
+não ganha nada da escola. Karatsuba faz TRÊS (ac, bd e (a + b)(c + d)):
+T(n) = 3T(n/2) + O(n), O(n^1,59). Escreva do zero as duas versões,
+recursivas, com caso base "um dos números tem 1 dígito" (aí multiplica
+direto e conta 1), e compare as contagens para 12345678 × 87654321 e
+para 99999999 × 99999999.
+
+```text
+Saída esperada:
+12345678 x 87654321 = 1082152022374638
+  4 produtos: 64 multiplicações (resultado certo)
+  Karatsuba: 33 multiplicações (resultado certo)
+99999999 x 99999999 = 9999999800000001
+  4 produtos: 64 multiplicações (resultado certo)
+  Karatsuba: 63 multiplicações (resultado certo)
+```
+
+**Resposta esperada:** os produtos certos e, para os números de 8 dígitos, 64 multiplicações de um dígito na versão de 4 produtos (8 · 8, a mesma conta da escola). Karatsuba gasta 33 no primeiro e 63 no segundo: com os 9s, cada a + b ganha um dígito (99 + 99 = 198) e a recursão desce um nível a mais.
+
+---
+
+**Exercício P2022** · ★★★ · Strassen numa matriz 4 × 4
+
+O produto de matrizes n × n pela definição custa n³ multiplicações. Em
+1969, Strassen dividiu cada matriz em quatro blocos n/2 × n/2 e mostrou
+que bastam SETE produtos de blocos, e não oito:
+
+```text
+M1 = (A11 + A22)(B11 + B22)   M5 = (A11 + A12) B22
+M2 = (A21 + A22) B11          M6 = (A21 - A11)(B11 + B12)
+M3 = A11 (B12 - B22)          M7 = (A12 - A22)(B21 + B22)
+M4 = A22 (B21 - B11)
+C11 = M1 + M4 - M5 + M7       C12 = M3 + M5
+C21 = M2 + M4                 C22 = M1 - M2 + M3 + M6
+```
+
+Escreva do zero strassen(n, A, B, C) recursiva, caso base n == 1, e
+conte as multiplicações de números. Para não precisar de matriz de
+tamanho variável, toda matriz é int [4][4] e a função usa só o canto
+n × n de cima à esquerda. Multiplique as matrizes 4 × 4 do main pelos
+dois métodos e confira que dão o mesmo resultado.
+
+```text
+Saída esperada:
+  14  10   5   5
+  10   7   5  12
+   9  11   7   9
+  12   3   9  14
+Definição: 64 multiplicações
+Strassen: 49 multiplicações
+Resultados iguais
+```
+
+**Resposta esperada:** o produto de cima, 64 multiplicações na definição e 49 no Strassen (7 · 7). Para n = 2^k, são 7^k contra 8^k: O(n^2,81).
+
+---
+
+**Exercício P2023** · ★★★ · Huffman de ida e volta
+
+Escreva do zero, sem o TAD do módulo, um Huffman completo para a frase
+
+```text
+MANAUS AMAZONAS
+```
+
+(1) conte as frequências dos caracteres; (2) monte a árvore com um
+heap-mínimo de índices de nós, escrito à mão (sobe e desce do assunto
+de heap), juntando sempre os dois de menor frequência; (3) gere o código
+de cada caractere (esquerda = 0, direita = 1); (4) codifique a frase numa
+string de '0' e '1'; (5) decodifique essa string descendo a árvore e
+confira que voltou a frase original. Para a saída sair igual, desempate
+no heap pelo índice do nó (o menor índice sai primeiro), crie as folhas
+em ordem de código ASCII e ponha o primeiro retirado à esquerda.
+
+```text
+Saída esperada:
+' ' 1 vez(es): 1010
+'A' 5 vez(es): 11
+'M' 2 vez(es): 010
+'N' 2 vez(es): 011
+'O' 1 vez(es): 1011
+'S' 2 vez(es): 100
+'U' 1 vez(es): 000
+'Z' 1 vez(es): 001
+Bits: 010110111100010010101101011001101101111100
+15 caracteres, 42 bits (ASCII: 120)
+Decodificado: MANAUS AMAZONAS (igual)
+```
+
+**Resposta esperada:** 15 caracteres, 42 bits (contra 120 em ASCII de 8 bits) e a frase decodificada igual à original.
+
+---
+
+**Exercício P2024** · ★★★ · O máximo de entregas no prazo
+
+A lavanderia recebeu 7 pedidos para hoje. Cada um leva um tempo (em
+horas de máquina) e tem um prazo (a hora em que o cliente vem buscar).
+A máquina lava um pedido por vez. Pedido atrasado é cliente perdido,
+então o dono quer o MAIOR NÚMERO de pedidos prontos no prazo:
+
+```text
+pedido   A  B  C  D  E  F  G
+tempo    2  4  3  1  5  2  3
+prazo    3  5  6  7  9 10 11
+```
+
+O algoritmo de Moore-Hodgson é guloso: percorra os pedidos por prazo
+crescente, sempre aceitando o pedido; se a soma dos tempos aceitos passa
+do prazo do pedido atual, DESCARTE o aceito de MAIOR tempo (é o que mais
+libera a máquina). Escreva do zero, mostrando cada descarte e, no fim,
+os pedidos aceitos e a hora em que cada um fica pronto.
+
+```text
+Saída esperada:
+Descarta B (tempo 4)
+Descarta E (tempo 5)
+A pronto às 2 (prazo 3)
+C pronto às 5 (prazo 6)
+D pronto às 6 (prazo 7)
+F pronto às 8 (prazo 10)
+G pronto às 11 (prazo 11)
+Pedidos no prazo: 5
+```
+
+**Resposta esperada:** descarta B e E e entrega 5 pedidos: A, C, D, F e G.
+
+---
+
+**Exercício P2025** · ★★★ · A mediana das medianas
+
+O SELECT pela partição (com pivô qualquer) pode cair no pior caso O(n²).
+O algoritmo da MEDIANA DAS MEDIANAS (Cormen 9.3) escolhe um pivô bom de
+propósito: divida o vetor em grupos de 5, ache a mediana de cada grupo
+(ordenando os 5 com insertion sort), ache recursivamente a mediana
+dessas medianas e use-a como pivô. Assim cada lado da partição tem pelo
+menos cerca de 3n/10 elementos, e o tempo é O(n) no pior caso.
+
+Os 23 lances de um leilão de gado, em mil reais, estão no main. Escreva
+do zero seleciona(v, n, k), que devolve o k-ésimo menor (k a partir de
+0) com esse pivô, e mostre o menor, a mediana (k = 11) e o maior,
+conferindo com o vetor ordenado por qsort.
+
+```text
+Saída esperada:
+Menor: 41 (qsort: 41)
+Mediana: 69 (qsort: 69)
+Maior: 98 (qsort: 98)
+```
+
+**Resposta esperada:** menor 41, mediana 69 e maior 98, iguais ao qsort.
+
+---
+
+**Exercício P2026** · ★★★ · Comprar barato, vender caro
+
+O preço de fechamento de uma ação em 12 pregões, em reais:
+
+```text
+dia:    0  1  2  3  4  5  6  7  8  9 10 11
+preço: 31 27 34 22 25 41 36 19 24 33 38 29
+```
+
+Você compra num dia i e vende num dia j > i. Qual o maior lucro? Por
+divisão e conquista: o melhor negócio está todo na metade esquerda, ou
+todo na direita, ou compra na esquerda e vende na direita (aí é o menor
+preço da esquerda com o maior da direita). Escreva do zero uma função
+que, para v[ini..fim], devolve num struct o lucro, os dias de compra e
+venda, e também o menor e o maior preço do pedaço (com os dias), para o
+caso que cruza sair em O(1). Confira com a força bruta de todos os pares.
+
+```text
+Saída esperada:
+Compra no dia 3 (R$ 22), vende no dia 5 (R$ 41)
+Lucro: R$ 19
+Força bruta: R$ 19
+```
+
+**Resposta esperada:** compra no dia 3 (R$ 22) e vende no dia 5 (R$ 41), lucro R$ 19. A força bruta concorda.
+
+---
+
+**Exercício P2027** · ★★★ · Quantos passaram?
+
+Este programa tem um erro de propósito. As notas da turma (vezes 10,
+para ficar em inteiros) estão em ordem crescente, com repetições:
+
+```text
+35 40 50 60 70 70 70 85 90 100
+```
+
+Aprovado é quem tem nota >= 70. A função primeira(v, ini, fim, x) devia
+devolver, por busca binária recursiva, o índice do PRIMEIRO elemento >=
+x (ou n, se nenhum for); os aprovados são n menos esse índice. Ela
+compila sem aviso e roda limpo, mas diz que só 3 passaram, e para nota de
+corte 50 diz 7. Conserte a função (o main está certo).
+
+```text
+Saída esperada:
+Corte 70: 6 aprovados
+Corte 50: 8 aprovados
+Corte 101: 0 aprovados
+```
+
+**Resposta esperada:** troque o > por >= no teste. 6 aprovados com corte 70, 8 com corte 50 e 0 com corte 101.
+
+---
+
+**Exercício P2028** · ★★★ · Vigias para o dia inteiro
+
+O condomínio precisa de vigia das 0h às 24h, sem buraco, e cada vigia da
+lista só aceita um turno fixo [ini, fim] (horas, e um turno cobre de ini
+até fim, inclusive as pontas):
+
+```text
+Edu [0, 6]   Bia [2, 9]   Gil [5, 12]   Ana [8, 14]   Caio [10, 18]
+Rui [15, 20]   Lia [17, 24]   Davi [19, 24]   Teo [0, 4]
+```
+
+Contratar custa caro: qual o MENOR número de vigias que cobre [0, 24]?
+O guloso da COBERTURA DE INTERVALOS: com a cobertura indo até a hora t
+(começa em 0), entre os turnos que começam em t ou antes, escolha o que
+termina MAIS TARDE; agora t vira o fim dele. Pare quando t chegar a 24 ou
+quando ninguém conseguir avançar (aí há um buraco). Escreva do zero e,
+depois, rode de novo sem a Caio e mostre onde fica o buraco.
+
+```text
+Saída esperada:
+Todos:
+  Edu [0, 6]
+  Gil [5, 12]
+  Caio [10, 18]
+  Lia [17, 24]
+  Total: 4 vigias
+Sem a Caio:
+  Edu [0, 6]
+  Gil [5, 12]
+  Ana [8, 14]
+  Buraco: ninguém cobre depois das 14h
+```
+
+**Resposta esperada:** 4 vigias (Edu, Gil, Caio e Lia); sem a Caio, a cobertura trava às 14h: o Rui só chega às 15h.
+
+---
+
+**Exercício P2029** · ★★★ · Juntando as notas de quatro turmas
+
+A secretaria tem as notas de 4 turmas, cada lista já em ordem crescente,
+e quer uma lista única ordenada. Intercalar uma a uma (a primeira com a
+segunda, o resultado com a terceira...) faz os primeiros elementos serem
+comparados de novo a cada rodada. Por divisão e conquista, intercale as
+turmas 0 e 1, as 2 e 3, e depois os dois resultados: com k listas são
+só lg k rodadas. Escreva do zero intercala(a, na, b, nb, saida), que
+conta as comparações, e as duas estratégias. Mostre a lista final e as
+comparações de cada uma.
+
+```text
+Turma 0: 52 61 78 90 95          Turma 1: 48 55 70
+Turma 2: 35 66 74 81 88 93 99    Turma 3: 40 59
+```
+
+```text
+Saída esperada:
+Lista: 35 40 48 52 55 59 61 66 70 74 78 81 88 90 93 95 99
+Uma a uma: 25 comparações
+Divisão e conquista: 24 comparações
+Listas iguais: sim
+```
+
+**Resposta esperada:** a mesma lista, com 25 comparações uma a uma e 24 por divisão e conquista. A diferença é pequena com listas curtas; com k listas de m notas, uma a uma custa O(k² m) e a divisão e conquista, O(k m lg k).
+
+---
+
+**Exercício P2030** · ★★★ · O guloso que pinta demais
+
+Oito transmissores de rádio comunitária ficam em dois morros: A0, A1, A2
+e A3 num, B0, B1, B2 e B3 no outro. Ai interfere com Bj sempre que i !=
+j (e os do mesmo morro não interferem entre si). Transmissores que
+interferem precisam de frequências diferentes. Isso é colorir o grafo, e
+o guloso popular é: percorra os vértices numa ordem e dê a cada um a
+menor frequência que nenhum vizinho já pintado usa. Escreva do zero:
+(a) o guloso na ordem A0 B0 A1 B1 A2 B2 A3 B3; (b) o guloso na ordem A0
+A1 A2 A3 B0 B1 B2 B3; (c) o mínimo de cores por backtracking (como no
+módulo 19). Mostre a frequência de cada um e o total de cada método.
+
+```text
+Saída esperada:
+Guloso intercalado: A0=0 A1=1 A2=2 A3=3 B0=0 B1=1 B2=2 B3=3 (4 frequências)
+Guloso por morro: A0=0 A1=0 A2=0 A3=0 B0=1 B1=1 B2=1 B3=1 (2 frequências)
+Ótimo: A0=0 A1=0 A2=0 A3=0 B0=1 B1=1 B2=1 B3=1 (2 frequências)
+```
+
+**Resposta esperada:** a ordem intercalada usa 4 frequências, a ordem por morro usa 2, e o ótimo é 2. O guloso depende da ordem e pode errar feio: neste tipo de grafo (a "coroa"), com n pares, ele chega a n cores.
+
+---
+
+### Desafios do módulo
 
 Problemas para resolver no papel e, quando fizer sentido, num arquivo `.c` seu.
 Eles misturam os assuntos do módulo.
@@ -2803,7 +3310,7 @@ vizinhos na cadeia.
 
 </details>
 
-## Questões do POSCOMP
+### Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -2814,1221 +3321,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 
 O gabarito oficial de 2025 não estava disponível quando este material foi montado.
 
-
-## Lista de exercícios práticos
-
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P2001.c a P2030.c, em `material/`; resoluções em `_respostas/20-dc-e-gulosos/lista/`.
-
-### ★☆☆ Aquecimento
-
-**Exercício P2001** · ★☆☆ · A senha do painel
-
-No painel do posto de saúde, as senhas chamadas hoje estão em ordem
-crescente: 3 8 12 15 21 27 33 40 46 52 58 64 71 79 85 90. Escreva do
-zero a busca binária RECURSIVA busca(v, ini, fim, x): olha o meio; se é
-x, devolve o índice; se x é menor, procura só na metade da esquerda;
-senão, só na da direita. Pedaço vazio (ini > fim) devolve -1. Conte as
-chamadas e procure as senhas 64, 3 e 50.
-
-
-```text
-Saída esperada:
-Senha 64: posição 11 (2 chamadas)
-Senha 3: posição 0 (4 chamadas)
-Senha 50: não chamada (5 chamadas)
-```
-
-**Dicas:**
-
-1. int meio = ini + (fim - ini) / 2; escrito assim, ini + fim nunca
-   estoura em vetores enormes.
-2. Zere o contador antes de cada busca. Com 16 elementos, são no máximo
-   lg 16 + 1 = 5 chamadas que olham o vetor, mais a do pedaço vazio.
-3. Resposta esperada: 64 na posição 11 (2 chamadas), 3 na posição 0 (4
-   chamadas) e 50 não chamada (5 chamadas, a última com o pedaço vazio).
-
-```bash
-gcc ~/LPEDC/material/P2001.c -o ~/LPEDC/material/P2001 && ~/LPEDC/material/P2001
-```
-
----
-
-**Exercício P2002** · ★☆☆ · Maior e menor temperatura, dividindo ao meio
-
-A estação de Manaus registrou as máximas de 8 dias: 31 34 29 36 33 30 35
-32 graus. Complete a função recursiva extremos(v, ini, fim, &menor,
-&maior), que acha os DOIS de uma vez por divisão e conquista: um
-elemento só é menor e maior ao mesmo tempo (0 comparações); dois
-elementos custam 1 comparação; com mais, divida ao meio, resolva cada
-metade e junte com 2 comparações (menor com menor, maior com maior).
-Conte as comparações entre temperaturas.
-
-
-```text
-Saída esperada:
-Menor: 29 graus
-Maior: 36 graus
-Comparações: 10
-```
-
-**Dicas:**
-
-1. No caso de dois elementos: comps++; if (v[ini] < v[fim]) {...} else
-   {...}.
-2. Para juntar: chame para [ini, meio] e [meio + 1, fim] com variáveis
-   locais e faça dois comps++.
-3. Resposta esperada: menor 29, maior 36 e 10 comparações, que é 3n/2 -
-   2 para n = 8. Achar os dois com dois laços separados custaria 2(n - 1)
-   = 14.
-
-```bash
-gcc ~/LPEDC/material/P2002.c -o ~/LPEDC/material/P2002 && ~/LPEDC/material/P2002
-```
-
----
-
-**Exercício P2003** · ★☆☆ · Os três últimos dígitos de 3^200
-
-3^200 tem 96 dígitos e não cabe em nenhum inteiro do C. Mas para saber
-só os três últimos dígitos basta fazer a conta módulo 1000, reduzindo
-depois de cada multiplicação: (a · b) % m = ((a % m) · (b % m)) % m.
-Complete potmod(b, e, m), a potência rápida recursiva do assunto 0131
-com o resto em cada passo, e conte as multiplicações. Mostre 3^200,
-7^222 e 2^1000, todos módulo 1000.
-
-
-```text
-Saída esperada:
-3^200 termina em 001 (11 multiplicações)
-7^222 termina em 049 (14 multiplicações)
-2^1000 termina em 376 (16 multiplicações)
-```
-
-**Dicas:**
-
-1. potmod(b, 0, m) = 1 % m. Para e > 0: calcule meia = potmod(b, e / 2,
-   m); o resultado é meia · meia % m, e, se e for ímpar, mais uma vez
-   vezes b % m.
-2. Use long long: 999 · 999 cabe folgado, mas o hábito evita estouro
-   quando m for grande.
-3. Resposta esperada: 3^200 termina em 001, 7^222 em 049 e 2^1000 em
-   376; as multiplicações estão na saída de cima.
-
-```bash
-gcc ~/LPEDC/material/P2003.c -o ~/LPEDC/material/P2003 && ~/LPEDC/material/P2003
-```
-
----
-
-**Exercício P2004** · ★☆☆ · O caixa da feira com poucas moedas
-
-A barraca de tapioca tem no caixa só 2 notas de R$ 10, 3 de R$ 5, 4
-moedas de R$ 2 e 5 de R$ 1. O guloso do troco continua valendo (sempre a
-maior que cabe), mas agora ele precisa respeitar o estoque: uma nota só
-sai se ainda há dela. Complete troco(valor), que mostra o que sai, tira
-do estoque e devolve 1 se conseguiu pagar tudo (0 se faltou). Dê, nesta
-ordem, os trocos de R$ 27, R$ 18 e R$ 9.
-
-
-```text
-Saída esperada:
-Troco de R$ 27: 10 10 5 2
-Troco de R$ 18: 5 5 2 2 2 1 1
-Troco de R$ 9: 1 1 1
-  faltou troco!
-Sobrou no caixa: 0 de 10, 0 de 5, 0 de 2, 0 de 1
-```
-
-**Dicas:**
-
-1. Para cada valor de nota, do maior para o menor: enquanto a nota cabe
-   no que falta E estoque[i] > 0, entregue uma.
-2. O estoque é global: o troco de 27 gasta notas que o de 18 não terá.
-3. Resposta esperada: 27 = 10 + 10 + 5 + 2; 18 = 5 + 5 + 2 + 2 + 2 + 1 +
-   1; o de 9 falha, porque sobram só 3 moedas de R$ 1.
-
-```bash
-gcc ~/LPEDC/material/P2004.c -o ~/LPEDC/material/P2004 && ~/LPEDC/material/P2004
-```
-
----
-
-**Exercício P2005** · ★☆☆ · A melhor semana da lanchonete
-
-A lanchonete anotou o lucro (ou prejuízo) de 10 dias, em reais:
-
-
-```text
-dia:    0    1    2    3    4    5    6    7    8    9
-lucro: -40  120  -30   80  -150  60   90  -20   70  -60
-```
-
-
-Qual sequência de dias SEGUIDOS deu o maior lucro somado? Escreva do
-zero o subvetor de soma máxima por divisão e conquista (assunto 0132),
-mas devolvendo também ONDE ele começa e termina: use um struct Trecho {
-int ini, fim, soma; }. O trecho que cruza o meio é o melhor final da
-esquerda grudado no melhor começo da direita.
-
-
-```text
-Saída esperada:
-Melhor trecho: dias 1 a 8
-Lucro: R$ 220
-```
-
-**Dicas:**
-
-1. Caso base: um dia só é o trecho (i, i, v[i]).
-2. Cruzando: a partir de meio, ande para a esquerda guardando a maior
-   soma e onde ela começa; a partir de meio + 1, para a direita
-   guardando a maior soma e onde ela termina.
-3. Resposta esperada: dias 1 a 8, lucro de R$ 220. Vale a pena atravessar
-   o prejuízo de R$ 150 do dia 4: os dias 5 a 8 sozinhos dão R$ 200.
-
-```bash
-gcc ~/LPEDC/material/P2005.c -o ~/LPEDC/material/P2005 && ~/LPEDC/material/P2005
-```
-
----
-
-**Exercício P2006** · ★☆☆ · O barco de Parintins
-
-Um barco sai de Manaus para Parintins com 500 kg livres no porão. O dono
-pode levar qualquer quantidade (dá para fracionar) de cinco produtos:
-
-
-```text
-produto     kg disponíveis   valor total (R$)
-castanha         200              3000
-farinha          300              1500
-guaraná          100              2500
-pirarucu         150              4200
-cupuaçu          250              2000
-```
-
-
-Escreva do zero a mochila fracionária: um struct Produto com nome, kg e
-valor; ordene com qsort pela razão valor/kg, da maior para a menor; leve
-inteiro enquanto couber e, no primeiro que não cabe, só a parte que
-cabe. Mostre o que vai e o valor total.
-
-
-```text
-Saída esperada:
-pirarucu: 150 kg, R$ 4200.00
-guaraná: 100 kg, R$ 2500.00
-castanha: 200 kg, R$ 3000.00
-cupuaçu: 50 kg, R$ 400.00
-Total: R$ 10100.00
-```
-
-**Dicas:**
-
-1. As razões são 15, 5, 25, 28 e 8 R$/kg.
-2. Na comparação do qsort, compare as razões com < e > e devolva -1, 0
-   ou 1; subtrair doubles e converter para int estraga a ordem.
-3. Resposta esperada: pirarucu, guaraná e castanha inteiros (450 kg) e
-   50 kg de cupuaçu: R$ 10100.00.
-
-```bash
-gcc ~/LPEDC/material/P2006.c -o ~/LPEDC/material/P2006 && ~/LPEDC/material/P2006
-```
-
----
-
-**Exercício P2007** · ★☆☆ · O código que confunde
-
-O código de Huffman é LIVRE DE PREFIXO: nenhum código é o começo de
-outro, e por isso dá para ler a sequência de bits sem separador. Um
-estagiário montou três tabelas para os símbolos A, B, C, D e E e quer
-saber quais servem. Escreva do zero livre_de_prefixo(cod, n), que
-compara cada par de códigos e devolve 0 ao achar um que é começo do
-outro (mostrando qual), ou 1 se a tabela serve.
-
-
-```text
-Tabela 1: A=0   B=10  C=110  D=1110  E=1111
-Tabela 2: A=0   B=01  C=110  D=111   E=10
-Tabela 3: A=00  B=01  C=10   D=110   E=111
-```
-
-
-
-```text
-Saída esperada:
-Tabela 1:
-  serve
-Tabela 2:
-  A=0 é começo de B=01
-  não serve
-Tabela 3:
-  serve
-```
-
-**Dicas:**
-
-1. a é prefixo de b quando strlen(a) <= strlen(b) e strncmp(a, b,
-   strlen(a)) == 0.
-2. Teste os dois sentidos para cada par i < j.
-3. Resposta esperada: as tabelas 1 e 3 servem; na 2, o 0 do A é começo
-   do 01 do B (e "01" poderia ser AE... ou B).
-
-```bash
-gcc ~/LPEDC/material/P2007.c -o ~/LPEDC/material/P2007 && ~/LPEDC/material/P2007
-```
-
----
-
-**Exercício P2008** · ★☆☆ · Os consertos da oficina
-
-O mecânico faz um conserto por dia e tem 6 pedidos. Cada pedido tem um
-prazo (até que dia o cliente aceita esperar) e um valor; se ficar para
-depois do prazo, o cliente vai embora. Os pedidos JÁ estão em ordem
-decrescente de valor:
-
-
-```text
-pedido   A    B    C    D    E    F
-valor   300  250  200  150  100   80
-prazo    2    1    2    3    3    1
-```
-
-
-O guloso do AGENDAMENTO COM PRAZOS pega os pedidos do mais valioso para
-o menos e põe cada um no ÚLTIMO dia livre que ainda está dentro do prazo
-dele (deixando os dias cedo para quem tem prazo curto). Se não há dia
-livre, o pedido é recusado. Complete o laço que procura o dia.
-
-
-```text
-Saída esperada:
-Recusado: C (R$ 200)
-Recusado: E (R$ 100)
-Recusado: F (R$ 80)
-Dia 1: B (R$ 250)
-Dia 2: A (R$ 300)
-Dia 3: D (R$ 150)
-Total: R$ 700
-```
-
-**Dicas:**
-
-1. Os dias vão de 1 a 3 (o maior prazo). dia[d] guarda o índice do
-   pedido do dia d, ou -1.
-2. for (int d = prazo[i]; d >= 1; d--) if (dia[d] == -1) { dia[d] = i;
-   break; }
-3. Resposta esperada: dia 1 B, dia 2 A, dia 3 D, total R$ 700.
-
-```bash
-gcc ~/LPEDC/material/P2008.c -o ~/LPEDC/material/P2008 && ~/LPEDC/material/P2008
-```
-
----
-
-**Exercício P2009** · ★☆☆ · Quando a razão engana
-
-A mochila fracionária é resolvida pelo guloso da razão valor/peso. Na
-mochila 0/1 (cada item vai inteiro ou não vai), o mesmo guloso pode
-errar. Uma mochila de 50 kg e três itens:
-
-
-```text
-item   peso   valor
-TV      10     600
-som     20    1000
-PC      30    1200
-```
-
-
-O programa abaixo já tem o guloso 0/1 (pega pela razão, inteiro, se
-couber). Complete otimo(), que testa os 2^3 subconjuntos por máscara de
-bits (assunto 0125) e devolve o maior valor que cabe. Mostre os dois.
-
-
-```text
-Saída esperada:
-Guloso pela razão: R$ 1600
-Ótimo (força bruta): R$ 2200
-```
-
-**Dicas:**
-
-1. for (int m = 0; m < (1 << N); m++): some peso e valor dos itens com o
-   bit ligado; se o peso cabe e o valor é o maior até agora, guarde.
-2. As razões são 60, 50 e 40 R$/kg: o guloso pega TV e som e sobram 20
-   kg, onde o PC não cabe.
-3. Resposta esperada: guloso R$ 1600, ótimo R$ 2200 (som + PC).
-
-```bash
-gcc ~/LPEDC/material/P2009.c -o ~/LPEDC/material/P2009 && ~/LPEDC/material/P2009
-```
-
----
-
-**Exercício P2010** · ★☆☆ · A poltrona com o próprio número
-
-No teatro, os ingressos vendidos (já em ordem crescente e sem repetição)
-foram para as poltronas -5 -2 0 1 2 5 9 12 15 18 (o negativo é o
-camarote). O gerente desconfia que algum ingresso está na POSIÇÃO igual
-ao próprio número: v[i] == i. Escreva do zero pos_fixa(v, ini, fim), por
-divisão e conquista como a busca binária: se v[meio] < meio, a resposta
-só pode estar à direita; se v[meio] > meio, só à esquerda. Conte as
-chamadas.
-
-
-```text
-Saída esperada:
-Posição 5: v[5] = 5
-Chamadas: 3
-```
-
-**Dicas:**
-
-1. Por que dá para jogar metade fora? Com valores inteiros distintos e
-   crescentes, v[i + 1] >= v[i] + 1: a diferença v[i] - i nunca diminui.
-2. Se v[meio] - meio < 0, à esquerda todas as diferenças são < 0.
-3. Resposta esperada: posição 5 (v[5] = 5), em 3 chamadas.
-
-```bash
-gcc ~/LPEDC/material/P2010.c -o ~/LPEDC/material/P2010 && ~/LPEDC/material/P2010
-```
-
-### ★★☆ Para pensar
-
-**Exercício P2011** · ★★☆ · Mínimo e máximo de dois em dois
-
-O aplicativo da corrida de rua guarda os tempos dos 10 atletas da
-categoria, em segundos: 1520 1384 1702 1455 1611 1398 1830 1290 1477
-1563. Achar o menor com um laço e o maior com outro custa 2(n - 1) = 18
-comparações. Dá para fazer com 3n/2 - 2: ande de DOIS em DOIS, compare
-os dois entre si (1 comparação), depois o menor deles com o mínimo e o
-maior com o máximo (mais 2). São 3 comparações para cada 2 elementos.
-Escreva do zero as duas versões, contando as comparações, e mostre os
-resultados.
-
-
-```text
-Saída esperada:
-Ingênuo: menor 1290, maior 1830, 18 comparações
-Aos pares: menor 1290, maior 1830, 13 comparações
-```
-
-**Dicas:**
-
-1. Comece com o primeiro par: compare v[0] com v[1] (1 comparação) e
-   eles viram o mínimo e o máximo iniciais. Depois, de i = 2 em diante,
-   de 2 em 2.
-2. Com n ímpar, o primeiro elemento sozinho seria mínimo e máximo, e os
-   pares começariam em i = 1. Aqui n = 10.
-3. Resposta esperada: 1290 e 1830 nas duas; 18 comparações contra 13
-   (3 · 10 / 2 - 2). É o limite inferior para achar os dois (Cormen 9.1).
-
-```bash
-gcc ~/LPEDC/material/P2011.c -o ~/LPEDC/material/P2011 && ~/LPEDC/material/P2011
-```
-
----
-
-**Exercício P2012** · ★★☆ · As duas antenas mais próximas
-
-A operadora tem 8 antenas de celular num bairro, em coordenadas (em
-centenas de metros): (2, 3) (12, 30) (40, 50) (5, 1) (12, 10) (3, 4)
-(31, 33) (18, 21). Duas antenas muito perto se atrapalham. Qual é o PAR
-MAIS PRÓXIMO? A força bruta testa os 28 pares. Escreva do zero a divisão
-e conquista simples: ordene por x, divida ao meio, resolva cada metade,
-e depois olhe só os pontos da FAIXA a menos de d da linha do meio (d é a
-menor distância das metades), comparando cada um com os da faixa. Use
-força bruta quando houver 3 pontos ou menos. Mostre o par, a distância e
-quantas distâncias cada método calculou.
-
-
-```text
-Saída esperada:
-Força bruta: (2, 3) e (3, 4), 1.41, 28 distâncias
-Divisão e conquista: (2, 3) e (3, 4), 1.41, 6 distâncias
-```
-
-**Dicas:**
-
-1. Ordene uma cópia com qsort por x. Trabalhe com a distância ao
-   quadrado (inteira) e tire a raiz só no fim, com sqrt de <math.h>.
-2. Na faixa, monte um vetor com os pontos em que (x - xmeio)^2 < d e
-   compare-os dois a dois (com poucos pontos, a força bruta na faixa
-   basta; com muitos, ordene a faixa por y).
-3. Resposta esperada: (2, 3) e (3, 4), distância 1.41 (raiz de 2).
-
-```bash
-gcc ~/LPEDC/material/P2012.c -o ~/LPEDC/material/P2012 -lm && ~/LPEDC/material/P2012
-```
-
----
-
-**Exercício P2013** · ★★☆ · A mediana sem ordenar tudo
-
-Na fila do banco, o gerente cronometrou o atendimento de 11 clientes, em
-minutos: 7 15 3 22 9 4 18 11 6 13 2. Ele quer a MEDIANA (o 6º menor) sem
-ordenar o vetor inteiro. O SELECT pela partição do quicksort faz isso:
-particione em volta de um pivô; se o pivô caiu na posição k, achou; se
-k está à esquerda, continue só na esquerda; senão, só na direita. Uma
-metade só, a cada passo. Complete seleciona(v, ini, fim, k), usando a
-particao (Lomuto, pivô = último) que já está no programa.
-
-
-```text
-Saída esperada:
- 6º menor: 9 (partições: 3)
- 1º menor: 2 (partições: 1)
-11º menor: 22 (partições: 5)
-```
-
-**Dicas:**
-
-1. int p = particao(v, ini, fim); if (p == k) return v[p];
-2. Se k < p, chame para (ini, p - 1); senão, para (p + 1, fim). k é o
-   índice no vetor inteiro, não muda.
-3. Resposta esperada: mediana 9; o 1º menor é 2 e o 11º é 22.
-
-```bash
-gcc ~/LPEDC/material/P2013.c -o ~/LPEDC/material/P2013 && ~/LPEDC/material/P2013
-```
-
----
-
-**Exercício P2014** · ★★☆ · Quantas salas para o congresso?
-
-O congresso de computação em Manaus tem 9 palestras, cada uma num
-intervalo [ini, fim) em horas:
-
-
-```text
-[9, 11) [9, 10) [10, 12) [11, 13) [10, 11) [12, 14) [13, 15) [9, 12)
-[14, 16)
-```
-
-
-Qual é o MENOR número de salas para que nenhuma palestra tenha choque?
-Diferente da seleção de atividades (que escolhe um subconjunto), aqui
-todas acontecem. O guloso: ordene pelo início e ponha cada palestra
-numa sala que já ficou livre (fim da última palestra dela <= ini); se
-nenhuma está livre, abra uma sala nova. Escreva do zero e mostre a sala
-de cada palestra e o total.
-
-
-```text
-Saída esperada:
-[9, 10) -> sala 1
-[9, 11) -> sala 2
-[9, 12) -> sala 3
-[10, 11) -> sala 1
-[10, 12) -> sala 4
-[11, 13) -> sala 1
-[12, 14) -> sala 2
-[13, 15) -> sala 1
-[14, 16) -> sala 2
-Salas: 4
-```
-
-**Dicas:**
-
-1. Guarde livre_em[s], a hora em que a sala s fica livre. Para cada
-   palestra, na ordem do início, use a primeira sala com livre_em[s] <=
-   ini.
-2. Ordene por início com qsort num vetor de structs { ini, fim }; empate
-   de início, o que termina antes vem primeiro.
-3. Resposta esperada: 4 salas. Entre 10h e 11h há quatro palestras ao
-   mesmo tempo ([9, 11), [9, 12), [10, 11) e [10, 12)), então nenhum
-   arranjo usa menos: o guloso acerta o ótimo.
-
-```bash
-gcc ~/LPEDC/material/P2014.c -o ~/LPEDC/material/P2014 && ~/LPEDC/material/P2014
-```
-
----
-
-**Exercício P2015** · ★★☆ · Huffman sem heap, para poucos símbolos
-
-Com só 6 símbolos, o heap é exagero: dá para achar os dois nós de menor
-frequência com um laço simples, O(n) por passo. A rádio comunitária vai
-transmitir boletins com as letras A, E, M, N, O e S, com estas
-frequências (em cada 100 letras):
-
-
-```text
-A: 30   E: 20   M: 5   N: 10   O: 25   S: 10
-```
-
-
-Escreva do zero a árvore de Huffman num vetor de nós (folhas nas
-posições 0 a 5, nós internos de 6 em diante), cada nó com freq, esq, dir
-e um flag de "já usado". Em cada passo, junte os dois de menor
-frequência ainda não usados. Depois, calcule a profundidade de cada
-folha (o tamanho do código) e o total de bits.
-
-
-```text
-Saída esperada:
-A: freq 30, código de 2 bits
-E: freq 20, código de 2 bits
-M: freq  5, código de 4 bits
-N: freq 10, código de 4 bits
-O: freq 25, código de 2 bits
-S: freq 10, código de 3 bits
-Total: 240 bits (código fixo: 300)
-```
-
-**Dicas:**
-
-1. menor_livre(n) devolve o índice do nó livre de menor freq entre 0 e n
-   - 1 (empate: o de menor índice). Chame duas vezes, marcando o
-   primeiro como usado antes de procurar o segundo.
-2. A profundidade sai de uma recursão a partir da raiz (o último nó
-   criado): prof(no, d) chega na folha com d = tamanho do código.
-3. Resposta esperada: 240 bits para as 100 letras, contra 300 de um
-   código fixo de 3 bits.
-
-```bash
-gcc ~/LPEDC/material/P2015.c -o ~/LPEDC/material/P2015 && ~/LPEDC/material/P2015
-```
-
----
-
-**Exercício P2016** · ★★☆ · O menor atraso da gráfica
-
-A gráfica tem 5 encomendas e uma impressora só. Cada encomenda tem a
-duração (em horas) e o prazo (a hora, contando do início do dia, em que
-o cliente vem buscar):
-
-
-```text
-encomenda   convites  cardápios  banner  folhetos  crachás
-duração         3          2        4        1         2
-prazo           6          4       10        3         7
-```
-
-
-O atraso de uma encomenda é max(0, fim - prazo). O guloso PRAZO MAIS
-CEDO PRIMEIRO (ordenar por prazo) minimiza o MAIOR atraso. Escreva do
-zero: compare a ordem da tabela com a ordem por prazo, mostrando o
-início e o fim de cada encomenda e o maior atraso de cada ordem.
-
-
-```text
-Saída esperada:
-Ordem da tabela:
-  convites: 0 a 3 (prazo 6, atraso 0)
-  cardápios: 3 a 5 (prazo 4, atraso 1)
-  banner: 5 a 9 (prazo 10, atraso 0)
-  folhetos: 9 a 10 (prazo 3, atraso 7)
-  crachás: 10 a 12 (prazo 7, atraso 5)
-  Maior atraso: 7 h
-Prazo mais cedo primeiro:
-  folhetos: 0 a 1 (prazo 3, atraso 0)
-  cardápios: 1 a 3 (prazo 4, atraso 0)
-  convites: 3 a 6 (prazo 6, atraso 0)
-  crachás: 6 a 8 (prazo 7, atraso 1)
-  banner: 8 a 12 (prazo 10, atraso 2)
-  Maior atraso: 2 h
-```
-
-**Dicas:**
-
-1. Use um struct { nome, dur, prazo } e qsort pelo prazo para a segunda
-   ordem. A hora corrente começa em 0 e soma a duração de cada uma.
-2. Por que funciona? Trocar duas encomendas vizinhas fora da ordem de
-   prazo nunca aumenta o maior atraso (o argumento de troca do Cormen).
-3. Resposta esperada: a ordem da tabela tem atraso máximo 7 (os folhetos
-   ficam prontos às 10, com prazo 3) e a ordem por prazo, só 2.
-
-```bash
-gcc ~/LPEDC/material/P2016.c -o ~/LPEDC/material/P2016 && ~/LPEDC/material/P2016
-```
-
----
-
-**Exercício P2017** · ★★☆ · Os postos da BR-319
-
-Um carro sai de Manaus pela BR-319 rumo a Porto Velho, 880 km, e o
-tanque cheio dá 250 km. Os postos ficam nos quilômetros 90, 180, 240,
-330, 420, 470, 560, 650, 700 e 790. O motorista quer parar o MENOR
-número de vezes. O guloso: só pare quando o próximo posto ficar fora do
-alcance, e pare no posto mais distante que ainda dá para alcançar.
-Escreva do zero e mostre as paradas e o total; se algum trecho entre
-postos for maior que 250 km, avise que é impossível.
-
-
-```text
-Saída esperada:
-Parada 1: km 240
-Parada 2: km 470
-Parada 3: km 700
-Chegou a Porto Velho com 3 paradas
-```
-
-**Dicas:**
-
-1. Ponha o destino como último "posto" (km 880). Guarde ultima, o km do
-   último abastecimento (começa em 0).
-2. Enquanto o destino não está ao alcance (880 - ultima > 250): ande pelos
-   postos enquanto posto[i + 1] - ultima <= 250; pare em posto[i].
-3. Resposta esperada: 3 paradas, nos km 240, 470 e 700.
-
-```bash
-gcc ~/LPEDC/material/P2017.c -o ~/LPEDC/material/P2017 && ~/LPEDC/material/P2017
-```
-
----
-
-**Exercício P2018** · ★★☆ · Quem tem maioria absoluta?
-
-Na eleição do síndico, os 15 votos (números dos candidatos) foram:
-
-
-```text
-4 7 4 4 2 4 7 4 9 4 4 2 4 7 4
-```
-
-
-Um candidato tem MAIORIA ABSOLUTA se recebeu mais da metade dos votos.
-Escreva do zero por divisão e conquista: se v[ini..fim] tem majoritário,
-ele é majoritário de pelo menos uma das metades. Então resolva as duas
-metades e, para cada candidato que voltar, conte os votos dele no
-pedaço inteiro. Devolva -1 se não houver. Mostre o resultado também para
-a apuração da segunda urna: 1 2 3 1 2 3 1 2.
-
-
-```text
-Saída esperada:
-Urna 1: candidato 4, com 9 de 15 votos
-Urna 2: ninguém tem maioria
-```
-
-**Dicas:**
-
-1. Caso base: um voto só é majoritário de si mesmo.
-2. conta(v, ini, fim, x) em O(n); a recorrência fica T(n) = 2T(n/2) +
-   O(n), ou seja, O(n log n).
-3. Resposta esperada: na primeira urna, o 4, com 9 de 15 votos; na
-   segunda, ninguém.
-
-```bash
-gcc ~/LPEDC/material/P2018.c -o ~/LPEDC/material/P2018 && ~/LPEDC/material/P2018
-```
-
----
-
-**Exercício P2019** · ★★☆ · Rotas de ônibus com potência de matriz
-
-Quatro terminais de ônibus (T0 a T3) são ligados por linhas diretas,
-dadas pela matriz de adjacência A (A[i][j] = 1 se há linha de Ti para
-Tj). Um fato bonito: o elemento (i, j) de A^k conta quantas rotas de
-EXATAMENTE k trechos vão de Ti a Tj. Calcule A^k pela potência rápida
-(assunto 0131), trocando a multiplicação de números pela de matrizes 4 ×
-4, e mostre quantas rotas de T0 a T3 existem com 3, 6 e 12 trechos, e
-quantos produtos de matriz cada potência custou.
-
-
-```text
-A = | 0 1 1 0 |
-    | 1 0 1 1 |
-    | 1 1 0 1 |
-    | 0 1 1 0 |
-```
-
-
-
-```text
-Saída esperada:
- 3 trechos: 2 rotas de T0 a T3 (4 produtos)
- 6 trechos: 58 rotas de T0 a T3 (5 produtos)
-12 trechos: 15178 rotas de T0 a T3 (6 produtos)
-```
-
-**Dicas:**
-
-1. Um typedef struct { long long m[4][4]; } Mat; facilita devolver
-   matriz de função. A identidade é o caso base (k = 0).
-2. potencia(A, k): meia = potencia(A, k / 2); r = meia · meia; se k é
-   ímpar, r = r · A. Conte cada chamada de multiplica.
-3. Resposta esperada: com 3 trechos são 2 rotas (T0 T1 T2 T3 e T0 T2 T1
-   T3); com 12 trechos, 15178, em só 6 produtos de matriz.
-
-```bash
-gcc ~/LPEDC/material/P2019.c -o ~/LPEDC/material/P2019 && ~/LPEDC/material/P2019
-```
-
----
-
-**Exercício P2020** · ★★☆ · A fila do cartório
-
-Seis pessoas chegaram juntas ao cartório e há um atendente só. Os
-serviços levam 12, 3, 8, 1, 20 e 5 minutos, na ordem de chegada. A
-espera de cada um é a soma das durações de quem foi atendido antes. O
-guloso que minimiza a ESPERA MÉDIA é atender primeiro o serviço mais
-curto. O programa abaixo já calcula a espera média na ordem de chegada.
-Estenda-o: ordene as durações (qsort) e mostre a nova ordem e a nova
-espera média.
-
-
-```text
-Saída esperada:
-Ordem de chegada: 12 3 8 1 20 5 -> espera média 19.67 min
-Mais curto primeiro: 1 3 5 8 12 20 -> espera média 10.00 min
-```
-
-**Dicas:**
-
-1. Reaproveite a função espera_media, chamando-a de novo depois do qsort.
-2. Por que o mais curto primeiro? O serviço na posição i (contando de 0)
-   entra na espera dos n - 1 - i que vêm depois: o mais curto deve ser o
-   que "pesa" mais vezes.
-3. Resposta esperada: de 19.67 para 10.00 minutos.
-
-```bash
-gcc ~/LPEDC/material/P2020.c -o ~/LPEDC/material/P2020 && ~/LPEDC/material/P2020
-```
-
-### ★★★ Desafio
-
-**Exercício P2021** · ★★★ · Karatsuba contra os quatro produtos
-
-Para multiplicar x e y de n dígitos por divisão e conquista, escreva x =
-a·p + b e y = c·p + d, com p = 10^(n/2). O jeito direto faz QUATRO
-produtos menores (ac, ad, bc, bd): T(n) = 4T(n/2) + O(n), que é O(n²) e
-não ganha nada da escola. Karatsuba faz TRÊS (ac, bd e (a + b)(c + d)):
-T(n) = 3T(n/2) + O(n), O(n^1,59). Escreva do zero as duas versões,
-recursivas, com caso base "um dos números tem 1 dígito" (aí multiplica
-direto e conta 1), e compare as contagens para 12345678 × 87654321 e
-para 99999999 × 99999999.
-
-
-```text
-Saída esperada:
-12345678 x 87654321 = 1082152022374638
-  4 produtos: 64 multiplicações (resultado certo)
-  Karatsuba: 33 multiplicações (resultado certo)
-99999999 x 99999999 = 9999999800000001
-  4 produtos: 64 multiplicações (resultado certo)
-  Karatsuba: 63 multiplicações (resultado certo)
-```
-
-**Dicas:**
-
-1. n é a quantidade de dígitos do MAIOR dos dois; p = 10^(n / 2).
-2. Quatro produtos: ac·p² + (ad + bc)·p + bd. Karatsuba: meio =
-   (a + b)(c + d) - ac - bd no lugar de ad + bc.
-3. Resposta esperada: os produtos certos e, para os números de 8
-   dígitos, 64 multiplicações de um dígito na versão de 4 produtos
-   (8 · 8, a mesma conta da escola). Karatsuba gasta 33 no primeiro e 63
-   no segundo: com os 9s, cada a + b ganha um dígito (99 + 99 = 198) e a
-   recursão desce um nível a mais.
-
-```bash
-gcc ~/LPEDC/material/P2021.c -o ~/LPEDC/material/P2021 && ~/LPEDC/material/P2021
-```
-
----
-
-**Exercício P2022** · ★★★ · Strassen numa matriz 4 × 4
-
-O produto de matrizes n × n pela definição custa n³ multiplicações. Em
-1969, Strassen dividiu cada matriz em quatro blocos n/2 × n/2 e mostrou
-que bastam SETE produtos de blocos, e não oito:
-
-
-```text
-M1 = (A11 + A22)(B11 + B22)   M5 = (A11 + A12) B22
-M2 = (A21 + A22) B11          M6 = (A21 - A11)(B11 + B12)
-M3 = A11 (B12 - B22)          M7 = (A12 - A22)(B21 + B22)
-M4 = A22 (B21 - B11)
-C11 = M1 + M4 - M5 + M7       C12 = M3 + M5
-C21 = M2 + M4                 C22 = M1 - M2 + M3 + M6
-```
-
-
-Escreva do zero strassen(n, A, B, C) recursiva, caso base n == 1, e
-conte as multiplicações de números. Para não precisar de matriz de
-tamanho variável, toda matriz é int [4][4] e a função usa só o canto
-n × n de cima à esquerda. Multiplique as matrizes 4 × 4 do main pelos
-dois métodos e confira que dão o mesmo resultado.
-
-
-```text
-Saída esperada:
-  14  10   5   5
-  10   7   5  12
-   9  11   7   9
-  12   3   9  14
-Definição: 64 multiplicações
-Strassen: 49 multiplicações
-Resultados iguais
-```
-
-**Dicas:**
-
-1. Escreva auxiliares soma(n, x, y, r), subtrai(n, x, y, r), pega(n, m,
-   l0, c0, bloco) (copia um bloco) e poe(n, bloco, m, l0, c0).
-2. Os blocos são VLAs locais int a11[N][N], com h = n / 2. Com n = 4 a
-   pilha aguenta folgada.
-3. Resposta esperada: o produto de cima, 64 multiplicações na definição
-   e 49 no Strassen (7 · 7). Para n = 2^k, são 7^k contra 8^k: O(n^2,81).
-
-```bash
-gcc ~/LPEDC/material/P2022.c -o ~/LPEDC/material/P2022 && ~/LPEDC/material/P2022
-```
-
----
-
-**Exercício P2023** · ★★★ · Huffman de ida e volta
-
-Escreva do zero, sem o TAD do módulo, um Huffman completo para a frase
-
-
-```text
-MANAUS AMAZONAS
-```
-
-
-(1) conte as frequências dos caracteres; (2) monte a árvore com um
-heap-mínimo de índices de nós, escrito à mão (sobe e desce do assunto
-de heap), juntando sempre os dois de menor frequência; (3) gere o código
-de cada caractere (esquerda = 0, direita = 1); (4) codifique a frase numa
-string de '0' e '1'; (5) decodifique essa string descendo a árvore e
-confira que voltou a frase original. Para a saída sair igual, desempate
-no heap pelo índice do nó (o menor índice sai primeiro), crie as folhas
-em ordem de código ASCII e ponha o primeiro retirado à esquerda.
-
-
-```text
-Saída esperada:
-' ' 1 vez(es): 1010
-'A' 5 vez(es): 11
-'M' 2 vez(es): 010
-'N' 2 vez(es): 011
-'O' 1 vez(es): 1011
-'S' 2 vez(es): 100
-'U' 1 vez(es): 000
-'Z' 1 vez(es): 001
-Bits: 010110111100010010101101011001101101111100
-15 caracteres, 42 bits (ASCII: 120)
-Decodificado: MANAUS AMAZONAS (igual)
-```
-
-**Dicas:**
-
-1. Nós num vetor: folhas de 0 a f - 1, internos depois. menor(i, j)
-   compara freq e, no empate, o índice.
-2. Para gerar os códigos, uma recursão com um buffer char cod[32] e a
-   profundidade: na folha, copie o buffer para a tabela do caractere.
-3. Resposta esperada: 15 caracteres, 42 bits (contra 120 em ASCII de 8
-   bits) e a frase decodificada igual à original.
-
-```bash
-gcc ~/LPEDC/material/P2023.c -o ~/LPEDC/material/P2023 && ~/LPEDC/material/P2023
-```
-
----
-
-**Exercício P2024** · ★★★ · O máximo de entregas no prazo
-
-A lavanderia recebeu 7 pedidos para hoje. Cada um leva um tempo (em
-horas de máquina) e tem um prazo (a hora em que o cliente vem buscar).
-A máquina lava um pedido por vez. Pedido atrasado é cliente perdido,
-então o dono quer o MAIOR NÚMERO de pedidos prontos no prazo:
-
-
-```text
-pedido   A  B  C  D  E  F  G
-tempo    2  4  3  1  5  2  3
-prazo    3  5  6  7  9 10 11
-```
-
-
-O algoritmo de Moore-Hodgson é guloso: percorra os pedidos por prazo
-crescente, sempre aceitando o pedido; se a soma dos tempos aceitos passa
-do prazo do pedido atual, DESCARTE o aceito de MAIOR tempo (é o que mais
-libera a máquina). Escreva do zero, mostrando cada descarte e, no fim,
-os pedidos aceitos e a hora em que cada um fica pronto.
-
-
-```text
-Saída esperada:
-Descarta B (tempo 4)
-Descarta E (tempo 5)
-A pronto às 2 (prazo 3)
-C pronto às 5 (prazo 6)
-D pronto às 6 (prazo 7)
-F pronto às 8 (prazo 10)
-G pronto às 11 (prazo 11)
-Pedidos no prazo: 5
-```
-
-**Dicas:**
-
-1. Os pedidos já estão em ordem de prazo. Guarde os aceitos num vetor
-   (com 7 pedidos, procurar o de maior tempo com um laço basta; com
-   milhares, use um heap de máximo).
-2. Descartar o maior pode descartar o próprio pedido que acabou de
-   entrar: tudo bem.
-3. Resposta esperada: descarta B e E e entrega 5 pedidos: A, C, D, F e G.
-
-```bash
-gcc ~/LPEDC/material/P2024.c -o ~/LPEDC/material/P2024 && ~/LPEDC/material/P2024
-```
-
----
-
-**Exercício P2025** · ★★★ · A mediana das medianas
-
-O SELECT pela partição (com pivô qualquer) pode cair no pior caso O(n²).
-O algoritmo da MEDIANA DAS MEDIANAS (Cormen 9.3) escolhe um pivô bom de
-propósito: divida o vetor em grupos de 5, ache a mediana de cada grupo
-(ordenando os 5 com insertion sort), ache recursivamente a mediana
-dessas medianas e use-a como pivô. Assim cada lado da partição tem pelo
-menos cerca de 3n/10 elementos, e o tempo é O(n) no pior caso.
-
-Os 23 lances de um leilão de gado, em mil reais, estão no main. Escreva
-do zero seleciona(v, n, k), que devolve o k-ésimo menor (k a partir de
-0) com esse pivô, e mostre o menor, a mediana (k = 11) e o maior,
-conferindo com o vetor ordenado por qsort.
-
-
-```text
-Saída esperada:
-Menor: 41 (qsort: 41)
-Mediana: 69 (qsort: 69)
-Maior: 98 (qsort: 98)
-```
-
-**Dicas:**
-
-1. Com n <= 5, ordene e devolva v[k]. Senão, copie as medianas dos grupos
-   para um vetor med[] (o último grupo pode ter menos de 5) e chame
-   seleciona(med, ng, ng / 2) para achar o pivô.
-2. Particione em três vetores: menores, iguais e maiores que o pivô (com
-   malloc, e free no fim). Se k < nmen, desça nos menores; se k < nmen +
-   nig, a resposta é o pivô; senão, desça nos maiores com k - nmen - nig.
-3. Resposta esperada: menor 41, mediana 69 e maior 98, iguais ao qsort.
-
-```bash
-gcc ~/LPEDC/material/P2025.c -o ~/LPEDC/material/P2025 && ~/LPEDC/material/P2025
-```
-
----
-
-**Exercício P2026** · ★★★ · Comprar barato, vender caro
-
-O preço de fechamento de uma ação em 12 pregões, em reais:
-
-
-```text
-dia:    0  1  2  3  4  5  6  7  8  9 10 11
-preço: 31 27 34 22 25 41 36 19 24 33 38 29
-```
-
-
-Você compra num dia i e vende num dia j > i. Qual o maior lucro? Por
-divisão e conquista: o melhor negócio está todo na metade esquerda, ou
-todo na direita, ou compra na esquerda e vende na direita (aí é o menor
-preço da esquerda com o maior da direita). Escreva do zero uma função
-que, para v[ini..fim], devolve num struct o lucro, os dias de compra e
-venda, e também o menor e o maior preço do pedaço (com os dias), para o
-caso que cruza sair em O(1). Confira com a força bruta de todos os pares.
-
-
-```text
-Saída esperada:
-Compra no dia 3 (R$ 22), vende no dia 5 (R$ 41)
-Lucro: R$ 19
-Força bruta: R$ 19
-```
-
-**Dicas:**
-
-1. Caso base, um dia só: lucro 0 (não há venda), menor = maior = v[i].
-2. Junte: cruza = d.maior - e.menor; o menor do pedaço é o menor entre
-   e.menor e d.menor; o maior, o maior entre e.maior e d.maior. Com o
-   trabalho de junção O(1), a recorrência é T(n) = 2T(n/2) + O(1), O(n).
-3. Resposta esperada: compra no dia 3 (R$ 22) e vende no dia 5 (R$ 41),
-   lucro R$ 19. A força bruta concorda.
-
-```bash
-gcc ~/LPEDC/material/P2026.c -o ~/LPEDC/material/P2026 && ~/LPEDC/material/P2026
-```
-
----
-
-**Exercício P2027** · ★★★ · Quantos passaram?
-
-Este programa tem um erro de propósito. As notas da turma (vezes 10,
-para ficar em inteiros) estão em ordem crescente, com repetições:
-
-
-```text
-35 40 50 60 70 70 70 85 90 100
-```
-
-
-Aprovado é quem tem nota >= 70. A função primeira(v, ini, fim, x) devia
-devolver, por busca binária recursiva, o índice do PRIMEIRO elemento >=
-x (ou n, se nenhum for); os aprovados são n menos esse índice. Ela
-compila sem aviso e roda limpo, mas diz que só 3 passaram, e para nota de
-corte 50 diz 7. Conserte a função (o main está certo).
-
-
-```text
-Saída esperada:
-Corte 70: 6 aprovados
-Corte 50: 8 aprovados
-Corte 101: 0 aprovados
-```
-
-**Dicas:**
-
-1. Acrescente um printf com ini, fim e meio em cada chamada e veja o que
-   acontece quando v[meio] é igual a x.
-2. Se v[meio] >= x, o meio PODE ser a resposta (ou haverá outra igual
-   antes dele): procure em [ini, meio], sem jogar o meio fora. Se v[meio]
-   < x, a resposta está em [meio + 1, fim].
-3. Resposta esperada: troque o > por >= no teste. 6 aprovados com corte
-   70, 8 com corte 50 e 0 com corte 101.
-
-```bash
-gcc ~/LPEDC/material/P2027.c -o ~/LPEDC/material/P2027 && ~/LPEDC/material/P2027
-```
-
----
-
-**Exercício P2028** · ★★★ · Vigias para o dia inteiro
-
-O condomínio precisa de vigia das 0h às 24h, sem buraco, e cada vigia da
-lista só aceita um turno fixo [ini, fim] (horas, e um turno cobre de ini
-até fim, inclusive as pontas):
-
-
-```text
-Edu [0, 6]   Bia [2, 9]   Gil [5, 12]   Ana [8, 14]   Caio [10, 18]
-Rui [15, 20]   Lia [17, 24]   Davi [19, 24]   Teo [0, 4]
-```
-
-
-Contratar custa caro: qual o MENOR número de vigias que cobre [0, 24]?
-O guloso da COBERTURA DE INTERVALOS: com a cobertura indo até a hora t
-(começa em 0), entre os turnos que começam em t ou antes, escolha o que
-termina MAIS TARDE; agora t vira o fim dele. Pare quando t chegar a 24 ou
-quando ninguém conseguir avançar (aí há um buraco). Escreva do zero e,
-depois, rode de novo sem a Caio e mostre onde fica o buraco.
-
-
-```text
-Saída esperada:
-Todos:
-  Edu [0, 6]
-  Gil [5, 12]
-  Caio [10, 18]
-  Lia [17, 24]
-  Total: 4 vigias
-Sem a Caio:
-  Edu [0, 6]
-  Gil [5, 12]
-  Ana [8, 14]
-  Buraco: ninguém cobre depois das 14h
-```
-
-**Dicas:**
-
-1. Com poucos turnos, cada passo pode olhar todos (O(n²) no total);
-   ordenando por início dá O(n log n).
-2. "Ninguém consegue avançar" é: o melhor fim achado é <= t.
-3. Resposta esperada: 4 vigias (Edu, Gil, Caio e Lia); sem a Caio, a
-   cobertura trava às 14h: o Rui só chega às 15h.
-
-```bash
-gcc ~/LPEDC/material/P2028.c -o ~/LPEDC/material/P2028 && ~/LPEDC/material/P2028
-```
-
----
-
-**Exercício P2029** · ★★★ · Juntando as notas de quatro turmas
-
-A secretaria tem as notas de 4 turmas, cada lista já em ordem crescente,
-e quer uma lista única ordenada. Intercalar uma a uma (a primeira com a
-segunda, o resultado com a terceira...) faz os primeiros elementos serem
-comparados de novo a cada rodada. Por divisão e conquista, intercale as
-turmas 0 e 1, as 2 e 3, e depois os dois resultados: com k listas são
-só lg k rodadas. Escreva do zero intercala(a, na, b, nb, saida), que
-conta as comparações, e as duas estratégias. Mostre a lista final e as
-comparações de cada uma.
-
-
-```text
-Turma 0: 52 61 78 90 95          Turma 1: 48 55 70
-Turma 2: 35 66 74 81 88 93 99    Turma 3: 40 59
-```
-
-
-
-```text
-Saída esperada:
-Lista: 35 40 48 52 55 59 61 66 70 74 78 81 88 90 93 95 99
-Uma a uma: 25 comparações
-Divisão e conquista: 24 comparações
-Listas iguais: sim
-```
-
-**Dicas:**
-
-1. A intercalação do merge sort: compare a[i] com b[j] (1 comparação),
-   copie o menor; quando uma acabar, copie o resto da outra sem comparar.
-2. junta(listas, ini, fim): com ini == fim devolve a própria lista; senão
-   junta a metade de cima, a de baixo e intercala as duas. Use vetores
-   locais de tamanho 17 (o total).
-3. Resposta esperada: a mesma lista, com 25 comparações uma a uma e 24
-   por divisão e conquista. A diferença é pequena com listas curtas; com
-   k listas de m notas, uma a uma custa O(k² m) e a divisão e conquista,
-   O(k m lg k).
-
-```bash
-gcc ~/LPEDC/material/P2029.c -o ~/LPEDC/material/P2029 && ~/LPEDC/material/P2029
-```
-
----
-
-**Exercício P2030** · ★★★ · O guloso que pinta demais
-
-Oito transmissores de rádio comunitária ficam em dois morros: A0, A1, A2
-e A3 num, B0, B1, B2 e B3 no outro. Ai interfere com Bj sempre que i !=
-j (e os do mesmo morro não interferem entre si). Transmissores que
-interferem precisam de frequências diferentes. Isso é colorir o grafo, e
-o guloso popular é: percorra os vértices numa ordem e dê a cada um a
-menor frequência que nenhum vizinho já pintado usa. Escreva do zero:
-(a) o guloso na ordem A0 B0 A1 B1 A2 B2 A3 B3; (b) o guloso na ordem A0
-A1 A2 A3 B0 B1 B2 B3; (c) o mínimo de cores por backtracking (como no
-módulo 19). Mostre a frequência de cada um e o total de cada método.
-
-
-```text
-Saída esperada:
-Guloso intercalado: A0=0 A1=1 A2=2 A3=3 B0=0 B1=1 B2=2 B3=3 (4 frequências)
-Guloso por morro: A0=0 A1=0 A2=0 A3=0 B0=1 B1=1 B2=1 B3=1 (2 frequências)
-Ótimo: A0=0 A1=0 A2=0 A3=0 B0=1 B1=1 B2=1 B3=1 (2 frequências)
-```
-
-**Dicas:**
-
-1. Numere A0..A3 como 0..3 e B0..B3 como 4..7; viz(u, v) é verdadeiro
-   quando um é A, o outro é B e os números são diferentes.
-2. guloso(ordem[]) usa cor[] = -1 para "ainda não pintado" e procura a
-   menor cor c que nenhum vizinho pintado tem.
-3. Resposta esperada: a ordem intercalada usa 4 frequências, a ordem por
-   morro usa 2, e o ótimo é 2. O guloso depende da ordem e pode errar
-   feio: neste tipo de grafo (a "coroa"), com n pares, ele chega a n cores.
-
-```bash
-gcc ~/LPEDC/material/P2030.c -o ~/LPEDC/material/P2030 && ~/LPEDC/material/P2030
-```
-
-## Questões no estilo da prova
+### Questões no estilo da prova
 
 Questões objetivas no formato da prova do PPGI. Resolva no papel, marque a
 letra e só depois abra o gabarito. Sempre que a questão traz código ou

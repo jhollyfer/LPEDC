@@ -1,37 +1,35 @@
 ## 0132 · Inversões e subvetor de soma máxima
 
-Você e o Caio montaram o top 8 de séries do ano. Os gostos batem? Se você
-põe "Sintonia" antes de "Cidade Invisível" e o Caio faz o contrário, o par
-está em desacordo.
+- **Inversão**: par de posições `i < j` com `v[i] > v[j]`. O vetor ordenado
+  tem zero; o vetor ao contrário tem `n(n - 1)/2`
+  (CORMEN et al., 2024).
+- **Contar por divisão e conquista**: toda inversão está inteira na metade
+  esquerda, inteira na direita ou **cruza** o meio. A recursão conta as duas
+  primeiras (KLEINBERG; TARDOS, 2006, cap. 5).
+- **Contar na intercalação**: com as metades ordenadas, quando um elemento da
+  direita sai antes, ele forma inversão com todos os `q - i` que sobram na
+  esquerda (KLEINBERG; TARDOS, 2006, cap. 5).
+- **Custo**: é o merge sort com um contador, **O(n log n)**, contra O(n²) de
+  testar todos os pares (KLEINBERG; TARDOS, 2006, cap. 5).
+- **Subvetor de soma máxima**: a faixa de posições **seguidas** com a maior
+  soma. Está na esquerda, na direita ou cruzando o meio; o caso que cruza é o
+  melhor final da esquerda mais o melhor começo da direita, um laço O(n), e o
+  total fica O(n log n) (CORMEN et al., 2012, seção 4.1).
+- **Contador largo**: 100 000 elementos ao contrário dão 4 999 950 000
+  inversões. Use `long long` (KERNIGHAN; RITCHIE, 1989).
 
-Escreva as suas séries e, embaixo, a posição de cada uma no ranking do Caio:
-se concordasse com tudo, o vetor seria `1 2 3 4 5 6 7 8`. Cada par em desacordo é uma **inversão**: posições `i < j` com `v[i] > v[j]`.
-São zero inversões no vetor ordenado e `n(n - 1)/2` no vetor ao contrário.
+> [!WARNING]
+> A soma é `inv += q - i`, e não `inv++`: o `v[j]` que sai está fora de ordem
+> com **todos** de `v[i]` a `v[q - 1]`. E o `<=` importa: valores iguais
+> **não** são inversão.
 
-Testar todos os pares é O(n²). Pegando carona no merge sort (0094), a divisão
-e conquista faz em **O(n log n)**.
+{{exemplo}}
 
-Divida o vetor ao meio. Toda inversão é de um destes tipos:
-
-1. os dois elementos estão na metade **esquerda**;
-2. os dois estão na metade **direita**;
-3. um em cada metade: a inversão **cruza** o meio.
-
-A recursão resolve os tipos 1 e 2. No tipo 3, com as metades **ordenadas**, a
-intercalação conta de graça: quando um elemento da direita sai antes, ele é
-menor que **todos** os `q - i` que sobram na esquerda, ou seja, `q - i`
-inversões de uma vez.
-
-A função devolve a contagem **e** deixa o pedaço ordenado: é a recorrência do
-merge sort, O(n log n).
-
-No vetor do Caio, são 3 inversões na esquerda, 4 na direita e mais 6 na
-intercalação (o 2 passa na frente de 3, o 4 de 2 e o 6 de 1):
+Você e o Caio montaram o top 8 de séries. Embaixo de cada série sua vai a
+posição dela no ranking do Caio. São 3 inversões na esquerda, 4 na direita e 6
+na intercalação:
 
 {{ideia}}
-
-É o merge sort com um contador; o `printf` mostra as inversões da esquerda,
-da direita e as cruzadas:
 
 ```c
 #include <stdio.h>
@@ -95,6 +93,12 @@ int main(void) {
 // Pares em desacordo: 13 de 28
 ```
 
+Contar também **ordena**; para manter a ordem original, conte numa cópia. As
+duas chamadas recursivas contam dentro de cada metade e a intercalação conta o
+que cruza:
+
+{{fluxograma}}
+
 ### Passo a passo
 
 Última intercalação: `1 3 5 7` com `2 4 6 8`. Quando o menor vem da direita,
@@ -111,39 +115,6 @@ soma os que sobram na esquerda:
 | 7 | esquerda | | 6 |
 | 8 | direita | (nenhum) | 6 |
 
-No fluxograma, as duas chamadas recursivas contam dentro de cada metade e a
-intercalação conta o que cruza:
-
-{{fluxograma}}
-
-### O subvetor de soma máxima
-
-Os mesmos três tipos resolvem outro problema. Um food truck anotou o lucro de
-8 dias: `4 -6 3 5 -2 6 -9 2`. Qual faixa de dias **seguidos** deu o maior
-lucro somado? Dividindo ao meio, ela está:
-
-1. inteira na **esquerda** (`4 -6 3 5`): `3 5`, soma 8;
-2. inteira na **direita** (`-2 6 -9 2`): `6`, soma 6;
-3. **cruzando** o meio: melhor final da esquerda (`3 5`, 8) mais melhor
-   começo da direita (`-2 6`, 4): `3 5 -2 6`, soma **12**.
-
-A resposta é o maior dos três: 12, do dia 2 ao 5. O caso 3 é um laço do meio
-para fora, O(n), e o total é O(n log n). O A263 traz o algoritmo em C e o
-A264, um jeito em O(n).
-
-> [!WARNING]
-> A soma é `inv += q - i`, e não `inv++`: o `v[j]` que sai está fora de ordem
-> com **todos** os elementos de `v[i]` a `v[q - 1]`. E o `<=` importa: valores
-> iguais **não** são inversão.
-
-> [!TIP]
-> **Por dentro do C:** o contador é `long long`: 100 000 elementos ao contrário
-> dão 4 999 950 000 inversões, mais que um `int` suporta. Contar também
-> **ordena**; para manter a ordem original, conte numa cópia (`memcpy`).
-
-> [!NOTE]
-> **Pergunta para você:** quantas inversões tem o vetor `8 7 6 5 4 3 2 1`? E
-> quanto o `printf` mostra na linha do `[0, 8)`? Confira a sua conta com a
-> fórmula `n(n - 1)/2`.
-
-{{pratique}}
+No subvetor de soma máxima, com o lucro de 8 dias `4 -6 3 5 -2 6 -9 2`: a
+esquerda dá `3 5` (8), a direita `6` (6) e o que cruza, `3 5 -2 6`, dá **12**,
+do dia 2 ao 5. O A263 traz o algoritmo em C e o A264, um jeito em O(n).

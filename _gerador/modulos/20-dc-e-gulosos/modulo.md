@@ -1,16 +1,10 @@
 # Módulo 20 · Divisão e conquista e algoritmos gulosos
 
-Este módulo trata de **técnicas**. Diante de um problema novo, pergunte: "isso
-se divide em pedaços iguais menores?" ou "dá para decidir um passo de cada vez,
-sem voltar atrás?".
-
-A **divisão e conquista** quebra o problema em pedaços do mesmo tipo, resolve
-cada um e combina as respostas, como no merge sort. Aqui ela calcula
-potências em O(log n), conta inversões e acha o melhor trecho de um vetor.
-
-A **estratégia gulosa** escolhe, a cada passo, o que parece melhor e nunca
-desfaz. Quando falha, erra sem avisar; por isso o módulo treina o
-**contraexemplo** e o argumento de **troca**, que prova o critério.
+Duas técnicas de projeto. A **divisão e conquista** quebra o problema em
+pedaços do mesmo tipo e combina as respostas: potência rápida, inversões,
+subvetor máximo. A **estratégia gulosa** escolhe o melhor agora e nunca
+desfaz: troco, intervalos, mochila fracionária e Huffman. Depende da recursão
+e do merge sort (módulos 04 e 13) e do heap (módulo 14).
 
 ## O que você vai aprender
 
@@ -28,20 +22,14 @@ Revise recursão (0032 e 0033), merge sort (0094), `qsort` (0050 e 0096), heap
 (0102) e arquivos binários (0068). Os custos usam as recorrências do módulo
 17 (0114 e 0115).
 
-**Progressão.** Do módulo 18 vem a ordenação, primeiro passo dos gulosos; do
-19, a recursão, aqui sem enumerar tudo. O 21 apresenta a programação
-dinâmica.
-
-Os dois últimos assuntos trazem um TAD na pasta (`huffman.h`,
-`compactador.h`); o comando compila junto o `.c` de apoio:
+Os dois últimos assuntos trazem um TAD (`huffman.h`, `compactador.h`); o
+comando compila junto o `.c` de apoio:
 
 ```bash
 gcc ~/LPEDC/material/A271.c ~/LPEDC/material/0136-huffman.c -o ~/LPEDC/material/A271 && ~/LPEDC/material/A271
 ```
 
-O último assunto cria arquivos de teste na pasta atual e os apaga no fim.
-
-Nos gulosos, tente quebrar o critério com casos pequenos no papel. Nos
+O último assunto cria arquivos de teste na pasta atual e os apaga no fim. Nos
 desenhos, verde é o escolhido, cinza o que ficou de fora e vermelho a escolha
 errada.
 
