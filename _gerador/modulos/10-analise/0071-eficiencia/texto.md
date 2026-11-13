@@ -1,43 +1,46 @@
 ## 0071 · Eficiência: contar passos
 
-Sexta à noite, padaria cheia. Você entrega a comanda 70 e a moça procura no
-bolo de comandas, uma por uma. Se a sua for a primeira, você sai na hora; se
-for a última, espera o bolo inteiro. Com 8 comandas, tanto faz. Com 800, faz
-diferença.
+- **Eficiência**: o tempo em segundos muda de máquina para máquina; o número de
+  **passos** do algoritmo, não (FEOFILOFF, 2009).
+- **Operação dominante**: a que domina o trabalho, contada em função de n.
+  Numa busca, é a comparação `v[i] == alvo`; o `i++` e o `i < n` andam junto
+  com ela (FEOFILOFF, 2009).
+- **Melhor, pior e caso médio**: a entrada mais favorável (1 passo), a mais
+  desfavorável (n passos) e a média de todas as posições ((n + 1) / 2 passos)
+  (ZIVIANI, 2010, cap. 1).
+- **Função de custo**: a contagem escrita como fórmula de n; o Ziviani diz
+  **função de complexidade**. Aqui, f(n) = n no pior caso
+  (ZIVIANI, 2010, cap. 1).
+- **Temporal e espacial**: contar passos dá a complexidade temporal; contar
+  memória extra, a espacial (assunto 0168) (ZIVIANI, 2010, cap. 1).
+- **Por que o pior caso**: só ele permite prometer "nunca passa de n passos". O
+  melhor caso é uma situação particular e não serve para análise
+  (CELES; RANGEL, 2002).
+- **Contador em vez de relógio**: `clock()` engana com entradas pequenas, e com
+  `-O2` o `gcc` pode apagar um laço sem uso. O contador dá o mesmo número em
+  qualquer máquina.
 
-Até aqui a pergunta era "o programa está **certo**?". Agora é "ele é
-**rápido** o bastante?". E isso não se mede em segundos: o mesmo código leva
-2 ms no notebook, 9 ms num Raspberry Pi e 40 ms com o Chrome aberto em 30
-abas.
+| comandas (n) | melhor caso | caso médio | pior caso |
+| --- | --- | --- | --- |
+| 8 | 1 | 4,5 | 8 |
+| 800 | 1 | 400,5 | 800 |
+| 80.000 | 1 | 40.000,5 | 80.000 |
 
-O que não muda de máquina é **quantos passos** o algoritmo dá. Escolha a
-operação que domina o trabalho (a **operação dominante**) e conte quantas
-vezes ela ocorre. Numa busca, é a comparação `v[i] == alvo`: o `i++` e o
-`i < n` andam junto com ela e dão a mesma ideia de custo.
+> [!WARNING]
+> Contar a coisa errada engana. Com o `passos++` **depois** do `if` que dá
+> `return`, a comparação que acertou fica fora. Sem zerar o contador entre
+> buscas, ele acumula. Confira à mão: achar na primeira posição custa 1.
 
-A conta depende da entrada, não só do tamanho. Daí três casos:
+{{exemplo}}
 
-- **melhor caso**: a entrada mais favorável (a comanda está na frente): 1
-  passo;
-- **pior caso**: a mais desfavorável (está no fim ou não está): n passos;
-- **caso médio**: a média de todas as posições: (n + 1) / 2 passos.
-
-Escrita como fórmula de n, a contagem é a **função de custo** (o Ziviani diz
-**função de complexidade**): aqui, f(n) = n no pior caso. Contar passos dá a
-**complexidade temporal**; contar memória extra, a **complexidade espacial**
-(assunto 0168).
-
-Só o pior caso permite prometer algo: "nunca passa de n passos". O melhor caso
-não promete nada, como dizer que a Marginal nunca tem trânsito porque às 4 da
-manhã estava livre.
-
-No exemplo, a comanda 70 está na posição 6: a busca erra as 6 primeiras e
-acerta na 7ª comparação. A 41 sai em 1 passo; a 99, que não está no bolo,
-custa as 8:
+Na padaria, a moça procura sua comanda no bolo, uma por uma. A comanda 70 está
+na posição 6: a busca erra as 6 primeiras e acerta na 7ª comparação. A 41 sai
+em 1 passo; a 99, que não está no bolo, custa as 8:
 
 {{ideia}}
 
-O contador é uma variável global somada a cada comparação, só para estudar o custo.
+O contador é uma variável global somada a cada comparação, só para estudar o
+custo.
 
 ```c
 #include <stdio.h>
@@ -72,37 +75,7 @@ int main(void) {
 // comanda 99: posição -1, passos: 8
 ```
 
-Para vários tamanhos de entrada, a contagem vira uma tabela que compara algoritmos:
-
-| comandas (n) | melhor caso | caso médio | pior caso |
-| --- | --- | --- | --- |
-| 8 | 1 | 4,5 | 8 |
-| 800 | 1 | 400,5 | 800 |
-| 80.000 | 1 | 40.000,5 | 80.000 |
-
-Multiplicou n por 100, o pior caso também multiplicou por 100. O próximo
-assunto parte disso.
-
-O laço do fluxograma tem duas saídas: "achou?" responde Sim, ou as comandas
-acabam. Cada volta pelo losango de baixo soma um passo:
+O laço tem duas saídas: "achou?" responde Sim, ou as comandas acabam. Cada
+volta pelo losango de baixo soma um passo:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Contar a coisa errada engana. Com o `passos++` **depois** do `if` que dá
-> `return`, a comparação que acertou fica fora e a comanda 41 aparece com 0
-> passos. Sem zerar o contador entre buscas, ele acumula: 1, 8, 16. Confira o
-> caso mais simples à mão (achar na primeira posição custa 1).
-
-> [!TIP]
-> **Por dentro do C:** medir tempo com `clock()` engana com entradas pequenas
-> (o ruído do sistema supera o tempo medido), e com `-O2` o `gcc` pode apagar
-> um laço cujo resultado ninguém usa. O contador, usado no `printf`, mantém o
-> laço e dá o mesmo número em qualquer máquina.
-
-> [!NOTE]
-> **Pergunta para você:** se o bolo tivesse 8 comandas **em ordem crescente**
-> (9, 17, 23, ..., 88), dava para parar antes ao procurar a 50, que não existe?
-> Quantos passos a busca gastaria? E no pior caso, mudou alguma coisa?
-
-{{pratique}}

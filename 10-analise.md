@@ -16,22 +16,11 @@
 > - [ ] Enfrentar os desafios do módulo
 > - [ ] Chefão: resolver as questões de prova do módulo sem consultar
 
-Até aqui a pergunta foi "como escrevo isso em C?". Daqui em diante, com
-listas, pilhas, árvores e grafos, passa a ser "**qual** jeito de escrever é o
-certo?". Vetor ou lista encadeada, busca sequencial, binária ou hash: todos
-funcionam com 10 itens. Com 1 milhão, uns respondem na hora e outros travam o
-servidor.
-
-Três ideias, que atravessam o resto do curso: **medir o custo** contando
-passos e resumindo o crescimento na notação O; **ter certeza de que está
-certo** com invariantes de laço, em vez de meia dúzia de testes; e **esconder
-os detalhes** atrás de um tipo abstrato de dado, para trocar a implementação
-sem quebrar quem usa.
-
-Usa o que veio antes: funções, vetores, ponteiros, `malloc`/`free` e `struct`
-(os arquivos do módulo 09 já mostraram o ganho do acesso direto, que aqui vira
-a notação O). Prepara os módulos 11 a 16: cada estrutura será medida em O e
-construída como TAD.
+Três ideias que atravessam o resto do curso: **medir o custo** contando passos
+e resumindo o crescimento na notação O, **provar que está certo** com
+invariantes de laço e **esconder os detalhes** num tipo abstrato de dado.
+Depende de funções, vetores, ponteiros, `malloc` e `struct` (módulos 04 a 08);
+prepara os módulos 11 a 16.
 
 ## O que você vai aprender
 
@@ -42,15 +31,11 @@ construída como TAD.
 
 ## Antes de começar
 
-Nos exemplos, mude o n, troque os dados, quebre um invariante de propósito e
-veja o `assert` disparar. Nos desenhos de custo, verde é o que continua leve e
-vermelho, o que explodiu. Os contadores de passos medem trabalho, não
-segundos: os números saem iguais aos do texto na sua máquina.
+Mude o n, troque os dados e quebre um invariante de propósito para ver o
+`assert` disparar. Nos desenhos de custo, verde é o que continua leve e
+vermelho, o que explodiu. Os contadores medem passos, não segundos.
 
-Novidades pequenas:
-
-- `<assert.h>`: `assert(condicao)` para o programa na hora se a condição for
-  falsa. É assim que um invariante vira código.
+- `<assert.h>`: `assert(condicao)` para o programa se a condição for falsa.
 - **arquivos de apoio**: no 0074, a pasta tem `contador.h`, `contador.c`,
   `conta.h` e `conta.c`. O comando do exemplo compila junto todo `.c` da pasta
   que não se chama `A000.c`/`E000.c`:
@@ -68,46 +53,157 @@ gcc ~/LPEDC/material/A147.c ~/LPEDC/material/0074-conta.c ~/LPEDC/material/0074-
 
 ---
 
-## 0071 · Eficiência: contar passos
+## 1. Conceitos gerais
 
-Sexta à noite, padaria cheia. Você entrega a comanda 70 e a moça procura no
-bolo de comandas, uma por uma. Se a sua for a primeira, você sai na hora; se
-for a última, espera o bolo inteiro. Com 8 comandas, tanto faz. Com 800, faz
-diferença.
+### 0071 · Eficiência: contar passos
 
-Até aqui a pergunta era "o programa está **certo**?". Agora é "ele é
-**rápido** o bastante?". E isso não se mede em segundos: o mesmo código leva
-2 ms no notebook, 9 ms num Raspberry Pi e 40 ms com o Chrome aberto em 30
-abas.
+- **Eficiência**: o tempo em segundos muda de máquina para máquina; o número de
+  **passos** do algoritmo, não (FEOFILOFF, 2009).
+- **Operação dominante**: a que domina o trabalho, contada em função de n.
+  Numa busca, é a comparação `v[i] == alvo`; o `i++` e o `i < n` andam junto
+  com ela (FEOFILOFF, 2009).
+- **Melhor, pior e caso médio**: a entrada mais favorável (1 passo), a mais
+  desfavorável (n passos) e a média de todas as posições ((n + 1) / 2 passos)
+  (ZIVIANI, 2010, cap. 1).
+- **Função de custo**: a contagem escrita como fórmula de n; o Ziviani diz
+  **função de complexidade**. Aqui, f(n) = n no pior caso
+  (ZIVIANI, 2010, cap. 1).
+- **Temporal e espacial**: contar passos dá a complexidade temporal; contar
+  memória extra, a espacial (assunto 0168) (ZIVIANI, 2010, cap. 1).
+- **Por que o pior caso**: só ele permite prometer "nunca passa de n passos". O
+  melhor caso é uma situação particular e não serve para análise
+  (CELES; RANGEL, 2002).
+- **Contador em vez de relógio**: `clock()` engana com entradas pequenas, e com
+  `-O2` o `gcc` pode apagar um laço sem uso. O contador dá o mesmo número em
+  qualquer máquina.
 
-O que não muda de máquina é **quantos passos** o algoritmo dá. Escolha a
-operação que domina o trabalho (a **operação dominante**) e conte quantas
-vezes ela ocorre. Numa busca, é a comparação `v[i] == alvo`: o `i++` e o
-`i < n` andam junto com ela e dão a mesma ideia de custo.
+| comandas (n) | melhor caso | caso médio | pior caso |
+| --- | --- | --- | --- |
+| 8 | 1 | 4,5 | 8 |
+| 800 | 1 | 400,5 | 800 |
+| 80.000 | 1 | 40.000,5 | 80.000 |
 
-A conta depende da entrada, não só do tamanho. Daí três casos:
+> [!WARNING]
+> Contar a coisa errada engana. Com o `passos++` **depois** do `if` que dá
+> `return`, a comparação que acertou fica fora. Sem zerar o contador entre
+> buscas, ele acumula. Confira à mão: achar na primeira posição custa 1.
 
-- **melhor caso**: a entrada mais favorável (a comanda está na frente): 1
-  passo;
-- **pior caso**: a mais desfavorável (está no fim ou não está): n passos;
-- **caso médio**: a média de todas as posições: (n + 1) / 2 passos.
+### 0072 · Notação O: como o custo cresce
 
-Escrita como fórmula de n, a contagem é a **função de custo** (o Ziviani diz
-**função de complexidade**): aqui, f(n) = n no pior caso. Contar passos dá a
-**complexidade temporal**; contar memória extra, a **complexidade espacial**
-(assunto 0168).
+- **Notação O** ("ó grande"): diz como a contagem de passos cresce quando n
+  cresce (CORMEN et al., 2024, cap. 3).
+- **Ignora constantes**: 3n e 100n são ambos O(n). A constante depende da
+  máquina; o formato do crescimento, não (CELES; RANGEL, 2002).
+- **Ignora termos menores**: em n² + 50n + 7, com n = 1000, o n² vale 1.000.000
+  e o 50n só 50.000. Fica O(n²) (ZIVIANI, 2010, cap. 1).
+- **Definição**: f(n) é **O(g(n))** se existem c > 0 e n₀ com
+  0 ≤ f(n) ≤ c · g(n) para todo n ≥ n₀. É um **teto** (CORMEN et al., 2024, cap. 3).
+- **Ω e Θ**: Ω é o piso e Θ, teto e piso juntos: n² + 50n + 7 é Θ(n²)
+  (assunto 0166) (CORMEN et al., 2024, cap. 3).
+- **Ler a classe nos laços**: de 1 em 1 até n é O(n); dois aninhados, O(n²);
+  um que **divide** n por 2 a cada volta, O(log n). De 1024 até 1 são 10
+  cortes. A base do log não importa (FEOFILOFF, 2009).
+- **Acesso O(1)**: `v[i]` sai de uma conta de endereço. Numa lista encadeada,
+  chegar ao elemento i exige seguir i ponteiros, O(n)
+  (CELES; CERQUEIRA; RANGEL, 2016).
 
-Só o pior caso permite prometer algo: "nunca passa de n passos". O melhor caso
-não promete nada, como dizer que a Marginal nunca tem trânsito porque às 4 da
-manhã estava livre.
+| classe | nome | n dobra, o custo... | exemplo |
+| --- | --- | --- | --- |
+| O(1) | constante | fica igual | `v[i]`, topo da pilha |
+| O(log n) | logarítmica | ganha **1** passo | busca binária |
+| O(n) | linear | dobra | somar um vetor |
+| O(n log n) | "n log n" | pouco mais que dobra | merge sort |
+| O(n²) | quadrática | **quadruplica** | comparar todos os pares |
 
-No exemplo, a comanda 70 está na posição 6: a busca erra as 6 primeiras e
-acerta na 7ª comparação. A 41 sai em 1 passo; a 99, que não está no bolo,
-custa as 8:
+> [!WARNING]
+> O(n) não é "sempre mais rápido" que O(n²): um algoritmo de 100n passos perde
+> de um de n² até n = 100. E um laço O(n) que chama a cada volta uma função O(n)
+> dá **O(n²)**, como o `strlen(s)` na condição do `for`.
+
+### 0073 · Invariantes de laço e corretude
+
+- **Invariante de laço**: relação entre as variáveis que vale **no começo de
+  cada iteração**, logo antes do teste. Serve para explicar e para provar o
+  laço (FEOFILOFF, 2009).
+- **Notação `v[0..i-1]`**: os elementos de índice 0 até i − 1, vazio quando i
+  vale 0. Em "achar o maior": **`maior` é um máximo de `v[0..i-1]`**
+  (FEOFILOFF, 2009).
+- **Quatro passos**, como numa indução (CORMEN et al., 2024, cap. 2):
+  1. **Início**: vale antes da primeira volta.
+  2. **Manutenção**: se vale no começo de uma volta, vale no começo da seguinte.
+  3. **Término**: quando o teste falha, invariante + condição de parada dão o
+     resultado.
+  4. **Parada**: uma quantidade inteira, a **variante**, diminui a cada volta.
+- **Contrato**: a documentação diz o que a função faz, não como. "Recebe n ≥ 1
+  e v; devolve o valor de **um** elemento máximo de `v[0..n-1]`"
+  (FEOFILOFF, 2009).
+- **`assert(cond)`** (`<assert.h>`): se `cond` for falsa, mostra arquivo e linha
+  e aborta. Com `-DNDEBUG`, vira nada (CPPREFERENCE, s.d.).
+
+> [!WARNING]
+> O erro clássico é o **início**: `int maior = 0;` passa nos testes com valores
+> positivos, mas com −120, −45, −300 devolve 0, que nem está no vetor. Comece
+> com `maior = v[0]` e i = 1. E nunca ponha no `assert` algo que o programa
+> precisa fazer.
+
+### 0074 · TAD: interface (.h) e implementação (.c)
+
+- **Tipo abstrato de dado** (TAD): tipo definido pelas **operações** que
+  oferece, não pelo modo como guarda os dados. O **cliente** conhece só as
+  operações (CELES; RANGEL, 2002).
+- **Interface** (`contador.h`): o contrato. Declara o tipo e os protótipos, cada
+  um com comentário sobre o que entra, o que sai e o que pode dar errado
+  (CELES; RANGEL, 2002).
+- **Implementação** (`contador.c`): define a `struct`, escreve as funções e
+  inclui o próprio `.h`, para o compilador conferir cada função contra o
+  protótipo (CELES; RANGEL, 2002).
+- **Tipo opaco**: o `.h` diz só `typedef struct contador Contador;`. No cliente
+  é um **tipo incompleto**: dá para ter `Contador *`, mas não variável, `sizeof`
+  nem `->valor`. Por isso há `_cria` (faz o `malloc`) e `_libera`
+  (CELES; CERQUEIRA; RANGEL, 2016).
+- **Invariante do TAD**: o contador promete `0 <= valor <= limite`. Só vale
+  porque o cliente não escreve `vagas->valor = 99`.
+- **Compilação separada**: o `#include` só cola texto; só o `contador.o` conhece
+  os campos, e o ligador junta tudo. Mudar a struct recompila só o `contador.c`
+  (KERNIGHAN; RITCHIE, 1989, seção 4.5).
+- **Molde dos módulos 11 a 16**, para um TAD `x`:
+  1. **Pasta do assunto**: `x.h`, `x.c` e os exemplos `A###.c`. O comando do
+     exemplo compila junto todo `.c` da pasta que não se chama
+     `A000.c`/`E000.c`. À mão: `gcc A147.c contador.c -o a147`.
+  2. **`x.h`**: *include guard* (`#ifndef X_H`), `typedef struct x X;` e
+     protótipos com prefixo `x_`, cada um com seu contrato.
+  3. **`x.c`**: inclui o próprio `"x.h"`, define a `struct x` com o invariante
+     comentado; auxiliares internas são `static`.
+  4. **Nomes**: `x_cria` (devolve `NULL` se faltar memória), `x_libera` (aceita
+     `NULL`) e verbos no presente: `x_insere`, `x_remove`. Leitura recebe
+     `const X *`.
+  5. **Erros**: operação que pode falhar devolve `bool`, com o valor por ponteiro
+     (`bool pilha_desempilha(Pilha *p, int *valor)`). O TAD não imprime erro.
+  6. **Cliente**: `#include "x.h"` com aspas, guarda só `X *`, confere o `NULL`
+     do `_cria` e chama `_libera` no fim.
+
+> [!WARNING]
+> `vagas->valor = 0;` ou `Contador c;` no cliente dá erro de **compilação**
+> (`invalid use of incomplete typedef`): é o tipo opaco funcionando. Não mova a
+> `struct` para o `.h`. E esquecer o `contador.c` ao compilar à mão dá
+> `undefined reference`, erro do **ligador**.
+
+---
+
+## 2. Exemplos de uso
+
+Cada exemplo compila sozinho. Rode com o comando abaixo dele e compare com a saída no fim do código.
+
+### 0071 · Eficiência: contar passos
+
+Na padaria, a moça procura sua comanda no bolo, uma por uma. A comanda 70 está
+na posição 6: a busca erra as 6 primeiras e acerta na 7ª comparação. A 41 sai
+em 1 passo; a 99, que não está no bolo, custa as 8:
 
 <p align="center"><img src="material/0071-ideia.svg" alt="Diagrama da ideia: Eficiência: contar passos" width="858"></p>
 
-O contador é uma variável global somada a cada comparação, só para estudar o custo.
+O contador é uma variável global somada a cada comparação, só para estudar o
+custo.
 
 ```c
 #include <stdio.h>
@@ -142,40 +238,10 @@ int main(void) {
 // comanda 99: posição -1, passos: 8
 ```
 
-Para vários tamanhos de entrada, a contagem vira uma tabela que compara algoritmos:
-
-| comandas (n) | melhor caso | caso médio | pior caso |
-| --- | --- | --- | --- |
-| 8 | 1 | 4,5 | 8 |
-| 800 | 1 | 400,5 | 800 |
-| 80.000 | 1 | 40.000,5 | 80.000 |
-
-Multiplicou n por 100, o pior caso também multiplicou por 100. O próximo
-assunto parte disso.
-
-O laço do fluxograma tem duas saídas: "achou?" responde Sim, ou as comandas
-acabam. Cada volta pelo losango de baixo soma um passo:
+O laço tem duas saídas: "achou?" responde Sim, ou as comandas acabam. Cada
+volta pelo losango de baixo soma um passo:
 
 <p align="center"><img src="material/0071-fluxograma.svg" alt="Fluxograma: Eficiência: contar passos" width="869"></p>
-
-> [!WARNING]
-> Contar a coisa errada engana. Com o `passos++` **depois** do `if` que dá
-> `return`, a comparação que acertou fica fora e a comanda 41 aparece com 0
-> passos. Sem zerar o contador entre buscas, ele acumula: 1, 8, 16. Confira o
-> caso mais simples à mão (achar na primeira posição custa 1).
-
-> [!TIP]
-> **Por dentro do C:** medir tempo com `clock()` engana com entradas pequenas
-> (o ruído do sistema supera o tempo medido), e com `-O2` o `gcc` pode apagar
-> um laço cujo resultado ninguém usa. O contador, usado no `printf`, mantém o
-> laço e dá o mesmo número em qualquer máquina.
-
-> [!NOTE]
-> **Pergunta para você:** se o bolo tivesse 8 comandas **em ordem crescente**
-> (9, 17, 23, ..., 88), dava para parar antes ao procurar a 50, que não existe?
-> Quantos passos a busca gastaria? E no pior caso, mudou alguma coisa?
-
-### Hora de praticar
 
 **Exemplo A141 · Contar tudo: a busca com sentinela**
 
@@ -307,168 +373,13 @@ int main(void) {
 gcc ~/LPEDC/material/A142.c -o ~/LPEDC/material/A142 && ~/LPEDC/material/A142
 ```
 
-#### Exercícios
+### 0072 · Notação O: como o custo cresce
 
-**Exercício E421** · ★☆☆
-
-Escreva um programa que monta cada trecho abaixo, conta com uma variável
-"passos" quantas vezes o passos++ roda e mostra o resultado. Zere o
-contador antes de cada trecho.
-
-
-```text
-a) for (i = 0; i < 6; i++)  for (j = 0; j < 4; j++)  passos++;
-b) for (i = 0; i < 6; i++)  for (j = i; j < 6; j++)  passos++;
-c) for (i = 1; i < 100; i = i * 2)  passos++;
-d) for (i = 0; i < 10; i++)  if (i % 3 == 0) passos++;
-```
-
-
-No d), conte também as voltas do laço numa segunda variável, "voltas", e
-mostre as duas.
-
-
-```text
-Saída esperada:
-a) 24
-b) 21
-c) 7
-d) 4 passos em 10 voltas
-```
-
-```bash
-gcc ~/LPEDC/material/E421.c -o ~/LPEDC/material/E421 && ~/LPEDC/material/E421
-```
-
-**Exercício E423** · ★★☆
-
-O texto disse que, em média, a busca sequencial custa (n + 1) / 2
-comparações. Não acredite: meça. Escreva um programa que, para n = 10, 100
-e 1000:
-
-1. preenche um vetor com os códigos de produto v[i] = 3 * i + 1;
-2. busca, um por um, TODOS os códigos que estão no vetor, somando os passos
-de todas as buscas;
-3. mostra o total e a média de passos por busca.
-
-
-```text
-Saída esperada:
-n =   10: total     55, média   5.5
-n =  100: total   5050, média  50.5
-n = 1000: total 500500, média 500.5
-```
-
-```bash
-gcc ~/LPEDC/material/E423.c -o ~/LPEDC/material/E423 && ~/LPEDC/material/E423
-```
-
-**Exercício E424** · ★★☆
-
-Dois jeitos de saber se n é primo, contando as divisões (n % d) como passo:
-
-
-```text
-ingênuo: testa todo d de 2 até n - 1;
-esperto: testa d de 2 enquanto d * d <= n. Se n tivesse um divisor maior
-         que a raiz, teria também um menor, que já teria aparecido.
-```
-
-
-Escreva as duas funções (devolvem bool) com contadores e mostre a tabela
-para os primos 97, 997 e 9973.
-
-
-```text
-Saída esperada:
-    n  ingênuo  esperto
-   97       95        8
-  997      995       30
- 9973     9971       98
-```
-
-```bash
-gcc ~/LPEDC/material/E424.c -o ~/LPEDC/material/E424 && ~/LPEDC/material/E424
-```
-
-**Exercício E426** · ★★★
-
-No assunto 0033 você viu que o Fibonacci recursivo é lento. Agora meça o
-quanto. Escreva:
-
-- fib_rec(n): a versão recursiva (fib(0) = 0, fib(1) = 1), somando 1 num
-contador global "chamadas" a cada vez que a função é chamada;
-- fib_it(n): a versão com laço, somando 1 num contador "somas" a cada soma.
-
-Mostre a tabela para n = 10, 20 e 30 (contadores long). Depois, uma segunda
-tabela: para n de 20 a 25, as chamadas da recursiva e a razão entre as
-chamadas de n e as de n - 1.
-
-
-```text
-Saída esperada:
- n     fib  chamadas  somas
-10      55       177      9
-20    6765     21891     19
-30  832040   2692537     29
-```
-
-
-
-```text
-n = 20:  21891 chamadas, razão 1.618
-n = 21:  35421 chamadas, razão 1.618
-n = 22:  57313 chamadas, razão 1.618
-n = 23:  92735 chamadas, razão 1.618
-n = 24: 150049 chamadas, razão 1.618
-n = 25: 242785 chamadas, razão 1.618
-```
-
-```bash
-gcc ~/LPEDC/material/E426.c -o ~/LPEDC/material/E426 && ~/LPEDC/material/E426
-```
-
----
-
-## 0072 · Notação O: como o custo cresce
-
-Você fez o app da hamburgueria. Com 8 pedidos, voou; com 64 por noite, tudo
-bem; na Black Friday, com 1024, uma tela travou. O código não mudou, o **n**
-sim, e cada parte reagiu de um jeito.
-
-O assunto anterior contou passos. Agora a pergunta é **como a contagem cresce
-quando n cresce**, e a **notação O** (fala-se "ó grande") responde com uma
-expressão curta. Ela ignora de propósito:
-
-- **constantes multiplicativas**: 3n e 100n são ambos O(n). A constante
-  depende da máquina; o formato do crescimento, não;
-- **termos menores**: em n² + 50n + 7, o n² domina quando n cresce. Com
-  n = 1000, ele vale 1.000.000 e o 50n só 50.000. Fica O(n²).
-
-Definição formal (Cormen): f(n) é **O(g(n))** se existem c > 0 e n₀ com
-0 ≤ f(n) ≤ c · g(n) para todo n ≥ n₀. É um **teto**: "nunca cresce mais rápido
-que g". **Ω** é o piso (f ≥ c · g) e **Θ**, teto e piso juntos: n² + 50n + 7
-é Θ(n²) (assunto 0166). As cinco classes do curso, da melhor para a pior:
-
-| classe | nome | n dobra, o custo... | exemplo |
-| --- | --- | --- | --- |
-| O(1) | constante | fica igual | `v[i]`, topo da pilha |
-| O(log n) | logarítmica | ganha **1** passo | busca binária |
-| O(n) | linear | dobra | somar um vetor |
-| O(n log n) | "n log n" | pouco mais que dobra | merge sort |
-| O(n²) | quadrática | **quadruplica** | comparar todos os pares |
-
-Para ler a classe de um código, olhe os laços. Um laço de 1 em 1 até n é
-O(n). Dois aninhados até n, O(n²). Um laço que **divide** n por 2 a cada
-volta é O(log n): de 1024 até 1 são 10 cortes, porque 2¹⁰ = 1024. A base do
-log não importa: trocar log₂ por log₁₀ só muda uma constante.
-
-O exemplo faz cinco perguntas sobre os mesmos pedidos, cada uma com seu ritmo.
-Em verde, o que continua leve em 1024; em vermelho, o que explodiu:
+O app da hamburgueria faz cinco perguntas sobre os mesmos pedidos, com 8, 64 e
+1024 pedidos. Em verde, o que continua leve em 1024; em vermelho, o que
+explodiu:
 
 <p align="center"><img src="material/0072-ideia.svg" alt="Diagrama da ideia: Notação O: como o custo cresce" width="858"></p>
-
-Cada função conta os passos de uma pergunta:
 
 ```c
 #include <stdio.h>
@@ -536,35 +447,12 @@ int main(void) {
 //   1024     1     10   1024    10240   523776
 ```
 
-Na última coluna, comparar todos os pares dá n(n − 1)/2, cerca de n²/2. A
-metade é constante e some: continua O(n²). De 64 para 1024, n cresceu 16
-vezes, essa coluna 260 vezes, e a do log ganhou 4 passos.
-
-O fluxograma mostra o laço do O(log n) com n = 1024. "n > 1?" responde Sim só
-10 vezes, porque cada volta joga metade fora:
+Comparar todos os pares dá n(n − 1)/2, cerca de n²/2: continua O(n²). De 64
+para 1024, n cresceu 16 vezes, a última coluna 260 vezes e a do log ganhou 4
+passos. O fluxograma mostra o laço do O(log n) com n = 1024: "n > 1?" responde
+Sim só 10 vezes:
 
 <p align="center"><img src="material/0072-fluxograma.svg" alt="Fluxograma: Notação O: como o custo cresce" width="531"></p>
-
-> [!WARNING]
-> O(n) não é "sempre mais rápido" que O(n²): a notação fala do
-> **crescimento**, não do tempo para um n específico. Um algoritmo de 100n
-> passos perde de um de n² só a partir de n = 100 (o A144 mostra a virada).
-> Para 10 itens, o simples costuma ganhar. A pegadinha inversa: um laço O(n)
-> que chama a cada volta uma função O(n) dá **O(n²)**. Exemplo clássico: o
-> `strlen(s)` na condição do `for`.
-
-> [!TIP]
-> **Por dentro do C:** `v[i]` é O(1) porque o vetor é contínuo e o endereço
-> sai de uma conta: `endereço de v + i * sizeof(int)`. Numa lista encadeada
-> (módulo 11) não há essa conta: chegar ao elemento i exige seguir i
-> ponteiros, O(n). A estrutura de dados decide a classe antes do algoritmo.
-
-> [!NOTE]
-> **Pergunta para você:** se um algoritmo O(n²) leva 1 segundo com 10.000
-> pedidos, quanto ele leva com 100.000? E um O(n log n) que também leva 1
-> segundo com 10.000? Faça a conta antes de olhar os exercícios.
-
-### Hora de praticar
 
 **Exemplo A143 · A base do log não importa**
 
@@ -670,174 +558,14 @@ int main(void) {
 gcc ~/LPEDC/material/A144.c -o ~/LPEDC/material/A144 && ~/LPEDC/material/A144
 ```
 
-#### Exercícios
+### 0073 · Invariantes de laço e corretude
 
-**Exercício E427** · ★☆☆
-
-Transforme cada trecho abaixo numa função long trecho_a(int n), ...,
-trecho_f(int n), que roda o trecho e devolve quantas vezes o x++ (ou a
-conta do d) aconteceu. No main, mostre uma tabela com a contagem para
-n = 16 e n = 1024. No rótulo de cada linha, escreva a classe O que a
-contagem indica.
-
-
-```text
-a) for (i = 0; i < n; i++)  for (j = 0; j < 10; j++)  x++;
-b) for (i = 1; i < n; i = i * 2)  x++;
-c) for (i = 0; i < n; i++)  for (j = 0; j < i; j++)  x++;
-d) x = v[n / 2] + v[0];
-e) for (i = 0; i < n; i++)  x++;
-   for (j = 0; j < n; j++)  x++;
-f) for (i = 0; i < n; i++)  for (j = n; j > 1; j = j / 2)  x++;
-```
-
-
-
-```text
-Saída esperada:
-trecho           n=16   n=1024
-a) O(n)           160    10240
-b) O(log n)         4       10
-c) O(n^2)         120   523776
-d) O(1)             1        1
-e) O(n)            32     2048
-f) O(n log n)      64    10240
-```
-
-```bash
-gcc ~/LPEDC/material/E427.c -o ~/LPEDC/material/E427 && ~/LPEDC/material/E427
-```
-
-**Exercício E429** · ★★☆
-
-O cupom fiscal tem códigos de produto de 0 a 999. Você quer saber se algum
-código aparece repetido. Escreva duas funções que devolvem bool e contam
-passos (comparações ou consultas):
-
-- repetido_pares(v, n): compara cada par (i, j) com i < j. O(n²).
-- repetido_marcas(v, n): usa um vetor bool visto[1000] (todo false no
-começo); para cada código, consulta visto[codigo] e marca. O(n).
-
-Teste com n = 100 e n = 1000, com v[i] = (i * 37) % 1000 (que não tem
-repetidos: é o pior caso, as duas vão até o fim).
-
-
-```text
-Saída esperada:
-n =  100: pares   4950 passos, marcas  100 passos
-n = 1000: pares 499500 passos, marcas 1000 passos
-```
-
-```bash
-gcc ~/LPEDC/material/E429.c -o ~/LPEDC/material/E429 && ~/LPEDC/material/E429
-```
-
-**Exercício E430** · ★★☆
-
-A "regra do dobro": rode um algoritmo com n e com 2n e divida os passos.
-Razão perto de 1 (com +1 passo) é O(log n); perto de 2, O(n); perto de 4,
-O(n²). Escreva quatro funções long misterio_a(int n) ... misterio_d(int n),
-que devolvem quantas vezes o laço roda:
-
-
-```text
-a) for (i = 0; i < n; i += 3)
-b) for (i = n; i > 0; i /= 2)
-c) for (i = 0; i < n; i++) for (j = 0; j < n; j += 2)
-d) for (d = 0; d * d < n; d++)
-```
-
-
-Escreva também const char *classe(double razao): "O(log n)" se a razão for
-menor que 1.2, "O(raiz n)" se for menor que 1.7, "O(n)" se for menor que 3
-e "O(n^2)" nos outros casos. Mostre, para n = 1000 e n = 2000, os passos, a
-razão e a classe de cada função.
-
-
-```text
-Saída esperada:
-a:     334 ->     667  razão 2.00  O(n)
-b:      10 ->      11  razão 1.10  O(log n)
-c:  500000 -> 2000000  razão 4.00  O(n^2)
-d:      32 ->      45  razão 1.41  O(raiz n)
-```
-
-```bash
-gcc ~/LPEDC/material/E430.c -o ~/LPEDC/material/E430 && ~/LPEDC/material/E430
-```
-
-**Exercício E431** · ★★★
-
-Você precisa ordenar a lista de entregas e tem duas opções:
-
-
-```text
-A: um algoritmo simples, que gasta 2n² passos;
-B: um sofisticado, que gasta 50 n log₂ n passos.
-```
-
-
-B é O(n log n) e A é O(n²), então B ganha "no fim". Mas a partir de que n?
-Escreva um programa que encontra o MENOR n (começando em 2) em que B gasta
-menos passos que A, e mostra os dois custos nesse n. Mostre também uma
-tabela para n = 10, 100, 1000 e 10000.
-
-
-```text
-Saída esperada:
-B passa a ganhar em n = 190 (A: 72200, B: 71914)
-     n           A          B
-    10         200       1661
-   100       20000      33219
-  1000     2000000     498289
- 10000   200000000    6643856
-```
-
-```bash
-gcc ~/LPEDC/material/E431.c -o ~/LPEDC/material/E431 -lm && ~/LPEDC/material/E431
-```
-
----
-
-## 0073 · Invariantes de laço e corretude
-
-Fim do expediente na lanchonete: troco inicial mais vendas tem que bater com
-a gaveta. E a conta vale depois de **cada** cliente: "gaveta = troco + vendas
-até agora". Se em algum momento não bater, o erro foi ali.
-
-Um laço funciona igual. Testar alguns valores mostra que ele acertou
-**naqueles** valores. Para ter certeza de que acerta sempre, procure uma frase
-que fica verdadeira volta após volta: o **invariante de laço**, uma relação
-entre as variáveis que vale **no começo de cada iteração**, antes do teste do
-laço.
-
-Para falar de pedaços de vetor, use `v[0..i-1]`: os elementos de índice 0 até
-i − 1 (vazio quando i vale 0). O invariante de "achar o maior" fica: **`maior`
-é um máximo de `v[0..i-1]`**. Diz o que o laço já sabe, não como ele anda.
-
-Mostrar que um laço está certo tem quatro passos, como numa prova por
-indução:
-
-1. **Início**: o invariante vale antes da primeira volta.
-2. **Manutenção**: se vale no começo de uma volta, vale no começo da seguinte.
-3. **Término**: quando o teste falha, invariante + condição de parada dão o
-   resultado desejado.
-4. **Parada**: uma quantidade inteira diminui a cada volta e não pode diminuir
-   para sempre (é a **variante**). Garante que o laço acaba.
-
-Isso também melhora a documentação. A função promete "recebe n ≥ 1 e v;
-devolve o valor de **um** elemento máximo de `v[0..n-1]`". Cobre todos os
-parâmetros, diz a restrição (n ≥ 1) e usa "um" por causa do empate. É o
-contrato, sem o "como".
-
-Os Pix do dia foram 120, 45, 300, 80, 210 e 95. No começo da volta com i = 4,
-a parte verde já foi vista e `maior` (300) é o maior dela. A parte cinza ainda
-não importa:
+Os Pix do dia foram 120, 45, 300, 80, 210 e 95. No começo da volta com i = 4, a
+parte verde já foi vista e `maior` (300) é o maior dela:
 
 <p align="center"><img src="material/0073-ideia.svg" alt="Diagrama da ideia: Invariantes de laço e corretude" width="893"></p>
 
-O `assert` de `<assert.h>` transforma o invariante em código: se a condição
-for falsa, o programa para e mostra a linha. A `eh_maximo` é lenta de
+O `assert` transforma o invariante em código. A `eh_maximo` é lenta de
 propósito: confere o invariante pelo caminho ingênuo, só para testar.
 
 ```c
@@ -892,7 +620,7 @@ int main(void) {
 // Maior Pix: R$ 300
 ```
 
-### Passo a passo
+#### Passo a passo
 
 Os quatro passos neste laço, com o teste de mesa:
 
@@ -914,27 +642,6 @@ No fluxograma, o invariante fica na seta que volta ao losango "i < 6?". Toda
 vez que o caminho passa ali, a frase é verdadeira:
 
 <p align="center"><img src="material/0073-fluxograma.svg" alt="Fluxograma: Invariantes de laço e corretude" width="593"></p>
-
-> [!WARNING]
-> O erro clássico é o **início**: `int maior = 0;` passa em todos os testes
-> com valores positivos. Com saldos negativos (−120, −45, −300), devolve 0,
-> que nem está no vetor. O invariante denuncia: antes da primeira volta, 0 não
-> é um máximo de `v[0..0]`. Comece com `maior = v[0]` e i = 1, e escreva n ≥ 1
-> no contrato.
-
-> [!TIP]
-> **Por dentro do C:** `assert(cond)` é uma macro: se `cond` for falsa, imprime
-> arquivo, linha e condição e chama `abort()`. Com `-DNDEBUG`, vira **nada**,
-> nem a condição é calculada. Por isso o `eh_maximo` (O(n) dentro de um laço
-> O(n)) não custa nada na versão final. Nunca ponha dentro do `assert` algo
-> que o programa precisa fazer, como `assert(fp = fopen(...))`.
-
-> [!NOTE]
-> **Pergunta para você:** no exemplo A146 (fichas de R$ 5 com R$ 47), o
-> invariante é `valor == q * ficha + r` e `r >= 0`. O que garante que o laço
-> termina? E se a ficha custasse R$ 0, qual dos quatro passos falharia?
-
-### Hora de praticar
 
 **Exemplo A145 · Dois invariantes no mesmo extrato**
 
@@ -1051,162 +758,16 @@ int main(void) {
 gcc ~/LPEDC/material/A146.c -o ~/LPEDC/material/A146 && ~/LPEDC/material/A146
 ```
 
-#### Exercícios
+### 0074 · TAD: interface (.h) e implementação (.c)
 
-**Exercício E433** · ★☆☆
-
-Escreva um programa com os quatro laços abaixo. Em cada um, ponha um assert
-com o invariante logo no começo do corpo e outro depois do laço (o término).
-Escreva também as funções que conferem os invariantes: soma_ate(v, i),
-aprovados_ate(v, i) (quantos de v[0..i-1] são >= 6), potencia_de_2(k) e
-nao_esta(v, ini, fim, x) (x não aparece em v[ini..fim-1]).
-
-
-```text
-a) gastos = {20, 35, 15, 50};  s = 0;  for (i = 0; i < n; i++)  s = s + gastos[i];
-b) notas = {7, 4, 9, 6, 5};  c = 0;  for (i = 0; i < n; i++)  if (notas[i] >= 6) c++;
-c) e = 10;  p = 1;  for (k = 0; k < e; k++)  p = p * 2;
-d) v = {3, 8, 5, 8, 1}, x = 8;  k = n - 1;  while (k >= 0 && v[k] != x)  k--;
-```
-
-
-
-```text
-Saída esperada:
-a) gastos: R$ 120
-b) aprovados: 3
-c) 2 elevado a 10: 1024
-d) último 8 na posição 3
-```
-
-```bash
-gcc ~/LPEDC/material/E433.c -o ~/LPEDC/material/E433 && ~/LPEDC/material/E433
-```
-
-**Exercício E435** · ★★☆
-
-Escreva int ultima(const int v[], int n, int x), que procura a ÚLTIMA vez
-que um aluno tirou a nota x, andando do fim para o começo (começa em
-k = n - 1 e anda enquanto k >= 0 e v[k] != x). Devolve a posição, ou -1 se a
-nota não aparece. Transforme a prova de que ela está certa em código:
-
-1. escreva bool nao_esta(v, ini, fim, x), que devolve true se x não aparece
-
-```text
- em v[ini..fim-1] (pedaço vazio: true);
-```
-
-2. dentro do laço, confira com assert o invariante "x não está em v[k+1..n-1]";
-3. depois do laço, confira com assert o término: ou k == -1, ou v[k] == x e
-
-```text
- o invariante ainda vale.
-```
-
-
-Teste com notas = {7, 9, 4, 9, 6}, e também com um vetor vazio (n = 0).
-
-
-```text
-Saída esperada:
-última nota 9: posição 3
-última nota 5: posição -1
-última nota 7: posição 0
-vetor vazio: posição -1
-```
-
-```bash
-gcc ~/LPEDC/material/E435.c -o ~/LPEDC/material/E435 && ~/LPEDC/material/E435
-```
-
-**Exercício E436** · ★★☆
-
-O banco quer saber qual cliente está "menos no vermelho": o maior saldo
-entre contas todas negativas. Escreva int maximo(const int v[], int n), que
-devolve o maior elemento de v. Ela exige n >= 1 (escreva isso num comentário
-de contrato em cima) e começa com maior = v[0], sem tratar "todos negativos"
-como caso especial. Escreva também bool eh_maximo(v, i, x) (x está em
-v[0..i-1] e ninguém passa dele) e confira o invariante com assert no começo
-de cada volta e o término depois do laço. Teste com saldos = {-120, -45,
--300, -80}, com um saldo só (-7) e com positivos (10, 3, 25).
-
-
-```text
-Saída esperada:
-Maior saldo: R$ -45
-Um saldo só: R$ -7
-Positivos: R$ 25
-```
-
-```bash
-gcc ~/LPEDC/material/E436.c -o ~/LPEDC/material/E436 && ~/LPEDC/material/E436
-```
-
-**Exercício E437** · ★★★
-
-Escreva int lg(int n), que devolve o piso de log₂ n (o maior i com
-2 elevado a i <= n), para n >= 1, SEM math.h: divida n por 2 até chegar a
-1, contando as divisões.
-
-Confira o invariante com assert no começo de cada volta e o término com
-outro assert depois do laço. Depois teste: mostre lg de 1, 10, 1000, 1024
-e 100000, e compare lg(n) com floor(log2(n)) de math.h para todo n de 1 a
-100000, contando as divergências.
-
-
-```text
-Saída esperada:
-lg(1) = 0
-lg(10) = 3
-lg(1000) = 9
-lg(1024) = 10
-lg(100000) = 16
-divergências de 1 a 100000: 0
-```
-
-```bash
-gcc ~/LPEDC/material/E437.c -o ~/LPEDC/material/E437 -lm && ~/LPEDC/material/E437
-```
-
----
-
-## 0074 · TAD: interface (.h) e implementação (.c)
-
-Na entrada do estacionamento do shopping, um painel: "VAGAS LIVRES: 3". A
-cancela só abre se houver vaga. Você não sabe se o sistema usa sensor, câmera
-ou planilha, e nem precisa. Usa três "botões": entrar, sair e ver quantas
-vagas sobram.
-
-Um **tipo abstrato de dado** (TAD) leva isso ao código: um tipo definido pelas
-**operações** que oferece, não pelo modo como guarda os dados. Quem usa (o
-**cliente**) conhece só as operações. Quem implementa pode trocar tudo por
-dentro, desde que as operações cumpram o prometido.
-
-No C, a divisão é física, em dois arquivos:
-
-- **`contador.h`, a interface**: o contrato. Declara o tipo e os protótipos,
-  cada um com um comentário sobre o que entra, o que sai e o que pode dar
-  errado. O cliente o inclui.
-- **`contador.c`, a implementação**: define a `struct` e escreve as funções.
-  O cliente nunca o inclui; ele só é compilado junto.
-
-O **tipo opaco** fecha a porta. O `.h` diz só `typedef struct contador
-Contador;`, sem os campos. No cliente, `struct contador` é um **tipo
-incompleto**: dá para ter um ponteiro `Contador *`, mas não uma variável
-`Contador`, nem `sizeof`, nem `->valor`. Por isso todo TAD opaco tem uma
-`_cria`, que faz o `malloc` lá dentro, e uma `_libera`, que faz o `free`.
-
-Isso permite ao TAD garantir um **invariante**, como no 0073. O contador
-promete `0 <= valor <= limite`. Se o cliente pudesse escrever
-`vagas->valor = 99`, a promessa não valeria nada.
-
-No exemplo, o cliente (o arquivo do `main`) inclui só o contrato; o
-`contador.c` também o inclui e guarda a `struct` escondida. Na memória, o
-cliente tem só um ponteiro para um bloco no heap que não consegue abrir:
+O estacionamento do shopping tem 3 vagas e o painel só abre a cancela se houver
+vaga. O cliente (o arquivo do `main`) tem só um ponteiro para um bloco no heap
+que não consegue abrir:
 
 <p align="center"><img src="material/0074-ideia.svg" alt="Diagrama da ideia: TAD: interface (.h) e implementação (.c)" width="870"></p>
 
-O contrato completo está em `contador.h`, na pasta do assunto. O cliente estaciona 4 carros em 3 vagas:
+O contrato completo está em `contador.h`, na pasta do assunto. O cliente
+estaciona 4 carros em 3 vagas:
 
 ```c
 #include <stdio.h>
@@ -1249,8 +810,8 @@ int main(void) {
 // CWB1D77 entrou (3/3)
 ```
 
-O lado escondido fica em `contador.c`, que inclui o próprio `.h` para o
-compilador conferir cada função contra o protótipo.
+O mesmo cliente outra vez, para ler lado a lado com a implementação que vem a
+seguir:
 
 ```c
 #include <stdio.h>
@@ -1293,8 +854,7 @@ int main(void) {
 // CWB1D77 entrou (3/3)
 ```
 
-O lado escondido fica em `contador.c`. Ele inclui o próprio `.h`, e assim o
-compilador confere que cada função bate com o protótipo prometido.
+O lado escondido fica em `contador.c`:
 
 ```c
 #include <stdlib.h>
@@ -1331,57 +891,10 @@ bool contador_incrementa(Contador *c) {
 //     contador_valor e contador_limite seguem o mesmo estilo
 ```
 
-No fluxograma, o cliente fala com o TAD só pelas funções. Quem decide
-"lotado" é o `contador_incrementa`, que devolve `false`:
+O cliente fala com o TAD só pelas funções. Quem decide "lotado" é o
+`contador_incrementa`, que devolve `false`:
 
 <p align="center"><img src="material/0074-fluxograma.svg" alt="Fluxograma: TAD: interface (.h) e implementação (.c)" width="679"></p>
-
-### O padrão dos próximos módulos
-
-Toda estrutura dos módulos 11 a 16 (lista, pilha, fila, árvore, hash, grafo)
-segue este molde. Para um TAD `x`:
-
-1. **Pasta do assunto**: `x.h`, `x.c` e os exemplos `A###.c`. O comando do
-   exemplo compila junto todo `.c` da pasta que não se chama
-   `A000.c`/`E000.c`. À mão: `gcc A147.c contador.c -o a147`.
-2. **`x.h`**: comentário sobre o que o TAD é; *include guard* (`#ifndef X_H`);
-   só os `#include` de que a interface precisa (em geral `<stdbool.h>`);
-   `typedef struct x X;`; protótipos com prefixo `x_`, cada um com seu
-   contrato em comentário.
-3. **`x.c`**: inclui as bibliotecas e o próprio `"x.h"`; define a `struct x`
-   com o invariante comentado em cima; funções auxiliares internas são
-   `static` (invisíveis fora do arquivo).
-4. **Nomes**: `x_cria` (devolve `NULL` se faltar memória), `x_libera` (aceita
-   `NULL`) e verbos no presente para o resto: `x_insere`, `x_remove`,
-   `x_valor`. Leitura recebe `const X *`.
-5. **Erros**: operação que pode falhar devolve `bool`; valor de saída vai por
-   ponteiro (`bool pilha_desempilha(Pilha *p, int *valor)`). O TAD não
-   imprime erro: o cliente decide o que mostrar.
-6. **Cliente**: `#include "x.h"` com aspas, guarda só `X *`, confere o `NULL`
-   do `_cria` e chama `_libera` no fim. Nunca usa `->` num `X`.
-
-> [!WARNING]
-> Se o cliente tentar `vagas->valor = 0;` ou `Contador c;`, o erro é de
-> **compilação**: `invalid use of incomplete typedef 'Contador'`. É o tipo
-> opaco funcionando. Não "conserte" movendo a `struct` para o `.h`: qualquer
-> cliente voltaria a quebrar o invariante. Se falta uma operação, acrescente
-> uma função na interface. Outro tropeço: esquecer o `contador.c` ao compilar
-> à mão. O erro `undefined reference to 'contador_cria'` é do **ligador**.
-
-> [!TIP]
-> **Por dentro do C:** o `#include "contador.h"` só cola texto: o cliente
-> recebe os protótipos e a frase "existe uma `struct contador`". O `A147.o`
-> nasce sem saber o tamanho da struct (ponteiro tem sempre 8 bytes em 64
-> bits); só o `contador.o` conhece os campos. O ligador junta os dois. Por
-> isso mudar a struct exige recompilar só o `contador.c`.
-
-> [!NOTE]
-> **Pergunta para você:** no exemplo A148, a conta guarda o saldo em
-> centavos (`int`), e não em reais (`double`). Por quê? E se o banco quisesse
-> trocar para `long long` amanhã, quais arquivos mudariam: `conta.h`,
-> `conta.c` ou o cliente?
-
-### Hora de praticar
 
 **Exemplo A147 · Duas salas, dois contadores**
 
@@ -1487,7 +1000,311 @@ int main(void) {
 gcc ~/LPEDC/material/A148.c ~/LPEDC/material/0074-conta.c ~/LPEDC/material/0074-contador.c -o ~/LPEDC/material/A148 && ~/LPEDC/material/A148
 ```
 
-#### Exercícios
+---
+
+## 3. Exercícios práticos
+
+Cada exercício é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta. Compile como os exemplos: `gcc ~/LPEDC/material/E007.c -o ~/LPEDC/material/E007 && ~/LPEDC/material/E007`. Resoluções em `_respostas/10-analise/`.
+
+### 0071 · Eficiência: contar passos
+
+**Exercício E421** · ★☆☆
+
+Escreva um programa que monta cada trecho abaixo, conta com uma variável
+"passos" quantas vezes o passos++ roda e mostra o resultado. Zere o
+contador antes de cada trecho.
+
+```text
+a) for (i = 0; i < 6; i++)  for (j = 0; j < 4; j++)  passos++;
+b) for (i = 0; i < 6; i++)  for (j = i; j < 6; j++)  passos++;
+c) for (i = 1; i < 100; i = i * 2)  passos++;
+d) for (i = 0; i < 10; i++)  if (i % 3 == 0) passos++;
+```
+
+No d), conte também as voltas do laço numa segunda variável, "voltas", e
+mostre as duas.
+
+```text
+Saída esperada:
+a) 24
+b) 21
+c) 7
+d) 4 passos em 10 voltas
+```
+
+**Exercício E423** · ★★☆
+
+O texto disse que, em média, a busca sequencial custa (n + 1) / 2
+comparações. Não acredite: meça. Escreva um programa que, para n = 10, 100
+e 1000:
+
+1. preenche um vetor com os códigos de produto v[i] = 3 * i + 1;
+2. busca, um por um, TODOS os códigos que estão no vetor, somando os passos
+de todas as buscas;
+3. mostra o total e a média de passos por busca.
+
+```text
+Saída esperada:
+n =   10: total     55, média   5.5
+n =  100: total   5050, média  50.5
+n = 1000: total 500500, média 500.5
+```
+
+**Exercício E424** · ★★☆
+
+Dois jeitos de saber se n é primo, contando as divisões (n % d) como passo:
+
+```text
+ingênuo: testa todo d de 2 até n - 1;
+esperto: testa d de 2 enquanto d * d <= n. Se n tivesse um divisor maior
+         que a raiz, teria também um menor, que já teria aparecido.
+```
+
+Escreva as duas funções (devolvem bool) com contadores e mostre a tabela
+para os primos 97, 997 e 9973.
+
+```text
+Saída esperada:
+    n  ingênuo  esperto
+   97       95        8
+  997      995       30
+ 9973     9971       98
+```
+
+**Exercício E426** · ★★★
+
+No assunto 0033 você viu que o Fibonacci recursivo é lento. Agora meça o
+quanto. Escreva:
+
+- fib_rec(n): a versão recursiva (fib(0) = 0, fib(1) = 1), somando 1 num
+contador global "chamadas" a cada vez que a função é chamada;
+- fib_it(n): a versão com laço, somando 1 num contador "somas" a cada soma.
+
+Mostre a tabela para n = 10, 20 e 30 (contadores long). Depois, uma segunda
+tabela: para n de 20 a 25, as chamadas da recursiva e a razão entre as
+chamadas de n e as de n - 1.
+
+```text
+Saída esperada:
+ n     fib  chamadas  somas
+10      55       177      9
+20    6765     21891     19
+30  832040   2692537     29
+```
+
+```text
+n = 20:  21891 chamadas, razão 1.618
+n = 21:  35421 chamadas, razão 1.618
+n = 22:  57313 chamadas, razão 1.618
+n = 23:  92735 chamadas, razão 1.618
+n = 24: 150049 chamadas, razão 1.618
+n = 25: 242785 chamadas, razão 1.618
+```
+
+### 0072 · Notação O: como o custo cresce
+
+**Exercício E427** · ★☆☆
+
+Transforme cada trecho abaixo numa função long trecho_a(int n), ...,
+trecho_f(int n), que roda o trecho e devolve quantas vezes o x++ (ou a
+conta do d) aconteceu. No main, mostre uma tabela com a contagem para
+n = 16 e n = 1024. No rótulo de cada linha, escreva a classe O que a
+contagem indica.
+
+```text
+a) for (i = 0; i < n; i++)  for (j = 0; j < 10; j++)  x++;
+b) for (i = 1; i < n; i = i * 2)  x++;
+c) for (i = 0; i < n; i++)  for (j = 0; j < i; j++)  x++;
+d) x = v[n / 2] + v[0];
+e) for (i = 0; i < n; i++)  x++;
+   for (j = 0; j < n; j++)  x++;
+f) for (i = 0; i < n; i++)  for (j = n; j > 1; j = j / 2)  x++;
+```
+
+```text
+Saída esperada:
+trecho           n=16   n=1024
+a) O(n)           160    10240
+b) O(log n)         4       10
+c) O(n^2)         120   523776
+d) O(1)             1        1
+e) O(n)            32     2048
+f) O(n log n)      64    10240
+```
+
+**Exercício E429** · ★★☆
+
+O cupom fiscal tem códigos de produto de 0 a 999. Você quer saber se algum
+código aparece repetido. Escreva duas funções que devolvem bool e contam
+passos (comparações ou consultas):
+
+- repetido_pares(v, n): compara cada par (i, j) com i < j. O(n²).
+- repetido_marcas(v, n): usa um vetor bool visto[1000] (todo false no
+começo); para cada código, consulta visto[codigo] e marca. O(n).
+
+Teste com n = 100 e n = 1000, com v[i] = (i * 37) % 1000 (que não tem
+repetidos: é o pior caso, as duas vão até o fim).
+
+```text
+Saída esperada:
+n =  100: pares   4950 passos, marcas  100 passos
+n = 1000: pares 499500 passos, marcas 1000 passos
+```
+
+**Exercício E430** · ★★☆
+
+A "regra do dobro": rode um algoritmo com n e com 2n e divida os passos.
+Razão perto de 1 (com +1 passo) é O(log n); perto de 2, O(n); perto de 4,
+O(n²). Escreva quatro funções long misterio_a(int n) ... misterio_d(int n),
+que devolvem quantas vezes o laço roda:
+
+```text
+a) for (i = 0; i < n; i += 3)
+b) for (i = n; i > 0; i /= 2)
+c) for (i = 0; i < n; i++) for (j = 0; j < n; j += 2)
+d) for (d = 0; d * d < n; d++)
+```
+
+Escreva também const char *classe(double razao): "O(log n)" se a razão for
+menor que 1.2, "O(raiz n)" se for menor que 1.7, "O(n)" se for menor que 3
+e "O(n^2)" nos outros casos. Mostre, para n = 1000 e n = 2000, os passos, a
+razão e a classe de cada função.
+
+```text
+Saída esperada:
+a:     334 ->     667  razão 2.00  O(n)
+b:      10 ->      11  razão 1.10  O(log n)
+c:  500000 -> 2000000  razão 4.00  O(n^2)
+d:      32 ->      45  razão 1.41  O(raiz n)
+```
+
+**Exercício E431** · ★★★
+
+Você precisa ordenar a lista de entregas e tem duas opções:
+
+```text
+A: um algoritmo simples, que gasta 2n² passos;
+B: um sofisticado, que gasta 50 n log₂ n passos.
+```
+
+B é O(n log n) e A é O(n²), então B ganha "no fim". Mas a partir de que n?
+Escreva um programa que encontra o MENOR n (começando em 2) em que B gasta
+menos passos que A, e mostra os dois custos nesse n. Mostre também uma
+tabela para n = 10, 100, 1000 e 10000.
+
+```text
+Saída esperada:
+B passa a ganhar em n = 190 (A: 72200, B: 71914)
+     n           A          B
+    10         200       1661
+   100       20000      33219
+  1000     2000000     498289
+ 10000   200000000    6643856
+```
+
+```bash
+gcc ~/LPEDC/material/E431.c -o ~/LPEDC/material/E431 -lm && ~/LPEDC/material/E431
+```
+
+### 0073 · Invariantes de laço e corretude
+
+**Exercício E433** · ★☆☆
+
+Escreva um programa com os quatro laços abaixo. Em cada um, ponha um assert
+com o invariante logo no começo do corpo e outro depois do laço (o término).
+Escreva também as funções que conferem os invariantes: soma_ate(v, i),
+aprovados_ate(v, i) (quantos de v[0..i-1] são >= 6), potencia_de_2(k) e
+nao_esta(v, ini, fim, x) (x não aparece em v[ini..fim-1]).
+
+```text
+a) gastos = {20, 35, 15, 50};  s = 0;  for (i = 0; i < n; i++)  s = s + gastos[i];
+b) notas = {7, 4, 9, 6, 5};  c = 0;  for (i = 0; i < n; i++)  if (notas[i] >= 6) c++;
+c) e = 10;  p = 1;  for (k = 0; k < e; k++)  p = p * 2;
+d) v = {3, 8, 5, 8, 1}, x = 8;  k = n - 1;  while (k >= 0 && v[k] != x)  k--;
+```
+
+```text
+Saída esperada:
+a) gastos: R$ 120
+b) aprovados: 3
+c) 2 elevado a 10: 1024
+d) último 8 na posição 3
+```
+
+**Exercício E435** · ★★☆
+
+Escreva int ultima(const int v[], int n, int x), que procura a ÚLTIMA vez
+que um aluno tirou a nota x, andando do fim para o começo (começa em
+k = n - 1 e anda enquanto k >= 0 e v[k] != x). Devolve a posição, ou -1 se a
+nota não aparece. Transforme a prova de que ela está certa em código:
+
+1. escreva bool nao_esta(v, ini, fim, x), que devolve true se x não aparece
+
+```text
+ em v[ini..fim-1] (pedaço vazio: true);
+```
+
+2. dentro do laço, confira com assert o invariante "x não está em v[k+1..n-1]";
+3. depois do laço, confira com assert o término: ou k == -1, ou v[k] == x e
+
+```text
+ o invariante ainda vale.
+```
+
+Teste com notas = {7, 9, 4, 9, 6}, e também com um vetor vazio (n = 0).
+
+```text
+Saída esperada:
+última nota 9: posição 3
+última nota 5: posição -1
+última nota 7: posição 0
+vetor vazio: posição -1
+```
+
+**Exercício E436** · ★★☆
+
+O banco quer saber qual cliente está "menos no vermelho": o maior saldo
+entre contas todas negativas. Escreva int maximo(const int v[], int n), que
+devolve o maior elemento de v. Ela exige n >= 1 (escreva isso num comentário
+de contrato em cima) e começa com maior = v[0], sem tratar "todos negativos"
+como caso especial. Escreva também bool eh_maximo(v, i, x) (x está em
+v[0..i-1] e ninguém passa dele) e confira o invariante com assert no começo
+de cada volta e o término depois do laço. Teste com saldos = {-120, -45,
+-300, -80}, com um saldo só (-7) e com positivos (10, 3, 25).
+
+```text
+Saída esperada:
+Maior saldo: R$ -45
+Um saldo só: R$ -7
+Positivos: R$ 25
+```
+
+**Exercício E437** · ★★★
+
+Escreva int lg(int n), que devolve o piso de log₂ n (o maior i com
+2 elevado a i <= n), para n >= 1, SEM math.h: divida n por 2 até chegar a
+1, contando as divisões.
+
+Confira o invariante com assert no começo de cada volta e o término com
+outro assert depois do laço. Depois teste: mostre lg de 1, 10, 1000, 1024
+e 100000, e compare lg(n) com floor(log2(n)) de math.h para todo n de 1 a
+100000, contando as divergências.
+
+```text
+Saída esperada:
+lg(1) = 0
+lg(10) = 3
+lg(1000) = 9
+lg(1024) = 10
+lg(100000) = 16
+divergências de 1 a 100000: 0
+```
+
+```bash
+gcc ~/LPEDC/material/E437.c -o ~/LPEDC/material/E437 -lm && ~/LPEDC/material/E437
+```
+
+### 0074 · TAD: interface (.h) e implementação (.c)
 
 **Exercício E439** · ★☆☆
 
@@ -1498,7 +1315,6 @@ para controlar a lotação de uma van escolar de 4 lugares:
 2. 6 alunos tentam subir: conte quantos subiram e quantos ficaram no ponto;
 3. na escola, 3 descem; mostre quantos ficaram a bordo;
 4. na garagem, zere o contador, mostre e libere.
-
 
 ```text
 Saída esperada:
@@ -1515,7 +1331,6 @@ gcc ~/LPEDC/material/E439.c ~/LPEDC/material/0074-conta.c ~/LPEDC/material/0074-
 
 Escreva um TAD Ponto para o app de entregas, com estas operações:
 
-
 ```text
 Ponto *ponto_cria(double x, double y);   // NULL se faltar memória
 void ponto_libera(Ponto *p);
@@ -1524,14 +1339,12 @@ double ponto_y(const Ponto *p);
 double ponto_distancia(const Ponto *a, const Ponto *b);
 ```
 
-
 Num projeto de verdade seriam ponto.h e ponto.c. Aqui, para o exercício
 ficar num arquivo só, separe as três partes com comentários: "ponto.h"
 (typedef e protótipos), "ponto.c" (struct e funções) e "cliente" (main).
 No main, use só as funções, nunca os campos: loja em (0, 0), cliente em
 (3, 4); depois um ponto A em (-2, 1) e um ponto B em (4, 9). Distâncias em
 km.
-
 
 ```text
 Saída esperada:
@@ -1548,16 +1361,13 @@ gcc ~/LPEDC/material/E441.c ~/LPEDC/material/0074-conta.c ~/LPEDC/material/0074-
 O TAD Conta desta pasta (conta.h) não tem transferência. Você não pode
 mexer no conta.c nem no conta.h. Escreva, no cliente, a função
 
-
 ```text
 bool transfere(Conta *de, Conta *para, int centavos);
 ```
 
-
 que só move o dinheiro se der para sacar da origem, e devolve se deu certo.
 Teste com um Pix da Bia para o Caio: a Bia tem R$ 80,00 e o Caio, R$ 10,00.
 Primeiro ela tenta mandar R$ 100,00; depois, R$ 35,50.
-
 
 ```text
 Saída esperada:
@@ -1577,7 +1387,6 @@ Racional (fração), num arquivo só, separado em "racional.h", "racional.c" e
 "cliente", com o invariante: denominador > 0 e fração sempre simplificada
 (mdc(|num|, den) == 1). Operações:
 
-
 ```text
 Racional *racional_cria(int num, int den);  // NULL se den == 0
 void racional_libera(Racional *r);
@@ -1586,10 +1395,8 @@ Racional *racional_multiplica(const Racional *a, const Racional *b);
 void racional_imprime(const Racional *r);   // ex.: 5/6
 ```
 
-
 No cliente, mostre: 1/2 + 1/3; 2/4 (já simplificado); 3/-6; (1/2) * (2/3);
 e tente criar 1/0.
-
 
 ```text
 Saída esperada:
@@ -1604,9 +1411,806 @@ Saída esperada:
 gcc ~/LPEDC/material/E443.c ~/LPEDC/material/0074-conta.c ~/LPEDC/material/0074-contador.c -o ~/LPEDC/material/E443 && ~/LPEDC/material/E443
 ```
 
+### Lista do módulo
+
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P1001.c a P1030.c, em `material/`; resoluções em `_respostas/10-analise/lista/`.
+
+#### ★☆☆ Aquecimento
+
+**Exercício P1001** · ★☆☆ · Quantas vezes dá para dividir
+
+O laço "while (n > 1) n = n / 2;" roda cerca de log₂ n vezes, e com
+"n = n / 3" roda cerca de log₃ n vezes. Escreva duas funções,
+int passos_metade(int n) e int passos_terco(int n), que rodam cada laço e
+devolvem quantas voltas ele deu. Mostre a tabela para n = 10, 100, 1000 e
+1000000, com printf("%8d %4d %4d\n", ...) e o cabeçalho abaixo.
+
+```text
+Saída esperada:
+       n   /2   /3
+      10    3    2
+     100    6    4
+    1000    9    6
+ 1000000   19   12
+```
+
 ---
 
-## Desafios do módulo
+**Exercício P1002** · ★☆☆ · A planilha inteira contra a diagonal
+
+Uma planilha quadrada n x n tem, na linha i e coluna j, o valor i + j
+(contando de 0). Escreva duas funções que recebem n (até 8) e um ponteiro
+para um contador de somas:
+
+```text
+int soma_tudo(int m[8][8], int n, int *somas)       // todas as células
+int soma_diagonal(int m[8][8], int n, int *somas)   // só m[i][i]
+```
+
+Cada "s += ..." conta 1 soma. Preencha a matriz no main e mostre os
+resultados para n = 2, 4 e 8.
+
+```text
+Saída esperada:
+n = 2: soma 4 (4 somas), diagonal 2 (2 somas)
+n = 4: soma 48 (16 somas), diagonal 12 (4 somas)
+n = 8: soma 448 (64 somas), diagonal 56 (8 somas)
+```
+
+---
+
+**Exercício P1003** · ★☆☆ · O laço contra a fórmula de Gauss
+
+Um app de poupança junta 1 real no dia 1, 2 no dia 2, ..., n no dia n.
+Quanto há no dia n? Escreva duas funções que devolvem a soma 1 + 2 + ...
++ n e contam, em *passos, quantas operações aritméticas fizeram:
+
+```text
+long long soma_laco(int n, int *passos)     // um for: 1 passo por soma
+long long soma_formula(int n, int *passos)  // n (n + 1) / 2: conte 3
+```
+
+Mostre o resultado para n = 100 e n = 100000.
+
+```text
+Saída esperada:
+n = 100: laço 5050 (100 passos), fórmula 5050 (3 passos)
+n = 100000: laço 5000050000 (100000 passos), fórmula 5000050000 (3 passos)
+```
+
+---
+
+**Exercício P1004** · ★☆☆ · Multiplicar somando, com invariante
+
+A máquina de cartão antiga só sabia somar, então multiplicava assim:
+
+```text
+int multiplica(int a, int b) {   // b >= 0
+    int r = 0;
+    for (int i = 0; i < b; i++) {
+        r = r + a;
+    }
+    return r;
+}
+```
+
+Escreva a função com DOIS assert: um no começo do corpo do for, com o
+invariante (o que vale sobre r e i em toda volta), e um depois do laço,
+com o que vale no término. Teste com 7 x 6, 12 x 0 e 3 x 15.
+
+```text
+Saída esperada:
+7 x 6 = 42
+12 x 0 = 0
+3 x 15 = 45
+```
+
+**Resposta esperada:** a saída acima, sem nenhum assert disparar.
+
+---
+
+**Exercício P1005** · ★☆☆ · O termômetro do freezer (só pela interface)
+
+O TAD Termometro abaixo já está pronto: a parte "termometro.h" é a
+interface, e a "termometro.c", a implementação. Escreva SÓ o cliente (o
+main), sem tocar nos campos da struct: registre as leituras do freezer
+-18, -20, -15, -22 e -19 graus e mostre o resumo. Conte também, no
+cliente, quantas leituras passaram de -16 graus (o alarme do freezer).
+
+```text
+Saída esperada:
+Leituras: 5
+Mínima: -22.0
+Máxima: -15.0
+Média: -18.8
+Alarmes (acima de -16): 1
+```
+
+**Resposta esperada:** a saída acima (média -94 / 5 = -18.8).
+
+---
+
+**Exercício P1006** · ★☆☆ · Quantos dígitos tem o valor do boleto
+
+Escreva int digitos(long long n, int *passos), que conta os dígitos de
+n >= 0 dividindo por 10 até sobrar zero, e conta em *passos quantas
+divisões fez. Use um do-while, para que o 0 tenha 1 dígito. Mostre o
+resultado para 0, 7, 70, 7000, 7000000 e 7000000000.
+
+```text
+Saída esperada:
+0: 1 dígito(s), 1 divisões
+7: 1 dígito(s), 1 divisões
+70: 2 dígito(s), 2 divisões
+7000: 4 dígito(s), 4 divisões
+7000000: 7 dígito(s), 7 divisões
+7000000000: 10 dígito(s), 10 divisões
+```
+
+---
+
+**Exercício P1007** · ★☆☆ · O caixa que o invariante dedurou
+
+A função soma abaixo devia somar as vendas do dia, e alguém já deixou o
+invariante escrito num assert: no começo de cada volta, s é a soma de
+v[0..i-1]. Rode: o assert dispara logo na primeira volta, porque o laço
+tem um erro de propósito. Conserte o LAÇO (não mexa no assert) para a
+saída ficar:
+
+```text
+Saída esperada:
+Caixa do dia: R$ 187
+Média por venda: R$ 46.75
+```
+
+**Resposta esperada:** o for começa em i = 1 e pula a primeira venda; com i = 0 o invariante vale em toda volta e a soma dá 45 + 30 + 62 + 50 = 187.
+
+---
+
+**Exercício P1008** · ★☆☆ · O polinômio pelo jeito de Horner
+
+O preço do frete de uma transportadora segue o polinômio
+p(x) = 2x⁴ - 3x³ + 0x² + 5x - 7, em que x é a distância em centenas de km.
+Os coeficientes ficam num vetor do grau 0 ao 4: c = {-7, 5, 0, -3, 2}.
+Escreva duas funções que calculam p(x) e contam as multiplicações:
+
+```text
+long ingenuo(const int c[], int grau, int x, int *mult)
+  para cada termo k, calcula x elevado a k com um laço (k
+  multiplicações) e multiplica pelo coeficiente (mais 1);
+long horner(const int c[], int grau, int x, int *mult)
+  r = c[grau]; depois, para k de grau - 1 até 0, r = r * x + c[k].
+```
+
+Mostre os dois para x = 3.
+
+```text
+Saída esperada:
+Ingênuo: p(3) = 89 com 15 multiplicações
+Horner:  p(3) = 89 com 4 multiplicações
+```
+
+---
+
+**Exercício P1009** · ★☆☆ · O TAD da rifa da escola
+
+A rifa tem números de 0 a 63. A interface "conjunto.h" já está escrita, e
+o cliente também. Falta a implementação: escreva o "conjunto.c" com uma
+struct que guarda um vetor bool de 64 posições e um contador, de modo que
+pertence, insere e remove custem O(1) e tamanho também (sem contar o
+vetor a cada chamada). Número fora de 0..63 é recusado (insere devolve
+false). Inserir de novo um número que já está não muda nada.
+
+```text
+Saída esperada:
+Vendidos: 3
+42 vendido? sim
+13 vendido? não
+64 aceito? não
+```
+
+**Resposta esperada:** a saída acima (vendidos 7, 42 e 63; o 13 saiu).
+
+---
+
+**Exercício P1010** · ★☆☆ · Os apertos de mão da reunião
+
+Numa reunião de condomínio com n pessoas, cada uma aperta a mão de cada
+outra uma vez. Escreva long apertos_laco(int n), que conta os apertos com
+dois for aninhados (a pessoa i aperta a mão de cada j > i), e
+long apertos_formula(int n), que devolve n (n - 1) / 2. Mostre os dois
+para n = 5, 10, 50 e 1000, e diga se conferem.
+
+```text
+Saída esperada:
+n = 5: laço 10, fórmula 10, confere
+n = 10: laço 45, fórmula 45, confere
+n = 50: laço 1225, fórmula 1225, confere
+n = 1000: laço 499500, fórmula 499500, confere
+```
+
+#### ★★☆ Para pensar
+
+**Exercício P1011** · ★★☆ · Achar a fórmula exata de T(n)
+
+Este trecho pinta faixas de um mural: a cada duas colunas, pinta da
+coluna i até o fim.
+
+```text
+for (int i = 0; i < n; i += 2)
+    for (int j = i; j < n; j++)
+        passos++;
+```
+
+Escreva long conta(int n), que roda o trecho e devolve passos, e
+long formula(int n), que calcula o mesmo número SEM laço nenhum, com uma
+expressão em n. Mostre conta(n) para n = 1 a 6 e depois confira se
+formula(n) == conta(n) para todo n de 1 a 1000.
+
+```text
+Saída esperada:
+T(1) = 1
+T(2) = 2
+T(3) = 4
+T(4) = 6
+T(5) = 9
+T(6) = 12
+Fórmula confere de 1 a 1000: sim
+```
+
+**Resposta esperada:** T(n) ≈ n² / 4, então Θ(n²).
+
+---
+
+**Exercício P1012** · ★★☆ · Primos: dividir contra peneirar
+
+Para sortear senhas, o sistema precisa de todos os primos até N. Escreva
+dois jeitos de contar os primos de 2 a N, contando o trabalho de cada um:
+
+```text
+int por_divisao(int n, long *ops)
+  para cada k de 2 a n, testa os divisores d = 2, 3, ... enquanto
+  d * d <= k, parando no primeiro que divide. Cada k % d é 1 operação.
+int por_crivo(int n, long *ops)
+  o crivo de Eratóstenes: um vetor bool com todos "primo", e para cada
+  i primo com i * i <= n, marca i*i, i*i + i, ... como não primo. Cada
+  marcação é 1 operação.
+```
+
+Mostre os dois para N = 100 e N = 10000 (use um vetor de 10001 bool).
+
+```text
+Saída esperada:
+N = 100: 25 primos | divisão: 236 ops | crivo: 104 ops
+N = 10000: 1229 primos | divisão: 117527 ops | crivo: 16981 ops
+```
+
+---
+
+**Exercício P1013** · ★★☆ · Busca binária com o invariante à vista
+
+As senhas atendidas no dia estão em ordem: 3, 8, 15, 21, 29, 34, 42, 50,
+57 e 63. Escreva int busca(const int v[], int n, int x, int *passos), a
+busca binária com ini e fim (intervalo fechado), e ponha dois assert:
+
+```text
+- no começo de cada volta, o invariante: "x não está fora de
+  v[ini..fim]", isto é, não está em v[0..ini-1] nem em v[fim+1..n-1];
+- depois do laço (quando não achou), ini > fim: o intervalo ficou vazio,
+  e então o invariante garante que x não está no vetor.
+```
+
+Para o assert, escreva bool fora_ausente(v, n, ini, fim, x), que confere
+as duas pontas de fora com laços simples. Conte em *passos as voltas do
+laço. Procure 42, 3 e 60.
+
+```text
+Saída esperada:
+42: posição 6 (4 passos)
+3: posição 0 (3 passos)
+60: não está (4 passos)
+```
+
+**Resposta esperada:** a saída acima, sem nenhum assert disparar.
+
+---
+
+**Exercício P1014** · ★★☆ · Separar débitos e créditos no lugar
+
+O extrato do mês tem os lançamentos 120, -30, 45, -80, -10, 60, 0 e -5.
+Escreva int separa(int v[], int n), que deixa todos os negativos (os
+débitos) no começo do vetor, sem vetor auxiliar, e devolve quantos são.
+Use um índice i (a fronteira) e um j que percorre o vetor: quando v[j] é
+negativo, troque v[i] com v[j] e avance i. Conte as trocas.
+
+Ponha no começo de cada volta um assert com o invariante: v[0..i-1] são
+todos negativos e v[i..j-1] são todos >= 0. Escreva a função auxiliar
+bool invariante(const int v[], int i, int j) para isso.
+
+```text
+Saída esperada:
+Débitos: -30 -80 -10 -5
+Créditos: 45 60 0 120
+Trocas: 4
+```
+
+---
+
+**Exercício P1015** · ★★☆ · O TAD Data e a contagem para a prova
+
+Escreva um TAD Data, num arquivo só ("data.h", "data.c" e cliente), com o
+invariante "a data guardada sempre existe no calendário" (ano bissexto:
+divisível por 4 e não por 100, ou divisível por 400). Operações:
+
+```text
+Data *data_cria(int dia, int mes, int ano);   // NULL se a data não existe
+Data *data_seguinte(const Data *d);           // o dia seguinte (nova Data)
+int data_compara(const Data *a, const Data *b);  // < 0, 0 ou > 0
+int data_dias_entre(const Data *a, const Data *b); // a <= b
+void data_imprime(const Data *d);             // dd/mm/aaaa
+void data_libera(Data *d);
+```
+
+No cliente, mostre o dia seguinte de 28/02/2024, 28/02/2025 e
+31/12/2026, tente criar 30/02/2025 e conte os dias do fim das
+inscrições do PPGI (09/11/2026) até a prova (27/11/2026).
+
+```text
+Saída esperada:
+Depois de 28/02/2024 vem 29/02/2024
+Depois de 28/02/2025 vem 01/03/2025
+Depois de 31/12/2026 vem 01/01/2027
+30/02/2025: data inválida
+De 09/11/2026 até 27/11/2026: 18 dias
+```
+
+---
+
+**Exercício P1016** · ★★☆ · Crescer de um em um ou dobrar?
+
+Um vetor que cresce com realloc precisa, quando enche, copiar os itens
+para um bloco maior. Quanto custa inserir n itens, um de cada vez, com
+cada estratégia? Simule SEM alocar nada, só contando as cópias:
+
+```text
+long copias_mais_um(int n)  // capacidade começa em 1 e cresce de 1 em 1
+long copias_dobra(int n)    // capacidade começa em 1 e dobra
+```
+
+Em ambas: quando o vetor tem tam == cap itens e chega mais um, ele cresce
+e copia os tam itens que já tinha. Mostre para n = 1000 e n = 2000, e a
+média de cópias por inserção com n = 2000.
+
+```text
+Saída esperada:
+n = 1000: +1 copia 499500, dobrando copia 1023
+n = 2000: +1 copia 1999000, dobrando copia 2047
+Por inserção (n = 2000): +1 = 999.5, dobrando = 1.0
+```
+
+---
+
+**Exercício P1017** · ★★☆ · A busca que não acha o último ônibus
+
+Os horários de saída do terminal (em minutos depois das 5h) estão em
+ordem: 5, 12, 20, 33, 41 e 58. A busca binária abaixo compila sem aviso e
+acha o 5, mas diz que o 58 e o 33 "não têm". Ela tem um erro de propósito.
+Conserte, usando o invariante para guiar: "se x está no vetor, está em
+v[ini..fim]" (intervalo FECHADO, com as duas pontas valendo).
+
+```text
+Saída esperada:
+58: posição 5
+5: posição 0
+33: posição 3
+40: não tem
+```
+
+**Resposta esperada:** o laço é while (ini < fim), que para com uma posição ainda sem olhar. O certo é while (ini <= fim). A saída fica igual à de cima.
+
+---
+
+**Exercício P1018** · ★★☆ · Euclides, o invariante e o pior caso
+
+O marceneiro quer cortar duas tábuas em pedaços iguais, do maior tamanho
+possível: é o mdc dos comprimentos. Escreva int mdc(int a, int b, int
+*passos), o algoritmo de Euclides iterativo (troca (a, b) por (b, a % b)
+até b == 0), contando as divisões. Ponha um assert com o invariante: o
+mdc do par atual é sempre o mesmo do par original. Para conferir, escreva
+int mdc_lento(int a, int b), que testa os divisores de cima para baixo.
+Teste com (1071, 462), (89, 55) e (100, 75).
+
+```text
+Saída esperada:
+mdc(1071, 462) = 21 em 3 passos
+mdc(89, 55) = 1 em 9 passos
+mdc(100, 75) = 25 em 2 passos
+```
+
+---
+
+**Exercício P1019** · ★★☆ · O resumo da corrida em O(1)
+
+O app de corrida mostra o resumo depois de cada treino e não quer guardar
+a lista inteira de tempos. Escreva o TAD Resumo, num arquivo só
+("resumo.h", "resumo.c" e cliente), em que TODA operação custa O(1),
+guardando só agregados (quantidade, soma, soma dos quadrados, menor e
+maior):
+
+```text
+Resumo *resumo_cria(void);
+void resumo_adiciona(Resumo *r, double x);
+int resumo_quantidade(const Resumo *r);
+double resumo_media(const Resumo *r);
+double resumo_menor(const Resumo *r);
+double resumo_maior(const Resumo *r);
+double resumo_desvio(const Resumo *r);  // desvio padrão populacional
+void resumo_libera(Resumo *r);
+```
+
+Teste com os tempos, em minutos, 32, 29, 35, 31, 28 e 33.
+
+```text
+Saída esperada:
+Corridas: 6
+Média: 31.33 min
+Melhor: 28 min
+Pior: 35 min
+Desvio: 2.36 min
+```
+
+```bash
+gcc ~/LPEDC/material/P1019.c -o ~/LPEDC/material/P1019 -lm && ~/LPEDC/material/P1019
+```
+
+---
+
+**Exercício P1020** · ★★☆ · As duplas da gincana em O(n)
+
+Na gincana da escola, uma dupla ganha bônus se a soma das idades dos dois
+for par. As idades dos 8 inscritos são 3, 8, 5, 12, 7, 10, 1 e 4 (é a
+gincana da família). Quantas duplas ganham bônus? Escreva:
+
+```text
+long duplas_lento(const int v[], int n, long *passos)
+  testa todo par i < j e conta 1 passo por par testado;
+long duplas_rapido(const int v[], int n, long *passos)
+  percorre o vetor UMA vez contando pares e ímpares (1 passo por item) e
+  depois calcula a resposta com uma conta.
+```
+
+```text
+Saída esperada:
+Lento: 12 duplas em 28 passos
+Rápido: 12 duplas em 8 passos
+```
+
+**Resposta esperada:** a saída acima (4 pares e 4 ímpares: 6 + 6 = 12).
+
+#### ★★★ Desafio
+
+**Exercício P1021** · ★★★ · A melhor sequência de dias do food truck
+
+O lucro diário do food truck, em centenas de reais, nos últimos 10 dias
+foi: -3, 5, -2, 8, -10, 4, 7, -1, -7, 3. Qual sequência de dias SEGUIDOS
+deu o maior lucro somado? É o problema do subvetor de soma máxima.
+Escreva três versões, todas devolvendo a soma e preenchendo *ini e *fim
+(índices de 0 a n - 1) e contando as somas feitas em *somas:
+
+```text
+int cubica(const int v[], int n, int *ini, int *fim, long *somas)
+  para cada par (i, j), soma v[i..j] do zero com um terceiro laço;
+int quadratica(const int v[], int n, int *ini, int *fim, long *somas)
+  para cada i, vai somando v[j] para j = i, i + 1, ... (aproveita a
+  soma anterior);
+int linear(const int v[], int n, int *ini, int *fim, long *somas)
+  o algoritmo de Kadane: percorre uma vez, guardando a melhor soma que
+  TERMINA no dia atual. Se essa soma ficou <= 0, recomece no dia atual.
+```
+
+Em todas, troque a melhor só quando a nova soma for ESTRITAMENTE maior.
+Mostre os dias contando de 1.
+
+```text
+Saída esperada:
+Cúbica:     12 (dias 2 a 7), 220 somas
+Quadrática: 12 (dias 2 a 7), 55 somas
+Linear:     12 (dias 2 a 7), 10 somas
+```
+
+**Resposta esperada:** a saída acima (5 - 2 + 8 - 10 + 4 + 7 = 12).
+
+---
+
+**Exercício P1022** · ★★★ · Turmas como conjuntos ordenados
+
+O cursinho quer cruzar as matrículas das turmas de Python e de C. Escreva
+um TAD Conjunto, num arquivo só ("conjunto.h", "conjunto.c" e cliente),
+guardado como um vetor ORDENADO e sem repetidos (o invariante), que cresce
+com realloc dobrando a capacidade:
+
+```text
+Conjunto *conj_cria(void);
+bool conj_insere(Conjunto *c, int x);  // mantém a ordem; ignora repetido
+Conjunto *conj_uniao(const Conjunto *a, const Conjunto *b, long *comp);
+Conjunto *conj_intersecao(const Conjunto *a, const Conjunto *b, long *comp);
+void conj_imprime(const Conjunto *c);
+void conj_libera(Conjunto *c);
+```
+
+União e interseção devem ser feitas por INTERCALAÇÃO, andando com um
+índice em cada vetor: O(n + m). Conte 1 comparação por volta do laço em
+que os dois vetores ainda têm itens. No cliente, compare com a interseção
+ingênua (para cada item de a, percorre b inteiro: O(n · m)), que pode ser
+escrita usando um vetor comum com os mesmos números.
+
+Python: 25, 3, 12, 8, 20 (inseridos nesta ordem). C: 30, 8, 5, 20, 8.
+
+```text
+Saída esperada:
+Python: 3 8 12 20 25
+C: 5 8 20 30
+União: 3 5 8 12 20 25 30 (6 comparações)
+Interseção: 8 20 (6 comparações)
+Interseção ingênua: 8 20 (20 comparações)
+```
+
+---
+
+**Exercício P1023** · ★★★ · Quem tem a maioria no grêmio?
+
+Na eleição do grêmio estudantil, um candidato só leva no primeiro turno se
+tiver MAIS DA METADE dos votos. Escreva duas funções que devolvem o
+candidato da maioria (ou -1 se não houver) e contam as comparações:
+
+```text
+int maioria_ingenua(const int v[], int n, long *comp)
+  para cada i, conta quantas vezes v[i] aparece no vetor inteiro (n
+  comparações) e devolve assim que achar um com mais de n / 2;
+int maioria_boyer_moore(const int v[], int n, long *comp)
+  fase 1: um candidato e um contador; para cada voto, se o contador é 0,
+  o voto vira o candidato; se o voto é igual ao candidato, contador++;
+  senão, contador--. Fase 2: conta os votos do candidato para confirmar.
+  Conte 1 comparação por voto em cada fase.
+```
+
+Eleição 1: 1, 3, 2, 2, 1, 2, 2, 3, 2, 2, 2. Eleição 2: 1, 2, 3, 1, 2, 3, 1.
+
+```text
+Saída esperada:
+Eleição 1: candidato 2 com 7 de 11 votos
+  ingênuo: 33 comparações, Boyer-Moore: 22
+Eleição 2: ninguém tem maioria
+  ingênuo: 49 comparações, Boyer-Moore: 14
+```
+
+**Resposta esperada:** Imprima a contagem de votos na eleição 1 com mais um laço.
+
+---
+
+**Exercício P1024** · ★★★ · A busca em escada na tabela de preços
+
+A tabela de fretes tem as linhas (distâncias) e as colunas (pesos) em
+ordem crescente: cada linha cresce para a direita e cada coluna cresce
+para baixo.
+
+```text
+ 2  5  9 14 20
+ 4  8 13 18 25
+ 7 11 16 22 30
+10 15 21 27 35
+```
+
+Escreva bool escada(int m[4][5], int x, int *lin, int *col, int *comp),
+que começa no canto de CIMA À DIREITA: se o valor é maior que x, a coluna
+inteira dali para baixo também é, então vá para a esquerda; se é menor,
+a linha inteira dali para a esquerda também é, então desça. Escreva
+também a força bruta (linha por linha, parando ao achar) e compare as
+comparações para x = 16 e x = 17.
+
+```text
+Saída esperada:
+16: linha 2, coluna 2 (escada: 5 comparações, força bruta: 13)
+17: não está (escada: 7 comparações, força bruta: 20)
+```
+
+---
+
+**Exercício P1025** · ★★★ · Os lugares do cinema num punhado de bits
+
+A sala do cinema tem 256 lugares (0 a 255). Guardar um bool por lugar
+gasta 256 bytes; guardando um BIT por lugar, bastam 32. Escreva o TAD
+Lugares, num arquivo só ("lugares.h", "lugares.c" e cliente), com um
+unsigned char bits[32] escondido na struct:
+
+```text
+Lugares *lugares_cria(void);                 // todos livres
+void lugares_ocupa(Lugares *l, int k);
+void lugares_libera_lugar(Lugares *l, int k);
+bool lugares_ocupado(const Lugares *l, int k);
+int lugares_conta(const Lugares *l);          // quantos ocupados
+Lugares *lugares_uniao(const Lugares *a, const Lugares *b);
+Lugares *lugares_intersecao(const Lugares *a, const Lugares *b);
+int lugares_bytes(void);                      // memória do vetor de bits
+void lugares_libera(Lugares *l);
+```
+
+Sessão da tarde: 0, 1, 2, 50, 99, 150 e 199. Sessão da noite: 2, 3, 50,
+100 e 199. Mostre quantos foram ocupados em cada sessão, os ocupados nas
+duas, quantos foram ocupados em alguma e o tamanho do vetor de bits.
+
+```text
+Saída esperada:
+Tarde: 7 ocupados
+Noite: 5 ocupados
+Ocupados nas duas: 2 50 199
+Ocupados em alguma: 9
+Memória: 32 bytes para 256 lugares
+```
+
+---
+
+**Exercício P1026** · ★★★ · Duas implementações da lista de presença
+
+A portaria do evento marca quem entrou (pelo número do crachá) e depois
+responde "fulano entrou?". Implemente a MESMA interface de dois jeitos,
+num arquivo só, e meça qual compensa (os nomes ganharam um sufixo só para
+as duas caberem no mesmo arquivo):
+
+```text
+Presenca *pres_cria_X(int capacidade);
+void pres_marca_X(Presenca *p, int cracha);
+bool pres_entrou_X(Presenca *p, int cracha);   // sem const: soma passos
+long pres_passos_X(const Presenca *p);   // passos gastos até agora
+void pres_libera_X(Presenca *p);
+```
+
+- X = A, vetor DESORDENADO: marca põe no fim (1 passo); entrou é a busca
+
+```text
+sequencial (1 passo por comparação).
+```
+
+- X = B, vetor ORDENADO: marca desloca os maiores para abrir espaço (1
+
+```text
+passo por deslocamento, mais 1 para gravar); entrou é a busca binária
+(1 passo por volta).
+```
+
+Carga de teste: marque os crachás (7 * k) % 1000 para k = 0..999 (os
+números de 0 a 999, embaralhados) e depois pergunte por 0, 1, ..., 1999
+(metade entrou, metade não). Mostre os passos de cada fase. A struct de
+cada versão pode ser igual: int *v, int n e long passos.
+
+```text
+Saída esperada:
+A (desordenado): marcar 1000 passos, consultar 1500500 passos
+B (ordenado):    marcar 214213 passos, consultar 18987 passos
+Respostas iguais: sim
+```
+
+---
+
+**Exercício P1027** · ★★★ · O topo da trilha em O(log n)
+
+O GPS da trilha registrou as altitudes, em metros, a cada quilômetro. Um
+PICO é um ponto que não é menor que os vizinhos (as pontas só têm um
+vizinho). Todo vetor tem pelo menos um pico, e dá para achar um sem olhar
+o vetor inteiro. Escreva:
+
+```text
+int pico_sequencial(const int v[], int n, int *comp)
+  anda até o primeiro i com v[i] >= v[i + 1] (ou até o fim);
+int pico_binario(const int v[], int n, int *comp)
+  com ini = 0 e fim = n - 1, enquanto ini < fim: olhe meio e meio + 1.
+  Se v[meio] < v[meio + 1], há um pico à direita: ini = meio + 1. Senão,
+  há um à esquerda (o meio incluído): fim = meio.
+```
+
+Ponha no começo de cada volta do binário um assert com o invariante:
+(ini == 0 ou v[ini - 1] < v[ini]) e (fim == n - 1 ou v[fim] >= v[fim + 1]).
+Conte 1 comparação por volta em cada versão. Teste com a trilha
+120, 340, 560, 610, 580, 430, 470, 520, 300, 150 e com a rampa 100, 200,
+..., 1600 (16 pontos).
+
+```text
+Saída esperada:
+Trilha: pico na posição 3 (610 m), binária 3, sequencial 4
+Rampa: pico na posição 15 (1600 m), binária 4, sequencial 15
+```
+
+---
+
+**Exercício P1028** · ★★★ · Quantos times de futsal? Recursão contra tabela
+
+Com 12 jogadores, quantos times de 5 dá para montar? É C(12, 5), e a
+relação de Pascal diz que C(n, k) = C(n - 1, k - 1) + C(n - 1, k), com
+C(n, 0) = C(n, n) = 1. Escreva:
+
+```text
+long comb_rec(int n, int k, long *chamadas)
+  a recursão direta da fórmula, contando todas as chamadas;
+long comb_tabela(int n, int k, long *somas)
+  monta o triângulo de Pascal linha por linha numa matriz long
+  t[21][21], só até a coluna k, contando as somas.
+```
+
+Mostre os dois para C(12, 5) e C(20, 10).
+
+```text
+Saída esperada:
+C(12, 5) = 792 | recursão: 1583 chamadas | tabela: 45 somas
+C(20, 10) = 184756 | recursão: 369511 chamadas | tabela: 145 somas
+```
+
+---
+
+**Exercício P1029** · ★★★ · O lado do terreno por busca binária
+
+Um terreno quadrado tem área A m². Qual o maior lado inteiro L com
+L · L <= A (a raiz quadrada inteira)? Sem math.h, escreva:
+
+```text
+long long raiz_linear(long long a, long *passos)
+  testa L = 0, 1, 2, ... enquanto (L + 1)² <= a; 1 passo por teste;
+long long raiz_binaria(long long a, long *passos)
+  com lo = 0 e hi = a + 1 e o invariante lo² <= a < hi², enquanto
+  hi - lo > 1: meio = lo + (hi - lo) / 2; se meio² <= a, lo = meio;
+  senão, hi = meio. 1 passo por volta. A resposta é lo.
+```
+
+Ponha o invariante num assert no começo de cada volta da binária. Teste
+com A = 50, 1000000 e 2000000000.
+
+```text
+Saída esperada:
+A = 50: lado 7 | linear 8 passos | binária 6 passos
+A = 1000000: lado 1000 | linear 1001 passos | binária 20 passos
+A = 2000000000: lado 44721 | linear 44722 passos | binária 31 passos
+```
+
+```bash
+gcc ~/LPEDC/material/P1029.c -o ~/LPEDC/material/P1029 -lm && ~/LPEDC/material/P1029
+```
+
+---
+
+**Exercício P1030** · ★★★ · Moda e mediana sem ordenar nada
+
+As notas do simulado são inteiras de 0 a 10. Como só existem 11 notas
+possíveis, dá para guardar um HISTOGRAMA (quantas vezes cada nota saiu)
+em vez da lista de notas. Escreva o TAD Histograma, num arquivo só
+("histograma.h", "histograma.c" e cliente):
+
+```text
+Histograma *hist_cria(void);
+bool hist_adiciona(Histograma *h, int nota);   // false se fora de 0..10
+int hist_quantidade(const Histograma *h);
+int hist_moda(const Histograma *h, int *vezes); // a menor, no empate
+int hist_mediana(const Histograma *h);  // o elemento (n + 1) / 2 na ordem
+double hist_media(const Histograma *h);
+void hist_libera(Histograma *h);
+```
+
+adiciona custa O(1); moda e mediana percorrem as 11 contagens, custo que
+NÃO depende de quantas notas existem. Teste com 7, 8, 5, 10, 7, 6, 9, 7,
+4, 8, 7; depois acrescente doze notas 10 e mostre de novo moda e mediana.
+
+```text
+Saída esperada:
+Notas: 11
+Moda: 7 (4 vezes)
+Mediana: 7
+Média: 7.09
+Depois de mais doze notas 10: moda 10 (13 vezes), mediana 10
+```
+
+**Resposta esperada:** a saída acima (com 23 notas, a 12ª da fila é 10).
+
+---
+
+### Desafios do módulo
 
 Problemas dos quatro assuntos, do médio ao difícil. Todos pedem código:
 escreva num arquivo seu e compile com as flags de estudo.
@@ -1825,7 +2429,7 @@ assunto 0071, a constante importa quando n é fixo.
 
 </details>
 
-## Questões do POSCOMP
+### Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -1840,1233 +2444,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 
 O gabarito de 2023 vem de um blog de terceiros que reproduz o gabarito definitivo; confira no PDF oficial da SBC. O gabarito oficial de 2025 não estava disponível quando este material foi montado.
 
-
-## Lista de exercícios práticos
-
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P1001.c a P1030.c, em `material/`; resoluções em `_respostas/10-analise/lista/`.
-
-### ★☆☆ Aquecimento
-
-**Exercício P1001** · ★☆☆ · Quantas vezes dá para dividir
-
-O laço "while (n > 1) n = n / 2;" roda cerca de log₂ n vezes, e com
-"n = n / 3" roda cerca de log₃ n vezes. Escreva duas funções,
-int passos_metade(int n) e int passos_terco(int n), que rodam cada laço e
-devolvem quantas voltas ele deu. Mostre a tabela para n = 10, 100, 1000 e
-1000000, com printf("%8d %4d %4d\n", ...) e o cabeçalho abaixo.
-
-
-```text
-Saída esperada:
-       n   /2   /3
-      10    3    2
-     100    6    4
-    1000    9    6
- 1000000   19   12
-```
-
-**Dicas:**
-
-1. Conte uma volta a cada divisão; com n = 1 o laço nem começa (0 voltas).
-2. O cabeçalho é printf("%8s %4s %4s\n", "n", "/2", "/3").
-3. Multiplicar n por 1000 só soma umas 10 voltas no /2. Trocar a
-   base do log muda a conta por uma constante (log₃ n = log₂ n / log₂ 3),
-   por isso as duas funções são O(log n).
-
-```bash
-gcc ~/LPEDC/material/P1001.c -o ~/LPEDC/material/P1001 && ~/LPEDC/material/P1001
-```
-
----
-
-**Exercício P1002** · ★☆☆ · A planilha inteira contra a diagonal
-
-Uma planilha quadrada n x n tem, na linha i e coluna j, o valor i + j
-(contando de 0). Escreva duas funções que recebem n (até 8) e um ponteiro
-para um contador de somas:
-
-
-```text
-int soma_tudo(int m[8][8], int n, int *somas)       // todas as células
-int soma_diagonal(int m[8][8], int n, int *somas)   // só m[i][i]
-```
-
-
-Cada "s += ..." conta 1 soma. Preencha a matriz no main e mostre os
-resultados para n = 2, 4 e 8.
-
-
-```text
-Saída esperada:
-n = 2: soma 4 (4 somas), diagonal 2 (2 somas)
-n = 4: soma 48 (16 somas), diagonal 12 (4 somas)
-n = 8: soma 448 (64 somas), diagonal 56 (8 somas)
-```
-
-**Dicas:**
-
-1. soma_tudo tem dois for aninhados de 0 a n - 1: n · n somas, O(n²).
-2. soma_diagonal tem um for só: n somas, O(n).
-3. Dobrar n multiplica por 4 as somas da planilha inteira e só
-   por 2 as da diagonal.
-
-```bash
-gcc ~/LPEDC/material/P1002.c -o ~/LPEDC/material/P1002 && ~/LPEDC/material/P1002
-```
-
----
-
-**Exercício P1003** · ★☆☆ · O laço contra a fórmula de Gauss
-
-Um app de poupança junta 1 real no dia 1, 2 no dia 2, ..., n no dia n.
-Quanto há no dia n? Escreva duas funções que devolvem a soma 1 + 2 + ...
-+ n e contam, em *passos, quantas operações aritméticas fizeram:
-
-
-```text
-long long soma_laco(int n, int *passos)     // um for: 1 passo por soma
-long long soma_formula(int n, int *passos)  // n (n + 1) / 2: conte 3
-```
-
-
-Mostre o resultado para n = 100 e n = 100000.
-
-
-```text
-Saída esperada:
-n = 100: laço 5050 (100 passos), fórmula 5050 (3 passos)
-n = 100000: laço 5000050000 (100000 passos), fórmula 5000050000 (3 passos)
-```
-
-**Dicas:**
-
-1. Com n = 100000 a soma passa de 2 bilhões: use long long e "%lld".
-2. Na fórmula, faça a conta em long long: (long long) n * (n + 1) / 2.
-   A soma, a multiplicação e a divisão são os 3 passos.
-3. O laço é O(n); a fórmula é O(1): não importa o tamanho de n.
-
-```bash
-gcc ~/LPEDC/material/P1003.c -o ~/LPEDC/material/P1003 && ~/LPEDC/material/P1003
-```
-
----
-
-**Exercício P1004** · ★☆☆ · Multiplicar somando, com invariante
-
-A máquina de cartão antiga só sabia somar, então multiplicava assim:
-
-
-```text
-int multiplica(int a, int b) {   // b >= 0
-    int r = 0;
-    for (int i = 0; i < b; i++) {
-        r = r + a;
-    }
-    return r;
-}
-```
-
-
-Escreva a função com DOIS assert: um no começo do corpo do for, com o
-invariante (o que vale sobre r e i em toda volta), e um depois do laço,
-com o que vale no término. Teste com 7 x 6, 12 x 0 e 3 x 15.
-
-
-```text
-Saída esperada:
-7 x 6 = 42
-12 x 0 = 0
-3 x 15 = 45
-```
-
-**Dicas:**
-
-1. Antes da volta i, quantas vezes o a já foi somado em r?
-2. O invariante é r == a * i. Quando o laço termina, i == b, então o
-   invariante vira r == a * b, que é justamente o que se queria.
-3. Com b = 0 o corpo nem roda, mas o assert do término ainda vale: r == 0.
-4. Resposta esperada: a saída acima, sem nenhum assert disparar.
-
-```bash
-gcc ~/LPEDC/material/P1004.c -o ~/LPEDC/material/P1004 && ~/LPEDC/material/P1004
-```
-
----
-
-**Exercício P1005** · ★☆☆ · O termômetro do freezer (só pela interface)
-
-O TAD Termometro abaixo já está pronto: a parte "termometro.h" é a
-interface, e a "termometro.c", a implementação. Escreva SÓ o cliente (o
-main), sem tocar nos campos da struct: registre as leituras do freezer
--18, -20, -15, -22 e -19 graus e mostre o resumo. Conte também, no
-cliente, quantas leituras passaram de -16 graus (o alarme do freezer).
-
-
-```text
-Saída esperada:
-Leituras: 5
-Mínima: -22.0
-Máxima: -15.0
-Média: -18.8
-Alarmes (acima de -16): 1
-```
-
-**Dicas:**
-
-1. Comece com Termometro *t = termometro_cria(); e confira se veio NULL.
-2. Para o alarme, compare a leitura ANTES de registrá-la: o TAD não
-   guarda a lista de leituras, só o resumo.
-3. Não esqueça termometro_libera(t) no fim.
-4. Resposta esperada: a saída acima (média -94 / 5 = -18.8).
-
-```bash
-gcc ~/LPEDC/material/P1005.c -o ~/LPEDC/material/P1005 && ~/LPEDC/material/P1005
-```
-
----
-
-**Exercício P1006** · ★☆☆ · Quantos dígitos tem o valor do boleto
-
-Escreva int digitos(long long n, int *passos), que conta os dígitos de
-n >= 0 dividindo por 10 até sobrar zero, e conta em *passos quantas
-divisões fez. Use um do-while, para que o 0 tenha 1 dígito. Mostre o
-resultado para 0, 7, 70, 7000, 7000000 e 7000000000.
-
-
-```text
-Saída esperada:
-0: 1 dígito(s), 1 divisões
-7: 1 dígito(s), 1 divisões
-70: 2 dígito(s), 2 divisões
-7000: 4 dígito(s), 4 divisões
-7000000: 7 dígito(s), 7 divisões
-7000000000: 10 dígito(s), 10 divisões
-```
-
-**Dicas:**
-
-1. do { n = n / 10; cont++; } while (n > 0);
-2. 7000000000 não cabe num int: use long long e "%lld".
-3. n multiplicado por 1000 custa só 3 divisões a mais: o número de passos
-   é piso(log₁₀ n) + 1, ou seja, O(log n).
-
-```bash
-gcc ~/LPEDC/material/P1006.c -o ~/LPEDC/material/P1006 && ~/LPEDC/material/P1006
-```
-
----
-
-**Exercício P1007** · ★☆☆ · O caixa que o invariante dedurou
-
-A função soma abaixo devia somar as vendas do dia, e alguém já deixou o
-invariante escrito num assert: no começo de cada volta, s é a soma de
-v[0..i-1]. Rode: o assert dispara logo na primeira volta, porque o laço
-tem um erro de propósito. Conserte o LAÇO (não mexa no assert) para a
-saída ficar:
-
-
-```text
-Saída esperada:
-Caixa do dia: R$ 187
-Média por venda: R$ 46.75
-```
-
-**Dicas:**
-
-1. Na primeira volta, quanto vale s e quanto vale soma_ate(v, i)?
-2. Que venda o laço nunca soma?
-3. Resposta esperada: o for começa em i = 1 e pula a primeira venda; com
-   i = 0 o invariante vale em toda volta e a soma dá 45 + 30 + 62 + 50 =
-   187.
-
-```bash
-gcc ~/LPEDC/material/P1007.c -o ~/LPEDC/material/P1007 && ~/LPEDC/material/P1007
-```
-
----
-
-**Exercício P1008** · ★☆☆ · O polinômio pelo jeito de Horner
-
-O preço do frete de uma transportadora segue o polinômio
-p(x) = 2x⁴ - 3x³ + 0x² + 5x - 7, em que x é a distância em centenas de km.
-Os coeficientes ficam num vetor do grau 0 ao 4: c = {-7, 5, 0, -3, 2}.
-Escreva duas funções que calculam p(x) e contam as multiplicações:
-
-
-```text
-long ingenuo(const int c[], int grau, int x, int *mult)
-  para cada termo k, calcula x elevado a k com um laço (k
-  multiplicações) e multiplica pelo coeficiente (mais 1);
-long horner(const int c[], int grau, int x, int *mult)
-  r = c[grau]; depois, para k de grau - 1 até 0, r = r * x + c[k].
-```
-
-
-Mostre os dois para x = 3.
-
-
-```text
-Saída esperada:
-Ingênuo: p(3) = 89 com 15 multiplicações
-Horner:  p(3) = 89 com 4 multiplicações
-```
-
-**Dicas:**
-
-1. Horner reescreve p(x) como (((2x - 3)x + 0)x + 5)x - 7.
-2. No ingênuo, grau 4 dá 0 + 1 + 2 + 3 + 4 = 10 multiplicações das
-   potências mais 5 dos coeficientes. Para grau n: (n + 1)(n + 2) / 2,
-   O(n²). Horner faz n: O(n).
-
-```bash
-gcc ~/LPEDC/material/P1008.c -o ~/LPEDC/material/P1008 && ~/LPEDC/material/P1008
-```
-
----
-
-**Exercício P1009** · ★☆☆ · O TAD da rifa da escola
-
-A rifa tem números de 0 a 63. A interface "conjunto.h" já está escrita, e
-o cliente também. Falta a implementação: escreva o "conjunto.c" com uma
-struct que guarda um vetor bool de 64 posições e um contador, de modo que
-pertence, insere e remove custem O(1) e tamanho também (sem contar o
-vetor a cada chamada). Número fora de 0..63 é recusado (insere devolve
-false). Inserir de novo um número que já está não muda nada.
-
-
-```text
-Saída esperada:
-Vendidos: 3
-42 vendido? sim
-13 vendido? não
-64 aceito? não
-```
-
-**Dicas:**
-
-1. struct conjunto { bool tem[64]; int n; };
-2. Em insere, só some 1 em n se o número ainda não estava. Em remove, só
-   subtraia se estava. Assim o invariante "n é o número de posições true"
-   vale depois de toda operação.
-3. Resposta esperada: a saída acima (vendidos 7, 42 e 63; o 13 saiu).
-
-```bash
-gcc ~/LPEDC/material/P1009.c -o ~/LPEDC/material/P1009 && ~/LPEDC/material/P1009
-```
-
----
-
-**Exercício P1010** · ★☆☆ · Os apertos de mão da reunião
-
-Numa reunião de condomínio com n pessoas, cada uma aperta a mão de cada
-outra uma vez. Escreva long apertos_laco(int n), que conta os apertos com
-dois for aninhados (a pessoa i aperta a mão de cada j > i), e
-long apertos_formula(int n), que devolve n (n - 1) / 2. Mostre os dois
-para n = 5, 10, 50 e 1000, e diga se conferem.
-
-
-```text
-Saída esperada:
-n = 5: laço 10, fórmula 10, confere
-n = 10: laço 45, fórmula 45, confere
-n = 50: laço 1225, fórmula 1225, confere
-n = 1000: laço 499500, fórmula 499500, confere
-```
-
-**Dicas:**
-
-1. for (i = 0; i < n; i++) for (j = i + 1; j < n; j++) cont++;
-2. A pessoa 0 faz n - 1 apertos, a 1 faz n - 2, ..., a última faz 0:
-   (n - 1) + (n - 2) + ... + 0 = n (n - 1) / 2. É Θ(n²), e é o mesmo
-   número de comparações de quem testa "todo par" num vetor.
-
-```bash
-gcc ~/LPEDC/material/P1010.c -o ~/LPEDC/material/P1010 && ~/LPEDC/material/P1010
-```
-
-### ★★☆ Para pensar
-
-**Exercício P1011** · ★★☆ · Achar a fórmula exata de T(n)
-
-Este trecho pinta faixas de um mural: a cada duas colunas, pinta da
-coluna i até o fim.
-
-
-```text
-for (int i = 0; i < n; i += 2)
-    for (int j = i; j < n; j++)
-        passos++;
-```
-
-
-Escreva long conta(int n), que roda o trecho e devolve passos, e
-long formula(int n), que calcula o mesmo número SEM laço nenhum, com uma
-expressão em n. Mostre conta(n) para n = 1 a 6 e depois confira se
-formula(n) == conta(n) para todo n de 1 a 1000.
-
-
-```text
-Saída esperada:
-T(1) = 1
-T(2) = 2
-T(3) = 4
-T(4) = 6
-T(5) = 9
-T(6) = 12
-Fórmula confere de 1 a 1000: sim
-```
-
-**Dicas:**
-
-1. Separe n par (n = 2m) e n ímpar (n = 2m + 1). Com n = 2m, o laço de
-   dentro roda 2m, 2m - 2, ..., 2 vezes: 2 (1 + 2 + ... + m) = m (m + 1).
-2. Com n = 2m + 1: 2m + 1, 2m - 1, ..., 1, a soma dos ímpares: (m + 1)².
-3. As duas cabem numa expressão só com divisão inteira:
-   ((n + 1) / 2) * ((n + 2) / 2). Confira com n = 5: 3 * 3 = 9.
-4. T(n) ≈ n² / 4, então Θ(n²).
-
-```bash
-gcc ~/LPEDC/material/P1011.c -o ~/LPEDC/material/P1011 && ~/LPEDC/material/P1011
-```
-
----
-
-**Exercício P1012** · ★★☆ · Primos: dividir contra peneirar
-
-Para sortear senhas, o sistema precisa de todos os primos até N. Escreva
-dois jeitos de contar os primos de 2 a N, contando o trabalho de cada um:
-
-
-```text
-int por_divisao(int n, long *ops)
-  para cada k de 2 a n, testa os divisores d = 2, 3, ... enquanto
-  d * d <= k, parando no primeiro que divide. Cada k % d é 1 operação.
-int por_crivo(int n, long *ops)
-  o crivo de Eratóstenes: um vetor bool com todos "primo", e para cada
-  i primo com i * i <= n, marca i*i, i*i + i, ... como não primo. Cada
-  marcação é 1 operação.
-```
-
-
-Mostre os dois para N = 100 e N = 10000 (use um vetor de 10001 bool).
-
-
-```text
-Saída esperada:
-N = 100: 25 primos | divisão: 236 ops | crivo: 104 ops
-N = 10000: 1229 primos | divisão: 117527 ops | crivo: 16981 ops
-```
-
-**Dicas:**
-
-1. Na divisão, o laço de dentro é for (d = 2; d * d <= k; d++) e sai com
-   break quando k % d == 0.
-2. No crivo, o laço de dentro começa em i * i porque os múltiplos menores
-   já foram marcados por primos menores que i.
-3. A divisão custa perto de N·√N / log N; o crivo, N·log log N. Com N
-   100 vezes maior, a divisão ficou 500 vezes mais cara e o crivo, 160.
-
-```bash
-gcc ~/LPEDC/material/P1012.c -o ~/LPEDC/material/P1012 && ~/LPEDC/material/P1012
-```
-
----
-
-**Exercício P1013** · ★★☆ · Busca binária com o invariante à vista
-
-As senhas atendidas no dia estão em ordem: 3, 8, 15, 21, 29, 34, 42, 50,
-57 e 63. Escreva int busca(const int v[], int n, int x, int *passos), a
-busca binária com ini e fim (intervalo fechado), e ponha dois assert:
-
-
-```text
-- no começo de cada volta, o invariante: "x não está fora de
-  v[ini..fim]", isto é, não está em v[0..ini-1] nem em v[fim+1..n-1];
-- depois do laço (quando não achou), ini > fim: o intervalo ficou vazio,
-  e então o invariante garante que x não está no vetor.
-```
-
-
-Para o assert, escreva bool fora_ausente(v, n, ini, fim, x), que confere
-as duas pontas de fora com laços simples. Conte em *passos as voltas do
-laço. Procure 42, 3 e 60.
-
-
-```text
-Saída esperada:
-42: posição 6 (4 passos)
-3: posição 0 (3 passos)
-60: não está (4 passos)
-```
-
-**Dicas:**
-
-1. Se v[meio] < x, todo v[0..meio] é < x (o vetor é crescente): ini =
-   meio + 1 preserva o invariante. O mesmo vale do outro lado.
-2. fora_ausente custa O(n) por chamada, então ela só serve para provar a
-   corretude. Numa versão de produção, os assert saem (ou se compila com
-   -DNDEBUG) e a busca volta a ser O(log n).
-3. Resposta esperada: a saída acima, sem nenhum assert disparar.
-
-```bash
-gcc ~/LPEDC/material/P1013.c -o ~/LPEDC/material/P1013 && ~/LPEDC/material/P1013
-```
-
----
-
-**Exercício P1014** · ★★☆ · Separar débitos e créditos no lugar
-
-O extrato do mês tem os lançamentos 120, -30, 45, -80, -10, 60, 0 e -5.
-Escreva int separa(int v[], int n), que deixa todos os negativos (os
-débitos) no começo do vetor, sem vetor auxiliar, e devolve quantos são.
-Use um índice i (a fronteira) e um j que percorre o vetor: quando v[j] é
-negativo, troque v[i] com v[j] e avance i. Conte as trocas.
-
-Ponha no começo de cada volta um assert com o invariante: v[0..i-1] são
-todos negativos e v[i..j-1] são todos >= 0. Escreva a função auxiliar
-bool invariante(const int v[], int i, int j) para isso.
-
-
-```text
-Saída esperada:
-Débitos: -30 -80 -10 -5
-Créditos: 45 60 0 120
-Trocas: 4
-```
-
-**Dicas:**
-
-1. Comece com i = 0 e j de 0 a n - 1. Com j = 0, as duas faixas estão
-   vazias, e o invariante vale "de graça".
-2. No fim, j == n: o invariante diz que v[0..i-1] < 0 e v[i..n-1] >= 0.
-   É exatamente o que se queria, e i é a resposta.
-3. A função é O(n): cada j é visto uma vez. A ordem dentro de cada grupo
-   muda (o 120 foi para o fim): essa partição não é estável.
-
-```bash
-gcc ~/LPEDC/material/P1014.c -o ~/LPEDC/material/P1014 && ~/LPEDC/material/P1014
-```
-
----
-
-**Exercício P1015** · ★★☆ · O TAD Data e a contagem para a prova
-
-Escreva um TAD Data, num arquivo só ("data.h", "data.c" e cliente), com o
-invariante "a data guardada sempre existe no calendário" (ano bissexto:
-divisível por 4 e não por 100, ou divisível por 400). Operações:
-
-
-```text
-Data *data_cria(int dia, int mes, int ano);   // NULL se a data não existe
-Data *data_seguinte(const Data *d);           // o dia seguinte (nova Data)
-int data_compara(const Data *a, const Data *b);  // < 0, 0 ou > 0
-int data_dias_entre(const Data *a, const Data *b); // a <= b
-void data_imprime(const Data *d);             // dd/mm/aaaa
-void data_libera(Data *d);
-```
-
-
-No cliente, mostre o dia seguinte de 28/02/2024, 28/02/2025 e
-31/12/2026, tente criar 30/02/2025 e conte os dias do fim das
-inscrições do PPGI (09/11/2026) até a prova (27/11/2026).
-
-
-```text
-Saída esperada:
-Depois de 28/02/2024 vem 29/02/2024
-Depois de 28/02/2025 vem 01/03/2025
-Depois de 31/12/2026 vem 01/01/2027
-30/02/2025: data inválida
-De 09/11/2026 até 27/11/2026: 18 dias
-```
-
-**Dicas:**
-
-1. Uma função static int dias_no_mes(int mes, int ano) resolve a validação
-   e o dia seguinte.
-2. data_dias_entre pode andar de dia em dia com data_seguinte até chegar
-   em b (O(dias)). Libere cada Data intermediária.
-3. data_compara: compare ano, depois mês, depois dia.
-
-```bash
-gcc ~/LPEDC/material/P1015.c -o ~/LPEDC/material/P1015 && ~/LPEDC/material/P1015
-```
-
----
-
-**Exercício P1016** · ★★☆ · Crescer de um em um ou dobrar?
-
-Um vetor que cresce com realloc precisa, quando enche, copiar os itens
-para um bloco maior. Quanto custa inserir n itens, um de cada vez, com
-cada estratégia? Simule SEM alocar nada, só contando as cópias:
-
-
-```text
-long copias_mais_um(int n)  // capacidade começa em 1 e cresce de 1 em 1
-long copias_dobra(int n)    // capacidade começa em 1 e dobra
-```
-
-
-Em ambas: quando o vetor tem tam == cap itens e chega mais um, ele cresce
-e copia os tam itens que já tinha. Mostre para n = 1000 e n = 2000, e a
-média de cópias por inserção com n = 2000.
-
-
-```text
-Saída esperada:
-n = 1000: +1 copia 499500, dobrando copia 1023
-n = 2000: +1 copia 1999000, dobrando copia 2047
-Por inserção (n = 2000): +1 = 999.5, dobrando = 1.0
-```
-
-**Dicas:**
-
-1. Simule com duas variáveis, tam e cap: para cada inserção, se tam ==
-   cap, some tam às cópias e aumente cap; depois, tam++.
-2. Crescendo de 1 em 1: 1 + 2 + ... + (n - 1) = n (n - 1) / 2 cópias,
-   O(n²) no total. Dobrando: 1 + 2 + 4 + ... < 2n, O(n) no total, O(1)
-   por inserção "em média" (o custo amortizado).
-
-```bash
-gcc ~/LPEDC/material/P1016.c -o ~/LPEDC/material/P1016 && ~/LPEDC/material/P1016
-```
-
----
-
-**Exercício P1017** · ★★☆ · A busca que não acha o último ônibus
-
-Os horários de saída do terminal (em minutos depois das 5h) estão em
-ordem: 5, 12, 20, 33, 41 e 58. A busca binária abaixo compila sem aviso e
-acha o 5, mas diz que o 58 e o 33 "não têm". Ela tem um erro de propósito.
-Conserte, usando o invariante para guiar: "se x está no vetor, está em
-v[ini..fim]" (intervalo FECHADO, com as duas pontas valendo).
-
-
-```text
-Saída esperada:
-58: posição 5
-5: posição 0
-33: posição 3
-40: não tem
-```
-
-**Dicas:**
-
-1. Faça o teste de mesa do 58: ini = 0, fim = 5, meio = 2, ...
-   Quando ini == fim, quantas posições ainda podem ter o x?
-2. Com intervalo fechado, o intervalo só fica vazio quando ini > fim.
-3. Resposta esperada: o laço é while (ini < fim), que para com uma
-   posição ainda sem olhar. O certo é while (ini <= fim). A saída fica
-   igual à de cima.
-
-```bash
-gcc ~/LPEDC/material/P1017.c -o ~/LPEDC/material/P1017 && ~/LPEDC/material/P1017
-```
-
----
-
-**Exercício P1018** · ★★☆ · Euclides, o invariante e o pior caso
-
-O marceneiro quer cortar duas tábuas em pedaços iguais, do maior tamanho
-possível: é o mdc dos comprimentos. Escreva int mdc(int a, int b, int
-*passos), o algoritmo de Euclides iterativo (troca (a, b) por (b, a % b)
-até b == 0), contando as divisões. Ponha um assert com o invariante: o
-mdc do par atual é sempre o mesmo do par original. Para conferir, escreva
-int mdc_lento(int a, int b), que testa os divisores de cima para baixo.
-Teste com (1071, 462), (89, 55) e (100, 75).
-
-
-```text
-Saída esperada:
-mdc(1071, 462) = 21 em 3 passos
-mdc(89, 55) = 1 em 9 passos
-mdc(100, 75) = 25 em 2 passos
-```
-
-**Dicas:**
-
-1. Guarde g = mdc_lento(a, b) antes do laço e, no começo de cada volta,
-   assert(mdc_lento(a, b) == g). Cuidado: mdc_lento(x, 0) é x.
-2. O invariante vale porque todo divisor de a e b também divide a % b
-   (e vice-versa).
-3. Dois Fibonacci seguidos (89 e 55) são o pior caso de Euclides: cada
-   passo só desce um degrau na sequência. Mesmo assim o número de passos
-   é O(log n).
-
-```bash
-gcc ~/LPEDC/material/P1018.c -o ~/LPEDC/material/P1018 && ~/LPEDC/material/P1018
-```
-
----
-
-**Exercício P1019** · ★★☆ · O resumo da corrida em O(1)
-
-O app de corrida mostra o resumo depois de cada treino e não quer guardar
-a lista inteira de tempos. Escreva o TAD Resumo, num arquivo só
-("resumo.h", "resumo.c" e cliente), em que TODA operação custa O(1),
-guardando só agregados (quantidade, soma, soma dos quadrados, menor e
-maior):
-
-
-```text
-Resumo *resumo_cria(void);
-void resumo_adiciona(Resumo *r, double x);
-int resumo_quantidade(const Resumo *r);
-double resumo_media(const Resumo *r);
-double resumo_menor(const Resumo *r);
-double resumo_maior(const Resumo *r);
-double resumo_desvio(const Resumo *r);  // desvio padrão populacional
-void resumo_libera(Resumo *r);
-```
-
-
-Teste com os tempos, em minutos, 32, 29, 35, 31, 28 e 33.
-
-
-```text
-Saída esperada:
-Corridas: 6
-Média: 31.33 min
-Melhor: 28 min
-Pior: 35 min
-Desvio: 2.36 min
-```
-
-**Dicas:**
-
-1. Variância = (soma dos quadrados / n) - média². O desvio é a raiz
-   (sqrt, de math.h; o rodar já liga a biblioteca com -lm).
-2. A interface não muda se um dia você trocar a implementação para
-   guardar todos os tempos (para ter a mediana, por exemplo): o cliente
-   continua compilando igual. Só o custo muda.
-
-```bash
-gcc ~/LPEDC/material/P1019.c -o ~/LPEDC/material/P1019 -lm && ~/LPEDC/material/P1019
-```
-
----
-
-**Exercício P1020** · ★★☆ · As duplas da gincana em O(n)
-
-Na gincana da escola, uma dupla ganha bônus se a soma das idades dos dois
-for par. As idades dos 8 inscritos são 3, 8, 5, 12, 7, 10, 1 e 4 (é a
-gincana da família). Quantas duplas ganham bônus? Escreva:
-
-
-```text
-long duplas_lento(const int v[], int n, long *passos)
-  testa todo par i < j e conta 1 passo por par testado;
-long duplas_rapido(const int v[], int n, long *passos)
-  percorre o vetor UMA vez contando pares e ímpares (1 passo por item) e
-  depois calcula a resposta com uma conta.
-```
-
-
-
-```text
-Saída esperada:
-Lento: 12 duplas em 28 passos
-Rápido: 12 duplas em 8 passos
-```
-
-**Dicas:**
-
-1. Soma par só acontece com par + par ou ímpar + ímpar.
-2. Com p pares e q ímpares: p (p - 1) / 2 + q (q - 1) / 2 duplas.
-3. O lento é Θ(n²) (n (n - 1) / 2 pares); o rápido é Θ(n). Pensar no
-   problema, e não só no código, foi o que trocou a classe.
-4. Resposta esperada: a saída acima (4 pares e 4 ímpares: 6 + 6 = 12).
-
-```bash
-gcc ~/LPEDC/material/P1020.c -o ~/LPEDC/material/P1020 && ~/LPEDC/material/P1020
-```
-
-### ★★★ Desafio
-
-**Exercício P1021** · ★★★ · A melhor sequência de dias do food truck
-
-O lucro diário do food truck, em centenas de reais, nos últimos 10 dias
-foi: -3, 5, -2, 8, -10, 4, 7, -1, -7, 3. Qual sequência de dias SEGUIDOS
-deu o maior lucro somado? É o problema do subvetor de soma máxima.
-Escreva três versões, todas devolvendo a soma e preenchendo *ini e *fim
-(índices de 0 a n - 1) e contando as somas feitas em *somas:
-
-
-```text
-int cubica(const int v[], int n, int *ini, int *fim, long *somas)
-  para cada par (i, j), soma v[i..j] do zero com um terceiro laço;
-int quadratica(const int v[], int n, int *ini, int *fim, long *somas)
-  para cada i, vai somando v[j] para j = i, i + 1, ... (aproveita a
-  soma anterior);
-int linear(const int v[], int n, int *ini, int *fim, long *somas)
-  o algoritmo de Kadane: percorre uma vez, guardando a melhor soma que
-  TERMINA no dia atual. Se essa soma ficou <= 0, recomece no dia atual.
-```
-
-
-Em todas, troque a melhor só quando a nova soma for ESTRITAMENTE maior.
-Mostre os dias contando de 1.
-
-
-```text
-Saída esperada:
-Cúbica:     12 (dias 2 a 7), 220 somas
-Quadrática: 12 (dias 2 a 7), 55 somas
-Linear:     12 (dias 2 a 7), 10 somas
-```
-
-**Dicas:**
-
-1. Na cúbica, o par (i, j) faz j - i + 1 somas; no total
-   n (n + 1) (n + 2) / 6 = 220 para n = 10: Θ(n³). A quadrática faz
-   n (n + 1) / 2 = 55: Θ(n²). Kadane faz n: Θ(n).
-2. Kadane: atual = soma da melhor sequência que termina em j. Se
-   atual <= 0, atual = v[j] e comeco = j; senão, atual += v[j]. Conte 1
-   soma por dia.
-3. O invariante de Kadane: depois de processar o dia j, melhor é a maior
-   soma de um subvetor de v[0..j].
-4. Resposta esperada: a saída acima (5 - 2 + 8 - 10 + 4 + 7 = 12).
-
-```bash
-gcc ~/LPEDC/material/P1021.c -o ~/LPEDC/material/P1021 && ~/LPEDC/material/P1021
-```
-
----
-
-**Exercício P1022** · ★★★ · Turmas como conjuntos ordenados
-
-O cursinho quer cruzar as matrículas das turmas de Python e de C. Escreva
-um TAD Conjunto, num arquivo só ("conjunto.h", "conjunto.c" e cliente),
-guardado como um vetor ORDENADO e sem repetidos (o invariante), que cresce
-com realloc dobrando a capacidade:
-
-
-```text
-Conjunto *conj_cria(void);
-bool conj_insere(Conjunto *c, int x);  // mantém a ordem; ignora repetido
-Conjunto *conj_uniao(const Conjunto *a, const Conjunto *b, long *comp);
-Conjunto *conj_intersecao(const Conjunto *a, const Conjunto *b, long *comp);
-void conj_imprime(const Conjunto *c);
-void conj_libera(Conjunto *c);
-```
-
-
-União e interseção devem ser feitas por INTERCALAÇÃO, andando com um
-índice em cada vetor: O(n + m). Conte 1 comparação por volta do laço em
-que os dois vetores ainda têm itens. No cliente, compare com a interseção
-ingênua (para cada item de a, percorre b inteiro: O(n · m)), que pode ser
-escrita usando um vetor comum com os mesmos números.
-
-Python: 25, 3, 12, 8, 20 (inseridos nesta ordem). C: 30, 8, 5, 20, 8.
-
-
-```text
-Saída esperada:
-Python: 3 8 12 20 25
-C: 5 8 20 30
-União: 3 5 8 12 20 25 30 (6 comparações)
-Interseção: 8 20 (6 comparações)
-Interseção ingênua: 8 20 (20 comparações)
-```
-
-**Dicas:**
-
-1. Na intercalação: se a[i] < b[j], o a[i] só está em a (avança i); se
-   a[i] > b[j], avança j; se são iguais, está nos dois (avança os dois).
-2. Na união, quando um vetor acaba, copie o resto do outro sem comparar.
-3. Como os dois já estão em ordem, os resultados saem em ordem, e o
-   invariante do TAD vale para eles sem ordenar nada.
-
-```bash
-gcc ~/LPEDC/material/P1022.c -o ~/LPEDC/material/P1022 && ~/LPEDC/material/P1022
-```
-
----
-
-**Exercício P1023** · ★★★ · Quem tem a maioria no grêmio?
-
-Na eleição do grêmio estudantil, um candidato só leva no primeiro turno se
-tiver MAIS DA METADE dos votos. Escreva duas funções que devolvem o
-candidato da maioria (ou -1 se não houver) e contam as comparações:
-
-
-```text
-int maioria_ingenua(const int v[], int n, long *comp)
-  para cada i, conta quantas vezes v[i] aparece no vetor inteiro (n
-  comparações) e devolve assim que achar um com mais de n / 2;
-int maioria_boyer_moore(const int v[], int n, long *comp)
-  fase 1: um candidato e um contador; para cada voto, se o contador é 0,
-  o voto vira o candidato; se o voto é igual ao candidato, contador++;
-  senão, contador--. Fase 2: conta os votos do candidato para confirmar.
-  Conte 1 comparação por voto em cada fase.
-```
-
-
-Eleição 1: 1, 3, 2, 2, 1, 2, 2, 3, 2, 2, 2. Eleição 2: 1, 2, 3, 1, 2, 3, 1.
-
-
-```text
-Saída esperada:
-Eleição 1: candidato 2 com 7 de 11 votos
-  ingênuo: 33 comparações, Boyer-Moore: 22
-Eleição 2: ninguém tem maioria
-  ingênuo: 49 comparações, Boyer-Moore: 14
-```
-
-**Dicas:**
-
-1. Por que a fase 1 funciona: cada "contador--" cancela um voto do
-   candidato contra um voto de outro. Quem tem mais da metade não pode ser
-   cancelado por inteiro, então sobra no fim.
-2. A fase 2 é obrigatória: na eleição 2 a fase 1 termina com um candidato
-   (o 1), mas ele tem só 3 de 7.
-3. O ingênuo é O(n²) no pior caso (sem maioria, n · n); Boyer-Moore é
-   O(n) e usa O(1) de memória extra.
-4. Imprima a contagem de votos na
-   eleição 1 com mais um laço.
-
-```bash
-gcc ~/LPEDC/material/P1023.c -o ~/LPEDC/material/P1023 && ~/LPEDC/material/P1023
-```
-
----
-
-**Exercício P1024** · ★★★ · A busca em escada na tabela de preços
-
-A tabela de fretes tem as linhas (distâncias) e as colunas (pesos) em
-ordem crescente: cada linha cresce para a direita e cada coluna cresce
-para baixo.
-
-
-```text
- 2  5  9 14 20
- 4  8 13 18 25
- 7 11 16 22 30
-10 15 21 27 35
-```
-
-
-Escreva bool escada(int m[4][5], int x, int *lin, int *col, int *comp),
-que começa no canto de CIMA À DIREITA: se o valor é maior que x, a coluna
-inteira dali para baixo também é, então vá para a esquerda; se é menor,
-a linha inteira dali para a esquerda também é, então desça. Escreva
-também a força bruta (linha por linha, parando ao achar) e compare as
-comparações para x = 16 e x = 17.
-
-
-```text
-Saída esperada:
-16: linha 2, coluna 2 (escada: 5 comparações, força bruta: 13)
-17: não está (escada: 7 comparações, força bruta: 20)
-```
-
-**Dicas:**
-
-1. Invariante da escada: se x está na matriz, está nas linhas i..3 e nas
-   colunas 0..j. Cada passo descarta uma linha ou uma coluna inteira.
-2. O laço é while (i < 4 && j >= 0); conte 1 comparação por volta.
-3. Com L linhas e C colunas, a escada faz no máximo L + C - 1
-   comparações, O(L + C), contra O(L · C) da força bruta.
-
-```bash
-gcc ~/LPEDC/material/P1024.c -o ~/LPEDC/material/P1024 && ~/LPEDC/material/P1024
-```
-
----
-
-**Exercício P1025** · ★★★ · Os lugares do cinema num punhado de bits
-
-A sala do cinema tem 256 lugares (0 a 255). Guardar um bool por lugar
-gasta 256 bytes; guardando um BIT por lugar, bastam 32. Escreva o TAD
-Lugares, num arquivo só ("lugares.h", "lugares.c" e cliente), com um
-unsigned char bits[32] escondido na struct:
-
-
-```text
-Lugares *lugares_cria(void);                 // todos livres
-void lugares_ocupa(Lugares *l, int k);
-void lugares_libera_lugar(Lugares *l, int k);
-bool lugares_ocupado(const Lugares *l, int k);
-int lugares_conta(const Lugares *l);          // quantos ocupados
-Lugares *lugares_uniao(const Lugares *a, const Lugares *b);
-Lugares *lugares_intersecao(const Lugares *a, const Lugares *b);
-int lugares_bytes(void);                      // memória do vetor de bits
-void lugares_libera(Lugares *l);
-```
-
-
-Sessão da tarde: 0, 1, 2, 50, 99, 150 e 199. Sessão da noite: 2, 3, 50,
-100 e 199. Mostre quantos foram ocupados em cada sessão, os ocupados nas
-duas, quantos foram ocupados em alguma e o tamanho do vetor de bits.
-
-
-```text
-Saída esperada:
-Tarde: 7 ocupados
-Noite: 5 ocupados
-Ocupados nas duas: 2 50 199
-Ocupados em alguma: 9
-Memória: 32 bytes para 256 lugares
-```
-
-**Dicas:**
-
-1. O lugar k fica no byte k / 8, no bit k % 8. Ocupar:
-   bits[k / 8] |= 1u << (k % 8). Liberar: &= ~(1u << (k % 8)).
-   Testar: (bits[k / 8] >> (k % 8)) & 1.
-2. União e interseção são um laço de 32 voltas com | e &: 8 lugares por
-   operação. Mesma classe O(n) de um vetor bool, mas 8 vezes menos
-   trabalho e memória.
-3. Para contar, some os bits de cada byte (com um laço de 8 ou com
-   b &= b - 1, que apaga o bit 1 mais baixo).
-4. lugares_bytes devolve sizeof(struct lugares), e só pode ser escrita
-   DENTRO do lugares.c: o cliente não enxerga a struct, então não
-   consegue fazer esse sizeof.
-
-```bash
-gcc ~/LPEDC/material/P1025.c -o ~/LPEDC/material/P1025 && ~/LPEDC/material/P1025
-```
-
----
-
-**Exercício P1026** · ★★★ · Duas implementações da lista de presença
-
-A portaria do evento marca quem entrou (pelo número do crachá) e depois
-responde "fulano entrou?". Implemente a MESMA interface de dois jeitos,
-num arquivo só, e meça qual compensa (os nomes ganharam um sufixo só para
-as duas caberem no mesmo arquivo):
-
-
-```text
-Presenca *pres_cria_X(int capacidade);
-void pres_marca_X(Presenca *p, int cracha);
-bool pres_entrou_X(Presenca *p, int cracha);   // sem const: soma passos
-long pres_passos_X(const Presenca *p);   // passos gastos até agora
-void pres_libera_X(Presenca *p);
-```
-
-
-- X = A, vetor DESORDENADO: marca põe no fim (1 passo); entrou é a busca
-
-```text
-sequencial (1 passo por comparação).
-```
-
-- X = B, vetor ORDENADO: marca desloca os maiores para abrir espaço (1
-
-```text
-passo por deslocamento, mais 1 para gravar); entrou é a busca binária
-(1 passo por volta).
-```
-
-
-Carga de teste: marque os crachás (7 * k) % 1000 para k = 0..999 (os
-números de 0 a 999, embaralhados) e depois pergunte por 0, 1, ..., 1999
-(metade entrou, metade não). Mostre os passos de cada fase. A struct de
-cada versão pode ser igual: int *v, int n e long passos.
-
-
-```text
-Saída esperada:
-A (desordenado): marcar 1000 passos, consultar 1500500 passos
-B (ordenado):    marcar 214213 passos, consultar 18987 passos
-Respostas iguais: sim
-```
-
-**Dicas:**
-
-1. Em B, a marcação é a inserção ordenada: i = n; while (i > 0 &&
-   v[i - 1] > x) { v[i] = v[i - 1]; i--; } e depois v[i] = x.
-2. A consulta de A custa até n por pergunta: 1000 perguntas sem sucesso
-   custam 1000 · 1000. A de B custa cerca de log₂ 1000 ≈ 10.
-3. Nenhuma é "a melhor": com muitas marcações e poucas consultas, A ganha;
-   com muitas consultas, B ganha. Como o cliente só usa a interface, dá
-   para trocar uma pela outra sem mexer nele.
-
-```bash
-gcc ~/LPEDC/material/P1026.c -o ~/LPEDC/material/P1026 && ~/LPEDC/material/P1026
-```
-
----
-
-**Exercício P1027** · ★★★ · O topo da trilha em O(log n)
-
-O GPS da trilha registrou as altitudes, em metros, a cada quilômetro. Um
-PICO é um ponto que não é menor que os vizinhos (as pontas só têm um
-vizinho). Todo vetor tem pelo menos um pico, e dá para achar um sem olhar
-o vetor inteiro. Escreva:
-
-
-```text
-int pico_sequencial(const int v[], int n, int *comp)
-  anda até o primeiro i com v[i] >= v[i + 1] (ou até o fim);
-int pico_binario(const int v[], int n, int *comp)
-  com ini = 0 e fim = n - 1, enquanto ini < fim: olhe meio e meio + 1.
-  Se v[meio] < v[meio + 1], há um pico à direita: ini = meio + 1. Senão,
-  há um à esquerda (o meio incluído): fim = meio.
-```
-
-
-Ponha no começo de cada volta do binário um assert com o invariante:
-(ini == 0 ou v[ini - 1] < v[ini]) e (fim == n - 1 ou v[fim] >= v[fim + 1]).
-Conte 1 comparação por volta em cada versão. Teste com a trilha
-120, 340, 560, 610, 580, 430, 470, 520, 300, 150 e com a rampa 100, 200,
-..., 1600 (16 pontos).
-
-
-```text
-Saída esperada:
-Trilha: pico na posição 3 (610 m), binária 3, sequencial 4
-Rampa: pico na posição 15 (1600 m), binária 4, sequencial 15
-```
-
-**Dicas:**
-
-1. Por que existe pico em [ini, fim]: o invariante diz que se "sobe" ao
-   entrar no intervalo e "desce" (ou fica igual) ao sair dele. Andando lá
-   dentro, em algum ponto a subida tem que parar.
-2. Quando ini == fim, o invariante diz que v[ini] não é menor que nenhum
-   vizinho: é um pico.
-3. As duas podem achar picos DIFERENTES (a trilha tem dois: 610 e 520).
-   Aqui, por acaso, acharam o mesmo.
-
-```bash
-gcc ~/LPEDC/material/P1027.c -o ~/LPEDC/material/P1027 && ~/LPEDC/material/P1027
-```
-
----
-
-**Exercício P1028** · ★★★ · Quantos times de futsal? Recursão contra tabela
-
-Com 12 jogadores, quantos times de 5 dá para montar? É C(12, 5), e a
-relação de Pascal diz que C(n, k) = C(n - 1, k - 1) + C(n - 1, k), com
-C(n, 0) = C(n, n) = 1. Escreva:
-
-
-```text
-long comb_rec(int n, int k, long *chamadas)
-  a recursão direta da fórmula, contando todas as chamadas;
-long comb_tabela(int n, int k, long *somas)
-  monta o triângulo de Pascal linha por linha numa matriz long
-  t[21][21], só até a coluna k, contando as somas.
-```
-
-
-Mostre os dois para C(12, 5) e C(20, 10).
-
-
-```text
-Saída esperada:
-C(12, 5) = 792 | recursão: 1583 chamadas | tabela: 45 somas
-C(20, 10) = 184756 | recursão: 369511 chamadas | tabela: 145 somas
-```
-
-**Dicas:**
-
-1. A árvore de chamadas da recursão tem uma folha (valor 1) para cada
-   unidade do resultado, então tem C(n, k) folhas e 2 · C(n, k) - 1 nós:
-   o custo cresce como o próprio resultado, que é exponencial.
-2. Na tabela, t[i][0] = 1 e t[i][i] = 1; para 0 < j < i e j <= k,
-   t[i][j] = t[i-1][j-1] + t[i-1][j]. São O(n · k) somas.
-3. A recursão recalcula os mesmos C(a, b) muitas e muitas vezes; a tabela
-   calcula cada um uma vez só. É a ideia da programação dinâmica.
-
-```bash
-gcc ~/LPEDC/material/P1028.c -o ~/LPEDC/material/P1028 && ~/LPEDC/material/P1028
-```
-
----
-
-**Exercício P1029** · ★★★ · O lado do terreno por busca binária
-
-Um terreno quadrado tem área A m². Qual o maior lado inteiro L com
-L · L <= A (a raiz quadrada inteira)? Sem math.h, escreva:
-
-
-```text
-long long raiz_linear(long long a, long *passos)
-  testa L = 0, 1, 2, ... enquanto (L + 1)² <= a; 1 passo por teste;
-long long raiz_binaria(long long a, long *passos)
-  com lo = 0 e hi = a + 1 e o invariante lo² <= a < hi², enquanto
-  hi - lo > 1: meio = lo + (hi - lo) / 2; se meio² <= a, lo = meio;
-  senão, hi = meio. 1 passo por volta. A resposta é lo.
-```
-
-
-Ponha o invariante num assert no começo de cada volta da binária. Teste
-com A = 50, 1000000 e 2000000000.
-
-
-```text
-Saída esperada:
-A = 50: lado 7 | linear 8 passos | binária 6 passos
-A = 1000000: lado 1000 | linear 1001 passos | binária 20 passos
-A = 2000000000: lado 44721 | linear 44722 passos | binária 31 passos
-```
-
-**Dicas:**
-
-1. Use long long em tudo: com a = 2 bilhões, hi² passa de 4 · 10¹⁸, que
-   ainda cabe (o limite é cerca de 9,2 · 10¹⁸). Para conferir o
-   invariante no assert sem estourar, escreva hi > a / hi no lugar de
-   hi * hi > a.
-2. O invariante no fim (hi - lo == 1) diz lo² <= a < (lo + 1)²: lo é
-   exatamente a raiz inteira.
-3. A linear é O(√A); a binária é O(log A).
-
-```bash
-gcc ~/LPEDC/material/P1029.c -o ~/LPEDC/material/P1029 -lm && ~/LPEDC/material/P1029
-```
-
----
-
-**Exercício P1030** · ★★★ · Moda e mediana sem ordenar nada
-
-As notas do simulado são inteiras de 0 a 10. Como só existem 11 notas
-possíveis, dá para guardar um HISTOGRAMA (quantas vezes cada nota saiu)
-em vez da lista de notas. Escreva o TAD Histograma, num arquivo só
-("histograma.h", "histograma.c" e cliente):
-
-
-```text
-Histograma *hist_cria(void);
-bool hist_adiciona(Histograma *h, int nota);   // false se fora de 0..10
-int hist_quantidade(const Histograma *h);
-int hist_moda(const Histograma *h, int *vezes); // a menor, no empate
-int hist_mediana(const Histograma *h);  // o elemento (n + 1) / 2 na ordem
-double hist_media(const Histograma *h);
-void hist_libera(Histograma *h);
-```
-
-
-adiciona custa O(1); moda e mediana percorrem as 11 contagens, custo que
-NÃO depende de quantas notas existem. Teste com 7, 8, 5, 10, 7, 6, 9, 7,
-4, 8, 7; depois acrescente doze notas 10 e mostre de novo moda e mediana.
-
-
-```text
-Saída esperada:
-Notas: 11
-Moda: 7 (4 vezes)
-Mediana: 7
-Média: 7.09
-Depois de mais doze notas 10: moda 10 (13 vezes), mediana 10
-```
-
-**Dicas:**
-
-1. struct histograma { int cont[11]; int n; long soma; };
-2. Mediana: ande pelas notas de 0 a 10 somando as contagens; a mediana é
-   a primeira nota em que a soma acumulada chega a (n + 1) / 2.
-3. Ordenar n notas custaria pelo menos O(n log n) com comparações; aqui o
-   truque é que o universo de valores é pequeno e fixo.
-4. Resposta esperada: a saída acima (com 23 notas, a 12ª da fila é 10).
-
-```bash
-gcc ~/LPEDC/material/P1030.c -o ~/LPEDC/material/P1030 && ~/LPEDC/material/P1030
-```
-
-## Questões no estilo da prova
+### Questões no estilo da prova
 
 Formato da prova do mestrado do PPGI/UFAM. Resolva no papel, marque uma letra
 e só depois abra o gabarito. Nas questões de contagem, o resultado foi
@@ -3313,7 +2691,7 @@ extremos; a média fica no meio. Veja 0071.
 
 </details>
 
-## Questões de provas do PPGI
+### Questões de provas do PPGI
 
 Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.
 
@@ -3332,7 +2710,6 @@ Qual a alternativa que completa corretamente a seguinte frase: Um algoritmo que 
 **D.** 2n+1 é linear. Assunto 0071.
 
 </details>
-
 
 ## Para ler mais
 

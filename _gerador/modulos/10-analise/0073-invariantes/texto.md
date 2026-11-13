@@ -1,42 +1,37 @@
 ## 0073 · Invariantes de laço e corretude
 
-Fim do expediente na lanchonete: troco inicial mais vendas tem que bater com
-a gaveta. E a conta vale depois de **cada** cliente: "gaveta = troco + vendas
-até agora". Se em algum momento não bater, o erro foi ali.
+- **Invariante de laço**: relação entre as variáveis que vale **no começo de
+  cada iteração**, logo antes do teste. Serve para explicar e para provar o
+  laço (FEOFILOFF, 2009).
+- **Notação `v[0..i-1]`**: os elementos de índice 0 até i − 1, vazio quando i
+  vale 0. Em "achar o maior": **`maior` é um máximo de `v[0..i-1]`**
+  (FEOFILOFF, 2009).
+- **Quatro passos**, como numa indução (CORMEN et al., 2024, cap. 2):
+  1. **Início**: vale antes da primeira volta.
+  2. **Manutenção**: se vale no começo de uma volta, vale no começo da seguinte.
+  3. **Término**: quando o teste falha, invariante + condição de parada dão o
+     resultado.
+  4. **Parada**: uma quantidade inteira, a **variante**, diminui a cada volta.
+- **Contrato**: a documentação diz o que a função faz, não como. "Recebe n ≥ 1
+  e v; devolve o valor de **um** elemento máximo de `v[0..n-1]`"
+  (FEOFILOFF, 2009).
+- **`assert(cond)`** (`<assert.h>`): se `cond` for falsa, mostra arquivo e linha
+  e aborta. Com `-DNDEBUG`, vira nada (CPPREFERENCE, s.d.).
 
-Um laço funciona igual. Testar alguns valores mostra que ele acertou
-**naqueles** valores. Para ter certeza de que acerta sempre, procure uma frase
-que fica verdadeira volta após volta: o **invariante de laço**, uma relação
-entre as variáveis que vale **no começo de cada iteração**, antes do teste do
-laço.
+> [!WARNING]
+> O erro clássico é o **início**: `int maior = 0;` passa nos testes com valores
+> positivos, mas com −120, −45, −300 devolve 0, que nem está no vetor. Comece
+> com `maior = v[0]` e i = 1. E nunca ponha no `assert` algo que o programa
+> precisa fazer.
 
-Para falar de pedaços de vetor, use `v[0..i-1]`: os elementos de índice 0 até
-i − 1 (vazio quando i vale 0). O invariante de "achar o maior" fica: **`maior`
-é um máximo de `v[0..i-1]`**. Diz o que o laço já sabe, não como ele anda.
+{{exemplo}}
 
-Mostrar que um laço está certo tem quatro passos, como numa prova por
-indução:
-
-1. **Início**: o invariante vale antes da primeira volta.
-2. **Manutenção**: se vale no começo de uma volta, vale no começo da seguinte.
-3. **Término**: quando o teste falha, invariante + condição de parada dão o
-   resultado desejado.
-4. **Parada**: uma quantidade inteira diminui a cada volta e não pode diminuir
-   para sempre (é a **variante**). Garante que o laço acaba.
-
-Isso também melhora a documentação. A função promete "recebe n ≥ 1 e v;
-devolve o valor de **um** elemento máximo de `v[0..n-1]`". Cobre todos os
-parâmetros, diz a restrição (n ≥ 1) e usa "um" por causa do empate. É o
-contrato, sem o "como".
-
-Os Pix do dia foram 120, 45, 300, 80, 210 e 95. No começo da volta com i = 4,
-a parte verde já foi vista e `maior` (300) é o maior dela. A parte cinza ainda
-não importa:
+Os Pix do dia foram 120, 45, 300, 80, 210 e 95. No começo da volta com i = 4, a
+parte verde já foi vista e `maior` (300) é o maior dela:
 
 {{ideia}}
 
-O `assert` de `<assert.h>` transforma o invariante em código: se a condição
-for falsa, o programa para e mostra a linha. A `eh_maximo` é lenta de
+O `assert` transforma o invariante em código. A `eh_maximo` é lenta de
 propósito: confere o invariante pelo caminho ingênuo, só para testar.
 
 ```c
@@ -113,24 +108,3 @@ No fluxograma, o invariante fica na seta que volta ao losango "i < 6?". Toda
 vez que o caminho passa ali, a frase é verdadeira:
 
 {{fluxograma}}
-
-> [!WARNING]
-> O erro clássico é o **início**: `int maior = 0;` passa em todos os testes
-> com valores positivos. Com saldos negativos (−120, −45, −300), devolve 0,
-> que nem está no vetor. O invariante denuncia: antes da primeira volta, 0 não
-> é um máximo de `v[0..0]`. Comece com `maior = v[0]` e i = 1, e escreva n ≥ 1
-> no contrato.
-
-> [!TIP]
-> **Por dentro do C:** `assert(cond)` é uma macro: se `cond` for falsa, imprime
-> arquivo, linha e condição e chama `abort()`. Com `-DNDEBUG`, vira **nada**,
-> nem a condição é calculada. Por isso o `eh_maximo` (O(n) dentro de um laço
-> O(n)) não custa nada na versão final. Nunca ponha dentro do `assert` algo
-> que o programa precisa fazer, como `assert(fp = fopen(...))`.
-
-> [!NOTE]
-> **Pergunta para você:** no exemplo A146 (fichas de R$ 5 com R$ 47), o
-> invariante é `valor == q * ficha + r` e `r >= 0`. O que garante que o laço
-> termina? E se a ficha custasse R$ 0, qual dos quatro passos falharia?
-
-{{pratique}}

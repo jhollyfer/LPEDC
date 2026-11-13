@@ -1,21 +1,10 @@
 # Módulo 10 · Pensar como cientista da computação
 
-Até aqui a pergunta foi "como escrevo isso em C?". Daqui em diante, com
-listas, pilhas, árvores e grafos, passa a ser "**qual** jeito de escrever é o
-certo?". Vetor ou lista encadeada, busca sequencial, binária ou hash: todos
-funcionam com 10 itens. Com 1 milhão, uns respondem na hora e outros travam o
-servidor.
-
-Três ideias, que atravessam o resto do curso: **medir o custo** contando
-passos e resumindo o crescimento na notação O; **ter certeza de que está
-certo** com invariantes de laço, em vez de meia dúzia de testes; e **esconder
-os detalhes** atrás de um tipo abstrato de dado, para trocar a implementação
-sem quebrar quem usa.
-
-Usa o que veio antes: funções, vetores, ponteiros, `malloc`/`free` e `struct`
-(os arquivos do módulo 09 já mostraram o ganho do acesso direto, que aqui vira
-a notação O). Prepara os módulos 11 a 16: cada estrutura será medida em O e
-construída como TAD.
+Três ideias que atravessam o resto do curso: **medir o custo** contando passos
+e resumindo o crescimento na notação O, **provar que está certo** com
+invariantes de laço e **esconder os detalhes** num tipo abstrato de dado.
+Depende de funções, vetores, ponteiros, `malloc` e `struct` (módulos 04 a 08);
+prepara os módulos 11 a 16.
 
 ## O que você vai aprender
 
@@ -26,15 +15,11 @@ construída como TAD.
 
 ## Antes de começar
 
-Nos exemplos, mude o n, troque os dados, quebre um invariante de propósito e
-veja o `assert` disparar. Nos desenhos de custo, verde é o que continua leve e
-vermelho, o que explodiu. Os contadores de passos medem trabalho, não
-segundos: os números saem iguais aos do texto na sua máquina.
+Mude o n, troque os dados e quebre um invariante de propósito para ver o
+`assert` disparar. Nos desenhos de custo, verde é o que continua leve e
+vermelho, o que explodiu. Os contadores medem passos, não segundos.
 
-Novidades pequenas:
-
-- `<assert.h>`: `assert(condicao)` para o programa na hora se a condição for
-  falsa. É assim que um invariante vira código.
+- `<assert.h>`: `assert(condicao)` para o programa se a condição for falsa.
 - **arquivos de apoio**: no 0074, a pasta tem `contador.h`, `contador.c`,
   `conta.h` e `conta.c`. O comando do exemplo compila junto todo `.c` da pasta
   que não se chama `A000.c`/`E000.c`:
