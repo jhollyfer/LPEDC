@@ -1,16 +1,37 @@
 ## 0080 · Lista circular
 
-O garçom do rodízio serve as mesas 3, 7, 12 e 15 e, na última, volta à 3: para
-ele não existe fim, só "a próxima mesa".
+- **Lista circular**: lista encadeada em que o último nó aponta para o
+  **primeiro**, e não para `NULL`. Os nós formam um anel (FEOFILOFF, 2009,
+  cap. 4).
+- **Para que serve**: rodízios, como a vez dos jogadores e a divisão da CPU
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 4).
+- **Ponteiro para o último**: o primeiro é `ultimo->prox`. Inserir no início
+  **e** no fim custa O(1); inserir no fim é inserir no início e declarar o
+  novo como último (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 4).
+- **Percorrer**: sem `NULL`, o laço para ao **voltar ao ponto de partida**.
+  O certo é o **do-while** (0021), que roda o corpo antes de testar; a lista
+  vazia (`ultimo == NULL`) é tratada antes (CELES; RANGEL, 2002).
+- **Girar e juntar**: girar a roda é `ultimo = ultimo->prox`; juntar duas
+  listas circulares é trocar dois ponteiros, O(1).
+- **Circular dupla**: o círculo fecha nos dois sentidos, como no Cormen, com
+  uma sentinela (CORMEN et al., 2024, cap. 10).
+- **Problema de Josephus**: pessoas em roda eliminam uma a cada k passos;
+  tira-se nós do anel até sobrar um que aponta para si mesmo (FEOFILOFF,
+  2009, cap. 4).
 
-Uma **lista circular** é uma lista encadeada em que o último nó aponta para o
-**primeiro**, e não para `NULL`: os nós formam um anel. Serve para rodízios,
-como a vez dos jogadores e a divisão da CPU. Na lista dupla, o círculo fecha
-nos dois sentidos, como no Cormen, com uma sentinela (assunto 0174).
+> [!WARNING]
+> Na lista circular, `p` **nunca** vira `NULL`: um laço `p != NULL` não
+> termina. No `libera`, **corte o círculo** antes (`ultimo->prox = NULL`):
+> o seguinte do último é o primeiro, já liberado.
 
-Convém guardar o ponteiro para o **último** nó: o primeiro é `ultimo->prox`.
-Assim, inserir no início **e** no fim custa O(1); inserir no fim é inserir no
-início e declarar o novo como último.
+{{exemplo}}
+
+O garçom do rodízio serve as mesas 3, 7, 12 e 15 e, na última, volta à 3. O
+ponteiro da lista fica na mesa 15, e a 3 é `ultimo->prox`:
+
+{{ideia}}
+
+As duas inserções do `lista.c`:
 
 ```c
 No *lista_insere_inicio(No *ultimo, int valor) {
@@ -27,15 +48,6 @@ No *lista_insere_fim(No *ultimo, int valor) {
     return ultimo->prox;
 }
 ```
-
-Sem `NULL`, percorrer para ao **voltar ao ponto de partida**. Como o primeiro
-passo já começa nele, o laço certo é o **do-while** (assunto 0021), que roda
-o corpo antes de testar. A lista vazia (`ultimo == NULL`) é tratada antes.
-
-No exemplo, o ponteiro da lista está na mesa 15 e a mesa 3 é `ultimo->prox`.
-O garçom serve 6 vezes sem testar nada:
-
-{{ideia}}
 
 ```c
 #include <stdio.h>
@@ -70,30 +82,7 @@ int main(void) {
 // 3 -> 7 -> 15 -> (volta ao 3)
 ```
 
-O fluxograma é o do `lista_imprime`: testa a lista vazia, põe `p` na mesa 3 e
-repete mostrar, andar e perguntar "já voltei ao primeiro?". Com 4 mesas, a
-resposta é Não três vezes e Sim na quarta:
+O `lista_imprime` testa a lista vazia, põe `p` na mesa 3 e pergunta "já
+voltei ao primeiro?": com 4 mesas, Não três vezes e Sim na quarta:
 
 {{fluxograma}}
-
-No **problema de Josephus**, pessoas em roda eliminam uma a cada k passos. O
-exemplo A160 o resolve com a batata quente, tirando nós do anel até sobrar
-um que aponta para si mesmo.
-
-> [!WARNING]
-> Numa lista circular, `p` **nunca** vira `NULL`: um laço `p != NULL` não
-> termina. No `libera`, o "seguinte" do último é o primeiro, já liberado:
-> **corte o círculo** antes (`ultimo->prox = NULL`) e trate como lista comum.
-> E um `while (p != ultimo->prox)` começando no primeiro não roda nem uma vez.
-
-> [!TIP]
-> **Por dentro do C:** o nó é o da lista simples, 16 bytes. **Girar** a roda é
-> `ultimo = ultimo->prox`, e **juntar** duas listas circulares é trocar dois
-> ponteiros, O(1).
-
-> [!NOTE]
-> **Pergunta para você:** se a lista guardasse o ponteiro para o **primeiro**
-> nó em vez do último, quanto custaria inserir no fim? E no início? (Lembre
-> que o último precisa apontar para o novo primeiro.)
-
-{{pratique}}

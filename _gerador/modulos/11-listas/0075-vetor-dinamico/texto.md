@@ -1,29 +1,41 @@
 ## 0075 · Vetor dinâmico
 
-Você anota as despesas de uma viagem e não sabe quantas serão. Um
-`int despesas[100]` desperdiça memória se forem 5 e estoura se forem 101.
+- **Lista sequencial** (ou **lista em vetor**): guarda os itens lado a lado,
+  na ordem da lista, num vetor (ZIVIANI, 2010, cap. 3).
+- **Vetor fixo**: se sobra espaço, desperdiça; se falta, não há jeito barato
+  de crescer (CELES; RANGEL, 2002).
+- **Três campos**: o endereço do vetor no heap (`itens`), quantos itens estão
+  em uso (`tam`) e quantos cabem (`cap`). Com `tam < cap`, inserir no fim é
+  escrever em `itens[tam]` (FEOFILOFF, 2009, cap. 3).
+- **Crescer**: com `tam == cap`, o `realloc` (0055) pede um bloco maior,
+  copia os itens e libera o antigo. Se falhar, devolve `NULL` e o bloco
+  antigo continua válido (CPPREFERENCE, s.d.).
+- **Dobrar a capacidade**: inserir n itens copia menos de 2n itens (1 + 2 + 4
+  + ... + n), O(1) em média por inserção, o **custo amortizado**. Crescendo de
+  um em um, são cerca de n²/2 cópias (CORMEN et al., 2024).
+- **TAD** (0074): `lista.h` diz **o que** a lista faz; `lista.c` diz **como**,
+  com a `struct lista` escondida (CELES; CERQUEIRA; RANGEL, 2016).
 
-A saída é um vetor que, quando a folga acaba, pede um vetor maior e copia os
-itens.
+| Operação | Custo |
+| --- | --- |
+| ler a posição `i` | O(1) |
+| inserir no fim | O(1) amortizado |
+| inserir ou remover no meio | O(n): desloca os seguintes |
 
-Uma **lista sequencial** (ou **lista em vetor**) guarda os itens lado a lado,
-na ordem da lista. Três campos a controlam: o endereço do vetor no heap
-(`itens`), quantos itens estão em uso (`tam`) e quantos cabem (`cap`).
-Enquanto `tam < cap`, inserir no fim é escrever em `itens[tam]`.
+> [!WARNING]
+> Nunca escreva `l->itens = realloc(l->itens, ...)`: se vier `NULL`, o bloco
+> antigo se perde. E um `int *p = &itens[0]` guardado antes de inserir pode
+> apontar para o bloco que o `realloc` liberou. Guarde o índice.
 
-Com `tam == cap`, o `realloc` (assunto 0055) pede um bloco maior, copia os
-itens e devolve o antigo. A prática é **dobrar a capacidade**.
+{{exemplo}}
 
-O conjunto é um **TAD** (assunto 0074): `lista.h` diz **o que** a lista faz e
-`lista.c` diz **como**, com a `struct lista` escondida.
-
-A lista do exemplo começa com espaço para 2 despesas. A 3ª dobra para 4 e a
-5ª (R$ 27) dobra para 8, copia os quatro valores e deixa três vagas:
+As despesas de uma viagem, numa lista que começa com espaço para 2. A 3ª
+dobra para 4; a 5ª (R$ 27) dobra para 8, copia os quatro valores e deixa
+três vagas:
 
 {{ideia}}
 
-A peça central do `lista.c` é a função que garante espaço antes de cada
-inserção:
+A peça central do `lista.c` garante espaço antes de cada inserção:
 
 ```c
 struct lista {
@@ -51,7 +63,7 @@ bool lista_insere_fim(Lista *l, int valor) {
 }
 ```
 
-E quem usa a lista só enxerga a interface de `lista.h`:
+Quem usa a lista só enxerga a interface de `lista.h`:
 
 ```c
 #include <stdio.h>
@@ -90,29 +102,7 @@ int main(void) {
 // total: R$ 132
 ```
 
-No fluxograma, "está cheio?" vem antes de escrever. Para o 27 a resposta é
-Sim: o vetor dobra e só então o valor entra em `itens[4]`. Se o `realloc`
-falhar, a função devolve `false` e a lista continua intacta:
+"Está cheio?" vem antes de escrever. Para o 27 a resposta é Sim: o vetor
+dobra e só então o valor entra em `itens[4]`:
 
 {{fluxograma}}
-
-Inserir ou remover no **meio** desloca todos os itens seguintes: O(n) no pior
-caso, a posição 0 (exemplo A150). Ler a posição `i` é O(1).
-
-> [!WARNING]
-> Um `int *p = &itens[0];` guardado antes de inserir pode apontar para o bloco
-> antigo, que o `realloc` devolveu. Guarde o índice. E nunca escreva
-> `l->itens = realloc(l->itens, ...)`: com `NULL`, você perde o bloco antigo.
-
-> [!TIP]
-> **Por dentro do C:** dobrando, inserir n itens copia menos de 2n itens (1 +
-> 2 + 4 + ... + n): O(1) **em média** por inserção (custo amortizado). De um
-> em um, são cerca de n²/2 cópias. `lista_libera` faz dois `free`, o do vetor
-> primeiro.
-
-> [!NOTE]
-> **Pergunta para você:** começando com `lista_cria(2)`, quantas vezes o
-> `realloc` roda até a lista ter 100 itens? E qual é a capacidade final?
-> Quantas vagas ficam sobrando?
-
-{{pratique}}

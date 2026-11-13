@@ -1,16 +1,9 @@
 # Módulo 11 · Listas
 
-O vetor tem tamanho fixo, mas você quase nunca sabe quantos itens vão chegar.
-O módulo começa pelo vetor que dobra quando enche.
-
-Depois vem a **lista encadeada**, a primeira estrutura feita só de ponteiros:
-cada item mora num pedaço do heap e sabe onde está o próximo. Troca-se o
-acesso direto pela liberdade de inserir e remover sem empurrar ninguém. Seguem
-busca, remoção, inserção em ordem, a lista dupla e a circular.
-
-Toda operação de lista é "quem aponta para quem": desenhe os nós e as setas
-antes de codar e compile com as flags de estudo, para o AddressSanitizer pegar
-os erros de ponteiro.
+O vetor que dobra quando enche e a **lista encadeada**, feita de nós e
+ponteiros: busca, remoção, inserção em ordem, lista dupla e circular. Depende
+dos módulos 06 (ponteiros), 07 (`malloc`), 08 (structs) e do TAD (0074); é a
+base do módulo 12.
 
 ## O que você vai aprender
 
@@ -27,12 +20,6 @@ os erros de ponteiro.
 
 ## Antes de começar
 
-Este módulo usa ponteiros (módulo 06, incluindo `No **inicio`, assunto 0049),
-`malloc` e `free` (módulo 07), structs e `->` (módulo 08) e o padrão TAD
-(assunto 0074). O vetor dinâmico estende o `realloc` do módulo 07 e a lista
-encadeada é a base do módulo 12 (pilhas e filas), que reaproveita nós e setas
-com outras regras de acesso.
-
 Cada assunto traz `lista.h` (interface) e `lista.c` (implementação). O
 comando compila o `lista.c` junto com o exemplo ou exercício:
 
@@ -41,14 +28,12 @@ gcc ~/LPEDC/material/A151.c ~/LPEDC/material/0076-lista.c -o ~/LPEDC/material/A1
 ```
 
 Nos exercícios, não repita o nome de uma função do `lista.c` (como
-`lista_imprime`): o ligador reclama. Exercícios com outra estrutura trazem
-tudo no arquivo. Nos desenhos, vermelho marca o nó que sai.
+`lista_imprime`): o ligador reclama. Nos desenhos, vermelho marca o nó que
+sai. Desenhe os nós e as setas antes de codar.
 
-> [!NOTE]
-> Nos exercícios de "ache o bug", o erro vem **de propósito**. Às vezes o
-> `gcc` avisa; às vezes só o AddressSanitizer pega, ao rodar. Leia o relatório
-> inteiro: ele traz o tipo do erro (`heap-use-after-free`,
-> `heap-buffer-overflow`, `memory leaks`) e a linha.
+Nos exercícios de "ache o bug", o erro vem **de propósito**. Às vezes só o
+AddressSanitizer pega, ao rodar: leia o relatório inteiro, com o tipo do erro
+(`heap-use-after-free`, `heap-buffer-overflow`, `memory leaks`) e a linha.
 
 {{indice}}
 

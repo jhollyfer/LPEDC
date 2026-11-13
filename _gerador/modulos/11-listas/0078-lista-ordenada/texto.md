@@ -1,20 +1,38 @@
 ## 0078 · Lista ordenada
 
-Na clínica, as ligações chegam fora de ordem, mas a agenda tem de estar
-sempre em ordem de horário. Em vez de reordenar tudo, cada marcação entra no
-lugar certo.
+- **Lista ordenada**: mantém os nós em ordem a cada inserção, em vez de
+  reordenar tudo depois (CELES; RANGEL, 2002).
+- **Inserção ordenada**: anda com o par `ant`/`p` (0077) enquanto os valores
+  forem menores que o novo. Ao parar, `p` é o primeiro maior ou igual (ou
+  `NULL`) e `ant` vem antes dele (FEOFILOFF, 2009, cap. 4).
+- **Religar duas setas**, nesta ordem: `novo->prox = p` e depois
+  `ant->prox = novo`. Se `ant` for `NULL`, o novo é o menor e vira o início;
+  o fim não é caso especial (CELES; RANGEL, 2002).
+- **Busca com parada**: dá para desistir ao passar do valor procurado
+  (FEOFILOFF, 2009, cap. 4).
+- **Critério**: está na comparação do `while`. Com
+  `strcmp(p->nome, nome) < 0`, a mesma inserção ordena por nome.
+- **Custo**: cada inserção é O(n) no pior caso, então montar n itens custa
+  O(n²). A busca continua O(n): sem acesso direto não há busca binária
+  (ZIVIANI, 2010, cap. 3).
 
-Uma **lista ordenada** mantém os nós em ordem a cada inserção. A **inserção
-ordenada** anda com o par `ant`/`p` (assunto 0077) enquanto os valores forem
-menores que o novo. Ao parar, `p` é o primeiro nó maior ou igual ao novo (ou
-`NULL`) e `ant` vem antes dele. O novo entra **entre** os dois, religando duas
-setas, nesta ordem:
+| Estrutura ordenada | Busca | Inserção |
+| --- | --- | --- |
+| lista encadeada | O(n) | O(n) para achar, O(1) para religar |
+| vetor | O(log n) | O(n): desloca os seguintes |
 
-1. `novo->prox = p`;
-2. `ant->prox = novo`.
+> [!WARNING]
+> O caso mais esquecido é o **novo menor que todos**: `ant` fica `NULL` e
+> `ant->prox = novo` sem o `if` derruba o programa. Teste início, meio e fim.
+> Com `<`, um repetido entra **antes** dos iguais; com `<=`, **depois**.
 
-Se `ant` for `NULL`, o novo é o menor e vira o início. O fim não é caso
-especial: com `p == NULL`, o passo 1 grava `NULL` em `novo->prox`.
+{{exemplo}}
+
+A agenda de uma clínica tem 09:00, 14:30 e 16:00 quando chega a ligação das
+10:15. O laço passa pelo 09:00 e para no 14:30; o novo aponta para o 14:30 e
+o 09:00 aponta para ele:
+
+{{ideia}}
 
 ```c
 No *lista_insere_ordenado(No *inicio, int valor) {
@@ -33,15 +51,6 @@ No *lista_insere_ordenado(No *inicio, int valor) {
     return inicio;
 }
 ```
-
-A ordem também ajuda na **busca**: dá para desistir ao passar do valor.
-Procurando 11:00, a busca para no 14:30.
-
-A agenda do exemplo tem 09:00, 14:30 e 16:00 quando chega a ligação das
-10:15. O laço passa pelo 09:00 e para no 14:30 (`14:30 < 10:15` é falso). O
-novo nó aponta para o 14:30 e o 09:00 aponta para ele:
-
-{{ideia}}
 
 O horário é um `int` hhmm (1430 é 14:30):
 
@@ -80,27 +89,7 @@ int main(void) {
 // 11:00 livre
 ```
 
-No fluxograma, o laço roda uma vez e sai pelo Não no 14:30. Como `ant` é o
-09:00, o caminho termina em `ant->prox = novo`. Na ligação das 9:00, `ant ==
-NULL` e o novo virou o início:
+Para as 10:15, o laço roda uma vez, `ant` é o 09:00 e o caminho termina em
+`ant->prox = novo`; para as 9:00, `ant == NULL` e o novo vira o início:
 
 {{fluxograma}}
-
-O critério está na comparação do `while`: com `strcmp(p->nome, nome) < 0`, a
-mesma inserção ordena por nome (exemplo A156).
-
-> [!WARNING]
-> O caso mais esquecido é o **novo menor que todos**: `ant` fica `NULL` e
-> `ant->prox = novo` sem o `if` derruba o programa. Teste início, meio e fim.
-> Com `<`, um valor repetido entra **antes** dos iguais; com `<=`, **depois**.
-
-> [!TIP]
-> **Por dentro do C:** a inserção ordenada é O(n) no pior caso; montar n itens
-> custa O(n²). A busca continua O(n): chegar ao meio exige andar n/2 nós, sem
-> busca binária. No vetor ordenado é o inverso: busca O(log n), inserção O(n).
-
-> [!NOTE]
-> **Pergunta para você:** inserindo 50, 40, 30, 20 e 10, nesta ordem, quantas
-> vezes o corpo do `while` roda no total? E inserindo 10, 20, 30, 40 e 50?
-
-{{pratique}}
