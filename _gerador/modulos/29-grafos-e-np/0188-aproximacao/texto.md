@@ -1,24 +1,61 @@
 ## 0188 · Aproximação
 
-- **Algoritmo de aproximação**: polinomial, com custo no máximo **ρ vezes o
-  ótimo** (minimização) em **qualquer** entrada. O ρ é o **fator de
-  aproximação**; a prova compara com um limite inferior do ótimo
-  (CORMEN et al., 2024, cap. 35).
-- **Bin packing**: guardar itens no menor número de caixas de capacidade C.
-  NP-difícil; o limite inferior é `soma / C` arredondado para cima
-  (KLEINBERG; TARDOS, 2006, cap. 11).
-- **First fit** (FF): cada item vai para a primeira caixa em que cabe, ou abre
-  outra. Nunca sobram duas caixas com metade ou menos: no máximo 2 × ótimo
-  (cerca de 1,7 × na análise fina) (KLEINBERG; TARDOS, 2006, cap. 11).
-- **First fit decrescente** (FFD): ordena do maior para o menor e faz o mesmo;
-  garantia de cerca de 11/9 × ótimo, mais uma constante.
-- **Cobertura de vértices 2-aproximada**: enquanto houver aresta descoberta
-  u-v, ponha **as duas pontas**. As arestas escolhidas não têm ponta em comum
-  e o ótimo precisa de uma de cada (CORMEN et al., 2024, cap. 35).
-- **Caixeiro viajante métrico**: com a **desigualdade triangular**, monte a
-  árvore geradora mínima (Prim, 0153), percorra em pré-ordem e volte ao
-  começo: no máximo 2 × ótimo. Sem a desigualdade, nenhum fator constante é
-  possível, salvo se P = NP (CORMEN et al., 2024, cap. 35).
+O 0186 deixou uma notícia ruim: para os problemas NP-difíceis, ninguém
+conhece algoritmo que ache a resposta ótima em tempo polinomial. Só que o
+problema continua lá, todo dia. O dono do barco de Manaus a Parintins precisa
+decidir hoje como distribuir as cargas pelas viagens, e não pode esperar a
+força bruta testar todas as combinações. Ele aceita uma resposta um pouco
+pior que a melhor, desde que saia rápido e venha com uma **garantia** de
+quanto pior ela pode ser.
+
+Essa é a ideia do **algoritmo de aproximação**: um algoritmo de tempo
+polinomial que, num problema de minimização, devolve uma solução de custo no
+máximo **ρ vezes o ótimo**, em **qualquer** entrada. O número ρ é o **fator
+de aproximação**. Um algoritmo 2-aproximado nunca gasta mais que o dobro do
+ótimo, por pior que seja a entrada (CORMEN et al., 2024, cap. 35). Repare no
+truque da prova: o algoritmo não conhece o ótimo, então a análise compara a
+solução dele com um **limite inferior** do ótimo, um valor que nenhuma solução
+consegue ficar abaixo.
+
+O problema do barco é o **bin packing** (empacotamento em caixas): guardar
+itens de tamanhos dados no menor número de caixas de capacidade C. É
+NP-difícil. O limite inferior sai de uma conta simples: a soma dos tamanhos
+dividida por C, arredondada para cima. Se as cargas somam 45 toneladas e o
+barco leva 10, nenhuma solução faz menos que 5 viagens (KLEINBERG; TARDOS,
+2006, cap. 11).
+
+O guloso mais simples é o **first fit** (FF, primeira que cabe): cada item,
+na ordem em que chega, vai para a primeira caixa aberta em que ele cabe; se
+não cabe em nenhuma, abre uma caixa nova. A garantia vem de uma observação:
+no fim, nunca sobram duas caixas ocupadas até a metade ou menos, porque o
+conteúdo da segunda teria cabido na primeira. Então quase todas as caixas
+estão mais que meio cheias, e o FF usa no máximo o dobro do ótimo. Uma
+análise mais fina baixa esse fator para cerca de 1,7 (KLEINBERG; TARDOS, 2006,
+cap. 11).
+
+O **first fit decrescente** (FFD) ordena os itens do maior para o menor antes
+de aplicar o mesmo guloso. Os itens grandes, que são os difíceis de encaixar,
+entram primeiro, e os pequenos preenchem as sobras. A garantia melhora para
+cerca de 11/9 do ótimo, mais uma constante pequena.
+
+A **cobertura de vértices** do 0187 tem um 2-aproximado curto: enquanto houver
+uma aresta `u-v` sem nenhuma ponta na cobertura, ponha **as duas pontas**
+nela. O porquê do fator 2: as arestas que o algoritmo escolhe não têm ponta em
+comum, já que, depois de escolher `u-v`, toda aresta que toca `u` ou `v` fica
+coberta. Qualquer cobertura, inclusive a ótima, precisa de pelo menos uma
+ponta de cada uma dessas arestas. O algoritmo pega duas por aresta, então
+usa no máximo o dobro (CORMEN et al., 2024, cap. 35).
+
+O **caixeiro viajante** pede o ciclo mais curto que passa por todas as
+cidades. Na versão **métrica**, as distâncias obedecem à **desigualdade
+triangular**: ir direto de A a C nunca é mais longo que passar por B. Com
+essa hipótese existe um 2-aproximado: monte a árvore geradora mínima (Prim,
+0153), percorra-a em pré-ordem e volte ao começo. A árvore custa menos que o
+ciclo ótimo, porque tirar uma aresta do ciclo deixa uma árvore. Contornar a
+árvore passa duas vezes por cada aresta, o dobro do custo dela, e pular as
+cidades repetidas só encurta, pela desigualdade triangular. Sem essa
+desigualdade, nenhum fator constante é possível, a menos que P = NP (CORMEN
+et al., 2024, cap. 35).
 
 > [!WARNING]
 > "Aproximado" não é "chute": o fator vale para **toda** entrada e vem com

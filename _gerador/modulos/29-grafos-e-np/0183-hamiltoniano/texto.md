@@ -1,19 +1,34 @@
 ## 0183 · Hamiltoniano
 
-- **Ciclo hamiltoniano**: ciclo que passa por **todos os vértices**, cada um
-  uma vez. **Caminho hamiltoniano** é o mesmo sem voltar ao começo
-  (CORMEN et al., 2024, cap. 34).
-- **Sem teste simples**: não se conhece condição necessária e suficiente nem
-  algoritmo polinomial; o problema é NP-completo (KARP, 1972).
-- **Condição de Dirac** (só suficiente): com V ≥ 3 e todo grau ≥ V/2, o ciclo
-  existe. Um ciclo puro de 100 vértices tem grau 2 e é hamiltoniano mesmo
-  assim (SZWARCFITER, 2018).
-- **Backtracking**: monta a rota por posição; põe em `pos` um vizinho ainda
-  não usado do último vértice, desce para `pos + 1` e, se travar, **desfaz** a
-  escolha (ZIVIANI, 2010).
-- **Economias**: fixe `rota[0] = 0` (divide o trabalho por V) e use `usada[]`
-  para cortar repetição. No pior caso sobram (V - 1)! ordens: com 15
-  vértices, 87 bilhões.
+O carro-forte abastece cinco agências e volta à base. Repetir rua não importa;
+parar duas vezes na mesma agência, sim, porque cada parada custa tempo e
+escolta. Existe uma rota que passa por cada agência exatamente uma vez e
+volta? A pergunta parece a do caminhão de lixo do 0182, só que com "vértice"
+no lugar de "aresta". A troca de uma palavra muda tudo: para arestas existe
+um teste rápido, e para vértices ninguém conhece um.
+
+Um **ciclo hamiltoniano** é um ciclo que passa por todos os vértices do
+grafo, cada um uma única vez, e volta ao primeiro. No vocabulário do Cormen,
+é um ciclo simples que contém todos os vértices. Um **caminho hamiltoniano**
+é a mesma coisa sem a volta ao começo: visita todos os vértices uma vez e
+termina em outro lugar (CORMEN et al., 2024, cap. 34).
+
+Para Euler bastava olhar os graus. Para Hamilton, não se conhece nenhuma
+condição simples que seja ao mesmo tempo necessária e suficiente, e também
+não se conhece algoritmo polinomial, isto é, com custo limitado por uma
+potência de V. O problema de decidir se um grafo tem ciclo hamiltoniano está
+na lista clássica de problemas NP-completos (KARP, 1972), uma classe que o
+0186 apresenta com calma.
+
+O que existe são condições **suficientes**: se valem, o ciclo existe; se não
+valem, nada se conclui. A mais conhecida é a de **Dirac**: se o grafo tem V ≥
+3 vértices e todo vértice tem grau ≥ V/2, então ele tem ciclo hamiltoniano
+(SZWARCFITER, 2018). A intuição é que, com tantos vizinhos, sempre sobra uma
+saída. A recíproca é falsa: um ciclo puro de 100 vértices tem grau 2 em todos,
+muito abaixo de 50, e é hamiltoniano, porque ele mesmo é o ciclo.
+
+A tabela compara os dois problemas, para que você não troque um pelo outro na
+prova:
 
 | | Euler (0182) | Hamilton |
 | --- | --- | --- |
@@ -21,6 +36,22 @@
 | teste | graus pares + conexo | nenhum teste rápido conhecido |
 | custo para achar | O(V + E) | exponencial no pior caso |
 | classe (0186) | P | NP-completo |
+
+Sem teste rápido, sobra testar as possibilidades, e o jeito organizado de
+fazer isso é o **backtracking** do módulo 19. A rota é montada por posição,
+num vetor `rota[]`. Na posição `pos`, o algoritmo escolhe um vizinho do
+vértice da posição `pos - 1` que ainda não esteja na rota, põe nessa posição
+e desce para `pos + 1`. Se lá embaixo nenhuma escolha der certo, ele volta,
+**desfaz** a escolha feita em `pos` e tenta o próximo vizinho. Quando as V
+posições estão preenchidas, só falta conferir se o último vértice liga ao
+primeiro (ZIVIANI, 2010).
+
+Duas economias saem de graça. A primeira: todo ciclo pode começar em
+qualquer um dos seus vértices, então fixar `rota[0] = 0` não perde nenhuma
+resposta e divide o trabalho por V. A segunda: um vetor `usada[]` de
+booleanos marca quem já está na rota, e a pergunta "esse vértice já entrou?"
+custa O(1) em vez de uma varredura. Mesmo assim, no pior caso sobram (V - 1)!
+ordens a testar. Com 15 vértices, são 14! ≈ 87 bilhões.
 
 > [!WARNING]
 > Esquecer o `usada[v] = false` depois da chamada recursiva deixa "queimado"

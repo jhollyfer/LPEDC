@@ -80,23 +80,42 @@ Convenções do módulo:
 
 ### Conceito
 
-- **Grau**: quantas arestas tocam o vértice (um laço conta 2). No dirigido, há
-  grau de entrada e de saída (CORMEN et al., 2024, apêndice B).
-- **Lema do aperto de mãos**: cada aresta conta duas vezes, então a soma dos
-  graus é **2 × E** e o número de vértices de grau ímpar é par
-  (CORMEN et al., 2024, apêndice B).
-- **Passeio, trajeto, caminho, circuito, ciclo**: os nomes mudam conforme o
-  que pode se repetir (tabela). O **comprimento** é o número de arestas. Aqui
-  vale a coluna do edital (SZWARCFITER, 2018).
-- **Circuito euleriano**: usa **toda aresta exatamente uma vez**. Num grafo
-  conexo, existe se e só se todos os graus são pares; trajeto aberto, se e só
-  se há exatamente dois ímpares, que são as pontas (LINTZMAYER; MOTA, 2023).
-- **Por que pares**: cada vez que o percurso entra numa esquina, sai por outra
-  rua; só a saída e a chegada escapam. No dirigido: entrada = saída em todo
-  vértice (CORMEN et al., 2024, cap. 20).
-- **Hierholzer**: anda por arestas não usadas, apagando-as, até travar; volta
-  pela pilha até um vértice com aresta sobrando e encaixa o desvio. O(V + E)
-  com lista, O(V²) com matriz (HIERHOLZER; WIENER, 1873).
+O caminhão da coleta de lixo precisa passar por todas as ruas do bairro e
+voltar à garagem. Passar duas vezes pela mesma rua é gasolina jogada fora.
+Existe um roteiro que usa cada rua exatamente uma vez? Euler respondeu a essa
+pergunta em 1736, a propósito das pontes de Königsberg, e a resposta é uma
+conta simples com os graus dos vértices. Antes dela, você precisa do
+vocabulário que a prova usa para falar de percursos num grafo.
+
+O **grau** de um vértice é o número de arestas que tocam nele. Um laço, a
+aresta que sai e volta ao mesmo vértice, conta 2, porque toca o vértice nas
+duas pontas. Num grafo dirigido (0109) há dois graus: o **grau de entrada**,
+quantas arestas chegam, e o **grau de saída**, quantas partem (CORMEN et al.,
+2024, apêndice B).
+
+Somando os graus de todos os vértices, cada aresta entra na conta duas vezes,
+uma em cada ponta. Por isso a soma dos graus é sempre **2 × E**, com E o
+número de arestas. Esse fato tem nome, **lema do aperto de mãos**: numa
+festa, se você soma quantas mãos cada pessoa apertou, cada aperto aparece
+duas vezes. Uma consequência cai muito em prova: como a soma é par, o número
+de vértices de grau ímpar também é par. Num dirigido, a soma dos graus de
+entrada é E, e a dos graus de saída também (CORMEN et al., 2024, apêndice B).
+
+Agora o vocabulário dos percursos. Andar pelo grafo é seguir uma sequência de
+vértices em que cada um está ligado ao seguinte por uma aresta. O
+**comprimento** do percurso é o número de arestas usadas. O nome do percurso
+muda conforme o que pode se repetir. Se vértices e arestas podem repetir, é
+um **passeio**. Se vértices podem repetir mas nenhuma aresta se repete, é um
+**trajeto**. Se nada se repete, é um **caminho**. Os fechados, que terminam
+onde começaram, seguem a mesma lógica: sem aresta repetida é um **circuito**;
+sem vértice repetido (fora o primeiro, que é também o último) é um **ciclo**
+(SZWARCFITER, 2018).
+
+O Cormen usa outros nomes: para ele, "caminho" é qualquer passeio, e o que
+não repete vértice é um "caminho simples"; "ciclo" é qualquer passeio fechado
+com pelo menos uma aresta, e "ciclo simples" proíbe repetir vértice. Neste
+módulo vale a coluna do edital, que é a da teoria dos grafos. A tabela põe os
+nomes lado a lado:
 
 | O que pode repetir | Cormen | Edital e teoria dos grafos | Também chamado |
 | --- | --- | --- | --- |
@@ -105,6 +124,29 @@ Convenções do módulo:
 | nada | caminho simples | **caminho** | (*path*) |
 | fechado, nenhuma aresta repetida | (sem nome) | **circuito** | trilha fechada |
 | fechado, nenhum vértice repetido | ciclo simples | **ciclo** | |
+
+Com isso dá para formular a pergunta do caminhão. Um **circuito euleriano** é
+um circuito que usa toda aresta do grafo exatamente uma vez. O teorema de
+Euler diz que, num grafo conexo (ignorando vértices isolados), existe
+circuito euleriano se e só se todos os vértices têm grau par. E existe um
+**trajeto euleriano** aberto se e só se há exatamente dois vértices de grau
+ímpar; nesse caso ele começa num deles e termina no outro (LINTZMAYER; MOTA,
+2023).
+
+O porquê cabe numa frase. Cada vez que o caminhão chega a uma esquina, sai
+dela por outra rua, então as ruas de cada esquina se gastam aos pares. Só a
+esquina de partida e a de chegada escapam dessa regra, e num circuito as duas
+são a mesma. Num grafo dirigido a condição muda para "grau de entrada igual
+ao grau de saída em todo vértice" (CORMEN et al., 2024, cap. 20).
+
+Saber que o circuito existe não diz qual é. O **algoritmo de Hierholzer** o
+monta. Ele parte de um vértice e anda por arestas ainda não usadas, apagando
+cada uma ao passar, até travar; com todos os graus pares, ele só trava de
+volta ao ponto de partida. Se sobraram arestas, ele volta pela pilha de
+vértices visitados até um que ainda tenha aresta livre, faz dali um novo
+passeio fechado e o **encaixa** no circuito naquele ponto. Com lista de
+adjacência, o custo é O(V + E); com matriz, procurar o próximo vizinho custa
+O(V) por vez e o total vai a O(V²) (HIERHOLZER; WIENER, 1873).
 
 > [!WARNING]
 > "Todos os graus pares" só garante o circuito se o grafo for **conexo**: dois
@@ -448,20 +490,35 @@ Traço 2: D B
 
 ### Conceito
 
-- **Ciclo hamiltoniano**: ciclo que passa por **todos os vértices**, cada um
-  uma vez. **Caminho hamiltoniano** é o mesmo sem voltar ao começo
-  (CORMEN et al., 2024, cap. 34).
-- **Sem teste simples**: não se conhece condição necessária e suficiente nem
-  algoritmo polinomial; o problema é NP-completo (KARP, 1972).
-- **Condição de Dirac** (só suficiente): com V ≥ 3 e todo grau ≥ V/2, o ciclo
-  existe. Um ciclo puro de 100 vértices tem grau 2 e é hamiltoniano mesmo
-  assim (SZWARCFITER, 2018).
-- **Backtracking**: monta a rota por posição; põe em `pos` um vizinho ainda
-  não usado do último vértice, desce para `pos + 1` e, se travar, **desfaz** a
-  escolha (ZIVIANI, 2010).
-- **Economias**: fixe `rota[0] = 0` (divide o trabalho por V) e use `usada[]`
-  para cortar repetição. No pior caso sobram (V - 1)! ordens: com 15
-  vértices, 87 bilhões.
+O carro-forte abastece cinco agências e volta à base. Repetir rua não importa;
+parar duas vezes na mesma agência, sim, porque cada parada custa tempo e
+escolta. Existe uma rota que passa por cada agência exatamente uma vez e
+volta? A pergunta parece a do caminhão de lixo do 0182, só que com "vértice"
+no lugar de "aresta". A troca de uma palavra muda tudo: para arestas existe
+um teste rápido, e para vértices ninguém conhece um.
+
+Um **ciclo hamiltoniano** é um ciclo que passa por todos os vértices do
+grafo, cada um uma única vez, e volta ao primeiro. No vocabulário do Cormen,
+é um ciclo simples que contém todos os vértices. Um **caminho hamiltoniano**
+é a mesma coisa sem a volta ao começo: visita todos os vértices uma vez e
+termina em outro lugar (CORMEN et al., 2024, cap. 34).
+
+Para Euler bastava olhar os graus. Para Hamilton, não se conhece nenhuma
+condição simples que seja ao mesmo tempo necessária e suficiente, e também
+não se conhece algoritmo polinomial, isto é, com custo limitado por uma
+potência de V. O problema de decidir se um grafo tem ciclo hamiltoniano está
+na lista clássica de problemas NP-completos (KARP, 1972), uma classe que o
+0186 apresenta com calma.
+
+O que existe são condições **suficientes**: se valem, o ciclo existe; se não
+valem, nada se conclui. A mais conhecida é a de **Dirac**: se o grafo tem V ≥
+3 vértices e todo vértice tem grau ≥ V/2, então ele tem ciclo hamiltoniano
+(SZWARCFITER, 2018). A intuição é que, com tantos vizinhos, sempre sobra uma
+saída. A recíproca é falsa: um ciclo puro de 100 vértices tem grau 2 em todos,
+muito abaixo de 50, e é hamiltoniano, porque ele mesmo é o ciclo.
+
+A tabela compara os dois problemas, para que você não troque um pelo outro na
+prova:
 
 | | Euler (0182) | Hamilton |
 | --- | --- | --- |
@@ -469,6 +526,22 @@ Traço 2: D B
 | teste | graus pares + conexo | nenhum teste rápido conhecido |
 | custo para achar | O(V + E) | exponencial no pior caso |
 | classe (0186) | P | NP-completo |
+
+Sem teste rápido, sobra testar as possibilidades, e o jeito organizado de
+fazer isso é o **backtracking** do módulo 19. A rota é montada por posição,
+num vetor `rota[]`. Na posição `pos`, o algoritmo escolhe um vizinho do
+vértice da posição `pos - 1` que ainda não esteja na rota, põe nessa posição
+e desce para `pos + 1`. Se lá embaixo nenhuma escolha der certo, ele volta,
+**desfaz** a escolha feita em `pos` e tenta o próximo vizinho. Quando as V
+posições estão preenchidas, só falta conferir se o último vértice liga ao
+primeiro (ZIVIANI, 2010).
+
+Duas economias saem de graça. A primeira: todo ciclo pode começar em
+qualquer um dos seus vértices, então fixar `rota[0] = 0` não perde nenhuma
+resposta e divide o trabalho por V. A segunda: um vetor `usada[]` de
+booleanos marca quem já está na rota, e a pergunta "esse vértice já entrou?"
+custa O(1) em vez de uma varredura. Mesmo assim, no pior caso sobram (V - 1)!
+ordens a testar. Com 15 vértices, são 14! ≈ 87 bilhões.
 
 > [!WARNING]
 > Esquecer o `usada[v] = false` depois da chamada recursiva deixa "queimado"
@@ -770,20 +843,59 @@ Chamadas: 8840
 
 ### Conceito
 
-- **Ponte** (aresta de corte): aresta cuja remoção aumenta o número de
-  componentes conexos (0150) (SZWARCFITER, 2018).
-- **Vértice de articulação** (ponto de corte): vértice cuja remoção, com suas
-  arestas, aumenta o número de componentes (SZWARCFITER, 2018).
-- **Uma DFS só**: tirar cada aresta e rodar uma DFS custa O(E · (V + E)); a
-  DFS com dois números por vértice resolve em O(V + E) (TARJAN, 1972).
-- **tin[u]**: o tempo de descoberta de `u`. **low[u]**: o menor `tin` que a
-  subárvore de `u` alcança descendo pela árvore e usando **uma** aresta de
-  volta (FEOFILOFF, s.d., *Algoritmos para grafos*).
-- **Só dois tipos de aresta**: na DFS não dirigida há arestas da árvore e de
-  volta (a um ancestral); nenhuma cruza para o lado (CORMEN et al., 2024, cap. 20).
-- **As regras**, para `u - v` da árvore: **ponte** se `low[v] > tin[u]`;
-  **articulação** se `low[v] >= tin[u]` e `u` não é a raiz; a **raiz** é
-  articulação só com dois ou mais filhos na DFS (TARJAN, 1972).
+Uma operadora liga sete bairros com cabos de fibra. Duas perguntas tiram o
+sono do engenheiro: se um cabo for cortado, algum bairro fica sem sinal? E se
+a central de um bairro pegar fogo, os outros continuam se falando? Essas são
+as duas perguntas de **conectividade** do edital, e as duas têm resposta com
+uma única busca em profundidade.
+
+Lembre que um grafo não dirigido se divide em **componentes conexos**, os
+pedaços dentro dos quais todo vértice alcança todo outro (0150). Uma **ponte**,
+também chamada aresta de corte, é uma aresta cuja remoção aumenta o número de
+componentes: sem ela, o grafo se parte. Um **vértice de articulação**, também
+chamado ponto de corte, é um vértice cuja remoção, junto com as arestas que
+tocam nele, aumenta o número de componentes (SZWARCFITER, 2018). Na rede da
+operadora, a ponte é o cabo que, cortado, isola um bairro; a articulação é a
+central que, fora do ar, separa a rede em dois.
+
+O jeito ingênuo de achar as pontes é tirar uma aresta de cada vez e rodar uma
+DFS para ver se o grafo continua conexo. São E buscas de custo O(V + E) cada,
+O(E · (V + E)) no total. Tarjan mostrou que basta **uma DFS só**, O(V + E),
+desde que ela anote dois números em cada vértice (TARJAN, 1972).
+
+O primeiro número é **tin[u]**, o tempo de descoberta: a DFS mantém um
+relógio que avança cada vez que ela entra num vértice novo, e `tin[u]` é o
+valor do relógio na entrada de `u`. Quanto menor o `tin`, mais perto da raiz
+da DFS o vértice está no caminho atual. O segundo é **low[u]**: o menor `tin`
+que dá para alcançar a partir de `u` descendo pela árvore da DFS e usando, no
+fim, **uma** aresta de volta para um ancestral (FEOFILOFF, s.d., *Algoritmos
+para grafos*). Ele mede até onde a subárvore de `u` consegue escapar para cima
+sem passar pela aresta que liga `u` ao pai.
+
+O `low` funciona por causa de uma propriedade da DFS em grafo não dirigido:
+toda aresta é ou da **árvore**, quando leva a um vértice ainda não visitado,
+ou de **volta**, quando leva a um ancestral. Não existe aresta que cruze para
+um galho vizinho da árvore, porque a DFS teria seguido por ela antes de
+terminar o primeiro galho (CORMEN et al., 2024, cap. 20). Assim, a única
+forma de uma subárvore se ligar ao resto é pela aresta do pai ou por arestas
+de volta, e o `low` mede exatamente as arestas de volta.
+
+As regras saem disso, olhando uma aresta da árvore `u - v`, com `v` filho de
+`u`, na volta da recursão, quando `low[v]` já está completo (TARJAN, 1972). A
+aresta é **ponte** se `low[v] > tin[u]`: nada abaixo de `v` alcança `u` ou
+algum vértice acima dele, então cortar `u - v` isola a subárvore de `v`. O
+vértice `u` é **articulação** se `low[v] >= tin[u]` e `u` não é a raiz: a
+subárvore de `v` volta no máximo até o próprio `u`, e sem `u` ela fica
+sozinha. A diferença entre `>` e `>=` é a diferença entre cortar um cabo e
+derrubar uma central: se `low[v]` é igual a `tin[u]`, a subárvore tem outro
+cabo até `u`, mas nenhum caminho que desvie de `u`.
+
+A raiz da DFS precisa de uma regra própria. Ela tem o menor `tin` de todos,
+então `low[v] >= tin[u]` vale sempre para os filhos dela, e a regra acima
+marcaria toda raiz como articulação. O critério certo é outro: a raiz é
+articulação **só se tiver dois ou mais filhos** na árvore da DFS. Se tem dois
+filhos, não há aresta entre as subárvores deles (seria de cruzamento), e
+tirar a raiz as separa.
 
 > [!WARNING]
 > Usar `low[v] >= tin[u]` também na raiz sempre dá verdadeiro e a marca como
@@ -1111,28 +1223,67 @@ Linha crítica: Sul - Porto
 
 ### Conceito
 
-- **Custo de um produto**: uma `p × q` vezes uma `q × r` dá uma `p × r`, e
-  cada uma das `p · r` casas soma `q` produtos: **p · q · r** multiplicações
-  (CORMEN et al., 2024, cap. 14).
-- **Associatividade**: `(A B) C = A (B C)`; os parênteses mudam só o
-  trabalho. Quatro matrizes têm 5 parentizações; 20 têm mais de 1,7 bilhão
-  (números de Catalan) (CORMEN et al., 2024, cap. 14).
-- **Subestrutura ótima**: a última multiplicação corta a cadeia em algum `k`,
-  e cada metade também está na melhor ordem. Com `Ai` de tamanho
-  `p[i-1] × p[i]` (FEOFILOFF, s.d., *Análise de algoritmos*):
+Uma rede de farmácias multiplica quatro tabelas de dados em sequência: uma 10
+× 30, uma 30 × 5, uma 5 × 60 e uma 60 × 10. O resultado final é uma matriz 10
+× 10 em qualquer ordem de cálculo, mas numa ordem o servidor faz 5 mil
+multiplicações e noutra, 33 mil. O problema da **multiplicação de cadeia de
+matrizes** é achar a ordem mais barata, e ele é o exemplo clássico de
+programação dinâmica do Cormen (CORMEN et al., 2024, cap. 14).
+
+Primeiro, o preço de um produto. Uma matriz `p × q` (p linhas, q colunas)
+vezes uma `q × r` dá uma matriz `p × r`. Cada uma das `p · r` casas do
+resultado é a soma de `q` produtos, uma linha da primeira vezes uma coluna da
+segunda. O total é **p · q · r** multiplicações escalares (CORMEN et al., 2024,
+cap. 14). Na rede de farmácias, a 10 × 30 vezes a 30 × 5 custa 10 · 30 · 5 =
+1500.
+
+A multiplicação de matrizes é **associativa**: `(A B) C` dá o mesmo resultado
+que `A (B C)`. Os parênteses não mudam a resposta, só o trabalho. Cada jeito
+de pôr os parênteses numa cadeia se chama uma **parentização**, e o número
+delas cresce depressa: 4 matrizes têm 5 parentizações; 10 têm 4862; 20 têm
+mais de 1,7 bilhão. Esses números são os **números de Catalan**, que crescem
+exponencialmente (CORMEN et al., 2024, cap. 14). Testar todas é inviável
+já para cadeias médias.
+
+A saída é olhar para a última multiplicação feita. Em qualquer parentização,
+o último passo junta duas metades: `(A1 ... Ak)` vezes `(Ak+1 ... An)`, para
+algum ponto de corte `k`. Se a parentização inteira é a melhor, cada metade
+também tem de estar na melhor ordem; senão, trocar a ordem dessa metade
+baratearia o todo. Essa propriedade se chama **subestrutura ótima**: a
+solução ótima é feita de soluções ótimas de pedaços menores. Escrevendo
+`m[i][j]` para o menor custo de multiplicar `Ai` até `Aj`, e lembrando que
+`Ai` tem tamanho `p[i-1] × p[i]`, sai a recorrência (FEOFILOFF, s.d.,
+*Análise de algoritmos*):
 
 ```text
 m[i][i] = 0
 m[i][j] = min sobre k de i até j-1:  m[i][k] + m[k+1][j] + p[i-1] · p[k] · p[j]
 ```
 
-- **Tabela `s`**: `s[i][j]` guarda o `k` vencedor, para remontar os
-  parênteses (CORMEN et al., 2024, cap. 14).
-- **Ordem de preencher**: `m[i][j]` depende de cadeias menores, então o laço
-  externo é o **tamanho** da cadeia; a tabela enche diagonal por diagonal.
-  **O(n³)** de tempo e O(n²) de espaço (CORMEN et al., 2024, cap. 14).
-- **Estouro**: o `(long)` antes de `p[i - 1] * p[k] * p[j]` evita que o
-  produto de três `int` estoure.
+Leia o termo da direita com calma. `m[i][k]` é o custo de montar a metade da
+esquerda, que vira uma `p[i-1] × p[k]`. `m[k+1][j]` é o da direita, que vira
+uma `p[k] × p[j]`. E `p[i-1] · p[k] · p[j]` é o preço de multiplicar as duas.
+Uma matriz sozinha não custa nada, por isso `m[i][i] = 0`. A cadeia de n
+matrizes precisa de n + 1 números em `p`, porque matrizes vizinhas
+compartilham uma dimensão.
+
+O valor mínimo não basta: você quer saber onde pôr os parênteses. Uma segunda
+tabela, `s[i][j]`, guarda o `k` que venceu o mínimo. Para remontar a
+resposta, você olha `s[1][n]`, divide a cadeia ali e repete em cada metade
+(CORMEN et al., 2024, cap. 14).
+
+A ordem de preencher a tabela importa. `m[i][j]` usa `m[i][k]` e `m[k+1][j]`,
+que são cadeias **menores**. Então o laço de fora percorre o **tamanho** da
+cadeia (2, 3, ..., n), e os de dentro percorrem o início `i` e o corte `k`. A
+tabela enche diagonal por diagonal: primeiro os pares, depois os trios, até
+a casa do canto, `m[1][n]`, que é a resposta. São O(n²) casas, cada uma com
+até n cortes testados: **O(n³)** de tempo e O(n²) de espaço, contra o
+exponencial de testar todas as parentizações (CORMEN et al., 2024, cap. 14).
+
+Um detalhe de C: as dimensões cabem num `int`, mas o produto de três delas
+pode não caber. Por isso o código converte para `long` antes de multiplicar,
+`(long)p[i - 1] * p[k] * p[j]`; converter só o resultado chega tarde, depois
+do estouro.
 
 > [!WARNING]
 > Preencher linha por linha calcula `m[1][3]` antes de `m[2][3]` existir e usa
@@ -1448,25 +1599,50 @@ PD: 3400
 
 ### Conceito
 
-- **Problema de decisão**: resposta **sim ou não** ("existe rota de no máximo
-  300 km?"). Otimização vira decisão com um limite (CORMEN et al., 2024, cap. 34).
-- **P**: problemas de decisão que se **resolvem** em tempo polinomial, O(n^k)
-  com k fixo: caminho mínimo, Euler (0182), pontes (0184)
-  (CORMEN et al., 2024, cap. 34).
-- **NP**: um "sim" tem um **certificado** (prova curta) que um
-  **verificador** confere em tempo polinomial. Quem resolve rápido confere
-  rápido: **P ⊆ NP** (LINTZMAYER; MOTA, 2023).
-- **NP-difícil**: todo problema de NP se reduz a ele em tempo polinomial
-  (0187). **NP-completo**: está em NP **e** é NP-difícil. Um NP-completo
-  polinomial daria P = NP, questão em aberto (KLEINBERG; TARDOS, 2006, cap. 8).
-- **SAT**: fórmula em **forma normal conjuntiva** (um E de **cláusulas**, cada
-  uma um OU de **literais** `x` ou `não x`); existe atribuição que deixa todas
-  verdadeiras? Foi o primeiro NP-completo (COOK, 1971).
-- **3-SAT**: no máximo três literais por cláusula (no Cormen, exatamente
-  três); continua NP-completo (KARP, 1972).
-- **Força bruta com máscara**: as 2ⁿ atribuições são os valores de um
-  contador; o bit `v - 1` diz se `v` é verdadeira, lido com
-  `(mascara >> (v - 1)) & 1`.
+Você organiza o churrasco da firma com cinco condições: alguém precisa levar a
+churrasqueira, dois colegas brigados não vão juntos, e assim por diante. Um
+amigo sugere "chama a Ana e o Davi", e conferir se a sugestão atende às cinco
+condições leva dez segundos. Achar um grupo bom sem palpite nenhum, porém,
+pode exigir testar todas as combinações de convidados. A pergunta mais famosa
+da computação gira em torno dessa diferença entre **achar** uma resposta e
+**conferir** uma resposta pronta.
+
+Para comparar problemas, a teoria olha só para **problemas de decisão**,
+aqueles cuja resposta é sim ou não: "este grafo tem ciclo hamiltoniano?",
+"existe rota de no máximo 300 km?". Isso não perde generalidade, porque um
+problema de otimização ("qual a menor rota?") vira um de decisão quando você
+fixa um limite e pergunta se dá para ficar abaixo dele. Se a decisão for
+difícil, a otimização também é (CORMEN et al., 2024, cap. 34).
+
+A classe **P** reúne os problemas de decisão que se **resolvem** em tempo
+polinomial, isto é, com custo O(n^k) para algum k fixo, sendo n o tamanho da
+entrada. Quase tudo o que você viu no curso está aqui: achar caminho mínimo,
+testar circuito euleriano (0182), achar pontes (0184). Polinomial é a
+fronteira que a teoria usa para "rápido": n³ cresce devagar perto de 2ⁿ
+(CORMEN et al., 2024, cap. 34).
+
+A classe **NP** exige menos: não pede para resolver, pede para **conferir**.
+Um problema está em NP quando toda resposta "sim" tem um **certificado**, uma
+prova curta, e existe um **verificador**, um algoritmo polinomial que recebe a
+entrada e o certificado e confirma o "sim" (LINTZMAYER; MOTA, 2023). No
+churrasco, o certificado é a lista de convidados; no ciclo hamiltoniano, é a
+própria rota, que se confere numa passada. Se você resolve um problema rápido,
+também confere rápido: basta ignorar o certificado e resolver. Por isso **P ⊆
+NP**.
+
+O nome engana. NP vem de *polinomial não determinístico*, porque a classe foi
+definida com uma máquina que "chuta" o certificado certo e depois o confere.
+Não quer dizer "não polinomial": todo problema de P também está em NP.
+
+Dentro de NP há os problemas mais difíceis da classe. Um problema é
+**NP-difícil** quando todo problema de NP se reduz a ele em tempo polinomial;
+a redução é o assunto do 0187, e por ora basta a ideia de que resolver o
+NP-difícil rápido resolveria todos os de NP rápido. Um problema é
+**NP-completo** quando está em NP **e** é NP-difícil. A consequência é forte:
+se um único NP-completo tiver algoritmo polinomial, então P = NP. Ninguém
+sabe se isso acontece; a maioria dos pesquisadores aposta que P ≠ NP, e a
+questão segue em aberto (KLEINBERG; TARDOS, 2006, cap. 8). A tabela resume as
+quatro classes:
 
 | Classe | O que se exige | Exemplos |
 | --- | --- | --- |
@@ -1474,6 +1650,32 @@ PD: 3400
 | NP | verificar um "sim" em tempo polinomial | tudo de P, SAT, clique, hamiltoniano |
 | NP-completo | estar em NP e ser NP-difícil | SAT, 3-SAT, clique, cobertura de vértices, ciclo hamiltoniano |
 | NP-difícil | todo NP se reduz a ele (pode nem estar em NP) | os NP-completos, caixeiro viajante (otimização) |
+
+O primeiro problema provado NP-completo foi o **SAT**, a satisfatibilidade de
+fórmulas lógicas (COOK, 1971). A fórmula vem em **forma normal conjuntiva**
+(FNC): um E de **cláusulas**, e cada cláusula é um OU de **literais**, sendo
+literal uma variável `x` ou a negação dela, `não x`. A pergunta é se existe
+uma atribuição de verdadeiro e falso às variáveis que deixe todas as
+cláusulas verdadeiras. No churrasco, cada colega é uma variável (vai ou não
+vai) e cada condição é uma cláusula. O **3-SAT** limita cada cláusula a no
+máximo três literais (no Cormen, exatamente três) e continua NP-completo
+(KARP, 1972).
+
+Sem algoritmo esperto, resta a força bruta: testar as 2ⁿ atribuições de n
+variáveis. Em C, a atribuição cabe num inteiro, a **máscara**: o bit `v - 1`
+diz se a variável `v` é verdadeira. Contar a máscara de 0 até 2ⁿ - 1 passa
+por todas as atribuições, e cada uma é conferida pelo verificador:
+
+```c
+unsigned mascara = 10; // binário 1010
+for (int v = 1; v <= 4; v++) {
+    printf("x%d = %u\n", v, (mascara >> (v - 1)) & 1);
+}
+// x1 = 0
+// x2 = 1
+// x3 = 0
+// x4 = 1
+```
 
 > [!WARNING]
 > **NP não quer dizer "não polinomial"**, e sim *polinomial não
@@ -1815,25 +2017,63 @@ Equivalentes em 32 de 32 atribuições dos x
 
 ### Conceito
 
-- **Redução polinomial** (A ≤p B): algoritmo polinomial que transforma toda
-  instância de A numa de B com **a mesma resposta**. A não é mais difícil que
-  B (CORMEN et al., 2024, cap. 34).
-- **Dois usos**: resolver A com um programa de B; ou provar dificuldade: se A
-  é NP-difícil e A ≤p B, B também é (LINTZMAYER; MOTA, 2023).
-- **Conjunto independente**: vértices sem nenhuma aresta entre eles.
-  **Clique**: vértices com todas as arestas entre eles. **Cobertura de
-  vértices**: vértices que tocam toda aresta. Os três são NP-completos na
-  versão "existe um de tamanho k?" (KARP, 1972).
-- **Complemento** de G: tem aresta entre os pares que G não liga. S é
-  independente em G se e só se S é clique no complemento, e se e só se
-  **V − S** é cobertura de G. Montar o complemento custa O(V²)
-  (CORMEN et al., 2024, cap. 34).
-- **Do 3-SAT à clique**: cada cláusula vira um grupo de vértices, um por
-  literal; ligue vértices de cláusulas diferentes que não se contradizem. Uma
-  clique com um vértice por cláusula dá uma atribuição que satisfaz a fórmula
-  (CORMEN et al., 2024, cap. 34).
-- **Máscaras**: o complemento de um conjunto é `todos & ~comissao`, com
-  `todos = (1 << V) - 1`; o do grafo é `paz[a][b] = a != b && !briga[a][b]`.
+A síndica quer montar a maior comissão possível no condomínio sem nenhum par
+de moradores que já brigou. O sobrinho dela tem um programa que acha o maior
+grupo de amigos numa rede social, um grupo em que todo mundo conhece todo
+mundo. Os dois problemas parecem diferentes, mas o programa do sobrinho serve
+para a síndica, desde que ela **traduza** a pergunta dela para a linguagem
+dele. Essa tradução se chama **redução**, e ela é a ferramenta que separa os
+problemas fáceis dos difíceis.
+
+Uma **redução polinomial** de um problema A para um problema B, escrita
+**A ≤p B**, é um algoritmo de tempo polinomial que transforma qualquer
+instância de A numa instância de B com **a mesma resposta**: se a de A é
+"sim", a de B também é, e vice-versa. Com ela, quem sabe resolver B resolve A:
+traduz a entrada, roda o programa de B e devolve a resposta. Por isso A ≤p B
+quer dizer que A **não é mais difícil** que B (CORMEN et al., 2024, cap. 34).
+
+A redução tem dois usos, em sentidos opostos. O primeiro é prático:
+**resolver** A quando você já tem um programa para B, como a síndica com o
+programa do sobrinho. O segundo é teórico: **provar dificuldade**. Se A é
+NP-difícil e A ≤p B, então B também é NP-difícil, porque um algoritmo rápido
+para B daria, pela tradução, um algoritmo rápido para A (LINTZMAYER; MOTA,
+2023). É assim que a lista de problemas NP-completos cresceu desde o SAT: cada
+novo membro entra por uma redução a partir de um já conhecido.
+
+Três problemas de grafo aparecem juntos o tempo todo. Um **conjunto
+independente** é um conjunto de vértices sem nenhuma aresta entre eles: a
+comissão sem brigas, se cada briga for uma aresta. Uma **clique** é o oposto,
+um conjunto de vértices com todas as arestas possíveis entre eles: o grupo de
+amigos. Uma **cobertura de vértices** é um conjunto de vértices que toca toda
+aresta, isto é, toda aresta tem pelo menos uma ponta no conjunto. Na versão de
+decisão ("existe um de tamanho k?"), os três são NP-completos (KARP, 1972).
+
+A ponte entre eles é o **complemento** de um grafo G: um grafo com os mesmos
+vértices e com aresta exatamente entre os pares que G **não** liga. No
+condomínio, G é o grafo das brigas, e o complemento é o grafo da paz. Um
+conjunto S sem nenhuma briga dentro dele é um conjunto em que todo par está
+em paz. Logo, S é independente em G se e só se S é uma clique no
+complemento. Montar o complemento é percorrer os V² pares da matriz de
+adjacência: custo O(V²), polinomial (CORMEN et al., 2024, cap. 34). Em C,
+com a matriz `briga`, a linha que monta o complemento é `paz[a][b] = a != b
+&& !briga[a][b]`.
+
+A cobertura entra pelo mesmo raciocínio. Se S é independente em G, nenhuma
+aresta tem as duas pontas em S, então toda aresta tem pelo menos uma ponta
+fora de S, em **V − S**. Logo V − S é uma cobertura de G, e a volta também
+vale. Juntando: existe independente de tamanho k em G se e só se existe clique
+de tamanho k no complemento, se e só se existe cobertura de tamanho V − k em
+G. Com conjuntos guardados como máscaras de bits, o complemento de um conjunto
+é `todos & ~comissao`, com `todos = (1 << V) - 1`.
+
+Uma redução mais engenhosa leva do 3-SAT (0186) à clique. Cada cláusula da
+fórmula vira um grupo de vértices, um vértice por literal. Ligue dois
+vértices quando estão em cláusulas **diferentes** e não se contradizem, isto
+é, um não é `x` enquanto o outro é `não x`. Uma clique com um vértice de cada
+cláusula escolhe, em cada cláusula, um literal que pode ser verdadeiro sem
+conflito com os outros escolhidos. Tornar verdadeiros esses literais satisfaz
+a fórmula; e uma atribuição que satisfaz a fórmula dá essa clique. Como o
+3-SAT é NP-completo, a clique também é (CORMEN et al., 2024, cap. 34).
 
 > [!WARNING]
 > A pegadinha é o sentido. Para provar que X é difícil, reduza um difícil
@@ -2157,25 +2397,62 @@ Completo K4: 12 variáveis, 34 cláusulas
 
 ### Conceito
 
-- **Algoritmo de aproximação**: polinomial, com custo no máximo **ρ vezes o
-  ótimo** (minimização) em **qualquer** entrada. O ρ é o **fator de
-  aproximação**; a prova compara com um limite inferior do ótimo
-  (CORMEN et al., 2024, cap. 35).
-- **Bin packing**: guardar itens no menor número de caixas de capacidade C.
-  NP-difícil; o limite inferior é `soma / C` arredondado para cima
-  (KLEINBERG; TARDOS, 2006, cap. 11).
-- **First fit** (FF): cada item vai para a primeira caixa em que cabe, ou abre
-  outra. Nunca sobram duas caixas com metade ou menos: no máximo 2 × ótimo
-  (cerca de 1,7 × na análise fina) (KLEINBERG; TARDOS, 2006, cap. 11).
-- **First fit decrescente** (FFD): ordena do maior para o menor e faz o mesmo;
-  garantia de cerca de 11/9 × ótimo, mais uma constante.
-- **Cobertura de vértices 2-aproximada**: enquanto houver aresta descoberta
-  u-v, ponha **as duas pontas**. As arestas escolhidas não têm ponta em comum
-  e o ótimo precisa de uma de cada (CORMEN et al., 2024, cap. 35).
-- **Caixeiro viajante métrico**: com a **desigualdade triangular**, monte a
-  árvore geradora mínima (Prim, 0153), percorra em pré-ordem e volte ao
-  começo: no máximo 2 × ótimo. Sem a desigualdade, nenhum fator constante é
-  possível, salvo se P = NP (CORMEN et al., 2024, cap. 35).
+O 0186 deixou uma notícia ruim: para os problemas NP-difíceis, ninguém
+conhece algoritmo que ache a resposta ótima em tempo polinomial. Só que o
+problema continua lá, todo dia. O dono do barco de Manaus a Parintins precisa
+decidir hoje como distribuir as cargas pelas viagens, e não pode esperar a
+força bruta testar todas as combinações. Ele aceita uma resposta um pouco
+pior que a melhor, desde que saia rápido e venha com uma **garantia** de
+quanto pior ela pode ser.
+
+Essa é a ideia do **algoritmo de aproximação**: um algoritmo de tempo
+polinomial que, num problema de minimização, devolve uma solução de custo no
+máximo **ρ vezes o ótimo**, em **qualquer** entrada. O número ρ é o **fator
+de aproximação**. Um algoritmo 2-aproximado nunca gasta mais que o dobro do
+ótimo, por pior que seja a entrada (CORMEN et al., 2024, cap. 35). Repare no
+truque da prova: o algoritmo não conhece o ótimo, então a análise compara a
+solução dele com um **limite inferior** do ótimo, um valor que nenhuma solução
+consegue ficar abaixo.
+
+O problema do barco é o **bin packing** (empacotamento em caixas): guardar
+itens de tamanhos dados no menor número de caixas de capacidade C. É
+NP-difícil. O limite inferior sai de uma conta simples: a soma dos tamanhos
+dividida por C, arredondada para cima. Se as cargas somam 45 toneladas e o
+barco leva 10, nenhuma solução faz menos que 5 viagens (KLEINBERG; TARDOS,
+2006, cap. 11).
+
+O guloso mais simples é o **first fit** (FF, primeira que cabe): cada item,
+na ordem em que chega, vai para a primeira caixa aberta em que ele cabe; se
+não cabe em nenhuma, abre uma caixa nova. A garantia vem de uma observação:
+no fim, nunca sobram duas caixas ocupadas até a metade ou menos, porque o
+conteúdo da segunda teria cabido na primeira. Então quase todas as caixas
+estão mais que meio cheias, e o FF usa no máximo o dobro do ótimo. Uma
+análise mais fina baixa esse fator para cerca de 1,7 (KLEINBERG; TARDOS, 2006,
+cap. 11).
+
+O **first fit decrescente** (FFD) ordena os itens do maior para o menor antes
+de aplicar o mesmo guloso. Os itens grandes, que são os difíceis de encaixar,
+entram primeiro, e os pequenos preenchem as sobras. A garantia melhora para
+cerca de 11/9 do ótimo, mais uma constante pequena.
+
+A **cobertura de vértices** do 0187 tem um 2-aproximado curto: enquanto houver
+uma aresta `u-v` sem nenhuma ponta na cobertura, ponha **as duas pontas**
+nela. O porquê do fator 2: as arestas que o algoritmo escolhe não têm ponta em
+comum, já que, depois de escolher `u-v`, toda aresta que toca `u` ou `v` fica
+coberta. Qualquer cobertura, inclusive a ótima, precisa de pelo menos uma
+ponta de cada uma dessas arestas. O algoritmo pega duas por aresta, então
+usa no máximo o dobro (CORMEN et al., 2024, cap. 35).
+
+O **caixeiro viajante** pede o ciclo mais curto que passa por todas as
+cidades. Na versão **métrica**, as distâncias obedecem à **desigualdade
+triangular**: ir direto de A a C nunca é mais longo que passar por B. Com
+essa hipótese existe um 2-aproximado: monte a árvore geradora mínima (Prim,
+0153), percorra-a em pré-ordem e volte ao começo. A árvore custa menos que o
+ciclo ótimo, porque tirar uma aresta do ciclo deixa uma árvore. Contornar a
+árvore passa duas vezes por cada aresta, o dobro do custo dela, e pular as
+cidades repetidas só encurta, pela desigualdade triangular. Sem essa
+desigualdade, nenhum fator constante é possível, a menos que P = NP (CORMEN
+et al., 2024, cap. 35).
 
 > [!WARNING]
 > "Aproximado" não é "chute": o fator vale para **toda** entrada e vem com
@@ -2510,17 +2787,44 @@ Garantia: rota <= 2 x árvore = 42
 
 ### Conceito
 
-- **Caixeiro viajante** (TSP): o **ciclo hamiltoniano** de custo mínimo
-  (0183). A versão de decisão ("existe volta de no máximo L?") é NP-completa
-  por redução do ciclo hamiltoniano: arestas do grafo custam 1, as que faltam
-  custam 2 (CORMEN et al., 2024, cap. 34).
-- **Métrico**: com desigualdade triangular, a árvore mínima dá uma
-  2-aproximação (0188) (CORMEN et al., 2024, cap. 35).
-- **Força bruta**: fixe o ponto de partida e teste as (n − 1)! ordens; 87
-  bilhões com 15 pontos.
-- **Held-Karp**: programação dinâmica sobre subconjuntos. `dp[S][j]` é o menor
-  caminho que sai da origem, passa exatamente pelos pontos de S e termina em
-  j. Só importam o conjunto e o último ponto, não a ordem (HELD; KARP, 1962):
+O entregador da farmácia recebe sete endereços e quer a volta mais curta,
+saindo da farmácia e voltando a ela. No pico da tarde, os endereços passam de
+quarenta. Esse é o **problema do caixeiro viajante** (TSP, da sigla em
+inglês), e ele reúne quase tudo o que o módulo apresentou: é um problema de
+ciclo, é NP-difícil, tem solução aproximada com garantia e tem solução exata
+por programação dinâmica.
+
+Em termos de grafo, as cidades são vértices, toda dupla de cidades tem uma
+aresta com um custo, e o TSP pede o **ciclo hamiltoniano** (0183) de custo
+total mínimo. A versão de decisão pergunta se existe uma volta de custo no
+máximo L, e ela é NP-completa (CORMEN et al., 2024, cap. 34). A prova é uma
+redução (0187) a partir do próprio ciclo hamiltoniano. Dado um grafo G com V
+vértices, monte um TSP nas mesmas cidades: as arestas que existem em G custam
+1, e as que faltam custam 2. Uma volta de custo V só usa arestas de custo 1,
+que são justamente as arestas de G, e por isso é um ciclo hamiltoniano de G.
+Assim, G tem ciclo hamiltoniano se e só se o TSP tem volta de custo no máximo
+V.
+
+Quando as distâncias são **métricas**, isto é, obedecem à desigualdade
+triangular (ir direto nunca é mais longo que dar a volta), vale o
+2-aproximado do 0188: árvore geradora mínima, percurso em pré-ordem e volta
+ao começo, com custo no máximo o dobro do ótimo (CORMEN et al., 2024, cap.
+35). Distância em quarteirões, |dx| + |dy|, é métrica.
+
+Para a resposta exata, o primeiro jeito é a força bruta. Como a volta é um
+ciclo, fixe a farmácia como ponto de partida e teste as (n − 1)! ordens dos
+outros pontos. Com 7 clientes são 5040 rotas, o que passa num piscar; com 15
+pontos são 87 bilhões, e a força bruta já não serve.
+
+O **algoritmo de Held-Karp** faz programação dinâmica sobre subconjuntos,
+como a cadeia de matrizes (0185) fazia sobre intervalos. A observação central
+é que, para continuar uma rota parcial da melhor forma, só importam duas
+coisas: **quais** pontos já foram visitados e **em qual** deles a rota está
+agora. A ordem em que os visitados foram percorridos não muda o que vem
+depois. Então `dp[S][j]` guarda o menor custo de um caminho que sai da
+farmácia (o ponto 0), passa exatamente pelos pontos do conjunto S e termina
+em `j`, que pertence a S (HELD; KARP, 1962). A recorrência estende o caminho
+um ponto por vez:
 
 ```text
 dp[{0}][0] = 0
@@ -2528,14 +2832,12 @@ dp[S ∪ {k}][k] = min sobre j em S:  dp[S][j] + d[j][k]
 resposta = min sobre j:  dp[todos][j] + d[j][0]
 ```
 
-- **Custo do Held-Karp**: 2ⁿ conjuntos × n finais × n extensões, **O(n² ·
-  2ⁿ)** de tempo e **O(n · 2ⁿ)** de memória, bem menos que n!
-  (HELD; KARP, 1962).
-- **Quando usar cada um**: até uns 20 pontos, Held-Karp resolve em segundos
-  (o limite é a memória); acima, aproximação com melhoria local, como o
-  2-opt.
-- **Bits sem parênteses**: `s >> j & 1` e `s | 1 << k` funcionam porque `>>`
-  e `<<` vêm antes de `&` e `|` (0170).
+A segunda linha diz: para chegar a `k` tendo visitado S e mais `k`, o melhor
+é vir de algum `j` de S, pelo melhor caminho até `j`, mais a distância de `j`
+a `k`. A terceira fecha o ciclo voltando à farmácia. Há 2ⁿ conjuntos, n
+pontos finais para cada um e n extensões possíveis: **O(n² · 2ⁿ)** de tempo e
+**O(n · 2ⁿ)** de memória (HELD; KARP, 1962). Continua exponencial, mas bem
+menos que n!. A tabela compara o número de passos:
 
 | n | (n − 1)! rotas | n² · 2ⁿ (Held-Karp) | n² (aproximado) |
 | --- | --- | --- | --- |
@@ -2543,6 +2845,16 @@ resposta = min sobre j:  dp[todos][j] + d[j][0]
 | 15 | 8,7 · 10¹⁰ | 7,4 · 10⁶ | 225 |
 | 20 | 1,2 · 10¹⁷ | 4,2 · 10⁸ | 400 |
 | 30 | 8,8 · 10³⁰ | 9,7 · 10¹¹ | 900 |
+
+Na prática, até uns 20 pontos o Held-Karp resolve em segundos, e o limite é a
+memória da tabela. Acima disso, o caminho é o aproximado, de preferência
+seguido de uma melhoria local como o **2-opt**, que troca duas arestas da rota
+quando a troca a encurta e repete enquanto houver ganho.
+
+Em C, o conjunto S é uma máscara de bits, como no 0186: o bit `j` ligado quer
+dizer que o ponto `j` está em S. As expressões `s >> j & 1` (o ponto `j` está
+em S?) e `s | 1 << k` (S com `k` acrescentado) funcionam sem parênteses porque
+os deslocamentos `>>` e `<<` têm precedência maior que `&` e `|` (0170).
 
 > [!WARNING]
 > A garantia de 2 × ótimo só vale com a **desigualdade triangular**; com

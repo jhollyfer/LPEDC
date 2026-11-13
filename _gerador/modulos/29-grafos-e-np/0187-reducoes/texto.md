@@ -1,24 +1,62 @@
 ## 0187 · Reduções
 
-- **Redução polinomial** (A ≤p B): algoritmo polinomial que transforma toda
-  instância de A numa de B com **a mesma resposta**. A não é mais difícil que
-  B (CORMEN et al., 2024, cap. 34).
-- **Dois usos**: resolver A com um programa de B; ou provar dificuldade: se A
-  é NP-difícil e A ≤p B, B também é (LINTZMAYER; MOTA, 2023).
-- **Conjunto independente**: vértices sem nenhuma aresta entre eles.
-  **Clique**: vértices com todas as arestas entre eles. **Cobertura de
-  vértices**: vértices que tocam toda aresta. Os três são NP-completos na
-  versão "existe um de tamanho k?" (KARP, 1972).
-- **Complemento** de G: tem aresta entre os pares que G não liga. S é
-  independente em G se e só se S é clique no complemento, e se e só se
-  **V − S** é cobertura de G. Montar o complemento custa O(V²)
-  (CORMEN et al., 2024, cap. 34).
-- **Do 3-SAT à clique**: cada cláusula vira um grupo de vértices, um por
-  literal; ligue vértices de cláusulas diferentes que não se contradizem. Uma
-  clique com um vértice por cláusula dá uma atribuição que satisfaz a fórmula
-  (CORMEN et al., 2024, cap. 34).
-- **Máscaras**: o complemento de um conjunto é `todos & ~comissao`, com
-  `todos = (1 << V) - 1`; o do grafo é `paz[a][b] = a != b && !briga[a][b]`.
+A síndica quer montar a maior comissão possível no condomínio sem nenhum par
+de moradores que já brigou. O sobrinho dela tem um programa que acha o maior
+grupo de amigos numa rede social, um grupo em que todo mundo conhece todo
+mundo. Os dois problemas parecem diferentes, mas o programa do sobrinho serve
+para a síndica, desde que ela **traduza** a pergunta dela para a linguagem
+dele. Essa tradução se chama **redução**, e ela é a ferramenta que separa os
+problemas fáceis dos difíceis.
+
+Uma **redução polinomial** de um problema A para um problema B, escrita
+**A ≤p B**, é um algoritmo de tempo polinomial que transforma qualquer
+instância de A numa instância de B com **a mesma resposta**: se a de A é
+"sim", a de B também é, e vice-versa. Com ela, quem sabe resolver B resolve A:
+traduz a entrada, roda o programa de B e devolve a resposta. Por isso A ≤p B
+quer dizer que A **não é mais difícil** que B (CORMEN et al., 2024, cap. 34).
+
+A redução tem dois usos, em sentidos opostos. O primeiro é prático:
+**resolver** A quando você já tem um programa para B, como a síndica com o
+programa do sobrinho. O segundo é teórico: **provar dificuldade**. Se A é
+NP-difícil e A ≤p B, então B também é NP-difícil, porque um algoritmo rápido
+para B daria, pela tradução, um algoritmo rápido para A (LINTZMAYER; MOTA,
+2023). É assim que a lista de problemas NP-completos cresceu desde o SAT: cada
+novo membro entra por uma redução a partir de um já conhecido.
+
+Três problemas de grafo aparecem juntos o tempo todo. Um **conjunto
+independente** é um conjunto de vértices sem nenhuma aresta entre eles: a
+comissão sem brigas, se cada briga for uma aresta. Uma **clique** é o oposto,
+um conjunto de vértices com todas as arestas possíveis entre eles: o grupo de
+amigos. Uma **cobertura de vértices** é um conjunto de vértices que toca toda
+aresta, isto é, toda aresta tem pelo menos uma ponta no conjunto. Na versão de
+decisão ("existe um de tamanho k?"), os três são NP-completos (KARP, 1972).
+
+A ponte entre eles é o **complemento** de um grafo G: um grafo com os mesmos
+vértices e com aresta exatamente entre os pares que G **não** liga. No
+condomínio, G é o grafo das brigas, e o complemento é o grafo da paz. Um
+conjunto S sem nenhuma briga dentro dele é um conjunto em que todo par está
+em paz. Logo, S é independente em G se e só se S é uma clique no
+complemento. Montar o complemento é percorrer os V² pares da matriz de
+adjacência: custo O(V²), polinomial (CORMEN et al., 2024, cap. 34). Em C,
+com a matriz `briga`, a linha que monta o complemento é `paz[a][b] = a != b
+&& !briga[a][b]`.
+
+A cobertura entra pelo mesmo raciocínio. Se S é independente em G, nenhuma
+aresta tem as duas pontas em S, então toda aresta tem pelo menos uma ponta
+fora de S, em **V − S**. Logo V − S é uma cobertura de G, e a volta também
+vale. Juntando: existe independente de tamanho k em G se e só se existe clique
+de tamanho k no complemento, se e só se existe cobertura de tamanho V − k em
+G. Com conjuntos guardados como máscaras de bits, o complemento de um conjunto
+é `todos & ~comissao`, com `todos = (1 << V) - 1`.
+
+Uma redução mais engenhosa leva do 3-SAT (0186) à clique. Cada cláusula da
+fórmula vira um grupo de vértices, um vértice por literal. Ligue dois
+vértices quando estão em cláusulas **diferentes** e não se contradizem, isto
+é, um não é `x` enquanto o outro é `não x`. Uma clique com um vértice de cada
+cláusula escolhe, em cada cláusula, um literal que pode ser verdadeiro sem
+conflito com os outros escolhidos. Tornar verdadeiros esses literais satisfaz
+a fórmula; e uma atribuição que satisfaz a fórmula dá essa clique. Como o
+3-SAT é NP-completo, a clique também é (CORMEN et al., 2024, cap. 34).
 
 > [!WARNING]
 > A pegadinha é o sentido. Para provar que X é difícil, reduza um difícil

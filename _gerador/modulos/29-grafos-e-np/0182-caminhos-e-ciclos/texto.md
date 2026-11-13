@@ -1,22 +1,41 @@
 ## 0182 · Caminhos e ciclos
 
-- **Grau**: quantas arestas tocam o vértice (um laço conta 2). No dirigido, há
-  grau de entrada e de saída (CORMEN et al., 2024, apêndice B).
-- **Lema do aperto de mãos**: cada aresta conta duas vezes, então a soma dos
-  graus é **2 × E** e o número de vértices de grau ímpar é par
-  (CORMEN et al., 2024, apêndice B).
-- **Passeio, trajeto, caminho, circuito, ciclo**: os nomes mudam conforme o
-  que pode se repetir (tabela). O **comprimento** é o número de arestas. Aqui
-  vale a coluna do edital (SZWARCFITER, 2018).
-- **Circuito euleriano**: usa **toda aresta exatamente uma vez**. Num grafo
-  conexo, existe se e só se todos os graus são pares; trajeto aberto, se e só
-  se há exatamente dois ímpares, que são as pontas (LINTZMAYER; MOTA, 2023).
-- **Por que pares**: cada vez que o percurso entra numa esquina, sai por outra
-  rua; só a saída e a chegada escapam. No dirigido: entrada = saída em todo
-  vértice (CORMEN et al., 2024, cap. 20).
-- **Hierholzer**: anda por arestas não usadas, apagando-as, até travar; volta
-  pela pilha até um vértice com aresta sobrando e encaixa o desvio. O(V + E)
-  com lista, O(V²) com matriz (HIERHOLZER; WIENER, 1873).
+O caminhão da coleta de lixo precisa passar por todas as ruas do bairro e
+voltar à garagem. Passar duas vezes pela mesma rua é gasolina jogada fora.
+Existe um roteiro que usa cada rua exatamente uma vez? Euler respondeu a essa
+pergunta em 1736, a propósito das pontes de Königsberg, e a resposta é uma
+conta simples com os graus dos vértices. Antes dela, você precisa do
+vocabulário que a prova usa para falar de percursos num grafo.
+
+O **grau** de um vértice é o número de arestas que tocam nele. Um laço, a
+aresta que sai e volta ao mesmo vértice, conta 2, porque toca o vértice nas
+duas pontas. Num grafo dirigido (0109) há dois graus: o **grau de entrada**,
+quantas arestas chegam, e o **grau de saída**, quantas partem (CORMEN et al.,
+2024, apêndice B).
+
+Somando os graus de todos os vértices, cada aresta entra na conta duas vezes,
+uma em cada ponta. Por isso a soma dos graus é sempre **2 × E**, com E o
+número de arestas. Esse fato tem nome, **lema do aperto de mãos**: numa
+festa, se você soma quantas mãos cada pessoa apertou, cada aperto aparece
+duas vezes. Uma consequência cai muito em prova: como a soma é par, o número
+de vértices de grau ímpar também é par. Num dirigido, a soma dos graus de
+entrada é E, e a dos graus de saída também (CORMEN et al., 2024, apêndice B).
+
+Agora o vocabulário dos percursos. Andar pelo grafo é seguir uma sequência de
+vértices em que cada um está ligado ao seguinte por uma aresta. O
+**comprimento** do percurso é o número de arestas usadas. O nome do percurso
+muda conforme o que pode se repetir. Se vértices e arestas podem repetir, é
+um **passeio**. Se vértices podem repetir mas nenhuma aresta se repete, é um
+**trajeto**. Se nada se repete, é um **caminho**. Os fechados, que terminam
+onde começaram, seguem a mesma lógica: sem aresta repetida é um **circuito**;
+sem vértice repetido (fora o primeiro, que é também o último) é um **ciclo**
+(SZWARCFITER, 2018).
+
+O Cormen usa outros nomes: para ele, "caminho" é qualquer passeio, e o que
+não repete vértice é um "caminho simples"; "ciclo" é qualquer passeio fechado
+com pelo menos uma aresta, e "ciclo simples" proíbe repetir vértice. Neste
+módulo vale a coluna do edital, que é a da teoria dos grafos. A tabela põe os
+nomes lado a lado:
 
 | O que pode repetir | Cormen | Edital e teoria dos grafos | Também chamado |
 | --- | --- | --- | --- |
@@ -25,6 +44,29 @@
 | nada | caminho simples | **caminho** | (*path*) |
 | fechado, nenhuma aresta repetida | (sem nome) | **circuito** | trilha fechada |
 | fechado, nenhum vértice repetido | ciclo simples | **ciclo** | |
+
+Com isso dá para formular a pergunta do caminhão. Um **circuito euleriano** é
+um circuito que usa toda aresta do grafo exatamente uma vez. O teorema de
+Euler diz que, num grafo conexo (ignorando vértices isolados), existe
+circuito euleriano se e só se todos os vértices têm grau par. E existe um
+**trajeto euleriano** aberto se e só se há exatamente dois vértices de grau
+ímpar; nesse caso ele começa num deles e termina no outro (LINTZMAYER; MOTA,
+2023).
+
+O porquê cabe numa frase. Cada vez que o caminhão chega a uma esquina, sai
+dela por outra rua, então as ruas de cada esquina se gastam aos pares. Só a
+esquina de partida e a de chegada escapam dessa regra, e num circuito as duas
+são a mesma. Num grafo dirigido a condição muda para "grau de entrada igual
+ao grau de saída em todo vértice" (CORMEN et al., 2024, cap. 20).
+
+Saber que o circuito existe não diz qual é. O **algoritmo de Hierholzer** o
+monta. Ele parte de um vértice e anda por arestas ainda não usadas, apagando
+cada uma ao passar, até travar; com todos os graus pares, ele só trava de
+volta ao ponto de partida. Se sobraram arestas, ele volta pela pilha de
+vértices visitados até um que ainda tenha aresta livre, faz dali um novo
+passeio fechado e o **encaixa** no circuito naquele ponto. Com lista de
+adjacência, o custo é O(V + E); com matriz, procurar o próximo vizinho custa
+O(V) por vez e o total vai a O(V²) (HIERHOLZER; WIENER, 1873).
 
 > [!WARNING]
 > "Todos os graus pares" só garante o circuito se o grafo for **conexo**: dois

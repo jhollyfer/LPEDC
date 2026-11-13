@@ -1,27 +1,66 @@
 ## 0185 · Cadeia de matrizes
 
-- **Custo de um produto**: uma `p × q` vezes uma `q × r` dá uma `p × r`, e
-  cada uma das `p · r` casas soma `q` produtos: **p · q · r** multiplicações
-  (CORMEN et al., 2024, cap. 14).
-- **Associatividade**: `(A B) C = A (B C)`; os parênteses mudam só o
-  trabalho. Quatro matrizes têm 5 parentizações; 20 têm mais de 1,7 bilhão
-  (números de Catalan) (CORMEN et al., 2024, cap. 14).
-- **Subestrutura ótima**: a última multiplicação corta a cadeia em algum `k`,
-  e cada metade também está na melhor ordem. Com `Ai` de tamanho
-  `p[i-1] × p[i]` (FEOFILOFF, s.d., *Análise de algoritmos*):
+Uma rede de farmácias multiplica quatro tabelas de dados em sequência: uma 10
+× 30, uma 30 × 5, uma 5 × 60 e uma 60 × 10. O resultado final é uma matriz 10
+× 10 em qualquer ordem de cálculo, mas numa ordem o servidor faz 5 mil
+multiplicações e noutra, 33 mil. O problema da **multiplicação de cadeia de
+matrizes** é achar a ordem mais barata, e ele é o exemplo clássico de
+programação dinâmica do Cormen (CORMEN et al., 2024, cap. 14).
+
+Primeiro, o preço de um produto. Uma matriz `p × q` (p linhas, q colunas)
+vezes uma `q × r` dá uma matriz `p × r`. Cada uma das `p · r` casas do
+resultado é a soma de `q` produtos, uma linha da primeira vezes uma coluna da
+segunda. O total é **p · q · r** multiplicações escalares (CORMEN et al., 2024,
+cap. 14). Na rede de farmácias, a 10 × 30 vezes a 30 × 5 custa 10 · 30 · 5 =
+1500.
+
+A multiplicação de matrizes é **associativa**: `(A B) C` dá o mesmo resultado
+que `A (B C)`. Os parênteses não mudam a resposta, só o trabalho. Cada jeito
+de pôr os parênteses numa cadeia se chama uma **parentização**, e o número
+delas cresce depressa: 4 matrizes têm 5 parentizações; 10 têm 4862; 20 têm
+mais de 1,7 bilhão. Esses números são os **números de Catalan**, que crescem
+exponencialmente (CORMEN et al., 2024, cap. 14). Testar todas é inviável
+já para cadeias médias.
+
+A saída é olhar para a última multiplicação feita. Em qualquer parentização,
+o último passo junta duas metades: `(A1 ... Ak)` vezes `(Ak+1 ... An)`, para
+algum ponto de corte `k`. Se a parentização inteira é a melhor, cada metade
+também tem de estar na melhor ordem; senão, trocar a ordem dessa metade
+baratearia o todo. Essa propriedade se chama **subestrutura ótima**: a
+solução ótima é feita de soluções ótimas de pedaços menores. Escrevendo
+`m[i][j]` para o menor custo de multiplicar `Ai` até `Aj`, e lembrando que
+`Ai` tem tamanho `p[i-1] × p[i]`, sai a recorrência (FEOFILOFF, s.d.,
+*Análise de algoritmos*):
 
 ```text
 m[i][i] = 0
 m[i][j] = min sobre k de i até j-1:  m[i][k] + m[k+1][j] + p[i-1] · p[k] · p[j]
 ```
 
-- **Tabela `s`**: `s[i][j]` guarda o `k` vencedor, para remontar os
-  parênteses (CORMEN et al., 2024, cap. 14).
-- **Ordem de preencher**: `m[i][j]` depende de cadeias menores, então o laço
-  externo é o **tamanho** da cadeia; a tabela enche diagonal por diagonal.
-  **O(n³)** de tempo e O(n²) de espaço (CORMEN et al., 2024, cap. 14).
-- **Estouro**: o `(long)` antes de `p[i - 1] * p[k] * p[j]` evita que o
-  produto de três `int` estoure.
+Leia o termo da direita com calma. `m[i][k]` é o custo de montar a metade da
+esquerda, que vira uma `p[i-1] × p[k]`. `m[k+1][j]` é o da direita, que vira
+uma `p[k] × p[j]`. E `p[i-1] · p[k] · p[j]` é o preço de multiplicar as duas.
+Uma matriz sozinha não custa nada, por isso `m[i][i] = 0`. A cadeia de n
+matrizes precisa de n + 1 números em `p`, porque matrizes vizinhas
+compartilham uma dimensão.
+
+O valor mínimo não basta: você quer saber onde pôr os parênteses. Uma segunda
+tabela, `s[i][j]`, guarda o `k` que venceu o mínimo. Para remontar a
+resposta, você olha `s[1][n]`, divide a cadeia ali e repete em cada metade
+(CORMEN et al., 2024, cap. 14).
+
+A ordem de preencher a tabela importa. `m[i][j]` usa `m[i][k]` e `m[k+1][j]`,
+que são cadeias **menores**. Então o laço de fora percorre o **tamanho** da
+cadeia (2, 3, ..., n), e os de dentro percorrem o início `i` e o corte `k`. A
+tabela enche diagonal por diagonal: primeiro os pares, depois os trios, até
+a casa do canto, `m[1][n]`, que é a resposta. São O(n²) casas, cada uma com
+até n cortes testados: **O(n³)** de tempo e O(n²) de espaço, contra o
+exponencial de testar todas as parentizações (CORMEN et al., 2024, cap. 14).
+
+Um detalhe de C: as dimensões cabem num `int`, mas o produto de três delas
+pode não caber. Por isso o código converte para `long` antes de multiplicar,
+`(long)p[i - 1] * p[k] * p[j]`; converter só o resultado chega tarde, depois
+do estouro.
 
 > [!WARNING]
 > Preencher linha por linha calcula `m[1][3]` antes de `m[2][3]` existir e usa

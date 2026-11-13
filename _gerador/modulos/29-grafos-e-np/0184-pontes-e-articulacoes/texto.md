@@ -1,19 +1,58 @@
 ## 0184 · Pontes e articulações
 
-- **Ponte** (aresta de corte): aresta cuja remoção aumenta o número de
-  componentes conexos (0150) (SZWARCFITER, 2018).
-- **Vértice de articulação** (ponto de corte): vértice cuja remoção, com suas
-  arestas, aumenta o número de componentes (SZWARCFITER, 2018).
-- **Uma DFS só**: tirar cada aresta e rodar uma DFS custa O(E · (V + E)); a
-  DFS com dois números por vértice resolve em O(V + E) (TARJAN, 1972).
-- **tin[u]**: o tempo de descoberta de `u`. **low[u]**: o menor `tin` que a
-  subárvore de `u` alcança descendo pela árvore e usando **uma** aresta de
-  volta (FEOFILOFF, s.d., *Algoritmos para grafos*).
-- **Só dois tipos de aresta**: na DFS não dirigida há arestas da árvore e de
-  volta (a um ancestral); nenhuma cruza para o lado (CORMEN et al., 2024, cap. 20).
-- **As regras**, para `u - v` da árvore: **ponte** se `low[v] > tin[u]`;
-  **articulação** se `low[v] >= tin[u]` e `u` não é a raiz; a **raiz** é
-  articulação só com dois ou mais filhos na DFS (TARJAN, 1972).
+Uma operadora liga sete bairros com cabos de fibra. Duas perguntas tiram o
+sono do engenheiro: se um cabo for cortado, algum bairro fica sem sinal? E se
+a central de um bairro pegar fogo, os outros continuam se falando? Essas são
+as duas perguntas de **conectividade** do edital, e as duas têm resposta com
+uma única busca em profundidade.
+
+Lembre que um grafo não dirigido se divide em **componentes conexos**, os
+pedaços dentro dos quais todo vértice alcança todo outro (0150). Uma **ponte**,
+também chamada aresta de corte, é uma aresta cuja remoção aumenta o número de
+componentes: sem ela, o grafo se parte. Um **vértice de articulação**, também
+chamado ponto de corte, é um vértice cuja remoção, junto com as arestas que
+tocam nele, aumenta o número de componentes (SZWARCFITER, 2018). Na rede da
+operadora, a ponte é o cabo que, cortado, isola um bairro; a articulação é a
+central que, fora do ar, separa a rede em dois.
+
+O jeito ingênuo de achar as pontes é tirar uma aresta de cada vez e rodar uma
+DFS para ver se o grafo continua conexo. São E buscas de custo O(V + E) cada,
+O(E · (V + E)) no total. Tarjan mostrou que basta **uma DFS só**, O(V + E),
+desde que ela anote dois números em cada vértice (TARJAN, 1972).
+
+O primeiro número é **tin[u]**, o tempo de descoberta: a DFS mantém um
+relógio que avança cada vez que ela entra num vértice novo, e `tin[u]` é o
+valor do relógio na entrada de `u`. Quanto menor o `tin`, mais perto da raiz
+da DFS o vértice está no caminho atual. O segundo é **low[u]**: o menor `tin`
+que dá para alcançar a partir de `u` descendo pela árvore da DFS e usando, no
+fim, **uma** aresta de volta para um ancestral (FEOFILOFF, s.d., *Algoritmos
+para grafos*). Ele mede até onde a subárvore de `u` consegue escapar para cima
+sem passar pela aresta que liga `u` ao pai.
+
+O `low` funciona por causa de uma propriedade da DFS em grafo não dirigido:
+toda aresta é ou da **árvore**, quando leva a um vértice ainda não visitado,
+ou de **volta**, quando leva a um ancestral. Não existe aresta que cruze para
+um galho vizinho da árvore, porque a DFS teria seguido por ela antes de
+terminar o primeiro galho (CORMEN et al., 2024, cap. 20). Assim, a única
+forma de uma subárvore se ligar ao resto é pela aresta do pai ou por arestas
+de volta, e o `low` mede exatamente as arestas de volta.
+
+As regras saem disso, olhando uma aresta da árvore `u - v`, com `v` filho de
+`u`, na volta da recursão, quando `low[v]` já está completo (TARJAN, 1972). A
+aresta é **ponte** se `low[v] > tin[u]`: nada abaixo de `v` alcança `u` ou
+algum vértice acima dele, então cortar `u - v` isola a subárvore de `v`. O
+vértice `u` é **articulação** se `low[v] >= tin[u]` e `u` não é a raiz: a
+subárvore de `v` volta no máximo até o próprio `u`, e sem `u` ela fica
+sozinha. A diferença entre `>` e `>=` é a diferença entre cortar um cabo e
+derrubar uma central: se `low[v]` é igual a `tin[u]`, a subárvore tem outro
+cabo até `u`, mas nenhum caminho que desvie de `u`.
+
+A raiz da DFS precisa de uma regra própria. Ela tem o menor `tin` de todos,
+então `low[v] >= tin[u]` vale sempre para os filhos dela, e a regra acima
+marcaria toda raiz como articulação. O critério certo é outro: a raiz é
+articulação **só se tiver dois ou mais filhos** na árvore da DFS. Se tem dois
+filhos, não há aresta entre as subárvores deles (seria de cruzamento), e
+tirar a raiz as separa.
 
 > [!WARNING]
 > Usar `low[v] >= tin[u]` também na raiz sempre dá verdadeiro e a marca como

@@ -1,16 +1,43 @@
 ## 0189 · Juntando tudo
 
-- **Caixeiro viajante** (TSP): o **ciclo hamiltoniano** de custo mínimo
-  (0183). A versão de decisão ("existe volta de no máximo L?") é NP-completa
-  por redução do ciclo hamiltoniano: arestas do grafo custam 1, as que faltam
-  custam 2 (CORMEN et al., 2024, cap. 34).
-- **Métrico**: com desigualdade triangular, a árvore mínima dá uma
-  2-aproximação (0188) (CORMEN et al., 2024, cap. 35).
-- **Força bruta**: fixe o ponto de partida e teste as (n − 1)! ordens; 87
-  bilhões com 15 pontos.
-- **Held-Karp**: programação dinâmica sobre subconjuntos. `dp[S][j]` é o menor
-  caminho que sai da origem, passa exatamente pelos pontos de S e termina em
-  j. Só importam o conjunto e o último ponto, não a ordem (HELD; KARP, 1962):
+O entregador da farmácia recebe sete endereços e quer a volta mais curta,
+saindo da farmácia e voltando a ela. No pico da tarde, os endereços passam de
+quarenta. Esse é o **problema do caixeiro viajante** (TSP, da sigla em
+inglês), e ele reúne quase tudo o que o módulo apresentou: é um problema de
+ciclo, é NP-difícil, tem solução aproximada com garantia e tem solução exata
+por programação dinâmica.
+
+Em termos de grafo, as cidades são vértices, toda dupla de cidades tem uma
+aresta com um custo, e o TSP pede o **ciclo hamiltoniano** (0183) de custo
+total mínimo. A versão de decisão pergunta se existe uma volta de custo no
+máximo L, e ela é NP-completa (CORMEN et al., 2024, cap. 34). A prova é uma
+redução (0187) a partir do próprio ciclo hamiltoniano. Dado um grafo G com V
+vértices, monte um TSP nas mesmas cidades: as arestas que existem em G custam
+1, e as que faltam custam 2. Uma volta de custo V só usa arestas de custo 1,
+que são justamente as arestas de G, e por isso é um ciclo hamiltoniano de G.
+Assim, G tem ciclo hamiltoniano se e só se o TSP tem volta de custo no máximo
+V.
+
+Quando as distâncias são **métricas**, isto é, obedecem à desigualdade
+triangular (ir direto nunca é mais longo que dar a volta), vale o
+2-aproximado do 0188: árvore geradora mínima, percurso em pré-ordem e volta
+ao começo, com custo no máximo o dobro do ótimo (CORMEN et al., 2024, cap.
+35). Distância em quarteirões, |dx| + |dy|, é métrica.
+
+Para a resposta exata, o primeiro jeito é a força bruta. Como a volta é um
+ciclo, fixe a farmácia como ponto de partida e teste as (n − 1)! ordens dos
+outros pontos. Com 7 clientes são 5040 rotas, o que passa num piscar; com 15
+pontos são 87 bilhões, e a força bruta já não serve.
+
+O **algoritmo de Held-Karp** faz programação dinâmica sobre subconjuntos,
+como a cadeia de matrizes (0185) fazia sobre intervalos. A observação central
+é que, para continuar uma rota parcial da melhor forma, só importam duas
+coisas: **quais** pontos já foram visitados e **em qual** deles a rota está
+agora. A ordem em que os visitados foram percorridos não muda o que vem
+depois. Então `dp[S][j]` guarda o menor custo de um caminho que sai da
+farmácia (o ponto 0), passa exatamente pelos pontos do conjunto S e termina
+em `j`, que pertence a S (HELD; KARP, 1962). A recorrência estende o caminho
+um ponto por vez:
 
 ```text
 dp[{0}][0] = 0
@@ -18,14 +45,12 @@ dp[S ∪ {k}][k] = min sobre j em S:  dp[S][j] + d[j][k]
 resposta = min sobre j:  dp[todos][j] + d[j][0]
 ```
 
-- **Custo do Held-Karp**: 2ⁿ conjuntos × n finais × n extensões, **O(n² ·
-  2ⁿ)** de tempo e **O(n · 2ⁿ)** de memória, bem menos que n!
-  (HELD; KARP, 1962).
-- **Quando usar cada um**: até uns 20 pontos, Held-Karp resolve em segundos
-  (o limite é a memória); acima, aproximação com melhoria local, como o
-  2-opt.
-- **Bits sem parênteses**: `s >> j & 1` e `s | 1 << k` funcionam porque `>>`
-  e `<<` vêm antes de `&` e `|` (0170).
+A segunda linha diz: para chegar a `k` tendo visitado S e mais `k`, o melhor
+é vir de algum `j` de S, pelo melhor caminho até `j`, mais a distância de `j`
+a `k`. A terceira fecha o ciclo voltando à farmácia. Há 2ⁿ conjuntos, n
+pontos finais para cada um e n extensões possíveis: **O(n² · 2ⁿ)** de tempo e
+**O(n · 2ⁿ)** de memória (HELD; KARP, 1962). Continua exponencial, mas bem
+menos que n!. A tabela compara o número de passos:
 
 | n | (n − 1)! rotas | n² · 2ⁿ (Held-Karp) | n² (aproximado) |
 | --- | --- | --- | --- |
@@ -33,6 +58,16 @@ resposta = min sobre j:  dp[todos][j] + d[j][0]
 | 15 | 8,7 · 10¹⁰ | 7,4 · 10⁶ | 225 |
 | 20 | 1,2 · 10¹⁷ | 4,2 · 10⁸ | 400 |
 | 30 | 8,8 · 10³⁰ | 9,7 · 10¹¹ | 900 |
+
+Na prática, até uns 20 pontos o Held-Karp resolve em segundos, e o limite é a
+memória da tabela. Acima disso, o caminho é o aproximado, de preferência
+seguido de uma melhoria local como o **2-opt**, que troca duas arestas da rota
+quando a troca a encurta e repete enquanto houver ganho.
+
+Em C, o conjunto S é uma máscara de bits, como no 0186: o bit `j` ligado quer
+dizer que o ponto `j` está em S. As expressões `s >> j & 1` (o ponto `j` está
+em S?) e `s | 1 << k` (S com `k` acrescentado) funcionam sem parênteses porque
+os deslocamentos `>>` e `<<` têm precedência maior que `&` e `|` (0170).
 
 > [!WARNING]
 > A garantia de 2 × ótimo só vale com a **desigualdade triangular**; com
