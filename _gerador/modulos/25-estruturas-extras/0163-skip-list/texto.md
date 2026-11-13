@@ -1,29 +1,62 @@
 ## 0163 · Skip list
 
-- **Skip list**: lista ordenada (0078) com linhas expressas, os **andares**. O
-  andar 0 é a lista completa; o 1 tem parte dos nós, o 2 menos ainda
-  (PUGH, 1990).
-- **Nó**: um vetor `prox`, em que `prox[k]` é o próximo no andar `k`. Uma
-  **cabeça** sem chave está em todos os andares e começa toda busca
-  (MORIN, 2013, cap. 4).
-- **Buscar**: comece no andar mais alto. Se o próximo é menor que a chave,
-  avance; se passou ou não existe, desça. No andar 0, o próximo é a chave ou ela
-  não existe.
-- **Moeda**: todo nó novo entra no andar 0 e sobe mais um enquanto der cara.
-  Metade chega ao andar 1, um quarto ao 2, sem nunca arrumar nada (PUGH, 1990).
-- **Inserir**: buscar guardando, em cada andar, o último nó antes de descer (o
-  vetor `antes`); depois ligar o nó novo após `antes[k]` em cada andar. A
-  remoção usa o mesmo vetor (SEDGEWICK, 1998, cap. 13).
-- **Custo**: **O(log n) esperado**, na média dos sorteios, sem garantia. Com 1
-  milhão de chaves, uns 40 nós por busca.
-- **Memória**: com `prox[SKIP_MAX]` todo nó tem 104 bytes. Um **membro vetor
-  flexível** (`struct NoSkip *prox[];`) aloca só os andares usados
-  (CPPREFERENCE, s.d.).
+Uma rodovia tem paradas de ônibus nos km 5, 12, 18, 23, 31, 40, 47 e 56. O
+ônibus **parador** para em todas; o **semidireto** para em algumas; o
+**direto**, só nas principais. Para chegar ao km 47, você não pega o
+parador desde o começo. Vai de direto até onde der sem passar do 47, troca
+para o semidireto e só no fim pega o parador.
+
+Uma lista ordenada (assunto 0078) é o ônibus parador: achar uma chave custa
+O(n), porque é preciso passar por todos os nós anteriores. A busca binária
+não serve, já que a lista não tem índice para pular ao meio. A BST e a AVL
+(módulo 14) resolvem isso trocando a lista por uma árvore e equilibrando-a
+com rotações.
+
+A **skip list** resolve de outro jeito: fica com a lista ordenada e
+acrescenta as linhas expressas, os **andares** (PUGH, 1990). O andar 0 é a
+lista completa, com todos os nós. O andar 1 liga só parte deles, o andar 2
+menos ainda, e assim por diante. Cada nó, em vez de um único ponteiro
+`prox`, tem um vetor deles: `prox[k]` é o próximo nó no andar `k`. Uma
+**cabeça**, um nó sem chave, está em todos os andares e é o ponto de
+partida de toda busca (MORIN, 2013, cap. 4).
+
+**Buscar** é a viagem de ônibus. Comece na cabeça, no andar mais alto. Olhe
+o próximo nó do andar. Se a chave dele é menor que a procurada, avance para
+ele. Se ela já passou da procurada, ou se não há próximo, desça um andar e
+repita. Quando chegar ao andar 0 e não puder mais avançar, o próximo nó é a
+chave procurada ou ela não existe. Com as paradas acima, procurar o 47 anda
+no andar 2 até o 23 (o próximo, 56, já passou), desce, anda até o 40 no
+andar 1, desce, e no andar 0 o próximo é o 47.
+
+E quem decide em quantos andares cada nó aparece? Uma **moeda** (PUGH,
+1990). Todo nó novo entra no andar 0 e, enquanto der cara, sobe mais um.
+Em média, metade dos nós chega ao andar 1, um quarto ao andar 2, um oitavo
+ao andar 3. Isso imita os andares de uma lista "perfeita", em que cada
+andar tem metade dos nós do de baixo, só que sem nunca reorganizar nada.
+
+**Inserir** começa por uma busca, com um cuidado: em cada andar, guarde o
+último nó visitado antes de descer. Esses nós ficam num vetor `antes`, e
+`antes[k]` é o nó depois do qual o novo entra no andar `k`. Depois, sorteie
+os andares do nó novo e ligue-o após `antes[k]` em cada um, como numa
+inserção em lista comum. A remoção usa o mesmo vetor para desligar o nó de
+cada andar (SEDGEWICK, 1998, cap. 13).
+
+O custo é **O(log n) esperado**. "Esperado" quer dizer na média dos
+sorteios da moeda: uma sequência de azar pode deixar a lista ruim, mas é
+muito improvável. Com 1 milhão de chaves, a busca olha uns 40 nós, contra
+meio milhão na lista simples. A AVL dá garantia de pior caso; a skip list
+troca essa garantia por um código sem rotações.
+
+Falta a memória. Se o nó declara `prox[SKIP_MAX]` com `SKIP_MAX` 12, todo
+nó ocupa 104 bytes, mesmo usando em média 2 ponteiros. A saída é um
+**membro vetor flexível**: o último campo da struct é declarado sem
+tamanho, `struct NoSkip *prox[];`, e o `malloc` pede só o necessário,
+`sizeof(NoSkip) + andares * sizeof(NoSkip *)` (CPPREFERENCE, s.d.).
 
 > [!WARNING]
-> Na remoção, o nó sai de **todos** os andares. Se o 23 sair só do andar 0 e
-> for liberado, a cabeça ainda aponta para ele no andar 2: ponteiro solto
-> (assunto 0057). O E976 pede essa remoção.
+> Na remoção, o nó sai de **todos** os andares em que aparece. Se o 23 sair
+> só do andar 0 e for liberado, a cabeça continua apontando para ele no andar
+> 2: ponteiro solto (assunto 0057). O E976 pede essa remoção.
 
 {{exemplo}}
 

@@ -1,25 +1,58 @@
 ## 0164 · Listas autoajustáveis
 
-- **Custo da busca sequencial** (0089): a **posição** do item. Se poucos itens
-  levam quase todas as buscas, a ordem importa.
-- **Lista autoajustável**: a cada busca bem-sucedida, aproxima o item achado do
-  começo; a busca também escreve na lista (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-- **Mover para a frente** (*move-to-front*): o item achado vira o primeiro.
-  Reage rápido, mas um acesso isolado também vai para a frente
-  (CORTÉS, 2015).
-- **Transposição**: o item troca de lugar com o anterior. Bagunça pouco, mas um
-  item popular demora a chegar à frente (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-- **Contagem**: cada nó guarda quantas vezes foi achado, e a lista fica em
-  ordem decrescente. Converge para a melhor ordem fixa, com um campo a mais.
-- **Lista ou vetor**: mover para a frente numa lista são três atribuições; num
-  vetor, copia todos os anteriores (A327). A transposição serve aos dois.
-- **Garantia**: mover para a frente nunca gasta mais que o dobro da melhor ordem
-  fixa escolhida por quem conhece as buscas de antemão
-  (SLEATOR; TARJAN, 1985; CORMEN et al., 2024, cap. 27).
+Na cozinha, o sal fica na frente do armário e o cravo, lá no fundo. Ninguém
+planejou isso: cada pote usado volta para a frente, e os mais usados acabam
+sempre à mão. Uma lista pode aprender o mesmo truque.
+
+A busca sequencial (assunto 0089) percorre a lista do começo até achar o
+item, então custa a **posição** dele: o primeiro sai com uma comparação, o
+décimo com dez. Se todos os itens fossem procurados com a mesma frequência,
+a ordem não faria diferença. Só que quase nunca é assim. Na agenda do
+celular, meia dúzia de contatos recebe quase todas as ligações. Se esses
+contatos estivessem no começo, a busca média seria muito mais barata.
+
+O problema é que ninguém sabe de antemão quem são os favoritos. A **lista
+autoajustável** descobre sozinha: a cada busca bem-sucedida, ela aproxima do
+começo o item achado (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7). Isso
+muda o papel da busca, que além de ler a lista passa a escrever nela. A
+regra que decide quanto o item anda se chama **política**, e há três
+clássicas.
+
+A primeira é **mover para a frente** (em inglês, *move-to-front*): o item
+achado vira o primeiro da lista (CORTÉS, 2015). Ela reage rápido. Se Edu
+passa a receber todas as ligações, depois da primeira ele já está na frente.
+O defeito é o mesmo: um contato procurado uma única vez também pula para a
+frente e empurra os favoritos uma casa para trás.
+
+A segunda é a **transposição**: o item achado troca de lugar com o vizinho
+da frente, o anterior, e anda só uma casa (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
+Um acesso isolado quase não bagunça a lista. Em compensação, um item que
+ficou popular de repente leva muitas buscas para chegar à frente.
+
+A terceira é a **contagem**: cada nó guarda quantas vezes foi achado, e a
+lista se mantém em ordem decrescente desse contador. Com o tempo, ela
+converge para a melhor ordem fixa possível, a das frequências reais. O
+preço é um campo a mais em cada nó e o trabalho de reposicionar o item
+quando o contador dele ultrapassa o do vizinho.
+
+A estrutura por baixo importa. Mover para a frente combina com **lista
+encadeada**: tirar o nó do lugar e pendurá-lo no início são três
+atribuições de ponteiro, `ant->prox = p->prox`, `p->prox = l->inicio` e
+`l->inicio = p`. Num vetor, levar o décimo item para a frente obriga a
+copiar os nove anteriores uma casa para trás (o A327 conta isso). A
+transposição é a troca de dois vizinhos e serve igualmente bem aos dois.
+
+Será que mover para a frente, tão simples, pode sair muito caro? Sleator e
+Tarjan provaram que não: em qualquer sequência de buscas, ele nunca gasta
+mais que o dobro da melhor ordem fixa, aquela que alguém escolheria
+conhecendo todas as buscas de antemão (SLEATOR; TARJAN, 1985; CORMEN et
+al., 2024, cap. 27). Esse tipo de comparação com um adversário que conhece o
+futuro se chama **análise competitiva**.
 
 > [!WARNING]
 > Se o nó achado já é o primeiro, `ant` é `NULL` e `ant->prox = p->prox`
-> derruba o programa (E982). Sem `l->inicio = p`, o nó some da lista e vaza.
+> derruba o programa (o E982 cobre esse caso). E sem `l->inicio = p`, o nó
+> some da lista e vaza memória.
 
 {{exemplo}}
 

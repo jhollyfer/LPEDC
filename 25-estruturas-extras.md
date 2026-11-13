@@ -66,23 +66,33 @@ mesma saída.
 
 ### Conceito
 
-- **Matriz esparsa**: matriz quase toda de zeros. A regra é **zero não se
-  guarda**: só os não nulos ocupam memória, e o resto vale 0
-  (SZWARCFITER; MARKENZON, 2010).
-- **Triplas**: vetor de `(linha, coluna, valor)` em ordem. Serve para arquivo ou
-  matriz que não muda, pois inserir no meio empurra todo mundo
-  (CELES; CERQUEIRA; RANGEL, 2004).
-- **Lista por linha**: vetor de ponteiros, um por linha, e em cada um uma lista
-  encadeada (módulo 11) com as células em ordem de coluna
-  (SZWARCFITER; MARKENZON, 2010).
-- **Ler `m[i][j]`**: percorrer a linha `i` até passar da coluna `j`; se a célula
-  não aparece, vale 0. O custo depende das células da linha, não do tamanho da
-  matriz.
-- **Gravar**: **inserção ordenada** (assunto 0078), com uma regra a mais: gravar
-  0 numa célula existente a **remove** (FEOFILOFF, 2009).
-- **Quando compensa**: cada `Celula` tem 16 bytes contra 4 do `int`; vale a pena
-  com menos de 1/4 das posições preenchidas. Um streaming com 1 milhão de
-  clientes e 50 mil filmes passa de 200 GB para 320 MB.
+Um serviço de streaming guarda a nota, de 1 a 5, que cada cliente deu a
+cada filme. São 1 milhão de clientes e 50 mil filmes. Numa matriz `int`
+cheia, isso dá 5 × 10¹⁰ posições de 4 bytes cada: **200 GB**. O detalhe é
+que cada cliente avalia uns 20 filmes, então mais de 99,9% dessas posições
+guardam 0. Quase toda a memória vai para registrar que nada aconteceu.
+
+Uma matriz quase toda de zeros se chama **matriz esparsa**, e ela aparece
+muito: quem segue quem numa rede social, as ligações de um grafo grande, as
+notas do streaming. A regra para guardá-la é uma só: **zero não se guarda**.
+Só as posições com valor diferente de zero ocupam memória; qualquer posição
+que não está guardada vale 0 (SZWARCFITER; MARKENZON, 2010). É como a lista
+de presença que anota só quem faltou: quem não aparece nela estava lá.
+
+O jeito mais simples de seguir a regra é um vetor de **triplas**
+`(linha, coluna, valor)`, uma para cada valor não nulo, em ordem de linha e
+depois de coluna (CELES; CERQUEIRA; RANGEL, 2004). As notas de Ana e Davi
+ficam `(0, 1, 4)`, `(0, 6, 5)`, `(3, 0, 5)`. O vetor de triplas é ótimo
+para gravar a matriz num arquivo ou para uma matriz que não muda. Mas ele
+sofre com mudança: uma nota nova no meio empurra todas as triplas seguintes
+uma casa para a frente, como inserir num vetor ordenado.
+
+Quando a matriz muda o tempo todo, a estrutura certa é a **lista por
+linha**: um vetor de ponteiros, um para cada linha, e em cada um uma lista
+encadeada (módulo 11) com as células daquela linha, em ordem de coluna
+(SZWARCFITER; MARKENZON, 2010). Cada **célula** guarda a coluna, o valor e
+o ponteiro para a próxima célula da mesma linha. Uma linha sem nenhum valor
+é só um ponteiro `NULL`.
 
 ```c
 typedef struct Celula {
@@ -97,9 +107,31 @@ typedef struct {
 } Esparsa;
 ```
 
+Ler `m[i][j]` vira percorrer a lista da linha `i`. Como as células estão em
+ordem de coluna, você para assim que encontrar a coluna `j` ou passar dela.
+Se a célula não apareceu, o valor é 0. Repare no custo: ele depende de
+quantas células a linha tem, não do tamanho da matriz. Ler uma nota do
+cliente que avaliou 20 filmes olha no máximo 20 células, por maior que seja
+o catálogo.
+
+Gravar `m[i][j] = v` é uma **inserção ordenada** (assunto 0078): ande na
+linha com dois ponteiros, o anterior e o atual, até a posição da coluna `j`.
+Há uma regra a mais, e ela vem direto do "zero não se guarda". Se a célula
+já existe e o valor novo é 0, a célula sai da lista e é liberada
+(FEOFILOFF, 2009). Assim, gravar cai em um de quatro casos: trocar o valor
+de uma célula que existe, remover a célula quando o valor novo é 0, ignorar
+um 0 gravado numa posição que já era 0, ou criar uma célula nova.
+
+Por fim, quando a lista compensa? Cada `Celula` ocupa 16 bytes em 64 bits
+(dois `int` e um ponteiro), contra os 4 bytes de um `int` na matriz cheia.
+Então a lista só ganha quando menos de 1/4 das posições têm valor. No
+streaming, os 2 × 10⁷ valores dão 2 × 10⁷ células de 16 bytes, uns
+**320 MB**, contra os 200 GB da matriz cheia.
+
 > [!WARNING]
-> Se gravar 0 trocasse o valor, a célula guardaria um 0 e `nao_zeros` mentiria.
-> Toda operação que pode gerar zero (gravar, somar, subtrair) remove a célula.
+> Se gravar 0 numa célula existente só trocasse o valor, a célula guardaria
+> um 0 e `nao_zeros` mentiria. Toda operação que pode gerar zero (gravar,
+> somar, subtrair) precisa remover a célula.
 
 ### Exemplos de uso
 
@@ -430,30 +462,63 @@ gcc ~/LPEDC/material/E971.c ~/LPEDC/material/0162-esparsa.c -o ~/LPEDC/material/
 
 ### Conceito
 
-- **Skip list**: lista ordenada (0078) com linhas expressas, os **andares**. O
-  andar 0 é a lista completa; o 1 tem parte dos nós, o 2 menos ainda
-  (PUGH, 1990).
-- **Nó**: um vetor `prox`, em que `prox[k]` é o próximo no andar `k`. Uma
-  **cabeça** sem chave está em todos os andares e começa toda busca
-  (MORIN, 2013, cap. 4).
-- **Buscar**: comece no andar mais alto. Se o próximo é menor que a chave,
-  avance; se passou ou não existe, desça. No andar 0, o próximo é a chave ou ela
-  não existe.
-- **Moeda**: todo nó novo entra no andar 0 e sobe mais um enquanto der cara.
-  Metade chega ao andar 1, um quarto ao 2, sem nunca arrumar nada (PUGH, 1990).
-- **Inserir**: buscar guardando, em cada andar, o último nó antes de descer (o
-  vetor `antes`); depois ligar o nó novo após `antes[k]` em cada andar. A
-  remoção usa o mesmo vetor (SEDGEWICK, 1998, cap. 13).
-- **Custo**: **O(log n) esperado**, na média dos sorteios, sem garantia. Com 1
-  milhão de chaves, uns 40 nós por busca.
-- **Memória**: com `prox[SKIP_MAX]` todo nó tem 104 bytes. Um **membro vetor
-  flexível** (`struct NoSkip *prox[];`) aloca só os andares usados
-  (CPPREFERENCE, s.d.).
+Uma rodovia tem paradas de ônibus nos km 5, 12, 18, 23, 31, 40, 47 e 56. O
+ônibus **parador** para em todas; o **semidireto** para em algumas; o
+**direto**, só nas principais. Para chegar ao km 47, você não pega o
+parador desde o começo. Vai de direto até onde der sem passar do 47, troca
+para o semidireto e só no fim pega o parador.
+
+Uma lista ordenada (assunto 0078) é o ônibus parador: achar uma chave custa
+O(n), porque é preciso passar por todos os nós anteriores. A busca binária
+não serve, já que a lista não tem índice para pular ao meio. A BST e a AVL
+(módulo 14) resolvem isso trocando a lista por uma árvore e equilibrando-a
+com rotações.
+
+A **skip list** resolve de outro jeito: fica com a lista ordenada e
+acrescenta as linhas expressas, os **andares** (PUGH, 1990). O andar 0 é a
+lista completa, com todos os nós. O andar 1 liga só parte deles, o andar 2
+menos ainda, e assim por diante. Cada nó, em vez de um único ponteiro
+`prox`, tem um vetor deles: `prox[k]` é o próximo nó no andar `k`. Uma
+**cabeça**, um nó sem chave, está em todos os andares e é o ponto de
+partida de toda busca (MORIN, 2013, cap. 4).
+
+**Buscar** é a viagem de ônibus. Comece na cabeça, no andar mais alto. Olhe
+o próximo nó do andar. Se a chave dele é menor que a procurada, avance para
+ele. Se ela já passou da procurada, ou se não há próximo, desça um andar e
+repita. Quando chegar ao andar 0 e não puder mais avançar, o próximo nó é a
+chave procurada ou ela não existe. Com as paradas acima, procurar o 47 anda
+no andar 2 até o 23 (o próximo, 56, já passou), desce, anda até o 40 no
+andar 1, desce, e no andar 0 o próximo é o 47.
+
+E quem decide em quantos andares cada nó aparece? Uma **moeda** (PUGH,
+1990). Todo nó novo entra no andar 0 e, enquanto der cara, sobe mais um.
+Em média, metade dos nós chega ao andar 1, um quarto ao andar 2, um oitavo
+ao andar 3. Isso imita os andares de uma lista "perfeita", em que cada
+andar tem metade dos nós do de baixo, só que sem nunca reorganizar nada.
+
+**Inserir** começa por uma busca, com um cuidado: em cada andar, guarde o
+último nó visitado antes de descer. Esses nós ficam num vetor `antes`, e
+`antes[k]` é o nó depois do qual o novo entra no andar `k`. Depois, sorteie
+os andares do nó novo e ligue-o após `antes[k]` em cada um, como numa
+inserção em lista comum. A remoção usa o mesmo vetor para desligar o nó de
+cada andar (SEDGEWICK, 1998, cap. 13).
+
+O custo é **O(log n) esperado**. "Esperado" quer dizer na média dos
+sorteios da moeda: uma sequência de azar pode deixar a lista ruim, mas é
+muito improvável. Com 1 milhão de chaves, a busca olha uns 40 nós, contra
+meio milhão na lista simples. A AVL dá garantia de pior caso; a skip list
+troca essa garantia por um código sem rotações.
+
+Falta a memória. Se o nó declara `prox[SKIP_MAX]` com `SKIP_MAX` 12, todo
+nó ocupa 104 bytes, mesmo usando em média 2 ponteiros. A saída é um
+**membro vetor flexível**: o último campo da struct é declarado sem
+tamanho, `struct NoSkip *prox[];`, e o `malloc` pede só o necessário,
+`sizeof(NoSkip) + andares * sizeof(NoSkip *)` (CPPREFERENCE, s.d.).
 
 > [!WARNING]
-> Na remoção, o nó sai de **todos** os andares. Se o 23 sair só do andar 0 e
-> for liberado, a cabeça ainda aponta para ele no andar 2: ponteiro solto
-> (assunto 0057). O E976 pede essa remoção.
+> Na remoção, o nó sai de **todos** os andares em que aparece. Se o 23 sair
+> só do andar 0 e for liberado, a cabeça continua apontando para ele no andar
+> 2: ponteiro solto (assunto 0057). O E976 pede essa remoção.
 
 ### Exemplos de uso
 
@@ -768,26 +833,59 @@ gcc ~/LPEDC/material/E977.c ~/LPEDC/material/0163-skip.c -o ~/LPEDC/material/E97
 
 ### Conceito
 
-- **Custo da busca sequencial** (0089): a **posição** do item. Se poucos itens
-  levam quase todas as buscas, a ordem importa.
-- **Lista autoajustável**: a cada busca bem-sucedida, aproxima o item achado do
-  começo; a busca também escreve na lista (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-- **Mover para a frente** (*move-to-front*): o item achado vira o primeiro.
-  Reage rápido, mas um acesso isolado também vai para a frente
-  (CORTÉS, 2015).
-- **Transposição**: o item troca de lugar com o anterior. Bagunça pouco, mas um
-  item popular demora a chegar à frente (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-- **Contagem**: cada nó guarda quantas vezes foi achado, e a lista fica em
-  ordem decrescente. Converge para a melhor ordem fixa, com um campo a mais.
-- **Lista ou vetor**: mover para a frente numa lista são três atribuições; num
-  vetor, copia todos os anteriores (A327). A transposição serve aos dois.
-- **Garantia**: mover para a frente nunca gasta mais que o dobro da melhor ordem
-  fixa escolhida por quem conhece as buscas de antemão
-  (SLEATOR; TARJAN, 1985; CORMEN et al., 2024, cap. 27).
+Na cozinha, o sal fica na frente do armário e o cravo, lá no fundo. Ninguém
+planejou isso: cada pote usado volta para a frente, e os mais usados acabam
+sempre à mão. Uma lista pode aprender o mesmo truque.
+
+A busca sequencial (assunto 0089) percorre a lista do começo até achar o
+item, então custa a **posição** dele: o primeiro sai com uma comparação, o
+décimo com dez. Se todos os itens fossem procurados com a mesma frequência,
+a ordem não faria diferença. Só que quase nunca é assim. Na agenda do
+celular, meia dúzia de contatos recebe quase todas as ligações. Se esses
+contatos estivessem no começo, a busca média seria muito mais barata.
+
+O problema é que ninguém sabe de antemão quem são os favoritos. A **lista
+autoajustável** descobre sozinha: a cada busca bem-sucedida, ela aproxima do
+começo o item achado (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7). Isso
+muda o papel da busca, que além de ler a lista passa a escrever nela. A
+regra que decide quanto o item anda se chama **política**, e há três
+clássicas.
+
+A primeira é **mover para a frente** (em inglês, *move-to-front*): o item
+achado vira o primeiro da lista (CORTÉS, 2015). Ela reage rápido. Se Edu
+passa a receber todas as ligações, depois da primeira ele já está na frente.
+O defeito é o mesmo: um contato procurado uma única vez também pula para a
+frente e empurra os favoritos uma casa para trás.
+
+A segunda é a **transposição**: o item achado troca de lugar com o vizinho
+da frente, o anterior, e anda só uma casa (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
+Um acesso isolado quase não bagunça a lista. Em compensação, um item que
+ficou popular de repente leva muitas buscas para chegar à frente.
+
+A terceira é a **contagem**: cada nó guarda quantas vezes foi achado, e a
+lista se mantém em ordem decrescente desse contador. Com o tempo, ela
+converge para a melhor ordem fixa possível, a das frequências reais. O
+preço é um campo a mais em cada nó e o trabalho de reposicionar o item
+quando o contador dele ultrapassa o do vizinho.
+
+A estrutura por baixo importa. Mover para a frente combina com **lista
+encadeada**: tirar o nó do lugar e pendurá-lo no início são três
+atribuições de ponteiro, `ant->prox = p->prox`, `p->prox = l->inicio` e
+`l->inicio = p`. Num vetor, levar o décimo item para a frente obriga a
+copiar os nove anteriores uma casa para trás (o A327 conta isso). A
+transposição é a troca de dois vizinhos e serve igualmente bem aos dois.
+
+Será que mover para a frente, tão simples, pode sair muito caro? Sleator e
+Tarjan provaram que não: em qualquer sequência de buscas, ele nunca gasta
+mais que o dobro da melhor ordem fixa, aquela que alguém escolheria
+conhecendo todas as buscas de antemão (SLEATOR; TARJAN, 1985; CORMEN et
+al., 2024, cap. 27). Esse tipo de comparação com um adversário que conhece o
+futuro se chama **análise competitiva**.
 
 > [!WARNING]
 > Se o nó achado já é o primeiro, `ant` é `NULL` e `ant->prox = p->prox`
-> derruba o programa (E982). Sem `l->inicio = p`, o nó some da lista e vaza.
+> derruba o programa (o E982 cobre esse caso). E sem `l->inicio = p`, o nó
+> some da lista e vaza memória.
 
 ### Exemplos de uso
 
@@ -1125,20 +1223,32 @@ gcc ~/LPEDC/material/E984.c ~/LPEDC/material/0164-autolista.c -o ~/LPEDC/materia
 
 ### Conceito
 
-- **Concorrentes**: a **BST** (0099) tem altura que depende da ordem de chegada;
-  a **AVL** (0101) garante perto de log₂ n com rotações; a **skip list** (0163)
-  promete O(log n) esperado sem rotação (PUGH, 1990); a **lista com mover para
-  a frente** (0164) é O(n), mas aposta nos mais procurados.
-- **Medir com justiça**: as mesmas chaves na mesma ordem, as mesmas buscas
-  (sorteadas uma vez e guardadas) e o mesmo **custo**, as chaves comparadas.
-- **Interface comum**: struct com ponteiros para função (0050) e a estrutura
-  como `void *` (0051); quem mede chama `e->busca(d, chave, &custo)` sem saber o
-  que há do outro lado (KERNIGHAN; RITCHIE, 1989).
-- **Chamada indireta**: o compilador em geral não a expande no lugar, e cada
-  busca paga um salto a mais, visível só no cronômetro.
-- **Resultado**: a BST desaba com chaves em ordem (vira lista); AVL e skip list
-  não percebem; a lista MTF perde com as consultas espalhadas (A329 mostra quando
-  o jogo vira).
+Uma loja virtual tem 1000 produtos e recebe 10 mil consultas por dia. Os 20
+produtos da promoção levam 80% delas. Qual estrutura deve guardar o
+catálogo? O módulo e os anteriores deixaram quatro candidatas, cada uma com
+uma promessa diferente, e a pergunta só se responde medindo.
+
+A **BST** (assunto 0099) busca em tempo proporcional à altura, e a altura
+depende da ordem em que as chaves chegam: chaves embaralhadas dão uma árvore
+baixa, chaves em ordem dão uma árvore que é uma lista. A **AVL** (0101)
+garante altura perto de log₂ n, à custa de rotações a cada inserção. A
+**skip list** (0163) promete O(log n) esperado, sem rotação nenhuma, porque
+a forma dela vem da moeda e não da ordem de chegada (PUGH, 1990). A **lista
+com mover para a frente** (0164) custa O(n) no pior caso, mas aposta que os
+itens mais procurados vão ficar no começo.
+
+Comparar estruturas exige uma medição justa, e justa quer dizer que só a
+estrutura muda. Todas recebem **as mesmas chaves, na mesma ordem**. Todas
+respondem **às mesmas buscas**, sorteadas uma vez e guardadas num vetor. E
+todas usam o mesmo **custo**: o número de chaves que a busca comparou, que
+não depende da máquina. Se uma dessas três coisas variar, a diferença no
+resultado pode vir dela, não da estrutura.
+
+Para o programa que mede não precisar conhecer cada estrutura, elas ficam
+atrás de uma **interface comum**: uma struct de ponteiros para função
+(assunto 0050), uma para cada operação, com a estrutura de dados passada
+como `void *` (assunto 0051), o ponteiro genérico que aponta para qualquer
+coisa (KERNIGHAN; RITCHIE, 1989):
 
 ```c
 typedef struct {
@@ -1152,10 +1262,28 @@ typedef struct {
 extern const Estrutura CONCORRENTES[NUM_CONCORRENTES];
 ```
 
+Quem mede chama `e->busca(d, chave, &custo)` sem saber o que há do outro
+lado: pode ser uma árvore, uma skip list ou uma lista. Para acrescentar um
+concorrente, basta pôr mais uma struct no vetor `CONCORRENTES`; o teste não
+muda.
+
+Essa flexibilidade tem um custo pequeno. `e->busca(d, ...)` é uma
+**chamada indireta**: o programa só descobre qual função chamar na hora,
+lendo o ponteiro. Por isso o compilador em geral não consegue copiar o
+corpo da função no lugar da chamada, e cada busca paga um salto a mais. Esse
+salto não aparece na contagem de chaves comparadas; só um cronômetro o vê.
+
+O resultado da medição confirma a teoria. Com as chaves em ordem crescente,
+como num catálogo exportado de uma planilha ordenada, a BST vira lista e
+passa de 500 comparações por busca. A AVL e a skip list nem percebem a
+diferença entre as duas ordens. A lista com mover para a frente perde: os
+20% de consultas espalhadas pelos outros produtos custam centenas de
+comparações cada. O A329 mostra em que ponto o jogo vira a favor dela.
+
 > [!WARNING]
-> Gerar as buscas **dentro** de `mede` estraga a comparação: o sorteio continua
-> de onde parou e cada concorrente recebe consultas diferentes. Sorteie uma vez,
-> antes.
+> Gerar as buscas **dentro** da função que mede estraga a comparação: o
+> sorteio continua de onde parou, e cada concorrente recebe consultas
+> diferentes. Sorteie uma vez, antes, e guarde num vetor.
 
 ### Exemplos de uso
 
