@@ -1,32 +1,38 @@
 ## 0121 · Radix sort
 
-Nos censos antigos, uma máquina **classificadora** jogava cada cartão perfurado
-num de 10 escaninhos, do 0 ao 9, conforme uma coluna. O operador juntava os
-escaninhos e passava o maço pela coluna seguinte, começando pela **menos**
-significativa.
+- **Radix sort** (ordenação digital): ordena dígito a dígito, cada passada
+  por um único dígito, até o dígito mais alto do maior número
+  (CORMEN et al., 2024, cap. 8).
+- **LSD** (*least significant digit*): começa pelas **unidades**, depois
+  dezenas, depois centenas. Era o método das classificadoras de cartões
+  perfurados (KNUTH, 1998).
+- **Dígito**: o de `x` na casa `exp` (1, 10, 100...) é `(x / exp) % 10`.
+  Cada passada é um **counting sort** (assunto 0120) com chaves de 0 a 9
+  (SEDGEWICK, 1998, cap. 10).
+- **Passada estável**: números com o mesmo dígito ficam na ordem que a
+  passada anterior deu. Sem isso o método não funciona
+  (CORMEN et al., 2024, cap. 8).
+- **Custo**: com `d` dígitos e base `b`, O(d · (n + b)). Para números de
+  tamanho fixo, `d` é constante e o custo é linear
+  (CORMEN et al., 2024, cap. 8).
+- **Base 256**: o "dígito" vira um byte, `(x >> 8 * b) & 0xFF` (assunto
+  0065). Um `int` de 32 bits faz 4 passadas com `c[256]`
+  (KERNIGHAN; RITCHIE, 1989).
+- **Sem comparar chaves**: por isso foge do limite n log n da ordenação por
+  comparação (SZWARCFITER; MARKENZON, 2010).
 
-O **radix sort** (ordenação digital) faz o mesmo com números: ordena pelo
-dígito das **unidades**, depois pelo das **dezenas**, depois pelo das
-**centenas**, até o dígito mais alto do maior número. Cada passada é um
-**counting sort** (assunto 0120) com chaves de 0 a 9, e o dígito de `x` na
-casa `exp` (1, 10, 100...) sai de `(x / exp) % 10`. Começar pelo dígito menos
-significativo se chama **LSD** (*least significant digit*).
+> [!WARNING]
+> Se a passada distribuir da frente para trás, os empates se invertem e o
+> resultado sai fora de ordem, sem erro. O número de passadas vem do **maior**
+> elemento, não do primeiro.
 
-Cada passada **precisa ser estável**: números com a mesma centena ficam na
-ordem que a passada anterior deu a eles.
+{{exemplo}}
 
-Com `d` dígitos e base `b`, o custo é **O(d · (n + b))**: para números de
-tamanho fixo, `d` é constante e o radix sort é linear. Para chaves de `b` bits
-em dígitos de `r` bits, Θ((b/r)(n + 2^r)), e a melhor escolha fica perto de
-r = log₂ n.
-
-No exemplo, em amarelo, o 807 e o 830: a passada das dezenas põe o 807 na
-frente, e a das centenas respeita essa ordem:
+Oito números de pedido, de 047 a 830, ordenados em três passadas. Em amarelo,
+o 807 e o 830: a passada das dezenas põe o 807 na frente, e a das centenas
+respeita essa ordem:
 
 {{ideia}}
-
-A `passada` é o counting sort do assunto 0120 com o dígito como chave; o vetor
-auxiliar é alocado uma vez só:
 
 ```c
 #include <stdio.h>
@@ -93,6 +99,11 @@ int main(void) {
 // exp = 100: 047 074 216 251 509 553 807 830
 ```
 
+O laço para quando `exp` passa do maior número: com 830, são três passadas
+(`exp` = 1, 10, 100), e `830 / 1000` dá 0:
+
+{{fluxograma}}
+
 ### Passo a passo
 
 A passada das dezenas (`exp = 10`) recebe o vetor da passada anterior. O
@@ -105,26 +116,3 @@ dígito de cada número é `(x / 10) % 10`:
 Contagem por dígito: 0 → 2, 1 → 1, 3 → 1, 4 → 1, 5 → 2, 7 → 1. Os blocos
 na saída ficam `807 509 | 216 | 830 | 047 | 251 553 | 074`. No bloco do 0, o
 807 vem antes do 509 porque já vinha antes.
-
-O laço para quando `exp` passa do maior número: com 830, são três passadas
-(`exp` = 1, 10, 100), e `830 / 1000` dá 0:
-
-{{fluxograma}}
-
-> [!WARNING]
-> Com o terceiro laço da `passada` da frente para trás, cada passada inverte
-> os empates e o resultado sai `074 047 251 216 553 509 830 807`, sem erro. A
-> última passada é a que manda, então tem que ser a do dígito mais
-> importante. O número de passadas vem do **maior** elemento, não do primeiro.
-
-> [!TIP]
-> **Por dentro do C:** na **base 256**, o "dígito" é um byte, e
-> `(x >> 8 * b) & 0xFF` (assunto 0065) é o byte `b` de `x`. Um `int` de 32
-> bits faz 4 passadas, com `c[256]`.
-
-> [!NOTE]
-> **Pergunta para você:** este código funciona com números negativos? Veja o
-> que `(-47 / 1) % 10` dá em C (o resto tem o sinal do dividendo) e em que
-> posição de `c` isso cairia.
-
-{{pratique}}

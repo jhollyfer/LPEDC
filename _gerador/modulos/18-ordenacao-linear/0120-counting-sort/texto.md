@@ -1,31 +1,35 @@
 ## 0120 · Counting sort
 
-A dona da lanchonete quer 8 avaliações (A a H, com 3, 1, 3, 2, 1, 4, 0 e 3
-estrelas) em ordem de nota. Ela faz cinco montes, um por nota, e junta os
-montes do 0 ao 4, sem comparar pedido com pedido.
+- **Ordenação por comparação**: decide a ordem só comparando pares de chaves.
+  No pior caso faz cerca de n log₂ n comparações (assunto 0117)
+  (CORMEN et al., 2024, cap. 8).
+- **Counting sort** (ordenação por contagem): usa o **valor** da chave como
+  **índice** de um vetor de contadores e por isso escapa desse piso. As chaves
+  são inteiros de 0 a k - 1 (CORMEN et al., 2024, cap. 8).
+- **Três laços**: **contar** (`c[x]` = quantos têm chave `x`), **acumular**
+  (`c[x]` = quantos têm chave menor ou igual a `x`, o fim do bloco de `x`) e
+  **distribuir** (de trás para a frente, `c[x]--` e `saida[c[x]] = v[i]`)
+  (CORMEN et al., 2024, cap. 8).
+- **Estável**: entre chaves iguais, a ordem da entrada se mantém. O radix sort
+  (assunto 0121) depende disso (SEDGEWICK; WAYNE, 2011).
+- **Custo**: Θ(n + k) de tempo, e memória para `k` contadores mais a saída de
+  `n` elementos. Vale a pena quando `k` é da ordem de `n` ou menor
+  (CORMEN et al., 2024, cap. 8).
+- **Não ordena no lugar**: o resultado vai para outro vetor
+  (LINTZMAYER; MOTA, 2023).
 
-O assunto 0117 mostrou que a ordenação **por comparação** faz uns n log₂ n
-testes no pior caso. O **counting sort** (ordenação por contagem) escapa desse
-piso porque usa o **valor** da chave como **índice** de um vetor. As chaves
-precisam ser inteiros num intervalo pequeno, de 0 a k - 1. São três laços:
+> [!WARNING]
+> Com o terceiro laço da frente para trás, os empates saem **invertidos**, sem
+> erro. E a chave tem que caber em `c`: a nota 5 ou -1 vira `c[5]` ou `c[-1]`,
+> escrita fora do vetor.
 
-1. **contar**: `c[x]` recebe quantos elementos têm a chave `x`;
-2. **acumular**: `c[x]` passa a valer quantos têm chave **menor ou igual** a
-   `x`, ou seja, onde termina o bloco de `x` na saída (as três avaliações de
-   3 estrelas ocupam as posições 4, 5 e 6, porque 7 têm até 3 estrelas);
-3. **distribuir**: percorra a entrada **de trás para a frente** e ponha cada
-   elemento na última vaga livre do seu bloco: `c[x]--` e
-   `saida[c[x]] = v[i]`.
+{{exemplo}}
 
-Entre chaves iguais, quem vem por último na entrada ocupa a última vaga: a
-ordem dos empates se mantém e o método é **estável**, o que o radix sort
-(próximo assunto) aproveita. O custo é Θ(n + k), ou Θ(n) quando k = O(n). No
-desenho, os pedidos de 3 estrelas (A, C e H, em verde) chegam à saída na ordem
+Oito avaliações de uma lanchonete (A a H, de 0 a 4 estrelas) vão para a ordem
+de nota. Os pedidos de 3 estrelas (A, C e H, em verde) chegam à saída na ordem
 original:
 
 {{ideia}}
-
-O counting sort não ordena no lugar: a saída vai para outro vetor.
 
 ```c
 #include <stdio.h>
@@ -83,6 +87,11 @@ int main(void) {
 // ordenado:  G0 B1 E1 D2 A3 C3 H3 F4
 ```
 
+Os três laços são sequenciais: dois andam pelos n elementos e um pelas k
+chaves, então o custo é **O(n + k)**:
+
+{{fluxograma}}
+
 ### Passo a passo
 
 O terceiro laço, com o acumulado `1 3 4 7 8` no começo. Cada linha usa uma
@@ -99,26 +108,4 @@ vaga e diminui o contador da nota:
 | 1 | B1 | c[1] = 2 | saida[1] | 0 1 3 5 7 |
 | 0 | A3 | c[3] = 5 | saida[4] | 0 1 3 4 7 |
 
-No fim, cada `c[x]` aponta para o **começo** do bloco de `x`. Os três laços
-são sequenciais: dois andam pelos n elementos e um pelas k chaves, então o
-custo é **O(n + k)**:
-
-{{fluxograma}}
-
-> [!WARNING]
-> Com o terceiro laço da frente para trás, os empates saem **invertidos**
-> (H3 C3 A3), sem erro algum. A chave também tem que caber no vetor: a nota 5
-> ou -1 vira `c[5]` ou `c[-1]`, escrita fora do vetor.
-
-> [!TIP]
-> **Por dentro do C:** o counting sort troca memória por tempo: `k`
-> contadores mais um vetor de saída com `n` elementos. Com chaves de 0 a 1
-> bilhão, `c` teria 4 GB e o `k` domina o custo. Use-o quando `k` for da ordem
-> de `n` ou menor.
-
-> [!NOTE]
-> **Pergunta para você:** sem o código do pedido, dá para pular a saída e o
-> acumulado e escrever cada nota `c[x]` vezes. Por que essa versão curta não
-> serve para ordenar as avaliações com o código junto?
-
-{{pratique}}
+No fim, cada `c[x]` aponta para o **começo** do bloco de `x`.

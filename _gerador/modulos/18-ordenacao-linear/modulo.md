@@ -1,18 +1,10 @@
 # Módulo 18 · Ordenação além da comparação e seleção
 
-No módulo 13 você ordenou comparando, e o módulo 17 mostrou o piso: quem só
-compara faz uns n log₂ n comparações no pior caso. Este módulo sai desse piso
-olhando para os **dados**.
-
-Chaves inteiras pequenas viram índice de vetor: **counting sort**. Chaves com
-dígitos ou bytes se ordenam casa por casa: **radix sort**. Valores espalhados
-num intervalo conhecido vão para baldes por faixa: **bucket sort**. Os três
-são lineares, gastam memória extra e supõem algo sobre os dados; se a suposição
-falha, o programa escreve fora do vetor.
-
-Dois parentes completam o módulo. O **shell sort** ainda compara, mas dá
-pulos longos ao insertion sort. O **quickselect** acha o k-ésimo menor (a
-mediana, o percentil) sem ordenar, reaproveitando a separação do quick sort.
+Quem só compara faz uns n log₂ n comparações no pior caso (módulo 17). Este
+módulo sai desse piso usando os **dados**: counting, radix e bucket sort são
+lineares, mas gastam memória e supõem algo sobre as chaves. Completam o módulo
+o **shell sort** e o **quickselect**. Depende do módulo 13 (insertion sort e
+separação do quick sort).
 
 ## O que você vai aprender
 
@@ -29,19 +21,12 @@ Revise o insertion sort (0093), a separação do quick sort (0095), listas
 encadeadas (0076 a 0078), filas (0085), operadores de bits (0065), `malloc` e
 `calloc` e o `qsort` (0096).
 
-**Progressão.** Do módulo 13 vêm o insertion sort e a separação do quick sort
-(base do shell sort e do quickselect); do 17, o piso de n log₂ n. O 19
-enumera escolhas com recursão e o 20 usa a ordenação como primeiro passo dos
-gulosos.
-
 Nos diagramas, **roxo** marca o pivô ou a posição da vez, **amarelo** o que
-acompanhar, **verde** o que já está no lugar e **cinza** o descartado. Faça o
-**Passo a passo** no papel antes de conferir a tabela.
+acompanhar, **verde** o que já está no lugar e **cinza** o descartado.
 
-O último assunto usa o TAD `pix.h`/`pix.c`, na pasta do assunto e compilado
-junto com o exemplo. Os dados vêm de um gerador `unsigned` próprio, para a
-saída não depender do computador. Os tempos medidos com `clock()` variam:
-compare proporções.
+O último assunto usa o TAD `pix.h`/`pix.c`, compilado junto com o exemplo. Os
+tempos medidos com `clock()` variam de máquina para máquina: compare
+proporções.
 
 {{indice}}
 

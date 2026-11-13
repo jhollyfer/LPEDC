@@ -1,32 +1,32 @@
 ## 0122 · Bucket sort
 
-A secretária da escola joga cada prova corrigida no envelope da sua nota
-inteira (a de 6,4 vai para o 6), arruma cada envelope, que tem poucas provas,
-e empilha os envelopes em ordem.
+- **Bucket sort** (ordenação por baldes): divide o intervalo dos valores em
+  **faixas** de mesmo tamanho, uma por **balde** (CORMEN et al., 2024, cap. 8).
+- **Três passos**: jogar cada elemento no balde da sua faixa, ordenar cada
+  balde (que é pequeno) e **concatenar** os baldes em ordem
+  (CORMEN et al., 2024, cap. 8).
+- **Cálculo de endereço**: a função que escolhe o balde **preserva a ordem**.
+  Tudo no balde 2 é menor que tudo no balde 4
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
+- **Balde como lista**: cada balde é uma lista encadeada (assunto 0076) e o
+  elemento entra já no lugar certo, como na lista ordenada (assunto 0078)
+  (ROVAI, 2018).
+- **Custo médio**: com `n` valores **uniformes** em [0, 1) e `n` baldes, `x`
+  vai para ⌊n · x⌋ e o custo esperado é Θ(n) (CORMEN et al., 2024, cap. 8).
+- **Pior caso**: todos no mesmo balde. Sobra um insertion sort de `n`
+  elementos, O(n²) (CORMEN et al., 2024, cap. 8).
 
-Esse é o **bucket sort** (ordenação por baldes). Ele divide o intervalo dos
-valores em **faixas** de mesmo tamanho, uma por **balde**:
+> [!WARNING]
+> O índice do balde tem que caber no vetor: a nota 10,0 dá `baldes[10]`, que
+> não existe. O bucket sort precisa **conhecer o intervalo**; valor fora da
+> faixa escreve fora do vetor.
 
-1. joga cada elemento no balde da sua faixa (para notas de 0 a 10 e 10 baldes,
-   o balde de `x` é `(int) x`);
-2. ordena cada balde, que é pequeno;
-3. **concatena** os baldes, do primeiro ao último.
+{{exemplo}}
 
-Funciona porque a escolha do balde **preserva a ordem**: tudo no balde 2 é
-menor que tudo no balde 4. Cada balde é uma **lista encadeada** (assunto
-0076), e o elemento já entra **no lugar certo**, como na lista ordenada do
-assunto 0078.
-
-Com `n` valores bem **espalhados** e uns `n` baldes, cada balde recebe em média
-um elemento e o custo é **O(n)** em média. Se todos caem no mesmo balde, sobra
-um insertion sort de `n` elementos: **O(n²)**. O Θ(n) médio do Cormen supõe
-valores **uniformes** em [0, 1), com `x` indo para ⌊n · x⌋.
-
-No exemplo, três notas caem no balde 2 e quatro baldes ficam vazios:
+A secretária da escola joga cada prova no envelope da sua nota inteira (a de
+6,4 vai para o 6). Três notas caem no balde 2 e quatro baldes ficam vazios:
 
 {{ideia}}
-
-Em C, os baldes são um vetor de 10 ponteiros para lista, todos em `NULL`:
 
 ```c
 #include <stdio.h>
@@ -108,22 +108,3 @@ int main(void) {
 O custo escondido está no `insere_ordenado`, que anda pela lista do balde:
 
 {{fluxograma}}
-
-> [!WARNING]
-> O índice do balde tem que caber no vetor: a nota 10,0 dá `baldes[10]`, que
-> não existe. Com o intervalo fechado [0, 10], use 11 baldes ou trate o máximo
-> à parte. O bucket sort precisa **conhecer o intervalo**: valor fora da
-> faixa também escreve fora do vetor.
-
-> [!TIP]
-> **Por dentro do C:** cada nota custa um `malloc` de um nó de 16 bytes, e cada
-> `malloc` pede o seu `free` (o código libera o nó logo depois de copiar o
-> valor). Para 1 milhão de valores, fica mais rápido contar quantos vão para
-> cada balde e usar um vetor só, como no counting sort do assunto 0120.
-
-> [!NOTE]
-> **Pergunta para você:** a turma de reforço tirou 5,1; 5,4; 5,0; 5,8; 5,3;
-> 5,6; 5,2 e 5,9. Em quantos baldes essas notas caem? Como você mudaria a
-> função do balde para espalhá-las melhor?
-
-{{pratique}}

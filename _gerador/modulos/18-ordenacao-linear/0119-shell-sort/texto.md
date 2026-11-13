@@ -1,30 +1,32 @@
 ## 0119 · Shell sort
 
-O motorista da van recebe 10 pacotes fora da ordem de rota. No insertion sort,
-o pacote 9, na quinta posição, precisa de quatro empurrões para chegar à
-frente.
+- **Shell sort**: insertion sort (assunto 0093) repetido com **saltos** `h`
+  cada vez menores. O elemento anda `h` casas por movimento, não uma
+  (SHELL, 1959).
+- **Vetor h-ordenado**: cada fileira de elementos a `h` casas de distância
+  está em ordem. Com `h = 4`, são quatro insertion sorts entrelaçados
+  (KNUTH, 1998).
+- **Rodada final**: sempre com `h = 1`. Ela pega um vetor **quase ordenado**,
+  caso em que o insertion sort é rápido (ZIVIANI, 2010, cap. 4).
+- **Sequência de Knuth**: `h = 3h + 1` (1, 4, 13, 40, 121...). Comece no maior
+  salto abaixo de `n / 3` e divida por 3 a cada rodada (SEDGEWICK, 1998, cap. 6).
+- **Custo**: com os saltos de Knuth, o pior caso é O(n^1,5). Com os saltos de
+  Shell (`n/2, n/4, ..., 1`), é O(n²): pares e ímpares só se comparam no fim
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
+- **Memória**: ordena no lugar, sem vetor extra. Não é **estável**: iguais
+  podem trocar de ordem (ZIVIANI, 2010, cap. 4).
 
-O **insertion sort** (assunto 0093) anda **uma casa por movimento**: num vetor
-invertido, a conta vira n²/2. Em 1959, Donald Shell propôs andar de **h em
-h**. O **shell sort** repete o insertion sort com saltos `h` cada vez
-menores. A última rodada é sempre com `h = 1`, sobre um vetor **quase
-ordenado**, caso em que o insertion sort é rápido.
+> [!WARNING]
+> A última rodada **tem** que ser com `h = 1`; sem ela o vetor termina fora de
+> ordem e sem erro. No laço de dentro, use `j >= h`, não `j > 0`, senão
+> `v[j - h]` lê antes do vetor.
 
-Depois da rodada com salto `h`, o vetor está **h-ordenado**: cada fileira de
-um elemento a cada `h` casas está em ordem. Com `h = 4`, são quatro insertion
-sorts entrelaçados (posições 0, 4, 8; 1, 5, 9; 2, 6; 3, 7).
+{{exemplo}}
 
-A sequência de **Knuth** é `h = 3h + 1`: 1, 4, 13, 40, 121, 364... Comece com o
-maior salto abaixo de `n / 3` e divida por 3 a cada rodada. Com `n = 10`, os
-saltos são 4 e 1.
-
-Na primeira linha do desenho, cada cor é uma fileira de salto 4: três
-movimentos deixam o vetor quase pronto.
+O motorista da van recebe 10 pacotes fora da ordem de rota. Com `n = 10`, os
+saltos são 4 e 1; cada cor do desenho é uma fileira de salto 4:
 
 {{ideia}}
-
-Em C, o laço de dentro é o insertion sort do assunto 0093 com o `1` trocado
-por `h`:
 
 ```c
 #include <stdio.h>
@@ -77,7 +79,7 @@ int main(void) {
 ```
 
 São 9 movimentos; o insertion sort comum faria 21. O `h /= 3` desfaz o
-`3 * h + 1`: 13 / 3 é 4 e 4 / 3 é 1. O laço para quando `h` vira 0.
+`3 * h + 1` e o laço para quando `h` vira 0:
 
 {{fluxograma}}
 
@@ -94,19 +96,3 @@ para trás:
 | 7 | 51 | v[3] = 40 | nada | 9 17 28 40 62 73 85 51 94 33 |
 | 8 | 94 | v[4] = 62 | nada | 9 17 28 40 62 73 85 51 94 33 |
 | 9 | 33 | v[5] = 73, depois v[1] = 17 | 73 pula para v[9]; 33 vai para v[5] | 9 17 28 40 62 33 85 51 94 73 |
-
-> [!WARNING]
-> A última rodada **tem** que ser com `h = 1`: depois do `h = 4`, o 62 ainda
-> está antes do 33. Sem o 1, o programa termina sem erro e com o vetor fora de
-> ordem. Use `j >= h`, não `j > 0`, senão `v[j - h]` lê antes do vetor.
-
-> [!TIP]
-> **Por dentro do C:** o shell sort não usa memória extra. Com os saltos de
-> Knuth, o pior caso é O(n^1,5); com `n/2, n/4, ..., 1` (os de Shell), é
-> O(n²), porque posições pares e ímpares só se comparam na rodada final.
-
-> [!NOTE]
-> **Pergunta para você:** o shell sort é estável? Faça `5 3a 3b 1` (dois 3
-> iguais) com saltos 2 e 1 no papel e veja em que ordem os 3 terminam.
-
-{{pratique}}
