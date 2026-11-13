@@ -6,6 +6,17 @@ Mudanças do LPEDC que quem estuda percebe. Formato
 
 ## [Não lançado]
 
+### Mudado
+
+- Todo módulo e os guias da raiz (README, PPGI, TRILHA, PROVAS e SIMULADOS) seguem três partes:
+  **1. Conceitos gerais**, **2. Exemplos de uso** e **3. Exercícios práticos**. No módulo, primeiro
+  vêm os conceitos de todos os assuntos, depois os exemplos e por fim os exercícios, a lista, os
+  desafios e as questões.
+- Conceito em tópicos curtos, cada definição com a obra de onde vem (livros, artigos e normas dos
+  fichamentos), e a referência completa em "Para ler mais". Saem o gancho, o "Por dentro do C" e a
+  "Pergunta para você"; fica um alerta por assunto.
+- Exercícios no `.md` mostram só o enunciado, a saída e a resposta esperada; as dicas ficam no `.c`.
+
 ### Adicionado
 
 - Trilha de conceitos (`#trilha` no quiz): os 189 assuntos do curso numa escada em que cada degrau

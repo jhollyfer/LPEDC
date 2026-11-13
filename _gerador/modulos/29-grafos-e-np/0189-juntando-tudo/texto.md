@@ -1,23 +1,16 @@
 ## 0189 · Juntando tudo
 
-O entregador da farmácia recebe sete endereços e quer a volta mais curta,
-saindo e voltando à farmácia. No pico da tarde, são quarenta. É o **caixeiro
-viajante** (TSP), NP-difícil, e junta o módulo:
-
-- é um **ciclo hamiltoniano** de custo mínimo (0183);
-- a versão de decisão ("existe volta de no máximo L?") é NP-completa (0186),
-  por **redução** do ciclo hamiltoniano (0187): arestas do grafo custam 1, as
-  que faltam custam 2;
-- com distâncias **métricas**, a árvore mínima dá uma **2-aproximação** (0188);
-- a solução exata é **programação dinâmica**, como a cadeia de matrizes
-  (0185).
-
-**Força bruta.** Fixe a farmácia e teste as (n − 1)! ordens: 5040 rotas com 7
-clientes, 87 bilhões com 15.
-
-**Held-Karp** (PD sobre subconjuntos). `dp[S][j]` é o menor caminho que sai da
-farmácia, passa **exatamente** pelos pontos de S e termina em j. Só importam o
-conjunto e o último ponto, não a **ordem**, e por isso o fatorial some:
+- **Caixeiro viajante** (TSP): o **ciclo hamiltoniano** de custo mínimo
+  (0183). A versão de decisão ("existe volta de no máximo L?") é NP-completa
+  por redução do ciclo hamiltoniano: arestas do grafo custam 1, as que faltam
+  custam 2 (CORMEN et al., 2024, cap. 34).
+- **Métrico**: com desigualdade triangular, a árvore mínima dá uma
+  2-aproximação (0188) (CORMEN et al., 2024, cap. 35).
+- **Força bruta**: fixe o ponto de partida e teste as (n − 1)! ordens; 87
+  bilhões com 15 pontos.
+- **Held-Karp**: programação dinâmica sobre subconjuntos. `dp[S][j]` é o menor
+  caminho que sai da origem, passa exatamente pelos pontos de S e termina em
+  j. Só importam o conjunto e o último ponto, não a ordem (HELD; KARP, 1962):
 
 ```text
 dp[{0}][0] = 0
@@ -25,8 +18,14 @@ dp[S ∪ {k}][k] = min sobre j em S:  dp[S][j] + d[j][k]
 resposta = min sobre j:  dp[todos][j] + d[j][0]
 ```
 
-São 2ⁿ conjuntos × n finais × n extensões: **O(n² · 2ⁿ)** de tempo e **O(n ·
-2ⁿ)** de memória, bem menos que n!.
+- **Custo do Held-Karp**: 2ⁿ conjuntos × n finais × n extensões, **O(n² ·
+  2ⁿ)** de tempo e **O(n · 2ⁿ)** de memória, bem menos que n!
+  (HELD; KARP, 1962).
+- **Quando usar cada um**: até uns 20 pontos, Held-Karp resolve em segundos
+  (o limite é a memória); acima, aproximação com melhoria local, como o
+  2-opt.
+- **Bits sem parênteses**: `s >> j & 1` e `s | 1 << k` funcionam porque `>>`
+  e `<<` vêm antes de `&` e `|` (0170).
 
 | n | (n − 1)! rotas | n² · 2ⁿ (Held-Karp) | n² (aproximado) |
 | --- | --- | --- | --- |
@@ -35,12 +34,17 @@ São 2ⁿ conjuntos × n finais × n extensões: **O(n² · 2ⁿ)** de tempo e *
 | 20 | 1,2 · 10¹⁷ | 4,2 · 10⁸ | 400 |
 | 30 | 8,8 · 10³⁰ | 9,7 · 10¹¹ | 900 |
 
-Até uns 20 pontos, Held-Karp resolve em segundos (o limite é a memória);
-acima, aproximação, de preferência com uma melhoria local como o 2-opt do
-A378.
+> [!WARNING]
+> A garantia de 2 × ótimo só vale com a **desigualdade triangular**; com
+> distâncias quaisquer, nenhum algoritmo polinomial tem fator constante, a
+> menos que P = NP. Held-Karp é **exato** e exponencial; a árvore é
+> **aproximada** e polinomial.
 
-As distâncias são em quarteirões (|dx| + |dy|), métricas. À esquerda, a rota
-exata; à direita, a da árvore mínima, com voltas desnecessárias no fim:
+{{exemplo}}
+
+O entregador de uma farmácia tem sete endereços e quer a volta mais curta,
+com distâncias em quarteirões (|dx| + |dy|). À esquerda, a rota exata; à
+direita, a da árvore mínima, com voltas desnecessárias no fim:
 
 {{ideia}}
 
@@ -148,28 +152,8 @@ int main(void) {
 // O aproximado gasta 29% a mais
 ```
 
-O fluxograma é a decisão de um programa real: poucos pontos, exato; muitos,
-aproximado e melhorado:
+O aproximado errou por 29%, longe do dobro permitido, e fez 64 passos contra
+1351. O fluxograma é a decisão de um programa real: poucos pontos, exato;
+muitos, aproximado e melhorado:
 
 {{fluxograma}}
-
-O aproximado errou por 29%, longe do dobro permitido, e fez 64 passos contra
-1351. Com 20 pontos seriam uns 400 contra 400 milhões. O A377 mede
-crescimento e memória; o A378 aplica o 2-opt.
-
-> [!WARNING]
-> A garantia de 2 × ótimo só vale com a **desigualdade triangular**. Com
-> distâncias quaisquer, nenhum algoritmo polinomial tem fator constante, a
-> menos que P = NP. Held-Karp é **exato** e exponencial; a árvore é
-> **aproximada** e polinomial.
-
-> [!TIP]
-> `s >> j & 1` e `s | 1 << k` funcionam sem parênteses porque `>>` e `<<` vêm
-> antes de `&` e `|` (0170).
-
-> [!NOTE]
-> **Pergunta para você:** se o Gil mudar para (3, 5), perto do Fábio, a rota
-> exata ainda começa pela farmácia indo ao Gil? E a diferença do aproximado
-> aumenta ou diminui?
-
-{{pratique}}

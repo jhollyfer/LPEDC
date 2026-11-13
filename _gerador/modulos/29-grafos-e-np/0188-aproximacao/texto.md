@@ -1,37 +1,35 @@
 ## 0188 · Aproximação
 
-O barco de Manaus a Parintins leva no máximo 10 toneladas por viagem. Chegam
-oito cargas: 4, 4, 6, 9, 2, 6, 7 e 7, e o dono quer o menor número de viagens.
-É o **bin packing** (empacotamento em caixas), NP-difícil. Ele aceita uma
-resposta **um pouco pior**, se for rápida e com **garantia**.
+- **Algoritmo de aproximação**: polinomial, com custo no máximo **ρ vezes o
+  ótimo** (minimização) em **qualquer** entrada. O ρ é o **fator de
+  aproximação**; a prova compara com um limite inferior do ótimo
+  (CORMEN et al., 2024, cap. 35).
+- **Bin packing**: guardar itens no menor número de caixas de capacidade C.
+  NP-difícil; o limite inferior é `soma / C` arredondado para cima
+  (KLEINBERG; TARDOS, 2006, cap. 11).
+- **First fit** (FF): cada item vai para a primeira caixa em que cabe, ou abre
+  outra. Nunca sobram duas caixas com metade ou menos: no máximo 2 × ótimo
+  (cerca de 1,7 × na análise fina) (KLEINBERG; TARDOS, 2006, cap. 11).
+- **First fit decrescente** (FFD): ordena do maior para o menor e faz o mesmo;
+  garantia de cerca de 11/9 × ótimo, mais uma constante.
+- **Cobertura de vértices 2-aproximada**: enquanto houver aresta descoberta
+  u-v, ponha **as duas pontas**. As arestas escolhidas não têm ponta em comum
+  e o ótimo precisa de uma de cada (CORMEN et al., 2024, cap. 35).
+- **Caixeiro viajante métrico**: com a **desigualdade triangular**, monte a
+  árvore geradora mínima (Prim, 0153), percorra em pré-ordem e volte ao
+  começo: no máximo 2 × ótimo. Sem a desigualdade, nenhum fator constante é
+  possível, salvo se P = NP (CORMEN et al., 2024, cap. 35).
 
-**Algoritmo de aproximação** é um algoritmo polinomial com custo no máximo
-**ρ vezes o ótimo** (minimização). O ρ é o **fator de aproximação**: um
-2-aproximado nunca gasta mais que o dobro do ótimo, em **qualquer** entrada. A
-prova compara com um **limite inferior** do ótimo.
+> [!WARNING]
+> "Aproximado" não é "chute": o fator vale para **toda** entrada e vem com
+> prova. E o guloso "pega o vértice de maior grau" para cobertura **não** tem
+> fator constante; o 2-aproximado é o "pega as duas pontas".
 
-**Bin packing.** Com capacidade C, nenhuma solução usa menos que `soma / C`
-caixas, arredondado para cima: o limite inferior. Dois gulosos:
+{{exemplo}}
 
-- **first fit** (FF): cada item vai para a **primeira** caixa em que cabe, ou
-  abre outra. Nunca sobram duas caixas com metade ou menos (a segunda caberia
-  na primeira): no máximo 2 × ótimo, e cerca de 1,7 × na análise fina;
-- **first fit decrescente** (FFD): ordena do maior para o menor e faz o mesmo.
-  A garantia é de cerca de 11/9 × ótimo (mais uma constante).
-
-**Cobertura de vértices 2-aproximada** (0187): enquanto houver aresta
-descoberta u-v, ponha **as duas pontas**. As arestas escolhidas não têm ponta
-em comum, e o ótimo precisa de uma de cada: no máximo o dobro (A375).
-
-**Caixeiro viajante métrico 2-aproximado.** Com a **desigualdade triangular**
-(ir direto nunca é mais longo que dar a volta), monte a árvore geradora mínima
-(Prim, 0153), percorra-a em **pré-ordem** e volte ao começo. A árvore custa
-menos que o ciclo ótimo, a volta pela árvore custa o dobro dela, e os atalhos
-só encurtam: no máximo 2 × ótimo (A376). Sem a desigualdade triangular, nenhum
-fator constante é possível, a menos que P = NP.
-
-No desenho, em cima, o first fit na ordem de chegada; embaixo, o decrescente,
-que bate o limite inferior, 45 / 10 → 5 viagens: ótimo.
+Um barco de Manaus a Parintins leva 10 toneladas por viagem e recebe oito
+cargas: 4, 4, 6, 9, 2, 6, 7 e 7. Em cima, o first fit na ordem de chegada;
+embaixo, o decrescente, que bate o limite inferior de 5 viagens:
 
 {{ideia}}
 
@@ -102,20 +100,7 @@ int main(void) {
 //   viagem 5: 6 4  (10 t)
 ```
 
-O fluxograma é o first fit para uma carga: procura a primeira viagem com
-espaço ou abre uma nova. Custa O(n²) no pior caso:
+O first fit para uma carga procura a primeira viagem com espaço ou abre uma
+nova. Custa O(n²) no pior caso:
 
 {{fluxograma}}
-
-> [!WARNING]
-> "Aproximado" não é "chute": o fator vale para **toda** entrada e vem com
-> prova, mas é do pior caso. A pegadinha inversa: o guloso "pega o vértice de
-> maior grau" para cobertura **não** tem fator constante e pode ficar log n
-> vezes pior que o ótimo. O 2-aproximado correto é o "pega as duas pontas".
-
-> [!NOTE]
-> **Pergunta para você:** se chegar uma nona carga de 5 toneladas no fim da
-> fila, quantas viagens o first fit usa? E o decrescente? O limite inferior
-> muda?
-
-{{pratique}}

@@ -1,22 +1,9 @@
 # Módulo 29 · Grafos: ciclos e cortes; problemas difíceis
 
-Os módulos 16 e 23 ensinaram a andar pelo grafo e a tirar dele caminhos,
-árvores e ordens. Este módulo fecha o assunto com duas perguntas da prova do
-PPGI. Sobre a **forma**: dá para passar por toda aresta uma vez? E por todo
-vértice? Qual cabo, se cortado, parte a rede? Sobre o **custo**: por que umas
-perguntas se resolvem em O(V + E) e outras, parecidas, parecem exigir testar
-tudo?
-
-A primeira metade (0182 a 0185) é algoritmo: graus e o teorema de Euler, o
-backtracking do ciclo hamiltoniano, a DFS com `tin` e `low` que acha pontes e
-articulações, e a programação dinâmica da cadeia de matrizes. A segunda (0186
-a 0189) é a teoria por trás de "esse problema é NP-completo": decisão,
-verificação polinomial, P e NP, reduções, e o que fazer quando o problema é
-difícil: aproximar com garantia ou resolver exato só com entrada pequena.
-
-Antes de perguntar "qual o algoritmo?", pergunte se o problema **tem**
-algoritmo rápido. Euler e Hamilton parecem gêmeos, mas um é fácil e o outro
-não.
+Fecha os grafos dos módulos 16 e 23. A primeira metade (0182 a 0185) é
+algoritmo: Euler, ciclo hamiltoniano, pontes e articulações, cadeia de
+matrizes. A segunda (0186 a 0189) é a teoria de P e NP, reduções e
+aproximação, e o que fazer quando o problema é difícil.
 
 ## O que você vai aprender
 
@@ -39,16 +26,12 @@ não.
 
 ## Antes de começar
 
-Usa a matriz de adjacência e a DFS (0109, 0111), os componentes conexos
-(0150), o Prim (0153), o backtracking (0032, 0126, 0127), a programação
-dinâmica (0138 a 0140), o `qsort` (0096) e as máscaras de bits (0065).
+Usa matriz de adjacência e DFS (0109, 0111), componentes conexos (0150), Prim
+(0153), backtracking (0032, 0126, 0127), programação dinâmica (0138 a 0140),
+`qsort` (0096) e máscaras de bits (0065).
 
-**Progressão.** Este módulo completa os grafos do 16 e do 23 e, com as
-máscaras e o `qsort` do 27, fecha o curso.
-
-Cada arquivo traz o algoritmo completo, sem TAD. Refaça no papel o **passo a
-passo**. Nos grafos, a origem é roxa, as arestas verdes são as escolhidas e o
-amarelo marca os vértices de corte.
+Cada arquivo traz o algoritmo completo, sem TAD. Nos grafos, a origem é roxa,
+as arestas verdes são as escolhidas e o amarelo marca os vértices de corte.
 
 Convenções do módulo:
 

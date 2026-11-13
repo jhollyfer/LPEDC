@@ -7,19 +7,22 @@
 
 | Atualizado | Fase atual | Progresso | Status |
 |---|---|---|---|
-| 2026-11-09 | 4 · Provas reais (concluída) | 16/16 tarefas | curso pronto para a prova de 2026-11-27 |
+| 2026-11-13 | 5 · Quiz e guia de estudo (concluída) | 23/23 tarefas | curso pronto para a prova de 2026-11-27 |
 
 ## Parou em
 
-Quiz das provas publicado (`index.html` + `quiz/`, fonte em `_gerador/provas/`). Nada em
-andamento; o estudo segue o "Comece aqui" do `PPGI.md`, agora com o quiz no lugar de conferir
-o `PROVAS.md` à mão. As 11 provas foram conferidas com os PDFs da banca e todas têm gabarito oficial.
+Os 29 módulos e os guias da raiz estão em três partes: conceitos gerais (tópicos com a fonte
+citada), exemplos de uso e exercícios práticos (`DECISIONS.md` #12). O `conferir-texto.py` exige a
+forma nova e confere se cada autor citado tem a obra no "Para ler mais".
 
 ## Próximos passos
 
-1. Se chegarem provas novas ou o gabarito oficial de outras, gravar em `_fontes/provas-ppgi.md` e atualizar `PROVAS.md` e a frequência do `PPGI.md`.
-2. Mudou letra ou explicação de questão: edite `_gerador/provas/<slug>.json`, rode `node quiz.mjs --check` e `node quiz.mjs`, e mantenha o `PROVAS.md` igual.
-3. As questões dos módulos ainda usam 5 alternativas (A a E); as provas desde 2022 usam 4. Os simulados já usam 4.
+1. Passar o `humanizer-pt` nos conceitos reescritos (ficou pendente) e conferir à mão as citações que
+   os relatórios marcaram como indiretas (Cormen e Ziviani não têm fichamento; capítulos vêm do
+   "Para ler mais").
+2. 0074: o 1º e o 2º bloco de código são iguais; trocar o 2º pelo `contador.h` (mexe em código).
+3. Se chegarem provas novas, gravar em `_fontes/provas-ppgi.md` e atualizar `PROVAS.md` e o `PPGI.md`.
+4. As questões dos módulos ainda usam 5 alternativas (A a E); as provas desde 2022 usam 4.
 
 ## Contexto importante
 

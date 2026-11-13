@@ -1,28 +1,24 @@
 ## 0186 · P e NP
 
-Você organiza o churrasco da firma com cinco condições: alguém leva a
-churrasqueira, dois colegas brigados não vão juntos... Um amigo diz "chama a
-Ana e o Davi", e conferir leva dez segundos. Achar um grupo sem palpite pode
-exigir todas as combinações. A pergunta mais famosa da computação gira em
-torno dessa assimetria entre **achar** e **conferir**.
-
-**Problema de decisão** é o de resposta **sim ou não**: "existe ciclo
-hamiltoniano?", "existe rota de no máximo 300 km?". Otimização ("qual a menor
-rota?") vira decisão com um limite.
-
-**P** é a classe dos problemas de decisão que se **resolvem** em tempo
-polinomial, O(n^k) para algum k fixo: ordenar, achar caminho mínimo, testar
-circuito euleriano (0182), achar pontes (0184).
-
-**NP** é a classe em que um "sim" tem um **certificado** (prova curta) que um
-**verificador** confere em tempo polinomial: no churrasco, a lista de quem
-vai; no hamiltoniano, a rota (o E1093 é um verificador). Quem resolve rápido
-também confere rápido: **P ⊆ NP**.
-
-**NP-difícil** é o problema ao qual **todo** problema de NP se reduz em tempo
-polinomial (0187). **NP-completo** é quem está em NP **e** é NP-difícil. Se um
-NP-completo tiver algoritmo polinomial, P = NP. Ninguém sabe; a maioria aposta
-que P ≠ NP, e a questão vale um milhão de dólares.
+- **Problema de decisão**: resposta **sim ou não** ("existe rota de no máximo
+  300 km?"). Otimização vira decisão com um limite (CORMEN et al., 2024, cap. 34).
+- **P**: problemas de decisão que se **resolvem** em tempo polinomial, O(n^k)
+  com k fixo: caminho mínimo, Euler (0182), pontes (0184)
+  (CORMEN et al., 2024, cap. 34).
+- **NP**: um "sim" tem um **certificado** (prova curta) que um
+  **verificador** confere em tempo polinomial. Quem resolve rápido confere
+  rápido: **P ⊆ NP** (LINTZMAYER; MOTA, 2023).
+- **NP-difícil**: todo problema de NP se reduz a ele em tempo polinomial
+  (0187). **NP-completo**: está em NP **e** é NP-difícil. Um NP-completo
+  polinomial daria P = NP, questão em aberto (KLEINBERG; TARDOS, 2006, cap. 8).
+- **SAT**: fórmula em **forma normal conjuntiva** (um E de **cláusulas**, cada
+  uma um OU de **literais** `x` ou `não x`); existe atribuição que deixa todas
+  verdadeiras? Foi o primeiro NP-completo (COOK, 1971).
+- **3-SAT**: no máximo três literais por cláusula (no Cormen, exatamente
+  três); continua NP-completo (KARP, 1972).
+- **Força bruta com máscara**: as 2ⁿ atribuições são os valores de um
+  contador; o bit `v - 1` diz se `v` é verdadeira, lido com
+  `(mascara >> (v - 1)) & 1`.
 
 | Classe | O que se exige | Exemplos |
 | --- | --- | --- |
@@ -31,15 +27,18 @@ que P ≠ NP, e a questão vale um milhão de dólares.
 | NP-completo | estar em NP e ser NP-difícil | SAT, 3-SAT, clique, cobertura de vértices, ciclo hamiltoniano |
 | NP-difícil | todo NP se reduz a ele (pode nem estar em NP) | os NP-completos, caixeiro viajante (otimização) |
 
-**SAT** (satisfatibilidade) foi o primeiro NP-completo (Cook-Levin, 1971). A
-fórmula está em **forma normal conjuntiva** (FNC): um E de **cláusulas**,
-cada uma um OU de **literais** (`x` ou `não x`). Existe uma atribuição que
-deixa todas verdadeiras? **3-SAT** tem no máximo três literais por cláusula
-(no Cormen, exatamente três) e continua NP-completo.
+> [!WARNING]
+> **NP não quer dizer "não polinomial"**, e sim *polinomial não
+> determinístico*. NP-completo é "sem algoritmo polinomial conhecido", não
+> "impossível". E reduzir A a B mostra que B é **pelo menos tão difícil**
+> quanto A, não o contrário (0187).
 
-As variáveis são Ana, Beto, Caio e Davi. O palpite do amigo falha na quinta
-cláusula; a força bruta percorre as 2⁴ = 16 atribuições e acha uma na décima
-primeira:
+{{exemplo}}
+
+Um churrasco da firma com cinco condições sobre Ana, Beto, Caio e Davi.
+Conferir um palpite é rápido; achar um grupo pode exigir todas as
+combinações. O palpite falha na quinta cláusula, e a força bruta acha uma
+atribuição na décima primeira de 16:
 
 {{ideia}}
 
@@ -113,23 +112,3 @@ O fluxograma é o verificador, O(tamanho da fórmula). A força bruta o chama
 até 2ⁿ vezes:
 
 {{fluxograma}}
-
-O A371 mede o crescimento de 2ⁿ. O A372 mostra outro NP-completo: boletos que
-somam exatamente o valor de um Pix.
-
-> [!WARNING]
-> **NP não quer dizer "não polinomial"**, e sim *polinomial não
-> determinístico*. NP-completo não é "impossível", é "sem algoritmo
-> polinomial conhecido". E reduzir A a B mostra que B é **pelo menos tão
-> difícil** quanto A, não o contrário (0187).
-
-> [!TIP]
-> A máscara é a atribuição: o bit `v - 1` diz se `v` é verdadeira, lido com
-> `(mascara >> (v - 1)) & 1`.
-
-> [!NOTE]
-> **Pergunta para você:** se você trocar a ordem dos bits (Ana no bit mais
-> alto e Davi no mais baixo), a força bruta acha a mesma atribuição? Em
-> quantas tentativas?
-
-{{pratique}}

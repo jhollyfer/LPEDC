@@ -1,35 +1,30 @@
 ## 0184 · Pontes e articulações
 
-A operadora ligou sete bairros de Manaus com fibra. Se um cabo for cortado,
-algum bairro fica sem sinal? E se a central de um bairro pegar fogo? São as
-duas perguntas de **conectividade** do edital:
+- **Ponte** (aresta de corte): aresta cuja remoção aumenta o número de
+  componentes conexos (0150) (SZWARCFITER, 2018).
+- **Vértice de articulação** (ponto de corte): vértice cuja remoção, com suas
+  arestas, aumenta o número de componentes (SZWARCFITER, 2018).
+- **Uma DFS só**: tirar cada aresta e rodar uma DFS custa O(E · (V + E)); a
+  DFS com dois números por vértice resolve em O(V + E) (TARJAN, 1972).
+- **tin[u]**: o tempo de descoberta de `u`. **low[u]**: o menor `tin` que a
+  subárvore de `u` alcança descendo pela árvore e usando **uma** aresta de
+  volta (FEOFILOFF, s.d., *Algoritmos para grafos*).
+- **Só dois tipos de aresta**: na DFS não dirigida há arestas da árvore e de
+  volta (a um ancestral); nenhuma cruza para o lado (CORMEN et al., 2024, cap. 20).
+- **As regras**, para `u - v` da árvore: **ponte** se `low[v] > tin[u]`;
+  **articulação** se `low[v] >= tin[u]` e `u` não é a raiz; a **raiz** é
+  articulação só com dois ou mais filhos na DFS (TARJAN, 1972).
 
-- **ponte** (aresta de corte): aresta cuja remoção aumenta o número de
-  componentes conexos (0150);
-- **vértice de articulação** (ponto de corte): vértice cuja remoção, com as
-  arestas dele, aumenta o número de componentes.
+> [!WARNING]
+> Usar `low[v] >= tin[u]` também na raiz sempre dá verdadeiro e a marca como
+> articulação sem ser. E trocar `>` por `>=` na ponte cria pontes falsas em
+> toda aresta que entra num ciclo.
 
-Tirar cada cabo e rodar uma DFS custa O(E · (V + E)) (o A368 confere). **Uma
-DFS só**, O(V + E), anota dois números por vértice.
+{{exemplo}}
 
-**tin[u]** é o tempo de descoberta: o relógio da DFS ao entrar em `u`.
-**low[u]** é o menor `tin` que a subárvore de `u` alcança descendo pela árvore
-e usando **uma** aresta de volta para um ancestral.
-
-Numa DFS não dirigida só há arestas da **árvore** (a um vértice novo) e de
-**volta** (a um ancestral); nenhuma "cruza" para o lado. `low` mede quanto a
-subárvore escapa para cima sem passar pelo pai.
-
-Para uma aresta da árvore `u - v` (v filho de u):
-
-- **ponte** se `low[v] > tin[u]`: nada abaixo de `v` volta a `u` ou acima;
-- **articulação** se `low[v] >= tin[u]`, com `u` diferente da raiz: a
-  subárvore de `v` volta no máximo ao próprio `u`. Sem `u`, fica sozinha;
-- **raiz**: a regra anterior vale sempre para ela, então não serve. A raiz é
-  articulação **só com dois ou mais filhos** na árvore da DFS.
-
-Do Centro, a DFS desce em ordem de índice. Ao lado de cada bairro, `tin/low`.
-As arestas verdes são as pontes; os bairros em amarelo, as articulações:
+Uma operadora liga sete bairros de Manaus com fibra: que cabo cortado deixa
+bairro sem sinal? Do Centro, a DFS desce em ordem de índice. Ao lado de cada
+bairro, `tin/low`; verdes são as pontes, amarelos as articulações:
 
 {{ideia}}
 
@@ -91,8 +86,7 @@ int main(void) {
 // Ponta Negra: tin 7, low 7
 ```
 
-No fluxograma, as duas perguntas vêm **na volta** da recursão, com `low[v]`
-completo:
+As duas perguntas vêm **na volta** da recursão, com `low[v]` completo:
 
 {{fluxograma}}
 
@@ -113,15 +107,3 @@ completo:
 
 Flores é articulação, mas Flores - Cidade Nova não é ponte (o triângulo tem
 dois caminhos): a diferença é o `>` contra o `>=`.
-
-> [!WARNING]
-> Dois erros clássicos. Usar `low[v] >= tin[u]` também na raiz: sempre dá
-> verdadeiro, e o Centro apareceria como articulação sem ser (o A367 mostra).
-> E trocar `>` por `>=` na ponte: toda aresta que sai da raiz para um ciclo
-> vira ponte falsa.
-
-> [!NOTE]
-> **Pergunta para você:** a operadora vai passar um cabo novo entre Ponta
-> Negra e o Centro (`{6, 0}`). Quais pontes e articulações sobram?
-
-{{pratique}}

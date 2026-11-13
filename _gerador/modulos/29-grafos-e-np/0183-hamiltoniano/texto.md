@@ -1,18 +1,19 @@
 ## 0183 · Hamiltoniano
 
-O carro-forte abastece cinco agências e volta à base. Repetir rua não importa;
-parar duas vezes na mesma agência, sim. Existe uma rota que passa por **cada
-agência exatamente uma vez** e volta? É o caminhão de lixo (0182) com
-"vértice" no lugar de "aresta", mas a dificuldade é outra.
-
-**Ciclo hamiltoniano** é um ciclo (simples, no Cormen) que passa por **todos
-os vértices**, cada um uma vez. **Caminho hamiltoniano** é o mesmo sem voltar
-ao começo.
-
-Para Hamilton **não se conhece condição simples** necessária e suficiente, nem
-algoritmo polinomial. Há condições suficientes, como a de **Dirac**: se V ≥ 3
-e todo vértice tem grau ≥ V/2, o ciclo existe. Mas um ciclo puro de 100
-vértices tem grau 2 em todos e é hamiltoniano mesmo assim.
+- **Ciclo hamiltoniano**: ciclo que passa por **todos os vértices**, cada um
+  uma vez. **Caminho hamiltoniano** é o mesmo sem voltar ao começo
+  (CORMEN et al., 2024, cap. 34).
+- **Sem teste simples**: não se conhece condição necessária e suficiente nem
+  algoritmo polinomial; o problema é NP-completo (KARP, 1972).
+- **Condição de Dirac** (só suficiente): com V ≥ 3 e todo grau ≥ V/2, o ciclo
+  existe. Um ciclo puro de 100 vértices tem grau 2 e é hamiltoniano mesmo
+  assim (SZWARCFITER, 2018).
+- **Backtracking**: monta a rota por posição; põe em `pos` um vizinho ainda
+  não usado do último vértice, desce para `pos + 1` e, se travar, **desfaz** a
+  escolha (ZIVIANI, 2010).
+- **Economias**: fixe `rota[0] = 0` (divide o trabalho por V) e use `usada[]`
+  para cortar repetição. No pior caso sobram (V - 1)! ordens: com 15
+  vértices, 87 bilhões.
 
 | | Euler (0182) | Hamilton |
 | --- | --- | --- |
@@ -21,19 +22,16 @@ vértices tem grau 2 em todos e é hamiltoniano mesmo assim.
 | custo para achar | O(V + E) | exponencial no pior caso |
 | classe (0186) | P | NP-completo |
 
-Sobra testar. O **backtracking** do módulo 19 monta a rota por posição: põe em
-`pos` um vizinho ainda não usado do último vértice, desce para `pos + 1` e, se
-travar, **desfaz** a escolha e tenta a próxima. Com os V vértices na rota, só
-falta o último ligar ao primeiro.
+> [!WARNING]
+> Esquecer o `usada[v] = false` depois da chamada recursiva deixa "queimado"
+> todo vértice de uma tentativa que falhou, e o programa diz "não existe" para
+> grafos que têm ciclo.
 
-Duas economias não custam nada: fixe `rota[0] = 0` (todo ciclo pode começar
-em qualquer vértice, o que divide o trabalho por V) e use `usada[]` para
-cortar rota que repete agência. No pior caso sobram (V - 1)! ordens: com 15
-agências, 87 bilhões.
+{{exemplo}}
 
-A primeira tentativa, Base Centro Orla Mercado Porto Shopping, trava: não há
-via do Shopping para a Base. O backtracking volta ao Mercado, troca Porto por
-Shopping e fecha o ciclo pelo Porto:
+Um carro-forte abastece cinco agências e volta à base, parando uma vez em
+cada. A primeira tentativa trava no Shopping, sem via para a Base; o
+backtracking volta ao Mercado, troca Porto por Shopping e fecha pelo Porto:
 
 {{ideia}}
 
@@ -86,25 +84,8 @@ int main(void) {
 // Chamadas da recursão: 8
 ```
 
-O fluxograma mostra uma chamada de `hamilton(pos)`. "Rota completa?" só
-confere a volta; o trabalho está no laço que escolhe o vizinho e na linha que
-desfaz a escolha quando a descida falha:
+Este grafo não tem circuito euleriano (quatro agências de grau ímpar) e tem
+ciclo hamiltoniano. O fluxograma mostra uma chamada de `hamilton(pos)`: o
+trabalho está no laço que escolhe o vizinho e na linha que desfaz a escolha:
 
 {{fluxograma}}
-
-Este grafo não tem circuito euleriano (quatro agências têm grau ímpar) e tem
-ciclo hamiltoniano. O A365 mostra o contrário, e o backtracking só descobre
-depois de tentar tudo. O A366 mede o crescimento das chamadas quando a
-resposta é "não".
-
-> [!WARNING]
-> Esquecer o `usada[v] = false` depois da chamada recursiva é o erro clássico:
-> cada agência de uma tentativa que falhou fica "queimada", e o programa
-> responde "não existe" para grafos que têm ciclo.
-
-> [!NOTE]
-> **Pergunta para você:** se a via Porto-Base for fechada (apague `{0, 4}`),
-> ainda existe ciclo hamiltoniano? A Base fica com grau 2: por quais agências
-> o ciclo teria de entrar e sair dela?
-
-{{pratique}}
