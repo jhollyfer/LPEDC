@@ -1,33 +1,33 @@
 ## 0147 · Trie: árvore de prefixos e autocompletar
 
-Você digita `bol` e o teclado oferece "bola", "boleto", "bolo" e "bolsa" sem
-comparar com o dicionário inteiro: nele, **o prefixo é o endereço**.
+- **Trie** (de *retrieval*) ou **árvore de prefixos**: cada aresta **é** uma
+  letra, e o caminho da raiz até um nó soletra um prefixo. As palavras com esse
+  prefixo moram embaixo dele (FREDKIN, 1960).
+- **Marca de fim**: o prefixo "bol" tem nó, mas não é palavra. Cada nó guarda um
+  `bool fim` que diz se alguma palavra **termina** ali (ZIVIANI, 2010, cap. 5).
+- **Nó com vetor**: com minúsculas sem acento, o nó tem 26 ponteiros, e o filho
+  da letra `c` fica em `filho[c - 'a']` (CORTÉS, 2015).
+- **Inserir**: desça pelo filho de cada letra, criando-o se faltar; no fim,
+  `fim = true`. **Buscar**: desça letra por letra; faltou filho, não existe; no
+  fim, vale o `fim` do nó.
+- **Autocompletar**: desça até o nó do prefixo e percorra a subárvore, de `a` a
+  `z`, imprimindo cada caminho que termina num `fim`.
+- **Custo**: inserir e buscar custam **O(L)**, L o tamanho da palavra, sem
+  depender de quantas há. Uma BST de 100 mil palavras faz umas 17 comparações de
+  strings (SEDGEWICK; WAYNE, 2011).
+- **Memória**: cada `NoTrie` tem 216 bytes, quase todos ponteiros `NULL`. Lista
+  de filhos (0144) ou árvore ternária gastam menos.
 
-Esse modo é a **trie** (de *retrieval*; ou **árvore de prefixos**). Cada nó tem
-um filho por letra, e cada aresta **é** uma letra. O caminho da raiz até um nó
-soletra um prefixo: raiz, `b`, `o`, `l` é o nó de "bol", e as palavras que
-começam com "bol" moram embaixo dele.
+> [!WARNING]
+> Achar o nó não é achar a palavra: a busca olha o `fim`
+> (`return n != NULL && n->fim;`). E o índice só vale de `'a'` a `'z'`:
+> `'B' - 'a'` dá -31 e `'ã'` não é um `char` só em UTF-8.
 
-"bol" tem nó, mas não é palavra. Por isso cada nó guarda um `bool fim`, que diz
-se alguma palavra **termina** ali: "bolo" termina no `o` depois do `l`.
+{{exemplo}}
 
-Com letras minúsculas sem acento, o nó é um vetor de 26 ponteiros, e o filho da
-letra `c` fica em `filho[c - 'a']`.
-
-- **inserir**: desça pelo filho de cada letra, criando-o se faltar; no fim,
-  `fim = true`;
-- **buscar**: desça letra por letra; faltou um filho, a palavra não existe; no
-  fim do texto, a resposta é o `fim` do nó;
-- **autocompletar**: desça até o nó do prefixo e percorra a subárvore dele,
-  imprimindo cada caminho que termina num `fim`.
-
-Inserir e buscar custam **O(L)**, com L o tamanho da palavra, **sem depender do
-número de palavras**: "bolsa" desce 5 nós com 10 ou com 100 mil palavras. Numa
-BST de 100 mil palavras, seriam umas 17 comparações de strings.
-
-O teclado do exemplo guarda bolo, bola, bolsa, boleto, bom, bombom, pão e
-pastel (sem acento: `pao`). No ramo do `b`, o caminho verde é o prefixo "bol";
-os nós verdes marcam o fim de uma palavra:
+Um teclado guarda bolo, bola, bolsa, boleto, bom, bombom, pão e pastel (sem
+acento: `pao`). No ramo do `b`, o caminho verde é o prefixo "bol"; os nós verdes
+marcam o fim de uma palavra:
 
 {{ideia}}
 
@@ -90,28 +90,7 @@ int main(void) {
 // Nós: 22 (216 bytes cada)
 ```
 
-As sugestões saem em ordem alfabética porque a subárvore é percorrida de `a` a
-`z`.
-
 O fluxograma mostra a inserção de "bom". O `b` e o `o` já existem; o `m` é novo
 e recebe `fim = true`:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Achar o nó não é achar a palavra: `trie_prefixo(t, "bol")` devolve um nó, mas
-> a busca precisa olhar o `fim` (`return n != NULL && n->fim;`). Esquecer o
-> `r->fim = true` na inserção faz a palavra sumir. No índice, `'B' - 'a'` dá -31 e `'ã'` não é um `char` só em UTF-8;
-> por isso `trie_insere` recusa o que não for de `'a'` a `'z'`.
-
-> [!TIP]
-> Cada `NoTrie` tem 216 bytes. As 8 palavras cabem em 45 bytes como strings, mas
-> a trie usa 22 nós, 4752 bytes, quase todos ponteiros `NULL`. Alternativas:
-> lista de filhos (0144) ou BST por nó (árvore ternária).
-
-> [!NOTE]
-> **Pergunta para você:** se você inserir "bolota", quantos nós novos aparecem?
-> E se inserir "bo"? Em cada caso, o que muda nas sugestões para "bo"? Responda
-> antes de acrescentar as palavras no vetor do exemplo.
-
-{{pratique}}

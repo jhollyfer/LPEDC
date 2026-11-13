@@ -1,14 +1,7 @@
 # Módulo 22 · Árvores e conjuntos avançados
 
-No módulo 14, a árvore era binária e guardava números. Aqui o formato do nó
-muda conforme a operação que vai rodar milhões de vezes: **qualquer número de
-filhos** (orçamento de obra), **um bit por nó** (rubro-negra), **nós gordos**
-para o disco (árvore B), **arestas que são letras** (trie do autocompletar)
-ou **setas do filho para o pai** (union-find, "estes dois estão no mesmo
-grupo?").
-
-A rubro-negra é uma árvore 2-3 escrita com nós binários, e a árvore B é a
-mesma ideia com nós maiores. O fim do módulo junta a trie com a distância de
+Árvores e conjuntos além da BST do módulo 14: árvore geral, rubro-negra
+esquerdista, árvore B, trie e union-find. O fim junta a trie com a distância de
 edição do módulo 21 num corretor ortográfico e compara trie, hash e BST.
 
 ## O que você vai aprender
@@ -23,10 +16,9 @@ edição do módulo 21 num corretor ortográfico e compara trie, hash e BST.
 
 ## Antes de começar
 
-Você precisa de recursão (0032 e 0033), ponteiros para struct (0062),
-`malloc`, `calloc` e `free` (0054 e 0055), TAD (0074), BST e rotações da AVL
-(0099 a 0101), hash (0105 a 0108) e distância de edição (0142). A análise
-amortizada do 0116 explica o "quase O(1)" do union-find.
+Revise recursão (0032 e 0033), ponteiros para struct (0062), `malloc`, `calloc`
+e `free` (0054 e 0055), TAD (0074), BST e rotações da AVL (0099 a 0101), hash
+(0105 a 0108), distância de edição (0142) e análise amortizada (0116).
 
 Cada assunto tem um TAD na pasta (`arvgen.h`, `rubronegra.h`, `arvoreb.h`,
 `trie.h`, `uniao.h`, `corretor.h`). Compile junto os `.c` de apoio:
@@ -35,16 +27,11 @@ Cada assunto tem um TAD na pasta (`arvgen.h`, `rubronegra.h`, `arvoreb.h`,
 gcc ~/LPEDC/material/A293.c ~/LPEDC/material/0147-trie.c -o ~/LPEDC/material/A293 && ~/LPEDC/material/A293
 ```
 
-Duas convenções valem para o módulo. **Altura conta arestas**, como no
-módulo 14: folha tem altura 0. Na árvore B, o TAD usa o **grau mínimo** `t`
-(de `t - 1` a `2t - 1` chaves por nó); outros livros usam "ordem m" (máximo
-de filhos) e o Ziviani usa m a 2m chaves por página, então confira a
-convenção. A rubro-negra do 0145 é a esquerdista; a clássica do Cormen, que
-a prova do PPGI cobra, está no 0177.
-
-Nos desenhos, o nó
-vermelho da rubro-negra é vermelho e o preto é cinza; na trie, nós verdes
-terminam palavra; no union-find, a raiz verde representa o grupo.
+Convenções: **altura conta arestas** (folha tem altura 0). A árvore B usa o
+**grau mínimo** `t` do Cormen; outros livros usam "ordem m". A rubro-negra do
+0145 é a esquerdista; a clássica do Cormen, cobrada no PPGI, está no 0177. Nos
+desenhos, o nó preto da rubro-negra é cinza; na trie, nó verde termina palavra;
+no union-find, a raiz verde representa o grupo.
 
 {{indice}}
 

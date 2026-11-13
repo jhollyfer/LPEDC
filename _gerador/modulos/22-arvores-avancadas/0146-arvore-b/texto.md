@@ -1,39 +1,34 @@
 ## 0146 · Árvore B: busca, divisão e inserção
 
-O acervo de uma biblioteca tem milhões de fichas no disco. Um HD leva uns 10
-milissegundos por bloco. Numa AVL com 2 milhões de livros, a busca desce uns 21
-nós, e cada nó pode ser uma ida ao disco. Importa **ler poucos nós**.
+- **Árvore B**: árvore de busca com nós gordos, feita para disco. Cada nó guarda
+  **várias chaves em ordem** e tem um filho a mais do que chaves; em geral um nó
+  ocupa um bloco (BAYER; McCREIGHT, 1972).
+- **Motivo**: um HD leva uns 10 ms por bloco. Numa AVL com 2 milhões de chaves a
+  busca desce uns 21 nós; na B, poucos (ZIVIANI, 2010, cap. 6).
+- **Grau mínimo `t`**: todo nó, menos a raiz, tem de `t - 1` a `2t - 1` chaves; um
+  nó interno com `k` chaves tem `k + 1` filhos; **todas as folhas ficam no mesmo
+  nível**. A altura é `h ≤ log_t((n + 1) / 2)` (CORMEN et al., 2024, cap. 18).
+- **`t = 2`**: de 1 a 3 chaves e de 2 a 4 filhos por nó, a árvore 2-3-4. É o
+  valor do TAD.
+- **Busca**: a da BST com um laço dentro do nó; lê um nó por nível, altura + 1
+  nós (CORMEN et al., 2024, cap. 18).
+- **Divisão**: o nó cheio (`2t - 1` chaves) vira dois de `t - 1`, e a **chave do
+  meio sobe** para o pai. O TAD divide na descida todo nó cheio do caminho; a
+  raiz cheia vira raiz nova, e a árvore cresce por cima (CORMEN et al., 2024, cap. 18).
+- **Na prática**: com `int` e ponteiros de 8 bytes, `t = 170` cabe num bloco de
+  4096 bytes, e um bilhão de chaves fica em altura 3.
 
-A **árvore B** usa nós gordos. Cada nó guarda **várias chaves em ordem** e tem
-um filho a mais do que chaves: com `[40 70]`, o filho 0 tem as chaves menores
-que 40, o filho 1 as entre 40 e 70, e o filho 2 as maiores que 70. Num banco de
-dados, um nó ocupa um bloco do disco.
+> [!WARNING]
+> Depois de `divide(x, i)`, a chave que subiu está em `x->chave[i]`. Sem
+> `if (chave > x->chave[i]) i++;`, chaves grandes vão para a metade errada. E
+> "ordem m" muda de livro para livro (m filhos no Knuth, de m a 2m registros no
+> Ziviani); o curso usa o `t` do Cormen.
 
-O **grau mínimo** `t` define o tamanho do nó:
+{{exemplo}}
 
-- todo nó, menos a raiz, tem de `t - 1` a `2t - 1` chaves (a raiz pode ter 1);
-- um nó com `k` chaves que não é folha tem `k + 1` filhos;
-- **todas as folhas ficam no mesmo nível**.
-
-O TAD usa `t = 2`: de 1 a 3 chaves por nó, de 2 a 4 filhos (a árvore 2-3-4).
-Como cada nó abaixo da raiz tem pelo menos `t` filhos, a altura de uma árvore B
-com `n` chaves é `h ≤ log_t((n + 1) / 2)` (Cormen).
-
-A **busca** é a da BST com um laço dentro do nó: ande até achar uma chave maior
-ou igual. Se for igual, achou; senão, desça pelo filho daquela posição. Lê um nó
-por nível: altura + 1 nós.
-
-A **inserção** põe a chave numa folha. Se a folha está cheia, ocorre a
-**divisão**: o nó com `2t - 1` chaves vira dois nós de `t - 1` chaves, e a
-**chave do meio sobe** para o pai. Para o pai nunca estar cheio, o TAD divide
-**na descida** todo nó cheio do caminho; a raiz cheia se divide e a chave do
-meio vira a raiz nova. A árvore cresce por cima, e as folhas ficam no mesmo
-nível.
-
-Exemplo: 11 livros, na ordem 40, 10, 70, 20, 50, 80, 30, 60, 90, 25 e 85. O 25
-encontra a folha `[10 20 30]` cheia: ela se divide e o 20 sobe. O 85 encontra a
-raiz `[20 40 70]` cheia: ela se divide e o 40 vira a raiz nova. A busca pelo 60
-lê três nós:
+O acervo de uma biblioteca recebe 11 livros: 40, 10, 70, 20, 50, 80, 30, 60, 90,
+25 e 85. O 25 divide a folha `[10 20 30]` e o 20 sobe; o 85 divide a raiz
+`[20 40 70]` e o 40 vira a raiz nova. A busca pelo 60 lê três nós:
 
 {{ideia}}
 
@@ -126,21 +121,3 @@ filho 0, cheio, se divide e o 20 sobe. Como 25 > 20, o `i++` leva a chave à
 metade nova, folha `[30]`:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Depois de `divide(x, i)`, a chave que subiu está em `x->chave[i]`. Sem
-> `if (chave > x->chave[i]) i++;`, chaves grandes vão para a metade da esquerda
-> e a busca não as acha. Cuidado também com "ordem m": são **m filhos no
-> máximo** em alguns livros (Knuth) e **de m a 2m registros** no Ziviani. O curso
-> usa o grau mínimo `t` do Cormen.
-
-> [!TIP]
-> Com chaves `int` e ponteiros de 8 bytes, `t = 170` (nó de `24t` bytes) cabe num
-> bloco de 4096 bytes: um bilhão de chaves em altura 3, 4 blocos lidos por busca.
-
-> [!NOTE]
-> **Pergunta para você:** na árvore final, insira o 87. Qual nó se divide, qual
-> chave sobe e como fica o nível 1? Depois insira o 95: a raiz muda? Confira
-> acrescentando as chaves no vetor do exemplo.
-
-{{pratique}}

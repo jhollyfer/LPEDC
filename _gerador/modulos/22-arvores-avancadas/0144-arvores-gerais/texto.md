@@ -1,33 +1,36 @@
 ## 0144 · Árvores gerais: primeiro filho, próximo irmão
 
-O empreiteiro mandou o orçamento da reforma em tópicos: a reforma tem
-cozinha, banheiro e pintura; a cozinha tem piso e pia; o banheiro tem box e
-louças; as louças têm vaso e cuba. O total de um tópico é a soma do que está
-embaixo dele.
+- **Árvore geral** (ou n-ária): cada nó pode ter qualquer número de filhos
+  (SZWARCFITER; MARKENZON, 2010).
+- **Vetor fixo de filhos** (`filhos[4]`, A193 do módulo 14) trava no quinto
+  filho e desperdiça ponteiros nas folhas.
+- **Primeiro filho / próximo irmão** (*left-child right-sibling*): cada nó
+  guarda `filho`, o primeiro filho, e `irmao`, o próximo filho do mesmo pai
+  (CORMEN et al., 2024, cap. 10).
+- **Filhos como lista**: começam em `filho` e seguem pelos `irmao`. Com dois
+  ponteiros, a árvore geral vira uma **árvore binária** (CELES; RANGEL, 2002).
+- **Recursão**: resolve o nó, pede a resposta de cada filho e junta. Somar a
+  subárvore é **pós-ordem**: os filhos ficam prontos antes do pai
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 5).
+- **Custo**: o nó tem tamanho fixo (40 bytes aqui), mas achar o k-ésimo filho
+  custa k passos pela lista de irmãos.
 
-Isso é uma **árvore geral** (ou n-ária): cada nó pode ter qualquer número de
-filhos. No módulo 14, o A193 usou um vetor fixo (`filhos[4]`), que trava no
-quinto filho e desperdiça ponteiros nas folhas.
-
-A saída é a representação **primeiro filho / próximo irmão** (*left-child
-right-sibling*). Cada nó guarda dois ponteiros: `filho`, para o primeiro filho,
-e `irmao`, para o próximo filho do mesmo pai. Os filhos formam uma **lista
-encadeada** que começa em `filho` e segue pelos `irmao`.
-
-Com dois ponteiros por nó, é uma **árvore binária**: `filho` faz o papel do
-esquerdo e `irmao`, do direito. Visitar os filhos é o laço da lista:
+Visitar os filhos é o laço da lista:
 
 ```c
 for (const NoG *p = r->filho; p != NULL; p = p->irmao) { ... }
 ```
 
-As funções recursivas resolvem o nó, pedem a resposta de cada filho e juntam. O
-total do orçamento é o valor do nó mais o total de cada filho: uma
-**pós-ordem**, porque os filhos ficam prontos antes do pai.
+> [!WARNING]
+> O irmão está no **mesmo nível**. A altura escrita como na binária,
+> `1 + maior(altura(r->filho), altura(r->irmao))`, conta cada irmão como um
+> andar: no orçamento dá 6 em vez de 3. Só `filho` desce um nível.
 
-O orçamento tem 10 nós; os tópicos que só agrupam valem 0. No desenho, em cima a
-árvore e embaixo a memória: setas verdes para o primeiro filho, roxas para o
-irmão:
+{{exemplo}}
+
+O orçamento de uma reforma em tópicos, com 10 nós; os tópicos que só agrupam
+valem 0. Em cima a árvore, embaixo a memória: setas verdes para o primeiro
+filho, roxas para o irmão:
 
 {{ideia}}
 
@@ -97,26 +100,7 @@ int main(void) {
 // Itens: 10 | altura: 3 | grau da raiz: 3
 ```
 
-O fluxograma acompanha `ag_total` no banheiro. A soma começa em 0, o laço
-visita o box (900) e as louças (700) e para quando `p` chega a `NULL`. O
-banheiro devolve 1600:
+O fluxograma segue `ag_total` no banheiro: soma o box (900) e as louças (700)
+e para quando `p` chega a `NULL`, devolvendo 1600:
 
 {{fluxograma}}
-
-> [!WARNING]
-> O irmão está no **mesmo nível**. Na altura escrita como na binária,
-> `1 + maior(altura(r->filho), altura(r->irmao))`, cada irmão conta como um
-> andar: no orçamento, a resposta sai 6 em vez de 3. Só `filho` desce um nível.
-> Do mesmo modo, `total(p->filho) + total(p->irmao)` soma irmãos que não são da
-> subárvore de `p`.
-
-> [!TIP]
-> O `NoG` tem 40 bytes, com qualquer número de filhos. O preço é o acesso:
-> achar o k-ésimo filho custa k passos pela lista de irmãos.
-
-> [!NOTE]
-> **Pergunta para você:** se o empreiteiro acrescentar `ag_adiciona(loucas,
-> "torneira", 150)`, quais linhas da saída mudam? E se a torneira for pendurada
-> na `pintura`? Pense na altura e no grau da raiz nos dois casos.
-
-{{pratique}}

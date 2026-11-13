@@ -1,37 +1,24 @@
 ## 0145 · Rubro-negra esquerdista (LLRB): inserção
 
-O síndico cadastra as tags da cancela do condomínio a qualquer hora. Uma BST
-degenera se as tags chegarem em ordem; a AVL resolve, mas guarda alturas e tem
-quatro casos de rotação. A **rubro-negra** é mais simples.
-
-Ela se apoia na **árvore 2-3**: um nó tem **uma chave** (2 filhos) ou **duas**
-(3 filhos). Toda chave entra numa folha; com três chaves, a folha estoura: a do
-meio sobe e as outras duas viram nós separados. A árvore só cresce quando a raiz
-estoura, então **todas as folhas ficam no mesmo nível**.
-
-A **rubro-negra esquerdista** (*left-leaning red-black*, LLRB) guarda a árvore
-2-3 em nós binários. Um nó `[a b]` vira o `b` com o `a` pendurado à esquerda por
-um **link vermelho**; os outros links são **pretos**. Cada nó guarda a cor do
-link que chega nele (`bool vermelho`).
-
-As regras da LLRB são a árvore 2-3 escrita em cores:
-
-1. link vermelho **só à esquerda**;
-2. nunca **dois vermelhos seguidos** (nó de três chaves não existe na 2-3);
-3. todo caminho da raiz até um `NULL` passa pelo **mesmo número de nós pretos**
-   (a **altura preta**), porque na 2-3 todas as folhas estão no mesmo nível.
-
-A raiz é sempre preta. O caminho mais longo tem no máximo o dobro do mais curto,
-e a altura fica abaixo de 2 · log₂(n + 1).
-
-> [!NOTE]
-> Esta é a de Sedgewick. A rubro-negra **clássica** do Cormen (a da
-> prova do PPGI) põe a cor no **nó**, aceita vermelho dos dois lados (equivale à
-> árvore 2-3-4), usa folhas `NIL` pretas e conserta a inserção pelos casos do
-> **tio**, com no máximo duas rotações. Veja o assunto 0177.
-
-A inserção pendura um nó **vermelho**, como na BST. Na volta da recursão, cada
-ancestral aplica três consertos, **nesta ordem**:
+- **Árvore 2-3**: cada nó tem **uma chave** (2 filhos) ou **duas** (3 filhos).
+  A chave entra numa folha; com três, a do meio sobe. Só cresce quando a raiz
+  estoura, então **todas as folhas ficam no mesmo nível** (SEDGEWICK; WAYNE, 2011).
+- **LLRB** (*left-leaning red-black*): guarda a 2-3 em nós binários. O nó `[a b]`
+  vira o `b` com o `a` à esquerda por um **link vermelho**; os outros links são
+  **pretos**. Cada nó guarda a cor do link que chega nele (SEDGEWICK, 2008).
+- **Regras**: vermelho **só à esquerda**; nunca **dois vermelhos seguidos**;
+  todo caminho da raiz a um `NULL` tem a mesma **altura preta**. A raiz é preta
+  (SEDGEWICK, 2008).
+- **Altura**: o caminho mais longo tem no máximo o dobro do mais curto; a altura
+  fica abaixo de 2 · log₂(n + 1) (CORMEN et al., 2024, cap. 13).
+- **Inserção**: pendura um nó **vermelho**, como na BST, e cada ancestral aplica
+  na volta três consertos, nesta ordem (tabela).
+- **Inversão de cores**: pinta os dois filhos de preto e `h` de vermelho; a
+  chave do meio sobe para o pai e pode disparar os consertos de novo.
+- **Rubro-negra clássica** (Cormen, a da prova do PPGI): a cor fica no **nó**,
+  aceita vermelho dos dois lados (equivale à 2-3-4), usa folhas `NIL` pretas e
+  conserta pelos casos do **tio**, com até duas rotações. Veja o assunto 0177
+  (CORMEN et al., 2024, cap. 13).
 
 | Situação em `h` | Conserto | Na árvore 2-3 |
 | --- | --- | --- |
@@ -39,12 +26,16 @@ ancestral aplica três consertos, **nesta ordem**:
 | filho esquerdo e neto esquerdo vermelhos | rotação à direita | arruma um nó de 3 chaves temporário |
 | os dois filhos vermelhos | inverte as cores | o nó de 3 chaves estoura e a do meio sobe |
 
-A **inversão de cores** pinta os dois filhos de preto e `h` de vermelho: a chave
-do meio sobe para o pai, onde pode disparar os consertos de novo.
+> [!WARNING]
+> Na rotação, quem sobe herda a cor de quem desce (`x->vermelho = h->vermelho`);
+> sem isso, a altura preta se desencontra. E a raiz pode ficar vermelha após
+> uma inversão no topo: `rn_insere` a pinta de preto em **toda** inserção.
 
-No desenho, as tags 30, 10 e 20 formam um zigue-zague e disparam os três
-consertos. Com as tags 50 e 40, o 20 vermelho fica colado no 40, o nó 2-3
-`[20 40]`:
+{{exemplo}}
+
+As tags da cancela de um condomínio: 30, 10 e 20 formam um zigue-zague e
+disparam os três consertos. Com 50 e 40, o 20 vermelho fica colado no 40, o nó
+2-3 `[20 40]`:
 
 {{ideia}}
 
@@ -122,8 +113,7 @@ int main(void) {
 ```
 
 O fluxograma mostra os três `if` da volta. O caminho verde é o do nó 30 quando
-a tag 20 chega: o 10 já fez o primeiro conserto, e o 30 faz o segundo e o
-terceiro:
+a tag 20 chega: ele faz o segundo e o terceiro conserto:
 
 {{fluxograma}}
 
@@ -140,19 +130,3 @@ vermelho:
 | 20 | filho direito 40 vermelho | rotação à esquerda | 40 com 20* (10, 30) e 50 |
 
 Três rotações e uma inversão neste exemplo.
-
-> [!WARNING]
-> Na rotação, quem sobe herda a cor de quem desce (`x->vermelho = h->vermelho`);
-> sem essa linha, a altura preta se desencontra. Outro erro: a raiz fica
-> vermelha após uma inversão no topo, por isso `rn_insere` a pinta de preto em
-> **toda** inserção.
-
-> [!TIP]
-> O `NoRN` tem 24 bytes, como o da AVL.
-
-> [!NOTE]
-> **Pergunta para você:** com as tags 10, 20, 30, 40, 50, 60 e 70, nesta ordem,
-> qual fica na raiz e quantos nós vermelhos sobram? Desenhe a árvore 2-3 de cada
-> passo e confira com o `rn_pre_ordem`.
-
-{{pratique}}

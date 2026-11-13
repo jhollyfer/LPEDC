@@ -1,31 +1,42 @@
 ## 0149 · Juntando tudo: corretor ortográfico
 
-O secretário da associação do bairro quer um programa que leia o aviso da
-semana ("o onibus pasou", "a fiera da rua"), aponte as palavras que não existem
-e sugira a correção.
+- **Duas perguntas ao dicionário**: "esta palavra existe?" (busca exata) e "quais
+  palavras estão perto desta?". Perto é a poucas **edições** (assunto 0142):
+  tirar, pôr ou trocar uma letra, ou trocar duas vizinhas.
+- **Gerar candidatos**: aplicar à palavra errada todas as edições e ver quais
+  existem. "fiera" gera 290 candidatos, e só "feira" existe.
+- **Dicionário em trie** (assunto 0147): cada busca custa O(L), e um candidato
+  sem prefixo válido ("fx...") morre no segundo nó (ZIVIANI, 2010, cap. 5).
+- **Alternativas**: a hash faz a busca exata em O(1) na média; a BST, em
+  O(log n) comparações de string (SZWARCFITER; MARKENZON, 2010).
+- **Memória e cache**: 84 palavras viram 239 nós de 216 bytes (cerca de 51 KB),
+  espalhados no heap. Cada acesso pode faltar no cache, e por isso a hash costuma
+  vencer na busca exata.
 
-Um corretor faz duas perguntas ao dicionário, milhares de vezes por texto:
-**"esta palavra existe?"** (busca exata) e **"quais palavras de verdade estão
-perto desta?"**. "Perto" é a poucas **edições** (assunto 0142): tirar, pôr ou
-trocar uma letra, ou trocar duas letras vizinhas.
+O A297 compara as três com 2500 palavras de duas sílabas e 5000 buscas (metade
+acha, metade não):
 
-Sugerir é **gerar candidatos**: aplicar à palavra errada todas as edições e ver
-quais existem. Para "fiera", são 5 jeitos de tirar, 4 de trocar vizinhas,
-5 · 25 de trocar uma letra e 6 · 26 de pôr uma letra: 290 candidatos, e só
-"feira" existe. O custo de 290 buscas depende da estrutura do dicionário.
+| | BST | Tabela hash | Trie |
+| --- | --- | --- | --- |
+| custo da busca exata | 17,2 comparações de string | 1,3 comparação de string | 4 nós (o tamanho da palavra) |
+| memória | 60 KB | 60 KB | 661 KB |
+| palavras com um prefixo | dá, com um percurso por intervalo | não dá | desce até o prefixo e lista |
+| ordem alfabética | percurso em ordem | não dá | percurso por letra |
+| depende de n? | sim, log n | não (com fator de carga bom) | não |
 
-O dicionário fica numa **trie** (assunto 0147): cada busca custa O(L), e um
-candidato que não começa como palavra nenhuma ("fx...") morre no segundo nó.
-Uma hash também faria a busca exata em O(1) na média, e uma BST em O(log n)
-comparações; a comparação está no fim do assunto.
+A trie ganha em tudo que envolve **prefixo**; um corretor de verdade combina
+trie e hash.
 
-O TAD está em `corretor.h` e `corretor.c`: `cor_carrega_basico` monta um
-dicionário de 84 palavras, `cor_proxima` separa o texto em palavras,
-`cor_contem` faz a busca exata e `cor_sugere` gera e filtra os candidatos.
+> [!WARNING]
+> `cor_proxima` só reconhece `'a'` a `'z'`: maiúscula e acento viram separadores
+> ("Hoje" sai "oje"; "pão" sai "p" e "o"). E `cor_sugere` usa um vetor de
+> `COR_MAX + 1` posições, porque pôr uma letra aumenta a palavra.
 
-O aviso tem 18 palavras e cinco problemas: três erros com uma sugestão só, um
-"caa" que pode ser três palavras e um "esquina" que está certo, mas fora do
-dicionário:
+{{exemplo}}
+
+O secretário da associação do bairro quer revisar o aviso da semana. São 18
+palavras e cinco problemas: três erros com uma sugestão só, um "caa" que pode
+ser três palavras e um "esquina" certo, mas fora do dicionário de 84 palavras:
 
 {{ideia}}
 
@@ -119,37 +130,3 @@ O fluxograma é um laço sobre as palavras: só as desconhecidas pagam o preço 
 candidatos. O caminho verde é o de "fiera", seguido do fim do texto:
 
 {{fluxograma}}
-
-### Trie, hash ou BST?
-
-O A297 monta as três estruturas com o mesmo dicionário de 2500 palavras de duas
-sílabas e faz 5000 buscas (metade acha, metade não):
-
-| | BST | Tabela hash | Trie |
-| --- | --- | --- | --- |
-| custo da busca exata | 17,2 comparações de string | 1,3 comparação de string | 4 nós (o tamanho da palavra) |
-| memória | 60 KB | 60 KB | 661 KB |
-| palavras com um prefixo | dá, com um percurso por intervalo | não dá | desce até o prefixo e lista |
-| ordem alfabética | percurso em ordem | não dá | percurso por letra |
-| depende de n? | sim, log n | não (com fator de carga bom) | não |
-
-A hash ganha na busca exata e a trie perde na memória, mas a trie ganha em tudo
-que envolve **prefixo**: autocompletar e cortar candidatos que já nascem
-errados. Um corretor de verdade combina as duas.
-
-> [!WARNING]
-> `cor_proxima` só reconhece `'a'` a `'z'`: maiúscula e acento viram
-> separadores ("Hoje" sai "oje"; "pão" sai "p" e "o"). Em UTF-8, `'ã'` ocupa
-> 2 bytes e não cabe num índice de 0 a 25. Além disso, `cor_sugere` usa um
-> vetor de `COR_MAX + 1` posições, porque pôr uma letra aumenta a palavra.
-
-> [!TIP]
-> A trie de 84 palavras tem 239 nós de 216 bytes (cerca de 51 KB). Cada nó fica
-> num ponto do heap, e cada acesso pode ser uma falta de cache; por isso a hash
-> costuma vencer a trie na busca exata.
-
-> [!NOTE]
-> **Pergunta para você:** se o aviso tivesse "onibu", quais sugestões
-> apareceriam? E "aa"? Confira trocando o texto do exemplo.
-
-{{pratique}}
