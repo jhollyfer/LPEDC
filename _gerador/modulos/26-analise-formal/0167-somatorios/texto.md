@@ -1,9 +1,17 @@
 ## 0167 · Somatórios que saem de laços
 
-- **Laço dependente**: o laço de dentro roda um número de vezes que depende
-  do `i` de fora. A conta de passos vira um **somatório** (FEOFILOFF, s.d.).
-- **Do `for` ao `Σ`**: cada laço vira um `Σ`; os limites do laço são os da
-  soma e o corpo é a parcela (CORMEN et al., 2024, apêndice A).
+Na reunião de condomínio, cada morador que chega aperta a mão de quem já
+está na sala. O primeiro não cumprimenta ninguém, o segundo cumprimenta 1,
+o terceiro 2, e assim por diante. Quantos apertos de mão acontecem com 8
+moradores? E com 1000? Contar passos (assunto 0071) é fácil quando o laço
+de dentro roda sempre o mesmo número de vezes. Aqui não: o número de
+cumprimentos depende de quem está chegando.
+
+Um laço assim, em que o de dentro roda um número de vezes que depende do
+`i` do laço de fora, se chama **laço dependente**, e a conta dos passos dele
+vira um **somatório** (FEOFILOFF, s.d.). O símbolo `Σ` (a letra grega
+sigma) significa "some": ele soma a expressão da direita para cada valor de
+`i`, do limite de baixo até o de cima.
 
 ```text
  n-1
@@ -11,16 +19,42 @@
  i=0
 ```
 
-- **Soma aritmética**: some a sequência de frente para trás e de trás para
-  frente; cada coluna dá `n-1`, são `n` colunas, e isso é o dobro. Sai
-  `n(n-1)/2`, Θ(n²) (CORMEN et al., 2024, apêndice A).
-- **Soma geométrica**: a última parcela supera todas as anteriores juntas
-  (`512 > 1 + 2 + ... + 256`); dois laços aninhados podem dar Θ(n)
-  (LINTZMAYER; MOTA, 2023).
-- **Soma harmônica**: `1 + 1/2 + ... + 1/n` cresce como `ln n`; vezes `n`, dá
-  `n ln n` (CORMEN et al., 2024, apêndice A).
-- **Estouro na fórmula**: com `int n = 70000`, `n * (n - 1)` estoura antes da
-  divisão por 2; guarde `n` num `long`.
+A tradução do código para a soma é direta. Cada `for` vira um `Σ`; os
+limites do laço viram os limites da soma, e o corpo vira a parcela (CORMEN
+et al., 2024, apêndice A). No condomínio, o laço `for (j = 0; j < i; j++)`
+faz `i` passos para cada `i`, então o total é a soma de `i` com `i` indo de
+0 a `n-1`.
+
+Falta achar quanto essa soma dá. Há um truque antigo. Escreva a soma duas
+vezes, uma de frente para trás e outra de trás para frente, uma embaixo da
+outra: `0 + 1 + ... + (n-1)` em cima e `(n-1) + (n-2) + ... + 0` embaixo.
+Cada coluna soma `n-1`, e são `n` colunas, então as duas linhas juntas
+valem `n(n-1)`. Como isso é o dobro da soma, ela vale `n(n-1)/2`. Para 8
+moradores, 28 apertos; para 1000, 499.500. Essa é a **soma aritmética**, e
+ela é **Θ(n²)**: a divisão por 2 muda a constante, não a classe (CORMEN et
+al., 2024, apêndice A).
+
+Nem todo par de laços aninhados dá n², e a **soma geométrica** é o caso que
+mais engana. Se o laço de fora dobra `t` a cada volta (`t = 1, 2, 4, 8,
+...`) e o de dentro roda `t` vezes, o total é `1 + 2 + 4 + ... + 2^(k-1)`,
+que vale `2^k - 1`. A última parcela sozinha supera todas as anteriores
+juntas: `512 > 1 + 2 + ... + 256`. Como a última parcela é menor que `n`, o
+total fica abaixo de `2n`, e dois laços aninhados resultam em Θ(n)
+(LINTZMAYER; MOTA, 2023).
+
+A **soma harmônica** é `1 + 1/2 + 1/3 + ... + 1/n`, e ela cresce devagar,
+como o logaritmo natural `ln n` (CORMEN et al., 2024, apêndice A). Ela
+aparece quando o laço de dentro anda de `p` em `p`: para cada `p` de 1 a
+`n`, ele roda umas `n/p` vezes. O total é `n` vezes a soma harmônica, perto
+de `n ln n`, que é Θ(n log n).
+
+Na hora de calcular a fórmula em C, cuidado com o estouro. Com
+`int n = 70000`, a conta `n * (n - 1)` passa do maior `int` **antes** da
+divisão por 2, embora o resultado final caiba num `long`. Estouro de `int`
+com sinal é comportamento indefinido; guarde `n` num `long` antes de
+multiplicar.
+
+A tabela reúne as quatro somas que mais aparecem em laços:
 
 | laço | somatório | fórmula | classe |
 | --- | --- | --- | --- |
@@ -30,8 +64,9 @@
 | `for p = 1..n`, `for (j = 0; j < n; j += p)` | harmônica: `Σ n/p` | `≈ n ln n` | Θ(n log n) |
 
 > [!WARNING]
-> `for (j = 0; j < i; j++)` roda `i` vezes e soma `n(n-1)/2`; com `j <= i`
-> soma `n(n+1)/2`. A classe é a mesma, mas o número exato fica errado. Teste
+> Cuidado com os limites. `for (j = 0; j < i; j++)` roda `i` vezes e soma
+> `n(n-1)/2`. Com `j <= i`, cada volta ganha um a mais: `n(n+1)/2`. Na
+> classe tanto faz (Θ(n²)); no **número exato**, é resposta errada. Teste
 > com `n = 1` e `n = 2` à mão.
 
 {{exemplo}}

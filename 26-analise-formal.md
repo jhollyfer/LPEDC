@@ -65,22 +65,69 @@ como nomes de variáveis suas.
 
 ### Conceito
 
-- **O (teto)**: `f(n)` é O(g(n)) se existem `c > 0` e `n₀` com
-  `f(n) ≤ c · g(n)` para todo `n ≥ n₀` (CORMEN et al., 2024, cap. 3).
-- **Ω (piso)**: o mesmo com `f(n) ≥ c · g(n)` para todo `n ≥ n₀`
-  (CORMEN et al., 2024, cap. 3).
-- **Θ (sanduíche)**: é O e Ω ao mesmo tempo, com `c₁ · g(n) ≤ f(n) ≤ c₂ · g(n)`
-  a partir de `n₀` (ZIVIANI, 2010, cap. 1).
-- **c e n₀**: o `c` absorve a constante da máquina; o `n₀` descarta os `n`
-  pequenos. Nenhum dos dois é único (LINTZMAYER; MOTA, 2023).
-- **Provar** é exibir `c` e `n₀` e fazer a conta. **Refutar** é mostrar que
-  nenhum par serve: para `3n² + 10n + 20` ser O(n) seria preciso
-  `3n + 10 + 20/n ≤ c`, e `n > c/3` quebra qualquer `c` (FEOFILOFF, s.d.).
-- **Melhor, pior e caso médio**: a entrada que dá menos trabalho, a que dá
-  mais e a média sobre uma distribuição. Cada caso é uma função de `n` com seu
-  próprio O, Ω ou Θ (SZWARCFITER; MARKENZON, 2010, cap. 1).
-- **Contas no programa**: `3 * n * n` com `int` estoura perto de
-  `n = 26.755`; por isso o exemplo usa `long`.
+Até aqui, dizer que um algoritmo é O(n²) queria dizer, sem muito rigor, que
+o custo "cresce como n²". A prova do mestrado cobra mais: cobra a definição
+com constantes, e cobra que você saiba provar e refutar uma afirmação como
+"`3n² + 10n + 20` é O(n)". A seguir vêm as três notações no papel, do
+jeito que o Cormen as define.
+
+Pense no contrato do sistema de caixa de um mercadinho. Ele diz: "o
+fechamento com `n` vendas faz no máximo `4n²` operações, a partir de 12
+vendas". Você contou as operações e chegou a `f(n) = 3n² + 10n + 20`. Com 10
+vendas, são 420 operações contra um limite de 400. O contrato foi quebrado?
+Não, porque ele só promete a partir de 12 vendas. As notações funcionam
+assim, com duas constantes: um fator **c** que multiplica a função de
+referência e um ponto de partida **n₀** a partir do qual a promessa vale.
+
+A primeira notação é o **teto**. Dizemos que **f(n) é O(g(n))** se existem
+constantes `c > 0` e `n₀` tais que `f(n) ≤ c · g(n)` para todo `n ≥ n₀`
+(CORMEN et al., 2024, cap. 3). Em palavras: depois de certo ponto, `f` nunca
+passa de um múltiplo fixo de `g`. O contrato do caixa afirma que o custo é
+O(n²), com `c = 4` e `n₀ = 12`.
+
+A segunda é o **piso**, a mesma ideia virada ao contrário. **f(n) é
+Ω(g(n))** (lê-se "ômega de g") se existem `c > 0` e `n₀` tais que
+`f(n) ≥ c · g(n)` para todo `n ≥ n₀` (CORMEN et al., 2024, cap. 3). Depois
+de certo ponto, `f` nunca fica abaixo de um múltiplo fixo de `g`.
+
+A terceira junta as duas. **f(n) é Θ(g(n))** (lê-se "teta de g") se é O e
+Ω ao mesmo tempo: existem `c₁`, `c₂` e `n₀` com
+`c₁ · g(n) ≤ f(n) ≤ c₂ · g(n)` para todo `n ≥ n₀` (ZIVIANI, 2010, cap. 1).
+É um **sanduíche**: `f` fica presa entre dois múltiplos de `g`, e por isso
+Θ diz que as duas funções crescem no mesmo ritmo.
+
+Por que as duas constantes? O **n₀** existe porque só interessa o
+comportamento para `n` grande; para `n` pequeno, termos como `10n` e `20`
+ainda pesam e atrapalham. O **c** existe porque a constante depende da
+máquina e do compilador, e a notação quer falar do algoritmo. Nenhum dos
+dois é único: se `c = 4` e `n₀ = 12` servem, `c = 5` com o mesmo `n₀`
+também serve (LINTZMAYER; MOTA, 2023).
+
+**Provar** que `f` é O(g) é exibir um par `c`, `n₀` e mostrar a conta. Para
+o teto com `c = 4`, a desigualdade `3n² + 10n + 20 ≤ 4n²` vira
+`n² - 10n - 20 ≥ 0`. A raiz positiva de `n² - 10n - 20` é 11,7, então a
+desigualdade vale para todo `n ≥ 12`. Para o piso com `c = 3`, a
+desigualdade `3n² + 10n + 20 ≥ 3n²` vale para todo `n ≥ 1`. Logo `f(n)` é
+**Θ(n²)**, com `c₁ = 3`, `c₂ = 4` e `n₀ = 12`.
+
+**Refutar** é mostrar que **nenhum** par serve, o que é bem diferente de
+não achar um. `f(n)` é O(n)? Seria preciso `3n² + 10n + 20 ≤ c · n`.
+Dividindo tudo por `n`, isso vira `3n + 10 + 20/n ≤ c`. Só que o lado
+esquerdo cresce sem limite: para qualquer `c` que alguém proponha, basta
+tomar `n > c/3` e a desigualdade quebra. Então não existe `c`, e `f` não é
+O(n) (FEOFILOFF, s.d.).
+
+Há outro eixo, independente das notações: **qual entrada** você está
+olhando. Para o mesmo `n`, o **melhor caso** é a entrada que dá menos
+trabalho, o **pior caso** a que dá mais, e o **caso médio** é a média sobre
+todas as entradas, segundo alguma distribuição de probabilidade
+(SZWARCFITER; MARKENZON, 2010, cap. 1). Cada caso é uma função de `n`
+diferente, e cada uma tem o seu O, Ω ou Θ. Na busca sequencial, o melhor
+caso é Θ(1), achar no primeiro, e o pior é Θ(n), não achar.
+
+Ao testar uma desigualdade num programa, cuidado com o tamanho das contas:
+`3 * n * n` com `int` estoura perto de `n = 26.755`, e estouro de inteiro
+com sinal é comportamento indefinido. Por isso o exemplo usa `long`.
 
 | Notação | Desigualdade (para `n ≥ n₀`) | Papel |
 | --- | --- | --- |
@@ -89,9 +136,10 @@ como nomes de variáveis suas.
 | Θ(g) | `c₁ · g(n) ≤ f(n) ≤ c₂ · g(n)` | sanduíche |
 
 > [!WARNING]
-> O, Ω e Θ **não** são pior, melhor e médio: valem para qualquer caso. "A busca
-> sequencial é Ω(n)" é falsa, pois o melhor caso faz 1 comparação. E testar até
-> 100 mil só acha candidatos: a prova é a conta.
+> O, Ω e Θ **não** são "pior, melhor e médio": são teto, piso e sanduíche, e
+> valem para qualquer caso. "A busca sequencial é Ω(n)" é falsa, pois o
+> melhor caso faz 1 comparação. E testar até 100 mil **não prova** nada além
+> disso: só acha candidatos. A prova é a conta `n² - 10n - 20 ≥ 0`.
 
 ### Exemplos de uso
 
@@ -363,10 +411,18 @@ falhas de n0 até 1000: 0
 
 ### Conceito
 
-- **Laço dependente**: o laço de dentro roda um número de vezes que depende
-  do `i` de fora. A conta de passos vira um **somatório** (FEOFILOFF, s.d.).
-- **Do `for` ao `Σ`**: cada laço vira um `Σ`; os limites do laço são os da
-  soma e o corpo é a parcela (CORMEN et al., 2024, apêndice A).
+Na reunião de condomínio, cada morador que chega aperta a mão de quem já
+está na sala. O primeiro não cumprimenta ninguém, o segundo cumprimenta 1,
+o terceiro 2, e assim por diante. Quantos apertos de mão acontecem com 8
+moradores? E com 1000? Contar passos (assunto 0071) é fácil quando o laço
+de dentro roda sempre o mesmo número de vezes. Aqui não: o número de
+cumprimentos depende de quem está chegando.
+
+Um laço assim, em que o de dentro roda um número de vezes que depende do
+`i` do laço de fora, se chama **laço dependente**, e a conta dos passos dele
+vira um **somatório** (FEOFILOFF, s.d.). O símbolo `Σ` (a letra grega
+sigma) significa "some": ele soma a expressão da direita para cada valor de
+`i`, do limite de baixo até o de cima.
 
 ```text
  n-1
@@ -374,16 +430,42 @@ falhas de n0 até 1000: 0
  i=0
 ```
 
-- **Soma aritmética**: some a sequência de frente para trás e de trás para
-  frente; cada coluna dá `n-1`, são `n` colunas, e isso é o dobro. Sai
-  `n(n-1)/2`, Θ(n²) (CORMEN et al., 2024, apêndice A).
-- **Soma geométrica**: a última parcela supera todas as anteriores juntas
-  (`512 > 1 + 2 + ... + 256`); dois laços aninhados podem dar Θ(n)
-  (LINTZMAYER; MOTA, 2023).
-- **Soma harmônica**: `1 + 1/2 + ... + 1/n` cresce como `ln n`; vezes `n`, dá
-  `n ln n` (CORMEN et al., 2024, apêndice A).
-- **Estouro na fórmula**: com `int n = 70000`, `n * (n - 1)` estoura antes da
-  divisão por 2; guarde `n` num `long`.
+A tradução do código para a soma é direta. Cada `for` vira um `Σ`; os
+limites do laço viram os limites da soma, e o corpo vira a parcela (CORMEN
+et al., 2024, apêndice A). No condomínio, o laço `for (j = 0; j < i; j++)`
+faz `i` passos para cada `i`, então o total é a soma de `i` com `i` indo de
+0 a `n-1`.
+
+Falta achar quanto essa soma dá. Há um truque antigo. Escreva a soma duas
+vezes, uma de frente para trás e outra de trás para frente, uma embaixo da
+outra: `0 + 1 + ... + (n-1)` em cima e `(n-1) + (n-2) + ... + 0` embaixo.
+Cada coluna soma `n-1`, e são `n` colunas, então as duas linhas juntas
+valem `n(n-1)`. Como isso é o dobro da soma, ela vale `n(n-1)/2`. Para 8
+moradores, 28 apertos; para 1000, 499.500. Essa é a **soma aritmética**, e
+ela é **Θ(n²)**: a divisão por 2 muda a constante, não a classe (CORMEN et
+al., 2024, apêndice A).
+
+Nem todo par de laços aninhados dá n², e a **soma geométrica** é o caso que
+mais engana. Se o laço de fora dobra `t` a cada volta (`t = 1, 2, 4, 8,
+...`) e o de dentro roda `t` vezes, o total é `1 + 2 + 4 + ... + 2^(k-1)`,
+que vale `2^k - 1`. A última parcela sozinha supera todas as anteriores
+juntas: `512 > 1 + 2 + ... + 256`. Como a última parcela é menor que `n`, o
+total fica abaixo de `2n`, e dois laços aninhados resultam em Θ(n)
+(LINTZMAYER; MOTA, 2023).
+
+A **soma harmônica** é `1 + 1/2 + 1/3 + ... + 1/n`, e ela cresce devagar,
+como o logaritmo natural `ln n` (CORMEN et al., 2024, apêndice A). Ela
+aparece quando o laço de dentro anda de `p` em `p`: para cada `p` de 1 a
+`n`, ele roda umas `n/p` vezes. O total é `n` vezes a soma harmônica, perto
+de `n ln n`, que é Θ(n log n).
+
+Na hora de calcular a fórmula em C, cuidado com o estouro. Com
+`int n = 70000`, a conta `n * (n - 1)` passa do maior `int` **antes** da
+divisão por 2, embora o resultado final caiba num `long`. Estouro de `int`
+com sinal é comportamento indefinido; guarde `n` num `long` antes de
+multiplicar.
+
+A tabela reúne as quatro somas que mais aparecem em laços:
 
 | laço | somatório | fórmula | classe |
 | --- | --- | --- | --- |
@@ -393,8 +475,9 @@ falhas de n0 até 1000: 0
 | `for p = 1..n`, `for (j = 0; j < n; j += p)` | harmônica: `Σ n/p` | `≈ n ln n` | Θ(n log n) |
 
 > [!WARNING]
-> `for (j = 0; j < i; j++)` roda `i` vezes e soma `n(n-1)/2`; com `j <= i`
-> soma `n(n+1)/2`. A classe é a mesma, mas o número exato fica errado. Teste
+> Cuidado com os limites. `for (j = 0; j < i; j++)` roda `i` vezes e soma
+> `n(n-1)/2`. Com `j <= i`, cada volta ganha um a mais: `n(n+1)/2`. Na
+> classe tanto faz (Θ(n²)); no **número exato**, é resposta errada. Teste
 > com `n = 1` e `n = 2` à mão.
 
 ### Exemplos de uso
@@ -646,21 +729,65 @@ Saída esperada:
 
 ### Conceito
 
-- **Complexidade espacial**: a memória que o algoritmo usa em função de `n`,
-  medida com as mesmas notações O, Ω e Θ (ZIVIANI, 2010, cap. 1).
-- **Espaço extra** (ou **auxiliar**): o que a função usa **além da entrada**.
-  É o que quase sempre interessa (LINTZMAYER; MOTA, 2023).
-- **In-place** (no lugar): o espaço extra é Θ(1), um número fixo de
-  variáveis simples. Uma cópia da entrada já é Θ(n)
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
-- **Pilha da recursão**: cada chamada ativa ocupa um frame. O espaço é a
-  **profundidade máxima** vezes o frame, não o total de chamadas
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 3).
-- **Onde mora a memória**: locais e frames ficam na **pilha**, pequena e fixa
-  (`ulimit -s` mostra 8192 KB); o `malloc` usa o **heap**; um `static` fica nos
-  dados estáticos (LINUX MAN-PAGES, s.d.).
-- **Tempo por espaço**: memoização, vetor de contagem e tabela hash gastam
-  memória para ganhar tempo (CORMEN et al., 2024).
+O motorista de entregas tem a rota do dia anotada numa folha: paradas 12,
+7, 30, 5, 18 e 9. Na volta, quer fazer o caminho ao contrário. Ele pode
+copiar a rota invertida numa folha nova, ou pode trocar os números na
+própria folha: a primeira parada com a última, a segunda com a penúltima, e
+assim por diante, sem gastar papel. Com 6 paradas tanto faz. Com 1 milhão
+de paradas guardadas como `int`, a folha nova pesa 4 MB.
+
+Até aqui a análise contou passos, o **tempo**. A **complexidade espacial**
+conta **memória**: quanto o algoritmo ocupa em função de `n`, medido com as
+mesmas notações O, Ω e Θ (ZIVIANI, 2010, cap. 1). Quase sempre o que
+interessa é o **espaço extra**, também chamado de **espaço auxiliar**: o
+que a função usa **além da entrada** que recebeu (LINTZMAYER; MOTA, 2023).
+A rota em si já existe antes da função ser chamada, então não conta.
+
+Com essa medida, as duas inversões se separam. Copiar numa folha nova pede
+um vetor auxiliar de `n` posições: espaço extra Θ(n). Trocar as pontas
+pede uma única variável para guardar um valor durante a troca, seja a rota
+de 6 ou de 1 milhão de paradas: espaço extra Θ(1). Um algoritmo que usa só
+um número fixo de variáveis simples, mexendo na própria entrada, se chama
+**in-place**, ou "no lugar" (TENENBAUM; LANGSAM; AUGENSTEIN, 1995,
+cap. 6).
+
+```c
+for (int i = 0, j = n - 1; i < j; i++, j--) {
+    int tmp = rota[i];   // a única memória extra
+    rota[i] = rota[j];
+    rota[j] = tmp;
+}
+```
+
+O espaço extra aparece em três lugares, e vale olhar cada um. O primeiro é
+o mais visível: vetores declarados e blocos pedidos ao `malloc`. Um vetor
+auxiliar de `n` posições é Θ(n); uma matriz `n × n` é Θ(n²).
+
+O segundo é a **pilha de chamadas**, e é o que passa despercebido. Cada
+chamada de função que ainda não terminou ocupa um **frame** na pilha, com
+seus parâmetros e variáveis locais (assunto 0031). Numa recursão, os frames
+se acumulam enquanto as chamadas descem. O espaço da recursão é a
+**profundidade máxima**, o maior número de chamadas ativas ao mesmo tempo,
+vezes o tamanho do frame. Não é o total de chamadas feitas ao longo da
+execução (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 3). A busca binária
+recursiva faz umas `log n` chamadas, uma dentro da outra, e por isso usa
+Θ(log n) de pilha; a versão com laço usa Θ(1).
+
+O terceiro são as tabelas criadas para ganhar tempo: a memoização, que
+guarda resultados já calculados, o vetor de contagem do counting sort, a
+tabela hash. Em todos, o algoritmo gasta memória para economizar passos. É
+a troca de **tempo por espaço** (CORMEN et al., 2024).
+
+Cada tipo de memória mora num lugar diferente do processo, com limites
+diferentes. Variáveis locais e frames ficam na **pilha**, que é pequena e
+tem tamanho fixo: no Linux, `ulimit -s` costuma mostrar 8192 KB. O
+`malloc` usa o **heap**, que pode crescer até o tamanho da RAM. Uma
+variável `static` fica na área de **dados estáticos**, reservada quando o
+programa começa (LINUX MAN-PAGES, s.d.). Um `static int grande[1000000]`
+ocupa 4 MB nos dados estáticos; sem o `static`, dentro de uma função,
+seriam 4 MB na pilha, metade do limite.
+
+A tabela resume tempo e espaço extra dos algoritmos que você já viu:
 
 | algoritmo | tempo | espaço extra |
 | --- | --- | --- |
@@ -674,9 +801,10 @@ Saída esperada:
 | counting sort com valores de 0 a k | Θ(n + k) | Θ(n + k) |
 
 > [!WARNING]
-> Recursão **custa** espaço mesmo sem vetor. `soma(v, n) = v[n-1] + soma(v,
-> n-1)` empilha `n` frames: com 1 milhão de elementos, a pilha de 8 MB estoura
-> em *segmentation fault*. Procure a **profundidade máxima**, não só os `malloc`.
+> Recursão **custa** espaço, mesmo sem vetor. `soma(v, n) = v[n-1] +
+> soma(v, n-1)` tem espaço extra Θ(n): `n` frames empilhados. Com 1 milhão
+> de elementos, a pilha de 8 MB estoura em *segmentation fault*; o laço usa
+> Θ(1). Procure a **profundidade máxima**, não só os `malloc`.
 
 ### Exemplos de uso
 
@@ -956,26 +1084,57 @@ Saída esperada:
 
 ### Conceito
 
-- **Ficha de complexidade**: tempo e espaço extra de uma função, cada um com
-  sua classe Θ e o caso a que se refere (ZIVIANI, 2010, cap. 1).
-- **Ler o código**: a fórmula exata de passos sai dos somatórios (0167); o
-  espaço extra, dos vetores, dos `malloc` e da profundidade da recursão (0168)
-  (CORMEN et al., 2024, apêndice A).
-- **Instrumentar**: um contador no laço mais interno, outro de bytes em cada
-  `malloc` e outro de frames vivos. O TAD `custo.h` guarda os três:
-  `custo_passos`, `custo_bytes` e `custo_prof_max`.
-- **Dobrar o `n`**: a versão prática do Θ (0166). Em Θ(n²) a razão
-  `f(2n) / f(n)` vai para 4; em Θ(n log n), fica um pouco acima de 2; em
-  Θ(log n), soma 1 (FEOFILOFF, 2009).
-- **O que é um passo** em cada função: um elemento somado, um elemento olhado
-  na busca, um par testado, um elemento copiado na intercalação, uma chamada
-  na soma recursiva.
-- **Heap e pilha**: o `custo_bytes` mede o heap; a pilha só se mede em frames.
+O fornecedor do sistema de caixa de uma loja de material de construção
+entregou cinco funções que trabalham sobre o vetor de preços, em centavos.
+Cada função veio com uma **ficha de complexidade**: o tempo e o espaço
+extra, cada um com sua classe Θ e o caso a que se refere (ZIVIANI, 2010,
+cap. 1). Fichas assim são promessas. Para conferir uma
+promessa dessas, você usa tudo o que o módulo ensinou: primeiro no papel, depois
+rodando o código.
+
+O primeiro passo é **ler o código**. Os laços dão a fórmula exata de
+passos, montada com os somatórios do assunto 0167: dois laços com `j < i`
+dão `n(n-1)/2`, por exemplo (CORMEN et al., 2024, apêndice A). O espaço
+extra sai do assunto 0168: procure os vetores auxiliares, os `malloc` e a
+profundidade máxima da recursão. No fim da leitura, você tem duas fórmulas
+por função e uma ficha que acredita ser a certa.
+
+O segundo passo é **instrumentar** o código, isto é, acrescentar contadores
+que registram o trabalho feito. Um contador de passos vai no laço mais
+interno. Outro soma os bytes pedidos em cada `malloc`. Um terceiro acompanha
+quantos frames estão vivos ao mesmo tempo e guarda o maior valor. O TAD
+`custo.h` reúne os três em variáveis globais: `custo_passos`, `custo_bytes`
+e `custo_prof_max`.
+
+Para o contador significar algo, é preciso decidir o que conta como **um
+passo** em cada função. Na soma, um passo é um elemento somado. Na busca
+binária, um elemento olhado. Na função que testa pares, um par testado. No
+merge sort, um elemento copiado durante a intercalação. Na soma recursiva,
+uma chamada. A escolha segue a operação que domina o custo, a que mais se
+repete.
+
+O terceiro passo é **medir e comparar** com a fórmula. Se a fórmula diz
+`n(n-1)/2` e o contador mostra outro número, a fórmula ou o código está
+errado. Compare o número exato antes de olhar a classe: uma fórmula errada
+pode ter a classe certa e passar despercebida.
+
+O quarto passo é **dobrar o `n`** e olhar a razão `f(2n) / f(n)`. É a
+versão prática do Θ do assunto 0166: o que importa é como o custo cresce,
+e dobrar a entrada mostra isso sem precisar das constantes (FEOFILOFF,
+2009). Em Θ(n), a razão é 2. Em Θ(n²), ela vai para 4, porque `(2n)² =
+4n²`. Em Θ(n log n), fica um pouco acima de 2. Em Θ(log n), o custo não
+multiplica: soma 1, já que `log(2n) = log n + 1`.
+
+Um limite da instrumentação: o `custo_bytes` mede só o **heap**, a memória
+do `malloc`. A pilha não tem um contador de bytes confiável, e por isso só
+se mede em frames. Ferramentas como o AddressSanitizer mudam o tamanho dos
+frames com zonas de proteção, o que reforça a escolha de contar frames.
 
 > [!WARNING]
 > A medida vale para a entrada testada. A busca roda no **pior caso** (1
-> centavo, que não está no vetor); com o preço do meio, faz 1 passo. Diga qual
-> caso a entrada representa.
+> centavo, que não está no vetor); com o preço do meio, faz 1 passo. Os
+> pares fazem `n(n-1)/2` testes em **qualquer** entrada. Diga qual caso a
+> entrada representa.
 
 ### Exemplos de uso
 

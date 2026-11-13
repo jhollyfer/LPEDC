@@ -1,20 +1,64 @@
 ## 0168 · Complexidade espacial
 
-- **Complexidade espacial**: a memória que o algoritmo usa em função de `n`,
-  medida com as mesmas notações O, Ω e Θ (ZIVIANI, 2010, cap. 1).
-- **Espaço extra** (ou **auxiliar**): o que a função usa **além da entrada**.
-  É o que quase sempre interessa (LINTZMAYER; MOTA, 2023).
-- **In-place** (no lugar): o espaço extra é Θ(1), um número fixo de
-  variáveis simples. Uma cópia da entrada já é Θ(n)
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
-- **Pilha da recursão**: cada chamada ativa ocupa um frame. O espaço é a
-  **profundidade máxima** vezes o frame, não o total de chamadas
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 3).
-- **Onde mora a memória**: locais e frames ficam na **pilha**, pequena e fixa
-  (`ulimit -s` mostra 8192 KB); o `malloc` usa o **heap**; um `static` fica nos
-  dados estáticos (LINUX MAN-PAGES, s.d.).
-- **Tempo por espaço**: memoização, vetor de contagem e tabela hash gastam
-  memória para ganhar tempo (CORMEN et al., 2024).
+O motorista de entregas tem a rota do dia anotada numa folha: paradas 12,
+7, 30, 5, 18 e 9. Na volta, quer fazer o caminho ao contrário. Ele pode
+copiar a rota invertida numa folha nova, ou pode trocar os números na
+própria folha: a primeira parada com a última, a segunda com a penúltima, e
+assim por diante, sem gastar papel. Com 6 paradas tanto faz. Com 1 milhão
+de paradas guardadas como `int`, a folha nova pesa 4 MB.
+
+Até aqui a análise contou passos, o **tempo**. A **complexidade espacial**
+conta **memória**: quanto o algoritmo ocupa em função de `n`, medido com as
+mesmas notações O, Ω e Θ (ZIVIANI, 2010, cap. 1). Quase sempre o que
+interessa é o **espaço extra**, também chamado de **espaço auxiliar**: o
+que a função usa **além da entrada** que recebeu (LINTZMAYER; MOTA, 2023).
+A rota em si já existe antes da função ser chamada, então não conta.
+
+Com essa medida, as duas inversões se separam. Copiar numa folha nova pede
+um vetor auxiliar de `n` posições: espaço extra Θ(n). Trocar as pontas
+pede uma única variável para guardar um valor durante a troca, seja a rota
+de 6 ou de 1 milhão de paradas: espaço extra Θ(1). Um algoritmo que usa só
+um número fixo de variáveis simples, mexendo na própria entrada, se chama
+**in-place**, ou "no lugar" (TENENBAUM; LANGSAM; AUGENSTEIN, 1995,
+cap. 6).
+
+```c
+for (int i = 0, j = n - 1; i < j; i++, j--) {
+    int tmp = rota[i];   // a única memória extra
+    rota[i] = rota[j];
+    rota[j] = tmp;
+}
+```
+
+O espaço extra aparece em três lugares, e vale olhar cada um. O primeiro é
+o mais visível: vetores declarados e blocos pedidos ao `malloc`. Um vetor
+auxiliar de `n` posições é Θ(n); uma matriz `n × n` é Θ(n²).
+
+O segundo é a **pilha de chamadas**, e é o que passa despercebido. Cada
+chamada de função que ainda não terminou ocupa um **frame** na pilha, com
+seus parâmetros e variáveis locais (assunto 0031). Numa recursão, os frames
+se acumulam enquanto as chamadas descem. O espaço da recursão é a
+**profundidade máxima**, o maior número de chamadas ativas ao mesmo tempo,
+vezes o tamanho do frame. Não é o total de chamadas feitas ao longo da
+execução (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 3). A busca binária
+recursiva faz umas `log n` chamadas, uma dentro da outra, e por isso usa
+Θ(log n) de pilha; a versão com laço usa Θ(1).
+
+O terceiro são as tabelas criadas para ganhar tempo: a memoização, que
+guarda resultados já calculados, o vetor de contagem do counting sort, a
+tabela hash. Em todos, o algoritmo gasta memória para economizar passos. É
+a troca de **tempo por espaço** (CORMEN et al., 2024).
+
+Cada tipo de memória mora num lugar diferente do processo, com limites
+diferentes. Variáveis locais e frames ficam na **pilha**, que é pequena e
+tem tamanho fixo: no Linux, `ulimit -s` costuma mostrar 8192 KB. O
+`malloc` usa o **heap**, que pode crescer até o tamanho da RAM. Uma
+variável `static` fica na área de **dados estáticos**, reservada quando o
+programa começa (LINUX MAN-PAGES, s.d.). Um `static int grande[1000000]`
+ocupa 4 MB nos dados estáticos; sem o `static`, dentro de uma função,
+seriam 4 MB na pilha, metade do limite.
+
+A tabela resume tempo e espaço extra dos algoritmos que você já viu:
 
 | algoritmo | tempo | espaço extra |
 | --- | --- | --- |
@@ -28,9 +72,10 @@
 | counting sort com valores de 0 a k | Θ(n + k) | Θ(n + k) |
 
 > [!WARNING]
-> Recursão **custa** espaço mesmo sem vetor. `soma(v, n) = v[n-1] + soma(v,
-> n-1)` empilha `n` frames: com 1 milhão de elementos, a pilha de 8 MB estoura
-> em *segmentation fault*. Procure a **profundidade máxima**, não só os `malloc`.
+> Recursão **custa** espaço, mesmo sem vetor. `soma(v, n) = v[n-1] +
+> soma(v, n-1)` tem espaço extra Θ(n): `n` frames empilhados. Com 1 milhão
+> de elementos, a pilha de 8 MB estoura em *segmentation fault*; o laço usa
+> Θ(1). Procure a **profundidade máxima**, não só os `malloc`.
 
 {{exemplo}}
 

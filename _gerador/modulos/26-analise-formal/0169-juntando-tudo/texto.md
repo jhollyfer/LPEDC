@@ -1,25 +1,56 @@
 ## 0169 · Juntando tudo: passos e bytes conferidos
 
-- **Ficha de complexidade**: tempo e espaço extra de uma função, cada um com
-  sua classe Θ e o caso a que se refere (ZIVIANI, 2010, cap. 1).
-- **Ler o código**: a fórmula exata de passos sai dos somatórios (0167); o
-  espaço extra, dos vetores, dos `malloc` e da profundidade da recursão (0168)
-  (CORMEN et al., 2024, apêndice A).
-- **Instrumentar**: um contador no laço mais interno, outro de bytes em cada
-  `malloc` e outro de frames vivos. O TAD `custo.h` guarda os três:
-  `custo_passos`, `custo_bytes` e `custo_prof_max`.
-- **Dobrar o `n`**: a versão prática do Θ (0166). Em Θ(n²) a razão
-  `f(2n) / f(n)` vai para 4; em Θ(n log n), fica um pouco acima de 2; em
-  Θ(log n), soma 1 (FEOFILOFF, 2009).
-- **O que é um passo** em cada função: um elemento somado, um elemento olhado
-  na busca, um par testado, um elemento copiado na intercalação, uma chamada
-  na soma recursiva.
-- **Heap e pilha**: o `custo_bytes` mede o heap; a pilha só se mede em frames.
+O fornecedor do sistema de caixa de uma loja de material de construção
+entregou cinco funções que trabalham sobre o vetor de preços, em centavos.
+Cada função veio com uma **ficha de complexidade**: o tempo e o espaço
+extra, cada um com sua classe Θ e o caso a que se refere (ZIVIANI, 2010,
+cap. 1). Fichas assim são promessas. Para conferir uma
+promessa dessas, você usa tudo o que o módulo ensinou: primeiro no papel, depois
+rodando o código.
+
+O primeiro passo é **ler o código**. Os laços dão a fórmula exata de
+passos, montada com os somatórios do assunto 0167: dois laços com `j < i`
+dão `n(n-1)/2`, por exemplo (CORMEN et al., 2024, apêndice A). O espaço
+extra sai do assunto 0168: procure os vetores auxiliares, os `malloc` e a
+profundidade máxima da recursão. No fim da leitura, você tem duas fórmulas
+por função e uma ficha que acredita ser a certa.
+
+O segundo passo é **instrumentar** o código, isto é, acrescentar contadores
+que registram o trabalho feito. Um contador de passos vai no laço mais
+interno. Outro soma os bytes pedidos em cada `malloc`. Um terceiro acompanha
+quantos frames estão vivos ao mesmo tempo e guarda o maior valor. O TAD
+`custo.h` reúne os três em variáveis globais: `custo_passos`, `custo_bytes`
+e `custo_prof_max`.
+
+Para o contador significar algo, é preciso decidir o que conta como **um
+passo** em cada função. Na soma, um passo é um elemento somado. Na busca
+binária, um elemento olhado. Na função que testa pares, um par testado. No
+merge sort, um elemento copiado durante a intercalação. Na soma recursiva,
+uma chamada. A escolha segue a operação que domina o custo, a que mais se
+repete.
+
+O terceiro passo é **medir e comparar** com a fórmula. Se a fórmula diz
+`n(n-1)/2` e o contador mostra outro número, a fórmula ou o código está
+errado. Compare o número exato antes de olhar a classe: uma fórmula errada
+pode ter a classe certa e passar despercebida.
+
+O quarto passo é **dobrar o `n`** e olhar a razão `f(2n) / f(n)`. É a
+versão prática do Θ do assunto 0166: o que importa é como o custo cresce,
+e dobrar a entrada mostra isso sem precisar das constantes (FEOFILOFF,
+2009). Em Θ(n), a razão é 2. Em Θ(n²), ela vai para 4, porque `(2n)² =
+4n²`. Em Θ(n log n), fica um pouco acima de 2. Em Θ(log n), o custo não
+multiplica: soma 1, já que `log(2n) = log n + 1`.
+
+Um limite da instrumentação: o `custo_bytes` mede só o **heap**, a memória
+do `malloc`. A pilha não tem um contador de bytes confiável, e por isso só
+se mede em frames. Ferramentas como o AddressSanitizer mudam o tamanho dos
+frames com zonas de proteção, o que reforça a escolha de contar frames.
 
 > [!WARNING]
 > A medida vale para a entrada testada. A busca roda no **pior caso** (1
-> centavo, que não está no vetor); com o preço do meio, faz 1 passo. Diga qual
-> caso a entrada representa.
+> centavo, que não está no vetor); com o preço do meio, faz 1 passo. Os
+> pares fazem `n(n-1)/2` testes em **qualquer** entrada. Diga qual caso a
+> entrada representa.
 
 {{exemplo}}
 
