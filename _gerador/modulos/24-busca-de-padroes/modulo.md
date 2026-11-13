@@ -1,14 +1,9 @@
 # Módulo 24 · Busca de padrões em texto
 
-Ctrl+F, `grep`, o antivírus, o filtro de palavrões do chat, o trecho de DNA
-num genoma de 3 bilhões de letras: tudo é achar um **padrão** de `m` letras
-num **texto** de `n` letras.
-
-Testar cada posição funciona, mas o pior caso é O(n·m). Este módulo traz três
-ideias melhores: **não reler** o que já foi visto (KMP), **pular** o que não
-pode dar certo (Horspool) e **comparar números** em vez de letras
-(Rabin-Karp). No fim, os quatro algoritmos viram um TAD e você monta um
-**mini-grep** que mede qual trabalha menos.
+Achar um **padrão** de `m` letras num **texto** de `n` letras: força bruta,
+KMP, Horspool e Rabin-Karp, e no fim um **mini-grep** que compara os quatro.
+Depende de strings (0041), hashing (0105) e ponteiros para função (0050). É
+complemento: não cai direto na prova do PPGI.
 
 ## O que você vai aprender
 
@@ -22,25 +17,18 @@ pode dar certo (Horspool) e **comparar números** em vez de letras
 
 ## Antes de começar
 
-Usa strings (0041), ponteiros (0047), `size_t` (0003), análise de custo (0072),
-invariantes (0073), hashing (0105) e ponteiros para função (0050).
+Revise strings (0041), ponteiros (0047), `size_t` (0003), análise de custo
+(0072), invariantes (0073), hashing (0105) e ponteiros para função (0050).
 
 Nos diagramas, o texto é uma fileira de gavetas com o padrão embaixo. **Verde**
 é letra que bateu ou ocorrência achada, **vermelha** a que falhou (ou o falso
-positivo), **amarela** a que decide o próximo passo, **roxa** o padrão,
-**azul** texto ainda não comparado e **cinza** o que não precisou ser olhado.
-Faça o passo a passo no papel antes de rodar.
+positivo), **amarela** a que decide o próximo passo, **roxa** o padrão, **azul**
+texto ainda não comparado e **cinza** o que não precisou ser olhado.
 
-Este módulo é complemento: não cai direto na prova do PPGI (o que mais cai
-está em `PPGI.md`, na raiz do curso).
-
-Os quatro primeiros assuntos têm um arquivo só por exemplo; no 0161 os
-algoritmos viram o TAD `padroes.h`, compilado junto com os exemplos e
-exercícios da pasta. Os exemplos contam **comparações de letra**, um custo que
-dá o mesmo número em qualquer máquina; o tempo de relógio só aparece no A321.
-Os algoritmos trabalham com **bytes**: em UTF-8, letra acentuada tem dois
-bytes acima de 127, que num `char` com sinal viram negativos e quebram o uso
-como índice de tabela (assunto 0159).
+Os exemplos contam **comparações de letra**, que dão o mesmo número em qualquer
+máquina; o tempo de relógio só aparece no A321. No 0161 os algoritmos viram o
+TAD `padroes.h`, compilado junto com os exemplos da pasta. Tudo trabalha com
+**bytes**: letra acentuada em UTF-8 quebra o uso como índice (0159).
 
 {{indice}}
 

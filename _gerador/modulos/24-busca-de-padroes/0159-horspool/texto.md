@@ -1,34 +1,32 @@
 ## 0159 · Horspool
 
-Na feira, você procura "MANGA" nas placas. Se a placa termina com uma letra
-que não existe em "MANGA", pule para a próxima. Dá para ler **menos** letras
-que a força bruta e o KMP?
+- **Comparar da direita para a esquerda**: olhe a letra do texto sob a
+  **última** casa do padrão. Se ela não aparece no padrão, o padrão pula `m`
+  casas (FEOFILOFF, 2009, cap. 13).
+- **Horspool**: versão simples do **Boyer-Moore**. Se a letra aparece, o salto
+  leva a ocorrência **mais à direita** dela no padrão até ficar sob ela
+  (HORSPOOL, 1980).
+- **Tabela de saltos**: uma casa por byte (256). Toda letra começa com `m`; para
+  `j` de 0 até `m - 2`, `salto[padrao[j]] = m - 1 - j`. A última letra fica de
+  fora: seu salto seria 0 (ZIVIANI, 2010, cap. 8).
+- **Avanço**: achando ou não, o próximo alinhamento é
+  `i + salto[texto[i + m - 1]]`.
+- **Custo**: com alfabeto grande, o salto fica perto de `m` e a busca olha umas
+  `n / m` letras: padrão **maior**, busca **mais rápida** (A317). O pior caso
+  segue O(n·m): "baaa" num texto só de `a` (E952) (ZIVIANI, 2010, cap. 8).
+- **Boyer-Moore completo**: acrescenta a tabela do **bom sufixo**, que garante
+  busca linear; o Horspool troca essa garantia por um código curto.
 
-Dá: compare o padrão **da direita para a esquerda**. Olhe a letra do texto
-sob a **última** casa do padrão. Se ela não aparece no padrão, nenhum
-alinhamento que a cubra dá certo, e o padrão pula `m` casas. Se aparece, o
-salto leva a ocorrência **mais à direita** dela no padrão até ficar sob a
-mesma letra do texto. É o algoritmo de **Horspool** (1980), versão simples do
-**Boyer-Moore** (1977).
+> [!WARNING]
+> O índice da tabela tem que ser `unsigned char`: em UTF-8, o `ã` começa com o
+> byte 0xC3, que num `char` com sinal vale **-61**, e `salto[-61]` escreve fora
+> do vetor. E não ponha a última letra do padrão na tabela.
 
-Os saltos dependem só do padrão e ficam numa **tabela de saltos**, uma casa
-por valor de byte (256):
+{{exemplo}}
 
-- toda letra começa com `salto = m`;
-- para cada `j` de 0 até `m - 2`, `salto[padrao[j]] = m - 1 - j`, a distância
-  de `j` até a última casa. Como `j` cresce, a letra repetida fica com a
-  ocorrência mais à direita.
-
-A última letra fica de fora: seu salto seria 0 e a busca não andaria.
-
-Cada alinhamento `i` compara de `j = m - 1` para trás. Achando ou não, o
-próximo é `i + salto[texto[i + m - 1]]`.
-
-A placa é "A BANCA VENDE MANGA" (19 letras) e o padrão é "MANGA" (`m = 5`).
-Os saltos são M = 4, A = 3, N = 2, G = 1 e 5 para as outras. No alinhamento 0,
-sob a última casa está o `N`: salta 2. No 2, o `A` bate, o `C` não, e o `A`
-manda saltar 3. No 5, o `E` salta 5. No 10, o `M` salta 4. No 14, as cinco
-letras batem:
+Procure "MANGA" (`m = 5`) na placa "A BANCA VENDE MANGA" (19 letras). Os saltos
+são M = 4, A = 3, N = 2, G = 1 e 5 para as outras; o padrão salta 2, 3, 5 e 4
+até casar no alinhamento 14:
 
 {{ideia}}
 
@@ -113,25 +111,3 @@ Foram 10 comparações; a força bruta faz 19. O passo do `i` vem da tabela,
 pela última letra da janela:
 
 {{fluxograma}}
-
-Com alfabeto grande e padrão comprido, o salto fica perto de `m` e a busca
-olha umas `n / m` letras: quanto **maior** o padrão, **mais rápida** a busca
-(o A317 mede). O pior caso continua O(n·m): "baaa" num texto só de `a`
-compara 4 letras e salta 1 por alinhamento (E952).
-
-> [!WARNING]
-> O índice da tabela tem que ser `unsigned char`. Em UTF-8, o `ã` começa com
-> o byte 0xC3, que num `char` com sinal (gcc em x86) vale **-61**, e
-> `salto[-61]` escreve fora do vetor sem erro de compilação. Converta:
-> `salto[(unsigned char) c]`. E não ponha a última letra do padrão na tabela.
-
-> [!TIP]
-> O Boyer-Moore completo acrescenta a tabela do **bom sufixo**, que garante
-> busca linear; o Horspool troca essa garantia por um código curto.
-
-> [!NOTE]
-> **Pergunta para você:** qual é a tabela de saltos de "BANANA"? E quantos
-> alinhamentos o Horspool testa para procurar "BANANA" em "BANDANA BANANA"?
-> Faça no papel e confira no código.
-
-{{pratique}}

@@ -1,28 +1,31 @@
 ## 0157 · Força bruta
 
-Você aperta Ctrl+F no PDF do contrato de aluguel e digita "multa": o leitor
-pinta todas as ocorrências. É achar um **padrão** dentro de um **texto**, o
-problema do `grep` e do antivírus.
+- **Busca de padrão**: achar um **padrão** de `m` letras dentro de um **texto**
+  de `n` letras, `m <= n`. É o problema do Ctrl+F e do `grep`
+  (CORMEN et al., 2024, cap. 32).
+- **Alinhamento**: encostar o padrão no texto a partir da posição `i`. Se as `m`
+  letras batem com `texto[i..i+m-1]`, há uma **ocorrência** em `i`.
+- **Força bruta** (busca ingênua): testa todos os alinhamentos, de `i = 0` a
+  `n - m`, comparando da esquerda para a direita e desistindo na primeira
+  diferença (FEOFILOFF, 2009, cap. 13).
+- **Sobreposição**: em "banana", "ana" aparece em 1 e em 3; como anda de 1 em 1,
+  a força bruta acha as duas.
+- **Custo**: num texto comum, perto de `n` comparações. No **pior caso**,
+  `(n - m + 1) · m`, ou **O(n·m)**, como `"00001"` num código de vinte zeros
+  (A314). Memória O(1) (ZIVIANI, 2010, cap. 8).
+- **`strstr(texto, padrao)`** (`string.h`): devolve um ponteiro para a primeira
+  ocorrência ou `NULL`; a posição é `p - texto`. Para a próxima, chame de novo a
+  partir de `p + 1` (A313) (DEITEL; DEITEL, 2011, cap. 8).
 
-O texto tem `n` letras e o padrão tem `m`, com `m <= n`. Um **alinhamento**
-encosta o padrão no texto a partir de uma posição `i`. Se as `m` letras batem
-com `texto[i..i+m-1]`, há uma **ocorrência** em `i`.
+> [!WARNING]
+> O laço vai até `i <= n - m`, **inclusive**: com `<`, a última ocorrência some.
+> Guarde `n` e `m` em `int`: `strlen` devolve `size_t`, sem sinal, e com padrão
+> maior que o texto `n - m` **dá a volta**.
 
-A **força bruta** (ou busca ingênua) testa todos os alinhamentos, `i = 0, 1,
-..., n - m`. Em cada um, compara da esquerda para a direita e desiste na
-primeira diferença. O último alinhamento começa em `n - m`, porque depois dele
-o padrão não cabe.
+{{exemplo}}
 
-As ocorrências podem se **sobrepor**: em "banana", "ana" aparece em 1 e em 3.
-A força bruta acha as duas porque avança de 1 em 1.
-
-Num texto comum, quase todo alinhamento falha na primeira ou na segunda letra:
-perto de `n` comparações. No **pior caso**, cada alinhamento compara quase o
-padrão inteiro: até `(n - m + 1) · m`, ou **O(n·m)**. Procurar `"00001"` num
-código de vinte zeros faz isso (A314).
-
-Procure "ana" em "banana bacana": são 11 alinhamentos, com ocorrências no 1,
-no 3 e no 10. O 0 falha no "b" e o 5 falha no espaço:
+Procure "ana" em "banana bacana": são 11 alinhamentos, com ocorrências no 1, no
+3 e no 10. O 0 falha no "b" e o 5 falha no espaço:
 
 {{ideia}}
 
@@ -95,24 +98,3 @@ O laço de fora anda o alinhamento `i`, o de dentro anda a letra `j`. O `i`
 sempre avança 1, tenha achado ou não:
 
 {{fluxograma}}
-
-`strstr(texto, padrao)`, de `string.h`, devolve um ponteiro para a primeira
-ocorrência ou `NULL`; a posição é `p - texto`. Para a próxima, chame de novo
-a partir de `p + 1` (o A313 compara `p + 1` e `p + m`).
-
-> [!WARNING]
-> O laço vai até `i <= n - m`, **inclusive**: com `i < n - m`, o "ana" da
-> posição 10 some. Guarde `n` e `m` em `int`: `strlen` devolve `size_t`, sem
-> sinal, e com padrão maior que o texto `n - m` **dá a volta** e o laço lê além
-> do `'\0'`.
-
-> [!TIP]
-> A força bruta usa memória O(1). Escrever pelo ponteiro que o `strstr`
-> devolve, num literal, é comportamento indefinido (assunto 0048).
-
-> [!NOTE]
-> **Pergunta para você:** quantas comparações a força bruta faz para procurar
-> "aaab" em "aaaaaaaaab" (nove "a" e um "b")? E para procurar "baaa" no mesmo
-> texto? Conte no papel e troque os valores no código para conferir.
-
-{{pratique}}

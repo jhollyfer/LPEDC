@@ -1,9 +1,19 @@
 ## 0161 · Juntando tudo
 
-O síndico quer os avisos do condomínio que falam da garagem: `grep garagem
-avisos.txt`. Aqui você monta o seu **mini-grep** com os quatro algoritmos do
-módulo e mede qual trabalha menos. Os quatro ficam num TAD, `padroes.h` e
-`padroes.c`, com a mesma assinatura:
+- **Grep**: mostra as linhas de um arquivo que têm um padrão fixo
+  (KERNIGHAN; RITCHIE, 1989).
+- **Mesma assinatura**: os quatro algoritmos do módulo ficam num TAD
+  (`padroes.h`, `padroes.c`), devolvem quantas ocorrências acharam, guardam as
+  primeiras `max` posições em `pos` (ou nada, se `NULL`) e **somam** em
+  `*comparacoes` as comparações de letra.
+- **Ponteiro para função** (assunto 0050): `Busca` aponta para qualquer um dos
+  quatro, e um vetor de structs `{nome, busca}` troca de algoritmo pelo índice
+  (KERNIGHAN; RITCHIE, 1989).
+- **Comparação de letra** é um cronômetro que não depende da máquina, mas não é
+  tempo: o Rabin-Karp troca comparações por contas de hash.
+- **`clock()`** (`<time.h>`): tempo de processador em tiques; divida a diferença
+  por `CLOCKS_PER_SEC`. Com `-O2`, o `gcc` pode apagar uma busca cujo resultado
+  ninguém usa, e por isso o A321 imprime o total.
 
 ```c
 typedef int (*Busca)(const char *texto, int n, const char *padrao, int m,
@@ -15,15 +25,6 @@ int pb_horspool(...);
 int pb_rabin_karp(...);
 ```
 
-Cada função devolve quantas ocorrências achou, guarda as posições das
-primeiras `max` em `pos` (ou nada, se `pos` for `NULL`) e **soma** em
-`*comparacoes` as comparações de letra, acumulando o custo do arquivo inteiro.
-`Busca` é um ponteiro para função (assunto 0050), e um vetor de structs
-`{nome, busca}` guarda os quatro: para trocar de algoritmo, troque o índice
-em `algs[a].busca(...)`.
-
-Cada um vence numa situação:
-
 | | preparo | memória extra | pior caso | caso comum | ponto forte |
 | --- | --- | --- | --- | --- | --- |
 | força bruta | nenhum | nenhuma | O(n·m) | perto de `n` | simples; ótima para padrão curto |
@@ -31,9 +32,16 @@ Cada um vence numa situação:
 | Horspool | saltos, O(256 + m) | 256 inteiros | O(n·m) | perto de `n / m` | pula letras; melhora com padrão longo |
 | Rabin-Karp | hash do padrão, O(m) | nenhuma | O(n·m) | O(n + m) | vários padrões de uma vez; texto como números |
 
-São 8 avisos e o padrão é "garagem". O grep mostra as linhas 3, 5 e 8 (a 3
-tem duas ocorrências). Os quatro algoritmos dão o mesmo resultado, com
-trabalho diferente:
+> [!WARNING]
+> Os algoritmos trabalham com **bytes**: em UTF-8, "Reunião" tem 8 bytes, as
+> posições são de byte, e "garagem" não acha "GARAGEM" (E963 e E951). O seu grep
+> trata só padrões fixos.
+
+{{exemplo}}
+
+O síndico quer os avisos do condomínio que falam da garagem. São 8 avisos e o
+grep mostra as linhas 3, 5 e 8 (a 3 tem duas ocorrências). Os quatro algoritmos
+dão o mesmo resultado, com trabalho diferente:
 
 {{ideia}}
 
@@ -110,28 +118,6 @@ O grep é um laço sobre as linhas com uma chamada de busca no meio:
 
 {{fluxograma}}
 
-O KMP fez **mais** comparações que a força bruta: em texto comum ela falha
-na primeira letra, e o KMP só ganha com muita repetição parcial. O Rabin-Karp
-parece imbatível, mas seu número só conta a conferência: as contas de hash das
-317 janelas não entram. O A321 usa o **cronômetro** `clock()` em textos de 2
-milhões de letras.
-
-> [!WARNING]
-> Comparação de letra não é tempo: o Rabin-Karp troca comparações por
-> multiplicações e restos, e o Horspool lê a tabela a cada alinhamento. Os
-> algoritmos trabalham com **bytes**: em UTF-8, "Reunião" tem 8 bytes, as
-> posições são de byte, e "garagem" não acha "GARAGEM" (E963 e E951). O seu
-> grep trata só padrões fixos.
-
-> [!TIP]
-> `clock()`, de `<time.h>`, devolve o tempo de processador em "tiques";
-> divida a diferença por `CLOCKS_PER_SEC` para ter segundos. Meça trechos
-> grandes. Com `-O2`, o `gcc` pode apagar uma busca cujo resultado ninguém
-> usa; por isso o A321 imprime o total achado.
-
-> [!NOTE]
-> **Pergunta para você:** se o padrão fosse "a", com uma letra só, qual dos
-> quatro faria menos comparações nos 8 avisos? E com "de"? Pense antes e
-> confira trocando o padrão no código.
-
-{{pratique}}
+O KMP fez **mais** comparações que a força bruta: em texto comum ela falha na
+primeira letra. O número do Rabin-Karp só conta a conferência; as contas de hash
+das 317 janelas não entram.

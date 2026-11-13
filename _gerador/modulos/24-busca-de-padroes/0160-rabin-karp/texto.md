@@ -1,28 +1,32 @@
 ## 0160 · Rabin-Karp
 
-Dois arquivos de 1 GB são iguais? Compare o hash de cada um (uma **impressão
-digital**): se diferem, os arquivos diferem; se batem, só então vale conferir.
+- **Impressão digital**: o hash (assunto 0105) resume um texto. Hashes
+  diferentes garantem textos diferentes; hashes iguais só pedem conferência.
+- **Rabin-Karp**: calcula o hash do padrão e o de cada **janela** de `m` letras
+  do texto, e só compara letra a letra quando os hashes batem
+  (KARP; RABIN, 1987).
+- **Hash rolante**: a janela seguinte perde uma letra e ganha outra, e o hash
+  novo sai do antigo em O(1). Com dígitos, de `271` para `718`:
+  `(271 - 2·100)·10 + 8` (CORMEN et al., 2024, cap. 32).
+- **Módulo `q`**: com letras, base 256 e tudo **módulo um primo `q`** grande
+  (como 1.000.003), em `long long`, porque os números ficam enormes
+  (SEDGEWICK; WAYNE, 2011).
+- **Colisão** ou **falso positivo**: janelas diferentes com o mesmo resto. Por
+  isso a conferência letra a letra nunca pode ser pulada (A319 mostra os falsos
+  positivos caindo com `q` maior).
+- **Custo**: O(n + m) na média com `q` grande; O(n·m) se tudo colidir
+  (CORMEN et al., 2024, cap. 32).
 
-O **Rabin-Karp** (1987) aplica isso à busca (hashing, assunto 0105): calcula
-o hash do padrão e o de cada **janela** de `m` letras do texto, e só compara
-letra a letra quando os hashes batem.
+> [!WARNING]
+> Em C, `-7 % 13` vale `-7`, não `6`. `ht - t[i] * pot` fica negativo, e um hash
+> negativo nunca bate: a busca **perde ocorrências** sem erro. Por isso a linha
+> é `(ht - t[i] * pot % Q + Q) % Q`.
 
-Recalcular cada janela custa `m` passos, sem ganho. A saída é o **hash
-rolante**: a janela seguinte perde uma letra à esquerda e ganha outra à
-direita, e o hash novo sai do antigo em O(1).
+{{exemplo}}
 
-Com dígitos: a janela `271` é o número 271, e a próxima, `718`, é
-`(271 - 2·100)·10 + 8`: tira o dígito que sai (peso 10^(m-1)), desloca e soma
-o que entra. Com letras é igual, na base 256, tudo **módulo um primo `q`**,
-pois os números ficam enormes.
-
-Janelas diferentes podem ter o mesmo resto: é a **colisão**, ou **falso
-positivo**, e por isso a conferência letra a letra nunca pode ser pulada. Com
-`q` grande, a busca custa O(n + m) na média; com tudo colidindo, O(n·m).
-
-Procure `182` em `2718281828459` com `q = 13` (pequeno, para aparecer
-colisão). O hash do padrão é `182 % 13 = 0`. Nas 11 janelas, o 0 aparece três
-vezes: duas são o `182` e uma é o `845`, que também deixa resto 0:
+Procure `182` em `2718281828459` com `q = 13`, pequeno de propósito. O hash do
+padrão é 0, e nas 11 janelas o 0 aparece três vezes: duas são o `182` e uma é o
+`845`, um falso positivo:
 
 {{ideia}}
 
@@ -115,23 +119,3 @@ São duas operações por janela, com qualquer `m`. A conferência letra a letra
 quase nunca roda quando `q` é grande:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Em C, o resto de número negativo é negativo: `-7 % 13` vale `-7`, não `6`.
-> `ht - t[i] * pot` fica negativo com frequência, e um hash negativo nunca bate
-> com o do padrão: a busca **perde ocorrências** sem erro. Por isso a linha é
-> `(ht - t[i] * pot % Q + Q) % Q`. E sem a conferência letra a letra, o `845`
-> seria contado.
-
-> [!TIP]
-> Com letras, `q` deve ser um primo grande, como 1.000.003. Use `long long`
-> (assunto 0003) para subir o `q`: overflow de `int` com sinal é
-> comportamento indefinido. O A319 mostra os falsos positivos caindo de 48
-> para 0 conforme o `q` cresce.
-
-> [!NOTE]
-> **Pergunta para você:** com `q = 13`, procurando `828` na mesma sequência,
-> quantos falsos positivos aparecem? Responda com os hashes da saída e confira
-> no código.
-
-{{pratique}}

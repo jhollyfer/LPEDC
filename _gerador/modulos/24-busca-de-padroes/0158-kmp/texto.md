@@ -1,36 +1,32 @@
 ## 0158 · KMP
 
-A central do alarme desarma quando a senha `12123` aparece no teclado. Ela
-não guarda o histórico. Você digita `1 2 1 2`, erra e aperta `1`: precisa
-recomeçar do zero?
+- **KMP** (Knuth, Morris e Pratt): busca que nunca volta no texto, lê cada letra
+  uma vez e custa **O(n + m)** sempre (KNUTH; MORRIS; PRATT, 1977).
+- **Ideia**: se `k` letras casaram e a próxima falhou, o fim do texto lido é
+  `padrao[0..k-1]`. O quanto disso ainda serve depende **só do padrão** e se
+  calcula antes (CORMEN et al., 2024, cap. 32).
+- **Borda**: o maior prefixo próprio que também é sufixo. Em `1212` é `12`; em
+  `121`, `1`; em `1213`, nenhuma (SZWARCFITER; MARKENZON, 2010).
+- **Tabela π**: `pi[j]` é o tamanho da borda de `padrao[0..j]`. Para `12123`,
+  `pi = [0, 0, 1, 2, 0]`. Sai procurando o padrão nele mesmo.
+- **Busca**: guarda só `k`. Se a letra é `padrao[k]`, `k++`; se não e `k > 0`,
+  recua `k = pi[k - 1]` e tenta a **mesma** letra; se `k == m`, achou e recua
+  para `pi[m - 1]` (CORMEN et al., 2024, cap. 32).
+- **Por que O(n)**: `k` sobe no máximo 1 por letra, `n` vezes no total; cada
+  recuo o diminui e ele nunca fica negativo. São no máximo `2n` comparações; a
+  tabela custa O(m) pelo mesmo argumento.
 
-Não. As últimas teclas foram `1 2 1`, o começo da senha. O **KMP** (Knuth,
-Morris e Pratt, 1977) aproveita isso: nunca volta no texto, lê cada letra uma
-vez e custa **O(n + m)**, sempre.
+> [!WARNING]
+> O recuo é um `while`, não um `if`: depois de `k = pi[k - 1]` a letra pode
+> continuar não servindo (o E947 testa isso). E os livros usam convenções
+> diferentes para a tabela (começando em 1, com -1): misturar dá erro de um.
 
-Se `k` letras já casaram e a próxima falhou, o fim do texto lido é
-`padrao[0..k-1]`. O quanto disso ainda serve depende **só do padrão**, e dá
-para calcular antes de ler o texto.
+{{exemplo}}
 
-Essa resposta é a **borda**: o maior prefixo próprio de uma string que também
-é sufixo dela. Em `1212` é `12`; em `121`, é `1`; em `1213`, não há. A
-**tabela π** (pi) guarda a borda de cada pedaço: `pi[j]` é o tamanho da borda
-de `padrao[0..j]`. Para `12123`, `pi = [0, 0, 1, 2, 0]`.
-
-A busca guarda só `k`, quantas letras já casaram. Para cada letra do texto:
-
-- se ela é `padrao[k]`, o casamento cresce: `k++`;
-- se não é e `k > 0`, recua para a borda, `k = pi[k - 1]`, e tenta de novo a
-  **mesma** letra (pode recuar várias vezes);
-- se `k` chega a `m`, achou; recua para `pi[m - 1]` para pegar as ocorrências
-  sobrepostas.
-
-A tabela π sai do mesmo jeito: o padrão é procurado nele mesmo.
-
-Teclas `1 2 1 2 1 2 3`. As quatro primeiras casam (`k = 4`). A quinta, `1`,
-não é o `3` esperado: a central usa `pi[3] = 2`, o `1 2` do fim continua
-valendo e o padrão escorrega duas casas. O `1` casa com `padrao[2]` e a senha
-se completa na sétima tecla:
+A central de um alarme desarma quando a senha `12123` aparece no teclado, sem
+guardar histórico. Com as teclas `1 2 1 2 1 2 3`, a quinta tecla falha, a
+central usa `pi[3] = 2` e o padrão escorrega duas casas; a senha se completa na
+sétima tecla:
 
 {{ideia}}
 
@@ -130,21 +126,3 @@ O recuo é um laço **dentro** do laço do texto e mexe só em `k`. O índice `i
 nunca anda para trás:
 
 {{fluxograma}}
-
-Por que é O(n)? O `k` sobe no máximo 1 por letra, ou seja, `n` vezes no total.
-Cada recuo o diminui e ele nunca fica negativo, então os recuos não passam
-disso: no máximo `2n` comparações. A tabela custa O(m) pelo mesmo argumento.
-
-> [!WARNING]
-> O recuo é um `while`, não um `if`: depois de `k = pi[k - 1]` a letra pode
-> continuar não servindo. Com `if`, a busca "acha" ocorrências que não existem
-> (o E947 testa isso num alarme). Os livros usam convenções diferentes para a
-> tabela (começando em 1, deslocada, com -1): misturar convenções dá erro de
-> um.
-
-> [!NOTE]
-> **Pergunta para você:** qual é a tabela π de `aabaaab`? E quantas vezes o
-> `k` recua quando o texto é `aabaaaab`? Calcule no papel, depois troque a
-> senha e as teclas no código e confira.
-
-{{pratique}}
