@@ -1,33 +1,37 @@
 ## 0107 · Endereçamento aberto
 
-O estacionamento do condomínio tem 11 vagas. A vaga do carro é o número do
-apartamento com resto por 11; se estiver ocupada, tenta-se a **próxima**. Na
-saída, o porteiro refaz o caminho.
+- **Endereçamento aberto**: sem lista. Os itens ficam **dentro do vetor**, e
+  quem colide tenta outras posições numa sequência fixa. Cada tentativa é uma
+  **sondagem** (CORMEN et al., 2024, cap. 11).
+- **Sondagem linear**: começa em `chave % m` e anda uma casa por vez, dando a
+  volta no fim: `i = (i + 1) % m`. No Cormen, `h(k, i) = (h'(k) + i) mod m`
+  (CORMEN et al., 2024, cap. 11).
+- **Outros passos**: a **quadrática**, `(h'(k) + c₁i + c₂i²) mod m`, e a
+  **dispersão dupla**, `(h₁(k) + i · h₂(k)) mod m` (assunto 0179)
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
+- **Operações**: inserir sonda até uma posição livre. Buscar sonda até achar
+  a chave ou uma posição **livre**, onde ela teria parado (ZIVIANI, 2010,
+  cap. 5).
+- **Lápide**: remover marca a posição como **removida** (*tombstone*, o
+  `DELETED` do Cormen). A busca passa reto e a inserção pode reaproveitá-la
+  (CORMEN et al., 2024, cap. 11).
+- **A tabela enche**: α nunca passa de 1. As ocupadas formam blocos que
+  atraem mais chaves, o **agrupamento primário**. Com α = 0,5, uma busca sem
+  sucesso olha 2,5 posições; com 0,9, cerca de 50 (KNUTH, 1998, seção 6.4).
+- **Reconstruir**: passando de 70% a 75% de ocupação, crie uma tabela maior e
+  reinsira tudo (exemplo A213). Num bloco só, sem `malloc` por item, a cache
+  ajuda (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
 
-Esse é o **endereçamento aberto**, a segunda forma de tratar colisão: sem
-lista, os itens ficam **dentro do vetor**, e quem colide tenta outras posições
-numa sequência fixa. Cada tentativa é uma **sondagem**.
+> [!WARNING]
+> Remover **não** é marcar a posição como livre. Se a vaga 5 (do 301) volta a
+> `LIVRE`, a busca pelo 1104 começa na 4, vê a 5 livre e diz "não está",
+> embora ele esteja na 6. Use a lápide (exemplo A214).
 
-A **sondagem linear** começa em `h = chave % m` e anda uma casa por vez, com
-volta no fim: `i = (i + 1) % m`. Na forma do Cormen, com a tentativa `i` a
-partir de 0: `h(k, i) = (h'(k) + i) mod m`. Trocando o passo, saem a
-**sondagem quadrática**, `(h'(k) + c₁i + c₂i²) mod m`, e a **dispersão
-dupla**, `(h₁(k) + i · h₂(k)) mod m` (assunto 0179).
+{{exemplo}}
 
-**Inserir** sonda até achar posição livre. **Buscar** sonda até achar a chave
-ou uma posição **livre**, onde a chave teria parado. **Remover** tem uma
-pegadinha, no aviso abaixo.
-
-A tabela **enche**: `α = n / m` nunca passa de 1, e fica lenta antes. As
-ocupadas formam blocos, e toda chave que cai num bloco vai parar no fim dele,
-aumentando-o: é o **agrupamento primário**. Com α = 0,5 uma busca sem sucesso
-olha 2,5 posições em média; com α = 0,9, cerca de 50. (Com hashing uniforme o
-Cormen limita a busca a 1/(1 − α): 2 e 10.) Passando de 70% a 75% de
-ocupação, crie uma tabela maior e reinsira tudo (exemplo A213).
-
-Os apartamentos 101, 202, 301, 1104 e 504 entram. O 101 vai para a vaga 2 e o
-202 para a 4. O 301 também dá 4, vê a vaga ocupada e para na 5. O 1104 tenta
-4, 5 e para na 6. O 504 vai para a 9. Buscar o 1104 custa 3 sondagens:
+O estacionamento do condomínio tem 11 vagas, e a vaga é o apartamento com
+resto por 11. O 301 dá 4, ocupada, e para na 5; o 1104 tenta 4, 5 e para na
+6. Buscar o 1104 custa 3 sondagens:
 
 {{ideia}}
 
@@ -115,22 +119,3 @@ No fluxograma, "está livre?" encerra sem sucesso e "é o carro?" encerra com
 sucesso; senão, anda uma vaga. O 1104 é achado na 6; o 303 para na 7, livre:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Remover **não** é marcar a posição como livre. Se a vaga 5 (do 301) volta a
-> `LIVRE`, a busca pelo 1104 começa na 4, vê a 5 livre e conclui "não está",
-> embora ele esteja na 6. A solução é uma terceira marca, **removida**
-> (lápide, *tombstone*; o `DELETED` do Cormen): a busca passa reto, e a
-> inserção pode reaproveitá-la (exemplo A214). Com muitas lápides, as buscas
-> sem sucesso ficam longas até a tabela ser reconstruída.
-
-> [!TIP]
-> **Por dentro do C:** as vagas formam **um bloco só**, sem `malloc` por item,
-> e andar para a próxima aproveita a cache. Por isso o endereçamento aberto
-> costuma ganhar do encadeamento na prática.
-
-> [!NOTE]
-> **Pergunta para você:** depois dos 5 carros, chega o apartamento 1203
-> (1203 % 11 = 4). Em qual vaga ele para, e com quantas sondagens?
-
-{{pratique}}

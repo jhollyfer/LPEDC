@@ -1,14 +1,9 @@
 # Módulo 15 · Tabelas hash
 
-Achar um item custou até aqui O(n) na lista e O(log n) na busca binária e na
-árvore equilibrada. A tabela hash troca a procura por uma **conta**: uma
-função transforma a chave num índice de vetor, e o acesso custa O(1).
-Dicionários, conjuntos e caches de quase todo software são tabelas hash.
-
-O módulo cobre a função hash, a colisão (tratada por **encadeamento**, com uma
-lista em cada balde, ou por **endereçamento aberto**, que procura outra
-posição no vetor), o crescimento da tabela e a falta de ordem. Termina com um
-contador de palavras.
+A tabela hash troca a procura por uma conta: a função hash leva a chave a um
+índice e o acesso custa O(1) na média. O módulo cobre função hash, colisão,
+encadeamento, endereçamento aberto e termina num contador de palavras. Usa a
+lista encadeada (módulo 11) e compara com a busca binária e a BST (13 e 14).
 
 ## O que você vai aprender
 
@@ -21,23 +16,16 @@ contador de palavras.
 
 ## Antes de começar
 
-Este módulo usa listas encadeadas (módulo 11), `malloc`/`free`, structs,
-ponteiro para função e `qsort`. As tabelas seguem o padrão TAD: `tabela.h` e
-`tabela.c` (encadeamento), `aberta.h` e `aberta.c` (endereçamento aberto),
-`palavras.h` e `palavras.c` (contador) ficam na pasta de cada assunto, e o
-comando compila tudo junto:
+Usa listas (módulo 11), `malloc`/`free`, structs, ponteiro para função e
+`qsort`. Cada assunto traz um TAD na pasta (`tabela`, `aberta`, `palavras`,
+com `.h` e `.c`), e o comando compila tudo junto:
 
 ```bash
 gcc ~/LPEDC/material/A211.c ~/LPEDC/material/0106-tabela.c -o ~/LPEDC/material/A211 && ~/LPEDC/material/A211
 ```
 
-Nos desenhos, cada balde é uma gaveta com o índice à esquerda e a corrente de
-nós à direita; vermelho marca colisão.
-
-**Progressão.** Do módulo 11 vem a lista encadeada, que vira a corrente de
-cada balde; dos módulos 13 e 14 vem o O(log n) da busca binária e da árvore,
-contra o qual o O(1) esperado da tabela é comparado. O módulo 16 reaproveita
-a lista de vizinhos nos grafos, e o 17 dá o rigor formal para provar custos.
+Nos desenhos, cada balde é uma gaveta com o índice à esquerda e a lista à
+direita; vermelho marca colisão.
 
 {{indice}}
 

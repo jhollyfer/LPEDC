@@ -1,29 +1,39 @@
 ## 0108 · Juntando tudo: o contador de palavras
 
-A padaria quer saber do que os clientes mais falam nos comentários do app.
-O programa lê o texto, conta cada palavra e mostra o ranking. A chave da
-tabela é a palavra e o valor é a contagem: cada palavra vira uma busca e um
-`+1`. Ele junta:
+- **Tabela como dicionário**: a chave é a palavra e o valor é a contagem.
+  Cada palavra do texto vira uma busca e um `+1` (KERNIGHAN; RITCHIE, 1988,
+  seção 6.6).
+- **Quebrar em palavras**: `ctype.h` testa letras e passa para minúsculas,
+  para "Pão" e "pão" contarem juntas (CPPREFERENCE, s.d.).
+- **Encadeamento** (0106): `contador_soma` soma 1 à palavra do balde ou cria o
+  nó com a palavra **copiada** (CELES; RANGEL, 2002).
+- **Ranking com `qsort`** (0050 e 0096): a tabela não guarda ordem. As
+  contagens vão para um vetor, ordenado por vezes e, no empate, pela palavra
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
+- **Custo**: com `N` palavras e `d` diferentes, a busca sequencial custa
+  O(N · d); a tabela custa O(N) em média, mais O(d log d) do `qsort`
+  (CORMEN et al., 2024, cap. 11).
+- **Base e `m` sem fator comum**: com base 31 e `m = 31`, o balde depende só
+  da última letra. O exemplo usa `m = 17` (CORMEN et al., 2024, cap. 11).
+- **O vetor aponta para a tabela**: cada `palavra` de `Contagem` aponta para
+  um nó, então `free(lista)` vem antes de `contador_libera`
+  (CELES; CERQUEIRA; RANGEL, 2016).
 
-- **strings e `ctype.h`**: quebrar o texto em palavras e passar para
-  minúsculas, para "Pão" e "pão" contarem juntas;
-- **tabela com encadeamento** (assunto 0106), como o TAD `palavras.h`:
-  `contador_soma` soma 1 à palavra do balde ou cria o nó com a palavra
-  **copiada**;
-- **vetor + `qsort`** (assuntos 0050 e 0096): a tabela não tem ordem, então as
-  contagens vão para um vetor, ordenado por vezes e, no empate, por ordem
-  alfabética.
+> [!WARNING]
+> `isalpha` e `tolower` exigem um `unsigned char` (0 a 255) ou `EOF`. Os bytes
+> do "ã" em UTF-8 são negativos num `char` com sinal, e `isalpha(s[i])` com
+> negativo é **comportamento indefinido**. Use `isalpha((unsigned char)s[i])`.
 
-Com `N` palavras e `d` diferentes, a busca sequencial custa O(N · d); a
-tabela custa O(N) em média, mais O(d log d) do `qsort`.
+{{exemplo}}
 
-O exemplo tem 31 palavras, 17 diferentes, em 17 baldes (carga 1). O "pão" cai
-no balde 2 e chega a 6; o "café", no 3, chega a 3; "estava" e "queijo" dividem
-o balde 4. A tabela vai para o vetor, o `qsort` ordena e o ranking sai:
+A padaria quer saber do que os clientes falam nos comentários do app. São 31
+palavras, 17 diferentes, em 17 baldes. O "pão" cai no balde 2 e chega a 6;
+"estava" e "queijo" dividem o balde 4. O `qsort` monta o ranking:
 
 {{ideia}}
 
-O `main` conhece só as funções do TAD `palavras.h`:
+O `main` conhece só as funções do TAD `palavras.h`. O `eh_letra` trata todo
+byte a partir de 128 como letra, e "pão" e "café" ficam inteiras:
 
 ```c
 #include <stdio.h>
@@ -111,23 +121,3 @@ palavra diferente, que cria o nó com 0). Os dois caminhos se juntam no
 `vezes++`:
 
 {{fluxograma}}
-
-> [!WARNING]
-> `isalpha` e `tolower` exigem um `unsigned char` (0 a 255) ou `EOF`. Os bytes
-> do "ã" em UTF-8 são negativos num `char` com sinal (assunto 0105), e
-> `isalpha(s[i])` com negativo é **comportamento indefinido**. Converta:
-> `isalpha((unsigned char)s[i])`. O `eh_letra` trata todo byte a partir de 128
-> como parte da palavra, e "pão" e "café" ficam inteiras.
-
-> [!TIP]
-> **Por dentro do C:** o vetor de `Contagem` **não copia** as palavras: cada
-> `palavra` aponta para um nó da tabela, e por isso o `free(lista)` vem antes
-> do `contador_libera`. Base e `m` não podem ter fator comum (com 31 e 31, o
-> balde depende só da última letra); o exemplo usa 17.
-
-> [!NOTE]
-> **Pergunta para você:** "o", "de" e "e" lideram o ranking e não dizem nada
-> sobre a padaria. Como ignorar essas palavras (as *stopwords*) com a própria
-> tabela hash? Qual seria a 3ª do ranking depois disso?
-
-{{pratique}}
