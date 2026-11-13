@@ -8,13 +8,14 @@ Mudanças do LPEDC que quem estuda percebe. Formato
 
 ### Mudado
 
-- Todo módulo e os guias da raiz (README, PPGI, TRILHA, PROVAS e SIMULADOS) seguem três partes:
-  **1. Conceitos gerais**, **2. Exemplos de uso** e **3. Exercícios práticos**. No módulo, primeiro
-  vêm os conceitos de todos os assuntos, depois os exemplos e por fim os exercícios, a lista, os
-  desafios e as questões.
-- Conceito em tópicos curtos, cada definição com a obra de onde vem (livros, artigos e normas dos
-  fichamentos), e a referência completa em "Para ler mais". Saem o gancho, o "Por dentro do C" e a
-  "Pergunta para você"; fica um alerta por assunto.
+- O curso lê como um livro. Cada assunto é um capítulo inteiro: **Conceito**, **Exemplos de uso** e
+  **Exercícios**, um depois do outro, sem precisar pular de parte em parte.
+- O conceito voltou a ser explicação em texto corrido: parte do problema, dá a intuição com um caso
+  do dia a dia e explica peça por peça, com a fonte de cada definição dentro do texto.
+- O README virou o sumário do livro: a rota de estudo, mundo por mundo, com link para cada um dos
+  189 assuntos.
+- Os guias da raiz (PPGI, TRILHA, PROVAS e SIMULADOS) seguem três partes: **1. Conceitos gerais**,
+  **2. Exemplos de uso** e **3. Exercícios práticos**.
 - Exercícios no `.md` mostram só o enunciado, a saída e a resposta esperada; as dicas ficam no `.c`.
 
 ### Adicionado

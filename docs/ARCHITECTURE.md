@@ -6,8 +6,9 @@
 
 ```
 LPEDC/
-├── README.md  PPGI.md  TRILHA.md  PROVAS.md  SIMULADOS.md   guias (escritos à mão)
-├── 01-fundamentos.md ...      gerados: um por módulo, em três partes (conceitos, exemplos, exercícios)
+├── README.md                  o sumário do livro (o sumário é gerado; o resto, à mão)
+├── PPGI.md  TRILHA.md  PROVAS.md  SIMULADOS.md   guias (escritos à mão)
+├── 01-fundamentos.md ...      gerados: um por módulo; cada assunto é um capítulo (conceito, exemplos, exercícios)
 ├── material/                  a única pasta de conteúdo: tudo o que se roda ou se vê
 │   ├── A003.c  A004.c ...     exemplos resolvidos
 │   ├── E007.c ...             exercícios (esqueleto vazio; a resposta vai dentro do arquivo)
@@ -54,18 +55,20 @@ Sempre 3 dígitos (4 a partir de 1000: `E1000.c`). Sempre 2 exemplos e 4 exercí
    `desenhos.mjs` por assunto.
 2. Os enunciados dos exercícios e da lista saem do bloco de comentários do topo dos `.c`
    (`RULES.md` §5 e §6).
-3. O gerador (§1) monta o `.md` na raiz em três partes e os SVGs `NNNN-ideia.svg` e
-   `NNNN-fluxograma.svg` em `material/`. No `texto.md`, o que vem antes de `{{exemplo}}` vai para
-   **1. Conceitos gerais**; o que vem depois, com os exemplos A, vai para **2. Exemplos de uso**. Os
-   exercícios E, a lista, os desafios e as questões formam **3. Exercícios práticos**.
+3. O gerador (§1) monta o `.md` na raiz e os SVGs `NNNN-ideia.svg` e `NNNN-fluxograma.svg` em
+   `material/`. Cada assunto vira `## NNNN · Título` com `### Conceito` (o que vem antes de
+   `{{exemplo}}` no `texto.md`), `### Exemplos de uso` (o que vem depois, mais os exemplos A) e
+   `### Exercícios` (os E). Depois do último assunto vêm a lista, os desafios e as questões.
+4. O gerador também reescreve o sumário do `README.md`, entre `<!-- sumario:inicio -->` e
+   `<!-- sumario:fim -->`: a rota de `fases.json`, com link para cada assunto.
 
 ## 4. Linguagem do domínio
 
 | Termo | Significa |
 |---|---|
 | módulo | o `.md` numerado da raiz (`01-fundamentos.md`) |
-| assunto | `### NNNN · Título`, presente nas três partes do módulo: conceito com fonte, exemplo (ideia, código e fluxograma) e exercícios |
-| conceito | tópico curto que define um termo e cita a obra `(AUTOR, ano)`; a referência completa fica em "Para ler mais" |
+| assunto | `## NNNN · Título`, um capítulo: conceito, exemplos de uso (ideia, código e fluxograma, exemplos A) e exercícios |
+| conceito | a explicação do assunto em texto corrido, como livro, com a obra citada `(AUTOR, ano)` em cada definição; a referência completa fica em "Para ler mais" |
 | exemplo (A) | programa resolvido que mostra outra faceta do assunto |
 | exercício (E) | esqueleto vazio para a pessoa codificar, com enunciado e saída esperada |
 | lista prática (P) | 30 exercícios por módulo no estilo da prova |

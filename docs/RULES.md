@@ -244,9 +244,10 @@ a letra, a justificativa e o assunto onde estudar. Rode todo código antes de fi
 originais, normas, K&R, cppreference, man pages)
 ```
 
-O gerador troca `{{assuntos}}` por `## 1. Conceitos gerais`, `## 2. Exemplos de uso` e
-`## 3. Exercícios práticos` (com a lista do módulo no fim). Desafios e questões ficam em `###`
-porque fazem parte da parte 3. "Questões do POSCOMP" e "Questões de provas do PPGI" seguem o mesmo nível.
+O gerador troca `{{assuntos}}` pelos assuntos em ordem, cada um como `## NNNN · Título` com
+`### Conceito`, `### Exemplos de uso` e `### Exercícios`, e pela `## Lista do módulo` no fim.
+Desafios, "Questões do POSCOMP", "Questões de provas do PPGI" e "Questões no estilo da prova" ficam
+em `##`.
 
 ## 8. C moderno
 
@@ -282,3 +283,4 @@ Exceção: as questões das provas do PPGI/UFAM entram na íntegra, por decisão
 | 2026-11-09 | Regras saem do `CLAUDE.md` para cá, no formato do `maiyu-pattern` |
 | 2026-11-10 | 4 exercícios por assunto, só de escrever código, com enunciado e saída esperada; sem dicas |
 | 2026-11-13 | Módulo em três partes (conceitos, exemplos, exercícios); conceito em tópicos com fonte citada; um WARNING só, sem TIP e NOTE |
+| 2026-11-13 | Assunto como capítulo de livro (conceito, exemplos, exercícios juntos); conceito em texto corrido com fonte, não em tópicos (`DECISIONS.md` #13) |
