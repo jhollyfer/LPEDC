@@ -73,22 +73,61 @@ Três convenções valem para o módulo:
 
 ### Conceito
 
-- **Componente conexo**: grupo em que todo vértice se liga a todo outro por
-  algum caminho, sem olhar a direção das setas (ZIVIANI, 2010, cap. 7).
-- **Contar componentes**: um **laço externo** começa uma DFS (assunto 0111), com
-  número de grupo novo, em cada vértice ainda sem grupo. Custa O(V + E) com
-  lista de adjacência (CORMEN et al., 2024, cap. 20).
-- **Ciclo** num grafo dirigido: caminho que volta ao vértice de partida seguindo
-  as setas.
-- **Três cores**: **branco** (nunca visto), **cinza** (na pilha da recursão) e
-  **preto** (terminado). Seta para cinza é ciclo; seta para preto leva a algo já
-  resolvido. O `pai[]` reconstrói o ciclo (CORMEN et al., 2024, cap. 20).
-- **Aresta de retorno** (*back edge*): a seta para um cinza. Um grafo dirigido é
-  acíclico se e só se a DFS não acha nenhuma (CORMEN et al., 2024, cap. 20).
-- **Fortemente conexo**: cada vértice alcança cada outro **seguindo** as setas.
-  Sai com duas DFS, a segunda no grafo invertido, em O(V + E). Ignorar a direção
-  é ser só **fracamente conexo** (SEDGEWICK; WAYNE, 2011). Pontes e articulação:
-  assunto 0184.
+Na planilha da reforma, a célula Total soma Obra e Frete, a Obra soma Tinta
+e Piso, e o Piso inclui o Frete. Em outra aba, os Juros usam o Saldo, o
+Saldo usa a Parcela, e alguém fez a Parcela usar os Juros. A planilha
+reclama: **referência circular**. Para chegar a essa mensagem, ela precisou
+responder duas perguntas sobre as fórmulas, e as duas têm resposta clássica
+com a busca em profundidade (DFS) do assunto 0111.
+
+Primeiro, veja a planilha como um **grafo dirigido**: cada célula é um
+vértice, e a seta `a -> b` diz "a fórmula de `a` usa o valor de `b`". A
+primeira pergunta é quais pedaços da planilha são independentes, sem
+nenhuma ligação entre si. A segunda é se existe uma cadeia de fórmulas que
+volta ao ponto de partida.
+
+Os pedaços independentes são os **componentes conexos**: grupos em que todo
+vértice se liga a todo outro por algum caminho, sem olhar a direção das
+setas (ZIVIANI, 2010, cap. 7). Na planilha, Total, Obra, Tinta, Piso e Frete
+formam um componente; Juros, Saldo e Parcela formam outro. Mudar uma célula
+de um grupo nunca afeta o outro.
+
+Para achá-los, lembre que uma DFS que parte de um vértice marca tudo o que
+ele alcança, e isso é exatamente o componente dele. Então basta um **laço
+externo** que percorre os vértices em ordem e, a cada vértice ainda sem
+grupo, começa uma DFS nova com um número de grupo novo. Cada vértice e cada
+aresta são tratados uma vez, e o custo é O(V + E) com lista de adjacência,
+com V vértices e E arestas (CORMEN et al., 2024, cap. 20).
+
+A segunda pergunta é sobre **ciclos**. Num grafo dirigido, um ciclo é um
+caminho que, seguindo as setas, volta ao vértice de onde saiu. A ideia
+óbvia é marcar os vértices visitados e acusar ciclo quando a DFS chega a um
+já visitado. Ela engana. O Total chega ao Frete direto e também por Obra e
+Piso. Na segunda vez, o Frete já foi visitado, mas isso são dois caminhos
+que se encontram, não um ciclo.
+
+O que caracteriza um ciclo é voltar a um vértice cuja chamada **ainda não
+terminou**, que ainda está na pilha da recursão. Para enxergar isso, a DFS
+usa **três cores**. **Branco** é o vértice nunca visto. **Cinza** é o vértice
+cuja chamada começou e não terminou: ele está na pilha, e a DFS está
+explorando o que vem abaixo dele. **Preto** é o vértice terminado, com tudo
+abaixo dele já explorado (CORMEN et al., 2024, cap. 20).
+
+Com as cores, a regra fica precisa. Uma seta para um vértice **cinza** fecha
+um ciclo: você saiu dele, andou pelas setas e voltou antes de ele terminar.
+Uma seta para um **preto** leva a algo já resolvido, sem ciclo. Para mostrar
+o ciclo, a DFS guarda em `pai[]` de onde veio cada vértice e sobe por ele até
+o cinza. O Cormen chama a seta para um cinza de **aresta de retorno** (*back
+edge*) e prova: um grafo dirigido é acíclico se e só se a DFS não encontra
+nenhuma aresta de retorno (CORMEN et al., 2024, cap. 20).
+
+Há um nome para cada jeito de ser conexo. Estar ligado ignorando a direção
+das setas é ser **fracamente conexo**. Num **componente fortemente conexo**,
+cada vértice alcança cada outro **seguindo** as setas: Juros, Saldo e
+Parcela formam um, porque o ciclo leva de qualquer um a qualquer outro. Os
+componentes fortemente conexos saem com duas DFS, a segunda no grafo com
+as setas invertidas, também em O(V + E) (SEDGEWICK; WAYNE, 2011). Pontes e
+vértices de articulação ficam para o assunto 0184.
 
 > [!WARNING]
 > Só com `visitado[]`, o ciclo dá **alarme falso**: dois caminhos que se
@@ -423,21 +462,54 @@ Impossível: Caio e Ana cairiam no mesmo turno
 
 ### Conceito
 
-- **Ordenação topológica**: ordem dos vértices em que toda seta `a -> b` aponta
-  para a frente. Só existe se o grafo não tem ciclo (CORMEN et al., 2024, cap. 20).
-- **DAG** (*directed acyclic graph*): grafo dirigido sem ciclos.
-- **Grau de entrada**: quantas setas chegam ao vértice, ou quantos serviços ele
-  espera.
-- **Algoritmo de Kahn**: ponha numa fila (0085) todos com grau 0; tire um,
-  escreva na lista e faça `grau[v]--` em quem esperava por ele; quem chegar a 0
-  entra na fila. Repita até esvaziar (KAHN, 1962).
-- **Detecta ciclo**: se a lista terminar com menos de V vértices, sobraram os
-  que estão num ciclo ou depois dele. Custo O(V + E) com lista, O(V²) com
-  matriz (SZWARCFITER; MARKENZON, 2010).
-- **Não é única**: vértices livres ao mesmo tempo saem na ordem da fila.
-- **Pela DFS**: empilhe `u` quando `dfs(u)` termina; a pós-ordem de trás para a
-  frente é uma ordenação topológica (tempo de término decrescente, no Cormen;
-  A301) (CORMEN et al., 2024, cap. 20).
+O mestre de obras tem oito serviços para encaixar no cronograma. Não dá para
+levantar parede sem fundação, nem pintar com o reboco molhado, nem pôr o
+piso antes da hidráulica. Ele precisa de uma lista em que **todo serviço
+apareça depois dos que ele espera**. A mesma necessidade aparece na ordem
+das disciplinas de um curso com pré-requisitos e na ordem em que um
+compilador processa arquivos que dependem uns dos outros.
+
+Cada regra "a vem antes de b" vira uma seta `a -> b` num grafo dirigido. A
+lista que o mestre de obras quer é uma **ordenação topológica**: uma ordem
+dos vértices em que toda seta aponta para a frente, de um vértice para outro
+que aparece depois dele (CORMEN et al., 2024, cap. 20). Ela só existe se o
+grafo não tem ciclo: se a Parede espera o Reboco e o Reboco espera a Parede,
+nenhum dos dois pode vir primeiro. Um grafo dirigido sem ciclos se chama
+**DAG** (*directed acyclic graph*).
+
+Para montar a lista, o algoritmo mais intuitivo faz o que o mestre de obras
+faria no papel: começa pelo que não espera ninguém. Para isso, conte, para
+cada serviço, quantas setas chegam nele. Esse número é o **grau de
+entrada**, e diz quantos serviços ele ainda espera. A Fundação tem grau de
+entrada 0; a Pintura, que espera Piso e Reboco, tem 2.
+
+O **algoritmo de Kahn** funciona assim. Ponha numa fila (assunto 0085)
+todos os serviços com grau de entrada 0, os que podem começar já. Depois,
+repita: tire um serviço da fila e escreva-o na lista. Como ele está feito,
+cada serviço que esperava por ele passa a esperar **um a menos**, e o grau
+dele diminui (`grau[v]--`). Quem chegar a 0 ficou livre e entra na fila.
+Quando a fila esvaziar, a lista está pronta (KAHN, 1962).
+
+O Kahn detecta ciclo de brinde. Num ciclo, cada vértice espera outro do
+mesmo ciclo, então nenhum chega a grau 0 e nenhum entra na fila. Se a lista
+terminar com menos de V vértices, os que sobraram estão num ciclo ou
+dependem de algum. Cada vértice entra na fila uma vez, e cada seta diminui
+um grau uma vez: o custo é O(V + E) com lista de adjacência e O(V²) com
+matriz, porque achar os vizinhos de um vértice custa uma linha inteira
+(SZWARCFITER; MARKENZON, 2010).
+
+A ordenação topológica **não é única**. Depois das Paredes, Elétrica,
+Hidráulica e Telhado ficam livres juntos, e qualquer ordem entre os três
+respeita as regras. Quem decide é a ordem em que entram na fila, que no
+programa segue o índice dos vértices.
+
+Há um segundo caminho, pela DFS do assunto 0111. Pense no momento em que
+`dfs(u)` termina: tudo o que `u` alcança, ou seja, tudo o que depende de
+`u`, já terminou antes. Então a ordem de término, a **pós-ordem**, lida de
+trás para a frente, põe cada vértice antes de tudo o que depende dele. Basta
+empilhar `u` no fim de `dfs(u)` e, no final, desempilhar tudo. É a versão do
+Cormen, que ordena pelo tempo de término decrescente; o exemplo A301 a
+mostra em C (CORMEN et al., 2024, cap. 20).
 
 > [!WARNING]
 > O grau que importa é o de **entrada**: `grau[b] += antes[a][b]`, somando pela
@@ -757,21 +829,60 @@ Total com 6 tarefas: 30
 
 ### Conceito
 
-- **Árvore**: grafo conexo e sem ciclo; com V vértices tem **V - 1 arestas**.
-- **Árvore geradora mínima** (MST, *minimum spanning tree*): árvore que toca
-  todos os vértices de um grafo **não dirigido** ponderado com a menor soma de
-  pesos (CORMEN et al., 2024, cap. 21). Não é o caminho mais curto entre dois.
-- **Kruskal**: ordene as arestas da mais barata para a mais cara, aceite cada
-  uma que **não feche ciclo** e pare com V - 1. É guloso (assunto 0133)
-  (KRUSKAL, 1956).
-- **Teste do ciclo**: o **union-find** (0148). Se `acha(a)` e `acha(b)` dão o
-  mesmo representante, a aresta fecha ciclo; senão, `une` junta os grupos
-  (SEDGEWICK; WAYNE, 2011).
-- **Custo**: a ordenação domina, O(E log E) = O(E log V); o union-find é quase
-  O(1) por operação (CORMEN et al., 2024, cap. 21).
-- **Propriedade do corte**: a aresta mais barata que cruza de um grupo ao outro
-  (**leve**) é **segura**: entra sem estragar a MST (CORMEN et al., 2024, cap. 21).
-- **Empates**: a MST pode não ser única; o custo mínimo é.
+A prefeitura quer asfaltar estradas entre seis vilas: Sede, Ponte, Brejo,
+Serra, Lagoa e Vale. A engenharia orçou nove trechos possíveis, de R$ 2 mil
+a R$ 9 mil cada. Depois da obra, deve dar para ir de qualquer vila a
+qualquer outra pelo asfalto, e a prefeitura quer gastar o mínimo. Repare no
+pedido: não é o caminho mais curto entre duas vilas, é um conjunto de
+estradas que **ligue todo mundo** com a **menor soma**.
+
+Esse conjunto nunca tem ciclo. Se três estradas formassem um triângulo,
+dava para tirar a mais cara delas e as vilas continuariam ligadas pelas
+outras duas, gastando menos. Um grafo conexo e sem ciclo se chama
+**árvore**, e uma árvore com V vértices tem sempre **V - 1 arestas**: menos
+que isso deixa alguém de fora, mais que isso fecha um ciclo. As seis vilas
+ficam ligadas com exatamente cinco estradas.
+
+O problema tem nome. Uma **árvore geradora** de um grafo é uma árvore que
+usa arestas do grafo e toca todos os vértices dele. A **árvore geradora
+mínima** (MST, de *minimum spanning tree*) é a de menor soma de pesos, num
+grafo **não dirigido** e ponderado, em que cada aresta tem um peso (CORMEN et
+al., 2024, cap. 21). Redes elétricas, de água e de cabos se planejam assim.
+
+O **algoritmo de Kruskal** é um guloso (assunto 0133) com uma regra só.
+Ordene as arestas da mais barata para a mais cara. Percorra a lista e
+**aceite** cada aresta que **não feche ciclo** com as já aceitas; recuse as
+que fecham. Pare quando tiver V - 1 arestas (KRUSKAL, 1956). Nas vilas, a
+Serra-Lagoa (2) entra, a Ponte-Brejo (3) entra, e assim por diante, até que
+a Sede-Ponte (6) aparece quando Sede e Ponte já estão ligadas pelo Brejo, e
+é recusada.
+
+O passo delicado é saber se uma aresta fecha ciclo. Ela fecha quando as
+duas pontas já estão ligadas por arestas aceitas, ou seja, no mesmo grupo.
+Grupos que se juntam e nunca se separam são o caso exato do **union-find**
+(assunto 0148). Cada grupo de vilas já ligadas é um conjunto. Para a aresta
+`a-b`, se `acha(a)` e `acha(b)` dão o mesmo representante, ela fecharia um
+ciclo; se não, ela entra e `une` junta os dois grupos (SEDGEWICK; WAYNE,
+2011).
+
+O custo é dominado pela ordenação das arestas, O(E log E). Como um grafo
+simples tem E < V², log E < 2 log V, e o custo também se escreve O(E log V).
+As operações do union-find, com os dois truques do 0148, custam quase O(1)
+cada (CORMEN et al., 2024, cap. 21).
+
+Por que o guloso acerta? Divida os vértices em dois grupos quaisquer, um
+**corte**. Toda árvore que liga tudo precisa de pelo menos uma aresta
+cruzando de um grupo ao outro. A aresta mais barata que cruza o corte se
+chama **leve**, e a **propriedade do corte** garante que ela é **segura**:
+sempre existe uma MST que a contém, então aceitá-la não estraga nada (CORMEN
+et al., 2024, cap. 21). Quando o Kruskal aceita uma aresta, ela é a mais
+barata que liga o grupo de uma ponta ao resto, porque todas as mais baratas
+já foram vistas antes.
+
+Com pesos repetidos, pode haver mais de uma MST. Nas vilas, a Lagoa-Vale
+também custa 7; se viesse antes da Serra-Vale na lista ordenada, entraria no
+lugar dela. A árvore muda, mas o custo mínimo, R$ 21 mil, é o mesmo: a MST
+pode não ser única, o custo mínimo é.
 
 > [!WARNING]
 > Testar `pai[a] != pai[b]` no lugar de `acha(a) != acha(b)` é o erro clássico:
@@ -1133,20 +1244,53 @@ Total: R$ 32 mil
 
 ### Conceito
 
-- **Prim**: sai de um vértice e, a cada passo, escolhe a aresta mais leve entre
-  um vértice da árvore e um de fora. Mantém **uma árvore só**, que cresce da
-  origem; o Kruskal junta florestas (PRIM, 1957).
-- **Por que acerta**: é guloso e vale a propriedade do corte (0152)
-  (CORMEN et al., 2024, cap. 21).
-- **Heap de mínimo** (0102): cada item diz "dá para ligar `v` com `chave` a
-  partir de `de`". Quando um vértice entra, as arestas que saem dele entram no
-  heap.
-- **Versão preguiçosa**: item cujo vértice já está na árvore é **descartado**;
-  nada se atualiza dentro do heap (SEDGEWICK; WAYNE, 2011).
-- **Versão do Cormen** (`MST-PRIM`): todos os vértices no heap com chave
-  infinita, e `DECREASE-KEY` baixa a chave no lugar. Com heap binário, as duas
-  custam O(E log V) (CORMEN et al., 2024, cap. 21).
-- **Prim e Dijkstra** (0112): mesmo código, muda a chave de quem entra no heap.
+Cinco chácaras vão dividir a água de um poço artesiano. O encanador mediu
+os trechos por onde dá para passar cano: do Poço à chácara da Ana são 4 m,
+da Ana ao Beto 3 m, do Poço ao Beto 6 m, e assim por diante. O objetivo é o
+mesmo do Kruskal (0152): ligar todo mundo com o **mínimo de cano**. O que
+muda é o jeito de trabalhar.
+
+O encanador não sai comprando o cano mais barato da lista inteira. Ele
+começa no Poço e vai **esticando a rede**: a cada passo, olha os canos que
+ligam uma casa que já tem água a uma que ainda não tem, e instala o **mais
+curto**. A casa nova passa a ter água, e o passo se repete. Esse é o
+**algoritmo de Prim**: parte de um vértice e, a cada passo, escolhe a
+aresta mais leve entre um vértice da árvore e um de fora (PRIM, 1957).
+
+A diferença para o Kruskal está na forma da solução enquanto ela se monta.
+O Kruskal junta pedaços espalhados, uma floresta de grupos que vão se
+fundindo. O Prim mantém **uma árvore só**, que cresce a partir da origem e
+nunca se separa. No fim, os dois chegam a uma árvore geradora mínima.
+
+O Prim também é guloso, e acerta pelo mesmo motivo do Kruskal, a
+propriedade do corte (0152). Em cada passo, o corte separa as casas com
+água das casas sem água. O cano mais curto que cruza esse corte é uma
+aresta leve, e uma aresta leve sempre cabe numa árvore mínima (CORMEN et
+al., 2024, cap. 21).
+
+O trabalho de cada passo é achar o cano mais curto que sai da rede. Para
+não procurar na lista toda, o Prim guarda os candidatos num **heap de
+mínimo** (assunto 0102), que entrega o menor na hora. Cada item do heap diz
+"dá para ligar `v` com `chave` metros a partir de `de`". Quando uma casa
+entra na rede, os canos que saem dela para casas de fora entram no heap.
+
+Um item pode envelhecer. O Beto entra no heap com 6 m, pelo Poço, e depois
+com 3 m, pela Ana. Quando o de 3 m sai, o Beto entra na rede, e o item de 6
+m continua no heap, inútil. Na **versão preguiçosa**, ninguém atualiza nada
+dentro do heap: quando um item sai e a casa dele já está na rede, ele é
+simplesmente **descartado** (SEDGEWICK; WAYNE, 2011).
+
+A versão do Cormen, `MST-PRIM`, faz diferente. Ela põe todos os vértices no
+heap desde o começo, com chave infinita, e, quando acha um cano mais curto
+para um vértice, baixa a chave dele no lugar, com a operação
+`DECREASE-KEY`. Não sobram itens velhos. Com heap binário, as duas versões
+custam O(E log V) (CORMEN et al., 2024, cap. 21).
+
+Se o código lembrou o Dijkstra (0112), não é por acaso: é o mesmo laço, e só
+muda a chave com que um vizinho entra no heap. No Prim, a chave é o cano que
+liga o vizinho à rede. No Dijkstra, é a distância acumulada desde a origem.
+Por isso as árvores saem diferentes: no exemplo, o Prim gasta 18 m de cano e
+a árvore do Dijkstra, 21 m. A tabela resume:
 
 | | chave de `w` ao sair de `v` | o que a árvore minimiza |
 | --- | --- | --- |
@@ -1533,21 +1677,58 @@ Total: R$ 17 mil (2 poços)
 
 ### Conceito
 
-- **Peso negativo**: o Dijkstra (0112) quebra, porque fixa um vértice cedo
-  supondo que somar pesos só aumenta (CORMEN et al., 2024, cap. 22).
-- **Relaxar** a aresta `u -> v` de custo `c`: se `dist[u] + c < dist[v]`,
-  atualize `dist[v]` e `anterior[v]` (no Cormen, `RELAX`, com `v.d` e `v.π`)
-  (CORMEN et al., 2024, cap. 22).
-- **Bellman-Ford**: `dist[origem] = 0`, INFINITO no resto, e **V - 1 rodadas**
-  relaxando **todas** as arestas, sem escolher o menor (BELLMAN, 1958).
-- **Por que V - 1**: um caminho mínimo não repete vértice, tem até V - 1
-  arestas, e a rodada `i` acerta a `i`-ésima. Rodada sem mudança permite parar.
-- **Ciclo negativo**: circuito de soma menor que zero; acaba com o caminho
-  mínimo. Uma **rodada extra** que ainda melhora alguma aresta o detecta
-  (CORMEN et al., 2024, cap. 22).
-- **Custo**: O(V · E), contra O((V + E) log V) do Dijkstra com heap. Num DAG,
-  relaxar cada aresta uma vez na ordem topológica (0151) dá O(V + E), mesmo com
-  negativos (CORMEN et al., 2024, cap. 22).
+O motoboy sai da Base e quer chegar em Casa gastando o mínimo. Alguns
+trechos coincidem com uma corrida que paga mais do que a gasolina custa. Do
+Shopping ao Centro, por exemplo, ele gasta R$ 2 e recebe R$ 6 de uma
+entrega: o **custo líquido** desse trecho é **R$ -4**. O mapa vira um grafo
+dirigido com **pesos negativos**, e um algoritmo que você conhece passa a
+errar.
+
+O Dijkstra (assunto 0112) fixa a cada passo o vértice mais perto da origem
+e nunca mais mexe nele. Isso só é seguro se somar pesos nunca diminui um
+custo, porque aí nenhum caminho que passa por um vértice mais distante pode
+voltar mais barato (CORMEN et al., 2024, cap. 22). Com peso negativo, essa
+premissa cai. No mapa do motoboy, o Dijkstra fixa o Centro com R$ 4, direto
+da Base, antes de olhar o Shopping. Mas Base, Shopping, Centro custa
+6 - 4 = **R$ 2**. O erro se propaga, e ele diz que Casa custa R$ 12, quando
+custa R$ 10.
+
+Para consertar, é preciso uma operação que você já usou sem nome. **Relaxar**
+a aresta `u -> v` de custo `c` é perguntar: chegar a `v` passando por `u` é
+melhor do que o que eu já sei? Se `dist[u] + c < dist[v]`, sim, e você
+atualiza `dist[v]` com o valor novo e anota em `anterior[v]` que o melhor
+caminho chega por `u`. No Cormen, esse teste se chama `RELAX`, e os dois
+vetores são os atributos `v.d` e `v.π` (CORMEN et al., 2024, cap. 22).
+
+O **algoritmo de Bellman-Ford** não fixa ninguém cedo. Ele começa com
+`dist[origem] = 0` e INFINITO para todos os outros. Depois faz **V - 1
+rodadas**, e em cada rodada relaxa **todas** as arestas do grafo, uma por
+uma, sem escolher a menor nem seguir ordem especial (BELLMAN, 1958). Um
+valor errado pode aparecer numa rodada e ser corrigido na seguinte; no
+mapa, a Casa aparece com 12 na rodada 3 e cai para 10 na rodada 4.
+
+Por que V - 1 rodadas bastam? Um caminho mínimo nunca repete vértice, então
+tem no máximo V vértices e V - 1 arestas. Depois da primeira rodada, a
+primeira aresta desse caminho já foi relaxada na ordem certa; depois da
+segunda, a segunda; e assim por diante. Na rodada V - 1, o caminho inteiro
+está acertado. Se uma rodada passa sem mudar nada, as seguintes também não
+mudariam, e dá para parar antes.
+
+Há um caso sem resposta. Um **ciclo negativo** é um circuito cuja soma de
+pesos é menor que zero. Se ele é alcançável da origem, dar uma volta nele
+diminui o custo, dar duas diminui mais, e o caminho mínimo deixa de existir
+(CORMEN et al., 2024, cap. 22). O Bellman-Ford detecta isso com uma **rodada
+extra**. Depois das V - 1 rodadas, todos os caminhos mínimos já estariam
+certos; se alguma aresta ainda melhora, é porque há um ciclo negativo no
+caminho.
+
+O preço da robustez é o tempo. São V - 1 rodadas, cada uma olhando as E
+arestas: **O(V · E)**, contra O((V + E) log V) do Dijkstra com heap. A regra
+prática: com peso negativo, Bellman-Ford; sem ele, Dijkstra. Há um caso
+especial mais barato. Num DAG (0151), basta relaxar cada aresta uma vez, na
+ordem topológica, porque quando um vértice é processado tudo o que chega
+nele já foi. Isso dá os caminhos mínimos em O(V + E), mesmo com pesos
+negativos (CORMEN et al., 2024, cap. 22).
 
 > [!WARNING]
 > O teste `dist[u] != INFINITO` é obrigatório: `INT_MAX + (-4)` **não** estoura,
@@ -1899,26 +2080,69 @@ Até 3 trechos: R$ 700
 
 ### Conceito
 
-- **Todos os pares**: a menor distância de cada vértice a cada outro, numa
-  matriz `d` (CORMEN et al., 2024, cap. 23).
-- **Floyd-Warshall**: programação dinâmica (módulo 21) sobre os vértices que um
-  caminho pode usar **como passagem**. Começa com `d[i][j]` = peso da aresta
-  direta, INFINITO se não há, 0 na diagonal (FLOYD, 1962).
-- **Rodada `k`**: depois dela, `d[i][j]` é o melhor de `i` a `j` usando como
-  passagem só os vértices de 0 a `k`. Por isso o `k` é o laço **de fora**.
-- **Custo**: **O(V³)** de tempo e O(V²) de memória: 125 passos para 5 vértices,
-  64 milhões para 400. Para grafos grandes e esparsos, Dijkstra com heap
-  (CORMEN et al., 2024, cap. 23).
-- **Pesos negativos**: aceita, sem ciclo negativo; com ciclo, aparece
-  `d[i][i] < 0` no fim.
-- **Fecho transitivo**: trocar `+` e `min` por `&&` e `||` responde "existe
-  caminho?" (algoritmo de Warshall) (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 8).
+Um aplicativo de corrida precisa do tempo de viagem de cada bairro para
+cada outro, para estimar o preço antes de chamar o motorista. A cidade tem
+cinco bairros ligados por ruas de **mão única**: Centro, Porto, Vila, Alto e
+Feira. A pergunta não é mais "da origem para todo mundo", como no Dijkstra
+(0112). É "**de todo mundo para todo mundo**".
+
+Esse é o problema dos **caminhos mínimos entre todos os pares**: achar a
+menor distância de cada vértice a cada outro e guardar tudo numa matriz
+`d`, em que `d[i][j]` é a distância de `i` até `j` (CORMEN et al., 2024, cap.
+23). Dá para rodar o Dijkstra uma vez a partir de cada bairro. O
+**algoritmo de Floyd-Warshall** faz diferente: monta a matriz inteira com
+três laços aninhados e quase nenhum código (FLOYD, 1962).
+
+A ideia vem da programação dinâmica (módulo 21), e o truque está em qual
+subproblema escolher. Em vez de pensar em caminhos inteiros, pense nos
+bairros que um caminho tem permissão de usar **como passagem**, isto é, por
+onde ele pode passar no meio, sem ser origem nem destino. No começo, nenhum
+bairro pode ser passagem, e `d[i][j]` é só o tempo da rua direta de `i` para
+`j`: INFINITO se a rua não existe e 0 na diagonal, porque ir de um bairro a
+ele mesmo não custa nada (FLOYD, 1962).
+
+Agora libere o Centro como passagem. Para cada par `i`, `j`, pergunte: ir
+de `i` ao Centro e do Centro a `j` sai mais barato que o melhor que eu
+conhecia? Se sim, atualize. Depois libere o Porto, fazendo a mesma pergunta
+com o Porto no meio, e depois a Vila, o Alto e a Feira. Cada bairro liberado
+é uma rodada:
 
 ```text
 para cada k:            (o bairro que passa a valer como passagem)
     para cada i, j:
         d[i][j] = mínimo(d[i][j], d[i][k] + d[k][j])
 ```
+
+O que garante que isso funciona é a afirmação que vale depois de cada
+rodada: terminada a rodada `k`, `d[i][j]` é o melhor tempo de `i` a `j` que
+usa como passagem só os bairros de 0 a `k`. Na rodada seguinte, o melhor
+caminho com o bairro `k + 1` liberado ou não passa por ele, e já está em
+`d[i][j]`, ou passa uma vez, e é a soma do trecho até ele com o trecho a
+partir dele, dois valores já prontos. Por isso o `k` **tem** de ser o laço
+de fora: ele é a rodada, e os laços de `i` e `j` só fazem sentido com a
+rodada anterior completa.
+
+Veja a casa `d[Centro][Alto]` evoluir. Não há rua direta, então ela começa
+em INFINITO. Com o Porto liberado, vira 10 (Centro, Porto, Alto). Com a Vila,
+cai para 9, porque Centro, Vila, Porto custa menos que Centro, Porto. Com a
+Feira, cai para 8. Cada rodada aproveita o que as anteriores já acharam.
+
+O custo é fácil de contar: três laços de V voltas, **O(V³)** de tempo, e a
+matriz de V × V, O(V²) de memória. São 125 passos para 5 bairros e 64
+milhões para 400. Para grafos grandes e esparsos, como um mapa com 100 mil
+esquinas e poucas ruas por esquina, o Dijkstra com heap a partir de cada
+origem sai muito mais barato (CORMEN et al., 2024, cap. 23).
+
+O Floyd-Warshall aceita pesos negativos, desde que não haja ciclo negativo.
+Se houver, ele avisa sozinho: no fim, algum `d[i][i]` fica menor que zero,
+porque sair de `i` e voltar a `i` pelo ciclo "custa" menos que ficar
+parado.
+
+A mesma estrutura de três laços responde outra pergunta. Troque os números
+por verdadeiro ou falso, o `+` por `&&` e o `mínimo` por `||`. Agora
+`d[i][j]` diz se **existe caminho** de `i` a `j`. Essa matriz é o **fecho
+transitivo** do grafo, e essa versão é o algoritmo de Warshall (TENENBAUM;
+LANGSAM; AUGENSTEIN, 1995, cap. 8).
 
 > [!WARNING]
 > Pôr o `k` no laço de **dentro** compila, roda e erra sem aviso: `d[i][k]` e
@@ -2215,17 +2439,52 @@ Confere com o Floyd completo: sim
 
 ### Conceito
 
-- **Cada pergunta, um algoritmo**: o tipo do grafo (dirigido ou não, com peso ou
-  sem) e a pergunta escolhem a técnica (ZIVIANI, 2010, cap. 7).
-- **Grade de disciplinas**: um **DAG** de setas "antes de", sem peso. "Quantos
-  semestres" é o Kahn por rodadas (A302), que também acusa pré-requisito
-  circular (CORMEN et al., 2024, cap. 20).
-- **Campus**: grafo **não dirigido** e ponderado. Com muitas consultas, compensa
-  calcular a tabela uma vez com o **Floyd-Warshall** e guardar o **próximo
-  passo** de cada rota (A309) (CORMEN et al., 2024, cap. 23).
-- **Um tipo `Grafo`** serve aos dois: número de vértices, nomes e matriz de
-  pesos. As funções recebem `const Grafo *` para não copiar a struct, que passa
-  de 300 bytes.
+O calouro tem duas dúvidas. A primeira é de calendário: com os
+pré-requisitos do curso, em quantos semestres ele se forma, e o que cursa
+em cada um? A segunda é de geografia: qual o caminho mais rápido a pé entre
+os prédios do campus? As duas viram grafos, mas grafos diferentes, e cada
+uma pede um algoritmo diferente do módulo.
+
+Essa é a habilidade que o projeto treina: olhar para um problema e
+reconhecer qual técnica ele pede. A escolha depende de duas coisas. Uma é o
+tipo do grafo: dirigido ou não, com peso nas arestas ou sem. A outra é a
+pergunta: ligar, ordenar, achar ciclo, achar caminho de uma origem ou entre
+todos os pares (ZIVIANI, 2010, cap. 7). A tabela no fim desta seção reúne o
+módulo nesse formato.
+
+A grade de disciplinas é um grafo **dirigido**: cada seta `a -> b` diz "a
+vem antes de b". Não há peso, porque um pré-requisito não custa mais que
+outro. E não pode haver ciclo, ou nenhuma das disciplinas do ciclo poderia
+ser cursada. É um **DAG**, e a pergunta "em que ordem cursar" é a ordenação
+topológica do assunto 0151 (CORMEN et al., 2024, cap. 20).
+
+"Quantos semestres" pede uma variação: o Kahn **por rodadas**, do exemplo
+A302. Em vez de tirar um vértice por vez da fila, cada rodada tira todos os
+que estão livres naquele momento, porque o calouro cursa em paralelo tudo o
+que já foi liberado. Cada rodada é um semestre. Se sobrarem disciplinas que
+nunca ficam livres, há um pré-requisito circular, e o programa avisa em vez
+de inventar uma grade.
+
+O campus é outro tipo de grafo: **não dirigido**, porque a trilha entre dois
+prédios se anda nos dois sentidos, e **ponderado**, com o tempo a pé em
+minutos. A pergunta é de caminho mínimo, e o calouro vai perguntar várias
+rotas diferentes ao longo do semestre. Nesse caso, compensa pagar uma vez o
+Floyd-Warshall (0155), que calcula a tabela de todos os pares, e depois só
+consultar a matriz (CORMEN et al., 2024, cap. 23).
+
+A matriz de distâncias diz quantos minutos, mas não por onde ir. Para
+reconstruir a rota, o programa guarda uma segunda matriz, a do **próximo
+passo**: `prox[i][j]` é o primeiro prédio depois de `i` no melhor caminho
+até `j`. Toda vez que o Floyd-Warshall melhora `d[i][j]` passando por `k`, o
+próximo passo de `i` para `j` passa a ser o mesmo de `i` para `k`. Para
+imprimir a rota, basta seguir `prox` a partir da origem até chegar ao
+destino, como no exemplo A309.
+
+Um único tipo `Grafo` serve aos dois mapas: o número de vértices, os nomes e
+a matriz de pesos. Na grade, o peso 1 só marca que a seta existe; no campus,
+o peso é o tempo em minutos. A struct inteira passa de 300 bytes, então as
+funções a recebem como `const Grafo *`: o ponteiro evita copiar tudo a cada
+chamada, e o `const` promete que a função só lê.
 
 | Pergunta | Algoritmo | Custo |
 | --- | --- | --- |

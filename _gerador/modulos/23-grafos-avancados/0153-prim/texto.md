@@ -1,19 +1,52 @@
 ## 0153 · Prim: a árvore que cresce
 
-- **Prim**: sai de um vértice e, a cada passo, escolhe a aresta mais leve entre
-  um vértice da árvore e um de fora. Mantém **uma árvore só**, que cresce da
-  origem; o Kruskal junta florestas (PRIM, 1957).
-- **Por que acerta**: é guloso e vale a propriedade do corte (0152)
-  (CORMEN et al., 2024, cap. 21).
-- **Heap de mínimo** (0102): cada item diz "dá para ligar `v` com `chave` a
-  partir de `de`". Quando um vértice entra, as arestas que saem dele entram no
-  heap.
-- **Versão preguiçosa**: item cujo vértice já está na árvore é **descartado**;
-  nada se atualiza dentro do heap (SEDGEWICK; WAYNE, 2011).
-- **Versão do Cormen** (`MST-PRIM`): todos os vértices no heap com chave
-  infinita, e `DECREASE-KEY` baixa a chave no lugar. Com heap binário, as duas
-  custam O(E log V) (CORMEN et al., 2024, cap. 21).
-- **Prim e Dijkstra** (0112): mesmo código, muda a chave de quem entra no heap.
+Cinco chácaras vão dividir a água de um poço artesiano. O encanador mediu
+os trechos por onde dá para passar cano: do Poço à chácara da Ana são 4 m,
+da Ana ao Beto 3 m, do Poço ao Beto 6 m, e assim por diante. O objetivo é o
+mesmo do Kruskal (0152): ligar todo mundo com o **mínimo de cano**. O que
+muda é o jeito de trabalhar.
+
+O encanador não sai comprando o cano mais barato da lista inteira. Ele
+começa no Poço e vai **esticando a rede**: a cada passo, olha os canos que
+ligam uma casa que já tem água a uma que ainda não tem, e instala o **mais
+curto**. A casa nova passa a ter água, e o passo se repete. Esse é o
+**algoritmo de Prim**: parte de um vértice e, a cada passo, escolhe a
+aresta mais leve entre um vértice da árvore e um de fora (PRIM, 1957).
+
+A diferença para o Kruskal está na forma da solução enquanto ela se monta.
+O Kruskal junta pedaços espalhados, uma floresta de grupos que vão se
+fundindo. O Prim mantém **uma árvore só**, que cresce a partir da origem e
+nunca se separa. No fim, os dois chegam a uma árvore geradora mínima.
+
+O Prim também é guloso, e acerta pelo mesmo motivo do Kruskal, a
+propriedade do corte (0152). Em cada passo, o corte separa as casas com
+água das casas sem água. O cano mais curto que cruza esse corte é uma
+aresta leve, e uma aresta leve sempre cabe numa árvore mínima (CORMEN et
+al., 2024, cap. 21).
+
+O trabalho de cada passo é achar o cano mais curto que sai da rede. Para
+não procurar na lista toda, o Prim guarda os candidatos num **heap de
+mínimo** (assunto 0102), que entrega o menor na hora. Cada item do heap diz
+"dá para ligar `v` com `chave` metros a partir de `de`". Quando uma casa
+entra na rede, os canos que saem dela para casas de fora entram no heap.
+
+Um item pode envelhecer. O Beto entra no heap com 6 m, pelo Poço, e depois
+com 3 m, pela Ana. Quando o de 3 m sai, o Beto entra na rede, e o item de 6
+m continua no heap, inútil. Na **versão preguiçosa**, ninguém atualiza nada
+dentro do heap: quando um item sai e a casa dele já está na rede, ele é
+simplesmente **descartado** (SEDGEWICK; WAYNE, 2011).
+
+A versão do Cormen, `MST-PRIM`, faz diferente. Ela põe todos os vértices no
+heap desde o começo, com chave infinita, e, quando acha um cano mais curto
+para um vértice, baixa a chave dele no lugar, com a operação
+`DECREASE-KEY`. Não sobram itens velhos. Com heap binário, as duas versões
+custam O(E log V) (CORMEN et al., 2024, cap. 21).
+
+Se o código lembrou o Dijkstra (0112), não é por acaso: é o mesmo laço, e só
+muda a chave com que um vizinho entra no heap. No Prim, a chave é o cano que
+liga o vizinho à rede. No Dijkstra, é a distância acumulada desde a origem.
+Por isso as árvores saem diferentes: no exemplo, o Prim gasta 18 m de cano e
+a árvore do Dijkstra, 21 m. A tabela resume:
 
 | | chave de `w` ao sair de `v` | o que a árvore minimiza |
 | --- | --- | --- |

@@ -1,20 +1,57 @@
 ## 0154 · Bellman-Ford: pesos negativos
 
-- **Peso negativo**: o Dijkstra (0112) quebra, porque fixa um vértice cedo
-  supondo que somar pesos só aumenta (CORMEN et al., 2024, cap. 22).
-- **Relaxar** a aresta `u -> v` de custo `c`: se `dist[u] + c < dist[v]`,
-  atualize `dist[v]` e `anterior[v]` (no Cormen, `RELAX`, com `v.d` e `v.π`)
-  (CORMEN et al., 2024, cap. 22).
-- **Bellman-Ford**: `dist[origem] = 0`, INFINITO no resto, e **V - 1 rodadas**
-  relaxando **todas** as arestas, sem escolher o menor (BELLMAN, 1958).
-- **Por que V - 1**: um caminho mínimo não repete vértice, tem até V - 1
-  arestas, e a rodada `i` acerta a `i`-ésima. Rodada sem mudança permite parar.
-- **Ciclo negativo**: circuito de soma menor que zero; acaba com o caminho
-  mínimo. Uma **rodada extra** que ainda melhora alguma aresta o detecta
-  (CORMEN et al., 2024, cap. 22).
-- **Custo**: O(V · E), contra O((V + E) log V) do Dijkstra com heap. Num DAG,
-  relaxar cada aresta uma vez na ordem topológica (0151) dá O(V + E), mesmo com
-  negativos (CORMEN et al., 2024, cap. 22).
+O motoboy sai da Base e quer chegar em Casa gastando o mínimo. Alguns
+trechos coincidem com uma corrida que paga mais do que a gasolina custa. Do
+Shopping ao Centro, por exemplo, ele gasta R$ 2 e recebe R$ 6 de uma
+entrega: o **custo líquido** desse trecho é **R$ -4**. O mapa vira um grafo
+dirigido com **pesos negativos**, e um algoritmo que você conhece passa a
+errar.
+
+O Dijkstra (assunto 0112) fixa a cada passo o vértice mais perto da origem
+e nunca mais mexe nele. Isso só é seguro se somar pesos nunca diminui um
+custo, porque aí nenhum caminho que passa por um vértice mais distante pode
+voltar mais barato (CORMEN et al., 2024, cap. 22). Com peso negativo, essa
+premissa cai. No mapa do motoboy, o Dijkstra fixa o Centro com R$ 4, direto
+da Base, antes de olhar o Shopping. Mas Base, Shopping, Centro custa
+6 - 4 = **R$ 2**. O erro se propaga, e ele diz que Casa custa R$ 12, quando
+custa R$ 10.
+
+Para consertar, é preciso uma operação que você já usou sem nome. **Relaxar**
+a aresta `u -> v` de custo `c` é perguntar: chegar a `v` passando por `u` é
+melhor do que o que eu já sei? Se `dist[u] + c < dist[v]`, sim, e você
+atualiza `dist[v]` com o valor novo e anota em `anterior[v]` que o melhor
+caminho chega por `u`. No Cormen, esse teste se chama `RELAX`, e os dois
+vetores são os atributos `v.d` e `v.π` (CORMEN et al., 2024, cap. 22).
+
+O **algoritmo de Bellman-Ford** não fixa ninguém cedo. Ele começa com
+`dist[origem] = 0` e INFINITO para todos os outros. Depois faz **V - 1
+rodadas**, e em cada rodada relaxa **todas** as arestas do grafo, uma por
+uma, sem escolher a menor nem seguir ordem especial (BELLMAN, 1958). Um
+valor errado pode aparecer numa rodada e ser corrigido na seguinte; no
+mapa, a Casa aparece com 12 na rodada 3 e cai para 10 na rodada 4.
+
+Por que V - 1 rodadas bastam? Um caminho mínimo nunca repete vértice, então
+tem no máximo V vértices e V - 1 arestas. Depois da primeira rodada, a
+primeira aresta desse caminho já foi relaxada na ordem certa; depois da
+segunda, a segunda; e assim por diante. Na rodada V - 1, o caminho inteiro
+está acertado. Se uma rodada passa sem mudar nada, as seguintes também não
+mudariam, e dá para parar antes.
+
+Há um caso sem resposta. Um **ciclo negativo** é um circuito cuja soma de
+pesos é menor que zero. Se ele é alcançável da origem, dar uma volta nele
+diminui o custo, dar duas diminui mais, e o caminho mínimo deixa de existir
+(CORMEN et al., 2024, cap. 22). O Bellman-Ford detecta isso com uma **rodada
+extra**. Depois das V - 1 rodadas, todos os caminhos mínimos já estariam
+certos; se alguma aresta ainda melhora, é porque há um ciclo negativo no
+caminho.
+
+O preço da robustez é o tempo. São V - 1 rodadas, cada uma olhando as E
+arestas: **O(V · E)**, contra O((V + E) log V) do Dijkstra com heap. A regra
+prática: com peso negativo, Bellman-Ford; sem ele, Dijkstra. Há um caso
+especial mais barato. Num DAG (0151), basta relaxar cada aresta uma vez, na
+ordem topológica, porque quando um vértice é processado tudo o que chega
+nele já foi. Isso dá os caminhos mínimos em O(V + E), mesmo com pesos
+negativos (CORMEN et al., 2024, cap. 22).
 
 > [!WARNING]
 > O teste `dist[u] != INFINITO` é obrigatório: `INT_MAX + (-4)` **não** estoura,

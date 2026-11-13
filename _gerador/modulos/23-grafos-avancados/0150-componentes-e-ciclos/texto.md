@@ -1,21 +1,60 @@
 ## 0150 · Componentes e ciclos
 
-- **Componente conexo**: grupo em que todo vértice se liga a todo outro por
-  algum caminho, sem olhar a direção das setas (ZIVIANI, 2010, cap. 7).
-- **Contar componentes**: um **laço externo** começa uma DFS (assunto 0111), com
-  número de grupo novo, em cada vértice ainda sem grupo. Custa O(V + E) com
-  lista de adjacência (CORMEN et al., 2024, cap. 20).
-- **Ciclo** num grafo dirigido: caminho que volta ao vértice de partida seguindo
-  as setas.
-- **Três cores**: **branco** (nunca visto), **cinza** (na pilha da recursão) e
-  **preto** (terminado). Seta para cinza é ciclo; seta para preto leva a algo já
-  resolvido. O `pai[]` reconstrói o ciclo (CORMEN et al., 2024, cap. 20).
-- **Aresta de retorno** (*back edge*): a seta para um cinza. Um grafo dirigido é
-  acíclico se e só se a DFS não acha nenhuma (CORMEN et al., 2024, cap. 20).
-- **Fortemente conexo**: cada vértice alcança cada outro **seguindo** as setas.
-  Sai com duas DFS, a segunda no grafo invertido, em O(V + E). Ignorar a direção
-  é ser só **fracamente conexo** (SEDGEWICK; WAYNE, 2011). Pontes e articulação:
-  assunto 0184.
+Na planilha da reforma, a célula Total soma Obra e Frete, a Obra soma Tinta
+e Piso, e o Piso inclui o Frete. Em outra aba, os Juros usam o Saldo, o
+Saldo usa a Parcela, e alguém fez a Parcela usar os Juros. A planilha
+reclama: **referência circular**. Para chegar a essa mensagem, ela precisou
+responder duas perguntas sobre as fórmulas, e as duas têm resposta clássica
+com a busca em profundidade (DFS) do assunto 0111.
+
+Primeiro, veja a planilha como um **grafo dirigido**: cada célula é um
+vértice, e a seta `a -> b` diz "a fórmula de `a` usa o valor de `b`". A
+primeira pergunta é quais pedaços da planilha são independentes, sem
+nenhuma ligação entre si. A segunda é se existe uma cadeia de fórmulas que
+volta ao ponto de partida.
+
+Os pedaços independentes são os **componentes conexos**: grupos em que todo
+vértice se liga a todo outro por algum caminho, sem olhar a direção das
+setas (ZIVIANI, 2010, cap. 7). Na planilha, Total, Obra, Tinta, Piso e Frete
+formam um componente; Juros, Saldo e Parcela formam outro. Mudar uma célula
+de um grupo nunca afeta o outro.
+
+Para achá-los, lembre que uma DFS que parte de um vértice marca tudo o que
+ele alcança, e isso é exatamente o componente dele. Então basta um **laço
+externo** que percorre os vértices em ordem e, a cada vértice ainda sem
+grupo, começa uma DFS nova com um número de grupo novo. Cada vértice e cada
+aresta são tratados uma vez, e o custo é O(V + E) com lista de adjacência,
+com V vértices e E arestas (CORMEN et al., 2024, cap. 20).
+
+A segunda pergunta é sobre **ciclos**. Num grafo dirigido, um ciclo é um
+caminho que, seguindo as setas, volta ao vértice de onde saiu. A ideia
+óbvia é marcar os vértices visitados e acusar ciclo quando a DFS chega a um
+já visitado. Ela engana. O Total chega ao Frete direto e também por Obra e
+Piso. Na segunda vez, o Frete já foi visitado, mas isso são dois caminhos
+que se encontram, não um ciclo.
+
+O que caracteriza um ciclo é voltar a um vértice cuja chamada **ainda não
+terminou**, que ainda está na pilha da recursão. Para enxergar isso, a DFS
+usa **três cores**. **Branco** é o vértice nunca visto. **Cinza** é o vértice
+cuja chamada começou e não terminou: ele está na pilha, e a DFS está
+explorando o que vem abaixo dele. **Preto** é o vértice terminado, com tudo
+abaixo dele já explorado (CORMEN et al., 2024, cap. 20).
+
+Com as cores, a regra fica precisa. Uma seta para um vértice **cinza** fecha
+um ciclo: você saiu dele, andou pelas setas e voltou antes de ele terminar.
+Uma seta para um **preto** leva a algo já resolvido, sem ciclo. Para mostrar
+o ciclo, a DFS guarda em `pai[]` de onde veio cada vértice e sobe por ele até
+o cinza. O Cormen chama a seta para um cinza de **aresta de retorno** (*back
+edge*) e prova: um grafo dirigido é acíclico se e só se a DFS não encontra
+nenhuma aresta de retorno (CORMEN et al., 2024, cap. 20).
+
+Há um nome para cada jeito de ser conexo. Estar ligado ignorando a direção
+das setas é ser **fracamente conexo**. Num **componente fortemente conexo**,
+cada vértice alcança cada outro **seguindo** as setas: Juros, Saldo e
+Parcela formam um, porque o ciclo leva de qualquer um a qualquer outro. Os
+componentes fortemente conexos saem com duas DFS, a segunda no grafo com
+as setas invertidas, também em O(V + E) (SEDGEWICK; WAYNE, 2011). Pontes e
+vértices de articulação ficam para o assunto 0184.
 
 > [!WARNING]
 > Só com `visitado[]`, o ciclo dá **alarme falso**: dois caminhos que se

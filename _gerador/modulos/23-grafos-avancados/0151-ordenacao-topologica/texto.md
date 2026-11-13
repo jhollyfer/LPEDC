@@ -1,20 +1,53 @@
 ## 0151 · Ordenação topológica
 
-- **Ordenação topológica**: ordem dos vértices em que toda seta `a -> b` aponta
-  para a frente. Só existe se o grafo não tem ciclo (CORMEN et al., 2024, cap. 20).
-- **DAG** (*directed acyclic graph*): grafo dirigido sem ciclos.
-- **Grau de entrada**: quantas setas chegam ao vértice, ou quantos serviços ele
-  espera.
-- **Algoritmo de Kahn**: ponha numa fila (0085) todos com grau 0; tire um,
-  escreva na lista e faça `grau[v]--` em quem esperava por ele; quem chegar a 0
-  entra na fila. Repita até esvaziar (KAHN, 1962).
-- **Detecta ciclo**: se a lista terminar com menos de V vértices, sobraram os
-  que estão num ciclo ou depois dele. Custo O(V + E) com lista, O(V²) com
-  matriz (SZWARCFITER; MARKENZON, 2010).
-- **Não é única**: vértices livres ao mesmo tempo saem na ordem da fila.
-- **Pela DFS**: empilhe `u` quando `dfs(u)` termina; a pós-ordem de trás para a
-  frente é uma ordenação topológica (tempo de término decrescente, no Cormen;
-  A301) (CORMEN et al., 2024, cap. 20).
+O mestre de obras tem oito serviços para encaixar no cronograma. Não dá para
+levantar parede sem fundação, nem pintar com o reboco molhado, nem pôr o
+piso antes da hidráulica. Ele precisa de uma lista em que **todo serviço
+apareça depois dos que ele espera**. A mesma necessidade aparece na ordem
+das disciplinas de um curso com pré-requisitos e na ordem em que um
+compilador processa arquivos que dependem uns dos outros.
+
+Cada regra "a vem antes de b" vira uma seta `a -> b` num grafo dirigido. A
+lista que o mestre de obras quer é uma **ordenação topológica**: uma ordem
+dos vértices em que toda seta aponta para a frente, de um vértice para outro
+que aparece depois dele (CORMEN et al., 2024, cap. 20). Ela só existe se o
+grafo não tem ciclo: se a Parede espera o Reboco e o Reboco espera a Parede,
+nenhum dos dois pode vir primeiro. Um grafo dirigido sem ciclos se chama
+**DAG** (*directed acyclic graph*).
+
+Para montar a lista, o algoritmo mais intuitivo faz o que o mestre de obras
+faria no papel: começa pelo que não espera ninguém. Para isso, conte, para
+cada serviço, quantas setas chegam nele. Esse número é o **grau de
+entrada**, e diz quantos serviços ele ainda espera. A Fundação tem grau de
+entrada 0; a Pintura, que espera Piso e Reboco, tem 2.
+
+O **algoritmo de Kahn** funciona assim. Ponha numa fila (assunto 0085)
+todos os serviços com grau de entrada 0, os que podem começar já. Depois,
+repita: tire um serviço da fila e escreva-o na lista. Como ele está feito,
+cada serviço que esperava por ele passa a esperar **um a menos**, e o grau
+dele diminui (`grau[v]--`). Quem chegar a 0 ficou livre e entra na fila.
+Quando a fila esvaziar, a lista está pronta (KAHN, 1962).
+
+O Kahn detecta ciclo de brinde. Num ciclo, cada vértice espera outro do
+mesmo ciclo, então nenhum chega a grau 0 e nenhum entra na fila. Se a lista
+terminar com menos de V vértices, os que sobraram estão num ciclo ou
+dependem de algum. Cada vértice entra na fila uma vez, e cada seta diminui
+um grau uma vez: o custo é O(V + E) com lista de adjacência e O(V²) com
+matriz, porque achar os vizinhos de um vértice custa uma linha inteira
+(SZWARCFITER; MARKENZON, 2010).
+
+A ordenação topológica **não é única**. Depois das Paredes, Elétrica,
+Hidráulica e Telhado ficam livres juntos, e qualquer ordem entre os três
+respeita as regras. Quem decide é a ordem em que entram na fila, que no
+programa segue o índice dos vértices.
+
+Há um segundo caminho, pela DFS do assunto 0111. Pense no momento em que
+`dfs(u)` termina: tudo o que `u` alcança, ou seja, tudo o que depende de
+`u`, já terminou antes. Então a ordem de término, a **pós-ordem**, lida de
+trás para a frente, põe cada vértice antes de tudo o que depende dele. Basta
+empilhar `u` no fim de `dfs(u)` e, no final, desempilhar tudo. É a versão do
+Cormen, que ordena pelo tempo de término decrescente; o exemplo A301 a
+mostra em C (CORMEN et al., 2024, cap. 20).
 
 > [!WARNING]
 > O grau que importa é o de **entrada**: `grau[b] += antes[a][b]`, somando pela

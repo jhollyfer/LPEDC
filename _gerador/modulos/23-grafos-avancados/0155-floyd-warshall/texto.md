@@ -1,25 +1,68 @@
 ## 0155 · Floyd-Warshall: todos os pares
 
-- **Todos os pares**: a menor distância de cada vértice a cada outro, numa
-  matriz `d` (CORMEN et al., 2024, cap. 23).
-- **Floyd-Warshall**: programação dinâmica (módulo 21) sobre os vértices que um
-  caminho pode usar **como passagem**. Começa com `d[i][j]` = peso da aresta
-  direta, INFINITO se não há, 0 na diagonal (FLOYD, 1962).
-- **Rodada `k`**: depois dela, `d[i][j]` é o melhor de `i` a `j` usando como
-  passagem só os vértices de 0 a `k`. Por isso o `k` é o laço **de fora**.
-- **Custo**: **O(V³)** de tempo e O(V²) de memória: 125 passos para 5 vértices,
-  64 milhões para 400. Para grafos grandes e esparsos, Dijkstra com heap
-  (CORMEN et al., 2024, cap. 23).
-- **Pesos negativos**: aceita, sem ciclo negativo; com ciclo, aparece
-  `d[i][i] < 0` no fim.
-- **Fecho transitivo**: trocar `+` e `min` por `&&` e `||` responde "existe
-  caminho?" (algoritmo de Warshall) (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 8).
+Um aplicativo de corrida precisa do tempo de viagem de cada bairro para
+cada outro, para estimar o preço antes de chamar o motorista. A cidade tem
+cinco bairros ligados por ruas de **mão única**: Centro, Porto, Vila, Alto e
+Feira. A pergunta não é mais "da origem para todo mundo", como no Dijkstra
+(0112). É "**de todo mundo para todo mundo**".
+
+Esse é o problema dos **caminhos mínimos entre todos os pares**: achar a
+menor distância de cada vértice a cada outro e guardar tudo numa matriz
+`d`, em que `d[i][j]` é a distância de `i` até `j` (CORMEN et al., 2024, cap.
+23). Dá para rodar o Dijkstra uma vez a partir de cada bairro. O
+**algoritmo de Floyd-Warshall** faz diferente: monta a matriz inteira com
+três laços aninhados e quase nenhum código (FLOYD, 1962).
+
+A ideia vem da programação dinâmica (módulo 21), e o truque está em qual
+subproblema escolher. Em vez de pensar em caminhos inteiros, pense nos
+bairros que um caminho tem permissão de usar **como passagem**, isto é, por
+onde ele pode passar no meio, sem ser origem nem destino. No começo, nenhum
+bairro pode ser passagem, e `d[i][j]` é só o tempo da rua direta de `i` para
+`j`: INFINITO se a rua não existe e 0 na diagonal, porque ir de um bairro a
+ele mesmo não custa nada (FLOYD, 1962).
+
+Agora libere o Centro como passagem. Para cada par `i`, `j`, pergunte: ir
+de `i` ao Centro e do Centro a `j` sai mais barato que o melhor que eu
+conhecia? Se sim, atualize. Depois libere o Porto, fazendo a mesma pergunta
+com o Porto no meio, e depois a Vila, o Alto e a Feira. Cada bairro liberado
+é uma rodada:
 
 ```text
 para cada k:            (o bairro que passa a valer como passagem)
     para cada i, j:
         d[i][j] = mínimo(d[i][j], d[i][k] + d[k][j])
 ```
+
+O que garante que isso funciona é a afirmação que vale depois de cada
+rodada: terminada a rodada `k`, `d[i][j]` é o melhor tempo de `i` a `j` que
+usa como passagem só os bairros de 0 a `k`. Na rodada seguinte, o melhor
+caminho com o bairro `k + 1` liberado ou não passa por ele, e já está em
+`d[i][j]`, ou passa uma vez, e é a soma do trecho até ele com o trecho a
+partir dele, dois valores já prontos. Por isso o `k` **tem** de ser o laço
+de fora: ele é a rodada, e os laços de `i` e `j` só fazem sentido com a
+rodada anterior completa.
+
+Veja a casa `d[Centro][Alto]` evoluir. Não há rua direta, então ela começa
+em INFINITO. Com o Porto liberado, vira 10 (Centro, Porto, Alto). Com a Vila,
+cai para 9, porque Centro, Vila, Porto custa menos que Centro, Porto. Com a
+Feira, cai para 8. Cada rodada aproveita o que as anteriores já acharam.
+
+O custo é fácil de contar: três laços de V voltas, **O(V³)** de tempo, e a
+matriz de V × V, O(V²) de memória. São 125 passos para 5 bairros e 64
+milhões para 400. Para grafos grandes e esparsos, como um mapa com 100 mil
+esquinas e poucas ruas por esquina, o Dijkstra com heap a partir de cada
+origem sai muito mais barato (CORMEN et al., 2024, cap. 23).
+
+O Floyd-Warshall aceita pesos negativos, desde que não haja ciclo negativo.
+Se houver, ele avisa sozinho: no fim, algum `d[i][i]` fica menor que zero,
+porque sair de `i` e voltar a `i` pelo ciclo "custa" menos que ficar
+parado.
+
+A mesma estrutura de três laços responde outra pergunta. Troque os números
+por verdadeiro ou falso, o `+` por `&&` e o `mínimo` por `||`. Agora
+`d[i][j]` diz se **existe caminho** de `i` a `j`. Essa matriz é o **fecho
+transitivo** do grafo, e essa versão é o algoritmo de Warshall (TENENBAUM;
+LANGSAM; AUGENSTEIN, 1995, cap. 8).
 
 > [!WARNING]
 > Pôr o `k` no laço de **dentro** compila, roda e erra sem aviso: `d[i][k]` e

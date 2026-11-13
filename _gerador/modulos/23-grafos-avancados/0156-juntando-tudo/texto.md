@@ -1,16 +1,51 @@
 ## 0156 · Juntando tudo: o assistente do calouro
 
-- **Cada pergunta, um algoritmo**: o tipo do grafo (dirigido ou não, com peso ou
-  sem) e a pergunta escolhem a técnica (ZIVIANI, 2010, cap. 7).
-- **Grade de disciplinas**: um **DAG** de setas "antes de", sem peso. "Quantos
-  semestres" é o Kahn por rodadas (A302), que também acusa pré-requisito
-  circular (CORMEN et al., 2024, cap. 20).
-- **Campus**: grafo **não dirigido** e ponderado. Com muitas consultas, compensa
-  calcular a tabela uma vez com o **Floyd-Warshall** e guardar o **próximo
-  passo** de cada rota (A309) (CORMEN et al., 2024, cap. 23).
-- **Um tipo `Grafo`** serve aos dois: número de vértices, nomes e matriz de
-  pesos. As funções recebem `const Grafo *` para não copiar a struct, que passa
-  de 300 bytes.
+O calouro tem duas dúvidas. A primeira é de calendário: com os
+pré-requisitos do curso, em quantos semestres ele se forma, e o que cursa
+em cada um? A segunda é de geografia: qual o caminho mais rápido a pé entre
+os prédios do campus? As duas viram grafos, mas grafos diferentes, e cada
+uma pede um algoritmo diferente do módulo.
+
+Essa é a habilidade que o projeto treina: olhar para um problema e
+reconhecer qual técnica ele pede. A escolha depende de duas coisas. Uma é o
+tipo do grafo: dirigido ou não, com peso nas arestas ou sem. A outra é a
+pergunta: ligar, ordenar, achar ciclo, achar caminho de uma origem ou entre
+todos os pares (ZIVIANI, 2010, cap. 7). A tabela no fim desta seção reúne o
+módulo nesse formato.
+
+A grade de disciplinas é um grafo **dirigido**: cada seta `a -> b` diz "a
+vem antes de b". Não há peso, porque um pré-requisito não custa mais que
+outro. E não pode haver ciclo, ou nenhuma das disciplinas do ciclo poderia
+ser cursada. É um **DAG**, e a pergunta "em que ordem cursar" é a ordenação
+topológica do assunto 0151 (CORMEN et al., 2024, cap. 20).
+
+"Quantos semestres" pede uma variação: o Kahn **por rodadas**, do exemplo
+A302. Em vez de tirar um vértice por vez da fila, cada rodada tira todos os
+que estão livres naquele momento, porque o calouro cursa em paralelo tudo o
+que já foi liberado. Cada rodada é um semestre. Se sobrarem disciplinas que
+nunca ficam livres, há um pré-requisito circular, e o programa avisa em vez
+de inventar uma grade.
+
+O campus é outro tipo de grafo: **não dirigido**, porque a trilha entre dois
+prédios se anda nos dois sentidos, e **ponderado**, com o tempo a pé em
+minutos. A pergunta é de caminho mínimo, e o calouro vai perguntar várias
+rotas diferentes ao longo do semestre. Nesse caso, compensa pagar uma vez o
+Floyd-Warshall (0155), que calcula a tabela de todos os pares, e depois só
+consultar a matriz (CORMEN et al., 2024, cap. 23).
+
+A matriz de distâncias diz quantos minutos, mas não por onde ir. Para
+reconstruir a rota, o programa guarda uma segunda matriz, a do **próximo
+passo**: `prox[i][j]` é o primeiro prédio depois de `i` no melhor caminho
+até `j`. Toda vez que o Floyd-Warshall melhora `d[i][j]` passando por `k`, o
+próximo passo de `i` para `j` passa a ser o mesmo de `i` para `k`. Para
+imprimir a rota, basta seguir `prox` a partir da origem até chegar ao
+destino, como no exemplo A309.
+
+Um único tipo `Grafo` serve aos dois mapas: o número de vértices, os nomes e
+a matriz de pesos. Na grade, o peso 1 só marca que a seta existe; no campus,
+o peso é o tempo em minutos. A struct inteira passa de 300 bytes, então as
+funções a recebem como `const Grafo *`: o ponteiro evita copiar tudo a cada
+chamada, e o `const` promete que a função só lê.
 
 | Pergunta | Algoritmo | Custo |
 | --- | --- | --- |

@@ -1,20 +1,59 @@
 ## 0152 · Kruskal: árvore geradora mínima
 
-- **Árvore**: grafo conexo e sem ciclo; com V vértices tem **V - 1 arestas**.
-- **Árvore geradora mínima** (MST, *minimum spanning tree*): árvore que toca
-  todos os vértices de um grafo **não dirigido** ponderado com a menor soma de
-  pesos (CORMEN et al., 2024, cap. 21). Não é o caminho mais curto entre dois.
-- **Kruskal**: ordene as arestas da mais barata para a mais cara, aceite cada
-  uma que **não feche ciclo** e pare com V - 1. É guloso (assunto 0133)
-  (KRUSKAL, 1956).
-- **Teste do ciclo**: o **union-find** (0148). Se `acha(a)` e `acha(b)` dão o
-  mesmo representante, a aresta fecha ciclo; senão, `une` junta os grupos
-  (SEDGEWICK; WAYNE, 2011).
-- **Custo**: a ordenação domina, O(E log E) = O(E log V); o union-find é quase
-  O(1) por operação (CORMEN et al., 2024, cap. 21).
-- **Propriedade do corte**: a aresta mais barata que cruza de um grupo ao outro
-  (**leve**) é **segura**: entra sem estragar a MST (CORMEN et al., 2024, cap. 21).
-- **Empates**: a MST pode não ser única; o custo mínimo é.
+A prefeitura quer asfaltar estradas entre seis vilas: Sede, Ponte, Brejo,
+Serra, Lagoa e Vale. A engenharia orçou nove trechos possíveis, de R$ 2 mil
+a R$ 9 mil cada. Depois da obra, deve dar para ir de qualquer vila a
+qualquer outra pelo asfalto, e a prefeitura quer gastar o mínimo. Repare no
+pedido: não é o caminho mais curto entre duas vilas, é um conjunto de
+estradas que **ligue todo mundo** com a **menor soma**.
+
+Esse conjunto nunca tem ciclo. Se três estradas formassem um triângulo,
+dava para tirar a mais cara delas e as vilas continuariam ligadas pelas
+outras duas, gastando menos. Um grafo conexo e sem ciclo se chama
+**árvore**, e uma árvore com V vértices tem sempre **V - 1 arestas**: menos
+que isso deixa alguém de fora, mais que isso fecha um ciclo. As seis vilas
+ficam ligadas com exatamente cinco estradas.
+
+O problema tem nome. Uma **árvore geradora** de um grafo é uma árvore que
+usa arestas do grafo e toca todos os vértices dele. A **árvore geradora
+mínima** (MST, de *minimum spanning tree*) é a de menor soma de pesos, num
+grafo **não dirigido** e ponderado, em que cada aresta tem um peso (CORMEN et
+al., 2024, cap. 21). Redes elétricas, de água e de cabos se planejam assim.
+
+O **algoritmo de Kruskal** é um guloso (assunto 0133) com uma regra só.
+Ordene as arestas da mais barata para a mais cara. Percorra a lista e
+**aceite** cada aresta que **não feche ciclo** com as já aceitas; recuse as
+que fecham. Pare quando tiver V - 1 arestas (KRUSKAL, 1956). Nas vilas, a
+Serra-Lagoa (2) entra, a Ponte-Brejo (3) entra, e assim por diante, até que
+a Sede-Ponte (6) aparece quando Sede e Ponte já estão ligadas pelo Brejo, e
+é recusada.
+
+O passo delicado é saber se uma aresta fecha ciclo. Ela fecha quando as
+duas pontas já estão ligadas por arestas aceitas, ou seja, no mesmo grupo.
+Grupos que se juntam e nunca se separam são o caso exato do **union-find**
+(assunto 0148). Cada grupo de vilas já ligadas é um conjunto. Para a aresta
+`a-b`, se `acha(a)` e `acha(b)` dão o mesmo representante, ela fecharia um
+ciclo; se não, ela entra e `une` junta os dois grupos (SEDGEWICK; WAYNE,
+2011).
+
+O custo é dominado pela ordenação das arestas, O(E log E). Como um grafo
+simples tem E < V², log E < 2 log V, e o custo também se escreve O(E log V).
+As operações do union-find, com os dois truques do 0148, custam quase O(1)
+cada (CORMEN et al., 2024, cap. 21).
+
+Por que o guloso acerta? Divida os vértices em dois grupos quaisquer, um
+**corte**. Toda árvore que liga tudo precisa de pelo menos uma aresta
+cruzando de um grupo ao outro. A aresta mais barata que cruza o corte se
+chama **leve**, e a **propriedade do corte** garante que ela é **segura**:
+sempre existe uma MST que a contém, então aceitá-la não estraga nada (CORMEN
+et al., 2024, cap. 21). Quando o Kruskal aceita uma aresta, ela é a mais
+barata que liga o grupo de uma ponta ao resto, porque todas as mais baratas
+já foram vistas antes.
+
+Com pesos repetidos, pode haver mais de uma MST. Nas vilas, a Lagoa-Vale
+também custa 7; se viesse antes da Serra-Vale na lista ordenada, entraria no
+lugar dela. A árvore muda, mas o custo mínimo, R$ 21 mil, é o mesmo: a MST
+pode não ser única, o custo mínimo é.
 
 > [!WARNING]
 > Testar `pai[a] != pai[b]` no lugar de `acha(a) != acha(b)` é o erro clássico:
