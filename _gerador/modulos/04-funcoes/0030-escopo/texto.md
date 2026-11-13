@@ -1,20 +1,59 @@
 ## 0030 · Escopo e tempo de vida
 
-- **Escopo**: **onde** no código o nome pode ser usado (DEITEL; DEITEL, 2011,
-  cap. 5).
-- **Tempo de vida** (duração): **quando** a variável existe na memória.
-  Automática nasce e morre com o bloco; estática dura o programa todo
-  (DEITEL; DEITEL, 2011, cap. 5).
-- **Local**: declarada dentro de `{ }`; parâmetros e o `i` do `for` também
-  são locais. Sem valor inicial, começa com lixo (BACKES, 2013, cap. 9).
-- **Global**: declarada fora das funções; qualquer função pode mudá-la, o que
-  dificulta achar erros. Prefira parâmetro e `return` (BACKES, 2013, cap. 9).
-- **`static` local**: escopo de local, vida de global. A inicialização roda
-  uma vez, e o valor fica entre as chamadas (KERNIGHAN; RITCHIE, 1989, cap. 4).
-- **Esconder nomes**: um nome declarado num bloco interno esconde o de fora até
-  o bloco acabar (DEITEL; DEITEL, 2011, cap. 5).
-- **`static` fora de função**: global visível só naquele `.c` (assunto 0034)
-  (KERNIGHAN; RITCHIE, 1989, cap. 4).
+Com funções, o programa passa a ter muitas variáveis espalhadas, e duas
+perguntas aparecem. Uma variável do `main` pode ser usada dentro de outra
+função? E o valor de uma variável da função sobrevive de uma chamada para a
+seguinte? As duas respostas dependem de onde e de como a variável foi
+declarada.
+
+No banco, o painel chama a senha 101, depois a 102, depois a 103: ele
+**lembra** onde parou. O atendente, ao contrário, começa a conversa do zero a
+cada cliente e não guarda nada do anterior. Um programa precisa das duas
+coisas, e o C tem uma ferramenta para cada. Para entender qual usar, separe
+duas propriedades que toda variável tem (DEITEL; DEITEL, 2011, cap. 5). O
+**escopo** diz **onde** no código o nome da variável pode ser usado. O
+**tempo de vida**, também chamado de duração, diz **quando** a variável existe
+na memória.
+
+A variável **local** é declarada dentro de um bloco `{ }` e só pode ser usada
+nele (BACKES, 2013, cap. 9). Os parâmetros são locais da função, e o `i` de
+`for (int i = 0; ...)` é local do laço. O tempo de vida acompanha o escopo: a
+local nasce quando o programa entra no bloco e morre quando sai. Por isso ela
+também se chama **automática**. É o atendente: a cada chamada, uma local
+começa de novo. E começa com **lixo**, se você não der um valor inicial,
+porque a memória que ela ocupa guarda o que sobrou de antes.
+
+A variável **global** é declarada fora de qualquer função. Seu escopo vai do
+ponto da declaração até o fim do arquivo, e ela vive enquanto o programa roda
+(BACKES, 2013, cap. 9). Parece prático, porque todas as funções a enxergam.
+O custo aparece quando algo dá errado: se o valor está estranho, qualquer
+função pode ter mexido nele, e você precisa ler o programa inteiro para achar
+o culpado. Prefira passar dados por parâmetro e devolver pelo `return`.
+
+O painel do banco pede uma terceira combinação: uma variável que só a função
+enxerga, mas que lembra o valor entre as chamadas. É a **`static` local**,
+declarada dentro do bloco com a palavra `static`. Ela tem o escopo de uma
+local e o tempo de vida de uma global (KERNIGHAN; RITCHIE, 1989, cap. 4). A
+linha `static int senha = 100;` roda **uma vez**, antes de o programa
+começar. Nas chamadas seguintes, a variável continua com o valor que tinha
+quando a função terminou da última vez.
+
+Globais e `static` têm outra diferença em relação às locais: sem valor
+inicial, começam em **0**. Elas ficam numa região fixa da memória, separada da
+região das locais, e essa região é preparada quando o programa carrega. As
+locais ficam na **pilha**, que é o assunto 0031.
+
+Os escopos também podem se sobrepor. Se um bloco interno declara um nome que
+já existe fora, o de dentro **esconde** o de fora até o bloco acabar (DEITEL;
+DEITEL, 2011, cap. 5). Vale sempre a declaração mais próxima. O de fora não
+mudou; ele só fica fora de alcance por um trecho.
+
+A palavra `static` tem ainda um segundo uso. Escrita numa global, fora de
+qualquer função, ela não muda o tempo de vida, que já é o programa todo; ela
+restringe o escopo ao arquivo `.c` em que a global está (KERNIGHAN; RITCHIE,
+1989, cap. 4). O assunto 0034 usa isso para esconder dados de um módulo.
+
+A tabela resume os três tipos de variável:
 
 | Tipo | Onde declara | Escopo | Tempo de vida |
 | --- | --- | --- | --- |
@@ -23,9 +62,10 @@
 | **`static` local** | dentro de `{ }`, com `static` | só aquele bloco | o programa todo |
 
 > [!WARNING]
-> `static int senha = 100;` não volta a 100 a cada chamada. Globais e `static`
-> sem valor começam em 0; locais começam com lixo. Esconder nomes compila sem
-> aviso com `-Wall`: só o `-Wshadow` reclama.
+> `static int senha = 100;` não volta a valer 100 a cada chamada: a
+> inicialização acontece uma vez. O oposto também engana: uma local **sem**
+> inicialização começa com lixo, não com 0. E esconder nomes compila sem aviso
+> com `-Wall`: só o `-Wshadow` reclama.
 
 {{exemplo}}
 

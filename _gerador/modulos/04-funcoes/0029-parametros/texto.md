@@ -1,28 +1,67 @@
 ## 0029 · Parâmetros e passagem por valor
 
-- **Passagem por valor**: na chamada, o C calcula cada argumento e **copia** o
-  valor para o parâmetro. É a única forma de passagem do C (DEITEL; DEITEL,
-  2011, cap. 5).
-- **Parâmetro formal e real**: o da definição é o **formal**; o valor da
-  chamada é o **argumento** (ou parâmetro real) (ROCHA; BORGES, s.d.).
-- **Parâmetro é local**: nasce com a cópia e pode mudar à vontade; a variável
-  de quem chamou não muda (BACKES, 2013, cap. 9).
-- **Por referência**: o C simula passando um endereço (assunto 0046)
-  (DEITEL; DEITEL, 2011, cap. 5).
-- **Retorno guardado**: o resultado volta só pelo `return`, e quem chama
-  precisa guardá-lo (`x = f(x)`); senão se perde (KERNIGHAN; RITCHIE, 1989,
-  cap. 4).
-- **Conversão automática**: argumento de outro tipo é convertido como numa
-  atribuição; `2.9` passado a um `int` vira `2`, sem aviso (KERNIGHAN;
-  RITCHIE, 1989, cap. 4).
-- **`(void)`**: `void linha(void)` não aceita argumento. `void linha()`, no
-  C17, não confere nada e aceita `linha(5)` calado. Escreva `(void)`
-  (BACKES, 2013, cap. 9).
+O assunto 0028 mostrou que a chamada leva um argumento até o parâmetro. Falta
+saber o que exatamente viaja. A função recebe a própria variável de quem
+chamou ou outra coisa? A resposta decide se uma função consegue mudar as
+variáveis do `main`, e explica por que tantas funções "não funcionam" na
+primeira tentativa.
+
+Pense num boleto. Você fotografa o boleto e manda no grupo da família. Sua tia
+rabisca "pago!" na foto. O boleto de papel, na sua gaveta, continua igual: ela
+mexeu numa **cópia**. Toda chamada de função em C segue essa regra. Em
+`reajustar(mensalidade, 10)`, o C calcula o valor de cada argumento e
+**copia** esse valor para o parâmetro. Esse mecanismo é a **passagem por
+valor**, e é a única forma de passagem que o C tem (DEITEL; DEITEL, 2011, cap.
+5).
+
+Os livros dão nomes às duas pontas da cópia (ROCHA; BORGES, s.d.). O
+parâmetro escrito na definição, como o `mensalidade` de
+`double reajustar(double mensalidade, double percentual)`, é o **parâmetro formal**.
+O valor que aparece na chamada é o **argumento**, também chamado de
+**parâmetro real**. Na prova, "formal" aponta para a definição e "real" para a
+chamada.
+
+O parâmetro formal é uma variável nova, **local** da função: nasce no momento
+da chamada, já com a cópia dentro, e some quando a função termina (BACKES,
+2013, cap. 9). A função pode mudá-lo à vontade. A variável de quem chamou fica
+intacta, mesmo que as duas tenham o mesmo nome. São duas caixinhas em lugares
+diferentes da memória, e o nome igual é coincidência.
+
+Uma consequência ajuda a fixar a ideia: a função recebe **só o número**. As
+chamadas `reajustar(mensalidade, 10)`, `reajustar(120.00, 10)` e
+`reajustar(100 + 20, 5 * 2)` são idênticas para ela, porque em todas chega
+120.00 e chega 10. Ela não sabe de onde o valor veio, então não tem como
+alterar a variável original.
+
+Se a função não mexe nas variáveis de quem chama, o resultado volta pelo
+`return`, e quem chama precisa **guardá-lo**: `mensalidade = reajustar(...)`
+(KERNIGHAN; RITCHIE, 1989, cap. 4). Ignorar o retorno é permitido; você faz
+isso o tempo todo com o `printf`, que devolve quantos caracteres escreveu. Mas
+um cálculo cujo retorno ninguém guarda é perdido.
+
+A cópia também converte o tipo quando preciso. Se o argumento não for do tipo
+do parâmetro, o C o converte como faria numa atribuição (KERNIGHAN; RITCHIE,
+1989, cap. 4). Passar `2.9` para um parâmetro `int` entrega `2`: a parte
+decimal some, e o `-Wall` não avisa. O protótipo é o que permite essa
+conversão, porque é ele que diz ao compilador o tipo de cada parâmetro.
+
+E a passagem **por referência**, que os livros de algoritmos citam? Nela a
+função recebe a variável original e pode alterá-la. O C não tem esse
+mecanismo, mas o simula: em vez do valor, você passa o **endereço** da
+variável, e a função usa o endereço para chegar até ela (DEITEL; DEITEL, 2011,
+cap. 5). O `&` do `scanf` faz exatamente isso. O assunto 0046 mostra como.
+
+Por fim, uma função sem parâmetros. Escreva `void linha(void)`: o `void` entre
+parênteses diz "não aceito argumento nenhum", e `linha(5)` vira erro. Já
+`void linha()`, com parênteses vazios, no C17 quer dizer "não vou conferir os
+argumentos", e `linha(5)` compila calado (BACKES, 2013, cap. 9). Use sempre
+`(void)`.
 
 > [!WARNING]
-> `void trocar(int a, int b)` troca só as cópias: nada muda no `main`. Para a
-> função mexer numa variável sua, passe o **endereço** (o `&` do `scanf`,
-> assunto 0046).
+> A função que "deveria" mudar a variável e não muda. Em
+> `void trocar(int a, int b)`, a troca ocorre entre as cópias e nada muda no
+> `main`. Para a função mexer numa variável sua, passe o **endereço** dela (o
+> `&` do `scanf`, assunto 0046).
 
 {{exemplo}}
 

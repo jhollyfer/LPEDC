@@ -1,19 +1,13 @@
 ## 0031 · A pilha de chamadas
 
-- **Pilha de chamadas**: a lista das funções em andamento. A de cima roda; as
-  de baixo esperam um retorno (CELES; CERQUEIRA; RANGEL, 2016).
-- **Quadro** (*stack frame*, registro de ativação): a memória de uma chamada,
-  com os **parâmetros**, as **variáveis locais** e o **endereço de retorno**
-  (BACKES, 2013, cap. 9).
-- **LIFO**: chamou, empilha um quadro no topo; retornou, ele sai. A última
-  função a começar é a primeira a terminar (DEITEL; DEITEL, 2011, cap. 5).
-- **Por que a local some**: seu quadro foi desempilhado no `return`. E uma
-  função não vê as locais de quem a chamou: estão noutro quadro (CELES;
-  CERQUEIRA; RANGEL, 2016).
-- **Stack trace**: o `bt` do `gdb` mostra a pilha no momento do erro (GDB, s.d.).
-- **Stack overflow**: chamadas demais esgotam a pilha, que tem tamanho fixo
-  (8 MB no Linux, `ulimit -s`), e o programa morre com `Segmentation fault`
-  (BACKES, 2013, cap. 9).
+O assunto 0030 deixou duas perguntas no ar. Por que uma variável local some
+quando a função termina? E por que cada chamada começa com locais novas? A
+resposta está no jeito como o programa organiza a memória das chamadas em
+andamento. Entender esse mecanismo também ajuda a ler as mensagens de erro e
+prepara o terreno para a recursão, no assunto 0032.
+
+Quando um programa em C quebra dentro do `gdb`, o depurador do GNU, o comando
+`bt` mostra algo assim:
 
 ```text
 #0  calcular_taxa (valor=0) at pedido.c:12
@@ -21,9 +15,45 @@
 #2  main () at pedido.c:5
 ```
 
+Esse relatório é um **stack trace**, ou *backtrace* (GDB, s.d.). Ele mostra a
+**pilha de chamadas**: a lista das funções que estão em andamento naquele
+instante (CELES; CERQUEIRA; RANGEL, 2016). Leia de baixo para cima. O `main`
+chamou `fechar_pedido`, que chamou `calcular_taxa`, e o erro aconteceu nesta
+última, na linha 12. Só a de cima estava rodando; as de baixo esperavam um
+retorno.
+
+A cada chamada, o programa reserva um pedaço de memória só para ela, o
+**quadro**, também chamado de *stack frame* ou registro de ativação (BACKES,
+2013, cap. 9). O quadro guarda três coisas. Os **parâmetros**, com as cópias
+dos argumentos (assunto 0029). As **variáveis locais** da função. E o
+**endereço de retorno**: o ponto exato, dentro de quem chamou, em que o
+programa deve continuar quando a função acabar. Sem esse endereço, o programa
+não saberia para onde voltar.
+
+Os quadros se empilham como pratos na pia. Chamou uma função, um quadro novo
+vai para o **topo**. A função retornou, o quadro do topo sai, e o de baixo
+continua do ponto em que parou. A última função a começar é sempre a primeira
+a terminar. Essa regra tem nome: **último a entrar, primeiro a sair**, ou
+**LIFO** (*last in, first out*) (DEITEL; DEITEL, 2011, cap. 5). A mesma regra
+volta no módulo de estruturas de dados, quando você mesmo construir uma pilha.
+
+Agora as perguntas do começo têm resposta. A local "some" no `return` porque
+o quadro dela foi desempilhado. Cada chamada começa com locais novas porque
+ganha um quadro novo. E uma função não enxerga as variáveis de quem a chamou
+porque elas estão noutro quadro, mais embaixo, fora do seu escopo (CELES;
+CERQUEIRA; RANGEL, 2016).
+
+A pilha tem tamanho fixo. No Linux, o padrão é 8 MB por programa, e o comando
+`ulimit -s` mostra o valor (BACKES, 2013, cap. 9). Dá para empilhar centenas
+de milhares de chamadas pequenas, mas não infinitas. Se o programa passa do
+limite, o sistema o encerra: é o **stack overflow**, o estouro da pilha, que
+no Linux aparece como `Segmentation fault`. O caso mais comum é uma recursão
+que nunca para, e o assunto 0032 mostra como evitar.
+
 > [!WARNING]
-> Local sem inicializar não "começa limpa": o quadro novo reaproveita a memória
-> de um quadro antigo, com o que ficou lá. O `-Wall` avisa
+> Local sem inicializar não "começa limpa". O quadro novo ocupa a memória que
+> um quadro antigo acabou de liberar, e ninguém a apaga: uma `int soma;` pode
+> nascer com o valor que outra função deixou ali. O `-Wall` avisa
 > `may be used uninitialized`.
 
 {{exemplo}}

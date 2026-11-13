@@ -1,26 +1,65 @@
 ## 0035 · Pré-processador: macros e #ifdef
 
-- **Pré-processador**: roda **antes** do compilador e trata as linhas que
-  começam com `#`. Quando o compilador recebe o código, as diretivas já sumiram
-  (DEITEL; DEITEL, 2011, cap. 13).
-- **Macro**: um `#define` com parâmetros. Não é função: não tem tipo, chamada
-  nem pilha; é **troca de texto**. O nome e o `(` ficam colados (GNU, s.d.).
-- **Parênteses**: a troca ignora a precedência. Ponha parênteses em volta de
-  cada parâmetro e da expressão inteira (DEITEL; DEITEL, 2011, cap. 13).
-- **Compilação condicional**: `#ifdef`, `#ifndef`, `#if`, `#elif`, `#else` e
-  `#endif` decidem o que chega ao compilador; `gcc -DNOME` define pela linha de
-  comando, e `#if 0` desliga um trecho (BACKES, 2013, cap. 13).
-- **Macros prontas e `#x`**: `__LINE__` dá a linha e `__func__` a função
-  atual; `#x` numa macro transforma o argumento em texto (GNU, s.d.).
-- **Função ou macro**: para cálculo, prefira função pequena, que confere os
-  tipos; macro fica para constantes, `#ifdef`, `__LINE__` e `#x` (LAGO, s.d.).
+O "localizar e substituir" do editor troca todo `TAXA` por `0.05` no arquivo,
+sem entender nada do texto. Ele não sabe se `TAXA` é variável, comentário ou
+pedaço de outra palavra; só troca. O C tem uma etapa que trabalha desse
+jeito, e você já a usa sem perceber, toda vez que escreve `#include` ou
+`#define`.
+
+Essa etapa é o **pré-processador**. Ele roda **antes** do compilador e cuida
+de toda linha que começa com `#`, as **diretivas** (DEITEL; DEITEL, 2011, cap.
+13). O `#include` cola um arquivo; o `#define` cria uma substituição. Quando o
+compilador recebe o código, as diretivas já sumiram e as trocas já foram
+feitas. O compilador nunca vê o nome `TAXA`, só o `0.05` que ficou no lugar.
+
+Você já usa `#define TAXA 0.05` para constantes. Com parâmetros, o `#define`
+vira uma **macro**:
 
 ```c
 #define QUAD(x) ((x) * (x))
 ```
 
+Cada `QUAD(alguma coisa)` no código vira `((alguma coisa) * (alguma
+coisa))`. Parece uma função, mas não é: não tem tipo, não faz chamada, não
+cria quadro na pilha. É **troca de texto**, feita antes de compilar (GNU,
+s.d.). Um detalhe de escrita decide tudo: o nome e o `(` ficam colados. Com
+espaço, `#define QUAD (x) ((x) * (x))` define uma constante sem parâmetro,
+que vale o texto `(x) ((x) * (x))`.
+
+Por ser troca de texto, a macro não respeita a precedência dos operadores
+(DEITEL; DEITEL, 2011, cap. 13). Suponha `#define QUAD_RUIM(x) x * x` e o
+terreno com `lado = 2`. A chamada `QUAD_RUIM(lado + 3)` chega ao compilador
+como `lado + 3 * lado + 3`, a multiplicação vem primeiro e o resultado é 11,
+não 25. A regra é pôr **parênteses em volta de cada parâmetro e em volta da
+expressão inteira**, como no `QUAD` acima. Os de dentro protegem o argumento;
+os de fora protegem a macro quando ela aparece no meio de outra conta.
+
+O pré-processador também decide o que chega ao compilador. Isso é a
+**compilação condicional** (BACKES, 2013, cap. 13). Um trecho entre
+`#ifdef DEPURAR` e `#endif` só é compilado se o nome `DEPURAR` estiver
+definido; o `#ifndef` faz o contrário. O `#if` testa uma expressão constante,
+e `#elif` e `#else` dão os outros caminhos, como num `if` comum. O nome pode
+vir do próprio código ou da linha de comando: `gcc -DDEPURAR` define
+`DEPURAR` sem mexer no arquivo. E `#if 0` ... `#endif` desliga um trecho
+inteiro de uma vez. O include guard do assunto 0034 é uma compilação
+condicional.
+
+Algumas peças prontas ajudam a depurar (GNU, s.d.). A macro `__LINE__` vira o
+número da linha em que aparece. O identificador `__func__`, que o compilador
+cria dentro de cada função, guarda o nome da função atual. E o operador `#`,
+usado dentro de uma macro, transforma o argumento em texto: numa macro
+`MOSTRAR(x)` que imprime `#x` e depois `(x)`, a chamada `MOSTRAR(lado + 3)`
+escreve `lado + 3 = 5`. Com isso dá para montar mensagens de erro que dizem
+onde e o quê.
+
+Função ou macro? Para cálculo, prefira uma função pequena (LAGO, s.d.). Ela
+confere os tipos dos argumentos, avalia cada argumento uma vez e aparece no
+depurador. A macro fica para o que só ela faz: constantes, compilação
+condicional, `__LINE__` e o operador `#`.
+
 > [!WARNING]
-> A macro avalia o argumento cada vez que ele aparece: `MAIOR(x++, y)` pode
+> A macro avalia o argumento **cada vez que ele aparece**: com
+> `#define MAIOR(a, b) ((a) > (b) ? (a) : (b))`, `MAIOR(x++, y)` pode
 > incrementar `x` duas vezes. E sem `;` no `#define`: `#define TAXA 0.05;`
 > faz `preco * TAXA + 1` virar `preco * 0.05; + 1`.
 

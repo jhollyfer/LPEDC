@@ -1,31 +1,64 @@
 ## 0036 · Juntando tudo: o caixa da lanchonete
 
-- **Dividir em funções**: cada tarefa vira uma função com nome que diz o que
-  ela faz; o chefe pede, o subordinado resolve (DEITEL; DEITEL, 2011, cap. 5).
-- **Módulo**: o cardápio fica em `cardapio.h` e `cardapio.c` (assunto 0034)
-  (BACKES, 2013, cap. 13).
-- **Dinheiro em centavos**: R$ 7,90 vira `790` num `int`. Com `double`,
-  `0.1 + 0.2` não dá exatamente `0.3` (assunto 0012); o único `double` é o
-  valor pago, convertido com `lround(pago * 100)`.
-- **Troco recursivo**: "se zerou, acabou; se a nota cabe, dê a nota e resolva o
-  resto; senão, tente a seguinte". O troco ou a nota diminui a cada chamada
-  (FEOFILOFF, 2009, cap. 5).
-- **Testar cada peça sozinha**: o exemplo A072 usa a macro `CONFERIR` para
-  testar preço, contador e notas sem digitar nada.
+Sexta à noite, fila no food truck. O caixa lança os pedidos pelo código,
+soma, põe 10% de serviço, recebe uma nota de R$ 50 e devolve o troco com o
+menor número de notas e moedas. Parece um programa só, mas cabe nele quase
+tudo o que o módulo 04 ensinou: um **módulo** separado com o cardápio, funções pequenas com
+**parâmetros** e retorno, um contador **`static`** escondido, uma constante
+do pré-processador para a taxa e uma função **recursiva** para o troco.
+
+Antes de escrever uma linha, divida o trabalho. Cada tarefa vira uma função
+com um nome que diz o que ela faz (DEITEL; DEITEL, 2011, cap. 5). Pense na
+lanchonete de verdade: o gerente não frita, não cobra e não conta troco; ele
+pede a cada um e junta os resultados. No programa, o `main` faz o papel do
+gerente. Ele chama `ler_codigo`, `preco_centavos` e `dar_troco`, e cada uma
+resolve a sua parte sem saber como as outras trabalham. Quando algo dá
+errado, o nome da função já diz onde procurar.
+
+O cardápio fica num módulo próprio, o par `cardapio.h` e `cardapio.c` do
+assunto 0034 (BACKES, 2013, cap. 13). O `.h` promete as funções de
+consulta; o `.c` guarda os preços e o contador `vendidos`, uma global
+`static` que só o módulo pode alterar. Quem está em `caixa.c` lê o contador
+pela função `itens_vendidos()`, mas não consegue mudá-lo por engano.
+
+Uma decisão vem antes de qualquer código: dinheiro em **centavos**, num
+`int`. R$ 7,90 vira `790`. O motivo é a precisão. Um `double` guarda os
+números em binário, e valores como 0,1 não têm representação exata; por isso
+`0.1 + 0.2` não dá exatamente `0.3` (assunto 0012), e um troco calculado
+assim pode errar um centavo. Com inteiros, toda conta é exata. Para mostrar,
+`%d.%02d` com `total / 100` e `total % 100` monta o texto "42.24". O único
+`double` do programa é o valor pago, que chega do teclado e é convertido de
+imediato com `lround(pago * 100)`, que arredonda para o inteiro mais
+próximo.
+
+O troco recursivo se lê como uma frase (FEOFILOFF, 2009, cap. 5). "Se o troco
+zerou, acabou. Se a nota atual cabe no troco, dê essa nota e resolva o resto.
+Se não cabe, tente a nota seguinte." O caso base é o troco zerado. Os dois
+casos recursivos diminuem alguma coisa: o primeiro diminui o troco, o segundo
+passa para uma nota menor. Como a menor moeda é de 1 centavo, que cabe em
+qualquer troco positivo, toda chamada chega mais perto do fim. A função
+`proxima_nota` diz qual é a nota seguinte; ela é uma **função pura**, que só
+depende do que recebe e não muda nada fora dela.
+
+Com as peças separadas, dá para testar cada uma sozinha, sem digitar pedidos
+no teclado. O exemplo A072 usa uma macro `CONFERIR` para comparar o preço, o
+contador e as notas com o valor esperado. A tabela mostra onde cada peça mora
+e o que ela usa do módulo:
 
 | Peça | Onde | O que usa do módulo |
 | --- | --- | --- |
 | `mostrar_cardapio`, `preco_centavos`, `mostrar_item` | `cardapio.c` | módulo `.h`/`.c`, `switch` |
-| `itens_vendidos` | `cardapio.c` | global `static`: só o módulo mexe |
+| `vendidos` | `cardapio.c` | global `static`: só o módulo mexe |
 | `ler_codigo` | `caixa.c` | validação com `do...while` e retorno do `scanf` |
 | `proxima_nota` | `caixa.c` | função pura: entra uma nota, sai a seguinte |
 | `dar_troco` | `caixa.c` | recursão: caso base "troco zerado" |
 | `TAXA_SERVICO` | `caixa.c` | `#define` |
 
 > [!WARNING]
-> Efeito colateral escondido: `preco_centavos` também soma 1 no contador de
-> vendidos. Chamá-la duas vezes para o mesmo pedido conta em dobro. Quando a
-> função muda estado, diga no nome (`registrar_pedido`) ou separe em duas.
+> Efeito colateral escondido: `preco_centavos` parece só consultar um preço,
+> mas também soma 1 no contador de vendidos. Chamá-la duas vezes para o mesmo
+> pedido conta o item em dobro. Quando a função muda estado, diga no nome
+> (`registrar_pedido`) ou separe em duas.
 
 {{exemplo}}
 
