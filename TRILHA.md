@@ -10,6 +10,9 @@ perde tempo na AVL. Use a trilha para saber **o que vem antes de quê**, e o pla
 **quanto tempo dar a cada coisa**. Os números de assunto (0090, 0101...) levam ao módulo; o mapa
 completo do edital está em [`PPGI.md`](PPGI.md#tópico-por-tópico).
 
+Na versão interativa, cada um dos 189 assuntos vira um degrau com os pré-requisitos diretos, o que
+saber de cabeça e as questões das provas que o cobram: [jhollyfer.github.io/LPEDC/#trilha](https://jhollyfer.github.io/LPEDC/#trilha).
+
 ## Como ler cada bloco
 
 - **Antes:** o que a bloco supõe. Se travar, volte a ele.

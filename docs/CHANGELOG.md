@@ -8,6 +8,10 @@ Mudanças do LPEDC que quem estuda percebe. Formato
 
 ### Adicionado
 
+- Trilha de conceitos (`#trilha` no quiz): os 189 assuntos do curso numa escada em que cada degrau
+  usa só o que veio antes, com o que saber de cabeça, o link para o curso, as questões das provas que
+  cobram o assunto e o "Dominei". Abre no modo "só o que cai" (106 degraus) com o ranking do que
+  mais cai.
 - Quiz das 11 provas do PPGI em `index.html`, publicado no GitHub Pages: você marca a alternativa
   e vê na hora se acertou, o porquê de cada alternativa e o módulo onde estudar. Tem filtro por
   tópico do edital, modo "refazer as que errei" e progresso salvo no navegador. As figuras das

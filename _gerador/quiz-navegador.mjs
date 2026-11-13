@@ -35,7 +35,9 @@ for (const [nome, opcoes] of [['390px', devices['iPhone 13']], ['1440px', { view
     if (r.largo || r.cru) ruins.push(`${id}${r.largo ? ' mais larga que a tela' : ''}${r.cru ? ' markdown cru' : ''}`)
   }
   // a trilha: a escada inteira aberta, sem página mais larga que a tela
+  await page.evaluate(() => localStorage.setItem('lpedc-so-prova', 'false'))
   await page.evaluate(() => { location.hash = 'trilha' })
+  await page.reload()
   await page.waitForSelector('.degraus')
   await page.evaluate(() => document.querySelectorAll('.degrau details').forEach((d) => { d.open = true }))
   const trilha = await page.evaluate(() => ({ largo: document.documentElement.scrollWidth > innerWidth + 1, degraus: document.querySelectorAll('.degrau').length }))

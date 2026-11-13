@@ -12,7 +12,7 @@
   "saia": [
    "`18 * 3 + 12` agrupa o `*` antes do `+`; a associatividade desempata `a = b = 5` como `a = (b = 5)`.",
    "`&`, `^` e `|` ficam abaixo do `==`: `x & 1 == 0` testa `1 == 0` primeiro.",
-   "Em `f() + g()` a ordem de avaliação não é especificada; só `&&`, `||`, `?:` e `,` garantem a esquerda primeiro."
+   "Em `f() + g()` a ordem de avaliação é indefinida; só `&&`, `||`, `?:` e `,` fixam a esquerda antes."
   ]
  },
  {
@@ -22,7 +22,7 @@
    "0003",
    "0008"
   ],
-  "porque": "Os limites de tipos e as conversões do 0003 e do 0008 ganham o caso mais perigoso: misturar sinal e não sinal numa conta ou comparação.",
+  "porque": "Os limites do 0003 e as conversões do 0008 ganham o caso mais perigoso: misturar com sinal e sem sinal numa conta.",
   "saia": [
    "`unsigned` não guarda negativo: `2u - 3u` dá 4294967295, porque a conta dá a volta módulo 2³².",
    "`-1 > 0u` é verdadeiro: na conversão aritmética usual, `int` e `unsigned` do mesmo tamanho viram `unsigned`.",
@@ -37,7 +37,7 @@
    "0053",
    "0056"
   ],
-  "porque": "O VLA é a matriz que nasce com o tamanho lido na execução, na pilha, e dispensa o `malloc` do 0056 quando o tamanho é pequeno.",
+  "porque": "O VLA é a matriz que nasce com o tamanho lido na execução, na pilha, e dispensa o `malloc` do 0056.",
   "saia": [
    "`int m[l][c];` cria um vetor local de tamanho calculado na execução, na pilha, sem `free`.",
    "VLA não pode ser `static`, global nem inicializado (`= {0}`); use um laço.",
@@ -85,7 +85,7 @@
   "saia": [
    "`fwrite` e `fread` copiam bytes sem converter: um `int` ocupa sempre 4 bytes no arquivo.",
    "O registro `i` começa no byte `i * sizeof(registro)`, e `fseek` pula direto até ele.",
-   "Modos com `b` (`\"rb\"`, `\"wb\"`, `\"ab\"`); o arquivo só vale em outra máquina se tipos e ordem dos bytes forem iguais."
+   "Modos com `b` (`\"rb\"`, `\"wb\"`); em outra máquina só serve se tipos e ordem dos bytes forem iguais."
   ]
  },
  {
@@ -141,7 +141,7 @@
   "saia": [
    "`f(n)` é `O(g(n))` se `f(n) <= c · g(n)` para todo `n >= n₀`; é um teto.",
    "A notação O descarta constantes e termos menores: `n² + 50n + 7` é `O(n²)`.",
-   "As cinco classes: `O(1)`, `O(log n)`, `O(n)`, `O(n log n)`, `O(n²)`; ao dobrar `n`, o custo muda em proporção diferente em cada uma."
+   "Cinco classes: `O(1)`, `O(log n)`, `O(n)`, `O(n log n)`, `O(n²)`; ao dobrar `n`, cada uma reage de um jeito."
   ]
  },
  {
@@ -151,9 +151,9 @@
    "0025",
    "0072"
   ],
-  "porque": "Antes de provar um laço, você precisa conhecer o padrão de laço que ele implementa; o invariante diz o que ele já garantiu a cada volta.",
+  "porque": "Para provar um laço, você precisa conhecer o padrão que ele implementa; o invariante diz o que ele já garantiu.",
   "saia": [
-   "Invariante é uma relação que vale no começo de cada iteração; o de \"achar o maior\" é `maior` ser máximo de `v[0..i-1]`.",
+   "Invariante vale no começo de cada iteração; o de \"achar o maior\" é `maior` ser máximo de `v[0..i-1]`.",
    "Quatro passos: início, manutenção, término e parada.",
    "`assert(condicao)` transforma o invariante em código que para o programa se ele quebrar."
   ]
@@ -166,9 +166,9 @@
    "0062",
    "0073"
   ],
-  "porque": "O TAD usa a compilação separada do 0034 e a struct com ponteiro; o contrato do `.h` é o que o invariante do 0073 garante por dentro.",
+  "porque": "O TAD usa a compilação separada do 0034 e a struct com ponteiro; o contrato do `.h` é o invariante do tipo.",
   "saia": [
-   "`.h` é o contrato (tipo e protótipos); `.c` define a struct e as funções; o cliente só inclui o `.h`.",
+   "`.h` é o contrato; `.c` define a struct e as funções; o cliente vê só o `.h`.",
    "Tipo opaco: `typedef struct contador Contador;` no `.h`; o cliente só tem `Contador *`, nunca a variável.",
    "O cliente conhece só as operações; quem implementa troca o interior sem quebrá-lo."
   ]
@@ -179,7 +179,7 @@
    "0071",
    "0072"
   ],
-  "porque": "A notação O do 0072 era só uma ideia de teto; aqui você a prova com as constantes `c` e `n₀`, e ganha o piso e o sanduíche.",
+  "porque": "A notação O do 0072 era um teto intuitivo; aqui você a prova com `c` e `n₀` e ganha o piso e o sanduíche.",
   "saia": [
    "`O` é teto, `Ω` é piso, `Θ` é os dois: `c₁ · g(n) <= f(n) <= c₂ · g(n)` para `n >= n₀`.",
    "Provar é exibir `c` e `n₀` e mostrar a conta: `3n² + 10n + 20` é `O(n²)` com `c = 4` e `n₀ = 12`.",
@@ -195,7 +195,7 @@
   ],
   "porque": "Laço de dentro que depende de `i` não se conta por multiplicação; cada `for` vira um `Σ` e a fórmula dá a classe do 0166.",
   "saia": [
-   "Cada `for` vira um `Σ`: os limites do laço são os da soma e o corpo é a parcela.",
+   "Cada `for` vira um `Σ`: limites do laço são limites da soma, e o corpo é a parcela.",
    "`Σ i` de 0 a `n-1` é `n(n-1)/2`, `Θ(n²)`; a metade corta a constante, não a classe.",
    "`Σ i²` dá `Θ(n³)`; laço que dobra a cada volta soma uma progressão geométrica."
   ]
@@ -210,7 +210,7 @@
   ],
   "porque": "Memória se conta com as mesmas notações do 0166, e o espaço extra vem do heap (`malloc`) e da pilha de chamadas.",
   "saia": [
-   "Espaço extra é o que a função usa além da entrada; constante é `Θ(1)` e o algoritmo é in-place.",
+   "Espaço extra é o que a função usa além da entrada; `Θ(1)` significa in-place.",
    "Na recursão, o espaço é a profundidade máxima vezes o tamanho do frame, não o total de chamadas.",
    "Tabelas de memoização, contagem ou hash trocam tempo por espaço."
   ]
@@ -227,7 +227,7 @@
   "porque": "Fecha o módulo: você confere fórmulas de passos e bytes medindo, com um TAD de contadores, o que escreveu no papel.",
   "saia": [
    "Escreva a fórmula exata de passos (somatórios) e o espaço extra, depois instrumente o código e compare.",
-   "Dobrar o `n` e olhar a razão: `Θ(n²)` tende a 4, `Θ(n log n)` fica um pouco acima de 2, `Θ(log n)` soma 1.",
+   "Dobrando `n`: `Θ(n²)` tende a razão 4, `Θ(n log n)` fica acima de 2, `Θ(log n)` soma 1.",
    "Passo é a operação dominante de cada função; `custo_passos`, `custo_bytes` e `custo_prof_max` medem passos, bytes e frames."
   ]
  },
@@ -280,7 +280,7 @@
   "porque": "A inserção ordenada reaproveita o par `ant`/`p` da busca do 0077 e religa duas setas no ponto certo.",
   "saia": [
    "Ande com `ant`/`p` enquanto os valores forem menores que o novo, então `novo->prox = p` e `ant->prox = novo`.",
-   "Se `ant` for `NULL`, o novo é o menor e vira o início; o fim não é caso especial.",
+   "Com `ant == NULL`, o novo é o menor e vira o início; o fim não é caso à parte.",
    "Com a lista em ordem, a busca pode desistir ao passar do valor."
   ]
  },
@@ -308,7 +308,7 @@
   "saia": [
    "Guarde o ponteiro para o último nó: o primeiro é `ultimo->prox`.",
    "Percorrer para ao voltar ao ponto de partida, com `do-while`; a lista vazia (`ultimo == NULL`) vem antes.",
-   "Inserir no início e no fim custa `O(1)`: no fim é inserir no início e declarar o novo como último."
+   "Inserir no início e no fim custa `O(1)`: no fim, insira no início e declare o novo último."
   ]
  },
  {
@@ -349,7 +349,7 @@
   ],
   "porque": "O vetor de capacidade fixa do 0082 dá lugar aos nós da lista do 0076, com o topo no começo.",
   "saia": [
-   "O topo fica no início da lista: empilhar e desempilhar são `O(1)`; no fim exigiria achar o penúltimo, `O(n)`.",
+   "O topo fica no início da lista: empilhar e desempilhar são `O(1)`; no fim seria `O(n)`.",
    "Vazia é `topo == NULL`; desempilhar guarda o valor, avança o topo e dá `free` no nó.",
    "O `pilha.h` é idêntico ao do vetor: só o `.c` muda."
   ]
@@ -418,7 +418,7 @@
   ],
   "porque": "Junta pilha e fila: converter infixa em pós-fixa usa uma fila de saída e uma pilha de operadores, e avaliar usa a pilha do 0084.",
   "saia": [
-   "Pátio de manobras: números vão direto para a fila; operadores esperam na pilha até nenhum mais forte precisar passar.",
+   "Pátio de manobras: números vão para a fila; operadores esperam na pilha até nenhum mais forte exigir passar.",
    "Avaliar a pós-fixa: itens saem da fila na ordem e passam por uma pilha de valores.",
    "Operadores viram códigos negativos num `enum`, porque os números são `>= 0`."
   ]
@@ -461,7 +461,7 @@
   ],
   "porque": "É o primeiro algoritmo de ordenação: laço aninhado sobre vizinhos, com troca por referência (0046) e custo contado como no 0072.",
   "saia": [
-   "Compara `v[j]` com `v[j + 1]` e troca se o da esquerda for maior; o maior vai para o fim a cada passada.",
+   "Compara `v[j]` com `v[j + 1]` e troca se o da esquerda for maior; o maior vai ao fim.",
    "`n - 1` passadas bastam; o laço interno vai até `j < n - passada`; a bandeira `trocou` para cedo.",
    "Pior caso `n(n - 1)/2` comparações, `O(n²)`; melhor, com bandeira, `O(n)`."
   ]
@@ -516,7 +516,7 @@
   ],
   "porque": "Também divide e conquista, mas o trabalho está em separar antes da recursão, e o pivô cai na posição final sem rascunho.",
   "saia": [
-   "Separação de Lomuto: `j` marca a fronteira; tudo em `v[p..j-1]` é `<=` pivô; no fim troque o pivô com `v[j]`.",
+   "Separação de Lomuto: `j` marca a fronteira (`v[p..j-1] <= pivô`); no fim troque o pivô com `v[j]`.",
    "Depois da separação, ordene `v[p..j-1]` e `v[j+1..r]` com o próprio quick sort.",
    "Pivô bom dá `O(n log n)`; pivô sempre no extremo dá `O(n²)`."
   ]
@@ -598,7 +598,7 @@
   ],
   "porque": "Usa a separação do 0095, mas segue só o lado onde está a resposta, em vez de ordenar os dois.",
   "saia": [
-   "Depois de `separa`, o pivô está em `j`: se `j == k` acabou; se `k < j` siga à esquerda; senão à direita.",
+   "Depois de `separa`, o pivô está em `j`: `j == k` acabou; `k < j` esquerda; `k > j` direita.",
    "Segue um lado só, num `while` que encolhe `[p, r]`.",
    "`O(n)` em média (`n + n/2 + n/4...` < `2n`); com pivô sempre extremo, `O(n²)`."
   ]

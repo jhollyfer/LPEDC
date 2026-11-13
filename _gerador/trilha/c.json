@@ -20,7 +20,7 @@
    "0074",
    "0032"
   ],
-  "porque": "A árvore binária limita a dois ponteiros por nó e vira um TAD, e os percursos são recursões que visitam a raiz antes, no meio ou depois.",
+  "porque": "A árvore binária limita a dois ponteiros por nó e vira um TAD; os percursos são recursões que visitam a raiz em momentos diferentes.",
   "saia": [
    "Nó binário tem dado, `esq` e `dir`, e `NULL` é a árvore vazia.",
    "Pré-ordem visita raiz, esquerda, direita; em-ordem, esquerda, raiz, direita; pós-ordem, esquerda, direita, raiz.",
@@ -45,7 +45,7 @@
   "requer": [
    "0099"
   ],
-  "porque": "Remover mexe no meio da árvore, e o caso de dois filhos só se resolve com a regra de ordem que a inserção da BST estabeleceu.",
+  "porque": "Remover mexe no meio da árvore, e o caso de dois filhos só se resolve com a regra de ordem da BST.",
   "saia": [
    "Folha some e um filho sobe para o lugar do nó removido.",
    "Com dois filhos, copie a chave do sucessor (menor da subárvore direita) e remova o sucessor.",
@@ -74,9 +74,9 @@
   ],
   "porque": "A fila de prioridade tira o maior em vez do primeiro, e o heap guarda uma árvore binária completa num vetor, sem ponteiros.",
   "saia": [
-   "No vetor, o pai de `i` é `(i - 1) / 2` e os filhos são `2i + 1` e `2i + 2`.",
+   "Pai de `i` é `(i - 1) / 2`; filhos são `2i + 1` e `2i + 2`.",
    "Heap de máximo: todo pai é maior ou igual aos filhos, e o máximo está na raiz.",
-   "Inserir sobe (`sobe`) e remover o máximo desce (`desce`), ambos em O(log n)."
+   "Inserir sobe o item e remover o máximo desce a raiz, ambos em O(log n)."
   ]
  },
  {
@@ -86,11 +86,11 @@
    "0094",
    "0095"
   ],
-  "porque": "O heapsort usa o heap para ordenar no próprio vetor e entra na comparação com o merge e o quick sort, que também têm O(n log n).",
+  "porque": "O heapsort usa o heap para ordenar no próprio vetor e se compara ao merge e ao quick sort, também O(n log n).",
   "saia": [
-   "Fase 1 constrói o heap em O(n); fase 2 troca a raiz com o último e faz a raiz descer.",
-   "Custo O(n log n) no pior caso, sem vetor extra, mas não é estável.",
-   "Pai de `n / 2 - 1` até a raiz: as folhas já são heaps."
+   "Fase 1 constrói o heap em O(n); fase 2 troca raiz e último e desce a raiz.",
+   "Custo O(n log n) no pior caso, sem vetor extra, mas não estável.",
+   "Construir desce os pais de `n / 2 - 1` até a raiz; as folhas já são heaps."
   ]
  },
  {
@@ -142,9 +142,9 @@
   ],
   "porque": "Cada nó guarda várias chaves ordenadas, e a busca dentro do nó é a busca binária do vetor, para ler poucos nós do disco.",
   "saia": [
-   "Grau mínimo `t`: todo nó, exceto a raiz, tem de `t - 1` a `2t - 1` chaves.",
-   "Nó com `k` chaves que não é folha tem `k + 1` filhos, e todas as folhas ficam no mesmo nível.",
-   "Nó cheio divide: a chave do meio sobe para o pai, e só a raiz que divide aumenta a altura."
+   "Grau mínimo `t`: todo nó, menos a raiz, tem de `t - 1` a `2t - 1` chaves.",
+   "Nó interno com `k` chaves tem `k + 1` filhos; todas as folhas ficam no mesmo nível.",
+   "Nó cheio divide: a chave do meio sobe; só a divisão da raiz aumenta a altura."
   ]
  },
  {
@@ -168,7 +168,7 @@
   ],
   "porque": "A floresta de conjuntos cabe num vetor de pais, uma árvore por grupo que só sobe até a raiz.",
   "saia": [
-   "`pai[x]` é o pai de x e a raiz tem `pai[x] == x`, e é o representante do grupo.",
+   "`pai[x]` é o pai de x; a raiz tem `pai[x] == x` e representa o grupo.",
    "`acha(x)` sobe até a raiz; `une(a, b)` pendura uma raiz na outra.",
    "Compressão de caminho e união por tamanho deixam as operações quase O(1)."
   ]
@@ -177,14 +177,13 @@
   "num": "0149",
   "requer": [
    "0147",
-   "0106",
-   "0108"
+   "0041"
   ],
-  "porque": "O corretor pergunta ao dicionário se a palavra existe, e trie e tabela hash são as duas estruturas que a respondem; as edições vêm da distância de edição.",
+  "porque": "O corretor pergunta ao dicionário se a palavra existe e quais estão perto; a trie responde, e as edições vêm da distância de edição.",
   "saia": [
    "Candidatos são as edições da palavra: tirar, pôr ou trocar uma letra, ou trocar vizinhas.",
    "Cada candidato custa uma busca no dicionário, e o custo dela decide a estrutura.",
-   "Hash acha palavra exata; trie também responde por prefixo."
+   "A trie acha palavra exata e também responde por prefixo."
   ]
  },
  {
@@ -208,10 +207,10 @@
    "0076",
    "0054"
   ],
-  "porque": "Cada balde guarda a cabeça de uma lista encadeada do módulo 11, e inserir, buscar e remover são operações de lista após `hash(chave) % m`.",
+  "porque": "Cada balde guarda a cabeça de uma lista encadeada do módulo 11, e as operações são de lista depois de `hash(chave) % m`.",
   "saia": [
-   "`i = hash(chave) % m` escolhe o balde e as operações andam só na lista dele.",
-   "Fator de carga `α = n / m` é o tamanho médio da lista e o custo esperado é O(1 + α).",
+   "`i = hash(chave) % m` escolhe o balde; as operações andam só na lista dele.",
+   "Carga `α = n / m` é o tamanho médio da lista; a busca custa O(1 + α).",
    "Remover é remoção de lista, guardando o anterior."
   ]
  },
@@ -251,7 +250,7 @@
   ],
   "porque": "A lista dupla tem `NULL` nas pontas e a circular não tem; a sentinela junta as duas e apaga os casos especiais da remoção.",
   "saia": [
-   "A sentinela `nil` fica entre o último e o primeiro: `nil.prox` é o primeiro e `nil.ant` é o último.",
+   "`nil` fica entre o último e o primeiro: `nil.prox` é o primeiro, `nil.ant` é o último.",
    "Lista vazia é `nil.prox == &nil`; todo nó real tem vizinho dos dois lados.",
    "Inserir e remover viram quatro atribuições, sem `if` para primeiro, último ou único."
   ]
@@ -262,10 +261,10 @@
    "0099",
    "0100"
   ],
-  "porque": "Antes de mexer nas árvores equilibradas, o curso fixa os termos da árvore e acha o sucessor e o antecessor, que a remoção da BST já usava.",
+  "porque": "Antes das árvores equilibradas, o curso fixa os termos da árvore e acha sucessor e antecessor, que a remoção da BST já usava.",
   "saia": [
    "Altura conta arestas, raiz está no nível 0 e profundidade é a distância até a raiz.",
-   "Sucessor é o menor da subárvore direita; sem direita, o primeiro ancestral para quem o nó está à esquerda.",
+   "Sucessor é o menor da subárvore direita; sem direita, o primeiro ancestral que tem o nó à esquerda.",
    "Grau de um nó é o número de filhos."
   ]
  },
@@ -291,9 +290,9 @@
    "0101",
    "0175"
   ],
-  "porque": "A versão clássica do Cormen usa as cores da LLRB com a sentinela `T.nil` do 0174, ponteiro para o pai e rotações da AVL, em mais casos.",
+  "porque": "A versão clássica do Cormen usa as cores da LLRB com a sentinela `T.nil` do 0174, ponteiro para o pai e as rotações da AVL.",
   "saia": [
-   "As cinco propriedades: nó vermelho ou preto, raiz preta, folha `T.nil` preta, vermelho tem filhos pretos, mesma altura negra.",
+   "Cinco propriedades: vermelho ou preto, raiz preta, `T.nil` preta, vermelho tem filhos pretos, mesma altura negra.",
    "Inserção pinta o nó de vermelho e conserta pelo tio: tio vermelho recolore, tio preto rotaciona.",
    "Altura máxima 2 log₂(n + 1), logo busca, inserção e remoção custam O(log n)."
   ]
@@ -307,7 +306,7 @@
   "saia": [
    "Método da divisão: `h(k) = k mod m`, com `m` primo longe de uma potência de 2.",
    "Com `m = 2^p`, só os `p` bits de baixo da chave contam, e o resto é ignorado.",
-   "Multiplicação: `h(k) = ⌊m · frac(k · A)⌋`, com `A` perto de 0,618, e aí o `m` pode ser potência de 2."
+   "Multiplicação: `h(k) = ⌊m · frac(k · A)⌋`, `A` perto de 0,618; `m` pode ser potência de 2."
   ]
  },
  {
@@ -319,7 +318,7 @@
   "porque": "A sondagem linear forma blocos de casas ocupadas; trocar o passo da sondagem espalha as chaves, e o par de funções hash vem do 0178.",
   "saia": [
    "Linear sofre agrupamento primário; quadrática sofre o secundário, porque chaves com o mesmo início seguem o mesmo caminho.",
-   "Dispersão dupla: `h(k, i) = (h1(k) + i · h2(k)) mod m`, e o passo `h2` não pode ser 0.",
+   "Dispersão dupla: `h(k, i) = (h1(k) + i · h2(k)) mod m`, com `h2` nunca 0.",
    "`m` primo e `h2(k)` coprimo com `m` fazem a sequência visitar todas as casas."
   ]
  },
@@ -331,7 +330,7 @@
   ],
   "porque": "Como o counting sort, o pigeonhole ordena sem comparar chaves num intervalo pequeno, mas guarda os registros e preserva a estabilidade do 0096.",
   "saia": [
-   "Uma casa por valor: `r = max - min + 1` casas, e a chave `- min` é o índice.",
+   "Uma casa por valor: `r = max - min + 1` casas, com índice `chave - min`.",
    "Cada casa é uma fila: a ordem de chegada se mantém, e a ordenação é estável.",
    "Custo O(n + r); só serve quando `r` é pequeno perto de `n`."
   ]
@@ -346,7 +345,7 @@
   ],
   "porque": "Cada pergunta do posto de saúde pede uma estrutura do módulo: hash para busca exata, rubro-negra para ordem e lista com sentinela para a fila.",
   "saia": [
-   "Hash com dispersão dupla acha o CPF em O(1) esperado; a rubro-negra acha a próxima hora com teto e sucessor.",
+   "Hash com dispersão dupla acha o CPF em O(1) esperado; a rubro-negra acha a próxima hora com sucessor.",
    "Lista dupla circular com sentinela tira do meio da fila sem caso especial.",
    "Estrutura escolhida pela pergunta: exata, por ordem, ou entrada e saída pelas pontas."
   ]
@@ -358,11 +357,11 @@
    "0076",
    "0059"
   ],
-  "porque": "O grafo generaliza a árvore: os vértices podem ter ciclos, e a lista de adjacência é a lista encadeada do módulo 11, um balde por vértice.",
+  "porque": "O grafo generaliza a árvore com ciclos, e a lista de adjacência é a lista encadeada do módulo 11, um balde por vértice.",
   "saia": [
    "Um grafo é G = (V, E): vértices e arestas; no dirigido a aresta tem sentido.",
    "Matriz de adjacência ocupa Θ(V²); lista de adjacência ocupa Θ(V + E).",
-   "Grau é o número de arestas que tocam o vértice; caminho é uma sequência de vértices ligados por arestas."
+   "Grau é o número de arestas no vértice; caminho é uma sequência de vértices ligados por arestas."
   ]
  },
  {
@@ -399,7 +398,7 @@
    "0102",
    "0109"
   ],
-  "porque": "Com pesos nas arestas a BFS erra, e o Dijkstra generaliza a ideia de ondas, escolhendo sempre o vértice de menor `dist`, o que o heap acelera.",
+  "porque": "Com pesos nas arestas a BFS erra; o Dijkstra generaliza as ondas, escolhendo sempre o vértice de menor `dist`, que o heap acelera.",
   "saia": [
    "Guarda `dist[v]`, `fixo[v]` e `anterior[v]`; a cada passo fixa o vértice não fixo de menor `dist`.",
    "Relaxar `u -> v`: se `dist[u] + peso < dist[v]`, atualiza `dist[v]` e `anterior[v]`.",
@@ -440,7 +439,7 @@
    "0085",
    "0150"
   ],
-  "porque": "Só existe ordem que respeite as setas se o grafo dirigido não tem ciclo; o Kahn usa fila e graus de entrada, e a DFS dá o mesmo resultado.",
+  "porque": "Só existe ordem que respeite as setas se o grafo dirigido não tem ciclo; o Kahn usa fila e graus de entrada.",
   "saia": [
    "Ordenação topológica: ordem dos vértices em que toda seta `a -> b` aponta para a frente.",
    "Kahn: ponha na fila quem tem grau de entrada 0; ao tirar, desconte 1 dos vizinhos.",
@@ -471,7 +470,7 @@
   "porque": "O Prim chega à mesma árvore mínima do Kruskal, mas cresce uma árvore só a partir da origem, com a estrutura de escolha do Dijkstra.",
   "saia": [
    "A cada passo, entre as arestas que saem da árvore, entra a mais leve.",
-   "Muda só uma linha do Dijkstra: a chave de `v` é o peso da aresta, não `dist[u] + peso`.",
+   "Muda uma linha do Dijkstra: a chave de `v` é o peso da aresta, não `dist[u] + peso`.",
    "Com heap custa O(E log V); com matriz, O(V²)."
   ]
  },
@@ -524,7 +523,7 @@
   "porque": "Euler pergunta pelas arestas e se responde contando graus, que o 0109 definiu, e com a DFS para saber se o grafo é conexo.",
   "saia": [
    "Aperto de mãos: soma dos graus = 2E, logo o número de vértices de grau ímpar é par.",
-   "Circuito euleriano existe se o grafo é conexo e todo grau é par; caminho euleriano aceita exatamente 2 ímpares.",
+   "Circuito euleriano: grafo conexo com todo grau par; caminho euleriano aceita exatamente 2 vértices de grau ímpar.",
    "Trilha não repete aresta, caminho não repete vértice e ciclo é um caminho que volta ao início."
   ]
  },
@@ -563,9 +562,9 @@
   ],
   "porque": "É o primeiro problema deste módulo resolvido por programação dinâmica, e usa a matriz e o custo de multiplicar matrizes.",
   "saia": [
-   "Multiplicar `p × q` por `q × r` custa `p · q · r` multiplicações; a ordem muda o custo, não o resultado.",
-   "`m[i][j]` é o menor custo de multiplicar de Ai a Aj, testando cada corte `k` entre `i` e `j`.",
-   "Custo O(n³) de tempo e O(n²) de memória, contra o número de Catalan de parentizações."
+   "Matriz `p × q` vezes `q × r` custa `p · q · r`; a ordem muda o custo.",
+   "`m[i][j]` é o menor custo de Ai a Aj, testando cada corte `k` entre `i` e `j`.",
+   "Custo O(n³) de tempo e O(n²) de memória, contra os números de Catalan."
   ]
  },
  {
@@ -590,7 +589,7 @@
   ],
   "porque": "A redução prova dificuldade passando um problema NP-difícil para outro, e se apoia nas classes P e NP do 0186.",
   "saia": [
-   "A ≤p B: transforma toda instância de A em uma de B, em tempo polinomial, com a mesma resposta.",
+   "A ≤p B: toda instância de A vira uma de B em tempo polinomial, com a mesma resposta.",
    "Se A é NP-difícil e A ≤p B, então B é NP-difícil.",
    "Conjunto independente, clique e cobertura de vértices se reduzem entre si."
   ]

@@ -23,6 +23,7 @@ LPEDC/
 ├── docs/  AGENTS.md  rodar    documentação viva, instruções de agentes e auxiliar do conferir.sh
 ├── index.html  .nojekyll      quiz das provas (GitHub Pages, raiz da main)
 ├── quiz/                      gerado: questoes.js e figuras/*.svg do quiz
+├── _gerador/trilha/           FONTE da trilha: requer, porquê e "saia sabendo" de cada assunto
 ├── _gerador/provas/           FONTE do quiz: <slug>.json (questões e porquês) e <slug>.figuras.json
 ├── provas-ppgi-ufam/          provas de 2016 a 2019 com os recortes das figuras
 ```

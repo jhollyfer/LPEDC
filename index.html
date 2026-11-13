@@ -287,6 +287,17 @@ kbd { font: 12px var(--font); border: 1px solid var(--control); border-radius: 4
 .base-links button.feito { color: var(--muted); text-decoration: line-through; }
 .degrau .acoes { margin-top: 12px; }
 .degrau .desenho img { max-width: 560px; }
+.degrau .estado-d.alta { color: var(--accent); font-weight: 600; }
+.degrau .estado-d.media { color: var(--text); }
+.mais-caem { margin-top: 28px; }
+.ranking { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 24px; }
+.ranking li { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+.ranking li.feito button { color: var(--muted); text-decoration: line-through; }
+.ranking button { border: 0; background: none; padding: 0; cursor: pointer; text-align: left; font: inherit; color: var(--text); }
+.ranking button:hover { color: var(--accent); }
+.ranking .n { color: var(--muted); margin-right: 4px; }
+.ranking li > .num { color: var(--accent); font-weight: 600; }
+@media (max-width: 560px) { .ranking { grid-template-columns: 1fr; } }
 .na-trilha { font-size: 13px; color: var(--muted); margin-top: 10px; }
 .na-trilha a { color: var(--accent); text-decoration: none; font-weight: 500; }
 
@@ -345,7 +356,7 @@ kbd { font: 12px var(--font); border: 1px solid var(--control); border-radius: 4
   <main id="app" aria-live="polite"></main>
 </div>
 
-<script src="quiz/questoes.js?v=412dc63f"></script>
+<script src="quiz/questoes.js?v=f5d230ae"></script>
 <script>
 'use strict'
 const REPO = 'https://github.com/jhollyfer/LPEDC/blob/main/'
@@ -612,7 +623,7 @@ function telaInicial() {
 
 // ---------- trilha ----------
 let dominados = new Set(ler('lpedc-dominados', []))
-let soProva = ler('lpedc-so-prova', false)
+let soProva = ler('lpedc-so-prova', true)
 
 function linhaNaTrilha(nums) {
   const naEscada = nums.filter((n) => posTrilha.has(n)).sort((a, b) => posTrilha.get(a) - posTrilha.get(b))
@@ -636,11 +647,12 @@ function telaTrilha(alvo) {
     const faltam = (d.requer ?? []).filter((r) => !dominados.has(r))
     const feito = dominados.has(d.num)
     const classes = ['degrau', feito ? 'feito' : '', !feito && faltam.length ? 'falta-base' : '', proximo?.num === d.num ? 'proximo' : ''].join(' ')
-    let estado = qs.length ? `cai em ${qs.length}` : ''
+    let estado = qs.length ? `cai em ${qs.length} ${qs.length === 1 ? 'questão' : 'questões'}` : (caiNaProva.has(d.num) ? 'base' : '')
     if (feito) estado = 'dominei'
+    const peso = qs.length >= 8 ? 'alta' : qs.length >= 3 ? 'media' : ''
     const aberto = alvo ? alvo === d.num : proximo?.num === d.num
     return `<li class="${classes}" id="d-${d.num}"><details ${aberto ? 'open' : ''}>
-      <summary><span class="pos num">degrau ${i + 1}</span><span class="tit"><span class="n num">${esc(d.num)}</span>${esc(a.titulo)}</span><span class="estado-d num">${estado}</span></summary>
+      <summary><span class="pos num">degrau ${i + 1}</span><span class="tit"><span class="n num">${esc(d.num)}</span>${esc(a.titulo)}</span><span class="estado-d num ${feito ? '' : peso}">${estado}</span></summary>
       <div class="corpo-d">
         <p>${emLinha(d.porque ?? '')}</p>
         ${(d.requer ?? []).length ? `<span class="rot">Precisa de${faltam.length ? ` · faltam ${faltam.length}` : ''}</span><div class="base-links">${d.requer.map((r) => `<button data-ir="${r}" class="${dominados.has(r) ? 'feito' : ''}">${esc(r)} · ${esc(ASSUNTOS[r]?.titulo ?? '')}</button>`).join('')}</div>` : '<span class="rot">Ponto de partida: não depende de nada antes.</span>'}
@@ -656,11 +668,15 @@ function telaTrilha(alvo) {
     </details></li>`
   }
   app.innerHTML = `
-    <h1 class="saudacao">Você dominou ${feitos} de ${visiveis.length} conceitos.</h1>
-    <p class="linha-cinza">Uma escada: cada degrau usa só o que veio antes. Estude no curso, treine as questões que cobram o assunto e marque <strong>Dominei</strong> para subir.${proximo ? ` O próximo é <strong>${esc(proximo.num)} · ${esc(ASSUNTOS[proximo.num]?.titulo ?? '')}</strong>.` : ''}</p>
+    <h1 class="saudacao">Você dominou ${feitos} de ${visiveis.length} conceitos${soProva ? ' que a prova cobra' : ''}.</h1>
+    <p class="linha-cinza">${soProva ? 'Aqui ficam só os assuntos que caem nas provas e as bases que eles exigem, na ordem em que um depende do outro.' : 'O curso inteiro em escada.'} Cada degrau usa só o que veio antes. Estude no curso, treine as questões que cobram o assunto e marque <strong>Dominei</strong> para subir.${proximo ? ` O próximo é <strong>${esc(proximo.num)} · ${esc(ASSUNTOS[proximo.num]?.titulo ?? '')}</strong>.` : ''}</p>
+    <section class="painel mais-caem" aria-labelledby="t-mais">
+      <h2 id="t-mais">O que mais cai <span class="conta">ordem de peso nas 210 questões</span></h2>
+      <ol class="ranking">${[...questoesPorAssunto.entries()].filter(([n]) => posTrilha.has(n)).sort((a, b) => b[1].length - a[1].length).slice(0, 12).map(([n, qs]) => `<li class="${dominados.has(n) ? 'feito' : ''}"><button data-ir="${n}"><span class="n num">${esc(n)}</span> ${esc(ASSUNTOS[n]?.titulo ?? '')}</button><span class="num">${qs.length}</span></li>`).join('')}</ol>
+    </section>
     <div class="trilha-acoes">
       ${proximo ? `<button class="botao principal" data-ir="${proximo.num}">Ir ao próximo degrau</button>` : ''}
-      <button class="chave" id="so-prova" aria-pressed="${soProva}"><span class="bola"></span>Só o que cai na prova · ${caiNaProva.size}</button>
+      <button class="chave" id="so-prova" aria-pressed="${soProva}"><span class="bola"></span>${soProva ? `Só o que cai · ${caiNaProva.size} de ${TRILHA.length}` : `Curso inteiro · ${TRILHA.length}`}</button>
     </div>
     ${mundos.map((m) => {
       const ds = visiveis.filter((d) => d.mundo === m)
