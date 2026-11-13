@@ -1,21 +1,57 @@
 ## 0072 · Notação O: como o custo cresce
 
-- **Notação O** ("ó grande"): diz como a contagem de passos cresce quando n
-  cresce (CORMEN et al., 2024, cap. 3).
-- **Ignora constantes**: 3n e 100n são ambos O(n). A constante depende da
-  máquina; o formato do crescimento, não (CELES; RANGEL, 2002).
-- **Ignora termos menores**: em n² + 50n + 7, com n = 1000, o n² vale 1.000.000
-  e o 50n só 50.000. Fica O(n²) (ZIVIANI, 2010, cap. 1).
-- **Definição**: f(n) é **O(g(n))** se existem c > 0 e n₀ com
-  0 ≤ f(n) ≤ c · g(n) para todo n ≥ n₀. É um **teto** (CORMEN et al., 2024, cap. 3).
-- **Ω e Θ**: Ω é o piso e Θ, teto e piso juntos: n² + 50n + 7 é Θ(n²)
-  (assunto 0166) (CORMEN et al., 2024, cap. 3).
-- **Ler a classe nos laços**: de 1 em 1 até n é O(n); dois aninhados, O(n²);
-  um que **divide** n por 2 a cada volta, O(log n). De 1024 até 1 são 10
-  cortes. A base do log não importa (FEOFILOFF, 2009).
-- **Acesso O(1)**: `v[i]` sai de uma conta de endereço. Numa lista encadeada,
-  chegar ao elemento i exige seguir i ponteiros, O(n)
-  (CELES; CERQUEIRA; RANGEL, 2016).
+Você fez o app da hamburgueria. Com 8 pedidos por noite, voou; com 64, tudo
+bem; na Black Friday, com 1024, uma tela travou. O código não mudou. Mudou o
+**n**, o número de pedidos, e cada parte do programa reagiu de um jeito. O
+assunto 0071 ensinou a contar passos para um n. Agora a pergunta é outra:
+**como essa contagem cresce quando n cresce?**
+
+Pense em duas contas de luz. Uma cobra R$ 10 fixos mais R$ 1 por kWh; a outra,
+R$ 0 fixos mais R$ 0,01 por kWh ao quadrado. Num mês de pouco consumo, a
+segunda sai mais barata. Mas o que decide qual é cara de verdade é o formato
+da conta quando o consumo sobe, e não o valor fixo. A **notação O** (lê-se
+"ó grande") descreve esse formato: ela diz como a contagem de passos cresce
+quando n cresce, numa expressão curta como O(n) ou O(n²) (CORMEN et al.,
+2024, cap. 3).
+
+Para chegar a essa expressão, a notação descarta de propósito duas coisas. A
+primeira são as **constantes multiplicativas**: 3n e 100n são ambos O(n). A
+constante depende da máquina e de detalhes do código; o formato do
+crescimento, não. Se n dobra, 3n e 100n dobram do mesmo jeito (CELES;
+RANGEL, 2002).
+
+A segunda são os **termos menores**. Em n² + 50n + 7, o n² manda quando n
+cresce: com n = 1000, ele vale 1.000.000, o 50n vale 50.000 e o 7 quase
+nada. A soma fica perto de n², e a classe é O(n²) (ZIVIANI, 2010, cap. 1).
+
+A definição formal, no nome do Cormen, diz exatamente quando isso vale: f(n)
+é **O(g(n))** se existem uma constante c > 0 e um ponto de partida n₀ tais
+que 0 ≤ f(n) ≤ c · g(n) para todo n ≥ n₀ (CORMEN et al., 2024, cap. 3). Leia
+assim: a partir de algum tamanho, f nunca passa de um múltiplo de g. É um
+**teto**. Para n² + 50n + 7, c = 2 e n₀ = 51 funcionam, porque a partir daí
+50n + 7 fica abaixo de n². Os valores pequenos de n, antes de n₀, não contam.
+
+O O tem dois parentes. **Ω** (ômega) é o piso: f(n) ≥ c · g(n) a partir de
+n₀, ou seja, f cresce pelo menos tanto quanto g. **Θ** (teta) é teto e piso
+juntos, o crescimento exato: n² + 50n + 7 é Θ(n²). O assunto 0166 trata os
+três com cuidado (CORMEN et al., 2024, cap. 3).
+
+Para ler a classe de um código, olhe os laços (FEOFILOFF, 2009). Um laço que
+anda de 1 em 1 até n é O(n). Dois laços aninhados, cada um até n, dão n
+vezes n passos, O(n²). Um laço que **divide** n por 2 a cada volta é
+O(log n): de 1024 até 1 são só 10 cortes, porque 2¹⁰ = 1024. A base do
+logaritmo não importa, porque trocar log₂ por log₁₀ só multiplica por uma
+constante, e a notação já descarta constantes.
+
+A estrutura de dados também decide a classe. `v[i]` num vetor é O(1), porque
+o vetor ocupa memória contínua e o endereço sai de uma conta só:
+`endereço de v + i * sizeof(int)`. Numa lista encadeada, que aparece no
+módulo 11, não existe essa conta: chegar ao elemento i exige seguir i
+ponteiros, um depois do outro, e custa O(n) (CELES; CERQUEIRA; RANGEL, 2016).
+
+As cinco classes que você vai encontrar no curso, da melhor para a pior. A
+terceira coluna é o teste mais prático: o que acontece com o custo quando o
+n dobra.
 
 | classe | nome | n dobra, o custo... | exemplo |
 | --- | --- | --- | --- |
@@ -26,9 +62,10 @@
 | O(n²) | quadrática | **quadruplica** | comparar todos os pares |
 
 > [!WARNING]
-> O(n) não é "sempre mais rápido" que O(n²): um algoritmo de 100n passos perde
-> de um de n² até n = 100. E um laço O(n) que chama a cada volta uma função O(n)
-> dá **O(n²)**, como o `strlen(s)` na condição do `for`.
+> O(n) não é "sempre mais rápido" que O(n²): a notação fala do crescimento,
+> não do tempo para um n específico. Um algoritmo de 100n passos perde de um
+> de n² até n = 100. E um laço O(n) que chama a cada volta uma função O(n) dá
+> **O(n²)**, como o `strlen(s)` na condição do `for`.
 
 {{exemplo}}
 

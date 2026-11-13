@@ -1,28 +1,68 @@
 ## 0073 · Invariantes de laço e corretude
 
-- **Invariante de laço**: relação entre as variáveis que vale **no começo de
-  cada iteração**, logo antes do teste. Serve para explicar e para provar o
-  laço (FEOFILOFF, 2009).
-- **Notação `v[0..i-1]`**: os elementos de índice 0 até i − 1, vazio quando i
-  vale 0. Em "achar o maior": **`maior` é um máximo de `v[0..i-1]`**
-  (FEOFILOFF, 2009).
-- **Quatro passos**, como numa indução (CORMEN et al., 2024, cap. 2):
-  1. **Início**: vale antes da primeira volta.
-  2. **Manutenção**: se vale no começo de uma volta, vale no começo da seguinte.
-  3. **Término**: quando o teste falha, invariante + condição de parada dão o
-     resultado.
-  4. **Parada**: uma quantidade inteira, a **variante**, diminui a cada volta.
-- **Contrato**: a documentação diz o que a função faz, não como. "Recebe n ≥ 1
-  e v; devolve o valor de **um** elemento máximo de `v[0..n-1]`"
-  (FEOFILOFF, 2009).
-- **`assert(cond)`** (`<assert.h>`): se `cond` for falsa, mostra arquivo e linha
-  e aborta. Com `-DNDEBUG`, vira nada (CPPREFERENCE, s.d.).
+Você escreveu um laço que acha o maior Pix do dia e testou com três vetores.
+Funcionou nos três. Isso prova que ele acerta **naqueles** três vetores, e
+mais nada. Para ter certeza de que acerta com qualquer entrada, inclusive as
+que você não pensou em testar, é preciso um argumento, e não mais testes.
+
+Pense no caixa da lanchonete. No fim do expediente, troco inicial mais vendas
+tem de bater com o dinheiro da gaveta. Essa conta não vale só no fim: depois
+de **cada** cliente, "gaveta = troco + vendas até agora" continua verdadeira.
+Se em algum momento não bater, você sabe que o erro foi naquele cliente. Um
+laço bem escrito tem uma frase desse tipo. O **invariante de laço** é uma
+relação entre as variáveis que vale **no começo de cada iteração**, logo antes
+do teste do laço. Ele serve para explicar o que o laço faz e para provar que
+o laço está certo (FEOFILOFF, 2009).
+
+Para escrever invariantes sobre vetores, use a notação `v[0..i-1]`: os
+elementos de índice 0 até i − 1. Quando i vale 0, o trecho é vazio. Com ela,
+o invariante de "achar o maior" fica: **`maior` é um máximo de
+`v[0..i-1]`** (FEOFILOFF, 2009). A frase diz o que o laço já sabe sobre a
+parte que viu, e não como ele anda. No começo da volta com i = 4, os quatro
+primeiros Pix já foram vistos, e `maior` guarda o maior deles.
+
+Mostrar que um laço está certo com o invariante tem quatro passos, no mesmo
+espírito de uma prova por indução, que vale para o primeiro caso e passa de
+um caso ao seguinte (CORMEN et al., 2024, cap. 2):
+
+1. **Início**: o invariante vale antes da primeira volta.
+2. **Manutenção**: se vale no começo de uma volta, vale no começo da seguinte.
+3. **Término**: quando o teste falha, invariante + condição de parada dão o
+   resultado.
+4. **Parada**: uma quantidade inteira, a **variante**, diminui a cada volta.
+
+No laço do maior, com `maior = v[0]` e i = 1, o **início** vale: um elemento
+sozinho é o máximo dele mesmo. Na **manutenção**, se `maior` é o máximo de
+`v[0..i-1]`, a volta compara com `v[i]` e fica com o maior dos dois; agora
+`maior` é o máximo de `v[0..i]`, e o `i++` devolve a frase à forma original.
+No **término**, o teste `i < n` falha com i == n, e o invariante passa a dizer
+"`maior` é um máximo de `v[0..n-1]`", o vetor inteiro: é a resposta.
+
+Os três primeiros passos mostram que, **se** o laço acabar, a resposta está
+certa. O quarto mostra que ele acaba. A **variante** é uma quantidade inteira
+que diminui a cada volta e não pode diminuir para sempre. No laço do maior,
+é n − i: começa em n − 1, perde 1 por volta e chega a 0, e aí o laço para.
+
+O mesmo raciocínio melhora a documentação. O comentário de uma função é um
+**contrato**: diz o que ela faz, e não como. "Recebe n ≥ 1 e v; devolve o
+valor de **um** elemento máximo de `v[0..n-1]`" cobre todos os parâmetros,
+diz a restrição (n ≥ 1, porque com o vetor vazio não há máximo) e usa "um"
+porque pode haver empate (FEOFILOFF, 2009). Quem chama a função lê só isso e
+sabe o que esperar.
+
+Para conferir um invariante enquanto o programa roda, use o `assert(cond)`,
+de `<assert.h>`. Se `cond` for falsa, ele mostra o arquivo, a linha e a
+condição, e encerra o programa na hora. Compilado com `-DNDEBUG`, o `assert`
+vira nada, e nem a condição é calculada (CPPREFERENCE, s.d.). Por isso você
+pode pôr dentro dele uma conferência lenta, só para teste, que não custa
+nada na versão final.
 
 > [!WARNING]
-> O erro clássico é o **início**: `int maior = 0;` passa nos testes com valores
-> positivos, mas com −120, −45, −300 devolve 0, que nem está no vetor. Comece
-> com `maior = v[0]` e i = 1. E nunca ponha no `assert` algo que o programa
-> precisa fazer.
+> O erro clássico é o **início**: `int maior = 0;` passa nos testes com
+> valores positivos, mas com −120, −45, −300 devolve 0, que nem está no vetor.
+> Comece com `maior = v[0]` e i = 1. E nunca ponha dentro do `assert` algo que
+> o programa precisa fazer, como `assert(fp = fopen(...))`: com `-DNDEBUG`,
+> some.
 
 {{exemplo}}
 
