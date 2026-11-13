@@ -62,21 +62,52 @@ proporções.
 
 ### Conceito
 
-- **Shell sort**: insertion sort (assunto 0093) repetido com **saltos** `h`
-  cada vez menores. O elemento anda `h` casas por movimento, não uma
-  (SHELL, 1959).
-- **Vetor h-ordenado**: cada fileira de elementos a `h` casas de distância
-  está em ordem. Com `h = 4`, são quatro insertion sorts entrelaçados
-  (KNUTH, 1998).
-- **Rodada final**: sempre com `h = 1`. Ela pega um vetor **quase ordenado**,
-  caso em que o insertion sort é rápido (ZIVIANI, 2010, cap. 4).
-- **Sequência de Knuth**: `h = 3h + 1` (1, 4, 13, 40, 121...). Comece no maior
-  salto abaixo de `n / 3` e divida por 3 a cada rodada (SEDGEWICK, 1998, cap. 6).
-- **Custo**: com os saltos de Knuth, o pior caso é O(n^1,5). Com os saltos de
-  Shell (`n/2, n/4, ..., 1`), é O(n²): pares e ímpares só se comparam no fim
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
-- **Memória**: ordena no lugar, sem vetor extra. Não é **estável**: iguais
-  podem trocar de ordem (ZIVIANI, 2010, cap. 4).
+O insertion sort do assunto 0093 tem um defeito de locomoção: cada elemento
+anda **uma casa por movimento**. Um elemento pequeno que está no fim do vetor
+precisa de um empurrão para cada casa até chegar à frente. Num vetor invertido,
+a conta chega a n²/2 movimentos. Pense no motorista de uma van que recebe 10
+pacotes fora da ordem da rota: se o pacote que deve sair primeiro está na
+quinta posição, ele leva quatro empurrões para chegar ao lugar.
+
+Em 1959, Donald Shell propôs deixar os elementos andarem **de h em h** casas.
+O **shell sort** repete o insertion sort várias vezes, com **saltos** `h`
+cada vez menores. Num salto grande, um elemento atravessa o vetor em poucos
+movimentos e já fica perto do lugar certo (SHELL, 1959).
+
+O que cada rodada produz tem nome. Depois da rodada com salto `h`, o vetor
+está **h-ordenado**: se você pegar um elemento a cada `h` casas, começando de
+qualquer posição, a fileira que sai está em ordem. Com `n = 10` e `h = 4`, as
+fileiras são as posições 0, 4, 8; depois 1, 5, 9; depois 2, 6; e 3, 7. A
+rodada com `h = 4` é, portanto, quatro insertion sorts pequenos entrelaçados
+no mesmo vetor, um por fileira (KNUTH, 1998).
+
+A rodada final usa sempre `h = 1`, que é o insertion sort comum. A diferença
+é que ela recebe um vetor **quase ordenado**, em que cada elemento está a
+poucas casas do seu lugar. Nesse caso o insertion sort faz poucos movimentos e
+fica rápido (ZIVIANI, 2010, cap. 4). As rodadas anteriores existem para
+preparar esse vetor.
+
+Falta decidir quais saltos usar. A escolha mais ensinada é a sequência de
+**Knuth**, em que cada salto é `h = 3h + 1` do anterior: 1, 4, 13, 40, 121,
+364, e assim por diante. O código gera a sequência enquanto `h` fica abaixo de
+`n / 3` e usa o último valor gerado como primeiro salto; depois divide por 3 a
+cada rodada até chegar em 1 (SEDGEWICK, 1998, cap. 6). Com `n = 10`, `n / 3`
+é 3 na divisão inteira, o 1 vira 4, o 4 já não é menor que 3, e os saltos são
+4 e 1.
+
+A sequência muda o custo. Com os saltos de Knuth, o pior caso é O(n^1,5),
+bem abaixo do n² do insertion sort. Com os saltos que o próprio Shell propôs,
+`n/2, n/4, ..., 1`, o pior caso continua O(n²). O motivo: quando `n` é
+potência de 2, todos esses saltos são pares até o último, então os elementos
+das posições pares e os das ímpares nunca se comparam antes da rodada final,
+e ela pode ter de fazer quase todo o trabalho (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
+
+Quanto à memória, o shell sort ordena **no lugar**: troca elementos dentro do
+próprio vetor e não precisa de vetor extra. Mas ele não é **estável**. Uma
+ordenação estável mantém, entre elementos de chave igual, a ordem em que eles
+vieram na entrada. No shell sort, dois elementos iguais podem cair em fileiras
+diferentes numa rodada com salto grande, e um pode pular por cima do outro
+(ZIVIANI, 2010, cap. 4).
 
 > [!WARNING]
 > A última rodada **tem** que ser com `h = 1`; sem ela o vetor termina fora de
@@ -440,23 +471,49 @@ total: 837 movimentos (o insertion sort faria 9775)
 
 ### Conceito
 
-- **Ordenação por comparação**: decide a ordem só comparando pares de chaves.
-  No pior caso faz cerca de n log₂ n comparações (assunto 0117)
-  (CORMEN et al., 2024, cap. 8).
-- **Counting sort** (ordenação por contagem): usa o **valor** da chave como
-  **índice** de um vetor de contadores e por isso escapa desse piso. As chaves
-  são inteiros de 0 a k - 1 (CORMEN et al., 2024, cap. 8).
-- **Três laços**: **contar** (`c[x]` = quantos têm chave `x`), **acumular**
-  (`c[x]` = quantos têm chave menor ou igual a `x`, o fim do bloco de `x`) e
-  **distribuir** (de trás para a frente, `c[x]--` e `saida[c[x]] = v[i]`)
-  (CORMEN et al., 2024, cap. 8).
-- **Estável**: entre chaves iguais, a ordem da entrada se mantém. O radix sort
-  (assunto 0121) depende disso (SEDGEWICK; WAYNE, 2011).
-- **Custo**: Θ(n + k) de tempo, e memória para `k` contadores mais a saída de
-  `n` elementos. Vale a pena quando `k` é da ordem de `n` ou menor
-  (CORMEN et al., 2024, cap. 8).
-- **Não ordena no lugar**: o resultado vai para outro vetor
-  (LINTZMAYER; MOTA, 2023).
+Todas as ordenações vistas até o módulo 17 são **ordenações por comparação**:
+decidem a ordem só perguntando qual de duas chaves é menor. O assunto 0117
+provou que elas fazem cerca de n log₂ n comparações no pior caso, e nenhuma
+esperteza muda isso (CORMEN et al., 2024, cap. 8). Para ordenar mais rápido, é
+preciso mudar a regra do jogo e usar alguma coisa além da comparação.
+
+Pense na dona de uma lanchonete com uma pilha de avaliações, cada uma com nota
+de 0 a 4 estrelas. Ela não compara avaliação com avaliação. Faz cinco montes,
+um por nota, joga cada avaliação no monte da sua nota e no fim junta os montes
+do 0 ao 4. A nota diz direto onde a avaliação vai. Esse é o **counting sort**,
+ou ordenação por contagem: ele usa o **valor** da chave como **índice** de um
+vetor de contadores (CORMEN et al., 2024, cap. 8). Para isso funcionar, as
+chaves precisam ser inteiros num intervalo pequeno, de `0` a `k - 1`.
+
+O algoritmo tem três laços, e cada um faz uma coisa simples. O primeiro
+**conta**: percorre a entrada e, para cada chave `x`, soma 1 em `c[x]`. No fim,
+`c[x]` diz quantos elementos têm a chave `x`. Com 8 avaliações de notas 3, 1,
+3, 2, 1, 4, 0 e 3, o vetor fica `c = {1, 2, 1, 3, 1}`.
+
+O segundo laço **acumula**: cada `c[x]` passa a valer a soma dele com todos os
+anteriores, ou seja, quantos elementos têm chave **menor ou igual** a `x`. O
+vetor do exemplo vira `{1, 3, 4, 7, 8}`. Esse número diz onde termina o bloco
+de cada chave na saída: 7 avaliações têm até 3 estrelas, então as três de 3
+estrelas ocupam as posições 4, 5 e 6 (CORMEN et al., 2024, cap. 8).
+
+O terceiro laço **distribui**. Ele percorre a entrada **de trás para a frente**
+e, para cada elemento de chave `x`, faz `c[x]--` e grava o elemento em
+`saida[c[x]]`, a última vaga livre do bloco de `x`. O decremento faz o próximo
+elemento com a mesma chave ocupar a vaga logo antes.
+
+Andar de trás para a frente tem um motivo. O último elemento de chave `x` na
+entrada pega a última vaga do bloco, o penúltimo pega a anterior, e assim por
+diante. Entre chaves iguais, a ordem da entrada se mantém, e por isso o
+counting sort é **estável** (SEDGEWICK; WAYNE, 2011). Isso importa quando a
+chave vem junto com outros dados, como o código da avaliação, e importa ainda
+mais para o radix sort do assunto 0121, que depende dessa propriedade.
+
+O custo é Θ(n + k): os laços que andam pela entrada fazem `n` passos, e o que
+acumula faz `k`. Quando `k` é da ordem de `n` ou menor, o total é Θ(n), linear
+(CORMEN et al., 2024, cap. 8). O preço é memória. O counting sort não ordena
+no lugar: precisa de `k` contadores e de um vetor de saída com `n` elementos
+(LINTZMAYER; MOTA, 2023). Com chaves de 0 a 1 bilhão, o vetor `c` teria 4 GB,
+e o `k` dominaria tudo. Por isso ele só vale para chaves num intervalo curto.
 
 > [!WARNING]
 > Com o terceiro laço da frente para trás, os empates saem **invertidos**, sem
@@ -765,26 +822,55 @@ a:9 o:7 r:7 e:4 i:3 u:3 d:2 b:1 c:1 f:1 h:1 m:1 n:1 p:1 t:1 v:1
 
 ### Conceito
 
-- **Radix sort** (ordenação digital): ordena dígito a dígito, cada passada
-  por um único dígito, até o dígito mais alto do maior número
-  (CORMEN et al., 2024, cap. 8).
-- **LSD** (*least significant digit*): começa pelas **unidades**, depois
-  dezenas, depois centenas. Era o método das classificadoras de cartões
-  perfurados (KNUTH, 1998).
-- **Dígito**: o de `x` na casa `exp` (1, 10, 100...) é `(x / exp) % 10`.
-  Cada passada é um **counting sort** (assunto 0120) com chaves de 0 a 9
-  (SEDGEWICK, 1998, cap. 10).
-- **Passada estável**: números com o mesmo dígito ficam na ordem que a
-  passada anterior deu. Sem isso o método não funciona
-  (CORMEN et al., 2024, cap. 8).
-- **Custo**: com `d` dígitos e base `b`, O(d · (n + b)). Para números de
-  tamanho fixo, `d` é constante e o custo é linear
-  (CORMEN et al., 2024, cap. 8).
-- **Base 256**: o "dígito" vira um byte, `(x >> 8 * b) & 0xFF` (assunto
-  0065). Um `int` de 32 bits faz 4 passadas com `c[256]`
-  (KERNIGHAN; RITCHIE, 1989).
-- **Sem comparar chaves**: por isso foge do limite n log n da ordenação por
-  comparação (SZWARCFITER; MARKENZON, 2010).
+O counting sort do assunto 0120 é linear, mas só para chaves num intervalo
+curto. Números de pedido de 0 a 999 já pedem 1000 contadores; CPFs pediriam
+centenas de bilhões. O radix sort contorna o problema quebrando cada número em
+dígitos, e cada dígito tem só 10 valores possíveis.
+
+A ideia vem de antes dos computadores. Nos censos antigos, cada pessoa virava
+um cartão perfurado, e uma máquina **classificadora** jogava cada cartão num
+de 10 escaninhos, do 0 ao 9, conforme o furo de uma coluna. O operador juntava
+os escaninhos na ordem, sem misturar, e passava o maço de novo pela coluna
+seguinte. Ele começava pela coluna **menos** significativa (KNUTH, 1998).
+
+O **radix sort**, ou ordenação digital, faz o mesmo com números: ordena todos
+pelo dígito das unidades, depois pelo das dezenas, depois pelo das centenas,
+até o dígito mais alto do maior número. Cada passada olha um único dígito
+(CORMEN et al., 2024, cap. 8). Começar pelo dígito menos significativo se
+chama **LSD**, do inglês *least significant digit*.
+
+Cada passada é um counting sort com chaves de 0 a 9. Falta só extrair o
+dígito. O dígito de `x` na casa `exp`, que vale 1, 10, 100 e assim por diante,
+é `(x / exp) % 10`: a divisão inteira joga fora as casas da direita, e o resto
+por 10 guarda só a última que sobrou. Para `x = 251` e `exp = 10`, `251 / 10`
+dá 25, e `25 % 10` dá 5, o dígito das dezenas (SEDGEWICK, 1998, cap. 10).
+
+O que faz tudo funcionar é a estabilidade. Cada passada **precisa ser estável**:
+números com o mesmo dígito na passada atual têm de ficar na ordem que a
+passada anterior deu a eles (CORMEN et al., 2024, cap. 8). Veja o 807 e o 830.
+Na passada das dezenas, o 807 (dezena 0) fica antes do 830 (dezena 3). Na
+passada das centenas, os dois têm 8. A estabilidade mantém o 807 na frente, e
+o resultado sai certo. Se a passada não fosse estável, ela poderia desfazer o
+trabalho das anteriores. O counting sort com o laço de distribuição de trás
+para a frente garante isso.
+
+O custo se conta por passada. Com `d` dígitos e base `b` (10, no caso
+decimal), cada passada é um counting sort de custo O(n + b), e o total é
+**O(d · (n + b))**. Para números de tamanho fixo, `d` é uma constante, e o
+radix sort é linear (CORMEN et al., 2024, cap. 8). O Cormen vai além e mostra
+que, para chaves de `b` bits (aqui `b` conta bits, não é a base) quebradas em
+dígitos de `r` bits, o custo é Θ((b/r)(n + 2^r)), e a melhor escolha de `r`
+fica perto de log₂ n.
+
+A base não precisa ser 10. Em C, a escolha natural é a **base 256**, em que
+cada "dígito" é um byte. O byte número `b` de `x` sai com os operadores bit a
+bit do assunto 0065: `(x >> 8 * b) & 0xFF`, que desloca o byte desejado para
+a direita e apaga o resto. Um `int` de 32 bits tem 4 bytes, e o radix sort
+faz só 4 passadas, cada uma com `c[256]` (KERNIGHAN; RITCHIE, 1989).
+
+Em nenhum momento o radix sort pergunta se um número é menor que outro: ele
+só lê dígitos e os usa como índice. Por isso escapa do limite de n log n da
+ordenação por comparação (SZWARCFITER; MARKENZON, 2010).
 
 > [!WARNING]
 > Se a passada distribuir da frente para trás, os empates se invertem e o
@@ -1115,21 +1201,58 @@ com a chave: -2147483648 -150000 -98000 -7 0 7 3200 98000 2147483647
 
 ### Conceito
 
-- **Bucket sort** (ordenação por baldes): divide o intervalo dos valores em
-  **faixas** de mesmo tamanho, uma por **balde** (CORMEN et al., 2024, cap. 8).
-- **Três passos**: jogar cada elemento no balde da sua faixa, ordenar cada
-  balde (que é pequeno) e **concatenar** os baldes em ordem
-  (CORMEN et al., 2024, cap. 8).
-- **Cálculo de endereço**: a função que escolhe o balde **preserva a ordem**.
-  Tudo no balde 2 é menor que tudo no balde 4
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
-- **Balde como lista**: cada balde é uma lista encadeada (assunto 0076) e o
-  elemento entra já no lugar certo, como na lista ordenada (assunto 0078)
-  (ROVAI, 2018).
-- **Custo médio**: com `n` valores **uniformes** em [0, 1) e `n` baldes, `x`
-  vai para ⌊n · x⌋ e o custo esperado é Θ(n) (CORMEN et al., 2024, cap. 8).
-- **Pior caso**: todos no mesmo balde. Sobra um insertion sort de `n`
-  elementos, O(n²) (CORMEN et al., 2024, cap. 8).
+O counting sort e o radix sort ordenam inteiros. Notas de prova como 6,4 e
+7,85, preços em reais e medidas de sensor são números reais, e não servem de
+índice de vetor. O bucket sort leva a ideia de "o valor diz onde o elemento
+vai" para esses números, desde que você conheça o intervalo em que eles caem.
+
+Pense na secretária de uma escola com uma pilha de provas corrigidas, de nota
+0 a 10. Ela separa 10 envelopes, um para cada nota inteira, e joga cada prova
+no envelope da parte inteira da nota: a de 6,4 vai para o envelope 6. Depois
+arruma cada envelope, que tem poucas provas, e empilha os envelopes em ordem.
+Esse é o **bucket sort**, ou ordenação por baldes. Ele divide o intervalo dos
+valores em **faixas** de mesmo tamanho e dá a cada faixa um **balde** (CORMEN
+et al., 2024, cap. 8).
+
+O algoritmo tem três passos. Primeiro, joga cada elemento no balde da sua
+faixa: para notas de 0 a 10 com 10 baldes, o balde de `x` é `(int) x`, a parte
+inteira. Como o intervalo [0, 10] é fechado, a nota 10,0 pediria um décimo
+primeiro balde: use 11 baldes ou trate o máximo à parte. Segundo, ordena cada
+balde, que tem poucos elementos. Terceiro,
+**concatena** os baldes, do primeiro ao último, e o resultado sai em ordem
+(CORMEN et al., 2024, cap. 8).
+
+O passo três só funciona porque a função que escolhe o balde **preserva a
+ordem**: se `x < y`, o balde de `x` vem antes do balde de `y` ou é o mesmo.
+Tudo o que está no balde 2 é menor que tudo o que está no balde 4, então
+juntar os baldes em sequência não desarruma nada. A literatura chama essa
+escolha de **cálculo de endereço**: o valor calcula a posição aproximada em
+que o elemento vai ficar (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6). Uma função
+que não preserva a ordem, como o resto da divisão das tabelas hash do módulo
+15, espalharia os valores e estragaria o resultado.
+
+Cada balde é uma **lista encadeada** (assunto 0076), porque não dá para saber
+de antemão quantos elementos cada um vai receber. O segundo passo pode até
+sumir: se cada elemento entra na lista do balde já na posição certa, como na
+lista ordenada do assunto 0078, o balde nasce em ordem (ROVAI, 2018). Para a
+ordenação ser estável, o elemento novo entra depois dos iguais que já estão
+lá. Cada nó custa um `malloc`, e cada `malloc` pede o seu `free`; o código do
+exemplo libera cada nó logo depois de copiar o valor para a saída. Com 1
+milhão de valores, fica mais rápido contar antes quantos vão para cada balde
+e usar um vetor só, como no counting sort do assunto 0120.
+
+O custo depende de como os valores se espalham. Se eles estão bem
+distribuídos pelo intervalo e há uns `n` baldes, cada balde recebe em média
+um elemento, e ordenar baldes quase vazios é barato. O Cormen faz essa conta
+supondo `n` valores **uniformes** em [0, 1), ou seja, qualquer trecho do
+intervalo tem a mesma chance de receber um valor, e `n` baldes, com `x` indo
+para o balde ⌊n · x⌋. Nessas condições, o custo esperado é Θ(n) (CORMEN et
+al., 2024, cap. 8).
+
+O pior caso aparece quando a suposição falha. Se todos os valores caem no
+mesmo balde, sobra um único balde com `n` elementos, e ordenar esse balde por
+inserção custa O(n²) (CORMEN et al., 2024, cap. 8). Uma turma em que todo
+mundo tirou entre 5 e 6 enche o envelope 5 e deixa os outros vazios.
 
 > [!WARNING]
 > O índice do balde tem que caber no vetor: a nota 10,0 dá `baldes[10]`, que
@@ -1493,23 +1616,59 @@ I:9 B:12 E:12 A:35 C:35 H:35 G:38 F:50 D:87
 
 ### Conceito
 
-- **Seleção**: achar o **k-ésimo menor** de um vetor sem ordenar tudo. O
-  mínimo é `k = 0`; a **mediana** é `k = n / 2` (CORMEN et al., 2024, cap. 9).
-- **Quickselect**: separa o vetor em torno de um pivô (assunto 0095), como o
-  quick sort, mas segue **um lado só** (HOARE, 1961).
-- **Regra do lado**: com o pivô na posição final `j`, se `j == k` achou; se
-  `k < j`, segue à esquerda; se `k > j`, segue à direita. Um `while` que
-  encolhe `[p, r]` basta (FEOFILOFF, 2009).
-- **Custo médio**: com o pivô perto do meio, `n + n/2 + n/4 + ...` < `2n`, logo
-  O(n). Com o pivô sempre no extremo, O(n²)
-  (CORMEN et al., 2024, cap. 9).
-- **`RANDOMIZED-SELECT`**: a versão com pivô sorteado; o esperado é O(n)
-  (CORMEN et al., 2024, cap. 9).
-- **`SELECT`** (mediana das medianas): escolhe um pivô bom o bastante para
-  garantir O(n) no **pior** caso (BLUM et al., 1973).
-- **Memória**: a versão com `while` usa O(1) extra. A recursiva é de cauda; o
-  gcc com `-O2` costuma virar laço, sem ele o pior caso empilha `n` chamadas
-  (SEDGEWICK, 1998, cap. 7).
+Às vezes você não quer o vetor inteiro em ordem: quer um valor só. Ao procurar
+apartamento, você anota nove aluguéis e quer saber o "típico". A média engana,
+porque um aluguel de luxo puxa o número para cima. O valor típico é a
+**mediana**, o que fica no meio da lista quando ela está em ordem. Ordenar
+tudo para achá-la funciona, mas arruma posições que ninguém pediu e custa
+O(n log n).
+
+O problema geral se chama **seleção**: dado um vetor e um número `k`, achar o
+**k-ésimo menor** elemento, o que ocuparia a posição `k` se o vetor estivesse
+ordenado (CORMEN et al., 2024, cap. 9). Contando as posições a partir de 0,
+como em C, o mínimo é `k = 0`, o máximo é `k = n - 1` e a mediana é
+`k = n / 2`. Com 9 aluguéis, a mediana é o elemento de posição 4.
+
+O **quickselect**, proposto por Hoare em 1961, aproveita a separação do quick
+sort, a função `separa` do assunto 0095 (HOARE, 1961). Depois de uma
+separação, o pivô fica na sua posição **final** `j`: todos os menores estão à
+esquerda dele e todos os maiores, à direita. Isso já diz muita coisa sobre o
+`k` procurado.
+
+A regra do lado sai daí. Se `j == k`, o pivô é exatamente o k-ésimo menor, e
+a busca acaba. Se `k < j`, a resposta está entre os menores, à **esquerda**, e
+tudo o que está à direita pode ser esquecido. Se `k > j`, a resposta está à
+**direita**, e a esquerda sai da conta (FEOFILOFF, 2009). Com os aluguéis, se
+o pivô cai na posição 2, a mediana (posição 4) está à direita, e os três
+primeiros nunca mais são lidos.
+
+Essa é a diferença para o quick sort, que depois de separar ordena os **dois**
+lados. O quickselect segue **um lado só**. Como não há dois ramos para
+acompanhar, a recursão vira um laço: um `while` que encolhe o intervalo
+`[p, r]` até sobrar a resposta (FEOFILOFF, 2009). É a ideia do exercício E569,
+do módulo 13.
+
+O custo depende do pivô. Se ele cai perto do meio, cada separação descarta
+metade do que sobrou, e o trabalho total é `n + n/2 + n/4 + ...`, uma soma que
+fica abaixo de `2n`. Então o quickselect é **O(n) em média**, contra O(n log n)
+de ordenar tudo. Se o pivô cai sempre num extremo, como acontece num vetor já
+ordenado com o pivô no fim, cada separação descarta um elemento só, e o custo
+sobe para **O(n²)** (CORMEN et al., 2024, cap. 9).
+
+Para fugir do azar, sorteie o pivô. O Cormen chama essa versão de
+`RANDOMIZED-SELECT`, e o tempo esperado dela é O(n) para qualquer entrada,
+porque nenhuma ordem dos dados força pivôs ruins sempre (CORMEN et al., 2024,
+cap. 9). Existe ainda uma garantia mais forte. O algoritmo `SELECT`, conhecido
+como **mediana das medianas**, escolhe o pivô com cuidado: divide o vetor em
+grupos de 5, acha a mediana de cada grupo e usa a mediana dessas medianas como
+pivô. Esse pivô é bom o bastante para garantir O(n) no **pior** caso (BLUM et
+al., 1973).
+
+A memória também é pouca. A versão com `while` usa só algumas variáveis,
+O(1) extra. A versão recursiva faz a chamada como último passo da função, o
+que se chama **recursão de cauda**, e o gcc com `-O2` costuma transformá-la em
+laço. Sem a otimização, cada chamada empilha um frame novo, e no pior caso são
+`n` frames (SEDGEWICK, 1998, cap. 7).
 
 > [!WARNING]
 > As posições começam em 0: "o 3º menor" é `k = 2`, e `quickselect(v, n, 3)`
@@ -1868,18 +2027,51 @@ mediana: 5001 (19 separações)
 
 ### Conceito
 
-- **Ordenação linear**: troca a comparação por **suposições sobre os dados**,
-  como chave inteira numa faixa conhecida (CORMEN et al., 2024, cap. 8).
-- **Duas chaves**: ordene pela **menos** importante e depois, com um método
-  **estável**, pela mais importante. É a ideia do radix LSD
-  (CORMEN et al., 2024, cap. 8).
-- **`qsort`**: ordena qualquer tipo. Move blocos de bytes e chama a função de
-  comparação por ponteiro, sem conhecer o tipo nem a faixa da chave
-  (KERNIGHAN; RITCHIE, 1989).
-- **`clock()`**: de `<time.h>`, dá o tempo de processador. A diferença entre
-  duas chamadas, dividida por `CLOCKS_PER_SEC`, vira segundos (CPPREFERENCE, s.d.).
-- **Teste por comparação**: ordenar uma cópia com o `qsort` e conferir se a
-  ordem bate é o jeito mais simples de testar uma ordenação escrita à mão.
+Este módulo trouxe ordenações que fazem menos que n log n comparações, e o
+assunto 0117 provou que isso é impossível para quem só compara. A conta fecha
+porque essas ordenações não jogam o mesmo jogo. Elas trocam a comparação por
+**suposições sobre os dados**: a chave é um inteiro numa faixa conhecida, os
+dígitos têm tamanho fixo, os reais se espalham por um intervalo sabido
+(CORMEN et al., 2024, cap. 8). Quando a suposição vale, o ganho é grande.
+Quando falha, o resultado pode sair errado ou o programa pode escrever fora do
+vetor.
+
+Pense num banco que registrou 1 milhão de Pix, cada um com um número, a hora
+em segundos desde a meia-noite e o valor em centavos. O time de fraudes quer
+as transações em ordem de valor e a linha do tempo do dia em ordem de horário.
+O `qsort` resolveria com uns 20 milhões de comparações. Só que as chaves são
+inteiros: o horário vai de 0 a 86399 e o valor cabe em 4 bytes. É o terreno
+das ordenações lineares.
+
+O `qsort` da biblioteca (assunto 0096) ordena qualquer tipo, e o preço dessa
+generalidade está no jeito como ele trabalha. Ele recebe o vetor como `void *`,
+move blocos de bytes do tamanho que você informar e, para decidir a ordem,
+chama a sua função de comparação por um ponteiro para função. Ele não conhece
+o tipo do registro nem a faixa da chave (KERNIGHAN; RITCHIE, 1989). As
+ordenações lineares exploram exatamente o que o `qsort` ignora.
+
+Um dos relatórios tem **duas chaves**: horário e, no empate, valor. Os Pix do
+mesmo segundo devem sair do menor para o maior valor. A solução vem do radix
+sort LSD do assunto 0121. Ordene primeiro pela chave **menos** importante, o
+valor. Depois ordene pela mais importante, o horário, com um método
+**estável**. A estabilidade preserva, dentro de cada segundo, a ordem de valor
+que a primeira passada deixou (CORMEN et al., 2024, cap. 8). O counting sort
+com `k = 86400` contadores faz essa segunda passada.
+
+Para comparar os métodos, o exemplo mede o tempo com `clock()`, de
+`<time.h>`, que devolve o tempo de processador já gasto pelo programa. A
+diferença entre duas chamadas, dividida por `CLOCKS_PER_SEC`, vira segundos
+(CPPREFERENCE, s.d.). O assunto 0118 mostra o cuidado com a divisão inteira.
+
+Ordenação escrita à mão precisa de teste, e há um jeito simples de testar:
+ordene uma cópia dos dados com o `qsort`, que você sabe que está certo,
+ordene outra com o seu método e confira se as duas saem na mesma ordem. Se
+uma posição diferir, o erro está no seu código.
+
+A tabela reúne os métodos do módulo e o `qsort`, para você escolher pelo que
+os dados oferecem. Shell sort e quickselect funcionam com qualquer chave
+comparável; counting, radix e bucket dependem de uma suposição sobre as
+chaves; o `qsort` aceita qualquer tipo e qualquer critério:
 
 | Algoritmo | Custo | Memória extra | Estável | Quando usar |
 | --- | --- | --- | --- | --- |
@@ -1889,6 +2081,11 @@ mediana: 5001 (19 separações)
 | bucket sort | O(n) médio, O(n²) pior | O(n) | sim (inserindo depois dos iguais) | valores reais bem espalhados num intervalo conhecido |
 | quickselect | O(n) médio, O(n²) pior | O(1) | não | o k-ésimo, a mediana, os k maiores, sem ordenar |
 | qsort | O(n log n) | depende da biblioteca | não garantido | qualquer tipo, qualquer critério |
+
+As suposições aparecem também no código do exemplo. O radix sort do TAD
+supõe `centavos` positivo: um estorno com valor negativo tem o byte mais alto
+cheio de bits 1 e sairia no fim do relatório, depois dos maiores valores. O
+exercício E726 mostra o conserto.
 
 > [!WARNING]
 > Chave fora da faixa escreve fora do vetor: um registro com

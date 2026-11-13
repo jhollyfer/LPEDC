@@ -1,22 +1,48 @@
 ## 0120 · Counting sort
 
-- **Ordenação por comparação**: decide a ordem só comparando pares de chaves.
-  No pior caso faz cerca de n log₂ n comparações (assunto 0117)
-  (CORMEN et al., 2024, cap. 8).
-- **Counting sort** (ordenação por contagem): usa o **valor** da chave como
-  **índice** de um vetor de contadores e por isso escapa desse piso. As chaves
-  são inteiros de 0 a k - 1 (CORMEN et al., 2024, cap. 8).
-- **Três laços**: **contar** (`c[x]` = quantos têm chave `x`), **acumular**
-  (`c[x]` = quantos têm chave menor ou igual a `x`, o fim do bloco de `x`) e
-  **distribuir** (de trás para a frente, `c[x]--` e `saida[c[x]] = v[i]`)
-  (CORMEN et al., 2024, cap. 8).
-- **Estável**: entre chaves iguais, a ordem da entrada se mantém. O radix sort
-  (assunto 0121) depende disso (SEDGEWICK; WAYNE, 2011).
-- **Custo**: Θ(n + k) de tempo, e memória para `k` contadores mais a saída de
-  `n` elementos. Vale a pena quando `k` é da ordem de `n` ou menor
-  (CORMEN et al., 2024, cap. 8).
-- **Não ordena no lugar**: o resultado vai para outro vetor
-  (LINTZMAYER; MOTA, 2023).
+Todas as ordenações vistas até o módulo 17 são **ordenações por comparação**:
+decidem a ordem só perguntando qual de duas chaves é menor. O assunto 0117
+provou que elas fazem cerca de n log₂ n comparações no pior caso, e nenhuma
+esperteza muda isso (CORMEN et al., 2024, cap. 8). Para ordenar mais rápido, é
+preciso mudar a regra do jogo e usar alguma coisa além da comparação.
+
+Pense na dona de uma lanchonete com uma pilha de avaliações, cada uma com nota
+de 0 a 4 estrelas. Ela não compara avaliação com avaliação. Faz cinco montes,
+um por nota, joga cada avaliação no monte da sua nota e no fim junta os montes
+do 0 ao 4. A nota diz direto onde a avaliação vai. Esse é o **counting sort**,
+ou ordenação por contagem: ele usa o **valor** da chave como **índice** de um
+vetor de contadores (CORMEN et al., 2024, cap. 8). Para isso funcionar, as
+chaves precisam ser inteiros num intervalo pequeno, de `0` a `k - 1`.
+
+O algoritmo tem três laços, e cada um faz uma coisa simples. O primeiro
+**conta**: percorre a entrada e, para cada chave `x`, soma 1 em `c[x]`. No fim,
+`c[x]` diz quantos elementos têm a chave `x`. Com 8 avaliações de notas 3, 1,
+3, 2, 1, 4, 0 e 3, o vetor fica `c = {1, 2, 1, 3, 1}`.
+
+O segundo laço **acumula**: cada `c[x]` passa a valer a soma dele com todos os
+anteriores, ou seja, quantos elementos têm chave **menor ou igual** a `x`. O
+vetor do exemplo vira `{1, 3, 4, 7, 8}`. Esse número diz onde termina o bloco
+de cada chave na saída: 7 avaliações têm até 3 estrelas, então as três de 3
+estrelas ocupam as posições 4, 5 e 6 (CORMEN et al., 2024, cap. 8).
+
+O terceiro laço **distribui**. Ele percorre a entrada **de trás para a frente**
+e, para cada elemento de chave `x`, faz `c[x]--` e grava o elemento em
+`saida[c[x]]`, a última vaga livre do bloco de `x`. O decremento faz o próximo
+elemento com a mesma chave ocupar a vaga logo antes.
+
+Andar de trás para a frente tem um motivo. O último elemento de chave `x` na
+entrada pega a última vaga do bloco, o penúltimo pega a anterior, e assim por
+diante. Entre chaves iguais, a ordem da entrada se mantém, e por isso o
+counting sort é **estável** (SEDGEWICK; WAYNE, 2011). Isso importa quando a
+chave vem junto com outros dados, como o código da avaliação, e importa ainda
+mais para o radix sort do assunto 0121, que depende dessa propriedade.
+
+O custo é Θ(n + k): os laços que andam pela entrada fazem `n` passos, e o que
+acumula faz `k`. Quando `k` é da ordem de `n` ou menor, o total é Θ(n), linear
+(CORMEN et al., 2024, cap. 8). O preço é memória. O counting sort não ordena
+no lugar: precisa de `k` contadores e de um vetor de saída com `n` elementos
+(LINTZMAYER; MOTA, 2023). Com chaves de 0 a 1 bilhão, o vetor `c` teria 4 GB,
+e o `k` dominaria tudo. Por isso ele só vale para chaves num intervalo curto.
 
 > [!WARNING]
 > Com o terceiro laço da frente para trás, os empates saem **invertidos**, sem

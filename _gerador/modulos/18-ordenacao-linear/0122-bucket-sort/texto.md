@@ -1,20 +1,57 @@
 ## 0122 · Bucket sort
 
-- **Bucket sort** (ordenação por baldes): divide o intervalo dos valores em
-  **faixas** de mesmo tamanho, uma por **balde** (CORMEN et al., 2024, cap. 8).
-- **Três passos**: jogar cada elemento no balde da sua faixa, ordenar cada
-  balde (que é pequeno) e **concatenar** os baldes em ordem
-  (CORMEN et al., 2024, cap. 8).
-- **Cálculo de endereço**: a função que escolhe o balde **preserva a ordem**.
-  Tudo no balde 2 é menor que tudo no balde 4
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
-- **Balde como lista**: cada balde é uma lista encadeada (assunto 0076) e o
-  elemento entra já no lugar certo, como na lista ordenada (assunto 0078)
-  (ROVAI, 2018).
-- **Custo médio**: com `n` valores **uniformes** em [0, 1) e `n` baldes, `x`
-  vai para ⌊n · x⌋ e o custo esperado é Θ(n) (CORMEN et al., 2024, cap. 8).
-- **Pior caso**: todos no mesmo balde. Sobra um insertion sort de `n`
-  elementos, O(n²) (CORMEN et al., 2024, cap. 8).
+O counting sort e o radix sort ordenam inteiros. Notas de prova como 6,4 e
+7,85, preços em reais e medidas de sensor são números reais, e não servem de
+índice de vetor. O bucket sort leva a ideia de "o valor diz onde o elemento
+vai" para esses números, desde que você conheça o intervalo em que eles caem.
+
+Pense na secretária de uma escola com uma pilha de provas corrigidas, de nota
+0 a 10. Ela separa 10 envelopes, um para cada nota inteira, e joga cada prova
+no envelope da parte inteira da nota: a de 6,4 vai para o envelope 6. Depois
+arruma cada envelope, que tem poucas provas, e empilha os envelopes em ordem.
+Esse é o **bucket sort**, ou ordenação por baldes. Ele divide o intervalo dos
+valores em **faixas** de mesmo tamanho e dá a cada faixa um **balde** (CORMEN
+et al., 2024, cap. 8).
+
+O algoritmo tem três passos. Primeiro, joga cada elemento no balde da sua
+faixa: para notas de 0 a 10 com 10 baldes, o balde de `x` é `(int) x`, a parte
+inteira. Como o intervalo [0, 10] é fechado, a nota 10,0 pediria um décimo
+primeiro balde: use 11 baldes ou trate o máximo à parte. Segundo, ordena cada
+balde, que tem poucos elementos. Terceiro,
+**concatena** os baldes, do primeiro ao último, e o resultado sai em ordem
+(CORMEN et al., 2024, cap. 8).
+
+O passo três só funciona porque a função que escolhe o balde **preserva a
+ordem**: se `x < y`, o balde de `x` vem antes do balde de `y` ou é o mesmo.
+Tudo o que está no balde 2 é menor que tudo o que está no balde 4, então
+juntar os baldes em sequência não desarruma nada. A literatura chama essa
+escolha de **cálculo de endereço**: o valor calcula a posição aproximada em
+que o elemento vai ficar (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6). Uma função
+que não preserva a ordem, como o resto da divisão das tabelas hash do módulo
+15, espalharia os valores e estragaria o resultado.
+
+Cada balde é uma **lista encadeada** (assunto 0076), porque não dá para saber
+de antemão quantos elementos cada um vai receber. O segundo passo pode até
+sumir: se cada elemento entra na lista do balde já na posição certa, como na
+lista ordenada do assunto 0078, o balde nasce em ordem (ROVAI, 2018). Para a
+ordenação ser estável, o elemento novo entra depois dos iguais que já estão
+lá. Cada nó custa um `malloc`, e cada `malloc` pede o seu `free`; o código do
+exemplo libera cada nó logo depois de copiar o valor para a saída. Com 1
+milhão de valores, fica mais rápido contar antes quantos vão para cada balde
+e usar um vetor só, como no counting sort do assunto 0120.
+
+O custo depende de como os valores se espalham. Se eles estão bem
+distribuídos pelo intervalo e há uns `n` baldes, cada balde recebe em média
+um elemento, e ordenar baldes quase vazios é barato. O Cormen faz essa conta
+supondo `n` valores **uniformes** em [0, 1), ou seja, qualquer trecho do
+intervalo tem a mesma chance de receber um valor, e `n` baldes, com `x` indo
+para o balde ⌊n · x⌋. Nessas condições, o custo esperado é Θ(n) (CORMEN et
+al., 2024, cap. 8).
+
+O pior caso aparece quando a suposição falha. Se todos os valores caem no
+mesmo balde, sobra um único balde com `n` elementos, e ordenar esse balde por
+inserção custa O(n²) (CORMEN et al., 2024, cap. 8). Uma turma em que todo
+mundo tirou entre 5 e 6 enche o envelope 5 e deixa os outros vazios.
 
 > [!WARNING]
 > O índice do balde tem que caber no vetor: a nota 10,0 dá `baldes[10]`, que

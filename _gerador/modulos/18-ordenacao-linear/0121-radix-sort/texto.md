@@ -1,25 +1,54 @@
 ## 0121 · Radix sort
 
-- **Radix sort** (ordenação digital): ordena dígito a dígito, cada passada
-  por um único dígito, até o dígito mais alto do maior número
-  (CORMEN et al., 2024, cap. 8).
-- **LSD** (*least significant digit*): começa pelas **unidades**, depois
-  dezenas, depois centenas. Era o método das classificadoras de cartões
-  perfurados (KNUTH, 1998).
-- **Dígito**: o de `x` na casa `exp` (1, 10, 100...) é `(x / exp) % 10`.
-  Cada passada é um **counting sort** (assunto 0120) com chaves de 0 a 9
-  (SEDGEWICK, 1998, cap. 10).
-- **Passada estável**: números com o mesmo dígito ficam na ordem que a
-  passada anterior deu. Sem isso o método não funciona
-  (CORMEN et al., 2024, cap. 8).
-- **Custo**: com `d` dígitos e base `b`, O(d · (n + b)). Para números de
-  tamanho fixo, `d` é constante e o custo é linear
-  (CORMEN et al., 2024, cap. 8).
-- **Base 256**: o "dígito" vira um byte, `(x >> 8 * b) & 0xFF` (assunto
-  0065). Um `int` de 32 bits faz 4 passadas com `c[256]`
-  (KERNIGHAN; RITCHIE, 1989).
-- **Sem comparar chaves**: por isso foge do limite n log n da ordenação por
-  comparação (SZWARCFITER; MARKENZON, 2010).
+O counting sort do assunto 0120 é linear, mas só para chaves num intervalo
+curto. Números de pedido de 0 a 999 já pedem 1000 contadores; CPFs pediriam
+centenas de bilhões. O radix sort contorna o problema quebrando cada número em
+dígitos, e cada dígito tem só 10 valores possíveis.
+
+A ideia vem de antes dos computadores. Nos censos antigos, cada pessoa virava
+um cartão perfurado, e uma máquina **classificadora** jogava cada cartão num
+de 10 escaninhos, do 0 ao 9, conforme o furo de uma coluna. O operador juntava
+os escaninhos na ordem, sem misturar, e passava o maço de novo pela coluna
+seguinte. Ele começava pela coluna **menos** significativa (KNUTH, 1998).
+
+O **radix sort**, ou ordenação digital, faz o mesmo com números: ordena todos
+pelo dígito das unidades, depois pelo das dezenas, depois pelo das centenas,
+até o dígito mais alto do maior número. Cada passada olha um único dígito
+(CORMEN et al., 2024, cap. 8). Começar pelo dígito menos significativo se
+chama **LSD**, do inglês *least significant digit*.
+
+Cada passada é um counting sort com chaves de 0 a 9. Falta só extrair o
+dígito. O dígito de `x` na casa `exp`, que vale 1, 10, 100 e assim por diante,
+é `(x / exp) % 10`: a divisão inteira joga fora as casas da direita, e o resto
+por 10 guarda só a última que sobrou. Para `x = 251` e `exp = 10`, `251 / 10`
+dá 25, e `25 % 10` dá 5, o dígito das dezenas (SEDGEWICK, 1998, cap. 10).
+
+O que faz tudo funcionar é a estabilidade. Cada passada **precisa ser estável**:
+números com o mesmo dígito na passada atual têm de ficar na ordem que a
+passada anterior deu a eles (CORMEN et al., 2024, cap. 8). Veja o 807 e o 830.
+Na passada das dezenas, o 807 (dezena 0) fica antes do 830 (dezena 3). Na
+passada das centenas, os dois têm 8. A estabilidade mantém o 807 na frente, e
+o resultado sai certo. Se a passada não fosse estável, ela poderia desfazer o
+trabalho das anteriores. O counting sort com o laço de distribuição de trás
+para a frente garante isso.
+
+O custo se conta por passada. Com `d` dígitos e base `b` (10, no caso
+decimal), cada passada é um counting sort de custo O(n + b), e o total é
+**O(d · (n + b))**. Para números de tamanho fixo, `d` é uma constante, e o
+radix sort é linear (CORMEN et al., 2024, cap. 8). O Cormen vai além e mostra
+que, para chaves de `b` bits (aqui `b` conta bits, não é a base) quebradas em
+dígitos de `r` bits, o custo é Θ((b/r)(n + 2^r)), e a melhor escolha de `r`
+fica perto de log₂ n.
+
+A base não precisa ser 10. Em C, a escolha natural é a **base 256**, em que
+cada "dígito" é um byte. O byte número `b` de `x` sai com os operadores bit a
+bit do assunto 0065: `(x >> 8 * b) & 0xFF`, que desloca o byte desejado para
+a direita e apaga o resto. Um `int` de 32 bits tem 4 bytes, e o radix sort
+faz só 4 passadas, cada uma com `c[256]` (KERNIGHAN; RITCHIE, 1989).
+
+Em nenhum momento o radix sort pergunta se um número é menor que outro: ele
+só lê dígitos e os usa como índice. Por isso escapa do limite de n log n da
+ordenação por comparação (SZWARCFITER; MARKENZON, 2010).
 
 > [!WARNING]
 > Se a passada distribuir da frente para trás, os empates se invertem e o

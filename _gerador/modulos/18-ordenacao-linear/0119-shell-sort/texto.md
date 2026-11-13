@@ -1,20 +1,51 @@
 ## 0119 · Shell sort
 
-- **Shell sort**: insertion sort (assunto 0093) repetido com **saltos** `h`
-  cada vez menores. O elemento anda `h` casas por movimento, não uma
-  (SHELL, 1959).
-- **Vetor h-ordenado**: cada fileira de elementos a `h` casas de distância
-  está em ordem. Com `h = 4`, são quatro insertion sorts entrelaçados
-  (KNUTH, 1998).
-- **Rodada final**: sempre com `h = 1`. Ela pega um vetor **quase ordenado**,
-  caso em que o insertion sort é rápido (ZIVIANI, 2010, cap. 4).
-- **Sequência de Knuth**: `h = 3h + 1` (1, 4, 13, 40, 121...). Comece no maior
-  salto abaixo de `n / 3` e divida por 3 a cada rodada (SEDGEWICK, 1998, cap. 6).
-- **Custo**: com os saltos de Knuth, o pior caso é O(n^1,5). Com os saltos de
-  Shell (`n/2, n/4, ..., 1`), é O(n²): pares e ímpares só se comparam no fim
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
-- **Memória**: ordena no lugar, sem vetor extra. Não é **estável**: iguais
-  podem trocar de ordem (ZIVIANI, 2010, cap. 4).
+O insertion sort do assunto 0093 tem um defeito de locomoção: cada elemento
+anda **uma casa por movimento**. Um elemento pequeno que está no fim do vetor
+precisa de um empurrão para cada casa até chegar à frente. Num vetor invertido,
+a conta chega a n²/2 movimentos. Pense no motorista de uma van que recebe 10
+pacotes fora da ordem da rota: se o pacote que deve sair primeiro está na
+quinta posição, ele leva quatro empurrões para chegar ao lugar.
+
+Em 1959, Donald Shell propôs deixar os elementos andarem **de h em h** casas.
+O **shell sort** repete o insertion sort várias vezes, com **saltos** `h`
+cada vez menores. Num salto grande, um elemento atravessa o vetor em poucos
+movimentos e já fica perto do lugar certo (SHELL, 1959).
+
+O que cada rodada produz tem nome. Depois da rodada com salto `h`, o vetor
+está **h-ordenado**: se você pegar um elemento a cada `h` casas, começando de
+qualquer posição, a fileira que sai está em ordem. Com `n = 10` e `h = 4`, as
+fileiras são as posições 0, 4, 8; depois 1, 5, 9; depois 2, 6; e 3, 7. A
+rodada com `h = 4` é, portanto, quatro insertion sorts pequenos entrelaçados
+no mesmo vetor, um por fileira (KNUTH, 1998).
+
+A rodada final usa sempre `h = 1`, que é o insertion sort comum. A diferença
+é que ela recebe um vetor **quase ordenado**, em que cada elemento está a
+poucas casas do seu lugar. Nesse caso o insertion sort faz poucos movimentos e
+fica rápido (ZIVIANI, 2010, cap. 4). As rodadas anteriores existem para
+preparar esse vetor.
+
+Falta decidir quais saltos usar. A escolha mais ensinada é a sequência de
+**Knuth**, em que cada salto é `h = 3h + 1` do anterior: 1, 4, 13, 40, 121,
+364, e assim por diante. O código gera a sequência enquanto `h` fica abaixo de
+`n / 3` e usa o último valor gerado como primeiro salto; depois divide por 3 a
+cada rodada até chegar em 1 (SEDGEWICK, 1998, cap. 6). Com `n = 10`, `n / 3`
+é 3 na divisão inteira, o 1 vira 4, o 4 já não é menor que 3, e os saltos são
+4 e 1.
+
+A sequência muda o custo. Com os saltos de Knuth, o pior caso é O(n^1,5),
+bem abaixo do n² do insertion sort. Com os saltos que o próprio Shell propôs,
+`n/2, n/4, ..., 1`, o pior caso continua O(n²). O motivo: quando `n` é
+potência de 2, todos esses saltos são pares até o último, então os elementos
+das posições pares e os das ímpares nunca se comparam antes da rodada final,
+e ela pode ter de fazer quase todo o trabalho (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
+
+Quanto à memória, o shell sort ordena **no lugar**: troca elementos dentro do
+próprio vetor e não precisa de vetor extra. Mas ele não é **estável**. Uma
+ordenação estável mantém, entre elementos de chave igual, a ordem em que eles
+vieram na entrada. No shell sort, dois elementos iguais podem cair em fileiras
+diferentes numa rodada com salto grande, e um pode pular por cima do outro
+(ZIVIANI, 2010, cap. 4).
 
 > [!WARNING]
 > A última rodada **tem** que ser com `h = 1`; sem ela o vetor termina fora de

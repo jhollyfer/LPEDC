@@ -1,17 +1,50 @@
 ## 0124 · Juntando tudo
 
-- **Ordenação linear**: troca a comparação por **suposições sobre os dados**,
-  como chave inteira numa faixa conhecida (CORMEN et al., 2024, cap. 8).
-- **Duas chaves**: ordene pela **menos** importante e depois, com um método
-  **estável**, pela mais importante. É a ideia do radix LSD
-  (CORMEN et al., 2024, cap. 8).
-- **`qsort`**: ordena qualquer tipo. Move blocos de bytes e chama a função de
-  comparação por ponteiro, sem conhecer o tipo nem a faixa da chave
-  (KERNIGHAN; RITCHIE, 1989).
-- **`clock()`**: de `<time.h>`, dá o tempo de processador. A diferença entre
-  duas chamadas, dividida por `CLOCKS_PER_SEC`, vira segundos (CPPREFERENCE, s.d.).
-- **Teste por comparação**: ordenar uma cópia com o `qsort` e conferir se a
-  ordem bate é o jeito mais simples de testar uma ordenação escrita à mão.
+Este módulo trouxe ordenações que fazem menos que n log n comparações, e o
+assunto 0117 provou que isso é impossível para quem só compara. A conta fecha
+porque essas ordenações não jogam o mesmo jogo. Elas trocam a comparação por
+**suposições sobre os dados**: a chave é um inteiro numa faixa conhecida, os
+dígitos têm tamanho fixo, os reais se espalham por um intervalo sabido
+(CORMEN et al., 2024, cap. 8). Quando a suposição vale, o ganho é grande.
+Quando falha, o resultado pode sair errado ou o programa pode escrever fora do
+vetor.
+
+Pense num banco que registrou 1 milhão de Pix, cada um com um número, a hora
+em segundos desde a meia-noite e o valor em centavos. O time de fraudes quer
+as transações em ordem de valor e a linha do tempo do dia em ordem de horário.
+O `qsort` resolveria com uns 20 milhões de comparações. Só que as chaves são
+inteiros: o horário vai de 0 a 86399 e o valor cabe em 4 bytes. É o terreno
+das ordenações lineares.
+
+O `qsort` da biblioteca (assunto 0096) ordena qualquer tipo, e o preço dessa
+generalidade está no jeito como ele trabalha. Ele recebe o vetor como `void *`,
+move blocos de bytes do tamanho que você informar e, para decidir a ordem,
+chama a sua função de comparação por um ponteiro para função. Ele não conhece
+o tipo do registro nem a faixa da chave (KERNIGHAN; RITCHIE, 1989). As
+ordenações lineares exploram exatamente o que o `qsort` ignora.
+
+Um dos relatórios tem **duas chaves**: horário e, no empate, valor. Os Pix do
+mesmo segundo devem sair do menor para o maior valor. A solução vem do radix
+sort LSD do assunto 0121. Ordene primeiro pela chave **menos** importante, o
+valor. Depois ordene pela mais importante, o horário, com um método
+**estável**. A estabilidade preserva, dentro de cada segundo, a ordem de valor
+que a primeira passada deixou (CORMEN et al., 2024, cap. 8). O counting sort
+com `k = 86400` contadores faz essa segunda passada.
+
+Para comparar os métodos, o exemplo mede o tempo com `clock()`, de
+`<time.h>`, que devolve o tempo de processador já gasto pelo programa. A
+diferença entre duas chamadas, dividida por `CLOCKS_PER_SEC`, vira segundos
+(CPPREFERENCE, s.d.). O assunto 0118 mostra o cuidado com a divisão inteira.
+
+Ordenação escrita à mão precisa de teste, e há um jeito simples de testar:
+ordene uma cópia dos dados com o `qsort`, que você sabe que está certo,
+ordene outra com o seu método e confira se as duas saem na mesma ordem. Se
+uma posição diferir, o erro está no seu código.
+
+A tabela reúne os métodos do módulo e o `qsort`, para você escolher pelo que
+os dados oferecem. Shell sort e quickselect funcionam com qualquer chave
+comparável; counting, radix e bucket dependem de uma suposição sobre as
+chaves; o `qsort` aceita qualquer tipo e qualquer critério:
 
 | Algoritmo | Custo | Memória extra | Estável | Quando usar |
 | --- | --- | --- | --- | --- |
@@ -21,6 +54,11 @@
 | bucket sort | O(n) médio, O(n²) pior | O(n) | sim (inserindo depois dos iguais) | valores reais bem espalhados num intervalo conhecido |
 | quickselect | O(n) médio, O(n²) pior | O(1) | não | o k-ésimo, a mediana, os k maiores, sem ordenar |
 | qsort | O(n log n) | depende da biblioteca | não garantido | qualquer tipo, qualquer critério |
+
+As suposições aparecem também no código do exemplo. O radix sort do TAD
+supõe `centavos` positivo: um estorno com valor negativo tem o byte mais alto
+cheio de bits 1 e sairia no fim do relatório, depois dos maiores valores. O
+exercício E726 mostra o conserto.
 
 > [!WARNING]
 > Chave fora da faixa escreve fora do vetor: um registro com
