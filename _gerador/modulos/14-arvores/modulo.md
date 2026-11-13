@@ -1,20 +1,9 @@
 # Módulo 14 · Árvores
 
-Pastas, organograma e sumário de livro são **hierarquias**, e a estrutura para
-elas é a **árvore**. Ela também resolve um problema do módulo 13: a busca
-binária exige vetor ordenado, e inserir no meio dele custa caro. A **árvore
-binária de busca** (BST) busca e insere descendo um caminho; a **AVL** a
-endireita com rotações; o **heap** entrega o maior elemento num vetor, sem
-ponteiros, e dá o **heapsort**.
-
-Quase tudo aqui é recursivo: a função resolve cada subárvore e junta as
-respostas.
-
-**Progressão.** O módulo usa recursão (assuntos 0032 e 0033), ponteiros para
-struct (0062), `malloc` e `free` (0054), TAD (0074), a fila do 0085 e a busca
-binária do 0090. O heapsort completa as ordenações do módulo 13. O módulo 15
-troca a hierarquia por uma tabela de espalhamento (hash), que busca em O(1) na
-média.
+Árvores guardam hierarquias e buscam descendo um caminho. O módulo cobre
+árvore binária e percursos, BST (busca, inserção, remoção), AVL, heap e
+heapsort. Usa recursão (0032), `malloc` (0054), TAD (0074), a fila (0085) e a
+busca binária (0090). O módulo 15 troca a árvore pela tabela hash.
 
 ## O que você vai aprender
 
@@ -30,11 +19,10 @@ média.
 
 ## Antes de começar
 
-A partir do 0098, cada assunto tem um TAD na pasta (`arvore.h`, `bst.h`,
-`avl.h`, `heap.h`, `cadastro.h`) e o exemplo só usa a interface; abra também o
-`.c`, que tem o algoritmo. Nos desenhos, as arestas verdes marcam o caminho de
-uma busca e o nó vermelho é o que vai sair ou está desequilibrado. Desenhe a
-árvore no papel e use a saída só para conferir.
+Do 0098 em diante, cada assunto tem um TAD na pasta (`arvore.h`, `bst.h`,
+`avl.h`, `heap.h`, `cadastro.h`); abra também o `.c`, que tem o algoritmo. Nos
+desenhos, aresta verde é o caminho da busca e nó vermelho é o que sai ou está
+desequilibrado. Desenhe no papel e use a saída para conferir.
 
 O comando compila junto o `.c` de apoio da pasta (como `bst.c`):
 
@@ -42,8 +30,7 @@ O comando compila junto o `.c` de apoio da pasta (como `bst.c`):
 gcc ~/LPEDC/material/A197.c ~/LPEDC/material/0099-bst.c -o ~/LPEDC/material/A197 && ~/LPEDC/material/A197
 ```
 
-**Altura conta arestas** em todo o módulo: a folha tem altura 0 e a árvore
-vazia, -1. Alguns livros contam nós; confira a convenção.
+**Altura conta arestas** em todo o módulo: folha vale 0 e árvore vazia, -1.
 
 {{indice}}
 

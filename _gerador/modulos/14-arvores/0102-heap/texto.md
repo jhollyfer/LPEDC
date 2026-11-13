@@ -1,48 +1,47 @@
 ## 0102 · Heap e fila de prioridade
 
-No pronto-socorro, o próximo atendido é o **mais grave** de quem espera, não o
-primeiro a chegar.
+- **Fila de prioridade**: cada item entra com uma prioridade e sai primeiro o
+  de **maior** prioridade (CORMEN et al., 2024, cap. 6).
+- **Heap de máximo**: árvore binária com duas regras. **Forma**: completa,
+  todos os níveis cheios menos talvez o último, que enche da esquerda para a
+  direita. **Ordem**: todo pai é maior ou igual aos filhos, e o máximo fica na
+  raiz (CORMEN et al., 2024, cap. 6).
+- **Regra mais fraca que a da BST**: esquerda e direita não se comparam. O
+  heap só responde "quem é o maior?" (TENENBAUM; LANGSAM; AUGENSTEIN, 1995,
+  cap. 6).
+- **Heap em vetor**: a forma completa deixa guardar a árvore nível por nível,
+  sem buracos e sem ponteiros (FEOFILOFF, 2009).
+- **Inserir**: o novo entra no fim e **sobe**, trocando com o pai enquanto for
+  maior. **Remover o máximo**: o último vai para a raiz e **desce**, trocando
+  com o **maior** filho. As duas custam até a altura, ⌊log₂ n⌋; no Cormen a
+  descida é a `MAX-HEAPIFY` (CORMEN et al., 2024, cap. 6).
+- **Heap de mínimo**: as comparações invertidas; o menor fica na raiz
+  (FEOFILOFF, 2009).
+- **Dois heaps diferentes**: este heap (estrutura de dados) não tem relação
+  com o heap do `malloc` (assunto 0053) (FEOFILOFF, 2009).
 
-Isso é uma **fila de prioridade**: insere-se com uma prioridade e tira-se o de
-**maior** prioridade. Num vetor solto, inserir é O(1) e achar o máximo é O(n).
-Num vetor ordenado, tirar o máximo é O(1) e inserir é O(n). Numa BST, os dois
-são O(log n) só se ela estiver equilibrada.
+| Quem | Índice com `v[0]` na raiz | No Cormen (`A[1..n]`) |
+| --- | --- | --- |
+| pai de `i` | `(i - 1) / 2` (divisão inteira) | `⌊i/2⌋` |
+| filho esquerdo | `2 * i + 1` | `2i` |
+| filho direito | `2 * i + 2` | `2i + 1` |
 
-O **heap** (de máximo) faz as duas em O(log n), sempre, sem ponteiros. É uma
-árvore binária com duas regras:
+| Onde guardar | Inserir | Tirar o máximo |
+| --- | --- | --- |
+| vetor solto | O(1) | O(n) |
+| vetor ordenado | O(n) | O(1) |
+| heap | O(log n) | O(log n) |
 
-- **forma**: **completa**: todos os níveis cheios, menos talvez o último, que
-  se enche da esquerda para a direita;
-- **ordem**: todo pai é **maior ou igual** aos filhos. O máximo está na raiz.
+> [!WARNING]
+> Na descida, troque com o **maior** dos filhos; trocar com o menor quebra o
+> heap. Confira `f + 1 < h->n` antes de ler `v[f + 1]`, e numa questão veja em
+> que índice o vetor começa.
 
-A regra de ordem é mais fraca que a da BST: esquerda e direita não se
-comparam. Por isso o heap só responde "quem é o maior?".
+{{exemplo}}
 
-A regra de forma permite guardar o heap **num vetor**, nível por nível, sem
-buracos. A raiz fica em `v[0]` e, para o índice `i`:
-
-| Quem | Índice |
-| --- | --- |
-| pai de `i` | `(i - 1) / 2` (divisão inteira) |
-| filho esquerdo | `2 * i + 1` |
-| filho direito | `2 * i + 2` |
-
-O Cormen usa `A[1..n]`, com `PARENT(i) = ⌊i/2⌋`, `LEFT(i) = 2i` e
-`RIGHT(i) = 2i + 1`. Numa questão, confira em que índice o vetor começa.
-
-As duas operações consertam o heap por um único caminho:
-
-- **inserir**: o novo entra no fim do vetor e **sobe**, trocando com o pai
-  enquanto for maior que ele;
-- **remover o máximo**: a raiz sai, o último elemento vai para o lugar dela e
-  **desce**, trocando com o **maior** dos filhos enquanto for menor que algum.
-
-O custo máximo é a altura, ⌊log₂ n⌋. No Cormen, a descida é a `MAX-HEAPIFY`.
-Invertendo as comparações, o **heap de mínimo** tem o menor na raiz.
-
-Chegam pacientes com gravidade 40, 70, 20, 90, 50 e 30. O heap fica
-`[90 70 30 40 50 20]`. Árvore e vetor são a mesma coisa: o 70 está no índice
-1, e os filhos dele, nos índices 3 e 4:
+No pronto-socorro, chegam pacientes com gravidade 40, 70, 20, 90, 50 e 30. O
+heap fica `[90 70 30 40 50 20]`. O 70 está no índice 1, e os filhos dele, nos
+índices 3 e 4:
 
 {{ideia}}
 
@@ -126,19 +125,3 @@ A remoção do 90. O último (20) vai para a raiz e desce pelo filho maior:
 | tira o 90, o 20 vai para `v[0]` | `[20 70 30 40 50]` | 0 | 70, 30 | 70 (índice 1) | sim |
 | | `[70 20 30 40 50]` | 1 | 40, 50 | 50 (índice 4) | sim |
 | | `[70 50 30 40 20]` | 4 | (nenhum) | | para |
-
-> [!WARNING]
-> Na descida, troque com o **maior** dos filhos. Trocar o 20 com o 30 o poria
-> acima do 70
-> e quebraria o heap. Confira `f + 1 < h->n` antes de ler `v[f + 1]`.
-
-> [!TIP]
-> Não confunda este heap (estrutura de dados) com o heap do `malloc` (assunto
-> 0053, região de memória).
-
-> [!NOTE]
-> **Pergunta para você:** o vetor `[90 70 30 40 50 20]` é um heap. E
-> `[90 30 70 40 50 20]`? Um vetor em ordem **decrescente** é sempre um
-> heap?
-
-{{pratique}}

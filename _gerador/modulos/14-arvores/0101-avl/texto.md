@@ -1,30 +1,24 @@
 ## 0101 · AVL: balanceamento e rotações
 
-A lanchonete numera os pedidos 10, 20, 30, 40..., em ordem crescente. Numa BST
-comum, cada pedido vira filho direito do anterior e a árvore vira uma lista de
-altura n - 1: com mil pedidos, achar o último custa mil comparações.
-
-A saída é uma BST que se **conserta sozinha** a cada inserção: a **AVL**
-(Adelson-Velsky e Landis, 1962). A regra: em **todo** nó, as alturas das duas
-subárvores diferem de no máximo 1.
-
-Cada nó guarda a própria altura e calcula o **fator de balanceamento**:
-`fb = altura(esq) - altura(dir)`. Na AVL, todo nó tem fator -1, 0 ou 1. Fator
-2 é "pesado à esquerda"; -2, "pesado à direita". Há livros que invertem a
-conta: o sinal troca, a regra não.
-
-A altura de uma AVL não passa de uns 1,44 · log₂ n: mil pedidos cabem em
-altura 9, e não 999. A **rubro-negra** (0177) e a **árvore B** (0146) também
-garantem O(log n).
-
-A inserção pendura uma folha, como na BST. Na **volta** da recursão, cada
-ancestral atualiza a altura e confere o fator. Se achar 2
-ou -2, conserta com uma **rotação**: um filho sobe e o pai desce, **sem quebrar
-a ordem da BST**. Na rotação à esquerda no nó `r`, o filho direito `d` sobe,
-`r` vira filho esquerdo de `d`, e a antiga subárvore esquerda de `d` passa a
-ser a direita de `r`. A em ordem não muda; só a forma.
-
-A rotação depende do lado do peso:
+- **AVL**: BST que se conserta a cada inserção. Em **todo** nó, as alturas
+  das duas subárvores diferem de no máximo 1 (ADELSON-VELSKY; LANDIS, 1962).
+- **Fator de balanceamento**: `fb = altura(esq) - altura(dir)`. Na AVL vale
+  -1, 0 ou 1; 2 é "pesado à esquerda" e -2, "pesado à direita". Há livros que
+  invertem a conta: o sinal troca, a regra não
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
+- **Altura garantida**: no máximo uns 1,44 · log₂ n. Mil chaves cabem em
+  altura 9, e não 999 (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
+- **Inserção**: pendura a folha como na BST. Na **volta** da recursão, cada
+  ancestral atualiza a altura e confere o fator (CORMEN et al., 2024).
+- **Rotação**: um filho sobe e o pai desce, sem quebrar a ordem da BST. Na
+  rotação à esquerda em `r`, o filho direito `d` sobe e a antiga subárvore
+  esquerda de `d` vira a direita de `r`. Custa O(1) (CORMEN et al., 2024,
+  cap. 13).
+- **Rotação dupla**: para o "zigue-zague". A primeira rotação, no filho,
+  endireita; a segunda, no nó, equilibra. Cada inserção faz no máximo uma
+  rotação, simples ou dupla (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
+- **Outras árvores equilibradas**: a **rubro-negra** (0177) e a **árvore B**
+  (0146) também garantem O(log n) (CORMEN et al., 2024, caps. 13 e 18).
 
 | Caso | Fator do nó | Fator do filho pesado | Conserto |
 | --- | --- | --- | --- |
@@ -33,12 +27,16 @@ A rotação depende do lado do peso:
 | esquerda-direita | +2 | -1 (esquerdo) | à esquerda no filho, depois à direita no nó |
 | direita-esquerda | -2 | +1 (direito) | à direita no filho, depois à esquerda no nó |
 
-Os dois últimos casos são a **rotação dupla**, para o "zigue-zague": a primeira
-rotação endireita; a segunda equilibra.
+> [!WARNING]
+> No zigue-zague, a rotação simples **não conserta**: só espelha o problema.
+> Por isso o código olha o fator do **filho**. E ligue a nova raiz de volta no
+> pai (`return rot_esquerda(r)`); senão o pai aponta para o nó que desceu.
 
-Inserir 10, 20 e 30 deixa o 10 com fator -2 e o filho com -1: rotação à
-esquerda no 10, e o 20 sobe. Depois, com a árvore 20 (10, 40 (30, 50)), inserir
-o 25 deixa o 20 com -2 e o filho 40 com +1: rotação dupla. O 30 acaba na raiz:
+{{exemplo}}
+
+A lanchonete numera os pedidos em ordem crescente, e a BST comum viraria uma
+lista. Na AVL, inserir 10, 20 e 30 gira o 10 à esquerda e o 20 sobe. Depois,
+com 20 (10, 40 (30, 50)), o 25 pede rotação dupla e o 30 vai para a raiz:
 
 {{ideia}}
 
@@ -119,19 +117,3 @@ fator +1, então duas rotações:
 | 25 | 20 (fb -2; filho 40 com +1) | direita-esquerda | direita no 40, esquerda no 20 | 30 |
 
 Sem a AVL, a sequência daria uma BST de altura 4.
-
-> [!WARNING]
-> No zigue-zague, a rotação simples **não conserta**: só espelha o problema.
-> Por isso o código olha o fator do **filho**. Ligue a nova raiz de volta no
-> pai (`return rot_esquerda(r)`); senão o pai aponta para o nó que desceu.
-
-> [!TIP]
-> A rotação é O(1), e cada inserção faz no máximo uma rotação (simples ou
-> dupla). Com mil pedidos em ordem, a BST tem altura 999 e a AVL, 9 (exemplo
-> A202).
-
-> [!NOTE]
-> **Pergunta para você:** insira 1, 2, 3, 4, 5, 6 e 7, nesta ordem, numa AVL
-> vazia. Quantas rotações acontecem e qual é a árvore final? Desenhe e confira.
-
-{{pratique}}

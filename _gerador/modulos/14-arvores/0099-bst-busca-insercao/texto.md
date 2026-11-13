@@ -1,31 +1,31 @@
 ## 0099 · BST: busca e inserção
 
-A catraca da academia precisa achar a matrícula na hora. No vetor ordenado, a
-busca binária (assunto 0090) é rápida, mas cada aluno novo empurra metade do
-vetor. Na lista encadeada, inserir é barato, mas a busca anda nó a nó. Dá para
-ter as duas coisas?
+- **Árvore binária de busca** (**BST**, *binary search tree*): árvore binária
+  em que, em **todo** nó, a subárvore esquerda só tem chaves menores e a
+  direita só tem chaves maiores (CORMEN et al., 2024, cap. 12).
+- **Busca**: compara com a raiz. Igual, achou; menor, desce à esquerda; maior,
+  à direita; `NULL`, a chave não existe. É a busca binária (assunto 0090) na
+  árvore (FEOFILOFF, 2009).
+- **Inserção**: a mesma descida. No `NULL` em que a busca falharia entra o nó
+  novo, sempre como **folha**. A função devolve a raiz da subárvore e o pai
+  faz `r->esq = bst_insere(r->esq, chave)`. Chave repetida é ignorada
+  (FEOFILOFF, 2009).
+- **Em ordem crescente**: a em ordem de uma BST sai ordenada. O nó logo depois
+  é o **sucessor**, o logo antes é o **antecessor**; o menor fica mais à
+  esquerda e o maior, mais à direita (CORMEN et al., 2024, cap. 12).
+- **Custo**: no máximo **altura** + 1 comparações. Numa árvore cheia, perto de
+  log₂ n: 7 chaves, 3 níveis; um milhão, uns 20 (ZIVIANI, 2010, cap. 5).
 
-A **árvore binária de busca**, ou **BST** (*binary search tree*), é uma árvore
-binária com uma regra em **todo** nó: as chaves da subárvore esquerda são
-**menores** que a do nó, e as da direita são **maiores**.
+> [!WARNING]
+> A forma da BST depende da **ordem de chegada**. As sete matrículas em ordem
+> crescente formam uma lista disfarçada de altura 6 (exemplo A198). E sem
+> `raiz = bst_insere(raiz, ...)` o nó criado se perde.
 
-Buscar é a busca binária na árvore: compare com a raiz; igual, achou; menor,
-esquerda; maior, direita; `NULL`, a chave não existe. **Inserir** é a mesma
-descida: no `NULL` em que a busca falharia, pendure um nó novo, sempre como
-**folha**. A inserção recursiva devolve a raiz da subárvore e o pai faz
-`r->esq = bst_insere(r->esq, chave)`: no `NULL`, o ponteiro do pai passa a
-apontar para o nó novo. Chave repetida é ignorada.
+{{exemplo}}
 
-A **em ordem** de uma BST sai crescente. O nó logo depois de outro na em ordem
-é o **sucessor**; o logo antes é o **antecessor**. O menor é o nó mais à
-esquerda e o maior, o mais à direita (assunto 0175).
-
-A busca custa no máximo **altura** + 1 comparações: numa árvore cheia, perto
-de log₂ n (7 chaves: 3 níveis; um milhão: uns 20).
-
-Sete alunos chegaram na ordem 50, 30, 70, 20, 40, 60 e 80. A busca pelo 60
-compara com 50 (direita), 70 (esquerda) e acha. A do 45 desce 50, 30, 40 e cai
-no `NULL` à direita do 40, onde o 45 entraria:
+A catraca da academia procura matrículas. Sete alunos chegaram na ordem 50,
+30, 70, 20, 40, 60 e 80. A busca do 60 passa por 50 e 70; a do 45 desce 50,
+30, 40 e cai no `NULL` à direita do 40:
 
 {{ideia}}
 
@@ -100,19 +100,3 @@ Cada volta faz no máximo duas perguntas e desce um nível. O caminho verde é a
 busca do 60:
 
 {{fluxograma}}
-
-> [!WARNING]
-> A forma da BST depende da **ordem de chegada**. As sete matrículas em ordem
-> crescente formam uma lista disfarçada, de altura 6, onde buscar o 80 passa
-> pelos 7 nós (exemplo A198). O assunto 0101 resolve isso.
-
-> [!TIP]
-> Esquecer a atribuição em `raiz = bst_insere(raiz, ...)` perde o nó criado. A
-> alternativa é passar o endereço da raiz (`No **`), como no `scanf` (exercício
-> E592).
-
-> [!NOTE]
-> **Pergunta para você:** em que ordem inserir 10, 20, 30, 40, 50, 60 e 70 para
-> a árvore ficar com altura 2? Há mais de uma resposta?
-
-{{pratique}}

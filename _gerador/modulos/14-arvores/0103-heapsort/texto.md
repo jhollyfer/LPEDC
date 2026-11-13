@@ -1,30 +1,31 @@
 ## 0103 · Heapsort
 
-Os tempos da corrida de rua, em minutos, chegaram nesta ordem: 52, 18, 73, 40,
-91, 25 e 66. Você quer o ranking crescente, no próprio vetor, sem alocar outro.
+- **Heapsort**: ordena tirando o máximo do heap n vezes. Tudo no **mesmo
+  vetor**: o heap encolhe uma casa a cada máximo, e essa casa livre no fim é o
+  lugar final dele (CORMEN et al., 2024, cap. 6).
+- **Fase 1, construir o heap**: cada **pai** desce, do último (`n / 2 - 1`)
+  até a raiz. As folhas já são heaps, e a fase custa só O(n). É a
+  `BUILD-MAX-HEAP` do Cormen (CORMEN et al., 2024, cap. 6).
+- **Fase 2, ordenar**: troca a raiz com o último do heap, encolhe o heap e faz
+  a nova raiz descer. O vetor fica com o heap no começo e a parte ordenada no
+  fim (FEOFILOFF, 2009).
+- **Custo**: n - 1 descidas de no máximo log₂ n níveis, O(n log n)
+  **sempre**. O quick sort (0095) pode cair em O(n²) e o merge sort (0094)
+  precisa de vetor extra (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
+- **In-place e não estável**: usa O(1) de memória, sem recursão, mas pode
+  trocar a ordem de chaves iguais. Na prática o quick sort costuma ser mais
+  rápido (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
 
-O heap tira o maior em O(log n). Tire os n elementos e eles saem em ordem
-decrescente: é o **heapsort**. No **mesmo vetor**: a cada máximo que sai, o
-heap encolhe uma casa, e essa casa livre no fim é a posição final do máximo.
+> [!WARNING]
+> Na fase 2, o `desce` recebe o tamanho **do heap** (`fim`), não o do vetor
+> (`n`). Com `desce(v, n, 0)`, a raiz trata os já ordenados como filhos e
+> desfaz o trabalho, sem aviso: os índices continuam válidos.
 
-Duas fases:
+{{exemplo}}
 
-1. **Construir o heap** no vetor. É mais barato fazer cada **pai** descer, do
-   último (`n / 2 - 1`) até a raiz, porque as folhas já são heaps: só O(n).
-   É a `BUILD-MAX-HEAP` do Cormen.
-2. **Ordenar**: troque a raiz (o máximo) com o último elemento do heap, que
-   fica no lugar definitivo. Encolha o heap em uma casa e faça a nova raiz
-   descer. Repita até restar um elemento.
-
-Na fase 2, o vetor tem o **heap** no começo e a parte **ordenada** no fim.
-
-A fase 1 é O(n) e a fase 2 faz n - 1 descidas de no máximo log₂ n níveis:
-O(n log n) **sempre**. O quick sort (assunto 0095) pode cair em O(n²); o merge
-sort (0094) precisa de vetor extra. O heapsort garante n log n sem memória
-extra.
-
-Depois da fase 1, o vetor é o heap `[91 52 73 40 18 25 66]`. Na fase 2, o 91
-troca com o 66 e fica no fim, em verde. O 66 desce pelo maior filho (73):
+Os tempos da corrida de rua chegaram como 52, 18, 73, 40, 91, 25 e 66. Depois
+da fase 1, o heap é `[91 52 73 40 18 25 66]`. O 91 troca com o 66 e fica no
+fim, em verde; o 66 desce pelo maior filho (73):
 
 {{ideia}}
 
@@ -111,20 +112,3 @@ A fase 1. Os pais são os índices 2, 1 e 0 (`n / 2 - 1 = 2`):
 | `v[2] = 73` | 25 e 66 | 73 já é o maior: fica | `52 18 73 40 91 25 66` |
 | `v[1] = 18` | 40 e 91 | troca com o 91 | `52 91 73 40 18 25 66` |
 | `v[0] = 52` | 91 e 73 | troca com o 91; depois, filhos 40 e 18: fica | `91 52 73 40 18 25 66` |
-
-> [!WARNING]
-> Na fase 2, o `desce` recebe o tamanho **do heap** (`fim`), não o do vetor
-> (`n`). Com `desce(v, n, 0)`, a raiz trata os elementos já ordenados como
-> filhos e desfaz o trabalho. O vetor sai embaralhado sem aviso: os índices
-> continuam válidos.
-
-> [!TIP]
-> O heapsort é **in-place** (O(1) de memória, sem recursão) e **não é
-> estável**. O quick sort costuma ganhar por usar melhor o cache.
-
-> [!NOTE]
-> **Pergunta para você:** o exemplo A206 ordena mil números em ordem
-> decrescente com insertion sort e com heapsort. Quantas comparações cada um
-> faz? E se o vetor já estivesse em ordem crescente, qual ganharia?
-
-{{pratique}}
