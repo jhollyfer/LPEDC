@@ -1,44 +1,34 @@
 ## 0056 · Matriz dinâmica
 
-Uma rede de lojas quer a planilha de vendas: uma linha por loja, uma coluna
-por semana. Este mês são 3 lojas e 4 semanas. Mês que vem abre a quarta loja,
-e o trimestre tem 13 semanas. Uma matriz `int vendas[3][4]` não serve: as
-dimensões só aparecem quando o programa roda.
+- **Só vetores**: o C aloca blocos de uma dimensão. A matriz dinâmica é montada
+  com vetores, de dois jeitos (CELES; RANGEL, 2002).
+- **Bloco único**: `linhas * colunas` elementos, com o elemento `(i, j)` em
+  `v[i * colunas + j]`. Um `malloc`, um `free`, mas `v[i][j]` não funciona
+  (BACKES, 2013, cap. 11).
+- **Vetor de ponteiros**: um vetor de `linhas` ponteiros (`int **m`) e um
+  `malloc` por linha. Agora `m[i][j]` funciona, e as linhas podem ter tamanhos
+  diferentes (FEOFILOFF, 2009, ap. F).
+- **Regra do `sizeof`**: o que você aloca tem um `*` a menos que o ponteiro
+  que recebe. Use `sizeof *m` e `sizeof *m[i]` (BACKES, 2013, cap. 11).
+- **Liberar na ordem**: primeiro cada linha, depois o vetor de ponteiros. Se
+  uma linha falhar ao criar, desfaça as anteriores antes de devolver `NULL`
+  (CELES; RANGEL, 2002).
+- **VLA** (C99): `int vendas[lojas][semanas];` mora na pilha, que é pequena e
+  não avisa quando estoura (BACKES, 2013).
+- **Custo**: `m[i][j]` com `int **` faz dois acessos à memória; o bloco único
+  faz um (CELES; RANGEL, 2002).
 
-O C só aloca **vetores** (uma dimensão). Para ter uma matriz, você monta uma
-com vetores, de dois jeitos.
+> [!WARNING]
+> `int **m = malloc(linhas * sizeof(int));` é bug: num PC de 64 bits, `int` tem
+> 4 bytes e `int *` tem 8. Você aloca metade e grava fora do bloco. Escreva
+> `sizeof *m`.
 
-**1. Um bloco só.** Aloque `linhas * colunas` elementos e calcule a posição: o
-elemento `(i, j)` fica em `v[i * colunas + j]`, a conta que o compilador faz
-numa matriz fixa (assunto 0039). Um `malloc`, um `free`, tudo contíguo. O
-preço: `v[i][j]` não funciona.
+{{exemplo}}
 
-**2. Vetor de ponteiros.** Um vetor de `linhas` ponteiros (`int **m`), um por
-linha, e um `malloc` por linha com `colunas` inteiros. Agora `m[i][j]`
-funciona: `m[i]` é o endereço da linha i e `[j]` anda dentro dela (o `**` do
-assunto 0049).
-
-Regra para o `sizeof`: **o que você aloca tem um `*` a menos que o ponteiro
-que recebe**. `int **m` recebe um vetor de `int *`; `m[i]` (`int *`) recebe um
-vetor de `int`. Com `sizeof *m` e `sizeof *m[i]`, a conta sai certa.
-
-O C99 tem um atalho, o **VLA**: `int vendas[lojas][semanas];`. Ele mora na
-**pilha**, que é pequena e não avisa quando estoura; o assunto 0172 mostra
-quando vale a pena.
-
-Para liberar, a ordem importa: **primeiro cada linha, depois o vetor de
-ponteiros**. Com `free(m)` antes, você perde os endereços das linhas, que
-ficam presas no heap.
-
-Se o `malloc` da terceira linha falhar, as duas primeiras já foram alocadas. A
-função de criação precisa desfazê-las antes de devolver `NULL`.
-
-A matriz de 3 lojas por 4 semanas é um vetor de 3 ponteiros, cada um para uma
-linha de 4 inteiros. As linhas podem estar em qualquer lugar do heap:
+A planilha de vendas de 3 lojas por 4 semanas (em R$ mil) vira um vetor de 3
+ponteiros, cada um para uma linha de 4 inteiros, em qualquer lugar do heap:
 
 {{ideia}}
-
-O código separa criar e liberar em funções. As vendas estão em R$ mil:
 
 ```c
 #include <stdio.h>
@@ -106,20 +96,3 @@ A criação é um laço com saída de emergência: se uma linha falhar, o caminh
 erro libera o que já existe:
 
 {{fluxograma}}
-
-> [!WARNING]
-> `int **m = malloc(linhas * sizeof(int));` é um bug comum. Num PC de 64 bits,
-> `int` tem 4 bytes e `int *` tem 8: você aloca metade do necessário e as
-> últimas linhas são gravadas fora do bloco. Escreva `sizeof *m`.
-
-> [!TIP]
-> `m[i][j]` com `int **` faz **dois** acessos à memória (o ponteiro `m[i]` e
-> o inteiro); numa matriz fixa ou no bloco único é um só. Em troca, as linhas
-> podem ter **tamanhos diferentes** (no triângulo de Pascal, a linha i tem
-> i + 1 elementos).
-
-> [!NOTE]
-> **Pergunta para você:** quantos `malloc` e quantos `free` o código acima faz
-> para 3 lojas? E para 100 lojas? Quantos faria a versão de bloco único (A112)?
-
-{{pratique}}

@@ -1,17 +1,9 @@
 # Módulo 07 · Memória dinâmica
 
-Até aqui, todo vetor tinha tamanho fixo no código. `int notas[50]` é uma
-aposta: com 12 alunos desperdiça, com 51 estoura. Este módulo ensina a pedir
-memória **enquanto o programa roda**, do tamanho exato, e a devolvê-la ao
-acabar.
-
-No C, nenhum vetor cresce sozinho e nenhum coletor de lixo apaga o que
-ninguém usa: você decide quanto, quando e por quanto tempo. Memória esquecida
-vaza; memória devolvida e usada de novo corrompe o programa.
-
-O módulo usa os ponteiros do 06 e prepara a segunda metade do curso: listas,
-pilhas, filas, árvores, tabelas hash e grafos são blocos do heap ligados por
-ponteiros. O módulo 08 (structs) agrupa esses dados em blocos com campos.
+Como pedir memória **enquanto o programa roda**, do tamanho exato, e
+devolvê-la ao acabar: heap, `malloc`, `free`, `calloc`, `realloc`, matrizes
+dinâmicas e os erros de memória. Depende dos ponteiros do módulo 06 e prepara
+listas, pilhas, filas, árvores e o módulo 08 (structs).
 
 ## O que você vai aprender
 
@@ -24,17 +16,10 @@ ponteiros. O módulo 08 (structs) agrupa esses dados em blocos com campos.
 
 ## Antes de começar
 
-Você precisa dominar ponteiros (módulo 06): `&`, `*`, `NULL`,
-`a[i] == *(a + i)`, `char *` e `**`. Se `int **m` ainda assusta, releia os
-assuntos 0047 e 0049.
-
-Nos diagramas, o verde costuma ser o bloco do heap. Ao rodar os exemplos,
-apague um `free` de propósito e leia a resposta do gcc com as flags de estudo.
-
-> [!NOTE]
-> Em todos os exercícios você escreve o programa do zero. Compile com as
-> flags de estudo e leia o relatório do AddressSanitizer se algo estourar. A
-> resolução de cada um roda limpa.
+Domine ponteiros (módulo 06): `&`, `*`, `NULL`, `a[i] == *(a + i)`, `char *` e
+`**`. Se `int **m` assusta, releia 0047 e 0049. Nos diagramas, o verde é o bloco
+do heap. Escreva cada exercício do zero, compile com as flags de estudo e leia
+o relatório do AddressSanitizer se algo estourar.
 
 O gcc com as flags de estudo já compila com o **AddressSanitizer**, que avisa
 de vazamentos no fim. Para o assunto 0057, instale também o **valgrind**:

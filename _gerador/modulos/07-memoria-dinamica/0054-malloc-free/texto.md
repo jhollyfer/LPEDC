@@ -1,45 +1,40 @@
 ## 0054 · malloc e free
 
-Fim do mês, hora de somar as corridas de aplicativo. Teve mês com 4 corridas,
-teve mês com 60. Se você declarar `double corridas[100];`, desperdiça espaço
-nos meses fracos e estoura no mês em que passar de 100. O tamanho certo só
-aparece quando o programa já está rodando.
-
-Para isso existe o `malloc` (*memory allocation*), de `<stdlib.h>`. Você diz
-**quantos bytes** quer e ele devolve o **endereço** de um bloco desse tamanho
-no heap. Esse endereço vai para um ponteiro, que age como vetor:
-`corridas[i]` funciona igual (assunto 0047).
+- **`malloc`** (*memory allocation*, de `<stdlib.h>`): recebe **quantos bytes**
+  você quer e devolve o endereço de um bloco no heap. O ponteiro que recebe age
+  como vetor (BACKES, 2013, cap. 11).
 
 ```c
 double *corridas = malloc(n * sizeof(double)); // n * 8 bytes
 ```
 
-Três detalhes nessa linha:
+- **Conta em bytes**: `malloc(4)` dá 4 bytes, não 4 `double`. Por isso
+  `n * sizeof(tipo)` (CELES; RANGEL, 2002).
+- **`void *`**: o retorno vira `double *` sozinho; em C o cast é dispensável
+  (BACKES, 2013, cap. 11).
+- **`NULL`**: é o que volta quando falta memória. Confira sempre antes de usar
+  (FEOFILOFF, 2009, ap. F).
+- **Lixo**: o `malloc` não zera o bloco. Preencha antes de ler
+  (BACKES, 2013, cap. 11).
+- **`free(p)`**: devolve o bloco, com exatamente o endereço que o `malloc` deu.
+  O tamanho fica num cabeçalho escondido, por isso `free(p + 1)` dá errado
+  (KERNIGHAN; RITCHIE, 1989, seção 8.7).
+- **Depois do `free`**, o ponteiro ainda guarda o endereço antigo. O hábito é
+  `p = NULL;` (FEOFILOFF, 2009, ap. F).
+- **Vazamento** (*memory leak*): bloco que ninguém libera. Todo `malloc` tem um
+  `free` (DEITEL; DEITEL, 2011, cap. 12).
 
-- o `malloc` conta em **bytes**, não em elementos. `malloc(4)` dá 4 bytes, não
-  4 `double`. Daí o `n * sizeof(tipo)`;
-- ele devolve `void *` (assunto 0051), que vira `double *` sozinho. Em C o
-  cast `(double *)` é dispensável;
-- se não houver memória, devolve **`NULL`**. Sempre confira antes de usar.
+> [!WARNING]
+> O erro mais comum é contar elementos em vez de bytes: `malloc(n)` para `n`
+> inteiros reserva um quarto do necessário. Tire o tipo do próprio ponteiro:
+> `int *v = malloc(n * sizeof *v);`.
 
-O bloco vem com **lixo**: o `malloc` não zera nada. Preencha antes de ler.
+{{exemplo}}
 
-Para devolver, use **`free(corridas)`**, com exatamente o endereço que o
-`malloc` deu. O `free` não precisa do tamanho: o `malloc` o anotou num
-cabeçalho escondido antes do bloco (por isso `free(p + 1)` dá errado). Depois
-do `free`, o ponteiro guarda o endereço antigo, que não é mais seu. Por isso o
-hábito: `corridas = NULL;`.
-
-A regra: **todo `malloc` tem um `free`**. O bloco esquecido fica ocupado até o
-programa acabar: é um **vazamento** (*memory leak*), tema do assunto 0057.
-
-O programa pergunta quantas corridas foram (4), pede ao heap `4 * 8 = 32`
-bytes, guarda os valores (R$ 12,50, R$ 18,00, R$ 25,90 e R$ 9,60), soma tudo e
-devolve o bloco:
+O programa pergunta quantas corridas de aplicativo houve no mês (4), pede ao
+heap `4 * 8 = 32` bytes, guarda os valores, soma e devolve o bloco:
 
 {{ideia}}
-
-O comentário no fim do código mostra uma execução completa:
 
 ```c
 #include <stdio.h>
@@ -94,16 +89,3 @@ Toda saída depois do `malloc` passa por um `free`, até a de erro no meio da
 leitura, a mais fácil de esquecer:
 
 {{fluxograma}}
-
-> [!WARNING]
-> O erro mais comum é contar elementos em vez de bytes: `malloc(n)` para `n`
-> inteiros reserva um quarto do necessário. Tire o tipo do próprio ponteiro:
-> `int *v = malloc(n * sizeof *v);`. Se `v` virar `double *`, a conta
-> acompanha.
-
-> [!NOTE]
-> **Pergunta para você:** se você tirar a linha `free(corridas);` o programa
-> continua mostrando o total certo? Então qual é o problema? Rode sem o `free`
-> e leia o fim da saída do gcc com as flags de estudo.
-
-{{pratique}}

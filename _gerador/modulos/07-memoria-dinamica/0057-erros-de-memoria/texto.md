@@ -1,15 +1,21 @@
 ## 0057 · Erros de memória
 
-O sistema do caixa da padaria funciona de manhã. Às seis da tarde está lento,
-e no sábado trava. Ninguém mexeu no código. Foi um **vazamento** (*memory
-leak*): a cada venda, um pedacinho de memória ficava para trás, e depois de
-milhares de vendas o heap acabou. No C, quem cria esse erro e quem o corrige
-é você.
-
-O pior é que o programa costuma **funcionar**: mostra a saída certa, termina
-sem reclamar e quebra só na máquina do cliente, dias depois. Por isso existem
-ferramentas que vigiam a memória durante a execução. Primeiro, os quatro
-erros clássicos:
+- **Vazamento** (*memory leak*): bloco que ninguém libera e ninguém mais acha.
+  O programa fica lento e trava depois de horas (DEITEL; DEITEL, 2011, cap. 12).
+- **Ponteiro solto** (*dangling pointer*): depois de `free(p)`, `p` guarda o
+  mesmo endereço. Usar `p` pode ler o valor antigo por sorte, até o `malloc`
+  entregar o pedaço a outro (BACKES, 2013, cap. 11).
+- **Free duplo**: liberar o mesmo bloco duas vezes (GOOGLE, s.d.).
+- **Estouro** no heap: passar do fim do bloco estraga o cabeçalho do vizinho, e
+  o programa quebra depois, num `free` sem culpa
+  (KERNIGHAN; RITCHIE, 1989, seção 8.7).
+- **AddressSanitizer** (ASan): `gcc -fsanitize=address -g`. Confere cada acesso,
+  para no primeiro erro e mostra onde o bloco foi alocado e liberado. No fim, o
+  **LeakSanitizer** lista o que vazou (GOOGLE, s.d.).
+- **valgrind**: roda o executável sem recompilar, 20 a 50 vezes mais lento, e
+  pega leitura de memória que nunca recebeu valor. Instale com `sudo pacman -S
+  valgrind` (Arch) ou `sudo apt install valgrind` (Debian/Ubuntu) e rode
+  `valgrind ./programa` (VALGRIND DEVELOPERS, s.d.).
 
 | Erro | O que é | O AddressSanitizer diz |
 | --- | --- | --- |
@@ -18,37 +24,21 @@ erros clássicos:
 | **free duplo** | liberar o mesmo bloco duas vezes | `attempting double-free` |
 | **estouro** | passar do fim (ou do começo) de um bloco | `heap-buffer-overflow` |
 
-O **ponteiro solto** (*dangling pointer*) está na raiz de dois deles. Depois
-de `free(p)`, `p` guarda o mesmo endereço. Usar `p` pode até ler o valor
-antigo, porque ninguém apagou os bytes. Funciona por sorte, até o `malloc`
-entregar aquele pedaço a outra parte do programa.
+> [!WARNING]
+> "Rodou e deu a saída certa" não prova nada em C. Uso depois do `free`,
+> estouro e leitura de lixo são **comportamento indefinido**. Rode com o ASan
+> (flags de estudo) e, na dúvida, com `valgrind ./programa`.
 
-O **estouro** no heap é mais traiçoeiro: logo depois do bloco mora o
-cabeçalho do vizinho (assunto 0054). Um byte a mais estraga a contabilidade do
-`malloc`, e o programa quebra depois, num `free` sem culpa.
+{{exemplo}}
 
-As ferramentas:
-
-- **AddressSanitizer** (ASan): use `-fsanitize=address -g` no `gcc`. O
-  compilador põe vigias em volta de cada bloco e confere cada acesso. Para no
-  primeiro erro e mostra onde ele aconteceu, onde o bloco foi alocado e onde
-  foi liberado. No fim, o **LeakSanitizer** lista o que vazou;
-- **valgrind**: roda o executável normal numa máquina virtual que vigia cada
-  byte. É 20 a 50 vezes mais lento, não exige recompilar e pega o que o ASan
-  não pega: ler memória que nunca recebeu valor. Instale com `sudo pacman -S
-  valgrind` (Arch) ou `sudo apt install valgrind` (Debian/Ubuntu) e rode
-  `valgrind ./programa`.
-
-A função `total_do_pedido` copia os 4 preços de um pedido (R$ 30, 12, 45 e 8)
-para um bloco temporário de 16 bytes e soma tudo. Na primeira versão, esquecia
-o `free`. Cada um dos 3 pedidos deixava 16 bytes perdidos: o endereço morria
-com o frame, mas o bloco ficava. O ASan mostra isso no fim da execução:
+A função `total_do_pedido` copia os 4 preços de um pedido para um bloco de 16
+bytes e soma. A primeira versão esquecia o `free`: cada um dos 3 pedidos
+deixava 16 bytes perdidos, e o ASan mostra isso no fim:
 
 {{ideia}}
 
-O relatório da versão quebrada, sem o `free` (salva como `pedido.c`). Leia de
-cima para baixo: o tipo do erro, quanto vazou e a pilha de chamadas do
-`malloc`:
+O relatório da versão sem o `free` (salva como `pedido.c`): o tipo do erro,
+quanto vazou e a pilha de chamadas do `malloc`:
 
 ```text
 ==12072==ERROR: LeakSanitizer: detected memory leaks
@@ -98,16 +88,3 @@ O `free` precisa vir antes do `return`, que destrói a única variável que sabi
 onde o bloco estava:
 
 {{fluxograma}}
-
-> [!WARNING]
-> "Rodou e deu a saída certa" não prova nada em C. Uso depois do `free`,
-> estouro de um byte e leitura de lixo são **comportamento indefinido**: o
-> programa pode funcionar hoje e quebrar com outro compilador. Rode sempre com
-> o ASan (flags de estudo) e, na dúvida, com `valgrind ./programa`.
-
-> [!NOTE]
-> **Pergunta para você:** se `free(p); p = NULL;` vira hábito, o que acontece
-> com um `free(p)` repetido por engano? E com um `p[0] = 5;` depois disso?
-> Qual dos dois o hábito resolve de vez?
-
-{{pratique}}

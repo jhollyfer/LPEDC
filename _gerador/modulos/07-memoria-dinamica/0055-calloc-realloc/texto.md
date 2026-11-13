@@ -1,45 +1,36 @@
 ## 0055 · calloc e realloc
 
-Você abriu uma vaquinha para o churrasco e os Pix vão chegando: R$ 50, R$ 120,
-R$ 35... Não sabe quantos serão. O vetor não cresce sozinho: quem o faz
-crescer é você, com o `realloc`.
-
-Antes dele, um primo do `malloc`: o **`calloc`**, que recebe a quantidade e o
-tamanho separados e entrega o bloco **zerado**:
+- **`calloc(n, tam)`**: recebe quantidade e tamanho separados e entrega o bloco
+  **zerado**. Serve para contadores, placares e tabelas de frequência
+  (BACKES, 2013, cap. 11).
 
 ```c
 int *contagem = calloc(5, sizeof(int)); // 5 ints, todos valendo 0
 ```
 
-Use quando o zero inicial importa: contadores, placares, tabelas de
-frequência. Com `malloc`, você teria lixo e precisaria de um laço para zerar.
+- **`realloc(p, novo_tamanho)`**: muda o tamanho de um bloco e **preserva o
+  conteúdo** até o menor dos dois tamanhos. A parte nova vem com lixo
+  (BACKES, 2013, cap. 11).
+- **Bloco que muda de lugar**: se não der para esticar no lugar, o `realloc`
+  aloca outro bloco, copia, libera o antigo e devolve o **endereço novo**.
+  Ponteiros para o bloco velho viram soltos (BACKES, 2013, cap. 11).
+- **Falha**: o `realloc` devolve `NULL` e não mexe no bloco antigo. Guarde o
+  resultado num ponteiro **temporário** e só depois troque (CELES; RANGEL, 2002).
+- **Quantidade e capacidade**: elementos usados e quantos cabem. Encheu,
+  **dobre** a capacidade: para 1000 elementos, começando com 1, bastam 10
+  `realloc`.
 
-O **`realloc(p, novo_tamanho)`** muda o tamanho de um bloco do heap e
-**preserva o conteúdo** (até o menor dos dois tamanhos). Se der para esticar o
-bloco no lugar, estica. Se não, aloca um bloco novo em outro lugar, copia
-tudo, libera o antigo e devolve o **endereço novo**. A parte nova vem com
-lixo.
+> [!WARNING]
+> `v = realloc(v, n)` é o erro clássico: se falhar, `v` vira `NULL` e o bloco
+> antigo fica no heap sem dono. Use um temporário. E não guarde `&v[3]` antes de
+> um `realloc`: o bloco pode ter mudado de lugar.
 
-Daí a regra central: **depois do `realloc`, o endereço antigo pode não valer
-mais**. Todo ponteiro para dentro do bloco velho virou ponteiro solto.
+{{exemplo}}
 
-Se faltar memória, o `realloc` devolve `NULL` e **não mexe no bloco antigo**.
-Por isso nunca escreva `pix = realloc(pix, ...)`: com `NULL`, você perde o
-único endereço do bloco, que continua ocupado. Guarde o resultado num ponteiro
-**temporário** e só depois troque.
-
-Para o vetor crescer sem gastar tempo demais, guarde duas contas: a
-**quantidade** (elementos usados) e a **capacidade** (quantos cabem). Encheu?
-**Dobre** a capacidade. Os `realloc` ficam raros: para guardar 1000
-elementos, começando com 1, são só 10.
-
-Chegam 5 Pix (R$ 50, 120, 35, 80 e 15). O vetor nasce com capacidade 2, dobra
-para 4 no terceiro Pix e para 8 no quinto. No fim, 5 posições usadas e 3
-livres:
+Os Pix de uma vaquinha vão chegando: R$ 50, 120, 35, 80 e 15. O vetor nasce
+com capacidade 2, dobra para 4 no terceiro Pix e para 8 no quinto:
 
 {{ideia}}
-
-O código é a semente da lista sequencial que vira TAD no assunto 0075:
 
 ```c
 #include <stdio.h>
@@ -86,21 +77,7 @@ int main(void) {
 // Sobram 3 posições livres
 ```
 
-A pergunta "encheu?" é feita a cada Pix, mas o desvio para o `realloc` só
-acontece duas vezes. Nas demais voltas, guardar custa uma atribuição:
+A pergunta "encheu?" vem a cada Pix, mas o desvio para o `realloc` só acontece
+duas vezes:
 
 {{fluxograma}}
-
-> [!WARNING]
-> `v = realloc(v, n)` é o erro clássico. Se o `realloc` falhar, `v` vira
-> `NULL`, o bloco antigo fica no heap sem dono (vazamento) e os dados se
-> perdem. Use um temporário. E não guarde endereços de elementos
-> (`int *ultimo = &v[3];`) antes de um `realloc`: o bloco pode ter mudado de
-> lugar.
-
-> [!NOTE]
-> **Pergunta para você:** se a capacidade inicial fosse 1, quantas vezes
-> apareceria "Capacidade: ..." para os mesmos 5 Pix? E qual seria a
-> capacidade final?
-
-{{pratique}}
