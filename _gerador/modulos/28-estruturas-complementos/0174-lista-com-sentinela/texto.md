@@ -1,39 +1,36 @@
 ## 0174 · Lista com sentinela
 
-Na barbearia do bairro, quem chega pega uma ficha e espera, e às vezes
-desiste no meio da fila. O barbeiro usa uma lista dupla (a do 0079), mas a
-remoção tem `if` para todo lado: e se for o primeiro? O último? O único?
+- **Nó sentinela** (`L.nil`): um nó falso, sem dado, entre o último e o
+  primeiro. A lista vira **dupla e circular**, e nenhum `NULL` sobra dentro
+  dela (CORMEN et al., 2024, cap. 10).
+- **Por que existe**: na lista dupla comum, o primeiro e o último têm `NULL` de
+  um lado, e cada `NULL` é um caso especial na remoção (TENENBAUM; LANGSAM;
+  AUGENSTEIN, 1995).
+- **Lista vazia**: a sentinela aponta para si (`nil.prox == &nil`);
+  `nil.prox` é o primeiro e `nil.ant` é o último (CORMEN et al., 2024, cap. 10).
+- **Inserir depois de `y`**: quatro ponteiros, sempre os mesmos, com `y`
+  podendo ser a sentinela (começo) ou o último (fim).
+- **Remover `x`**: `x->ant->prox = x->prox` e `x->prox->ant = x->ant`. Duas
+  linhas, sem `if` (CELES; CERQUEIRA; RANGEL, 2016).
+- **Buscar com a chave na sentinela**: guarde a chave procurada em `nil`
+  antes do laço; ele sempre para e faz um teste por volta em vez de dois. Se
+  parar na sentinela, não achou (CORMEN et al., 2024, cap. 10).
+- **Custo**: um nó a mais por lista. Como a sentinela fica dentro da `ListaS`,
+  `&L->nil` é fixo e os laços sabem onde parar.
 
-Os `if` existem porque o primeiro nó tem `NULL` à esquerda e o último, à
-direita: cada `NULL` é um caso especial, e é neles que o bug mora.
+> [!WARNING]
+> A sentinela **não é um dado**: o laço para quando volta a ela e começa em
+> `L->nil.prox`. Nunca passe `&L->nil` para `sent_remove`: ela não veio do
+> `malloc`, e o `free` derruba o programa.
 
-A saída clássica é um **nó sentinela** (o Cormen chama de `L.nil`): um nó
-falso, sem dado, **entre o último e o primeiro**. A lista vira **dupla e
-circular**: `nil.prox` é o primeiro, `nil.ant` é o último. Não sobra `NULL`
-dentro da lista.
+{{exemplo}}
 
-A lista vazia é a sentinela apontando para si (`nil.prox == &nil`). **Todo nó
-real tem vizinho dos dois lados**, nem que seja a sentinela, e os casos
-especiais somem:
-
-- **inserir depois de `y`**: quatro ponteiros, sempre os mesmos, com `y`
-  podendo ser a sentinela (começo) ou o último (fim);
-- **remover `x`**: `x->ant->prox = x->prox` e `x->prox->ant = x->ant`. Duas
-  linhas, sem `if`;
-- **buscar**: anda de `nil.prox` até achar a chave. Se voltar à sentinela,
-  não achou.
-
-Na busca, o Cormen **guarda a chave procurada dentro da sentinela** antes do
-laço. Assim o laço sempre para (no pior caso, na sentinela) e faz um teste por
-volta, `x->chave != chave`, em vez de dois.
-
-Chegam as fichas 12, 25 e 7. A 25 desiste e sai. A busca pela 40, que não
-existe, para na sentinela (o nó cinza do desenho, sem valor):
+Uma barbearia guarda as fichas de espera. Chegam 12, 25 e 7; a 25 desiste e
+sai. A busca pela 40, que não existe, para na sentinela (o nó cinza):
 
 {{ideia}}
 
-No `sentinela.h`, a sentinela fica **dentro** da struct da lista, e o `n`
-conta só os nós reais. As três funções centrais do `sentinela.c`:
+As três funções centrais do `sentinela.c`; o `n` conta só os nós reais:
 
 ```c
 NoS *sent_insere_apos(ListaS *L, NoS *y, int chave) {
@@ -108,24 +105,7 @@ int main(void) {
 // Na fila: 2
 ```
 
-No fluxograma, a busca da ficha 40 passa pelo 12 e pelo 7 e para na
-sentinela, que guarda 40. "Parou na sentinela?" separa "achou" de "não está":
+A busca da ficha 40 passa pelo 12 e pelo 7 e para na sentinela, que guarda
+40. "Parou na sentinela?" separa "achou" de "não está":
 
 {{fluxograma}}
-
-> [!WARNING]
-> A sentinela **não é um dado**. Todo laço para quando volta a ela (`x !=
-> &L->nil`) e nunca começa por ela: o primeiro nó real é `L->nil.prox`.
-> Nunca passe `&L->nil` para `sent_remove`: ela não veio do `malloc`, e o
-> `free` derruba o programa.
-
-> [!TIP]
-> A sentinela custa um nó a mais por lista (24 bytes em 64 bits). Como ela
-> está **dentro** da `ListaS`, `&L->nil` é fixo e os laços sabem onde parar.
-
-> [!NOTE]
-> **Pergunta para você:** depois de `sent_busca(fila, 40)`, qual valor fica
-> guardado em `fila->nil.chave`? E se a sua lista tivesse a chave 40 de
-> verdade, a busca acharia o nó certo ou pararia na sentinela?
-
-{{pratique}}

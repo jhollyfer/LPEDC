@@ -1,45 +1,37 @@
 ## 0175 · Conceitos e sucessor
 
-No painel da rodoviária, qual ônibus sai logo depois do seu? E qual saiu
-logo antes? Os horários (6h15, 6h50, 7h00, 7h30, 8h00, 9h20, 10h30, 12h00)
-estão numa BST, e a resposta é o **sucessor** e o **antecessor** da chave.
+- **Grau**: quantos filhos o nó tem; grau 0 é **folha**. O grau da árvore é o
+  maior grau entre os nós (SZWARCFITER; MARKENZON, 2010).
+- **Profundidade** e **nível**: arestas do nó até a raiz, que tem
+  profundidade 0. Alguns livros contam o nível a partir de 1: confira o
+  enunciado (CORMEN et al., 2024, cap. 12).
+- **Altura**: o maior número de arestas do nó até uma folha abaixo. Folha tem
+  altura 0 e árvore vazia, -1 (CORMEN et al., 2024, cap. 12).
+- **Fator de balanceamento**: `altura(esq) - altura(dir)`, que a AVL mantém
+  em -1, 0 ou 1 (ADELSON-VELSKY; LANDIS, 1962).
+- **Sucessor** de `x`: a menor chave maior que `x`. Com subárvore direita, é o
+  **mínimo** dela; sem ela, sobe enquanto vier de um filho direito, e o
+  primeiro ancestral alcançado por um filho esquerdo é a resposta
+  (CORMEN et al., 2024, cap. 12).
+- **Ponteiro `pai`** (`x.p` no Cormen): permite a subida, sem pilha nem
+  recursão; custa 8 bytes por nó. O **antecessor** é o espelho, e os dois
+  custam O(h) (CORMEN et al., 2024, cap. 12).
 
-Primeiro o vocabulário, na convenção do Cormen e do módulo 14 (altura conta
-**arestas**):
+> [!WARNING]
+> Trocar o lado na subida (`x == y->esq` no lugar de `x == y->dir`) dá um
+> "sucessor" **menor** que `x`. Toda inserção, remoção ou rotação também tem
+> que acertar o `pai` (o da raiz fica `NULL`).
 
-- **grau de um nó**: quantos filhos ele tem. Grau 0 é **folha**. O **grau da
-  árvore** é o maior grau entre os nós;
-- **profundidade** de um nó: arestas até a raiz, que tem profundidade 0;
-- **nível**: os nós de mesma profundidade. A raiz está no nível 0, mas alguns
-  livros contam **a partir de 1**: confira o enunciado;
-- **altura** de um nó: o maior número de arestas até uma folha abaixo. Folha
-  tem altura 0, árvore vazia tem -1. A altura da árvore é a da raiz;
-- **fator de balanceamento**: `altura(esq) - altura(dir)`, mantido em -1, 0
-  ou 1 pela AVL do 0101.
+{{exemplo}}
 
-O sucessor de `x` em ordem é a menor chave maior que `x`. Há dois casos:
-
-1. `x` tem **subárvore direita**: o sucessor é o **mínimo** dela (desce uma
-   vez à direita e depois tudo à esquerda);
-2. `x` **não tem** subárvore direita: o sucessor é um **ancestral**. Sobe
-   enquanto vier de um filho direito (esses ancestrais são menores). O
-   primeiro ancestral alcançado **por um filho esquerdo** é a resposta. Se a
-   subida passar da raiz, `x` é o maior e não tem sucessor.
-
-O caso 2 precisa subir, por isso o nó ganha o ponteiro **`pai`** (`x.p` no
-Cormen). O antecessor é o espelho (esquerda por direita, mínimo por máximo).
-Os dois custam O(h).
-
-Os horários entram na ordem 8h00, 6h15, 10h30, 7h00, 6h50, 9h20, 12h00, 7h30
-(chaves `800`, `615`...). O sucessor das 8h00 é caso 1: 10h30 e depois à
-esquerda, 9h20. O das 7h30 é caso 2: ela é filha direita do 7h00, que é filho
-direito do 6h15, que é filho **esquerdo** do 8h00, a resposta. No desenho, os
-números ao lado de cada nó são a profundidade e a altura:
+Os horários de ônibus de uma rodoviária entram numa BST na ordem 8h00, 6h15,
+10h30, 7h00, 6h50, 9h20, 12h00, 7h30. O sucessor das 8h00 é caso 1 (10h30 e
+depois à esquerda, 9h20); o das 7h30 é caso 2 e sobe até o 8h00. Ao lado de
+cada nó, a profundidade e a altura:
 
 {{ideia}}
 
-No `arvpai.c`, a inserção é a iterativa do Cormen (desce lembrando o pai).
-O sucessor:
+O sucessor no `arvpai.c`:
 
 ```c
 NoP *ap_sucessor(NoP *x) {
@@ -55,7 +47,7 @@ NoP *ap_sucessor(NoP *x) {
 }
 ```
 
-O painel mostra também os conceitos de três nós:
+O painel mostra os conceitos de três nós e as perguntas de horário:
 
 ```c
 #include <stdio.h>
@@ -106,24 +98,7 @@ int main(void) {
 // Depois das 8h00 sai o das 9h20; antes, o das 7h30
 ```
 
-O fluxograma segue o sucessor das 7h30: sem filho direito, vai ao caso 2 e
-sobe duas vezes, sempre vindo da direita. Na terceira, o 6h15 é filho esquerdo
-do 8h00: o laço para:
+O fluxograma segue o sucessor das 7h30: sobe duas vezes vindo da direita; na
+terceira, o 6h15 é filho esquerdo do 8h00 e o laço para:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Trocar o lado na subida (`x == y->esq` no lugar de `x == y->dir`) faz o
-> sucessor das 7h30 virar 7h00, que é **menor**. Toda inserção, remoção ou
-> rotação também tem que acertar o `pai` (o da raiz fica `NULL`).
-
-> [!TIP]
-> O `pai` custa 8 bytes por nó (32 no `NoP`, contra 24 da BST do 0099), mas o
-> sucessor dispensa pilha e recursão.
-
-> [!NOTE]
-> **Pergunta para você:** qual é o antecessor das 6h50? E o sucessor das
-> 12h00? Depois insira 7h45 e
-> diga, sem rodar, qual será o grau do 7h30 e a nova altura da árvore.
-
-{{pratique}}

@@ -1,32 +1,23 @@
 ## 0177 · Rubro-negra clássica
 
-A central de entregas registra pacotes pelo número, e eles chegam quase em
-ordem, o pior caso da BST. No 0145 você viu a rubro-negra **esquerdista**
-(LLRB). A prova usa a versão **clássica** do Cormen: as mesmas cores, outras
-regras de conserto e ponteiro para o pai.
-
-Uma **árvore rubro-negra** é uma BST em que cada nó tem uma cor e valem as
-**cinco propriedades**:
-
-1. todo nó é **vermelho** ou **preto**;
-2. a **raiz** é preta;
-3. toda **folha** (`T.nil`) é preta;
-4. se um nó é vermelho, **os dois filhos são pretos**;
-5. para cada nó, todos os caminhos até as folhas abaixo passam pelo **mesmo
-   número de nós pretos**.
-
-As "folhas" do Cormen não guardam chave: são os lugares do `NULL`. Todas são
-**um nó só**, a **sentinela `T.nil`**, preta, como na lista do 0174. O pai da
-raiz também é `T.nil`.
-
-O número de pretos de `x` até uma folha, sem contar `x`, é a **altura negra**
-`bh(x)`, igual em todos os caminhos (propriedade 5). A subárvore de `x` tem
-pelo menos `2^bh(x) - 1` nós e, pela propriedade 4, `bh(raiz) >= h/2`. Daí
-**h ≤ 2 log₂(n + 1)**: busca, mínimo e sucessor custam O(log n).
-
-A **inserção** pendura o nó novo `z` como na BST e o pinta de **vermelho**
-(a propriedade 5 se mantém). Só a 4 pode quebrar, se o pai de `z` for
-vermelho. O conserto (`RB-INSERT-FIXUP`) olha o **tio** de `z`:
+- **Árvore rubro-negra**: BST em que cada nó tem cor e valem cinco
+  propriedades: (1) todo nó é vermelho ou preto; (2) a raiz é preta; (3) toda
+  folha (`T.nil`) é preta; (4) nó vermelho tem os dois filhos pretos; (5) todo
+  caminho de um nó até as folhas abaixo tem o mesmo número de pretos
+  (CORMEN et al., 2024, cap. 13).
+- **Origem**: o esquema de duas cores para árvores balanceadas é de Guibas e
+  Sedgewick; a LLRB do 0145 é uma variante (GUIBAS; SEDGEWICK, 1978).
+- **Sentinela `T.nil`**: as folhas não guardam chave; todas são um nó só,
+  preto, como na lista do 0174. O pai da raiz também é `T.nil`
+  (CORMEN et al., 2024, cap. 13).
+- **Altura negra** `bh(x)`: pretos de `x` até uma folha, sem contar `x`. Como
+  `bh(raiz) >= h/2`, sai **h ≤ 2 log₂(n + 1)** e busca custa O(log n)
+  (CORMEN et al., 2024, cap. 13).
+- **Inserção**: pendura `z` como na BST e o pinta de **vermelho**. Só a
+  propriedade 4 pode quebrar, e o conserto olha o **tio** de `z`
+  (CORMEN et al., 2024, cap. 13).
+- **Remoção**: quatro casos, olhando o **irmão**; custa O(log n) e faz no
+  máximo **três rotações** (SZWARCFITER; MARKENZON, 2010).
 
 | Caso | Situação | O que fazer |
 | --- | --- | --- |
@@ -34,19 +25,24 @@ vermelho. O conserto (`RB-INSERT-FIXUP`) olha o **tio** de `z`:
 | 2 | tio **preto**, `z` em **triângulo** (filho direito de um filho esquerdo, ou o espelho) | gira no pai e cai no caso 3 |
 | 3 | tio **preto**, `z` em **linha** (filho esquerdo de um filho esquerdo, ou o espelho) | pinta o pai de preto e o avô de vermelho, gira no avô. Acabou |
 
-O caso 1 só troca cores e pode subir até a raiz. Os casos 2 e 3 fazem **no
-máximo duas rotações** e encerram. No fim, a raiz vira preta.
+O caso 1 só troca cores e pode subir até a raiz; os casos 2 e 3 fazem no
+máximo duas rotações e encerram. No fim, a raiz vira preta.
 
-Chegam os pacotes 50, 30, 70, 20, 25, 40 e 45. O 20 tem tio vermelho (caso 1).
-O 25 forma um triângulo com o 20 e o 30 (casos 2 e 3). O 40 tem tio vermelho, e
-o 45 fica em linha com o 40 e o 30 (caso 3, espelho). No desenho, o antes e o
-depois de cada caso:
+> [!WARNING]
+> Erros comuns: esquecer de **subir** no caso 1 (`z = avo`) e trocar a ordem
+> de cores e rotação no caso 3. Na prova, `bh(x)` **não conta o próprio x** e
+> **conta a folha `T.nil`**.
+
+{{exemplo}}
+
+Uma central de entregas recebe os pacotes 50, 30, 70, 20, 25, 40 e 45, quase
+em ordem. O 20 tem tio vermelho (caso 1); o 25 forma triângulo (casos 2 e 3);
+o 45 fica em linha (caso 3, espelho). O antes e o depois de cada caso:
 
 {{ideia}}
 
-No `vermelhopreto.h`, a sentinela fica dentro da struct da árvore, e o
-`T->casos` conta cada caso. O conserto, no `vermelhopreto.c` (pai filho
-esquerdo; o outro lado é o espelho):
+O conserto no `vermelhopreto.c` (pai filho esquerdo; o outro lado é o
+espelho). O `T->casos` conta cada caso:
 
 ```c
 static void conserta(ArvVP *T, NoVP *z) {
@@ -80,8 +76,7 @@ static void conserta(ArvVP *T, NoVP *z) {
 ```
 
 O laço nunca testa `NULL`: o tio pode ser a sentinela, preta, e cai nos casos
-2 e 3. Se `z` chega à raiz, o pai é `T.nil`, preto, e o `while` para. O
-cliente:
+2 e 3. O cliente:
 
 ```c
 #include <stdio.h>
@@ -135,24 +130,3 @@ O conserto de três inserções. "Pai" e "avô" são os de `z` no início da lin
 
 Duas rotações no 25, uma no 45, nenhuma no 20 e no 40. A altura negra só
 cresce quando o caso 1 chega à raiz: a árvore cresce **por cima**.
-
-A **remoção** do Cormen (quatro casos, olhando o **irmão** do nó com um "preto
-a mais") fica fora daqui. Para a prova: custa O(log n) e faz no máximo **três
-rotações**.
-
-> [!WARNING]
-> Erros comuns: esquecer de **subir** no caso 1 (`z = avo`) e trocar a ordem
-> das cores e da rotação no caso 3. Pegadinha de prova: `bh(x)` **não conta o
-> próprio x** e **conta a folha `T.nil`**. Na árvore do exemplo, `bh` da raiz
-> é 2: o 25 e a nil, ou o 70 e a nil.
-
-> [!TIP]
-> O `NoVP` tem 32 bytes. Todo ponteiro "vazio" aponta para `&T->nil`, então o
-> código lê `tio->cor` sem testar `NULL`.
-
-> [!NOTE]
-> **Pergunta para você:** na árvore final do exemplo, chega o pacote 47. Quem
-> é o pai, quem é o tio e qual caso roda? E se depois chegar o 48? Desenhe e
-> confira com o `vp_pre_ordem`.
-
-{{pratique}}

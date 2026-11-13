@@ -1,52 +1,44 @@
 ## 0180 · Pigeonhole e chave composta
 
-A professora quer a turma pela nota do simulado, da menor para a maior. As
-notas vão de 0 a 10, e quem empata continua na ordem alfabética da chamada.
-Com só 11 notas, dá para ordenar sem comparar alunos.
-
-O **pigeonhole sort** (casas de pombo) serve quando a chave é um inteiro num
-intervalo pequeno `[min, max]`. Ele cria uma **casa** para cada valor, `r =
-max - min + 1` casas, e faz duas passadas:
-
-1. põe cada registro **no fim da fila** da casa da sua chave (`chave - min`);
-2. percorre as casas em ordem e devolve os registros, **na ordem em que
-   entraram**.
-
-O custo é **O(n + r)**, linear se `r` for pequeno perto de `n`. Ele é primo do
-**counting sort** (0120): o counting só **conta** e calcula posições; o
-pigeonhole **guarda os registros**, cada casa uma fila.
-
-Por isso é **estável**: uma ordenação é **estável** quando registros com
-**chaves iguais** saem na ordem relativa em que entraram. Os clássicos:
+- **Pigeonhole sort** (casas de pombo): para chave inteira num intervalo
+  pequeno `[min, max]`. Cria `r = max - min + 1` casas; põe cada registro no
+  fim da fila da sua casa e depois esvazia as casas em ordem. Custa O(n + r).
+- **Primo do counting sort** (0120): o counting só conta e calcula posições;
+  o pigeonhole guarda os registros, cada casa uma fila.
+- **Ordenação estável**: registros com chaves iguais saem na ordem relativa em
+  que entraram. O pigeonhole é estável porque cada casa é uma fila
+  (ZIVIANI, 2010).
+- **Quem é estável**: merge (se no empate pegar da esquerda) e inserção (se só
+  deslocar quem é estritamente maior). Os não estáveis trocam elementos
+  distantes (ZIVIANI, 2010).
+- **Chave composta com comparador**: compara o campo principal e, no empate,
+  o secundário. É o jeito do `qsort`, que o padrão não garante estável
+  (CPPREFERENCE, s.d.).
+- **Chave composta em passadas**: ordene pela chave menos importante e, com
+  método estável, pela mais importante. A última passada manda; as anteriores
+  desempatam, como no radix LSD (CORMEN et al., 2024).
+- **Memória proporcional a `r`**: CPF (11 dígitos) pediria 100 bilhões de
+  casas; para chaves grandes, use o radix (0121).
 
 | Estáveis | Não estáveis |
 | --- | --- |
 | bubble, inserção, merge sort, counting, radix (LSD), bucket (com filas), pigeonhole | seleção, shell sort, quick sort, heapsort |
 
-O merge é estável se, no empate, pegar primeiro da esquerda; a inserção, se só
-deslocar quem é **estritamente** maior. Os não estáveis **trocam elementos
-distantes**.
+> [!WARNING]
+> Nas passadas em sequência, a ordem é **da menos importante para a mais
+> importante**: para "por cidade e, dentro dela, por nota", ordene pela nota e
+> por último pela cidade. E a última passada **tem** que ser estável.
 
-A **chave composta** junta campos em ordem de prioridade: nota e, no empate,
-nome. Há dois jeitos:
+{{exemplo}}
 
-- **um comparador composto**: compara o campo principal e, no empate, o
-  secundário. É o jeito do `qsort`, que **não** é estável pelo padrão C: o
-  desempate tem que estar no comparador;
-- **várias passadas estáveis, da chave menos importante para a mais
-  importante**: ordene pela secundária e, com método estável, pela principal.
-  A última passada manda; as anteriores desempatam. É o raciocínio do radix
-  LSD.
-
-A chamada (Ana 7, Bruno 5, Carla 9, Diego 5, Elisa 7, Fabio 3, Gabi 9, Hugo 5)
-já está em ordem de nome, então uma passada **estável** pela nota entrega a
-chave composta (nota, nome):
+Uma professora ordena a turma pela nota do simulado (0 a 10), e quem empata
+fica na ordem da chamada. A chamada já está em ordem de nome, então uma
+passada estável pela nota entrega a chave composta (nota, nome):
 
 {{ideia}}
 
-No `pombal.h`, a casa é uma fila de **índices**, montada com três vetores
-(`primeiro`, `ultimo` e `prox`), sem `malloc` por aluno. As duas passadas, no
-`pombal.c`:
+No `pombal.c`, a casa é uma fila de índices em três vetores (`primeiro`,
+`ultimo` e `prox`), sem `malloc` por aluno. As duas passadas:
 
 ```c
     for (int i = 0; i < n; i++) { // 1. cada aluno entra no fim da fila da sua casa
@@ -67,7 +59,7 @@ No `pombal.h`, a casa é uma fila de **índices**, montada com três vetores
     }
 ```
 
-A seleção, para comparar:
+O programa compara com a seleção:
 
 ```c
 #include <stdio.h>
@@ -99,28 +91,8 @@ int main(void) {
 // Seleção:    Fabio(3) Bruno(5) Diego(5) Hugo(5) Elisa(7) Ana(7) Gabi(9) Carla(9)
 ```
 
-Na seleção, a Elisa passou na frente da Ana: na primeira volta, o Fabio
-(posição 5) trocou com a Ana (posição 0), que foi parar depois da Elisa.
-
-O fluxograma tem as duas passadas, sem comparação entre alunos: a primeira
-põe cada um na sua casa; a segunda esvazia as 11 casas em ordem:
+Na seleção, a Elisa passou na frente da Ana: na primeira volta, o Fabio trocou
+com a Ana, que foi parar depois da Elisa. O fluxograma tem as duas passadas,
+sem comparação entre alunos:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Nas passadas em sequência, a ordem é **da menos importante para a mais
-> importante**. Para "por cidade e, dentro dela, por nota", ordene primeiro
-> pela nota e **por último** pela cidade. E a última passada **tem** que ser
-> estável: com a seleção, ela embaralha o que a primeira arrumou (o A360
-> mostra).
-
-> [!TIP]
-> A memória é proporcional a `r`: CPF (11 dígitos) pediria 100 bilhões de
-> casas. Para chaves grandes existe o radix (0121).
-
-> [!NOTE]
-> **Pergunta para você:** se a lista de chamada estivesse em ordem
-> **contrária** (de Hugo para Ana), em que ordem sairiam Bruno, Diego e Hugo
-> no pigeonhole? E na seleção, dá para prever sem rodar?
-
-{{pratique}}

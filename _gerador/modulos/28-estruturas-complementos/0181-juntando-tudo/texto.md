@@ -1,28 +1,32 @@
 ## 0181 · Juntando tudo
 
-A recepção do posto de saúde responde a três perguntas o dia inteiro: "Esse
-CPF já tem cadastro?", "Qual a próxima consulta depois das 8h45?" e "A dona
-Ana desmarcou: quem estava esperando?". Cada uma pede uma estrutura do módulo:
+- **Pacientes numa hash com dispersão dupla** (0179), pelo CPF: busca exata
+  em O(1) em média, com `m = 101` primo e carga abaixo de 1/2
+  (CORMEN et al., 2024, cap. 11).
+- **Horários numa rubro-negra** com sentinela (0177), pela hora em HHMM:
+  marcar custa O(log n); "a próxima depois de tal hora" é o teto seguido do
+  **sucessor** (0175) (CORMEN et al., 2024, cap. 13).
+- **Fila de espera numa lista dupla circular com sentinela** (0174): entra no
+  fim e sai do começo ou do meio, sem caso especial (CORMEN et al., 2024, cap. 10).
+- **Ligação por chaves**: o nó da árvore guarda o CPF, o paciente guarda o
+  horário, a fila guarda CPFs. Rotação ou sondagem não invalidam as outras
+  estruturas.
+- **Horário vago**: a rubro-negra do 0177 não tem remoção; a consulta
+  desmarcada deixa `cpf = 0` no nó, como a lápide da hash.
+- **Tipo opaco**: o `.h` só declara `typedef struct Agenda Agenda`; dá para
+  trocar a rubro-negra por uma AVL sem mudar o cliente (CELES; CERQUEIRA;
+  RANGEL, 2016).
 
-- os **pacientes** ficam numa **tabela hash com dispersão dupla** (0179), pelo
-  CPF: busca exata em O(1) em média. O `m` é 101, primo, e a carga fica abaixo
-  de 1/2;
-- os **horários** ficam numa **rubro-negra clássica** com sentinela (0177),
-  pela hora em HHMM: marcar custa O(log n), e "a próxima depois de tal hora" é
-  o **teto** seguido do **sucessor** (0175);
-- a **fila de espera** é uma **lista dupla circular com sentinela** (0174):
-  entra no fim e sai do começo ou do meio, sem caso especial.
+> [!WARNING]
+> Quando duas estruturas guardam a mesma informação, elas mudam **juntas**.
+> Se o cancelamento zerar só a árvore (`x->cpf`) e esquecer a hash
+> (`p->horario`), a paciente nunca mais consegue marcar.
 
-As estruturas conversam por **chaves**, não por ponteiros: o nó da árvore
-guarda o CPF de quem marcou, o paciente na hash guarda o horário, a fila
-guarda CPFs. Rotação ou sondagem não invalidam as outras.
+{{exemplo}}
 
-A rubro-negra do 0177 não tem remoção: a consulta desmarcada deixa o
-**horário vago** na árvore (`cpf = 0`), como a lápide da hash.
-
-Cinco pacientes se cadastram. Carla marca às 8h00, Ana às 9h00, Bruno às
-10h30. Diego quer as 9h00 e vai para a espera; Elisa também. Ana desmarca, e
-Diego assume. No desenho, as estruturas depois disso:
+A recepção de um posto de saúde cadastra cinco pacientes. Carla marca às
+8h00, Ana às 9h00, Bruno às 10h30; Diego e Elisa esperam pelas 9h00. Ana
+desmarca e Diego assume. As estruturas depois disso:
 
 {{ideia}}
 
@@ -106,21 +110,3 @@ O fluxograma segue o cancelamento das 9h00: a Ana fica sem horário e, como a
 fila não está vazia, o Diego assume e sai dela:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Quando duas estruturas guardam a mesma informação, elas mudam **juntas**.
-> O horário do paciente está na hash (`p->horario`) e na árvore (`x->cpf`):
-> se o cancelamento zerar só a árvore, a Ana continua "com consulta" na hash e
-> nunca mais consegue marcar.
-
-> [!TIP]
-> `Agenda` é um **tipo opaco** (o `.h` só declara `typedef struct Agenda
-> Agenda`): o cliente não enxerga as estruturas, e dá para trocar a
-> rubro-negra por uma AVL sem mudar uma linha dele.
-
-> [!NOTE]
-> **Pergunta para você:** depois do exemplo, a Elisa ainda está na espera. Se
-> o Bruno desmarcar as 10h30 e, em seguida, a Carla desmarcar as 8h00, quem
-> fica com cada horário? E o que `ag_proximo(a, 700)` devolve no fim?
-
-{{pratique}}

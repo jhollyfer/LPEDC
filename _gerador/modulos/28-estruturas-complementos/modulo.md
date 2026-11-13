@@ -1,22 +1,9 @@
 # Módulo 28 · Estruturas: o que faltava
 
-Os módulos 11, 14 e 15 construíram listas, árvores e tabelas hash do jeito
-mais direto. Este módulo volta a elas e preenche o que ficou de fora, com o
-olhar do Cormen, o livro da prova do PPGI: as versões dos livros, das
-bibliotecas e dos concursos.
-
-Três ideias atravessam o módulo. A **sentinela** é um nó falso no lugar do
-`NULL` que apaga os casos especiais, na lista (`L.nil`) e na rubro-negra
-(`T.nil`). O **conserto na volta**: AVL e rubro-negra quebram uma regra ao
-inserir ou remover e consertam subindo, com rotações e recolorações. E **a
-escolha do número importa**: o `m` da hash, a constante `A`, o passo da
-dispersão dupla e a ordem das passadas numa chave composta levam o custo de
-O(1) a O(n) sem mudar a lógica.
-
-A pergunta do módulo é "por quê?": por que `m` primo, por que a dupla só
-quando o filho pende para dentro, por que h ≤ 2 log₂(n + 1). Ele termina com
-uma agenda de consultas que junta lista com sentinela, rubro-negra e
-dispersão dupla.
+Completa listas, árvores e hash dos módulos 11, 14 e 15 com as versões do
+Cormen: lista com sentinela, sucessor com ponteiro para o pai, remoção na AVL,
+rubro-negra clássica, hash por multiplicação, sondagem quadrática e dupla e
+ordenação estável por chave composta. Termina com uma agenda que junta tudo.
 
 ## O que você vai aprender
 
@@ -35,32 +22,24 @@ dispersão dupla.
 
 ## Antes de começar
 
-Supõe a **lista dupla** e a **circular** (0079 e 0080), a **BST** (0099 e
-0100), a **AVL** com rotações (0101), a **tabela hash** (0105 a 0107), a
-**estabilidade** das ordenações (0096 e 0120), **ponteiro para struct**
-(0062), `malloc`/`free` e **TAD** (0074).
+Supõe lista dupla e circular (0079, 0080), BST (0099, 0100), AVL (0101),
+hash (0105 a 0107), estabilidade (0096, 0120), ponteiro para struct (0062) e
+TAD (0074).
 
-**Progressão.** Este módulo completa os 11, 14 e 15. Prepara o 29, que
-completa os grafos, e retoma o 27 nos bits e nos inteiros sem sinal.
-
-Cada assunto tem um **TAD** na pasta (`sentinela.h`, `arvpai.h`, `avlrem.h`,
-`vermelhopreto.h`, `espalha.h`, `sondagem.h`, `pombal.h`, `agenda.h`). O texto
-mostra só o pedaço do `.c` que importa. Compile junto os `.c` de apoio da
-pasta, como `vermelhopreto.c`:
+Cada assunto tem um TAD na pasta (`sentinela.h`, `arvpai.h`, `avlrem.h`,
+`vermelhopreto.h`, `espalha.h`, `sondagem.h`, `pombal.h`, `agenda.h`), e o
+texto mostra só o pedaço do `.c` que importa. Compile junto os `.c` de apoio:
 
 ```bash
 gcc ~/LPEDC/material/A353.c ~/LPEDC/material/0177-vermelhopreto.c -o ~/LPEDC/material/A353 -lm && ~/LPEDC/material/A353
 ```
 
-As convenções são as do Cormen: **altura conta arestas** (folha tem altura 0,
-árvore vazia tem -1), a raiz está no **nível 0** e o **fator de
-balanceamento** é `altura(esq) - altura(dir)`. Alguns livros contam o nível a
-partir de 1 ou o fator ao contrário: leia a definição do enunciado.
+Convenções do Cormen: altura conta arestas (folha 0, árvore vazia -1), a raiz
+está no nível 0 e o fator é `altura(esq) - altura(dir)`. Confira a definição
+do enunciado, porque alguns livros mudam isso.
 
-Nos assuntos 0176 e 0177, refaça o **Passo a passo** no papel, desenhando a
-árvore a cada rotação. Nos desenhos, a sentinela das listas e o nó preto da
-rubro-negra são cinza; nas tabelas hash, amarelo marca as posições olhadas e
-verde, onde achou a chave.
+Nos desenhos, a sentinela e o nó preto são cinza; nas tabelas hash, amarelo
+marca as posições olhadas e verde, onde achou a chave.
 
 {{indice}}
 

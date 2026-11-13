@@ -16,23 +16,10 @@
 > - [ ] Enfrentar os desafios do módulo
 > - [ ] Chefão: resolver as questões de prova do módulo sem consultar
 
-Os módulos 11, 14 e 15 construíram listas, árvores e tabelas hash do jeito
-mais direto. Este módulo volta a elas e preenche o que ficou de fora, com o
-olhar do Cormen, o livro da prova do PPGI: as versões dos livros, das
-bibliotecas e dos concursos.
-
-Três ideias atravessam o módulo. A **sentinela** é um nó falso no lugar do
-`NULL` que apaga os casos especiais, na lista (`L.nil`) e na rubro-negra
-(`T.nil`). O **conserto na volta**: AVL e rubro-negra quebram uma regra ao
-inserir ou remover e consertam subindo, com rotações e recolorações. E **a
-escolha do número importa**: o `m` da hash, a constante `A`, o passo da
-dispersão dupla e a ordem das passadas numa chave composta levam o custo de
-O(1) a O(n) sem mudar a lógica.
-
-A pergunta do módulo é "por quê?": por que `m` primo, por que a dupla só
-quando o filho pende para dentro, por que h ≤ 2 log₂(n + 1). Ele termina com
-uma agenda de consultas que junta lista com sentinela, rubro-negra e
-dispersão dupla.
+Completa listas, árvores e hash dos módulos 11, 14 e 15 com as versões do
+Cormen: lista com sentinela, sucessor com ponteiro para o pai, remoção na AVL,
+rubro-negra clássica, hash por multiplicação, sondagem quadrática e dupla e
+ordenação estável por chave composta. Termina com uma agenda que junta tudo.
 
 ## O que você vai aprender
 
@@ -51,32 +38,24 @@ dispersão dupla.
 
 ## Antes de começar
 
-Supõe a **lista dupla** e a **circular** (0079 e 0080), a **BST** (0099 e
-0100), a **AVL** com rotações (0101), a **tabela hash** (0105 a 0107), a
-**estabilidade** das ordenações (0096 e 0120), **ponteiro para struct**
-(0062), `malloc`/`free` e **TAD** (0074).
+Supõe lista dupla e circular (0079, 0080), BST (0099, 0100), AVL (0101),
+hash (0105 a 0107), estabilidade (0096, 0120), ponteiro para struct (0062) e
+TAD (0074).
 
-**Progressão.** Este módulo completa os 11, 14 e 15. Prepara o 29, que
-completa os grafos, e retoma o 27 nos bits e nos inteiros sem sinal.
-
-Cada assunto tem um **TAD** na pasta (`sentinela.h`, `arvpai.h`, `avlrem.h`,
-`vermelhopreto.h`, `espalha.h`, `sondagem.h`, `pombal.h`, `agenda.h`). O texto
-mostra só o pedaço do `.c` que importa. Compile junto os `.c` de apoio da
-pasta, como `vermelhopreto.c`:
+Cada assunto tem um TAD na pasta (`sentinela.h`, `arvpai.h`, `avlrem.h`,
+`vermelhopreto.h`, `espalha.h`, `sondagem.h`, `pombal.h`, `agenda.h`), e o
+texto mostra só o pedaço do `.c` que importa. Compile junto os `.c` de apoio:
 
 ```bash
 gcc ~/LPEDC/material/A353.c ~/LPEDC/material/0177-vermelhopreto.c -o ~/LPEDC/material/A353 -lm && ~/LPEDC/material/A353
 ```
 
-As convenções são as do Cormen: **altura conta arestas** (folha tem altura 0,
-árvore vazia tem -1), a raiz está no **nível 0** e o **fator de
-balanceamento** é `altura(esq) - altura(dir)`. Alguns livros contam o nível a
-partir de 1 ou o fator ao contrário: leia a definição do enunciado.
+Convenções do Cormen: altura conta arestas (folha 0, árvore vazia -1), a raiz
+está no nível 0 e o fator é `altura(esq) - altura(dir)`. Confira a definição
+do enunciado, porque alguns livros mudam isso.
 
-Nos assuntos 0176 e 0177, refaça o **Passo a passo** no papel, desenhando a
-árvore a cada rotação. Nos desenhos, a sentinela das listas e o nó preto da
-rubro-negra são cinza; nas tabelas hash, amarelo marca as posições olhadas e
-verde, onde achou a chave.
+Nos desenhos, a sentinela e o nó preto são cinza; nas tabelas hash, amarelo
+marca as posições olhadas e verde, onde achou a chave.
 
 | # | Assunto |
 | --- | --- |
@@ -89,45 +68,235 @@ verde, onde achou a chave.
 | [0180](#0180--pigeonhole-e-chave-composta) | Pigeonhole e chave composta |
 | [0181](#0181--juntando-tudo) | Juntando tudo |
 
+---
+
+## 1. Conceitos gerais
+
+### 0174 · Lista com sentinela
+
+- **Nó sentinela** (`L.nil`): um nó falso, sem dado, entre o último e o
+  primeiro. A lista vira **dupla e circular**, e nenhum `NULL` sobra dentro
+  dela (CORMEN et al., 2024, cap. 10).
+- **Por que existe**: na lista dupla comum, o primeiro e o último têm `NULL` de
+  um lado, e cada `NULL` é um caso especial na remoção (TENENBAUM; LANGSAM;
+  AUGENSTEIN, 1995).
+- **Lista vazia**: a sentinela aponta para si (`nil.prox == &nil`);
+  `nil.prox` é o primeiro e `nil.ant` é o último (CORMEN et al., 2024, cap. 10).
+- **Inserir depois de `y`**: quatro ponteiros, sempre os mesmos, com `y`
+  podendo ser a sentinela (começo) ou o último (fim).
+- **Remover `x`**: `x->ant->prox = x->prox` e `x->prox->ant = x->ant`. Duas
+  linhas, sem `if` (CELES; CERQUEIRA; RANGEL, 2016).
+- **Buscar com a chave na sentinela**: guarde a chave procurada em `nil`
+  antes do laço; ele sempre para e faz um teste por volta em vez de dois. Se
+  parar na sentinela, não achou (CORMEN et al., 2024, cap. 10).
+- **Custo**: um nó a mais por lista. Como a sentinela fica dentro da `ListaS`,
+  `&L->nil` é fixo e os laços sabem onde parar.
+
+> [!WARNING]
+> A sentinela **não é um dado**: o laço para quando volta a ela e começa em
+> `L->nil.prox`. Nunca passe `&L->nil` para `sent_remove`: ela não veio do
+> `malloc`, e o `free` derruba o programa.
+
+### 0175 · Conceitos e sucessor
+
+- **Grau**: quantos filhos o nó tem; grau 0 é **folha**. O grau da árvore é o
+  maior grau entre os nós (SZWARCFITER; MARKENZON, 2010).
+- **Profundidade** e **nível**: arestas do nó até a raiz, que tem
+  profundidade 0. Alguns livros contam o nível a partir de 1: confira o
+  enunciado (CORMEN et al., 2024, cap. 12).
+- **Altura**: o maior número de arestas do nó até uma folha abaixo. Folha tem
+  altura 0 e árvore vazia, -1 (CORMEN et al., 2024, cap. 12).
+- **Fator de balanceamento**: `altura(esq) - altura(dir)`, que a AVL mantém
+  em -1, 0 ou 1 (ADELSON-VELSKY; LANDIS, 1962).
+- **Sucessor** de `x`: a menor chave maior que `x`. Com subárvore direita, é o
+  **mínimo** dela; sem ela, sobe enquanto vier de um filho direito, e o
+  primeiro ancestral alcançado por um filho esquerdo é a resposta
+  (CORMEN et al., 2024, cap. 12).
+- **Ponteiro `pai`** (`x.p` no Cormen): permite a subida, sem pilha nem
+  recursão; custa 8 bytes por nó. O **antecessor** é o espelho, e os dois
+  custam O(h) (CORMEN et al., 2024, cap. 12).
+
+> [!WARNING]
+> Trocar o lado na subida (`x == y->esq` no lugar de `x == y->dir`) dá um
+> "sucessor" **menor** que `x`. Toda inserção, remoção ou rotação também tem
+> que acertar o `pai` (o da raiz fica `NULL`).
+
+### 0176 · AVL: remoção
+
+- **Remoção na AVL**: começa como a da BST (0100). Folha some; com um filho,
+  o filho ocupa o lugar; com dois, a chave do **sucessor** é copiada e o
+  sucessor é removido lá embaixo (SZWARCFITER; MARKENZON, 2010).
+- **Conserto na volta**: tirar um nó encurta um caminho. Na volta da
+  recursão, cada ancestral recalcula a altura, confere o fator e, se passar
+  de 1 ou -1, faz a rotação do 0101 (ADELSON-VELSKY; LANDIS, 1962).
+- **Filho com fator 0**: na remoção, o filho do lado pesado pode ter fator 0,
+  o que nunca ocorre na inserção. Fator 0 ou de mesmo sinal: **rotação
+  simples**; sinal contrário: **dupla** (SZWARCFITER; MARKENZON, 2010).
+- **Várias rotações**: a rotação pode deixar a subárvore um nível mais baixa,
+  e o desequilíbrio sobe para o avô. Uma remoção pode rodar até a raiz:
+  O(log n) rotações no pior caso (ZIVIANI, 2010).
+- **Cópia da chave**: com dois filhos, o código copia a chave do sucessor e
+  libera o nó dele; um ponteiro guardado para esse nó fica pendurado.
+
+> [!WARNING]
+> Copiar da inserção o teste `avr_fator(r->esq) <= 0` faz a dupla com fator 0
+> e deixa a árvore torta. Só o sinal **contrário** pede a dupla. E não existe
+> "fiz uma rotação, acabou": todo ancestral passa pelo `rebalanceia`.
+
+### 0177 · Rubro-negra clássica
+
+- **Árvore rubro-negra**: BST em que cada nó tem cor e valem cinco
+  propriedades: (1) todo nó é vermelho ou preto; (2) a raiz é preta; (3) toda
+  folha (`T.nil`) é preta; (4) nó vermelho tem os dois filhos pretos; (5) todo
+  caminho de um nó até as folhas abaixo tem o mesmo número de pretos
+  (CORMEN et al., 2024, cap. 13).
+- **Origem**: o esquema de duas cores para árvores balanceadas é de Guibas e
+  Sedgewick; a LLRB do 0145 é uma variante (GUIBAS; SEDGEWICK, 1978).
+- **Sentinela `T.nil`**: as folhas não guardam chave; todas são um nó só,
+  preto, como na lista do 0174. O pai da raiz também é `T.nil`
+  (CORMEN et al., 2024, cap. 13).
+- **Altura negra** `bh(x)`: pretos de `x` até uma folha, sem contar `x`. Como
+  `bh(raiz) >= h/2`, sai **h ≤ 2 log₂(n + 1)** e busca custa O(log n)
+  (CORMEN et al., 2024, cap. 13).
+- **Inserção**: pendura `z` como na BST e o pinta de **vermelho**. Só a
+  propriedade 4 pode quebrar, e o conserto olha o **tio** de `z`
+  (CORMEN et al., 2024, cap. 13).
+- **Remoção**: quatro casos, olhando o **irmão**; custa O(log n) e faz no
+  máximo **três rotações** (SZWARCFITER; MARKENZON, 2010).
+
+| Caso | Situação | O que fazer |
+| --- | --- | --- |
+| 1 | tio **vermelho** | pinta pai e tio de preto, o avô de vermelho, e **sobe**: `z` vira o avô |
+| 2 | tio **preto**, `z` em **triângulo** (filho direito de um filho esquerdo, ou o espelho) | gira no pai e cai no caso 3 |
+| 3 | tio **preto**, `z` em **linha** (filho esquerdo de um filho esquerdo, ou o espelho) | pinta o pai de preto e o avô de vermelho, gira no avô. Acabou |
+
+O caso 1 só troca cores e pode subir até a raiz; os casos 2 e 3 fazem no
+máximo duas rotações e encerram. No fim, a raiz vira preta.
+
+> [!WARNING]
+> Erros comuns: esquecer de **subir** no caso 1 (`z = avo`) e trocar a ordem
+> de cores e rotação no caso 3. Na prova, `bh(x)` **não conta o próprio x** e
+> **conta a folha `T.nil`**.
+
+### 0178 · Hash: divisão e multiplicação
+
+- **Método da divisão**: **h(k) = k mod m**. É rápido, mas o `m` decide tudo
+  (CORMEN et al., 2024, cap. 11).
+- **m ruins**: `m = 2^p` usa só os p bits de baixo de `k` (`k & (m - 1)`);
+  `m = 10^d`, só os d últimos dígitos; `m = 2^p - 1` não distingue duas letras
+  trocadas de lugar num texto (CORMEN et al., 2024, cap. 11).
+- **m bom**: um **primo longe de uma potência de 2**. Para 2000 chaves com uns
+  3 por balde, 673 serve (longe de 512 e de 1024) (CORMEN et al., 2024, cap. 11).
+- **Método da multiplicação**: **h(k) = ⌊m · (k·A mod 1)⌋**, com `0 < A < 1`.
+  A parte fracionária mistura todos os dígitos de `k`, e o `m` pode ser até
+  potência de 2 (CORMEN et al., 2024, cap. 11).
+- **Constante de Knuth**: **A ≈ (√5 − 1) / 2 = 0,6180339887...**; chaves
+  seguidas pulam pela tabela inteira (KNUTH, 1998).
+- **Versão em inteiros**: com 32 bits e `m = 2^p`, troque `A` por
+  **s = ⌊A · 2^32⌋ = 2654435769**. O balde são os p bits de cima dos 32 de
+  baixo de `k · s`: `(k * s) >> (32 - p)` com `uint32_t` (KNUTH, 1998).
+
+> [!WARNING]
+> O produto **tem que ser `unsigned`**: com `int`, `k * 2654435769` estoura
+> (comportamento indefinido). E pegue os bits **de cima** (`>> (32 - p)`), não
+> os de baixo (`& (m - 1)`), que repetem o problema da divisão por 2^p.
+
+### 0179 · Sondagem quadrática e dupla
+
+- **Sequência de sondagem**: no endereçamento aberto, cada chave tem uma lista
+  de posições `h(k, 0), h(k, 1), ...`. A inserção para na primeira livre; a
+  busca refaz o caminho até achar a chave ou uma livre (CORMEN et al., 2024, cap. 11).
+- **Linear**: `h(k, i) = (h'(k) + i) mod m`. Sofre **agrupamento primário**:
+  toda chave que cai em qualquer ponto de um bloco ocupado vai para o fim dele
+  e o aumenta (CORMEN et al., 2024, cap. 11).
+- **Quadrática**: `h(k, i) = (h'(k) + c₁·i + c₂·i²) mod m`. Os saltos crescem
+  (1, 4, 9...) e os blocos se desfazem, mas sobra o **agrupamento
+  secundário**: chaves com o mesmo `h'(k)` seguem a mesma trilha
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995).
+- **Dispersão dupla**: `h(k, i) = (h₁(k) + i·h₂(k)) mod m`. O passo depende
+  da chave, nunca é 0 e é primo com `m`; com `m` primo, `h₂(k) = 1 + (k mod
+  (m - 1))` (CORMEN et al., 2024, cap. 11).
+- **Fator de carga** `α = n / m`: com hash uniforme, a busca sem sucesso faz
+  no máximo `1 / (1 - α)` sondagens em média, e a com sucesso,
+  `(1/α) · ln(1 / (1 - α))`. Com α = 0,9: 10 e 2,6 (CORMEN et al., 2024, cap. 11).
+- **Lápide** (*tombstone*): a remoção marca a posição como removida, nunca
+  como livre, senão corta o caminho de quem pulou por ela. A busca passa reto;
+  a inserção pode reaproveitar (TENENBAUM; LANGSAM; AUGENSTEIN, 1995).
+
+> [!WARNING]
+> O passo `h₂(k)` **não pode ser 0** nem ter fator comum com `m`: com `m = 12`
+> e passo 4, a chave visita só 3 posições. Na quadrática com carga acima de
+> 1/2, a inserção pode falhar **com posições livres**.
+
+### 0180 · Pigeonhole e chave composta
+
+- **Pigeonhole sort** (casas de pombo): para chave inteira num intervalo
+  pequeno `[min, max]`. Cria `r = max - min + 1` casas; põe cada registro no
+  fim da fila da sua casa e depois esvazia as casas em ordem. Custa O(n + r).
+- **Primo do counting sort** (0120): o counting só conta e calcula posições;
+  o pigeonhole guarda os registros, cada casa uma fila.
+- **Ordenação estável**: registros com chaves iguais saem na ordem relativa em
+  que entraram. O pigeonhole é estável porque cada casa é uma fila
+  (ZIVIANI, 2010).
+- **Quem é estável**: merge (se no empate pegar da esquerda) e inserção (se só
+  deslocar quem é estritamente maior). Os não estáveis trocam elementos
+  distantes (ZIVIANI, 2010).
+- **Chave composta com comparador**: compara o campo principal e, no empate,
+  o secundário. É o jeito do `qsort`, que o padrão não garante estável
+  (CPPREFERENCE, s.d.).
+- **Chave composta em passadas**: ordene pela chave menos importante e, com
+  método estável, pela mais importante. A última passada manda; as anteriores
+  desempatam, como no radix LSD (CORMEN et al., 2024).
+- **Memória proporcional a `r`**: CPF (11 dígitos) pediria 100 bilhões de
+  casas; para chaves grandes, use o radix (0121).
+
+| Estáveis | Não estáveis |
+| --- | --- |
+| bubble, inserção, merge sort, counting, radix (LSD), bucket (com filas), pigeonhole | seleção, shell sort, quick sort, heapsort |
+
+> [!WARNING]
+> Nas passadas em sequência, a ordem é **da menos importante para a mais
+> importante**: para "por cidade e, dentro dela, por nota", ordene pela nota e
+> por último pela cidade. E a última passada **tem** que ser estável.
+
+### 0181 · Juntando tudo
+
+- **Pacientes numa hash com dispersão dupla** (0179), pelo CPF: busca exata
+  em O(1) em média, com `m = 101` primo e carga abaixo de 1/2
+  (CORMEN et al., 2024, cap. 11).
+- **Horários numa rubro-negra** com sentinela (0177), pela hora em HHMM:
+  marcar custa O(log n); "a próxima depois de tal hora" é o teto seguido do
+  **sucessor** (0175) (CORMEN et al., 2024, cap. 13).
+- **Fila de espera numa lista dupla circular com sentinela** (0174): entra no
+  fim e sai do começo ou do meio, sem caso especial (CORMEN et al., 2024, cap. 10).
+- **Ligação por chaves**: o nó da árvore guarda o CPF, o paciente guarda o
+  horário, a fila guarda CPFs. Rotação ou sondagem não invalidam as outras
+  estruturas.
+- **Horário vago**: a rubro-negra do 0177 não tem remoção; a consulta
+  desmarcada deixa `cpf = 0` no nó, como a lápide da hash.
+- **Tipo opaco**: o `.h` só declara `typedef struct Agenda Agenda`; dá para
+  trocar a rubro-negra por uma AVL sem mudar o cliente (CELES; CERQUEIRA;
+  RANGEL, 2016).
+
+> [!WARNING]
+> Quando duas estruturas guardam a mesma informação, elas mudam **juntas**.
+> Se o cancelamento zerar só a árvore (`x->cpf`) e esquecer a hash
+> (`p->horario`), a paciente nunca mais consegue marcar.
 
 ---
 
-## 0174 · Lista com sentinela
+## 2. Exemplos de uso
 
-Na barbearia do bairro, quem chega pega uma ficha e espera, e às vezes
-desiste no meio da fila. O barbeiro usa uma lista dupla (a do 0079), mas a
-remoção tem `if` para todo lado: e se for o primeiro? O último? O único?
+Cada exemplo compila sozinho. Rode com o comando abaixo dele e compare com a saída no fim do código.
 
-Os `if` existem porque o primeiro nó tem `NULL` à esquerda e o último, à
-direita: cada `NULL` é um caso especial, e é neles que o bug mora.
+### 0174 · Lista com sentinela
 
-A saída clássica é um **nó sentinela** (o Cormen chama de `L.nil`): um nó
-falso, sem dado, **entre o último e o primeiro**. A lista vira **dupla e
-circular**: `nil.prox` é o primeiro, `nil.ant` é o último. Não sobra `NULL`
-dentro da lista.
-
-A lista vazia é a sentinela apontando para si (`nil.prox == &nil`). **Todo nó
-real tem vizinho dos dois lados**, nem que seja a sentinela, e os casos
-especiais somem:
-
-- **inserir depois de `y`**: quatro ponteiros, sempre os mesmos, com `y`
-  podendo ser a sentinela (começo) ou o último (fim);
-- **remover `x`**: `x->ant->prox = x->prox` e `x->prox->ant = x->ant`. Duas
-  linhas, sem `if`;
-- **buscar**: anda de `nil.prox` até achar a chave. Se voltar à sentinela,
-  não achou.
-
-Na busca, o Cormen **guarda a chave procurada dentro da sentinela** antes do
-laço. Assim o laço sempre para (no pior caso, na sentinela) e faz um teste por
-volta, `x->chave != chave`, em vez de dois.
-
-Chegam as fichas 12, 25 e 7. A 25 desiste e sai. A busca pela 40, que não
-existe, para na sentinela (o nó cinza do desenho, sem valor):
+Uma barbearia guarda as fichas de espera. Chegam 12, 25 e 7; a 25 desiste e
+sai. A busca pela 40, que não existe, para na sentinela (o nó cinza):
 
 <p align="center"><img src="material/0174-ideia.svg" alt="Diagrama da ideia: Lista com sentinela" width="858"></p>
 
-No `sentinela.h`, a sentinela fica **dentro** da struct da lista, e o `n`
-conta só os nós reais. As três funções centrais do `sentinela.c`:
+As três funções centrais do `sentinela.c`; o `n` conta só os nós reais:
 
 ```c
 NoS *sent_insere_apos(ListaS *L, NoS *y, int chave) {
@@ -202,27 +371,10 @@ int main(void) {
 // Na fila: 2
 ```
 
-No fluxograma, a busca da ficha 40 passa pelo 12 e pelo 7 e para na
-sentinela, que guarda 40. "Parou na sentinela?" separa "achou" de "não está":
+A busca da ficha 40 passa pelo 12 e pelo 7 e para na sentinela, que guarda
+40. "Parou na sentinela?" separa "achou" de "não está":
 
 <p align="center"><img src="material/0174-fluxograma.svg" alt="Fluxograma: Lista com sentinela" width="543"></p>
-
-> [!WARNING]
-> A sentinela **não é um dado**. Todo laço para quando volta a ela (`x !=
-> &L->nil`) e nunca começa por ela: o primeiro nó real é `L->nil.prox`.
-> Nunca passe `&L->nil` para `sent_remove`: ela não veio do `malloc`, e o
-> `free` derruba o programa.
-
-> [!TIP]
-> A sentinela custa um nó a mais por lista (24 bytes em 64 bits). Como ela
-> está **dentro** da `ListaS`, `&L->nil` é fixo e os laços sabem onde parar.
-
-> [!NOTE]
-> **Pergunta para você:** depois de `sent_busca(fila, 40)`, qual valor fica
-> guardado em `fila->nil.chave`? E se a sua lista tivesse a chave 40 de
-> verdade, a busca acharia o nó certo ou pararia na sentinela?
-
-### Hora de praticar
 
 **Exemplo A347 · Vazia, um nó, vários: o mesmo código**
 
@@ -356,133 +508,16 @@ int main(void) {
 gcc ~/LPEDC/material/A348.c ~/LPEDC/material/0174-sentinela.c -o ~/LPEDC/material/A348 && ~/LPEDC/material/A348
 ```
 
-#### Exercícios
+### 0175 · Conceitos e sucessor
 
-**Exercício E1039** · ★☆☆
-
-O carrinho do mercado virou uma lista com sentinela (sentinela.h). Os
-preços, em centavos, entram no fim: 1250, 899, 2340 e 475. Escreva
-soma(L), que percorre do L->nil.prox até voltar à sentinela e devolve o
-total. Mostre a lista e o total em reais.
-
-
-```text
-Saída esperada:
-Carrinho: [ 1250 899 2340 475 ]
-Total: R$ 49.64
-```
-
-```bash
-gcc ~/LPEDC/material/E1039.c ~/LPEDC/material/0174-sentinela.c -o ~/LPEDC/material/E1039 && ~/LPEDC/material/E1039
-```
-
-**Exercício E1041** · ★★☆
-
-A agenda do dentista guarda os horários do dia (em HHMM) em ordem. Escreva
-insere_ordenado(L, h), que anda a partir de L->nil.prox enquanto não voltou
-à sentinela e a chave é menor que h, e então insere antes do nó onde
-parou, com sent_insere_apos(L, p->ant, h). Isso vale para a lista
-vazia, para o começo e para o fim, sem nenhum caso especial. Insira 1400,
-900, 1630, 800 e 1100 e mostre a lista depois de cada um.
-
-
-```text
-Saída esperada:
-[ 1400 ]
-[ 900 1400 ]
-[ 900 1400 1630 ]
-[ 800 900 1400 1630 ]
-[ 800 900 1100 1400 1630 ]
-```
-
-```bash
-gcc ~/LPEDC/material/E1041.c ~/LPEDC/material/0174-sentinela.c -o ~/LPEDC/material/E1041 && ~/LPEDC/material/E1041
-```
-
-**Exercício E1042** · ★★☆
-
-O leitor de código de barras do caixa travou e registrou o mesmo produto
-várias vezes. Escreva remove_todas(L, codigo), que tira da lista com
-sentinela (sentinela.h) todos os nós com aquele código e devolve quantos
-saíram. A lista tem 7, 3, 3, 9, 3, 5, 3. Remova os 3 e depois os 8.
-
-
-```text
-Saída esperada:
-Antes: [ 7 3 3 9 3 5 3 ]
-Removidos 4 do código 3: [ 7 9 5 ]
-Removidos 0 do código 8: [ 7 9 5 ]
-```
-
-```bash
-gcc ~/LPEDC/material/E1042.c ~/LPEDC/material/0174-sentinela.c -o ~/LPEDC/material/E1042 && ~/LPEDC/material/E1042
-```
-
-**Exercício E1044** · ★★★
-
-O ônibus chegou ao ponto final e volta pelo mesmo caminho: a lista de
-paradas tem que ser invertida. Escreva inverte(L), que inverte a lista com
-sentinela (sentinela.h) sem criar nem liberar nó nenhum: em cada nó,
-INCLUINDO a sentinela, troque ant com prox. Teste com as paradas 10, 20,
-30, 40 e com uma lista vazia (que deve continuar funcionando sem if).
-
-
-```text
-Saída esperada:
-ida:   [ 10 20 30 40 ]
-volta: [ 40 30 20 10 ]
-volta ao contrário: [ 10 20 30 40 ]
-vazia invertida: [ ]
-```
-
-```bash
-gcc ~/LPEDC/material/E1044.c ~/LPEDC/material/0174-sentinela.c -o ~/LPEDC/material/E1044 && ~/LPEDC/material/E1044
-```
-
----
-
-## 0175 · Conceitos e sucessor
-
-No painel da rodoviária, qual ônibus sai logo depois do seu? E qual saiu
-logo antes? Os horários (6h15, 6h50, 7h00, 7h30, 8h00, 9h20, 10h30, 12h00)
-estão numa BST, e a resposta é o **sucessor** e o **antecessor** da chave.
-
-Primeiro o vocabulário, na convenção do Cormen e do módulo 14 (altura conta
-**arestas**):
-
-- **grau de um nó**: quantos filhos ele tem. Grau 0 é **folha**. O **grau da
-  árvore** é o maior grau entre os nós;
-- **profundidade** de um nó: arestas até a raiz, que tem profundidade 0;
-- **nível**: os nós de mesma profundidade. A raiz está no nível 0, mas alguns
-  livros contam **a partir de 1**: confira o enunciado;
-- **altura** de um nó: o maior número de arestas até uma folha abaixo. Folha
-  tem altura 0, árvore vazia tem -1. A altura da árvore é a da raiz;
-- **fator de balanceamento**: `altura(esq) - altura(dir)`, mantido em -1, 0
-  ou 1 pela AVL do 0101.
-
-O sucessor de `x` em ordem é a menor chave maior que `x`. Há dois casos:
-
-1. `x` tem **subárvore direita**: o sucessor é o **mínimo** dela (desce uma
-   vez à direita e depois tudo à esquerda);
-2. `x` **não tem** subárvore direita: o sucessor é um **ancestral**. Sobe
-   enquanto vier de um filho direito (esses ancestrais são menores). O
-   primeiro ancestral alcançado **por um filho esquerdo** é a resposta. Se a
-   subida passar da raiz, `x` é o maior e não tem sucessor.
-
-O caso 2 precisa subir, por isso o nó ganha o ponteiro **`pai`** (`x.p` no
-Cormen). O antecessor é o espelho (esquerda por direita, mínimo por máximo).
-Os dois custam O(h).
-
-Os horários entram na ordem 8h00, 6h15, 10h30, 7h00, 6h50, 9h20, 12h00, 7h30
-(chaves `800`, `615`...). O sucessor das 8h00 é caso 1: 10h30 e depois à
-esquerda, 9h20. O das 7h30 é caso 2: ela é filha direita do 7h00, que é filho
-direito do 6h15, que é filho **esquerdo** do 8h00, a resposta. No desenho, os
-números ao lado de cada nó são a profundidade e a altura:
+Os horários de ônibus de uma rodoviária entram numa BST na ordem 8h00, 6h15,
+10h30, 7h00, 6h50, 9h20, 12h00, 7h30. O sucessor das 8h00 é caso 1 (10h30 e
+depois à esquerda, 9h20); o das 7h30 é caso 2 e sobe até o 8h00. Ao lado de
+cada nó, a profundidade e a altura:
 
 <p align="center"><img src="material/0175-ideia.svg" alt="Diagrama da ideia: Conceitos e sucessor" width="858"></p>
 
-No `arvpai.c`, a inserção é a iterativa do Cormen (desce lembrando o pai).
-O sucessor:
+O sucessor no `arvpai.c`:
 
 ```c
 NoP *ap_sucessor(NoP *x) {
@@ -498,7 +533,7 @@ NoP *ap_sucessor(NoP *x) {
 }
 ```
 
-O painel mostra também os conceitos de três nós:
+O painel mostra os conceitos de três nós e as perguntas de horário:
 
 ```c
 #include <stdio.h>
@@ -549,27 +584,10 @@ int main(void) {
 // Depois das 8h00 sai o das 9h20; antes, o das 7h30
 ```
 
-O fluxograma segue o sucessor das 7h30: sem filho direito, vai ao caso 2 e
-sobe duas vezes, sempre vindo da direita. Na terceira, o 6h15 é filho esquerdo
-do 8h00: o laço para:
+O fluxograma segue o sucessor das 7h30: sobe duas vezes vindo da direita; na
+terceira, o 6h15 é filho esquerdo do 8h00 e o laço para:
 
 <p align="center"><img src="material/0175-fluxograma.svg" alt="Fluxograma: Conceitos e sucessor" width="746"></p>
-
-> [!WARNING]
-> Trocar o lado na subida (`x == y->esq` no lugar de `x == y->dir`) faz o
-> sucessor das 7h30 virar 7h00, que é **menor**. Toda inserção, remoção ou
-> rotação também tem que acertar o `pai` (o da raiz fica `NULL`).
-
-> [!TIP]
-> O `pai` custa 8 bytes por nó (32 no `NoP`, contra 24 da BST do 0099), mas o
-> sucessor dispensa pilha e recursão.
-
-> [!NOTE]
-> **Pergunta para você:** qual é o antecessor das 6h50? E o sucessor das
-> 12h00? Depois insira 7h45 e
-> diga, sem rodar, qual será o grau do 7h30 e a nova altura da árvore.
-
-### Hora de praticar
 
 **Exemplo A349 · Em ordem sem recursão e sem pilha**
 
@@ -710,132 +728,12 @@ int main(void) {
 gcc ~/LPEDC/material/A350.c ~/LPEDC/material/0175-arvpai.c -o ~/LPEDC/material/A350 && ~/LPEDC/material/A350
 ```
 
-#### Exercícios
+### 0176 · AVL: remoção
 
-**Exercício E1045** · ★☆☆
-
-O estoque guarda os códigos 50, 30, 70, 20, 40, 60, 80, 35, 45 e 65,
-inseridos nessa ordem numa BST (arvpai.h). Escreva conta_graus(r, conta),
-que percorre a árvore e soma em conta[g] quantos nós têm grau g (0, 1 ou
-2 filhos). Mostre as três contagens, o grau da árvore (o maior grau que
-aparece) e quantas folhas ela tem.
-
-
-```text
-Saída esperada:
-grau 0: 5 nós
-grau 1: 1 nós
-grau 2: 4 nós
-grau da árvore: 2 | folhas: 5
-```
-
-```bash
-gcc ~/LPEDC/material/E1045.c ~/LPEDC/material/0175-arvpai.c -o ~/LPEDC/material/E1045 && ~/LPEDC/material/E1045
-```
-
-**Exercício E1047** · ★★☆
-
-A loja de calçados guarda os preços (em centavos) numa BST com pai
-(arvpai.h): 1890, 990, 2450, 1290, 3100, 750 e 2100, nessa ordem. Mostre os
-preços do mais caro ao mais barato SEM recursão: comece no ap_maximo e
-ande com ap_antecessor até chegar em NULL. Depois mostre os vizinhos do
-preço 12.90 (o antecessor e o sucessor dele).
-
-
-```text
-Saída esperada:
-Do mais caro ao mais barato: 31.00 24.50 21.00 18.90 12.90 9.90 7.50
-Vizinhos de 12.90: 9.90 e 18.90
-```
-
-```bash
-gcc ~/LPEDC/material/E1047.c ~/LPEDC/material/0175-arvpai.c -o ~/LPEDC/material/E1047 && ~/LPEDC/material/E1047
-```
-
-**Exercício E1048** · ★★☆
-
-Nem toda BST tem ponteiro para o pai. Escreva
-sucessor_sem_pai(raiz, chave), que acha o sucessor descendo da raiz: se o
-nó da chave tem subárvore direita, é o mínimo dela; senão, é o ÚLTIMO nó
-em que a descida virou à esquerda. Com os códigos 50, 30, 70, 20, 40, 60,
-80, 35, 45, 65 (arvpai.h), mostre o sucessor de cada chave (-1 para o
-maior) e confira com ap_sucessor, contando quantas respostas batem.
-
-
-```text
-Saída esperada:
-20 -> 30
-30 -> 35
-35 -> 40
-40 -> 45
-45 -> 50
-50 -> 60
-60 -> 65
-65 -> 70
-70 -> 80
-80 -> -1
-iguais ao ap_sucessor: 10 de 10
-```
-
-```bash
-gcc ~/LPEDC/material/E1048.c ~/LPEDC/material/0175-arvpai.c -o ~/LPEDC/material/E1048 && ~/LPEDC/material/E1048
-```
-
-**Exercício E1050** · ★★★
-
-Escreva altura_se_avl(r), que devolve a altura da árvore se TODO nó tiver
-fator de balanceamento -1, 0 ou 1, e -2 se algum nó estiver fora disso.
-Ela tem que fazer uma passada só (O(n)): cada nó usa as alturas que os
-filhos devolveram, sem chamar ap_altura. Escreva também
-mostra_desequilibrados(r), que lista (em ordem) os nós com fator fora de
--1..1, com o fator. Teste três BSTs (arvpai.h): os horários 800, 615,
-1030, 700, 650, 920, 1200, 730; os códigos 50, 30, 70, 20, 40, 60, 80, 35,
-45, 65; e as chaves 1 a 5 em ordem.
-
-
-```text
-Saída esperada:
-horários: não é AVL. Desequilibrados: 615 (fator -2)
-códigos: é AVL, altura 3
-crescente: não é AVL. Desequilibrados: 1 (fator -4) 2 (fator -3) 3 (fator -2)
-```
-
-```bash
-gcc ~/LPEDC/material/E1050.c ~/LPEDC/material/0175-arvpai.c -o ~/LPEDC/material/E1050 && ~/LPEDC/material/E1050
-```
-
----
-
-## 0176 · AVL: remoção
-
-A lanchonete guarda os pedidos em preparo numa AVL, pelo número. Mas pedido
-também **sai**: o motoboy levou o 30, e o nó precisa sumir sem a árvore perder
-o equilíbrio.
-
-A remoção começa como a da BST (0100), em três casos:
-
-- **folha**: some;
-- **um filho**: o filho ocupa o lugar;
-- **dois filhos**: a chave do **sucessor** (0175) é copiada para o nó, e o
-  sucessor é removido lá embaixo, onde tem no máximo um filho.
-
-Tirar um nó **encurta** um caminho, e um ancestral pode ficar com fator 2 ou
--2. Como na inserção, na **volta da recursão** cada ancestral recalcula a
-altura, confere o fator e, se preciso, faz a rotação do 0101. Duas coisas
-mudam, e a prova cobra as duas:
-
-1. O filho do lado pesado pode ter **fator 0**, o que na inserção nunca
-   ocorre. Fator 0 ou do mesmo sinal: **rotação simples**; sinal contrário:
-   **dupla**. Com fator 0, a subárvore mantém a altura e o conserto para.
-2. A rotação pode **não devolver a altura antiga**: a subárvore fica um nível
-   mais baixa, e o desequilíbrio **sobe** para o avô. Por isso uma remoção
-   pode fazer **várias rotações**, até a raiz: O(log n) no pior caso.
-
-A cozinha tem 16 pedidos (altura 4), e o 30 sai. O 28 fica pesado à esquerda,
-com o filho 25 pendendo para a direita: rotação dupla, e o 26 sobe. A
-subárvore do 28 cai de altura 2 para 1, e a raiz 20 desequilibra: rotação
-simples, e o 12 vira a raiz. No desenho, a árvore antes, o conserto no 28 e o
-fim:
+Uma lanchonete guarda 16 pedidos numa AVL de altura 4, e o 30 sai. O 28 fica
+pesado à esquerda com o filho 25 pendendo para a direita: rotação dupla. A
+subárvore cai de altura e a raiz 20 desequilibra: rotação simples, e o 12 vira
+a raiz:
 
 <p align="center"><img src="material/0176-ideia.svg" alt="Diagrama da ideia: AVL: remoção" width="887"></p>
 
@@ -917,15 +815,13 @@ int main(void) {
 // Rotações nesta remoção: 3 | fator da raiz: 0
 ```
 
-São 3 rotações simples: a dupla no 28 conta 2, a simples no 20 conta 1.
-
-O fluxograma mostra o `rebalanceia` no 28 (fator 2, filho 25 com fator -1:
-duas rotações). No 20, pega o outro ramo: filho 12 com fator 1, só a rotação
-à direita:
+São 3 rotações simples: a dupla no 28 conta 2, a simples no 20 conta 1. O
+fluxograma mostra o `rebalanceia` no 28 (fator 2, filho com fator -1) e, no 20,
+o outro ramo (filho com fator 1, só a rotação à direita):
 
 <p align="center"><img src="material/0176-fluxograma.svg" alt="Fluxograma: AVL: remoção" width="659"></p>
 
-### Passo a passo
+#### Passo a passo
 
 O 30 é folha e devolve `NULL` ao 28. Daí para cima, cada nó confere a si
 mesmo:
@@ -937,22 +833,6 @@ mesmo:
 
 O conserto no 28 **encurtou** a subárvore e levou o desequilíbrio ao 20. Se o
 28 tivesse voltado à altura 2, a remoção pararia ali.
-
-> [!WARNING]
-> Copiar da inserção o teste `if (avr_fator(r->esq) <= 0)` (menor **ou
-> igual**) faz a dupla com fator 0, e a árvore sai desequilibrada. Só o fator
-> **de sinal contrário** pede a dupla. Na remoção também não existe "fiz uma
-> rotação, acabou": todo ancestral passa pelo `rebalanceia`.
-
-> [!TIP]
-> Com dois filhos, o código **copia a chave** do sucessor e libera o nó dele:
-> um `NoA *` guardado fora da árvore para o sucessor fica pendurado.
-
-> [!NOTE]
-> **Pergunta para você:** na árvore do fim (raiz 12), o pedido 1 sai. Quantas
-> rotações acontecem e qual é a nova raiz? E se, em seguida, sair o 3?
-
-### Hora de praticar
 
 **Exemplo A351 · Esvaziando pela esquerda**
 
@@ -1044,151 +924,16 @@ int main(void) {
 gcc ~/LPEDC/material/A352.c ~/LPEDC/material/0176-avlrem.c -o ~/LPEDC/material/A352 && ~/LPEDC/material/A352
 ```
 
-#### Exercícios
+### 0177 · Rubro-negra clássica
 
-**Exercício E1051** · ★☆☆
-
-A biblioteca guarda as matrículas dos leitores com livro emprestado numa
-AVL (avlrem.h). Insira 50, 25, 75, 10, 30, 60, 80, 5, 15, 27, 55 e 1, nessa
-ordem. Depois os leitores 80, 75 e 60 devolvem os livros: remova os três,
-um por vez, mostrando a pré-ordem, a altura e quantas rotações cada
-remoção fez (use avr_rotacoes antes e depois).
-
-
-```text
-Saída esperada:
-início:  pré 50 25 10 5 1 15 30 27 75 60 55 80 | altura 4
-tira 80: pré 25 10 5 1 15 50 30 27 60 55 75 | altura 3 | rotações 2
-tira 75: pré 25 10 5 1 15 50 30 27 60 55 | altura 3 | rotações 0
-tira 60: pré 25 10 5 1 15 50 30 27 55 | altura 3 | rotações 0
-```
-
-```bash
-gcc ~/LPEDC/material/E1051.c ~/LPEDC/material/0176-avlrem.c -o ~/LPEDC/material/E1051 && ~/LPEDC/material/E1051
-```
-
-**Exercício E1053** · ★★☆
-
-A fila de prioridade do pronto-socorro está guardada numa AVL (avlrem.h):
-a menor chave é a mais urgente. Insira as chaves i * 7 % 20, para i de 0
-a 19 (são 0 a 19 embaralhados). Depois atenda até esvaziar: ache a menor
-chave (descendo tudo à esquerda), mostre e remova. No fim, mostre a
-altura que a árvore tinha no começo e quantas rotações o esvaziamento
-custou.
-
-
-```text
-Saída esperada:
-Atendidos: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19
-Altura no começo: 4 | rotações para esvaziar: 7
-```
-
-```bash
-gcc ~/LPEDC/material/E1053.c ~/LPEDC/material/0176-avlrem.c -o ~/LPEDC/material/E1053 && ~/LPEDC/material/E1053
-```
-
-**Exercício E1054** · ★★☆
-
-Escreva uma AVL de int do zero (sem TAD): No com chave, altura, esq e dir;
-alt (altura de NULL é -1), atualiza, gira_dir, gira_esq, equilibra,
-insere, pre (pré-ordem) e libera. Na remoção, remove_chave, o nó com dois
-filhos recebe a chave do ANTECESSOR (o maior da subárvore esquerda), que
-é removido dali; o rebalanceamento acontece na volta da recursão.
-Insira 40, 20, 60, 10, 30, 50, 70, 25, 35, remova o 40 e depois o 20,
-mostrando a pré-ordem a cada passo e, no fim, a altura.
-
-
-```text
-Saída esperada:
-início:  pré 40 20 10 30 25 35 60 50 70
-tira 40: pré 35 20 10 30 25 60 50 70
-tira 20: pré 35 25 10 30 60 50 70
-altura final: 2
-```
-
-```bash
-gcc ~/LPEDC/material/E1054.c ~/LPEDC/material/0176-avlrem.c -o ~/LPEDC/material/E1054 && ~/LPEDC/material/E1054
-```
-
-**Exercício E1056** · ★★★
-
-Na inserção, a AVL faz no máximo uma rotação (simples ou dupla). Na
-remoção, não: o conserto pode subir até a raiz. O pior caso é a árvore de
-Fibonacci de altura h: a esquerda é uma árvore de Fibonacci de altura h - 1
-e a direita, de altura h - 2 (todo nó tem fator 1). Escreva
-fibonacci(h), que monta essa árvore direto com malloc (NoA de avlrem.h,
-campo altura preenchido, chaves 1, 2, 3... em ordem), e, para h de 2 a 9,
-remova a MAIOR chave com avr_remove e mostre quantos nós havia, quantas
-rotações a remoção fez e a altura depois.
-
-
-```text
-Saída esperada:
-altura 2:   4 nós | rotações 1 | altura depois 1
-altura 3:   7 nós | rotações 1 | altura depois 2
-altura 4:  12 nós | rotações 2 | altura depois 3
-altura 5:  20 nós | rotações 2 | altura depois 4
-altura 6:  33 nós | rotações 3 | altura depois 5
-altura 7:  54 nós | rotações 3 | altura depois 6
-altura 8:  88 nós | rotações 4 | altura depois 7
-altura 9: 143 nós | rotações 4 | altura depois 8
-```
-
-```bash
-gcc ~/LPEDC/material/E1056.c ~/LPEDC/material/0176-avlrem.c -o ~/LPEDC/material/E1056 && ~/LPEDC/material/E1056
-```
-
----
-
-## 0177 · Rubro-negra clássica
-
-A central de entregas registra pacotes pelo número, e eles chegam quase em
-ordem, o pior caso da BST. No 0145 você viu a rubro-negra **esquerdista**
-(LLRB). A prova usa a versão **clássica** do Cormen: as mesmas cores, outras
-regras de conserto e ponteiro para o pai.
-
-Uma **árvore rubro-negra** é uma BST em que cada nó tem uma cor e valem as
-**cinco propriedades**:
-
-1. todo nó é **vermelho** ou **preto**;
-2. a **raiz** é preta;
-3. toda **folha** (`T.nil`) é preta;
-4. se um nó é vermelho, **os dois filhos são pretos**;
-5. para cada nó, todos os caminhos até as folhas abaixo passam pelo **mesmo
-   número de nós pretos**.
-
-As "folhas" do Cormen não guardam chave: são os lugares do `NULL`. Todas são
-**um nó só**, a **sentinela `T.nil`**, preta, como na lista do 0174. O pai da
-raiz também é `T.nil`.
-
-O número de pretos de `x` até uma folha, sem contar `x`, é a **altura negra**
-`bh(x)`, igual em todos os caminhos (propriedade 5). A subárvore de `x` tem
-pelo menos `2^bh(x) - 1` nós e, pela propriedade 4, `bh(raiz) >= h/2`. Daí
-**h ≤ 2 log₂(n + 1)**: busca, mínimo e sucessor custam O(log n).
-
-A **inserção** pendura o nó novo `z` como na BST e o pinta de **vermelho**
-(a propriedade 5 se mantém). Só a 4 pode quebrar, se o pai de `z` for
-vermelho. O conserto (`RB-INSERT-FIXUP`) olha o **tio** de `z`:
-
-| Caso | Situação | O que fazer |
-| --- | --- | --- |
-| 1 | tio **vermelho** | pinta pai e tio de preto, o avô de vermelho, e **sobe**: `z` vira o avô |
-| 2 | tio **preto**, `z` em **triângulo** (filho direito de um filho esquerdo, ou o espelho) | gira no pai e cai no caso 3 |
-| 3 | tio **preto**, `z` em **linha** (filho esquerdo de um filho esquerdo, ou o espelho) | pinta o pai de preto e o avô de vermelho, gira no avô. Acabou |
-
-O caso 1 só troca cores e pode subir até a raiz. Os casos 2 e 3 fazem **no
-máximo duas rotações** e encerram. No fim, a raiz vira preta.
-
-Chegam os pacotes 50, 30, 70, 20, 25, 40 e 45. O 20 tem tio vermelho (caso 1).
-O 25 forma um triângulo com o 20 e o 30 (casos 2 e 3). O 40 tem tio vermelho, e
-o 45 fica em linha com o 40 e o 30 (caso 3, espelho). No desenho, o antes e o
-depois de cada caso:
+Uma central de entregas recebe os pacotes 50, 30, 70, 20, 25, 40 e 45, quase
+em ordem. O 20 tem tio vermelho (caso 1); o 25 forma triângulo (casos 2 e 3);
+o 45 fica em linha (caso 3, espelho). O antes e o depois de cada caso:
 
 <p align="center"><img src="material/0177-ideia.svg" alt="Diagrama da ideia: Rubro-negra clássica" width="858"></p>
 
-No `vermelhopreto.h`, a sentinela fica dentro da struct da árvore, e o
-`T->casos` conta cada caso. O conserto, no `vermelhopreto.c` (pai filho
-esquerdo; o outro lado é o espelho):
+O conserto no `vermelhopreto.c` (pai filho esquerdo; o outro lado é o
+espelho). O `T->casos` conta cada caso:
 
 ```c
 static void conserta(ArvVP *T, NoVP *z) {
@@ -1222,8 +967,7 @@ static void conserta(ArvVP *T, NoVP *z) {
 ```
 
 O laço nunca testa `NULL`: o tio pode ser a sentinela, preta, e cai nos casos
-2 e 3. Se `z` chega à raiz, o pai é `T.nil`, preto, e o `while` para. O
-cliente:
+2 e 3. O cliente:
 
 ```c
 #include <stdio.h>
@@ -1263,7 +1007,7 @@ triângulo. Caso 2 e caso 3 na mesma volta, e o laço termina:
 
 <p align="center"><img src="material/0177-fluxograma.svg" alt="Fluxograma: Rubro-negra clássica" width="762"></p>
 
-### Passo a passo
+#### Passo a passo
 
 O conserto de três inserções. "Pai" e "avô" são os de `z` no início da linha:
 
@@ -1277,27 +1021,6 @@ O conserto de três inserções. "Pai" e "avô" são os de `z` no início da lin
 
 Duas rotações no 25, uma no 45, nenhuma no 20 e no 40. A altura negra só
 cresce quando o caso 1 chega à raiz: a árvore cresce **por cima**.
-
-A **remoção** do Cormen (quatro casos, olhando o **irmão** do nó com um "preto
-a mais") fica fora daqui. Para a prova: custa O(log n) e faz no máximo **três
-rotações**.
-
-> [!WARNING]
-> Erros comuns: esquecer de **subir** no caso 1 (`z = avo`) e trocar a ordem
-> das cores e da rotação no caso 3. Pegadinha de prova: `bh(x)` **não conta o
-> próprio x** e **conta a folha `T.nil`**. Na árvore do exemplo, `bh` da raiz
-> é 2: o 25 e a nil, ou o 70 e a nil.
-
-> [!TIP]
-> O `NoVP` tem 32 bytes. Todo ponteiro "vazio" aponta para `&T->nil`, então o
-> código lê `tio->cor` sem testar `NULL`.
-
-> [!NOTE]
-> **Pergunta para você:** na árvore final do exemplo, chega o pacote 47. Quem
-> é o pai, quem é o tio e qual caso roda? E se depois chegar o 48? Desenhe e
-> confira com o `vp_pre_ordem`.
-
-### Hora de praticar
 
 **Exemplo A353 · A altura que a rubro-negra garante**
 
@@ -1387,149 +1110,12 @@ int main(void) {
 gcc ~/LPEDC/material/A354.c ~/LPEDC/material/0177-vermelhopreto.c -o ~/LPEDC/material/A354 && ~/LPEDC/material/A354
 ```
 
-#### Exercícios
+### 0178 · Hash: divisão e multiplicação
 
-**Exercício E1057** · ★☆☆
-
-Insira os pacotes 1 a 10, em ordem, numa rubro-negra (vermelhopreto.h) e
-escreva conta_vermelhos(T, x), que percorre a subárvore de x e conta os
-nós vermelhos. A recursão para na sentinela (x == &T->nil), e
-não em NULL. Mostre a pré-ordem, os vermelhos, os pretos e a altura negra.
-
-
-```text
-Saída esperada:
-pré: 4 2 1 3 6 5 8* 7 9 10*
-vermelhos: 2 | pretos: 8 | altura negra: 3
-```
-
-```bash
-gcc ~/LPEDC/material/E1057.c ~/LPEDC/material/0177-vermelhopreto.c -o ~/LPEDC/material/E1057 && ~/LPEDC/material/E1057
-```
-
-**Exercício E1059** · ★★☆
-
-O Cormen prova que a subárvore de qualquer nó x tem pelo menos
-2^bh(x) - 1 nós, onde bh(x) é a altura negra de x: quantos pretos há de x
-(sem contar x) até uma folha nil (contando a nil). Confira isso nó por
-nó. Insira 40, 20, 60, 10, 30, 50, 70, 5, 15, 25 (vermelhopreto.h) e
-escreva bh(T, x), nos(T, x) e tabela(T, x), que mostra em ordem, para
-cada nó: chave, cor, bh, nós da subárvore, 2^bh - 1 e "ok" se a
-desigualdade vale.
-
-
-```text
-Saída esperada:
-  5 vermelho bh 1 | nós  1 | 2^bh - 1 = 1 ok
- 10 preto    bh 1 | nós  3 | 2^bh - 1 = 1 ok
- 15 vermelho bh 1 | nós  1 | 2^bh - 1 = 1 ok
- 20 vermelho bh 2 | nós  6 | 2^bh - 1 = 3 ok
- 25 vermelho bh 1 | nós  1 | 2^bh - 1 = 1 ok
- 30 preto    bh 1 | nós  2 | 2^bh - 1 = 1 ok
- 40 preto    bh 2 | nós 10 | 2^bh - 1 = 3 ok
- 50 vermelho bh 1 | nós  1 | 2^bh - 1 = 1 ok
- 60 preto    bh 1 | nós  3 | 2^bh - 1 = 1 ok
- 70 vermelho bh 1 | nós  1 | 2^bh - 1 = 1 ok
-```
-
-```bash
-gcc ~/LPEDC/material/E1059.c ~/LPEDC/material/0177-vermelhopreto.c -o ~/LPEDC/material/E1059 && ~/LPEDC/material/E1059
-```
-
-**Exercício E1060** · ★★☆
-
-Acompanhe o conserto da rubro-negra. Insira as senhas 10, 20, 30, 15, 25,
-5, 1 e 27 (vermelhopreto.h) e, depois de cada uma, mostre quantas vezes
-cada caso do conserto rodou NAQUELA inserção (use T->casos[1], [2] e [3]
-antes e depois) e a pré-ordem. No fim, mostre o total de rotações.
-
-
-```text
-Saída esperada:
-insere 10: caso 1: 0 | caso 2: 0 | caso 3: 0 | pré 10
-insere 20: caso 1: 0 | caso 2: 0 | caso 3: 0 | pré 10 20*
-insere 30: caso 1: 0 | caso 2: 0 | caso 3: 1 | pré 20 10* 30*
-insere 15: caso 1: 1 | caso 2: 0 | caso 3: 0 | pré 20 10 15* 30
-insere 25: caso 1: 0 | caso 2: 0 | caso 3: 0 | pré 20 10 15* 30 25*
-insere  5: caso 1: 0 | caso 2: 0 | caso 3: 0 | pré 20 10 5* 15* 30 25*
-insere  1: caso 1: 1 | caso 2: 0 | caso 3: 0 | pré 20 10* 5 1* 15 30 25*
-insere 27: caso 1: 0 | caso 2: 1 | caso 3: 1 | pré 20 10* 5 1* 15 27 25* 30*
-rotações no total: 3
-```
-
-```bash
-gcc ~/LPEDC/material/E1060.c ~/LPEDC/material/0177-vermelhopreto.c -o ~/LPEDC/material/E1060 && ~/LPEDC/material/E1060
-```
-
-**Exercício E1061** · ★★★
-
-Escreva a inserção da rubro-negra do Cormen à mão, com a sentinela nil
-(variável global, preta, que serve de folha e de pai da raiz):
-gira_esq, gira_dir, conserta (os casos 1, 2 e 3 e o espelho deles),
-insere(chave) e libera. Escreva também:
-
-
-```text
-void pre(const No *x)    // pré-ordem; vermelho leva "*" depois da chave
-int fiscal(const No *x)  // pretos de x até a nil (nil inclusive), ou
-                         // -1 se a propriedade 4 ou a 5 falhar
-```
-
-
-Insira os pacotes 1 a 10, em ordem, mostre a pré-ordem e o veredito do
-fiscal sobre a raiz.
-
-
-```text
-Saída esperada:
-pré: 4 2 1 3 6 5 8* 7 9 10*
-fiscal: as cinco propriedades valem
-```
-
-```bash
-gcc ~/LPEDC/material/E1061.c ~/LPEDC/material/0177-vermelhopreto.c -o ~/LPEDC/material/E1061 && ~/LPEDC/material/E1061
-```
-
----
-
-## 0178 · Hash: divisão e multiplicação
-
-No atacadão, fardos de 16 unidades são registrados pelo número do último
-item: 16, 32, 48, até 160. A tabela tem 16 baldes e usa `k % 16` (0105): os
-dez fardos caem **todos no balde 0**, e a busca volta a ser O(n). O problema
-está no `m`.
-
-O **método da divisão** é o que você já conhece: **h(k) = k mod m**. É rápido,
-mas o `m` decide tudo:
-
-- **m = 2^p é ruim**: `k % 2^p` são os **p bits de baixo** de `k` (`k & (m -
-  1)`), e o resto é ignorado. Os fardos de 16 em 16 (4 bits de baixo sempre
-  zero) colidem todos;
-- **m = 10^d** só olha os d últimos dígitos (com m = 100, preços terminados
-  em 00 caem no balde 0);
-- **m = 2^p - 1** é ruim para textos: trocar duas letras de lugar não muda o
-  balde;
-- a regra do livro: um **primo longe de uma potência de 2**. Para 2000 chaves,
-  com uns 3 por balde, serve 673 (longe de 512 e de 1024).
-
-O **método da multiplicação** tira a dependência do `m`. Multiplique a chave
-por uma constante `A` entre 0 e 1, fique com a **parte fracionária** e
-multiplique por `m`:
-
-**h(k) = ⌊m · (k·A mod 1)⌋**
-
-A parte fracionária de `k·A` mistura todos os dígitos de `k`, então o `m` pode
-ser qualquer um, até uma **potência de 2**. Knuth sugere **A ≈ (√5 − 1) / 2 =
-0,6180339887...**: chaves seguidas pulam pela tabela inteira.
-
-Em `double` a fórmula é lenta e arredonda. Use **inteiros**: com w = 32 bits
-e m = 2^p, troque `A` por **s = ⌊A · 2^32⌋ = 2654435769**. Dos 64
-bits de `k · s`, os 32 de baixo são o "k·A mod 1" em binário, e os **p bits
-mais altos** deles são o balde: `(k * s) >> (32 - p)`, com `uint32_t`, que já
-descarta os 32 de cima.
-
-Os dez fardos passam por divisão por 16, divisão por 13 (primo) e
-multiplicação com m = 16 (p = 4). No desenho, a conta do fardo 48:
+Um atacadão registra fardos de 16 unidades pelo número do último item: 16,
+32, 48 até 160. Com `k % 16`, os dez caem no balde 0. Os fardos passam por
+divisão por 16, divisão por 13 e multiplicação com m = 16; no desenho, a conta
+do fardo 48:
 
 <p align="center"><img src="material/0178-ideia.svg" alt="Diagrama da ideia: Hash: divisão e multiplicação" width="858"></p>
 
@@ -1583,27 +1169,11 @@ int main(void) {
 // Balde mais cheio: 10 | 1 | 2
 ```
 
-Com 16, os dez num balde só. Com 13, nenhuma colisão. Com a multiplicação,
-uma (16 e 160), normal para 10 chaves em 16 baldes.
-
-O fluxograma faz a conta do fardo 48: confere o `p` (deslocar 32 bits ou mais
-é indefinido), multiplica, deixa o `uint32_t` cortar e desloca. Nenhuma
-divisão:
+Com 16, os dez num balde só; com 13, nenhuma colisão; com a multiplicação,
+uma (16 e 160). O fluxograma confere o `p` (deslocar 32 bits ou mais é
+indefinido), multiplica, deixa o `uint32_t` cortar e desloca:
 
 <p align="center"><img src="material/0178-fluxograma.svg" alt="Fluxograma: Hash: divisão e multiplicação" width="560"></p>
-
-> [!WARNING]
-> O produto **tem que ser `unsigned`**: com `int`, `k * 2654435769` estoura, e
-> estouro com sinal é comportamento indefinido. E pegue os bits **de cima**
-> (`>> (32 - p)`), não os de baixo (`& (m - 1)`): os de baixo dependem só dos
-> bits de baixo de `k`, o problema da divisão por 2^p.
-
-> [!NOTE]
-> **Pergunta para você:** com m = 32 (p = 5), em que balde cai o fardo 48 pela
-> multiplicação em inteiros? Faça a conta com o produto `0xAA66D2B0` do
-> desenho antes de rodar `esp_mult_desloca(48, 5)`.
-
-### Hora de praticar
 
 **Exemplo A355 · Potência de 2 só enxerga os bits de baixo**
 
@@ -1716,137 +1286,11 @@ int main(void) {
 gcc ~/LPEDC/material/A356.c ~/LPEDC/material/0178-espalha.c -o ~/LPEDC/material/A356 -lm && ~/LPEDC/material/A356
 ```
 
-#### Exercícios
+### 0179 · Sondagem quadrática e dupla
 
-**Exercício E1063** · ★☆☆
-
-A transportadora espalha os CEPs de entrega numa tabela de m = 97 baldes
-(97 é primo e fica longe de 64 e de 128). Use esp_divisao (espalha.h) para
-mostrar o balde de cada CEP: 69050000, 69020120, 69099999, 01310100,
-20040002 e 69050097. Mostre o CEP com 8 dígitos (zeros à esquerda).
-
-
-```text
-Saída esperada:
-     CEP | balde (m = 97)
-69050000 | 65
-69020120 | 61
-69099999 | 12
-01310100 | 18
-20040002 | 93
-69050097 | 65
-```
-
-```bash
-gcc ~/LPEDC/material/E1063.c ~/LPEDC/material/0178-espalha.c -o ~/LPEDC/material/E1063 -lm && ~/LPEDC/material/E1063
-```
-
-**Exercício E1065** · ★★☆
-
-O almoxarifado recebe 1000 caixas numeradas de 64 em 64 (64, 128, ...,
-64000). Compare três funções (espalha.h): divisão com m = 64, divisão com
-m = 61 e multiplicação em inteiros com m = 64 (p = 6). Para cada uma,
-conte as chaves por balde e mostre quantos baldes foram usados e o
-tamanho do mais cheio.
-
-
-```text
-Saída esperada:
-divisão, m = 64:        1 baldes usados, o mais cheio com 1000
-divisão, m = 61:       61 baldes usados, o mais cheio com 17
-multiplicação, m = 64: 64 baldes usados, o mais cheio com 17
-```
-
-```bash
-gcc ~/LPEDC/material/E1065.c ~/LPEDC/material/0178-espalha.c -o ~/LPEDC/material/E1065 -lm && ~/LPEDC/material/E1065
-```
-
-**Exercício E1066** · ★★☆
-
-Escolha o m de uma tabela com encadeamento pelo método da divisão. Para n
-chaves e um fator de carga alvo alfa, o m é o menor primo >= n / alfa
-(arredondado para cima), mas que fique a pelo menos (n / alfa) / 8 de
-distância da potência de 2 mais próxima; se ficar perto demais, tente o
-próximo primo. Escreva eh_primo, primo_a_partir(x), distancia_potencia(m)
-e escolhe(n, alfa), e teste (2000, 3), (3000, 2), (5000, 5) e (100, 2).
-
-
-```text
-Saída esperada:
-n = 2000, alfa = 3: alvo 667 -> m = 673 (a 161 da potência de 2 mais perto)
-n = 3000, alfa = 2: alvo 1500 -> m = 1511 (a 487 da potência de 2 mais perto)
-n = 5000, alfa = 5: alvo 1000 -> m = 1151 (a 127 da potência de 2 mais perto)
-n = 100, alfa = 2: alvo 50 -> m = 53 (a 11 da potência de 2 mais perto)
-```
-
-```bash
-gcc ~/LPEDC/material/E1066.c ~/LPEDC/material/0178-espalha.c -o ~/LPEDC/material/E1066 -lm && ~/LPEDC/material/E1066
-```
-
-**Exercício E1068** · ★★★
-
-O método da multiplicação aceita m = 2^p, e isso permite uma tabela que
-DOBRA de tamanho. Escreva uma tabela hash com encadeamento (listas) cujo
-índice é (k * 2654435769u) >> (32 - p), com uint32_t. Ela começa com m = 4
-e, antes de inserir, se n + 1 passar de m, dobra: cria 2m baldes vazios e
-move cada nó para o balde novo (o índice muda, porque p muda), sem malloc
-novo por item, mostrando "dobrou: m = ... (n = ...)". Insira as
-matrículas 1000, 2000, ..., 100000 e mostre n, m, o fator de carga e o
-tamanho da maior lista. Libere tudo no fim.
-
-
-```text
-Saída esperada:
-dobrou: m = 8 (n = 4)
-dobrou: m = 16 (n = 8)
-dobrou: m = 32 (n = 16)
-dobrou: m = 64 (n = 32)
-dobrou: m = 128 (n = 64)
-fim: n = 100, m = 128, fator de carga 0.78, maior lista 2
-```
-
-```bash
-gcc ~/LPEDC/material/E1068.c ~/LPEDC/material/0178-espalha.c -o ~/LPEDC/material/E1068 -lm && ~/LPEDC/material/E1068
-```
-
----
-
-## 0179 · Sondagem quadrática e dupla
-
-O guarda-volumes tem 13 armários, escolhidos por `cartão % 13`. Se estiver
-ocupado, o funcionário tenta outro: no 0107, o **seguinte** (sondagem
-linear). Cinco clientes chegam com os cartões 18, 31, 44, 20 e 57, e quatro
-caem no armário 5. Qual é o melhor "outro"?
-
-No endereçamento aberto, cada chave tem uma **sequência de sondagem** `h(k,
-0), h(k, 1), ...`. A inserção para na primeira posição livre; a busca refaz o
-caminho até achar a chave ou uma livre. O Cormen apresenta três:
-
-- **linear**: `h(k, i) = (h'(k) + i) mod m`. Sofre de **agrupamento
-  primário**: as ocupadas formam blocos, e toda chave que cai **em qualquer
-  ponto** do bloco vai para o fim dele e o aumenta;
-- **quadrática**: `h(k, i) = (h'(k) + c₁·i + c₂·i²) mod m`. Com c₁ = 0 e c₂ =
-  1, os saltos crescem (1, 4, 9, 16...) e os blocos se desfazem. Sobra o
-  **agrupamento secundário**: chaves com o mesmo `h'(k)` seguem **a mesma
-  trilha**, que com `m` primo visita só metade das posições (carga abaixo de
-  1/2);
-- **dispersão dupla** (*double hashing*): `h(k, i) = (h₁(k) + i·h₂(k)) mod m`.
-  O passo `h₂(k)` depende da chave, então chaves do mesmo início andam com
-  passos diferentes: é a que mais se aproxima do hash uniforme. O passo nunca
-  é 0 e tem que ser **primo com m**: com `m` primo, `h₁(k) = k mod m` e
-  `h₂(k) = 1 + (k mod (m - 1))`; com `m = 2^p`, um `h₂` sempre ímpar.
-
-O **fator de carga** `α = n / m` manda no custo. Com hash uniforme, uma busca
-**sem sucesso** faz em média no máximo `1 / (1 - α)` sondagens, e uma **com
-sucesso**, `(1/α) · ln(1 / (1 - α))`: com α = 0,5, 2 e 1,4; com α = 0,9, 10 e
-2,6. A linear é pior (o A357 mede 45 sondagens com α = 0,9).
-
-Nas três, a **remoção** deixa uma **lápide** (*tombstone*), nunca uma posição
-livre, que cortaria o caminho de quem pulou por ela. A busca passa reto pela
-lápide; a inserção pode reaproveitá-la.
-
-Os cinco cartões entram nas três tabelas. No desenho, as posições que a
-busca do 57 olha:
+Um guarda-volumes de 13 armários usa `cartão % 13`, e os cartões 18, 31, 44,
+20 e 57 entram nas três tabelas; quatro deles começam no armário 5. No
+desenho, as posições que a busca do 57 olha:
 
 <p align="center"><img src="material/0179-ideia.svg" alt="Diagrama da ideia: Sondagem quadrática e dupla" width="858"></p>
 
@@ -1914,28 +1358,12 @@ int main(void) {
 //             sondagens para guardar: 8 | para achar o 57: 2
 ```
 
-Na linear, o 20 (começa no 7) cai no meio do bloco e vai para o 8. Na
-quadrática, 31, 44 e 57 repetem a trilha 5, 6, 9, 1. Na dupla, o 31 anda de 8
-em 8, o 44 de 9 em 9 e o 57 de 10 em 10: cada um sai do 5 para um lugar
-diferente.
-
-O fluxograma é a inserção do 57 na dupla: o 5 está ocupado, `i` vira 1, e
-`(5 + 10) % 13 = 2` está livre:
+Na linear, o 20 cai no meio do bloco e vai para o 8. Na quadrática, 31, 44 e
+57 repetem a trilha 5, 6, 9, 1. Na dupla, cada um sai do 5 com um passo
+diferente. O fluxograma é a inserção do 57 na dupla: `(5 + 10) % 13 = 2` está
+livre:
 
 <p align="center"><img src="material/0179-fluxograma.svg" alt="Fluxograma: Sondagem quadrática e dupla" width="422"></p>
-
-> [!WARNING]
-> O passo `h₂(k)` **não pode ser 0** nem ter fator comum com `m`: com `m = 12`
-> e passo 4, a chave visita só 3 das 12 posições e a inserção falha com a
-> tabela quase vazia. Na quadrática, com carga acima de 1/2, ela pode falhar
-> **com posições livres**.
-
-> [!NOTE]
-> **Pergunta para você:** na tabela da dispersão dupla do exemplo, chega o
-> cartão 70 (70 % 13 = 5, passo 1 + 70 % 12 = 11). Em que posição ele fica, e
-> com quantas sondagens? E na linear?
-
-### Hora de praticar
 
 **Exemplo A357 · Medindo os agrupamentos**
 
@@ -2065,159 +1493,16 @@ int main(void) {
 gcc ~/LPEDC/material/A358.c ~/LPEDC/material/0179-sondagem.c -o ~/LPEDC/material/A358 && ~/LPEDC/material/A358
 ```
 
-#### Exercícios
+### 0180 · Pigeonhole e chave composta
 
-**Exercício E1069** · ★☆☆
-
-Com m = 13 (sondagem.h), mostre as 6 primeiras posições da sequência de
-sondagem das chaves 44 e 57 nos três modos (SD_LINEAR, SD_QUADRATICA e
-SD_DUPLA), usando sd_posicao(t, chave, i) para i de 0 a 5. As duas chaves
-começam na posição 5: veja em qual modo as sequências se separam.
-
-
-```text
-Saída esperada:
-chave 44
-  linear:      5  6  7  8  9 10
-  quadrática:  5  6  9  1  8  4
-  dupla:       5  1 10  6  2 11
-chave 57
-  linear:      5  6  7  8  9 10
-  quadrática:  5  6  9  1  8  4
-  dupla:       5  2 12  9  6  3
-```
-
-```bash
-gcc ~/LPEDC/material/E1069.c ~/LPEDC/material/0179-sondagem.c -o ~/LPEDC/material/E1069 && ~/LPEDC/material/E1069
-```
-
-**Exercício E1071** · ★★☆
-
-Dispersão dupla com m = 16, uma potência de 2. A regra do Cormen: o passo
-h2(k) tem que ser ÍMPAR, para ser primo com 16 e visitar todas as
-posições. Escreva, sem o TAD, h1(k) = k % 16 e h2(k) = 2 * ((k / 16) % 8)
-+ 1 (os bits que o h1 não usa), e insira os cartões 3, 19, 35, 51, 67 e
-83 (todos com h1 = 3) num vetor de 16 posições (-1 é livre). Mostre o h2,
-a posição e as sondagens de cada um e a tabela no fim.
-
-
-```text
-Saída esperada:
- 3: h2 =  1 -> posição  3, 1 sondagens
-19: h2 =  3 -> posição  6, 2 sondagens
-35: h2 =  5 -> posição  8, 2 sondagens
-51: h2 =  7 -> posição 10, 2 sondagens
-67: h2 =  9 -> posição 12, 2 sondagens
-83: h2 = 11 -> posição 14, 2 sondagens
-tabela: . . . 3 . . 19 . 35 . 51 . 67 . 83 .
-```
-
-```bash
-gcc ~/LPEDC/material/E1071.c ~/LPEDC/material/0179-sondagem.c -o ~/LPEDC/material/E1071 && ~/LPEDC/material/E1071
-```
-
-**Exercício E1072** · ★★☆
-
-A sondagem quadrática h(k, i) = (k % m + i²) % m não visita todas as
-posições: com m primo, só (m + 1) / 2 delas são diferentes. Com uma
-tabela de m = 7 (sondagem.h, SD_QUADRATICA), mostre a sequência da chave
-0 para i de 0 a 6 e as posições que ela nunca visita. Depois insira 0, 7,
-14, 21 e 28 (todas começam no 0), mostrando a posição de cada uma (-1 é
-falha), a tabela e a carga. A 28 não entra, com três posições livres.
-
-
-```text
-Saída esperada:
-sequência da chave 0: 0 1 4 2 2 4 1
-nunca visitadas: 3 5 6
-insere  0: posição 0
-insere  7: posição 1
-insere 14: posição 4
-insere 21: posição 2
-insere 28: posição -1
-tabela:   0   7  21   .  14   .   .
-carga 0.57 e a chave 28 ficou de fora
-```
-
-```bash
-gcc ~/LPEDC/material/E1072.c ~/LPEDC/material/0179-sondagem.c -o ~/LPEDC/material/E1072 && ~/LPEDC/material/E1072
-```
-
-**Exercício E1074** · ★★★
-
-Escreva, sem o TAD, uma tabela de dispersão dupla que cresce: um vetor de
-int (-1 livre), m primo, h1 = k % m e h2 = 1 + k % (m - 1). Antes de
-inserir, se (n + 1) / m passar de 0.5, ela cresce para o menor primo >=
-2m, reinsere as chaves antigas (com o m novo, as posições mudam) e mostra
-"cresceu: m = ... -> ... (n = ...)". Comece com m = 7, insira as chaves
-7919 * i % 100000, para i de 0 a 39, e no fim mostre n, m, a carga e a
-média de sondagens para achar cada uma das 40 chaves. Libere o vetor.
-
-
-```text
-Saída esperada:
-cresceu: m = 7 -> 17 (n = 3)
-cresceu: m = 17 -> 37 (n = 8)
-cresceu: m = 37 -> 79 (n = 18)
-cresceu: m = 79 -> 163 (n = 39)
-fim: n = 40, m = 163, carga 0.25, média de sondagens 1.38
-```
-
-```bash
-gcc ~/LPEDC/material/E1074.c ~/LPEDC/material/0179-sondagem.c -o ~/LPEDC/material/E1074 && ~/LPEDC/material/E1074
-```
-
----
-
-## 0180 · Pigeonhole e chave composta
-
-A professora quer a turma pela nota do simulado, da menor para a maior. As
-notas vão de 0 a 10, e quem empata continua na ordem alfabética da chamada.
-Com só 11 notas, dá para ordenar sem comparar alunos.
-
-O **pigeonhole sort** (casas de pombo) serve quando a chave é um inteiro num
-intervalo pequeno `[min, max]`. Ele cria uma **casa** para cada valor, `r =
-max - min + 1` casas, e faz duas passadas:
-
-1. põe cada registro **no fim da fila** da casa da sua chave (`chave - min`);
-2. percorre as casas em ordem e devolve os registros, **na ordem em que
-   entraram**.
-
-O custo é **O(n + r)**, linear se `r` for pequeno perto de `n`. Ele é primo do
-**counting sort** (0120): o counting só **conta** e calcula posições; o
-pigeonhole **guarda os registros**, cada casa uma fila.
-
-Por isso é **estável**: uma ordenação é **estável** quando registros com
-**chaves iguais** saem na ordem relativa em que entraram. Os clássicos:
-
-| Estáveis | Não estáveis |
-| --- | --- |
-| bubble, inserção, merge sort, counting, radix (LSD), bucket (com filas), pigeonhole | seleção, shell sort, quick sort, heapsort |
-
-O merge é estável se, no empate, pegar primeiro da esquerda; a inserção, se só
-deslocar quem é **estritamente** maior. Os não estáveis **trocam elementos
-distantes**.
-
-A **chave composta** junta campos em ordem de prioridade: nota e, no empate,
-nome. Há dois jeitos:
-
-- **um comparador composto**: compara o campo principal e, no empate, o
-  secundário. É o jeito do `qsort`, que **não** é estável pelo padrão C: o
-  desempate tem que estar no comparador;
-- **várias passadas estáveis, da chave menos importante para a mais
-  importante**: ordene pela secundária e, com método estável, pela principal.
-  A última passada manda; as anteriores desempatam. É o raciocínio do radix
-  LSD.
-
-A chamada (Ana 7, Bruno 5, Carla 9, Diego 5, Elisa 7, Fabio 3, Gabi 9, Hugo 5)
-já está em ordem de nome, então uma passada **estável** pela nota entrega a
-chave composta (nota, nome):
+Uma professora ordena a turma pela nota do simulado (0 a 10), e quem empata
+fica na ordem da chamada. A chamada já está em ordem de nome, então uma
+passada estável pela nota entrega a chave composta (nota, nome):
 
 <p align="center"><img src="material/0180-ideia.svg" alt="Diagrama da ideia: Pigeonhole e chave composta" width="858"></p>
 
-No `pombal.h`, a casa é uma fila de **índices**, montada com três vetores
-(`primeiro`, `ultimo` e `prox`), sem `malloc` por aluno. As duas passadas, no
-`pombal.c`:
+No `pombal.c`, a casa é uma fila de índices em três vetores (`primeiro`,
+`ultimo` e `prox`), sem `malloc` por aluno. As duas passadas:
 
 ```c
     for (int i = 0; i < n; i++) { // 1. cada aluno entra no fim da fila da sua casa
@@ -2238,7 +1523,7 @@ No `pombal.h`, a casa é uma fila de **índices**, montada com três vetores
     }
 ```
 
-A seleção, para comparar:
+O programa compara com a seleção:
 
 ```c
 #include <stdio.h>
@@ -2270,31 +1555,11 @@ int main(void) {
 // Seleção:    Fabio(3) Bruno(5) Diego(5) Hugo(5) Elisa(7) Ana(7) Gabi(9) Carla(9)
 ```
 
-Na seleção, a Elisa passou na frente da Ana: na primeira volta, o Fabio
-(posição 5) trocou com a Ana (posição 0), que foi parar depois da Elisa.
-
-O fluxograma tem as duas passadas, sem comparação entre alunos: a primeira
-põe cada um na sua casa; a segunda esvazia as 11 casas em ordem:
+Na seleção, a Elisa passou na frente da Ana: na primeira volta, o Fabio trocou
+com a Ana, que foi parar depois da Elisa. O fluxograma tem as duas passadas,
+sem comparação entre alunos:
 
 <p align="center"><img src="material/0180-fluxograma.svg" alt="Fluxograma: Pigeonhole e chave composta" width="570"></p>
-
-> [!WARNING]
-> Nas passadas em sequência, a ordem é **da menos importante para a mais
-> importante**. Para "por cidade e, dentro dela, por nota", ordene primeiro
-> pela nota e **por último** pela cidade. E a última passada **tem** que ser
-> estável: com a seleção, ela embaralha o que a primeira arrumou (o A360
-> mostra).
-
-> [!TIP]
-> A memória é proporcional a `r`: CPF (11 dígitos) pediria 100 bilhões de
-> casas. Para chaves grandes existe o radix (0121).
-
-> [!NOTE]
-> **Pergunta para você:** se a lista de chamada estivesse em ordem
-> **contrária** (de Hugo para Ana), em que ordem sairiam Bruno, Diego e Hugo
-> no pigeonhole? E na seleção, dá para prever sem rodar?
-
-### Hora de praticar
 
 **Exemplo A359 · A tabela do campeonato com qsort**
 
@@ -2434,124 +1699,11 @@ int main(void) {
 gcc ~/LPEDC/material/A360.c ~/LPEDC/material/0180-pombal.c -o ~/LPEDC/material/A360 && ~/LPEDC/material/A360
 ```
 
-#### Exercícios
+### 0181 · Juntando tudo
 
-**Exercício E1075** · ★☆☆
-
-A academia quer as idades dos alunos da turma de iniciantes em ordem. As
-idades vão de 18 a 25: 22, 19, 25, 18, 22, 20, 19, 24, 22, 18. Escreva o
-pigeonhole sort para números inteiros: um vetor casa[] com uma posição
-para cada idade possível (25 - 18 + 1 = 8), conte quantos caem em cada
-casa e depois esvazie as casas em ordem de volta no vetor. Mostre também
-quantas casas foram usadas.
-
-
-```text
-Saída esperada:
-ordenadas: 18 18 19 19 20 22 22 22 24 25
-casas usadas: 6 de 8
-```
-
-```bash
-gcc ~/LPEDC/material/E1075.c ~/LPEDC/material/0180-pombal.c -o ~/LPEDC/material/E1075 && ~/LPEDC/material/E1075
-```
-
-**Exercício E1077** · ★★☆
-
-Teste a estabilidade de três ordenações do pombal.h. Monte 10 alunos com
-nomes a0 a a9, as notas 4, 8, 4, 2, 8, 4, 6, 2, 8, 6 e, no campo turma, a
-posição original (0 a 9). Escreva eh_estavel(v, n): depois de ordenar,
-entre vizinhos de nota igual, a posição original tem que crescer. Ordene
-uma cópia com pb_selecao, outra com pb_insercao e outra com pb_pigeonhole
-e mostre o veredito e o resultado de cada uma.
-
-
-```text
-Saída esperada:
-seleção:    não estável | a3(2) a7(2) a2(4) a0(4) a5(4) a6(6) a9(6) a1(8) a8(8) a4(8)
-inserção:   estável     | a3(2) a7(2) a0(4) a2(4) a5(4) a6(6) a9(6) a1(8) a4(8) a8(8)
-pigeonhole: estável     | a3(2) a7(2) a0(4) a2(4) a5(4) a6(6) a9(6) a1(8) a4(8) a8(8)
-```
-
-```bash
-gcc ~/LPEDC/material/E1077.c ~/LPEDC/material/0180-pombal.c -o ~/LPEDC/material/E1077 && ~/LPEDC/material/E1077
-```
-
-**Exercício E1078** · ★★☆
-
-A previsão do frio na serra: ordene as leituras da MAIS QUENTE para a
-MAIS FRIA com um pigeonhole sort estável escrito por você. As
-temperaturas vão de -5 a 8 graus (14 casas; a casa de t é t - (-5)). Cada
-casa é uma fila de índices, como no pombal.c, e as casas são esvaziadas
-da mais quente para a mais fria. Leituras: Urubici -3, Gramado 4,
-Curitiba 8, Sao Joaquim -5, Lages 4, Bom Jardim -3, Canela 4, Caxias 6.
-
-
-```text
-Saída esperada:
-  8 Curitiba
-  6 Caxias
-  4 Gramado
-  4 Lages
-  4 Canela
- -3 Urubici
- -3 Bom Jardim
- -5 Sao Joaquim
-```
-
-```bash
-gcc ~/LPEDC/material/E1078.c ~/LPEDC/material/0180-pombal.c -o ~/LPEDC/material/E1078 && ~/LPEDC/material/E1078
-```
-
-**Exercício E1079** · ★★★
-
-A secretaria quer a lista dos inscritos do vestibular por CIDADE (código
-1, 2 ou 3) e, dentro de cada cidade, por NOTA, da menor para a maior.
-Escreva ordena_por_cidade e ordena_por_nota, duas inserções (que são
-estáveis) sobre Inscrito, e chame-as na ordem que dá o resultado certo
-(a chave principal fica por último). Inscritos (nome, cidade, nota):
-Ana 1 62, Teo 2 70, Nina 3 91, Rui 1 80, Bia 2 48, Lia 1 62, Caio 3 55,
-Ivo 2 70, Joao 1 55. Mostre uma linha por cidade.
-
-
-```text
-Saída esperada:
-1:Joao(55) 1:Ana(62) 1:Lia(62) 1:Rui(80)
-2:Bia(48) 2:Teo(70) 2:Ivo(70)
-3:Caio(55) 3:Nina(91)
-```
-
-```bash
-gcc ~/LPEDC/material/E1079.c ~/LPEDC/material/0180-pombal.c -o ~/LPEDC/material/E1079 && ~/LPEDC/material/E1079
-```
-
----
-
-## 0181 · Juntando tudo
-
-A recepção do posto de saúde responde a três perguntas o dia inteiro: "Esse
-CPF já tem cadastro?", "Qual a próxima consulta depois das 8h45?" e "A dona
-Ana desmarcou: quem estava esperando?". Cada uma pede uma estrutura do módulo:
-
-- os **pacientes** ficam numa **tabela hash com dispersão dupla** (0179), pelo
-  CPF: busca exata em O(1) em média. O `m` é 101, primo, e a carga fica abaixo
-  de 1/2;
-- os **horários** ficam numa **rubro-negra clássica** com sentinela (0177),
-  pela hora em HHMM: marcar custa O(log n), e "a próxima depois de tal hora" é
-  o **teto** seguido do **sucessor** (0175);
-- a **fila de espera** é uma **lista dupla circular com sentinela** (0174):
-  entra no fim e sai do começo ou do meio, sem caso especial.
-
-As estruturas conversam por **chaves**, não por ponteiros: o nó da árvore
-guarda o CPF de quem marcou, o paciente na hash guarda o horário, a fila
-guarda CPFs. Rotação ou sondagem não invalidam as outras.
-
-A rubro-negra do 0177 não tem remoção: a consulta desmarcada deixa o
-**horário vago** na árvore (`cpf = 0`), como a lápide da hash.
-
-Cinco pacientes se cadastram. Carla marca às 8h00, Ana às 9h00, Bruno às
-10h30. Diego quer as 9h00 e vai para a espera; Elisa também. Ana desmarca, e
-Diego assume. No desenho, as estruturas depois disso:
+A recepção de um posto de saúde cadastra cinco pacientes. Carla marca às
+8h00, Ana às 9h00, Bruno às 10h30; Diego e Elisa esperam pelas 9h00. Ana
+desmarca e Diego assume. As estruturas depois disso:
 
 <p align="center"><img src="material/0181-ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
 
@@ -2635,24 +1787,6 @@ O fluxograma segue o cancelamento das 9h00: a Ana fica sem horário e, como a
 fila não está vazia, o Diego assume e sai dela:
 
 <p align="center"><img src="material/0181-fluxograma.svg" alt="Fluxograma: Juntando tudo" width="630"></p>
-
-> [!WARNING]
-> Quando duas estruturas guardam a mesma informação, elas mudam **juntas**.
-> O horário do paciente está na hash (`p->horario`) e na árvore (`x->cpf`):
-> se o cancelamento zerar só a árvore, a Ana continua "com consulta" na hash e
-> nunca mais consegue marcar.
-
-> [!TIP]
-> `Agenda` é um **tipo opaco** (o `.h` só declara `typedef struct Agenda
-> Agenda`): o cliente não enxerga as estruturas, e dá para trocar a
-> rubro-negra por uma AVL sem mudar uma linha dele.
-
-> [!NOTE]
-> **Pergunta para você:** depois do exemplo, a Elisa ainda está na espera. Se
-> o Bruno desmarcar as 10h30 e, em seguida, a Carla desmarcar as 8h00, quem
-> fica com cada horário? E o que `ag_proximo(a, 700)` devolve no fim?
-
-### Hora de praticar
 
 **Exemplo A361 · Um dia cheio, marcado em ordem**
 
@@ -2778,7 +1912,643 @@ int main(void) {
 gcc ~/LPEDC/material/A362.c ~/LPEDC/material/0181-agenda.c -o ~/LPEDC/material/A362 && ~/LPEDC/material/A362
 ```
 
-#### Exercícios
+---
+
+## 3. Exercícios práticos
+
+Cada exercício é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta. Compile como os exemplos: `gcc ~/LPEDC/material/E007.c -o ~/LPEDC/material/E007 && ~/LPEDC/material/E007`. Resoluções em `_respostas/28-estruturas-complementos/`.
+
+### 0174 · Lista com sentinela
+
+**Exercício E1039** · ★☆☆
+
+O carrinho do mercado virou uma lista com sentinela (sentinela.h). Os
+preços, em centavos, entram no fim: 1250, 899, 2340 e 475. Escreva
+soma(L), que percorre do L->nil.prox até voltar à sentinela e devolve o
+total. Mostre a lista e o total em reais.
+
+```text
+Saída esperada:
+Carrinho: [ 1250 899 2340 475 ]
+Total: R$ 49.64
+```
+
+```bash
+gcc ~/LPEDC/material/E1039.c ~/LPEDC/material/0174-sentinela.c -o ~/LPEDC/material/E1039 && ~/LPEDC/material/E1039
+```
+
+**Exercício E1041** · ★★☆
+
+A agenda do dentista guarda os horários do dia (em HHMM) em ordem. Escreva
+insere_ordenado(L, h), que anda a partir de L->nil.prox enquanto não voltou
+à sentinela e a chave é menor que h, e então insere antes do nó onde
+parou, com sent_insere_apos(L, p->ant, h). Isso vale para a lista
+vazia, para o começo e para o fim, sem nenhum caso especial. Insira 1400,
+900, 1630, 800 e 1100 e mostre a lista depois de cada um.
+
+```text
+Saída esperada:
+[ 1400 ]
+[ 900 1400 ]
+[ 900 1400 1630 ]
+[ 800 900 1400 1630 ]
+[ 800 900 1100 1400 1630 ]
+```
+
+```bash
+gcc ~/LPEDC/material/E1041.c ~/LPEDC/material/0174-sentinela.c -o ~/LPEDC/material/E1041 && ~/LPEDC/material/E1041
+```
+
+**Exercício E1042** · ★★☆
+
+O leitor de código de barras do caixa travou e registrou o mesmo produto
+várias vezes. Escreva remove_todas(L, codigo), que tira da lista com
+sentinela (sentinela.h) todos os nós com aquele código e devolve quantos
+saíram. A lista tem 7, 3, 3, 9, 3, 5, 3. Remova os 3 e depois os 8.
+
+```text
+Saída esperada:
+Antes: [ 7 3 3 9 3 5 3 ]
+Removidos 4 do código 3: [ 7 9 5 ]
+Removidos 0 do código 8: [ 7 9 5 ]
+```
+
+```bash
+gcc ~/LPEDC/material/E1042.c ~/LPEDC/material/0174-sentinela.c -o ~/LPEDC/material/E1042 && ~/LPEDC/material/E1042
+```
+
+**Exercício E1044** · ★★★
+
+O ônibus chegou ao ponto final e volta pelo mesmo caminho: a lista de
+paradas tem que ser invertida. Escreva inverte(L), que inverte a lista com
+sentinela (sentinela.h) sem criar nem liberar nó nenhum: em cada nó,
+INCLUINDO a sentinela, troque ant com prox. Teste com as paradas 10, 20,
+30, 40 e com uma lista vazia (que deve continuar funcionando sem if).
+
+```text
+Saída esperada:
+ida:   [ 10 20 30 40 ]
+volta: [ 40 30 20 10 ]
+volta ao contrário: [ 10 20 30 40 ]
+vazia invertida: [ ]
+```
+
+```bash
+gcc ~/LPEDC/material/E1044.c ~/LPEDC/material/0174-sentinela.c -o ~/LPEDC/material/E1044 && ~/LPEDC/material/E1044
+```
+
+### 0175 · Conceitos e sucessor
+
+**Exercício E1045** · ★☆☆
+
+O estoque guarda os códigos 50, 30, 70, 20, 40, 60, 80, 35, 45 e 65,
+inseridos nessa ordem numa BST (arvpai.h). Escreva conta_graus(r, conta),
+que percorre a árvore e soma em conta[g] quantos nós têm grau g (0, 1 ou
+2 filhos). Mostre as três contagens, o grau da árvore (o maior grau que
+aparece) e quantas folhas ela tem.
+
+```text
+Saída esperada:
+grau 0: 5 nós
+grau 1: 1 nós
+grau 2: 4 nós
+grau da árvore: 2 | folhas: 5
+```
+
+```bash
+gcc ~/LPEDC/material/E1045.c ~/LPEDC/material/0175-arvpai.c -o ~/LPEDC/material/E1045 && ~/LPEDC/material/E1045
+```
+
+**Exercício E1047** · ★★☆
+
+A loja de calçados guarda os preços (em centavos) numa BST com pai
+(arvpai.h): 1890, 990, 2450, 1290, 3100, 750 e 2100, nessa ordem. Mostre os
+preços do mais caro ao mais barato SEM recursão: comece no ap_maximo e
+ande com ap_antecessor até chegar em NULL. Depois mostre os vizinhos do
+preço 12.90 (o antecessor e o sucessor dele).
+
+```text
+Saída esperada:
+Do mais caro ao mais barato: 31.00 24.50 21.00 18.90 12.90 9.90 7.50
+Vizinhos de 12.90: 9.90 e 18.90
+```
+
+```bash
+gcc ~/LPEDC/material/E1047.c ~/LPEDC/material/0175-arvpai.c -o ~/LPEDC/material/E1047 && ~/LPEDC/material/E1047
+```
+
+**Exercício E1048** · ★★☆
+
+Nem toda BST tem ponteiro para o pai. Escreva
+sucessor_sem_pai(raiz, chave), que acha o sucessor descendo da raiz: se o
+nó da chave tem subárvore direita, é o mínimo dela; senão, é o ÚLTIMO nó
+em que a descida virou à esquerda. Com os códigos 50, 30, 70, 20, 40, 60,
+80, 35, 45, 65 (arvpai.h), mostre o sucessor de cada chave (-1 para o
+maior) e confira com ap_sucessor, contando quantas respostas batem.
+
+```text
+Saída esperada:
+20 -> 30
+30 -> 35
+35 -> 40
+40 -> 45
+45 -> 50
+50 -> 60
+60 -> 65
+65 -> 70
+70 -> 80
+80 -> -1
+iguais ao ap_sucessor: 10 de 10
+```
+
+```bash
+gcc ~/LPEDC/material/E1048.c ~/LPEDC/material/0175-arvpai.c -o ~/LPEDC/material/E1048 && ~/LPEDC/material/E1048
+```
+
+**Exercício E1050** · ★★★
+
+Escreva altura_se_avl(r), que devolve a altura da árvore se TODO nó tiver
+fator de balanceamento -1, 0 ou 1, e -2 se algum nó estiver fora disso.
+Ela tem que fazer uma passada só (O(n)): cada nó usa as alturas que os
+filhos devolveram, sem chamar ap_altura. Escreva também
+mostra_desequilibrados(r), que lista (em ordem) os nós com fator fora de
+-1..1, com o fator. Teste três BSTs (arvpai.h): os horários 800, 615,
+1030, 700, 650, 920, 1200, 730; os códigos 50, 30, 70, 20, 40, 60, 80, 35,
+45, 65; e as chaves 1 a 5 em ordem.
+
+```text
+Saída esperada:
+horários: não é AVL. Desequilibrados: 615 (fator -2)
+códigos: é AVL, altura 3
+crescente: não é AVL. Desequilibrados: 1 (fator -4) 2 (fator -3) 3 (fator -2)
+```
+
+```bash
+gcc ~/LPEDC/material/E1050.c ~/LPEDC/material/0175-arvpai.c -o ~/LPEDC/material/E1050 && ~/LPEDC/material/E1050
+```
+
+### 0176 · AVL: remoção
+
+**Exercício E1051** · ★☆☆
+
+A biblioteca guarda as matrículas dos leitores com livro emprestado numa
+AVL (avlrem.h). Insira 50, 25, 75, 10, 30, 60, 80, 5, 15, 27, 55 e 1, nessa
+ordem. Depois os leitores 80, 75 e 60 devolvem os livros: remova os três,
+um por vez, mostrando a pré-ordem, a altura e quantas rotações cada
+remoção fez (use avr_rotacoes antes e depois).
+
+```text
+Saída esperada:
+início:  pré 50 25 10 5 1 15 30 27 75 60 55 80 | altura 4
+tira 80: pré 25 10 5 1 15 50 30 27 60 55 75 | altura 3 | rotações 2
+tira 75: pré 25 10 5 1 15 50 30 27 60 55 | altura 3 | rotações 0
+tira 60: pré 25 10 5 1 15 50 30 27 55 | altura 3 | rotações 0
+```
+
+```bash
+gcc ~/LPEDC/material/E1051.c ~/LPEDC/material/0176-avlrem.c -o ~/LPEDC/material/E1051 && ~/LPEDC/material/E1051
+```
+
+**Exercício E1053** · ★★☆
+
+A fila de prioridade do pronto-socorro está guardada numa AVL (avlrem.h):
+a menor chave é a mais urgente. Insira as chaves i * 7 % 20, para i de 0
+a 19 (são 0 a 19 embaralhados). Depois atenda até esvaziar: ache a menor
+chave (descendo tudo à esquerda), mostre e remova. No fim, mostre a
+altura que a árvore tinha no começo e quantas rotações o esvaziamento
+custou.
+
+```text
+Saída esperada:
+Atendidos: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19
+Altura no começo: 4 | rotações para esvaziar: 7
+```
+
+```bash
+gcc ~/LPEDC/material/E1053.c ~/LPEDC/material/0176-avlrem.c -o ~/LPEDC/material/E1053 && ~/LPEDC/material/E1053
+```
+
+**Exercício E1054** · ★★☆
+
+Escreva uma AVL de int do zero (sem TAD): No com chave, altura, esq e dir;
+alt (altura de NULL é -1), atualiza, gira_dir, gira_esq, equilibra,
+insere, pre (pré-ordem) e libera. Na remoção, remove_chave, o nó com dois
+filhos recebe a chave do ANTECESSOR (o maior da subárvore esquerda), que
+é removido dali; o rebalanceamento acontece na volta da recursão.
+Insira 40, 20, 60, 10, 30, 50, 70, 25, 35, remova o 40 e depois o 20,
+mostrando a pré-ordem a cada passo e, no fim, a altura.
+
+```text
+Saída esperada:
+início:  pré 40 20 10 30 25 35 60 50 70
+tira 40: pré 35 20 10 30 25 60 50 70
+tira 20: pré 35 25 10 30 60 50 70
+altura final: 2
+```
+
+```bash
+gcc ~/LPEDC/material/E1054.c ~/LPEDC/material/0176-avlrem.c -o ~/LPEDC/material/E1054 && ~/LPEDC/material/E1054
+```
+
+**Exercício E1056** · ★★★
+
+Na inserção, a AVL faz no máximo uma rotação (simples ou dupla). Na
+remoção, não: o conserto pode subir até a raiz. O pior caso é a árvore de
+Fibonacci de altura h: a esquerda é uma árvore de Fibonacci de altura h - 1
+e a direita, de altura h - 2 (todo nó tem fator 1). Escreva
+fibonacci(h), que monta essa árvore direto com malloc (NoA de avlrem.h,
+campo altura preenchido, chaves 1, 2, 3... em ordem), e, para h de 2 a 9,
+remova a MAIOR chave com avr_remove e mostre quantos nós havia, quantas
+rotações a remoção fez e a altura depois.
+
+```text
+Saída esperada:
+altura 2:   4 nós | rotações 1 | altura depois 1
+altura 3:   7 nós | rotações 1 | altura depois 2
+altura 4:  12 nós | rotações 2 | altura depois 3
+altura 5:  20 nós | rotações 2 | altura depois 4
+altura 6:  33 nós | rotações 3 | altura depois 5
+altura 7:  54 nós | rotações 3 | altura depois 6
+altura 8:  88 nós | rotações 4 | altura depois 7
+altura 9: 143 nós | rotações 4 | altura depois 8
+```
+
+```bash
+gcc ~/LPEDC/material/E1056.c ~/LPEDC/material/0176-avlrem.c -o ~/LPEDC/material/E1056 && ~/LPEDC/material/E1056
+```
+
+### 0177 · Rubro-negra clássica
+
+**Exercício E1057** · ★☆☆
+
+Insira os pacotes 1 a 10, em ordem, numa rubro-negra (vermelhopreto.h) e
+escreva conta_vermelhos(T, x), que percorre a subárvore de x e conta os
+nós vermelhos. A recursão para na sentinela (x == &T->nil), e
+não em NULL. Mostre a pré-ordem, os vermelhos, os pretos e a altura negra.
+
+```text
+Saída esperada:
+pré: 4 2 1 3 6 5 8* 7 9 10*
+vermelhos: 2 | pretos: 8 | altura negra: 3
+```
+
+```bash
+gcc ~/LPEDC/material/E1057.c ~/LPEDC/material/0177-vermelhopreto.c -o ~/LPEDC/material/E1057 && ~/LPEDC/material/E1057
+```
+
+**Exercício E1059** · ★★☆
+
+O Cormen prova que a subárvore de qualquer nó x tem pelo menos
+2^bh(x) - 1 nós, onde bh(x) é a altura negra de x: quantos pretos há de x
+(sem contar x) até uma folha nil (contando a nil). Confira isso nó por
+nó. Insira 40, 20, 60, 10, 30, 50, 70, 5, 15, 25 (vermelhopreto.h) e
+escreva bh(T, x), nos(T, x) e tabela(T, x), que mostra em ordem, para
+cada nó: chave, cor, bh, nós da subárvore, 2^bh - 1 e "ok" se a
+desigualdade vale.
+
+```text
+Saída esperada:
+  5 vermelho bh 1 | nós  1 | 2^bh - 1 = 1 ok
+ 10 preto    bh 1 | nós  3 | 2^bh - 1 = 1 ok
+ 15 vermelho bh 1 | nós  1 | 2^bh - 1 = 1 ok
+ 20 vermelho bh 2 | nós  6 | 2^bh - 1 = 3 ok
+ 25 vermelho bh 1 | nós  1 | 2^bh - 1 = 1 ok
+ 30 preto    bh 1 | nós  2 | 2^bh - 1 = 1 ok
+ 40 preto    bh 2 | nós 10 | 2^bh - 1 = 3 ok
+ 50 vermelho bh 1 | nós  1 | 2^bh - 1 = 1 ok
+ 60 preto    bh 1 | nós  3 | 2^bh - 1 = 1 ok
+ 70 vermelho bh 1 | nós  1 | 2^bh - 1 = 1 ok
+```
+
+```bash
+gcc ~/LPEDC/material/E1059.c ~/LPEDC/material/0177-vermelhopreto.c -o ~/LPEDC/material/E1059 && ~/LPEDC/material/E1059
+```
+
+**Exercício E1060** · ★★☆
+
+Acompanhe o conserto da rubro-negra. Insira as senhas 10, 20, 30, 15, 25,
+5, 1 e 27 (vermelhopreto.h) e, depois de cada uma, mostre quantas vezes
+cada caso do conserto rodou NAQUELA inserção (use T->casos[1], [2] e [3]
+antes e depois) e a pré-ordem. No fim, mostre o total de rotações.
+
+```text
+Saída esperada:
+insere 10: caso 1: 0 | caso 2: 0 | caso 3: 0 | pré 10
+insere 20: caso 1: 0 | caso 2: 0 | caso 3: 0 | pré 10 20*
+insere 30: caso 1: 0 | caso 2: 0 | caso 3: 1 | pré 20 10* 30*
+insere 15: caso 1: 1 | caso 2: 0 | caso 3: 0 | pré 20 10 15* 30
+insere 25: caso 1: 0 | caso 2: 0 | caso 3: 0 | pré 20 10 15* 30 25*
+insere  5: caso 1: 0 | caso 2: 0 | caso 3: 0 | pré 20 10 5* 15* 30 25*
+insere  1: caso 1: 1 | caso 2: 0 | caso 3: 0 | pré 20 10* 5 1* 15 30 25*
+insere 27: caso 1: 0 | caso 2: 1 | caso 3: 1 | pré 20 10* 5 1* 15 27 25* 30*
+rotações no total: 3
+```
+
+```bash
+gcc ~/LPEDC/material/E1060.c ~/LPEDC/material/0177-vermelhopreto.c -o ~/LPEDC/material/E1060 && ~/LPEDC/material/E1060
+```
+
+**Exercício E1061** · ★★★
+
+Escreva a inserção da rubro-negra do Cormen à mão, com a sentinela nil
+(variável global, preta, que serve de folha e de pai da raiz):
+gira_esq, gira_dir, conserta (os casos 1, 2 e 3 e o espelho deles),
+insere(chave) e libera. Escreva também:
+
+```text
+void pre(const No *x)    // pré-ordem; vermelho leva "*" depois da chave
+int fiscal(const No *x)  // pretos de x até a nil (nil inclusive), ou
+                         // -1 se a propriedade 4 ou a 5 falhar
+```
+
+Insira os pacotes 1 a 10, em ordem, mostre a pré-ordem e o veredito do
+fiscal sobre a raiz.
+
+```text
+Saída esperada:
+pré: 4 2 1 3 6 5 8* 7 9 10*
+fiscal: as cinco propriedades valem
+```
+
+```bash
+gcc ~/LPEDC/material/E1061.c ~/LPEDC/material/0177-vermelhopreto.c -o ~/LPEDC/material/E1061 && ~/LPEDC/material/E1061
+```
+
+### 0178 · Hash: divisão e multiplicação
+
+**Exercício E1063** · ★☆☆
+
+A transportadora espalha os CEPs de entrega numa tabela de m = 97 baldes
+(97 é primo e fica longe de 64 e de 128). Use esp_divisao (espalha.h) para
+mostrar o balde de cada CEP: 69050000, 69020120, 69099999, 01310100,
+20040002 e 69050097. Mostre o CEP com 8 dígitos (zeros à esquerda).
+
+```text
+Saída esperada:
+     CEP | balde (m = 97)
+69050000 | 65
+69020120 | 61
+69099999 | 12
+01310100 | 18
+20040002 | 93
+69050097 | 65
+```
+
+```bash
+gcc ~/LPEDC/material/E1063.c ~/LPEDC/material/0178-espalha.c -o ~/LPEDC/material/E1063 -lm && ~/LPEDC/material/E1063
+```
+
+**Exercício E1065** · ★★☆
+
+O almoxarifado recebe 1000 caixas numeradas de 64 em 64 (64, 128, ...,
+64000). Compare três funções (espalha.h): divisão com m = 64, divisão com
+m = 61 e multiplicação em inteiros com m = 64 (p = 6). Para cada uma,
+conte as chaves por balde e mostre quantos baldes foram usados e o
+tamanho do mais cheio.
+
+```text
+Saída esperada:
+divisão, m = 64:        1 baldes usados, o mais cheio com 1000
+divisão, m = 61:       61 baldes usados, o mais cheio com 17
+multiplicação, m = 64: 64 baldes usados, o mais cheio com 17
+```
+
+```bash
+gcc ~/LPEDC/material/E1065.c ~/LPEDC/material/0178-espalha.c -o ~/LPEDC/material/E1065 -lm && ~/LPEDC/material/E1065
+```
+
+**Exercício E1066** · ★★☆
+
+Escolha o m de uma tabela com encadeamento pelo método da divisão. Para n
+chaves e um fator de carga alvo alfa, o m é o menor primo >= n / alfa
+(arredondado para cima), mas que fique a pelo menos (n / alfa) / 8 de
+distância da potência de 2 mais próxima; se ficar perto demais, tente o
+próximo primo. Escreva eh_primo, primo_a_partir(x), distancia_potencia(m)
+e escolhe(n, alfa), e teste (2000, 3), (3000, 2), (5000, 5) e (100, 2).
+
+```text
+Saída esperada:
+n = 2000, alfa = 3: alvo 667 -> m = 673 (a 161 da potência de 2 mais perto)
+n = 3000, alfa = 2: alvo 1500 -> m = 1511 (a 487 da potência de 2 mais perto)
+n = 5000, alfa = 5: alvo 1000 -> m = 1151 (a 127 da potência de 2 mais perto)
+n = 100, alfa = 2: alvo 50 -> m = 53 (a 11 da potência de 2 mais perto)
+```
+
+```bash
+gcc ~/LPEDC/material/E1066.c ~/LPEDC/material/0178-espalha.c -o ~/LPEDC/material/E1066 -lm && ~/LPEDC/material/E1066
+```
+
+**Exercício E1068** · ★★★
+
+O método da multiplicação aceita m = 2^p, e isso permite uma tabela que
+DOBRA de tamanho. Escreva uma tabela hash com encadeamento (listas) cujo
+índice é (k * 2654435769u) >> (32 - p), com uint32_t. Ela começa com m = 4
+e, antes de inserir, se n + 1 passar de m, dobra: cria 2m baldes vazios e
+move cada nó para o balde novo (o índice muda, porque p muda), sem malloc
+novo por item, mostrando "dobrou: m = ... (n = ...)". Insira as
+matrículas 1000, 2000, ..., 100000 e mostre n, m, o fator de carga e o
+tamanho da maior lista. Libere tudo no fim.
+
+```text
+Saída esperada:
+dobrou: m = 8 (n = 4)
+dobrou: m = 16 (n = 8)
+dobrou: m = 32 (n = 16)
+dobrou: m = 64 (n = 32)
+dobrou: m = 128 (n = 64)
+fim: n = 100, m = 128, fator de carga 0.78, maior lista 2
+```
+
+```bash
+gcc ~/LPEDC/material/E1068.c ~/LPEDC/material/0178-espalha.c -o ~/LPEDC/material/E1068 -lm && ~/LPEDC/material/E1068
+```
+
+### 0179 · Sondagem quadrática e dupla
+
+**Exercício E1069** · ★☆☆
+
+Com m = 13 (sondagem.h), mostre as 6 primeiras posições da sequência de
+sondagem das chaves 44 e 57 nos três modos (SD_LINEAR, SD_QUADRATICA e
+SD_DUPLA), usando sd_posicao(t, chave, i) para i de 0 a 5. As duas chaves
+começam na posição 5: veja em qual modo as sequências se separam.
+
+```text
+Saída esperada:
+chave 44
+  linear:      5  6  7  8  9 10
+  quadrática:  5  6  9  1  8  4
+  dupla:       5  1 10  6  2 11
+chave 57
+  linear:      5  6  7  8  9 10
+  quadrática:  5  6  9  1  8  4
+  dupla:       5  2 12  9  6  3
+```
+
+```bash
+gcc ~/LPEDC/material/E1069.c ~/LPEDC/material/0179-sondagem.c -o ~/LPEDC/material/E1069 && ~/LPEDC/material/E1069
+```
+
+**Exercício E1071** · ★★☆
+
+Dispersão dupla com m = 16, uma potência de 2. A regra do Cormen: o passo
+h2(k) tem que ser ÍMPAR, para ser primo com 16 e visitar todas as
+posições. Escreva, sem o TAD, h1(k) = k % 16 e h2(k) = 2 * ((k / 16) % 8)
++ 1 (os bits que o h1 não usa), e insira os cartões 3, 19, 35, 51, 67 e
+83 (todos com h1 = 3) num vetor de 16 posições (-1 é livre). Mostre o h2,
+a posição e as sondagens de cada um e a tabela no fim.
+
+```text
+Saída esperada:
+ 3: h2 =  1 -> posição  3, 1 sondagens
+19: h2 =  3 -> posição  6, 2 sondagens
+35: h2 =  5 -> posição  8, 2 sondagens
+51: h2 =  7 -> posição 10, 2 sondagens
+67: h2 =  9 -> posição 12, 2 sondagens
+83: h2 = 11 -> posição 14, 2 sondagens
+tabela: . . . 3 . . 19 . 35 . 51 . 67 . 83 .
+```
+
+```bash
+gcc ~/LPEDC/material/E1071.c ~/LPEDC/material/0179-sondagem.c -o ~/LPEDC/material/E1071 && ~/LPEDC/material/E1071
+```
+
+**Exercício E1072** · ★★☆
+
+A sondagem quadrática h(k, i) = (k % m + i²) % m não visita todas as
+posições: com m primo, só (m + 1) / 2 delas são diferentes. Com uma
+tabela de m = 7 (sondagem.h, SD_QUADRATICA), mostre a sequência da chave
+0 para i de 0 a 6 e as posições que ela nunca visita. Depois insira 0, 7,
+14, 21 e 28 (todas começam no 0), mostrando a posição de cada uma (-1 é
+falha), a tabela e a carga. A 28 não entra, com três posições livres.
+
+```text
+Saída esperada:
+sequência da chave 0: 0 1 4 2 2 4 1
+nunca visitadas: 3 5 6
+insere  0: posição 0
+insere  7: posição 1
+insere 14: posição 4
+insere 21: posição 2
+insere 28: posição -1
+tabela:   0   7  21   .  14   .   .
+carga 0.57 e a chave 28 ficou de fora
+```
+
+```bash
+gcc ~/LPEDC/material/E1072.c ~/LPEDC/material/0179-sondagem.c -o ~/LPEDC/material/E1072 && ~/LPEDC/material/E1072
+```
+
+**Exercício E1074** · ★★★
+
+Escreva, sem o TAD, uma tabela de dispersão dupla que cresce: um vetor de
+int (-1 livre), m primo, h1 = k % m e h2 = 1 + k % (m - 1). Antes de
+inserir, se (n + 1) / m passar de 0.5, ela cresce para o menor primo >=
+2m, reinsere as chaves antigas (com o m novo, as posições mudam) e mostra
+"cresceu: m = ... -> ... (n = ...)". Comece com m = 7, insira as chaves
+7919 * i % 100000, para i de 0 a 39, e no fim mostre n, m, a carga e a
+média de sondagens para achar cada uma das 40 chaves. Libere o vetor.
+
+```text
+Saída esperada:
+cresceu: m = 7 -> 17 (n = 3)
+cresceu: m = 17 -> 37 (n = 8)
+cresceu: m = 37 -> 79 (n = 18)
+cresceu: m = 79 -> 163 (n = 39)
+fim: n = 40, m = 163, carga 0.25, média de sondagens 1.38
+```
+
+```bash
+gcc ~/LPEDC/material/E1074.c ~/LPEDC/material/0179-sondagem.c -o ~/LPEDC/material/E1074 && ~/LPEDC/material/E1074
+```
+
+### 0180 · Pigeonhole e chave composta
+
+**Exercício E1075** · ★☆☆
+
+A academia quer as idades dos alunos da turma de iniciantes em ordem. As
+idades vão de 18 a 25: 22, 19, 25, 18, 22, 20, 19, 24, 22, 18. Escreva o
+pigeonhole sort para números inteiros: um vetor casa[] com uma posição
+para cada idade possível (25 - 18 + 1 = 8), conte quantos caem em cada
+casa e depois esvazie as casas em ordem de volta no vetor. Mostre também
+quantas casas foram usadas.
+
+```text
+Saída esperada:
+ordenadas: 18 18 19 19 20 22 22 22 24 25
+casas usadas: 6 de 8
+```
+
+```bash
+gcc ~/LPEDC/material/E1075.c ~/LPEDC/material/0180-pombal.c -o ~/LPEDC/material/E1075 && ~/LPEDC/material/E1075
+```
+
+**Exercício E1077** · ★★☆
+
+Teste a estabilidade de três ordenações do pombal.h. Monte 10 alunos com
+nomes a0 a a9, as notas 4, 8, 4, 2, 8, 4, 6, 2, 8, 6 e, no campo turma, a
+posição original (0 a 9). Escreva eh_estavel(v, n): depois de ordenar,
+entre vizinhos de nota igual, a posição original tem que crescer. Ordene
+uma cópia com pb_selecao, outra com pb_insercao e outra com pb_pigeonhole
+e mostre o veredito e o resultado de cada uma.
+
+```text
+Saída esperada:
+seleção:    não estável | a3(2) a7(2) a2(4) a0(4) a5(4) a6(6) a9(6) a1(8) a8(8) a4(8)
+inserção:   estável     | a3(2) a7(2) a0(4) a2(4) a5(4) a6(6) a9(6) a1(8) a4(8) a8(8)
+pigeonhole: estável     | a3(2) a7(2) a0(4) a2(4) a5(4) a6(6) a9(6) a1(8) a4(8) a8(8)
+```
+
+```bash
+gcc ~/LPEDC/material/E1077.c ~/LPEDC/material/0180-pombal.c -o ~/LPEDC/material/E1077 && ~/LPEDC/material/E1077
+```
+
+**Exercício E1078** · ★★☆
+
+A previsão do frio na serra: ordene as leituras da MAIS QUENTE para a
+MAIS FRIA com um pigeonhole sort estável escrito por você. As
+temperaturas vão de -5 a 8 graus (14 casas; a casa de t é t - (-5)). Cada
+casa é uma fila de índices, como no pombal.c, e as casas são esvaziadas
+da mais quente para a mais fria. Leituras: Urubici -3, Gramado 4,
+Curitiba 8, Sao Joaquim -5, Lages 4, Bom Jardim -3, Canela 4, Caxias 6.
+
+```text
+Saída esperada:
+  8 Curitiba
+  6 Caxias
+  4 Gramado
+  4 Lages
+  4 Canela
+ -3 Urubici
+ -3 Bom Jardim
+ -5 Sao Joaquim
+```
+
+```bash
+gcc ~/LPEDC/material/E1078.c ~/LPEDC/material/0180-pombal.c -o ~/LPEDC/material/E1078 && ~/LPEDC/material/E1078
+```
+
+**Exercício E1079** · ★★★
+
+A secretaria quer a lista dos inscritos do vestibular por CIDADE (código
+1, 2 ou 3) e, dentro de cada cidade, por NOTA, da menor para a maior.
+Escreva ordena_por_cidade e ordena_por_nota, duas inserções (que são
+estáveis) sobre Inscrito, e chame-as na ordem que dá o resultado certo
+(a chave principal fica por último). Inscritos (nome, cidade, nota):
+Ana 1 62, Teo 2 70, Nina 3 91, Rui 1 80, Bia 2 48, Lia 1 62, Caio 3 55,
+Ivo 2 70, Joao 1 55. Mostre uma linha por cidade.
+
+```text
+Saída esperada:
+1:Joao(55) 1:Ana(62) 1:Lia(62) 1:Rui(80)
+2:Bia(48) 2:Teo(70) 2:Ivo(70)
+3:Caio(55) 3:Nina(91)
+```
+
+```bash
+gcc ~/LPEDC/material/E1079.c ~/LPEDC/material/0180-pombal.c -o ~/LPEDC/material/E1079 && ~/LPEDC/material/E1079
+```
+
+### 0181 · Juntando tudo
 
 **Exercício E1081** · ★☆☆
 
@@ -2787,7 +2557,6 @@ Tania (301000003) e Ugo (301000004). Marque Rosa às 11:00, Saulo às
 08:30 e Tania às 13:15. Tente marcar o Ugo às 08:30 e o CPF 301000005
 (que não existe) às 09:00, mostrando uma mensagem para cada recusa, e
 mostre a agenda.
-
 
 ```text
 Saída esperada:
@@ -2810,7 +2579,6 @@ O plantão da clínica funciona em três turnos: manhã (00:00 a 11:59), tarde
 07:30, 11:15, 12:00, 19:45, 09:00, 14:00, 18:30, 11:59, 16:00 e 21:00. Com
 ag_intervalo, mostre quantas consultas há em cada turno e quais são.
 
-
 ```text
 Saída esperada:
 manhã (4): 07:30 09:00 11:15 11:59
@@ -2831,7 +2599,6 @@ novo, novo, ...)). Senão, desmarca o antigo com ag_cancela (se alguém da
 espera assumir, mostre quem) e marca o novo. Teste: Zeca (601000001) às
 09:00, Alice (601000002) às 10:00 e Breno (601000003) na espera; remarque
 o Zeca para 10:00 e depois para 11:00.
-
 
 ```text
 Saída esperada:
@@ -2861,7 +2628,6 @@ entram no fim. Sem nenhum caso especial para fila vazia. Chegam, nesta
 ordem: Ana 35, Beto 70, Caio 22, Dora 65, Enzo 81, Fabi 40. Mostre a fila
 depois de cada chegada e libere tudo no fim.
 
-
 ```text
 Saída esperada:
 Ana
@@ -2876,9 +2642,613 @@ Beto* Dora* Enzo* Ana Caio Fabi
 gcc ~/LPEDC/material/E1085.c ~/LPEDC/material/0181-agenda.c -o ~/LPEDC/material/E1085 && ~/LPEDC/material/E1085
 ```
 
+### Lista do módulo
+
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P2801.c a P2830.c, em `material/`; resoluções em `_respostas/28-estruturas-complementos/lista/`.
+
+#### ★☆☆ Aquecimento
+
+**Exercício P2801** · ★☆☆ · A fila do caixa com sentinela
+
+O caixa rápido do mercado atende pela ordem de chegada. Escreva, do zero,
+uma lista dupla circular com nó sentinela (a struct da lista guarda o nó
+nil dentro dela): inicia(L), insere_fim(L, senha), mostra(L) do primeiro
+ao último, mostra_inverso(L) do último ao primeiro e libera(L). Entram as
+senhas 31, 32, 33 e 34. Mostre a fila nos dois sentidos e, no fim, se a
+sentinela da lista vazia aponta para ela mesma.
+
+```text
+Saída esperada:
+ida:   [ 31 32 33 34 ]
+volta: [ 34 33 32 31 ]
+vazia: nil aponta para ela mesma? sim
+```
+
 ---
 
-## Desafios do módulo
+**Exercício P2802** · ★☆☆ · A chave guardada na sentinela
+
+Na busca com sentinela do Cormen, a chave procurada é copiada para
+nil.chave antes do laço, e o laço só testa x->chave != k. Monte a lista
+com sentinela 4, 8, 15, 16, 23, 42 (insira no fim) e escreva busca(L, k,
+&comparacoes), que devolve o nó achado (ou &L->nil) e conta quantas vezes
+x->chave != k foi avaliado. Busque 15, 42 e 99.
+
+```text
+Saída esperada:
+15: achou, 3 comparações
+42: achou, 6 comparações
+99: não está, 7 comparações
+```
+
+---
+
+**Exercício P2803** · ★☆☆ · O grau de cada nó
+
+O catálogo da livraria guarda os códigos 60, 30, 90, 20, 45, 75, 40, 50,
+95 numa BST (insira nessa ordem). Escreva grau(x), que devolve quantos
+filhos x tem, e mostre, em ordem, cada chave com o grau entre parênteses.
+Depois mostre o grau da árvore (o maior grau) e quantas folhas ela tem.
+
+```text
+Saída esperada:
+em ordem: 20(0) 30(2) 40(0) 45(2) 50(0) 60(2) 75(0) 90(2) 95(0)
+grau da árvore: 2 | folhas: 5
+```
+
+---
+
+**Exercício P2804** · ★☆☆ · Quantos nós em cada nível
+
+Com a mesma árvore do P2803 (60, 30, 90, 20, 45, 75, 40, 50, 95), escreva
+profundidade(x), que sobe pelo ponteiro pai contando arestas, e altura(x),
+em arestas (vazia: -1). Mostre quantos nós há em cada nível, de 0 até a
+altura da árvore, e quais são.
+
+```text
+Saída esperada:
+nível 0: 60 (1 nós)
+nível 1: 30 90 (2 nós)
+nível 2: 20 45 75 95 (4 nós)
+nível 3: 40 50 (2 nós)
+altura: 3
+```
+
+---
+
+**Exercício P2805** · ★☆☆ · O fator de cada nó
+
+Ainda com a árvore do P2803 (60, 30, 90, 20, 45, 75, 40, 50, 95), mostre
+em ordem cada chave com o seu fator de balanceamento, altura(esq) -
+altura(dir), e diga no fim se a árvore é AVL (todo fator em -1, 0 ou 1).
+Depois insira 55 e repita.
+
+```text
+Saída esperada:
+fatores: 20(0) 30(-1) 40(0) 45(0) 50(0) 60(1) 75(0) 90(0) 95(0)
+é AVL
+fatores: 20(0) 30(-2) 40(0) 45(-1) 50(-1) 55(0) 60(2) 75(0) 90(0) 95(0)
+não é AVL
+```
+
+---
+
+**Exercício P2806** · ★☆☆ · Mínimo, máximo e sucessor
+
+O painel de embarque guarda os horários (HHMM) 1210, 830, 1545, 700, 945,
+1400, 1700, 900 numa BST com ponteiro para o pai. Escreva minimo(x),
+maximo(x) e sucessor(x) (o TREE-SUCCESSOR do Cormen: com subárvore
+direita, o mínimo dela; sem, sobe até chegar por um filho esquerdo).
+Mostre o primeiro e o último voo e o sucessor de 945, de 1210 e de 1700.
+
+```text
+Saída esperada:
+primeiro: 700 | último: 1700
+depois de 945: 1210
+depois de 1210: 1400
+depois de 1700: nenhum
+```
+
+---
+
+**Exercício P2807** · ★☆☆ · Divisão e colisões
+
+A locadora de bicicletas espalha as matrículas 1013, 2026, 3039, 4052,
+5065, 1500, 2600 e 3700 numa tabela de m = 13 baldes com h(k) = k mod 13.
+Mostre o balde de cada matrícula, o número de colisões (chaves que caem
+num balde já ocupado) e repita com m = 10.
+
+```text
+Saída esperada:
+m = 13: 12 11 10 9 8 5 0 8 | colisões: 1
+m = 10: 3 6 9 2 5 0 0 0 | colisões: 2
+```
+
+---
+
+**Exercício P2808** · ★☆☆ · Multiplicação em ponto flutuante
+
+Escreva h(k, m) = floor(m · (k·A mod 1)) com A = (raiz de 5 - 1) / 2, em
+double. Para as senhas 10, 20, ..., 80 e m = 8, mostre o balde de cada uma
+e quantos baldes diferentes foram usados. Compare com k mod 8.
+
+```text
+Saída esperada:
+senha | mult | k % 8
+   10 |    1 | 2
+   20 |    2 | 4
+   30 |    4 | 6
+   40 |    5 | 0
+   50 |    7 | 2
+   60 |    0 | 4
+   70 |    2 | 6
+   80 |    3 | 0
+baldes usados: multiplicação 7, divisão 4
+```
+
+```bash
+gcc ~/LPEDC/material/P2808.c -o ~/LPEDC/material/P2808 -lm && ~/LPEDC/material/P2808
+```
+
+---
+
+**Exercício P2809** · ★☆☆ · Sondagem linear e a tabela final
+
+O estacionamento tem 11 vagas e usa h(k, i) = (k mod 11 + i) mod 11.
+Entram as placas (só os números) 23, 45, 12, 34, 56, 9 e 1. Para cada uma,
+mostre a vaga e quantas sondagens fez; no fim, imprima a tabela inteira
+("." para vaga livre).
+
+```text
+Saída esperada:
+23 -> vaga  1 (1 sondagens)
+45 -> vaga  2 (2 sondagens)
+12 -> vaga  3 (3 sondagens)
+34 -> vaga  4 (4 sondagens)
+56 -> vaga  5 (5 sondagens)
+ 9 -> vaga  9 (1 sondagens)
+ 1 -> vaga  6 (6 sondagens)
+tabela: . 23 45 12 34 56 1 . . 9 .
+```
+
+---
+
+**Exercício P2810** · ★☆☆ · Pigeonhole dos dados
+
+Num jogo de tabuleiro, foram anotados 15 lançamentos de um dado: 3, 6, 1,
+3, 5, 2, 6, 6, 4, 1, 3, 5, 6, 2, 3. Ordene com o pigeonhole sort (uma casa
+para cada face, de 1 a 6) e mostre a sequência ordenada e quantas vezes
+saiu cada face.
+
+```text
+Saída esperada:
+frequências: 1:2 2:2 3:4 4:1 5:2 6:4
+ordenados: 1 1 2 2 3 3 3 3 4 5 5 6 6 6 6
+```
+
+#### ★★☆ Para pensar
+
+**Exercício P2811** · ★★☆ · Sondagem quadrática
+
+Refaça o estacionamento do P2809 (m = 11, placas 23, 45, 12, 34, 56, 9 e
+1) com sondagem quadrática: h(k, i) = (k mod 11 + i * i) mod 11. Mostre a
+vaga e as sondagens de cada placa, a tabela final e o total de sondagens.
+Compare com o P2809.
+
+```text
+Saída esperada:
+23 -> vaga  1 (1 sondagens)
+45 -> vaga  2 (2 sondagens)
+12 -> vaga  5 (3 sondagens)
+34 -> vaga 10 (4 sondagens)
+56 -> vaga  6 (5 sondagens)
+ 9 -> vaga  9 (1 sondagens)
+ 1 -> vaga  4 (6 sondagens)
+tabela: . 23 45 . 1 12 56 . . 9 34
+total de sondagens: 22
+```
+
+---
+
+**Exercício P2812** · ★★☆ · Dispersão dupla
+
+Agora com dispersão dupla, numa tabela de m = 13: h(k, i) = (h1(k) + i ·
+h2(k)) mod 13, com h1(k) = k mod 13 e h2(k) = 1 + (k mod 11). Insira 14,
+27, 40, 53, 66, 79 (todas com h1 = 1) e 5. Mostre o passo h2, a posição e
+as sondagens de cada uma, a tabela final e o total de sondagens.
+
+```text
+Saída esperada:
+14: passo  4 ->  1 (1 sondagens)
+27: passo  6 ->  7 (2 sondagens)
+40: passo  8 ->  9 (2 sondagens)
+53: passo 10 -> 11 (2 sondagens)
+66: passo  1 ->  2 (2 sondagens)
+79: passo  3 ->  4 (2 sondagens)
+ 5: passo  6 ->  5 (1 sondagens)
+tabela: . 14 66 . 79 5 . 27 . 40 . 53 .
+total de sondagens: 12
+```
+
+---
+
+**Exercício P2813** · ★★☆ · A lápide no meio do caminho
+
+Numa tabela de m = 7 com sondagem linear, cada posição tem um estado:
+LIVRE, OCUPADA ou LAPIDE. Escreva insere (reaproveita a primeira lápide do
+caminho), busca (para na LIVRE, passa reto pela LAPIDE) e remove (marca
+LAPIDE). Insira 10, 17, 24 e 5 (os três primeiros começam no 3), remova o
+17, busque o 24, insira 31 e mostre a tabela depois de cada passo ("."
+livre, "x" lápide).
+
+```text
+Saída esperada:
+inseridos:   .  .  . 10 17 24  5
+tira 17:     .  .  . 10  x 24  5
+busca 24: posição 5
+insere 31:   .  .  . 10 31 24  5
+```
+
+---
+
+**Exercício P2814** · ★★☆ · Do maior para o menor com o antecessor
+
+A tabela de recordes do fliperama guarda as pontuações 5200, 3100, 8800,
+2500, 4700, 7600, 9900, 4100 numa BST com ponteiro para o pai. Escreva
+antecessor(x) (o espelho do sucessor: com subárvore esquerda, o máximo
+dela; sem, sobe até chegar por um filho direito) e mostre o ranking, do
+maior para o menor, sem recursão: comece no máximo e ande pelo antecessor.
+Mostre também o antecessor do 4700 e do 2500.
+
+```text
+Saída esperada:
+ranking: 9900 8800 7600 5200 4700 4100 3100 2500
+antes de 4700: 4100 | antes de 2500: nenhum
+```
+
+---
+
+**Exercício P2815** · ★★☆ · O fiscal da rubro-negra
+
+Três árvores foram coloridas à mão e você tem que conferir se são rubro-
+negras. Cada nó tem chave, cor ('V' ou 'P') e dois filhos (NULL faz o
+papel da folha nil, preta). Escreva fiscal(x), que devolve a altura negra
+de x (pretos de x até NULL, contando x, sem contar o NULL) ou -1 se: um
+vermelho tem filho vermelho, ou os dois lados têm alturas negras
+diferentes. Confira também a raiz preta. As árvores (pré-ordem, com o
+filho vazio como -):
+
+```text
+A: 20P (10V (5P, 15P), 30P (-, 35V))
+B: 20P (10V (5V, 15P), 30P)
+C: 20P (10P (5P, -), 30P)
+```
+
+Monte-as com uma função novo(chave, cor, esq, dir) que usa malloc.
+
+```text
+Saída esperada:
+A: rubro-negra, altura negra 2
+B: não é rubro-negra
+C: não é rubro-negra
+```
+
+---
+
+**Exercício P2816** · ★★☆ · Escreva a remoção da AVL
+
+Escreva, do zero, uma AVL com inserção e remoção (nó com altura guardada,
+rotações à esquerda e à direita e um equilibra que serve para as duas
+operações; na remoção de nó com dois filhos, use o sucessor). Conte as
+rotações simples num contador global (a dupla conta 2). Insira 30, 20, 40,
+10, 25, 35, 50, 5, 15, 45, 1 e remova 35, 40 e 25, mostrando a pré-ordem,
+a altura e as rotações de cada remoção.
+
+```text
+Saída esperada:
+início: pré 30 10 5 1 20 15 25 40 35 50 45 | altura 3
+tira 35: pré 30 10 5 1 20 15 25 45 40 50 | altura 3 | rotações 2
+tira 40: pré 30 10 5 1 20 15 25 45 50 | altura 3 | rotações 0
+tira 25: pré 30 10 5 1 20 15 45 50 | altura 3 | rotações 0
+```
+
+---
+
+**Exercício P2817** · ★★☆ · Quem é estável?
+
+Os pedidos do delivery chegam com número (1 a 8, a ordem de chegada) e
+bairro (código 1 a 3): (1,2) (2,1) (3,2) (4,3) (5,1) (6,3) (7,2) (8,1).
+Ordene cópias pelo bairro com a inserção, com a seleção e com o pigeonhole
+(uma fila por bairro), e escreva estavel(v, n): entre vizinhos de mesmo
+bairro, o número de chegada tem que crescer. Mostre cada resultado como
+numero:bairro e o veredito.
+
+```text
+Saída esperada:
+inserção:   2:1 5:1 8:1 1:2 3:2 7:2 4:3 6:3 | estável
+seleção:    2:1 5:1 8:1 1:2 7:2 3:2 4:3 6:3 | não estável
+casas:      2:1 5:1 8:1 1:2 3:2 7:2 4:3 6:3 | estável
+```
+
+---
+
+**Exercício P2818** · ★★☆ · A classificação da corrida
+
+Na corrida de rua do bairro, a classificação é pelo tempo (em segundos, o
+menor primeiro); no empate, o mais velho fica na frente; se ainda empatar,
+o nome em ordem alfabética. Escreva o comparador composto e ordene com
+qsort: Lia 1520 s 34 anos, Davi 1490 s 28, Rita 1520 s 41, Caio 1490 s 28,
+Bia 1610 s 22, Teo 1520 s 41. Mostre posição, nome, tempo em min:s e
+idade.
+
+```text
+Saída esperada:
+1. Caio  24:50  28 anos
+2. Davi  24:50  28 anos
+3. Rita  25:20  41 anos
+4. Teo   25:20  41 anos
+5. Lia   25:20  34 anos
+6. Bia   26:50  22 anos
+```
+
+---
+
+**Exercício P2819** · ★★☆ · Aniversários em duas passadas
+
+O RH quer os aniversários do ano em ordem de mês e, dentro do mês, de dia.
+Faça duas passadas de pigeonhole estável: primeiro pelo dia (31 casas),
+depois pelo mês (12 casas). Datas (dia/mês) e nomes: Ana 15/3, Beto 2/11,
+Cris 28/3, Duda 2/3, Enzo 15/1, Fábio 9/11, Gil 1/12, Hana 30/1. Mostre a
+lista depois de cada passada.
+
+```text
+Saída esperada:
+por dia: Gil 1/12 Beto 2/11 Duda 2/3 Fabio 9/11 Ana 15/3 Enzo 15/1 Cris 28/3 Hana 30/1
+por mês: Enzo 15/1 Hana 30/1 Duda 2/3 Ana 15/3 Cris 28/3 Beto 2/11 Fabio 9/11 Gil 1/12
+```
+
+---
+
+**Exercício P2820** · ★★☆ · Múltiplos de 32 na tabela
+
+Os lotes do almoxarifado têm números múltiplos de 32: 32, 64, ..., 3200
+(100 lotes). Compare, numa tabela de m = 32 baldes, a divisão k mod 32 e a
+multiplicação em inteiros (k * 2654435769u) >> 27, com uint32_t. Mostre
+para cada uma quantos baldes ficaram vazios e o tamanho do balde mais
+cheio. Depois repita a divisão com m = 31.
+
+```text
+Saída esperada:
+vazios 31 | mais cheio 100 | divisão, m = 32
+vazios  5 | mais cheio   5 | multiplicação, m = 32
+vazios  0 | mais cheio   4 | divisão, m = 31
+```
+
+#### ★★★ Desafio
+
+**Exercício P2821** · ★★★ · A rubro-negra do Cormen, do zero
+
+Escreva a rubro-negra clássica com a sentinela nil (um nó preto global que
+faz o papel de toda folha e do pai da raiz): rotações à esquerda e à
+direita que acertam o pai, inserção como na BST com o nó novo vermelho e o
+conserto com os três casos do tio (e os espelhos). Conte quantas vezes
+cada caso rodou. Insira 30, 15, 60, 10, 20, 50, 70, 5, 1, 55, 65, 80 e 90
+e mostre a pré-ordem (vermelhos com *), as contagens, a altura negra e o
+resultado de um fiscal das propriedades 4 e 5.
+
+```text
+Saída esperada:
+pré: 30 15 5 1* 10* 20 60 50 55* 70* 65 80 90*
+caso 1: 5 | caso 2: 0 | caso 3: 1
+altura negra: 3 | fiscal: ok
+```
+
+---
+
+**Exercício P2822** · ★★★ · A remoção que esqueceu de subir
+
+Ache o bug. A cozinha guarda os pedidos numa AVL, e o pedido 30 foi
+entregue. A remoção apaga o nó direitinho, mas a árvore fica torta: o
+fiscal reclama. O erro está no FIM de remove_chave: a volta da recursão só
+recalcula a altura, sem rebalancear. Conserte e rode de novo.
+
+```text
+Saída esperada:
+pré: 12 6 3 1 4 9 8 10 20 16 14 18 26 25 28
+altura 3 | rotações na remoção: 3
+fiscal: AVL ok
+```
+
+**Resposta esperada:** troque "atualiza(r); return r;" por "return equilibra(r);" no fim de remove_chave. Com a correção, a saída é a de cima.
+
+---
+
+**Exercício P2823** · ★★★ · O passo zero da dispersão dupla
+
+Ache o bug. O guarda-volumes usa dispersão dupla com m = 11: h1(k) =
+k mod 11 e um passo h2(k). Entram os cartões 21, 32, 10 e 43, todos com h1 = 10.
+O cartão 10 "não coube", com a tabela quase vazia. O erro está em UMA
+conta do passo. Conserte e rode de novo.
+
+```text
+Saída esperada:
+21: passo 2 -> 10
+32: passo 3 -> 2
+10: passo 1 -> 0
+43: passo 4 -> 3
+tabela: 10 . 32 43 . . . . . . 21
+```
+
+**Resposta esperada:** o passo é 1 + k % (M - 1), não k % (M - 1). Com a correção, a saída é a de cima.
+
+---
+
+**Exercício P2824** · ★★★ · Lápides demais: hora de reconstruir
+
+Uma tabela de sondagem linear com m = 13 sofre com as lápides. Escreva
+insere, busca (contando sondagens) e remove (com lápide). Insira as chaves
+1, 14, 27, 40, 53 e 66 (todas começam no 1), remova 14, 27, 40 e 53 e meça
+quantas sondagens custa buscar o 79 (que não está). Depois reconstrua:
+crie uma tabela nova só com as chaves vivas, meça de novo e mostre as duas
+tabelas ("." livre, "x" lápide).
+
+```text
+Saída esperada:
+antes:   . 1 x x x x 66 . . . . . .
+busca 79: 7 sondagens
+depois:  . 1 66 . . . . . . . . . .
+busca 79: 3 sondagens
+```
+
+---
+
+**Exercício P2825** · ★★★ · As três sondagens lado a lado
+
+Compare as três sondagens numa tabela de m = 17 com as mesmas chaves,
+nesta ordem: 20, 37, 54, 71, 88, 5, 22, 39 (as cinco primeiras começam no
+3). Linear: (k mod 17 + i) mod 17; quadrática: (k mod 17 + i * i) mod 17;
+dupla: (k mod 17 + i * (1 + k mod 16)) mod 17. Para cada método, imprima a
+tabela final e o total de sondagens.
+
+```text
+Saída esperada:
+linear:      .  .  . 20 37 54 71 88  5 22 39  .  .  .  .  .  . | 30 sondagens
+quadrática:  .  . 88 20 37  5 22 54  . 39  .  . 71  .  .  .  . | 21 sondagens
+dupla:       .  . 22 20  .  5  .  .  . 37 54 71 88 39  .  .  . | 15 sondagens
+```
+
+---
+
+**Exercício P2826** · ★★★ · Relatório por intervalo
+
+O sistema da farmácia guarda os códigos dos remédios 412, 157, 890, 233,
+501, 678, 120, 345, 999, 460 numa BST com pai. Escreva teto(raiz, a) (o
+primeiro nó com chave >= a, descendo da raiz) e sucessor(x), e com eles
+relatorio(raiz, a, b), que mostra em ordem as chaves de a até b e conta
+quantas chamadas de sucessor foram feitas. Teste [200, 500], [0, 150],
+[900, 2000] e [600, 650].
+
+```text
+Saída esperada:
+[200, 500]: 233 345 412 460 (4 sucessores)
+[0, 150]: 120 (1 sucessores)
+[900, 2000]: 999 (1 sucessores)
+[600, 650]: (0 sucessores)
+```
+
+---
+
+**Exercício P2827** · ★★★ · A AVL mais magra de cada altura
+
+A AVL com o menor número de nós para a altura h (a árvore de Fibonacci)
+tem N(h) = N(h - 1) + N(h - 2) + 1 nós, com N(0) = 1 e N(1) = 2. Calcule
+N(h) de baixo para cima, para h de 0 a 12, e mostre também o máximo,
+2^(h+1) - 1, e a razão h / log2(N(h) + 1), que cresce devagar em direção a
+1,44: a AVL mais torta é no máximo uns 44% mais alta que a perfeita.
+
+```text
+Saída esperada:
+ h | mínimo | máximo | h / log2(N + 1)
+ 0 |      1 |      1 | 0.00
+ 1 |      2 |      3 | 0.63
+ 2 |      4 |      7 | 0.86
+ 3 |      7 |     15 | 1.00
+ 4 |     12 |     31 | 1.08
+ 5 |     20 |     63 | 1.14
+ 6 |     33 |    127 | 1.18
+ 7 |     54 |    255 | 1.21
+ 8 |     88 |    511 | 1.24
+ 9 |    143 |   1023 | 1.26
+10 |    232 |   2047 | 1.27
+11 |    376 |   4095 | 1.29
+12 |    609 |   8191 | 1.30
+```
+
+```bash
+gcc ~/LPEDC/material/P2827.c -o ~/LPEDC/material/P2827 -lm && ~/LPEDC/material/P2827
+```
+
+---
+
+**Exercício P2828** · ★★★ · A tabela do campeonato em duas passadas
+
+A liga do bairro tem os times em ordem alfabética, com pontos (0 a 30) e
+saldo de gols (-10 a 10): Aleixo 13 +4, Betânia 16 -1, Coroado 13 +4, Dom
+Pedro 16 +6, Educandos 9 -3, Flores 13 -2, Glória 16 -1. A classificação é
+por pontos, depois saldo (os dois do maior para o menor) e, no empate
+total, nome. Faça com duas passadas de pigeonhole estável, esvaziando as
+casas da maior para a menor: primeiro pelo saldo (21 casas), depois pelos
+pontos (31 casas). Mostre a tabela.
+
+```text
+Saída esperada:
+1. Dom Pedro: 16 pontos, saldo +6
+2. Betânia: 16 pontos, saldo -1
+3. Glória: 16 pontos, saldo -1
+4. Aleixo: 13 pontos, saldo +4
+5. Coroado: 13 pontos, saldo +4
+6. Flores: 13 pontos, saldo -2
+7. Educandos: 9 pontos, saldo -3
+```
+
+---
+
+**Exercício P2829** · ★★★ · O cache da biblioteca
+
+O sistema da biblioteca guarda as 3 páginas do catálogo mais recentes num
+cache. A ordem de uso fica numa lista dupla circular com sentinela (a mais
+recente logo depois da sentinela) e, para achar a página sem percorrer a
+lista, uma tabela de sondagem linear com m = 7 leva o número da página ao
+nó dela (com lápide na remoção). A cada acesso: se a página está no cache
+(acerto), o nó vai para a frente; senão (falta), se o cache está cheio,
+sai o último da lista (o menos recente), e a página nova entra na frente.
+Acessos: 7 0 1 2 0 3 0 4 2 3 0 3 2. Mostre, a cada acesso, A (acerto) ou F
+(falta) e o cache; no fim, o total de faltas.
+
+```text
+Saída esperada:
+7: F [ 7 ]
+0: F [ 0 7 ]
+1: F [ 1 0 7 ]
+2: F [ 2 1 0 ]
+0: A [ 0 2 1 ]
+3: F [ 3 0 2 ]
+0: A [ 0 3 2 ]
+4: F [ 4 0 3 ]
+2: F [ 2 4 0 ]
+3: F [ 3 2 4 ]
+0: F [ 0 3 2 ]
+3: A [ 3 0 2 ]
+2: A [ 2 3 0 ]
+faltas: 9 de 13
+```
+
+---
+
+**Exercício P2830** · ★★★ · O painel de voos
+
+O painel do aeroporto guarda os horários (HHMM) 1415, 905, 1830, 640,
+1120, 1600, 2210, 1000 numa BST com ponteiro para o pai. Escreva teto(r,
+h) (o primeiro voo às h ou depois), piso(r, h) (o último às h ou antes) e
+a remoção do Cormen com transplanta(raiz, u, v), que põe a subárvore v no
+lugar de u acertando o pai (no caso dos dois filhos, o sucessor y sobe
+para o lugar do nó removido). Para as horas 1130 e 1415, mostre o piso e o
+teto; cancele os voos 1415 (a raiz, com dois filhos) e 640 e repita,
+mostrando também a árvore em pré-ordem.
+
+```text
+Saída esperada:
+pré: 1415 905 640 1120 1000 1830 1600 2210
+  1130: antes 1120, depois 1415
+  1415: antes 1415, depois 1415
+sem 1415 e 640: pré 1600 905 1120 1000 1830 2210
+  1130: antes 1120, depois 1600
+  1415: antes 1120, depois 1600
+```
+
+---
+
+### Desafios do módulo
 
 Problemas para resolver no papel e, quando fizer sentido, num arquivo `.c` seu
 usando os TADs do módulo. Eles misturam os assuntos.
@@ -3039,962 +3409,7 @@ O(1) + a marcação do primeiro da fila. Intervalo: **O(log c + k)**.
 
 </details>
 
-## Lista de exercícios práticos
-
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P2801.c a P2830.c, em `material/`; resoluções em `_respostas/28-estruturas-complementos/lista/`.
-
-### ★☆☆ Aquecimento
-
-**Exercício P2801** · ★☆☆ · A fila do caixa com sentinela
-
-O caixa rápido do mercado atende pela ordem de chegada. Escreva, do zero,
-uma lista dupla circular com nó sentinela (a struct da lista guarda o nó
-nil dentro dela): inicia(L), insere_fim(L, senha), mostra(L) do primeiro
-ao último, mostra_inverso(L) do último ao primeiro e libera(L). Entram as
-senhas 31, 32, 33 e 34. Mostre a fila nos dois sentidos e, no fim, se a
-sentinela da lista vazia aponta para ela mesma.
-
-
-```text
-Saída esperada:
-ida:   [ 31 32 33 34 ]
-volta: [ 34 33 32 31 ]
-vazia: nil aponta para ela mesma? sim
-```
-
-**Dicas:**
-
-1. Lista vazia: nil.prox e nil.ant apontam para &L->nil.
-2. Inserir no fim é inserir depois de nil.ant: quatro ponteiros, sem if.
-3. Os laços começam em nil.prox (ou nil.ant) e param quando voltam a
-   &L->nil.
-
-```bash
-gcc ~/LPEDC/material/P2801.c -o ~/LPEDC/material/P2801 && ~/LPEDC/material/P2801
-```
-
----
-
-**Exercício P2802** · ★☆☆ · A chave guardada na sentinela
-
-Na busca com sentinela do Cormen, a chave procurada é copiada para
-nil.chave antes do laço, e o laço só testa x->chave != k. Monte a lista
-com sentinela 4, 8, 15, 16, 23, 42 (insira no fim) e escreva busca(L, k,
-&comparacoes), que devolve o nó achado (ou &L->nil) e conta quantas vezes
-x->chave != k foi avaliado. Busque 15, 42 e 99.
-
-
-```text
-Saída esperada:
-15: achou, 3 comparações
-42: achou, 6 comparações
-99: não está, 7 comparações
-```
-
-**Dicas:**
-
-1. Antes do laço: L->nil.chave = k; x = L->nil.prox.
-2. Cada volta do while é uma comparação; a última (a que dá falso) também
-   conta.
-3. Para 99, o laço passa pelos 6 nós e para na sentinela: 7 comparações.
-
-```bash
-gcc ~/LPEDC/material/P2802.c -o ~/LPEDC/material/P2802 && ~/LPEDC/material/P2802
-```
-
----
-
-**Exercício P2803** · ★☆☆ · O grau de cada nó
-
-O catálogo da livraria guarda os códigos 60, 30, 90, 20, 45, 75, 40, 50,
-95 numa BST (insira nessa ordem). Escreva grau(x), que devolve quantos
-filhos x tem, e mostre, em ordem, cada chave com o grau entre parênteses.
-Depois mostre o grau da árvore (o maior grau) e quantas folhas ela tem.
-
-
-```text
-Saída esperada:
-em ordem: 20(0) 30(2) 40(0) 45(2) 50(0) 60(2) 75(0) 90(2) 95(0)
-grau da árvore: 2 | folhas: 5
-```
-
-**Dicas:**
-
-1. grau(x) = (x->esq != NULL) + (x->dir != NULL).
-2. Folha é o nó de grau 0. Percorra em ordem e conte.
-
-```bash
-gcc ~/LPEDC/material/P2803.c -o ~/LPEDC/material/P2803 && ~/LPEDC/material/P2803
-```
-
----
-
-**Exercício P2804** · ★☆☆ · Quantos nós em cada nível
-
-Com a mesma árvore do P2803 (60, 30, 90, 20, 45, 75, 40, 50, 95), escreva
-profundidade(x), que sobe pelo ponteiro pai contando arestas, e altura(x),
-em arestas (vazia: -1). Mostre quantos nós há em cada nível, de 0 até a
-altura da árvore, e quais são.
-
-
-```text
-Saída esperada:
-nível 0: 60 (1 nós)
-nível 1: 30 90 (2 nós)
-nível 2: 20 45 75 95 (4 nós)
-nível 3: 40 50 (2 nós)
-altura: 3
-```
-
-**Dicas:**
-
-1. A raiz está no nível 0 e a altura da árvore é a maior profundidade.
-2. Um vetor conta[10] somado num percurso qualquer resolve a contagem.
-3. Para listar os nós de um nível, percorra em ordem e mostre quem tem a
-   profundidade certa.
-
-```bash
-gcc ~/LPEDC/material/P2804.c -o ~/LPEDC/material/P2804 && ~/LPEDC/material/P2804
-```
-
----
-
-**Exercício P2805** · ★☆☆ · O fator de cada nó
-
-Ainda com a árvore do P2803 (60, 30, 90, 20, 45, 75, 40, 50, 95), mostre
-em ordem cada chave com o seu fator de balanceamento, altura(esq) -
-altura(dir), e diga no fim se a árvore é AVL (todo fator em -1, 0 ou 1).
-Depois insira 55 e repita.
-
-
-```text
-Saída esperada:
-fatores: 20(0) 30(-1) 40(0) 45(0) 50(0) 60(1) 75(0) 90(0) 95(0)
-é AVL
-fatores: 20(0) 30(-2) 40(0) 45(-1) 50(-1) 55(0) 60(2) 75(0) 90(0) 95(0)
-não é AVL
-```
-
-**Dicas:**
-
-1. O fator de uma folha é (-1) - (-1) = 0.
-2. Uma flag global ou um ponteiro para bool marca se algum fator saiu de
-   -1..1.
-3. O 55 entra à direita do 50 e desequilibra o 30 e o 60.
-
-```bash
-gcc ~/LPEDC/material/P2805.c -o ~/LPEDC/material/P2805 && ~/LPEDC/material/P2805
-```
-
----
-
-**Exercício P2806** · ★☆☆ · Mínimo, máximo e sucessor
-
-O painel de embarque guarda os horários (HHMM) 1210, 830, 1545, 700, 945,
-1400, 1700, 900 numa BST com ponteiro para o pai. Escreva minimo(x),
-maximo(x) e sucessor(x) (o TREE-SUCCESSOR do Cormen: com subárvore
-direita, o mínimo dela; sem, sobe até chegar por um filho esquerdo).
-Mostre o primeiro e o último voo e o sucessor de 945, de 1210 e de 1700.
-
-
-```text
-Saída esperada:
-primeiro: 700 | último: 1700
-depois de 945: 1210
-depois de 1210: 1400
-depois de 1700: nenhum
-```
-
-**Dicas:**
-
-1. Ache o nó com uma busca comum antes de pedir o sucessor.
-2. O 945 não tem filho direito: o sucessor é um ancestral.
-3. O 1700 é o máximo: o sucessor é NULL.
-
-```bash
-gcc ~/LPEDC/material/P2806.c -o ~/LPEDC/material/P2806 && ~/LPEDC/material/P2806
-```
-
----
-
-**Exercício P2807** · ★☆☆ · Divisão e colisões
-
-A locadora de bicicletas espalha as matrículas 1013, 2026, 3039, 4052,
-5065, 1500, 2600 e 3700 numa tabela de m = 13 baldes com h(k) = k mod 13.
-Mostre o balde de cada matrícula, o número de colisões (chaves que caem
-num balde já ocupado) e repita com m = 10.
-
-
-```text
-Saída esperada:
-m = 13: 12 11 10 9 8 5 0 8 | colisões: 1
-m = 10: 3 6 9 2 5 0 0 0 | colisões: 2
-```
-
-**Dicas:**
-
-1. Um vetor de contagem por balde: colisão é quando conta[h] já era maior
-   que 0.
-2. As matrículas 1013, 2026, ... são múltiplos de 1013 = 13 · 78 - 1.
-3. Com m = 10, a função só vê o último dígito.
-
-```bash
-gcc ~/LPEDC/material/P2807.c -o ~/LPEDC/material/P2807 && ~/LPEDC/material/P2807
-```
-
----
-
-**Exercício P2808** · ★☆☆ · Multiplicação em ponto flutuante
-
-Escreva h(k, m) = floor(m · (k·A mod 1)) com A = (raiz de 5 - 1) / 2, em
-double. Para as senhas 10, 20, ..., 80 e m = 8, mostre o balde de cada uma
-e quantos baldes diferentes foram usados. Compare com k mod 8.
-
-
-```text
-Saída esperada:
-senha | mult | k % 8
-   10 |    1 | 2
-   20 |    2 | 4
-   30 |    4 | 6
-   40 |    5 | 0
-   50 |    7 | 2
-   60 |    0 | 4
-   70 |    2 | 6
-   80 |    3 | 0
-baldes usados: multiplicação 7, divisão 4
-```
-
-**Dicas:**
-
-1. "mod 1" é tirar a parte inteira: p - floor(p).
-2. Com k mod 8, as senhas múltiplas de 10 só usam baldes pares.
-
-```bash
-gcc ~/LPEDC/material/P2808.c -o ~/LPEDC/material/P2808 -lm && ~/LPEDC/material/P2808
-```
-
----
-
-**Exercício P2809** · ★☆☆ · Sondagem linear e a tabela final
-
-O estacionamento tem 11 vagas e usa h(k, i) = (k mod 11 + i) mod 11.
-Entram as placas (só os números) 23, 45, 12, 34, 56, 9 e 1. Para cada uma,
-mostre a vaga e quantas sondagens fez; no fim, imprima a tabela inteira
-("." para vaga livre).
-
-
-```text
-Saída esperada:
-23 -> vaga  1 (1 sondagens)
-45 -> vaga  2 (2 sondagens)
-12 -> vaga  3 (3 sondagens)
-34 -> vaga  4 (4 sondagens)
-56 -> vaga  5 (5 sondagens)
- 9 -> vaga  9 (1 sondagens)
- 1 -> vaga  6 (6 sondagens)
-tabela: . 23 45 12 34 56 1 . . 9 .
-```
-
-**Dicas:**
-
-1. Um vetor de 11 posições começando em -1 (livre).
-2. 23, 45, 12, 34 e 56 começam todas no 1: o agrupamento primário aparece
-   na hora.
-3. O 1 também começa no 1 e só acha lugar depois do bloco.
-
-```bash
-gcc ~/LPEDC/material/P2809.c -o ~/LPEDC/material/P2809 && ~/LPEDC/material/P2809
-```
-
----
-
-**Exercício P2810** · ★☆☆ · Pigeonhole dos dados
-
-Num jogo de tabuleiro, foram anotados 15 lançamentos de um dado: 3, 6, 1,
-3, 5, 2, 6, 6, 4, 1, 3, 5, 6, 2, 3. Ordene com o pigeonhole sort (uma casa
-para cada face, de 1 a 6) e mostre a sequência ordenada e quantas vezes
-saiu cada face.
-
-
-```text
-Saída esperada:
-frequências: 1:2 2:2 3:4 4:1 5:2 6:4
-ordenados: 1 1 2 2 3 3 3 3 4 5 5 6 6 6 6
-```
-
-**Dicas:**
-
-1. casa[face - 1]++ na primeira passada.
-2. Na segunda, a casa c devolve o valor c + 1, casa[c] vezes.
-
-```bash
-gcc ~/LPEDC/material/P2810.c -o ~/LPEDC/material/P2810 && ~/LPEDC/material/P2810
-```
-
-### ★★☆ Para pensar
-
-**Exercício P2811** · ★★☆ · Sondagem quadrática
-
-Refaça o estacionamento do P2809 (m = 11, placas 23, 45, 12, 34, 56, 9 e
-1) com sondagem quadrática: h(k, i) = (k mod 11 + i * i) mod 11. Mostre a
-vaga e as sondagens de cada placa, a tabela final e o total de sondagens.
-Compare com o P2809.
-
-
-```text
-Saída esperada:
-23 -> vaga  1 (1 sondagens)
-45 -> vaga  2 (2 sondagens)
-12 -> vaga  5 (3 sondagens)
-34 -> vaga 10 (4 sondagens)
-56 -> vaga  6 (5 sondagens)
- 9 -> vaga  9 (1 sondagens)
- 1 -> vaga  4 (6 sondagens)
-tabela: . 23 45 . 1 12 56 . . 9 34
-total de sondagens: 22
-```
-
-**Dicas:**
-
-1. A placa que começa no 1 tenta 1, 2, 5, 10, 6 (1 + 16 = 17), ...
-2. O total é o mesmo da linear (22) neste caso. O bloco de vagas seguidas
-   some, mas todas as placas que começam no 1 seguem a mesma trilha
-   (agrupamento secundário).
-
-```bash
-gcc ~/LPEDC/material/P2811.c -o ~/LPEDC/material/P2811 && ~/LPEDC/material/P2811
-```
-
----
-
-**Exercício P2812** · ★★☆ · Dispersão dupla
-
-Agora com dispersão dupla, numa tabela de m = 13: h(k, i) = (h1(k) + i ·
-h2(k)) mod 13, com h1(k) = k mod 13 e h2(k) = 1 + (k mod 11). Insira 14,
-27, 40, 53, 66, 79 (todas com h1 = 1) e 5. Mostre o passo h2, a posição e
-as sondagens de cada uma, a tabela final e o total de sondagens.
-
-
-```text
-Saída esperada:
-14: passo  4 ->  1 (1 sondagens)
-27: passo  6 ->  7 (2 sondagens)
-40: passo  8 ->  9 (2 sondagens)
-53: passo 10 -> 11 (2 sondagens)
-66: passo  1 ->  2 (2 sondagens)
-79: passo  3 ->  4 (2 sondagens)
- 5: passo  6 ->  5 (1 sondagens)
-tabela: . 14 66 . 79 5 . 27 . 40 . 53 .
-total de sondagens: 12
-```
-
-**Dicas:**
-
-1. h2 nunca é 0 por causa do + 1, e como 13 é primo, qualquer passo de 1
-   a 12 visita todas as posições.
-2. Cada chave anda com o seu passo: as trilhas se separam logo na segunda
-   sondagem.
-
-```bash
-gcc ~/LPEDC/material/P2812.c -o ~/LPEDC/material/P2812 && ~/LPEDC/material/P2812
-```
-
----
-
-**Exercício P2813** · ★★☆ · A lápide no meio do caminho
-
-Numa tabela de m = 7 com sondagem linear, cada posição tem um estado:
-LIVRE, OCUPADA ou LAPIDE. Escreva insere (reaproveita a primeira lápide do
-caminho), busca (para na LIVRE, passa reto pela LAPIDE) e remove (marca
-LAPIDE). Insira 10, 17, 24 e 5 (os três primeiros começam no 3), remova o
-17, busque o 24, insira 31 e mostre a tabela depois de cada passo ("."
-livre, "x" lápide).
-
-
-```text
-Saída esperada:
-inseridos:   .  .  . 10 17 24  5
-tira 17:     .  .  . 10  x 24  5
-busca 24: posição 5
-insere 31:   .  .  . 10 31 24  5
-```
-
-**Dicas:**
-
-1. Na inserção, guarde a posição da primeira lápide vista; se a chave não
-   estiver na tabela, use essa posição (ou a livre onde parou).
-2. O 31 também começa no 3 e ocupa o lugar do 17 removido.
-
-```bash
-gcc ~/LPEDC/material/P2813.c -o ~/LPEDC/material/P2813 && ~/LPEDC/material/P2813
-```
-
----
-
-**Exercício P2814** · ★★☆ · Do maior para o menor com o antecessor
-
-A tabela de recordes do fliperama guarda as pontuações 5200, 3100, 8800,
-2500, 4700, 7600, 9900, 4100 numa BST com ponteiro para o pai. Escreva
-antecessor(x) (o espelho do sucessor: com subárvore esquerda, o máximo
-dela; sem, sobe até chegar por um filho direito) e mostre o ranking, do
-maior para o menor, sem recursão: comece no máximo e ande pelo antecessor.
-Mostre também o antecessor do 4700 e do 2500.
-
-
-```text
-Saída esperada:
-ranking: 9900 8800 7600 5200 4700 4100 3100 2500
-antes de 4700: 4100 | antes de 2500: nenhum
-```
-
-**Dicas:**
-
-1. for (No *x = maximo(raiz); x != NULL; x = antecessor(x)).
-2. O 4700 tem filho esquerdo (4100): o antecessor é o máximo dele.
-3. O 2500 é o mínimo: não tem antecessor.
-
-```bash
-gcc ~/LPEDC/material/P2814.c -o ~/LPEDC/material/P2814 && ~/LPEDC/material/P2814
-```
-
----
-
-**Exercício P2815** · ★★☆ · O fiscal da rubro-negra
-
-Três árvores foram coloridas à mão e você tem que conferir se são rubro-
-negras. Cada nó tem chave, cor ('V' ou 'P') e dois filhos (NULL faz o
-papel da folha nil, preta). Escreva fiscal(x), que devolve a altura negra
-de x (pretos de x até NULL, contando x, sem contar o NULL) ou -1 se: um
-vermelho tem filho vermelho, ou os dois lados têm alturas negras
-diferentes. Confira também a raiz preta. As árvores (pré-ordem, com o
-filho vazio como -):
-
-
-```text
-A: 20P (10V (5P, 15P), 30P (-, 35V))
-B: 20P (10V (5V, 15P), 30P)
-C: 20P (10P (5P, -), 30P)
-```
-
-
-Monte-as com uma função novo(chave, cor, esq, dir) que usa malloc.
-
-
-```text
-Saída esperada:
-A: rubro-negra, altura negra 2
-B: não é rubro-negra
-C: não é rubro-negra
-```
-
-**Dicas:**
-
-1. NULL devolve 0. Se um filho devolveu -1, devolva -1.
-2. Em B, o 10 vermelho tem o 5 vermelho embaixo (propriedade 4).
-3. Em C, à esquerda do 10 há dois pretos e à direita só um (propriedade
-   5).
-
-```bash
-gcc ~/LPEDC/material/P2815.c -o ~/LPEDC/material/P2815 && ~/LPEDC/material/P2815
-```
-
----
-
-**Exercício P2816** · ★★☆ · Escreva a remoção da AVL
-
-Escreva, do zero, uma AVL com inserção e remoção (nó com altura guardada,
-rotações à esquerda e à direita e um equilibra que serve para as duas
-operações; na remoção de nó com dois filhos, use o sucessor). Conte as
-rotações simples num contador global (a dupla conta 2). Insira 30, 20, 40,
-10, 25, 35, 50, 5, 15, 45, 1 e remova 35, 40 e 25, mostrando a pré-ordem,
-a altura e as rotações de cada remoção.
-
-
-```text
-Saída esperada:
-início: pré 30 10 5 1 20 15 25 40 35 50 45 | altura 3
-tira 35: pré 30 10 5 1 20 15 25 45 40 50 | altura 3 | rotações 2
-tira 40: pré 30 10 5 1 20 15 25 45 50 | altura 3 | rotações 0
-tira 25: pré 30 10 5 1 20 15 45 50 | altura 3 | rotações 0
-```
-
-**Dicas:**
-
-1. O equilibra recalcula a altura, olha o fator e escolhe simples ou
-   dupla: na remoção, filho com fator 0 pede a simples.
-2. raiz = remove_chave(raiz, k): a raiz pode mudar.
-3. Tirar o 35 deixa o 40 pesado à direita, com o filho 50 pendendo para
-   dentro (fator 1): rotação dupla.
-
-```bash
-gcc ~/LPEDC/material/P2816.c -o ~/LPEDC/material/P2816 && ~/LPEDC/material/P2816
-```
-
----
-
-**Exercício P2817** · ★★☆ · Quem é estável?
-
-Os pedidos do delivery chegam com número (1 a 8, a ordem de chegada) e
-bairro (código 1 a 3): (1,2) (2,1) (3,2) (4,3) (5,1) (6,3) (7,2) (8,1).
-Ordene cópias pelo bairro com a inserção, com a seleção e com o pigeonhole
-(uma fila por bairro), e escreva estavel(v, n): entre vizinhos de mesmo
-bairro, o número de chegada tem que crescer. Mostre cada resultado como
-numero:bairro e o veredito.
-
-
-```text
-Saída esperada:
-inserção:   2:1 5:1 8:1 1:2 3:2 7:2 4:3 6:3 | estável
-seleção:    2:1 5:1 8:1 1:2 7:2 3:2 4:3 6:3 | não estável
-casas:      2:1 5:1 8:1 1:2 3:2 7:2 4:3 6:3 | estável
-```
-
-**Dicas:**
-
-1. A seleção troca o menor com a posição i e pode pular por cima de
-   iguais.
-2. Para o pigeonhole, três vetores (início, fim e próximo) como no
-   pombal.c, ou simplesmente passe 3 vezes pela entrada, uma por bairro,
-   copiando na ordem.
-
-```bash
-gcc ~/LPEDC/material/P2817.c -o ~/LPEDC/material/P2817 && ~/LPEDC/material/P2817
-```
-
----
-
-**Exercício P2818** · ★★☆ · A classificação da corrida
-
-Na corrida de rua do bairro, a classificação é pelo tempo (em segundos, o
-menor primeiro); no empate, o mais velho fica na frente; se ainda empatar,
-o nome em ordem alfabética. Escreva o comparador composto e ordene com
-qsort: Lia 1520 s 34 anos, Davi 1490 s 28, Rita 1520 s 41, Caio 1490 s 28,
-Bia 1610 s 22, Teo 1520 s 41. Mostre posição, nome, tempo em min:s e
-idade.
-
-
-```text
-Saída esperada:
-1. Caio  24:50  28 anos
-2. Davi  24:50  28 anos
-3. Rita  25:20  41 anos
-4. Teo   25:20  41 anos
-5. Lia   25:20  34 anos
-6. Bia   26:50  22 anos
-```
-
-**Dicas:**
-
-1. Compare o tempo; se igual, a idade ao contrário (y - x); se igual,
-   strcmp.
-2. O qsort não é estável: o desempate pelo nome deixa a ordem completa.
-
-```bash
-gcc ~/LPEDC/material/P2818.c -o ~/LPEDC/material/P2818 && ~/LPEDC/material/P2818
-```
-
----
-
-**Exercício P2819** · ★★☆ · Aniversários em duas passadas
-
-O RH quer os aniversários do ano em ordem de mês e, dentro do mês, de dia.
-Faça duas passadas de pigeonhole estável: primeiro pelo dia (31 casas),
-depois pelo mês (12 casas). Datas (dia/mês) e nomes: Ana 15/3, Beto 2/11,
-Cris 28/3, Duda 2/3, Enzo 15/1, Fábio 9/11, Gil 1/12, Hana 30/1. Mostre a
-lista depois de cada passada.
-
-
-```text
-Saída esperada:
-por dia: Gil 1/12 Beto 2/11 Duda 2/3 Fabio 9/11 Ana 15/3 Enzo 15/1 Cris 28/3 Hana 30/1
-por mês: Enzo 15/1 Hana 30/1 Duda 2/3 Ana 15/3 Cris 28/3 Beto 2/11 Fabio 9/11 Gil 1/12
-```
-
-**Dicas:**
-
-1. Uma função genérica com chave = 0 (dia) ou 1 (mês) evita escrever o
-   código duas vezes.
-2. Cada passada: para cada casa em ordem, copie da entrada, em ordem,
-   quem cai nela.
-3. A última passada é a da chave principal (o mês).
-
-```bash
-gcc ~/LPEDC/material/P2819.c -o ~/LPEDC/material/P2819 && ~/LPEDC/material/P2819
-```
-
----
-
-**Exercício P2820** · ★★☆ · Múltiplos de 32 na tabela
-
-Os lotes do almoxarifado têm números múltiplos de 32: 32, 64, ..., 3200
-(100 lotes). Compare, numa tabela de m = 32 baldes, a divisão k mod 32 e a
-multiplicação em inteiros (k * 2654435769u) >> 27, com uint32_t. Mostre
-para cada uma quantos baldes ficaram vazios e o tamanho do balde mais
-cheio. Depois repita a divisão com m = 31.
-
-
-```text
-Saída esperada:
-vazios 31 | mais cheio 100 | divisão, m = 32
-vazios  5 | mais cheio   5 | multiplicação, m = 32
-vazios  0 | mais cheio   4 | divisão, m = 31
-```
-
-**Dicas:**
-
-1. m = 32 = 2^5: a multiplicação pega os 5 bits mais altos do produto (>>
-   27).
-2. k mod 32 só olha os 5 bits de baixo de k, que são todos zero.
-
-```bash
-gcc ~/LPEDC/material/P2820.c -o ~/LPEDC/material/P2820 && ~/LPEDC/material/P2820
-```
-
-### ★★★ Desafio
-
-**Exercício P2821** · ★★★ · A rubro-negra do Cormen, do zero
-
-Escreva a rubro-negra clássica com a sentinela nil (um nó preto global que
-faz o papel de toda folha e do pai da raiz): rotações à esquerda e à
-direita que acertam o pai, inserção como na BST com o nó novo vermelho e o
-conserto com os três casos do tio (e os espelhos). Conte quantas vezes
-cada caso rodou. Insira 30, 15, 60, 10, 20, 50, 70, 5, 1, 55, 65, 80 e 90
-e mostre a pré-ordem (vermelhos com *), as contagens, a altura negra e o
-resultado de um fiscal das propriedades 4 e 5.
-
-
-```text
-Saída esperada:
-pré: 30 15 5 1* 10* 20 60 50 55* 70* 65 80 90*
-caso 1: 5 | caso 2: 0 | caso 3: 1
-altura negra: 3 | fiscal: ok
-```
-
-**Dicas:**
-
-1. Caso 1: tio vermelho, recolore pai, tio e avô e faz z = avô. Caso 2:
-   tio preto e z em triângulo, z = pai e gira. Caso 3: tio preto e z em
-   linha, recolore e gira no avô.
-2. Com a sentinela, o tio pode ser nil (preto) sem nenhum teste de NULL.
-3. A altura negra pode ser contada descendo sempre pela esquerda.
-
-```bash
-gcc ~/LPEDC/material/P2821.c -o ~/LPEDC/material/P2821 && ~/LPEDC/material/P2821
-```
-
----
-
-**Exercício P2822** · ★★★ · A remoção que esqueceu de subir
-
-Ache o bug. A cozinha guarda os pedidos numa AVL, e o pedido 30 foi
-entregue. A remoção apaga o nó direitinho, mas a árvore fica torta: o
-fiscal reclama. O erro está no FIM de remove_chave: a volta da recursão só
-recalcula a altura, sem rebalancear. Conserte e rode de novo.
-
-
-```text
-Saída esperada:
-pré: 12 6 3 1 4 9 8 10 20 16 14 18 26 25 28
-altura 3 | rotações na remoção: 3
-fiscal: AVL ok
-```
-
-**Dicas:**
-
-1. Na remoção, todo ancestral tem que passar pelo mesmo equilibra da
-   inserção, na volta da recursão.
-2. Aqui, o 28 precisa de uma rotação dupla e, depois dela, a raiz 20
-   precisa de uma simples: 3 rotações.
-3. Resposta esperada: troque "atualiza(r); return r;" por "return
-   equilibra(r);" no fim de remove_chave. Com a correção, a saída é a de
-   cima.
-
-```bash
-gcc ~/LPEDC/material/P2822.c -o ~/LPEDC/material/P2822 && ~/LPEDC/material/P2822
-```
-
----
-
-**Exercício P2823** · ★★★ · O passo zero da dispersão dupla
-
-Ache o bug. O guarda-volumes usa dispersão dupla com m = 11: h1(k) =
-k mod 11 e um passo h2(k). Entram os cartões 21, 32, 10 e 43, todos com h1 = 10.
-O cartão 10 "não coube", com a tabela quase vazia. O erro está em UMA
-conta do passo. Conserte e rode de novo.
-
-
-```text
-Saída esperada:
-21: passo 2 -> 10
-32: passo 3 -> 2
-10: passo 1 -> 0
-43: passo 4 -> 3
-tabela: 10 . 32 43 . . . . . . 21
-```
-
-**Dicas:**
-
-1. Calcule o passo do cartão 10 com o código como está. O que acontece
-   com h1 + i · 0?
-2. O passo nunca pode ser 0 e tem que ser primo com m.
-3. Resposta esperada: o passo é 1 + k % (M - 1), não k % (M - 1). Com a
-   correção, a saída é a de cima.
-
-```bash
-gcc ~/LPEDC/material/P2823.c -o ~/LPEDC/material/P2823 && ~/LPEDC/material/P2823
-```
-
----
-
-**Exercício P2824** · ★★★ · Lápides demais: hora de reconstruir
-
-Uma tabela de sondagem linear com m = 13 sofre com as lápides. Escreva
-insere, busca (contando sondagens) e remove (com lápide). Insira as chaves
-1, 14, 27, 40, 53 e 66 (todas começam no 1), remova 14, 27, 40 e 53 e meça
-quantas sondagens custa buscar o 79 (que não está). Depois reconstrua:
-crie uma tabela nova só com as chaves vivas, meça de novo e mostre as duas
-tabelas ("." livre, "x" lápide).
-
-
-```text
-Saída esperada:
-antes:   . 1 x x x x 66 . . . . . .
-busca 79: 7 sondagens
-depois:  . 1 66 . . . . . . . . . .
-busca 79: 3 sondagens
-```
-
-**Dicas:**
-
-1. A busca sem sucesso só para numa posição LIVRE: as lápides alongam o
-   caminho.
-2. Reconstruir é percorrer a tabela velha e inserir as OCUPADAS numa
-   tabela zerada.
-
-```bash
-gcc ~/LPEDC/material/P2824.c -o ~/LPEDC/material/P2824 && ~/LPEDC/material/P2824
-```
-
----
-
-**Exercício P2825** · ★★★ · As três sondagens lado a lado
-
-Compare as três sondagens numa tabela de m = 17 com as mesmas chaves,
-nesta ordem: 20, 37, 54, 71, 88, 5, 22, 39 (as cinco primeiras começam no
-3). Linear: (k mod 17 + i) mod 17; quadrática: (k mod 17 + i * i) mod 17;
-dupla: (k mod 17 + i * (1 + k mod 16)) mod 17. Para cada método, imprima a
-tabela final e o total de sondagens.
-
-
-```text
-Saída esperada:
-linear:      .  .  . 20 37 54 71 88  5 22 39  .  .  .  .  .  . | 30 sondagens
-quadrática:  .  . 88 20 37  5 22 54  . 39  .  . 71  .  .  .  . | 21 sondagens
-dupla:       .  . 22 20  .  5  .  .  . 37 54 71 88 39  .  .  . | 15 sondagens
-```
-
-**Dicas:**
-
-1. Uma função posicao(metodo, k, i) com um switch deixa um laço só para
-   os três.
-2. O 22 começa no 5: na linear, ele cai no meio do bloco que as cinco
-   primeiras formaram.
-
-```bash
-gcc ~/LPEDC/material/P2825.c -o ~/LPEDC/material/P2825 && ~/LPEDC/material/P2825
-```
-
----
-
-**Exercício P2826** · ★★★ · Relatório por intervalo
-
-O sistema da farmácia guarda os códigos dos remédios 412, 157, 890, 233,
-501, 678, 120, 345, 999, 460 numa BST com pai. Escreva teto(raiz, a) (o
-primeiro nó com chave >= a, descendo da raiz) e sucessor(x), e com eles
-relatorio(raiz, a, b), que mostra em ordem as chaves de a até b e conta
-quantas chamadas de sucessor foram feitas. Teste [200, 500], [0, 150],
-[900, 2000] e [600, 650].
-
-
-```text
-Saída esperada:
-[200, 500]: 233 345 412 460 (4 sucessores)
-[0, 150]: 120 (1 sucessores)
-[900, 2000]: 999 (1 sucessores)
-[600, 650]: (0 sucessores)
-```
-
-**Dicas:**
-
-1. No teto, quando x->chave >= a, x vira candidato e você desce à
-   esquerda; senão, à direita.
-2. O laço: for (x = teto(raiz, a); x != NULL && x->chave <= b; x =
-   sucessor(x)).
-3. Num intervalo vazio, o teto já passa de b e nenhum sucessor é chamado.
-
-```bash
-gcc ~/LPEDC/material/P2826.c -o ~/LPEDC/material/P2826 && ~/LPEDC/material/P2826
-```
-
----
-
-**Exercício P2827** · ★★★ · A AVL mais magra de cada altura
-
-A AVL com o menor número de nós para a altura h (a árvore de Fibonacci)
-tem N(h) = N(h - 1) + N(h - 2) + 1 nós, com N(0) = 1 e N(1) = 2. Calcule
-N(h) de baixo para cima, para h de 0 a 12, e mostre também o máximo,
-2^(h+1) - 1, e a razão h / log2(N(h) + 1), que cresce devagar em direção a
-1,44: a AVL mais torta é no máximo uns 44% mais alta que a perfeita.
-
-
-```text
-Saída esperada:
- h | mínimo | máximo | h / log2(N + 1)
- 0 |      1 |      1 | 0.00
- 1 |      2 |      3 | 0.63
- 2 |      4 |      7 | 0.86
- 3 |      7 |     15 | 1.00
- 4 |     12 |     31 | 1.08
- 5 |     20 |     63 | 1.14
- 6 |     33 |    127 | 1.18
- 7 |     54 |    255 | 1.21
- 8 |     88 |    511 | 1.24
- 9 |    143 |   1023 | 1.26
-10 |    232 |   2047 | 1.27
-11 |    376 |   4095 | 1.29
-12 |    609 |   8191 | 1.30
-```
-
-**Dicas:**
-
-1. Um vetor long N[13] preenchido num for, como no Fibonacci da
-   programação dinâmica.
-2. log2 está em <math.h>; para h = 0, a razão é 0.
-3. N(h) = F(h + 3) - 1, onde F é a sequência de Fibonacci.
-
-```bash
-gcc ~/LPEDC/material/P2827.c -o ~/LPEDC/material/P2827 -lm && ~/LPEDC/material/P2827
-```
-
----
-
-**Exercício P2828** · ★★★ · A tabela do campeonato em duas passadas
-
-A liga do bairro tem os times em ordem alfabética, com pontos (0 a 30) e
-saldo de gols (-10 a 10): Aleixo 13 +4, Betânia 16 -1, Coroado 13 +4, Dom
-Pedro 16 +6, Educandos 9 -3, Flores 13 -2, Glória 16 -1. A classificação é
-por pontos, depois saldo (os dois do maior para o menor) e, no empate
-total, nome. Faça com duas passadas de pigeonhole estável, esvaziando as
-casas da maior para a menor: primeiro pelo saldo (21 casas), depois pelos
-pontos (31 casas). Mostre a tabela.
-
-
-```text
-Saída esperada:
-1. Dom Pedro: 16 pontos, saldo +6
-2. Betânia: 16 pontos, saldo -1
-3. Glória: 16 pontos, saldo -1
-4. Aleixo: 13 pontos, saldo +4
-5. Coroado: 13 pontos, saldo +4
-6. Flores: 13 pontos, saldo -2
-7. Educandos: 9 pontos, saldo -3
-```
-
-**Dicas:**
-
-1. O saldo s vai para a casa s + 10.
-2. Como a entrada já está em ordem alfabética, a estabilidade cuida do
-   desempate pelo nome sem nenhuma comparação.
-3. A última passada é a da chave principal: os pontos.
-
-```bash
-gcc ~/LPEDC/material/P2828.c -o ~/LPEDC/material/P2828 && ~/LPEDC/material/P2828
-```
-
----
-
-**Exercício P2829** · ★★★ · O cache da biblioteca
-
-O sistema da biblioteca guarda as 3 páginas do catálogo mais recentes num
-cache. A ordem de uso fica numa lista dupla circular com sentinela (a mais
-recente logo depois da sentinela) e, para achar a página sem percorrer a
-lista, uma tabela de sondagem linear com m = 7 leva o número da página ao
-nó dela (com lápide na remoção). A cada acesso: se a página está no cache
-(acerto), o nó vai para a frente; senão (falta), se o cache está cheio,
-sai o último da lista (o menos recente), e a página nova entra na frente.
-Acessos: 7 0 1 2 0 3 0 4 2 3 0 3 2. Mostre, a cada acesso, A (acerto) ou F
-(falta) e o cache; no fim, o total de faltas.
-
-
-```text
-Saída esperada:
-7: F [ 7 ]
-0: F [ 0 7 ]
-1: F [ 1 0 7 ]
-2: F [ 2 1 0 ]
-0: A [ 0 2 1 ]
-3: F [ 3 0 2 ]
-0: A [ 0 3 2 ]
-4: F [ 4 0 3 ]
-2: F [ 2 4 0 ]
-3: F [ 3 2 4 ]
-0: F [ 0 3 2 ]
-3: A [ 3 0 2 ]
-2: A [ 2 3 0 ]
-faltas: 9 de 13
-```
-
-**Dicas:**
-
-1. A tabela guarda pares (página, No *) com estado LIVRE, OCUPADA ou
-   LAPIDE; a busca passa reto pela lápide.
-2. Mover para a frente: tira o nó (dois ponteiros) e insere depois da
-   sentinela (quatro), sem if.
-3. O menos recente é nil.ant.
-
-```bash
-gcc ~/LPEDC/material/P2829.c -o ~/LPEDC/material/P2829 && ~/LPEDC/material/P2829
-```
-
----
-
-**Exercício P2830** · ★★★ · O painel de voos
-
-O painel do aeroporto guarda os horários (HHMM) 1415, 905, 1830, 640,
-1120, 1600, 2210, 1000 numa BST com ponteiro para o pai. Escreva teto(r,
-h) (o primeiro voo às h ou depois), piso(r, h) (o último às h ou antes) e
-a remoção do Cormen com transplanta(raiz, u, v), que põe a subárvore v no
-lugar de u acertando o pai (no caso dos dois filhos, o sucessor y sobe
-para o lugar do nó removido). Para as horas 1130 e 1415, mostre o piso e o
-teto; cancele os voos 1415 (a raiz, com dois filhos) e 640 e repita,
-mostrando também a árvore em pré-ordem.
-
-
-```text
-Saída esperada:
-pré: 1415 905 640 1120 1000 1830 1600 2210
-  1130: antes 1120, depois 1415
-  1415: antes 1415, depois 1415
-sem 1415 e 640: pré 1600 905 1120 1000 1830 2210
-  1130: antes 1120, depois 1600
-  1415: antes 1120, depois 1600
-```
-
-**Dicas:**
-
-1. transplanta: se u é a raiz, v vira a raiz; senão, v entra no lado de u
-   no pai; se v != NULL, v->pai = u->pai.
-2. Dois filhos: y = mínimo(z->dir). Se y não é filho direito de z,
-   transplanta(y, y->dir) e y herda z->dir; depois transplanta(z, y) e y
-   herda z->esq.
-3. A remoção devolve a nova raiz, que pode mudar.
-
-```bash
-gcc ~/LPEDC/material/P2830.c -o ~/LPEDC/material/P2830 && ~/LPEDC/material/P2830
-```
-
-## Questões no estilo da prova
+### Questões no estilo da prova
 
 Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma
 alternativa certa. Onde o enunciado não disser outra coisa, a raiz fica no

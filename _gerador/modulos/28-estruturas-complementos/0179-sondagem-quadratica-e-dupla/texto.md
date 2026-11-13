@@ -1,39 +1,35 @@
 ## 0179 · Sondagem quadrática e dupla
 
-O guarda-volumes tem 13 armários, escolhidos por `cartão % 13`. Se estiver
-ocupado, o funcionário tenta outro: no 0107, o **seguinte** (sondagem
-linear). Cinco clientes chegam com os cartões 18, 31, 44, 20 e 57, e quatro
-caem no armário 5. Qual é o melhor "outro"?
+- **Sequência de sondagem**: no endereçamento aberto, cada chave tem uma lista
+  de posições `h(k, 0), h(k, 1), ...`. A inserção para na primeira livre; a
+  busca refaz o caminho até achar a chave ou uma livre (CORMEN et al., 2024, cap. 11).
+- **Linear**: `h(k, i) = (h'(k) + i) mod m`. Sofre **agrupamento primário**:
+  toda chave que cai em qualquer ponto de um bloco ocupado vai para o fim dele
+  e o aumenta (CORMEN et al., 2024, cap. 11).
+- **Quadrática**: `h(k, i) = (h'(k) + c₁·i + c₂·i²) mod m`. Os saltos crescem
+  (1, 4, 9...) e os blocos se desfazem, mas sobra o **agrupamento
+  secundário**: chaves com o mesmo `h'(k)` seguem a mesma trilha
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995).
+- **Dispersão dupla**: `h(k, i) = (h₁(k) + i·h₂(k)) mod m`. O passo depende
+  da chave, nunca é 0 e é primo com `m`; com `m` primo, `h₂(k) = 1 + (k mod
+  (m - 1))` (CORMEN et al., 2024, cap. 11).
+- **Fator de carga** `α = n / m`: com hash uniforme, a busca sem sucesso faz
+  no máximo `1 / (1 - α)` sondagens em média, e a com sucesso,
+  `(1/α) · ln(1 / (1 - α))`. Com α = 0,9: 10 e 2,6 (CORMEN et al., 2024, cap. 11).
+- **Lápide** (*tombstone*): a remoção marca a posição como removida, nunca
+  como livre, senão corta o caminho de quem pulou por ela. A busca passa reto;
+  a inserção pode reaproveitar (TENENBAUM; LANGSAM; AUGENSTEIN, 1995).
 
-No endereçamento aberto, cada chave tem uma **sequência de sondagem** `h(k,
-0), h(k, 1), ...`. A inserção para na primeira posição livre; a busca refaz o
-caminho até achar a chave ou uma livre. O Cormen apresenta três:
+> [!WARNING]
+> O passo `h₂(k)` **não pode ser 0** nem ter fator comum com `m`: com `m = 12`
+> e passo 4, a chave visita só 3 posições. Na quadrática com carga acima de
+> 1/2, a inserção pode falhar **com posições livres**.
 
-- **linear**: `h(k, i) = (h'(k) + i) mod m`. Sofre de **agrupamento
-  primário**: as ocupadas formam blocos, e toda chave que cai **em qualquer
-  ponto** do bloco vai para o fim dele e o aumenta;
-- **quadrática**: `h(k, i) = (h'(k) + c₁·i + c₂·i²) mod m`. Com c₁ = 0 e c₂ =
-  1, os saltos crescem (1, 4, 9, 16...) e os blocos se desfazem. Sobra o
-  **agrupamento secundário**: chaves com o mesmo `h'(k)` seguem **a mesma
-  trilha**, que com `m` primo visita só metade das posições (carga abaixo de
-  1/2);
-- **dispersão dupla** (*double hashing*): `h(k, i) = (h₁(k) + i·h₂(k)) mod m`.
-  O passo `h₂(k)` depende da chave, então chaves do mesmo início andam com
-  passos diferentes: é a que mais se aproxima do hash uniforme. O passo nunca
-  é 0 e tem que ser **primo com m**: com `m` primo, `h₁(k) = k mod m` e
-  `h₂(k) = 1 + (k mod (m - 1))`; com `m = 2^p`, um `h₂` sempre ímpar.
+{{exemplo}}
 
-O **fator de carga** `α = n / m` manda no custo. Com hash uniforme, uma busca
-**sem sucesso** faz em média no máximo `1 / (1 - α)` sondagens, e uma **com
-sucesso**, `(1/α) · ln(1 / (1 - α))`: com α = 0,5, 2 e 1,4; com α = 0,9, 10 e
-2,6. A linear é pior (o A357 mede 45 sondagens com α = 0,9).
-
-Nas três, a **remoção** deixa uma **lápide** (*tombstone*), nunca uma posição
-livre, que cortaria o caminho de quem pulou por ela. A busca passa reto pela
-lápide; a inserção pode reaproveitá-la.
-
-Os cinco cartões entram nas três tabelas. No desenho, as posições que a
-busca do 57 olha:
+Um guarda-volumes de 13 armários usa `cartão % 13`, e os cartões 18, 31, 44,
+20 e 57 entram nas três tabelas; quatro deles começam no armário 5. No
+desenho, as posições que a busca do 57 olha:
 
 {{ideia}}
 
@@ -101,25 +97,9 @@ int main(void) {
 //             sondagens para guardar: 8 | para achar o 57: 2
 ```
 
-Na linear, o 20 (começa no 7) cai no meio do bloco e vai para o 8. Na
-quadrática, 31, 44 e 57 repetem a trilha 5, 6, 9, 1. Na dupla, o 31 anda de 8
-em 8, o 44 de 9 em 9 e o 57 de 10 em 10: cada um sai do 5 para um lugar
-diferente.
-
-O fluxograma é a inserção do 57 na dupla: o 5 está ocupado, `i` vira 1, e
-`(5 + 10) % 13 = 2` está livre:
+Na linear, o 20 cai no meio do bloco e vai para o 8. Na quadrática, 31, 44 e
+57 repetem a trilha 5, 6, 9, 1. Na dupla, cada um sai do 5 com um passo
+diferente. O fluxograma é a inserção do 57 na dupla: `(5 + 10) % 13 = 2` está
+livre:
 
 {{fluxograma}}
-
-> [!WARNING]
-> O passo `h₂(k)` **não pode ser 0** nem ter fator comum com `m`: com `m = 12`
-> e passo 4, a chave visita só 3 das 12 posições e a inserção falha com a
-> tabela quase vazia. Na quadrática, com carga acima de 1/2, ela pode falhar
-> **com posições livres**.
-
-> [!NOTE]
-> **Pergunta para você:** na tabela da dispersão dupla do exemplo, chega o
-> cartão 70 (70 % 13 = 5, passo 1 + 70 % 12 = 11). Em que posição ele fica, e
-> com quantas sondagens? E na linear?
-
-{{pratique}}

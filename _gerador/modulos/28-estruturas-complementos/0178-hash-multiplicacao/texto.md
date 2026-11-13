@@ -1,41 +1,32 @@
 ## 0178 · Hash: divisão e multiplicação
 
-No atacadão, fardos de 16 unidades são registrados pelo número do último
-item: 16, 32, 48, até 160. A tabela tem 16 baldes e usa `k % 16` (0105): os
-dez fardos caem **todos no balde 0**, e a busca volta a ser O(n). O problema
-está no `m`.
+- **Método da divisão**: **h(k) = k mod m**. É rápido, mas o `m` decide tudo
+  (CORMEN et al., 2024, cap. 11).
+- **m ruins**: `m = 2^p` usa só os p bits de baixo de `k` (`k & (m - 1)`);
+  `m = 10^d`, só os d últimos dígitos; `m = 2^p - 1` não distingue duas letras
+  trocadas de lugar num texto (CORMEN et al., 2024, cap. 11).
+- **m bom**: um **primo longe de uma potência de 2**. Para 2000 chaves com uns
+  3 por balde, 673 serve (longe de 512 e de 1024) (CORMEN et al., 2024, cap. 11).
+- **Método da multiplicação**: **h(k) = ⌊m · (k·A mod 1)⌋**, com `0 < A < 1`.
+  A parte fracionária mistura todos os dígitos de `k`, e o `m` pode ser até
+  potência de 2 (CORMEN et al., 2024, cap. 11).
+- **Constante de Knuth**: **A ≈ (√5 − 1) / 2 = 0,6180339887...**; chaves
+  seguidas pulam pela tabela inteira (KNUTH, 1998).
+- **Versão em inteiros**: com 32 bits e `m = 2^p`, troque `A` por
+  **s = ⌊A · 2^32⌋ = 2654435769**. O balde são os p bits de cima dos 32 de
+  baixo de `k · s`: `(k * s) >> (32 - p)` com `uint32_t` (KNUTH, 1998).
 
-O **método da divisão** é o que você já conhece: **h(k) = k mod m**. É rápido,
-mas o `m` decide tudo:
+> [!WARNING]
+> O produto **tem que ser `unsigned`**: com `int`, `k * 2654435769` estoura
+> (comportamento indefinido). E pegue os bits **de cima** (`>> (32 - p)`), não
+> os de baixo (`& (m - 1)`), que repetem o problema da divisão por 2^p.
 
-- **m = 2^p é ruim**: `k % 2^p` são os **p bits de baixo** de `k` (`k & (m -
-  1)`), e o resto é ignorado. Os fardos de 16 em 16 (4 bits de baixo sempre
-  zero) colidem todos;
-- **m = 10^d** só olha os d últimos dígitos (com m = 100, preços terminados
-  em 00 caem no balde 0);
-- **m = 2^p - 1** é ruim para textos: trocar duas letras de lugar não muda o
-  balde;
-- a regra do livro: um **primo longe de uma potência de 2**. Para 2000 chaves,
-  com uns 3 por balde, serve 673 (longe de 512 e de 1024).
+{{exemplo}}
 
-O **método da multiplicação** tira a dependência do `m`. Multiplique a chave
-por uma constante `A` entre 0 e 1, fique com a **parte fracionária** e
-multiplique por `m`:
-
-**h(k) = ⌊m · (k·A mod 1)⌋**
-
-A parte fracionária de `k·A` mistura todos os dígitos de `k`, então o `m` pode
-ser qualquer um, até uma **potência de 2**. Knuth sugere **A ≈ (√5 − 1) / 2 =
-0,6180339887...**: chaves seguidas pulam pela tabela inteira.
-
-Em `double` a fórmula é lenta e arredonda. Use **inteiros**: com w = 32 bits
-e m = 2^p, troque `A` por **s = ⌊A · 2^32⌋ = 2654435769**. Dos 64
-bits de `k · s`, os 32 de baixo são o "k·A mod 1" em binário, e os **p bits
-mais altos** deles são o balde: `(k * s) >> (32 - p)`, com `uint32_t`, que já
-descarta os 32 de cima.
-
-Os dez fardos passam por divisão por 16, divisão por 13 (primo) e
-multiplicação com m = 16 (p = 4). No desenho, a conta do fardo 48:
+Um atacadão registra fardos de 16 unidades pelo número do último item: 16,
+32, 48 até 160. Com `k % 16`, os dez caem no balde 0. Os fardos passam por
+divisão por 16, divisão por 13 e multiplicação com m = 16; no desenho, a conta
+do fardo 48:
 
 {{ideia}}
 
@@ -89,24 +80,8 @@ int main(void) {
 // Balde mais cheio: 10 | 1 | 2
 ```
 
-Com 16, os dez num balde só. Com 13, nenhuma colisão. Com a multiplicação,
-uma (16 e 160), normal para 10 chaves em 16 baldes.
-
-O fluxograma faz a conta do fardo 48: confere o `p` (deslocar 32 bits ou mais
-é indefinido), multiplica, deixa o `uint32_t` cortar e desloca. Nenhuma
-divisão:
+Com 16, os dez num balde só; com 13, nenhuma colisão; com a multiplicação,
+uma (16 e 160). O fluxograma confere o `p` (deslocar 32 bits ou mais é
+indefinido), multiplica, deixa o `uint32_t` cortar e desloca:
 
 {{fluxograma}}
-
-> [!WARNING]
-> O produto **tem que ser `unsigned`**: com `int`, `k * 2654435769` estoura, e
-> estouro com sinal é comportamento indefinido. E pegue os bits **de cima**
-> (`>> (32 - p)`), não os de baixo (`& (m - 1)`): os de baixo dependem só dos
-> bits de baixo de `k`, o problema da divisão por 2^p.
-
-> [!NOTE]
-> **Pergunta para você:** com m = 32 (p = 5), em que balde cai o fardo 48 pela
-> multiplicação em inteiros? Faça a conta com o produto `0xAA66D2B0` do
-> desenho antes de rodar `esp_mult_desloca(48, 5)`.
-
-{{pratique}}

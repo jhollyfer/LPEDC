@@ -1,33 +1,31 @@
 ## 0176 · AVL: remoção
 
-A lanchonete guarda os pedidos em preparo numa AVL, pelo número. Mas pedido
-também **sai**: o motoboy levou o 30, e o nó precisa sumir sem a árvore perder
-o equilíbrio.
+- **Remoção na AVL**: começa como a da BST (0100). Folha some; com um filho,
+  o filho ocupa o lugar; com dois, a chave do **sucessor** é copiada e o
+  sucessor é removido lá embaixo (SZWARCFITER; MARKENZON, 2010).
+- **Conserto na volta**: tirar um nó encurta um caminho. Na volta da
+  recursão, cada ancestral recalcula a altura, confere o fator e, se passar
+  de 1 ou -1, faz a rotação do 0101 (ADELSON-VELSKY; LANDIS, 1962).
+- **Filho com fator 0**: na remoção, o filho do lado pesado pode ter fator 0,
+  o que nunca ocorre na inserção. Fator 0 ou de mesmo sinal: **rotação
+  simples**; sinal contrário: **dupla** (SZWARCFITER; MARKENZON, 2010).
+- **Várias rotações**: a rotação pode deixar a subárvore um nível mais baixa,
+  e o desequilíbrio sobe para o avô. Uma remoção pode rodar até a raiz:
+  O(log n) rotações no pior caso (ZIVIANI, 2010).
+- **Cópia da chave**: com dois filhos, o código copia a chave do sucessor e
+  libera o nó dele; um ponteiro guardado para esse nó fica pendurado.
 
-A remoção começa como a da BST (0100), em três casos:
+> [!WARNING]
+> Copiar da inserção o teste `avr_fator(r->esq) <= 0` faz a dupla com fator 0
+> e deixa a árvore torta. Só o sinal **contrário** pede a dupla. E não existe
+> "fiz uma rotação, acabou": todo ancestral passa pelo `rebalanceia`.
 
-- **folha**: some;
-- **um filho**: o filho ocupa o lugar;
-- **dois filhos**: a chave do **sucessor** (0175) é copiada para o nó, e o
-  sucessor é removido lá embaixo, onde tem no máximo um filho.
+{{exemplo}}
 
-Tirar um nó **encurta** um caminho, e um ancestral pode ficar com fator 2 ou
--2. Como na inserção, na **volta da recursão** cada ancestral recalcula a
-altura, confere o fator e, se preciso, faz a rotação do 0101. Duas coisas
-mudam, e a prova cobra as duas:
-
-1. O filho do lado pesado pode ter **fator 0**, o que na inserção nunca
-   ocorre. Fator 0 ou do mesmo sinal: **rotação simples**; sinal contrário:
-   **dupla**. Com fator 0, a subárvore mantém a altura e o conserto para.
-2. A rotação pode **não devolver a altura antiga**: a subárvore fica um nível
-   mais baixa, e o desequilíbrio **sobe** para o avô. Por isso uma remoção
-   pode fazer **várias rotações**, até a raiz: O(log n) no pior caso.
-
-A cozinha tem 16 pedidos (altura 4), e o 30 sai. O 28 fica pesado à esquerda,
-com o filho 25 pendendo para a direita: rotação dupla, e o 26 sobe. A
-subárvore do 28 cai de altura 2 para 1, e a raiz 20 desequilibra: rotação
-simples, e o 12 vira a raiz. No desenho, a árvore antes, o conserto no 28 e o
-fim:
+Uma lanchonete guarda 16 pedidos numa AVL de altura 4, e o 30 sai. O 28 fica
+pesado à esquerda com o filho 25 pendendo para a direita: rotação dupla. A
+subárvore cai de altura e a raiz 20 desequilibra: rotação simples, e o 12 vira
+a raiz:
 
 {{ideia}}
 
@@ -109,11 +107,9 @@ int main(void) {
 // Rotações nesta remoção: 3 | fator da raiz: 0
 ```
 
-São 3 rotações simples: a dupla no 28 conta 2, a simples no 20 conta 1.
-
-O fluxograma mostra o `rebalanceia` no 28 (fator 2, filho 25 com fator -1:
-duas rotações). No 20, pega o outro ramo: filho 12 com fator 1, só a rotação
-à direita:
+São 3 rotações simples: a dupla no 28 conta 2, a simples no 20 conta 1. O
+fluxograma mostra o `rebalanceia` no 28 (fator 2, filho com fator -1) e, no 20,
+o outro ramo (filho com fator 1, só a rotação à direita):
 
 {{fluxograma}}
 
@@ -129,19 +125,3 @@ mesmo:
 
 O conserto no 28 **encurtou** a subárvore e levou o desequilíbrio ao 20. Se o
 28 tivesse voltado à altura 2, a remoção pararia ali.
-
-> [!WARNING]
-> Copiar da inserção o teste `if (avr_fator(r->esq) <= 0)` (menor **ou
-> igual**) faz a dupla com fator 0, e a árvore sai desequilibrada. Só o fator
-> **de sinal contrário** pede a dupla. Na remoção também não existe "fiz uma
-> rotação, acabou": todo ancestral passa pelo `rebalanceia`.
-
-> [!TIP]
-> Com dois filhos, o código **copia a chave** do sucessor e libera o nó dele:
-> um `NoA *` guardado fora da árvore para o sucessor fica pendurado.
-
-> [!NOTE]
-> **Pergunta para você:** na árvore do fim (raiz 12), o pedido 1 sai. Quantas
-> rotações acontecem e qual é a nova raiz? E se, em seguida, sair o 3?
-
-{{pratique}}
