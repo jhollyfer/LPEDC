@@ -1,8 +1,10 @@
 ## 0022 · For
 
-- **Laço com contador**: tem começo, condição e passo. Com `while`, o contador
-  aparece em três lugares, e esquecer o passo dá laço infinito
-  (DEITEL; DEITEL, 2011, cap. 4).
+Você comprou uma TV de R$ 1.800 em 6 parcelas de R$ 300 e quer ver o carnê
+inteiro, da parcela 1 à 6. Desta vez você **sabe** quantas voltas são antes de
+começar. Esse é o **laço com contador**: uma variável começa num valor, anda
+de passo em passo e para num valor conhecido (DEITEL; DEITEL, 2011, cap. 4).
+Dá para escrever com `while`, mas o contador fica espalhado em três lugares:
 
 ```c
 int parcela = 1;              // começa
@@ -12,8 +14,10 @@ while (parcela <= 6) {        // pergunta
 }
 ```
 
-- **`for`**: junta início, condição e passo numa linha
-  (BACKES, 2013, cap. 5).
+O começo está antes do laço, a pergunta no cabeçalho e o passo lá no fim do
+corpo. Num corpo longo, o `parcela++` some de vista, e esquecer dele dá laço
+infinito. O **`for`** junta as três peças numa linha só, o cabeçalho, e deixa
+o corpo livre para o trabalho (BACKES, 2013, cap. 5):
 
 ```c
 for (int parcela = 1; parcela <= 6; parcela++) {
@@ -21,24 +25,44 @@ for (int parcela = 1; parcela <= 6; parcela++) {
 }
 ```
 
-- **Ordem de execução**: o **início** roda uma vez; a **condição** é testada
-  antes de cada volta; depois vem o **corpo**; o **passo** roda no fim da
-  volta e volta para a condição (CARVALHO, 2010).
-- **`for` e `while`**: o `for` é o `while` reorganizado. Use `for` com
-  contador de começo, fim e passo conhecidos; `while` quando só se sabe a
-  condição de parada (KERNIGHAN; RITCHIE, 1988, cap. 3).
-- **Variações**: o `int` declarado no `for` só existe no laço (C99). O passo
-  pode ser qualquer conta (`c += 10`, `x *= 3`), o contador pode ser `char` e
-  a vírgula permite duas variáveis (A044). Partes vazias valem, mas os dois
-  `;` não: `for (;;)` é laço infinito (BACKES, 2013, cap. 5).
-- **Quantas voltas**: `for (i = a; i < b; i++)` dá `b - a`; com `<=`,
-  `b - a + 1` (DEITEL; DEITEL, 2011, cap. 4).
+Pense na catraca do ônibus com contador. Ela começa zerada uma vez, no início
+do dia; antes de cada passageiro, confere se ainda cabe gente; o passageiro
+passa; e só depois que ele passou o número sobe. O `for` roda nessa mesma
+ordem, que não é a ordem em que você lê a linha (CARVALHO, 2010). O **início**
+(`int parcela = 1`) roda **uma vez**, antes de tudo. A **condição**
+(`parcela <= 6`) é testada antes de cada volta; se der falso, o laço acaba. Se
+der verdadeiro, roda o **corpo**. Por fim roda o **passo** (`parcela++`), e o
+fluxo volta para a condição. Repare que o passo, escrito no meio do cabeçalho,
+só acontece depois do corpo.
+
+O `for` é o `while` de cima reorganizado; o compilador trata os dois do mesmo
+jeito (KERNIGHAN; RITCHIE, 1988, cap. 3). A escolha é de leitura. Use `for`
+quando há um contador com começo, fim e passo conhecidos, como o carnê. Use
+`while` quando só se sabe a condição de parada, como o cofrinho do assunto
+0020, em que o número de meses é a resposta.
+
+O cabeçalho aceita várias formas (BACKES, 2013, cap. 5). A variável declarada
+no início, como o `int parcela`, só existe dentro do laço; isso vale do padrão
+C99 em diante e evita que o contador vaze para o resto do programa. O passo
+pode ser qualquer conta: `c += 10`, `s--`, `x *= 3`. O contador pode ser
+`char`, porque em C um caractere é um número. A vírgula permite controlar duas
+variáveis ao mesmo tempo: `for (int i = 1, j = 9; i < j; i++, j--)`. O exemplo
+A044 mostra essas variações. Qualquer parte do cabeçalho pode ficar vazia, mas
+os dois `;` são obrigatórios: `for (;;)` não tem condição, roda para sempre e
+é um laço infinito escrito de propósito.
+
+Para saber quantas voltas um `for` dá sem rodar o programa, olhe o primeiro e
+o último valor que passam pela condição (DEITEL; DEITEL, 2011, cap. 4). Em
+`for (i = a; i < b; i++)`, o contador vai de `a` até `b - 1`, o que dá
+`b - a` voltas. Com `<=`, ele chega até o próprio `b` e dá `b - a + 1`. O
+carnê, de 1 a 6 com `<=`, dá 6 voltas.
 
 > [!WARNING]
-> **Erro por um** (*off-by-one*): `for (int p = 1; p < 6; p++)` mostra 5
-> parcelas. Pergunte qual é o **primeiro** e o **último** valor que passa. E
-> contador é sempre inteiro: `for (double x = 0.1; x != 1.0; x += 0.1)` nunca
-> termina.
+> O erro mais comum é o **erro por um** (*off-by-one*): uma volta a mais ou a
+> menos. `for (int p = 1; p < 6; p++)` mostra 5 parcelas. Pergunte qual é o
+> **primeiro** e o **último** valor que passa. E contador é sempre inteiro:
+> `for (double x = 0.1; x != 1.0; x += 0.1)` nunca termina, porque 0,1 não é
+> exato em binário e `x` pula o 1,0.
 
 {{exemplo}}
 

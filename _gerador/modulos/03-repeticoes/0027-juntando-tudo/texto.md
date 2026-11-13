@@ -1,24 +1,54 @@
 ## 0027 · Juntando tudo
 
-- **Craps**: jogo de dois dados. No **primeiro** lançamento, soma 7 ou 11
-  ganha e 2, 3 ou 12 perde; qualquer outra soma vira o **ponto**. Depois,
-  relança até repetir o ponto (ganha) ou tirar 7 (perde)
-  (DEITEL; DEITEL, 2011, cap. 5).
-- **Peças do módulo**: sorteio com `rand` (0026), `switch` com casos agrupados
-  no primeiro lançamento (0018), `while` nos relançamentos (0020) e um
-  contador de lançamentos (0025).
-- **Variável de situação**: funciona como flag. `0` continua, `1` ganhou, `-1`
-  perdeu; só o corpo do laço sabe o que saiu, então só ele a muda
-  (DEITEL; DEITEL, 2011, cap. 5).
-- **Número mágico**: `1`, `-1` e `0` exigem lembrar o significado. No módulo
-  08, o `enum` dá nomes a eles (`GANHOU`, `PERDEU`, `CONTINUA`).
-- **Repetição de código**: o sorteio `1 + rand() % 6` aparece quatro vezes. No
-  módulo 04 ele vira a função `lancar()`.
+Cada assunto do módulo resolveu um pedaço: repetir enquanto algo vale,
+repetir pelo menos uma vez, contar, sair no meio, sortear. Um programa de
+verdade raramente usa uma peça só. Este assunto monta um jogo inteiro com
+elas, para você ver as peças encaixadas e treinar a pergunta que mais importa
+num laço: como ele termina?
+
+O jogo é o **craps**, o dos dados da mesa de cassino (DEITEL; DEITEL, 2011,
+cap. 5). Você lança dois dados e olha a soma. No **primeiro** lançamento, 7 ou
+11 **ganha** na hora, e 2, 3 ou 12 **perde** na hora. Qualquer outra soma (4,
+5, 6, 8, 9 ou 10) vira o **ponto**, o número que você precisa repetir. A
+partir daí, você relança até tirar o ponto de novo, e **ganha**, ou até tirar
+um 7, e **perde**. As outras somas não fazem nada.
+
+Cada regra vira uma peça já conhecida. O lançamento é o sorteio com
+`1 + rand() % 6` para cada dado (assunto 0026). O primeiro lançamento tem
+três destinos, decididos por valores exatos da soma, e o `switch` com casos
+agrupados resolve isso: `case 7: case 11:` ganha, `case 2: case 3: case 12:`
+perde, e o `default` guarda o ponto (assunto 0018). Os relançamentos são um
+`while` (assunto 0020), e um contador de lançamentos (assunto 0025) diz em
+que jogada a partida acabou.
+
+O `while` dos relançamentos é do tipo "não sei quantas voltas": a partida
+pode acabar no segundo lançamento ou no trigésimo. Por isso a condição não
+conta voltas. Ela testa uma **variável de situação**, que guarda o estado da
+partida: `0` continua, `1` ganhou, `-1` perdeu (DEITEL; DEITEL, 2011, cap. 5).
+Ela funciona como a flag do assunto 0025, com um valor a mais. Só o corpo do
+laço sabe o que saiu no dado, então só ele muda a situação.
+
+Os valores `1`, `-1` e `0` são **números mágicos**: códigos que só fazem
+sentido para quem lembra o que cada um quer dizer. Quem lê `situacao == -1`
+precisa voltar ao começo do programa para entender. O módulo 08 resolve isso
+com o `enum`, que dá nomes a esses valores (`GANHOU`, `PERDEU`, `CONTINUA`);
+por baixo, eles continuam sendo `int`.
+
+O programa também mostra o que ainda falta. O sorteio `1 + rand() % 6`
+aparece quatro vezes no código, dois dados no primeiro lançamento e dois nos
+relançamentos. Repetir a mesma conta em vários lugares obriga a corrigir
+todos quando algo muda. No módulo 04 o sorteio vira uma **função** chamada
+`lancar()`, escrita uma vez e usada onde for preciso, e o programa encolhe.
+
+Por fim, a pergunta do começo. Este laço sempre termina, porque a cada
+lançamento há chance de sair o ponto ou o 7. Mas a garantia depende de as
+duas saídas estarem no código, e é essa conferência que o alerta pede.
 
 > [!WARNING]
 > Confira se o laço **termina**. Com `while (soma != ponto)` e sem o 7, o jogo
-> nunca perde e o programa está errado sem dar erro. Antes de escrever um
-> `while`, diga **todas** as formas de sair dele e confira cada uma.
+> nunca perde e o programa está errado sem dar erro nenhum. Antes de escrever
+> um `while`, diga **todas** as formas de sair dele e confira se cada uma está
+> na condição ou num `break`.
 
 {{exemplo}}
 

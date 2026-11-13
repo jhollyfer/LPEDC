@@ -1,29 +1,60 @@
 ## 0026 · Aleatórios
 
-- **Pseudoaleatório**: o computador é determinístico. Ele calcula uma
-  sequência por uma conta fixa, cada número a partir do anterior, que parece
-  aleatória (DEITEL; DEITEL, 2011, cap. 5).
-- **`rand()`**, de `<stdlib.h>`: devolve o próximo número, de 0 até
-  **`RAND_MAX`**. O padrão garante pelo menos 32767; na glibc, 2147483647
-  (CPPREFERENCE, s.d.).
-- **`srand(semente)`**: escolhe onde a sequência começa. A mesma **semente**
-  dá sempre a mesma sequência; sem `srand`, vale `srand(1)`
-  (LINUX MAN-PAGES PROJECT, s.d.).
-- **Faixa**: `1 + rand() % 6` dá de 1 a 6; de `a` até `b`,
-  `a + rand() % (b - a + 1)` (DEITEL; DEITEL, 2011, cap. 5).
-- **Semente fixa** (`srand(2022)`): os mesmos números a cada execução, bom para
-  testar e depurar; os exemplos do curso usam assim
-  (DEITEL; DEITEL, 2011, cap. 5).
-- **Semente do relógio** (`srand(time(NULL))`, com `<time.h>`): os segundos
-  desde 1º/1/1970 mudam a cada execução. Um jogo real usa este
-  (DEITEL; DEITEL, 2011, cap. 5).
-- **Não é cofre**: o `rand` nunca serve para senha ou token; quem descobre a
-  semente prevê tudo (LINUX MAN-PAGES PROJECT, s.d.).
+No jogo de tabuleiro, você caiu na prisão. Para sair, precisa tirar **dupla**
+nos dois dados. Joga, não sai, joga de novo. A estrutura é um `do...while`
+(assunto 0021), mas com uma peça que você ainda não tem: o resultado de cada
+volta é sorteado. Até aqui, todo valor vinha de uma conta ou do teclado. Para
+jogos, simulações e testes, o programa precisa de números que pareçam acaso.
+
+O problema é que o computador não sorteia. Ele é **determinístico**: a mesma
+entrada dá sempre a mesma saída. A saída é gerar números
+**pseudoaleatórios**, uma sequência produzida por uma conta fixa em que cada
+número sai do anterior, mas que, olhada de fora, parece não seguir regra
+nenhuma (DEITEL; DEITEL, 2011, cap. 5). Pense num baralho que vem de fábrica
+sempre embaralhado na mesma ordem. As cartas parecem misturadas, mas quem
+souber a ordem prevê todas.
+
+Em C, o gerador fica em `<stdlib.h>`. A função **`rand()`** devolve o próximo
+número da sequência, um inteiro de 0 até a constante **`RAND_MAX`**. O padrão
+da linguagem garante que `RAND_MAX` vale pelo menos 32767; na glibc, a
+biblioteca do Linux, ele vale 2147483647 (CPPREFERENCE, s.d.). Como o valor
+muda de um sistema para outro, o programa nunca deve contar com um `RAND_MAX`
+específico.
+
+Um dado só tem 6 faces, então você precisa trazer o número para a faixa
+certa. A ferramenta é o resto da divisão (assunto 0007). O resto de qualquer
+número por 6 fica entre 0 e 5; somando 1, fica entre 1 e 6. Daí vem
+`1 + rand() % 6`. Para uma faixa qualquer de `a` até `b`, a quantidade de
+valores possíveis é `b - a + 1`, e a fórmula vira
+`a + rand() % (b - a + 1)` (DEITEL; DEITEL, 2011, cap. 5). Para sortear de 10
+a 20, por exemplo: `10 + rand() % 11`.
+
+Falta escolher onde a sequência começa. Esse ponto de partida é a
+**semente**, e a função **`srand(semente)`** o define. A mesma semente dá
+sempre a mesma sequência. Se o programa não chamar `srand`, vale `srand(1)`, e
+toda execução sorteia os mesmos números (LINUX MAN-PAGES PROJECT, s.d.). No
+baralho de fábrica, a semente diz de que ponto da pilha você começa a tirar
+cartas.
+
+A semente certa depende do objetivo (DEITEL; DEITEL, 2011, cap. 5). Uma
+**semente fixa**, como `srand(2022)`, sorteia sempre os mesmos números. Isso
+ajuda a testar e depurar, porque o erro que apareceu uma vez volta a aparecer.
+Os exemplos do curso usam semente fixa para a saída do comentário bater com a
+sua. Já a **semente do relógio**, `srand(time(NULL))` com `<time.h>`, usa
+`time(NULL)`, que devolve os segundos passados desde 1º de janeiro de 1970.
+Cada execução começa num segundo diferente e sorteia outra sequência. Um jogo
+de verdade usa esta.
+
+Como a sequência inteira sai da semente, quem descobre a semente prevê todos
+os números. Por isso o `rand` nunca serve para senha, token ou criptografia
+(LINUX MAN-PAGES PROJECT, s.d.). Para esses casos o Linux oferece o
+`getrandom`, e existem bibliotecas de criptografia feitas para isso.
 
 > [!WARNING]
-> `srand(time(NULL))` **dentro** do laço reinicia a sequência com a mesma
-> semente a cada volta, no mesmo segundo, e o dado "sorteia" 4, 4, 4... O
-> `srand` vai uma vez, no começo do `main`; quem sorteia é o `rand`.
+> `srand(time(NULL))` **dentro** do laço reinicia a sequência a cada volta. O
+> laço roda em milissegundos, no mesmo segundo, então a semente é sempre a
+> mesma e o dado "sorteia" 4, 4, 4... O `srand` vai uma vez, no começo do
+> `main`. E ele não devolve nada (é `void`): quem sorteia é o `rand`.
 
 {{exemplo}}
 

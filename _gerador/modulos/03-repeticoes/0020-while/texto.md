@@ -1,9 +1,16 @@
 ## 0020 · While
 
-- **Repetição**: rodar o mesmo trecho várias vezes. Cada passada pelo corpo é
-  uma **iteração** (ou volta) (DEITEL; DEITEL, 2011, cap. 3).
-- **`while`** ("enquanto"): **pergunta**, roda o corpo, volta e pergunta de
-  novo. Com a resposta falsa, segue depois da `}` (BACKES, 2013, cap. 5).
+Você quer um celular de R$ 1.000 e guarda R$ 150 por mês. Em quantos meses
+consegue comprar? Com o que você viu até aqui, teria de escrever um `if` para
+cada mês, sem saber quantos `if` seriam necessários. O raciocínio que você faz
+de cabeça já mostra a saída: "guardo, confiro se deu; se não deu, guardo de
+novo". Falta ao programa esse "de novo".
+
+Esse "de novo" é a **repetição**: rodar o mesmo trecho de código várias vezes.
+Cada passada pelo trecho repetido se chama **iteração**, ou volta, e o trecho
+em si é o **corpo** do laço (DEITEL; DEITEL, 2011, cap. 3). A forma mais
+simples de repetir em C é o **`while`** ("enquanto"): ele faz uma pergunta e,
+enquanto a resposta for verdadeira, roda o corpo (BACKES, 2013, cap. 5).
 
 ```c
 while (condição) {
@@ -11,20 +18,50 @@ while (condição) {
 }
 ```
 
-- **Teste no início** (pré-teste): como a pergunta vem antes, o corpo pode
-  rodar **zero vezes** (BACKES, 2013, cap. 5).
-- **Quando usar**: não se sabe quantas voltas vão ocorrer, mas se sabe quando
-  parar (CARVALHO, 2010).
-- **Três peças**: a variável da pergunta tem valor **antes** do laço; a
-  pergunta usa essa variável; o corpo **muda** essa variável rumo ao fim
-  (DEITEL; DEITEL, 2011, cap. 3).
-- **Laço infinito**: sem a terceira peça, a pergunta dá sempre a mesma
-  resposta. No terminal, `Ctrl+C` encerra (BACKES, 2013, cap. 5).
+A leitura segue o ciclo do cofrinho. O `while` testa a condição; se ela vale,
+roda o corpo inteiro, volta ao topo e testa de novo. Quando a resposta for
+falsa, ele pula o corpo e o programa segue na linha depois da `}`. A condição
+é a mesma que você já usa no `if`: um número, e todo valor diferente de zero
+conta como verdadeiro (assunto 0012). A diferença para o `if` é a volta: o
+`if` pergunta uma vez, o `while` pergunta a cada passada.
+
+Como a pergunta vem **antes** do corpo, o `while` é um laço **com teste no
+início**, também chamado de pré-teste. Isso tem uma consequência prática: o
+corpo pode rodar **zero vezes**. Se o saldo já começasse em R$ 1.200, a
+primeira pergunta daria falso e o programa nem entraria no laço (BACKES, 2013,
+cap. 5). Esse comportamento é o certo aqui, porque quem já tem o dinheiro não
+precisa guardar nada.
+
+O `while` serve bem quando você **não sabe quantas voltas** vão acontecer, mas
+sabe **quando parar**. No cofrinho, ninguém diz "repita 7 vezes"; a regra é
+"repita até o saldo chegar na meta". O número de voltas sai como resultado da
+conta, não como dado de entrada (CARVALHO, 2010).
+
+Para um `while` funcionar, três peças precisam estar no lugar, todas ligadas à
+mesma variável (DEITEL; DEITEL, 2011, cap. 3). Primeiro, a variável da
+pergunta tem um valor **antes** do laço: `saldo = 0`. Sem isso, a primeira
+pergunta compara lixo de memória. Segundo, a condição usa essa variável:
+`saldo < meta`. Terceiro, o corpo **muda** essa variável na direção de parar:
+`saldo = saldo + deposito`. É a terceira peça que garante o fim, porque cada
+volta deixa o saldo mais perto da meta.
+
+Se a terceira peça falta, a condição dá sempre a mesma resposta e o laço nunca
+acaba. Esse é o **laço infinito**. O programa parece travado: não aparece
+nada novo ou aparece a mesma linha sem parar. No terminal, `Ctrl+C` interrompe
+o programa (BACKES, 2013, cap. 5). Quando isso acontecer, procure no corpo a
+linha que deveria mudar a variável da condição.
+
+Para conferir quantas voltas um laço dá, monte um **teste de mesa**: uma
+linha por pergunta, uma coluna por variável. O detalhe que mais engana é
+contar as perguntas. Um laço que roda o corpo 7 vezes faz 8 perguntas, porque
+a última pergunta é a que responde "não" e libera a saída.
 
 > [!WARNING]
 > Um `;` logo depois do `while` acaba com o laço: `while (saldo < meta);` tem
-> corpo **vazio** e o programa trava. Sem chaves, só a **primeira** linha
-> repete, seja qual for o recuo. Use chaves sempre.
+> corpo **vazio**, o bloco seguinte nunca é alcançado e o programa trava. Sem
+> chaves, só a **primeira** linha depois do `while` repete, seja qual for o
+> recuo. O gcc avisa este caso com `-Wmisleading-indentation`, mas o `;` vazio
+> passa calado. Use chaves sempre.
 
 {{exemplo}}
 

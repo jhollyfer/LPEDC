@@ -66,10 +66,17 @@ ela.
 
 ### Conceito
 
-- **Repetição**: rodar o mesmo trecho várias vezes. Cada passada pelo corpo é
-  uma **iteração** (ou volta) (DEITEL; DEITEL, 2011, cap. 3).
-- **`while`** ("enquanto"): **pergunta**, roda o corpo, volta e pergunta de
-  novo. Com a resposta falsa, segue depois da `}` (BACKES, 2013, cap. 5).
+Você quer um celular de R$ 1.000 e guarda R$ 150 por mês. Em quantos meses
+consegue comprar? Com o que você viu até aqui, teria de escrever um `if` para
+cada mês, sem saber quantos `if` seriam necessários. O raciocínio que você faz
+de cabeça já mostra a saída: "guardo, confiro se deu; se não deu, guardo de
+novo". Falta ao programa esse "de novo".
+
+Esse "de novo" é a **repetição**: rodar o mesmo trecho de código várias vezes.
+Cada passada pelo trecho repetido se chama **iteração**, ou volta, e o trecho
+em si é o **corpo** do laço (DEITEL; DEITEL, 2011, cap. 3). A forma mais
+simples de repetir em C é o **`while`** ("enquanto"): ele faz uma pergunta e,
+enquanto a resposta for verdadeira, roda o corpo (BACKES, 2013, cap. 5).
 
 ```c
 while (condição) {
@@ -77,20 +84,50 @@ while (condição) {
 }
 ```
 
-- **Teste no início** (pré-teste): como a pergunta vem antes, o corpo pode
-  rodar **zero vezes** (BACKES, 2013, cap. 5).
-- **Quando usar**: não se sabe quantas voltas vão ocorrer, mas se sabe quando
-  parar (CARVALHO, 2010).
-- **Três peças**: a variável da pergunta tem valor **antes** do laço; a
-  pergunta usa essa variável; o corpo **muda** essa variável rumo ao fim
-  (DEITEL; DEITEL, 2011, cap. 3).
-- **Laço infinito**: sem a terceira peça, a pergunta dá sempre a mesma
-  resposta. No terminal, `Ctrl+C` encerra (BACKES, 2013, cap. 5).
+A leitura segue o ciclo do cofrinho. O `while` testa a condição; se ela vale,
+roda o corpo inteiro, volta ao topo e testa de novo. Quando a resposta for
+falsa, ele pula o corpo e o programa segue na linha depois da `}`. A condição
+é a mesma que você já usa no `if`: um número, e todo valor diferente de zero
+conta como verdadeiro (assunto 0012). A diferença para o `if` é a volta: o
+`if` pergunta uma vez, o `while` pergunta a cada passada.
+
+Como a pergunta vem **antes** do corpo, o `while` é um laço **com teste no
+início**, também chamado de pré-teste. Isso tem uma consequência prática: o
+corpo pode rodar **zero vezes**. Se o saldo já começasse em R$ 1.200, a
+primeira pergunta daria falso e o programa nem entraria no laço (BACKES, 2013,
+cap. 5). Esse comportamento é o certo aqui, porque quem já tem o dinheiro não
+precisa guardar nada.
+
+O `while` serve bem quando você **não sabe quantas voltas** vão acontecer, mas
+sabe **quando parar**. No cofrinho, ninguém diz "repita 7 vezes"; a regra é
+"repita até o saldo chegar na meta". O número de voltas sai como resultado da
+conta, não como dado de entrada (CARVALHO, 2010).
+
+Para um `while` funcionar, três peças precisam estar no lugar, todas ligadas à
+mesma variável (DEITEL; DEITEL, 2011, cap. 3). Primeiro, a variável da
+pergunta tem um valor **antes** do laço: `saldo = 0`. Sem isso, a primeira
+pergunta compara lixo de memória. Segundo, a condição usa essa variável:
+`saldo < meta`. Terceiro, o corpo **muda** essa variável na direção de parar:
+`saldo = saldo + deposito`. É a terceira peça que garante o fim, porque cada
+volta deixa o saldo mais perto da meta.
+
+Se a terceira peça falta, a condição dá sempre a mesma resposta e o laço nunca
+acaba. Esse é o **laço infinito**. O programa parece travado: não aparece
+nada novo ou aparece a mesma linha sem parar. No terminal, `Ctrl+C` interrompe
+o programa (BACKES, 2013, cap. 5). Quando isso acontecer, procure no corpo a
+linha que deveria mudar a variável da condição.
+
+Para conferir quantas voltas um laço dá, monte um **teste de mesa**: uma
+linha por pergunta, uma coluna por variável. O detalhe que mais engana é
+contar as perguntas. Um laço que roda o corpo 7 vezes faz 8 perguntas, porque
+a última pergunta é a que responde "não" e libera a saída.
 
 > [!WARNING]
 > Um `;` logo depois do `while` acaba com o laço: `while (saldo < meta);` tem
-> corpo **vazio** e o programa trava. Sem chaves, só a **primeira** linha
-> repete, seja qual for o recuo. Use chaves sempre.
+> corpo **vazio**, o bloco seguinte nunca é alcançado e o programa trava. Sem
+> chaves, só a **primeira** linha depois do `while` repete, seja qual for o
+> recuo. O gcc avisa este caso com `-Wmisleading-indentation`, mas o `;` vazio
+> passa calado. Use chaves sempre.
 
 ### Exemplos de uso
 
@@ -285,9 +322,18 @@ C: | voltas 0, k final 10
 
 ### Conceito
 
-- **`do...while`**: **faz primeiro e pergunta depois**. Roda o corpo e testa;
-  se a condição é verdadeira, volta ao começo do corpo
-  (DEITEL; DEITEL, 2011, cap. 4).
+A geladeira custa R$ 1.200 e o app pergunta: "em quantas parcelas (1 a 12)?".
+Você digita 15, ele recusa e pergunta de novo. Repare na ordem: o app precisa
+fazer a pergunta pelo menos uma vez antes de ter algo para conferir. Com o
+`while` do assunto 0020, a conferência vem antes de tudo, e você teria de
+inventar um valor inválido só para entrar no laço (`parcelas = 0`). O truque
+funciona, mas esconde a intenção.
+
+Pense numa prova de roupa. Você veste primeiro e só depois decide se serve; se
+não serviu, troca e veste de novo. Ninguém decide se a roupa serve antes de
+vestir. O **`do...while`** segue essa lógica: **faz primeiro e pergunta
+depois**. Ele roda o corpo, testa a condição e, se ela for verdadeira, volta
+ao começo do corpo (DEITEL; DEITEL, 2011, cap. 4).
 
 ```c
 do {
@@ -295,23 +341,42 @@ do {
 } while (condição);   // o ; no fim é obrigatório
 ```
 
-- **Teste no fim** (pós-teste): o corpo roda **uma ou mais vezes**, nunca
-  zero. Dispensa inventar um valor inválido só para entrar no laço
-  (CARVALHO, 2010).
-- **`;` obrigatório** depois do `while (...)` final (BACKES, 2013, cap. 5).
-- **`repita ... até`**: no pseudocódigo da prova, a condição é de **parar**.
-  `repita ... até x > 10` vira `do { ... } while (!(x > 10));`, que é
-  `while (x <= 10)` (DORNELLES F., 1997).
-- **Quando usar**: a primeira volta é obrigatória. Validação de entrada, menu
-  (o A042 faz um caixa eletrônico) e "jogar de novo?"
-  (BACKES, 2013, cap. 5).
-- **Condição de validação**: descreve o valor **inválido**, o que faz repetir:
-  `parcelas < 1 || parcelas > 12` (DEITEL; DEITEL, 2011, cap. 3).
+Como a pergunta fica no fim, ele é o laço **com teste no fim**, também chamado
+de pós-teste. A consequência é a diferença inteira em relação ao `while`: o
+corpo roda **uma ou mais vezes**, nunca zero. Por isso você não precisa de
+valor inicial falso para a variável da condição; a primeira volta acontece de
+qualquer jeito e é ela que dá o primeiro valor (CARVALHO, 2010).
+
+Um detalhe de escrita pega muita gente. No `do...while`, o `while (...)` do
+fim é o último pedaço do comando, então leva **`;`** logo depois do parêntese
+(BACKES, 2013, cap. 5). Sem ele, o compilador acusa erro. É o oposto do
+`while` comum, em que o `;` depois do parêntese estraga o laço.
+
+Use o `do...while` quando a primeira volta é obrigatória (BACKES, 2013, cap.
+5). O caso mais comum é a **validação de entrada**: você lê o dado e repete a
+leitura enquanto ele vier inválido. Outro é o **menu**: o programa mostra as
+opções, executa a escolhida e repete até a pessoa escolher "sair" (o exemplo
+A042 faz um caixa eletrônico assim). O terceiro é o "jogar de novo?": a
+primeira partida sempre acontece, e só depois faz sentido perguntar.
+
+Na validação, a condição descreve o valor **inválido**, porque é ele que faz o
+programa perguntar de novo. Para parcelas de 1 a 12, o valor inválido é o que
+fica abaixo de 1 ou acima de 12: `parcelas < 1 || parcelas > 12` (DEITEL;
+DEITEL, 2011, cap. 3). Leia em voz alta: "peça as parcelas **enquanto** forem
+menores que 1 ou maiores que 12".
+
+O pseudocódigo da prova costuma usar outra forma de pós-teste: `repita ...
+até condição`. Ele também testa no fim, mas a condição é de **parar**, não de
+continuar. Para levar para C, você inverte a condição: `repita ... até x > 10`
+vira `do { ... } while (!(x > 10));`, que é o mesmo que `while (x <= 10)`
+(DORNELLES F., 1997). Na prova, confira sempre se o enunciado usa "enquanto"
+ou "até" antes de contar as voltas.
 
 > [!WARNING]
-> A condição é de **continuar**, não de parar. Com
-> `while (parcelas >= 1 && parcelas <= 12)`, o programa repete com o 4 e
-> aceita o 15. Para inverter um `&&`, use De Morgan (0013): `!a || !b`.
+> A condição é de **continuar**, não de parar. Quem escreve
+> `while (parcelas >= 1 && parcelas <= 12)` inverte o programa: repete com o 4
+> e aceita o 15. Para inverter uma condição com `&&`, use De Morgan (assunto
+> 0013): o contrário de `a && b` é `!a || !b`.
 
 ### Exemplos de uso
 
@@ -559,9 +624,11 @@ Com as entradas 1111, 2222 e 3333, a última linha da saída é "Cartão bloquea
 
 ### Conceito
 
-- **Laço com contador**: tem começo, condição e passo. Com `while`, o contador
-  aparece em três lugares, e esquecer o passo dá laço infinito
-  (DEITEL; DEITEL, 2011, cap. 4).
+Você comprou uma TV de R$ 1.800 em 6 parcelas de R$ 300 e quer ver o carnê
+inteiro, da parcela 1 à 6. Desta vez você **sabe** quantas voltas são antes de
+começar. Esse é o **laço com contador**: uma variável começa num valor, anda
+de passo em passo e para num valor conhecido (DEITEL; DEITEL, 2011, cap. 4).
+Dá para escrever com `while`, mas o contador fica espalhado em três lugares:
 
 ```c
 int parcela = 1;              // começa
@@ -571,8 +638,10 @@ while (parcela <= 6) {        // pergunta
 }
 ```
 
-- **`for`**: junta início, condição e passo numa linha
-  (BACKES, 2013, cap. 5).
+O começo está antes do laço, a pergunta no cabeçalho e o passo lá no fim do
+corpo. Num corpo longo, o `parcela++` some de vista, e esquecer dele dá laço
+infinito. O **`for`** junta as três peças numa linha só, o cabeçalho, e deixa
+o corpo livre para o trabalho (BACKES, 2013, cap. 5):
 
 ```c
 for (int parcela = 1; parcela <= 6; parcela++) {
@@ -580,24 +649,44 @@ for (int parcela = 1; parcela <= 6; parcela++) {
 }
 ```
 
-- **Ordem de execução**: o **início** roda uma vez; a **condição** é testada
-  antes de cada volta; depois vem o **corpo**; o **passo** roda no fim da
-  volta e volta para a condição (CARVALHO, 2010).
-- **`for` e `while`**: o `for` é o `while` reorganizado. Use `for` com
-  contador de começo, fim e passo conhecidos; `while` quando só se sabe a
-  condição de parada (KERNIGHAN; RITCHIE, 1988, cap. 3).
-- **Variações**: o `int` declarado no `for` só existe no laço (C99). O passo
-  pode ser qualquer conta (`c += 10`, `x *= 3`), o contador pode ser `char` e
-  a vírgula permite duas variáveis (A044). Partes vazias valem, mas os dois
-  `;` não: `for (;;)` é laço infinito (BACKES, 2013, cap. 5).
-- **Quantas voltas**: `for (i = a; i < b; i++)` dá `b - a`; com `<=`,
-  `b - a + 1` (DEITEL; DEITEL, 2011, cap. 4).
+Pense na catraca do ônibus com contador. Ela começa zerada uma vez, no início
+do dia; antes de cada passageiro, confere se ainda cabe gente; o passageiro
+passa; e só depois que ele passou o número sobe. O `for` roda nessa mesma
+ordem, que não é a ordem em que você lê a linha (CARVALHO, 2010). O **início**
+(`int parcela = 1`) roda **uma vez**, antes de tudo. A **condição**
+(`parcela <= 6`) é testada antes de cada volta; se der falso, o laço acaba. Se
+der verdadeiro, roda o **corpo**. Por fim roda o **passo** (`parcela++`), e o
+fluxo volta para a condição. Repare que o passo, escrito no meio do cabeçalho,
+só acontece depois do corpo.
+
+O `for` é o `while` de cima reorganizado; o compilador trata os dois do mesmo
+jeito (KERNIGHAN; RITCHIE, 1988, cap. 3). A escolha é de leitura. Use `for`
+quando há um contador com começo, fim e passo conhecidos, como o carnê. Use
+`while` quando só se sabe a condição de parada, como o cofrinho do assunto
+0020, em que o número de meses é a resposta.
+
+O cabeçalho aceita várias formas (BACKES, 2013, cap. 5). A variável declarada
+no início, como o `int parcela`, só existe dentro do laço; isso vale do padrão
+C99 em diante e evita que o contador vaze para o resto do programa. O passo
+pode ser qualquer conta: `c += 10`, `s--`, `x *= 3`. O contador pode ser
+`char`, porque em C um caractere é um número. A vírgula permite controlar duas
+variáveis ao mesmo tempo: `for (int i = 1, j = 9; i < j; i++, j--)`. O exemplo
+A044 mostra essas variações. Qualquer parte do cabeçalho pode ficar vazia, mas
+os dois `;` são obrigatórios: `for (;;)` não tem condição, roda para sempre e
+é um laço infinito escrito de propósito.
+
+Para saber quantas voltas um `for` dá sem rodar o programa, olhe o primeiro e
+o último valor que passam pela condição (DEITEL; DEITEL, 2011, cap. 4). Em
+`for (i = a; i < b; i++)`, o contador vai de `a` até `b - 1`, o que dá
+`b - a` voltas. Com `<=`, ele chega até o próprio `b` e dá `b - a + 1`. O
+carnê, de 1 a 6 com `<=`, dá 6 voltas.
 
 > [!WARNING]
-> **Erro por um** (*off-by-one*): `for (int p = 1; p < 6; p++)` mostra 5
-> parcelas. Pergunte qual é o **primeiro** e o **último** valor que passa. E
-> contador é sempre inteiro: `for (double x = 0.1; x != 1.0; x += 0.1)` nunca
-> termina.
+> O erro mais comum é o **erro por um** (*off-by-one*): uma volta a mais ou a
+> menos. `for (int p = 1; p < 6; p++)` mostra 5 parcelas. Pergunte qual é o
+> **primeiro** e o **último** valor que passa. E contador é sempre inteiro:
+> `for (double x = 0.1; x != 1.0; x += 0.1)` nunca termina, porque 0,1 não é
+> exato em binário e `x` pula o 1,0.
 
 ### Exemplos de uso
 
@@ -811,27 +900,60 @@ pi ~ 3.140593
 
 ### Conceito
 
-- **`break`**: sai do laço **na hora** e segue depois da `}`. É o mesmo
-  `break` do `switch` (0018) (DEITEL; DEITEL, 2011, cap. 4).
-- **`continue`**: abandona só a **volta atual**; o resto do corpo é pulado. No
-  `for`, o passo (`i++`) ainda roda antes da pergunta; no `while`, o salto vai
-  direto para a pergunta (DEITEL; DEITEL, 2011, cap. 4).
-- **Dentro de um `if`**: os dois quase sempre aparecem assim, "se acontecer
-  tal coisa, saia" ou "pule" (BACKES, 2013, cap. 5).
-- **`while (1)`** (ou `for (;;)`): condição sempre verdadeira, com um `break`
-  no meio do corpo. Serve quando o motivo de parar só aparece **depois** de
-  ler o dado (KERNIGHAN; RITCHIE, 1988, cap. 3).
-- **Por que parou?** Depois de um laço com `break`, às vezes é preciso saber
-  se saiu pela condição ou pelo `break`. O A046 testa um primo assim.
-- **Só o mais interno**: `break` e `continue` valem para o laço mais próximo.
-  O C não tem `break` com rótulo; existe o `goto`, que deve ser evitado
-  (BACKES, 2013, cap. 5).
+Até aqui, um laço só para quando a condição do cabeçalho dá falso, e cada volta
+roda o corpo inteiro. Às vezes isso não basta. Você só descobre que precisa
+parar no meio do corpo, depois de ler um dado. Ou descobre que um dado não
+presta e quer pular o resto da volta sem encerrar o laço.
+
+No caixa do mercado, a atendente passa os produtos um a um. Se o leitor falha
+e marca um preço negativo, ela ignora aquela leitura e passa o próximo. Quando
+a compra acaba, ela digita 0 e fecha a conta. São dois atalhos na mesma
+repetição: "pula este" e "para tudo". Em C, eles se chamam **`continue`** e
+**`break`** (DEITEL; DEITEL, 2011, cap. 4).
+
+O **`break`** sai do laço **na hora**. O que resta do corpo não roda, a
+condição não é testada de novo e o programa segue na primeira linha depois da
+`}` do laço. É o mesmo `break` que você usou no assunto 0018 para sair de um `case` no
+`switch` (DEITEL; DEITEL, 2011, cap. 4).
+
+O **`continue`** é mais brando: abandona só a **volta atual**. O resto do
+corpo é pulado e o laço segue para a próxima volta. Onde ele cai depende do
+laço (DEITEL; DEITEL, 2011, cap. 4). No `for`, o passo (`i++`) ainda roda e só
+depois vem a condição. No `while` e no `do...while`, o salto vai direto para a
+condição. Essa diferença parece pequena, mas é ela que decide se o contador
+anda ou fica parado, como o alerta no fim deste texto mostra.
+
+Os dois quase sempre aparecem dentro de um `if`, porque só fazem sentido
+quando algo acontece: "se o preço for 0, saia" ou "se o preço for negativo,
+pule" (BACKES, 2013, cap. 5). Um `break` solto, sem `if`, encerraria o laço
+logo na primeira volta.
+
+O `break` abre caminho para um laço muito usado: o **`while (1)`**, que também
+se escreve `for (;;)`. A condição é sempre verdadeira, então quem decide a
+saída é um `break` no meio do corpo (KERNIGHAN; RITCHIE, 1988, cap. 3). Ele
+serve quando o motivo de parar só aparece **depois** de ler o dado. No caixa,
+você lê o preço e só então descobre que é 0; um `while` comum teria de testar
+um valor que ainda não foi lido.
+
+Depois de um laço com `break`, às vezes você precisa saber **por que** ele
+parou: porque a condição deu falso ou porque o `break` disparou? A resposta
+muda o que o programa conclui. O exemplo A046 testa se um número é primo
+assim: o laço procura um divisor e dá `break` ao achar um. Se chegou ao fim
+sem `break`, nenhum divisor apareceu e o número é primo.
+
+Por fim, o alcance. `break` e `continue` valem só para o laço **mais
+interno**, aquele que os envolve mais de perto (BACKES, 2013, cap. 5). Com um
+laço dentro de outro, o `break` de dentro encerra só o de dentro, e o de fora
+continua. O C não tem um `break` que saia de dois laços de uma vez. Existe o
+`goto`, que salta para um rótulo em qualquer ponto da função, mas ele embaralha
+o caminho do programa e deve ser evitado.
 
 > [!WARNING]
 > `continue` num `while` pode pular o passo. Em
-> `while (i < 10) { if (i == 5) continue; printf("%d", i); i++; }`, o `i`
-> fica 5 para sempre. No `for`, o mesmo código funciona, porque o `i++` está
-> no cabeçalho.
+> `while (i < 10) { if (i == 5) continue; printf("%d", i); i++; }`, quando `i`
+> chega a 5, o `continue` volta à pergunta **sem** passar pelo `i++`: `i` fica
+> 5 para sempre. No `for`, o mesmo código funciona, porque o `i++` está no
+> cabeçalho e roda mesmo com `continue`.
 
 ### Exemplos de uso
 
@@ -1074,27 +1196,58 @@ Média de 3 notas: 7.83
 
 ### Conceito
 
-- **Laço aninhado**: o corpo de um laço contém outro laço inteiro. A cada
-  volta do laço **de fora**, o **de dentro** roda do começo ao fim, como os
-  ponteiros de horas e minutos (BACKES, 2013, cap. 5).
-- **Recomeço**: o contador de dentro volta ao início a cada volta de fora. No
-  `for`, é automático; no `while`, você zera à mão (o E142 mostra o estrago)
-  (BACKES, 2013, cap. 5).
-- **Voltas**: o corpo de dentro roda (voltas de fora) × (voltas de dentro)
-  vezes: 4 × 5 = 20 (DEITEL; DEITEL, 2011, cap. 4).
-- **Limite dependente**: o de dentro pode usar o contador de fora. Com
-  `for (int col = 1; col <= linha; col++)`, sai um triângulo (A048)
-  (DEITEL; DEITEL, 2011, cap. 4).
-- **Custo**: a conta é uma **multiplicação**. Comparar 1.000 clientes com
-  1.000 pedidos dá 1 milhão de comparações, o **O(n²)** do módulo de análise
-  (CELES; CERQUEIRA; RANGEL, 2016).
-- **Nomes**: `fileira` e `poltrona`, `linha` e `coluna`. Com `i` e `j`, é
-  fácil trocar um pelo outro sem perceber.
+Uma sala de cinema tem 4 fileiras, de A a D, com 5 poltronas cada. Para
+imprimir o mapa da sala, você percorre a fileira A da poltrona 1 à 5, desce
+para a B e faz tudo de novo, até a D. Repare que há duas repetições, uma
+dentro da outra: a das fileiras e, para cada fileira, a das poltronas. Um laço
+só não dá conta disso.
+
+O nome dessa construção é **laço aninhado**: o corpo de um laço contém outro
+laço inteiro (BACKES, 2013, cap. 5). A regra que governa tudo é esta: a cada
+volta do laço **de fora**, o laço **de dentro** roda **do começo ao fim**.
+Pense no relógio de ponteiros. O dos minutos dá uma volta completa a cada hora,
+e só então o das horas avança uma casa. O de fora é o das horas; o de dentro,
+o dos minutos.
+
+Da regra sai a primeira consequência: o contador de dentro **recomeça** a cada
+volta de fora (BACKES, 2013, cap. 5). No `for`, isso é automático, porque o
+início do cabeçalho (`int poltrona = 1`) roda de novo toda vez que o laço de
+dentro começa. No `while`, o início fica fora do laço, e você precisa zerar o
+contador à mão antes de cada nova fileira. Esquecer disso faz o laço de dentro
+rodar só na primeira fileira, porque nas seguintes o contador já está no fim.
+O exercício E142 mostra esse estrago.
+
+A segunda consequência é a conta de voltas. O corpo do laço de dentro roda
+(voltas de fora) × (voltas de dentro) vezes (DEITEL; DEITEL, 2011, cap. 4). No
+cinema, são 4 × 5 = 20 poltronas impressas. Essa conta vale quando o laço de
+dentro tem sempre o mesmo tamanho.
+
+Ele nem sempre tem. A terceira consequência é que o limite de dentro pode
+**depender** do contador de fora (DEITEL; DEITEL, 2011, cap. 4). Com
+`for (int col = 1; col <= linha; col++)`, a linha 1 tem 1 asterisco, a linha 2
+tem 2, a linha 3 tem 3, e o desenho vira um triângulo. O exemplo A048 faz
+isso. Aqui a conta de voltas deixa de ser multiplicação e vira soma:
+1 + 2 + 3 + ... até a última linha.
+
+A multiplicação também mostra o **custo** de um laço aninhado. Com 4 × 5, não
+há o que medir. Mas comparar 1.000 clientes com 1.000 pedidos, cada um contra
+cada um, dá 1 milhão de comparações. Quando o tamanho da entrada dobra, o
+trabalho quadruplica. É o crescimento quadrático, o **O(n²)** que o módulo de
+análise de algoritmos estuda (CELES; CERQUEIRA; RANGEL, 2016). Ao ver um laço
+dentro de outro, faça a conta antes de rodar com dados grandes.
+
+Com dois contadores no ar, o nome pesa. Use nomes que digam quem é quem:
+`fileira` e `poltrona`, `linha` e `coluna`. Com `i` e `j`, é fácil trocar um
+pelo outro numa condição ou num `printf` sem perceber, e o programa compila do
+mesmo jeito. Lembre também que `break` e `continue` valem só para o laço mais
+interno (assunto 0023): um `break` no laço das poltronas encerra a fileira
+atual, não o mapa.
 
 > [!WARNING]
 > O `printf("\n")` no lugar errado muda o desenho: dentro do laço de dentro,
 > sai uma poltrona por linha; fora dos dois, tudo numa linha. Pergunte: isto
-> acontece uma vez por poltrona, por fileira ou no programa?
+> acontece **uma vez por poltrona**, **uma vez por fileira** ou **uma vez no
+> programa**? A resposta diz em que nível o comando vai.
 
 ### Exemplos de uso
 
@@ -1297,24 +1450,60 @@ Altura:
 
 ### Conceito
 
-- **Padrão de laço**: um uso de variável já resolvido milhares de vezes. A
-  variável ganha valor **antes** do laço, muda **dentro** e é usada **depois**
-  (DEITEL; DEITEL, 2011, cap. 3).
-- **Contador e acumulador**: o contador soma 1 a cada volta; o acumulador soma
-  o valor lido. Ambos começam em 0; o acumulador de **produto** começa em 1
-  (DEITEL; DEITEL, 2011, cap. 3).
-- **Maior e menor**: começam com o **primeiro valor lido**, nunca com 0
-  (BACKES, 2013, cap. 5).
-- **Flag**: um `bool` que só sobe. Sem `else flag = false`, senão um valor
-  comum depois do especial apaga a resposta (LEAL, 2016).
-- **Sentinela**: valor que **não pode** ser dado real e só manda parar; não
-  entra em conta nenhuma (DEITEL; DEITEL, 2011, cap. 3).
-- **Leitura antecipada**: lê **antes** do laço e no **fim** do corpo, para a
-  pergunta do `while` olhar sempre um valor recém-lido
-  (DEITEL; DEITEL, 2011, cap. 3).
-- **Média**: `(double) soma / dias`, e só com `dias > 0`. Com 0 / 0, o `double`
-  dá `nan` e o `int` derruba o programa. O acumulador também estoura: para
-  dinheiro, some **centavos** num `long long` (DEITEL; DEITEL, 2011).
+Fim de semana de calor e você anotou a máxima de cada dia: 28, 31, 36, 25 e
+30 °C. Agora quer saber quantos dias foram, qual a média, qual o dia mais
+quente e o mais frio, e se teve algum dia de 35 °C ou mais. O laço que lê as
+temperaturas você já sabe escrever. A dúvida é o que fazer com cada valor lido
+para que, no fim, as respostas estejam prontas.
+
+Cada uma dessas perguntas tem uma solução conhecida, um **padrão de laço**: um
+jeito de usar uma variável que já foi resolvido milhares de vezes e que você
+só precisa reconhecer (DEITEL; DEITEL, 2011, cap. 3). Todos seguem o mesmo
+roteiro em três tempos. A variável ganha um valor **antes** do laço, é
+atualizada **dentro** dele e é usada **depois**. Errar qualquer um dos três
+tempos dá resposta errada, mesmo com o laço certo.
+
+O **contador** responde "quantos?". Começa em 0 e soma 1 a cada volta:
+`dias++`. O **acumulador** responde "quanto ao todo?". Também começa em 0, mas
+soma o valor lido: `soma += temp` (DEITEL; DEITEL, 2011, cap. 3). Com os dois,
+a média sai depois do laço. O acumulador também multiplica, e aí muda o ponto
+de partida: um **produto** começa em 1, porque começar em 0 zera tudo na
+primeira volta.
+
+O **maior** e o **menor** guardam o recorde até agora. A cada valor lido, você
+compara com o recorde e troca se o novo for melhor:
+`if (temp > maior) maior = temp`. A pegadinha está no primeiro tempo. O
+recorde começa com o **primeiro valor lido**, nunca com um número inventado
+como 0, porque o 0 pode vencer todos os valores reais (BACKES, 2013, cap. 5).
+O alerta no fim do texto mostra o caso.
+
+A **flag** (bandeira) responde "aconteceu alguma vez?". É uma variável `bool`
+que começa `false` e sobe para `true` quando o caso aparece:
+`if (temp >= 35) calorao = true`. Ela só sobe, nunca desce. Se você puser um
+`else calorao = false`, um dia de 25 °C depois do de 36 apaga a resposta, e a
+flag passa a dizer só se o **último** dia foi quente (LEAL, 2016).
+
+A **sentinela** resolve outro problema: como avisar ao programa que os dados
+acabaram. Ela é um valor que **não pode** ser dado real e só serve para mandar
+parar (DEITEL; DEITEL, 2011, cap. 3). Temperatura pode ser 0 ou negativa,
+então a sentinela aqui é 999. Ela não entra em conta nenhuma: o laço testa o
+valor antes de contar ou somar.
+
+Para isso funcionar, a leitura aparece em dois lugares: uma vez **antes** do
+laço e outra no **fim** do corpo. Essa é a **leitura antecipada**. Com ela, a
+pergunta do `while` sempre olha um valor que acabou de chegar, e a sentinela é
+barrada antes de entrar no corpo (DEITEL; DEITEL, 2011, cap. 3).
+
+A média pede dois cuidados. O primeiro é o tipo: `soma / dias` com dois `int`
+descarta os decimais, então você escreve `(double) soma / dias`, com o cast do
+assunto 0008. O segundo é o zero: se a primeira entrada for a sentinela,
+`dias` fica 0. Com `double`, 0 / 0 dá `nan` (*not a number*); com `int`, o
+programa quebra. Teste `dias > 0` antes de dividir. E o acumulador tem os
+limites do tipo: um `int` que passa de 2.147.483.647 estoura, e somar 0,1 em
+`double` acumula erro de arredondamento. Para dinheiro, some **centavos** num
+`long long` e divida por 100 só ao mostrar (DEITEL; DEITEL, 2011).
+
+A tabela junta os padrões para consulta:
 
 | Padrão | Antes do laço | Dentro do laço | Depois |
 | --- | --- | --- | --- |
@@ -1325,9 +1514,10 @@ Altura:
 | **sentinela** | ler o primeiro valor | ler o próximo, no fim | (o laço para nela) |
 
 > [!WARNING]
-> `maior = 0` falha no inverno: com máximas de -3, -1 e -4 °C, o programa diz
-> que o dia mais quente teve 0 °C. Comece com o **primeiro valor lido** ou com
-> `INT_MIN` (e `INT_MAX` para o menor), de `<limits.h>`.
+> `maior = 0` parece inofensivo, até o inverno: com máximas de -3, -1 e -4 °C,
+> o programa diz que o dia mais quente teve 0 °C, um dia que nunca existiu.
+> Comece com o **primeiro valor lido** ou com `INT_MIN` (e `INT_MAX` para o
+> menor), de `<limits.h>`.
 
 ### Exemplos de uso
 
@@ -1621,30 +1811,61 @@ Nota 8:
 
 ### Conceito
 
-- **Pseudoaleatório**: o computador é determinístico. Ele calcula uma
-  sequência por uma conta fixa, cada número a partir do anterior, que parece
-  aleatória (DEITEL; DEITEL, 2011, cap. 5).
-- **`rand()`**, de `<stdlib.h>`: devolve o próximo número, de 0 até
-  **`RAND_MAX`**. O padrão garante pelo menos 32767; na glibc, 2147483647
-  (CPPREFERENCE, s.d.).
-- **`srand(semente)`**: escolhe onde a sequência começa. A mesma **semente**
-  dá sempre a mesma sequência; sem `srand`, vale `srand(1)`
-  (LINUX MAN-PAGES PROJECT, s.d.).
-- **Faixa**: `1 + rand() % 6` dá de 1 a 6; de `a` até `b`,
-  `a + rand() % (b - a + 1)` (DEITEL; DEITEL, 2011, cap. 5).
-- **Semente fixa** (`srand(2022)`): os mesmos números a cada execução, bom para
-  testar e depurar; os exemplos do curso usam assim
-  (DEITEL; DEITEL, 2011, cap. 5).
-- **Semente do relógio** (`srand(time(NULL))`, com `<time.h>`): os segundos
-  desde 1º/1/1970 mudam a cada execução. Um jogo real usa este
-  (DEITEL; DEITEL, 2011, cap. 5).
-- **Não é cofre**: o `rand` nunca serve para senha ou token; quem descobre a
-  semente prevê tudo (LINUX MAN-PAGES PROJECT, s.d.).
+No jogo de tabuleiro, você caiu na prisão. Para sair, precisa tirar **dupla**
+nos dois dados. Joga, não sai, joga de novo. A estrutura é um `do...while`
+(assunto 0021), mas com uma peça que você ainda não tem: o resultado de cada
+volta é sorteado. Até aqui, todo valor vinha de uma conta ou do teclado. Para
+jogos, simulações e testes, o programa precisa de números que pareçam acaso.
+
+O problema é que o computador não sorteia. Ele é **determinístico**: a mesma
+entrada dá sempre a mesma saída. A saída é gerar números
+**pseudoaleatórios**, uma sequência produzida por uma conta fixa em que cada
+número sai do anterior, mas que, olhada de fora, parece não seguir regra
+nenhuma (DEITEL; DEITEL, 2011, cap. 5). Pense num baralho que vem de fábrica
+sempre embaralhado na mesma ordem. As cartas parecem misturadas, mas quem
+souber a ordem prevê todas.
+
+Em C, o gerador fica em `<stdlib.h>`. A função **`rand()`** devolve o próximo
+número da sequência, um inteiro de 0 até a constante **`RAND_MAX`**. O padrão
+da linguagem garante que `RAND_MAX` vale pelo menos 32767; na glibc, a
+biblioteca do Linux, ele vale 2147483647 (CPPREFERENCE, s.d.). Como o valor
+muda de um sistema para outro, o programa nunca deve contar com um `RAND_MAX`
+específico.
+
+Um dado só tem 6 faces, então você precisa trazer o número para a faixa
+certa. A ferramenta é o resto da divisão (assunto 0007). O resto de qualquer
+número por 6 fica entre 0 e 5; somando 1, fica entre 1 e 6. Daí vem
+`1 + rand() % 6`. Para uma faixa qualquer de `a` até `b`, a quantidade de
+valores possíveis é `b - a + 1`, e a fórmula vira
+`a + rand() % (b - a + 1)` (DEITEL; DEITEL, 2011, cap. 5). Para sortear de 10
+a 20, por exemplo: `10 + rand() % 11`.
+
+Falta escolher onde a sequência começa. Esse ponto de partida é a
+**semente**, e a função **`srand(semente)`** o define. A mesma semente dá
+sempre a mesma sequência. Se o programa não chamar `srand`, vale `srand(1)`, e
+toda execução sorteia os mesmos números (LINUX MAN-PAGES PROJECT, s.d.). No
+baralho de fábrica, a semente diz de que ponto da pilha você começa a tirar
+cartas.
+
+A semente certa depende do objetivo (DEITEL; DEITEL, 2011, cap. 5). Uma
+**semente fixa**, como `srand(2022)`, sorteia sempre os mesmos números. Isso
+ajuda a testar e depurar, porque o erro que apareceu uma vez volta a aparecer.
+Os exemplos do curso usam semente fixa para a saída do comentário bater com a
+sua. Já a **semente do relógio**, `srand(time(NULL))` com `<time.h>`, usa
+`time(NULL)`, que devolve os segundos passados desde 1º de janeiro de 1970.
+Cada execução começa num segundo diferente e sorteia outra sequência. Um jogo
+de verdade usa esta.
+
+Como a sequência inteira sai da semente, quem descobre a semente prevê todos
+os números. Por isso o `rand` nunca serve para senha, token ou criptografia
+(LINUX MAN-PAGES PROJECT, s.d.). Para esses casos o Linux oferece o
+`getrandom`, e existem bibliotecas de criptografia feitas para isso.
 
 > [!WARNING]
-> `srand(time(NULL))` **dentro** do laço reinicia a sequência com a mesma
-> semente a cada volta, no mesmo segundo, e o dado "sorteia" 4, 4, 4... O
-> `srand` vai uma vez, no começo do `main`; quem sorteia é o `rand`.
+> `srand(time(NULL))` **dentro** do laço reinicia a sequência a cada volta. O
+> laço roda em milissegundos, no mesmo segundo, então a semente é sempre a
+> mesma e o dado "sorteia" 4, 4, 4... O `srand` vai uma vez, no começo do
+> `main`. E ele não devolve nada (é `void`): quem sorteia é o `rand`.
 
 ### Exemplos de uso
 
@@ -1844,25 +2065,55 @@ pi ~ 3.1388
 
 ### Conceito
 
-- **Craps**: jogo de dois dados. No **primeiro** lançamento, soma 7 ou 11
-  ganha e 2, 3 ou 12 perde; qualquer outra soma vira o **ponto**. Depois,
-  relança até repetir o ponto (ganha) ou tirar 7 (perde)
-  (DEITEL; DEITEL, 2011, cap. 5).
-- **Peças do módulo**: sorteio com `rand` (0026), `switch` com casos agrupados
-  no primeiro lançamento (0018), `while` nos relançamentos (0020) e um
-  contador de lançamentos (0025).
-- **Variável de situação**: funciona como flag. `0` continua, `1` ganhou, `-1`
-  perdeu; só o corpo do laço sabe o que saiu, então só ele a muda
-  (DEITEL; DEITEL, 2011, cap. 5).
-- **Número mágico**: `1`, `-1` e `0` exigem lembrar o significado. No módulo
-  08, o `enum` dá nomes a eles (`GANHOU`, `PERDEU`, `CONTINUA`).
-- **Repetição de código**: o sorteio `1 + rand() % 6` aparece quatro vezes. No
-  módulo 04 ele vira a função `lancar()`.
+Cada assunto do módulo resolveu um pedaço: repetir enquanto algo vale,
+repetir pelo menos uma vez, contar, sair no meio, sortear. Um programa de
+verdade raramente usa uma peça só. Este assunto monta um jogo inteiro com
+elas, para você ver as peças encaixadas e treinar a pergunta que mais importa
+num laço: como ele termina?
+
+O jogo é o **craps**, o dos dados da mesa de cassino (DEITEL; DEITEL, 2011,
+cap. 5). Você lança dois dados e olha a soma. No **primeiro** lançamento, 7 ou
+11 **ganha** na hora, e 2, 3 ou 12 **perde** na hora. Qualquer outra soma (4,
+5, 6, 8, 9 ou 10) vira o **ponto**, o número que você precisa repetir. A
+partir daí, você relança até tirar o ponto de novo, e **ganha**, ou até tirar
+um 7, e **perde**. As outras somas não fazem nada.
+
+Cada regra vira uma peça já conhecida. O lançamento é o sorteio com
+`1 + rand() % 6` para cada dado (assunto 0026). O primeiro lançamento tem
+três destinos, decididos por valores exatos da soma, e o `switch` com casos
+agrupados resolve isso: `case 7: case 11:` ganha, `case 2: case 3: case 12:`
+perde, e o `default` guarda o ponto (assunto 0018). Os relançamentos são um
+`while` (assunto 0020), e um contador de lançamentos (assunto 0025) diz em
+que jogada a partida acabou.
+
+O `while` dos relançamentos é do tipo "não sei quantas voltas": a partida
+pode acabar no segundo lançamento ou no trigésimo. Por isso a condição não
+conta voltas. Ela testa uma **variável de situação**, que guarda o estado da
+partida: `0` continua, `1` ganhou, `-1` perdeu (DEITEL; DEITEL, 2011, cap. 5).
+Ela funciona como a flag do assunto 0025, com um valor a mais. Só o corpo do
+laço sabe o que saiu no dado, então só ele muda a situação.
+
+Os valores `1`, `-1` e `0` são **números mágicos**: códigos que só fazem
+sentido para quem lembra o que cada um quer dizer. Quem lê `situacao == -1`
+precisa voltar ao começo do programa para entender. O módulo 08 resolve isso
+com o `enum`, que dá nomes a esses valores (`GANHOU`, `PERDEU`, `CONTINUA`);
+por baixo, eles continuam sendo `int`.
+
+O programa também mostra o que ainda falta. O sorteio `1 + rand() % 6`
+aparece quatro vezes no código, dois dados no primeiro lançamento e dois nos
+relançamentos. Repetir a mesma conta em vários lugares obriga a corrigir
+todos quando algo muda. No módulo 04 o sorteio vira uma **função** chamada
+`lancar()`, escrita uma vez e usada onde for preciso, e o programa encolhe.
+
+Por fim, a pergunta do começo. Este laço sempre termina, porque a cada
+lançamento há chance de sair o ponto ou o 7. Mas a garantia depende de as
+duas saídas estarem no código, e é essa conferência que o alerta pede.
 
 > [!WARNING]
 > Confira se o laço **termina**. Com `while (soma != ponto)` e sem o 7, o jogo
-> nunca perde e o programa está errado sem dar erro. Antes de escrever um
-> `while`, diga **todas** as formas de sair dele e confira cada uma.
+> nunca perde e o programa está errado sem dar erro nenhum. Antes de escrever
+> um `while`, diga **todas** as formas de sair dele e confira se cada uma está
+> na condição ou num `break`.
 
 ### Exemplos de uso
 
