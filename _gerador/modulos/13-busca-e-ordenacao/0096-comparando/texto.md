@@ -1,31 +1,29 @@
 ## 0096 · Comparando: estabilidade, custo e qsort
 
-- **Estável**: elementos com chave **igual** saem na ordem relativa em que
-  entraram. Com `int` não importa; com structs, sim (FEOFILOFF, 2009).
-- **Outros critérios**: **custo** no melhor, médio e pior caso; **memória
-  extra**, **in-place** (O(1)) ou rascunho O(n); **adaptativo**, mais rápido
-  com o vetor quase em ordem (ZIVIANI, 2010, cap. 4).
-- **Não há o melhor de todos**: insertion ganha em vetores pequenos ou quase
-  ordenados; merge garante n log n e estabilidade, com memória; quick é o
-  mais rápido na média, mas tem pior caso O(n²); selection faz o mínimo de
-  trocas (FEOFILOFF, 2009).
-- **`qsort`** da `stdlib.h`: ordenação genérica com ponteiro para função
-  (0050). Não conhece o tipo, por isso o `void *` e o `tamanho`
-  (KERNIGHAN; RITCHIE, 1989).
+A planilha de pedidos vem em ordem de horário, e a logística pede: "agrupa
+por cidade, mas mantém a ordem de chegada dentro de cada cidade". Você já
+conhece seis métodos de ordenação. Qual deles serve? E, num programa de
+verdade, precisa escrever algum? Este assunto compara os métodos pelos
+critérios que decidem a escolha e apresenta a ordenação que o C já traz
+pronta.
 
-```text
-void qsort(void *base, size_t n, size_t tamanho,
-           int (*compara)(const void *, const void *));
-```
+O pedido da logística depende de **estabilidade**, que o 0092 apresentou: um
+método é estável quando elementos com chave **igual** saem na mesma ordem
+relativa em que entraram (FEOFILOFF, 2009). Se três pedidos de Recife chegaram
+como R1, R3 e R6, um método estável que ordena por cidade devolve R1, R3, R6.
+Um instável pode devolver R3, R1, R6. Num vetor de `int` isso não faz
+diferença, porque dois 7 são indistinguíveis. Num vetor de `struct`, em que a
+chave é só um dos campos, faz toda a diferença: os outros campos revelam a
+troca.
 
-- **Função de comparação**: devolve **negativo** se o primeiro vem antes,
-  **zero** se empatam e **positivo** se vem depois, como o `strcmp`
-  (CPPREFERENCE, s.d.).
-- **Estabilidade do `qsort`**: a norma não promete. Se a ordem dos empatados
-  importa, ponha o desempate na função: uma **chave composta** (0180)
-  (LINUX MAN-PAGES, s.d.).
-- **`bsearch`**: busca binária da `stdlib.h` num vetor ordenado pela mesma
-  função de comparação (CELES; RANGEL, 2002).
+Além da estabilidade, três critérios pesam (ZIVIANI, 2010, cap. 4). O
+primeiro é o **custo** no melhor, no médio e no pior caso; o pior caso importa
+porque é ele que trava um sistema no dia em que a entrada vem ruim. O segundo
+é a **memória extra**: um método **in-place** usa só O(1) além do vetor,
+enquanto o merge sort precisa de um rascunho O(n). O terceiro é ser
+**adaptativo**, isto é, ficar mais rápido quando o vetor já está quase em
+ordem, como o insertion sort e o bubble sort com bandeira. A tabela reúne o
+módulo inteiro, e o heapsort, que entra no assunto 0103:
 
 | Algoritmo | Melhor | Médio | Pior | Memória extra | Estável |
 | --- | --- | --- | --- | --- | --- |
@@ -35,6 +33,39 @@ void qsort(void *base, size_t n, size_t tamanho,
 | merge | O(n log n) | O(n log n) | O(n log n) | O(n) | sim |
 | quick | O(n log n) | O(n log n) | O(n²) | O(log n) a O(n) de pilha | não |
 | heap (assunto 0103) | O(n log n) | O(n log n) | O(n log n) | O(1) | não |
+
+A tabela mostra que não existe um método melhor que todos. O insertion sort
+ganha em vetores pequenos ou quase ordenados. O merge sort garante
+O(n log n) e estabilidade, pagando com memória. O quick sort é o mais rápido
+na média, mas tem pior caso O(n²) e não é estável. O selection sort faz o
+mínimo de trocas, o que ajuda quando mover um elemento é caro (FEOFILOFF,
+2009). Para a logística, servem o insertion e o merge, que são estáveis.
+
+Num programa real, você não escreve a ordenação: usa a **`qsort`**, da
+`stdlib.h`. Ela ordena um vetor de qualquer tipo, e o truque para isso é o
+ponteiro para função do assunto 0050 (KERNIGHAN; RITCHIE, 1989):
+
+```text
+void qsort(void *base, size_t n, size_t tamanho,
+           int (*compara)(const void *, const void *));
+```
+
+A `qsort` não sabe o tipo dos elementos. Por isso recebe o vetor como
+`void *`, o endereço cru do primeiro byte, junto com o número de elementos e o
+`tamanho` de cada um em bytes: com esses dados ela sabe onde começa cada
+elemento e consegue copiá-los. O que ela não sabe é qual vem antes, e isso
+você ensina com a **função de comparação**. Ela recebe os endereços de dois
+elementos e devolve um número **negativo** se o primeiro deve vir antes,
+**zero** se os dois empatam e **positivo** se o primeiro deve vir depois, a
+mesma convenção do `strcmp` (CPPREFERENCE, s.d.).
+
+A norma do C não diz qual algoritmo a `qsort` usa, e por isso não promete
+estabilidade. Se a ordem dos empatados importa, ponha o desempate dentro da
+própria função de comparação: compare a cidade e, se empatar, compare o
+horário. Essa é uma **chave composta** (0180) (LINUX MAN-PAGES, s.d.). Para
+buscar num vetor ordenado pela mesma função, a `stdlib.h` traz a **`bsearch`**,
+uma busca binária genérica que recebe a mesma função de comparação (CELES;
+RANGEL, 2002).
 
 > [!WARNING]
 > `return *(const int *) a - *(const int *) b;` passa nos testes pequenos,

@@ -1,21 +1,63 @@
 ## 0094 · Merge sort
 
-- **Intercalação** (*merge*): juntar duas sequências ordenadas numa só,
-  olhando o primeiro de cada e tirando o menor. Juntar `n` elementos custa no
-  máximo `n - 1` comparações (FEOFILOFF, 2009).
-- **Merge sort** (ordenação por intercalação): **divide** o vetor ao meio,
-  **ordena** cada metade com o próprio merge sort (recursão, 0032) e
-  **intercala** as duas (CORMEN et al., 2024, cap. 2).
-- **Dividir e conquistar**: quebrar o problema em pedaços menores do mesmo
-  tipo, resolver cada um e combinar (CORMEN et al., 2024, cap. 2).
-- **Caso base e intervalo**: pedaço de 0 ou 1 elemento. O código usa o
-  intervalo **semiaberto** `[p, r)`: metades `[p, q)` e `[q, r)` sem repetir
-  ninguém. O Cormen usa o fechado `A[p..r]` (FEOFILOFF, 2009).
-- **Custo**: `log₂ n` níveis, e em cada nível as intercalações passam pelos
-  `n` elementos: **O(n log n)** em **todos** os casos. O preço é um vetor
-  auxiliar (o **rascunho**), **O(n)** de memória (ZIVIANI, 2010, cap. 4).
-- **Estável**: o `<=` da intercalação pega o da esquerda no empate
-  (FEOFILOFF, 2009).
+Os três métodos do 0091 ao 0093 custam O(n²) no pior caso. Com mil elementos
+isso dá meio milhão de comparações; com um milhão, meio trilhão. Para ordenar
+volumes grandes, você precisa de uma ideia diferente, e ela começa num
+problema mais fácil que ordenar.
+
+Duas monitoras entregam pilhas de provas, cada uma já em ordem de nota. Para
+montar uma pilha só, você olha a prova de cima de cada pilha, pega a de menor
+nota e repete. Quando uma pilha acaba, a outra vai inteira para o fim. Juntar
+duas sequências ordenadas numa só é a **intercalação** (*merge*). Cada
+comparação manda **um** elemento para o resultado, e o último elemento nunca
+precisa ser comparado, então intercalar `n` elementos custa no máximo `n - 1`
+comparações (FEOFILOFF, 2009). A intercalação é rápida, mas exige que as duas
+partes já estejam ordenadas.
+
+O **merge sort** (ordenação por intercalação) resolve isso com recursão, a
+técnica do assunto 0032. Ele **divide** o vetor ao meio, **ordena** cada
+metade chamando o próprio merge sort e **intercala** as duas metades, que
+agora estão ordenadas (CORMEN et al., 2024, cap. 2). A recursão para no
+**caso base**: um pedaço com 0 ou 1 elemento já está ordenado e volta como
+está.
+
+Essa forma de pensar tem nome: **dividir e conquistar**. Você quebra o
+problema em pedaços menores do mesmo tipo, resolve cada pedaço da mesma
+maneira e combina as respostas (CORMEN et al., 2024, cap. 2). No merge sort, a
+divisão é trivial (achar o meio) e todo o trabalho fica na combinação, a
+intercalação.
+
+```c
+void merge_sort(int v[], int w[], int p, int r) { // ordena v[p..r-1]
+    if (r - p < 2) return;       // 0 ou 1 elemento: já ordenado
+    int q = p + (r - p) / 2;
+    merge_sort(v, w, p, q);      // metade esquerda  [p, q)
+    merge_sort(v, w, q, r);      // metade direita   [q, r)
+    intercala(v, w, p, q, r);    // junta as duas usando o rascunho w
+}
+```
+
+O código usa o intervalo **semiaberto** `[p, r)`: inclui `p` e exclui `r`, e
+o pedaço tem `r - p` elementos. A vantagem é que as metades `[p, q)` e
+`[q, r)` se encaixam sem repetir nem perder ninguém. O Cormen usa o intervalo
+fechado `A[p..r]`, com os dois extremos incluídos; isso muda as contas dos
+índices, não o algoritmo (FEOFILOFF, 2009).
+
+O custo sai de uma conta de níveis. Dividir ao meio repetidas vezes até
+chegar a pedaços de 1 dá `log₂ n` níveis: com 8 elementos, 3 níveis (8, 4, 2,
+1). Em **cada** nível, as intercalações juntas passam por todos os `n`
+elementos uma vez. São `n` de trabalho em `log₂ n` níveis: **O(n log n)**, e
+em **todos** os casos, porque a divisão não depende dos valores (ZIVIANI,
+2010, cap. 4). Para um milhão de elementos, isso dá cerca de 20 milhões de
+operações, contra meio trilhão do insertion sort no pior caso.
+
+O preço é memória. A intercalação não consegue juntar as metades dentro do
+próprio vetor sem atropelar valores, então usa um vetor auxiliar, o
+**rascunho** `w`, do mesmo tamanho: **O(n)** de memória extra (ZIVIANI, 2010,
+cap. 4). Um milhão de `int` no rascunho são 4 MB. Em troca, o merge sort é
+**estável** (o 0092 define o termo): no empate, a intercalação usa `<=` e
+pega o elemento da metade **esquerda**, que tinha chegado antes (FEOFILOFF,
+2009).
 
 > [!WARNING]
 > Com o intervalo semiaberto, o caso base é `r - p < 2`. Com

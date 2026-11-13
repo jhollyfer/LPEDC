@@ -1,20 +1,55 @@
 ## 0090 · Busca binária
 
-- **Busca binária**: num vetor **ordenado**, olha a gaveta do meio. Se tem a
-  chave, acabou; se a chave é maior, descarta a esquerda; se é menor,
-  descarta a direita. Cada pergunta joga fora metade do que sobrou
-  (ZIVIANI, 2010, cap. 5).
-- **Invariante** (0073): "se `x` está no vetor, está em `v[ini..fim]`", com
-  os dois extremos inclusive. Quando `ini` passa de `fim`, o intervalo está
-  vazio e a resposta é `-1` (FEOFILOFF, 2009).
-- **Custo**: com 15 elementos sobram 15, 7, 3, 1, no máximo 4 voltas; com um
-  milhão, 20. Pior caso ⌊log₂ n⌋ + 1 voltas, **O(log n)** (0072)
-  (ZIVIANI, 2010, cap. 5).
-- **Pré-condição**: o vetor tem de estar ordenado. Num vetor bagunçado, a
-  busca responde errado sem avisar (FEOFILOFF, 2009).
-- **Meio sem overflow**: `ini + (fim - ini) / 2`. Com `(ini + fim) / 2`, a
-  soma passa de `INT_MAX` em vetores enormes, bug que ficou anos escondido em
-  bibliotecas (BLOCH, 2006).
+No jogo "pensei num número de 1 a 100", quem chuta 1, 2, 3 e assim por diante
+pode precisar de 100 tentativas. Quem chuta 50, ouve "menor", chuta 25, ouve
+"maior", chuta 37, acerta em no máximo 7. A diferença é que cada resposta
+"maior" ou "menor" descarta metade dos números que ainda eram possíveis. A
+busca sequencial do 0089 não aproveita nada disso, porque olhar um elemento
+não diz nada sobre os outros. Num vetor **ordenado**, diz.
+
+A **busca binária** é esse jogo num vetor ordenado. Você olha a gaveta do
+meio. Se ela tem a chave, acabou. Se a chave é maior que o valor do meio, ela
+só pode estar à direita, e a metade esquerda é descartada. Se é menor, a
+direita é descartada. Cada comparação joga fora metade do que sobrou
+(ZIVIANI, 2010, cap. 5).
+
+O código guarda o pedaço que ainda pode conter a chave entre dois índices,
+`ini` e `fim`, com os dois extremos incluídos. Essa frase vira um
+**invariante**, a afirmação que o assunto 0073 ensinou a manter verdadeira em
+toda volta do laço: "se `x` está no vetor, está em `v[ini..fim]`". No começo,
+`ini` vale 0 e `fim` vale `n - 1`, e o invariante vale porque o pedaço é o
+vetor inteiro. A cada volta, um dos extremos pula para depois do meio, e o
+invariante continua valendo. Quando `ini` passa de `fim`, o pedaço está vazio,
+e o invariante garante que a chave não está no vetor: a resposta é `-1`
+(FEOFILOFF, 2009).
+
+```c
+while (ini <= fim) {
+    int meio = ini + (fim - ini) / 2;
+    if (v[meio] == x) return meio;
+    if (v[meio] < x) ini = meio + 1; // descarta a esquerda e o meio
+    else fim = meio - 1;             // descarta a direita e o meio
+}
+return -1;
+```
+
+O ganho aparece no custo. Com 15 elementos, o pedaço passa por 15, 7, 3 e 1:
+no máximo **4** voltas. Com um milhão de elementos, 20 voltas. No pior caso a
+busca faz ⌊log₂ n⌋ + 1 voltas, e na notação do 0072 isso é **O(log n)**
+(ZIVIANI, 2010, cap. 5). Dobrar o vetor custa só uma volta a mais, enquanto na
+busca sequencial dobrar o vetor dobra o trabalho.
+
+O preço é a pré-condição: o vetor tem de estar ordenado. Num vetor bagunçado,
+a busca binária não trava nem dá erro, ela só responde errado, e sem avisar
+(FEOFILOFF, 2009). Se o vetor muda o tempo todo, manter a ordem pode custar
+mais que a economia na busca; os assuntos 0091 a 0096 tratam de como ordenar.
+
+Repare na conta do meio. A forma `(ini + fim) / 2` parece natural, mas a soma
+pode passar de `INT_MAX`, o maior `int`, em vetores com mais de um bilhão de
+elementos, e o resultado vira um índice negativo. A forma
+`ini + (fim - ini) / 2` dá o mesmo meio sem nunca somar dois índices grandes.
+Esse bug ficou anos escondido em bibliotecas usadas no mundo todo (BLOCH,
+2006).
 
 > [!WARNING]
 > Busca binária é famosa por erros de um. Com o intervalo fechado `[ini, fim]`,

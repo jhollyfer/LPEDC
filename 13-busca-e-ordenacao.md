@@ -61,19 +61,47 @@ AddressSanitizer e o UBSan param o programa nos erros de índice e de overflow.
 
 ### Conceito
 
-- **Busca sequencial** (ou **linear**): olha a primeira posição, depois a
-  segunda, até achar ou acabar o vetor. Não exige ordem (ZIVIANI, 2010,
-  cap. 5).
-- **Chave**: o valor procurado. A função devolve o **índice** em que achou
-  ou `-1`, que nunca é índice válido. O tamanho vai como parâmetro porque o
-  vetor do C não o guarda (DEITEL; DEITEL, 2011, cap. 6).
-- **Custo**: conta-se o número de **comparações** com a chave. Melhor caso,
-  1 (a chave na posição 0); pior caso, `n` (no fim ou ausente: "não tem" exige
-  olhar todos); caso médio, `(n + 1) / 2` (ZIVIANI, 2010, cap. 5).
-- **O(n)** (0072): dobrou o tamanho, dobra o tempo no pior caso
-  (FEOFILOFF, 2009).
-- **Sentinela**: copia a chave para uma gaveta extra no fim, e o laço deixa
-  de testar `i < n`: uma pergunta a menos por volta (ZIVIANI, 2010, cap. 5).
+Você passa a carteirinha na catraca da academia e ela responde "liberado" ou
+"bloqueado". Por trás da resposta, o sistema procurou a sua matrícula numa
+lista de alunos ativos. Procurar um valor numa coleção é uma das tarefas mais
+comuns de um programa, e o módulo começa pelo jeito mais direto de fazê-la.
+
+Pense em achar um nome numa lista de chamada sem ordem nenhuma. Você lê o
+primeiro nome, depois o segundo, e segue até encontrar ou chegar ao fim da
+folha. A **busca sequencial**, também chamada de **busca linear**, é isso
+num vetor: ela compara o valor procurado com a posição 0, depois com a 1, e
+assim por diante, até achar ou acabar o vetor. Ela não exige que o vetor
+esteja em ordem (ZIVIANI, 2010, cap. 5).
+
+O valor procurado se chama **chave**. A função recebe o vetor, o tamanho e a
+chave, e devolve o **índice** em que achou. Se não achou, devolve `-1`, que
+nunca é um índice válido e por isso não se confunde com uma resposta. O
+tamanho vai como parâmetro porque o vetor do C não guarda o próprio tamanho:
+dentro da função, ele chega como um ponteiro para o primeiro elemento
+(DEITEL; DEITEL, 2011, cap. 6).
+
+Para medir o custo, você conta quantas **comparações** com a chave a função
+faz. No **melhor caso**, a chave está na posição 0 e basta uma comparação. No
+**pior caso**, a chave está na última posição ou nem está no vetor, e a
+função faz `n` comparações. Responder "não tem" é sempre o caso caro, porque
+só dá para afirmar a ausência depois de olhar **todos** os elementos. No
+**caso médio**, com a chave presente numa posição qualquer, a função faz
+`(n + 1) / 2` comparações (ZIVIANI, 2010, cap. 5).
+
+Na notação do assunto 0072, a busca sequencial é **O(n)**: o pior caso cresce
+na mesma proporção do vetor. Se a academia dobra o número de alunos, a
+catraca leva o dobro do tempo para dizer "bloqueado" a quem não está na lista
+(FEOFILOFF, 2009). Para algumas centenas de alunos, ninguém percebe. Para
+milhões de registros consultados a toda hora, isso pesa, e o 0090 mostra como
+fazer melhor quando o vetor está ordenado.
+
+Dá para economizar um pouco mesmo sem ordem. O laço comum faz duas perguntas
+por volta: "`i` ainda está dentro do vetor?" e "`v[i]` é a chave?". A
+**sentinela** elimina a primeira. Você copia a chave para uma gaveta extra no
+fim do vetor; assim o laço sempre para, no pior caso nessa gaveta, e não
+precisa mais testar `i < n` (ZIVIANI, 2010, cap. 5). Se a busca parou na
+gaveta extra, a chave não estava no vetor original. O custo continua O(n),
+mas cada volta faz uma pergunta a menos.
 
 > [!WARNING]
 > Com `if (v[i] == x) return i; else return -1;` dentro do laço, a função olha
@@ -344,21 +372,56 @@ Movendo para a frente: 20 comparações
 
 ### Conceito
 
-- **Busca binária**: num vetor **ordenado**, olha a gaveta do meio. Se tem a
-  chave, acabou; se a chave é maior, descarta a esquerda; se é menor,
-  descarta a direita. Cada pergunta joga fora metade do que sobrou
-  (ZIVIANI, 2010, cap. 5).
-- **Invariante** (0073): "se `x` está no vetor, está em `v[ini..fim]`", com
-  os dois extremos inclusive. Quando `ini` passa de `fim`, o intervalo está
-  vazio e a resposta é `-1` (FEOFILOFF, 2009).
-- **Custo**: com 15 elementos sobram 15, 7, 3, 1, no máximo 4 voltas; com um
-  milhão, 20. Pior caso ⌊log₂ n⌋ + 1 voltas, **O(log n)** (0072)
-  (ZIVIANI, 2010, cap. 5).
-- **Pré-condição**: o vetor tem de estar ordenado. Num vetor bagunçado, a
-  busca responde errado sem avisar (FEOFILOFF, 2009).
-- **Meio sem overflow**: `ini + (fim - ini) / 2`. Com `(ini + fim) / 2`, a
-  soma passa de `INT_MAX` em vetores enormes, bug que ficou anos escondido em
-  bibliotecas (BLOCH, 2006).
+No jogo "pensei num número de 1 a 100", quem chuta 1, 2, 3 e assim por diante
+pode precisar de 100 tentativas. Quem chuta 50, ouve "menor", chuta 25, ouve
+"maior", chuta 37, acerta em no máximo 7. A diferença é que cada resposta
+"maior" ou "menor" descarta metade dos números que ainda eram possíveis. A
+busca sequencial do 0089 não aproveita nada disso, porque olhar um elemento
+não diz nada sobre os outros. Num vetor **ordenado**, diz.
+
+A **busca binária** é esse jogo num vetor ordenado. Você olha a gaveta do
+meio. Se ela tem a chave, acabou. Se a chave é maior que o valor do meio, ela
+só pode estar à direita, e a metade esquerda é descartada. Se é menor, a
+direita é descartada. Cada comparação joga fora metade do que sobrou
+(ZIVIANI, 2010, cap. 5).
+
+O código guarda o pedaço que ainda pode conter a chave entre dois índices,
+`ini` e `fim`, com os dois extremos incluídos. Essa frase vira um
+**invariante**, a afirmação que o assunto 0073 ensinou a manter verdadeira em
+toda volta do laço: "se `x` está no vetor, está em `v[ini..fim]`". No começo,
+`ini` vale 0 e `fim` vale `n - 1`, e o invariante vale porque o pedaço é o
+vetor inteiro. A cada volta, um dos extremos pula para depois do meio, e o
+invariante continua valendo. Quando `ini` passa de `fim`, o pedaço está vazio,
+e o invariante garante que a chave não está no vetor: a resposta é `-1`
+(FEOFILOFF, 2009).
+
+```c
+while (ini <= fim) {
+    int meio = ini + (fim - ini) / 2;
+    if (v[meio] == x) return meio;
+    if (v[meio] < x) ini = meio + 1; // descarta a esquerda e o meio
+    else fim = meio - 1;             // descarta a direita e o meio
+}
+return -1;
+```
+
+O ganho aparece no custo. Com 15 elementos, o pedaço passa por 15, 7, 3 e 1:
+no máximo **4** voltas. Com um milhão de elementos, 20 voltas. No pior caso a
+busca faz ⌊log₂ n⌋ + 1 voltas, e na notação do 0072 isso é **O(log n)**
+(ZIVIANI, 2010, cap. 5). Dobrar o vetor custa só uma volta a mais, enquanto na
+busca sequencial dobrar o vetor dobra o trabalho.
+
+O preço é a pré-condição: o vetor tem de estar ordenado. Num vetor bagunçado,
+a busca binária não trava nem dá erro, ela só responde errado, e sem avisar
+(FEOFILOFF, 2009). Se o vetor muda o tempo todo, manter a ordem pode custar
+mais que a economia na busca; os assuntos 0091 a 0096 tratam de como ordenar.
+
+Repare na conta do meio. A forma `(ini + fim) / 2` parece natural, mas a soma
+pode passar de `INT_MAX`, o maior `int`, em vetores com mais de um bilhão de
+elementos, e o resultado vira um índice negativo. A forma
+`ini + (fim - ini) / 2` dá o mesmo meio sem nunca somar dois índices grandes.
+Esse bug ficou anos escondido em bibliotecas usadas no mundo todo (BLOCH,
+2006).
 
 > [!WARNING]
 > Busca binária é famosa por erros de um. Com o intervalo fechado `[ini, fim]`,
@@ -655,20 +718,49 @@ Saída esperada:
 
 ### Conceito
 
-- **Bubble sort** (ordenação por bolha): compara **vizinhos**, `v[j]` com
-  `v[j + 1]`, e troca os dois se o da esquerda for maior. Cada varredura é
-  uma **passada** (CELES; RANGEL, 2002).
-- **O maior afunda**: a cada passada, o maior restante vai para a última
-  gaveta livre. Por isso `n - 1` passadas bastam, e a passada `k` não olha
-  as últimas `k - 1` gavetas (DEITEL; DEITEL, 2011, cap. 6).
-- **Bandeira** (`bool trocou`): passada sem troca quer dizer vetor
-  ordenado, e o laço para (CELES; RANGEL, 2002).
-- **Custo**: no pior caso (vetor ao contrário), `n(n - 1)/2` comparações,
-  todas viram trocas: **O(n²)**. No melhor caso, com bandeira, uma passada:
-  **O(n)** (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
-- **Inversão**: par na ordem errada. Cada troca de vizinhos desfaz uma; num
-  vetor aleatório são cerca de `n²/4`. Serve para aprender, não para código
-  real (CORMEN et al., 2024, cap. 2).
+No app de delivery, cinco restaurantes prometem entregar em 42, 17, 35, 8 e 23
+minutos. Para mostrar do mais rápido ao mais lento, o vetor precisa estar
+**ordenado**. Ordenar também é o que libera a busca binária do 0090, que só
+funciona em vetor ordenado. O módulo apresenta vários métodos de ordenação, e
+este é o mais simples de entender.
+
+Imagine cinco pessoas numa fila, que devem ficar da mais baixa para a mais
+alta, e só podem trocar de lugar com quem está do lado. Você anda pela fila
+comparando cada par de vizinhos e, se o da esquerda for mais alto, troca os
+dois. O **bubble sort** (ordenação por bolha) faz exatamente isso: compara
+`v[j]` com `v[j + 1]` e troca os dois se o da esquerda for maior. Cada
+varredura do começo ao fim do vetor se chama **passada** (CELES; RANGEL,
+2002). O nome vem da imagem dos valores grandes subindo como bolhas, ou, no
+desenho com o vetor na horizontal, indo parar no fim.
+
+O que torna o método correto é o que acontece com o maior elemento. Assim que
+a passada o encontra, ele vence toda comparação e é carregado troca a troca
+até a última gaveta livre. Depois da primeira passada, o maior está no lugar
+final; depois da segunda, o segundo maior também, e assim por diante (DEITEL;
+DEITEL, 2011, cap. 6). Daí saem duas regras. Bastam `n - 1` passadas, porque
+com os `n - 1` maiores no lugar o que sobra só pode ser o menor, já na frente.
+E a passada `k` não precisa olhar as últimas `k - 1` gavetas, que já estão
+prontas: o laço interno vai até `j < n - passada`.
+
+Uma terceira regra vem de uma variável `bool`, a **bandeira** `trocou`. Ela
+começa cada passada valendo `false` e vira `true` a cada troca. Se uma passada
+inteira termina sem nenhuma troca, todo vizinho já está em ordem, então o
+vetor está ordenado e o laço pode parar antes das `n - 1` passadas (CELES;
+RANGEL, 2002).
+
+No pior caso, com o vetor ao contrário, a primeira passada compara `n - 1`
+pares, a segunda `n - 2`, até a última com 1. A soma dá `n(n - 1)/2`
+comparações, e todas viram trocas: o custo é **O(n²)**. No melhor caso, com o
+vetor já em ordem e a bandeira ligada, uma passada de `n - 1` comparações
+basta: **O(n)** (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
+
+Uma forma de medir a bagunça de um vetor é contar **inversões**: pares de
+posições `i < j` com `v[i] > v[j]`, ou seja, dois valores na ordem errada. Em
+`42 17 35`, os pares (42, 17) e (42, 35) são inversões. Cada troca de vizinhos
+desfaz exatamente uma inversão, e um vetor aleatório tem cerca de `n²/4`
+delas (CORMEN et al., 2024, cap. 2). Por isso o bubble sort serve para
+aprender a ideia, mas não para código real: os métodos dos próximos assuntos
+desfazem as mesmas inversões gastando menos.
 
 > [!WARNING]
 > `v[j] = v[j + 1]; v[j + 1] = v[j];` não troca nada: os dois ficam iguais.
@@ -965,18 +1057,49 @@ resultado: 1 2 3 4 5 6 7 8
 
 ### Conceito
 
-- **Selection sort** (ordenação por seleção): escolhe o menor, depois o
-  segundo menor, e assim por diante (FEOFILOFF, 2009).
-- **Parte pronta**: à esquerda ficam os menores, já na posição final. Cada
-  passada `i` procura o **índice** do menor em `v[i..n-1]` e o troca com
-  `v[i]`; a gaveta `i` nunca mais muda (FEOFILOFF, 2009).
-- **Índice, não valor**: guarda-se o índice do menor para poder trocar no
-  fim (padrão "maior/menor" do 0025).
-- **Custo**: `n(n - 1)/2` comparações em **todos** os casos, mesmo com o
-  vetor em ordem: **O(n²)**. A vantagem é no máximo **uma troca por
-  passada**, `n - 1` no total (ZIVIANI, 2010, cap. 4).
-- **Instável**: a troca é de longa distância e pode inverter a ordem de
-  iguais. Ordena **in-place**, com O(1) de memória extra (FEOFILOFF, 2009).
+Final da bateria de kart: os tempos da melhor volta, em segundos, foram 58, 31,
+47, 19 e 26. Para montar o pódio, ninguém compara vizinhos como no bubble
+sort do 0091. Você procura o **menor** tempo, que é o primeiro lugar. Depois
+procura o menor entre os que **sobraram**, que é o segundo lugar, e segue até
+acabarem os pilotos.
+
+Esse é o **selection sort** (ordenação por seleção): escolher o menor, depois
+o segundo menor, e assim por diante (FEOFILOFF, 2009). O vetor fica dividido
+em duas partes. À esquerda está a parte **pronta**, com os menores já na
+posição final. À direita está o resto, ainda fora de ordem. Cada passada
+aumenta a parte pronta em uma gaveta.
+
+A passada `i` faz duas coisas. Primeiro procura o **índice** do menor
+elemento em `v[i..n-1]`, a parte que ainda não está pronta. Depois troca esse
+menor com `v[i]`. A partir daí a gaveta `i` nunca mais muda, porque ela já
+tem o valor que deve ter no fim (FEOFILOFF, 2009). Na primeira passada dos
+tempos do kart, o menor é o 19, na gaveta 3, e ele troca de lugar com o 58 da
+gaveta 0.
+
+Repare que a busca guarda o **índice** do menor, e não o valor. É o padrão
+"maior/menor" do assunto 0025 com um detalhe a mais: para trocar no fim da
+passada, você precisa saber **onde** o menor está. Guardar só o valor 19
+responderia qual é o menor, mas não diria qual gaveta trocar.
+
+O custo em comparações não depende da entrada. Achar o menor exige olhar
+todos os que sobraram, e nenhum atalho diz que o menor já foi visto. Assim, o
+método faz `n(n - 1)/2` comparações em **todos** os casos, mesmo com o vetor
+já em ordem: **O(n²)** (ZIVIANI, 2010, cap. 4). A vantagem está nas
+**trocas**: no máximo uma por passada, `n - 1` no total, contra até
+`n(n - 1)/2` do bubble sort. Isso pesa quando mover um elemento custa caro,
+como num vetor de `struct` grandes.
+
+Um método de ordenação é **estável** quando elementos com chaves iguais saem
+na mesma ordem relativa em que entraram. Se dois pilotos fizeram 31 segundos e
+a Ana aparecia antes do Bruno, um método estável mantém Ana antes de Bruno. O
+selection sort é **instável**, porque a troca é de longa distância: o 19
+salta da gaveta 3 para a 0 e manda o 58 para a gaveta 3, por cima de quem
+estiver no meio. Um elemento igual a outro pode pular para trás dele nessa
+viagem (FEOFILOFF, 2009).
+
+O método também ordena **in-place**, isto é, dentro do próprio vetor, sem
+precisar de um segundo vetor: além dele, só usa algumas variáveis, e a memória
+extra é **O(1)** (FEOFILOFF, 2009).
 
 > [!WARNING]
 > Trocar **dentro** do laço que procura o menor ordena, mas perde a vantagem
@@ -1263,21 +1386,56 @@ loja[0] continua sendo: Fone sem fio
 
 ### Conceito
 
-- **Insertion sort** (ordenação por inserção): como arrumar cartas na mão,
-  cada elemento novo é **encaixado** no lugar certo da parte já ordenada
-  (CORMEN et al., 2024, cap. 2).
-- **Parte pronta**: `v[0..j-1]` fica **em ordem entre si**, mas não no lugar
-  final, ao contrário do selection (FEOFILOFF, 2009).
-- **Passo**: guarde `x = v[j]`; ande para a esquerda empurrando uma casa
-  para a direita cada elemento **maior** que `x` (um **deslocamento**, não
-  uma troca); ponha `x` em `v[i + 1]` (FEOFILOFF, 2009).
-- **Guardar `x` antes** é obrigatório: o primeiro deslocamento escreve por
-  cima de `v[j]`.
-- **Custo**: pior caso (vetor ao contrário), `n(n - 1)/2` comparações,
-  **O(n²)**; melhor caso (já ordenado), `n - 1`, **O(n)**. Cada deslocamento
-  desfaz uma inversão com uma escrita, não três (CORMEN et al., 2024, cap. 2).
-- **Estável e online**: o `>` para no primeiro igual e `x` entra depois dele;
-  ordena à medida que os dados chegam (FEOFILOFF, 2009).
+Numa rodada de buraco, você recebe as cartas uma a uma: 7, 4, 9, 2, 5. Ninguém
+espera a mão inteira para arrumar. Cada carta nova é **encaixada** no lugar
+certo entre as que você já segura, que já estão em ordem. O 4 vai antes do 7;
+o 9 fica no fim; o 2 atravessa a mão até a ponta esquerda.
+
+Esse é o **insertion sort** (ordenação por inserção): cada elemento novo é
+inserido no lugar certo de uma parte que já está ordenada (CORMEN et al.,
+2024, cap. 2). Como no selection sort do 0092, o vetor tem uma parte pronta à
+esquerda, `v[0..j-1]`. A diferença está no que "pronta" quer dizer. No
+selection, a parte pronta já tem os menores do vetor inteiro, no lugar final.
+Aqui ela está só **em ordem entre si**: um valor que ainda não chegou pode
+precisar entrar no meio dela (FEOFILOFF, 2009).
+
+Cada passo encaixa `v[j]` na parte pronta. Você guarda o valor em `x`. Depois
+anda para a esquerda a partir de `j - 1` e, enquanto o elemento olhado for
+**maior** que `x`, empurra esse elemento uma casa para a direita. Esse
+movimento é um **deslocamento**: uma única escrita, e não uma troca de dois
+valores. Quando você acha um elemento menor ou igual a `x`, ou chega ao começo
+do vetor, a gaveta logo à direita dele, `v[i + 1]`, ficou livre, e `x` entra
+ali (FEOFILOFF, 2009).
+
+```c
+int x = v[j];
+int i = j - 1;
+while (i >= 0 && v[i] > x) {
+    v[i + 1] = v[i]; // desloca uma casa para a direita
+    i--;
+}
+v[i + 1] = x;
+```
+
+Guardar `x` antes do laço é obrigatório. O primeiro deslocamento escreve em
+`v[j]`, a gaveta onde `x` estava, e sem a cópia o valor se perderia.
+
+O custo depende de quão bagunçado o vetor está. Cada deslocamento desfaz uma
+**inversão** (o par fora de ordem do 0091), como a troca do bubble sort, mas
+com uma escrita em vez das três de uma troca. No pior caso, com o vetor ao
+contrário, cada elemento atravessa toda a parte pronta, e o total é
+`n(n - 1)/2` comparações: **O(n²)**. No melhor caso, com o vetor já ordenado,
+cada elemento compara uma vez e fica onde está: `n - 1` comparações, **O(n)**
+(CORMEN et al., 2024, cap. 2). Por isso o insertion sort é o melhor dos três
+métodos simples, e bibliotecas de ordenação o usam para pedaços pequenos, de
+16 a 32 posições, dentro de métodos mais rápidos.
+
+Duas propriedades fecham o retrato. O insertion sort é **estável** (a
+definição está no 0092): o laço para no primeiro elemento que **não** é maior
+que `x`, ou seja, para num igual, e `x` entra depois dele, mantendo a ordem de
+chegada. E ele é **online**: consegue ordenar à medida que os dados chegam,
+sem conhecer a entrada inteira, como a mão de cartas que você arruma a cada
+compra (FEOFILOFF, 2009).
 
 > [!WARNING]
 > Escreva `while (i >= 0 && v[i] > x)`. Na ordem inversa, com `i = -1` o
@@ -1551,22 +1709,64 @@ j = 5: 8 12 19 27 31 45
 
 ### Conceito
 
-- **Intercalação** (*merge*): juntar duas sequências ordenadas numa só,
-  olhando o primeiro de cada e tirando o menor. Juntar `n` elementos custa no
-  máximo `n - 1` comparações (FEOFILOFF, 2009).
-- **Merge sort** (ordenação por intercalação): **divide** o vetor ao meio,
-  **ordena** cada metade com o próprio merge sort (recursão, 0032) e
-  **intercala** as duas (CORMEN et al., 2024, cap. 2).
-- **Dividir e conquistar**: quebrar o problema em pedaços menores do mesmo
-  tipo, resolver cada um e combinar (CORMEN et al., 2024, cap. 2).
-- **Caso base e intervalo**: pedaço de 0 ou 1 elemento. O código usa o
-  intervalo **semiaberto** `[p, r)`: metades `[p, q)` e `[q, r)` sem repetir
-  ninguém. O Cormen usa o fechado `A[p..r]` (FEOFILOFF, 2009).
-- **Custo**: `log₂ n` níveis, e em cada nível as intercalações passam pelos
-  `n` elementos: **O(n log n)** em **todos** os casos. O preço é um vetor
-  auxiliar (o **rascunho**), **O(n)** de memória (ZIVIANI, 2010, cap. 4).
-- **Estável**: o `<=` da intercalação pega o da esquerda no empate
-  (FEOFILOFF, 2009).
+Os três métodos do 0091 ao 0093 custam O(n²) no pior caso. Com mil elementos
+isso dá meio milhão de comparações; com um milhão, meio trilhão. Para ordenar
+volumes grandes, você precisa de uma ideia diferente, e ela começa num
+problema mais fácil que ordenar.
+
+Duas monitoras entregam pilhas de provas, cada uma já em ordem de nota. Para
+montar uma pilha só, você olha a prova de cima de cada pilha, pega a de menor
+nota e repete. Quando uma pilha acaba, a outra vai inteira para o fim. Juntar
+duas sequências ordenadas numa só é a **intercalação** (*merge*). Cada
+comparação manda **um** elemento para o resultado, e o último elemento nunca
+precisa ser comparado, então intercalar `n` elementos custa no máximo `n - 1`
+comparações (FEOFILOFF, 2009). A intercalação é rápida, mas exige que as duas
+partes já estejam ordenadas.
+
+O **merge sort** (ordenação por intercalação) resolve isso com recursão, a
+técnica do assunto 0032. Ele **divide** o vetor ao meio, **ordena** cada
+metade chamando o próprio merge sort e **intercala** as duas metades, que
+agora estão ordenadas (CORMEN et al., 2024, cap. 2). A recursão para no
+**caso base**: um pedaço com 0 ou 1 elemento já está ordenado e volta como
+está.
+
+Essa forma de pensar tem nome: **dividir e conquistar**. Você quebra o
+problema em pedaços menores do mesmo tipo, resolve cada pedaço da mesma
+maneira e combina as respostas (CORMEN et al., 2024, cap. 2). No merge sort, a
+divisão é trivial (achar o meio) e todo o trabalho fica na combinação, a
+intercalação.
+
+```c
+void merge_sort(int v[], int w[], int p, int r) { // ordena v[p..r-1]
+    if (r - p < 2) return;       // 0 ou 1 elemento: já ordenado
+    int q = p + (r - p) / 2;
+    merge_sort(v, w, p, q);      // metade esquerda  [p, q)
+    merge_sort(v, w, q, r);      // metade direita   [q, r)
+    intercala(v, w, p, q, r);    // junta as duas usando o rascunho w
+}
+```
+
+O código usa o intervalo **semiaberto** `[p, r)`: inclui `p` e exclui `r`, e
+o pedaço tem `r - p` elementos. A vantagem é que as metades `[p, q)` e
+`[q, r)` se encaixam sem repetir nem perder ninguém. O Cormen usa o intervalo
+fechado `A[p..r]`, com os dois extremos incluídos; isso muda as contas dos
+índices, não o algoritmo (FEOFILOFF, 2009).
+
+O custo sai de uma conta de níveis. Dividir ao meio repetidas vezes até
+chegar a pedaços de 1 dá `log₂ n` níveis: com 8 elementos, 3 níveis (8, 4, 2,
+1). Em **cada** nível, as intercalações juntas passam por todos os `n`
+elementos uma vez. São `n` de trabalho em `log₂ n` níveis: **O(n log n)**, e
+em **todos** os casos, porque a divisão não depende dos valores (ZIVIANI,
+2010, cap. 4). Para um milhão de elementos, isso dá cerca de 20 milhões de
+operações, contra meio trilhão do insertion sort no pior caso.
+
+O preço é memória. A intercalação não consegue juntar as metades dentro do
+próprio vetor sem atropelar valores, então usa um vetor auxiliar, o
+**rascunho** `w`, do mesmo tamanho: **O(n)** de memória extra (ZIVIANI, 2010,
+cap. 4). Um milhão de `int` no rascunho são 4 MB. Em troca, o merge sort é
+**estável** (o 0092 define o termo): no empate, a intercalação usa `<=` e
+pega o elemento da metade **esquerda**, que tinha chegado antes (FEOFILOFF,
+2009).
 
 > [!WARNING]
 > Com o intervalo semiaberto, o caso base é `r - p < 2`. Com
@@ -1858,25 +2058,56 @@ de 28 pares possíveis
 
 ### Conceito
 
-- **Quick sort**: escolhe um **pivô**, separa o pedaço em `menores ou iguais
-  | pivô | maiores` e ordena cada lado com o próprio quick sort. Criado por
-  Tony Hoare em 1960 (CORMEN et al., 2024, cap. 7).
-- **Separação** (ou **partição**): rearranja o pedaço e deixa o pivô na sua
-  posição **final**, `j`. As chamadas seguintes são em `v[p..j-1]` e
-  `v[j+1..r]` (FEOFILOFF, 2009).
-- **Lomuto** (a `PARTITION` do Cormen): pivô `v[r]`; `k` anda pelo pedaço e
-  `j` marca a fronteira dos `<=` pivô. No fim, troca o pivô com `v[j]`
-  (CORMEN et al., 2024, cap. 7).
-- **Hoare**: dois índices vindos das pontas, que trocam os que estão do lado
-  errado (ZIVIANI, 2010, cap. 4).
-- **Ao contrário do merge**: o trabalho está em dividir, e juntar é de graça.
-  Não precisa de rascunho (FEOFILOFF, 2009).
-- **Custo**: com o pivô perto do meio, **O(n log n)**; sempre o menor ou o
-  maior, **O(n²)**, como no vetor **já ordenado** com pivô no fim. Na média,
-  O(n log n). Não é estável (CORMEN et al., 2024, cap. 7).
-- **Pilha**: no pior caso a recursão desce `n` níveis. Defesas: **mediana de
-  três** como pivô e recursão só no lado **menor**, no máximo `log₂ n` níveis
-  (FEOFILOFF, 2009).
+O merge sort do 0094 garante O(n log n), mas gasta um rascunho do tamanho do
+vetor. Dá para ter a mesma rapidez, na média, ordenando dentro do próprio
+vetor? Dá, invertendo onde fica o trabalho. No merge sort, dividir é trivial
+e juntar dá trabalho. No quick sort, dividir dá trabalho e juntar é de graça.
+
+Black Friday: sete fones custam R$ 35, 12, 48, 7, 29, 51 e 20. Você escolhe o
+de R$ 20 e faz dois montes: os que custam até 20 de um lado, os mais caros do
+outro. Sem ordenar nenhum monte, você já sabe uma coisa: o fone de 20 está no
+lugar certo, porque todo mundo à esquerda dele é mais barato e todo mundo à
+direita é mais caro. Agora basta ordenar cada monte da mesma forma.
+
+Esse é o **quick sort**, criado por Tony Hoare em 1960. O elemento escolhido é
+o **pivô**. O método separa o pedaço em `menores ou iguais | pivô | maiores` e
+ordena cada lado com o próprio quick sort, por recursão (CORMEN et al., 2024,
+cap. 7). Quando os dois lados voltam ordenados, o pedaço inteiro está
+ordenado, sem nenhuma intercalação: é por isso que juntar sai de graça.
+
+O passo de fazer os montes se chama **separação**, também chamado de
+**partição**. Ele rearranja o pedaço `v[p..r]` e devolve a posição `j` em que
+o pivô ficou, que é a sua posição **final** no vetor ordenado. As chamadas
+seguintes trabalham em `v[p..j-1]` e `v[j+1..r]`, e o pivô fica de fora das
+duas (FEOFILOFF, 2009). Como os dois montes ficam dentro do próprio vetor, o
+quick sort não precisa de rascunho.
+
+Há duas separações clássicas. A de **Lomuto**, que o Cormen chama de
+`PARTITION`, escolhe o último elemento, `v[r]`, como pivô. Um índice `k` anda
+pelo pedaço, e um índice `j` marca a fronteira: tudo em `v[p..j-1]` é menor ou
+igual ao pivô. Quando `k` acha um elemento `<=` pivô, troca esse elemento com
+`v[j]` e avança `j`. No fim, troca o pivô com `v[j]`, e ele cai entre os dois
+montes (CORMEN et al., 2024, cap. 7). A separação de **Hoare** usa dois
+índices que partem das pontas e andam um na direção do outro, trocando os
+pares que estão do lado errado (ZIVIANI, 2010, cap. 4).
+
+O custo depende do pivô. Se ele cai perto do meio, cada separação corta o
+pedaço em duas metades, e a conta de níveis do merge sort se repete:
+**O(n log n)**. Se ele é sempre o menor ou o maior do pedaço, um monte fica
+vazio e o outro com `n - 1` elementos, e a soma vira `n + (n - 1) + ... + 1`:
+**O(n²)**. Com o pivô no fim, esse pior caso acontece justamente no vetor
+**já ordenado**, que parece o caso mais fácil. Em dados embaralhados, o custo
+médio é O(n log n) (CORMEN et al., 2024, cap. 7). O quick sort não é estável:
+as trocas de longa distância da separação podem inverter iguais.
+
+O pior caso traz mais um risco, agora de memória. A recursão desce um nível
+por chamada, e no pior caso desce `n` níveis; cada nível é um quadro na pilha
+de chamadas do assunto 0031. Um milhão de quadros estoura a pilha de 8 MB que
+o Linux dá a um programa. Há duas defesas. A **mediana de três** escolhe como
+pivô o valor do meio entre o primeiro, o do meio e o último do pedaço, o que
+afasta o pior caso dos vetores quase ordenados. E fazer a chamada recursiva só
+no lado **menor**, tratando o maior com um laço, limita a profundidade a
+`log₂ n` níveis (FEOFILOFF, 2009).
 
 > [!WARNING]
 > Com `quick_sort(v, p, j)`, o pivô entra de novo no pedaço da esquerda. Se é
@@ -2215,32 +2446,30 @@ ordenando tudo: 33 min (23 comparações)
 
 ### Conceito
 
-- **Estável**: elementos com chave **igual** saem na ordem relativa em que
-  entraram. Com `int` não importa; com structs, sim (FEOFILOFF, 2009).
-- **Outros critérios**: **custo** no melhor, médio e pior caso; **memória
-  extra**, **in-place** (O(1)) ou rascunho O(n); **adaptativo**, mais rápido
-  com o vetor quase em ordem (ZIVIANI, 2010, cap. 4).
-- **Não há o melhor de todos**: insertion ganha em vetores pequenos ou quase
-  ordenados; merge garante n log n e estabilidade, com memória; quick é o
-  mais rápido na média, mas tem pior caso O(n²); selection faz o mínimo de
-  trocas (FEOFILOFF, 2009).
-- **`qsort`** da `stdlib.h`: ordenação genérica com ponteiro para função
-  (0050). Não conhece o tipo, por isso o `void *` e o `tamanho`
-  (KERNIGHAN; RITCHIE, 1989).
+A planilha de pedidos vem em ordem de horário, e a logística pede: "agrupa
+por cidade, mas mantém a ordem de chegada dentro de cada cidade". Você já
+conhece seis métodos de ordenação. Qual deles serve? E, num programa de
+verdade, precisa escrever algum? Este assunto compara os métodos pelos
+critérios que decidem a escolha e apresenta a ordenação que o C já traz
+pronta.
 
-```text
-void qsort(void *base, size_t n, size_t tamanho,
-           int (*compara)(const void *, const void *));
-```
+O pedido da logística depende de **estabilidade**, que o 0092 apresentou: um
+método é estável quando elementos com chave **igual** saem na mesma ordem
+relativa em que entraram (FEOFILOFF, 2009). Se três pedidos de Recife chegaram
+como R1, R3 e R6, um método estável que ordena por cidade devolve R1, R3, R6.
+Um instável pode devolver R3, R1, R6. Num vetor de `int` isso não faz
+diferença, porque dois 7 são indistinguíveis. Num vetor de `struct`, em que a
+chave é só um dos campos, faz toda a diferença: os outros campos revelam a
+troca.
 
-- **Função de comparação**: devolve **negativo** se o primeiro vem antes,
-  **zero** se empatam e **positivo** se vem depois, como o `strcmp`
-  (CPPREFERENCE, s.d.).
-- **Estabilidade do `qsort`**: a norma não promete. Se a ordem dos empatados
-  importa, ponha o desempate na função: uma **chave composta** (0180)
-  (LINUX MAN-PAGES, s.d.).
-- **`bsearch`**: busca binária da `stdlib.h` num vetor ordenado pela mesma
-  função de comparação (CELES; RANGEL, 2002).
+Além da estabilidade, três critérios pesam (ZIVIANI, 2010, cap. 4). O
+primeiro é o **custo** no melhor, no médio e no pior caso; o pior caso importa
+porque é ele que trava um sistema no dia em que a entrada vem ruim. O segundo
+é a **memória extra**: um método **in-place** usa só O(1) além do vetor,
+enquanto o merge sort precisa de um rascunho O(n). O terceiro é ser
+**adaptativo**, isto é, ficar mais rápido quando o vetor já está quase em
+ordem, como o insertion sort e o bubble sort com bandeira. A tabela reúne o
+módulo inteiro, e o heapsort, que entra no assunto 0103:
 
 | Algoritmo | Melhor | Médio | Pior | Memória extra | Estável |
 | --- | --- | --- | --- | --- | --- |
@@ -2250,6 +2479,39 @@ void qsort(void *base, size_t n, size_t tamanho,
 | merge | O(n log n) | O(n log n) | O(n log n) | O(n) | sim |
 | quick | O(n log n) | O(n log n) | O(n²) | O(log n) a O(n) de pilha | não |
 | heap (assunto 0103) | O(n log n) | O(n log n) | O(n log n) | O(1) | não |
+
+A tabela mostra que não existe um método melhor que todos. O insertion sort
+ganha em vetores pequenos ou quase ordenados. O merge sort garante
+O(n log n) e estabilidade, pagando com memória. O quick sort é o mais rápido
+na média, mas tem pior caso O(n²) e não é estável. O selection sort faz o
+mínimo de trocas, o que ajuda quando mover um elemento é caro (FEOFILOFF,
+2009). Para a logística, servem o insertion e o merge, que são estáveis.
+
+Num programa real, você não escreve a ordenação: usa a **`qsort`**, da
+`stdlib.h`. Ela ordena um vetor de qualquer tipo, e o truque para isso é o
+ponteiro para função do assunto 0050 (KERNIGHAN; RITCHIE, 1989):
+
+```text
+void qsort(void *base, size_t n, size_t tamanho,
+           int (*compara)(const void *, const void *));
+```
+
+A `qsort` não sabe o tipo dos elementos. Por isso recebe o vetor como
+`void *`, o endereço cru do primeiro byte, junto com o número de elementos e o
+`tamanho` de cada um em bytes: com esses dados ela sabe onde começa cada
+elemento e consegue copiá-los. O que ela não sabe é qual vem antes, e isso
+você ensina com a **função de comparação**. Ela recebe os endereços de dois
+elementos e devolve um número **negativo** se o primeiro deve vir antes,
+**zero** se os dois empatam e **positivo** se o primeiro deve vir depois, a
+mesma convenção do `strcmp` (CPPREFERENCE, s.d.).
+
+A norma do C não diz qual algoritmo a `qsort` usa, e por isso não promete
+estabilidade. Se a ordem dos empatados importa, ponha o desempate dentro da
+própria função de comparação: compare a cidade e, se empatar, compare o
+horário. Essa é uma **chave composta** (0180) (LINUX MAN-PAGES, s.d.). Para
+buscar num vetor ordenado pela mesma função, a `stdlib.h` traz a **`bsearch`**,
+uma busca binária genérica que recebe a mesma função de comparação (CELES;
+RANGEL, 2002).
 
 > [!WARNING]
 > `return *(const int *) a - *(const int *) b;` passa nos testes pequenos,

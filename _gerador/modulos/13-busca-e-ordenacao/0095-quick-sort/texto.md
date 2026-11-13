@@ -1,24 +1,55 @@
 ## 0095 · Quick sort
 
-- **Quick sort**: escolhe um **pivô**, separa o pedaço em `menores ou iguais
-  | pivô | maiores` e ordena cada lado com o próprio quick sort. Criado por
-  Tony Hoare em 1960 (CORMEN et al., 2024, cap. 7).
-- **Separação** (ou **partição**): rearranja o pedaço e deixa o pivô na sua
-  posição **final**, `j`. As chamadas seguintes são em `v[p..j-1]` e
-  `v[j+1..r]` (FEOFILOFF, 2009).
-- **Lomuto** (a `PARTITION` do Cormen): pivô `v[r]`; `k` anda pelo pedaço e
-  `j` marca a fronteira dos `<=` pivô. No fim, troca o pivô com `v[j]`
-  (CORMEN et al., 2024, cap. 7).
-- **Hoare**: dois índices vindos das pontas, que trocam os que estão do lado
-  errado (ZIVIANI, 2010, cap. 4).
-- **Ao contrário do merge**: o trabalho está em dividir, e juntar é de graça.
-  Não precisa de rascunho (FEOFILOFF, 2009).
-- **Custo**: com o pivô perto do meio, **O(n log n)**; sempre o menor ou o
-  maior, **O(n²)**, como no vetor **já ordenado** com pivô no fim. Na média,
-  O(n log n). Não é estável (CORMEN et al., 2024, cap. 7).
-- **Pilha**: no pior caso a recursão desce `n` níveis. Defesas: **mediana de
-  três** como pivô e recursão só no lado **menor**, no máximo `log₂ n` níveis
-  (FEOFILOFF, 2009).
+O merge sort do 0094 garante O(n log n), mas gasta um rascunho do tamanho do
+vetor. Dá para ter a mesma rapidez, na média, ordenando dentro do próprio
+vetor? Dá, invertendo onde fica o trabalho. No merge sort, dividir é trivial
+e juntar dá trabalho. No quick sort, dividir dá trabalho e juntar é de graça.
+
+Black Friday: sete fones custam R$ 35, 12, 48, 7, 29, 51 e 20. Você escolhe o
+de R$ 20 e faz dois montes: os que custam até 20 de um lado, os mais caros do
+outro. Sem ordenar nenhum monte, você já sabe uma coisa: o fone de 20 está no
+lugar certo, porque todo mundo à esquerda dele é mais barato e todo mundo à
+direita é mais caro. Agora basta ordenar cada monte da mesma forma.
+
+Esse é o **quick sort**, criado por Tony Hoare em 1960. O elemento escolhido é
+o **pivô**. O método separa o pedaço em `menores ou iguais | pivô | maiores` e
+ordena cada lado com o próprio quick sort, por recursão (CORMEN et al., 2024,
+cap. 7). Quando os dois lados voltam ordenados, o pedaço inteiro está
+ordenado, sem nenhuma intercalação: é por isso que juntar sai de graça.
+
+O passo de fazer os montes se chama **separação**, também chamado de
+**partição**. Ele rearranja o pedaço `v[p..r]` e devolve a posição `j` em que
+o pivô ficou, que é a sua posição **final** no vetor ordenado. As chamadas
+seguintes trabalham em `v[p..j-1]` e `v[j+1..r]`, e o pivô fica de fora das
+duas (FEOFILOFF, 2009). Como os dois montes ficam dentro do próprio vetor, o
+quick sort não precisa de rascunho.
+
+Há duas separações clássicas. A de **Lomuto**, que o Cormen chama de
+`PARTITION`, escolhe o último elemento, `v[r]`, como pivô. Um índice `k` anda
+pelo pedaço, e um índice `j` marca a fronteira: tudo em `v[p..j-1]` é menor ou
+igual ao pivô. Quando `k` acha um elemento `<=` pivô, troca esse elemento com
+`v[j]` e avança `j`. No fim, troca o pivô com `v[j]`, e ele cai entre os dois
+montes (CORMEN et al., 2024, cap. 7). A separação de **Hoare** usa dois
+índices que partem das pontas e andam um na direção do outro, trocando os
+pares que estão do lado errado (ZIVIANI, 2010, cap. 4).
+
+O custo depende do pivô. Se ele cai perto do meio, cada separação corta o
+pedaço em duas metades, e a conta de níveis do merge sort se repete:
+**O(n log n)**. Se ele é sempre o menor ou o maior do pedaço, um monte fica
+vazio e o outro com `n - 1` elementos, e a soma vira `n + (n - 1) + ... + 1`:
+**O(n²)**. Com o pivô no fim, esse pior caso acontece justamente no vetor
+**já ordenado**, que parece o caso mais fácil. Em dados embaralhados, o custo
+médio é O(n log n) (CORMEN et al., 2024, cap. 7). O quick sort não é estável:
+as trocas de longa distância da separação podem inverter iguais.
+
+O pior caso traz mais um risco, agora de memória. A recursão desce um nível
+por chamada, e no pior caso desce `n` níveis; cada nível é um quadro na pilha
+de chamadas do assunto 0031. Um milhão de quadros estoura a pilha de 8 MB que
+o Linux dá a um programa. Há duas defesas. A **mediana de três** escolhe como
+pivô o valor do meio entre o primeiro, o do meio e o último do pedaço, o que
+afasta o pior caso dos vetores quase ordenados. E fazer a chamada recursiva só
+no lado **menor**, tratando o maior com um laço, limita a profundidade a
+`log₂ n` níveis (FEOFILOFF, 2009).
 
 > [!WARNING]
 > Com `quick_sort(v, p, j)`, o pivô entra de novo no pedaço da esquerda. Se é

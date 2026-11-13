@@ -1,20 +1,55 @@
 ## 0093 · Insertion sort
 
-- **Insertion sort** (ordenação por inserção): como arrumar cartas na mão,
-  cada elemento novo é **encaixado** no lugar certo da parte já ordenada
-  (CORMEN et al., 2024, cap. 2).
-- **Parte pronta**: `v[0..j-1]` fica **em ordem entre si**, mas não no lugar
-  final, ao contrário do selection (FEOFILOFF, 2009).
-- **Passo**: guarde `x = v[j]`; ande para a esquerda empurrando uma casa
-  para a direita cada elemento **maior** que `x` (um **deslocamento**, não
-  uma troca); ponha `x` em `v[i + 1]` (FEOFILOFF, 2009).
-- **Guardar `x` antes** é obrigatório: o primeiro deslocamento escreve por
-  cima de `v[j]`.
-- **Custo**: pior caso (vetor ao contrário), `n(n - 1)/2` comparações,
-  **O(n²)**; melhor caso (já ordenado), `n - 1`, **O(n)**. Cada deslocamento
-  desfaz uma inversão com uma escrita, não três (CORMEN et al., 2024, cap. 2).
-- **Estável e online**: o `>` para no primeiro igual e `x` entra depois dele;
-  ordena à medida que os dados chegam (FEOFILOFF, 2009).
+Numa rodada de buraco, você recebe as cartas uma a uma: 7, 4, 9, 2, 5. Ninguém
+espera a mão inteira para arrumar. Cada carta nova é **encaixada** no lugar
+certo entre as que você já segura, que já estão em ordem. O 4 vai antes do 7;
+o 9 fica no fim; o 2 atravessa a mão até a ponta esquerda.
+
+Esse é o **insertion sort** (ordenação por inserção): cada elemento novo é
+inserido no lugar certo de uma parte que já está ordenada (CORMEN et al.,
+2024, cap. 2). Como no selection sort do 0092, o vetor tem uma parte pronta à
+esquerda, `v[0..j-1]`. A diferença está no que "pronta" quer dizer. No
+selection, a parte pronta já tem os menores do vetor inteiro, no lugar final.
+Aqui ela está só **em ordem entre si**: um valor que ainda não chegou pode
+precisar entrar no meio dela (FEOFILOFF, 2009).
+
+Cada passo encaixa `v[j]` na parte pronta. Você guarda o valor em `x`. Depois
+anda para a esquerda a partir de `j - 1` e, enquanto o elemento olhado for
+**maior** que `x`, empurra esse elemento uma casa para a direita. Esse
+movimento é um **deslocamento**: uma única escrita, e não uma troca de dois
+valores. Quando você acha um elemento menor ou igual a `x`, ou chega ao começo
+do vetor, a gaveta logo à direita dele, `v[i + 1]`, ficou livre, e `x` entra
+ali (FEOFILOFF, 2009).
+
+```c
+int x = v[j];
+int i = j - 1;
+while (i >= 0 && v[i] > x) {
+    v[i + 1] = v[i]; // desloca uma casa para a direita
+    i--;
+}
+v[i + 1] = x;
+```
+
+Guardar `x` antes do laço é obrigatório. O primeiro deslocamento escreve em
+`v[j]`, a gaveta onde `x` estava, e sem a cópia o valor se perderia.
+
+O custo depende de quão bagunçado o vetor está. Cada deslocamento desfaz uma
+**inversão** (o par fora de ordem do 0091), como a troca do bubble sort, mas
+com uma escrita em vez das três de uma troca. No pior caso, com o vetor ao
+contrário, cada elemento atravessa toda a parte pronta, e o total é
+`n(n - 1)/2` comparações: **O(n²)**. No melhor caso, com o vetor já ordenado,
+cada elemento compara uma vez e fica onde está: `n - 1` comparações, **O(n)**
+(CORMEN et al., 2024, cap. 2). Por isso o insertion sort é o melhor dos três
+métodos simples, e bibliotecas de ordenação o usam para pedaços pequenos, de
+16 a 32 posições, dentro de métodos mais rápidos.
+
+Duas propriedades fecham o retrato. O insertion sort é **estável** (a
+definição está no 0092): o laço para no primeiro elemento que **não** é maior
+que `x`, ou seja, para num igual, e `x` entra depois dele, mantendo a ordem de
+chegada. E ele é **online**: consegue ordenar à medida que os dados chegam,
+sem conhecer a entrada inteira, como a mão de cartas que você arruma a cada
+compra (FEOFILOFF, 2009).
 
 > [!WARNING]
 > Escreva `while (i >= 0 && v[i] > x)`. Na ordem inversa, com `i = -1` o

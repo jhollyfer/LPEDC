@@ -1,17 +1,48 @@
 ## 0092 · Selection sort
 
-- **Selection sort** (ordenação por seleção): escolhe o menor, depois o
-  segundo menor, e assim por diante (FEOFILOFF, 2009).
-- **Parte pronta**: à esquerda ficam os menores, já na posição final. Cada
-  passada `i` procura o **índice** do menor em `v[i..n-1]` e o troca com
-  `v[i]`; a gaveta `i` nunca mais muda (FEOFILOFF, 2009).
-- **Índice, não valor**: guarda-se o índice do menor para poder trocar no
-  fim (padrão "maior/menor" do 0025).
-- **Custo**: `n(n - 1)/2` comparações em **todos** os casos, mesmo com o
-  vetor em ordem: **O(n²)**. A vantagem é no máximo **uma troca por
-  passada**, `n - 1` no total (ZIVIANI, 2010, cap. 4).
-- **Instável**: a troca é de longa distância e pode inverter a ordem de
-  iguais. Ordena **in-place**, com O(1) de memória extra (FEOFILOFF, 2009).
+Final da bateria de kart: os tempos da melhor volta, em segundos, foram 58, 31,
+47, 19 e 26. Para montar o pódio, ninguém compara vizinhos como no bubble
+sort do 0091. Você procura o **menor** tempo, que é o primeiro lugar. Depois
+procura o menor entre os que **sobraram**, que é o segundo lugar, e segue até
+acabarem os pilotos.
+
+Esse é o **selection sort** (ordenação por seleção): escolher o menor, depois
+o segundo menor, e assim por diante (FEOFILOFF, 2009). O vetor fica dividido
+em duas partes. À esquerda está a parte **pronta**, com os menores já na
+posição final. À direita está o resto, ainda fora de ordem. Cada passada
+aumenta a parte pronta em uma gaveta.
+
+A passada `i` faz duas coisas. Primeiro procura o **índice** do menor
+elemento em `v[i..n-1]`, a parte que ainda não está pronta. Depois troca esse
+menor com `v[i]`. A partir daí a gaveta `i` nunca mais muda, porque ela já
+tem o valor que deve ter no fim (FEOFILOFF, 2009). Na primeira passada dos
+tempos do kart, o menor é o 19, na gaveta 3, e ele troca de lugar com o 58 da
+gaveta 0.
+
+Repare que a busca guarda o **índice** do menor, e não o valor. É o padrão
+"maior/menor" do assunto 0025 com um detalhe a mais: para trocar no fim da
+passada, você precisa saber **onde** o menor está. Guardar só o valor 19
+responderia qual é o menor, mas não diria qual gaveta trocar.
+
+O custo em comparações não depende da entrada. Achar o menor exige olhar
+todos os que sobraram, e nenhum atalho diz que o menor já foi visto. Assim, o
+método faz `n(n - 1)/2` comparações em **todos** os casos, mesmo com o vetor
+já em ordem: **O(n²)** (ZIVIANI, 2010, cap. 4). A vantagem está nas
+**trocas**: no máximo uma por passada, `n - 1` no total, contra até
+`n(n - 1)/2` do bubble sort. Isso pesa quando mover um elemento custa caro,
+como num vetor de `struct` grandes.
+
+Um método de ordenação é **estável** quando elementos com chaves iguais saem
+na mesma ordem relativa em que entraram. Se dois pilotos fizeram 31 segundos e
+a Ana aparecia antes do Bruno, um método estável mantém Ana antes de Bruno. O
+selection sort é **instável**, porque a troca é de longa distância: o 19
+salta da gaveta 3 para a 0 e manda o 58 para a gaveta 3, por cima de quem
+estiver no meio. Um elemento igual a outro pode pular para trás dele nessa
+viagem (FEOFILOFF, 2009).
+
+O método também ordena **in-place**, isto é, dentro do próprio vetor, sem
+precisar de um segundo vetor: além dele, só usa algumas variáveis, e a memória
+extra é **O(1)** (FEOFILOFF, 2009).
 
 > [!WARNING]
 > Trocar **dentro** do laço que procura o menor ordena, mas perde a vantagem
