@@ -20,7 +20,7 @@ TypeScript, JavaScript, Python, Java...): tudo é explicado em termos de C.
 O curso começa direto em C: o módulo 01 abre com algoritmo e o modelo
 entrada → processamento → saída (a estrutura sequencial); depois vêm
 decisões, laços, funções e assim por diante. A instalação está no
-[`README.md`](../README.md#como-preparar-o-computador).
+[`README.md`](../README.md#2-exemplos-de-uso).
 
 **Objetivo principal:** preparar para a Prova de Conhecimentos do Mestrado do
 PPGI/UFAM (escopo em `PRD.md`; mapa edital → assuntos e roteiro em
@@ -42,41 +42,53 @@ O sumário completo (módulos, assuntos e números) está em
 
 ## 3. Cada assunto (texto.md)
 
-Um assunto conta **um exemplo só**, em quatro partes que batem entre si: texto,
-diagrama da ideia, código e fluxograma, com o **mesmo cenário e os mesmos
-valores**. Roteiro:
+O módulo tem três partes: **1. Conceitos gerais**, **2. Exemplos de uso** e **3. Exercícios
+práticos** (`DECISIONS.md` #12). O `texto.md` alimenta as duas primeiras; o marcador `{{exemplo}}`
+separa uma da outra. Modelo: `_gerador/modulos/01-fundamentos/0002-variaveis/texto.md`.
 
-1. `## 0002 · Variáveis` (título curto).
-2. **Gancho**: uma situação do dia a dia (feira, ônibus, conta de luz,
-   mercado, Pix, academia, futebol...). Cenários brasileiros, valores em R$.
-3. O conceito em parágrafos curtos (2 a 4 linhas cada). Termos novos em
-   **negrito**. Código inline com crase.
-4. Um parágrafo que apresenta o exemplo e termina apontando para o desenho →
-   `{{ideia}}`. Varie a abertura: nada de repetir a mesma frase em todo assunto.
-5. O código do mesmo exemplo, em bloco ```` ```c ````, completo e compilável,
-   com a saída em comentário (`// Saída: ...`).
-6. Um parágrafo que puxa o fluxograma (o caminho que o exemplo faz) →
-   `{{fluxograma}}`.
-7. `> [!WARNING]` com a pegadinha principal (o erro que todo mundo comete).
-8. `> [!TIP]` começando com **Por dentro do C:**, com o que acontece por baixo:
-   memória, bytes, endereços, o que o compilador faz, custo. É a marca do curso.
-   Nos assuntos de estrutura de dados também vale: "Por dentro do C" mostra a
-   memória.
-9. `> [!NOTE]` com **Pergunta para você:** algo para prever antes de rodar.
-10. `{{pratique}}` (gerado: exemplos e exercícios).
+```md
+## 0002 · Variáveis
 
-Tamanho: o texto de um assunto (sem o pratique) tem entre 60 e 140 linhas.
-Assunto difícil (ponteiros, recursão, árvores) pode ter uma seção extra
-`### Passo a passo` com um teste de mesa em tabela markdown.
+- **Variável**: lugar na memória com nome, tipo e valor (DEITEL; DEITEL, 2011, cap. 2).
+- ... de 3 a 8 tópicos, cada um com até 3 linhas
 
-Estilo de escrita: frases curtas, voz ativa, sem enrolação, sem emoji, sem
-"Neste assunto veremos". Explique o **porquê**, não só o como. Sem vícios de
-linguagem ("onde" como coringa, "de forma X", "através de" no lugar de "por
-meio de", "realizar" no lugar de "fazer", "possuir" no lugar de "ter", "vale
-ressaltar", "é importante notar", "basicamente", "na verdade", "ou seja" em
-série) e sem marcas de texto gerado ("não é só X, é Y", trios forçados,
-"crucial", "fundamental" a cada parágrafo, conclusão genérica, travessão).
-O `humanizer-pt` entra antes do commit (`TEST-PLAN.md` §3). Não repita o que outro assunto ou o README já disse: aponte para ele.
+(tabela curta, só se ajudar)
+
+> [!WARNING]
+> A pegadinha principal, em 1 a 3 linhas.
+
+{{exemplo}}
+
+Uma ou duas frases com o cenário, terminando no desenho:
+
+{{ideia}}
+
+(bloco ```c completo e compilável, com a saída em comentário: // Saída: ...)
+
+Uma frase que puxa o fluxograma:
+
+{{fluxograma}}
+```
+
+- **Conceito com fonte.** Cada tópico que define um termo termina com a obra, no estilo ABNT curto:
+  `(AUTOR, ano)` ou `(AUTOR, ano, cap. N)`. A definição vem dos fichamentos de `_fontes/`, escrita
+  com outras palavras (§9). O primeiro autor citado tem a referência completa em "Para ler mais"
+  do `modulo.md`. Capítulo ou página só quando o fichamento confirma; nunca invente.
+- **Curto e direto.** Ler cansa: de 15 a 40 linhas por assunto fora o código. Sem gancho na parte de
+  conceito, sem parágrafo de transição. Termos novos em **negrito**, código inline com crase.
+- **Um alerta só**: o `> [!WARNING]` com o erro que todo mundo comete. Não há `TIP` nem `NOTE`.
+- **O exemplo** usa um cenário do dia a dia (feira, ônibus, Pix...), valores em R$, e o código, o
+  diagrama da ideia e o fluxograma mostram o **mesmo cenário com os mesmos valores**.
+- Assunto difícil (ponteiros, recursão, árvores) pode ter `### Passo a passo` depois do código,
+  com um teste de mesa em tabela; o gerador o rebaixa para `####`.
+- O gerador cuida do resto: os exemplos A entram na parte 2 e os exercícios E na parte 3.
+
+Estilo de escrita: frases curtas, voz ativa, sem emoji, sem "Neste assunto veremos". Sem vícios de
+linguagem ("onde" como coringa, "de forma X", "através de", "realizar", "possuir", "vale
+ressaltar", "é importante notar", "basicamente", "na verdade", "ou seja" em série) e sem marcas de
+texto gerado ("não é só X, é Y", trios forçados, "crucial", "fundamental", conclusão genérica,
+travessão). O `humanizer-pt` entra antes do commit (`TEST-PLAN.md` §3). Não repita o que outro
+assunto ou o README já disse: aponte para ele.
 
 ## 4. Exemplos (A003.c)
 
@@ -177,8 +189,10 @@ com **30 exercícios** em `<modulo>/lista/`, que misturam os assuntos do módulo
   no próprio arquivo.
 - Resolução em `_respostas/<modulo>/lista/P1407.c` (mesmo cabeçalho + código),
   rodada e conferida. Respostas autocontidas: nada de `.c` de apoio na pasta.
-- O gerador põe a lista inteira no `.md` do módulo, numa seção antes das
-  "Questões no estilo da prova". Não edite o `modulo.md` para isso.
+- O gerador põe a lista inteira no `.md` do módulo, em "3. Exercícios práticos", depois dos
+  exercícios dos assuntos e antes dos desafios. Não edite o `modulo.md` para isso.
+- No `.md`, cada exercício (E e P) mostra só o enunciado, a saída e a "Resposta esperada" quando ela
+  acrescenta algo; as outras dicas ficam só no `.c`.
 - Confira com `_gerador/conferir.sh <modulo>` (`TEST-PLAN.md`).
 
 ## 7. modulo.md
@@ -186,15 +200,13 @@ com **30 exercícios** em `<modulo>/lista/`, que misturam os assuntos do módulo
 ```md
 # Módulo 01 · Fundamentos de C
 
-(2 a 4 parágrafos: por que este módulo existe, o que muda na cabeça)
+(até 5 linhas: o que o módulo cobre e de que módulo depende)
 
 ## O que você vai aprender
 - ...
 
 ## Antes de começar
-(o que precisa saber/instalar; avisos; o que os desenhos deste módulo têm de
-próprio. O roteiro de estudo e a legenda de cores ficam só no README.md: não
-repita aqui.)
+(o que precisa instalar ou saber; o que os desenhos do módulo têm de próprio)
 
 {{indice}}
 
@@ -204,23 +216,21 @@ repita aqui.)
 
 ---
 
-## Desafios do módulo
-(8 a 12 problemas extras, só no markdown, misturando os assuntos do módulo,
-do médio ao difícil. Cada um com enunciado e, num <details>, a resposta
-esperada e uma dica de caminho.)
+### Desafios do módulo
+(8 a 12 problemas extras que misturam os assuntos, cada um com a resposta num <details>)
 
-## Questões no estilo da prova
-(8 a 10 questões objetivas originais, no formato da prova do PPGI: enunciado
-curto, trecho de código C ou pseudocódigo quando couber, alternativas (A) a
-(E). Cada uma termina com um <details><summary>Gabarito</summary> com a letra
-e a justificativa, citando o assunto onde estudar (ex.: "veja 0095"). Cubra os
-tópicos do edital que o módulo toca. Rode todo código de questão antes de
-fixar o gabarito.)
+### Questões no estilo da prova
+(8 a 10 questões objetivas no formato do PPGI, cada uma com <details><summary>Gabarito</summary>,
+a letra, a justificativa e o assunto onde estudar. Rode todo código antes de fixar o gabarito.)
 
 ## Para ler mais
-(referências em ABNT: os livros dos fichamentos que serviram de base para o
-módulo + K&R, cppreference, man pages quando couber)
+(referências ABNT completas de toda obra citada nos conceitos: livros dos fichamentos, artigos
+originais, normas, K&R, cppreference, man pages)
 ```
+
+O gerador troca `{{assuntos}}` por `## 1. Conceitos gerais`, `## 2. Exemplos de uso` e
+`## 3. Exercícios práticos` (com a lista do módulo no fim). Desafios e questões ficam em `###`
+porque fazem parte da parte 3. "Questões do POSCOMP" e "Questões de provas do PPGI" seguem o mesmo nível.
 
 ## 8. C moderno
 
@@ -255,3 +265,4 @@ Exceção: as questões das provas do PPGI/UFAM entram na íntegra, por decisão
 |---|---|
 | 2026-11-09 | Regras saem do `CLAUDE.md` para cá, no formato do `maiyu-pattern` |
 | 2026-11-10 | 4 exercícios por assunto, só de escrever código, com enunciado e saída esperada; sem dicas |
+| 2026-11-13 | Módulo em três partes (conceitos, exemplos, exercícios); conceito em tópicos com fonte citada; um WARNING só, sem TIP e NOTE |

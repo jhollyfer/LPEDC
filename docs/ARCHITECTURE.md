@@ -7,7 +7,7 @@
 ```
 LPEDC/
 ├── README.md  PPGI.md  TRILHA.md  PROVAS.md  SIMULADOS.md   guias (escritos à mão)
-├── 01-fundamentos.md ...      gerados: um por módulo (texto, exercícios, lista, questões)
+├── 01-fundamentos.md ...      gerados: um por módulo, em três partes (conceitos, exemplos, exercícios)
 ├── material/                  a única pasta de conteúdo: tudo o que se roda ou se vê
 │   ├── A003.c  A004.c ...     exemplos resolvidos
 │   ├── E007.c ...             exercícios (esqueleto vazio; a resposta vai dentro do arquivo)
@@ -54,16 +54,19 @@ Sempre 3 dígitos (4 a partir de 1000: `E1000.c`). Sempre 2 exemplos e 4 exercí
    `desenhos.mjs` por assunto.
 2. Os enunciados dos exercícios e da lista saem do bloco de comentários do topo dos `.c`
    (`RULES.md` §5 e §6).
-3. O gerador (§1) monta o `.md` na raiz e os SVGs `NNNN-ideia.svg` e `NNNN-fluxograma.svg`, também na raiz.
+3. O gerador (§1) monta o `.md` na raiz em três partes e os SVGs `NNNN-ideia.svg` e
+   `NNNN-fluxograma.svg` em `material/`. No `texto.md`, o que vem antes de `{{exemplo}}` vai para
+   **1. Conceitos gerais**; o que vem depois, com os exemplos A, vai para **2. Exemplos de uso**. Os
+   exercícios E, a lista, os desafios e as questões formam **3. Exercícios práticos**.
 
 ## 4. Linguagem do domínio
 
 | Termo | Significa |
 |---|---|
 | módulo | o `.md` numerado da raiz (`01-fundamentos.md`) |
-| assunto | uma seção `## NNNN · Título`, com um exemplo contado em texto, ideia, código e fluxograma |
+| assunto | `### NNNN · Título`, presente nas três partes do módulo: conceito com fonte, exemplo (ideia, código e fluxograma) e exercícios |
+| conceito | tópico curto que define um termo e cita a obra `(AUTOR, ano)`; a referência completa fica em "Para ler mais" |
 | exemplo (A) | programa resolvido que mostra outra faceta do assunto |
 | exercício (E) | esqueleto vazio para a pessoa codificar, com enunciado e saída esperada |
 | lista prática (P) | 30 exercícios por módulo no estilo da prova |
-| pratique | bloco gerado com os exemplos e exercícios do assunto |
 | prova | Prova de Conhecimentos do Mestrado do PPGI/UFAM (`PRD.md`) |

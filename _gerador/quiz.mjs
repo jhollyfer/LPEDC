@@ -58,12 +58,13 @@ const mapaAssuntos = () => {
   const mapa = {}
   for (const modulo of readdirSync(RAIZ).filter((a) => /^\d{2}-.*\.md$/.test(a)).sort()) {
     for (const linha of readFileSync(join(RAIZ, modulo), 'utf8').split('\n')) {
-      const m = linha.match(/^## (\d{4}) · (.+)$/)
-      if (!m) continue
+      // o assunto aparece nas três partes do módulo; o link vai para a primeira (o conceito)
+      const m = linha.match(/^#{2,3} (\d{4}) · (.+)$/)
+      if (!m || mapa[m[1]]) continue
       mapa[m[1]] = {
         titulo: m[2].trim(),
         modulo,
-        ancora: ancora(linha.slice(3)),
+        ancora: ancora(linha.replace(/^#+ /, '')),
         ideia: existsSync(join(RAIZ, 'material', `${m[1]}-ideia.svg`)),
       }
     }
