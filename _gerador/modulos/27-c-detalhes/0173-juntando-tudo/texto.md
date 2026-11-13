@@ -1,30 +1,32 @@
 ## 0173 · Juntando tudo: o controle de acesso
 
-O coworking tem porta com crachá, reunião, impressora, garagem e configuração.
-O papel (visitante, membro ou admin) dá um pacote de permissões, com exceções:
-o Bruno aluga vaga na garagem, e a Carla estourou a cota da impressora.
+- **Permissão como bit**: cada permissão é um bit de um `unsigned`
+  (`1u << 2`); ligar é `|`, apagar é `& ~`, testar é `&`
+  (DEITEL; DEITEL, 2011, cap. 10).
+- **Papel como enum**: o `enum` indexa o vetor `base`, que dá o pacote de cada
+  papel (KERNIGHAN; RITCHIE, 1988, cap. 2).
+- **Permissão efetiva**: `(base[u->papel] | u->extra) & ~u->bloqueio`. O `|`
+  junta pacote e extras; o `~` inverte o bloqueio e o `&` apaga esses bits: o
+  **bloqueio vence** (DEITEL; DEITEL, 2011, cap. 10).
+- **Parênteses obrigatórios**: "tem tudo da máscara?" é
+  `(efetivas & mascara) == mascara`, porque o `==` vem antes do `&`, como no 0170
+  (CPPREFERENCE, s.d.).
+- **Tudo `unsigned`**: `~` num `int` daria negativo, e misturar sinais abre a
+  porta para o `-1 > 0u` do 0171 (ISO/IEC, 2018).
+- **Planilha VLA**: `bool acesso[n][QTD_PERMS]`, com `n` numa variável (0172).
 
-As permissões são **bits** num `unsigned`, e o papel é um **enum** que indexa
-o vetor `base`. A **struct** `Usuario` guarda o papel e duas máscaras: `extra`
-(o que ganhou) e `bloqueio` (o que perdeu). A permissão efetiva sai de uma
-expressão:
+> [!WARNING]
+> `efetivas(u) & mascara == mascara` vira `efetivas(u) & 1` e só olha o bit de
+> ENTRAR (o gcc avisa). E `p = p | ~IMPRIMIR` no lugar de `p = p & ~IMPRIMIR`
+> **liga todas as outras** permissões, sem aviso.
 
-`(base[u->papel] | u->extra) & ~u->bloqueio`
+{{exemplo}}
 
-O `|` junta pacote e extras (com parênteses, porque `&` vem antes de `|`). O
-`~` (nível 2) inverte o bloqueio, e o `&` apaga esses bits: **o bloqueio
-vence**. "Pode tudo desta máscara?" é `(efetivas & mascara) == mascara`:
-parênteses de novo, porque o `==` vem antes do `&`.
-
-Tudo é `unsigned`: `~` num `int` daria negativo, e misturar sinais abre a
-porta para o `-1 > 0u`. A planilha é um **VLA** `bool acesso[n][QTD_PERMS]`.
-
-A Carla é membro (`00111`: imprimir, reunião, entrar) com a impressora
-bloqueada. O desenho faz a conta bit a bit:
+Um coworking dá permissões por papel (visitante, membro, admin), com
+exceções. A Carla é membro (`00111`) com a impressora bloqueada; o desenho faz
+a conta bit a bit:
 
 {{ideia}}
-
-O programa monta a planilha e mostra quem pode usar a reunião **e** imprimir:
 
 ```c
 #include <stdbool.h>
@@ -109,16 +111,3 @@ int main(void) {
 O fluxograma é um laço pela equipe com uma comparação de bits por pessoa:
 
 {{fluxograma}}
-
-> [!WARNING]
-> `efetivas(u) & mascara == mascara` é lido como `efetivas(u) & (mascara ==
-> mascara)`, isto é, `efetivas(u) & 1`: só olha o bit de ENTRAR (o gcc
-> avisa). E `p = p | ~IMPRIMIR` no lugar de `p = p & ~IMPRIMIR` **liga todas
-> as outras** permissões, até as que não existem, e compila sem aviso.
-
-> [!NOTE]
-> **Pergunta para você:** que máscara de `extra` o Davi precisaria para poder
-> imprimir? E se a Ana ganhar `bloqueio = CONFIG | GARAGEM`, como fica a linha
-> dela na planilha?
-
-{{pratique}}

@@ -1,24 +1,19 @@
 ## 0172 · Vetor de tamanho variável (VLA)
 
-Numa planilha de treinos, alunos e semanas só são conhecidos na digitação.
-Até aqui, as saídas eram uma matriz enorme "por garantia" ou o `malloc`.
-
-O C99 trouxe o **VLA** (*variable length array*): um vetor local cujo tamanho
-é uma expressão calculada na hora, como `int treinos[alunos][semanas];`. Ele
-mora na **pilha** e some no fim do bloco, sem `free`.
-
-Com VLA, `sizeof treinos` é calculado **na execução**: `alunos * semanas *
-sizeof(int)`. O VLA não pode ser `static` nem global e não aceita
-inicialização (`int v[n] = {0};` é erro no C17): use um laço.
-
-O uso mais útil é como **parâmetro**. Uma função comum precisa da largura da
-matriz ao compilar (`int m[][4]`); com VLA, ela recebe as dimensões e a
-matriz: `void f(int l, int c, int m[l][c])`. `l` e `c` vêm **antes**, porque o
-tipo `m[l][c]` usa os dois.
-
-O VLA é obrigatório no C99 e **opcional** no C11 e no C17: o compilador sem
-VLA define `__STDC_NO_VLA__` (o da Microsoft não suporta; gcc e clang sim).
-Para exigir VLA:
+- **VLA** (*variable length array*): vetor local cujo tamanho é uma expressão
+  calculada na execução, como `int treinos[alunos][semanas];`. Veio no C99
+  (ISO/IEC, 2018).
+- **Onde mora**: na **pilha**; some no fim do bloco, sem `free`. Não pode ser
+  `static` nem global (CPPREFERENCE, s.d.).
+- **`sizeof` na execução**: `sizeof treinos` vale `alunos * semanas *
+  sizeof(int)`, calculado na hora (ISO/IEC, 2018).
+- **Sem inicializador**: `int v[n] = {0};` é erro no C17; zere com um laço
+  (CPPREFERENCE, s.d.).
+- **VLA como parâmetro**: `void f(int l, int c, int m[l][c])`. As dimensões
+  vêm **antes** da matriz, porque o tipo `m[l][c]` usa as duas
+  (ISO/IEC, 2018).
+- **Opcional desde o C11**: o compilador sem VLA define `__STDC_NO_VLA__`
+  (gcc e clang têm; o da Microsoft não). Para exigir VLA:
 
 ```c
 #ifdef __STDC_NO_VLA__
@@ -26,11 +21,20 @@ Para exigir VLA:
 #endif
 ```
 
-Com 3 alunos e 4 semanas, a planilha tem 12 `int`: 48 bytes na pilha:
+- **VLA no heap**: `int (*m)[c] = malloc(l * sizeof *m);` cria a matriz no
+  heap, e `m[i][j]` continua valendo (veja o A344).
+
+> [!WARNING]
+> O VLA não avisa quando falha. A pilha do Linux tem uns **8 MB** (`ulimit -s`):
+> `int v[n]` com 3 milhões de `int` derruba o programa. Use VLA só para
+> tamanhos pequenos e conferidos; para o resto, `malloc`, que devolve `NULL`.
+
+{{exemplo}}
+
+Uma planilha de treinos em que alunos e semanas só chegam na digitação. Com 3
+alunos e 4 semanas, ela tem 12 `int`: 48 bytes na pilha:
 
 {{ideia}}
-
-O programa lê as dimensões, confere, cria o VLA e o passa às funções:
 
 ```c
 #include <stdio.h>
@@ -83,25 +87,7 @@ int main(void) {
 // aluno 3: 2 4 1 3  total 10
 ```
 
-No fluxograma, a validação vem **antes** do VLA: depois da linha, não há como
-desistir nem saber se deu certo:
+No fluxograma, a validação vem **antes** do VLA: depois da declaração não há
+como desistir nem saber se deu certo:
 
 {{fluxograma}}
-
-> [!WARNING]
-> O VLA não avisa quando falha. A pilha no Linux tem uns **8 MB** (veja com
-> `ulimit -s`): `int v[n]` com `n` igual a 3 milhões pede 12 MB e derruba o
-> programa com *segmentation fault*. Um `n` do usuário pode ser 0, negativo
-> ou gigante. Use VLA só para tamanhos **pequenos e conferidos**; para o
-> resto, `malloc`, que devolve `NULL` quando falta memória.
-
-> [!TIP]
-> `int (*m)[c] = malloc(l * sizeof *m);` cria no heap uma matriz com tipo
-> VLA, e `m[i][j]` continua valendo (veja o A344).
-
-> [!NOTE]
-> **Pergunta para você:** se o professor digitar `100 52`, quantos bytes o
-> `sizeof treinos` mostra? E quantas planilhas desse tamanho caberiam numa
-> pilha de 8 MB?
-
-{{pratique}}

@@ -1,38 +1,41 @@
 ## 0171 · Com sinal e sem sinal
 
-A loja vendeu 3 fones de um estoque de 2, e o sistema anunciou **4294967295
-fones**. O estoque era `unsigned`, e número sem sinal não é negativo.
+- **Com sinal** (`int`, `signed char`, `long`): guarda negativos; num `int` de
+  32 bits, de -2147483648 a 2147483647 (BACKES, 2013).
+- **Sem sinal** (`unsigned`, `unsigned char`, `size_t`): vai de 0 a
+  4294967295 (`UINT_MAX`). `sizeof` e `strlen` devolvem `size_t`
+  (KERNIGHAN; RITCHIE, 1988, cap. 2).
+- **Volta do sem sinal**: a conta é módulo 2³², como um odômetro. `2u - 3u` é
+  4294967295 e `UINT_MAX + 1u` é 0. Estourar um `int` com sinal é
+  comportamento indefinido (ISO/IEC, 2018).
+- **Complemento de dois**: o -1 de um `int` são 32 bits ligados, que lidos como
+  `unsigned` valem 4294967295 (DEITEL; DEITEL, 2011, apêndice D).
+- **Promoção inteira**: `char`, `short`, `unsigned char`, `bool` e `enum`
+  viram `int` antes da conta. `unsigned char` 200 + 100 dá 300 (ISO/IEC, 2018).
+- **Conversão aritmética usual**: os operandos viram o tipo "maior". Entre
+  `int` e `unsigned` do mesmo tamanho, ganha o `unsigned`; se o com sinal for
+  maior e couber o sem sinal todo (`long` de 64 contra `unsigned` de 32), ganha
+  o com sinal (KERNIGHAN; RITCHIE, 1988, cap. 2).
+- **Bits e máscaras**: use `unsigned`; deslocar negativo é indefinido ou
+  depende da implementação (DEITEL; DEITEL, 2011, cap. 10).
 
-O **com sinal** (`int`, `signed char`, `long`) guarda negativos: num `int` de
-32 bits, de -2147483648 a 2147483647. O **sem sinal** (`unsigned`, `unsigned
-char`, `size_t`) vai de 0 a 4294967295 (`UINT_MAX`). `sizeof` e `strlen`
-devolvem `size_t`.
+| Expressão | Resultado | Por quê |
+| --- | --- | --- |
+| `-1 > 0u` | verdadeiro | o `-1` vira 4294967295 |
+| `-1L < 1u` | verdadeiro (Linux 64 bits) | o `unsigned` cabe no `long` |
+| `2u - 3u` | 4294967295 | volta módulo 2³² |
 
-O -1 de um `int` são 32 bits ligados, que como `unsigned` valem 4294967295. A
-conta sem sinal **dá a volta**, como um odômetro: `2u - 3u` é 4294967295 e
-`UINT_MAX + 1u` é 0 (módulo 2³², definido). Estourar um `int` com sinal, como
-`INT_MAX + 1`, é comportamento indefinido.
+> [!WARNING]
+> `for (size_t i = n - 1; i >= 0; i--)` nunca termina: o `size_t` passa de 0
+> para 18446744073709551615. Escreva `for (size_t i = n; i-- > 0;)`. E
+> `strlen(a) - strlen(b) > 0` é verdadeiro sempre que os tamanhos diferem.
 
-Com tipos misturados, o C aplica duas regras antes de calcular:
+{{exemplo}}
 
-1. **Promoção inteira**: `char`, `short`, `unsigned char`, `bool` e `enum`
-   viram `int`. `unsigned char` 200 + 100 dá 300, um `int`; só guardar num
-   byte corta o excesso.
-2. **Conversão aritmética usual**: os operandos viram o tipo "maior". Entre
-   `int` e `unsigned` do mesmo tamanho, ganha o `unsigned`. Se o com sinal
-   for maior e couber todo o sem sinal (`long` de 64 bits contra `unsigned`
-   de 32), ganha o com sinal. Com `double`, tudo vira `double`.
-
-A regra 2 gera a pegadinha mais famosa: `-1 > 0u` é **verdadeiro**, porque o
-`-1` vira 4294967295. Já `-1L < 1u` é verdadeiro no Linux de 64 bits: o `unsigned`
-cabe no `long`.
-
-O desenho mostra os 4 bytes do saldo -1 e as duas leituras. A comparação com
-`0u` usa a sem sinal:
+Uma loja vendeu 3 fones de um estoque `unsigned` de 2. O desenho mostra os 4
+bytes do saldo -1 e as duas leituras; a comparação com `0u` usa a sem sinal:
 
 {{ideia}}
-
-O programa repete as três situações:
 
 ```c
 #include <limits.h>
@@ -69,24 +72,3 @@ int main(void) {
 No fluxograma, a pergunta real é sobre 4294967295:
 
 {{fluxograma}}
-
-> [!WARNING]
-> `for (size_t i = n - 1; i >= 0; i--)` nunca termina: o `size_t` é sempre
-> `>= 0` e, ao passar de 0, vira 18446744073709551615 e o laço lê fora do
-> vetor. O gcc avisa ("comparison of unsigned expression in '>= 0' is always
-> true"). Escreva `for (size_t i = n; i-- > 0;)`, que funciona até com `n =
-> 0`.
->
-> Sem aviso: `if (strlen(a) - strlen(b) > 0)` é verdadeiro sempre que os
-> tamanhos diferem, porque a subtração de `size_t` nunca dá negativo.
-
-> [!TIP]
-> Para bits e máscaras, use `unsigned`: deslocar negativo é indefinido ou
-> depende da implementação.
-
-> [!NOTE]
-> **Pergunta para você:** com `unsigned char x = 0x0F;`, quanto vale `~x`? É
-> 0xF0 (240) ou um número negativo? Pense na promoção inteira antes de rodar
-> `printf("%d\n", ~x);`.
-
-{{pratique}}

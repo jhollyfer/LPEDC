@@ -1,15 +1,9 @@
 # Módulo 27 · Detalhes de C que caem em prova
 
-Linhas como `x & 1 == 0`, `i < u` ou `n - 1` com `size_t` compilam e enganam:
-o compilador as lê por regras que o olho não aplica sozinho. A prova de
-múltipla escolha explora isso com código curto e uma alternativa que traz o
-resultado intuitivo.
-
-O módulo reúne essas regras: precedência e ordem de avaliação, a mistura de
-inteiros com e sem sinal (por que `-1 > 0u` é verdadeiro) e o vetor de
-tamanho variável (VLA), o único vetor do C com `sizeof` calculado na
-execução. Leia como o compilador: primeiro os tipos, depois a árvore, só
-então os valores.
+Regras do C que a prova explora com código curto: precedência e ordem de
+avaliação, mistura de inteiros com e sem sinal (por que `-1 > 0u` é
+verdadeiro) e o vetor de tamanho variável (VLA). Relê os módulos 01 a 08 com
+mais rigor.
 
 ## O que você vai aprender
 
@@ -23,15 +17,12 @@ então os valores.
 ## Antes de começar
 
 Usa os operadores dos módulos 01 e 02, os bits e máscaras do 0065, struct e
-enum do módulo 08 e `malloc`/`free` do módulo 07.
-
-**Progressão.** Este módulo relê os módulos 01 a 08 com mais rigor. Prepara o
-28, que completa listas, árvores e hash, e o 29, que completa grafos e
-apresenta P e NP; os dois reusam máscaras e inteiros sem sinal.
+enum do módulo 08 e `malloc`/`free` do módulo 07. Prepara os módulos 28 e 29,
+que reusam máscaras e inteiros sem sinal.
 
 Os valores dos comentários são de um PC de 64 bits com Linux e gcc: `int` e
-`unsigned` com 4 bytes, `long` e `size_t` com 8. Compile com o gcc e as flags
-de estudo `-Wall -Wextra`: os avisos pegam vários erros do módulo.
+`unsigned` com 4 bytes, `long` e `size_t` com 8. Compile com `-Wall -Wextra`:
+os avisos pegam vários erros do módulo.
 
 {{indice}}
 
