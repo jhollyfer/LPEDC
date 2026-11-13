@@ -1,31 +1,55 @@
 ## 0017 · Ternário: condição ? a : b
 
-- **Operador ternário**: o único do C com três partes. Escolhe um entre dois
-  valores (DEITEL; DEITEL, 2011, cap. 3).
+Muitas decisões servem só para escolher um valor. O frete é zero ou
+R$ 19,90; a palavra é "item" ou "itens"; a nota mínima é 5 ou 6. Com
+`if/else`, cada escolha dessas ocupa cinco linhas e repete o nome da
+variável nos dois blocos. Quando o programa tem várias delas, o código
+cresce sem dizer nada de novo.
+
+Pense no carrinho de uma loja on-line. Ele mostra "3 itens" ou "1 item",
+conforme a quantidade, e mostra o frete, que é zero para compras a partir
+de R$ 199. Nenhuma dessas decisões faz trabalho: cada uma só escolhe o que
+vai aparecer numa lacuna da tela.
+
+Para isso o C tem o **operador ternário**, o único da linguagem com três
+partes: uma condição, o valor para quando ela é verdadeira e o valor para
+quando é falsa (DEITEL; DEITEL, 2011, cap. 3). O `?` separa a condição do
+primeiro valor, e o `:` separa os dois valores.
 
 ```c
 condição ? valor_se_verdade : valor_se_falso
 ```
 
-- **É expressão**: ao contrário do `if`, **devolve um valor**. Cabe à direita
-  de uma atribuição, num `printf` ou no meio de uma conta
-  (BACKES, 2013, cap. 4).
+A diferença para o `if` está na natureza das duas coisas. O `if` é um
+comando: ele escolhe quais instruções rodam. O ternário é uma
+**expressão**: ele **devolve um valor**, como `2 + 3` devolve 5 (BACKES,
+2013, cap. 4). Por isso ele cabe em lugares em que um `if` não cabe: à
+direita de uma atribuição, dentro dos argumentos de um `printf`, no meio de
+uma conta.
 
 ```c
 double frete = total >= 199 ? 0.0 : 19.90;   // escolhe um valor
 printf("%s\n", qtd == 1 ? "item" : "itens"); // escolhe um texto
 ```
 
-- **Só um lado roda**: o C avalia a condição e depois um dos lados, como no
-  curto-circuito. `b != 0 ? a / b : 0` nunca divide por zero
-  (KERNIGHAN; RITCHIE, 1988, cap. 2).
-- **Tipo comum**: os dois lados viram o mesmo tipo. Em `n > 0 ? n : 0.5`, com
-  `n` inteiro, o resultado é `double` (KERNIGHAN; RITCHIE, 1988, cap. 2).
-- **Associatividade**: desempata operadores da mesma linha da tabela, do mais
-  forte ao mais fraco (a completa, com bits e ponteiros, está no 0170)
-  (CPPREFERENCE, s.d.).
-- **Quando usar**: para escolher **um valor**, com condição curta. Se cada lado
-  faz várias coisas, ou os ternários se aninham, volte ao `if/else`.
+O C avalia primeiro a condição e depois **só um** dos lados, o escolhido. O
+outro nem é calculado, como no curto-circuito do 0013. Isso torna seguro
+escrever `b != 0 ? a / b : 0`: quando `b` é zero, a divisão nunca acontece
+(KERNIGHAN; RITCHIE, 1988, cap. 2).
+
+Como o ternário devolve um valor só, esse valor precisa ter um tipo só. Os
+dois lados são convertidos para um **tipo comum**, pelas regras de
+conversão do 0008. Em `n > 0 ? n : 0.5`, com `n` inteiro, o resultado é
+`double` mesmo quando quem sai é o `n` (KERNIGHAN; RITCHIE, 1988, cap. 2).
+O mais simples é manter os dois lados do mesmo tipo.
+
+Com o ternário, você já conhece quase todos os operadores do C, e vale ver
+a ordem completa. A tabela vai do mais forte ao mais fraco. Quando dois
+operadores da mesma linha aparecem juntos, quem decide é a
+**associatividade**, o sentido em que a conta é feita: `a - b - c` é
+`(a - b) - c`, da esquerda para a direita, e `a = b = c` é `a = (b = c)`,
+da direita para a esquerda (CPPREFERENCE, s.d.). A tabela completa, com os
+operadores de bits e de ponteiros, está no 0170.
 
 | Operadores | Associatividade |
 | --- | --- |
@@ -40,10 +64,17 @@ printf("%s\n", qtd == 1 ? "item" : "itens"); // escolhe um texto
 | `?:` | direita → esquerda |
 | `=` `+=` `-=` `*=` `/=` `%=` | direita → esquerda |
 
+Repare onde o `?:` ficou: quase no fim, acima só da atribuição. Isso
+explica o erro do alerta abaixo. Use o ternário para escolher **um valor**
+entre dois, com uma condição curta. Se cada lado precisa fazer várias
+coisas, ou se você começa a pôr um ternário dentro de outro, volte ao
+`if/else`, que se lê com mais facilidade.
+
 > [!WARNING]
 > **O ternário tem precedência baixíssima.** `40 - estudante ? 20 : 0` é
 > `(40 - estudante) ? 20 : 0`, que dá 20 para todo mundo. Escreva
-> `40 - (estudante ? 20 : 0)`: no meio de uma conta, ternário entre parênteses.
+> `40 - (estudante ? 20 : 0)`: no meio de uma conta, ternário entre
+> parênteses.
 
 {{exemplo}}
 

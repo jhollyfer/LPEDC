@@ -71,21 +71,20 @@ avisos; o enunciado avisa quando é o caso. Nos demais, **zero avisos**.
 
 ### Conceito
 
-- **Operadores relacionais**: `>`, `<`, `>=`, `<=`, `==` (igual, dois sinais)
-  e `!=` (diferente). Toda decisão começa numa comparação
-  (DEITEL; DEITEL, 2011, cap. 2).
-- **Comparação vale número**: um `int`, **1** se é verdade e **0** se é
-  mentira. Dá para mostrar com `%d`, somar e multiplicar
-  (KERNIGHAN; RITCHIE, 1988, cap. 2).
-- **Verdade em C**: na condição, **0 é falso e qualquer outro valor é
-  verdadeiro** (1, 42, -3, 0.5). `if (num)` é `if (num != 0)`
-  (BACKES, 2013, cap. 3).
-- **`bool`**: o `<stdbool.h>` do C99 dá `bool`, `true` (1) e `false` (0). Todo
-  valor diferente de zero vira `true`: `bool b = 42;` guarda 1
-  (BACKES, 2013, cap. 3).
-- **Erros de escrita**: `=<`, `=>` e `<>` não existem; `= =` com espaço também
-  não. `=` sozinho é **atribuição**: leia `=` como "recebe" e `==` como "é
-  igual a" (DEITEL; DEITEL, 2011, cap. 2).
+Os programas do módulo 01 seguiam sempre o mesmo caminho, de cima para
+baixo. Um programa que decide precisa, antes de tudo, de uma pergunta de sim
+ou não: a compra passou de R$ 200? A senha está certa? O saldo dá? Este
+módulo inteiro se apoia nessas perguntas, e elas começam numa comparação.
+
+Pense na tabela do campeonato no fim do domingo. O jogo terminou 2 x 1 para
+o mandante, e a tabela precisa saber três coisas: o mandante fez mais gols?
+Empatou? Fez menos? Cada resposta é sim ou não, e dela sai a pontuação: 3
+pontos pela vitória, 1 pelo empate, 0 pela derrota.
+
+Para fazer essas perguntas, o C tem seis **operadores relacionais**, que
+comparam dois valores: `>` (maior), `<` (menor), `>=` (maior ou igual),
+`<=` (menor ou igual), `==` (igual, com dois sinais) e `!=` (diferente)
+(DEITEL; DEITEL, 2011, cap. 2). Toda decisão do curso começa num deles.
 
 | Operador | Pergunta | Com o placar 2 x 1 |
 | --- | --- | --- |
@@ -96,9 +95,47 @@ avisos; o enunciado avisa quando é o caso. Nos demais, **zero avisos**.
 | `==` | igual? (dois sinais!) | `2 == 1` vale 0 |
 | `!=` | diferente? | `2 != 1` vale 1 |
 
+Repare na última coluna: a resposta sai como um número. No C, uma
+comparação produz um `int` que vale **1** quando é verdade e **0** quando
+é mentira (KERNIGHAN; RITCHIE, 1988, cap. 2). Como é um número, dá
+para mostrar com `%d`, somar e multiplicar. A tabela do campeonato nem
+precisa decidir nada: os pontos do mandante são `3 * (gm > gv) + (gm == gv)`.
+Com 2 x 1, a conta dá 3 × 1 + 0 = 3.
+
+```c
+int gm = 2, gv = 1;
+printf("%d %d %d\n", gm > gv, gm == gv, gm < gv);   // 1 0 0
+```
+
+O caminho de volta também existe, e é ele que o `if` (0014) vai usar.
+Quando o C precisa saber se um valor é verdadeiro, ele segue uma regra
+simples: **0 é falso, e qualquer outro valor é verdadeiro**. Valem como
+verdade 1, 42, -3 e até 0.5. Por isso `if (num)` é o mesmo que
+`if (num != 0)` (BACKES, 2013, cap. 3).
+
+Como a comparação vale número, uma comparação em cadeia não faz o que
+parece. Em `7 > 3 > 1`, o C resolve da esquerda para a direita: `7 > 3`
+vale 1, e depois `1 > 1` vale 0. A expressão inteira dá falso, apesar de 7
+ser maior que 3 e 3 maior que 1. Para juntar duas comparações, você precisa
+do E lógico do 0013.
+
+Para deixar claro que uma variável guarda sim ou não, o C99 criou o
+cabeçalho **`<stdbool.h>`**, com o tipo **`bool`** e os nomes **`true`**
+(vale 1) e **`false`** (vale 0). O `bool` é rígido: qualquer valor
+diferente de zero vira `true`, então `bool b = 42;` guarda 1 (BACKES,
+2013, cap. 3).
+
+Por fim, três erros de escrita aparecem muito. Os símbolos `=<`, `=>` e
+`<>` não existem: o sinal vem antes do `=`, e diferente se escreve `!=`.
+O `= =` com espaço no meio também não vale. E o `=` sozinho é
+**atribuição**, não comparação (DEITEL; DEITEL, 2011, cap. 2). Leia `=`
+como "recebe" e `==` como "é igual a"; o estrago dessa troca dentro de um
+`if` aparece no 0015.
+
 > [!WARNING]
-> **Não compare `float` ou `double` com `==`.** `0.1 + 0.2 == 0.3` vale **0**:
-> a soma dá 0.30000000000000004. Pergunte se estão perto o bastante,
+> **Não compare `float` ou `double` com `==`.** `0.1 + 0.2 == 0.3` vale
+> **0**: 0,1 não tem representação exata em binário, e a soma dá
+> 0.30000000000000004. Pergunte se estão perto o bastante,
 > `fabs(a - b) < 1e-9`, ou guarde dinheiro em **centavos** num `int`.
 
 ### Exemplos de uso
@@ -292,21 +329,27 @@ A pagar: R$ 142.50
 
 ### Conceito
 
-- **Operadores lógicos**: `a && b` (**E**) é verdade só se as duas forem;
-  `a || b` (**OU**) é verdade se pelo menos uma for; `!a` (**NÃO**) inverte. O
-  resultado é um `int` 0 ou 1 (DEITEL; DEITEL, 2011, cap. 4).
-- **Intervalo**: 18 ≤ idade ≤ 65 vira `idade >= 18 && idade <= 65`. Escrever
-  `18 <= idade <= 65` compila, mas compara o 0 ou 1 da primeira parte com 65
-  (BACKES, 2013, cap. 3).
-- **Precedência**, da mais forte para a mais fraca: `!`, aritméticos,
-  relacionais, igualdade, `&&` e por último `||`. `a || b && c` é
-  `a || (b && c)` (KERNIGHAN; RITCHIE, 1988, cap. 2).
-- **Curto-circuito**: o C avalia da esquerda para a direita e **para assim que
-  sabe a resposta**. Em `a && b`, se `a` é falso, `b` nem é calculado; em
-  `a || b`, se `a` é verdade, `b` é pulado. Assim,
-  `n != 0 && total / n > 3` nunca divide por zero (DEITEL; DEITEL, 2011, cap. 4).
-- **De Morgan**: o NÃO entra nos parênteses e troca E por OU. `!(a && b)` é
-  `!a || !b`, e `!(a || b)` é `!a && !b` (DEITEL; DEITEL, 2011, cap. 4).
+Uma comparação sozinha responde uma pergunta. Muitas regras da vida real
+dependem de várias ao mesmo tempo: pode dirigir quem tem 18 anos **e** tem
+carteira; ganha frete grátis quem é assinante **ou** comprou acima de
+R$ 100. Para juntar comparações numa resposta só, o C tem os operadores
+lógicos.
+
+Pense na bilheteria do cinema. Paga meia quem é estudante **ou** tem 60
+anos ou mais, **e** a sessão **não** é pré-estreia. São três respostas de
+sim ou não, ligadas pelas palavras E, OU e NÃO. A atendente não pensa nessas
+palavras, mas aplica cada uma delas toda vez que vende um ingresso.
+
+Os **operadores lógicos** do C são esses três (DEITEL; DEITEL, 2011, cap.
+4). O **E**, escrito `a && b`, é verdade só quando as duas partes são
+verdade. O **OU**, `a || b`, é verdade quando pelo menos uma parte é
+verdade. O **NÃO**, `!a`, inverte: `!1` vale 0 e `!0` vale 1. Como nas
+comparações do 0012, o resultado é um `int` que vale 0 ou 1.
+
+A **tabela-verdade** reúne todas as combinações possíveis de `a` e `b` e o
+resultado de cada operador. Vale a pena conferir uma linha de cada vez:
+com `a` falso e `b` verdadeiro, o E dá 0, porque falta uma parte, e o OU dá
+1, porque uma basta.
 
 | `a` | `b` | `a && b` | `a \|\| b` | `!a` |
 | --- | --- | --- | --- | --- |
@@ -315,10 +358,41 @@ A pagar: R$ 142.50
 | 1 | 0 | 0 | 1 | 0 |
 | 1 | 1 | 1 | 1 | 0 |
 
+O uso mais comum do E é o intervalo. Na matemática você escreve
+18 ≤ idade ≤ 65; no C, o intervalo é um E de duas comparações:
+`idade >= 18 && idade <= 65` (BACKES, 2013, cap. 3). Escrever
+`18 <= idade <= 65` compila, mas faz outra coisa: compara o 0 ou 1 da
+primeira parte com 65, que é sempre menor. Com idade 67, o resultado é 1.
+
+Quando a expressão mistura vários operadores, vale a **precedência**, da
+mais forte para a mais fraca: o `!` (junto com o menos de `-x`), os
+aritméticos, os relacionais (`<`, `>`, `<=`, `>=`), a igualdade (`==`,
+`!=`), o `&&` e, por último, o `||` (KERNIGHAN; RITCHIE, 1988, cap. 2).
+Por isso `x > 0 && x < 10` dispensa parênteses: as comparações acontecem
+antes do E. E `a || b && c` é lido como `a || (b && c)`. Na dúvida, ponha
+parênteses; eles também mostram a intenção para quem lê.
+
+O C avalia `&&` e `||` da esquerda para a direita e **para assim que sabe a
+resposta**. Isso se chama **curto-circuito**, e o padrão garante esse
+comportamento (DEITEL; DEITEL, 2011, cap. 4). Em `a && b`, se `a` é falso,
+o resultado já é falso e o `b` nem é calculado. Em `a || b`, se `a` é
+verdade, o resultado já é verdade e o `b` é pulado. Isso protege contas
+perigosas: em `n != 0 && total / n > 3`, a divisão só acontece quando `n`
+não é zero. Também economiza trabalho; ponha à esquerda o teste mais barato
+ou o que mais dá falso.
+
+Às vezes você precisa negar uma condição inteira. As **leis de De Morgan**
+dizem como: o NÃO entra nos parênteses e troca E por OU. `!(a && b)` é o
+mesmo que `!a || !b`, e `!(a || b)` é o mesmo que `!a && !b` (DEITEL;
+DEITEL, 2011, cap. 4). Em palavras: "não é (estudante ou idoso)" é "não é
+estudante e não é idoso". A troca do E pelo OU é o ponto que mais se
+esquece.
+
 > [!WARNING]
-> **`&` não é `&&`.** O `&` é o E **bit a bit** (0065): sem curto-circuito e
-> com precedência **menor** que a do `==`. `if (x & 1 == 0)` vira
-> `x & (1 == 0)`, sempre 0. O `-Wall` avisa: "suggest parentheses".
+> **`&` não é `&&`.** O `&` é o E **bit a bit** (0065): sem curto-circuito
+> e com precedência **menor** que a do `==`. `if (x & 1 == 0)` vira
+> `x & (1 == 0)`, sempre 0. O certo é `(x & 1) == 0` ou `x % 2 == 0`. O
+> `-Wall` avisa: "suggest parentheses".
 
 ### Exemplos de uso
 
@@ -509,9 +583,22 @@ Alerta? 1
 
 ### Conceito
 
-- **`if`**: a **seleção simples**. Com a condição verdadeira, roda o bloco;
-  com ela falsa, pula o bloco e segue. Um passo extra ou nada
-  (DEITEL; DEITEL, 2011, cap. 3).
+Com as comparações (0012) e os operadores lógicos (0013), o programa já
+sabe fazer perguntas e calcular a resposta, mas ainda não sabe agir
+diferente conforme ela. Todo programa até aqui executava as mesmas linhas,
+sempre. O `if` é o primeiro comando que muda o caminho: ele deixa um trecho
+rodar só quando uma condição é verdadeira.
+
+Pense no caixa do mercado com a placa: compras a partir de R$ 200 ganham
+10% de desconto. A operadora soma tudo e olha o total. Se passou de
+R$ 200, ela faz um passo a mais e aplica o desconto. Se não passou, não faz
+nada de especial e segue para o pagamento. O passo extra depende da
+resposta; o resto acontece de qualquer jeito.
+
+Esse "só se" é o **`if`**, a **seleção simples**. Quando a condição é
+verdadeira, o programa executa o bloco do `if`; quando é falsa, pula o
+bloco inteiro e continua na linha seguinte. É um passo extra ou nada
+(DEITEL; DEITEL, 2011, cap. 3). Não há "senão" aqui; ele chega no 0015.
 
 ```c
 if (condição) {
@@ -520,12 +607,19 @@ if (condição) {
 // daqui em diante roda sempre
 ```
 
-- **Condição**: entre parênteses, qualquer expressão numérica: comparação,
-  combinação lógica ou variável sozinha. Zero é falso, o resto é verdade:
-  `if (saldo)` é `if (saldo != 0)` (BACKES, 2013, cap. 4).
-- **Bloco**: as chaves agrupam quantas instruções quiser. Sem chaves, o `if`
-  controla **uma** instrução só, a primeira depois dele
-  (BACKES, 2013, cap. 4).
+A **condição** vem entre parênteses e pode ser qualquer expressão que dê um
+número. Pode ser uma comparação, como `total >= 200`; uma combinação lógica,
+como `idade >= 18 && tem_cnh`; ou uma variável sozinha. Vale a regra do
+0012: **zero é falso, o resto é verdade** (BACKES, 2013, cap. 4). Assim,
+`if (saldo)` equivale a `if (saldo != 0)`, e `if (!saldo)` equivale a
+`if (saldo == 0)`. As duas formas funcionam; a segunda deixa a pergunta
+mais explícita.
+
+O **bloco** é o trecho entre chaves, e ele aceita quantas instruções você
+quiser. Tudo o que está entre a `{` e a `}` roda junto, ou nada roda. Sem
+chaves, o `if` controla **uma** instrução só: a primeira que vem depois
+dele (BACKES, 2013, cap. 4). A linha seguinte já está fora do `if`, mesmo
+que pareça dentro.
 
 ```c
 if (total >= 200)
@@ -533,13 +627,24 @@ if (total >= 200)
 printf("Pronto\n");        // NÃO depende, apesar de qualquer recuo
 ```
 
-- **Recuo**: só para quem lê; o compilador o ignora. Por isso o curso usa
-  **chaves sempre**, mesmo com uma linha só (KERNIGHAN; RITCHIE, 1988, cap. 3).
+O que engana é o **recuo**, os espaços no começo da linha. Ele existe só
+para quem lê; o compilador o ignora por completo. Se você acrescentar uma
+segunda linha recuada debaixo de um `if` sem chaves, ela parece fazer parte
+do `if`, mas roda sempre. Por isso o curso usa **chaves sempre**, mesmo
+quando o bloco tem uma linha só (KERNIGHAN; RITCHIE, 1988, cap. 3). Com as
+chaves, acrescentar uma linha depois não muda o sentido do código.
+
+Um último detalhe sobre a condição: ela é avaliada uma vez, no momento em
+que o programa chega ao `if`. Se `total` mudar depois, o `if` não volta
+atrás. No exemplo do mercado, o desconto multiplica o total por 0,9 dentro
+do bloco, e a linha que mostra o valor final, fora do bloco, enxerga o
+total já atualizado ou o original, conforme o caminho tomado.
 
 > [!WARNING]
-> **O `;` depois do `if` mata a condição.** Em `if (total >= 200);`, o `;` é
-> uma **instrução vazia** e vira o corpo; o bloco seguinte roda **sempre**. O
-> `-Wextra` avisa ("suggest braces around empty body").
+> **O `;` depois do `if` mata a condição.** Em `if (total >= 200);`, o `;`
+> é uma **instrução vazia** e vira o corpo; o bloco seguinte roda
+> **sempre**, e todo mundo ganha desconto. O `-Wextra` avisa ("suggest
+> braces around empty body"). No fim da linha do `if` nunca vai `;`.
 
 ### Exemplos de uso
 
@@ -712,8 +817,22 @@ Conta: R$ 94.60
 
 ### Conceito
 
-- **`if/else`**: a **seleção dupla**. Exatamente um dos dois blocos roda,
-  nunca os dois e nunca nenhum (DEITEL; DEITEL, 2011, cap. 3).
+O `if` do 0014 fazia um passo a mais ou nada. Muitas situações, porém, têm
+dois desfechos, e um deles **sempre** acontece: o aluno passa ou fica de
+recuperação, o pagamento é aprovado ou recusado. Com um `if` só, você teria
+de escrever a pergunta duas vezes, uma afirmando e outra negando. O C
+oferece um jeito direto de dizer "se não, faça isto".
+
+Pense na catraca do metrô. Você encosta o cartão, e ela faz uma pergunta:
+há saldo para a tarifa de R$ 5,00? Se há, ela libera a passagem e
+desconta. Se não há, ela barra e mostra quanto falta. Não existe terceira
+saída, e as duas nunca acontecem juntas.
+
+Esse segundo caminho é o **`else`**, "senão" em inglês. Junto com o `if`,
+ele forma a **seleção dupla**: exatamente um dos dois blocos roda, nunca os
+dois e nunca nenhum (DEITEL; DEITEL, 2011, cap. 3). Com a condição
+verdadeira, roda o bloco do `if`; com ela falsa, roda o bloco do `else`.
+Depois, os dois caminhos se reencontram na linha seguinte.
 
 ```c
 if (condição) {
@@ -723,21 +842,37 @@ if (condição) {
 }
 ```
 
-- **`else` sem condição**: é "todo o resto". `else (saldo < 5)` é erro; outra
-  pergunta vira um novo `if` (0016) (BACKES, 2013, cap. 4).
-- **Chaves e `;`**: sem chaves, o `else` controla uma instrução só. Em
-  `if (c); { ... } else { ... }`, o `else` fica sem `if` e não compila
-  (DEITEL; DEITEL, 2011, cap. 3).
-- **Atribuição é expressão**: vale o valor guardado. Por isso `if (saldo = 0)`
-  **guarda 0** e testa esse 0, que é falso; `if (opcao = 1)` é sempre verdade
-  (DEITEL; DEITEL, 2011, cap. 4).
-- **Avisos**: o `-Wall` acusa "suggest parentheses around assignment used as
-  truth value". Código bom compila com zero avisos (GNU, s.d.).
+O `else` **não tem condição**. Ele significa "todo o resto", tudo o que não
+satisfez o `if`. Por isso `else (saldo < 5)` é erro de compilação: se você
+precisa de outra pergunta, ela vira um novo `if`, assunto do 0016 (BACKES,
+2013, cap. 4).
+
+As regras de chaves do 0014 continuam valendo. Sem chaves, o `else`
+controla uma instrução só, e o curso usa chaves sempre. O `;` depois do
+`if`, que no 0014 compilava e errava em silêncio, agora costuma ser pego:
+em `if (c); { ... } else { ... }`, o `;` encerra o `if`, o bloco fica solto
+e o `else` aparece sem nenhum `if` antes dele. O compilador recusa (DEITEL;
+DEITEL, 2011, cap. 3).
+
+Agora a pegadinha mais famosa do C, que o compilador **não** recusa: o `=`
+no lugar do `==`. Ela funciona assim. No 0009 você viu que a atribuição é
+uma expressão e vale o valor que acabou de guardar. Então `if (saldo = 0)`
+não compara nada: ele **guarda 0** em `saldo` e depois testa esse 0, que é
+falso (DEITEL; DEITEL, 2011, cap. 4). O saldo some e o `else` roda sempre.
+Do mesmo jeito, `if (opcao = 1)` guarda 1 e é sempre verdade, qualquer que
+fosse a opção digitada.
+
+Na execução, nada denuncia o erro; o único alerta vem do compilador.
+Com `-Wall`, o gcc acusa "suggest parentheses around assignment
+used as truth value" na linha do `if` (GNU, s.d.). Trate todo aviso como
+erro: código bom compila com zero avisos. Há também um truque de escrita:
+pôr a constante à esquerda, `if (0 == saldo)`. Se faltar um `=`, a linha
+vira `0 = saldo`, que não compila, porque 0 não é um lugar da memória.
 
 > [!WARNING]
-> **`=` no lugar de `==`** compila e erra em silêncio: com `if (saldo = 0)`, o
-> saldo vira zero e o `else` roda sempre. Compile com `-Wall` ou escreva a
-> constante à esquerda: `0 = saldo` não compila.
+> **`=` no lugar de `==`** compila e erra em silêncio: com
+> `if (saldo = 0)`, o saldo vira zero e o `else` roda sempre. Compile com
+> `-Wall` ou escreva a constante à esquerda: `0 = saldo` não compila.
 
 ### Exemplos de uso
 
@@ -911,8 +1046,20 @@ gcc ~/LPEDC/material/E090.c -o ~/LPEDC/material/E090 -lm && ~/LPEDC/material/E09
 
 ### Conceito
 
-- **`else if`**: encadeia perguntas para mais de dois caminhos; só um vale
-  (DEITEL; DEITEL, 2011, cap. 3).
+O `if/else` do 0015 escolhe entre dois caminhos. Muita regra, porém, tem
+mais de duas saídas: uma nota vira conceito A, B, C ou D; uma conta de luz
+cai numa de várias faixas de tarifa. Você precisa de um jeito de fazer
+várias perguntas em sequência e ficar com a primeira que der certo.
+
+Pense no radar de uma avenida com limite de 60 km/h. O Código de Trânsito
+divide o excesso em faixas: até 20% acima do limite, infração média; de
+20% a 50% acima, grave; acima de 50%, gravíssima. Com o limite de 60, as
+faixas terminam em 72 e 90 km/h. O agente olha a velocidade e procura a
+primeira faixa em que ela cabe, começando pela menor. Quatro caminhos, e só
+um vale.
+
+Para isso, o C encadeia perguntas com **`else if`**: cada `else` traz uma
+nova pergunta, e só um bloco da cadeia roda (DEITEL; DEITEL, 2011, cap. 3).
 
 ```c
 if (velocidade <= 60) {
@@ -926,17 +1073,35 @@ if (velocidade <= 60) {
 }
 ```
 
-- **Primeiro Sim**: o C testa de cima para baixo e **para no primeiro Sim**.
-  Ao chegar em `velocidade <= 72`, já se sabe que passou de 60: não precisa
-  de `velocidade > 60 &&` (BACKES, 2013, cap. 4).
-- **A ordem importa**: com `velocidade <= 90` no topo, 65 km/h viraria
-  "grave". Percorra as faixas num sentido só. O `else` final é opcional e pega
-  o que sobrou (DEITEL; DEITEL, 2011, cap. 3).
-- **`if` aninhado**: um `if` dentro do bloco de outro, para a pergunta que só
-  faz sentido depois de um Sim. O `else if` não é palavra-chave: é um `else`
-  cuja única instrução é um `if` (KERNIGHAN; RITCHIE, 1988, cap. 3).
-- **Else pendurado**: sem chaves, o `else` pertence ao `if` **mais próximo**
-  que ainda não tem `else`, não importa o recuo (BACKES, 2013, cap. 4).
+O C testa as condições **de cima para baixo** e **para no primeiro Sim**:
+roda aquele bloco e pula todo o resto da cadeia, sem fazer os testes que
+faltam (BACKES, 2013, cap. 4). Isso tem uma consequência útil. Quando o
+programa chega em `velocidade <= 72`, já se sabe que a velocidade passou
+de 60, senão ele teria parado no primeiro teste. Por isso não é preciso
+escrever `velocidade > 60 && velocidade <= 72`: a parte de baixo da faixa
+já está garantida pelos testes anteriores. Com 80 km/h, o C pergunta
+"80 <= 60?", não; "80 <= 72?", não; "80 <= 90?", sim, e para ali.
+
+A mesma regra faz a **ordem importar**. Se o primeiro teste fosse
+`velocidade <= 90`, os 65 km/h cairiam nele e virariam "grave", porque 65
+também é menor que 90. Percorra as faixas sempre num sentido só, da menor
+para a maior ou o contrário (DEITEL; DEITEL, 2011, cap. 3). O `else` final
+é opcional e pega o que sobrou, o caso em que nenhuma pergunta deu Sim.
+
+O `else if` é um caso particular de algo mais geral: o **`if` aninhado**,
+um `if` dentro do bloco de outro `if`. Ele serve quando a segunda pergunta
+só faz sentido depois de um Sim na primeira: "o usuário existe? Se existe,
+a senha confere?". Não adianta conferir a senha de quem não existe. E o
+`else if` nem é uma palavra-chave do C. Ele é um `else` cuja única
+instrução é um `if`, escrito na mesma linha para evitar uma escada de
+recuos (KERNIGHAN; RITCHIE, 1988, cap. 3).
+
+Quando há `if` dentro de `if` sem chaves, surge uma dúvida: a qual `if`
+pertence um `else`? A regra do C é fixa e não olha para o recuo. Um `else`
+pertence ao `if` **mais próximo**, acima dele, que ainda não tem `else`
+(BACKES, 2013, cap. 4). Esse caso tem nome: o **else pendurado**. Com
+chaves em volta do `if` de dentro, a dúvida desaparece, porque o bloco
+fecha antes do `else`.
 
 > [!WARNING]
 > **O `else` pendurado.** O recuo engana:
@@ -1163,32 +1328,56 @@ Triângulo isósceles.
 
 ### Conceito
 
-- **Operador ternário**: o único do C com três partes. Escolhe um entre dois
-  valores (DEITEL; DEITEL, 2011, cap. 3).
+Muitas decisões servem só para escolher um valor. O frete é zero ou
+R$ 19,90; a palavra é "item" ou "itens"; a nota mínima é 5 ou 6. Com
+`if/else`, cada escolha dessas ocupa cinco linhas e repete o nome da
+variável nos dois blocos. Quando o programa tem várias delas, o código
+cresce sem dizer nada de novo.
+
+Pense no carrinho de uma loja on-line. Ele mostra "3 itens" ou "1 item",
+conforme a quantidade, e mostra o frete, que é zero para compras a partir
+de R$ 199. Nenhuma dessas decisões faz trabalho: cada uma só escolhe o que
+vai aparecer numa lacuna da tela.
+
+Para isso o C tem o **operador ternário**, o único da linguagem com três
+partes: uma condição, o valor para quando ela é verdadeira e o valor para
+quando é falsa (DEITEL; DEITEL, 2011, cap. 3). O `?` separa a condição do
+primeiro valor, e o `:` separa os dois valores.
 
 ```c
 condição ? valor_se_verdade : valor_se_falso
 ```
 
-- **É expressão**: ao contrário do `if`, **devolve um valor**. Cabe à direita
-  de uma atribuição, num `printf` ou no meio de uma conta
-  (BACKES, 2013, cap. 4).
+A diferença para o `if` está na natureza das duas coisas. O `if` é um
+comando: ele escolhe quais instruções rodam. O ternário é uma
+**expressão**: ele **devolve um valor**, como `2 + 3` devolve 5 (BACKES,
+2013, cap. 4). Por isso ele cabe em lugares em que um `if` não cabe: à
+direita de uma atribuição, dentro dos argumentos de um `printf`, no meio de
+uma conta.
 
 ```c
 double frete = total >= 199 ? 0.0 : 19.90;   // escolhe um valor
 printf("%s\n", qtd == 1 ? "item" : "itens"); // escolhe um texto
 ```
 
-- **Só um lado roda**: o C avalia a condição e depois um dos lados, como no
-  curto-circuito. `b != 0 ? a / b : 0` nunca divide por zero
-  (KERNIGHAN; RITCHIE, 1988, cap. 2).
-- **Tipo comum**: os dois lados viram o mesmo tipo. Em `n > 0 ? n : 0.5`, com
-  `n` inteiro, o resultado é `double` (KERNIGHAN; RITCHIE, 1988, cap. 2).
-- **Associatividade**: desempata operadores da mesma linha da tabela, do mais
-  forte ao mais fraco (a completa, com bits e ponteiros, está no 0170)
-  (CPPREFERENCE, s.d.).
-- **Quando usar**: para escolher **um valor**, com condição curta. Se cada lado
-  faz várias coisas, ou os ternários se aninham, volte ao `if/else`.
+O C avalia primeiro a condição e depois **só um** dos lados, o escolhido. O
+outro nem é calculado, como no curto-circuito do 0013. Isso torna seguro
+escrever `b != 0 ? a / b : 0`: quando `b` é zero, a divisão nunca acontece
+(KERNIGHAN; RITCHIE, 1988, cap. 2).
+
+Como o ternário devolve um valor só, esse valor precisa ter um tipo só. Os
+dois lados são convertidos para um **tipo comum**, pelas regras de
+conversão do 0008. Em `n > 0 ? n : 0.5`, com `n` inteiro, o resultado é
+`double` mesmo quando quem sai é o `n` (KERNIGHAN; RITCHIE, 1988, cap. 2).
+O mais simples é manter os dois lados do mesmo tipo.
+
+Com o ternário, você já conhece quase todos os operadores do C, e vale ver
+a ordem completa. A tabela vai do mais forte ao mais fraco. Quando dois
+operadores da mesma linha aparecem juntos, quem decide é a
+**associatividade**, o sentido em que a conta é feita: `a - b - c` é
+`(a - b) - c`, da esquerda para a direita, e `a = b = c` é `a = (b = c)`,
+da direita para a esquerda (CPPREFERENCE, s.d.). A tabela completa, com os
+operadores de bits e de ponteiros, está no 0170.
 
 | Operadores | Associatividade |
 | --- | --- |
@@ -1203,10 +1392,17 @@ printf("%s\n", qtd == 1 ? "item" : "itens"); // escolhe um texto
 | `?:` | direita → esquerda |
 | `=` `+=` `-=` `*=` `/=` `%=` | direita → esquerda |
 
+Repare onde o `?:` ficou: quase no fim, acima só da atribuição. Isso
+explica o erro do alerta abaixo. Use o ternário para escolher **um valor**
+entre dois, com uma condição curta. Se cada lado precisa fazer várias
+coisas, ou se você começa a pôr um ternário dentro de outro, volte ao
+`if/else`, que se lê com mais facilidade.
+
 > [!WARNING]
 > **O ternário tem precedência baixíssima.** `40 - estudante ? 20 : 0` é
 > `(40 - estudante) ? 20 : 0`, que dá 20 para todo mundo. Escreva
-> `40 - (estudante ? 20 : 0)`: no meio de uma conta, ternário entre parênteses.
+> `40 - (estudante ? 20 : 0)`: no meio de uma conta, ternário entre
+> parênteses.
 
 ### Exemplos de uso
 
@@ -1389,9 +1585,22 @@ Saída esperada:
 
 ### Conceito
 
-- **`switch`**: a **seleção múltipla**. Calcula a expressão uma vez e **pula
-  direto** para o `case` de mesmo valor; o **`default`** pega o que não casou
-  (DEITEL; DEITEL, 2011, cap. 4).
+O `else if` do 0016 resolve faixas: até 60, até 72, até 90. Há um outro
+tipo de escolha, mais simples, em que você só quer saber **qual valor
+exato** chegou. A opção 1, 2 ou 3 de um menu; a letra S ou N de uma
+resposta. Dá para fazer com `else if`, repetindo `codigo == 1`,
+`codigo == 2`, `codigo == 3`, mas o C tem um comando feito para isso.
+
+Pense na lanchonete com cardápio numerado: 1 é X-Burger, 2 é X-Salada, 3 é
+Misto quente. Você diz "um 2". O atendente não testa se o seu número é
+maior ou menor que alguma coisa; ele vai direto à linha 2 do cardápio.
+
+Esse "vá direto ao valor igual" é o **`switch`**, chamado de **seleção
+múltipla**. Ele calcula a expressão entre parênteses uma vez só e **pula
+direto** para o `case` que tem o mesmo valor. Se nenhum `case` casar, o
+programa vai para o **`default`**, que pega todo o resto (DEITEL; DEITEL,
+2011, cap. 4). O `default` é opcional, mas é nele que você trata o valor
+inválido, como um código 7 que não existe no cardápio.
 
 ```c
 switch (codigo) {
@@ -1406,22 +1615,41 @@ default:
 }
 ```
 
-- **Expressão inteira**: `int`, `char` ou parecido. `double` e texto não
-  compilam (DEITEL; DEITEL, 2011, cap. 4).
-- **`case` constante**: valor conhecido na compilação (`case 2:`,
-  `case 'S':`); `case x:` e `case > 10:` não valem, nem dois `case` iguais
-  (KERNIGHAN; RITCHIE, 1988, cap. 3).
-- **Fall-through**: o `case` é só um **rótulo** de entrada. Depois de entrar,
-  o C executa **tudo para baixo**, atravessando os outros `case`, até um
-  **`break`** ou o fim do `switch` (BACKES, 2013, cap. 4).
-- **Fall-through de propósito**: `case` empilhados dividem o mesmo trecho
-  (`case 'S': case 's':`). Com código no meio, avise com `// fall through`,
-  que o gcc reconhece (GNU, s.d.).
+Em troca dessa rapidez, as regras são mais rígidas que as do `if`. A
+expressão do `switch` tem de ser **inteira**: `int`, `char` (que é um
+número, 0002) ou parecido. Um `double` ou um texto não compilam (DEITEL;
+DEITEL, 2011, cap. 4). Cada `case` leva uma **constante**, um valor
+conhecido já na hora de compilar, como `case 2:` ou `case 'S':`. Por isso
+`case x:`, com uma variável, e `case > 10:`, com uma comparação, não
+valem, e dois `case` não podem ter o mesmo valor (KERNIGHAN; RITCHIE,
+1988, cap. 3).
+
+Essas restrições têm um motivo. Como os valores dos `case` são conhecidos
+antes de o programa rodar, o compilador pode montar uma **tabela de
+saltos**, uma lista de endereços indexada pelo valor. Com valores próximos,
+como 1, 2 e 3, o programa vai ao `case` certo num passo só, sem comparar
+um por um como numa escada de `else if`.
+
+Agora a parte que mais surpreende. O `case` não é um bloco: é só um
+**rótulo**, uma marca que diz por onde entrar. Depois de entrar, o C
+executa **tudo para baixo**, atravessando os `case` seguintes, até
+encontrar um **`break`** ou chegar ao fim do `switch` (BACKES, 2013,
+cap. 4). Esse atravessar tem nome, **fall-through**, "cair através". O
+`break` é a ordem de sair do `switch` naquele ponto; por isso ele aparece
+no fim de quase todo `case`.
+
+Às vezes o fall-through é exatamente o que você quer. Vários `case`
+empilhados, sem nada entre eles, dividem o mesmo trecho: `case 'S':
+case 's':` aceita a resposta em maiúscula e em minúscula. Se o
+fall-through for de propósito e houver código no meio do caminho, avise
+quem lê com o comentário `// fall through`, que o gcc reconhece e não
+reclama (GNU, s.d.).
 
 > [!WARNING]
 > **Esquecer o `break`.** Sem o do `case 2`, pedir X-Salada mostra também
-> "Misto quente" e o preço vira **9.00**. O compilador não vê erro; o
-> `-Wextra` avisa ("this statement may fall through").
+> "Misto quente" e o preço vira **9.00**: o `case 3` também rodou e
+> sobrescreveu o preço. O compilador não vê erro; o `-Wextra` avisa ("this
+> statement may fall through").
 
 ### Exemplos de uso
 
@@ -1651,17 +1879,28 @@ Opção inválida.
 
 ### Conceito
 
-- **Escolher a ferramenta**: valores exatos pedem `switch`; duas condições
-  juntas, `if` com `&&`; um valor entre dois, ternário; faixas, `else if`
-  (DEITEL; DEITEL, 2011, cap. 4).
-- **Validar a entrada**: o `scanf` devolve quantos valores leu; com "abc" no
-  lugar de um número, devolve 0. Confira antes de usar
-  (BACKES, 2013, cap. 2).
-- **Cláusula de guarda**: trate o caso ruim primeiro, avise e saia com
-  `return 1` (o código de erro que `echo $?` mostra). O resto fica reto, sem
-  um `else` gigante.
-- **Tarifas simplificadas**: R$ 0,80 por kWh; bandeira amarela com R$ 0,02 a
-  mais por kWh e vermelha com R$ 0,05; desconto social de 40%.
+O módulo apresentou as ferramentas de decisão do C: comparações, operadores
+lógicos, `if` e `if/else`, `else if`, ternário e `switch`. Num programa de
+verdade elas aparecem juntas, e a pergunta deixa de ser "como se escreve" e
+passa a ser "qual delas serve aqui". Escolher bem deixa o código curto e
+fácil de conferir; escolher mal produz escadas de `if` que ninguém consegue
+seguir.
+
+Pense de novo na conta de luz do 0011, agora com as regras de verdade. O
+valor depende do consumo e da **bandeira** do mês, verde, amarela ou
+vermelha. Famílias de baixa renda têm a **tarifa social**, um desconto. A
+taxa de iluminação muda com o consumo, e um carimbo diz se o consumo foi
+baixo, médio ou alto. Cada uma dessas regras é uma decisão diferente, e
+cada uma tem a sua forma.
+
+A forma da pergunta indica a ferramenta (DEITEL; DEITEL, 2011, cap. 4). Se
+a resposta é um entre poucos **valores exatos**, como a letra da bandeira,
+o `switch` (0018) pula direto para ela. Se a regra exige **duas condições
+ao mesmo tempo**, como ter tarifa social e consumir até 220 kWh, é um `if`
+com `&&` (0013), um passo a mais ou nada. Se a decisão só **escolhe um
+valor** entre dois, como R$ 15 ou R$ 5 de iluminação, o ternário (0017)
+resolve numa linha. E se o valor cai em **faixas**, como baixo, médio e
+alto, o `else if` (0016) testa em ordem. A tabela resume:
 
 | Decisão | Ferramenta | Por quê |
 | --- | --- | --- |
@@ -1670,6 +1909,26 @@ Opção inválida.
 | iluminação: R$ 15 acima de 100 kWh, senão R$ 5 | ternário | escolhe **um valor** entre dois |
 | consumo baixo, médio ou alto? | `else if` | faixas, testadas em ordem |
 | a leitura deu certo e o consumo não é negativo? | `if` com `\|\|` | barra a entrada ruim logo no começo |
+
+A última linha da tabela trata de outra coisa: a entrada. Um programa que
+lê do teclado precisa desconfiar de quem digita. O `scanf` devolve
+**quantos valores leu** (0006); se ele pediu um número e veio "abc",
+devolve 0, e a variável continua com lixo (BACKES, 2013, cap. 2). Por isso
+a primeira decisão do programa é conferir a leitura: `scanf(...) != 1` ou
+um consumo negativo indicam entrada ruim.
+
+O jeito de reagir a essa entrada ruim tem nome: **cláusula de guarda**.
+Você trata o caso ruim primeiro, mostra um aviso e encerra o programa com
+`return 1`. O número 1 é um código de erro que o terminal enxerga; depois
+de rodar, `echo $?` o mostra. A vantagem aparece no resto do código: como o
+caso ruim já saiu, tudo o que vem depois fica reto, sem um `else` gigante
+envolvendo o programa inteiro.
+
+As tarifas do exemplo são simplificadas para a conta caber de cabeça. A
+energia custa R$ 0,80 por kWh. A bandeira amarela soma R$ 0,02 por kWh, e
+a vermelha, R$ 0,05; a verde não soma nada. O desconto social é de 40% e
+vale sobre a energia e a bandeira, mas não sobre a iluminação. Com essas
+regras, a ordem dos passos passa a fazer parte da conta.
 
 > [!WARNING]
 > **A ordem dos passos é parte da regra.** O desconto vale sobre energia e

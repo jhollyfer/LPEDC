@@ -1,7 +1,21 @@
 ## 0015 · if/else e o = no lugar do ==
 
-- **`if/else`**: a **seleção dupla**. Exatamente um dos dois blocos roda,
-  nunca os dois e nunca nenhum (DEITEL; DEITEL, 2011, cap. 3).
+O `if` do 0014 fazia um passo a mais ou nada. Muitas situações, porém, têm
+dois desfechos, e um deles **sempre** acontece: o aluno passa ou fica de
+recuperação, o pagamento é aprovado ou recusado. Com um `if` só, você teria
+de escrever a pergunta duas vezes, uma afirmando e outra negando. O C
+oferece um jeito direto de dizer "se não, faça isto".
+
+Pense na catraca do metrô. Você encosta o cartão, e ela faz uma pergunta:
+há saldo para a tarifa de R$ 5,00? Se há, ela libera a passagem e
+desconta. Se não há, ela barra e mostra quanto falta. Não existe terceira
+saída, e as duas nunca acontecem juntas.
+
+Esse segundo caminho é o **`else`**, "senão" em inglês. Junto com o `if`,
+ele forma a **seleção dupla**: exatamente um dos dois blocos roda, nunca os
+dois e nunca nenhum (DEITEL; DEITEL, 2011, cap. 3). Com a condição
+verdadeira, roda o bloco do `if`; com ela falsa, roda o bloco do `else`.
+Depois, os dois caminhos se reencontram na linha seguinte.
 
 ```c
 if (condição) {
@@ -11,21 +25,37 @@ if (condição) {
 }
 ```
 
-- **`else` sem condição**: é "todo o resto". `else (saldo < 5)` é erro; outra
-  pergunta vira um novo `if` (0016) (BACKES, 2013, cap. 4).
-- **Chaves e `;`**: sem chaves, o `else` controla uma instrução só. Em
-  `if (c); { ... } else { ... }`, o `else` fica sem `if` e não compila
-  (DEITEL; DEITEL, 2011, cap. 3).
-- **Atribuição é expressão**: vale o valor guardado. Por isso `if (saldo = 0)`
-  **guarda 0** e testa esse 0, que é falso; `if (opcao = 1)` é sempre verdade
-  (DEITEL; DEITEL, 2011, cap. 4).
-- **Avisos**: o `-Wall` acusa "suggest parentheses around assignment used as
-  truth value". Código bom compila com zero avisos (GNU, s.d.).
+O `else` **não tem condição**. Ele significa "todo o resto", tudo o que não
+satisfez o `if`. Por isso `else (saldo < 5)` é erro de compilação: se você
+precisa de outra pergunta, ela vira um novo `if`, assunto do 0016 (BACKES,
+2013, cap. 4).
+
+As regras de chaves do 0014 continuam valendo. Sem chaves, o `else`
+controla uma instrução só, e o curso usa chaves sempre. O `;` depois do
+`if`, que no 0014 compilava e errava em silêncio, agora costuma ser pego:
+em `if (c); { ... } else { ... }`, o `;` encerra o `if`, o bloco fica solto
+e o `else` aparece sem nenhum `if` antes dele. O compilador recusa (DEITEL;
+DEITEL, 2011, cap. 3).
+
+Agora a pegadinha mais famosa do C, que o compilador **não** recusa: o `=`
+no lugar do `==`. Ela funciona assim. No 0009 você viu que a atribuição é
+uma expressão e vale o valor que acabou de guardar. Então `if (saldo = 0)`
+não compara nada: ele **guarda 0** em `saldo` e depois testa esse 0, que é
+falso (DEITEL; DEITEL, 2011, cap. 4). O saldo some e o `else` roda sempre.
+Do mesmo jeito, `if (opcao = 1)` guarda 1 e é sempre verdade, qualquer que
+fosse a opção digitada.
+
+Na execução, nada denuncia o erro; o único alerta vem do compilador.
+Com `-Wall`, o gcc acusa "suggest parentheses around assignment
+used as truth value" na linha do `if` (GNU, s.d.). Trate todo aviso como
+erro: código bom compila com zero avisos. Há também um truque de escrita:
+pôr a constante à esquerda, `if (0 == saldo)`. Se faltar um `=`, a linha
+vira `0 = saldo`, que não compila, porque 0 não é um lugar da memória.
 
 > [!WARNING]
-> **`=` no lugar de `==`** compila e erra em silêncio: com `if (saldo = 0)`, o
-> saldo vira zero e o `else` roda sempre. Compile com `-Wall` ou escreva a
-> constante à esquerda: `0 = saldo` não compila.
+> **`=` no lugar de `==`** compila e erra em silêncio: com
+> `if (saldo = 0)`, o saldo vira zero e o `else` roda sempre. Compile com
+> `-Wall` ou escreva a constante à esquerda: `0 = saldo` não compila.
 
 {{exemplo}}
 
