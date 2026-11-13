@@ -1,26 +1,20 @@
 ## 0168 · Complexidade espacial
 
-O motorista tem a rota do dia: paradas 12, 7, 30, 5, 18 e 9. Na volta, quer o
-caminho ao contrário: pode copiar a rota invertida numa folha nova ou trocar
-na própria folha (a primeira com a última, a segunda com a penúltima...), sem
-gastar papel. Com 1 milhão de paradas, a folha nova pesa 4 MB.
-
-A **complexidade espacial** conta **memória** em função de `n`, com as
-mesmas notações O, Ω e Θ.
-
-Quase sempre interessa o **espaço extra** (ou **auxiliar**): o que a função
-usa **além da entrada**. Número fixo de variáveis simples é **Θ(1)**: o
-algoritmo é **in-place** (no lugar). Uma cópia da entrada é **Θ(n)**.
-
-O espaço extra aparece em três lugares:
-
-- **vetores e `malloc`**: um auxiliar de `n` posições é Θ(n), uma matriz
-  `n × n` é Θ(n²);
-- **a pilha de chamadas**: cada chamada recursiva ativa ocupa um frame
-  (assunto 0031). O espaço é a **profundidade máxima** vezes o tamanho do
-  frame, não o total de chamadas;
-- **tabelas para ganhar tempo**: memoização, vetor de contagem, tabela hash.
-  É a troca de **tempo por espaço**.
+- **Complexidade espacial**: a memória que o algoritmo usa em função de `n`,
+  medida com as mesmas notações O, Ω e Θ (ZIVIANI, 2010, cap. 1).
+- **Espaço extra** (ou **auxiliar**): o que a função usa **além da entrada**.
+  É o que quase sempre interessa (LINTZMAYER; MOTA, 2023).
+- **In-place** (no lugar): o espaço extra é Θ(1), um número fixo de
+  variáveis simples. Uma cópia da entrada já é Θ(n)
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
+- **Pilha da recursão**: cada chamada ativa ocupa um frame. O espaço é a
+  **profundidade máxima** vezes o frame, não o total de chamadas
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 3).
+- **Onde mora a memória**: locais e frames ficam na **pilha**, pequena e fixa
+  (`ulimit -s` mostra 8192 KB); o `malloc` usa o **heap**; um `static` fica nos
+  dados estáticos (LINUX MAN-PAGES, s.d.).
+- **Tempo por espaço**: memoização, vetor de contagem e tabela hash gastam
+  memória para ganhar tempo (CORMEN et al., 2024).
 
 | algoritmo | tempo | espaço extra |
 | --- | --- | --- |
@@ -33,13 +27,18 @@ O espaço extra aparece em três lugares:
 | quick sort | Θ(n log n) em média | Θ(log n) em média, Θ(n) no pior, da pilha |
 | counting sort com valores de 0 a k | Θ(n + k) | Θ(n + k) |
 
-Em cima, a cópia: 6 gavetas a mais, `6 · 4 = 24` bytes. Embaixo, a inversão
-no lugar: só a caixinha `tmp`, 4 bytes, para qualquer rota:
+> [!WARNING]
+> Recursão **custa** espaço mesmo sem vetor. `soma(v, n) = v[n-1] + soma(v,
+> n-1)` empilha `n` frames: com 1 milhão de elementos, a pilha de 8 MB estoura
+> em *segmentation fault*. Procure a **profundidade máxima**, não só os `malloc`.
+
+{{exemplo}}
+
+Um motorista quer a rota do dia ao contrário. Em cima, a cópia: 6 gavetas a
+mais, `6 · 4 = 24` bytes. Embaixo, a inversão no lugar: só a caixinha `tmp`, 4
+bytes, para qualquer rota:
 
 {{ideia}}
-
-O programa faz as duas inversões e devolve os bytes extras de cada uma.
-Depois repete com 1 milhão de paradas:
 
 ```c
 #include <stdio.h>
@@ -101,26 +100,7 @@ int main(void) {
 // bytes extras com 1 milhão: 4000000 e 4
 ```
 
-Nenhuma caixa cria memória. O `i` anda da esquerda e o `j` da direita, até se
-cruzarem: 3 trocas para 6 paradas. Tempo Θ(n), espaço extra Θ(1):
+O `i` anda da esquerda e o `j` da direita até se cruzarem: 3 trocas para 6
+paradas, tempo Θ(n) e espaço extra Θ(1):
 
 {{fluxograma}}
-
-> [!WARNING]
-> Recursão **custa** espaço, mesmo sem vetor. `soma(v, n) = v[n-1] + soma(v,
-> n-1)` tem espaço extra Θ(n): `n` frames empilhados. Com 1 milhão de
-> elementos, a pilha (8 MB no Linux) estoura em *segmentation fault*; o laço
-> usa Θ(1). Procure a **profundidade máxima**, não só os `malloc`.
-
-> [!TIP]
-> Locais e frames ficam na **pilha**, pequena e fixa (`ulimit -s` mostra 8192
-> KB). O `malloc` usa o **heap**, que cresce até a RAM. O `static int
-> grande[1000000]` fica nos **dados estáticos**; sem `static`, seriam 4 MB na
-> pilha, metade do limite.
-
-> [!NOTE]
-> **Pergunta para você:** quantos bytes extras a `inverte_copiando` pediria
-> com 1 milhão de `double` em vez de `int`? E a `inverte_no_lugar`, com `tmp`
-> `double`? Calcule e troque os tipos no programa.
-
-{{pratique}}

@@ -1,16 +1,8 @@
 # Módulo 26 · Notação assintótica, somatórios e espaço
 
-Nos módulos 10 e 17 você contou passos, disse "isso é O(n²)" e resolveu
-recorrências. Este módulo fecha três pontas: as **definições formais** de O,
-Ω e Θ, com `c` e `n₀`; os **somatórios** que dão o número exato de vezes que
-um laço roda; e a **complexidade espacial**, que mede memória como se mede
-tempo.
-
-A mudança é trocar o "parece n²" pela conta: dizer que `3n² + 10n + 20` é
-Θ(n²) vira uma afirmação que se **prova** ou se **refuta**. O laço que roda
-"umas n²/2 vezes" passa a rodar `n(n-1)/2`, conferido por um contador. E a
-função que "não usa memória" obriga a olhar a pilha da recursão. O último
-assunto junta as três ideias na ficha de cinco funções.
+Definições formais de O, Ω e Θ (com `c` e `n₀`), somatórios que contam
+laços e complexidade espacial. Depende dos módulos 10 (eficiência e notação O)
+e 17 (recorrências).
 
 ## O que você vai aprender
 
@@ -26,23 +18,20 @@ assunto junta as três ideias na ficha de cinco funções.
 
 ## Antes de começar
 
-Usa contagem de passos e notação O (0071, 0072), pilha de chamadas e recursão
-(0031 a 0033), pilha, heap, `malloc` e `free` (0053, 0054), ponteiro para
-função (0050), busca binária (0090), insertion e merge sort (0093, 0094),
-recorrências e Θ (0114 a 0117), backtracking (0126), potência rápida (0131) e
-memoização (0138).
+Revise contagem de passos e notação O (0071, 0072), pilha de chamadas e
+recursão (0031 a 0033), `malloc` e `free` (0053, 0054), merge sort (0094) e
+recorrências (0114 a 0117).
 
-Faça as contas no papel **antes** de rodar; depois dobre o `n` e veja se o
-contador acompanha a fórmula. Nos diagramas, verde é o que vale (teto que
-segura, espaço constante), vermelho é o que falha ou cresce com `n`, amarelo
-marca a virada (o `n₀`, a razão ao dobrar `n`) e roxo é trabalho contado.
+Faça as contas no papel antes de rodar; depois dobre o `n` e veja se o
+contador acompanha a fórmula. Nos diagramas, verde é o que vale, vermelho o que
+falha ou cresce com `n`, amarelo a virada (o `n₀`) e roxo o trabalho contado.
 
-Lembre que `log₂ n` é quantas vezes dá para dividir `n` por 2 até chegar em 1,
-e que `ln n` é o logaritmo natural (`log` em `<math.h>`).
+`log₂ n` é quantas vezes dá para dividir `n` por 2 até chegar em 1; `ln n` é o
+logaritmo natural (`log` em `<math.h>`).
 
 O último assunto tem um TAD, `custo.h` e `custo.c`, compilado junto com os
-exemplos e exercícios da pasta: não dê os nomes `custo_passos`, `custo_bytes`
-e `custo_prof_max` a variáveis suas.
+exemplos da pasta: não use `custo_passos`, `custo_bytes` e `custo_prof_max`
+como nomes de variáveis suas.
 
 {{indice}}
 

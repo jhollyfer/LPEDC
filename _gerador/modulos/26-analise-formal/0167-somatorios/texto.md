@@ -1,12 +1,9 @@
 ## 0167 · Somatórios que saem de laços
 
-Na reunião de condomínio, cada morador que chega aperta a mão de quem já está
-na sala: o primeiro ninguém, o segundo 1, o terceiro 2... Quantos apertos com
-8 moradores? E com 1000?
-
-Contar passos (assunto 0071) é fácil quando o laço de dentro roda sempre o
-mesmo número de vezes. Aqui ele depende de `i`: é um **laço dependente**, e a
-conta vira um **somatório**:
+- **Laço dependente**: o laço de dentro roda um número de vezes que depende
+  do `i` de fora. A conta de passos vira um **somatório** (FEOFILOFF, s.d.).
+- **Do `for` ao `Σ`**: cada laço vira um `Σ`; os limites do laço são os da
+  soma e o corpo é a parcela (CORMEN et al., 2024, apêndice A).
 
 ```text
  n-1
@@ -14,16 +11,16 @@ conta vira um **somatório**:
  i=0
 ```
 
-O `Σ` (sigma) soma a expressão da direita para cada `i`, do limite de baixo ao
-de cima. Cada `for` vira um `Σ`: os limites do laço são os da soma, e o corpo
-é a parcela.
-
-A fórmula da soma de `0` a `n-1` vem de um truque: escreva a soma de frente
-para trás e de trás para frente, uma embaixo da outra. Cada coluna soma `n-1`,
-são `n` colunas, e isso é o dobro: `n(n-1)/2`. Para 8 moradores, 28; para
-1000, 499.500. É **Θ(n²)**: a metade corta a constante, não a classe.
-
-As quatro somas que mais aparecem em laços:
+- **Soma aritmética**: some a sequência de frente para trás e de trás para
+  frente; cada coluna dá `n-1`, são `n` colunas, e isso é o dobro. Sai
+  `n(n-1)/2`, Θ(n²) (CORMEN et al., 2024, apêndice A).
+- **Soma geométrica**: a última parcela supera todas as anteriores juntas
+  (`512 > 1 + 2 + ... + 256`); dois laços aninhados podem dar Θ(n)
+  (LINTZMAYER; MOTA, 2023).
+- **Soma harmônica**: `1 + 1/2 + ... + 1/n` cresce como `ln n`; vezes `n`, dá
+  `n ln n` (CORMEN et al., 2024, apêndice A).
+- **Estouro na fórmula**: com `int n = 70000`, `n * (n - 1)` estoura antes da
+  divisão por 2; guarde `n` num `long`.
 
 | laço | somatório | fórmula | classe |
 | --- | --- | --- | --- |
@@ -32,16 +29,18 @@ As quatro somas que mais aparecem em laços:
 | `for (t = 1; t < n; t *= 2)`, `for j < t` | geométrica: `1 + 2 + 4 + ...` | `2^k - 1` (menos que `2n`) | Θ(n) |
 | `for p = 1..n`, `for (j = 0; j < n; j += p)` | harmônica: `Σ n/p` | `≈ n ln n` | Θ(n log n) |
 
-A **geométrica** engana: dois laços aninhados e mesmo assim linear, pois a
-última parcela supera todas as outras juntas (`512 > 1 + 2 + ... + 256`). A **harmônica**, `1 + 1/2 + ... + 1/n`, cresce como `ln n`;
-multiplicada por `n`, dá `n ln n`.
+> [!WARNING]
+> `for (j = 0; j < i; j++)` roda `i` vezes e soma `n(n-1)/2`; com `j <= i`
+> soma `n(n+1)/2`. A classe é a mesma, mas o número exato fica errado. Teste
+> com `n = 1` e `n = 2` à mão.
 
-Cada linha é um morador e cada quadradinho roxo, um aperto de mão. O
-triângulo é metade do quadrado de 8 por 8, sem a diagonal:
+{{exemplo}}
+
+Numa reunião de condomínio, cada morador que chega aperta a mão de quem já
+está na sala. Cada quadradinho roxo é um aperto; o triângulo é metade do
+quadrado de 8 por 8, sem a diagonal:
 
 {{ideia}}
-
-O programa conta os apertos com os dois laços e compara com a fórmula:
 
 ```c
 #include <stdio.h>
@@ -93,21 +92,3 @@ Com `n = 8`, cada volta de `i` soma `i` apertos ao total:
 | 5 | 5 | 15 |
 | 6 | 6 | 21 |
 | 7 | 7 | **28** |
-
-> [!WARNING]
-> Cuidado com os limites. `for (j = 0; j < i; j++)` roda `i` vezes e soma
-> `n(n-1)/2`. Com `j <= i`, cada volta ganha um a mais: `n(n+1)/2`. Na
-> classe tanto faz (Θ(n²)); no **número exato**, é resposta errada. Teste com
-> `n = 1` e `n = 2` à mão.
-
-> [!TIP]
-> Com `int n = 70000`, `n * (n - 1)` estoura o `int` **antes** da divisão por
-> 2, embora o resultado caiba num `long`. Estouro de `int` com sinal é
-> comportamento indefinido; por isso o `main` guarda `n` num `long`.
-
-> [!NOTE]
-> **Pergunta para você:** com `j <= i`, quantos apertos seriam com 8
-> moradores? E trios com dois que já estão (três laços, `k < j < i`)? Escreva
-> o somatório antes de mudar o programa.
-
-{{pratique}}
