@@ -1,27 +1,30 @@
 ## 0093 · Insertion sort
 
-Numa rodada de buraco, você recebe as cartas uma a uma: 7, 4, 9, 2, 5. Cada
-carta nova é **encaixada** no lugar certo da mão, que já está em ordem.
+- **Insertion sort** (ordenação por inserção): como arrumar cartas na mão,
+  cada elemento novo é **encaixado** no lugar certo da parte já ordenada
+  (CORMEN et al., 2024, cap. 2).
+- **Parte pronta**: `v[0..j-1]` fica **em ordem entre si**, mas não no lugar
+  final, ao contrário do selection (FEOFILOFF, 2009).
+- **Passo**: guarde `x = v[j]`; ande para a esquerda empurrando uma casa
+  para a direita cada elemento **maior** que `x` (um **deslocamento**, não
+  uma troca); ponha `x` em `v[i + 1]` (FEOFILOFF, 2009).
+- **Guardar `x` antes** é obrigatório: o primeiro deslocamento escreve por
+  cima de `v[j]`.
+- **Custo**: pior caso (vetor ao contrário), `n(n - 1)/2` comparações,
+  **O(n²)**; melhor caso (já ordenado), `n - 1`, **O(n)**. Cada deslocamento
+  desfaz uma inversão com uma escrita, não três (CORMEN et al., 2024, cap. 2).
+- **Estável e online**: o `>` para no primeiro igual e `x` entra depois dele;
+  ordena à medida que os dados chegam (FEOFILOFF, 2009).
 
-Esse é o **insertion sort** (ordenação por inserção). A parte pronta é
-`v[0..j-1]`, **em ordem entre si** (no selection, a parte pronta já estava no
-lugar final). A cada passo:
+> [!WARNING]
+> Escreva `while (i >= 0 && v[i] > x)`. Na ordem inversa, com `i = -1` o
+> programa lê `v[-1]`. O curto-circuito do `&&` (0013) protege o vetor.
 
-1. guarde a próxima carta, `x = v[j]`;
-2. ande para a esquerda empurrando uma casa para a direita cada elemento
-   **maior** que `x` (um **deslocamento**, não uma troca);
-3. ao achar alguém menor ou igual (ou o começo), ponha `x` em `v[i + 1]`.
+{{exemplo}}
 
-Guardar `x` antes é obrigatório: o primeiro deslocamento escreve por cima de
-`v[j]`.
-
-Cada deslocamento desfaz uma inversão, como a troca do bubble, mas custa uma
-escrita, não três. No pior caso (vetor ao contrário): `n(n - 1)/2`
-comparações, **O(n²)**. No melhor (já ordenado): `n - 1`, **O(n)**. É o melhor
-dos três simples; bibliotecas o usam para pedaços de 16 a 32 posições.
-
-Cada linha é uma carta nova: verde é a mão arrumada, amarela é a carta que
-entrou. O 9 não anda; o 2 atravessa a mão inteira:
+Numa rodada de buraco, as cartas chegam uma a uma: 7, 4, 9, 2, 5. Cada linha é
+uma carta nova: verde é a mão arrumada, amarela é a carta que entrou. O 9 não
+anda; o 2 atravessa a mão inteira:
 
 {{ideia}}
 
@@ -92,26 +95,10 @@ O encaixe do 2 (`j = 3`), o mais caro. A mão antes é `4 7 9 | 2 5`:
 | 0 | 4 | sim | `v[1] = 4` | 4 4 7 9 5 |
 | -1 | | (`i >= 0` falso: nem compara) | `v[0] = 2` | 2 4 7 9 5 |
 
-Foram três comparações e três deslocamentos. Somando todos os encaixes:
-1 + 1 + 3 + 3 = **8 comparações** e 1 + 0 + 3 + 2 = **6 deslocamentos**.
+Somando todos os encaixes: 1 + 1 + 3 + 3 = **8 comparações** e
+1 + 0 + 3 + 2 = **6 deslocamentos**.
 
 O laço de dentro para por dois motivos: acabou o vetor ou achou alguém que
 não é maior:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Escreva `while (i >= 0 && v[i] > x)`. Na ordem inversa, com `i = -1` o
-> programa lê `v[-1]`. O curto-circuito do `&&` (assunto 0013) protege o vetor.
-
-> [!TIP]
-> O insertion sort é **estável**: o `>` (e não `>=`) para ao encontrar um
-> igual, e `x` entra depois dele. Também é **online**: ordena à medida que os
-> dados chegam.
-
-> [!NOTE]
-> **Pergunta para você:** se a condição fosse `v[i] >= x`, o vetor continuaria
-> saindo ordenado? Quantos deslocamentos o código faria? E com dois elementos
-> iguais? (O A185 mostra por que isso importa.)
-
-{{pratique}}

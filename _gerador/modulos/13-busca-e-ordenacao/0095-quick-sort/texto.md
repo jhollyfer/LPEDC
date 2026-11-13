@@ -1,32 +1,34 @@
 ## 0095 · Quick sort
 
-Black Friday: 7 fones de R$ 35, 12, 48, 7, 29, 51 e 20. Você escolhe o de
-R$ 20 e faz dois montes: os que custam até 20 de um lado, os mais caros do
-outro. O de 20 já está no lugar certo.
+- **Quick sort**: escolhe um **pivô**, separa o pedaço em `menores ou iguais
+  | pivô | maiores` e ordena cada lado com o próprio quick sort. Criado por
+  Tony Hoare em 1960 (CORMEN et al., 2024, cap. 7).
+- **Separação** (ou **partição**): rearranja o pedaço e deixa o pivô na sua
+  posição **final**, `j`. As chamadas seguintes são em `v[p..j-1]` e
+  `v[j+1..r]` (FEOFILOFF, 2009).
+- **Lomuto** (a `PARTITION` do Cormen): pivô `v[r]`; `k` anda pelo pedaço e
+  `j` marca a fronteira dos `<=` pivô. No fim, troca o pivô com `v[j]`
+  (CORMEN et al., 2024, cap. 7).
+- **Hoare**: dois índices vindos das pontas, que trocam os que estão do lado
+  errado (ZIVIANI, 2010, cap. 4).
+- **Ao contrário do merge**: o trabalho está em dividir, e juntar é de graça.
+  Não precisa de rascunho (FEOFILOFF, 2009).
+- **Custo**: com o pivô perto do meio, **O(n log n)**; sempre o menor ou o
+  maior, **O(n²)**, como no vetor **já ordenado** com pivô no fim. Na média,
+  O(n log n). Não é estável (CORMEN et al., 2024, cap. 7).
+- **Pilha**: no pior caso a recursão desce `n` níveis. Defesas: **mediana de
+  três** como pivô e recursão só no lado **menor**, no máximo `log₂ n` níveis
+  (FEOFILOFF, 2009).
 
-Esse é o **quick sort**, inventado por Tony Hoare em 1960. O elemento escolhido
-é o **pivô**, e o passo de fazer os montes é a **separação** (ou
-**partição**):
+> [!WARNING]
+> Com `quick_sort(v, p, j)`, o pivô entra de novo no pedaço da esquerda. Se é
+> o maior (`j == r`), a chamada recebe o mesmo pedaço e nunca para: estouro de
+> pilha. As chamadas precisam bater com o que a separação promete sobre `j`.
 
-1. escolha o pivô (aqui, o **último** do pedaço, `v[r]`);
-2. **separe**: rearranje o pedaço para ficar `menores ou iguais | pivô |
-   maiores`. O pivô cai na sua posição **final**, `j`;
-3. ordene, com o próprio quick sort, `v[p..j-1]` e `v[j+1..r]`.
+{{exemplo}}
 
-No merge sort o trabalho está em juntar; aqui está em dividir, e juntar é
-de graça. Não precisa de rascunho.
-
-A separação de **Lomuto** (a `PARTITION` do Cormen) anda com `k` pelo pedaço e
-mantém `j` na fronteira: tudo em `v[p..j-1]` é `<=` pivô. Achou um `<=` pivô?
-Troca com `v[j]` e avança `j`. No fim, troca o pivô com `v[j]`. A de **Hoare**
-(Ziviani, Tenenbaum) usa dois índices vindos das pontas.
-
-O custo depende do pivô. Perto do meio, corta em metades: **O(n log n)**.
-Sempre o menor ou o maior, um monte fica vazio e o outro com `n - 1`: **O(n²)**.
-Com o pivô no fim, isso ocorre no vetor **já ordenado** (exemplo A190). Em
-dados embaralhados, é O(n log n) na média.
-
-O 20 (roxo) separa o vetor e fica verde, no lugar. Cada lado escolhe o seu pivô:
+Black Friday: 7 fones de R$ 35, 12, 48, 7, 29, 51 e 20. O 20 (roxo) é o pivô:
+separa o vetor e fica verde, no lugar. Cada lado escolhe o seu pivô:
 
 {{ideia}}
 
@@ -108,24 +110,8 @@ A primeira separação, com pivô 20. `k` anda; `j` marca onde entra o próximo
 | fim | | | troca v[2] e o pivô | 12 7 **20** 35 29 51 48 | 2 |
 
 Seis comparações. Depois vêm `[12 7]` (1), `[35 29 51 48]` (3) e `[35 29]`
-(1): **11 comparações**. O pivô fica fora das duas chamadas, e por isso o
-problema sempre diminui:
+(1): **11 comparações**.
+
+O pivô fica fora das duas chamadas, e por isso o problema sempre diminui:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Com `quick_sort(v, p, j)`, o pivô entra de novo no pedaço da esquerda. Se ele
-> é o maior (`j == r`), a chamada recebe o mesmo pedaço e nunca para: estouro
-> de pilha. As chamadas precisam bater com o que a separação promete sobre `j`.
-
-> [!TIP]
-> No pior caso a recursão desce `n` níveis (assunto 0031): 1 milhão de frames
-> estouram a pilha de 8 MB do Linux. Defesas: **mediana de três** como pivô e
-> recursão só no lado **menor** (no máximo `log₂ n` níveis).
-
-> [!NOTE]
-> **Pergunta para você:** o quick sort é estável? Pense em `3a 3b 1` (dois 3
-> iguais, `a` chegou antes de `b`) quando o pivô é o 1. Faça a separação à mão
-> antes de ler o assunto 0096.
-
-{{pratique}}

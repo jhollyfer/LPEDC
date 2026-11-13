@@ -1,26 +1,32 @@
 ## 0090 · Busca binária
 
-No jogo "pensei num número de 1 a 100", quem chuta 1, 2, 3... pode precisar de
-100 tentativas. Quem chuta 50, ouve "menor", chuta 25 e assim por diante,
-acerta em no máximo 7.
+- **Busca binária**: num vetor **ordenado**, olha a gaveta do meio. Se tem a
+  chave, acabou; se a chave é maior, descarta a esquerda; se é menor,
+  descarta a direita. Cada pergunta joga fora metade do que sobrou
+  (ZIVIANI, 2010, cap. 5).
+- **Invariante** (0073): "se `x` está no vetor, está em `v[ini..fim]`", com
+  os dois extremos inclusive. Quando `ini` passa de `fim`, o intervalo está
+  vazio e a resposta é `-1` (FEOFILOFF, 2009).
+- **Custo**: com 15 elementos sobram 15, 7, 3, 1, no máximo 4 voltas; com um
+  milhão, 20. Pior caso ⌊log₂ n⌋ + 1 voltas, **O(log n)** (0072)
+  (ZIVIANI, 2010, cap. 5).
+- **Pré-condição**: o vetor tem de estar ordenado. Num vetor bagunçado, a
+  busca responde errado sem avisar (FEOFILOFF, 2009).
+- **Meio sem overflow**: `ini + (fim - ini) / 2`. Com `(ini + fim) / 2`, a
+  soma passa de `INT_MAX` em vetores enormes, bug que ficou anos escondido em
+  bibliotecas (BLOCH, 2006).
 
-A **busca binária** é esse jogo num vetor **ordenado**. Olhe a gaveta do meio:
-se ela tem a chave, acabou; se a chave é maior, descarte a esquerda; se é
-menor, descarte a direita. Cada pergunta joga fora metade do que sobrou.
+> [!WARNING]
+> Busca binária é famosa por erros de um. Com o intervalo fechado `[ini, fim]`,
+> `while (ini < fim)` deixa de olhar o último candidato e `fim = meio` pode
+> nunca encolher. Escolha um estilo (fechado ou semiaberto `[ini, fim)`) e
+> siga as regras dele.
 
-O código guarda o pedaço que ainda pode ter a chave entre `ini` e `fim` (os
-dois inclusive). É um **invariante** (assunto 0073): "se `x` está no vetor,
-está em `v[ini..fim]`". Quando `ini` passa de `fim`, o intervalo está vazio e a
-resposta é `-1`.
-
-Com 15 elementos sobram 15, 7, 3, 1: no máximo **4** voltas. Com um milhão, 20.
-É o **O(log n)** do assunto 0072: quando `n` dobra, a busca ganha uma volta. O
-pior caso é ⌊log₂ n⌋ + 1 voltas. A pré-condição é o preço: num vetor
-bagunçado, a busca responde errado sem avisar.
+{{exemplo}}
 
 O catálogo do atacadão tem 15 códigos em ordem e você procura o 216. O meio
-(índice 7) tem 189, menor: a esquerda fica cinza. O novo meio (11) tem 245,
-maior: a direita sai. Na terceira volta, o meio (9) é o 216:
+(índice 7) tem 189, menor: a esquerda sai. O novo meio (11) tem 245, maior: a
+direita sai. Na terceira volta, o meio (9) é o 216:
 
 {{ideia}}
 
@@ -90,27 +96,9 @@ A busca por 150, que não está no catálogo:
 | 4 | 4 | 4 | 4 | 152 | 152 > 150: `fim = 3` |
 | fim | 4 | 3 | | | `ini > fim`: devolve `-1` |
 
-O `ini = 4` final é a posição em que o 150 **deveria** entrar para manter a
-ordem (exemplo A180).
+O `ini = 4` final é a posição em que o 150 **deveria** entrar (exemplo A180).
 
-O fluxograma tem três perguntas por volta, e a volta mexe em `ini` **ou** em
-`fim`, nunca nos dois:
+Três perguntas por volta, e cada volta mexe em `ini` **ou** em `fim`, nunca
+nos dois:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Busca binária é famosa por erros de um. Com o intervalo fechado `[ini, fim]`,
-> `while (ini < fim)` deixa de olhar o último candidato e `fim = meio` pode
-> nunca encolher. Escolha um estilo (fechado, como acima, ou semiaberto
-> `[ini, fim)`, como no A180) e siga as regras dele.
-
-> [!TIP]
-> Use `ini + (fim - ini) / 2`, e não `(ini + fim) / 2`: com mais de 1 bilhão de
-> elementos, `ini + fim` passa de `INT_MAX` e causa **overflow**.
-
-> [!NOTE]
-> **Pergunta para você:** quantas voltas o código dá para achar o 103, o
-> primeiro do catálogo? E qual é o máximo de voltas para 1000 elementos? Faça o
-> teste de mesa antes de executar.
-
-{{pratique}}

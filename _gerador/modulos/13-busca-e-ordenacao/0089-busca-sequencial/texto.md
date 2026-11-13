@@ -1,29 +1,28 @@
 ## 0089 · Busca sequencial
 
-Você passa a carteirinha na catraca da academia e ela responde "liberado" ou
-"bloqueado": o sistema procurou a sua matrícula numa lista de alunos ativos.
+- **Busca sequencial** (ou **linear**): olha a primeira posição, depois a
+  segunda, até achar ou acabar o vetor. Não exige ordem (ZIVIANI, 2010,
+  cap. 5).
+- **Chave**: o valor procurado. A função devolve o **índice** em que achou
+  ou `-1`, que nunca é índice válido. O tamanho vai como parâmetro porque o
+  vetor do C não o guarda (DEITEL; DEITEL, 2011, cap. 6).
+- **Custo**: conta-se o número de **comparações** com a chave. Melhor caso,
+  1 (a chave na posição 0); pior caso, `n` (no fim ou ausente: "não tem" exige
+  olhar todos); caso médio, `(n + 1) / 2` (ZIVIANI, 2010, cap. 5).
+- **O(n)** (0072): dobrou o tamanho, dobra o tempo no pior caso
+  (FEOFILOFF, 2009).
+- **Sentinela**: copia a chave para uma gaveta extra no fim, e o laço deixa
+  de testar `i < n`: uma pergunta a menos por volta (ZIVIANI, 2010, cap. 5).
 
-A **busca sequencial** (ou **busca linear**) olha a primeira posição, depois a
-segunda, e assim por diante, até achar ou acabar o vetor. Não exige ordem.
+> [!WARNING]
+> Com `if (v[i] == x) return i; else return -1;` dentro do laço, a função olha
+> só o primeiro elemento e desiste. "Não achei" só vale **depois** do laço.
 
-A função recebe o vetor, o tamanho e o valor procurado (a **chave**) e devolve
-o **índice** em que achou. Se não achou, devolve `-1`, que nunca é um índice
-válido. O tamanho vai como parâmetro porque o vetor do C não o guarda.
+{{exemplo}}
 
-O custo é o número de **comparações** com a chave:
-
-- **melhor caso**: a chave está na posição 0. Uma comparação.
-- **pior caso**: a chave está no fim ou não está no vetor. São `n`
-  comparações, porque responder "não tem" exige olhar **todos**.
-- **caso médio** (chave presente, em posição sorteada): `(n + 1) / 2`
-  comparações.
-
-No assunto 0072, isso é **O(n)**: dobrou o número de alunos, dobrou o tempo
-no pior caso.
-
-A academia tem 6 alunos ativos e a catraca procura a matrícula 1290. Ela
-compara com 4172, 3305 e 8821 (diferentes, em amarelo) e acha na quarta gaveta,
-a de índice 3. As duas últimas nem são olhadas:
+A catraca da academia procura a matrícula 1290 entre 6 alunos ativos. Compara
+com 4172, 3305 e 8821 (amarelo) e acha na gaveta de índice 3; as duas últimas
+nem são olhadas:
 
 {{ideia}}
 
@@ -74,26 +73,9 @@ Teste de mesa da busca por 1290, uma linha por volta do laço:
 | 4 | 5567 | | | cinza (nem olhada) |
 | 5 | 7034 | | | cinza |
 
-Para 9999, as 6 linhas seriam "não" e a função só devolve `-1` depois da
-última.
+Para 9999, as 6 linhas seriam "não" e o `-1` só sai depois da última.
 
-O fluxograma faz duas perguntas por volta: `i < n?` protege o vetor e
-`v[i] == x?` é a busca de fato. O caminho verde dá a volta três vezes antes de
-sair pelo Sim:
+Duas perguntas por volta: `i < n?` protege o vetor e `v[i] == x?` é a busca.
+O caminho dá a volta três vezes antes de sair pelo Sim:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Com `if (v[i] == x) return i; else return -1;` dentro do laço, a função olha
-> só o primeiro elemento e desiste. "Não achei" só vale **depois** do laço.
-
-> [!TIP]
-> A **sentinela** copia a chave para uma gaveta extra no fim do vetor, e o laço
-> deixa de testar `i < n`: uma pergunta a menos por volta (exemplo A178).
-
-> [!NOTE]
-> **Pergunta para você:** se a matrícula 3305 aparecesse nas posições 1 e 4,
-> qual posição a função devolveria? E quantas comparações ela faria para achar
-> 7034? O exemplo A177 mostra como achar todas as ocorrências.
-
-{{pratique}}

@@ -1,21 +1,31 @@
 ## 0096 · Comparando: estabilidade, custo e qsort
 
-A planilha de pedidos vem em ordem de horário, e a logística pede: "agrupa por
-cidade, mas mantém a ordem de chegada dentro de cada cidade". Qual algoritmo
-usar? Precisa escrever um?
+- **Estável**: elementos com chave **igual** saem na ordem relativa em que
+  entraram. Com `int` não importa; com structs, sim (FEOFILOFF, 2009).
+- **Outros critérios**: **custo** no melhor, médio e pior caso; **memória
+  extra**, **in-place** (O(1)) ou rascunho O(n); **adaptativo**, mais rápido
+  com o vetor quase em ordem (ZIVIANI, 2010, cap. 4).
+- **Não há o melhor de todos**: insertion ganha em vetores pequenos ou quase
+  ordenados; merge garante n log n e estabilidade, com memória; quick é o
+  mais rápido na média, mas tem pior caso O(n²); selection faz o mínimo de
+  trocas (FEOFILOFF, 2009).
+- **`qsort`** da `stdlib.h`: ordenação genérica com ponteiro para função
+  (0050). Não conhece o tipo, por isso o `void *` e o `tamanho`
+  (KERNIGHAN; RITCHIE, 1989).
 
-Um algoritmo de ordenação é **estável** quando elementos com chave **igual**
-saem na ordem relativa em que entraram. Se três pedidos de Recife chegaram como
-R1, R3, R6, um algoritmo estável devolve R1, R3, R6; um instável pode
-devolver R3, R1, R6. Com `int` isso não importa; com structs, importa.
+```text
+void qsort(void *base, size_t n, size_t tamanho,
+           int (*compara)(const void *, const void *));
+```
 
-Outros critérios:
-
-- **custo** no melhor, no médio e no pior caso (o pior derruba o sistema);
-- **memória extra**: **in-place** (O(1) a mais) ou rascunho O(n);
-- **adaptativo**: fica mais rápido com o vetor quase em ordem.
-
-Resumo do módulo:
+- **Função de comparação**: devolve **negativo** se o primeiro vem antes,
+  **zero** se empatam e **positivo** se vem depois, como o `strcmp`
+  (CPPREFERENCE, s.d.).
+- **Estabilidade do `qsort`**: a norma não promete. Se a ordem dos empatados
+  importa, ponha o desempate na função: uma **chave composta** (0180)
+  (LINUX MAN-PAGES, s.d.).
+- **`bsearch`**: busca binária da `stdlib.h` num vetor ordenado pela mesma
+  função de comparação (CELES; RANGEL, 2002).
 
 | Algoritmo | Melhor | Médio | Pior | Memória extra | Estável |
 | --- | --- | --- | --- | --- | --- |
@@ -26,32 +36,20 @@ Resumo do módulo:
 | quick | O(n log n) | O(n log n) | O(n²) | O(log n) a O(n) de pilha | não |
 | heap (assunto 0103) | O(n log n) | O(n log n) | O(n log n) | O(1) | não |
 
-Não existe o melhor de todos. O insertion ganha em vetores pequenos ou quase
-ordenados. O merge garante n log n e estabilidade, ao custo de memória. O quick
-é o mais rápido na média, mas tem pior caso O(n²) e não é estável. O selection
-faz o mínimo de trocas.
+> [!WARNING]
+> `return *(const int *) a - *(const int *) b;` passa nos testes pequenos,
+> mas com sinais opostos e valores grandes (`INT_MAX` e `-5`) a subtração dá
+> **overflow**. Escreva `return (x > y) - (x < y);`.
 
-Na prática, use o **`qsort`** da `stdlib.h`, genérico (assunto 0050, ponteiro
-para função):
+{{exemplo}}
 
-```text
-void qsort(void *base, size_t n, size_t tamanho,
-           int (*compara)(const void *, const void *));
-```
-
-O `qsort` não conhece o tipo dos elementos (por isso o `void *` e o
-`tamanho`). A sua `compara` recebe dois ponteiros e devolve **negativo** se o
-primeiro vem antes, **zero** se empatam e **positivo** se vem depois, como o
-`strcmp`.
-
-Por cidade, um algoritmo estável (insertion, merge) mantém R1, R3, R6. O
+A planilha de pedidos vem em ordem de horário, e a logística quer agrupar por
+cidade mantendo a ordem de chegada. Um algoritmo estável mantém R1, R3, R6; o
 selection, com trocas de longa distância, entrega R3 antes de R1:
 
 {{ideia}}
 
-A norma **não promete** que o `qsort` é estável. Se a ordem dos empatados
-importa, ponha o desempate na `compara`: cidade primeiro, horário depois. Isso
-é uma **chave composta**; a **chave simples** é um campo só (assunto 0180).
+O desempate pelo horário vai na `compara`, e o `qsort` resolve:
 
 ```c
 #include <stdio.h>
@@ -115,26 +113,11 @@ O exemplo A192 roda os cinco algoritmos com 1000 números:
 | merge | 8.696 | 4.932 | 5.044 |
 | quick (pivô no fim) | 10.972 | 499.500 | 499.500 |
 
-No aleatório, os O(n log n) fazem umas 50 vezes menos trabalho. No ordenado, o
-bubble e o insertion fazem uma passada só e o quick com pivô no fim cai no pior
-caso. O selection não percebe diferença.
+No aleatório, os O(n log n) fazem umas 50 vezes menos trabalho. No ordenado,
+bubble e insertion fazem uma passada e o quick com pivô no fim cai no pior
+caso.
 
-O caminho marcado no fluxograma é o deste exemplo: a ordem de chegada cabe
-como desempate na `compara`, então `qsort` resolve:
+A ordem de chegada cabe como desempate na `compara`, então o caminho termina
+no `qsort`:
 
 {{fluxograma}}
-
-> [!WARNING]
-> `return *(const int *) a - *(const int *) b;` passa nos testes pequenos, mas
-> com sinais opostos e valores grandes (`INT_MAX` e `-5`) a subtração dá
-> **overflow** e a ordem sai errada. Escreva `return (x > y) - (x < y);`.
-
-> [!TIP]
-> A norma não diz qual algoritmo o `qsort` usa: não conte com estabilidade. Para
-> buscar num vetor ordenado pela `compara`, use a **`bsearch`**, da `stdlib.h`.
-
-> [!NOTE]
-> **Pergunta para você:** se a `compara` só comparasse a cidade, a saída seria
-> sempre igual? Em que ordem você esperaria os três pedidos de Recife?
-
-{{pratique}}

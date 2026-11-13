@@ -1,35 +1,36 @@
 ## 0094 · Merge sort
 
-Duas monitoras entregam pilhas de provas, cada uma já em ordem de nota. Para
-montar uma pilha só, você olha o topo das duas, pega a menor nota e repete.
-Quando uma acaba, a outra vai inteira para o fim.
+- **Intercalação** (*merge*): juntar duas sequências ordenadas numa só,
+  olhando o primeiro de cada e tirando o menor. Juntar `n` elementos custa no
+  máximo `n - 1` comparações (FEOFILOFF, 2009).
+- **Merge sort** (ordenação por intercalação): **divide** o vetor ao meio,
+  **ordena** cada metade com o próprio merge sort (recursão, 0032) e
+  **intercala** as duas (CORMEN et al., 2024, cap. 2).
+- **Dividir e conquistar**: quebrar o problema em pedaços menores do mesmo
+  tipo, resolver cada um e combinar (CORMEN et al., 2024, cap. 2).
+- **Caso base e intervalo**: pedaço de 0 ou 1 elemento. O código usa o
+  intervalo **semiaberto** `[p, r)`: metades `[p, q)` e `[q, r)` sem repetir
+  ninguém. O Cormen usa o fechado `A[p..r]` (FEOFILOFF, 2009).
+- **Custo**: `log₂ n` níveis, e em cada nível as intercalações passam pelos
+  `n` elementos: **O(n log n)** em **todos** os casos. O preço é um vetor
+  auxiliar (o **rascunho**), **O(n)** de memória (ZIVIANI, 2010, cap. 4).
+- **Estável**: o `<=` da intercalação pega o da esquerda no empate
+  (FEOFILOFF, 2009).
 
-Juntar duas sequências ordenadas numa só é a **intercalação** (*merge*). Cada
-comparação manda **um** elemento para o resultado, então juntar `n` elementos
-custa no máximo `n - 1` comparações (exemplo A188).
+> [!WARNING]
+> Com o intervalo semiaberto, o caso base é `r - p < 2`. Com
+> `if (p >= r) return;`, um pedaço de 1 elemento passa direto e a chamada
+> recebe o mesmo pedaço para sempre: **estouro de pilha**.
 
-O **merge sort** (ordenação por intercalação) usa **dividir e conquistar**:
+{{exemplo}}
 
-1. **divida** o vetor ao meio;
-2. **ordene** cada metade, com o próprio merge sort (recursão, assunto 0032);
-3. **intercale** as duas metades ordenadas.
-
-O caso base é o pedaço com 0 ou 1 elemento. O código usa o intervalo
-**semiaberto** `[p, r)`: o pedaço tem `r - p` elementos e as metades `[p, q)`
-e `[q, r)` se encaixam sem repetir ninguém. O Cormen usa o intervalo fechado
-`A[p..r]`: muda a conta dos índices, não o algoritmo.
-
-Dividir ao meio dá `log₂ n` níveis (8 elementos: 3 níveis), e em **cada**
-nível as intercalações passam pelos `n` elementos: **O(n log n)** em **todos**
-os casos. O preço é um vetor auxiliar (o **rascunho**): **O(n)** de memória
-extra.
-
-As notas descem divididas até pedaços de 1 e sobem intercaladas (verde):
+Duas monitoras entregam pilhas de provas, cada uma em ordem de nota. As 8
+notas descem divididas até pedaços de 1 e sobem intercaladas (verde):
 
 {{ideia}}
 
 O rascunho `w` é alocado **uma vez** no `main` e serve a todas as
-intercalações:
+intercalações; a recursão termina a metade esquerda antes da direita (0031):
 
 ```c
 #include <stdio.h>
@@ -93,9 +94,6 @@ int main(void) {
 // 17 comparações
 ```
 
-A recursão termina a metade esquerda (`[0, 4)`) antes da direita (assunto
-0031).
-
 ### Passo a passo
 
 A última intercalação, `7 18 33 52` com `12 26 41 60`. `i` anda na esquerda,
@@ -112,26 +110,9 @@ A última intercalação, `7 18 33 52` com `12 26 41 60`. `i` anda na esquerda,
 | 7 | 52 | 60 | 52 (esquerda) | ... 41 52 |
 | | (esquerda acabou) | 60 | 60, sem comparar | ... 52 60 |
 
-Sete comparações para 8 elementos, o máximo (`n - 1`). Somando os níveis:
-4 + 6 + 7 = **17 comparações**. No fluxograma, cada caixa `merge_sort` repete
-o fluxograma inteiro para uma metade:
+Sete comparações para 8 elementos, o máximo. Somando os níveis:
+4 + 6 + 7 = **17 comparações**.
+
+Cada caixa `merge_sort` repete o fluxograma inteiro para uma metade:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Com o intervalo semiaberto, o caso base é `r - p < 2`. Com
-> `if (p >= r) return;`, um pedaço de 1 elemento passa direto e
-> `merge_sort(v, w, q, r)` recebe o mesmo pedaço para sempre: **estouro de
-> pilha**. Misturar intervalo fechado e semiaberto dá o mesmo erro.
-
-> [!TIP]
-> O `<=` da intercalação pega o da **esquerda** em caso de empate: o merge
-> sort é **estável**. A memória que pesa é o rascunho (1 milhão de `int` são
-> 4 MB).
-
-> [!NOTE]
-> **Pergunta para você:** quantas comparações o código faria com as notas já em
-> ordem, `7 12 18 26 33 41 52 60`? Pense na intercalação em que a metade
-> esquerda inteira é menor que a direita.
-
-{{pratique}}

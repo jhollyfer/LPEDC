@@ -1,13 +1,9 @@
 # Módulo 13 · Busca e ordenação
 
-Procurar e ordenar estão em toda lista de contatos, extrato bancário e busca
-de loja virtual. Aqui você abre essas caixas pretas: a busca binária acha um
-item entre um milhão em 20 passos, e a comparação `a - b` pode dar errado no C.
-
-**Progressão.** O módulo usa vetores, ponteiros, recursão, `malloc` e structs
-dos módulos anteriores e o Big-O do módulo 10: em cada algoritmo você **conta
-comparações e trocas** e confere a teoria. O módulo 14 troca o vetor por
-árvores: a busca binária vira BST e o heapsort fecha as ordenações.
+Busca sequencial e binária, os três métodos O(n²) e os dois O(n log n), com
+`qsort` e `bsearch`. Em cada algoritmo você **conta comparações e trocas**.
+Depende de vetores, ponteiros, recursão, `malloc`, structs e do Big-O do
+módulo 10; o 14 leva a busca binária para a árvore.
 
 ## O que você vai aprender
 
@@ -25,12 +21,9 @@ a gaveta comparada (ou o menor achado), **roxa** é a posição ou o pivô da ve
 **verde** já está no lugar e **cinza** foi descartada. Faça o **Passo a passo**
 no papel antes de conferir a tabela.
 
-O contador de comparações (`static` ou ponteiro) não faz parte do algoritmo:
-é o cronômetro do custo. O tempo de relógio varia de máquina para máquina; o
-número de comparações, não.
-
-Compile com o gcc e as flags de estudo: o AddressSanitizer e o UBSan param o
-programa nos erros de índice e de overflow.
+O contador de comparações não faz parte do algoritmo: mede o custo, que não
+muda de máquina para máquina. Compile com as flags de estudo: o
+AddressSanitizer e o UBSan param o programa nos erros de índice e de overflow.
 
 {{indice}}
 
