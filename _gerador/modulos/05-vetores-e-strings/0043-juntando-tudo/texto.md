@@ -1,34 +1,35 @@
 ## 0043 · Juntando tudo
 
-A escola do bairro abriu uma enquete para o mascote da festa junina: arara,
-boto ou capivara. Os votos chegam um por linha, como cada pessoa digitou:
-`boto`, `Arara`, `CAPIVARA`, `Tatu`... Você precisa contar, desenhar um
-gráfico de barras e anunciar o vencedor.
+- **Laço de leitura com `fgets`**: lê uma linha por vez até devolver `NULL`;
+  é um laço com sentinela (assunto 0025) (LINUX MAN-PAGES PROJECT, s.d.).
+- **Normalizar**: `strcspn` tira o `'\n'` e `tolower` iguala "BOTO" e "boto";
+  o `(unsigned char)` protege contra acento (DEITEL; DEITEL, 2011, cap. 8).
+- **Matriz de `char`**: os nomes dos candidatos, um por linha;
+  `nomes[i]` fica em início + i × 12, por isso `[TAM_NOME]` no parâmetro
+  (BACKES, 2013, cap. 9).
+- **Vetor de contadores**: `votos[i]` conta os votos do candidato `i`, na
+  mesma posição do nome na matriz (DEITEL; DEITEL, 2011, cap. 6).
+- **Busca que devolve -1**: `buscar` devolve a posição ou -1, e o voto
+  inválido cai fora sem `if` especial (BACKES, 2013, cap. 9).
+- **Trocar strings**: como não se atribui com `=`, trocar dois nomes é um
+  `strcpy` triplo com uma auxiliar; o A086 ordena uma lista assim (KERNIGHAN;
+  RITCHIE, 1989, cap. 5).
 
-O problema usa o módulo inteiro:
+> [!WARNING]
+> **Empate**: com `>`, ganha quem aparece primeiro na matriz; com `>=`, o
+> último. Decida de propósito. E `"boto "`, com espaço no fim, é inválido:
+> `normalizar` não corta espaços.
 
-- **`fgets` num laço** (0042) lê um voto por linha até devolver `NULL`;
-- **caracteres** (0040): `tolower` iguala "BOTO" e "boto";
-- **strings** (0041): `strcspn` tira o `'\n'` e `strcmp` compara o voto com
-  cada candidato;
-- **matriz de `char`** (0039): os nomes dos candidatos, um por linha;
-- **vetor de contadores** (0037): `votos[i]` conta os votos do candidato `i`,
-  na mesma posição do nome na matriz;
-- **funções que recebem vetores** (0038): `normalizar` altera a linha lida,
-  `buscar` só lê.
+{{exemplo}}
 
-O `main` cuida do laço e do resultado; cada função faz uma coisa só. `buscar`
-devolve a posição ou -1, como no A076, e assim "Tatu" cai nos inválidos sem
-`if` especial. O `(unsigned char)` no `tolower` protege contra votos com acento
-(assunto 0040).
-
-Cada linha passa pela mesma esteira: lê, normaliza, procura na matriz de nomes
-e soma 1 no contador. "Tatu" não está na matriz e vai para os inválidos:
+A enquete do mascote da festa junina: arara, boto ou capivara. Cada linha lida
+passa pela mesma esteira: normaliza, procura na matriz e soma 1. "Tatu" vai
+para os inválidos:
 
 {{ideia}}
 
-Para testar sem digitar, salve o código num `.c`, compile com o gcc e mande os
-votos com `printf 'boto\nArara\n...' | ./programa`:
+Para testar sem digitar, mande os votos com
+`printf 'boto\nArara\n...' | ./programa`:
 
 ```c
 #include <stdio.h>
@@ -102,33 +103,7 @@ int main(void) {
 // Vencedor: boto
 ```
 
-É um laço com sentinela (assunto 0025), e a sentinela é o `NULL` do `fgets`.
-Dentro dele, uma decisão: achou o candidato ou não. O resultado só sai quando a
-entrada acaba:
+Dentro do laço há uma decisão: achou o candidato ou não. O resultado só sai
+quando a entrada acaba:
 
 {{fluxograma}}
-
-Para ordenar os nomes em ordem alfabética, como string não se atribui com `=`,
-trocar dois nomes é um `strcpy` triplo, com uma string auxiliar. O exemplo A086
-ordena uma lista de chamada assim, prévia da ordenação por seleção (assunto
-0092).
-
-> [!WARNING]
-> **Empate.** Com `votos[i] > votos[vencedor]`, o empate fica com quem aparece
-> primeiro na matriz; com `>=`, com o último. É uma regra de negócio escondida
-> no operador: decida de propósito. E `"boto "`, com espaço no fim, é inválido
-> para o `strcmp`: `normalizar` não corta espaços.
-
-> [!TIP]
-> **Por dentro do C:** `char nomes[3][12]` são 36 bytes contínuos; "arara"
-> usa 6 da linha 0 e o resto da linha é zero. `nomes[i]` fica em início +
-> i × 12, e é essa conta que exige `[TAM_NOME]` no parâmetro de `buscar`. Nomes
-> de tamanhos muito diferentes desperdiçam espaço; no módulo 07, a memória
-> dinâmica guarda cada nome com o tamanho exato.
-
-> [!NOTE]
-> **Pergunta para você:** se a entrada tivesse uma linha em branco no meio, o
-> que aconteceria com ela? E se um voto tivesse 50 letras, maior que o
-> `linha[40]`? Pense no que o `fgets` faz com o resto da linha.
-
-{{pratique}}

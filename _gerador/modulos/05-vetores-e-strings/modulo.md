@@ -1,14 +1,8 @@
 # Módulo 05 · Vetores, matrizes e strings
 
-Até aqui, cada variável guardava um valor. Para as notas de uma turma ou os
-passos de um mês, seriam dezenas de variáveis. Este módulo traz a primeira
-**estrutura de dados** do curso: o **vetor**, várias variáveis do mesmo tipo
-com um nome só, lado a lado na memória.
-
-No C, o vetor é um bloco de bytes: tamanho fixo, sem `length`, sem conferência
-de índice. Por isso é rápido: a posição 999 custa o mesmo que a 0. O C também
-não tem tipo string: uma string é um vetor de `char` que termina no byte zero,
-o `'\0'`, detalhe por trás de muitas falhas de segurança.
+A primeira estrutura de dados do curso: o **vetor**, e com ele matrizes,
+caracteres e strings (vetor de `char` terminado em `'\0'`). Depende dos laços
+e das funções dos módulos 03 e 04 e prepara o 06, de ponteiros.
 
 ## O que você vai aprender
 
@@ -21,18 +15,13 @@ o `'\0'`, detalhe por trás de muitas falhas de segurança.
 
 ## Antes de começar
 
-Este módulo usa os laços (inclusive aninhados), os padrões contador,
-acumulador e maior/menor, e as funções com parâmetros dos módulos anteriores.
-Ele prepara o módulo 06: quando o texto disser "vai o endereço do vetor",
-guarde a ideia, que lá ganha sintaxe. Ponteiros ainda não apareceram.
+Nos desenhos, o índice de cada gaveta fica embaixo, em cinza. Ponteiros ainda
+não aparecem: quando o texto disser "vai o endereço do vetor", guarde a ideia
+para o módulo 06.
 
-Nos desenhos, o índice de cada gaveta fica embaixo, em cinza. Ao rodar, mude
-um tamanho ou um índice de propósito.
-
-O **AddressSanitizer** do gcc, ativo nas flags de estudo, confere o que o C
-não confere: índice e tamanho de string. Diante de `stack-buffer-overflow` ou
-`index out of bounds`, leia a linha indicada: quase sempre é um `<=` no lugar
-de `<` ou um `'\0'` sem lugar.
+O **AddressSanitizer**, ativo nas flags de estudo, confere índice e tamanho de
+string. Diante de `stack-buffer-overflow`, leia a linha indicada: quase sempre
+é um `<=` no lugar de `<` ou um `'\0'` sem lugar.
 
 {{indice}}
 

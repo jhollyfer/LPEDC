@@ -1,14 +1,21 @@
 ## 0040 · Caracteres
 
-No app do Detran, você digita a placa em minúsculas, `bra2e19`, e ele mostra
-`BRA2E19` e confirma o formato: três letras, um número, uma letra, dois
-números. Como o programa sabe que `b` é letra, que `2` é dígito e qual é a
-maiúscula de `b`?
-
-Porque, para o computador, **caractere é número**. O `char` é um inteiro de
-1 byte, e cada símbolo tem um código na **tabela ASCII**: `'A'` é 65, `'B'` é
-66, `'a'` é 97, `'0'` é 48, o espaço é 32, o `'\n'` é 10. As aspas simples só
-escrevem o número de forma legível: `'A'` e `65` são o mesmo valor.
+- **Caractere é número**: o `char` é um inteiro de 1 byte, e cada símbolo tem
+  um código na **tabela ASCII**. `'A'` e `65` são o mesmo valor (DEITEL;
+  DEITEL, 2011, cap. 8).
+- **`%c` e `%d`**: o `printf` mostra o símbolo ou o código. Como é número, dá
+  para calcular: `'a' + 1` é `'b'` e `c - '0'` transforma `'7'` em 7 (BACKES,
+  2013, cap. 7).
+- **`<ctype.h>`**: testes (`isalpha`, `isdigit`, `isalnum`, `isspace`,
+  `isupper`, `islower`, `ispunct`) e conversões (`toupper`, `tolower`). O que
+  não é letra volta igual (DEITEL; DEITEL, 2011, cap. 8).
+- **Verdadeiro é não zero**: os testes não devolvem necessariamente 1.
+  Escreva `if (isdigit(c))`, nunca `== 1` (LINUX MAN-PAGES PROJECT, s.d.).
+- **`getchar()`**: lê um caractere e devolve um **`int`**, o código ou
+  **`EOF`** (negativo, fim da entrada). Guarde num `int` (DEITEL; DEITEL, 2011,
+  cap. 8).
+- **Acento**: o "ç" em UTF-8 ocupa dois bytes e não cabe num `char`. Para o
+  `ctype.h`, use `toupper((unsigned char) c)` (CPPREFERENCE, s.d.).
 
 | símbolos | códigos | repare |
 | --- | --- | --- |
@@ -16,32 +23,16 @@ escrevem o número de forma legível: `'A'` e `65` são o mesmo valor.
 | `'A'` a `'Z'` | 65 a 90 | em ordem alfabética |
 | `'a'` a `'z'` | 97 a 122 | cada minúscula = maiúscula + 32 |
 
-O `printf` decide o que você vê: `%c` mostra o símbolo, `%d` o código. Como é
-número, dá para calcular e comparar: `'a' + 1` é `'b'`, `c >= 'A' && c <= 'Z'`
-pergunta se é maiúscula, e `c - '0'` transforma o dígito `'7'` no número 7.
+> [!WARNING]
+> Letra não é "tudo entre `'A'` e `'z'`": no meio ficam `[ \ ] ^ _` e a crase.
+> Use `isalpha(c)`. E `'0'` (código 48) não é `0` (o caractere nulo `'\0'`).
 
-O `<ctype.h>` traz funções prontas:
+{{exemplo}}
 
-- **testes**: `isalpha` (letra), `isdigit` (dígito), `isalnum` (letra ou
-  dígito), `isspace` (espaço, `\t`, `\n`...), `isupper`, `islower`, `ispunct`;
-- **conversões**: `toupper` e `tolower`. O que não é letra volta igual:
-  `toupper('2')` é `'2'`.
-
-Os testes devolvem **diferente de zero** para verdadeiro, não necessariamente
-1. Escreva `if (isdigit(c))`, nunca `if (isdigit(c) == 1)`.
-
-O `getchar()` lê um caractere do teclado e devolve um **`int`**: o código ou
-**`EOF`**, valor negativo que avisa que a entrada acabou (Ctrl+D no Linux).
-Guarde sempre num `int`. O exemplo A080 conta letras e dígitos assim, até o
-Enter.
-
-No exemplo, a placa é um vetor de 7 `char`. O `toupper` troca cada minúscula
-pela maiúscula, 32 posições antes na tabela. Os dígitos passam sem mudar:
+A placa `bra2e19` vira `BRA2E19`: o `toupper` troca cada minúscula pela
+maiúscula, 32 posições antes na tabela, e os dígitos passam sem mudar:
 
 {{ideia}}
-
-O código mostra cada caractere com `%c` e `%d`, antes e depois, e confere o
-formato com `isdigit` e `isalpha`:
 
 ```c
 #include <stdio.h>
@@ -88,29 +79,7 @@ int main(void) {
 // Placa: BRA2E19 -> válida
 ```
 
-O `putchar` mostra um caractere sem formatação. O vetor `placa` ainda não é
-uma **string**: falta o marcador de fim que o `%s` exige (próximo assunto).
-
-A cada posição, o programa converte e confere o que ela deveria ser. Uma
-posição errada invalida a placa, mas o laço segue até o fim:
+O vetor `placa` ainda não é string: falta o marcador de fim (próximo assunto).
+Uma posição errada invalida a placa, mas o laço segue até o fim:
 
 {{fluxograma}}
-
-> [!WARNING]
-> **Letra não é "tudo entre `'A'` e `'z'`".** Entre o `'Z'` (90) e o `'a'`
-> (97) ficam `[ \ ] ^ _` e a crase, então `c >= 'A' && c <= 'z'` aceita `_`
-> como letra. Use `isalpha(c)`. E não confunda `'0'` (o caractere zero, código
-> 48) com `0` (o número zero, igual ao caractere nulo `'\0'`).
-
-> [!TIP]
-> **Por dentro do C:** o C não garante se o `char` tem sinal (no x86 vai de
-> -128 a 127). O "ç" em UTF-8 ocupa **dois** bytes (`0xC3 0xA7`) e não cabe num
-> `char`; com sinal, eles viram negativos, e passar um negativo (que não seja
-> `EOF`) ao `ctype.h` é comportamento indefinido. O jeito seguro é
-> `toupper((unsigned char) c)`.
-
-> [!NOTE]
-> **Pergunta para você:** o que `printf("%c %d\n", 'A' + 2, 'z' - 'a');`
-> mostra? E `printf("%d\n", '9' - '0' + 1);`?
-
-{{pratique}}

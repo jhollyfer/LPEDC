@@ -1,40 +1,37 @@
 ## 0038 · Vetores e funções
 
-A lanchonete da esquina vai reajustar o cardápio em 10%. A coxinha de R$ 12,50
-passa a R$ 13,75, o suco de R$ 8,00 vai para R$ 8,80. Você escreve a função
-`reajustar` e passa o vetor de preços. Ela mexe nos preços do `main` ou numa
-cópia?
-
-No assunto 0029, o C passa argumentos **por valor**: a função recebe uma cópia.
-Com vetor é diferente: **a função mexe no vetor original**. O C nunca copia um
-vetor inteiro para a função. Vai **o endereço onde o vetor começa**, e a função
-escreve nas mesmas gavetas.
-
-No parâmetro, os colchetes ficam vazios. Na chamada, vai só o nome:
+- **Vetor como argumento**: o C não copia o vetor; passa **o endereço onde ele
+  começa**. Por isso a função mexe no vetor original (DEITEL; DEITEL, 2011,
+  cap. 6).
+- **Sintaxe**: no parâmetro, colchetes vazios (`double precos[]`); na chamada,
+  só o nome (`cardapio`). Um número dentro dos colchetes do parâmetro é
+  ignorado (BACKES, 2013, cap. 9).
+- **Tamanho junto**: só o endereço chega, então o tamanho vai num parâmetro à
+  parte. Vetor + tamanho é um par do curso inteiro (BACKES, 2013, cap. 9).
+- **`const`**: `const double precos[]` promete só ler; escrever nele é erro de
+  compilação (DEITEL; DEITEL, 2011, cap. 6).
+- **Elemento sozinho**: `cardapio[0]` vai por valor, como qualquer `double`
+  (DEITEL; DEITEL, 2011, cap. 6).
+- **Custo**: passar um vetor custa um endereço (8 bytes), tenha ele 4 itens ou
+  um milhão. No módulo 06 esse endereço vira **ponteiro** (KERNIGHAN; RITCHIE,
+  1989, cap. 5).
 
 ```c
 void reajustar(double precos[], int n, double percentual); // protótipo
 reajustar(cardapio, 4, 10);                                // chamada
 ```
 
-Por isso o `int n`: como só o endereço chega, **o tamanho não vai junto** e a
-função não tem como descobri-lo. Vetor + tamanho é um par que aparece no curso
-inteiro.
+> [!WARNING]
+> **`sizeof` dentro da função não dá o tamanho do vetor.** Em `reajustar`,
+> `sizeof(precos)` vale 8, o tamanho de um endereço. O gcc avisa
+> (`-Wsizeof-array-argument`).
 
-Um número dentro dos colchetes do parâmetro é ignorado: `double precos[4]`,
-`double precos[100]` e `double precos[]` são iguais para o compilador. Prefira
-os colchetes vazios.
+{{exemplo}}
 
-Quando a função **não deve** mexer no vetor, marque o parâmetro com
-**`const`**: `void mostrar(const double precos[], int n)`. Se alguém escrever
-`precos[0] = 0;` dentro dela, o compilador dá erro.
-
-O `main` guarda o vetor `cardapio`. A função recebe o endereço dele em
-`precos`, e cada `precos[i]` é a mesma gaveta que `cardapio[i]`:
+A lanchonete reajusta o cardápio em 10%. A função recebe o endereço de
+`cardapio` em `precos`, e cada `precos[i]` é a mesma gaveta que `cardapio[i]`:
 
 {{ideia}}
-
-`reajustar` escreve (sem `const`) e `mostrar` só lê (com `const`):
 
 ```c
 #include <stdio.h>
@@ -72,35 +69,7 @@ int main(void) {
 // R$   6.05
 ```
 
-No fluxograma, o `main` chama e a função percorre as 4 gavetas. Ela é `void`,
-mas o `main` enxerga os preços novos, porque ela escreveu direto no vetor dele:
+A função é `void`, mas o `main` enxerga os preços novos, porque ela escreveu
+direto no vetor dele:
 
 {{fluxograma}}
-
-Um **elemento** passado sozinho vai por valor, como qualquer `double`:
-`reajustar_um(double preco)` chamada com `cardapio[0]` recebe uma cópia do
-12.50 e não muda nada. Só o vetor inteiro (o nome sem colchetes) vai pelo
-endereço. O exemplo A076 mostra as duas coisas lado a lado.
-
-> [!WARNING]
-> **`sizeof` dentro da função não dá o tamanho do vetor.** No `main`,
-> `sizeof(cardapio)` vale 32 (4 × 8 bytes). Dentro de `reajustar`,
-> `sizeof(precos)` vale 8 num PC de 64 bits: é o tamanho de um **endereço**. O
-> truque `sizeof(v) / sizeof(v[0])` só funciona onde o vetor foi declarado. O
-> gcc avisa (`-Wsizeof-array-argument`); quem ignora ganha um laço que percorre
-> 1 item em vez de 4.
-
-> [!TIP]
-> **Por dentro do C:** a chamada passa ao frame da função (assunto 0031) um
-> endereço (8 bytes), um `int` e um `double`; os 32 bytes do vetor ficam no
-> frame do `main`. Por isso passar um vetor custa 8 bytes, seja de 4 itens ou
-> de um milhão, e por isso a função pode estragá-lo (o `const` protege). No
-> módulo 06 esse endereço será um **ponteiro**, e `double precos[]` é só outro
-> jeito de escrevê-lo.
-
-> [!NOTE]
-> **Pergunta para você:** e se você chamasse `reajustar(cardapio, ITENS, 10)`
-> duas vezes seguidas? A coxinha ficaria com 20% de aumento (R$ 15,00) ou com
-> mais? Calcule antes de rodar.
-
-{{pratique}}

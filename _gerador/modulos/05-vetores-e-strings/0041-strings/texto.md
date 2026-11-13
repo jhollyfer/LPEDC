@@ -1,14 +1,19 @@
 ## 0041 · Strings
 
-Na entrada de um evento, a recepção imprime o crachá juntando nome e
-sobrenome: "Bruna" + " " + "Matos". Depois confere se bate com o cadastro. No
-C, `+` não junta textos e `==` não compara textos, por causa do que uma string
-é.
-
-**String é um vetor de `char` terminado pelo caractere `'\0'`** (nulo, código
-0). Não existe tipo "string". O `'\0'` marca o fim: o que vem depois é
-ignorado. O `printf` com `%s` e as funções de texto andam pelo vetor até achar
-o `'\0'`.
+- **String**: vetor de `char` terminado pelo caractere nulo `'\0'` (código 0).
+  O C não tem tipo "string"; o `'\0'` marca o fim, e o que vem depois é
+  ignorado (DEITEL; DEITEL, 2011, cap. 8).
+- **N + 1**: as aspas duplas já põem o `'\0'`. `"Bruna"` ocupa 6 bytes; um
+  texto de N caracteres precisa de N + 1 posições (BACKES, 2013, cap. 7).
+- **Aspas simples e duplas**: `'B'` é um `char` (o número 66); `"B"` é uma
+  string de 2 bytes (BACKES, 2013, cap. 7).
+- **`<string.h>`**: como string é vetor, não se atribui com `=` nem se compara
+  com `==`; usam-se funções. O destino vem primeiro, como em `dest = orig`
+  (KERNIGHAN; RITCHIE, 1989, cap. 5).
+- **`strlen`**: anda até o `'\0'` a cada chamada e devolve `size_t` (`%zu`).
+  Calcule antes do laço, não no `i < strlen(s)` (CPPREFERENCE, s.d.).
+- **Lista de nomes**: uma matriz de `char`, uma string por linha
+  (`char nomes[3][10]`) (CELES; CERQUEIRA; RANGEL, 2016).
 
 ```c
 char nome[] = "Bruna";   // 6 posições: 'B' 'r' 'u' 'n' 'a' '\0'
@@ -17,14 +22,6 @@ char letra = 'B';        // aspas simples: UM char (o número 66)
 char texto[] = "B";      // aspas duplas: uma string, 2 bytes ('B' e '\0')
 ```
 
-As aspas duplas já colocam o `'\0'` no fim. Por isso `"Bruna"` ocupa 6 bytes, e
-um texto de N caracteres precisa de **N + 1** posições. Esquecer esse +1 é o
-erro mais comum com string.
-
-Como string é vetor (assunto 0037), não se atribui com `=` depois da
-declaração nem se compara com `==`. As operações são funções do
-**`<string.h>`**:
-
 | função | faz |
 | --- | --- |
 | `strlen(s)` | conta os caracteres até o `'\0'` (sem ele) |
@@ -32,21 +29,18 @@ declaração nem se compara com `==`. As operações são funções do
 | `strcat(dest, orig)` | cola `orig` no fim de `dest` |
 | `strcmp(a, b)` | 0 se iguais; negativo se `a` vem antes; positivo se depois |
 
-O `strlen` devolve `size_t` (inteiro sem sinal para tamanhos), mostrado com
-`%zu`. Em `strcpy` e `strcat`, o **destino vem primeiro**, como em
-`dest = orig`.
+> [!WARNING]
+> `strcpy` e `strcat` não sabem o tamanho do destino: "Bruna Matos" num
+> `char cracha[8]` é **estouro de buffer**. E `strcmp` devolve **0 quando são
+> iguais**: escreva sempre `== 0`.
 
-Uma lista de nomes é uma matriz de `char` (assunto 0039), cada linha uma
-string. Em `char nomes[3][10] = {"Ana", "Bia", "Caio"};`, `nomes[1]` é "Bia" e
-cabem 9 caracteres por nome.
+{{exemplo}}
 
-O vetor `cracha` do exemplo tem 20 posições. Depois do `strcpy` e dos dois
-`strcat`, as 11 primeiras guardam "Bruna Matos", a 12ª guarda o `'\0'` e o
-resto não importa:
+A recepção monta o crachá juntando nome e sobrenome. No vetor de 20, as 11
+primeiras posições guardam "Bruna Matos", a 12ª o `'\0'`, e o resto não
+importa:
 
 {{ideia}}
-
-O código monta o crachá, compara `strlen` com `sizeof` e confere com `strcmp`:
 
 ```c
 #include <stdio.h>
@@ -77,29 +71,7 @@ int main(void) {
 // Confere com a inscrição.
 ```
 
-O `strcat` procura o `'\0'` do destino, escreve ali por cima e põe um `'\0'`
-novo no fim. Toda função de string é um laço "até achar o `'\0'`":
+O `strcat` acha o `'\0'` do destino, escreve por cima e põe um novo no fim.
+Toda função de string é um laço "até achar o `'\0'`":
 
 {{fluxograma}}
-
-> [!WARNING]
-> **`strcpy` e `strcat` não sabem o tamanho do destino.** Escrevem até acabar
-> a origem, caiba ou não. Com `char cracha[8]`, juntar "Bruna Matos" escreve 12
-> bytes num vetor de 8: **estouro de buffer**, falha de segurança clássica.
-> Antes, confira `strlen(dest) + strlen(orig) + 1 <= sizeof(dest)`. Outra
-> pegadinha: `strcmp` devolve **0 quando são iguais**, e 0 é falso, então
-> `if (strcmp(a, b))` significa "se forem **diferentes**". Escreva sempre
-> `== 0`.
-
-> [!TIP]
-> **Por dentro do C:** a string não guarda o tamanho; o `strlen` anda até o
-> `'\0'` a cada chamada. Por isso, nunca escreva `for (i = 0; i < strlen(s);
-> i++)`: calcule antes do laço. E `strlen("Belém")` é **6**, porque o "é" em
-> UTF-8 ocupa 2 bytes.
-
-> [!NOTE]
-> **Pergunta para você:** depois de `char s[10] = "banana";` e `s[3] = '\0';`,
-> o que `printf("%s %zu %zu\n", s, strlen(s), sizeof(s));` mostra? As letras
-> depois da posição 3 sumiram da memória?
-
-{{pratique}}
