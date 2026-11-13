@@ -167,11 +167,40 @@ const figuras = {}
 for (const a of readdirSync(PROVAS).filter((a) => a.endsWith('.figuras.json')))
   Object.assign(figuras, JSON.parse(readFileSync(join(PROVAS, a), 'utf8')))
 
-const erros = conferir(provas, figuras)
+// escada de conceitos: a ordem da rota (fases.json) e, em cada módulo, a ordem dos assuntos;
+// requer/porque/saia de cada degrau vêm de trilha/*.json
+const FASES = JSON.parse(readFileSync(join(AQUI, 'fases.json'), 'utf8'))
+const escadaBase = FASES.flatMap((f, i) =>
+  Object.keys(ASSUNTOS).filter((n) => ASSUNTOS[n].modulo === `${f.modulo}.md`).map((num) => ({ num, mundo: f.mundo, etapa: i + 1 })),
+)
+const PASTA_TRILHA = join(AQUI, 'trilha')
+const degraus = {}
+if (existsSync(PASTA_TRILHA))
+  for (const a of readdirSync(PASTA_TRILHA).filter((x) => x.endsWith('.json')).sort())
+    for (const d of JSON.parse(readFileSync(join(PASTA_TRILHA, a), 'utf8'))) degraus[d.num] = d
+const TRILHA = escadaBase.map((b) => ({ ...b, requer: [], porque: '', saia: [], ...degraus[b.num] }))
+
+function conferirTrilha() {
+  const e = []
+  const posicao = Object.fromEntries(TRILHA.map((d, i) => [d.num, i]))
+  for (const num of Object.keys(degraus)) if (!(num in posicao)) e.push(`trilha: ${num} não é assunto do curso`)
+  TRILHA.forEach((d, i) => {
+    if (!degraus[d.num]) return e.push(`trilha: ${d.num} sem degrau`)
+    for (const r of d.requer ?? []) {
+      if (!(r in posicao)) e.push(`trilha ${d.num}: requer ${r}, que não existe`)
+      else if (posicao[r] >= i) e.push(`trilha ${d.num}: requer ${r}, que vem depois na escada`)
+    }
+    if (!d.porque?.trim()) e.push(`trilha ${d.num}: sem porquê`)
+    if (!Array.isArray(d.saia) || d.saia.length < 2 || d.saia.length > 3) e.push(`trilha ${d.num}: saia com ${d.saia?.length ?? 0} itens (2 ou 3)`)
+  })
+  return e
+}
+
+const erros = [...conferir(provas, figuras), ...conferirTrilha()]
 for (const e of erros) console.error(`erro: ${e}`)
 if (SO_CONFERIR) {
   const total = provas.reduce((t, p) => t + p.questoes.length, 0)
-  console.log(`${provas.length} provas, ${total} questões, ${Object.keys(figuras).length} figuras, ${erros.length} erros`)
+  console.log(`${provas.length} provas, ${total} questões, ${Object.keys(figuras).length} figuras, ${TRILHA.length} degraus na trilha, ${erros.length} erros`)
   process.exit(erros.length ? 1 : 0)
 }
 
@@ -198,7 +227,7 @@ const dados = provas.map((p) => ({
 }))
 writeFileSync(
   join(SAIDA, 'questoes.js'),
-  `// Gerado por _gerador/quiz.mjs a partir de _gerador/provas/. Não edite à mão.\nwindow.ASSUNTOS = ${JSON.stringify(ASSUNTOS)}\nwindow.PROVAS = ${JSON.stringify(dados, null, 1)}\n`,
+  `// Gerado por _gerador/quiz.mjs a partir de _gerador/provas/. Não edite à mão.\nwindow.ASSUNTOS = ${JSON.stringify(ASSUNTOS)}\nwindow.TRILHA = ${JSON.stringify(TRILHA)}\nwindow.PROVAS = ${JSON.stringify(dados, null, 1)}\n`,
 )
 // versão do questoes.js no index.html, para o navegador não misturar dados novos com cache velho
 const versao = createHash('sha1').update(readFileSync(join(SAIDA, 'questoes.js'))).digest('hex').slice(0, 8)

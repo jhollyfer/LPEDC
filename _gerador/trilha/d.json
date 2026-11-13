@@ -1,0 +1,457 @@
+[
+ {
+  "num": "0114",
+  "requer": [
+   "0032",
+   "0033",
+   "0072",
+   "0167"
+  ],
+  "porque": "A recorrência dá o custo de uma função recursiva, então exige a recursão e a notação O, e a soma da árvore usa somatórios.",
+  "saia": [
+   "`T(n) = 2T(n/2) + n` é o merge sort; a árvore tem `log₂ n` níveis de custo `n`",
+   "Recorrência se resolve somando o trabalho de cada nível da árvore de chamadas",
+   "`T(n) = T(n-1) + n` dá Θ(n²), pois `1 + 2 + ... + n` é `n(n+1)/2`"
+  ]
+ },
+ {
+  "num": "0115",
+  "requer": [
+   "0114"
+  ],
+  "porque": "O teorema mestre é a soma da árvore do 0114 feita uma vez em geral, então vem logo depois dela.",
+  "saia": [
+   "Em `T(n) = aT(n/b) + n^k`, `a` é o número de chamadas e `b` o encolhimento",
+   "Compare `a` com `b^k` para escolher entre três casos de Θ",
+   "Merge sort: `a = 2`, `b = 2`, `k = 1`, então `a = b^k` e Θ(n log n)"
+  ]
+ },
+ {
+  "num": "0116",
+  "requer": [
+   "0055",
+   "0075",
+   "0072"
+  ],
+  "porque": "A inserção no vetor dinâmico custa O(n) só quando enche; para medir o custo médio de uma sequência é preciso a amortizada.",
+  "saia": [
+   "Análise amortizada divide o custo total de uma sequência de operações pelo número delas, no pior caso",
+   "Dobrar a capacidade a cada cheio torna `n` inserções O(n) no total, O(1) amortizado cada",
+   "Amortizado não é médio: não usa probabilidade, vale para qualquer sequência"
+  ]
+ },
+ {
+  "num": "0117",
+  "requer": [
+   "0094",
+   "0095",
+   "0103",
+   "0072"
+  ],
+  "porque": "O limite vale para toda ordenação por comparação, e merge sort, quick sort e heapsort são os casos que ele mede.",
+  "saia": [
+   "Ordenar `n` elementos por comparação exige Ω(n log n) comparações no pior caso",
+   "A árvore de decisão tem `n!` folhas e altura mínima `log₂(n!)`",
+   "Merge sort e heapsort são ótimos: atingem o limite, então não há ordenação por comparação assintoticamente melhor"
+  ]
+ },
+ {
+  "num": "0118",
+  "requer": [
+   "0114",
+   "0115",
+   "0116",
+   "0117"
+  ],
+  "porque": "Fecha o módulo usando recorrência, teorema mestre, amortizada e limite inferior juntos para prever o tempo antes de rodar.",
+  "saia": [
+   "Dobrar `n` quadruplica o tempo em Θ(n²) e dá pouco mais que o dobro em Θ(n log n)",
+   "Para prever o tempo de um `n` grande, meça em dois tamanhos e extrapole pela classe",
+   "Contar comparações dá o mesmo número em qualquer máquina; o tempo de relógio varia"
+  ]
+ },
+ {
+  "num": "0125",
+  "requer": [
+   "0032",
+   "0065"
+  ],
+  "porque": "Subconjuntos são uma decisão sim ou não por item, feita recursivamente; a máscara de bits do 0065 é a outra forma de enumerá-los.",
+  "saia": [
+   "`n` itens têm 2ⁿ subconjuntos, contando o vazio e o conjunto inteiro",
+   "`gera(i)` decide o item `i` (entra ou não) e chama `gera(i + 1)`",
+   "Cada contagem de uma máscara de 0 a 2ⁿ - 1 também representa um subconjunto"
+  ]
+ },
+ {
+  "num": "0126",
+  "requer": [
+   "0125",
+   "0048"
+  ],
+  "porque": "Permutação também é enumeração recursiva, agora com uma posição por vez e troca de elementos, como os caracteres de uma string.",
+  "saia": [
+   "`n` elementos têm `n!` permutações",
+   "`permuta(v, i)` escolhe (troca `v[i]` com `v[j]`), desce e desfaz (troca de volta)",
+   "Sem o desfazer, o vetor sai embaralhado e as permutações se repetem ou faltam"
+  ]
+ },
+ {
+  "num": "0127",
+  "requer": [
+   "0125",
+   "0126"
+  ],
+  "porque": "Backtracking é a enumeração dos dois assuntos anteriores com poda: desiste do galho assim que ele não pode dar certo.",
+  "saia": [
+   "Backtracking é tentativa e erro: escolhe, desce, desfaz, e poda quando o galho já falhou",
+   "Com poda, a saída é a mesma e o número de chamadas cai",
+   "Em toda função recursiva, ache onde ela para, onde poda e onde escolhe e desfaz"
+  ]
+ },
+ {
+  "num": "0128",
+  "requer": [
+   "0127",
+   "0039"
+  ],
+  "porque": "As N-rainhas aplicam a poda do backtracking sobre um tabuleiro, representado como matriz ou por vetores de marcação.",
+  "saia": [
+   "A solução é um vetor `pos` com a coluna da rainha de cada linha, uma por linha",
+   "`rainha(l)` tenta cada coluna livre, marca, desce para `l + 1` e desmarca",
+   "Vetores de marcação de coluna e diagonais testam o ataque em O(1)"
+  ]
+ },
+ {
+  "num": "0129",
+  "requer": [
+   "0127",
+   "0039",
+   "0111",
+   "0110"
+  ],
+  "porque": "O labirinto é a DFS do grafo numa matriz com backtracking; a BFS do 0110 é o contraponto que acha o menor caminho.",
+  "saia": [
+   "`anda(l, c)` recusa fora do mapa, parede e casa já no caminho; se é a saída, responde sim",
+   "Marcar a casa com `'*'` ao entrar e desmarcar ao voltar é o escolhe e desfaz",
+   "A DFS acha um caminho qualquer; a BFS (0110) acha o menor"
+  ]
+ },
+ {
+  "num": "0130",
+  "requer": [
+   "0127",
+   "0128",
+   "0039",
+   "0065"
+  ],
+  "porque": "O sudoku combina matriz, poda com vetores de marcação e a recursão de decisão por casa vazia, tudo do módulo.",
+  "saia": [
+   "Cada casa vazia é uma decisão com 9 opções; a poda é a regra do jogo",
+   "`na_linha[l][d]`, `na_coluna[c][d]` e `na_caixa[b][d]` testam o dígito em O(1)",
+   "A caixa de `(l, c)` é `b = (l / 3) * 3 + c / 3`"
+  ]
+ },
+ {
+  "num": "0131",
+  "requer": [
+   "0032",
+   "0094",
+   "0095",
+   "0115"
+  ],
+  "porque": "Divisão e conquista dá nome ao que o merge sort e o quick sort já faziam, e o teorema mestre calcula o custo dela.",
+  "saia": [
+   "Os três passos: dividir, conquistar (recursivamente) e combinar",
+   "`potencia(x, n)` usa `x^(n/2)` uma vez e dá O(log n) em vez de O(n)",
+   "Mesma forma `T(n) = a T(n/b) + f(n)` do teorema mestre; a busca binária (0090) é um caso"
+  ]
+ },
+ {
+  "num": "0132",
+  "requer": [
+   "0131",
+   "0094"
+  ],
+  "porque": "Inversões são o merge sort com contagem na intercalação, e o subvetor de soma máxima é outra divisão e conquista.",
+  "saia": [
+   "Inversão é um par `i < j` com `v[i] > v[j]`; o vetor invertido tem `n(n - 1)/2`",
+   "No merge, cada elemento da direita que passa um da esquerda conta as inversões restantes",
+   "Contar inversões custa Θ(n log n), contra O(n²) de testar todos os pares"
+  ]
+ },
+ {
+  "num": "0133",
+  "requer": [
+   "0127",
+   "0131",
+   "0096",
+   "0112"
+  ],
+  "porque": "O guloso é a terceira técnica depois do backtracking e da divisão e conquista; o Dijkstra do 0112 já era guloso.",
+  "saia": [
+   "Algoritmo guloso escolhe o melhor agora e nunca volta atrás",
+   "Guloso nem sempre é ótimo: com `{1, 3, 4}` e troco 6 dá 3 moedas, o ótimo é 2",
+   "Para provar um guloso, mostre que a escolha cabe numa solução ótima; para refutar, ache um caso pequeno"
+  ]
+ },
+ {
+  "num": "0134",
+  "requer": [
+   "0133",
+   "0096",
+   "0125"
+  ],
+  "porque": "A seleção de intervalos é o primeiro guloso com ordenação prévia; o 0125 mostra o custo de testar todos os subconjuntos.",
+  "saia": [
+   "Ordene por **menor fim** e aceite todo intervalo que começa depois do último aceito",
+   "Ordenar por início ou por duração curta tem contraexemplo; só o menor fim é ótimo",
+   "Custo: Θ(n log n) pela ordenação, mais um laço O(n)"
+  ]
+ },
+ {
+  "num": "0135",
+  "requer": [
+   "0133"
+  ],
+  "porque": "A mochila fracionária é o guloso por razão valor/peso, a versão fácil que contrasta com a mochila 0/1 do módulo seguinte.",
+  "saia": [
+   "Ordene os itens por `valor / peso` decrescente e encha a mochila até caber",
+   "A última fração é cortada para completar a capacidade `W`",
+   "O guloso é ótimo aqui porque cada quilo de espaço vai para quem paga mais"
+  ]
+ },
+ {
+  "num": "0136",
+  "requer": [
+   "0133",
+   "0102"
+  ],
+  "porque": "Huffman é guloso que junta sempre os dois nós de menor frequência, e a fila de prioridade em heap do 0102 faz essa escolha.",
+  "saia": [
+   "Código livre de prefixo: nenhum código é o começo de outro, então a leitura não tem ambiguidade",
+   "Frequente ganha código curto, raro ganha comprido; a árvore tem os símbolos nas folhas",
+   "Repita: retire os dois nós de menor frequência do heap e insira o pai com a soma"
+  ]
+ },
+ {
+  "num": "0137",
+  "requer": [
+   "0136",
+   "0068",
+   "0065",
+   "0074"
+  ],
+  "porque": "O compactador grava os códigos do 0136 como bits num arquivo binário, com máscaras de bits e um TAD de interface própria.",
+  "saia": [
+   "Junte 8 bits num `unsigned char` com deslocamento e `|`; o último byte vai completado com zeros",
+   "O descompactador precisa da tabela de frequências ou da árvore e do total de símbolos",
+   "Arquivo binário (`fwrite`, `fread`) é a forma de gravar bits de verdade"
+  ]
+ },
+ {
+  "num": "0138",
+  "requer": [
+   "0033",
+   "0032"
+  ],
+  "porque": "A memoização guarda os resultados da recursão do Fibonacci do 0033 para não repetir chamadas, o primeiro degrau da programação dinâmica.",
+  "saia": [
+   "Recursão pura de `formas(n)` é exponencial porque repete os mesmos subproblemas",
+   "Memoização: guarde cada resultado numa tabela e consulte antes de calcular",
+   "PD precisa de subestrutura ótima e de subproblemas repetidos; o custo cai para O(n)"
+  ]
+ },
+ {
+  "num": "0139",
+  "requer": [
+   "0138",
+   "0133",
+   "0054"
+  ],
+  "porque": "O troco mínimo com PD resolve o caso em que o guloso do 0133 falha, usando a tabela do 0138 (alocada com `malloc` se grande).",
+  "saia": [
+   "`menos[v] = 1 + min(menos[v - moeda])` sobre as moedas que cabem em `v`",
+   "O guloso erra com `{1, 3, 4}` para 6; a PD testa todas as escolhas sem repetir",
+   "Custo O(V · k) para valor `V` e `k` moedas"
+  ]
+ },
+ {
+  "num": "0140",
+  "requer": [
+   "0138",
+   "0135",
+   "0139"
+  ],
+  "porque": "A mochila 0/1 é a mochila fracionária em que o item não parte, e o guloso falha; a PD do troco serve de modelo.",
+  "saia": [
+   "Cada item vai inteiro ou não vai; o guloso por valor/peso erra",
+   "`dp[i][w]` é o melhor valor com os `i` primeiros itens e capacidade `w`",
+   "Custo Θ(n · W), pseudopolinomial: cresce com o valor de `W`, não com os bits dele"
+  ]
+ },
+ {
+  "num": "0141",
+  "requer": [
+   "0138",
+   "0041"
+  ],
+  "porque": "A LCS compara duas strings com uma tabela de PD, retomando a ideia da memoização e as strings do módulo 5.",
+  "saia": [
+   "Subsequência apaga letras sem mudar a ordem; `MNG` é subsequência de `MORANGO`",
+   "Letras finais iguais: `L[i][j] = L[i-1][j-1] + 1`; diferentes: o maior entre `L[i-1][j]` e `L[i][j-1]`",
+   "Custo Θ(n · m); a tabela permite refazer a LCS voltando pelo caminho"
+  ]
+ },
+ {
+  "num": "0142",
+  "requer": [
+   "0141",
+   "0139"
+  ],
+  "porque": "A distância de edição usa a mesma tabela da LCS, mas com o mínimo de três operações, como a escolha mínima do troco.",
+  "saia": [
+   "Inserir, remover e trocar custam 1 cada; é a distância de Levenshtein",
+   "Letras iguais: custo diagonal; diferentes: `1 + min(inserir, remover, trocar)`",
+   "`d[i][0] = i` e `d[0][j] = j` são o caso base; custo Θ(n · m)"
+  ]
+ },
+ {
+  "num": "0143",
+  "requer": [
+   "0141",
+   "0142",
+   "0055",
+   "0069"
+  ],
+  "porque": "O mini-diff aplica a LCS às linhas de dois arquivos, com tabela dinâmica e nomes de arquivo vindos da linha de comando.",
+  "saia": [
+   "O diff usa a LCS sobre linhas: duas linhas casam quando `strcmp` dá 0",
+   "As linhas fora da LCS são `-` (só na antiga) ou `+` (só na nova)",
+   "A tabela de `(n + 1) x (m + 1)` vai no heap com `malloc`; libere no fim"
+  ]
+ },
+ {
+  "num": "0157",
+  "requer": [
+   "0041",
+   "0047",
+   "0072"
+  ],
+  "porque": "A força bruta é o ponto de partida do módulo: percorre strings com ponteiros e seu custo é pior caso da análise O.",
+  "saia": [
+   "Teste todos os alinhamentos `i = 0 .. n - m`, comparando até `m` letras em cada",
+   "Pior caso O(n · m), por exemplo `AAAA...A` buscando `AAAB`",
+   "Ocorrência em `i` quer dizer `texto[i..i+m-1]` igual ao padrão"
+  ]
+ },
+ {
+  "num": "0158",
+  "requer": [
+   "0157",
+   "0073"
+  ],
+  "porque": "O KMP corrige o desperdício da força bruta com a tabela de falhas, e a corretude dela se prova por invariante.",
+  "saia": [
+   "Nunca volta no texto: cada letra é lida uma vez, custo O(n + m)",
+   "A tabela de falhas diz, para cada prefixo do padrão, o maior borda (prefixo que também é sufixo)",
+   "Quando a letra falha, `k = falha[k - 1]` em vez de recomeçar do zero"
+  ]
+ },
+ {
+  "num": "0159",
+  "requer": [
+   "0157",
+   "0003"
+  ],
+  "porque": "O Horspool também melhora a força bruta, comparando da direita e usando tabela indexada por byte, daí o `unsigned char` e `size_t`.",
+  "saia": [
+   "Compara o padrão da direita para a esquerda e pula pela letra do texto sob a última casa",
+   "Tabela de saltos com 256 posições, indexada por `unsigned char`; letra ausente salta `m`",
+   "Pior caso O(n · m), mas na prática lê menos letras que KMP"
+  ]
+ },
+ {
+  "num": "0160",
+  "requer": [
+   "0157",
+   "0105"
+  ],
+  "porque": "O Rabin-Karp usa a função hash do 0105 sobre janelas do texto e só compara letras quando os hashes batem.",
+  "saia": [
+   "Hash rolante: a próxima janela perde a letra da esquerda e ganha a da direita em O(1)",
+   "Hash igual não prova ocorrência; confira letra a letra para descartar o falso positivo",
+   "Caso médio O(n + m); pior caso O(n · m) se muitos hashes colidem"
+  ]
+ },
+ {
+  "num": "0161",
+  "requer": [
+   "0157",
+   "0158",
+   "0159",
+   "0160",
+   "0050"
+  ],
+  "porque": "O mini-grep reúne os quatro algoritmos num TAD com a mesma assinatura via ponteiro para função, para comparar as comparações de cada um.",
+  "saia": [
+   "`typedef int (*Busca)(...)` permite trocar o algoritmo sem mudar o chamador",
+   "Compare pelo número de comparações de letra, que independe da máquina",
+   "O Horspool costuma ler menos letras, e o KMP garante O(n + m) sempre"
+  ]
+ },
+ {
+  "num": "0162",
+  "requer": [
+   "0078",
+   "0054"
+  ],
+  "porque": "A matriz esparsa guarda só os valores diferentes de zero em listas ordenadas por posição, a lista ordenada do 0078 alocada com `malloc`.",
+  "saia": [
+   "Zero não se guarda: só valores diferentes de zero ocupam memória",
+   "Vetor de triplas `(linha, coluna, valor)` ou lista por linha ordenada pela coluna",
+   "Ler uma posição ausente devolve 0; o gasto cresce com os não nulos, não com `L x C`"
+  ]
+ },
+ {
+  "num": "0163",
+  "requer": [
+   "0078",
+   "0057"
+  ],
+  "porque": "A skip list põe linhas expressas sobre a lista ordenada do 0078, e os ponteiros de vários níveis exigem o cuidado do 0057 com memória.",
+  "saia": [
+   "Busca desce de nível quando o próximo passaria da chave; O(log n) esperado",
+   "A altura de cada nó vem de sorteio (cara ou coroa); sem rotação, ao contrário da AVL",
+   "Inserir e remover religam ponteiros em cada nível do nó"
+  ]
+ },
+ {
+  "num": "0164",
+  "requer": [
+   "0077",
+   "0089"
+  ],
+  "porque": "A lista autoajustável melhora a busca sequencial do 0089 movendo o achado para a frente, o que reescreve a lista da busca do 0077.",
+  "saia": [
+   "Três políticas: mover para a frente, transpor e contar frequência",
+   "Mover para a frente leva o item achado ao começo, O(1) com ponteiro para o anterior",
+   "Vale quando poucas chaves recebem quase todas as buscas"
+  ]
+ },
+ {
+  "num": "0165",
+  "requer": [
+   "0163",
+   "0164",
+   "0099",
+   "0101"
+  ],
+  "porque": "Compara a skip list e a lista autoajustável com a BST e a AVL, medindo as comparações no mesmo conjunto de buscas.",
+  "saia": [
+   "Meça com as mesmas chaves, mesma sequência de buscas e mesma semente do gerador",
+   "AVL garante O(log n); skip list promete O(log n) esperado; lista autoajustável é O(n)",
+   "A estrutura certa depende da distribuição das buscas: 20 itens com 80% das consultas favorecem a lista"
+  ]
+ }
+]

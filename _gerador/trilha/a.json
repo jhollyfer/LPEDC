@@ -1,0 +1,817 @@
+[
+ {
+  "num": "0001",
+  "requer": [],
+  "porque": "É a porta de entrada: sem saber compilar e rodar um `main`, nenhum outro assunto do curso pode ser testado.",
+  "saia": [
+   "Todo programa C começa em `main`, e `return 0;` avisa ao sistema que deu certo.",
+   "`gcc arquivo.c -o nome` compila, e `./nome` executa o programa gerado."
+  ]
+ },
+ {
+  "num": "0002",
+  "requer": [
+   "0001"
+  ],
+  "porque": "Variável é o primeiro recurso que o programa mínimo ganha: um nome para guardar um valor na memória.",
+  "saia": [
+   "Declarar é dar tipo e nome: `int idade;` reserva espaço, e `=` guarda o valor.",
+   "Variável sem inicializar guarda lixo, então atribua antes de usar."
+  ]
+ },
+ {
+  "num": "0003",
+  "requer": [
+   "0002"
+  ],
+  "porque": "Declarar uma variável exige escolher o tipo, e o tipo decide quantos bytes ela ocupa e até onde o valor vai.",
+  "saia": [
+   "`char`, `int`, `float` e `double` ocupam tamanhos diferentes, e `sizeof` mede cada um.",
+   "Passar do limite do tipo (overflow) faz o valor dar a volta ou vira comportamento indefinido."
+  ]
+ },
+ {
+  "num": "0004",
+  "requer": [
+   "0002",
+   "0003"
+  ],
+  "porque": "Constante é variável com tipo cujo valor não muda; só faz sentido depois de saber declarar e tipar.",
+  "saia": [
+   "`const int N = 10;` impede a troca do valor, e `#define N 10` é substituição de texto.",
+   "Nome em maiúsculas evita o número mágico espalhado pelo código."
+  ]
+ },
+ {
+  "num": "0005",
+  "requer": [
+   "0002",
+   "0003"
+  ],
+  "porque": "Para mostrar variáveis de cada tipo você precisa do especificador de formato certo, que depende do tipo.",
+  "saia": [
+   "`%d` é `int`, `%f` é `double`, `%c` é `char`, `%s` é string.",
+   "`%.2f` fixa duas casas decimais, e `%5d` reserva largura 5."
+  ]
+ },
+ {
+  "num": "0006",
+  "requer": [
+   "0005",
+   "0003"
+  ],
+  "porque": "`scanf` espelha o `printf`: usa os mesmos formatos, mas lê do teclado e precisa do endereço da variável.",
+  "saia": [
+   "`scanf(\"%d\", &x);` leva o `&` porque grava na variável.",
+   "O retorno do `scanf` é quantos campos leu; confira para detectar entrada inválida."
+  ]
+ },
+ {
+  "num": "0007",
+  "requer": [
+   "0003",
+   "0006"
+  ],
+  "porque": "Com valores lidos e guardados, o próximo passo é calcular, e o tipo decide o resultado da conta.",
+  "saia": [
+   "`int / int` trunca: `7 / 2` é `3`, e `%` dá o resto.",
+   "Misturar `int` com `double` promove o resultado para `double`."
+  ]
+ },
+ {
+  "num": "0008",
+  "requer": [
+   "0007",
+   "0003"
+  ],
+  "porque": "A divisão inteira do assunto anterior mostra o problema que o cast resolve: forçar o tipo no momento da conta.",
+  "saia": [
+   "`(double)a / b` converte antes de dividir; `(double)(a / b)` converte tarde demais.",
+   "Converter `double` para `int` descarta a parte decimal, sem arredondar."
+  ]
+ },
+ {
+  "num": "0009",
+  "requer": [
+   "0007",
+   "0002"
+  ],
+  "porque": "Depois de calcular e converter, falta o atalho para alterar a própria variável, base de todo contador.",
+  "saia": [
+   "`x += 5` equivale a `x = x + 5`.",
+   "`i++` usa o valor e depois soma; `++i` soma e depois usa."
+  ]
+ },
+ {
+  "num": "0010",
+  "requer": [
+   "0007",
+   "0008"
+  ],
+  "porque": "Contas além das quatro operações pedem a biblioteca de matemática, que trabalha em `double`.",
+  "saia": [
+   "`sqrt`, `pow`, `fabs`, `ceil`, `floor` e `round` vêm de `<math.h>`.",
+   "Compile com `-lm` para ligar a biblioteca matemática."
+  ]
+ },
+ {
+  "num": "0011",
+  "requer": [
+   "0006",
+   "0008",
+   "0009",
+   "0010"
+  ],
+  "porque": "Fecha o módulo juntando leitura, conta, conversão e saída formatada num programa só.",
+  "saia": [
+   "Todo programa segue entrada, processamento e saída.",
+   "Cada passo do módulo 01 aparece de novo no mesmo `main`."
+  ]
+ },
+ {
+  "num": "0012",
+  "requer": [
+   "0003",
+   "0007"
+  ],
+  "porque": "Antes de decidir é preciso comparar, e em C a comparação devolve um número, não um tipo especial.",
+  "saia": [
+   "`==`, `!=`, `<`, `<=`, `>`, `>=` dão `1` (verdadeiro) ou `0` (falso).",
+   "Em C, todo valor diferente de zero é verdadeiro; `bool` vem de `<stdbool.h>`."
+  ]
+ },
+ {
+  "num": "0013",
+  "requer": [
+   "0012"
+  ],
+  "porque": "Uma condição simples quase nunca basta, então você combina comparações com E, OU e NÃO.",
+  "saia": [
+   "`&&` exige as duas, `||` basta uma, `!` inverte.",
+   "`&&` e `||` param cedo: o segundo lado só roda se for preciso (curto-circuito)."
+  ]
+ },
+ {
+  "num": "0014",
+  "requer": [
+   "0012",
+   "0013"
+  ],
+  "porque": "O `if` usa uma condição, o resultado de relacionais e lógicos, para escolher se um bloco roda.",
+  "saia": [
+   "`if (cond) { ... }` roda o bloco só se `cond` for diferente de zero.",
+   "Chaves sempre: sem elas o `if` controla uma única instrução."
+  ]
+ },
+ {
+  "num": "0015",
+  "requer": [
+   "0014"
+  ],
+  "porque": "O `else` completa o `if` com o caminho oposto, e é aqui que mora o erro clássico de trocar `==` por `=`.",
+  "saia": [
+   "`if/else` executa exatamente um dos dois blocos.",
+   "`if (x = 5)` atribui e quase sempre dá verdadeiro; a comparação é `x == 5`."
+  ]
+ },
+ {
+  "num": "0016",
+  "requer": [
+   "0015"
+  ],
+  "porque": "Quando há mais de duas saídas, os `if/else` se encadeiam, e a ambiguidade do `else` precisa de regra.",
+  "saia": [
+   "`else if` testa em ordem e para no primeiro verdadeiro.",
+   "O `else` pertence ao `if` mais próximo; chaves resolvem o else pendurado."
+  ]
+ },
+ {
+  "num": "0017",
+  "requer": [
+   "0015",
+   "0013"
+  ],
+  "porque": "O ternário é o `if/else` que devolve um valor, útil quando a decisão cabe numa expressão.",
+  "saia": [
+   "`cond ? a : b` vale `a` se `cond` for verdadeira e `b` se não.",
+   "Use em escolhas curtas; decisão com vários passos fica melhor no `if`."
+  ]
+ },
+ {
+  "num": "0018",
+  "requer": [
+   "0016",
+   "0012"
+  ],
+  "porque": "Quando o teste compara uma variável inteira com vários valores fixos, o `switch` substitui a escada de `else if`.",
+  "saia": [
+   "`case` compara com constante inteira, e `break` encerra o caso.",
+   "Sem `break` a execução cai no caso seguinte (fall-through); `default` cobre o resto."
+  ]
+ },
+ {
+  "num": "0019",
+  "requer": [
+   "0006",
+   "0016",
+   "0018",
+   "0017"
+  ],
+  "porque": "Fecha o módulo combinando leitura, faixas de decisão e saída numa conta de luz de verdade.",
+  "saia": [
+   "Faixas de consumo viram `if/else if` em ordem, e valores de fronteira merecem teste.",
+   "Teste cada caminho: 199,99, 200 e 200,01 pegam o `>` no lugar de `>=`."
+  ]
+ },
+ {
+  "num": "0020",
+  "requer": [
+   "0014",
+   "0012",
+   "0009"
+  ],
+  "porque": "Repetir é decidir várias vezes: o `while` é o `if` que volta enquanto a condição for verdadeira.",
+  "saia": [
+   "`while (cond) { ... }` testa antes de cada volta e pode não rodar nenhuma vez.",
+   "Sem alterar a variável da condição, o laço nunca termina."
+  ]
+ },
+ {
+  "num": "0021",
+  "requer": [
+   "0020",
+   "0006"
+  ],
+  "porque": "O `do-while` inverte o `while`: testa depois, ideal para ler e validar uma entrada pelo menos uma vez.",
+  "saia": [
+   "`do { ... } while (cond);` roda o corpo ao menos uma vez e leva `;` no fim.",
+   "Serve para repetir a leitura até o valor ser válido."
+  ]
+ },
+ {
+  "num": "0022",
+  "requer": [
+   "0020",
+   "0009"
+  ],
+  "porque": "Quando se sabe quantas voltas, o `for` junta início, condição e passo do `while` numa linha só.",
+  "saia": [
+   "`for (i = 0; i < n; i++)` roda `n` vezes, de `0` a `n - 1`.",
+   "Os três campos são inicialização, condição e atualização, na ordem em que rodam."
+  ]
+ },
+ {
+  "num": "0023",
+  "requer": [
+   "0022",
+   "0016"
+  ],
+  "porque": "Nem todo laço termina pela condição: `break` e `continue` desviam o fluxo de dentro do corpo.",
+  "saia": [
+   "`break` sai do laço mais interno na hora.",
+   "`continue` pula para a próxima volta, e no `for` ainda executa o passo."
+  ]
+ },
+ {
+  "num": "0024",
+  "requer": [
+   "0022",
+   "0023"
+  ],
+  "porque": "Um laço dentro de outro faz a conta de linhas e colunas, a base das matrizes mais adiante.",
+  "saia": [
+   "O laço de dentro roda inteiro a cada volta do de fora.",
+   "Com `n` e `m` voltas, o corpo interno roda `n * m` vezes."
+  ]
+ },
+ {
+  "num": "0025",
+  "requer": [
+   "0022",
+   "0008",
+   "0003"
+  ],
+  "porque": "Os problemas de repetição se resumem a poucos moldes que você reconhece e reusa.",
+  "saia": [
+   "Contador soma `1`, acumulador soma valores, e maior/menor começa pelo primeiro dado.",
+   "Média exige `(double)` na divisão para não truncar."
+  ]
+ },
+ {
+  "num": "0026",
+  "requer": [
+   "0022",
+   "0007"
+  ],
+  "porque": "Sorteio é repetição com `%` para limitar a faixa, e prepara o jogo que fecha o módulo.",
+  "saia": [
+   "`rand() % n` dá um valor de `0` a `n - 1`.",
+   "`srand(time(NULL))` roda uma vez só, para a sequência mudar a cada execução."
+  ]
+ },
+ {
+  "num": "0027",
+  "requer": [
+   "0025",
+   "0026",
+   "0021",
+   "0018"
+  ],
+  "porque": "Fecha o módulo juntando laços, sorteio e decisão no craps, que no módulo seguinte vira função.",
+  "saia": [
+   "Um jogo é um laço com estado: a rodada continua até uma condição de fim.",
+   "Cada regra do jogo cabe num `switch` ou `if` dentro do laço."
+  ]
+ },
+ {
+  "num": "0028",
+  "requer": [
+   "0011",
+   "0027"
+  ],
+  "porque": "Os programas dos módulos anteriores ficaram grandes dentro do `main`; função quebra o problema em pedaços com nome.",
+  "saia": [
+   "Uma função tem tipo de retorno, nome, parâmetros e corpo, e `return` devolve o valor.",
+   "`void` marca função sem retorno; declare ou defina antes de chamar."
+  ]
+ },
+ {
+  "num": "0029",
+  "requer": [
+   "0028",
+   "0002"
+  ],
+  "porque": "Chamar uma função exige entender o que viaja para ela: o C copia os argumentos.",
+  "saia": [
+   "O parâmetro é uma cópia: mudar dentro da função não altera a variável de fora.",
+   "A ordem e o tipo dos argumentos devem bater com os parâmetros."
+  ]
+ },
+ {
+  "num": "0030",
+  "requer": [
+   "0029"
+  ],
+  "porque": "Se o parâmetro é uma variável local, cabe perguntar onde cada variável existe e por quanto tempo.",
+  "saia": [
+   "Variável local só existe dentro do bloco; global vive o programa todo.",
+   "`static` local mantém o valor entre as chamadas."
+  ]
+ },
+ {
+  "num": "0031",
+  "requer": [
+   "0030",
+   "0029"
+  ],
+  "porque": "Escopo e tempo de vida têm um lugar físico: a pilha, onde cada chamada ganha seu quadro.",
+  "saia": [
+   "Cada chamada empilha um quadro com parâmetros e locais; ao retornar, ele sai.",
+   "A função que está rodando é a do topo, e `bt` no `gdb` mostra a pilha."
+  ]
+ },
+ {
+  "num": "0032",
+  "requer": [
+   "0031",
+   "0028"
+  ],
+  "porque": "Recursão é a função se chamando, e só se entende vendo cada chamada como um quadro novo na pilha.",
+  "saia": [
+   "Toda recursão precisa de caso base e de um passo que se aproxima dele.",
+   "Sem caso base a pilha estoura (stack overflow)."
+  ]
+ },
+ {
+  "num": "0033",
+  "requer": [
+   "0032"
+  ],
+  "porque": "Os três clássicos mostram a recursão em formas diferentes: de cauda, duplicada e de reduzir o problema.",
+  "saia": [
+   "Fibonacci recursivo repete cálculos: `fib(n)` chama `fib(n-1)` e `fib(n-2)`.",
+   "Hanói move `2^n - 1` discos, e Euclides usa `mdc(a, b) = mdc(b, a % b)`."
+  ]
+ },
+ {
+  "num": "0034",
+  "requer": [
+   "0028",
+   "0029",
+   "0030"
+  ],
+  "porque": "Com muitas funções, o código se divide em arquivos: o `.h` declara e o `.c` define.",
+  "saia": [
+   "O `.h` leva protótipos e o include guard; o `.c` leva as definições.",
+   "Compila-se cada `.c` à parte e o `gcc` liga todos num executável."
+  ]
+ },
+ {
+  "num": "0035",
+  "requer": [
+   "0034",
+   "0004"
+  ],
+  "porque": "O pré-processador roda antes da compilação e é quem sustenta o include guard do assunto anterior.",
+  "saia": [
+   "`#define` troca texto, e macro com argumento precisa de parênteses em tudo.",
+   "`#ifdef`/`#ifndef` incluem ou cortam trechos de código na compilação."
+  ]
+ },
+ {
+  "num": "0036",
+  "requer": [
+   "0034",
+   "0035",
+   "0019"
+  ],
+  "porque": "Fecha o módulo juntando funções, vários arquivos e decisão num programa pequeno, mas completo.",
+  "saia": [
+   "Cada função faz uma coisa, e o `main` só orquestra as chamadas.",
+   "Programa de vários arquivos compila-se com todos os `.c` no mesmo `gcc`."
+  ]
+ },
+ {
+  "num": "0037",
+  "requer": [
+   "0022",
+   "0025",
+   "0003"
+  ],
+  "porque": "O vetor guarda vários valores do mesmo tipo, e o `for` é o modo natural de percorrê-lo.",
+  "saia": [
+   "`int v[5];` cria 5 gavetas, índices de `0` a `4`; `v[5]` já está fora.",
+   "O C não confere o índice; o AddressSanitizer pega o estouro."
+  ]
+ },
+ {
+  "num": "0038",
+  "requer": [
+   "0037",
+   "0029",
+   "0031"
+  ],
+  "porque": "Passar um vetor para uma função não copia as gavetas: vai o endereço, e o tamanho segue à parte.",
+  "saia": [
+   "O parâmetro `int v[]` recebe o endereço do vetor, então a função altera o original.",
+   "O tamanho `n` vai como outro parâmetro, porque `sizeof` dentro da função não o dá."
+  ]
+ },
+ {
+  "num": "0039",
+  "requer": [
+   "0037",
+   "0024",
+   "0038"
+  ],
+  "porque": "Matriz é vetor de vetores, percorrida com laços aninhados, e como parâmetro precisa das colunas.",
+  "saia": [
+   "`int m[L][C]` é acessada por `m[i][j]`, linha primeiro.",
+   "Ao passar para função, o número de colunas é obrigatório: `int m[][C]`."
+  ]
+ },
+ {
+  "num": "0040",
+  "requer": [
+   "0003",
+   "0012"
+  ],
+  "porque": "Caractere é um inteiro pequeno que a tabela ASCII traduz em letra, base do que vem para strings.",
+  "saia": [
+   "`'A'` vale `65`, e `'a' - 'A'` vale `32`.",
+   "`<ctype.h>` traz `isdigit`, `isalpha`, `toupper` e afins."
+  ]
+ },
+ {
+  "num": "0041",
+  "requer": [
+   "0037",
+   "0040"
+  ],
+  "porque": "String é um vetor de `char` terminado por `'\\0'`, então tudo o que vale para vetor vale aqui.",
+  "saia": [
+   "`char s[6] = \"ola\";` guarda `'o'`, `'l'`, `'a'` e `'\\0'`; o terminador ocupa espaço.",
+   "`strlen`, `strcpy`, `strcmp` e `strcat` vêm de `<string.h>`."
+  ]
+ },
+ {
+  "num": "0042",
+  "requer": [
+   "0041",
+   "0006",
+   "0038"
+  ],
+  "porque": "Ler texto do teclado tem armadilhas que o `scanf(\"%d\")` não tinha: espaços e tamanho do vetor.",
+  "saia": [
+   "`fgets(s, sizeof s, stdin)` respeita o tamanho e guarda o `'\\n'`.",
+   "`scanf(\"%s\")` para no espaço e não confere o tamanho, então evite sem limite."
+  ]
+ },
+ {
+  "num": "0043",
+  "requer": [
+   "0038",
+   "0039",
+   "0041",
+   "0042"
+  ],
+  "porque": "Fecha o módulo juntando vetores, matrizes e strings com funções num programa só.",
+  "saia": [
+   "Vetor, índice e laço formam o molde de quase todo problema deste módulo.",
+   "Toda função que recebe vetor ou string precisa saber o tamanho ou o `'\\0'`."
+  ]
+ },
+ {
+  "num": "0044",
+  "requer": [
+   "0002",
+   "0031",
+   "0037"
+  ],
+  "porque": "Todo o curso até aqui escondeu um detalhe: cada variável mora num endereço, e agora você o enxerga.",
+  "saia": [
+   "`&x` é o endereço de `x`; `%p` o imprime.",
+   "Os elementos de um vetor ocupam endereços seguidos, separados por `sizeof` do tipo."
+  ]
+ },
+ {
+  "num": "0045",
+  "requer": [
+   "0044"
+  ],
+  "porque": "Com o endereço em mãos, o ponteiro é a variável que o guarda, e `*` segue a seta.",
+  "saia": [
+   "`int *p = &x;` guarda o endereço de `x`, e `*p` lê ou grava em `x`.",
+   "Ponteiro sem destino deve ser `NULL`; usar `*p` com `NULL` derruba o programa."
+  ]
+ },
+ {
+  "num": "0046",
+  "requer": [
+   "0045",
+   "0029"
+  ],
+  "porque": "A passagem por valor não consegue alterar o original; o ponteiro como parâmetro resolve.",
+  "saia": [
+   "Passar `&x` e receber `int *p` permite à função alterar `x` com `*p`.",
+   "`scanf` funciona assim, e por isso leva o `&`."
+  ]
+ },
+ {
+  "num": "0047",
+  "requer": [
+   "0045",
+   "0038",
+   "0039"
+  ],
+  "porque": "O nome do vetor já era um endereço nos módulos anteriores, e agora a aritmética de ponteiros dá sintaxe a isso.",
+  "saia": [
+   "`v[i]` é `*(v + i)`, e `p + 1` anda `sizeof(*p)` bytes.",
+   "O nome do vetor vale `&v[0]`, mas não pode receber outro endereço."
+  ]
+ },
+ {
+  "num": "0048",
+  "requer": [
+   "0047",
+   "0041"
+  ],
+  "porque": "Strings são vetores de `char`, então percorrê-las com ponteiro é a aritmética do assunto anterior.",
+  "saia": [
+   "`char *p = s;` percorre até `*p == '\\0'`.",
+   "Literal `char *s = \"oi\"` é só leitura; mudar o texto exige `char s[]`."
+  ]
+ },
+ {
+  "num": "0049",
+  "requer": [
+   "0046",
+   "0048"
+  ],
+  "porque": "Se o ponteiro é uma variável, ele também tem endereço, e um `**` pode apontar para ele.",
+  "saia": [
+   "`int **pp = &p;` guarda o endereço de `p`, e `**pp` chega em `x`.",
+   "Para uma função alterar um ponteiro do chamador, ela recebe `int **`; `argv` é `char **`."
+  ]
+ },
+ {
+  "num": "0050",
+  "requer": [
+   "0045",
+   "0046"
+  ],
+  "porque": "Função também mora na memória e tem endereço, então um ponteiro pode guardá-la e passá-la como parâmetro.",
+  "saia": [
+   "`int (*f)(int, int);` declara um ponteiro para função de dois `int`.",
+   "Passar a função como argumento deixa quem chama escolher o comportamento."
+  ]
+ },
+ {
+  "num": "0051",
+  "requer": [
+   "0046",
+   "0050",
+   "0047"
+  ],
+  "porque": "Para uma função servir a qualquer tipo, o ponteiro precisa esquecer o tipo: é o `void *`.",
+  "saia": [
+   "`void *` guarda qualquer endereço, mas não se desreferencia sem cast.",
+   "`qsort` recebe `const void *` e a função de comparação faz o cast."
+  ]
+ },
+ {
+  "num": "0052",
+  "requer": [
+   "0046",
+   "0047",
+   "0049",
+   "0050",
+   "0051"
+  ],
+  "porque": "Fecha o módulo juntando referência, vetor de ponteiros e ponteiro para função num ranking ordenado.",
+  "saia": [
+   "Ordenar ponteiros é mais barato que mover os dados.",
+   "`qsort` com função de comparação ordena por qualquer critério."
+  ]
+ },
+ {
+  "num": "0053",
+  "requer": [
+   "0031",
+   "0045"
+  ],
+  "porque": "Os ponteiros precisam apontar para algum lugar, e a memória tem duas regiões com regras de vida diferentes.",
+  "saia": [
+   "A pilha guarda locais e some quando a função retorna.",
+   "O heap guarda blocos que você pede e devolve, e eles vivem até o `free`."
+  ]
+ },
+ {
+  "num": "0054",
+  "requer": [
+   "0053",
+   "0047",
+   "0051"
+  ],
+  "porque": "`malloc` é o pedido de memória ao heap, e o endereço que ele devolve cabe num ponteiro.",
+  "saia": [
+   "`int *p = malloc(n * sizeof *p);` reserva `n` inteiros, e `NULL` indica falha.",
+   "Todo `malloc` tem um `free`, e o ponteiro não se usa depois dele."
+  ]
+ },
+ {
+  "num": "0055",
+  "requer": [
+   "0054",
+   "0037"
+  ],
+  "porque": "Além de pedir bloco, é preciso zerar e crescer, e é isso que `calloc` e `realloc` fazem.",
+  "saia": [
+   "`calloc(n, tam)` entrega o bloco zerado.",
+   "`realloc` pode mover o bloco, então guarde o retorno num ponteiro à parte antes de trocar."
+  ]
+ },
+ {
+  "num": "0056",
+  "requer": [
+   "0054",
+   "0055",
+   "0049",
+   "0039"
+  ],
+  "porque": "Matriz dinâmica junta a matriz do módulo 05 com o `**` e o `malloc`: um bloco para as linhas, outro para cada uma.",
+  "saia": [
+   "`int **m` aponta para um vetor de ponteiros, cada um com sua linha.",
+   "Libere cada linha e, por último, o vetor de linhas."
+  ]
+ },
+ {
+  "num": "0057",
+  "requer": [
+   "0054",
+   "0055",
+   "0056"
+  ],
+  "porque": "Quem pede memória precisa saber como ela falha: cada erro tem causa e sintoma conhecidos.",
+  "saia": [
+   "Vazamento é `malloc` sem `free`; uso após `free` e `free` duplo corrompem o heap.",
+   "AddressSanitizer e `valgrind` apontam a linha do erro."
+  ]
+ },
+ {
+  "num": "0058",
+  "requer": [
+   "0053",
+   "0054",
+   "0055",
+   "0056",
+   "0057"
+  ],
+  "porque": "Fecha o módulo juntando alocação, redimensionamento e limpeza num programa que cresce com o uso.",
+  "saia": [
+   "Todo caminho do programa deve liberar o que alocou, inclusive o de erro.",
+   "Cresça o bloco por fatores (dobrar) e não de um em um."
+  ]
+ },
+ {
+  "num": "0059",
+  "requer": [
+   "0037",
+   "0041",
+   "0003"
+  ],
+  "porque": "O vetor guarda valores do mesmo tipo; a struct agrupa campos de tipos diferentes sob um nome.",
+  "saia": [
+   "`struct aluno { char nome[30]; int idade; };` define o molde, e `a.idade` acessa o campo.",
+   "`sizeof` de uma struct pode passar da soma dos campos, por causa do alinhamento."
+  ]
+ },
+ {
+  "num": "0060",
+  "requer": [
+   "0059"
+  ],
+  "porque": "Escrever `struct aluno` toda vez cansa, e o `typedef` dá um nome curto ao tipo composto.",
+  "saia": [
+   "`typedef struct { ... } Aluno;` permite declarar `Aluno a;`.",
+   "`typedef` cria apelido de tipo, não novo tipo."
+  ]
+ },
+ {
+  "num": "0061",
+  "requer": [
+   "0060",
+   "0037",
+   "0038"
+  ],
+  "porque": "Com o tipo composto pronto, o vetor de structs é o vetor do módulo 05 com elementos maiores.",
+  "saia": [
+   "`Aluno turma[30];` guarda 30 registros, e `turma[i].nome` acessa o campo.",
+   "`qsort` ordena o vetor de structs com uma função de comparação por campo."
+  ]
+ },
+ {
+  "num": "0062",
+  "requer": [
+   "0060",
+   "0045",
+   "0054"
+  ],
+  "porque": "Struct grande se passa e se aloca por ponteiro, e o `->` abrevia a conta.",
+  "saia": [
+   "`p->campo` é `(*p).campo`.",
+   "Passar `Aluno *` evita copiar a struct inteira; `malloc(sizeof *p)` a aloca no heap."
+  ]
+ },
+ {
+  "num": "0063",
+  "requer": [
+   "0004",
+   "0018"
+  ],
+  "porque": "Enum dá nome a um conjunto de constantes inteiras, e casa bem com o `switch`.",
+  "saia": [
+   "`enum cor { VERMELHO, VERDE, AZUL };` numera de `0` em diante.",
+   "O `switch` sobre um enum permite o aviso do compilador para caso esquecido."
+  ]
+ },
+ {
+  "num": "0064",
+  "requer": [
+   "0059",
+   "0003"
+  ],
+  "porque": "Union parece struct, mas os campos dividem o mesmo espaço, o que depende de saber o tamanho dos tipos.",
+  "saia": [
+   "Todos os campos da `union` começam no mesmo endereço; o tamanho é o do maior.",
+   "Só vale o campo escrito por último; use um enum à parte para marcar qual."
+  ]
+ },
+ {
+  "num": "0065",
+  "requer": [
+   "0003",
+   "0064",
+   "0013"
+  ],
+  "porque": "Bits dentro de um inteiro são outra forma de empacotar vários valores, agora com operadores bit a bit.",
+  "saia": [
+   "`&` testa, `|` liga, `^` inverte e `~` complementa bit a bit.",
+   "`flags |= (1 << k)` liga o bit `k`, e `flags & (1 << k)` o testa."
+  ]
+ },
+ {
+  "num": "0066",
+  "requer": [
+   "0061",
+   "0062",
+   "0063",
+   "0060"
+  ],
+  "porque": "Fecha o módulo juntando struct, vetor de structs e enum num cardápio com cálculo e ordenação.",
+  "saia": [
+   "Registro é struct, coleção é vetor de structs, e a categoria é enum.",
+   "Funções recebem ponteiro para struct, com `const` quando só leem."
+  ]
+ }
+]

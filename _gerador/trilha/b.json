@@ -1,0 +1,622 @@
+[
+ {
+  "num": "0170",
+  "requer": [
+   "0007",
+   "0009",
+   "0013",
+   "0017",
+   "0065"
+  ],
+  "porque": "A prova esconde várias contas numa linha só, e ler cada uma exige saber a ordem entre os operadores que você já usou.",
+  "saia": [
+   "`18 * 3 + 12` agrupa o `*` antes do `+`; a associatividade desempata `a = b = 5` como `a = (b = 5)`.",
+   "`&`, `^` e `|` ficam abaixo do `==`: `x & 1 == 0` testa `1 == 0` primeiro.",
+   "Em `f() + g()` a ordem de avaliação não é especificada; só `&&`, `||`, `?:` e `,` garantem a esquerda primeiro."
+  ]
+ },
+ {
+  "num": "0171",
+  "requer": [
+   "0170",
+   "0003",
+   "0008"
+  ],
+  "porque": "Os limites de tipos e as conversões do 0003 e do 0008 ganham o caso mais perigoso: misturar sinal e não sinal numa conta ou comparação.",
+  "saia": [
+   "`unsigned` não guarda negativo: `2u - 3u` dá 4294967295, porque a conta dá a volta módulo 2³².",
+   "`-1 > 0u` é verdadeiro: na conversão aritmética usual, `int` e `unsigned` do mesmo tamanho viram `unsigned`.",
+   "Estourar `int` com sinal (`INT_MAX + 1`) é comportamento indefinido; `unsigned` é definido."
+  ]
+ },
+ {
+  "num": "0172",
+  "requer": [
+   "0038",
+   "0039",
+   "0053",
+   "0056"
+  ],
+  "porque": "O VLA é a matriz que nasce com o tamanho lido na execução, na pilha, e dispensa o `malloc` do 0056 quando o tamanho é pequeno.",
+  "saia": [
+   "`int m[l][c];` cria um vetor local de tamanho calculado na execução, na pilha, sem `free`.",
+   "VLA não pode ser `static`, global nem inicializado (`= {0}`); use um laço.",
+   "Como parâmetro, as dimensões vêm antes: `void f(int l, int c, int m[l][c])`."
+  ]
+ },
+ {
+  "num": "0173",
+  "requer": [
+   "0170",
+   "0171",
+   "0172",
+   "0063",
+   "0065"
+  ],
+  "porque": "Junta o módulo: precedência decide os parênteses da máscara, `unsigned` evita o `~` negativo e o VLA guarda a planilha de acessos.",
+  "saia": [
+   "Permissão efetiva é `(base[u->papel] | u->extra) & ~u->bloqueio`: o bloqueio vence.",
+   "\"Pode tudo desta máscara?\" é `(efetivas & mascara) == mascara`, com parênteses porque `==` vem antes de `&`.",
+   "Máscaras de bits ficam em `unsigned`: `~` num `int` daria negativo e abriria a pegadinha do `-1 > 0u`."
+  ]
+ },
+ {
+  "num": "0067",
+  "requer": [
+   "0041",
+   "0042",
+   "0045"
+  ],
+  "porque": "Arquivo é acessado por um `FILE *`, um ponteiro, e lido com as mesmas funções de texto das strings, agora vindas do disco.",
+  "saia": [
+   "Três passos: `fopen(caminho, modo)`, ler ou escrever, `fclose`; `fopen` devolve `NULL` se falhar, então todo uso leva `if`.",
+   "`\"w\"` apaga o arquivo que já existe; `\"a\"` escreve no fim; `\"r\"` exige que ele exista.",
+   "Em arquivo texto o número 152.40 vira os caracteres `'1' '5' '2' '.' '4' '0'`."
+  ]
+ },
+ {
+  "num": "0068",
+  "requer": [
+   "0067",
+   "0059",
+   "0061"
+  ],
+  "porque": "O binário grava a struct do 0059 como está na memória, e a conta `i * sizeof(registro)` só funciona porque o 0061 fixa o tamanho.",
+  "saia": [
+   "`fwrite` e `fread` copiam bytes sem converter: um `int` ocupa sempre 4 bytes no arquivo.",
+   "O registro `i` começa no byte `i * sizeof(registro)`, e `fseek` pula direto até ele.",
+   "Modos com `b` (`\"rb\"`, `\"wb\"`, `\"ab\"`); o arquivo só vale em outra máquina se tipos e ordem dos bytes forem iguais."
+  ]
+ },
+ {
+  "num": "0069",
+  "requer": [
+   "0038",
+   "0048",
+   "0049"
+  ],
+  "porque": "`argv` é um vetor de strings, um `char **`, e usar cada item pede o que você viu de ponteiros e strings.",
+  "saia": [
+   "`argc` conta os itens, inclusive o nome do programa; `argv[0]` é o nome e `argv[argc]` é `NULL`.",
+   "Tudo em `argv` é texto: converta com `strtol(texto, &fim, 10)` ou `strtod` e confira `*fim`.",
+   "Quem corta a linha em argumentos é o shell, antes de o programa começar."
+  ]
+ },
+ {
+  "num": "0070",
+  "requer": [
+   "0061",
+   "0067",
+   "0068",
+   "0069"
+  ],
+  "porque": "Junta o módulo: os argumentos escolhem o subcomando, o binário guarda os registros e o texto exporta o CSV.",
+  "saia": [
+   "`argv[1]` escolhe o subcomando; o `main` confere o `argc` antes de chamar a função.",
+   "Gravar com `fwrite` em `\"ab\"`; `ftell / sizeof(Gasto)` diz quantos registros já existem.",
+   "Valide antes de gravar: `strtod` com `*fim != '\\0'` barra entrada como `\"abc\"`."
+  ]
+ },
+ {
+  "num": "0071",
+  "requer": [
+   "0022",
+   "0024",
+   "0025",
+   "0038"
+  ],
+  "porque": "Contar passos precisa dos laços e do padrão de busca em vetor, porque a operação dominante é a comparação dentro do laço.",
+  "saia": [
+   "Escolha a operação dominante e conte quantas vezes ela roda; a medida é passos, não segundos.",
+   "Melhor, pior e médio caso: numa busca em `n` itens, 1, `n` e `(n + 1) / 2` passos.",
+   "A contagem escrita em função de `n` é a função de custo."
+  ]
+ },
+ {
+  "num": "0072",
+  "requer": [
+   "0071"
+  ],
+  "porque": "A função de custo contada no 0071 ganha uma forma curta: só importa como ela cresce quando `n` cresce.",
+  "saia": [
+   "`f(n)` é `O(g(n))` se `f(n) <= c · g(n)` para todo `n >= n₀`; é um teto.",
+   "A notação O descarta constantes e termos menores: `n² + 50n + 7` é `O(n²)`.",
+   "As cinco classes: `O(1)`, `O(log n)`, `O(n)`, `O(n log n)`, `O(n²)`; ao dobrar `n`, o custo muda em proporção diferente em cada uma."
+  ]
+ },
+ {
+  "num": "0073",
+  "requer": [
+   "0022",
+   "0025",
+   "0072"
+  ],
+  "porque": "Antes de provar um laço, você precisa conhecer o padrão de laço que ele implementa; o invariante diz o que ele já garantiu a cada volta.",
+  "saia": [
+   "Invariante é uma relação que vale no começo de cada iteração; o de \"achar o maior\" é `maior` ser máximo de `v[0..i-1]`.",
+   "Quatro passos: início, manutenção, término e parada.",
+   "`assert(condicao)` transforma o invariante em código que para o programa se ele quebrar."
+  ]
+ },
+ {
+  "num": "0074",
+  "requer": [
+   "0034",
+   "0054",
+   "0062",
+   "0073"
+  ],
+  "porque": "O TAD usa a compilação separada do 0034 e a struct com ponteiro; o contrato do `.h` é o que o invariante do 0073 garante por dentro.",
+  "saia": [
+   "`.h` é o contrato (tipo e protótipos); `.c` define a struct e as funções; o cliente só inclui o `.h`.",
+   "Tipo opaco: `typedef struct contador Contador;` no `.h`; o cliente só tem `Contador *`, nunca a variável.",
+   "O cliente conhece só as operações; quem implementa troca o interior sem quebrá-lo."
+  ]
+ },
+ {
+  "num": "0166",
+  "requer": [
+   "0071",
+   "0072"
+  ],
+  "porque": "A notação O do 0072 era só uma ideia de teto; aqui você a prova com as constantes `c` e `n₀`, e ganha o piso e o sanduíche.",
+  "saia": [
+   "`O` é teto, `Ω` é piso, `Θ` é os dois: `c₁ · g(n) <= f(n) <= c₂ · g(n)` para `n >= n₀`.",
+   "Provar é exibir `c` e `n₀` e mostrar a conta: `3n² + 10n + 20` é `O(n²)` com `c = 4` e `n₀ = 12`.",
+   "O `n₀` existe porque só o `n` grande importa; o `c` existe porque a constante muda de máquina."
+  ]
+ },
+ {
+  "num": "0167",
+  "requer": [
+   "0024",
+   "0071",
+   "0166"
+  ],
+  "porque": "Laço de dentro que depende de `i` não se conta por multiplicação; cada `for` vira um `Σ` e a fórmula dá a classe do 0166.",
+  "saia": [
+   "Cada `for` vira um `Σ`: os limites do laço são os da soma e o corpo é a parcela.",
+   "`Σ i` de 0 a `n-1` é `n(n-1)/2`, `Θ(n²)`; a metade corta a constante, não a classe.",
+   "`Σ i²` dá `Θ(n³)`; laço que dobra a cada volta soma uma progressão geométrica."
+  ]
+ },
+ {
+  "num": "0168",
+  "requer": [
+   "0031",
+   "0053",
+   "0054",
+   "0166"
+  ],
+  "porque": "Memória se conta com as mesmas notações do 0166, e o espaço extra vem do heap (`malloc`) e da pilha de chamadas.",
+  "saia": [
+   "Espaço extra é o que a função usa além da entrada; constante é `Θ(1)` e o algoritmo é in-place.",
+   "Na recursão, o espaço é a profundidade máxima vezes o tamanho do frame, não o total de chamadas.",
+   "Tabelas de memoização, contagem ou hash trocam tempo por espaço."
+  ]
+ },
+ {
+  "num": "0169",
+  "requer": [
+   "0032",
+   "0074",
+   "0166",
+   "0167",
+   "0168"
+  ],
+  "porque": "Fecha o módulo: você confere fórmulas de passos e bytes medindo, com um TAD de contadores, o que escreveu no papel.",
+  "saia": [
+   "Escreva a fórmula exata de passos (somatórios) e o espaço extra, depois instrumente o código e compare.",
+   "Dobrar o `n` e olhar a razão: `Θ(n²)` tende a 4, `Θ(n log n)` fica um pouco acima de 2, `Θ(log n)` soma 1.",
+   "Passo é a operação dominante de cada função; `custo_passos`, `custo_bytes` e `custo_prof_max` medem passos, bytes e frames."
+  ]
+ },
+ {
+  "num": "0075",
+  "requer": [
+   "0055",
+   "0074"
+  ],
+  "porque": "O vetor dinâmico estende o `realloc` do 0055 e o embrulha num TAD, o primeiro de lista do curso.",
+  "saia": [
+   "Três campos controlam a lista: `itens` (endereço no heap), `tam` (em uso) e `cap` (cabem).",
+   "Com `tam == cap`, `realloc` para o dobro da capacidade; inserir no fim fica `O(1)` amortizado.",
+   "O `.h` diz o que a lista faz e o `.c` esconde a `struct lista`."
+  ]
+ },
+ {
+  "num": "0076",
+  "requer": [
+   "0054",
+   "0062",
+   "0074"
+  ],
+  "porque": "O nó é uma struct que contém um ponteiro para si mesma, alocada com `malloc`, e a lista vira um TAD como o do 0074.",
+  "saia": [
+   "Nó: valor e `prox`; a lista é o endereço do primeiro nó, e vazia é `inicio == NULL`.",
+   "Não existe `lista[2]`: para chegar ao terceiro nó, siga duas setas a partir do início.",
+   "Inserir no início é `O(1)`: o `prox` do novo aponta para o antigo início."
+  ]
+ },
+ {
+  "num": "0077",
+  "requer": [
+   "0049",
+   "0076"
+  ],
+  "porque": "Remover o primeiro nó muda o início, então a função recebe o endereço dele (`No **inicio`, 0049) e percorre com dois ponteiros.",
+  "saia": [
+   "Buscar é percorrer até achar, `O(n)`, e devolver o endereço do nó ou `NULL`.",
+   "Remover usa `ant` e `p`: `ant->prox = p->prox`; se `ant == NULL`, o nó é o primeiro e o `inicio` muda.",
+   "Religue as setas antes do `free(p)`."
+  ]
+ },
+ {
+  "num": "0078",
+  "requer": [
+   "0076",
+   "0077"
+  ],
+  "porque": "A inserção ordenada reaproveita o par `ant`/`p` da busca do 0077 e religa duas setas no ponto certo.",
+  "saia": [
+   "Ande com `ant`/`p` enquanto os valores forem menores que o novo, então `novo->prox = p` e `ant->prox = novo`.",
+   "Se `ant` for `NULL`, o novo é o menor e vira o início; o fim não é caso especial.",
+   "Com a lista em ordem, a busca pode desistir ao passar do valor."
+  ]
+ },
+ {
+  "num": "0079",
+  "requer": [
+   "0076",
+   "0077"
+  ],
+  "porque": "A lista simples não volta, e remover exige o anterior; o nó ganha um `ant` para tirar o 0077 do caminho.",
+  "saia": [
+   "Cada nó guarda `prox` e `ant`; para todo `p` que não é o último, `p->prox->ant == p`.",
+   "Remover um nó conhecendo só ele é `O(1)`: duas setas mudam, cada uma com seu caso de borda.",
+   "Com ponteiro para o último nó, inserir no fim também é `O(1)`."
+  ]
+ },
+ {
+  "num": "0080",
+  "requer": [
+   "0021",
+   "0076",
+   "0079"
+  ],
+  "porque": "O último nó aponta para o primeiro, e o `do-while` do 0021 é o laço que percorre uma lista sem fim.",
+  "saia": [
+   "Guarde o ponteiro para o último nó: o primeiro é `ultimo->prox`.",
+   "Percorrer para ao voltar ao ponto de partida, com `do-while`; a lista vazia (`ultimo == NULL`) vem antes.",
+   "Inserir no início e no fim custa `O(1)`: no fim é inserir no início e declarar o novo como último."
+  ]
+ },
+ {
+  "num": "0081",
+  "requer": [
+   "0050",
+   "0067",
+   "0077",
+   "0079",
+   "0080"
+  ],
+  "porque": "Junta o módulo: lista dupla com cursor, busca e remoção, volta circular e salvar em arquivo texto.",
+  "saia": [
+   "O TAD `playlist` esconde os nós `Faixa` (`ant`, `prox`, `Musica`) e guarda `inicio`, `fim`, `atual`, `tamanho` e `repetir`.",
+   "Com repetir ligado, próxima e anterior dão a volta nas pontas como numa lista circular.",
+   "Salvar e carregar usam arquivo texto, uma música por linha, no formato `titulo;artista;segundos`."
+  ]
+ },
+ {
+  "num": "0082",
+  "requer": [
+   "0031",
+   "0037",
+   "0074"
+  ],
+  "porque": "A pilha de chamadas do 0031 vira estrutura própria, montada como TAD sobre um vetor de tamanho fixo.",
+  "saia": [
+   "LIFO: o último a entrar é o primeiro a sair; só o topo está ao alcance.",
+   "Quatro operações: empilhar, desempilhar, olhar o topo e perguntar se é vazia.",
+   "Desempilhar de pilha vazia é underflow; empilhar em pilha cheia é overflow."
+  ]
+ },
+ {
+  "num": "0083",
+  "requer": [
+   "0076",
+   "0082"
+  ],
+  "porque": "O vetor de capacidade fixa do 0082 dá lugar aos nós da lista do 0076, com o topo no começo.",
+  "saia": [
+   "O topo fica no início da lista: empilhar e desempilhar são `O(1)`; no fim exigiria achar o penúltimo, `O(n)`.",
+   "Vazia é `topo == NULL`; desempilhar guarda o valor, avança o topo e dá `free` no nó.",
+   "O `pilha.h` é idêntico ao do vetor: só o `.c` muda."
+  ]
+ },
+ {
+  "num": "0084",
+  "requer": [
+   "0041",
+   "0082",
+   "0083"
+  ],
+  "porque": "É o primeiro uso real da pilha: o fechamento casa com a abertura pendente mais recente, que é o topo.",
+  "saia": [
+   "Abriu, empilha; fechou, desempilha e confere o par; no fim, a pilha tem que estar vazia.",
+   "Um contador só serve com um tipo de parêntese; com `()`, `[]` e `{}` falha em `( [ ) ]`.",
+   "Na pós-fixa, números vão para a pilha e cada operador usa os dois do topo."
+  ]
+ },
+ {
+  "num": "0085",
+  "requer": [
+   "0074",
+   "0082"
+  ],
+  "porque": "A fila tem o mesmo TAD da pilha com a regra oposta, e o vetor circular depende do `%` para dar a volta.",
+  "saia": [
+   "FIFO: entra pelo fim, sai pelo início; o primeiro a entrar é o primeiro a sair.",
+   "Fila circular: guarde `inicio` e `n`; a próxima vaga é `(inicio + n) % CAPACIDADE`.",
+   "Empurrar todo mundo a cada retirada custaria `O(n)`; o vetor circular deixa em `O(1)`."
+  ]
+ },
+ {
+  "num": "0086",
+  "requer": [
+   "0083",
+   "0085"
+  ],
+  "porque": "Assim como a pilha do 0083, a fila troca o vetor por nós, mas usa as duas pontas e precisa de um segundo ponteiro.",
+  "saia": [
+   "Retirar do início é `inicio = inicio->prox`, `O(1)`.",
+   "Guarde o `fim`: `fim->prox = novo; fim = novo` insere em `O(1)`, sem andar até o último.",
+   "A fila sai pelo início e entra pelo fim; o contrário não funciona numa lista simples."
+  ]
+ },
+ {
+  "num": "0087",
+  "requer": [
+   "0079",
+   "0082",
+   "0085"
+  ],
+  "porque": "O deque é a fila circular do 0085 com as duas pontas abertas, e generaliza pilha e fila.",
+  "saia": [
+   "Quatro operações em `O(1)`: insere e retira no início, insere e retira no fim.",
+   "Com uma ponta só é pilha; inserindo no fim e retirando no início é fila.",
+   "Para inserir na frente, o `inicio` recua uma gaveta e, da 0, volta para a última."
+  ]
+ },
+ {
+  "num": "0088",
+  "requer": [
+   "0063",
+   "0083",
+   "0084",
+   "0086"
+  ],
+  "porque": "Junta pilha e fila: converter infixa em pós-fixa usa uma fila de saída e uma pilha de operadores, e avaliar usa a pilha do 0084.",
+  "saia": [
+   "Pátio de manobras: números vão direto para a fila; operadores esperam na pilha até nenhum mais forte precisar passar.",
+   "Avaliar a pós-fixa: itens saem da fila na ordem e passam por uma pilha de valores.",
+   "Operadores viram códigos negativos num `enum`, porque os números são `>= 0`."
+  ]
+ },
+ {
+  "num": "0089",
+  "requer": [
+   "0025",
+   "0038",
+   "0072"
+  ],
+  "porque": "É a primeira busca em vetor: usa o padrão de laço do 0025 e é o exemplo concreto do `O(n)` do 0072.",
+  "saia": [
+   "Percorra de 0 a `n-1`; devolva o índice ou `-1`, que nunca é índice válido.",
+   "Melhor caso 1 comparação, pior `n`, médio `(n + 1) / 2`; não exige ordem.",
+   "\"Não tem\" só se responde olhando todos."
+  ]
+ },
+ {
+  "num": "0090",
+  "requer": [
+   "0072",
+   "0073",
+   "0089"
+  ],
+  "porque": "A busca binária exige o vetor ordenado e é o exemplo do `O(log n)` do 0072, com o invariante do 0073.",
+  "saia": [
+   "Invariante: se `x` está no vetor, está em `v[ini..fim]`; quando `ini > fim`, responda `-1`.",
+   "Cada volta descarta metade; o pior caso é `⌊log₂ n⌋ + 1` voltas.",
+   "Em vetor desordenado ela responde errado sem avisar."
+  ]
+ },
+ {
+  "num": "0091",
+  "requer": [
+   "0024",
+   "0038",
+   "0046",
+   "0072"
+  ],
+  "porque": "É o primeiro algoritmo de ordenação: laço aninhado sobre vizinhos, com troca por referência (0046) e custo contado como no 0072.",
+  "saia": [
+   "Compara `v[j]` com `v[j + 1]` e troca se o da esquerda for maior; o maior vai para o fim a cada passada.",
+   "`n - 1` passadas bastam; o laço interno vai até `j < n - passada`; a bandeira `trocou` para cedo.",
+   "Pior caso `n(n - 1)/2` comparações, `O(n²)`; melhor, com bandeira, `O(n)`."
+  ]
+ },
+ {
+  "num": "0092",
+  "requer": [
+   "0025",
+   "0091"
+  ],
+  "porque": "Reaproveita o padrão do menor do 0025 e a troca do 0091, mas troca no máximo uma vez por passada.",
+  "saia": [
+   "Passada `i`: ache o índice do menor em `v[i..n-1]` e troque com `v[i]`.",
+   "`n(n - 1)/2` comparações em todos os casos, `O(n²)`.",
+   "No máximo `n - 1` trocas, contra até `n(n - 1)/2` do bubble."
+  ]
+ },
+ {
+  "num": "0093",
+  "requer": [
+   "0073",
+   "0091"
+  ],
+  "porque": "Cada carta encaixa numa mão já em ordem; o invariante do 0073 é exatamente \"`v[0..j-1]` está em ordem\".",
+  "saia": [
+   "Guarde `x = v[j]`, desloque para a direita os maiores que `x` e ponha `x` no buraco.",
+   "Pior caso `n(n - 1)/2` comparações, `O(n²)`; melhor (já ordenado) `n - 1`, `O(n)`.",
+   "Desloca em vez de trocar, e é o melhor dos três simples."
+  ]
+ },
+ {
+  "num": "0094",
+  "requer": [
+   "0031",
+   "0032",
+   "0054",
+   "0093"
+  ],
+  "porque": "Dividir ao meio é recursão (0032) e a intercalação pede um vetor auxiliar (`malloc`), o primeiro `O(n log n)` do curso.",
+  "saia": [
+   "Intercalar dois vetores ordenados custa no máximo `n - 1` comparações.",
+   "Divida, ordene cada metade com o próprio merge sort, intercale; caso base com 0 ou 1 elemento.",
+   "São `log₂ n` níveis de custo `n`: `O(n log n)`, com rascunho de `O(n)`."
+  ]
+ },
+ {
+  "num": "0095",
+  "requer": [
+   "0031",
+   "0032",
+   "0094"
+  ],
+  "porque": "Também divide e conquista, mas o trabalho está em separar antes da recursão, e o pivô cai na posição final sem rascunho.",
+  "saia": [
+   "Separação de Lomuto: `j` marca a fronteira; tudo em `v[p..j-1]` é `<=` pivô; no fim troque o pivô com `v[j]`.",
+   "Depois da separação, ordene `v[p..j-1]` e `v[j+1..r]` com o próprio quick sort.",
+   "Pivô bom dá `O(n log n)`; pivô sempre no extremo dá `O(n²)`."
+  ]
+ },
+ {
+  "num": "0096",
+  "requer": [
+   "0050",
+   "0051",
+   "0093",
+   "0094",
+   "0095"
+  ],
+  "porque": "Compara os algoritmos pelos critérios que decidem a escolha, e o `qsort` usa o ponteiro para função e o `void *` do módulo 06.",
+  "saia": [
+   "Estável: chaves iguais mantêm a ordem de entrada; bubble, insertion e merge são estáveis, selection e quick não.",
+   "Compare custo (melhor, médio, pior), memória extra (in-place ou `O(n)`) e se adapta a vetor quase ordenado.",
+   "`qsort(base, n, tam, comparar)` recebe uma função de comparação que devolve negativo, zero ou positivo."
+  ]
+ },
+ {
+  "num": "0119",
+  "requer": [
+   "0093"
+  ],
+  "porque": "O shell sort corrige o ponto fraco do insertion sort do 0093, que anda uma casa por movimento, trocando o passo por saltos `h`.",
+  "saia": [
+   "Repete o insertion sort com saltos `h` decrescentes; a última rodada é com `h = 1`.",
+   "Depois da rodada com salto `h`, o vetor está h-ordenado.",
+   "Sequência de Knuth `h = 3h + 1` (1, 4, 13, 40...); comece abaixo de `n / 3` e divida por 3."
+  ]
+ },
+ {
+  "num": "0120",
+  "requer": [
+   "0038",
+   "0072",
+   "0096"
+  ],
+  "porque": "Depois de comparar algoritmos por comparação, este usa o valor da chave como índice e escapa do piso `n log n`, sem comparar elementos.",
+  "saia": [
+   "Três laços: contar, acumular (quantos são `<=` a `x`) e distribuir de trás para a frente.",
+   "Distribuir de trás para a frente com `c[x]--` e `saida[c[x]] = v[i]` torna a ordenação estável.",
+   "Custo `O(n + k)`, com chaves inteiras de `0` a `k - 1` e vetor auxiliar."
+  ]
+ },
+ {
+  "num": "0121",
+  "requer": [
+   "0007",
+   "0065",
+   "0120"
+  ],
+  "porque": "Cada passada do radix é um counting sort do 0120 sobre um dígito, e dividir por `exp` ou deslocar bits tira o dígito.",
+  "saia": [
+   "LSD: ordene pelo dígito menos significativo primeiro; o dígito de `x` na casa `exp` é `(x / exp) % 10`.",
+   "Cada passada precisa ser estável, ou a anterior se perde.",
+   "Com `d` dígitos e base `b`, o custo é `O(d · (n + b))`; para tamanho fixo é linear."
+  ]
+ },
+ {
+  "num": "0122",
+  "requer": [
+   "0076",
+   "0078",
+   "0120"
+  ],
+  "porque": "Cada balde é uma lista ordenada (0078) de nós (0076), e como no 0120 a chave escolhe o destino sem comparar tudo com tudo.",
+  "saia": [
+   "Divida o intervalo em faixas, jogue cada elemento no balde da faixa, ordene cada balde e concatene.",
+   "Valores bem espalhados dão `O(n)` em média; se todos caem num balde, vira `O(n²)`.",
+   "Cada balde é uma lista encadeada com inserção ordenada."
+  ]
+ },
+ {
+  "num": "0123",
+  "requer": [
+   "0095"
+  ],
+  "porque": "Usa a separação do 0095, mas segue só o lado onde está a resposta, em vez de ordenar os dois.",
+  "saia": [
+   "Depois de `separa`, o pivô está em `j`: se `j == k` acabou; se `k < j` siga à esquerda; senão à direita.",
+   "Segue um lado só, num `while` que encolhe `[p, r]`.",
+   "`O(n)` em média (`n + n/2 + n/4...` < `2n`); com pivô sempre extremo, `O(n²)`."
+  ]
+ },
+ {
+  "num": "0124",
+  "requer": [
+   "0059",
+   "0096",
+   "0120",
+   "0121",
+   "0074"
+  ],
+  "porque": "Junta os métodos lineares: números inteiros de chave pequena escolhem radix ou counting em vez do `qsort` do 0096.",
+  "saia": [
+   "`pix_por_valor` usa radix sort base 256: quatro passadas de counting sort estável com vetor auxiliar.",
+   "`pix_por_horario` usa counting sort direto com `k = 86400` contadores, linear porque `k < n`.",
+   "Ordenar por duas chaves, horário e valor, depende de cada passada ser estável."
+  ]
+ }
+]

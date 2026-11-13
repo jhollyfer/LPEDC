@@ -34,7 +34,14 @@ for (const [nome, opcoes] of [['390px', devices['iPhone 13']], ['1440px', { view
     })
     if (r.largo || r.cru) ruins.push(`${id}${r.largo ? ' mais larga que a tela' : ''}${r.cru ? ' markdown cru' : ''}`)
   }
-  console.log(`${nome}: ${ids.length} questões, ${ruins.length} com problema, ${erros.length} erros de script`)
+  // a trilha: a escada inteira aberta, sem página mais larga que a tela
+  await page.evaluate(() => { location.hash = 'trilha' })
+  await page.waitForSelector('.degraus')
+  await page.evaluate(() => document.querySelectorAll('.degrau details').forEach((d) => { d.open = true }))
+  const trilha = await page.evaluate(() => ({ largo: document.documentElement.scrollWidth > innerWidth + 1, degraus: document.querySelectorAll('.degrau').length }))
+  if (trilha.largo) ruins.push('trilha mais larga que a tela')
+  if (trilha.degraus !== await page.evaluate(() => window.TRILHA.length)) ruins.push(`trilha com ${trilha.degraus} degraus`)
+  console.log(`${nome}: ${ids.length} questões + trilha, ${ruins.length} com problema, ${erros.length} erros de script`)
   for (const x of [...ruins, ...erros]) console.log(`  ${x}`)
   falhas += ruins.length + erros.length
   await ctx.close()

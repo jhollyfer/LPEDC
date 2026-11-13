@@ -1,0 +1,628 @@
+[
+ {
+  "num": "0097",
+  "requer": [
+   "0062",
+   "0076",
+   "0032"
+  ],
+  "porque": "Cada nó aponta para os filhos como a lista aponta para o próximo, só que com vários ponteiros, e as árvores se percorrem por recursão.",
+  "saia": [
+   "Raiz é o único nó sem pai, folha é nó sem filhos, irmãos são filhos do mesmo pai.",
+   "Altura conta arestas: a folha tem altura 0 e a árvore vazia, -1.",
+   "Profundidade de um nó é o número de arestas até a raiz."
+  ]
+ },
+ {
+  "num": "0098",
+  "requer": [
+   "0097",
+   "0074",
+   "0032"
+  ],
+  "porque": "A árvore binária limita a dois ponteiros por nó e vira um TAD, e os percursos são recursões que visitam a raiz antes, no meio ou depois.",
+  "saia": [
+   "Nó binário tem dado, `esq` e `dir`, e `NULL` é a árvore vazia.",
+   "Pré-ordem visita raiz, esquerda, direita; em-ordem, esquerda, raiz, direita; pós-ordem, esquerda, direita, raiz.",
+   "Percurso por nível usa uma fila (0085), não recursão."
+  ]
+ },
+ {
+  "num": "0099",
+  "requer": [
+   "0098",
+   "0090"
+  ],
+  "porque": "A BST põe a regra menor à esquerda e maior à direita na árvore binária, para que a busca binária do vetor ande por ponteiros.",
+  "saia": [
+   "Em todo nó, esquerda tem chaves menores e direita tem chaves maiores.",
+   "Busca e inserção descem um caminho só e custam O(altura); o nó novo entra sempre como folha.",
+   "Em-ordem numa BST devolve as chaves em ordem crescente."
+  ]
+ },
+ {
+  "num": "0100",
+  "requer": [
+   "0099"
+  ],
+  "porque": "Remover mexe no meio da árvore, e o caso de dois filhos só se resolve com a regra de ordem que a inserção da BST estabeleceu.",
+  "saia": [
+   "Folha some e um filho sobe para o lugar do nó removido.",
+   "Com dois filhos, copie a chave do sucessor (menor da subárvore direita) e remova o sucessor.",
+   "A remoção custa O(altura), e o `free` vem depois de religar o pai."
+  ]
+ },
+ {
+  "num": "0101",
+  "requer": [
+   "0099",
+   "0072"
+  ],
+  "porque": "A BST degenera com chaves em ordem e custa O(n); a AVL conserta a altura a cada inserção com rotações para manter O(log n).",
+  "saia": [
+   "`fb = altura(esq) - altura(dir)` vale -1, 0 ou 1 em todo nó da AVL.",
+   "Os quatro casos são esquerda-esquerda e direita-direita (rotação simples) e esquerda-direita e direita-esquerda (rotação dupla).",
+   "A rotação preserva a ordem da BST e a altura da AVL fica em O(log n)."
+  ]
+ },
+ {
+  "num": "0102",
+  "requer": [
+   "0098",
+   "0085",
+   "0037"
+  ],
+  "porque": "A fila de prioridade tira o maior em vez do primeiro, e o heap guarda uma árvore binária completa num vetor, sem ponteiros.",
+  "saia": [
+   "No vetor, o pai de `i` é `(i - 1) / 2` e os filhos são `2i + 1` e `2i + 2`.",
+   "Heap de máximo: todo pai é maior ou igual aos filhos, e o máximo está na raiz.",
+   "Inserir sobe (`sobe`) e remover o máximo desce (`desce`), ambos em O(log n)."
+  ]
+ },
+ {
+  "num": "0103",
+  "requer": [
+   "0102",
+   "0094",
+   "0095"
+  ],
+  "porque": "O heapsort usa o heap para ordenar no próprio vetor e entra na comparação com o merge e o quick sort, que também têm O(n log n).",
+  "saia": [
+   "Fase 1 constrói o heap em O(n); fase 2 troca a raiz com o último e faz a raiz descer.",
+   "Custo O(n log n) no pior caso, sem vetor extra, mas não é estável.",
+   "Pai de `n / 2 - 1` até a raiz: as folhas já são heaps."
+  ]
+ },
+ {
+  "num": "0104",
+  "requer": [
+   "0100",
+   "0102",
+   "0059"
+  ],
+  "porque": "Fecha o módulo juntando a BST, que busca pela chave, ao heap, que acha os maiores por outro critério, em registros do tipo struct.",
+  "saia": [
+   "BST responde por matrícula (a chave) em O(altura); o heap responde por treinos (os maiores).",
+   "A chave ordena a árvore e o resto do registro vai junto no nó.",
+   "Cada estrutura serve a uma pergunta; uma só não resolve as duas."
+  ]
+ },
+ {
+  "num": "0144",
+  "requer": [
+   "0097",
+   "0098",
+   "0076"
+  ],
+  "porque": "Nó com número livre de filhos não cabe num vetor fixo, mas os filhos formam uma lista encadeada e o nó guarda só dois ponteiros.",
+  "saia": [
+   "Cada nó guarda `filho` (primeiro filho) e `irmao` (próximo da lista de irmãos).",
+   "Visitar os filhos é andar pela lista que começa em `filho` e segue os `irmao`.",
+   "É uma árvore binária disfarçada: esquerda é o filho e direita é o irmão."
+  ]
+ },
+ {
+  "num": "0145",
+  "requer": [
+   "0101",
+   "0099"
+  ],
+  "porque": "A LLRB reequilibra com as mesmas rotações da AVL, mas com cores e apenas três consertos em vez de alturas e quatro casos.",
+  "saia": [
+   "Link vermelho pendurado à esquerda guarda duas chaves num nó da árvore 2-3.",
+   "Os três consertos na volta da recursão: rotação à esquerda, rotação à direita e inversão de cores.",
+   "Todo caminho da raiz a uma folha tem o mesmo número de links pretos."
+  ]
+ },
+ {
+  "num": "0146",
+  "requer": [
+   "0099",
+   "0090"
+  ],
+  "porque": "Cada nó guarda várias chaves ordenadas, e a busca dentro do nó é a busca binária do vetor, para ler poucos nós do disco.",
+  "saia": [
+   "Grau mínimo `t`: todo nó, exceto a raiz, tem de `t - 1` a `2t - 1` chaves.",
+   "Nó com `k` chaves que não é folha tem `k + 1` filhos, e todas as folhas ficam no mesmo nível.",
+   "Nó cheio divide: a chave do meio sobe para o pai, e só a raiz que divide aumenta a altura."
+  ]
+ },
+ {
+  "num": "0147",
+  "requer": [
+   "0144",
+   "0041"
+  ],
+  "porque": "Cada nó tem um filho por letra de um alfabeto, e a ideia de nó com vários filhos acessados por índice vem da árvore geral.",
+  "saia": [
+   "O caminho da raiz soletra um prefixo; `bool fim` marca onde uma palavra termina.",
+   "Com 26 letras, o filho da letra `c` fica em `filho[c - 'a']`.",
+   "Inserir e buscar custam O(tamanho da palavra), independentes de quantas palavras existem."
+  ]
+ },
+ {
+  "num": "0148",
+  "requer": [
+   "0037",
+   "0097"
+  ],
+  "porque": "A floresta de conjuntos cabe num vetor de pais, uma árvore por grupo que só sobe até a raiz.",
+  "saia": [
+   "`pai[x]` é o pai de x e a raiz tem `pai[x] == x`, e é o representante do grupo.",
+   "`acha(x)` sobe até a raiz; `une(a, b)` pendura uma raiz na outra.",
+   "Compressão de caminho e união por tamanho deixam as operações quase O(1)."
+  ]
+ },
+ {
+  "num": "0149",
+  "requer": [
+   "0147",
+   "0106",
+   "0108"
+  ],
+  "porque": "O corretor pergunta ao dicionário se a palavra existe, e trie e tabela hash são as duas estruturas que a respondem; as edições vêm da distância de edição.",
+  "saia": [
+   "Candidatos são as edições da palavra: tirar, pôr ou trocar uma letra, ou trocar vizinhas.",
+   "Cada candidato custa uma busca no dicionário, e o custo dela decide a estrutura.",
+   "Hash acha palavra exata; trie também responde por prefixo."
+  ]
+ },
+ {
+  "num": "0105",
+  "requer": [
+   "0037",
+   "0072",
+   "0089"
+  ],
+  "porque": "O vetor dá O(1) por índice, e a função hash transforma qualquer chave em índice, para trocar o O(n) da busca sequencial por O(1) esperado.",
+  "saia": [
+   "Função hash recebe a chave e devolve um índice de `0` a `m - 1`.",
+   "Colisão é duas chaves no mesmo balde; é inevitável quando há mais chaves que baldes.",
+   "Hash boa é determinística e espalha bem."
+  ]
+ },
+ {
+  "num": "0106",
+  "requer": [
+   "0105",
+   "0076",
+   "0054"
+  ],
+  "porque": "Cada balde guarda a cabeça de uma lista encadeada do módulo 11, e inserir, buscar e remover são operações de lista após `hash(chave) % m`.",
+  "saia": [
+   "`i = hash(chave) % m` escolhe o balde e as operações andam só na lista dele.",
+   "Fator de carga `α = n / m` é o tamanho médio da lista e o custo esperado é O(1 + α).",
+   "Remover é remoção de lista, guardando o anterior."
+  ]
+ },
+ {
+  "num": "0107",
+  "requer": [
+   "0105",
+   "0037"
+  ],
+  "porque": "Sem lista, a tabela guarda os itens no próprio vetor e quem colide sonda outras casas, então o vetor tem de ter `n < m`.",
+  "saia": [
+   "Sondagem linear: `i = (i + 1) % m`, tentando a casa seguinte até achar vaga.",
+   "Remoção marca a casa como removida, não vazia, para a busca não parar no meio do caminho.",
+   "Com `α` perto de 1 as sondagens explodem: a tabela precisa de folga."
+  ]
+ },
+ {
+  "num": "0108",
+  "requer": [
+   "0106",
+   "0041",
+   "0096",
+   "0050"
+  ],
+  "porque": "Junta a tabela de encadeamento, o tratamento de strings e o `qsort` com ponteiro para função para contar e ranquear palavras.",
+  "saia": [
+   "Chave é a palavra, valor é a contagem, e cada palavra lida vira uma busca e um `+1`.",
+   "A tabela não tem ordem: copie as contagens para um vetor e use `qsort`.",
+   "Com N palavras e d diferentes, busca sequencial custa O(N · d) e o hash, O(N) esperado."
+  ]
+ },
+ {
+  "num": "0174",
+  "requer": [
+   "0079",
+   "0080"
+  ],
+  "porque": "A lista dupla tem `NULL` nas pontas e a circular não tem; a sentinela junta as duas e apaga os casos especiais da remoção.",
+  "saia": [
+   "A sentinela `nil` fica entre o último e o primeiro: `nil.prox` é o primeiro e `nil.ant` é o último.",
+   "Lista vazia é `nil.prox == &nil`; todo nó real tem vizinho dos dois lados.",
+   "Inserir e remover viram quatro atribuições, sem `if` para primeiro, último ou único."
+  ]
+ },
+ {
+  "num": "0175",
+  "requer": [
+   "0099",
+   "0100"
+  ],
+  "porque": "Antes de mexer nas árvores equilibradas, o curso fixa os termos da árvore e acha o sucessor e o antecessor, que a remoção da BST já usava.",
+  "saia": [
+   "Altura conta arestas, raiz está no nível 0 e profundidade é a distância até a raiz.",
+   "Sucessor é o menor da subárvore direita; sem direita, o primeiro ancestral para quem o nó está à esquerda.",
+   "Grau de um nó é o número de filhos."
+  ]
+ },
+ {
+  "num": "0176",
+  "requer": [
+   "0100",
+   "0101",
+   "0175"
+  ],
+  "porque": "Remover da AVL é a remoção da BST seguida das rotações do 0101 na volta da recursão, com o caso novo do fator 0.",
+  "saia": [
+   "Remove como na BST e, na volta, cada ancestral recalcula a altura e confere o `fb`.",
+   "O filho pesado pode ter fator 0, e então uma rotação simples resolve.",
+   "Uma remoção pode exigir rotações em vários ancestrais, até a raiz: O(log n)."
+  ]
+ },
+ {
+  "num": "0177",
+  "requer": [
+   "0145",
+   "0174",
+   "0101",
+   "0175"
+  ],
+  "porque": "A versão clássica do Cormen usa as cores da LLRB com a sentinela `T.nil` do 0174, ponteiro para o pai e rotações da AVL, em mais casos.",
+  "saia": [
+   "As cinco propriedades: nó vermelho ou preto, raiz preta, folha `T.nil` preta, vermelho tem filhos pretos, mesma altura negra.",
+   "Inserção pinta o nó de vermelho e conserta pelo tio: tio vermelho recolore, tio preto rotaciona.",
+   "Altura máxima 2 log₂(n + 1), logo busca, inserção e remoção custam O(log n)."
+  ]
+ },
+ {
+  "num": "0178",
+  "requer": [
+   "0105"
+  ],
+  "porque": "O `m` da divisão `k % m` decide se a tabela espalha ou colide, e o método da multiplicação tira essa dependência.",
+  "saia": [
+   "Método da divisão: `h(k) = k mod m`, com `m` primo longe de uma potência de 2.",
+   "Com `m = 2^p`, só os `p` bits de baixo da chave contam, e o resto é ignorado.",
+   "Multiplicação: `h(k) = ⌊m · frac(k · A)⌋`, com `A` perto de 0,618, e aí o `m` pode ser potência de 2."
+  ]
+ },
+ {
+  "num": "0179",
+  "requer": [
+   "0107",
+   "0178"
+  ],
+  "porque": "A sondagem linear forma blocos de casas ocupadas; trocar o passo da sondagem espalha as chaves, e o par de funções hash vem do 0178.",
+  "saia": [
+   "Linear sofre agrupamento primário; quadrática sofre o secundário, porque chaves com o mesmo início seguem o mesmo caminho.",
+   "Dispersão dupla: `h(k, i) = (h1(k) + i · h2(k)) mod m`, e o passo `h2` não pode ser 0.",
+   "`m` primo e `h2(k)` coprimo com `m` fazem a sequência visitar todas as casas."
+  ]
+ },
+ {
+  "num": "0180",
+  "requer": [
+   "0120",
+   "0096"
+  ],
+  "porque": "Como o counting sort, o pigeonhole ordena sem comparar chaves num intervalo pequeno, mas guarda os registros e preserva a estabilidade do 0096.",
+  "saia": [
+   "Uma casa por valor: `r = max - min + 1` casas, e a chave `- min` é o índice.",
+   "Cada casa é uma fila: a ordem de chegada se mantém, e a ordenação é estável.",
+   "Custo O(n + r); só serve quando `r` é pequeno perto de `n`."
+  ]
+ },
+ {
+  "num": "0181",
+  "requer": [
+   "0174",
+   "0175",
+   "0177",
+   "0179"
+  ],
+  "porque": "Cada pergunta do posto de saúde pede uma estrutura do módulo: hash para busca exata, rubro-negra para ordem e lista com sentinela para a fila.",
+  "saia": [
+   "Hash com dispersão dupla acha o CPF em O(1) esperado; a rubro-negra acha a próxima hora com teto e sucessor.",
+   "Lista dupla circular com sentinela tira do meio da fila sem caso especial.",
+   "Estrutura escolhida pela pergunta: exata, por ordem, ou entrada e saída pelas pontas."
+  ]
+ },
+ {
+  "num": "0109",
+  "requer": [
+   "0039",
+   "0076",
+   "0059"
+  ],
+  "porque": "O grafo generaliza a árvore: os vértices podem ter ciclos, e a lista de adjacência é a lista encadeada do módulo 11, um balde por vértice.",
+  "saia": [
+   "Um grafo é G = (V, E): vértices e arestas; no dirigido a aresta tem sentido.",
+   "Matriz de adjacência ocupa Θ(V²); lista de adjacência ocupa Θ(V + E).",
+   "Grau é o número de arestas que tocam o vértice; caminho é uma sequência de vértices ligados por arestas."
+  ]
+ },
+ {
+  "num": "0110",
+  "requer": [
+   "0109",
+   "0085"
+  ],
+  "porque": "A BFS visita os vértices em ondas, e quem descoberto primeiro sai primeiro: o trabalho da fila do módulo 12.",
+  "saia": [
+   "`dist[v] = dist[u] + 1` ao descobrir `v` pela primeira vez; `visitado[]` evita repetição.",
+   "A BFS dá o menor caminho em número de arestas, em grafo sem pesos.",
+   "Custo Θ(V + E) com lista de adjacência e Θ(V²) com matriz."
+  ]
+ },
+ {
+  "num": "0111",
+  "requer": [
+   "0109",
+   "0031",
+   "0032"
+  ],
+  "porque": "A DFS troca a fila por mergulho recursivo, e a pilha de chamadas faz o papel da pilha explícita que guarda as escolhas pendentes.",
+  "saia": [
+   "Marca o vértice e chama a si mesma para cada vizinho não visitado; ao esgotar, volta (backtracking).",
+   "`visitado[]` é obrigatório: sem ele o ciclo vira recursão infinita.",
+   "Custo Θ(V + E), e a ordem de visita depende da ordem dos vizinhos."
+  ]
+ },
+ {
+  "num": "0112",
+  "requer": [
+   "0110",
+   "0102",
+   "0109"
+  ],
+  "porque": "Com pesos nas arestas a BFS erra, e o Dijkstra generaliza a ideia de ondas, escolhendo sempre o vértice de menor `dist`, o que o heap acelera.",
+  "saia": [
+   "Guarda `dist[v]`, `fixo[v]` e `anterior[v]`; a cada passo fixa o vértice não fixo de menor `dist`.",
+   "Relaxar `u -> v`: se `dist[u] + peso < dist[v]`, atualiza `dist[v]` e `anterior[v]`.",
+   "Só vale sem pesos negativos; com matriz custa O(V²) e com heap, O((V + E) log V)."
+  ]
+ },
+ {
+  "num": "0113",
+  "requer": [
+   "0110",
+   "0111",
+   "0112"
+  ],
+  "porque": "Junta as três buscas do módulo, que têm o mesmo esqueleto e mudam só a ordem de saída: pilha, fila ou menor `dist`.",
+  "saia": [
+   "DFS responde alcance e ciclos, BFS responde menos arestas e Dijkstra responde menor soma de pesos.",
+   "Cada pergunta tem o seu algoritmo; escolher errado dá resposta errada, não só lenta.",
+   "Os três guardam `pai[]` e remontam o caminho de trás para a frente."
+  ]
+ },
+ {
+  "num": "0150",
+  "requer": [
+   "0111",
+   "0148"
+  ],
+  "porque": "Uma DFS com laço externo conta os pedaços do grafo, e a mesma DFS com cores acha ciclo em grafo dirigido.",
+  "saia": [
+   "Componente conexo: DFS de cada vértice ainda não visitado conta um componente novo.",
+   "DFS de três cores: branco (novo), cinza (na pilha) e preto (terminado); aresta para cinza é ciclo.",
+   "Custo O(V + E) para componentes e para ciclo."
+  ]
+ },
+ {
+  "num": "0151",
+  "requer": [
+   "0111",
+   "0085",
+   "0150"
+  ],
+  "porque": "Só existe ordem que respeite as setas se o grafo dirigido não tem ciclo; o Kahn usa fila e graus de entrada, e a DFS dá o mesmo resultado.",
+  "saia": [
+   "Ordenação topológica: ordem dos vértices em que toda seta `a -> b` aponta para a frente.",
+   "Kahn: ponha na fila quem tem grau de entrada 0; ao tirar, desconte 1 dos vizinhos.",
+   "Se saírem menos de V vértices, sobrou um ciclo; custo O(V + E)."
+  ]
+ },
+ {
+  "num": "0152",
+  "requer": [
+   "0148",
+   "0096",
+   "0109"
+  ],
+  "porque": "O Kruskal ordena as arestas com `qsort` e usa o union-find para saber, em quase O(1), se uma aresta fecha ciclo.",
+  "saia": [
+   "Árvore geradora mínima: V - 1 arestas, sem ciclo, ligando tudo com a menor soma de pesos.",
+   "Ordene as arestas por peso e aceite a que une dois conjuntos diferentes (`acha(a) != acha(b)`).",
+   "Custo O(E log E), dominado pela ordenação."
+  ]
+ },
+ {
+  "num": "0153",
+  "requer": [
+   "0152",
+   "0102",
+   "0112"
+  ],
+  "porque": "O Prim chega à mesma árvore mínima do Kruskal, mas cresce uma árvore só a partir da origem, com a estrutura de escolha do Dijkstra.",
+  "saia": [
+   "A cada passo, entre as arestas que saem da árvore, entra a mais leve.",
+   "Muda só uma linha do Dijkstra: a chave de `v` é o peso da aresta, não `dist[u] + peso`.",
+   "Com heap custa O(E log V); com matriz, O(V²)."
+  ]
+ },
+ {
+  "num": "0154",
+  "requer": [
+   "0112"
+  ],
+  "porque": "O Dijkstra fixa cedo e quebra com pesos negativos; o Bellman-Ford relaxa todas as arestas várias vezes, sem fixar ninguém.",
+  "saia": [
+   "Repita V - 1 vezes: relaxe todas as arestas `u -> v`; custo O(V · E).",
+   "Uma rodada extra que ainda relaxa revela um ciclo negativo.",
+   "Aceita pesos negativos, e o Dijkstra não."
+  ]
+ },
+ {
+  "num": "0155",
+  "requer": [
+   "0112",
+   "0039"
+  ],
+  "porque": "Em vez de rodar o Dijkstra a partir de cada vértice, a matriz de distâncias é refinada por três laços aninhados.",
+  "saia": [
+   "Três laços `k`, `i`, `j` com `d[i][j] = min(d[i][j], d[i][k] + d[k][j])`.",
+   "Depois da rodada `k`, `d[i][j]` usa só os vértices de 0 a k como passagem.",
+   "Custo Θ(V³) de tempo e Θ(V²) de memória; aceita pesos negativos, sem ciclo negativo."
+  ]
+ },
+ {
+  "num": "0156",
+  "requer": [
+   "0150",
+   "0151",
+   "0153",
+   "0112"
+  ],
+  "porque": "Reúne as perguntas de grafo do módulo, e cada uma tem o seu algoritmo: ordenação topológica para o calendário e Dijkstra para o mapa.",
+  "saia": [
+   "Pré-requisitos formam um DAG e a ordem topológica diz os semestres.",
+   "Quais pedaços, ciclo, ordem, árvore mínima e menor caminho: cada um com seu custo.",
+   "Pesos negativos pedem Bellman-Ford; todos os pares pedem Floyd-Warshall."
+  ]
+ },
+ {
+  "num": "0182",
+  "requer": [
+   "0109",
+   "0111"
+  ],
+  "porque": "Euler pergunta pelas arestas e se responde contando graus, que o 0109 definiu, e com a DFS para saber se o grafo é conexo.",
+  "saia": [
+   "Aperto de mãos: soma dos graus = 2E, logo o número de vértices de grau ímpar é par.",
+   "Circuito euleriano existe se o grafo é conexo e todo grau é par; caminho euleriano aceita exatamente 2 ímpares.",
+   "Trilha não repete aresta, caminho não repete vértice e ciclo é um caminho que volta ao início."
+  ]
+ },
+ {
+  "num": "0183",
+  "requer": [
+   "0182",
+   "0032"
+  ],
+  "porque": "Hamilton troca aresta por vértice, e a pergunta, parecida com a de Euler, não tem condição simples: só se testa tentando e voltando.",
+  "saia": [
+   "Ciclo hamiltoniano passa por todos os vértices exatamente uma vez e volta ao início.",
+   "Euler se decide em tempo polinomial; Hamilton não tem algoritmo polinomial conhecido.",
+   "Dirac: V ≥ 3 e todo grau ≥ V/2 bastam, mas não são necessários."
+  ]
+ },
+ {
+  "num": "0184",
+  "requer": [
+   "0111",
+   "0150"
+  ],
+  "porque": "Pontes e articulações são sobre quantos componentes (0150) sobram ao tirar uma aresta ou um vértice, e uma DFS só os acha.",
+  "saia": [
+   "Ponte é aresta cuja remoção aumenta o número de componentes; articulação é o vértice análogo.",
+   "`tin[u]` é o tempo de descoberta e `low[u]` é o menor `tin` alcançável com uma aresta de volta.",
+   "`(u, v)` é ponte se `low[v] > tin[u]`; a DFS inteira custa O(V + E)."
+  ]
+ },
+ {
+  "num": "0185",
+  "requer": [
+   "0039",
+   "0032",
+   "0072"
+  ],
+  "porque": "É o primeiro problema deste módulo resolvido por programação dinâmica, e usa a matriz e o custo de multiplicar matrizes.",
+  "saia": [
+   "Multiplicar `p × q` por `q × r` custa `p · q · r` multiplicações; a ordem muda o custo, não o resultado.",
+   "`m[i][j]` é o menor custo de multiplicar de Ai a Aj, testando cada corte `k` entre `i` e `j`.",
+   "Custo O(n³) de tempo e O(n²) de memória, contra o número de Catalan de parentizações."
+  ]
+ },
+ {
+  "num": "0186",
+  "requer": [
+   "0182",
+   "0184",
+   "0072"
+  ],
+  "porque": "Euler e pontes são problemas de P e Hamilton não tem algoritmo polinomial conhecido, então a assimetria entre achar e conferir vira classe.",
+  "saia": [
+   "P: decisão resolvida em tempo polinomial; NP: um sim tem certificado conferível em tempo polinomial.",
+   "P está contido em NP; se P = NP é pergunta aberta.",
+   "NP-completo está em NP e é tão difícil quanto qualquer problema de NP."
+  ]
+ },
+ {
+  "num": "0187",
+  "requer": [
+   "0186",
+   "0109"
+  ],
+  "porque": "A redução prova dificuldade passando um problema NP-difícil para outro, e se apoia nas classes P e NP do 0186.",
+  "saia": [
+   "A ≤p B: transforma toda instância de A em uma de B, em tempo polinomial, com a mesma resposta.",
+   "Se A é NP-difícil e A ≤p B, então B é NP-difícil.",
+   "Conjunto independente, clique e cobertura de vértices se reduzem entre si."
+  ]
+ },
+ {
+  "num": "0188",
+  "requer": [
+   "0187",
+   "0153",
+   "0186"
+  ],
+  "porque": "Se o problema é NP-difícil e não há algoritmo exato rápido, aceita-se resposta pior com garantia, medida contra um limite inferior do ótimo.",
+  "saia": [
+   "Algoritmo ρ-aproximado nunca gasta mais que ρ vezes o ótimo, em qualquer entrada.",
+   "Bin packing: first fit gasta no máximo 2 vezes o ótimo; o limite inferior é ⌈soma / C⌉.",
+   "A MST dá 2-aproximação do caixeiro viajante com distâncias que respeitam a desigualdade triangular."
+  ]
+ },
+ {
+  "num": "0189",
+  "requer": [
+   "0183",
+   "0185",
+   "0186",
+   "0187",
+   "0188"
+  ],
+  "porque": "O caixeiro viajante junta o módulo: é um ciclo hamiltoniano de custo mínimo, NP-difícil, com PD sobre subconjuntos e 2-aproximação.",
+  "saia": [
+   "Força bruta custa (n - 1)!; Held-Karp, O(n² · 2ⁿ), guarda `dp[S][j]` com S em máscara de bits.",
+   "A versão de decisão é NP-completa, por redução do ciclo hamiltoniano.",
+   "Distâncias métricas permitem a 2-aproximação pela árvore mínima."
+  ]
+ }
+]

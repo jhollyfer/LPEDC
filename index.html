@@ -257,6 +257,39 @@ code { font-family: var(--mono); font-size: .9em; }
 .atalhos { font-size: 13px; color: var(--muted); margin-top: 16px; }
 kbd { font: 12px var(--font); border: 1px solid var(--control); border-radius: 4px; padding: 0 5px; }
 
+/* trilha */
+.trilha-acoes { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+.mundo { margin-top: 40px; }
+.mundo h2 { font: 400 26px/1.2 var(--serif); margin: 0 0 4px; }
+.mundo .sub { color: var(--muted); font-size: 14px; margin: 0 0 14px; }
+.degraus { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.degrau { background: var(--surface); border-radius: var(--radius-inner); border: 1px solid transparent; scroll-margin-top: 16px; }
+.degrau.proximo { border-color: var(--accent); }
+.degrau > details > summary {
+  list-style: none; cursor: pointer; display: grid; grid-template-columns: 88px 1fr auto; gap: 4px 12px;
+  align-items: center; padding: 12px 16px;
+}
+.degrau > details > summary::-webkit-details-marker { display: none; }
+.degrau .pos { font-size: 13px; color: var(--muted); white-space: nowrap; }
+.degrau .tit { font-weight: 500; }
+.degrau .tit .n { color: var(--muted); font-weight: 400; margin-right: 6px; }
+.degrau .estado-d { font-size: 13px; color: var(--muted); white-space: nowrap; }
+.degrau.feito .estado-d { color: var(--positive); }
+.degrau.feito .tit { color: var(--muted); }
+.degrau.falta-base .tit { color: var(--muted); }
+.degrau .corpo-d { padding: 0 16px 16px 116px; font-size: 15px; }
+.degrau .corpo-d p { margin: 0 0 10px; }
+.degrau .corpo-d ul { margin: 0 0 12px; padding-left: 18px; }
+.degrau .corpo-d li { margin-bottom: 4px; }
+.degrau .rot { font-size: 13px; color: var(--muted); display: block; margin-bottom: 4px; }
+.base-links { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 0 0 12px; }
+.base-links button { border: 0; background: none; padding: 0; cursor: pointer; font: 500 13px var(--font); color: var(--accent); text-align: left; }
+.base-links button.feito { color: var(--muted); text-decoration: line-through; }
+.degrau .acoes { margin-top: 12px; }
+.degrau .desenho img { max-width: 560px; }
+.na-trilha { font-size: 13px; color: var(--muted); margin-top: 10px; }
+.na-trilha a { color: var(--accent); text-decoration: none; font-weight: 500; }
+
 /* resultado */
 .grande { font-size: 32px; margin: 0; }
 
@@ -268,6 +301,10 @@ kbd { font: 12px var(--font); border: 1px solid var(--control); border-radius: 4
 }
 @media (max-width: 560px) {
   body { font-size: 15px; }
+  .degrau > details > summary { grid-template-columns: 1fr auto; }
+  .degrau .pos { grid-column: 1 / -1; }
+  .degrau .corpo-d { padding-left: 16px; }
+  .mundo h2 { font-size: 22px; }
   .so-largo { display: none; }
   .so-curto { display: inline; }
   .contador { min-height: 0; padding: 14px 16px; }
@@ -301,13 +338,14 @@ kbd { font: 12px var(--font); border: 1px solid var(--control); border-radius: 4
       LPEDC <small>· provas PPGI</small>
     </a>
     <span class="espaco"></span>
+    <a class="chave" id="link-trilha" href="#trilha">Trilha</a>
     <button class="chave" id="modo-prova" type="button" aria-pressed="false" title="Modo prova: o conceito começa fechado"><span class="bola"></span><span class="so-largo">Modo prova</span><span class="so-curto">Prova</span></button>
     <button class="chave" id="tema" type="button" aria-label="Trocar tema claro ou escuro"><svg class="lua" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5a6.5 6.5 0 1 0 0 13z" fill="currentColor"/><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><span class="so-largo">Tema</span></button>
   </header>
   <main id="app" aria-live="polite"></main>
 </div>
 
-<script src="quiz/questoes.js?v=8e87e465"></script>
+<script src="quiz/questoes.js?v=412dc63f"></script>
 <script>
 'use strict'
 const REPO = 'https://github.com/jhollyfer/LPEDC/blob/main/'
@@ -329,6 +367,21 @@ const QUESTOES = PROVAS.flatMap((p) =>
 )
 const porId = new Map(QUESTOES.map((q) => [q.id, q]))
 const valeNota = (q) => /^[A-E]$/.test(q.gabarito ?? '')
+
+// ---------- trilha: escada de conceitos ----------
+const TRILHA = window.TRILHA ?? []
+const posTrilha = new Map(TRILHA.map((d, i) => [d.num, i]))
+const citados = (q) => new Set([...(q.assuntos ?? []).map((s) => s.num), ...[...(q.dica ?? '').matchAll(/\[(\d{4})\]/g)].map((m) => m[1])])
+const questoesPorAssunto = new Map()
+for (const q of QUESTOES) for (const n of citados(q)) questoesPorAssunto.set(n, [...(questoesPorAssunto.get(n) ?? []), q.id])
+// o que cai na prova: assuntos citados nas questões e todas as bases deles
+const caiNaProva = new Set()
+const marcarBase = (n) => {
+  if (caiNaProva.has(n) || !posTrilha.has(n)) return
+  caiNaProva.add(n)
+  for (const r of TRILHA[posTrilha.get(n)].requer ?? []) marcarBase(r)
+}
+for (const n of questoesPorAssunto.keys()) marcarBase(n)
 
 // ---------- memória do navegador (pode falhar em aba privada) ----------
 const ler = (k, padrao) => { try { return JSON.parse(localStorage.getItem(k)) ?? padrao } catch { return padrao } }
@@ -524,6 +577,7 @@ function telaInicial() {
         <h2 id="t-como">Como estudar com o quiz</h2>
         <p class="texto-painel">Antes de responder, leia o painel <strong>Antes de responder</strong>: o que a questão cobra, os conceitos com o assunto do curso onde cada um é ensinado e um exemplo com outros dados.</p>
         <p class="texto-painel">Depois, cada alternativa mostra por que está certa ou errada. Para treinar como na prova, ligue o <strong>Modo prova</strong>: o conceito começa fechado.</p>
+        <p class="texto-painel">Não sabe por onde começar? A <a href="#trilha"><strong>trilha</strong></a> põe os 189 conceitos do curso numa escada: cada degrau usa só o que veio antes.</p>
         <div class="acoes"><button class="botao" id="novas" ${naoVistas.length ? '' : 'disabled'}>Só as que não fiz · ${naoVistas.length}</button><button class="botao" id="zerar" ${Object.keys(respostas).length ? '' : 'disabled'}>Zerar progresso</button></div>
       </section>
     </section>
@@ -556,6 +610,94 @@ function telaInicial() {
   window.scrollTo(0, 0)
 }
 
+// ---------- trilha ----------
+let dominados = new Set(ler('lpedc-dominados', []))
+let soProva = ler('lpedc-so-prova', false)
+
+function linhaNaTrilha(nums) {
+  const naEscada = nums.filter((n) => posTrilha.has(n)).sort((a, b) => posTrilha.get(a) - posTrilha.get(b))
+  if (!naEscada.length) return ''
+  const bases = [...new Set(naEscada.flatMap((n) => TRILHA[posTrilha.get(n)].requer ?? []))].filter((b) => !naEscada.includes(b) && !dominados.has(b))
+  const ultimo = naEscada.at(-1)
+  return `<p class="na-trilha">Na trilha: <a href="#trilha/${ultimo}">degrau ${posTrilha.get(ultimo) + 1} de ${TRILHA.length}</a>${bases.length ? ` · base ainda não marcada: ${bases.map((b) => `<a href="#trilha/${b}">${esc(b)}</a>`).join(', ')}` : ''}</p>`
+}
+
+function telaTrilha(alvo) {
+  rodada = null
+  const app = document.getElementById('app')
+  const visiveis = TRILHA.filter((d) => !soProva || caiNaProva.has(d.num))
+  const feitos = visiveis.filter((d) => dominados.has(d.num)).length
+  const proximo = visiveis.find((d) => !dominados.has(d.num))
+  const mundos = [...new Set(visiveis.map((d) => d.mundo))]
+  const degrauHtml = (d) => {
+    const a = ASSUNTOS[d.num] ?? { titulo: d.num, modulo: '', ancora: '' }
+    const i = posTrilha.get(d.num)
+    const qs = questoesPorAssunto.get(d.num) ?? []
+    const faltam = (d.requer ?? []).filter((r) => !dominados.has(r))
+    const feito = dominados.has(d.num)
+    const classes = ['degrau', feito ? 'feito' : '', !feito && faltam.length ? 'falta-base' : '', proximo?.num === d.num ? 'proximo' : ''].join(' ')
+    let estado = qs.length ? `cai em ${qs.length}` : ''
+    if (feito) estado = 'dominei'
+    const aberto = alvo ? alvo === d.num : proximo?.num === d.num
+    return `<li class="${classes}" id="d-${d.num}"><details ${aberto ? 'open' : ''}>
+      <summary><span class="pos num">degrau ${i + 1}</span><span class="tit"><span class="n num">${esc(d.num)}</span>${esc(a.titulo)}</span><span class="estado-d num">${estado}</span></summary>
+      <div class="corpo-d">
+        <p>${emLinha(d.porque ?? '')}</p>
+        ${(d.requer ?? []).length ? `<span class="rot">Precisa de${faltam.length ? ` · faltam ${faltam.length}` : ''}</span><div class="base-links">${d.requer.map((r) => `<button data-ir="${r}" class="${dominados.has(r) ? 'feito' : ''}">${esc(r)} · ${esc(ASSUNTOS[r]?.titulo ?? '')}</button>`).join('')}</div>` : '<span class="rot">Ponto de partida: não depende de nada antes.</span>'}
+        <span class="rot">Saia sabendo</span>
+        <ul>${(d.saia ?? []).map((t) => `<li>${emLinha(t)}</li>`).join('')}</ul>
+        ${a.ideia ? `<details class="desenho"><summary>Ver o desenho do assunto</summary><img src="material/${d.num}-ideia.svg" alt="Diagrama da ideia: ${esc(a.titulo)}" loading="lazy"></details>` : ''}
+        <div class="acoes">
+          <a class="botao" href="${REPO}${encodeURI(a.modulo)}#${a.ancora}" target="_blank" rel="noopener">Estudar no curso</a>
+          ${qs.length ? `<button class="botao" data-treinar="${d.num}">Treinar ${qs.length} ${qs.length === 1 ? 'questão' : 'questões'}</button>` : ''}
+          <button class="botao ${feito ? '' : 'principal'}" data-dominei="${d.num}" aria-pressed="${feito}">${feito ? 'Desmarcar' : 'Dominei'}</button>
+        </div>
+      </div>
+    </details></li>`
+  }
+  app.innerHTML = `
+    <h1 class="saudacao">Você dominou ${feitos} de ${visiveis.length} conceitos.</h1>
+    <p class="linha-cinza">Uma escada: cada degrau usa só o que veio antes. Estude no curso, treine as questões que cobram o assunto e marque <strong>Dominei</strong> para subir.${proximo ? ` O próximo é <strong>${esc(proximo.num)} · ${esc(ASSUNTOS[proximo.num]?.titulo ?? '')}</strong>.` : ''}</p>
+    <div class="trilha-acoes">
+      ${proximo ? `<button class="botao principal" data-ir="${proximo.num}">Ir ao próximo degrau</button>` : ''}
+      <button class="chave" id="so-prova" aria-pressed="${soProva}"><span class="bola"></span>Só o que cai na prova · ${caiNaProva.size}</button>
+    </div>
+    ${mundos.map((m) => {
+      const ds = visiveis.filter((d) => d.mundo === m)
+      const f = ds.filter((d) => dominados.has(d.num)).length
+      return `<section class="mundo" aria-labelledby="m-${esc(m.replace(/\W+/g, ''))}">
+        <h2 id="m-${esc(m.replace(/\W+/g, ''))}">${esc(m)}</h2>
+        <p class="sub num">${f} de ${ds.length} dominados</p>
+        <ol class="degraus">${ds.map(degrauHtml).join('')}</ol>
+      </section>`
+    }).join('')}
+  `
+  const irPara = (n) => {
+    const li = document.getElementById(`d-${n}`)
+    if (!li) { soProva = false; gravar('lpedc-so-prova', soProva); location.hash = `trilha/${n}`; return }
+    li.querySelector('details').open = true
+    li.scrollIntoView({ block: 'start' })
+  }
+  app.querySelectorAll('[data-ir]').forEach((b) => { b.onclick = () => irPara(b.dataset.ir) })
+  app.querySelectorAll('[data-treinar]').forEach((b) => {
+    b.onclick = () => iniciar(`Treino de ${b.dataset.treinar}`, questoesPorAssunto.get(b.dataset.treinar) ?? [])
+  })
+  app.querySelectorAll('[data-dominei]').forEach((b) => {
+    b.onclick = () => {
+      const n = b.dataset.dominei
+      if (dominados.has(n)) dominados.delete(n)
+      else dominados.add(n)
+      gravar('lpedc-dominados', [...dominados])
+      const y = window.scrollY
+      telaTrilha(n)
+      window.scrollTo(0, y)
+    }
+  })
+  app.querySelector('#so-prova').onclick = () => { soProva = !soProva; gravar('lpedc-so-prova', soProva); telaTrilha() }
+  if (alvo) requestAnimationFrame(() => document.getElementById(`d-${alvo}`)?.scrollIntoView({ block: 'start' }))
+  else window.scrollTo(0, 0)
+}
+
 // ---------- questão ----------
 function painelAntes(q, respondida) {
   if (!q.dica) return ''
@@ -566,6 +708,7 @@ function painelAntes(q, respondida) {
     <summary>Antes de responder <span class="estado">${modoProva && !respondida ? 'modo prova · H abre' : 'H fecha'}</span></summary>
     <div class="corpo">
       ${md(q.dica)}
+      ${linhaNaTrilha(nums)}
       ${comDesenho ? `<details class="desenho"><summary>Ver o desenho do assunto ${esc(comDesenho)}</summary><img src="material/${comDesenho}-ideia.svg" alt="Diagrama da ideia do assunto ${esc(comDesenho)}: ${esc(ASSUNTOS[comDesenho].titulo)}" loading="lazy"></details>` : ''}
     </div>
   </details>`
@@ -718,6 +861,7 @@ function telaFim() {
 function rotear() {
   const h = location.hash.slice(1)
   if (h.startsWith('q/')) telaQuestao(h.slice(2))
+  else if (h === 'trilha' || h.startsWith('trilha/')) telaTrilha(h.split('/')[1])
   else if (h === 'fim') telaFim()
   else telaInicial()
 }
