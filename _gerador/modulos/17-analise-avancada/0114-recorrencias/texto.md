@@ -1,39 +1,29 @@
 ## 0114 · Recorrências e árvore de recursão
 
-Na contabilidade de uma rede de farmácias chegou um lote de notas fiscais. A
-chefe confere o lote inteiro, divide em dois lotes iguais e entrega cada metade
-a um auditor, que faz o mesmo. Com uma nota só, o auditor confere e para.
-
-Quantas notas são olhadas no total? Contar laços (módulo 10) não resolve: o
-trabalho está nas chamadas.
-
-Uma **recorrência** é uma equação que dá o custo de uma função recursiva em
-termos do custo dela com entradas menores. Para um lote de `n` notas:
+- **Recorrência**: equação que dá o custo de uma função recursiva em termos do
+  custo dela em entradas menores, mais um caso base
+  (CORMEN et al., 2024, cap. 4).
+- **Ler a recorrência no código**: quantas chamadas e de que tamanho (o termo
+  `2 T(n/2)`)? Quanto trabalho fora delas (o `+ n`)? Qual o caso base e seu
+  custo (`T(1) = 1`)? (ZIVIANI, 2010, cap. 2).
+- **Árvore de recursão**: cada chamada vira um nó com o trabalho que faz
+  sozinha, e a soma é feita **nível por nível**. Serve para resolver e para
+  chutar a resposta (LINTZMAYER; MOTA, 2023).
+- **Substituição**: chute a resposta e prove por indução. No passo é preciso
+  chegar **exatamente** na expressão chutada (CORMEN et al., 2024, cap. 4).
+- **Θ** (teta): a função cresce **exatamente** naquele ritmo. O `O` (0072) é
+  teto; o Θ é teto e piso. Definições formais no 0166
+  (CORMEN et al., 2024, cap. 3).
+- **Tempo e memória**: o tempo é a soma dos nós da árvore; a memória é a
+  altura, os frames vivos na pilha (0031) (FEOFILOFF, 2009).
 
 ```text
 T(1) = 1                  (caso base: confere a nota e para)
 T(n) = 2 T(n/2) + n       (duas chamadas com metade, mais n de trabalho)
 ```
 
-Leia a recorrência no código com três perguntas:
-
-1. **Quantas chamadas recursivas**, e de que tamanho? Aqui, 2 de tamanho
-   `n/2`: o termo `2 T(n/2)`.
-2. **Quanto trabalho** fora das chamadas? Aqui, olhar `n` notas: o termo `n`.
-3. **Qual o caso base** e seu custo? Aqui, `T(1) = 1`.
-
-Para **resolver** (chegar numa fórmula sem `T` dos dois lados), use a **árvore
-de recursão**: cada chamada vira um nó com o trabalho que faz sozinha, e você
-soma **nível por nível**. O nível `k` tem `2^k` chamadas de `n/2^k` notas cada:
-custa `n`. Os lotes caem pela metade até 1, então há `log₂ n + 1` níveis.
-Total: `n log₂ n + n`, ou **Θ(n log n)**.
-
-O **Θ** (teta) diz que a função cresce **exatamente** naquele ritmo: o `O` do
-assunto 0072 é um teto, o Θ é teto e piso (definições formais no assunto
-0166). Além da árvore, o Cormen ensina a **substituição** (chutar a resposta e
-provar por indução) e o teorema mestre, do próximo assunto.
-
-A forma da recorrência decide a forma da árvore:
+Os lotes caem pela metade até 1: há `log₂ n + 1` níveis de custo `n`, e o
+total é `n log₂ n + n`, ou **Θ(n log n)**.
 
 | recorrência | árvore | resultado | exemplo |
 | --- | --- | --- | --- |
@@ -43,8 +33,16 @@ A forma da recorrência decide a forma da árvore:
 | `T(n) = 2 T(n/2) + n` | binária, log n níveis de custo n | Θ(n log n) | merge sort, a auditoria |
 | `T(n) = 2 T(n-1) + 1` | binária, n níveis que dobram | Θ(2ⁿ) | Hanói (assunto 0033) |
 
-Num lote de 8 notas, cada caixa é uma chamada com o tamanho do lote que ela
-confere. Cada linha soma 8, e são 4 linhas:
+> [!WARNING]
+> "Duas chamadas recursivas" não diz nada sozinho: decide o **tamanho** de cada
+> chamada. `2 T(n/2) + 1` (máximo dividindo o vetor) dá Θ(n); `2 T(n-1) + 1`
+> (Hanói) dá Θ(2ⁿ): para `n = 30`, mais de um bilhão de chamadas.
+
+{{exemplo}}
+
+A chefe da contabilidade confere um lote de notas, divide em dois e passa
+cada metade a um auditor, que faz o mesmo. Com 8 notas, cada caixa é uma
+chamada; cada linha soma 8, e são 4 linhas:
 
 {{ideia}}
 
@@ -129,20 +127,3 @@ Abrir o `T` até o caso base, com `n = 8`:
 | T(8) | 2 · T(4) + 8 = 24 + 8 | **32** |
 
 Bate com a árvore (4 níveis de 8) e com o programa.
-
-> [!WARNING]
-> "Duas chamadas recursivas" não diz nada sozinho: decide o **tamanho** de cada
-> chamada. `2 T(n/2) + 1` (máximo dividindo o vetor) dá Θ(n); `2 T(n-1) + 1`
-> (Hanói) dá Θ(2ⁿ): para `n = 30`, mais de um bilhão de chamadas.
-
-> [!TIP]
-> **Por dentro do C:** a árvore é o filme da pilha de chamadas (assunto 0031).
-> O **tempo** é a soma dos nós (`2n - 1 = 15` chamadas para 8 notas); a
-> **memória** é a altura, no máximo `log₂ n + 1 = 4` frames vivos.
-
-> [!NOTE]
-> **Pergunta para você:** e se a chefe tirasse uma nota só e repassasse as
-> outras `n - 1` a um único auditor? A recorrência vira `T(n) = T(n-1) + n`.
-> Quanto dá para 8 notas? E para 1024? Compare com 32 e 11.264.
-
-{{pratique}}

@@ -16,16 +16,10 @@
 > - [ ] Enfrentar os desafios do módulo
 > - [ ] Chefão: resolver as questões de prova do módulo sem consultar
 
-O módulo 10 contou passos e leu a classe pelos laços. Isso falha numa função
-que chama a si mesma: quanto custa o merge sort? O "n log n" do módulo 13 veio
-de um desenho; aqui vira conta.
-
-A **recorrência** transforma o código recursivo numa equação, e a **árvore de
-recursão** a resolve somando nível por nível. O **teorema mestre** resolve de
-uma vez as de divisão e conquista. A **análise amortizada** explica por que o
-vetor que dobra é barato. O **limite inferior** pergunta se dá para fazer
-melhor: para ordenar comparando, não dá. O último assunto prevê o tempo de
-quatro ordenações com 1 milhão de elementos a partir de uma medida com 16 mil.
+Contar laços (módulo 10) não mede função recursiva. O módulo cobre
+recorrências, árvore de recursão, teorema mestre, análise amortizada e o
+limite Ω(n log n) da ordenação, e fecha prevendo o tempo de quatro ordenações.
+Dá prova aos "n log n" dos módulos 13 e 14.
 
 ## O que você vai aprender
 
@@ -40,19 +34,15 @@ quatro ordenações com 1 milhão de elementos a partir de uma medida com 16 mil
 ## Antes de começar
 
 Usa recursão (0031 a 0033), Big-O (0071 e 0072), vetor que cresce (0055 e
-0075), pilha (0082), fila (0085), merge sort e quick sort (módulo 13), heap
-(0102 e 0103) e ponteiros para função (0050). Matemática: `log₂ n` é quantas
-vezes dá para dividir n por 2 até chegar em 1 (`log₂ 1024 = 10`), e `log_b a`
-é o expoente que leva `b` a `a` (`log₃ 9 = 2`). `log2` e `log` ficam em
-`<math.h>`; as flags de estudo já ligam `-lm`.
+0075), pilha (0082), fila (0085), merge e quick sort (módulo 13), heap (0102 e
+0103) e ponteiro para função (0050).
 
-O último assunto traz o TAD `ordena.h` e `ordena.c`, com as quatro ordenações e
-um contador de comparações; o comando do exemplo compila o `ordena.c` junto. Os
-tempos variam entre execuções; as comparações, não.
+Matemática: `log₂ n` é quantas vezes n se divide por 2 até chegar em 1
+(`log₂ 1024 = 10`); `log_b a` é o expoente que leva `b` a `a` (`log₃ 9 = 2`).
+`log2` e `log` ficam em `<math.h>`; as flags de estudo já ligam `-lm`.
 
-**Progressão.** Dá prova aos "n log n" do merge sort, do quick sort (módulo 13)
-e do heap (módulo 14) e às estimativas dos módulos 15 e 16 (O(1) esperado da
-hash; custo de BFS, DFS e Dijkstra). Prepara a divisão e conquista.
+O 0118 traz o TAD `ordena.h` e `ordena.c`, com as quatro ordenações e um
+contador de comparações. Os tempos variam entre execuções; as comparações, não.
 
 | # | Assunto |
 | --- | --- |
@@ -64,42 +54,34 @@ hash; custo de BFS, DFS e Dijkstra). Prepara a divisão e conquista.
 
 ---
 
-## 0114 · Recorrências e árvore de recursão
+## 1. Conceitos gerais
 
-Na contabilidade de uma rede de farmácias chegou um lote de notas fiscais. A
-chefe confere o lote inteiro, divide em dois lotes iguais e entrega cada metade
-a um auditor, que faz o mesmo. Com uma nota só, o auditor confere e para.
+### 0114 · Recorrências e árvore de recursão
 
-Quantas notas são olhadas no total? Contar laços (módulo 10) não resolve: o
-trabalho está nas chamadas.
-
-Uma **recorrência** é uma equação que dá o custo de uma função recursiva em
-termos do custo dela com entradas menores. Para um lote de `n` notas:
+- **Recorrência**: equação que dá o custo de uma função recursiva em termos do
+  custo dela em entradas menores, mais um caso base
+  (CORMEN et al., 2024, cap. 4).
+- **Ler a recorrência no código**: quantas chamadas e de que tamanho (o termo
+  `2 T(n/2)`)? Quanto trabalho fora delas (o `+ n`)? Qual o caso base e seu
+  custo (`T(1) = 1`)? (ZIVIANI, 2010, cap. 2).
+- **Árvore de recursão**: cada chamada vira um nó com o trabalho que faz
+  sozinha, e a soma é feita **nível por nível**. Serve para resolver e para
+  chutar a resposta (LINTZMAYER; MOTA, 2023).
+- **Substituição**: chute a resposta e prove por indução. No passo é preciso
+  chegar **exatamente** na expressão chutada (CORMEN et al., 2024, cap. 4).
+- **Θ** (teta): a função cresce **exatamente** naquele ritmo. O `O` (0072) é
+  teto; o Θ é teto e piso. Definições formais no 0166
+  (CORMEN et al., 2024, cap. 3).
+- **Tempo e memória**: o tempo é a soma dos nós da árvore; a memória é a
+  altura, os frames vivos na pilha (0031) (FEOFILOFF, 2009).
 
 ```text
 T(1) = 1                  (caso base: confere a nota e para)
 T(n) = 2 T(n/2) + n       (duas chamadas com metade, mais n de trabalho)
 ```
 
-Leia a recorrência no código com três perguntas:
-
-1. **Quantas chamadas recursivas**, e de que tamanho? Aqui, 2 de tamanho
-   `n/2`: o termo `2 T(n/2)`.
-2. **Quanto trabalho** fora das chamadas? Aqui, olhar `n` notas: o termo `n`.
-3. **Qual o caso base** e seu custo? Aqui, `T(1) = 1`.
-
-Para **resolver** (chegar numa fórmula sem `T` dos dois lados), use a **árvore
-de recursão**: cada chamada vira um nó com o trabalho que faz sozinha, e você
-soma **nível por nível**. O nível `k` tem `2^k` chamadas de `n/2^k` notas cada:
-custa `n`. Os lotes caem pela metade até 1, então há `log₂ n + 1` níveis.
-Total: `n log₂ n + n`, ou **Θ(n log n)**.
-
-O **Θ** (teta) diz que a função cresce **exatamente** naquele ritmo: o `O` do
-assunto 0072 é um teto, o Θ é teto e piso (definições formais no assunto
-0166). Além da árvore, o Cormen ensina a **substituição** (chutar a resposta e
-provar por indução) e o teorema mestre, do próximo assunto.
-
-A forma da recorrência decide a forma da árvore:
+Os lotes caem pela metade até 1: há `log₂ n + 1` níveis de custo `n`, e o
+total é `n log₂ n + n`, ou **Θ(n log n)**.
 
 | recorrência | árvore | resultado | exemplo |
 | --- | --- | --- | --- |
@@ -109,8 +91,157 @@ A forma da recorrência decide a forma da árvore:
 | `T(n) = 2 T(n/2) + n` | binária, log n níveis de custo n | Θ(n log n) | merge sort, a auditoria |
 | `T(n) = 2 T(n-1) + 1` | binária, n níveis que dobram | Θ(2ⁿ) | Hanói (assunto 0033) |
 
-Num lote de 8 notas, cada caixa é uma chamada com o tamanho do lote que ela
-confere. Cada linha soma 8, e são 4 linhas:
+> [!WARNING]
+> "Duas chamadas recursivas" não diz nada sozinho: decide o **tamanho** de cada
+> chamada. `2 T(n/2) + 1` (máximo dividindo o vetor) dá Θ(n); `2 T(n-1) + 1`
+> (Hanói) dá Θ(2ⁿ): para `n = 30`, mais de um bilhão de chamadas.
+
+### 0115 · Teorema mestre
+
+- **Teorema mestre**: a soma da árvore de recursão (0114) já feita em geral,
+  para recorrências de divisão e conquista. O resultado cabe em três linhas
+  (CORMEN et al., 2024, cap. 4).
+- **Forma simplificada**: `T(n) = a T(n/b) + n^k`. `a` (pelo menos 1) é
+  quantas chamadas; `b` (maior que 1) é quanto o tamanho encolhe; `n^k` é o
+  trabalho fora das chamadas (LINTZMAYER; MOTA, 2023).
+- **Por que funciona**: o nível `j` tem `a^j` chamadas de tamanho `n/b^j` e
+  custa `n^k · (a/b^k)^j`. De um nível ao seguinte, o custo é multiplicado
+  por `a/b^k` (LINTZMAYER; MOTA, 2023).
+- **Forma do Cormen**: `T(n) = a T(n/b) + f(n)`, com `f(n)` comparada a
+  `n^(log_b a)`. O caso 2 aceita `f(n) = Θ(n^(log_b a) · logᵖ n)`, p ≥ 0, e dá
+  Θ(n^(log_b a) · log^(p+1) n). O caso 3 exige também `a f(n/b) ≤ c f(n)`,
+  c < 1 (CORMEN et al., 2024, cap. 4).
+- **Quando não se aplica**: `T(n) = T(n-1) + n` (o tamanho cai subtraindo),
+  `T(n) = T(n/3) + T(2n/3) + n` (pedaços diferentes). Volte à árvore, que
+  sempre funciona (exemplo A230) (LINTZMAYER; MOTA, 2023).
+- **Divisão inteira**: arredondar `n / 2` para cima ou para baixo não muda o
+  Θ (CORMEN et al., 2024, cap. 4).
+
+```text
+T(n) = a T(n/b) + n^k
+```
+
+| caso | comparação | o custo por nível... | quem pesa | resultado |
+| --- | --- | --- | --- | --- |
+| 1 | `a > b^k` | **cresce** a cada nível | as folhas | Θ(n^(log_b a)) |
+| 2 | `a = b^k` | fica **igual** | todos os níveis | Θ(n^k log n) |
+| 3 | `a < b^k` | **cai** a cada nível | a raiz | Θ(n^k) |
+
+| algoritmo | a | b | k | b^k | resultado |
+| --- | --- | --- | --- | --- | --- |
+| busca binária | 1 | 2 | 0 | 1 | caso 2: Θ(log n) |
+| máximo dividindo ao meio | 2 | 2 | 0 | 1 | caso 1: Θ(n) |
+| merge sort | 2 | 2 | 1 | 2 | caso 2: Θ(n log n) |
+| multiplicar polinômios com 3 produtos (Karatsuba) | 3 | 2 | 1 | 2 | caso 1: Θ(n^1,585) |
+| algo que lê tudo e segue numa metade | 1 | 2 | 1 | 2 | caso 3: Θ(n) |
+
+> [!WARNING]
+> Quatro estagiários com metade cada um é `4 T(n/2)`, não `4 T(n/4)`. Em
+> `T(n) = 2 T(n-1) + 1` (Hanói) não existe `b`: `n - 1` não é `n` dividido por
+> nada. Use a árvore, que dá Θ(2ⁿ).
+
+### 0116 · Análise amortizada
+
+- **Análise amortizada**: mede uma **sequência** de operações no pior caso e
+  divide pelo número de operações. O **custo amortizado** é uma garantia
+  sobre o total, sem sorteio (CORMEN et al., 2024, cap. 16).
+- **Vetor que dobra** (0075): inserir no fim custa uma escrita, até encher;
+  aí aloca o dobro e **copia tudo**. Isolada, a inserção é O(n); em sequência,
+  as caras são raras (ROVAI, 2018).
+- **Método agregado**: some tudo. Com capacidade inicial 1, `n` inserções
+  fazem `n` escritas mais cópias `1 + 2 + 4 + ...`, menos de `2n`. O total
+  fica abaixo de `3n`: **O(1) amortizado** (CORMEN et al., 2024, cap. 16).
+- **Método do banqueiro** (contábil): cada inserção paga **3 moedas**, 1 pela
+  escrita e 2 para um cofrinho. Quando `c` vira `2c`, os `c` mais novos
+  guardaram as `c` cópias. O cofrinho nunca fica negativo
+  (SZWARCFITER; MARKENZON, 2010).
+- **Método do potencial**: o cofrinho vira uma função Φ do estado (aqui,
+  Φ = 2 · n - capacidade). Custo amortizado = real + Φ(depois) - Φ(antes)
+  (CORMEN et al., 2024, cap. 16).
+- **Não é caso médio**: o médio supõe entradas sorteadas; o amortizado vale
+  para a **pior** sequência. E não promete que cada operação é rápida: um
+  sistema que não pode travar precisa de outra solução
+  (SZWARCFITER; MARKENZON, 2010).
+- **Outros exemplos**: o **contador binário** troca menos de 2 bits por soma
+  em média (A231) e a pilha com `multipop(k)` tira cada item uma vez (A232)
+  (CORMEN et al., 2024, cap. 16).
+- **Na prática**: usa-se `realloc` (0055), que às vezes estica no lugar; a
+  análise conta o pior caso. O preço é memória: logo após dobrar, metade está
+  vazia (CORTÉS, 2015).
+
+> [!WARNING]
+> Crescer por **tamanho fixo** estraga tudo. Com `nova = cap + 10`, as cópias
+> são 10, 20, 30...: quase **500 milhões** para 100.000 inserções, contra
+> 131.071 dobrando. Qualquer fator maior que 1 (1,5 ou 2) dá O(1) amortizado;
+> somar uma constante, não.
+
+### 0117 · Limite inferior da ordenação
+
+- **Limite inferior**: uma afirmação sobre o **problema**, não sobre um
+  algoritmo. Diz que nenhum método resolve com menos que tanto
+  (SZWARCFITER; MARKENZON, 2010).
+- **Ordenação por comparação**: só aprende a ordem perguntando "x > y?". Vale
+  para o módulo 13, o heapsort e o `qsort`, que só conhece a ordem pelas
+  respostas da `compara` (CORMEN et al., 2024, cap. 8).
+- **Árvore de decisão**: cada nó interno é uma pergunta, cada aresta uma
+  resposta e cada folha uma ordem final. O pior caso é a **altura**
+  (CORMEN et al., 2024, cap. 8).
+- **O argumento**: há `n!` ordens e cada uma precisa da sua folha. Com 2
+  respostas por pergunta, altura `h` dá no máximo `2^h` folhas. Logo
+  `2^h ≥ n!`, isto é, **`h ≥ log₂(n!)`** (LINTZMAYER; MOTA, 2023).
+- **Ω(n log n)**: `log₂(n!)` cresce como `n log₂ n`. O **Ω** (ômega) é o piso,
+  o contrário do teto `O` (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
+- **Assintoticamente ótimo**: merge sort e heapsort fazem O(n log n) e
+  alcançam o limite (CORMEN et al., 2024, cap. 8).
+
+| n | n! | limite ⌈log₂ n!⌉ | merge sort (pior caso) |
+| --- | --- | --- | --- |
+| 3 | 6 | 3 | 3 |
+| 4 | 24 | 5 | 5 |
+| 5 | 120 | 7 | 8 |
+| 10 | 3.628.800 | 22 | 25 |
+| 1000 | (2.568 dígitos) | 8.530 | 8.977 |
+
+> [!WARNING]
+> O limite vale para o **pior caso** de **qualquer** algoritmo que só compara.
+> O insertion sort ordena um vetor já em ordem com `n - 1` comparações, e o
+> counting sort (módulo 18) usa o valor como **índice** e escapa do limite.
+
+### 0118 · Juntando tudo
+
+- **Prever antes de rodar**: conhecida a classe de custo, uma medida num
+  tamanho pequeno estima o tamanho grande (ZIVIANI, 2010, cap. 1).
+- **Conhecer a classe**: insertion sort, `T(n) = T(n-1) + n`, Θ(n²); merge
+  sort, `2 T(n/2) + n`, Θ(n log n) pelo teorema mestre; heapsort, `n` descidas
+  de O(log n); quick sort, Θ(n log n) em média (CORMEN et al., 2024, cap. 4).
+- **Teste da razão**: meça em `n` e `2n`. Dobrar multiplica o custo por 4 na
+  classe n² e por pouco mais de 2 na classe n log n (FEOFILOFF, 2009).
+- **Extrapolar**: de `n` para `N`, multiplique por `(N/n)²` na classe n², ou
+  por `(N log N)/(n log n)` na classe n log n (ZIVIANI, 2010, cap. 1).
+- **Duas réguas**: a **contagem de comparações**, igual em qualquer
+  computador, e o **tempo**, que varia entre máquinas
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
+- **`clock()`**: devolve tiques de processador; `CLOCKS_PER_SEC` diz quantos
+  cabem num segundo. Os dois são inteiros, por isso o `1000.0 *` na frente da
+  divisão (CPPREFERENCE, s.d.).
+
+> [!WARNING]
+> Na classe n log n, dobrar `n` **não** dá ×2 exato: de 8 mil para 16 mil, é
+> 2,15. Com `n` pequeno, constantes e cache distorcem as razões. Meça com
+> tamanhos grandes e com a **mesma entrada**: o `memcpy` do `mede` restaura o
+> vetor antes de cada ordenação.
+
+---
+
+## 2. Exemplos de uso
+
+Cada exemplo compila sozinho. Rode com o comando abaixo dele e compare com a saída no fim do código.
+
+### 0114 · Recorrências e árvore de recursão
+
+A chefe da contabilidade confere um lote de notas, divide em dois e passa
+cada metade a um auditor, que faz o mesmo. Com 8 notas, cada caixa é uma
+chamada; cada linha soma 8, e são 4 linhas:
 
 <p align="center"><img src="material/0114-ideia.svg" alt="Diagrama da ideia: Recorrências e árvore de recursão" width="858"></p>
 
@@ -183,7 +314,7 @@ o `2 T(n/2)` e a caixa `custo_nivel += n` é o `+ n`:
 
 <p align="center"><img src="material/0114-fluxograma.svg" alt="Fluxograma: Recorrências e árvore de recursão" width="350"></p>
 
-### Passo a passo
+#### Passo a passo
 
 Abrir o `T` até o caso base, com `n = 8`:
 
@@ -195,23 +326,6 @@ Abrir o `T` até o caso base, com `n = 8`:
 | T(8) | 2 · T(4) + 8 = 24 + 8 | **32** |
 
 Bate com a árvore (4 níveis de 8) e com o programa.
-
-> [!WARNING]
-> "Duas chamadas recursivas" não diz nada sozinho: decide o **tamanho** de cada
-> chamada. `2 T(n/2) + 1` (máximo dividindo o vetor) dá Θ(n); `2 T(n-1) + 1`
-> (Hanói) dá Θ(2ⁿ): para `n = 30`, mais de um bilhão de chamadas.
-
-> [!TIP]
-> **Por dentro do C:** a árvore é o filme da pilha de chamadas (assunto 0031).
-> O **tempo** é a soma dos nós (`2n - 1 = 15` chamadas para 8 notas); a
-> **memória** é a altura, no máximo `log₂ n + 1 = 4` frames vivos.
-
-> [!NOTE]
-> **Pergunta para você:** e se a chefe tirasse uma nota só e repassasse as
-> outras `n - 1` a um único auditor? A recorrência vira `T(n) = T(n-1) + n`.
-> Quanto dá para 8 notas? E para 1024? Compare com 32 e 11.264.
-
-### Hora de praticar
 
 **Exemplo A227 · Duas chamadas, destinos diferentes**
 
@@ -366,159 +480,11 @@ int main(void) {
 gcc ~/LPEDC/material/A228.c -o ~/LPEDC/material/A228 && ~/LPEDC/material/A228
 ```
 
-#### Exercícios
+### 0115 · Teorema mestre
 
-**Exercício E679** · ★☆☆
-
-A busca binária recursiva segue T(n) = T(n/2) + 1. Confira no computador:
-escreva "int busca(const int v[], int ini, int fim, int x)", que procura x
-em v[ini..fim-1] (ordenado) e conta as chamadas num contador global. Com
-cpfs[i] = 10 * (i + 1) para 1024 posições, busque 5 (menor que todos: pior
-caso) nos primeiros n elementos, para n = 1, 2, 4, ..., 1024, e mostre as
-chamadas de cada busca.
-
-
-```text
-Saída esperada:
-   n  chamadas
-   1  2
-   2  3
-   4  4
-   8  5
-  16  6
-  32  7
-  64  8
- 128  9
- 256  10
- 512  11
-1024  12
-```
-
-```bash
-gcc ~/LPEDC/material/E679.c -o ~/LPEDC/material/E679 && ~/LPEDC/material/E679
-```
-
-**Exercício E681** · ★★☆
-
-Um comparador de preços confere um lote assim: compara cada preço com todos
-os do lote (n² comparações), divide o lote ao meio e confere cada metade do
-mesmo jeito: T(n) = 2 T(n/2) + n², T(1) = 1. Escreva a função recursiva
-que conta as comparações POR NÍVEL da recursão e mostre os níveis para n = 8
-e, depois, o total para n = 16, 32 e 64 ao lado de 2n² - n. Preços:
-preco[i] = 5 + (i * 13) % 40, e um par é suspeito quando um preço passa do
-dobro do outro (conte também os suspeitos, sem mostrar).
-
-
-```text
-Saída esperada:
-nível 0: 64 comparações
-nível 1: 32 comparações
-nível 2: 16 comparações
-nível 3: 8 comparações
-total: 120
- n  T(n)  2n² - n
-16   496   496
-32  2016  2016
-64  8128  8128
-```
-
-```bash
-gcc ~/LPEDC/material/E681.c -o ~/LPEDC/material/E681 && ~/LPEDC/material/E681
-```
-
-**Exercício E682** · ★★☆
-
-Escreva do zero um selection sort RECURSIVO, sem laço externo:
-ordena(v, n) procura o maior de v[0..n-1], troca com v[n-1] e chama
-ordena(v, n - 1). Cada chamada mostra quantas comparações fez, e o main
-mostra o total e o vetor ordenado. Os preços são:
-
-
-```text
-42 17 88 5 63 29 71 10
-```
-
-
-
-```text
-Saída esperada:
-ordena(8): 7 comparações
-ordena(7): 6 comparações
-ordena(6): 5 comparações
-ordena(5): 4 comparações
-ordena(4): 3 comparações
-ordena(3): 2 comparações
-ordena(2): 1 comparação
-total: 28 = 8 · 7 / 2
-5 10 17 29 42 63 71 88
-```
-
-```bash
-gcc ~/LPEDC/material/E682.c -o ~/LPEDC/material/E682 && ~/LPEDC/material/E682
-```
-
-**Exercício E684** · ★★★
-
-O fib ingênuo faz C(n) chamadas: C(0) = C(1) = 1 e C(n) = C(n-1) + C(n-2) +
-1. Escreva fib(n), recursiva, com contador global de chamadas;
-conta_chamadas(n), que calcula C(n) com laço; e fib_laco(n), que calcula
-F(n) com laço. Para n = 5, 10, ..., 25, mostre as chamadas contadas, C(n) e
-2F(n+1) - 1. No fim, só com laço, mostre C(40) e a razão C(40) / C(39).
-
-
-```text
-Saída esperada:
- n  contadas    C(n)  2F(n+1)-1
- 5        15      15         15
-10       177     177        177
-15      1973    1973       1973
-20     21891   21891      21891
-25    242785  242785     242785
-C(40) = 331160281
-C(40) / C(39) = 1.6180
-```
-
-```bash
-gcc ~/LPEDC/material/E684.c -o ~/LPEDC/material/E684 && ~/LPEDC/material/E684
-```
-
----
-
-## 0115 · Teorema mestre
-
-Na declaração do Imposto de Renda, você acha a sua faixa na tabela e lê a
-alíquota, sem refazer a conta.
-
-O **teorema mestre** é a tabela pronta das recorrências de divisão e
-conquista: a soma da árvore do assunto 0114 já foi feita em geral, e o
-resultado cabe em três linhas. A forma é:
-
-```text
-T(n) = a T(n/b) + n^k
-```
-
-- `a` (pelo menos 1) é **quantas chamadas** cada chamada faz;
-- `b` (maior que 1) é **quanto o tamanho encolhe**: cada chamada recebe `n/b`;
-- `n^k` é o **trabalho fora das chamadas** (`k = 0` constante, `k = 1` linear).
-
-Na árvore, o nível `j` tem `a^j` chamadas de tamanho `n/b^j`, e o nível custa
-`n^k · (a/b^k)^j`: de um nível ao seguinte, o custo é multiplicado pela razão
-`a/b^k`. Há três possibilidades:
-
-| caso | comparação | o custo por nível... | quem pesa | resultado |
-| --- | --- | --- | --- | --- |
-| 1 | `a > b^k` | **cresce** a cada nível | as folhas | Θ(n^(log_b a)) |
-| 2 | `a = b^k` | fica **igual** | todos os níveis | Θ(n^k log n) |
-| 3 | `a < b^k` | **cai** a cada nível | a raiz | Θ(n^k) |
-
-No caso 1, o último nível manda: tem `a^(log_b n) = n^(log_b a)` folhas e os
-de cima somam um múltiplo fixo dele. No caso 2, são `log_b n + 1` níveis de
-`n^k`. No caso 3, a raiz já é uma fração fixa do total.
-
-Um escritório revisa um contrato de `n` páginas: o revisor lê tudo e repassa
-**metade** a `a` estagiários, que fazem o mesmo. Com `b = 2` e `k = 1`, `b^k =
-2`, e `a = 1`, 2 ou 4 cai numa linha diferente. O desenho mostra a árvore de
-cada um para `n = 16`:
+Um revisor lê as `n` páginas de um contrato e repassa **metade** a `a`
+estagiários, que fazem o mesmo. Com `b = 2` e `k = 1`, `b^k = 2`, e `a = 1`,
+2 ou 4 cai numa linha diferente. O desenho mostra cada árvore para `n = 16`:
 
 <p align="center"><img src="material/0115-ideia.svg" alt="Diagrama da ideia: Teorema mestre" width="858"></p>
 
@@ -572,56 +538,11 @@ int main(void) {
 // a = 4: 4.00
 ```
 
-Confira com a tabela. Com `a = 1`, `1 < 2`: caso 3, a raiz domina, Θ(n), total
-`2n - 1`. Com `a = 2`, `2 = 2`: caso 2, Θ(n log n), exatamente `n log₂ n + n`.
-Com `a = 4`, `4 > 2`: caso 1, as folhas dominam, Θ(n²), total `2n² - n`.
-
-
-O fluxograma é o teorema como receita: forma certa? depois `a` contra `b^k`.
-O caminho marcado é o de `a = 2`:
+Com `a = 1`, caso 3: Θ(n), total `2n - 1`. Com `a = 2`, caso 2: Θ(n log n),
+exatamente `n log₂ n + n`. Com `a = 4`, caso 1: Θ(n²), total `2n² - n`. O
+fluxograma é o teorema como receita; o caminho marcado é o de `a = 2`:
 
 <p align="center"><img src="material/0115-fluxograma.svg" alt="Fluxograma: Teorema mestre" width="963"></p>
-
-A mesma receita resolve algoritmos conhecidos:
-
-| algoritmo | a | b | k | b^k | resultado |
-| --- | --- | --- | --- | --- | --- |
-| busca binária | 1 | 2 | 0 | 1 | caso 2: Θ(log n) |
-| máximo dividindo ao meio | 2 | 2 | 0 | 1 | caso 1: Θ(n) |
-| merge sort | 2 | 2 | 1 | 2 | caso 2: Θ(n log n) |
-| multiplicar polinômios com 3 produtos (Karatsuba) | 3 | 2 | 1 | 2 | caso 1: Θ(n^1,585) |
-| algo que lê tudo e segue numa metade | 1 | 2 | 1 | 2 | caso 3: Θ(n) |
-
-O teorema **não** se aplica quando a recorrência foge de `a T(n/b) + n^k`:
-`T(n) = T(n-1) + n` (o tamanho cai subtraindo), `T(n) = T(n/3) + T(2n/3) + n`
-(pedaços diferentes) ou `T(n) = 2 T(n/2) + n log n` (a forma do Cormen, na
-nota abaixo, ainda pega este). Volte à árvore, que sempre funciona; o exemplo
-A230 resolve dois desses casos.
-
-> [!NOTE]
-> **No Cormen (4ª ed.)** a forma é `T(n) = a T(n/b) + f(n)`, com `f(n)`
-> comparada a `n^(log_b a)`. Caso 1: `f(n) = O(n^(log_b a - ε))` dá
-> Θ(n^(log_b a)). Caso 2: `f(n) = Θ(n^(log_b a) · logᵖ n)`, p ≥ 0, dá
-> Θ(n^(log_b a) · log^(p+1) n). Caso 3: `f(n) = Ω(n^(log_b a + ε))` **e**
-> `a f(n/b) ≤ c f(n)` (c < 1) dão Θ(f(n)). Com p = 1, `2 T(n/2) + n log n` dá
-> Θ(n log² n), o que o A230 mede.
-
-> [!WARNING]
-> Os quatro estagiários recebem metade cada um: é `4 T(n/2)`, não
-> `4 T(n/4)`, e por isso o custo explode. Em `T(n) = 2 T(n-1) + 1` (Hanói) não existe `b`, pois `n - 1`
-> não é `n` dividido por nada: use a árvore, que dá Θ(2ⁿ).
-
-> [!TIP]
-> **Por dentro do C:** o `n / 2` é divisão inteira; arredondar para cima ou
-> para baixo não muda o Θ. Muda o **caso base**: com `if (n == 1)`, um `n = 0`
-> passa, `0 / 2` dá 0 e a pilha estoura. Prefira `if (n <= 1)`.
-
-> [!NOTE]
-> **Pergunta para você:** e com `a = 3`? Antes de mudar o laço do `main`, diga
-> em que linha da tabela o 3 cai e por quanto o total multiplica quando `n`
-> dobra. Pista: `log₂ 3 ≈ 1,585`.
-
-### Hora de praticar
 
 **Exemplo A229 · A tabela do teorema mestre em código**
 
@@ -802,129 +723,11 @@ int main(void) {
 gcc ~/LPEDC/material/A230.c -o ~/LPEDC/material/A230 && ~/LPEDC/material/A230
 ```
 
-#### Exercícios
-
-**Exercício E685** · ★☆☆
-
-Escreva "int caso(int a, int b, int k)": recebe T(n) = a T(n/b) + n^k e
-devolve o caso do teorema mestre (1 se a > b^k, 2 se a = b^k, 3 se a < b^k),
-com b^k calculado em inteiros por uma função potencia(b, k) com laço. Teste
-as recorrências (a, b, k) = (2,2,1), (4,2,1), (1,2,1), (9,3,2), (5,4,1),
-(2,4,1) e (16,4,2), mostrando o caso e a classe: folhas Θ(n^(log_b a)),
-empate Θ(n^k log n) ou raiz Θ(n^k).
-
-
-```text
-Saída esperada:
- 2 T(n/2) + n^1 -> caso 2, empate: Θ(n^k log n)
- 4 T(n/2) + n^1 -> caso 1, folhas: Θ(n^(log_b a))
- 1 T(n/2) + n^1 -> caso 3, raiz: Θ(n^k)
- 9 T(n/3) + n^2 -> caso 2, empate: Θ(n^k log n)
- 5 T(n/4) + n^1 -> caso 1, folhas: Θ(n^(log_b a))
- 2 T(n/4) + n^1 -> caso 3, raiz: Θ(n^k)
-16 T(n/4) + n^2 -> caso 2, empate: Θ(n^k log n)
-```
-
-```bash
-gcc ~/LPEDC/material/E685.c -o ~/LPEDC/material/E685 && ~/LPEDC/material/E685
-```
-
-**Exercício E687** · ★★☆
-
-As 1024 notas de um concurso (0 a 10) estão em ordem crescente:
-notas[i] = i * 11 / 1024. Escreva duas funções recursivas, com um contador
-global de chamadas. conta_lento(v, ini, fim, x) conta as notas x olhando
-SEMPRE as duas metades (T(n) = 2 T(n/2) + 1, caso 1, Θ(n)). primeira(v, ini,
-fim, x) devolve a primeira posição de v[ini..fim-1] com valor >= x (ou fim),
-seguindo só UMA metade (T(n) = T(n/2) + 1, caso 2, Θ(log n)). As notas 7 são
-primeira(..., 8) - primeira(..., 7).
-
-
-```text
-Saída esperada:
-lento:  93 notas 7 em 2047 chamadas
-rápido: 93 notas 7 em 22 chamadas
-```
-
-```bash
-gcc ~/LPEDC/material/E687.c -o ~/LPEDC/material/E687 && ~/LPEDC/material/E687
-```
-
-**Exercício E688** · ★★☆
-
-Escreva duas buscas recursivas em v[0..N-1] = 0, 2, 4, ... (N = 1000000),
-contando cada comparação com v[...]. binaria(ini, fim, x): compara x ==
-v[meio] e depois x < v[meio]. ternaria(ini, fim, x): com terco = (fim -
-ini) / 3, m1 = ini + terco e m2 = fim - 1 - terco, compara x == v[m1], x ==
-v[m2], x < v[m1] e x > v[m2]. Faça 1000 buscas por números ímpares, x = 2 *
-((i * 7919) % N) + 1 (i de 0 a 999), e mostre a média de comparações de
-cada uma.
-
-
-```text
-Saída esperada:
-binária: 39.9 comparações por busca
-ternária: 47.3 comparações por busca
-```
-
-```bash
-gcc ~/LPEDC/material/E688.c -o ~/LPEDC/material/E688 && ~/LPEDC/material/E688
-```
-
-**Exercício E689** · ★★★
-
-Escreva multiplica4 (quatro produtos de metades) e multiplica3 (Karatsuba:
-p0 = a0·b0, p2 = a1·b1, p1 = (a0 + a1)·(b0 + b1) - p0 - p2, resultado p0 +
-p1·x^h + p2·x^(2h), h = n/2), recursivas, "void f(const long a[], const
-long b[], int n, long r[])", com n potência de 2, r com 2n - 1
-coeficientes, n = 1 multiplicando direto e um contador global de
-multiplicações. Teste a = 1 2 3 4 e b = 5 6 7 8; depois n = 64, 128 e 256
-com x[i] = i % 10 e y[i] = (3 * i) % 7, conferindo que os resultados são
-iguais.
-
-
-```text
-Saída esperada:
-4 produtos: 5 16 34 60 61 52 32  (16 multiplicações)
-3 produtos: 5 16 34 60 61 52 32  (9 multiplicações)
-n =  64:   4096 contra   729 multiplicações, mesmo resultado
-n = 128:  16384 contra  2187 multiplicações, mesmo resultado
-n = 256:  65536 contra  6561 multiplicações, mesmo resultado
-```
-
-```bash
-gcc ~/LPEDC/material/E689.c -o ~/LPEDC/material/E689 && ~/LPEDC/material/E689
-```
-
----
-
-## 0116 · Análise amortizada
-
-Mudar de apartamento custa um dia carregando **todos** os móveis, mas é raro:
-ninguém mede o custo de morar pela pior semana do ano.
-
-No vetor que cresce (assunto 0075), inserir no fim custa uma escrita, até o
-vetor encher: aí é preciso alocar um maior e **copiar tudo**. Isolada, a
-inserção é O(n) no pior caso, e `n` inserções dariam O(n²). A conta é
-pessimista: as caras não vêm em sequência.
-
-A **análise amortizada** mede uma **sequência** de operações no pior caso e
-divide pelo número de operações: o **custo amortizado** é uma garantia sobre o
-total, sem sorteio.
-
-No **método agregado**, some tudo. Com capacidade inicial 1, dobrando ao
-encher, `n` inserções fazem `n` escritas mais as cópias `1 + 2 + 4 + ...`, que
-somam menos de `2n`. O total fica abaixo de `3n`: **O(1) amortizado**.
-
-No **método do banqueiro** (contábil), cada inserção paga **3 moedas**: 1 pela
-escrita e 2 para um cofrinho. Quando a capacidade `c` enche e vira `2c`, os `c`
-elementos mais novos guardaram 2 moedas cada: são as `c` cópias. Com o cofrinho
-**sempre não negativo**, o custo amortizado é 3. O Cormen traz ainda o **potencial**: o
-cofrinho vira uma função Φ do estado (aqui, Φ = 2 · n - capacidade).
+### 0116 · Análise amortizada
 
 O app do banco guarda o histórico de Pix num vetor de 1 posição que dobra ao
-encher. Chegam 16 Pix; as inserções 2, 3, 5 e 9 são as mudanças, em vermelho, e
-o cofrinho cai nelas e se recupera:
+encher. Chegam 16 Pix; as inserções 2, 3, 5 e 9 são as mudanças, em vermelho,
+e o cofrinho cai nelas e se recupera:
 
 <p align="center"><img src="material/0116-ideia.svg" alt="Diagrama da ideia: Análise amortizada" width="870"></p>
 
@@ -1001,42 +804,10 @@ int main(void) {
 ```
 
 As cópias somam `1 + 2 + 4 + 8 = 15`, mais 16 escritas: 31, menos de `2 · 16`.
-O cofrinho nunca chega a zero.
-
-O fluxograma segue o `insere` da 9ª inserção, a mais cara: o vetor tem 8 de 8
-ocupados, então o caminho passa pela mudança inteira:
+O fluxograma segue a 9ª inserção, a mais cara: 8 de 8 ocupados, e o caminho
+passa pela mudança inteira:
 
 <p align="center"><img src="material/0116-fluxograma.svg" alt="Fluxograma: Análise amortizada" width="378"></p>
-
-A mesma análise vale para o **contador binário** (somar 1 às vezes vira muitos
-bits, em média menos de 2; exemplo A231) e para a **pilha com `multipop(k)`**,
-que tira até `k` itens (cada item sai uma vez; exemplo A232).
-
-Amortizado **não** é caso médio: o médio supõe entradas sorteadas; o
-amortizado vale para a **pior** sequência. E não garante que cada operação é
-rápida: a 1.048.577ª inserção copia mais de um milhão de elementos. Sistema que
-não pode travar precisa de outra solução.
-
-> [!WARNING]
-> Crescer por **tamanho fixo** estraga tudo. Com `nova = cap + 10`, as mudanças
-> copiam 10, 20, 30... elementos: para 100.000 inserções, quase **500 milhões**
-> de cópias, contra 131.071 dobrando. É uma progressão aritmética, Θ(n²) no
-> total e O(n) amortizado. Qualquer fator maior que 1 (1,5 ou 2) dá O(1)
-> amortizado; somar uma constante, não.
-
-> [!TIP]
-> **Por dentro do C:** na prática se usa `realloc` (assunto 0055), que às vezes
-> estica o bloco no lugar; a análise conta o pior caso, copiar tudo. O preço
-> é memória: logo após dobrar, metade do vetor está vazia.
-> Use o `realloc` seguro, com ponteiro à parte e `NULL` conferido.
-
-> [!NOTE]
-> **Pergunta para você:** e na volta? Suponha que o vetor **encolhe pela
-> metade** quando fica com metade das posições ocupadas. Com 16 elementos e
-> capacidade 16, quantas cópias cada operação faz se o programa alternar
-> "insere, remove" mil vezes?
-
-### Hora de praticar
 
 **Exemplo A231 · O contador binário da catraca**
 
@@ -1219,126 +990,12 @@ int main(void) {
 gcc ~/LPEDC/material/A232.c -o ~/LPEDC/material/A232 && ~/LPEDC/material/A232
 ```
 
-#### Exercícios
+### 0117 · Limite inferior da ordenação
 
-**Exercício E691** · ★☆☆
-
-Escreva um vetor dinâmico de int (struct Vetor com dados, n, cap e
-"long copias") que começa com capacidade 1 e dobra ao encher; cada elemento
-copiado numa mudança soma 1 em copias. Para n = 10, 100, 1000 e 1000000,
-crie um vetor novo, insira n números, mostre as cópias e a média de cópias
-por inserção, e libere o vetor.
-
-
-```text
-Saída esperada:
-      n    cópias  cópias/n
-     10        15      1.50
-    100       127      1.27
-   1000      1023      1.02
-1000000   1048575      1.05
-```
-
-```bash
-gcc ~/LPEDC/material/E691.c -o ~/LPEDC/material/E691 && ~/LPEDC/material/E691
-```
-
-**Exercício E693** · ★★☆
-
-Muitas bibliotecas crescem o vetor por 1,5, e não por 2, para sobrar menos
-memória. Continua O(1) amortizado? Escreva o vetor dinâmico de int (struct
-Vetor com dados, n, cap, "long copias" e "int mudancas", capacidade inicial
-1) com insere(v, valor, num, den): a nova capacidade é cap * num / den. Escreva
-testa(nome, num, den, n), que insere n números e mostra mudanças, cópias,
-cópias por inserção e a sobra (cap - n). Rode com n = 1000000 para 3/2 e 2/1.
-Atenção: com cap = 1, a conta 1 * 3 / 2 dá 1; a nova capacidade tem de ser
-sempre maior que a antiga.
-
-
-```text
-Saída esperada:
-fator  mudanças    cópias  cópias/n     sobra
-x 1,5        34    2099753     2.10     49869
-x 2          20    1048575     1.05     48576
-```
-
-```bash
-gcc ~/LPEDC/material/E693.c -o ~/LPEDC/material/E693 && ~/LPEDC/material/E693
-```
-
-**Exercício E694** · ★★☆
-
-O contador binário tem custo amortizado menor que 2 por incremento. E se
-também puder DIMINUIR? Com um contador de 10 bits (b[i] é o bit i), escreva
-incrementa(b) e decrementa(b), que devolvem quantos bits mudaram (no
-decremento, os 0 do fim viram 1 e o primeiro 1 vira 0), e carrega(b, x), que
-coloca o número x nos bits. No main, faça 100 incrementos a partir de 0 e
-100 operações alternando incrementa e decrementa (começando por incrementa)
-a partir de 511 (0111111111).
-
-
-```text
-Saída esperada:
-100 incrementos a partir de 0: 197 trocas (1.97 por operação)
-inc/dec alternados a partir de 511: 1000 trocas (10.00 por operação)
-```
-
-```bash
-gcc ~/LPEDC/material/E694.c -o ~/LPEDC/material/E694 && ~/LPEDC/material/E694
-```
-
-**Exercício E695** · ★★★
-
-Monte uma fila de pedidos com duas pilhas, entrada e saida. enfileira(x)
-empilha x na entrada; desenfileira() passa TODOS os itens da entrada para a
-saida se esta estiver vazia e desempilha da saida, devolvendo o custo (1 +
-transferências) por um ponteiro. Conte as transferências num contador
-global. Sequência: enfileira 1 a 5, atende 2, enfileira 6 e 7, atende 4,
-enfileira 8, atende 2. Depois, com as pilhas zeradas, faça 1 milhão de
-operações: na operação i, se i for múltiplo de 3 e a fila não estiver
-vazia, atenda; senão, enfileire i.
-
-
-```text
-Saída esperada:
-atendidos: 1 2 3 4 5 6 7 8
-8 pedidos, 8 transferências
-666667 enfileirados, 524286 transferências, pior atendimento: 262145
-```
-
-```bash
-gcc ~/LPEDC/material/E695.c -o ~/LPEDC/material/E695 && ~/LPEDC/material/E695
-```
-
----
-
-## 0117 · Limite inferior da ordenação
-
-Nos Correios chegaram três encomendas, A, B e C, e a única ferramenta é uma
-balança de dois pratos, que só diz qual lado pesa mais. Quantas pesagens são
-necessárias, no pior caso, com o **melhor** método possível?
-
-Até aqui, a análise media **um algoritmo**. Agora a pergunta é sobre o
-**problema**: existe jeito de ordenar com menos? A resposta vale para todo
-algoritmo que só **compara** dois elementos, como a balança: a **ordenação
-por comparação** (módulo 13, heapsort, `qsort`).
-
-A ferramenta é a **árvore de decisão**: cada nó interno é uma pergunta ("A é
-mais pesada que B?"), cada aresta é uma resposta e cada folha é a ordem final.
-Rodar o algoritmo é descer da raiz a uma folha; o pior caso é a **altura**.
-
-1. Com 3 encomendas há `3! = 6` ordens, e cada uma precisa da sua folha: duas
-   ordens diferentes na mesma folha receberiam a mesma resposta, e uma estaria
-   errada.
-2. Cada pergunta tem 2 respostas, então a árvore de altura `h` tem no máximo
-   `2^h` folhas.
-3. Logo `2^h ≥ 6`. Com `h = 2` cabem 4 folhas; precisa de `h ≥ 3`.
-
-Nenhum método ordena 3 encomendas com menos de 3 pesagens. Para `n`
-elementos, `2^h ≥ n!`, ou seja, **`h ≥ log₂(n!)`**.
-
-O desenho é o insertion sort de 3 elementos como árvore de decisão. O
-caminho verde, A = 5 kg, B = 9 kg e C = 2 kg, acaba na folha C A B:
+Nos Correios, três encomendas e uma balança de dois pratos. Há `3! = 6`
+ordens e altura 2 só dá 4 folhas: são precisas 3 pesagens. O desenho é o
+insertion sort de 3 elementos; o caminho verde (A = 5, B = 9, C = 2 kg) acaba
+na folha C A B:
 
 <p align="center"><img src="material/0117-ideia.svg" alt="Diagrama da ideia: Limite inferior da ordenação" width="884"></p>
 
@@ -1403,46 +1060,11 @@ int main(void) {
 // pior caso: 3 pesagens
 ```
 
-Cada linha é um caminho da raiz a uma folha, e as 6 folhas são diferentes. O
-pior caso, 3, iguala o limite: para 3 elementos, o insertion sort é **ótimo**.
-
-O fluxograma é o argumento inteiro, para qualquer método que só compara:
+Cada linha é um caminho da raiz a uma folha, e o pior caso, 3, iguala o
+limite: para 3 elementos, o insertion sort é **ótimo**. O fluxograma é o
+argumento inteiro, para qualquer método que só compara:
 
 <p align="center"><img src="material/0117-fluxograma.svg" alt="Fluxograma: Limite inferior da ordenação" width="442"></p>
-
-`log₂(n!)` cresce como `n log₂ n` (menos cerca de `1,44 n`). Contra o merge
-sort:
-
-| n | n! | limite ⌈log₂ n!⌉ | merge sort (pior caso) |
-| --- | --- | --- | --- |
-| 3 | 6 | 3 | 3 |
-| 4 | 24 | 5 | 5 |
-| 5 | 120 | 7 | 8 |
-| 10 | 3.628.800 | 22 | 25 |
-| 1000 | (2.568 dígitos) | 8.530 | 8.977 |
-
-O limite se escreve com **Ω** (ômega), o piso, contrário do teto `O`: ordenar
-por comparação é **Ω(n log n)** no pior caso. Merge sort e heapsort fazem
-O(n log n): são **assintoticamente ótimos**.
-
-> [!WARNING]
-> O limite vale para o **pior caso** de **qualquer** algoritmo que só compara.
-> O insertion sort ordena um vetor já em ordem com `n - 1` comparações. Quem
-> não compara escapa: o counting sort (módulo 18) usa o valor como **índice** e
-> ordena inteiros pequenos em O(n). O **maior** de `n` elementos
-> precisa só de `n - 1` comparações.
-
-> [!TIP]
-> **Por dentro do C:** o `qsort` recebe o vetor como `void *` e uma `compara`,
-> e só sabe da ordem pelas respostas dela. Logo nenhuma implementação faz menos
-> de `⌈log₂ n!⌉` chamadas à `compara` no pior caso: para `n = 1000`, alguma
-> entrada passa de 8.530.
-
-> [!NOTE]
-> **Pergunta para você:** com 4 encomendas, quantas pesagens são o mínimo no
-> pior caso? E o insertion sort de 4 elementos faz quantas? Ainda é ótimo?
-
-### Hora de praticar
 
 **Exemplo A233 · Quem encosta no limite**
 
@@ -1674,145 +1296,17 @@ int main(void) {
 gcc ~/LPEDC/material/A234.c -o ~/LPEDC/material/A234 && ~/LPEDC/material/A234
 ```
 
-#### Exercícios
+### 0118 · Juntando tudo
 
-**Exercício E697** · ★☆☆
+O relatório da loja virtual vai ordenar **1 milhão** de pedidos, e o
+programador só mediu com 16 mil. Cada algoritmo ordena 8 mil e 16 mil; a razão
+confirma a classe e a medida de 16 mil prevê o milhão. Verde acertou;
+vermelho nem dá para rodar:
 
-Escreva teto_log2(x): o menor h tal que 2^h >= x, só com inteiros (um laço
-que dobra uma variável até alcançar x). Use-a para mostrar o limite inferior
-⌈log₂ n!⌉ de comparações para ordenar n elementos, com n de 1 a 20.
+<p align="center"><img src="material/0118-ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
 
-
-```text
-Saída esperada:
- n                   n!  limite
- 1                    1       0
- 2                    2       1
- 3                    6       3
- 4                   24       5
- 5                  120       7
- 6                  720      10
- 7                 5040      13
- 8                40320      16
- 9               362880      19
-10              3628800      22
-11             39916800      26
-12            479001600      29
-13           6227020800      33
-14          87178291200      37
-15        1307674368000      41
-16       20922789888000      45
-17      355687428096000      49
-18     6402373705728000      53
-19   121645100408832000      57
-20  2432902008176640000      62
-```
-
-```bash
-gcc ~/LPEDC/material/E697.c -o ~/LPEDC/material/E697 && ~/LPEDC/material/E697
-```
-
-**Exercício E699** · ★★☆
-
-Para achar o mínimo E o máximo de n temperaturas, o jeito ingênuo compara
-cada uma com o mínimo e com o máximo: 2(n - 1) comparações. Escreva também
-a versão "de dois em dois": compare os dois do par entre si (1 comparação);
-só o menor disputa o mínimo e só o maior disputa o máximo (mais 2). Com n
-ímpar, o primeiro elemento começa sozinho como mínimo e máximo. Faça todas
-as comparações pela função "int menor(int a, int b)", que conta num
-contador global. Teste com as 10 primeiras e com as 11 temperaturas de
-{23, 31, 18, 27, 35, 22, 19, 30, 26, 21, 33}.
-
-
-```text
-Saída esperada:
-10 dias: mín 18, máx 35 | ingênuo 18 comparações | pares 13
-11 dias: mín 18, máx 35 | ingênuo 20 comparações | pares 15
-```
-
-```bash
-gcc ~/LPEDC/material/E699.c -o ~/LPEDC/material/E699 && ~/LPEDC/material/E699
-```
-
-**Exercício E700** · ★★☆
-
-O pior caso do merge sort tem recorrência própria: as metades têm ⌈n/2⌉ e
-⌊n/2⌋ elementos e intercalar custa no máximo n - 1 comparações:
-W(1) = 0 e W(n) = W(⌈n/2⌉) + W(⌊n/2⌋) + (n - 1). Escreva pior_merge(n),
-recursiva (a própria recorrência, sem ordenar nada), e teto_log2(x) com
-inteiros, como no E697. Mostre para n de 1 a 16 o limite ⌈log₂ n!⌉, o pior
-caso do merge sort e o do insertion sort, n(n - 1)/2.
-
-
-```text
-Saída esperada:
- n  limite  merge  insertion
- 1       0      0          0
- 2       1      1          1
- 3       3      3          3
- 4       5      5          6
- 5       7      8         10
- 6      10     11         15
- 7      13     14         21
- 8      16     17         28
- 9      19     21         36
-10      22     25         45
-11      26     29         55
-12      29     33         66
-13      33     37         78
-14      37     41         91
-15      41     45        105
-16      45     49        120
-```
-
-```bash
-gcc ~/LPEDC/material/E700.c -o ~/LPEDC/material/E700 && ~/LPEDC/material/E700
-```
-
-**Exercício E702** · ★★★
-
-O limite para 4 elementos é 5 comparações, e o insertion sort faz 6 no pior
-caso. Escreva "void ordena4(int v[])", que ordena 4 valores com NO MÁXIMO 5
-comparações, todas pela função "int menor(int a, int b)" (conta num
-contador global). Compare v[0] com v[1] e v[2] com v[3]; o menor dos dois
-menores é o mínimo e o maior dos dois maiores é o máximo; compare os dois que
-sobraram. No main, teste as 24 ordens de {10, 20, 30, 40} e mostre quantas
-ficaram certas e o pior caso de comparações.
-
-
-```text
-Saída esperada:
-24 ordens testadas, 24 certas
-pior caso: 5 comparações (limite: 5)
-```
-
-```bash
-gcc ~/LPEDC/material/E702.c -o ~/LPEDC/material/E702 && ~/LPEDC/material/E702
-```
-
----
-
-## 0118 · Juntando tudo
-
-O relatório da loja virtual vai ordenar **1 milhão** de pedidos em vez de 16
-mil, e o programador só mediu com 16 mil. Rodar para ver pode levar meia hora.
-Dá para **prever** antes, com os quatro passos deste módulo:
-
-1. **Conhecer a classe.** Insertion sort: `T(n) = T(n-1) + n`, Θ(n²). Merge
-   sort: `2 T(n/2) + n`, Θ(n log n) pelo teorema mestre. Heapsort: `n` descidas
-   de O(log n). Quick sort: Θ(n log n) em média.
-2. **Medir em dois tamanhos, um o dobro do outro.** Dobrar `n` multiplica o
-   custo por 4 (n²) ou por pouco mais de 2 (n log n).
-3. **Extrapolar.** De `n` para `N`, o custo é multiplicado por `(N/n)²` na
-   classe n², ou por `(N log N)/(n log n)` na classe n log n.
-4. **Conferir**, quando der para rodar o tamanho grande.
-
-Há duas réguas: a **contagem de comparações**, igual em qualquer computador, e
-o **tempo** (`clock()`, de `<time.h>`), que varia entre máquinas.
-
-As quatro ordenações ficam no TAD `ordena.h` e `ordena.c`, na pasta do
-assunto. Toda comparação passa por uma função `menor`, escondida no `.c`, que
-conta:
+As quatro ordenações ficam no TAD `ordena.h` e `ordena.c`. Toda comparação
+passa por uma função `menor`, escondida no `.c`, que conta:
 
 ```c
 void ord_insertion(int v[], int n); // Θ(n²) no caso médio e no pior
@@ -1824,12 +1318,6 @@ void ord_zera_contagem(void);
 long ord_contagem(void);
 int ord_confere(const int v[], int n);
 ```
-
-Os pedidos vêm de um gerador próprio, igual em qualquer máquina. Cada
-algoritmo ordena 8 mil e 16 mil; a razão confirma a classe e a medida de 16 mil
-prevê o milhão. Verde acertou; vermelho nem dá para rodar:
-
-<p align="center"><img src="material/0118-ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
 
 O programa mede, prevê e confere; o `insertion` só ganha previsão, pois rodar
 levaria quase meia hora:
@@ -1926,17 +1414,13 @@ int main(void) {
 //   medido para 1 milhão:       25.0 milhões de comparações,    0.26 s
 ```
 
-A saída tem três camadas. As **razões** confirmam as classes: ×4,00 no
-insertion e ×2,17 a ×2,29 nos outros. As **previsões** de comparações ficaram a
-menos de 4% do medido (o modelo `n log n` ignora termos menores). O **tempo**
-do insertion para 1 milhão, 1.600 segundos (uns 27 minutos), é mais de 5 mil
-vezes o do merge sort, um terço de segundo.
-
-O fluxograma aplica a receita ao merge sort:
+As **razões** confirmam as classes (×4,00 no insertion, ×2,17 a ×2,29 nos
+outros) e as **previsões** ficaram a menos de 4% do medido. O fluxograma
+aplica a receita ao merge sort:
 
 <p align="center"><img src="material/0118-fluxograma.svg" alt="Fluxograma: Juntando tudo" width="527"></p>
 
-### Passo a passo
+#### Passo a passo
 
 A previsão do merge sort, de `n = 16.000` para `N = 1.000.000`:
 
@@ -1947,27 +1431,6 @@ A previsão do merge sort, de `n = 16.000` para `N = 1.000.000`:
 | comparações medidas | (rodando) | 18,7 milhões |
 | fator n² (insertion) | (1.000.000 / 16.000)² | 62,5² = 3.906 |
 | comparações previstas | 64.831.293 · 3.906 | 253 bilhões |
-
-> [!WARNING]
-> Na classe n log n, dobrar `n` **não** dá ×2 exato: de 8 mil para 16 mil, é
-> `2 · log₂ 16.000 / log₂ 8.000 = 2,15`. Com `n` pequeno, constantes, chamadas
-> e cache distorcem as razões. Meça com tamanhos grandes e da **mesma
-> entrada**: o `memcpy` do `mede` restaura o vetor antes de cada ordenação.
-
-> [!TIP]
-> **Por dentro do C:** `clock()` devolve tiques de processador, e
-> `CLOCKS_PER_SEC` é quantos cabem num segundo (1.000.000 no Linux). Os dois
-> são inteiros: `(clock() - ini) / CLOCKS_PER_SEC` dá **0** abaixo de um
-> segundo, por isso o `1000.0 *` na frente. O exemplo compila sem
-> otimização e com AddressSanitizer: os tempos são maiores, as **razões** não.
-
-> [!NOTE]
-> **Pergunta para você:** o quick sort daqui usa o elemento do meio como pivô.
-> Ele continuaria rápido com o vetor já em ordem? E com 1 milhão de pedidos de
-> só 10 valores diferentes (notas de 0 a 9)? Pense na partição antes de rodar
-> o exemplo A235.
-
-### Hora de praticar
 
 **Exemplo A235 · A entrada também decide: quatro vetores, quatro ordenações**
 
@@ -2109,7 +1572,348 @@ int main(void) {
 gcc ~/LPEDC/material/A236.c ~/LPEDC/material/0118-ordena.c -o ~/LPEDC/material/A236 && ~/LPEDC/material/A236
 ```
 
-#### Exercícios
+---
+
+## 3. Exercícios práticos
+
+Cada exercício é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta. Compile como os exemplos: `gcc ~/LPEDC/material/E007.c -o ~/LPEDC/material/E007 && ~/LPEDC/material/E007`. Resoluções em `_respostas/17-analise-avancada/`.
+
+### 0114 · Recorrências e árvore de recursão
+
+**Exercício E679** · ★☆☆
+
+A busca binária recursiva segue T(n) = T(n/2) + 1. Confira no computador:
+escreva "int busca(const int v[], int ini, int fim, int x)", que procura x
+em v[ini..fim-1] (ordenado) e conta as chamadas num contador global. Com
+cpfs[i] = 10 * (i + 1) para 1024 posições, busque 5 (menor que todos: pior
+caso) nos primeiros n elementos, para n = 1, 2, 4, ..., 1024, e mostre as
+chamadas de cada busca.
+
+```text
+Saída esperada:
+   n  chamadas
+   1  2
+   2  3
+   4  4
+   8  5
+  16  6
+  32  7
+  64  8
+ 128  9
+ 256  10
+ 512  11
+1024  12
+```
+
+**Exercício E681** · ★★☆
+
+Um comparador de preços confere um lote assim: compara cada preço com todos
+os do lote (n² comparações), divide o lote ao meio e confere cada metade do
+mesmo jeito: T(n) = 2 T(n/2) + n², T(1) = 1. Escreva a função recursiva
+que conta as comparações POR NÍVEL da recursão e mostre os níveis para n = 8
+e, depois, o total para n = 16, 32 e 64 ao lado de 2n² - n. Preços:
+preco[i] = 5 + (i * 13) % 40, e um par é suspeito quando um preço passa do
+dobro do outro (conte também os suspeitos, sem mostrar).
+
+```text
+Saída esperada:
+nível 0: 64 comparações
+nível 1: 32 comparações
+nível 2: 16 comparações
+nível 3: 8 comparações
+total: 120
+ n  T(n)  2n² - n
+16   496   496
+32  2016  2016
+64  8128  8128
+```
+
+**Exercício E682** · ★★☆
+
+Escreva do zero um selection sort RECURSIVO, sem laço externo:
+ordena(v, n) procura o maior de v[0..n-1], troca com v[n-1] e chama
+ordena(v, n - 1). Cada chamada mostra quantas comparações fez, e o main
+mostra o total e o vetor ordenado. Os preços são:
+
+```text
+42 17 88 5 63 29 71 10
+```
+
+```text
+Saída esperada:
+ordena(8): 7 comparações
+ordena(7): 6 comparações
+ordena(6): 5 comparações
+ordena(5): 4 comparações
+ordena(4): 3 comparações
+ordena(3): 2 comparações
+ordena(2): 1 comparação
+total: 28 = 8 · 7 / 2
+5 10 17 29 42 63 71 88
+```
+
+**Exercício E684** · ★★★
+
+O fib ingênuo faz C(n) chamadas: C(0) = C(1) = 1 e C(n) = C(n-1) + C(n-2) +
+1. Escreva fib(n), recursiva, com contador global de chamadas;
+conta_chamadas(n), que calcula C(n) com laço; e fib_laco(n), que calcula
+F(n) com laço. Para n = 5, 10, ..., 25, mostre as chamadas contadas, C(n) e
+2F(n+1) - 1. No fim, só com laço, mostre C(40) e a razão C(40) / C(39).
+
+```text
+Saída esperada:
+ n  contadas    C(n)  2F(n+1)-1
+ 5        15      15         15
+10       177     177        177
+15      1973    1973       1973
+20     21891   21891      21891
+25    242785  242785     242785
+C(40) = 331160281
+C(40) / C(39) = 1.6180
+```
+
+### 0115 · Teorema mestre
+
+**Exercício E685** · ★☆☆
+
+Escreva "int caso(int a, int b, int k)": recebe T(n) = a T(n/b) + n^k e
+devolve o caso do teorema mestre (1 se a > b^k, 2 se a = b^k, 3 se a < b^k),
+com b^k calculado em inteiros por uma função potencia(b, k) com laço. Teste
+as recorrências (a, b, k) = (2,2,1), (4,2,1), (1,2,1), (9,3,2), (5,4,1),
+(2,4,1) e (16,4,2), mostrando o caso e a classe: folhas Θ(n^(log_b a)),
+empate Θ(n^k log n) ou raiz Θ(n^k).
+
+```text
+Saída esperada:
+ 2 T(n/2) + n^1 -> caso 2, empate: Θ(n^k log n)
+ 4 T(n/2) + n^1 -> caso 1, folhas: Θ(n^(log_b a))
+ 1 T(n/2) + n^1 -> caso 3, raiz: Θ(n^k)
+ 9 T(n/3) + n^2 -> caso 2, empate: Θ(n^k log n)
+ 5 T(n/4) + n^1 -> caso 1, folhas: Θ(n^(log_b a))
+ 2 T(n/4) + n^1 -> caso 3, raiz: Θ(n^k)
+16 T(n/4) + n^2 -> caso 2, empate: Θ(n^k log n)
+```
+
+**Exercício E687** · ★★☆
+
+As 1024 notas de um concurso (0 a 10) estão em ordem crescente:
+notas[i] = i * 11 / 1024. Escreva duas funções recursivas, com um contador
+global de chamadas. conta_lento(v, ini, fim, x) conta as notas x olhando
+SEMPRE as duas metades (T(n) = 2 T(n/2) + 1, caso 1, Θ(n)). primeira(v, ini,
+fim, x) devolve a primeira posição de v[ini..fim-1] com valor >= x (ou fim),
+seguindo só UMA metade (T(n) = T(n/2) + 1, caso 2, Θ(log n)). As notas 7 são
+primeira(..., 8) - primeira(..., 7).
+
+```text
+Saída esperada:
+lento:  93 notas 7 em 2047 chamadas
+rápido: 93 notas 7 em 22 chamadas
+```
+
+**Exercício E688** · ★★☆
+
+Escreva duas buscas recursivas em v[0..N-1] = 0, 2, 4, ... (N = 1000000),
+contando cada comparação com v[...]. binaria(ini, fim, x): compara x ==
+v[meio] e depois x < v[meio]. ternaria(ini, fim, x): com terco = (fim -
+ini) / 3, m1 = ini + terco e m2 = fim - 1 - terco, compara x == v[m1], x ==
+v[m2], x < v[m1] e x > v[m2]. Faça 1000 buscas por números ímpares, x = 2 *
+((i * 7919) % N) + 1 (i de 0 a 999), e mostre a média de comparações de
+cada uma.
+
+```text
+Saída esperada:
+binária: 39.9 comparações por busca
+ternária: 47.3 comparações por busca
+```
+
+**Exercício E689** · ★★★
+
+Escreva multiplica4 (quatro produtos de metades) e multiplica3 (Karatsuba:
+p0 = a0·b0, p2 = a1·b1, p1 = (a0 + a1)·(b0 + b1) - p0 - p2, resultado p0 +
+p1·x^h + p2·x^(2h), h = n/2), recursivas, "void f(const long a[], const
+long b[], int n, long r[])", com n potência de 2, r com 2n - 1
+coeficientes, n = 1 multiplicando direto e um contador global de
+multiplicações. Teste a = 1 2 3 4 e b = 5 6 7 8; depois n = 64, 128 e 256
+com x[i] = i % 10 e y[i] = (3 * i) % 7, conferindo que os resultados são
+iguais.
+
+```text
+Saída esperada:
+4 produtos: 5 16 34 60 61 52 32  (16 multiplicações)
+3 produtos: 5 16 34 60 61 52 32  (9 multiplicações)
+n =  64:   4096 contra   729 multiplicações, mesmo resultado
+n = 128:  16384 contra  2187 multiplicações, mesmo resultado
+n = 256:  65536 contra  6561 multiplicações, mesmo resultado
+```
+
+### 0116 · Análise amortizada
+
+**Exercício E691** · ★☆☆
+
+Escreva um vetor dinâmico de int (struct Vetor com dados, n, cap e
+"long copias") que começa com capacidade 1 e dobra ao encher; cada elemento
+copiado numa mudança soma 1 em copias. Para n = 10, 100, 1000 e 1000000,
+crie um vetor novo, insira n números, mostre as cópias e a média de cópias
+por inserção, e libere o vetor.
+
+```text
+Saída esperada:
+      n    cópias  cópias/n
+     10        15      1.50
+    100       127      1.27
+   1000      1023      1.02
+1000000   1048575      1.05
+```
+
+**Exercício E693** · ★★☆
+
+Muitas bibliotecas crescem o vetor por 1,5, e não por 2, para sobrar menos
+memória. Continua O(1) amortizado? Escreva o vetor dinâmico de int (struct
+Vetor com dados, n, cap, "long copias" e "int mudancas", capacidade inicial
+1) com insere(v, valor, num, den): a nova capacidade é cap * num / den. Escreva
+testa(nome, num, den, n), que insere n números e mostra mudanças, cópias,
+cópias por inserção e a sobra (cap - n). Rode com n = 1000000 para 3/2 e 2/1.
+Atenção: com cap = 1, a conta 1 * 3 / 2 dá 1; a nova capacidade tem de ser
+sempre maior que a antiga.
+
+```text
+Saída esperada:
+fator  mudanças    cópias  cópias/n     sobra
+x 1,5        34    2099753     2.10     49869
+x 2          20    1048575     1.05     48576
+```
+
+**Exercício E694** · ★★☆
+
+O contador binário tem custo amortizado menor que 2 por incremento. E se
+também puder DIMINUIR? Com um contador de 10 bits (b[i] é o bit i), escreva
+incrementa(b) e decrementa(b), que devolvem quantos bits mudaram (no
+decremento, os 0 do fim viram 1 e o primeiro 1 vira 0), e carrega(b, x), que
+coloca o número x nos bits. No main, faça 100 incrementos a partir de 0 e
+100 operações alternando incrementa e decrementa (começando por incrementa)
+a partir de 511 (0111111111).
+
+```text
+Saída esperada:
+100 incrementos a partir de 0: 197 trocas (1.97 por operação)
+inc/dec alternados a partir de 511: 1000 trocas (10.00 por operação)
+```
+
+**Exercício E695** · ★★★
+
+Monte uma fila de pedidos com duas pilhas, entrada e saida. enfileira(x)
+empilha x na entrada; desenfileira() passa TODOS os itens da entrada para a
+saida se esta estiver vazia e desempilha da saida, devolvendo o custo (1 +
+transferências) por um ponteiro. Conte as transferências num contador
+global. Sequência: enfileira 1 a 5, atende 2, enfileira 6 e 7, atende 4,
+enfileira 8, atende 2. Depois, com as pilhas zeradas, faça 1 milhão de
+operações: na operação i, se i for múltiplo de 3 e a fila não estiver
+vazia, atenda; senão, enfileire i.
+
+```text
+Saída esperada:
+atendidos: 1 2 3 4 5 6 7 8
+8 pedidos, 8 transferências
+666667 enfileirados, 524286 transferências, pior atendimento: 262145
+```
+
+### 0117 · Limite inferior da ordenação
+
+**Exercício E697** · ★☆☆
+
+Escreva teto_log2(x): o menor h tal que 2^h >= x, só com inteiros (um laço
+que dobra uma variável até alcançar x). Use-a para mostrar o limite inferior
+⌈log₂ n!⌉ de comparações para ordenar n elementos, com n de 1 a 20.
+
+```text
+Saída esperada:
+ n                   n!  limite
+ 1                    1       0
+ 2                    2       1
+ 3                    6       3
+ 4                   24       5
+ 5                  120       7
+ 6                  720      10
+ 7                 5040      13
+ 8                40320      16
+ 9               362880      19
+10              3628800      22
+11             39916800      26
+12            479001600      29
+13           6227020800      33
+14          87178291200      37
+15        1307674368000      41
+16       20922789888000      45
+17      355687428096000      49
+18     6402373705728000      53
+19   121645100408832000      57
+20  2432902008176640000      62
+```
+
+**Exercício E699** · ★★☆
+
+Para achar o mínimo E o máximo de n temperaturas, o jeito ingênuo compara
+cada uma com o mínimo e com o máximo: 2(n - 1) comparações. Escreva também
+a versão "de dois em dois": compare os dois do par entre si (1 comparação);
+só o menor disputa o mínimo e só o maior disputa o máximo (mais 2). Com n
+ímpar, o primeiro elemento começa sozinho como mínimo e máximo. Faça todas
+as comparações pela função "int menor(int a, int b)", que conta num
+contador global. Teste com as 10 primeiras e com as 11 temperaturas de
+{23, 31, 18, 27, 35, 22, 19, 30, 26, 21, 33}.
+
+```text
+Saída esperada:
+10 dias: mín 18, máx 35 | ingênuo 18 comparações | pares 13
+11 dias: mín 18, máx 35 | ingênuo 20 comparações | pares 15
+```
+
+**Exercício E700** · ★★☆
+
+O pior caso do merge sort tem recorrência própria: as metades têm ⌈n/2⌉ e
+⌊n/2⌋ elementos e intercalar custa no máximo n - 1 comparações:
+W(1) = 0 e W(n) = W(⌈n/2⌉) + W(⌊n/2⌋) + (n - 1). Escreva pior_merge(n),
+recursiva (a própria recorrência, sem ordenar nada), e teto_log2(x) com
+inteiros, como no E697. Mostre para n de 1 a 16 o limite ⌈log₂ n!⌉, o pior
+caso do merge sort e o do insertion sort, n(n - 1)/2.
+
+```text
+Saída esperada:
+ n  limite  merge  insertion
+ 1       0      0          0
+ 2       1      1          1
+ 3       3      3          3
+ 4       5      5          6
+ 5       7      8         10
+ 6      10     11         15
+ 7      13     14         21
+ 8      16     17         28
+ 9      19     21         36
+10      22     25         45
+11      26     29         55
+12      29     33         66
+13      33     37         78
+14      37     41         91
+15      41     45        105
+16      45     49        120
+```
+
+**Exercício E702** · ★★★
+
+O limite para 4 elementos é 5 comparações, e o insertion sort faz 6 no pior
+caso. Escreva "void ordena4(int v[])", que ordena 4 valores com NO MÁXIMO 5
+comparações, todas pela função "int menor(int a, int b)" (conta num
+contador global). Compare v[0] com v[1] e v[2] com v[3]; o menor dos dois
+menores é o mínimo e o maior dos dois maiores é o máximo; compare os dois que
+sobraram. No main, teste as 24 ordens de {10, 20, 30, 40} e mostre quantas
+ficaram certas e o pior caso de comparações.
+
+```text
+Saída esperada:
+24 ordens testadas, 24 certas
+pior caso: 5 comparações (limite: 5)
+```
+
+### 0118 · Juntando tudo
 
 **Exercício E703** · ★☆☆
 
@@ -2120,7 +1924,6 @@ tempo de ord_insertion e de ord_merge para n = 1000, 2000, 4000 e 8000, com
 a razão sobre a linha anterior. original: s = 1 e, a cada posição, s = s *
 1103515245u + 12345u e original[i] = (int)(s >> 8). Os tempos variam; as
 razões, pouco.
-
 
 ```text
 Saída esperada:
@@ -2143,7 +1946,6 @@ quatro ordenações é a melhor para esse vetor quase ordenado: base[i] = i (0
 a 9999); 50 trocas de base[i] com base[i + 1], i = sorteia() % (N - 1);
 para cada algoritmo, copie base para v, zere a contagem, ordene, confira
 com ord_confere e mostre as comparações. No fim, diga qual comparou menos.
-
 
 ```text
 Saída esperada:
@@ -2169,7 +1971,6 @@ j de i+1 a n-1. b: recursiva, 1 se n <= 1, senão b(n/2) + b(n - n/2) + 1.
 c: i de 0 a n-1, j de 1 a n-1 dobrando (j *= 2). d: i e j de 0 a n-1, k de
 j a n-1 de 2 em 2.
 
-
 ```text
 Saída esperada:
 misterio_a: dobrou n, custo x4.03 -> Θ(n²)
@@ -2191,7 +1992,6 @@ menor(a, b) global e cronometre com clock(). Ordene 200 mil números (s =
 11; s = s * 1103515245u + 12345u; (int)(s >> 8)) com limiar 1, 8, 16, 32,
 64 e 256, conferindo o resultado. Os tempos variam; as comparações, não.
 
-
 ```text
 Saída esperada:
 L =   1:  3272603 comparações,   29.2 ms
@@ -2206,9 +2006,1053 @@ L = 256: 11917965 comparações,   45.1 ms
 gcc ~/LPEDC/material/E707.c ~/LPEDC/material/0118-ordena.c -o ~/LPEDC/material/E707 && ~/LPEDC/material/E707
 ```
 
+### Lista do módulo
+
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P1701.c a P1730.c, em `material/`; resoluções em `_respostas/17-analise-avancada/lista/`.
+
+#### ★☆☆ Aquecimento
+
+**Exercício P1701** · ★☆☆ · O faturamento somado pelas metades
+
+A padaria guarda o faturamento de cada dia (em reais) num vetor. A função
+soma(v, ini, fim) do esqueleto soma v[ini..fim] dividindo o pedaço ao meio e
+somando as duas metades. A recorrência do número de chamadas é
+
+```text
+C(1) = 1,  C(n) = C(⌈n/2⌉) + C(⌊n/2⌋) + 1
+```
+
+Confira no computador que C(n) = 2n - 1, para QUALQUER n (não só potência
+de 2): acrescente um contador global de chamadas e mostre, para n = 1, 2,
+3, 4, 10, 16, 64 e 100, a soma dos n primeiros dias, as chamadas contadas e
+2n - 1.
+
+```text
+Saída esperada:
+  n       soma  chamadas  2n-1
+  1        900         1     1
+  2       1850         3     3
+  3       2850         5     5
+  4       3900         7     7
+ 10      10200        19    19
+ 16      16550        31    31
+ 64      67050       127   127
+100     104750       199   199
+```
+
+**Resposta esperada:** as duas colunas de chamadas são sempre iguais; com n = 100 são 199 chamadas.
+
 ---
 
-## Desafios do módulo
+**Exercício P1702** · ★☆☆ · A maior nota dividindo a turma em três
+
+Complete a função maior3(v, ini, n), que acha a maior nota de v[ini ..
+ini + n - 1] dividindo o pedaço em TRÊS terços iguais (n é potência de 3),
+achando a maior de cada terço com uma chamada recursiva e comparando as
+três. Um contador global soma 1 a cada chamada.
+
+A recorrência das chamadas é C(1) = 1 e C(n) = 3 C(n/3) + 1. Pela árvore
+de recursão, C(n) = 1 + 3 + 9 + ... + n = (3n - 1) / 2. Mostre, para n = 1,
+3, 9, 27, 81 e 243, a maior nota, as chamadas contadas e (3n - 1) / 2.
+
+```text
+Saída esperada:
+  n  maior  chamadas  (3n-1)/2
+  1     11         1         1
+  3     85         4         4
+  9     95        13        13
+ 27     98        40        40
+ 81    100       121       121
+243    100       364       364
+```
+
+**Resposta esperada:** com n = 243, 364 chamadas, igual a (3 · 243 - 1) / 2.
+
+---
+
+**Exercício P1703** · ★☆☆ · O hodômetro do ônibus: custo amortizado em base 10
+
+O hodômetro mecânico de um ônibus tem 4 rodinhas de dígitos (0000 a 9999)
+e soma 1 a cada quilômetro. Girar uma rodinha custa 1. Quase sempre só a
+rodinha das unidades gira, mas de 0999 para 1000 giram quatro.
+
+Guarde os dígitos num vetor int d[4] (d[0] = unidades) e escreva int
+incrementa(int d[]), que soma 1 e devolve quantas rodinhas giraram. Mostre
+o custo de cada passo de 0997 até 1000, e o custo TOTAL e o custo por
+incremento depois de 10, 100, 1000 e 10000 quilômetros a partir de 0000.
+
+```text
+Saída esperada:
+0998 (giraram 1)
+0999 (giraram 1)
+1000 (giraram 4)
+   10 km:    11 rodinhas, 1.100 por km
+  100 km:   111 rodinhas, 1.110 por km
+ 1000 km:  1111 rodinhas, 1.111 por km
+10000 km: 11110 rodinhas, 1.111 por km
+```
+
+**Resposta esperada:** 1, 1 e 4 rodinhas nos passos 0997 -> 0998 -> 0999 -> 1000; 1111 rodinhas em 1000 km e 11110 em 10000 km (1,111 por km).
+
+---
+
+**Exercício P1704** · ★☆☆ · Contador binário: quantas vezes cada bit troca
+
+A catraca da academia conta os acessos num contador binário de 8 bits,
+guardado em int b[8] (b[0] é o bit menos significativo). Incrementar custa
+o número de bits trocados.
+
+Escreva int incrementa(int b[]) e um programa que faça 32 incrementos a
+partir de 00000000, mostrando os oito primeiros (o contador e o custo) e,
+no fim, quantas vezes CADA bit trocou, o total e o limite 2n da análise
+agregada.
+
+```text
+Saída esperada:
+00000001  custo 1
+00000010  custo 2
+00000011  custo 1
+00000100  custo 3
+00000101  custo 1
+00000110  custo 2
+00000111  custo 1
+00001000  custo 4
+bit 0: 32 trocas
+bit 1: 16 trocas
+bit 2:  8 trocas
+bit 3:  4 trocas
+bit 4:  2 trocas
+bit 5:  1 trocas
+bit 6:  0 trocas
+bit 7:  0 trocas
+Total: 63 trocas em 32 incrementos (limite 2n = 64)
+```
+
+**Resposta esperada:** o bit 0 troca 32 vezes, o bit 1 16, ..., o bit 5 uma vez; total 63, abaixo de 2n = 64.
+
+---
+
+**Exercício P1705** · ★☆☆ · A árvore de recursão do merge sort, nível por nível
+
+O merge sort do esqueleto ordena os preços de 16 produtos. A recorrência
+é T(n) = 2 T(n/2) + n: cada chamada com um pedaço de tamanho m custa m (o
+trabalho de intercalar).
+
+Instrumente o merge sort com um parâmetro nivel (a raiz é o nível 0) e,
+em vetores globais, acumule por nível o número de chamadas e o custo (a
+soma dos tamanhos dos pedaços). Mostre a tabela da árvore de recursão para
+n = 16 e para n = 10 e o custo total. Para n potência de 2, o total é
+n lg n + n: lg n + 1 níveis com custo n cada.
+
+```text
+Saída esperada:
+n = 16: 2 3 5 7 8 9 11 12 15 18 19 22 25 30 33 40
+nível  chamadas  custo
+    0         1     16
+    1         2     16
+    2         4     16
+    3         8     16
+    4        16     16
+Total: 80
+n = 10: 3 5 8 9 12 15 18 22 30 40
+nível  chamadas  custo
+    0         1     10
+    1         2     10
+    2         4     10
+    3         8     10
+    4         4      4
+Total: 44
+```
+
+**Resposta esperada:** n = 16 dá 5 níveis de custo 16 (total 80 = 16 · 4 + 16); n = 10 dá 5 níveis, o último com 4 chamadas e custo 4 (total 44).
+
+---
+
+**Exercício P1706** · ★☆☆ · O desfazer do editor: pilha com multipop
+
+Um editor de texto guarda cada tecla digitada numa pilha. "Desfazer k"
+tira k teclas de uma vez (ou todas, se houver menos de k): é o MULTIPOP. O
+custo real de empilhar é 1, e o de desfazer k é min(k, tamanho da pilha).
+
+Complete int multipop(Pilha *p, int k), que devolve quantas teclas tirou,
+e rode a sessão do esqueleto mostrando o custo de cada operação, o maior
+custo de uma operação só, o custo total e o limite 2 · (empilhamentos) da
+análise amortizada.
+
+```text
+Saída esperada:
+digita "manaux" custo  6 | texto: "manaux"
+desfaz 1        custo  1 | texto: "manau"
+digita "s! ok"  custo  5 | texto: "manaus! ok"
+desfaz 12       custo 10 | texto: ""
+digita "oi"     custo  2 | texto: "oi"
+desfaz 1        custo  1 | texto: "o"
+Empilhadas 13, tiradas 12, total 25 (limite 2 x 13 = 26)
+Operação mais cara: 10
+```
+
+**Resposta esperada:** 13 teclas empilhadas, 12 tiradas, total 25, dentro do limite 26; a operação mais cara custou 10.
+
+---
+
+**Exercício P1707** · ★☆☆ · Insertion sort recursivo e a recorrência T(n-1) + n
+
+Escreva do zero um insertion sort RECURSIVO para as senhas de atendimento
+de uma agência: ordena(v, n) ordena v[0..n-2] com uma chamada recursiva e
+depois insere v[n-1] na posição certa, deslocando os maiores. Conte as
+comparações entre elementos num contador global.
+
+A recorrência do pior caso é T(1) = 0 e T(n) = T(n - 1) + (n - 1), que
+soma 1 + 2 + ... + (n - 1) = n(n - 1)/2. No melhor caso, cada inserção faz
+uma comparação só: n - 1. Mostre as comparações para os três vetores de 10
+senhas do esqueleto, junto com n - 1 e n(n - 1)/2.
+
+```text
+Saída esperada:
+crescente     9 comparações: 101 102 103 104 105 106 107 108 109 110
+decrescente  45 comparações: 101 102 103 104 105 106 107 108 109 110
+misturado    26 comparações: 101 102 103 104 105 106 107 108 109 110
+Melhor caso n - 1 = 9 | pior caso n(n - 1)/2 = 45
+```
+
+**Resposta esperada:** 9 comparações no crescente, 45 no decrescente e 26 no misturado.
+
+---
+
+**Exercício P1708** · ★☆☆ · Quão funda fica a pilha de chamadas
+
+A recorrência mede o TEMPO; a altura da árvore de recursão mede a PILHA.
+O esqueleto tem duas somas recursivas das contas de luz de um condomínio,
+as duas com Θ(n) chamadas:
+
+- soma_fila(v, n) = v[n - 1] + soma_fila(v, n - 1): T(n) = T(n - 1) + 1;
+- soma_meio(v, ini, fim) divide ao meio: T(n) = 2 T(n/2) + 1.
+
+Instrumente as duas com um parâmetro de profundidade e guarde a maior
+profundidade alcançada (a raiz tem profundidade 1). Mostre, para n = 10,
+100 e 1000, as chamadas e a profundidade máxima de cada uma.
+
+```text
+Saída esperada:
+n =   10  fila: soma   1385,   11 chamadas, profundidade   11
+          meio: soma   1385,   19 chamadas, profundidade    5
+n =  100  fila: soma  15350,  101 chamadas, profundidade  101
+          meio: soma  15350,  199 chamadas, profundidade    8
+n = 1000  fila: soma 154400, 1001 chamadas, profundidade 1001
+          meio: soma 154400, 1999 chamadas, profundidade   11
+```
+
+**Resposta esperada:** as duas somas dão o mesmo valor; chamadas n + 1 e 2n - 1; profundidades 1001 e 11 para n = 1000.
+
+---
+
+**Exercício P1709** · ★☆☆ · A função que se chama duas vezes à toa
+
+Um colega escreveu a função do esqueleto para calcular a meta de vendas do
+mês n de uma loja: a meta dobra todo mês, e a de janeiro (n = 1) é R$ 100.
+Ela funciona, mas chama meta(n - 1) DUAS vezes com o mesmo argumento:
+
+```text
+C(1) = 1,  C(n) = 2 C(n - 1) + 1  =>  C(n) = 2^n - 1 chamadas
+```
+
+Acrescente um contador de chamadas, escreva meta_boa(n), que chama
+meta_boa(n - 1) uma vez só e guarda o resultado numa variável (C(n) =
+C(n - 1) + 1 = n), e mostre, para n = 1, 5, 10, 20 e 25, a meta e as
+chamadas das duas versões, junto com 2^n - 1.
+
+```text
+Saída esperada:
+ n        meta  ruim: chamadas     2^n-1  boa: chamadas
+ 1         100                1         1              1
+ 5        1600               31        31              5
+10       51200             1023      1023             10
+20    52428800          1048575   1048575             20
+25  1677721600         33554431  33554431             25
+```
+
+**Resposta esperada:** com n = 25, a meta é 1677721600, a versão ruim faz 33554431 chamadas e a boa, 25.
+
+---
+
+**Exercício P1710** · ★☆☆ · Adivinhe o preço: o limite da árvore de decisão
+
+No programa de auditório, o participante adivinha um preço inteiro de 1 a
+n reais, e o apresentador responde "é esse", "mais" ou "menos". Qualquer
+estratégia é uma árvore de decisão com n respostas possíveis; uma árvore
+binária de altura h tem no máximo 2^h - 1 nós de "é esse", então o pior
+caso precisa de pelo menos ⌈lg(n + 1)⌉ palpites.
+
+A busca binária atinge esse limite. Escreva:
+
+```text
+int palpites(int n, int preco);   // palpites da busca binária até acertar
+int teto_lg(int x);               // menor h com 2^h >= x, só com inteiros
+```
+
+e mostre, para n = 7, 15, 100, 1000 e 1000000, o pior caso da busca
+binária (testando TODOS os preços de 1 a n) e o limite ⌈lg(n + 1)⌉.
+
+```text
+Saída esperada:
+      n  pior caso  limite
+      7          3       3
+     15          4       4
+    100          7       7
+   1000         10      10
+1000000         20      20
+```
+
+**Resposta esperada:** as duas colunas são iguais; 3, 4, 7, 10 e 20.
+
+#### ★★☆ Para pensar
+
+**Exercício P1711** · ★★☆ · A árvore de 3T(n/4) + n² contada por nível
+
+A recorrência T(n) = 3 T(n/4) + n² é o exemplo clássico da árvore de
+recursão no Cormen. Transforme-a num programa: trabalho(n, nivel) faz n²
+unidades de trabalho (um laço duplo que soma 1 num contador do nível) e se
+chama três vezes com n/4; com n == 1, faz 1 unidade e para.
+
+Rode com n = 256 e mostre, por nível: o número de chamadas, o tamanho de
+cada pedaço e o custo do nível. Mostre também o total e a razão total / n²,
+que tem de ficar abaixo de 1/(1 - 3/16) = 16/13 ≈ 1,2308: a soma é uma
+progressão geométrica de razão 3/16, e a RAIZ domina (caso 3 do teorema
+mestre, Θ(n²)).
+
+```text
+Saída esperada:
+nível  chamadas  tamanho  custo
+    0         1      256  65536
+    1         3       64  12288
+    2         9       16   2304
+    3        27        4    432
+    4        81        1     81
+Total: 80641 | total / n² = 1.2305 (limite 16/13 = 1.2308)
+```
+
+**Resposta esperada:** custos 65536, 12288, 2304, 432 e 81; total 80641; razão 1.2305.
+
+---
+
+**Exercício P1712** · ★★☆ · Três funções, três casos, três fórmulas fechadas
+
+As três funções do esqueleto fazem um laço de n voltas (custo n) e se
+chamam com n/2, mudando só QUANTAS vezes:
+
+```text
+quatro(n): T(n) = 4 T(n/2) + n   caso 1: Θ(n²)
+duas(n):   T(n) = 2 T(n/2) + n   caso 2: Θ(n lg n)
+uma(n):    T(n) = T(n/2) + n     caso 3: Θ(n)
+```
+
+com T(1) = 1. Resolvendo exatamente para n potência de 2 (pela árvore de
+recursão), as fórmulas são 2n² - n, n lg n + n e 2n - 1. Instrumente as três
+com um contador global (some 1 em cada volta do laço e 1 no caso base) e
+mostre, para n = 1, 2, 4, ..., 1024, o custo contado e a fórmula de cada
+uma.
+
+```text
+Saída esperada:
+   n    quatro   2n²-n   duas  nlgn+n   uma  2n-1
+   1         1       1      1       1     1     1
+   2         6       6      4       4     3     3
+   4        28      28     12      12     7     7
+   8       120     120     32      32    15    15
+  16       496     496     80      80    31    31
+  32      2016    2016    192     192    63    63
+  64      8128    8128    448     448   127   127
+ 128     32640   32640   1024    1024   255   255
+ 256    130816  130816   2304    2304   511   511
+ 512    523776  523776   5120    5120  1023  1023
+1024   2096128 2096128  11264   11264  2047  2047
+```
+
+**Resposta esperada:** as colunas contadas e as fórmulas batem em todas as linhas; com n = 1024: 2096128, 11264 e 2047.
+
+---
+
+**Exercício P1713** · ★★☆ · Quando o mestre não serve: 2T(n/2) + n lg n
+
+Um sistema de relatórios divide os registros ao meio, processa cada metade
+recursivamente e, para juntar, gasta n lg n (ele ordena o resultado). A
+recorrência é T(n) = 2 T(n/2) + n lg n, com T(1) = 1.
+
+Parece o caso 3 (n lg n é maior que n^(log₂ 2) = n), mas não é: n lg n
+não é POLINOMIALMENTE maior que n (não existe ε > 0 com n lg n = Ω(n^(1+ε))).
+O teorema mestre na forma básica não se aplica. A árvore de recursão
+resolve: o nível i custa n (lg n - i), e a soma dá
+
+```text
+T(n) = n + n · lg n (lg n + 1) / 2 = Θ(n lg² n)
+```
+
+Escreva relatorio(n), que conta n · lg n unidades de trabalho (lg n
+calculado com inteiros) e se chama duas vezes com n/2, e mostre, para
+n = 2, 4, 8, ..., 2^16, o custo contado, a fórmula, a razão custo/(n lg n)
+(que CRESCE) e a razão custo/(n lg² n) (que se aproxima de 1/2).
+
+```text
+Saída esperada:
+    n      custo    fórmula  c/(n lg n)  c/(n lg² n)
+    2          4          4       2.000        2.000
+    4         16         16       2.000        1.000
+    8         56         56       2.333        0.778
+   16        176        176       2.750        0.688
+   32        512        512       3.200        0.640
+   64       1408       1408       3.667        0.611
+  128       3712       3712       4.143        0.592
+  256       9472       9472       4.625        0.578
+  512      23552      23552       5.111        0.568
+ 1024      57344      57344       5.600        0.560
+ 2048     137216     137216       6.091        0.554
+ 4096     323584     323584       6.583        0.549
+ 8192     753664     753664       7.077        0.544
+16384    1736704    1736704       7.571        0.541
+32768    3964928    3964928       8.067        0.538
+65536    8978432    8978432       8.562        0.535
+```
+
+**Resposta esperada:** custo igual à fórmula em todas as linhas; com n = 65536, 8978432, razões 8.562 e 0.535.
+
+---
+
+**Exercício P1714** · ★★☆ · Apertando √ na calculadora: T(n) = T(√n) + 1
+
+Na calculadora, você digita um número e aperta a tecla √ até o visor
+mostrar 2 ou menos. Quantas vezes? A função raizes(n) do enunciado faz
+isso recursivamente: se n <= 2, para; senão, chama raizes(⌊√n⌋). A
+recorrência é T(n) = T(√n) + 1.
+
+Ela não tem a forma a T(n/b) + f(n), mas a MUDANÇA DE VARIÁVEL resolve:
+com n = 2^m, fica S(m) = S(m/2) + 1, que é Θ(lg m). Voltando, T(n) =
+Θ(lg lg n). Para n = 2^(2^k) a conta é exata: k + 1 chamadas.
+
+Escreva raiz_inteira(n) (o maior r com r · r <= n, só com inteiros, por
+busca binária), teto_lg(n) (o menor h com 2^h >= n, só com inteiros) e
+raizes(n) com um contador de chamadas, e mostre as chamadas e
+⌈lg ⌈lg n⌉⌉ + 1 para n = 4, 16, 256, 65536, 4294967296 e
+18446744073709551615 (o maior unsigned long long, que não é potência de
+2^(2^k)).
+
+```text
+Saída esperada:
+                   n  chamadas  teto(lg teto(lg n)) + 1
+                   4         2            2
+                  16         3            3
+                 256         4            4
+               65536         5            5
+          4294967296         6            6
+18446744073709551615         7            7
+```
+
+**Resposta esperada:** 2, 3, 4, 5 e 6 chamadas para as potências, e 7 para o maior unsigned long long; a coluna da fórmula bate em todas.
+
+---
+
+**Exercício P1715** · ★★☆ · O método do potencial no vetor que dobra
+
+O vetor de pedidos de um app começa VAZIO (capacidade 0). Ao inserir com o
+vetor cheio, ele aloca o dobro (ou 1, se a capacidade era 0) e copia tudo.
+O custo real de uma inserção é 1, mais o número de cópias.
+
+O método do potencial do Cormen usa Φ = 2 · num - cap (num = itens, cap =
+capacidade). O custo AMORTIZADO de uma operação é o real mais a variação do
+potencial: ĉ = c + Φ(depois) - Φ(antes). Escreva o vetor com malloc (copie
+os itens à mão, para contar as cópias) e mostre, para 17 inserções: num,
+cap, custo real, Φ e custo amortizado. Mostre também a soma dos custos reais
+e a dos amortizados.
+
+```text
+Saída esperada:
+num  cap  real  phi  amortizado
+  1    1     1    1           2
+  2    2     2    2           3
+  3    4     3    2           3
+  4    4     1    4           3
+  5    8     5    2           3
+  6    8     1    4           3
+  7    8     1    6           3
+  8    8     1    8           3
+  9   16     9    2           3
+ 10   16     1    4           3
+ 11   16     1    6           3
+ 12   16     1    8           3
+ 13   16     1   10           3
+ 14   16     1   12           3
+ 15   16     1   14           3
+ 16   16     1   16           3
+ 17   32    17    2           3
+Soma real: 48 | soma amortizada: 50 (3n = 51)
+```
+
+**Resposta esperada:** amortizado 3 em todas as linhas (2 na primeira); soma real 48 e soma amortizada 50.
+
+---
+
+**Exercício P1716** · ★★☆ · Contador com zerar: o reset que não varre tudo
+
+O contador de passageiros de uma estação tem 16 bits e duas operações:
+INCREMENTA e ZERA (no fim de cada turno). Zerar varrendo os 16 bits custa
+16 sempre. Dá para fazer melhor: guarde em maior o índice do bit 1 mais
+alto já ligado desde o último zerar, e zere só os bits 0..maior (custo
+maior + 1).
+
+Com isso, n operações quaisquer custam O(n) no total. Pelo método
+contábil, cada INCREMENTA paga 3: 1 pelo bit que liga, 1 de crédito para
+quando esse bit for desligado, e 1 de crédito para o ZERA varrer a posição,
+caso o incremento tenha subido o maior (ele sobe no máximo 1 por vez).
+
+Escreva as duas versões do zerar e rode a sequência do esqueleto contando o
+custo total de cada uma (incrementar custa os bits trocados; zerar custa os
+bits varridos). Mostre também o limite 3 · (incrementos) + (zerares).
+
+```text
+Saída esperada:
+Incrementos: 1150 | zerares: 52
+Zerar varrendo tudo: 3026
+Zerar até o maior:   2304
+Limite 3·1150 + 52 = 3502
+```
+
+**Resposta esperada:** versão boba 3026, esperta 2304, limite 3502; nos 50 turnos curtos, cada zerar esperto custa 2 em vez de 16.
+
+---
+
+**Exercício P1717** · ★★☆ · Conserte o vetor que cresce de 10 em 10
+
+Conserte o programa. O app de delivery guarda os pedidos do dia num vetor
+dinâmico, e o colega fez o vetor crescer de 10 em 10 posições "para não
+desperdiçar memória". O vetor funciona e o
+AddressSanitizer não reclama: o erro de propósito é de ANÁLISE. Com crescimento aditivo, n
+inserções copiam 10 + 20 + 30 + ... ≈ n²/20 itens: Θ(n²) no total, Θ(n)
+por inserção. Veja a saída com 10 mil pedidos:
+
+```text
+Saída que aparece:
+Pedidos: 10000 | capacidade: 10000
+Realocações: 999 | cópias: 4995000 (499.50 por pedido)
+```
+
+Troque a regra de crescimento para DOBRAR a capacidade (começando em 10) e
+confira que as cópias caem para menos de 2n, ou seja, O(1) amortizado:
+
+```text
+Saída esperada:
+Pedidos: 10000 | capacidade: 10240
+Realocações: 10 | cópias: 10230 (1.02 por pedido)
+```
+
+**Resposta esperada:** 10 realocações e 10230 cópias, contra 999 e 4995000.
+
+---
+
+**Exercício P1718** · ★★☆ · O laço que dobra dentro da recursão
+
+A função do esqueleto organiza as filas de um evento: em cada pedaço de n
+pessoas, um laço for (i = 1; i < n; i *= 2) faz lg n passos, e depois a
+função se chama para as duas metades. A recorrência é
+
+```text
+T(1) = 1,  T(n) = 2 T(n/2) + lg n
+```
+
+Leia o código, ache a recorrência e aplique o teorema mestre: a = 2,
+b = 2, n^(log₂ 2) = n, e f(n) = lg n = O(n^(1 - ε)): caso 1, Θ(n). A
+árvore de recursão dá a fórmula exata para n potência de 2:
+T(n) = 3n - lg n - 2.
+
+Acrescente um contador global (1 por volta do laço e 1 no caso base) e
+mostre, para n = 1, 4, 16, ..., 2^20 (potências de 4), o custo contado,
+3n - lg n - 2 e a razão custo / n.
+
+```text
+Saída esperada:
+      n    custo  3n-lg n-2  custo/n
+      1        1          1   1.0000
+      4        8          8   2.0000
+     16       42         42   2.6250
+     64      184        184   2.8750
+    256      758        758   2.9609
+   1024     3060       3060   2.9883
+   4096    12274      12274   2.9966
+  16384    49136      49136   2.9990
+  65536   196590     196590   2.9997
+ 262144   786412     786412   2.9999
+1048576  3145706    3145706   3.0000
+```
+
+**Resposta esperada:** o custo bate com 3n - lg n - 2 em todas as linhas; com n = 2^20, 3145706.
+
+---
+
+**Exercício P1719** · ★★☆ · Quantas chamadas para escolher o time do futsal
+
+O técnico quer saber de quantos jeitos dá para escolher k jogadores de um
+grupo de n. A função comb(n, k) do esqueleto usa a relação de Pascal:
+C(n, k) = C(n - 1, k - 1) + C(n - 1, k), com C(n, 0) = C(n, n) = 1.
+
+Toda folha da árvore de recursão devolve 1, então ela tem exatamente
+C(n, k) folhas. E todo nó interno tem dois filhos. Numa árvore assim
+(binária cheia), nós = 2 · folhas - 1. Logo:
+
+```text
+chamadas(n, k) = 2 C(n, k) - 1
+```
+
+Acrescente um contador e mostre, para (6, 2), (10, 5), (20, 10) e (26, 13),
+o valor, as chamadas e 2 C(n, k) - 1. Depois escreva comb_linha(n, k), que
+calcula o mesmo número sem recursão, pela fórmula multiplicativa
+C(n, k) = C(n, k - 1) · (n - k + 1) / k, e conte as multiplicações.
+
+```text
+Saída esperada:
+ n  k     C(n,k)  chamadas  2C-1      linha  mult
+ 6  2         15        29        29         15    2
+10  5        252       503       503        252    5
+20 10     184756    369511    369511     184756   10
+26 13   10400600  20801199  20801199   10400600   13
+```
+
+**Resposta esperada:** 15, 252, 184756 e 10400600, com 29, 503, 369511 e 20801199 chamadas; a fórmula faz 2, 5, 10 e 13 multiplicações.
+
+---
+
+**Exercício P1720** · ★★☆ · Quatro ordenações contando comparações
+
+Em vez de cronometrar, conte. O esqueleto gera os preços de n produtos com
+um gerador pseudoaleatório fixo (a mesma sequência em toda execução).
+Escreva insertion sort, merge sort, heapsort e quicksort (pivô no último
+elemento, partição de Lomuto) e conte as COMPARAÇÕES ENTRE ELEMENTOS de
+cada um, todos ordenando cópias do mesmo vetor.
+
+Mostre as contagens para n = 1000 e n = 2000, a razão entre as duas (quanto
+cresce quando n dobra) e as referências n²/4 e n lg n. Confira também que
+os quatro deixam o vetor ordenado.
+
+```text
+Saída esperada:
+            n = 1000  n = 2000  razão
+insertion     250962   1021285   4.07
+merge           8707     19411   2.23
+heapsort       16835     37713   2.24
+quicksort      10531     23811   2.26
+n²/4         250000   1000000   4.00
+n lg n          9966     21932   2.20
+Todos ordenados: sim
+```
+
+**Resposta esperada:** o insertion sort fica perto de n²/4 e quadruplica (razão 4,07); merge, heap e quick ficam entre 0,8 e 1,8 vezes n lg n e crescem cerca de 2,2 vezes.
+
+#### ★★★ Desafio
+
+**Exercício P1721** · ★★★ · Matrizes por blocos: 8 chamadas contra as 7 de Strassen
+
+Uma rede de farmácias multiplica matrizes n × n (transferências entre
+filiais vezes custos) com n potência de 2. Dividindo cada matriz em quatro
+blocos n/2 × n/2, o produto sai de 8 produtos de blocos:
+
+```text
+C11 = A11 B11 + A12 B21    C12 = A11 B12 + A12 B22
+C21 = A21 B11 + A22 B21    C22 = A21 B12 + A22 B22
+```
+
+Isso dá M(n) = 8 M(n/2) multiplicações escalares, com M(1) = 1: n³, igual ao
+laço triplo (caso 1 do mestre, n^(log₂ 8)). Strassen descobriu como fazer
+com 7 produtos de blocos: S(n) = 7 S(n/2) = n^(log₂ 7) ≈ n^2,807.
+
+Escreva:
+
+1. mult_blocos(), recursiva com as 8 chamadas (trabalhe com deslocamentos
+de linha e coluna nas matrizes globais, sem copiar blocos), contando as
+multiplicações escalares;
+2. a conferência com o laço triplo para n = 2, 4, 8 e 16;
+3. a tabela de n³ e 7^(lg n) para n = 2, 4, ..., 1024, calculada pelas
+recorrências, com a razão entre elas.
+
+```text
+Saída esperada:
+n =  2:    8 multiplicações (n³ =    8), igual ao laço triplo: sim
+n =  4:   64 multiplicações (n³ =   64), igual ao laço triplo: sim
+n =  8:  512 multiplicações (n³ =  512), igual ao laço triplo: sim
+n = 16: 4096 multiplicações (n³ = 4096), igual ao laço triplo: sim
+    n          8 blocos   Strassen  razão
+    2                 8          7   1.14
+    4                64         49   1.31
+    8               512        343   1.49
+   16              4096       2401   1.71
+   32             32768      16807   1.95
+   64            262144     117649   2.23
+  128           2097152     823543   2.55
+  256          16777216    5764801   2.91
+  512         134217728   40353607   3.33
+ 1024        1073741824  282475249   3.80
+```
+
+**Resposta esperada:** as multiplicações contadas são n³ e os produtos batem com o laço triplo; com n = 1024, 1073741824 contra 282475249 (razão 3.80).
+
+---
+
+**Exercício P1722** · ★★★ · A árvore de recursão de qualquer a T(n/b) + n^k
+
+O teorema mestre é a árvore de recursão resumida. Escreva um programa que
+DESENHE a árvore, por nível, para qualquer recorrência T(n) = a T(n/b) + n^k
+com T(1) = 1 (n potência de b), e que confira o total com uma função
+recursiva que realmente soma os custos.
+
+```text
+void arvore(int a, int b, int k, long n);
+```
+
+Para cada nível i: o número de nós a^i, o tamanho n/b^i, o custo de cada
+nó (n/b^i)^k e o custo do nível. No fim: o total da tabela, o total da
+recursão (têm de bater) e o diagnóstico pela razão r = a / b^k entre o
+custo de um nível e o do anterior:
+
+- r > 1: o custo cresce para baixo, as FOLHAS dominam (caso 1);
+- r == 1: todos os níveis custam o mesmo, total = custo × níveis (caso 2);
+- r < 1: o custo cai, a RAIZ domina (caso 3).
+
+Rode para (8, 2, 2), (4, 2, 2) e (2, 2, 2), todas com n = 64, e para
+(9, 3, 1) com n = 81.
+
+```text
+Saída esperada:
+T(n) = 8 T(n/2) + n^2, n = 64
+  nível      nós  tamanho  custo/nó  custo do nível
+      0        1       64      4096            4096
+      1        8       32      1024            8192
+      2       64       16       256           16384
+      3      512        8        64           32768
+      4     4096        4        16           65536
+      5    32768        2         4          131072
+      6   262144        1         1          262144
+  total da tabela 520192, da recursão 520192
+  r = 8/4 > 1: as folhas dominam (caso 1)
+T(n) = 4 T(n/2) + n^2, n = 64
+  nível      nós  tamanho  custo/nó  custo do nível
+      0        1       64      4096            4096
+      1        4       32      1024            4096
+      2       16       16       256            4096
+      3       64        8        64            4096
+      4      256        4        16            4096
+      5     1024        2         4            4096
+      6     4096        1         1            4096
+  total da tabela 28672, da recursão 28672
+  r = 1: 7 níveis iguais (caso 2)
+T(n) = 2 T(n/2) + n^2, n = 64
+  nível      nós  tamanho  custo/nó  custo do nível
+      0        1       64      4096            4096
+      1        2       32      1024            2048
+      2        4       16       256            1024
+      3        8        8        64             512
+      4       16        4        16             256
+      5       32        2         4             128
+      6       64        1         1              64
+  total da tabela 8128, da recursão 8128
+  r = 2/4 < 1: a raiz domina (caso 3)
+T(n) = 9 T(n/3) + n^1, n = 81
+  nível      nós  tamanho  custo/nó  custo do nível
+      0        1       81        81              81
+      1        9       27        27             243
+      2       81        9         9             729
+      3      729        3         3            2187
+      4     6561        1         1            6561
+  total da tabela 9801, da recursão 9801
+  r = 9/3 > 1: as folhas dominam (caso 1)
+```
+
+**Resposta esperada:** 8T(n/2)+n² tem folhas 262144 de 520192 (caso 1); 4T(n/2)+n² tem 7 níveis de 4096 (caso 2); 2T(n/2)+n² tem raiz 4096 de 8128 (caso 3); 9T(n/3)+n é caso 1.
+
+---
+
+**Exercício P1723** · ★★★ · Stooge sort: correto, recursivo e pior que o bubble
+
+O stooge sort (problema 7-3 do Cormen) ordena v[i..j] assim: se v[i] >
+v[j], troca os dois; se o pedaço tem 3 ou mais elementos, com t = ⌊(j - i +
+1)/3⌋, ordena os primeiros 2/3, depois os últimos 2/3, depois os primeiros
+2/3 de novo. Ele funciona, mas a recorrência é
+
+```text
+T(n) = 3 T(2n/3) + Θ(1)  =>  Θ(n^(log_{3/2} 3)) ≈ Θ(n^2,71)
+```
+
+pior que os Θ(n²) do bubble e do insertion sort.
+
+Escreva o stooge sort com um contador de chamadas e a profundidade máxima
+da recursão (a raiz tem profundidade 1), e ordene os tempos de volta de um
+kart (vetor do esqueleto) para n = 10, 20, 40, ..., 640. Mostre, para
+cada n: as chamadas, se ficou ordenado, a profundidade, log_{3/2} n e as
+n(n - 1)/2 comparações do bubble sort. No fim, estime o expoente entre n = 10 e
+n = 640 com log(c₆₄₀ / c₁₀) / log(64) e compare com log(3) / log(1,5).
+
+```text
+Saída esperada:
+  n  chamadas  ordenado  prof  log1.5(n)  bubble
+ 10       364       sim     6       5.68      45
+ 20      3280       sim     8       7.39     190
+ 40      9841       sim     9       9.10     780
+ 80     88573       sim    11      10.81    3160
+160    797161       sim    13      12.52   12720
+320   7174453       sim    15      14.23   51040
+640  21523360       sim    16      15.94  204480
+Expoente estimado: 2.642 | teoria log(3) / log(1,5) = 2.7095
+```
+
+**Resposta esperada:** todos ordenados; com n = 640, 21523360 chamadas (contra 204480 comparações do bubble); expoente estimado 2.642, teoria 2.7095.
+
+```bash
+gcc ~/LPEDC/material/P1723.c -o ~/LPEDC/material/P1723 -lm && ~/LPEDC/material/P1723
+```
+
+---
+
+**Exercício P1724** · ★★★ · A fila circular que dobra sem perder a ordem
+
+A fila de senhas de um banco é um vetor CIRCULAR: ini aponta o primeiro,
+num diz quantos há, e o próximo entra em (ini + num) % cap. Quando enche,
+a fila dobra. A pegadinha: não dá para copiar o vetor velho como está,
+porque a fila pode "dar a volta" no fim. É preciso copiar NA ORDEM DA FILA
+(de ini até o fim, depois do começo até ini - 1) para o começo do vetor
+novo, e fazer ini = 0.
+
+Escreva enfileira, desenfileira e cresce, contando as cópias. Comece com
+cap = 1 e rode o dia do esqueleto: 1000 rodadas de "chega, chega, atende,
+chega, atende, chega, atende". Confira que as senhas saem na ordem em que chegaram,
+mostre cada vez que a fila cresceu (de quanto para quanto, e com ini em
+que posição) e o total de cópias, comparado com o número de enfileiramentos.
+
+```text
+Saída esperada:
+cresce    1 ->    2 (ini era 0)
+cresce    2 ->    4 (ini era 1)
+cresce    4 ->    8 (ini era 2)
+cresce    8 ->   16 (ini era 4)
+cresce   16 ->   32 (ini era 8)
+cresce   32 ->   64 (ini era 16)
+cresce   64 ->  128 (ini era 32)
+cresce  128 ->  256 (ini era 64)
+cresce  256 ->  512 (ini era 128)
+cresce  512 -> 1024 (ini era 256)
+Crescimentos: 10 | cópias: 1023 | senhas enfileiradas: 4000
+Atendidas em ordem: sim | na fila: 1000 (cap 1024)
+```
+
+**Resposta esperada:** 10 crescimentos (até cap 1024), quase todos com a fila dando a volta (ini na metade do vetor); 1023 cópias para 4000 senhas; ordem conferida; 1000 senhas na fila no fim.
+
+---
+
+**Exercício P1725** · ★★★ · O método da substituição testado no computador
+
+O merge sort com n qualquer (não só potência de 2) segue
+
+```text
+T(1) = 0,  T(n) = T(⌈n/2⌉) + T(⌊n/2⌋) + n - 1
+```
+
+(n - 1 é o pior caso de comparações ao intercalar). No método da
+substituição, você chuta T(n) <= c · n lg n e prova por indução. O
+computador não prova, mas mostra se o chute é bom e qual c serve.
+
+Escreva um programa que calcule T(n) para todo n de 1 a 1000000 numa
+tabela (de baixo para cima: T[n] só usa índices menores), e mostre:
+
+- T(n) e T(n) / (n lg n) para n = 10, 100, ..., 1000000;
+- o maior valor de T(n) / (n lg n) para 2 <= n <= 1000000, e em que n;
+- a conferência da fórmula exata do pior caso do merge sort:
+T(n) = n ⌈lg n⌉ - 2^⌈lg n⌉ + 1, para todo n de 1 a 1000000.
+
+```text
+Saída esperada:
+      n          T(n)  T/(n lg n)
+     10            25       0.753
+    100           573       0.862
+   1000          8977       0.901
+  10000        123617       0.930
+ 100000       1568929       0.945
+1000000      18951425       0.951
+Maior razão: 0.9531, em n = 762546
+Fórmula n teto(lg n) - 2^teto(lg n) + 1: 0 n errados
+```
+
+**Resposta esperada:** a fórmula confere em todos os n; com n = 1000000, T = 18951425 e razão 0.951.
+
+```bash
+gcc ~/LPEDC/material/P1725.c -o ~/LPEDC/material/P1725 -lm && ~/LPEDC/material/P1725
+```
+
+---
+
+**Exercício P1726** · ★★★ · Busca na tabela de fretes: escada contra quadrantes
+
+A transportadora tem uma tabela n × n de fretes, em reais, crescente em
+cada linha (peso) e em cada coluna (distância): frete[i][j] = 10i + 7j.
+Dado um valor, ela quer saber se ele aparece na tabela. Escreva as duas
+buscas e conte as comparações com elementos da tabela:
+
+- ESCADA: comece no canto de cima à direita. Se o valor é menor, vá para a
+esquerda; se é maior, desça. No máximo 2n - 1 passos: Θ(n).
+- QUADRANTES: compare com o elemento do meio m = frete[mi][mj]. Se o valor
+é menor, ele não está no quadrante de baixo à direita (linhas >= mi e
+colunas >= mj); se é maior, não está no de cima à esquerda (linhas <= mi
+e colunas <= mj). Procure recursivamente nos TRÊS pedaços que sobram. A
+recorrência é T(n) = 3 T(n/2) + 1, caso 1: Θ(n^(lg 3)) ≈ Θ(n^1,585).
+
+Para n = 8, 16, 32 e 64, procure TODOS os valores de 0 até o maior da
+tabela e mostre o pior caso de cada busca, 2n - 1 e n^(lg 3). Confira que as
+duas buscas concordam em todos os valores.
+
+```text
+Saída esperada:
+ n  escada  2n-1  quadrantes  n^lg3  concordam
+ 8      15    15          40     27        sim
+16      25    31         121     81        sim
+32      41    63         364    243        sim
+64      73   127        1093    729        sim
+```
+
+**Resposta esperada:** as buscas concordam; com n = 64, a escada faz no pior caso 73 comparações (o limite é 127) e a de quadrantes, 1093.
+
+```bash
+gcc ~/LPEDC/material/P1726.c -o ~/LPEDC/material/P1726 -lm && ~/LPEDC/material/P1726
+```
+
+---
+
+**Exercício P1727** · ★★★ · Montar o heap: n inserções ou BUILD-HEAP?
+
+A central do SAMU recebe de uma vez a lista de chamados do turno e precisa
+de um heap MÍNIMO pela gravidade (1 é o mais grave). Há dois jeitos:
+
+- inserir um por um: cada inserção sobe o novo item, até lg i trocas. Total
+O(n lg n);
+- BUILD-HEAP (Floyd): põe tudo no vetor e chama "desce" para i de n/2 - 1
+até 0. Um nó de altura h desce no máximo h níveis, e só ~n/2^(h+1) nós
+têm altura h: a soma Σ h · n/2^(h+1) é menor que n. Total O(n).
+
+Implemente os dois, contando as TROCAS, e teste no pior caso de cada um:
+gravidades em ordem DECRESCENTE (n, n - 1, ..., 1), com n = 2^k - 1 para
+k = 4, 8, 12, 16 e 20. Mostre as trocas, n lg n e n, e confira que os dois
+heaps são válidos.
+
+```text
+Saída esperada:
+      n   inserindo   build-heap      n lg n  válidos
+     15          34           11          59      sim
+    255        1538          247        2039      sim
+   4095       40962         4083       49139      sim
+  65535      917506        65519     1048559      sim
+1048575    18874370      1048555    20971499      sim
+```
+
+**Resposta esperada:** com n = 1048575, 18874370 trocas inserindo e 1048555 com BUILD-HEAP (n - 20).
+
+```bash
+gcc ~/LPEDC/material/P1727.c -o ~/LPEDC/material/P1727 -lm && ~/LPEDC/material/P1727
+```
+
+---
+
+**Exercício P1728** · ★★★ · Fabrique o pior caso do merge sort
+
+O merge sort intercala com no máximo n - 1 comparações; o pior caso total,
+para n potência de 2, é n lg n - n + 1. Que entrada provoca isso? Uma
+intercalação faz n - 1 comparações quando as duas metades se alternam até
+o fim: o maior e o segundo maior ficam em metades diferentes, e assim por
+diante. Dá para FABRICAR a entrada desfazendo o merge sort:
+
+```text
+pior(v[0..n-1] ordenado): os elementos das posições pares vão para a
+metade esquerda, os das ímpares para a direita, e cada metade é
+arrumada recursivamente do mesmo jeito.
+```
+
+Escreva pior() e um merge sort que conte comparações. Para n = 8, 16 e
+1024, mostre as comparações com a entrada já ordenada, com a fabricada, a
+fórmula n lg n - n + 1 e o limite inferior ⌈lg n!⌉ de qualquer ordenação
+por comparação. Mostre também a entrada fabricada para n = 8 (com as notas
+1 a 8 de uma prova).
+
+```text
+Saída esperada:
+   n  ordenada  fabricada  n lg n - n + 1  teto(lg n!)
+   8        12         17              17           16
+  16        32         49              49           45
+1024      5120       9217            9217         8770
+Entrada fabricada (n = 8): 1 5 3 7 2 6 4 8
+```
+
+**Resposta esperada:** para n = 8, a entrada 1 5 3 7 2 6 4 8 dá 17 comparações (fórmula 17, limite 16); para n = 1024, 9217 contra o limite 8770.
+
+```bash
+gcc ~/LPEDC/material/P1728.c -o ~/LPEDC/material/P1728 -lm && ~/LPEDC/material/P1728
+```
+
+---
+
+**Exercício P1729** · ★★★ · A roda do amigo-secreto: simular ou recorrer?
+
+Na roda de n pessoas, numeradas de 1 a n no sentido horário, a pessoa 1
+começa: ela "pula" a vizinha, que sai da roda, e a vez passa para a pessoa
+seguinte à que saiu. Isso se repete (sai uma, pula uma) até sobrar uma,
+que escolhe o primeiro presente. É o problema de Josephus com passo 2.
+
+Dois jeitos de achar quem sobra:
+
+- SIMULAR com uma lista circular encadeada (malloc): n - 1 remoções, cada
+uma com um passo de ponteiro: Θ(n) passos.
+- RECORRER: J(1) = 1, J(2m) = 2 J(m) - 1 e J(2m + 1) = 2 J(m) + 1. Uma
+chamada com n/2: C(n) = C(n/2) + 1 = ⌊lg n⌋ + 1 chamadas.
+
+Escreva os dois, contando passos e chamadas, e confira com a fórmula
+fechada J(n) = 2(n - 2^⌊lg n⌋) + 1. Rode para n = 5, 10, 41, 1000 e
+100000.
+
+```text
+Saída esperada:
+     n  simulação  passos  recursão  chamadas  fórmula
+     5          3       4         3         3        3
+    10          5       9         5         4        5
+    41         19      40        19         6       19
+  1000        977     999       977        10      977
+100000      68929   99999     68929        17    68929
+```
+
+**Resposta esperada:** sobram 3, 5, 19, 977 e 68929; a simulação gasta n - 1 passos, a recursão no máximo 17 chamadas.
+
+---
+
+**Exercício P1730** · ★★★ · Contador em que trocar o bit i custa 2^i
+
+No contador binário comum, trocar qualquer bit custa 1, e n incrementos
+custam menos que 2n: O(1) amortizado. Agora imagine um contador de placas
+mecânicas em que a placa i é 2^i vezes mais pesada: trocar o bit i custa
+2^i. O custo amortizado continua constante?
+
+Análise agregada: em n = 2^k incrementos a partir de 0, o bit i (i < k)
+troca n/2^i vezes, a 2^i cada: n por bit. Com k bits trocando, e mais a
+placa k ligada uma vez no fim (custo 2^k = n), o total é n(k + 1) =
+n(lg n + 1). Amortizado: lg n + 1, que CRESCE com n.
+
+Escreva o contador (24 bits) com os dois custos e mostre, para n = 2^k com
+k = 4, 8, 12, 16 e 20: o custo total comum, o total pesado, n(lg n + 1) e o
+custo pesado por incremento.
+
+```text
+Saída esperada:
+      n    comum      pesado  n(lg n + 1)  pesado/n
+     16       31          80           80       5.0
+    256      511        2304         2304       9.0
+   4096     8191       53248        53248      13.0
+  65536   131071     1114112      1114112      17.0
+1048576  2097151    22020096     22020096      21.0
+```
+
+**Resposta esperada:** o comum fica em 2n - 1; o pesado bate com n(lg n + 1) em todas as linhas (21 por incremento com n = 2^20).
+
+---
+
+### Desafios do módulo
 
 Problemas para fechar o módulo, misturando os assuntos. Resolva no papel e,
 sempre que der, confira com um programa em C compilado com as flags de estudo.
@@ -2351,7 +3195,7 @@ apenas não distinguem `n^1,5` de, digamos, `n log² n`.
 
 </details>
 
-## Questões do POSCOMP
+### Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -2359,1485 +3203,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 | --- | --- | --- | --- | --- |
 | 2019 | 21 | Recorrências de algoritmos recursivos, limites Theta | A | [caderno](https://www.sbc.org.br/wp-content/uploads/2025/02/0518.002_Exame_POSCOMP_2019.pdf) |
 
-
-## Lista de exercícios práticos
-
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P1701.c a P1730.c, em `material/`; resoluções em `_respostas/17-analise-avancada/lista/`.
-
-### ★☆☆ Aquecimento
-
-**Exercício P1701** · ★☆☆ · O faturamento somado pelas metades
-
-A padaria guarda o faturamento de cada dia (em reais) num vetor. A função
-soma(v, ini, fim) do esqueleto soma v[ini..fim] dividindo o pedaço ao meio e
-somando as duas metades. A recorrência do número de chamadas é
-
-
-```text
-C(1) = 1,  C(n) = C(⌈n/2⌉) + C(⌊n/2⌋) + 1
-```
-
-
-Confira no computador que C(n) = 2n - 1, para QUALQUER n (não só potência
-de 2): acrescente um contador global de chamadas e mostre, para n = 1, 2,
-3, 4, 10, 16, 64 e 100, a soma dos n primeiros dias, as chamadas contadas e
-2n - 1.
-
-
-```text
-Saída esperada:
-  n       soma  chamadas  2n-1
-  1        900         1     1
-  2       1850         3     3
-  3       2850         5     5
-  4       3900         7     7
- 10      10200        19    19
- 16      16550        31    31
- 64      67050       127   127
-100     104750       199   199
-```
-
-**Dicas:**
-
-1. Some 1 no contador na primeira linha de soma(). Zere o contador antes
-   de cada n.
-2. A árvore de recursão tem n folhas (um dia cada) e n - 1 nós internos
-   (cada um junta dois pedaços): 2n - 1 nós no total.
-3. O custo é Θ(n): dividir ao meio não deixa a soma mais rápida que um
-   laço.
-4. Resposta esperada: as duas colunas de chamadas são sempre iguais; com
-   n = 100 são 199 chamadas.
-
-```bash
-gcc ~/LPEDC/material/P1701.c -o ~/LPEDC/material/P1701 && ~/LPEDC/material/P1701
-```
-
----
-
-**Exercício P1702** · ★☆☆ · A maior nota dividindo a turma em três
-
-Complete a função maior3(v, ini, n), que acha a maior nota de v[ini ..
-ini + n - 1] dividindo o pedaço em TRÊS terços iguais (n é potência de 3),
-achando a maior de cada terço com uma chamada recursiva e comparando as
-três. Um contador global soma 1 a cada chamada.
-
-A recorrência das chamadas é C(1) = 1 e C(n) = 3 C(n/3) + 1. Pela árvore
-de recursão, C(n) = 1 + 3 + 9 + ... + n = (3n - 1) / 2. Mostre, para n = 1,
-3, 9, 27, 81 e 243, a maior nota, as chamadas contadas e (3n - 1) / 2.
-
-
-```text
-Saída esperada:
-  n  maior  chamadas  (3n-1)/2
-  1     11         1         1
-  3     85         4         4
-  9     95        13        13
- 27     98        40        40
- 81    100       121       121
-243    100       364       364
-```
-
-**Dicas:**
-
-1. Caso base: n == 1, devolve v[ini]. Senão, t = n / 3 e as chamadas são
-   em ini, ini + t e ini + 2t, todas com tamanho t.
-2. A árvore tem log₃ n + 1 níveis, com 3^i nós no nível i: a soma da
-   progressão geométrica dá (3n - 1) / 2.
-3. Pelo teorema mestre, T(n) = 3 T(n/3) + Θ(1) é o caso 1 (n^(log₃ 3) = n
-   ganha de 1): Θ(n), como um laço.
-4. Resposta esperada: com n = 243, 364 chamadas, igual a (3 · 243 - 1) / 2.
-
-```bash
-gcc ~/LPEDC/material/P1702.c -o ~/LPEDC/material/P1702 && ~/LPEDC/material/P1702
-```
-
----
-
-**Exercício P1703** · ★☆☆ · O hodômetro do ônibus: custo amortizado em base 10
-
-O hodômetro mecânico de um ônibus tem 4 rodinhas de dígitos (0000 a 9999)
-e soma 1 a cada quilômetro. Girar uma rodinha custa 1. Quase sempre só a
-rodinha das unidades gira, mas de 0999 para 1000 giram quatro.
-
-Guarde os dígitos num vetor int d[4] (d[0] = unidades) e escreva int
-incrementa(int d[]), que soma 1 e devolve quantas rodinhas giraram. Mostre
-o custo de cada passo de 0997 até 1000, e o custo TOTAL e o custo por
-incremento depois de 10, 100, 1000 e 10000 quilômetros a partir de 0000.
-
-
-```text
-Saída esperada:
-0998 (giraram 1)
-0999 (giraram 1)
-1000 (giraram 4)
-   10 km:    11 rodinhas, 1.100 por km
-  100 km:   111 rodinhas, 1.110 por km
- 1000 km:  1111 rodinhas, 1.111 por km
-10000 km: 11110 rodinhas, 1.111 por km
-```
-
-**Dicas:**
-
-1. incrementa: i = 0; enquanto i < 4 e d[i] == 9, d[i] = 0 e i++ (cada
-   uma é uma rodinha girada); se i < 4, d[i]++ (mais uma).
-2. Análise agregada: em n incrementos, a rodinha das unidades gira n
-   vezes, a das dezenas n/10, a das centenas n/100... A soma fica abaixo
-   de n · 10/9 ≈ 1,111 n.
-3. Em 10000 km o hodômetro volta para 0000: a rodinha dos milhares também
-   gira 10 vezes.
-4. Resposta esperada: 1, 1 e 4 rodinhas nos passos 0997 -> 0998 -> 0999 ->
-   1000; 1111 rodinhas em 1000 km e 11110 em 10000 km (1,111 por km).
-
-```bash
-gcc ~/LPEDC/material/P1703.c -o ~/LPEDC/material/P1703 && ~/LPEDC/material/P1703
-```
-
----
-
-**Exercício P1704** · ★☆☆ · Contador binário: quantas vezes cada bit troca
-
-A catraca da academia conta os acessos num contador binário de 8 bits,
-guardado em int b[8] (b[0] é o bit menos significativo). Incrementar custa
-o número de bits trocados.
-
-Escreva int incrementa(int b[]) e um programa que faça 32 incrementos a
-partir de 00000000, mostrando os oito primeiros (o contador e o custo) e,
-no fim, quantas vezes CADA bit trocou, o total e o limite 2n da análise
-agregada.
-
-
-```text
-Saída esperada:
-00000001  custo 1
-00000010  custo 2
-00000011  custo 1
-00000100  custo 3
-00000101  custo 1
-00000110  custo 2
-00000111  custo 1
-00001000  custo 4
-bit 0: 32 trocas
-bit 1: 16 trocas
-bit 2:  8 trocas
-bit 3:  4 trocas
-bit 4:  2 trocas
-bit 5:  1 trocas
-bit 6:  0 trocas
-bit 7:  0 trocas
-Total: 63 trocas em 32 incrementos (limite 2n = 64)
-```
-
-**Dicas:**
-
-1. incrementa: enquanto b[i] == 1, zere b[i] e avance i (cada um é uma
-   troca); depois, se i < 8, b[i] = 1 (mais uma troca).
-2. Some 1 em trocas[i] a cada troca do bit i: é a análise agregada do
-   Cormen olhando bit por bit.
-3. O bit i troca a cada 2^i incrementos: n, n/2, n/4, ... A soma é menor
-   que 2n, então o custo amortizado é O(1) por incremento, mesmo com um
-   incremento isolado custando até 8.
-4. Resposta esperada: o bit 0 troca 32 vezes, o bit 1 16, ..., o bit 5
-   uma vez; total 63, abaixo de 2n = 64.
-
-```bash
-gcc ~/LPEDC/material/P1704.c -o ~/LPEDC/material/P1704 && ~/LPEDC/material/P1704
-```
-
----
-
-**Exercício P1705** · ★☆☆ · A árvore de recursão do merge sort, nível por nível
-
-O merge sort do esqueleto ordena os preços de 16 produtos. A recorrência
-é T(n) = 2 T(n/2) + n: cada chamada com um pedaço de tamanho m custa m (o
-trabalho de intercalar).
-
-Instrumente o merge sort com um parâmetro nivel (a raiz é o nível 0) e,
-em vetores globais, acumule por nível o número de chamadas e o custo (a
-soma dos tamanhos dos pedaços). Mostre a tabela da árvore de recursão para
-n = 16 e para n = 10 e o custo total. Para n potência de 2, o total é
-n lg n + n: lg n + 1 níveis com custo n cada.
-
-
-```text
-Saída esperada:
-n = 16: 2 3 5 7 8 9 11 12 15 18 19 22 25 30 33 40
-nível  chamadas  custo
-    0         1     16
-    1         2     16
-    2         4     16
-    3         8     16
-    4        16     16
-Total: 80
-n = 10: 3 5 8 9 12 15 18 22 30 40
-nível  chamadas  custo
-    0         1     10
-    1         2     10
-    2         4     10
-    3         8     10
-    4         4      4
-Total: 44
-```
-
-**Dicas:**
-
-1. Acrescente int nivel aos parâmetros: a chamada recursiva passa
-   nivel + 1. Logo no começo, faça nos[nivel]++ e custo[nivel] += m.
-2. Conte também as folhas (pedaços de tamanho 1): elas formam o último
-   nível, com custo 1 cada.
-3. Com n = 10 os pedaços não têm o mesmo tamanho, e o último nível fica
-   incompleto. Mesmo assim cada nível cheio custa n.
-4. Resposta esperada: n = 16 dá 5 níveis de custo 16 (total 80 = 16 · 4 +
-   16); n = 10 dá 5 níveis, o último com 4 chamadas e custo 4 (total 44).
-
-```bash
-gcc ~/LPEDC/material/P1705.c -o ~/LPEDC/material/P1705 && ~/LPEDC/material/P1705
-```
-
----
-
-**Exercício P1706** · ★☆☆ · O desfazer do editor: pilha com multipop
-
-Um editor de texto guarda cada tecla digitada numa pilha. "Desfazer k"
-tira k teclas de uma vez (ou todas, se houver menos de k): é o MULTIPOP. O
-custo real de empilhar é 1, e o de desfazer k é min(k, tamanho da pilha).
-
-Complete int multipop(Pilha *p, int k), que devolve quantas teclas tirou,
-e rode a sessão do esqueleto mostrando o custo de cada operação, o maior
-custo de uma operação só, o custo total e o limite 2 · (empilhamentos) da
-análise amortizada.
-
-
-```text
-Saída esperada:
-digita "manaux" custo  6 | texto: "manaux"
-desfaz 1        custo  1 | texto: "manau"
-digita "s! ok"  custo  5 | texto: "manaus! ok"
-desfaz 12       custo 10 | texto: ""
-digita "oi"     custo  2 | texto: "oi"
-desfaz 1        custo  1 | texto: "o"
-Empilhadas 13, tiradas 12, total 25 (limite 2 x 13 = 26)
-Operação mais cara: 10
-```
-
-**Dicas:**
-
-1. multipop: enquanto k > 0 e a pilha não estiver vazia, tire o topo e
-   diminua k. Devolva quantas saíram.
-2. Uma operação isolada pode custar muito (o "desfazer 12" custa 10), mas
-   cada tecla só sai da pilha se entrou antes: o total de pops não passa
-   do total de pushes.
-3. Por isso n operações custam no máximo 2n: custo amortizado O(1).
-4. Resposta esperada: 13 teclas empilhadas, 12 tiradas, total 25, dentro
-   do limite 26; a operação mais cara custou 10.
-
-```bash
-gcc ~/LPEDC/material/P1706.c -o ~/LPEDC/material/P1706 && ~/LPEDC/material/P1706
-```
-
----
-
-**Exercício P1707** · ★☆☆ · Insertion sort recursivo e a recorrência T(n-1) + n
-
-Escreva do zero um insertion sort RECURSIVO para as senhas de atendimento
-de uma agência: ordena(v, n) ordena v[0..n-2] com uma chamada recursiva e
-depois insere v[n-1] na posição certa, deslocando os maiores. Conte as
-comparações entre elementos num contador global.
-
-A recorrência do pior caso é T(1) = 0 e T(n) = T(n - 1) + (n - 1), que
-soma 1 + 2 + ... + (n - 1) = n(n - 1)/2. No melhor caso, cada inserção faz
-uma comparação só: n - 1. Mostre as comparações para os três vetores de 10
-senhas do esqueleto, junto com n - 1 e n(n - 1)/2.
-
-
-```text
-Saída esperada:
-crescente     9 comparações: 101 102 103 104 105 106 107 108 109 110
-decrescente  45 comparações: 101 102 103 104 105 106 107 108 109 110
-misturado    26 comparações: 101 102 103 104 105 106 107 108 109 110
-Melhor caso n - 1 = 9 | pior caso n(n - 1)/2 = 45
-```
-
-**Dicas:**
-
-1. Caso base: n <= 1, nada a fazer. Depois da chamada, x = v[n - 1];
-   j = n - 2; enquanto j >= 0 e (conte 1) v[j] > x, desloque v[j] para
-   v[j + 1].
-2. Conte a comparação ANTES de testar: se o laço para porque j < 0, não
-   houve comparação.
-3. O vetor crescente é o melhor caso (Θ(n)), o decrescente o pior
-   (Θ(n²)). O misturado fica no meio.
-4. Resposta esperada: 9 comparações no crescente, 45 no decrescente e 26
-   no misturado.
-
-```bash
-gcc ~/LPEDC/material/P1707.c -o ~/LPEDC/material/P1707 && ~/LPEDC/material/P1707
-```
-
----
-
-**Exercício P1708** · ★☆☆ · Quão funda fica a pilha de chamadas
-
-A recorrência mede o TEMPO; a altura da árvore de recursão mede a PILHA.
-O esqueleto tem duas somas recursivas das contas de luz de um condomínio,
-as duas com Θ(n) chamadas:
-
-- soma_fila(v, n) = v[n - 1] + soma_fila(v, n - 1): T(n) = T(n - 1) + 1;
-- soma_meio(v, ini, fim) divide ao meio: T(n) = 2 T(n/2) + 1.
-
-Instrumente as duas com um parâmetro de profundidade e guarde a maior
-profundidade alcançada (a raiz tem profundidade 1). Mostre, para n = 10,
-100 e 1000, as chamadas e a profundidade máxima de cada uma.
-
-
-```text
-Saída esperada:
-n =   10  fila: soma   1385,   11 chamadas, profundidade   11
-          meio: soma   1385,   19 chamadas, profundidade    5
-n =  100  fila: soma  15350,  101 chamadas, profundidade  101
-          meio: soma  15350,  199 chamadas, profundidade    8
-n = 1000  fila: soma 154400, 1001 chamadas, profundidade 1001
-          meio: soma 154400, 1999 chamadas, profundidade   11
-```
-
-**Dicas:**
-
-1. Passe prof + 1 nas chamadas recursivas e atualize uma variável global
-   max_prof logo no começo da função.
-2. soma_fila desce até n == 0: a pilha chega a n + 1 chamadas abertas ao
-   mesmo tempo.
-3. soma_meio para em pedaços de 1 elemento. A altura é ⌈lg n⌉ + 1: com
-   n = 1000, só 11 chamadas abertas, contra 1001.
-4. Resposta esperada: as duas somas dão o mesmo valor; chamadas n + 1 e
-   2n - 1; profundidades 1001 e 11 para n = 1000.
-
-```bash
-gcc ~/LPEDC/material/P1708.c -o ~/LPEDC/material/P1708 && ~/LPEDC/material/P1708
-```
-
----
-
-**Exercício P1709** · ★☆☆ · A função que se chama duas vezes à toa
-
-Um colega escreveu a função do esqueleto para calcular a meta de vendas do
-mês n de uma loja: a meta dobra todo mês, e a de janeiro (n = 1) é R$ 100.
-Ela funciona, mas chama meta(n - 1) DUAS vezes com o mesmo argumento:
-
-
-```text
-C(1) = 1,  C(n) = 2 C(n - 1) + 1  =>  C(n) = 2^n - 1 chamadas
-```
-
-
-Acrescente um contador de chamadas, escreva meta_boa(n), que chama
-meta_boa(n - 1) uma vez só e guarda o resultado numa variável (C(n) =
-C(n - 1) + 1 = n), e mostre, para n = 1, 5, 10, 20 e 25, a meta e as
-chamadas das duas versões, junto com 2^n - 1.
-
-
-```text
-Saída esperada:
- n        meta  ruim: chamadas     2^n-1  boa: chamadas
- 1         100                1         1              1
- 5        1600               31        31              5
-10       51200             1023      1023             10
-20    52428800          1048575   1048575             20
-25  1677721600         33554431  33554431             25
-```
-
-**Dicas:**
-
-1. Use long para a meta: 100 · 2^24 passa de 1,6 bilhão.
-2. A árvore de recursão da versão ruim é uma árvore binária cheia de
-   altura n - 1: 2^n - 1 nós.
-3. 2^n - 1 dá para calcular com (1L << n) - 1.
-4. Resposta esperada: com n = 25, a meta é 1677721600, a versão ruim faz
-   33554431 chamadas e a boa, 25.
-
-```bash
-gcc ~/LPEDC/material/P1709.c -o ~/LPEDC/material/P1709 && ~/LPEDC/material/P1709
-```
-
----
-
-**Exercício P1710** · ★☆☆ · Adivinhe o preço: o limite da árvore de decisão
-
-No programa de auditório, o participante adivinha um preço inteiro de 1 a
-n reais, e o apresentador responde "é esse", "mais" ou "menos". Qualquer
-estratégia é uma árvore de decisão com n respostas possíveis; uma árvore
-binária de altura h tem no máximo 2^h - 1 nós de "é esse", então o pior
-caso precisa de pelo menos ⌈lg(n + 1)⌉ palpites.
-
-A busca binária atinge esse limite. Escreva:
-
-
-```text
-int palpites(int n, int preco);   // palpites da busca binária até acertar
-int teto_lg(int x);               // menor h com 2^h >= x, só com inteiros
-```
-
-
-e mostre, para n = 7, 15, 100, 1000 e 1000000, o pior caso da busca
-binária (testando TODOS os preços de 1 a n) e o limite ⌈lg(n + 1)⌉.
-
-
-```text
-Saída esperada:
-      n  pior caso  limite
-      7          3       3
-     15          4       4
-    100          7       7
-   1000         10      10
-1000000         20      20
-```
-
-**Dicas:**
-
-1. palpites: ini = 1, fim = n; a cada volta, chute meio = (ini + fim) / 2
-   e conte 1; se acertou, pare; se o preço é maior, ini = meio + 1; senão,
-   fim = meio - 1.
-2. teto_lg: h = 0, p = 1; enquanto p < x, p *= 2 e h++. Use long para p.
-3. Com n = 1000000, testar todos os preços custa uns 20 milhões de passos:
-   roda em menos de um segundo.
-4. Resposta esperada: as duas colunas são iguais; 3, 4, 7, 10 e 20.
-
-```bash
-gcc ~/LPEDC/material/P1710.c -o ~/LPEDC/material/P1710 && ~/LPEDC/material/P1710
-```
-
-### ★★☆ Para pensar
-
-**Exercício P1711** · ★★☆ · A árvore de 3T(n/4) + n² contada por nível
-
-A recorrência T(n) = 3 T(n/4) + n² é o exemplo clássico da árvore de
-recursão no Cormen. Transforme-a num programa: trabalho(n, nivel) faz n²
-unidades de trabalho (um laço duplo que soma 1 num contador do nível) e se
-chama três vezes com n/4; com n == 1, faz 1 unidade e para.
-
-Rode com n = 256 e mostre, por nível: o número de chamadas, o tamanho de
-cada pedaço e o custo do nível. Mostre também o total e a razão total / n²,
-que tem de ficar abaixo de 1/(1 - 3/16) = 16/13 ≈ 1,2308: a soma é uma
-progressão geométrica de razão 3/16, e a RAIZ domina (caso 3 do teorema
-mestre, Θ(n²)).
-
-
-```text
-Saída esperada:
-nível  chamadas  tamanho  custo
-    0         1      256  65536
-    1         3       64  12288
-    2         9       16   2304
-    3        27        4    432
-    4        81        1     81
-Total: 80641 | total / n² = 1.2305 (limite 16/13 = 1.2308)
-```
-
-**Dicas:**
-
-1. Guarde chamadas[nivel] e custo[nivel] em vetores globais; 256 = 4^4,
-   então são 5 níveis (0 a 4).
-2. O nível i tem 3^i chamadas com pedaços de n/4^i: o custo é
-   3^i (n/4^i)² = (3/16)^i n².
-3. Faça o laço duplo de verdade (for i < n, for j < n, custo++): com
-   n = 256 são 65536 voltas na raiz, nada que demore.
-4. Resposta esperada: custos 65536, 12288, 2304, 432 e 81; total 80641;
-   razão 1.2305.
-
-```bash
-gcc ~/LPEDC/material/P1711.c -o ~/LPEDC/material/P1711 && ~/LPEDC/material/P1711
-```
-
----
-
-**Exercício P1712** · ★★☆ · Três funções, três casos, três fórmulas fechadas
-
-As três funções do esqueleto fazem um laço de n voltas (custo n) e se
-chamam com n/2, mudando só QUANTAS vezes:
-
-
-```text
-quatro(n): T(n) = 4 T(n/2) + n   caso 1: Θ(n²)
-duas(n):   T(n) = 2 T(n/2) + n   caso 2: Θ(n lg n)
-uma(n):    T(n) = T(n/2) + n     caso 3: Θ(n)
-```
-
-
-com T(1) = 1. Resolvendo exatamente para n potência de 2 (pela árvore de
-recursão), as fórmulas são 2n² - n, n lg n + n e 2n - 1. Instrumente as três
-com um contador global (some 1 em cada volta do laço e 1 no caso base) e
-mostre, para n = 1, 2, 4, ..., 1024, o custo contado e a fórmula de cada
-uma.
-
-
-```text
-Saída esperada:
-   n    quatro   2n²-n   duas  nlgn+n   uma  2n-1
-   1         1       1      1       1     1     1
-   2         6       6      4       4     3     3
-   4        28      28     12      12     7     7
-   8       120     120     32      32    15    15
-  16       496     496     80      80    31    31
-  32      2016    2016    192     192    63    63
-  64      8128    8128    448     448   127   127
- 128     32640   32640   1024    1024   255   255
- 256    130816  130816   2304    2304   511   511
- 512    523776  523776   5120    5120  1023  1023
-1024   2096128 2096128  11264   11264  2047  2047
-```
-
-**Dicas:**
-
-1. Zere o contador antes de cada chamada de topo. Use long: quatro(1024)
-   passa de 2 milhões.
-2. Para o lg n, use um contador de expoente que sobe junto com n no laço do
-   main (n = 1 << k).
-3. As fórmulas saem da soma por nível: quatro tem 4^i pedaços de n/2^i
-   (custo 2^i n no nível i); duas tem custo n em todo nível; uma tem
-   n/2^i no nível i.
-4. Resposta esperada: as colunas contadas e as fórmulas batem em todas as
-   linhas; com n = 1024: 2096128, 11264 e 2047.
-
-```bash
-gcc ~/LPEDC/material/P1712.c -o ~/LPEDC/material/P1712 && ~/LPEDC/material/P1712
-```
-
----
-
-**Exercício P1713** · ★★☆ · Quando o mestre não serve: 2T(n/2) + n lg n
-
-Um sistema de relatórios divide os registros ao meio, processa cada metade
-recursivamente e, para juntar, gasta n lg n (ele ordena o resultado). A
-recorrência é T(n) = 2 T(n/2) + n lg n, com T(1) = 1.
-
-Parece o caso 3 (n lg n é maior que n^(log₂ 2) = n), mas não é: n lg n
-não é POLINOMIALMENTE maior que n (não existe ε > 0 com n lg n = Ω(n^(1+ε))).
-O teorema mestre na forma básica não se aplica. A árvore de recursão
-resolve: o nível i custa n (lg n - i), e a soma dá
-
-
-```text
-T(n) = n + n · lg n (lg n + 1) / 2 = Θ(n lg² n)
-```
-
-
-Escreva relatorio(n), que conta n · lg n unidades de trabalho (lg n
-calculado com inteiros) e se chama duas vezes com n/2, e mostre, para
-n = 2, 4, 8, ..., 2^16, o custo contado, a fórmula, a razão custo/(n lg n)
-(que CRESCE) e a razão custo/(n lg² n) (que se aproxima de 1/2).
-
-
-```text
-Saída esperada:
-    n      custo    fórmula  c/(n lg n)  c/(n lg² n)
-    2          4          4       2.000        2.000
-    4         16         16       2.000        1.000
-    8         56         56       2.333        0.778
-   16        176        176       2.750        0.688
-   32        512        512       3.200        0.640
-   64       1408       1408       3.667        0.611
-  128       3712       3712       4.143        0.592
-  256       9472       9472       4.625        0.578
-  512      23552      23552       5.111        0.568
- 1024      57344      57344       5.600        0.560
- 2048     137216     137216       6.091        0.554
- 4096     323584     323584       6.583        0.549
- 8192     753664     753664       7.077        0.544
-16384    1736704    1736704       7.571        0.541
-32768    3964928    3964928       8.067        0.538
-65536    8978432    8978432       8.562        0.535
-```
-
-**Dicas:**
-
-1. lg n com inteiros: conte quantas vezes dá para dividir n por 2 até
-   chegar a 1.
-2. Não precisa de laço de n lg n voltas: some n * lg(n) direto no
-   contador (o custo é o que interessa, não o tempo).
-3. Uma razão que cresce sem parar mostra que o palpite Θ(n lg n) está
-   errado; uma razão que se estabiliza mostra a classe certa.
-4. Resposta esperada: custo igual à fórmula em todas as linhas; com
-   n = 65536, 8978432, razões 8.562 e 0.535.
-
-```bash
-gcc ~/LPEDC/material/P1713.c -o ~/LPEDC/material/P1713 && ~/LPEDC/material/P1713
-```
-
----
-
-**Exercício P1714** · ★★☆ · Apertando √ na calculadora: T(n) = T(√n) + 1
-
-Na calculadora, você digita um número e aperta a tecla √ até o visor
-mostrar 2 ou menos. Quantas vezes? A função raizes(n) do enunciado faz
-isso recursivamente: se n <= 2, para; senão, chama raizes(⌊√n⌋). A
-recorrência é T(n) = T(√n) + 1.
-
-Ela não tem a forma a T(n/b) + f(n), mas a MUDANÇA DE VARIÁVEL resolve:
-com n = 2^m, fica S(m) = S(m/2) + 1, que é Θ(lg m). Voltando, T(n) =
-Θ(lg lg n). Para n = 2^(2^k) a conta é exata: k + 1 chamadas.
-
-Escreva raiz_inteira(n) (o maior r com r · r <= n, só com inteiros, por
-busca binária), teto_lg(n) (o menor h com 2^h >= n, só com inteiros) e
-raizes(n) com um contador de chamadas, e mostre as chamadas e
-⌈lg ⌈lg n⌉⌉ + 1 para n = 4, 16, 256, 65536, 4294967296 e
-18446744073709551615 (o maior unsigned long long, que não é potência de
-2^(2^k)).
-
-
-```text
-Saída esperada:
-                   n  chamadas  teto(lg teto(lg n)) + 1
-                   4         2            2
-                  16         3            3
-                 256         4            4
-               65536         5            5
-          4294967296         6            6
-18446744073709551615         7            7
-```
-
-**Dicas:**
-
-1. Use unsigned long long. Na busca binária, teste r <= n / r em vez de
-   r * r <= n: o produto estoura para n perto de 2^64.
-2. teto_lg(n): conte quantos bits tem n - 1 (desloque para a direita até
-   zerar). Não use p *= 2 até passar de n: p estoura antes de 2^64.
-3. Mesmo o maior número de 64 bits cai para 2 em 7 apertos: lg lg n cresce
-   devagar demais para ser visto na prática.
-4. Resposta esperada: 2, 3, 4, 5 e 6 chamadas para as potências, e 7 para
-   o maior unsigned long long; a coluna da fórmula bate em todas.
-
-```bash
-gcc ~/LPEDC/material/P1714.c -o ~/LPEDC/material/P1714 && ~/LPEDC/material/P1714
-```
-
----
-
-**Exercício P1715** · ★★☆ · O método do potencial no vetor que dobra
-
-O vetor de pedidos de um app começa VAZIO (capacidade 0). Ao inserir com o
-vetor cheio, ele aloca o dobro (ou 1, se a capacidade era 0) e copia tudo.
-O custo real de uma inserção é 1, mais o número de cópias.
-
-O método do potencial do Cormen usa Φ = 2 · num - cap (num = itens, cap =
-capacidade). O custo AMORTIZADO de uma operação é o real mais a variação do
-potencial: ĉ = c + Φ(depois) - Φ(antes). Escreva o vetor com malloc (copie
-os itens à mão, para contar as cópias) e mostre, para 17 inserções: num,
-cap, custo real, Φ e custo amortizado. Mostre também a soma dos custos reais
-e a dos amortizados.
-
-
-```text
-Saída esperada:
-num  cap  real  phi  amortizado
-  1    1     1    1           2
-  2    2     2    2           3
-  3    4     3    2           3
-  4    4     1    4           3
-  5    8     5    2           3
-  6    8     1    4           3
-  7    8     1    6           3
-  8    8     1    8           3
-  9   16     9    2           3
- 10   16     1    4           3
- 11   16     1    6           3
- 12   16     1    8           3
- 13   16     1   10           3
- 14   16     1   12           3
- 15   16     1   14           3
- 16   16     1   16           3
- 17   32    17    2           3
-Soma real: 48 | soma amortizada: 50 (3n = 51)
-```
-
-**Dicas:**
-
-1. Antes de inserir, guarde Φ = 2 · num - cap. Depois, calcule o novo Φ
-   e ĉ = c + Φnovo - Φvelho.
-2. Sem expansão: c = 1 e Φ sobe 2, então ĉ = 3. Com expansão de num = cap
-   = k para 2k: c = k + 1 e Φ cai de k para 2, então ĉ = 3 também.
-3. Como Φ começa em 0 e nunca fica negativo depois da primeira inserção, a
-   soma dos reais nunca passa da soma dos amortizados: no máximo 3n.
-4. Resposta esperada: amortizado 3 em todas as linhas (2 na primeira);
-   soma real 48 e soma amortizada 50.
-
-```bash
-gcc ~/LPEDC/material/P1715.c -o ~/LPEDC/material/P1715 && ~/LPEDC/material/P1715
-```
-
----
-
-**Exercício P1716** · ★★☆ · Contador com zerar: o reset que não varre tudo
-
-O contador de passageiros de uma estação tem 16 bits e duas operações:
-INCREMENTA e ZERA (no fim de cada turno). Zerar varrendo os 16 bits custa
-16 sempre. Dá para fazer melhor: guarde em maior o índice do bit 1 mais
-alto já ligado desde o último zerar, e zere só os bits 0..maior (custo
-maior + 1).
-
-Com isso, n operações quaisquer custam O(n) no total. Pelo método
-contábil, cada INCREMENTA paga 3: 1 pelo bit que liga, 1 de crédito para
-quando esse bit for desligado, e 1 de crédito para o ZERA varrer a posição,
-caso o incremento tenha subido o maior (ele sobe no máximo 1 por vez).
-
-Escreva as duas versões do zerar e rode a sequência do esqueleto contando o
-custo total de cada uma (incrementar custa os bits trocados; zerar custa os
-bits varridos). Mostre também o limite 3 · (incrementos) + (zerares).
-
-
-```text
-Saída esperada:
-Incrementos: 1150 | zerares: 52
-Zerar varrendo tudo: 3026
-Zerar até o maior:   2304
-Limite 3·1150 + 52 = 3502
-```
-
-**Dicas:**
-
-1. No incrementa, depois de ligar o bit i, faça maior = i se i > maior.
-   Comece com maior = -1.
-2. zera_esperto: para i de 0 até maior, b[i] = 0 (custo maior + 1); depois
-   maior = -1. zera_bobo: varre os 16.
-3. Um zerar logo depois de outro custa 0 na versão esperta (maior = -1).
-4. Resposta esperada: versão boba 3026, esperta 2304, limite 3502; nos 50
-   turnos curtos, cada zerar esperto custa 2 em vez de 16.
-
-```bash
-gcc ~/LPEDC/material/P1716.c -o ~/LPEDC/material/P1716 && ~/LPEDC/material/P1716
-```
-
----
-
-**Exercício P1717** · ★★☆ · Conserte o vetor que cresce de 10 em 10
-
-Conserte o programa. O app de delivery guarda os pedidos do dia num vetor
-dinâmico, e o colega fez o vetor crescer de 10 em 10 posições "para não
-desperdiçar memória". O vetor funciona e o
-AddressSanitizer não reclama: o erro de propósito é de ANÁLISE. Com crescimento aditivo, n
-inserções copiam 10 + 20 + 30 + ... ≈ n²/20 itens: Θ(n²) no total, Θ(n)
-por inserção. Veja a saída com 10 mil pedidos:
-
-
-```text
-Saída que aparece:
-Pedidos: 10000 | capacidade: 10000
-Realocações: 999 | cópias: 4995000 (499.50 por pedido)
-```
-
-
-Troque a regra de crescimento para DOBRAR a capacidade (começando em 10) e
-confira que as cópias caem para menos de 2n, ou seja, O(1) amortizado:
-
-
-```text
-Saída esperada:
-Pedidos: 10000 | capacidade: 10240
-Realocações: 10 | cópias: 10230 (1.02 por pedido)
-```
-
-**Dicas:**
-
-1. A única linha que muda é a da nova capacidade.
-2. Dobrando a partir de 10, as cópias são 10 + 20 + 40 + ... + 5120: uma
-   progressão geométrica que soma menos que o dobro do último termo.
-3. Se quiser ver a diferença no relógio, aumente para 1 milhão de pedidos:
-   a versão aditiva copia uns 50 bilhões de itens.
-4. Resposta esperada: 10 realocações e 10230 cópias, contra 999 e 4995000.
-
-```bash
-gcc ~/LPEDC/material/P1717.c -o ~/LPEDC/material/P1717 && ~/LPEDC/material/P1717
-```
-
----
-
-**Exercício P1718** · ★★☆ · O laço que dobra dentro da recursão
-
-A função do esqueleto organiza as filas de um evento: em cada pedaço de n
-pessoas, um laço for (i = 1; i < n; i *= 2) faz lg n passos, e depois a
-função se chama para as duas metades. A recorrência é
-
-
-```text
-T(1) = 1,  T(n) = 2 T(n/2) + lg n
-```
-
-
-Leia o código, ache a recorrência e aplique o teorema mestre: a = 2,
-b = 2, n^(log₂ 2) = n, e f(n) = lg n = O(n^(1 - ε)): caso 1, Θ(n). A
-árvore de recursão dá a fórmula exata para n potência de 2:
-T(n) = 3n - lg n - 2.
-
-Acrescente um contador global (1 por volta do laço e 1 no caso base) e
-mostre, para n = 1, 4, 16, ..., 2^20 (potências de 4), o custo contado,
-3n - lg n - 2 e a razão custo / n.
-
-
-```text
-Saída esperada:
-      n    custo  3n-lg n-2  custo/n
-      1        1          1   1.0000
-      4        8          8   2.0000
-     16       42         42   2.6250
-     64      184        184   2.8750
-    256      758        758   2.9609
-   1024     3060       3060   2.9883
-   4096    12274      12274   2.9966
-  16384    49136      49136   2.9990
-  65536   196590     196590   2.9997
- 262144   786412     786412   2.9999
-1048576  3145706    3145706   3.0000
-```
-
-**Dicas:**
-
-1. Para ler a recorrência do código: duas chamadas com n/2 dão 2 T(n/2);
-   o laço com i *= 2 roda ⌈lg n⌉ vezes; o resto é constante.
-2. Mesmo com o trabalho por chamada crescendo (lg n), a quantidade de
-   folhas (n) domina: o caso 1 diz que as folhas ganham.
-3. A razão custo / n se aproxima de 3, a constante da fórmula.
-4. Resposta esperada: o custo bate com 3n - lg n - 2 em todas as linhas;
-   com n = 2^20, 3145706.
-
-```bash
-gcc ~/LPEDC/material/P1718.c -o ~/LPEDC/material/P1718 && ~/LPEDC/material/P1718
-```
-
----
-
-**Exercício P1719** · ★★☆ · Quantas chamadas para escolher o time do futsal
-
-O técnico quer saber de quantos jeitos dá para escolher k jogadores de um
-grupo de n. A função comb(n, k) do esqueleto usa a relação de Pascal:
-C(n, k) = C(n - 1, k - 1) + C(n - 1, k), com C(n, 0) = C(n, n) = 1.
-
-Toda folha da árvore de recursão devolve 1, então ela tem exatamente
-C(n, k) folhas. E todo nó interno tem dois filhos. Numa árvore assim
-(binária cheia), nós = 2 · folhas - 1. Logo:
-
-
-```text
-chamadas(n, k) = 2 C(n, k) - 1
-```
-
-
-Acrescente um contador e mostre, para (6, 2), (10, 5), (20, 10) e (26, 13),
-o valor, as chamadas e 2 C(n, k) - 1. Depois escreva comb_linha(n, k), que
-calcula o mesmo número sem recursão, pela fórmula multiplicativa
-C(n, k) = C(n, k - 1) · (n - k + 1) / k, e conte as multiplicações.
-
-
-```text
-Saída esperada:
- n  k     C(n,k)  chamadas  2C-1      linha  mult
- 6  2         15        29        29         15    2
-10  5        252       503       503        252    5
-20 10     184756    369511    369511     184756   10
-26 13   10400600  20801199  20801199   10400600   13
-```
-
-**Dicas:**
-
-1. Use long: C(26, 13) passa de 10 milhões, e as chamadas, de 20 milhões.
-2. Na fórmula multiplicativa, faça r = r * (n - i + 1) / i para i de 1 a k,
-   nessa ordem: a divisão é sempre exata.
-3. A recursão gasta Θ(C(n, k)) chamadas, que crescem como 2^n / √n; a
-   fórmula gasta k multiplicações.
-4. Resposta esperada: 15, 252, 184756 e 10400600, com 29, 503, 369511 e
-   20801199 chamadas; a fórmula faz 2, 5, 10 e 13 multiplicações.
-
-```bash
-gcc ~/LPEDC/material/P1719.c -o ~/LPEDC/material/P1719 && ~/LPEDC/material/P1719
-```
-
----
-
-**Exercício P1720** · ★★☆ · Quatro ordenações contando comparações
-
-Em vez de cronometrar, conte. O esqueleto gera os preços de n produtos com
-um gerador pseudoaleatório fixo (a mesma sequência em toda execução).
-Escreva insertion sort, merge sort, heapsort e quicksort (pivô no último
-elemento, partição de Lomuto) e conte as COMPARAÇÕES ENTRE ELEMENTOS de
-cada um, todos ordenando cópias do mesmo vetor.
-
-Mostre as contagens para n = 1000 e n = 2000, a razão entre as duas (quanto
-cresce quando n dobra) e as referências n²/4 e n lg n. Confira também que
-os quatro deixam o vetor ordenado.
-
-
-```text
-Saída esperada:
-            n = 1000  n = 2000  razão
-insertion     250962   1021285   4.07
-merge           8707     19411   2.23
-heapsort       16835     37713   2.24
-quicksort      10531     23811   2.26
-n²/4         250000   1000000   4.00
-n lg n          9966     21932   2.20
-Todos ordenados: sim
-```
-
-**Dicas:**
-
-1. Faça a comparação passar por uma função menor(a, b) que soma 1 num
-   contador global: assim nenhuma comparação escapa.
-2. Quadrático: dobrar n multiplica por 4. Θ(n lg n): multiplica por um
-   pouco mais que 2 (2 · lg 2n / lg n ≈ 2,2 para n = 1000).
-3. O insertion sort faz em média n²/4 comparações: cada par fora de ordem
-   custa uma. Os outros três são Θ(n lg n) com constantes diferentes; o
-   heapsort compara duas vezes por nível ao descer, e por isso perde.
-4. Resposta esperada: o insertion sort fica perto de n²/4 e quadruplica
-   (razão 4,07); merge, heap e quick ficam entre 0,8 e 1,8 vezes n lg n e
-   crescem cerca de 2,2 vezes.
-
-```bash
-gcc ~/LPEDC/material/P1720.c -o ~/LPEDC/material/P1720 && ~/LPEDC/material/P1720
-```
-
-### ★★★ Desafio
-
-**Exercício P1721** · ★★★ · Matrizes por blocos: 8 chamadas contra as 7 de Strassen
-
-Uma rede de farmácias multiplica matrizes n × n (transferências entre
-filiais vezes custos) com n potência de 2. Dividindo cada matriz em quatro
-blocos n/2 × n/2, o produto sai de 8 produtos de blocos:
-
-
-```text
-C11 = A11 B11 + A12 B21    C12 = A11 B12 + A12 B22
-C21 = A21 B11 + A22 B21    C22 = A21 B12 + A22 B22
-```
-
-
-Isso dá M(n) = 8 M(n/2) multiplicações escalares, com M(1) = 1: n³, igual ao
-laço triplo (caso 1 do mestre, n^(log₂ 8)). Strassen descobriu como fazer
-com 7 produtos de blocos: S(n) = 7 S(n/2) = n^(log₂ 7) ≈ n^2,807.
-
-Escreva:
-
-1. mult_blocos(), recursiva com as 8 chamadas (trabalhe com deslocamentos
-de linha e coluna nas matrizes globais, sem copiar blocos), contando as
-multiplicações escalares;
-2. a conferência com o laço triplo para n = 2, 4, 8 e 16;
-3. a tabela de n³ e 7^(lg n) para n = 2, 4, ..., 1024, calculada pelas
-recorrências, com a razão entre elas.
-
-
-```text
-Saída esperada:
-n =  2:    8 multiplicações (n³ =    8), igual ao laço triplo: sim
-n =  4:   64 multiplicações (n³ =   64), igual ao laço triplo: sim
-n =  8:  512 multiplicações (n³ =  512), igual ao laço triplo: sim
-n = 16: 4096 multiplicações (n³ = 4096), igual ao laço triplo: sim
-    n          8 blocos   Strassen  razão
-    2                 8          7   1.14
-    4                64         49   1.31
-    8               512        343   1.49
-   16              4096       2401   1.71
-   32             32768      16807   1.95
-   64            262144     117649   2.23
-  128           2097152     823543   2.55
-  256          16777216    5764801   2.91
-  512         134217728   40353607   3.33
- 1024        1073741824  282475249   3.80
-```
-
-**Dicas:**
-
-1. mult(ar, ac, br, bc, cr, cc, n): no caso base, C[cr][cc] += A[ar][ac] *
-   B[br][bc]. Senão, com h = n/2, cada bloco Cxy recebe dois produtos:
-   por exemplo, C11 += A11 B11 é mult(ar, ac, br, bc, cr, cc, h) e
-   C11 += A12 B21 é mult(ar, ac + h, br + h, bc, cr, cc, h).
-2. Zere C antes de cada n: as chamadas SOMAM em C.
-3. A razão n³ / 7^(lg n) = (8/7)^(lg n) cresce devagar: só fica grande
-   para n enorme, e por isso Strassen só compensa em matrizes grandes.
-4. Resposta esperada: as multiplicações contadas são n³ e os produtos
-   batem com o laço triplo; com n = 1024, 1073741824 contra 282475249
-   (razão 3.80).
-
-```bash
-gcc ~/LPEDC/material/P1721.c -o ~/LPEDC/material/P1721 && ~/LPEDC/material/P1721
-```
-
----
-
-**Exercício P1722** · ★★★ · A árvore de recursão de qualquer a T(n/b) + n^k
-
-O teorema mestre é a árvore de recursão resumida. Escreva um programa que
-DESENHE a árvore, por nível, para qualquer recorrência T(n) = a T(n/b) + n^k
-com T(1) = 1 (n potência de b), e que confira o total com uma função
-recursiva que realmente soma os custos.
-
-
-```text
-void arvore(int a, int b, int k, long n);
-```
-
-
-Para cada nível i: o número de nós a^i, o tamanho n/b^i, o custo de cada
-nó (n/b^i)^k e o custo do nível. No fim: o total da tabela, o total da
-recursão (têm de bater) e o diagnóstico pela razão r = a / b^k entre o
-custo de um nível e o do anterior:
-
-- r > 1: o custo cresce para baixo, as FOLHAS dominam (caso 1);
-- r == 1: todos os níveis custam o mesmo, total = custo × níveis (caso 2);
-- r < 1: o custo cai, a RAIZ domina (caso 3).
-
-Rode para (8, 2, 2), (4, 2, 2) e (2, 2, 2), todas com n = 64, e para
-(9, 3, 1) com n = 81.
-
-
-```text
-Saída esperada:
-T(n) = 8 T(n/2) + n^2, n = 64
-  nível      nós  tamanho  custo/nó  custo do nível
-      0        1       64      4096            4096
-      1        8       32      1024            8192
-      2       64       16       256           16384
-      3      512        8        64           32768
-      4     4096        4        16           65536
-      5    32768        2         4          131072
-      6   262144        1         1          262144
-  total da tabela 520192, da recursão 520192
-  r = 8/4 > 1: as folhas dominam (caso 1)
-T(n) = 4 T(n/2) + n^2, n = 64
-  nível      nós  tamanho  custo/nó  custo do nível
-      0        1       64      4096            4096
-      1        4       32      1024            4096
-      2       16       16       256            4096
-      3       64        8        64            4096
-      4      256        4        16            4096
-      5     1024        2         4            4096
-      6     4096        1         1            4096
-  total da tabela 28672, da recursão 28672
-  r = 1: 7 níveis iguais (caso 2)
-T(n) = 2 T(n/2) + n^2, n = 64
-  nível      nós  tamanho  custo/nó  custo do nível
-      0        1       64      4096            4096
-      1        2       32      1024            2048
-      2        4       16       256            1024
-      3        8        8        64             512
-      4       16        4        16             256
-      5       32        2         4             128
-      6       64        1         1              64
-  total da tabela 8128, da recursão 8128
-  r = 2/4 < 1: a raiz domina (caso 3)
-T(n) = 9 T(n/3) + n^1, n = 81
-  nível      nós  tamanho  custo/nó  custo do nível
-      0        1       81        81              81
-      1        9       27        27             243
-      2       81        9         9             729
-      3      729        3         3            2187
-      4     6561        1         1            6561
-  total da tabela 9801, da recursão 9801
-  r = 9/3 > 1: as folhas dominam (caso 1)
-```
-
-**Dicas:**
-
-1. Compare a com b^k em inteiros: nada de double nem de log, que erram por
-   arredondamento.
-2. A função recursiva custo(a, b, k, n) devolve n^k + a · custo(a, b, k,
-   n/b), com custo(1) = 1. É a própria recorrência.
-3. A última linha da tabela (tamanho 1) tem a^(log_b n) = n^(log_b a)
-   folhas: é o termo que o caso 1 compara com f(n).
-4. Resposta esperada: 8T(n/2)+n² tem folhas 262144 de 520192 (caso 1);
-   4T(n/2)+n² tem 7 níveis de 4096 (caso 2); 2T(n/2)+n² tem raiz 4096 de
-   8128 (caso 3); 9T(n/3)+n é caso 1.
-
-```bash
-gcc ~/LPEDC/material/P1722.c -o ~/LPEDC/material/P1722 && ~/LPEDC/material/P1722
-```
-
----
-
-**Exercício P1723** · ★★★ · Stooge sort: correto, recursivo e pior que o bubble
-
-O stooge sort (problema 7-3 do Cormen) ordena v[i..j] assim: se v[i] >
-v[j], troca os dois; se o pedaço tem 3 ou mais elementos, com t = ⌊(j - i +
-1)/3⌋, ordena os primeiros 2/3, depois os últimos 2/3, depois os primeiros
-2/3 de novo. Ele funciona, mas a recorrência é
-
-
-```text
-T(n) = 3 T(2n/3) + Θ(1)  =>  Θ(n^(log_{3/2} 3)) ≈ Θ(n^2,71)
-```
-
-
-pior que os Θ(n²) do bubble e do insertion sort.
-
-Escreva o stooge sort com um contador de chamadas e a profundidade máxima
-da recursão (a raiz tem profundidade 1), e ordene os tempos de volta de um
-kart (vetor do esqueleto) para n = 10, 20, 40, ..., 640. Mostre, para
-cada n: as chamadas, se ficou ordenado, a profundidade, log_{3/2} n e as
-n(n - 1)/2 comparações do bubble sort. No fim, estime o expoente entre n = 10 e
-n = 640 com log(c₆₄₀ / c₁₀) / log(64) e compare com log(3) / log(1,5).
-
-
-```text
-Saída esperada:
-  n  chamadas  ordenado  prof  log1.5(n)  bubble
- 10       364       sim     6       5.68      45
- 20      3280       sim     8       7.39     190
- 40      9841       sim     9       9.10     780
- 80     88573       sim    11      10.81    3160
-160    797161       sim    13      12.52   12720
-320   7174453       sim    15      14.23   51040
-640  21523360       sim    16      15.94  204480
-Expoente estimado: 2.642 | teoria log(3) / log(1,5) = 2.7095
-```
-
-**Dicas:**
-
-1. Os dois "2/3" se sobrepõem: primeiros vão de i até j - t, últimos de
-   i + t até j. É essa sobreposição que garante que o maior chega ao fim.
-2. As chamadas são sempre (3^p - 1)/2, com p a profundidade: a
-   árvore é ternária e cheia. Cada fator 3/2 no tamanho acrescenta um
-   nível, então p ≈ log_{3/2} n e as chamadas ≈ 3^(log_{3/2} n) =
-   n^(log_{3/2} 3).
-3. Por causa do ⌊ ⌋, a profundidade anda aos saltos: a razão entre n e 2n
-   oscila. Estime o expoente num intervalo longo.
-4. Resposta esperada: todos ordenados; com n = 640, 21523360 chamadas
-   (contra 204480 comparações do bubble); expoente estimado 2.642, teoria
-   2.7095.
-
-```bash
-gcc ~/LPEDC/material/P1723.c -o ~/LPEDC/material/P1723 -lm && ~/LPEDC/material/P1723
-```
-
----
-
-**Exercício P1724** · ★★★ · A fila circular que dobra sem perder a ordem
-
-A fila de senhas de um banco é um vetor CIRCULAR: ini aponta o primeiro,
-num diz quantos há, e o próximo entra em (ini + num) % cap. Quando enche,
-a fila dobra. A pegadinha: não dá para copiar o vetor velho como está,
-porque a fila pode "dar a volta" no fim. É preciso copiar NA ORDEM DA FILA
-(de ini até o fim, depois do começo até ini - 1) para o começo do vetor
-novo, e fazer ini = 0.
-
-Escreva enfileira, desenfileira e cresce, contando as cópias. Comece com
-cap = 1 e rode o dia do esqueleto: 1000 rodadas de "chega, chega, atende,
-chega, atende, chega, atende". Confira que as senhas saem na ordem em que chegaram,
-mostre cada vez que a fila cresceu (de quanto para quanto, e com ini em
-que posição) e o total de cópias, comparado com o número de enfileiramentos.
-
-
-```text
-Saída esperada:
-cresce    1 ->    2 (ini era 0)
-cresce    2 ->    4 (ini era 1)
-cresce    4 ->    8 (ini era 2)
-cresce    8 ->   16 (ini era 4)
-cresce   16 ->   32 (ini era 8)
-cresce   32 ->   64 (ini era 16)
-cresce   64 ->  128 (ini era 32)
-cresce  128 ->  256 (ini era 64)
-cresce  256 ->  512 (ini era 128)
-cresce  512 -> 1024 (ini era 256)
-Crescimentos: 10 | cópias: 1023 | senhas enfileiradas: 4000
-Atendidas em ordem: sim | na fila: 1000 (cap 1024)
-```
-
-**Dicas:**
-
-1. Em cresce: para i de 0 a num - 1, novo[i] = velho[(ini + i) % cap].
-   Depois libere o velho, ini = 0 e cap *= 2.
-2. Mostre o ini ANTES da cópia: quando ele não é 0, a fila estava dando a
-   volta, e um memcpy do vetor inteiro embaralharia a ordem.
-3. As cópias somam 1 + 2 + 4 + ... + 512 = 1023: menos de uma cópia por
-   senha enfileirada. Custo amortizado O(1).
-4. Resposta esperada: 10 crescimentos (até cap 1024), quase todos com a
-   fila dando a volta (ini na metade do vetor); 1023 cópias para 4000
-   senhas; ordem conferida; 1000 senhas na fila no fim.
-
-```bash
-gcc ~/LPEDC/material/P1724.c -o ~/LPEDC/material/P1724 && ~/LPEDC/material/P1724
-```
-
----
-
-**Exercício P1725** · ★★★ · O método da substituição testado no computador
-
-O merge sort com n qualquer (não só potência de 2) segue
-
-
-```text
-T(1) = 0,  T(n) = T(⌈n/2⌉) + T(⌊n/2⌋) + n - 1
-```
-
-
-(n - 1 é o pior caso de comparações ao intercalar). No método da
-substituição, você chuta T(n) <= c · n lg n e prova por indução. O
-computador não prova, mas mostra se o chute é bom e qual c serve.
-
-Escreva um programa que calcule T(n) para todo n de 1 a 1000000 numa
-tabela (de baixo para cima: T[n] só usa índices menores), e mostre:
-
-- T(n) e T(n) / (n lg n) para n = 10, 100, ..., 1000000;
-- o maior valor de T(n) / (n lg n) para 2 <= n <= 1000000, e em que n;
-- a conferência da fórmula exata do pior caso do merge sort:
-T(n) = n ⌈lg n⌉ - 2^⌈lg n⌉ + 1, para todo n de 1 a 1000000.
-
-
-```text
-Saída esperada:
-      n          T(n)  T/(n lg n)
-     10            25       0.753
-    100           573       0.862
-   1000          8977       0.901
-  10000        123617       0.930
- 100000       1568929       0.945
-1000000      18951425       0.951
-Maior razão: 0.9531, em n = 762546
-Fórmula n teto(lg n) - 2^teto(lg n) + 1: 0 n errados
-```
-
-**Dicas:**
-
-1. Um vetor de 1 milhão de long ocupa 8 MB: deixe-o global ou static.
-2. T[n] = T[(n + 1) / 2] + T[n / 2] + n - 1: com inteiros, (n + 1) / 2 é
-   o teto e n / 2 é o chão.
-3. Para ⌈lg n⌉ e 2^⌈lg n⌉ sem double, ande com uma potência p que dobra
-   enquanto p < n.
-4. A razão fica abaixo de 1 em todo n: c = 1 serve no chute T(n) <= c n lg n,
-   e o chute fica justo (a razão se aproxima de 1 por baixo).
-5. Resposta esperada: a fórmula confere em todos os n; com n = 1000000,
-   T = 18951425 e razão 0.951.
-
-```bash
-gcc ~/LPEDC/material/P1725.c -o ~/LPEDC/material/P1725 -lm && ~/LPEDC/material/P1725
-```
-
----
-
-**Exercício P1726** · ★★★ · Busca na tabela de fretes: escada contra quadrantes
-
-A transportadora tem uma tabela n × n de fretes, em reais, crescente em
-cada linha (peso) e em cada coluna (distância): frete[i][j] = 10i + 7j.
-Dado um valor, ela quer saber se ele aparece na tabela. Escreva as duas
-buscas e conte as comparações com elementos da tabela:
-
-- ESCADA: comece no canto de cima à direita. Se o valor é menor, vá para a
-esquerda; se é maior, desça. No máximo 2n - 1 passos: Θ(n).
-- QUADRANTES: compare com o elemento do meio m = frete[mi][mj]. Se o valor
-é menor, ele não está no quadrante de baixo à direita (linhas >= mi e
-colunas >= mj); se é maior, não está no de cima à esquerda (linhas <= mi
-e colunas <= mj). Procure recursivamente nos TRÊS pedaços que sobram. A
-recorrência é T(n) = 3 T(n/2) + 1, caso 1: Θ(n^(lg 3)) ≈ Θ(n^1,585).
-
-Para n = 8, 16, 32 e 64, procure TODOS os valores de 0 até o maior da
-tabela e mostre o pior caso de cada busca, 2n - 1 e n^(lg 3). Confira que as
-duas buscas concordam em todos os valores.
-
-
-```text
-Saída esperada:
- n  escada  2n-1  quadrantes  n^lg3  concordam
- 8      15    15          40     27        sim
-16      25    31         121     81        sim
-32      41    63         364    243        sim
-64      73   127        1093    729        sim
-```
-
-**Dicas:**
-
-1. A busca por quadrantes trabalha num retângulo (l0, c0, l1, c1); se ele
-   está vazio (l0 > l1 ou c0 > c1), devolve falso sem comparar.
-2. Com mi = (l0 + l1) / 2 e mj = (c0 + c1) / 2, os três pedaços para
-   "valor menor" são (l0, c0, mi - 1, mj - 1), (l0, mj, mi - 1, c1) e
-   (mi, c0, l1, mj - 1). Para "valor maior": (l0, mj + 1, mi, c1),
-   (mi + 1, c0, l1, mj) e (mi + 1, mj + 1, l1, c1).
-3. Dividir parece sempre melhor, mas aqui não é: três subproblemas de
-   metade do lado dão n^1,585, que perde de 2n.
-4. Resposta esperada: as buscas concordam; com n = 64, a escada faz no
-   pior caso 73 comparações (o limite é 127) e a de quadrantes, 1093.
-
-```bash
-gcc ~/LPEDC/material/P1726.c -o ~/LPEDC/material/P1726 -lm && ~/LPEDC/material/P1726
-```
-
----
-
-**Exercício P1727** · ★★★ · Montar o heap: n inserções ou BUILD-HEAP?
-
-A central do SAMU recebe de uma vez a lista de chamados do turno e precisa
-de um heap MÍNIMO pela gravidade (1 é o mais grave). Há dois jeitos:
-
-- inserir um por um: cada inserção sobe o novo item, até lg i trocas. Total
-O(n lg n);
-- BUILD-HEAP (Floyd): põe tudo no vetor e chama "desce" para i de n/2 - 1
-até 0. Um nó de altura h desce no máximo h níveis, e só ~n/2^(h+1) nós
-têm altura h: a soma Σ h · n/2^(h+1) é menor que n. Total O(n).
-
-Implemente os dois, contando as TROCAS, e teste no pior caso de cada um:
-gravidades em ordem DECRESCENTE (n, n - 1, ..., 1), com n = 2^k - 1 para
-k = 4, 8, 12, 16 e 20. Mostre as trocas, n lg n e n, e confira que os dois
-heaps são válidos.
-
-
-```text
-Saída esperada:
-      n   inserindo   build-heap      n lg n  válidos
-     15          34           11          59      sim
-    255        1538          247        2039      sim
-   4095       40962         4083       49139      sim
-  65535      917506        65519     1048559      sim
-1048575    18874370      1048555    20971499      sim
-```
-
-**Dicas:**
-
-1. Em ordem decrescente, cada novo item é o menor de todos: sobe até a
-   raiz. São ⌊lg i⌋ trocas para o i-ésimo item.
-2. No BUILD-HEAP, cada nó desce até uma folha. Para n = 2^k - 1, a soma das
-   alturas dá exatamente n - k.
-3. Heap mínimo válido: v[(i - 1) / 2] <= v[i] para todo i >= 1.
-4. Resposta esperada: com n = 1048575, 18874370 trocas inserindo e 1048555
-   com BUILD-HEAP (n - 20).
-
-```bash
-gcc ~/LPEDC/material/P1727.c -o ~/LPEDC/material/P1727 -lm && ~/LPEDC/material/P1727
-```
-
----
-
-**Exercício P1728** · ★★★ · Fabrique o pior caso do merge sort
-
-O merge sort intercala com no máximo n - 1 comparações; o pior caso total,
-para n potência de 2, é n lg n - n + 1. Que entrada provoca isso? Uma
-intercalação faz n - 1 comparações quando as duas metades se alternam até
-o fim: o maior e o segundo maior ficam em metades diferentes, e assim por
-diante. Dá para FABRICAR a entrada desfazendo o merge sort:
-
-
-```text
-pior(v[0..n-1] ordenado): os elementos das posições pares vão para a
-metade esquerda, os das ímpares para a direita, e cada metade é
-arrumada recursivamente do mesmo jeito.
-```
-
-
-Escreva pior() e um merge sort que conte comparações. Para n = 8, 16 e
-1024, mostre as comparações com a entrada já ordenada, com a fabricada, a
-fórmula n lg n - n + 1 e o limite inferior ⌈lg n!⌉ de qualquer ordenação
-por comparação. Mostre também a entrada fabricada para n = 8 (com as notas
-1 a 8 de uma prova).
-
-
-```text
-Saída esperada:
-   n  ordenada  fabricada  n lg n - n + 1  teto(lg n!)
-   8        12         17              17           16
-  16        32         49              49           45
-1024      5120       9217            9217         8770
-Entrada fabricada (n = 8): 1 5 3 7 2 6 4 8
-```
-
-**Dicas:**
-
-1. pior(v, n): copie os de índice par para aux[0..n/2-1] e os de índice
-   ímpar para aux[n/2..n-1], chame pior nas duas metades de aux e copie de
-   volta. Com n == 1, nada a fazer.
-2. Na entrada ordenada, cada intercalação esgota a metade esquerda primeiro:
-   n/2 comparações por nível, (n/2) lg n no total.
-3. ⌈lg n!⌉ sai de somar log2(i) para i de 2 a n (com double) e arredondar
-   para cima.
-4. Resposta esperada: para n = 8, a entrada 1 5 3 7 2 6 4 8 dá 17
-   comparações (fórmula 17, limite 16); para n = 1024, 9217 contra o limite
-   8770.
-
-```bash
-gcc ~/LPEDC/material/P1728.c -o ~/LPEDC/material/P1728 -lm && ~/LPEDC/material/P1728
-```
-
----
-
-**Exercício P1729** · ★★★ · A roda do amigo-secreto: simular ou recorrer?
-
-Na roda de n pessoas, numeradas de 1 a n no sentido horário, a pessoa 1
-começa: ela "pula" a vizinha, que sai da roda, e a vez passa para a pessoa
-seguinte à que saiu. Isso se repete (sai uma, pula uma) até sobrar uma,
-que escolhe o primeiro presente. É o problema de Josephus com passo 2.
-
-Dois jeitos de achar quem sobra:
-
-- SIMULAR com uma lista circular encadeada (malloc): n - 1 remoções, cada
-uma com um passo de ponteiro: Θ(n) passos.
-- RECORRER: J(1) = 1, J(2m) = 2 J(m) - 1 e J(2m + 1) = 2 J(m) + 1. Uma
-chamada com n/2: C(n) = C(n/2) + 1 = ⌊lg n⌋ + 1 chamadas.
-
-Escreva os dois, contando passos e chamadas, e confira com a fórmula
-fechada J(n) = 2(n - 2^⌊lg n⌋) + 1. Rode para n = 5, 10, 41, 1000 e
-100000.
-
-
-```text
-Saída esperada:
-     n  simulação  passos  recursão  chamadas  fórmula
-     5          3       4         3         3        3
-    10          5       9         5         4        5
-    41         19      40        19         6       19
-  1000        977     999       977        10      977
-100000      68929   99999     68929        17    68929
-```
-
-**Dicas:**
-
-1. Lista circular: crie os nós 1..n, ligue o último ao primeiro e guarde
-   em atual a pessoa da vez. Remover: alvo = atual->prox; atual->prox =
-   alvo->prox; free(alvo); atual = atual->prox (conte 1 passo).
-2. Sobra um nó só quando atual->prox == atual. Libere-o no fim.
-3. Na recursão, J(m) é a resposta para metade da roda: depois da primeira
-   volta, só sobram os ímpares, e a numeração deles é "dobrada".
-4. Resposta esperada: sobram 3, 5, 19, 977 e 68929; a simulação gasta
-   n - 1 passos, a recursão no máximo 17 chamadas.
-
-```bash
-gcc ~/LPEDC/material/P1729.c -o ~/LPEDC/material/P1729 && ~/LPEDC/material/P1729
-```
-
----
-
-**Exercício P1730** · ★★★ · Contador em que trocar o bit i custa 2^i
-
-No contador binário comum, trocar qualquer bit custa 1, e n incrementos
-custam menos que 2n: O(1) amortizado. Agora imagine um contador de placas
-mecânicas em que a placa i é 2^i vezes mais pesada: trocar o bit i custa
-2^i. O custo amortizado continua constante?
-
-Análise agregada: em n = 2^k incrementos a partir de 0, o bit i (i < k)
-troca n/2^i vezes, a 2^i cada: n por bit. Com k bits trocando, e mais a
-placa k ligada uma vez no fim (custo 2^k = n), o total é n(k + 1) =
-n(lg n + 1). Amortizado: lg n + 1, que CRESCE com n.
-
-Escreva o contador (24 bits) com os dois custos e mostre, para n = 2^k com
-k = 4, 8, 12, 16 e 20: o custo total comum, o total pesado, n(lg n + 1) e o
-custo pesado por incremento.
-
-
-```text
-Saída esperada:
-      n    comum      pesado  n(lg n + 1)  pesado/n
-     16       31          80           80       5.0
-    256      511        2304         2304       9.0
-   4096     8191       53248        53248      13.0
-  65536   131071     1114112      1114112      17.0
-1048576  2097151    22020096     22020096      21.0
-```
-
-**Dicas:**
-
-1. Um só incrementa() devolve as duas contagens por ponteiro: some 1 em
-   *comum e 1 << i em *pesado a cada bit i trocado.
-2. Use long para o custo pesado: com n = 2^20, passa de 20 milhões.
-3. A análise agregada não muda de método, só de conta: o que importa é
-   quantas vezes cada bit troca, multiplicado pelo preço do bit.
-4. Resposta esperada: o comum fica em 2n - 1; o pesado bate com
-   n(lg n + 1) em todas as linhas (21 por incremento com n = 2^20).
-
-```bash
-gcc ~/LPEDC/material/P1730.c -o ~/LPEDC/material/P1730 && ~/LPEDC/material/P1730
-```
-
-## Questões no estilo da prova
+### Questões no estilo da prova
 
 Questões objetivas no formato da prova do PPGI. Resolva no papel, marque a
 letra e só depois abra o gabarito. O teorema mestre usado aqui é o da forma

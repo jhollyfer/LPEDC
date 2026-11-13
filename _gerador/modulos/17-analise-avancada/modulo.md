@@ -1,15 +1,9 @@
 # Módulo 17 · Medindo algoritmos recursivos
 
-O módulo 10 contou passos e leu a classe pelos laços. Isso falha numa função
-que chama a si mesma: quanto custa o merge sort? O "n log n" do módulo 13 veio
-de um desenho; aqui vira conta.
-
-A **recorrência** transforma o código recursivo numa equação, e a **árvore de
-recursão** a resolve somando nível por nível. O **teorema mestre** resolve de
-uma vez as de divisão e conquista. A **análise amortizada** explica por que o
-vetor que dobra é barato. O **limite inferior** pergunta se dá para fazer
-melhor: para ordenar comparando, não dá. O último assunto prevê o tempo de
-quatro ordenações com 1 milhão de elementos a partir de uma medida com 16 mil.
+Contar laços (módulo 10) não mede função recursiva. O módulo cobre
+recorrências, árvore de recursão, teorema mestre, análise amortizada e o
+limite Ω(n log n) da ordenação, e fecha prevendo o tempo de quatro ordenações.
+Dá prova aos "n log n" dos módulos 13 e 14.
 
 ## O que você vai aprender
 
@@ -24,19 +18,15 @@ quatro ordenações com 1 milhão de elementos a partir de uma medida com 16 mil
 ## Antes de começar
 
 Usa recursão (0031 a 0033), Big-O (0071 e 0072), vetor que cresce (0055 e
-0075), pilha (0082), fila (0085), merge sort e quick sort (módulo 13), heap
-(0102 e 0103) e ponteiros para função (0050). Matemática: `log₂ n` é quantas
-vezes dá para dividir n por 2 até chegar em 1 (`log₂ 1024 = 10`), e `log_b a`
-é o expoente que leva `b` a `a` (`log₃ 9 = 2`). `log2` e `log` ficam em
-`<math.h>`; as flags de estudo já ligam `-lm`.
+0075), pilha (0082), fila (0085), merge e quick sort (módulo 13), heap (0102 e
+0103) e ponteiro para função (0050).
 
-O último assunto traz o TAD `ordena.h` e `ordena.c`, com as quatro ordenações e
-um contador de comparações; o comando do exemplo compila o `ordena.c` junto. Os
-tempos variam entre execuções; as comparações, não.
+Matemática: `log₂ n` é quantas vezes n se divide por 2 até chegar em 1
+(`log₂ 1024 = 10`); `log_b a` é o expoente que leva `b` a `a` (`log₃ 9 = 2`).
+`log2` e `log` ficam em `<math.h>`; as flags de estudo já ligam `-lm`.
 
-**Progressão.** Dá prova aos "n log n" do merge sort, do quick sort (módulo 13)
-e do heap (módulo 14) e às estimativas dos módulos 15 e 16 (O(1) esperado da
-hash; custo de BFS, DFS e Dijkstra). Prepara a divisão e conquista.
+O 0118 traz o TAD `ordena.h` e `ordena.c`, com as quatro ordenações e um
+contador de comparações. Os tempos variam entre execuções; as comparações, não.
 
 {{indice}}
 

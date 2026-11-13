@@ -1,30 +1,41 @@
 ## 0117 · Limite inferior da ordenação
 
-Nos Correios chegaram três encomendas, A, B e C, e a única ferramenta é uma
-balança de dois pratos, que só diz qual lado pesa mais. Quantas pesagens são
-necessárias, no pior caso, com o **melhor** método possível?
+- **Limite inferior**: uma afirmação sobre o **problema**, não sobre um
+  algoritmo. Diz que nenhum método resolve com menos que tanto
+  (SZWARCFITER; MARKENZON, 2010).
+- **Ordenação por comparação**: só aprende a ordem perguntando "x > y?". Vale
+  para o módulo 13, o heapsort e o `qsort`, que só conhece a ordem pelas
+  respostas da `compara` (CORMEN et al., 2024, cap. 8).
+- **Árvore de decisão**: cada nó interno é uma pergunta, cada aresta uma
+  resposta e cada folha uma ordem final. O pior caso é a **altura**
+  (CORMEN et al., 2024, cap. 8).
+- **O argumento**: há `n!` ordens e cada uma precisa da sua folha. Com 2
+  respostas por pergunta, altura `h` dá no máximo `2^h` folhas. Logo
+  `2^h ≥ n!`, isto é, **`h ≥ log₂(n!)`** (LINTZMAYER; MOTA, 2023).
+- **Ω(n log n)**: `log₂(n!)` cresce como `n log₂ n`. O **Ω** (ômega) é o piso,
+  o contrário do teto `O` (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
+- **Assintoticamente ótimo**: merge sort e heapsort fazem O(n log n) e
+  alcançam o limite (CORMEN et al., 2024, cap. 8).
 
-Até aqui, a análise media **um algoritmo**. Agora a pergunta é sobre o
-**problema**: existe jeito de ordenar com menos? A resposta vale para todo
-algoritmo que só **compara** dois elementos, como a balança: a **ordenação
-por comparação** (módulo 13, heapsort, `qsort`).
+| n | n! | limite ⌈log₂ n!⌉ | merge sort (pior caso) |
+| --- | --- | --- | --- |
+| 3 | 6 | 3 | 3 |
+| 4 | 24 | 5 | 5 |
+| 5 | 120 | 7 | 8 |
+| 10 | 3.628.800 | 22 | 25 |
+| 1000 | (2.568 dígitos) | 8.530 | 8.977 |
 
-A ferramenta é a **árvore de decisão**: cada nó interno é uma pergunta ("A é
-mais pesada que B?"), cada aresta é uma resposta e cada folha é a ordem final.
-Rodar o algoritmo é descer da raiz a uma folha; o pior caso é a **altura**.
+> [!WARNING]
+> O limite vale para o **pior caso** de **qualquer** algoritmo que só compara.
+> O insertion sort ordena um vetor já em ordem com `n - 1` comparações, e o
+> counting sort (módulo 18) usa o valor como **índice** e escapa do limite.
 
-1. Com 3 encomendas há `3! = 6` ordens, e cada uma precisa da sua folha: duas
-   ordens diferentes na mesma folha receberiam a mesma resposta, e uma estaria
-   errada.
-2. Cada pergunta tem 2 respostas, então a árvore de altura `h` tem no máximo
-   `2^h` folhas.
-3. Logo `2^h ≥ 6`. Com `h = 2` cabem 4 folhas; precisa de `h ≥ 3`.
+{{exemplo}}
 
-Nenhum método ordena 3 encomendas com menos de 3 pesagens. Para `n`
-elementos, `2^h ≥ n!`, ou seja, **`h ≥ log₂(n!)`**.
-
-O desenho é o insertion sort de 3 elementos como árvore de decisão. O
-caminho verde, A = 5 kg, B = 9 kg e C = 2 kg, acaba na folha C A B:
+Nos Correios, três encomendas e uma balança de dois pratos. Há `3! = 6`
+ordens e altura 2 só dá 4 folhas: são precisas 3 pesagens. O desenho é o
+insertion sort de 3 elementos; o caminho verde (A = 5, B = 9, C = 2 kg) acaba
+na folha C A B:
 
 {{ideia}}
 
@@ -89,43 +100,8 @@ int main(void) {
 // pior caso: 3 pesagens
 ```
 
-Cada linha é um caminho da raiz a uma folha, e as 6 folhas são diferentes. O
-pior caso, 3, iguala o limite: para 3 elementos, o insertion sort é **ótimo**.
-
-O fluxograma é o argumento inteiro, para qualquer método que só compara:
+Cada linha é um caminho da raiz a uma folha, e o pior caso, 3, iguala o
+limite: para 3 elementos, o insertion sort é **ótimo**. O fluxograma é o
+argumento inteiro, para qualquer método que só compara:
 
 {{fluxograma}}
-
-`log₂(n!)` cresce como `n log₂ n` (menos cerca de `1,44 n`). Contra o merge
-sort:
-
-| n | n! | limite ⌈log₂ n!⌉ | merge sort (pior caso) |
-| --- | --- | --- | --- |
-| 3 | 6 | 3 | 3 |
-| 4 | 24 | 5 | 5 |
-| 5 | 120 | 7 | 8 |
-| 10 | 3.628.800 | 22 | 25 |
-| 1000 | (2.568 dígitos) | 8.530 | 8.977 |
-
-O limite se escreve com **Ω** (ômega), o piso, contrário do teto `O`: ordenar
-por comparação é **Ω(n log n)** no pior caso. Merge sort e heapsort fazem
-O(n log n): são **assintoticamente ótimos**.
-
-> [!WARNING]
-> O limite vale para o **pior caso** de **qualquer** algoritmo que só compara.
-> O insertion sort ordena um vetor já em ordem com `n - 1` comparações. Quem
-> não compara escapa: o counting sort (módulo 18) usa o valor como **índice** e
-> ordena inteiros pequenos em O(n). O **maior** de `n` elementos
-> precisa só de `n - 1` comparações.
-
-> [!TIP]
-> **Por dentro do C:** o `qsort` recebe o vetor como `void *` e uma `compara`,
-> e só sabe da ordem pelas respostas dela. Logo nenhuma implementação faz menos
-> de `⌈log₂ n!⌉` chamadas à `compara` no pior caso: para `n = 1000`, alguma
-> entrada passa de 8.530.
-
-> [!NOTE]
-> **Pergunta para você:** com 4 encomendas, quantas pesagens são o mínimo no
-> pior caso? E o insertion sort de 4 elementos faz quantas? Ainda é ótimo?
-
-{{pratique}}

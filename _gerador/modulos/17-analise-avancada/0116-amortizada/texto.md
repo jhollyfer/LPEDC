@@ -1,30 +1,43 @@
 ## 0116 · Análise amortizada
 
-Mudar de apartamento custa um dia carregando **todos** os móveis, mas é raro:
-ninguém mede o custo de morar pela pior semana do ano.
+- **Análise amortizada**: mede uma **sequência** de operações no pior caso e
+  divide pelo número de operações. O **custo amortizado** é uma garantia
+  sobre o total, sem sorteio (CORMEN et al., 2024, cap. 16).
+- **Vetor que dobra** (0075): inserir no fim custa uma escrita, até encher;
+  aí aloca o dobro e **copia tudo**. Isolada, a inserção é O(n); em sequência,
+  as caras são raras (ROVAI, 2018).
+- **Método agregado**: some tudo. Com capacidade inicial 1, `n` inserções
+  fazem `n` escritas mais cópias `1 + 2 + 4 + ...`, menos de `2n`. O total
+  fica abaixo de `3n`: **O(1) amortizado** (CORMEN et al., 2024, cap. 16).
+- **Método do banqueiro** (contábil): cada inserção paga **3 moedas**, 1 pela
+  escrita e 2 para um cofrinho. Quando `c` vira `2c`, os `c` mais novos
+  guardaram as `c` cópias. O cofrinho nunca fica negativo
+  (SZWARCFITER; MARKENZON, 2010).
+- **Método do potencial**: o cofrinho vira uma função Φ do estado (aqui,
+  Φ = 2 · n - capacidade). Custo amortizado = real + Φ(depois) - Φ(antes)
+  (CORMEN et al., 2024, cap. 16).
+- **Não é caso médio**: o médio supõe entradas sorteadas; o amortizado vale
+  para a **pior** sequência. E não promete que cada operação é rápida: um
+  sistema que não pode travar precisa de outra solução
+  (SZWARCFITER; MARKENZON, 2010).
+- **Outros exemplos**: o **contador binário** troca menos de 2 bits por soma
+  em média (A231) e a pilha com `multipop(k)` tira cada item uma vez (A232)
+  (CORMEN et al., 2024, cap. 16).
+- **Na prática**: usa-se `realloc` (0055), que às vezes estica no lugar; a
+  análise conta o pior caso. O preço é memória: logo após dobrar, metade está
+  vazia (CORTÉS, 2015).
 
-No vetor que cresce (assunto 0075), inserir no fim custa uma escrita, até o
-vetor encher: aí é preciso alocar um maior e **copiar tudo**. Isolada, a
-inserção é O(n) no pior caso, e `n` inserções dariam O(n²). A conta é
-pessimista: as caras não vêm em sequência.
+> [!WARNING]
+> Crescer por **tamanho fixo** estraga tudo. Com `nova = cap + 10`, as cópias
+> são 10, 20, 30...: quase **500 milhões** para 100.000 inserções, contra
+> 131.071 dobrando. Qualquer fator maior que 1 (1,5 ou 2) dá O(1) amortizado;
+> somar uma constante, não.
 
-A **análise amortizada** mede uma **sequência** de operações no pior caso e
-divide pelo número de operações: o **custo amortizado** é uma garantia sobre o
-total, sem sorteio.
-
-No **método agregado**, some tudo. Com capacidade inicial 1, dobrando ao
-encher, `n` inserções fazem `n` escritas mais as cópias `1 + 2 + 4 + ...`, que
-somam menos de `2n`. O total fica abaixo de `3n`: **O(1) amortizado**.
-
-No **método do banqueiro** (contábil), cada inserção paga **3 moedas**: 1 pela
-escrita e 2 para um cofrinho. Quando a capacidade `c` enche e vira `2c`, os `c`
-elementos mais novos guardaram 2 moedas cada: são as `c` cópias. Com o cofrinho
-**sempre não negativo**, o custo amortizado é 3. O Cormen traz ainda o **potencial**: o
-cofrinho vira uma função Φ do estado (aqui, Φ = 2 · n - capacidade).
+{{exemplo}}
 
 O app do banco guarda o histórico de Pix num vetor de 1 posição que dobra ao
-encher. Chegam 16 Pix; as inserções 2, 3, 5 e 9 são as mudanças, em vermelho, e
-o cofrinho cai nelas e se recupera:
+encher. Chegam 16 Pix; as inserções 2, 3, 5 e 9 são as mudanças, em vermelho,
+e o cofrinho cai nelas e se recupera:
 
 {{ideia}}
 
@@ -101,39 +114,7 @@ int main(void) {
 ```
 
 As cópias somam `1 + 2 + 4 + 8 = 15`, mais 16 escritas: 31, menos de `2 · 16`.
-O cofrinho nunca chega a zero.
-
-O fluxograma segue o `insere` da 9ª inserção, a mais cara: o vetor tem 8 de 8
-ocupados, então o caminho passa pela mudança inteira:
+O fluxograma segue a 9ª inserção, a mais cara: 8 de 8 ocupados, e o caminho
+passa pela mudança inteira:
 
 {{fluxograma}}
-
-A mesma análise vale para o **contador binário** (somar 1 às vezes vira muitos
-bits, em média menos de 2; exemplo A231) e para a **pilha com `multipop(k)`**,
-que tira até `k` itens (cada item sai uma vez; exemplo A232).
-
-Amortizado **não** é caso médio: o médio supõe entradas sorteadas; o
-amortizado vale para a **pior** sequência. E não garante que cada operação é
-rápida: a 1.048.577ª inserção copia mais de um milhão de elementos. Sistema que
-não pode travar precisa de outra solução.
-
-> [!WARNING]
-> Crescer por **tamanho fixo** estraga tudo. Com `nova = cap + 10`, as mudanças
-> copiam 10, 20, 30... elementos: para 100.000 inserções, quase **500 milhões**
-> de cópias, contra 131.071 dobrando. É uma progressão aritmética, Θ(n²) no
-> total e O(n) amortizado. Qualquer fator maior que 1 (1,5 ou 2) dá O(1)
-> amortizado; somar uma constante, não.
-
-> [!TIP]
-> **Por dentro do C:** na prática se usa `realloc` (assunto 0055), que às vezes
-> estica o bloco no lugar; a análise conta o pior caso, copiar tudo. O preço
-> é memória: logo após dobrar, metade do vetor está vazia.
-> Use o `realloc` seguro, com ponteiro à parte e `NULL` conferido.
-
-> [!NOTE]
-> **Pergunta para você:** e na volta? Suponha que o vetor **encolhe pela
-> metade** quando fica com metade das posições ocupadas. Com 16 elementos e
-> capacidade 16, quantas cópias cada operação faz se o programa alternar
-> "insere, remove" mil vezes?
-
-{{pratique}}
