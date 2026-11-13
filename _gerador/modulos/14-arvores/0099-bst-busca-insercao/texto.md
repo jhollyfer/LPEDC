@@ -1,20 +1,49 @@
 ## 0099 · BST: busca e inserção
 
-- **Árvore binária de busca** (**BST**, *binary search tree*): árvore binária
-  em que, em **todo** nó, a subárvore esquerda só tem chaves menores e a
-  direita só tem chaves maiores (CORMEN et al., 2024, cap. 12).
-- **Busca**: compara com a raiz. Igual, achou; menor, desce à esquerda; maior,
-  à direita; `NULL`, a chave não existe. É a busca binária (assunto 0090) na
-  árvore (FEOFILOFF, 2009).
-- **Inserção**: a mesma descida. No `NULL` em que a busca falharia entra o nó
-  novo, sempre como **folha**. A função devolve a raiz da subárvore e o pai
-  faz `r->esq = bst_insere(r->esq, chave)`. Chave repetida é ignorada
-  (FEOFILOFF, 2009).
-- **Em ordem crescente**: a em ordem de uma BST sai ordenada. O nó logo depois
-  é o **sucessor**, o logo antes é o **antecessor**; o menor fica mais à
-  esquerda e o maior, mais à direita (CORMEN et al., 2024, cap. 12).
-- **Custo**: no máximo **altura** + 1 comparações. Numa árvore cheia, perto de
-  log₂ n: 7 chaves, 3 níveis; um milhão, uns 20 (ZIVIANI, 2010, cap. 5).
+A catraca da academia precisa achar a matrícula na hora, e alunos novos se
+matriculam todo dia. No vetor ordenado, a busca binária do 0090 é rápida, mas
+cada aluno novo obriga a empurrar metade do vetor para abrir espaço. Na lista
+encadeada, inserir é barato, mas a busca anda nó a nó, em O(n). Você quer a
+busca do vetor ordenado com a inserção da lista. A árvore binária do 0098,
+com uma regra a mais, entrega as duas coisas.
+
+A **árvore binária de busca**, ou **BST** (do inglês *binary search tree*), é
+uma árvore binária em que vale uma regra em **todo** nó: as chaves da
+subárvore esquerda são todas **menores** que a chave do nó, e as da subárvore
+direita são todas **maiores** (CORMEN et al., 2024, cap. 12). A regra vale
+para a subárvore inteira, não só para os filhos: se a raiz é 50, nenhum nó em
+qualquer ponto da esquerda pode passar de 50.
+
+Buscar é a busca binária feita na árvore. Você compara a chave com a raiz. Se
+é igual, achou. Se é menor, ela só pode estar na subárvore esquerda, e a
+direita inteira fica para trás; se é maior, vale o contrário. Você repete a
+comparação no nó seguinte até achar a chave ou chegar a um `NULL`, e chegar
+ao `NULL` quer dizer que a chave não existe (FEOFILOFF, 2009). Cada
+comparação desce um nível e descarta uma subárvore.
+
+**Inserir** é a mesma descida. Você procura a chave nova como se ela já
+existisse; no `NULL` em que a busca falharia, pendura um nó novo. Por isso o
+nó novo sempre entra como **folha**, e nenhum nó antigo muda de lugar. A
+versão recursiva devolve a raiz da subárvore em que inseriu, e quem chamou
+guarda o retorno: o pai faz `r->esq = bst_insere(r->esq, chave)`. Quando a
+descida chega ao `NULL`, a função devolve o nó novo, e essa atribuição faz o
+ponteiro do pai passar a apontar para ele. Uma chave repetida é ignorada, e a
+árvore não guarda duplicatas (FEOFILOFF, 2009). A outra forma de escrever é
+passar o endereço do ponteiro, um `No **`, como você faz com o `scanf`.
+
+A regra da BST tem um efeito bonito no percurso **em ordem** do 0098: ele
+visita a esquerda (os menores), depois o nó, depois a direita (os maiores), e
+por isso lista as chaves em ordem **crescente**. O nó que vem logo depois de
+outro na em ordem é o seu **sucessor**; o que vem logo antes é o seu
+**antecessor**. O menor nó da árvore é o que fica mais à esquerda, e o maior,
+o que fica mais à direita (CORMEN et al., 2024, cap. 12).
+
+O custo da busca e da inserção é o tamanho do caminho percorrido: no máximo
+**altura** + 1 comparações. Numa árvore cheia, em que todos os níveis estão
+completos, a altura fica perto de log₂ n. Com 7 chaves são 3 níveis; com um
+milhão de chaves, uns 20 (ZIVIANI, 2010, cap. 5). O problema é que nada
+garante a árvore cheia. A forma da BST depende da ordem em que as chaves
+chegam, e o assunto 0101 trata de corrigir isso.
 
 > [!WARNING]
 > A forma da BST depende da **ordem de chegada**. As sete matrículas em ordem

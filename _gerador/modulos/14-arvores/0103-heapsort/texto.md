@@ -1,20 +1,51 @@
 ## 0103 · Heapsort
 
-- **Heapsort**: ordena tirando o máximo do heap n vezes. Tudo no **mesmo
-  vetor**: o heap encolhe uma casa a cada máximo, e essa casa livre no fim é o
-  lugar final dele (CORMEN et al., 2024, cap. 6).
-- **Fase 1, construir o heap**: cada **pai** desce, do último (`n / 2 - 1`)
-  até a raiz. As folhas já são heaps, e a fase custa só O(n). É a
-  `BUILD-MAX-HEAP` do Cormen (CORMEN et al., 2024, cap. 6).
-- **Fase 2, ordenar**: troca a raiz com o último do heap, encolhe o heap e faz
-  a nova raiz descer. O vetor fica com o heap no começo e a parte ordenada no
-  fim (FEOFILOFF, 2009).
-- **Custo**: n - 1 descidas de no máximo log₂ n níveis, O(n log n)
-  **sempre**. O quick sort (0095) pode cair em O(n²) e o merge sort (0094)
-  precisa de vetor extra (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
-- **In-place e não estável**: usa O(1) de memória, sem recursão, mas pode
-  trocar a ordem de chaves iguais. Na prática o quick sort costuma ser mais
-  rápido (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
+Os tempos da corrida de rua, em minutos, chegaram nesta ordem: 52, 18, 73,
+40, 91, 25 e 66. Você quer o ranking em ordem crescente, no próprio vetor,
+sem alocar outro, e com O(n log n) garantido. O merge sort (0094) garante o
+tempo, mas pede um rascunho; o quick sort (0095) dispensa o rascunho, mas
+pode cair em O(n²). O heap do 0102 resolve as duas exigências de uma vez.
+
+A ideia parte de uma observação. O heap entrega o maior elemento em
+O(log n). Se você tirar os n elementos um a um, eles saem do maior para o
+menor, já em ordem. Esse é o **heapsort**: ordenar tirando o máximo
+do heap n vezes (CORMEN et al., 2024, cap. 6). O truque que dispensa o
+segundo vetor é este: a cada máximo que sai, o heap encolhe uma casa, e a
+casa que ficou livre no fim do vetor é exatamente a posição final daquele
+máximo. O heap e a parte ordenada dividem o mesmo vetor.
+
+O método tem duas fases. A **fase 1 constrói o heap** dentro do vetor
+bagunçado. Inserir um elemento por vez funcionaria, mas há um jeito mais
+barato: fazer cada **pai** descer, como na remoção do 0102, começando pelo
+último pai, no índice `n / 2 - 1`, e voltando até a raiz. As folhas, que são
+a metade final do vetor, já são heaps de um elemento só e não precisam de
+nada. Como a maioria dos nós está nos níveis de baixo e desce pouco, a fase
+inteira custa só O(n). No Cormen ela se chama `BUILD-MAX-HEAP` (CORMEN et
+al., 2024, cap. 6). Nos tempos da corrida, os pais são os índices 2, 1 e 0, e
+o vetor vira o heap `[91 52 73 40 18 25 66]`.
+
+A **fase 2 ordena**. Você troca a raiz, que é o máximo, com o último elemento
+do heap; o máximo cai no lugar definitivo. Depois encolhe o heap em uma casa,
+para que ele deixe de enxergar esse máximo, e faz a nova raiz descer para
+consertar a ordem. Repete até restar um elemento. Durante essa fase, o vetor
+tem o **heap** no começo e a parte **ordenada** no fim, e a fronteira anda
+uma casa para a esquerda a cada volta (FEOFILOFF, 2009). Na primeira volta,
+o 91 troca com o 66 e fica no fim; o 66 desce pelo maior filho, o 73.
+
+O custo sai das duas fases. A fase 1 é O(n). A fase 2 faz n - 1 descidas, e
+cada uma desce no máximo log₂ n níveis. O total é **O(n log n)** em
+**todos** os casos, porque nenhuma entrada força o heap a ficar mais alto
+(TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6). É a garantia do merge sort
+sem o rascunho do merge sort.
+
+Duas propriedades completam o retrato. O heapsort é **in-place**: usa O(1)
+de memória extra e nem precisa de recursão, porque a descida é um laço. E
+não é **estável** (o termo está no 0092): as trocas entre a raiz e o fim do
+vetor atravessam longas distâncias e podem inverter chaves iguais. Mesmo com
+a garantia, na prática o quick sort costuma ser mais rápido, porque acessa
+posições vizinhas da memória e aproveita melhor o cache do processador,
+enquanto o heapsort salta de `i` para `2 * i + 1` (TENENBAUM; LANGSAM;
+AUGENSTEIN, 1995, cap. 6).
 
 > [!WARNING]
 > Na fase 2, o `desce` recebe o tamanho **do heap** (`fim`), não o do vetor

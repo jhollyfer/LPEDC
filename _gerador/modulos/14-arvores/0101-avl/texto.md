@@ -1,24 +1,51 @@
 ## 0101 · AVL: balanceamento e rotações
 
-- **AVL**: BST que se conserta a cada inserção. Em **todo** nó, as alturas
-  das duas subárvores diferem de no máximo 1 (ADELSON-VELSKY; LANDIS, 1962).
-- **Fator de balanceamento**: `fb = altura(esq) - altura(dir)`. Na AVL vale
-  -1, 0 ou 1; 2 é "pesado à esquerda" e -2, "pesado à direita". Há livros que
-  invertem a conta: o sinal troca, a regra não
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-- **Altura garantida**: no máximo uns 1,44 · log₂ n. Mil chaves cabem em
-  altura 9, e não 999 (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-- **Inserção**: pendura a folha como na BST. Na **volta** da recursão, cada
-  ancestral atualiza a altura e confere o fator (CORMEN et al., 2024).
-- **Rotação**: um filho sobe e o pai desce, sem quebrar a ordem da BST. Na
-  rotação à esquerda em `r`, o filho direito `d` sobe e a antiga subárvore
-  esquerda de `d` vira a direita de `r`. Custa O(1) (CORMEN et al., 2024,
-  cap. 13).
-- **Rotação dupla**: para o "zigue-zague". A primeira rotação, no filho,
-  endireita; a segunda, no nó, equilibra. Cada inserção faz no máximo uma
-  rotação, simples ou dupla (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-- **Outras árvores equilibradas**: a **rubro-negra** (0177) e a **árvore B**
-  (0146) também garantem O(log n) (CORMEN et al., 2024, caps. 13 e 18).
+A lanchonete numera os pedidos 10, 20, 30, 40 e assim por diante, sempre em
+ordem crescente. Numa BST comum (0099), cada pedido vira filho direito do
+anterior, e a árvore se degenera numa lista de altura n - 1. Com mil pedidos,
+achar o último custa mil comparações, e a promessa de O(log n) vai embora. O
+problema não está na busca, mas na forma da árvore, que depende da ordem de
+chegada. Falta uma BST que não deixe a forma piorar.
+
+A saída é uma BST que se **conserta sozinha** a cada inserção: a **árvore
+AVL**, cujo nome vem das iniciais de seus criadores, Adelson-Velsky e Landis.
+A regra é que, em **todo** nó, as alturas das duas subárvores diferem de no
+máximo 1 (ADELSON-VELSKY; LANDIS, 1962). Pense numa balança de dois pratos
+em cada nó: um lado pode pesar um pouco mais que o outro, nunca dois níveis a
+mais.
+
+Para vigiar a regra, cada nó guarda a própria altura e calcula o **fator de
+balanceamento**, `fb = altura(esq) - altura(dir)`. Numa AVL, todo nó tem
+fator -1, 0 ou 1. Fator 2 quer dizer "pesado à esquerda", e -2, "pesado à
+direita". Há livros que fazem a conta ao contrário, direita menos esquerda; o
+sinal troca, a regra não (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
+
+A recompensa é uma altura garantida. Uma AVL com n chaves nunca passa de
+cerca de 1,44 · log₂ n de altura (TENENBAUM; LANGSAM; AUGENSTEIN, 1995,
+cap. 7). Os mil pedidos da lanchonete cabem numa árvore de altura 9, e não
+999, e buscar, inserir e remover voltam a custar O(log n).
+
+A inserção começa igual à da BST: desce e pendura uma folha. A novidade vem na
+**volta** da recursão. Cada ancestral do nó novo, do pai até a raiz, atualiza
+a própria altura e confere o fator (CORMEN et al., 2024). Se algum achar 2 ou
+-2, ele se conserta ali mesmo, antes de devolver o controle ao pai.
+
+O conserto é a **rotação**: um filho sobe, o pai desce, e a ordem da BST
+continua valendo. Na rotação à esquerda no nó `r`, o filho direito `d` sobe
+para o lugar de `r`, e `r` vira filho esquerdo de `d`. A antiga subárvore
+esquerda de `d` precisa de um novo lugar e vira a subárvore direita de `r`;
+ela cabe ali porque suas chaves são maiores que `r` e menores que `d`. O
+percurso em ordem não muda, só a forma. A rotação mexe em poucos ponteiros e
+custa O(1) (CORMEN et al., 2024, cap. 13). A rotação à direita é o espelho.
+
+Qual rotação usar depende de onde está o peso. Se o nó pesa à direita e o
+filho direito também, o caso é **direita-direita**, e uma rotação à esquerda
+no nó resolve. Se o nó pesa à direita mas o filho direito pesa à esquerda, o
+caminho faz um "zigue-zague", e a rotação simples só espelharia o problema.
+Esse caso pede a **rotação dupla**: a primeira rotação, no filho, endireita o
+caminho; a segunda, no nó, equilibra. Cada inserção faz no máximo uma
+rotação, simples ou dupla (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7). A
+tabela resume os quatro casos:
 
 | Caso | Fator do nó | Fator do filho pesado | Conserto |
 | --- | --- | --- | --- |
@@ -26,6 +53,10 @@
 | direita-direita | -2 | -1 ou 0 (direito) | rotação à esquerda no nó |
 | esquerda-direita | +2 | -1 (esquerdo) | à esquerda no filho, depois à direita no nó |
 | direita-esquerda | -2 | +1 (direito) | à direita no filho, depois à esquerda no nó |
+
+A AVL não é a única árvore que se equilibra. A **árvore rubro-negra** (0177)
+e a **árvore B** (0146) também garantem O(log n), com regras diferentes
+(CORMEN et al., 2024, caps. 13 e 18).
 
 > [!WARNING]
 > No zigue-zague, a rotação simples **não conserta**: só espelha o problema.

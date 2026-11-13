@@ -1,24 +1,51 @@
 ## 0100 · BST: remoção
 
-- **Remoção**: a busca acha o nó; o que fazer depende de **quantos filhos**
-  ele tem (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-- **Folha ou um filho**: o filho que existe sobe para o lugar do nó. Na folha
-  esse filho é `NULL`, então é um código só (CORMEN et al., 2024, cap. 12).
-- **Dois filhos**: o lugar vai para o **sucessor**, a menor chave da
-  subárvore direita. Desça uma vez à direita e depois à esquerda até não dar
-  mais (CORMEN et al., 2024, cap. 12).
-- **O sucessor não tem filho esquerdo**: removê-lo cai num caso fácil. Usar o
-  **antecessor** (a maior da esquerda) também funciona, mas a árvore final
-  sai diferente (FEOFILOFF, 2009).
-- **Retorno**: como na inserção, a função devolve a raiz da subárvore. O pai
-  faz `r->esq = bst_remove(r->esq, chave)` e o cliente,
-  `raiz = bst_remove(raiz, ...)`. Custo O(altura) (CELES; RANGEL, 2002).
+Três alunos cancelaram o plano, e as matrículas 30, 40 e 20 precisam sair da
+árvore. Inserir foi fácil porque todo nó novo entra como folha e ninguém muda
+de lugar. Remover é mais delicado: o nó que sai pode ter filhos, e depois da
+remoção a regra da BST do 0099 precisa continuar valendo em todo nó.
+
+O primeiro passo é a busca de sempre, que acha o nó. O que fazer com ele
+depende de **quantos filhos** ele tem, e são três casos (TENENBAUM; LANGSAM;
+AUGENSTEIN, 1995, cap. 7). Se o nó é uma **folha**, você libera o nó e o pai
+passa a apontar para `NULL`. Se o nó tem **um filho**, esse filho sobe para o
+lugar dele: o avô passa a apontar direto para o neto e "pula" o nó removido.
+A regra continua valendo, porque o filho e tudo abaixo dele já estavam do
+lado certo do avô.
+
+Os dois primeiros casos cabem num código só. A regra é "o filho que existe
+sobe", e na folha esse filho é `NULL`, então o pai passa a apontar para
+`NULL` sem nenhum teste extra (CORMEN et al., 2024, cap. 12).
+
+O caso difícil é o nó com **dois filhos**. Não dá para subir os dois, porque o
+pai só tem um ponteiro para aquele lugar. A saída é procurar outro nó que
+possa ocupar a posição: alguém maior que tudo à esquerda e menor que tudo à
+direita. O candidato natural é o **sucessor**, a menor chave da subárvore
+direita, que o 0099 definiu como o nó logo depois na em ordem (CORMEN et al.,
+2024, cap. 12). Para achá-lo, desça **uma vez à direita** e depois **à
+esquerda até não dar mais**.
+
+O sucessor tem uma propriedade que salva a remoção: ele **não tem filho
+esquerdo**, porque se tivesse, esse filho seria menor e o sucessor seria ele.
+Então você copia a chave do sucessor para o nó que ia sair e remove o
+sucessor da subárvore direita, e essa segunda remoção sempre cai num dos
+casos fáceis. Usar o **antecessor**, a maior chave da subárvore esquerda,
+funciona do mesmo jeito, mas a árvore final sai diferente; este TAD usa o
+sucessor, como o Cormen (FEOFILOFF, 2009).
 
 | Caso | O que fazer | No exemplo |
 | --- | --- | --- |
 | **folha** | dá `free` e o pai passa a apontar para `NULL` | remover o 20 |
 | **um filho** | o filho sobe para o lugar dele; o avô "pula" o nó | remover o 40: o 45 sobe |
 | **dois filhos** | troca pelo **sucessor** e remove o sucessor | remover o 30: o 35 assume |
+
+O código segue o molde da inserção: a função devolve a raiz da subárvore
+depois da remoção, o pai faz `r->esq = bst_remove(r->esq, chave)` e o cliente
+faz `raiz = bst_remove(raiz, ...)`, porque a própria raiz pode sair. O custo é
+o da descida, **O(altura)** (CELES; RANGEL, 2002). Copiar só a chave basta
+quando o nó guarda um `int`. Com uma `struct` grande, compensa religar os
+ponteiros em vez de copiar dados, e é isso que o procedimento `TRANSPLANT` do
+Cormen faz.
 
 > [!WARNING]
 > `bst_remove(raiz->esq, 20);` sem atribuir o retorno dá `free` no 20 mas deixa

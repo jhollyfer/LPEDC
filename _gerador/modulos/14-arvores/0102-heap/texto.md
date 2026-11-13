@@ -1,24 +1,43 @@
 ## 0102 · Heap e fila de prioridade
 
-- **Fila de prioridade**: cada item entra com uma prioridade e sai primeiro o
-  de **maior** prioridade (CORMEN et al., 2024, cap. 6).
-- **Heap de máximo**: árvore binária com duas regras. **Forma**: completa,
-  todos os níveis cheios menos talvez o último, que enche da esquerda para a
-  direita. **Ordem**: todo pai é maior ou igual aos filhos, e o máximo fica na
-  raiz (CORMEN et al., 2024, cap. 6).
-- **Regra mais fraca que a da BST**: esquerda e direita não se comparam. O
-  heap só responde "quem é o maior?" (TENENBAUM; LANGSAM; AUGENSTEIN, 1995,
-  cap. 6).
-- **Heap em vetor**: a forma completa deixa guardar a árvore nível por nível,
-  sem buracos e sem ponteiros (FEOFILOFF, 2009).
-- **Inserir**: o novo entra no fim e **sobe**, trocando com o pai enquanto for
-  maior. **Remover o máximo**: o último vai para a raiz e **desce**, trocando
-  com o **maior** filho. As duas custam até a altura, ⌊log₂ n⌋; no Cormen a
-  descida é a `MAX-HEAPIFY` (CORMEN et al., 2024, cap. 6).
-- **Heap de mínimo**: as comparações invertidas; o menor fica na raiz
-  (FEOFILOFF, 2009).
-- **Dois heaps diferentes**: este heap (estrutura de dados) não tem relação
-  com o heap do `malloc` (assunto 0053) (FEOFILOFF, 2009).
+No pronto-socorro, o próximo atendido é o **mais grave** de quem espera, e não
+o primeiro a chegar. A fila do 0085 não serve, porque atende por ordem de
+chegada. O que o pronto-socorro precisa é de uma estrutura em que cada item
+entra com uma prioridade e sai sempre o de **maior** prioridade. Essa
+estrutura é a **fila de prioridade** (CORMEN et al., 2024, cap. 6).
+
+As estruturas que você já conhece fazem metade do serviço. Num vetor solto,
+inserir é O(1), basta pôr no fim, mas achar o máximo exige olhar todos, O(n).
+Num vetor ordenado, tirar o máximo é O(1), mas inserir exige abrir espaço no
+lugar certo, O(n). Uma BST faz as duas em O(log n) só se estiver equilibrada,
+e para isso precisa da AVL do 0101, com ponteiros e rotações.
+
+| Onde guardar | Inserir | Tirar o máximo |
+| --- | --- | --- |
+| vetor solto | O(1) | O(n) |
+| vetor ordenado | O(n) | O(1) |
+| heap | O(log n) | O(log n) |
+
+O **heap de máximo** faz as duas em O(log n), sempre, e sem um único
+ponteiro. Ele é uma árvore binária com duas regras (CORMEN et al., 2024,
+cap. 6). A regra de **forma** diz que a árvore é **completa**: todos os
+níveis estão cheios, menos talvez o último, que se enche da esquerda para a
+direita, sem pular vaga. A regra de **ordem** diz que todo pai é **maior ou
+igual** aos seus filhos. Seguindo a regra de pai em pai, o máximo de todos
+fica na raiz.
+
+Compare com a regra da BST. Na BST, a esquerda é menor e a direita é maior;
+no heap, esquerda e direita não se comparam, e o 30 pode estar à esquerda do
+70 ou à direita dele. A regra é mais fraca, e por isso mais barata de manter,
+mas o heap só responde uma pergunta: "quem é o maior?" (TENENBAUM; LANGSAM;
+AUGENSTEIN, 1995, cap. 6). Ele não serve para buscar uma chave qualquer.
+
+A regra de forma é o que dispensa os ponteiros. Como a árvore completa não
+tem buracos, você pode guardá-la num **vetor**, nível por nível, da esquerda
+para a direita (FEOFILOFF, 2009). A raiz fica em `v[0]`, os dois nós do nível
+1 em `v[1]` e `v[2]`, os quatro do nível 2 de `v[3]` a `v[6]`, e assim por
+diante. Os parentescos viram contas com o índice. O Cormen numera o vetor a
+partir de 1, e as contas mudam:
 
 | Quem | Índice com `v[0]` na raiz | No Cormen (`A[1..n]`) |
 | --- | --- | --- |
@@ -26,11 +45,20 @@
 | filho esquerdo | `2 * i + 1` | `2i` |
 | filho direito | `2 * i + 2` | `2i + 1` |
 
-| Onde guardar | Inserir | Tirar o máximo |
-| --- | --- | --- |
-| vetor solto | O(1) | O(n) |
-| vetor ordenado | O(n) | O(1) |
-| heap | O(log n) | O(log n) |
+As duas operações quebram uma regra por um instante e consertam por um único
+caminho. Para **inserir**, o item novo entra no fim do vetor, o que mantém a
+forma, e **sobe**: troca de lugar com o pai enquanto for maior que ele. Para
+**remover o máximo**, a raiz sai, o último elemento do vetor vai para o lugar
+dela e **desce**: troca com o **maior** dos dois filhos enquanto for menor que
+algum deles. Cada operação anda no máximo a altura da árvore, ⌊log₂ n⌋
+trocas, e daí o O(log n). No Cormen, a descida se chama `MAX-HEAPIFY`
+(CORMEN et al., 2024, cap. 6).
+
+Invertendo as comparações, você tem o **heap de mínimo**, com o menor na
+raiz, útil quando a prioridade é "quem tem o menor valor", como o pedido com
+o menor prazo (FEOFILOFF, 2009). Um cuidado com o nome: este heap, a
+estrutura de dados, não tem nada a ver com o heap do `malloc`, a região de
+memória do assunto 0053. São dois usos da mesma palavra.
 
 > [!WARNING]
 > Na descida, troque com o **maior** dos filhos; trocar com o menor quebra o

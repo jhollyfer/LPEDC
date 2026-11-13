@@ -68,19 +68,28 @@ gcc ~/LPEDC/material/A197.c ~/LPEDC/material/0099-bst.c -o ~/LPEDC/material/A197
 
 ### Conceito
 
-- **Árvore**: estrutura em que cada elemento tem um só "de cima" e pode ter
-  vários "de baixo". Serve para pastas, organogramas e sumários
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 5).
-- **Definição recursiva**: uma árvore é um nó, a **raiz**, com zero ou mais
-  árvores penduradas embaixo. Por isso quase toda função de árvore resolve
-  cada filho e junta as respostas (FEOFILOFF, 2009).
-- **Profundidade** (ou **nível**): quantas arestas separam o nó da raiz. A
-  raiz tem profundidade 0 (CELES; RANGEL, 2002).
-- **Altura**: o caminho mais longo, em arestas, do nó até uma folha. A altura
-  da árvore é a da raiz; folha tem altura 0 e árvore vazia, -1
-  (FEOFILOFF, 2009).
-- **Liberar**: cada nó vem de um `malloc`, como na lista encadeada; o `free`
-  vem depois dos filhos (CELES; RANGEL, 2002).
+No gerenciador de arquivos, a pasta `casa` tem `fotos`, `contas` e `musica`.
+`fotos` tem `praia` e `natal`. `contas` tem `agua` e `luz`, e `luz` tem a
+pasta `2025`. Tente guardar isso numa lista, numa pilha ou numa fila e você
+esbarra no mesmo problema: todas elas põem um elemento depois do outro, numa
+linha. Uma pasta tem **várias** subpastas, e cada subpasta pode ter as suas.
+Falta uma estrutura que se ramifique.
+
+Essa forma de "um em cima, vários embaixo" é a **árvore**: uma estrutura em
+que cada elemento tem um único elemento acima dele, exceto o primeiro, e pode
+ter vários abaixo (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 5). O
+organograma de uma empresa e o sumário de um livro têm essa forma. Na
+computação, a árvore se desenha de cabeça para baixo: a origem fica no alto e
+os galhos descem.
+
+O vocabulário vem dessa imagem e da árvore genealógica. Cada elemento é um
+**nó**, e a ligação entre dois nós é uma **aresta**. O nó do topo, o único sem
+ninguém acima, é a **raiz**; nas pastas, é `casa`. Um nó é **pai** dos nós
+ligados logo abaixo dele, que são seus **filhos**, e filhos do mesmo pai são
+**irmãos**. Um nó sem filhos é uma **folha**. Um nó junto com tudo que está
+abaixo dele forma uma **subárvore**. O **grau** de um nó é quantos filhos ele
+tem, e o grau da árvore é o maior grau entre os nós. A tabela aplica cada
+termo às pastas:
 
 | Termo | O que é | Nas pastas |
 | --- | --- | --- |
@@ -91,6 +100,29 @@ gcc ~/LPEDC/material/A197.c ~/LPEDC/material/0099-bst.c -o ~/LPEDC/material/A197
 | **folha** | nó sem filhos | `praia`, `natal`, `agua`, `2025`, `musica` |
 | **subárvore** | um nó com tudo que está embaixo dele | `contas` com `agua`, `luz` e `2025` |
 | **grau** | quantos filhos o nó tem; o da árvore é o maior deles | `casa` tem grau 3 |
+
+Duas medidas dizem onde um nó está. A **profundidade**, também chamada de
+**nível**, é o número de arestas entre o nó e a raiz: `casa` tem profundidade
+0, `contas` tem 1 e `luz` tem 2 (CELES; RANGEL, 2002). A **altura** olha para
+baixo: é o número de arestas do caminho mais longo entre o nó e uma folha. A
+altura da árvore é a altura da raiz. Nesta convenção, que conta arestas, a
+folha tem altura 0 e a árvore vazia tem altura -1 (FEOFILOFF, 2009). A árvore
+das pastas tem altura 3, pelo caminho `casa`, `contas`, `luz`, `2025`.
+
+A definição que mais ajuda a programar é **recursiva**: uma árvore é um nó, a
+raiz, com zero ou mais árvores penduradas embaixo dele (FEOFILOFF, 2009). Cada
+filho da raiz é, ele mesmo, a raiz de uma árvore menor. Por isso quase toda
+função de árvore é recursiva e segue o mesmo molde: resolve o problema em cada
+filho e combina as respostas. Para contar folhas, você soma as folhas dos
+filhos, e um nó sem filhos conta 1. Para a altura, você pega a maior altura
+entre os filhos e soma 1.
+
+Em C, cada nó vem de um `malloc`, como na lista encadeada do módulo 11, e por
+isso precisa de um `free` no fim. A ordem importa: o nó só pode ser liberado
+**depois** dos filhos, porque é ele que guarda os endereços deles (CELES;
+RANGEL, 2002). Para guardar um número qualquer de filhos com só dois
+ponteiros por nó, há a representação **primeiro filho, próximo irmão**: cada
+nó aponta para o filho mais à esquerda e para o irmão seguinte.
 
 > [!WARNING]
 > Aqui a altura conta **arestas**. Há livros que contam nós, e a mesma árvore
@@ -568,21 +600,55 @@ Total de caminhos: 5
 
 ### Conceito
 
-- **Árvore binária**: ou é **vazia** (`NULL`), ou é um nó com uma
-  **subárvore esquerda** e uma **subárvore direita**. Cada nó tem no máximo
-  dois filhos (CORMEN et al., 2024, cap. 12).
-- **O lado importa**: `A` com `B` à esquerda e `A` com `B` à direita são
-  árvores diferentes (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 5).
-- **Percurso**: um jeito de visitar todos os nós uma vez. Os três recursivos
-  só mudam a posição da visita em relação às duas chamadas (FEOFILOFF, 2009).
-- **Por nível**: usa uma **fila** (assunto 0085). Tira o nó da frente, mostra
-  e põe os filhos no fim (CELES; RANGEL, 2002).
-- **Árvore de expressão**: operadores nos nós internos, números nas folhas.
-  A pós-ordem é a ordem de calcular (assunto 0084)
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 5).
-- **Ponteiros nulos**: uma árvore binária com `n` nós tem `n + 1` ponteiros
-  `NULL`. A recursão usa altura + 1 chamadas na pilha
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
+A planilha recebe `=(8-3)*(4+2)` e precisa decidir o que calcular primeiro.
+Os parênteses dizem que a subtração e a soma vêm antes, e a multiplicação
+junta os dois resultados. Essa estrutura de "a conta de cima depende das duas
+contas de baixo" é uma árvore em que cada operador tem exatamente dois
+operandos. Árvores com no máximo dois filhos por nó aparecem tanto, na prova e
+nos programas, que ganharam nome próprio.
+
+Uma **árvore binária** é uma árvore em que cada nó tem no máximo dois filhos,
+um à **esquerda** e outro à **direita**. A definição recursiva diz melhor:
+uma árvore binária ou é **vazia**, o que em C se representa com `NULL`, ou é
+um nó com uma **subárvore esquerda** e uma **subárvore direita**, cada uma
+delas também uma árvore binária (CORMEN et al., 2024, cap. 12). A árvore vazia
+é o caso base que encerra toda recursão sobre a árvore.
+
+Aqui o lado importa. Um nó `A` com o filho `B` à esquerda e um nó `A` com o
+filho `B` à direita são árvores **diferentes**, mesmo tendo os mesmos nós
+(TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 5). Na conta, isso é óbvio:
+`8 - 3` e `3 - 8` têm os mesmos números e o mesmo operador, e dão resultados
+diferentes. Em C, o nó é uma `struct` com o dado e dois ponteiros, `esq` e
+`dir`, e um filho ausente é um ponteiro `NULL`.
+
+Para mostrar, contar ou somar o que está numa árvore, você precisa passar por
+todos os nós. Um **percurso** é um jeito de visitar cada nó exatamente uma
+vez. Os três percursos clássicos são recursivos e só diferem na posição da
+visita em relação às duas chamadas (FEOFILOFF, 2009). Na **pré-ordem**, você
+visita a raiz antes das subárvores; na **em ordem**, entre a esquerda e a
+direita; na **pós-ordem**, depois das duas:
+
+```c
+void em_ordem(No *r) {
+    if (r == NULL) return;   // árvore vazia: nada a visitar
+    em_ordem(r->esq);
+    printf("%c ", r->info);  // na pré-ordem, esta linha vem antes; na pós, depois
+    em_ordem(r->dir);
+}
+```
+
+O quarto percurso, **por nível**, visita a árvore linha por linha, de cima
+para baixo, e não é recursivo. Ele usa uma **fila** (assunto 0085): põe a raiz
+na fila e, enquanto a fila não esvazia, tira o nó da frente, mostra o nó e
+põe os filhos dele no fim (CELES; RANGEL, 2002). Como a fila atende por ordem
+de chegada, todos os nós de um nível saem antes dos nós do nível seguinte.
+
+A conta do churrasco vira uma **árvore de expressão**: os operadores ficam nos
+nós internos e os números nas folhas. Cada percurso dela produz uma notação
+conhecida, e a pós-ordem dá exatamente a pós-fixa do assunto 0084. Isso não é
+coincidência: o `*` só pode ser aplicado depois que as duas subárvores foram
+calculadas, e a pós-ordem visita a raiz depois das duas (TENENBAUM; LANGSAM;
+AUGENSTEIN, 1995, cap. 5).
 
 | Percurso | Ordem | Em `(8-3)*(4+2)` |
 | --- | --- | --- |
@@ -590,6 +656,14 @@ Total de caminhos: 5
 | **em ordem** | esquerda, raiz, direita | `8 - 3 * 4 + 2` (infixa, sem parênteses) |
 | **pós-ordem** | esquerda, direita, raiz | `8 3 - 4 2 + *` (pós-fixa, a da calculadora HP) |
 | **por nível** | linha por linha, de cima para baixo | `* - + 8 3 4 2` |
+
+Dois números ajudam a prever o comportamento. Uma árvore binária com `n` nós
+tem `n + 1` ponteiros `NULL`: são `2n` ponteiros no total, e só `n - 1` deles
+apontam para algum nó, porque todo nó menos a raiz tem um pai. E a recursão
+empilha altura + 1 chamadas de uma vez (TENENBAUM; LANGSAM; AUGENSTEIN, 1995,
+cap. 7). Numa árvore equilibrada de um milhão de nós, isso dá uns 20 quadros
+na pilha; numa árvore em fila indiana, com cada nó tendo um filho só, dá um
+milhão, e a pilha estoura.
 
 > [!WARNING]
 > A em ordem **perde os parênteses**: `8 - 3 * 4 + 2` dá `8 - 12 + 2 = -2`, e
@@ -902,21 +976,50 @@ gcc ~/LPEDC/material/E588.c ~/LPEDC/material/0098-arvore.c -o ~/LPEDC/material/E
 
 ### Conceito
 
-- **Árvore binária de busca** (**BST**, *binary search tree*): árvore binária
-  em que, em **todo** nó, a subárvore esquerda só tem chaves menores e a
-  direita só tem chaves maiores (CORMEN et al., 2024, cap. 12).
-- **Busca**: compara com a raiz. Igual, achou; menor, desce à esquerda; maior,
-  à direita; `NULL`, a chave não existe. É a busca binária (assunto 0090) na
-  árvore (FEOFILOFF, 2009).
-- **Inserção**: a mesma descida. No `NULL` em que a busca falharia entra o nó
-  novo, sempre como **folha**. A função devolve a raiz da subárvore e o pai
-  faz `r->esq = bst_insere(r->esq, chave)`. Chave repetida é ignorada
-  (FEOFILOFF, 2009).
-- **Em ordem crescente**: a em ordem de uma BST sai ordenada. O nó logo depois
-  é o **sucessor**, o logo antes é o **antecessor**; o menor fica mais à
-  esquerda e o maior, mais à direita (CORMEN et al., 2024, cap. 12).
-- **Custo**: no máximo **altura** + 1 comparações. Numa árvore cheia, perto de
-  log₂ n: 7 chaves, 3 níveis; um milhão, uns 20 (ZIVIANI, 2010, cap. 5).
+A catraca da academia precisa achar a matrícula na hora, e alunos novos se
+matriculam todo dia. No vetor ordenado, a busca binária do 0090 é rápida, mas
+cada aluno novo obriga a empurrar metade do vetor para abrir espaço. Na lista
+encadeada, inserir é barato, mas a busca anda nó a nó, em O(n). Você quer a
+busca do vetor ordenado com a inserção da lista. A árvore binária do 0098,
+com uma regra a mais, entrega as duas coisas.
+
+A **árvore binária de busca**, ou **BST** (do inglês *binary search tree*), é
+uma árvore binária em que vale uma regra em **todo** nó: as chaves da
+subárvore esquerda são todas **menores** que a chave do nó, e as da subárvore
+direita são todas **maiores** (CORMEN et al., 2024, cap. 12). A regra vale
+para a subárvore inteira, não só para os filhos: se a raiz é 50, nenhum nó em
+qualquer ponto da esquerda pode passar de 50.
+
+Buscar é a busca binária feita na árvore. Você compara a chave com a raiz. Se
+é igual, achou. Se é menor, ela só pode estar na subárvore esquerda, e a
+direita inteira fica para trás; se é maior, vale o contrário. Você repete a
+comparação no nó seguinte até achar a chave ou chegar a um `NULL`, e chegar
+ao `NULL` quer dizer que a chave não existe (FEOFILOFF, 2009). Cada
+comparação desce um nível e descarta uma subárvore.
+
+**Inserir** é a mesma descida. Você procura a chave nova como se ela já
+existisse; no `NULL` em que a busca falharia, pendura um nó novo. Por isso o
+nó novo sempre entra como **folha**, e nenhum nó antigo muda de lugar. A
+versão recursiva devolve a raiz da subárvore em que inseriu, e quem chamou
+guarda o retorno: o pai faz `r->esq = bst_insere(r->esq, chave)`. Quando a
+descida chega ao `NULL`, a função devolve o nó novo, e essa atribuição faz o
+ponteiro do pai passar a apontar para ele. Uma chave repetida é ignorada, e a
+árvore não guarda duplicatas (FEOFILOFF, 2009). A outra forma de escrever é
+passar o endereço do ponteiro, um `No **`, como você faz com o `scanf`.
+
+A regra da BST tem um efeito bonito no percurso **em ordem** do 0098: ele
+visita a esquerda (os menores), depois o nó, depois a direita (os maiores), e
+por isso lista as chaves em ordem **crescente**. O nó que vem logo depois de
+outro na em ordem é o seu **sucessor**; o que vem logo antes é o seu
+**antecessor**. O menor nó da árvore é o que fica mais à esquerda, e o maior,
+o que fica mais à direita (CORMEN et al., 2024, cap. 12).
+
+O custo da busca e da inserção é o tamanho do caminho percorrido: no máximo
+**altura** + 1 comparações. Numa árvore cheia, em que todos os níveis estão
+completos, a altura fica perto de log₂ n. Com 7 chaves são 3 níveis; com um
+milhão de chaves, uns 20 (ZIVIANI, 2010, cap. 5). O problema é que nada
+garante a árvore cheia. A forma da BST depende da ordem em que as chaves
+chegam, e o assunto 0101 trata de corrigir isso.
 
 > [!WARNING]
 > A forma da BST depende da **ordem de chegada**. As sete matrículas em ordem
@@ -1210,25 +1313,52 @@ gcc ~/LPEDC/material/E594.c ~/LPEDC/material/0099-bst.c -o ~/LPEDC/material/E594
 
 ### Conceito
 
-- **Remoção**: a busca acha o nó; o que fazer depende de **quantos filhos**
-  ele tem (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-- **Folha ou um filho**: o filho que existe sobe para o lugar do nó. Na folha
-  esse filho é `NULL`, então é um código só (CORMEN et al., 2024, cap. 12).
-- **Dois filhos**: o lugar vai para o **sucessor**, a menor chave da
-  subárvore direita. Desça uma vez à direita e depois à esquerda até não dar
-  mais (CORMEN et al., 2024, cap. 12).
-- **O sucessor não tem filho esquerdo**: removê-lo cai num caso fácil. Usar o
-  **antecessor** (a maior da esquerda) também funciona, mas a árvore final
-  sai diferente (FEOFILOFF, 2009).
-- **Retorno**: como na inserção, a função devolve a raiz da subárvore. O pai
-  faz `r->esq = bst_remove(r->esq, chave)` e o cliente,
-  `raiz = bst_remove(raiz, ...)`. Custo O(altura) (CELES; RANGEL, 2002).
+Três alunos cancelaram o plano, e as matrículas 30, 40 e 20 precisam sair da
+árvore. Inserir foi fácil porque todo nó novo entra como folha e ninguém muda
+de lugar. Remover é mais delicado: o nó que sai pode ter filhos, e depois da
+remoção a regra da BST do 0099 precisa continuar valendo em todo nó.
+
+O primeiro passo é a busca de sempre, que acha o nó. O que fazer com ele
+depende de **quantos filhos** ele tem, e são três casos (TENENBAUM; LANGSAM;
+AUGENSTEIN, 1995, cap. 7). Se o nó é uma **folha**, você libera o nó e o pai
+passa a apontar para `NULL`. Se o nó tem **um filho**, esse filho sobe para o
+lugar dele: o avô passa a apontar direto para o neto e "pula" o nó removido.
+A regra continua valendo, porque o filho e tudo abaixo dele já estavam do
+lado certo do avô.
+
+Os dois primeiros casos cabem num código só. A regra é "o filho que existe
+sobe", e na folha esse filho é `NULL`, então o pai passa a apontar para
+`NULL` sem nenhum teste extra (CORMEN et al., 2024, cap. 12).
+
+O caso difícil é o nó com **dois filhos**. Não dá para subir os dois, porque o
+pai só tem um ponteiro para aquele lugar. A saída é procurar outro nó que
+possa ocupar a posição: alguém maior que tudo à esquerda e menor que tudo à
+direita. O candidato natural é o **sucessor**, a menor chave da subárvore
+direita, que o 0099 definiu como o nó logo depois na em ordem (CORMEN et al.,
+2024, cap. 12). Para achá-lo, desça **uma vez à direita** e depois **à
+esquerda até não dar mais**.
+
+O sucessor tem uma propriedade que salva a remoção: ele **não tem filho
+esquerdo**, porque se tivesse, esse filho seria menor e o sucessor seria ele.
+Então você copia a chave do sucessor para o nó que ia sair e remove o
+sucessor da subárvore direita, e essa segunda remoção sempre cai num dos
+casos fáceis. Usar o **antecessor**, a maior chave da subárvore esquerda,
+funciona do mesmo jeito, mas a árvore final sai diferente; este TAD usa o
+sucessor, como o Cormen (FEOFILOFF, 2009).
 
 | Caso | O que fazer | No exemplo |
 | --- | --- | --- |
 | **folha** | dá `free` e o pai passa a apontar para `NULL` | remover o 20 |
 | **um filho** | o filho sobe para o lugar dele; o avô "pula" o nó | remover o 40: o 45 sobe |
 | **dois filhos** | troca pelo **sucessor** e remove o sucessor | remover o 30: o 35 assume |
+
+O código segue o molde da inserção: a função devolve a raiz da subárvore
+depois da remoção, o pai faz `r->esq = bst_remove(r->esq, chave)` e o cliente
+faz `raiz = bst_remove(raiz, ...)`, porque a própria raiz pode sair. O custo é
+o da descida, **O(altura)** (CELES; RANGEL, 2002). Copiar só a chave basta
+quando o nó guarda um `int`. Com uma `struct` grande, compensa religar os
+ponteiros em vez de copiar dados, e é isso que o procedimento `TRANSPLANT` do
+Cormen faz.
 
 > [!WARNING]
 > `bst_remove(raiz->esq, 20);` sem atribuir o retorno dá `free` no 20 mas deixa
@@ -1519,25 +1649,52 @@ gcc ~/LPEDC/material/E599.c ~/LPEDC/material/0100-bst.c -o ~/LPEDC/material/E599
 
 ### Conceito
 
-- **AVL**: BST que se conserta a cada inserção. Em **todo** nó, as alturas
-  das duas subárvores diferem de no máximo 1 (ADELSON-VELSKY; LANDIS, 1962).
-- **Fator de balanceamento**: `fb = altura(esq) - altura(dir)`. Na AVL vale
-  -1, 0 ou 1; 2 é "pesado à esquerda" e -2, "pesado à direita". Há livros que
-  invertem a conta: o sinal troca, a regra não
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-- **Altura garantida**: no máximo uns 1,44 · log₂ n. Mil chaves cabem em
-  altura 9, e não 999 (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-- **Inserção**: pendura a folha como na BST. Na **volta** da recursão, cada
-  ancestral atualiza a altura e confere o fator (CORMEN et al., 2024).
-- **Rotação**: um filho sobe e o pai desce, sem quebrar a ordem da BST. Na
-  rotação à esquerda em `r`, o filho direito `d` sobe e a antiga subárvore
-  esquerda de `d` vira a direita de `r`. Custa O(1) (CORMEN et al., 2024,
-  cap. 13).
-- **Rotação dupla**: para o "zigue-zague". A primeira rotação, no filho,
-  endireita; a segunda, no nó, equilibra. Cada inserção faz no máximo uma
-  rotação, simples ou dupla (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-- **Outras árvores equilibradas**: a **rubro-negra** (0177) e a **árvore B**
-  (0146) também garantem O(log n) (CORMEN et al., 2024, caps. 13 e 18).
+A lanchonete numera os pedidos 10, 20, 30, 40 e assim por diante, sempre em
+ordem crescente. Numa BST comum (0099), cada pedido vira filho direito do
+anterior, e a árvore se degenera numa lista de altura n - 1. Com mil pedidos,
+achar o último custa mil comparações, e a promessa de O(log n) vai embora. O
+problema não está na busca, mas na forma da árvore, que depende da ordem de
+chegada. Falta uma BST que não deixe a forma piorar.
+
+A saída é uma BST que se **conserta sozinha** a cada inserção: a **árvore
+AVL**, cujo nome vem das iniciais de seus criadores, Adelson-Velsky e Landis.
+A regra é que, em **todo** nó, as alturas das duas subárvores diferem de no
+máximo 1 (ADELSON-VELSKY; LANDIS, 1962). Pense numa balança de dois pratos
+em cada nó: um lado pode pesar um pouco mais que o outro, nunca dois níveis a
+mais.
+
+Para vigiar a regra, cada nó guarda a própria altura e calcula o **fator de
+balanceamento**, `fb = altura(esq) - altura(dir)`. Numa AVL, todo nó tem
+fator -1, 0 ou 1. Fator 2 quer dizer "pesado à esquerda", e -2, "pesado à
+direita". Há livros que fazem a conta ao contrário, direita menos esquerda; o
+sinal troca, a regra não (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
+
+A recompensa é uma altura garantida. Uma AVL com n chaves nunca passa de
+cerca de 1,44 · log₂ n de altura (TENENBAUM; LANGSAM; AUGENSTEIN, 1995,
+cap. 7). Os mil pedidos da lanchonete cabem numa árvore de altura 9, e não
+999, e buscar, inserir e remover voltam a custar O(log n).
+
+A inserção começa igual à da BST: desce e pendura uma folha. A novidade vem na
+**volta** da recursão. Cada ancestral do nó novo, do pai até a raiz, atualiza
+a própria altura e confere o fator (CORMEN et al., 2024). Se algum achar 2 ou
+-2, ele se conserta ali mesmo, antes de devolver o controle ao pai.
+
+O conserto é a **rotação**: um filho sobe, o pai desce, e a ordem da BST
+continua valendo. Na rotação à esquerda no nó `r`, o filho direito `d` sobe
+para o lugar de `r`, e `r` vira filho esquerdo de `d`. A antiga subárvore
+esquerda de `d` precisa de um novo lugar e vira a subárvore direita de `r`;
+ela cabe ali porque suas chaves são maiores que `r` e menores que `d`. O
+percurso em ordem não muda, só a forma. A rotação mexe em poucos ponteiros e
+custa O(1) (CORMEN et al., 2024, cap. 13). A rotação à direita é o espelho.
+
+Qual rotação usar depende de onde está o peso. Se o nó pesa à direita e o
+filho direito também, o caso é **direita-direita**, e uma rotação à esquerda
+no nó resolve. Se o nó pesa à direita mas o filho direito pesa à esquerda, o
+caminho faz um "zigue-zague", e a rotação simples só espelharia o problema.
+Esse caso pede a **rotação dupla**: a primeira rotação, no filho, endireita o
+caminho; a segunda, no nó, equilibra. Cada inserção faz no máximo uma
+rotação, simples ou dupla (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7). A
+tabela resume os quatro casos:
 
 | Caso | Fator do nó | Fator do filho pesado | Conserto |
 | --- | --- | --- | --- |
@@ -1545,6 +1702,10 @@ gcc ~/LPEDC/material/E599.c ~/LPEDC/material/0100-bst.c -o ~/LPEDC/material/E599
 | direita-direita | -2 | -1 ou 0 (direito) | rotação à esquerda no nó |
 | esquerda-direita | +2 | -1 (esquerdo) | à esquerda no filho, depois à direita no nó |
 | direita-esquerda | -2 | +1 (direito) | à direita no filho, depois à esquerda no nó |
+
+A AVL não é a única árvore que se equilibra. A **árvore rubro-negra** (0177)
+e a **árvore B** (0146) também garantem O(log n), com regras diferentes
+(CORMEN et al., 2024, caps. 13 e 18).
 
 > [!WARNING]
 > No zigue-zague, a rotação simples **não conserta**: só espelha o problema.
@@ -1870,25 +2031,44 @@ gcc ~/LPEDC/material/E606.c ~/LPEDC/material/0101-avl.c -o ~/LPEDC/material/E606
 
 ### Conceito
 
-- **Fila de prioridade**: cada item entra com uma prioridade e sai primeiro o
-  de **maior** prioridade (CORMEN et al., 2024, cap. 6).
-- **Heap de máximo**: árvore binária com duas regras. **Forma**: completa,
-  todos os níveis cheios menos talvez o último, que enche da esquerda para a
-  direita. **Ordem**: todo pai é maior ou igual aos filhos, e o máximo fica na
-  raiz (CORMEN et al., 2024, cap. 6).
-- **Regra mais fraca que a da BST**: esquerda e direita não se comparam. O
-  heap só responde "quem é o maior?" (TENENBAUM; LANGSAM; AUGENSTEIN, 1995,
-  cap. 6).
-- **Heap em vetor**: a forma completa deixa guardar a árvore nível por nível,
-  sem buracos e sem ponteiros (FEOFILOFF, 2009).
-- **Inserir**: o novo entra no fim e **sobe**, trocando com o pai enquanto for
-  maior. **Remover o máximo**: o último vai para a raiz e **desce**, trocando
-  com o **maior** filho. As duas custam até a altura, ⌊log₂ n⌋; no Cormen a
-  descida é a `MAX-HEAPIFY` (CORMEN et al., 2024, cap. 6).
-- **Heap de mínimo**: as comparações invertidas; o menor fica na raiz
-  (FEOFILOFF, 2009).
-- **Dois heaps diferentes**: este heap (estrutura de dados) não tem relação
-  com o heap do `malloc` (assunto 0053) (FEOFILOFF, 2009).
+No pronto-socorro, o próximo atendido é o **mais grave** de quem espera, e não
+o primeiro a chegar. A fila do 0085 não serve, porque atende por ordem de
+chegada. O que o pronto-socorro precisa é de uma estrutura em que cada item
+entra com uma prioridade e sai sempre o de **maior** prioridade. Essa
+estrutura é a **fila de prioridade** (CORMEN et al., 2024, cap. 6).
+
+As estruturas que você já conhece fazem metade do serviço. Num vetor solto,
+inserir é O(1), basta pôr no fim, mas achar o máximo exige olhar todos, O(n).
+Num vetor ordenado, tirar o máximo é O(1), mas inserir exige abrir espaço no
+lugar certo, O(n). Uma BST faz as duas em O(log n) só se estiver equilibrada,
+e para isso precisa da AVL do 0101, com ponteiros e rotações.
+
+| Onde guardar | Inserir | Tirar o máximo |
+| --- | --- | --- |
+| vetor solto | O(1) | O(n) |
+| vetor ordenado | O(n) | O(1) |
+| heap | O(log n) | O(log n) |
+
+O **heap de máximo** faz as duas em O(log n), sempre, e sem um único
+ponteiro. Ele é uma árvore binária com duas regras (CORMEN et al., 2024,
+cap. 6). A regra de **forma** diz que a árvore é **completa**: todos os
+níveis estão cheios, menos talvez o último, que se enche da esquerda para a
+direita, sem pular vaga. A regra de **ordem** diz que todo pai é **maior ou
+igual** aos seus filhos. Seguindo a regra de pai em pai, o máximo de todos
+fica na raiz.
+
+Compare com a regra da BST. Na BST, a esquerda é menor e a direita é maior;
+no heap, esquerda e direita não se comparam, e o 30 pode estar à esquerda do
+70 ou à direita dele. A regra é mais fraca, e por isso mais barata de manter,
+mas o heap só responde uma pergunta: "quem é o maior?" (TENENBAUM; LANGSAM;
+AUGENSTEIN, 1995, cap. 6). Ele não serve para buscar uma chave qualquer.
+
+A regra de forma é o que dispensa os ponteiros. Como a árvore completa não
+tem buracos, você pode guardá-la num **vetor**, nível por nível, da esquerda
+para a direita (FEOFILOFF, 2009). A raiz fica em `v[0]`, os dois nós do nível
+1 em `v[1]` e `v[2]`, os quatro do nível 2 de `v[3]` a `v[6]`, e assim por
+diante. Os parentescos viram contas com o índice. O Cormen numera o vetor a
+partir de 1, e as contas mudam:
 
 | Quem | Índice com `v[0]` na raiz | No Cormen (`A[1..n]`) |
 | --- | --- | --- |
@@ -1896,11 +2076,20 @@ gcc ~/LPEDC/material/E606.c ~/LPEDC/material/0101-avl.c -o ~/LPEDC/material/E606
 | filho esquerdo | `2 * i + 1` | `2i` |
 | filho direito | `2 * i + 2` | `2i + 1` |
 
-| Onde guardar | Inserir | Tirar o máximo |
-| --- | --- | --- |
-| vetor solto | O(1) | O(n) |
-| vetor ordenado | O(n) | O(1) |
-| heap | O(log n) | O(log n) |
+As duas operações quebram uma regra por um instante e consertam por um único
+caminho. Para **inserir**, o item novo entra no fim do vetor, o que mantém a
+forma, e **sobe**: troca de lugar com o pai enquanto for maior que ele. Para
+**remover o máximo**, a raiz sai, o último elemento do vetor vai para o lugar
+dela e **desce**: troca com o **maior** dos dois filhos enquanto for menor que
+algum deles. Cada operação anda no máximo a altura da árvore, ⌊log₂ n⌋
+trocas, e daí o O(log n). No Cormen, a descida se chama `MAX-HEAPIFY`
+(CORMEN et al., 2024, cap. 6).
+
+Invertendo as comparações, você tem o **heap de mínimo**, com o menor na
+raiz, útil quando a prioridade é "quem tem o menor valor", como o pedido com
+o menor prazo (FEOFILOFF, 2009). Um cuidado com o nome: este heap, a
+estrutura de dados, não tem nada a ver com o heap do `malloc`, a região de
+memória do assunto 0053. São dois usos da mesma palavra.
 
 > [!WARNING]
 > Na descida, troque com o **maior** dos filhos; trocar com o menor quebra o
@@ -2214,21 +2403,52 @@ gcc ~/LPEDC/material/E611.c ~/LPEDC/material/0102-heap.c -o ~/LPEDC/material/E61
 
 ### Conceito
 
-- **Heapsort**: ordena tirando o máximo do heap n vezes. Tudo no **mesmo
-  vetor**: o heap encolhe uma casa a cada máximo, e essa casa livre no fim é o
-  lugar final dele (CORMEN et al., 2024, cap. 6).
-- **Fase 1, construir o heap**: cada **pai** desce, do último (`n / 2 - 1`)
-  até a raiz. As folhas já são heaps, e a fase custa só O(n). É a
-  `BUILD-MAX-HEAP` do Cormen (CORMEN et al., 2024, cap. 6).
-- **Fase 2, ordenar**: troca a raiz com o último do heap, encolhe o heap e faz
-  a nova raiz descer. O vetor fica com o heap no começo e a parte ordenada no
-  fim (FEOFILOFF, 2009).
-- **Custo**: n - 1 descidas de no máximo log₂ n níveis, O(n log n)
-  **sempre**. O quick sort (0095) pode cair em O(n²) e o merge sort (0094)
-  precisa de vetor extra (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
-- **In-place e não estável**: usa O(1) de memória, sem recursão, mas pode
-  trocar a ordem de chaves iguais. Na prática o quick sort costuma ser mais
-  rápido (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
+Os tempos da corrida de rua, em minutos, chegaram nesta ordem: 52, 18, 73,
+40, 91, 25 e 66. Você quer o ranking em ordem crescente, no próprio vetor,
+sem alocar outro, e com O(n log n) garantido. O merge sort (0094) garante o
+tempo, mas pede um rascunho; o quick sort (0095) dispensa o rascunho, mas
+pode cair em O(n²). O heap do 0102 resolve as duas exigências de uma vez.
+
+A ideia parte de uma observação. O heap entrega o maior elemento em
+O(log n). Se você tirar os n elementos um a um, eles saem do maior para o
+menor, já em ordem. Esse é o **heapsort**: ordenar tirando o máximo
+do heap n vezes (CORMEN et al., 2024, cap. 6). O truque que dispensa o
+segundo vetor é este: a cada máximo que sai, o heap encolhe uma casa, e a
+casa que ficou livre no fim do vetor é exatamente a posição final daquele
+máximo. O heap e a parte ordenada dividem o mesmo vetor.
+
+O método tem duas fases. A **fase 1 constrói o heap** dentro do vetor
+bagunçado. Inserir um elemento por vez funcionaria, mas há um jeito mais
+barato: fazer cada **pai** descer, como na remoção do 0102, começando pelo
+último pai, no índice `n / 2 - 1`, e voltando até a raiz. As folhas, que são
+a metade final do vetor, já são heaps de um elemento só e não precisam de
+nada. Como a maioria dos nós está nos níveis de baixo e desce pouco, a fase
+inteira custa só O(n). No Cormen ela se chama `BUILD-MAX-HEAP` (CORMEN et
+al., 2024, cap. 6). Nos tempos da corrida, os pais são os índices 2, 1 e 0, e
+o vetor vira o heap `[91 52 73 40 18 25 66]`.
+
+A **fase 2 ordena**. Você troca a raiz, que é o máximo, com o último elemento
+do heap; o máximo cai no lugar definitivo. Depois encolhe o heap em uma casa,
+para que ele deixe de enxergar esse máximo, e faz a nova raiz descer para
+consertar a ordem. Repete até restar um elemento. Durante essa fase, o vetor
+tem o **heap** no começo e a parte **ordenada** no fim, e a fronteira anda
+uma casa para a esquerda a cada volta (FEOFILOFF, 2009). Na primeira volta,
+o 91 troca com o 66 e fica no fim; o 66 desce pelo maior filho, o 73.
+
+O custo sai das duas fases. A fase 1 é O(n). A fase 2 faz n - 1 descidas, e
+cada uma desce no máximo log₂ n níveis. O total é **O(n log n)** em
+**todos** os casos, porque nenhuma entrada força o heap a ficar mais alto
+(TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6). É a garantia do merge sort
+sem o rascunho do merge sort.
+
+Duas propriedades completam o retrato. O heapsort é **in-place**: usa O(1)
+de memória extra e nem precisa de recursão, porque a descida é um laço. E
+não é **estável** (o termo está no 0092): as trocas entre a raiz e o fim do
+vetor atravessam longas distâncias e podem inverter chaves iguais. Mesmo com
+a garantia, na prática o quick sort costuma ser mais rápido, porque acessa
+posições vizinhas da memória e aproveita melhor o cache do processador,
+enquanto o heapsort salta de `i` para `2 * i + 1` (TENENBAUM; LANGSAM;
+AUGENSTEIN, 1995, cap. 6).
 
 > [!WARNING]
 > Na fase 2, o `desce` recebe o tamanho **do heap** (`fim`), não o do vetor
@@ -2565,20 +2785,48 @@ Zeca
 
 ### Conceito
 
-- **Cada estrutura no seu papel**: achar, inserir e remover pela chave é
-  trabalho de **BST**, O(altura). "Os maiores" por outro critério é trabalho
-  de **heap** (CORMEN et al., 2024, caps. 6 e 12).
-- **Registro no nó**: o nó guarda uma struct inteira. Uma parte é a
-  **chave**, que ordena a árvore; o resto vai junto
-  (KERNIGHAN; RITCHIE, 1989, seção 6.5).
-- **Ponteiro para dentro da árvore**: a busca pode devolver o endereço do
-  registro. Quem chama muda os campos comuns, mas nunca a chave, que quebraria
-  a regra da BST (CELES; RANGEL, 2002).
-- **Os k maiores**: copie para um vetor, monte o heap em O(n) e tire o máximo
-  k vezes. É a fase 2 do heapsort interrompida; não precisa ordenar tudo
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
-- **Structs grandes**: o heap pode guardar **ponteiros** (`Aluno *v[]`) e
-  trocar só os ponteiros (exercício E618) (CELES; CERQUEIRA; RANGEL, 2016).
+A academia quer largar a planilha. O sistema novo precisa achar um aluno pela
+matrícula, cadastrar, cancelar e mostrar, no fim do mês, o pódio de quem mais
+treinou. São dois pedidos de natureza diferente: três operações que olham a
+matrícula e uma que olha os treinos. Este assunto mostra como as estruturas
+do módulo dividem esse trabalho, cada uma no papel em que é boa.
+
+Achar, cadastrar e cancelar pela matrícula é trabalho de **BST** (0099 e
+0100): as três operações descem um caminho e custam O(altura). O pódio pede
+"os maiores" por outro critério, os treinos, e a BST não ajuda, porque está
+ordenada pela matrícula. Para "quem é o maior?" existe o **heap** do 0102
+(CORMEN et al., 2024, caps. 6 e 12). Nenhuma das duas faz bem o serviço da
+outra, e o sistema usa as duas.
+
+Até aqui, cada nó guardava um `int`. Agora o nó guarda um **registro**, uma
+`struct` com matrícula, nome e treinos. Uma parte do registro é a **chave**,
+o campo que decide a posição na árvore; aqui, a matrícula. O resto viaja
+junto, sem influenciar nada (KERNIGHAN; RITCHIE, 1989, seção 6.5). As funções
+são as mesmas da BST, só que comparam `r->a.matricula` onde antes
+comparavam `r->chave`. Na remoção com dois filhos, a cópia do sucessor passa
+a copiar a `struct` inteira, e não só a chave.
+
+A busca pode devolver um ponteiro para o registro que está **dentro** da
+árvore. Com ele, quem chama soma um treino ao aluno sem remover e reinserir
+nada. O cuidado é o que se pode mudar por esse ponteiro: os campos comuns,
+como os treinos, sim; a chave, nunca. Mudar a matrícula deixaria o nó num
+lugar que a regra da BST não permite, e as buscas seguintes passariam a
+errar (CELES; RANGEL, 2002).
+
+Para o pódio, a árvore não pode ser reordenada pelos treinos sem deixar de
+ser uma BST de matrículas. A saída é **copiar**: um percurso em ordem joga os
+alunos num vetor, e sobre esse vetor você monta um heap de máximo **pelos
+treinos**, com a fase 1 do heapsort (0103), em O(n). Depois tira o máximo
+três vezes. É a fase 2 do heapsort interrompida no terceiro passo. Para achar
+os k maiores, você não precisa ordenar o vetor inteiro: o custo é O(n) da
+construção mais k descidas de O(log n) (TENENBAUM; LANGSAM; AUGENSTEIN, 1995,
+cap. 6).
+
+Se cada registro fosse grande, com endereço, histórico e foto, cada troca do
+heap copiaria a `struct` inteira. Nesse caso, o heap guarda **ponteiros**
+para os registros, um vetor `Aluno *v[]`, e as trocas movem só os ponteiros,
+de 8 bytes cada (CELES; CERQUEIRA; RANGEL, 2016). O exercício E618 pede essa
+versão.
 
 > [!WARNING]
 > O ponteiro de `cad_busca` aponta para dentro de um nó e vale só até a próxima

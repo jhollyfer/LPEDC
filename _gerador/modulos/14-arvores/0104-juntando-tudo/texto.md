@@ -1,19 +1,47 @@
 ## 0104 · Juntando tudo
 
-- **Cada estrutura no seu papel**: achar, inserir e remover pela chave é
-  trabalho de **BST**, O(altura). "Os maiores" por outro critério é trabalho
-  de **heap** (CORMEN et al., 2024, caps. 6 e 12).
-- **Registro no nó**: o nó guarda uma struct inteira. Uma parte é a
-  **chave**, que ordena a árvore; o resto vai junto
-  (KERNIGHAN; RITCHIE, 1989, seção 6.5).
-- **Ponteiro para dentro da árvore**: a busca pode devolver o endereço do
-  registro. Quem chama muda os campos comuns, mas nunca a chave, que quebraria
-  a regra da BST (CELES; RANGEL, 2002).
-- **Os k maiores**: copie para um vetor, monte o heap em O(n) e tire o máximo
-  k vezes. É a fase 2 do heapsort interrompida; não precisa ordenar tudo
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
-- **Structs grandes**: o heap pode guardar **ponteiros** (`Aluno *v[]`) e
-  trocar só os ponteiros (exercício E618) (CELES; CERQUEIRA; RANGEL, 2016).
+A academia quer largar a planilha. O sistema novo precisa achar um aluno pela
+matrícula, cadastrar, cancelar e mostrar, no fim do mês, o pódio de quem mais
+treinou. São dois pedidos de natureza diferente: três operações que olham a
+matrícula e uma que olha os treinos. Este assunto mostra como as estruturas
+do módulo dividem esse trabalho, cada uma no papel em que é boa.
+
+Achar, cadastrar e cancelar pela matrícula é trabalho de **BST** (0099 e
+0100): as três operações descem um caminho e custam O(altura). O pódio pede
+"os maiores" por outro critério, os treinos, e a BST não ajuda, porque está
+ordenada pela matrícula. Para "quem é o maior?" existe o **heap** do 0102
+(CORMEN et al., 2024, caps. 6 e 12). Nenhuma das duas faz bem o serviço da
+outra, e o sistema usa as duas.
+
+Até aqui, cada nó guardava um `int`. Agora o nó guarda um **registro**, uma
+`struct` com matrícula, nome e treinos. Uma parte do registro é a **chave**,
+o campo que decide a posição na árvore; aqui, a matrícula. O resto viaja
+junto, sem influenciar nada (KERNIGHAN; RITCHIE, 1989, seção 6.5). As funções
+são as mesmas da BST, só que comparam `r->a.matricula` onde antes
+comparavam `r->chave`. Na remoção com dois filhos, a cópia do sucessor passa
+a copiar a `struct` inteira, e não só a chave.
+
+A busca pode devolver um ponteiro para o registro que está **dentro** da
+árvore. Com ele, quem chama soma um treino ao aluno sem remover e reinserir
+nada. O cuidado é o que se pode mudar por esse ponteiro: os campos comuns,
+como os treinos, sim; a chave, nunca. Mudar a matrícula deixaria o nó num
+lugar que a regra da BST não permite, e as buscas seguintes passariam a
+errar (CELES; RANGEL, 2002).
+
+Para o pódio, a árvore não pode ser reordenada pelos treinos sem deixar de
+ser uma BST de matrículas. A saída é **copiar**: um percurso em ordem joga os
+alunos num vetor, e sobre esse vetor você monta um heap de máximo **pelos
+treinos**, com a fase 1 do heapsort (0103), em O(n). Depois tira o máximo
+três vezes. É a fase 2 do heapsort interrompida no terceiro passo. Para achar
+os k maiores, você não precisa ordenar o vetor inteiro: o custo é O(n) da
+construção mais k descidas de O(log n) (TENENBAUM; LANGSAM; AUGENSTEIN, 1995,
+cap. 6).
+
+Se cada registro fosse grande, com endereço, histórico e foto, cada troca do
+heap copiaria a `struct` inteira. Nesse caso, o heap guarda **ponteiros**
+para os registros, um vetor `Aluno *v[]`, e as trocas movem só os ponteiros,
+de 8 bytes cada (CELES; CERQUEIRA; RANGEL, 2016). O exercício E618 pede essa
+versão.
 
 > [!WARNING]
 > O ponteiro de `cad_busca` aponta para dentro de um nó e vale só até a próxima

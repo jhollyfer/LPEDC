@@ -1,18 +1,27 @@
 ## 0097 · Árvores
 
-- **Árvore**: estrutura em que cada elemento tem um só "de cima" e pode ter
-  vários "de baixo". Serve para pastas, organogramas e sumários
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 5).
-- **Definição recursiva**: uma árvore é um nó, a **raiz**, com zero ou mais
-  árvores penduradas embaixo. Por isso quase toda função de árvore resolve
-  cada filho e junta as respostas (FEOFILOFF, 2009).
-- **Profundidade** (ou **nível**): quantas arestas separam o nó da raiz. A
-  raiz tem profundidade 0 (CELES; RANGEL, 2002).
-- **Altura**: o caminho mais longo, em arestas, do nó até uma folha. A altura
-  da árvore é a da raiz; folha tem altura 0 e árvore vazia, -1
-  (FEOFILOFF, 2009).
-- **Liberar**: cada nó vem de um `malloc`, como na lista encadeada; o `free`
-  vem depois dos filhos (CELES; RANGEL, 2002).
+No gerenciador de arquivos, a pasta `casa` tem `fotos`, `contas` e `musica`.
+`fotos` tem `praia` e `natal`. `contas` tem `agua` e `luz`, e `luz` tem a
+pasta `2025`. Tente guardar isso numa lista, numa pilha ou numa fila e você
+esbarra no mesmo problema: todas elas põem um elemento depois do outro, numa
+linha. Uma pasta tem **várias** subpastas, e cada subpasta pode ter as suas.
+Falta uma estrutura que se ramifique.
+
+Essa forma de "um em cima, vários embaixo" é a **árvore**: uma estrutura em
+que cada elemento tem um único elemento acima dele, exceto o primeiro, e pode
+ter vários abaixo (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 5). O
+organograma de uma empresa e o sumário de um livro têm essa forma. Na
+computação, a árvore se desenha de cabeça para baixo: a origem fica no alto e
+os galhos descem.
+
+O vocabulário vem dessa imagem e da árvore genealógica. Cada elemento é um
+**nó**, e a ligação entre dois nós é uma **aresta**. O nó do topo, o único sem
+ninguém acima, é a **raiz**; nas pastas, é `casa`. Um nó é **pai** dos nós
+ligados logo abaixo dele, que são seus **filhos**, e filhos do mesmo pai são
+**irmãos**. Um nó sem filhos é uma **folha**. Um nó junto com tudo que está
+abaixo dele forma uma **subárvore**. O **grau** de um nó é quantos filhos ele
+tem, e o grau da árvore é o maior grau entre os nós. A tabela aplica cada
+termo às pastas:
 
 | Termo | O que é | Nas pastas |
 | --- | --- | --- |
@@ -23,6 +32,29 @@
 | **folha** | nó sem filhos | `praia`, `natal`, `agua`, `2025`, `musica` |
 | **subárvore** | um nó com tudo que está embaixo dele | `contas` com `agua`, `luz` e `2025` |
 | **grau** | quantos filhos o nó tem; o da árvore é o maior deles | `casa` tem grau 3 |
+
+Duas medidas dizem onde um nó está. A **profundidade**, também chamada de
+**nível**, é o número de arestas entre o nó e a raiz: `casa` tem profundidade
+0, `contas` tem 1 e `luz` tem 2 (CELES; RANGEL, 2002). A **altura** olha para
+baixo: é o número de arestas do caminho mais longo entre o nó e uma folha. A
+altura da árvore é a altura da raiz. Nesta convenção, que conta arestas, a
+folha tem altura 0 e a árvore vazia tem altura -1 (FEOFILOFF, 2009). A árvore
+das pastas tem altura 3, pelo caminho `casa`, `contas`, `luz`, `2025`.
+
+A definição que mais ajuda a programar é **recursiva**: uma árvore é um nó, a
+raiz, com zero ou mais árvores penduradas embaixo dele (FEOFILOFF, 2009). Cada
+filho da raiz é, ele mesmo, a raiz de uma árvore menor. Por isso quase toda
+função de árvore é recursiva e segue o mesmo molde: resolve o problema em cada
+filho e combina as respostas. Para contar folhas, você soma as folhas dos
+filhos, e um nó sem filhos conta 1. Para a altura, você pega a maior altura
+entre os filhos e soma 1.
+
+Em C, cada nó vem de um `malloc`, como na lista encadeada do módulo 11, e por
+isso precisa de um `free` no fim. A ordem importa: o nó só pode ser liberado
+**depois** dos filhos, porque é ele que guarda os endereços deles (CELES;
+RANGEL, 2002). Para guardar um número qualquer de filhos com só dois
+ponteiros por nó, há a representação **primeiro filho, próximo irmão**: cada
+nó aponta para o filho mais à esquerda e para o irmão seguinte.
 
 > [!WARNING]
 > Aqui a altura conta **arestas**. Há livros que contam nós, e a mesma árvore
