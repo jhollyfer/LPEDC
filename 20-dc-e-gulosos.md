@@ -68,22 +68,57 @@ errada.
 
 ### Conceito
 
-- **Divisão e conquista** (*divide and conquer*): resolve o problema
-  quebrando-o em pedaços menores do mesmo tipo (CORMEN et al., 2024, cap. 4).
-- **Três passos**: **dividir** em pedaços menores; **conquistar** cada pedaço
-  com a própria função (recursão, assunto 0032); **combinar** as respostas
-  (CORMEN et al., 2024, cap. 4).
-- **Caso base**: o pedaço pequeno o bastante para resolver direto
-  (ZIVIANI, 2010, cap. 2).
-- **Onde fica o esforço**: o merge sort (0094) gasta na combinação; o quick
-  sort (0095), na divisão, e não combina; a busca binária (0090) descarta uma
-  metade (FEOFILOFF, 2009).
-- **Potência rápida**: xⁿ = (x^(n/2))², com mais um `x` se `n` é ímpar. O
-  caso base é `n == 0`, pois x⁰ = 1 (LINTZMAYER; MOTA, 2023).
-- **Custo**: T(n) = T(n/2) + O(1), que dá **O(log n)** pelo teorema mestre
-  (assunto 0115). Para n = 1 milhão, uns 20 níveis (CORMEN et al., 2024, cap. 4).
-- **Pedaços repetidos**: divisão e conquista só compensa quando os pedaços
-  **não se repetem** (ZIVIANI, 2010, cap. 2).
+Uma corrente no grupo da família: quem recebe a mensagem repassa para 3
+contatos. Quantas mensagens saem na rodada 20? A conta é 3²⁰, e o jeito
+óbvio é um laço que multiplica por 3 vinte vezes. Funciona, mas o número de
+multiplicações cresce junto com o expoente. Para um expoente de 1 milhão,
+seria 1 milhão de voltas.
+
+Existe um atalho. 3²⁰ é 3¹⁰ vezes 3¹⁰: quem já sabe 3¹⁰ chega a 3²⁰ com uma
+única multiplicação. E 3¹⁰ é 3⁵ vezes 3⁵. E 3⁵ é 3² vezes 3² vezes 3, porque
+o expoente ímpar deixa sobrar um 3. A cada passo, o problema vira outro do
+mesmo tipo com metade do tamanho. É como dividir a arrumação de uma casa:
+cada cômodo é uma arrumação menor, e no fim a casa está arrumada porque cada
+cômodo está.
+
+Essa estratégia tem nome. A **divisão e conquista** (*divide and conquer*)
+resolve um problema quebrando-o em pedaços menores do mesmo tipo, resolvendo
+cada pedaço e juntando as respostas (CORMEN et al., 2024, cap. 4). Ela
+trabalha em três passos. **Dividir** quebra o problema em pedaços menores.
+**Conquistar** resolve cada pedaço chamando a própria função, ou seja, por
+recursão (assunto 0032). **Combinar** junta as respostas dos pedaços na
+resposta do todo (CORMEN et al., 2024, cap. 4).
+
+A recursão precisa parar em algum lugar. O pedaço pequeno o bastante para
+ser resolvido direto, sem dividir de novo, é o **caso base** (ZIVIANI, 2010,
+cap. 2). Na potência, o caso base é `n == 0`, porque qualquer x⁰ vale 1.
+Sem ele, a função cortaria o expoente para sempre e a pilha estouraria.
+
+Na potência rápida, dividir é cortar o expoente ao meio e combinar é elevar
+o resultado ao quadrado. Se o expoente é ímpar, a divisão inteira perde uma
+unidade, e a combinação multiplica mais um `x` para compensar: xⁿ =
+(x^(n/2))², com um `x` a mais quando `n` é ímpar (LINTZMAYER; MOTA, 2023).
+Com `n = 5`, a chamada calcula x², eleva ao quadrado (x⁴) e multiplica por
+`x` (x⁵).
+
+Você já viu essa estratégia em outros lugares, só que com o esforço em
+pontos diferentes. O merge sort (0094) divide sem esforço, ao meio, e gasta
+o trabalho na combinação, a intercalação. O quick sort (0095) gasta o
+trabalho na divisão, a partição, e não precisa combinar nada. A busca
+binária (0090) divide e simplesmente descarta uma das metades (FEOFILOFF,
+2009). Ao estudar um algoritmo desse tipo, pergunte onde está o trabalho.
+
+O custo sai de uma recorrência. Cada chamada da potência faz uma chamada
+com metade do expoente e mais um trabalho constante: T(n) = T(n/2) + O(1).
+Pelo teorema mestre (assunto 0115), isso dá **O(log n)**. Para n = 1 milhão,
+são uns 20 níveis de recursão contra 1 milhão de voltas do laço (CORMEN et
+al., 2024, cap. 4).
+
+Há uma condição para a estratégia compensar: os pedaços **não podem se
+repetir**. Se dois pedaços diferentes pedem a mesma sub-resposta, a
+recursão a calcula de novo a cada vez, e o tempo explode (ZIVIANI, 2010,
+cap. 2). Quando os pedaços se repetem, a ferramenta certa é a programação
+dinâmica, do módulo 21.
 
 > [!WARNING]
 > `return potencia(x, n / 2) * potencia(x, n / 2);` dá o resultado certo, mas
@@ -360,23 +395,54 @@ F(90) = 2880067194370816120 (11 produtos de matriz)
 
 ### Conceito
 
-- **Inversão**: par de posições `i < j` com `v[i] > v[j]`. O vetor ordenado
-  tem zero; o vetor ao contrário tem `n(n - 1)/2`
-  (CORMEN et al., 2024).
-- **Contar por divisão e conquista**: toda inversão está inteira na metade
-  esquerda, inteira na direita ou **cruza** o meio. A recursão conta as duas
-  primeiras (KLEINBERG; TARDOS, 2006, cap. 5).
-- **Contar na intercalação**: com as metades ordenadas, quando um elemento da
-  direita sai antes, ele forma inversão com todos os `q - i` que sobram na
-  esquerda (KLEINBERG; TARDOS, 2006, cap. 5).
-- **Custo**: é o merge sort com um contador, **O(n log n)**, contra O(n²) de
-  testar todos os pares (KLEINBERG; TARDOS, 2006, cap. 5).
-- **Subvetor de soma máxima**: a faixa de posições **seguidas** com a maior
-  soma. Está na esquerda, na direita ou cruzando o meio; o caso que cruza é o
-  melhor final da esquerda mais o melhor começo da direita, um laço O(n), e o
-  total fica O(n log n) (CORMEN et al., 2012, seção 4.1).
-- **Contador largo**: 100 000 elementos ao contrário dão 4 999 950 000
-  inversões. Use `long long` (KERNIGHAN; RITCHIE, 1989).
+Você e o Caio montaram o top 8 de séries do ano. Os gostos batem? Se você
+põe "Sintonia" antes de "Cidade Invisível" e o Caio faz o contrário, esse
+par de séries está em desacordo. Medir o quanto dois rankings discordam
+serve para recomendação de filmes, comparação de buscadores e votação.
+
+Para transformar a pergunta em conta, escreva as suas séries em ordem e,
+embaixo de cada uma, a posição que ela tem no ranking do Caio. Se ele
+concordasse com tudo, o vetor sairia `1 2 3 4 5 6 7 8`. Cada par fora de
+ordem nesse vetor é uma **inversão**: um par de posições `i < j` com
+`v[i] > v[j]` (CORMEN et al., 2024). O vetor ordenado tem zero inversões. O
+vetor ao contrário tem todas: cada um dos `n(n - 1)/2` pares está invertido.
+
+O jeito direto é testar todos os pares com dois laços, o que custa O(n²).
+A divisão e conquista (0131) faz melhor. Divida o vetor ao meio. Toda
+inversão cai num de três tipos: os dois elementos estão inteiros na metade
+esquerda, os dois estão inteiros na metade direita, ou um está em cada
+metade e a inversão **cruza** o meio. A recursão conta os dois primeiros
+tipos sozinha, porque cada metade é o mesmo problema com metade do tamanho
+(KLEINBERG; TARDOS, 2006, cap. 5).
+
+Falta contar as que cruzam, e aqui entra o truque. Se as duas metades já
+estiverem **ordenadas**, a intercalação do merge sort (0094) conta de
+graça. Na intercalação, `i` anda pela esquerda (que termina antes de `q`) e
+`j` anda pela direita. Quando o menor da vez vem da direita, `v[j]` é menor
+que `v[i]` e, como a esquerda está ordenada, menor também que todos os que
+vêm depois dele. São `q - i` inversões de uma vez (KLEINBERG; TARDOS, 2006,
+cap. 5). Intercalando `1 3 5 7` com `2 4 6 8`, o 2 sai antes de 3, 5 e 7 e
+soma 3; o 4 sai antes de 5 e 7 e soma 2; o 6 sai antes do 7 e soma 1.
+
+Para isso funcionar, a função precisa devolver a contagem **e** deixar o
+pedaço ordenado, pronto para a intercalação do nível de cima. Ela é o merge
+sort com um contador, e o custo é o mesmo: **O(n log n)**, contra O(n²) de
+testar todos os pares (KLEINBERG; TARDOS, 2006, cap. 5). Um efeito colateral:
+contar ordena o vetor. Se precisar da ordem original, conte numa cópia.
+
+O número de inversões cresce rápido. Um vetor de 100 000 elementos ao
+contrário tem 4 999 950 000 inversões, mais do que um `int` de 32 bits
+guarda. O contador tem de ser `long long` (KERNIGHAN; RITCHIE, 1989).
+
+A mesma divisão em três casos resolve outro problema clássico, o
+**subvetor de soma máxima**: a faixa de posições **seguidas** cuja soma é a
+maior possível. Um food truck anotou o lucro de 8 dias, `4 -6 3 5 -2 6 -9 2`,
+e quer saber qual sequência de dias rendeu mais. Divida ao meio. A melhor
+faixa está inteira na esquerda (`3 5`, soma 8), inteira na direita (`6`,
+soma 6) ou cruzando o meio. A que cruza é o melhor final da esquerda (`3 5`,
+8) somado ao melhor começo da direita (`-2 6`, 4): `3 5 -2 6`, soma 12. A
+resposta é o maior dos três, 12. Achar a que cruza é um laço do meio para
+fora, O(n), e o total fica O(n log n) (CORMEN et al., 2012, seção 4.1).
 
 > [!WARNING]
 > A soma é `inv += q - i`, e não `inv++`: o `v[j]` que sai está fora de ordem
@@ -692,23 +758,53 @@ Força bruta: 7
 
 ### Conceito
 
-- **Algoritmo guloso** (*greedy*): a cada passo faz a escolha que parece a
-  **melhor agora** e **nunca volta atrás** (CORMEN et al., 2024, cap. 15).
-- **Diferença**: não desfaz, como o backtracking (0127), nem divide em
-  subproblemas, como a divisão e conquista (0131). O Dijkstra (0112) é guloso
-  (ZIVIANI, 2010, cap. 2).
-- **Propriedade da escolha gulosa**: alguma solução ótima começa pela escolha
-  do guloso (CORMEN et al., 2024, cap. 15).
-- **Subestrutura ótima**: o que sobra depois da escolha é um problema do
-  mesmo tipo (CORMEN et al., 2024, cap. 15).
-- **Prova por troca**: troque um pedaço da solução ótima pela escolha gulosa
-  e mostre que ela não piora. **Um contraexemplo derruba; só uma prova
-  garante** (KLEINBERG; TARDOS, 2006, cap. 4).
-- **Troco guloso**: dá sempre a maior moeda que cabe. Acerta o mínimo nos
-  sistemas **canônicos**, como o Real; com fichas {1, 3, 4}, o troco de 6 sai
-  4 + 1 + 1, e o ótimo é 3 + 3 (KOZEN; ZAKS, 1994).
-- **Quando falha**: a programação dinâmica (módulo 21) resolve o troco de
-  qualquer sistema (CORMEN et al., 2024, cap. 15).
+Na padaria, o pão deu R$ 3,10 e você pagou com uma nota de 5. O caixa
+precisa devolver R$ 1,90 com o menor número de moedas. Ninguém no balcão
+testa todas as combinações. O caixa pega a maior moeda que cabe no que
+falta, depois a maior que cabe no resto, e assim por diante: 100, 50, 25,
+10 e 5 centavos. Cinco moedas, e é o mínimo possível.
+
+Esse jeito de decidir tem nome. Um **algoritmo guloso** (*greedy*) monta a
+solução passo a passo e, a cada passo, faz a escolha que parece a **melhor
+agora**, sem nunca voltar atrás (CORMEN et al., 2024, cap. 15). Ele não
+desfaz escolhas, como o backtracking (0127), e não divide o problema em
+pedaços para resolver cada um, como a divisão e conquista (0131). Você já
+viu um guloso: o Dijkstra (0112) fixa o vértice mais perto da origem e nunca
+mais mexe nele (ZIVIANI, 2010, cap. 2).
+
+Quando funciona, o guloso é curto e barato. O troco é um laço que percorre
+os `k` tipos de moeda do maior para o menor, e o custo é O(k + moedas
+dadas). O problema é que uma escolha boa agora pode estragar o resto, e o
+guloso não percebe, porque nunca olha para trás.
+
+Veja isso num fliperama com fichas de 1, 3 e 4 créditos. O troco de 6
+créditos pelo guloso começa pela maior ficha que cabe, a de 4. Sobram 2,
+que só se pagam com 1 + 1. São três fichas. Mas 3 + 3 resolve com duas. O 4
+parecia a melhor escolha e fechou o caminho bom. O sistema do Real é
+**canônico**: para ele, o guloso sempre acha o mínimo. O sistema {1, 3, 4}
+não é (KOZEN; ZAKS, 1994).
+
+Como saber se o guloso acerta? O Cormen pede duas propriedades. A
+**propriedade da escolha gulosa** diz que existe alguma solução ótima que
+começa pela escolha que o guloso faz. Então escolher assim não fecha a porta
+para o ótimo (CORMEN et al., 2024, cap. 15). A **subestrutura ótima** diz que,
+depois da escolha, o que sobra é um problema do mesmo tipo, menor, e que a
+solução ótima do todo contém uma solução ótima desse resto (CORMEN et al.,
+2024, cap. 15). No troco: depois de dar a moeda de 100, falta dar R$ 0,90 com
+o mínimo de moedas, que é o mesmo problema.
+
+A primeira propriedade costuma sair de uma **prova por troca**. Você pega
+uma solução ótima qualquer, troca um pedaço dela pela escolha gulosa e
+mostra que o resultado não piora (KLEINBERG; TARDOS, 2006, cap. 4). No Real,
+se um troco usasse duas moedas de 25 no lugar de uma de 50, trocar as duas
+pela de 50 diminuiria a contagem. Logo o ótimo nunca evita a moeda maior que
+cabe. Com {1, 3, 4} a troca falha: duas fichas de 3 não viram uma de 4.
+
+A lição vale para todo guloso: **um contraexemplo derruba, e só uma prova
+garante** (KLEINBERG; TARDOS, 2006, cap. 4). Testar meia dúzia de casos que
+dão certo não prova nada. Quando o guloso não serve, a programação dinâmica
+(módulo 21) resolve o troco de qualquer sistema de moedas, a um custo maior
+(CORMEN et al., 2024, cap. 15).
 
 > [!WARNING]
 > O troco guloso **depende da ordem** do vetor: com `{5, 10, 25, 50, 100}`, a
@@ -960,21 +1056,54 @@ Carla -> Fábio: R$ 15.00
 
 ### Conceito
 
-- **Seleção de atividades**: dado um conjunto de intervalos `[início, fim)`,
-  achar o maior subconjunto sem sobreposição (CORMEN et al., 2024, cap. 15).
-- **Critério guloso**: aceitar primeiro quem **termina** mais cedo. Ele
-  devolve o recurso mais cedo e deixa mais espaço para os outros
-  (CORMEN et al., 2024, cap. 15).
-- **Prova por troca**: numa escolha ótima, troque o primeiro intervalo pelo
-  que termina primeiro; ele não choca com os outros e o tamanho se mantém. É o
-  argumento de "ficar à frente" (KLEINBERG; TARDOS, 2006, cap. 4).
-- **`GREEDY-ACTIVITY-SELECTOR`**: ordene pelo fim; guarde `livre_em` (começa
-  em 0); aceite quem começa em `livre_em` ou depois e mova `livre_em` para o
-  fim dele (CORMEN et al., 2024, cap. 15).
-- **Custo**: a ordenação, O(n log n), mais uma passada O(n). Testar todos os
-  subconjuntos seria O(2ⁿ) (CORMEN et al., 2024, cap. 15).
-- **Intervalo semiaberto**: quem sai às 10h libera às 10h, por isso o teste é
-  `ini >= livre_em`, com o igual (CORMEN et al., 2024, cap. 15).
+A quadra do condomínio atende uma reserva por vez, e no sábado chegaram
+nove pedidos, cada um com hora de início e de fim. Alguns horários se
+chocam. O síndico quer aceitar o **maior número possível** de pedidos, sem
+dois na quadra ao mesmo tempo. Quais ele aceita?
+
+Esse é um problema clássico de escalonamento. Na **seleção de atividades**,
+você recebe um conjunto de intervalos `[início, fim)` e quer o maior
+subconjunto deles sem sobreposição (CORMEN et al., 2024, cap. 15). O mesmo
+problema aparece com salas de reunião, com uma máquina que roda uma tarefa
+por vez e com a grade de um canal de TV.
+
+Testar todos os subconjuntos (0125) resolve, mas custa O(2ⁿ): são 512 casos
+para nove pedidos e mais de um bilhão para trinta. Um guloso (0133) ordena
+os pedidos uma vez e decide cada um numa passada. A dúvida é o critério.
+Aceitar primeiro quem começa mais cedo parece justo. Aceitar primeiro o
+pedido mais curto parece econômico. Aceitar primeiro quem termina mais cedo
+parece estranho, e é o único que funciona sempre.
+
+O motivo é simples de ver. O pedido que termina primeiro **devolve a quadra
+mais cedo** e deixa o maior pedaço do dia livre para os outros (CORMEN et
+al., 2024, cap. 15). Quem começa cedo pode ocupar a quadra o dia inteiro. Um
+pedido curto pode cair bem no meio de dois outros que cabiam juntos.
+
+A prova é uma troca, como no troco (0133). Pegue uma escolha ótima qualquer
+e olhe o primeiro pedido dela. Troque-o pelo pedido que termina mais cedo
+de todos. Esse termina antes ou junto, então não choca com nenhum dos
+seguintes, e a escolha continua com o mesmo tamanho. Logo existe uma
+solução ótima que começa pela escolha gulosa. Kleinberg e Tardos chamam esse
+raciocínio de "ficar à frente": a cada passo, o guloso termina no máximo na
+mesma hora que qualquer outra solução (KLEINBERG; TARDOS, 2006, cap. 4).
+
+O algoritmo, que o Cormen chama de `GREEDY-ACTIVITY-SELECTOR`, tem três
+partes. Primeiro, ordene os pedidos pela hora de fim. Depois, guarde numa
+variável `livre_em` a hora em que a quadra fica livre, começando em 0. Por
+fim, percorra os pedidos em ordem: se o pedido começa em `livre_em` ou
+depois, aceite e mova `livre_em` para o fim dele; senão, recuse (CORMEN et
+al., 2024, cap. 15).
+
+O custo é dominado pela ordenação, O(n log n). A passada que decide é O(n),
+porque olha cada pedido uma vez. Comparado com O(2ⁿ) de testar todos os
+subconjuntos, a diferença é enorme já para poucas dezenas de pedidos
+(CORMEN et al., 2024, cap. 15).
+
+Um detalhe na comparação. Os intervalos são **semiabertos**: `[8, 10)`
+inclui as 8h e não inclui as 10h. Quem sai às 10h libera a quadra às 10h, e
+quem entra às 10h pode usá-la. Por isso o teste é `ini >= livre_em`, com o
+igual (CORMEN et al., 2024, cap. 15). Com `>`, a reserva das 10h às 11h
+seria recusada sem motivo.
 
 > [!WARNING]
 > Os outros critérios falham sem erro, só com resposta pior. "Começa primeiro"
@@ -1302,21 +1431,48 @@ Jogos aceitos: 7 de 10
 
 ### Conceito
 
-- **Mochila fracionária**: capacidade `W`, `n` itens com peso e valor, e pode
-  levar qualquer **fração** de cada um, com valor proporcional. Objetivo: o
-  maior valor sem passar de `W` (CORMEN et al., 2024, cap. 15).
-- **Razão**: `valor / peso`, o valor por unidade de espaço. Cada quilo vai
-  para quem paga mais (CORMEN et al., 2024, cap. 15).
-- **Guloso**: ordene pela razão, da maior para a menor; leve cada item
-  **inteiro** enquanto couber; no primeiro que não couber, leve **só a
-  fração** que completa o espaço e pare (ZIVIANI, 2010, cap. 2).
-- **No máximo um item partido**: o último. O custo é a ordenação,
-  O(n log n) (CORMEN et al., 2024, cap. 15).
-- **Prova por troca**: trocar 1 kg de um item caro por 1 kg de um barato
-  perde valor sem ganhar espaço, então a carga ótima segue a razão
-  (KLEINBERG; TARDOS, 2006, cap. 4).
-- **Mochila 0/1**: itens indivisíveis. Ali o guloso pela razão pode errar e a
-  solução é programação dinâmica (módulo 21) (CORMEN et al., 2024, cap. 15).
+Um feirante leva **60 kg** na caminhonete. Ele tem café, castanha, feijão,
+açafrão e arroz a granel, cada um num saco com peso e preço, e pode levar
+**parte** de um saco, porque grão se divide. O que ele põe na caçamba para
+voltar da feira com o máximo de dinheiro?
+
+O problema tem nome. Na **mochila fracionária**, você tem uma mochila de
+capacidade `W` e `n` itens, cada um com peso e valor, e pode levar qualquer
+**fração** de cada item, recebendo o valor proporcional a essa fração. O
+objetivo é o maior valor total sem passar de `W` (CORMEN et al., 2024, cap.
+15). Metade de um saco de 30 kg que vale R$ 270 pesa 15 kg e vale R$ 135.
+
+A intuição é pensar no espaço, não no item. Cada quilo da caçamba é um
+recurso escasso, e ele deve ir para o produto que paga mais por quilo. Essa
+medida é a **razão** `valor / peso`, o valor por unidade de espaço (CORMEN
+et al., 2024, cap. 15). O açafrão pode custar menos por saco que o feijão e,
+mesmo assim, render muito mais por quilo.
+
+Daí sai o guloso (0133). Calcule a razão de cada item e ordene da maior para
+a menor. Percorra nessa ordem e leve cada item **inteiro** enquanto ele
+couber. No primeiro que não couber, leve **só a fração** que completa o
+espaço que sobrou, e pare (ZIVIANI, 2010, cap. 2). No feirante, as razões são
+açafrão R$ 80/kg, castanha R$ 50, café R$ 30, feijão R$ 9 e arroz R$ 5.
+Açafrão, castanha e café cabem inteiros (5 + 15 + 20 = 40 kg). Sobram 20 kg
+e o saco de feijão tem 30: vão dois terços dele. O arroz nem entra.
+
+Repare que **no máximo um item fica partido**, o último. Todos antes dele
+entraram inteiros, e todos depois ficaram de fora. O custo é dominado pela
+ordenação, O(n log n); a passada que enche a caçamba é O(n) (CORMEN et al.,
+2024, cap. 15).
+
+Por que essa ordem é a ótima? A prova é por troca. Suponha uma carga que
+leva 1 kg de feijão (R$ 9/kg) e deixa de fora 1 kg de castanha (R$ 50/kg).
+Trocar um pelo outro mantém o peso e ganha R$ 41. Então uma carga ótima
+nunca deixa de fora um quilo que paga mais enquanto leva um que paga menos,
+e é exatamente isso que a ordem pela razão garante (KLEINBERG; TARDOS, 2006,
+cap. 4).
+
+Tudo isso depende de poder partir. Na **mochila 0/1**, cada item vai inteiro
+ou não vai, como um notebook ou uma televisão. Ali a troca de um quilo por
+outro deixa de ser possível, e o guloso pela razão pode errar. A mochila 0/1
+se resolve com programação dinâmica (módulo 21), a um custo maior (CORMEN et
+al., 2024, cap. 15).
 
 > [!WARNING]
 > Esse guloso só vale na versão **fracionária**. Com capacidade 10 e itens
@@ -1632,24 +1788,60 @@ Itens tirados do heap: 5 de 8
 
 ### Conceito
 
-- **Código de tamanho variável**: curto para o símbolo frequente, comprido
-  para o raro, como no Morse. Gasta menos bits que o código fixo
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, seção 5.3).
-- **Código livre de prefixo**: nenhum código é o começo de outro, e a leitura
-  não tem dúvida. Com A = `0` e N = `01`, `001` seria ambíguo
-  (CORMEN et al., 2024, cap. 15).
-- **Árvore de código**: cada símbolo é uma **folha**; o código é o caminho da
-  raiz até ela, `0` à esquerda e `1` à direita. O total de bits é a soma de
-  `frequência × profundidade` (SZWARCFITER; MARKENZON, 2010).
-- **Algoritmo de Huffman**: ponha uma folha por símbolo num **heap de mínimo**
-  (0102); enquanto houver mais de um nó, tire os dois menores e devolva um pai
-  com a soma; o que sobra é a raiz. Esse guloso acha a melhor árvore
-  (HUFFMAN, 1952).
-- **Custo**: `k - 1` junções com heap O(log k), logo **O(k log k)**; a árvore
-  tem `2k - 1` nós (CORMEN et al., 2024, cap. 15).
-- **Desempate**: frequências iguais permitem árvores diferentes, todas
-  ótimas. Quem decodifica precisa da **mesma** árvore
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, seção 5.3).
+Na placa da barraca está escrito `BANANA NA CABANA`. São 16 caracteres, e
+com 8 bits por caractere a frase ocupa 128 bits. Mas ela usa só **5
+símbolos**: A, N, B, C e o espaço. Com 3 bits cada, já daria para numerar os
+cinco, e a frase cairia para 48 bits. E dá para gastar menos ainda, porque o
+A aparece 7 vezes e o C, uma só.
+
+A ideia é usar um **código de tamanho variável**: o símbolo frequente ganha
+um código curto e o raro ganha um comprido, como no Morse, em que o E é um
+ponto só. No total, a mensagem gasta menos bits que com o código fixo
+(TENENBAUM; LANGSAM; AUGENSTEIN, 1995, seção 5.3). O preço é uma dúvida nova:
+na hora de ler, onde termina um código e começa o seguinte? Se A = `0` e
+N = `01`, a sequência `001` pode ser "A, A, e o começo de outra coisa" ou
+"A, N".
+
+A saída é exigir um **código livre de prefixo**: nenhum código é o começo de
+outro. Assim, quem lê a sequência de bits da esquerda para a direita sabe
+que um código terminou no instante em que ele bate com um da tabela, sem
+precisar olhar adiante (CORMEN et al., 2024, cap. 15). Com A = `0` e N = `10`,
+o `0` só pode ser A, e `10` só pode ser N.
+
+Todo código livre de prefixo cabe numa **árvore binária de código**. Cada
+símbolo é uma **folha**, um nó sem filhos. O código de um símbolo é o
+caminho da raiz até a folha dele: cada passo para a esquerda escreve `0` e
+cada passo para a direita escreve `1`. Como os símbolos só moram nas folhas,
+nenhum caminho passa por outro símbolo, e o prefixo nunca se repete. O
+tamanho do código é a **profundidade** da folha, e o total de bits da
+mensagem é a soma de `frequência × profundidade` de todas as folhas
+(SZWARCFITER; MARKENZON, 2010).
+
+Resta achar a árvore que deixa essa soma mínima. David Huffman mostrou que
+um guloso (0133) acha (HUFFMAN, 1952). Crie uma folha por símbolo, com a
+frequência dele, e ponha todas num **heap de mínimo** (0102), a estrutura
+que entrega sempre o menor elemento. Enquanto houver mais de um nó no heap,
+tire os dois de menor frequência, crie um nó pai com os dois como filhos e
+com a **soma** das frequências, e devolva o pai ao heap. Quando sobrar um nó
+só, ele é a raiz.
+
+A intuição do guloso: os dois símbolos mais raros devem ficar no fundo da
+árvore, com os códigos mais longos, porque pagam pouco por isso. Juntá-los
+primeiro garante que fiquem lá embaixo, irmãos. Na frase da barraca, A = 7,
+N = 4, B = 2, espaço = 2 e C = 1. C e espaço viram um nó de 3; ele e o B viram
+5; com o N, 9; com o A, a raiz, 16. O A fica a um passo da raiz e ganha o
+código `0`; o C fica no fundo e ganha `1110`. O total cai para 33 bits.
+
+O custo vem do heap. Para `k` símbolos são `k - 1` junções, porque cada uma
+diminui o heap em um nó, e cada operação no heap custa O(log k). O total é
+**O(k log k)**. A árvore final tem `k` folhas e `k - 1` nós internos, ou
+seja, `2k - 1` nós (CORMEN et al., 2024, cap. 15).
+
+Quando duas frequências empatam, o heap pode tirar uma ou outra primeiro, e
+saem árvores diferentes. Todas são ótimas, com o mesmo total de bits, mas
+os códigos mudam. Por isso quem decodifica precisa da **mesma** árvore de
+quem codificou: o arquivo compactado guarda a árvore, ou as frequências e a
+regra de desempate (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, seção 5.3).
 
 > [!WARNING]
 > Se o desempate mudar entre codificar e decodificar, os códigos mudam e a
@@ -2004,26 +2196,57 @@ gcc ~/LPEDC/material/E815.c ~/LPEDC/material/0136-huffman.c -o ~/LPEDC/material/
 
 ### Conceito
 
-- **Compactador**: grava uma versão menor de um arquivo; o
-  **descompactador** devolve o original, byte por byte
-  (SZWARCFITER; MARKENZON, 2010).
-- **Bits de verdade**: o código vira bits, juntados 8 por vez num
-  `unsigned char` com `<<` e `|`; o último byte quase nunca enche e vai
-  completado com zeros (KERNIGHAN; RITCHIE, 1989).
-- **Cabeçalho**: o arquivo começa com a assinatura `HUF1`, o tamanho original
-  e as 256 frequências, para o descompactador montar a **mesma** árvore
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, seção 5.3).
-- **Fim dos dados**: os zeros do último byte não são dados; o descompactador
-  para ao escrever o tamanho original (LINTZMAYER; MOTA, 2023).
-- **Duas leituras**: o compactador conta as frequências e depois, com a
-  árvore pronta, troca cada byte pelo código; `rewind` volta ao começo
-  (KERNIGHAN; RITCHIE, 1989).
-- **Decodificar**: anda na árvore bit a bit (`0` esquerda, `1` direita); na
-  folha, escreve o byte e volta à raiz (CORMEN et al., 2024, cap. 15).
-- **Tamanho fixo**: `uint64_t` e `uint32_t` de `stdint.h` têm sempre o mesmo
-  tamanho; `long` varia entre sistemas (CPPREFERENCE, s.d.).
-- **Limite**: nenhum código sem perda comprime abaixo da **entropia** da
-  fonte (SHANNON, 1948).
+A feira do bairro manda a lista de preços para as barracas por um rádio
+lento, e cada byte economizado é tempo de transmissão a menos. Para isso
+servem dois programas que andam juntos. Um **compactador** grava uma versão
+menor de um arquivo; um **descompactador** recebe essa versão e devolve o
+original, idêntico byte por byte (SZWARCFITER; MARKENZON, 2010). Este
+projeto monta os dois em cima do Huffman (0136).
+
+No 0136, os códigos eram textos como `"1110"`, um caractere por bit. Isso
+serve para ver a árvore, mas não economiza nada: cada `'1'` ocupa um byte
+inteiro. Num arquivo de verdade, o código vira **bits de verdade**. O arquivo
+só sabe gravar bytes, então o programa junta os bits, 8 por vez, num
+`unsigned char`, empurrando cada bit novo com `<<` e acendendo-o com `|`
+(0065). Quando o byte enche, ele vai para o arquivo. O último byte quase
+nunca enche, e vai completado com zeros (KERNIGHAN; RITCHIE, 1989).
+
+Esses zeros criam um problema. O descompactador lê bits até o fim do
+arquivo, e os zeros de enchimento parecem dados: um `0` pode ser o código do
+A. Por isso o descompactador precisa saber quantos bytes o original tinha e
+parar exatamente ao escrever o último (LINTZMAYER; MOTA, 2023).
+
+O descompactador também precisa da **mesma** árvore que o compactador usou,
+senão os códigos não batem. Ele não tem o texto original para contar as
+frequências. A saída é gravar um **cabeçalho** no começo do arquivo
+compactado: uma assinatura, `HUF1`, que identifica o formato; o tamanho
+original; e as 256 frequências, uma por valor de byte. Com elas, o
+descompactador chama o mesmo `huf_constroi`, que desempata sempre do mesmo
+jeito, e chega à mesma árvore (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, seção
+5.3).
+
+O cabeçalho precisa ter o mesmo tamanho em qualquer máquina. O tamanho de
+`long` varia: 8 bytes no Linux de 64 bits, 4 no Windows. Os tipos `uint64_t`
+e `uint32_t`, de `stdint.h`, têm sempre 8 e 4 bytes (CPPREFERENCE, s.d.). Com
+eles, o cabeçalho tem sempre 4 + 8 + 1024 = 1036 bytes.
+
+O compactador lê o arquivo **duas vezes**. Na primeira passada, conta quantas
+vezes cada byte aparece e monta a árvore. Na segunda, com a árvore pronta,
+troca cada byte pelo seu código. Entre uma e outra, `rewind` volta a leitura
+para o começo do arquivo (KERNIGHAN; RITCHIE, 1989).
+
+O descompactador faz o caminho inverso. Ele lê o cabeçalho, monta a árvore
+e anda nela bit a bit, a partir da raiz: `0` desce para a esquerda, `1` para
+a direita. Ao chegar numa folha, escreve o byte dela e volta à raiz para o
+próximo (CORMEN et al., 2024, cap. 15). Como o código é livre de prefixo,
+nunca há dúvida sobre onde um símbolo termina.
+
+Quanto dá para ganhar? Há um limite. Shannon mostrou que nenhum código sem
+perda comprime abaixo da **entropia** da fonte, uma medida de quanta
+incerteza cada símbolo carrega em média (SHANNON, 1948). Um arquivo com
+poucos símbolos, alguns muito frequentes, tem entropia baixa e comprime bem.
+Um arquivo em que todos os 256 bytes aparecem por igual quase não comprime,
+e o cabeçalho de 1036 bytes ainda o deixa maior.
 
 > [!WARNING]
 > Sem o `descarrega` no fim, os bits do byte incompleto se perdem. Teste a ida

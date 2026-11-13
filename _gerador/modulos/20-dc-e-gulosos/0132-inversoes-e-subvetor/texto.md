@@ -1,22 +1,53 @@
 ## 0132 · Inversões e subvetor de soma máxima
 
-- **Inversão**: par de posições `i < j` com `v[i] > v[j]`. O vetor ordenado
-  tem zero; o vetor ao contrário tem `n(n - 1)/2`
-  (CORMEN et al., 2024).
-- **Contar por divisão e conquista**: toda inversão está inteira na metade
-  esquerda, inteira na direita ou **cruza** o meio. A recursão conta as duas
-  primeiras (KLEINBERG; TARDOS, 2006, cap. 5).
-- **Contar na intercalação**: com as metades ordenadas, quando um elemento da
-  direita sai antes, ele forma inversão com todos os `q - i` que sobram na
-  esquerda (KLEINBERG; TARDOS, 2006, cap. 5).
-- **Custo**: é o merge sort com um contador, **O(n log n)**, contra O(n²) de
-  testar todos os pares (KLEINBERG; TARDOS, 2006, cap. 5).
-- **Subvetor de soma máxima**: a faixa de posições **seguidas** com a maior
-  soma. Está na esquerda, na direita ou cruzando o meio; o caso que cruza é o
-  melhor final da esquerda mais o melhor começo da direita, um laço O(n), e o
-  total fica O(n log n) (CORMEN et al., 2012, seção 4.1).
-- **Contador largo**: 100 000 elementos ao contrário dão 4 999 950 000
-  inversões. Use `long long` (KERNIGHAN; RITCHIE, 1989).
+Você e o Caio montaram o top 8 de séries do ano. Os gostos batem? Se você
+põe "Sintonia" antes de "Cidade Invisível" e o Caio faz o contrário, esse
+par de séries está em desacordo. Medir o quanto dois rankings discordam
+serve para recomendação de filmes, comparação de buscadores e votação.
+
+Para transformar a pergunta em conta, escreva as suas séries em ordem e,
+embaixo de cada uma, a posição que ela tem no ranking do Caio. Se ele
+concordasse com tudo, o vetor sairia `1 2 3 4 5 6 7 8`. Cada par fora de
+ordem nesse vetor é uma **inversão**: um par de posições `i < j` com
+`v[i] > v[j]` (CORMEN et al., 2024). O vetor ordenado tem zero inversões. O
+vetor ao contrário tem todas: cada um dos `n(n - 1)/2` pares está invertido.
+
+O jeito direto é testar todos os pares com dois laços, o que custa O(n²).
+A divisão e conquista (0131) faz melhor. Divida o vetor ao meio. Toda
+inversão cai num de três tipos: os dois elementos estão inteiros na metade
+esquerda, os dois estão inteiros na metade direita, ou um está em cada
+metade e a inversão **cruza** o meio. A recursão conta os dois primeiros
+tipos sozinha, porque cada metade é o mesmo problema com metade do tamanho
+(KLEINBERG; TARDOS, 2006, cap. 5).
+
+Falta contar as que cruzam, e aqui entra o truque. Se as duas metades já
+estiverem **ordenadas**, a intercalação do merge sort (0094) conta de
+graça. Na intercalação, `i` anda pela esquerda (que termina antes de `q`) e
+`j` anda pela direita. Quando o menor da vez vem da direita, `v[j]` é menor
+que `v[i]` e, como a esquerda está ordenada, menor também que todos os que
+vêm depois dele. São `q - i` inversões de uma vez (KLEINBERG; TARDOS, 2006,
+cap. 5). Intercalando `1 3 5 7` com `2 4 6 8`, o 2 sai antes de 3, 5 e 7 e
+soma 3; o 4 sai antes de 5 e 7 e soma 2; o 6 sai antes do 7 e soma 1.
+
+Para isso funcionar, a função precisa devolver a contagem **e** deixar o
+pedaço ordenado, pronto para a intercalação do nível de cima. Ela é o merge
+sort com um contador, e o custo é o mesmo: **O(n log n)**, contra O(n²) de
+testar todos os pares (KLEINBERG; TARDOS, 2006, cap. 5). Um efeito colateral:
+contar ordena o vetor. Se precisar da ordem original, conte numa cópia.
+
+O número de inversões cresce rápido. Um vetor de 100 000 elementos ao
+contrário tem 4 999 950 000 inversões, mais do que um `int` de 32 bits
+guarda. O contador tem de ser `long long` (KERNIGHAN; RITCHIE, 1989).
+
+A mesma divisão em três casos resolve outro problema clássico, o
+**subvetor de soma máxima**: a faixa de posições **seguidas** cuja soma é a
+maior possível. Um food truck anotou o lucro de 8 dias, `4 -6 3 5 -2 6 -9 2`,
+e quer saber qual sequência de dias rendeu mais. Divida ao meio. A melhor
+faixa está inteira na esquerda (`3 5`, soma 8), inteira na direita (`6`,
+soma 6) ou cruzando o meio. A que cruza é o melhor final da esquerda (`3 5`,
+8) somado ao melhor começo da direita (`-2 6`, 4): `3 5 -2 6`, soma 12. A
+resposta é o maior dos três, 12. Achar a que cruza é um laço do meio para
+fora, O(n), e o total fica O(n log n) (CORMEN et al., 2012, seção 4.1).
 
 > [!WARNING]
 > A soma é `inv += q - i`, e não `inv++`: o `v[j]` que sai está fora de ordem

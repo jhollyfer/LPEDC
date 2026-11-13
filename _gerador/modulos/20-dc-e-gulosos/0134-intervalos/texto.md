@@ -1,20 +1,53 @@
 ## 0134 · Seleção de intervalos
 
-- **Seleção de atividades**: dado um conjunto de intervalos `[início, fim)`,
-  achar o maior subconjunto sem sobreposição (CORMEN et al., 2024, cap. 15).
-- **Critério guloso**: aceitar primeiro quem **termina** mais cedo. Ele
-  devolve o recurso mais cedo e deixa mais espaço para os outros
-  (CORMEN et al., 2024, cap. 15).
-- **Prova por troca**: numa escolha ótima, troque o primeiro intervalo pelo
-  que termina primeiro; ele não choca com os outros e o tamanho se mantém. É o
-  argumento de "ficar à frente" (KLEINBERG; TARDOS, 2006, cap. 4).
-- **`GREEDY-ACTIVITY-SELECTOR`**: ordene pelo fim; guarde `livre_em` (começa
-  em 0); aceite quem começa em `livre_em` ou depois e mova `livre_em` para o
-  fim dele (CORMEN et al., 2024, cap. 15).
-- **Custo**: a ordenação, O(n log n), mais uma passada O(n). Testar todos os
-  subconjuntos seria O(2ⁿ) (CORMEN et al., 2024, cap. 15).
-- **Intervalo semiaberto**: quem sai às 10h libera às 10h, por isso o teste é
-  `ini >= livre_em`, com o igual (CORMEN et al., 2024, cap. 15).
+A quadra do condomínio atende uma reserva por vez, e no sábado chegaram
+nove pedidos, cada um com hora de início e de fim. Alguns horários se
+chocam. O síndico quer aceitar o **maior número possível** de pedidos, sem
+dois na quadra ao mesmo tempo. Quais ele aceita?
+
+Esse é um problema clássico de escalonamento. Na **seleção de atividades**,
+você recebe um conjunto de intervalos `[início, fim)` e quer o maior
+subconjunto deles sem sobreposição (CORMEN et al., 2024, cap. 15). O mesmo
+problema aparece com salas de reunião, com uma máquina que roda uma tarefa
+por vez e com a grade de um canal de TV.
+
+Testar todos os subconjuntos (0125) resolve, mas custa O(2ⁿ): são 512 casos
+para nove pedidos e mais de um bilhão para trinta. Um guloso (0133) ordena
+os pedidos uma vez e decide cada um numa passada. A dúvida é o critério.
+Aceitar primeiro quem começa mais cedo parece justo. Aceitar primeiro o
+pedido mais curto parece econômico. Aceitar primeiro quem termina mais cedo
+parece estranho, e é o único que funciona sempre.
+
+O motivo é simples de ver. O pedido que termina primeiro **devolve a quadra
+mais cedo** e deixa o maior pedaço do dia livre para os outros (CORMEN et
+al., 2024, cap. 15). Quem começa cedo pode ocupar a quadra o dia inteiro. Um
+pedido curto pode cair bem no meio de dois outros que cabiam juntos.
+
+A prova é uma troca, como no troco (0133). Pegue uma escolha ótima qualquer
+e olhe o primeiro pedido dela. Troque-o pelo pedido que termina mais cedo
+de todos. Esse termina antes ou junto, então não choca com nenhum dos
+seguintes, e a escolha continua com o mesmo tamanho. Logo existe uma
+solução ótima que começa pela escolha gulosa. Kleinberg e Tardos chamam esse
+raciocínio de "ficar à frente": a cada passo, o guloso termina no máximo na
+mesma hora que qualquer outra solução (KLEINBERG; TARDOS, 2006, cap. 4).
+
+O algoritmo, que o Cormen chama de `GREEDY-ACTIVITY-SELECTOR`, tem três
+partes. Primeiro, ordene os pedidos pela hora de fim. Depois, guarde numa
+variável `livre_em` a hora em que a quadra fica livre, começando em 0. Por
+fim, percorra os pedidos em ordem: se o pedido começa em `livre_em` ou
+depois, aceite e mova `livre_em` para o fim dele; senão, recuse (CORMEN et
+al., 2024, cap. 15).
+
+O custo é dominado pela ordenação, O(n log n). A passada que decide é O(n),
+porque olha cada pedido uma vez. Comparado com O(2ⁿ) de testar todos os
+subconjuntos, a diferença é enorme já para poucas dezenas de pedidos
+(CORMEN et al., 2024, cap. 15).
+
+Um detalhe na comparação. Os intervalos são **semiabertos**: `[8, 10)`
+inclui as 8h e não inclui as 10h. Quem sai às 10h libera a quadra às 10h, e
+quem entra às 10h pode usá-la. Por isso o teste é `ini >= livre_em`, com o
+igual (CORMEN et al., 2024, cap. 15). Com `>`, a reserva das 10h às 11h
+seria recusada sem motivo.
 
 > [!WARNING]
 > Os outros critérios falham sem erro, só com resposta pior. "Começa primeiro"

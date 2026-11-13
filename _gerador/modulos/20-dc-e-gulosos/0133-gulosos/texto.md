@@ -1,22 +1,52 @@
 ## 0133 · Algoritmos gulosos
 
-- **Algoritmo guloso** (*greedy*): a cada passo faz a escolha que parece a
-  **melhor agora** e **nunca volta atrás** (CORMEN et al., 2024, cap. 15).
-- **Diferença**: não desfaz, como o backtracking (0127), nem divide em
-  subproblemas, como a divisão e conquista (0131). O Dijkstra (0112) é guloso
-  (ZIVIANI, 2010, cap. 2).
-- **Propriedade da escolha gulosa**: alguma solução ótima começa pela escolha
-  do guloso (CORMEN et al., 2024, cap. 15).
-- **Subestrutura ótima**: o que sobra depois da escolha é um problema do
-  mesmo tipo (CORMEN et al., 2024, cap. 15).
-- **Prova por troca**: troque um pedaço da solução ótima pela escolha gulosa
-  e mostre que ela não piora. **Um contraexemplo derruba; só uma prova
-  garante** (KLEINBERG; TARDOS, 2006, cap. 4).
-- **Troco guloso**: dá sempre a maior moeda que cabe. Acerta o mínimo nos
-  sistemas **canônicos**, como o Real; com fichas {1, 3, 4}, o troco de 6 sai
-  4 + 1 + 1, e o ótimo é 3 + 3 (KOZEN; ZAKS, 1994).
-- **Quando falha**: a programação dinâmica (módulo 21) resolve o troco de
-  qualquer sistema (CORMEN et al., 2024, cap. 15).
+Na padaria, o pão deu R$ 3,10 e você pagou com uma nota de 5. O caixa
+precisa devolver R$ 1,90 com o menor número de moedas. Ninguém no balcão
+testa todas as combinações. O caixa pega a maior moeda que cabe no que
+falta, depois a maior que cabe no resto, e assim por diante: 100, 50, 25,
+10 e 5 centavos. Cinco moedas, e é o mínimo possível.
+
+Esse jeito de decidir tem nome. Um **algoritmo guloso** (*greedy*) monta a
+solução passo a passo e, a cada passo, faz a escolha que parece a **melhor
+agora**, sem nunca voltar atrás (CORMEN et al., 2024, cap. 15). Ele não
+desfaz escolhas, como o backtracking (0127), e não divide o problema em
+pedaços para resolver cada um, como a divisão e conquista (0131). Você já
+viu um guloso: o Dijkstra (0112) fixa o vértice mais perto da origem e nunca
+mais mexe nele (ZIVIANI, 2010, cap. 2).
+
+Quando funciona, o guloso é curto e barato. O troco é um laço que percorre
+os `k` tipos de moeda do maior para o menor, e o custo é O(k + moedas
+dadas). O problema é que uma escolha boa agora pode estragar o resto, e o
+guloso não percebe, porque nunca olha para trás.
+
+Veja isso num fliperama com fichas de 1, 3 e 4 créditos. O troco de 6
+créditos pelo guloso começa pela maior ficha que cabe, a de 4. Sobram 2,
+que só se pagam com 1 + 1. São três fichas. Mas 3 + 3 resolve com duas. O 4
+parecia a melhor escolha e fechou o caminho bom. O sistema do Real é
+**canônico**: para ele, o guloso sempre acha o mínimo. O sistema {1, 3, 4}
+não é (KOZEN; ZAKS, 1994).
+
+Como saber se o guloso acerta? O Cormen pede duas propriedades. A
+**propriedade da escolha gulosa** diz que existe alguma solução ótima que
+começa pela escolha que o guloso faz. Então escolher assim não fecha a porta
+para o ótimo (CORMEN et al., 2024, cap. 15). A **subestrutura ótima** diz que,
+depois da escolha, o que sobra é um problema do mesmo tipo, menor, e que a
+solução ótima do todo contém uma solução ótima desse resto (CORMEN et al.,
+2024, cap. 15). No troco: depois de dar a moeda de 100, falta dar R$ 0,90 com
+o mínimo de moedas, que é o mesmo problema.
+
+A primeira propriedade costuma sair de uma **prova por troca**. Você pega
+uma solução ótima qualquer, troca um pedaço dela pela escolha gulosa e
+mostra que o resultado não piora (KLEINBERG; TARDOS, 2006, cap. 4). No Real,
+se um troco usasse duas moedas de 25 no lugar de uma de 50, trocar as duas
+pela de 50 diminuiria a contagem. Logo o ótimo nunca evita a moeda maior que
+cabe. Com {1, 3, 4} a troca falha: duas fichas de 3 não viram uma de 4.
+
+A lição vale para todo guloso: **um contraexemplo derruba, e só uma prova
+garante** (KLEINBERG; TARDOS, 2006, cap. 4). Testar meia dúzia de casos que
+dão certo não prova nada. Quando o guloso não serve, a programação dinâmica
+(módulo 21) resolve o troco de qualquer sistema de moedas, a um custo maior
+(CORMEN et al., 2024, cap. 15).
 
 > [!WARNING]
 > O troco guloso **depende da ordem** do vetor: com `{5, 10, 25, 50, 100}`, a
