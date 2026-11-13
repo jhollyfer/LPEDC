@@ -55,9 +55,12 @@ proporções.
 
 ---
 
-## 1. Conceitos gerais
+> [!NOTE]
+> Cada assunto é um capítulo: **Conceito** (a explicação), **Exemplos de uso** (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e **Exercícios** (cada um é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta; resoluções em `_respostas/18-ordenacao-linear/`).
 
-### 0119 · Shell sort
+## 0119 · Shell sort
+
+### Conceito
 
 - **Shell sort**: insertion sort (assunto 0093) repetido com **saltos** `h`
   cada vez menores. O elemento anda `h` casas por movimento, não uma
@@ -80,143 +83,7 @@ proporções.
 > ordem e sem erro. No laço de dentro, use `j >= h`, não `j > 0`, senão
 > `v[j - h]` lê antes do vetor.
 
-### 0120 · Counting sort
-
-- **Ordenação por comparação**: decide a ordem só comparando pares de chaves.
-  No pior caso faz cerca de n log₂ n comparações (assunto 0117)
-  (CORMEN et al., 2024, cap. 8).
-- **Counting sort** (ordenação por contagem): usa o **valor** da chave como
-  **índice** de um vetor de contadores e por isso escapa desse piso. As chaves
-  são inteiros de 0 a k - 1 (CORMEN et al., 2024, cap. 8).
-- **Três laços**: **contar** (`c[x]` = quantos têm chave `x`), **acumular**
-  (`c[x]` = quantos têm chave menor ou igual a `x`, o fim do bloco de `x`) e
-  **distribuir** (de trás para a frente, `c[x]--` e `saida[c[x]] = v[i]`)
-  (CORMEN et al., 2024, cap. 8).
-- **Estável**: entre chaves iguais, a ordem da entrada se mantém. O radix sort
-  (assunto 0121) depende disso (SEDGEWICK; WAYNE, 2011).
-- **Custo**: Θ(n + k) de tempo, e memória para `k` contadores mais a saída de
-  `n` elementos. Vale a pena quando `k` é da ordem de `n` ou menor
-  (CORMEN et al., 2024, cap. 8).
-- **Não ordena no lugar**: o resultado vai para outro vetor
-  (LINTZMAYER; MOTA, 2023).
-
-> [!WARNING]
-> Com o terceiro laço da frente para trás, os empates saem **invertidos**, sem
-> erro. E a chave tem que caber em `c`: a nota 5 ou -1 vira `c[5]` ou `c[-1]`,
-> escrita fora do vetor.
-
-### 0121 · Radix sort
-
-- **Radix sort** (ordenação digital): ordena dígito a dígito, cada passada
-  por um único dígito, até o dígito mais alto do maior número
-  (CORMEN et al., 2024, cap. 8).
-- **LSD** (*least significant digit*): começa pelas **unidades**, depois
-  dezenas, depois centenas. Era o método das classificadoras de cartões
-  perfurados (KNUTH, 1998).
-- **Dígito**: o de `x` na casa `exp` (1, 10, 100...) é `(x / exp) % 10`.
-  Cada passada é um **counting sort** (assunto 0120) com chaves de 0 a 9
-  (SEDGEWICK, 1998, cap. 10).
-- **Passada estável**: números com o mesmo dígito ficam na ordem que a
-  passada anterior deu. Sem isso o método não funciona
-  (CORMEN et al., 2024, cap. 8).
-- **Custo**: com `d` dígitos e base `b`, O(d · (n + b)). Para números de
-  tamanho fixo, `d` é constante e o custo é linear
-  (CORMEN et al., 2024, cap. 8).
-- **Base 256**: o "dígito" vira um byte, `(x >> 8 * b) & 0xFF` (assunto
-  0065). Um `int` de 32 bits faz 4 passadas com `c[256]`
-  (KERNIGHAN; RITCHIE, 1989).
-- **Sem comparar chaves**: por isso foge do limite n log n da ordenação por
-  comparação (SZWARCFITER; MARKENZON, 2010).
-
-> [!WARNING]
-> Se a passada distribuir da frente para trás, os empates se invertem e o
-> resultado sai fora de ordem, sem erro. O número de passadas vem do **maior**
-> elemento, não do primeiro.
-
-### 0122 · Bucket sort
-
-- **Bucket sort** (ordenação por baldes): divide o intervalo dos valores em
-  **faixas** de mesmo tamanho, uma por **balde** (CORMEN et al., 2024, cap. 8).
-- **Três passos**: jogar cada elemento no balde da sua faixa, ordenar cada
-  balde (que é pequeno) e **concatenar** os baldes em ordem
-  (CORMEN et al., 2024, cap. 8).
-- **Cálculo de endereço**: a função que escolhe o balde **preserva a ordem**.
-  Tudo no balde 2 é menor que tudo no balde 4
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
-- **Balde como lista**: cada balde é uma lista encadeada (assunto 0076) e o
-  elemento entra já no lugar certo, como na lista ordenada (assunto 0078)
-  (ROVAI, 2018).
-- **Custo médio**: com `n` valores **uniformes** em [0, 1) e `n` baldes, `x`
-  vai para ⌊n · x⌋ e o custo esperado é Θ(n) (CORMEN et al., 2024, cap. 8).
-- **Pior caso**: todos no mesmo balde. Sobra um insertion sort de `n`
-  elementos, O(n²) (CORMEN et al., 2024, cap. 8).
-
-> [!WARNING]
-> O índice do balde tem que caber no vetor: a nota 10,0 dá `baldes[10]`, que
-> não existe. O bucket sort precisa **conhecer o intervalo**; valor fora da
-> faixa escreve fora do vetor.
-
-### 0123 · Quickselect
-
-- **Seleção**: achar o **k-ésimo menor** de um vetor sem ordenar tudo. O
-  mínimo é `k = 0`; a **mediana** é `k = n / 2` (CORMEN et al., 2024, cap. 9).
-- **Quickselect**: separa o vetor em torno de um pivô (assunto 0095), como o
-  quick sort, mas segue **um lado só** (HOARE, 1961).
-- **Regra do lado**: com o pivô na posição final `j`, se `j == k` achou; se
-  `k < j`, segue à esquerda; se `k > j`, segue à direita. Um `while` que
-  encolhe `[p, r]` basta (FEOFILOFF, 2009).
-- **Custo médio**: com o pivô perto do meio, `n + n/2 + n/4 + ...` < `2n`, logo
-  O(n). Com o pivô sempre no extremo, O(n²)
-  (CORMEN et al., 2024, cap. 9).
-- **`RANDOMIZED-SELECT`**: a versão com pivô sorteado; o esperado é O(n)
-  (CORMEN et al., 2024, cap. 9).
-- **`SELECT`** (mediana das medianas): escolhe um pivô bom o bastante para
-  garantir O(n) no **pior** caso (BLUM et al., 1973).
-- **Memória**: a versão com `while` usa O(1) extra. A recursiva é de cauda; o
-  gcc com `-O2` costuma virar laço, sem ele o pior caso empilha `n` chamadas
-  (SEDGEWICK, 1998, cap. 7).
-
-> [!WARNING]
-> As posições começam em 0: "o 3º menor" é `k = 2`, e `quickselect(v, n, 3)`
-> devolve o 4º. O quickselect também **bagunça o vetor**: para manter a ordem
-> original, passe uma cópia.
-
-### 0124 · Juntando tudo
-
-- **Ordenação linear**: troca a comparação por **suposições sobre os dados**,
-  como chave inteira numa faixa conhecida (CORMEN et al., 2024, cap. 8).
-- **Duas chaves**: ordene pela **menos** importante e depois, com um método
-  **estável**, pela mais importante. É a ideia do radix LSD
-  (CORMEN et al., 2024, cap. 8).
-- **`qsort`**: ordena qualquer tipo. Move blocos de bytes e chama a função de
-  comparação por ponteiro, sem conhecer o tipo nem a faixa da chave
-  (KERNIGHAN; RITCHIE, 1989).
-- **`clock()`**: de `<time.h>`, dá o tempo de processador. A diferença entre
-  duas chamadas, dividida por `CLOCKS_PER_SEC`, vira segundos (CPPREFERENCE, s.d.).
-- **Teste por comparação**: ordenar uma cópia com o `qsort` e conferir se a
-  ordem bate é o jeito mais simples de testar uma ordenação escrita à mão.
-
-| Algoritmo | Custo | Memória extra | Estável | Quando usar |
-| --- | --- | --- | --- | --- |
-| shell sort | ~n^1,25 (Knuth: pior n^1,5) | O(1) | não | vetores médios, pouca memória, código curto |
-| counting sort | O(n + k) | O(n + k) | sim | chaves inteiras num intervalo pequeno |
-| radix sort | O(d · (n + b)) | O(n + b) | sim | inteiros ou strings de tamanho fixo |
-| bucket sort | O(n) médio, O(n²) pior | O(n) | sim (inserindo depois dos iguais) | valores reais bem espalhados num intervalo conhecido |
-| quickselect | O(n) médio, O(n²) pior | O(1) | não | o k-ésimo, a mediana, os k maiores, sem ordenar |
-| qsort | O(n log n) | depende da biblioteca | não garantido | qualquer tipo, qualquer critério |
-
-> [!WARNING]
-> Chave fora da faixa escreve fora do vetor: um registro com
-> `segundo = 86400` faz `c[86400]` estourar. Confira a faixa antes de usar o
-> valor como índice.
-
----
-
-## 2. Exemplos de uso
-
-Cada exemplo compila sozinho. Rode com o comando abaixo dele e compare com a saída no fim do código.
-
-### 0119 · Shell sort
+### Exemplos de uso
 
 O motorista da van recebe 10 pacotes fora da ordem de rota. Com `n = 10`, os
 saltos são 4 e 1; cada cor do desenho é uma fileira de salto 4:
@@ -492,7 +359,111 @@ int main(void) {
 gcc ~/LPEDC/material/A238.c -o ~/LPEDC/material/A238 && ~/LPEDC/material/A238
 ```
 
-### 0120 · Counting sort
+### Exercícios
+
+**Exercício E709** · ★☆☆
+
+Antes de ordenar, o shell sort escolhe os saltos. Escreva a função
+void mostra_saltos(int n), que mostra os saltos de Knuth (h = 3h + 1) que
+o shell sort do texto usa para um vetor de n elementos, na ordem em que
+eles são usados (do maior para o 1). Chame para n = 10, 100, 1000 e
+1000000.
+
+```text
+Saída esperada:
+n = 10: 4 1
+n = 100: 40 13 4 1
+n = 1000: 364 121 40 13 4 1
+n = 1000000: 797161 265720 88573 29524 9841 3280 1093 364 121 40 13 4 1
+```
+
+**Exercício E711** · ★★☆
+
+A lista de convidados da festa precisa ir para a portaria em ordem
+alfabética. Escreva void shell_nomes(const char *v[], int n), um shell
+sort com os saltos de Knuth para um vetor de strings, que troca só os
+ponteiros (as letras não saem do lugar). Conte as comparações (cada strcmp
+conta uma) numa variável static. No main, ordene os convidados e mostre
+o resultado e a contagem.
+
+```text
+Convidados: Rafael Bianca Tiago Larissa Diego Amanda Paulo Helena Caio
+            Sofia Murilo Elisa
+```
+
+```text
+Saída esperada:
+Amanda, Bianca, Caio, Diego, Elisa, Helena, Larissa, Murilo, Paulo, Rafael, Sofia, Tiago
+36 comparações
+```
+
+**Exercício E712** · ★★☆
+
+Um vetor está h-ORDENADO quando toda fileira de passo h (v[i], v[i + h],
+v[i + 2h], ...) está em ordem. Escreva bool esta_h_ordenado(const int v[],
+int n, int h). No main, gere 40 números com v[i] = (i * 17 + 5) % 40 e rode
+o shell sort com os saltos de Knuth (13, 4, 1). Antes da primeira rodada e
+depois de cada uma, mostre se o vetor está 13-, 4- e 1-ordenado.
+
+```text
+Saída esperada:
+início: 13-ordenado? não, 4-ordenado? não, 1-ordenado? não
+h = 13: 13-ordenado? sim, 4-ordenado? não, 1-ordenado? não
+h =  4: 13-ordenado? sim, 4-ordenado? sim, 1-ordenado? não
+h =  1: 13-ordenado? sim, 4-ordenado? sim, 1-ordenado? sim
+```
+
+**Exercício E714** · ★★★
+
+Uma INVERSÃO é um par de posições i < j com v[i] > v[j]: um par fora de
+ordem. Vetor ordenado tem 0 inversões. Escreva long inversoes(const int
+v[], int n) (dois laços, O(n²)). No main, gere 200 números com
+v[i] = (i * 73 + 11) % 200 e rode o shell sort com os saltos de Knuth,
+contando os movimentos (v[j] = v[j - h]) de cada rodada. Depois de cada
+rodada, mostre as inversões que sobraram e os movimentos dela. No fim,
+mostre o total de movimentos e as inversões do início.
+
+```text
+Saída esperada:
+início:  9775 inversões
+h = 121:  7359 inversões,   12 movimentos
+h =  40:  2602 inversões,  131 movimentos
+h =  13:  1004 inversões,  172 movimentos
+h =   4:   288 inversões,  234 movimentos
+h =   1:     0 inversões,  288 movimentos
+total: 837 movimentos (o insertion sort faria 9775)
+```
+
+---
+
+## 0120 · Counting sort
+
+### Conceito
+
+- **Ordenação por comparação**: decide a ordem só comparando pares de chaves.
+  No pior caso faz cerca de n log₂ n comparações (assunto 0117)
+  (CORMEN et al., 2024, cap. 8).
+- **Counting sort** (ordenação por contagem): usa o **valor** da chave como
+  **índice** de um vetor de contadores e por isso escapa desse piso. As chaves
+  são inteiros de 0 a k - 1 (CORMEN et al., 2024, cap. 8).
+- **Três laços**: **contar** (`c[x]` = quantos têm chave `x`), **acumular**
+  (`c[x]` = quantos têm chave menor ou igual a `x`, o fim do bloco de `x`) e
+  **distribuir** (de trás para a frente, `c[x]--` e `saida[c[x]] = v[i]`)
+  (CORMEN et al., 2024, cap. 8).
+- **Estável**: entre chaves iguais, a ordem da entrada se mantém. O radix sort
+  (assunto 0121) depende disso (SEDGEWICK; WAYNE, 2011).
+- **Custo**: Θ(n + k) de tempo, e memória para `k` contadores mais a saída de
+  `n` elementos. Vale a pena quando `k` é da ordem de `n` ou menor
+  (CORMEN et al., 2024, cap. 8).
+- **Não ordena no lugar**: o resultado vai para outro vetor
+  (LINTZMAYER; MOTA, 2023).
+
+> [!WARNING]
+> Com o terceiro laço da frente para trás, os empates saem **invertidos**, sem
+> erro. E a chave tem que caber em `c`: a nota 5 ou -1 vira `c[5]` ou `c[-1]`,
+> escrita fora do vetor.
+
+### Exemplos de uso
 
 Oito avaliações de uma lanchonete (A a H, de 0 a 4 estrelas) vão para a ordem
 de nota. Os pedidos de 3 estrelas (A, C e H, em verde) chegam à saída na ordem
@@ -703,7 +674,124 @@ int main(void) {
 gcc ~/LPEDC/material/A240.c -o ~/LPEDC/material/A240 && ~/LPEDC/material/A240
 ```
 
-### 0121 · Radix sort
+### Exercícios
+
+**Exercício E715** · ★☆☆
+
+As notas da prova de 20 alunos vão de 0 a 10:
+
+```text
+7 5 10 3 7 8 5 7 9 6 4 7 8 2 5 10 6 7 8 5
+```
+
+Ordene o vetor com a versão curta do counting sort (conte cada nota e
+reescreva cada uma c[x] vezes, sem vetor de saída) e mostre também a nota
+mais comum, usando os mesmos contadores.
+
+```text
+Saída esperada:
+ordenadas: 2 3 4 5 5 5 5 6 6 7 7 7 7 7 8 8 8 9 10 10
+mais comum: 7 (5 alunos)
+```
+
+**Exercício E717** · ★★☆
+
+Na triagem do pronto-socorro, cada paciente recebe uma cor de risco:
+vermelho, laranja, amarelo, verde ou azul, do mais grave para o menos
+grave. A fila de atendimento é por cor e, dentro da mesma cor, por ordem
+de chegada. Escreva ordena_triagem, um counting sort ESTÁVEL que usa como
+chave a posição da cor no vetor ordem_cores, e mostre a fila.
+
+```text
+Chegada (nome, cor): Joana amarelo, Pedro verde, Rita vermelho, Caio
+amarelo, Lia azul, Davi laranja, Nina verde, Otto vermelho, Sara
+amarelo, Ivo laranja
+```
+
+```text
+Saída esperada:
+ 1. Rita  (vermelho)
+ 2. Otto  (vermelho)
+ 3. Davi  (laranja)
+ 4. Ivo   (laranja)
+ 5. Joana (amarelo)
+ 6. Caio  (amarelo)
+ 7. Sara  (amarelo)
+ 8. Pedro (verde)
+ 9. Nina  (verde)
+10. Lia   (azul)
+```
+
+**Exercício E718** · ★★☆
+
+Duas palavras são ANAGRAMAS quando usam as mesmas letras, nas mesmas
+quantidades: "porta" e "tropa". Um jeito de conferir: ordene as letras de
+cada uma e compare. Escreva void ordena_letras(char s[]), um counting sort
+das letras da própria string, com um contador para cada valor possível de
+char (256). No main, teste os pares alegria/regalia, porta/tropa,
+mesa/seta e carro/corra, copiando cada palavra para um vetor local antes
+de ordenar.
+
+```text
+Saída esperada:
+alegria -> aaegilr | regalia -> aaegilr: anagramas
+porta -> aoprt | tropa -> aoprt: anagramas
+mesa -> aems | seta -> aest: não são anagramas
+carro -> acorr | corra -> acorr: anagramas
+```
+
+**Exercício E720** · ★★★
+
+Quem quebra códigos secretos começa contando letras. Escreva um programa
+que mostre as letras da frase abaixo da MAIS frequente para a menos
+frequente (só as que aparecem), com empates em ordem alfabética:
+
+```text
+o rato roeu a roupa do rei de roma e a rainha ficou brava
+```
+
+A regra: nada de comparar letra com letra. Conte as frequências (um
+contador por letra) e depois ordene as 26 letras com um counting sort
+estável cuja chave é a frequência.
+
+```text
+Saída esperada:
+a:9 o:7 r:7 e:4 i:3 u:3 d:2 b:1 c:1 f:1 h:1 m:1 n:1 p:1 t:1 v:1
+```
+
+---
+
+## 0121 · Radix sort
+
+### Conceito
+
+- **Radix sort** (ordenação digital): ordena dígito a dígito, cada passada
+  por um único dígito, até o dígito mais alto do maior número
+  (CORMEN et al., 2024, cap. 8).
+- **LSD** (*least significant digit*): começa pelas **unidades**, depois
+  dezenas, depois centenas. Era o método das classificadoras de cartões
+  perfurados (KNUTH, 1998).
+- **Dígito**: o de `x` na casa `exp` (1, 10, 100...) é `(x / exp) % 10`.
+  Cada passada é um **counting sort** (assunto 0120) com chaves de 0 a 9
+  (SEDGEWICK, 1998, cap. 10).
+- **Passada estável**: números com o mesmo dígito ficam na ordem que a
+  passada anterior deu. Sem isso o método não funciona
+  (CORMEN et al., 2024, cap. 8).
+- **Custo**: com `d` dígitos e base `b`, O(d · (n + b)). Para números de
+  tamanho fixo, `d` é constante e o custo é linear
+  (CORMEN et al., 2024, cap. 8).
+- **Base 256**: o "dígito" vira um byte, `(x >> 8 * b) & 0xFF` (assunto
+  0065). Um `int` de 32 bits faz 4 passadas com `c[256]`
+  (KERNIGHAN; RITCHIE, 1989).
+- **Sem comparar chaves**: por isso foge do limite n log n da ordenação por
+  comparação (SZWARCFITER; MARKENZON, 2010).
+
+> [!WARNING]
+> Se a passada distribuir da frente para trás, os empates se invertem e o
+> resultado sai fora de ordem, sem erro. O número de passadas vem do **maior**
+> elemento, não do primeiro.
+
+### Exemplos de uso
 
 Oito números de pedido, de 047 a 830, ordenados em três passadas. Em amarelo,
 o 807 e o 830: a passada das dezenas põe o 807 na frente, e a das centenas
@@ -936,7 +1024,119 @@ int main(void) {
 gcc ~/LPEDC/material/A242.c -o ~/LPEDC/material/A242 && ~/LPEDC/material/A242
 ```
 
-### 0122 · Bucket sort
+### Exercícios
+
+**Exercício E721** · ★☆☆
+
+As duas perguntas que o radix sort faz o tempo todo são "quantos dígitos
+tem o maior número?" (quantas passadas) e "qual é o dígito desta casa?".
+Escreva as duas funções, só com divisão e resto por 10 (sem pow):
+
+- int quantos_digitos(int x): 5082 tem 4, 7 tem 1;
+
+- int digito(int x, int pos): pos 0 é a unidade, 1 a dezena, e assim por
+diante. digito(5082, 1) é 8.
+
+No main, mostre a tabela para 5082, 7, 340 e 19000, com o nome de cada
+casa (unidade, dezena, centena, milhar, dezena de milhar).
+
+```text
+Saída esperada:
+5082: 4 dígitos; unidade 2, dezena 8, centena 0, milhar 5
+7: 1 dígito; unidade 7
+340: 3 dígitos; unidade 0, dezena 4, centena 3
+19000: 5 dígitos; unidade 0, dezena 0, centena 0, milhar 9, dezena de milhar 1
+```
+
+**Exercício E723** · ★★☆
+
+A classificadora de cartões tinha 10 escaninhos, e cada escaninho é uma
+FILA: o primeiro cartão que entra é o primeiro que sai (assunto 0085).
+Escreva uma fila de inteiros sobre vetor (struct Fila, enfileira,
+desenfileira, vazia) e faça o radix sort assim, sem contagem nem
+acumulado: em cada passada, distribua os números em 10 filas pelo dígito
+da vez e depois recolha as filas em ordem, da 0 à 9, de volta no vetor.
+Os números são os cubos de 0 a 9, embaralhados:
+
+```text
+64 8 216 512 27 729 0 1 343 125
+```
+
+Mostre o vetor (com 3 dígitos por número) depois de cada passada.
+
+```text
+Saída esperada:
+exp =   1: 000 001 512 343 064 125 216 027 008 729
+exp =  10: 000 001 008 512 216 125 027 729 343 064
+exp = 100: 000 001 008 027 064 125 216 343 512 729
+```
+
+**Exercício E724** · ★★☆
+
+O radix sort não precisa de dígitos: qualquer chave formada por "casas"
+serve. Uma data tem três casas: dia, mês e ano, do menos para o mais
+importante. Ordene os vencimentos dos boletos em ordem cronológica com
+três passadas de counting sort estável: primeiro pelo dia, depois pelo
+mês, por fim pelo ano. Mostre o vetor depois de cada passada.
+
+```text
+Vencimentos (dia/mês/ano): 15/03/2025 05/11/2024 15/01/2025 28/02/2024
+05/03/2025 10/11/2024 28/01/2025
+```
+
+```text
+Saída esperada:
+início: 15/03/2025 05/11/2024 15/01/2025 28/02/2024 05/03/2025 10/11/2024 28/01/2025
+dia:    05/11/2024 05/03/2025 10/11/2024 15/03/2025 15/01/2025 28/02/2024 28/01/2025
+mês:    15/01/2025 28/01/2025 28/02/2024 05/03/2025 15/03/2025 05/11/2024 10/11/2024
+ano:    28/02/2024 05/11/2024 10/11/2024 15/01/2025 28/01/2025 05/03/2025 15/03/2025
+```
+
+**Exercício E726** · ★★★
+
+O extrato tem saques (negativos) e depósitos, em centavos. No complemento
+de dois, -7 é FFFFFFF9: como número sem sinal ele é enorme, e o radix sort
+em base 256 ingênuo põe os negativos depois dos positivos. Escreva
+radix(v, aux, n, com_chave) para int32_t: sem a chave, ordena por
+(uint32_t) x; com a chave, por (uint32_t) x ^ 0x80000000u (inverte o bit
+de sinal). Use -150000, 3200, -7, 0, INT_MAX, INT_MIN, 98000, -98000 e 7;
+mostre o -7 em hexadecimal e o resultado dos dois casos.
+
+```text
+Saída esperada:
+-7 como uint32_t: FFFFFFF9
+sem a chave: 0 7 3200 98000 2147483647 -2147483648 -150000 -98000 -7
+com a chave: -2147483648 -150000 -98000 -7 0 7 3200 98000 2147483647
+```
+
+---
+
+## 0122 · Bucket sort
+
+### Conceito
+
+- **Bucket sort** (ordenação por baldes): divide o intervalo dos valores em
+  **faixas** de mesmo tamanho, uma por **balde** (CORMEN et al., 2024, cap. 8).
+- **Três passos**: jogar cada elemento no balde da sua faixa, ordenar cada
+  balde (que é pequeno) e **concatenar** os baldes em ordem
+  (CORMEN et al., 2024, cap. 8).
+- **Cálculo de endereço**: a função que escolhe o balde **preserva a ordem**.
+  Tudo no balde 2 é menor que tudo no balde 4
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
+- **Balde como lista**: cada balde é uma lista encadeada (assunto 0076) e o
+  elemento entra já no lugar certo, como na lista ordenada (assunto 0078)
+  (ROVAI, 2018).
+- **Custo médio**: com `n` valores **uniformes** em [0, 1) e `n` baldes, `x`
+  vai para ⌊n · x⌋ e o custo esperado é Θ(n) (CORMEN et al., 2024, cap. 8).
+- **Pior caso**: todos no mesmo balde. Sobra um insertion sort de `n`
+  elementos, O(n²) (CORMEN et al., 2024, cap. 8).
+
+> [!WARNING]
+> O índice do balde tem que caber no vetor: a nota 10,0 dá `baldes[10]`, que
+> não existe. O bucket sort precisa **conhecer o intervalo**; valor fora da
+> faixa escreve fora do vetor.
+
+### Exemplos de uso
 
 A secretária da escola joga cada prova no envelope da sua nota inteira (a de
 6,4 vai para o 6). Três notas caem no balde 2 e quatro baldes ficam vazios:
@@ -1205,7 +1405,118 @@ int main(void) {
 gcc ~/LPEDC/material/A244.c -o ~/LPEDC/material/A244 && ~/LPEDC/material/A244
 ```
 
-### 0123 · Quickselect
+### Exercícios
+
+**Exercício E727** · ★☆☆
+
+A loja de R$ 1,99 virou "loja até R$ 50" e quer separar os produtos em 5
+prateleiras de preço: de 0 a 10, de 10 a 20, ..., de 40 a 50. Escreva
+int balde_de(double x, double max, int nb), que devolve o balde (de 0 a
+nb - 1) de um valor x entre 0 e max, com nb baldes de mesma largura. O
+preço máximo, R$ 50,00, vai para o último balde. Mostre o balde de cada
+preço: 12.50, 49.99, 50.00, 0.00, 10.00, 37.20 e 9.99.
+
+```text
+Saída esperada:
+R$ 12.50 -> balde 1
+R$ 49.99 -> balde 4
+R$ 50.00 -> balde 4
+R$  0.00 -> balde 0
+R$ 10.00 -> balde 1
+R$ 37.20 -> balde 3
+R$  9.99 -> balde 0
+```
+
+**Exercício E729** · ★★☆
+
+A agenda do celular agrupa os contatos pela letra inicial. Faça um bucket
+sort de strings com 26 baldes, um por letra: o balde de um nome é
+nome[0] - 'A', e cada balde é uma lista encadeada que guarda os nomes já
+em ordem alfabética (compare com strcmp). Mostre cada balde que não está
+vazio, devolva os nomes ao vetor em ordem e libere todos os nós.
+
+```text
+Contatos: Marcos Ana Bruno Mariana Carla Alberto Beatriz Marta Caio
+Amanda Mauro
+```
+
+```text
+Saída esperada:
+A: Alberto Amanda Ana
+B: Beatriz Bruno
+C: Caio Carla
+M: Marcos Mariana Marta Mauro
+agenda: Alberto Amanda Ana Beatriz Bruno Caio Carla Marcos Mariana Marta Mauro
+```
+
+**Exercício E730** · ★★☆
+
+Escreva dois bucket sorts de double, com baldes que são listas encadeadas
+mantidas em ordem: bucket_sort_01(double v[], int n), para valores em
+[0, 1), com n baldes e balde (int) (x * n); e bucket_sort_faixa(double
+v[], int n), para valores quaisquer, que mostra a faixa (menor e maior) e
+usa n baldes de mesma largura (se todos são iguais, vão para o balde 0).
+Teste a primeira com 0.35 0.80 0.05 0.62 0.41 0.97 e a segunda com 22.4
+-3.5 38.2 15.0 9.7 30.1 -1.2 27.8 18.6 4.3 33.0 12.9 e com 7.0 7.0 7.0,
+mostrando cada vetor ordenado com 2 casas decimais.
+
+```text
+Saída esperada:
+0.05 0.35 0.41 0.62 0.80 0.97
+faixa: -3.5 a 38.2, 12 baldes de 3.48
+-3.50 -1.20 4.30 9.70 12.90 15.00 18.60 22.40 27.80 30.10 33.00 38.20
+faixa: 7.0 a 7.0, 3 baldes de 0.00
+7.00 7.00 7.00
+```
+
+**Exercício E731** · ★★★
+
+A padaria ordena os pedidos do dia pelo valor e quer que pedidos de mesmo
+valor fiquem na ordem de chegada. Escreva um bucket sort ESTÁVEL de
+struct Pedido { char cliente; int valor; }, para valores de R$ 0 a R$ 99:
+10 baldes, um para cada R$ 10 (balde = valor / 10), cada um uma lista
+encadeada ordenada. Devolva os pedidos ao vetor, balde por balde, e libere
+os nós. Pedidos (cliente:valor), na ordem de chegada:
+
+```text
+A:35 B:12 C:35 D:87 E:12 F:50 G:38 H:35 I:9
+```
+
+```text
+Saída esperada:
+I:9 B:12 E:12 A:35 C:35 H:35 G:38 F:50 D:87
+```
+
+---
+
+## 0123 · Quickselect
+
+### Conceito
+
+- **Seleção**: achar o **k-ésimo menor** de um vetor sem ordenar tudo. O
+  mínimo é `k = 0`; a **mediana** é `k = n / 2` (CORMEN et al., 2024, cap. 9).
+- **Quickselect**: separa o vetor em torno de um pivô (assunto 0095), como o
+  quick sort, mas segue **um lado só** (HOARE, 1961).
+- **Regra do lado**: com o pivô na posição final `j`, se `j == k` achou; se
+  `k < j`, segue à esquerda; se `k > j`, segue à direita. Um `while` que
+  encolhe `[p, r]` basta (FEOFILOFF, 2009).
+- **Custo médio**: com o pivô perto do meio, `n + n/2 + n/4 + ...` < `2n`, logo
+  O(n). Com o pivô sempre no extremo, O(n²)
+  (CORMEN et al., 2024, cap. 9).
+- **`RANDOMIZED-SELECT`**: a versão com pivô sorteado; o esperado é O(n)
+  (CORMEN et al., 2024, cap. 9).
+- **`SELECT`** (mediana das medianas): escolhe um pivô bom o bastante para
+  garantir O(n) no **pior** caso (BLUM et al., 1973).
+- **Memória**: a versão com `while` usa O(1) extra. A recursiva é de cauda; o
+  gcc com `-O2` costuma virar laço, sem ele o pior caso empilha `n` chamadas
+  (SEDGEWICK, 1998, cap. 7).
+
+> [!WARNING]
+> As posições começam em 0: "o 3º menor" é `k = 2`, e `quickselect(v, n, 3)`
+> devolve o 4º. O quickselect também **bagunça o vetor**: para manter a ordem
+> original, passe uma cópia.
+
+### Exemplos de uso
 
 Nove aluguéis anotados, de R$ 980 a R$ 3100; o típico é a mediana. O pivô
 1300 cai na posição 2, e a mediana (posição 4) está à direita: os três
@@ -1463,7 +1774,128 @@ int main(void) {
 gcc ~/LPEDC/material/A246.c -o ~/LPEDC/material/A246 && ~/LPEDC/material/A246
 ```
 
-### 0124 · Juntando tudo
+### Exercícios
+
+**Exercício E733** · ★☆☆
+
+A escola quer um resumo das notas de redação do simulado: a menor, a
+segunda menor, a mediana, a segunda maior e a maior. Escreva o quickselect
+(int quickselect(int v[], int n, int k), com a separação de Lomuto de
+pivô v[r]) e int seleciona_copia(const int v[], int n, int k), que copia v
+para um vetor local e roda o quickselect na cópia, para a lista ficar na
+ordem original. Use para mostrar o resumo e, no fim, notas[0], para provar
+que o vetor não mudou.
+
+```text
+Notas de 11 alunos: 720 480 860 640 920 560 700 380 800 600 680
+```
+
+```text
+Saída esperada:
+menor:       380
+2ª menor:    480
+mediana:     680
+2ª maior:    860
+maior:       920
+primeira do vetor continua: 720
+```
+
+**Exercício E735** · ★★☆
+
+Com um número PAR de valores, a mediana é a média dos dois do meio. O app
+de entregas quer a mediana dos tempos de 10 entregas, sem ordenar o vetor.
+Escreva o quickselect (Lomuto, pivô v[r]) e double mediana(int v[], int n),
+que funciona para n par e ímpar, usando UM quickselect só. Confira no fim
+com o qsort.
+
+```text
+Tempos (min), 10 entregas: 42 28 55 31 47 35 61 41 26 38
+Com 9 entregas: os mesmos, sem o 38
+```
+
+```text
+Saída esperada:
+10 entregas: mediana 39.5 min
+9 entregas:  mediana 41.0 min
+conferindo: 38 e 41 no meio
+```
+
+**Exercício E736** · ★★☆
+
+Quem cuida de servidores olha os PERCENTIS: o p90 é o tempo que 90% das
+requisições não ultrapassam. Gere 50 tempos de resposta, em ms, com
+
+```text
+t[i] = 30 + (i * 37) % 50 * 4 + (i % 9 == 0 ? 600 : 0)
+```
+
+Escreva o quickselect (Lomuto, pivô v[r]) e int percentil(int v[], int n,
+int pct), que devolve o valor da posição teto(pct * n / 100) - 1 da ordem
+crescente. Mostre p50, p90 e p99. Depois ordene com qsort e confira as
+posições 24, 44 e 49.
+
+```text
+Saída esperada:
+p50: 138 ms
+p90: 630 ms
+p99: 826 ms
+conferindo: 138, 630 e 826
+```
+
+**Exercício E737** · ★★★
+
+A secretaria da faculdade tem 10001 matrículas, numeradas de 1 a 10001 e
+já em ordem, e quer a matrícula mediana (a da posição 5000 do vetor).
+Para fugir do pior caso do vetor ordenado, escreva um quickselect com
+pivô sorteado. A cada passada do laço, sorteie a posição do pivô entre p
+e r, troque-a com v[r] e só então faça a separação de Lomuto (pivô v[r],
+comparação <=), contando as separações numa variável static. O sorteio
+usa uma semente unsigned, que começa em 2025:
+
+```text
+semente = semente * 1103515245u + 12345u;
+posição = p + (int) ((semente >> 16) % (unsigned) (r - p + 1));
+```
+
+```text
+Saída esperada:
+mediana: 5001 (19 separações)
+```
+
+---
+
+## 0124 · Juntando tudo
+
+### Conceito
+
+- **Ordenação linear**: troca a comparação por **suposições sobre os dados**,
+  como chave inteira numa faixa conhecida (CORMEN et al., 2024, cap. 8).
+- **Duas chaves**: ordene pela **menos** importante e depois, com um método
+  **estável**, pela mais importante. É a ideia do radix LSD
+  (CORMEN et al., 2024, cap. 8).
+- **`qsort`**: ordena qualquer tipo. Move blocos de bytes e chama a função de
+  comparação por ponteiro, sem conhecer o tipo nem a faixa da chave
+  (KERNIGHAN; RITCHIE, 1989).
+- **`clock()`**: de `<time.h>`, dá o tempo de processador. A diferença entre
+  duas chamadas, dividida por `CLOCKS_PER_SEC`, vira segundos (CPPREFERENCE, s.d.).
+- **Teste por comparação**: ordenar uma cópia com o `qsort` e conferir se a
+  ordem bate é o jeito mais simples de testar uma ordenação escrita à mão.
+
+| Algoritmo | Custo | Memória extra | Estável | Quando usar |
+| --- | --- | --- | --- | --- |
+| shell sort | ~n^1,25 (Knuth: pior n^1,5) | O(1) | não | vetores médios, pouca memória, código curto |
+| counting sort | O(n + k) | O(n + k) | sim | chaves inteiras num intervalo pequeno |
+| radix sort | O(d · (n + b)) | O(n + b) | sim | inteiros ou strings de tamanho fixo |
+| bucket sort | O(n) médio, O(n²) pior | O(n) | sim (inserindo depois dos iguais) | valores reais bem espalhados num intervalo conhecido |
+| quickselect | O(n) médio, O(n²) pior | O(1) | não | o k-ésimo, a mediana, os k maiores, sem ordenar |
+| qsort | O(n log n) | depende da biblioteca | não garantido | qualquer tipo, qualquer critério |
+
+> [!WARNING]
+> Chave fora da faixa escreve fora do vetor: um registro com
+> `segundo = 86400` faz `c[86400]` estourar. Confira a faixa antes de usar o
+> valor como índice.
+
+### Exemplos de uso
 
 Um banco registrou 1 milhão de Pix. O time de fraudes pede dois relatórios:
 por **valor** e por **horário**, com os Pix do mesmo segundo do menor para o
@@ -1752,428 +2184,7 @@ int main(void) {
 gcc ~/LPEDC/material/A248.c ~/LPEDC/material/0124-pix.c -o ~/LPEDC/material/A248 && ~/LPEDC/material/A248
 ```
 
----
-
-## 3. Exercícios práticos
-
-Cada exercício é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta. Compile como os exemplos: `gcc ~/LPEDC/material/E007.c -o ~/LPEDC/material/E007 && ~/LPEDC/material/E007`. Resoluções em `_respostas/18-ordenacao-linear/`.
-
-### 0119 · Shell sort
-
-**Exercício E709** · ★☆☆
-
-Antes de ordenar, o shell sort escolhe os saltos. Escreva a função
-void mostra_saltos(int n), que mostra os saltos de Knuth (h = 3h + 1) que
-o shell sort do texto usa para um vetor de n elementos, na ordem em que
-eles são usados (do maior para o 1). Chame para n = 10, 100, 1000 e
-1000000.
-
-```text
-Saída esperada:
-n = 10: 4 1
-n = 100: 40 13 4 1
-n = 1000: 364 121 40 13 4 1
-n = 1000000: 797161 265720 88573 29524 9841 3280 1093 364 121 40 13 4 1
-```
-
-**Exercício E711** · ★★☆
-
-A lista de convidados da festa precisa ir para a portaria em ordem
-alfabética. Escreva void shell_nomes(const char *v[], int n), um shell
-sort com os saltos de Knuth para um vetor de strings, que troca só os
-ponteiros (as letras não saem do lugar). Conte as comparações (cada strcmp
-conta uma) numa variável static. No main, ordene os convidados e mostre
-o resultado e a contagem.
-
-```text
-Convidados: Rafael Bianca Tiago Larissa Diego Amanda Paulo Helena Caio
-            Sofia Murilo Elisa
-```
-
-```text
-Saída esperada:
-Amanda, Bianca, Caio, Diego, Elisa, Helena, Larissa, Murilo, Paulo, Rafael, Sofia, Tiago
-36 comparações
-```
-
-**Exercício E712** · ★★☆
-
-Um vetor está h-ORDENADO quando toda fileira de passo h (v[i], v[i + h],
-v[i + 2h], ...) está em ordem. Escreva bool esta_h_ordenado(const int v[],
-int n, int h). No main, gere 40 números com v[i] = (i * 17 + 5) % 40 e rode
-o shell sort com os saltos de Knuth (13, 4, 1). Antes da primeira rodada e
-depois de cada uma, mostre se o vetor está 13-, 4- e 1-ordenado.
-
-```text
-Saída esperada:
-início: 13-ordenado? não, 4-ordenado? não, 1-ordenado? não
-h = 13: 13-ordenado? sim, 4-ordenado? não, 1-ordenado? não
-h =  4: 13-ordenado? sim, 4-ordenado? sim, 1-ordenado? não
-h =  1: 13-ordenado? sim, 4-ordenado? sim, 1-ordenado? sim
-```
-
-**Exercício E714** · ★★★
-
-Uma INVERSÃO é um par de posições i < j com v[i] > v[j]: um par fora de
-ordem. Vetor ordenado tem 0 inversões. Escreva long inversoes(const int
-v[], int n) (dois laços, O(n²)). No main, gere 200 números com
-v[i] = (i * 73 + 11) % 200 e rode o shell sort com os saltos de Knuth,
-contando os movimentos (v[j] = v[j - h]) de cada rodada. Depois de cada
-rodada, mostre as inversões que sobraram e os movimentos dela. No fim,
-mostre o total de movimentos e as inversões do início.
-
-```text
-Saída esperada:
-início:  9775 inversões
-h = 121:  7359 inversões,   12 movimentos
-h =  40:  2602 inversões,  131 movimentos
-h =  13:  1004 inversões,  172 movimentos
-h =   4:   288 inversões,  234 movimentos
-h =   1:     0 inversões,  288 movimentos
-total: 837 movimentos (o insertion sort faria 9775)
-```
-
-### 0120 · Counting sort
-
-**Exercício E715** · ★☆☆
-
-As notas da prova de 20 alunos vão de 0 a 10:
-
-```text
-7 5 10 3 7 8 5 7 9 6 4 7 8 2 5 10 6 7 8 5
-```
-
-Ordene o vetor com a versão curta do counting sort (conte cada nota e
-reescreva cada uma c[x] vezes, sem vetor de saída) e mostre também a nota
-mais comum, usando os mesmos contadores.
-
-```text
-Saída esperada:
-ordenadas: 2 3 4 5 5 5 5 6 6 7 7 7 7 7 8 8 8 9 10 10
-mais comum: 7 (5 alunos)
-```
-
-**Exercício E717** · ★★☆
-
-Na triagem do pronto-socorro, cada paciente recebe uma cor de risco:
-vermelho, laranja, amarelo, verde ou azul, do mais grave para o menos
-grave. A fila de atendimento é por cor e, dentro da mesma cor, por ordem
-de chegada. Escreva ordena_triagem, um counting sort ESTÁVEL que usa como
-chave a posição da cor no vetor ordem_cores, e mostre a fila.
-
-```text
-Chegada (nome, cor): Joana amarelo, Pedro verde, Rita vermelho, Caio
-amarelo, Lia azul, Davi laranja, Nina verde, Otto vermelho, Sara
-amarelo, Ivo laranja
-```
-
-```text
-Saída esperada:
- 1. Rita  (vermelho)
- 2. Otto  (vermelho)
- 3. Davi  (laranja)
- 4. Ivo   (laranja)
- 5. Joana (amarelo)
- 6. Caio  (amarelo)
- 7. Sara  (amarelo)
- 8. Pedro (verde)
- 9. Nina  (verde)
-10. Lia   (azul)
-```
-
-**Exercício E718** · ★★☆
-
-Duas palavras são ANAGRAMAS quando usam as mesmas letras, nas mesmas
-quantidades: "porta" e "tropa". Um jeito de conferir: ordene as letras de
-cada uma e compare. Escreva void ordena_letras(char s[]), um counting sort
-das letras da própria string, com um contador para cada valor possível de
-char (256). No main, teste os pares alegria/regalia, porta/tropa,
-mesa/seta e carro/corra, copiando cada palavra para um vetor local antes
-de ordenar.
-
-```text
-Saída esperada:
-alegria -> aaegilr | regalia -> aaegilr: anagramas
-porta -> aoprt | tropa -> aoprt: anagramas
-mesa -> aems | seta -> aest: não são anagramas
-carro -> acorr | corra -> acorr: anagramas
-```
-
-**Exercício E720** · ★★★
-
-Quem quebra códigos secretos começa contando letras. Escreva um programa
-que mostre as letras da frase abaixo da MAIS frequente para a menos
-frequente (só as que aparecem), com empates em ordem alfabética:
-
-```text
-o rato roeu a roupa do rei de roma e a rainha ficou brava
-```
-
-A regra: nada de comparar letra com letra. Conte as frequências (um
-contador por letra) e depois ordene as 26 letras com um counting sort
-estável cuja chave é a frequência.
-
-```text
-Saída esperada:
-a:9 o:7 r:7 e:4 i:3 u:3 d:2 b:1 c:1 f:1 h:1 m:1 n:1 p:1 t:1 v:1
-```
-
-### 0121 · Radix sort
-
-**Exercício E721** · ★☆☆
-
-As duas perguntas que o radix sort faz o tempo todo são "quantos dígitos
-tem o maior número?" (quantas passadas) e "qual é o dígito desta casa?".
-Escreva as duas funções, só com divisão e resto por 10 (sem pow):
-
-- int quantos_digitos(int x): 5082 tem 4, 7 tem 1;
-
-- int digito(int x, int pos): pos 0 é a unidade, 1 a dezena, e assim por
-diante. digito(5082, 1) é 8.
-
-No main, mostre a tabela para 5082, 7, 340 e 19000, com o nome de cada
-casa (unidade, dezena, centena, milhar, dezena de milhar).
-
-```text
-Saída esperada:
-5082: 4 dígitos; unidade 2, dezena 8, centena 0, milhar 5
-7: 1 dígito; unidade 7
-340: 3 dígitos; unidade 0, dezena 4, centena 3
-19000: 5 dígitos; unidade 0, dezena 0, centena 0, milhar 9, dezena de milhar 1
-```
-
-**Exercício E723** · ★★☆
-
-A classificadora de cartões tinha 10 escaninhos, e cada escaninho é uma
-FILA: o primeiro cartão que entra é o primeiro que sai (assunto 0085).
-Escreva uma fila de inteiros sobre vetor (struct Fila, enfileira,
-desenfileira, vazia) e faça o radix sort assim, sem contagem nem
-acumulado: em cada passada, distribua os números em 10 filas pelo dígito
-da vez e depois recolha as filas em ordem, da 0 à 9, de volta no vetor.
-Os números são os cubos de 0 a 9, embaralhados:
-
-```text
-64 8 216 512 27 729 0 1 343 125
-```
-
-Mostre o vetor (com 3 dígitos por número) depois de cada passada.
-
-```text
-Saída esperada:
-exp =   1: 000 001 512 343 064 125 216 027 008 729
-exp =  10: 000 001 008 512 216 125 027 729 343 064
-exp = 100: 000 001 008 027 064 125 216 343 512 729
-```
-
-**Exercício E724** · ★★☆
-
-O radix sort não precisa de dígitos: qualquer chave formada por "casas"
-serve. Uma data tem três casas: dia, mês e ano, do menos para o mais
-importante. Ordene os vencimentos dos boletos em ordem cronológica com
-três passadas de counting sort estável: primeiro pelo dia, depois pelo
-mês, por fim pelo ano. Mostre o vetor depois de cada passada.
-
-```text
-Vencimentos (dia/mês/ano): 15/03/2025 05/11/2024 15/01/2025 28/02/2024
-05/03/2025 10/11/2024 28/01/2025
-```
-
-```text
-Saída esperada:
-início: 15/03/2025 05/11/2024 15/01/2025 28/02/2024 05/03/2025 10/11/2024 28/01/2025
-dia:    05/11/2024 05/03/2025 10/11/2024 15/03/2025 15/01/2025 28/02/2024 28/01/2025
-mês:    15/01/2025 28/01/2025 28/02/2024 05/03/2025 15/03/2025 05/11/2024 10/11/2024
-ano:    28/02/2024 05/11/2024 10/11/2024 15/01/2025 28/01/2025 05/03/2025 15/03/2025
-```
-
-**Exercício E726** · ★★★
-
-O extrato tem saques (negativos) e depósitos, em centavos. No complemento
-de dois, -7 é FFFFFFF9: como número sem sinal ele é enorme, e o radix sort
-em base 256 ingênuo põe os negativos depois dos positivos. Escreva
-radix(v, aux, n, com_chave) para int32_t: sem a chave, ordena por
-(uint32_t) x; com a chave, por (uint32_t) x ^ 0x80000000u (inverte o bit
-de sinal). Use -150000, 3200, -7, 0, INT_MAX, INT_MIN, 98000, -98000 e 7;
-mostre o -7 em hexadecimal e o resultado dos dois casos.
-
-```text
-Saída esperada:
--7 como uint32_t: FFFFFFF9
-sem a chave: 0 7 3200 98000 2147483647 -2147483648 -150000 -98000 -7
-com a chave: -2147483648 -150000 -98000 -7 0 7 3200 98000 2147483647
-```
-
-### 0122 · Bucket sort
-
-**Exercício E727** · ★☆☆
-
-A loja de R$ 1,99 virou "loja até R$ 50" e quer separar os produtos em 5
-prateleiras de preço: de 0 a 10, de 10 a 20, ..., de 40 a 50. Escreva
-int balde_de(double x, double max, int nb), que devolve o balde (de 0 a
-nb - 1) de um valor x entre 0 e max, com nb baldes de mesma largura. O
-preço máximo, R$ 50,00, vai para o último balde. Mostre o balde de cada
-preço: 12.50, 49.99, 50.00, 0.00, 10.00, 37.20 e 9.99.
-
-```text
-Saída esperada:
-R$ 12.50 -> balde 1
-R$ 49.99 -> balde 4
-R$ 50.00 -> balde 4
-R$  0.00 -> balde 0
-R$ 10.00 -> balde 1
-R$ 37.20 -> balde 3
-R$  9.99 -> balde 0
-```
-
-**Exercício E729** · ★★☆
-
-A agenda do celular agrupa os contatos pela letra inicial. Faça um bucket
-sort de strings com 26 baldes, um por letra: o balde de um nome é
-nome[0] - 'A', e cada balde é uma lista encadeada que guarda os nomes já
-em ordem alfabética (compare com strcmp). Mostre cada balde que não está
-vazio, devolva os nomes ao vetor em ordem e libere todos os nós.
-
-```text
-Contatos: Marcos Ana Bruno Mariana Carla Alberto Beatriz Marta Caio
-Amanda Mauro
-```
-
-```text
-Saída esperada:
-A: Alberto Amanda Ana
-B: Beatriz Bruno
-C: Caio Carla
-M: Marcos Mariana Marta Mauro
-agenda: Alberto Amanda Ana Beatriz Bruno Caio Carla Marcos Mariana Marta Mauro
-```
-
-**Exercício E730** · ★★☆
-
-Escreva dois bucket sorts de double, com baldes que são listas encadeadas
-mantidas em ordem: bucket_sort_01(double v[], int n), para valores em
-[0, 1), com n baldes e balde (int) (x * n); e bucket_sort_faixa(double
-v[], int n), para valores quaisquer, que mostra a faixa (menor e maior) e
-usa n baldes de mesma largura (se todos são iguais, vão para o balde 0).
-Teste a primeira com 0.35 0.80 0.05 0.62 0.41 0.97 e a segunda com 22.4
--3.5 38.2 15.0 9.7 30.1 -1.2 27.8 18.6 4.3 33.0 12.9 e com 7.0 7.0 7.0,
-mostrando cada vetor ordenado com 2 casas decimais.
-
-```text
-Saída esperada:
-0.05 0.35 0.41 0.62 0.80 0.97
-faixa: -3.5 a 38.2, 12 baldes de 3.48
--3.50 -1.20 4.30 9.70 12.90 15.00 18.60 22.40 27.80 30.10 33.00 38.20
-faixa: 7.0 a 7.0, 3 baldes de 0.00
-7.00 7.00 7.00
-```
-
-**Exercício E731** · ★★★
-
-A padaria ordena os pedidos do dia pelo valor e quer que pedidos de mesmo
-valor fiquem na ordem de chegada. Escreva um bucket sort ESTÁVEL de
-struct Pedido { char cliente; int valor; }, para valores de R$ 0 a R$ 99:
-10 baldes, um para cada R$ 10 (balde = valor / 10), cada um uma lista
-encadeada ordenada. Devolva os pedidos ao vetor, balde por balde, e libere
-os nós. Pedidos (cliente:valor), na ordem de chegada:
-
-```text
-A:35 B:12 C:35 D:87 E:12 F:50 G:38 H:35 I:9
-```
-
-```text
-Saída esperada:
-I:9 B:12 E:12 A:35 C:35 H:35 G:38 F:50 D:87
-```
-
-### 0123 · Quickselect
-
-**Exercício E733** · ★☆☆
-
-A escola quer um resumo das notas de redação do simulado: a menor, a
-segunda menor, a mediana, a segunda maior e a maior. Escreva o quickselect
-(int quickselect(int v[], int n, int k), com a separação de Lomuto de
-pivô v[r]) e int seleciona_copia(const int v[], int n, int k), que copia v
-para um vetor local e roda o quickselect na cópia, para a lista ficar na
-ordem original. Use para mostrar o resumo e, no fim, notas[0], para provar
-que o vetor não mudou.
-
-```text
-Notas de 11 alunos: 720 480 860 640 920 560 700 380 800 600 680
-```
-
-```text
-Saída esperada:
-menor:       380
-2ª menor:    480
-mediana:     680
-2ª maior:    860
-maior:       920
-primeira do vetor continua: 720
-```
-
-**Exercício E735** · ★★☆
-
-Com um número PAR de valores, a mediana é a média dos dois do meio. O app
-de entregas quer a mediana dos tempos de 10 entregas, sem ordenar o vetor.
-Escreva o quickselect (Lomuto, pivô v[r]) e double mediana(int v[], int n),
-que funciona para n par e ímpar, usando UM quickselect só. Confira no fim
-com o qsort.
-
-```text
-Tempos (min), 10 entregas: 42 28 55 31 47 35 61 41 26 38
-Com 9 entregas: os mesmos, sem o 38
-```
-
-```text
-Saída esperada:
-10 entregas: mediana 39.5 min
-9 entregas:  mediana 41.0 min
-conferindo: 38 e 41 no meio
-```
-
-**Exercício E736** · ★★☆
-
-Quem cuida de servidores olha os PERCENTIS: o p90 é o tempo que 90% das
-requisições não ultrapassam. Gere 50 tempos de resposta, em ms, com
-
-```text
-t[i] = 30 + (i * 37) % 50 * 4 + (i % 9 == 0 ? 600 : 0)
-```
-
-Escreva o quickselect (Lomuto, pivô v[r]) e int percentil(int v[], int n,
-int pct), que devolve o valor da posição teto(pct * n / 100) - 1 da ordem
-crescente. Mostre p50, p90 e p99. Depois ordene com qsort e confira as
-posições 24, 44 e 49.
-
-```text
-Saída esperada:
-p50: 138 ms
-p90: 630 ms
-p99: 826 ms
-conferindo: 138, 630 e 826
-```
-
-**Exercício E737** · ★★★
-
-A secretaria da faculdade tem 10001 matrículas, numeradas de 1 a 10001 e
-já em ordem, e quer a matrícula mediana (a da posição 5000 do vetor).
-Para fugir do pior caso do vetor ordenado, escreva um quickselect com
-pivô sorteado. A cada passada do laço, sorteie a posição do pivô entre p
-e r, troque-a com v[r] e só então faça a separação de Lomuto (pivô v[r],
-comparação <=), contando as separações numa variável static. O sorteio
-usa uma semente unsigned, que começa em 2025:
-
-```text
-semente = semente * 1103515245u + 12345u;
-posição = p + (int) ((semente >> 16) % (unsigned) (r - p + 1));
-```
-
-```text
-Saída esperada:
-mediana: 5001 (19 separações)
-```
-
-### 0124 · Juntando tudo
+### Exercícios
 
 **Exercício E739** · ★☆☆
 
@@ -2263,11 +2274,13 @@ valores até R$ 2,55: 1 passada de 4, igual ao pix_por_valor? sim
 gcc ~/LPEDC/material/E744.c ~/LPEDC/material/0124-pix.c -o ~/LPEDC/material/E744 && ~/LPEDC/material/E744
 ```
 
-### Lista do módulo
+---
+
+## Lista do módulo
 
 30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P1801.c a P1830.c, em `material/`; resoluções em `_respostas/18-ordenacao-linear/lista/`.
 
-#### ★☆☆ Aquecimento
+### ★☆☆ Aquecimento
 
 **Exercício P1801** · ★☆☆ · Counting sort passo a passo: o vetor C e a saída
 
@@ -2507,7 +2520,7 @@ Saída esperada:
 0 3 4 5 5 6 7 7 8 9 10 10
 ```
 
-#### ★★☆ Para pensar
+### ★★☆ Para pensar
 
 **Exercício P1811** · ★★☆ · Quatro sequências de saltos no mesmo shell sort
 
@@ -2800,7 +2813,7 @@ Saída esperada:
 
 **Resposta esperada:** counting ganha com k = 10 e k = 1000 (2010 e 3000 operações); merge ganha com k = 100000 e 1000000.
 
-#### ★★★ Desafio
+### ★★★ Desafio
 
 **Exercício P1821** · ★★★ · O painel de partidas do aeroporto
 
@@ -3157,7 +3170,7 @@ strcmp("10.0.0.9", "10.0.0.10") > 0: sim
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas para fechar o módulo, misturando os assuntos. Escreva em C e compile
 com as flags de estudo.
@@ -3306,7 +3319,7 @@ junto com o vetor ordenado. Num vetor decrescente de 100 mil, são
 
 </details>
 
-### Questões do POSCOMP
+## Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -3316,7 +3329,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 
 O gabarito de 2023 vem de um blog de terceiros que reproduz o gabarito definitivo; confira no PDF oficial da SBC.
 
-### Questões no estilo da prova
+## Questões no estilo da prova
 
 Questões objetivas no formato da prova do PPGI: conceito, afirmações
 combinadas, simulação à mão, cálculo e código com erro. Resolva no papel,

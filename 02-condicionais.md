@@ -64,9 +64,12 @@ avisos; o enunciado avisa quando é o caso. Nos demais, **zero avisos**.
 
 ---
 
-## 1. Conceitos gerais
+> [!NOTE]
+> Cada assunto é um capítulo: **Conceito** (a explicação), **Exemplos de uso** (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e **Exercícios** (cada um é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta; resoluções em `_respostas/02-condicionais/`).
 
-### 0012 · Relacionais e a verdade em C
+## 0012 · Relacionais e a verdade em C
+
+### Conceito
 
 - **Operadores relacionais**: `>`, `<`, `>=`, `<=`, `==` (igual, dois sinais)
   e `!=` (diferente). Toda decisão começa numa comparação
@@ -98,259 +101,7 @@ avisos; o enunciado avisa quando é o caso. Nos demais, **zero avisos**.
 > a soma dá 0.30000000000000004. Pergunte se estão perto o bastante,
 > `fabs(a - b) < 1e-9`, ou guarde dinheiro em **centavos** num `int`.
 
-### 0013 · Lógicos: E, OU, NÃO
-
-- **Operadores lógicos**: `a && b` (**E**) é verdade só se as duas forem;
-  `a || b` (**OU**) é verdade se pelo menos uma for; `!a` (**NÃO**) inverte. O
-  resultado é um `int` 0 ou 1 (DEITEL; DEITEL, 2011, cap. 4).
-- **Intervalo**: 18 ≤ idade ≤ 65 vira `idade >= 18 && idade <= 65`. Escrever
-  `18 <= idade <= 65` compila, mas compara o 0 ou 1 da primeira parte com 65
-  (BACKES, 2013, cap. 3).
-- **Precedência**, da mais forte para a mais fraca: `!`, aritméticos,
-  relacionais, igualdade, `&&` e por último `||`. `a || b && c` é
-  `a || (b && c)` (KERNIGHAN; RITCHIE, 1988, cap. 2).
-- **Curto-circuito**: o C avalia da esquerda para a direita e **para assim que
-  sabe a resposta**. Em `a && b`, se `a` é falso, `b` nem é calculado; em
-  `a || b`, se `a` é verdade, `b` é pulado. Assim,
-  `n != 0 && total / n > 3` nunca divide por zero (DEITEL; DEITEL, 2011, cap. 4).
-- **De Morgan**: o NÃO entra nos parênteses e troca E por OU. `!(a && b)` é
-  `!a || !b`, e `!(a || b)` é `!a && !b` (DEITEL; DEITEL, 2011, cap. 4).
-
-| `a` | `b` | `a && b` | `a \|\| b` | `!a` |
-| --- | --- | --- | --- | --- |
-| 0 | 0 | 0 | 0 | 1 |
-| 0 | 1 | 0 | 1 | 1 |
-| 1 | 0 | 0 | 1 | 0 |
-| 1 | 1 | 1 | 1 | 0 |
-
-> [!WARNING]
-> **`&` não é `&&`.** O `&` é o E **bit a bit** (0065): sem curto-circuito e
-> com precedência **menor** que a do `==`. `if (x & 1 == 0)` vira
-> `x & (1 == 0)`, sempre 0. O `-Wall` avisa: "suggest parentheses".
-
-### 0014 · if
-
-- **`if`**: a **seleção simples**. Com a condição verdadeira, roda o bloco;
-  com ela falsa, pula o bloco e segue. Um passo extra ou nada
-  (DEITEL; DEITEL, 2011, cap. 3).
-
-```c
-if (condição) {
-    // só roda quando a condição é verdadeira
-}
-// daqui em diante roda sempre
-```
-
-- **Condição**: entre parênteses, qualquer expressão numérica: comparação,
-  combinação lógica ou variável sozinha. Zero é falso, o resto é verdade:
-  `if (saldo)` é `if (saldo != 0)` (BACKES, 2013, cap. 4).
-- **Bloco**: as chaves agrupam quantas instruções quiser. Sem chaves, o `if`
-  controla **uma** instrução só, a primeira depois dele
-  (BACKES, 2013, cap. 4).
-
-```c
-if (total >= 200)
-    total = total * 0.9;   // depende do if
-printf("Pronto\n");        // NÃO depende, apesar de qualquer recuo
-```
-
-- **Recuo**: só para quem lê; o compilador o ignora. Por isso o curso usa
-  **chaves sempre**, mesmo com uma linha só (KERNIGHAN; RITCHIE, 1988, cap. 3).
-
-> [!WARNING]
-> **O `;` depois do `if` mata a condição.** Em `if (total >= 200);`, o `;` é
-> uma **instrução vazia** e vira o corpo; o bloco seguinte roda **sempre**. O
-> `-Wextra` avisa ("suggest braces around empty body").
-
-### 0015 · if/else e o = no lugar do ==
-
-- **`if/else`**: a **seleção dupla**. Exatamente um dos dois blocos roda,
-  nunca os dois e nunca nenhum (DEITEL; DEITEL, 2011, cap. 3).
-
-```c
-if (condição) {
-    // caminho do Sim
-} else {
-    // caminho do Não
-}
-```
-
-- **`else` sem condição**: é "todo o resto". `else (saldo < 5)` é erro; outra
-  pergunta vira um novo `if` (0016) (BACKES, 2013, cap. 4).
-- **Chaves e `;`**: sem chaves, o `else` controla uma instrução só. Em
-  `if (c); { ... } else { ... }`, o `else` fica sem `if` e não compila
-  (DEITEL; DEITEL, 2011, cap. 3).
-- **Atribuição é expressão**: vale o valor guardado. Por isso `if (saldo = 0)`
-  **guarda 0** e testa esse 0, que é falso; `if (opcao = 1)` é sempre verdade
-  (DEITEL; DEITEL, 2011, cap. 4).
-- **Avisos**: o `-Wall` acusa "suggest parentheses around assignment used as
-  truth value". Código bom compila com zero avisos (GNU, s.d.).
-
-> [!WARNING]
-> **`=` no lugar de `==`** compila e erra em silêncio: com `if (saldo = 0)`, o
-> saldo vira zero e o `else` roda sempre. Compile com `-Wall` ou escreva a
-> constante à esquerda: `0 = saldo` não compila.
-
-### 0016 · else if, if aninhado e o else pendurado
-
-- **`else if`**: encadeia perguntas para mais de dois caminhos; só um vale
-  (DEITEL; DEITEL, 2011, cap. 3).
-
-```c
-if (velocidade <= 60) {
-    // dentro do limite
-} else if (velocidade <= 72) {
-    // média
-} else if (velocidade <= 90) {
-    // grave
-} else {
-    // gravíssima
-}
-```
-
-- **Primeiro Sim**: o C testa de cima para baixo e **para no primeiro Sim**.
-  Ao chegar em `velocidade <= 72`, já se sabe que passou de 60: não precisa
-  de `velocidade > 60 &&` (BACKES, 2013, cap. 4).
-- **A ordem importa**: com `velocidade <= 90` no topo, 65 km/h viraria
-  "grave". Percorra as faixas num sentido só. O `else` final é opcional e pega
-  o que sobrou (DEITEL; DEITEL, 2011, cap. 3).
-- **`if` aninhado**: um `if` dentro do bloco de outro, para a pergunta que só
-  faz sentido depois de um Sim. O `else if` não é palavra-chave: é um `else`
-  cuja única instrução é um `if` (KERNIGHAN; RITCHIE, 1988, cap. 3).
-- **Else pendurado**: sem chaves, o `else` pertence ao `if` **mais próximo**
-  que ainda não tem `else`, não importa o recuo (BACKES, 2013, cap. 4).
-
-> [!WARNING]
-> **O `else` pendurado.** O recuo engana:
->
-> ```c
-> if (pessoas > 0)
->     if (pessoas == 1)
->         printf("Mesa para um.\n");
-> else
->     printf("Restaurante vazio.\n");
-> ```
->
-> O `else` é do segundo `if`: com 4 pessoas aparece "Restaurante vazio.". O
-> `-Wall` avisa; a cura são **chaves** em volta do `if` de dentro.
-
-### 0017 · Ternário: condição ? a : b
-
-- **Operador ternário**: o único do C com três partes. Escolhe um entre dois
-  valores (DEITEL; DEITEL, 2011, cap. 3).
-
-```c
-condição ? valor_se_verdade : valor_se_falso
-```
-
-- **É expressão**: ao contrário do `if`, **devolve um valor**. Cabe à direita
-  de uma atribuição, num `printf` ou no meio de uma conta
-  (BACKES, 2013, cap. 4).
-
-```c
-double frete = total >= 199 ? 0.0 : 19.90;   // escolhe um valor
-printf("%s\n", qtd == 1 ? "item" : "itens"); // escolhe um texto
-```
-
-- **Só um lado roda**: o C avalia a condição e depois um dos lados, como no
-  curto-circuito. `b != 0 ? a / b : 0` nunca divide por zero
-  (KERNIGHAN; RITCHIE, 1988, cap. 2).
-- **Tipo comum**: os dois lados viram o mesmo tipo. Em `n > 0 ? n : 0.5`, com
-  `n` inteiro, o resultado é `double` (KERNIGHAN; RITCHIE, 1988, cap. 2).
-- **Associatividade**: desempata operadores da mesma linha da tabela, do mais
-  forte ao mais fraco (a completa, com bits e ponteiros, está no 0170)
-  (CPPREFERENCE, s.d.).
-- **Quando usar**: para escolher **um valor**, com condição curta. Se cada lado
-  faz várias coisas, ou os ternários se aninham, volte ao `if/else`.
-
-| Operadores | Associatividade |
-| --- | --- |
-| `x++` `x--` (pós) | esquerda → direita |
-| `!` `-x` `++x` `--x` `(tipo)` `sizeof` | direita → esquerda |
-| `*` `/` `%` | esquerda → direita |
-| `+` `-` | esquerda → direita |
-| `<` `<=` `>` `>=` | esquerda → direita |
-| `==` `!=` | esquerda → direita |
-| `&&` | esquerda → direita |
-| `\|\|` | esquerda → direita |
-| `?:` | direita → esquerda |
-| `=` `+=` `-=` `*=` `/=` `%=` | direita → esquerda |
-
-> [!WARNING]
-> **O ternário tem precedência baixíssima.** `40 - estudante ? 20 : 0` é
-> `(40 - estudante) ? 20 : 0`, que dá 20 para todo mundo. Escreva
-> `40 - (estudante ? 20 : 0)`: no meio de uma conta, ternário entre parênteses.
-
-### 0018 · switch, case, break e fall-through
-
-- **`switch`**: a **seleção múltipla**. Calcula a expressão uma vez e **pula
-  direto** para o `case` de mesmo valor; o **`default`** pega o que não casou
-  (DEITEL; DEITEL, 2011, cap. 4).
-
-```c
-switch (codigo) {
-case 1:
-    // código igual a 1
-    break;
-case 2:
-    // código igual a 2
-    break;
-default:
-    // nenhum dos anteriores
-}
-```
-
-- **Expressão inteira**: `int`, `char` ou parecido. `double` e texto não
-  compilam (DEITEL; DEITEL, 2011, cap. 4).
-- **`case` constante**: valor conhecido na compilação (`case 2:`,
-  `case 'S':`); `case x:` e `case > 10:` não valem, nem dois `case` iguais
-  (KERNIGHAN; RITCHIE, 1988, cap. 3).
-- **Fall-through**: o `case` é só um **rótulo** de entrada. Depois de entrar,
-  o C executa **tudo para baixo**, atravessando os outros `case`, até um
-  **`break`** ou o fim do `switch` (BACKES, 2013, cap. 4).
-- **Fall-through de propósito**: `case` empilhados dividem o mesmo trecho
-  (`case 'S': case 's':`). Com código no meio, avise com `// fall through`,
-  que o gcc reconhece (GNU, s.d.).
-
-> [!WARNING]
-> **Esquecer o `break`.** Sem o do `case 2`, pedir X-Salada mostra também
-> "Misto quente" e o preço vira **9.00**. O compilador não vê erro; o
-> `-Wextra` avisa ("this statement may fall through").
-
-### 0019 · Juntando tudo: a conta de luz
-
-- **Escolher a ferramenta**: valores exatos pedem `switch`; duas condições
-  juntas, `if` com `&&`; um valor entre dois, ternário; faixas, `else if`
-  (DEITEL; DEITEL, 2011, cap. 4).
-- **Validar a entrada**: o `scanf` devolve quantos valores leu; com "abc" no
-  lugar de um número, devolve 0. Confira antes de usar
-  (BACKES, 2013, cap. 2).
-- **Cláusula de guarda**: trate o caso ruim primeiro, avise e saia com
-  `return 1` (o código de erro que `echo $?` mostra). O resto fica reto, sem
-  um `else` gigante.
-- **Tarifas simplificadas**: R$ 0,80 por kWh; bandeira amarela com R$ 0,02 a
-  mais por kWh e vermelha com R$ 0,05; desconto social de 40%.
-
-| Decisão | Ferramenta | Por quê |
-| --- | --- | --- |
-| a bandeira é V, A ou R? | `switch` | valores exatos de um `char` |
-| tem tarifa social **e** consumo até 220 kWh? | `if` com `&&` | duas condições juntas, um passo a mais ou nada |
-| iluminação: R$ 15 acima de 100 kWh, senão R$ 5 | ternário | escolhe **um valor** entre dois |
-| consumo baixo, médio ou alto? | `else if` | faixas, testadas em ordem |
-| a leitura deu certo e o consumo não é negativo? | `if` com `\|\|` | barra a entrada ruim logo no começo |
-
-> [!WARNING]
-> **A ordem dos passos é parte da regra.** O desconto vale sobre energia e
-> bandeira, não sobre a iluminação. Teste um caso que passe por todos os
-> ramos: 150 kWh, verde, social dá 120 + 0 - 48 + 15 = **R$ 87.00**.
-
----
-
-## 2. Exemplos de uso
-
-Cada exemplo compila sozinho. Rode com o comando abaixo dele e compare com a saída no fim do código.
-
-### 0012 · Relacionais e a verdade em C
+### Exemplos de uso
 
 Fim de jogo, mandante 2 x 1 visitante. Os dois placares viram três perguntas,
 cada resposta é 0 ou 1, e a tabela usa esses números direto na conta dos
@@ -468,7 +219,108 @@ int main(void) {
 gcc ~/LPEDC/material/A024.c -o ~/LPEDC/material/A024 -lm && ~/LPEDC/material/A024
 ```
 
-### 0013 · Lógicos: E, OU, NÃO
+### Exercícios
+
+**Exercício E067** · ★☆☆
+
+No posto, a regra de bolso diz que o etanol compensa quando custa no
+máximo 70% do preço da gasolina. Leia o preço do etanol e o da gasolina, nessa
+ordem e sem mostrar perguntas, e guarde a resposta num bool. Mostre o bool com
+%d (sem if: só a comparação).
+
+```text
+Entrada:
+4.19
+6.09
+Saída esperada:
+Etanol compensa? 1
+```
+
+**Exercício E069** · ★★☆
+
+A loja cobra frete de R$ 24.90, mas só quando a compra é menor que
+R$ 199.00. Leia o total da compra, sem mostrar pergunta, e calcule o frete SEM
+usar if: multiplique 24.90 pelo 0 ou 1 de uma comparação. Mostre o frete e o
+valor a pagar.
+
+```text
+Entrada:
+150
+Saída esperada:
+Frete: R$ 24.90
+A pagar: R$ 174.90
+```
+
+**Exercício E070** · ★★☆
+
+A bala custa R$ 0,70 e a criança pagou com sete moedas de 10 centavos.
+Escreva um programa com preco = 0.7 e pago = 0.1 * 7 (double). Mostre pago
+com 20 casas e responda "Pagou o valor exato?" de dois jeitos: (a) comparando
+os doubles com uma tolerância de 1e-9, usando fabs; (b) trabalhando com
+centavos em int (70 e 7 * 10).
+
+```text
+Saída esperada:
+pago = 0.70000000000000006661
+Pagou o valor exato? 1
+Pagou o valor exato? 1
+```
+
+```bash
+gcc ~/LPEDC/material/E070.c -o ~/LPEDC/material/E070 -lm && ~/LPEDC/material/E070
+```
+
+**Exercício E072** · ★★★
+
+Desconto progressivo, sem nenhum if: compras a partir de R$ 100 ganham
+5%; a partir de R$ 300, ganham mais 5% (10% no total). Leia o total, sem
+mostrar pergunta, calcule a porcentagem só com comparações e mostre o total,
+o desconto e o valor a pagar.
+
+```text
+Entrada:
+150
+Saída esperada:
+Total: R$ 150.00
+Desconto: 5%
+A pagar: R$ 142.50
+```
+
+---
+
+## 0013 · Lógicos: E, OU, NÃO
+
+### Conceito
+
+- **Operadores lógicos**: `a && b` (**E**) é verdade só se as duas forem;
+  `a || b` (**OU**) é verdade se pelo menos uma for; `!a` (**NÃO**) inverte. O
+  resultado é um `int` 0 ou 1 (DEITEL; DEITEL, 2011, cap. 4).
+- **Intervalo**: 18 ≤ idade ≤ 65 vira `idade >= 18 && idade <= 65`. Escrever
+  `18 <= idade <= 65` compila, mas compara o 0 ou 1 da primeira parte com 65
+  (BACKES, 2013, cap. 3).
+- **Precedência**, da mais forte para a mais fraca: `!`, aritméticos,
+  relacionais, igualdade, `&&` e por último `||`. `a || b && c` é
+  `a || (b && c)` (KERNIGHAN; RITCHIE, 1988, cap. 2).
+- **Curto-circuito**: o C avalia da esquerda para a direita e **para assim que
+  sabe a resposta**. Em `a && b`, se `a` é falso, `b` nem é calculado; em
+  `a || b`, se `a` é verdade, `b` é pulado. Assim,
+  `n != 0 && total / n > 3` nunca divide por zero (DEITEL; DEITEL, 2011, cap. 4).
+- **De Morgan**: o NÃO entra nos parênteses e troca E por OU. `!(a && b)` é
+  `!a || !b`, e `!(a || b)` é `!a && !b` (DEITEL; DEITEL, 2011, cap. 4).
+
+| `a` | `b` | `a && b` | `a \|\| b` | `!a` |
+| --- | --- | --- | --- | --- |
+| 0 | 0 | 0 | 0 | 1 |
+| 0 | 1 | 0 | 1 | 1 |
+| 1 | 0 | 0 | 1 | 0 |
+| 1 | 1 | 1 | 1 | 0 |
+
+> [!WARNING]
+> **`&` não é `&&`.** O `&` é o E **bit a bit** (0065): sem curto-circuito e
+> com precedência **menor** que a do `==`. `if (x & 1 == 0)` vira
+> `x & (1 == 0)`, sempre 0. O `-Wall` avisa: "suggest parentheses".
+
+### Exemplos de uso
 
 No cinema, paga meia quem é estudante **ou** tem 60 anos ou mais, **e** a
 sessão **não** é pré-estreia. Para uma pessoa de 67 anos, não estudante, numa
@@ -579,7 +431,117 @@ int main(void) {
 gcc ~/LPEDC/material/A026.c -o ~/LPEDC/material/A026 && ~/LPEDC/material/A026
 ```
 
-### 0014 · if
+### Exercícios
+
+**Exercício E073** · ★☆☆
+
+Monte a tabela-verdade no terminal. Para cada uma das quatro combinações
+de a e b (0 0, 0 1, 1 0, 1 1), dê os valores às duas variáveis e mostre
+uma linha com a, b, a && b, a || b e !a, calculados pelo programa (nada de
+digitar os resultados no printf). Primeiro vem a linha de títulos.
+
+```text
+Saída esperada:
+a b | E OU NAO
+0 0 | 0 0  1
+0 1 | 0 1  1
+1 0 | 0 1  0
+1 1 | 1 1  0
+```
+
+**Exercício E075** · ★★☆
+
+Um ano é bissexto quando é divisível por 4 e não por 100, ou quando é
+divisível por 400. Leia o ano, sem mostrar pergunta, e calcule a resposta numa
+ÚNICA expressão, guardada num bool (sem if). Mostre o bool com %d.
+
+```text
+Entrada:
+2024
+Saída esperada:
+Bissexto? 1
+```
+
+**Exercício E076** · ★★☆
+
+Na portaria do show, a regra do "barrado" é !(idade >= 18 && tem_ingresso).
+Leia a idade e depois 1 ou 0 para "tem ingresso", sem mostrar perguntas.
+Calcule o barrado de duas formas: a original e uma reescrita por De Morgan, sem
+o ! do lado de fora de parênteses. Mostre as duas lado a lado.
+
+```text
+Entrada:
+16
+1
+Saída esperada:
+barrado (original):  1
+barrado (De Morgan): 1
+```
+
+**Exercício E077** · ★★★
+
+O app do banco mostra se o gasto médio por dia passou de R$ 100. Leia o
+gasto total e o número de dias (dois inteiros, em um scanf), sem mostrar
+pergunta. gasto_alto é verdade quando a média (gasto / dias) passa de 100;
+alerta é verdade quando não há dias registrados OU quando o gasto é alto.
+Conta nova tem 0 dias: o programa não pode dividir por zero em nenhuma das
+duas linhas. Sem if. Teste com 900 6 e com 900 0.
+
+```text
+Entrada:
+900 6
+Saída esperada:
+Gasto alto? 1
+Alerta? 1
+```
+
+```text
+Entrada:
+900 0
+Saída esperada:
+Gasto alto? 0
+Alerta? 1
+```
+
+---
+
+## 0014 · if
+
+### Conceito
+
+- **`if`**: a **seleção simples**. Com a condição verdadeira, roda o bloco;
+  com ela falsa, pula o bloco e segue. Um passo extra ou nada
+  (DEITEL; DEITEL, 2011, cap. 3).
+
+```c
+if (condição) {
+    // só roda quando a condição é verdadeira
+}
+// daqui em diante roda sempre
+```
+
+- **Condição**: entre parênteses, qualquer expressão numérica: comparação,
+  combinação lógica ou variável sozinha. Zero é falso, o resto é verdade:
+  `if (saldo)` é `if (saldo != 0)` (BACKES, 2013, cap. 4).
+- **Bloco**: as chaves agrupam quantas instruções quiser. Sem chaves, o `if`
+  controla **uma** instrução só, a primeira depois dele
+  (BACKES, 2013, cap. 4).
+
+```c
+if (total >= 200)
+    total = total * 0.9;   // depende do if
+printf("Pronto\n");        // NÃO depende, apesar de qualquer recuo
+```
+
+- **Recuo**: só para quem lê; o compilador o ignora. Por isso o curso usa
+  **chaves sempre**, mesmo com uma linha só (KERNIGHAN; RITCHIE, 1988, cap. 3).
+
+> [!WARNING]
+> **O `;` depois do `if` mata a condição.** Em `if (total >= 200);`, o `;` é
+> uma **instrução vazia** e vira o corpo; o bloco seguinte roda **sempre**. O
+> `-Wextra` avisa ("suggest braces around empty body").
+
+### Exemplos de uso
 
 No mercado, compras a partir de R$ 200 ganham 10% de desconto. Entram
 R$ 230, a resposta é Sim e o valor final é R$ 207; com Não, a seta cinza iria
@@ -681,7 +643,103 @@ int main(void) {
 gcc ~/LPEDC/material/A028.c -o ~/LPEDC/material/A028 && ~/LPEDC/material/A028
 ```
 
-### 0015 · if/else e o = no lugar do ==
+### Exercícios
+
+**Exercício E079** · ★☆☆
+
+Leia a temperatura de uma pessoa, sem mostrar pergunta, e mostre sempre
+o valor lido. Só se ela passar de 37.5, mostre também o aviso de febre.
+
+```text
+Entrada:
+38.2
+Saída esperada:
+Temperatura: 38.2 °C
+Febre! Procure um médico.
+```
+
+**Exercício E081** · ★★☆
+
+O cinema barra menores de 18 anos neste filme. Leia a idade, sem mostrar
+pergunta. Se for menor que 18, mostre "Entrada proibida para menores.". Para
+todo mundo, mostre "Bom filme!" no final. Teste com 25 e com 15.
+
+```text
+Entrada:
+25
+Saída esperada:
+Bom filme!
+```
+
+```text
+Entrada:
+15
+Saída esperada:
+Entrada proibida para menores.
+Bom filme!
+```
+
+**Exercício E082** · ★★☆
+
+Três lojas deram orçamento para a mesma geladeira. Leia os três valores
+(inteiros, em reais, na mesma linha) e mostre o MAIOR, usando só if (sem
+else).
+
+```text
+Entrada:
+3200 3790 3450
+Saída esperada:
+Maior orçamento: R$ 3790
+```
+
+**Exercício E084** · ★★★
+
+A conta de água da cidade funciona assim: até 10 m³, paga a tarifa mínima
+de R$ 45.00. Cada m³ acima de 10 custa R$ 6.20. E, se o consumo passar de
+30 m³, a conta inteira ganha 15% de multa por desperdício. Leia o consumo
+(inteiro), sem mostrar pergunta, e mostre a conta. Use só if, sem else.
+
+```text
+Entrada:
+18
+Saída esperada:
+Conta: R$ 94.60
+```
+
+---
+
+## 0015 · if/else e o = no lugar do ==
+
+### Conceito
+
+- **`if/else`**: a **seleção dupla**. Exatamente um dos dois blocos roda,
+  nunca os dois e nunca nenhum (DEITEL; DEITEL, 2011, cap. 3).
+
+```c
+if (condição) {
+    // caminho do Sim
+} else {
+    // caminho do Não
+}
+```
+
+- **`else` sem condição**: é "todo o resto". `else (saldo < 5)` é erro; outra
+  pergunta vira um novo `if` (0016) (BACKES, 2013, cap. 4).
+- **Chaves e `;`**: sem chaves, o `else` controla uma instrução só. Em
+  `if (c); { ... } else { ... }`, o `else` fica sem `if` e não compila
+  (DEITEL; DEITEL, 2011, cap. 3).
+- **Atribuição é expressão**: vale o valor guardado. Por isso `if (saldo = 0)`
+  **guarda 0** e testa esse 0, que é falso; `if (opcao = 1)` é sempre verdade
+  (DEITEL; DEITEL, 2011, cap. 4).
+- **Avisos**: o `-Wall` acusa "suggest parentheses around assignment used as
+  truth value". Código bom compila com zero avisos (GNU, s.d.).
+
+> [!WARNING]
+> **`=` no lugar de `==`** compila e erra em silêncio: com `if (saldo = 0)`, o
+> saldo vira zero e o `else` roda sempre. Compile com `-Wall` ou escreva a
+> constante à esquerda: `0 = saldo` não compila.
+
+### Exemplos de uso
 
 Na catraca do metrô, o cartão tem R$ 3,50 e a tarifa é R$ 5,00. A resposta é
 Não, e o caminho de baixo é o que vale:
@@ -775,7 +833,126 @@ int main(void) {
 gcc ~/LPEDC/material/A030.c -o ~/LPEDC/material/A030 && ~/LPEDC/material/A030
 ```
 
-### 0016 · else if, if aninhado e o else pendurado
+### Exercícios
+
+**Exercício E085** · ★☆☆
+
+Leia a idade, sem mostrar pergunta. Se for 18 ou mais, mostre "Maior de
+idade."; senão, mostre quantos anos faltam para os 18.
+
+```text
+Entrada:
+16
+Saída esperada:
+Faltam 2 ano(s) para a maioridade.
+```
+
+**Exercício E087** · ★★☆
+
+O caixa eletrônico bloqueia o cartão na 3ª senha errada. Leia quantas
+senhas erradas já foram digitadas, sem mostrar pergunta. Se forem 3, mostre
+"Cartão bloqueado."; senão, mostre quantas tentativas restam (3 menos o
+valor lido). No fim, para qualquer caso, mostre quantas tentativas foram
+registradas. Teste com 1 e com 3.
+
+```text
+Entrada:
+1
+Saída esperada:
+Senha errada. Restam 2 tentativa(s).
+Tentativas registradas: 1
+```
+
+```text
+Entrada:
+3
+Saída esperada:
+Cartão bloqueado.
+Tentativas registradas: 3
+```
+
+**Exercício E088** · ★★☆
+
+No empréstimo consignado, a parcela não pode passar de 35% do salário.
+Leia o salário e o valor da parcela, nessa ordem e sem mostrar perguntas.
+Mostre o limite e se o empréstimo foi aprovado ("Aprovado!") ou negado.
+
+```text
+Entrada:
+3000
+1200
+Saída esperada:
+Limite da parcela: R$ 1050.00
+Negado: a parcela passa do limite.
+```
+
+**Exercício E090** · ★★★
+
+Bhaskara. Leia os coeficientes a, b e c de ax² + bx + c = 0 (suponha
+a diferente de zero), sem mostrar pergunta. Calcule delta = b² - 4ac. Se
+delta for negativo, mostre "Sem raízes reais."; senão, calcule e mostre as
+duas raízes com duas casas (x1 com a raiz do delta somada, x2 subtraída).
+
+```text
+Entrada:
+1 -5 6
+Saída esperada:
+x1 = 3.00
+x2 = 2.00
+```
+
+```bash
+gcc ~/LPEDC/material/E090.c -o ~/LPEDC/material/E090 -lm && ~/LPEDC/material/E090
+```
+
+---
+
+## 0016 · else if, if aninhado e o else pendurado
+
+### Conceito
+
+- **`else if`**: encadeia perguntas para mais de dois caminhos; só um vale
+  (DEITEL; DEITEL, 2011, cap. 3).
+
+```c
+if (velocidade <= 60) {
+    // dentro do limite
+} else if (velocidade <= 72) {
+    // média
+} else if (velocidade <= 90) {
+    // grave
+} else {
+    // gravíssima
+}
+```
+
+- **Primeiro Sim**: o C testa de cima para baixo e **para no primeiro Sim**.
+  Ao chegar em `velocidade <= 72`, já se sabe que passou de 60: não precisa
+  de `velocidade > 60 &&` (BACKES, 2013, cap. 4).
+- **A ordem importa**: com `velocidade <= 90` no topo, 65 km/h viraria
+  "grave". Percorra as faixas num sentido só. O `else` final é opcional e pega
+  o que sobrou (DEITEL; DEITEL, 2011, cap. 3).
+- **`if` aninhado**: um `if` dentro do bloco de outro, para a pergunta que só
+  faz sentido depois de um Sim. O `else if` não é palavra-chave: é um `else`
+  cuja única instrução é um `if` (KERNIGHAN; RITCHIE, 1988, cap. 3).
+- **Else pendurado**: sem chaves, o `else` pertence ao `if` **mais próximo**
+  que ainda não tem `else`, não importa o recuo (BACKES, 2013, cap. 4).
+
+> [!WARNING]
+> **O `else` pendurado.** O recuo engana:
+>
+> ```c
+> if (pessoas > 0)
+>     if (pessoas == 1)
+>         printf("Mesa para um.\n");
+> else
+>     printf("Restaurante vazio.\n");
+> ```
+>
+> O `else` é do segundo `if`: com 4 pessoas aparece "Restaurante vazio.". O
+> `-Wall` avisa; a cura são **chaves** em volta do `if` de dentro.
+
+### Exemplos de uso
 
 O radar da avenida tem limite de 60 km/h e você passou a 80. As faixas saem
 do limite: 80 <= 60? Não. <= 72? Não. <= 90? Sim, e a busca para ali:
@@ -885,7 +1062,153 @@ int main(void) {
 gcc ~/LPEDC/material/A032.c -o ~/LPEDC/material/A032 && ~/LPEDC/material/A032
 ```
 
-### 0017 · Ternário: condição ? a : b
+### Exercícios
+
+**Exercício E091** · ★☆☆
+
+O plano de saúde cobra por faixa de idade: até 18 anos, R$ 150; de 19 a
+38, R$ 280; de 39 a 58, R$ 520; de 59 em diante, R$ 900. Leia a idade, sem
+mostrar pergunta, e mostre a mensalidade usando uma cadeia de else if.
+
+```text
+Entrada:
+45
+Saída esperada:
+Mensalidade: R$ 520.00
+```
+
+**Exercício E093** · ★★☆
+
+O assistente do celular lê duas respostas, cada uma 1 ou 0: você vai sair?
+Vai chover? Quem vai sair e vê chuva lê "Leve o guarda-chuva."; quem NÃO vai
+sair lê "Fique em casa e descanse."; quem vai sair sem chuva não lê nenhum
+dos dois. Todo mundo lê "Bom dia!" no fim. Leia as duas respostas em um
+scanf, sem mostrar pergunta, e use chaves em todos os blocos. Teste com
+0 1, 1 0 e 1 1.
+
+```text
+Entrada:
+0 1
+Saída esperada:
+Fique em casa e descanse.
+Bom dia!
+```
+
+```text
+Entrada:
+1 0
+Saída esperada:
+Bom dia!
+```
+
+```text
+Entrada:
+1 1
+Saída esperada:
+Leve o guarda-chuva.
+Bom dia!
+```
+
+**Exercício E094** · ★★☆
+
+Leia a nota (real), sem mostrar pergunta, e mostre o conceito: A para
+9 ou mais, B para 7 ou mais, C para 5 ou mais, D para abaixo de 5. Use uma
+cadeia de else if. Teste com 9.5, 7.2, 5 e 3.
+
+```text
+Entrada:
+9.5
+Saída esperada:
+Conceito A
+```
+
+```text
+Entrada:
+7.2
+Saída esperada:
+Conceito B
+```
+
+```text
+Entrada:
+5
+Saída esperada:
+Conceito C
+```
+
+```text
+Entrada:
+3
+Saída esperada:
+Conceito D
+```
+
+**Exercício E095** · ★★★
+
+Leia três medidas inteiras (em cm), na mesma linha. Primeiro diga se
+elas formam um triângulo: cada lado tem que ser menor que a soma dos outros
+dois ("Não forma triângulo." se não). Se formarem, classifique: equilátero (3
+lados iguais), isósceles (só 2 iguais) ou escaleno (todos diferentes).
+
+```text
+Entrada:
+5 5 8
+Saída esperada:
+Triângulo isósceles.
+```
+
+---
+
+## 0017 · Ternário: condição ? a : b
+
+### Conceito
+
+- **Operador ternário**: o único do C com três partes. Escolhe um entre dois
+  valores (DEITEL; DEITEL, 2011, cap. 3).
+
+```c
+condição ? valor_se_verdade : valor_se_falso
+```
+
+- **É expressão**: ao contrário do `if`, **devolve um valor**. Cabe à direita
+  de uma atribuição, num `printf` ou no meio de uma conta
+  (BACKES, 2013, cap. 4).
+
+```c
+double frete = total >= 199 ? 0.0 : 19.90;   // escolhe um valor
+printf("%s\n", qtd == 1 ? "item" : "itens"); // escolhe um texto
+```
+
+- **Só um lado roda**: o C avalia a condição e depois um dos lados, como no
+  curto-circuito. `b != 0 ? a / b : 0` nunca divide por zero
+  (KERNIGHAN; RITCHIE, 1988, cap. 2).
+- **Tipo comum**: os dois lados viram o mesmo tipo. Em `n > 0 ? n : 0.5`, com
+  `n` inteiro, o resultado é `double` (KERNIGHAN; RITCHIE, 1988, cap. 2).
+- **Associatividade**: desempata operadores da mesma linha da tabela, do mais
+  forte ao mais fraco (a completa, com bits e ponteiros, está no 0170)
+  (CPPREFERENCE, s.d.).
+- **Quando usar**: para escolher **um valor**, com condição curta. Se cada lado
+  faz várias coisas, ou os ternários se aninham, volte ao `if/else`.
+
+| Operadores | Associatividade |
+| --- | --- |
+| `x++` `x--` (pós) | esquerda → direita |
+| `!` `-x` `++x` `--x` `(tipo)` `sizeof` | direita → esquerda |
+| `*` `/` `%` | esquerda → direita |
+| `+` `-` | esquerda → direita |
+| `<` `<=` `>` `>=` | esquerda → direita |
+| `==` `!=` | esquerda → direita |
+| `&&` | esquerda → direita |
+| `\|\|` | esquerda → direita |
+| `?:` | direita → esquerda |
+| `=` `+=` `-=` `*=` `/=` `%=` | direita → esquerda |
+
+> [!WARNING]
+> **O ternário tem precedência baixíssima.** `40 - estudante ? 20 : 0` é
+> `(40 - estudante) ? 20 : 0`, que dá 20 para todo mundo. Escreva
+> `40 - (estudante ? 20 : 0)`: no meio de uma conta, ternário entre parênteses.
+
+### Exemplos de uso
 
 No carrinho da loja, o frete é zero acima de R$ 199. Entram R$ 150, "passou
 de 199?" é Não, e o ternário devolve 19.90 para a caixinha `frete`:
@@ -986,7 +1309,121 @@ int main(void) {
 gcc ~/LPEDC/material/A034.c -o ~/LPEDC/material/A034 && ~/LPEDC/material/A034
 ```
 
-### 0018 · switch, case, break e fall-through
+### Exercícios
+
+**Exercício E097** · ★☆☆
+
+O ingresso do cinema custa R$ 40.00 para quem tem 18 anos ou mais e
+R$ 20.00 para os menores. Leia a idade, sem mostrar pergunta, e guarde o
+preço numa variável double em UMA linha, com o operador ternário (sem if).
+Mostre o preço com duas casas.
+
+```text
+Entrada:
+15
+Saída esperada:
+Ingresso: R$ 20.00
+```
+
+**Exercício E099** · ★★☆
+
+Leia dois inteiros, a e b, sem mostrar pergunta, e mostre quatro linhas,
+cada resultado saído de UM ternário (nada de if): a distância entre os dois
+(o maior menos o menor); se a soma é "par" ou "ímpar"; o menor dos dois; e se
+a é "divisível" ou "não divisível" por b. Com b igual a 0, a última linha
+mostra "não dá para dividir por zero", sem calcular o resto. Teste com 2 5.
+
+```text
+Entrada:
+2 5
+Saída esperada:
+Distância: 3
+Soma: ímpar
+Menor: 2
+2 por 5: não divisível
+```
+
+**Exercício E100** · ★★☆
+
+Leia três notas inteiras de jurados, na mesma linha, e mostre a maior,
+usando só o operador ternário (nada de if).
+
+```text
+Entrada:
+7 10 9
+Saída esperada:
+Maior nota: 10
+```
+
+**Exercício E102** · ★★★
+
+Converta uma hora do formato 24 h (0 a 23) para o formato de 12 h com AM e
+PM, usando ternários. Meia-noite é 12 AM e meio-dia é 12 PM. Se a hora não
+estiver entre 0 e 23, mostre "Hora inválida." (pode usar um if para isso).
+Teste com 13, 0 e 12.
+
+```text
+Entrada:
+13
+Saída esperada:
+1 PM
+```
+
+```text
+Entrada:
+0
+Saída esperada:
+12 AM
+```
+
+```text
+Entrada:
+12
+Saída esperada:
+12 PM
+```
+
+---
+
+## 0018 · switch, case, break e fall-through
+
+### Conceito
+
+- **`switch`**: a **seleção múltipla**. Calcula a expressão uma vez e **pula
+  direto** para o `case` de mesmo valor; o **`default`** pega o que não casou
+  (DEITEL; DEITEL, 2011, cap. 4).
+
+```c
+switch (codigo) {
+case 1:
+    // código igual a 1
+    break;
+case 2:
+    // código igual a 2
+    break;
+default:
+    // nenhum dos anteriores
+}
+```
+
+- **Expressão inteira**: `int`, `char` ou parecido. `double` e texto não
+  compilam (DEITEL; DEITEL, 2011, cap. 4).
+- **`case` constante**: valor conhecido na compilação (`case 2:`,
+  `case 'S':`); `case x:` e `case > 10:` não valem, nem dois `case` iguais
+  (KERNIGHAN; RITCHIE, 1988, cap. 3).
+- **Fall-through**: o `case` é só um **rótulo** de entrada. Depois de entrar,
+  o C executa **tudo para baixo**, atravessando os outros `case`, até um
+  **`break`** ou o fim do `switch` (BACKES, 2013, cap. 4).
+- **Fall-through de propósito**: `case` empilhados dividem o mesmo trecho
+  (`case 'S': case 's':`). Com código no meio, avise com `// fall through`,
+  que o gcc reconhece (GNU, s.d.).
+
+> [!WARNING]
+> **Esquecer o `break`.** Sem o do `case 2`, pedir X-Salada mostra também
+> "Misto quente" e o preço vira **9.00**. O compilador não vê erro; o
+> `-Wextra` avisa ("this statement may fall through").
+
+### Exemplos de uso
 
 Na lanchonete, 1 é X-Burger, 2 é X-Salada, 3 é Misto quente. O código 2
 entra, o `switch` pula direto para o `case 2`, sem testar o 1 nem o 3, e o
@@ -1134,7 +1571,112 @@ int main(void) {
 gcc ~/LPEDC/material/A036.c -o ~/LPEDC/material/A036 && ~/LPEDC/material/A036
 ```
 
-### 0019 · Juntando tudo: a conta de luz
+### Exercícios
+
+**Exercício E103** · ★☆☆
+
+Leia um número de 1 a 7, sem mostrar pergunta, e mostre o dia da semana
+(1 é domingo, 7 é sábado). Qualquer outro número mostra "Dia inválido.". Use
+switch.
+
+```text
+Entrada:
+4
+Saída esperada:
+Quarta-feira
+```
+
+**Exercício E105** · ★★☆
+
+O atendimento por telefone do banco tem um menu de teclas: 1 mostra
+"Consultar saldo."; 2 mostra "Segunda via da fatura."; 9 mostra "Transferindo
+para um atendente..."; 0 mostra "Repetindo o menu.". Qualquer outra tecla mostra
+"Opção inválida." e, em seguida, também repete o menu. Escreva com UM switch
+em que o default fica no meio, logo antes do case 0, e cai nele de propósito
+(sem repetir o printf do menu). Leia a tecla sem mostrar pergunta. Teste com 7.
+
+```text
+Entrada:
+7
+Saída esperada:
+Opção inválida.
+Repetindo o menu.
+```
+
+**Exercício E106** · ★★☆
+
+Calculadora de bolso. Leia uma conta no formato "número operador número"
+(por exemplo, 20 / 4), sem mostrar pergunta, e mostre o resultado com duas
+casas depois de "= ". Aceite + - * / e trate dois erros: "Divisão por zero." e
+"Operador inválido.".
+
+```text
+Entrada:
+20 / 4
+Saída esperada:
+= 5.00
+```
+
+**Exercício E107** · ★★★
+
+A pizzaria mostra o preço da pizza escolhida. Leia uma letra, sem mostrar
+pergunta: M é Muçarela (R$ 45.00), C é Calabresa (R$ 50.00) e P é Portuguesa
+(R$ 55.00), em maiúscula ou minúscula. Use switch e mostre só a linha da pizza
+escolhida. Qualquer outra letra mostra "Opção inválida.". Teste com m, P e x.
+
+```text
+Entrada:
+m
+Saída esperada:
+Muçarela: R$ 45.00
+```
+
+```text
+Entrada:
+P
+Saída esperada:
+Portuguesa: R$ 55.00
+```
+
+```text
+Entrada:
+x
+Saída esperada:
+Opção inválida.
+```
+
+---
+
+## 0019 · Juntando tudo: a conta de luz
+
+### Conceito
+
+- **Escolher a ferramenta**: valores exatos pedem `switch`; duas condições
+  juntas, `if` com `&&`; um valor entre dois, ternário; faixas, `else if`
+  (DEITEL; DEITEL, 2011, cap. 4).
+- **Validar a entrada**: o `scanf` devolve quantos valores leu; com "abc" no
+  lugar de um número, devolve 0. Confira antes de usar
+  (BACKES, 2013, cap. 2).
+- **Cláusula de guarda**: trate o caso ruim primeiro, avise e saia com
+  `return 1` (o código de erro que `echo $?` mostra). O resto fica reto, sem
+  um `else` gigante.
+- **Tarifas simplificadas**: R$ 0,80 por kWh; bandeira amarela com R$ 0,02 a
+  mais por kWh e vermelha com R$ 0,05; desconto social de 40%.
+
+| Decisão | Ferramenta | Por quê |
+| --- | --- | --- |
+| a bandeira é V, A ou R? | `switch` | valores exatos de um `char` |
+| tem tarifa social **e** consumo até 220 kWh? | `if` com `&&` | duas condições juntas, um passo a mais ou nada |
+| iluminação: R$ 15 acima de 100 kWh, senão R$ 5 | ternário | escolhe **um valor** entre dois |
+| consumo baixo, médio ou alto? | `else if` | faixas, testadas em ordem |
+| a leitura deu certo e o consumo não é negativo? | `if` com `\|\|` | barra a entrada ruim logo no começo |
+
+> [!WARNING]
+> **A ordem dos passos é parte da regra.** O desconto vale sobre energia e
+> bandeira, não sobre a iluminação. Teste um caso que passe por todos os
+> ramos: 150 kWh, verde, social dá 120 + 0 - 48 + 15 = **R$ 87.00**.
+
+### Exemplos de uso
 
 A conta de luz do módulo 01 volta com decisões. Com 230 kWh, bandeira amarela
 e sem tarifa social, cada decisão do módulo entra uma vez:
@@ -1329,530 +1871,7 @@ int main(void) {
 gcc ~/LPEDC/material/A038.c -o ~/LPEDC/material/A038 && ~/LPEDC/material/A038
 ```
 
----
-
-## 3. Exercícios práticos
-
-Cada exercício é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta. Compile como os exemplos: `gcc ~/LPEDC/material/E007.c -o ~/LPEDC/material/E007 && ~/LPEDC/material/E007`. Resoluções em `_respostas/02-condicionais/`.
-
-### 0012 · Relacionais e a verdade em C
-
-**Exercício E067** · ★☆☆
-
-No posto, a regra de bolso diz que o etanol compensa quando custa no
-máximo 70% do preço da gasolina. Leia o preço do etanol e o da gasolina, nessa
-ordem e sem mostrar perguntas, e guarde a resposta num bool. Mostre o bool com
-%d (sem if: só a comparação).
-
-```text
-Entrada:
-4.19
-6.09
-Saída esperada:
-Etanol compensa? 1
-```
-
-**Exercício E069** · ★★☆
-
-A loja cobra frete de R$ 24.90, mas só quando a compra é menor que
-R$ 199.00. Leia o total da compra, sem mostrar pergunta, e calcule o frete SEM
-usar if: multiplique 24.90 pelo 0 ou 1 de uma comparação. Mostre o frete e o
-valor a pagar.
-
-```text
-Entrada:
-150
-Saída esperada:
-Frete: R$ 24.90
-A pagar: R$ 174.90
-```
-
-**Exercício E070** · ★★☆
-
-A bala custa R$ 0,70 e a criança pagou com sete moedas de 10 centavos.
-Escreva um programa com preco = 0.7 e pago = 0.1 * 7 (double). Mostre pago
-com 20 casas e responda "Pagou o valor exato?" de dois jeitos: (a) comparando
-os doubles com uma tolerância de 1e-9, usando fabs; (b) trabalhando com
-centavos em int (70 e 7 * 10).
-
-```text
-Saída esperada:
-pago = 0.70000000000000006661
-Pagou o valor exato? 1
-Pagou o valor exato? 1
-```
-
-```bash
-gcc ~/LPEDC/material/E070.c -o ~/LPEDC/material/E070 -lm && ~/LPEDC/material/E070
-```
-
-**Exercício E072** · ★★★
-
-Desconto progressivo, sem nenhum if: compras a partir de R$ 100 ganham
-5%; a partir de R$ 300, ganham mais 5% (10% no total). Leia o total, sem
-mostrar pergunta, calcule a porcentagem só com comparações e mostre o total,
-o desconto e o valor a pagar.
-
-```text
-Entrada:
-150
-Saída esperada:
-Total: R$ 150.00
-Desconto: 5%
-A pagar: R$ 142.50
-```
-
-### 0013 · Lógicos: E, OU, NÃO
-
-**Exercício E073** · ★☆☆
-
-Monte a tabela-verdade no terminal. Para cada uma das quatro combinações
-de a e b (0 0, 0 1, 1 0, 1 1), dê os valores às duas variáveis e mostre
-uma linha com a, b, a && b, a || b e !a, calculados pelo programa (nada de
-digitar os resultados no printf). Primeiro vem a linha de títulos.
-
-```text
-Saída esperada:
-a b | E OU NAO
-0 0 | 0 0  1
-0 1 | 0 1  1
-1 0 | 0 1  0
-1 1 | 1 1  0
-```
-
-**Exercício E075** · ★★☆
-
-Um ano é bissexto quando é divisível por 4 e não por 100, ou quando é
-divisível por 400. Leia o ano, sem mostrar pergunta, e calcule a resposta numa
-ÚNICA expressão, guardada num bool (sem if). Mostre o bool com %d.
-
-```text
-Entrada:
-2024
-Saída esperada:
-Bissexto? 1
-```
-
-**Exercício E076** · ★★☆
-
-Na portaria do show, a regra do "barrado" é !(idade >= 18 && tem_ingresso).
-Leia a idade e depois 1 ou 0 para "tem ingresso", sem mostrar perguntas.
-Calcule o barrado de duas formas: a original e uma reescrita por De Morgan, sem
-o ! do lado de fora de parênteses. Mostre as duas lado a lado.
-
-```text
-Entrada:
-16
-1
-Saída esperada:
-barrado (original):  1
-barrado (De Morgan): 1
-```
-
-**Exercício E077** · ★★★
-
-O app do banco mostra se o gasto médio por dia passou de R$ 100. Leia o
-gasto total e o número de dias (dois inteiros, em um scanf), sem mostrar
-pergunta. gasto_alto é verdade quando a média (gasto / dias) passa de 100;
-alerta é verdade quando não há dias registrados OU quando o gasto é alto.
-Conta nova tem 0 dias: o programa não pode dividir por zero em nenhuma das
-duas linhas. Sem if. Teste com 900 6 e com 900 0.
-
-```text
-Entrada:
-900 6
-Saída esperada:
-Gasto alto? 1
-Alerta? 1
-```
-
-```text
-Entrada:
-900 0
-Saída esperada:
-Gasto alto? 0
-Alerta? 1
-```
-
-### 0014 · if
-
-**Exercício E079** · ★☆☆
-
-Leia a temperatura de uma pessoa, sem mostrar pergunta, e mostre sempre
-o valor lido. Só se ela passar de 37.5, mostre também o aviso de febre.
-
-```text
-Entrada:
-38.2
-Saída esperada:
-Temperatura: 38.2 °C
-Febre! Procure um médico.
-```
-
-**Exercício E081** · ★★☆
-
-O cinema barra menores de 18 anos neste filme. Leia a idade, sem mostrar
-pergunta. Se for menor que 18, mostre "Entrada proibida para menores.". Para
-todo mundo, mostre "Bom filme!" no final. Teste com 25 e com 15.
-
-```text
-Entrada:
-25
-Saída esperada:
-Bom filme!
-```
-
-```text
-Entrada:
-15
-Saída esperada:
-Entrada proibida para menores.
-Bom filme!
-```
-
-**Exercício E082** · ★★☆
-
-Três lojas deram orçamento para a mesma geladeira. Leia os três valores
-(inteiros, em reais, na mesma linha) e mostre o MAIOR, usando só if (sem
-else).
-
-```text
-Entrada:
-3200 3790 3450
-Saída esperada:
-Maior orçamento: R$ 3790
-```
-
-**Exercício E084** · ★★★
-
-A conta de água da cidade funciona assim: até 10 m³, paga a tarifa mínima
-de R$ 45.00. Cada m³ acima de 10 custa R$ 6.20. E, se o consumo passar de
-30 m³, a conta inteira ganha 15% de multa por desperdício. Leia o consumo
-(inteiro), sem mostrar pergunta, e mostre a conta. Use só if, sem else.
-
-```text
-Entrada:
-18
-Saída esperada:
-Conta: R$ 94.60
-```
-
-### 0015 · if/else e o = no lugar do ==
-
-**Exercício E085** · ★☆☆
-
-Leia a idade, sem mostrar pergunta. Se for 18 ou mais, mostre "Maior de
-idade."; senão, mostre quantos anos faltam para os 18.
-
-```text
-Entrada:
-16
-Saída esperada:
-Faltam 2 ano(s) para a maioridade.
-```
-
-**Exercício E087** · ★★☆
-
-O caixa eletrônico bloqueia o cartão na 3ª senha errada. Leia quantas
-senhas erradas já foram digitadas, sem mostrar pergunta. Se forem 3, mostre
-"Cartão bloqueado."; senão, mostre quantas tentativas restam (3 menos o
-valor lido). No fim, para qualquer caso, mostre quantas tentativas foram
-registradas. Teste com 1 e com 3.
-
-```text
-Entrada:
-1
-Saída esperada:
-Senha errada. Restam 2 tentativa(s).
-Tentativas registradas: 1
-```
-
-```text
-Entrada:
-3
-Saída esperada:
-Cartão bloqueado.
-Tentativas registradas: 3
-```
-
-**Exercício E088** · ★★☆
-
-No empréstimo consignado, a parcela não pode passar de 35% do salário.
-Leia o salário e o valor da parcela, nessa ordem e sem mostrar perguntas.
-Mostre o limite e se o empréstimo foi aprovado ("Aprovado!") ou negado.
-
-```text
-Entrada:
-3000
-1200
-Saída esperada:
-Limite da parcela: R$ 1050.00
-Negado: a parcela passa do limite.
-```
-
-**Exercício E090** · ★★★
-
-Bhaskara. Leia os coeficientes a, b e c de ax² + bx + c = 0 (suponha
-a diferente de zero), sem mostrar pergunta. Calcule delta = b² - 4ac. Se
-delta for negativo, mostre "Sem raízes reais."; senão, calcule e mostre as
-duas raízes com duas casas (x1 com a raiz do delta somada, x2 subtraída).
-
-```text
-Entrada:
-1 -5 6
-Saída esperada:
-x1 = 3.00
-x2 = 2.00
-```
-
-```bash
-gcc ~/LPEDC/material/E090.c -o ~/LPEDC/material/E090 -lm && ~/LPEDC/material/E090
-```
-
-### 0016 · else if, if aninhado e o else pendurado
-
-**Exercício E091** · ★☆☆
-
-O plano de saúde cobra por faixa de idade: até 18 anos, R$ 150; de 19 a
-38, R$ 280; de 39 a 58, R$ 520; de 59 em diante, R$ 900. Leia a idade, sem
-mostrar pergunta, e mostre a mensalidade usando uma cadeia de else if.
-
-```text
-Entrada:
-45
-Saída esperada:
-Mensalidade: R$ 520.00
-```
-
-**Exercício E093** · ★★☆
-
-O assistente do celular lê duas respostas, cada uma 1 ou 0: você vai sair?
-Vai chover? Quem vai sair e vê chuva lê "Leve o guarda-chuva."; quem NÃO vai
-sair lê "Fique em casa e descanse."; quem vai sair sem chuva não lê nenhum
-dos dois. Todo mundo lê "Bom dia!" no fim. Leia as duas respostas em um
-scanf, sem mostrar pergunta, e use chaves em todos os blocos. Teste com
-0 1, 1 0 e 1 1.
-
-```text
-Entrada:
-0 1
-Saída esperada:
-Fique em casa e descanse.
-Bom dia!
-```
-
-```text
-Entrada:
-1 0
-Saída esperada:
-Bom dia!
-```
-
-```text
-Entrada:
-1 1
-Saída esperada:
-Leve o guarda-chuva.
-Bom dia!
-```
-
-**Exercício E094** · ★★☆
-
-Leia a nota (real), sem mostrar pergunta, e mostre o conceito: A para
-9 ou mais, B para 7 ou mais, C para 5 ou mais, D para abaixo de 5. Use uma
-cadeia de else if. Teste com 9.5, 7.2, 5 e 3.
-
-```text
-Entrada:
-9.5
-Saída esperada:
-Conceito A
-```
-
-```text
-Entrada:
-7.2
-Saída esperada:
-Conceito B
-```
-
-```text
-Entrada:
-5
-Saída esperada:
-Conceito C
-```
-
-```text
-Entrada:
-3
-Saída esperada:
-Conceito D
-```
-
-**Exercício E095** · ★★★
-
-Leia três medidas inteiras (em cm), na mesma linha. Primeiro diga se
-elas formam um triângulo: cada lado tem que ser menor que a soma dos outros
-dois ("Não forma triângulo." se não). Se formarem, classifique: equilátero (3
-lados iguais), isósceles (só 2 iguais) ou escaleno (todos diferentes).
-
-```text
-Entrada:
-5 5 8
-Saída esperada:
-Triângulo isósceles.
-```
-
-### 0017 · Ternário: condição ? a : b
-
-**Exercício E097** · ★☆☆
-
-O ingresso do cinema custa R$ 40.00 para quem tem 18 anos ou mais e
-R$ 20.00 para os menores. Leia a idade, sem mostrar pergunta, e guarde o
-preço numa variável double em UMA linha, com o operador ternário (sem if).
-Mostre o preço com duas casas.
-
-```text
-Entrada:
-15
-Saída esperada:
-Ingresso: R$ 20.00
-```
-
-**Exercício E099** · ★★☆
-
-Leia dois inteiros, a e b, sem mostrar pergunta, e mostre quatro linhas,
-cada resultado saído de UM ternário (nada de if): a distância entre os dois
-(o maior menos o menor); se a soma é "par" ou "ímpar"; o menor dos dois; e se
-a é "divisível" ou "não divisível" por b. Com b igual a 0, a última linha
-mostra "não dá para dividir por zero", sem calcular o resto. Teste com 2 5.
-
-```text
-Entrada:
-2 5
-Saída esperada:
-Distância: 3
-Soma: ímpar
-Menor: 2
-2 por 5: não divisível
-```
-
-**Exercício E100** · ★★☆
-
-Leia três notas inteiras de jurados, na mesma linha, e mostre a maior,
-usando só o operador ternário (nada de if).
-
-```text
-Entrada:
-7 10 9
-Saída esperada:
-Maior nota: 10
-```
-
-**Exercício E102** · ★★★
-
-Converta uma hora do formato 24 h (0 a 23) para o formato de 12 h com AM e
-PM, usando ternários. Meia-noite é 12 AM e meio-dia é 12 PM. Se a hora não
-estiver entre 0 e 23, mostre "Hora inválida." (pode usar um if para isso).
-Teste com 13, 0 e 12.
-
-```text
-Entrada:
-13
-Saída esperada:
-1 PM
-```
-
-```text
-Entrada:
-0
-Saída esperada:
-12 AM
-```
-
-```text
-Entrada:
-12
-Saída esperada:
-12 PM
-```
-
-### 0018 · switch, case, break e fall-through
-
-**Exercício E103** · ★☆☆
-
-Leia um número de 1 a 7, sem mostrar pergunta, e mostre o dia da semana
-(1 é domingo, 7 é sábado). Qualquer outro número mostra "Dia inválido.". Use
-switch.
-
-```text
-Entrada:
-4
-Saída esperada:
-Quarta-feira
-```
-
-**Exercício E105** · ★★☆
-
-O atendimento por telefone do banco tem um menu de teclas: 1 mostra
-"Consultar saldo."; 2 mostra "Segunda via da fatura."; 9 mostra "Transferindo
-para um atendente..."; 0 mostra "Repetindo o menu.". Qualquer outra tecla mostra
-"Opção inválida." e, em seguida, também repete o menu. Escreva com UM switch
-em que o default fica no meio, logo antes do case 0, e cai nele de propósito
-(sem repetir o printf do menu). Leia a tecla sem mostrar pergunta. Teste com 7.
-
-```text
-Entrada:
-7
-Saída esperada:
-Opção inválida.
-Repetindo o menu.
-```
-
-**Exercício E106** · ★★☆
-
-Calculadora de bolso. Leia uma conta no formato "número operador número"
-(por exemplo, 20 / 4), sem mostrar pergunta, e mostre o resultado com duas
-casas depois de "= ". Aceite + - * / e trate dois erros: "Divisão por zero." e
-"Operador inválido.".
-
-```text
-Entrada:
-20 / 4
-Saída esperada:
-= 5.00
-```
-
-**Exercício E107** · ★★★
-
-A pizzaria mostra o preço da pizza escolhida. Leia uma letra, sem mostrar
-pergunta: M é Muçarela (R$ 45.00), C é Calabresa (R$ 50.00) e P é Portuguesa
-(R$ 55.00), em maiúscula ou minúscula. Use switch e mostre só a linha da pizza
-escolhida. Qualquer outra letra mostra "Opção inválida.". Teste com m, P e x.
-
-```text
-Entrada:
-m
-Saída esperada:
-Muçarela: R$ 45.00
-```
-
-```text
-Entrada:
-P
-Saída esperada:
-Portuguesa: R$ 55.00
-```
-
-```text
-Entrada:
-x
-Saída esperada:
-Opção inválida.
-```
-
-### 0019 · Juntando tudo: a conta de luz
+### Exercícios
 
 **Exercício E109** · ★☆☆
 
@@ -1941,11 +1960,13 @@ Saída esperada:
 Dia seguinte: 01/01/2024
 ```
 
-### Lista do módulo
+---
+
+## Lista do módulo
 
 30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P0201.c a P0230.c, em `material/`; resoluções em `_respostas/02-condicionais/lista/`.
 
-#### ★☆☆ Aquecimento
+### ★☆☆ Aquecimento
 
 **Exercício P0201** · ★☆☆ · O rodízio de placas
 
@@ -2120,7 +2141,7 @@ Drone em (200, 45): dentro da área
 
 **Resposta esperada:** fora, depois dentro (200 está na borda, e a borda vale).
 
-#### ★★☆ Para pensar
+### ★★☆ Para pensar
 
 **Exercício P0211** · ★★☆ · A nota do jurado do meio
 
@@ -2289,7 +2310,7 @@ Melhor opção: CDB
 gcc ~/LPEDC/material/P0220.c -o ~/LPEDC/material/P0220 -lm && ~/LPEDC/material/P0220
 ```
 
-#### ★★★ Desafio
+### ★★★ Desafio
 
 **Exercício P0221** · ★★★ · Que dia do ano é a prova
 
@@ -2514,7 +2535,7 @@ Senha aceita
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas extras, só com decisões (sem laços). Escreva cada um num arquivo
 seu, compile com as flags de estudo e teste todos os caminhos.
@@ -2677,7 +2698,7 @@ já faz isso).
 
 </details>
 
-### Questões do POSCOMP
+## Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -2689,7 +2710,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 
 O gabarito oficial de 2025 não estava disponível quando este material foi montado.
 
-### Questões no estilo da prova
+## Questões no estilo da prova
 
 Questões objetivas no formato da Prova do PPGI, com uma alternativa certa.
 Resolva no papel antes do gabarito. Vários trechos fazem o `-Wall` reclamar de

@@ -41,7 +41,7 @@ sudo apt install strace     # Debian / Ubuntu
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas do médio ao difícil. Crie os arquivos de teste com
 `printf '...' > /tmp/teste.txt`.
@@ -206,7 +206,7 @@ pequenos o texto até ganha (`7\n` tem 2 bytes); para grandes, o binário ganha.
 
 </details>
 
-### Questões no estilo da prova
+## Questões no estilo da prova
 
 Formato da prova do mestrado do PPGI/UFAM. Resolva no papel, marque uma letra
 e só depois abra o gabarito. Os trechos foram compilados com

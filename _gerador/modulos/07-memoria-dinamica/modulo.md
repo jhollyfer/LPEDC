@@ -46,7 +46,7 @@ depois dele**.
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Resolva num arquivo seu, com as flags de estudo (e `valgrind ./programa` como
 segunda opinião). A versão final não pode gerar relatório de erro.
@@ -287,7 +287,7 @@ pedaços, o vetor deles e a frase nova.
 
 </details>
 
-### Questões no estilo da prova
+## Questões no estilo da prova
 
 Formato da prova do mestrado do PPGI/UFAM. Resolva no papel, marque uma letra
 e só então abra o gabarito. Os trechos foram compilados com

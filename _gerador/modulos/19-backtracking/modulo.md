@@ -37,7 +37,7 @@ vermelho, casa proibida.
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas para resolver no papel e, quando fizer sentido, num arquivo `.c` seu.
 Eles misturam os assuntos do módulo.
@@ -178,7 +178,7 @@ mochila ganham, no módulo 21, um método que não testa tudo.
 
 </details>
 
-### Questões do POSCOMP
+## Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -189,7 +189,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 O gabarito oficial de 2025 não estava disponível quando este material foi montado.
 
 
-### Questões no estilo da prova
+## Questões no estilo da prova
 
 Questões objetivas no formato da prova do PPGI. Resolva no papel, marque a
 letra e só depois abra o gabarito. Todo código daqui compila: rode para

@@ -54,9 +54,12 @@ gcc ~/LPEDC/material/A117.c -o ~/LPEDC/material/A117 && ~/LPEDC/material/A117
 
 ---
 
-## 1. Conceitos gerais
+> [!NOTE]
+> Cada assunto é um capítulo: **Conceito** (a explicação), **Exemplos de uso** (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e **Exercícios** (cada um é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta; resoluções em `_respostas/08-structs/`).
 
-### 0059 · Struct
+## 0059 · Struct
+
+### Conceito
 
 - **Struct**: agrupa variáveis de tipos diferentes sob um nome só. Cada
   variável de dentro é um **campo** (ou membro); livros e provas também dizem
@@ -96,215 +99,7 @@ struct pedido {
 > `p1 == p2` (compare campo a campo) nem `cliente.nome = "Ana";` (use `strcpy`).
 > E o `;` depois da `}` do molde é obrigatório.
 
-### 0060 · Typedef
-
-- **Typedef**: dá um **apelido** a um tipo que já existe. Cria um sinônimo, não
-  um tipo novo (BACKES, 2013, cap. 8).
-- **Regra de leitura**: escreva a declaração de uma variável e ponha `typedef`
-  na frente. O nome que seria a variável vira o nome do tipo
-  (FEOFILOFF, 2009, ap. J).
-
-```c
-double Reais;          // uma variável chamada Reais
-typedef double Reais;  // um apelido: Reais agora é o mesmo que double
-```
-
-- **Com struct**: batize uma struct existente (`typedef struct pix Pix;`) ou
-  faça tudo de uma vez, sem nome para a struct. Depois basta `Pix p;`
-  (DEITEL; DEITEL, 2011, cap. 10).
-
-```c
-typedef struct {
-    char chave[40];
-    Reais valor;
-    int hora;
-} Pix;
-```
-
-- **Tipos definidos pelo programador**: struct, union e enum, com ou sem
-  `typedef` (CELES; CERQUEIRA; RANGEL, 2016).
-- **Convenção**: inicial maiúscula em nome de tipo, para não confundir tipo com
-  variável (DEITEL; DEITEL, 2011, cap. 10).
-- **Typedefs da biblioteca**: `size_t`, `uint8_t`, `int32_t` e `FILE` são
-  apelidos definidos nos cabeçalhos. `uint8_t` diz "8 bits sem sinal" em
-  qualquer máquina (KERNIGHAN; RITCHIE, 1988, cap. 6).
-
-> [!WARNING]
-> `typedef` não cria tipo novo: com `typedef double Reais;` e
-> `typedef double Dolares;`, `Reais r = dolares;` compila. Para barrar a
-> mistura, embrulhe numa struct. E `typedef int *PInt;` esconde que
-> `PInt a, b;` são ponteiros.
-
-### 0061 · Vetor de structs
-
-- **Vetor de structs**: `Time tabela[4];` são quatro `Time` seguidos na
-  memória, com os bytes de cada struct dentro do vetor (BACKES, 2013, cap. 8).
-- **Índice antes do ponto**: `tabela[2].nome`. Primeiro a posição, depois o
-  campo; `tabela.nome[2]` não faz sentido, porque o vetor não tem campos
-  (BACKES, 2013, cap. 8).
-- **Inicialização**: chaves dentro de chaves. Sem o tamanho entre colchetes, o
-  compilador conta, e `sizeof tabela / sizeof tabela[0]` dá a quantidade
-  (DEITEL; DEITEL, 2011, cap. 10).
-
-```c
-Time tabela[] = {
-    {"Bahia", 8, 5, 3},
-    {"Flamengo", 9, 6, 1},
-};
-```
-
-- **Cópia inteira**: `tabela[i] = tabela[j]` copia o time todo. Ao ordenar,
-  troque as structs, não campo a campo (BACKES, 2013, cap. 8).
-- **Guardar o índice**: o índice diz **onde** está o elemento e permite mexer
-  nele (`tabela[lider].vitorias++`); uma cópia fica desligada da tabela.
-
-> [!WARNING]
-> O C não confere limites: `tabela[4]` num vetor de 4 times lê lixo ou derruba
-> o programa. E trocar só o nome ao ordenar embaralha nomes e pontos.
-
-### 0062 · Ponteiro para struct
-
-- **Struct vai por valor**: a função recebe uma cópia de todos os bytes, e
-  mudar a cópia não muda o original. Para alterar, passe o **endereço**
-  (DEITEL; DEITEL, 2011, cap. 10).
-- **`(*c).saldo`**: `*c` chega à struct e `.saldo` ao campo. Os parênteses são
-  obrigatórios: o ponto tem prioridade, e `*c.saldo` vira `*(c.saldo)`
-  (FEOFILOFF, 2009, ap. E).
-- **Seta** `->`: `c->saldo` é o mesmo que `(*c).saldo`. Variável struct usa
-  ponto; ponteiro para struct usa seta (BACKES, 2013, cap. 8).
-- **Struct no heap**: `malloc(sizeof *c)` reserva a struct inteira. Confira o
-  `NULL` e termine com `free` (CELES; RANGEL, 2002).
-- **Struct grande anda por ponteiro**: por valor, uma struct com
-  `double leituras[1000]` copia 8016 bytes a cada chamada, contra 8 do
-  ponteiro. `const Cartao *c` diz que a função só lê (CELES; RANGEL, 2002).
-
-> [!WARNING]
-> `void recarregar(Cartao c, double v) { c.saldo += v; }` compila, roda e não
-> faz nada: recarrega uma cópia. Passe `Cartao *c`. E `return &cartao;` de uma
-> struct local devolve endereço que morre no `return`.
-
-### 0063 · Enum
-
-- **Enum** (enumeração): lista de **constantes inteiras com nome**. Melhor que
-  número solto (`status == 2` não diz nada) e que string (pede `strcmp`)
-  (BACKES, 2013, cap. 8).
-
-```c
-typedef enum { RECEBIDO, PREPARANDO, A_CAMINHO, ENTREGUE } Status;
-```
-
-- **Valores**: o primeiro nome vale 0 e cada um vale o anterior mais 1. Dá
-  para escolher (`DEZ = 10, VINTE = 20`), e o seguinte continua a contagem
-  (DEITEL; DEITEL, 2011, cap. 10).
-- **Só um inteiro com apelido**: o compilador deixa somar, comparar com `<` e
-  guardar 42 numa variável `Status`. A variável ocupa o mesmo que um `int`
-  (BACKES, 2013, cap. 8).
-- **Nomes em MAIÚSCULAS**, como no `#define`. Ao contrário dele, o compilador
-  conhece o enum: sem um `case`, o `-Wall` avisa, desde que o `switch` não
-  tenha `default` (DEITEL; DEITEL, 2011, cap. 10).
-- **Contador no fim**: `{ RECEBIDO, ..., ENTREGUE, QTD_STATUS }`. `QTD_STATUS`
-  vale 4 e dimensiona um vetor de textos (`const char *nomes[QTD_STATUS]`).
-
-> [!WARNING]
-> O C **não confere** se o valor de um enum é válido: `Status s = 42;` compila,
-> e `s++` depois de `ENTREGUE` dá 4. E os nomes são globais: dois enums com
-> `ENTREGUE` não compilam. Use prefixo: `STATUS_ENTREGUE`.
-
-### 0064 · Union
-
-- **Union** (união): declara-se como a struct, mas **todos os campos começam no
-  mesmo endereço** e dividem os mesmos bytes. Só um campo vale por vez
-  (BACKES, 2013, cap. 8).
-- **Tamanho**: o do maior campo, arredondado ao alinhamento
-  (DEITEL; DEITEL, 2011, cap. 10).
-
-```c
-typedef union {
-    uint32_t numero;        // 4 bytes
-    unsigned char bytes[4]; // os MESMOS 4 bytes
-} Endereco;
-```
-
-- **Dois usos**: economizar espaço quando o dado é uma coisa **ou** outra (Pix
-  ou cartão ou boleto) e olhar os mesmos bytes de dois jeitos
-  (KERNIGHAN; RITCHIE, 1988, cap. 6).
-- **Union etiquetada**: um **enum** ao lado diz qual campo vale; quem confere
-  a etiqueta é você (KERNIGHAN; RITCHIE, 1988, cap. 6).
-- **Endianness**: a ordem dos bytes na memória. No **little-endian** (Intel,
-  AMD e quase todo ARM), o byte menos significativo fica no endereço menor; no
-  **big-endian**, a ordem é a de leitura humana (LINUX MAN PAGES, s.d.).
-- **Rede**: a ordem é big-endian; `htonl` e `ntohl`, de `<arpa/inet.h>`,
-  convertem os números (LINUX MAN PAGES, s.d.).
-
-> [!WARNING]
-> Escrever num campo **estraga** os outros. Numa union para economizar espaço,
-> ler um campo diferente do último gravado dá lixo, sem aviso. E ler os bytes
-> depende da endianness: a saída muda entre máquinas.
-
-### 0065 · Bits, máscaras e flags
-
-- **Bit e base 2**: um inteiro é uma fileira de bits, e cada casa vale o dobro
-  da casa à direita. Os bits se numeram da direita, a partir do **bit 0** (o
-  que vale 1). Revisão no assunto 0003 (FEOFILOFF, 2009, ap. C).
-- **Hexa e octal**: um dígito hexadecimal vale 4 bits (`0xED` = 237); um octal
-  vale 3, por isso aparece nas permissões. Zero à esquerda é octal: `0755` vale
-  493 (BACKES, 2013).
-- **Operadores bit a bit**: agem casa por casa em inteiros. Deslocar 1 casa à
-  esquerda multiplica por 2; à direita, divide por 2. `1u << n` tem só o bit
-  `n` ligado (BACKES, 2013).
-- **Flag**: um bit que diz sim ou não. Várias cabem num inteiro: 32 num
-  `unsigned` de 4 bytes (DEITEL; DEITEL, 2011, cap. 10).
-- **Máscara**: valor que escolhe certos bits. Ligar `p |= W;`, desligar
-  `p &= ~W;`, testar `if (p & W)`, inverter `p ^= W;`
-  (DEITEL; DEITEL, 2011, cap. 10).
-- **Campos de bits** (`unsigned ler : 1;`): a ordem depende do compilador. Para
-  arquivos e protocolos, prefira máscaras explícitas (BACKES, 2013, cap. 13).
-
-| Operador | Nome | Regra para cada bit | `a op b` |
-| --- | --- | --- | --- |
-| `a & b` | E | 1 se os dois são 1 | `0010` (2) |
-| `a \| b` | OU | 1 se algum é 1 | `0111` (7) |
-| `a ^ b` | OU exclusivo | 1 se são diferentes | `0101` (5) |
-| `~a` | NÃO | inverte cada bit | `...1001` |
-| `a << 1` | desloca à esquerda | empurra, entra 0 à direita | `1100` (12) |
-| `a >> 1` | desloca à direita | empurra, sai o bit 0 | `0011` (3) |
-
-Na tabela, `a = 0110` (6) e `b = 0011` (3).
-
-> [!WARNING]
-> `&`, `^` e `|` ficam **abaixo** do `==`: `if (p & W == 0)` vira `p & 0`,
-> sempre falso; use `if ((p & W) == 0)`. `&` não é `&&`. E use **unsigned**:
-> deslocar negativo, ou por casas demais (`1u << 32`), é comportamento indefinido.
-
-### 0066 · Juntando tudo: o cardápio
-
-- **Struct e typedef** (0059, 0060): `Item` junta nome, categoria, preço e
-  tags (BACKES, 2013, cap. 8).
-- **Enum** (0063): `Categoria` nomeia as categorias, e `QTD_CATEGORIAS`
-  dimensiona o vetor de nomes (DEITEL; DEITEL, 2011, cap. 10).
-- **Flags** (0065): vegano, sem glúten e picante são bits num `unsigned tags`
-  (DEITEL; DEITEL, 2011, cap. 10).
-- **Vetor de structs no heap** (0061): `Cardapio` guarda o ponteiro para os
-  itens, quantos existem (`n`) e quantos cabem (`cap`), e dobra quando enche.
-  É a semente do vetor dinâmico do módulo 11 (CELES; RANGEL, 2002).
-- **Ponteiros** (0062): `Cardapio *c` para mexer no cardápio e `const Item *it`
-  para ler sem copiar (FEOFILOFF, 2009, ap. E).
-- **Filtro "tem todas"**: `(tags & mascara) == mascara`. O `&` apaga as tags
-  fora da máscara; se sobra a própria máscara, nenhuma faltou. Máscara 0 deixa
-  todo item passar.
-
-> [!WARNING]
-> `c->itens[c->n++] = it` copia o item para **dentro** do vetor: mexer depois em
-> `it` não muda o cardápio. E `Item *p = &c.itens[0]` fica **solto** após o
-> próximo `realloc`. Em vetor que cresce, guarde índices, não ponteiros.
-
----
-
-## 2. Exemplos de uso
-
-Cada exemplo compila sozinho. Rode com o comando abaixo dele e compare com a saída no fim do código.
-
-### 0059 · Struct
+### Exemplos de uso
 
 O pedido de açaí: copo M, 2 unidades, R$ 18,50 cada. O programa multiplica dois
 campos, chega a R$ 37,00 e decide o frete. O buraco cinza entre `tamanho` e
@@ -447,7 +242,118 @@ int main(void) {
 gcc ~/LPEDC/material/A118.c -o ~/LPEDC/material/A118 && ~/LPEDC/material/A118
 ```
 
-### 0060 · Typedef
+### Exercícios
+
+**Exercício E349** · ★☆☆
+
+Crie uma struct livro com os campos titulo (até 39 letras), autor (até 29
+letras), ano (int) e preco (double). Declare uma variável já inicializada
+com o livro abaixo e mostre os campos e o preço com 10% de desconto.
+
+```text
+Saída esperada:
+Livro: Dom Casmurro
+Autor: Machado de Assis
+Ano: 1899
+Preço: R$ 34.90
+Na promoção: R$ 31.41
+```
+
+**Exercício E351** · ★★☆
+
+Um terreno retangular é descrito por dois cantos: o inferior esquerdo
+(2, 1) e o superior direito (10, 6), em metros. Crie uma struct ponto
+(x e y, double) e uma struct retangulo com dois campos struct ponto. Escreva
+funções que recebem o retângulo e devolvem a área e o perímetro, e uma que
+diz se um ponto (uma árvore, por exemplo) está dentro do terreno.
+
+```text
+Saída esperada:
+Largura: 8.0 m, altura: 5.0 m
+Área: 40.0 m2
+Perímetro: 26.0 m
+Árvore em (4.0, 3.0): dentro
+Árvore em (11.0, 2.0): fora
+```
+
+**Exercício E352** · ★★☆
+
+Crie a struct jogadora com nome (até 19 letras) e gols (int). Guarde em a a
+artilheira Marta, com 17 gols (o nome entra com strcpy), copie a para b com
+uma atribuição e mostre b. Depois confira se as duas fichas são iguais,
+comparando campo a campo (o == não funciona com struct).
+
+```text
+Saída esperada:
+Marta: 17 gols
+a e b são iguais
+```
+
+**Exercício E353** · ★★★
+
+Crie uma struct data (dia, mes, ano) e escreva:
+
+```text
+- struct data dia_seguinte(struct data d): devolve a data do dia seguinte,
+  tratando fim de mês, fim de ano e fevereiro em ano bissexto;
+- int comparar(struct data a, struct data b): devolve -1 se a vem antes,
+  0 se são iguais e 1 se a vem depois.
+```
+
+Teste com as datas abaixo:
+
+```text
+Saída esperada:
+28/02/2024 -> 29/02/2024
+28/02/2025 -> 01/03/2025
+31/12/2025 -> 01/01/2026
+15/03/2025 vem antes de 02/11/2025
+```
+
+---
+
+## 0060 · Typedef
+
+### Conceito
+
+- **Typedef**: dá um **apelido** a um tipo que já existe. Cria um sinônimo, não
+  um tipo novo (BACKES, 2013, cap. 8).
+- **Regra de leitura**: escreva a declaração de uma variável e ponha `typedef`
+  na frente. O nome que seria a variável vira o nome do tipo
+  (FEOFILOFF, 2009, ap. J).
+
+```c
+double Reais;          // uma variável chamada Reais
+typedef double Reais;  // um apelido: Reais agora é o mesmo que double
+```
+
+- **Com struct**: batize uma struct existente (`typedef struct pix Pix;`) ou
+  faça tudo de uma vez, sem nome para a struct. Depois basta `Pix p;`
+  (DEITEL; DEITEL, 2011, cap. 10).
+
+```c
+typedef struct {
+    char chave[40];
+    Reais valor;
+    int hora;
+} Pix;
+```
+
+- **Tipos definidos pelo programador**: struct, union e enum, com ou sem
+  `typedef` (CELES; CERQUEIRA; RANGEL, 2016).
+- **Convenção**: inicial maiúscula em nome de tipo, para não confundir tipo com
+  variável (DEITEL; DEITEL, 2011, cap. 10).
+- **Typedefs da biblioteca**: `size_t`, `uint8_t`, `int32_t` e `FILE` são
+  apelidos definidos nos cabeçalhos. `uint8_t` diz "8 bits sem sinal" em
+  qualquer máquina (KERNIGHAN; RITCHIE, 1988, cap. 6).
+
+> [!WARNING]
+> `typedef` não cria tipo novo: com `typedef double Reais;` e
+> `typedef double Dolares;`, `Reais r = dolares;` compila. Para barrar a
+> mistura, embrulhe numa struct. E `typedef int *PInt;` esconde que
+> `PInt a, b;` são ponteiros.
+
+### Exemplos de uso
 
 Um Pix de R$ 1.500,00 às 22h esbarra no limite noturno de R$ 1.000,00 (entre
 20h e 6h). `Pix` e `Reais` são só etiquetas coladas em tipos que já existiam:
@@ -586,7 +492,106 @@ int main(void) {
 gcc ~/LPEDC/material/A120.c -o ~/LPEDC/material/A120 && ~/LPEDC/material/A120
 ```
 
-### 0061 · Vetor de structs
+### Exercícios
+
+**Exercício E355** · ★☆☆
+
+Crie com typedef o tipo Produto (nome até 19 letras, quantidade int e preco
+double). Escreva double subtotal(Produto p) e void mostrar(Produto p). No
+main, crie Café (3 unidades a R$ 12.50) e Leite (6 a R$ 4.99), mostre os dois
+e o total da compra.
+
+```text
+Saída esperada:
+Café: 3 x R$ 12.50 = R$ 37.50
+Leite: 6 x R$ 4.99 = R$ 29.94
+Total: R$ 67.44
+```
+
+**Exercício E357** · ★★☆
+
+Na receita de bolo você soma 1/4 de xícara com 1/6 de xícara. Crie o tipo
+Fracao (numerador e denominador inteiros) com typedef e escreva:
+
+```text
+- Fracao simplificar(Fracao f): divide os dois pelo MDC;
+- Fracao somar(Fracao a, Fracao b) e Fracao multiplicar(Fracao a, Fracao b),
+  que já devolvem a fração simplificada.
+```
+
+```text
+Saída esperada:
+1/4 + 1/6 = 5/12
+2/3 * 9/4 = 3/2
+3/4 + 1/4 = 1/1
+```
+
+**Exercício E358** · ★★☆
+
+Crie com typedef o apelido Reais para double e o tipo Cartao (struct sem
+nome, com titular de até 19 letras e saldo em Reais). Escreva
+Cartao pagar(Cartao c, Reais valor), que devolve uma cópia do cartão com o
+valor descontado do saldo. Ana tem R$ 600.00 no vale-refeição e paga um
+almoço de R$ 36.50: mostre o saldo antes e depois.
+
+```text
+Saída esperada:
+Ana: R$ 600.00 -> R$ 563.50
+```
+
+**Exercício E359** · ★★★
+
+Ponteiro para função (assunto 0050) tem uma declaração difícil de ler:
+double (*f)(double, double). Com typedef ela fica limpa. Crie:
+
+```text
+typedef double (*Operacao)(double, double);
+```
+
+e um tipo Botao (struct com um char simbolo e uma Operacao). Monte um
+vetor com os quatro botões de uma calculadora (+ - * /) e, num laço, aplique
+cada um aos números 12 e 4.
+
+```text
+Saída esperada:
+12 + 4 = 16
+12 - 4 = 8
+12 * 4 = 48
+12 / 4 = 3
+```
+
+---
+
+## 0061 · Vetor de structs
+
+### Conceito
+
+- **Vetor de structs**: `Time tabela[4];` são quatro `Time` seguidos na
+  memória, com os bytes de cada struct dentro do vetor (BACKES, 2013, cap. 8).
+- **Índice antes do ponto**: `tabela[2].nome`. Primeiro a posição, depois o
+  campo; `tabela.nome[2]` não faz sentido, porque o vetor não tem campos
+  (BACKES, 2013, cap. 8).
+- **Inicialização**: chaves dentro de chaves. Sem o tamanho entre colchetes, o
+  compilador conta, e `sizeof tabela / sizeof tabela[0]` dá a quantidade
+  (DEITEL; DEITEL, 2011, cap. 10).
+
+```c
+Time tabela[] = {
+    {"Bahia", 8, 5, 3},
+    {"Flamengo", 9, 6, 1},
+};
+```
+
+- **Cópia inteira**: `tabela[i] = tabela[j]` copia o time todo. Ao ordenar,
+  troque as structs, não campo a campo (BACKES, 2013, cap. 8).
+- **Guardar o índice**: o índice diz **onde** está o elemento e permite mexer
+  nele (`tabela[lider].vitorias++`); uma cópia fica desligada da tabela.
+
+> [!WARNING]
+> O C não confere limites: `tabela[4]` num vetor de 4 times lê lixo ou derruba
+> o programa. E trocar só o nome ao ordenar embaralha nomes e pontos.
+
+### Exemplos de uso
 
 Quatro times na tabela do campeonato. O programa calcula os pontos de cada um
 (3 por vitória, 1 por empate) e guarda o **índice** do melhor até agora.
@@ -769,7 +774,131 @@ int main(void) {
 gcc ~/LPEDC/material/A122.c -o ~/LPEDC/material/A122 && ~/LPEDC/material/A122
 ```
 
-### 0062 · Ponteiro para struct
+### Exercícios
+
+**Exercício E361** · ★☆☆
+
+Monte a lista de compras abaixo como um vetor de structs (nome,
+quantidade, preço unitário). Percorra o vetor mostrando o subtotal de cada
+item, o total da compra e o item que mais pesou no bolso.
+
+```text
+Arroz 5kg   2 x R$ 27.90
+Feijão      3 x R$ 8.49
+Café        1 x R$ 18.90
+Óleo        4 x R$ 7.99
+```
+
+```text
+Saída esperada:
+Arroz 5kg: R$ 55.80
+Feijão: R$ 25.47
+Café: R$ 18.90
+Óleo: R$ 31.96
+Total: R$ 132.13
+Mais caro: Arroz 5kg
+```
+
+**Exercício E363** · ★★☆
+
+Leia do teclado 3 atletas: o nome (pode ter espaço) numa linha e, na linha
+seguinte, a altura e a idade. Não mostre mensagens antes de ler. Guarde num
+vetor de structs e mostre o mais alto e o mais velho.
+
+```text
+Entrada:
+Rebeca Andrade
+1.55 26
+Darlan Romani
+1.88 34
+Rayssa Leal
+1.50 17
+```
+
+```text
+Saída esperada:
+Mais alto: Darlan Romani (1.88 m)
+Mais velho: Darlan Romani (34 anos)
+```
+
+**Exercício E364** · ★★☆
+
+Uma loja tem estes celulares em estoque:
+
+```text
+Moto G     R$ 1299.00
+Galaxy A   R$ 1899.00
+iPhone     R$ 5499.00
+Redmi      R$ 999.00
+```
+
+Use qsort (assunto 0050) duas vezes: primeiro em ordem alfabética do nome,
+depois do mais caro para o mais barato. Mostre a lista após cada ordenação.
+
+```text
+Saída esperada:
+Por nome:
+  Galaxy A   R$ 1899.00
+  Moto G     R$ 1299.00
+  Redmi      R$ 999.00
+  iPhone     R$ 5499.00
+Por preço:
+  iPhone     R$ 5499.00
+  Galaxy A   R$ 1899.00
+  Moto G     R$ 1299.00
+  Redmi      R$ 999.00
+```
+
+**Exercício E366** · ★★★
+
+Um terreno irregular tem 5 cantos, em metros, dados em ordem (dando a volta
+no terreno):
+
+```text
+(0, 0)  (6, 0)  (6, 4)  (3, 7)  (0, 4)
+```
+
+Guarde os cantos num vetor de struct Ponto e calcule a área e o perímetro.
+Para a área, use a fórmula do cadarço (shoelace): some x[i] * y[j] -
+x[j] * y[i] para cada canto i, com j sendo o canto seguinte, e divida o
+valor absoluto da soma por 2. O canto seguinte ao último é o primeiro.
+
+```text
+Saída esperada:
+Área: 33.00 m2
+Perímetro: 22.49 m
+```
+
+```bash
+gcc ~/LPEDC/material/E366.c -o ~/LPEDC/material/E366 -lm && ~/LPEDC/material/E366
+```
+
+---
+
+## 0062 · Ponteiro para struct
+
+### Conceito
+
+- **Struct vai por valor**: a função recebe uma cópia de todos os bytes, e
+  mudar a cópia não muda o original. Para alterar, passe o **endereço**
+  (DEITEL; DEITEL, 2011, cap. 10).
+- **`(*c).saldo`**: `*c` chega à struct e `.saldo` ao campo. Os parênteses são
+  obrigatórios: o ponto tem prioridade, e `*c.saldo` vira `*(c.saldo)`
+  (FEOFILOFF, 2009, ap. E).
+- **Seta** `->`: `c->saldo` é o mesmo que `(*c).saldo`. Variável struct usa
+  ponto; ponteiro para struct usa seta (BACKES, 2013, cap. 8).
+- **Struct no heap**: `malloc(sizeof *c)` reserva a struct inteira. Confira o
+  `NULL` e termine com `free` (CELES; RANGEL, 2002).
+- **Struct grande anda por ponteiro**: por valor, uma struct com
+  `double leituras[1000]` copia 8016 bytes a cada chamada, contra 8 do
+  ponteiro. `const Cartao *c` diz que a função só lê (CELES; RANGEL, 2002).
+
+> [!WARNING]
+> `void recarregar(Cartao c, double v) { c.saldo += v; }` compila, roda e não
+> faz nada: recarrega uma cópia. Passe `Cartao *c`. E `return &cartao;` de uma
+> struct local devolve endereço que morre no `return`.
+
+### Exemplos de uso
 
 O cartão de ônibus da Luana mora no heap com R$ 10,00, e cada passagem custa
 R$ 4,40. `cobrar_passagem` recebe uma cópia do **endereço**, não do cartão: as
@@ -974,7 +1103,125 @@ int main(void) {
 gcc ~/LPEDC/material/A124.c -o ~/LPEDC/material/A124 && ~/LPEDC/material/A124
 ```
 
-### 0063 · Enum
+### Exercícios
+
+**Exercício E367** · ★☆☆
+
+A empresa deu 8% de reajuste. Crie o tipo Funcionario (nome e salário) e
+escreva duas funções:
+
+```text
+- void reajustar(Funcionario *f, double pct): aumenta o salário do
+  funcionário original;
+- void mostrar(const Funcionario *f): só mostra (por isso o const).
+```
+
+Aplique o reajuste em Ana (R$ 3200.00) e Beto (R$ 4100.00).
+
+```text
+Saída esperada:
+Ana: R$ 3200.00
+Beto: R$ 4100.00
+Depois do reajuste:
+Ana: R$ 3456.00
+Beto: R$ 4428.00
+```
+
+**Exercício E369** · ★★☆
+
+Crie o tipo Conta (titular e saldo) e três funções:
+
+```text
+- Conta *conta_criar(const char *titular, double saldo): aloca com malloc,
+  preenche e devolve (NULL se faltar memória);
+- bool transferir(Conta *de, Conta *para, double valor): só transfere se
+  houver saldo, e devolve se deu certo;
+- void conta_destruir(Conta *c): libera.
+```
+
+Crie Ana com R$ 500.00 e Beto com R$ 120.00. Transfira R$ 200.00 de Ana
+para Beto e depois R$ 400.00 de Beto para Ana.
+
+```text
+Saída esperada:
+Ana -> Beto, R$ 200.00: ok
+Beto -> Ana, R$ 400.00: saldo insuficiente
+Ana: R$ 300.00 | Beto: R$ 320.00
+```
+
+**Exercício E370** · ★★☆
+
+Escreva Produto *criar_produto(const char *nome, double preco), que aloca
+com malloc um Produto (struct com nome de até 29 letras e preco double),
+preenche e devolve o ponteiro (NULL se faltar memória). No main, crie o fone
+abaixo, mostre e libere com free.
+
+```text
+Saída esperada:
+Fone Bluetooth: R$ 149.90
+```
+
+**Exercício E371** · ★★★
+
+Leia produtos (nome sem espaço e preço) até a entrada acabar, guardando
+num vetor de structs no heap que começa com capacidade 2 e dobra com
+realloc quando enche. Mostre cada vez que a capacidade crescer e, no fim, a
+lista e o total.
+
+```text
+Entrada:
+Arroz 27.90
+Feijao 8.49
+Cafe 18.90
+Oleo 7.99
+Acucar 4.59
+```
+
+```text
+Saída esperada:
+capacidade: 2 -> 4
+capacidade: 4 -> 8
+5 produtos:
+  Arroz      R$ 27.90
+  Feijao     R$ 8.49
+  Cafe       R$ 18.90
+  Oleo       R$ 7.99
+  Acucar     R$ 4.59
+Total: R$ 67.87
+```
+
+---
+
+## 0063 · Enum
+
+### Conceito
+
+- **Enum** (enumeração): lista de **constantes inteiras com nome**. Melhor que
+  número solto (`status == 2` não diz nada) e que string (pede `strcmp`)
+  (BACKES, 2013, cap. 8).
+
+```c
+typedef enum { RECEBIDO, PREPARANDO, A_CAMINHO, ENTREGUE } Status;
+```
+
+- **Valores**: o primeiro nome vale 0 e cada um vale o anterior mais 1. Dá
+  para escolher (`DEZ = 10, VINTE = 20`), e o seguinte continua a contagem
+  (DEITEL; DEITEL, 2011, cap. 10).
+- **Só um inteiro com apelido**: o compilador deixa somar, comparar com `<` e
+  guardar 42 numa variável `Status`. A variável ocupa o mesmo que um `int`
+  (BACKES, 2013, cap. 8).
+- **Nomes em MAIÚSCULAS**, como no `#define`. Ao contrário dele, o compilador
+  conhece o enum: sem um `case`, o `-Wall` avisa, desde que o `switch` não
+  tenha `default` (DEITEL; DEITEL, 2011, cap. 10).
+- **Contador no fim**: `{ RECEBIDO, ..., ENTREGUE, QTD_STATUS }`. `QTD_STATUS`
+  vale 4 e dimensiona um vetor de textos (`const char *nomes[QTD_STATUS]`).
+
+> [!WARNING]
+> O C **não confere** se o valor de um enum é válido: `Status s = 42;` compila,
+> e `s++` depois de `ENTREGUE` dá 4. E os nomes são globais: dois enums com
+> `ENTREGUE` não compilam. Use prefixo: `STATUS_ENTREGUE`.
+
+### Exemplos de uso
 
 O pedido no app de delivery passa por quatro etapas. A variável `s` começa em
 `RECEBIDO` e anda uma etapa por vez, com `s++`:
@@ -1133,7 +1380,141 @@ int main(void) {
 gcc ~/LPEDC/material/A126.c -o ~/LPEDC/material/A126 && ~/LPEDC/material/A126
 ```
 
-### 0064 · Union
+### Exercícios
+
+**Exercício E373** · ★☆☆
+
+Declare o enum abaixo, com alguns valores escolhidos e outros não:
+
+```text
+enum Tamanho { P = 1, M, G, GG = 10, XG, XXG = GG * 2, ESP };
+```
+
+Guarde os sete tamanhos num vetor e os nomes deles num vetor de textos, e
+mostre um por linha, num laço. Depois guarde G + XG numa variável
+enum Tamanho e mostre: o C deixa, mesmo que somar tamanhos não faça
+sentido.
+
+```text
+Saída esperada:
+P = 1
+M = 2
+G = 3
+GG = 10
+XG = 11
+XXG = 20
+ESP = 21
+G + XG = 14
+```
+
+**Exercício E375** · ★★☆
+
+Jokenpô! Crie os enums Jogada { PEDRA, PAPEL, TESOURA } e
+Resultado { EMPATE, VITORIA, DERROTA }. Escreva
+Resultado jogar(Jogada voce, Jogada outro) e rode as 5 partidas abaixo,
+mostrando o placar no fim.
+
+```text
+voce     x outro
+pedra    x tesoura
+papel    x tesoura
+tesoura  x tesoura
+papel    x pedra
+pedra    x papel
+```
+
+```text
+Saída esperada:
+pedra x tesoura: vitória
+papel x tesoura: derrota
+tesoura x tesoura: empate
+papel x pedra: vitória
+pedra x papel: derrota
+Placar: 2 vitórias, 1 empate, 2 derrotas
+```
+
+**Exercício E376** · ★★☆
+
+Crie o enum Naipe { OUROS, ESPADAS, COPAS, PAUS } e a função
+const char *nome_naipe(Naipe n), com um switch que tem um case para cada
+naipe e nenhum default (assim o gcc avisa se um naipe for esquecido). O
+"???" é devolvido depois do switch, só para valores inválidos. No main, um
+laço mostra o 7 de cada naipe.
+
+```text
+Saída esperada:
+7 de ouros
+7 de espadas
+7 de copas
+7 de paus
+```
+
+**Exercício E377** · ★★★
+
+A catraca do metrô é uma máquina de estados. Ela está TRAVADA ou LIBERADA,
+e recebe dois eventos: BILHETE e EMPURRAO. As regras:
+
+```text
+TRAVADA  + BILHETE  -> LIBERADA
+TRAVADA  + EMPURRAO -> TRAVADA   (alguém tentou passar sem pagar)
+LIBERADA + EMPURRAO -> TRAVADA   (uma pessoa passou)
+LIBERADA + BILHETE  -> LIBERADA  (bilhete desperdiçado)
+```
+
+Use dois enums (Estado e Evento) e uma função
+Estado transicao(Estado e, Evento ev). Começando TRAVADA, processe a
+sequência BILHETE, EMPURRAO, EMPURRAO, BILHETE, BILHETE, EMPURRAO, EMPURRAO
+e conte quantos passaram, quantas tentativas foram barradas e quantos
+bilhetes foram desperdiçados.
+
+```text
+Saída esperada:
+travada + bilhete -> liberada
+liberada + empurrão -> travada
+travada + empurrão -> travada
+travada + bilhete -> liberada
+liberada + bilhete -> liberada
+liberada + empurrão -> travada
+travada + empurrão -> travada
+Passaram: 2 | Barrados: 2 | Bilhetes desperdiçados: 1
+```
+
+---
+
+## 0064 · Union
+
+### Conceito
+
+- **Union** (união): declara-se como a struct, mas **todos os campos começam no
+  mesmo endereço** e dividem os mesmos bytes. Só um campo vale por vez
+  (BACKES, 2013, cap. 8).
+- **Tamanho**: o do maior campo, arredondado ao alinhamento
+  (DEITEL; DEITEL, 2011, cap. 10).
+
+```c
+typedef union {
+    uint32_t numero;        // 4 bytes
+    unsigned char bytes[4]; // os MESMOS 4 bytes
+} Endereco;
+```
+
+- **Dois usos**: economizar espaço quando o dado é uma coisa **ou** outra (Pix
+  ou cartão ou boleto) e olhar os mesmos bytes de dois jeitos
+  (KERNIGHAN; RITCHIE, 1988, cap. 6).
+- **Union etiquetada**: um **enum** ao lado diz qual campo vale; quem confere
+  a etiqueta é você (KERNIGHAN; RITCHIE, 1988, cap. 6).
+- **Endianness**: a ordem dos bytes na memória. No **little-endian** (Intel,
+  AMD e quase todo ARM), o byte menos significativo fica no endereço menor; no
+  **big-endian**, a ordem é a de leitura humana (LINUX MAN PAGES, s.d.).
+- **Rede**: a ordem é big-endian; `htonl` e `ntohl`, de `<arpa/inet.h>`,
+  convertem os números (LINUX MAN PAGES, s.d.).
+
+> [!WARNING]
+> Escrever num campo **estraga** os outros. Numa union para economizar espaço,
+> ler um campo diferente do último gravado dá lixo, sem aviso. E ler os bytes
+> depende da endianness: a saída muda entre máquinas.
+
+### Exemplos de uso
 
 O IP 192.168.0.10 é um número de 32 bits, `0xC0A8000A`. O programa grava em
 `ip.numero` e lê por `ip.bytes`; repare na ordem dos bytes na memória:
@@ -1294,7 +1675,142 @@ int main(void) {
 gcc ~/LPEDC/material/A128.c -o ~/LPEDC/material/A128 && ~/LPEDC/material/A128
 ```
 
-### 0065 · Bits, máscaras e flags
+### Exercícios
+
+**Exercício E379** · ★☆☆
+
+Escreva um programa que declare os três tipos abaixo e mostre o sizeof de
+cada um. Para a union Caixa e a struct Ficha, mostre também onde cada campo
+começa (offsetof): é a diferença entre as duas, em números.
+
+```text
+union Caixa  { char c; int i; double d; };
+struct Ficha { char c; int i; double d; };
+union Nome   { char texto[10]; int codigo; };
+```
+
+```text
+Saída esperada (num PC de 64 bits):
+union Caixa: 8 bytes, campos em 0, 0 e 0
+struct Ficha: 16 bytes, campos em 0, 4 e 8
+union Nome: 12 bytes
+```
+
+**Exercício E381** · ★★☆
+
+Um arquivo vindo de uma máquina big-endian guardou números de 16 bits com
+os dois bytes na ordem oposta à do seu PC. Escreva
+uint16_t trocar_bytes(uint16_t x) usando uma union de um uint16_t com um
+unsigned char[2] (sem operadores de bits), e teste com três valores.
+
+```text
+Saída esperada:
+0xABCD -> 0xCDAB
+0x0102 -> 0x0201
+258 -> 513
+```
+
+**Exercício E382** · ★★☆
+
+Um app de reforma calcula a área de peças de formatos diferentes. Crie uma
+union etiquetada:
+
+```text
+typedef enum { CIRCULO, RETANGULO, TRIANGULO } TipoForma;
+typedef struct {
+    TipoForma tipo;
+    union {
+        double raio;
+        struct { double largura, altura; } ret;
+        struct { double base, altura; } tri;
+    } medida;
+} Forma;
+```
+
+Escreva double area(const Forma *f) com um switch no tipo e some as
+áreas de: um círculo de raio 2, um retângulo 3 x 4 e um triângulo de base 6
+e altura 5.
+
+```text
+Saída esperada:
+círculo: 12.57 m2
+retângulo: 12.00 m2
+triângulo: 15.00 m2
+Total: 39.57 m2
+```
+
+**Exercício E384** · ★★★
+
+Na rede, a convenção é mandar os números em big-endian (a "ordem de
+rede"). Use a union abaixo para escrever:
+
+```text
+typedef union {
+    uint32_t n;
+    uint16_t m[2];
+    unsigned char b[4];
+} Visao;
+```
+
+```text
+- void mostrar_memoria(Visao x): mostra os 4 bytes na ordem da memória;
+- int little_endian(void): devolve 1 se a máquina é little-endian;
+- uint32_t ordem_de_rede(uint32_t x): devolve o número com os bytes
+  arrumados para que, na memória, apareçam do mais significativo para o
+  menos. Numa máquina big-endian, devolve x sem mexer.
+```
+
+Teste com x.n = 0x11223344: mostre a memória, m[0] e m[1], a endianness e
+a memória do número convertido.
+
+```text
+Saída esperada (num PC Intel/AMD ou ARM):
+memória: 44 33 22 11
+m[0] = 0x3344, m[1] = 0x1122
+esta máquina é little-endian
+em ordem de rede, memória: 11 22 33 44
+```
+
+---
+
+## 0065 · Bits, máscaras e flags
+
+### Conceito
+
+- **Bit e base 2**: um inteiro é uma fileira de bits, e cada casa vale o dobro
+  da casa à direita. Os bits se numeram da direita, a partir do **bit 0** (o
+  que vale 1). Revisão no assunto 0003 (FEOFILOFF, 2009, ap. C).
+- **Hexa e octal**: um dígito hexadecimal vale 4 bits (`0xED` = 237); um octal
+  vale 3, por isso aparece nas permissões. Zero à esquerda é octal: `0755` vale
+  493 (BACKES, 2013).
+- **Operadores bit a bit**: agem casa por casa em inteiros. Deslocar 1 casa à
+  esquerda multiplica por 2; à direita, divide por 2. `1u << n` tem só o bit
+  `n` ligado (BACKES, 2013).
+- **Flag**: um bit que diz sim ou não. Várias cabem num inteiro: 32 num
+  `unsigned` de 4 bytes (DEITEL; DEITEL, 2011, cap. 10).
+- **Máscara**: valor que escolhe certos bits. Ligar `p |= W;`, desligar
+  `p &= ~W;`, testar `if (p & W)`, inverter `p ^= W;`
+  (DEITEL; DEITEL, 2011, cap. 10).
+- **Campos de bits** (`unsigned ler : 1;`): a ordem depende do compilador. Para
+  arquivos e protocolos, prefira máscaras explícitas (BACKES, 2013, cap. 13).
+
+| Operador | Nome | Regra para cada bit | `a op b` |
+| --- | --- | --- | --- |
+| `a & b` | E | 1 se os dois são 1 | `0010` (2) |
+| `a \| b` | OU | 1 se algum é 1 | `0111` (7) |
+| `a ^ b` | OU exclusivo | 1 se são diferentes | `0101` (5) |
+| `~a` | NÃO | inverte cada bit | `...1001` |
+| `a << 1` | desloca à esquerda | empurra, entra 0 à direita | `1100` (12) |
+| `a >> 1` | desloca à direita | empurra, sai o bit 0 | `0011` (3) |
+
+Na tabela, `a = 0110` (6) e `b = 0011` (3).
+
+> [!WARNING]
+> `&`, `^` e `|` ficam **abaixo** do `==`: `if (p & W == 0)` vira `p & 0`,
+> sempre falso; use `if ((p & W) == 0)`. `&` não é `&&`. E use **unsigned**:
+> deslocar negativo, ou por casas demais (`1u << 32`), é comportamento indefinido.
+
+### Exemplos de uso
 
 As permissões de `ls -l` (`rwx`) são três bits: `LER` = 4, `ESCREVER` = 2,
 `EXECUTAR` = 1. Um arquivo começa com `rw-` (110); o OU com a máscara `001`
@@ -1458,7 +1974,114 @@ int main(void) {
 gcc ~/LPEDC/material/A130.c -o ~/LPEDC/material/A130 && ~/LPEDC/material/A130
 ```
 
-### 0066 · Juntando tudo: o cardápio
+### Exercícios
+
+**Exercício E385** · ★☆☆
+
+Escreva a função void mostrar(const char *nome, unsigned char r), que
+mostra o nome, os 8 bits de r (com um espaço no meio), o valor em hexa e
+em decimal. Com a = 0xCA e b = 0x5C (dois unsigned char), use a função
+para mostrar a, b e os seis resultados abaixo, guardando cada um num
+unsigned char:
+
+```text
+a & b    a | b    a ^ b    ~a    a << 1    a >> 3
+```
+
+```text
+Saída esperada:
+a       1100 1010 = 0xCA = 202
+b       0101 1100 = 0x5C = 92
+a & b   0100 1000 = 0x48 = 72
+a | b   1101 1110 = 0xDE = 222
+a ^ b   1001 0110 = 0x96 = 150
+~a      0011 0101 = 0x35 = 53
+a << 1  1001 0100 = 0x94 = 148
+a >> 3  0001 1001 = 0x19 = 25
+```
+
+**Exercício E387** · ★★☆
+
+Escreva duas funções para um uint16_t (16 bits):
+
+```text
+- void mostrar_bits(uint16_t x): mostra os 16 bits, do 15 ao 0, com um
+  espaço a cada 4;
+- int contar_uns(uint16_t x): conta quantos bits estão ligados.
+```
+
+Use as duas em 2025, 255 e 4096 e diga a paridade (par ou ímpar) da
+quantidade de bits 1. Esse "bit de paridade" é um jeito antigo e barato de
+detectar um bit corrompido numa transmissão.
+
+```text
+Saída esperada:
+2025: 0000 0111 1110 1001 -> 8 bits 1 (par)
+255: 0000 0000 1111 1111 -> 8 bits 1 (par)
+4096: 0001 0000 0000 0000 -> 1 bits 1 (ímpar)
+```
+
+**Exercício E388** · ★★☆
+
+As notificações do app ficam em flags: EMAIL (1), SMS (2) e PUSH (4).
+Escreva void mostrar(unsigned f), que mostra numa linha se cada uma está
+ligada ou desligada. Comece com email e push ligados, mostre, desligue o
+push (só ele, sem mexer nos outros bits) e mostre de novo.
+
+```text
+Saída esperada:
+email: ligado | sms: desligado | push: ligado
+email: ligado | sms: desligado | push: desligado
+```
+
+**Exercício E389** · ★★★
+
+No CSS, uma cor como #FF8800 são três bytes juntos: vermelho (FF), verde
+(88) e azul (00). Guarde cores num uint32_t (os 8 bits de cima ficam
+zerados) e escreva:
+
+```text
+- uint32_t rgb(unsigned r, unsigned g, unsigned b): empacota;
+- unsigned canal_r(uint32_t c), canal_g e canal_b: desempacotam;
+- uint32_t escurecer(uint32_t c): divide cada canal por 2;
+- uint32_t cinza(uint32_t c): os três canais viram a média deles.
+```
+
+```text
+Saída esperada:
+rgb(255, 136, 0) = #FF8800
+#3366CC -> r = 51, g = 102, b = 204
+#FF8800 escurecida = #7F4400
+#3366CC em cinza = #777777
+```
+
+---
+
+## 0066 · Juntando tudo: o cardápio
+
+### Conceito
+
+- **Struct e typedef** (0059, 0060): `Item` junta nome, categoria, preço e
+  tags (BACKES, 2013, cap. 8).
+- **Enum** (0063): `Categoria` nomeia as categorias, e `QTD_CATEGORIAS`
+  dimensiona o vetor de nomes (DEITEL; DEITEL, 2011, cap. 10).
+- **Flags** (0065): vegano, sem glúten e picante são bits num `unsigned tags`
+  (DEITEL; DEITEL, 2011, cap. 10).
+- **Vetor de structs no heap** (0061): `Cardapio` guarda o ponteiro para os
+  itens, quantos existem (`n`) e quantos cabem (`cap`), e dobra quando enche.
+  É a semente do vetor dinâmico do módulo 11 (CELES; RANGEL, 2002).
+- **Ponteiros** (0062): `Cardapio *c` para mexer no cardápio e `const Item *it`
+  para ler sem copiar (FEOFILOFF, 2009, ap. E).
+- **Filtro "tem todas"**: `(tags & mascara) == mascara`. O `&` apaga as tags
+  fora da máscara; se sobra a própria máscara, nenhuma faltou. Máscara 0 deixa
+  todo item passar.
+
+> [!WARNING]
+> `c->itens[c->n++] = it` copia o item para **dentro** do vetor: mexer depois em
+> `it` não muda o cardápio. E `Item *p = &c.itens[0]` fica **solto** após o
+> próximo `realloc`. Em vetor que cresce, guarde índices, não ponteiros.
+
+### Exemplos de uso
 
 O cardápio da lanchonete tem 6 itens. O suco de caju tem as tags `011` (vegano
 e sem glúten) e passa na máscara `011`; o burger de grão-de-bico tem `001`,
@@ -1763,611 +2386,7 @@ int main(void) {
 gcc ~/LPEDC/material/A132.c -o ~/LPEDC/material/A132 && ~/LPEDC/material/A132
 ```
 
----
-
-## 3. Exercícios práticos
-
-Cada exercício é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta. Compile como os exemplos: `gcc ~/LPEDC/material/E007.c -o ~/LPEDC/material/E007 && ~/LPEDC/material/E007`. Resoluções em `_respostas/08-structs/`.
-
-### 0059 · Struct
-
-**Exercício E349** · ★☆☆
-
-Crie uma struct livro com os campos titulo (até 39 letras), autor (até 29
-letras), ano (int) e preco (double). Declare uma variável já inicializada
-com o livro abaixo e mostre os campos e o preço com 10% de desconto.
-
-```text
-Saída esperada:
-Livro: Dom Casmurro
-Autor: Machado de Assis
-Ano: 1899
-Preço: R$ 34.90
-Na promoção: R$ 31.41
-```
-
-**Exercício E351** · ★★☆
-
-Um terreno retangular é descrito por dois cantos: o inferior esquerdo
-(2, 1) e o superior direito (10, 6), em metros. Crie uma struct ponto
-(x e y, double) e uma struct retangulo com dois campos struct ponto. Escreva
-funções que recebem o retângulo e devolvem a área e o perímetro, e uma que
-diz se um ponto (uma árvore, por exemplo) está dentro do terreno.
-
-```text
-Saída esperada:
-Largura: 8.0 m, altura: 5.0 m
-Área: 40.0 m2
-Perímetro: 26.0 m
-Árvore em (4.0, 3.0): dentro
-Árvore em (11.0, 2.0): fora
-```
-
-**Exercício E352** · ★★☆
-
-Crie a struct jogadora com nome (até 19 letras) e gols (int). Guarde em a a
-artilheira Marta, com 17 gols (o nome entra com strcpy), copie a para b com
-uma atribuição e mostre b. Depois confira se as duas fichas são iguais,
-comparando campo a campo (o == não funciona com struct).
-
-```text
-Saída esperada:
-Marta: 17 gols
-a e b são iguais
-```
-
-**Exercício E353** · ★★★
-
-Crie uma struct data (dia, mes, ano) e escreva:
-
-```text
-- struct data dia_seguinte(struct data d): devolve a data do dia seguinte,
-  tratando fim de mês, fim de ano e fevereiro em ano bissexto;
-- int comparar(struct data a, struct data b): devolve -1 se a vem antes,
-  0 se são iguais e 1 se a vem depois.
-```
-
-Teste com as datas abaixo:
-
-```text
-Saída esperada:
-28/02/2024 -> 29/02/2024
-28/02/2025 -> 01/03/2025
-31/12/2025 -> 01/01/2026
-15/03/2025 vem antes de 02/11/2025
-```
-
-### 0060 · Typedef
-
-**Exercício E355** · ★☆☆
-
-Crie com typedef o tipo Produto (nome até 19 letras, quantidade int e preco
-double). Escreva double subtotal(Produto p) e void mostrar(Produto p). No
-main, crie Café (3 unidades a R$ 12.50) e Leite (6 a R$ 4.99), mostre os dois
-e o total da compra.
-
-```text
-Saída esperada:
-Café: 3 x R$ 12.50 = R$ 37.50
-Leite: 6 x R$ 4.99 = R$ 29.94
-Total: R$ 67.44
-```
-
-**Exercício E357** · ★★☆
-
-Na receita de bolo você soma 1/4 de xícara com 1/6 de xícara. Crie o tipo
-Fracao (numerador e denominador inteiros) com typedef e escreva:
-
-```text
-- Fracao simplificar(Fracao f): divide os dois pelo MDC;
-- Fracao somar(Fracao a, Fracao b) e Fracao multiplicar(Fracao a, Fracao b),
-  que já devolvem a fração simplificada.
-```
-
-```text
-Saída esperada:
-1/4 + 1/6 = 5/12
-2/3 * 9/4 = 3/2
-3/4 + 1/4 = 1/1
-```
-
-**Exercício E358** · ★★☆
-
-Crie com typedef o apelido Reais para double e o tipo Cartao (struct sem
-nome, com titular de até 19 letras e saldo em Reais). Escreva
-Cartao pagar(Cartao c, Reais valor), que devolve uma cópia do cartão com o
-valor descontado do saldo. Ana tem R$ 600.00 no vale-refeição e paga um
-almoço de R$ 36.50: mostre o saldo antes e depois.
-
-```text
-Saída esperada:
-Ana: R$ 600.00 -> R$ 563.50
-```
-
-**Exercício E359** · ★★★
-
-Ponteiro para função (assunto 0050) tem uma declaração difícil de ler:
-double (*f)(double, double). Com typedef ela fica limpa. Crie:
-
-```text
-typedef double (*Operacao)(double, double);
-```
-
-e um tipo Botao (struct com um char simbolo e uma Operacao). Monte um
-vetor com os quatro botões de uma calculadora (+ - * /) e, num laço, aplique
-cada um aos números 12 e 4.
-
-```text
-Saída esperada:
-12 + 4 = 16
-12 - 4 = 8
-12 * 4 = 48
-12 / 4 = 3
-```
-
-### 0061 · Vetor de structs
-
-**Exercício E361** · ★☆☆
-
-Monte a lista de compras abaixo como um vetor de structs (nome,
-quantidade, preço unitário). Percorra o vetor mostrando o subtotal de cada
-item, o total da compra e o item que mais pesou no bolso.
-
-```text
-Arroz 5kg   2 x R$ 27.90
-Feijão      3 x R$ 8.49
-Café        1 x R$ 18.90
-Óleo        4 x R$ 7.99
-```
-
-```text
-Saída esperada:
-Arroz 5kg: R$ 55.80
-Feijão: R$ 25.47
-Café: R$ 18.90
-Óleo: R$ 31.96
-Total: R$ 132.13
-Mais caro: Arroz 5kg
-```
-
-**Exercício E363** · ★★☆
-
-Leia do teclado 3 atletas: o nome (pode ter espaço) numa linha e, na linha
-seguinte, a altura e a idade. Não mostre mensagens antes de ler. Guarde num
-vetor de structs e mostre o mais alto e o mais velho.
-
-```text
-Entrada:
-Rebeca Andrade
-1.55 26
-Darlan Romani
-1.88 34
-Rayssa Leal
-1.50 17
-```
-
-```text
-Saída esperada:
-Mais alto: Darlan Romani (1.88 m)
-Mais velho: Darlan Romani (34 anos)
-```
-
-**Exercício E364** · ★★☆
-
-Uma loja tem estes celulares em estoque:
-
-```text
-Moto G     R$ 1299.00
-Galaxy A   R$ 1899.00
-iPhone     R$ 5499.00
-Redmi      R$ 999.00
-```
-
-Use qsort (assunto 0050) duas vezes: primeiro em ordem alfabética do nome,
-depois do mais caro para o mais barato. Mostre a lista após cada ordenação.
-
-```text
-Saída esperada:
-Por nome:
-  Galaxy A   R$ 1899.00
-  Moto G     R$ 1299.00
-  Redmi      R$ 999.00
-  iPhone     R$ 5499.00
-Por preço:
-  iPhone     R$ 5499.00
-  Galaxy A   R$ 1899.00
-  Moto G     R$ 1299.00
-  Redmi      R$ 999.00
-```
-
-**Exercício E366** · ★★★
-
-Um terreno irregular tem 5 cantos, em metros, dados em ordem (dando a volta
-no terreno):
-
-```text
-(0, 0)  (6, 0)  (6, 4)  (3, 7)  (0, 4)
-```
-
-Guarde os cantos num vetor de struct Ponto e calcule a área e o perímetro.
-Para a área, use a fórmula do cadarço (shoelace): some x[i] * y[j] -
-x[j] * y[i] para cada canto i, com j sendo o canto seguinte, e divida o
-valor absoluto da soma por 2. O canto seguinte ao último é o primeiro.
-
-```text
-Saída esperada:
-Área: 33.00 m2
-Perímetro: 22.49 m
-```
-
-```bash
-gcc ~/LPEDC/material/E366.c -o ~/LPEDC/material/E366 -lm && ~/LPEDC/material/E366
-```
-
-### 0062 · Ponteiro para struct
-
-**Exercício E367** · ★☆☆
-
-A empresa deu 8% de reajuste. Crie o tipo Funcionario (nome e salário) e
-escreva duas funções:
-
-```text
-- void reajustar(Funcionario *f, double pct): aumenta o salário do
-  funcionário original;
-- void mostrar(const Funcionario *f): só mostra (por isso o const).
-```
-
-Aplique o reajuste em Ana (R$ 3200.00) e Beto (R$ 4100.00).
-
-```text
-Saída esperada:
-Ana: R$ 3200.00
-Beto: R$ 4100.00
-Depois do reajuste:
-Ana: R$ 3456.00
-Beto: R$ 4428.00
-```
-
-**Exercício E369** · ★★☆
-
-Crie o tipo Conta (titular e saldo) e três funções:
-
-```text
-- Conta *conta_criar(const char *titular, double saldo): aloca com malloc,
-  preenche e devolve (NULL se faltar memória);
-- bool transferir(Conta *de, Conta *para, double valor): só transfere se
-  houver saldo, e devolve se deu certo;
-- void conta_destruir(Conta *c): libera.
-```
-
-Crie Ana com R$ 500.00 e Beto com R$ 120.00. Transfira R$ 200.00 de Ana
-para Beto e depois R$ 400.00 de Beto para Ana.
-
-```text
-Saída esperada:
-Ana -> Beto, R$ 200.00: ok
-Beto -> Ana, R$ 400.00: saldo insuficiente
-Ana: R$ 300.00 | Beto: R$ 320.00
-```
-
-**Exercício E370** · ★★☆
-
-Escreva Produto *criar_produto(const char *nome, double preco), que aloca
-com malloc um Produto (struct com nome de até 29 letras e preco double),
-preenche e devolve o ponteiro (NULL se faltar memória). No main, crie o fone
-abaixo, mostre e libere com free.
-
-```text
-Saída esperada:
-Fone Bluetooth: R$ 149.90
-```
-
-**Exercício E371** · ★★★
-
-Leia produtos (nome sem espaço e preço) até a entrada acabar, guardando
-num vetor de structs no heap que começa com capacidade 2 e dobra com
-realloc quando enche. Mostre cada vez que a capacidade crescer e, no fim, a
-lista e o total.
-
-```text
-Entrada:
-Arroz 27.90
-Feijao 8.49
-Cafe 18.90
-Oleo 7.99
-Acucar 4.59
-```
-
-```text
-Saída esperada:
-capacidade: 2 -> 4
-capacidade: 4 -> 8
-5 produtos:
-  Arroz      R$ 27.90
-  Feijao     R$ 8.49
-  Cafe       R$ 18.90
-  Oleo       R$ 7.99
-  Acucar     R$ 4.59
-Total: R$ 67.87
-```
-
-### 0063 · Enum
-
-**Exercício E373** · ★☆☆
-
-Declare o enum abaixo, com alguns valores escolhidos e outros não:
-
-```text
-enum Tamanho { P = 1, M, G, GG = 10, XG, XXG = GG * 2, ESP };
-```
-
-Guarde os sete tamanhos num vetor e os nomes deles num vetor de textos, e
-mostre um por linha, num laço. Depois guarde G + XG numa variável
-enum Tamanho e mostre: o C deixa, mesmo que somar tamanhos não faça
-sentido.
-
-```text
-Saída esperada:
-P = 1
-M = 2
-G = 3
-GG = 10
-XG = 11
-XXG = 20
-ESP = 21
-G + XG = 14
-```
-
-**Exercício E375** · ★★☆
-
-Jokenpô! Crie os enums Jogada { PEDRA, PAPEL, TESOURA } e
-Resultado { EMPATE, VITORIA, DERROTA }. Escreva
-Resultado jogar(Jogada voce, Jogada outro) e rode as 5 partidas abaixo,
-mostrando o placar no fim.
-
-```text
-voce     x outro
-pedra    x tesoura
-papel    x tesoura
-tesoura  x tesoura
-papel    x pedra
-pedra    x papel
-```
-
-```text
-Saída esperada:
-pedra x tesoura: vitória
-papel x tesoura: derrota
-tesoura x tesoura: empate
-papel x pedra: vitória
-pedra x papel: derrota
-Placar: 2 vitórias, 1 empate, 2 derrotas
-```
-
-**Exercício E376** · ★★☆
-
-Crie o enum Naipe { OUROS, ESPADAS, COPAS, PAUS } e a função
-const char *nome_naipe(Naipe n), com um switch que tem um case para cada
-naipe e nenhum default (assim o gcc avisa se um naipe for esquecido). O
-"???" é devolvido depois do switch, só para valores inválidos. No main, um
-laço mostra o 7 de cada naipe.
-
-```text
-Saída esperada:
-7 de ouros
-7 de espadas
-7 de copas
-7 de paus
-```
-
-**Exercício E377** · ★★★
-
-A catraca do metrô é uma máquina de estados. Ela está TRAVADA ou LIBERADA,
-e recebe dois eventos: BILHETE e EMPURRAO. As regras:
-
-```text
-TRAVADA  + BILHETE  -> LIBERADA
-TRAVADA  + EMPURRAO -> TRAVADA   (alguém tentou passar sem pagar)
-LIBERADA + EMPURRAO -> TRAVADA   (uma pessoa passou)
-LIBERADA + BILHETE  -> LIBERADA  (bilhete desperdiçado)
-```
-
-Use dois enums (Estado e Evento) e uma função
-Estado transicao(Estado e, Evento ev). Começando TRAVADA, processe a
-sequência BILHETE, EMPURRAO, EMPURRAO, BILHETE, BILHETE, EMPURRAO, EMPURRAO
-e conte quantos passaram, quantas tentativas foram barradas e quantos
-bilhetes foram desperdiçados.
-
-```text
-Saída esperada:
-travada + bilhete -> liberada
-liberada + empurrão -> travada
-travada + empurrão -> travada
-travada + bilhete -> liberada
-liberada + bilhete -> liberada
-liberada + empurrão -> travada
-travada + empurrão -> travada
-Passaram: 2 | Barrados: 2 | Bilhetes desperdiçados: 1
-```
-
-### 0064 · Union
-
-**Exercício E379** · ★☆☆
-
-Escreva um programa que declare os três tipos abaixo e mostre o sizeof de
-cada um. Para a union Caixa e a struct Ficha, mostre também onde cada campo
-começa (offsetof): é a diferença entre as duas, em números.
-
-```text
-union Caixa  { char c; int i; double d; };
-struct Ficha { char c; int i; double d; };
-union Nome   { char texto[10]; int codigo; };
-```
-
-```text
-Saída esperada (num PC de 64 bits):
-union Caixa: 8 bytes, campos em 0, 0 e 0
-struct Ficha: 16 bytes, campos em 0, 4 e 8
-union Nome: 12 bytes
-```
-
-**Exercício E381** · ★★☆
-
-Um arquivo vindo de uma máquina big-endian guardou números de 16 bits com
-os dois bytes na ordem oposta à do seu PC. Escreva
-uint16_t trocar_bytes(uint16_t x) usando uma union de um uint16_t com um
-unsigned char[2] (sem operadores de bits), e teste com três valores.
-
-```text
-Saída esperada:
-0xABCD -> 0xCDAB
-0x0102 -> 0x0201
-258 -> 513
-```
-
-**Exercício E382** · ★★☆
-
-Um app de reforma calcula a área de peças de formatos diferentes. Crie uma
-union etiquetada:
-
-```text
-typedef enum { CIRCULO, RETANGULO, TRIANGULO } TipoForma;
-typedef struct {
-    TipoForma tipo;
-    union {
-        double raio;
-        struct { double largura, altura; } ret;
-        struct { double base, altura; } tri;
-    } medida;
-} Forma;
-```
-
-Escreva double area(const Forma *f) com um switch no tipo e some as
-áreas de: um círculo de raio 2, um retângulo 3 x 4 e um triângulo de base 6
-e altura 5.
-
-```text
-Saída esperada:
-círculo: 12.57 m2
-retângulo: 12.00 m2
-triângulo: 15.00 m2
-Total: 39.57 m2
-```
-
-**Exercício E384** · ★★★
-
-Na rede, a convenção é mandar os números em big-endian (a "ordem de
-rede"). Use a union abaixo para escrever:
-
-```text
-typedef union {
-    uint32_t n;
-    uint16_t m[2];
-    unsigned char b[4];
-} Visao;
-```
-
-```text
-- void mostrar_memoria(Visao x): mostra os 4 bytes na ordem da memória;
-- int little_endian(void): devolve 1 se a máquina é little-endian;
-- uint32_t ordem_de_rede(uint32_t x): devolve o número com os bytes
-  arrumados para que, na memória, apareçam do mais significativo para o
-  menos. Numa máquina big-endian, devolve x sem mexer.
-```
-
-Teste com x.n = 0x11223344: mostre a memória, m[0] e m[1], a endianness e
-a memória do número convertido.
-
-```text
-Saída esperada (num PC Intel/AMD ou ARM):
-memória: 44 33 22 11
-m[0] = 0x3344, m[1] = 0x1122
-esta máquina é little-endian
-em ordem de rede, memória: 11 22 33 44
-```
-
-### 0065 · Bits, máscaras e flags
-
-**Exercício E385** · ★☆☆
-
-Escreva a função void mostrar(const char *nome, unsigned char r), que
-mostra o nome, os 8 bits de r (com um espaço no meio), o valor em hexa e
-em decimal. Com a = 0xCA e b = 0x5C (dois unsigned char), use a função
-para mostrar a, b e os seis resultados abaixo, guardando cada um num
-unsigned char:
-
-```text
-a & b    a | b    a ^ b    ~a    a << 1    a >> 3
-```
-
-```text
-Saída esperada:
-a       1100 1010 = 0xCA = 202
-b       0101 1100 = 0x5C = 92
-a & b   0100 1000 = 0x48 = 72
-a | b   1101 1110 = 0xDE = 222
-a ^ b   1001 0110 = 0x96 = 150
-~a      0011 0101 = 0x35 = 53
-a << 1  1001 0100 = 0x94 = 148
-a >> 3  0001 1001 = 0x19 = 25
-```
-
-**Exercício E387** · ★★☆
-
-Escreva duas funções para um uint16_t (16 bits):
-
-```text
-- void mostrar_bits(uint16_t x): mostra os 16 bits, do 15 ao 0, com um
-  espaço a cada 4;
-- int contar_uns(uint16_t x): conta quantos bits estão ligados.
-```
-
-Use as duas em 2025, 255 e 4096 e diga a paridade (par ou ímpar) da
-quantidade de bits 1. Esse "bit de paridade" é um jeito antigo e barato de
-detectar um bit corrompido numa transmissão.
-
-```text
-Saída esperada:
-2025: 0000 0111 1110 1001 -> 8 bits 1 (par)
-255: 0000 0000 1111 1111 -> 8 bits 1 (par)
-4096: 0001 0000 0000 0000 -> 1 bits 1 (ímpar)
-```
-
-**Exercício E388** · ★★☆
-
-As notificações do app ficam em flags: EMAIL (1), SMS (2) e PUSH (4).
-Escreva void mostrar(unsigned f), que mostra numa linha se cada uma está
-ligada ou desligada. Comece com email e push ligados, mostre, desligue o
-push (só ele, sem mexer nos outros bits) e mostre de novo.
-
-```text
-Saída esperada:
-email: ligado | sms: desligado | push: ligado
-email: ligado | sms: desligado | push: desligado
-```
-
-**Exercício E389** · ★★★
-
-No CSS, uma cor como #FF8800 são três bytes juntos: vermelho (FF), verde
-(88) e azul (00). Guarde cores num uint32_t (os 8 bits de cima ficam
-zerados) e escreva:
-
-```text
-- uint32_t rgb(unsigned r, unsigned g, unsigned b): empacota;
-- unsigned canal_r(uint32_t c), canal_g e canal_b: desempacotam;
-- uint32_t escurecer(uint32_t c): divide cada canal por 2;
-- uint32_t cinza(uint32_t c): os três canais viram a média deles.
-```
-
-```text
-Saída esperada:
-rgb(255, 136, 0) = #FF8800
-#3366CC -> r = 51, g = 102, b = 204
-#FF8800 escurecida = #7F4400
-#3366CC em cinza = #777777
-```
-
-### 0066 · Juntando tudo: o cardápio
+### Exercícios
 
 **Exercício E391** · ★☆☆
 
@@ -2467,11 +2486,13 @@ Trabalho:
 [média] dia 3: Revisar PR
 ```
 
-### Lista do módulo
+---
+
+## Lista do módulo
 
 30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P0801.c a P0830.c, em `material/`; resoluções em `_respostas/08-structs/lista/`.
 
-#### ★☆☆ Aquecimento
+### ★☆☆ Aquecimento
 
 **Exercício P0801** · ★☆☆ · A distância entre as paradas
 
@@ -2737,7 +2758,7 @@ estrada  vol 22, graves 3, agudos 0, balanço  0, loudness sim, fonte "Radio FM"
 show     vol 30, graves 5, agudos 4, balanço -2, loudness não, fonte "Pendrive"
 ```
 
-#### ★★☆ Para pensar
+### ★★☆ Para pensar
 
 **Exercício P0811** · ★★☆ · O cardápio em duas ordens
 
@@ -3060,7 +3081,7 @@ Manaus (7 dias):  0.0  4.5 22.0 18.0  0.0  6.5 11.0
   média 8.86 mm, bloco de 80 bytes
 ```
 
-#### ★★★ Desafio
+### ★★★ Desafio
 
 **Exercício P0821** · ★★★ · O catálogo ordenado por três chaves
 
@@ -3390,7 +3411,7 @@ Atende Téo
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Resolva num arquivo seu, misturando os assuntos do módulo, do médio ao
 difícil.
@@ -3529,7 +3550,7 @@ passam a vir do `malloc`.
 
 </details>
 
-### Questões do POSCOMP
+## Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -3540,7 +3561,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 
 O gabarito de 2023 vem de um blog de terceiros que reproduz o gabarito definitivo; confira no PDF oficial da SBC.
 
-### Questões no estilo da prova
+## Questões no estilo da prova
 
 Formato da prova do mestrado do PPGI/UFAM. Resolva no papel, marque uma letra
 e só então abra o gabarito. Os trechos foram compilados com

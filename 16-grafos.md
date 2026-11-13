@@ -52,9 +52,12 @@ completos.
 
 ---
 
-## 1. Conceitos gerais
+> [!NOTE]
+> Cada assunto é um capítulo: **Conceito** (a explicação), **Exemplos de uso** (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e **Exercícios** (cada um é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta; resoluções em `_respostas/16-grafos/`).
 
-### 0109 · Grafos
+## 0109 · Grafos
+
+### Conceito
 
 - **Grafo**: um conjunto de **vértices** (pontos) e de **arestas** (ligações
   entre pares). O Cormen escreve **G = (V, E)** e usa V e E também para as
@@ -85,133 +88,7 @@ pequeno ou denso, matriz; grande e esparso, lista.
 > e `adj[b][a] = 1`. Esquecer um cria um grafo dirigido sem querer, e o erro
 > só aparece quando a busca não acha um caminho que existe.
 
-### 0110 · BFS: busca em largura
-
-- **Distância**: o menor número de arestas num caminho de `s` até `v`. Não
-  confunda com o grau do 0109 (FEOFILOFF, 2009, cap. 5).
-- **Busca em largura** (BFS, *breadth-first search*): explora em ondas a
-  partir da origem. Primeiro quem está a 1 aresta, depois a 2, e assim por
-  diante (CORMEN et al., 2024, cap. 20).
-- **Fila** (0085): quem foi descoberto primeiro sai primeiro. O laço tira `u`
-  da frente e, para cada vizinho `v` novo, faz `dist[v] = dist[u] + 1`,
-  `pai[v] = u` e põe `v` no fim (FEOFILOFF, 2009, cap. 5).
-- **`dist[]` com -1**: marca o "não descoberto" e impede andar em círculos,
-  porque dá para chegar ao mesmo vértice por caminhos diferentes
-  (FEOFILOFF, 2009, cap. 5).
-- **Árvore da BFS**: os pares (`pai[v]`, `v`). Seguir `pai[]` do destino até
-  `-1` dá o caminho mais curto, de trás para frente
-  (CORMEN et al., 2024, cap. 20).
-- **Cores do Cormen**: **branco** é o não descoberto, **cinza** o que está na
-  fila e **preto** o que já saiu; `v.d` é `dist[v]` e `v.π`, `pai[v]`
-  (CORMEN et al., 2024, cap. 20).
-- **Custo**: cada vértice entra na fila uma vez, então `int fila[V]` basta.
-  O(V²) com matriz e O(V + E) com lista (ZIVIANI, 2010, cap. 7).
-- **Só vale sem peso**: o primeiro caminho achado é o mais curto porque toda
-  aresta custa 1. Com pesos, entra Dijkstra (0112) (CORMEN et al., 2024,
-  cap. 22).
-
-> [!WARNING]
-> Marque o vértice como descoberto **ao pôr na fila**, não ao tirar. Marcando
-> ao tirar, um vértice com dois vizinhos já vistos entra duas vezes e a fila
-> estoura.
-
-### 0111 · DFS: busca em profundidade
-
-- **Busca em profundidade** (DFS, *depth-first search*): vai o mais fundo
-  possível e, sem nada novo, **volta** à última escolha pendente, o
-  **backtracking** (CORMEN et al., 2024, cap. 20).
-- **Pilha**: a DFS usa a pilha de chamadas (0031). A função marca o vértice e
-  chama a si mesma para cada vizinho não visitado; ao voltar, o frame lembra
-  onde o laço parou (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 8).
-- **`visitado[]`**: obrigatório, como na BFS. Num ciclo, sem a marca, a
-  recursão nunca acaba (ZIVIANI, 2010, cap. 7).
-- **Árvore da DFS e arestas de retorno**: a DFS desce pelas arestas da
-  árvore. Uma aresta que leva a um vértice ainda na pilha é **de retorno**; em
-  grafo não dirigido, achar uma é achar um ciclo (CORMEN et al., 2024,
-  cap. 20).
-- **Relógio do Cormen**: cada vértice ganha tempo de **descoberta** `v.d` e de
-  **término** `v.f`, com cores branco, cinza (na pilha) e preto. `DFS(G)`
-  recomeça de todo vértice branco (CORMEN et al., 2024, cap. 20).
-- **Grafo dirigido**: as outras arestas são de **retorno** (para ancestral
-  cinza: há ciclo), de **avanço** (descendente preto) ou de **cruzamento**
-  (outro preto). A ordem decrescente de `v.f` dá a **ordenação topológica**
-  de um grafo acíclico (CORMEN et al., 2024, cap. 20).
-- **Custo e caminho**: O(V + E) com lista. A DFS **não** dá o caminho mais
-  curto; para isso há a BFS (FEOFILOFF, 2009, cap. 5).
-
-> [!WARNING]
-> Recursão funda estoura a pilha (8 MB é o comum no Linux): um labirinto de
-> 1000 × 1000 casas pode empilhar um milhão de chamadas. Em grafos grandes,
-> use pilha explícita com `malloc`, como no A222.
-
-### 0112 · Dijkstra: caminho mínimo
-
-- **Grafo ponderado**: cada aresta tem um **peso** (minutos, km, reais). O
-  menor caminho é o de **menor soma de pesos**, não o de menos arestas; aí a
-  BFS erra (CORMEN et al., 2024, cap. 22).
-- **Dijkstra**: acha os menores caminhos a partir de uma origem quando
-  **nenhum peso é negativo** (DIJKSTRA, 1959).
-- **O que ele guarda**: `dist[v]`, o melhor tempo **conhecido** até `v` (0 na
-  origem, INFINITO no resto); `fixo[v]`, se ele já é definitivo; `anterior[v]`,
-  de onde se chega em `v` (o `pai[]` da BFS) (ZIVIANI, 2010, cap. 7).
-- **Relaxar**: se `dist[u] + peso[u][v] < dist[v]`, atualiza `dist[v]` e
-  `anterior[v]`. No Cormen é `RELAX(u, v, w)`, com `v.d`, `v.π` e o conjunto S
-  dos fixos (CORMEN et al., 2024, cap. 22).
-- **Guloso**: a cada passo fixa o não fixo de menor `dist` e relaxa as arestas
-  dele; a escolha nunca se desfaz. É seguro porque, sem pesos negativos, outro
-  caminho até ele passaria por um vértice de `dist` maior ou igual
-  (CORMEN et al., 2024, cap. 22).
-- **Peso negativo**: o argumento cai e o Dijkstra erra sem avisar. Aí entra o
-  Bellman-Ford (0154), que relaxa todas as arestas V - 1 vezes
-  (CORMEN et al., 2024, cap. 22).
-- **Custo**: com matriz, cada um dos V passos varre V vértices, O(V²). Com
-  lista e **heap** (0102), O((V + E) log V) (CORMEN et al., 2024, cap. 22).
-
-> [!WARNING]
-> `INT_MAX + 3` **estoura**: comportamento indefinido em `int` com sinal, que
-> na prática vira negativo e "ganha" no `<`. Por isso o código só escolhe `u`
-> com `dist[u] != INFINITO`. Um INFINITO folgado (`1000000000`) também evita o
-> estouro (CPPREFERENCE, s.d.).
-
-### 0113 · Juntando tudo: a central de entregas
-
-- **Um esqueleto, três buscas**: DFS, BFS e Dijkstra usam marcas, `pai[]` e um
-  laço que descobre vizinhos. Muda a **ordem** de saída: pilha, fila ou "menor
-  `dist`" (CORMEN et al., 2024, caps. 20 e 22).
-- **"Menor em quê?"**: com arestas de mesmo custo, a BFS basta, em O(V + E).
-  Com pesos variados, ela erra sem aviso (FEOFILOFF, 2009, cap. 5).
-- **Alcance primeiro**: a DFS diz quem dá para alcançar. Se o destino está
-  fora, não há rota a calcular (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 8).
-- **Árvore geradora mínima**: o conjunto de arestas que liga todos os
-  vértices com a menor soma de pesos (CORMEN et al., 2024, cap. 21).
-- **Prim**: é o Dijkstra com uma linha trocada. Em vez de
-  `dist[u] + custo < dist[v]`, compara só `custo < chave[v]`
-  (CORMEN et al., 2024, cap. 21).
-- **Grafo como struct**: `Grafo` junta vértices, nomes e matriz de km. As
-  funções recebem `const Grafo *`: passa 8 bytes em vez de 328 e promete não
-  mexer no mapa (KERNIGHAN; RITCHIE, 1989).
-- **Inicializador designado** (C99): `{.n = 7, .nomes = {...}}` cita só os
-  campos que quer; o resto, como `km`, começa zerado (ISO/IEC, 2018).
-
-| Pergunta | Algoritmo | Estrutura auxiliar |
-| --- | --- | --- |
-| Quem dá para alcançar? Quantos grupos? Tem ciclo? | DFS | pilha (a recursão) |
-| Menor caminho em número de arestas | BFS | fila |
-| Menor caminho em soma de pesos (pesos >= 0) | Dijkstra | vetor `dist` (ou heap) |
-| Ligar todos com o menor custo total | Prim | vetor `chave` |
-
-> [!WARNING]
-> Na matriz de pesos, `0` quer dizer "sem aresta", o que só funciona se nenhum
-> peso real for zero. Se um trecho pode custar R$ 0, use outra marca,
-> como `-1`.
-
----
-
-## 2. Exemplos de uso
-
-Cada exemplo compila sozinho. Rode com o comando abaixo dele e compare com a saída no fim do código.
-
-### 0109 · Grafos
+### Exemplos de uso
 
 Cinco ciclovias ligam Centro, Praia, Feira, Parque e Estádio, nos dois
 sentidos e sem peso. A matriz sai simétrica; a Feira tem três vizinhos, e a
@@ -386,7 +263,134 @@ int main(void) {
 gcc ~/LPEDC/material/A218.c ~/LPEDC/material/0109-grafo.c -o ~/LPEDC/material/A218 && ~/LPEDC/material/A218
 ```
 
-### 0110 · BFS: busca em largura
+### Exercícios
+
+**Exercício E649** · ★☆☆
+
+Uma companhia aérea regional tem voos diretos, de ida e volta, entre
+quatro capitais: Recife (0), Salvador (1), Fortaleza (2) e Natal (3). Os
+voos são: Recife-Salvador, Recife-Fortaleza, Recife-Natal e
+Fortaleza-Natal.
+
+Monte a matriz de adjacência (grafo não dirigido), mostre a matriz e conte
+quantos voos existem olhando só para a matriz (não vale contar os pares à
+mão):
+
+```text
+Saída esperada:
+     0 1 2 3
+  0  0 1 1 1
+  1  1 0 0 0
+  2  1 0 0 1
+  3  1 0 1 0
+Voos diretos: 4
+```
+
+```bash
+gcc ~/LPEDC/material/E649.c ~/LPEDC/material/0109-grafo.c -o ~/LPEDC/material/E649 && ~/LPEDC/material/E649
+```
+
+**Exercício E651** · ★★☆
+
+O bairro tem quatro esquinas, A (0), B (1), C (2) e D (3). A prefeitura listou
+as ruas num vetor de "Rua" (struct com "int de, para"), uma entrada por
+SENTIDO permitido; {0, 1} é ir de A para B. Os sentidos são {0, 1}, {1, 0},
+{1, 2}, {2, 3}, {3, 0}, {0, 2} e {2, 0}. Monte a matriz de adjacência
+DIRIGIDA a partir do vetor e, para cada par de esquinas ligadas, diga se a
+rua é de mão dupla ou única (e o sentido). No fim, conte cada tipo.
+
+```text
+Saída esperada:
+Sentidos cadastrados: 7
+A-B: mão dupla
+A-C: mão dupla
+A-D: mão única (D -> A)
+B-C: mão única (B -> C)
+C-D: mão única (C -> D)
+Mão única: 3, mão dupla: 2
+```
+
+```bash
+gcc ~/LPEDC/material/E651.c ~/LPEDC/material/0109-grafo.c -o ~/LPEDC/material/E651 && ~/LPEDC/material/E651
+```
+
+**Exercício E652** · ★★☆
+
+O grupo de estudos tem Ana (0), Beto (1), Cris (2) e Davi (3). As duplas que
+estudam juntas são Ana-Beto, Ana-Cris, Beto-Cris e Beto-Davi. Monte a matriz
+de adjacência do grafo NÃO dirigido e mostre o grau de cada pessoa (soma da
+linha da matriz) e a soma dos graus.
+
+```text
+Saída esperada:
+Ana estuda com 2 pessoa(s)
+Beto estuda com 3 pessoa(s)
+Cris estuda com 2 pessoa(s)
+Davi estuda com 1 pessoa(s)
+Soma dos graus: 8
+```
+
+```bash
+gcc ~/LPEDC/material/E652.c ~/LPEDC/material/0109-grafo.c -o ~/LPEDC/material/E652 && ~/LPEDC/material/E652
+```
+
+**Exercício E653** · ★★★
+
+Converta a matriz das ciclovias (no esqueleto) para uma LISTA de adjacência
+com malloc: um vetor de 5 ponteiros, cada um para a lista encadeada dos
+vizinhos do ponto. Regras: os vizinhos de cada lista saem em ordem crescente
+de índice; inserir um nó custa O(1) (sem percorrer a lista até o fim); conte
+os nós alocados; libere tudo no final, sem vazamento.
+
+```text
+Saída esperada:
+Centro  -> Praia Feira
+Praia   -> Centro Feira
+Feira   -> Centro Praia Parque
+Parque  -> Feira Estadio
+Estadio -> Parque
+Nós alocados: 10
+```
+
+```bash
+gcc ~/LPEDC/material/E653.c ~/LPEDC/material/0109-grafo.c -o ~/LPEDC/material/E653 && ~/LPEDC/material/E653
+```
+
+---
+
+## 0110 · BFS: busca em largura
+
+### Conceito
+
+- **Distância**: o menor número de arestas num caminho de `s` até `v`. Não
+  confunda com o grau do 0109 (FEOFILOFF, 2009, cap. 5).
+- **Busca em largura** (BFS, *breadth-first search*): explora em ondas a
+  partir da origem. Primeiro quem está a 1 aresta, depois a 2, e assim por
+  diante (CORMEN et al., 2024, cap. 20).
+- **Fila** (0085): quem foi descoberto primeiro sai primeiro. O laço tira `u`
+  da frente e, para cada vizinho `v` novo, faz `dist[v] = dist[u] + 1`,
+  `pai[v] = u` e põe `v` no fim (FEOFILOFF, 2009, cap. 5).
+- **`dist[]` com -1**: marca o "não descoberto" e impede andar em círculos,
+  porque dá para chegar ao mesmo vértice por caminhos diferentes
+  (FEOFILOFF, 2009, cap. 5).
+- **Árvore da BFS**: os pares (`pai[v]`, `v`). Seguir `pai[]` do destino até
+  `-1` dá o caminho mais curto, de trás para frente
+  (CORMEN et al., 2024, cap. 20).
+- **Cores do Cormen**: **branco** é o não descoberto, **cinza** o que está na
+  fila e **preto** o que já saiu; `v.d` é `dist[v]` e `v.π`, `pai[v]`
+  (CORMEN et al., 2024, cap. 20).
+- **Custo**: cada vértice entra na fila uma vez, então `int fila[V]` basta.
+  O(V²) com matriz e O(V + E) com lista (ZIVIANI, 2010, cap. 7).
+- **Só vale sem peso**: o primeiro caminho achado é o mais curto porque toda
+  aresta custa 1. Com pesos, entra Dijkstra (0112) (CORMEN et al., 2024,
+  cap. 22).
+
+> [!WARNING]
+> Marque o vértice como descoberto **ao pôr na fila**, não ao tirar. Marcando
+> ao tirar, um vértice com dois vizinhos já vistos entra duas vezes e a fila
+> estoura.
+
+### Exemplos de uso
 
 Lia quer uma indicação para a vaga da recrutadora Rita. A onda 1 é Max e
 Nina; a 2, Otto e Pedro; a 3, Rita. As setas verdes são a árvore da BFS, e o
@@ -600,7 +604,126 @@ int main(void) {
 gcc ~/LPEDC/material/A220.c -o ~/LPEDC/material/A220 && ~/LPEDC/material/A220
 ```
 
-### 0111 · DFS: busca em profundidade
+### Exercícios
+
+**Exercício E655** · ★☆☆
+
+O mapa liga seis bairros por linhas de ônibus diretas (grafo não dirigido):
+Centro (0), Lapa (1), Moema (2), Penha (3), Saude (4) e Tatuape (5). As
+linhas são Centro-Lapa, Centro-Moema, Lapa-Penha, Moema-Penha, Moema-Saude,
+Penha-Tatuape e Saude-Tatuape. Escreva uma BFS a partir da Penha que mostra,
+numa linha, a ordem da visita com a distância de cada bairro e, depois, uma
+linha por bairro (em ordem de índice) dizendo quem o descobriu (vetor pai[]).
+
+```text
+Saída esperada:
+Penha(0) Lapa(1) Moema(1) Tatuape(1) Centro(2) Saude(2)
+Centro: descoberto por Lapa
+Lapa: descoberto por Penha
+Moema: descoberto por Penha
+Penha: origem
+Saude: descoberto por Moema
+Tatuape: descoberto por Penha
+```
+
+**Exercício E657** · ★★☆
+
+Mesmo mapa de ônibus do E655 (já está no esqueleto). Você mora na Lapa e
+precisa ir à Saude pegando o menor número de ônibus. Rode uma BFS a partir
+da Lapa guardando pai[] e escreva uma função RECURSIVA que imprime o
+caminho na ordem certa, da origem ao destino:
+
+```text
+void imprimir_caminho(const int pai[], int v);
+```
+
+Existe outro caminho com 3 ônibus (Lapa, Penha, Tatuape, Saude). Para ver
+quem decide o empate, rode a BFS uma segunda vez examinando os vizinhos
+de trás para frente (v de V-1 até 0) e mostre o caminho que ela acha.
+
+```text
+Saída esperada:
+Lapa -> Centro -> Moema -> Saude
+Ônibus: 3
+Ao contrário: Lapa -> Penha -> Tatuape -> Saude
+Ônibus: 3
+```
+
+**Exercício E658** · ★★☆
+
+Depois do temporal, a companhia de energia sabe quais cabos entre os oito
+bairros (A a H) continuam inteiros. Bairros ligados, direta ou
+indiretamente, formam um grupo que pode ser religado de uma vez. Os cabos
+inteiros são:
+
+```text
+A-B, B-C, D-E, F-G, G-H, F-H
+```
+
+Escreva um programa que descobre os grupos (as COMPONENTES CONEXAS do
+grafo) usando BFS e mostra cada um:
+
+```text
+Saída esperada:
+Grupo 1: A B C
+Grupo 2: D E
+Grupo 3: F G H
+Total de grupos: 3
+```
+
+**Exercício E659** · ★★★
+
+Para cada quarteirão do mapa, ache a distância até o posto de saúde mais
+próximo com uma BFS que começa com todos os postos na fila. P é posto, # é
+área sem passagem e . é quarteirão; anda-se para cima, baixo, esquerda e
+direita. Mapa: "P...#...", ".##.#.#.", "....#.#P", ".#......", "...#..#.".
+Mostre o mapa com as distâncias (0 nos postos, # onde não passa) e a pior
+distância.
+
+```text
+Saída esperada:
+0123#432
+1##4#5#1
+2345#4#0
+3#554321
+456#54#2
+Pior distância: 6
+```
+
+---
+
+## 0111 · DFS: busca em profundidade
+
+### Conceito
+
+- **Busca em profundidade** (DFS, *depth-first search*): vai o mais fundo
+  possível e, sem nada novo, **volta** à última escolha pendente, o
+  **backtracking** (CORMEN et al., 2024, cap. 20).
+- **Pilha**: a DFS usa a pilha de chamadas (0031). A função marca o vértice e
+  chama a si mesma para cada vizinho não visitado; ao voltar, o frame lembra
+  onde o laço parou (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 8).
+- **`visitado[]`**: obrigatório, como na BFS. Num ciclo, sem a marca, a
+  recursão nunca acaba (ZIVIANI, 2010, cap. 7).
+- **Árvore da DFS e arestas de retorno**: a DFS desce pelas arestas da
+  árvore. Uma aresta que leva a um vértice ainda na pilha é **de retorno**; em
+  grafo não dirigido, achar uma é achar um ciclo (CORMEN et al., 2024,
+  cap. 20).
+- **Relógio do Cormen**: cada vértice ganha tempo de **descoberta** `v.d` e de
+  **término** `v.f`, com cores branco, cinza (na pilha) e preto. `DFS(G)`
+  recomeça de todo vértice branco (CORMEN et al., 2024, cap. 20).
+- **Grafo dirigido**: as outras arestas são de **retorno** (para ancestral
+  cinza: há ciclo), de **avanço** (descendente preto) ou de **cruzamento**
+  (outro preto). A ordem decrescente de `v.f` dá a **ordenação topológica**
+  de um grafo acíclico (CORMEN et al., 2024, cap. 20).
+- **Custo e caminho**: O(V + E) com lista. A DFS **não** dá o caminho mais
+  curto; para isso há a BFS (FEOFILOFF, 2009, cap. 5).
+
+> [!WARNING]
+> Recursão funda estoura a pilha (8 MB é o comum no Linux): um labirinto de
+> 1000 × 1000 casas pode empilhar um milhão de chamadas. Em grafos grandes,
+> use pilha explícita com `malloc`, como no A222.
+
+### Exemplos de uso
 
 Da Sede do parque saem trilhas para o Lago e a Ponte. A DFS desce Lago,
 Gruta, Topo e Bica, volta e só no fim pega a Ponte. Os números são a ordem da
@@ -766,7 +889,114 @@ int main(void) {
 gcc ~/LPEDC/material/A222.c -o ~/LPEDC/material/A222 && ~/LPEDC/material/A222
 ```
 
-### 0112 · Dijkstra: caminho mínimo
+### Exercícios
+
+**Exercício E661** · ★☆☆
+
+O shopping tem seis áreas, Hall (0), Cinema (1), Praça (2), Loja (3), Banco
+(4) e Saída (5), ligadas por corredores (grafo não dirigido): Hall-Praça,
+Hall-Banco, Cinema-Praça, Praça-Loja, Loja-Banco e Banco-Saída. Escreva uma
+DFS recursiva a partir do Hall (vizinhos em ordem de índice) que imprime cada
+área com o número da visita (1, 2, 3...) e 2 espaços de recuo por nível de
+profundidade. No fim, mostre qual área ficou mais funda e em que nível.
+
+```text
+Saída esperada:
+1 Hall
+  2 Praça
+    3 Cinema
+    4 Loja
+      5 Banco
+        6 Saída
+Mais fundo: Saída (nível 4)
+```
+
+**Exercício E663** · ★★☆
+
+Uma foto de satélite virou uma grade: # é terra e ~ é água. Terras vizinhas
+na horizontal ou na vertical formam uma ilha. Com DFS recursiva, que pinta
+a ilha inteira ao achar terra ainda não visitada, mostre o tamanho de cada
+ilha, o total de ilhas e o tamanho da maior. Grade: "##~~~#~", "#~~~##~",
+"~~#~~~~", "~###~~#", "~~#~~##".
+
+```text
+Saída esperada:
+Ilha 1: 3 casa(s)
+Ilha 2: 3 casa(s)
+Ilha 3: 5 casa(s)
+Ilha 4: 3 casa(s)
+Total: 4 ilhas, a maior tem 5 casas
+```
+
+**Exercício E664** · ★★☆
+
+Disciplinas: Lógica 0, C 1, Ponteiros 2, Estruturas 3, Grafos 4, Discreta
+5. Pré-requisitos (A -> B: A vem antes de B): Lógica -> C, C -> Ponteiros,
+Ponteiros -> Estruturas, Estruturas -> Grafos, Discreta -> Grafos, Lógica
+-> Discreta. Escreva a ordenação topológica com DFS (vértices e sucessores
+em ordem de índice): anote cada vértice ao TERMINAR dfs(u). Mostre a ordem
+de término e, lida de trás para frente, a ordem para cursar.
+
+```text
+Saída esperada:
+Ordem de término: Grafos Estruturas Ponteiros C Discreta Lógica
+Ordem para cursar: Lógica Discreta C Ponteiros Estruturas Grafos
+```
+
+**Exercício E665** · ★★★
+
+Os pacotes de um projeto são app 0, api 1, auth 2, db 3, log 4 e utils 5, e
+uma seta A -> B quer dizer "A importa B":
+
+```text
+app -> api, app -> auth, api -> db, api -> log, auth -> db,
+db -> utils, utils -> log, log -> auth
+```
+
+Escreva uma DFS com TRÊS cores (branco, cinza, preto) que acha o ciclo e o
+mostra, reconstruído com pai[]: uma seta para um vértice CINZA fecha um
+ciclo. Rode com o grafo acima e sem a seta log -> auth.
+
+```text
+Saída esperada:
+Com log -> auth: ciclo db -> utils -> log -> auth -> db
+Sem log -> auth: sem ciclo
+```
+
+---
+
+## 0112 · Dijkstra: caminho mínimo
+
+### Conceito
+
+- **Grafo ponderado**: cada aresta tem um **peso** (minutos, km, reais). O
+  menor caminho é o de **menor soma de pesos**, não o de menos arestas; aí a
+  BFS erra (CORMEN et al., 2024, cap. 22).
+- **Dijkstra**: acha os menores caminhos a partir de uma origem quando
+  **nenhum peso é negativo** (DIJKSTRA, 1959).
+- **O que ele guarda**: `dist[v]`, o melhor tempo **conhecido** até `v` (0 na
+  origem, INFINITO no resto); `fixo[v]`, se ele já é definitivo; `anterior[v]`,
+  de onde se chega em `v` (o `pai[]` da BFS) (ZIVIANI, 2010, cap. 7).
+- **Relaxar**: se `dist[u] + peso[u][v] < dist[v]`, atualiza `dist[v]` e
+  `anterior[v]`. No Cormen é `RELAX(u, v, w)`, com `v.d`, `v.π` e o conjunto S
+  dos fixos (CORMEN et al., 2024, cap. 22).
+- **Guloso**: a cada passo fixa o não fixo de menor `dist` e relaxa as arestas
+  dele; a escolha nunca se desfaz. É seguro porque, sem pesos negativos, outro
+  caminho até ele passaria por um vértice de `dist` maior ou igual
+  (CORMEN et al., 2024, cap. 22).
+- **Peso negativo**: o argumento cai e o Dijkstra erra sem avisar. Aí entra o
+  Bellman-Ford (0154), que relaxa todas as arestas V - 1 vezes
+  (CORMEN et al., 2024, cap. 22).
+- **Custo**: com matriz, cada um dos V passos varre V vértices, O(V²). Com
+  lista e **heap** (0102), O((V + E) log V) (CORMEN et al., 2024, cap. 22).
+
+> [!WARNING]
+> `INT_MAX + 3` **estoura**: comportamento indefinido em `int` com sinal, que
+> na prática vira negativo e "ganha" no `<`. Por isso o código só escolhe `u`
+> com `dist[u] != INFINITO`. Um INFINITO folgado (`1000000000`) também evita o
+> estouro (CPPREFERENCE, s.d.).
+
+### Exemplos de uso
 
 Rumo à praia, o Waze sabe que Casa até Padaria leva 4 minutos, mas Casa,
 Escola, Padaria leva 3. A BFS acharia Casa, Padaria, Praia (14 minutos). Os
@@ -1005,7 +1235,121 @@ int main(void) {
 gcc ~/LPEDC/material/A224.c -o ~/LPEDC/material/A224 && ~/LPEDC/material/A224
 ```
 
-### 0113 · Juntando tudo: a central de entregas
+### Exercícios
+
+**Exercício E667** · ★☆☆
+
+Um centro de distribuição entrega em quatro bairros (CD 0, A 1, B 2, C 3 e D
+4). As ruas são de mão dupla, com pesos em km: CD-A 7, CD-B 2, B-A 3, B-C 8,
+A-C 1, A-D 6 e C-D 2. Escreva o Dijkstra a partir do CD, com matriz de pesos,
+dist[] e anterior[], e imprima o teste de mesa: depois de relaxar os
+vizinhos de cada vértice fixado, mostre quem foi fixado e o vetor dist
+inteiro (- para INFINITO). No fim, mostre o caminho até D e a distância.
+
+```text
+Saída esperada:
+Fixa CD: dist = 0 7 2 - -
+Fixa B: dist = 0 5 2 10 -
+Fixa A: dist = 0 5 2 6 11
+Fixa C: dist = 0 5 2 6 8
+Fixa D: dist = 0 5 2 6 8
+Caminho até D: CD -> B -> A -> C -> D (8 km)
+```
+
+**Exercício E669** · ★★☆
+
+Um motoboy sai do restaurante (R) para entregar em cinco clientes. As
+ruas são de mão dupla e os pesos são km:
+
+```text
+R-Ana 2, R-Beto 6, Ana-Beto 3, Ana-Caio 7, Beto-Caio 2, Beto-Dani 9,
+Caio-Dani 3, Caio-Eva 8, Dani-Eva 1
+```
+
+Escreva o programa completo: Dijkstra a partir do R guardando anterior[],
+e mostre, para cada cliente, a distância e a rota (com uma função
+recursiva). No fim, diga qual cliente fica mais longe.
+
+```text
+Saída esperada:
+Ana: 2 km  R -> Ana
+Beto: 5 km  R -> Ana -> Beto
+Caio: 7 km  R -> Ana -> Beto -> Caio
+Dani: 10 km  R -> Ana -> Beto -> Caio -> Dani
+Eva: 11 km  R -> Ana -> Beto -> Caio -> Dani -> Eva
+Mais longe: Eva (11 km)
+```
+
+**Exercício E670** · ★★☆
+
+Ruas de mão única, em minutos, entre Hospital 0, Norte 1, Sul 2, Leste 3 e
+Oeste 4: Norte -> Hospital 9, Norte -> Leste 2, Leste -> Hospital 4, Leste
+-> Oeste 1, Sul -> Oeste 3, Sul -> Norte 1, Oeste -> Hospital 5, Hospital
+-> Sul 1. Com UMA só execução de Dijkstra, a partir do Hospital no grafo
+transposto (setas invertidas), mostre quanto a ambulância leva de cada
+bairro até o Hospital.
+
+```text
+Saída esperada:
+Norte: 6 min
+Sul: 7 min
+Leste: 4 min
+Oeste: 5 min
+```
+
+**Exercício E671** · ★★★
+
+Escreva o voo mais barato saindo de São Paulo (SP 0, Rio 1, BH 2, Manaus 3 e
+Belém 4). Os voos são de ida e volta, em reais: SP-Rio 200, SP-BH 250,
+Rio-BH 180 e Manaus-Belém 300. Nenhum voo liga Manaus e Belém ao resto do
+mapa. Use Dijkstra com INFINITO = INT_MAX e nunca some com o INFINITO (a
+conta estoura o int). Mostre o preço até cada cidade ou "sem voo".
+
+```text
+Saída esperada:
+Rio: R$ 200
+BH: R$ 250
+Manaus: sem voo
+Belém: sem voo
+```
+
+---
+
+## 0113 · Juntando tudo: a central de entregas
+
+### Conceito
+
+- **Um esqueleto, três buscas**: DFS, BFS e Dijkstra usam marcas, `pai[]` e um
+  laço que descobre vizinhos. Muda a **ordem** de saída: pilha, fila ou "menor
+  `dist`" (CORMEN et al., 2024, caps. 20 e 22).
+- **"Menor em quê?"**: com arestas de mesmo custo, a BFS basta, em O(V + E).
+  Com pesos variados, ela erra sem aviso (FEOFILOFF, 2009, cap. 5).
+- **Alcance primeiro**: a DFS diz quem dá para alcançar. Se o destino está
+  fora, não há rota a calcular (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 8).
+- **Árvore geradora mínima**: o conjunto de arestas que liga todos os
+  vértices com a menor soma de pesos (CORMEN et al., 2024, cap. 21).
+- **Prim**: é o Dijkstra com uma linha trocada. Em vez de
+  `dist[u] + custo < dist[v]`, compara só `custo < chave[v]`
+  (CORMEN et al., 2024, cap. 21).
+- **Grafo como struct**: `Grafo` junta vértices, nomes e matriz de km. As
+  funções recebem `const Grafo *`: passa 8 bytes em vez de 328 e promete não
+  mexer no mapa (KERNIGHAN; RITCHIE, 1989).
+- **Inicializador designado** (C99): `{.n = 7, .nomes = {...}}` cita só os
+  campos que quer; o resto, como `km`, começa zerado (ISO/IEC, 2018).
+
+| Pergunta | Algoritmo | Estrutura auxiliar |
+| --- | --- | --- |
+| Quem dá para alcançar? Quantos grupos? Tem ciclo? | DFS | pilha (a recursão) |
+| Menor caminho em número de arestas | BFS | fila |
+| Menor caminho em soma de pesos (pesos >= 0) | Dijkstra | vetor `dist` (ou heap) |
+| Ligar todos com o menor custo total | Prim | vetor `chave` |
+
+> [!WARNING]
+> Na matriz de pesos, `0` quer dizer "sem aresta", o que só funciona se nenhum
+> peso real for zero. Se um trecho pode custar R$ 0, use outra marca,
+> como `-1`.
+
+### Exemplos de uso
 
 Uma transportadora tem um centro de distribuição (CD) e seis lugares a
 atender. A Ilha só tem balsa, e a DFS a deixa de fora. A BFS acha a rota de 2
@@ -1334,344 +1678,7 @@ int main(void) {
 gcc ~/LPEDC/material/A226.c -o ~/LPEDC/material/A226 && ~/LPEDC/material/A226
 ```
 
----
-
-## 3. Exercícios práticos
-
-Cada exercício é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta. Compile como os exemplos: `gcc ~/LPEDC/material/E007.c -o ~/LPEDC/material/E007 && ~/LPEDC/material/E007`. Resoluções em `_respostas/16-grafos/`.
-
-### 0109 · Grafos
-
-**Exercício E649** · ★☆☆
-
-Uma companhia aérea regional tem voos diretos, de ida e volta, entre
-quatro capitais: Recife (0), Salvador (1), Fortaleza (2) e Natal (3). Os
-voos são: Recife-Salvador, Recife-Fortaleza, Recife-Natal e
-Fortaleza-Natal.
-
-Monte a matriz de adjacência (grafo não dirigido), mostre a matriz e conte
-quantos voos existem olhando só para a matriz (não vale contar os pares à
-mão):
-
-```text
-Saída esperada:
-     0 1 2 3
-  0  0 1 1 1
-  1  1 0 0 0
-  2  1 0 0 1
-  3  1 0 1 0
-Voos diretos: 4
-```
-
-```bash
-gcc ~/LPEDC/material/E649.c ~/LPEDC/material/0109-grafo.c -o ~/LPEDC/material/E649 && ~/LPEDC/material/E649
-```
-
-**Exercício E651** · ★★☆
-
-O bairro tem quatro esquinas, A (0), B (1), C (2) e D (3). A prefeitura listou
-as ruas num vetor de "Rua" (struct com "int de, para"), uma entrada por
-SENTIDO permitido; {0, 1} é ir de A para B. Os sentidos são {0, 1}, {1, 0},
-{1, 2}, {2, 3}, {3, 0}, {0, 2} e {2, 0}. Monte a matriz de adjacência
-DIRIGIDA a partir do vetor e, para cada par de esquinas ligadas, diga se a
-rua é de mão dupla ou única (e o sentido). No fim, conte cada tipo.
-
-```text
-Saída esperada:
-Sentidos cadastrados: 7
-A-B: mão dupla
-A-C: mão dupla
-A-D: mão única (D -> A)
-B-C: mão única (B -> C)
-C-D: mão única (C -> D)
-Mão única: 3, mão dupla: 2
-```
-
-```bash
-gcc ~/LPEDC/material/E651.c ~/LPEDC/material/0109-grafo.c -o ~/LPEDC/material/E651 && ~/LPEDC/material/E651
-```
-
-**Exercício E652** · ★★☆
-
-O grupo de estudos tem Ana (0), Beto (1), Cris (2) e Davi (3). As duplas que
-estudam juntas são Ana-Beto, Ana-Cris, Beto-Cris e Beto-Davi. Monte a matriz
-de adjacência do grafo NÃO dirigido e mostre o grau de cada pessoa (soma da
-linha da matriz) e a soma dos graus.
-
-```text
-Saída esperada:
-Ana estuda com 2 pessoa(s)
-Beto estuda com 3 pessoa(s)
-Cris estuda com 2 pessoa(s)
-Davi estuda com 1 pessoa(s)
-Soma dos graus: 8
-```
-
-```bash
-gcc ~/LPEDC/material/E652.c ~/LPEDC/material/0109-grafo.c -o ~/LPEDC/material/E652 && ~/LPEDC/material/E652
-```
-
-**Exercício E653** · ★★★
-
-Converta a matriz das ciclovias (no esqueleto) para uma LISTA de adjacência
-com malloc: um vetor de 5 ponteiros, cada um para a lista encadeada dos
-vizinhos do ponto. Regras: os vizinhos de cada lista saem em ordem crescente
-de índice; inserir um nó custa O(1) (sem percorrer a lista até o fim); conte
-os nós alocados; libere tudo no final, sem vazamento.
-
-```text
-Saída esperada:
-Centro  -> Praia Feira
-Praia   -> Centro Feira
-Feira   -> Centro Praia Parque
-Parque  -> Feira Estadio
-Estadio -> Parque
-Nós alocados: 10
-```
-
-```bash
-gcc ~/LPEDC/material/E653.c ~/LPEDC/material/0109-grafo.c -o ~/LPEDC/material/E653 && ~/LPEDC/material/E653
-```
-
-### 0110 · BFS: busca em largura
-
-**Exercício E655** · ★☆☆
-
-O mapa liga seis bairros por linhas de ônibus diretas (grafo não dirigido):
-Centro (0), Lapa (1), Moema (2), Penha (3), Saude (4) e Tatuape (5). As
-linhas são Centro-Lapa, Centro-Moema, Lapa-Penha, Moema-Penha, Moema-Saude,
-Penha-Tatuape e Saude-Tatuape. Escreva uma BFS a partir da Penha que mostra,
-numa linha, a ordem da visita com a distância de cada bairro e, depois, uma
-linha por bairro (em ordem de índice) dizendo quem o descobriu (vetor pai[]).
-
-```text
-Saída esperada:
-Penha(0) Lapa(1) Moema(1) Tatuape(1) Centro(2) Saude(2)
-Centro: descoberto por Lapa
-Lapa: descoberto por Penha
-Moema: descoberto por Penha
-Penha: origem
-Saude: descoberto por Moema
-Tatuape: descoberto por Penha
-```
-
-**Exercício E657** · ★★☆
-
-Mesmo mapa de ônibus do E655 (já está no esqueleto). Você mora na Lapa e
-precisa ir à Saude pegando o menor número de ônibus. Rode uma BFS a partir
-da Lapa guardando pai[] e escreva uma função RECURSIVA que imprime o
-caminho na ordem certa, da origem ao destino:
-
-```text
-void imprimir_caminho(const int pai[], int v);
-```
-
-Existe outro caminho com 3 ônibus (Lapa, Penha, Tatuape, Saude). Para ver
-quem decide o empate, rode a BFS uma segunda vez examinando os vizinhos
-de trás para frente (v de V-1 até 0) e mostre o caminho que ela acha.
-
-```text
-Saída esperada:
-Lapa -> Centro -> Moema -> Saude
-Ônibus: 3
-Ao contrário: Lapa -> Penha -> Tatuape -> Saude
-Ônibus: 3
-```
-
-**Exercício E658** · ★★☆
-
-Depois do temporal, a companhia de energia sabe quais cabos entre os oito
-bairros (A a H) continuam inteiros. Bairros ligados, direta ou
-indiretamente, formam um grupo que pode ser religado de uma vez. Os cabos
-inteiros são:
-
-```text
-A-B, B-C, D-E, F-G, G-H, F-H
-```
-
-Escreva um programa que descobre os grupos (as COMPONENTES CONEXAS do
-grafo) usando BFS e mostra cada um:
-
-```text
-Saída esperada:
-Grupo 1: A B C
-Grupo 2: D E
-Grupo 3: F G H
-Total de grupos: 3
-```
-
-**Exercício E659** · ★★★
-
-Para cada quarteirão do mapa, ache a distância até o posto de saúde mais
-próximo com uma BFS que começa com todos os postos na fila. P é posto, # é
-área sem passagem e . é quarteirão; anda-se para cima, baixo, esquerda e
-direita. Mapa: "P...#...", ".##.#.#.", "....#.#P", ".#......", "...#..#.".
-Mostre o mapa com as distâncias (0 nos postos, # onde não passa) e a pior
-distância.
-
-```text
-Saída esperada:
-0123#432
-1##4#5#1
-2345#4#0
-3#554321
-456#54#2
-Pior distância: 6
-```
-
-### 0111 · DFS: busca em profundidade
-
-**Exercício E661** · ★☆☆
-
-O shopping tem seis áreas, Hall (0), Cinema (1), Praça (2), Loja (3), Banco
-(4) e Saída (5), ligadas por corredores (grafo não dirigido): Hall-Praça,
-Hall-Banco, Cinema-Praça, Praça-Loja, Loja-Banco e Banco-Saída. Escreva uma
-DFS recursiva a partir do Hall (vizinhos em ordem de índice) que imprime cada
-área com o número da visita (1, 2, 3...) e 2 espaços de recuo por nível de
-profundidade. No fim, mostre qual área ficou mais funda e em que nível.
-
-```text
-Saída esperada:
-1 Hall
-  2 Praça
-    3 Cinema
-    4 Loja
-      5 Banco
-        6 Saída
-Mais fundo: Saída (nível 4)
-```
-
-**Exercício E663** · ★★☆
-
-Uma foto de satélite virou uma grade: # é terra e ~ é água. Terras vizinhas
-na horizontal ou na vertical formam uma ilha. Com DFS recursiva, que pinta
-a ilha inteira ao achar terra ainda não visitada, mostre o tamanho de cada
-ilha, o total de ilhas e o tamanho da maior. Grade: "##~~~#~", "#~~~##~",
-"~~#~~~~", "~###~~#", "~~#~~##".
-
-```text
-Saída esperada:
-Ilha 1: 3 casa(s)
-Ilha 2: 3 casa(s)
-Ilha 3: 5 casa(s)
-Ilha 4: 3 casa(s)
-Total: 4 ilhas, a maior tem 5 casas
-```
-
-**Exercício E664** · ★★☆
-
-Disciplinas: Lógica 0, C 1, Ponteiros 2, Estruturas 3, Grafos 4, Discreta
-5. Pré-requisitos (A -> B: A vem antes de B): Lógica -> C, C -> Ponteiros,
-Ponteiros -> Estruturas, Estruturas -> Grafos, Discreta -> Grafos, Lógica
--> Discreta. Escreva a ordenação topológica com DFS (vértices e sucessores
-em ordem de índice): anote cada vértice ao TERMINAR dfs(u). Mostre a ordem
-de término e, lida de trás para frente, a ordem para cursar.
-
-```text
-Saída esperada:
-Ordem de término: Grafos Estruturas Ponteiros C Discreta Lógica
-Ordem para cursar: Lógica Discreta C Ponteiros Estruturas Grafos
-```
-
-**Exercício E665** · ★★★
-
-Os pacotes de um projeto são app 0, api 1, auth 2, db 3, log 4 e utils 5, e
-uma seta A -> B quer dizer "A importa B":
-
-```text
-app -> api, app -> auth, api -> db, api -> log, auth -> db,
-db -> utils, utils -> log, log -> auth
-```
-
-Escreva uma DFS com TRÊS cores (branco, cinza, preto) que acha o ciclo e o
-mostra, reconstruído com pai[]: uma seta para um vértice CINZA fecha um
-ciclo. Rode com o grafo acima e sem a seta log -> auth.
-
-```text
-Saída esperada:
-Com log -> auth: ciclo db -> utils -> log -> auth -> db
-Sem log -> auth: sem ciclo
-```
-
-### 0112 · Dijkstra: caminho mínimo
-
-**Exercício E667** · ★☆☆
-
-Um centro de distribuição entrega em quatro bairros (CD 0, A 1, B 2, C 3 e D
-4). As ruas são de mão dupla, com pesos em km: CD-A 7, CD-B 2, B-A 3, B-C 8,
-A-C 1, A-D 6 e C-D 2. Escreva o Dijkstra a partir do CD, com matriz de pesos,
-dist[] e anterior[], e imprima o teste de mesa: depois de relaxar os
-vizinhos de cada vértice fixado, mostre quem foi fixado e o vetor dist
-inteiro (- para INFINITO). No fim, mostre o caminho até D e a distância.
-
-```text
-Saída esperada:
-Fixa CD: dist = 0 7 2 - -
-Fixa B: dist = 0 5 2 10 -
-Fixa A: dist = 0 5 2 6 11
-Fixa C: dist = 0 5 2 6 8
-Fixa D: dist = 0 5 2 6 8
-Caminho até D: CD -> B -> A -> C -> D (8 km)
-```
-
-**Exercício E669** · ★★☆
-
-Um motoboy sai do restaurante (R) para entregar em cinco clientes. As
-ruas são de mão dupla e os pesos são km:
-
-```text
-R-Ana 2, R-Beto 6, Ana-Beto 3, Ana-Caio 7, Beto-Caio 2, Beto-Dani 9,
-Caio-Dani 3, Caio-Eva 8, Dani-Eva 1
-```
-
-Escreva o programa completo: Dijkstra a partir do R guardando anterior[],
-e mostre, para cada cliente, a distância e a rota (com uma função
-recursiva). No fim, diga qual cliente fica mais longe.
-
-```text
-Saída esperada:
-Ana: 2 km  R -> Ana
-Beto: 5 km  R -> Ana -> Beto
-Caio: 7 km  R -> Ana -> Beto -> Caio
-Dani: 10 km  R -> Ana -> Beto -> Caio -> Dani
-Eva: 11 km  R -> Ana -> Beto -> Caio -> Dani -> Eva
-Mais longe: Eva (11 km)
-```
-
-**Exercício E670** · ★★☆
-
-Ruas de mão única, em minutos, entre Hospital 0, Norte 1, Sul 2, Leste 3 e
-Oeste 4: Norte -> Hospital 9, Norte -> Leste 2, Leste -> Hospital 4, Leste
--> Oeste 1, Sul -> Oeste 3, Sul -> Norte 1, Oeste -> Hospital 5, Hospital
--> Sul 1. Com UMA só execução de Dijkstra, a partir do Hospital no grafo
-transposto (setas invertidas), mostre quanto a ambulância leva de cada
-bairro até o Hospital.
-
-```text
-Saída esperada:
-Norte: 6 min
-Sul: 7 min
-Leste: 4 min
-Oeste: 5 min
-```
-
-**Exercício E671** · ★★★
-
-Escreva o voo mais barato saindo de São Paulo (SP 0, Rio 1, BH 2, Manaus 3 e
-Belém 4). Os voos são de ida e volta, em reais: SP-Rio 200, SP-BH 250,
-Rio-BH 180 e Manaus-Belém 300. Nenhum voo liga Manaus e Belém ao resto do
-mapa. Use Dijkstra com INFINITO = INT_MAX e nunca some com o INFINITO (a
-conta estoura o int). Mostre o preço até cada cidade ou "sem voo".
-
-```text
-Saída esperada:
-Rio: R$ 200
-BH: R$ 250
-Manaus: sem voo
-Belém: sem voo
-```
-
-### 0113 · Juntando tudo: a central de entregas
+### Exercícios
 
 **Exercício E674** · ★☆☆
 
@@ -1748,11 +1755,13 @@ MOTO -> CAMA em 5 passo(s): MOTO MATO MATA LATA LAMA CAMA
 GATO -> PEIXE: impossível
 ```
 
-### Lista do módulo
+---
+
+## Lista do módulo
 
 30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P1601.c a P1630.c, em `material/`; resoluções em `_respostas/16-grafos/lista/`.
 
-#### ★☆☆ Aquecimento
+### ★☆☆ Aquecimento
 
 **Exercício P1601** · ★☆☆ · Grau das paradas e número de linhas
 
@@ -2066,7 +2075,7 @@ Linhas novas necessárias: 3
 
 **Resposta esperada:** 4 componentes, logo 3 linhas novas.
 
-#### ★★☆ Para pensar
+### ★★☆ Para pensar
 
 **Exercício P1611** · ★★☆ · Menos conexões até Porto Alegre
 
@@ -2335,7 +2344,7 @@ Festa 2: sem celebridade (13 consultas de 36)
 
 **Resposta esperada:** na festa 1 a celebridade é Rubem, com 15 consultas (5 na eliminação + 10 na conferência, de 36 da matriz inteira); na festa 2 não há celebridade.
 
-#### ★★★ Desafio
+### ★★★ Desafio
 
 **Exercício P1621** · ★★★ · As duas jarras do vendedor de caldo de cana
 
@@ -2664,7 +2673,7 @@ Galpão 2: -1
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas para fechar o módulo, misturando os assuntos. Escreva em C e rode
 com as flags de estudo.
@@ -2916,7 +2925,7 @@ só a fila vira "o menor `dist` primeiro", com `dist[u] + custo(v)` no lugar de
 
 </details>
 
-### Questões do POSCOMP
+## Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -2936,7 +2945,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 
 O gabarito de 2023 vem de um blog de terceiros que reproduz o gabarito definitivo; confira no PDF oficial da SBC. O gabarito oficial de 2025 não estava disponível quando este material foi montado.
 
-### Questões no estilo da prova
+## Questões no estilo da prova
 
 Questões objetivas no formato da prova do PPGI. Resolva no papel, marque a
 letra e só depois abra o gabarito. Nas de simulação, desenhe o grafo e

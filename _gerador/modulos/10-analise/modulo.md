@@ -36,7 +36,7 @@ gcc ~/LPEDC/material/A147.c ~/LPEDC/material/0074-conta.c ~/LPEDC/material/0074-
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas dos quatro assuntos, do médio ao difícil. Todos pedem código:
 escreva num arquivo seu e compile com as flags de estudo.
@@ -255,7 +255,7 @@ assunto 0071, a constante importa quando n é fixo.
 
 </details>
 
-### Questões do POSCOMP
+## Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -271,7 +271,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 O gabarito de 2023 vem de um blog de terceiros que reproduz o gabarito definitivo; confira no PDF oficial da SBC. O gabarito oficial de 2025 não estava disponível quando este material foi montado.
 
 
-### Questões no estilo da prova
+## Questões no estilo da prova
 
 Formato da prova do mestrado do PPGI/UFAM. Resolva no papel, marque uma letra
 e só depois abra o gabarito. Nas questões de contagem, o resultado foi
@@ -518,7 +518,7 @@ extremos; a média fica no meio. Veja 0071.
 
 </details>
 
-### Questões de provas do PPGI
+## Questões de provas do PPGI
 
 Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.
 

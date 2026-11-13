@@ -65,9 +65,12 @@ depois dele**.
 
 ---
 
-## 1. Conceitos gerais
+> [!NOTE]
+> Cada assunto é um capítulo: **Conceito** (a explicação), **Exemplos de uso** (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e **Exercícios** (cada um é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta; resoluções em `_respostas/07-memoria-dinamica/`).
 
-### 0053 · Pilha e heap
+## 0053 · Pilha e heap
+
+### Conceito
 
 - **Regiões da memória**: o programa recebe uma faixa de endereços dividida em
   código, dados, heap e pilha. Cada região tem um dono e um tempo de vida
@@ -96,147 +99,7 @@ depois dele**.
 > aponta para um frame que já morreu. O gcc avisa e devolve `NULL` no lugar.
 > Saídas: quem chama empresta o vetor, a variável vira `static` ou o bloco vem do heap.
 
-### 0054 · malloc e free
-
-- **`malloc`** (*memory allocation*, de `<stdlib.h>`): recebe **quantos bytes**
-  você quer e devolve o endereço de um bloco no heap. O ponteiro que recebe age
-  como vetor (BACKES, 2013, cap. 11).
-
-```c
-double *corridas = malloc(n * sizeof(double)); // n * 8 bytes
-```
-
-- **Conta em bytes**: `malloc(4)` dá 4 bytes, não 4 `double`. Por isso
-  `n * sizeof(tipo)` (CELES; RANGEL, 2002).
-- **`void *`**: o retorno vira `double *` sozinho; em C o cast é dispensável
-  (BACKES, 2013, cap. 11).
-- **`NULL`**: é o que volta quando falta memória. Confira sempre antes de usar
-  (FEOFILOFF, 2009, ap. F).
-- **Lixo**: o `malloc` não zera o bloco. Preencha antes de ler
-  (BACKES, 2013, cap. 11).
-- **`free(p)`**: devolve o bloco, com exatamente o endereço que o `malloc` deu.
-  O tamanho fica num cabeçalho escondido, por isso `free(p + 1)` dá errado
-  (KERNIGHAN; RITCHIE, 1989, seção 8.7).
-- **Depois do `free`**, o ponteiro ainda guarda o endereço antigo. O hábito é
-  `p = NULL;` (FEOFILOFF, 2009, ap. F).
-- **Vazamento** (*memory leak*): bloco que ninguém libera. Todo `malloc` tem um
-  `free` (DEITEL; DEITEL, 2011, cap. 12).
-
-> [!WARNING]
-> O erro mais comum é contar elementos em vez de bytes: `malloc(n)` para `n`
-> inteiros reserva um quarto do necessário. Tire o tipo do próprio ponteiro:
-> `int *v = malloc(n * sizeof *v);`.
-
-### 0055 · calloc e realloc
-
-- **`calloc(n, tam)`**: recebe quantidade e tamanho separados e entrega o bloco
-  **zerado**. Serve para contadores, placares e tabelas de frequência
-  (BACKES, 2013, cap. 11).
-
-```c
-int *contagem = calloc(5, sizeof(int)); // 5 ints, todos valendo 0
-```
-
-- **`realloc(p, novo_tamanho)`**: muda o tamanho de um bloco e **preserva o
-  conteúdo** até o menor dos dois tamanhos. A parte nova vem com lixo
-  (BACKES, 2013, cap. 11).
-- **Bloco que muda de lugar**: se não der para esticar no lugar, o `realloc`
-  aloca outro bloco, copia, libera o antigo e devolve o **endereço novo**.
-  Ponteiros para o bloco velho viram soltos (BACKES, 2013, cap. 11).
-- **Falha**: o `realloc` devolve `NULL` e não mexe no bloco antigo. Guarde o
-  resultado num ponteiro **temporário** e só depois troque (CELES; RANGEL, 2002).
-- **Quantidade e capacidade**: elementos usados e quantos cabem. Encheu,
-  **dobre** a capacidade: para 1000 elementos, começando com 1, bastam 10
-  `realloc`.
-
-> [!WARNING]
-> `v = realloc(v, n)` é o erro clássico: se falhar, `v` vira `NULL` e o bloco
-> antigo fica no heap sem dono. Use um temporário. E não guarde `&v[3]` antes de
-> um `realloc`: o bloco pode ter mudado de lugar.
-
-### 0056 · Matriz dinâmica
-
-- **Só vetores**: o C aloca blocos de uma dimensão. A matriz dinâmica é montada
-  com vetores, de dois jeitos (CELES; RANGEL, 2002).
-- **Bloco único**: `linhas * colunas` elementos, com o elemento `(i, j)` em
-  `v[i * colunas + j]`. Um `malloc`, um `free`, mas `v[i][j]` não funciona
-  (BACKES, 2013, cap. 11).
-- **Vetor de ponteiros**: um vetor de `linhas` ponteiros (`int **m`) e um
-  `malloc` por linha. Agora `m[i][j]` funciona, e as linhas podem ter tamanhos
-  diferentes (FEOFILOFF, 2009, ap. F).
-- **Regra do `sizeof`**: o que você aloca tem um `*` a menos que o ponteiro
-  que recebe. Use `sizeof *m` e `sizeof *m[i]` (BACKES, 2013, cap. 11).
-- **Liberar na ordem**: primeiro cada linha, depois o vetor de ponteiros. Se
-  uma linha falhar ao criar, desfaça as anteriores antes de devolver `NULL`
-  (CELES; RANGEL, 2002).
-- **VLA** (C99): `int vendas[lojas][semanas];` mora na pilha, que é pequena e
-  não avisa quando estoura (BACKES, 2013).
-- **Custo**: `m[i][j]` com `int **` faz dois acessos à memória; o bloco único
-  faz um (CELES; RANGEL, 2002).
-
-> [!WARNING]
-> `int **m = malloc(linhas * sizeof(int));` é bug: num PC de 64 bits, `int` tem
-> 4 bytes e `int *` tem 8. Você aloca metade e grava fora do bloco. Escreva
-> `sizeof *m`.
-
-### 0057 · Erros de memória
-
-- **Vazamento** (*memory leak*): bloco que ninguém libera e ninguém mais acha.
-  O programa fica lento e trava depois de horas (DEITEL; DEITEL, 2011, cap. 12).
-- **Ponteiro solto** (*dangling pointer*): depois de `free(p)`, `p` guarda o
-  mesmo endereço. Usar `p` pode ler o valor antigo por sorte, até o `malloc`
-  entregar o pedaço a outro (BACKES, 2013, cap. 11).
-- **Free duplo**: liberar o mesmo bloco duas vezes (GOOGLE, s.d.).
-- **Estouro** no heap: passar do fim do bloco estraga o cabeçalho do vizinho, e
-  o programa quebra depois, num `free` sem culpa
-  (KERNIGHAN; RITCHIE, 1989, seção 8.7).
-- **AddressSanitizer** (ASan): `gcc -fsanitize=address -g`. Confere cada acesso,
-  para no primeiro erro e mostra onde o bloco foi alocado e liberado. No fim, o
-  **LeakSanitizer** lista o que vazou (GOOGLE, s.d.).
-- **valgrind**: roda o executável sem recompilar, 20 a 50 vezes mais lento, e
-  pega leitura de memória que nunca recebeu valor. Instale com `sudo pacman -S
-  valgrind` (Arch) ou `sudo apt install valgrind` (Debian/Ubuntu) e rode
-  `valgrind ./programa` (VALGRIND DEVELOPERS, s.d.).
-
-| Erro | O que é | O AddressSanitizer diz |
-| --- | --- | --- |
-| **vazamento** | um bloco que ninguém libera e ninguém mais acha | `detected memory leaks` |
-| **uso depois do free** | ler ou escrever num bloco já devolvido (ponteiro solto) | `heap-use-after-free` |
-| **free duplo** | liberar o mesmo bloco duas vezes | `attempting double-free` |
-| **estouro** | passar do fim (ou do começo) de um bloco | `heap-buffer-overflow` |
-
-> [!WARNING]
-> "Rodou e deu a saída certa" não prova nada em C. Uso depois do `free`,
-> estouro e leitura de lixo são **comportamento indefinido**. Rode com o ASan
-> (flags de estudo) e, na dúvida, com `valgrind ./programa`.
-
-### 0058 · Juntando tudo
-
-- **Heap** (0053): o caderno de fiado dura o programa todo e cresce, então mora
-  no heap (CELES; RANGEL, 2002).
-- **`malloc` e `free`** (0054): `duplicar` copia cada nome para um bloco do
-  tamanho exato, `strlen + 1` (BACKES, 2013, cap. 11).
-- **`realloc`** (0055): dois vetores paralelos (`nomes` e `centavos`) dobram a
-  capacidade juntos, com ponteiro temporário (CELES; RANGEL, 2002).
-- **Vetor de ponteiros** (0056): `char **nomes` é um vetor de `char *`, como as
-  linhas de tamanhos diferentes de uma matriz dinâmica (BACKES, 2013, cap. 11).
-- **`char ***`**: `crescer` precisa mudar o ponteiro `nomes` do `main`, então
-  recebe o endereço dele (assunto 0049) (FEOFILOFF, 2009, ap. F).
-- **Centavos**: valores em `int` não têm erro de arredondamento; R$ 12,50 vira
-  `1250`.
-
-> [!WARNING]
-> Liberar só `nomes` vaza todos os nomes: cada `nomes[i]` tem seu `malloc`. São
-> 2 `malloc` no começo e 5 nomes, então `liberar` faz 5 + 2 `free`. Confira com
-> `valgrind ./programa` a linha `All heap blocks were freed`.
-
----
-
-## 2. Exemplos de uso
-
-Cada exemplo compila sozinho. Rode com o comando abaixo dele e compare com a saída no fim do código.
-
-### 0053 · Pilha e heap
+### Exemplos de uso
 
 A função `abrir_comanda` monta a comanda da mesa 4 com três itens (R$ 18, 25
 e 7). A variável `itens` mora na pilha, os valores vão para um bloco no heap e
@@ -402,7 +265,139 @@ int main(void) {
 gcc ~/LPEDC/material/A106.c -o ~/LPEDC/material/A106 && ~/LPEDC/material/A106
 ```
 
-### 0054 · malloc e free
+### Exercícios
+
+**Exercício E313** · ★☆☆
+
+Complete o programa do placar do campeonato. Ele já tem a global recorde
+e o protótipo de ler_placar. Escreva ler_placar(int jogos) assim:
+
+- uma static int chamadas, que soma 1 a cada chamada;
+- um bloco no heap com jogos ints (confira o NULL);
+- placar[i] = i * 2 para cada jogo i;
+- mostra "Chamada N:" e os gols, e devolve o ponteiro.
+
+No main, chame ler_placar(3), atualize recorde com o maior gol do bloco e
+libere o bloco; depois faça o mesmo com ler_placar(2). No fim, mostre o
+recorde. Ao lado de cada declaração, escreva num comentário a região onde
+ela mora: código, dados, pilha ou heap.
+
+```text
+Saída esperada:
+Chamada 1: 0 2 4
+Chamada 2: 0 2
+Recorde: 4
+```
+
+**Exercício E315** · ★★☆
+
+No Linux, "ulimit -s" mostra o tamanho da pilha em KiB (em geral, 8192,
+ou seja, 8 MiB). Uma função recursiva guarda o histórico de preços de uma
+ação num vetor local: int historico[2000]; e chama a si mesma.
+
+Escreva um programa que calcule e mostre quantos bytes esse vetor ocupa em
+cada chamada e quantas chamadas, no máximo, cabem numa pilha de 8 MiB.
+Depois faça a mesma conta para o vetor double historico[2000]; e mostre
+também. Use sizeof para o tamanho de cada tipo e divisão inteira.
+
+```text
+Saída esperada:
+int: cada chamada usa pelo menos 8000 bytes
+int: cabem no máximo 1048 chamadas
+double: cada chamada usa pelo menos 16000 bytes
+double: cabem no máximo 524 chamadas
+```
+
+**Exercício E316** · ★★☆
+
+Um sensor de vibração de uma ponte grava 5.000.000 de leituras por dia.
+Simule as leituras com leitura[i] = i % 7 e mostre a soma de todas.
+
+Faça em três passos:
+1) declare o vetor int leituras[5000000]; como LOCAL de main e rode com o
+
+```text
+ rodar. Leia o que acontece.
+```
+
+2) mude o vetor para os DADOS (global ou static) e rode de novo.
+3) acrescente uma linha que mostre quantos bytes o vetor ocupa, com
+
+```text
+ sizeof aplicado ao próprio vetor.
+```
+
+```text
+Saída esperada (depois do passo 3):
+O vetor ocupa 20000000 bytes
+Soma das leituras: 14999995
+```
+
+**Exercício E317** · ★★★
+
+O programa abaixo mistura uma global, uma static e uma local numa função
+recursiva. Estenda o programa (sem mudar as contas) para ele mostrar o que
+acontece em cada frame:
+
+- logo depois de contador--, um printf com n, chamadas, local e contador;
+- logo antes do return, um printf com n e o valor que o frame devolve.
+
+Use os formatos da saída esperada. Rode e confira cada número com o lugar
+onde mora cada variável.
+
+```text
+Saída esperada:
+entra n=3: chamadas=1 local=1 contador=99
+entra n=2: chamadas=2 local=1 contador=98
+entra n=1: chamadas=3 local=1 contador=97
+entra n=0: chamadas=4 local=1 contador=96
+sai n=0: devolve 41
+sai n=1: devolve 41
+sai n=2: devolve 41
+sai n=3: devolve 41
+41
+entra n=0: chamadas=5 local=1 contador=95
+sai n=0: devolve 51
+51
+95
+```
+
+---
+
+## 0054 · malloc e free
+
+### Conceito
+
+- **`malloc`** (*memory allocation*, de `<stdlib.h>`): recebe **quantos bytes**
+  você quer e devolve o endereço de um bloco no heap. O ponteiro que recebe age
+  como vetor (BACKES, 2013, cap. 11).
+
+```c
+double *corridas = malloc(n * sizeof(double)); // n * 8 bytes
+```
+
+- **Conta em bytes**: `malloc(4)` dá 4 bytes, não 4 `double`. Por isso
+  `n * sizeof(tipo)` (CELES; RANGEL, 2002).
+- **`void *`**: o retorno vira `double *` sozinho; em C o cast é dispensável
+  (BACKES, 2013, cap. 11).
+- **`NULL`**: é o que volta quando falta memória. Confira sempre antes de usar
+  (FEOFILOFF, 2009, ap. F).
+- **Lixo**: o `malloc` não zera o bloco. Preencha antes de ler
+  (BACKES, 2013, cap. 11).
+- **`free(p)`**: devolve o bloco, com exatamente o endereço que o `malloc` deu.
+  O tamanho fica num cabeçalho escondido, por isso `free(p + 1)` dá errado
+  (KERNIGHAN; RITCHIE, 1989, seção 8.7).
+- **Depois do `free`**, o ponteiro ainda guarda o endereço antigo. O hábito é
+  `p = NULL;` (FEOFILOFF, 2009, ap. F).
+- **Vazamento** (*memory leak*): bloco que ninguém libera. Todo `malloc` tem um
+  `free` (DEITEL; DEITEL, 2011, cap. 12).
+
+> [!WARNING]
+> O erro mais comum é contar elementos em vez de bytes: `malloc(n)` para `n`
+> inteiros reserva um quarto do necessário. Tire o tipo do próprio ponteiro:
+> `int *v = malloc(n * sizeof *v);`.
+
+### Exemplos de uso
 
 O programa pergunta quantas corridas de aplicativo houve no mês (4), pede ao
 heap `4 * 8 = 32` bytes, guarda os valores, soma e devolve o bloco:
@@ -567,7 +562,112 @@ int main(void) {
 gcc ~/LPEDC/material/A108.c -o ~/LPEDC/material/A108 && ~/LPEDC/material/A108
 ```
 
-### 0055 · calloc e realloc
+### Exercícios
+
+**Exercício E320** · ★☆☆
+
+Complete a função duplicar: ela recebe uma string e devolve uma CÓPIA dela
+num bloco novo do heap, do tamanho exato. O main já está pronto: ele
+passa a cópia para maiúsculas e mostra que a original não mudou.
+
+```text
+Saída esperada:
+Original: coxinha
+Cópia: COXINHA
+```
+
+**Exercício E321** · ★★☆
+
+Escreva a função
+
+```text
+int *filtrar_pares(const int *v, int n, int *qtd);
+```
+
+que devolve um vetor NOVO, no heap, só com os números pares de v, do
+tamanho exato. A quantidade de pares volta por *qtd. Teste com os números
+sorteados 7, 4, 10, 3, 8, 1, 6.
+
+```text
+Saída esperada:
+4 pares: 4 10 8 6
+```
+
+**Exercício E322** · ★★☆
+
+Escreva um programa que faça de verdade as cinco alocações abaixo. Antes
+de cada malloc, guarde numa variável size_t quantos bytes ele vai pedir
+(ex.: size_t ta = 5 * sizeof(int);) e passe essa variável para o malloc.
+Confira o NULL de cada uma, mostre os cinco tamanhos, mostre quantos int
+cabem inteiros no bloco e) e libere os cinco blocos no fim.
+
+```text
+a) int *a = malloc(5 * sizeof(int));
+b) double *b = malloc(5 * sizeof(double));
+c) int **c = malloc(3 * sizeof(int *));
+d) char *d = malloc(strlen("Recife") + 1);
+e) int *e = malloc(5);
+```
+
+```text
+Saída esperada (num PC de 64 bits):
+a) 20 bytes
+b) 40 bytes
+c) 24 bytes
+d) 7 bytes
+e) 5 bytes: cabe 1 int
+```
+
+**Exercício E324** · ★★★
+
+Escreva a função
+
+```text
+char *juntar(const char *a, const char *b);
+```
+
+que devolve uma string NOVA, no heap, com a, um espaço e b. Depois, em
+main, monte o nome do crachá "Maria Clara Fonseca" chamando juntar duas
+vezes: primeiro "Maria" com "Clara", depois o resultado com "Fonseca".
+Mostre o nome e o tamanho, e não deixe nenhum bloco para trás.
+
+```text
+Saída esperada:
+Crachá: Maria Clara Fonseca (19 caracteres)
+```
+
+---
+
+## 0055 · calloc e realloc
+
+### Conceito
+
+- **`calloc(n, tam)`**: recebe quantidade e tamanho separados e entrega o bloco
+  **zerado**. Serve para contadores, placares e tabelas de frequência
+  (BACKES, 2013, cap. 11).
+
+```c
+int *contagem = calloc(5, sizeof(int)); // 5 ints, todos valendo 0
+```
+
+- **`realloc(p, novo_tamanho)`**: muda o tamanho de um bloco e **preserva o
+  conteúdo** até o menor dos dois tamanhos. A parte nova vem com lixo
+  (BACKES, 2013, cap. 11).
+- **Bloco que muda de lugar**: se não der para esticar no lugar, o `realloc`
+  aloca outro bloco, copia, libera o antigo e devolve o **endereço novo**.
+  Ponteiros para o bloco velho viram soltos (BACKES, 2013, cap. 11).
+- **Falha**: o `realloc` devolve `NULL` e não mexe no bloco antigo. Guarde o
+  resultado num ponteiro **temporário** e só depois troque (CELES; RANGEL, 2002).
+- **Quantidade e capacidade**: elementos usados e quantos cabem. Encheu,
+  **dobre** a capacidade: para 1000 elementos, começando com 1, bastam 10
+  `realloc`.
+
+> [!WARNING]
+> `v = realloc(v, n)` é o erro clássico: se falhar, `v` vira `NULL` e o bloco
+> antigo fica no heap sem dono. Use um temporário. E não guarde `&v[3]` antes de
+> um `realloc`: o bloco pode ter mudado de lugar.
+
+### Exemplos de uso
 
 Os Pix de uma vaquinha vão chegando: R$ 50, 120, 35, 80 e 15. O vetor nasce
 com capacidade 2, dobra para 4 no terceiro Pix e para 8 no quinto:
@@ -721,7 +821,106 @@ int main(void) {
 gcc ~/LPEDC/material/A110.c -o ~/LPEDC/material/A110 && ~/LPEDC/material/A110
 ```
 
-### 0056 · Matriz dinâmica
+### Exercícios
+
+**Exercício E325** · ★☆☆
+
+Num jogo de tabuleiro, o dado saiu assim em 12 jogadas:
+3, 6, 1, 6, 2, 5, 6, 3, 4, 6, 1, 2. Use calloc para criar os contadores
+das faces (zerados) e mostre quantas vezes cada face saiu, com um # por
+vez.
+
+```text
+Saída esperada:
+1: 2 ##
+2: 2 ##
+3: 2 ##
+4: 1 #
+5: 1 #
+6: 4 ####
+```
+
+**Exercício E327** · ★★☆
+
+Leia números inteiros do teclado até aparecer 0 (o 0 não entra). Guarde num
+vetor dinâmico que começa com capacidade 2 e dobra (realloc) quando enche.
+No fim, mostre os números na ordem contrária e a capacidade final.
+
+```text
+Entrada:
+5 8 2 9 4 0
+```
+
+```text
+Saída esperada:
+Ao contrário: 4 9 2 8 5
+Capacidade final: 8
+```
+
+**Exercício E328** · ★★☆
+
+Um sensor de umidade mandou 10 leituras, mas -1 significa "falha na
+leitura": 12, -1, 15, 14, -1, -1, 13, 16, -1, 11. Copie as leituras para
+um bloco do heap, remova as falhas puxando as válidas para a frente (no
+mesmo bloco) e depois ENCOLHA o bloco com realloc para o tamanho exato.
+
+```text
+Saída esperada:
+6 leituras válidas: 12 15 14 13 16 11
+Bloco encolheu de 40 para 24 bytes
+```
+
+**Exercício E329** · ★★★
+
+Compare duas estratégias de crescimento para guardar 1000 números, com
+capacidade inicial 1:
+
+```text
+A) crescer de 1 em 1 (capacidade + 1) sempre que encher;
+B) dobrar a capacidade sempre que encher.
+```
+
+Escreva um programa que faça os dois vetores de verdade (com realloc) e
+conte, para cada estratégia, quantos realloc foram feitos e quantos
+elementos o realloc precisou copiar no pior caso (a quantidade guardada
+na hora de cada realloc).
+
+```text
+Saída esperada:
++1:     999 realocações, 499500 cópias
+dobrar: 10 realocações, 1023 cópias
+```
+
+---
+
+## 0056 · Matriz dinâmica
+
+### Conceito
+
+- **Só vetores**: o C aloca blocos de uma dimensão. A matriz dinâmica é montada
+  com vetores, de dois jeitos (CELES; RANGEL, 2002).
+- **Bloco único**: `linhas * colunas` elementos, com o elemento `(i, j)` em
+  `v[i * colunas + j]`. Um `malloc`, um `free`, mas `v[i][j]` não funciona
+  (BACKES, 2013, cap. 11).
+- **Vetor de ponteiros**: um vetor de `linhas` ponteiros (`int **m`) e um
+  `malloc` por linha. Agora `m[i][j]` funciona, e as linhas podem ter tamanhos
+  diferentes (FEOFILOFF, 2009, ap. F).
+- **Regra do `sizeof`**: o que você aloca tem um `*` a menos que o ponteiro
+  que recebe. Use `sizeof *m` e `sizeof *m[i]` (BACKES, 2013, cap. 11).
+- **Liberar na ordem**: primeiro cada linha, depois o vetor de ponteiros. Se
+  uma linha falhar ao criar, desfaça as anteriores antes de devolver `NULL`
+  (CELES; RANGEL, 2002).
+- **VLA** (C99): `int vendas[lojas][semanas];` mora na pilha, que é pequena e
+  não avisa quando estoura (BACKES, 2013).
+- **Custo**: `m[i][j]` com `int **` faz dois acessos à memória; o bloco único
+  faz um (CELES; RANGEL, 2002).
+
+> [!WARNING]
+> `int **m = malloc(linhas * sizeof(int));` é bug: num PC de 64 bits, `int` tem
+> 4 bytes e `int *` tem 8. Você aloca metade e grava fora do bloco. Escreva
+> `sizeof *m`.
+
+### Exemplos de uso
 
 A planilha de vendas de 3 lojas por 4 semanas (em R$ mil) vira um vetor de 3
 ponteiros, cada um para uma linha de 4 inteiros, em qualquer lugar do heap:
@@ -930,7 +1129,136 @@ int main(void) {
 gcc ~/LPEDC/material/A112.c -o ~/LPEDC/material/A112 && ~/LPEDC/material/A112
 ```
 
-### 0057 · Erros de memória
+### Exercícios
+
+**Exercício E332** · ★☆☆
+
+Uma matriz de 5 linhas e 8 colunas vai morar num bloco único:
+int *v = malloc(5 * 8 * sizeof *v); e o elemento (i, j) fica em
+v[i * 8 + j]. Escreva as duas funções de conversão:
+
+```text
+int indice(int i, int j, int colunas);             // (i, j) -> k
+void posicao(int k, int colunas, int *i, int *j);  // k -> (i, j)
+```
+
+No main, aloque o bloco, guarde em cada (i, j) o valor i * 10 + j (usando
+indice) e mostre os quatro casos abaixo. O valor guardado confere a conta:
+o 23 só pode estar na linha 2, coluna 3. Libere o bloco no fim.
+
+```text
+Saída esperada:
+(2, 3) -> índice 19, valor 23
+(4, 7) -> índice 39, valor 47
+(0, 5) -> índice 5, valor 5
+índice 26 -> (3, 2), valor 32
+```
+
+**Exercício E333** · ★★☆
+
+Escreva a função
+
+```text
+int **transpor(int **m, int linhas, int colunas);
+```
+
+que devolve uma matriz NOVA, com colunas linhas e linhas colunas, em que
+t[j][i] = m[i][j]. Teste com a matriz 2 x 3 de horas de estudo por
+semana (linhas = semanas, colunas = matérias):
+
+```text
+2 5 1
+3 4 0
+```
+
+```text
+Saída esperada (a transposta, 3 x 2):
+2 3
+5 4
+1 0
+```
+
+**Exercício E334** · ★★☆
+
+Monte o triângulo de Pascal com 6 linhas usando um vetor de ponteiros em
+que a linha i tem exatamente i + 1 elementos (nada de matriz quadrada com
+metade desperdiçada). As pontas de cada linha valem 1 e cada número de
+dentro é a soma dos dois de cima: p[i][j] = p[i-1][j-1] + p[i-1][j].
+
+```text
+Saída esperada:
+1
+1 1
+1 2 1
+1 3 3 1
+1 4 6 4 1
+1 5 10 10 5 1
+Elementos guardados: 21
+```
+
+**Exercício E336** · ★★★
+
+Escreva a função
+
+```text
+int **multiplicar(int **a, int la, int ca, int **b, int lb, int cb);
+```
+
+que devolve uma matriz NOVA la x cb com o produto a * b, ou NULL se as
+dimensões não combinarem (ca precisa ser igual a lb). Teste com
+
+```text
+A (2 x 3)    B (3 x 2)
+1 2 3        7  8
+4 5 6        9 10
+             11 12
+```
+
+e depois tente A * A (2 x 3 vezes 2 x 3).
+
+```text
+Saída esperada:
+58 64
+139 154
+A * A: dimensões incompatíveis
+```
+
+---
+
+## 0057 · Erros de memória
+
+### Conceito
+
+- **Vazamento** (*memory leak*): bloco que ninguém libera e ninguém mais acha.
+  O programa fica lento e trava depois de horas (DEITEL; DEITEL, 2011, cap. 12).
+- **Ponteiro solto** (*dangling pointer*): depois de `free(p)`, `p` guarda o
+  mesmo endereço. Usar `p` pode ler o valor antigo por sorte, até o `malloc`
+  entregar o pedaço a outro (BACKES, 2013, cap. 11).
+- **Free duplo**: liberar o mesmo bloco duas vezes (GOOGLE, s.d.).
+- **Estouro** no heap: passar do fim do bloco estraga o cabeçalho do vizinho, e
+  o programa quebra depois, num `free` sem culpa
+  (KERNIGHAN; RITCHIE, 1989, seção 8.7).
+- **AddressSanitizer** (ASan): `gcc -fsanitize=address -g`. Confere cada acesso,
+  para no primeiro erro e mostra onde o bloco foi alocado e liberado. No fim, o
+  **LeakSanitizer** lista o que vazou (GOOGLE, s.d.).
+- **valgrind**: roda o executável sem recompilar, 20 a 50 vezes mais lento, e
+  pega leitura de memória que nunca recebeu valor. Instale com `sudo pacman -S
+  valgrind` (Arch) ou `sudo apt install valgrind` (Debian/Ubuntu) e rode
+  `valgrind ./programa` (VALGRIND DEVELOPERS, s.d.).
+
+| Erro | O que é | O AddressSanitizer diz |
+| --- | --- | --- |
+| **vazamento** | um bloco que ninguém libera e ninguém mais acha | `detected memory leaks` |
+| **uso depois do free** | ler ou escrever num bloco já devolvido (ponteiro solto) | `heap-use-after-free` |
+| **free duplo** | liberar o mesmo bloco duas vezes | `attempting double-free` |
+| **estouro** | passar do fim (ou do começo) de um bloco | `heap-buffer-overflow` |
+
+> [!WARNING]
+> "Rodou e deu a saída certa" não prova nada em C. Uso depois do `free`,
+> estouro e leitura de lixo são **comportamento indefinido**. Rode com o ASan
+> (flags de estudo) e, na dúvida, com `valgrind ./programa`.
+
+### Exemplos de uso
 
 A função `total_do_pedido` copia os 4 preços de um pedido para um bloco de 16
 bytes e soma. A primeira versão esquecia o `free`: cada um dos 3 pedidos
@@ -1105,7 +1433,103 @@ int main(void) {
 gcc ~/LPEDC/material/A114.c -o ~/LPEDC/material/A114 && ~/LPEDC/material/A114
 ```
 
-### 0058 · Juntando tudo
+### Exercícios
+
+**Exercício E337** · ★☆☆
+
+O painel da rodoviária monta 4 avisos, um de cada vez, a partir dos vetores
+
+```text
+const char *destinos[] = {"Belém", "Macapá", "Santarém", "Manaus"};
+const char *horas[] = {"08h", "09h", "11h", "14h"};
+```
+
+Para cada aviso, aloque 64 bytes com malloc, monte "Ônibus para <destino> às
+<hora>", mostre e libere o bloco antes de passar ao próximo. Use um contador
+somado a cada malloc e outro a cada free, e mostre os dois no fim: têm que
+bater.
+
+```text
+Saída esperada:
+Aviso: Ônibus para Belém às 08h
+Aviso: Ônibus para Macapá às 09h
+Aviso: Ônibus para Santarém às 11h
+Aviso: Ônibus para Manaus às 14h
+malloc: 4 | free: 4
+```
+
+**Exercício E339** · ★★☆
+
+O placar do campeonato de futsal da firma guarda os gols dos 3 times num
+vetor alocado com malloc: 4, 2 e 7. Faça um backup em OUTRO bloco, também
+alocado com malloc, copiando os valores um a um. Para provar que o backup é
+independente, zere placar[0] (o jogo foi anulado) e mostre os dois vetores.
+Libere o placar, mostre "Placar encerrado" e libere o backup.
+
+```text
+Saída esperada:
+Placar: 0 2 7
+Backup: 4 2 7
+Placar encerrado
+```
+
+**Exercício E340** · ★★☆
+
+O sistema do estacionamento guarda a placa "QTX3E21" numa string alocada
+com malloc (copie com strcpy) e os km rodados nos últimos 5 dias (42, 55,
+38, 61 e 42) num vetor de int, também alocado. Mostre a placa e a soma dos
+km da semana. Libere os dois blocos.
+
+```text
+Saída esperada:
+Placa: QTX3E21
+Km da semana: 238
+```
+
+**Exercício E341** · ★★★
+
+A lista de presença de uma aula de yoga começa com 2 vagas e dobra quando
+enche. Escreva a função
+
+```text
+int adicionar(int **v, int *qtd, int *cap, int matricula)
+```
+
+que acrescenta a matrícula ao vetor, dobrando a capacidade com realloc
+quando qtd == cap, e atualiza o ponteiro do chamador. Devolve 1 se deu
+certo e 0 se faltou memória. No main, aloque o vetor com capacidade 2,
+adicione as matrículas 11, 27, 35 e 48, mostre a lista e libere.
+
+```text
+Saída esperada:
+Presentes: 11 27 35 48
+```
+
+---
+
+## 0058 · Juntando tudo
+
+### Conceito
+
+- **Heap** (0053): o caderno de fiado dura o programa todo e cresce, então mora
+  no heap (CELES; RANGEL, 2002).
+- **`malloc` e `free`** (0054): `duplicar` copia cada nome para um bloco do
+  tamanho exato, `strlen + 1` (BACKES, 2013, cap. 11).
+- **`realloc`** (0055): dois vetores paralelos (`nomes` e `centavos`) dobram a
+  capacidade juntos, com ponteiro temporário (CELES; RANGEL, 2002).
+- **Vetor de ponteiros** (0056): `char **nomes` é um vetor de `char *`, como as
+  linhas de tamanhos diferentes de uma matriz dinâmica (BACKES, 2013, cap. 11).
+- **`char ***`**: `crescer` precisa mudar o ponteiro `nomes` do `main`, então
+  recebe o endereço dele (assunto 0049) (FEOFILOFF, 2009, ap. F).
+- **Centavos**: valores em `int` não têm erro de arredondamento; R$ 12,50 vira
+  `1250`.
+
+> [!WARNING]
+> Liberar só `nomes` vaza todos os nomes: cada `nomes[i]` tem seu `malloc`. São
+> 2 `malloc` no começo e 5 nomes, então `liberar` faz 5 + 2 `free`. Confira com
+> `valgrind ./programa` a linha `All heap blocks were freed`.
+
+### Exemplos de uso
 
 Chegam seis anotações: Dona Cida (R$ 12,50), Seu Jorge (R$ 8,30), Dona Cida de
 novo (R$ 4,70), Bia (R$ 20,00), Tonho (R$ 3,15) e Rosa (R$ 5,60). São 5
@@ -1399,420 +1823,7 @@ int main(void) {
 gcc ~/LPEDC/material/A116.c -o ~/LPEDC/material/A116 && ~/LPEDC/material/A116
 ```
 
----
-
-## 3. Exercícios práticos
-
-Cada exercício é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta. Compile como os exemplos: `gcc ~/LPEDC/material/E007.c -o ~/LPEDC/material/E007 && ~/LPEDC/material/E007`. Resoluções em `_respostas/07-memoria-dinamica/`.
-
-### 0053 · Pilha e heap
-
-**Exercício E313** · ★☆☆
-
-Complete o programa do placar do campeonato. Ele já tem a global recorde
-e o protótipo de ler_placar. Escreva ler_placar(int jogos) assim:
-
-- uma static int chamadas, que soma 1 a cada chamada;
-- um bloco no heap com jogos ints (confira o NULL);
-- placar[i] = i * 2 para cada jogo i;
-- mostra "Chamada N:" e os gols, e devolve o ponteiro.
-
-No main, chame ler_placar(3), atualize recorde com o maior gol do bloco e
-libere o bloco; depois faça o mesmo com ler_placar(2). No fim, mostre o
-recorde. Ao lado de cada declaração, escreva num comentário a região onde
-ela mora: código, dados, pilha ou heap.
-
-```text
-Saída esperada:
-Chamada 1: 0 2 4
-Chamada 2: 0 2
-Recorde: 4
-```
-
-**Exercício E315** · ★★☆
-
-No Linux, "ulimit -s" mostra o tamanho da pilha em KiB (em geral, 8192,
-ou seja, 8 MiB). Uma função recursiva guarda o histórico de preços de uma
-ação num vetor local: int historico[2000]; e chama a si mesma.
-
-Escreva um programa que calcule e mostre quantos bytes esse vetor ocupa em
-cada chamada e quantas chamadas, no máximo, cabem numa pilha de 8 MiB.
-Depois faça a mesma conta para o vetor double historico[2000]; e mostre
-também. Use sizeof para o tamanho de cada tipo e divisão inteira.
-
-```text
-Saída esperada:
-int: cada chamada usa pelo menos 8000 bytes
-int: cabem no máximo 1048 chamadas
-double: cada chamada usa pelo menos 16000 bytes
-double: cabem no máximo 524 chamadas
-```
-
-**Exercício E316** · ★★☆
-
-Um sensor de vibração de uma ponte grava 5.000.000 de leituras por dia.
-Simule as leituras com leitura[i] = i % 7 e mostre a soma de todas.
-
-Faça em três passos:
-1) declare o vetor int leituras[5000000]; como LOCAL de main e rode com o
-
-```text
- rodar. Leia o que acontece.
-```
-
-2) mude o vetor para os DADOS (global ou static) e rode de novo.
-3) acrescente uma linha que mostre quantos bytes o vetor ocupa, com
-
-```text
- sizeof aplicado ao próprio vetor.
-```
-
-```text
-Saída esperada (depois do passo 3):
-O vetor ocupa 20000000 bytes
-Soma das leituras: 14999995
-```
-
-**Exercício E317** · ★★★
-
-O programa abaixo mistura uma global, uma static e uma local numa função
-recursiva. Estenda o programa (sem mudar as contas) para ele mostrar o que
-acontece em cada frame:
-
-- logo depois de contador--, um printf com n, chamadas, local e contador;
-- logo antes do return, um printf com n e o valor que o frame devolve.
-
-Use os formatos da saída esperada. Rode e confira cada número com o lugar
-onde mora cada variável.
-
-```text
-Saída esperada:
-entra n=3: chamadas=1 local=1 contador=99
-entra n=2: chamadas=2 local=1 contador=98
-entra n=1: chamadas=3 local=1 contador=97
-entra n=0: chamadas=4 local=1 contador=96
-sai n=0: devolve 41
-sai n=1: devolve 41
-sai n=2: devolve 41
-sai n=3: devolve 41
-41
-entra n=0: chamadas=5 local=1 contador=95
-sai n=0: devolve 51
-51
-95
-```
-
-### 0054 · malloc e free
-
-**Exercício E320** · ★☆☆
-
-Complete a função duplicar: ela recebe uma string e devolve uma CÓPIA dela
-num bloco novo do heap, do tamanho exato. O main já está pronto: ele
-passa a cópia para maiúsculas e mostra que a original não mudou.
-
-```text
-Saída esperada:
-Original: coxinha
-Cópia: COXINHA
-```
-
-**Exercício E321** · ★★☆
-
-Escreva a função
-
-```text
-int *filtrar_pares(const int *v, int n, int *qtd);
-```
-
-que devolve um vetor NOVO, no heap, só com os números pares de v, do
-tamanho exato. A quantidade de pares volta por *qtd. Teste com os números
-sorteados 7, 4, 10, 3, 8, 1, 6.
-
-```text
-Saída esperada:
-4 pares: 4 10 8 6
-```
-
-**Exercício E322** · ★★☆
-
-Escreva um programa que faça de verdade as cinco alocações abaixo. Antes
-de cada malloc, guarde numa variável size_t quantos bytes ele vai pedir
-(ex.: size_t ta = 5 * sizeof(int);) e passe essa variável para o malloc.
-Confira o NULL de cada uma, mostre os cinco tamanhos, mostre quantos int
-cabem inteiros no bloco e) e libere os cinco blocos no fim.
-
-```text
-a) int *a = malloc(5 * sizeof(int));
-b) double *b = malloc(5 * sizeof(double));
-c) int **c = malloc(3 * sizeof(int *));
-d) char *d = malloc(strlen("Recife") + 1);
-e) int *e = malloc(5);
-```
-
-```text
-Saída esperada (num PC de 64 bits):
-a) 20 bytes
-b) 40 bytes
-c) 24 bytes
-d) 7 bytes
-e) 5 bytes: cabe 1 int
-```
-
-**Exercício E324** · ★★★
-
-Escreva a função
-
-```text
-char *juntar(const char *a, const char *b);
-```
-
-que devolve uma string NOVA, no heap, com a, um espaço e b. Depois, em
-main, monte o nome do crachá "Maria Clara Fonseca" chamando juntar duas
-vezes: primeiro "Maria" com "Clara", depois o resultado com "Fonseca".
-Mostre o nome e o tamanho, e não deixe nenhum bloco para trás.
-
-```text
-Saída esperada:
-Crachá: Maria Clara Fonseca (19 caracteres)
-```
-
-### 0055 · calloc e realloc
-
-**Exercício E325** · ★☆☆
-
-Num jogo de tabuleiro, o dado saiu assim em 12 jogadas:
-3, 6, 1, 6, 2, 5, 6, 3, 4, 6, 1, 2. Use calloc para criar os contadores
-das faces (zerados) e mostre quantas vezes cada face saiu, com um # por
-vez.
-
-```text
-Saída esperada:
-1: 2 ##
-2: 2 ##
-3: 2 ##
-4: 1 #
-5: 1 #
-6: 4 ####
-```
-
-**Exercício E327** · ★★☆
-
-Leia números inteiros do teclado até aparecer 0 (o 0 não entra). Guarde num
-vetor dinâmico que começa com capacidade 2 e dobra (realloc) quando enche.
-No fim, mostre os números na ordem contrária e a capacidade final.
-
-```text
-Entrada:
-5 8 2 9 4 0
-```
-
-```text
-Saída esperada:
-Ao contrário: 4 9 2 8 5
-Capacidade final: 8
-```
-
-**Exercício E328** · ★★☆
-
-Um sensor de umidade mandou 10 leituras, mas -1 significa "falha na
-leitura": 12, -1, 15, 14, -1, -1, 13, 16, -1, 11. Copie as leituras para
-um bloco do heap, remova as falhas puxando as válidas para a frente (no
-mesmo bloco) e depois ENCOLHA o bloco com realloc para o tamanho exato.
-
-```text
-Saída esperada:
-6 leituras válidas: 12 15 14 13 16 11
-Bloco encolheu de 40 para 24 bytes
-```
-
-**Exercício E329** · ★★★
-
-Compare duas estratégias de crescimento para guardar 1000 números, com
-capacidade inicial 1:
-
-```text
-A) crescer de 1 em 1 (capacidade + 1) sempre que encher;
-B) dobrar a capacidade sempre que encher.
-```
-
-Escreva um programa que faça os dois vetores de verdade (com realloc) e
-conte, para cada estratégia, quantos realloc foram feitos e quantos
-elementos o realloc precisou copiar no pior caso (a quantidade guardada
-na hora de cada realloc).
-
-```text
-Saída esperada:
-+1:     999 realocações, 499500 cópias
-dobrar: 10 realocações, 1023 cópias
-```
-
-### 0056 · Matriz dinâmica
-
-**Exercício E332** · ★☆☆
-
-Uma matriz de 5 linhas e 8 colunas vai morar num bloco único:
-int *v = malloc(5 * 8 * sizeof *v); e o elemento (i, j) fica em
-v[i * 8 + j]. Escreva as duas funções de conversão:
-
-```text
-int indice(int i, int j, int colunas);             // (i, j) -> k
-void posicao(int k, int colunas, int *i, int *j);  // k -> (i, j)
-```
-
-No main, aloque o bloco, guarde em cada (i, j) o valor i * 10 + j (usando
-indice) e mostre os quatro casos abaixo. O valor guardado confere a conta:
-o 23 só pode estar na linha 2, coluna 3. Libere o bloco no fim.
-
-```text
-Saída esperada:
-(2, 3) -> índice 19, valor 23
-(4, 7) -> índice 39, valor 47
-(0, 5) -> índice 5, valor 5
-índice 26 -> (3, 2), valor 32
-```
-
-**Exercício E333** · ★★☆
-
-Escreva a função
-
-```text
-int **transpor(int **m, int linhas, int colunas);
-```
-
-que devolve uma matriz NOVA, com colunas linhas e linhas colunas, em que
-t[j][i] = m[i][j]. Teste com a matriz 2 x 3 de horas de estudo por
-semana (linhas = semanas, colunas = matérias):
-
-```text
-2 5 1
-3 4 0
-```
-
-```text
-Saída esperada (a transposta, 3 x 2):
-2 3
-5 4
-1 0
-```
-
-**Exercício E334** · ★★☆
-
-Monte o triângulo de Pascal com 6 linhas usando um vetor de ponteiros em
-que a linha i tem exatamente i + 1 elementos (nada de matriz quadrada com
-metade desperdiçada). As pontas de cada linha valem 1 e cada número de
-dentro é a soma dos dois de cima: p[i][j] = p[i-1][j-1] + p[i-1][j].
-
-```text
-Saída esperada:
-1
-1 1
-1 2 1
-1 3 3 1
-1 4 6 4 1
-1 5 10 10 5 1
-Elementos guardados: 21
-```
-
-**Exercício E336** · ★★★
-
-Escreva a função
-
-```text
-int **multiplicar(int **a, int la, int ca, int **b, int lb, int cb);
-```
-
-que devolve uma matriz NOVA la x cb com o produto a * b, ou NULL se as
-dimensões não combinarem (ca precisa ser igual a lb). Teste com
-
-```text
-A (2 x 3)    B (3 x 2)
-1 2 3        7  8
-4 5 6        9 10
-             11 12
-```
-
-e depois tente A * A (2 x 3 vezes 2 x 3).
-
-```text
-Saída esperada:
-58 64
-139 154
-A * A: dimensões incompatíveis
-```
-
-### 0057 · Erros de memória
-
-**Exercício E337** · ★☆☆
-
-O painel da rodoviária monta 4 avisos, um de cada vez, a partir dos vetores
-
-```text
-const char *destinos[] = {"Belém", "Macapá", "Santarém", "Manaus"};
-const char *horas[] = {"08h", "09h", "11h", "14h"};
-```
-
-Para cada aviso, aloque 64 bytes com malloc, monte "Ônibus para <destino> às
-<hora>", mostre e libere o bloco antes de passar ao próximo. Use um contador
-somado a cada malloc e outro a cada free, e mostre os dois no fim: têm que
-bater.
-
-```text
-Saída esperada:
-Aviso: Ônibus para Belém às 08h
-Aviso: Ônibus para Macapá às 09h
-Aviso: Ônibus para Santarém às 11h
-Aviso: Ônibus para Manaus às 14h
-malloc: 4 | free: 4
-```
-
-**Exercício E339** · ★★☆
-
-O placar do campeonato de futsal da firma guarda os gols dos 3 times num
-vetor alocado com malloc: 4, 2 e 7. Faça um backup em OUTRO bloco, também
-alocado com malloc, copiando os valores um a um. Para provar que o backup é
-independente, zere placar[0] (o jogo foi anulado) e mostre os dois vetores.
-Libere o placar, mostre "Placar encerrado" e libere o backup.
-
-```text
-Saída esperada:
-Placar: 0 2 7
-Backup: 4 2 7
-Placar encerrado
-```
-
-**Exercício E340** · ★★☆
-
-O sistema do estacionamento guarda a placa "QTX3E21" numa string alocada
-com malloc (copie com strcpy) e os km rodados nos últimos 5 dias (42, 55,
-38, 61 e 42) num vetor de int, também alocado. Mostre a placa e a soma dos
-km da semana. Libere os dois blocos.
-
-```text
-Saída esperada:
-Placa: QTX3E21
-Km da semana: 238
-```
-
-**Exercício E341** · ★★★
-
-A lista de presença de uma aula de yoga começa com 2 vagas e dobra quando
-enche. Escreva a função
-
-```text
-int adicionar(int **v, int *qtd, int *cap, int matricula)
-```
-
-que acrescenta a matrícula ao vetor, dobrando a capacidade com realloc
-quando qtd == cap, e atualiza o ponteiro do chamador. Devolve 1 se deu
-certo e 0 se faltou memória. No main, aloque o vetor com capacidade 2,
-adicione as matrículas 11, 27, 35 e 48, mostre a lista e libere.
-
-```text
-Saída esperada:
-Presentes: 11 27 35 48
-```
-
-### 0058 · Juntando tudo
+### Exercícios
 
 **Exercício E344** · ★☆☆
 
@@ -1900,11 +1911,13 @@ Saída esperada:
 3 itens: [] [] []
 ```
 
-### Lista do módulo
+---
+
+## Lista do módulo
 
 30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P0701.c a P0730.c, em `material/`; resoluções em `_respostas/07-memoria-dinamica/lista/`.
 
-#### ★☆☆ Aquecimento
+### ★☆☆ Aquecimento
 
 **Exercício P0701** · ★☆☆ · Uma cópia no heap
 
@@ -2134,7 +2147,7 @@ Modelo 2:   9  16
 Modelo 3:  35  39
 ```
 
-#### ★★☆ Para pensar
+### ★★☆ Para pensar
 
 **Exercício P0711** · ★★☆ · Juntar a lista com um malloc só
 
@@ -2399,7 +2412,7 @@ Miolo: 17
 
 **Resposta esperada:** Borda 35 e Miolo 17.
 
-#### ★★★ Desafio
+### ★★★ Desafio
 
 **Exercício P0721** · ★★★ · Um vetor que cresce para qualquer tipo
 
@@ -2704,7 +2717,7 @@ Saída esperada:
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Resolva num arquivo seu, com as flags de estudo (e `valgrind ./programa` como
 segunda opinião). A versão final não pode gerar relatório de erro.
@@ -2945,7 +2958,7 @@ pedaços, o vetor deles e a frase nova.
 
 </details>
 
-### Questões no estilo da prova
+## Questões no estilo da prova
 
 Formato da prova do mestrado do PPGI/UFAM. Resolva no papel, marque uma letra
 e só então abra o gabarito. Os trechos foram compilados com

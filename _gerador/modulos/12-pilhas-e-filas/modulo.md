@@ -37,7 +37,7 @@ marca o item que sai e cinza a gaveta que virou vaga.
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas para resolver num arquivo seu, misturando os assuntos do módulo.
 Use os TADs das pastas ou escreva a estrutura do zero.
@@ -188,7 +188,7 @@ pós-fixas ficam `A B C * +` e `A B + C *`.
 
 </details>
 
-### Questões do POSCOMP
+## Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -199,7 +199,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 O gabarito de 2023 vem de um blog de terceiros que reproduz o gabarito definitivo; confira no PDF oficial da SBC.
 
 
-### Questões de provas do PPGI
+## Questões de provas do PPGI
 
 Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.
 

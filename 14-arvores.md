@@ -61,9 +61,12 @@ gcc ~/LPEDC/material/A197.c ~/LPEDC/material/0099-bst.c -o ~/LPEDC/material/A197
 
 ---
 
-## 1. Conceitos gerais
+> [!NOTE]
+> Cada assunto é um capítulo: **Conceito** (a explicação), **Exemplos de uso** (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e **Exercícios** (cada um é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta; resoluções em `_respostas/14-arvores/`).
 
-### 0097 · Árvores
+## 0097 · Árvores
+
+### Conceito
 
 - **Árvore**: estrutura em que cada elemento tem um só "de cima" e pode ter
   vários "de baixo". Serve para pastas, organogramas e sumários
@@ -94,211 +97,7 @@ gcc ~/LPEDC/material/A197.c ~/LPEDC/material/0099-bst.c -o ~/LPEDC/material/A197
 > ganha 1 a mais; não misture. Na hora de liberar, primeiro as subárvores: com
 > `free(n)` **antes** dos filhos, o laço lê memória já devolvida.
 
-### 0098 · Árvore binária e percursos
-
-- **Árvore binária**: ou é **vazia** (`NULL`), ou é um nó com uma
-  **subárvore esquerda** e uma **subárvore direita**. Cada nó tem no máximo
-  dois filhos (CORMEN et al., 2024, cap. 12).
-- **O lado importa**: `A` com `B` à esquerda e `A` com `B` à direita são
-  árvores diferentes (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 5).
-- **Percurso**: um jeito de visitar todos os nós uma vez. Os três recursivos
-  só mudam a posição da visita em relação às duas chamadas (FEOFILOFF, 2009).
-- **Por nível**: usa uma **fila** (assunto 0085). Tira o nó da frente, mostra
-  e põe os filhos no fim (CELES; RANGEL, 2002).
-- **Árvore de expressão**: operadores nos nós internos, números nas folhas.
-  A pós-ordem é a ordem de calcular (assunto 0084)
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 5).
-- **Ponteiros nulos**: uma árvore binária com `n` nós tem `n + 1` ponteiros
-  `NULL`. A recursão usa altura + 1 chamadas na pilha
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-
-| Percurso | Ordem | Em `(8-3)*(4+2)` |
-| --- | --- | --- |
-| **pré-ordem** | raiz, esquerda, direita | `* - 8 3 + 4 2` (notação prefixa) |
-| **em ordem** | esquerda, raiz, direita | `8 - 3 * 4 + 2` (infixa, sem parênteses) |
-| **pós-ordem** | esquerda, direita, raiz | `8 3 - 4 2 + *` (pós-fixa, a da calculadora HP) |
-| **por nível** | linha por linha, de cima para baixo | `* - + 8 3 4 2` |
-
-> [!WARNING]
-> A em ordem **perde os parênteses**: `8 - 3 * 4 + 2` dá `8 - 12 + 2 = -2`, e
-> não 30. Para mostrar a fórmula certa, abra `(` antes de cada subárvore e
-> feche depois (exemplo A196).
-
-### 0099 · BST: busca e inserção
-
-- **Árvore binária de busca** (**BST**, *binary search tree*): árvore binária
-  em que, em **todo** nó, a subárvore esquerda só tem chaves menores e a
-  direita só tem chaves maiores (CORMEN et al., 2024, cap. 12).
-- **Busca**: compara com a raiz. Igual, achou; menor, desce à esquerda; maior,
-  à direita; `NULL`, a chave não existe. É a busca binária (assunto 0090) na
-  árvore (FEOFILOFF, 2009).
-- **Inserção**: a mesma descida. No `NULL` em que a busca falharia entra o nó
-  novo, sempre como **folha**. A função devolve a raiz da subárvore e o pai
-  faz `r->esq = bst_insere(r->esq, chave)`. Chave repetida é ignorada
-  (FEOFILOFF, 2009).
-- **Em ordem crescente**: a em ordem de uma BST sai ordenada. O nó logo depois
-  é o **sucessor**, o logo antes é o **antecessor**; o menor fica mais à
-  esquerda e o maior, mais à direita (CORMEN et al., 2024, cap. 12).
-- **Custo**: no máximo **altura** + 1 comparações. Numa árvore cheia, perto de
-  log₂ n: 7 chaves, 3 níveis; um milhão, uns 20 (ZIVIANI, 2010, cap. 5).
-
-> [!WARNING]
-> A forma da BST depende da **ordem de chegada**. As sete matrículas em ordem
-> crescente formam uma lista disfarçada de altura 6 (exemplo A198). E sem
-> `raiz = bst_insere(raiz, ...)` o nó criado se perde.
-
-### 0100 · BST: remoção
-
-- **Remoção**: a busca acha o nó; o que fazer depende de **quantos filhos**
-  ele tem (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-- **Folha ou um filho**: o filho que existe sobe para o lugar do nó. Na folha
-  esse filho é `NULL`, então é um código só (CORMEN et al., 2024, cap. 12).
-- **Dois filhos**: o lugar vai para o **sucessor**, a menor chave da
-  subárvore direita. Desça uma vez à direita e depois à esquerda até não dar
-  mais (CORMEN et al., 2024, cap. 12).
-- **O sucessor não tem filho esquerdo**: removê-lo cai num caso fácil. Usar o
-  **antecessor** (a maior da esquerda) também funciona, mas a árvore final
-  sai diferente (FEOFILOFF, 2009).
-- **Retorno**: como na inserção, a função devolve a raiz da subárvore. O pai
-  faz `r->esq = bst_remove(r->esq, chave)` e o cliente,
-  `raiz = bst_remove(raiz, ...)`. Custo O(altura) (CELES; RANGEL, 2002).
-
-| Caso | O que fazer | No exemplo |
-| --- | --- | --- |
-| **folha** | dá `free` e o pai passa a apontar para `NULL` | remover o 20 |
-| **um filho** | o filho sobe para o lugar dele; o avô "pula" o nó | remover o 40: o 45 sobe |
-| **dois filhos** | troca pelo **sucessor** e remove o sucessor | remover o 30: o 35 assume |
-
-> [!WARNING]
-> `bst_remove(raiz->esq, 20);` sem atribuir o retorno dá `free` no 20 mas deixa
-> o pai apontando para o endereço antigo: **ponteiro solto**, que o
-> AddressSanitizer acusa como `heap-use-after-free`. Vale também para `raiz`.
-
-### 0101 · AVL: balanceamento e rotações
-
-- **AVL**: BST que se conserta a cada inserção. Em **todo** nó, as alturas
-  das duas subárvores diferem de no máximo 1 (ADELSON-VELSKY; LANDIS, 1962).
-- **Fator de balanceamento**: `fb = altura(esq) - altura(dir)`. Na AVL vale
-  -1, 0 ou 1; 2 é "pesado à esquerda" e -2, "pesado à direita". Há livros que
-  invertem a conta: o sinal troca, a regra não
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-- **Altura garantida**: no máximo uns 1,44 · log₂ n. Mil chaves cabem em
-  altura 9, e não 999 (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-- **Inserção**: pendura a folha como na BST. Na **volta** da recursão, cada
-  ancestral atualiza a altura e confere o fator (CORMEN et al., 2024).
-- **Rotação**: um filho sobe e o pai desce, sem quebrar a ordem da BST. Na
-  rotação à esquerda em `r`, o filho direito `d` sobe e a antiga subárvore
-  esquerda de `d` vira a direita de `r`. Custa O(1) (CORMEN et al., 2024,
-  cap. 13).
-- **Rotação dupla**: para o "zigue-zague". A primeira rotação, no filho,
-  endireita; a segunda, no nó, equilibra. Cada inserção faz no máximo uma
-  rotação, simples ou dupla (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-- **Outras árvores equilibradas**: a **rubro-negra** (0177) e a **árvore B**
-  (0146) também garantem O(log n) (CORMEN et al., 2024, caps. 13 e 18).
-
-| Caso | Fator do nó | Fator do filho pesado | Conserto |
-| --- | --- | --- | --- |
-| esquerda-esquerda | +2 | +1 ou 0 (esquerdo) | rotação à direita no nó |
-| direita-direita | -2 | -1 ou 0 (direito) | rotação à esquerda no nó |
-| esquerda-direita | +2 | -1 (esquerdo) | à esquerda no filho, depois à direita no nó |
-| direita-esquerda | -2 | +1 (direito) | à direita no filho, depois à esquerda no nó |
-
-> [!WARNING]
-> No zigue-zague, a rotação simples **não conserta**: só espelha o problema.
-> Por isso o código olha o fator do **filho**. E ligue a nova raiz de volta no
-> pai (`return rot_esquerda(r)`); senão o pai aponta para o nó que desceu.
-
-### 0102 · Heap e fila de prioridade
-
-- **Fila de prioridade**: cada item entra com uma prioridade e sai primeiro o
-  de **maior** prioridade (CORMEN et al., 2024, cap. 6).
-- **Heap de máximo**: árvore binária com duas regras. **Forma**: completa,
-  todos os níveis cheios menos talvez o último, que enche da esquerda para a
-  direita. **Ordem**: todo pai é maior ou igual aos filhos, e o máximo fica na
-  raiz (CORMEN et al., 2024, cap. 6).
-- **Regra mais fraca que a da BST**: esquerda e direita não se comparam. O
-  heap só responde "quem é o maior?" (TENENBAUM; LANGSAM; AUGENSTEIN, 1995,
-  cap. 6).
-- **Heap em vetor**: a forma completa deixa guardar a árvore nível por nível,
-  sem buracos e sem ponteiros (FEOFILOFF, 2009).
-- **Inserir**: o novo entra no fim e **sobe**, trocando com o pai enquanto for
-  maior. **Remover o máximo**: o último vai para a raiz e **desce**, trocando
-  com o **maior** filho. As duas custam até a altura, ⌊log₂ n⌋; no Cormen a
-  descida é a `MAX-HEAPIFY` (CORMEN et al., 2024, cap. 6).
-- **Heap de mínimo**: as comparações invertidas; o menor fica na raiz
-  (FEOFILOFF, 2009).
-- **Dois heaps diferentes**: este heap (estrutura de dados) não tem relação
-  com o heap do `malloc` (assunto 0053) (FEOFILOFF, 2009).
-
-| Quem | Índice com `v[0]` na raiz | No Cormen (`A[1..n]`) |
-| --- | --- | --- |
-| pai de `i` | `(i - 1) / 2` (divisão inteira) | `⌊i/2⌋` |
-| filho esquerdo | `2 * i + 1` | `2i` |
-| filho direito | `2 * i + 2` | `2i + 1` |
-
-| Onde guardar | Inserir | Tirar o máximo |
-| --- | --- | --- |
-| vetor solto | O(1) | O(n) |
-| vetor ordenado | O(n) | O(1) |
-| heap | O(log n) | O(log n) |
-
-> [!WARNING]
-> Na descida, troque com o **maior** dos filhos; trocar com o menor quebra o
-> heap. Confira `f + 1 < h->n` antes de ler `v[f + 1]`, e numa questão veja em
-> que índice o vetor começa.
-
-### 0103 · Heapsort
-
-- **Heapsort**: ordena tirando o máximo do heap n vezes. Tudo no **mesmo
-  vetor**: o heap encolhe uma casa a cada máximo, e essa casa livre no fim é o
-  lugar final dele (CORMEN et al., 2024, cap. 6).
-- **Fase 1, construir o heap**: cada **pai** desce, do último (`n / 2 - 1`)
-  até a raiz. As folhas já são heaps, e a fase custa só O(n). É a
-  `BUILD-MAX-HEAP` do Cormen (CORMEN et al., 2024, cap. 6).
-- **Fase 2, ordenar**: troca a raiz com o último do heap, encolhe o heap e faz
-  a nova raiz descer. O vetor fica com o heap no começo e a parte ordenada no
-  fim (FEOFILOFF, 2009).
-- **Custo**: n - 1 descidas de no máximo log₂ n níveis, O(n log n)
-  **sempre**. O quick sort (0095) pode cair em O(n²) e o merge sort (0094)
-  precisa de vetor extra (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
-- **In-place e não estável**: usa O(1) de memória, sem recursão, mas pode
-  trocar a ordem de chaves iguais. Na prática o quick sort costuma ser mais
-  rápido (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
-
-> [!WARNING]
-> Na fase 2, o `desce` recebe o tamanho **do heap** (`fim`), não o do vetor
-> (`n`). Com `desce(v, n, 0)`, a raiz trata os já ordenados como filhos e
-> desfaz o trabalho, sem aviso: os índices continuam válidos.
-
-### 0104 · Juntando tudo
-
-- **Cada estrutura no seu papel**: achar, inserir e remover pela chave é
-  trabalho de **BST**, O(altura). "Os maiores" por outro critério é trabalho
-  de **heap** (CORMEN et al., 2024, caps. 6 e 12).
-- **Registro no nó**: o nó guarda uma struct inteira. Uma parte é a
-  **chave**, que ordena a árvore; o resto vai junto
-  (KERNIGHAN; RITCHIE, 1989, seção 6.5).
-- **Ponteiro para dentro da árvore**: a busca pode devolver o endereço do
-  registro. Quem chama muda os campos comuns, mas nunca a chave, que quebraria
-  a regra da BST (CELES; RANGEL, 2002).
-- **Os k maiores**: copie para um vetor, monte o heap em O(n) e tire o máximo
-  k vezes. É a fase 2 do heapsort interrompida; não precisa ordenar tudo
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
-- **Structs grandes**: o heap pode guardar **ponteiros** (`Aluno *v[]`) e
-  trocar só os ponteiros (exercício E618) (CELES; CERQUEIRA; RANGEL, 2016).
-
-> [!WARNING]
-> O ponteiro de `cad_busca` aponta para dentro de um nó e vale só até a próxima
-> remoção: `cad_remove` pode liberar esse nó ou copiar outro aluno por cima
-> dele. Busque de novo depois de mexer na árvore e nunca altere `a->matricula`.
-
----
-
-## 2. Exemplos de uso
-
-Cada exemplo compila sozinho. Rode com o comando abaixo dele e compare com a saída no fim do código.
-
-### 0097 · Árvores
+### Exemplos de uso
 
 As pastas de um computador: `casa` tem `fotos`, `contas` e `musica`, e `luz`
 fica dentro de `contas`. São 9 nós, 5 folhas (em verde) e altura 3, de `casa`
@@ -619,7 +418,185 @@ int main(void) {
 gcc ~/LPEDC/material/A194.c -o ~/LPEDC/material/A194 && ~/LPEDC/material/A194
 ```
 
-### 0098 · Árvore binária e percursos
+### Exercícios
+
+**Exercício E577** · ★☆☆
+
+O site de uma loja organiza os produtos em categorias:
+
+```text
+loja
+├── eletronicos
+│   ├── celulares
+│   └── tvs
+│       ├── oled
+│       └── led
+├── casa
+│   └── cozinha
+└── moda
+```
+
+Escreva as funções novo, adiciona(pai, nome), altura e libera, monte a
+árvore no main e escreva ficha(n, prof), que imprime uma linha por
+categoria, recuada 2 espaços por nível, com a profundidade, o grau e a
+palavra "folha" quando o nó não tem filhos. Por fim, imprima a altura.
+
+```text
+Saída esperada:
+loja: prof 0, grau 3
+  eletronicos: prof 1, grau 2
+    celulares: prof 2, grau 0, folha
+    tvs: prof 2, grau 2
+      oled: prof 3, grau 0, folha
+      led: prof 3, grau 0, folha
+  casa: prof 1, grau 1
+    cozinha: prof 2, grau 0, folha
+  moda: prof 1, grau 0, folha
+Altura: 3
+```
+
+**Exercício E579** · ★★☆
+
+As pastas de um computador formam esta árvore:
+
+```text
+casa
+├── fotos
+│   ├── praia
+│   └── natal
+├── contas
+│   ├── agua
+│   └── luz
+│       └── 2025
+└── musica
+```
+
+Escreva profundidade_de(raiz, nome), que procura uma pasta pelo nome e
+devolve a profundidade dela (a raiz tem profundidade 0), ou -1 se a pasta
+não existir. Monte a árvore no main e teste luz, casa, 2025 e videos.
+
+```text
+Saída esperada:
+luz: 2
+casa: 0
+2025: 3
+videos: -1
+```
+
+**Exercício E580** · ★★☆
+
+Cada pasta guarda arquivos soltos (campo mb, em megabytes):
+
+```text
+casa (5)
+├── fotos (10)
+│   ├── praia (300)
+│   └── natal (120)
+└── contas (2)
+    ├── agua (5)
+    └── luz (8)
+```
+
+Escreva tamanho(n), que soma a pasta com tudo que está dentro dela, e duas
+funções que mostram o tamanho total de cada pasta:
+
+- du(n): imprime "<total> MB  <nome>", com cada pasta DEPOIS de todas as
+
+```text
+subpastas dela (a raiz por último);
+```
+
+- arvore(n, prof): imprime "nome (total MB)", a pasta ANTES das
+
+```text
+subpastas, recuada 2 espaços por nível.
+```
+
+```text
+Saída esperada:
+-- du --
+300 MB  praia
+120 MB  natal
+430 MB  fotos
+5 MB  agua
+8 MB  luz
+15 MB  contas
+450 MB  casa
+-- arvore --
+casa (450 MB)
+  fotos (430 MB)
+    praia (300 MB)
+    natal (120 MB)
+  contas (15 MB)
+    agua (5 MB)
+    luz (8 MB)
+```
+
+**Exercício E582** · ★★★
+
+O menu do app de delivery é uma árvore:
+
+```text
+app
+├── lanches
+│   ├── x-salada
+│   └── x-bacon
+└── bebidas
+    ├── suco
+    └── refri
+        ├── lata
+        └── 2 litros
+```
+
+Escreva um programa (struct, montagem, função e liberação) que imprime o
+caminho da raiz até cada folha, com "/" entre os nomes, como um endereço
+de pasta, e no fim conta os caminhos.
+
+```text
+Saída esperada:
+app/lanches/x-salada
+app/lanches/x-bacon
+app/bebidas/suco
+app/bebidas/refri/lata
+app/bebidas/refri/2 litros
+Total de caminhos: 5
+```
+
+---
+
+## 0098 · Árvore binária e percursos
+
+### Conceito
+
+- **Árvore binária**: ou é **vazia** (`NULL`), ou é um nó com uma
+  **subárvore esquerda** e uma **subárvore direita**. Cada nó tem no máximo
+  dois filhos (CORMEN et al., 2024, cap. 12).
+- **O lado importa**: `A` com `B` à esquerda e `A` com `B` à direita são
+  árvores diferentes (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 5).
+- **Percurso**: um jeito de visitar todos os nós uma vez. Os três recursivos
+  só mudam a posição da visita em relação às duas chamadas (FEOFILOFF, 2009).
+- **Por nível**: usa uma **fila** (assunto 0085). Tira o nó da frente, mostra
+  e põe os filhos no fim (CELES; RANGEL, 2002).
+- **Árvore de expressão**: operadores nos nós internos, números nas folhas.
+  A pós-ordem é a ordem de calcular (assunto 0084)
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 5).
+- **Ponteiros nulos**: uma árvore binária com `n` nós tem `n + 1` ponteiros
+  `NULL`. A recursão usa altura + 1 chamadas na pilha
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
+
+| Percurso | Ordem | Em `(8-3)*(4+2)` |
+| --- | --- | --- |
+| **pré-ordem** | raiz, esquerda, direita | `* - 8 3 + 4 2` (notação prefixa) |
+| **em ordem** | esquerda, raiz, direita | `8 - 3 * 4 + 2` (infixa, sem parênteses) |
+| **pós-ordem** | esquerda, direita, raiz | `8 3 - 4 2 + *` (pós-fixa, a da calculadora HP) |
+| **por nível** | linha por linha, de cima para baixo | `* - + 8 3 4 2` |
+
+> [!WARNING]
+> A em ordem **perde os parênteses**: `8 - 3 * 4 + 2` dá `8 - 12 + 2 = -2`, e
+> não 30. Para mostrar a fórmula certa, abra `(` antes de cada subárvore e
+> feche depois (exemplo A196).
+
+### Exemplos de uso
 
 A conta do churrasco, `=(8-3)*(4+2)` = 30: 8 pessoas, 3 não bebem, e cada uma
 paga R$ 4 de cerveja e R$ 2 de gelo. Os operadores ficam nos nós internos
@@ -822,7 +799,131 @@ int main(void) {
 gcc ~/LPEDC/material/A196.c ~/LPEDC/material/0098-arvore.c -o ~/LPEDC/material/A196 && ~/LPEDC/material/A196
 ```
 
-### 0099 · BST: busca e inserção
+### Exercícios
+
+**Exercício E583** · ★☆☆
+
+Com arv_cria, do TAD arvore.h, monte esta árvore, imprima os quatro
+percursos (pré-ordem, em ordem, pós-ordem e por nível), a quantidade de
+nós e a altura, e libere com arv_libera.
+
+```text
+M
+├── esq: G
+│   ├── esq: C
+│   └── dir: J
+└── dir: T
+    └── dir: X
+```
+
+```text
+Saída esperada:
+Pré-ordem: M G C J T X
+Em ordem:  C G J M T X
+Pós-ordem: C J G X T M
+Por nível: M G T C J X
+Nós: 6, altura: 2
+```
+
+```bash
+gcc ~/LPEDC/material/E583.c ~/LPEDC/material/0098-arvore.c -o ~/LPEDC/material/E583 && ~/LPEDC/material/E583
+```
+
+**Exercício E585** · ★★☆
+
+Com o TAD arvore.h, monte a árvore da expressão (8 - 3) * (4 + 2): raiz
+'*', filho esquerdo '-' (com 8 e 3) e filho direito '+' (com 4 e 2).
+Escreva espelha(r), que troca de lugar, em todo nó, a subárvore da
+esquerda com a da direita. Não crie nós novos: troque só ponteiros.
+Imprima a em ordem antes e depois.
+
+```text
+Saída esperada:
+Antes:  8 - 3 * 4 + 2
+Depois: 2 + 4 * 3 - 8
+```
+
+```bash
+gcc ~/LPEDC/material/E585.c ~/LPEDC/material/0098-arvore.c -o ~/LPEDC/material/E585 && ~/LPEDC/material/E585
+```
+
+**Exercício E586** · ★★☆
+
+Com o TAD arvore.h, monte a árvore (8 - 3) * (4 + 2): raiz '*', filho
+esquerdo '-' (com 8 e 3) e filho direito '+' (com 4 e 2). Escreva
+deitada(r, nivel), que desenha a árvore deitada: a raiz na coluna 0 e cada
+nível 4 espaços mais à direita. A subárvore da DIREITA aparece em cima e a
+da esquerda embaixo.
+
+```text
+Saída esperada:
+        2
+    +
+        4
+*
+        3
+    -
+        8
+```
+
+```bash
+gcc ~/LPEDC/material/E586.c ~/LPEDC/material/0098-arvore.c -o ~/LPEDC/material/E586 && ~/LPEDC/material/E586
+```
+
+**Exercício E588** · ★★★
+
+Uma árvore binária cabe numa string: escreva a pré-ordem e marque cada
+subárvore vazia com um ponto. A árvore da expressão vira "*-8..3..+4..2.."
+e a árvore M, G, T, C, J, X do E583 vira "MGC..J..T.X..".
+
+Com o TAD arvore.h, escreva constroi(s, &pos), que lê a string a partir de
+s[pos] e devolve a árvore montada com arv_cria. Para cada string, mostre a
+em ordem, a pós-ordem, o número de nós e a altura.
+
+```text
+Saída esperada:
+*-8..3..+4..2..
+  em ordem:  8 - 3 * 4 + 2
+  pós-ordem: 8 3 - 4 2 + *
+  nós: 7, altura: 2
+MGC..J..T.X..
+  em ordem:  C G J M T X
+  pós-ordem: C J G X T M
+  nós: 6, altura: 2
+```
+
+```bash
+gcc ~/LPEDC/material/E588.c ~/LPEDC/material/0098-arvore.c -o ~/LPEDC/material/E588 && ~/LPEDC/material/E588
+```
+
+---
+
+## 0099 · BST: busca e inserção
+
+### Conceito
+
+- **Árvore binária de busca** (**BST**, *binary search tree*): árvore binária
+  em que, em **todo** nó, a subárvore esquerda só tem chaves menores e a
+  direita só tem chaves maiores (CORMEN et al., 2024, cap. 12).
+- **Busca**: compara com a raiz. Igual, achou; menor, desce à esquerda; maior,
+  à direita; `NULL`, a chave não existe. É a busca binária (assunto 0090) na
+  árvore (FEOFILOFF, 2009).
+- **Inserção**: a mesma descida. No `NULL` em que a busca falharia entra o nó
+  novo, sempre como **folha**. A função devolve a raiz da subárvore e o pai
+  faz `r->esq = bst_insere(r->esq, chave)`. Chave repetida é ignorada
+  (FEOFILOFF, 2009).
+- **Em ordem crescente**: a em ordem de uma BST sai ordenada. O nó logo depois
+  é o **sucessor**, o logo antes é o **antecessor**; o menor fica mais à
+  esquerda e o maior, mais à direita (CORMEN et al., 2024, cap. 12).
+- **Custo**: no máximo **altura** + 1 comparações. Numa árvore cheia, perto de
+  log₂ n: 7 chaves, 3 níveis; um milhão, uns 20 (ZIVIANI, 2010, cap. 5).
+
+> [!WARNING]
+> A forma da BST depende da **ordem de chegada**. As sete matrículas em ordem
+> crescente formam uma lista disfarçada de altura 6 (exemplo A198). E sem
+> `raiz = bst_insere(raiz, ...)` o nó criado se perde.
+
+### Exemplos de uso
 
 A catraca da academia procura matrículas. Sete alunos chegaram na ordem 50,
 30, 70, 20, 40, 60 e 80. A busca do 60 passa por 50 e 70; a do 45 desce 50,
@@ -1013,7 +1114,128 @@ int main(void) {
 gcc ~/LPEDC/material/A198.c ~/LPEDC/material/0099-bst.c -o ~/LPEDC/material/A198 && ~/LPEDC/material/A198
 ```
 
-### 0100 · BST: remoção
+### Exercícios
+
+**Exercício E589** · ★☆☆
+
+O posto de saúde guarda as senhas de atendimento numa BST. Com o TAD
+bst.h, insira, nesta ordem, 45 20 70 10 30 60 90 25. Escreva
+nivel_de(r, chave), que desce pela árvore como a busca e devolve a
+profundidade da chave (a raiz tem nível 0), ou -1 se a chave não estiver
+lá. Mostre a em ordem, a altura e o nível das senhas 45, 70, 30, 25 e 65.
+
+```text
+Saída esperada:
+Em ordem: 10 20 25 30 45 60 70 90
+Altura: 3
+Senha 45: nível 0
+Senha 70: nível 1
+Senha 30: nível 2
+Senha 25: nível 3
+Senha 65: nível -1
+```
+
+```bash
+gcc ~/LPEDC/material/E589.c ~/LPEDC/material/0099-bst.c -o ~/LPEDC/material/E589 && ~/LPEDC/material/E589
+```
+
+**Exercício E591** · ★★☆
+
+Uma loja guarda os preços (em reais, inteiros) numa BST. Com o TAD bst.h,
+insira, nesta ordem, 50 30 70 20 40 60 80 10 90. O cliente quer ver só o
+que custa de R$ 35 a R$ 65. Escreva faixa(r, min, max, &visitados), que
+imprime em ordem crescente as chaves em [min, max] e conta os nós que
+visitou. Não entre numa subárvore que não pode ter resposta: se a chave do
+nó é menor que min, nada à esquerda dele serve.
+
+```text
+Saída esperada:
+Entre 35 e 65: 40 50 60
+Nós visitados: 5 de 9
+```
+
+```bash
+gcc ~/LPEDC/material/E591.c ~/LPEDC/material/0099-bst.c -o ~/LPEDC/material/E591 && ~/LPEDC/material/E591
+```
+
+**Exercício E592** · ★★☆
+
+Escreva insere_sem_recursao(No **raiz, int chave): a inserção na BST com um
+laço, recebendo o ENDEREÇO da raiz. A função não devolve nada e o main não
+faz raiz = .... Chave repetida é ignorada. Com o TAD bst.h (só o tipo No,
+bst_em_ordem, bst_altura e bst_libera), insira as matrículas
+50 30 70 20 40 60 80 30 e mostre a em ordem e a altura.
+
+```text
+Saída esperada:
+Em ordem: 20 30 40 50 60 70 80
+Altura: 2
+```
+
+```bash
+gcc ~/LPEDC/material/E592.c ~/LPEDC/material/0099-bst.c -o ~/LPEDC/material/E592 && ~/LPEDC/material/E592
+```
+
+**Exercício E594** · ★★★
+
+Na rifa da festa junina, alguns números de bilhete foram vendidos mais de
+uma vez. Os números anotados, na ordem da venda:
+
+```text
+23 8 41 15 8 30 23 4 41 12 41
+```
+
+Com o TAD bst.h, escreva um programa que avisa cada número repetido no
+momento em que ele aparece, e depois mostra os números distintos em ordem
+crescente, quantos são e a altura da árvore.
+
+```text
+Saída esperada:
+Repetido: 8
+Repetido: 23
+Repetido: 41
+Repetido: 41
+Distintos: 4 8 12 15 23 30 41
+Quantos: 7
+Altura: 3
+```
+
+```bash
+gcc ~/LPEDC/material/E594.c ~/LPEDC/material/0099-bst.c -o ~/LPEDC/material/E594 && ~/LPEDC/material/E594
+```
+
+---
+
+## 0100 · BST: remoção
+
+### Conceito
+
+- **Remoção**: a busca acha o nó; o que fazer depende de **quantos filhos**
+  ele tem (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
+- **Folha ou um filho**: o filho que existe sobe para o lugar do nó. Na folha
+  esse filho é `NULL`, então é um código só (CORMEN et al., 2024, cap. 12).
+- **Dois filhos**: o lugar vai para o **sucessor**, a menor chave da
+  subárvore direita. Desça uma vez à direita e depois à esquerda até não dar
+  mais (CORMEN et al., 2024, cap. 12).
+- **O sucessor não tem filho esquerdo**: removê-lo cai num caso fácil. Usar o
+  **antecessor** (a maior da esquerda) também funciona, mas a árvore final
+  sai diferente (FEOFILOFF, 2009).
+- **Retorno**: como na inserção, a função devolve a raiz da subárvore. O pai
+  faz `r->esq = bst_remove(r->esq, chave)` e o cliente,
+  `raiz = bst_remove(raiz, ...)`. Custo O(altura) (CELES; RANGEL, 2002).
+
+| Caso | O que fazer | No exemplo |
+| --- | --- | --- |
+| **folha** | dá `free` e o pai passa a apontar para `NULL` | remover o 20 |
+| **um filho** | o filho sobe para o lugar dele; o avô "pula" o nó | remover o 40: o 45 sobe |
+| **dois filhos** | troca pelo **sucessor** e remove o sucessor | remover o 30: o 35 assume |
+
+> [!WARNING]
+> `bst_remove(raiz->esq, 20);` sem atribuir o retorno dá `free` no 20 mas deixa
+> o pai apontando para o endereço antigo: **ponteiro solto**, que o
+> AddressSanitizer acusa como `heap-use-after-free`. Vale também para `raiz`.
+
+### Exemplos de uso
 
 Três alunos cancelaram o plano, e as matrículas 30, 40 e 20 saem. O 30 tem
 dois filhos: o sucessor fica à direita (40) e depois à esquerda (35). O 35
@@ -1205,7 +1427,131 @@ int main(void) {
 gcc ~/LPEDC/material/A200.c ~/LPEDC/material/0100-bst.c -o ~/LPEDC/material/A200 && ~/LPEDC/material/A200
 ```
 
-### 0101 · AVL: balanceamento e rotações
+### Exercícios
+
+**Exercício E595** · ★☆☆
+
+Com o TAD bst.h, monte a BST inserindo 60 25 80 10 40 70 90 35 50 e
+remova, um de cada vez, o 10, o 80 e o 25 com bst_remove. Escreva
+pre(r), a pré-ordem, e caso(r, chave), que acha o nó da chave e devolve
+"folha", "um filho", "dois filhos" ou "não existe". Chame caso ANTES de
+cada remoção e mostre a pré-ordem depois. O rótulo ocupa 24 colunas:
+use printf("%-24spré", rotulo).
+
+```text
+Saída esperada:
+Antes:                  pré 60 25 10 40 35 50 80 70 90
+Sem o 10 (folha):       pré 60 25 40 35 50 80 70 90
+Sem o 80 (dois filhos): pré 60 25 40 35 50 90 70
+Sem o 25 (um filho):    pré 60 40 35 50 90 70
+```
+
+```bash
+gcc ~/LPEDC/material/E595.c ~/LPEDC/material/0100-bst.c -o ~/LPEDC/material/E595 && ~/LPEDC/material/E595
+```
+
+**Exercício E597** · ★★☆
+
+O bst_remove do TAD usa o sucessor nos casos de dois filhos. Escreva
+remove_antecessor(r, chave), a mesma remoção, mas que usa o ANTECESSOR: a
+maior chave da subárvore esquerda. Com o TAD bst.h, insira as matrículas
+50 30 70 20 40 60 80 35 45, escreva pre(r) (pré-ordem) e remova o 30 e
+depois o 50.
+
+```text
+Saída esperada:
+Antes:     pré 50 30 20 40 35 45 70 60 80
+Sem o 30:  pré 50 20 40 35 45 70 60 80
+Sem o 50:  pré 45 20 40 35 70 60 80
+```
+
+```bash
+gcc ~/LPEDC/material/E597.c ~/LPEDC/material/0100-bst.c -o ~/LPEDC/material/E597 && ~/LPEDC/material/E597
+```
+
+**Exercício E598** · ★★☆
+
+A academia chama os alunos pela ordem de matrícula, sempre o menor número
+primeiro. Com o TAD bst.h, insira as matrículas 50 30 70 20 40 60 80 35 45
+e escreva No *remove_menor(No *r, int *menor): remove o nó mais à esquerda
+(que tem no máximo um filho), guarda a chave em *menor e devolve a nova
+raiz. Chame-a até a árvore esvaziar, numerando as chamadas.
+
+```text
+Saída esperada:
+Chamada 1: matrícula 20
+Chamada 2: matrícula 30
+Chamada 3: matrícula 35
+Chamada 4: matrícula 40
+Chamada 5: matrícula 45
+Chamada 6: matrícula 50
+Chamada 7: matrícula 60
+Chamada 8: matrícula 70
+Chamada 9: matrícula 80
+Árvore vazia: sim
+```
+
+```bash
+gcc ~/LPEDC/material/E598.c ~/LPEDC/material/0100-bst.c -o ~/LPEDC/material/E598 && ~/LPEDC/material/E598
+```
+
+**Exercício E599** · ★★★
+
+A academia vai encerrar a turma das matrículas de 35 a 65. Com o TAD
+bst.h, insira 50 30 70 20 40 60 80 35 45 e escreva remove_faixa(r, a, b),
+que remove da BST todas as chaves em [a, b] e devolve a nova raiz. Mostre
+a em ordem antes e depois e, no fim, a chave da raiz e a altura.
+
+```text
+Saída esperada:
+Antes:  20 30 35 40 45 50 60 70 80
+Depois: 20 30 70 80
+Raiz: 70, altura: 2
+```
+
+```bash
+gcc ~/LPEDC/material/E599.c ~/LPEDC/material/0100-bst.c -o ~/LPEDC/material/E599 && ~/LPEDC/material/E599
+```
+
+---
+
+## 0101 · AVL: balanceamento e rotações
+
+### Conceito
+
+- **AVL**: BST que se conserta a cada inserção. Em **todo** nó, as alturas
+  das duas subárvores diferem de no máximo 1 (ADELSON-VELSKY; LANDIS, 1962).
+- **Fator de balanceamento**: `fb = altura(esq) - altura(dir)`. Na AVL vale
+  -1, 0 ou 1; 2 é "pesado à esquerda" e -2, "pesado à direita". Há livros que
+  invertem a conta: o sinal troca, a regra não
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
+- **Altura garantida**: no máximo uns 1,44 · log₂ n. Mil chaves cabem em
+  altura 9, e não 999 (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
+- **Inserção**: pendura a folha como na BST. Na **volta** da recursão, cada
+  ancestral atualiza a altura e confere o fator (CORMEN et al., 2024).
+- **Rotação**: um filho sobe e o pai desce, sem quebrar a ordem da BST. Na
+  rotação à esquerda em `r`, o filho direito `d` sobe e a antiga subárvore
+  esquerda de `d` vira a direita de `r`. Custa O(1) (CORMEN et al., 2024,
+  cap. 13).
+- **Rotação dupla**: para o "zigue-zague". A primeira rotação, no filho,
+  endireita; a segunda, no nó, equilibra. Cada inserção faz no máximo uma
+  rotação, simples ou dupla (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
+- **Outras árvores equilibradas**: a **rubro-negra** (0177) e a **árvore B**
+  (0146) também garantem O(log n) (CORMEN et al., 2024, caps. 13 e 18).
+
+| Caso | Fator do nó | Fator do filho pesado | Conserto |
+| --- | --- | --- | --- |
+| esquerda-esquerda | +2 | +1 ou 0 (esquerdo) | rotação à direita no nó |
+| direita-direita | -2 | -1 ou 0 (direito) | rotação à esquerda no nó |
+| esquerda-direita | +2 | -1 (esquerdo) | à esquerda no filho, depois à direita no nó |
+| direita-esquerda | -2 | +1 (direito) | à direita no filho, depois à esquerda no nó |
+
+> [!WARNING]
+> No zigue-zague, a rotação simples **não conserta**: só espelha o problema.
+> Por isso o código olha o fator do **filho**. E ligue a nova raiz de volta no
+> pai (`return rot_esquerda(r)`); senão o pai aponta para o nó que desceu.
+
+### Exemplos de uso
 
 A lanchonete numera os pedidos em ordem crescente, e a BST comum viraria uma
 lista. Na AVL, inserir 10, 20 e 30 gira o 10 à esquerda e o 20 sobe. Depois,
@@ -1409,7 +1755,159 @@ int main(void) {
 gcc ~/LPEDC/material/A202.c ~/LPEDC/material/0101-avl.c -o ~/LPEDC/material/A202 && ~/LPEDC/material/A202
 ```
 
-### 0102 · Heap e fila de prioridade
+### Exercícios
+
+**Exercício E601** · ★☆☆
+
+Monte à mão esta árvore binária, sem campo de altura (struct Arv: chave,
+esq, dir):
+
+```text
+50
+├── esq: 30
+│   ├── esq: 20
+│   │   └── esq: 10
+│   └── dir: 40
+└── dir: 70
+    └── dir: 80
+        └── dir: 90
+```
+
+Escreva altura(r) e relatorio(r). A relatorio mostra, em pré-ordem, a
+altura e o fator de balanceamento (altura da esquerda menos altura da
+direita) de cada nó, marca com "<- desequilibrado" quem tem fator fora de
+-1..1 e devolve quantos nós estão assim. O main diz se a árvore é AVL.
+
+```text
+Saída esperada:
+50: altura 3, fator 0
+30: altura 2, fator 1
+20: altura 1, fator 1
+10: altura 0, fator 0
+40: altura 0, fator 0
+70: altura 2, fator -2 <- desequilibrado
+80: altura 1, fator -1
+90: altura 0, fator 0
+É AVL? não
+```
+
+```bash
+gcc ~/LPEDC/material/E601.c ~/LPEDC/material/0101-avl.c -o ~/LPEDC/material/E601 && ~/LPEDC/material/E601
+```
+
+**Exercício E603** · ★★☆
+
+Use o struct Arv do E601 (chave, esq, dir, sem campo de altura). Escreva
+altura_se_avl(r): devolve a altura da árvore se ela respeitar a regra da
+AVL em todos os nós, ou -2 se algum nó tiver fator fora de -1..1. Visite
+cada nó UMA vez só. Teste duas árvores:
+
+```text
+Árvore 1: a do E601.
+Árvore 2: a mesma, mas com a subárvore direita da raiz trocada por
+          80 (filhos 70 e 90).
+```
+
+```text
+Saída esperada:
+Árvore 1: não é AVL
+Árvore 2: é AVL, altura 3
+```
+
+```bash
+gcc ~/LPEDC/material/E603.c ~/LPEDC/material/0101-avl.c -o ~/LPEDC/material/E603 && ~/LPEDC/material/E603
+```
+
+**Exercício E604** · ★★☆
+
+Com o TAD avl.h (o struct No tem chave, altura, esq e dir), escreva
+atualiza_altura(r), gira_direita(r) e gira_esquerda(r). Cada rotação
+recalcula as duas alturas na ordem certa e devolve a nova raiz. Escreva
+também no(chave, esq, dir), que cria um nó já com a altura certa. Gire à
+esquerda duas árvores montadas à mão: t1 = 10 -> dir 20 -> dir 30 e t2 =
+raiz 40 (esq 20; dir 60 com filhos 50 e 70). Mostre a pré-ordem
+(avl_pre_ordem) e a altura da raiz.
+
+```text
+Saída esperada:
+Teste 1: pré 20 10 30 | altura da raiz 1
+Teste 2: pré 60 40 20 50 70 | altura da raiz 2
+```
+
+```bash
+gcc ~/LPEDC/material/E604.c ~/LPEDC/material/0101-avl.c -o ~/LPEDC/material/E604 && ~/LPEDC/material/E604
+```
+
+**Exercício E606** · ★★★
+
+Escreva uma AVL (sem o avl.h) que, a cada rotação, imprime qual dos
+quatro casos aconteceu e em qual nó. Insira estes pedidos, nesta ordem:
+
+```text
+30 25 15 45 60 35 20
+```
+
+Pedidos que não causam rotação não imprimem nada. No fim, mostre a em
+ordem e a pré-ordem.
+
+```text
+Saída esperada:
+Insere 15: esquerda-esquerda no 30
+Insere 60: direita-direita no 30
+Insere 35: direita-esquerda no 25
+Insere 20: esquerda-direita no 25
+Em ordem: 15 20 25 30 35 45 60
+Pré-ordem: 30 20 15 25 45 35 60
+```
+
+```bash
+gcc ~/LPEDC/material/E606.c ~/LPEDC/material/0101-avl.c -o ~/LPEDC/material/E606 && ~/LPEDC/material/E606
+```
+
+---
+
+## 0102 · Heap e fila de prioridade
+
+### Conceito
+
+- **Fila de prioridade**: cada item entra com uma prioridade e sai primeiro o
+  de **maior** prioridade (CORMEN et al., 2024, cap. 6).
+- **Heap de máximo**: árvore binária com duas regras. **Forma**: completa,
+  todos os níveis cheios menos talvez o último, que enche da esquerda para a
+  direita. **Ordem**: todo pai é maior ou igual aos filhos, e o máximo fica na
+  raiz (CORMEN et al., 2024, cap. 6).
+- **Regra mais fraca que a da BST**: esquerda e direita não se comparam. O
+  heap só responde "quem é o maior?" (TENENBAUM; LANGSAM; AUGENSTEIN, 1995,
+  cap. 6).
+- **Heap em vetor**: a forma completa deixa guardar a árvore nível por nível,
+  sem buracos e sem ponteiros (FEOFILOFF, 2009).
+- **Inserir**: o novo entra no fim e **sobe**, trocando com o pai enquanto for
+  maior. **Remover o máximo**: o último vai para a raiz e **desce**, trocando
+  com o **maior** filho. As duas custam até a altura, ⌊log₂ n⌋; no Cormen a
+  descida é a `MAX-HEAPIFY` (CORMEN et al., 2024, cap. 6).
+- **Heap de mínimo**: as comparações invertidas; o menor fica na raiz
+  (FEOFILOFF, 2009).
+- **Dois heaps diferentes**: este heap (estrutura de dados) não tem relação
+  com o heap do `malloc` (assunto 0053) (FEOFILOFF, 2009).
+
+| Quem | Índice com `v[0]` na raiz | No Cormen (`A[1..n]`) |
+| --- | --- | --- |
+| pai de `i` | `(i - 1) / 2` (divisão inteira) | `⌊i/2⌋` |
+| filho esquerdo | `2 * i + 1` | `2i` |
+| filho direito | `2 * i + 2` | `2i + 1` |
+
+| Onde guardar | Inserir | Tirar o máximo |
+| --- | --- | --- |
+| vetor solto | O(1) | O(n) |
+| vetor ordenado | O(n) | O(1) |
+| heap | O(log n) | O(log n) |
+
+> [!WARNING]
+> Na descida, troque com o **maior** dos filhos; trocar com o menor quebra o
+> heap. Confira `f + 1 < h->n` antes de ler `v[f + 1]`, e numa questão veja em
+> que índice o vetor começa.
+
+### Exemplos de uso
 
 No pronto-socorro, chegam pacientes com gravidade 40, 70, 20, 90, 50 e 30. O
 heap fica `[90 70 30 40 50 20]`. O 70 está no índice 1, e os filhos dele, nos
@@ -1628,7 +2126,116 @@ int main(void) {
 gcc ~/LPEDC/material/A204.c ~/LPEDC/material/0102-heap.c -o ~/LPEDC/material/A204 && ~/LPEDC/material/A204
 ```
 
-### 0103 · Heapsort
+### Exercícios
+
+**Exercício E607** · ★☆☆
+
+No heap, a árvore mora no vetor: os filhos de i estão em 2i + 1 e 2i + 2.
+Escreva mostra_filhos(v, n), que, para cada posição, mostra o valor e quem
+são os filhos (só os que existem, com índice menor que n). Teste com o
+heap da triagem {90, 70, 30, 40, 50, 20}.
+
+```text
+Saída esperada:
+v[0] = 90: filhos 70 e 30
+v[1] = 70: filhos 40 e 50
+v[2] = 30: filho 20
+v[3] = 40: folha
+v[4] = 50: folha
+v[5] = 20: folha
+```
+
+```bash
+gcc ~/LPEDC/material/E607.c ~/LPEDC/material/0102-heap.c -o ~/LPEDC/material/E607 && ~/LPEDC/material/E607
+```
+
+**Exercício E609** · ★★☆
+
+Na fila de prioridade, é comum tirar o máximo e logo colocar um valor
+novo. Escreva troca_topo(h, x), que faz isso numa operação só: guarda o
+máximo, põe x na raiz (v[0]), faz x descer até o lugar certo e devolve o
+máximo antigo. Suponha o heap não vazio. O TAD heap.h deixa os campos v e
+n à mostra, mas a função desce do heap.c é static: escreva a sua. Insira
+15, 35, 25, 45 e 5, mostre o heap com heap_mostra e troque o topo por 40
+e depois por 10.
+
+```text
+Saída esperada:
+depois das 5 inserções: [45 35 25 15 5]
+saiu 45, entrou 40: [40 35 25 15 5]
+saiu 40, entrou 10: [35 15 25 10 5]
+```
+
+```bash
+gcc ~/LPEDC/material/E609.c ~/LPEDC/material/0102-heap.c -o ~/LPEDC/material/E609 && ~/LPEDC/material/E609
+```
+
+**Exercício E610** · ★★☆
+
+No banco, a fila é por senha: a MENOR senha é chamada primeiro. Você só
+tem o TAD heap.h, que é um heap de MÁXIMO, e não pode mexer nele. As
+senhas foram entregues nesta ordem: 7, 3, 9, 1, 5. Escreva o main para
+chamar as senhas na ordem certa.
+
+```text
+Saída esperada:
+Chamando senha 1
+Chamando senha 3
+Chamando senha 5
+Chamando senha 7
+Chamando senha 9
+```
+
+```bash
+gcc ~/LPEDC/material/E610.c ~/LPEDC/material/0102-heap.c -o ~/LPEDC/material/E610 && ~/LPEDC/material/E610
+```
+
+**Exercício E611** · ★★★
+
+O professor quer o pódio: as 3 maiores notas da turma. Em vez de ordenar
+o vetor inteiro, use um heap de MÍNIMO com espaço para 3, que guarda as 3
+maiores vistas até agora, com a menor delas na raiz. Para cada nota: se o
+heap tem menos de 3, insira; senão, se a nota é maior que a raiz, a raiz
+sai e a nota entra. Escreva o heap por conta própria (o heap.h é de
+máximo). Notas: 72 95 60 88 91 45 98 83 77 90 66 85.
+
+```text
+Saída esperada:
+Pódio: 98 95 91
+```
+
+```bash
+gcc ~/LPEDC/material/E611.c ~/LPEDC/material/0102-heap.c -o ~/LPEDC/material/E611 && ~/LPEDC/material/E611
+```
+
+---
+
+## 0103 · Heapsort
+
+### Conceito
+
+- **Heapsort**: ordena tirando o máximo do heap n vezes. Tudo no **mesmo
+  vetor**: o heap encolhe uma casa a cada máximo, e essa casa livre no fim é o
+  lugar final dele (CORMEN et al., 2024, cap. 6).
+- **Fase 1, construir o heap**: cada **pai** desce, do último (`n / 2 - 1`)
+  até a raiz. As folhas já são heaps, e a fase custa só O(n). É a
+  `BUILD-MAX-HEAP` do Cormen (CORMEN et al., 2024, cap. 6).
+- **Fase 2, ordenar**: troca a raiz com o último do heap, encolhe o heap e faz
+  a nova raiz descer. O vetor fica com o heap no começo e a parte ordenada no
+  fim (FEOFILOFF, 2009).
+- **Custo**: n - 1 descidas de no máximo log₂ n níveis, O(n log n)
+  **sempre**. O quick sort (0095) pode cair em O(n²) e o merge sort (0094)
+  precisa de vetor extra (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
+- **In-place e não estável**: usa O(1) de memória, sem recursão, mas pode
+  trocar a ordem de chaves iguais. Na prática o quick sort costuma ser mais
+  rápido (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
+
+> [!WARNING]
+> Na fase 2, o `desce` recebe o tamanho **do heap** (`fim`), não o do vetor
+> (`n`). Com `desce(v, n, 0)`, a raiz trata os já ordenados como filhos e
+> desfaz o trabalho, sem aviso: os índices continuam válidos.
+
+### Exemplos de uso
 
 Os tempos da corrida de rua chegaram como 52, 18, 73, 40, 91, 25 e 66. Depois
 da fase 1, o heap é `[91 52 73 40 18 25 66]`. O 91 troca com o 66 e fica no
@@ -1882,7 +2489,103 @@ int main(void) {
 gcc ~/LPEDC/material/A206.c -o ~/LPEDC/material/A206 && ~/LPEDC/material/A206
 ```
 
-### 0104 · Juntando tudo
+### Exercícios
+
+**Exercício E613** · ★☆☆
+
+Escreva troca, desce(v, n, i) (heap de máximo) e mostra(v, n, fim). No
+vetor {3, 9, 2, 7, 5, 8}, faça a fase 1 do heapsort (descer cada pai, do
+último até a raiz), mostrando o vetor depois de cada pai descer. Depois
+faça só os DOIS primeiros passos da fase 2 (o máximo vai para o fim e o
+heap encolhe uma casa). Mostre o vetor entre colchetes; nos passos da
+fase 2, uma barra separa a parte já ordenada.
+
+```text
+Saída esperada:
+pai 2 desceu: [3 9 8 7 5 2]
+pai 1 desceu: [3 9 8 7 5 2]
+pai 0 desceu: [9 7 8 3 5 2]
+fase 2:       [8 7 2 3 5 | 9]
+fase 2:       [7 5 2 3 | 8 9]
+```
+
+**Exercício E615** · ★★☆
+
+Há dois jeitos de montar o heap da fase 1: inserir os elementos um a um
+(cada um SOBE, como no heap_insere) ou descer cada pai, do último até a
+raiz (o jeito do texto). Escreva as duas funções, contando as trocas, e
+rode nos tempos da corrida {52, 18, 73, 40, 91, 25, 66}, cada uma numa
+cópia do vetor. Escreva também eh_heap(v, n) e confira se os dois
+resultados são heaps de máximo, mesmo sendo diferentes.
+
+```text
+Saída esperada:
+Por inserções:    [91 73 66 18 40 25 52], 5 trocas
+Descendo os pais: [91 52 73 40 18 25 66], 2 trocas
+Os dois são heaps? sim
+```
+
+**Exercício E616** · ★★☆
+
+O heapsort percebe quando o vetor já vem arrumado? Meça. Escreva um
+heapsort em que desce(v, n, i) devolve quantas trocas fez, e
+testa(nome, v, n), que soma as trocas do desce em cada fase (a troca do
+v[0] com o v[fim] da fase 2 não entra na conta) e mostra os totais e o
+vetor final. Teste um vetor crescente, um decrescente e um com tudo igual:
+{1..7}, {7..1} e {5, 5, 5, 5, 5, 5, 5}.
+
+```text
+Saída esperada:
+crescente:   fase 1: 4 trocas, fase 2: 6 trocas -> 1 2 3 4 5 6 7
+decrescente: fase 1: 0 trocas, fase 2: 5 trocas -> 1 2 3 4 5 6 7
+iguais:      fase 1: 0 trocas, fase 2: 0 trocas -> 5 5 5 5 5 5 5
+```
+
+**Exercício E618** · ★★★
+
+A organização da corrida quer os inscritos em ordem alfabética. Escreva um
+heapsort para um vetor de strings (const char *), comparando com strcmp, e
+ordene: Paula, Bruno, Zeca, Ana, Marcos, Carla, Igor, Beatriz.
+
+```text
+Saída esperada:
+Ana
+Beatriz
+Bruno
+Carla
+Igor
+Marcos
+Paula
+Zeca
+```
+
+---
+
+## 0104 · Juntando tudo
+
+### Conceito
+
+- **Cada estrutura no seu papel**: achar, inserir e remover pela chave é
+  trabalho de **BST**, O(altura). "Os maiores" por outro critério é trabalho
+  de **heap** (CORMEN et al., 2024, caps. 6 e 12).
+- **Registro no nó**: o nó guarda uma struct inteira. Uma parte é a
+  **chave**, que ordena a árvore; o resto vai junto
+  (KERNIGHAN; RITCHIE, 1989, seção 6.5).
+- **Ponteiro para dentro da árvore**: a busca pode devolver o endereço do
+  registro. Quem chama muda os campos comuns, mas nunca a chave, que quebraria
+  a regra da BST (CELES; RANGEL, 2002).
+- **Os k maiores**: copie para um vetor, monte o heap em O(n) e tire o máximo
+  k vezes. É a fase 2 do heapsort interrompida; não precisa ordenar tudo
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
+- **Structs grandes**: o heap pode guardar **ponteiros** (`Aluno *v[]`) e
+  trocar só os ponteiros (exercício E618) (CELES; CERQUEIRA; RANGEL, 2016).
+
+> [!WARNING]
+> O ponteiro de `cad_busca` aponta para dentro de um nó e vale só até a próxima
+> remoção: `cad_remove` pode liberar esse nó ou copiar outro aluno por cima
+> dele. Busque de novo depois de mexer na árvore e nunca altere `a->matricula`.
+
+### Exemplos de uso
 
 A academia troca a planilha por um cadastro em BST, com a matrícula como
 chave. A catraca acha o 60 (Fabio) descendo 50, 70 e 60 e soma um treino. O
@@ -2120,691 +2823,7 @@ int main(void) {
 gcc ~/LPEDC/material/A208.c ~/LPEDC/material/0104-cadastro.c -o ~/LPEDC/material/A208 && ~/LPEDC/material/A208
 ```
 
----
-
-## 3. Exercícios práticos
-
-Cada exercício é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta. Compile como os exemplos: `gcc ~/LPEDC/material/E007.c -o ~/LPEDC/material/E007 && ~/LPEDC/material/E007`. Resoluções em `_respostas/14-arvores/`.
-
-### 0097 · Árvores
-
-**Exercício E577** · ★☆☆
-
-O site de uma loja organiza os produtos em categorias:
-
-```text
-loja
-├── eletronicos
-│   ├── celulares
-│   └── tvs
-│       ├── oled
-│       └── led
-├── casa
-│   └── cozinha
-└── moda
-```
-
-Escreva as funções novo, adiciona(pai, nome), altura e libera, monte a
-árvore no main e escreva ficha(n, prof), que imprime uma linha por
-categoria, recuada 2 espaços por nível, com a profundidade, o grau e a
-palavra "folha" quando o nó não tem filhos. Por fim, imprima a altura.
-
-```text
-Saída esperada:
-loja: prof 0, grau 3
-  eletronicos: prof 1, grau 2
-    celulares: prof 2, grau 0, folha
-    tvs: prof 2, grau 2
-      oled: prof 3, grau 0, folha
-      led: prof 3, grau 0, folha
-  casa: prof 1, grau 1
-    cozinha: prof 2, grau 0, folha
-  moda: prof 1, grau 0, folha
-Altura: 3
-```
-
-**Exercício E579** · ★★☆
-
-As pastas de um computador formam esta árvore:
-
-```text
-casa
-├── fotos
-│   ├── praia
-│   └── natal
-├── contas
-│   ├── agua
-│   └── luz
-│       └── 2025
-└── musica
-```
-
-Escreva profundidade_de(raiz, nome), que procura uma pasta pelo nome e
-devolve a profundidade dela (a raiz tem profundidade 0), ou -1 se a pasta
-não existir. Monte a árvore no main e teste luz, casa, 2025 e videos.
-
-```text
-Saída esperada:
-luz: 2
-casa: 0
-2025: 3
-videos: -1
-```
-
-**Exercício E580** · ★★☆
-
-Cada pasta guarda arquivos soltos (campo mb, em megabytes):
-
-```text
-casa (5)
-├── fotos (10)
-│   ├── praia (300)
-│   └── natal (120)
-└── contas (2)
-    ├── agua (5)
-    └── luz (8)
-```
-
-Escreva tamanho(n), que soma a pasta com tudo que está dentro dela, e duas
-funções que mostram o tamanho total de cada pasta:
-
-- du(n): imprime "<total> MB  <nome>", com cada pasta DEPOIS de todas as
-
-```text
-subpastas dela (a raiz por último);
-```
-
-- arvore(n, prof): imprime "nome (total MB)", a pasta ANTES das
-
-```text
-subpastas, recuada 2 espaços por nível.
-```
-
-```text
-Saída esperada:
--- du --
-300 MB  praia
-120 MB  natal
-430 MB  fotos
-5 MB  agua
-8 MB  luz
-15 MB  contas
-450 MB  casa
--- arvore --
-casa (450 MB)
-  fotos (430 MB)
-    praia (300 MB)
-    natal (120 MB)
-  contas (15 MB)
-    agua (5 MB)
-    luz (8 MB)
-```
-
-**Exercício E582** · ★★★
-
-O menu do app de delivery é uma árvore:
-
-```text
-app
-├── lanches
-│   ├── x-salada
-│   └── x-bacon
-└── bebidas
-    ├── suco
-    └── refri
-        ├── lata
-        └── 2 litros
-```
-
-Escreva um programa (struct, montagem, função e liberação) que imprime o
-caminho da raiz até cada folha, com "/" entre os nomes, como um endereço
-de pasta, e no fim conta os caminhos.
-
-```text
-Saída esperada:
-app/lanches/x-salada
-app/lanches/x-bacon
-app/bebidas/suco
-app/bebidas/refri/lata
-app/bebidas/refri/2 litros
-Total de caminhos: 5
-```
-
-### 0098 · Árvore binária e percursos
-
-**Exercício E583** · ★☆☆
-
-Com arv_cria, do TAD arvore.h, monte esta árvore, imprima os quatro
-percursos (pré-ordem, em ordem, pós-ordem e por nível), a quantidade de
-nós e a altura, e libere com arv_libera.
-
-```text
-M
-├── esq: G
-│   ├── esq: C
-│   └── dir: J
-└── dir: T
-    └── dir: X
-```
-
-```text
-Saída esperada:
-Pré-ordem: M G C J T X
-Em ordem:  C G J M T X
-Pós-ordem: C J G X T M
-Por nível: M G T C J X
-Nós: 6, altura: 2
-```
-
-```bash
-gcc ~/LPEDC/material/E583.c ~/LPEDC/material/0098-arvore.c -o ~/LPEDC/material/E583 && ~/LPEDC/material/E583
-```
-
-**Exercício E585** · ★★☆
-
-Com o TAD arvore.h, monte a árvore da expressão (8 - 3) * (4 + 2): raiz
-'*', filho esquerdo '-' (com 8 e 3) e filho direito '+' (com 4 e 2).
-Escreva espelha(r), que troca de lugar, em todo nó, a subárvore da
-esquerda com a da direita. Não crie nós novos: troque só ponteiros.
-Imprima a em ordem antes e depois.
-
-```text
-Saída esperada:
-Antes:  8 - 3 * 4 + 2
-Depois: 2 + 4 * 3 - 8
-```
-
-```bash
-gcc ~/LPEDC/material/E585.c ~/LPEDC/material/0098-arvore.c -o ~/LPEDC/material/E585 && ~/LPEDC/material/E585
-```
-
-**Exercício E586** · ★★☆
-
-Com o TAD arvore.h, monte a árvore (8 - 3) * (4 + 2): raiz '*', filho
-esquerdo '-' (com 8 e 3) e filho direito '+' (com 4 e 2). Escreva
-deitada(r, nivel), que desenha a árvore deitada: a raiz na coluna 0 e cada
-nível 4 espaços mais à direita. A subárvore da DIREITA aparece em cima e a
-da esquerda embaixo.
-
-```text
-Saída esperada:
-        2
-    +
-        4
-*
-        3
-    -
-        8
-```
-
-```bash
-gcc ~/LPEDC/material/E586.c ~/LPEDC/material/0098-arvore.c -o ~/LPEDC/material/E586 && ~/LPEDC/material/E586
-```
-
-**Exercício E588** · ★★★
-
-Uma árvore binária cabe numa string: escreva a pré-ordem e marque cada
-subárvore vazia com um ponto. A árvore da expressão vira "*-8..3..+4..2.."
-e a árvore M, G, T, C, J, X do E583 vira "MGC..J..T.X..".
-
-Com o TAD arvore.h, escreva constroi(s, &pos), que lê a string a partir de
-s[pos] e devolve a árvore montada com arv_cria. Para cada string, mostre a
-em ordem, a pós-ordem, o número de nós e a altura.
-
-```text
-Saída esperada:
-*-8..3..+4..2..
-  em ordem:  8 - 3 * 4 + 2
-  pós-ordem: 8 3 - 4 2 + *
-  nós: 7, altura: 2
-MGC..J..T.X..
-  em ordem:  C G J M T X
-  pós-ordem: C J G X T M
-  nós: 6, altura: 2
-```
-
-```bash
-gcc ~/LPEDC/material/E588.c ~/LPEDC/material/0098-arvore.c -o ~/LPEDC/material/E588 && ~/LPEDC/material/E588
-```
-
-### 0099 · BST: busca e inserção
-
-**Exercício E589** · ★☆☆
-
-O posto de saúde guarda as senhas de atendimento numa BST. Com o TAD
-bst.h, insira, nesta ordem, 45 20 70 10 30 60 90 25. Escreva
-nivel_de(r, chave), que desce pela árvore como a busca e devolve a
-profundidade da chave (a raiz tem nível 0), ou -1 se a chave não estiver
-lá. Mostre a em ordem, a altura e o nível das senhas 45, 70, 30, 25 e 65.
-
-```text
-Saída esperada:
-Em ordem: 10 20 25 30 45 60 70 90
-Altura: 3
-Senha 45: nível 0
-Senha 70: nível 1
-Senha 30: nível 2
-Senha 25: nível 3
-Senha 65: nível -1
-```
-
-```bash
-gcc ~/LPEDC/material/E589.c ~/LPEDC/material/0099-bst.c -o ~/LPEDC/material/E589 && ~/LPEDC/material/E589
-```
-
-**Exercício E591** · ★★☆
-
-Uma loja guarda os preços (em reais, inteiros) numa BST. Com o TAD bst.h,
-insira, nesta ordem, 50 30 70 20 40 60 80 10 90. O cliente quer ver só o
-que custa de R$ 35 a R$ 65. Escreva faixa(r, min, max, &visitados), que
-imprime em ordem crescente as chaves em [min, max] e conta os nós que
-visitou. Não entre numa subárvore que não pode ter resposta: se a chave do
-nó é menor que min, nada à esquerda dele serve.
-
-```text
-Saída esperada:
-Entre 35 e 65: 40 50 60
-Nós visitados: 5 de 9
-```
-
-```bash
-gcc ~/LPEDC/material/E591.c ~/LPEDC/material/0099-bst.c -o ~/LPEDC/material/E591 && ~/LPEDC/material/E591
-```
-
-**Exercício E592** · ★★☆
-
-Escreva insere_sem_recursao(No **raiz, int chave): a inserção na BST com um
-laço, recebendo o ENDEREÇO da raiz. A função não devolve nada e o main não
-faz raiz = .... Chave repetida é ignorada. Com o TAD bst.h (só o tipo No,
-bst_em_ordem, bst_altura e bst_libera), insira as matrículas
-50 30 70 20 40 60 80 30 e mostre a em ordem e a altura.
-
-```text
-Saída esperada:
-Em ordem: 20 30 40 50 60 70 80
-Altura: 2
-```
-
-```bash
-gcc ~/LPEDC/material/E592.c ~/LPEDC/material/0099-bst.c -o ~/LPEDC/material/E592 && ~/LPEDC/material/E592
-```
-
-**Exercício E594** · ★★★
-
-Na rifa da festa junina, alguns números de bilhete foram vendidos mais de
-uma vez. Os números anotados, na ordem da venda:
-
-```text
-23 8 41 15 8 30 23 4 41 12 41
-```
-
-Com o TAD bst.h, escreva um programa que avisa cada número repetido no
-momento em que ele aparece, e depois mostra os números distintos em ordem
-crescente, quantos são e a altura da árvore.
-
-```text
-Saída esperada:
-Repetido: 8
-Repetido: 23
-Repetido: 41
-Repetido: 41
-Distintos: 4 8 12 15 23 30 41
-Quantos: 7
-Altura: 3
-```
-
-```bash
-gcc ~/LPEDC/material/E594.c ~/LPEDC/material/0099-bst.c -o ~/LPEDC/material/E594 && ~/LPEDC/material/E594
-```
-
-### 0100 · BST: remoção
-
-**Exercício E595** · ★☆☆
-
-Com o TAD bst.h, monte a BST inserindo 60 25 80 10 40 70 90 35 50 e
-remova, um de cada vez, o 10, o 80 e o 25 com bst_remove. Escreva
-pre(r), a pré-ordem, e caso(r, chave), que acha o nó da chave e devolve
-"folha", "um filho", "dois filhos" ou "não existe". Chame caso ANTES de
-cada remoção e mostre a pré-ordem depois. O rótulo ocupa 24 colunas:
-use printf("%-24spré", rotulo).
-
-```text
-Saída esperada:
-Antes:                  pré 60 25 10 40 35 50 80 70 90
-Sem o 10 (folha):       pré 60 25 40 35 50 80 70 90
-Sem o 80 (dois filhos): pré 60 25 40 35 50 90 70
-Sem o 25 (um filho):    pré 60 40 35 50 90 70
-```
-
-```bash
-gcc ~/LPEDC/material/E595.c ~/LPEDC/material/0100-bst.c -o ~/LPEDC/material/E595 && ~/LPEDC/material/E595
-```
-
-**Exercício E597** · ★★☆
-
-O bst_remove do TAD usa o sucessor nos casos de dois filhos. Escreva
-remove_antecessor(r, chave), a mesma remoção, mas que usa o ANTECESSOR: a
-maior chave da subárvore esquerda. Com o TAD bst.h, insira as matrículas
-50 30 70 20 40 60 80 35 45, escreva pre(r) (pré-ordem) e remova o 30 e
-depois o 50.
-
-```text
-Saída esperada:
-Antes:     pré 50 30 20 40 35 45 70 60 80
-Sem o 30:  pré 50 20 40 35 45 70 60 80
-Sem o 50:  pré 45 20 40 35 70 60 80
-```
-
-```bash
-gcc ~/LPEDC/material/E597.c ~/LPEDC/material/0100-bst.c -o ~/LPEDC/material/E597 && ~/LPEDC/material/E597
-```
-
-**Exercício E598** · ★★☆
-
-A academia chama os alunos pela ordem de matrícula, sempre o menor número
-primeiro. Com o TAD bst.h, insira as matrículas 50 30 70 20 40 60 80 35 45
-e escreva No *remove_menor(No *r, int *menor): remove o nó mais à esquerda
-(que tem no máximo um filho), guarda a chave em *menor e devolve a nova
-raiz. Chame-a até a árvore esvaziar, numerando as chamadas.
-
-```text
-Saída esperada:
-Chamada 1: matrícula 20
-Chamada 2: matrícula 30
-Chamada 3: matrícula 35
-Chamada 4: matrícula 40
-Chamada 5: matrícula 45
-Chamada 6: matrícula 50
-Chamada 7: matrícula 60
-Chamada 8: matrícula 70
-Chamada 9: matrícula 80
-Árvore vazia: sim
-```
-
-```bash
-gcc ~/LPEDC/material/E598.c ~/LPEDC/material/0100-bst.c -o ~/LPEDC/material/E598 && ~/LPEDC/material/E598
-```
-
-**Exercício E599** · ★★★
-
-A academia vai encerrar a turma das matrículas de 35 a 65. Com o TAD
-bst.h, insira 50 30 70 20 40 60 80 35 45 e escreva remove_faixa(r, a, b),
-que remove da BST todas as chaves em [a, b] e devolve a nova raiz. Mostre
-a em ordem antes e depois e, no fim, a chave da raiz e a altura.
-
-```text
-Saída esperada:
-Antes:  20 30 35 40 45 50 60 70 80
-Depois: 20 30 70 80
-Raiz: 70, altura: 2
-```
-
-```bash
-gcc ~/LPEDC/material/E599.c ~/LPEDC/material/0100-bst.c -o ~/LPEDC/material/E599 && ~/LPEDC/material/E599
-```
-
-### 0101 · AVL: balanceamento e rotações
-
-**Exercício E601** · ★☆☆
-
-Monte à mão esta árvore binária, sem campo de altura (struct Arv: chave,
-esq, dir):
-
-```text
-50
-├── esq: 30
-│   ├── esq: 20
-│   │   └── esq: 10
-│   └── dir: 40
-└── dir: 70
-    └── dir: 80
-        └── dir: 90
-```
-
-Escreva altura(r) e relatorio(r). A relatorio mostra, em pré-ordem, a
-altura e o fator de balanceamento (altura da esquerda menos altura da
-direita) de cada nó, marca com "<- desequilibrado" quem tem fator fora de
--1..1 e devolve quantos nós estão assim. O main diz se a árvore é AVL.
-
-```text
-Saída esperada:
-50: altura 3, fator 0
-30: altura 2, fator 1
-20: altura 1, fator 1
-10: altura 0, fator 0
-40: altura 0, fator 0
-70: altura 2, fator -2 <- desequilibrado
-80: altura 1, fator -1
-90: altura 0, fator 0
-É AVL? não
-```
-
-```bash
-gcc ~/LPEDC/material/E601.c ~/LPEDC/material/0101-avl.c -o ~/LPEDC/material/E601 && ~/LPEDC/material/E601
-```
-
-**Exercício E603** · ★★☆
-
-Use o struct Arv do E601 (chave, esq, dir, sem campo de altura). Escreva
-altura_se_avl(r): devolve a altura da árvore se ela respeitar a regra da
-AVL em todos os nós, ou -2 se algum nó tiver fator fora de -1..1. Visite
-cada nó UMA vez só. Teste duas árvores:
-
-```text
-Árvore 1: a do E601.
-Árvore 2: a mesma, mas com a subárvore direita da raiz trocada por
-          80 (filhos 70 e 90).
-```
-
-```text
-Saída esperada:
-Árvore 1: não é AVL
-Árvore 2: é AVL, altura 3
-```
-
-```bash
-gcc ~/LPEDC/material/E603.c ~/LPEDC/material/0101-avl.c -o ~/LPEDC/material/E603 && ~/LPEDC/material/E603
-```
-
-**Exercício E604** · ★★☆
-
-Com o TAD avl.h (o struct No tem chave, altura, esq e dir), escreva
-atualiza_altura(r), gira_direita(r) e gira_esquerda(r). Cada rotação
-recalcula as duas alturas na ordem certa e devolve a nova raiz. Escreva
-também no(chave, esq, dir), que cria um nó já com a altura certa. Gire à
-esquerda duas árvores montadas à mão: t1 = 10 -> dir 20 -> dir 30 e t2 =
-raiz 40 (esq 20; dir 60 com filhos 50 e 70). Mostre a pré-ordem
-(avl_pre_ordem) e a altura da raiz.
-
-```text
-Saída esperada:
-Teste 1: pré 20 10 30 | altura da raiz 1
-Teste 2: pré 60 40 20 50 70 | altura da raiz 2
-```
-
-```bash
-gcc ~/LPEDC/material/E604.c ~/LPEDC/material/0101-avl.c -o ~/LPEDC/material/E604 && ~/LPEDC/material/E604
-```
-
-**Exercício E606** · ★★★
-
-Escreva uma AVL (sem o avl.h) que, a cada rotação, imprime qual dos
-quatro casos aconteceu e em qual nó. Insira estes pedidos, nesta ordem:
-
-```text
-30 25 15 45 60 35 20
-```
-
-Pedidos que não causam rotação não imprimem nada. No fim, mostre a em
-ordem e a pré-ordem.
-
-```text
-Saída esperada:
-Insere 15: esquerda-esquerda no 30
-Insere 60: direita-direita no 30
-Insere 35: direita-esquerda no 25
-Insere 20: esquerda-direita no 25
-Em ordem: 15 20 25 30 35 45 60
-Pré-ordem: 30 20 15 25 45 35 60
-```
-
-```bash
-gcc ~/LPEDC/material/E606.c ~/LPEDC/material/0101-avl.c -o ~/LPEDC/material/E606 && ~/LPEDC/material/E606
-```
-
-### 0102 · Heap e fila de prioridade
-
-**Exercício E607** · ★☆☆
-
-No heap, a árvore mora no vetor: os filhos de i estão em 2i + 1 e 2i + 2.
-Escreva mostra_filhos(v, n), que, para cada posição, mostra o valor e quem
-são os filhos (só os que existem, com índice menor que n). Teste com o
-heap da triagem {90, 70, 30, 40, 50, 20}.
-
-```text
-Saída esperada:
-v[0] = 90: filhos 70 e 30
-v[1] = 70: filhos 40 e 50
-v[2] = 30: filho 20
-v[3] = 40: folha
-v[4] = 50: folha
-v[5] = 20: folha
-```
-
-```bash
-gcc ~/LPEDC/material/E607.c ~/LPEDC/material/0102-heap.c -o ~/LPEDC/material/E607 && ~/LPEDC/material/E607
-```
-
-**Exercício E609** · ★★☆
-
-Na fila de prioridade, é comum tirar o máximo e logo colocar um valor
-novo. Escreva troca_topo(h, x), que faz isso numa operação só: guarda o
-máximo, põe x na raiz (v[0]), faz x descer até o lugar certo e devolve o
-máximo antigo. Suponha o heap não vazio. O TAD heap.h deixa os campos v e
-n à mostra, mas a função desce do heap.c é static: escreva a sua. Insira
-15, 35, 25, 45 e 5, mostre o heap com heap_mostra e troque o topo por 40
-e depois por 10.
-
-```text
-Saída esperada:
-depois das 5 inserções: [45 35 25 15 5]
-saiu 45, entrou 40: [40 35 25 15 5]
-saiu 40, entrou 10: [35 15 25 10 5]
-```
-
-```bash
-gcc ~/LPEDC/material/E609.c ~/LPEDC/material/0102-heap.c -o ~/LPEDC/material/E609 && ~/LPEDC/material/E609
-```
-
-**Exercício E610** · ★★☆
-
-No banco, a fila é por senha: a MENOR senha é chamada primeiro. Você só
-tem o TAD heap.h, que é um heap de MÁXIMO, e não pode mexer nele. As
-senhas foram entregues nesta ordem: 7, 3, 9, 1, 5. Escreva o main para
-chamar as senhas na ordem certa.
-
-```text
-Saída esperada:
-Chamando senha 1
-Chamando senha 3
-Chamando senha 5
-Chamando senha 7
-Chamando senha 9
-```
-
-```bash
-gcc ~/LPEDC/material/E610.c ~/LPEDC/material/0102-heap.c -o ~/LPEDC/material/E610 && ~/LPEDC/material/E610
-```
-
-**Exercício E611** · ★★★
-
-O professor quer o pódio: as 3 maiores notas da turma. Em vez de ordenar
-o vetor inteiro, use um heap de MÍNIMO com espaço para 3, que guarda as 3
-maiores vistas até agora, com a menor delas na raiz. Para cada nota: se o
-heap tem menos de 3, insira; senão, se a nota é maior que a raiz, a raiz
-sai e a nota entra. Escreva o heap por conta própria (o heap.h é de
-máximo). Notas: 72 95 60 88 91 45 98 83 77 90 66 85.
-
-```text
-Saída esperada:
-Pódio: 98 95 91
-```
-
-```bash
-gcc ~/LPEDC/material/E611.c ~/LPEDC/material/0102-heap.c -o ~/LPEDC/material/E611 && ~/LPEDC/material/E611
-```
-
-### 0103 · Heapsort
-
-**Exercício E613** · ★☆☆
-
-Escreva troca, desce(v, n, i) (heap de máximo) e mostra(v, n, fim). No
-vetor {3, 9, 2, 7, 5, 8}, faça a fase 1 do heapsort (descer cada pai, do
-último até a raiz), mostrando o vetor depois de cada pai descer. Depois
-faça só os DOIS primeiros passos da fase 2 (o máximo vai para o fim e o
-heap encolhe uma casa). Mostre o vetor entre colchetes; nos passos da
-fase 2, uma barra separa a parte já ordenada.
-
-```text
-Saída esperada:
-pai 2 desceu: [3 9 8 7 5 2]
-pai 1 desceu: [3 9 8 7 5 2]
-pai 0 desceu: [9 7 8 3 5 2]
-fase 2:       [8 7 2 3 5 | 9]
-fase 2:       [7 5 2 3 | 8 9]
-```
-
-**Exercício E615** · ★★☆
-
-Há dois jeitos de montar o heap da fase 1: inserir os elementos um a um
-(cada um SOBE, como no heap_insere) ou descer cada pai, do último até a
-raiz (o jeito do texto). Escreva as duas funções, contando as trocas, e
-rode nos tempos da corrida {52, 18, 73, 40, 91, 25, 66}, cada uma numa
-cópia do vetor. Escreva também eh_heap(v, n) e confira se os dois
-resultados são heaps de máximo, mesmo sendo diferentes.
-
-```text
-Saída esperada:
-Por inserções:    [91 73 66 18 40 25 52], 5 trocas
-Descendo os pais: [91 52 73 40 18 25 66], 2 trocas
-Os dois são heaps? sim
-```
-
-**Exercício E616** · ★★☆
-
-O heapsort percebe quando o vetor já vem arrumado? Meça. Escreva um
-heapsort em que desce(v, n, i) devolve quantas trocas fez, e
-testa(nome, v, n), que soma as trocas do desce em cada fase (a troca do
-v[0] com o v[fim] da fase 2 não entra na conta) e mostra os totais e o
-vetor final. Teste um vetor crescente, um decrescente e um com tudo igual:
-{1..7}, {7..1} e {5, 5, 5, 5, 5, 5, 5}.
-
-```text
-Saída esperada:
-crescente:   fase 1: 4 trocas, fase 2: 6 trocas -> 1 2 3 4 5 6 7
-decrescente: fase 1: 0 trocas, fase 2: 5 trocas -> 1 2 3 4 5 6 7
-iguais:      fase 1: 0 trocas, fase 2: 0 trocas -> 5 5 5 5 5 5 5
-```
-
-**Exercício E618** · ★★★
-
-A organização da corrida quer os inscritos em ordem alfabética. Escreva um
-heapsort para um vetor de strings (const char *), comparando com strcmp, e
-ordene: Paula, Bruno, Zeca, Ana, Marcos, Carla, Igor, Beatriz.
-
-```text
-Saída esperada:
-Ana
-Beatriz
-Bruno
-Carla
-Igor
-Marcos
-Paula
-Zeca
-```
-
-### 0104 · Juntando tudo
+### Exercícios
 
 **Exercício E619** · ★☆☆
 
@@ -2914,11 +2933,13 @@ Chamando: Caio (1)
 gcc ~/LPEDC/material/E624.c ~/LPEDC/material/0104-cadastro.c -o ~/LPEDC/material/E624 && ~/LPEDC/material/E624
 ```
 
-### Lista do módulo
+---
+
+## Lista do módulo
 
 30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P1401.c a P1430.c, em `material/`; resoluções em `_respostas/14-arvores/lista/`.
 
-#### ★☆☆ Aquecimento
+### ★☆☆ Aquecimento
 
 **Exercício P1401** · ★☆☆ · O organograma, nível por nível
 
@@ -3122,7 +3143,7 @@ desce(1): 4 23 31 19 8 9 12 2 17
 desce(0): 31 23 12 19 8 9 4 2 17
 ```
 
-#### ★★☆ Para pensar
+### ★★☆ Para pensar
 
 **Exercício P1411** · ★★☆ · Sucessor e antecessor sem ponteiro para o pai
 
@@ -3363,7 +3384,7 @@ em ordem: 11 20 29 32 41 50 65 72 91 99
 pilha chegou a 3 nós
 ```
 
-#### ★★★ Desafio
+### ★★★ Desafio
 
 **Exercício P1421** · ★★★ · Remoção na AVL
 
@@ -3667,7 +3688,7 @@ tempo, ordem: #104(35) #107(35) #102(38) #105(38) #101(42) #103(42) #106(42)
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas para fechar o módulo, misturando os assuntos. Escreva em C e compile
 com o gcc e as flags de estudo. Quando o desafio citar `avl.h` ou `heap.h`,
@@ -3920,7 +3941,7 @@ E611 em escala.
 
 </details>
 
-### Questões do POSCOMP
+## Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -3932,7 +3953,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 
 O gabarito de 2023 vem de um blog de terceiros que reproduz o gabarito definitivo; confira no PDF oficial da SBC.
 
-### Questões de provas do PPGI
+## Questões de provas do PPGI
 
 Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.
 

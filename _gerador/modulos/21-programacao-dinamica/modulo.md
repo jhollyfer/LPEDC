@@ -40,7 +40,7 @@ e **cinza** o que não chega a ser usado.
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas para fechar o módulo, misturando os assuntos. Escreva em C e rode
 com as flags de estudo.
@@ -188,7 +188,7 @@ meio recursivamente), mas dá mais trabalho.
 
 </details>
 
-### Questões no estilo da prova
+## Questões no estilo da prova
 
 Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma
 alternativa certa. Resolva no papel, com a tabela à mão, antes de abrir o

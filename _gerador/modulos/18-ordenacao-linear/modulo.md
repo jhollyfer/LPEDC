@@ -36,7 +36,7 @@ proporções.
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas para fechar o módulo, misturando os assuntos. Escreva em C e compile
 com as flags de estudo.
@@ -185,7 +185,7 @@ junto com o vetor ordenado. Num vetor decrescente de 100 mil, são
 
 </details>
 
-### Questões do POSCOMP
+## Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -196,7 +196,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 O gabarito de 2023 vem de um blog de terceiros que reproduz o gabarito definitivo; confira no PDF oficial da SBC.
 
 
-### Questões no estilo da prova
+## Questões no estilo da prova
 
 Questões objetivas no formato da prova do PPGI: conceito, afirmações
 combinadas, simulação à mão, cálculo e código com erro. Resolva no papel,

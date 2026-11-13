@@ -49,9 +49,12 @@ os avisos pegam vários erros do módulo.
 
 ---
 
-## 1. Conceitos gerais
+> [!NOTE]
+> Cada assunto é um capítulo: **Conceito** (a explicação), **Exemplos de uso** (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e **Exercícios** (cada um é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta; resoluções em `_respostas/27-c-detalhes/`).
 
-### 0170 · Precedência e ordem de avaliação
+## 0170 · Precedência e ordem de avaliação
+
+### Conceito
 
 - **Precedência**: diz qual operador pega os operandos primeiro; `*` vem antes
   de `+` (DEITEL; DEITEL, 2011, cap. 2).
@@ -93,98 +96,7 @@ os avisos pegam vários erros do módulo.
 > avisa `x & 3 == 3` e `a || b && c`, mas **não**
 > `compra + compra >= 50 ? 0 : frete`. Na dúvida, use parênteses.
 
-### 0171 · Com sinal e sem sinal
-
-- **Com sinal** (`int`, `signed char`, `long`): guarda negativos; num `int` de
-  32 bits, de -2147483648 a 2147483647 (BACKES, 2013).
-- **Sem sinal** (`unsigned`, `unsigned char`, `size_t`): vai de 0 a
-  4294967295 (`UINT_MAX`). `sizeof` e `strlen` devolvem `size_t`
-  (KERNIGHAN; RITCHIE, 1988, cap. 2).
-- **Volta do sem sinal**: a conta é módulo 2³², como um odômetro. `2u - 3u` é
-  4294967295 e `UINT_MAX + 1u` é 0. Estourar um `int` com sinal é
-  comportamento indefinido (ISO/IEC, 2018).
-- **Complemento de dois**: o -1 de um `int` são 32 bits ligados, que lidos como
-  `unsigned` valem 4294967295 (DEITEL; DEITEL, 2011, apêndice D).
-- **Promoção inteira**: `char`, `short`, `unsigned char`, `bool` e `enum`
-  viram `int` antes da conta. `unsigned char` 200 + 100 dá 300 (ISO/IEC, 2018).
-- **Conversão aritmética usual**: os operandos viram o tipo "maior". Entre
-  `int` e `unsigned` do mesmo tamanho, ganha o `unsigned`; se o com sinal for
-  maior e couber o sem sinal todo (`long` de 64 contra `unsigned` de 32), ganha
-  o com sinal (KERNIGHAN; RITCHIE, 1988, cap. 2).
-- **Bits e máscaras**: use `unsigned`; deslocar negativo é indefinido ou
-  depende da implementação (DEITEL; DEITEL, 2011, cap. 10).
-
-| Expressão | Resultado | Por quê |
-| --- | --- | --- |
-| `-1 > 0u` | verdadeiro | o `-1` vira 4294967295 |
-| `-1L < 1u` | verdadeiro (Linux 64 bits) | o `unsigned` cabe no `long` |
-| `2u - 3u` | 4294967295 | volta módulo 2³² |
-
-> [!WARNING]
-> `for (size_t i = n - 1; i >= 0; i--)` nunca termina: o `size_t` passa de 0
-> para 18446744073709551615. Escreva `for (size_t i = n; i-- > 0;)`. E
-> `strlen(a) - strlen(b) > 0` é verdadeiro sempre que os tamanhos diferem.
-
-### 0172 · Vetor de tamanho variável (VLA)
-
-- **VLA** (*variable length array*): vetor local cujo tamanho é uma expressão
-  calculada na execução, como `int treinos[alunos][semanas];`. Veio no C99
-  (ISO/IEC, 2018).
-- **Onde mora**: na **pilha**; some no fim do bloco, sem `free`. Não pode ser
-  `static` nem global (CPPREFERENCE, s.d.).
-- **`sizeof` na execução**: `sizeof treinos` vale `alunos * semanas *
-  sizeof(int)`, calculado na hora (ISO/IEC, 2018).
-- **Sem inicializador**: `int v[n] = {0};` é erro no C17; zere com um laço
-  (CPPREFERENCE, s.d.).
-- **VLA como parâmetro**: `void f(int l, int c, int m[l][c])`. As dimensões
-  vêm **antes** da matriz, porque o tipo `m[l][c]` usa as duas
-  (ISO/IEC, 2018).
-- **Opcional desde o C11**: o compilador sem VLA define `__STDC_NO_VLA__`
-  (gcc e clang têm; o da Microsoft não). Para exigir VLA:
-
-```c
-#ifdef __STDC_NO_VLA__
-#error "este programa precisa de VLA"
-#endif
-```
-
-- **VLA no heap**: `int (*m)[c] = malloc(l * sizeof *m);` cria a matriz no
-  heap, e `m[i][j]` continua valendo (veja o A344).
-
-> [!WARNING]
-> O VLA não avisa quando falha. A pilha do Linux tem uns **8 MB** (`ulimit -s`):
-> `int v[n]` com 3 milhões de `int` derruba o programa. Use VLA só para
-> tamanhos pequenos e conferidos; para o resto, `malloc`, que devolve `NULL`.
-
-### 0173 · Juntando tudo: o controle de acesso
-
-- **Permissão como bit**: cada permissão é um bit de um `unsigned`
-  (`1u << 2`); ligar é `|`, apagar é `& ~`, testar é `&`
-  (DEITEL; DEITEL, 2011, cap. 10).
-- **Papel como enum**: o `enum` indexa o vetor `base`, que dá o pacote de cada
-  papel (KERNIGHAN; RITCHIE, 1988, cap. 2).
-- **Permissão efetiva**: `(base[u->papel] | u->extra) & ~u->bloqueio`. O `|`
-  junta pacote e extras; o `~` inverte o bloqueio e o `&` apaga esses bits: o
-  **bloqueio vence** (DEITEL; DEITEL, 2011, cap. 10).
-- **Parênteses obrigatórios**: "tem tudo da máscara?" é
-  `(efetivas & mascara) == mascara`, porque o `==` vem antes do `&`, como no 0170
-  (CPPREFERENCE, s.d.).
-- **Tudo `unsigned`**: `~` num `int` daria negativo, e misturar sinais abre a
-  porta para o `-1 > 0u` do 0171 (ISO/IEC, 2018).
-- **Planilha VLA**: `bool acesso[n][QTD_PERMS]`, com `n` numa variável (0172).
-
-> [!WARNING]
-> `efetivas(u) & mascara == mascara` vira `efetivas(u) & 1` e só olha o bit de
-> ENTRAR (o gcc avisa). E `p = p | ~IMPRIMIR` no lugar de `p = p & ~IMPRIMIR`
-> **liga todas as outras** permissões, sem aviso.
-
----
-
-## 2. Exemplos de uso
-
-Cada exemplo compila sozinho. Rode com o comando abaixo dele e compare com a saída no fim do código.
-
-### 0170 · Precedência e ordem de avaliação
+### Exemplos de uso
 
 Três pacotes de café a R$ 18 mais R$ 12 de frete, com frete grátis a partir
 de R$ 50. O operador de menor precedência fica na raiz da árvore e age por
@@ -368,7 +280,131 @@ int main(void) {
 gcc ~/LPEDC/material/A340.c -o ~/LPEDC/material/A340 && ~/LPEDC/material/A340
 ```
 
-### 0171 · Com sinal e sem sinal
+### Exercícios
+
+**Exercício E1016** · ★☆☆
+
+Escreva um programa que mostre, para cada expressão abaixo, o valor dela
+como está e o valor da mesma conta com todos os parênteses no jeito que o
+C agrupa. Os dois números de cada linha têm que bater. Para as duas
+últimas, que são atribuições, mostre as variáveis depois da instrução.
+
+```text
+100 / 10 / 5      2 - 3 - 4      2 * 3 % 4
+a = b = c = 7     x = 5; x -= 1 + 2
+```
+
+```text
+Saída esperada:
+100 / 10 / 5 = 2   ((100 / 10) / 5) = 2
+2 - 3 - 4 = -5   ((2 - 3) - 4) = -5
+2 * 3 % 4 = 2   ((2 * 3) % 4) = 2
+a = b = c = 7 -> a = 7, b = 7, c = 7
+x -= 1 + 2 -> x = 2
+```
+
+**Exercício E1017** · ★★☆
+
+Escreva as duas funções abaixo, que fazem o trabalho de x++ e ++x
+recebendo o endereço da variável:
+
+```text
+int pos_incremento(int *p)  // devolve o valor antigo, depois soma 1
+int pre_incremento(int *p)  // soma 1, depois devolve o valor novo
+```
+
+No main, comece com a = 5, calcule b = a++ * 2 e c = ++a * 2 com os
+operadores e mostre a linha "com ++". Refaça as mesmas contas com as
+suas funções, em a2, b2 e c2, e mostre a linha "com funcoes".
+
+```text
+Saída esperada:
+com ++:      a = 7, b = 10, c = 14
+com funcoes: a = 7, b = 10, c = 14
+```
+
+**Exercício E1018** · ★★☆
+
+Quatro amigos alugaram uma casa de praia por R$ 2400 para 3 dias.
+Escreva um programa, com int total, pessoas e dias, que mostre:
+
+```text
+- o custo por pessoa por dia: o total dividido por (pessoas x dias);
+- quanto cada um paga: a sua parte do total mais R$ 50 de limpeza
+  quando a estadia passa de 2 dias;
+- o desconto à vista: 10% do total.
+```
+
+```text
+Saída esperada:
+por pessoa por dia: R$ 200
+cada um paga: R$ 650
+desconto à vista: R$ 240
+```
+
+**Exercício E1020** · ★★★
+
+Um colega escreveu a busca de um código no estoque assim:
+
+```text
+while (v[i] != alvo && i < n) i++;
+```
+
+Quando o código não existe, ele lê v[n], que fica fora do vetor (o
+AddressSanitizer acusa). Escreva a versão segura:
+
+```text
+int procurar(const int *v, int n, int alvo, int *lidos)
+```
+
+Ela devolve o índice do alvo, ou -1, e conta em *lidos quantas vezes leu
+uma casa do vetor. Teste com os códigos {12, 7, 30, 7, 55}, procurando 30
+e 99, e com um vetor vazio (n = 0).
+
+```text
+Saída esperada:
+procurar 30: indice 2, leituras 3
+procurar 99: indice -1, leituras 5
+vetor vazio: indice -1, leituras 0
+```
+
+---
+
+## 0171 · Com sinal e sem sinal
+
+### Conceito
+
+- **Com sinal** (`int`, `signed char`, `long`): guarda negativos; num `int` de
+  32 bits, de -2147483648 a 2147483647 (BACKES, 2013).
+- **Sem sinal** (`unsigned`, `unsigned char`, `size_t`): vai de 0 a
+  4294967295 (`UINT_MAX`). `sizeof` e `strlen` devolvem `size_t`
+  (KERNIGHAN; RITCHIE, 1988, cap. 2).
+- **Volta do sem sinal**: a conta é módulo 2³², como um odômetro. `2u - 3u` é
+  4294967295 e `UINT_MAX + 1u` é 0. Estourar um `int` com sinal é
+  comportamento indefinido (ISO/IEC, 2018).
+- **Complemento de dois**: o -1 de um `int` são 32 bits ligados, que lidos como
+  `unsigned` valem 4294967295 (DEITEL; DEITEL, 2011, apêndice D).
+- **Promoção inteira**: `char`, `short`, `unsigned char`, `bool` e `enum`
+  viram `int` antes da conta. `unsigned char` 200 + 100 dá 300 (ISO/IEC, 2018).
+- **Conversão aritmética usual**: os operandos viram o tipo "maior". Entre
+  `int` e `unsigned` do mesmo tamanho, ganha o `unsigned`; se o com sinal for
+  maior e couber o sem sinal todo (`long` de 64 contra `unsigned` de 32), ganha
+  o com sinal (KERNIGHAN; RITCHIE, 1988, cap. 2).
+- **Bits e máscaras**: use `unsigned`; deslocar negativo é indefinido ou
+  depende da implementação (DEITEL; DEITEL, 2011, cap. 10).
+
+| Expressão | Resultado | Por quê |
+| --- | --- | --- |
+| `-1 > 0u` | verdadeiro | o `-1` vira 4294967295 |
+| `-1L < 1u` | verdadeiro (Linux 64 bits) | o `unsigned` cabe no `long` |
+| `2u - 3u` | 4294967295 | volta módulo 2³² |
+
+> [!WARNING]
+> `for (size_t i = n - 1; i >= 0; i--)` nunca termina: o `size_t` passa de 0
+> para 18446744073709551615. Escreva `for (size_t i = n; i-- > 0;)`. E
+> `strlen(a) - strlen(b) > 0` é verdadeiro sempre que os tamanhos diferem.
+
+### Exemplos de uso
 
 Uma loja vendeu 3 fones de um estoque `unsigned` de 2. O desenho mostra os 4
 bytes do saldo -1 e as duas leituras; a comparação com `0u` usa a sem sinal:
@@ -509,7 +545,136 @@ int main(void) {
 gcc ~/LPEDC/material/A342.c -o ~/LPEDC/material/A342 && ~/LPEDC/material/A342
 ```
 
-### 0172 · Vetor de tamanho variável (VLA)
+### Exercícios
+
+**Exercício E1021** · ★☆☆
+
+Um unsigned char é um odômetro de 0 a 255. Escreva um programa que:
+
+```text
+- começa um unsigned char contador em 250 e, num laço de 10 voltas,
+  soma 1 e mostra o valor, tudo na mesma linha;
+- começa um unsigned char vidas em 2 e, num laço de 3 voltas, tira 1 e
+  mostra o valor.
+```
+
+```text
+Saída esperada:
+contador: 251 252 253 254 255 0 1 2 3 4
+vidas: 1 0 255
+```
+
+**Exercício E1023** · ★★☆
+
+Este laço, que deveria mostrar a fila de trás para a frente, nunca
+termina (e o gcc avisa que "i >= 0" é sempre verdadeiro):
+
+```text
+for (size_t i = n - 1; i >= 0; i--) printf(" %s", fila[i]);
+```
+
+Escreva, com índices size_t que descem sem cair do zero:
+
+```text
+- void mostrar_ao_contrario(const char *fila[], size_t n): mostra os
+  nomes do último ao primeiro, ou "(nada)" se n for 0;
+- size_t ultimo_par(const int *v, size_t n): procura de trás para a
+  frente e devolve o índice do último número par, ou n se não houver.
+```
+
+Teste com a fila {"Ana", "Bia", "Caio"}, com uma fila vazia, e com os
+vetores {3, 8, 5, 4, 7} e {1, 3}.
+
+```text
+Saída esperada:
+fila: Caio Bia Ana
+fila vazia: (nada)
+ultimo par em {3, 8, 5, 4, 7}: indice 3
+ultimo par em {1, 3}: nenhum
+```
+
+**Exercício E1024** · ★★☆
+
+Escreva duas funções que não caiam na armadilha do size_t, que nunca é
+negativo:
+
+```text
+const char *mais_longo(const char *a, const char *b)
+size_t restantes(const char *msg, size_t limite)
+```
+
+mais_longo devolve o nome mais comprido (no empate, o segundo).
+restantes diz quantos caracteres ainda cabem numa mensagem de até
+limite caracteres, e dá 0 quando a mensagem já passou. No main, chame
+mais_longo com ("Ana", "Bernardo") e ("Bernardo", "Ana"), e restantes com
+"Oi, tudo bem?" e com "Chego em 15 minutos, me espera", ambas com limite 20.
+
+```text
+Saída esperada:
+mais longo: Bernardo
+mais longo: Bernardo
+restam 7 caracteres
+restam 0 caracteres
+```
+
+**Exercício E1025** · ★★★
+
+Um leitor de código de barras manda os bytes de um boleto e, no fim, um
+byte verificador: o número que, somado a todos os bytes, dá 0 módulo 256.
+Escreva:
+
+```text
+- unsigned char verificador(const unsigned char *d, size_t n);
+- bool confere(const unsigned char *d, size_t n, unsigned char v), que
+  soma os bytes e o v e diz se o byte da soma é 0.
+```
+
+Teste com os bytes {0x12, 0xA0, 0xFF, 0x31} e depois troque o 0xA0 por
+0xA1, como se um bit tivesse se perdido na transmissão.
+
+```text
+Saída esperada:
+verificador = 0x1E
+original: confere
+alterado: nao confere
+```
+
+---
+
+## 0172 · Vetor de tamanho variável (VLA)
+
+### Conceito
+
+- **VLA** (*variable length array*): vetor local cujo tamanho é uma expressão
+  calculada na execução, como `int treinos[alunos][semanas];`. Veio no C99
+  (ISO/IEC, 2018).
+- **Onde mora**: na **pilha**; some no fim do bloco, sem `free`. Não pode ser
+  `static` nem global (CPPREFERENCE, s.d.).
+- **`sizeof` na execução**: `sizeof treinos` vale `alunos * semanas *
+  sizeof(int)`, calculado na hora (ISO/IEC, 2018).
+- **Sem inicializador**: `int v[n] = {0};` é erro no C17; zere com um laço
+  (CPPREFERENCE, s.d.).
+- **VLA como parâmetro**: `void f(int l, int c, int m[l][c])`. As dimensões
+  vêm **antes** da matriz, porque o tipo `m[l][c]` usa as duas
+  (ISO/IEC, 2018).
+- **Opcional desde o C11**: o compilador sem VLA define `__STDC_NO_VLA__`
+  (gcc e clang têm; o da Microsoft não). Para exigir VLA:
+
+```c
+#ifdef __STDC_NO_VLA__
+#error "este programa precisa de VLA"
+#endif
+```
+
+- **VLA no heap**: `int (*m)[c] = malloc(l * sizeof *m);` cria a matriz no
+  heap, e `m[i][j]` continua valendo (veja o A344).
+
+> [!WARNING]
+> O VLA não avisa quando falha. A pilha do Linux tem uns **8 MB** (`ulimit -s`):
+> `int v[n]` com 3 milhões de `int` derruba o programa. Use VLA só para
+> tamanhos pequenos e conferidos; para o resto, `malloc`, que devolve `NULL`.
+
+### Exemplos de uso
 
 Uma planilha de treinos em que alunos e semanas só chegam na digitação. Com 3
 alunos e 4 semanas, ela tem 12 `int`: 48 bytes na pilha:
@@ -673,7 +838,107 @@ int main(void) {
 gcc ~/LPEDC/material/A344.c -o ~/LPEDC/material/A344 && ~/LPEDC/material/A344
 ```
 
-### 0173 · Juntando tudo: o controle de acesso
+### Exercícios
+
+**Exercício E1027** · ★☆☆
+
+Escreva void multiplos(int base, int n), que cria um VLA int t[n], guarda
+nele os n primeiros múltiplos de base, mostra os valores e, no fim da
+linha, o sizeof t. Chame com (7, 3) e com (9, 5).
+
+```text
+Saída esperada:
+7: 7 14 21 (12 bytes)
+9: 9 18 27 36 45 (20 bytes)
+```
+
+**Exercício E1029** · ★★☆
+
+Escreva duas funções com parâmetros VLA:
+
+```text
+void mostrar(int l, int c, int m[l][c])
+void transpor(int l, int c, int a[l][c], int t[c][l])
+```
+
+A transposta troca linhas por colunas: t[j][i] = a[i][j]. No main, com
+int l = 2, c = 3, crie os VLAs a[l][c] e t[c][l], preencha a com 1 a 6
+(linha por linha), transponha e mostre as duas.
+
+```text
+Saída esperada:
+original (2 x 3):
+  1  2  3
+  4  5  6
+transposta (3 x 2):
+  1  4
+  2  5
+  3  6
+```
+
+**Exercício E1030** · ★★☆
+
+Escreva um programa que calcule o preço médio de n = 3000000 produtos.
+Guarde os preços num vetor double *precos obtido com malloc (24 MB não
+cabem na pilha, por isso nada de VLA), confira se deu NULL e libere com
+free no fim. O preço do produto i é i % 100 + 0.5.
+
+```text
+Saída esperada:
+n = 3000000, media = R$ 50.00
+```
+
+**Exercício E1031** · ★★★
+
+Duas lojas fazem a compra do mês de 3 produtos (arroz, feijão, café), e
+dois fornecedores, A e B, cobram preços diferentes. Multiplique a matriz
+de quantidades (lojas x produtos) pela de preços (produtos x
+fornecedores) para obter o custo de cada loja em cada fornecedor:
+
+```text
+void multiplicar(int l, int m, int c, int a[l][m], int b[m][c], int r[l][c])
+```
+
+Depois mostre o custo e o fornecedor mais barato para cada loja.
+
+```text
+quantidades:  loja 1: 10, 0, 5     loja 2: 2, 8, 4
+preços:       arroz: A 3, B 4      feijão: A 6, B 5    café: A 2, B 1
+```
+
+```text
+Saída esperada:
+loja 1: A = R$ 40, B = R$ 45 -> melhor A
+loja 2: A = R$ 62, B = R$ 52 -> melhor B
+```
+
+---
+
+## 0173 · Juntando tudo: o controle de acesso
+
+### Conceito
+
+- **Permissão como bit**: cada permissão é um bit de um `unsigned`
+  (`1u << 2`); ligar é `|`, apagar é `& ~`, testar é `&`
+  (DEITEL; DEITEL, 2011, cap. 10).
+- **Papel como enum**: o `enum` indexa o vetor `base`, que dá o pacote de cada
+  papel (KERNIGHAN; RITCHIE, 1988, cap. 2).
+- **Permissão efetiva**: `(base[u->papel] | u->extra) & ~u->bloqueio`. O `|`
+  junta pacote e extras; o `~` inverte o bloqueio e o `&` apaga esses bits: o
+  **bloqueio vence** (DEITEL; DEITEL, 2011, cap. 10).
+- **Parênteses obrigatórios**: "tem tudo da máscara?" é
+  `(efetivas & mascara) == mascara`, porque o `==` vem antes do `&`, como no 0170
+  (CPPREFERENCE, s.d.).
+- **Tudo `unsigned`**: `~` num `int` daria negativo, e misturar sinais abre a
+  porta para o `-1 > 0u` do 0171 (ISO/IEC, 2018).
+- **Planilha VLA**: `bool acesso[n][QTD_PERMS]`, com `n` numa variável (0172).
+
+> [!WARNING]
+> `efetivas(u) & mascara == mascara` vira `efetivas(u) & 1` e só olha o bit de
+> ENTRAR (o gcc avisa). E `p = p | ~IMPRIMIR` no lugar de `p = p & ~IMPRIMIR`
+> **liga todas as outras** permissões, sem aviso.
+
+### Exemplos de uso
 
 Um coworking dá permissões por papel (visitante, membro, admin), com
 exceções. A Carla é membro (`00111`) com a impressora bloqueada; o desenho faz
@@ -924,269 +1189,7 @@ int main(void) {
 gcc ~/LPEDC/material/A346.c -o ~/LPEDC/material/A346 && ~/LPEDC/material/A346
 ```
 
----
-
-## 3. Exercícios práticos
-
-Cada exercício é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta. Compile como os exemplos: `gcc ~/LPEDC/material/E007.c -o ~/LPEDC/material/E007 && ~/LPEDC/material/E007`. Resoluções em `_respostas/27-c-detalhes/`.
-
-### 0170 · Precedência e ordem de avaliação
-
-**Exercício E1016** · ★☆☆
-
-Escreva um programa que mostre, para cada expressão abaixo, o valor dela
-como está e o valor da mesma conta com todos os parênteses no jeito que o
-C agrupa. Os dois números de cada linha têm que bater. Para as duas
-últimas, que são atribuições, mostre as variáveis depois da instrução.
-
-```text
-100 / 10 / 5      2 - 3 - 4      2 * 3 % 4
-a = b = c = 7     x = 5; x -= 1 + 2
-```
-
-```text
-Saída esperada:
-100 / 10 / 5 = 2   ((100 / 10) / 5) = 2
-2 - 3 - 4 = -5   ((2 - 3) - 4) = -5
-2 * 3 % 4 = 2   ((2 * 3) % 4) = 2
-a = b = c = 7 -> a = 7, b = 7, c = 7
-x -= 1 + 2 -> x = 2
-```
-
-**Exercício E1017** · ★★☆
-
-Escreva as duas funções abaixo, que fazem o trabalho de x++ e ++x
-recebendo o endereço da variável:
-
-```text
-int pos_incremento(int *p)  // devolve o valor antigo, depois soma 1
-int pre_incremento(int *p)  // soma 1, depois devolve o valor novo
-```
-
-No main, comece com a = 5, calcule b = a++ * 2 e c = ++a * 2 com os
-operadores e mostre a linha "com ++". Refaça as mesmas contas com as
-suas funções, em a2, b2 e c2, e mostre a linha "com funcoes".
-
-```text
-Saída esperada:
-com ++:      a = 7, b = 10, c = 14
-com funcoes: a = 7, b = 10, c = 14
-```
-
-**Exercício E1018** · ★★☆
-
-Quatro amigos alugaram uma casa de praia por R$ 2400 para 3 dias.
-Escreva um programa, com int total, pessoas e dias, que mostre:
-
-```text
-- o custo por pessoa por dia: o total dividido por (pessoas x dias);
-- quanto cada um paga: a sua parte do total mais R$ 50 de limpeza
-  quando a estadia passa de 2 dias;
-- o desconto à vista: 10% do total.
-```
-
-```text
-Saída esperada:
-por pessoa por dia: R$ 200
-cada um paga: R$ 650
-desconto à vista: R$ 240
-```
-
-**Exercício E1020** · ★★★
-
-Um colega escreveu a busca de um código no estoque assim:
-
-```text
-while (v[i] != alvo && i < n) i++;
-```
-
-Quando o código não existe, ele lê v[n], que fica fora do vetor (o
-AddressSanitizer acusa). Escreva a versão segura:
-
-```text
-int procurar(const int *v, int n, int alvo, int *lidos)
-```
-
-Ela devolve o índice do alvo, ou -1, e conta em *lidos quantas vezes leu
-uma casa do vetor. Teste com os códigos {12, 7, 30, 7, 55}, procurando 30
-e 99, e com um vetor vazio (n = 0).
-
-```text
-Saída esperada:
-procurar 30: indice 2, leituras 3
-procurar 99: indice -1, leituras 5
-vetor vazio: indice -1, leituras 0
-```
-
-### 0171 · Com sinal e sem sinal
-
-**Exercício E1021** · ★☆☆
-
-Um unsigned char é um odômetro de 0 a 255. Escreva um programa que:
-
-```text
-- começa um unsigned char contador em 250 e, num laço de 10 voltas,
-  soma 1 e mostra o valor, tudo na mesma linha;
-- começa um unsigned char vidas em 2 e, num laço de 3 voltas, tira 1 e
-  mostra o valor.
-```
-
-```text
-Saída esperada:
-contador: 251 252 253 254 255 0 1 2 3 4
-vidas: 1 0 255
-```
-
-**Exercício E1023** · ★★☆
-
-Este laço, que deveria mostrar a fila de trás para a frente, nunca
-termina (e o gcc avisa que "i >= 0" é sempre verdadeiro):
-
-```text
-for (size_t i = n - 1; i >= 0; i--) printf(" %s", fila[i]);
-```
-
-Escreva, com índices size_t que descem sem cair do zero:
-
-```text
-- void mostrar_ao_contrario(const char *fila[], size_t n): mostra os
-  nomes do último ao primeiro, ou "(nada)" se n for 0;
-- size_t ultimo_par(const int *v, size_t n): procura de trás para a
-  frente e devolve o índice do último número par, ou n se não houver.
-```
-
-Teste com a fila {"Ana", "Bia", "Caio"}, com uma fila vazia, e com os
-vetores {3, 8, 5, 4, 7} e {1, 3}.
-
-```text
-Saída esperada:
-fila: Caio Bia Ana
-fila vazia: (nada)
-ultimo par em {3, 8, 5, 4, 7}: indice 3
-ultimo par em {1, 3}: nenhum
-```
-
-**Exercício E1024** · ★★☆
-
-Escreva duas funções que não caiam na armadilha do size_t, que nunca é
-negativo:
-
-```text
-const char *mais_longo(const char *a, const char *b)
-size_t restantes(const char *msg, size_t limite)
-```
-
-mais_longo devolve o nome mais comprido (no empate, o segundo).
-restantes diz quantos caracteres ainda cabem numa mensagem de até
-limite caracteres, e dá 0 quando a mensagem já passou. No main, chame
-mais_longo com ("Ana", "Bernardo") e ("Bernardo", "Ana"), e restantes com
-"Oi, tudo bem?" e com "Chego em 15 minutos, me espera", ambas com limite 20.
-
-```text
-Saída esperada:
-mais longo: Bernardo
-mais longo: Bernardo
-restam 7 caracteres
-restam 0 caracteres
-```
-
-**Exercício E1025** · ★★★
-
-Um leitor de código de barras manda os bytes de um boleto e, no fim, um
-byte verificador: o número que, somado a todos os bytes, dá 0 módulo 256.
-Escreva:
-
-```text
-- unsigned char verificador(const unsigned char *d, size_t n);
-- bool confere(const unsigned char *d, size_t n, unsigned char v), que
-  soma os bytes e o v e diz se o byte da soma é 0.
-```
-
-Teste com os bytes {0x12, 0xA0, 0xFF, 0x31} e depois troque o 0xA0 por
-0xA1, como se um bit tivesse se perdido na transmissão.
-
-```text
-Saída esperada:
-verificador = 0x1E
-original: confere
-alterado: nao confere
-```
-
-### 0172 · Vetor de tamanho variável (VLA)
-
-**Exercício E1027** · ★☆☆
-
-Escreva void multiplos(int base, int n), que cria um VLA int t[n], guarda
-nele os n primeiros múltiplos de base, mostra os valores e, no fim da
-linha, o sizeof t. Chame com (7, 3) e com (9, 5).
-
-```text
-Saída esperada:
-7: 7 14 21 (12 bytes)
-9: 9 18 27 36 45 (20 bytes)
-```
-
-**Exercício E1029** · ★★☆
-
-Escreva duas funções com parâmetros VLA:
-
-```text
-void mostrar(int l, int c, int m[l][c])
-void transpor(int l, int c, int a[l][c], int t[c][l])
-```
-
-A transposta troca linhas por colunas: t[j][i] = a[i][j]. No main, com
-int l = 2, c = 3, crie os VLAs a[l][c] e t[c][l], preencha a com 1 a 6
-(linha por linha), transponha e mostre as duas.
-
-```text
-Saída esperada:
-original (2 x 3):
-  1  2  3
-  4  5  6
-transposta (3 x 2):
-  1  4
-  2  5
-  3  6
-```
-
-**Exercício E1030** · ★★☆
-
-Escreva um programa que calcule o preço médio de n = 3000000 produtos.
-Guarde os preços num vetor double *precos obtido com malloc (24 MB não
-cabem na pilha, por isso nada de VLA), confira se deu NULL e libere com
-free no fim. O preço do produto i é i % 100 + 0.5.
-
-```text
-Saída esperada:
-n = 3000000, media = R$ 50.00
-```
-
-**Exercício E1031** · ★★★
-
-Duas lojas fazem a compra do mês de 3 produtos (arroz, feijão, café), e
-dois fornecedores, A e B, cobram preços diferentes. Multiplique a matriz
-de quantidades (lojas x produtos) pela de preços (produtos x
-fornecedores) para obter o custo de cada loja em cada fornecedor:
-
-```text
-void multiplicar(int l, int m, int c, int a[l][m], int b[m][c], int r[l][c])
-```
-
-Depois mostre o custo e o fornecedor mais barato para cada loja.
-
-```text
-quantidades:  loja 1: 10, 0, 5     loja 2: 2, 8, 4
-preços:       arroz: A 3, B 4      feijão: A 6, B 5    café: A 2, B 1
-```
-
-```text
-Saída esperada:
-loja 1: A = R$ 40, B = R$ 45 -> melhor A
-loja 2: A = R$ 62, B = R$ 52 -> melhor B
-```
-
-### 0173 · Juntando tudo: o controle de acesso
+### Exercícios
 
 **Exercício E1033** · ★☆☆
 
@@ -1275,11 +1278,13 @@ pedido ---G-: admin (falta ao visitante: ---G-)
 pedido -----: nenhum (falta ao visitante: -----)
 ```
 
-### Lista do módulo
+---
+
+## Lista do módulo
 
 30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P2701.c a P2730.c, em `material/`; resoluções em `_respostas/27-c-detalhes/lista/`.
 
-#### ★☆☆ Aquecimento
+### ★☆☆ Aquecimento
 
 **Exercício P2701** · ★☆☆ · A calculadora do caixa
 
@@ -1470,7 +1475,7 @@ acima da média: 3 dias
 mais quente: 35 no dia 4
 ```
 
-#### ★★☆ Para pensar
+### ★★☆ Para pensar
 
 **Exercício P2711** · ★★☆ · O estoque que não fica negativo
 
@@ -1685,7 +1690,7 @@ depois de desligar 6: 4
 TESTA(flags, 7 - 1) = 0
 ```
 
-#### ★★★ Desafio
+### ★★★ Desafio
 
 **Exercício P2721** · ★★★ · Calculadora de notação polonesa reversa
 
@@ -1929,7 +1934,7 @@ contestadas: 1 (R$ 89.90)
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas para resolver num arquivo seu, misturando os assuntos do módulo. Do
 médio ao difícil.
@@ -2069,7 +2074,7 @@ com `r = -2`.
 
 </details>
 
-### Questões do POSCOMP
+## Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -2078,7 +2083,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 | 2019 | 27 | Saída de código em linguagem C | A | [caderno](https://www.sbc.org.br/wp-content/uploads/2025/02/0518.002_Exame_POSCOMP_2019.pdf) |
 | 2024 | 33 | Saída de código C com deslocamento de bits | C | [caderno](https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2024.pdf) |
 
-### Questões no estilo da prova
+## Questões no estilo da prova
 
 Questões de múltipla escolha, como as da prova do PPGI. Resolva no papel,
 marque a letra e só então abra o gabarito. Os trechos de código estão dentro

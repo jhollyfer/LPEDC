@@ -72,7 +72,7 @@ gcc ~/LPEDC/material/A011.c -o ~/LPEDC/material/A011 && printf '3 4.99\n2\n' | ~
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas com variáveis, `scanf`, aritmética, conversões, `math.h` e
 `printf`. Nenhum precisa de `if` nem de laço. Escreva cada um num arquivo seu
@@ -245,7 +245,7 @@ sinal estoura, e isso é **comportamento indefinido**: costuma virar
 
 </details>
 
-### Questões do POSCOMP
+## Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -254,7 +254,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 | 2024 | 45 | Tipos de dados básicos de linguagem | A | [caderno](https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2024.pdf) |
 
 
-### Questões no estilo da prova
+## Questões no estilo da prova
 
 Questões objetivas no formato da Prova do PPGI, com uma alternativa certa.
 Resolva no papel antes do gabarito e, na dúvida, rode o trecho com as flags

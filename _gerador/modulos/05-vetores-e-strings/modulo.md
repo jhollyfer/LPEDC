@@ -31,7 +31,7 @@ string. Diante de `stack-buffer-overflow`, leia a linha indicada: quase sempre
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas extras que misturam os assuntos do módulo. Resolva num arquivo seu e
 compile com as flags de estudo.
@@ -199,7 +199,7 @@ matrizes revezam.
 
 </details>
 
-### Questões no estilo da prova
+## Questões no estilo da prova
 
 Questões no formato da Prova de Conhecimentos do PPGI, com uma alternativa
 certa. Nas de vetor, desenhe as gavetas com os índices; nas de string, inclua
@@ -422,7 +422,7 @@ tirar o `'\n'` com `lin[strcspn(lin, "\n")] = '\0';`. Veja 0042.
 
 </details>
 
-### Questões de provas do PPGI
+## Questões de provas do PPGI
 
 Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.
 

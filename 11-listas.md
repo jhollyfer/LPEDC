@@ -63,9 +63,12 @@ AddressSanitizer pega, ao rodar: leia o relatório inteiro, com o tipo do erro
 
 ---
 
-## 1. Conceitos gerais
+> [!NOTE]
+> Cada assunto é um capítulo: **Conceito** (a explicação), **Exemplos de uso** (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e **Exercícios** (cada um é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta; resoluções em `_respostas/11-listas/`).
 
-### 0075 · Vetor dinâmico
+## 0075 · Vetor dinâmico
+
+### Conceito
 
 - **Lista sequencial** (ou **lista em vetor**): guarda os itens lado a lado,
   na ordem da lista, num vetor (ZIVIANI, 2010, cap. 3).
@@ -94,189 +97,7 @@ AddressSanitizer pega, ao rodar: leia o relatório inteiro, com o tipo do erro
 > antigo se perde. E um `int *p = &itens[0]` guardado antes de inserir pode
 > apontar para o bloco que o `realloc` liberou. Guarde o índice.
 
-### 0076 · Lista encadeada
-
-- **Lista encadeada** (ou **lista ligada**): cada item fica num pedaço
-  separado de memória, o **nó**, com o valor e o endereço do próximo. O
-  último aponta para `NULL` (FEOFILOFF, 2009, cap. 4).
-- **Início**: a lista inteira é o endereço do primeiro nó (o `L.head` do
-  Cormen). Lista vazia é `inicio == NULL` (CORMEN et al., 2024, cap. 10).
-- **Struct autorreferenciada**: uma struct não pode conter a si mesma, mas
-  pode conter um **ponteiro** para a própria struct (KERNIGHAN; RITCHIE, 1989).
-
-```c
-typedef struct no {
-    int valor;
-    struct no *prox; // o próximo nó, ou NULL no último
-} No;
-```
-
-- **Sem acesso direto**: cada nó vem de um `malloc` e cai onde o heap tiver
-  espaço; a ordem está nas setas. Não existe `lista[2]`: para chegar ao
-  terceiro nó, siga duas setas (CELES; RANGEL, 2002).
-- **Inserir no início**: cria o nó, aponta o `prox` dele para o antigo início
-  e devolve o novo nó. É O(1) (CELES; RANGEL, 2002).
-- **Percorrer**: `for (p = inicio; p != NULL; p = p->prox)`, o "for de
-  lista" (FEOFILOFF, 2009, cap. 4).
-- **Liberar**: um `free` por nó, guardando o próximo **antes** do `free`
-  (CELES; RANGEL, 2002).
-- **Inserir no fim** com só o início guardado é O(n); com um ponteiro para o
-  último, vira O(1) (0079 e 0086).
-
-> [!WARNING]
-> `lista_insere_inicio(inicio, 20);` sem o `inicio =` na frente compila e
-> está errado: o novo início se perde e o nó vaza. No `libera`, o erro comum é ler
-> `p->prox` depois de `free(p)`.
-
-### 0077 · Busca e remoção
-
-- **Buscar**: percorrer até achar, O(n). A função devolve o **endereço do
-  nó** ou `NULL`; com ele você lê ou muda o valor (FEOFILOFF, 2009, cap. 4).
-- **Remover** o nó `p`: o **anterior** passa a apontar para o seguinte. A
-  lista simples não volta, então se percorre com **dois ponteiros**: `ant`
-  anda um passo atrás de `p` (CELES; RANGEL, 2002).
-- **Dois casos**: `ant == NULL` quer dizer que o nó é o **primeiro**, e o
-  início muda; senão, `ant->prox = p->prox` e o anterior pula o `p`. O
-  `free(p)` vem depois de religar (CELES; RANGEL, 2002).
-- **`No **inicio`**: como remover o primeiro muda o início, a função recebe o
-  endereço dele (0049). É o outro estilo comum; a inserção do 0076 devolvia o
-  início novo (FEOFILOFF, 2009, cap. 4).
-- **Nó-cabeça**: um nó de mentira no começo faz todo nó de verdade ter
-  anterior, e o caso especial some. O Cormen usa a **sentinela** `L.nil`
-  (CORMEN et al., 2024, cap. 10).
-- **Custo**: religar é O(1); achar o nó é O(n) (FEOFILOFF, 2009, cap. 4).
-
-> [!WARNING]
-> A ordem do `&&` importa. Em `while (p->valor != valor && p != NULL)`, o
-> `p->valor` é lido antes de testar `p` e quebra quando o valor não está na
-> lista. Com `p != NULL` primeiro, o curto-circuito (0013) evita a leitura.
-
-### 0078 · Lista ordenada
-
-- **Lista ordenada**: mantém os nós em ordem a cada inserção, em vez de
-  reordenar tudo depois (CELES; RANGEL, 2002).
-- **Inserção ordenada**: anda com o par `ant`/`p` (0077) enquanto os valores
-  forem menores que o novo. Ao parar, `p` é o primeiro maior ou igual (ou
-  `NULL`) e `ant` vem antes dele (FEOFILOFF, 2009, cap. 4).
-- **Religar duas setas**, nesta ordem: `novo->prox = p` e depois
-  `ant->prox = novo`. Se `ant` for `NULL`, o novo é o menor e vira o início;
-  o fim não é caso especial (CELES; RANGEL, 2002).
-- **Busca com parada**: dá para desistir ao passar do valor procurado
-  (FEOFILOFF, 2009, cap. 4).
-- **Critério**: está na comparação do `while`. Com
-  `strcmp(p->nome, nome) < 0`, a mesma inserção ordena por nome.
-- **Custo**: cada inserção é O(n) no pior caso, então montar n itens custa
-  O(n²). A busca continua O(n): sem acesso direto não há busca binária
-  (ZIVIANI, 2010, cap. 3).
-
-| Estrutura ordenada | Busca | Inserção |
-| --- | --- | --- |
-| lista encadeada | O(n) | O(n) para achar, O(1) para religar |
-| vetor | O(log n) | O(n): desloca os seguintes |
-
-> [!WARNING]
-> O caso mais esquecido é o **novo menor que todos**: `ant` fica `NULL` e
-> `ant->prox = novo` sem o `if` derruba o programa. Teste início, meio e fim.
-> Com `<`, um repetido entra **antes** dos iguais; com `<=`, **depois**.
-
-### 0079 · Lista dupla
-
-- **Lista duplamente encadeada** (no Cormen, **duplamente ligada**, com
-  `next` e `prev`): cada nó guarda `prox` e `ant` (CORMEN et al., 2024,
-  cap. 10).
-- **Por que existe**: na lista simples não se anda de trás para frente e,
-  para remover um nó conhecido, ainda é preciso achar o anterior
-  (CELES; RANGEL, 2002).
-- **O que ganha**: anda nos **dois sentidos**, remove um nó conhecendo **só
-  ele** em O(1) e, com ponteiro para o **último**, insere no fim em O(1)
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 4).
-- **Regra das setas**: para todo nó `p` que não é o último,
-  `p->prox->ant == p`. As setas mudam **aos pares** (FEOFILOFF, 2009, cap. 4).
-- **Remover `p`**: desvia as duas setas que chegam nele, cada uma com seu
-  caso de borda: primeiro nó (muda o `inicio`) e último nó (muda o `fim`)
-  (CELES; RANGEL, 2002).
-- **Custo de memória**: em 64 bits, `sizeof(No)` passa de 16 para 24 bytes,
-  um ponteiro a mais por nó.
-
-A lista desta pasta é uma struct com as duas pontas e o tamanho:
-
-```c
-typedef struct no {
-    int valor;
-    struct no *ant;  // o anterior, ou NULL no primeiro
-    struct no *prox; // o próximo, ou NULL no último
-} No;
-
-typedef struct {
-    No *inicio;
-    No *fim;
-    int tamanho;
-} Lista;
-```
-
-> [!WARNING]
-> Com uma seta faltando, a lista dupla **parece certa**: se a inserção
-> esquecer o `ant`, só a volta sai errada. Imprima **nos dois sentidos**. Na
-> remoção, `p->ant->prox` no primeiro nó acessa `NULL`.
-
-### 0080 · Lista circular
-
-- **Lista circular**: lista encadeada em que o último nó aponta para o
-  **primeiro**, e não para `NULL`. Os nós formam um anel (FEOFILOFF, 2009,
-  cap. 4).
-- **Para que serve**: rodízios, como a vez dos jogadores e a divisão da CPU
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 4).
-- **Ponteiro para o último**: o primeiro é `ultimo->prox`. Inserir no início
-  **e** no fim custa O(1); inserir no fim é inserir no início e declarar o
-  novo como último (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 4).
-- **Percorrer**: sem `NULL`, o laço para ao **voltar ao ponto de partida**.
-  O certo é o **do-while** (0021), que roda o corpo antes de testar; a lista
-  vazia (`ultimo == NULL`) é tratada antes (CELES; RANGEL, 2002).
-- **Girar e juntar**: girar a roda é `ultimo = ultimo->prox`; juntar duas
-  listas circulares é trocar dois ponteiros, O(1).
-- **Circular dupla**: o círculo fecha nos dois sentidos, como no Cormen, com
-  uma sentinela (CORMEN et al., 2024, cap. 10).
-- **Problema de Josephus**: pessoas em roda eliminam uma a cada k passos;
-  tira-se nós do anel até sobrar um que aponta para si mesmo (FEOFILOFF,
-  2009, cap. 4).
-
-> [!WARNING]
-> Na lista circular, `p` **nunca** vira `NULL`: um laço `p != NULL` não
-> termina. No `libera`, **corte o círculo** antes (`ultimo->prox = NULL`):
-> o seguinte do último é o primeiro, já liberado.
-
-### 0081 · Juntando tudo
-
-- **TAD playlist** (`playlist.h` e `playlist.c`): quem usa vê a struct
-  `Musica` (título, artista, segundos) e as operações; os nós ficam
-  escondidos no `.c` (CELES; CERQUEIRA; RANGEL, 2016).
-- **Nó `Faixa`**: guarda uma `Musica`, `ant` e `prox`. A `struct playlist`
-  guarda `inicio`, `fim`, `atual` (a que toca), `tamanho` e o `bool repetir`
-  (CELES; RANGEL, 2002).
-- **Adicionar**: inserção no fim da lista dupla (0079), O(1) com `fim`.
-- **Remover pelo título**: busca com `strcmp` (0077) e remoção dupla. Se era
-  a atual, o `atual` vai para a seguinte, ou para a anterior se era a última.
-- **Próxima e anterior**: `prox` e `ant`. Com repetir ligado, dão a volta
-  nas pontas como numa lista circular (0080).
-- **Salvar e carregar**: arquivo texto (módulo 09), uma música por linha,
-  `titulo;artista;segundos`, com `fgets` e `sscanf`.
-- **Para cada**: recebe um ponteiro para função e um `void *` (0050 e 0051),
-  sem expor os nós (KERNIGHAN; RITCHIE, 1989).
-- **Não é circular**: o último `prox` continua `NULL`. A volta é decisão da
-  função, então imprimir, liberar e salvar seguem com o `for` de sempre.
-
-> [!WARNING]
-> `playlist_proxima(p)->titulo` acessa `NULL` quando a função devolve
-> `NULL`, o que ocorre na última música com repetir desligado: guarde o
-> ponteiro e teste antes de usar.
-
----
-
-## 2. Exemplos de uso
-
-Cada exemplo compila sozinho. Rode com o comando abaixo dele e compare com a saída no fim do código.
-
-### 0075 · Vetor dinâmico
+### Exemplos de uso
 
 As despesas de uma viagem, numa lista que começa com espaço para 2. A 3ª
 dobra para 4; a 5ª (R$ 27) dobra para 8, copia os quatro valores e deixa
@@ -455,7 +276,157 @@ int main(void) {
 gcc ~/LPEDC/material/A150.c ~/LPEDC/material/0075-lista.c -o ~/LPEDC/material/A150 && ~/LPEDC/material/A150
 ```
 
-### 0076 · Lista encadeada
+### Exercícios
+
+**Exercício E445** · ★☆☆
+
+O medidor de glicose da sua mãe registrou estas leituras na semana (mg/dL):
+98, 110, 87, 132, 105, 91. Usando só as funções de lista.h, crie uma lista
+com capacidade inicial 4, insira as leituras no fim, mostre a lista, o
+tamanho, a capacidade, a média (uma casa decimal) e a maior leitura.
+
+```text
+Saída esperada:
+[98, 110, 87, 132, 105, 91]
+tamanho 6, capacidade 8
+média: 103.8
+maior: 132
+```
+
+```bash
+gcc ~/LPEDC/material/E445.c ~/LPEDC/material/0075-lista.c -o ~/LPEDC/material/E445 && ~/LPEDC/material/E445
+```
+
+**Exercício E447** · ★★☆
+
+O pluviômetro da escola anota a chuva do dia em mm e grava -1 quando o
+sensor falha. Usando SÓ a interface de lista.h, guarde as leituras
+4, -1, 0, 12, -1, -1, 7 numa lista de capacidade inicial 4 e escreva:
+
+```text
+int posicao_de(const Lista *l, int valor)  primeira posição do valor, ou -1
+int remove_todos(Lista *l, int valor)      tira todas as ocorrências e
+                                           devolve quantas tirou
+```
+
+Mostre a lista, remova as falhas (-1) e mostre de novo.
+
+```text
+Saída esperada:
+antes:  [4, -1, 0, 12, -1, -1, 7]
+depois: [4, 0, 12, 7]
+3 falhas removidas
+```
+
+```bash
+gcc ~/LPEDC/material/E447.c ~/LPEDC/material/0075-lista.c -o ~/LPEDC/material/E447 && ~/LPEDC/material/E447
+```
+
+**Exercício E448** · ★★☆
+
+Existem dois jeitos de tirar um item do meio de uma lista sequencial:
+
+```text
+deslocando: puxa todos os de depois uma casa para a esquerda (mantém a
+            ordem; custa O(n))
+trocando:   copia o ÚLTIMO item para o buraco e diminui o tamanho
+            (bagunça a ordem; custa O(1))
+```
+
+Escreva as duas funções. Cada uma recebe o vetor, o endereço do tamanho e
+a posição, e devolve quantos itens precisou mover (trocando move 1, ou 0
+quando a posição já é a última). Teste tirando a posição 2 de duas cópias
+das senhas 101 a 108. Depois, para sentir a diferença de custo, esvazie
+as duas cópias tirando SEMPRE a posição 0 e mostre o total de movimentos
+de cada uma:
+
+```text
+Saída esperada:
+deslocando: [101, 102, 104, 105, 106, 107, 108]  movimentos: 5
+trocando:   [101, 102, 108, 104, 105, 106, 107]  movimentos: 1
+esvaziando pela frente: deslocando 21, trocando 6
+```
+
+```bash
+gcc ~/LPEDC/material/E448.c ~/LPEDC/material/0075-lista.c -o ~/LPEDC/material/E448 && ~/LPEDC/material/E448
+```
+
+**Exercício E450** · ★★★
+
+Um vetor que só cresce nunca devolve memória. Usando a struct Vet abaixo,
+escreva vet_empurra (põe no fim; quando tam == cap, dobra a capacidade com
+realloc) e duas funções que tiram o último item, guardam em *saiu e
+encolhem o vetor pela metade (nunca abaixo de capacidade 2):
+
+```text
+bool vet_tira(Vet *v, int *saiu)         encolhe se tam <= cap / 4
+bool vet_tira_metade(Vet *v, int *saiu)  encolhe se tam <= cap / 2
+```
+
+Some 1 em v->reallocs a cada realloc que der certo. No main: comece com um
+vetor de cap 2, empurre 1 a 9, esvazie com vet_tira mostrando cada passo;
+depois crie dois vetores com 1, 2, 3, 4 (tam 4, cap 4, reallocs zerado) e,
+10 vezes, empurre 5 e tire, um com cada regra, mostrando os reallocs.
+
+```text
+Saída esperada:
+empurrou 9: tam 9, cap 16
+tirou 9: tam 8, cap 16
+tirou 8: tam 7, cap 16
+tirou 7: tam 6, cap 16
+tirou 6: tam 5, cap 16
+tirou 5: tam 4, cap 8
+tirou 4: tam 3, cap 8
+tirou 3: tam 2, cap 4
+tirou 2: tam 1, cap 2
+tirou 1: tam 0, cap 2
+alternando com 1/2: 20 realloc
+alternando com 1/4: 1 realloc
+```
+
+```bash
+gcc ~/LPEDC/material/E450.c ~/LPEDC/material/0075-lista.c -o ~/LPEDC/material/E450 && ~/LPEDC/material/E450
+```
+
+---
+
+## 0076 · Lista encadeada
+
+### Conceito
+
+- **Lista encadeada** (ou **lista ligada**): cada item fica num pedaço
+  separado de memória, o **nó**, com o valor e o endereço do próximo. O
+  último aponta para `NULL` (FEOFILOFF, 2009, cap. 4).
+- **Início**: a lista inteira é o endereço do primeiro nó (o `L.head` do
+  Cormen). Lista vazia é `inicio == NULL` (CORMEN et al., 2024, cap. 10).
+- **Struct autorreferenciada**: uma struct não pode conter a si mesma, mas
+  pode conter um **ponteiro** para a própria struct (KERNIGHAN; RITCHIE, 1989).
+
+```c
+typedef struct no {
+    int valor;
+    struct no *prox; // o próximo nó, ou NULL no último
+} No;
+```
+
+- **Sem acesso direto**: cada nó vem de um `malloc` e cai onde o heap tiver
+  espaço; a ordem está nas setas. Não existe `lista[2]`: para chegar ao
+  terceiro nó, siga duas setas (CELES; RANGEL, 2002).
+- **Inserir no início**: cria o nó, aponta o `prox` dele para o antigo início
+  e devolve o novo nó. É O(1) (CELES; RANGEL, 2002).
+- **Percorrer**: `for (p = inicio; p != NULL; p = p->prox)`, o "for de
+  lista" (FEOFILOFF, 2009, cap. 4).
+- **Liberar**: um `free` por nó, guardando o próximo **antes** do `free`
+  (CELES; RANGEL, 2002).
+- **Inserir no fim** com só o início guardado é O(n); com um ponteiro para o
+  último, vira O(1) (0079 e 0086).
+
+> [!WARNING]
+> `lista_insere_inicio(inicio, 20);` sem o `inicio =` na frente compila e
+> está errado: o novo início se perde e o nó vaza. No `libera`, o erro comum é ler
+> `p->prox` depois de `free(p)`.
+
+### Exemplos de uso
 
 Chegam quatro Pix: R$ 20, 45, 10 e 80, e o 80 aparece primeiro no extrato.
 Embaixo, a lista no heap, com endereços fora de ordem:
@@ -607,7 +578,125 @@ int main(void) {
 gcc ~/LPEDC/material/A152.c ~/LPEDC/material/0076-lista.c -o ~/LPEDC/material/A152 && ~/LPEDC/material/A152
 ```
 
-### 0077 · Busca e remoção
+### Exercícios
+
+**Exercício E451** · ★☆☆
+
+O app do banco quer destacar os Pix "grandes". Monte o extrato inserindo
+no início os Pix 30, 75, 12, 50, 120 e 64 (nesta ordem), mostre a lista e
+escreva a função
+
+```text
+int conta_maiores(const No *inicio, int limite)
+```
+
+que devolve quantos valores são MAIORES que o limite. Use limite 50.
+
+```text
+Saída esperada:
+64 -> 120 -> 50 -> 12 -> 75 -> 30 -> NULL
+3 Pix acima de R$ 50
+```
+
+```bash
+gcc ~/LPEDC/material/E451.c ~/LPEDC/material/0076-lista.c -o ~/LPEDC/material/E451 && ~/LPEDC/material/E451
+```
+
+**Exercício E453** · ★★☆
+
+Os preços do hortifruti chegaram num vetor: {5, 18, 7, 22, 9}. Escreva:
+
+```text
+No *vetor_para_lista(const int v[], int n)
+    monta a lista NA MESMA ORDEM do vetor, usando só lista_insere_inicio
+int lista_para_vetor(const No *inicio, int v[], int max)
+    copia a lista para o vetor (no máximo max itens) e devolve quantos
+    copiou
+```
+
+Teste indo e voltando:
+
+```text
+Saída esperada:
+lista: 5 -> 18 -> 7 -> 22 -> 9 -> NULL
+vetor: 5 18 7 22 9
+```
+
+```bash
+gcc ~/LPEDC/material/E453.c ~/LPEDC/material/0076-lista.c -o ~/LPEDC/material/E453 && ~/LPEDC/material/E453
+```
+
+**Exercício E454** · ★★☆
+
+Uma lista é NULL ou um nó seguido de outra lista. Essa definição é
+recursiva, e as funções também podem ser. O extrato recebeu os Pix 15, 60,
+35, 90 e 25, inseridos no início. Escreva, SEM laço nenhum:
+
+```text
+void imprime_ao_contrario(const No *p)  do mais antigo para o mais novo
+int tamanho_rec(const No *p)            quantos nós
+```
+
+```text
+Saída esperada:
+mais novo primeiro: 25 -> 90 -> 35 -> 60 -> 15 -> NULL
+mais antigo primeiro: 15 60 35 90 25
+tamanho (recursivo): 5
+```
+
+```bash
+gcc ~/LPEDC/material/E454.c ~/LPEDC/material/0076-lista.c -o ~/LPEDC/material/E454 && ~/LPEDC/material/E454
+```
+
+**Exercício E456** · ★★★
+
+A fila de embarque foi montada ao contrário: 5 -> 4 -> 3 -> 2 -> 1 (monte
+inserindo no início 1, 2, 3, 4 e 5). Escreva No *inverte(No *inicio), que
+inverte a lista SÓ MEXENDO NOS PONTEIROS: nada de malloc, nada de trocar
+os valores, nada de vetor auxiliar. Ela devolve o novo início. Mostre a
+fila antes e depois e teste também com a lista vazia e com uma lista de
+um nó só (o valor 7).
+
+```text
+Saída esperada:
+antes:  5 -> 4 -> 3 -> 2 -> 1 -> NULL
+depois: 1 -> 2 -> 3 -> 4 -> 5 -> NULL
+vazia:  NULL
+um só:  7 -> NULL
+```
+
+```bash
+gcc ~/LPEDC/material/E456.c ~/LPEDC/material/0076-lista.c -o ~/LPEDC/material/E456 && ~/LPEDC/material/E456
+```
+
+---
+
+## 0077 · Busca e remoção
+
+### Conceito
+
+- **Buscar**: percorrer até achar, O(n). A função devolve o **endereço do
+  nó** ou `NULL`; com ele você lê ou muda o valor (FEOFILOFF, 2009, cap. 4).
+- **Remover** o nó `p`: o **anterior** passa a apontar para o seguinte. A
+  lista simples não volta, então se percorre com **dois ponteiros**: `ant`
+  anda um passo atrás de `p` (CELES; RANGEL, 2002).
+- **Dois casos**: `ant == NULL` quer dizer que o nó é o **primeiro**, e o
+  início muda; senão, `ant->prox = p->prox` e o anterior pula o `p`. O
+  `free(p)` vem depois de religar (CELES; RANGEL, 2002).
+- **`No **inicio`**: como remover o primeiro muda o início, a função recebe o
+  endereço dele (0049). É o outro estilo comum; a inserção do 0076 devolvia o
+  início novo (FEOFILOFF, 2009, cap. 4).
+- **Nó-cabeça**: um nó de mentira no começo faz todo nó de verdade ter
+  anterior, e o caso especial some. O Cormen usa a **sentinela** `L.nil`
+  (CORMEN et al., 2024, cap. 10).
+- **Custo**: religar é O(1); achar o nó é O(n) (FEOFILOFF, 2009, cap. 4).
+
+> [!WARNING]
+> A ordem do `&&` importa. Em `while (p->valor != valor && p != NULL)`, o
+> `p->valor` é lido antes de testar `p` e quebra quando o valor não está na
+> lista. Com `p != NULL` primeiro, o curto-circuito (0013) evita a leitura.
+
+### Exemplos de uso
 
 Na barbearia, as senhas 31, 17, 42 e 8 esperam numa lista. O 42 desiste: o
 laço para com `p` no 42 e `ant` no 17, a seta do 17 passa a apontar para o 8
@@ -807,7 +896,139 @@ int main(void) {
 gcc ~/LPEDC/material/A154.c ~/LPEDC/material/0077-lista.c -o ~/LPEDC/material/A154 && ~/LPEDC/material/A154
 ```
 
-### 0078 · Lista ordenada
+### Exercícios
+
+**Exercício E457** · ★☆☆
+
+A fila do açougue tem as senhas 33 -> 40 -> 7 -> 25 -> 12 (monte inserindo
+no início 12, 25, 7, 40 e 33). Escreva int posicao(const No *inicio, int
+valor), que devolve a posição do valor contando a partir de 1, ou 0 se ele
+não está na lista. O programa lê duas senhas do teclado (sem mostrar
+perguntas), confere o retorno do scanf e responde sobre cada uma.
+
+```text
+Entrada:
+7
+50
+```
+
+```text
+Saída esperada:
+senha 7 está na posição 3
+senha 50 não está na fila
+```
+
+```bash
+gcc ~/LPEDC/material/E457.c ~/LPEDC/material/0077-lista.c -o ~/LPEDC/material/E457 && ~/LPEDC/material/E457
+```
+
+**Exercício E459** · ★★☆
+
+O sensor de temperatura da estufa grava 0 quando falha. Escreva
+int remove_todos(No **inicio, int valor), que tira TODOS os nós com o
+valor numa passada só (sem chamar lista_remove em laço) e devolve quantos
+tirou. No main, monte a lista com as leituras 0, 19, 0, 21, 0, 0
+inseridas no início, mostre antes e depois da remoção dos 0 e o total
+removido. Depois monte uma lista só com dois 0, remova-os e mostre que
+ela ficou vazia (imprima "só falhas: NULL (2 removidas)" com o total
+devolvido pela função).
+
+```text
+Saída esperada:
+antes:  0 -> 0 -> 21 -> 0 -> 19 -> 0 -> NULL
+depois: 21 -> 19 -> NULL
+4 leituras removidas
+só falhas: NULL (2 removidas)
+```
+
+```bash
+gcc ~/LPEDC/material/E459.c ~/LPEDC/material/0077-lista.c -o ~/LPEDC/material/E459 && ~/LPEDC/material/E459
+```
+
+**Exercício E460** · ★★☆
+
+Num leilão online, a cada rodada o MENOR lance sai da disputa. Os lances
+estão numa lista de structs Lance (declarada abaixo). Escreva
+
+```text
+Lance *lance_insere(Lance *inicio, const char *nome, int valor)  no início
+void lance_imprime(const Lance *inicio)  formato do exemplo
+void lance_libera(Lance *inicio)
+bool remove_menor(Lance **inicio, Lance *saiu)
+```
+
+remove_menor acha o nó de menor valor, copia os dados dele para *saiu, tira
+o nó da lista e devolve true (ou false se a lista estiver vazia). Insira
+Ana 150, Bruno 90, Carla 210 e Davi 175 (nesta ordem), mostre a lista e
+rode duas rodadas.
+
+```text
+Saída esperada:
+Davi R$ 175 -> Carla R$ 210 -> Bruno R$ 90 -> Ana R$ 150 -> NULL
+saiu Bruno (R$ 90)
+Davi R$ 175 -> Carla R$ 210 -> Ana R$ 150 -> NULL
+saiu Ana (R$ 150)
+Davi R$ 175 -> Carla R$ 210 -> NULL
+```
+
+```bash
+gcc ~/LPEDC/material/E460.c ~/LPEDC/material/0077-lista.c -o ~/LPEDC/material/E460 && ~/LPEDC/material/E460
+```
+
+**Exercício E462** · ★★★
+
+O vagão do MEIO do trem precisa ir para a manutenção, e você só pode
+percorrer a lista UMA vez (sem contar os nós antes). Escreva
+bool remove_meio(No **inicio), com dois ponteiros que saem do início: um
+anda um nó por vez e o outro anda dois. Com quantidade par, o meio é o
+SEGUNDO dos dois do centro. No main, monte a lista 1 a 7, a lista
+10, 20, 30, 40, 50, 60 e a lista de um nó só (99), inserindo no início;
+remova o meio de cada uma e imprima as três.
+
+```text
+Saída esperada:
+1 -> 2 -> 3 -> 5 -> 6 -> 7 -> NULL
+10 -> 20 -> 30 -> 50 -> 60 -> NULL
+NULL
+```
+
+```bash
+gcc ~/LPEDC/material/E462.c ~/LPEDC/material/0077-lista.c -o ~/LPEDC/material/E462 && ~/LPEDC/material/E462
+```
+
+---
+
+## 0078 · Lista ordenada
+
+### Conceito
+
+- **Lista ordenada**: mantém os nós em ordem a cada inserção, em vez de
+  reordenar tudo depois (CELES; RANGEL, 2002).
+- **Inserção ordenada**: anda com o par `ant`/`p` (0077) enquanto os valores
+  forem menores que o novo. Ao parar, `p` é o primeiro maior ou igual (ou
+  `NULL`) e `ant` vem antes dele (FEOFILOFF, 2009, cap. 4).
+- **Religar duas setas**, nesta ordem: `novo->prox = p` e depois
+  `ant->prox = novo`. Se `ant` for `NULL`, o novo é o menor e vira o início;
+  o fim não é caso especial (CELES; RANGEL, 2002).
+- **Busca com parada**: dá para desistir ao passar do valor procurado
+  (FEOFILOFF, 2009, cap. 4).
+- **Critério**: está na comparação do `while`. Com
+  `strcmp(p->nome, nome) < 0`, a mesma inserção ordena por nome.
+- **Custo**: cada inserção é O(n) no pior caso, então montar n itens custa
+  O(n²). A busca continua O(n): sem acesso direto não há busca binária
+  (ZIVIANI, 2010, cap. 3).
+
+| Estrutura ordenada | Busca | Inserção |
+| --- | --- | --- |
+| lista encadeada | O(n) | O(n) para achar, O(1) para religar |
+| vetor | O(log n) | O(n): desloca os seguintes |
+
+> [!WARNING]
+> O caso mais esquecido é o **novo menor que todos**: `ant` fica `NULL` e
+> `ant->prox = novo` sem o `if` derruba o programa. Teste início, meio e fim.
+> Com `<`, um repetido entra **antes** dos iguais; com `<=`, **depois**.
+
+### Exemplos de uso
 
 A agenda de uma clínica tem 09:00, 14:30 e 16:00 quando chega a ligação das
 10:15. O laço passa pelo 09:00 e para no 14:30; o novo aponta para o 14:30 e
@@ -994,7 +1215,136 @@ int main(void) {
 gcc ~/LPEDC/material/A156.c ~/LPEDC/material/0078-lista.c -o ~/LPEDC/material/A156 && ~/LPEDC/material/A156
 ```
 
-### 0079 · Lista dupla
+### Exercícios
+
+**Exercício E463** · ★☆☆
+
+As notas do simulado saíram nesta ordem: 7, 3, 9, 5, 10, 1. Insira todas
+com lista_insere_ordenado, mostre a lista e depois a menor e a maior nota.
+
+```text
+Saída esperada:
+1 -> 3 -> 5 -> 7 -> 9 -> 10 -> NULL
+menor: 1, maior: 10
+```
+
+```bash
+gcc ~/LPEDC/material/E463.c ~/LPEDC/material/0078-lista.c -o ~/LPEDC/material/E463 && ~/LPEDC/material/E463
+```
+
+**Exercício E465** · ★★☆
+
+O entregador anotou os números das casas da rua, com repetidos: 5, 3, 5,
+8, 3, 3, 1. Insira tudo em ordem e escreva
+
+```text
+int remove_repetidos(No *inicio)
+```
+
+que deixa um só de cada número e devolve quantos nós tirou.
+
+```text
+Saída esperada:
+antes:  1 -> 3 -> 3 -> 3 -> 5 -> 5 -> 8 -> NULL
+depois: 1 -> 3 -> 5 -> 8 -> NULL
+3 repetidos removidos
+```
+
+```bash
+gcc ~/LPEDC/material/E465.c ~/LPEDC/material/0078-lista.c -o ~/LPEDC/material/E465 && ~/LPEDC/material/E465
+```
+
+**Exercício E466** · ★★☆
+
+Duas linhas de ônibus saem do mesmo terminal. Os horários de cada uma
+(em minutos depois das 6h) estão em listas crescentes:
+
+```text
+linha 101: 0 -> 25 -> 50 -> 75
+linha 202: 10 -> 25 -> 40 -> 90
+```
+
+Monte as duas com lista_insere_ordenado (entrando fora de ordem) e escreva
+No *intercala(No *a, No *b), que junta as duas numa lista só, também
+crescente, SEM criar nenhum nó novo: só religando os que existem. Mostre
+o resultado.
+
+```text
+Saída esperada:
+0 -> 10 -> 25 -> 25 -> 40 -> 50 -> 75 -> 90 -> NULL
+```
+
+```bash
+gcc ~/LPEDC/material/E466.c ~/LPEDC/material/0078-lista.c -o ~/LPEDC/material/E466 && ~/LPEDC/material/E466
+```
+
+**Exercício E468** · ★★★
+
+Os pedidos do delivery chegaram fora de ordem: 3 -> 7 -> 1 -> 9 -> 4 (monte
+inserindo no início 4, 9, 1, 7 e 3). Escreva No *ordena(No *inicio, int
+*passos), que deixa a lista em ordem crescente pelo método da inserção,
+SÓ RELIGANDO os nós: nada de malloc, nada de free, nada de trocar valores
+entre nós. Para medir o custo, some 1 em *passos cada vez que o laço de
+encaixe anda um nó. Mostre antes, depois e os passos para a lista dos
+pedidos e para o pior caso, uma lista que já chega crescente 1 a 5.
+
+```text
+Saída esperada:
+antes:  3 -> 7 -> 1 -> 9 -> 4 -> NULL
+depois: 1 -> 3 -> 4 -> 7 -> 9 -> NULL  (6 passos)
+antes:  1 -> 2 -> 3 -> 4 -> 5 -> NULL
+depois: 1 -> 2 -> 3 -> 4 -> 5 -> NULL  (10 passos)
+```
+
+```bash
+gcc ~/LPEDC/material/E468.c ~/LPEDC/material/0078-lista.c -o ~/LPEDC/material/E468 && ~/LPEDC/material/E468
+```
+
+---
+
+## 0079 · Lista dupla
+
+### Conceito
+
+- **Lista duplamente encadeada** (no Cormen, **duplamente ligada**, com
+  `next` e `prev`): cada nó guarda `prox` e `ant` (CORMEN et al., 2024,
+  cap. 10).
+- **Por que existe**: na lista simples não se anda de trás para frente e,
+  para remover um nó conhecido, ainda é preciso achar o anterior
+  (CELES; RANGEL, 2002).
+- **O que ganha**: anda nos **dois sentidos**, remove um nó conhecendo **só
+  ele** em O(1) e, com ponteiro para o **último**, insere no fim em O(1)
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 4).
+- **Regra das setas**: para todo nó `p` que não é o último,
+  `p->prox->ant == p`. As setas mudam **aos pares** (FEOFILOFF, 2009, cap. 4).
+- **Remover `p`**: desvia as duas setas que chegam nele, cada uma com seu
+  caso de borda: primeiro nó (muda o `inicio`) e último nó (muda o `fim`)
+  (CELES; RANGEL, 2002).
+- **Custo de memória**: em 64 bits, `sizeof(No)` passa de 16 para 24 bytes,
+  um ponteiro a mais por nó.
+
+A lista desta pasta é uma struct com as duas pontas e o tamanho:
+
+```c
+typedef struct no {
+    int valor;
+    struct no *ant;  // o anterior, ou NULL no primeiro
+    struct no *prox; // o próximo, ou NULL no último
+} No;
+
+typedef struct {
+    No *inicio;
+    No *fim;
+    int tamanho;
+} Lista;
+```
+
+> [!WARNING]
+> Com uma seta faltando, a lista dupla **parece certa**: se a inserção
+> esquecer o `ant`, só a volta sai errada. Imprima **nos dois sentidos**. Na
+> remoção, `p->ant->prox` no primeiro nó acessa `NULL`.
+
+### Exemplos de uso
 
 Um trem de minério tem vagões de 98, 105, 87 e 110 toneladas, e o de 87 está
 com o freio travado. Com `p` nele, o 105 passa a apontar para o 110, e o 110
@@ -1161,7 +1511,133 @@ int main(void) {
 gcc ~/LPEDC/material/A158.c ~/LPEDC/material/0079-lista.c -o ~/LPEDC/material/A158 && ~/LPEDC/material/A158
 ```
 
-### 0080 · Lista circular
+### Exercícios
+
+**Exercício E469** · ★☆☆
+
+O pátio de manobras quer saber o peso dos ÚLTIMOS 3 vagões do trem, os que
+vão ser desengatados na próxima estação. Monte o trem com lista_insere_fim
+(120, 95, 101, 88, 130 e 76 toneladas) e, começando do fim e andando com
+ant, mostre os 3 últimos (do último para trás) e a soma deles. Não comece
+do início.
+
+```text
+Saída esperada:
+76 130 88
+últimos 3: 294 t
+```
+
+```bash
+gcc ~/LPEDC/material/E469.c ~/LPEDC/material/0079-lista.c -o ~/LPEDC/material/E469 && ~/LPEDC/material/E469
+```
+
+**Exercício E471** · ★★☆
+
+Um palíndromo se lê igual nos dois sentidos. Com uma lista dupla dá para
+conferir sem vetor nenhum: um ponteiro sai do início, outro sai do fim, e
+os dois andam em direção ao meio comparando. Guarde cada letra como int
+(char é número) e escreva:
+
+```text
+void monta(Lista *l, const char *palavra)   uma letra por nó, no fim
+bool eh_palindromo(const Lista *l)
+```
+
+Teste com "radar", "trem", "arara" e "ab".
+
+```text
+Saída esperada:
+radar: sim
+trem: não
+arara: sim
+ab: não
+```
+
+```bash
+gcc ~/LPEDC/material/E471.c ~/LPEDC/material/0079-lista.c -o ~/LPEDC/material/E471 && ~/LPEDC/material/E471
+```
+
+**Exercício E472** · ★★☆
+
+Engatar um vagão no meio do trem mexe em QUATRO setas. Monte o trem 98, 105,
+87, 110 com lista_insere_fim e escreva
+
+```text
+bool insere_depois(Lista *l, No *p, int valor)
+```
+
+que cria um nó com o valor logo depois do nó p (que está na lista), sem
+esquecer o caso em que p é o último. Engate um vagão de 99 t depois do de
+105 e um de 70 t depois do último. Mostre a lista nos dois sentidos
+(lista_imprime e lista_imprime_reverso) e a quantidade de vagões.
+
+```text
+Saída esperada:
+98 <-> 105 <-> 99 <-> 87 <-> 110 <-> 70
+70 <-> 110 <-> 87 <-> 99 <-> 105 <-> 98
+6 vagões
+```
+
+```bash
+gcc ~/LPEDC/material/E472.c ~/LPEDC/material/0079-lista.c -o ~/LPEDC/material/E472 && ~/LPEDC/material/E472
+```
+
+**Exercício E474** · ★★★
+
+Todo editor de texto tem um cursor que anda para os dois lados, e uma
+lista dupla de letras é um jeito clássico de fazer isso: inserir e apagar
+na posição do cursor custa O(1). Simule o teclado com a string de teclas
+
+```text
+"progamr#<<r>>a"
+```
+
+onde letra insere na posição do cursor, '<' anda uma letra para a
+esquerda, '>' anda para a direita e '#' apaga a letra à esquerda do
+cursor (o backspace). Nas pontas, '<', '>' e '#' não fazem nada. No fim,
+mostre o texto com uma '|' onde está o cursor. Use uma lista dupla de
+letras, com a struct escrita por você.
+
+```text
+Saída esperada:
+texto: programa|
+```
+
+```bash
+gcc ~/LPEDC/material/E474.c ~/LPEDC/material/0079-lista.c -o ~/LPEDC/material/E474 && ~/LPEDC/material/E474
+```
+
+---
+
+## 0080 · Lista circular
+
+### Conceito
+
+- **Lista circular**: lista encadeada em que o último nó aponta para o
+  **primeiro**, e não para `NULL`. Os nós formam um anel (FEOFILOFF, 2009,
+  cap. 4).
+- **Para que serve**: rodízios, como a vez dos jogadores e a divisão da CPU
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 4).
+- **Ponteiro para o último**: o primeiro é `ultimo->prox`. Inserir no início
+  **e** no fim custa O(1); inserir no fim é inserir no início e declarar o
+  novo como último (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 4).
+- **Percorrer**: sem `NULL`, o laço para ao **voltar ao ponto de partida**.
+  O certo é o **do-while** (0021), que roda o corpo antes de testar; a lista
+  vazia (`ultimo == NULL`) é tratada antes (CELES; RANGEL, 2002).
+- **Girar e juntar**: girar a roda é `ultimo = ultimo->prox`; juntar duas
+  listas circulares é trocar dois ponteiros, O(1).
+- **Circular dupla**: o círculo fecha nos dois sentidos, como no Cormen, com
+  uma sentinela (CORMEN et al., 2024, cap. 10).
+- **Problema de Josephus**: pessoas em roda eliminam uma a cada k passos;
+  tira-se nós do anel até sobrar um que aponta para si mesmo (FEOFILOFF,
+  2009, cap. 4).
+
+> [!WARNING]
+> Na lista circular, `p` **nunca** vira `NULL`: um laço `p != NULL` não
+> termina. No `libera`, **corte o círculo** antes (`ultimo->prox = NULL`):
+> o seguinte do último é o primeiro, já liberado.
+
+### Exemplos de uso
 
 O garçom do rodízio serve as mesas 3, 7, 12 e 15 e, na última, volta à 3. O
 ponteiro da lista fica na mesa 15, e a 3 é `ultimo->prox`:
@@ -1324,7 +1800,126 @@ int main(void) {
 gcc ~/LPEDC/material/A160.c ~/LPEDC/material/0080-lista.c -o ~/LPEDC/material/A160 && ~/LPEDC/material/A160
 ```
 
-### 0081 · Juntando tudo
+### Exercícios
+
+**Exercício E475** · ★☆☆
+
+Numa roda de chimarrão com 5 pessoas (numeradas de 1 a 5), a cuia começa
+com a pessoa 1 e passa para a seguinte 12 vezes. Com quem ela fica? Monte
+a roda com lista_insere_fim e descubra ANDANDO na lista circular. Depois
+confira com uma conta usando %.
+
+```text
+Saída esperada:
+1 -> 2 -> 3 -> 4 -> 5 -> (volta ao 1)
+depois de 12 passadas, a cuia está com a pessoa 3
+conferindo com %: pessoa 3
+```
+
+```bash
+gcc ~/LPEDC/material/E475.c ~/LPEDC/material/0080-lista.c -o ~/LPEDC/material/E475 && ~/LPEDC/material/E475
+```
+
+**Exercício E477** · ★★☆
+
+Rita, Davi e Lia vão de carro de Belo Horizonte a Vitória e voltam: são
+1000 km de estrada. Eles revezam ao volante, nesta ordem, cada um
+dirigindo um trecho de 150 km (o último trecho é o que sobrar). Com uma
+lista circular de structs (nome e km dirigidos), mostre cada trecho e, no
+fim, quanto cada um dirigiu.
+
+```text
+Saída esperada:
+trecho 1: Rita dirige 150 km
+trecho 2: Davi dirige 150 km
+trecho 3: Lia dirige 150 km
+trecho 4: Rita dirige 150 km
+trecho 5: Davi dirige 150 km
+trecho 6: Lia dirige 150 km
+trecho 7: Rita dirige 100 km
+Rita: 400 km
+Davi: 300 km
+Lia: 300 km
+```
+
+```bash
+gcc ~/LPEDC/material/E477.c ~/LPEDC/material/0080-lista.c -o ~/LPEDC/material/E477 && ~/LPEDC/material/E477
+```
+
+**Exercício E478** · ★★☆
+
+Dois salões do restaurante vão virar um só. Cada salão é uma lista
+circular de mesas, guardada pelo último nó: o salão A tem as mesas 1, 2 e
+3 e o B tem 10 e 20 (monte com lista_insere_fim). Escreva
+No *concatena(No *ult_a, No *ult_b), que emenda b depois de a e devolve o
+último da lista nova, em O(1): sem percorrer nada, só trocando ponteiros.
+Trate as listas vazias. Mostre A, B, a junção e a junção com uma lista
+vazia (NULL). No fim, libere a lista juntada uma vez só.
+
+```text
+Saída esperada:
+A: 1 -> 2 -> 3 -> (volta ao 1)
+B: 10 -> 20 -> (volta ao 10)
+juntas: 1 -> 2 -> 3 -> 10 -> 20 -> (volta ao 1)
+com vazia: 1 -> 2 -> 3 -> 10 -> 20 -> (volta ao 1)
+```
+
+```bash
+gcc ~/LPEDC/material/E478.c ~/LPEDC/material/0080-lista.c -o ~/LPEDC/material/E478 && ~/LPEDC/material/E478
+```
+
+**Exercício E479** · ★★★
+
+O sistema operacional divide a CPU entre os programas com o escalonamento
+round-robin: cada processo roda no máximo um QUANTUM de tempo e vai para
+o fim da fila; quem termina sai da roda. Simule com uma lista circular de
+processos (id e tempo que falta), quantum 2, e os processos P1 (precisa de
+5 unidades), P2 (2) e P3 (4), chegando nessa ordem no tempo 0. A struct é sua.
+
+```text
+Saída esperada:
+t=0..2: P1 (falta 3)
+t=2..4: P2 (terminou)
+t=4..6: P3 (falta 2)
+t=6..8: P1 (falta 1)
+t=8..10: P3 (terminou)
+t=10..11: P1 (terminou)
+```
+
+```bash
+gcc ~/LPEDC/material/E479.c ~/LPEDC/material/0080-lista.c -o ~/LPEDC/material/E479 && ~/LPEDC/material/E479
+```
+
+---
+
+## 0081 · Juntando tudo
+
+### Conceito
+
+- **TAD playlist** (`playlist.h` e `playlist.c`): quem usa vê a struct
+  `Musica` (título, artista, segundos) e as operações; os nós ficam
+  escondidos no `.c` (CELES; CERQUEIRA; RANGEL, 2016).
+- **Nó `Faixa`**: guarda uma `Musica`, `ant` e `prox`. A `struct playlist`
+  guarda `inicio`, `fim`, `atual` (a que toca), `tamanho` e o `bool repetir`
+  (CELES; RANGEL, 2002).
+- **Adicionar**: inserção no fim da lista dupla (0079), O(1) com `fim`.
+- **Remover pelo título**: busca com `strcmp` (0077) e remoção dupla. Se era
+  a atual, o `atual` vai para a seguinte, ou para a anterior se era a última.
+- **Próxima e anterior**: `prox` e `ant`. Com repetir ligado, dão a volta
+  nas pontas como numa lista circular (0080).
+- **Salvar e carregar**: arquivo texto (módulo 09), uma música por linha,
+  `titulo;artista;segundos`, com `fgets` e `sscanf`.
+- **Para cada**: recebe um ponteiro para função e um `void *` (0050 e 0051),
+  sem expor os nós (KERNIGHAN; RITCHIE, 1989).
+- **Não é circular**: o último `prox` continua `NULL`. A volta é decisão da
+  função, então imprimir, liberar e salvar seguem com o `for` de sempre.
+
+> [!WARNING]
+> `playlist_proxima(p)->titulo` acessa `NULL` quando a função devolve
+> `NULL`, o que ocorre na última música com repetir desligado: guarde o
+> ponteiro e teste antes de usar.
+
+### Exemplos de uso
 
 Uma playlist de cinco músicas, 20:01 no total. Pulando duas, toca a terceira;
 a "Asa Branca" sai, a playlist chega à última e, com repetir ligado, volta
@@ -1503,587 +2098,7 @@ int main(void) {
 gcc ~/LPEDC/material/A162.c ~/LPEDC/material/0081-playlist.c -o ~/LPEDC/material/A162 && ~/LPEDC/material/A162
 ```
 
----
-
-## 3. Exercícios práticos
-
-Cada exercício é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta. Compile como os exemplos: `gcc ~/LPEDC/material/E007.c -o ~/LPEDC/material/E007 && ~/LPEDC/material/E007`. Resoluções em `_respostas/11-listas/`.
-
-### 0075 · Vetor dinâmico
-
-**Exercício E445** · ★☆☆
-
-O medidor de glicose da sua mãe registrou estas leituras na semana (mg/dL):
-98, 110, 87, 132, 105, 91. Usando só as funções de lista.h, crie uma lista
-com capacidade inicial 4, insira as leituras no fim, mostre a lista, o
-tamanho, a capacidade, a média (uma casa decimal) e a maior leitura.
-
-```text
-Saída esperada:
-[98, 110, 87, 132, 105, 91]
-tamanho 6, capacidade 8
-média: 103.8
-maior: 132
-```
-
-```bash
-gcc ~/LPEDC/material/E445.c ~/LPEDC/material/0075-lista.c -o ~/LPEDC/material/E445 && ~/LPEDC/material/E445
-```
-
-**Exercício E447** · ★★☆
-
-O pluviômetro da escola anota a chuva do dia em mm e grava -1 quando o
-sensor falha. Usando SÓ a interface de lista.h, guarde as leituras
-4, -1, 0, 12, -1, -1, 7 numa lista de capacidade inicial 4 e escreva:
-
-```text
-int posicao_de(const Lista *l, int valor)  primeira posição do valor, ou -1
-int remove_todos(Lista *l, int valor)      tira todas as ocorrências e
-                                           devolve quantas tirou
-```
-
-Mostre a lista, remova as falhas (-1) e mostre de novo.
-
-```text
-Saída esperada:
-antes:  [4, -1, 0, 12, -1, -1, 7]
-depois: [4, 0, 12, 7]
-3 falhas removidas
-```
-
-```bash
-gcc ~/LPEDC/material/E447.c ~/LPEDC/material/0075-lista.c -o ~/LPEDC/material/E447 && ~/LPEDC/material/E447
-```
-
-**Exercício E448** · ★★☆
-
-Existem dois jeitos de tirar um item do meio de uma lista sequencial:
-
-```text
-deslocando: puxa todos os de depois uma casa para a esquerda (mantém a
-            ordem; custa O(n))
-trocando:   copia o ÚLTIMO item para o buraco e diminui o tamanho
-            (bagunça a ordem; custa O(1))
-```
-
-Escreva as duas funções. Cada uma recebe o vetor, o endereço do tamanho e
-a posição, e devolve quantos itens precisou mover (trocando move 1, ou 0
-quando a posição já é a última). Teste tirando a posição 2 de duas cópias
-das senhas 101 a 108. Depois, para sentir a diferença de custo, esvazie
-as duas cópias tirando SEMPRE a posição 0 e mostre o total de movimentos
-de cada uma:
-
-```text
-Saída esperada:
-deslocando: [101, 102, 104, 105, 106, 107, 108]  movimentos: 5
-trocando:   [101, 102, 108, 104, 105, 106, 107]  movimentos: 1
-esvaziando pela frente: deslocando 21, trocando 6
-```
-
-```bash
-gcc ~/LPEDC/material/E448.c ~/LPEDC/material/0075-lista.c -o ~/LPEDC/material/E448 && ~/LPEDC/material/E448
-```
-
-**Exercício E450** · ★★★
-
-Um vetor que só cresce nunca devolve memória. Usando a struct Vet abaixo,
-escreva vet_empurra (põe no fim; quando tam == cap, dobra a capacidade com
-realloc) e duas funções que tiram o último item, guardam em *saiu e
-encolhem o vetor pela metade (nunca abaixo de capacidade 2):
-
-```text
-bool vet_tira(Vet *v, int *saiu)         encolhe se tam <= cap / 4
-bool vet_tira_metade(Vet *v, int *saiu)  encolhe se tam <= cap / 2
-```
-
-Some 1 em v->reallocs a cada realloc que der certo. No main: comece com um
-vetor de cap 2, empurre 1 a 9, esvazie com vet_tira mostrando cada passo;
-depois crie dois vetores com 1, 2, 3, 4 (tam 4, cap 4, reallocs zerado) e,
-10 vezes, empurre 5 e tire, um com cada regra, mostrando os reallocs.
-
-```text
-Saída esperada:
-empurrou 9: tam 9, cap 16
-tirou 9: tam 8, cap 16
-tirou 8: tam 7, cap 16
-tirou 7: tam 6, cap 16
-tirou 6: tam 5, cap 16
-tirou 5: tam 4, cap 8
-tirou 4: tam 3, cap 8
-tirou 3: tam 2, cap 4
-tirou 2: tam 1, cap 2
-tirou 1: tam 0, cap 2
-alternando com 1/2: 20 realloc
-alternando com 1/4: 1 realloc
-```
-
-```bash
-gcc ~/LPEDC/material/E450.c ~/LPEDC/material/0075-lista.c -o ~/LPEDC/material/E450 && ~/LPEDC/material/E450
-```
-
-### 0076 · Lista encadeada
-
-**Exercício E451** · ★☆☆
-
-O app do banco quer destacar os Pix "grandes". Monte o extrato inserindo
-no início os Pix 30, 75, 12, 50, 120 e 64 (nesta ordem), mostre a lista e
-escreva a função
-
-```text
-int conta_maiores(const No *inicio, int limite)
-```
-
-que devolve quantos valores são MAIORES que o limite. Use limite 50.
-
-```text
-Saída esperada:
-64 -> 120 -> 50 -> 12 -> 75 -> 30 -> NULL
-3 Pix acima de R$ 50
-```
-
-```bash
-gcc ~/LPEDC/material/E451.c ~/LPEDC/material/0076-lista.c -o ~/LPEDC/material/E451 && ~/LPEDC/material/E451
-```
-
-**Exercício E453** · ★★☆
-
-Os preços do hortifruti chegaram num vetor: {5, 18, 7, 22, 9}. Escreva:
-
-```text
-No *vetor_para_lista(const int v[], int n)
-    monta a lista NA MESMA ORDEM do vetor, usando só lista_insere_inicio
-int lista_para_vetor(const No *inicio, int v[], int max)
-    copia a lista para o vetor (no máximo max itens) e devolve quantos
-    copiou
-```
-
-Teste indo e voltando:
-
-```text
-Saída esperada:
-lista: 5 -> 18 -> 7 -> 22 -> 9 -> NULL
-vetor: 5 18 7 22 9
-```
-
-```bash
-gcc ~/LPEDC/material/E453.c ~/LPEDC/material/0076-lista.c -o ~/LPEDC/material/E453 && ~/LPEDC/material/E453
-```
-
-**Exercício E454** · ★★☆
-
-Uma lista é NULL ou um nó seguido de outra lista. Essa definição é
-recursiva, e as funções também podem ser. O extrato recebeu os Pix 15, 60,
-35, 90 e 25, inseridos no início. Escreva, SEM laço nenhum:
-
-```text
-void imprime_ao_contrario(const No *p)  do mais antigo para o mais novo
-int tamanho_rec(const No *p)            quantos nós
-```
-
-```text
-Saída esperada:
-mais novo primeiro: 25 -> 90 -> 35 -> 60 -> 15 -> NULL
-mais antigo primeiro: 15 60 35 90 25
-tamanho (recursivo): 5
-```
-
-```bash
-gcc ~/LPEDC/material/E454.c ~/LPEDC/material/0076-lista.c -o ~/LPEDC/material/E454 && ~/LPEDC/material/E454
-```
-
-**Exercício E456** · ★★★
-
-A fila de embarque foi montada ao contrário: 5 -> 4 -> 3 -> 2 -> 1 (monte
-inserindo no início 1, 2, 3, 4 e 5). Escreva No *inverte(No *inicio), que
-inverte a lista SÓ MEXENDO NOS PONTEIROS: nada de malloc, nada de trocar
-os valores, nada de vetor auxiliar. Ela devolve o novo início. Mostre a
-fila antes e depois e teste também com a lista vazia e com uma lista de
-um nó só (o valor 7).
-
-```text
-Saída esperada:
-antes:  5 -> 4 -> 3 -> 2 -> 1 -> NULL
-depois: 1 -> 2 -> 3 -> 4 -> 5 -> NULL
-vazia:  NULL
-um só:  7 -> NULL
-```
-
-```bash
-gcc ~/LPEDC/material/E456.c ~/LPEDC/material/0076-lista.c -o ~/LPEDC/material/E456 && ~/LPEDC/material/E456
-```
-
-### 0077 · Busca e remoção
-
-**Exercício E457** · ★☆☆
-
-A fila do açougue tem as senhas 33 -> 40 -> 7 -> 25 -> 12 (monte inserindo
-no início 12, 25, 7, 40 e 33). Escreva int posicao(const No *inicio, int
-valor), que devolve a posição do valor contando a partir de 1, ou 0 se ele
-não está na lista. O programa lê duas senhas do teclado (sem mostrar
-perguntas), confere o retorno do scanf e responde sobre cada uma.
-
-```text
-Entrada:
-7
-50
-```
-
-```text
-Saída esperada:
-senha 7 está na posição 3
-senha 50 não está na fila
-```
-
-```bash
-gcc ~/LPEDC/material/E457.c ~/LPEDC/material/0077-lista.c -o ~/LPEDC/material/E457 && ~/LPEDC/material/E457
-```
-
-**Exercício E459** · ★★☆
-
-O sensor de temperatura da estufa grava 0 quando falha. Escreva
-int remove_todos(No **inicio, int valor), que tira TODOS os nós com o
-valor numa passada só (sem chamar lista_remove em laço) e devolve quantos
-tirou. No main, monte a lista com as leituras 0, 19, 0, 21, 0, 0
-inseridas no início, mostre antes e depois da remoção dos 0 e o total
-removido. Depois monte uma lista só com dois 0, remova-os e mostre que
-ela ficou vazia (imprima "só falhas: NULL (2 removidas)" com o total
-devolvido pela função).
-
-```text
-Saída esperada:
-antes:  0 -> 0 -> 21 -> 0 -> 19 -> 0 -> NULL
-depois: 21 -> 19 -> NULL
-4 leituras removidas
-só falhas: NULL (2 removidas)
-```
-
-```bash
-gcc ~/LPEDC/material/E459.c ~/LPEDC/material/0077-lista.c -o ~/LPEDC/material/E459 && ~/LPEDC/material/E459
-```
-
-**Exercício E460** · ★★☆
-
-Num leilão online, a cada rodada o MENOR lance sai da disputa. Os lances
-estão numa lista de structs Lance (declarada abaixo). Escreva
-
-```text
-Lance *lance_insere(Lance *inicio, const char *nome, int valor)  no início
-void lance_imprime(const Lance *inicio)  formato do exemplo
-void lance_libera(Lance *inicio)
-bool remove_menor(Lance **inicio, Lance *saiu)
-```
-
-remove_menor acha o nó de menor valor, copia os dados dele para *saiu, tira
-o nó da lista e devolve true (ou false se a lista estiver vazia). Insira
-Ana 150, Bruno 90, Carla 210 e Davi 175 (nesta ordem), mostre a lista e
-rode duas rodadas.
-
-```text
-Saída esperada:
-Davi R$ 175 -> Carla R$ 210 -> Bruno R$ 90 -> Ana R$ 150 -> NULL
-saiu Bruno (R$ 90)
-Davi R$ 175 -> Carla R$ 210 -> Ana R$ 150 -> NULL
-saiu Ana (R$ 150)
-Davi R$ 175 -> Carla R$ 210 -> NULL
-```
-
-```bash
-gcc ~/LPEDC/material/E460.c ~/LPEDC/material/0077-lista.c -o ~/LPEDC/material/E460 && ~/LPEDC/material/E460
-```
-
-**Exercício E462** · ★★★
-
-O vagão do MEIO do trem precisa ir para a manutenção, e você só pode
-percorrer a lista UMA vez (sem contar os nós antes). Escreva
-bool remove_meio(No **inicio), com dois ponteiros que saem do início: um
-anda um nó por vez e o outro anda dois. Com quantidade par, o meio é o
-SEGUNDO dos dois do centro. No main, monte a lista 1 a 7, a lista
-10, 20, 30, 40, 50, 60 e a lista de um nó só (99), inserindo no início;
-remova o meio de cada uma e imprima as três.
-
-```text
-Saída esperada:
-1 -> 2 -> 3 -> 5 -> 6 -> 7 -> NULL
-10 -> 20 -> 30 -> 50 -> 60 -> NULL
-NULL
-```
-
-```bash
-gcc ~/LPEDC/material/E462.c ~/LPEDC/material/0077-lista.c -o ~/LPEDC/material/E462 && ~/LPEDC/material/E462
-```
-
-### 0078 · Lista ordenada
-
-**Exercício E463** · ★☆☆
-
-As notas do simulado saíram nesta ordem: 7, 3, 9, 5, 10, 1. Insira todas
-com lista_insere_ordenado, mostre a lista e depois a menor e a maior nota.
-
-```text
-Saída esperada:
-1 -> 3 -> 5 -> 7 -> 9 -> 10 -> NULL
-menor: 1, maior: 10
-```
-
-```bash
-gcc ~/LPEDC/material/E463.c ~/LPEDC/material/0078-lista.c -o ~/LPEDC/material/E463 && ~/LPEDC/material/E463
-```
-
-**Exercício E465** · ★★☆
-
-O entregador anotou os números das casas da rua, com repetidos: 5, 3, 5,
-8, 3, 3, 1. Insira tudo em ordem e escreva
-
-```text
-int remove_repetidos(No *inicio)
-```
-
-que deixa um só de cada número e devolve quantos nós tirou.
-
-```text
-Saída esperada:
-antes:  1 -> 3 -> 3 -> 3 -> 5 -> 5 -> 8 -> NULL
-depois: 1 -> 3 -> 5 -> 8 -> NULL
-3 repetidos removidos
-```
-
-```bash
-gcc ~/LPEDC/material/E465.c ~/LPEDC/material/0078-lista.c -o ~/LPEDC/material/E465 && ~/LPEDC/material/E465
-```
-
-**Exercício E466** · ★★☆
-
-Duas linhas de ônibus saem do mesmo terminal. Os horários de cada uma
-(em minutos depois das 6h) estão em listas crescentes:
-
-```text
-linha 101: 0 -> 25 -> 50 -> 75
-linha 202: 10 -> 25 -> 40 -> 90
-```
-
-Monte as duas com lista_insere_ordenado (entrando fora de ordem) e escreva
-No *intercala(No *a, No *b), que junta as duas numa lista só, também
-crescente, SEM criar nenhum nó novo: só religando os que existem. Mostre
-o resultado.
-
-```text
-Saída esperada:
-0 -> 10 -> 25 -> 25 -> 40 -> 50 -> 75 -> 90 -> NULL
-```
-
-```bash
-gcc ~/LPEDC/material/E466.c ~/LPEDC/material/0078-lista.c -o ~/LPEDC/material/E466 && ~/LPEDC/material/E466
-```
-
-**Exercício E468** · ★★★
-
-Os pedidos do delivery chegaram fora de ordem: 3 -> 7 -> 1 -> 9 -> 4 (monte
-inserindo no início 4, 9, 1, 7 e 3). Escreva No *ordena(No *inicio, int
-*passos), que deixa a lista em ordem crescente pelo método da inserção,
-SÓ RELIGANDO os nós: nada de malloc, nada de free, nada de trocar valores
-entre nós. Para medir o custo, some 1 em *passos cada vez que o laço de
-encaixe anda um nó. Mostre antes, depois e os passos para a lista dos
-pedidos e para o pior caso, uma lista que já chega crescente 1 a 5.
-
-```text
-Saída esperada:
-antes:  3 -> 7 -> 1 -> 9 -> 4 -> NULL
-depois: 1 -> 3 -> 4 -> 7 -> 9 -> NULL  (6 passos)
-antes:  1 -> 2 -> 3 -> 4 -> 5 -> NULL
-depois: 1 -> 2 -> 3 -> 4 -> 5 -> NULL  (10 passos)
-```
-
-```bash
-gcc ~/LPEDC/material/E468.c ~/LPEDC/material/0078-lista.c -o ~/LPEDC/material/E468 && ~/LPEDC/material/E468
-```
-
-### 0079 · Lista dupla
-
-**Exercício E469** · ★☆☆
-
-O pátio de manobras quer saber o peso dos ÚLTIMOS 3 vagões do trem, os que
-vão ser desengatados na próxima estação. Monte o trem com lista_insere_fim
-(120, 95, 101, 88, 130 e 76 toneladas) e, começando do fim e andando com
-ant, mostre os 3 últimos (do último para trás) e a soma deles. Não comece
-do início.
-
-```text
-Saída esperada:
-76 130 88
-últimos 3: 294 t
-```
-
-```bash
-gcc ~/LPEDC/material/E469.c ~/LPEDC/material/0079-lista.c -o ~/LPEDC/material/E469 && ~/LPEDC/material/E469
-```
-
-**Exercício E471** · ★★☆
-
-Um palíndromo se lê igual nos dois sentidos. Com uma lista dupla dá para
-conferir sem vetor nenhum: um ponteiro sai do início, outro sai do fim, e
-os dois andam em direção ao meio comparando. Guarde cada letra como int
-(char é número) e escreva:
-
-```text
-void monta(Lista *l, const char *palavra)   uma letra por nó, no fim
-bool eh_palindromo(const Lista *l)
-```
-
-Teste com "radar", "trem", "arara" e "ab".
-
-```text
-Saída esperada:
-radar: sim
-trem: não
-arara: sim
-ab: não
-```
-
-```bash
-gcc ~/LPEDC/material/E471.c ~/LPEDC/material/0079-lista.c -o ~/LPEDC/material/E471 && ~/LPEDC/material/E471
-```
-
-**Exercício E472** · ★★☆
-
-Engatar um vagão no meio do trem mexe em QUATRO setas. Monte o trem 98, 105,
-87, 110 com lista_insere_fim e escreva
-
-```text
-bool insere_depois(Lista *l, No *p, int valor)
-```
-
-que cria um nó com o valor logo depois do nó p (que está na lista), sem
-esquecer o caso em que p é o último. Engate um vagão de 99 t depois do de
-105 e um de 70 t depois do último. Mostre a lista nos dois sentidos
-(lista_imprime e lista_imprime_reverso) e a quantidade de vagões.
-
-```text
-Saída esperada:
-98 <-> 105 <-> 99 <-> 87 <-> 110 <-> 70
-70 <-> 110 <-> 87 <-> 99 <-> 105 <-> 98
-6 vagões
-```
-
-```bash
-gcc ~/LPEDC/material/E472.c ~/LPEDC/material/0079-lista.c -o ~/LPEDC/material/E472 && ~/LPEDC/material/E472
-```
-
-**Exercício E474** · ★★★
-
-Todo editor de texto tem um cursor que anda para os dois lados, e uma
-lista dupla de letras é um jeito clássico de fazer isso: inserir e apagar
-na posição do cursor custa O(1). Simule o teclado com a string de teclas
-
-```text
-"progamr#<<r>>a"
-```
-
-onde letra insere na posição do cursor, '<' anda uma letra para a
-esquerda, '>' anda para a direita e '#' apaga a letra à esquerda do
-cursor (o backspace). Nas pontas, '<', '>' e '#' não fazem nada. No fim,
-mostre o texto com uma '|' onde está o cursor. Use uma lista dupla de
-letras, com a struct escrita por você.
-
-```text
-Saída esperada:
-texto: programa|
-```
-
-```bash
-gcc ~/LPEDC/material/E474.c ~/LPEDC/material/0079-lista.c -o ~/LPEDC/material/E474 && ~/LPEDC/material/E474
-```
-
-### 0080 · Lista circular
-
-**Exercício E475** · ★☆☆
-
-Numa roda de chimarrão com 5 pessoas (numeradas de 1 a 5), a cuia começa
-com a pessoa 1 e passa para a seguinte 12 vezes. Com quem ela fica? Monte
-a roda com lista_insere_fim e descubra ANDANDO na lista circular. Depois
-confira com uma conta usando %.
-
-```text
-Saída esperada:
-1 -> 2 -> 3 -> 4 -> 5 -> (volta ao 1)
-depois de 12 passadas, a cuia está com a pessoa 3
-conferindo com %: pessoa 3
-```
-
-```bash
-gcc ~/LPEDC/material/E475.c ~/LPEDC/material/0080-lista.c -o ~/LPEDC/material/E475 && ~/LPEDC/material/E475
-```
-
-**Exercício E477** · ★★☆
-
-Rita, Davi e Lia vão de carro de Belo Horizonte a Vitória e voltam: são
-1000 km de estrada. Eles revezam ao volante, nesta ordem, cada um
-dirigindo um trecho de 150 km (o último trecho é o que sobrar). Com uma
-lista circular de structs (nome e km dirigidos), mostre cada trecho e, no
-fim, quanto cada um dirigiu.
-
-```text
-Saída esperada:
-trecho 1: Rita dirige 150 km
-trecho 2: Davi dirige 150 km
-trecho 3: Lia dirige 150 km
-trecho 4: Rita dirige 150 km
-trecho 5: Davi dirige 150 km
-trecho 6: Lia dirige 150 km
-trecho 7: Rita dirige 100 km
-Rita: 400 km
-Davi: 300 km
-Lia: 300 km
-```
-
-```bash
-gcc ~/LPEDC/material/E477.c ~/LPEDC/material/0080-lista.c -o ~/LPEDC/material/E477 && ~/LPEDC/material/E477
-```
-
-**Exercício E478** · ★★☆
-
-Dois salões do restaurante vão virar um só. Cada salão é uma lista
-circular de mesas, guardada pelo último nó: o salão A tem as mesas 1, 2 e
-3 e o B tem 10 e 20 (monte com lista_insere_fim). Escreva
-No *concatena(No *ult_a, No *ult_b), que emenda b depois de a e devolve o
-último da lista nova, em O(1): sem percorrer nada, só trocando ponteiros.
-Trate as listas vazias. Mostre A, B, a junção e a junção com uma lista
-vazia (NULL). No fim, libere a lista juntada uma vez só.
-
-```text
-Saída esperada:
-A: 1 -> 2 -> 3 -> (volta ao 1)
-B: 10 -> 20 -> (volta ao 10)
-juntas: 1 -> 2 -> 3 -> 10 -> 20 -> (volta ao 1)
-com vazia: 1 -> 2 -> 3 -> 10 -> 20 -> (volta ao 1)
-```
-
-```bash
-gcc ~/LPEDC/material/E478.c ~/LPEDC/material/0080-lista.c -o ~/LPEDC/material/E478 && ~/LPEDC/material/E478
-```
-
-**Exercício E479** · ★★★
-
-O sistema operacional divide a CPU entre os programas com o escalonamento
-round-robin: cada processo roda no máximo um QUANTUM de tempo e vai para
-o fim da fila; quem termina sai da roda. Simule com uma lista circular de
-processos (id e tempo que falta), quantum 2, e os processos P1 (precisa de
-5 unidades), P2 (2) e P3 (4), chegando nessa ordem no tempo 0. A struct é sua.
-
-```text
-Saída esperada:
-t=0..2: P1 (falta 3)
-t=2..4: P2 (terminou)
-t=4..6: P3 (falta 2)
-t=6..8: P1 (falta 1)
-t=8..10: P3 (terminou)
-t=10..11: P1 (terminou)
-```
-
-```bash
-gcc ~/LPEDC/material/E479.c ~/LPEDC/material/0080-lista.c -o ~/LPEDC/material/E479 && ~/LPEDC/material/E479
-```
-
-### 0081 · Juntando tudo
+### Exercícios
 
 **Exercício E481** · ★☆☆
 
@@ -2200,11 +2215,13 @@ P + Q = 4x^4 + 7x - 5
 gcc ~/LPEDC/material/E486.c ~/LPEDC/material/0081-playlist.c -o ~/LPEDC/material/E486 && ~/LPEDC/material/E486
 ```
 
-### Lista do módulo
+---
+
+## Lista do módulo
 
 30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P1101.c a P1130.c, em `material/`; resoluções em `_respostas/11-listas/lista/`.
 
-#### ★☆☆ Aquecimento
+### ★☆☆ Aquecimento
 
 **Exercício P1101** · ★☆☆ · Encaixar uma música no meio da playlist
 
@@ -2439,7 +2456,7 @@ Saída esperada:
 [4 3 2 1] em 2 trocas
 ```
 
-#### ★★☆ Para pensar
+### ★★☆ Para pensar
 
 **Exercício P1111** · ★★☆ · Juntar dois rankings já em ordem decrescente
 
@@ -2694,7 +2711,7 @@ k = 0:  2 -> 3 -> 4 -> 5 -> 1 -> NULL
 
 **Resposta esperada:** O(n) e memória O(1).
 
-#### ★★★ Desafio
+### ★★★ Desafio
 
 **Exercício P1121** · ★★★ · A agenda que sobrevive ao desligar
 
@@ -3000,7 +3017,7 @@ Não nulos: 6 de 15
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas para fazer num arquivo seu, misturando os assuntos do módulo. Use
 o gcc com as flags de estudo em todos: resposta certa com vazamento não vale.
@@ -3179,7 +3196,7 @@ entrando no meio).
 
 </details>
 
-### Questões do POSCOMP
+## Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -3188,7 +3205,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 | 2019 | 26 | Afirmações sobre listas encadeadas | D | [caderno](https://www.sbc.org.br/wp-content/uploads/2025/02/0518.002_Exame_POSCOMP_2019.pdf) |
 | 2024 | 24 | Lista encadeada ordenada, tipo de lista | E | [caderno](https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2024.pdf) |
 
-### Questões de provas do PPGI
+## Questões de provas do PPGI
 
 Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.
 

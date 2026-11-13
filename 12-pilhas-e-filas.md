@@ -57,9 +57,12 @@ marca o item que sai e cinza a gaveta que virou vaga.
 
 ---
 
-## 1. Conceitos gerais
+> [!NOTE]
+> Cada assunto é um capítulo: **Conceito** (a explicação), **Exemplos de uso** (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e **Exercícios** (cada um é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta; resoluções em `_respostas/12-pilhas-e-filas/`).
 
-### 0082 · Pilha
+## 0082 · Pilha
+
+### Conceito
 
 - **Pilha** (*stack*): só o **topo** está ao alcance. O último a entrar é o
   primeiro a sair, **LIFO** (*last in, first out*) (FEOFILOFF, 2009).
@@ -95,175 +98,7 @@ bool pilha_topo(const Pilha *p, int *valor); // peek: olha o topo sem tirar
 > Aqui `n` é a próxima vaga: empilha em `itens[n]` e depois `n++`; desempilha
 > com `n--` e depois lê. Muito livro usa `topo = -1`: não misture convenções.
 
-### 0083 · Pilha encadeada
-
-- **Pilha encadeada**: cada item fica num **nó** alocado com `malloc`, como
-  na lista do módulo 11. A pilha só "enche" quando acaba a memória
-  (CELES; RANGEL, 2002).
-- **Topo no começo da lista**: inserir e remover no início é O(1). Remover
-  do fim exigiria achar o penúltimo, O(n) (FEOFILOFF, 2009).
-- **Empilhar** = inserir no início: o novo nó aponta para o antigo topo, e o
-  topo passa a ser o novo (DEITEL; DEITEL, 2011, cap. 12).
-- **Desempilhar** = remover do início: guarda o valor, avança o topo e
-  libera o nó velho. **Vazia** é `topo == NULL` (DEITEL; DEITEL, 2011,
-  cap. 12).
-- **Mesma interface**: o `pilha.h` é idêntico ao do 0082; só o `pilha.c`
-  muda, e quem usa não percebe a troca (CELES; RANGEL, 2002).
-- **Custo de espaço**: cada nó ocupa 16 bytes em 64 bits, contra 4 por item
-  no vetor. A encadeada troca espaço por não ter teto.
-
-> [!WARNING]
-> Trocar a ordem destrói a pilha: com `p->topo = novo` antes de
-> `novo->prox = p->topo`, o nó aponta para **ele mesmo** e os de baixo vazam.
-> No desempilhar, ler `velho->valor` **depois** do `free` é
-> `heap-use-after-free`.
-
-### 0084 · Pilha na prática: parênteses e notação pós-fixa
-
-- **Contador não basta**: com um só tipo de parêntese, somar 1 no `(` e
-  tirar 1 no `)` resolve. Com `()`, `[]` e `{}` falha: em `( [ ) ]` as contas
-  fecham, mas o par está errado (TENENBAUM; LANGSAM; AUGENSTEIN, 1995,
-  cap. 2).
-- **Regra**: todo fechamento casa com a abertura **mais recente** ainda
-  pendente, que é o topo de uma pilha (FEOFILOFF, 2009).
-- **Algoritmo**: abriu, **empilha**; fechou, **desempilha** e confere o par
-  (pilha vazia ou par errado é erro); outro caractere, ignora; no fim, a
-  pilha tem de estar **vazia** (FEOFILOFF, 2009).
-- **Infixa e pós-fixa**: na **infixa**, o operador fica no meio e exige
-  parênteses e precedência. Na **pós-fixa** (a da HP 12C), ele vem **depois**
-  dos operandos: `35 25 + 3 * 4 /` (TENENBAUM; LANGSAM; AUGENSTEIN, 1995,
-  cap. 2).
-- **Avaliar a pós-fixa**: número **empilha**; operador **desempilha dois**,
-  calcula e **empilha o resultado**. No fim sobra um número, o resultado
-  (KERNIGHAN; RITCHIE, 1988, seç. 4.3).
-- **Custo**: a pilha nunca passa do número de caracteres; tempo e memória
-  O(n), cada caractere visto uma vez (FEOFILOFF, 2009).
-
-> [!WARNING]
-> Na pós-fixa, o **primeiro** a sair é o operando da **direita**. Em `8 3 -`,
-> sai o 3 (b) e depois o 8 (a): a conta é `a - b = 5`. Teste com `-` e `/`,
-> onde a inversão aparece. Nos parênteses, esquecer o teste final de pilha
-> vazia faz `{ [ (` passar como balanceada.
-
-### 0085 · Fila
-
-- **Fila** (*queue*): entra pelo **fim** e sai pelo **início**. O primeiro a
-  entrar é o primeiro a sair, **FIFO** (*first in, first out*), o contrário
-  da pilha (FEOFILOFF, 2009).
-- **TAD**: a mesma cara da pilha, com inserir, retirar, olhar o primeiro e
-  vazia? (CELES; RANGEL, 2002).
-
-```c
-typedef struct fila Fila; // tipo opaco: os campos ficam no fila.c
-
-Fila *fila_cria(void);                          // fila vazia (NULL se faltar memória)
-void fila_libera(Fila *f);                      // devolve toda a memória da fila
-bool fila_vazia(const Fila *f);                 // true se não tem ninguém
-int fila_tamanho(const Fila *f);                // quantos estão na fila
-bool fila_insere(Fila *f, int valor);           // entra no fim: false se não coube
-bool fila_retira(Fila *f, int *valor);          // sai do início: false se vazia
-bool fila_primeiro(const Fila *f, int *valor);  // olha quem é o próximo, sem tirar
-```
-
-- **Fila em vetor**: mexe nas duas pontas. Empurrar todo mundo a cada
-  retirada custa O(n); sem empurrar, a fila bate no fim do vetor com as
-  primeiras gavetas vazias (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 4).
-- **Fila circular**: passou da última gaveta, volta à 0. Guarde o
-  **início** e o número de itens `n`; a próxima vaga é
-  `(inicio + n) % CAPACIDADE` (CELES; RANGEL, 2002).
-- **Cheia ou vazia**: só com `inicio` e `fim`, as duas têm `inicio == fim`.
-  Ou se guarda `n`, ou se **sacrifica uma gaveta**: cheia quando
-  `(fim + 1) % CAPACIDADE == inicio`, como no Cormen com `Q.head` e `Q.tail`
-  (CORMEN et al., 2024, cap. 10).
-- **Custo**: inserir e retirar são O(1). Retirar não apaga: o valor fica na
-  gaveta até alguém escrever por cima (FEOFILOFF, 2009).
-
-> [!WARNING]
-> O tamanho como `fim - inicio` dá negativo depois da volta: com início 4 e
-> fim 2, dá -2. Use o contador `n` ou `(fim - inicio + CAPACIDADE) %
-> CAPACIDADE`.
-
-### 0086 · Fila encadeada
-
-- **Fila encadeada**: troca o vetor por **nós**, como a pilha encadeada. Só
-  recusa um item quando acaba a memória (CELES; RANGEL, 2002).
-- **Dois ponteiros**: `inicio`, o próximo a sair, e `fim`, o último que
-  entrou. Na fila vazia, os dois são `NULL` (FEOFILOFF, 2009).
-- **Retirar** do começo é `inicio = inicio->prox`, O(1). **Inserir** no fim
-  é `fim->prox = novo; fim = novo`, também O(1) graças ao `fim`
-  (DEITEL; DEITEL, 2011, cap. 12).
-- **Sai pelo início, entra pelo fim**: o contrário não serve numa lista
-  simples, porque remover o último exige o penúltimo (CELES; RANGEL, 2002).
-- **Casos de borda**: inserir na fila vazia atualiza também o `inicio`;
-  retirar o último zera também o `fim` (CELES; RANGEL, 2002).
-- **Mesma interface**: o `fila.h` é o do 0085; só o `fila.c` muda. Cada
-  inserção chama `malloc` e cada retirada `free`, mais caros que uma gaveta
-  de vetor.
-
-> [!WARNING]
-> Retirar o **último** sem zerar o `fim` deixa o `fim` apontando para o nó
-> liberado, e o próximo `fila_insere` escreve `fim->prox` em memória liberada
-> (`heap-use-after-free`). Inserir na fila vazia sem atualizar o `inicio`
-> deixa a fila "vazia" para sempre.
-
-### 0087 · Deque
-
-- **Deque** (*double-ended queue*, pronuncia-se "deck"): uma **fila dupla**,
-  que entra e sai pelas **duas** pontas (CELES; RANGEL, 2002).
-- **Quatro operações**: `deque_insere_inicio` e `deque_retira_inicio` mexem
-  na frente; `deque_insere_fim` e `deque_retira_fim`, no fundo
-  (CELES; RANGEL, 2002).
-- **Generaliza pilha e fila**: inserindo e retirando no fim, é uma
-  **pilha**; inserindo no fim e retirando no início, uma **fila**
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 4).
-- **Em vetor circular**: é a fila do 0085 com o `inicio` andando também para
-  **trás**. Para inserir na frente, ele recua uma gaveta; da 0 volta para a
-  última. Retirar do fim só diminui `n`. Tudo O(1) (CELES; RANGEL, 2002).
-- **Encadeado**: exige lista **dupla** (0079), porque para retirar do fim o
-  último nó precisa conhecer o penúltimo (CELES; RANGEL, 2002).
-- **`static` numa função**: tira a função da ligação externa e a torna
-  **privada** do arquivo (KERNIGHAN; RITCHIE, 1988).
-
-> [!WARNING]
-> Em C, o resto de negativo é **negativo**: `-1 % 8` vale `-1`, não 7. Assim
-> `(inicio - 1) % CAPACIDADE` com `inicio = 0` escreve em `itens[-1]`. Some a
-> capacidade antes: `(inicio - 1 + CAPACIDADE) % CAPACIDADE`
-> (CPPREFERENCE, s.d.).
-
-### 0088 · Juntando tudo: a calculadora de expressões
-
-- **Duas etapas**: **converter** a infixa em pós-fixa e **avaliar** a
-  pós-fixa, com uma **fila** no meio e duas **pilhas**
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 2).
-- **Pátio de manobras** (*shunting-yard*): os números vão direto para a fila
-  de saída; os operadores esperam numa pilha até nenhum operador mais forte
-  precisar passar na frente. O algoritmo é de Dijkstra (DIJKSTRA, 1961).
-- **Regras da conversão**: número vai para a fila; `(` empilha; `)`
-  desempilha para a fila até achar o `(`, que é descartado; operador
-  desempilha enquanto o topo tiver precedência **maior ou igual** e depois se
-  empilha; no fim, o que sobrou vai para a fila (FEOFILOFF, 2009).
-- **Avaliar**: os itens saem da fila na ordem de entrada (FIFO) e passam por
-  uma **pilha de valores**, como no 0084 (KERNIGHAN; RITCHIE, 1988, seç. 4.3).
-- **Produtor e consumidor**: a etapa 1 produz itens e a 2 os consome na mesma
-  ordem; a fila também guarda o 35 inteiro, sem juntar dígitos de novo.
-- **Códigos negativos**: a fila e a pilha só guardam `int`. Os números são
-  `>= 0`, então os operadores viram negativos num `enum` (0063): `SOMA = -1`,
-  `SUB = -2`. Na avaliação, `t < 0` é operador.
-- **Custo**: cada símbolo entra e sai da fila uma vez e de cada pilha no
-  máximo uma: O(n).
-
-> [!WARNING]
-> O "maior **ou igual**" muda o resultado. Só com "maior", `8 - 3 - 2` vira
-> `8 3 2 - -`, que dá 7; o certo é `(8 - 3) - 2 = 3`. Mesma precedência
-> associa **à esquerda**: o que já está na pilha sai antes do novo.
-
----
-
-## 2. Exemplos de uso
-
-Cada exemplo compila sozinho. Rode com o comando abaixo dele e compare com a saída no fim do código.
-
-### 0082 · Pilha
+### Exemplos de uso
 
 No app de delivery, os preços entram em centavos (2590, 800 e 1200) nas
 gavetas 0, 1 e 2, com `n` igual a 3. O "desfazer" tira o 1200, o último:
@@ -429,7 +264,125 @@ int main(void) {
 gcc ~/LPEDC/material/A164.c ~/LPEDC/material/0082-pilha.c -o ~/LPEDC/material/A164 && ~/LPEDC/material/A164
 ```
 
-### 0083 · Pilha encadeada
+### Exercícios
+
+**Exercício E487** · ★☆☆
+
+O garçom empilha as comandas no espeto do balcão, e a cozinha sempre pega a
+de cima. Com o pilha.h, empilhe 4 e 7; desempilhe e mostre o valor; empilhe 2
+e 9; mostre o topo sem tirar; desempilhe duas vezes e mostre o último valor
+tirado e o tamanho da pilha; esvazie a pilha mostrando um valor por linha e
+mostre "vazia? " com o resultado de pilha_vazia (1 ou 0). Por fim, chame
+pilha_desempilha mais uma vez, guarde o retorno num bool e mostre o que a
+função devolveu e quanto x ficou valendo.
+
+```text
+Saída esperada:
+7
+9
+2 1
+4
+vazia? 1
+mais um desempilha: devolveu 0, x = 4
+```
+
+```bash
+gcc ~/LPEDC/material/E487.c ~/LPEDC/material/0082-pilha.c -o ~/LPEDC/material/E487 && ~/LPEDC/material/E487
+```
+
+**Exercício E489** · ★★☆
+
+Escreva int soma_pedido(Pilha *p), que devolve a soma de todos os preços (em
+centavos) de uma pilha do pilha.h, usando só as funções da interface. A pilha
+tem que voltar exatamente como estava, na mesma ordem: o cliente ainda pode
+querer desfazer. No main, empilhe 2590, 800 e 1200 (nessa ordem), mostre o
+total em reais e, depois, o topo e o tamanho da pilha.
+
+```text
+Saída esperada:
+Total: R$ 45,90
+Topo continua: R$ 12,00 (3 itens)
+```
+
+```bash
+gcc ~/LPEDC/material/E489.c ~/LPEDC/material/0082-pilha.c -o ~/LPEDC/material/E489 && ~/LPEDC/material/E489
+```
+
+**Exercício E490** · ★★☆
+
+No balcão do restaurante cabem 4 bandejas empilhadas. Escreva a própria pilha:
+typedef struct Balcao (vetor itens de CAPACIDADE ints e o índice topo, que vale
+-1 quando a pilha está vazia) e bool balcao_empilha(Balcao *b, int bandeja),
+que recusa (devolve false) a bandeja quando o balcão está cheio. No main,
+tente empilhar as bandejas 1 a 5 mostrando o resultado de cada uma e, no fim,
+a bandeja que está no topo.
+
+```text
+Saída esperada:
+Empilhou a bandeja 1
+Empilhou a bandeja 2
+Empilhou a bandeja 3
+Empilhou a bandeja 4
+Balcão cheio: a bandeja 5 ficou de fora
+No topo: bandeja 4
+```
+
+```bash
+gcc ~/LPEDC/material/E490.c ~/LPEDC/material/0082-pilha.c -o ~/LPEDC/material/E490 && ~/LPEDC/material/E490
+```
+
+**Exercício E492** · ★★★
+
+A bancada da cozinha tem 6 lugares e guarda duas pilhas de pratos: os limpos
+crescem a partir da posição 0 e os sujos a partir da posição 5, um em direção
+ao outro. A bancada só enche quando os 6 lugares estão ocupados. Sem usar o
+pilha.h, escreva a struct Bancada (vetor de 6 int e dois índices) e as funções
+bool empilha_limpo, empilha_sujo, desempilha_limpo e desempilha_sujo. No main:
+empilhe os limpos 1, 2 e 3 e os sujos 10, 20 e 30; tente empilhar o limpo 4
+(tem que falhar); desempilhe um sujo; empilhe o limpo 4 de novo; e esvazie as
+duas pilhas mostrando o que sai.
+
+```text
+Saída esperada:
+Limpo 4: bancada cheia
+Saiu o sujo 30
+Limpo 4: ok
+Limpos: 4 3 2 1
+Sujos: 20 10
+```
+
+```bash
+gcc ~/LPEDC/material/E492.c ~/LPEDC/material/0082-pilha.c -o ~/LPEDC/material/E492 && ~/LPEDC/material/E492
+```
+
+---
+
+## 0083 · Pilha encadeada
+
+### Conceito
+
+- **Pilha encadeada**: cada item fica num **nó** alocado com `malloc`, como
+  na lista do módulo 11. A pilha só "enche" quando acaba a memória
+  (CELES; RANGEL, 2002).
+- **Topo no começo da lista**: inserir e remover no início é O(1). Remover
+  do fim exigiria achar o penúltimo, O(n) (FEOFILOFF, 2009).
+- **Empilhar** = inserir no início: o novo nó aponta para o antigo topo, e o
+  topo passa a ser o novo (DEITEL; DEITEL, 2011, cap. 12).
+- **Desempilhar** = remover do início: guarda o valor, avança o topo e
+  libera o nó velho. **Vazia** é `topo == NULL` (DEITEL; DEITEL, 2011,
+  cap. 12).
+- **Mesma interface**: o `pilha.h` é idêntico ao do 0082; só o `pilha.c`
+  muda, e quem usa não percebe a troca (CELES; RANGEL, 2002).
+- **Custo de espaço**: cada nó ocupa 16 bytes em 64 bits, contra 4 por item
+  no vetor. A encadeada troca espaço por não ter teto.
+
+> [!WARNING]
+> Trocar a ordem destrói a pilha: com `p->topo = novo` antes de
+> `novo->prox = p->topo`, o nó aponta para **ele mesmo** e os de baixo vazam.
+> No desempilhar, ler `velho->valor` **depois** do `free` é
+> `heap-use-after-free`.
+
+### Exemplos de uso
 
 Na planilha, a célula B2 foi de R$ 1500 para 1800, 2100 e 2500. Antes de cada
 edição, o valor antigo vai para a pilha; o 2100 fica no primeiro nó e o
@@ -629,7 +582,125 @@ int main(void) {
 gcc ~/LPEDC/material/A166.c ~/LPEDC/material/0083-pilha.c -o ~/LPEDC/material/A166 && ~/LPEDC/material/A166
 ```
 
-### 0084 · Pilha na prática: parênteses e notação pós-fixa
+### Exercícios
+
+**Exercício E493** · ★☆☆
+
+Escreva void estado(const Pilha *p), que mostra a pilha do pilha.h só com a
+interface: "[N itens, topo X]" (com "item" no singular quando N é 1) ou
+"[vazia]". No main, empilhe 3 e mostre o estado; empilhe 8 e mostre; desempilhe
+e mostre "saiu X -> " seguido do estado; empilhe 5 e mostre; empilhe 9 e
+mostre; e então esvazie a pilha num laço, mostrando "saiu X -> " e o estado a
+cada passo.
+
+```text
+Saída esperada:
+[1 item, topo 3]
+[2 itens, topo 8]
+saiu 8 -> [1 item, topo 3]
+[2 itens, topo 5]
+[3 itens, topo 9]
+saiu 9 -> [2 itens, topo 5]
+saiu 5 -> [1 item, topo 3]
+saiu 3 -> [vazia]
+```
+
+```bash
+gcc ~/LPEDC/material/E493.c ~/LPEDC/material/0083-pilha.c -o ~/LPEDC/material/E493 && ~/LPEDC/material/E493
+```
+
+**Exercício E495** · ★★☆
+
+O botão Voltar do navegador é uma pilha de páginas. Com os tipos abaixo (pilha
+encadeada com um texto em cada nó), escreva bool visita(Historico *h, const
+char *url), que põe a página no topo, e bool voltar(Historico *h), que tira a
+página do topo, mas só se ela não for a única (da primeira página não se
+volta). No main, visite g1.globo.com, ge.globo.com e receitas.com, mostre a
+página atual, tente voltar, visite cifraclub.com.br, mostre a página atual,
+tente voltar três vezes e libere a memória.
+
+```text
+Saída esperada:
+Agora em: receitas.com
+Voltar -> ge.globo.com
+Agora em: cifraclub.com.br
+Voltar -> ge.globo.com
+Voltar -> g1.globo.com
+Não dá para voltar de g1.globo.com
+```
+
+```bash
+gcc ~/LPEDC/material/E495.c ~/LPEDC/material/0083-pilha.c -o ~/LPEDC/material/E495 && ~/LPEDC/material/E495
+```
+
+**Exercício E496** · ★★☆
+
+Pilha de pratos do restaurante, cada prato com um número, feita com nós
+alocados. Com os tipos abaixo, escreva bool poe_prato(Prato **topo, int numero)
+e bool tira_prato(Prato **topo, int *numero), que devolve o número e libera o
+nó. No main, ponha os pratos 10, 20 e 30 (nessa ordem) e tire todos mostrando
+cada um.
+
+```text
+Saída esperada:
+Tirou o prato 30
+Tirou o prato 20
+Tirou o prato 10
+```
+
+```bash
+gcc ~/LPEDC/material/E496.c ~/LPEDC/material/0083-pilha.c -o ~/LPEDC/material/E496 && ~/LPEDC/material/E496
+```
+
+**Exercício E497** · ★★★
+
+Os pedidos da cozinha chegaram empilhados fora de ordem: 5, 3, 8, 1 e 4 (o 4 no
+topo). Escreva void ordena(Pilha *p), que deixa a pilha ordenada com o MENOR
+no topo, usando só as funções do pilha.h e no máximo UMA pilha auxiliar (nada
+de vetor). No main, empilhe os pedidos nessa ordem, chame ordena e desempilhe
+tudo mostrando os valores numa linha, separados por espaço.
+
+```text
+Saída esperada:
+1 3 4 5 8
+```
+
+```bash
+gcc ~/LPEDC/material/E497.c ~/LPEDC/material/0083-pilha.c -o ~/LPEDC/material/E497 && ~/LPEDC/material/E497
+```
+
+---
+
+## 0084 · Pilha na prática: parênteses e notação pós-fixa
+
+### Conceito
+
+- **Contador não basta**: com um só tipo de parêntese, somar 1 no `(` e
+  tirar 1 no `)` resolve. Com `()`, `[]` e `{}` falha: em `( [ ) ]` as contas
+  fecham, mas o par está errado (TENENBAUM; LANGSAM; AUGENSTEIN, 1995,
+  cap. 2).
+- **Regra**: todo fechamento casa com a abertura **mais recente** ainda
+  pendente, que é o topo de uma pilha (FEOFILOFF, 2009).
+- **Algoritmo**: abriu, **empilha**; fechou, **desempilha** e confere o par
+  (pilha vazia ou par errado é erro); outro caractere, ignora; no fim, a
+  pilha tem de estar **vazia** (FEOFILOFF, 2009).
+- **Infixa e pós-fixa**: na **infixa**, o operador fica no meio e exige
+  parênteses e precedência. Na **pós-fixa** (a da HP 12C), ele vem **depois**
+  dos operandos: `35 25 + 3 * 4 /` (TENENBAUM; LANGSAM; AUGENSTEIN, 1995,
+  cap. 2).
+- **Avaliar a pós-fixa**: número **empilha**; operador **desempilha dois**,
+  calcula e **empilha o resultado**. No fim sobra um número, o resultado
+  (KERNIGHAN; RITCHIE, 1988, seç. 4.3).
+- **Custo**: a pilha nunca passa do número de caracteres; tempo e memória
+  O(n), cada caractere visto uma vez (FEOFILOFF, 2009).
+
+> [!WARNING]
+> Na pós-fixa, o **primeiro** a sair é o operando da **direita**. Em `8 3 -`,
+> sai o 3 (b) e depois o 8 (a): a conta é `a - b = 5`. Teste com `-` e `/`,
+> onde a inversão aparece. Nos parênteses, esquecer o teste final de pilha
+> vazia faz `{ [ (` passar como balanceada.
+
+### Exemplos de uso
 
 Em `{ x = v[(i + 1)] }` sobram os delimitadores `{ [ ( ) ] }`. Os três
 primeiros são empilhados; o `)` encontra `(` no topo e casa, depois `]` casa
@@ -860,7 +931,135 @@ int main(void) {
 gcc ~/LPEDC/material/A168.c ~/LPEDC/material/0084-pilha.c -o ~/LPEDC/material/A168 && ~/LPEDC/material/A168
 ```
 
-### 0085 · Fila
+### Exercícios
+
+**Exercício E499** · ★☆☆
+
+Escreva bool avalia(const char *expr, int *resultado), que calcula uma
+expressão pós-fixa (inteiros não negativos e + - * /, separados por espaço)
+com uma pilha do pilha.h; devolve false se a expressão for inválida (faltam
+operandos, sobram valores ou divide por zero). Traduza à mão para pós-fixa
+a) (7 + 3) * 2, b) 7 + 3 * 2, c) 100 / (2 + 3) - 4 e d) (6 / 2) * (3 - 1).
+No main, avalie cada uma e mostre o resultado ao lado do valor da mesma conta
+escrita direto em C, com "confere" ou "NÃO confere".
+
+```text
+Saída esperada:
+7 3 + 2 * = 20 (em C: 20) confere
+7 3 2 * + = 13 (em C: 13) confere
+100 2 3 + / 4 - = 16 (em C: 16) confere
+6 2 / 3 1 - * = 6 (em C: 6) confere
+```
+
+```bash
+gcc ~/LPEDC/material/E499.c ~/LPEDC/material/0084-pilha.c -o ~/LPEDC/material/E499 && ~/LPEDC/material/E499
+```
+
+**Exercício E501** · ★★☆
+
+Escreva void diagnostico(const char *s), que confere os parênteses (), [] e {}
+de s com uma pilha do pilha.h e diz onde está o problema. Empilhe a POSIÇÃO de
+cada abertura na string (o caractere é s[pos]); a primeira posição é 0. As
+mensagens possíveis estão na saída esperada: ok, fecha sem abrir, fechamento
+trocado (dizendo onde a abertura estava) e abertura sem fechar (dizendo
+quantas faltam e qual o de cima). No main, teste "[1, (2, 3)]", "{a: [1, 2}]",
+"f(x))" e "if (a[0] {".
+
+```text
+Saída esperada:
+[1, (2, 3)]: ok
+{a: [1, 2}]: esperava ] e veio } na posição 9 (o [ abriu na posição 4)
+f(x)): fecha sem abrir na posição 4
+if (a[0] {: faltou fechar 2; o de cima é o { da posição 9
+```
+
+```bash
+gcc ~/LPEDC/material/E501.c ~/LPEDC/material/0084-pilha.c -o ~/LPEDC/material/E501 && ~/LPEDC/material/E501
+```
+
+**Exercício E502** · ★★☆
+
+Escreva int avalia(const char *expr), uma calculadora pós-fixa com uma pilha do
+pilha.h: os operandos têm um dígito, os operadores são + - * / e há um espaço
+entre os símbolos. No main, calcule "2 3 +", "8 3 -", "8 4 /" e "9 5 2 - *",
+mostrando cada conta e o resultado.
+
+```text
+Saída esperada:
+2 3 + = 5
+8 3 - = 5
+8 4 / = 2
+9 5 2 - * = 27
+```
+
+```bash
+gcc ~/LPEDC/material/E502.c ~/LPEDC/material/0084-pilha.c -o ~/LPEDC/material/E502 && ~/LPEDC/material/E502
+```
+
+**Exercício E503** · ★★★
+
+Escreva void para_posfixa(const char *in, char *out), que converte uma
+expressão infixa (operandos de UM dígito, + - * / e parênteses) para a
+notação pós-fixa, com um espaço entre os símbolos, usando a pilha do pilha.h
+para os operadores (o algoritmo do "pátio de manobras", de Dijkstra). Operadores
+de mesma precedência associam à esquerda. No main, converta e mostre as
+quatro expressões da saída esperada.
+
+```text
+Saída esperada:
+1+2*3 -> 1 2 3 * +
+(6+2)*5-8/4 -> 6 2 + 5 * 8 4 / -
+(1+2)*(3-4) -> 1 2 + 3 4 - *
+9-4-2 -> 9 4 - 2 -
+```
+
+```bash
+gcc ~/LPEDC/material/E503.c ~/LPEDC/material/0084-pilha.c -o ~/LPEDC/material/E503 && ~/LPEDC/material/E503
+```
+
+---
+
+## 0085 · Fila
+
+### Conceito
+
+- **Fila** (*queue*): entra pelo **fim** e sai pelo **início**. O primeiro a
+  entrar é o primeiro a sair, **FIFO** (*first in, first out*), o contrário
+  da pilha (FEOFILOFF, 2009).
+- **TAD**: a mesma cara da pilha, com inserir, retirar, olhar o primeiro e
+  vazia? (CELES; RANGEL, 2002).
+
+```c
+typedef struct fila Fila; // tipo opaco: os campos ficam no fila.c
+
+Fila *fila_cria(void);                          // fila vazia (NULL se faltar memória)
+void fila_libera(Fila *f);                      // devolve toda a memória da fila
+bool fila_vazia(const Fila *f);                 // true se não tem ninguém
+int fila_tamanho(const Fila *f);                // quantos estão na fila
+bool fila_insere(Fila *f, int valor);           // entra no fim: false se não coube
+bool fila_retira(Fila *f, int *valor);          // sai do início: false se vazia
+bool fila_primeiro(const Fila *f, int *valor);  // olha quem é o próximo, sem tirar
+```
+
+- **Fila em vetor**: mexe nas duas pontas. Empurrar todo mundo a cada
+  retirada custa O(n); sem empurrar, a fila bate no fim do vetor com as
+  primeiras gavetas vazias (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 4).
+- **Fila circular**: passou da última gaveta, volta à 0. Guarde o
+  **início** e o número de itens `n`; a próxima vaga é
+  `(inicio + n) % CAPACIDADE` (CELES; RANGEL, 2002).
+- **Cheia ou vazia**: só com `inicio` e `fim`, as duas têm `inicio == fim`.
+  Ou se guarda `n`, ou se **sacrifica uma gaveta**: cheia quando
+  `(fim + 1) % CAPACIDADE == inicio`, como no Cormen com `Q.head` e `Q.tail`
+  (CORMEN et al., 2024, cap. 10).
+- **Custo**: inserir e retirar são O(1). Retirar não apaga: o valor fica na
+  gaveta até alguém escrever por cima (FEOFILOFF, 2009).
+
+> [!WARNING]
+> O tamanho como `fim - inicio` dá negativo depois da volta: com início 4 e
+> fim 2, dá -2. Use o contador `n` ou `(fim - inicio + CAPACIDADE) %
+> CAPACIDADE`.
+
+### Exemplos de uso
 
 Na lotérica, o painel guarda 8 senhas. Chegam as senhas 31 a 36 (gavetas 0 a
 5) e o caixa atende 4. Chegam 37 a 40: o 37 e o 38 ocupam as gavetas 6 e 7, e
@@ -1052,7 +1251,123 @@ int main(void) {
 gcc ~/LPEDC/material/A170.c ~/LPEDC/material/0085-fila.c -o ~/LPEDC/material/A170 && ~/LPEDC/material/A170
 ```
 
-### 0086 · Fila encadeada
+### Exercícios
+
+**Exercício E505** · ★☆☆
+
+Uma fila circular de 4 gavetas, com os campos à vista: struct Fila4 com o vetor
+itens, o índice inicio e o contador n (todas as gavetas começam com -1).
+Escreva bool insere(Fila4 *f, int valor), bool retira(Fila4 *f, int *valor) e
+void mostra(const Fila4 *f), que imprime o vetor inteiro (_ nas gavetas que
+valem -1) e depois inicio e n. No main, insira 1 a 6 mostrando o estado depois
+de cada tentativa (com "recusado" quando não couber); logo depois do 2, retire
+um; no fim, retire mais dois e mostre a gaveta onde entraria o próximo.
+
+```text
+Saída esperada:
+insere 1: [1 _ _ _] inicio 0, n 1
+insere 2: [1 2 _ _] inicio 0, n 2
+retira 1: [1 2 _ _] inicio 1, n 1
+insere 3: [1 2 3 _] inicio 1, n 2
+insere 4: [1 2 3 4] inicio 1, n 3
+insere 5: [5 2 3 4] inicio 1, n 4
+insere 6: recusado [5 2 3 4] inicio 1, n 4
+retira 2: [5 2 3 4] inicio 2, n 3
+retira 3: [5 2 3 4] inicio 3, n 2
+próxima vaga: gaveta 1
+```
+
+```bash
+gcc ~/LPEDC/material/E505.c ~/LPEDC/material/0085-fila.c -o ~/LPEDC/material/E505 && ~/LPEDC/material/E505
+```
+
+**Exercício E507** · ★★☆
+
+Outra convenção de fila circular não guarda o contador: ela guarda inicio (o
+próximo a sair) e fim (a próxima vaga) e SACRIFICA uma gaveta, então com TAM 5
+cabem só 4. Com o tipo abaixo, escreva fc_vazia, fc_cheia, fc_insere e
+fc_retira (bool). No main, insira 1 a 5 (avisando "N recusado: fila cheia"
+quando não couber), retire dois mostrando "saiu X", insira 6, 7 e 8 (mesmo
+aviso) e esvazie a fila mostrando o que sobrou.
+
+```text
+Saída esperada:
+5 recusado: fila cheia
+saiu 1
+saiu 2
+8 recusado: fila cheia
+Na fila: 3 4 6 7
+```
+
+```bash
+gcc ~/LPEDC/material/E507.c ~/LPEDC/material/0085-fila.c -o ~/LPEDC/material/E507 && ~/LPEDC/material/E507
+```
+
+**Exercício E508** · ★★☆
+
+O drive-thru da lanchonete usa uma fila circular com inicio, fim (a próxima
+vaga) e uma gaveta sacrificada (TAM 6, cabem 5 carros). Com o tipo abaixo,
+escreva void entra(DriveThru *f, int placa) (ignora o carro se não couber),
+void sai(DriveThru *f) e int tamanho(const DriveThru *f), que tem que acertar
+mesmo depois que a fila deu a volta no vetor. No main, entre os carros 1 a 5 e
+mostre "Carros na fila: N"; saiam 4 e mostre; entrem 6, 7 e 8 e mostre.
+
+```text
+Saída esperada:
+Carros na fila: 5
+Carros na fila: 1
+Carros na fila: 4
+```
+
+```bash
+gcc ~/LPEDC/material/E508.c ~/LPEDC/material/0085-fila.c -o ~/LPEDC/material/E508 && ~/LPEDC/material/E508
+```
+
+**Exercício E509** · ★★★
+
+Batata quente: 7 pessoas numeradas de 1 a 7 estão em roda. A batata passa de
+mão em mão, e quem estiver com ela na 3ª passada sai. A contagem recomeça de
+quem estava ao lado, até sobrar uma pessoa (o problema de Josephus). Resolva
+com uma fila do fila.h e mostre a ordem de saída e quem sobrou.
+
+```text
+Saída esperada:
+Saíram: 3 6 2 7 5 1
+Sobrou: 4
+```
+
+```bash
+gcc ~/LPEDC/material/E509.c ~/LPEDC/material/0085-fila.c -o ~/LPEDC/material/E509 && ~/LPEDC/material/E509
+```
+
+---
+
+## 0086 · Fila encadeada
+
+### Conceito
+
+- **Fila encadeada**: troca o vetor por **nós**, como a pilha encadeada. Só
+  recusa um item quando acaba a memória (CELES; RANGEL, 2002).
+- **Dois ponteiros**: `inicio`, o próximo a sair, e `fim`, o último que
+  entrou. Na fila vazia, os dois são `NULL` (FEOFILOFF, 2009).
+- **Retirar** do começo é `inicio = inicio->prox`, O(1). **Inserir** no fim
+  é `fim->prox = novo; fim = novo`, também O(1) graças ao `fim`
+  (DEITEL; DEITEL, 2011, cap. 12).
+- **Sai pelo início, entra pelo fim**: o contrário não serve numa lista
+  simples, porque remover o último exige o penúltimo (CELES; RANGEL, 2002).
+- **Casos de borda**: inserir na fila vazia atualiza também o `inicio`;
+  retirar o último zera também o `fim` (CELES; RANGEL, 2002).
+- **Mesma interface**: o `fila.h` é o do 0085; só o `fila.c` muda. Cada
+  inserção chama `malloc` e cada retirada `free`, mais caros que uma gaveta
+  de vetor.
+
+> [!WARNING]
+> Retirar o **último** sem zerar o `fim` deixa o `fim` apontando para o nó
+> liberado, e o próximo `fila_insere` escreve `fim->prox` em memória liberada
+> (`heap-use-after-free`). Inserir na fila vazia sem atualizar o `inicio`
+> deixa a fila "vazia" para sempre.
+
+### Exemplos de uso
 
 Na pizzaria, chegam os pedidos 501, 502 e 503. A cozinha pega o 501: o início
 anda para o 502 e o nó do 501 é liberado. Chega o 504, pendurado depois do
@@ -1257,7 +1572,123 @@ int main(void) {
 gcc ~/LPEDC/material/A172.c ~/LPEDC/material/0086-fila.c -o ~/LPEDC/material/A172 && ~/LPEDC/material/A172
 ```
 
-### 0087 · Deque
+### Exercícios
+
+**Exercício E511** · ★☆☆
+
+Escreva void mostra(Fila *f), que mostra a fila encadeada do fila.h do início
+para o fim, separando por " -> " (ou "vazia"), usando só a interface, e
+deixando a fila como estava. Quando houver um item só, acrescente "(um nó só:
+início e fim apontam para ele)". No main, insira 7, 4, 9 e 1, mostrando
+"insere X: " e a fila a cada inserção; a partir da segunda, retire um logo
+depois mostrando "retira X: " e a fila; no fim, retire mais um e mostre.
+
+```text
+Saída esperada:
+insere 7: 7 (um nó só: início e fim apontam para ele)
+insere 4: 7 -> 4
+retira 7: 4 (um nó só: início e fim apontam para ele)
+insere 9: 4 -> 9
+retira 4: 9 (um nó só: início e fim apontam para ele)
+insere 1: 9 -> 1
+retira 9: 1 (um nó só: início e fim apontam para ele)
+retira 1: vazia
+```
+
+```bash
+gcc ~/LPEDC/material/E511.c ~/LPEDC/material/0086-fila.c -o ~/LPEDC/material/E511 && ~/LPEDC/material/E511
+```
+
+**Exercício E513** · ★★☆
+
+A fila do caixa da padaria guarda o NOME de cada cliente, com um texto em cada
+nó. Com os tipos abaixo, escreva bool entra(FilaPadaria *f, const char *nome),
+que pendura o cliente no fim, e bool sai(FilaPadaria *f, char *destino), que
+copia o nome do primeiro para destino, tira o nó e o libera (false se não
+tinha ninguém). No main, entrem Ana, Bruno e Carla; atenda um; entre Davi; e
+atenda todos até esvaziar, mostrando "Atendendo NOME" e, no fim, "Fila vazia".
+
+```text
+Saída esperada:
+Atendendo Ana
+Atendendo Bruno
+Atendendo Carla
+Atendendo Davi
+Fila vazia
+```
+
+```bash
+gcc ~/LPEDC/material/E513.c ~/LPEDC/material/0086-fila.c -o ~/LPEDC/material/E513 && ~/LPEDC/material/E513
+```
+
+**Exercício E514** · ★★☆
+
+A fila de pedidos da cozinha é encadeada, com ponteiros para o início e para o
+fim. Com os tipos abaixo, escreva bool cozinha_entra(Cozinha *f, int numero) e
+bool cozinha_sai(Cozinha *f, int *numero), que libera o nó. A fila tem que
+continuar funcionando depois de esvaziar e receber pedidos novos. No main,
+entrem os pedidos 11 e 12 e saiam todos; entrem 13 e 14 e saiam todos,
+mostrando "Pronto: N" a cada saída.
+
+```text
+Saída esperada:
+Pronto: 11
+Pronto: 12
+Pronto: 13
+Pronto: 14
+```
+
+```bash
+gcc ~/LPEDC/material/E514.c ~/LPEDC/material/0086-fila.c -o ~/LPEDC/material/E514 && ~/LPEDC/material/E514
+```
+
+**Exercício E515** · ★★★
+
+No banco, a lei manda atender primeiro quem tem prioridade, mas sem largar a
+fila comum esquecida. A regra da agência: chame 2 preferenciais, depois 1
+comum, e repita. Se uma das filas estiver vazia, chame da outra. Use duas
+filas do fila.h. As senhas preferenciais são 101, 102 e 103; as comuns, 1, 2,
+3 e 4. Mostre a ordem de chamada, com P na frente das preferenciais e C na
+frente das comuns.
+
+```text
+Saída esperada:
+Chamando: P101 P102 C1 P103 C2 C3 C4
+```
+
+```bash
+gcc ~/LPEDC/material/E515.c ~/LPEDC/material/0086-fila.c -o ~/LPEDC/material/E515 && ~/LPEDC/material/E515
+```
+
+---
+
+## 0087 · Deque
+
+### Conceito
+
+- **Deque** (*double-ended queue*, pronuncia-se "deck"): uma **fila dupla**,
+  que entra e sai pelas **duas** pontas (CELES; RANGEL, 2002).
+- **Quatro operações**: `deque_insere_inicio` e `deque_retira_inicio` mexem
+  na frente; `deque_insere_fim` e `deque_retira_fim`, no fundo
+  (CELES; RANGEL, 2002).
+- **Generaliza pilha e fila**: inserindo e retirando no fim, é uma
+  **pilha**; inserindo no fim e retirando no início, uma **fila**
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 4).
+- **Em vetor circular**: é a fila do 0085 com o `inicio` andando também para
+  **trás**. Para inserir na frente, ele recua uma gaveta; da 0 volta para a
+  última. Retirar do fim só diminui `n`. Tudo O(1) (CELES; RANGEL, 2002).
+- **Encadeado**: exige lista **dupla** (0079), porque para retirar do fim o
+  último nó precisa conhecer o penúltimo (CELES; RANGEL, 2002).
+- **`static` numa função**: tira a função da ligação externa e a torna
+  **privada** do arquivo (KERNIGHAN; RITCHIE, 1988).
+
+> [!WARNING]
+> Em C, o resto de negativo é **negativo**: `-1 % 8` vale `-1`, não 7. Assim
+> `(inicio - 1) % CAPACIDADE` com `inicio = 0` escreve em `itens[-1]`. Some a
+> capacidade antes: `(inicio - 1 + CAPACIDADE) % CAPACIDADE`
+> (CPPREFERENCE, s.d.).
+
+### Exemplos de uso
 
 No app de música, as faixas 5, 8 e 3 entram pelo fim, nas gavetas 0, 1 e 2.
 A 11 entra pela frente ("tocar em seguida"): o início recua da gaveta 0 e dá
@@ -1437,7 +1868,119 @@ int main(void) {
 gcc ~/LPEDC/material/A174.c ~/LPEDC/material/0087-deque.c -o ~/LPEDC/material/A174 && ~/LPEDC/material/A174
 ```
 
-### 0088 · Juntando tudo: a calculadora de expressões
+### Exercícios
+
+**Exercício E517** · ★☆☆
+
+Os números 1, 2, 3 e 4 chegam nessa ordem, um de cada vez, e cada um entra
+pela frente (deque_insere_inicio) ou pelo fundo (deque_insere_fim) de um
+Deque do deque.h. Escolha a ponta de cada um para que o deque fique 4 2 1 3 da
+frente para o fundo. Depois retire um do fundo, um da frente e mostre quem
+ficou na frente, quem ficou no fundo e o tamanho.
+
+```text
+Saída esperada:
+saiu do fim: 3
+saiu da frente: 4
+frente 2, fundo 1, tamanho 2
+```
+
+```bash
+gcc ~/LPEDC/material/E517.c ~/LPEDC/material/0087-deque.c -o ~/LPEDC/material/E517 && ~/LPEDC/material/E517
+```
+
+**Exercício E519** · ★★☆
+
+No vôlei, os 6 jogadores de um time fazem rodízio. Guarde os números 1 a 6
+num deque do deque.h e escreva, usando só a interface: void mostra(Deque *d),
+que mostra os itens da frente para o fundo e deixa o deque como estava; void
+gira_esquerda(Deque *d, int k), em que o da frente vai para o fundo, k vezes;
+e void gira_direita(Deque *d, int k), em que o do fundo vem para a frente,
+k vezes. Mostre o início, depois de girar 2 para a esquerda e depois de girar
+3 para a direita.
+
+```text
+Saída esperada:
+Início: 1 2 3 4 5 6
+Esquerda 2: 3 4 5 6 1 2
+Direita 3: 6 1 2 3 4 5
+```
+
+```bash
+gcc ~/LPEDC/material/E519.c ~/LPEDC/material/0087-deque.c -o ~/LPEDC/material/E519 && ~/LPEDC/material/E519
+```
+
+**Exercício E520** · ★★☆
+
+No embarque do avião, quem viaja com criança de colo entra na frente da fila e
+o resto entra no fim. Com a fila circular abaixo (TAM 5, campos poltronas,
+inicio e n), escreva bool entra_no_fim(Embarque *e, int poltrona), bool
+entra_na_frente(Embarque *e, int poltrona) e bool embarca(Embarque *e, int
+*poltrona). No main, entrem no fim as poltronas 10, 20 e 30, entre na frente a
+40 e embarque todos, mostrando a ordem.
+
+```text
+Saída esperada:
+Embarcando: 40 10 20 30
+```
+
+```bash
+gcc ~/LPEDC/material/E520.c ~/LPEDC/material/0087-deque.c -o ~/LPEDC/material/E520 && ~/LPEDC/material/E520
+```
+
+**Exercício E521** · ★★★
+
+O deque também pode ser feito com nós, mas com lista DUPLA: para retirar do
+fim, o último nó precisa conhecer o penúltimo (o ant). Com os tipos abaixo,
+escreva dl_insere_inicio, dl_insere_fim, dl_retira_inicio, dl_retira_fim (todas
+bool, as retiradas devolvem o valor por ponteiro e liberam o nó) e void
+dl_libera(DequeLista *d). No main, simule a fila de músicas: insira no fim as
+faixas 5, 8 e 3 e no início a 11; toque (retire do início) uma, remova (retire
+do fim) uma e mostre as que sobraram.
+
+```text
+Saída esperada:
+Tocando a faixa 11
+Removida a faixa 3
+Ainda na fila: 5 8
+```
+
+```bash
+gcc ~/LPEDC/material/E521.c ~/LPEDC/material/0087-deque.c -o ~/LPEDC/material/E521 && ~/LPEDC/material/E521
+```
+
+---
+
+## 0088 · Juntando tudo: a calculadora de expressões
+
+### Conceito
+
+- **Duas etapas**: **converter** a infixa em pós-fixa e **avaliar** a
+  pós-fixa, com uma **fila** no meio e duas **pilhas**
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 2).
+- **Pátio de manobras** (*shunting-yard*): os números vão direto para a fila
+  de saída; os operadores esperam numa pilha até nenhum operador mais forte
+  precisar passar na frente. O algoritmo é de Dijkstra (DIJKSTRA, 1961).
+- **Regras da conversão**: número vai para a fila; `(` empilha; `)`
+  desempilha para a fila até achar o `(`, que é descartado; operador
+  desempilha enquanto o topo tiver precedência **maior ou igual** e depois se
+  empilha; no fim, o que sobrou vai para a fila (FEOFILOFF, 2009).
+- **Avaliar**: os itens saem da fila na ordem de entrada (FIFO) e passam por
+  uma **pilha de valores**, como no 0084 (KERNIGHAN; RITCHIE, 1988, seç. 4.3).
+- **Produtor e consumidor**: a etapa 1 produz itens e a 2 os consome na mesma
+  ordem; a fila também guarda o 35 inteiro, sem juntar dígitos de novo.
+- **Códigos negativos**: a fila e a pilha só guardam `int`. Os números são
+  `>= 0`, então os operadores viram negativos num `enum` (0063): `SOMA = -1`,
+  `SUB = -2`. Na avaliação, `t < 0` é operador.
+- **Custo**: cada símbolo entra e sai da fila uma vez e de cada pilha no
+  máximo uma: O(n).
+
+> [!WARNING]
+> O "maior **ou igual**" muda o resultado. Só com "maior", `8 - 3 - 2` vira
+> `8 3 2 - -`, que dá 7; o certo é `(8 - 3) - 2 = 3`. Mesma precedência
+> associa **à esquerda**: o que já está na pilha sai antes do novo.
+
+### Exemplos de uso
 
 A conta do bar, digitada como `(35 + 25) * 3 / 4`. A fila de saída fica
 `35 25 + 3 * 4 /`; quando chega o `/`, a pilha de valores tem 180 e 4, e a
@@ -1749,535 +2292,7 @@ int main(void) {
 gcc ~/LPEDC/material/A176.c ~/LPEDC/material/0088-fila.c ~/LPEDC/material/0088-pilha.c -o ~/LPEDC/material/A176 && ~/LPEDC/material/A176
 ```
 
----
-
-## 3. Exercícios práticos
-
-Cada exercício é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta. Compile como os exemplos: `gcc ~/LPEDC/material/E007.c -o ~/LPEDC/material/E007 && ~/LPEDC/material/E007`. Resoluções em `_respostas/12-pilhas-e-filas/`.
-
-### 0082 · Pilha
-
-**Exercício E487** · ★☆☆
-
-O garçom empilha as comandas no espeto do balcão, e a cozinha sempre pega a
-de cima. Com o pilha.h, empilhe 4 e 7; desempilhe e mostre o valor; empilhe 2
-e 9; mostre o topo sem tirar; desempilhe duas vezes e mostre o último valor
-tirado e o tamanho da pilha; esvazie a pilha mostrando um valor por linha e
-mostre "vazia? " com o resultado de pilha_vazia (1 ou 0). Por fim, chame
-pilha_desempilha mais uma vez, guarde o retorno num bool e mostre o que a
-função devolveu e quanto x ficou valendo.
-
-```text
-Saída esperada:
-7
-9
-2 1
-4
-vazia? 1
-mais um desempilha: devolveu 0, x = 4
-```
-
-```bash
-gcc ~/LPEDC/material/E487.c ~/LPEDC/material/0082-pilha.c -o ~/LPEDC/material/E487 && ~/LPEDC/material/E487
-```
-
-**Exercício E489** · ★★☆
-
-Escreva int soma_pedido(Pilha *p), que devolve a soma de todos os preços (em
-centavos) de uma pilha do pilha.h, usando só as funções da interface. A pilha
-tem que voltar exatamente como estava, na mesma ordem: o cliente ainda pode
-querer desfazer. No main, empilhe 2590, 800 e 1200 (nessa ordem), mostre o
-total em reais e, depois, o topo e o tamanho da pilha.
-
-```text
-Saída esperada:
-Total: R$ 45,90
-Topo continua: R$ 12,00 (3 itens)
-```
-
-```bash
-gcc ~/LPEDC/material/E489.c ~/LPEDC/material/0082-pilha.c -o ~/LPEDC/material/E489 && ~/LPEDC/material/E489
-```
-
-**Exercício E490** · ★★☆
-
-No balcão do restaurante cabem 4 bandejas empilhadas. Escreva a própria pilha:
-typedef struct Balcao (vetor itens de CAPACIDADE ints e o índice topo, que vale
--1 quando a pilha está vazia) e bool balcao_empilha(Balcao *b, int bandeja),
-que recusa (devolve false) a bandeja quando o balcão está cheio. No main,
-tente empilhar as bandejas 1 a 5 mostrando o resultado de cada uma e, no fim,
-a bandeja que está no topo.
-
-```text
-Saída esperada:
-Empilhou a bandeja 1
-Empilhou a bandeja 2
-Empilhou a bandeja 3
-Empilhou a bandeja 4
-Balcão cheio: a bandeja 5 ficou de fora
-No topo: bandeja 4
-```
-
-```bash
-gcc ~/LPEDC/material/E490.c ~/LPEDC/material/0082-pilha.c -o ~/LPEDC/material/E490 && ~/LPEDC/material/E490
-```
-
-**Exercício E492** · ★★★
-
-A bancada da cozinha tem 6 lugares e guarda duas pilhas de pratos: os limpos
-crescem a partir da posição 0 e os sujos a partir da posição 5, um em direção
-ao outro. A bancada só enche quando os 6 lugares estão ocupados. Sem usar o
-pilha.h, escreva a struct Bancada (vetor de 6 int e dois índices) e as funções
-bool empilha_limpo, empilha_sujo, desempilha_limpo e desempilha_sujo. No main:
-empilhe os limpos 1, 2 e 3 e os sujos 10, 20 e 30; tente empilhar o limpo 4
-(tem que falhar); desempilhe um sujo; empilhe o limpo 4 de novo; e esvazie as
-duas pilhas mostrando o que sai.
-
-```text
-Saída esperada:
-Limpo 4: bancada cheia
-Saiu o sujo 30
-Limpo 4: ok
-Limpos: 4 3 2 1
-Sujos: 20 10
-```
-
-```bash
-gcc ~/LPEDC/material/E492.c ~/LPEDC/material/0082-pilha.c -o ~/LPEDC/material/E492 && ~/LPEDC/material/E492
-```
-
-### 0083 · Pilha encadeada
-
-**Exercício E493** · ★☆☆
-
-Escreva void estado(const Pilha *p), que mostra a pilha do pilha.h só com a
-interface: "[N itens, topo X]" (com "item" no singular quando N é 1) ou
-"[vazia]". No main, empilhe 3 e mostre o estado; empilhe 8 e mostre; desempilhe
-e mostre "saiu X -> " seguido do estado; empilhe 5 e mostre; empilhe 9 e
-mostre; e então esvazie a pilha num laço, mostrando "saiu X -> " e o estado a
-cada passo.
-
-```text
-Saída esperada:
-[1 item, topo 3]
-[2 itens, topo 8]
-saiu 8 -> [1 item, topo 3]
-[2 itens, topo 5]
-[3 itens, topo 9]
-saiu 9 -> [2 itens, topo 5]
-saiu 5 -> [1 item, topo 3]
-saiu 3 -> [vazia]
-```
-
-```bash
-gcc ~/LPEDC/material/E493.c ~/LPEDC/material/0083-pilha.c -o ~/LPEDC/material/E493 && ~/LPEDC/material/E493
-```
-
-**Exercício E495** · ★★☆
-
-O botão Voltar do navegador é uma pilha de páginas. Com os tipos abaixo (pilha
-encadeada com um texto em cada nó), escreva bool visita(Historico *h, const
-char *url), que põe a página no topo, e bool voltar(Historico *h), que tira a
-página do topo, mas só se ela não for a única (da primeira página não se
-volta). No main, visite g1.globo.com, ge.globo.com e receitas.com, mostre a
-página atual, tente voltar, visite cifraclub.com.br, mostre a página atual,
-tente voltar três vezes e libere a memória.
-
-```text
-Saída esperada:
-Agora em: receitas.com
-Voltar -> ge.globo.com
-Agora em: cifraclub.com.br
-Voltar -> ge.globo.com
-Voltar -> g1.globo.com
-Não dá para voltar de g1.globo.com
-```
-
-```bash
-gcc ~/LPEDC/material/E495.c ~/LPEDC/material/0083-pilha.c -o ~/LPEDC/material/E495 && ~/LPEDC/material/E495
-```
-
-**Exercício E496** · ★★☆
-
-Pilha de pratos do restaurante, cada prato com um número, feita com nós
-alocados. Com os tipos abaixo, escreva bool poe_prato(Prato **topo, int numero)
-e bool tira_prato(Prato **topo, int *numero), que devolve o número e libera o
-nó. No main, ponha os pratos 10, 20 e 30 (nessa ordem) e tire todos mostrando
-cada um.
-
-```text
-Saída esperada:
-Tirou o prato 30
-Tirou o prato 20
-Tirou o prato 10
-```
-
-```bash
-gcc ~/LPEDC/material/E496.c ~/LPEDC/material/0083-pilha.c -o ~/LPEDC/material/E496 && ~/LPEDC/material/E496
-```
-
-**Exercício E497** · ★★★
-
-Os pedidos da cozinha chegaram empilhados fora de ordem: 5, 3, 8, 1 e 4 (o 4 no
-topo). Escreva void ordena(Pilha *p), que deixa a pilha ordenada com o MENOR
-no topo, usando só as funções do pilha.h e no máximo UMA pilha auxiliar (nada
-de vetor). No main, empilhe os pedidos nessa ordem, chame ordena e desempilhe
-tudo mostrando os valores numa linha, separados por espaço.
-
-```text
-Saída esperada:
-1 3 4 5 8
-```
-
-```bash
-gcc ~/LPEDC/material/E497.c ~/LPEDC/material/0083-pilha.c -o ~/LPEDC/material/E497 && ~/LPEDC/material/E497
-```
-
-### 0084 · Pilha na prática: parênteses e notação pós-fixa
-
-**Exercício E499** · ★☆☆
-
-Escreva bool avalia(const char *expr, int *resultado), que calcula uma
-expressão pós-fixa (inteiros não negativos e + - * /, separados por espaço)
-com uma pilha do pilha.h; devolve false se a expressão for inválida (faltam
-operandos, sobram valores ou divide por zero). Traduza à mão para pós-fixa
-a) (7 + 3) * 2, b) 7 + 3 * 2, c) 100 / (2 + 3) - 4 e d) (6 / 2) * (3 - 1).
-No main, avalie cada uma e mostre o resultado ao lado do valor da mesma conta
-escrita direto em C, com "confere" ou "NÃO confere".
-
-```text
-Saída esperada:
-7 3 + 2 * = 20 (em C: 20) confere
-7 3 2 * + = 13 (em C: 13) confere
-100 2 3 + / 4 - = 16 (em C: 16) confere
-6 2 / 3 1 - * = 6 (em C: 6) confere
-```
-
-```bash
-gcc ~/LPEDC/material/E499.c ~/LPEDC/material/0084-pilha.c -o ~/LPEDC/material/E499 && ~/LPEDC/material/E499
-```
-
-**Exercício E501** · ★★☆
-
-Escreva void diagnostico(const char *s), que confere os parênteses (), [] e {}
-de s com uma pilha do pilha.h e diz onde está o problema. Empilhe a POSIÇÃO de
-cada abertura na string (o caractere é s[pos]); a primeira posição é 0. As
-mensagens possíveis estão na saída esperada: ok, fecha sem abrir, fechamento
-trocado (dizendo onde a abertura estava) e abertura sem fechar (dizendo
-quantas faltam e qual o de cima). No main, teste "[1, (2, 3)]", "{a: [1, 2}]",
-"f(x))" e "if (a[0] {".
-
-```text
-Saída esperada:
-[1, (2, 3)]: ok
-{a: [1, 2}]: esperava ] e veio } na posição 9 (o [ abriu na posição 4)
-f(x)): fecha sem abrir na posição 4
-if (a[0] {: faltou fechar 2; o de cima é o { da posição 9
-```
-
-```bash
-gcc ~/LPEDC/material/E501.c ~/LPEDC/material/0084-pilha.c -o ~/LPEDC/material/E501 && ~/LPEDC/material/E501
-```
-
-**Exercício E502** · ★★☆
-
-Escreva int avalia(const char *expr), uma calculadora pós-fixa com uma pilha do
-pilha.h: os operandos têm um dígito, os operadores são + - * / e há um espaço
-entre os símbolos. No main, calcule "2 3 +", "8 3 -", "8 4 /" e "9 5 2 - *",
-mostrando cada conta e o resultado.
-
-```text
-Saída esperada:
-2 3 + = 5
-8 3 - = 5
-8 4 / = 2
-9 5 2 - * = 27
-```
-
-```bash
-gcc ~/LPEDC/material/E502.c ~/LPEDC/material/0084-pilha.c -o ~/LPEDC/material/E502 && ~/LPEDC/material/E502
-```
-
-**Exercício E503** · ★★★
-
-Escreva void para_posfixa(const char *in, char *out), que converte uma
-expressão infixa (operandos de UM dígito, + - * / e parênteses) para a
-notação pós-fixa, com um espaço entre os símbolos, usando a pilha do pilha.h
-para os operadores (o algoritmo do "pátio de manobras", de Dijkstra). Operadores
-de mesma precedência associam à esquerda. No main, converta e mostre as
-quatro expressões da saída esperada.
-
-```text
-Saída esperada:
-1+2*3 -> 1 2 3 * +
-(6+2)*5-8/4 -> 6 2 + 5 * 8 4 / -
-(1+2)*(3-4) -> 1 2 + 3 4 - *
-9-4-2 -> 9 4 - 2 -
-```
-
-```bash
-gcc ~/LPEDC/material/E503.c ~/LPEDC/material/0084-pilha.c -o ~/LPEDC/material/E503 && ~/LPEDC/material/E503
-```
-
-### 0085 · Fila
-
-**Exercício E505** · ★☆☆
-
-Uma fila circular de 4 gavetas, com os campos à vista: struct Fila4 com o vetor
-itens, o índice inicio e o contador n (todas as gavetas começam com -1).
-Escreva bool insere(Fila4 *f, int valor), bool retira(Fila4 *f, int *valor) e
-void mostra(const Fila4 *f), que imprime o vetor inteiro (_ nas gavetas que
-valem -1) e depois inicio e n. No main, insira 1 a 6 mostrando o estado depois
-de cada tentativa (com "recusado" quando não couber); logo depois do 2, retire
-um; no fim, retire mais dois e mostre a gaveta onde entraria o próximo.
-
-```text
-Saída esperada:
-insere 1: [1 _ _ _] inicio 0, n 1
-insere 2: [1 2 _ _] inicio 0, n 2
-retira 1: [1 2 _ _] inicio 1, n 1
-insere 3: [1 2 3 _] inicio 1, n 2
-insere 4: [1 2 3 4] inicio 1, n 3
-insere 5: [5 2 3 4] inicio 1, n 4
-insere 6: recusado [5 2 3 4] inicio 1, n 4
-retira 2: [5 2 3 4] inicio 2, n 3
-retira 3: [5 2 3 4] inicio 3, n 2
-próxima vaga: gaveta 1
-```
-
-```bash
-gcc ~/LPEDC/material/E505.c ~/LPEDC/material/0085-fila.c -o ~/LPEDC/material/E505 && ~/LPEDC/material/E505
-```
-
-**Exercício E507** · ★★☆
-
-Outra convenção de fila circular não guarda o contador: ela guarda inicio (o
-próximo a sair) e fim (a próxima vaga) e SACRIFICA uma gaveta, então com TAM 5
-cabem só 4. Com o tipo abaixo, escreva fc_vazia, fc_cheia, fc_insere e
-fc_retira (bool). No main, insira 1 a 5 (avisando "N recusado: fila cheia"
-quando não couber), retire dois mostrando "saiu X", insira 6, 7 e 8 (mesmo
-aviso) e esvazie a fila mostrando o que sobrou.
-
-```text
-Saída esperada:
-5 recusado: fila cheia
-saiu 1
-saiu 2
-8 recusado: fila cheia
-Na fila: 3 4 6 7
-```
-
-```bash
-gcc ~/LPEDC/material/E507.c ~/LPEDC/material/0085-fila.c -o ~/LPEDC/material/E507 && ~/LPEDC/material/E507
-```
-
-**Exercício E508** · ★★☆
-
-O drive-thru da lanchonete usa uma fila circular com inicio, fim (a próxima
-vaga) e uma gaveta sacrificada (TAM 6, cabem 5 carros). Com o tipo abaixo,
-escreva void entra(DriveThru *f, int placa) (ignora o carro se não couber),
-void sai(DriveThru *f) e int tamanho(const DriveThru *f), que tem que acertar
-mesmo depois que a fila deu a volta no vetor. No main, entre os carros 1 a 5 e
-mostre "Carros na fila: N"; saiam 4 e mostre; entrem 6, 7 e 8 e mostre.
-
-```text
-Saída esperada:
-Carros na fila: 5
-Carros na fila: 1
-Carros na fila: 4
-```
-
-```bash
-gcc ~/LPEDC/material/E508.c ~/LPEDC/material/0085-fila.c -o ~/LPEDC/material/E508 && ~/LPEDC/material/E508
-```
-
-**Exercício E509** · ★★★
-
-Batata quente: 7 pessoas numeradas de 1 a 7 estão em roda. A batata passa de
-mão em mão, e quem estiver com ela na 3ª passada sai. A contagem recomeça de
-quem estava ao lado, até sobrar uma pessoa (o problema de Josephus). Resolva
-com uma fila do fila.h e mostre a ordem de saída e quem sobrou.
-
-```text
-Saída esperada:
-Saíram: 3 6 2 7 5 1
-Sobrou: 4
-```
-
-```bash
-gcc ~/LPEDC/material/E509.c ~/LPEDC/material/0085-fila.c -o ~/LPEDC/material/E509 && ~/LPEDC/material/E509
-```
-
-### 0086 · Fila encadeada
-
-**Exercício E511** · ★☆☆
-
-Escreva void mostra(Fila *f), que mostra a fila encadeada do fila.h do início
-para o fim, separando por " -> " (ou "vazia"), usando só a interface, e
-deixando a fila como estava. Quando houver um item só, acrescente "(um nó só:
-início e fim apontam para ele)". No main, insira 7, 4, 9 e 1, mostrando
-"insere X: " e a fila a cada inserção; a partir da segunda, retire um logo
-depois mostrando "retira X: " e a fila; no fim, retire mais um e mostre.
-
-```text
-Saída esperada:
-insere 7: 7 (um nó só: início e fim apontam para ele)
-insere 4: 7 -> 4
-retira 7: 4 (um nó só: início e fim apontam para ele)
-insere 9: 4 -> 9
-retira 4: 9 (um nó só: início e fim apontam para ele)
-insere 1: 9 -> 1
-retira 9: 1 (um nó só: início e fim apontam para ele)
-retira 1: vazia
-```
-
-```bash
-gcc ~/LPEDC/material/E511.c ~/LPEDC/material/0086-fila.c -o ~/LPEDC/material/E511 && ~/LPEDC/material/E511
-```
-
-**Exercício E513** · ★★☆
-
-A fila do caixa da padaria guarda o NOME de cada cliente, com um texto em cada
-nó. Com os tipos abaixo, escreva bool entra(FilaPadaria *f, const char *nome),
-que pendura o cliente no fim, e bool sai(FilaPadaria *f, char *destino), que
-copia o nome do primeiro para destino, tira o nó e o libera (false se não
-tinha ninguém). No main, entrem Ana, Bruno e Carla; atenda um; entre Davi; e
-atenda todos até esvaziar, mostrando "Atendendo NOME" e, no fim, "Fila vazia".
-
-```text
-Saída esperada:
-Atendendo Ana
-Atendendo Bruno
-Atendendo Carla
-Atendendo Davi
-Fila vazia
-```
-
-```bash
-gcc ~/LPEDC/material/E513.c ~/LPEDC/material/0086-fila.c -o ~/LPEDC/material/E513 && ~/LPEDC/material/E513
-```
-
-**Exercício E514** · ★★☆
-
-A fila de pedidos da cozinha é encadeada, com ponteiros para o início e para o
-fim. Com os tipos abaixo, escreva bool cozinha_entra(Cozinha *f, int numero) e
-bool cozinha_sai(Cozinha *f, int *numero), que libera o nó. A fila tem que
-continuar funcionando depois de esvaziar e receber pedidos novos. No main,
-entrem os pedidos 11 e 12 e saiam todos; entrem 13 e 14 e saiam todos,
-mostrando "Pronto: N" a cada saída.
-
-```text
-Saída esperada:
-Pronto: 11
-Pronto: 12
-Pronto: 13
-Pronto: 14
-```
-
-```bash
-gcc ~/LPEDC/material/E514.c ~/LPEDC/material/0086-fila.c -o ~/LPEDC/material/E514 && ~/LPEDC/material/E514
-```
-
-**Exercício E515** · ★★★
-
-No banco, a lei manda atender primeiro quem tem prioridade, mas sem largar a
-fila comum esquecida. A regra da agência: chame 2 preferenciais, depois 1
-comum, e repita. Se uma das filas estiver vazia, chame da outra. Use duas
-filas do fila.h. As senhas preferenciais são 101, 102 e 103; as comuns, 1, 2,
-3 e 4. Mostre a ordem de chamada, com P na frente das preferenciais e C na
-frente das comuns.
-
-```text
-Saída esperada:
-Chamando: P101 P102 C1 P103 C2 C3 C4
-```
-
-```bash
-gcc ~/LPEDC/material/E515.c ~/LPEDC/material/0086-fila.c -o ~/LPEDC/material/E515 && ~/LPEDC/material/E515
-```
-
-### 0087 · Deque
-
-**Exercício E517** · ★☆☆
-
-Os números 1, 2, 3 e 4 chegam nessa ordem, um de cada vez, e cada um entra
-pela frente (deque_insere_inicio) ou pelo fundo (deque_insere_fim) de um
-Deque do deque.h. Escolha a ponta de cada um para que o deque fique 4 2 1 3 da
-frente para o fundo. Depois retire um do fundo, um da frente e mostre quem
-ficou na frente, quem ficou no fundo e o tamanho.
-
-```text
-Saída esperada:
-saiu do fim: 3
-saiu da frente: 4
-frente 2, fundo 1, tamanho 2
-```
-
-```bash
-gcc ~/LPEDC/material/E517.c ~/LPEDC/material/0087-deque.c -o ~/LPEDC/material/E517 && ~/LPEDC/material/E517
-```
-
-**Exercício E519** · ★★☆
-
-No vôlei, os 6 jogadores de um time fazem rodízio. Guarde os números 1 a 6
-num deque do deque.h e escreva, usando só a interface: void mostra(Deque *d),
-que mostra os itens da frente para o fundo e deixa o deque como estava; void
-gira_esquerda(Deque *d, int k), em que o da frente vai para o fundo, k vezes;
-e void gira_direita(Deque *d, int k), em que o do fundo vem para a frente,
-k vezes. Mostre o início, depois de girar 2 para a esquerda e depois de girar
-3 para a direita.
-
-```text
-Saída esperada:
-Início: 1 2 3 4 5 6
-Esquerda 2: 3 4 5 6 1 2
-Direita 3: 6 1 2 3 4 5
-```
-
-```bash
-gcc ~/LPEDC/material/E519.c ~/LPEDC/material/0087-deque.c -o ~/LPEDC/material/E519 && ~/LPEDC/material/E519
-```
-
-**Exercício E520** · ★★☆
-
-No embarque do avião, quem viaja com criança de colo entra na frente da fila e
-o resto entra no fim. Com a fila circular abaixo (TAM 5, campos poltronas,
-inicio e n), escreva bool entra_no_fim(Embarque *e, int poltrona), bool
-entra_na_frente(Embarque *e, int poltrona) e bool embarca(Embarque *e, int
-*poltrona). No main, entrem no fim as poltronas 10, 20 e 30, entre na frente a
-40 e embarque todos, mostrando a ordem.
-
-```text
-Saída esperada:
-Embarcando: 40 10 20 30
-```
-
-```bash
-gcc ~/LPEDC/material/E520.c ~/LPEDC/material/0087-deque.c -o ~/LPEDC/material/E520 && ~/LPEDC/material/E520
-```
-
-**Exercício E521** · ★★★
-
-O deque também pode ser feito com nós, mas com lista DUPLA: para retirar do
-fim, o último nó precisa conhecer o penúltimo (o ant). Com os tipos abaixo,
-escreva dl_insere_inicio, dl_insere_fim, dl_retira_inicio, dl_retira_fim (todas
-bool, as retiradas devolvem o valor por ponteiro e liberam o nó) e void
-dl_libera(DequeLista *d). No main, simule a fila de músicas: insira no fim as
-faixas 5, 8 e 3 e no início a 11; toque (retire do início) uma, remova (retire
-do fim) uma e mostre as que sobraram.
-
-```text
-Saída esperada:
-Tocando a faixa 11
-Removida a faixa 3
-Ainda na fila: 5 8
-```
-
-```bash
-gcc ~/LPEDC/material/E521.c ~/LPEDC/material/0087-deque.c -o ~/LPEDC/material/E521 && ~/LPEDC/material/E521
-```
-
-### 0088 · Juntando tudo: a calculadora de expressões
+### Exercícios
 
 **Exercício E523** · ★☆☆
 
@@ -2362,11 +2377,13 @@ Carro 5 saiu; manobras: 3
 gcc ~/LPEDC/material/E527.c ~/LPEDC/material/0088-fila.c ~/LPEDC/material/0088-pilha.c -o ~/LPEDC/material/E527 && ~/LPEDC/material/E527
 ```
 
-### Lista do módulo
+---
+
+## Lista do módulo
 
 30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P1201.c a P1230.c, em `material/`; resoluções em `_respostas/12-pilhas-e-filas/lista/`.
 
-#### ★☆☆ Aquecimento
+### ★☆☆ Aquecimento
 
 **Exercício P1201** · ★☆☆ · O painel de LEDs em binário
 
@@ -2606,7 +2623,7 @@ original depois:          30 20 10
 
 **Resposta esperada:** Cada item é movido 3 vezes: O(n).
 
-#### ★★☆ Para pensar
+### ★★☆ Para pensar
 
 **Exercício P1211** · ★★☆ · Pós-fixa com potência (que associa à direita)
 
@@ -2851,7 +2868,7 @@ painel: 5 7 8 12 20 25 30
 A e B vazias: sim
 ```
 
-#### ★★★ Desafio
+### ★★★ Desafio
 
 **Exercício P1221** · ★★★ · O banco em que o cliente desiste
 
@@ -3162,7 +3179,7 @@ Fim do atendimento: minuto 16
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas para resolver num arquivo seu, misturando os assuntos do módulo.
 Use os TADs das pastas ou escreva a estrutura do zero.
@@ -3313,7 +3330,7 @@ pós-fixas ficam `A B C * +` e `A B + C *`.
 
 </details>
 
-### Questões do POSCOMP
+## Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -3323,7 +3340,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 
 O gabarito de 2023 vem de um blog de terceiros que reproduz o gabarito definitivo; confira no PDF oficial da SBC.
 
-### Questões de provas do PPGI
+## Questões de provas do PPGI
 
 Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.
 

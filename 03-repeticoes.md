@@ -59,9 +59,12 @@ ela.
 
 ---
 
-## 1. Conceitos gerais
+> [!NOTE]
+> Cada assunto é um capítulo: **Conceito** (a explicação), **Exemplos de uso** (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e **Exercícios** (cada um é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta; resoluções em `_respostas/03-repeticoes/`).
 
-### 0020 · While
+## 0020 · While
+
+### Conceito
 
 - **Repetição**: rodar o mesmo trecho várias vezes. Cada passada pelo corpo é
   uma **iteração** (ou volta) (DEITEL; DEITEL, 2011, cap. 3).
@@ -89,216 +92,7 @@ while (condição) {
 > corpo **vazio** e o programa trava. Sem chaves, só a **primeira** linha
 > repete, seja qual for o recuo. Use chaves sempre.
 
-### 0021 · Do-while
-
-- **`do...while`**: **faz primeiro e pergunta depois**. Roda o corpo e testa;
-  se a condição é verdadeira, volta ao começo do corpo
-  (DEITEL; DEITEL, 2011, cap. 4).
-
-```c
-do {
-    // corpo: roda pelo menos uma vez
-} while (condição);   // o ; no fim é obrigatório
-```
-
-- **Teste no fim** (pós-teste): o corpo roda **uma ou mais vezes**, nunca
-  zero. Dispensa inventar um valor inválido só para entrar no laço
-  (CARVALHO, 2010).
-- **`;` obrigatório** depois do `while (...)` final (BACKES, 2013, cap. 5).
-- **`repita ... até`**: no pseudocódigo da prova, a condição é de **parar**.
-  `repita ... até x > 10` vira `do { ... } while (!(x > 10));`, que é
-  `while (x <= 10)` (DORNELLES F., 1997).
-- **Quando usar**: a primeira volta é obrigatória. Validação de entrada, menu
-  (o A042 faz um caixa eletrônico) e "jogar de novo?"
-  (BACKES, 2013, cap. 5).
-- **Condição de validação**: descreve o valor **inválido**, o que faz repetir:
-  `parcelas < 1 || parcelas > 12` (DEITEL; DEITEL, 2011, cap. 3).
-
-> [!WARNING]
-> A condição é de **continuar**, não de parar. Com
-> `while (parcelas >= 1 && parcelas <= 12)`, o programa repete com o 4 e
-> aceita o 15. Para inverter um `&&`, use De Morgan (0013): `!a || !b`.
-
-### 0022 · For
-
-- **Laço com contador**: tem começo, condição e passo. Com `while`, o contador
-  aparece em três lugares, e esquecer o passo dá laço infinito
-  (DEITEL; DEITEL, 2011, cap. 4).
-
-```c
-int parcela = 1;              // começa
-while (parcela <= 6) {        // pergunta
-    printf("Parcela %d\n", parcela);
-    parcela++;                // passo, lá no fim do corpo
-}
-```
-
-- **`for`**: junta início, condição e passo numa linha
-  (BACKES, 2013, cap. 5).
-
-```c
-for (int parcela = 1; parcela <= 6; parcela++) {
-    printf("Parcela %d\n", parcela);
-}
-```
-
-- **Ordem de execução**: o **início** roda uma vez; a **condição** é testada
-  antes de cada volta; depois vem o **corpo**; o **passo** roda no fim da
-  volta e volta para a condição (CARVALHO, 2010).
-- **`for` e `while`**: o `for` é o `while` reorganizado. Use `for` com
-  contador de começo, fim e passo conhecidos; `while` quando só se sabe a
-  condição de parada (KERNIGHAN; RITCHIE, 1988, cap. 3).
-- **Variações**: o `int` declarado no `for` só existe no laço (C99). O passo
-  pode ser qualquer conta (`c += 10`, `x *= 3`), o contador pode ser `char` e
-  a vírgula permite duas variáveis (A044). Partes vazias valem, mas os dois
-  `;` não: `for (;;)` é laço infinito (BACKES, 2013, cap. 5).
-- **Quantas voltas**: `for (i = a; i < b; i++)` dá `b - a`; com `<=`,
-  `b - a + 1` (DEITEL; DEITEL, 2011, cap. 4).
-
-> [!WARNING]
-> **Erro por um** (*off-by-one*): `for (int p = 1; p < 6; p++)` mostra 5
-> parcelas. Pergunte qual é o **primeiro** e o **último** valor que passa. E
-> contador é sempre inteiro: `for (double x = 0.1; x != 1.0; x += 0.1)` nunca
-> termina.
-
-### 0023 · Break e continue
-
-- **`break`**: sai do laço **na hora** e segue depois da `}`. É o mesmo
-  `break` do `switch` (0018) (DEITEL; DEITEL, 2011, cap. 4).
-- **`continue`**: abandona só a **volta atual**; o resto do corpo é pulado. No
-  `for`, o passo (`i++`) ainda roda antes da pergunta; no `while`, o salto vai
-  direto para a pergunta (DEITEL; DEITEL, 2011, cap. 4).
-- **Dentro de um `if`**: os dois quase sempre aparecem assim, "se acontecer
-  tal coisa, saia" ou "pule" (BACKES, 2013, cap. 5).
-- **`while (1)`** (ou `for (;;)`): condição sempre verdadeira, com um `break`
-  no meio do corpo. Serve quando o motivo de parar só aparece **depois** de
-  ler o dado (KERNIGHAN; RITCHIE, 1988, cap. 3).
-- **Por que parou?** Depois de um laço com `break`, às vezes é preciso saber
-  se saiu pela condição ou pelo `break`. O A046 testa um primo assim.
-- **Só o mais interno**: `break` e `continue` valem para o laço mais próximo.
-  O C não tem `break` com rótulo; existe o `goto`, que deve ser evitado
-  (BACKES, 2013, cap. 5).
-
-> [!WARNING]
-> `continue` num `while` pode pular o passo. Em
-> `while (i < 10) { if (i == 5) continue; printf("%d", i); i++; }`, o `i`
-> fica 5 para sempre. No `for`, o mesmo código funciona, porque o `i++` está
-> no cabeçalho.
-
-### 0024 · Laços aninhados
-
-- **Laço aninhado**: o corpo de um laço contém outro laço inteiro. A cada
-  volta do laço **de fora**, o **de dentro** roda do começo ao fim, como os
-  ponteiros de horas e minutos (BACKES, 2013, cap. 5).
-- **Recomeço**: o contador de dentro volta ao início a cada volta de fora. No
-  `for`, é automático; no `while`, você zera à mão (o E142 mostra o estrago)
-  (BACKES, 2013, cap. 5).
-- **Voltas**: o corpo de dentro roda (voltas de fora) × (voltas de dentro)
-  vezes: 4 × 5 = 20 (DEITEL; DEITEL, 2011, cap. 4).
-- **Limite dependente**: o de dentro pode usar o contador de fora. Com
-  `for (int col = 1; col <= linha; col++)`, sai um triângulo (A048)
-  (DEITEL; DEITEL, 2011, cap. 4).
-- **Custo**: a conta é uma **multiplicação**. Comparar 1.000 clientes com
-  1.000 pedidos dá 1 milhão de comparações, o **O(n²)** do módulo de análise
-  (CELES; CERQUEIRA; RANGEL, 2016).
-- **Nomes**: `fileira` e `poltrona`, `linha` e `coluna`. Com `i` e `j`, é
-  fácil trocar um pelo outro sem perceber.
-
-> [!WARNING]
-> O `printf("\n")` no lugar errado muda o desenho: dentro do laço de dentro,
-> sai uma poltrona por linha; fora dos dois, tudo numa linha. Pergunte: isto
-> acontece uma vez por poltrona, por fileira ou no programa?
-
-### 0025 · Padrões de laço
-
-- **Padrão de laço**: um uso de variável já resolvido milhares de vezes. A
-  variável ganha valor **antes** do laço, muda **dentro** e é usada **depois**
-  (DEITEL; DEITEL, 2011, cap. 3).
-- **Contador e acumulador**: o contador soma 1 a cada volta; o acumulador soma
-  o valor lido. Ambos começam em 0; o acumulador de **produto** começa em 1
-  (DEITEL; DEITEL, 2011, cap. 3).
-- **Maior e menor**: começam com o **primeiro valor lido**, nunca com 0
-  (BACKES, 2013, cap. 5).
-- **Flag**: um `bool` que só sobe. Sem `else flag = false`, senão um valor
-  comum depois do especial apaga a resposta (LEAL, 2016).
-- **Sentinela**: valor que **não pode** ser dado real e só manda parar; não
-  entra em conta nenhuma (DEITEL; DEITEL, 2011, cap. 3).
-- **Leitura antecipada**: lê **antes** do laço e no **fim** do corpo, para a
-  pergunta do `while` olhar sempre um valor recém-lido
-  (DEITEL; DEITEL, 2011, cap. 3).
-- **Média**: `(double) soma / dias`, e só com `dias > 0`. Com 0 / 0, o `double`
-  dá `nan` e o `int` derruba o programa. O acumulador também estoura: para
-  dinheiro, some **centavos** num `long long` (DEITEL; DEITEL, 2011).
-
-| Padrão | Antes do laço | Dentro do laço | Depois |
-| --- | --- | --- | --- |
-| **contador** | `dias = 0` | `dias++` | quantos foram |
-| **acumulador** | `soma = 0` (produto: `= 1`) | `soma += temp` | total, média |
-| **maior/menor** | o **primeiro** valor | `if (temp > maior) maior = temp` | o recorde |
-| **flag** | `calorao = false` | `if (temp >= 35) calorao = true` | aconteceu ou não? |
-| **sentinela** | ler o primeiro valor | ler o próximo, no fim | (o laço para nela) |
-
-> [!WARNING]
-> `maior = 0` falha no inverno: com máximas de -3, -1 e -4 °C, o programa diz
-> que o dia mais quente teve 0 °C. Comece com o **primeiro valor lido** ou com
-> `INT_MIN` (e `INT_MAX` para o menor), de `<limits.h>`.
-
-### 0026 · Aleatórios
-
-- **Pseudoaleatório**: o computador é determinístico. Ele calcula uma
-  sequência por uma conta fixa, cada número a partir do anterior, que parece
-  aleatória (DEITEL; DEITEL, 2011, cap. 5).
-- **`rand()`**, de `<stdlib.h>`: devolve o próximo número, de 0 até
-  **`RAND_MAX`**. O padrão garante pelo menos 32767; na glibc, 2147483647
-  (CPPREFERENCE, s.d.).
-- **`srand(semente)`**: escolhe onde a sequência começa. A mesma **semente**
-  dá sempre a mesma sequência; sem `srand`, vale `srand(1)`
-  (LINUX MAN-PAGES PROJECT, s.d.).
-- **Faixa**: `1 + rand() % 6` dá de 1 a 6; de `a` até `b`,
-  `a + rand() % (b - a + 1)` (DEITEL; DEITEL, 2011, cap. 5).
-- **Semente fixa** (`srand(2022)`): os mesmos números a cada execução, bom para
-  testar e depurar; os exemplos do curso usam assim
-  (DEITEL; DEITEL, 2011, cap. 5).
-- **Semente do relógio** (`srand(time(NULL))`, com `<time.h>`): os segundos
-  desde 1º/1/1970 mudam a cada execução. Um jogo real usa este
-  (DEITEL; DEITEL, 2011, cap. 5).
-- **Não é cofre**: o `rand` nunca serve para senha ou token; quem descobre a
-  semente prevê tudo (LINUX MAN-PAGES PROJECT, s.d.).
-
-> [!WARNING]
-> `srand(time(NULL))` **dentro** do laço reinicia a sequência com a mesma
-> semente a cada volta, no mesmo segundo, e o dado "sorteia" 4, 4, 4... O
-> `srand` vai uma vez, no começo do `main`; quem sorteia é o `rand`.
-
-### 0027 · Juntando tudo
-
-- **Craps**: jogo de dois dados. No **primeiro** lançamento, soma 7 ou 11
-  ganha e 2, 3 ou 12 perde; qualquer outra soma vira o **ponto**. Depois,
-  relança até repetir o ponto (ganha) ou tirar 7 (perde)
-  (DEITEL; DEITEL, 2011, cap. 5).
-- **Peças do módulo**: sorteio com `rand` (0026), `switch` com casos agrupados
-  no primeiro lançamento (0018), `while` nos relançamentos (0020) e um
-  contador de lançamentos (0025).
-- **Variável de situação**: funciona como flag. `0` continua, `1` ganhou, `-1`
-  perdeu; só o corpo do laço sabe o que saiu, então só ele a muda
-  (DEITEL; DEITEL, 2011, cap. 5).
-- **Número mágico**: `1`, `-1` e `0` exigem lembrar o significado. No módulo
-  08, o `enum` dá nomes a eles (`GANHOU`, `PERDEU`, `CONTINUA`).
-- **Repetição de código**: o sorteio `1 + rand() % 6` aparece quatro vezes. No
-  módulo 04 ele vira a função `lancar()`.
-
-> [!WARNING]
-> Confira se o laço **termina**. Com `while (soma != ponto)` e sem o 7, o jogo
-> nunca perde e o programa está errado sem dar erro. Antes de escrever um
-> `while`, diga **todas** as formas de sair dele e confira cada uma.
-
----
-
-## 2. Exemplos de uso
-
-Cada exemplo compila sozinho. Rode com o comando abaixo dele e compare com a saída no fim do código.
-
-### 0020 · While
+### Exemplos de uso
 
 Um celular de R$ 1.000, guardando R$ 150 por mês. "saldo < 1000?" responde
 Sim sete vezes, com um depósito a cada Sim; na oitava, com R$ 1.050, responde
@@ -430,7 +224,96 @@ int main(void) {
 gcc ~/LPEDC/material/A040.c -o ~/LPEDC/material/A040 && ~/LPEDC/material/A040
 ```
 
-### 0021 · Do-while
+### Exercícios
+
+**Exercício E116** · ★☆☆
+
+Escreva um programa que mostre, com um while, os múltiplos de 7 menores que
+50, todos na mesma linha e separados por espaço.
+
+```text
+Saída esperada:
+7 14 21 28 35 42 49
+```
+
+**Exercício E117** · ★★☆
+
+A caixa d'água tem 1000 litros e a casa gasta 180 litros por dia. Escreva um
+programa com um while que diz para quantos dias COMPLETOS a água dura e
+quantos litros sobram depois deles. Use as variáveis litros, consumo e dias.
+
+```text
+Saída esperada:
+Dá para 5 dias. Sobram 100 litros.
+```
+
+**Exercício E118** · ★★☆
+
+Você aplica R$ 1000.00 num investimento que rende 1% ao mês (juros sobre
+juros: todo mês o saldo é multiplicado por 1.01). Em quantos meses o saldo
+passa de R$ 1500.00? Mostre os meses e o saldo final com 2 casas.
+
+```text
+Saída esperada:
+Passou de R$ 1500.00 em 41 meses.
+Saldo: R$ 1503.75
+```
+
+**Exercício E120** · ★★★
+
+Escreva um programa com três laços while, um depois do outro, cada um numa
+linha da saída. A linha começa com a letra do trecho, mostra os valores que o
+corpo imprime e termina com o número de voltas e o valor final da variável
+(use um contador por trecho):
+
+```text
+A: int i = 0; while (i++ < 5) mostra i
+B: int n = 100; while (n > 1) divide n por 3 e mostra o n novo
+C: int k = 10; while (k < 10) soma 1 em k
+```
+
+```text
+Saída esperada:
+A: 1 2 3 4 5 | voltas 5, i final 6
+B: 33 11 3 1 | voltas 4, n final 1
+C: | voltas 0, k final 10
+```
+
+---
+
+## 0021 · Do-while
+
+### Conceito
+
+- **`do...while`**: **faz primeiro e pergunta depois**. Roda o corpo e testa;
+  se a condição é verdadeira, volta ao começo do corpo
+  (DEITEL; DEITEL, 2011, cap. 4).
+
+```c
+do {
+    // corpo: roda pelo menos uma vez
+} while (condição);   // o ; no fim é obrigatório
+```
+
+- **Teste no fim** (pós-teste): o corpo roda **uma ou mais vezes**, nunca
+  zero. Dispensa inventar um valor inválido só para entrar no laço
+  (CARVALHO, 2010).
+- **`;` obrigatório** depois do `while (...)` final (BACKES, 2013, cap. 5).
+- **`repita ... até`**: no pseudocódigo da prova, a condição é de **parar**.
+  `repita ... até x > 10` vira `do { ... } while (!(x > 10));`, que é
+  `while (x <= 10)` (DORNELLES F., 1997).
+- **Quando usar**: a primeira volta é obrigatória. Validação de entrada, menu
+  (o A042 faz um caixa eletrônico) e "jogar de novo?"
+  (BACKES, 2013, cap. 5).
+- **Condição de validação**: descreve o valor **inválido**, o que faz repetir:
+  `parcelas < 1 || parcelas > 12` (DEITEL; DEITEL, 2011, cap. 3).
+
+> [!WARNING]
+> A condição é de **continuar**, não de parar. Com
+> `while (parcelas >= 1 && parcelas <= 12)`, o programa repete com o 4 e
+> aceita o 15. Para inverter um `&&`, use De Morgan (0013): `!a || !b`.
+
+### Exemplos de uso
 
 A geladeira de R$ 1.200 em 1 a 12 parcelas. A pessoa digita 0, 15 e 4: os
 dois primeiros caem fora da faixa e o programa pergunta de novo; o 4 passa. O
@@ -574,7 +457,149 @@ int main(void) {
 gcc ~/LPEDC/material/A042.c -o ~/LPEDC/material/A042 && ~/LPEDC/material/A042
 ```
 
-### 0022 · For
+### Exercícios
+
+**Exercício E122** · ★☆☆
+
+Escreva um programa com três trechos, um por linha de saída. Cada linha
+mostra os valores impressos pelo trecho e termina com o valor final da
+variável:
+
+```text
+A: n = 10; while (n < 5) mostra n e soma 1
+B: m = 10; do { mostra m e soma 1 } while (m < 5);
+C: k = 10; o mesmo que o B, mas escrito com while (sem do-while)
+```
+
+```text
+Saída esperada:
+| A terminou com n = 10
+10 | B terminou com m = 11
+10 | C terminou com k = 11
+```
+
+**Exercício E123** · ★★☆
+
+No caixa da padaria, a atendente digita o preço de cada item e o sistema
+pergunta "Mais algum item? (s/n)". Escreva o programa com do-while: lê um
+preço ("Preço:"), soma, pergunta e repete enquanto a resposta for s ou S.
+No fim, mostra quantos itens e o total com 2 casas.
+Cada pedido de leitura termina com quebra de linha (\n).
+
+```text
+Entrada:
+12.50
+s
+7.00
+S
+3.25
+n
+```
+
+```text
+Saída esperada:
+Preço:
+Mais algum item? (s/n)
+Preço:
+Mais algum item? (s/n)
+Preço:
+Mais algum item? (s/n)
+Itens: 3
+Total: R$ 22.75
+```
+
+**Exercício E124** · ★★☆
+
+O totem do cinema oferece 3 sessões. Escreva o programa com do-while que
+pergunta "Sessão (1, 2 ou 3):" e repete a pergunta enquanto a opção for
+inválida. Quando a opção for válida, mostra "Sessão N escolhida.".
+Cada pedido de leitura termina com quebra de linha (\n).
+
+```text
+Entrada:
+7
+2
+```
+
+```text
+Saída esperada:
+Sessão (1, 2 ou 3):
+Sessão (1, 2 ou 3):
+Sessão 2 escolhida.
+```
+
+**Exercício E125** · ★★★
+
+A senha do cartão é 4321 e a pessoa tem 3 tentativas. Escreva o programa: lê
+a senha com do-while ("Senha:"), conta as tentativas e para quando acertar
+OU quando acabarem as tentativas. No fim, diz "Senha correta na tentativa N."
+ou, se errou as três, "Cartão bloqueado.".
+Cada pedido de leitura termina com quebra de linha (\n).
+
+```text
+Entrada:
+1111
+2222
+4321
+```
+
+```text
+Saída esperada:
+Senha:
+Senha:
+Senha:
+Senha correta na tentativa 3.
+```
+
+Com as entradas 1111, 2222 e 3333, a última linha da saída é "Cartão bloqueado.".
+
+---
+
+## 0022 · For
+
+### Conceito
+
+- **Laço com contador**: tem começo, condição e passo. Com `while`, o contador
+  aparece em três lugares, e esquecer o passo dá laço infinito
+  (DEITEL; DEITEL, 2011, cap. 4).
+
+```c
+int parcela = 1;              // começa
+while (parcela <= 6) {        // pergunta
+    printf("Parcela %d\n", parcela);
+    parcela++;                // passo, lá no fim do corpo
+}
+```
+
+- **`for`**: junta início, condição e passo numa linha
+  (BACKES, 2013, cap. 5).
+
+```c
+for (int parcela = 1; parcela <= 6; parcela++) {
+    printf("Parcela %d\n", parcela);
+}
+```
+
+- **Ordem de execução**: o **início** roda uma vez; a **condição** é testada
+  antes de cada volta; depois vem o **corpo**; o **passo** roda no fim da
+  volta e volta para a condição (CARVALHO, 2010).
+- **`for` e `while`**: o `for` é o `while` reorganizado. Use `for` com
+  contador de começo, fim e passo conhecidos; `while` quando só se sabe a
+  condição de parada (KERNIGHAN; RITCHIE, 1988, cap. 3).
+- **Variações**: o `int` declarado no `for` só existe no laço (C99). O passo
+  pode ser qualquer conta (`c += 10`, `x *= 3`), o contador pode ser `char` e
+  a vírgula permite duas variáveis (A044). Partes vazias valem, mas os dois
+  `;` não: `for (;;)` é laço infinito (BACKES, 2013, cap. 5).
+- **Quantas voltas**: `for (i = a; i < b; i++)` dá `b - a`; com `<=`,
+  `b - a + 1` (DEITEL; DEITEL, 2011, cap. 4).
+
+> [!WARNING]
+> **Erro por um** (*off-by-one*): `for (int p = 1; p < 6; p++)` mostra 5
+> parcelas. Pergunte qual é o **primeiro** e o **último** valor que passa. E
+> contador é sempre inteiro: `for (double x = 0.1; x != 1.0; x += 0.1)` nunca
+> termina.
+
+### Exemplos de uso
 
 Uma TV de R$ 1.800 em 6 parcelas. O carnê começa com `parcela = 1` uma vez
 só, pergunta "parcela <= 6?", roda o corpo, dá o passo e volta à pergunta; na
@@ -699,7 +724,116 @@ int main(void) {
 gcc ~/LPEDC/material/A044.c -o ~/LPEDC/material/A044 && ~/LPEDC/material/A044
 ```
 
-### 0023 · Break e continue
+### Exercícios
+
+**Exercício E128** · ★☆☆
+
+Escreva um programa com os quatro laços abaixo, um depois do outro. Cada
+um mostra os valores de x numa linha que começa com a letra do laço e, no
+fim da linha, quantas voltas ele deu (use um contador para cada laço):
+
+```text
+a) for (int x = 3; x <= 20; x += 4)
+b) for (int x = 50; x > 30; x -= 6)
+c) for (int x = 1; x >= 10; x++)
+d) for (int x = 1; x < 100; x *= 3)
+```
+
+```text
+Saída esperada:
+a) 3 7 11 15 19 (5 voltas)
+b) 50 44 38 32 (4 voltas)
+c) (0 voltas)
+d) 1 3 9 27 81 (5 voltas)
+```
+
+**Exercício E129** · ★★☆
+
+Você aplica R$ 2000.00 num CDB que rende 0,8% ao mês. Mostre o saldo mês a
+mês durante 12 meses (todo mês o saldo é multiplicado por 1.008). No fim,
+mostre o resultado da fórmula dos juros compostos,
+saldo = 2000 * 1.008 elevado a 12, usando pow (assunto 0010).
+
+```text
+Saída esperada:
+Mês  1: R$ 2016.00
+Mês  2: R$ 2032.13
+Mês  3: R$ 2048.39
+Mês  4: R$ 2064.77
+Mês  5: R$ 2081.29
+Mês  6: R$ 2097.94
+Mês  7: R$ 2114.72
+Mês  8: R$ 2131.64
+Mês  9: R$ 2148.70
+Mês 10: R$ 2165.88
+Mês 11: R$ 2183.21
+Mês 12: R$ 2200.68
+Pela fórmula: R$ 2200.68
+```
+
+```bash
+gcc ~/LPEDC/material/E129.c -o ~/LPEDC/material/E129 -lm && ~/LPEDC/material/E129
+```
+
+**Exercício E130** · ★★☆
+
+O treino manda fazer 5 séries de flexões. Escreva um programa com um for que
+mostra "Série 1" até "Série 5", uma por linha.
+
+```text
+Saída esperada:
+Série 1
+Série 2
+Série 3
+Série 4
+Série 5
+```
+
+**Exercício E131** · ★★★
+
+Dá para calcular pi com uma soma infinita (série de Leibniz):
+
+```text
+pi = 4/1 - 4/3 + 4/5 - 4/7 + 4/9 - ...
+```
+
+Escreva um programa com um for que soma os primeiros 1000 termos e mostra o
+resultado com 6 casas.
+
+```text
+Saída esperada:
+pi ~ 3.140593
+```
+
+---
+
+## 0023 · Break e continue
+
+### Conceito
+
+- **`break`**: sai do laço **na hora** e segue depois da `}`. É o mesmo
+  `break` do `switch` (0018) (DEITEL; DEITEL, 2011, cap. 4).
+- **`continue`**: abandona só a **volta atual**; o resto do corpo é pulado. No
+  `for`, o passo (`i++`) ainda roda antes da pergunta; no `while`, o salto vai
+  direto para a pergunta (DEITEL; DEITEL, 2011, cap. 4).
+- **Dentro de um `if`**: os dois quase sempre aparecem assim, "se acontecer
+  tal coisa, saia" ou "pule" (BACKES, 2013, cap. 5).
+- **`while (1)`** (ou `for (;;)`): condição sempre verdadeira, com um `break`
+  no meio do corpo. Serve quando o motivo de parar só aparece **depois** de
+  ler o dado (KERNIGHAN; RITCHIE, 1988, cap. 3).
+- **Por que parou?** Depois de um laço com `break`, às vezes é preciso saber
+  se saiu pela condição ou pelo `break`. O A046 testa um primo assim.
+- **Só o mais interno**: `break` e `continue` valem para o laço mais próximo.
+  O C não tem `break` com rótulo; existe o `goto`, que deve ser evitado
+  (BACKES, 2013, cap. 5).
+
+> [!WARNING]
+> `continue` num `while` pode pular o passo. Em
+> `while (i < 10) { if (i == 5) continue; printf("%d", i); i++; }`, o `i`
+> fica 5 para sempre. No `for`, o mesmo código funciona, porque o `i++` está
+> no cabeçalho.
+
+### Exemplos de uso
 
 No caixa do mercado entram 12,90, uma leitura com erro (-1), 8,50, 4,00 e, para
 fechar, 0. O -1 cai no `continue` e volta direto à leitura, sem passar pela
@@ -833,7 +967,136 @@ int main(void) {
 gcc ~/LPEDC/material/A046.c -o ~/LPEDC/material/A046 && ~/LPEDC/material/A046
 ```
 
-### 0024 · Laços aninhados
+### Exercícios
+
+**Exercício E134** · ★☆☆
+
+Escreva um programa com um for de i = 1 a 10 que mostra os valores de i numa
+linha, mas pula (continue) os múltiplos de 4 e para (break) quando i for 7.
+No fim da linha, mostra quantas vezes o continue aconteceu. Na linha
+seguinte, repita o laço com um contador novo, mas agora o break testa i == 8.
+
+```text
+Saída esperada:
+1 2 3 5 6 (continue: 1 vez)
+1 2 3 5 6 7 9 10 (continue: 2 vezes)
+```
+
+**Exercício E135** · ★★☆
+
+O elevador aguenta 600 kg e até 8 pessoas. As pessoas entram uma a uma; o
+programa lê o peso de cada uma ("Peso da pessoa N:", no máximo 8 leituras)
+e, se a próxima passar do limite de peso, ela espera e ninguém mais entra
+("A pessoa N (P kg) espera o próximo."). No fim, mostra quantas entraram e o
+peso total.
+Cada pedido de leitura termina com quebra de linha (\n).
+
+```text
+Entrada:
+80
+95
+110
+70
+120
+90
+60
+```
+
+```text
+Saída esperada:
+Peso da pessoa 1:
+Peso da pessoa 2:
+Peso da pessoa 3:
+Peso da pessoa 4:
+Peso da pessoa 5:
+Peso da pessoa 6:
+Peso da pessoa 7:
+A pessoa 7 (60 kg) espera o próximo.
+Entraram 6 pessoas, 565 kg.
+```
+
+**Exercício E136** · ★★☆
+
+Um sensor manda até 5 códigos: 1 = normal, 2 = alerta, 9 = desligou. Escreva
+o programa que lê os códigos com um for e um switch e mostra "normal",
+"alerta" ou "sensor desligou" (qualquer outro: "código desconhecido"). O
+laço tem que parar de ler no 9. No fim, mostra "Leituras: N".
+
+```text
+Entrada:
+1
+2
+9
+1
+2
+```
+
+```text
+Saída esperada:
+normal
+alerta
+sensor desligou
+Leituras: 3
+```
+
+**Exercício E138** · ★★★
+
+Escreva um programa que lê notas ("Nota (-1 encerra):") e calcula a média,
+sem usar break nem continue: use uma variável bool (assunto 0012) na
+condição do while e if/else no corpo. Nota negativa (ou entrada inválida)
+encerra; nota maior que 10 é ignorada e mostra "  nota X ignorada" (1 casa);
+as demais entram na soma. Se houve alguma nota válida, mostra a média.
+Cada pedido de leitura termina com quebra de linha (\n).
+
+```text
+Entrada:
+8
+12
+6.5
+9
+-1
+```
+
+```text
+Saída esperada:
+Nota (-1 encerra):
+Nota (-1 encerra):
+  nota 12.0 ignorada
+Nota (-1 encerra):
+Nota (-1 encerra):
+Nota (-1 encerra):
+Média de 3 notas: 7.83
+```
+
+---
+
+## 0024 · Laços aninhados
+
+### Conceito
+
+- **Laço aninhado**: o corpo de um laço contém outro laço inteiro. A cada
+  volta do laço **de fora**, o **de dentro** roda do começo ao fim, como os
+  ponteiros de horas e minutos (BACKES, 2013, cap. 5).
+- **Recomeço**: o contador de dentro volta ao início a cada volta de fora. No
+  `for`, é automático; no `while`, você zera à mão (o E142 mostra o estrago)
+  (BACKES, 2013, cap. 5).
+- **Voltas**: o corpo de dentro roda (voltas de fora) × (voltas de dentro)
+  vezes: 4 × 5 = 20 (DEITEL; DEITEL, 2011, cap. 4).
+- **Limite dependente**: o de dentro pode usar o contador de fora. Com
+  `for (int col = 1; col <= linha; col++)`, sai um triângulo (A048)
+  (DEITEL; DEITEL, 2011, cap. 4).
+- **Custo**: a conta é uma **multiplicação**. Comparar 1.000 clientes com
+  1.000 pedidos dá 1 milhão de comparações, o **O(n²)** do módulo de análise
+  (CELES; CERQUEIRA; RANGEL, 2016).
+- **Nomes**: `fileira` e `poltrona`, `linha` e `coluna`. Com `i` e `j`, é
+  fácil trocar um pelo outro sem perceber.
+
+> [!WARNING]
+> O `printf("\n")` no lugar errado muda o desenho: dentro do laço de dentro,
+> sai uma poltrona por linha; fora dos dois, tudo numa linha. Pergunte: isto
+> acontece uma vez por poltrona, por fileira ou no programa?
+
+### Exemplos de uso
 
 O mapa de um cinema com 4 fileiras (A a D) de 5 poltronas. O desenho congela
 o meio do caminho: a fileira A já saiu inteira, a B está na poltrona 3, e a C
@@ -958,7 +1221,115 @@ int main(void) {
 gcc ~/LPEDC/material/A048.c -o ~/LPEDC/material/A048 && ~/LPEDC/material/A048
 ```
 
-### 0025 · Padrões de laço
+### Exercícios
+
+**Exercício E140** · ★☆☆
+
+Escreva dois laços for aninhados: para i de 1 a 3, a linha i mostra os
+produtos i * j com j de 1 até i. Use um contador de quantas vezes o printf
+de dentro rodou e mostre-o depois dos dois laços.
+
+```text
+Saída esperada:
+1
+2 4
+3 6 9
+printf de dentro: 6 vezes
+```
+
+**Exercício E141** · ★★☆
+
+Monte a tábua de multiplicação de 1 a 9 como uma tabela, com cabeçalho e
+margem. Cada número ocupa 4 posições (%4d).
+
+```text
+Saída esperada:
+  x |   1   2   3   4   5   6   7   8   9
+----+------------------------------------
+  1 |   1   2   3   4   5   6   7   8   9
+  2 |   2   4   6   8  10  12  14  16  18
+  3 |   3   6   9  12  15  18  21  24  27
+  4 |   4   8  12  16  20  24  28  32  36
+  5 |   5  10  15  20  25  30  35  40  45
+  6 |   6  12  18  24  30  36  42  48  54
+  7 |   7  14  21  28  35  42  49  56  63
+  8 |   8  16  24  32  40  48  56  64  72
+  9 |   9  18  27  36  45  54  63  72  81
+```
+
+**Exercício E142** · ★★☆
+
+A escola quer a lista de chamada de 3 turmas com 4 alunos cada, uma turma
+por linha, no formato T1-A1 T1-A2 ... Escreva o programa com dois while
+aninhados (um para a turma, outro para o aluno).
+
+```text
+Saída esperada:
+T1-A1 T1-A2 T1-A3 T1-A4
+T2-A1 T2-A2 T2-A3 T2-A4
+T3-A1 T3-A2 T3-A3 T3-A4
+```
+
+**Exercício E143** · ★★★
+
+Desenhe uma pirâmide centralizada com a altura lida do teclado ("Altura:",
+aceite de 1 a 20; confira o retorno do scanf).
+Cada pedido de leitura termina com quebra de linha (\n).
+
+```text
+Entrada:
+5
+```
+
+```text
+Saída esperada:
+Altura:
+    *
+   ***
+  *****
+ *******
+*********
+```
+
+---
+
+## 0025 · Padrões de laço
+
+### Conceito
+
+- **Padrão de laço**: um uso de variável já resolvido milhares de vezes. A
+  variável ganha valor **antes** do laço, muda **dentro** e é usada **depois**
+  (DEITEL; DEITEL, 2011, cap. 3).
+- **Contador e acumulador**: o contador soma 1 a cada volta; o acumulador soma
+  o valor lido. Ambos começam em 0; o acumulador de **produto** começa em 1
+  (DEITEL; DEITEL, 2011, cap. 3).
+- **Maior e menor**: começam com o **primeiro valor lido**, nunca com 0
+  (BACKES, 2013, cap. 5).
+- **Flag**: um `bool` que só sobe. Sem `else flag = false`, senão um valor
+  comum depois do especial apaga a resposta (LEAL, 2016).
+- **Sentinela**: valor que **não pode** ser dado real e só manda parar; não
+  entra em conta nenhuma (DEITEL; DEITEL, 2011, cap. 3).
+- **Leitura antecipada**: lê **antes** do laço e no **fim** do corpo, para a
+  pergunta do `while` olhar sempre um valor recém-lido
+  (DEITEL; DEITEL, 2011, cap. 3).
+- **Média**: `(double) soma / dias`, e só com `dias > 0`. Com 0 / 0, o `double`
+  dá `nan` e o `int` derruba o programa. O acumulador também estoura: para
+  dinheiro, some **centavos** num `long long` (DEITEL; DEITEL, 2011).
+
+| Padrão | Antes do laço | Dentro do laço | Depois |
+| --- | --- | --- | --- |
+| **contador** | `dias = 0` | `dias++` | quantos foram |
+| **acumulador** | `soma = 0` (produto: `= 1`) | `soma += temp` | total, média |
+| **maior/menor** | o **primeiro** valor | `if (temp > maior) maior = temp` | o recorde |
+| **flag** | `calorao = false` | `if (temp >= 35) calorao = true` | aconteceu ou não? |
+| **sentinela** | ler o primeiro valor | ler o próximo, no fim | (o laço para nela) |
+
+> [!WARNING]
+> `maior = 0` falha no inverno: com máximas de -3, -1 e -4 °C, o programa diz
+> que o dia mais quente teve 0 °C. Comece com o **primeiro valor lido** ou com
+> `INT_MIN` (e `INT_MAX` para o menor), de `<limits.h>`.
+
+### Exemplos de uso
 
 As máximas de cinco dias: 28, 31, 36, 25 e 30 °C, e 999 como sentinela (uma
 temperatura pode ser 0 ou negativa). Cada valor atualiza as caixinhas; o 999
@@ -1131,7 +1502,151 @@ int main(void) {
 gcc ~/LPEDC/material/A050.c -o ~/LPEDC/material/A050 && ~/LPEDC/material/A050
 ```
 
-### 0026 · Aleatórios
+### Exercícios
+
+**Exercício E145** · ★☆☆
+
+Leia as 5 notas de um aluno com um for ("Nota N:"). Mostre a soma, a média
+(1 casa) e em quantas provas ele tirou 6 ou mais.
+Cada pedido de leitura termina com quebra de linha (\n).
+
+```text
+Entrada:
+7
+4.5
+8
+6
+9.5
+```
+
+```text
+Saída esperada:
+Nota 1:
+Nota 2:
+Nota 3:
+Nota 4:
+Nota 5:
+Soma: 35.0
+Média: 7.0
+Provas com 6 ou mais: 4
+```
+
+**Exercício E147** · ★★☆
+
+Você anotou o preço da gasolina em 6 postos do caminho. Leia os 6 preços
+("Posto N:") e mostre o mais barato e o mais caro, com o NÚMERO do posto de
+cada um, e a diferença entre eles.
+Cada pedido de leitura termina com quebra de linha (\n).
+
+```text
+Entrada:
+5.89
+6.09
+5.79
+5.99
+6.19
+5.85
+```
+
+```text
+Saída esperada:
+Posto 1:
+Posto 2:
+Posto 3:
+Posto 4:
+Posto 5:
+Posto 6:
+Mais barato: posto 3 (R$ 5.79)
+Mais caro: posto 5 (R$ 6.19)
+Diferença: R$ 0.40 por litro
+```
+
+**Exercício E148** · ★★☆
+
+A lanchonete anota o resultado de cada dia em reais (negativo é prejuízo) e
+digita 9999 para encerrar; o 9999 não conta como dia. Escreva o programa que
+lê os valores e mostra quantos dias foram, a média (2 casas) e o melhor dia.
+
+```text
+Entrada:
+-30
+-10
+-45
+9999
+```
+
+```text
+Saída esperada:
+Dias: 3
+Média: -28.33
+Melhor dia: -10
+```
+
+**Exercício E149** · ★★★
+
+Campeonato de skate: 8 notas de 0 a 100. Leia cada nota UMA vez ("Nota N:",
+sem guardar todas: vetores só no módulo 05) e mostre a maior e a segunda
+maior. Se duas pessoas empatarem no topo, a segunda maior é igual à maior.
+Cada pedido de leitura termina com quebra de linha (\n).
+
+```text
+Entrada:
+72
+95
+88
+95
+60
+81
+99
+70
+```
+
+```text
+Saída esperada:
+Nota 1:
+Nota 2:
+Nota 3:
+Nota 4:
+Nota 5:
+Nota 6:
+Nota 7:
+Nota 8:
+1º lugar: 99
+2º lugar: 95
+```
+
+---
+
+## 0026 · Aleatórios
+
+### Conceito
+
+- **Pseudoaleatório**: o computador é determinístico. Ele calcula uma
+  sequência por uma conta fixa, cada número a partir do anterior, que parece
+  aleatória (DEITEL; DEITEL, 2011, cap. 5).
+- **`rand()`**, de `<stdlib.h>`: devolve o próximo número, de 0 até
+  **`RAND_MAX`**. O padrão garante pelo menos 32767; na glibc, 2147483647
+  (CPPREFERENCE, s.d.).
+- **`srand(semente)`**: escolhe onde a sequência começa. A mesma **semente**
+  dá sempre a mesma sequência; sem `srand`, vale `srand(1)`
+  (LINUX MAN-PAGES PROJECT, s.d.).
+- **Faixa**: `1 + rand() % 6` dá de 1 a 6; de `a` até `b`,
+  `a + rand() % (b - a + 1)` (DEITEL; DEITEL, 2011, cap. 5).
+- **Semente fixa** (`srand(2022)`): os mesmos números a cada execução, bom para
+  testar e depurar; os exemplos do curso usam assim
+  (DEITEL; DEITEL, 2011, cap. 5).
+- **Semente do relógio** (`srand(time(NULL))`, com `<time.h>`): os segundos
+  desde 1º/1/1970 mudam a cada execução. Um jogo real usa este
+  (DEITEL; DEITEL, 2011, cap. 5).
+- **Não é cofre**: o `rand` nunca serve para senha ou token; quem descobre a
+  semente prevê tudo (LINUX MAN-PAGES PROJECT, s.d.).
+
+> [!WARNING]
+> `srand(time(NULL))` **dentro** do laço reinicia a sequência com a mesma
+> semente a cada volta, no mesmo segundo, e o dado "sorteia" 4, 4, 4... O
+> `srand` vai uma vez, no começo do `main`; quem sorteia é o `rand`.
+
+### Exemplos de uso
 
 No jogo de tabuleiro, só sai da prisão quem tira **dupla**. A semente 2022
 entra no gerador, o `% 6 + 1` vira cada número numa face, e na quarta jogada
@@ -1261,7 +1776,95 @@ int main(void) {
 gcc ~/LPEDC/material/A052.c -o ~/LPEDC/material/A052 && ~/LPEDC/material/A052
 ```
 
-### 0027 · Juntando tudo
+### Exercícios
+
+**Exercício E152** · ★☆☆
+
+Simule 20 lançamentos de uma moeda: mostre C (cara) ou K (coroa) para cada
+um, na mesma linha, e no fim quantas caras e quantas coroas saíram. Use
+srand(time(NULL)) para o resultado mudar a cada execução.
+
+```text
+Saída esperada (exemplo, a sua muda a cada execução):
+C K K C C K C K K K C C K C K K C C K C
+Caras: 10 | Coroas: 10
+```
+
+**Exercício E153** · ★★☆
+
+O jogo clássico: o programa sorteia um número de 1 a 100 (com
+srand(time(NULL))) e a pessoa tenta adivinhar ("Palpite: "). A cada palpite,
+diz "Mais alto." ou "Mais baixo.". No acerto, mostra "Acertou em N
+tentativas!". Se o scanf falhar (letra ou fim da entrada), o jogo encerra
+mostrando o número sorteado.
+
+```text
+Saída esperada (exemplo, digitando 50, 25 e 37; o número sorteado muda a cada vez):
+Palpite: 50
+Mais baixo.
+Palpite: 25
+Mais alto.
+Palpite: 37
+Acertou em 3 tentativas!
+```
+
+**Exercício E154** · ★★☆
+
+Escreva um programa que sorteia 10 lançamentos de um dado e mostra os 10
+números na mesma linha. Os números têm que variar de um lançamento para o
+outro e ficar sempre entre 1 e 6. Use srand(time(NULL)) uma vez só.
+
+```text
+Saída esperada (exemplo, a sua muda a cada execução):
+4 1 6 3 3 5 2 6 1 4
+```
+
+**Exercício E155** · ★★★
+
+Dá para estimar pi jogando dardos. Sorteie um ponto (x, y) com x e y entre
+0 e 1: ele cai num quadrado de lado 1. O quarto de círculo de raio 1 ocupa
+pi/4 desse quadrado. Então, com muitos pontos:
+
+```text
+pi ~ 4 x (pontos dentro do círculo) / (total de pontos)
+```
+
+Sorteie 1 000 000 de pontos (com srand(42)) e mostre a estimativa com 4
+casas. Um ponto está dentro se x * x + y * y <= 1.
+
+```text
+Saída esperada:
+Dentro do círculo: 784696 de 1000000
+pi ~ 3.1388
+```
+
+---
+
+## 0027 · Juntando tudo
+
+### Conceito
+
+- **Craps**: jogo de dois dados. No **primeiro** lançamento, soma 7 ou 11
+  ganha e 2, 3 ou 12 perde; qualquer outra soma vira o **ponto**. Depois,
+  relança até repetir o ponto (ganha) ou tirar 7 (perde)
+  (DEITEL; DEITEL, 2011, cap. 5).
+- **Peças do módulo**: sorteio com `rand` (0026), `switch` com casos agrupados
+  no primeiro lançamento (0018), `while` nos relançamentos (0020) e um
+  contador de lançamentos (0025).
+- **Variável de situação**: funciona como flag. `0` continua, `1` ganhou, `-1`
+  perdeu; só o corpo do laço sabe o que saiu, então só ele a muda
+  (DEITEL; DEITEL, 2011, cap. 5).
+- **Número mágico**: `1`, `-1` e `0` exigem lembrar o significado. No módulo
+  08, o `enum` dá nomes a eles (`GANHOU`, `PERDEU`, `CONTINUA`).
+- **Repetição de código**: o sorteio `1 + rand() % 6` aparece quatro vezes. No
+  módulo 04 ele vira a função `lancar()`.
+
+> [!WARNING]
+> Confira se o laço **termina**. Com `while (soma != ponto)` e sem o 7, o jogo
+> nunca perde e o programa está errado sem dar erro. Antes de escrever um
+> `while`, diga **todas** as formas de sair dele e confira cada uma.
+
+### Exemplos de uso
 
 Com a semente 21, o primeiro lançamento dá 3 + 6 = 9, que vira o ponto. O
 jogo relança: 8, depois 5 (nada acontece), depois 9. Saiu o ponto antes do 7:
@@ -1479,591 +2082,7 @@ int main(void) {
 gcc ~/LPEDC/material/A054.c -o ~/LPEDC/material/A054 && ~/LPEDC/material/A054
 ```
 
----
-
-## 3. Exercícios práticos
-
-Cada exercício é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta. Compile como os exemplos: `gcc ~/LPEDC/material/E007.c -o ~/LPEDC/material/E007 && ~/LPEDC/material/E007`. Resoluções em `_respostas/03-repeticoes/`.
-
-### 0020 · While
-
-**Exercício E116** · ★☆☆
-
-Escreva um programa que mostre, com um while, os múltiplos de 7 menores que
-50, todos na mesma linha e separados por espaço.
-
-```text
-Saída esperada:
-7 14 21 28 35 42 49
-```
-
-**Exercício E117** · ★★☆
-
-A caixa d'água tem 1000 litros e a casa gasta 180 litros por dia. Escreva um
-programa com um while que diz para quantos dias COMPLETOS a água dura e
-quantos litros sobram depois deles. Use as variáveis litros, consumo e dias.
-
-```text
-Saída esperada:
-Dá para 5 dias. Sobram 100 litros.
-```
-
-**Exercício E118** · ★★☆
-
-Você aplica R$ 1000.00 num investimento que rende 1% ao mês (juros sobre
-juros: todo mês o saldo é multiplicado por 1.01). Em quantos meses o saldo
-passa de R$ 1500.00? Mostre os meses e o saldo final com 2 casas.
-
-```text
-Saída esperada:
-Passou de R$ 1500.00 em 41 meses.
-Saldo: R$ 1503.75
-```
-
-**Exercício E120** · ★★★
-
-Escreva um programa com três laços while, um depois do outro, cada um numa
-linha da saída. A linha começa com a letra do trecho, mostra os valores que o
-corpo imprime e termina com o número de voltas e o valor final da variável
-(use um contador por trecho):
-
-```text
-A: int i = 0; while (i++ < 5) mostra i
-B: int n = 100; while (n > 1) divide n por 3 e mostra o n novo
-C: int k = 10; while (k < 10) soma 1 em k
-```
-
-```text
-Saída esperada:
-A: 1 2 3 4 5 | voltas 5, i final 6
-B: 33 11 3 1 | voltas 4, n final 1
-C: | voltas 0, k final 10
-```
-
-### 0021 · Do-while
-
-**Exercício E122** · ★☆☆
-
-Escreva um programa com três trechos, um por linha de saída. Cada linha
-mostra os valores impressos pelo trecho e termina com o valor final da
-variável:
-
-```text
-A: n = 10; while (n < 5) mostra n e soma 1
-B: m = 10; do { mostra m e soma 1 } while (m < 5);
-C: k = 10; o mesmo que o B, mas escrito com while (sem do-while)
-```
-
-```text
-Saída esperada:
-| A terminou com n = 10
-10 | B terminou com m = 11
-10 | C terminou com k = 11
-```
-
-**Exercício E123** · ★★☆
-
-No caixa da padaria, a atendente digita o preço de cada item e o sistema
-pergunta "Mais algum item? (s/n)". Escreva o programa com do-while: lê um
-preço ("Preço:"), soma, pergunta e repete enquanto a resposta for s ou S.
-No fim, mostra quantos itens e o total com 2 casas.
-Cada pedido de leitura termina com quebra de linha (\n).
-
-```text
-Entrada:
-12.50
-s
-7.00
-S
-3.25
-n
-```
-
-```text
-Saída esperada:
-Preço:
-Mais algum item? (s/n)
-Preço:
-Mais algum item? (s/n)
-Preço:
-Mais algum item? (s/n)
-Itens: 3
-Total: R$ 22.75
-```
-
-**Exercício E124** · ★★☆
-
-O totem do cinema oferece 3 sessões. Escreva o programa com do-while que
-pergunta "Sessão (1, 2 ou 3):" e repete a pergunta enquanto a opção for
-inválida. Quando a opção for válida, mostra "Sessão N escolhida.".
-Cada pedido de leitura termina com quebra de linha (\n).
-
-```text
-Entrada:
-7
-2
-```
-
-```text
-Saída esperada:
-Sessão (1, 2 ou 3):
-Sessão (1, 2 ou 3):
-Sessão 2 escolhida.
-```
-
-**Exercício E125** · ★★★
-
-A senha do cartão é 4321 e a pessoa tem 3 tentativas. Escreva o programa: lê
-a senha com do-while ("Senha:"), conta as tentativas e para quando acertar
-OU quando acabarem as tentativas. No fim, diz "Senha correta na tentativa N."
-ou, se errou as três, "Cartão bloqueado.".
-Cada pedido de leitura termina com quebra de linha (\n).
-
-```text
-Entrada:
-1111
-2222
-4321
-```
-
-```text
-Saída esperada:
-Senha:
-Senha:
-Senha:
-Senha correta na tentativa 3.
-```
-
-Com as entradas 1111, 2222 e 3333, a última linha da saída é "Cartão bloqueado.".
-
-### 0022 · For
-
-**Exercício E128** · ★☆☆
-
-Escreva um programa com os quatro laços abaixo, um depois do outro. Cada
-um mostra os valores de x numa linha que começa com a letra do laço e, no
-fim da linha, quantas voltas ele deu (use um contador para cada laço):
-
-```text
-a) for (int x = 3; x <= 20; x += 4)
-b) for (int x = 50; x > 30; x -= 6)
-c) for (int x = 1; x >= 10; x++)
-d) for (int x = 1; x < 100; x *= 3)
-```
-
-```text
-Saída esperada:
-a) 3 7 11 15 19 (5 voltas)
-b) 50 44 38 32 (4 voltas)
-c) (0 voltas)
-d) 1 3 9 27 81 (5 voltas)
-```
-
-**Exercício E129** · ★★☆
-
-Você aplica R$ 2000.00 num CDB que rende 0,8% ao mês. Mostre o saldo mês a
-mês durante 12 meses (todo mês o saldo é multiplicado por 1.008). No fim,
-mostre o resultado da fórmula dos juros compostos,
-saldo = 2000 * 1.008 elevado a 12, usando pow (assunto 0010).
-
-```text
-Saída esperada:
-Mês  1: R$ 2016.00
-Mês  2: R$ 2032.13
-Mês  3: R$ 2048.39
-Mês  4: R$ 2064.77
-Mês  5: R$ 2081.29
-Mês  6: R$ 2097.94
-Mês  7: R$ 2114.72
-Mês  8: R$ 2131.64
-Mês  9: R$ 2148.70
-Mês 10: R$ 2165.88
-Mês 11: R$ 2183.21
-Mês 12: R$ 2200.68
-Pela fórmula: R$ 2200.68
-```
-
-```bash
-gcc ~/LPEDC/material/E129.c -o ~/LPEDC/material/E129 -lm && ~/LPEDC/material/E129
-```
-
-**Exercício E130** · ★★☆
-
-O treino manda fazer 5 séries de flexões. Escreva um programa com um for que
-mostra "Série 1" até "Série 5", uma por linha.
-
-```text
-Saída esperada:
-Série 1
-Série 2
-Série 3
-Série 4
-Série 5
-```
-
-**Exercício E131** · ★★★
-
-Dá para calcular pi com uma soma infinita (série de Leibniz):
-
-```text
-pi = 4/1 - 4/3 + 4/5 - 4/7 + 4/9 - ...
-```
-
-Escreva um programa com um for que soma os primeiros 1000 termos e mostra o
-resultado com 6 casas.
-
-```text
-Saída esperada:
-pi ~ 3.140593
-```
-
-### 0023 · Break e continue
-
-**Exercício E134** · ★☆☆
-
-Escreva um programa com um for de i = 1 a 10 que mostra os valores de i numa
-linha, mas pula (continue) os múltiplos de 4 e para (break) quando i for 7.
-No fim da linha, mostra quantas vezes o continue aconteceu. Na linha
-seguinte, repita o laço com um contador novo, mas agora o break testa i == 8.
-
-```text
-Saída esperada:
-1 2 3 5 6 (continue: 1 vez)
-1 2 3 5 6 7 9 10 (continue: 2 vezes)
-```
-
-**Exercício E135** · ★★☆
-
-O elevador aguenta 600 kg e até 8 pessoas. As pessoas entram uma a uma; o
-programa lê o peso de cada uma ("Peso da pessoa N:", no máximo 8 leituras)
-e, se a próxima passar do limite de peso, ela espera e ninguém mais entra
-("A pessoa N (P kg) espera o próximo."). No fim, mostra quantas entraram e o
-peso total.
-Cada pedido de leitura termina com quebra de linha (\n).
-
-```text
-Entrada:
-80
-95
-110
-70
-120
-90
-60
-```
-
-```text
-Saída esperada:
-Peso da pessoa 1:
-Peso da pessoa 2:
-Peso da pessoa 3:
-Peso da pessoa 4:
-Peso da pessoa 5:
-Peso da pessoa 6:
-Peso da pessoa 7:
-A pessoa 7 (60 kg) espera o próximo.
-Entraram 6 pessoas, 565 kg.
-```
-
-**Exercício E136** · ★★☆
-
-Um sensor manda até 5 códigos: 1 = normal, 2 = alerta, 9 = desligou. Escreva
-o programa que lê os códigos com um for e um switch e mostra "normal",
-"alerta" ou "sensor desligou" (qualquer outro: "código desconhecido"). O
-laço tem que parar de ler no 9. No fim, mostra "Leituras: N".
-
-```text
-Entrada:
-1
-2
-9
-1
-2
-```
-
-```text
-Saída esperada:
-normal
-alerta
-sensor desligou
-Leituras: 3
-```
-
-**Exercício E138** · ★★★
-
-Escreva um programa que lê notas ("Nota (-1 encerra):") e calcula a média,
-sem usar break nem continue: use uma variável bool (assunto 0012) na
-condição do while e if/else no corpo. Nota negativa (ou entrada inválida)
-encerra; nota maior que 10 é ignorada e mostra "  nota X ignorada" (1 casa);
-as demais entram na soma. Se houve alguma nota válida, mostra a média.
-Cada pedido de leitura termina com quebra de linha (\n).
-
-```text
-Entrada:
-8
-12
-6.5
-9
--1
-```
-
-```text
-Saída esperada:
-Nota (-1 encerra):
-Nota (-1 encerra):
-  nota 12.0 ignorada
-Nota (-1 encerra):
-Nota (-1 encerra):
-Nota (-1 encerra):
-Média de 3 notas: 7.83
-```
-
-### 0024 · Laços aninhados
-
-**Exercício E140** · ★☆☆
-
-Escreva dois laços for aninhados: para i de 1 a 3, a linha i mostra os
-produtos i * j com j de 1 até i. Use um contador de quantas vezes o printf
-de dentro rodou e mostre-o depois dos dois laços.
-
-```text
-Saída esperada:
-1
-2 4
-3 6 9
-printf de dentro: 6 vezes
-```
-
-**Exercício E141** · ★★☆
-
-Monte a tábua de multiplicação de 1 a 9 como uma tabela, com cabeçalho e
-margem. Cada número ocupa 4 posições (%4d).
-
-```text
-Saída esperada:
-  x |   1   2   3   4   5   6   7   8   9
-----+------------------------------------
-  1 |   1   2   3   4   5   6   7   8   9
-  2 |   2   4   6   8  10  12  14  16  18
-  3 |   3   6   9  12  15  18  21  24  27
-  4 |   4   8  12  16  20  24  28  32  36
-  5 |   5  10  15  20  25  30  35  40  45
-  6 |   6  12  18  24  30  36  42  48  54
-  7 |   7  14  21  28  35  42  49  56  63
-  8 |   8  16  24  32  40  48  56  64  72
-  9 |   9  18  27  36  45  54  63  72  81
-```
-
-**Exercício E142** · ★★☆
-
-A escola quer a lista de chamada de 3 turmas com 4 alunos cada, uma turma
-por linha, no formato T1-A1 T1-A2 ... Escreva o programa com dois while
-aninhados (um para a turma, outro para o aluno).
-
-```text
-Saída esperada:
-T1-A1 T1-A2 T1-A3 T1-A4
-T2-A1 T2-A2 T2-A3 T2-A4
-T3-A1 T3-A2 T3-A3 T3-A4
-```
-
-**Exercício E143** · ★★★
-
-Desenhe uma pirâmide centralizada com a altura lida do teclado ("Altura:",
-aceite de 1 a 20; confira o retorno do scanf).
-Cada pedido de leitura termina com quebra de linha (\n).
-
-```text
-Entrada:
-5
-```
-
-```text
-Saída esperada:
-Altura:
-    *
-   ***
-  *****
- *******
-*********
-```
-
-### 0025 · Padrões de laço
-
-**Exercício E145** · ★☆☆
-
-Leia as 5 notas de um aluno com um for ("Nota N:"). Mostre a soma, a média
-(1 casa) e em quantas provas ele tirou 6 ou mais.
-Cada pedido de leitura termina com quebra de linha (\n).
-
-```text
-Entrada:
-7
-4.5
-8
-6
-9.5
-```
-
-```text
-Saída esperada:
-Nota 1:
-Nota 2:
-Nota 3:
-Nota 4:
-Nota 5:
-Soma: 35.0
-Média: 7.0
-Provas com 6 ou mais: 4
-```
-
-**Exercício E147** · ★★☆
-
-Você anotou o preço da gasolina em 6 postos do caminho. Leia os 6 preços
-("Posto N:") e mostre o mais barato e o mais caro, com o NÚMERO do posto de
-cada um, e a diferença entre eles.
-Cada pedido de leitura termina com quebra de linha (\n).
-
-```text
-Entrada:
-5.89
-6.09
-5.79
-5.99
-6.19
-5.85
-```
-
-```text
-Saída esperada:
-Posto 1:
-Posto 2:
-Posto 3:
-Posto 4:
-Posto 5:
-Posto 6:
-Mais barato: posto 3 (R$ 5.79)
-Mais caro: posto 5 (R$ 6.19)
-Diferença: R$ 0.40 por litro
-```
-
-**Exercício E148** · ★★☆
-
-A lanchonete anota o resultado de cada dia em reais (negativo é prejuízo) e
-digita 9999 para encerrar; o 9999 não conta como dia. Escreva o programa que
-lê os valores e mostra quantos dias foram, a média (2 casas) e o melhor dia.
-
-```text
-Entrada:
--30
--10
--45
-9999
-```
-
-```text
-Saída esperada:
-Dias: 3
-Média: -28.33
-Melhor dia: -10
-```
-
-**Exercício E149** · ★★★
-
-Campeonato de skate: 8 notas de 0 a 100. Leia cada nota UMA vez ("Nota N:",
-sem guardar todas: vetores só no módulo 05) e mostre a maior e a segunda
-maior. Se duas pessoas empatarem no topo, a segunda maior é igual à maior.
-Cada pedido de leitura termina com quebra de linha (\n).
-
-```text
-Entrada:
-72
-95
-88
-95
-60
-81
-99
-70
-```
-
-```text
-Saída esperada:
-Nota 1:
-Nota 2:
-Nota 3:
-Nota 4:
-Nota 5:
-Nota 6:
-Nota 7:
-Nota 8:
-1º lugar: 99
-2º lugar: 95
-```
-
-### 0026 · Aleatórios
-
-**Exercício E152** · ★☆☆
-
-Simule 20 lançamentos de uma moeda: mostre C (cara) ou K (coroa) para cada
-um, na mesma linha, e no fim quantas caras e quantas coroas saíram. Use
-srand(time(NULL)) para o resultado mudar a cada execução.
-
-```text
-Saída esperada (exemplo, a sua muda a cada execução):
-C K K C C K C K K K C C K C K K C C K C
-Caras: 10 | Coroas: 10
-```
-
-**Exercício E153** · ★★☆
-
-O jogo clássico: o programa sorteia um número de 1 a 100 (com
-srand(time(NULL))) e a pessoa tenta adivinhar ("Palpite: "). A cada palpite,
-diz "Mais alto." ou "Mais baixo.". No acerto, mostra "Acertou em N
-tentativas!". Se o scanf falhar (letra ou fim da entrada), o jogo encerra
-mostrando o número sorteado.
-
-```text
-Saída esperada (exemplo, digitando 50, 25 e 37; o número sorteado muda a cada vez):
-Palpite: 50
-Mais baixo.
-Palpite: 25
-Mais alto.
-Palpite: 37
-Acertou em 3 tentativas!
-```
-
-**Exercício E154** · ★★☆
-
-Escreva um programa que sorteia 10 lançamentos de um dado e mostra os 10
-números na mesma linha. Os números têm que variar de um lançamento para o
-outro e ficar sempre entre 1 e 6. Use srand(time(NULL)) uma vez só.
-
-```text
-Saída esperada (exemplo, a sua muda a cada execução):
-4 1 6 3 3 5 2 6 1 4
-```
-
-**Exercício E155** · ★★★
-
-Dá para estimar pi jogando dardos. Sorteie um ponto (x, y) com x e y entre
-0 e 1: ele cai num quadrado de lado 1. O quarto de círculo de raio 1 ocupa
-pi/4 desse quadrado. Então, com muitos pontos:
-
-```text
-pi ~ 4 x (pontos dentro do círculo) / (total de pontos)
-```
-
-Sorteie 1 000 000 de pontos (com srand(42)) e mostre a estimativa com 4
-casas. Um ponto está dentro se x * x + y * y <= 1.
-
-```text
-Saída esperada:
-Dentro do círculo: 784696 de 1000000
-pi ~ 3.1388
-```
-
-### 0027 · Juntando tudo
+### Exercícios
 
 **Exercício E157** · ★☆☆
 
@@ -2152,11 +2171,13 @@ Você tira:
 Sobram 0. Você tirou o último palito. Perdeu!
 ```
 
-### Lista do módulo
+---
+
+## Lista do módulo
 
 30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P0301.c a P0330.c, em `material/`; resoluções em `_respostas/03-repeticoes/lista/`.
 
-#### ★☆☆ Aquecimento
+### ★☆☆ Aquecimento
 
 **Exercício P0301** · ★☆☆ · A tabela do pão francês
 
@@ -2369,7 +2390,7 @@ Total: R$ 1899.00
 
 **Resposta esperada:** 10 parcelas, Total: R$ 1899.00.
 
-#### ★★☆ Para pensar
+### ★★☆ Para pensar
 
 **Exercício P0311** · ★★☆ · O pedido de trás para frente
 
@@ -2556,7 +2577,7 @@ Média: 8.0
 
 **Resposta esperada:** Soma: 40, Média: 8.0.
 
-#### ★★★ Desafio
+### ★★★ Desafio
 
 **Exercício P0321** · ★★★ · O calendário de qualquer mês
 
@@ -2815,7 +2836,7 @@ Saída esperada:
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas extras, do médio ao difícil. Crie um arquivo seu para cada um e
 compile com as flags de estudo.
@@ -2975,7 +2996,7 @@ sempre o meio, `(menor + maior) / 2`, e corta metade a cada resposta: com 1,
 
 </details>
 
-### Questões do POSCOMP
+## Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -2986,7 +3007,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 
 O gabarito oficial de 2025 não estava disponível quando este material foi montado.
 
-### Questões no estilo da prova
+## Questões no estilo da prova
 
 Questões objetivas no formato da prova do PPGI: uma alternativa certa. Faça o
 teste de mesa: uma linha por volta, com o valor de cada variável.

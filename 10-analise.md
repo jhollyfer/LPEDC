@@ -53,9 +53,12 @@ gcc ~/LPEDC/material/A147.c ~/LPEDC/material/0074-conta.c ~/LPEDC/material/0074-
 
 ---
 
-## 1. Conceitos gerais
+> [!NOTE]
+> Cada assunto é um capítulo: **Conceito** (a explicação), **Exemplos de uso** (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e **Exercícios** (cada um é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta; resoluções em `_respostas/10-analise/`).
 
-### 0071 · Eficiência: contar passos
+## 0071 · Eficiência: contar passos
+
+### Conceito
 
 - **Eficiência**: o tempo em segundos muda de máquina para máquina; o número de
   **passos** do algoritmo, não (FEOFILOFF, 2009).
@@ -88,113 +91,7 @@ gcc ~/LPEDC/material/A147.c ~/LPEDC/material/0074-conta.c ~/LPEDC/material/0074-
 > `return`, a comparação que acertou fica fora. Sem zerar o contador entre
 > buscas, ele acumula. Confira à mão: achar na primeira posição custa 1.
 
-### 0072 · Notação O: como o custo cresce
-
-- **Notação O** ("ó grande"): diz como a contagem de passos cresce quando n
-  cresce (CORMEN et al., 2024, cap. 3).
-- **Ignora constantes**: 3n e 100n são ambos O(n). A constante depende da
-  máquina; o formato do crescimento, não (CELES; RANGEL, 2002).
-- **Ignora termos menores**: em n² + 50n + 7, com n = 1000, o n² vale 1.000.000
-  e o 50n só 50.000. Fica O(n²) (ZIVIANI, 2010, cap. 1).
-- **Definição**: f(n) é **O(g(n))** se existem c > 0 e n₀ com
-  0 ≤ f(n) ≤ c · g(n) para todo n ≥ n₀. É um **teto** (CORMEN et al., 2024, cap. 3).
-- **Ω e Θ**: Ω é o piso e Θ, teto e piso juntos: n² + 50n + 7 é Θ(n²)
-  (assunto 0166) (CORMEN et al., 2024, cap. 3).
-- **Ler a classe nos laços**: de 1 em 1 até n é O(n); dois aninhados, O(n²);
-  um que **divide** n por 2 a cada volta, O(log n). De 1024 até 1 são 10
-  cortes. A base do log não importa (FEOFILOFF, 2009).
-- **Acesso O(1)**: `v[i]` sai de uma conta de endereço. Numa lista encadeada,
-  chegar ao elemento i exige seguir i ponteiros, O(n)
-  (CELES; CERQUEIRA; RANGEL, 2016).
-
-| classe | nome | n dobra, o custo... | exemplo |
-| --- | --- | --- | --- |
-| O(1) | constante | fica igual | `v[i]`, topo da pilha |
-| O(log n) | logarítmica | ganha **1** passo | busca binária |
-| O(n) | linear | dobra | somar um vetor |
-| O(n log n) | "n log n" | pouco mais que dobra | merge sort |
-| O(n²) | quadrática | **quadruplica** | comparar todos os pares |
-
-> [!WARNING]
-> O(n) não é "sempre mais rápido" que O(n²): um algoritmo de 100n passos perde
-> de um de n² até n = 100. E um laço O(n) que chama a cada volta uma função O(n)
-> dá **O(n²)**, como o `strlen(s)` na condição do `for`.
-
-### 0073 · Invariantes de laço e corretude
-
-- **Invariante de laço**: relação entre as variáveis que vale **no começo de
-  cada iteração**, logo antes do teste. Serve para explicar e para provar o
-  laço (FEOFILOFF, 2009).
-- **Notação `v[0..i-1]`**: os elementos de índice 0 até i − 1, vazio quando i
-  vale 0. Em "achar o maior": **`maior` é um máximo de `v[0..i-1]`**
-  (FEOFILOFF, 2009).
-- **Quatro passos**, como numa indução (CORMEN et al., 2024, cap. 2):
-  1. **Início**: vale antes da primeira volta.
-  2. **Manutenção**: se vale no começo de uma volta, vale no começo da seguinte.
-  3. **Término**: quando o teste falha, invariante + condição de parada dão o
-     resultado.
-  4. **Parada**: uma quantidade inteira, a **variante**, diminui a cada volta.
-- **Contrato**: a documentação diz o que a função faz, não como. "Recebe n ≥ 1
-  e v; devolve o valor de **um** elemento máximo de `v[0..n-1]`"
-  (FEOFILOFF, 2009).
-- **`assert(cond)`** (`<assert.h>`): se `cond` for falsa, mostra arquivo e linha
-  e aborta. Com `-DNDEBUG`, vira nada (CPPREFERENCE, s.d.).
-
-> [!WARNING]
-> O erro clássico é o **início**: `int maior = 0;` passa nos testes com valores
-> positivos, mas com −120, −45, −300 devolve 0, que nem está no vetor. Comece
-> com `maior = v[0]` e i = 1. E nunca ponha no `assert` algo que o programa
-> precisa fazer.
-
-### 0074 · TAD: interface (.h) e implementação (.c)
-
-- **Tipo abstrato de dado** (TAD): tipo definido pelas **operações** que
-  oferece, não pelo modo como guarda os dados. O **cliente** conhece só as
-  operações (CELES; RANGEL, 2002).
-- **Interface** (`contador.h`): o contrato. Declara o tipo e os protótipos, cada
-  um com comentário sobre o que entra, o que sai e o que pode dar errado
-  (CELES; RANGEL, 2002).
-- **Implementação** (`contador.c`): define a `struct`, escreve as funções e
-  inclui o próprio `.h`, para o compilador conferir cada função contra o
-  protótipo (CELES; RANGEL, 2002).
-- **Tipo opaco**: o `.h` diz só `typedef struct contador Contador;`. No cliente
-  é um **tipo incompleto**: dá para ter `Contador *`, mas não variável, `sizeof`
-  nem `->valor`. Por isso há `_cria` (faz o `malloc`) e `_libera`
-  (CELES; CERQUEIRA; RANGEL, 2016).
-- **Invariante do TAD**: o contador promete `0 <= valor <= limite`. Só vale
-  porque o cliente não escreve `vagas->valor = 99`.
-- **Compilação separada**: o `#include` só cola texto; só o `contador.o` conhece
-  os campos, e o ligador junta tudo. Mudar a struct recompila só o `contador.c`
-  (KERNIGHAN; RITCHIE, 1989, seção 4.5).
-- **Molde dos módulos 11 a 16**, para um TAD `x`:
-  1. **Pasta do assunto**: `x.h`, `x.c` e os exemplos `A###.c`. O comando do
-     exemplo compila junto todo `.c` da pasta que não se chama
-     `A000.c`/`E000.c`. À mão: `gcc A147.c contador.c -o a147`.
-  2. **`x.h`**: *include guard* (`#ifndef X_H`), `typedef struct x X;` e
-     protótipos com prefixo `x_`, cada um com seu contrato.
-  3. **`x.c`**: inclui o próprio `"x.h"`, define a `struct x` com o invariante
-     comentado; auxiliares internas são `static`.
-  4. **Nomes**: `x_cria` (devolve `NULL` se faltar memória), `x_libera` (aceita
-     `NULL`) e verbos no presente: `x_insere`, `x_remove`. Leitura recebe
-     `const X *`.
-  5. **Erros**: operação que pode falhar devolve `bool`, com o valor por ponteiro
-     (`bool pilha_desempilha(Pilha *p, int *valor)`). O TAD não imprime erro.
-  6. **Cliente**: `#include "x.h"` com aspas, guarda só `X *`, confere o `NULL`
-     do `_cria` e chama `_libera` no fim.
-
-> [!WARNING]
-> `vagas->valor = 0;` ou `Contador c;` no cliente dá erro de **compilação**
-> (`invalid use of incomplete typedef`): é o tipo opaco funcionando. Não mova a
-> `struct` para o `.h`. E esquecer o `contador.c` ao compilar à mão dá
-> `undefined reference`, erro do **ligador**.
-
----
-
-## 2. Exemplos de uso
-
-Cada exemplo compila sozinho. Rode com o comando abaixo dele e compare com a saída no fim do código.
-
-### 0071 · Eficiência: contar passos
+### Exemplos de uso
 
 Na padaria, a moça procura sua comanda no bolo, uma por uma. A comanda 70 está
 na posição 6: a busca erra as 6 primeiras e acerta na 7ª comparação. A 41 sai
@@ -373,7 +270,138 @@ int main(void) {
 gcc ~/LPEDC/material/A142.c -o ~/LPEDC/material/A142 && ~/LPEDC/material/A142
 ```
 
-### 0072 · Notação O: como o custo cresce
+### Exercícios
+
+**Exercício E421** · ★☆☆
+
+Escreva um programa que monta cada trecho abaixo, conta com uma variável
+"passos" quantas vezes o passos++ roda e mostra o resultado. Zere o
+contador antes de cada trecho.
+
+```text
+a) for (i = 0; i < 6; i++)  for (j = 0; j < 4; j++)  passos++;
+b) for (i = 0; i < 6; i++)  for (j = i; j < 6; j++)  passos++;
+c) for (i = 1; i < 100; i = i * 2)  passos++;
+d) for (i = 0; i < 10; i++)  if (i % 3 == 0) passos++;
+```
+
+No d), conte também as voltas do laço numa segunda variável, "voltas", e
+mostre as duas.
+
+```text
+Saída esperada:
+a) 24
+b) 21
+c) 7
+d) 4 passos em 10 voltas
+```
+
+**Exercício E423** · ★★☆
+
+O texto disse que, em média, a busca sequencial custa (n + 1) / 2
+comparações. Não acredite: meça. Escreva um programa que, para n = 10, 100
+e 1000:
+
+1. preenche um vetor com os códigos de produto v[i] = 3 * i + 1;
+2. busca, um por um, TODOS os códigos que estão no vetor, somando os passos
+de todas as buscas;
+3. mostra o total e a média de passos por busca.
+
+```text
+Saída esperada:
+n =   10: total     55, média   5.5
+n =  100: total   5050, média  50.5
+n = 1000: total 500500, média 500.5
+```
+
+**Exercício E424** · ★★☆
+
+Dois jeitos de saber se n é primo, contando as divisões (n % d) como passo:
+
+```text
+ingênuo: testa todo d de 2 até n - 1;
+esperto: testa d de 2 enquanto d * d <= n. Se n tivesse um divisor maior
+         que a raiz, teria também um menor, que já teria aparecido.
+```
+
+Escreva as duas funções (devolvem bool) com contadores e mostre a tabela
+para os primos 97, 997 e 9973.
+
+```text
+Saída esperada:
+    n  ingênuo  esperto
+   97       95        8
+  997      995       30
+ 9973     9971       98
+```
+
+**Exercício E426** · ★★★
+
+No assunto 0033 você viu que o Fibonacci recursivo é lento. Agora meça o
+quanto. Escreva:
+
+- fib_rec(n): a versão recursiva (fib(0) = 0, fib(1) = 1), somando 1 num
+contador global "chamadas" a cada vez que a função é chamada;
+- fib_it(n): a versão com laço, somando 1 num contador "somas" a cada soma.
+
+Mostre a tabela para n = 10, 20 e 30 (contadores long). Depois, uma segunda
+tabela: para n de 20 a 25, as chamadas da recursiva e a razão entre as
+chamadas de n e as de n - 1.
+
+```text
+Saída esperada:
+ n     fib  chamadas  somas
+10      55       177      9
+20    6765     21891     19
+30  832040   2692537     29
+```
+
+```text
+n = 20:  21891 chamadas, razão 1.618
+n = 21:  35421 chamadas, razão 1.618
+n = 22:  57313 chamadas, razão 1.618
+n = 23:  92735 chamadas, razão 1.618
+n = 24: 150049 chamadas, razão 1.618
+n = 25: 242785 chamadas, razão 1.618
+```
+
+---
+
+## 0072 · Notação O: como o custo cresce
+
+### Conceito
+
+- **Notação O** ("ó grande"): diz como a contagem de passos cresce quando n
+  cresce (CORMEN et al., 2024, cap. 3).
+- **Ignora constantes**: 3n e 100n são ambos O(n). A constante depende da
+  máquina; o formato do crescimento, não (CELES; RANGEL, 2002).
+- **Ignora termos menores**: em n² + 50n + 7, com n = 1000, o n² vale 1.000.000
+  e o 50n só 50.000. Fica O(n²) (ZIVIANI, 2010, cap. 1).
+- **Definição**: f(n) é **O(g(n))** se existem c > 0 e n₀ com
+  0 ≤ f(n) ≤ c · g(n) para todo n ≥ n₀. É um **teto** (CORMEN et al., 2024, cap. 3).
+- **Ω e Θ**: Ω é o piso e Θ, teto e piso juntos: n² + 50n + 7 é Θ(n²)
+  (assunto 0166) (CORMEN et al., 2024, cap. 3).
+- **Ler a classe nos laços**: de 1 em 1 até n é O(n); dois aninhados, O(n²);
+  um que **divide** n por 2 a cada volta, O(log n). De 1024 até 1 são 10
+  cortes. A base do log não importa (FEOFILOFF, 2009).
+- **Acesso O(1)**: `v[i]` sai de uma conta de endereço. Numa lista encadeada,
+  chegar ao elemento i exige seguir i ponteiros, O(n)
+  (CELES; CERQUEIRA; RANGEL, 2016).
+
+| classe | nome | n dobra, o custo... | exemplo |
+| --- | --- | --- | --- |
+| O(1) | constante | fica igual | `v[i]`, topo da pilha |
+| O(log n) | logarítmica | ganha **1** passo | busca binária |
+| O(n) | linear | dobra | somar um vetor |
+| O(n log n) | "n log n" | pouco mais que dobra | merge sort |
+| O(n²) | quadrática | **quadruplica** | comparar todos os pares |
+
+> [!WARNING]
+> O(n) não é "sempre mais rápido" que O(n²): um algoritmo de 100n passos perde
+> de um de n² até n = 100. E um laço O(n) que chama a cada volta uma função O(n)
+> dá **O(n²)**, como o `strlen(s)` na condição do `for`.
+
+### Exemplos de uso
 
 O app da hamburgueria faz cinco perguntas sobre os mesmos pedidos, com 8, 64 e
 1024 pedidos. Em verde, o que continua leve em 1024; em vermelho, o que
@@ -558,7 +586,142 @@ int main(void) {
 gcc ~/LPEDC/material/A144.c -o ~/LPEDC/material/A144 && ~/LPEDC/material/A144
 ```
 
-### 0073 · Invariantes de laço e corretude
+### Exercícios
+
+**Exercício E427** · ★☆☆
+
+Transforme cada trecho abaixo numa função long trecho_a(int n), ...,
+trecho_f(int n), que roda o trecho e devolve quantas vezes o x++ (ou a
+conta do d) aconteceu. No main, mostre uma tabela com a contagem para
+n = 16 e n = 1024. No rótulo de cada linha, escreva a classe O que a
+contagem indica.
+
+```text
+a) for (i = 0; i < n; i++)  for (j = 0; j < 10; j++)  x++;
+b) for (i = 1; i < n; i = i * 2)  x++;
+c) for (i = 0; i < n; i++)  for (j = 0; j < i; j++)  x++;
+d) x = v[n / 2] + v[0];
+e) for (i = 0; i < n; i++)  x++;
+   for (j = 0; j < n; j++)  x++;
+f) for (i = 0; i < n; i++)  for (j = n; j > 1; j = j / 2)  x++;
+```
+
+```text
+Saída esperada:
+trecho           n=16   n=1024
+a) O(n)           160    10240
+b) O(log n)         4       10
+c) O(n^2)         120   523776
+d) O(1)             1        1
+e) O(n)            32     2048
+f) O(n log n)      64    10240
+```
+
+**Exercício E429** · ★★☆
+
+O cupom fiscal tem códigos de produto de 0 a 999. Você quer saber se algum
+código aparece repetido. Escreva duas funções que devolvem bool e contam
+passos (comparações ou consultas):
+
+- repetido_pares(v, n): compara cada par (i, j) com i < j. O(n²).
+- repetido_marcas(v, n): usa um vetor bool visto[1000] (todo false no
+começo); para cada código, consulta visto[codigo] e marca. O(n).
+
+Teste com n = 100 e n = 1000, com v[i] = (i * 37) % 1000 (que não tem
+repetidos: é o pior caso, as duas vão até o fim).
+
+```text
+Saída esperada:
+n =  100: pares   4950 passos, marcas  100 passos
+n = 1000: pares 499500 passos, marcas 1000 passos
+```
+
+**Exercício E430** · ★★☆
+
+A "regra do dobro": rode um algoritmo com n e com 2n e divida os passos.
+Razão perto de 1 (com +1 passo) é O(log n); perto de 2, O(n); perto de 4,
+O(n²). Escreva quatro funções long misterio_a(int n) ... misterio_d(int n),
+que devolvem quantas vezes o laço roda:
+
+```text
+a) for (i = 0; i < n; i += 3)
+b) for (i = n; i > 0; i /= 2)
+c) for (i = 0; i < n; i++) for (j = 0; j < n; j += 2)
+d) for (d = 0; d * d < n; d++)
+```
+
+Escreva também const char *classe(double razao): "O(log n)" se a razão for
+menor que 1.2, "O(raiz n)" se for menor que 1.7, "O(n)" se for menor que 3
+e "O(n^2)" nos outros casos. Mostre, para n = 1000 e n = 2000, os passos, a
+razão e a classe de cada função.
+
+```text
+Saída esperada:
+a:     334 ->     667  razão 2.00  O(n)
+b:      10 ->      11  razão 1.10  O(log n)
+c:  500000 -> 2000000  razão 4.00  O(n^2)
+d:      32 ->      45  razão 1.41  O(raiz n)
+```
+
+**Exercício E431** · ★★★
+
+Você precisa ordenar a lista de entregas e tem duas opções:
+
+```text
+A: um algoritmo simples, que gasta 2n² passos;
+B: um sofisticado, que gasta 50 n log₂ n passos.
+```
+
+B é O(n log n) e A é O(n²), então B ganha "no fim". Mas a partir de que n?
+Escreva um programa que encontra o MENOR n (começando em 2) em que B gasta
+menos passos que A, e mostra os dois custos nesse n. Mostre também uma
+tabela para n = 10, 100, 1000 e 10000.
+
+```text
+Saída esperada:
+B passa a ganhar em n = 190 (A: 72200, B: 71914)
+     n           A          B
+    10         200       1661
+   100       20000      33219
+  1000     2000000     498289
+ 10000   200000000    6643856
+```
+
+```bash
+gcc ~/LPEDC/material/E431.c -o ~/LPEDC/material/E431 -lm && ~/LPEDC/material/E431
+```
+
+---
+
+## 0073 · Invariantes de laço e corretude
+
+### Conceito
+
+- **Invariante de laço**: relação entre as variáveis que vale **no começo de
+  cada iteração**, logo antes do teste. Serve para explicar e para provar o
+  laço (FEOFILOFF, 2009).
+- **Notação `v[0..i-1]`**: os elementos de índice 0 até i − 1, vazio quando i
+  vale 0. Em "achar o maior": **`maior` é um máximo de `v[0..i-1]`**
+  (FEOFILOFF, 2009).
+- **Quatro passos**, como numa indução (CORMEN et al., 2024, cap. 2):
+  1. **Início**: vale antes da primeira volta.
+  2. **Manutenção**: se vale no começo de uma volta, vale no começo da seguinte.
+  3. **Término**: quando o teste falha, invariante + condição de parada dão o
+     resultado.
+  4. **Parada**: uma quantidade inteira, a **variante**, diminui a cada volta.
+- **Contrato**: a documentação diz o que a função faz, não como. "Recebe n ≥ 1
+  e v; devolve o valor de **um** elemento máximo de `v[0..n-1]`"
+  (FEOFILOFF, 2009).
+- **`assert(cond)`** (`<assert.h>`): se `cond` for falsa, mostra arquivo e linha
+  e aborta. Com `-DNDEBUG`, vira nada (CPPREFERENCE, s.d.).
+
+> [!WARNING]
+> O erro clássico é o **início**: `int maior = 0;` passa nos testes com valores
+> positivos, mas com −120, −45, −300 devolve 0, que nem está no vetor. Comece
+> com `maior = v[0]` e i = 1. E nunca ponha no `assert` algo que o programa
+> precisa fazer.
+
+### Exemplos de uso
 
 Os Pix do dia foram 120, 45, 300, 80, 210 e 95. No começo da volta com i = 4, a
 parte verde já foi vista e `maior` (300) é o maior dela:
@@ -758,7 +921,151 @@ int main(void) {
 gcc ~/LPEDC/material/A146.c -o ~/LPEDC/material/A146 && ~/LPEDC/material/A146
 ```
 
-### 0074 · TAD: interface (.h) e implementação (.c)
+### Exercícios
+
+**Exercício E433** · ★☆☆
+
+Escreva um programa com os quatro laços abaixo. Em cada um, ponha um assert
+com o invariante logo no começo do corpo e outro depois do laço (o término).
+Escreva também as funções que conferem os invariantes: soma_ate(v, i),
+aprovados_ate(v, i) (quantos de v[0..i-1] são >= 6), potencia_de_2(k) e
+nao_esta(v, ini, fim, x) (x não aparece em v[ini..fim-1]).
+
+```text
+a) gastos = {20, 35, 15, 50};  s = 0;  for (i = 0; i < n; i++)  s = s + gastos[i];
+b) notas = {7, 4, 9, 6, 5};  c = 0;  for (i = 0; i < n; i++)  if (notas[i] >= 6) c++;
+c) e = 10;  p = 1;  for (k = 0; k < e; k++)  p = p * 2;
+d) v = {3, 8, 5, 8, 1}, x = 8;  k = n - 1;  while (k >= 0 && v[k] != x)  k--;
+```
+
+```text
+Saída esperada:
+a) gastos: R$ 120
+b) aprovados: 3
+c) 2 elevado a 10: 1024
+d) último 8 na posição 3
+```
+
+**Exercício E435** · ★★☆
+
+Escreva int ultima(const int v[], int n, int x), que procura a ÚLTIMA vez
+que um aluno tirou a nota x, andando do fim para o começo (começa em
+k = n - 1 e anda enquanto k >= 0 e v[k] != x). Devolve a posição, ou -1 se a
+nota não aparece. Transforme a prova de que ela está certa em código:
+
+1. escreva bool nao_esta(v, ini, fim, x), que devolve true se x não aparece
+
+```text
+ em v[ini..fim-1] (pedaço vazio: true);
+```
+
+2. dentro do laço, confira com assert o invariante "x não está em v[k+1..n-1]";
+3. depois do laço, confira com assert o término: ou k == -1, ou v[k] == x e
+
+```text
+ o invariante ainda vale.
+```
+
+Teste com notas = {7, 9, 4, 9, 6}, e também com um vetor vazio (n = 0).
+
+```text
+Saída esperada:
+última nota 9: posição 3
+última nota 5: posição -1
+última nota 7: posição 0
+vetor vazio: posição -1
+```
+
+**Exercício E436** · ★★☆
+
+O banco quer saber qual cliente está "menos no vermelho": o maior saldo
+entre contas todas negativas. Escreva int maximo(const int v[], int n), que
+devolve o maior elemento de v. Ela exige n >= 1 (escreva isso num comentário
+de contrato em cima) e começa com maior = v[0], sem tratar "todos negativos"
+como caso especial. Escreva também bool eh_maximo(v, i, x) (x está em
+v[0..i-1] e ninguém passa dele) e confira o invariante com assert no começo
+de cada volta e o término depois do laço. Teste com saldos = {-120, -45,
+-300, -80}, com um saldo só (-7) e com positivos (10, 3, 25).
+
+```text
+Saída esperada:
+Maior saldo: R$ -45
+Um saldo só: R$ -7
+Positivos: R$ 25
+```
+
+**Exercício E437** · ★★★
+
+Escreva int lg(int n), que devolve o piso de log₂ n (o maior i com
+2 elevado a i <= n), para n >= 1, SEM math.h: divida n por 2 até chegar a
+1, contando as divisões.
+
+Confira o invariante com assert no começo de cada volta e o término com
+outro assert depois do laço. Depois teste: mostre lg de 1, 10, 1000, 1024
+e 100000, e compare lg(n) com floor(log2(n)) de math.h para todo n de 1 a
+100000, contando as divergências.
+
+```text
+Saída esperada:
+lg(1) = 0
+lg(10) = 3
+lg(1000) = 9
+lg(1024) = 10
+lg(100000) = 16
+divergências de 1 a 100000: 0
+```
+
+```bash
+gcc ~/LPEDC/material/E437.c -o ~/LPEDC/material/E437 -lm && ~/LPEDC/material/E437
+```
+
+---
+
+## 0074 · TAD: interface (.h) e implementação (.c)
+
+### Conceito
+
+- **Tipo abstrato de dado** (TAD): tipo definido pelas **operações** que
+  oferece, não pelo modo como guarda os dados. O **cliente** conhece só as
+  operações (CELES; RANGEL, 2002).
+- **Interface** (`contador.h`): o contrato. Declara o tipo e os protótipos, cada
+  um com comentário sobre o que entra, o que sai e o que pode dar errado
+  (CELES; RANGEL, 2002).
+- **Implementação** (`contador.c`): define a `struct`, escreve as funções e
+  inclui o próprio `.h`, para o compilador conferir cada função contra o
+  protótipo (CELES; RANGEL, 2002).
+- **Tipo opaco**: o `.h` diz só `typedef struct contador Contador;`. No cliente
+  é um **tipo incompleto**: dá para ter `Contador *`, mas não variável, `sizeof`
+  nem `->valor`. Por isso há `_cria` (faz o `malloc`) e `_libera`
+  (CELES; CERQUEIRA; RANGEL, 2016).
+- **Invariante do TAD**: o contador promete `0 <= valor <= limite`. Só vale
+  porque o cliente não escreve `vagas->valor = 99`.
+- **Compilação separada**: o `#include` só cola texto; só o `contador.o` conhece
+  os campos, e o ligador junta tudo. Mudar a struct recompila só o `contador.c`
+  (KERNIGHAN; RITCHIE, 1989, seção 4.5).
+- **Molde dos módulos 11 a 16**, para um TAD `x`:
+  1. **Pasta do assunto**: `x.h`, `x.c` e os exemplos `A###.c`. O comando do
+     exemplo compila junto todo `.c` da pasta que não se chama
+     `A000.c`/`E000.c`. À mão: `gcc A147.c contador.c -o a147`.
+  2. **`x.h`**: *include guard* (`#ifndef X_H`), `typedef struct x X;` e
+     protótipos com prefixo `x_`, cada um com seu contrato.
+  3. **`x.c`**: inclui o próprio `"x.h"`, define a `struct x` com o invariante
+     comentado; auxiliares internas são `static`.
+  4. **Nomes**: `x_cria` (devolve `NULL` se faltar memória), `x_libera` (aceita
+     `NULL`) e verbos no presente: `x_insere`, `x_remove`. Leitura recebe
+     `const X *`.
+  5. **Erros**: operação que pode falhar devolve `bool`, com o valor por ponteiro
+     (`bool pilha_desempilha(Pilha *p, int *valor)`). O TAD não imprime erro.
+  6. **Cliente**: `#include "x.h"` com aspas, guarda só `X *`, confere o `NULL`
+     do `_cria` e chama `_libera` no fim.
+
+> [!WARNING]
+> `vagas->valor = 0;` ou `Contador c;` no cliente dá erro de **compilação**
+> (`invalid use of incomplete typedef`): é o tipo opaco funcionando. Não mova a
+> `struct` para o `.h`. E esquecer o `contador.c` ao compilar à mão dá
+> `undefined reference`, erro do **ligador**.
+
+### Exemplos de uso
 
 O estacionamento do shopping tem 3 vagas e o painel só abre a cancela se houver
 vaga. O cliente (o arquivo do `main`) tem só um ponteiro para um bloco no heap
@@ -1000,311 +1307,7 @@ int main(void) {
 gcc ~/LPEDC/material/A148.c ~/LPEDC/material/0074-conta.c ~/LPEDC/material/0074-contador.c -o ~/LPEDC/material/A148 && ~/LPEDC/material/A148
 ```
 
----
-
-## 3. Exercícios práticos
-
-Cada exercício é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta. Compile como os exemplos: `gcc ~/LPEDC/material/E007.c -o ~/LPEDC/material/E007 && ~/LPEDC/material/E007`. Resoluções em `_respostas/10-analise/`.
-
-### 0071 · Eficiência: contar passos
-
-**Exercício E421** · ★☆☆
-
-Escreva um programa que monta cada trecho abaixo, conta com uma variável
-"passos" quantas vezes o passos++ roda e mostra o resultado. Zere o
-contador antes de cada trecho.
-
-```text
-a) for (i = 0; i < 6; i++)  for (j = 0; j < 4; j++)  passos++;
-b) for (i = 0; i < 6; i++)  for (j = i; j < 6; j++)  passos++;
-c) for (i = 1; i < 100; i = i * 2)  passos++;
-d) for (i = 0; i < 10; i++)  if (i % 3 == 0) passos++;
-```
-
-No d), conte também as voltas do laço numa segunda variável, "voltas", e
-mostre as duas.
-
-```text
-Saída esperada:
-a) 24
-b) 21
-c) 7
-d) 4 passos em 10 voltas
-```
-
-**Exercício E423** · ★★☆
-
-O texto disse que, em média, a busca sequencial custa (n + 1) / 2
-comparações. Não acredite: meça. Escreva um programa que, para n = 10, 100
-e 1000:
-
-1. preenche um vetor com os códigos de produto v[i] = 3 * i + 1;
-2. busca, um por um, TODOS os códigos que estão no vetor, somando os passos
-de todas as buscas;
-3. mostra o total e a média de passos por busca.
-
-```text
-Saída esperada:
-n =   10: total     55, média   5.5
-n =  100: total   5050, média  50.5
-n = 1000: total 500500, média 500.5
-```
-
-**Exercício E424** · ★★☆
-
-Dois jeitos de saber se n é primo, contando as divisões (n % d) como passo:
-
-```text
-ingênuo: testa todo d de 2 até n - 1;
-esperto: testa d de 2 enquanto d * d <= n. Se n tivesse um divisor maior
-         que a raiz, teria também um menor, que já teria aparecido.
-```
-
-Escreva as duas funções (devolvem bool) com contadores e mostre a tabela
-para os primos 97, 997 e 9973.
-
-```text
-Saída esperada:
-    n  ingênuo  esperto
-   97       95        8
-  997      995       30
- 9973     9971       98
-```
-
-**Exercício E426** · ★★★
-
-No assunto 0033 você viu que o Fibonacci recursivo é lento. Agora meça o
-quanto. Escreva:
-
-- fib_rec(n): a versão recursiva (fib(0) = 0, fib(1) = 1), somando 1 num
-contador global "chamadas" a cada vez que a função é chamada;
-- fib_it(n): a versão com laço, somando 1 num contador "somas" a cada soma.
-
-Mostre a tabela para n = 10, 20 e 30 (contadores long). Depois, uma segunda
-tabela: para n de 20 a 25, as chamadas da recursiva e a razão entre as
-chamadas de n e as de n - 1.
-
-```text
-Saída esperada:
- n     fib  chamadas  somas
-10      55       177      9
-20    6765     21891     19
-30  832040   2692537     29
-```
-
-```text
-n = 20:  21891 chamadas, razão 1.618
-n = 21:  35421 chamadas, razão 1.618
-n = 22:  57313 chamadas, razão 1.618
-n = 23:  92735 chamadas, razão 1.618
-n = 24: 150049 chamadas, razão 1.618
-n = 25: 242785 chamadas, razão 1.618
-```
-
-### 0072 · Notação O: como o custo cresce
-
-**Exercício E427** · ★☆☆
-
-Transforme cada trecho abaixo numa função long trecho_a(int n), ...,
-trecho_f(int n), que roda o trecho e devolve quantas vezes o x++ (ou a
-conta do d) aconteceu. No main, mostre uma tabela com a contagem para
-n = 16 e n = 1024. No rótulo de cada linha, escreva a classe O que a
-contagem indica.
-
-```text
-a) for (i = 0; i < n; i++)  for (j = 0; j < 10; j++)  x++;
-b) for (i = 1; i < n; i = i * 2)  x++;
-c) for (i = 0; i < n; i++)  for (j = 0; j < i; j++)  x++;
-d) x = v[n / 2] + v[0];
-e) for (i = 0; i < n; i++)  x++;
-   for (j = 0; j < n; j++)  x++;
-f) for (i = 0; i < n; i++)  for (j = n; j > 1; j = j / 2)  x++;
-```
-
-```text
-Saída esperada:
-trecho           n=16   n=1024
-a) O(n)           160    10240
-b) O(log n)         4       10
-c) O(n^2)         120   523776
-d) O(1)             1        1
-e) O(n)            32     2048
-f) O(n log n)      64    10240
-```
-
-**Exercício E429** · ★★☆
-
-O cupom fiscal tem códigos de produto de 0 a 999. Você quer saber se algum
-código aparece repetido. Escreva duas funções que devolvem bool e contam
-passos (comparações ou consultas):
-
-- repetido_pares(v, n): compara cada par (i, j) com i < j. O(n²).
-- repetido_marcas(v, n): usa um vetor bool visto[1000] (todo false no
-começo); para cada código, consulta visto[codigo] e marca. O(n).
-
-Teste com n = 100 e n = 1000, com v[i] = (i * 37) % 1000 (que não tem
-repetidos: é o pior caso, as duas vão até o fim).
-
-```text
-Saída esperada:
-n =  100: pares   4950 passos, marcas  100 passos
-n = 1000: pares 499500 passos, marcas 1000 passos
-```
-
-**Exercício E430** · ★★☆
-
-A "regra do dobro": rode um algoritmo com n e com 2n e divida os passos.
-Razão perto de 1 (com +1 passo) é O(log n); perto de 2, O(n); perto de 4,
-O(n²). Escreva quatro funções long misterio_a(int n) ... misterio_d(int n),
-que devolvem quantas vezes o laço roda:
-
-```text
-a) for (i = 0; i < n; i += 3)
-b) for (i = n; i > 0; i /= 2)
-c) for (i = 0; i < n; i++) for (j = 0; j < n; j += 2)
-d) for (d = 0; d * d < n; d++)
-```
-
-Escreva também const char *classe(double razao): "O(log n)" se a razão for
-menor que 1.2, "O(raiz n)" se for menor que 1.7, "O(n)" se for menor que 3
-e "O(n^2)" nos outros casos. Mostre, para n = 1000 e n = 2000, os passos, a
-razão e a classe de cada função.
-
-```text
-Saída esperada:
-a:     334 ->     667  razão 2.00  O(n)
-b:      10 ->      11  razão 1.10  O(log n)
-c:  500000 -> 2000000  razão 4.00  O(n^2)
-d:      32 ->      45  razão 1.41  O(raiz n)
-```
-
-**Exercício E431** · ★★★
-
-Você precisa ordenar a lista de entregas e tem duas opções:
-
-```text
-A: um algoritmo simples, que gasta 2n² passos;
-B: um sofisticado, que gasta 50 n log₂ n passos.
-```
-
-B é O(n log n) e A é O(n²), então B ganha "no fim". Mas a partir de que n?
-Escreva um programa que encontra o MENOR n (começando em 2) em que B gasta
-menos passos que A, e mostra os dois custos nesse n. Mostre também uma
-tabela para n = 10, 100, 1000 e 10000.
-
-```text
-Saída esperada:
-B passa a ganhar em n = 190 (A: 72200, B: 71914)
-     n           A          B
-    10         200       1661
-   100       20000      33219
-  1000     2000000     498289
- 10000   200000000    6643856
-```
-
-```bash
-gcc ~/LPEDC/material/E431.c -o ~/LPEDC/material/E431 -lm && ~/LPEDC/material/E431
-```
-
-### 0073 · Invariantes de laço e corretude
-
-**Exercício E433** · ★☆☆
-
-Escreva um programa com os quatro laços abaixo. Em cada um, ponha um assert
-com o invariante logo no começo do corpo e outro depois do laço (o término).
-Escreva também as funções que conferem os invariantes: soma_ate(v, i),
-aprovados_ate(v, i) (quantos de v[0..i-1] são >= 6), potencia_de_2(k) e
-nao_esta(v, ini, fim, x) (x não aparece em v[ini..fim-1]).
-
-```text
-a) gastos = {20, 35, 15, 50};  s = 0;  for (i = 0; i < n; i++)  s = s + gastos[i];
-b) notas = {7, 4, 9, 6, 5};  c = 0;  for (i = 0; i < n; i++)  if (notas[i] >= 6) c++;
-c) e = 10;  p = 1;  for (k = 0; k < e; k++)  p = p * 2;
-d) v = {3, 8, 5, 8, 1}, x = 8;  k = n - 1;  while (k >= 0 && v[k] != x)  k--;
-```
-
-```text
-Saída esperada:
-a) gastos: R$ 120
-b) aprovados: 3
-c) 2 elevado a 10: 1024
-d) último 8 na posição 3
-```
-
-**Exercício E435** · ★★☆
-
-Escreva int ultima(const int v[], int n, int x), que procura a ÚLTIMA vez
-que um aluno tirou a nota x, andando do fim para o começo (começa em
-k = n - 1 e anda enquanto k >= 0 e v[k] != x). Devolve a posição, ou -1 se a
-nota não aparece. Transforme a prova de que ela está certa em código:
-
-1. escreva bool nao_esta(v, ini, fim, x), que devolve true se x não aparece
-
-```text
- em v[ini..fim-1] (pedaço vazio: true);
-```
-
-2. dentro do laço, confira com assert o invariante "x não está em v[k+1..n-1]";
-3. depois do laço, confira com assert o término: ou k == -1, ou v[k] == x e
-
-```text
- o invariante ainda vale.
-```
-
-Teste com notas = {7, 9, 4, 9, 6}, e também com um vetor vazio (n = 0).
-
-```text
-Saída esperada:
-última nota 9: posição 3
-última nota 5: posição -1
-última nota 7: posição 0
-vetor vazio: posição -1
-```
-
-**Exercício E436** · ★★☆
-
-O banco quer saber qual cliente está "menos no vermelho": o maior saldo
-entre contas todas negativas. Escreva int maximo(const int v[], int n), que
-devolve o maior elemento de v. Ela exige n >= 1 (escreva isso num comentário
-de contrato em cima) e começa com maior = v[0], sem tratar "todos negativos"
-como caso especial. Escreva também bool eh_maximo(v, i, x) (x está em
-v[0..i-1] e ninguém passa dele) e confira o invariante com assert no começo
-de cada volta e o término depois do laço. Teste com saldos = {-120, -45,
--300, -80}, com um saldo só (-7) e com positivos (10, 3, 25).
-
-```text
-Saída esperada:
-Maior saldo: R$ -45
-Um saldo só: R$ -7
-Positivos: R$ 25
-```
-
-**Exercício E437** · ★★★
-
-Escreva int lg(int n), que devolve o piso de log₂ n (o maior i com
-2 elevado a i <= n), para n >= 1, SEM math.h: divida n por 2 até chegar a
-1, contando as divisões.
-
-Confira o invariante com assert no começo de cada volta e o término com
-outro assert depois do laço. Depois teste: mostre lg de 1, 10, 1000, 1024
-e 100000, e compare lg(n) com floor(log2(n)) de math.h para todo n de 1 a
-100000, contando as divergências.
-
-```text
-Saída esperada:
-lg(1) = 0
-lg(10) = 3
-lg(1000) = 9
-lg(1024) = 10
-lg(100000) = 16
-divergências de 1 a 100000: 0
-```
-
-```bash
-gcc ~/LPEDC/material/E437.c -o ~/LPEDC/material/E437 -lm && ~/LPEDC/material/E437
-```
-
-### 0074 · TAD: interface (.h) e implementação (.c)
+### Exercícios
 
 **Exercício E439** · ★☆☆
 
@@ -1411,11 +1414,13 @@ Saída esperada:
 gcc ~/LPEDC/material/E443.c ~/LPEDC/material/0074-conta.c ~/LPEDC/material/0074-contador.c -o ~/LPEDC/material/E443 && ~/LPEDC/material/E443
 ```
 
-### Lista do módulo
+---
+
+## Lista do módulo
 
 30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P1001.c a P1030.c, em `material/`; resoluções em `_respostas/10-analise/lista/`.
 
-#### ★☆☆ Aquecimento
+### ★☆☆ Aquecimento
 
 **Exercício P1001** · ★☆☆ · Quantas vezes dá para dividir
 
@@ -1629,7 +1634,7 @@ n = 50: laço 1225, fórmula 1225, confere
 n = 1000: laço 499500, fórmula 499500, confere
 ```
 
-#### ★★☆ Para pensar
+### ★★☆ Para pensar
 
 **Exercício P1011** · ★★☆ · Achar a fórmula exata de T(n)
 
@@ -1887,7 +1892,7 @@ Rápido: 12 duplas em 8 passos
 
 **Resposta esperada:** a saída acima (4 pares e 4 ímpares: 6 + 6 = 12).
 
-#### ★★★ Desafio
+### ★★★ Desafio
 
 **Exercício P1021** · ★★★ · A melhor sequência de dias do food truck
 
@@ -2210,7 +2215,7 @@ Depois de mais doze notas 10: moda 10 (13 vezes), mediana 10
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas dos quatro assuntos, do médio ao difícil. Todos pedem código:
 escreva num arquivo seu e compile com as flags de estudo.
@@ -2429,7 +2434,7 @@ assunto 0071, a constante importa quando n é fixo.
 
 </details>
 
-### Questões do POSCOMP
+## Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -2444,7 +2449,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 
 O gabarito de 2023 vem de um blog de terceiros que reproduz o gabarito definitivo; confira no PDF oficial da SBC. O gabarito oficial de 2025 não estava disponível quando este material foi montado.
 
-### Questões no estilo da prova
+## Questões no estilo da prova
 
 Formato da prova do mestrado do PPGI/UFAM. Resolva no papel, marque uma letra
 e só depois abra o gabarito. Nas questões de contagem, o resultado foi
@@ -2691,7 +2696,7 @@ extremos; a média fica no meio. Veja 0071.
 
 </details>
 
-### Questões de provas do PPGI
+## Questões de provas do PPGI
 
 Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.
 

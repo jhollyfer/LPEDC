@@ -52,9 +52,12 @@ direita; vermelho marca colisão.
 
 ---
 
-## 1. Conceitos gerais
+> [!NOTE]
+> Cada assunto é um capítulo: **Conceito** (a explicação), **Exemplos de uso** (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e **Exercícios** (cada um é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta; resoluções em `_respostas/15-hash/`).
 
-### 0105 · A ideia e a função hash
+## 0105 · A ideia e a função hash
+
+### Conceito
 
 - **Endereçamento direto**: a chave é o próprio índice do vetor e o acesso
   custa O(1). Falha quando a chave é grande (um CPF tem 11 dígitos) ou não é
@@ -82,92 +85,7 @@ direita; vermelho marca colisão.
 > 431 e caem no mesmo balde. Use o **polinômio** `h = h * 31 + letra`, que
 > multiplica cada letra pela sua posição (exemplo A210).
 
-### 0106 · Encadeamento
-
-- **Encadeamento** (ou encadeamento separado): cada balde guarda a **cabeça
-  de uma lista encadeada** com os itens que caíram ali. A tabela vira um vetor
-  de ponteiros, `No *baldes[m]` (CORMEN et al., 2024, cap. 11).
-- **Operações**: calcule `i = hash(chave) % m` e use a lista de `baldes[i]`
-  (módulo 11). Inserir procura a chave; se não achar, põe um nó **no início**
-  em O(1). Buscar e remover andam só nessa lista (CELES; RANGEL, 2002).
-- **Custo médio**: com hash que espalha bem, cada lista tem em média α nós e
-  a busca custa Θ(1 + α). Se `m` cresce com `n`, α fica constante e a busca é
-  O(1) na média (CORMEN et al., 2024, cap. 11).
-- **Pior caso**: um hash ruim joga tudo num balde, a tabela vira uma lista só
-  e a busca é O(n) (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-- **Nunca enche**: α pode passar de 1 (exemplo A211: 8 itens em 2 baldes)
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-- **Liberar**: cada nó é um `malloc`. `tabela_libera` dá `free` em todos,
-  guardando o `prox` antes; `free(t->baldes)` sozinho vaza as listas
-  (CELES; CERQUEIRA; RANGEL, 2016).
-
-> [!WARNING]
-> Compare chave de texto com `strcmp`, nunca com `==`: `p->chave == chave`
-> compara **endereços**. O nó guarda a sua **cópia** da chave, porque o buffer
-> de quem chamou é reaproveitado.
-
-### 0107 · Endereçamento aberto
-
-- **Endereçamento aberto**: sem lista. Os itens ficam **dentro do vetor**, e
-  quem colide tenta outras posições numa sequência fixa. Cada tentativa é uma
-  **sondagem** (CORMEN et al., 2024, cap. 11).
-- **Sondagem linear**: começa em `chave % m` e anda uma casa por vez, dando a
-  volta no fim: `i = (i + 1) % m`. No Cormen, `h(k, i) = (h'(k) + i) mod m`
-  (CORMEN et al., 2024, cap. 11).
-- **Outros passos**: a **quadrática**, `(h'(k) + c₁i + c₂i²) mod m`, e a
-  **dispersão dupla**, `(h₁(k) + i · h₂(k)) mod m` (assunto 0179)
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-- **Operações**: inserir sonda até uma posição livre. Buscar sonda até achar
-  a chave ou uma posição **livre**, onde ela teria parado (ZIVIANI, 2010,
-  cap. 5).
-- **Lápide**: remover marca a posição como **removida** (*tombstone*, o
-  `DELETED` do Cormen). A busca passa reto e a inserção pode reaproveitá-la
-  (CORMEN et al., 2024, cap. 11).
-- **A tabela enche**: α nunca passa de 1. As ocupadas formam blocos que
-  atraem mais chaves, o **agrupamento primário**. Com α = 0,5, uma busca sem
-  sucesso olha 2,5 posições; com 0,9, cerca de 50 (KNUTH, 1998, seção 6.4).
-- **Reconstruir**: passando de 70% a 75% de ocupação, crie uma tabela maior e
-  reinsira tudo (exemplo A213). Num bloco só, sem `malloc` por item, a cache
-  ajuda (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-
-> [!WARNING]
-> Remover **não** é marcar a posição como livre. Se a vaga 5 (do 301) volta a
-> `LIVRE`, a busca pelo 1104 começa na 4, vê a 5 livre e diz "não está",
-> embora ele esteja na 6. Use a lápide (exemplo A214).
-
-### 0108 · Juntando tudo: o contador de palavras
-
-- **Tabela como dicionário**: a chave é a palavra e o valor é a contagem.
-  Cada palavra do texto vira uma busca e um `+1` (KERNIGHAN; RITCHIE, 1988,
-  seção 6.6).
-- **Quebrar em palavras**: `ctype.h` testa letras e passa para minúsculas,
-  para "Pão" e "pão" contarem juntas (CPPREFERENCE, s.d.).
-- **Encadeamento** (0106): `contador_soma` soma 1 à palavra do balde ou cria o
-  nó com a palavra **copiada** (CELES; RANGEL, 2002).
-- **Ranking com `qsort`** (0050 e 0096): a tabela não guarda ordem. As
-  contagens vão para um vetor, ordenado por vezes e, no empate, pela palavra
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-- **Custo**: com `N` palavras e `d` diferentes, a busca sequencial custa
-  O(N · d); a tabela custa O(N) em média, mais O(d log d) do `qsort`
-  (CORMEN et al., 2024, cap. 11).
-- **Base e `m` sem fator comum**: com base 31 e `m = 31`, o balde depende só
-  da última letra. O exemplo usa `m = 17` (CORMEN et al., 2024, cap. 11).
-- **O vetor aponta para a tabela**: cada `palavra` de `Contagem` aponta para
-  um nó, então `free(lista)` vem antes de `contador_libera`
-  (CELES; CERQUEIRA; RANGEL, 2016).
-
-> [!WARNING]
-> `isalpha` e `tolower` exigem um `unsigned char` (0 a 255) ou `EOF`. Os bytes
-> do "ã" em UTF-8 são negativos num `char` com sinal, e `isalpha(s[i])` com
-> negativo é **comportamento indefinido**. Use `isalpha((unsigned char)s[i])`.
-
----
-
-## 2. Exemplos de uso
-
-Cada exemplo compila sozinho. Rode com o comando abaixo dele e compare com a saída no fim do código.
-
-### 0105 · A ideia e a função hash
+### Exemplos de uso
 
 O guarda-volumes da academia tem 7 armários, e a regra é "soma dos códigos das
 letras, resto por 7". "caio" soma 412 e cai no 6; "bia" soma 300, também dá 6
@@ -317,7 +235,129 @@ int main(void) {
 gcc ~/LPEDC/material/A210.c -o ~/LPEDC/material/A210 && ~/LPEDC/material/A210
 ```
 
-### 0106 · Encadeamento
+### Exercícios
+
+**Exercício E625** · ★☆☆
+
+A lanchonete guarda os pedidos numa prateleira de 11 nichos. O nicho de um
+pedido é o resto da divisão do número do pedido por 11. Escreva a função
+"int nicho(int pedido)" e mostre o nicho dos pedidos 1043, 2210, 3876, 5521
+e 7019, um por linha. Quando o nicho já tiver um pedido anterior, acrescente
+"(colide com NNNN)".
+
+```text
+Saída esperada:
+pedido 1043 -> nicho 9
+pedido 2210 -> nicho 10
+pedido 3876 -> nicho 4
+pedido 5521 -> nicho 10 (colide com 2210)
+pedido 7019 -> nicho 1
+```
+
+**Exercício E627** · ★★☆
+
+Escreva a função "unsigned hash_pol(const char *s)", o hash polinomial de
+base 31: começa com h = 0 e, para cada byte da string, faz h = h * 31 + byte
+(h unsigned; converta cada char para unsigned char). Ela devolve h % 13.
+Mostre o hash de "pix", "ted", "doc" e "boleto", com o nome alinhado à
+esquerda em 6 colunas.
+
+```text
+Saída esperada:
+pix    -> 0
+ted    -> 8
+doc    -> 8
+boleto -> 1
+```
+
+**Exercício E628** · ★★☆
+
+Na loja de material de construção, todo código de produto termina em 0: 120,
+350, 470, 590, 610, 230, 740, 860, 980 e 440. Escreva um programa que espalha
+esses 10 códigos com "codigo % m" e mostra quantos caíram em cada balde, com
+uma estrela por código (número do balde em 2 colunas). No fim de cada tabela,
+mostre quantos baldes ficaram vazios. Faça para m = 10 e para m = 11.
+
+```text
+Saída esperada:
+m = 10
+ 0: **********
+ 1:
+ 2:
+ 3:
+ 4:
+ 5:
+ 6:
+ 7:
+ 8:
+ 9:
+vazios: 9
+m = 11
+ 0: *
+ 1: *
+ 2: *
+ 3: *
+ 4:
+ 5: *
+ 6:
+ 7: *
+ 8: *
+ 9: *
+10: **
+vazios: 2
+```
+
+**Exercício E630** · ★★★
+
+O compilador reconhece palavras reservadas o tempo todo. Para um conjunto
+fixo de chaves, dá para achar um hash "perfeito": uma tabela sem colisão.
+Com o hash polinomial de base 31 (h = h * 31 + byte, em unsigned), ache o
+MENOR m, a partir de 8, em que as 8 palavras abaixo caem em baldes todos
+diferentes: int, char, if, else, for, while, return e void. Mostre o m
+encontrado e o balde de cada palavra.
+
+```text
+Saída esperada:
+m = 14
+int -> 5
+char -> 10
+if -> 11
+else -> 1
+for -> 7
+while -> 13
+return -> 4
+void -> 8
+```
+
+---
+
+## 0106 · Encadeamento
+
+### Conceito
+
+- **Encadeamento** (ou encadeamento separado): cada balde guarda a **cabeça
+  de uma lista encadeada** com os itens que caíram ali. A tabela vira um vetor
+  de ponteiros, `No *baldes[m]` (CORMEN et al., 2024, cap. 11).
+- **Operações**: calcule `i = hash(chave) % m` e use a lista de `baldes[i]`
+  (módulo 11). Inserir procura a chave; se não achar, põe um nó **no início**
+  em O(1). Buscar e remover andam só nessa lista (CELES; RANGEL, 2002).
+- **Custo médio**: com hash que espalha bem, cada lista tem em média α nós e
+  a busca custa Θ(1 + α). Se `m` cresce com `n`, α fica constante e a busca é
+  O(1) na média (CORMEN et al., 2024, cap. 11).
+- **Pior caso**: um hash ruim joga tudo num balde, a tabela vira uma lista só
+  e a busca é O(n) (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
+- **Nunca enche**: α pode passar de 1 (exemplo A211: 8 itens em 2 baldes)
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
+- **Liberar**: cada nó é um `malloc`. `tabela_libera` dá `free` em todos,
+  guardando o `prox` antes; `free(t->baldes)` sozinho vaza as listas
+  (CELES; CERQUEIRA; RANGEL, 2016).
+
+> [!WARNING]
+> Compare chave de texto com `strcmp`, nunca com `==`: `p->chave == chave`
+> compara **endereços**. O nó guarda a sua **cópia** da chave, porque o buffer
+> de quem chamou é reaproveitado.
+
+### Exemplos de uso
 
 O hortifrúti guarda o estoque em 5 baldes, com o hash polinomial do 0105.
 Banana, uva, pera, kiwi, manga e caju caem em 4, 2, 4, 1, 1 e 4; cada nova
@@ -516,7 +556,148 @@ int main(void) {
 gcc ~/LPEDC/material/A212.c ~/LPEDC/material/0106-tabela.c -o ~/LPEDC/material/A212 && ~/LPEDC/material/A212
 ```
 
-### 0107 · Endereçamento aberto
+### Exercícios
+
+**Exercício E631** · ★☆☆
+
+Escreva uma tabela com encadeamento de 5 baldes (h(k) = k % 5; cada número
+novo entra no INÍCIO da corrente) com as funções insere, mostra e libera.
+Insira 12, 7, 20, 17, 3 e 25, nessa ordem. A função mostra imprime um balde
+por linha, com os números na ordem da corrente, e no fim os baldes vazios e
+o tamanho da corrente mais comprida.
+
+```text
+Saída esperada:
+[0] 25 20
+[1]
+[2] 17 7 12
+[3] 3
+[4]
+vazios: 2, maior corrente: 3
+```
+
+```bash
+gcc ~/LPEDC/material/E631.c ~/LPEDC/material/0106-tabela.c -o ~/LPEDC/material/E631 && ~/LPEDC/material/E631
+```
+
+**Exercício E633** · ★★☆
+
+No balcão da pizzaria, os pedidos prontos ficam numa tabela com 4 baldes e
+encadeamento (h = pedido % 4, inserção no início da corrente). Quando o
+cliente retira, o pedido sai da tabela. Escreva do zero: o nó, insere,
+"bool remove_pedido(No *baldes[], int pedido)", mostra e libera. Insira
+101, 205, 309, 120, 222 e 315, mostre, retire 205, 309 e 999, e mostre de
+novo.
+
+```text
+Saída esperada:
+[0] 120
+[1] 309 205 101
+[2] 222
+[3] 315
+pedido 205 retirado
+pedido 309 retirado
+pedido 999 não existe
+[0] 120
+[1] 101
+[2] 222
+[3] 315
+```
+
+```bash
+gcc ~/LPEDC/material/E633.c ~/LPEDC/material/0106-tabela.c -o ~/LPEDC/material/E633 && ~/LPEDC/material/E633
+```
+
+**Exercício E634** · ★★☆
+
+Um colega sugeriu usar o tamanho do nome como função hash ("é rápido!").
+Compare as duas funções numa tabela com 8 baldes e estas 10 cidades:
+
+```text
+recife natal manaus belem santos maceio osasco palmas macapa cuiaba
+```
+
+Para cada função (tamanho: strlen(s); polinômio: h = h * 31 + byte, em
+unsigned), mostre quantas cidades caem em cada balde, o tamanho da maior
+corrente e a média de comparações para achar uma cidade que está na
+tabela. Use um ponteiro para função para não escrever a análise duas vezes.
+
+```text
+Saída esperada:
+tamanho  : 0 0 0 0 0 2 8 0 | maior: 8 | média: 3.9
+polinomio: 2 2 1 1 3 1 0 0 | maior: 3 | média: 1.5
+```
+
+```bash
+gcc ~/LPEDC/material/E634.c ~/LPEDC/material/0106-tabela.c -o ~/LPEDC/material/E634 && ~/LPEDC/material/E634
+```
+
+**Exercício E636** · ★★★
+
+No encadeamento a tabela nunca enche, mas as correntes crescem. A solução
+das bibliotecas é o rehash: quando o fator de carga passa de 1 (n > m), a
+tabela cria um vetor de baldes com 2 * m + 1 posições e muda cada nó para o
+balde novo, sem malloc de nó. Escreva a tabela de inteiros (struct com m, n
+e o vetor de baldes, alocado com calloc) com insere, cresce, mostra e
+libera. Comece com m = 2, insira 14, 5, 23, 8, 19, 40, 12, 31, 21 e 2, avise
+cada vez que a tabela crescer e mostre o resultado.
+
+```text
+Saída esperada:
+cresceu: m = 5
+cresceu: m = 11
+n = 10, m = 11
+[0]
+[1] 12 23
+[2] 2
+[3] 14
+[4]
+[5] 5
+[6]
+[7] 40
+[8] 19 8
+[9] 31
+[10] 21
+```
+
+```bash
+gcc ~/LPEDC/material/E636.c ~/LPEDC/material/0106-tabela.c -o ~/LPEDC/material/E636 && ~/LPEDC/material/E636
+```
+
+---
+
+## 0107 · Endereçamento aberto
+
+### Conceito
+
+- **Endereçamento aberto**: sem lista. Os itens ficam **dentro do vetor**, e
+  quem colide tenta outras posições numa sequência fixa. Cada tentativa é uma
+  **sondagem** (CORMEN et al., 2024, cap. 11).
+- **Sondagem linear**: começa em `chave % m` e anda uma casa por vez, dando a
+  volta no fim: `i = (i + 1) % m`. No Cormen, `h(k, i) = (h'(k) + i) mod m`
+  (CORMEN et al., 2024, cap. 11).
+- **Outros passos**: a **quadrática**, `(h'(k) + c₁i + c₂i²) mod m`, e a
+  **dispersão dupla**, `(h₁(k) + i · h₂(k)) mod m` (assunto 0179)
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
+- **Operações**: inserir sonda até uma posição livre. Buscar sonda até achar
+  a chave ou uma posição **livre**, onde ela teria parado (ZIVIANI, 2010,
+  cap. 5).
+- **Lápide**: remover marca a posição como **removida** (*tombstone*, o
+  `DELETED` do Cormen). A busca passa reto e a inserção pode reaproveitá-la
+  (CORMEN et al., 2024, cap. 11).
+- **A tabela enche**: α nunca passa de 1. As ocupadas formam blocos que
+  atraem mais chaves, o **agrupamento primário**. Com α = 0,5, uma busca sem
+  sucesso olha 2,5 posições; com 0,9, cerca de 50 (KNUTH, 1998, seção 6.4).
+- **Reconstruir**: passando de 70% a 75% de ocupação, crie uma tabela maior e
+  reinsira tudo (exemplo A213). Num bloco só, sem `malloc` por item, a cache
+  ajuda (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
+
+> [!WARNING]
+> Remover **não** é marcar a posição como livre. Se a vaga 5 (do 301) volta a
+> `LIVRE`, a busca pelo 1104 começa na 4, vê a 5 livre e diz "não está",
+> embora ele esteja na 6. Use a lápide (exemplo A214).
+
+### Exemplos de uso
 
 O estacionamento do condomínio tem 11 vagas, e a vaga é o apartamento com
 resto por 11. O 301 dá 4, ocupada, e para na 5; o 1104 tenta 4, 5 e para na
@@ -712,7 +893,121 @@ int main(void) {
 gcc ~/LPEDC/material/A214.c ~/LPEDC/material/0107-aberta.c -o ~/LPEDC/material/A214 && ~/LPEDC/material/A214
 ```
 
-### 0108 · Juntando tudo: o contador de palavras
+### Exercícios
+
+**Exercício E637** · ★☆☆
+
+Escreva um programa com uma tabela de 7 inteiros, todos começando com -1
+(livre), que insere 10, 24, 5, 17 e 31 com sondagem linear (h = k % 7; se
+ocupada, tenta a próxima, dando a volta no fim) e mostra a tabela.
+
+```text
+Saída esperada:
+[0] 31
+[1] -
+[2] -
+[3] 10
+[4] 24
+[5] 5
+[6] 17
+```
+
+```bash
+gcc ~/LPEDC/material/E637.c ~/LPEDC/material/0107-aberta.c -o ~/LPEDC/material/E637 && ~/LPEDC/material/E637
+```
+
+**Exercício E639** · ★★☆
+
+Os armários da escola usam endereçamento aberto com 7 posições (h = k % 7,
+sondagem linear) e o enum Estado { LIVRE, OCUPADA, REMOVIDA }. Escreva
+"guarda" e "bool busca(const Armario t[], int chave, int *sondagens)", que
+conta as sondagens, para ao achar a chave (true) ou uma posição LIVRE
+(false), passa reto pelas REMOVIDAS e nunca dá mais de 7 passos. Guarde 14,
+21 e 28 (vão para 0, 1 e 2), marque a posição do 21 como REMOVIDA e busque
+28 e 35.
+
+```text
+Saída esperada:
+28: achou, sondagens: 3
+35: não está, sondagens: 4
+```
+
+```bash
+gcc ~/LPEDC/material/E639.c ~/LPEDC/material/0107-aberta.c -o ~/LPEDC/material/E639 && ~/LPEDC/material/E639
+```
+
+**Exercício E640** · ★★☆
+
+Uma tabela com endereçamento aberto enche. Escreva "int insere(int tab[],
+int chave)" para uma tabela de 5 posições (-1 = livre, h = k % 5,
+sondagem linear) que devolve a posição usada ou -1 se a tabela estiver
+cheia, sem nunca entrar em laço infinito. Insira 12, 7, 3, 9, 15 e 20 e
+mostre a posição e o fator de carga depois de cada inserção.
+
+```text
+Saída esperada:
+12 -> 2 (carga 0.20)
+7 -> 3 (carga 0.40)
+3 -> 4 (carga 0.60)
+9 -> 0 (carga 0.80)
+15 -> 1 (carga 1.00)
+20: tabela cheia!
+```
+
+```bash
+gcc ~/LPEDC/material/E640.c ~/LPEDC/material/0107-aberta.c -o ~/LPEDC/material/E640 && ~/LPEDC/material/E640
+```
+
+**Exercício E642** · ★★★
+
+A sondagem linear forma blocos; o hash duplo usa i = (i + passo) % m com
+passo = 1 + k % 10 (m = 11, primo: o passo visita todas as posições).
+Escreva uma função que simula as inserções das chaves 5 16 27 8 38 19 30 2
+numa tabela de 11 posições, recebendo o passo por ponteiro para função.
+Mostre as sondagens de cada inserção e o total, primeiro com passo 1 e
+depois com o hash duplo.
+
+```text
+Saída esperada:
+linear: 1 2 3 1 5 3 4 1 | total: 20
+duplo : 1 2 2 1 2 2 2 4 | total: 16
+```
+
+```bash
+gcc ~/LPEDC/material/E642.c ~/LPEDC/material/0107-aberta.c -o ~/LPEDC/material/E642 && ~/LPEDC/material/E642
+```
+
+---
+
+## 0108 · Juntando tudo: o contador de palavras
+
+### Conceito
+
+- **Tabela como dicionário**: a chave é a palavra e o valor é a contagem.
+  Cada palavra do texto vira uma busca e um `+1` (KERNIGHAN; RITCHIE, 1988,
+  seção 6.6).
+- **Quebrar em palavras**: `ctype.h` testa letras e passa para minúsculas,
+  para "Pão" e "pão" contarem juntas (CPPREFERENCE, s.d.).
+- **Encadeamento** (0106): `contador_soma` soma 1 à palavra do balde ou cria o
+  nó com a palavra **copiada** (CELES; RANGEL, 2002).
+- **Ranking com `qsort`** (0050 e 0096): a tabela não guarda ordem. As
+  contagens vão para um vetor, ordenado por vezes e, no empate, pela palavra
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
+- **Custo**: com `N` palavras e `d` diferentes, a busca sequencial custa
+  O(N · d); a tabela custa O(N) em média, mais O(d log d) do `qsort`
+  (CORMEN et al., 2024, cap. 11).
+- **Base e `m` sem fator comum**: com base 31 e `m = 31`, o balde depende só
+  da última letra. O exemplo usa `m = 17` (CORMEN et al., 2024, cap. 11).
+- **O vetor aponta para a tabela**: cada `palavra` de `Contagem` aponta para
+  um nó, então `free(lista)` vem antes de `contador_libera`
+  (CELES; CERQUEIRA; RANGEL, 2016).
+
+> [!WARNING]
+> `isalpha` e `tolower` exigem um `unsigned char` (0 a 255) ou `EOF`. Os bytes
+> do "ã" em UTF-8 são negativos num `char` com sinal, e `isalpha(s[i])` com
+> negativo é **comportamento indefinido**. Use `isalpha((unsigned char)s[i])`.
+
+### Exemplos de uso
 
 A padaria quer saber do que os clientes falam nos comentários do app. São 31
 palavras, 17 diferentes, em 17 baldes. O "pão" cai no balde 2 e chega a 6;
@@ -968,299 +1263,7 @@ int main(void) {
 gcc ~/LPEDC/material/A216.c ~/LPEDC/material/0108-palavras.c -o ~/LPEDC/material/A216 && ~/LPEDC/material/A216
 ```
 
----
-
-## 3. Exercícios práticos
-
-Cada exercício é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta. Compile como os exemplos: `gcc ~/LPEDC/material/E007.c -o ~/LPEDC/material/E007 && ~/LPEDC/material/E007`. Resoluções em `_respostas/15-hash/`.
-
-### 0105 · A ideia e a função hash
-
-**Exercício E625** · ★☆☆
-
-A lanchonete guarda os pedidos numa prateleira de 11 nichos. O nicho de um
-pedido é o resto da divisão do número do pedido por 11. Escreva a função
-"int nicho(int pedido)" e mostre o nicho dos pedidos 1043, 2210, 3876, 5521
-e 7019, um por linha. Quando o nicho já tiver um pedido anterior, acrescente
-"(colide com NNNN)".
-
-```text
-Saída esperada:
-pedido 1043 -> nicho 9
-pedido 2210 -> nicho 10
-pedido 3876 -> nicho 4
-pedido 5521 -> nicho 10 (colide com 2210)
-pedido 7019 -> nicho 1
-```
-
-**Exercício E627** · ★★☆
-
-Escreva a função "unsigned hash_pol(const char *s)", o hash polinomial de
-base 31: começa com h = 0 e, para cada byte da string, faz h = h * 31 + byte
-(h unsigned; converta cada char para unsigned char). Ela devolve h % 13.
-Mostre o hash de "pix", "ted", "doc" e "boleto", com o nome alinhado à
-esquerda em 6 colunas.
-
-```text
-Saída esperada:
-pix    -> 0
-ted    -> 8
-doc    -> 8
-boleto -> 1
-```
-
-**Exercício E628** · ★★☆
-
-Na loja de material de construção, todo código de produto termina em 0: 120,
-350, 470, 590, 610, 230, 740, 860, 980 e 440. Escreva um programa que espalha
-esses 10 códigos com "codigo % m" e mostra quantos caíram em cada balde, com
-uma estrela por código (número do balde em 2 colunas). No fim de cada tabela,
-mostre quantos baldes ficaram vazios. Faça para m = 10 e para m = 11.
-
-```text
-Saída esperada:
-m = 10
- 0: **********
- 1:
- 2:
- 3:
- 4:
- 5:
- 6:
- 7:
- 8:
- 9:
-vazios: 9
-m = 11
- 0: *
- 1: *
- 2: *
- 3: *
- 4:
- 5: *
- 6:
- 7: *
- 8: *
- 9: *
-10: **
-vazios: 2
-```
-
-**Exercício E630** · ★★★
-
-O compilador reconhece palavras reservadas o tempo todo. Para um conjunto
-fixo de chaves, dá para achar um hash "perfeito": uma tabela sem colisão.
-Com o hash polinomial de base 31 (h = h * 31 + byte, em unsigned), ache o
-MENOR m, a partir de 8, em que as 8 palavras abaixo caem em baldes todos
-diferentes: int, char, if, else, for, while, return e void. Mostre o m
-encontrado e o balde de cada palavra.
-
-```text
-Saída esperada:
-m = 14
-int -> 5
-char -> 10
-if -> 11
-else -> 1
-for -> 7
-while -> 13
-return -> 4
-void -> 8
-```
-
-### 0106 · Encadeamento
-
-**Exercício E631** · ★☆☆
-
-Escreva uma tabela com encadeamento de 5 baldes (h(k) = k % 5; cada número
-novo entra no INÍCIO da corrente) com as funções insere, mostra e libera.
-Insira 12, 7, 20, 17, 3 e 25, nessa ordem. A função mostra imprime um balde
-por linha, com os números na ordem da corrente, e no fim os baldes vazios e
-o tamanho da corrente mais comprida.
-
-```text
-Saída esperada:
-[0] 25 20
-[1]
-[2] 17 7 12
-[3] 3
-[4]
-vazios: 2, maior corrente: 3
-```
-
-```bash
-gcc ~/LPEDC/material/E631.c ~/LPEDC/material/0106-tabela.c -o ~/LPEDC/material/E631 && ~/LPEDC/material/E631
-```
-
-**Exercício E633** · ★★☆
-
-No balcão da pizzaria, os pedidos prontos ficam numa tabela com 4 baldes e
-encadeamento (h = pedido % 4, inserção no início da corrente). Quando o
-cliente retira, o pedido sai da tabela. Escreva do zero: o nó, insere,
-"bool remove_pedido(No *baldes[], int pedido)", mostra e libera. Insira
-101, 205, 309, 120, 222 e 315, mostre, retire 205, 309 e 999, e mostre de
-novo.
-
-```text
-Saída esperada:
-[0] 120
-[1] 309 205 101
-[2] 222
-[3] 315
-pedido 205 retirado
-pedido 309 retirado
-pedido 999 não existe
-[0] 120
-[1] 101
-[2] 222
-[3] 315
-```
-
-```bash
-gcc ~/LPEDC/material/E633.c ~/LPEDC/material/0106-tabela.c -o ~/LPEDC/material/E633 && ~/LPEDC/material/E633
-```
-
-**Exercício E634** · ★★☆
-
-Um colega sugeriu usar o tamanho do nome como função hash ("é rápido!").
-Compare as duas funções numa tabela com 8 baldes e estas 10 cidades:
-
-```text
-recife natal manaus belem santos maceio osasco palmas macapa cuiaba
-```
-
-Para cada função (tamanho: strlen(s); polinômio: h = h * 31 + byte, em
-unsigned), mostre quantas cidades caem em cada balde, o tamanho da maior
-corrente e a média de comparações para achar uma cidade que está na
-tabela. Use um ponteiro para função para não escrever a análise duas vezes.
-
-```text
-Saída esperada:
-tamanho  : 0 0 0 0 0 2 8 0 | maior: 8 | média: 3.9
-polinomio: 2 2 1 1 3 1 0 0 | maior: 3 | média: 1.5
-```
-
-```bash
-gcc ~/LPEDC/material/E634.c ~/LPEDC/material/0106-tabela.c -o ~/LPEDC/material/E634 && ~/LPEDC/material/E634
-```
-
-**Exercício E636** · ★★★
-
-No encadeamento a tabela nunca enche, mas as correntes crescem. A solução
-das bibliotecas é o rehash: quando o fator de carga passa de 1 (n > m), a
-tabela cria um vetor de baldes com 2 * m + 1 posições e muda cada nó para o
-balde novo, sem malloc de nó. Escreva a tabela de inteiros (struct com m, n
-e o vetor de baldes, alocado com calloc) com insere, cresce, mostra e
-libera. Comece com m = 2, insira 14, 5, 23, 8, 19, 40, 12, 31, 21 e 2, avise
-cada vez que a tabela crescer e mostre o resultado.
-
-```text
-Saída esperada:
-cresceu: m = 5
-cresceu: m = 11
-n = 10, m = 11
-[0]
-[1] 12 23
-[2] 2
-[3] 14
-[4]
-[5] 5
-[6]
-[7] 40
-[8] 19 8
-[9] 31
-[10] 21
-```
-
-```bash
-gcc ~/LPEDC/material/E636.c ~/LPEDC/material/0106-tabela.c -o ~/LPEDC/material/E636 && ~/LPEDC/material/E636
-```
-
-### 0107 · Endereçamento aberto
-
-**Exercício E637** · ★☆☆
-
-Escreva um programa com uma tabela de 7 inteiros, todos começando com -1
-(livre), que insere 10, 24, 5, 17 e 31 com sondagem linear (h = k % 7; se
-ocupada, tenta a próxima, dando a volta no fim) e mostra a tabela.
-
-```text
-Saída esperada:
-[0] 31
-[1] -
-[2] -
-[3] 10
-[4] 24
-[5] 5
-[6] 17
-```
-
-```bash
-gcc ~/LPEDC/material/E637.c ~/LPEDC/material/0107-aberta.c -o ~/LPEDC/material/E637 && ~/LPEDC/material/E637
-```
-
-**Exercício E639** · ★★☆
-
-Os armários da escola usam endereçamento aberto com 7 posições (h = k % 7,
-sondagem linear) e o enum Estado { LIVRE, OCUPADA, REMOVIDA }. Escreva
-"guarda" e "bool busca(const Armario t[], int chave, int *sondagens)", que
-conta as sondagens, para ao achar a chave (true) ou uma posição LIVRE
-(false), passa reto pelas REMOVIDAS e nunca dá mais de 7 passos. Guarde 14,
-21 e 28 (vão para 0, 1 e 2), marque a posição do 21 como REMOVIDA e busque
-28 e 35.
-
-```text
-Saída esperada:
-28: achou, sondagens: 3
-35: não está, sondagens: 4
-```
-
-```bash
-gcc ~/LPEDC/material/E639.c ~/LPEDC/material/0107-aberta.c -o ~/LPEDC/material/E639 && ~/LPEDC/material/E639
-```
-
-**Exercício E640** · ★★☆
-
-Uma tabela com endereçamento aberto enche. Escreva "int insere(int tab[],
-int chave)" para uma tabela de 5 posições (-1 = livre, h = k % 5,
-sondagem linear) que devolve a posição usada ou -1 se a tabela estiver
-cheia, sem nunca entrar em laço infinito. Insira 12, 7, 3, 9, 15 e 20 e
-mostre a posição e o fator de carga depois de cada inserção.
-
-```text
-Saída esperada:
-12 -> 2 (carga 0.20)
-7 -> 3 (carga 0.40)
-3 -> 4 (carga 0.60)
-9 -> 0 (carga 0.80)
-15 -> 1 (carga 1.00)
-20: tabela cheia!
-```
-
-```bash
-gcc ~/LPEDC/material/E640.c ~/LPEDC/material/0107-aberta.c -o ~/LPEDC/material/E640 && ~/LPEDC/material/E640
-```
-
-**Exercício E642** · ★★★
-
-A sondagem linear forma blocos; o hash duplo usa i = (i + passo) % m com
-passo = 1 + k % 10 (m = 11, primo: o passo visita todas as posições).
-Escreva uma função que simula as inserções das chaves 5 16 27 8 38 19 30 2
-numa tabela de 11 posições, recebendo o passo por ponteiro para função.
-Mostre as sondagens de cada inserção e o total, primeiro com passo 1 e
-depois com o hash duplo.
-
-```text
-Saída esperada:
-linear: 1 2 3 1 5 3 4 1 | total: 20
-duplo : 1 2 2 1 2 2 2 4 | total: 16
-```
-
-```bash
-gcc ~/LPEDC/material/E642.c ~/LPEDC/material/0107-aberta.c -o ~/LPEDC/material/E642 && ~/LPEDC/material/E642
-```
-
-### 0108 · Juntando tudo: o contador de palavras
+### Exercícios
 
 **Exercício E643** · ★☆☆
 
@@ -1352,11 +1355,13 @@ diferentes: 5
 gcc ~/LPEDC/material/E647.c ~/LPEDC/material/0108-palavras.c -o ~/LPEDC/material/E647 && ~/LPEDC/material/E647
 ```
 
-### Lista do módulo
+---
+
+## Lista do módulo
 
 30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P1501.c a P1530.c, em `material/`; resoluções em `_respostas/15-hash/lista/`.
 
-#### ★☆☆ Aquecimento
+### ★☆☆ Aquecimento
 
 **Exercício P1501** · ★☆☆ · Cem baldes ou noventa e sete?
 
@@ -1583,7 +1588,7 @@ Saída esperada:
 1024: divisão  0, multiplicação 13
 ```
 
-#### ★★☆ Para pensar
+### ★★☆ Para pensar
 
 **Exercício P1511** · ★★☆ · A lápide que segura a busca
 
@@ -1849,7 +1854,7 @@ MNB3E45: entrou às 13h, ficou 2h, paga R$ 10,00
 AAA0A00: não entrou aqui
 ```
 
-#### ★★★ Desafio
+### ★★★ Desafio
 
 **Exercício P1521** · ★★★ · O contador da feira que cresce sozinho
 
@@ -2190,7 +2195,7 @@ menor intervalo: ABC1D23, passagens 1 e 4 (distância 3)
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas extras que misturam os assuntos do módulo. Todos pedem código:
 resolva num arquivo seu e compile com as flags de estudo.
@@ -2370,7 +2375,7 @@ mais comum: a (10 vezes)
 
 </details>
 
-### Questões do POSCOMP
+## Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -2383,7 +2388,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 
 O gabarito de 2023 vem de um blog de terceiros que reproduz o gabarito definitivo; confira no PDF oficial da SBC. O gabarito oficial de 2025 não estava disponível quando este material foi montado.
 
-### Questões de provas do PPGI
+## Questões de provas do PPGI
 
 Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.
 

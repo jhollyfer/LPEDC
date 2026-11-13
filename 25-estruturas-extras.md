@@ -59,9 +59,12 @@ mesma saída.
 
 ---
 
-## 1. Conceitos gerais
+> [!NOTE]
+> Cada assunto é um capítulo: **Conceito** (a explicação), **Exemplos de uso** (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e **Exercícios** (cada um é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta; resoluções em `_respostas/25-estruturas-extras/`).
 
-### 0162 · Matriz esparsa
+## 0162 · Matriz esparsa
+
+### Conceito
 
 - **Matriz esparsa**: matriz quase toda de zeros. A regra é **zero não se
   guarda**: só os não nulos ocupam memória, e o resto vale 0
@@ -98,97 +101,7 @@ typedef struct {
 > Se gravar 0 trocasse o valor, a célula guardaria um 0 e `nao_zeros` mentiria.
 > Toda operação que pode gerar zero (gravar, somar, subtrair) remove a célula.
 
-### 0163 · Skip list
-
-- **Skip list**: lista ordenada (0078) com linhas expressas, os **andares**. O
-  andar 0 é a lista completa; o 1 tem parte dos nós, o 2 menos ainda
-  (PUGH, 1990).
-- **Nó**: um vetor `prox`, em que `prox[k]` é o próximo no andar `k`. Uma
-  **cabeça** sem chave está em todos os andares e começa toda busca
-  (MORIN, 2013, cap. 4).
-- **Buscar**: comece no andar mais alto. Se o próximo é menor que a chave,
-  avance; se passou ou não existe, desça. No andar 0, o próximo é a chave ou ela
-  não existe.
-- **Moeda**: todo nó novo entra no andar 0 e sobe mais um enquanto der cara.
-  Metade chega ao andar 1, um quarto ao 2, sem nunca arrumar nada (PUGH, 1990).
-- **Inserir**: buscar guardando, em cada andar, o último nó antes de descer (o
-  vetor `antes`); depois ligar o nó novo após `antes[k]` em cada andar. A
-  remoção usa o mesmo vetor (SEDGEWICK, 1998, cap. 13).
-- **Custo**: **O(log n) esperado**, na média dos sorteios, sem garantia. Com 1
-  milhão de chaves, uns 40 nós por busca.
-- **Memória**: com `prox[SKIP_MAX]` todo nó tem 104 bytes. Um **membro vetor
-  flexível** (`struct NoSkip *prox[];`) aloca só os andares usados
-  (CPPREFERENCE, s.d.).
-
-> [!WARNING]
-> Na remoção, o nó sai de **todos** os andares. Se o 23 sair só do andar 0 e
-> for liberado, a cabeça ainda aponta para ele no andar 2: ponteiro solto
-> (assunto 0057). O E976 pede essa remoção.
-
-### 0164 · Listas autoajustáveis
-
-- **Custo da busca sequencial** (0089): a **posição** do item. Se poucos itens
-  levam quase todas as buscas, a ordem importa.
-- **Lista autoajustável**: a cada busca bem-sucedida, aproxima o item achado do
-  começo; a busca também escreve na lista (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-- **Mover para a frente** (*move-to-front*): o item achado vira o primeiro.
-  Reage rápido, mas um acesso isolado também vai para a frente
-  (CORTÉS, 2015).
-- **Transposição**: o item troca de lugar com o anterior. Bagunça pouco, mas um
-  item popular demora a chegar à frente (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-- **Contagem**: cada nó guarda quantas vezes foi achado, e a lista fica em
-  ordem decrescente. Converge para a melhor ordem fixa, com um campo a mais.
-- **Lista ou vetor**: mover para a frente numa lista são três atribuições; num
-  vetor, copia todos os anteriores (A327). A transposição serve aos dois.
-- **Garantia**: mover para a frente nunca gasta mais que o dobro da melhor ordem
-  fixa escolhida por quem conhece as buscas de antemão
-  (SLEATOR; TARJAN, 1985; CORMEN et al., 2024, cap. 27).
-
-> [!WARNING]
-> Se o nó achado já é o primeiro, `ant` é `NULL` e `ant->prox = p->prox`
-> derruba o programa (E982). Sem `l->inicio = p`, o nó some da lista e vaza.
-
-### 0165 · Juntando tudo
-
-- **Concorrentes**: a **BST** (0099) tem altura que depende da ordem de chegada;
-  a **AVL** (0101) garante perto de log₂ n com rotações; a **skip list** (0163)
-  promete O(log n) esperado sem rotação (PUGH, 1990); a **lista com mover para
-  a frente** (0164) é O(n), mas aposta nos mais procurados.
-- **Medir com justiça**: as mesmas chaves na mesma ordem, as mesmas buscas
-  (sorteadas uma vez e guardadas) e o mesmo **custo**, as chaves comparadas.
-- **Interface comum**: struct com ponteiros para função (0050) e a estrutura
-  como `void *` (0051); quem mede chama `e->busca(d, chave, &custo)` sem saber o
-  que há do outro lado (KERNIGHAN; RITCHIE, 1989).
-- **Chamada indireta**: o compilador em geral não a expande no lugar, e cada
-  busca paga um salto a mais, visível só no cronômetro.
-- **Resultado**: a BST desaba com chaves em ordem (vira lista); AVL e skip list
-  não percebem; a lista MTF perde com as consultas espalhadas (A329 mostra quando
-  o jogo vira).
-
-```c
-typedef struct {
-    const char *nome;
-    void *(*cria)(void);
-    void (*insere)(void *e, int chave);            // repetida é ignorada
-    bool (*busca)(void *e, int chave, int *custo); // custo: chaves comparadas
-    void (*libera)(void *e);
-} Estrutura;
-
-extern const Estrutura CONCORRENTES[NUM_CONCORRENTES];
-```
-
-> [!WARNING]
-> Gerar as buscas **dentro** de `mede` estraga a comparação: o sorteio continua
-> de onde parou e cada concorrente recebe consultas diferentes. Sorteie uma vez,
-> antes.
-
----
-
-## 2. Exemplos de uso
-
-Cada exemplo compila sozinho. Rode com o comando abaixo dele e compare com a saída no fim do código.
-
-### 0162 · Matriz esparsa
+### Exemplos de uso
 
 Uma locadora tem 4 clientes (linhas 0 a 3) e 8 filmes (colunas 0 a 7). Chegam
 seis notas e Bruno apaga a dele: das 32 posições, sobram 5 células. A linha de
@@ -415,7 +328,134 @@ int main(void) {
 gcc ~/LPEDC/material/A324.c ~/LPEDC/material/0162-esparsa.c -o ~/LPEDC/material/A324 && ~/LPEDC/material/A324
 ```
 
-### 0163 · Skip list
+### Exercícios
+
+**Exercício E967** · ★☆☆
+
+Um app de delivery guarda as notas (1 a 5) que 4 clientes deram a 10
+restaurantes numa matriz esparsa (esparsa.h). Escreva
+int resumo_linha(const Esparsa *m, int i, int *qtd): percorre só as células
+da linha i, devolve a soma das notas e guarda em *qtd quantas notas a linha
+tem. No main (a matriz já está montada), mostre a média de cada cliente:
+
+```text
+Saída esperada:
+Cliente 0: 3 notas, média 4.00
+Cliente 1: 1 nota, média 2.00
+Cliente 2: 0 notas
+Cliente 3: 4 notas, média 3.50
+```
+
+```bash
+gcc ~/LPEDC/material/E967.c ~/LPEDC/material/0162-esparsa.c -o ~/LPEDC/material/E967 && ~/LPEDC/material/E967
+```
+
+**Exercício E969** · ★★☆
+
+A matriz notas tem os clientes nas linhas e os filmes nas colunas. A
+locadora agora quer o contrário: a média de cada FILME. Andar por coluna
+numa lista por linha é ruim (teria que visitar todas as linhas). Então:
+1. escreva transposta(m), que devolve uma nova Esparsa com linhas e
+
+```text
+ colunas trocadas (m->colunas x m->linhas), percorrendo as células de m;
+```
+
+2. no main, use a transposta para mostrar, para cada filme com nota,
+
+```text
+ quantas notas ele tem e a média; libere as duas matrizes.
+```
+
+```text
+Saída esperada:
+Filme 0: 2 notas, média 4.50
+Filme 2: 3 notas, média 2.67
+Filme 5: 1 nota, média 1.00
+Células: 6 e 6
+```
+
+```bash
+gcc ~/LPEDC/material/E969.c ~/LPEDC/material/0162-esparsa.c -o ~/LPEDC/material/E969 && ~/LPEDC/material/E969
+```
+
+**Exercício E970** · ★★☆
+
+Escreva do zero uma matriz esparsa de vendas, sem usar o esparsa.h: uma
+lista encadeada por linha, células ordenadas por coluna, com os campos
+col, valor e prox, e a struct Esparsa (linhas, colunas, nao_zeros e o
+vetor de listas). Faça cria, define (insere no lugar certo ou troca o
+valor), mostra_linha (cada valor com %3d, zeros inclusos) e libera.
+Grave, nesta ordem, as vendas (vendedor, dia, valor) de 2 vendedores em 7
+dias: (0,5,30) (1,4,40) (0,2,20) (1,1,12) (0,0,15). Compile com
+-fsanitize=address: não pode haver vazamento nem acesso inválido.
+
+```text
+Saída esperada:
+Vendedor 0: 15  0 20  0  0 30  0
+Vendedor 1:  0 12  0  0 40  0  0
+Células: 5
+```
+
+```bash
+gcc ~/LPEDC/material/E970.c ~/LPEDC/material/0162-esparsa.c -o ~/LPEDC/material/E970 && ~/LPEDC/material/E970
+```
+
+**Exercício E971** · ★★★
+
+Uma rede de farmácias guarda o estoque numa matriz esparsa filial x
+produto (esparsa.h). No fim do dia chega a matriz de movimento: entrada é
+positiva, venda é negativa. Escreva Esparsa *soma(const Esparsa *a, const
+Esparsa *b), que devolve uma NOVA Esparsa com a + b, sem usar esp_valor e
+sem esp_define: monte cada linha do resultado intercalando as duas listas,
+como no merge do merge sort. Quando a soma der 0, a célula não entra. No
+main (as duas matrizes já estão montadas), mostre o estoque novo:
+
+```text
+Saída esperada:
+Estoque novo:
+  4  0  0  0  9  0
+  0  0  0  3  0  0
+  0  2  0  0  0  0
+Células: 4
+```
+
+```bash
+gcc ~/LPEDC/material/E971.c ~/LPEDC/material/0162-esparsa.c -o ~/LPEDC/material/E971 && ~/LPEDC/material/E971
+```
+
+---
+
+## 0163 · Skip list
+
+### Conceito
+
+- **Skip list**: lista ordenada (0078) com linhas expressas, os **andares**. O
+  andar 0 é a lista completa; o 1 tem parte dos nós, o 2 menos ainda
+  (PUGH, 1990).
+- **Nó**: um vetor `prox`, em que `prox[k]` é o próximo no andar `k`. Uma
+  **cabeça** sem chave está em todos os andares e começa toda busca
+  (MORIN, 2013, cap. 4).
+- **Buscar**: comece no andar mais alto. Se o próximo é menor que a chave,
+  avance; se passou ou não existe, desça. No andar 0, o próximo é a chave ou ela
+  não existe.
+- **Moeda**: todo nó novo entra no andar 0 e sobe mais um enquanto der cara.
+  Metade chega ao andar 1, um quarto ao 2, sem nunca arrumar nada (PUGH, 1990).
+- **Inserir**: buscar guardando, em cada andar, o último nó antes de descer (o
+  vetor `antes`); depois ligar o nó novo após `antes[k]` em cada andar. A
+  remoção usa o mesmo vetor (SEDGEWICK, 1998, cap. 13).
+- **Custo**: **O(log n) esperado**, na média dos sorteios, sem garantia. Com 1
+  milhão de chaves, uns 40 nós por busca.
+- **Memória**: com `prox[SKIP_MAX]` todo nó tem 104 bytes. Um **membro vetor
+  flexível** (`struct NoSkip *prox[];`) aloca só os andares usados
+  (CPPREFERENCE, s.d.).
+
+> [!WARNING]
+> Na remoção, o nó sai de **todos** os andares. Se o 23 sair só do andar 0 e
+> for liberado, a cabeça ainda aponta para ele no andar 2: ponteiro solto
+> (assunto 0057). O E976 pede essa remoção.
+
+### Exemplos de uso
 
 As paradas de uma rodovia, nos km 5 a 56, entram com andares prontos: o 23 e o
 56 em 3, o 12 e o 40 em 2, os outros só no 0. A busca pelo 47 anda no andar 2
@@ -616,7 +656,140 @@ int main(void) {
 gcc ~/LPEDC/material/A326.c ~/LPEDC/material/0163-skip.c -o ~/LPEDC/material/A326 && ~/LPEDC/material/A326
 ```
 
-### 0164 · Listas autoajustáveis
+### Exercícios
+
+**Exercício E973** · ★☆☆
+
+Escreva int maior(const Skip *s, int *avancos), que devolve a maior chave
+da skip list (que não pode estar vazia) e guarda em *avancos quantas vezes
+o ponteiro avançou. Não ande só pelo andar 0: use os andares de cima, como
+o ônibus direto. No main (as duas listas já estão montadas), teste com as
+paradas do texto e com 1000 códigos sorteados:
+
+```text
+Saída esperada:
+Paradas: maior 56, 2 avanços (pelo andar 0 seriam 8)
+Códigos: maior 10000, 13 avanços (pelo andar 0 seriam 1000)
+```
+
+```bash
+gcc ~/LPEDC/material/E973.c ~/LPEDC/material/0163-skip.c -o ~/LPEDC/material/E973 && ~/LPEDC/material/E973
+```
+
+**Exercício E975** · ★★☆
+
+A moeda da skip list não precisa ser honesta. Com probabilidade 1/4 de
+subir, os nós ficam mais baixos: menos ponteiros. Será que a busca fica
+muito mais lenta? Faça o experimento com 4000 chaves (1 a 4000):
+- escreva int sorteia(unsigned *estado, int lados): começa com 1 andar e
+
+```text
+sobe mais um enquanto (proximo(estado) >> 16) % lados == 0, sem passar
+de SKIP_MAX;
+```
+
+- escreva void experimento(int lados): monta a skip list com
+
+```text
+skip_insere_andares e os andares sorteados (estado começa em 7), busca
+cada chave somando os nós olhados e mostra uma linha como abaixo.
+```
+
+```text
+Saída esperada:
+1/2: 7997 ponteiros, 21.9 nós olhados por busca
+1/4: 5410 ponteiros, 21.6 nós olhados por busca
+```
+
+```bash
+gcc ~/LPEDC/material/E975.c ~/LPEDC/material/0163-skip.c -o ~/LPEDC/material/E975 && ~/LPEDC/material/E975
+```
+
+**Exercício E976** · ★★☆
+
+A concessionária desativou a parada do km 23. Escreva, sem usar
+skip_remove, void remove_parada(Skip *s, int chave): guarda o nó anterior
+de cada andar, tira o nó de TODOS os andares em que ele aparece e só então
+libera a memória. Escreva também void procura(const Skip *s, int km), que
+mostra se há parada. No main (a linha já está montada), remova o km 23,
+procure os km 47 e 23 e mostre a skip list com skip_mostra. Compile com
+-fsanitize=address: não pode haver acesso a memória liberada.
+
+```text
+Saída esperada:
+km 47: tem parada
+km 23: não tem parada
+andar 2:                          56
+andar 1:      12          40      56
+andar 0:   5  12  18  31  40  47  56
+```
+
+```bash
+gcc ~/LPEDC/material/E976.c ~/LPEDC/material/0163-skip.c -o ~/LPEDC/material/E976 && ~/LPEDC/material/E976
+```
+
+**Exercício E977** · ★★★
+
+Contador de palavras com skip list. Escreva do zero (sem o skip.h, que só
+guarda int) uma skip list de palavras: cada nó tem a palavra (até 23
+letras), quantas vezes ela apareceu, os andares e o vetor prox. Leia as
+palavras da entrada até o fim; palavra nova entra no lugar certo (ordem
+do strcmp) com andares sorteados por moeda(); palavra repetida só soma 1.
+No fim, mostre as palavras em ordem e libere tudo.
+
+```text
+Entrada:
+o rato roeu a roupa do rei de roma e o rei riu
+```
+
+```text
+Saída esperada:
+a 1
+de 1
+do 1
+e 1
+o 2
+rato 1
+rei 2
+riu 1
+roeu 1
+roma 1
+roupa 1
+11 palavras diferentes, 13 no total
+```
+
+```bash
+gcc ~/LPEDC/material/E977.c ~/LPEDC/material/0163-skip.c -o ~/LPEDC/material/E977 && ~/LPEDC/material/E977
+```
+
+---
+
+## 0164 · Listas autoajustáveis
+
+### Conceito
+
+- **Custo da busca sequencial** (0089): a **posição** do item. Se poucos itens
+  levam quase todas as buscas, a ordem importa.
+- **Lista autoajustável**: a cada busca bem-sucedida, aproxima o item achado do
+  começo; a busca também escreve na lista (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
+- **Mover para a frente** (*move-to-front*): o item achado vira o primeiro.
+  Reage rápido, mas um acesso isolado também vai para a frente
+  (CORTÉS, 2015).
+- **Transposição**: o item troca de lugar com o anterior. Bagunça pouco, mas um
+  item popular demora a chegar à frente (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
+- **Contagem**: cada nó guarda quantas vezes foi achado, e a lista fica em
+  ordem decrescente. Converge para a melhor ordem fixa, com um campo a mais.
+- **Lista ou vetor**: mover para a frente numa lista são três atribuições; num
+  vetor, copia todos os anteriores (A327). A transposição serve aos dois.
+- **Garantia**: mover para a frente nunca gasta mais que o dobro da melhor ordem
+  fixa escolhida por quem conhece as buscas de antemão
+  (SLEATOR; TARJAN, 1985; CORMEN et al., 2024, cap. 27).
+
+> [!WARNING]
+> Se o nó achado já é o primeiro, `ant` é `NULL` e `ant->prox = p->prox`
+> derruba o programa (E982). Sem `l->inicio = p`, o nó some da lista e vaza.
+
+### Exemplos de uso
 
 Uma agenda com Ana, Bia, Caio, Duda e Edu recebe ligações para Edu, Edu, Caio,
 Edu e Edu. Na terceira, Caio é achado na quarta comparação e vai para a frente;
@@ -852,7 +1025,139 @@ int main(void) {
 gcc ~/LPEDC/material/A328.c ~/LPEDC/material/0164-autolista.c -o ~/LPEDC/material/A328 && ~/LPEDC/material/A328
 ```
 
-### 0165 · Juntando tudo
+### Exercícios
+
+**Exercício E979** · ★☆☆
+
+A playlist do carro tem 6 músicas e a busca é sequencial. Faça as 10
+buscas desta sequência nas duas listas (já montadas no main): a fixa com
+al_busca e a outra com al_busca_transpoe. Some o custo de cada uma e mostre
+os dois totais e a ordem final da lista que se ajusta.
+
+```text
+sequência: Luar Asa Luar Luar Trem Luar Asa Luar Asa Luar
+```
+
+```text
+Saída esperada:
+Fixa: 54 comparações
+Transposição: 46 comparações
+Ordem final: Luar Aquarela Trem Asa Garota Ciranda
+```
+
+```bash
+gcc ~/LPEDC/material/E979.c ~/LPEDC/material/0164-autolista.c -o ~/LPEDC/material/E979 && ~/LPEDC/material/E979
+```
+
+**Exercício E981** · ★★☆
+
+Uma política intermediária entre mover para a frente e transposição: o
+item achado sobe DUAS casas (ou vai para o início, se estava na posição 1
+ou 2, contando do 0). Usando o autolista.h, escreva
+bool busca_sobe2(AutoLista *l, const char *nome, int *custo), que aplica
+essa política, devolve se achou e guarda em *custo quantos nós comparou.
+A agenda começa com Ana Bia Caio Duda Edu; as chamadas são Edu, Edu, Duda,
+Edu e Duda. Mostre cada chamada com o custo e a agenda depois dela, e o
+total:
+
+```text
+Saída esperada:
+Edu  custo 5 -> Ana Bia Edu Caio Duda
+Edu  custo 3 -> Edu Ana Bia Caio Duda
+Duda custo 5 -> Edu Ana Duda Bia Caio
+Edu  custo 1 -> Edu Ana Duda Bia Caio
+Duda custo 3 -> Duda Edu Ana Bia Caio
+Total: 17
+```
+
+```bash
+gcc ~/LPEDC/material/E981.c ~/LPEDC/material/0164-autolista.c -o ~/LPEDC/material/E981 && ~/LPEDC/material/E981
+```
+
+**Exercício E982** · ★★☆
+
+Escreva void liga(AutoLista *l, const char *nome), o mover para a frente
+de uma agenda, andando pelos nós do autolista.h (sem usar al_busca_mtf).
+Cuide do contato que já é o primeiro e do que não está na agenda. No
+main, monte a agenda Ana Bia Caio Duda e ligue para Bia, Bia, Duda, Ana e
+Ana, mostrando a agenda depois de cada ligação. Compile com
+-fsanitize=address: não pode haver acesso inválido.
+
+```text
+Saída esperada:
+Bia: Bia Ana Caio Duda
+Bia: Bia Ana Caio Duda
+Duda: Duda Bia Ana Caio
+Ana: Ana Duda Bia Caio
+Ana: Ana Duda Bia Caio
+```
+
+```bash
+gcc ~/LPEDC/material/E982.c ~/LPEDC/material/0164-autolista.c -o ~/LPEDC/material/E982 && ~/LPEDC/material/E982
+```
+
+**Exercício E984** · ★★★
+
+Mover para a frente também é um truque de compressão (o bzip2 usa). Comece
+com o alfabeto em ordem, "abcdefghijklmnopqrstuvwxyz". Para cada letra do
+texto, escreva a POSIÇÃO atual dela nesse vetor (contando do 0) e leve a
+letra para a frente. Letras repetidas de perto viram números pequenos,
+principalmente zeros, que um compressor guarda em poucos bits.
+
+Escreva codifica(texto, codigos) e decodifica(codigos, n, saida). A
+decodificação começa do mesmo alfabeto: o número diz a posição; a letra
+que está lá é a próxima do texto, e ela também vai para a frente. Teste
+com "banana" e "aaabbbaaa":
+
+```text
+Saída esperada:
+banana: 1 1 13 1 1 1 -> banana
+aaabbbaaa: 0 0 0 1 0 0 1 0 0 -> aaabbbaaa
+```
+
+```bash
+gcc ~/LPEDC/material/E984.c ~/LPEDC/material/0164-autolista.c -o ~/LPEDC/material/E984 && ~/LPEDC/material/E984
+```
+
+---
+
+## 0165 · Juntando tudo
+
+### Conceito
+
+- **Concorrentes**: a **BST** (0099) tem altura que depende da ordem de chegada;
+  a **AVL** (0101) garante perto de log₂ n com rotações; a **skip list** (0163)
+  promete O(log n) esperado sem rotação (PUGH, 1990); a **lista com mover para
+  a frente** (0164) é O(n), mas aposta nos mais procurados.
+- **Medir com justiça**: as mesmas chaves na mesma ordem, as mesmas buscas
+  (sorteadas uma vez e guardadas) e o mesmo **custo**, as chaves comparadas.
+- **Interface comum**: struct com ponteiros para função (0050) e a estrutura
+  como `void *` (0051); quem mede chama `e->busca(d, chave, &custo)` sem saber o
+  que há do outro lado (KERNIGHAN; RITCHIE, 1989).
+- **Chamada indireta**: o compilador em geral não a expande no lugar, e cada
+  busca paga um salto a mais, visível só no cronômetro.
+- **Resultado**: a BST desaba com chaves em ordem (vira lista); AVL e skip list
+  não percebem; a lista MTF perde com as consultas espalhadas (A329 mostra quando
+  o jogo vira).
+
+```c
+typedef struct {
+    const char *nome;
+    void *(*cria)(void);
+    void (*insere)(void *e, int chave);            // repetida é ignorada
+    bool (*busca)(void *e, int chave, int *custo); // custo: chaves comparadas
+    void (*libera)(void *e);
+} Estrutura;
+
+extern const Estrutura CONCORRENTES[NUM_CONCORRENTES];
+```
+
+> [!WARNING]
+> Gerar as buscas **dentro** de `mede` estraga a comparação: o sorteio continua
+> de onde parou e cada concorrente recebe consultas diferentes. Sorteie uma vez,
+> antes.
+
+### Exemplos de uso
 
 Uma loja tem 1000 produtos e 10 mil consultas por dia, 80% delas nos 20 da
 promoção. Cada concorrente recebe as chaves embaralhadas e em ordem crescente e
@@ -1133,309 +1438,7 @@ int main(void) {
 gcc ~/LPEDC/material/A330.c ~/LPEDC/material/0165-bancada.c ~/LPEDC/material/0165-skip.c -o ~/LPEDC/material/A330 && ~/LPEDC/material/A330
 ```
 
----
-
-## 3. Exercícios práticos
-
-Cada exercício é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta. Compile como os exemplos: `gcc ~/LPEDC/material/E007.c -o ~/LPEDC/material/E007 && ~/LPEDC/material/E007`. Resoluções em `_respostas/25-estruturas-extras/`.
-
-### 0162 · Matriz esparsa
-
-**Exercício E967** · ★☆☆
-
-Um app de delivery guarda as notas (1 a 5) que 4 clientes deram a 10
-restaurantes numa matriz esparsa (esparsa.h). Escreva
-int resumo_linha(const Esparsa *m, int i, int *qtd): percorre só as células
-da linha i, devolve a soma das notas e guarda em *qtd quantas notas a linha
-tem. No main (a matriz já está montada), mostre a média de cada cliente:
-
-```text
-Saída esperada:
-Cliente 0: 3 notas, média 4.00
-Cliente 1: 1 nota, média 2.00
-Cliente 2: 0 notas
-Cliente 3: 4 notas, média 3.50
-```
-
-```bash
-gcc ~/LPEDC/material/E967.c ~/LPEDC/material/0162-esparsa.c -o ~/LPEDC/material/E967 && ~/LPEDC/material/E967
-```
-
-**Exercício E969** · ★★☆
-
-A matriz notas tem os clientes nas linhas e os filmes nas colunas. A
-locadora agora quer o contrário: a média de cada FILME. Andar por coluna
-numa lista por linha é ruim (teria que visitar todas as linhas). Então:
-1. escreva transposta(m), que devolve uma nova Esparsa com linhas e
-
-```text
- colunas trocadas (m->colunas x m->linhas), percorrendo as células de m;
-```
-
-2. no main, use a transposta para mostrar, para cada filme com nota,
-
-```text
- quantas notas ele tem e a média; libere as duas matrizes.
-```
-
-```text
-Saída esperada:
-Filme 0: 2 notas, média 4.50
-Filme 2: 3 notas, média 2.67
-Filme 5: 1 nota, média 1.00
-Células: 6 e 6
-```
-
-```bash
-gcc ~/LPEDC/material/E969.c ~/LPEDC/material/0162-esparsa.c -o ~/LPEDC/material/E969 && ~/LPEDC/material/E969
-```
-
-**Exercício E970** · ★★☆
-
-Escreva do zero uma matriz esparsa de vendas, sem usar o esparsa.h: uma
-lista encadeada por linha, células ordenadas por coluna, com os campos
-col, valor e prox, e a struct Esparsa (linhas, colunas, nao_zeros e o
-vetor de listas). Faça cria, define (insere no lugar certo ou troca o
-valor), mostra_linha (cada valor com %3d, zeros inclusos) e libera.
-Grave, nesta ordem, as vendas (vendedor, dia, valor) de 2 vendedores em 7
-dias: (0,5,30) (1,4,40) (0,2,20) (1,1,12) (0,0,15). Compile com
--fsanitize=address: não pode haver vazamento nem acesso inválido.
-
-```text
-Saída esperada:
-Vendedor 0: 15  0 20  0  0 30  0
-Vendedor 1:  0 12  0  0 40  0  0
-Células: 5
-```
-
-```bash
-gcc ~/LPEDC/material/E970.c ~/LPEDC/material/0162-esparsa.c -o ~/LPEDC/material/E970 && ~/LPEDC/material/E970
-```
-
-**Exercício E971** · ★★★
-
-Uma rede de farmácias guarda o estoque numa matriz esparsa filial x
-produto (esparsa.h). No fim do dia chega a matriz de movimento: entrada é
-positiva, venda é negativa. Escreva Esparsa *soma(const Esparsa *a, const
-Esparsa *b), que devolve uma NOVA Esparsa com a + b, sem usar esp_valor e
-sem esp_define: monte cada linha do resultado intercalando as duas listas,
-como no merge do merge sort. Quando a soma der 0, a célula não entra. No
-main (as duas matrizes já estão montadas), mostre o estoque novo:
-
-```text
-Saída esperada:
-Estoque novo:
-  4  0  0  0  9  0
-  0  0  0  3  0  0
-  0  2  0  0  0  0
-Células: 4
-```
-
-```bash
-gcc ~/LPEDC/material/E971.c ~/LPEDC/material/0162-esparsa.c -o ~/LPEDC/material/E971 && ~/LPEDC/material/E971
-```
-
-### 0163 · Skip list
-
-**Exercício E973** · ★☆☆
-
-Escreva int maior(const Skip *s, int *avancos), que devolve a maior chave
-da skip list (que não pode estar vazia) e guarda em *avancos quantas vezes
-o ponteiro avançou. Não ande só pelo andar 0: use os andares de cima, como
-o ônibus direto. No main (as duas listas já estão montadas), teste com as
-paradas do texto e com 1000 códigos sorteados:
-
-```text
-Saída esperada:
-Paradas: maior 56, 2 avanços (pelo andar 0 seriam 8)
-Códigos: maior 10000, 13 avanços (pelo andar 0 seriam 1000)
-```
-
-```bash
-gcc ~/LPEDC/material/E973.c ~/LPEDC/material/0163-skip.c -o ~/LPEDC/material/E973 && ~/LPEDC/material/E973
-```
-
-**Exercício E975** · ★★☆
-
-A moeda da skip list não precisa ser honesta. Com probabilidade 1/4 de
-subir, os nós ficam mais baixos: menos ponteiros. Será que a busca fica
-muito mais lenta? Faça o experimento com 4000 chaves (1 a 4000):
-- escreva int sorteia(unsigned *estado, int lados): começa com 1 andar e
-
-```text
-sobe mais um enquanto (proximo(estado) >> 16) % lados == 0, sem passar
-de SKIP_MAX;
-```
-
-- escreva void experimento(int lados): monta a skip list com
-
-```text
-skip_insere_andares e os andares sorteados (estado começa em 7), busca
-cada chave somando os nós olhados e mostra uma linha como abaixo.
-```
-
-```text
-Saída esperada:
-1/2: 7997 ponteiros, 21.9 nós olhados por busca
-1/4: 5410 ponteiros, 21.6 nós olhados por busca
-```
-
-```bash
-gcc ~/LPEDC/material/E975.c ~/LPEDC/material/0163-skip.c -o ~/LPEDC/material/E975 && ~/LPEDC/material/E975
-```
-
-**Exercício E976** · ★★☆
-
-A concessionária desativou a parada do km 23. Escreva, sem usar
-skip_remove, void remove_parada(Skip *s, int chave): guarda o nó anterior
-de cada andar, tira o nó de TODOS os andares em que ele aparece e só então
-libera a memória. Escreva também void procura(const Skip *s, int km), que
-mostra se há parada. No main (a linha já está montada), remova o km 23,
-procure os km 47 e 23 e mostre a skip list com skip_mostra. Compile com
--fsanitize=address: não pode haver acesso a memória liberada.
-
-```text
-Saída esperada:
-km 47: tem parada
-km 23: não tem parada
-andar 2:                          56
-andar 1:      12          40      56
-andar 0:   5  12  18  31  40  47  56
-```
-
-```bash
-gcc ~/LPEDC/material/E976.c ~/LPEDC/material/0163-skip.c -o ~/LPEDC/material/E976 && ~/LPEDC/material/E976
-```
-
-**Exercício E977** · ★★★
-
-Contador de palavras com skip list. Escreva do zero (sem o skip.h, que só
-guarda int) uma skip list de palavras: cada nó tem a palavra (até 23
-letras), quantas vezes ela apareceu, os andares e o vetor prox. Leia as
-palavras da entrada até o fim; palavra nova entra no lugar certo (ordem
-do strcmp) com andares sorteados por moeda(); palavra repetida só soma 1.
-No fim, mostre as palavras em ordem e libere tudo.
-
-```text
-Entrada:
-o rato roeu a roupa do rei de roma e o rei riu
-```
-
-```text
-Saída esperada:
-a 1
-de 1
-do 1
-e 1
-o 2
-rato 1
-rei 2
-riu 1
-roeu 1
-roma 1
-roupa 1
-11 palavras diferentes, 13 no total
-```
-
-```bash
-gcc ~/LPEDC/material/E977.c ~/LPEDC/material/0163-skip.c -o ~/LPEDC/material/E977 && ~/LPEDC/material/E977
-```
-
-### 0164 · Listas autoajustáveis
-
-**Exercício E979** · ★☆☆
-
-A playlist do carro tem 6 músicas e a busca é sequencial. Faça as 10
-buscas desta sequência nas duas listas (já montadas no main): a fixa com
-al_busca e a outra com al_busca_transpoe. Some o custo de cada uma e mostre
-os dois totais e a ordem final da lista que se ajusta.
-
-```text
-sequência: Luar Asa Luar Luar Trem Luar Asa Luar Asa Luar
-```
-
-```text
-Saída esperada:
-Fixa: 54 comparações
-Transposição: 46 comparações
-Ordem final: Luar Aquarela Trem Asa Garota Ciranda
-```
-
-```bash
-gcc ~/LPEDC/material/E979.c ~/LPEDC/material/0164-autolista.c -o ~/LPEDC/material/E979 && ~/LPEDC/material/E979
-```
-
-**Exercício E981** · ★★☆
-
-Uma política intermediária entre mover para a frente e transposição: o
-item achado sobe DUAS casas (ou vai para o início, se estava na posição 1
-ou 2, contando do 0). Usando o autolista.h, escreva
-bool busca_sobe2(AutoLista *l, const char *nome, int *custo), que aplica
-essa política, devolve se achou e guarda em *custo quantos nós comparou.
-A agenda começa com Ana Bia Caio Duda Edu; as chamadas são Edu, Edu, Duda,
-Edu e Duda. Mostre cada chamada com o custo e a agenda depois dela, e o
-total:
-
-```text
-Saída esperada:
-Edu  custo 5 -> Ana Bia Edu Caio Duda
-Edu  custo 3 -> Edu Ana Bia Caio Duda
-Duda custo 5 -> Edu Ana Duda Bia Caio
-Edu  custo 1 -> Edu Ana Duda Bia Caio
-Duda custo 3 -> Duda Edu Ana Bia Caio
-Total: 17
-```
-
-```bash
-gcc ~/LPEDC/material/E981.c ~/LPEDC/material/0164-autolista.c -o ~/LPEDC/material/E981 && ~/LPEDC/material/E981
-```
-
-**Exercício E982** · ★★☆
-
-Escreva void liga(AutoLista *l, const char *nome), o mover para a frente
-de uma agenda, andando pelos nós do autolista.h (sem usar al_busca_mtf).
-Cuide do contato que já é o primeiro e do que não está na agenda. No
-main, monte a agenda Ana Bia Caio Duda e ligue para Bia, Bia, Duda, Ana e
-Ana, mostrando a agenda depois de cada ligação. Compile com
--fsanitize=address: não pode haver acesso inválido.
-
-```text
-Saída esperada:
-Bia: Bia Ana Caio Duda
-Bia: Bia Ana Caio Duda
-Duda: Duda Bia Ana Caio
-Ana: Ana Duda Bia Caio
-Ana: Ana Duda Bia Caio
-```
-
-```bash
-gcc ~/LPEDC/material/E982.c ~/LPEDC/material/0164-autolista.c -o ~/LPEDC/material/E982 && ~/LPEDC/material/E982
-```
-
-**Exercício E984** · ★★★
-
-Mover para a frente também é um truque de compressão (o bzip2 usa). Comece
-com o alfabeto em ordem, "abcdefghijklmnopqrstuvwxyz". Para cada letra do
-texto, escreva a POSIÇÃO atual dela nesse vetor (contando do 0) e leve a
-letra para a frente. Letras repetidas de perto viram números pequenos,
-principalmente zeros, que um compressor guarda em poucos bits.
-
-Escreva codifica(texto, codigos) e decodifica(codigos, n, saida). A
-decodificação começa do mesmo alfabeto: o número diz a posição; a letra
-que está lá é a próxima do texto, e ela também vai para a frente. Teste
-com "banana" e "aaabbbaaa":
-
-```text
-Saída esperada:
-banana: 1 1 13 1 1 1 -> banana
-aaabbbaaa: 0 0 0 1 0 0 1 0 0 -> aaabbbaaa
-```
-
-```bash
-gcc ~/LPEDC/material/E984.c ~/LPEDC/material/0164-autolista.c -o ~/LPEDC/material/E984 && ~/LPEDC/material/E984
-```
-
-### 0165 · Juntando tudo
+### Exercícios
 
 **Exercício E985** · ★☆☆
 
@@ -1534,11 +1537,13 @@ para raiz           6.6        7.0
 gcc ~/LPEDC/material/E990.c ~/LPEDC/material/0165-bancada.c ~/LPEDC/material/0165-skip.c -o ~/LPEDC/material/E990 && ~/LPEDC/material/E990
 ```
 
-### Lista do módulo
+---
+
+## Lista do módulo
 
 30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P2501.c a P2530.c, em `material/`; resoluções em `_respostas/25-estruturas-extras/lista/`.
 
-#### ★☆☆ Aquecimento
+### ★☆☆ Aquecimento
 
 **Exercício P2501** · ★☆☆ · As poltronas ocupadas do cinema
 
@@ -1810,7 +1815,7 @@ Multiplicações: 8 (a matriz cheia faria 40)
 
 **Resposta esperada:** R$ 20, 39, 3 e 50; 8 multiplicações contra 40.
 
-#### ★★☆ Para pensar
+### ★★☆ Para pensar
 
 **Exercício P2511** · ★★☆ · O estoque que não esquece o zero
 
@@ -2091,7 +2096,7 @@ Custo total: 24
 
 **Resposta esperada:** custo total 24; no fim, Evidências(3) Aquarela(3) na frente.
 
-#### ★★★ Desafio
+### ★★★ Desafio
 
 **Exercício P2521** · ★★★ · O cache de CEPs em O(1)
 
@@ -2414,7 +2419,7 @@ Ordem ótima: 0 1 2 3 4 5 6 7 9 8
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas para resolver no papel e, quando fizer sentido, num arquivo `.c` seu.
 Eles misturam os assuntos do módulo.
@@ -2568,7 +2573,7 @@ faixa; a skip list com um código mais simples; (c) **hash**: só pergunta
 
 </details>
 
-### Questões do POSCOMP
+## Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -2576,7 +2581,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 | --- | --- | --- | --- | --- |
 | 2019 | 35 | Tabela de símbolos na compressão LZW | D | [caderno](https://www.sbc.org.br/wp-content/uploads/2025/02/0518.002_Exame_POSCOMP_2019.pdf) |
 
-### Questões no estilo da prova
+## Questões no estilo da prova
 
 Estas estruturas não caem direto na prova do PPGI, mas questões no
 mesmo formato treinam o que cai: contar memória, contar comparações e

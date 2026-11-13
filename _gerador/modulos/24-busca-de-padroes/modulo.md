@@ -38,7 +38,7 @@ TAD `padroes.h`, compilado junto com os exemplos da pasta. Tudo trabalha com
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas para fechar o módulo, misturando os assuntos. Escreva em C e rode
 com as flags de estudo.
@@ -179,7 +179,7 @@ máquina de estados com `fgets`, e a busca continua sendo uma chamada só.
 
 </details>
 
-### Questões no estilo da prova
+## Questões no estilo da prova
 
 Questões no formato da prova do PPGI, que treinam o que cai nela: contar passos, reconhecer a complexidade e seguir
 uma tabela à mão. Uma alternativa certa em cada.

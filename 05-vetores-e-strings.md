@@ -51,9 +51,12 @@ string. Diante de `stack-buffer-overflow`, leia a linha indicada: quase sempre
 
 ---
 
-## 1. Conceitos gerais
+> [!NOTE]
+> Cada assunto é um capítulo: **Conceito** (a explicação), **Exemplos de uso** (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e **Exercícios** (cada um é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta; resoluções em `_respostas/05-vetores-e-strings/`).
 
-### 0037 · Vetores
+## 0037 · Vetores
+
+### Conceito
 
 - **Vetor** (*array*): várias variáveis do mesmo tipo com um nome só, lado a
   lado na memória. É um dado composto **homogêneo**; a struct (módulo 08) é o
@@ -84,189 +87,7 @@ int dias[] = {31, 28, 31};     // sem tamanho: o compilador conta (3)
 > memória vizinha: comportamento indefinido. O erro clássico é `i <= 7` no
 > laço; o AddressSanitizer mostra `stack-buffer-overflow`.
 
-### 0038 · Vetores e funções
-
-- **Vetor como argumento**: o C não copia o vetor; passa **o endereço onde ele
-  começa**. Por isso a função mexe no vetor original (DEITEL; DEITEL, 2011,
-  cap. 6).
-- **Sintaxe**: no parâmetro, colchetes vazios (`double precos[]`); na chamada,
-  só o nome (`cardapio`). Um número dentro dos colchetes do parâmetro é
-  ignorado (BACKES, 2013, cap. 9).
-- **Tamanho junto**: só o endereço chega, então o tamanho vai num parâmetro à
-  parte. Vetor + tamanho é um par do curso inteiro (BACKES, 2013, cap. 9).
-- **`const`**: `const double precos[]` promete só ler; escrever nele é erro de
-  compilação (DEITEL; DEITEL, 2011, cap. 6).
-- **Elemento sozinho**: `cardapio[0]` vai por valor, como qualquer `double`
-  (DEITEL; DEITEL, 2011, cap. 6).
-- **Custo**: passar um vetor custa um endereço (8 bytes), tenha ele 4 itens ou
-  um milhão. No módulo 06 esse endereço vira **ponteiro** (KERNIGHAN; RITCHIE,
-  1989, cap. 5).
-
-```c
-void reajustar(double precos[], int n, double percentual); // protótipo
-reajustar(cardapio, 4, 10);                                // chamada
-```
-
-> [!WARNING]
-> **`sizeof` dentro da função não dá o tamanho do vetor.** Em `reajustar`,
-> `sizeof(precos)` vale 8, o tamanho de um endereço. O gcc avisa
-> (`-Wsizeof-array-argument`).
-
-### 0039 · Matrizes
-
-- **Matriz**: um **vetor de vetores** (bidimensional). `int vendas[3][4]` são
-  3 linhas, cada uma um vetor de 4 `int` (BACKES, 2013, cap. 6).
-- **Dois índices**: primeiro a linha, depois a coluna, os dois a partir de 0:
-  `vendas[2][0]` é a linha 3, coluna 1 (DEITEL; DEITEL, 2011, cap. 6).
-- **Inicialização**: uma chave por linha; o que falta vira 0. Só a 1ª dimensão
-  pode ser omitida (DEITEL; DEITEL, 2011, cap. 6).
-- **Dois laços aninhados**: o de fora escolhe a linha, o de dentro anda pelas
-  colunas. Para somar por coluna, inverta (BACKES, 2013, cap. 6).
-- **Linha após linha** (*row-major*): a matriz é um bloco contínuo.
-  `vendas[l][s]` é o item `l × 4 + s` da fila (KERNIGHAN; RITCHIE, 1989,
-  cap. 5).
-- **Matriz como parâmetro**: vai o endereço, mas todas as dimensões menos a
-  primeira são obrigatórias (`int m[][4]`), porque a conta acima precisa das
-  colunas (DEITEL; DEITEL, 2011, cap. 6).
-
-```c
-int vendas[3][4];                          // 12 int com lixo
-int m[2][3] = {{1, 2, 3}, {4, 5, 6}};      // uma chave por linha
-int z[2][3] = {{1}, {4, 5}};               // o que falta vira 0: 1 0 0 / 4 5 0
-int t[][2] = {{1, 2}, {3, 4}, {5, 6}};     // só a 1ª dimensão pode sumir: 3 linhas
-```
-
-> [!WARNING]
-> Escreva `m[l][c]`, nunca `m[l, c]`: a vírgula descarta o da esquerda e
-> `m[1, 2]` vira `m[2]`. E não troque os limites: com `int m[3][4]`, linhas
-> até 3 e colunas até 4.
-
-### 0040 · Caracteres
-
-- **Caractere é número**: o `char` é um inteiro de 1 byte, e cada símbolo tem
-  um código na **tabela ASCII**. `'A'` e `65` são o mesmo valor (DEITEL;
-  DEITEL, 2011, cap. 8).
-- **`%c` e `%d`**: o `printf` mostra o símbolo ou o código. Como é número, dá
-  para calcular: `'a' + 1` é `'b'` e `c - '0'` transforma `'7'` em 7 (BACKES,
-  2013, cap. 7).
-- **`<ctype.h>`**: testes (`isalpha`, `isdigit`, `isalnum`, `isspace`,
-  `isupper`, `islower`, `ispunct`) e conversões (`toupper`, `tolower`). O que
-  não é letra volta igual (DEITEL; DEITEL, 2011, cap. 8).
-- **Verdadeiro é não zero**: os testes não devolvem necessariamente 1.
-  Escreva `if (isdigit(c))`, nunca `== 1` (LINUX MAN-PAGES PROJECT, s.d.).
-- **`getchar()`**: lê um caractere e devolve um **`int`**, o código ou
-  **`EOF`** (negativo, fim da entrada). Guarde num `int` (DEITEL; DEITEL, 2011,
-  cap. 8).
-- **Acento**: o "ç" em UTF-8 ocupa dois bytes e não cabe num `char`. Para o
-  `ctype.h`, use `toupper((unsigned char) c)` (CPPREFERENCE, s.d.).
-
-| símbolos | códigos | repare |
-| --- | --- | --- |
-| `'0'` a `'9'` | 48 a 57 | em ordem: `'7' - '0'` = 7 |
-| `'A'` a `'Z'` | 65 a 90 | em ordem alfabética |
-| `'a'` a `'z'` | 97 a 122 | cada minúscula = maiúscula + 32 |
-
-> [!WARNING]
-> Letra não é "tudo entre `'A'` e `'z'`": no meio ficam `[ \ ] ^ _` e a crase.
-> Use `isalpha(c)`. E `'0'` (código 48) não é `0` (o caractere nulo `'\0'`).
-
-### 0041 · Strings
-
-- **String**: vetor de `char` terminado pelo caractere nulo `'\0'` (código 0).
-  O C não tem tipo "string"; o `'\0'` marca o fim, e o que vem depois é
-  ignorado (DEITEL; DEITEL, 2011, cap. 8).
-- **N + 1**: as aspas duplas já põem o `'\0'`. `"Bruna"` ocupa 6 bytes; um
-  texto de N caracteres precisa de N + 1 posições (BACKES, 2013, cap. 7).
-- **Aspas simples e duplas**: `'B'` é um `char` (o número 66); `"B"` é uma
-  string de 2 bytes (BACKES, 2013, cap. 7).
-- **`<string.h>`**: como string é vetor, não se atribui com `=` nem se compara
-  com `==`; usam-se funções. O destino vem primeiro, como em `dest = orig`
-  (KERNIGHAN; RITCHIE, 1989, cap. 5).
-- **`strlen`**: anda até o `'\0'` a cada chamada e devolve `size_t` (`%zu`).
-  Calcule antes do laço, não no `i < strlen(s)` (CPPREFERENCE, s.d.).
-- **Lista de nomes**: uma matriz de `char`, uma string por linha
-  (`char nomes[3][10]`) (CELES; CERQUEIRA; RANGEL, 2016).
-
-```c
-char nome[] = "Bruna";   // 6 posições: 'B' 'r' 'u' 'n' 'a' '\0'
-char cracha[20];         // cabem até 19 caracteres + o '\0'
-char letra = 'B';        // aspas simples: UM char (o número 66)
-char texto[] = "B";      // aspas duplas: uma string, 2 bytes ('B' e '\0')
-```
-
-| função | faz |
-| --- | --- |
-| `strlen(s)` | conta os caracteres até o `'\0'` (sem ele) |
-| `strcpy(dest, orig)` | copia `orig` para dentro de `dest` |
-| `strcat(dest, orig)` | cola `orig` no fim de `dest` |
-| `strcmp(a, b)` | 0 se iguais; negativo se `a` vem antes; positivo se depois |
-
-> [!WARNING]
-> `strcpy` e `strcat` não sabem o tamanho do destino: "Bruna Matos" num
-> `char cracha[8]` é **estouro de buffer**. E `strcmp` devolve **0 quando são
-> iguais**: escreva sempre `== 0`.
-
-### 0042 · Lendo strings
-
-- **`scanf("%s", nome)`**: sem `&`, porque o nome do vetor já é o endereço
-  (assunto 0038). Lê **uma palavra** e para no primeiro espaço (BACKES, 2013,
-  cap. 7).
-- **Largura**: o `scanf` não sabe o tamanho do vetor; limite com
-  `scanf("%39s", nome)` num `char nome[40]` (BACKES, 2013, cap. 7).
-- **`fgets`**: lê uma **linha inteira** até o Enter ou até `tamanho - 1`
-  caracteres, e sempre põe o `'\0'`. Devolve `NULL` se a entrada acabar
-  (LINUX MAN-PAGES PROJECT, s.d.).
-- **O `'\n'` fica**: o `fgets` guarda o Enter, se couber.
-  `strcspn(s, "\n")` dá a posição do primeiro `'\n'` (ou o tamanho), e trocá-la
-  por `'\0'` limpa nos dois casos (LINUX MAN-PAGES PROJECT, s.d.).
-- **Buffer**: o terminal só entrega no Enter, e `scanf`, `getchar` e `fgets`
-  tiram bytes do mesmo buffer: o que um deixa, o próximo pega (DEITEL; DEITEL,
-  2011, cap. 8).
-- **`gets`**: lia sem limite e estourava a memória; foi a brecha do worm de
-  Morris (SPAFFORD, 1989). Saiu no C11: use `fgets`.
-
-```c
-fgets(nome, sizeof(nome), stdin);
-```
-
-```c
-nome[strcspn(nome, "\n")] = '\0';
-```
-
-> [!WARNING]
-> `scanf("%d")` seguido de `fgets` "pula" a leitura: o Enter que sobrou vira
-> uma linha vazia. Descarte o resto com
-> `while ((c = getchar()) != '\n' && c != EOF) {}`. Não use `fflush(stdin)`.
-
-### 0043 · Juntando tudo
-
-- **Laço de leitura com `fgets`**: lê uma linha por vez até devolver `NULL`;
-  é um laço com sentinela (assunto 0025) (LINUX MAN-PAGES PROJECT, s.d.).
-- **Normalizar**: `strcspn` tira o `'\n'` e `tolower` iguala "BOTO" e "boto";
-  o `(unsigned char)` protege contra acento (DEITEL; DEITEL, 2011, cap. 8).
-- **Matriz de `char`**: os nomes dos candidatos, um por linha;
-  `nomes[i]` fica em início + i × 12, por isso `[TAM_NOME]` no parâmetro
-  (BACKES, 2013, cap. 9).
-- **Vetor de contadores**: `votos[i]` conta os votos do candidato `i`, na
-  mesma posição do nome na matriz (DEITEL; DEITEL, 2011, cap. 6).
-- **Busca que devolve -1**: `buscar` devolve a posição ou -1, e o voto
-  inválido cai fora sem `if` especial (BACKES, 2013, cap. 9).
-- **Trocar strings**: como não se atribui com `=`, trocar dois nomes é um
-  `strcpy` triplo com uma auxiliar; o A086 ordena uma lista assim (KERNIGHAN;
-  RITCHIE, 1989, cap. 5).
-
-> [!WARNING]
-> **Empate**: com `>`, ganha quem aparece primeiro na matriz; com `>=`, o
-> último. Decida de propósito. E `"boto "`, com espaço no fim, é inválido:
-> `normalizar` não corta espaços.
-
----
-
-## 2. Exemplos de uso
-
-Cada exemplo compila sozinho. Rode com o comando abaixo dele e compare com a saída no fim do código.
-
-### 0037 · Vetores
+### Exemplos de uso
 
 O relógio contou os passos da semana: 7 gavetas, uma por dia. O laço soma e
 guarda a maior; o recorde está na gaveta 5, o dia 6 do relatório:
@@ -397,7 +218,127 @@ int main(void) {
 gcc ~/LPEDC/material/A074.c -o ~/LPEDC/material/A074 && ~/LPEDC/material/A074
 ```
 
-### 0038 · Vetores e funções
+### Exercícios
+
+**Exercício E217** · ★☆☆
+
+A estação meteorológica de Curitiba registrou as máximas de uma semana:
+19, 23, 21, 17, 15, 18 e 22 graus. Guarde as sete temperaturas num vetor e
+mostre-as de trás para frente, do último dia para o primeiro, cada uma com o
+número do dia (1 a 7).
+
+```text
+Saída esperada:
+Dia 7: 22 graus
+Dia 6: 18 graus
+Dia 5: 15 graus
+Dia 4: 17 graus
+Dia 3: 21 graus
+Dia 2: 23 graus
+Dia 1: 19 graus
+```
+
+**Exercício E219** · ★★☆
+
+Um professor quer saber quem ficou acima da média da turma. Leia as notas de
+5 alunos (números reais), calcule a média e liste o número do aluno (1 a 5)
+e a nota de quem ficou ACIMA dela, com uma casa decimal. Se o scanf falhar,
+mostre "Entrada inválida." e termine com return 1.
+
+```text
+Entrada:
+7.5
+4
+9
+6
+8.5
+```
+
+```text
+Saída esperada:
+Média da turma: 7.00
+Acima da média:
+Aluno 1: 7.5
+Aluno 3: 9.0
+Aluno 5: 8.5
+```
+
+**Exercício E220** · ★★☆
+
+Um app de delivery recebeu 15 avaliações, de 1 a 5 estrelas:
+
+```text
+5 4 5 3 5 1 4 5 2 4 5 3 4 5 5
+```
+
+Conte quantas avaliações teve cada nota e desenhe um histograma com
+asteriscos, da nota 5 para a nota 1. Não use if nem switch para contar: use
+a própria nota como índice de um vetor de contadores.
+
+```text
+Saída esperada:
+Nota 5: ******* (7)
+Nota 4: **** (4)
+Nota 3: ** (2)
+Nota 2: * (1)
+Nota 1: * (1)
+```
+
+**Exercício E222** · ★★★
+
+O Crivo de Eratóstenes acha todos os primos até N sem fazer nenhuma
+divisão. Com N = 50:
+
+```text
+1. Crie um vetor de bool com 51 posições (índices 0 a 50), todas true.
+2. Marque 0 e 1 como false (não são primos).
+3. Para cada p de 2 em diante: se p ainda está true, ele é primo; então
+   marque como false todos os múltiplos de p a partir de p * p
+   (p*p, p*p + p, p*p + 2p, ... até 50).
+4. Pode parar quando p * p passar de 50.
+```
+
+No fim, mostre os primos e quantos são.
+
+```text
+Saída esperada:
+2 3 5 7 11 13 17 19 23 29 31 37 41 43 47
+15 primos até 50
+```
+
+---
+
+## 0038 · Vetores e funções
+
+### Conceito
+
+- **Vetor como argumento**: o C não copia o vetor; passa **o endereço onde ele
+  começa**. Por isso a função mexe no vetor original (DEITEL; DEITEL, 2011,
+  cap. 6).
+- **Sintaxe**: no parâmetro, colchetes vazios (`double precos[]`); na chamada,
+  só o nome (`cardapio`). Um número dentro dos colchetes do parâmetro é
+  ignorado (BACKES, 2013, cap. 9).
+- **Tamanho junto**: só o endereço chega, então o tamanho vai num parâmetro à
+  parte. Vetor + tamanho é um par do curso inteiro (BACKES, 2013, cap. 9).
+- **`const`**: `const double precos[]` promete só ler; escrever nele é erro de
+  compilação (DEITEL; DEITEL, 2011, cap. 6).
+- **Elemento sozinho**: `cardapio[0]` vai por valor, como qualquer `double`
+  (DEITEL; DEITEL, 2011, cap. 6).
+- **Custo**: passar um vetor custa um endereço (8 bytes), tenha ele 4 itens ou
+  um milhão. No módulo 06 esse endereço vira **ponteiro** (KERNIGHAN; RITCHIE,
+  1989, cap. 5).
+
+```c
+void reajustar(double precos[], int n, double percentual); // protótipo
+reajustar(cardapio, 4, 10);                                // chamada
+```
+
+> [!WARNING]
+> **`sizeof` dentro da função não dá o tamanho do vetor.** Em `reajustar`,
+> `sizeof(precos)` vale 8, o tamanho de um endereço. O gcc avisa
+> (`-Wsizeof-array-argument`).
+
+### Exemplos de uso
 
 A lanchonete reajusta o cardápio em 10%. A função recebe o endereço de
 `cardapio` em `precos`, e cada `precos[i]` é a mesma gaveta que `cardapio[i]`:
@@ -546,7 +487,135 @@ int main(void) {
 gcc ~/LPEDC/material/A076.c -o ~/LPEDC/material/A076 && ~/LPEDC/material/A076
 ```
 
-### 0039 · Matrizes
+### Exercícios
+
+**Exercício E223** · ★☆☆
+
+O time da várzea marcou estes gols nas 8 rodadas do campeonato:
+
+```text
+3 1 0 2 4 1 2 3
+```
+
+Escreva duas funções e use as duas no main:
+
+```text
+int soma(const int v[], int n);       devolve a soma dos n itens
+double media(const int v[], int n);   devolve a média (use a soma)
+```
+
+```text
+Saída esperada:
+Gols no campeonato: 16
+Média por rodada: 2.00
+```
+
+**Exercício E225** · ★★☆
+
+A função mexer abaixo recebe um vetor e um int. Uma das duas mudanças que
+ela faz chega ao main; a outra se perde. Mostre isso na tela:
+
+```text
+1. No fim de mexer, acrescente um printf que mostre v[0], v[1], v[2] e x
+   (formato "dentro: ...", como na saída esperada).
+2. No main, troque os dois printf pelos do formato "fora: ...".
+3. Escreva void vezes_dez(int v[], int pos), que multiplica por 10 só a
+   gaveta pos do vetor, e use no fim do main para multiplicar a[2] de
+   verdade (coisa que mexer(a, a[2]) não fez).
+```
+
+```text
+Saída esperada:
+dentro: v = 10 50 3, x = 50
+fora: a = 10 50 3, b = 5
+dentro: v = 100 30 3, x = 30
+fora: a = 100 30 3
+depois de vezes_dez: a = 100 30 30
+```
+
+**Exercício E226** · ★★☆
+
+As contas de luz do ano (janeiro a dezembro), em reais:
+
+```text
+182.40 175.10 190.75 168.30 150.20 141.90
+139.60 144.80 158.25 171.40 189.90 205.35
+```
+
+Escreva três funções, todas recebendo o vetor e o tamanho:
+
+```text
+int indice_do_maior(const double v[], int n);
+double media(const double v[], int n);
+int contar_acima(const double v[], int n, double limite);
+```
+
+e use as três para mostrar:
+
+```text
+Saída esperada:
+Mês mais caro: 12 (R$ 205.35)
+Média mensal: R$ 168.16
+Meses acima da média: 7
+```
+
+**Exercício E228** · ★★★
+
+Uma playlist guarda os números das faixas: 11 22 33 44 55. Escreva:
+
+```text
+void mostrar(const int v[], int n);
+void inverter(int v[], int n);    inverte NO PRÓPRIO vetor, sem criar
+                                  outro: troca o 1º com o último, o 2º
+                                  com o penúltimo...
+void rotacionar(int v[], int n);  a 1ª faixa vai para o fim e as outras
+                                  andam uma casa para a esquerda
+```
+
+No main: mostre a playlist, inverta e mostre, depois rotacione DUAS vezes
+e mostre.
+
+```text
+Saída esperada:
+11 22 33 44 55
+55 44 33 22 11
+33 22 11 55 44
+```
+
+---
+
+## 0039 · Matrizes
+
+### Conceito
+
+- **Matriz**: um **vetor de vetores** (bidimensional). `int vendas[3][4]` são
+  3 linhas, cada uma um vetor de 4 `int` (BACKES, 2013, cap. 6).
+- **Dois índices**: primeiro a linha, depois a coluna, os dois a partir de 0:
+  `vendas[2][0]` é a linha 3, coluna 1 (DEITEL; DEITEL, 2011, cap. 6).
+- **Inicialização**: uma chave por linha; o que falta vira 0. Só a 1ª dimensão
+  pode ser omitida (DEITEL; DEITEL, 2011, cap. 6).
+- **Dois laços aninhados**: o de fora escolhe a linha, o de dentro anda pelas
+  colunas. Para somar por coluna, inverta (BACKES, 2013, cap. 6).
+- **Linha após linha** (*row-major*): a matriz é um bloco contínuo.
+  `vendas[l][s]` é o item `l × 4 + s` da fila (KERNIGHAN; RITCHIE, 1989,
+  cap. 5).
+- **Matriz como parâmetro**: vai o endereço, mas todas as dimensões menos a
+  primeira são obrigatórias (`int m[][4]`), porque a conta acima precisa das
+  colunas (DEITEL; DEITEL, 2011, cap. 6).
+
+```c
+int vendas[3][4];                          // 12 int com lixo
+int m[2][3] = {{1, 2, 3}, {4, 5, 6}};      // uma chave por linha
+int z[2][3] = {{1}, {4, 5}};               // o que falta vira 0: 1 0 0 / 4 5 0
+int t[][2] = {{1, 2}, {3, 4}, {5, 6}};     // só a 1ª dimensão pode sumir: 3 linhas
+```
+
+> [!WARNING]
+> Escreva `m[l][c]`, nunca `m[l, c]`: a vírgula descarta o da esquerda e
+> `m[1, 2]` vira `m[2]`. E não troque os limites: com `int m[3][4]`, linhas
+> até 3 e colunas até 4.
+
+### Exemplos de uso
 
 Uma rede de açaí compara 3 lojas em 4 semanas. As 12 células ficam
 enfileiradas, linha após linha; `vendas[1][2]` (o 14) está na posição
@@ -714,7 +783,138 @@ int main(void) {
 gcc ~/LPEDC/material/A078.c -o ~/LPEDC/material/A078 && ~/LPEDC/material/A078
 ```
 
-### 0040 · Caracteres
+### Exercícios
+
+**Exercício E229** · ★☆☆
+
+Um quadrado mágico 3x3 tem a mesma soma em todas as linhas, colunas e nas
+duas diagonais. Guarde este numa matriz, mostre-o e calcule a soma da
+diagonal principal (de cima à esquerda até embaixo à direita) e a da
+diagonal secundária (de cima à direita até embaixo à esquerda):
+
+```text
+2 7 6
+9 5 1
+4 3 8
+```
+
+```text
+Saída esperada:
+2 7 6
+9 5 1
+4 3 8
+Diagonal principal: 15
+Diagonal secundária: 15
+```
+
+**Exercício E231** · ★★☆
+
+A academia guarda, numa matriz 2x3, quantos alunos foram em cada turno
+(linhas: segunda e terça; colunas: manhã, tarde e noite):
+
+```text
+40 25 60
+35 30 55
+```
+
+O gerente quer a planilha "deitada": uma linha por turno e uma coluna por
+dia. Isso é a TRANSPOSTA. Monte uma matriz 3x2 t em que t[c][l] = m[l][c]
+e mostre as duas.
+
+```text
+Saída esperada:
+Original (2x3):
+40 25 60
+35 30 55
+Transposta (3x2):
+40 35
+25 30
+60 55
+```
+
+**Exercício E232** · ★★☆
+
+Uma sala de cinema pequena tem 5 fileiras (A a E) de 6 poltronas. Na matriz,
+1 é ocupada e 0 é livre:
+
+```text
+1 1 0 1 1 1
+0 0 1 1 0 0
+1 1 1 1 1 1
+0 1 0 0 0 1
+1 0 0 1 1 0
+```
+
+Mostre o mapa com 'X' para ocupada e '.' para livre, o número de lugares
+livres em cada fileira e a fileira com MAIS lugares livres (em caso de
+empate, a primeira).
+
+```text
+Saída esperada:
+A X X . X X X  livres: 1
+B . . X X . .  livres: 4
+C X X X X X X  livres: 0
+D . X . . . X  livres: 4
+E X . . X X .  livres: 3
+Melhor fileira: B
+```
+
+**Exercício E234** · ★★★
+
+Campo minado! Num campo 4x5, 1 é bomba e 0 é livre:
+
+```text
+0 1 0 0 0
+0 0 0 1 0
+1 1 0 0 0
+0 0 0 0 1
+```
+
+Mostre o campo "aberto": '*' onde há bomba e, nas outras casas, quantas
+bombas existem nas até 8 casas vizinhas (incluindo as diagonais).
+
+```text
+Saída esperada:
+1 * 2 1 1
+3 3 3 * 1
+* * 2 2 2
+2 2 1 1 *
+```
+
+---
+
+## 0040 · Caracteres
+
+### Conceito
+
+- **Caractere é número**: o `char` é um inteiro de 1 byte, e cada símbolo tem
+  um código na **tabela ASCII**. `'A'` e `65` são o mesmo valor (DEITEL;
+  DEITEL, 2011, cap. 8).
+- **`%c` e `%d`**: o `printf` mostra o símbolo ou o código. Como é número, dá
+  para calcular: `'a' + 1` é `'b'` e `c - '0'` transforma `'7'` em 7 (BACKES,
+  2013, cap. 7).
+- **`<ctype.h>`**: testes (`isalpha`, `isdigit`, `isalnum`, `isspace`,
+  `isupper`, `islower`, `ispunct`) e conversões (`toupper`, `tolower`). O que
+  não é letra volta igual (DEITEL; DEITEL, 2011, cap. 8).
+- **Verdadeiro é não zero**: os testes não devolvem necessariamente 1.
+  Escreva `if (isdigit(c))`, nunca `== 1` (LINUX MAN-PAGES PROJECT, s.d.).
+- **`getchar()`**: lê um caractere e devolve um **`int`**, o código ou
+  **`EOF`** (negativo, fim da entrada). Guarde num `int` (DEITEL; DEITEL, 2011,
+  cap. 8).
+- **Acento**: o "ç" em UTF-8 ocupa dois bytes e não cabe num `char`. Para o
+  `ctype.h`, use `toupper((unsigned char) c)` (CPPREFERENCE, s.d.).
+
+| símbolos | códigos | repare |
+| --- | --- | --- |
+| `'0'` a `'9'` | 48 a 57 | em ordem: `'7' - '0'` = 7 |
+| `'A'` a `'Z'` | 65 a 90 | em ordem alfabética |
+| `'a'` a `'z'` | 97 a 122 | cada minúscula = maiúscula + 32 |
+
+> [!WARNING]
+> Letra não é "tudo entre `'A'` e `'z'`": no meio ficam `[ \ ] ^ _` e a crase.
+> Use `isalpha(c)`. E `'0'` (código 48) não é `0` (o caractere nulo `'\0'`).
+
+### Exemplos de uso
 
 A placa `bra2e19` vira `BRA2E19`: o `toupper` troca cada minúscula pela
 maiúscula, 32 posições antes na tabela, e os dígitos passam sem mudar:
@@ -854,7 +1054,149 @@ int main(void) {
 gcc ~/LPEDC/material/A080.c -o ~/LPEDC/material/A080 && ~/LPEDC/material/A080
 ```
 
-### 0041 · Strings
+### Exercícios
+
+**Exercício E235** · ★☆☆
+
+Mostre o código ASCII de cada caractere do vetor abaixo, um por linha, no
+formato do exemplo. Depois, mostre os caracteres dos códigos 72, 105 e 33,
+colados, numa linha só (descubra a mensagem!).
+
+```text
+char simbolos[] = {'A', 'Z', 'a', 'z', '0', '9', ' ', '@'};
+```
+
+```text
+Saída esperada:
+'A' = 65
+'Z' = 90
+'a' = 97
+'z' = 122
+'0' = 48
+'9' = 57
+' ' = 32
+'@' = 64
+Hi!
+```
+
+**Exercício E237** · ★★☆
+
+A cifra de César troca cada letra pela que fica K posições depois no
+alfabeto, dando a volta no fim (com K = 3: A vira D, X vira A, Z vira C).
+O que não é letra fica como está.
+
+Cifre a mensagem abaixo com K = 3, mostre, depois decifre (ande 3 para
+trás) e mostre de novo:
+
+```text
+char msg[] = {'Z', 'E', 'B', 'R', 'A', ' ', 'A', 'Z', 'U', 'L'};
+```
+
+```text
+Saída esperada:
+Cifrada: CHEUD DCXO
+Decifrada: ZEBRA AZUL
+```
+
+**Exercício E238** · ★★☆
+
+Um formulário pede o CEP. A pessoa pode digitar com ou sem o traço:
+"69050-010" e "69050010" valem. Leia a linha caractere por caractere com
+getchar, até o Enter (ou EOF), e:
+
+```text
+- guarde os dígitos num vetor char cep[8];
+- ignore o '-';
+- qualquer outro caractere torna o CEP inválido;
+- o CEP só é válido com exatamente 8 dígitos.
+```
+
+```text
+Entrada:
+69050-010
+```
+
+```text
+Saída esperada:
+CEP válido: 69050010
+```
+
+```text
+Entrada:
+6905-00100
+```
+
+```text
+Saída esperada:
+CEP inválido.
+```
+
+**Exercício E240** · ★★★
+
+Reescreva cinco funções do ctype.h usando só a tabela ASCII (nada de
+ctype.h dentro delas):
+
+```text
+bool meu_isdigit(int c);
+bool meu_isupper(int c);
+bool meu_islower(int c);
+bool meu_isalpha(int c);   use as duas anteriores
+int meu_toupper(int c);    devolve c igual se não for minúscula
+```
+
+Depois, prove que estão certas: para TODOS os códigos de 0 a 127, compare
+cada uma com a original do ctype.h e conte as diferenças. Atenção: a
+original devolve "diferente de zero" para verdadeiro, não 1. Compare a
+verdade, não o número.
+
+```text
+Saída esperada:
+meu_toupper('q') = Q
+meu_toupper('7') = 7
+Diferenças em 128 códigos: 0
+```
+
+---
+
+## 0041 · Strings
+
+### Conceito
+
+- **String**: vetor de `char` terminado pelo caractere nulo `'\0'` (código 0).
+  O C não tem tipo "string"; o `'\0'` marca o fim, e o que vem depois é
+  ignorado (DEITEL; DEITEL, 2011, cap. 8).
+- **N + 1**: as aspas duplas já põem o `'\0'`. `"Bruna"` ocupa 6 bytes; um
+  texto de N caracteres precisa de N + 1 posições (BACKES, 2013, cap. 7).
+- **Aspas simples e duplas**: `'B'` é um `char` (o número 66); `"B"` é uma
+  string de 2 bytes (BACKES, 2013, cap. 7).
+- **`<string.h>`**: como string é vetor, não se atribui com `=` nem se compara
+  com `==`; usam-se funções. O destino vem primeiro, como em `dest = orig`
+  (KERNIGHAN; RITCHIE, 1989, cap. 5).
+- **`strlen`**: anda até o `'\0'` a cada chamada e devolve `size_t` (`%zu`).
+  Calcule antes do laço, não no `i < strlen(s)` (CPPREFERENCE, s.d.).
+- **Lista de nomes**: uma matriz de `char`, uma string por linha
+  (`char nomes[3][10]`) (CELES; CERQUEIRA; RANGEL, 2016).
+
+```c
+char nome[] = "Bruna";   // 6 posições: 'B' 'r' 'u' 'n' 'a' '\0'
+char cracha[20];         // cabem até 19 caracteres + o '\0'
+char letra = 'B';        // aspas simples: UM char (o número 66)
+char texto[] = "B";      // aspas duplas: uma string, 2 bytes ('B' e '\0')
+```
+
+| função | faz |
+| --- | --- |
+| `strlen(s)` | conta os caracteres até o `'\0'` (sem ele) |
+| `strcpy(dest, orig)` | copia `orig` para dentro de `dest` |
+| `strcat(dest, orig)` | cola `orig` no fim de `dest` |
+| `strcmp(a, b)` | 0 se iguais; negativo se `a` vem antes; positivo se depois |
+
+> [!WARNING]
+> `strcpy` e `strcat` não sabem o tamanho do destino: "Bruna Matos" num
+> `char cracha[8]` é **estouro de buffer**. E `strcmp` devolve **0 quando são
+> iguais**: escreva sempre `== 0`.
+
+### Exemplos de uso
 
 A recepção monta o crachá juntando nome e sobrenome. No vetor de 20, as 11
 primeiras posições guardam "Bruna Matos", a 12ª o `'\0'`, e o resto não
@@ -987,7 +1329,136 @@ int main(void) {
 gcc ~/LPEDC/material/A082.c -o ~/LPEDC/material/A082 && ~/LPEDC/material/A082
 ```
 
-### 0042 · Lendo strings
+### Exercícios
+
+**Exercício E241** · ★☆☆
+
+Declare char cidade[] = "Manaus"; e mostre cada posição do vetor, INCLUINDO
+a do '\0', com o caractere e o código. Para o '\0', mostre \0 no lugar do
+caractere. No fim, mostre strlen e sizeof.
+
+```text
+Saída esperada:
+[0] M 77
+[1] a 97
+[2] n 110
+[3] a 97
+[4] u 117
+[5] s 115
+[6] \0 0
+strlen = 6, sizeof = 7
+```
+
+**Exercício E243** · ★★☆
+
+Implemente, sem usar o string.h, as suas versões de três funções:
+
+```text
+int meu_strlen(const char s[]);
+void meu_strcat(char dest[], const char orig[]);
+int meu_strcmp(const char a[], const char b[]);
+```
+
+meu_strcmp devolve 0 se forem iguais, um negativo se a vem antes e um
+positivo se a vem depois. No main, teste:
+
+```text
+char usuario[30] = "joao";
+meu_strcat(usuario, ".silva");
+```
+
+```text
+Saída esperada:
+joao.silva (10)
+igual a "joao.silva"? sim
+"ana" antes de "bia"? sim
+"bia" antes de "bianca"? sim
+```
+
+**Exercício E244** · ★★☆
+
+Um palíndromo se lê igual nos dois sentidos: "arara", "osso". Escreva
+
+```text
+bool eh_palindromo(const char s[]);
+```
+
+que ignora a diferença entre maiúsculas e minúsculas ("Reviver" vale) e
+teste com as palavras do vetor de strings abaixo (cada linha da matriz de
+char é uma string):
+
+```text
+char palavras[5][12] = {"arara", "Reviver", "carro", "Osso", "A"};
+```
+
+```text
+Saída esperada:
+arara: sim
+Reviver: sim
+carro: não
+Osso: sim
+A: sim
+```
+
+**Exercício E246** · ★★★
+
+Uma biblioteca quer padronizar os títulos dos livros: a primeira letra de
+cada palavra em maiúscula e as outras em minúscula. Escreva
+
+```text
+int capitalizar(char s[]);
+```
+
+que altera a string no lugar e devolve quantas palavras ela tem. Palavras
+são separadas por um ou mais espaços (pode haver espaço no começo e no fim).
+
+```text
+char titulo[] = "  o SENHOR   dos aneis ";
+```
+
+```text
+Saída esperada:
+[  O Senhor   Dos Aneis ]
+4 palavras
+```
+
+---
+
+## 0042 · Lendo strings
+
+### Conceito
+
+- **`scanf("%s", nome)`**: sem `&`, porque o nome do vetor já é o endereço
+  (assunto 0038). Lê **uma palavra** e para no primeiro espaço (BACKES, 2013,
+  cap. 7).
+- **Largura**: o `scanf` não sabe o tamanho do vetor; limite com
+  `scanf("%39s", nome)` num `char nome[40]` (BACKES, 2013, cap. 7).
+- **`fgets`**: lê uma **linha inteira** até o Enter ou até `tamanho - 1`
+  caracteres, e sempre põe o `'\0'`. Devolve `NULL` se a entrada acabar
+  (LINUX MAN-PAGES PROJECT, s.d.).
+- **O `'\n'` fica**: o `fgets` guarda o Enter, se couber.
+  `strcspn(s, "\n")` dá a posição do primeiro `'\n'` (ou o tamanho), e trocá-la
+  por `'\0'` limpa nos dois casos (LINUX MAN-PAGES PROJECT, s.d.).
+- **Buffer**: o terminal só entrega no Enter, e `scanf`, `getchar` e `fgets`
+  tiram bytes do mesmo buffer: o que um deixa, o próximo pega (DEITEL; DEITEL,
+  2011, cap. 8).
+- **`gets`**: lia sem limite e estourava a memória; foi a brecha do worm de
+  Morris (SPAFFORD, 1989). Saiu no C11: use `fgets`.
+
+```c
+fgets(nome, sizeof(nome), stdin);
+```
+
+```c
+nome[strcspn(nome, "\n")] = '\0';
+```
+
+> [!WARNING]
+> `scanf("%d")` seguido de `fgets` "pula" a leitura: o Enter que sobrou vira
+> uma linha vazia. Descarte o resto com
+> `while ((c = getchar()) != '\n' && c != EOF) {}`. Não use `fflush(stdin)`.
+
+### Exemplos de uso
 
 No cadastro, a pessoa digita "Maria Clara" num `char nome[40]`. O `fgets` copia
 os 11 caracteres, o `'\n'` e o `'\0'`; o `strcspn` acha o `'\n'` na posição 11,
@@ -1116,7 +1587,138 @@ int main(void) {
 gcc ~/LPEDC/material/A084.c -o ~/LPEDC/material/A084 && ~/LPEDC/material/A084
 ```
 
-### 0043 · Juntando tudo
+### Exercícios
+
+**Exercício E248** · ★☆☆
+
+O programa abaixo faz três leituras seguidas da mesma linha: dois scanf e um
+fgets. Troque o printf final por um printf depois de CADA leitura, que
+mostre o que ela pegou entre colchetes e o strlen. No fgets, mostre o
+strlen antes e depois de tirar o '\n'. Rode digitando a linha
+
+```text
+Maria Clara Souza
+```
+
+```text
+Saída esperada (depois da linha digitada):
+1ª leitura: [Maria] (5)
+2ª leitura: [Clar] (4)
+fgets: 8 com o '\n', limpo: [a Souza] (7)
+```
+
+Para testar sem digitar: printf 'Maria Clara Souza\n' | ~/LPEDC/rodar
+seguido do caminho deste arquivo.
+
+**Exercício E249** · ★★☆
+
+Leia a quantidade de ingressos (um inteiro, com scanf) e, na linha seguinte,
+o nome completo do comprador (pode ter espaços, use fgets e tire o '\n').
+Depois mostre a quantidade e o nome. Cuidado: o '\n' que sobra depois do
+scanf não pode atrapalhar a leitura do nome.
+
+```text
+Entrada:
+2
+Ana Lima
+```
+
+```text
+Saída esperada:
+2 ingresso(s) para Ana Lima
+```
+
+**Exercício E250** · ★★☆
+
+O cadastro do banco exige uma senha com pelo menos 8 caracteres, uma letra
+maiúscula, uma minúscula e um dígito (espaço é permitido). Leia a senha com
+fgets, tire o '\n' e mostre, para cada regra que falhar, uma linha "Falta:".
+Se nenhuma falhar, mostre "Senha forte.".
+
+```text
+Entrada:
+banana12
+```
+
+```text
+Saída esperada:
+Falta: letra maiúscula
+```
+
+```text
+Entrada:
+abc
+```
+
+```text
+Saída esperada:
+Falta: 8 caracteres (tem 3)
+Falta: letra maiúscula
+Falta: dígito
+```
+
+```text
+Entrada:
+Pao de Queijo 1
+```
+
+```text
+Saída esperada:
+Senha forte.
+```
+
+**Exercício E252** · ★★★
+
+O programa abaixo lê com fgets num vetor de só 6 bytes, num laço, até a
+entrada acabar. Uma linha longa chega em pedaços, e cada pedaço parece uma
+linha nova. Sem aumentar o vetor s, mude o programa para que ele:
+
+```text
+1. mostre cada pedaço numerado, entre colchetes, com o '\n' (quando vier)
+   escrito como \n, sem quebrar a linha da tela;
+2. perceba quando um pedaço fecha uma linha (termina em '\n') e mostre o
+   número da linha e quantas letras ela teve, somando os pedaços;
+3. no fim, mostre quantas leituras e quantas linhas de verdade houve.
+```
+
+Rode com printf 'abacaxi\nuva\n' | ~/LPEDC/rodar seguido do caminho deste
+arquivo.
+
+```text
+Saída esperada:
+pedaço 1: [abaca]
+pedaço 2: [xi\n] fim da linha 1 (7 letras)
+pedaço 3: [uva\n] fim da linha 2 (3 letras)
+3 leituras, 2 linhas
+```
+
+---
+
+## 0043 · Juntando tudo
+
+### Conceito
+
+- **Laço de leitura com `fgets`**: lê uma linha por vez até devolver `NULL`;
+  é um laço com sentinela (assunto 0025) (LINUX MAN-PAGES PROJECT, s.d.).
+- **Normalizar**: `strcspn` tira o `'\n'` e `tolower` iguala "BOTO" e "boto";
+  o `(unsigned char)` protege contra acento (DEITEL; DEITEL, 2011, cap. 8).
+- **Matriz de `char`**: os nomes dos candidatos, um por linha;
+  `nomes[i]` fica em início + i × 12, por isso `[TAM_NOME]` no parâmetro
+  (BACKES, 2013, cap. 9).
+- **Vetor de contadores**: `votos[i]` conta os votos do candidato `i`, na
+  mesma posição do nome na matriz (DEITEL; DEITEL, 2011, cap. 6).
+- **Busca que devolve -1**: `buscar` devolve a posição ou -1, e o voto
+  inválido cai fora sem `if` especial (BACKES, 2013, cap. 9).
+- **Trocar strings**: como não se atribui com `=`, trocar dois nomes é um
+  `strcpy` triplo com uma auxiliar; o A086 ordena uma lista assim (KERNIGHAN;
+  RITCHIE, 1989, cap. 5).
+
+> [!WARNING]
+> **Empate**: com `>`, ganha quem aparece primeiro na matriz; com `>=`, o
+> último. Decida de propósito. E `"boto "`, com espaço no fim, é inválido:
+> `normalizar` não corta espaços.
+
+### Exemplos de uso
 
 A enquete do mascote da festa junina: arara, boto ou capivara. Cada linha lida
 passa pela mesma esteira: normaliza, procura na matriz e soma 1. "Tatu" vai
@@ -1344,594 +1946,7 @@ int main(void) {
 gcc ~/LPEDC/material/A086.c -o ~/LPEDC/material/A086 && ~/LPEDC/material/A086
 ```
 
----
-
-## 3. Exercícios práticos
-
-Cada exercício é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta. Compile como os exemplos: `gcc ~/LPEDC/material/E007.c -o ~/LPEDC/material/E007 && ~/LPEDC/material/E007`. Resoluções em `_respostas/05-vetores-e-strings/`.
-
-### 0037 · Vetores
-
-**Exercício E217** · ★☆☆
-
-A estação meteorológica de Curitiba registrou as máximas de uma semana:
-19, 23, 21, 17, 15, 18 e 22 graus. Guarde as sete temperaturas num vetor e
-mostre-as de trás para frente, do último dia para o primeiro, cada uma com o
-número do dia (1 a 7).
-
-```text
-Saída esperada:
-Dia 7: 22 graus
-Dia 6: 18 graus
-Dia 5: 15 graus
-Dia 4: 17 graus
-Dia 3: 21 graus
-Dia 2: 23 graus
-Dia 1: 19 graus
-```
-
-**Exercício E219** · ★★☆
-
-Um professor quer saber quem ficou acima da média da turma. Leia as notas de
-5 alunos (números reais), calcule a média e liste o número do aluno (1 a 5)
-e a nota de quem ficou ACIMA dela, com uma casa decimal. Se o scanf falhar,
-mostre "Entrada inválida." e termine com return 1.
-
-```text
-Entrada:
-7.5
-4
-9
-6
-8.5
-```
-
-```text
-Saída esperada:
-Média da turma: 7.00
-Acima da média:
-Aluno 1: 7.5
-Aluno 3: 9.0
-Aluno 5: 8.5
-```
-
-**Exercício E220** · ★★☆
-
-Um app de delivery recebeu 15 avaliações, de 1 a 5 estrelas:
-
-```text
-5 4 5 3 5 1 4 5 2 4 5 3 4 5 5
-```
-
-Conte quantas avaliações teve cada nota e desenhe um histograma com
-asteriscos, da nota 5 para a nota 1. Não use if nem switch para contar: use
-a própria nota como índice de um vetor de contadores.
-
-```text
-Saída esperada:
-Nota 5: ******* (7)
-Nota 4: **** (4)
-Nota 3: ** (2)
-Nota 2: * (1)
-Nota 1: * (1)
-```
-
-**Exercício E222** · ★★★
-
-O Crivo de Eratóstenes acha todos os primos até N sem fazer nenhuma
-divisão. Com N = 50:
-
-```text
-1. Crie um vetor de bool com 51 posições (índices 0 a 50), todas true.
-2. Marque 0 e 1 como false (não são primos).
-3. Para cada p de 2 em diante: se p ainda está true, ele é primo; então
-   marque como false todos os múltiplos de p a partir de p * p
-   (p*p, p*p + p, p*p + 2p, ... até 50).
-4. Pode parar quando p * p passar de 50.
-```
-
-No fim, mostre os primos e quantos são.
-
-```text
-Saída esperada:
-2 3 5 7 11 13 17 19 23 29 31 37 41 43 47
-15 primos até 50
-```
-
-### 0038 · Vetores e funções
-
-**Exercício E223** · ★☆☆
-
-O time da várzea marcou estes gols nas 8 rodadas do campeonato:
-
-```text
-3 1 0 2 4 1 2 3
-```
-
-Escreva duas funções e use as duas no main:
-
-```text
-int soma(const int v[], int n);       devolve a soma dos n itens
-double media(const int v[], int n);   devolve a média (use a soma)
-```
-
-```text
-Saída esperada:
-Gols no campeonato: 16
-Média por rodada: 2.00
-```
-
-**Exercício E225** · ★★☆
-
-A função mexer abaixo recebe um vetor e um int. Uma das duas mudanças que
-ela faz chega ao main; a outra se perde. Mostre isso na tela:
-
-```text
-1. No fim de mexer, acrescente um printf que mostre v[0], v[1], v[2] e x
-   (formato "dentro: ...", como na saída esperada).
-2. No main, troque os dois printf pelos do formato "fora: ...".
-3. Escreva void vezes_dez(int v[], int pos), que multiplica por 10 só a
-   gaveta pos do vetor, e use no fim do main para multiplicar a[2] de
-   verdade (coisa que mexer(a, a[2]) não fez).
-```
-
-```text
-Saída esperada:
-dentro: v = 10 50 3, x = 50
-fora: a = 10 50 3, b = 5
-dentro: v = 100 30 3, x = 30
-fora: a = 100 30 3
-depois de vezes_dez: a = 100 30 30
-```
-
-**Exercício E226** · ★★☆
-
-As contas de luz do ano (janeiro a dezembro), em reais:
-
-```text
-182.40 175.10 190.75 168.30 150.20 141.90
-139.60 144.80 158.25 171.40 189.90 205.35
-```
-
-Escreva três funções, todas recebendo o vetor e o tamanho:
-
-```text
-int indice_do_maior(const double v[], int n);
-double media(const double v[], int n);
-int contar_acima(const double v[], int n, double limite);
-```
-
-e use as três para mostrar:
-
-```text
-Saída esperada:
-Mês mais caro: 12 (R$ 205.35)
-Média mensal: R$ 168.16
-Meses acima da média: 7
-```
-
-**Exercício E228** · ★★★
-
-Uma playlist guarda os números das faixas: 11 22 33 44 55. Escreva:
-
-```text
-void mostrar(const int v[], int n);
-void inverter(int v[], int n);    inverte NO PRÓPRIO vetor, sem criar
-                                  outro: troca o 1º com o último, o 2º
-                                  com o penúltimo...
-void rotacionar(int v[], int n);  a 1ª faixa vai para o fim e as outras
-                                  andam uma casa para a esquerda
-```
-
-No main: mostre a playlist, inverta e mostre, depois rotacione DUAS vezes
-e mostre.
-
-```text
-Saída esperada:
-11 22 33 44 55
-55 44 33 22 11
-33 22 11 55 44
-```
-
-### 0039 · Matrizes
-
-**Exercício E229** · ★☆☆
-
-Um quadrado mágico 3x3 tem a mesma soma em todas as linhas, colunas e nas
-duas diagonais. Guarde este numa matriz, mostre-o e calcule a soma da
-diagonal principal (de cima à esquerda até embaixo à direita) e a da
-diagonal secundária (de cima à direita até embaixo à esquerda):
-
-```text
-2 7 6
-9 5 1
-4 3 8
-```
-
-```text
-Saída esperada:
-2 7 6
-9 5 1
-4 3 8
-Diagonal principal: 15
-Diagonal secundária: 15
-```
-
-**Exercício E231** · ★★☆
-
-A academia guarda, numa matriz 2x3, quantos alunos foram em cada turno
-(linhas: segunda e terça; colunas: manhã, tarde e noite):
-
-```text
-40 25 60
-35 30 55
-```
-
-O gerente quer a planilha "deitada": uma linha por turno e uma coluna por
-dia. Isso é a TRANSPOSTA. Monte uma matriz 3x2 t em que t[c][l] = m[l][c]
-e mostre as duas.
-
-```text
-Saída esperada:
-Original (2x3):
-40 25 60
-35 30 55
-Transposta (3x2):
-40 35
-25 30
-60 55
-```
-
-**Exercício E232** · ★★☆
-
-Uma sala de cinema pequena tem 5 fileiras (A a E) de 6 poltronas. Na matriz,
-1 é ocupada e 0 é livre:
-
-```text
-1 1 0 1 1 1
-0 0 1 1 0 0
-1 1 1 1 1 1
-0 1 0 0 0 1
-1 0 0 1 1 0
-```
-
-Mostre o mapa com 'X' para ocupada e '.' para livre, o número de lugares
-livres em cada fileira e a fileira com MAIS lugares livres (em caso de
-empate, a primeira).
-
-```text
-Saída esperada:
-A X X . X X X  livres: 1
-B . . X X . .  livres: 4
-C X X X X X X  livres: 0
-D . X . . . X  livres: 4
-E X . . X X .  livres: 3
-Melhor fileira: B
-```
-
-**Exercício E234** · ★★★
-
-Campo minado! Num campo 4x5, 1 é bomba e 0 é livre:
-
-```text
-0 1 0 0 0
-0 0 0 1 0
-1 1 0 0 0
-0 0 0 0 1
-```
-
-Mostre o campo "aberto": '*' onde há bomba e, nas outras casas, quantas
-bombas existem nas até 8 casas vizinhas (incluindo as diagonais).
-
-```text
-Saída esperada:
-1 * 2 1 1
-3 3 3 * 1
-* * 2 2 2
-2 2 1 1 *
-```
-
-### 0040 · Caracteres
-
-**Exercício E235** · ★☆☆
-
-Mostre o código ASCII de cada caractere do vetor abaixo, um por linha, no
-formato do exemplo. Depois, mostre os caracteres dos códigos 72, 105 e 33,
-colados, numa linha só (descubra a mensagem!).
-
-```text
-char simbolos[] = {'A', 'Z', 'a', 'z', '0', '9', ' ', '@'};
-```
-
-```text
-Saída esperada:
-'A' = 65
-'Z' = 90
-'a' = 97
-'z' = 122
-'0' = 48
-'9' = 57
-' ' = 32
-'@' = 64
-Hi!
-```
-
-**Exercício E237** · ★★☆
-
-A cifra de César troca cada letra pela que fica K posições depois no
-alfabeto, dando a volta no fim (com K = 3: A vira D, X vira A, Z vira C).
-O que não é letra fica como está.
-
-Cifre a mensagem abaixo com K = 3, mostre, depois decifre (ande 3 para
-trás) e mostre de novo:
-
-```text
-char msg[] = {'Z', 'E', 'B', 'R', 'A', ' ', 'A', 'Z', 'U', 'L'};
-```
-
-```text
-Saída esperada:
-Cifrada: CHEUD DCXO
-Decifrada: ZEBRA AZUL
-```
-
-**Exercício E238** · ★★☆
-
-Um formulário pede o CEP. A pessoa pode digitar com ou sem o traço:
-"69050-010" e "69050010" valem. Leia a linha caractere por caractere com
-getchar, até o Enter (ou EOF), e:
-
-```text
-- guarde os dígitos num vetor char cep[8];
-- ignore o '-';
-- qualquer outro caractere torna o CEP inválido;
-- o CEP só é válido com exatamente 8 dígitos.
-```
-
-```text
-Entrada:
-69050-010
-```
-
-```text
-Saída esperada:
-CEP válido: 69050010
-```
-
-```text
-Entrada:
-6905-00100
-```
-
-```text
-Saída esperada:
-CEP inválido.
-```
-
-**Exercício E240** · ★★★
-
-Reescreva cinco funções do ctype.h usando só a tabela ASCII (nada de
-ctype.h dentro delas):
-
-```text
-bool meu_isdigit(int c);
-bool meu_isupper(int c);
-bool meu_islower(int c);
-bool meu_isalpha(int c);   use as duas anteriores
-int meu_toupper(int c);    devolve c igual se não for minúscula
-```
-
-Depois, prove que estão certas: para TODOS os códigos de 0 a 127, compare
-cada uma com a original do ctype.h e conte as diferenças. Atenção: a
-original devolve "diferente de zero" para verdadeiro, não 1. Compare a
-verdade, não o número.
-
-```text
-Saída esperada:
-meu_toupper('q') = Q
-meu_toupper('7') = 7
-Diferenças em 128 códigos: 0
-```
-
-### 0041 · Strings
-
-**Exercício E241** · ★☆☆
-
-Declare char cidade[] = "Manaus"; e mostre cada posição do vetor, INCLUINDO
-a do '\0', com o caractere e o código. Para o '\0', mostre \0 no lugar do
-caractere. No fim, mostre strlen e sizeof.
-
-```text
-Saída esperada:
-[0] M 77
-[1] a 97
-[2] n 110
-[3] a 97
-[4] u 117
-[5] s 115
-[6] \0 0
-strlen = 6, sizeof = 7
-```
-
-**Exercício E243** · ★★☆
-
-Implemente, sem usar o string.h, as suas versões de três funções:
-
-```text
-int meu_strlen(const char s[]);
-void meu_strcat(char dest[], const char orig[]);
-int meu_strcmp(const char a[], const char b[]);
-```
-
-meu_strcmp devolve 0 se forem iguais, um negativo se a vem antes e um
-positivo se a vem depois. No main, teste:
-
-```text
-char usuario[30] = "joao";
-meu_strcat(usuario, ".silva");
-```
-
-```text
-Saída esperada:
-joao.silva (10)
-igual a "joao.silva"? sim
-"ana" antes de "bia"? sim
-"bia" antes de "bianca"? sim
-```
-
-**Exercício E244** · ★★☆
-
-Um palíndromo se lê igual nos dois sentidos: "arara", "osso". Escreva
-
-```text
-bool eh_palindromo(const char s[]);
-```
-
-que ignora a diferença entre maiúsculas e minúsculas ("Reviver" vale) e
-teste com as palavras do vetor de strings abaixo (cada linha da matriz de
-char é uma string):
-
-```text
-char palavras[5][12] = {"arara", "Reviver", "carro", "Osso", "A"};
-```
-
-```text
-Saída esperada:
-arara: sim
-Reviver: sim
-carro: não
-Osso: sim
-A: sim
-```
-
-**Exercício E246** · ★★★
-
-Uma biblioteca quer padronizar os títulos dos livros: a primeira letra de
-cada palavra em maiúscula e as outras em minúscula. Escreva
-
-```text
-int capitalizar(char s[]);
-```
-
-que altera a string no lugar e devolve quantas palavras ela tem. Palavras
-são separadas por um ou mais espaços (pode haver espaço no começo e no fim).
-
-```text
-char titulo[] = "  o SENHOR   dos aneis ";
-```
-
-```text
-Saída esperada:
-[  O Senhor   Dos Aneis ]
-4 palavras
-```
-
-### 0042 · Lendo strings
-
-**Exercício E248** · ★☆☆
-
-O programa abaixo faz três leituras seguidas da mesma linha: dois scanf e um
-fgets. Troque o printf final por um printf depois de CADA leitura, que
-mostre o que ela pegou entre colchetes e o strlen. No fgets, mostre o
-strlen antes e depois de tirar o '\n'. Rode digitando a linha
-
-```text
-Maria Clara Souza
-```
-
-```text
-Saída esperada (depois da linha digitada):
-1ª leitura: [Maria] (5)
-2ª leitura: [Clar] (4)
-fgets: 8 com o '\n', limpo: [a Souza] (7)
-```
-
-Para testar sem digitar: printf 'Maria Clara Souza\n' | ~/LPEDC/rodar
-seguido do caminho deste arquivo.
-
-**Exercício E249** · ★★☆
-
-Leia a quantidade de ingressos (um inteiro, com scanf) e, na linha seguinte,
-o nome completo do comprador (pode ter espaços, use fgets e tire o '\n').
-Depois mostre a quantidade e o nome. Cuidado: o '\n' que sobra depois do
-scanf não pode atrapalhar a leitura do nome.
-
-```text
-Entrada:
-2
-Ana Lima
-```
-
-```text
-Saída esperada:
-2 ingresso(s) para Ana Lima
-```
-
-**Exercício E250** · ★★☆
-
-O cadastro do banco exige uma senha com pelo menos 8 caracteres, uma letra
-maiúscula, uma minúscula e um dígito (espaço é permitido). Leia a senha com
-fgets, tire o '\n' e mostre, para cada regra que falhar, uma linha "Falta:".
-Se nenhuma falhar, mostre "Senha forte.".
-
-```text
-Entrada:
-banana12
-```
-
-```text
-Saída esperada:
-Falta: letra maiúscula
-```
-
-```text
-Entrada:
-abc
-```
-
-```text
-Saída esperada:
-Falta: 8 caracteres (tem 3)
-Falta: letra maiúscula
-Falta: dígito
-```
-
-```text
-Entrada:
-Pao de Queijo 1
-```
-
-```text
-Saída esperada:
-Senha forte.
-```
-
-**Exercício E252** · ★★★
-
-O programa abaixo lê com fgets num vetor de só 6 bytes, num laço, até a
-entrada acabar. Uma linha longa chega em pedaços, e cada pedaço parece uma
-linha nova. Sem aumentar o vetor s, mude o programa para que ele:
-
-```text
-1. mostre cada pedaço numerado, entre colchetes, com o '\n' (quando vier)
-   escrito como \n, sem quebrar a linha da tela;
-2. perceba quando um pedaço fecha uma linha (termina em '\n') e mostre o
-   número da linha e quantas letras ela teve, somando os pedaços;
-3. no fim, mostre quantas leituras e quantas linhas de verdade houve.
-```
-
-Rode com printf 'abacaxi\nuva\n' | ~/LPEDC/rodar seguido do caminho deste
-arquivo.
-
-```text
-Saída esperada:
-pedaço 1: [abaca]
-pedaço 2: [xi\n] fim da linha 1 (7 letras)
-pedaço 3: [uva\n] fim da linha 2 (3 letras)
-3 leituras, 2 linhas
-```
-
-### 0043 · Juntando tudo
+### Exercícios
 
 **Exercício E254** · ★☆☆
 
@@ -2052,11 +2067,13 @@ Saída esperada:
 z9z3 (12 -> 4)
 ```
 
-### Lista do módulo
+---
+
+## Lista do módulo
 
 30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P0501.c a P0530.c, em `material/`; resoluções em `_respostas/05-vetores-e-strings/lista/`.
 
-#### ★☆☆ Aquecimento
+### ★☆☆ Aquecimento
 
 **Exercício P0501** · ★☆☆ · O melhor dia da padaria
 
@@ -2299,7 +2316,7 @@ Saída esperada:
 44: # (1)
 ```
 
-#### ★★☆ Para pensar
+### ★★☆ Para pensar
 
 **Exercício P0511** · ★★☆ · Quanto custa cada receita em cada mercado
 
@@ -2567,7 +2584,7 @@ Saldo: -40
 
 **Resposta esperada:** a saída acima (saldo -40).
 
-#### ★★★ Desafio
+### ★★★ Desafio
 
 **Exercício P0521** · ★★★ · Quem ganhou o jogo da velha
 
@@ -2902,7 +2919,7 @@ Saída esperada:
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas extras que misturam os assuntos do módulo. Resolva num arquivo seu e
 compile com as flags de estudo.
@@ -3070,7 +3087,7 @@ matrizes revezam.
 
 </details>
 
-### Questões no estilo da prova
+## Questões no estilo da prova
 
 Questões no formato da Prova de Conhecimentos do PPGI, com uma alternativa
 certa. Nas de vetor, desenhe as gavetas com os índices; nas de string, inclua
@@ -3293,7 +3310,7 @@ tirar o `'\n'` com `lin[strcspn(lin, "\n")] = '\0';`. Veja 0042.
 
 </details>
 
-### Questões de provas do PPGI
+## Questões de provas do PPGI
 
 Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.
 

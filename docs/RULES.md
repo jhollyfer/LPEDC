@@ -42,20 +42,29 @@ O sumário completo (módulos, assuntos e números) está em
 
 ## 3. Cada assunto (texto.md)
 
-O módulo tem três partes: **1. Conceitos gerais**, **2. Exemplos de uso** e **3. Exercícios
-práticos** (`DECISIONS.md` #12). O `texto.md` alimenta as duas primeiras; o marcador `{{exemplo}}`
-separa uma da outra. Modelo: `_gerador/modulos/01-fundamentos/0002-variaveis/texto.md`.
+Cada assunto é um **capítulo de livro**: no `.md` do módulo ele sai inteiro, com `### Conceito`,
+`### Exemplos de uso` e `### Exercícios`, um depois do outro (`DECISIONS.md` #13). O `texto.md`
+alimenta as duas primeiras; o marcador `{{exemplo}}` separa uma da outra. Modelo:
+`_gerador/modulos/01-fundamentos/0005-printf/texto.md`.
 
 ```md
-## 0002 · Variáveis
+## 0005 · printf
 
-- **Variável**: lugar na memória com nome, tipo e valor (DEITEL; DEITEL, 2011, cap. 2).
-- ... de 3 a 8 tópicos, cada um com até 3 linhas
+Parágrafo que parte do problema: para que serve, o que falta sem isso.
 
-(tabela curta, só se ajudar)
+Uma imagem do dia a dia (o formulário, a fila do banco) que dá a intuição, e
+o termo novo em **negrito**, definido com outras palavras e com a fonte
+(BACKES, 2013, cap. 2).
+
+(trecho curto de código, se ajudar a ver a ideia)
+
+Um parágrafo por peça da ideia, do simples ao detalhe, cada um com um
+exemplo pequeno e o porquê ("isso importa porque...") (DEITEL; DEITEL, 2011, cap. 9).
+
+(tabela, só se ajudar a consultar)
 
 > [!WARNING]
-> A pegadinha principal, em 1 a 3 linhas.
+> O erro que todo mundo comete, em 2 a 5 linhas.
 
 {{exemplo}}
 
@@ -70,20 +79,27 @@ Uma frase que puxa o fluxograma:
 {{fluxograma}}
 ```
 
-- **Conceito com fonte.** Cada tópico que define um termo termina com a obra, no estilo ABNT curto:
-  `(AUTOR, ano)` ou `(AUTOR, ano, cap. N)`. A definição vem dos fichamentos de `_fontes/`, escrita
-  com outras palavras (§9). O primeiro autor citado tem a referência completa em "Para ler mais"
-  do `modulo.md`. Capítulo ou página só quando o fichamento confirma; nunca invente.
-- **Curto e direto.** Ler cansa: de 15 a 40 linhas por assunto fora o código. Sem gancho na parte de
-  conceito, sem parágrafo de transição. Termos novos em **negrito**, código inline com crase.
-- **Um alerta só**: o `> [!WARNING]` com o erro que todo mundo comete. Não há `TIP` nem `NOTE`.
+- **Lê como livro.** O conceito é texto corrido, em parágrafos que se encadeiam: o problema, a
+  intuição, a definição e as peças uma de cada vez, cada uma com um exemplo pequeno e o porquê.
+  Quem lê não precisa adivinhar nada: todo termo é explicado na primeira vez que aparece. Nada de
+  glossário em tópicos (`- **termo**: ...`); o `conferir-texto.py` reprova conceito com menos de 4
+  parágrafos corridos ou com mais de 3 tópicos desse tipo.
+- **Fonte dentro do texto.** A frase que define ou afirma algo de livro termina com a obra, no
+  estilo ABNT curto: `(AUTOR, ano)` ou `(AUTOR, ano, cap. N)`. A definição vem dos fichamentos de
+  `_fontes/`, escrita com outras palavras (§9). O autor citado tem a referência completa em "Para
+  ler mais" do `modulo.md`. Capítulo ou página só quando o fichamento confirma; nunca invente.
+- **Tamanho.** O necessário para entender sem esforço: de 25 a 70 linhas de conceito fora o
+  código. Termos novos em **negrito**, código inline com crase.
+- **Um alerta só**: o `> [!WARNING]` com o erro que todo mundo comete. Não há `TIP` nem `NOTE`; o
+  que era "Por dentro do C" e vale a pena vira parágrafo do conceito.
 - **O exemplo** usa um cenário do dia a dia (feira, ônibus, Pix...), valores em R$, e o código, o
   diagrama da ideia e o fluxograma mostram o **mesmo cenário com os mesmos valores**.
 - Assunto difícil (ponteiros, recursão, árvores) pode ter `### Passo a passo` depois do código,
   com um teste de mesa em tabela; o gerador o rebaixa para `####`.
-- O gerador cuida do resto: os exemplos A entram na parte 2 e os exercícios E na parte 3.
+- O gerador cuida do resto: os exemplos A entram em "Exemplos de uso" e os exercícios E em
+  "Exercícios", no mesmo assunto.
 
-Estilo de escrita: frases curtas, voz ativa, sem emoji, sem "Neste assunto veremos". Sem vícios de
+Estilo de escrita: frases curtas, voz ativa, sem emoji, sem "Neste assunto veremos". Frases de ligação entre as peças da explicação são bem-vindas; o que se corta é enchimento. Sem vícios de
 linguagem ("onde" como coringa, "de forma X", "através de", "realizar", "possuir", "vale
 ressaltar", "é importante notar", "basicamente", "na verdade", "ou seja" em série) e sem marcas de
 texto gerado ("não é só X, é Y", trios forçados, "crucial", "fundamental", conclusão genérica,

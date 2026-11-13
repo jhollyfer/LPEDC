@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Compara as fontes de texto (texto.md e modulo.md) de um módulo com o último
 commit e reprova se a revisão de texto mexeu no que não pode mudar: blocos de
-código, títulos "## NNNN · ..." e letras de gabarito. Também confere a forma do
-texto.md: conceito, um WARNING, {{exemplo}}, {{ideia}} e {{fluxograma}}, nessa ordem.
+código (os que existiam continuam; trecho novo pode entrar), títulos "## NNNN · ..."
+e letras de gabarito. Também confere a forma do texto.md: conceito em texto corrido
+(não lista de tópicos), com fonte, um WARNING, {{exemplo}}, {{ideia}} e
+{{fluxograma}}, nessa ordem.
   python3 _gerador/conferir-texto.py 14-arvores [15-hash ...]
 """
 import re, subprocess, sys, pathlib
@@ -27,6 +29,15 @@ def forma(t):
         erros.append('o conceito precisa de exatamente um WARNING')
     if re.search(r'Por dentro do C|Pergunta para você|^> \[!(TIP|NOTE)\]', t, flags=re.M):
         erros.append('sobrou TIP, NOTE, Por dentro do C ou Pergunta para você')
+    # o conceito é explicação de livro: parágrafos corridos, não glossário
+    sem_codigo = re.sub(r'^```.*?^```', '', conceito, flags=re.S | re.M)
+    paragrafos = [b for b in re.split(r'\n\s*\n', sem_codigo)
+                  if b.strip() and not re.match(r'\s*([-*|>#]|\d+\.)', b.strip())]
+    if len(paragrafos) < 4:
+        erros.append(f'o conceito tem {len(paragrafos)} parágrafo(s) de texto corrido (mínimo 4)')
+    topicos = len(re.findall(r'^- \*\*', sem_codigo, flags=re.M))
+    if topicos > 3:
+        erros.append(f'o conceito virou lista de tópicos ({topicos} "- **termo**"); explique em texto corrido')
     if not re.search(r'\([A-ZÁÉÍÓÚ][A-ZÁÉÍÓÚ/.\- ]+(; [A-ZÁÉÍÓÚ][A-ZÁÉÍÓÚ/.\- ]+)*( et al\.)?, (\d{4}|s\.d\.)', conceito):
         erros.append('o conceito não cita nenhuma fonte (AUTOR, ano)')
     return erros
@@ -53,7 +64,11 @@ for mod in sys.argv[1:]:
         novo = f.read_text()
         a, d = partes(antes), partes(novo)
         for k in a:
-            if a[k] != d[k]:
+            if k == 'blocos de código':
+                sumiu = [b for b in a[k] if b not in d[k]]
+                if sumiu:
+                    falhas += 1; print(f'{rel}: {len(sumiu)} bloco(s) de código mudou ou sumiu')
+            elif a[k] != d[k]:
                 falhas += 1; print(f'{rel}: {k} mudou ({len(a[k])} -> {len(d[k])})')
         if f.name == 'texto.md':
             for e in forma(novo):

@@ -50,7 +50,7 @@ marca as posições olhadas e verde, onde achou a chave.
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas para resolver no papel e, quando fizer sentido, num arquivo `.c` seu
 usando os TADs do módulo. Eles misturam os assuntos.
@@ -211,7 +211,7 @@ O(1) + a marcação do primeiro da fila. Intervalo: **O(log c + k)**.
 
 </details>
 
-### Questões no estilo da prova
+## Questões no estilo da prova
 
 Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma
 alternativa certa. Onde o enunciado não disser outra coisa, a raiz fica no

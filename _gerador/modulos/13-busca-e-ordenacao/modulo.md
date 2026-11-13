@@ -33,7 +33,7 @@ AddressSanitizer e o UBSan param o programa nos erros de índice e de overflow.
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas para fechar o módulo, misturando os assuntos. Escreva em C e compile
 com o gcc e as flags de estudo.
@@ -214,7 +214,7 @@ ordenado. A certa é `int x = *(const int *) a, y = *(const int *) b; return
 
 </details>
 
-### Questões do POSCOMP
+## Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -225,7 +225,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 O gabarito oficial de 2025 não estava disponível quando este material foi montado.
 
 
-### Questões de provas do PPGI
+## Questões de provas do PPGI
 
 Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.
 

@@ -59,9 +59,12 @@ e **cinza** o que não chega a ser usado.
 
 ---
 
-## 1. Conceitos gerais
+> [!NOTE]
+> Cada assunto é um capítulo: **Conceito** (a explicação), **Exemplos de uso** (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e **Exercícios** (cada um é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta; resoluções em `_respostas/21-programacao-dinamica/`).
 
-### 0138 · Memoização
+## 0138 · Memoização
+
+### Conceito
 
 - **Programação dinâmica** (PD): combina respostas de **subproblemas que se
   repetem**, calculando cada um uma vez só. "Programação" quer dizer
@@ -87,146 +90,7 @@ e **cinza** o que não chega a ser usado.
 > `-1`). Com `0` e 0 sendo resposta válida, cada célula 0 é recalculada e o
 > tempo volta a ser exponencial, com a resposta certa.
 
-### 0139 · Troco com programação dinâmica
-
-- **Troco mínimo**: o menor número de moedas que somam **exatamente** um
-  valor. O guloso (assunto 0133) erra em sistemas não canônicos; a PD testa
-  todas as escolhas sem repetir trabalho (CORMEN et al., 2024, cap. 14).
-- **Recorrência**: pelo **último** selo, `dp[v] = 1 + mín(dp[v - s])` para
-  cada selo `s ≤ v`, com `dp[0] = 0` (LINTZMAYER; MOTA, 2023).
-- **Subestrutura ótima**: tirando o último selo de uma solução ótima, o resto
-  continua ótimo; senão daria para melhorar o todo
-  (CORMEN et al., 2024, cap. 14).
-- **Recuperar a solução**: `ultimo[v]` guarda o selo que deu o mínimo; anda-se
-  para trás de `v` até 0 por `v - ultimo[v]` (ZIVIANI, 2010, cap. 2).
-- **Custo**: `total` subproblemas, cada um testando `k` selos:
-  **O(total × k)** de tempo e O(total) de memória
-  (LINTZMAYER; MOTA, 2023).
-- **Tabela grande**: para totais altos, aloque `dp` com `malloc` (assunto
-  0054); na pilha, 1 milhão de `int` já passa do limite padrão
-  (KERNIGHAN; RITCHIE, 1989).
-
-> [!WARNING]
-> O "infinito" precisa sobreviver a um `+ 1`. Com `INT_MAX`, a conta
-> `dp[v - selo[s]] + 1` **estoura** o `int`. Use `1000000`, `total + 1` ou
-> teste `dp[v - selo[s]] != INF` antes de somar.
-
-### 0140 · Mochila 0/1
-
-- **Mochila 0/1**: capacidade `W` e `n` itens com peso e lucro; cada item vai
-  inteiro (1) ou não vai (0). São `2ⁿ` escolhas
-  (CORMEN et al., 2024, seção 15.2).
-- **Guloso falha**: ordenar por lucro por quilo, que resolve a fracionária
-  (assunto 0135), aqui pode deixar espaço vazio e perder lucro
-  (CORMEN et al., 2024, seção 15.2).
-- **Tabela**: `t[i][c]` é o maior lucro usando só os itens `1..i` com
-  capacidade `c`. A linha 0 é toda zero e a resposta fica em `t[n][W]`
-  (KLEINBERG; TARDOS, 2006, cap. 6).
-- **Recorrência**: o item `i` **não vai** (`t[i-1][c]`) ou **vai**, se
-  `peso[i] <= c` (`lucro[i] + t[i-1][c - peso[i]]`); fica o maior
-  (KLEINBERG; TARDOS, 2006, cap. 6).
-- **Recuperação**: de baixo para cima, se `t[i][c]` é igual a `t[i-1][c]`, o
-  item `i` ficou de fora; se mudou, foi junto e `c` perde `peso[i]`
-  (ZIVIANI, 2010, cap. 2).
-- **Pseudopolinomial**: são `(n + 1) × (W + 1)` células, **O(n × W)**. Mas `W`
-  é um número escrito com uns log₂ W bits; dobrar os bits eleva `W` ao
-  quadrado. A mochila 0/1 continua NP-difícil (assunto 0186)
-  (LINTZMAYER; MOTA, 2023).
-
-> [!WARNING]
-> Na recuperação, o teste é "o valor **mudou**?", e não "dá para levar?". E
-> confira `peso[i] <= c` antes de ler `t[i - 1][c - peso[i]]`: com índice
-> negativo, o C lê outra linha da matriz sem avisar.
-
-### 0141 · Maior subsequência comum (LCS)
-
-- **Subsequência**: o que sobra depois de apagar letras, sem mudar a ordem.
-  `MNG` é subsequência de `MORANGO`; `GNA` não é
-  (CORMEN et al., 2024, cap. 14).
-- **LCS** (*longest common subsequence*): a maior subsequência das duas
-  strings. Testar todas é inviável: 30 letras já têm mais de um bilhão
-  (CORMEN et al., 2024, cap. 14).
-- **Recorrência**: olhe a última letra de cada uma. **Iguais**: ela fecha a
-  LCS, some 1 à das duas sem ela. **Diferentes**: tire a última de `a` ou a de
-  `b` e fique com a melhor (CORMEN et al., 2024, cap. 14).
-- **Tabela**: `c[i][j]` é o tamanho da LCS dos **prefixos** `a[0..i-1]` e
-  `b[0..j-1]`; a resposta fica em `c[m][n]` (LINTZMAYER; MOTA, 2023).
-- **Recuperação**: do canto até a borda; letra igual entra na resposta e o
-  caminho vai na diagonal, senão vai para o vizinho de onde o valor veio
-  (CORMEN et al., 2024, cap. 14).
-- **Custo**: `(m + 1) × (n + 1)` células de O(1), **O(m × n)** de tempo e de
-  memória. Só o tamanho cabe em duas linhas; as letras pedem a tabela inteira
-  (KLEINBERG; TARDOS, 2006, cap. 6).
-
-| caso | `c[i][j]` |
-| --- | --- |
-| `i == 0` ou `j == 0` | 0 (um prefixo vazio) |
-| `a[i-1] == b[j-1]` | `c[i-1][j-1] + 1` (diagonal) |
-| letras diferentes | o maior entre `c[i-1][j]` (cima) e `c[i][j-1]` (esquerda) |
-
-> [!WARNING]
-> Subsequência não é **substring** (pedaço contíguo): a maior substring comum
-> de MORANGO e MANGA é `ANG` (3), e a LCS tem 4. A linha `i` fala de
-> `a[i - 1]`: escrever `a[i] == b[j]` compila e dá a resposta errada.
-
-### 0142 · Distância de edição
-
-- **Distância de edição** (ou **de Levenshtein**): o menor número de
-  operações que transforma uma string em outra. Cada operação custa 1:
-  **inserir**, **remover** ou **trocar** uma letra (LEVENSHTEIN, 1966).
-- **Recorrência**: como na LCS (assunto 0141), olhe o fim. Últimas letras
-  **iguais**: custa o mesmo que as palavras sem elas. **Diferentes**: 1 + a
-  mais barata entre trocar, remover e inserir (KLEINBERG; TARDOS, 2006, cap. 6).
-- **Tabela**: `d[i][j]` é a distância entre os prefixos `a[0..i-1]` e
-  `b[0..j-1]`; a resposta fica em `d[m][n]` (LINTZMAYER; MOTA, 2023).
-- **Borda**: diferente da LCS, `d[i][0] = i` (`i` remoções) e `d[0][j] = j`
-  (`j` inserções) (LINTZMAYER; MOTA, 2023).
-- **Custo**: **O(m × n)**. A distância é pelo menos a diferença dos tamanhos,
-  o que ajuda um corretor a descartar palavras cedo
-  (KLEINBERG; TARDOS, 2006, cap. 6).
-- **Alinhamento**: a volta pela tabela mostra quais edições foram feitas, do
-  fim para o começo (KLEINBERG; TARDOS, 2006, cap. 6).
-
-| caso | `d[i][j]` |
-| --- | --- |
-| `a[i-1] == b[j-1]` | `d[i-1][j-1]` (diagonal, de graça) |
-| letras diferentes | `1 +` o menor entre `d[i-1][j-1]` (troca), `d[i-1][j]` (remove) e `d[i][j-1]` (insere) |
-
-> [!WARNING]
-> A borda **não** é zero, como na LCS: sem `d[i][0] = i` e `d[0][j] = j`,
-> CARTA e ARTES dariam 2. Na volta, confira `i > 0` e `j > 0` antes de ler
-> `d[i - 1][...]` ou `a[i - 1]`.
-
-### 0143 · Juntando tudo: um mini-diff
-
-- **`diff`**: mostra o que mudou entre duas versões de um arquivo. Comparar
-  linha com linha não serve: uma linha nova no começo faz todas parecerem
-  diferentes (LINUX MAN-PAGES, s.d.).
-- **LCS de linhas**: a LCS (assunto 0141) com linhas no lugar de letras; duas
-  linhas casam quando `strcmp` dá 0. As da LCS ficaram iguais; as que só estão
-  na antiga foram **removidas** (`-`); as que só estão na nova, **adicionadas**
-  (`+`) (CORMEN et al., 2024, cap. 14).
-- **Tabela de sufixos**: `c[i][j]` é a LCS de `a[i..m-1]` e `b[j..n-1]`. A
-  resposta fica em `c[0][0]` e a volta anda do **começo** para o fim
-  (LINTZMAYER; MOTA, 2023).
-- **Ler linhas**: `fgets` guarda o `'\n'`; `buf[strcspn(buf, "\n")] = '\0'`
-  corta-o se existir (CPPREFERENCE, s.d.).
-- **Matriz num bloco**: a tabela vem de um único `malloc`, e a célula `(i, j)`
-  mora em `c[i * w + j]`, com `w = n + 1` (KERNIGHAN; RITCHIE, 1989).
-- **Algoritmo de Myers**: o `diff` real gasta O((m + n) × D), com D o número
-  de diferenças, em vez de O(m × n) (MYERS, 1986).
-
-> [!WARNING]
-> Sem tirar o `'\n'`, "banana\n" e "banana" diferem no `strcmp` e o diff acusa
-> uma mudança invisível. A última linha do arquivo pode vir **sem** `'\n'`.
-
----
-
-## 2. Exemplos de uso
-
-Cada exemplo compila sozinho. Rode com o comando abaixo dele e compare com a saída no fim do código.
-
-### 0138 · Memoização
+### Exemplos de uso
 
 Subir 35 degraus de um em um ou de dois em dois: pelo último passo,
 `formas(n) = formas(n - 1) + formas(n - 2)`, com `formas(0) = formas(1) = 1`.
@@ -426,7 +290,126 @@ int main(void) {
 gcc ~/LPEDC/material/A276.c -o ~/LPEDC/material/A276 && ~/LPEDC/material/A276
 ```
 
-### 0139 · Troco com programação dinâmica
+### Exercícios
+
+**Exercício E823** · ★☆☆
+
+Na escadaria da igreja da cidade, os adolescentes sobem de 1, de 2 ou de 3
+degraus por vez. São 10 degraus. Escreva um programa que calcula, de baixo
+para cima, quantos jeitos existem de subir 0, 1, 2, ..., 10 degraus, num
+vetor t[], e mostre a tabela inteira e a resposta.
+
+```text
+Saída esperada:
+t: 1 1 2 4 7 13 24 44 81 149 274
+Jeitos de subir 10 degraus: 274
+```
+
+**Exercício E825** · ★★☆
+
+Um motorista de aplicativo cruza o centro da cidade de um canto ao outro,
+andando só para a direita (D) ou para baixo (B). Cada quarteirão tem um
+pedágio de estacionamento rotativo, em reais, que ele paga ao passar
+(inclusive o da saída e o da chegada):
+
+```text
+3 1 4 2 5
+2 7 1 8 2
+6 1 3 2 4
+5 2 9 1 3
+```
+
+Escreva um programa que calcula, de baixo para cima, a matriz custo[i][j]
+(o menor gasto da saída até o quarteirão (i, j)) e mostre o menor custo
+até o canto de baixo à direita. Depois, refaça o caminho de trás para a
+frente e mostre a sequência de letras D e B, da saída até a chegada.
+
+```text
+Saída esperada:
+Menor custo: R$ 18
+Caminho: DDBBDBD
+```
+
+**Exercício E826** · ★★☆
+
+A feira de domingo tem 8 vagas de barraca enfileiradas, numeradas de 0 a 7.
+Você tem barracas suficientes, mas a prefeitura proíbe montar em duas
+vagas VIZINHAS. O lucro estimado de cada vaga, em reais, é:
+
+```text
+vaga:   0   1   2   3   4   5   6   7
+lucro: 40  25  60  30  10  55  35  20
+```
+
+Escreva um programa que calcula, de baixo para cima, melhor[i] = o maior
+lucro usando só as vagas 0..i, mostre o vetor, o lucro máximo e quais
+vagas usar.
+
+```text
+Saída esperada:
+melhor: 40 40 100 100 110 155 155 175
+Lucro máximo: R$ 175
+Barracas: 0 2 5 7
+```
+
+**Exercício E828** · ★★★
+
+Na Mega-Sena você escolhe 6 dezenas entre 60. O número de jogos possíveis
+é C(60, 6), e a recorrência do triângulo de Pascal calcula isso sem
+fatorial nenhum (60! não cabe em tipo nenhum do C):
+
+```text
+C(n, k) = C(n - 1, k - 1) + C(n - 1, k),   com C(n, 0) = C(n, n) = 1
+```
+
+(a dezena n entra no jogo ou não entra). A recursão pura faria
+2 x C(60, 6) - 1, uns 100 milhões de chamadas. Escreva a função
+
+```text
+long long comb(int n, int k)
+```
+
+com memoização numa matriz memo[61][61] e um contador global de chamadas.
+Calcule C(60, 6) e depois, zerando o contador mas SEM limpar o memo,
+C(60, 30). No fim, conte quantas posições do memo foram preenchidas.
+
+```text
+Saída esperada:
+Mega-Sena: C(60, 6) = 50063860 (649 chamadas)
+chance de acertar com um jogo: 1 em 50063860
+C(60, 30) = 118264581564861424 (1441 chamadas novas)
+subproblemas guardados no memo: 1044
+```
+
+---
+
+## 0139 · Troco com programação dinâmica
+
+### Conceito
+
+- **Troco mínimo**: o menor número de moedas que somam **exatamente** um
+  valor. O guloso (assunto 0133) erra em sistemas não canônicos; a PD testa
+  todas as escolhas sem repetir trabalho (CORMEN et al., 2024, cap. 14).
+- **Recorrência**: pelo **último** selo, `dp[v] = 1 + mín(dp[v - s])` para
+  cada selo `s ≤ v`, com `dp[0] = 0` (LINTZMAYER; MOTA, 2023).
+- **Subestrutura ótima**: tirando o último selo de uma solução ótima, o resto
+  continua ótimo; senão daria para melhorar o todo
+  (CORMEN et al., 2024, cap. 14).
+- **Recuperar a solução**: `ultimo[v]` guarda o selo que deu o mínimo; anda-se
+  para trás de `v` até 0 por `v - ultimo[v]` (ZIVIANI, 2010, cap. 2).
+- **Custo**: `total` subproblemas, cada um testando `k` selos:
+  **O(total × k)** de tempo e O(total) de memória
+  (LINTZMAYER; MOTA, 2023).
+- **Tabela grande**: para totais altos, aloque `dp` com `malloc` (assunto
+  0054); na pilha, 1 milhão de `int` já passa do limite padrão
+  (KERNIGHAN; RITCHIE, 1989).
+
+> [!WARNING]
+> O "infinito" precisa sobreviver a um `+ 1`. Com `INT_MAX`, a conta
+> `dp[v - selo[s]] + 1` **estoura** o `int`. Use `1000000`, `total + 1` ou
+> teste `dp[v - selo[s]] != INF` antes de somar.
+
+### Exemplos de uso
 
 Nos Correios só há selos de R$ 1, R$ 4 e R$ 5, e a carta custa R$ 8. O guloso
 cola 5 + 1 + 1 + 1, quatro selos; dois de R$ 4 bastam. No desenho, `dp[8]` olha
@@ -612,7 +595,121 @@ int main(void) {
 gcc ~/LPEDC/material/A278.c -o ~/LPEDC/material/A278 && ~/LPEDC/material/A278
 ```
 
-### 0140 · Mochila 0/1
+### Exercícios
+
+**Exercício E829** · ★☆☆
+
+A loja de ferragens vende parafusos só em pacotes fechados de 3, 7 e 11
+unidades. Um marceneiro precisa de exatamente 25 parafusos e quer levar o
+menor número de pacotes. Escreva um programa que monta a tabela dp[v] (o
+menor número de pacotes com exatamente v parafusos) de 0 a 25. Mostre as
+quantidades de 1 a 25 que são impossíveis e a resposta para 25.
+
+```text
+Saída esperada:
+Impossíveis até 25: 1 2 4 5 8
+Menor número de pacotes para 25 parafusos: 3
+```
+
+**Exercício E831** · ★★☆
+
+Num jogo de celular, a loja vende pacotes de 1, 6 e 10 gemas. Escreva um
+programa que calcula dp[v], o menor número de pacotes para cada total v de 1
+a 20 gemas, e guarda em ultimo[v] o último pacote usado. Mostre os pacotes da
+solução de 12 gemas.
+
+Escreva também int guloso(int v), que sempre pega o maior pacote que cabe, e
+mostre, para v de 1 a 20, os totais em que o guloso usa MAIS pacotes que a
+PD, no formato "v: guloso g, PD d".
+
+```text
+Saída esperada:
+12 gemas: 2 pacotes (6 6)
+12: guloso 3, PD 2
+13: guloso 4, PD 3
+14: guloso 5, PD 4
+15: guloso 6, PD 5
+18: guloso 4, PD 3
+19: guloso 5, PD 4
+```
+
+**Exercício E832** · ★★☆
+
+Você vai pagar um lanche de R$ 7 com moedas de R$ 1, cédulas de R$ 2 e
+cédulas de R$ 5. Duas perguntas diferentes:
+
+a) Quantas COMBINAÇÕES de dinheiro somam R$ 7? (5 + 2 e 2 + 5 são a mesma)
+b) A máquina de autoatendimento aceita uma nota ou moeda por vez. Quantas
+
+```text
+ SEQUÊNCIAS diferentes de inserção somam R$ 7? (5 + 2 e 2 + 5 contam
+ separado)
+```
+
+Escreva as funções long long combinacoes(int total) e long long
+sequencias(int total), cada uma com o seu vetor de PD, e mostre as duas
+respostas.
+
+```text
+Saída esperada:
+combinações: 6
+sequências:  26
+```
+
+**Exercício E834** · ★★★
+
+A máquina de café do escritório custa R$ 1,00, aceita moedas de 5, 10, 25
+e 50 centavos, mas trava se você colocar mais de 6 moedas. Quantas
+combinações de moedas pagam exatamente R$ 1,00 com até 6 moedas? Mostre
+também quantas usam exatamente 1, 2, ..., 6 moedas.
+
+Um vetor jeitos[v] não basta: ele não sabe quantas moedas cada combinação
+usou. Acrescente essa informação como uma segunda dimensão:
+w[q][v] = combinações com EXATAMENTE q moedas que somam v centavos.
+
+```text
+Saída esperada:
+exatamente 1 moeda: 0
+exatamente 2 moedas: 1
+exatamente 3 moedas: 1
+exatamente 4 moedas: 1
+exatamente 5 moedas: 1
+exatamente 6 moedas: 3
+até 6 moedas: 7 combinações
+```
+
+---
+
+## 0140 · Mochila 0/1
+
+### Conceito
+
+- **Mochila 0/1**: capacidade `W` e `n` itens com peso e lucro; cada item vai
+  inteiro (1) ou não vai (0). São `2ⁿ` escolhas
+  (CORMEN et al., 2024, seção 15.2).
+- **Guloso falha**: ordenar por lucro por quilo, que resolve a fracionária
+  (assunto 0135), aqui pode deixar espaço vazio e perder lucro
+  (CORMEN et al., 2024, seção 15.2).
+- **Tabela**: `t[i][c]` é o maior lucro usando só os itens `1..i` com
+  capacidade `c`. A linha 0 é toda zero e a resposta fica em `t[n][W]`
+  (KLEINBERG; TARDOS, 2006, cap. 6).
+- **Recorrência**: o item `i` **não vai** (`t[i-1][c]`) ou **vai**, se
+  `peso[i] <= c` (`lucro[i] + t[i-1][c - peso[i]]`); fica o maior
+  (KLEINBERG; TARDOS, 2006, cap. 6).
+- **Recuperação**: de baixo para cima, se `t[i][c]` é igual a `t[i-1][c]`, o
+  item `i` ficou de fora; se mudou, foi junto e `c` perde `peso[i]`
+  (ZIVIANI, 2010, cap. 2).
+- **Pseudopolinomial**: são `(n + 1) × (W + 1)` células, **O(n × W)**. Mas `W`
+  é um número escrito com uns log₂ W bits; dobrar os bits eleva `W` ao
+  quadrado. A mochila 0/1 continua NP-difícil (assunto 0186)
+  (LINTZMAYER; MOTA, 2023).
+
+> [!WARNING]
+> Na recuperação, o teste é "o valor **mudou**?", e não "dá para levar?". E
+> confira `peso[i] <= c` antes de ler `t[i - 1][c - peso[i]]`: com índice
+> negativo, o C lê outra linha da matriz sem avisar.
+
+### Exemplos de uso
 
 Um ambulante tem um isopor de 7 kg: água (2 kg, R$ 18), refri (3 kg, R$ 24),
 suco (4 kg, R$ 30) e açaí (5 kg, R$ 35). O guloso leva água e refri (R$ 42);
@@ -830,7 +927,143 @@ int main(void) {
 gcc ~/LPEDC/material/A280.c -o ~/LPEDC/material/A280 && ~/LPEDC/material/A280
 ```
 
-### 0141 · Maior subsequência comum (LCS)
+### Exercícios
+
+**Exercício E835** · ★☆☆
+
+Uma padaria tem R$ 10 mil para investir e cinco projetos. Cada projeto é
+feito inteiro ou não é feito (0/1). Custos e retornos em mil reais:
+
+```text
+projeto            custo  retorno por ano
+1 fachada nova       4          9
+2 site de pedidos    3          7
+3 curso da equipe    2          4
+4 forno novo         5         11
+5 vitrine refrig.    1          2
+```
+
+Escreva um programa que monta a tabela t[i][c] (maior retorno usando os
+projetos 1..i com c mil reais) e mostre a última linha da tabela e o
+retorno máximo com os R$ 10 mil.
+
+```text
+Saída esperada:
+última linha: 0 2 4 7 9 11 13 16 18 20 22
+Retorno máximo com R$ 10 mil: R$ 22 mil por ano
+```
+
+**Exercício E837** · ★★☆
+
+Véspera de vestibular: você tem 6 horas de estudo e uma estimativa de
+quantos pontos cada revisão completa rende. Cada matéria é revisada
+inteira ou não é revisada:
+
+```text
+matéria      horas  pontos
+Matemática    2.5     30
+Português     1.5     18
+História      1.0     10
+Física        2.0     25
+Química       1.5     16
+Inglês        0.5      6
+```
+
+O problema: a tabela da mochila precisa de capacidades INTEIRAS, e as
+horas são double. Guarde as horas como double no programa, converta tudo
+para meias horas (unidades inteiras) e resolva a mochila 0/1 com
+recuperação. Mostre o máximo, as matérias e as horas usadas.
+
+```text
+Saída esperada:
+Máximo: 73 pontos em 6.0 h
+Estudar: Física Português Matemática
+Horas usadas: 6.0
+```
+
+**Exercício E838** · ★★☆
+
+Sua carteira tem estas cédulas: 2, 5, 5, 10, 10, 20, 20 e 50 reais. Você
+precisa separar exatamente R$ 30 para o rateio do churrasco. De quantos
+jeitos dá para escolher as cédulas? Cada cédula é um papel diferente: as
+duas notas de 20 contam como escolhas distintas.
+
+Resolva com PD num vetor só (jeitos[s] = quantos subconjuntos das cédulas
+vistas até agora somam s) e confira o resultado com a força bruta por bits
+do assunto 0125, testando os 2^8 subconjuntos.
+
+```text
+Saída esperada:
+PD: 7 jeitos de separar R$ 30
+força bruta: 7 jeitos (256 subconjuntos testados)
+```
+
+**Exercício E840** · ★★★
+
+Um drone de entregas carrega até 10 kg E até 8 litros de volume no
+compartimento. Há seis pacotes esperando, cada um com peso, volume e o
+frete que paga:
+
+```text
+pacote  peso (kg)  volume (L)  frete (R$)
+  1         3          4           25
+  2         4          2           30
+  3         2          3           18
+  4         5          3           40
+  5         1          2            9
+  6         3          3           22
+```
+
+Agora há DUAS capacidades. Estenda a ideia da mochila 0/1 para uma tabela
+de três dimensões, t[i][p][v] = maior frete usando os pacotes 1..i com
+até p kg e v litros. Mostre o frete máximo, os pacotes (do último para o
+primeiro, como sai da volta pela tabela), o peso e o volume usados, e
+confira o valor com uma força bruta pelos 2^6 subconjuntos.
+
+```text
+Saída esperada:
+Frete máximo: R$ 79
+Pacotes: 5 4 2
+Usa 10 kg e 7 L
+Força bruta: R$ 79
+```
+
+---
+
+## 0141 · Maior subsequência comum (LCS)
+
+### Conceito
+
+- **Subsequência**: o que sobra depois de apagar letras, sem mudar a ordem.
+  `MNG` é subsequência de `MORANGO`; `GNA` não é
+  (CORMEN et al., 2024, cap. 14).
+- **LCS** (*longest common subsequence*): a maior subsequência das duas
+  strings. Testar todas é inviável: 30 letras já têm mais de um bilhão
+  (CORMEN et al., 2024, cap. 14).
+- **Recorrência**: olhe a última letra de cada uma. **Iguais**: ela fecha a
+  LCS, some 1 à das duas sem ela. **Diferentes**: tire a última de `a` ou a de
+  `b` e fique com a melhor (CORMEN et al., 2024, cap. 14).
+- **Tabela**: `c[i][j]` é o tamanho da LCS dos **prefixos** `a[0..i-1]` e
+  `b[0..j-1]`; a resposta fica em `c[m][n]` (LINTZMAYER; MOTA, 2023).
+- **Recuperação**: do canto até a borda; letra igual entra na resposta e o
+  caminho vai na diagonal, senão vai para o vizinho de onde o valor veio
+  (CORMEN et al., 2024, cap. 14).
+- **Custo**: `(m + 1) × (n + 1)` células de O(1), **O(m × n)** de tempo e de
+  memória. Só o tamanho cabe em duas linhas; as letras pedem a tabela inteira
+  (KLEINBERG; TARDOS, 2006, cap. 6).
+
+| caso | `c[i][j]` |
+| --- | --- |
+| `i == 0` ou `j == 0` | 0 (um prefixo vazio) |
+| `a[i-1] == b[j-1]` | `c[i-1][j-1] + 1` (diagonal) |
+| letras diferentes | o maior entre `c[i-1][j]` (cima) e `c[i][j-1]` (esquerda) |
+
+> [!WARNING]
+> Subsequência não é **substring** (pedaço contíguo): a maior substring comum
+> de MORANGO e MANGA é `ANG` (3), e a LCS tem 4. A linha `i` fala de
+> `a[i - 1]`: escrever `a[i] == b[j]` compila e dá a resposta errada.
+
+### Exemplos de uso
 
 Você ditou **MORANGO** e seu sobrinho escreveu **MANGA**. No desenho, o
 caminho sai do canto roxo; as células verdes são as quatro letras da
@@ -1064,7 +1297,141 @@ int main(void) {
 gcc ~/LPEDC/material/A282.c -o ~/LPEDC/material/A282 && ~/LPEDC/material/A282
 ```
 
-### 0142 · Distância de edição
+### Exercícios
+
+**Exercício E841** · ★☆☆
+
+Duas linhas de ônibus atravessam o centro. Cada ponto tem uma letra:
+
+```text
+linha 101: A B C D E F G H
+linha 202: B D C E G A H
+```
+
+Quantos pontos as duas visitam na MESMA ordem (sem precisar ser pontos
+seguidos)? Escreva a função
+
+```text
+int lcs(const char *a, const char *b)
+```
+
+que devolve o tamanho da maior subsequência comum, e teste com os pares
+abaixo, mostrando cada um entre aspas.
+
+```text
+Saída esperada:
+"ABCDEFGH" x "BDCEGAH": 5
+"CASA" x "ASA": 3
+"" x "ABC": 0
+"XYZ" x "XYZ": 3
+"ABC" x "DEF": 0
+```
+
+**Exercício E843** · ★★☆
+
+A LCS não é só para strings. Ana e Beto montaram playlists para a viagem,
+e cada música tem um número de catálogo:
+
+```text
+Ana:  12  7 33  5 21  8 40 17
+Beto:  7  5  9 21 40  3 17 12
+```
+
+Eles querem uma playlist em comum que respeite a ordem das DUAS listas.
+Escreva a função
+
+```text
+int lcs_vetor(const int a[], int m, const int b[], int n, int saida[])
+```
+
+que grava em saida a maior subsequência comum dos dois vetores e devolve
+o tamanho dela. Mostre o resultado.
+
+```text
+Saída esperada:
+5 músicas em comum, na mesma ordem: 7 5 21 40 17
+```
+
+**Exercício E844** · ★★☆
+
+Charada de palavras: qual é a MENOR sequência de letras (não precisa
+existir no dicionário) que contém BANANA e também CABANA como
+subsequências? É a menor supersequência comum, e ela sai da tabela da
+LCS: as letras da LCS aparecem uma vez só, e todas as outras letras das
+duas palavras entram também. Por isso o tamanho é m + n - LCS.
+
+Monte a tabela da LCS, construa a supersequência numa volta pela tabela
+e confira o resultado com uma função
+
+```text
+int eh_subsequencia(const char *p, const char *t)
+```
+
+que diz se p é subsequência de t.
+
+```text
+Saída esperada:
+LCS: 4 letras
+Supersequência: CABANANA (8 letras)
+BANANA está nela? sim
+CABANA está nela? sim
+```
+
+**Exercício E846** · ★★★
+
+O fechamento de uma ação em 13 pregões foi, em reais:
+
+```text
+31 28 35 30 33 29 36 40 34 38 41 37 33
+```
+
+Qual é a maior sequência de pregões (não precisam ser seguidos) em que o
+preço SEMPRE sobe? Ela é a LCS entre o vetor original e uma cópia dele
+ORDENADA e SEM REPETIDOS.
+
+Escreva o programa: copie o vetor, ordene a cópia com qsort, tire os
+repetidos, rode a LCS de vetores de int com recuperação e mostre o
+tamanho e os preços.
+
+```text
+Saída esperada:
+Maior sequência de altas: 6 dias
+Preços: 28 30 33 36 40 41
+```
+
+---
+
+## 0142 · Distância de edição
+
+### Conceito
+
+- **Distância de edição** (ou **de Levenshtein**): o menor número de
+  operações que transforma uma string em outra. Cada operação custa 1:
+  **inserir**, **remover** ou **trocar** uma letra (LEVENSHTEIN, 1966).
+- **Recorrência**: como na LCS (assunto 0141), olhe o fim. Últimas letras
+  **iguais**: custa o mesmo que as palavras sem elas. **Diferentes**: 1 + a
+  mais barata entre trocar, remover e inserir (KLEINBERG; TARDOS, 2006, cap. 6).
+- **Tabela**: `d[i][j]` é a distância entre os prefixos `a[0..i-1]` e
+  `b[0..j-1]`; a resposta fica em `d[m][n]` (LINTZMAYER; MOTA, 2023).
+- **Borda**: diferente da LCS, `d[i][0] = i` (`i` remoções) e `d[0][j] = j`
+  (`j` inserções) (LINTZMAYER; MOTA, 2023).
+- **Custo**: **O(m × n)**. A distância é pelo menos a diferença dos tamanhos,
+  o que ajuda um corretor a descartar palavras cedo
+  (KLEINBERG; TARDOS, 2006, cap. 6).
+- **Alinhamento**: a volta pela tabela mostra quais edições foram feitas, do
+  fim para o começo (KLEINBERG; TARDOS, 2006, cap. 6).
+
+| caso | `d[i][j]` |
+| --- | --- |
+| `a[i-1] == b[j-1]` | `d[i-1][j-1]` (diagonal, de graça) |
+| letras diferentes | `1 +` o menor entre `d[i-1][j-1]` (troca), `d[i-1][j]` (remove) e `d[i][j-1]` (insere) |
+
+> [!WARNING]
+> A borda **não** é zero, como na LCS: sem `d[i][0] = i` e `d[0][j] = j`,
+> CARTA e ARTES dariam 2. Na volta, confira `i > 0` e `j > 0` antes de ler
+> `d[i - 1][...]` ou `a[i - 1]`.
+
+### Exemplos de uso
 
 Um corretor ranqueia sugestões pelo número de edições. CARTA e ARTES distam 3:
 remover o C, inserir um E e trocar o último A por S (CARTA, ARTA, ARTEA,
@@ -1319,7 +1686,128 @@ int main(void) {
 gcc ~/LPEDC/material/A284.c -o ~/LPEDC/material/A284 && ~/LPEDC/material/A284
 ```
 
-### 0143 · Juntando tudo: um mini-diff
+### Exercícios
+
+**Exercício E847** · ★☆☆
+
+Escreva a função
+
+```text
+int distancia(const char *a, const char *b)
+```
+
+que devolve a distância de Levenshtein entre duas palavras (inserir,
+remover e trocar custam 1), e teste com os pares abaixo, mostrando cada
+um entre aspas.
+
+```text
+Saída esperada:
+"LIVRO" -> "LIBRA": 2
+"" -> "SOL": 3
+"CASA" -> "CASA": 0
+"ABACAXI" -> "ABACATE": 2
+"FUTEBOL" -> "BASQUETE": 8
+```
+
+**Exercício E849** · ★★☆
+
+Alguns sistemas de controle de versão não "trocam" letras: cada mudança é
+uma remoção seguida de uma inserção. Nessa distância sem troca, BOLO para
+BOLA custa 2 (remove O, insere A), e não 1.
+
+Escreva int dist_sem_troca(const char *a, const char *b), com a mesma
+tabela da distância de edição mas só com remover e inserir. Escreva também
+int lcs(const char *a, const char *b) e confira, para cada par, que a
+distância sem troca é igual a m + n - 2 x LCS (tudo que não está na LCS
+sai de a ou entra de b).
+
+```text
+Saída esperada:
+PALMEIRAS PALMAS     PD:  3   m + n - 2 x LCS = 9 + 6 - 2 x 6 =  3
+CARTA     ARTES      PD:  4   m + n - 2 x LCS = 5 + 5 - 2 x 3 =  4
+BOLO      BOLA       PD:  2   m + n - 2 x LCS = 4 + 4 - 2 x 3 =  2
+RECIFE    FORTALEZA  PD: 11   m + n - 2 x LCS = 6 + 9 - 2 x 2 = 11
+```
+
+**Exercício E850** · ★★☆
+
+A câmera do estacionamento lê placas com erro: troca O por 0, perde um
+caractere no fim, inventa outro. As placas cadastradas são:
+
+```text
+BRA2E19 RIO1A23 SPX9F87 BRA2E79 MGA4B56 BRZ2E19 PE1234 AM12B3456
+```
+
+Para cada leitura (BRA2E19, RI01A23, SPX9F8 e XYZ0000), mostre todas as
+placas cadastradas a distância de edição de no máximo 1, com a distância
+entre parênteses, ou "nenhuma". Antes de montar cada tabela, pule as
+placas cujo tamanho difere da leitura em mais de 1 (a distância é pelo
+menos a diferença dos tamanhos), e conte quantas tabelas foram montadas.
+
+```text
+Saída esperada:
+BRA2E19: BRA2E19 (0) BRA2E79 (1) BRZ2E19 (1)
+RI01A23: RIO1A23 (1)
+SPX9F8: SPX9F87 (1)
+XYZ0000: nenhuma
+tabelas montadas: 28 de 32
+```
+
+**Exercício E852** · ★★★
+
+Programas de comparar textos e de bioinformática mostram o ALINHAMENTO
+das duas sequências, uma em cima da outra, com um traço onde falta letra
+e uma marca embaixo dizendo o que aconteceu em cada coluna:
+
+```text
+= letras iguais     T troca     R remove (de cima)     I insere (de baixo)
+```
+
+Escreva void alinha(const char *a, const char *b), que monta a tabela da
+distância de edição, faz a volta e mostra a distância e as três linhas do
+alinhamento, com um espaço antes de cada caractere. Teste com SABADO ->
+SALDO e ESTRELA -> ESTERIL.
+
+```text
+Saída esperada:
+SABADO -> SALDO: distância 2
+ S A B A D O
+ S A - L D O
+ = = R T = =
+ESTRELA -> ESTERIL: distância 3
+ E S T - R E L A
+ E S T E R I L -
+ = = = I = T = R
+```
+
+---
+
+## 0143 · Juntando tudo: um mini-diff
+
+### Conceito
+
+- **`diff`**: mostra o que mudou entre duas versões de um arquivo. Comparar
+  linha com linha não serve: uma linha nova no começo faz todas parecerem
+  diferentes (LINUX MAN-PAGES, s.d.).
+- **LCS de linhas**: a LCS (assunto 0141) com linhas no lugar de letras; duas
+  linhas casam quando `strcmp` dá 0. As da LCS ficaram iguais; as que só estão
+  na antiga foram **removidas** (`-`); as que só estão na nova, **adicionadas**
+  (`+`) (CORMEN et al., 2024, cap. 14).
+- **Tabela de sufixos**: `c[i][j]` é a LCS de `a[i..m-1]` e `b[j..n-1]`. A
+  resposta fica em `c[0][0]` e a volta anda do **começo** para o fim
+  (LINTZMAYER; MOTA, 2023).
+- **Ler linhas**: `fgets` guarda o `'\n'`; `buf[strcspn(buf, "\n")] = '\0'`
+  corta-o se existir (CPPREFERENCE, s.d.).
+- **Matriz num bloco**: a tabela vem de um único `malloc`, e a célula `(i, j)`
+  mora em `c[i * w + j]`, com `w = n + 1` (KERNIGHAN; RITCHIE, 1989).
+- **Algoritmo de Myers**: o `diff` real gasta O((m + n) × D), com D o número
+  de diferenças, em vez de O(m × n) (MYERS, 1986).
+
+> [!WARNING]
+> Sem tirar o `'\n'`, "banana\n" e "banana" diferem no `strcmp` e o diff acusa
+> uma mudança invisível. A última linha do arquivo pode vir **sem** `'\n'`.
+
+### Exemplos de uso
 
 Você e sua mãe dividem a lista de compras num arquivo. `linhas.h` e
 `linhas.c` (assunto 0034) leem as linhas num `char **` que dobra com
@@ -1614,484 +2102,7 @@ int main(void) {
 gcc ~/LPEDC/material/A286.c ~/LPEDC/material/0143-linhas.c -o ~/LPEDC/material/A286 && ~/LPEDC/material/A286
 ```
 
----
-
-## 3. Exercícios práticos
-
-Cada exercício é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta. Compile como os exemplos: `gcc ~/LPEDC/material/E007.c -o ~/LPEDC/material/E007 && ~/LPEDC/material/E007`. Resoluções em `_respostas/21-programacao-dinamica/`.
-
-### 0138 · Memoização
-
-**Exercício E823** · ★☆☆
-
-Na escadaria da igreja da cidade, os adolescentes sobem de 1, de 2 ou de 3
-degraus por vez. São 10 degraus. Escreva um programa que calcula, de baixo
-para cima, quantos jeitos existem de subir 0, 1, 2, ..., 10 degraus, num
-vetor t[], e mostre a tabela inteira e a resposta.
-
-```text
-Saída esperada:
-t: 1 1 2 4 7 13 24 44 81 149 274
-Jeitos de subir 10 degraus: 274
-```
-
-**Exercício E825** · ★★☆
-
-Um motorista de aplicativo cruza o centro da cidade de um canto ao outro,
-andando só para a direita (D) ou para baixo (B). Cada quarteirão tem um
-pedágio de estacionamento rotativo, em reais, que ele paga ao passar
-(inclusive o da saída e o da chegada):
-
-```text
-3 1 4 2 5
-2 7 1 8 2
-6 1 3 2 4
-5 2 9 1 3
-```
-
-Escreva um programa que calcula, de baixo para cima, a matriz custo[i][j]
-(o menor gasto da saída até o quarteirão (i, j)) e mostre o menor custo
-até o canto de baixo à direita. Depois, refaça o caminho de trás para a
-frente e mostre a sequência de letras D e B, da saída até a chegada.
-
-```text
-Saída esperada:
-Menor custo: R$ 18
-Caminho: DDBBDBD
-```
-
-**Exercício E826** · ★★☆
-
-A feira de domingo tem 8 vagas de barraca enfileiradas, numeradas de 0 a 7.
-Você tem barracas suficientes, mas a prefeitura proíbe montar em duas
-vagas VIZINHAS. O lucro estimado de cada vaga, em reais, é:
-
-```text
-vaga:   0   1   2   3   4   5   6   7
-lucro: 40  25  60  30  10  55  35  20
-```
-
-Escreva um programa que calcula, de baixo para cima, melhor[i] = o maior
-lucro usando só as vagas 0..i, mostre o vetor, o lucro máximo e quais
-vagas usar.
-
-```text
-Saída esperada:
-melhor: 40 40 100 100 110 155 155 175
-Lucro máximo: R$ 175
-Barracas: 0 2 5 7
-```
-
-**Exercício E828** · ★★★
-
-Na Mega-Sena você escolhe 6 dezenas entre 60. O número de jogos possíveis
-é C(60, 6), e a recorrência do triângulo de Pascal calcula isso sem
-fatorial nenhum (60! não cabe em tipo nenhum do C):
-
-```text
-C(n, k) = C(n - 1, k - 1) + C(n - 1, k),   com C(n, 0) = C(n, n) = 1
-```
-
-(a dezena n entra no jogo ou não entra). A recursão pura faria
-2 x C(60, 6) - 1, uns 100 milhões de chamadas. Escreva a função
-
-```text
-long long comb(int n, int k)
-```
-
-com memoização numa matriz memo[61][61] e um contador global de chamadas.
-Calcule C(60, 6) e depois, zerando o contador mas SEM limpar o memo,
-C(60, 30). No fim, conte quantas posições do memo foram preenchidas.
-
-```text
-Saída esperada:
-Mega-Sena: C(60, 6) = 50063860 (649 chamadas)
-chance de acertar com um jogo: 1 em 50063860
-C(60, 30) = 118264581564861424 (1441 chamadas novas)
-subproblemas guardados no memo: 1044
-```
-
-### 0139 · Troco com programação dinâmica
-
-**Exercício E829** · ★☆☆
-
-A loja de ferragens vende parafusos só em pacotes fechados de 3, 7 e 11
-unidades. Um marceneiro precisa de exatamente 25 parafusos e quer levar o
-menor número de pacotes. Escreva um programa que monta a tabela dp[v] (o
-menor número de pacotes com exatamente v parafusos) de 0 a 25. Mostre as
-quantidades de 1 a 25 que são impossíveis e a resposta para 25.
-
-```text
-Saída esperada:
-Impossíveis até 25: 1 2 4 5 8
-Menor número de pacotes para 25 parafusos: 3
-```
-
-**Exercício E831** · ★★☆
-
-Num jogo de celular, a loja vende pacotes de 1, 6 e 10 gemas. Escreva um
-programa que calcula dp[v], o menor número de pacotes para cada total v de 1
-a 20 gemas, e guarda em ultimo[v] o último pacote usado. Mostre os pacotes da
-solução de 12 gemas.
-
-Escreva também int guloso(int v), que sempre pega o maior pacote que cabe, e
-mostre, para v de 1 a 20, os totais em que o guloso usa MAIS pacotes que a
-PD, no formato "v: guloso g, PD d".
-
-```text
-Saída esperada:
-12 gemas: 2 pacotes (6 6)
-12: guloso 3, PD 2
-13: guloso 4, PD 3
-14: guloso 5, PD 4
-15: guloso 6, PD 5
-18: guloso 4, PD 3
-19: guloso 5, PD 4
-```
-
-**Exercício E832** · ★★☆
-
-Você vai pagar um lanche de R$ 7 com moedas de R$ 1, cédulas de R$ 2 e
-cédulas de R$ 5. Duas perguntas diferentes:
-
-a) Quantas COMBINAÇÕES de dinheiro somam R$ 7? (5 + 2 e 2 + 5 são a mesma)
-b) A máquina de autoatendimento aceita uma nota ou moeda por vez. Quantas
-
-```text
- SEQUÊNCIAS diferentes de inserção somam R$ 7? (5 + 2 e 2 + 5 contam
- separado)
-```
-
-Escreva as funções long long combinacoes(int total) e long long
-sequencias(int total), cada uma com o seu vetor de PD, e mostre as duas
-respostas.
-
-```text
-Saída esperada:
-combinações: 6
-sequências:  26
-```
-
-**Exercício E834** · ★★★
-
-A máquina de café do escritório custa R$ 1,00, aceita moedas de 5, 10, 25
-e 50 centavos, mas trava se você colocar mais de 6 moedas. Quantas
-combinações de moedas pagam exatamente R$ 1,00 com até 6 moedas? Mostre
-também quantas usam exatamente 1, 2, ..., 6 moedas.
-
-Um vetor jeitos[v] não basta: ele não sabe quantas moedas cada combinação
-usou. Acrescente essa informação como uma segunda dimensão:
-w[q][v] = combinações com EXATAMENTE q moedas que somam v centavos.
-
-```text
-Saída esperada:
-exatamente 1 moeda: 0
-exatamente 2 moedas: 1
-exatamente 3 moedas: 1
-exatamente 4 moedas: 1
-exatamente 5 moedas: 1
-exatamente 6 moedas: 3
-até 6 moedas: 7 combinações
-```
-
-### 0140 · Mochila 0/1
-
-**Exercício E835** · ★☆☆
-
-Uma padaria tem R$ 10 mil para investir e cinco projetos. Cada projeto é
-feito inteiro ou não é feito (0/1). Custos e retornos em mil reais:
-
-```text
-projeto            custo  retorno por ano
-1 fachada nova       4          9
-2 site de pedidos    3          7
-3 curso da equipe    2          4
-4 forno novo         5         11
-5 vitrine refrig.    1          2
-```
-
-Escreva um programa que monta a tabela t[i][c] (maior retorno usando os
-projetos 1..i com c mil reais) e mostre a última linha da tabela e o
-retorno máximo com os R$ 10 mil.
-
-```text
-Saída esperada:
-última linha: 0 2 4 7 9 11 13 16 18 20 22
-Retorno máximo com R$ 10 mil: R$ 22 mil por ano
-```
-
-**Exercício E837** · ★★☆
-
-Véspera de vestibular: você tem 6 horas de estudo e uma estimativa de
-quantos pontos cada revisão completa rende. Cada matéria é revisada
-inteira ou não é revisada:
-
-```text
-matéria      horas  pontos
-Matemática    2.5     30
-Português     1.5     18
-História      1.0     10
-Física        2.0     25
-Química       1.5     16
-Inglês        0.5      6
-```
-
-O problema: a tabela da mochila precisa de capacidades INTEIRAS, e as
-horas são double. Guarde as horas como double no programa, converta tudo
-para meias horas (unidades inteiras) e resolva a mochila 0/1 com
-recuperação. Mostre o máximo, as matérias e as horas usadas.
-
-```text
-Saída esperada:
-Máximo: 73 pontos em 6.0 h
-Estudar: Física Português Matemática
-Horas usadas: 6.0
-```
-
-**Exercício E838** · ★★☆
-
-Sua carteira tem estas cédulas: 2, 5, 5, 10, 10, 20, 20 e 50 reais. Você
-precisa separar exatamente R$ 30 para o rateio do churrasco. De quantos
-jeitos dá para escolher as cédulas? Cada cédula é um papel diferente: as
-duas notas de 20 contam como escolhas distintas.
-
-Resolva com PD num vetor só (jeitos[s] = quantos subconjuntos das cédulas
-vistas até agora somam s) e confira o resultado com a força bruta por bits
-do assunto 0125, testando os 2^8 subconjuntos.
-
-```text
-Saída esperada:
-PD: 7 jeitos de separar R$ 30
-força bruta: 7 jeitos (256 subconjuntos testados)
-```
-
-**Exercício E840** · ★★★
-
-Um drone de entregas carrega até 10 kg E até 8 litros de volume no
-compartimento. Há seis pacotes esperando, cada um com peso, volume e o
-frete que paga:
-
-```text
-pacote  peso (kg)  volume (L)  frete (R$)
-  1         3          4           25
-  2         4          2           30
-  3         2          3           18
-  4         5          3           40
-  5         1          2            9
-  6         3          3           22
-```
-
-Agora há DUAS capacidades. Estenda a ideia da mochila 0/1 para uma tabela
-de três dimensões, t[i][p][v] = maior frete usando os pacotes 1..i com
-até p kg e v litros. Mostre o frete máximo, os pacotes (do último para o
-primeiro, como sai da volta pela tabela), o peso e o volume usados, e
-confira o valor com uma força bruta pelos 2^6 subconjuntos.
-
-```text
-Saída esperada:
-Frete máximo: R$ 79
-Pacotes: 5 4 2
-Usa 10 kg e 7 L
-Força bruta: R$ 79
-```
-
-### 0141 · Maior subsequência comum (LCS)
-
-**Exercício E841** · ★☆☆
-
-Duas linhas de ônibus atravessam o centro. Cada ponto tem uma letra:
-
-```text
-linha 101: A B C D E F G H
-linha 202: B D C E G A H
-```
-
-Quantos pontos as duas visitam na MESMA ordem (sem precisar ser pontos
-seguidos)? Escreva a função
-
-```text
-int lcs(const char *a, const char *b)
-```
-
-que devolve o tamanho da maior subsequência comum, e teste com os pares
-abaixo, mostrando cada um entre aspas.
-
-```text
-Saída esperada:
-"ABCDEFGH" x "BDCEGAH": 5
-"CASA" x "ASA": 3
-"" x "ABC": 0
-"XYZ" x "XYZ": 3
-"ABC" x "DEF": 0
-```
-
-**Exercício E843** · ★★☆
-
-A LCS não é só para strings. Ana e Beto montaram playlists para a viagem,
-e cada música tem um número de catálogo:
-
-```text
-Ana:  12  7 33  5 21  8 40 17
-Beto:  7  5  9 21 40  3 17 12
-```
-
-Eles querem uma playlist em comum que respeite a ordem das DUAS listas.
-Escreva a função
-
-```text
-int lcs_vetor(const int a[], int m, const int b[], int n, int saida[])
-```
-
-que grava em saida a maior subsequência comum dos dois vetores e devolve
-o tamanho dela. Mostre o resultado.
-
-```text
-Saída esperada:
-5 músicas em comum, na mesma ordem: 7 5 21 40 17
-```
-
-**Exercício E844** · ★★☆
-
-Charada de palavras: qual é a MENOR sequência de letras (não precisa
-existir no dicionário) que contém BANANA e também CABANA como
-subsequências? É a menor supersequência comum, e ela sai da tabela da
-LCS: as letras da LCS aparecem uma vez só, e todas as outras letras das
-duas palavras entram também. Por isso o tamanho é m + n - LCS.
-
-Monte a tabela da LCS, construa a supersequência numa volta pela tabela
-e confira o resultado com uma função
-
-```text
-int eh_subsequencia(const char *p, const char *t)
-```
-
-que diz se p é subsequência de t.
-
-```text
-Saída esperada:
-LCS: 4 letras
-Supersequência: CABANANA (8 letras)
-BANANA está nela? sim
-CABANA está nela? sim
-```
-
-**Exercício E846** · ★★★
-
-O fechamento de uma ação em 13 pregões foi, em reais:
-
-```text
-31 28 35 30 33 29 36 40 34 38 41 37 33
-```
-
-Qual é a maior sequência de pregões (não precisam ser seguidos) em que o
-preço SEMPRE sobe? Ela é a LCS entre o vetor original e uma cópia dele
-ORDENADA e SEM REPETIDOS.
-
-Escreva o programa: copie o vetor, ordene a cópia com qsort, tire os
-repetidos, rode a LCS de vetores de int com recuperação e mostre o
-tamanho e os preços.
-
-```text
-Saída esperada:
-Maior sequência de altas: 6 dias
-Preços: 28 30 33 36 40 41
-```
-
-### 0142 · Distância de edição
-
-**Exercício E847** · ★☆☆
-
-Escreva a função
-
-```text
-int distancia(const char *a, const char *b)
-```
-
-que devolve a distância de Levenshtein entre duas palavras (inserir,
-remover e trocar custam 1), e teste com os pares abaixo, mostrando cada
-um entre aspas.
-
-```text
-Saída esperada:
-"LIVRO" -> "LIBRA": 2
-"" -> "SOL": 3
-"CASA" -> "CASA": 0
-"ABACAXI" -> "ABACATE": 2
-"FUTEBOL" -> "BASQUETE": 8
-```
-
-**Exercício E849** · ★★☆
-
-Alguns sistemas de controle de versão não "trocam" letras: cada mudança é
-uma remoção seguida de uma inserção. Nessa distância sem troca, BOLO para
-BOLA custa 2 (remove O, insere A), e não 1.
-
-Escreva int dist_sem_troca(const char *a, const char *b), com a mesma
-tabela da distância de edição mas só com remover e inserir. Escreva também
-int lcs(const char *a, const char *b) e confira, para cada par, que a
-distância sem troca é igual a m + n - 2 x LCS (tudo que não está na LCS
-sai de a ou entra de b).
-
-```text
-Saída esperada:
-PALMEIRAS PALMAS     PD:  3   m + n - 2 x LCS = 9 + 6 - 2 x 6 =  3
-CARTA     ARTES      PD:  4   m + n - 2 x LCS = 5 + 5 - 2 x 3 =  4
-BOLO      BOLA       PD:  2   m + n - 2 x LCS = 4 + 4 - 2 x 3 =  2
-RECIFE    FORTALEZA  PD: 11   m + n - 2 x LCS = 6 + 9 - 2 x 2 = 11
-```
-
-**Exercício E850** · ★★☆
-
-A câmera do estacionamento lê placas com erro: troca O por 0, perde um
-caractere no fim, inventa outro. As placas cadastradas são:
-
-```text
-BRA2E19 RIO1A23 SPX9F87 BRA2E79 MGA4B56 BRZ2E19 PE1234 AM12B3456
-```
-
-Para cada leitura (BRA2E19, RI01A23, SPX9F8 e XYZ0000), mostre todas as
-placas cadastradas a distância de edição de no máximo 1, com a distância
-entre parênteses, ou "nenhuma". Antes de montar cada tabela, pule as
-placas cujo tamanho difere da leitura em mais de 1 (a distância é pelo
-menos a diferença dos tamanhos), e conte quantas tabelas foram montadas.
-
-```text
-Saída esperada:
-BRA2E19: BRA2E19 (0) BRA2E79 (1) BRZ2E19 (1)
-RI01A23: RIO1A23 (1)
-SPX9F8: SPX9F87 (1)
-XYZ0000: nenhuma
-tabelas montadas: 28 de 32
-```
-
-**Exercício E852** · ★★★
-
-Programas de comparar textos e de bioinformática mostram o ALINHAMENTO
-das duas sequências, uma em cima da outra, com um traço onde falta letra
-e uma marca embaixo dizendo o que aconteceu em cada coluna:
-
-```text
-= letras iguais     T troca     R remove (de cima)     I insere (de baixo)
-```
-
-Escreva void alinha(const char *a, const char *b), que monta a tabela da
-distância de edição, faz a volta e mostra a distância e as três linhas do
-alinhamento, com um espaço antes de cada caractere. Teste com SABADO ->
-SALDO e ESTRELA -> ESTERIL.
-
-```text
-Saída esperada:
-SABADO -> SALDO: distância 2
- S A B A D O
- S A - L D O
- = = R T = =
-ESTRELA -> ESTERIL: distância 3
- E S T - R E L A
- E S T E R I L -
- = = = I = T = R
-```
-
-### 0143 · Juntando tudo: um mini-diff
+### Exercícios
 
 **Exercício E853** · ★☆☆
 
@@ -2224,11 +2235,13 @@ Saída esperada:
 gcc ~/LPEDC/material/E858.c ~/LPEDC/material/0143-linhas.c -o ~/LPEDC/material/E858 && ~/LPEDC/material/E858
 ```
 
-### Lista do módulo
+---
+
+## Lista do módulo
 
 30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P2101.c a P2130.c, em `material/`; resoluções em `_respostas/21-programacao-dinamica/lista/`.
 
-#### ★☆☆ Aquecimento
+### ★☆☆ Aquecimento
 
 **Exercício P2101** · ★☆☆ · Tribonacci com e sem memória
 
@@ -2483,7 +2496,7 @@ Saída esperada:
 
 **Resposta esperada:** 3 para 226, 16 para 1122612 e 0 para 301 (o 30 e o 0 sozinho não são letras).
 
-#### ★★☆ Para pensar
+### ★★☆ Para pensar
 
 **Exercício P2111** · ★★☆ · Dois barcos com o mesmo peso
 
@@ -2743,7 +2756,7 @@ Cálculos: 16
 
 **Resposta esperada:** 1, 2, 5, 14, 42, ... até 9694845, com 16 cálculos (um para cada n de 0 a 15): sem memo, arv(15) faria milhões de chamadas.
 
-#### ★★★ Desafio
+### ★★★ Desafio
 
 **Exercício P2121** · ★★★ · A ordem das multiplicações de matrizes
 
@@ -3009,7 +3022,7 @@ Força bruta: 94 horas
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas para fechar o módulo, misturando os assuntos. Escreva em C e rode
 com as flags de estudo.
@@ -3157,7 +3170,7 @@ meio recursivamente), mas dá mais trabalho.
 
 </details>
 
-### Questões no estilo da prova
+## Questões no estilo da prova
 
 Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma
 alternativa certa. Resolva no papel, com a tabela à mão, antes de abrir o

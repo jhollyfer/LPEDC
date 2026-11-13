@@ -62,9 +62,12 @@ sudo apt install gdb        # Debian / Ubuntu
 
 ---
 
-## 1. Conceitos gerais
+> [!NOTE]
+> Cada assunto é um capítulo: **Conceito** (a explicação), **Exemplos de uso** (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e **Exercícios** (cada um é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta; resoluções em `_respostas/06-ponteiros/`).
 
-### 0044 · Memória e endereços
+## 0044 · Memória e endereços
+
+### Conceito
 
 - **Memória**: uma fileira de gavetas de **1 byte**, cada uma com um número, o
   **endereço** (FEOFILOFF, 2009, ap. D).
@@ -84,195 +87,7 @@ sudo apt install gdb        # Debian / Ubuntu
 > com `(void *)`. E não deduza nada da ordem de variáveis soltas: só num vetor
 > a ordem é garantida.
 
-### 0045 · Ponteiros
-
-- **Ponteiro**: variável que guarda um **endereço**. Ele também mora numa
-  gaveta, mas guarda o número de **outra**. Ziviani e a tradução do K&R dizem
-  **apontador** (ZIVIANI, 2010).
-- **Declaração**: `int *cartao;` lê-se "ponteiro para int". O tipo diz o que
-  mora lá e quantos bytes ler (DEITEL; DEITEL, 2011, cap. 7).
-- **`&` e `*`**: `&x` dá o endereço; `*p` vai ao endereço guardado e lê ou
-  escreve lá, que é **desreferenciar** (KERNIGHAN; RITCHIE, 1989, cap. 5).
-- **Três papéis do `*`**: multiplicação (`a * b`), declaração (`int *p`) e
-  desreferência (`*p = 5`) (BACKES, 2013, cap. 10).
-- **`NULL`**: endereço que quer dizer "lugar nenhum". Teste
-  `if (p != NULL)` antes de usar; desreferenciá-lo derruba o programa
-  (*segmentation fault*) (DEITEL; DEITEL, 2011, cap. 7).
-- **Tamanho**: todo ponteiro de dado tem 8 bytes em 64 bits; o tipo muda só a
-  leitura (BACKES, 2013, cap. 10).
-
-> [!WARNING]
-> `int *p;` sem valor guarda **lixo**, e `*p = 10;` escreve numa gaveta
-> desconhecida. Inicialize com um endereço ou `NULL`. E em `int *a, b;` só `a`
-> é ponteiro.
-
-### 0046 · Passagem por referência
-
-- **Só existe passagem por valor** no C: a função recebe uma cópia (assunto
-  0029) (DEITEL; DEITEL, 2011, cap. 7).
-- **Passagem por referência**: o C a simula passando o **endereço**. A cópia
-  do endereço aponta para a mesma gaveta, e `*a` é a própria variável de quem
-  chamou (KERNIGHAN; RITCHIE, 1989, cap. 5).
-- **Sintaxe**: a função recebe ponteiros (`void troca(int *a, int *b)`); quem
-  chama passa endereços (`troca(&arroz, &feijao)`) (BACKES, 2013, cap. 10).
-- **O `&` do `scanf`**: ele precisa escrever na variável, então pede o
-  endereço. `scanf("%s", nome)` vai sem `&` porque o nome do vetor já é
-  endereço (BACKES, 2013, cap. 10).
-- **Vários resultados**: o `return` devolve um valor só; para devolver mais,
-  a função escreve em ponteiros recebidos (o A092 racha a conta) (DEITEL;
-  DEITEL, 2011, cap. 7).
-- **`const int *p`**: a função só lê; o compilador recusa `*p = ...`. Struct
-  grande vai assim (DEITEL; DEITEL, 2011, cap. 7).
-
-> [!WARNING]
-> Esquecer o `&` na chamada manda o número 8 onde se espera um endereço, e o
-> programa cai. Esquecer o `*` na função (`a = b;`) troca só os ponteiros
-> locais. Quem mexe no dado de quem chamou é sempre `*a`.
-
-### 0047 · Ponteiros e vetores
-
-- **Decaimento**: numa expressão, o nome do vetor quase sempre **vira** o
-  endereço do primeiro elemento: `kwh` vale `&kwh[0]` (KERNIGHAN; RITCHIE,
-  1989, cap. 5).
-- **Aritmética de ponteiros**: `p + 1` é o **próximo elemento**, não o próximo
-  byte; o C multiplica pelo tamanho do tipo. `p++` avança um, `q - p` dá
-  quantos elementos há entre eles (DEITEL; DEITEL, 2011, cap. 7).
-- **`v[i]` é `*(v + i)`**: ande `i` elementos e pegue o que tem lá. Vale para
-  ponteiro: `p[2]` é `*(p + 2)`, contado de onde `p` aponta agora (DEITEL;
-  DEITEL, 2011, cap. 7).
-- **Vetor não é ponteiro**: `sizeof kwh` dá o vetor inteiro (20), `sizeof p`
-  dá 8, e `kwh++` não compila (BACKES, 2013, cap. 10).
-- **Matriz**: `m[i][j]` é `*(*(m + i) + j)`. Em `int m[3][4]`, `m + 1` anda uma
-  linha (16 bytes) e `m[0] + 1` anda 4 (BACKES, 2013, cap. 10).
-- **Um depois do último**: `kwh + 5` pode ser calculado e comparado, nunca
-  lido (KERNIGHAN; RITCHIE, 1989, cap. 5).
-
-> [!WARNING]
-> `*p + 1` soma 1 ao valor; `*(p + 1)` anda uma gaveta. `*p++` lê e depois
-> avança; `(*p)++` soma 1 no valor. Passar do fim (`p <= kwh + 5`) dá
-> `stack-buffer-overflow` no AddressSanitizer.
-
-### 0048 · Ponteiros e strings
-
-- **`char *`**: toda função de string recebe o endereço do primeiro caractere
-  e anda até o `'\0'` (KERNIGHAN; RITCHIE, 1989, cap. 5).
-- **Literal de string**: um texto entre aspas, guardado **uma vez só** numa
-  região **somente leitura** (DEITEL; DEITEL, 2011, cap. 7).
-- **`char nome[] = "ana";`**: cria um vetor de 4 `char` e **copia** o literal.
-  O vetor é seu: `nome[0] = 'A'` vale (DEITEL; DEITEL, 2011, cap. 7).
-- **`const char *apelido = "bia";`**: cria só um ponteiro para o literal. Com
-  `const`, o compilador recusa `apelido[0] = 'B'` (DEITEL; DEITEL, 2011,
-  cap. 7).
-- **Mudar de alvo**: `apelido = "bibi";` vale; `nome = "joana";` não compila
-  (use `strcpy`). `sizeof nome` dá 4 e `sizeof apelido` dá 8 (BACKES, 2013,
-  cap. 10).
-- **Vetor de ponteiros**: `const char *dias[]` gasta 8 bytes por nome mais o
-  texto; a matriz `char[4][10]` reserva 10 bytes por linha (DEITEL; DEITEL,
-  2011, cap. 7).
-
-> [!WARNING]
-> `char *s = "ola"; s[0] = 'O';` compila sem aviso e cai na execução
-> (`segmentation fault`). Use `const char *` ou `char s[]`. E `==` entre
-> strings compara endereços: use `strcmp`.
-
-### 0049 · Ponteiro para ponteiro
-
-- **Ponteiro para ponteiro**: variável que guarda o endereço de um ponteiro.
-  `int **pp;` lê-se "pp aponta para um `int *`" (BACKES, 2013, cap. 10).
-- **Níveis**: com `int *p = &vagas; int **pp = &p;`, `*pp` é o próprio `p` e
-  `**pp` é `vagas`. Cada `*` da declaração é um nível, e o acesso usa o mesmo
-  número de `*` (BACKES, 2013, cap. 10).
-- **Mudar o ponteiro de quem chamou**: para mudar um `int`, a função recebe
-  `int *`; para mudar um `int *`, recebe `int **`. As listas do módulo 11 mudam
-  o início assim (DEITEL; DEITEL, 2011, cap. 7).
-- **Vetor de ponteiros**: o nome de `const char *dias[]` decai para
-  `const char **`, o tipo do `char **argv` (assunto 0069) (KERNIGHAN; RITCHIE,
-  1989, cap. 5).
-
-> [!WARNING]
-> Estrela a menos: `*pp = 38;` não muda `vagas`, guarda 38 **em `p`** como
-> endereço, e o próximo `*p` derruba o programa. Para a função mudar o seu
-> ponteiro, passe `&posto`, não `posto`.
-
-### 0050 · Ponteiro para função
-
-- **Ponteiro para função**: o código da função mora na memória, e o nome dela,
-  sem parênteses, já é o endereço. Uma variável que guarda esse endereço é um
-  ponteiro para função (BACKES, 2013, cap. 13).
-- **Declaração**: `int (*criterio)(int);` lê-se de dentro para fora. Sem os
-  parênteses, `int *criterio(int);` é uma função que devolve `int *` (DEITEL;
-  DEITEL, 2011, cap. 7).
-- **Assinatura**: o ponteiro só aceita funções com o mesmo protótipo (BACKES,
-  2013, cap. 13).
-- **Uso**: `criterio = eh_calor;` guarda o endereço; `criterio(31)` chama.
-  `(*criterio)(31)` também vale (DEITEL; DEITEL, 2011, cap. 7).
-- **Callback**: a função passada como parâmetro. A função que recebe fica
-  genérica, e quem chama decide o comportamento (CELES; RANGEL, 2002).
-- **`qsort`**: ordena qualquer vetor com a sua função de comparação, que recebe
-  dois `const void *` e devolve negativo, zero ou positivo (o A100 usa)
-  (KERRISK, s.d.).
-
-```text
-int (*criterio)(int);
-```
-
-> [!WARNING]
-> `return *(const int *)a - *(const int *)b;` estoura o `int` com sinais
-> opostos (`signed integer overflow`). Use `return (x > y) - (x < y);`. E
-> `int *f(int)` é função, não ponteiro.
-
-### 0051 · void * e cast
-
-- **`void *`**: **ponteiro genérico**. Guarda o endereço de qualquer dado, mas
-  não diz o que mora lá (DEITEL; DEITEL, 2011, cap. 7).
-- **Conversão livre**: em C, qualquer ponteiro de dado vira `void *` e volta
-  sem cast (`int *q = p;`) (DEITEL; DEITEL, 2011, cap. 7).
-- **Não se desreferencia**: `*p` não compila, porque o compilador não sabe
-  quantos bytes ler. Converta antes com um **cast**: `*(int *)p`. E `p + 1` não
-  existe no C padrão (BACKES, 2013, cap. 10).
-- **O cast é uma promessa**: `(double *)` num endereço de `int` lê 8 bytes onde
-  havia 4 e mostra lixo (BACKES, 2013, cap. 10).
-- **Funções genéricas**: recebem `void *` e o tamanho em bytes, e olham a
-  memória com `unsigned char *`, o único tipo que lê qualquer objeto byte a
-  byte. Assim funcionam `memcpy`, `qsort` e `malloc` (CELES; RANGEL, 2002).
-
-> [!WARNING]
-> O `void *` desliga a conferência de tipos: `troca_generica(&senha_a,
-> &preco_a, sizeof preco_a)` compila e troca 8 bytes numa variável de 4. Use o
-> `sizeof` da própria variável, nunca um número à mão.
-
-### 0052 · Juntando tudo: o ranking da feira
-
-- **Vetores paralelos**: nome, quantidade e preço de cada barraca na mesma
-  posição, e o faturamento `fat[i] = qtd[i] * preco[i]` (DEITEL; DEITEL, 2011,
-  cap. 7).
-- **Vetor de ponteiros como índice**: `const double *ordem[N]` aponta para os
-  elementos de `fat`. Ordena-se `ordem`, não `fat`, como o índice de um livro
-  (assunto 0049) (CELES; RANGEL, 2002).
-- **`qsort` com ponteiros**: cada elemento de `ordem` é um `const double *`, e
-  o `qsort` entrega o endereço dele como `const void *`; dois saltos (`**`)
-  levam ao faturamento (KERRISK, s.d.).
-- **Subtração de ponteiros**: `ordem[i] - fat` dá o índice em `fat`, o mesmo
-  do nome em `produtos` (assunto 0047) (KERNIGHAN; RITCHIE, 1989, cap. 5).
-- **Dois resultados por referência**: `resumo` devolve o total num `double *`
-  e **onde** está o maior num `const double **` (assunto 0046) (DEITEL;
-  DEITEL, 2011, cap. 7).
-- **Ler `const` da direita para a esquerda**: `const double * const *` é
-  ponteiro para ponteiro constante para `double` constante (DEITEL; DEITEL,
-  2011, cap. 7).
-
-> [!WARNING]
-> `sizeof(double)` no `qsort` de `ordem` está errado: os elementos são
-> **ponteiros**. Aqui os dois têm 8 bytes e o erro se esconde; com `int *` não.
-> Escreva sempre `sizeof ordem[0]`.
-
----
-
-## 2. Exemplos de uso
-
-Cada exemplo compila sozinho. Rode com o comando abaixo dele e compare com a saída no fim do código.
-
-### 0044 · Memória e endereços
+### Exemplos de uso
 
 No cadastro da academia, a idade (`int`), a mensalidade (`double`) e o plano
 (`char`) ganham gavetas. Os endereços do desenho são fictícios:
@@ -376,7 +191,121 @@ int main(void) {
 gcc ~/LPEDC/material/A088.c -o ~/LPEDC/material/A088 && ~/LPEDC/material/A088
 ```
 
-### 0045 · Ponteiros
+### Exercícios
+
+**Exercício E259** · ★☆☆
+
+No ônibus da linha 0.420, o painel guarda três dados: a quantidade de
+passageiros (int, 42), a tarifa (float, 4.40) e a letra do setor
+(char, 'X'). Declare as três variáveis e mostre, para cada uma, o valor,
+o endereço e quantos bytes ela ocupa.
+
+```text
+Saída esperada (os endereços mudam a cada execução):
+passageiros = 42, endereço 0x7f..., tamanho 4
+tarifa = 4.40, endereço 0x7f..., tamanho 4
+setor = X, endereço 0x7f..., tamanho 1
+```
+
+**Exercício E261** · ★★☆
+
+A lanchonete guarda o preço de 2 tamanhos (linhas) de 3 sucos (colunas)
+numa matriz double precos[2][3]:
+
+```text
+{ {6.0, 7.5, 8.0}, {9.0, 11.0, 12.5} }
+```
+
+Mostre o valor e o endereço de cada posição, linha por linha, com dois
+for aninhados. Depois mostre, com sizeof, quantos bytes ocupa uma
+posição, uma linha inteira (precos[0]) e a matriz toda. Compare os
+endereços de precos[0][2] e precos[1][0] na saída: a linha 1 começa logo
+onde a linha 0 acaba.
+
+```text
+Saída esperada (endereços mudam a cada execução):
+precos[0][0] = 6.00 em 0x7f...30
+precos[0][1] = 7.50 em 0x7f...38
+...
+precos[1][2] = 12.50 em 0x7f...58
+uma posição: 8 bytes
+uma linha: 24 bytes
+a matriz: 48 bytes
+```
+
+**Exercício E262** · ★★☆
+
+Na pizzaria, declare int pedidos = 15 e um ponteiro int *p que guarda o
+endereço de pedidos. Mostre o valor de pedidos, o endereço de pedidos com
+%p (com o cast (void *)), o endereço guardado em p e, por fim, "sim" ou
+"não" conforme os dois endereços sejam iguais. O endereço muda a cada
+execução.
+
+```text
+Saída esperada:
+Valor: 15
+Endereço: 0x7ffe59064b4c
+Pelo ponteiro: 0x7ffe59064b4c
+Mesmo endereço: sim
+```
+
+**Exercício E263** · ★★★
+
+Variáveis declaradas juntas ficam juntas na memória? Escreva um programa
+que declare
+
+```text
+int a = 1, b = 2, c = 3;
+int v[3] = {1, 2, 3};
+```
+
+e mostre o endereço de a, b e c (uma linha cada) e depois, com um for, o
+endereço de v[0], v[1] e v[2]. No fim, mostre sizeof v e a soma
+sizeof a + sizeof b + sizeof c. Rode com o rodar. Depois compile SEM o
+sanitizer e rode de novo, para comparar as duas saídas:
+
+```text
+gcc -std=c17 E263.c -o e263 && ./e263
+```
+
+```text
+Saída esperada (endereços mudam a cada execução; com o rodar):
+a em 0x7f...30
+b em 0x7f...40
+c em 0x7f...50
+v[0] em 0x7f...60
+v[1] em 0x7f...64
+v[2] em 0x7f...68
+sizeof v = 12, a + b + c = 12
+```
+
+---
+
+## 0045 · Ponteiros
+
+### Conceito
+
+- **Ponteiro**: variável que guarda um **endereço**. Ele também mora numa
+  gaveta, mas guarda o número de **outra**. Ziviani e a tradução do K&R dizem
+  **apontador** (ZIVIANI, 2010).
+- **Declaração**: `int *cartao;` lê-se "ponteiro para int". O tipo diz o que
+  mora lá e quantos bytes ler (DEITEL; DEITEL, 2011, cap. 7).
+- **`&` e `*`**: `&x` dá o endereço; `*p` vai ao endereço guardado e lê ou
+  escreve lá, que é **desreferenciar** (KERNIGHAN; RITCHIE, 1989, cap. 5).
+- **Três papéis do `*`**: multiplicação (`a * b`), declaração (`int *p`) e
+  desreferência (`*p = 5`) (BACKES, 2013, cap. 10).
+- **`NULL`**: endereço que quer dizer "lugar nenhum". Teste
+  `if (p != NULL)` antes de usar; desreferenciá-lo derruba o programa
+  (*segmentation fault*) (DEITEL; DEITEL, 2011, cap. 7).
+- **Tamanho**: todo ponteiro de dado tem 8 bytes em 64 bits; o tipo muda só a
+  leitura (BACKES, 2013, cap. 10).
+
+> [!WARNING]
+> `int *p;` sem valor guarda **lixo**, e `*p = 10;` escreve numa gaveta
+> desconhecida. Inicialize com um endereço ou `NULL`. E em `int *a, b;` só `a`
+> é ponteiro.
+
+### Exemplos de uso
 
 No caixa da farmácia, o cliente tem 120 pontos. O ponteiro `cartao` começa em
 `NULL`, recebe `&pontos`, e a compra soma 30 **por meio do ponteiro**:
@@ -503,7 +432,107 @@ int main(void) {
 gcc ~/LPEDC/material/A090.c -o ~/LPEDC/material/A090 && ~/LPEDC/material/A090
 ```
 
-### 0046 · Passagem por referência
+### Exercícios
+
+**Exercício E265** · ★☆☆
+
+O ar-condicionado da sala marca 22.5 graus. Declare double temperatura =
+22.5 e um ponteiro pt que aponte para ela. Usando SÓ o ponteiro (sem
+escrever temperatura do lado esquerdo do =), mostre a temperatura,
+aumente 1.5 grau e mostre de novo. No fim, mostre a variável temperatura
+pelo nome para provar que ela mudou.
+
+```text
+Saída esperada:
+Pelo ponteiro: 22.5
+Pelo ponteiro: 24.0
+Pela variável: 24.0
+```
+
+**Exercício E267** · ★★☆
+
+Na academia, declare int peso = 0 e int meta = 78, e dois ponteiros, um para
+cada variável (peso_ptr e meta_ptr). Mude o peso para 82 escrevendo pelo
+ponteiro peso_ptr. Depois mostre peso e, lendo pelo ponteiro meta_ptr, a
+meta.
+
+```text
+Saída esperada:
+Peso: 82
+Meta: 78
+```
+
+**Exercício E268** · ★★☆
+
+No check-in do aeroporto, a companhia aceita uma mala de até 23 kg sem
+cobrar. Você tem duas malas: mala_azul com 19 kg e mala_preta com 26 kg.
+Complete o programa: faça o ponteiro pesada apontar para a mala mais
+pesada e, usando só o ponteiro, tire 4 kg dela (você passou umas roupas
+para a mochila). Depois mostre as duas malas.
+
+```text
+Saída esperada:
+Mais pesada: 26 kg
+Depois de tirar 4 kg: azul 19 kg, preta 22 kg
+```
+
+**Exercício E269** · ★★★
+
+Transforme o trecho abaixo num teste de mesa que o próprio programa
+imprime. Cole o código no main e, depois da declaração e depois de CADA
+uma das cinco linhas, acrescente um printf que mostre a linha executada
+e os valores de a, b, *p e *q naquele momento.
+
+```text
+int a = 3, b = 8;
+int *p = &a, *q = &b;
+```
+
+```text
+*p = *q + 1;
+p = q;
+*p = *p * 2;
+q = &a;
+*q -= 4;
+```
+
+```text
+Saída esperada:
+início        a = 3, b = 8, *p = 3, *q = 8
+*p = *q + 1   a = 9, b = 8, *p = 9, *q = 8
+p = q         a = 9, b = 8, *p = 8, *q = 8
+...
+*q -= 4       a = 5, b = 16, *p = 16, *q = 5
+```
+
+---
+
+## 0046 · Passagem por referência
+
+### Conceito
+
+- **Só existe passagem por valor** no C: a função recebe uma cópia (assunto
+  0029) (DEITEL; DEITEL, 2011, cap. 7).
+- **Passagem por referência**: o C a simula passando o **endereço**. A cópia
+  do endereço aponta para a mesma gaveta, e `*a` é a própria variável de quem
+  chamou (KERNIGHAN; RITCHIE, 1989, cap. 5).
+- **Sintaxe**: a função recebe ponteiros (`void troca(int *a, int *b)`); quem
+  chama passa endereços (`troca(&arroz, &feijao)`) (BACKES, 2013, cap. 10).
+- **O `&` do `scanf`**: ele precisa escrever na variável, então pede o
+  endereço. `scanf("%s", nome)` vai sem `&` porque o nome do vetor já é
+  endereço (BACKES, 2013, cap. 10).
+- **Vários resultados**: o `return` devolve um valor só; para devolver mais,
+  a função escreve em ponteiros recebidos (o A092 racha a conta) (DEITEL;
+  DEITEL, 2011, cap. 7).
+- **`const int *p`**: a função só lê; o compilador recusa `*p = ...`. Struct
+  grande vai assim (DEITEL; DEITEL, 2011, cap. 7).
+
+> [!WARNING]
+> Esquecer o `&` na chamada manda o número 8 onde se espera um endereço, e o
+> programa cai. Esquecer o `*` na função (`a = b;`) troca só os ponteiros
+> locais. Quem mexe no dado de quem chamou é sempre `*a`.
+
+### Exemplos de uso
 
 No mercadinho, as etiquetas saíram trocadas: arroz a R$ 8, feijão a R$ 25. A
 `troca` recebe `0x1000` e `0x1004`, guarda o 8 em `tmp` e mexe direto nas
@@ -644,7 +673,110 @@ int main(void) {
 gcc ~/LPEDC/material/A092.c -o ~/LPEDC/material/A092 && ~/LPEDC/material/A092
 ```
 
-### 0047 · Ponteiros e vetores
+### Exercícios
+
+**Exercício E271** · ★☆☆
+
+Promoção do cinema: quem compra pelo app ganha o dobro de ingressos.
+Escreva a função void dobra(int *quantidade), que dobra o valor da
+variável de quem chamou. No main, comece com ingressos = 3, chame a
+função e mostre o resultado.
+
+```text
+Saída esperada:
+Antes: 3 ingressos
+Depois: 6 ingressos
+```
+
+**Exercício E273** · ★★☆
+
+As temperaturas máximas da semana em Cuiabá foram
+
+```text
+{ 34, 37, 31, 39, 36, 33, 38 }
+```
+
+Escreva void extremos(const int v[], int n, int *menor, int *maior), que
+acha a menor e a maior temperatura do vetor numa passada só e entrega as
+duas pelos ponteiros. Mostre também a amplitude (maior - menor).
+
+```text
+Saída esperada:
+Menor: 31  Maior: 39  Amplitude: 8
+```
+
+**Exercício E274** · ★★☆
+
+A catraca do metrô conta passageiros. Escreva duas funções:
+
+```text
+void passa(int *contador)   // soma 1 ao valor apontado
+void zera(int *valor)       // coloca 0 no valor apontado
+```
+
+No main, comece com passageiros = 0 e avulsos = 5, chame passa três vezes
+para passageiros, chame zera para avulsos e mostre os dois.
+
+```text
+Saída esperada:
+Passageiros: 3
+Bilhetes avulsos: 0
+```
+
+**Exercício E275** · ★★★
+
+Escreva
+
+```text
+int raizes(double a, double b, double c, double *x1, double *x2)
+```
+
+que resolve a*x*x + b*x + c = 0. A função DEVOLVE quantas raízes reais
+existem (0, 1 ou 2) e escreve as raízes em *x1 e *x2 (quando houver uma
+só, as duas recebem o mesmo valor). Se a for 0, devolve -1 (não é do 2º
+grau). No main, teste as quatro equações abaixo e mostre o resultado com
+duas casas decimais.
+
+```text
+Saída esperada:
+x² - 5x + 6 = 0   ->  2 raízes: 3.00 e 2.00
+x² + 2x + 1 = 0   ->  1 raiz: -1.00
+x² + 1 = 0        ->  nenhuma raiz real
+0x² + 3x + 1 = 0  ->  não é do 2º grau
+```
+
+```bash
+gcc ~/LPEDC/material/E275.c -o ~/LPEDC/material/E275 -lm && ~/LPEDC/material/E275
+```
+
+---
+
+## 0047 · Ponteiros e vetores
+
+### Conceito
+
+- **Decaimento**: numa expressão, o nome do vetor quase sempre **vira** o
+  endereço do primeiro elemento: `kwh` vale `&kwh[0]` (KERNIGHAN; RITCHIE,
+  1989, cap. 5).
+- **Aritmética de ponteiros**: `p + 1` é o **próximo elemento**, não o próximo
+  byte; o C multiplica pelo tamanho do tipo. `p++` avança um, `q - p` dá
+  quantos elementos há entre eles (DEITEL; DEITEL, 2011, cap. 7).
+- **`v[i]` é `*(v + i)`**: ande `i` elementos e pegue o que tem lá. Vale para
+  ponteiro: `p[2]` é `*(p + 2)`, contado de onde `p` aponta agora (DEITEL;
+  DEITEL, 2011, cap. 7).
+- **Vetor não é ponteiro**: `sizeof kwh` dá o vetor inteiro (20), `sizeof p`
+  dá 8, e `kwh++` não compila (BACKES, 2013, cap. 10).
+- **Matriz**: `m[i][j]` é `*(*(m + i) + j)`. Em `int m[3][4]`, `m + 1` anda uma
+  linha (16 bytes) e `m[0] + 1` anda 4 (BACKES, 2013, cap. 10).
+- **Um depois do último**: `kwh + 5` pode ser calculado e comparado, nunca
+  lido (KERNIGHAN; RITCHIE, 1989, cap. 5).
+
+> [!WARNING]
+> `*p + 1` soma 1 ao valor; `*(p + 1)` anda uma gaveta. `*p++` lê e depois
+> avança; `(*p)++` soma 1 no valor. Passar do fim (`p <= kwh + 5`) dá
+> `stack-buffer-overflow` no AddressSanitizer.
+
+### Exemplos de uso
 
 O consumo de luz de 5 meses está em `kwh`. O ponteiro `p` começa em `0x1000`
 e anda uma gaveta por vez, somando, até chegar a `kwh + 5`:
@@ -781,7 +913,112 @@ int main(void) {
 gcc ~/LPEDC/material/A094.c -o ~/LPEDC/material/A094 && ~/LPEDC/material/A094
 ```
 
-### 0048 · Ponteiros e strings
+### Exercícios
+
+**Exercício E277** · ★☆☆
+
+As notas de uma aluna no bimestre estão em
+
+```text
+float notas[4] = {7.5, 8.0, 6.5, 9.0};
+```
+
+Mostre as quatro notas e a média SEM usar colchetes depois da
+declaração: só um ponteiro que anda pelo vetor.
+
+```text
+Saída esperada:
+7.5 8.0 6.5 9.0
+Média: 7.75
+```
+
+**Exercício E279** · ★★☆
+
+Você quer ouvir a playlist de trás para frente. As faixas estão
+numeradas num vetor:
+
+```text
+int faixas[7] = {11, 23, 35, 47, 52, 68, 74};
+```
+
+Escreva void inverte(int *v, int n), que inverte o vetor no lugar usando
+DOIS ponteiros: ini (no começo) e fim (no último). Troque o que eles
+apontam, aproxime um do outro e pare quando se cruzarem. Use a função
+troca do assunto 0046.
+
+```text
+Saída esperada:
+74 68 52 47 35 23 11
+```
+
+**Exercício E280** · ★★☆
+
+Na sorveteria, o estoque de 5 sabores está no vetor
+int estoque[5] = {12, 8, 15, 4, 9}. Crie um ponteiro p que aponta para o
+início do vetor e avance-o uma posição (p += 1). Usando p com índice (p[2]),
+mude o estoque do sabor de índice 3 para 20. Depois mostre os 5 valores
+percorrendo o vetor com um ponteiro q, de estoque até estoque + 5, separados
+por espaço.
+
+```text
+Saída esperada:
+12 8 15 20 9
+```
+
+**Exercício E281** · ★★★
+
+A loja tem 3 filiais e anotou as vendas de 4 semanas numa matriz
+
+```text
+int vendas[3][4] = {
+    {12, 15, 9, 20},
+    {7, 11, 14, 10},
+    {18, 6, 13, 16},
+};
+```
+
+Como a matriz é uma fila só de 12 ints na memória (assunto 0039), dá para
+percorrê-la com UM ponteiro e UM laço. Faça isso: some tudo e descubra
+qual filial vendeu mais, calculando a linha de cada elemento pela
+distância (p - inicio) / 4.
+
+```text
+Saída esperada:
+Total: 151
+Filial 0: 56
+Filial 1: 42
+Filial 2: 53
+Campeã: filial 0
+```
+
+---
+
+## 0048 · Ponteiros e strings
+
+### Conceito
+
+- **`char *`**: toda função de string recebe o endereço do primeiro caractere
+  e anda até o `'\0'` (KERNIGHAN; RITCHIE, 1989, cap. 5).
+- **Literal de string**: um texto entre aspas, guardado **uma vez só** numa
+  região **somente leitura** (DEITEL; DEITEL, 2011, cap. 7).
+- **`char nome[] = "ana";`**: cria um vetor de 4 `char` e **copia** o literal.
+  O vetor é seu: `nome[0] = 'A'` vale (DEITEL; DEITEL, 2011, cap. 7).
+- **`const char *apelido = "bia";`**: cria só um ponteiro para o literal. Com
+  `const`, o compilador recusa `apelido[0] = 'B'` (DEITEL; DEITEL, 2011,
+  cap. 7).
+- **Mudar de alvo**: `apelido = "bibi";` vale; `nome = "joana";` não compila
+  (use `strcpy`). `sizeof nome` dá 4 e `sizeof apelido` dá 8 (BACKES, 2013,
+  cap. 10).
+- **Vetor de ponteiros**: `const char *dias[]` gasta 8 bytes por nome mais o
+  texto; a matriz `char[4][10]` reserva 10 bytes por linha (DEITEL; DEITEL,
+  2011, cap. 7).
+
+> [!WARNING]
+> `char *s = "ola"; s[0] = 'O';` compila sem aviso e cai na execução
+> (`segmentation fault`). Use `const char *` ou `char s[]`. E `==` entre
+> strings compara endereços: use `strcmp`.
+
+### Exemplos de uso
 
 No crachá, `nome` é uma cópia na pilha e o laço passa cada letra para
 maiúscula; `apelido` é só uma seta para o literal `"bia"`, na área de leitura:
@@ -904,7 +1141,108 @@ int main(void) {
 gcc ~/LPEDC/material/A096.c -o ~/LPEDC/material/A096 && ~/LPEDC/material/A096
 ```
 
-### 0049 · Ponteiro para ponteiro
+### Exercícios
+
+**Exercício E283** · ★☆☆
+
+Escreva int conta_vogais(const char *s), que conta as vogais (minúsculas
+a, e, i, o, u) de uma frase andando com um ponteiro até o '\0', sem usar
+índice nem strlen. Teste com a frase do outdoor:
+
+```text
+"promocao de pastel na feira de domingo"
+```
+
+```text
+Saída esperada:
+Vogais: 15
+```
+
+**Exercício E285** · ★★☆
+
+Escreva sua própria versão do strcpy com ponteiros:
+
+```text
+void copia(char *destino, const char *origem)
+```
+
+Copie caractere por caractere, INCLUINDO o '\0' do fim. Depois escreva
+uma segunda versão, copia_classica, com o laço clássico de corpo vazio:
+
+```text
+while ((*destino++ = *origem++) != '\0') {
+}
+```
+
+Teste as duas copiando "Porto Alegre" para um vetor char destino[20] e
+mostrando o resultado e o strlen dele. Para provar que a clássica copia
+o '\0', antes de chamá-la encha destino com "XXXXXXXXXXXXXXXXXXX" (19 X)
+e confira que nenhum X sobra no fim.
+
+```text
+Saída esperada:
+copia:          Porto Alegre (12 letras)
+copia_classica: Porto Alegre (12 letras)
+```
+
+**Exercício E286** · ★★☆
+
+Na portaria do condomínio, escreva um programa que:
+
+```text
+- cria a saudação "ola, visitante!" de forma que seja possível trocar o
+  primeiro caractere por 'O', e mostra o resultado;
+- copia "B" com strcpy para um vetor bloco de 2 posições e mostra "Bloco: B";
+- compara o vetor morador, que guarda "ana", com a string "ana" usando
+  strcmp e mostra "Mesmo morador" se forem iguais.
+```
+
+```text
+Saída esperada:
+Ola, visitante!
+Bloco: B
+Mesmo morador
+```
+
+**Exercício E287** · ★★★
+
+Escreva bool palindromo(const char *s), que diz se uma frase é um
+palíndromo IGNORANDO os espaços. Use dois ponteiros: um no começo e outro
+no último caractere (antes do '\0'), que andam um em direção ao outro,
+pulando espaços. Teste com "arara", "socorram me subi no onibus em
+marrocos" e "pix caiu".
+
+```text
+Saída esperada:
+arara: sim
+socorram me subi no onibus em marrocos: sim
+pix caiu: não
+```
+
+---
+
+## 0049 · Ponteiro para ponteiro
+
+### Conceito
+
+- **Ponteiro para ponteiro**: variável que guarda o endereço de um ponteiro.
+  `int **pp;` lê-se "pp aponta para um `int *`" (BACKES, 2013, cap. 10).
+- **Níveis**: com `int *p = &vagas; int **pp = &p;`, `*pp` é o próprio `p` e
+  `**pp` é `vagas`. Cada `*` da declaração é um nível, e o acesso usa o mesmo
+  número de `*` (BACKES, 2013, cap. 10).
+- **Mudar o ponteiro de quem chamou**: para mudar um `int`, a função recebe
+  `int *`; para mudar um `int *`, recebe `int **`. As listas do módulo 11 mudam
+  o início assim (DEITEL; DEITEL, 2011, cap. 7).
+- **Vetor de ponteiros**: o nome de `const char *dias[]` decai para
+  `const char **`, o tipo do `char **argv` (assunto 0069) (KERNIGHAN; RITCHIE,
+  1989, cap. 5).
+
+> [!WARNING]
+> Estrela a menos: `*pp = 38;` não muda `vagas`, guarda 38 **em `p`** como
+> endereço, e o próximo `*p` derruba o programa. Para a função mudar o seu
+> ponteiro, passe `&posto`, não `posto`.
+
+### Exemplos de uso
 
 O estacionamento do shopping tem 40 vagas. `p` aponta para `vagas` e `pp` para
 `p`; quando entram 2 carros, o programa atualiza `vagas` em dois saltos:
@@ -1034,7 +1372,126 @@ int main(void) {
 gcc ~/LPEDC/material/A098.c -o ~/LPEDC/material/A098 && ~/LPEDC/material/A098
 ```
 
-### 0050 · Ponteiro para função
+### Exercícios
+
+**Exercício E289** · ★☆☆
+
+A turma do cursinho é identificada por uma letra. Declare
+
+```text
+char turma = 'k';
+char *p = &turma;
+char **pp = &p;
+```
+
+Mostre a letra de três jeitos (pela variável, por p e por pp). Depois,
+usando só pp, troque a letra para 'K' e mostre a variável turma.
+
+```text
+Saída esperada:
+k k k
+Agora: K
+```
+
+**Exercício E291** · ★★☆
+
+A loja recebe mensagens como "Pedido numero 4521 confirmado". Escreva
+
+```text
+void pula_ate_digito(const char **s)
+```
+
+que avança o ponteiro DE QUEM CHAMOU até o primeiro dígito do texto (ou
+até o '\0', se não houver dígito). No main:
+
+```text
+const char *msg = "Pedido numero 4521 confirmado";
+pula_ate_digito(&msg);
+printf("%s\n", msg);
+```
+
+```text
+Saída esperada:
+4521 confirmado
+```
+
+Teste também com "Sem numero": deve sair uma linha vazia.
+
+**Exercício E292** · ★★☆
+
+Num leilão, escreva a função
+
+```text
+void aponta_maior(int *a, int *b, int **res)
+```
+
+que faz o ponteiro apontado por res passar a apontar para o maior dos dois
+lances (a ou b). No main, com lance1 = 870 e lance2 = 640, declare
+int *vencedor = NULL, chame a função e mostre o valor do maior lance
+pelo ponteiro vencedor.
+
+```text
+Saída esperada:
+Maior lance: R$ 870
+```
+
+**Exercício E293** · ★★★
+
+Quatro jurados deram notas a uma escola de samba, cada uma numa variável:
+
+```text
+int j1 = 9, j2 = 7, j3 = 10, j4 = 8;
+```
+
+Você quer mostrar as notas em ordem crescente SEM mexer nas variáveis.
+Monte um vetor de ponteiros int *ordem[4] = {&j1, &j2, &j3, &j4}; e
+ordene OS PONTEIROS pelo valor apontado. Para trocar dois ponteiros do
+vetor, escreva
+
+```text
+void troca_ptr(int **a, int **b)
+```
+
+No fim, mostre as notas pela ordem e depois as variáveis originais.
+
+```text
+Saída esperada:
+Em ordem: 7 8 9 10
+Originais: j1=9 j2=7 j3=10 j4=8
+```
+
+---
+
+## 0050 · Ponteiro para função
+
+### Conceito
+
+- **Ponteiro para função**: o código da função mora na memória, e o nome dela,
+  sem parênteses, já é o endereço. Uma variável que guarda esse endereço é um
+  ponteiro para função (BACKES, 2013, cap. 13).
+- **Declaração**: `int (*criterio)(int);` lê-se de dentro para fora. Sem os
+  parênteses, `int *criterio(int);` é uma função que devolve `int *` (DEITEL;
+  DEITEL, 2011, cap. 7).
+- **Assinatura**: o ponteiro só aceita funções com o mesmo protótipo (BACKES,
+  2013, cap. 13).
+- **Uso**: `criterio = eh_calor;` guarda o endereço; `criterio(31)` chama.
+  `(*criterio)(31)` também vale (DEITEL; DEITEL, 2011, cap. 7).
+- **Callback**: a função passada como parâmetro. A função que recebe fica
+  genérica, e quem chama decide o comportamento (CELES; RANGEL, 2002).
+- **`qsort`**: ordena qualquer vetor com a sua função de comparação, que recebe
+  dois `const void *` e devolve negativo, zero ou positivo (o A100 usa)
+  (KERRISK, s.d.).
+
+```text
+int (*criterio)(int);
+```
+
+> [!WARNING]
+> `return *(const int *)a - *(const int *)b;` estoura o `int` com sinais
+> opostos (`signed integer overflow`). Use `return (x > y) - (x < y);`. E
+> `int *f(int)` é função, não ponteiro.
+
+### Exemplos de uso
 
 As máximas da semana estão num vetor. `conta_se` conta os dias que passam num
 critério que ela não conhece: recebe o endereço de `eh_calor` (ou `eh_frio`) e
@@ -1181,7 +1638,133 @@ int main(void) {
 gcc ~/LPEDC/material/A100.c -o ~/LPEDC/material/A100 && ~/LPEDC/material/A100
 ```
 
-### 0051 · void * e cast
+### Exercícios
+
+**Exercício E295** · ★☆☆
+
+O app de clima converte temperaturas nos dois sentidos. Escreva
+
+```text
+double c_para_f(double c)   // f = c * 9 / 5 + 32
+double f_para_c(double f)   // c = (f - 32) * 5 / 9
+```
+
+Declare um ponteiro double (*conv)(double); faça ele apontar para
+c_para_f e converta 30; depois aponte para f_para_c e converta 86.
+
+```text
+Saída esperada:
+30.0 -> 86.0
+86.0 -> 30.0
+```
+
+**Exercício E297** · ★★☆
+
+Faça uma calculadora SEM switch. Escreva soma, subtrai, multiplica e
+divide, todas com a assinatura int f(int, int), e guarde-as num vetor de
+ponteiros para função:
+
+```text
+int (*ops[4])(int, int) = {soma, subtrai, multiplica, divide};
+```
+
+Leia uma conta no formato "12 * 4" com scanf("%d %c %d", ...), ache o
+índice do operador na string "+-*/" e chame ops[indice](a, b). Operador
+desconhecido mostra "Operador inválido"; divisão por zero mostra
+"Divisão por zero".
+
+```text
+Entrada:
+12 * 4
+```
+
+```text
+Saída esperada:
+Resultado: 48
+```
+
+```text
+Entrada:
+7 / 0
+```
+
+```text
+Saída esperada:
+Divisão por zero
+```
+
+```text
+Entrada:
+3 % 2
+```
+
+```text
+Saída esperada:
+Operador inválido
+```
+
+**Exercício E298** · ★★☆
+
+Ordene as frutas da barraca em ordem alfabética com qsort:
+
+```text
+const char *frutas[] = {"manga", "abacaxi", "caju", "banana", "acerola"};
+```
+
+```text
+Saída esperada:
+abacaxi acerola banana caju manga
+```
+
+O detalhe: cada elemento do vetor é um const char *. O qsort entrega à
+comparação o ENDEREÇO de um elemento, ou seja, o endereço de um
+const char * (um ponteiro para ponteiro, assunto 0049).
+
+**Exercício E300** · ★★★
+
+Você tem R$ 50 no bolso e quer ver os produtos da lojinha do mais perto
+desse valor ao mais longe. Ordene com qsort pela distância até 50
+(|preço - 50|); em caso de empate, o mais barato vem antes.
+
+```text
+int precos[7] = {47, 58, 50, 39, 53, 61, 44};
+```
+
+A função de comparação só recebe dois endereços, então guarde o alvo
+numa variável global static. Depois de mostrar a ordem para 50, mude o
+alvo para 60 (você achou mais R$ 10), ordene de novo e mostre.
+
+```text
+Saída esperada:
+50 47 53 44 58 39 61
+61 58 53 50 47 44 39
+```
+
+---
+
+## 0051 · void * e cast
+
+### Conceito
+
+- **`void *`**: **ponteiro genérico**. Guarda o endereço de qualquer dado, mas
+  não diz o que mora lá (DEITEL; DEITEL, 2011, cap. 7).
+- **Conversão livre**: em C, qualquer ponteiro de dado vira `void *` e volta
+  sem cast (`int *q = p;`) (DEITEL; DEITEL, 2011, cap. 7).
+- **Não se desreferencia**: `*p` não compila, porque o compilador não sabe
+  quantos bytes ler. Converta antes com um **cast**: `*(int *)p`. E `p + 1` não
+  existe no C padrão (BACKES, 2013, cap. 10).
+- **O cast é uma promessa**: `(double *)` num endereço de `int` lê 8 bytes onde
+  havia 4 e mostra lixo (BACKES, 2013, cap. 10).
+- **Funções genéricas**: recebem `void *` e o tamanho em bytes, e olham a
+  memória com `unsigned char *`, o único tipo que lê qualquer objeto byte a
+  byte. Assim funcionam `memcpy`, `qsort` e `malloc` (CELES; RANGEL, 2002).
+
+> [!WARNING]
+> O `void *` desliga a conferência de tipos: `troca_generica(&senha_a,
+> &preco_a, sizeof preco_a)` compila e troca 8 bytes numa variável de 4. Use o
+> `sizeof` da própria variável, nunca um número à mão.
+
+### Exemplos de uso
 
 A `troca` do assunto 0046 só troca `int`. A `troca_generica` recebe dois
 endereços sem tipo e o tamanho: com 4, troca duas senhas; com 8, dois preços.
@@ -1325,7 +1908,118 @@ int main(void) {
 gcc ~/LPEDC/material/A102.c -o ~/LPEDC/material/A102 && ~/LPEDC/material/A102
 ```
 
-### 0052 · Juntando tudo: o ranking da feira
+### Exercícios
+
+**Exercício E301** · ★☆☆
+
+No cadastro do plano de saúde, declare int idade = 41 e double altura =
+1.83. Use UM único ponteiro void *p: primeiro aponte para idade e mostre
+o valor; depois aponte para altura e mostre o valor.
+
+```text
+Saída esperada:
+idade: 41
+altura: 1.83
+```
+
+**Exercício E303** · ★★☆
+
+Escreva sua versão do memset para zerar qualquer coisa:
+
+```text
+void zera(void *p, size_t tam)
+```
+
+que coloca 0 em cada um dos tam bytes a partir de p. Teste zerando o
+vetor de placar int gols[5] = {2, 1, 3, 0, 4} e a variável double saldo
+= 99.90. Mostre antes e depois.
+
+```text
+Saída esperada:
+antes: 2 1 3 0 4 | 99.90
+depois: 0 0 0 0 0 | 0.00
+```
+
+**Exercício E304** · ★★☆
+
+Escreva uma função que mostra vetores de QUALQUER tipo:
+
+```text
+void mostra_vetor(const void *v, size_t n, size_t tam,
+                  void (*mostra)(const void *))
+```
+
+Ela calcula o endereço de cada elemento (o i-ésimo começa i * tam bytes
+depois do início) e chama mostra com esse endereço. Escreva também
+mostra_int e mostra_double. Teste com
+
+```text
+int senhas[4] = {101, 102, 103, 104};
+double notas[3] = {7.5, 9.25, 6.0};
+```
+
+```text
+Saída esperada:
+101 102 103 104
+7.50 9.25 6.00
+```
+
+**Exercício E305** · ★★★
+
+Escreva uma busca linear genérica:
+
+```text
+int busca(const void *v, size_t n, size_t tam, const void *alvo,
+          int (*igual)(const void *, const void *))
+```
+
+que devolve o índice do primeiro elemento igual ao alvo (segundo a função
+igual) ou -1. Use com três vetores:
+
+```text
+int cods[5] = {310, 422, 518, 422, 907};          alvo 422
+double precos[4] = {9.90, 15.50, 4.25, 30.00};    alvo 4.25
+const char *nomes[3] = {"ana", "bia", "caio"};    alvo "caio"
+```
+
+```text
+Saída esperada:
+422 no índice 1
+4.25 no índice 2
+caio no índice 2
+bruno no índice -1
+```
+
+---
+
+## 0052 · Juntando tudo: o ranking da feira
+
+### Conceito
+
+- **Vetores paralelos**: nome, quantidade e preço de cada barraca na mesma
+  posição, e o faturamento `fat[i] = qtd[i] * preco[i]` (DEITEL; DEITEL, 2011,
+  cap. 7).
+- **Vetor de ponteiros como índice**: `const double *ordem[N]` aponta para os
+  elementos de `fat`. Ordena-se `ordem`, não `fat`, como o índice de um livro
+  (assunto 0049) (CELES; RANGEL, 2002).
+- **`qsort` com ponteiros**: cada elemento de `ordem` é um `const double *`, e
+  o `qsort` entrega o endereço dele como `const void *`; dois saltos (`**`)
+  levam ao faturamento (KERRISK, s.d.).
+- **Subtração de ponteiros**: `ordem[i] - fat` dá o índice em `fat`, o mesmo
+  do nome em `produtos` (assunto 0047) (KERNIGHAN; RITCHIE, 1989, cap. 5).
+- **Dois resultados por referência**: `resumo` devolve o total num `double *`
+  e **onde** está o maior num `const double **` (assunto 0046) (DEITEL;
+  DEITEL, 2011, cap. 7).
+- **Ler `const` da direita para a esquerda**: `const double * const *` é
+  ponteiro para ponteiro constante para `double` constante (DEITEL; DEITEL,
+  2011, cap. 7).
+
+> [!WARNING]
+> `sizeof(double)` no `qsort` de `ordem` está errado: os elementos são
+> **ponteiros**. Aqui os dois têm 8 bytes e o erro se esconde; com `int *` não.
+> Escreva sempre `sizeof ordem[0]`.
+
+### Exemplos de uso
 
 Fim de feira, 4 barracas: tomate (30 × R$ 6,50), alface (45 × R$ 3,00), queijo
 (8 × R$ 32,00) e pastel (60 × R$ 9,00). Depois do `qsort`, `ordem[0]` aponta
@@ -1524,678 +2218,7 @@ int main(void) {
 gcc ~/LPEDC/material/A104.c -o ~/LPEDC/material/A104 && ~/LPEDC/material/A104
 ```
 
----
-
-## 3. Exercícios práticos
-
-Cada exercício é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta. Compile como os exemplos: `gcc ~/LPEDC/material/E007.c -o ~/LPEDC/material/E007 && ~/LPEDC/material/E007`. Resoluções em `_respostas/06-ponteiros/`.
-
-### 0044 · Memória e endereços
-
-**Exercício E259** · ★☆☆
-
-No ônibus da linha 0.420, o painel guarda três dados: a quantidade de
-passageiros (int, 42), a tarifa (float, 4.40) e a letra do setor
-(char, 'X'). Declare as três variáveis e mostre, para cada uma, o valor,
-o endereço e quantos bytes ela ocupa.
-
-```text
-Saída esperada (os endereços mudam a cada execução):
-passageiros = 42, endereço 0x7f..., tamanho 4
-tarifa = 4.40, endereço 0x7f..., tamanho 4
-setor = X, endereço 0x7f..., tamanho 1
-```
-
-**Exercício E261** · ★★☆
-
-A lanchonete guarda o preço de 2 tamanhos (linhas) de 3 sucos (colunas)
-numa matriz double precos[2][3]:
-
-```text
-{ {6.0, 7.5, 8.0}, {9.0, 11.0, 12.5} }
-```
-
-Mostre o valor e o endereço de cada posição, linha por linha, com dois
-for aninhados. Depois mostre, com sizeof, quantos bytes ocupa uma
-posição, uma linha inteira (precos[0]) e a matriz toda. Compare os
-endereços de precos[0][2] e precos[1][0] na saída: a linha 1 começa logo
-onde a linha 0 acaba.
-
-```text
-Saída esperada (endereços mudam a cada execução):
-precos[0][0] = 6.00 em 0x7f...30
-precos[0][1] = 7.50 em 0x7f...38
-...
-precos[1][2] = 12.50 em 0x7f...58
-uma posição: 8 bytes
-uma linha: 24 bytes
-a matriz: 48 bytes
-```
-
-**Exercício E262** · ★★☆
-
-Na pizzaria, declare int pedidos = 15 e um ponteiro int *p que guarda o
-endereço de pedidos. Mostre o valor de pedidos, o endereço de pedidos com
-%p (com o cast (void *)), o endereço guardado em p e, por fim, "sim" ou
-"não" conforme os dois endereços sejam iguais. O endereço muda a cada
-execução.
-
-```text
-Saída esperada:
-Valor: 15
-Endereço: 0x7ffe59064b4c
-Pelo ponteiro: 0x7ffe59064b4c
-Mesmo endereço: sim
-```
-
-**Exercício E263** · ★★★
-
-Variáveis declaradas juntas ficam juntas na memória? Escreva um programa
-que declare
-
-```text
-int a = 1, b = 2, c = 3;
-int v[3] = {1, 2, 3};
-```
-
-e mostre o endereço de a, b e c (uma linha cada) e depois, com um for, o
-endereço de v[0], v[1] e v[2]. No fim, mostre sizeof v e a soma
-sizeof a + sizeof b + sizeof c. Rode com o rodar. Depois compile SEM o
-sanitizer e rode de novo, para comparar as duas saídas:
-
-```text
-gcc -std=c17 E263.c -o e263 && ./e263
-```
-
-```text
-Saída esperada (endereços mudam a cada execução; com o rodar):
-a em 0x7f...30
-b em 0x7f...40
-c em 0x7f...50
-v[0] em 0x7f...60
-v[1] em 0x7f...64
-v[2] em 0x7f...68
-sizeof v = 12, a + b + c = 12
-```
-
-### 0045 · Ponteiros
-
-**Exercício E265** · ★☆☆
-
-O ar-condicionado da sala marca 22.5 graus. Declare double temperatura =
-22.5 e um ponteiro pt que aponte para ela. Usando SÓ o ponteiro (sem
-escrever temperatura do lado esquerdo do =), mostre a temperatura,
-aumente 1.5 grau e mostre de novo. No fim, mostre a variável temperatura
-pelo nome para provar que ela mudou.
-
-```text
-Saída esperada:
-Pelo ponteiro: 22.5
-Pelo ponteiro: 24.0
-Pela variável: 24.0
-```
-
-**Exercício E267** · ★★☆
-
-Na academia, declare int peso = 0 e int meta = 78, e dois ponteiros, um para
-cada variável (peso_ptr e meta_ptr). Mude o peso para 82 escrevendo pelo
-ponteiro peso_ptr. Depois mostre peso e, lendo pelo ponteiro meta_ptr, a
-meta.
-
-```text
-Saída esperada:
-Peso: 82
-Meta: 78
-```
-
-**Exercício E268** · ★★☆
-
-No check-in do aeroporto, a companhia aceita uma mala de até 23 kg sem
-cobrar. Você tem duas malas: mala_azul com 19 kg e mala_preta com 26 kg.
-Complete o programa: faça o ponteiro pesada apontar para a mala mais
-pesada e, usando só o ponteiro, tire 4 kg dela (você passou umas roupas
-para a mochila). Depois mostre as duas malas.
-
-```text
-Saída esperada:
-Mais pesada: 26 kg
-Depois de tirar 4 kg: azul 19 kg, preta 22 kg
-```
-
-**Exercício E269** · ★★★
-
-Transforme o trecho abaixo num teste de mesa que o próprio programa
-imprime. Cole o código no main e, depois da declaração e depois de CADA
-uma das cinco linhas, acrescente um printf que mostre a linha executada
-e os valores de a, b, *p e *q naquele momento.
-
-```text
-int a = 3, b = 8;
-int *p = &a, *q = &b;
-```
-
-```text
-*p = *q + 1;
-p = q;
-*p = *p * 2;
-q = &a;
-*q -= 4;
-```
-
-```text
-Saída esperada:
-início        a = 3, b = 8, *p = 3, *q = 8
-*p = *q + 1   a = 9, b = 8, *p = 9, *q = 8
-p = q         a = 9, b = 8, *p = 8, *q = 8
-...
-*q -= 4       a = 5, b = 16, *p = 16, *q = 5
-```
-
-### 0046 · Passagem por referência
-
-**Exercício E271** · ★☆☆
-
-Promoção do cinema: quem compra pelo app ganha o dobro de ingressos.
-Escreva a função void dobra(int *quantidade), que dobra o valor da
-variável de quem chamou. No main, comece com ingressos = 3, chame a
-função e mostre o resultado.
-
-```text
-Saída esperada:
-Antes: 3 ingressos
-Depois: 6 ingressos
-```
-
-**Exercício E273** · ★★☆
-
-As temperaturas máximas da semana em Cuiabá foram
-
-```text
-{ 34, 37, 31, 39, 36, 33, 38 }
-```
-
-Escreva void extremos(const int v[], int n, int *menor, int *maior), que
-acha a menor e a maior temperatura do vetor numa passada só e entrega as
-duas pelos ponteiros. Mostre também a amplitude (maior - menor).
-
-```text
-Saída esperada:
-Menor: 31  Maior: 39  Amplitude: 8
-```
-
-**Exercício E274** · ★★☆
-
-A catraca do metrô conta passageiros. Escreva duas funções:
-
-```text
-void passa(int *contador)   // soma 1 ao valor apontado
-void zera(int *valor)       // coloca 0 no valor apontado
-```
-
-No main, comece com passageiros = 0 e avulsos = 5, chame passa três vezes
-para passageiros, chame zera para avulsos e mostre os dois.
-
-```text
-Saída esperada:
-Passageiros: 3
-Bilhetes avulsos: 0
-```
-
-**Exercício E275** · ★★★
-
-Escreva
-
-```text
-int raizes(double a, double b, double c, double *x1, double *x2)
-```
-
-que resolve a*x*x + b*x + c = 0. A função DEVOLVE quantas raízes reais
-existem (0, 1 ou 2) e escreve as raízes em *x1 e *x2 (quando houver uma
-só, as duas recebem o mesmo valor). Se a for 0, devolve -1 (não é do 2º
-grau). No main, teste as quatro equações abaixo e mostre o resultado com
-duas casas decimais.
-
-```text
-Saída esperada:
-x² - 5x + 6 = 0   ->  2 raízes: 3.00 e 2.00
-x² + 2x + 1 = 0   ->  1 raiz: -1.00
-x² + 1 = 0        ->  nenhuma raiz real
-0x² + 3x + 1 = 0  ->  não é do 2º grau
-```
-
-```bash
-gcc ~/LPEDC/material/E275.c -o ~/LPEDC/material/E275 -lm && ~/LPEDC/material/E275
-```
-
-### 0047 · Ponteiros e vetores
-
-**Exercício E277** · ★☆☆
-
-As notas de uma aluna no bimestre estão em
-
-```text
-float notas[4] = {7.5, 8.0, 6.5, 9.0};
-```
-
-Mostre as quatro notas e a média SEM usar colchetes depois da
-declaração: só um ponteiro que anda pelo vetor.
-
-```text
-Saída esperada:
-7.5 8.0 6.5 9.0
-Média: 7.75
-```
-
-**Exercício E279** · ★★☆
-
-Você quer ouvir a playlist de trás para frente. As faixas estão
-numeradas num vetor:
-
-```text
-int faixas[7] = {11, 23, 35, 47, 52, 68, 74};
-```
-
-Escreva void inverte(int *v, int n), que inverte o vetor no lugar usando
-DOIS ponteiros: ini (no começo) e fim (no último). Troque o que eles
-apontam, aproxime um do outro e pare quando se cruzarem. Use a função
-troca do assunto 0046.
-
-```text
-Saída esperada:
-74 68 52 47 35 23 11
-```
-
-**Exercício E280** · ★★☆
-
-Na sorveteria, o estoque de 5 sabores está no vetor
-int estoque[5] = {12, 8, 15, 4, 9}. Crie um ponteiro p que aponta para o
-início do vetor e avance-o uma posição (p += 1). Usando p com índice (p[2]),
-mude o estoque do sabor de índice 3 para 20. Depois mostre os 5 valores
-percorrendo o vetor com um ponteiro q, de estoque até estoque + 5, separados
-por espaço.
-
-```text
-Saída esperada:
-12 8 15 20 9
-```
-
-**Exercício E281** · ★★★
-
-A loja tem 3 filiais e anotou as vendas de 4 semanas numa matriz
-
-```text
-int vendas[3][4] = {
-    {12, 15, 9, 20},
-    {7, 11, 14, 10},
-    {18, 6, 13, 16},
-};
-```
-
-Como a matriz é uma fila só de 12 ints na memória (assunto 0039), dá para
-percorrê-la com UM ponteiro e UM laço. Faça isso: some tudo e descubra
-qual filial vendeu mais, calculando a linha de cada elemento pela
-distância (p - inicio) / 4.
-
-```text
-Saída esperada:
-Total: 151
-Filial 0: 56
-Filial 1: 42
-Filial 2: 53
-Campeã: filial 0
-```
-
-### 0048 · Ponteiros e strings
-
-**Exercício E283** · ★☆☆
-
-Escreva int conta_vogais(const char *s), que conta as vogais (minúsculas
-a, e, i, o, u) de uma frase andando com um ponteiro até o '\0', sem usar
-índice nem strlen. Teste com a frase do outdoor:
-
-```text
-"promocao de pastel na feira de domingo"
-```
-
-```text
-Saída esperada:
-Vogais: 15
-```
-
-**Exercício E285** · ★★☆
-
-Escreva sua própria versão do strcpy com ponteiros:
-
-```text
-void copia(char *destino, const char *origem)
-```
-
-Copie caractere por caractere, INCLUINDO o '\0' do fim. Depois escreva
-uma segunda versão, copia_classica, com o laço clássico de corpo vazio:
-
-```text
-while ((*destino++ = *origem++) != '\0') {
-}
-```
-
-Teste as duas copiando "Porto Alegre" para um vetor char destino[20] e
-mostrando o resultado e o strlen dele. Para provar que a clássica copia
-o '\0', antes de chamá-la encha destino com "XXXXXXXXXXXXXXXXXXX" (19 X)
-e confira que nenhum X sobra no fim.
-
-```text
-Saída esperada:
-copia:          Porto Alegre (12 letras)
-copia_classica: Porto Alegre (12 letras)
-```
-
-**Exercício E286** · ★★☆
-
-Na portaria do condomínio, escreva um programa que:
-
-```text
-- cria a saudação "ola, visitante!" de forma que seja possível trocar o
-  primeiro caractere por 'O', e mostra o resultado;
-- copia "B" com strcpy para um vetor bloco de 2 posições e mostra "Bloco: B";
-- compara o vetor morador, que guarda "ana", com a string "ana" usando
-  strcmp e mostra "Mesmo morador" se forem iguais.
-```
-
-```text
-Saída esperada:
-Ola, visitante!
-Bloco: B
-Mesmo morador
-```
-
-**Exercício E287** · ★★★
-
-Escreva bool palindromo(const char *s), que diz se uma frase é um
-palíndromo IGNORANDO os espaços. Use dois ponteiros: um no começo e outro
-no último caractere (antes do '\0'), que andam um em direção ao outro,
-pulando espaços. Teste com "arara", "socorram me subi no onibus em
-marrocos" e "pix caiu".
-
-```text
-Saída esperada:
-arara: sim
-socorram me subi no onibus em marrocos: sim
-pix caiu: não
-```
-
-### 0049 · Ponteiro para ponteiro
-
-**Exercício E289** · ★☆☆
-
-A turma do cursinho é identificada por uma letra. Declare
-
-```text
-char turma = 'k';
-char *p = &turma;
-char **pp = &p;
-```
-
-Mostre a letra de três jeitos (pela variável, por p e por pp). Depois,
-usando só pp, troque a letra para 'K' e mostre a variável turma.
-
-```text
-Saída esperada:
-k k k
-Agora: K
-```
-
-**Exercício E291** · ★★☆
-
-A loja recebe mensagens como "Pedido numero 4521 confirmado". Escreva
-
-```text
-void pula_ate_digito(const char **s)
-```
-
-que avança o ponteiro DE QUEM CHAMOU até o primeiro dígito do texto (ou
-até o '\0', se não houver dígito). No main:
-
-```text
-const char *msg = "Pedido numero 4521 confirmado";
-pula_ate_digito(&msg);
-printf("%s\n", msg);
-```
-
-```text
-Saída esperada:
-4521 confirmado
-```
-
-Teste também com "Sem numero": deve sair uma linha vazia.
-
-**Exercício E292** · ★★☆
-
-Num leilão, escreva a função
-
-```text
-void aponta_maior(int *a, int *b, int **res)
-```
-
-que faz o ponteiro apontado por res passar a apontar para o maior dos dois
-lances (a ou b). No main, com lance1 = 870 e lance2 = 640, declare
-int *vencedor = NULL, chame a função e mostre o valor do maior lance
-pelo ponteiro vencedor.
-
-```text
-Saída esperada:
-Maior lance: R$ 870
-```
-
-**Exercício E293** · ★★★
-
-Quatro jurados deram notas a uma escola de samba, cada uma numa variável:
-
-```text
-int j1 = 9, j2 = 7, j3 = 10, j4 = 8;
-```
-
-Você quer mostrar as notas em ordem crescente SEM mexer nas variáveis.
-Monte um vetor de ponteiros int *ordem[4] = {&j1, &j2, &j3, &j4}; e
-ordene OS PONTEIROS pelo valor apontado. Para trocar dois ponteiros do
-vetor, escreva
-
-```text
-void troca_ptr(int **a, int **b)
-```
-
-No fim, mostre as notas pela ordem e depois as variáveis originais.
-
-```text
-Saída esperada:
-Em ordem: 7 8 9 10
-Originais: j1=9 j2=7 j3=10 j4=8
-```
-
-### 0050 · Ponteiro para função
-
-**Exercício E295** · ★☆☆
-
-O app de clima converte temperaturas nos dois sentidos. Escreva
-
-```text
-double c_para_f(double c)   // f = c * 9 / 5 + 32
-double f_para_c(double f)   // c = (f - 32) * 5 / 9
-```
-
-Declare um ponteiro double (*conv)(double); faça ele apontar para
-c_para_f e converta 30; depois aponte para f_para_c e converta 86.
-
-```text
-Saída esperada:
-30.0 -> 86.0
-86.0 -> 30.0
-```
-
-**Exercício E297** · ★★☆
-
-Faça uma calculadora SEM switch. Escreva soma, subtrai, multiplica e
-divide, todas com a assinatura int f(int, int), e guarde-as num vetor de
-ponteiros para função:
-
-```text
-int (*ops[4])(int, int) = {soma, subtrai, multiplica, divide};
-```
-
-Leia uma conta no formato "12 * 4" com scanf("%d %c %d", ...), ache o
-índice do operador na string "+-*/" e chame ops[indice](a, b). Operador
-desconhecido mostra "Operador inválido"; divisão por zero mostra
-"Divisão por zero".
-
-```text
-Entrada:
-12 * 4
-```
-
-```text
-Saída esperada:
-Resultado: 48
-```
-
-```text
-Entrada:
-7 / 0
-```
-
-```text
-Saída esperada:
-Divisão por zero
-```
-
-```text
-Entrada:
-3 % 2
-```
-
-```text
-Saída esperada:
-Operador inválido
-```
-
-**Exercício E298** · ★★☆
-
-Ordene as frutas da barraca em ordem alfabética com qsort:
-
-```text
-const char *frutas[] = {"manga", "abacaxi", "caju", "banana", "acerola"};
-```
-
-```text
-Saída esperada:
-abacaxi acerola banana caju manga
-```
-
-O detalhe: cada elemento do vetor é um const char *. O qsort entrega à
-comparação o ENDEREÇO de um elemento, ou seja, o endereço de um
-const char * (um ponteiro para ponteiro, assunto 0049).
-
-**Exercício E300** · ★★★
-
-Você tem R$ 50 no bolso e quer ver os produtos da lojinha do mais perto
-desse valor ao mais longe. Ordene com qsort pela distância até 50
-(|preço - 50|); em caso de empate, o mais barato vem antes.
-
-```text
-int precos[7] = {47, 58, 50, 39, 53, 61, 44};
-```
-
-A função de comparação só recebe dois endereços, então guarde o alvo
-numa variável global static. Depois de mostrar a ordem para 50, mude o
-alvo para 60 (você achou mais R$ 10), ordene de novo e mostre.
-
-```text
-Saída esperada:
-50 47 53 44 58 39 61
-61 58 53 50 47 44 39
-```
-
-### 0051 · void * e cast
-
-**Exercício E301** · ★☆☆
-
-No cadastro do plano de saúde, declare int idade = 41 e double altura =
-1.83. Use UM único ponteiro void *p: primeiro aponte para idade e mostre
-o valor; depois aponte para altura e mostre o valor.
-
-```text
-Saída esperada:
-idade: 41
-altura: 1.83
-```
-
-**Exercício E303** · ★★☆
-
-Escreva sua versão do memset para zerar qualquer coisa:
-
-```text
-void zera(void *p, size_t tam)
-```
-
-que coloca 0 em cada um dos tam bytes a partir de p. Teste zerando o
-vetor de placar int gols[5] = {2, 1, 3, 0, 4} e a variável double saldo
-= 99.90. Mostre antes e depois.
-
-```text
-Saída esperada:
-antes: 2 1 3 0 4 | 99.90
-depois: 0 0 0 0 0 | 0.00
-```
-
-**Exercício E304** · ★★☆
-
-Escreva uma função que mostra vetores de QUALQUER tipo:
-
-```text
-void mostra_vetor(const void *v, size_t n, size_t tam,
-                  void (*mostra)(const void *))
-```
-
-Ela calcula o endereço de cada elemento (o i-ésimo começa i * tam bytes
-depois do início) e chama mostra com esse endereço. Escreva também
-mostra_int e mostra_double. Teste com
-
-```text
-int senhas[4] = {101, 102, 103, 104};
-double notas[3] = {7.5, 9.25, 6.0};
-```
-
-```text
-Saída esperada:
-101 102 103 104
-7.50 9.25 6.00
-```
-
-**Exercício E305** · ★★★
-
-Escreva uma busca linear genérica:
-
-```text
-int busca(const void *v, size_t n, size_t tam, const void *alvo,
-          int (*igual)(const void *, const void *))
-```
-
-que devolve o índice do primeiro elemento igual ao alvo (segundo a função
-igual) ou -1. Use com três vetores:
-
-```text
-int cods[5] = {310, 422, 518, 422, 907};          alvo 422
-double precos[4] = {9.90, 15.50, 4.25, 30.00};    alvo 4.25
-const char *nomes[3] = {"ana", "bia", "caio"};    alvo "caio"
-```
-
-```text
-Saída esperada:
-422 no índice 1
-4.25 no índice 2
-caio no índice 2
-bruno no índice -1
-```
-
-### 0052 · Juntando tudo: o ranking da feira
+### Exercícios
 
 **Exercício E307** · ★☆☆
 
@@ -2282,11 +2305,13 @@ nome mais comprido: laranja (índice 2)
 depois de zerar: 12 0 33 47 5
 ```
 
-### Lista do módulo
+---
+
+## Lista do módulo
 
 30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P0601.c a P0630.c, em `material/`; resoluções em `_respostas/06-ponteiros/lista/`.
 
-#### ★☆☆ Aquecimento
+### ★☆☆ Aquecimento
 
 **Exercício P0601** · ★☆☆ · O placar pelo ponteiro
 
@@ -2524,7 +2549,7 @@ Semana (coluna): 2
 
 **Resposta esperada:** a saída acima (22 na posição 10: linha 2, coluna 2).
 
-#### ★★☆ Para pensar
+### ★★☆ Para pensar
 
 **Exercício P0611** · ★★☆ · Lado par, lado ímpar
 
@@ -2777,7 +2802,7 @@ Decrescente:    85 66 58 47 30 21 12  9
 Pares primeiro: 12 30 58 66  9 21 47 85
 ```
 
-#### ★★★ Desafio
+### ★★★ Desafio
 
 **Exercício P0621** · ★★★ · O ranking do processo seletivo
 
@@ -3056,7 +3081,7 @@ CUPU   não está na grade
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas extras que misturam os assuntos do módulo. Resolva num arquivo seu e
 compile com as flags de estudo.
@@ -3228,7 +3253,7 @@ achou. A busca binária em si é o assunto 0090.
 
 </details>
 
-### Questões do POSCOMP
+## Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -3238,7 +3263,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 
 O gabarito de 2023 vem de um blog de terceiros que reproduz o gabarito definitivo; confira no PDF oficial da SBC.
 
-### Questões no estilo da prova
+## Questões no estilo da prova
 
 Questões no formato da prova do PPGI/UFAM. Resolva no papel, marque uma letra e
 só então abra o gabarito. Os trechos foram compilados com

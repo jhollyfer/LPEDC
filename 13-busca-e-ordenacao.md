@@ -54,9 +54,12 @@ AddressSanitizer e o UBSan param o programa nos erros de índice e de overflow.
 
 ---
 
-## 1. Conceitos gerais
+> [!NOTE]
+> Cada assunto é um capítulo: **Conceito** (a explicação), **Exemplos de uso** (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e **Exercícios** (cada um é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta; resoluções em `_respostas/13-busca-e-ordenacao/`).
 
-### 0089 · Busca sequencial
+## 0089 · Busca sequencial
+
+### Conceito
 
 - **Busca sequencial** (ou **linear**): olha a primeira posição, depois a
   segunda, até achar ou acabar o vetor. Não exige ordem (ZIVIANI, 2010,
@@ -76,195 +79,7 @@ AddressSanitizer e o UBSan param o programa nos erros de índice e de overflow.
 > Com `if (v[i] == x) return i; else return -1;` dentro do laço, a função olha
 > só o primeiro elemento e desiste. "Não achei" só vale **depois** do laço.
 
-### 0090 · Busca binária
-
-- **Busca binária**: num vetor **ordenado**, olha a gaveta do meio. Se tem a
-  chave, acabou; se a chave é maior, descarta a esquerda; se é menor,
-  descarta a direita. Cada pergunta joga fora metade do que sobrou
-  (ZIVIANI, 2010, cap. 5).
-- **Invariante** (0073): "se `x` está no vetor, está em `v[ini..fim]`", com
-  os dois extremos inclusive. Quando `ini` passa de `fim`, o intervalo está
-  vazio e a resposta é `-1` (FEOFILOFF, 2009).
-- **Custo**: com 15 elementos sobram 15, 7, 3, 1, no máximo 4 voltas; com um
-  milhão, 20. Pior caso ⌊log₂ n⌋ + 1 voltas, **O(log n)** (0072)
-  (ZIVIANI, 2010, cap. 5).
-- **Pré-condição**: o vetor tem de estar ordenado. Num vetor bagunçado, a
-  busca responde errado sem avisar (FEOFILOFF, 2009).
-- **Meio sem overflow**: `ini + (fim - ini) / 2`. Com `(ini + fim) / 2`, a
-  soma passa de `INT_MAX` em vetores enormes, bug que ficou anos escondido em
-  bibliotecas (BLOCH, 2006).
-
-> [!WARNING]
-> Busca binária é famosa por erros de um. Com o intervalo fechado `[ini, fim]`,
-> `while (ini < fim)` deixa de olhar o último candidato e `fim = meio` pode
-> nunca encolher. Escolha um estilo (fechado ou semiaberto `[ini, fim)`) e
-> siga as regras dele.
-
-### 0091 · Bubble sort
-
-- **Bubble sort** (ordenação por bolha): compara **vizinhos**, `v[j]` com
-  `v[j + 1]`, e troca os dois se o da esquerda for maior. Cada varredura é
-  uma **passada** (CELES; RANGEL, 2002).
-- **O maior afunda**: a cada passada, o maior restante vai para a última
-  gaveta livre. Por isso `n - 1` passadas bastam, e a passada `k` não olha
-  as últimas `k - 1` gavetas (DEITEL; DEITEL, 2011, cap. 6).
-- **Bandeira** (`bool trocou`): passada sem troca quer dizer vetor
-  ordenado, e o laço para (CELES; RANGEL, 2002).
-- **Custo**: no pior caso (vetor ao contrário), `n(n - 1)/2` comparações,
-  todas viram trocas: **O(n²)**. No melhor caso, com bandeira, uma passada:
-  **O(n)** (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
-- **Inversão**: par na ordem errada. Cada troca de vizinhos desfaz uma; num
-  vetor aleatório são cerca de `n²/4`. Serve para aprender, não para código
-  real (CORMEN et al., 2024, cap. 2).
-
-> [!WARNING]
-> `v[j] = v[j + 1]; v[j + 1] = v[j];` não troca nada: os dois ficam iguais.
-> Use uma variável auxiliar. Com `j < n` no laço interno, a última volta lê
-> `v[n]`, fora do vetor.
-
-### 0092 · Selection sort
-
-- **Selection sort** (ordenação por seleção): escolhe o menor, depois o
-  segundo menor, e assim por diante (FEOFILOFF, 2009).
-- **Parte pronta**: à esquerda ficam os menores, já na posição final. Cada
-  passada `i` procura o **índice** do menor em `v[i..n-1]` e o troca com
-  `v[i]`; a gaveta `i` nunca mais muda (FEOFILOFF, 2009).
-- **Índice, não valor**: guarda-se o índice do menor para poder trocar no
-  fim (padrão "maior/menor" do 0025).
-- **Custo**: `n(n - 1)/2` comparações em **todos** os casos, mesmo com o
-  vetor em ordem: **O(n²)**. A vantagem é no máximo **uma troca por
-  passada**, `n - 1` no total (ZIVIANI, 2010, cap. 4).
-- **Instável**: a troca é de longa distância e pode inverter a ordem de
-  iguais. Ordena **in-place**, com O(1) de memória extra (FEOFILOFF, 2009).
-
-> [!WARNING]
-> Trocar **dentro** do laço que procura o menor ordena, mas perde a vantagem
-> das poucas trocas. Esquecer de reiniciar `menor = i` a cada passada faz
-> `menor` apontar para a parte pronta.
-
-### 0093 · Insertion sort
-
-- **Insertion sort** (ordenação por inserção): como arrumar cartas na mão,
-  cada elemento novo é **encaixado** no lugar certo da parte já ordenada
-  (CORMEN et al., 2024, cap. 2).
-- **Parte pronta**: `v[0..j-1]` fica **em ordem entre si**, mas não no lugar
-  final, ao contrário do selection (FEOFILOFF, 2009).
-- **Passo**: guarde `x = v[j]`; ande para a esquerda empurrando uma casa
-  para a direita cada elemento **maior** que `x` (um **deslocamento**, não
-  uma troca); ponha `x` em `v[i + 1]` (FEOFILOFF, 2009).
-- **Guardar `x` antes** é obrigatório: o primeiro deslocamento escreve por
-  cima de `v[j]`.
-- **Custo**: pior caso (vetor ao contrário), `n(n - 1)/2` comparações,
-  **O(n²)**; melhor caso (já ordenado), `n - 1`, **O(n)**. Cada deslocamento
-  desfaz uma inversão com uma escrita, não três (CORMEN et al., 2024, cap. 2).
-- **Estável e online**: o `>` para no primeiro igual e `x` entra depois dele;
-  ordena à medida que os dados chegam (FEOFILOFF, 2009).
-
-> [!WARNING]
-> Escreva `while (i >= 0 && v[i] > x)`. Na ordem inversa, com `i = -1` o
-> programa lê `v[-1]`. O curto-circuito do `&&` (0013) protege o vetor.
-
-### 0094 · Merge sort
-
-- **Intercalação** (*merge*): juntar duas sequências ordenadas numa só,
-  olhando o primeiro de cada e tirando o menor. Juntar `n` elementos custa no
-  máximo `n - 1` comparações (FEOFILOFF, 2009).
-- **Merge sort** (ordenação por intercalação): **divide** o vetor ao meio,
-  **ordena** cada metade com o próprio merge sort (recursão, 0032) e
-  **intercala** as duas (CORMEN et al., 2024, cap. 2).
-- **Dividir e conquistar**: quebrar o problema em pedaços menores do mesmo
-  tipo, resolver cada um e combinar (CORMEN et al., 2024, cap. 2).
-- **Caso base e intervalo**: pedaço de 0 ou 1 elemento. O código usa o
-  intervalo **semiaberto** `[p, r)`: metades `[p, q)` e `[q, r)` sem repetir
-  ninguém. O Cormen usa o fechado `A[p..r]` (FEOFILOFF, 2009).
-- **Custo**: `log₂ n` níveis, e em cada nível as intercalações passam pelos
-  `n` elementos: **O(n log n)** em **todos** os casos. O preço é um vetor
-  auxiliar (o **rascunho**), **O(n)** de memória (ZIVIANI, 2010, cap. 4).
-- **Estável**: o `<=` da intercalação pega o da esquerda no empate
-  (FEOFILOFF, 2009).
-
-> [!WARNING]
-> Com o intervalo semiaberto, o caso base é `r - p < 2`. Com
-> `if (p >= r) return;`, um pedaço de 1 elemento passa direto e a chamada
-> recebe o mesmo pedaço para sempre: **estouro de pilha**.
-
-### 0095 · Quick sort
-
-- **Quick sort**: escolhe um **pivô**, separa o pedaço em `menores ou iguais
-  | pivô | maiores` e ordena cada lado com o próprio quick sort. Criado por
-  Tony Hoare em 1960 (CORMEN et al., 2024, cap. 7).
-- **Separação** (ou **partição**): rearranja o pedaço e deixa o pivô na sua
-  posição **final**, `j`. As chamadas seguintes são em `v[p..j-1]` e
-  `v[j+1..r]` (FEOFILOFF, 2009).
-- **Lomuto** (a `PARTITION` do Cormen): pivô `v[r]`; `k` anda pelo pedaço e
-  `j` marca a fronteira dos `<=` pivô. No fim, troca o pivô com `v[j]`
-  (CORMEN et al., 2024, cap. 7).
-- **Hoare**: dois índices vindos das pontas, que trocam os que estão do lado
-  errado (ZIVIANI, 2010, cap. 4).
-- **Ao contrário do merge**: o trabalho está em dividir, e juntar é de graça.
-  Não precisa de rascunho (FEOFILOFF, 2009).
-- **Custo**: com o pivô perto do meio, **O(n log n)**; sempre o menor ou o
-  maior, **O(n²)**, como no vetor **já ordenado** com pivô no fim. Na média,
-  O(n log n). Não é estável (CORMEN et al., 2024, cap. 7).
-- **Pilha**: no pior caso a recursão desce `n` níveis. Defesas: **mediana de
-  três** como pivô e recursão só no lado **menor**, no máximo `log₂ n` níveis
-  (FEOFILOFF, 2009).
-
-> [!WARNING]
-> Com `quick_sort(v, p, j)`, o pivô entra de novo no pedaço da esquerda. Se é
-> o maior (`j == r`), a chamada recebe o mesmo pedaço e nunca para: estouro de
-> pilha. As chamadas precisam bater com o que a separação promete sobre `j`.
-
-### 0096 · Comparando: estabilidade, custo e qsort
-
-- **Estável**: elementos com chave **igual** saem na ordem relativa em que
-  entraram. Com `int` não importa; com structs, sim (FEOFILOFF, 2009).
-- **Outros critérios**: **custo** no melhor, médio e pior caso; **memória
-  extra**, **in-place** (O(1)) ou rascunho O(n); **adaptativo**, mais rápido
-  com o vetor quase em ordem (ZIVIANI, 2010, cap. 4).
-- **Não há o melhor de todos**: insertion ganha em vetores pequenos ou quase
-  ordenados; merge garante n log n e estabilidade, com memória; quick é o
-  mais rápido na média, mas tem pior caso O(n²); selection faz o mínimo de
-  trocas (FEOFILOFF, 2009).
-- **`qsort`** da `stdlib.h`: ordenação genérica com ponteiro para função
-  (0050). Não conhece o tipo, por isso o `void *` e o `tamanho`
-  (KERNIGHAN; RITCHIE, 1989).
-
-```text
-void qsort(void *base, size_t n, size_t tamanho,
-           int (*compara)(const void *, const void *));
-```
-
-- **Função de comparação**: devolve **negativo** se o primeiro vem antes,
-  **zero** se empatam e **positivo** se vem depois, como o `strcmp`
-  (CPPREFERENCE, s.d.).
-- **Estabilidade do `qsort`**: a norma não promete. Se a ordem dos empatados
-  importa, ponha o desempate na função: uma **chave composta** (0180)
-  (LINUX MAN-PAGES, s.d.).
-- **`bsearch`**: busca binária da `stdlib.h` num vetor ordenado pela mesma
-  função de comparação (CELES; RANGEL, 2002).
-
-| Algoritmo | Melhor | Médio | Pior | Memória extra | Estável |
-| --- | --- | --- | --- | --- | --- |
-| bubble (com bandeira) | O(n) | O(n²) | O(n²) | O(1) | sim |
-| selection | O(n²) | O(n²) | O(n²) | O(1) | não |
-| insertion | O(n) | O(n²) | O(n²) | O(1) | sim |
-| merge | O(n log n) | O(n log n) | O(n log n) | O(n) | sim |
-| quick | O(n log n) | O(n log n) | O(n²) | O(log n) a O(n) de pilha | não |
-| heap (assunto 0103) | O(n log n) | O(n log n) | O(n log n) | O(1) | não |
-
-> [!WARNING]
-> `return *(const int *) a - *(const int *) b;` passa nos testes pequenos,
-> mas com sinais opostos e valores grandes (`INT_MAX` e `-5`) a subtração dá
-> **overflow**. Escreva `return (x > y) - (x < y);`.
-
----
-
-## 2. Exemplos de uso
-
-Cada exemplo compila sozinho. Rode com o comando abaixo dele e compare com a saída no fim do código.
-
-### 0089 · Busca sequencial
+### Exemplos de uso
 
 A catraca da academia procura a matrícula 1290 entre 6 alunos ativos. Compara
 com 4172, 3305 e 8821 (amarelo) e acha na gaveta de índice 3; as duas últimas
@@ -432,7 +247,126 @@ int main(void) {
 gcc ~/LPEDC/material/A178.c -o ~/LPEDC/material/A178 && ~/LPEDC/material/A178
 ```
 
-### 0090 · Busca binária
+### Exercícios
+
+**Exercício E529** · ★☆☆
+
+O extrato do Pix do mês tem estes valores, em reais, do mais antigo para o
+mais recente: 50, 120, 35, 50, 80, 50, 15. Você quer achar a ÚLTIMA
+transação de R$ 50 (a mais recente). Escreva a função
+
+```text
+int ultima_ocorrencia(const int v[], int n, int x, int *comparacoes)
+```
+
+que devolve o índice da última ocorrência de x (ou -1) e conta as
+comparações. Procure de um jeito que pare assim que achar. Teste com 50 e
+com 200.
+
+```text
+Saída esperada:
+Última de R$ 50: posição 5 (2 comparações)
+Última de R$ 200: posição -1 (7 comparações)
+```
+
+**Exercício E531** · ★★☆
+
+A tabela de preços de uma loja está em ordem crescente:
+12, 19, 25, 31, 38, 44, 52, 60, 73, 89. Escreva duas funções que devolvem o
+índice (ou -1) e contam quantos elementos olharam:
+
+```text
+busca: a busca sequencial comum;
+busca_ordenada: aproveita a ordem e desiste assim que encontra um preço
+MAIOR que o procurado.
+```
+
+Teste as duas com R$ 47 (não existe) e R$ 60.
+
+```text
+Saída esperada:
+R$ 47: comum -1 (10 olhados), ordenada -1 (7 olhados)
+R$ 60: comum 7 (8 olhados), ordenada 7 (8 olhados)
+```
+
+**Exercício E532** · ★★☆
+
+O estoque do mercadinho é um vetor de structs:
+
+```text
+typedef struct { int codigo; char nome[20]; double preco; } Produto;
+```
+
+```text
+{1010, "Arroz 5kg", 27.50}, {2050, "Café 500g", 18.90},
+{3300, "Feijão 1kg", 8.40}, {4120, "Leite 1L", 5.20}
+```
+
+Escreva Produto *busca_produto(Produto v[], int n, int codigo), que devolve
+o ENDEREÇO do produto dentro do vetor (ou NULL). No main, busque 2050,
+mostre o produto e dê um reajuste de 10% pelo ponteiro devolvido. Depois
+mostre estoque[1] direto do vetor e busque 9999.
+
+```text
+Saída esperada:
+2050 Café 500g R$ 18.90
+No vetor: Café 500g R$ 20.79
+9999: não cadastrado
+```
+
+**Exercício E534** · ★★★
+
+Na agenda do celular você liga muito mais para umas pessoas do que para
+outras. Uma heurística antiga é o MOVER PARA A FRENTE: toda vez que a busca
+acha um contato, ele vai para a posição 0 e os anteriores andam uma casa.
+
+Agenda inicial: "Chefe", "Banco", "Pizzaria", "Ana", "Mãe".
+Acessos, nessa ordem: Mãe, Ana, Mãe, Mãe, Pizzaria, Mãe.
+
+Mostre a agenda depois de cada acesso e compare o total de comparações com
+uma busca que nunca mexe na agenda.
+
+```text
+Saída esperada:
+Mãe -> Mãe Chefe Banco Pizzaria Ana
+Ana -> Ana Mãe Chefe Banco Pizzaria
+Mãe -> Mãe Ana Chefe Banco Pizzaria
+Mãe -> Mãe Ana Chefe Banco Pizzaria
+Pizzaria -> Pizzaria Mãe Ana Chefe Banco
+Mãe -> Mãe Pizzaria Ana Chefe Banco
+Sem mover: 27 comparações
+Movendo para a frente: 20 comparações
+```
+
+---
+
+## 0090 · Busca binária
+
+### Conceito
+
+- **Busca binária**: num vetor **ordenado**, olha a gaveta do meio. Se tem a
+  chave, acabou; se a chave é maior, descarta a esquerda; se é menor,
+  descarta a direita. Cada pergunta joga fora metade do que sobrou
+  (ZIVIANI, 2010, cap. 5).
+- **Invariante** (0073): "se `x` está no vetor, está em `v[ini..fim]`", com
+  os dois extremos inclusive. Quando `ini` passa de `fim`, o intervalo está
+  vazio e a resposta é `-1` (FEOFILOFF, 2009).
+- **Custo**: com 15 elementos sobram 15, 7, 3, 1, no máximo 4 voltas; com um
+  milhão, 20. Pior caso ⌊log₂ n⌋ + 1 voltas, **O(log n)** (0072)
+  (ZIVIANI, 2010, cap. 5).
+- **Pré-condição**: o vetor tem de estar ordenado. Num vetor bagunçado, a
+  busca responde errado sem avisar (FEOFILOFF, 2009).
+- **Meio sem overflow**: `ini + (fim - ini) / 2`. Com `(ini + fim) / 2`, a
+  soma passa de `INT_MAX` em vetores enormes, bug que ficou anos escondido em
+  bibliotecas (BLOCH, 2006).
+
+> [!WARNING]
+> Busca binária é famosa por erros de um. Com o intervalo fechado `[ini, fim]`,
+> `while (ini < fim)` deixa de olhar o último candidato e `fim = meio` pode
+> nunca encolher. Escolha um estilo (fechado ou semiaberto `[ini, fim)`) e
+> siga as regras dele.
+
+### Exemplos de uso
 
 O catálogo do atacadão tem 15 códigos em ordem e você procura o 216. O meio
 (índice 7) tem 189, menor: a esquerda sai. O novo meio (11) tem 245, maior: a
@@ -629,7 +563,119 @@ int main(void) {
 gcc ~/LPEDC/material/A180.c -o ~/LPEDC/material/A180 && ~/LPEDC/material/A180
 ```
 
-### 0091 · Bubble sort
+### Exercícios
+
+**Exercício E535** · ★☆☆
+
+Os armários livres do vestiário estão numa lista ordenada:
+4, 9, 13, 21, 30, 38, 47, 55, 62. Escreva void procura(const int v[], int
+n, int x), uma busca binária que mostra cada volta (ini, fim, meio e o
+valor do meio) e, no fim, a posição achada ou a mensagem de falha, sempre
+com o total de voltas. No "não achou", mostre também os valores de ini e
+fim que pararam o laço. Procure 47, 5 e 62.
+
+```text
+Saída esperada:
+Procurando 47
+ini=0 fim=8 meio=4 (30)
+ini=5 fim=8 meio=6 (47)
+achou na posição 6 em 2 voltas
+Procurando 5
+ini=0 fim=8 meio=4 (30)
+ini=0 fim=3 meio=1 (9)
+ini=0 fim=0 meio=0 (4)
+não achou em 3 voltas (parou com ini=1 fim=0)
+Procurando 62
+ini=0 fim=8 meio=4 (30)
+ini=5 fim=8 meio=6 (47)
+ini=7 fim=8 meio=7 (55)
+ini=8 fim=8 meio=8 (62)
+achou na posição 8 em 4 voltas
+```
+
+**Exercício E537** · ★★☆
+
+As avaliações de um app (de 1 a 5 estrelas) já estão ordenadas:
+
+```text
+1, 1, 2, 3, 3, 3, 3, 4, 4, 5, 5, 5
+```
+
+Para cada nota de 1 a 5, mostre em que posições ela aparece e quantas vezes,
+usando DUAS buscas binárias por nota (nada de percorrer o vetor contando):
+uma acha a primeira posição com valor >= nota, a outra a primeira posição
+com valor > nota.
+
+```text
+Saída esperada:
+Nota 1: posições 0 a 1, 2 avaliações
+Nota 2: posições 2 a 2, 1 avaliação
+Nota 3: posições 3 a 6, 4 avaliações
+Nota 4: posições 7 a 8, 2 avaliações
+Nota 5: posições 9 a 11, 3 avaliações
+```
+
+**Exercício E538** · ★★☆
+
+Busca binária também funciona com strings, desde que estejam em ordem.
+Escreva int busca_nome(const char *v[], int n, const char *nome, int *voltas)
+e teste com as capitais abaixo, procurando "Natal" e "Palmas":
+
+```text
+"Aracaju", "Belém", "Boa Vista", "Cuiabá", "Curitiba", "Florianópolis",
+"Fortaleza", "Goiânia", "Maceió", "Manaus", "Natal", "Recife",
+"Salvador", "São Paulo", "Teresina", "Vitória"
+```
+
+```text
+Saída esperada:
+Natal: posição 10 (4 voltas)
+Palmas: posição -1 (4 voltas)
+```
+
+**Exercício E540** · ★★★
+
+Busca binária não precisa de vetor: basta uma pergunta de sim ou não que
+muda de resposta uma única vez. Um terreno quadrado tem que caber numa área
+de A m². Qual o maior lado INTEIRO possível? Ou seja: o maior L com
+L * L <= A. Sem sqrt: faça uma busca binária no intervalo de 0 a A e conte
+as voltas. Teste com 50, 1000000, 2147395600 e 2147483647.
+
+```text
+Saída esperada:
+50 m²: lado 7 m (6 voltas)
+1000000 m²: lado 1000 m (20 voltas)
+2147395600 m²: lado 46340 m (31 voltas)
+2147483647 m²: lado 46340 m (31 voltas)
+```
+
+---
+
+## 0091 · Bubble sort
+
+### Conceito
+
+- **Bubble sort** (ordenação por bolha): compara **vizinhos**, `v[j]` com
+  `v[j + 1]`, e troca os dois se o da esquerda for maior. Cada varredura é
+  uma **passada** (CELES; RANGEL, 2002).
+- **O maior afunda**: a cada passada, o maior restante vai para a última
+  gaveta livre. Por isso `n - 1` passadas bastam, e a passada `k` não olha
+  as últimas `k - 1` gavetas (DEITEL; DEITEL, 2011, cap. 6).
+- **Bandeira** (`bool trocou`): passada sem troca quer dizer vetor
+  ordenado, e o laço para (CELES; RANGEL, 2002).
+- **Custo**: no pior caso (vetor ao contrário), `n(n - 1)/2` comparações,
+  todas viram trocas: **O(n²)**. No melhor caso, com bandeira, uma passada:
+  **O(n)** (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
+- **Inversão**: par na ordem errada. Cada troca de vizinhos desfaz uma; num
+  vetor aleatório são cerca de `n²/4`. Serve para aprender, não para código
+  real (CORMEN et al., 2024, cap. 2).
+
+> [!WARNING]
+> `v[j] = v[j + 1]; v[j + 1] = v[j];` não troca nada: os dois ficam iguais.
+> Use uma variável auxiliar. Com `j < n` no laço interno, a última volta lê
+> `v[n]`, fora do vetor.
+
+### Exemplos de uso
 
 Cinco restaurantes prometem entregar em 42, 17, 35, 8 e 23 minutos. Na
 passada 1 o 42 afunda até o fim; na 2, o 35 acha o seu lugar; na 3, o 8 chega
@@ -840,7 +886,104 @@ int main(void) {
 gcc ~/LPEDC/material/A182.c -o ~/LPEDC/material/A182 && ~/LPEDC/material/A182
 ```
 
-### 0092 · Selection sort
+### Exercícios
+
+**Exercício E541** · ★☆☆
+
+No bolão da firma, os pontos de seis participantes são 18, 31, 7, 25, 31 e
+12. Ordene com bubble sort (com a bandeira) em ordem DECRESCENTE, do líder
+para o lanterna, e mostre o ranking.
+
+```text
+Saída esperada:
+Ranking: 31 31 25 18 12 7
+```
+
+**Exercício E543** · ★★☆
+
+A turma de natação tem as idades 34, 19, 27, 45 e 22. Escreva um bubble
+sort em ordem crescente, trocando com uma variável auxiliar. Mostre o
+vetor ao fim de cada passada e, no fim, o total de trocas.
+
+```text
+Saída esperada:
+passada 1: 19 27 34 22 45
+passada 2: 19 27 22 34 45
+passada 3: 19 22 27 34 45
+passada 4: 19 22 27 34 45
+5 trocas
+```
+
+**Exercício E544** · ★★☆
+
+Monte a tabela do campeonato. Cada time é uma struct:
+
+```text
+typedef struct { char nome[16]; int pontos; int vitorias; } Time;
+```
+
+```text
+{"Fortaleza", 68, 19}, {"Flamengo", 70, 20}, {"Botafogo", 79, 23},
+{"Palmeiras", 70, 21}, {"Inter", 65, 18}
+```
+
+Ordene com bubble sort: mais pontos primeiro; empatou nos pontos, mais
+vitórias primeiro. Escreva uma função bool vem_depois(const Time *a,
+const Time *b) com o critério e use-a no lugar do ">" do bubble.
+
+```text
+Saída esperada:
+1º Botafogo   79 pts 23 vit
+2º Palmeiras  70 pts 21 vit
+3º Flamengo   70 pts 20 vit
+4º Fortaleza  68 pts 19 vit
+5º Inter      65 pts 18 vit
+```
+
+**Exercício E545** · ★★★
+
+O bubble tem um ponto fraco: elemento pequeno no fim (uma "tartaruga") anda
+só UMA casa para a esquerda por passada. No vetor 2, 3, 4, 5, 6, 7, 8, 1, o
+1 precisa de 7 passadas para chegar à frente.
+
+O SHAKER SORT (coqueteleira) alterna o sentido: uma passada de ida
+(esquerda para a direita, leva o maior para o fim) e uma de volta (direita
+para a esquerda, traz o menor para a frente). Implemente o bubble com
+bandeira e o shaker, conte passadas (ida e volta contam uma cada) e
+comparações, e compare no vetor acima.
+
+```text
+Saída esperada:
+bubble: 7 passadas, 28 comparações
+shaker: 3 passadas, 18 comparações
+resultado: 1 2 3 4 5 6 7 8
+```
+
+---
+
+## 0092 · Selection sort
+
+### Conceito
+
+- **Selection sort** (ordenação por seleção): escolhe o menor, depois o
+  segundo menor, e assim por diante (FEOFILOFF, 2009).
+- **Parte pronta**: à esquerda ficam os menores, já na posição final. Cada
+  passada `i` procura o **índice** do menor em `v[i..n-1]` e o troca com
+  `v[i]`; a gaveta `i` nunca mais muda (FEOFILOFF, 2009).
+- **Índice, não valor**: guarda-se o índice do menor para poder trocar no
+  fim (padrão "maior/menor" do 0025).
+- **Custo**: `n(n - 1)/2` comparações em **todos** os casos, mesmo com o
+  vetor em ordem: **O(n²)**. A vantagem é no máximo **uma troca por
+  passada**, `n - 1` no total (ZIVIANI, 2010, cap. 4).
+- **Instável**: a troca é de longa distância e pode inverter a ordem de
+  iguais. Ordena **in-place**, com O(1) de memória extra (FEOFILOFF, 2009).
+
+> [!WARNING]
+> Trocar **dentro** do laço que procura o menor ordena, mas perde a vantagem
+> das poucas trocas. Esquecer de reiniciar `menor = i` a cada passada faz
+> `menor` apontar para a parte pronta.
+
+### Exemplos de uso
 
 Os tempos da melhor volta numa bateria de kart, em segundos: 58, 31, 47, 19 e
 26. Cada linha é uma passada: a gaveta roxa é a posição `i`, a amarela é o
@@ -1032,7 +1175,115 @@ int main(void) {
 gcc ~/LPEDC/material/A184.c -o ~/LPEDC/material/A184 && ~/LPEDC/material/A184
 ```
 
-### 0093 · Insertion sort
+### Exercícios
+
+**Exercício E547** · ★☆☆
+
+Uma variação do selection: em vez de procurar o MENOR e pôr na frente,
+procure o MAIOR e ponha no FIM. A parte pronta cresce pela direita. Ordene
+os preços 89, 45, 120, 30, 75, 60 e mostre o vetor depois de cada passada
+(fim é a gaveta que recebe o maior).
+
+```text
+Saída esperada:
+fim = 5: 89 45 60 30 75 120
+fim = 4: 75 45 60 30 89 120
+fim = 3: 30 45 60 75 89 120
+fim = 2: 30 45 60 75 89 120
+fim = 1: 30 45 60 75 89 120
+```
+
+**Exercício E549** · ★★☆
+
+Monte a lista de chamada em ordem alfabética com selection sort. Os nomes
+ficam em const char *alunos[] = {"Rafael", "Ana", "Lucas", "Beatriz",
+"Diego", "Carla"}. Não copie letras: troque só os PONTEIROS. Mostre a lista
+numerada e quantas trocas foram feitas.
+
+```text
+Saída esperada:
+1. Ana
+2. Beatriz
+3. Carla
+4. Diego
+5. Lucas
+6. Rafael
+5 trocas de ponteiro
+```
+
+**Exercício E550** · ★★☆
+
+Um site de passagens achou 8 voos: R$ 420, 315, 689, 298, 512, 350, 275 e
+601. A tela só mostra os 3 MAIS BARATOS. Ordenar tudo é desperdício: o
+selection coloca um menor no lugar por passada, então bastam 3 passadas.
+Escreva int k_menores(int v[], int n, int k), que faz só as k primeiras
+passadas e devolve quantas comparações fez.
+
+```text
+Saída esperada:
+3 mais baratas: R$ 275, R$ 298, R$ 315
+18 comparações (ordenar tudo custaria 28)
+```
+
+**Exercício E552** · ★★★
+
+Os produtos de uma loja têm uma descrição de 200 bytes, então cada struct
+é pesada de mover:
+
+```text
+typedef struct { int codigo; double preco; char descricao[200]; } Produto;
+```
+
+```text
+{11, 249.90, "Fone sem fio"}, {12, 89.90, "Mouse"},
+{13, 1299.00, "Monitor 24"}, {14, 159.90, "Teclado"},
+{15, 49.90, "Mousepad"}
+```
+
+Mostre os produtos do mais barato ao mais caro SEM mexer no vetor loja.
+Truque: crie int ordem[5] = {0, 1, 2, 3, 4} e ordene ESSE vetor com
+selection sort, comparando loja[ordem[j]].preco. É a ORDENAÇÃO INDIRETA.
+(O 216 é o tamanho do Produto numa máquina de 64 bits comum.)
+
+```text
+Saída esperada:
+Do mais barato ao mais caro:
+15 Mousepad      R$   49.90
+12 Mouse         R$   89.90
+14 Teclado       R$  159.90
+11 Fone sem fio  R$  249.90
+13 Monitor 24    R$ 1299.00
+loja[0] continua sendo: Fone sem fio
+3 trocas de 4 bytes, em vez de 216 bytes
+```
+
+---
+
+## 0093 · Insertion sort
+
+### Conceito
+
+- **Insertion sort** (ordenação por inserção): como arrumar cartas na mão,
+  cada elemento novo é **encaixado** no lugar certo da parte já ordenada
+  (CORMEN et al., 2024, cap. 2).
+- **Parte pronta**: `v[0..j-1]` fica **em ordem entre si**, mas não no lugar
+  final, ao contrário do selection (FEOFILOFF, 2009).
+- **Passo**: guarde `x = v[j]`; ande para a esquerda empurrando uma casa
+  para a direita cada elemento **maior** que `x` (um **deslocamento**, não
+  uma troca); ponha `x` em `v[i + 1]` (FEOFILOFF, 2009).
+- **Guardar `x` antes** é obrigatório: o primeiro deslocamento escreve por
+  cima de `v[j]`.
+- **Custo**: pior caso (vetor ao contrário), `n(n - 1)/2` comparações,
+  **O(n²)**; melhor caso (já ordenado), `n - 1`, **O(n)**. Cada deslocamento
+  desfaz uma inversão com uma escrita, não três (CORMEN et al., 2024, cap. 2).
+- **Estável e online**: o `>` para no primeiro igual e `x` entra depois dele;
+  ordena à medida que os dados chegam (FEOFILOFF, 2009).
+
+> [!WARNING]
+> Escreva `while (i >= 0 && v[i] > x)`. Na ordem inversa, com `i = -1` o
+> programa lê `v[-1]`. O curto-circuito do `&&` (0013) protege o vetor.
+
+### Exemplos de uso
 
 Numa rodada de buraco, as cartas chegam uma a uma: 7, 4, 9, 2, 5. Cada linha é
 uma carta nova: verde é a mão arrumada, amarela é a carta que entrou. O 9 não
@@ -1218,7 +1469,111 @@ int main(void) {
 gcc ~/LPEDC/material/A186.c -o ~/LPEDC/material/A186 && ~/LPEDC/material/A186
 ```
 
-### 0094 · Merge sort
+### Exercícios
+
+**Exercício E553** · ★☆☆
+
+As notas de redação de cinco candidatos foram 650, 720, 580, 810 e 690.
+Ordene com insertion sort em ordem DECRESCENTE (a maior primeiro) e mostre a
+classificação.
+
+```text
+Saída esperada:
+Classificação: 810 720 690 650 580
+```
+
+**Exercício E555** · ★★☆
+
+O fliperama guarda os 5 maiores recordes, do maior para o menor. Hoje o
+ranking tem 4: 9800, 8750, 7200, 6100. Escreva
+
+```text
+void novo_recorde(int top[], int *n, int cap, int pontos)
+```
+
+que encaixa a nova pontuação no lugar certo, como UM passo do insertion
+sort. Se o ranking já está cheio (n == cap), o último sai; se a pontuação
+não supera o último de um ranking cheio, ela nem entra. Teste com 7500,
+4000 e 9900, nessa ordem, e mostre o ranking depois de cada uma.
+
+```text
+Saída esperada:
+7500: 9800 8750 7500 7200 6100
+4000: não entrou no ranking
+9900: 9900 9800 8750 7500 7200
+```
+
+**Exercício E556** · ★★☆
+
+Os pedidos de uma lanchonete chegam com o tempo de preparo, em minutos:
+6, 3, 8, 3, 1. Escreva
+
+```text
+int ordena(int v[], int n, bool maior_ou_igual, bool mostrar)
+```
+
+com insertion sort crescente. Ela devolve o total de deslocamentos. Com
+maior_ou_igual falso, o while desloca quando v[i] > x; com verdadeiro,
+quando v[i] >= x. Com mostrar verdadeiro, imprime uma linha por encaixe.
+No main, ordene o vetor com > (mostrando) e uma cópia com >= (sem
+mostrar), e imprima os dois totais.
+
+```text
+Saída esperada:
+j = 1 (x = 3 entrou na posição 0): 3 6 8 3 1 (deslocou 1)
+j = 2 (x = 8 entrou na posição 2): 3 6 8 3 1 (deslocou 0)
+j = 3 (x = 3 entrou na posição 1): 3 3 6 8 1 (deslocou 2)
+j = 4 (x = 1 entrou na posição 0): 1 3 3 6 8 (deslocou 4)
+total com >: 7
+total com >=: 8
+```
+
+**Exercício E557** · ★★★
+
+As idades do grupo de corrida são 31, 12, 45, 27, 8 e 19. Escreva um
+insertion sort crescente que mostra o vetor depois de cada encaixe e, no
+fim, conta as comparações e os deslocamentos. Cuidado com o limite: teste
+i >= 0 ANTES de ler v[i]. Conte uma comparação a cada v[i] <= x testado.
+
+```text
+Saída esperada:
+j = 1: 12 31 45 27 8 19
+j = 2: 12 31 45 27 8 19
+j = 3: 12 27 31 45 8 19
+j = 4: 8 12 27 31 45 19
+j = 5: 8 12 19 27 31 45
+13 comparações, 10 deslocamentos
+```
+
+---
+
+## 0094 · Merge sort
+
+### Conceito
+
+- **Intercalação** (*merge*): juntar duas sequências ordenadas numa só,
+  olhando o primeiro de cada e tirando o menor. Juntar `n` elementos custa no
+  máximo `n - 1` comparações (FEOFILOFF, 2009).
+- **Merge sort** (ordenação por intercalação): **divide** o vetor ao meio,
+  **ordena** cada metade com o próprio merge sort (recursão, 0032) e
+  **intercala** as duas (CORMEN et al., 2024, cap. 2).
+- **Dividir e conquistar**: quebrar o problema em pedaços menores do mesmo
+  tipo, resolver cada um e combinar (CORMEN et al., 2024, cap. 2).
+- **Caso base e intervalo**: pedaço de 0 ou 1 elemento. O código usa o
+  intervalo **semiaberto** `[p, r)`: metades `[p, q)` e `[q, r)` sem repetir
+  ninguém. O Cormen usa o fechado `A[p..r]` (FEOFILOFF, 2009).
+- **Custo**: `log₂ n` níveis, e em cada nível as intercalações passam pelos
+  `n` elementos: **O(n log n)** em **todos** os casos. O preço é um vetor
+  auxiliar (o **rascunho**), **O(n)** de memória (ZIVIANI, 2010, cap. 4).
+- **Estável**: o `<=` da intercalação pega o da esquerda no empate
+  (FEOFILOFF, 2009).
+
+> [!WARNING]
+> Com o intervalo semiaberto, o caso base é `r - p < 2`. Com
+> `if (p >= r) return;`, um pedaço de 1 elemento passa direto e a chamada
+> recebe o mesmo pedaço para sempre: **estouro de pilha**.
+
+### Exemplos de uso
 
 Duas monitoras entregam pilhas de provas, cada uma em ordem de nota. As 8
 notas descem divididas até pedaços de 1 e sobem intercaladas (verde):
@@ -1417,7 +1772,118 @@ int main(void) {
 gcc ~/LPEDC/material/A188.c -o ~/LPEDC/material/A188 && ~/LPEDC/material/A188
 ```
 
-### 0095 · Quick sort
+### Exercícios
+
+**Exercício E559** · ★☆☆
+
+Duas turmas fizeram a mesma prova e cada professora mandou as notas em
+ordem: turma A = 45, 60, 75, 90 e turma B = 50, 60, 85, 95, 98. Escreva
+
+```text
+int intercala(const int a[], int na, const int b[], int nb, int c[])
+```
+
+que junta as duas listas, em ordem, no vetor c e devolve quantas
+comparações fez. Mostre o resultado.
+
+```text
+Saída esperada:
+Notas: 45 50 60 60 75 85 90 95 98
+7 comparações
+```
+
+**Exercício E561** · ★★☆
+
+A academia tem duas listas de presença, cada uma em ordem de matrícula e
+sem repetidos dentro dela:
+
+```text
+manhã: 1021, 1034, 1050, 1077, 1090
+tarde: 1010, 1034, 1066, 1077, 1095, 1102
+```
+
+Monte, numa passada só (estilo intercalação), a lista de alunos DIFERENTES
+que treinaram no dia, em ordem, e conte quantos foram nos dois turnos.
+
+```text
+Saída esperada:
+9 alunos diferentes: 1010 1021 1034 1050 1066 1077 1090 1095 1102
+foram nos dois turnos: 2
+```
+
+**Exercício E562** · ★★☆
+
+A fila de pedidos de uma padaria chegou nesta ordem:
+
+```text
+typedef struct { char cliente[8]; int valor; } Pedido;
+{"Ana", 50}, {"Bruno", 30}, {"Carla", 50}, {"Davi", 30}, {"Eva", 20}
+```
+
+Ordene por valor com merge sort (adapte o código do assunto para Pedido) e
+mostre a fila. Quem empatou no valor deve continuar na ordem de chegada
+(Bruno antes de Davi, Ana antes de Carla). Para ver o papel do <= da
+intercalação, dê à intercala (e ao merge_sort) um parâmetro bool estavel:
+verdadeiro compara com <=, falso compara com <. Ordene duas cópias da fila,
+uma de cada jeito, e mostre as duas.
+
+```text
+Saída esperada:
+com <=: Eva 20, Bruno 30, Davi 30, Ana 50, Carla 50
+com <:  Eva 20, Davi 30, Bruno 30, Carla 50, Ana 50
+```
+
+**Exercício E564** · ★★★
+
+Ana e Bia ranquearam as mesmas 8 séries. Numerando as séries pela ordem da
+Bia, o ranking da Ana fica: 3, 1, 7, 2, 8, 4, 6, 5. Quanto mais INVERSÕES
+(pares fora de ordem) esse vetor tem, mais os gostos discordam. É assim que
+sites de recomendação medem "pessoas parecidas com você".
+
+Contar inversões com dois laços é O(n²). Faça em O(n log n) pegando carona
+no merge sort: durante a intercalação, toda vez que um elemento da metade
+DIREITA sai antes, ele estava invertido com todos os que ainda restam na
+esquerda. Mostre o resultado do jeito rápido e confira com a força bruta.
+
+```text
+Saída esperada:
+força bruta: 10 discordâncias
+merge sort:  10 discordâncias
+de 28 pares possíveis
+```
+
+---
+
+## 0095 · Quick sort
+
+### Conceito
+
+- **Quick sort**: escolhe um **pivô**, separa o pedaço em `menores ou iguais
+  | pivô | maiores` e ordena cada lado com o próprio quick sort. Criado por
+  Tony Hoare em 1960 (CORMEN et al., 2024, cap. 7).
+- **Separação** (ou **partição**): rearranja o pedaço e deixa o pivô na sua
+  posição **final**, `j`. As chamadas seguintes são em `v[p..j-1]` e
+  `v[j+1..r]` (FEOFILOFF, 2009).
+- **Lomuto** (a `PARTITION` do Cormen): pivô `v[r]`; `k` anda pelo pedaço e
+  `j` marca a fronteira dos `<=` pivô. No fim, troca o pivô com `v[j]`
+  (CORMEN et al., 2024, cap. 7).
+- **Hoare**: dois índices vindos das pontas, que trocam os que estão do lado
+  errado (ZIVIANI, 2010, cap. 4).
+- **Ao contrário do merge**: o trabalho está em dividir, e juntar é de graça.
+  Não precisa de rascunho (FEOFILOFF, 2009).
+- **Custo**: com o pivô perto do meio, **O(n log n)**; sempre o menor ou o
+  maior, **O(n²)**, como no vetor **já ordenado** com pivô no fim. Na média,
+  O(n log n). Não é estável (CORMEN et al., 2024, cap. 7).
+- **Pilha**: no pior caso a recursão desce `n` níveis. Defesas: **mediana de
+  três** como pivô e recursão só no lado **menor**, no máximo `log₂ n` níveis
+  (FEOFILOFF, 2009).
+
+> [!WARNING]
+> Com `quick_sort(v, p, j)`, o pivô entra de novo no pedaço da esquerda. Se é
+> o maior (`j == r`), a chamada recebe o mesmo pedaço e nunca para: estouro de
+> pilha. As chamadas precisam bater com o que a separação promete sobre `j`.
+
+### Exemplos de uso
 
 Black Friday: 7 fones de R$ 35, 12, 48, 7, 29, 51 e 20. O 20 (roxo) é o pivô:
 separa o vetor e fica verde, no lugar. Cada lado escolhe o seu pivô:
@@ -1665,7 +2131,132 @@ int main(void) {
 gcc ~/LPEDC/material/A190.c -o ~/LPEDC/material/A190 && ~/LPEDC/material/A190
 ```
 
-### 0096 · Comparando: estabilidade, custo e qsort
+### Exercícios
+
+**Exercício E565** · ★☆☆
+
+As senhas de uma fila de exames são 9, 2, 6, 4, 8, 5. Escreva
+int separa(int v[], int p, int r), a separação com o pivô no fim (v[r]),
+que imprime "troca v[a] e v[b]" a cada troca, conta as comparações
+(v[k] <= pivo) numa variável static e devolve a posição final do pivô. No
+main, separe o vetor inteiro, mostre o vetor e a posição do pivô; depois
+separe só o lado DIREITO do pivô, mostre de novo e, no fim, o total de
+comparações.
+
+```text
+Saída esperada:
+troca v[0] e v[1]
+troca v[1] e v[3]
+troca v[2] e v[5]
+vetor: 2 4 5 9 8 6
+pivô na posição 2
+troca v[3] e v[5]
+vetor: 2 4 5 6 8 9
+pivô na posição 3
+comparações: 7
+```
+
+**Exercício E567** · ★★☆
+
+Ordene a lista do mercado em ordem alfabética com quick sort (pivô no fim,
+separação de Lomuto, como no texto do assunto), trocando só os ponteiros:
+
+```text
+const char *compras[] = {"leite", "arroz", "tomate", "café", "pão",
+                         "banana", "ovos", "feijão"};
+```
+
+Conte as comparações de strings.
+
+```text
+Saída esperada:
+arroz, banana, café, feijão, leite, ovos, pão, tomate
+14 comparações
+```
+
+**Exercício E568** · ★★☆
+
+Os andares das entregas do prédio são 4, 9, 2, 7, 5 e 1. Escreva
+void quick_sort(int v[], int n, int p, int r), recursivo, com separação de
+Lomuto (pivô em v[r]). A cada separação, imprima o intervalo, a posição
+final do pivô e o vetor. Chame as duas metades SEM o pivô (j - 1 e j + 1).
+
+```text
+Saída esperada:
+separa [0..5]: pivô na posição 0 -> 1 9 2 7 5 4
+separa [1..5]: pivô na posição 2 -> 1 2 4 7 5 9
+separa [3..5]: pivô na posição 5 -> 1 2 4 7 5 9
+separa [3..4]: pivô na posição 3 -> 1 2 4 5 7 9
+Final: 1 2 4 5 7 9
+```
+
+**Exercício E569** · ★★★
+
+Os 11 corredores do grupo fizeram 5 km em 45, 22, 38, 31, 50, 27, 24, 41,
+29, 35 e 33 minutos. Qual o tempo MEDIANO (o do meio, se a lista estivesse
+ordenada)? Não precisa ordenar tudo: depois de um separa, o pivô está na
+posição final j. Se j é a posição que você quer (k = n / 2), acabou. Se
+k < j, a resposta está só no lado esquerdo; se k > j, só no direito. Isso é
+o QUICKSELECT.
+
+Escreva int quickselect(int v[], int n, int k), sem recursão (um while que
+encolhe [p, r]), e compare as comparações com um quick sort completo numa
+cópia do vetor.
+
+```text
+Saída esperada:
+mediana: 33 min (quickselect: 10 comparações)
+ordenando tudo: 33 min (23 comparações)
+```
+
+---
+
+## 0096 · Comparando: estabilidade, custo e qsort
+
+### Conceito
+
+- **Estável**: elementos com chave **igual** saem na ordem relativa em que
+  entraram. Com `int` não importa; com structs, sim (FEOFILOFF, 2009).
+- **Outros critérios**: **custo** no melhor, médio e pior caso; **memória
+  extra**, **in-place** (O(1)) ou rascunho O(n); **adaptativo**, mais rápido
+  com o vetor quase em ordem (ZIVIANI, 2010, cap. 4).
+- **Não há o melhor de todos**: insertion ganha em vetores pequenos ou quase
+  ordenados; merge garante n log n e estabilidade, com memória; quick é o
+  mais rápido na média, mas tem pior caso O(n²); selection faz o mínimo de
+  trocas (FEOFILOFF, 2009).
+- **`qsort`** da `stdlib.h`: ordenação genérica com ponteiro para função
+  (0050). Não conhece o tipo, por isso o `void *` e o `tamanho`
+  (KERNIGHAN; RITCHIE, 1989).
+
+```text
+void qsort(void *base, size_t n, size_t tamanho,
+           int (*compara)(const void *, const void *));
+```
+
+- **Função de comparação**: devolve **negativo** se o primeiro vem antes,
+  **zero** se empatam e **positivo** se vem depois, como o `strcmp`
+  (CPPREFERENCE, s.d.).
+- **Estabilidade do `qsort`**: a norma não promete. Se a ordem dos empatados
+  importa, ponha o desempate na função: uma **chave composta** (0180)
+  (LINUX MAN-PAGES, s.d.).
+- **`bsearch`**: busca binária da `stdlib.h` num vetor ordenado pela mesma
+  função de comparação (CELES; RANGEL, 2002).
+
+| Algoritmo | Melhor | Médio | Pior | Memória extra | Estável |
+| --- | --- | --- | --- | --- | --- |
+| bubble (com bandeira) | O(n) | O(n²) | O(n²) | O(1) | sim |
+| selection | O(n²) | O(n²) | O(n²) | O(1) | não |
+| insertion | O(n) | O(n²) | O(n²) | O(1) | sim |
+| merge | O(n log n) | O(n log n) | O(n log n) | O(n) | sim |
+| quick | O(n log n) | O(n log n) | O(n²) | O(log n) a O(n) de pilha | não |
+| heap (assunto 0103) | O(n log n) | O(n log n) | O(n log n) | O(1) | não |
+
+> [!WARNING]
+> `return *(const int *) a - *(const int *) b;` passa nos testes pequenos,
+> mas com sinais opostos e valores grandes (`INT_MAX` e `-5`) a subtração dá
+> **overflow**. Escreva `return (x > y) - (x < y);`.
+
+### Exemplos de uso
 
 A planilha de pedidos vem em ordem de horário, e a logística quer agrupar por
 cidade mantendo a ordem de chegada. Um algoritmo estável mantém R1, R3, R6; o
@@ -1969,579 +2560,7 @@ int main(void) {
 gcc ~/LPEDC/material/A192.c -o ~/LPEDC/material/A192 && ~/LPEDC/material/A192
 ```
 
----
-
-## 3. Exercícios práticos
-
-Cada exercício é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta. Compile como os exemplos: `gcc ~/LPEDC/material/E007.c -o ~/LPEDC/material/E007 && ~/LPEDC/material/E007`. Resoluções em `_respostas/13-busca-e-ordenacao/`.
-
-### 0089 · Busca sequencial
-
-**Exercício E529** · ★☆☆
-
-O extrato do Pix do mês tem estes valores, em reais, do mais antigo para o
-mais recente: 50, 120, 35, 50, 80, 50, 15. Você quer achar a ÚLTIMA
-transação de R$ 50 (a mais recente). Escreva a função
-
-```text
-int ultima_ocorrencia(const int v[], int n, int x, int *comparacoes)
-```
-
-que devolve o índice da última ocorrência de x (ou -1) e conta as
-comparações. Procure de um jeito que pare assim que achar. Teste com 50 e
-com 200.
-
-```text
-Saída esperada:
-Última de R$ 50: posição 5 (2 comparações)
-Última de R$ 200: posição -1 (7 comparações)
-```
-
-**Exercício E531** · ★★☆
-
-A tabela de preços de uma loja está em ordem crescente:
-12, 19, 25, 31, 38, 44, 52, 60, 73, 89. Escreva duas funções que devolvem o
-índice (ou -1) e contam quantos elementos olharam:
-
-```text
-busca: a busca sequencial comum;
-busca_ordenada: aproveita a ordem e desiste assim que encontra um preço
-MAIOR que o procurado.
-```
-
-Teste as duas com R$ 47 (não existe) e R$ 60.
-
-```text
-Saída esperada:
-R$ 47: comum -1 (10 olhados), ordenada -1 (7 olhados)
-R$ 60: comum 7 (8 olhados), ordenada 7 (8 olhados)
-```
-
-**Exercício E532** · ★★☆
-
-O estoque do mercadinho é um vetor de structs:
-
-```text
-typedef struct { int codigo; char nome[20]; double preco; } Produto;
-```
-
-```text
-{1010, "Arroz 5kg", 27.50}, {2050, "Café 500g", 18.90},
-{3300, "Feijão 1kg", 8.40}, {4120, "Leite 1L", 5.20}
-```
-
-Escreva Produto *busca_produto(Produto v[], int n, int codigo), que devolve
-o ENDEREÇO do produto dentro do vetor (ou NULL). No main, busque 2050,
-mostre o produto e dê um reajuste de 10% pelo ponteiro devolvido. Depois
-mostre estoque[1] direto do vetor e busque 9999.
-
-```text
-Saída esperada:
-2050 Café 500g R$ 18.90
-No vetor: Café 500g R$ 20.79
-9999: não cadastrado
-```
-
-**Exercício E534** · ★★★
-
-Na agenda do celular você liga muito mais para umas pessoas do que para
-outras. Uma heurística antiga é o MOVER PARA A FRENTE: toda vez que a busca
-acha um contato, ele vai para a posição 0 e os anteriores andam uma casa.
-
-Agenda inicial: "Chefe", "Banco", "Pizzaria", "Ana", "Mãe".
-Acessos, nessa ordem: Mãe, Ana, Mãe, Mãe, Pizzaria, Mãe.
-
-Mostre a agenda depois de cada acesso e compare o total de comparações com
-uma busca que nunca mexe na agenda.
-
-```text
-Saída esperada:
-Mãe -> Mãe Chefe Banco Pizzaria Ana
-Ana -> Ana Mãe Chefe Banco Pizzaria
-Mãe -> Mãe Ana Chefe Banco Pizzaria
-Mãe -> Mãe Ana Chefe Banco Pizzaria
-Pizzaria -> Pizzaria Mãe Ana Chefe Banco
-Mãe -> Mãe Pizzaria Ana Chefe Banco
-Sem mover: 27 comparações
-Movendo para a frente: 20 comparações
-```
-
-### 0090 · Busca binária
-
-**Exercício E535** · ★☆☆
-
-Os armários livres do vestiário estão numa lista ordenada:
-4, 9, 13, 21, 30, 38, 47, 55, 62. Escreva void procura(const int v[], int
-n, int x), uma busca binária que mostra cada volta (ini, fim, meio e o
-valor do meio) e, no fim, a posição achada ou a mensagem de falha, sempre
-com o total de voltas. No "não achou", mostre também os valores de ini e
-fim que pararam o laço. Procure 47, 5 e 62.
-
-```text
-Saída esperada:
-Procurando 47
-ini=0 fim=8 meio=4 (30)
-ini=5 fim=8 meio=6 (47)
-achou na posição 6 em 2 voltas
-Procurando 5
-ini=0 fim=8 meio=4 (30)
-ini=0 fim=3 meio=1 (9)
-ini=0 fim=0 meio=0 (4)
-não achou em 3 voltas (parou com ini=1 fim=0)
-Procurando 62
-ini=0 fim=8 meio=4 (30)
-ini=5 fim=8 meio=6 (47)
-ini=7 fim=8 meio=7 (55)
-ini=8 fim=8 meio=8 (62)
-achou na posição 8 em 4 voltas
-```
-
-**Exercício E537** · ★★☆
-
-As avaliações de um app (de 1 a 5 estrelas) já estão ordenadas:
-
-```text
-1, 1, 2, 3, 3, 3, 3, 4, 4, 5, 5, 5
-```
-
-Para cada nota de 1 a 5, mostre em que posições ela aparece e quantas vezes,
-usando DUAS buscas binárias por nota (nada de percorrer o vetor contando):
-uma acha a primeira posição com valor >= nota, a outra a primeira posição
-com valor > nota.
-
-```text
-Saída esperada:
-Nota 1: posições 0 a 1, 2 avaliações
-Nota 2: posições 2 a 2, 1 avaliação
-Nota 3: posições 3 a 6, 4 avaliações
-Nota 4: posições 7 a 8, 2 avaliações
-Nota 5: posições 9 a 11, 3 avaliações
-```
-
-**Exercício E538** · ★★☆
-
-Busca binária também funciona com strings, desde que estejam em ordem.
-Escreva int busca_nome(const char *v[], int n, const char *nome, int *voltas)
-e teste com as capitais abaixo, procurando "Natal" e "Palmas":
-
-```text
-"Aracaju", "Belém", "Boa Vista", "Cuiabá", "Curitiba", "Florianópolis",
-"Fortaleza", "Goiânia", "Maceió", "Manaus", "Natal", "Recife",
-"Salvador", "São Paulo", "Teresina", "Vitória"
-```
-
-```text
-Saída esperada:
-Natal: posição 10 (4 voltas)
-Palmas: posição -1 (4 voltas)
-```
-
-**Exercício E540** · ★★★
-
-Busca binária não precisa de vetor: basta uma pergunta de sim ou não que
-muda de resposta uma única vez. Um terreno quadrado tem que caber numa área
-de A m². Qual o maior lado INTEIRO possível? Ou seja: o maior L com
-L * L <= A. Sem sqrt: faça uma busca binária no intervalo de 0 a A e conte
-as voltas. Teste com 50, 1000000, 2147395600 e 2147483647.
-
-```text
-Saída esperada:
-50 m²: lado 7 m (6 voltas)
-1000000 m²: lado 1000 m (20 voltas)
-2147395600 m²: lado 46340 m (31 voltas)
-2147483647 m²: lado 46340 m (31 voltas)
-```
-
-### 0091 · Bubble sort
-
-**Exercício E541** · ★☆☆
-
-No bolão da firma, os pontos de seis participantes são 18, 31, 7, 25, 31 e
-12. Ordene com bubble sort (com a bandeira) em ordem DECRESCENTE, do líder
-para o lanterna, e mostre o ranking.
-
-```text
-Saída esperada:
-Ranking: 31 31 25 18 12 7
-```
-
-**Exercício E543** · ★★☆
-
-A turma de natação tem as idades 34, 19, 27, 45 e 22. Escreva um bubble
-sort em ordem crescente, trocando com uma variável auxiliar. Mostre o
-vetor ao fim de cada passada e, no fim, o total de trocas.
-
-```text
-Saída esperada:
-passada 1: 19 27 34 22 45
-passada 2: 19 27 22 34 45
-passada 3: 19 22 27 34 45
-passada 4: 19 22 27 34 45
-5 trocas
-```
-
-**Exercício E544** · ★★☆
-
-Monte a tabela do campeonato. Cada time é uma struct:
-
-```text
-typedef struct { char nome[16]; int pontos; int vitorias; } Time;
-```
-
-```text
-{"Fortaleza", 68, 19}, {"Flamengo", 70, 20}, {"Botafogo", 79, 23},
-{"Palmeiras", 70, 21}, {"Inter", 65, 18}
-```
-
-Ordene com bubble sort: mais pontos primeiro; empatou nos pontos, mais
-vitórias primeiro. Escreva uma função bool vem_depois(const Time *a,
-const Time *b) com o critério e use-a no lugar do ">" do bubble.
-
-```text
-Saída esperada:
-1º Botafogo   79 pts 23 vit
-2º Palmeiras  70 pts 21 vit
-3º Flamengo   70 pts 20 vit
-4º Fortaleza  68 pts 19 vit
-5º Inter      65 pts 18 vit
-```
-
-**Exercício E545** · ★★★
-
-O bubble tem um ponto fraco: elemento pequeno no fim (uma "tartaruga") anda
-só UMA casa para a esquerda por passada. No vetor 2, 3, 4, 5, 6, 7, 8, 1, o
-1 precisa de 7 passadas para chegar à frente.
-
-O SHAKER SORT (coqueteleira) alterna o sentido: uma passada de ida
-(esquerda para a direita, leva o maior para o fim) e uma de volta (direita
-para a esquerda, traz o menor para a frente). Implemente o bubble com
-bandeira e o shaker, conte passadas (ida e volta contam uma cada) e
-comparações, e compare no vetor acima.
-
-```text
-Saída esperada:
-bubble: 7 passadas, 28 comparações
-shaker: 3 passadas, 18 comparações
-resultado: 1 2 3 4 5 6 7 8
-```
-
-### 0092 · Selection sort
-
-**Exercício E547** · ★☆☆
-
-Uma variação do selection: em vez de procurar o MENOR e pôr na frente,
-procure o MAIOR e ponha no FIM. A parte pronta cresce pela direita. Ordene
-os preços 89, 45, 120, 30, 75, 60 e mostre o vetor depois de cada passada
-(fim é a gaveta que recebe o maior).
-
-```text
-Saída esperada:
-fim = 5: 89 45 60 30 75 120
-fim = 4: 75 45 60 30 89 120
-fim = 3: 30 45 60 75 89 120
-fim = 2: 30 45 60 75 89 120
-fim = 1: 30 45 60 75 89 120
-```
-
-**Exercício E549** · ★★☆
-
-Monte a lista de chamada em ordem alfabética com selection sort. Os nomes
-ficam em const char *alunos[] = {"Rafael", "Ana", "Lucas", "Beatriz",
-"Diego", "Carla"}. Não copie letras: troque só os PONTEIROS. Mostre a lista
-numerada e quantas trocas foram feitas.
-
-```text
-Saída esperada:
-1. Ana
-2. Beatriz
-3. Carla
-4. Diego
-5. Lucas
-6. Rafael
-5 trocas de ponteiro
-```
-
-**Exercício E550** · ★★☆
-
-Um site de passagens achou 8 voos: R$ 420, 315, 689, 298, 512, 350, 275 e
-601. A tela só mostra os 3 MAIS BARATOS. Ordenar tudo é desperdício: o
-selection coloca um menor no lugar por passada, então bastam 3 passadas.
-Escreva int k_menores(int v[], int n, int k), que faz só as k primeiras
-passadas e devolve quantas comparações fez.
-
-```text
-Saída esperada:
-3 mais baratas: R$ 275, R$ 298, R$ 315
-18 comparações (ordenar tudo custaria 28)
-```
-
-**Exercício E552** · ★★★
-
-Os produtos de uma loja têm uma descrição de 200 bytes, então cada struct
-é pesada de mover:
-
-```text
-typedef struct { int codigo; double preco; char descricao[200]; } Produto;
-```
-
-```text
-{11, 249.90, "Fone sem fio"}, {12, 89.90, "Mouse"},
-{13, 1299.00, "Monitor 24"}, {14, 159.90, "Teclado"},
-{15, 49.90, "Mousepad"}
-```
-
-Mostre os produtos do mais barato ao mais caro SEM mexer no vetor loja.
-Truque: crie int ordem[5] = {0, 1, 2, 3, 4} e ordene ESSE vetor com
-selection sort, comparando loja[ordem[j]].preco. É a ORDENAÇÃO INDIRETA.
-(O 216 é o tamanho do Produto numa máquina de 64 bits comum.)
-
-```text
-Saída esperada:
-Do mais barato ao mais caro:
-15 Mousepad      R$   49.90
-12 Mouse         R$   89.90
-14 Teclado       R$  159.90
-11 Fone sem fio  R$  249.90
-13 Monitor 24    R$ 1299.00
-loja[0] continua sendo: Fone sem fio
-3 trocas de 4 bytes, em vez de 216 bytes
-```
-
-### 0093 · Insertion sort
-
-**Exercício E553** · ★☆☆
-
-As notas de redação de cinco candidatos foram 650, 720, 580, 810 e 690.
-Ordene com insertion sort em ordem DECRESCENTE (a maior primeiro) e mostre a
-classificação.
-
-```text
-Saída esperada:
-Classificação: 810 720 690 650 580
-```
-
-**Exercício E555** · ★★☆
-
-O fliperama guarda os 5 maiores recordes, do maior para o menor. Hoje o
-ranking tem 4: 9800, 8750, 7200, 6100. Escreva
-
-```text
-void novo_recorde(int top[], int *n, int cap, int pontos)
-```
-
-que encaixa a nova pontuação no lugar certo, como UM passo do insertion
-sort. Se o ranking já está cheio (n == cap), o último sai; se a pontuação
-não supera o último de um ranking cheio, ela nem entra. Teste com 7500,
-4000 e 9900, nessa ordem, e mostre o ranking depois de cada uma.
-
-```text
-Saída esperada:
-7500: 9800 8750 7500 7200 6100
-4000: não entrou no ranking
-9900: 9900 9800 8750 7500 7200
-```
-
-**Exercício E556** · ★★☆
-
-Os pedidos de uma lanchonete chegam com o tempo de preparo, em minutos:
-6, 3, 8, 3, 1. Escreva
-
-```text
-int ordena(int v[], int n, bool maior_ou_igual, bool mostrar)
-```
-
-com insertion sort crescente. Ela devolve o total de deslocamentos. Com
-maior_ou_igual falso, o while desloca quando v[i] > x; com verdadeiro,
-quando v[i] >= x. Com mostrar verdadeiro, imprime uma linha por encaixe.
-No main, ordene o vetor com > (mostrando) e uma cópia com >= (sem
-mostrar), e imprima os dois totais.
-
-```text
-Saída esperada:
-j = 1 (x = 3 entrou na posição 0): 3 6 8 3 1 (deslocou 1)
-j = 2 (x = 8 entrou na posição 2): 3 6 8 3 1 (deslocou 0)
-j = 3 (x = 3 entrou na posição 1): 3 3 6 8 1 (deslocou 2)
-j = 4 (x = 1 entrou na posição 0): 1 3 3 6 8 (deslocou 4)
-total com >: 7
-total com >=: 8
-```
-
-**Exercício E557** · ★★★
-
-As idades do grupo de corrida são 31, 12, 45, 27, 8 e 19. Escreva um
-insertion sort crescente que mostra o vetor depois de cada encaixe e, no
-fim, conta as comparações e os deslocamentos. Cuidado com o limite: teste
-i >= 0 ANTES de ler v[i]. Conte uma comparação a cada v[i] <= x testado.
-
-```text
-Saída esperada:
-j = 1: 12 31 45 27 8 19
-j = 2: 12 31 45 27 8 19
-j = 3: 12 27 31 45 8 19
-j = 4: 8 12 27 31 45 19
-j = 5: 8 12 19 27 31 45
-13 comparações, 10 deslocamentos
-```
-
-### 0094 · Merge sort
-
-**Exercício E559** · ★☆☆
-
-Duas turmas fizeram a mesma prova e cada professora mandou as notas em
-ordem: turma A = 45, 60, 75, 90 e turma B = 50, 60, 85, 95, 98. Escreva
-
-```text
-int intercala(const int a[], int na, const int b[], int nb, int c[])
-```
-
-que junta as duas listas, em ordem, no vetor c e devolve quantas
-comparações fez. Mostre o resultado.
-
-```text
-Saída esperada:
-Notas: 45 50 60 60 75 85 90 95 98
-7 comparações
-```
-
-**Exercício E561** · ★★☆
-
-A academia tem duas listas de presença, cada uma em ordem de matrícula e
-sem repetidos dentro dela:
-
-```text
-manhã: 1021, 1034, 1050, 1077, 1090
-tarde: 1010, 1034, 1066, 1077, 1095, 1102
-```
-
-Monte, numa passada só (estilo intercalação), a lista de alunos DIFERENTES
-que treinaram no dia, em ordem, e conte quantos foram nos dois turnos.
-
-```text
-Saída esperada:
-9 alunos diferentes: 1010 1021 1034 1050 1066 1077 1090 1095 1102
-foram nos dois turnos: 2
-```
-
-**Exercício E562** · ★★☆
-
-A fila de pedidos de uma padaria chegou nesta ordem:
-
-```text
-typedef struct { char cliente[8]; int valor; } Pedido;
-{"Ana", 50}, {"Bruno", 30}, {"Carla", 50}, {"Davi", 30}, {"Eva", 20}
-```
-
-Ordene por valor com merge sort (adapte o código do assunto para Pedido) e
-mostre a fila. Quem empatou no valor deve continuar na ordem de chegada
-(Bruno antes de Davi, Ana antes de Carla). Para ver o papel do <= da
-intercalação, dê à intercala (e ao merge_sort) um parâmetro bool estavel:
-verdadeiro compara com <=, falso compara com <. Ordene duas cópias da fila,
-uma de cada jeito, e mostre as duas.
-
-```text
-Saída esperada:
-com <=: Eva 20, Bruno 30, Davi 30, Ana 50, Carla 50
-com <:  Eva 20, Davi 30, Bruno 30, Carla 50, Ana 50
-```
-
-**Exercício E564** · ★★★
-
-Ana e Bia ranquearam as mesmas 8 séries. Numerando as séries pela ordem da
-Bia, o ranking da Ana fica: 3, 1, 7, 2, 8, 4, 6, 5. Quanto mais INVERSÕES
-(pares fora de ordem) esse vetor tem, mais os gostos discordam. É assim que
-sites de recomendação medem "pessoas parecidas com você".
-
-Contar inversões com dois laços é O(n²). Faça em O(n log n) pegando carona
-no merge sort: durante a intercalação, toda vez que um elemento da metade
-DIREITA sai antes, ele estava invertido com todos os que ainda restam na
-esquerda. Mostre o resultado do jeito rápido e confira com a força bruta.
-
-```text
-Saída esperada:
-força bruta: 10 discordâncias
-merge sort:  10 discordâncias
-de 28 pares possíveis
-```
-
-### 0095 · Quick sort
-
-**Exercício E565** · ★☆☆
-
-As senhas de uma fila de exames são 9, 2, 6, 4, 8, 5. Escreva
-int separa(int v[], int p, int r), a separação com o pivô no fim (v[r]),
-que imprime "troca v[a] e v[b]" a cada troca, conta as comparações
-(v[k] <= pivo) numa variável static e devolve a posição final do pivô. No
-main, separe o vetor inteiro, mostre o vetor e a posição do pivô; depois
-separe só o lado DIREITO do pivô, mostre de novo e, no fim, o total de
-comparações.
-
-```text
-Saída esperada:
-troca v[0] e v[1]
-troca v[1] e v[3]
-troca v[2] e v[5]
-vetor: 2 4 5 9 8 6
-pivô na posição 2
-troca v[3] e v[5]
-vetor: 2 4 5 6 8 9
-pivô na posição 3
-comparações: 7
-```
-
-**Exercício E567** · ★★☆
-
-Ordene a lista do mercado em ordem alfabética com quick sort (pivô no fim,
-separação de Lomuto, como no texto do assunto), trocando só os ponteiros:
-
-```text
-const char *compras[] = {"leite", "arroz", "tomate", "café", "pão",
-                         "banana", "ovos", "feijão"};
-```
-
-Conte as comparações de strings.
-
-```text
-Saída esperada:
-arroz, banana, café, feijão, leite, ovos, pão, tomate
-14 comparações
-```
-
-**Exercício E568** · ★★☆
-
-Os andares das entregas do prédio são 4, 9, 2, 7, 5 e 1. Escreva
-void quick_sort(int v[], int n, int p, int r), recursivo, com separação de
-Lomuto (pivô em v[r]). A cada separação, imprima o intervalo, a posição
-final do pivô e o vetor. Chame as duas metades SEM o pivô (j - 1 e j + 1).
-
-```text
-Saída esperada:
-separa [0..5]: pivô na posição 0 -> 1 9 2 7 5 4
-separa [1..5]: pivô na posição 2 -> 1 2 4 7 5 9
-separa [3..5]: pivô na posição 5 -> 1 2 4 7 5 9
-separa [3..4]: pivô na posição 3 -> 1 2 4 5 7 9
-Final: 1 2 4 5 7 9
-```
-
-**Exercício E569** · ★★★
-
-Os 11 corredores do grupo fizeram 5 km em 45, 22, 38, 31, 50, 27, 24, 41,
-29, 35 e 33 minutos. Qual o tempo MEDIANO (o do meio, se a lista estivesse
-ordenada)? Não precisa ordenar tudo: depois de um separa, o pivô está na
-posição final j. Se j é a posição que você quer (k = n / 2), acabou. Se
-k < j, a resposta está só no lado esquerdo; se k > j, só no direito. Isso é
-o QUICKSELECT.
-
-Escreva int quickselect(int v[], int n, int k), sem recursão (um while que
-encolhe [p, r]), e compare as comparações com um quick sort completo numa
-cópia do vetor.
-
-```text
-Saída esperada:
-mediana: 33 min (quickselect: 10 comparações)
-ordenando tudo: 33 min (23 comparações)
-```
-
-### 0096 · Comparando: estabilidade, custo e qsort
+### Exercícios
 
 **Exercício E571** · ★☆☆
 
@@ -2623,11 +2642,13 @@ Carla: 11 98765-4321 (posição 1)
 Zeca: não está na agenda
 ```
 
-### Lista do módulo
+---
+
+## Lista do módulo
 
 30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P1301.c a P1330.c, em `material/`; resoluções em `_respostas/13-busca-e-ordenacao/lista/`.
 
-#### ★☆☆ Aquecimento
+### ★☆☆ Aquecimento
 
 **Exercício P1301** · ★☆☆ · A placa no estacionamento, com sentinela
 
@@ -2808,7 +2829,7 @@ linha 640: 2 vez(es), posições 3 7
 linha 500: 0 vez(es)
 ```
 
-#### ★★☆ Para pensar
+### ★★☆ Para pensar
 
 **Exercício P1311** · ★★☆ · O primeiro boleto do dia
 
@@ -3049,7 +3070,7 @@ com troca  : D1 F1 E2 B2 C3 A3
 deslocando : D1 F1 B2 E2 A3 C3
 ```
 
-#### ★★★ Desafio
+### ★★★ Desafio
 
 **Exercício P1321** · ★★★ · As quedas de mais da metade
 
@@ -3409,7 +3430,7 @@ Saída esperada:
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas para fechar o módulo, misturando os assuntos. Escreva em C e compile
 com o gcc e as flags de estudo.
@@ -3590,7 +3611,7 @@ ordenado. A certa é `int x = *(const int *) a, y = *(const int *) b; return
 
 </details>
 
-### Questões do POSCOMP
+## Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -3600,7 +3621,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 
 O gabarito oficial de 2025 não estava disponível quando este material foi montado.
 
-### Questões de provas do PPGI
+## Questões de provas do PPGI
 
 Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.
 

@@ -60,9 +60,12 @@ junto.
 
 ---
 
-## 1. Conceitos gerais
+> [!NOTE]
+> Cada assunto é um capítulo: **Conceito** (a explicação), **Exemplos de uso** (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e **Exercícios** (cada um é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta; resoluções em `_respostas/04-funcoes/`).
 
-### 0028 · Funções
+## 0028 · Funções
+
+### Conceito
 
 - **Função**: bloco de código com nome que recebe dados, faz uma tarefa e
   devolve um resultado. Escreve-se uma vez e chama-se quantas vezes precisar
@@ -96,229 +99,7 @@ tipo_de_retorno nome(tipo parametro1, tipo parametro2) {
 > (`implicit declaration`). E esquecer o `return` numa função não `void`: o
 > `-Wall` avisa `control reaches end of non-void function`, e volta lixo.
 
-### 0029 · Parâmetros e passagem por valor
-
-- **Passagem por valor**: na chamada, o C calcula cada argumento e **copia** o
-  valor para o parâmetro. É a única forma de passagem do C (DEITEL; DEITEL,
-  2011, cap. 5).
-- **Parâmetro formal e real**: o da definição é o **formal**; o valor da
-  chamada é o **argumento** (ou parâmetro real) (ROCHA; BORGES, s.d.).
-- **Parâmetro é local**: nasce com a cópia e pode mudar à vontade; a variável
-  de quem chamou não muda (BACKES, 2013, cap. 9).
-- **Por referência**: o C simula passando um endereço (assunto 0046)
-  (DEITEL; DEITEL, 2011, cap. 5).
-- **Retorno guardado**: o resultado volta só pelo `return`, e quem chama
-  precisa guardá-lo (`x = f(x)`); senão se perde (KERNIGHAN; RITCHIE, 1989,
-  cap. 4).
-- **Conversão automática**: argumento de outro tipo é convertido como numa
-  atribuição; `2.9` passado a um `int` vira `2`, sem aviso (KERNIGHAN;
-  RITCHIE, 1989, cap. 4).
-- **`(void)`**: `void linha(void)` não aceita argumento. `void linha()`, no
-  C17, não confere nada e aceita `linha(5)` calado. Escreva `(void)`
-  (BACKES, 2013, cap. 9).
-
-> [!WARNING]
-> `void trocar(int a, int b)` troca só as cópias: nada muda no `main`. Para a
-> função mexer numa variável sua, passe o **endereço** (o `&` do `scanf`,
-> assunto 0046).
-
-### 0030 · Escopo e tempo de vida
-
-- **Escopo**: **onde** no código o nome pode ser usado (DEITEL; DEITEL, 2011,
-  cap. 5).
-- **Tempo de vida** (duração): **quando** a variável existe na memória.
-  Automática nasce e morre com o bloco; estática dura o programa todo
-  (DEITEL; DEITEL, 2011, cap. 5).
-- **Local**: declarada dentro de `{ }`; parâmetros e o `i` do `for` também
-  são locais. Sem valor inicial, começa com lixo (BACKES, 2013, cap. 9).
-- **Global**: declarada fora das funções; qualquer função pode mudá-la, o que
-  dificulta achar erros. Prefira parâmetro e `return` (BACKES, 2013, cap. 9).
-- **`static` local**: escopo de local, vida de global. A inicialização roda
-  uma vez, e o valor fica entre as chamadas (KERNIGHAN; RITCHIE, 1989, cap. 4).
-- **Esconder nomes**: um nome declarado num bloco interno esconde o de fora até
-  o bloco acabar (DEITEL; DEITEL, 2011, cap. 5).
-- **`static` fora de função**: global visível só naquele `.c` (assunto 0034)
-  (KERNIGHAN; RITCHIE, 1989, cap. 4).
-
-| Tipo | Onde declara | Escopo | Tempo de vida |
-| --- | --- | --- | --- |
-| **local** (automática) | dentro de `{ }` | só aquele bloco | nasce ao entrar no bloco, morre ao sair |
-| **global** | fora de qualquer função | do ponto da declaração até o fim do arquivo | o programa todo |
-| **`static` local** | dentro de `{ }`, com `static` | só aquele bloco | o programa todo |
-
-> [!WARNING]
-> `static int senha = 100;` não volta a 100 a cada chamada. Globais e `static`
-> sem valor começam em 0; locais começam com lixo. Esconder nomes compila sem
-> aviso com `-Wall`: só o `-Wshadow` reclama.
-
-### 0031 · A pilha de chamadas
-
-- **Pilha de chamadas**: a lista das funções em andamento. A de cima roda; as
-  de baixo esperam um retorno (CELES; CERQUEIRA; RANGEL, 2016).
-- **Quadro** (*stack frame*, registro de ativação): a memória de uma chamada,
-  com os **parâmetros**, as **variáveis locais** e o **endereço de retorno**
-  (BACKES, 2013, cap. 9).
-- **LIFO**: chamou, empilha um quadro no topo; retornou, ele sai. A última
-  função a começar é a primeira a terminar (DEITEL; DEITEL, 2011, cap. 5).
-- **Por que a local some**: seu quadro foi desempilhado no `return`. E uma
-  função não vê as locais de quem a chamou: estão noutro quadro (CELES;
-  CERQUEIRA; RANGEL, 2016).
-- **Stack trace**: o `bt` do `gdb` mostra a pilha no momento do erro (GDB, s.d.).
-- **Stack overflow**: chamadas demais esgotam a pilha, que tem tamanho fixo
-  (8 MB no Linux, `ulimit -s`), e o programa morre com `Segmentation fault`
-  (BACKES, 2013, cap. 9).
-
-```text
-#0  calcular_taxa (valor=0) at pedido.c:12
-#1  fechar_pedido () at pedido.c:30
-#2  main () at pedido.c:5
-```
-
-> [!WARNING]
-> Local sem inicializar não "começa limpa": o quadro novo reaproveita a memória
-> de um quadro antigo, com o que ficou lá. O `-Wall` avisa
-> `may be used uninitialized`.
-
-### 0032 · Recursão
-
-- **Função recursiva**: resolve o problema chamando a si mesma com uma versão
-  menor dele (DEITEL; DEITEL, 2011, cap. 5).
-- **Caso base**: o problema pequeno o bastante para responder direto, sem nova
-  chamada (FEOFILOFF, 2009, cap. 5).
-- **Caso recursivo**: reduz o problema e usa a resposta menor
-  (`n * fatorial(n - 1)`). Cada chamada tem de chegar **mais perto** do caso
-  base (FEOFILOFF, 2009, cap. 5).
-- **Confie na função**: suponha que a chamada menor já funciona e monte a
-  resposta de `n` com ela; depois confira o caso base (FEOFILOFF, 2009, cap. 5).
-- **Ida e volta**: cada chamada tem seu quadro (assunto 0031). Na ida a pilha
-  cresce até o caso base; na volta cada quadro combina a resposta e sai
-  (BACKES, 2013, cap. 9).
-- **Recursão e laço**: resolvem os mesmos problemas. A recursão gasta memória
-  proporcional à profundidade e compensa quando o problema é recursivo por
-  natureza: árvores, "divide ao meio" (TENENBAUM; LANGSAM; AUGENSTEIN, 1995,
-  cap. 3).
-
-> [!WARNING]
-> Caso base que nunca chega: com `if (n == 1)`, `fatorial(0)` chama
-> `fatorial(-1)` e não para. A pilha estoura (**stack overflow**,
-> `Segmentation fault`). E 13! já não cabe num `int` de 32 bits.
-
-### 0033 · Recursão na prática: Fibonacci, Hanói e Euclides
-
-- **Fibonacci**: 0, 1, 1, 2, 3, 5, 8... `fib(0) = 0`, `fib(1) = 1` e
-  `fib(n) = fib(n - 1) + fib(n - 2)`: dois casos base e **duas** chamadas
-  (BACKES, 2013, cap. 9).
-- **Árvore de chamadas**: um nó por chamada. Em `fib`, as duas chamadas não se
-  comunicam e refazem o mesmo trabalho; o número de nós cresce de forma
-  **exponencial** (DEITEL; DEITEL, 2011, cap. 5).
-- **Tempo e memória**: o tempo segue o número de nós da árvore; a memória
-  segue a altura, no máximo `n` quadros, porque um galho sai da pilha antes do
-  seguinte (FEOFILOFF, 2009, cap. 5).
-- **Torre de Hanói**: para levar `n` discos de A para C, leve `n - 1` para B,
-  o maior para C e os `n - 1` de B para C. São `2ⁿ - 1` movimentos, o mínimo
-  possível: aqui a recursão não desperdiça nada (DEITEL; DEITEL, 2011, cap. 5).
-- **MDC de Euclides**: `mdc(a, b) = mdc(b, a % b)`, e `mdc(a, 0) = a`. Uma
-  chamada por vez, e o resto encolhe depressa (DEITEL; DEITEL, 2011, cap. 5).
-
-> [!WARNING]
-> Fibonacci recursivo serve para aprender custo, não para calcular. E
-> `fib(47)` = 2.971.215.073 não cabe num `int` de 32 bits; com `long long` vai
-> até `fib(92)`.
-
-### 0034 · Módulos: .h, .c e compilação separada
-
-- **Módulo**: um par de arquivos. O `.h` (cabeçalho) é a **interface**: diz
-  **o que** o módulo oferece, com protótipos e constantes. O `.c` é a
-  **implementação**: diz **como**, e inclui o próprio `.h` (BACKES, 2013,
-  cap. 13).
-- **`#include`**: cola o texto do arquivo ali. Com aspas, procura primeiro na
-  pasta do `.c`; com `< >`, só nas pastas do sistema (DEITEL; DEITEL, 2011,
-  cap. 5).
-- **Compilação separada**: cada `.c` vira um **arquivo objeto** (`.o`) sem
-  saber dos outros; o **ligador** (*linker*) junta os `.o` e resolve os nomes
-  (KERNIGHAN; RITCHIE, 1989, cap. 4).
-- **Include guard**: `#ifndef X_H` / `#define X_H` / `#endif` faz o `.h`
-  entrar uma vez só por `.c`, mesmo incluído duas vezes (GNU, s.d.).
-- **`static` fora de função**: esconde a global ou a função dos outros
-  arquivos; o módulo muda por dentro sem quebrar quem o usa (KERNIGHAN;
-  RITCHIE, 1989, cap. 4).
-- **`extern`**: declara uma global definida noutro arquivo (`extern int
-  limite;` no `.h`, `int limite = 10;` em um `.c` só) (BACKES, 2013, cap. 13).
-
-```bash
-gcc -std=c17 -Wall -Wextra -c conversao.c       # gera conversao.o
-gcc -std=c17 -Wall -Wextra -c viagem.c            # gera viagem.o
-gcc viagem.o conversao.o -o viagem                # o ligador junta
-gcc -std=c17 -Wall -Wextra viagem.c conversao.c -o viagem   # ou tudo de uma vez
-```
-
-> [!WARNING]
-> Corpo de função no `.h`: dois `.c` que o incluem geram
-> `multiple definition of` no ligador, e o include guard não salva. Nunca
-> escreva `#include "conversao.c"`.
-
-### 0035 · Pré-processador: macros e #ifdef
-
-- **Pré-processador**: roda **antes** do compilador e trata as linhas que
-  começam com `#`. Quando o compilador recebe o código, as diretivas já sumiram
-  (DEITEL; DEITEL, 2011, cap. 13).
-- **Macro**: um `#define` com parâmetros. Não é função: não tem tipo, chamada
-  nem pilha; é **troca de texto**. O nome e o `(` ficam colados (GNU, s.d.).
-- **Parênteses**: a troca ignora a precedência. Ponha parênteses em volta de
-  cada parâmetro e da expressão inteira (DEITEL; DEITEL, 2011, cap. 13).
-- **Compilação condicional**: `#ifdef`, `#ifndef`, `#if`, `#elif`, `#else` e
-  `#endif` decidem o que chega ao compilador; `gcc -DNOME` define pela linha de
-  comando, e `#if 0` desliga um trecho (BACKES, 2013, cap. 13).
-- **Macros prontas e `#x`**: `__LINE__` dá a linha e `__func__` a função
-  atual; `#x` numa macro transforma o argumento em texto (GNU, s.d.).
-- **Função ou macro**: para cálculo, prefira função pequena, que confere os
-  tipos; macro fica para constantes, `#ifdef`, `__LINE__` e `#x` (LAGO, s.d.).
-
-```c
-#define QUAD(x) ((x) * (x))
-```
-
-> [!WARNING]
-> A macro avalia o argumento cada vez que ele aparece: `MAIOR(x++, y)` pode
-> incrementar `x` duas vezes. E sem `;` no `#define`: `#define TAXA 0.05;`
-> faz `preco * TAXA + 1` virar `preco * 0.05; + 1`.
-
-### 0036 · Juntando tudo: o caixa da lanchonete
-
-- **Dividir em funções**: cada tarefa vira uma função com nome que diz o que
-  ela faz; o chefe pede, o subordinado resolve (DEITEL; DEITEL, 2011, cap. 5).
-- **Módulo**: o cardápio fica em `cardapio.h` e `cardapio.c` (assunto 0034)
-  (BACKES, 2013, cap. 13).
-- **Dinheiro em centavos**: R$ 7,90 vira `790` num `int`. Com `double`,
-  `0.1 + 0.2` não dá exatamente `0.3` (assunto 0012); o único `double` é o
-  valor pago, convertido com `lround(pago * 100)`.
-- **Troco recursivo**: "se zerou, acabou; se a nota cabe, dê a nota e resolva o
-  resto; senão, tente a seguinte". O troco ou a nota diminui a cada chamada
-  (FEOFILOFF, 2009, cap. 5).
-- **Testar cada peça sozinha**: o exemplo A072 usa a macro `CONFERIR` para
-  testar preço, contador e notas sem digitar nada.
-
-| Peça | Onde | O que usa do módulo |
-| --- | --- | --- |
-| `mostrar_cardapio`, `preco_centavos`, `mostrar_item` | `cardapio.c` | módulo `.h`/`.c`, `switch` |
-| `itens_vendidos` | `cardapio.c` | global `static`: só o módulo mexe |
-| `ler_codigo` | `caixa.c` | validação com `do...while` e retorno do `scanf` |
-| `proxima_nota` | `caixa.c` | função pura: entra uma nota, sai a seguinte |
-| `dar_troco` | `caixa.c` | recursão: caso base "troco zerado" |
-| `TAXA_SERVICO` | `caixa.c` | `#define` |
-
-> [!WARNING]
-> Efeito colateral escondido: `preco_centavos` também soma 1 no contador de
-> vendidos. Chamá-la duas vezes para o mesmo pedido conta em dobro. Quando a
-> função muda estado, diga no nome (`registrar_pedido`) ou separe em duas.
-
----
-
-## 2. Exemplos de uso
-
-Cada exemplo compila sozinho. Rode com o comando abaixo dele e compare com a saída no fim do código.
-
-### 0028 · Funções
+### Exemplos de uso
 
 O app de corrida cobra R$ 5,00 de bandeirada mais R$ 2,50 por km. O `main`
 chama `preco_corrida(4.0)`, o 4.0 vai para `km`, e o 15.00 volta:
@@ -448,7 +229,102 @@ double menor(double a, double b) {
 gcc ~/LPEDC/material/A056.c -o ~/LPEDC/material/A056 && ~/LPEDC/material/A056
 ```
 
-### 0029 · Parâmetros e passagem por valor
+### Exercícios
+
+**Exercício E163** · ★☆☆
+
+Você vai trocar o piso de dois cômodos e precisa da área de cada um. Escreva
+a função "double area_comodo(double largura, double comprimento)" e use-a no
+main para a sala (4.0 x 3.5) e o quarto (3.0 x 3.0). Mostre também a soma.
+O main não pode ter nenhuma multiplicação: a conta fica só na função.
+
+```text
+Saída esperada:
+Sala: 14.00 m2
+Quarto: 9.00 m2
+Total: 23.00 m2
+```
+
+**Exercício E165** · ★★☆
+
+Um ano é bissexto se for divisível por 4 e não por 100, ou se for divisível
+por 400. Escreva "bool eh_bissexto(int ano)" e use-a num laço para mostrar
+os anos bissextos de 2000 a 2030 e quantos são.
+
+```text
+Saída esperada:
+2000 2004 2008 2012 2016 2020 2024 2028
+Bissextos: 8
+```
+
+**Exercício E166** · ★★☆
+
+O estacionamento do shopping cobra R$ 5.00 pelas primeiras 2 horas e mais
+R$ 2.00 por hora ou fração depois disso, com teto de R$ 20.00 por dia.
+Escreva "double tarifa(double horas)" e calcule o valor de três carros
+(1.5 h, 3.2 h e 12 h) e o total do dia.
+
+```text
+Saída esperada:
+Carro 1 (1.5 h): R$ 5.00
+Carro 2 (3.2 h): R$ 9.00
+Carro 3 (12.0 h): R$ 20.00
+Total do dia: R$ 34.00
+```
+
+```bash
+gcc ~/LPEDC/material/E166.c -o ~/LPEDC/material/E166 -lm && ~/LPEDC/material/E166
+```
+
+**Exercício E167** · ★★★
+
+A função ajusta, já pronta no arquivo, tem três return. Só o primeiro que
+for alcançado vale: os testes de baixo nem são feitos.
+
+Escreva "int passos(int n)", que aplica ajusta em n repetidas vezes até
+n chegar a 1, mostrando cada valor no caminho, e devolve quantas vezes
+aplicou. No main, use passos para 7, 14 e 30 e mostre o total de cada um,
+e mostre também ajusta(dobro(7)), resolvida de dentro para fora.
+
+```text
+Saída esperada:
+7: 8 4 2 1 (4 passos)
+14: 4 2 1 (3 passos)
+30: 20 10 5 6 3 4 2 1 (8 passos)
+ajusta(dobro(7)) = 4
+```
+
+---
+
+## 0029 · Parâmetros e passagem por valor
+
+### Conceito
+
+- **Passagem por valor**: na chamada, o C calcula cada argumento e **copia** o
+  valor para o parâmetro. É a única forma de passagem do C (DEITEL; DEITEL,
+  2011, cap. 5).
+- **Parâmetro formal e real**: o da definição é o **formal**; o valor da
+  chamada é o **argumento** (ou parâmetro real) (ROCHA; BORGES, s.d.).
+- **Parâmetro é local**: nasce com a cópia e pode mudar à vontade; a variável
+  de quem chamou não muda (BACKES, 2013, cap. 9).
+- **Por referência**: o C simula passando um endereço (assunto 0046)
+  (DEITEL; DEITEL, 2011, cap. 5).
+- **Retorno guardado**: o resultado volta só pelo `return`, e quem chama
+  precisa guardá-lo (`x = f(x)`); senão se perde (KERNIGHAN; RITCHIE, 1989,
+  cap. 4).
+- **Conversão automática**: argumento de outro tipo é convertido como numa
+  atribuição; `2.9` passado a um `int` vira `2`, sem aviso (KERNIGHAN;
+  RITCHIE, 1989, cap. 4).
+- **`(void)`**: `void linha(void)` não aceita argumento. `void linha()`, no
+  C17, não confere nada e aceita `linha(5)` calado. Escreva `(void)`
+  (BACKES, 2013, cap. 9).
+
+> [!WARNING]
+> `void trocar(int a, int b)` troca só as cópias: nada muda no `main`. Para a
+> função mexer numa variável sua, passe o **endereço** (o `&` do `scanf`,
+> assunto 0046).
+
+### Exemplos de uso
 
 A academia reajusta a mensalidade de R$ 120,00 em 10%. Há duas `mensalidade`
 na memória, a do `main` e a cópia da função, e só a cópia vira 132.00:
@@ -583,7 +459,110 @@ void linha(void) {
 gcc ~/LPEDC/material/A058.c -o ~/LPEDC/material/A058 && ~/LPEDC/material/A058
 ```
 
-### 0030 · Escopo e tempo de vida
+### Exercícios
+
+**Exercício E169** · ★☆☆
+
+No app do cartão fidelidade, a promoção dobra os pontos. Escreva
+"int dobrar_pontos(int pontos)", que dobra o próprio parâmetro, mostra
+"dentro: <valor>" e devolve o valor dobrado. No main, comece com
+pontos = 150 e faça, nesta ordem:
+
+```text
+1. chame dobrar_pontos(pontos) SEM guardar o retorno e mostre "main: ...";
+2. chame de novo, agora com pontos = dobrar_pontos(pontos), e mostre
+   "main: ..." outra vez.
+```
+
+```text
+Saída esperada:
+dentro: 300
+main: 150
+dentro: 300
+main: 300
+```
+
+**Exercício E171** · ★★☆
+
+Escreva as funções "int menor(int a, int b)" e "int maior(int a, int b)",
+que devolvem o valor (sem ponteiros). No main, com a = 9 e b = 6, mostre as
+duas notas em ordem crescente usando as duas funções no printf.
+
+```text
+Saída esperada:
+Em ordem: 6 e 9
+```
+
+**Exercício E172** · ★★☆
+
+Você aplica R$ 1000.00 num investimento que rende 1% ao mês. Escreva
+"double montante(double capital, double taxa, int meses)" que usa o próprio
+parâmetro capital como acumulador: a cada mês, capital = capital * (1 + taxa / 100).
+No main, mostre o montante depois de 12 e de 24 meses e prove que a
+variável do main não mudou.
+
+```text
+Saída esperada:
+12 meses: R$ 1126.83
+24 meses: R$ 1269.73
+No main, capital continua R$ 1000.00
+```
+
+**Exercício E174** · ★★★
+
+Um número é capicua (palíndromo) quando se lê igual de trás para frente:
+1221, 343. Escreva:
+
+```text
+int inverter(int n)        devolve n com os dígitos invertidos (123 -> 321);
+                           use o próprio n como variável de trabalho
+bool eh_capicua(int n)     usa inverter
+```
+
+No main, mostre inverter(12345), prove que a variável do main não mudou e
+conte as capicuas de 100 a 999.
+
+```text
+Saída esperada:
+inverter(12345) = 54321
+No main, numero continua 12345
+Capicuas de 100 a 999: 90
+```
+
+---
+
+## 0030 · Escopo e tempo de vida
+
+### Conceito
+
+- **Escopo**: **onde** no código o nome pode ser usado (DEITEL; DEITEL, 2011,
+  cap. 5).
+- **Tempo de vida** (duração): **quando** a variável existe na memória.
+  Automática nasce e morre com o bloco; estática dura o programa todo
+  (DEITEL; DEITEL, 2011, cap. 5).
+- **Local**: declarada dentro de `{ }`; parâmetros e o `i` do `for` também
+  são locais. Sem valor inicial, começa com lixo (BACKES, 2013, cap. 9).
+- **Global**: declarada fora das funções; qualquer função pode mudá-la, o que
+  dificulta achar erros. Prefira parâmetro e `return` (BACKES, 2013, cap. 9).
+- **`static` local**: escopo de local, vida de global. A inicialização roda
+  uma vez, e o valor fica entre as chamadas (KERNIGHAN; RITCHIE, 1989, cap. 4).
+- **Esconder nomes**: um nome declarado num bloco interno esconde o de fora até
+  o bloco acabar (DEITEL; DEITEL, 2011, cap. 5).
+- **`static` fora de função**: global visível só naquele `.c` (assunto 0034)
+  (KERNIGHAN; RITCHIE, 1989, cap. 4).
+
+| Tipo | Onde declara | Escopo | Tempo de vida |
+| --- | --- | --- | --- |
+| **local** (automática) | dentro de `{ }` | só aquele bloco | nasce ao entrar no bloco, morre ao sair |
+| **global** | fora de qualquer função | do ponto da declaração até o fim do arquivo | o programa todo |
+| **`static` local** | dentro de `{ }`, com `static` | só aquele bloco | o programa todo |
+
+> [!WARNING]
+> `static int senha = 100;` não volta a 100 a cada chamada. Globais e `static`
+> sem valor começam em 0; locais começam com lixo. Esconder nomes compila sem
+> aviso com `-Wall`: só o `-Wshadow` reclama.
+
+### Exemplos de uso
 
 O painel do banco lembra a última senha; o atendente zera a conversa a cada
 cliente. A função `chamar` tem a global `atendidos`, a `static` `senha` e a
@@ -717,7 +696,120 @@ int main(void) {
 gcc ~/LPEDC/material/A060.c -o ~/LPEDC/material/A060 && ~/LPEDC/material/A060
 ```
 
-### 0031 · A pilha de chamadas
+### Exercícios
+
+**Exercício E175** · ★☆☆
+
+O cartão fidelidade da farmácia tem 100 pontos guardados (uma global) e a
+compra de hoje vale 30 pontos (uma local do main com o MESMO nome). Escreva:
+
+```text
+int pontos = 100;                 global: o saldo do cartão
+void extrato(void)                mostra "extrato: <pontos>"
+void somar_na_global(int valor)   soma valor nos pontos do cartão
+```
+
+No main, chame extrato, declare "int pontos = 30;", mostre "compra de hoje",
+chame somar_na_global(pontos), chame extrato de novo e mostre a compra de
+hoje outra vez.
+
+```text
+Saída esperada:
+extrato: 100
+compra de hoje: 30
+extrato: 130
+compra de hoje: 30
+```
+
+**Exercício E177** · ★★☆
+
+Escreva "double preco_item(int i)", que devolve o preço do item i da compra
+(1: 12.50, 2: 8.00, 3: 30.00, 4: 4.75). No main, use um for de 1 a 4 para
+somar os quatro itens numa variável total e mostre o total depois do laço.
+
+```text
+Saída esperada:
+Total: R$ 55.25
+```
+
+**Exercício E178** · ★★☆
+
+O vale-refeição começa com R$ 300.00, guardados numa variável LOCAL do main
+(nada de global). Escreva "double gastar(double saldo, double valor)", que
+recebe o saldo e devolve o saldo novo, já descontada uma taxa de R$ 1.00 por
+gasto. O main guarda o retorno na própria variável: gasta R$ 45.00 e R$ 32.50
+e mostra o saldo; depois gasta R$ 18.00 e mostra o saldo de novo.
+
+```text
+Saída esperada:
+Saldo: R$ 220.50
+Saldo: R$ 201.50
+```
+
+**Exercício E179** · ★★★
+
+Quatro variáveis chamadas x, cada uma com escopo e tempo de vida
+diferentes. Escreva o programa a partir destas regras:
+
+```text
+int x = 10;     global
+void a(void)    tem uma local x = 1; mostra "a: <x>", soma 1, mostra " -> <x>"
+int b(void)     tem uma static x = 5; mostra "b: <x>", soma 5, mostra
+                " -> <x>" e devolve o x novo
+void c(void)    não declara x: mostra "c: <x>", dobra, mostra " -> <x>"
+```
+
+O main tem a própria local x = 20 e mostra "main: 20"; abre um bloco com
+outra x = 30 e mostra "bloco: 30"; chama a, b e c duas vezes, nessa ordem,
+somando numa local os dois retornos de b; mostra "main: <x>" e a soma.
+
+```text
+Saída esperada:
+main: 20
+bloco: 30
+a: 1 -> 2
+b: 5 -> 10
+c: 10 -> 20
+a: 1 -> 2
+b: 10 -> 15
+c: 20 -> 40
+main: 20
+soma dos b: 25
+```
+
+---
+
+## 0031 · A pilha de chamadas
+
+### Conceito
+
+- **Pilha de chamadas**: a lista das funções em andamento. A de cima roda; as
+  de baixo esperam um retorno (CELES; CERQUEIRA; RANGEL, 2016).
+- **Quadro** (*stack frame*, registro de ativação): a memória de uma chamada,
+  com os **parâmetros**, as **variáveis locais** e o **endereço de retorno**
+  (BACKES, 2013, cap. 9).
+- **LIFO**: chamou, empilha um quadro no topo; retornou, ele sai. A última
+  função a começar é a primeira a terminar (DEITEL; DEITEL, 2011, cap. 5).
+- **Por que a local some**: seu quadro foi desempilhado no `return`. E uma
+  função não vê as locais de quem a chamou: estão noutro quadro (CELES;
+  CERQUEIRA; RANGEL, 2016).
+- **Stack trace**: o `bt` do `gdb` mostra a pilha no momento do erro (GDB, s.d.).
+- **Stack overflow**: chamadas demais esgotam a pilha, que tem tamanho fixo
+  (8 MB no Linux, `ulimit -s`), e o programa morre com `Segmentation fault`
+  (BACKES, 2013, cap. 9).
+
+```text
+#0  calcular_taxa (valor=0) at pedido.c:12
+#1  fechar_pedido () at pedido.c:30
+#2  main () at pedido.c:5
+```
+
+> [!WARNING]
+> Local sem inicializar não "começa limpa": o quadro novo reaproveita a memória
+> de um quadro antigo, com o que ficou lá. O `-Wall` avisa
+> `may be used uninitialized`.
+
+### Exemplos de uso
 
 Num pedido de R$ 50,00, o `main` chama `total_com_entrega`, que chama
 `taxa_entrega`. No fundo há três quadros; quando `taxa_entrega` devolve 7.90,
@@ -882,7 +974,118 @@ int main(void) {
 gcc ~/LPEDC/material/A062.c -o ~/LPEDC/material/A062 && ~/LPEDC/material/A062
 ```
 
-### 0032 · Recursão
+### Exercícios
+
+**Exercício E181** · ★☆☆
+
+Faça o programa do IMC mostrar a pilha enquanto roda. Escreva:
+
+```text
+double quadrado(double x)                  devolve x * x
+double imc(double peso, double altura)     devolve peso / quadrado(altura)
+```
+
+Cada função mostra uma linha ao entrar (com os parâmetros) e outra ao sair
+(com o valor que devolve), recuada 2 espaços a mais que a de quem a chamou.
+O main calcula imc(72.0, 1.80), guarda numa local e mostra o resultado.
+
+```text
+Saída esperada:
+main chama imc
+  entra imc(peso = 72.0, altura = 1.80)
+    entra quadrado(x = 1.80)
+    sai quadrado -> 3.24
+  sai imc -> 22.2
+IMC: 22.2
+```
+
+**Exercício E183** · ★★☆
+
+Monte o rastro de uma compra online. Escreva quatro funções que se chamam em
+cadeia: finalizar_compra chama pagar, que chama antifraude, que chama
+consultar_banco. Cada uma recebe o nível (int nivel) e passa nivel + 1 para
+a próxima. Use uma função "void recuo(int nivel)", que mostra 2 espaços por
+nível, para a saída ficar assim:
+
+```text
+Saída esperada:
+entra finalizar_compra
+  entra pagar
+    entra antifraude
+      consultar_banco: aprovado
+    sai antifraude
+  sai pagar
+sai finalizar_compra
+```
+
+**Exercício E184** · ★★☆
+
+Cada quadro da pilha tem as suas variáveis, mesmo com nomes iguais. Escreva:
+
+```text
+int dobro_mais_um(int n)  r = n * 2; n = r + 1; devolve n
+int processa(int n)       r = dobro_mais_um(n); devolve r + n
+main                      n = 5; r = processa(n)
+```
+
+Cada função mostra n e r como na saída (dobro_mais_um na entrada e na saída;
+processa antes e depois de devolver; main no fim).
+
+```text
+Saída esperada:
+dobro_mais_um entra: n = 5
+dobro_mais_um sai: n = 11, r = 10
+processa: n = 5, r = 11
+processa devolve 16
+main: n = 5, r = 16
+```
+
+**Exercício E186** · ★★★
+
+Meça a altura da pilha. Use duas globais, "altura" e "maior_altura". Toda
+função, ao entrar, chama entrar() (que soma 1 em altura e atualiza
+maior_altura) e, antes de sair, chama sair() (que diminui 1). O main também
+conta: ele chama entrar() no começo.
+
+Monte estas chamadas: main chama checkout e frete; checkout chama
+cupom e pagamento; pagamento chama antifraude; frete não chama ninguém.
+No fim, o main mostra a maior altura e a altura atual (antes do sair dele).
+
+```text
+Saída esperada:
+Maior altura: 4
+Altura agora: 1
+```
+
+---
+
+## 0032 · Recursão
+
+### Conceito
+
+- **Função recursiva**: resolve o problema chamando a si mesma com uma versão
+  menor dele (DEITEL; DEITEL, 2011, cap. 5).
+- **Caso base**: o problema pequeno o bastante para responder direto, sem nova
+  chamada (FEOFILOFF, 2009, cap. 5).
+- **Caso recursivo**: reduz o problema e usa a resposta menor
+  (`n * fatorial(n - 1)`). Cada chamada tem de chegar **mais perto** do caso
+  base (FEOFILOFF, 2009, cap. 5).
+- **Confie na função**: suponha que a chamada menor já funciona e monte a
+  resposta de `n` com ela; depois confira o caso base (FEOFILOFF, 2009, cap. 5).
+- **Ida e volta**: cada chamada tem seu quadro (assunto 0031). Na ida a pilha
+  cresce até o caso base; na volta cada quadro combina a resposta e sai
+  (BACKES, 2013, cap. 9).
+- **Recursão e laço**: resolvem os mesmos problemas. A recursão gasta memória
+  proporcional à profundidade e compensa quando o problema é recursivo por
+  natureza: árvores, "divide ao meio" (TENENBAUM; LANGSAM; AUGENSTEIN, 1995,
+  cap. 3).
+
+> [!WARNING]
+> Caso base que nunca chega: com `if (n == 1)`, `fatorial(0)` chama
+> `fatorial(-1)` e não para. A pilha estoura (**stack overflow**,
+> `Segmentation fault`). E 13! já não cabe num `int` de 32 bits.
+
+### Exemplos de uso
 
 De quantos jeitos 5 amigos sentam em 5 cadeiras? 5 × 4 × 3 × 2 × 1 = 120. Na
 ida a pilha cresce até `fatorial(1)`; na volta cada quadro multiplica e
@@ -997,7 +1200,95 @@ int main(void) {
 gcc ~/LPEDC/material/A064.c -o ~/LPEDC/material/A064 && ~/LPEDC/material/A064
 ```
 
-### 0033 · Recursão na prática: Fibonacci, Hanói e Euclides
+### Exercícios
+
+**Exercício E187** · ★☆☆
+
+Num torneio de vôlei de praia, cada dupla que chega cumprimenta todas as que
+já estão lá. Com 12 duplas, são 0 + 1 + 2 + ... + 11 cumprimentos. Escreva
+"int soma_ate(int n)", recursiva, que devolve 1 + 2 + ... + n, sem nenhum
+laço, e use-a para responder.
+
+```text
+Saída esperada:
+soma_ate(4) = 10
+soma_ate(100) = 5050
+Cumprimentos com 12 duplas: 66
+```
+
+**Exercício E189** · ★★☆
+
+Escreva "void eco(int n, int nivel)", recursiva, que mostra "ida n" antes
+da chamada recursiva, "fundo" no caso base (n == 0) e "volta n" depois da
+chamada. Cada linha é recuada 2 espaços por nível: o main chama eco(3, 0),
+e cada chamada recursiva passa nivel + 1. Use uma função "void recuo(int
+nivel)" para os espaços.
+
+```text
+Saída esperada:
+ida 3
+  ida 2
+    ida 1
+      fundo
+    volta 1
+  volta 2
+volta 3
+```
+
+**Exercício E190** · ★★☆
+
+Escreva "void binario(int n)", recursiva, que mostra n em binário. A conta
+de dividir por 2 dá os bits de trás para frente (o último resto é o primeiro
+bit); a recursão resolve isso de graça se você imprimir na volta.
+
+```text
+Saída esperada:
+13 = 1101
+255 = 11111111
+2026 = 11111101010
+```
+
+**Exercício E192** · ★★★
+
+A calculadora velha da loja só sabe somar e subtrair. Escreva
+"int multiplicar(int a, int b)", recursiva, que só usa + e - (nada de *),
+e que funciona com b positivo, zero e NEGATIVO.
+
+```text
+Saída esperada:
+7 x 4 = 28
+7 x -3 = -21
+-5 x 6 = -30
+9 x 0 = 0
+```
+
+---
+
+## 0033 · Recursão na prática: Fibonacci, Hanói e Euclides
+
+### Conceito
+
+- **Fibonacci**: 0, 1, 1, 2, 3, 5, 8... `fib(0) = 0`, `fib(1) = 1` e
+  `fib(n) = fib(n - 1) + fib(n - 2)`: dois casos base e **duas** chamadas
+  (BACKES, 2013, cap. 9).
+- **Árvore de chamadas**: um nó por chamada. Em `fib`, as duas chamadas não se
+  comunicam e refazem o mesmo trabalho; o número de nós cresce de forma
+  **exponencial** (DEITEL; DEITEL, 2011, cap. 5).
+- **Tempo e memória**: o tempo segue o número de nós da árvore; a memória
+  segue a altura, no máximo `n` quadros, porque um galho sai da pilha antes do
+  seguinte (FEOFILOFF, 2009, cap. 5).
+- **Torre de Hanói**: para levar `n` discos de A para C, leve `n - 1` para B,
+  o maior para C e os `n - 1` de B para C. São `2ⁿ - 1` movimentos, o mínimo
+  possível: aqui a recursão não desperdiça nada (DEITEL; DEITEL, 2011, cap. 5).
+- **MDC de Euclides**: `mdc(a, b) = mdc(b, a % b)`, e `mdc(a, 0) = a`. Uma
+  chamada por vez, e o resto encolhe depressa (DEITEL; DEITEL, 2011, cap. 5).
+
+> [!WARNING]
+> Fibonacci recursivo serve para aprender custo, não para calcular. E
+> `fib(47)` = 2.971.215.073 não cabe num `int` de 32 bits; com `long long` vai
+> até `fib(92)`.
+
+### Exemplos de uso
 
 Uma escada de 4 degraus, subindo de 1 em 1 ou pulando 2, tem `fib(5) = 5`
 jeitos. A árvore de `fib(5)` tem 15 nós, e os dois amarelos são `fib(3)`
@@ -1143,7 +1434,114 @@ int main(void) {
 gcc ~/LPEDC/material/A066.c -o ~/LPEDC/material/A066 && ~/LPEDC/material/A066
 ```
 
-### 0034 · Módulos: .h, .c e compilação separada
+### Exercícios
+
+**Exercício E193** · ★☆☆
+
+A receita pede 84 g de farinha para 36 g de açúcar. Escreva o MDC de
+Euclides, recursivo, "int mdc(int a, int b)", e use-o para simplificar a
+proporção 84/36. Teste também com 1000/625.
+
+```text
+Saída esperada:
+mdc(84, 36) = 12 -> 84/36 = 7/3
+mdc(1000, 625) = 125 -> 1000/625 = 8/5
+```
+
+**Exercício E195** · ★★☆
+
+Escreva "int fib_rapido(int n)" SEM recursão, com um laço e duas variáveis
+(anterior e atual). Mostre fib(10), fib(40) e fib(46), o maior que cabe num
+int.
+
+```text
+Saída esperada:
+fib(10) = 55
+fib(40) = 102334155
+fib(46) = 1836311903
+```
+
+**Exercício E196** · ★★☆
+
+Meça o desperdício do Fibonacci recursivo. Copie o fib do texto (o de duas
+chamadas por vez) e acrescente três globais:
+
+```text
+chamadas      quantas vezes fib foi chamada, no total
+repetidas     quantas dessas chamadas foram com n == 2
+maior_altura  o maior número de quadros de fib na pilha ao mesmo tempo
+```
+
+Para a altura, use uma quarta global, altura: some 1 ao entrar em fib e
+tire 1 logo antes de cada return. Mostre tudo para fib(6).
+
+```text
+Saída esperada:
+fib(6) = 8
+chamadas: 25
+fib(2) calculado 5 vezes
+maior altura: 6
+```
+
+**Exercício E197** · ★★★
+
+Exponenciação rápida. Para calcular 3^13 dá para multiplicar 3 por ele mesmo
+12 vezes, mas existe um atalho: se o expoente é par, x^e = (x^(e/2))²; se é
+ímpar, x^e = x * x^(e-1). Escreva duas funções recursivas que contam as
+multiplicações numa global:
+
+```text
+long long pot_lenta(long long x, int e)    x * pot_lenta(x, e - 1)
+long long pot_rapida(long long x, int e)   o atalho acima
+```
+
+Mostre o resultado e o número de multiplicações de cada uma para 3^13 e 2^60.
+
+```text
+Saída esperada:
+lenta:  3^13 = 1594323 (13 multiplicações)
+rápida: 3^13 = 1594323 (6 multiplicações)
+lenta:  2^60 = 1152921504606846976 (60 multiplicações)
+rápida: 2^60 = 1152921504606846976 (9 multiplicações)
+```
+
+---
+
+## 0034 · Módulos: .h, .c e compilação separada
+
+### Conceito
+
+- **Módulo**: um par de arquivos. O `.h` (cabeçalho) é a **interface**: diz
+  **o que** o módulo oferece, com protótipos e constantes. O `.c` é a
+  **implementação**: diz **como**, e inclui o próprio `.h` (BACKES, 2013,
+  cap. 13).
+- **`#include`**: cola o texto do arquivo ali. Com aspas, procura primeiro na
+  pasta do `.c`; com `< >`, só nas pastas do sistema (DEITEL; DEITEL, 2011,
+  cap. 5).
+- **Compilação separada**: cada `.c` vira um **arquivo objeto** (`.o`) sem
+  saber dos outros; o **ligador** (*linker*) junta os `.o` e resolve os nomes
+  (KERNIGHAN; RITCHIE, 1989, cap. 4).
+- **Include guard**: `#ifndef X_H` / `#define X_H` / `#endif` faz o `.h`
+  entrar uma vez só por `.c`, mesmo incluído duas vezes (GNU, s.d.).
+- **`static` fora de função**: esconde a global ou a função dos outros
+  arquivos; o módulo muda por dentro sem quebrar quem o usa (KERNIGHAN;
+  RITCHIE, 1989, cap. 4).
+- **`extern`**: declara uma global definida noutro arquivo (`extern int
+  limite;` no `.h`, `int limite = 10;` em um `.c` só) (BACKES, 2013, cap. 13).
+
+```bash
+gcc -std=c17 -Wall -Wextra -c conversao.c       # gera conversao.o
+gcc -std=c17 -Wall -Wextra -c viagem.c            # gera viagem.o
+gcc viagem.o conversao.o -o viagem                # o ligador junta
+gcc -std=c17 -Wall -Wextra viagem.c conversao.c -o viagem   # ou tudo de uma vez
+```
+
+> [!WARNING]
+> Corpo de função no `.h`: dois `.c` que o incluem geram
+> `multiple definition of` no ligador, e o include guard não salva. Nunca
+> escreva `#include "conversao.c"`.
+
+### Exemplos de uso
 
 A conversão de unidades mora num módulo só. O `conversao.h` é incluído pelos
 dois `.c`; cada um vira um `.o`, e o ligador junta os dois no executável
@@ -1264,7 +1662,141 @@ int main(void) {
 gcc ~/LPEDC/material/A068.c ~/LPEDC/material/0034-conversao.c -o ~/LPEDC/material/A068 && ~/LPEDC/material/A068
 ```
 
-### 0035 · Pré-processador: macros e #ifdef
+### Exercícios
+
+**Exercício E199** · ★☆☆
+
+Monte o módulo "frete" num arquivo só, com cada peça no bloco certo. Os
+três blocos já estão marcados no esqueleto: "// frete.h" (o que o módulo
+oferece), "// main.c" (quem usa) e "// frete.c" (como ele faz).
+
+```text
+no frete.h:  o include guard (#ifndef FRETE_H / #define FRETE_H / #endif),
+             #define FRETE_GRATIS_ACIMA 200.0 e o protótipo
+             double calcular_frete(double valor_compra, double peso_kg,
+                                   int distancia_km);
+no frete.c:  static double taxa_por_km(int distancia_km), que devolve
+             0.20 por km, e o corpo de calcular_frete
+no main.c:   o main
+```
+
+O frete é grátis quando a compra chega a FRETE_GRATIS_ACIMA; senão, é
+R$ 10.00 + R$ 1.50 por kg + a taxa por km. Calcule três pedidos.
+
+```text
+Saída esperada:
+Pedido 1 (R$ 150.00, 2.0 kg, 30 km): frete R$ 19.00
+Pedido 2 (R$ 250.00, 5.0 kg, 100 km): frete R$ 0.00
+Pedido 3 (R$ 80.00, 1.0 kg, 12 km): frete R$ 13.90
+```
+
+```bash
+gcc ~/LPEDC/material/E199.c ~/LPEDC/material/0034-conversao.c -o ~/LPEDC/material/E199 && ~/LPEDC/material/E199
+```
+
+**Exercício E201** · ★★☆
+
+O módulo conversao (conversao.h e conversao.c, nesta pasta) converte km em
+milhas, mas não faz o contrário. Sem mexer no módulo, escreva NESTE arquivo
+"double milhas_para_km(double milhas)" (1 milha = 1.609344 km) e use as
+duas funções juntas: a maratona de 26.2 milhas em km; a volta completa
+km_para_milhas(milhas_para_km(26.2)); a meia maratona de 13.1 milhas em km;
+e quantas conversões o módulo contou (conversoes_feitas).
+
+```text
+Saída esperada:
+Maratona: 26.2 milhas = 42.2 km
+Volta completa: 26.2 milhas
+Meia: 13.1 milhas = 21.1 km
+Conversões do módulo: 1
+```
+
+```bash
+gcc ~/LPEDC/material/E201.c ~/LPEDC/material/0034-conversao.c -o ~/LPEDC/material/E201 && ~/LPEDC/material/E201
+```
+
+**Exercício E202** · ★★☆
+
+Escreva, num arquivo só, um módulo imitado: o bloco "// desconto.h" com o
+protótipo de "double aplicar_desconto(double preco, double percentual)", o
+bloco "// main.c" com o main, que mostra o preço de um tênis de R$ 299.90 com
+20% de desconto, e o bloco "// desconto.c" com a definição da função
+(preco - preco * percentual / 100). O programa tem que compilar e ligar.
+
+```text
+Saída esperada:
+Tênis: R$ 239.92
+```
+
+```bash
+gcc ~/LPEDC/material/E202.c ~/LPEDC/material/0034-conversao.c -o ~/LPEDC/material/E202 && ~/LPEDC/material/E202
+```
+
+**Exercício E203** · ★★★
+
+Escreva o módulo "placar" de um campeonato entre dois times, num arquivo
+só, com os blocos "// placar.h", "// main.c" e "// placar.c". Os dados
+moram em globais static no bloco do placar.c: os gols da partida atual de
+cada time e os pontos e gols de cada um no campeonato. Ninguém de fora mexe
+neles sem passar pelas funções:
+
+```text
+void marcar_gol(int time)      time 1 (casa) ou 2 (visitante)
+void encerrar_partida(void)    mostra "Partida N: X x Y", dá 3 pontos
+                               para quem venceu (1 para cada no empate),
+                               soma os gols no campeonato e zera o placar
+int pontos(int time)
+int gols(int time)             gols no campeonato
+```
+
+Uma função static do placar.c, "void anotar(int time)", é a única que mexe
+nos gols da partida; marcar_gol só a chama. O main simula: 2 x 1, 0 x 0 e
+1 x 3, e mostra a tabela.
+
+```text
+Saída esperada:
+Partida 1: 2 x 1
+Partida 2: 0 x 0
+Partida 3: 1 x 3
+Casa: 4 pontos, 3 gols
+Visitante: 4 pontos, 4 gols
+```
+
+```bash
+gcc ~/LPEDC/material/E203.c ~/LPEDC/material/0034-conversao.c -o ~/LPEDC/material/E203 && ~/LPEDC/material/E203
+```
+
+---
+
+## 0035 · Pré-processador: macros e #ifdef
+
+### Conceito
+
+- **Pré-processador**: roda **antes** do compilador e trata as linhas que
+  começam com `#`. Quando o compilador recebe o código, as diretivas já sumiram
+  (DEITEL; DEITEL, 2011, cap. 13).
+- **Macro**: um `#define` com parâmetros. Não é função: não tem tipo, chamada
+  nem pilha; é **troca de texto**. O nome e o `(` ficam colados (GNU, s.d.).
+- **Parênteses**: a troca ignora a precedência. Ponha parênteses em volta de
+  cada parâmetro e da expressão inteira (DEITEL; DEITEL, 2011, cap. 13).
+- **Compilação condicional**: `#ifdef`, `#ifndef`, `#if`, `#elif`, `#else` e
+  `#endif` decidem o que chega ao compilador; `gcc -DNOME` define pela linha de
+  comando, e `#if 0` desliga um trecho (BACKES, 2013, cap. 13).
+- **Macros prontas e `#x`**: `__LINE__` dá a linha e `__func__` a função
+  atual; `#x` numa macro transforma o argumento em texto (GNU, s.d.).
+- **Função ou macro**: para cálculo, prefira função pequena, que confere os
+  tipos; macro fica para constantes, `#ifdef`, `__LINE__` e `#x` (LAGO, s.d.).
+
+```c
+#define QUAD(x) ((x) * (x))
+```
+
+> [!WARNING]
+> A macro avalia o argumento cada vez que ele aparece: `MAIOR(x++, y)` pode
+> incrementar `x` duas vezes. E sem `;` no `#define`: `#define TAXA 0.05;`
+> faz `preco * TAXA + 1` virar `preco * 0.05; + 1`.
+
+### Exemplos de uso
 
 O terreno tem `lado + 3` metros de lado, com `lado = 2`.
 `QUAD_RUIM(lado + 3)` chega ao compilador como `lado + 3 * lado + 3` e dá 11;
@@ -1390,7 +1922,118 @@ int main(void) {
 gcc ~/LPEDC/material/A070.c -o ~/LPEDC/material/A070 && ~/LPEDC/material/A070
 ```
 
-### 0036 · Juntando tudo: o caixa da lanchonete
+### Exercícios
+
+**Exercício E206** · ★☆☆
+
+Escreva três macros à prova de precedência e teste com os valores abaixo:
+
+```text
+MAIOR(a, b)          o maior dos dois
+ABS(x)               o valor absoluto
+ENTRE(x, min, max)   1 se min <= x <= max, senão 0
+```
+
+```text
+Saída esperada:
+MAIOR(7, 12) = 12
+ABS(-8) = 8
+ABS(3 - 10) = 7
+ENTRE(15, 10, 20) = 1
+ENTRE(25, 10, 20) = 0
+100 / ABS(-5 * 2) = 10
+```
+
+**Exercício E207** · ★★☆
+
+Escreva o programa da lanchonete com duas macros: DESCONTO (0.10) e
+PRECO_COMBO (25 + 5, à prova de precedência). Com preco = 35.00, mostre o
+desconto (preco * DESCONTO) e o valor de dois combos (2.0 * PRECO_COMBO).
+
+```text
+Saída esperada:
+Desconto: R$ 3.50
+Dois combos: R$ 60.00
+```
+
+**Exercício E208** · ★★☆
+
+Escreva um simulador de parcelas com modo de teste. Uma compra de R$ 1000.00
+em 4 parcelas com juros de 2% ao mês: cada parcela é o valor original
+dividido por 4, mais 2% de juros por mês de espera (a 1ª parcela tem 2%, a
+2ª 4%, e assim por diante, juros simples). Mostre o total pago.
+
+Com "#define MODO_TESTE" no topo, mostre também cada parcela, com o prefixo
+"[teste]". Sem a linha, só o total. Use #ifdef; nada de if comum.
+
+```text
+Saída esperada com MODO_TESTE:
+[teste] parcela 1: 255.00
+[teste] parcela 2: 260.00
+[teste] parcela 3: 265.00
+[teste] parcela 4: 270.00
+Total: R$ 1050.00
+```
+
+```text
+Saída esperada sem MODO_TESTE:
+Total: R$ 1050.00
+```
+
+**Exercício E209** · ★★★
+
+A macro avalia o argumento cada vez que ele aparece. Escreva a macro
+MAIOR(a, b), à prova de precedência, a função "int maior(int a, int b)", a
+função "int maior3(int a, int b, int c)" (usa maior) e "int pontos(int p)",
+que soma 1 na global chamadas e devolve p. No main, mostre (x = 5, y = 3):
+MAIOR(x++, y) e maior(x++, y); MAIOR e maior com pontos(40) e pontos(25);
+MAIOR aninhada e maior3 com pontos(7), pontos(19) e pontos(12). Cada linha
+mostra m e (x ou chamadas).
+
+```text
+Saída esperada:
+macro:  m = 6, x = 7
+função: m = 5, x = 6
+macro:  m = 40, chamadas = 3
+função: m = 40, chamadas = 2
+macro aninhada: m = 19, chamadas = 7
+maior3: m = 19, chamadas = 3
+```
+
+---
+
+## 0036 · Juntando tudo: o caixa da lanchonete
+
+### Conceito
+
+- **Dividir em funções**: cada tarefa vira uma função com nome que diz o que
+  ela faz; o chefe pede, o subordinado resolve (DEITEL; DEITEL, 2011, cap. 5).
+- **Módulo**: o cardápio fica em `cardapio.h` e `cardapio.c` (assunto 0034)
+  (BACKES, 2013, cap. 13).
+- **Dinheiro em centavos**: R$ 7,90 vira `790` num `int`. Com `double`,
+  `0.1 + 0.2` não dá exatamente `0.3` (assunto 0012); o único `double` é o
+  valor pago, convertido com `lround(pago * 100)`.
+- **Troco recursivo**: "se zerou, acabou; se a nota cabe, dê a nota e resolva o
+  resto; senão, tente a seguinte". O troco ou a nota diminui a cada chamada
+  (FEOFILOFF, 2009, cap. 5).
+- **Testar cada peça sozinha**: o exemplo A072 usa a macro `CONFERIR` para
+  testar preço, contador e notas sem digitar nada.
+
+| Peça | Onde | O que usa do módulo |
+| --- | --- | --- |
+| `mostrar_cardapio`, `preco_centavos`, `mostrar_item` | `cardapio.c` | módulo `.h`/`.c`, `switch` |
+| `itens_vendidos` | `cardapio.c` | global `static`: só o módulo mexe |
+| `ler_codigo` | `caixa.c` | validação com `do...while` e retorno do `scanf` |
+| `proxima_nota` | `caixa.c` | função pura: entra uma nota, sai a seguinte |
+| `dar_troco` | `caixa.c` | recursão: caso base "troco zerado" |
+| `TAXA_SERVICO` | `caixa.c` | `#define` |
+
+> [!WARNING]
+> Efeito colateral escondido: `preco_centavos` também soma 1 no contador de
+> vendidos. Chamá-la duas vezes para o mesmo pedido conta em dobro. Quando a
+> função muda estado, diga no nome (`registrar_pedido`) ou separe em duas.
+
+### Exemplos de uso
 
 Os pedidos 1, 2 e 3 somam R$ 38,40; com 10% de serviço, R$ 42,24. Pagando
 R$ 50, o troco de R$ 7,76 sai da recursão como 5 + 2 + 0,50 + 0,25 + 0,01:
@@ -1668,627 +2311,7 @@ int main(void) {
 gcc ~/LPEDC/material/A072.c ~/LPEDC/material/0036-cardapio.c -o ~/LPEDC/material/A072 && ~/LPEDC/material/A072
 ```
 
----
-
-## 3. Exercícios práticos
-
-Cada exercício é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta. Compile como os exemplos: `gcc ~/LPEDC/material/E007.c -o ~/LPEDC/material/E007 && ~/LPEDC/material/E007`. Resoluções em `_respostas/04-funcoes/`.
-
-### 0028 · Funções
-
-**Exercício E163** · ★☆☆
-
-Você vai trocar o piso de dois cômodos e precisa da área de cada um. Escreva
-a função "double area_comodo(double largura, double comprimento)" e use-a no
-main para a sala (4.0 x 3.5) e o quarto (3.0 x 3.0). Mostre também a soma.
-O main não pode ter nenhuma multiplicação: a conta fica só na função.
-
-```text
-Saída esperada:
-Sala: 14.00 m2
-Quarto: 9.00 m2
-Total: 23.00 m2
-```
-
-**Exercício E165** · ★★☆
-
-Um ano é bissexto se for divisível por 4 e não por 100, ou se for divisível
-por 400. Escreva "bool eh_bissexto(int ano)" e use-a num laço para mostrar
-os anos bissextos de 2000 a 2030 e quantos são.
-
-```text
-Saída esperada:
-2000 2004 2008 2012 2016 2020 2024 2028
-Bissextos: 8
-```
-
-**Exercício E166** · ★★☆
-
-O estacionamento do shopping cobra R$ 5.00 pelas primeiras 2 horas e mais
-R$ 2.00 por hora ou fração depois disso, com teto de R$ 20.00 por dia.
-Escreva "double tarifa(double horas)" e calcule o valor de três carros
-(1.5 h, 3.2 h e 12 h) e o total do dia.
-
-```text
-Saída esperada:
-Carro 1 (1.5 h): R$ 5.00
-Carro 2 (3.2 h): R$ 9.00
-Carro 3 (12.0 h): R$ 20.00
-Total do dia: R$ 34.00
-```
-
-```bash
-gcc ~/LPEDC/material/E166.c -o ~/LPEDC/material/E166 -lm && ~/LPEDC/material/E166
-```
-
-**Exercício E167** · ★★★
-
-A função ajusta, já pronta no arquivo, tem três return. Só o primeiro que
-for alcançado vale: os testes de baixo nem são feitos.
-
-Escreva "int passos(int n)", que aplica ajusta em n repetidas vezes até
-n chegar a 1, mostrando cada valor no caminho, e devolve quantas vezes
-aplicou. No main, use passos para 7, 14 e 30 e mostre o total de cada um,
-e mostre também ajusta(dobro(7)), resolvida de dentro para fora.
-
-```text
-Saída esperada:
-7: 8 4 2 1 (4 passos)
-14: 4 2 1 (3 passos)
-30: 20 10 5 6 3 4 2 1 (8 passos)
-ajusta(dobro(7)) = 4
-```
-
-### 0029 · Parâmetros e passagem por valor
-
-**Exercício E169** · ★☆☆
-
-No app do cartão fidelidade, a promoção dobra os pontos. Escreva
-"int dobrar_pontos(int pontos)", que dobra o próprio parâmetro, mostra
-"dentro: <valor>" e devolve o valor dobrado. No main, comece com
-pontos = 150 e faça, nesta ordem:
-
-```text
-1. chame dobrar_pontos(pontos) SEM guardar o retorno e mostre "main: ...";
-2. chame de novo, agora com pontos = dobrar_pontos(pontos), e mostre
-   "main: ..." outra vez.
-```
-
-```text
-Saída esperada:
-dentro: 300
-main: 150
-dentro: 300
-main: 300
-```
-
-**Exercício E171** · ★★☆
-
-Escreva as funções "int menor(int a, int b)" e "int maior(int a, int b)",
-que devolvem o valor (sem ponteiros). No main, com a = 9 e b = 6, mostre as
-duas notas em ordem crescente usando as duas funções no printf.
-
-```text
-Saída esperada:
-Em ordem: 6 e 9
-```
-
-**Exercício E172** · ★★☆
-
-Você aplica R$ 1000.00 num investimento que rende 1% ao mês. Escreva
-"double montante(double capital, double taxa, int meses)" que usa o próprio
-parâmetro capital como acumulador: a cada mês, capital = capital * (1 + taxa / 100).
-No main, mostre o montante depois de 12 e de 24 meses e prove que a
-variável do main não mudou.
-
-```text
-Saída esperada:
-12 meses: R$ 1126.83
-24 meses: R$ 1269.73
-No main, capital continua R$ 1000.00
-```
-
-**Exercício E174** · ★★★
-
-Um número é capicua (palíndromo) quando se lê igual de trás para frente:
-1221, 343. Escreva:
-
-```text
-int inverter(int n)        devolve n com os dígitos invertidos (123 -> 321);
-                           use o próprio n como variável de trabalho
-bool eh_capicua(int n)     usa inverter
-```
-
-No main, mostre inverter(12345), prove que a variável do main não mudou e
-conte as capicuas de 100 a 999.
-
-```text
-Saída esperada:
-inverter(12345) = 54321
-No main, numero continua 12345
-Capicuas de 100 a 999: 90
-```
-
-### 0030 · Escopo e tempo de vida
-
-**Exercício E175** · ★☆☆
-
-O cartão fidelidade da farmácia tem 100 pontos guardados (uma global) e a
-compra de hoje vale 30 pontos (uma local do main com o MESMO nome). Escreva:
-
-```text
-int pontos = 100;                 global: o saldo do cartão
-void extrato(void)                mostra "extrato: <pontos>"
-void somar_na_global(int valor)   soma valor nos pontos do cartão
-```
-
-No main, chame extrato, declare "int pontos = 30;", mostre "compra de hoje",
-chame somar_na_global(pontos), chame extrato de novo e mostre a compra de
-hoje outra vez.
-
-```text
-Saída esperada:
-extrato: 100
-compra de hoje: 30
-extrato: 130
-compra de hoje: 30
-```
-
-**Exercício E177** · ★★☆
-
-Escreva "double preco_item(int i)", que devolve o preço do item i da compra
-(1: 12.50, 2: 8.00, 3: 30.00, 4: 4.75). No main, use um for de 1 a 4 para
-somar os quatro itens numa variável total e mostre o total depois do laço.
-
-```text
-Saída esperada:
-Total: R$ 55.25
-```
-
-**Exercício E178** · ★★☆
-
-O vale-refeição começa com R$ 300.00, guardados numa variável LOCAL do main
-(nada de global). Escreva "double gastar(double saldo, double valor)", que
-recebe o saldo e devolve o saldo novo, já descontada uma taxa de R$ 1.00 por
-gasto. O main guarda o retorno na própria variável: gasta R$ 45.00 e R$ 32.50
-e mostra o saldo; depois gasta R$ 18.00 e mostra o saldo de novo.
-
-```text
-Saída esperada:
-Saldo: R$ 220.50
-Saldo: R$ 201.50
-```
-
-**Exercício E179** · ★★★
-
-Quatro variáveis chamadas x, cada uma com escopo e tempo de vida
-diferentes. Escreva o programa a partir destas regras:
-
-```text
-int x = 10;     global
-void a(void)    tem uma local x = 1; mostra "a: <x>", soma 1, mostra " -> <x>"
-int b(void)     tem uma static x = 5; mostra "b: <x>", soma 5, mostra
-                " -> <x>" e devolve o x novo
-void c(void)    não declara x: mostra "c: <x>", dobra, mostra " -> <x>"
-```
-
-O main tem a própria local x = 20 e mostra "main: 20"; abre um bloco com
-outra x = 30 e mostra "bloco: 30"; chama a, b e c duas vezes, nessa ordem,
-somando numa local os dois retornos de b; mostra "main: <x>" e a soma.
-
-```text
-Saída esperada:
-main: 20
-bloco: 30
-a: 1 -> 2
-b: 5 -> 10
-c: 10 -> 20
-a: 1 -> 2
-b: 10 -> 15
-c: 20 -> 40
-main: 20
-soma dos b: 25
-```
-
-### 0031 · A pilha de chamadas
-
-**Exercício E181** · ★☆☆
-
-Faça o programa do IMC mostrar a pilha enquanto roda. Escreva:
-
-```text
-double quadrado(double x)                  devolve x * x
-double imc(double peso, double altura)     devolve peso / quadrado(altura)
-```
-
-Cada função mostra uma linha ao entrar (com os parâmetros) e outra ao sair
-(com o valor que devolve), recuada 2 espaços a mais que a de quem a chamou.
-O main calcula imc(72.0, 1.80), guarda numa local e mostra o resultado.
-
-```text
-Saída esperada:
-main chama imc
-  entra imc(peso = 72.0, altura = 1.80)
-    entra quadrado(x = 1.80)
-    sai quadrado -> 3.24
-  sai imc -> 22.2
-IMC: 22.2
-```
-
-**Exercício E183** · ★★☆
-
-Monte o rastro de uma compra online. Escreva quatro funções que se chamam em
-cadeia: finalizar_compra chama pagar, que chama antifraude, que chama
-consultar_banco. Cada uma recebe o nível (int nivel) e passa nivel + 1 para
-a próxima. Use uma função "void recuo(int nivel)", que mostra 2 espaços por
-nível, para a saída ficar assim:
-
-```text
-Saída esperada:
-entra finalizar_compra
-  entra pagar
-    entra antifraude
-      consultar_banco: aprovado
-    sai antifraude
-  sai pagar
-sai finalizar_compra
-```
-
-**Exercício E184** · ★★☆
-
-Cada quadro da pilha tem as suas variáveis, mesmo com nomes iguais. Escreva:
-
-```text
-int dobro_mais_um(int n)  r = n * 2; n = r + 1; devolve n
-int processa(int n)       r = dobro_mais_um(n); devolve r + n
-main                      n = 5; r = processa(n)
-```
-
-Cada função mostra n e r como na saída (dobro_mais_um na entrada e na saída;
-processa antes e depois de devolver; main no fim).
-
-```text
-Saída esperada:
-dobro_mais_um entra: n = 5
-dobro_mais_um sai: n = 11, r = 10
-processa: n = 5, r = 11
-processa devolve 16
-main: n = 5, r = 16
-```
-
-**Exercício E186** · ★★★
-
-Meça a altura da pilha. Use duas globais, "altura" e "maior_altura". Toda
-função, ao entrar, chama entrar() (que soma 1 em altura e atualiza
-maior_altura) e, antes de sair, chama sair() (que diminui 1). O main também
-conta: ele chama entrar() no começo.
-
-Monte estas chamadas: main chama checkout e frete; checkout chama
-cupom e pagamento; pagamento chama antifraude; frete não chama ninguém.
-No fim, o main mostra a maior altura e a altura atual (antes do sair dele).
-
-```text
-Saída esperada:
-Maior altura: 4
-Altura agora: 1
-```
-
-### 0032 · Recursão
-
-**Exercício E187** · ★☆☆
-
-Num torneio de vôlei de praia, cada dupla que chega cumprimenta todas as que
-já estão lá. Com 12 duplas, são 0 + 1 + 2 + ... + 11 cumprimentos. Escreva
-"int soma_ate(int n)", recursiva, que devolve 1 + 2 + ... + n, sem nenhum
-laço, e use-a para responder.
-
-```text
-Saída esperada:
-soma_ate(4) = 10
-soma_ate(100) = 5050
-Cumprimentos com 12 duplas: 66
-```
-
-**Exercício E189** · ★★☆
-
-Escreva "void eco(int n, int nivel)", recursiva, que mostra "ida n" antes
-da chamada recursiva, "fundo" no caso base (n == 0) e "volta n" depois da
-chamada. Cada linha é recuada 2 espaços por nível: o main chama eco(3, 0),
-e cada chamada recursiva passa nivel + 1. Use uma função "void recuo(int
-nivel)" para os espaços.
-
-```text
-Saída esperada:
-ida 3
-  ida 2
-    ida 1
-      fundo
-    volta 1
-  volta 2
-volta 3
-```
-
-**Exercício E190** · ★★☆
-
-Escreva "void binario(int n)", recursiva, que mostra n em binário. A conta
-de dividir por 2 dá os bits de trás para frente (o último resto é o primeiro
-bit); a recursão resolve isso de graça se você imprimir na volta.
-
-```text
-Saída esperada:
-13 = 1101
-255 = 11111111
-2026 = 11111101010
-```
-
-**Exercício E192** · ★★★
-
-A calculadora velha da loja só sabe somar e subtrair. Escreva
-"int multiplicar(int a, int b)", recursiva, que só usa + e - (nada de *),
-e que funciona com b positivo, zero e NEGATIVO.
-
-```text
-Saída esperada:
-7 x 4 = 28
-7 x -3 = -21
--5 x 6 = -30
-9 x 0 = 0
-```
-
-### 0033 · Recursão na prática: Fibonacci, Hanói e Euclides
-
-**Exercício E193** · ★☆☆
-
-A receita pede 84 g de farinha para 36 g de açúcar. Escreva o MDC de
-Euclides, recursivo, "int mdc(int a, int b)", e use-o para simplificar a
-proporção 84/36. Teste também com 1000/625.
-
-```text
-Saída esperada:
-mdc(84, 36) = 12 -> 84/36 = 7/3
-mdc(1000, 625) = 125 -> 1000/625 = 8/5
-```
-
-**Exercício E195** · ★★☆
-
-Escreva "int fib_rapido(int n)" SEM recursão, com um laço e duas variáveis
-(anterior e atual). Mostre fib(10), fib(40) e fib(46), o maior que cabe num
-int.
-
-```text
-Saída esperada:
-fib(10) = 55
-fib(40) = 102334155
-fib(46) = 1836311903
-```
-
-**Exercício E196** · ★★☆
-
-Meça o desperdício do Fibonacci recursivo. Copie o fib do texto (o de duas
-chamadas por vez) e acrescente três globais:
-
-```text
-chamadas      quantas vezes fib foi chamada, no total
-repetidas     quantas dessas chamadas foram com n == 2
-maior_altura  o maior número de quadros de fib na pilha ao mesmo tempo
-```
-
-Para a altura, use uma quarta global, altura: some 1 ao entrar em fib e
-tire 1 logo antes de cada return. Mostre tudo para fib(6).
-
-```text
-Saída esperada:
-fib(6) = 8
-chamadas: 25
-fib(2) calculado 5 vezes
-maior altura: 6
-```
-
-**Exercício E197** · ★★★
-
-Exponenciação rápida. Para calcular 3^13 dá para multiplicar 3 por ele mesmo
-12 vezes, mas existe um atalho: se o expoente é par, x^e = (x^(e/2))²; se é
-ímpar, x^e = x * x^(e-1). Escreva duas funções recursivas que contam as
-multiplicações numa global:
-
-```text
-long long pot_lenta(long long x, int e)    x * pot_lenta(x, e - 1)
-long long pot_rapida(long long x, int e)   o atalho acima
-```
-
-Mostre o resultado e o número de multiplicações de cada uma para 3^13 e 2^60.
-
-```text
-Saída esperada:
-lenta:  3^13 = 1594323 (13 multiplicações)
-rápida: 3^13 = 1594323 (6 multiplicações)
-lenta:  2^60 = 1152921504606846976 (60 multiplicações)
-rápida: 2^60 = 1152921504606846976 (9 multiplicações)
-```
-
-### 0034 · Módulos: .h, .c e compilação separada
-
-**Exercício E199** · ★☆☆
-
-Monte o módulo "frete" num arquivo só, com cada peça no bloco certo. Os
-três blocos já estão marcados no esqueleto: "// frete.h" (o que o módulo
-oferece), "// main.c" (quem usa) e "// frete.c" (como ele faz).
-
-```text
-no frete.h:  o include guard (#ifndef FRETE_H / #define FRETE_H / #endif),
-             #define FRETE_GRATIS_ACIMA 200.0 e o protótipo
-             double calcular_frete(double valor_compra, double peso_kg,
-                                   int distancia_km);
-no frete.c:  static double taxa_por_km(int distancia_km), que devolve
-             0.20 por km, e o corpo de calcular_frete
-no main.c:   o main
-```
-
-O frete é grátis quando a compra chega a FRETE_GRATIS_ACIMA; senão, é
-R$ 10.00 + R$ 1.50 por kg + a taxa por km. Calcule três pedidos.
-
-```text
-Saída esperada:
-Pedido 1 (R$ 150.00, 2.0 kg, 30 km): frete R$ 19.00
-Pedido 2 (R$ 250.00, 5.0 kg, 100 km): frete R$ 0.00
-Pedido 3 (R$ 80.00, 1.0 kg, 12 km): frete R$ 13.90
-```
-
-```bash
-gcc ~/LPEDC/material/E199.c ~/LPEDC/material/0034-conversao.c -o ~/LPEDC/material/E199 && ~/LPEDC/material/E199
-```
-
-**Exercício E201** · ★★☆
-
-O módulo conversao (conversao.h e conversao.c, nesta pasta) converte km em
-milhas, mas não faz o contrário. Sem mexer no módulo, escreva NESTE arquivo
-"double milhas_para_km(double milhas)" (1 milha = 1.609344 km) e use as
-duas funções juntas: a maratona de 26.2 milhas em km; a volta completa
-km_para_milhas(milhas_para_km(26.2)); a meia maratona de 13.1 milhas em km;
-e quantas conversões o módulo contou (conversoes_feitas).
-
-```text
-Saída esperada:
-Maratona: 26.2 milhas = 42.2 km
-Volta completa: 26.2 milhas
-Meia: 13.1 milhas = 21.1 km
-Conversões do módulo: 1
-```
-
-```bash
-gcc ~/LPEDC/material/E201.c ~/LPEDC/material/0034-conversao.c -o ~/LPEDC/material/E201 && ~/LPEDC/material/E201
-```
-
-**Exercício E202** · ★★☆
-
-Escreva, num arquivo só, um módulo imitado: o bloco "// desconto.h" com o
-protótipo de "double aplicar_desconto(double preco, double percentual)", o
-bloco "// main.c" com o main, que mostra o preço de um tênis de R$ 299.90 com
-20% de desconto, e o bloco "// desconto.c" com a definição da função
-(preco - preco * percentual / 100). O programa tem que compilar e ligar.
-
-```text
-Saída esperada:
-Tênis: R$ 239.92
-```
-
-```bash
-gcc ~/LPEDC/material/E202.c ~/LPEDC/material/0034-conversao.c -o ~/LPEDC/material/E202 && ~/LPEDC/material/E202
-```
-
-**Exercício E203** · ★★★
-
-Escreva o módulo "placar" de um campeonato entre dois times, num arquivo
-só, com os blocos "// placar.h", "// main.c" e "// placar.c". Os dados
-moram em globais static no bloco do placar.c: os gols da partida atual de
-cada time e os pontos e gols de cada um no campeonato. Ninguém de fora mexe
-neles sem passar pelas funções:
-
-```text
-void marcar_gol(int time)      time 1 (casa) ou 2 (visitante)
-void encerrar_partida(void)    mostra "Partida N: X x Y", dá 3 pontos
-                               para quem venceu (1 para cada no empate),
-                               soma os gols no campeonato e zera o placar
-int pontos(int time)
-int gols(int time)             gols no campeonato
-```
-
-Uma função static do placar.c, "void anotar(int time)", é a única que mexe
-nos gols da partida; marcar_gol só a chama. O main simula: 2 x 1, 0 x 0 e
-1 x 3, e mostra a tabela.
-
-```text
-Saída esperada:
-Partida 1: 2 x 1
-Partida 2: 0 x 0
-Partida 3: 1 x 3
-Casa: 4 pontos, 3 gols
-Visitante: 4 pontos, 4 gols
-```
-
-```bash
-gcc ~/LPEDC/material/E203.c ~/LPEDC/material/0034-conversao.c -o ~/LPEDC/material/E203 && ~/LPEDC/material/E203
-```
-
-### 0035 · Pré-processador: macros e #ifdef
-
-**Exercício E206** · ★☆☆
-
-Escreva três macros à prova de precedência e teste com os valores abaixo:
-
-```text
-MAIOR(a, b)          o maior dos dois
-ABS(x)               o valor absoluto
-ENTRE(x, min, max)   1 se min <= x <= max, senão 0
-```
-
-```text
-Saída esperada:
-MAIOR(7, 12) = 12
-ABS(-8) = 8
-ABS(3 - 10) = 7
-ENTRE(15, 10, 20) = 1
-ENTRE(25, 10, 20) = 0
-100 / ABS(-5 * 2) = 10
-```
-
-**Exercício E207** · ★★☆
-
-Escreva o programa da lanchonete com duas macros: DESCONTO (0.10) e
-PRECO_COMBO (25 + 5, à prova de precedência). Com preco = 35.00, mostre o
-desconto (preco * DESCONTO) e o valor de dois combos (2.0 * PRECO_COMBO).
-
-```text
-Saída esperada:
-Desconto: R$ 3.50
-Dois combos: R$ 60.00
-```
-
-**Exercício E208** · ★★☆
-
-Escreva um simulador de parcelas com modo de teste. Uma compra de R$ 1000.00
-em 4 parcelas com juros de 2% ao mês: cada parcela é o valor original
-dividido por 4, mais 2% de juros por mês de espera (a 1ª parcela tem 2%, a
-2ª 4%, e assim por diante, juros simples). Mostre o total pago.
-
-Com "#define MODO_TESTE" no topo, mostre também cada parcela, com o prefixo
-"[teste]". Sem a linha, só o total. Use #ifdef; nada de if comum.
-
-```text
-Saída esperada com MODO_TESTE:
-[teste] parcela 1: 255.00
-[teste] parcela 2: 260.00
-[teste] parcela 3: 265.00
-[teste] parcela 4: 270.00
-Total: R$ 1050.00
-```
-
-```text
-Saída esperada sem MODO_TESTE:
-Total: R$ 1050.00
-```
-
-**Exercício E209** · ★★★
-
-A macro avalia o argumento cada vez que ele aparece. Escreva a macro
-MAIOR(a, b), à prova de precedência, a função "int maior(int a, int b)", a
-função "int maior3(int a, int b, int c)" (usa maior) e "int pontos(int p)",
-que soma 1 na global chamadas e devolve p. No main, mostre (x = 5, y = 3):
-MAIOR(x++, y) e maior(x++, y); MAIOR e maior com pontos(40) e pontos(25);
-MAIOR aninhada e maior3 com pontos(7), pontos(19) e pontos(12). Cada linha
-mostra m e (x ou chamadas).
-
-```text
-Saída esperada:
-macro:  m = 6, x = 7
-função: m = 5, x = 6
-macro:  m = 40, chamadas = 3
-função: m = 40, chamadas = 2
-macro aninhada: m = 19, chamadas = 7
-maior3: m = 19, chamadas = 3
-```
-
-### 0036 · Juntando tudo: o caixa da lanchonete
+### Exercícios
 
 **Exercício E212** · ★☆☆
 
@@ -2387,11 +2410,13 @@ Saída esperada:
 gcc ~/LPEDC/material/E215.c ~/LPEDC/material/0036-cardapio.c -o ~/LPEDC/material/E215 && ~/LPEDC/material/E215
 ```
 
-### Lista do módulo
+---
+
+## Lista do módulo
 
 30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P0401.c a P0430.c, em `material/`; resoluções em `_respostas/04-funcoes/lista/`.
 
-#### ★☆☆ Aquecimento
+### ★☆☆ Aquecimento
 
 **Exercício P0401** · ★☆☆ · O desconto do Pix
 
@@ -2560,7 +2585,7 @@ Saída esperada:
 
 **Resposta esperada:** as quatro barras acima.
 
-#### ★★☆ Para pensar
+### ★★☆ Para pensar
 
 **Exercício P0411** · ★★☆ · O número do pedido ao contrário
 
@@ -2760,7 +2785,7 @@ Maior dígito de 5: 5
 
 **Resposta esperada:** 9, 8 e 5.
 
-#### ★★★ Desafio
+### ★★★ Desafio
 
 **Exercício P0421** · ★★★ · Hanói com 4 discos e a conta de cada disco
 
@@ -2999,7 +3024,7 @@ Saída esperada:
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas do médio ao difícil, para resolver num arquivo seu.
 
@@ -3175,7 +3200,7 @@ volta.
 
 </details>
 
-### Questões do POSCOMP
+## Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -3188,7 +3213,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 
 O gabarito oficial de 2025 não estava disponível quando este material foi montado.
 
-### Questões no estilo da prova
+## Questões no estilo da prova
 
 Questões objetivas no formato da prova do PPGI: uma alternativa certa. Nas de
 recursão, desenhe a pilha: um quadro por chamada, com os parâmetros e o que
@@ -3427,7 +3452,7 @@ algoritmo de Euclides. Veja 0033.
 
 </details>
 
-### Questões de provas do PPGI
+## Questões de provas do PPGI
 
 Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.
 

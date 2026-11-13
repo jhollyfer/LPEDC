@@ -58,9 +58,12 @@ como nomes de variáveis suas.
 
 ---
 
-## 1. Conceitos gerais
+> [!NOTE]
+> Cada assunto é um capítulo: **Conceito** (a explicação), **Exemplos de uso** (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e **Exercícios** (cada um é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta; resoluções em `_respostas/26-analise-formal/`).
 
-### 0166 · O, Ω e Θ de verdade
+## 0166 · O, Ω e Θ de verdade
+
+### Conceito
 
 - **O (teto)**: `f(n)` é O(g(n)) se existem `c > 0` e `n₀` com
   `f(n) ≤ c · g(n)` para todo `n ≥ n₀` (CORMEN et al., 2024, cap. 3).
@@ -90,106 +93,7 @@ como nomes de variáveis suas.
 > sequencial é Ω(n)" é falsa, pois o melhor caso faz 1 comparação. E testar até
 > 100 mil só acha candidatos: a prova é a conta.
 
-### 0167 · Somatórios que saem de laços
-
-- **Laço dependente**: o laço de dentro roda um número de vezes que depende
-  do `i` de fora. A conta de passos vira um **somatório** (FEOFILOFF, s.d.).
-- **Do `for` ao `Σ`**: cada laço vira um `Σ`; os limites do laço são os da
-  soma e o corpo é a parcela (CORMEN et al., 2024, apêndice A).
-
-```text
- n-1
-  Σ  i  =  0 + 1 + 2 + ... + (n-1)  =  n(n-1)/2
- i=0
-```
-
-- **Soma aritmética**: some a sequência de frente para trás e de trás para
-  frente; cada coluna dá `n-1`, são `n` colunas, e isso é o dobro. Sai
-  `n(n-1)/2`, Θ(n²) (CORMEN et al., 2024, apêndice A).
-- **Soma geométrica**: a última parcela supera todas as anteriores juntas
-  (`512 > 1 + 2 + ... + 256`); dois laços aninhados podem dar Θ(n)
-  (LINTZMAYER; MOTA, 2023).
-- **Soma harmônica**: `1 + 1/2 + ... + 1/n` cresce como `ln n`; vezes `n`, dá
-  `n ln n` (CORMEN et al., 2024, apêndice A).
-- **Estouro na fórmula**: com `int n = 70000`, `n * (n - 1)` estoura antes da
-  divisão por 2; guarde `n` num `long`.
-
-| laço | somatório | fórmula | classe |
-| --- | --- | --- | --- |
-| `for i < n`, `for j < i` | aritmética: `Σ i` | `n(n-1)/2` | Θ(n²) |
-| `for i < n`, `for j < i*i` | quadrados: `Σ i²` | `(n-1)n(2n-1)/6` | Θ(n³) |
-| `for (t = 1; t < n; t *= 2)`, `for j < t` | geométrica: `1 + 2 + 4 + ...` | `2^k - 1` (menos que `2n`) | Θ(n) |
-| `for p = 1..n`, `for (j = 0; j < n; j += p)` | harmônica: `Σ n/p` | `≈ n ln n` | Θ(n log n) |
-
-> [!WARNING]
-> `for (j = 0; j < i; j++)` roda `i` vezes e soma `n(n-1)/2`; com `j <= i`
-> soma `n(n+1)/2`. A classe é a mesma, mas o número exato fica errado. Teste
-> com `n = 1` e `n = 2` à mão.
-
-### 0168 · Complexidade espacial
-
-- **Complexidade espacial**: a memória que o algoritmo usa em função de `n`,
-  medida com as mesmas notações O, Ω e Θ (ZIVIANI, 2010, cap. 1).
-- **Espaço extra** (ou **auxiliar**): o que a função usa **além da entrada**.
-  É o que quase sempre interessa (LINTZMAYER; MOTA, 2023).
-- **In-place** (no lugar): o espaço extra é Θ(1), um número fixo de
-  variáveis simples. Uma cópia da entrada já é Θ(n)
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
-- **Pilha da recursão**: cada chamada ativa ocupa um frame. O espaço é a
-  **profundidade máxima** vezes o frame, não o total de chamadas
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 3).
-- **Onde mora a memória**: locais e frames ficam na **pilha**, pequena e fixa
-  (`ulimit -s` mostra 8192 KB); o `malloc` usa o **heap**; um `static` fica nos
-  dados estáticos (LINUX MAN-PAGES, s.d.).
-- **Tempo por espaço**: memoização, vetor de contagem e tabela hash gastam
-  memória para ganhar tempo (CORMEN et al., 2024).
-
-| algoritmo | tempo | espaço extra |
-| --- | --- | --- |
-| inverter trocando as pontas | Θ(n) | Θ(1) |
-| busca binária com laço | Θ(log n) | Θ(1) |
-| busca binária recursiva | Θ(log n) | Θ(log n), da pilha |
-| soma recursiva de `n` elementos | Θ(n) | Θ(n), da pilha |
-| insertion sort, heapsort | Θ(n²), Θ(n log n) | Θ(1) |
-| merge sort | Θ(n log n) | Θ(n), do vetor auxiliar |
-| quick sort | Θ(n log n) em média | Θ(log n) em média, Θ(n) no pior, da pilha |
-| counting sort com valores de 0 a k | Θ(n + k) | Θ(n + k) |
-
-> [!WARNING]
-> Recursão **custa** espaço mesmo sem vetor. `soma(v, n) = v[n-1] + soma(v,
-> n-1)` empilha `n` frames: com 1 milhão de elementos, a pilha de 8 MB estoura
-> em *segmentation fault*. Procure a **profundidade máxima**, não só os `malloc`.
-
-### 0169 · Juntando tudo: passos e bytes conferidos
-
-- **Ficha de complexidade**: tempo e espaço extra de uma função, cada um com
-  sua classe Θ e o caso a que se refere (ZIVIANI, 2010, cap. 1).
-- **Ler o código**: a fórmula exata de passos sai dos somatórios (0167); o
-  espaço extra, dos vetores, dos `malloc` e da profundidade da recursão (0168)
-  (CORMEN et al., 2024, apêndice A).
-- **Instrumentar**: um contador no laço mais interno, outro de bytes em cada
-  `malloc` e outro de frames vivos. O TAD `custo.h` guarda os três:
-  `custo_passos`, `custo_bytes` e `custo_prof_max`.
-- **Dobrar o `n`**: a versão prática do Θ (0166). Em Θ(n²) a razão
-  `f(2n) / f(n)` vai para 4; em Θ(n log n), fica um pouco acima de 2; em
-  Θ(log n), soma 1 (FEOFILOFF, 2009).
-- **O que é um passo** em cada função: um elemento somado, um elemento olhado
-  na busca, um par testado, um elemento copiado na intercalação, uma chamada
-  na soma recursiva.
-- **Heap e pilha**: o `custo_bytes` mede o heap; a pilha só se mede em frames.
-
-> [!WARNING]
-> A medida vale para a entrada testada. A busca roda no **pior caso** (1
-> centavo, que não está no vetor); com o preço do meio, faz 1 passo. Diga qual
-> caso a entrada representa.
-
----
-
-## 2. Exemplos de uso
-
-Cada exemplo compila sozinho. Rode com o comando abaixo dele e compare com a saída no fim do código.
-
-### 0166 · O, Ω e Θ de verdade
+### Exemplos de uso
 
 O fechamento de um caixa custa `f(n) = 3n² + 10n + 20` passos. O teto `4n²`
 fica abaixo até `n = 11` e acima de 12 em diante; o `n₀` é a primeira coluna
@@ -385,7 +289,115 @@ int main(void) {
 gcc ~/LPEDC/material/A332.c -o ~/LPEDC/material/A332 -lm && ~/LPEDC/material/A332
 ```
 
-### 0167 · Somatórios que saem de laços
+### Exercícios
+
+**Exercício E991** · ★☆☆
+
+O sistema do condomínio gera os boletos de n condôminos com
+f(n) = 5n + 40 passos. Prove, com um programa, que f(n) é O(n): escreva
+a função custo(n) e uma função acha_n0(c) que testa todo n de 1 até
+10000 e devolve o menor n0 a partir do qual custo(n) <= c * n sempre
+vale. Mostre o n0 para c = 6, 7, 10 e 45:
+
+```text
+Saída esperada:
+c =  6: n0 = 40
+c =  7: n0 = 20
+c = 10: n0 = 8
+c = 45: n0 = 1
+```
+
+**Exercício E993** · ★★☆
+
+Melhor, pior e caso médio de verdade, sem fórmula: para cada n de 3 a 7,
+gere TODAS as ordens dos números 1..n (são n! ordens), ordene uma cópia
+de cada uma com o insertion sort e conte as comparações entre elementos.
+Mostre quantas ordens foram testadas, o menor, o maior e a média de
+comparações:
+
+```text
+Saída esperada:
+n = 3:    6 ordens | melhor 2 | pior  3 | média 2.67
+n = 4:   24 ordens | melhor 3 | pior  6 | média 4.92
+n = 5:  120 ordens | melhor 4 | pior 10 | média 7.72
+n = 6:  720 ordens | melhor 5 | pior 15 | média 11.05
+n = 7: 5040 ordens | melhor 6 | pior 21 | média 14.91
+```
+
+**Exercício E994** · ★★☆
+
+Refute com um programa: n log₂ n NÃO é O(n). Para cada c em 2, 4, 8 e
+16, ache o último n de 1 até 200000 em que n * log2(n) <= c * n, e
+mostre a partir de onde a desigualdade quebra de vez:
+
+```text
+Saída esperada:
+c =  2: falha de n = 5 em diante
+c =  4: falha de n = 17 em diante
+c =  8: falha de n = 257 em diante
+c = 16: falha de n = 65537 em diante
+```
+
+```bash
+gcc ~/LPEDC/material/E994.c -o ~/LPEDC/material/E994 -lm && ~/LPEDC/material/E994
+```
+
+**Exercício E995** · ★★★
+
+O sistema do torneio de futsal monta a rodada com 2n² operações; com n
+ímpar, um time folga e a tabela é refeita (30n a mais). Escreva long
+custo(long n) e long acha_n0(long c), que devolve o menor n0 tal que
+custo(n) <= c * n² para TODO n de n0 até LIMITE (1000), como pede a
+definição de O. No main, mostre o n0 para c = 3 e confira, com um laço de
+n0 até LIMITE, quantas falhas existem:
+
+```text
+Saída esperada:
+custo(n) <= 3n² a partir de n0 = 30
+falhas de n0 até 1000: 0
+```
+
+---
+
+## 0167 · Somatórios que saem de laços
+
+### Conceito
+
+- **Laço dependente**: o laço de dentro roda um número de vezes que depende
+  do `i` de fora. A conta de passos vira um **somatório** (FEOFILOFF, s.d.).
+- **Do `for` ao `Σ`**: cada laço vira um `Σ`; os limites do laço são os da
+  soma e o corpo é a parcela (CORMEN et al., 2024, apêndice A).
+
+```text
+ n-1
+  Σ  i  =  0 + 1 + 2 + ... + (n-1)  =  n(n-1)/2
+ i=0
+```
+
+- **Soma aritmética**: some a sequência de frente para trás e de trás para
+  frente; cada coluna dá `n-1`, são `n` colunas, e isso é o dobro. Sai
+  `n(n-1)/2`, Θ(n²) (CORMEN et al., 2024, apêndice A).
+- **Soma geométrica**: a última parcela supera todas as anteriores juntas
+  (`512 > 1 + 2 + ... + 256`); dois laços aninhados podem dar Θ(n)
+  (LINTZMAYER; MOTA, 2023).
+- **Soma harmônica**: `1 + 1/2 + ... + 1/n` cresce como `ln n`; vezes `n`, dá
+  `n ln n` (CORMEN et al., 2024, apêndice A).
+- **Estouro na fórmula**: com `int n = 70000`, `n * (n - 1)` estoura antes da
+  divisão por 2; guarde `n` num `long`.
+
+| laço | somatório | fórmula | classe |
+| --- | --- | --- | --- |
+| `for i < n`, `for j < i` | aritmética: `Σ i` | `n(n-1)/2` | Θ(n²) |
+| `for i < n`, `for j < i*i` | quadrados: `Σ i²` | `(n-1)n(2n-1)/6` | Θ(n³) |
+| `for (t = 1; t < n; t *= 2)`, `for j < t` | geométrica: `1 + 2 + 4 + ...` | `2^k - 1` (menos que `2n`) | Θ(n) |
+| `for p = 1..n`, `for (j = 0; j < n; j += p)` | harmônica: `Σ n/p` | `≈ n ln n` | Θ(n log n) |
+
+> [!WARNING]
+> `for (j = 0; j < i; j++)` roda `i` vezes e soma `n(n-1)/2`; com `j <= i`
+> soma `n(n+1)/2`. A classe é a mesma, mas o número exato fica errado. Teste
+> com `n = 1` e `n = 2` à mão.
+
+### Exemplos de uso
 
 Numa reunião de condomínio, cada morador que chega aperta a mão de quem já
 está na sala. Cada quadradinho roxo é um aperto; o triângulo é metade do
@@ -552,7 +564,121 @@ int main(void) {
 gcc ~/LPEDC/material/A334.c -o ~/LPEDC/material/A334 -lm && ~/LPEDC/material/A334
 ```
 
-### 0168 · Complexidade espacial
+### Exercícios
+
+**Exercício E1000** · ★★☆
+
+Na feira, as laranjas são empilhadas em pirâmide de base quadrada: a
+camada de cima tem 1 laranja (1 × 1), a segunda tem 4 (2 × 2), a
+terceira 9, até a camada n, com n × n. Escreva laranjas(n) com dois
+laços: o de fora percorre as camadas i = 1..n e o de dentro conta uma
+laranja por vez, de 0 até i * i. Compare com a fórmula da soma dos
+quadrados para n = 3, 10 e 100:
+
+```text
+Saída esperada:
+  n  laranjas  n(n+1)(2n+1)/6
+  3        14              14
+ 10       385             385
+100    338350          338350
+```
+
+**Exercício E1002** · ★★★
+
+Na feira há n bancas, numeradas de 1 a n. O fiscal p (p = 1..n) visita
+as bancas p, 2p, 3p, ... Escreva:
+- visitas(n), com dois laços, contando cada visita;
+- visitas_rapido(n), com UM laço só, que chega no mesmo total sabendo
+
+```text
+quantas bancas o fiscal p visita sem andar por elas.
+```
+
+Para n = 10, 100, ..., 1.000.000, mostre os dois totais, n ln n e a razão
+visitas / (n ln n):
+
+```text
+Saída esperada:
+      n    visitas    rápido    n ln n  razão
+     10         27        27        23  1.173
+    100        482       482       461  1.047
+   1000       7069      7069      6908  1.023
+  10000      93668     93668     92103  1.017
+ 100000    1166750   1166750   1151293  1.013
+1000000   13970034  13970034  13815511  1.011
+```
+
+```bash
+gcc ~/LPEDC/material/E1002.c -o ~/LPEDC/material/E1002 -lm && ~/LPEDC/material/E1002
+```
+
+**Exercício E997** · ★☆☆
+
+Desafio do cofrinho: no dia 1 você guarda R$ 1, no dia 2 guarda R$ 2,
+e assim por diante, até o dia 365. Calcule o total de dois jeitos: com
+um laço que soma dia a dia e com a fórmula fechada da soma aritmética.
+Use long:
+
+```text
+Saída esperada:
+pelo laço:    R$ 66795
+pela fórmula: R$ 66795
+```
+
+**Exercício E999** · ★★☆
+
+O condomínio quer saber quantas comissões de 3 moradores diferentes dá
+para formar (a ordem não importa). Escreva trios(n) com três laços
+dependentes, k < j < i, contando cada trio uma vez, e compare com a
+fórmula n(n-1)(n-2)/6 para n = 10, 30 e 100:
+
+```text
+Saída esperada:
+  n   trios  n(n-1)(n-2)/6
+ 10     120            120
+ 30    4060           4060
+100  161700         161700
+```
+
+---
+
+## 0168 · Complexidade espacial
+
+### Conceito
+
+- **Complexidade espacial**: a memória que o algoritmo usa em função de `n`,
+  medida com as mesmas notações O, Ω e Θ (ZIVIANI, 2010, cap. 1).
+- **Espaço extra** (ou **auxiliar**): o que a função usa **além da entrada**.
+  É o que quase sempre interessa (LINTZMAYER; MOTA, 2023).
+- **In-place** (no lugar): o espaço extra é Θ(1), um número fixo de
+  variáveis simples. Uma cópia da entrada já é Θ(n)
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
+- **Pilha da recursão**: cada chamada ativa ocupa um frame. O espaço é a
+  **profundidade máxima** vezes o frame, não o total de chamadas
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 3).
+- **Onde mora a memória**: locais e frames ficam na **pilha**, pequena e fixa
+  (`ulimit -s` mostra 8192 KB); o `malloc` usa o **heap**; um `static` fica nos
+  dados estáticos (LINUX MAN-PAGES, s.d.).
+- **Tempo por espaço**: memoização, vetor de contagem e tabela hash gastam
+  memória para ganhar tempo (CORMEN et al., 2024).
+
+| algoritmo | tempo | espaço extra |
+| --- | --- | --- |
+| inverter trocando as pontas | Θ(n) | Θ(1) |
+| busca binária com laço | Θ(log n) | Θ(1) |
+| busca binária recursiva | Θ(log n) | Θ(log n), da pilha |
+| soma recursiva de `n` elementos | Θ(n) | Θ(n), da pilha |
+| insertion sort, heapsort | Θ(n²), Θ(n log n) | Θ(1) |
+| merge sort | Θ(n log n) | Θ(n), do vetor auxiliar |
+| quick sort | Θ(n log n) em média | Θ(log n) em média, Θ(n) no pior, da pilha |
+| counting sort com valores de 0 a k | Θ(n + k) | Θ(n + k) |
+
+> [!WARNING]
+> Recursão **custa** espaço mesmo sem vetor. `soma(v, n) = v[n-1] + soma(v,
+> n-1)` empilha `n` frames: com 1 milhão de elementos, a pilha de 8 MB estoura
+> em *segmentation fault*. Procure a **profundidade máxima**, não só os `malloc`.
+
+### Exemplos de uso
 
 Um motorista quer a rota do dia ao contrário. Em cima, a cópia: 6 gavetas a
 mais, `6 · 4 = 24` bytes. Embaixo, a inversão no lugar: só a caixinha `tmp`, 4
@@ -763,7 +889,95 @@ int main(void) {
 gcc ~/LPEDC/material/A336.c -o ~/LPEDC/material/A336 && ~/LPEDC/material/A336
 ```
 
-### 0169 · Juntando tudo: passos e bytes conferidos
+### Exercícios
+
+**Exercício E1003** · ★☆☆
+
+Escreva a recursiva long potencia(long base, int e), com uma multiplicação
+por chamada (potencia(base, 0) = 1). Meça quanto ela empilha: use dois
+contadores globais, prof (frames vivos agora) e prof_max (o maior valor que
+prof já teve). No main, mostre o resultado e a profundidade máxima para
+3^10, 3^20 e 3^30:
+
+```text
+Saída esperada:
+3^10 = 59049, profundidade 11
+3^20 = 3486784401, profundidade 21
+3^30 = 205891132094649, profundidade 31
+```
+
+**Exercício E1005** · ★★☆
+
+Escreva a potência rápida recursiva (assunto 0131): x^e é o quadrado de
+x^(e/2), vezes x quando e é ímpar. Faça as contas módulo 1000000007
+(para não estourar o long) e meça a profundidade máxima da pilha, como
+no E1003, para 3^10, 3^1000, 3^1000000 e 3^1000000000:
+
+```text
+Saída esperada:
+3^10 mod p = 59049, profundidade 5
+3^1000 mod p = 56888193, profundidade 11
+3^1000000 mod p = 64935414, profundidade 21
+3^1000000000 mod p = 235939645, profundidade 31
+```
+
+**Exercício E1006** · ★★☆
+
+A escala de plantão da clínica tem 7 médicos, numerados de 1 a 7. Todo
+mês ela gira k posições para a direita: os k últimos passam para a
+frente. Escreva gira(v, n, k) usando Θ(1) de espaço extra, sem vetor
+auxiliar, com o truque das três inversões: inverta o vetor inteiro,
+depois os k primeiros, depois o resto. Gire 3 posições, mostre, e depois
+gire mais 11 posições e mostre de novo:
+
+```text
+Saída esperada:
+5 6 7 1 2 3 4
+1 2 3 4 5 6 7
+```
+
+**Exercício E1007** · ★★★
+
+O estacionamento registrou as placas (números) que entraram no dia, em
+ordem crescente, com repetições: 1020 1020 1033 1047 1047 1047 1050 1062
+1062 1071 1088 1088. Escreva int sem_repetidas(int placas[], int n), que
+deixa uma cópia de cada placa no começo do vetor e devolve quantas
+sobraram, com Θ(1) de espaço extra: sem malloc e sem vetor auxiliar,
+mexendo no próprio vetor. No main, mostre o resultado:
+
+```text
+Saída esperada:
+12 placas, 7 distintas: 1020 1033 1047 1050 1062 1071 1088
+```
+
+---
+
+## 0169 · Juntando tudo: passos e bytes conferidos
+
+### Conceito
+
+- **Ficha de complexidade**: tempo e espaço extra de uma função, cada um com
+  sua classe Θ e o caso a que se refere (ZIVIANI, 2010, cap. 1).
+- **Ler o código**: a fórmula exata de passos sai dos somatórios (0167); o
+  espaço extra, dos vetores, dos `malloc` e da profundidade da recursão (0168)
+  (CORMEN et al., 2024, apêndice A).
+- **Instrumentar**: um contador no laço mais interno, outro de bytes em cada
+  `malloc` e outro de frames vivos. O TAD `custo.h` guarda os três:
+  `custo_passos`, `custo_bytes` e `custo_prof_max`.
+- **Dobrar o `n`**: a versão prática do Θ (0166). Em Θ(n²) a razão
+  `f(2n) / f(n)` vai para 4; em Θ(n log n), fica um pouco acima de 2; em
+  Θ(log n), soma 1 (FEOFILOFF, 2009).
+- **O que é um passo** em cada função: um elemento somado, um elemento olhado
+  na busca, um par testado, um elemento copiado na intercalação, uma chamada
+  na soma recursiva.
+- **Heap e pilha**: o `custo_bytes` mede o heap; a pilha só se mede em frames.
+
+> [!WARNING]
+> A medida vale para a entrada testada. A busca roda no **pior caso** (1
+> centavo, que não está no vetor); com o preço do meio, faz 1 passo. Diga qual
+> caso a entrada representa.
+
+### Exemplos de uso
 
 Um fornecedor entregou cinco funções sobre o vetor de preços, cada uma com
 sua ficha. Passos com `n = 1024` e `n = 2048`, razão e espaço extra: em
@@ -987,218 +1201,7 @@ int main(void) {
 gcc ~/LPEDC/material/A338.c ~/LPEDC/material/0169-custo.c -o ~/LPEDC/material/A338 && ~/LPEDC/material/A338
 ```
 
----
-
-## 3. Exercícios práticos
-
-Cada exercício é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta. Compile como os exemplos: `gcc ~/LPEDC/material/E007.c -o ~/LPEDC/material/E007 && ~/LPEDC/material/E007`. Resoluções em `_respostas/26-analise-formal/`.
-
-### 0166 · O, Ω e Θ de verdade
-
-**Exercício E991** · ★☆☆
-
-O sistema do condomínio gera os boletos de n condôminos com
-f(n) = 5n + 40 passos. Prove, com um programa, que f(n) é O(n): escreva
-a função custo(n) e uma função acha_n0(c) que testa todo n de 1 até
-10000 e devolve o menor n0 a partir do qual custo(n) <= c * n sempre
-vale. Mostre o n0 para c = 6, 7, 10 e 45:
-
-```text
-Saída esperada:
-c =  6: n0 = 40
-c =  7: n0 = 20
-c = 10: n0 = 8
-c = 45: n0 = 1
-```
-
-**Exercício E993** · ★★☆
-
-Melhor, pior e caso médio de verdade, sem fórmula: para cada n de 3 a 7,
-gere TODAS as ordens dos números 1..n (são n! ordens), ordene uma cópia
-de cada uma com o insertion sort e conte as comparações entre elementos.
-Mostre quantas ordens foram testadas, o menor, o maior e a média de
-comparações:
-
-```text
-Saída esperada:
-n = 3:    6 ordens | melhor 2 | pior  3 | média 2.67
-n = 4:   24 ordens | melhor 3 | pior  6 | média 4.92
-n = 5:  120 ordens | melhor 4 | pior 10 | média 7.72
-n = 6:  720 ordens | melhor 5 | pior 15 | média 11.05
-n = 7: 5040 ordens | melhor 6 | pior 21 | média 14.91
-```
-
-**Exercício E994** · ★★☆
-
-Refute com um programa: n log₂ n NÃO é O(n). Para cada c em 2, 4, 8 e
-16, ache o último n de 1 até 200000 em que n * log2(n) <= c * n, e
-mostre a partir de onde a desigualdade quebra de vez:
-
-```text
-Saída esperada:
-c =  2: falha de n = 5 em diante
-c =  4: falha de n = 17 em diante
-c =  8: falha de n = 257 em diante
-c = 16: falha de n = 65537 em diante
-```
-
-```bash
-gcc ~/LPEDC/material/E994.c -o ~/LPEDC/material/E994 -lm && ~/LPEDC/material/E994
-```
-
-**Exercício E995** · ★★★
-
-O sistema do torneio de futsal monta a rodada com 2n² operações; com n
-ímpar, um time folga e a tabela é refeita (30n a mais). Escreva long
-custo(long n) e long acha_n0(long c), que devolve o menor n0 tal que
-custo(n) <= c * n² para TODO n de n0 até LIMITE (1000), como pede a
-definição de O. No main, mostre o n0 para c = 3 e confira, com um laço de
-n0 até LIMITE, quantas falhas existem:
-
-```text
-Saída esperada:
-custo(n) <= 3n² a partir de n0 = 30
-falhas de n0 até 1000: 0
-```
-
-### 0167 · Somatórios que saem de laços
-
-**Exercício E1000** · ★★☆
-
-Na feira, as laranjas são empilhadas em pirâmide de base quadrada: a
-camada de cima tem 1 laranja (1 × 1), a segunda tem 4 (2 × 2), a
-terceira 9, até a camada n, com n × n. Escreva laranjas(n) com dois
-laços: o de fora percorre as camadas i = 1..n e o de dentro conta uma
-laranja por vez, de 0 até i * i. Compare com a fórmula da soma dos
-quadrados para n = 3, 10 e 100:
-
-```text
-Saída esperada:
-  n  laranjas  n(n+1)(2n+1)/6
-  3        14              14
- 10       385             385
-100    338350          338350
-```
-
-**Exercício E1002** · ★★★
-
-Na feira há n bancas, numeradas de 1 a n. O fiscal p (p = 1..n) visita
-as bancas p, 2p, 3p, ... Escreva:
-- visitas(n), com dois laços, contando cada visita;
-- visitas_rapido(n), com UM laço só, que chega no mesmo total sabendo
-
-```text
-quantas bancas o fiscal p visita sem andar por elas.
-```
-
-Para n = 10, 100, ..., 1.000.000, mostre os dois totais, n ln n e a razão
-visitas / (n ln n):
-
-```text
-Saída esperada:
-      n    visitas    rápido    n ln n  razão
-     10         27        27        23  1.173
-    100        482       482       461  1.047
-   1000       7069      7069      6908  1.023
-  10000      93668     93668     92103  1.017
- 100000    1166750   1166750   1151293  1.013
-1000000   13970034  13970034  13815511  1.011
-```
-
-```bash
-gcc ~/LPEDC/material/E1002.c -o ~/LPEDC/material/E1002 -lm && ~/LPEDC/material/E1002
-```
-
-**Exercício E997** · ★☆☆
-
-Desafio do cofrinho: no dia 1 você guarda R$ 1, no dia 2 guarda R$ 2,
-e assim por diante, até o dia 365. Calcule o total de dois jeitos: com
-um laço que soma dia a dia e com a fórmula fechada da soma aritmética.
-Use long:
-
-```text
-Saída esperada:
-pelo laço:    R$ 66795
-pela fórmula: R$ 66795
-```
-
-**Exercício E999** · ★★☆
-
-O condomínio quer saber quantas comissões de 3 moradores diferentes dá
-para formar (a ordem não importa). Escreva trios(n) com três laços
-dependentes, k < j < i, contando cada trio uma vez, e compare com a
-fórmula n(n-1)(n-2)/6 para n = 10, 30 e 100:
-
-```text
-Saída esperada:
-  n   trios  n(n-1)(n-2)/6
- 10     120            120
- 30    4060           4060
-100  161700         161700
-```
-
-### 0168 · Complexidade espacial
-
-**Exercício E1003** · ★☆☆
-
-Escreva a recursiva long potencia(long base, int e), com uma multiplicação
-por chamada (potencia(base, 0) = 1). Meça quanto ela empilha: use dois
-contadores globais, prof (frames vivos agora) e prof_max (o maior valor que
-prof já teve). No main, mostre o resultado e a profundidade máxima para
-3^10, 3^20 e 3^30:
-
-```text
-Saída esperada:
-3^10 = 59049, profundidade 11
-3^20 = 3486784401, profundidade 21
-3^30 = 205891132094649, profundidade 31
-```
-
-**Exercício E1005** · ★★☆
-
-Escreva a potência rápida recursiva (assunto 0131): x^e é o quadrado de
-x^(e/2), vezes x quando e é ímpar. Faça as contas módulo 1000000007
-(para não estourar o long) e meça a profundidade máxima da pilha, como
-no E1003, para 3^10, 3^1000, 3^1000000 e 3^1000000000:
-
-```text
-Saída esperada:
-3^10 mod p = 59049, profundidade 5
-3^1000 mod p = 56888193, profundidade 11
-3^1000000 mod p = 64935414, profundidade 21
-3^1000000000 mod p = 235939645, profundidade 31
-```
-
-**Exercício E1006** · ★★☆
-
-A escala de plantão da clínica tem 7 médicos, numerados de 1 a 7. Todo
-mês ela gira k posições para a direita: os k últimos passam para a
-frente. Escreva gira(v, n, k) usando Θ(1) de espaço extra, sem vetor
-auxiliar, com o truque das três inversões: inverta o vetor inteiro,
-depois os k primeiros, depois o resto. Gire 3 posições, mostre, e depois
-gire mais 11 posições e mostre de novo:
-
-```text
-Saída esperada:
-5 6 7 1 2 3 4
-1 2 3 4 5 6 7
-```
-
-**Exercício E1007** · ★★★
-
-O estacionamento registrou as placas (números) que entraram no dia, em
-ordem crescente, com repetições: 1020 1020 1033 1047 1047 1047 1050 1062
-1062 1071 1088 1088. Escreva int sem_repetidas(int placas[], int n), que
-deixa uma cópia de cada placa no começo do vetor e devolve quantas
-sobraram, com Θ(1) de espaço extra: sem malloc e sem vetor auxiliar,
-mexendo no próprio vetor. No main, mostre o resultado:
-
-```text
-Saída esperada:
-12 placas, 7 distintas: 1020 1033 1047 1050 1062 1071 1088
-```
-
-### 0169 · Juntando tudo: passos e bytes conferidos
+### Exercícios
 
 **Exercício E1009** · ★☆☆
 
@@ -1293,11 +1296,13 @@ com prefixos:    2000 passos,  8008 bytes, total 185862850
 gcc ~/LPEDC/material/E1014.c ~/LPEDC/material/0169-custo.c -o ~/LPEDC/material/E1014 && ~/LPEDC/material/E1014
 ```
 
-### Lista do módulo
+---
+
+## Lista do módulo
 
 30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P2601.c a P2630.c, em `material/`; resoluções em `_respostas/26-analise-formal/lista/`.
 
-#### ★☆☆ Aquecimento
+### ★☆☆ Aquecimento
 
 **Exercício P2601** · ★☆☆ · Fiscal de dois em dois
 
@@ -1464,7 +1469,7 @@ n =  100:    80000 bytes (0.08 MB)
 n = 1000:  8000000 bytes (7.63 MB)
 ```
 
-#### ★★☆ Para pensar
+### ★★☆ Para pensar
 
 **Exercício P2611** · ★★☆ · O sanduíche completo
 
@@ -1663,7 +1668,7 @@ distancia(7, 3) = 26.0
 gcc ~/LPEDC/material/P2620.c -o ~/LPEDC/material/P2620 -lm && ~/LPEDC/material/P2620
 ```
 
-#### ★★★ Desafio
+### ★★★ Desafio
 
 **Exercício P2621** · ★★★ · As fatias que deram zero
 
@@ -1877,7 +1882,7 @@ n = 200
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas que misturam os assuntos do módulo. Resolva no papel e, sempre que
 der, confira com um programa compilado e rodado.
@@ -2029,7 +2034,7 @@ a `n` nesse tempo.
 
 </details>
 
-### Questões do POSCOMP
+## Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -2041,7 +2046,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 
 O gabarito oficial de 2025 não estava disponível quando este material foi montado.
 
-### Questões no estilo da prova
+## Questões no estilo da prova
 
 Dez questões no formato da prova do PPGI. Marque uma alternativa antes de
 abrir o gabarito.
@@ -2254,7 +2259,7 @@ pior. Veja 0166 (exemplo A331).
 
 </details>
 
-### Questões de provas do PPGI
+## Questões de provas do PPGI
 
 Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.
 

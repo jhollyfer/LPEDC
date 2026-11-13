@@ -66,9 +66,12 @@ Três convenções valem para o módulo:
 
 ---
 
-## 1. Conceitos gerais
+> [!NOTE]
+> Cada assunto é um capítulo: **Conceito** (a explicação), **Exemplos de uso** (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e **Exercícios** (cada um é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta; resoluções em `_respostas/23-grafos-avancados/`).
 
-### 0150 · Componentes e ciclos
+## 0150 · Componentes e ciclos
+
+### Conceito
 
 - **Componente conexo**: grupo em que todo vértice se liga a todo outro por
   algum caminho, sem olhar a direção das setas (ZIVIANI, 2010, cap. 7).
@@ -92,166 +95,7 @@ Três convenções valem para o módulo:
 > encontram não são ciclo. Pergunte "ainda está na pilha?", não "já vi?". No
 > grafo **não dirigido**, o pai sempre parece ciclo: ignore-o.
 
-### 0151 · Ordenação topológica
-
-- **Ordenação topológica**: ordem dos vértices em que toda seta `a -> b` aponta
-  para a frente. Só existe se o grafo não tem ciclo (CORMEN et al., 2024, cap. 20).
-- **DAG** (*directed acyclic graph*): grafo dirigido sem ciclos.
-- **Grau de entrada**: quantas setas chegam ao vértice, ou quantos serviços ele
-  espera.
-- **Algoritmo de Kahn**: ponha numa fila (0085) todos com grau 0; tire um,
-  escreva na lista e faça `grau[v]--` em quem esperava por ele; quem chegar a 0
-  entra na fila. Repita até esvaziar (KAHN, 1962).
-- **Detecta ciclo**: se a lista terminar com menos de V vértices, sobraram os
-  que estão num ciclo ou depois dele. Custo O(V + E) com lista, O(V²) com
-  matriz (SZWARCFITER; MARKENZON, 2010).
-- **Não é única**: vértices livres ao mesmo tempo saem na ordem da fila.
-- **Pela DFS**: empilhe `u` quando `dfs(u)` termina; a pós-ordem de trás para a
-  frente é uma ordenação topológica (tempo de término decrescente, no Cormen;
-  A301) (CORMEN et al., 2024, cap. 20).
-
-> [!WARNING]
-> O grau que importa é o de **entrada**: `grau[b] += antes[a][b]`, somando pela
-> coluna. Pela linha dá o de saída e acusa ciclo que não existe. Sem
-> `feitas < V`, um ciclo gera uma lista incompleta que parece certa.
-
-### 0152 · Kruskal: árvore geradora mínima
-
-- **Árvore**: grafo conexo e sem ciclo; com V vértices tem **V - 1 arestas**.
-- **Árvore geradora mínima** (MST, *minimum spanning tree*): árvore que toca
-  todos os vértices de um grafo **não dirigido** ponderado com a menor soma de
-  pesos (CORMEN et al., 2024, cap. 21). Não é o caminho mais curto entre dois.
-- **Kruskal**: ordene as arestas da mais barata para a mais cara, aceite cada
-  uma que **não feche ciclo** e pare com V - 1. É guloso (assunto 0133)
-  (KRUSKAL, 1956).
-- **Teste do ciclo**: o **union-find** (0148). Se `acha(a)` e `acha(b)` dão o
-  mesmo representante, a aresta fecha ciclo; senão, `une` junta os grupos
-  (SEDGEWICK; WAYNE, 2011).
-- **Custo**: a ordenação domina, O(E log E) = O(E log V); o union-find é quase
-  O(1) por operação (CORMEN et al., 2024, cap. 21).
-- **Propriedade do corte**: a aresta mais barata que cruza de um grupo ao outro
-  (**leve**) é **segura**: entra sem estragar a MST (CORMEN et al., 2024, cap. 21).
-- **Empates**: a MST pode não ser única; o custo mínimo é.
-
-> [!WARNING]
-> Testar `pai[a] != pai[b]` no lugar de `acha(a) != acha(b)` é o erro clássico:
-> `pai` não é o representante. E no `qsort`, `x->custo - y->custo` estoura perto
-> de `INT_MAX`; use `(x->custo > y->custo) - (x->custo < y->custo)`.
-
-### 0153 · Prim: a árvore que cresce
-
-- **Prim**: sai de um vértice e, a cada passo, escolhe a aresta mais leve entre
-  um vértice da árvore e um de fora. Mantém **uma árvore só**, que cresce da
-  origem; o Kruskal junta florestas (PRIM, 1957).
-- **Por que acerta**: é guloso e vale a propriedade do corte (0152)
-  (CORMEN et al., 2024, cap. 21).
-- **Heap de mínimo** (0102): cada item diz "dá para ligar `v` com `chave` a
-  partir de `de`". Quando um vértice entra, as arestas que saem dele entram no
-  heap.
-- **Versão preguiçosa**: item cujo vértice já está na árvore é **descartado**;
-  nada se atualiza dentro do heap (SEDGEWICK; WAYNE, 2011).
-- **Versão do Cormen** (`MST-PRIM`): todos os vértices no heap com chave
-  infinita, e `DECREASE-KEY` baixa a chave no lugar. Com heap binário, as duas
-  custam O(E log V) (CORMEN et al., 2024, cap. 21).
-- **Prim e Dijkstra** (0112): mesmo código, muda a chave de quem entra no heap.
-
-| | chave de `w` ao sair de `v` | o que a árvore minimiza |
-| --- | --- | --- |
-| Prim | `cano[v][w]` | a soma de **todos** os canos |
-| Dijkstra | `dist[v] + cano[v][w]` | a distância de **cada** casa até o Poço |
-
-> [!WARNING]
-> Sem `if (na_rede[it.v]) continue;`, o total soma cano que ninguém instala
-> (aqui, 49 m). Sem `!na_rede[w]`, o heap enche de itens inúteis e `CAP` pode
-> estourar. Prim e Kruskal só valem para grafo **não dirigido**.
-
-### 0154 · Bellman-Ford: pesos negativos
-
-- **Peso negativo**: o Dijkstra (0112) quebra, porque fixa um vértice cedo
-  supondo que somar pesos só aumenta (CORMEN et al., 2024, cap. 22).
-- **Relaxar** a aresta `u -> v` de custo `c`: se `dist[u] + c < dist[v]`,
-  atualize `dist[v]` e `anterior[v]` (no Cormen, `RELAX`, com `v.d` e `v.π`)
-  (CORMEN et al., 2024, cap. 22).
-- **Bellman-Ford**: `dist[origem] = 0`, INFINITO no resto, e **V - 1 rodadas**
-  relaxando **todas** as arestas, sem escolher o menor (BELLMAN, 1958).
-- **Por que V - 1**: um caminho mínimo não repete vértice, tem até V - 1
-  arestas, e a rodada `i` acerta a `i`-ésima. Rodada sem mudança permite parar.
-- **Ciclo negativo**: circuito de soma menor que zero; acaba com o caminho
-  mínimo. Uma **rodada extra** que ainda melhora alguma aresta o detecta
-  (CORMEN et al., 2024, cap. 22).
-- **Custo**: O(V · E), contra O((V + E) log V) do Dijkstra com heap. Num DAG,
-  relaxar cada aresta uma vez na ordem topológica (0151) dá O(V + E), mesmo com
-  negativos (CORMEN et al., 2024, cap. 22).
-
-> [!WARNING]
-> O teste `dist[u] != INFINITO` é obrigatório: `INT_MAX + (-4)` **não** estoura,
-> e um vértice inalcançável "melhora" outro com distância falsa. Em grafo **não
-> dirigido**, uma aresta negativa já é um ciclo negativo (ir e voltar).
-
-### 0155 · Floyd-Warshall: todos os pares
-
-- **Todos os pares**: a menor distância de cada vértice a cada outro, numa
-  matriz `d` (CORMEN et al., 2024, cap. 23).
-- **Floyd-Warshall**: programação dinâmica (módulo 21) sobre os vértices que um
-  caminho pode usar **como passagem**. Começa com `d[i][j]` = peso da aresta
-  direta, INFINITO se não há, 0 na diagonal (FLOYD, 1962).
-- **Rodada `k`**: depois dela, `d[i][j]` é o melhor de `i` a `j` usando como
-  passagem só os vértices de 0 a `k`. Por isso o `k` é o laço **de fora**.
-- **Custo**: **O(V³)** de tempo e O(V²) de memória: 125 passos para 5 vértices,
-  64 milhões para 400. Para grafos grandes e esparsos, Dijkstra com heap
-  (CORMEN et al., 2024, cap. 23).
-- **Pesos negativos**: aceita, sem ciclo negativo; com ciclo, aparece
-  `d[i][i] < 0` no fim.
-- **Fecho transitivo**: trocar `+` e `min` por `&&` e `||` responde "existe
-  caminho?" (algoritmo de Warshall) (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 8).
-
-```text
-para cada k:            (o bairro que passa a valer como passagem)
-    para cada i, j:
-        d[i][j] = mínimo(d[i][j], d[i][k] + d[k][j])
-```
-
-> [!WARNING]
-> Pôr o `k` no laço de **dentro** compila, roda e erra sem aviso: `d[i][k]` e
-> `d[k][j]` ainda não estão prontos. E `d[i][k] + d[k][j]` precisa do teste de
-> INFINITO: com `INT_MAX`, estoura.
-
-### 0156 · Juntando tudo: o assistente do calouro
-
-- **Cada pergunta, um algoritmo**: o tipo do grafo (dirigido ou não, com peso ou
-  sem) e a pergunta escolhem a técnica (ZIVIANI, 2010, cap. 7).
-- **Grade de disciplinas**: um **DAG** de setas "antes de", sem peso. "Quantos
-  semestres" é o Kahn por rodadas (A302), que também acusa pré-requisito
-  circular (CORMEN et al., 2024, cap. 20).
-- **Campus**: grafo **não dirigido** e ponderado. Com muitas consultas, compensa
-  calcular a tabela uma vez com o **Floyd-Warshall** e guardar o **próximo
-  passo** de cada rota (A309) (CORMEN et al., 2024, cap. 23).
-- **Um tipo `Grafo`** serve aos dois: número de vértices, nomes e matriz de
-  pesos. As funções recebem `const Grafo *` para não copiar a struct, que passa
-  de 300 bytes.
-
-| Pergunta | Algoritmo | Custo |
-| --- | --- | --- |
-| Quais pedaços são independentes? | componentes (DFS + laço externo) | O(V + E) |
-| Tem ciclo num grafo dirigido? | DFS com três cores | O(V + E) |
-| Em que ordem fazer, respeitando as setas? | ordenação topológica (Kahn ou DFS) | O(V + E) |
-| Ligar todos pelo menor custo total | Kruskal ou Prim (árvore geradora mínima) | O(E log E) ou O(E log V) |
-| Menor caminho de uma origem, pesos >= 0 | Dijkstra (assunto 0112) | O((V + E) log V) |
-| Menor caminho de uma origem, com pesos negativos | Bellman-Ford | O(V · E) |
-| Menor caminho entre todos os pares | Floyd-Warshall | O(V³) |
-
-> [!WARNING]
-> Na matriz com "0 = sem aresta", uma aresta de peso **zero** some. Não misture
-> as perguntas: Floyd-Warshall com 100 mil vértices é inviável (10¹⁵ passos), e
-> a árvore mínima não dá caminho mínimo (21 m contra 18 m no 0153).
-
----
-
-## 2. Exemplos de uso
-
-Cada exemplo compila sozinho. Rode com o comando abaixo dele e compare com a saída no fim do código.
-
-### 0150 · Componentes e ciclos
+### Exemplos de uso
 
 Uma planilha de reforma vira grafo: a seta `a -> b` diz "a fórmula de `a` usa
 `b`". Os números dão a ordem de descoberta; a obra fica preta (verde), o
@@ -484,7 +328,123 @@ int main(void) {
 gcc ~/LPEDC/material/A300.c -o ~/LPEDC/material/A300 && ~/LPEDC/material/A300
 ```
 
-### 0151 · Ordenação topológica
+### Exercícios
+
+**Exercício E895** · ★☆☆
+
+Um arquipélago tem sete ilhas: Norte, Sul, Leste, Oeste, Coral, Farol e
+Gaivota (índices 0 a 6). As pontes, todas de mão dupla, são:
+
+```text
+Norte-Farol, Farol-Coral, Sul-Leste, Oeste-Sul
+```
+
+Escreva o programa do zero: monte a matriz de adjacência, descubra os
+grupos de ilhas ligadas por ponte (os componentes) com uma DFS e um laço
+externo, mostre cada grupo e quantas pontes novas, no mínimo, ligariam o
+arquipélago inteiro.
+
+```text
+Saída esperada:
+Grupos de ilhas: 3
+  grupo 1: Norte Coral Farol
+  grupo 2: Sul Leste Oeste
+  grupo 3: Gaivota
+Pontes novas para ligar tudo: 2
+```
+
+**Exercício E897** · ★★☆
+
+A prefeitura mapeou as ciclovias entre nove bairros (índices 0 a 8):
+Centro, Prainha, Jardim, Lagoa, Industrial, Vila Nova, Alto, Porto e
+Mangue. As ciclovias, de mão dupla, são:
+
+```text
+Centro-Prainha, Prainha-Jardim, Jardim-Centro, Lagoa-Alto,
+Centro-Porto, Alto-Vila Nova
+```
+
+Escreva o programa do zero. Ele mostra o maior grupo de bairros ligados
+por ciclovia (quantos e quais), os bairros sem nenhuma ciclovia e quantas
+ciclovias novas, no mínimo, ligariam a cidade toda.
+
+```text
+Saída esperada:
+Maior grupo: 4 bairros (Centro, Prainha, Jardim, Porto)
+Sem ciclovia: Industrial Mangue
+Ciclovias novas para ligar tudo: 3
+```
+
+**Exercício E898** · ★★☆
+
+Um parque nacional tem três parques menores, e o mapa de trilhas (mão dupla)
+liga 11 pontos, numerados de 0 a 10: Portaria, Mirante, Cachoeira, Lago,
+Bosque, Pico, Gruta, Rio, Ponte, Ninho e Toca. As trilhas são:
+
+```text
+0-1 1-2 2-0 | 3-4 4-5 4-6 | 7-8 8-9 9-7 7-10
+```
+
+Escreva o programa do zero: separe os pontos em grupos (os parques) com uma
+DFS e mostre, para cada parque, seus pontos em ordem de índice, quantos
+pontos e quantas trilhas ele tem e se existe um circuito (dá para sair de um
+ponto e voltar a ele sem repetir trilha), sem escrever outra DFS.
+
+```text
+Saída esperada:
+Parque 1: Portaria Mirante Cachoeira | 3 pontos, 3 trilhas, tem circuito
+Parque 2: Lago Bosque Pico Gruta | 4 pontos, 3 trilhas, sem circuito
+Parque 3: Rio Ponte Ninho Toca | 4 pontos, 4 trilhas, tem circuito
+```
+
+**Exercício E900** · ★★★
+
+O restaurante tem dois turnos, A e B, e oito funcionários: Ana, Bia, Caio,
+Duda, Enzo, Flor, Gui e Hana (índices 0 a 7). Alguns pares não podem
+trabalhar juntos (conflito, de mão dupla): 0-1, 1-2, 2-3, 3-0, 4-5, 6-7 e
+5-6.
+
+Escreva divide(): ela põe cada pessoa num turno, com todo par em conflito
+em turnos diferentes, e mostra os dois turnos; se for impossível, mostra o
+primeiro par que cairia junto. Use uma DFS que pinta: quem começa uma DFS
+nova vai para o turno A e cada vizinho recebe o turno oposto (vizinhos em
+ordem de índice). Chame divide() e de novo após acrescentar Ana-Caio.
+
+```text
+Saída esperada:
+Turno A: Ana Caio Enzo Gui
+Turno B: Bia Duda Flor Hana
+Impossível: Caio e Ana cairiam no mesmo turno
+```
+
+---
+
+## 0151 · Ordenação topológica
+
+### Conceito
+
+- **Ordenação topológica**: ordem dos vértices em que toda seta `a -> b` aponta
+  para a frente. Só existe se o grafo não tem ciclo (CORMEN et al., 2024, cap. 20).
+- **DAG** (*directed acyclic graph*): grafo dirigido sem ciclos.
+- **Grau de entrada**: quantas setas chegam ao vértice, ou quantos serviços ele
+  espera.
+- **Algoritmo de Kahn**: ponha numa fila (0085) todos com grau 0; tire um,
+  escreva na lista e faça `grau[v]--` em quem esperava por ele; quem chegar a 0
+  entra na fila. Repita até esvaziar (KAHN, 1962).
+- **Detecta ciclo**: se a lista terminar com menos de V vértices, sobraram os
+  que estão num ciclo ou depois dele. Custo O(V + E) com lista, O(V²) com
+  matriz (SZWARCFITER; MARKENZON, 2010).
+- **Não é única**: vértices livres ao mesmo tempo saem na ordem da fila.
+- **Pela DFS**: empilhe `u` quando `dfs(u)` termina; a pós-ordem de trás para a
+  frente é uma ordenação topológica (tempo de término decrescente, no Cormen;
+  A301) (CORMEN et al., 2024, cap. 20).
+
+> [!WARNING]
+> O grau que importa é o de **entrada**: `grau[b] += antes[a][b]`, somando pela
+> coluna. Pela linha dá o de saída e acusa ciclo que não existe. Sem
+> `feitas < V`, um ciclo gera uma lista incompleta que parece certa.
+
+### Exemplos de uso
 
 Oito serviços de uma obra: não dá para levantar parede sem fundação nem pintar
 com o reboco molhado. O número em cada serviço é a posição dele na lista:
@@ -681,7 +641,144 @@ int main(void) {
 gcc ~/LPEDC/material/A302.c -o ~/LPEDC/material/A302 && ~/LPEDC/material/A302
 ```
 
-### 0152 · Kruskal: árvore geradora mínima
+### Exercícios
+
+**Exercício E901** · ★☆☆
+
+A receita de bolo tem oito passos (índices 0 a 7): bater os ovos,
+desenformar, despejar na forma, misturar os secos, juntar tudo,
+preaquecer o forno, untar a forma e assar. As regras "a antes de b" são:
+
+```text
+bater os ovos -> juntar tudo       misturar os secos -> juntar tudo
+juntar tudo -> despejar na forma   untar a forma -> despejar na forma
+despejar na forma -> assar         preaquecer o forno -> assar
+assar -> desenformar
+```
+
+Escreva do zero o algoritmo de Kahn (matriz, grau de entrada, fila) e
+mostre os passos numerados. Examine os vizinhos em ordem de índice.
+
+```text
+Saída esperada:
+1. bater os ovos
+2. misturar os secos
+3. preaquecer o forno
+4. untar a forma
+5. juntar tudo
+6. despejar na forma
+7. assar
+8. desenformar
+```
+
+**Exercício E903** · ★★☆
+
+A equipe de suporte tem sete chamados, #101 a #107 (índices 0 a 6), e alguns
+só podem ser resolvidos depois de outros:
+
+```text
+#105 -> #101   #105 -> #102   #106 -> #102   #102 -> #103
+#107 -> #104   #101 -> #104
+```
+
+O Kahn com fila atende na ordem em que os chamados ficam livres. A chefe quer
+outra regra: entre os livres, sempre o de MENOR número. Escreva kahn_fila()
+(o Kahn com fila) e kahn_menor() (a cada passo, procura o menor índice ainda
+não feito com grau de entrada 0). Mostre as duas ordens.
+
+```text
+Saída esperada:
+Fila:   #105 #106 #107 #101 #102 #104 #103
+Menor:  #105 #101 #106 #102 #103 #107 #104
+```
+
+**Exercício E904** · ★★☆
+
+Uma obra tem oito serviços (índices 0 a 7, com a duração em dias): Elétrica
+5, Fundação 10, Hidráulica 6, Paredes 15, Piso 4, Pintura 6, Reboco 8 e
+Telhado 7. As regras "a antes de b" são:
+
+```text
+Fundação -> Paredes    Paredes -> Telhado     Paredes -> Elétrica
+Paredes -> Hidráulica  Telhado -> Reboco      Elétrica -> Reboco
+Hidráulica -> Reboco   Hidráulica -> Piso     Reboco -> Pintura
+Piso -> Pintura
+```
+
+Com equipes em paralelo, um serviço começa no dia em que o ÚLTIMO dos que ele
+espera termina. Escreva o Kahn com fila (vizinhos em ordem de índice) e
+mostre, na ordem em que os serviços saem da fila, o dia de início e o de fim
+de cada um, o prazo total e o caminho crítico (a corrente de serviços que, se
+atrasar um dia, atrasa a obra).
+
+```text
+Saída esperada:
+Fundação: dia 0 ao 10
+Paredes: dia 10 ao 25
+Elétrica: dia 25 ao 30
+Hidráulica: dia 25 ao 31
+Telhado: dia 25 ao 32
+Piso: dia 31 ao 35
+Reboco: dia 32 ao 40
+Pintura: dia 40 ao 46
+Obra pronta em 46 dias
+Caminho crítico: Fundação -> Paredes -> Telhado -> Reboco -> Pintura
+```
+
+**Exercício E906** · ★★★
+
+Quantas ordens diferentes existem para a rotina da manhã? As tarefas são
+café, banho, vestir, escovar e sair (índices 0 a 4), com as regras:
+
+```text
+banho -> vestir   café -> escovar   vestir -> sair   escovar -> sair
+```
+
+Escreva conta(): ela gera TODAS as ordenações topológicas com backtracking
+(assunto 0127), mostra cada uma quando mostrar é true e devolve quantas são.
+Depois acrescente uma sexta tarefa, ler as mensagens (antes de sair), e peça
+só o total.
+
+```text
+Saída esperada:
+café, banho, vestir, escovar, sair
+café, banho, escovar, vestir, sair
+café, escovar, banho, vestir, sair
+banho, café, vestir, escovar, sair
+banho, café, escovar, vestir, sair
+banho, vestir, café, escovar, sair
+Total com 5 tarefas: 6
+Total com 6 tarefas: 30
+```
+
+---
+
+## 0152 · Kruskal: árvore geradora mínima
+
+### Conceito
+
+- **Árvore**: grafo conexo e sem ciclo; com V vértices tem **V - 1 arestas**.
+- **Árvore geradora mínima** (MST, *minimum spanning tree*): árvore que toca
+  todos os vértices de um grafo **não dirigido** ponderado com a menor soma de
+  pesos (CORMEN et al., 2024, cap. 21). Não é o caminho mais curto entre dois.
+- **Kruskal**: ordene as arestas da mais barata para a mais cara, aceite cada
+  uma que **não feche ciclo** e pare com V - 1. É guloso (assunto 0133)
+  (KRUSKAL, 1956).
+- **Teste do ciclo**: o **union-find** (0148). Se `acha(a)` e `acha(b)` dão o
+  mesmo representante, a aresta fecha ciclo; senão, `une` junta os grupos
+  (SEDGEWICK; WAYNE, 2011).
+- **Custo**: a ordenação domina, O(E log E) = O(E log V); o union-find é quase
+  O(1) por operação (CORMEN et al., 2024, cap. 21).
+- **Propriedade do corte**: a aresta mais barata que cruza de um grupo ao outro
+  (**leve**) é **segura**: entra sem estragar a MST (CORMEN et al., 2024, cap. 21).
+- **Empates**: a MST pode não ser única; o custo mínimo é.
+
+> [!WARNING]
+> Testar `pai[a] != pai[b]` no lugar de `acha(a) != acha(b)` é o erro clássico:
+> `pai` não é o representante. E no `qsort`, `x->custo - y->custo` estoura perto
+> de `INT_MAX`; use `(x->custo > y->custo) - (x->custo < y->custo)`.
+
+### Exemplos de uso
 
 A prefeitura quer asfaltar estradas entre seis vilas com o menor custo, a partir
 de nove trechos orçados. Verde entrou, vermelho fecharia ciclo e cinza nem foi
@@ -924,7 +1021,144 @@ int main(void) {
 gcc ~/LPEDC/material/A304.c -o ~/LPEDC/material/A304 && ~/LPEDC/material/A304
 ```
 
-### 0153 · Prim: a árvore que cresce
+### Exercícios
+
+**Exercício E907** · ★☆☆
+
+A horta comunitária vai levar água a cinco canteiros com mangueira. Os
+trechos possíveis já vêm em ordem crescente de metros:
+
+```text
+Alface-Couve 2, Tomate-Ervas 3, Alface-Tomate 4, Couve-Tomate 5,
+Cenoura-Ervas 6, Couve-Cenoura 8, Alface-Ervas 9
+```
+
+Escreva o Kruskal do zero, sem union-find: guarde em grupo[v] o número
+do grupo de cada canteiro (começa com grupo[v] = v). Uma aresta entre
+grupos iguais fecharia ciclo; entre grupos diferentes, aceite e passe
+todo o grupo de b para o grupo de a.
+
+```text
+Saída esperada:
+Alface-Couve (2 m)
+Tomate-Ervas (3 m)
+Alface-Tomate (4 m)
+Cenoura-Ervas (6 m)
+Mangueira total: 15 m
+```
+
+**Exercício E909** · ★★☆
+
+Seis vilas (Sede, Ponte, Brejo, Serra, Lagoa e Vale, índices 0 a 5) podem ser
+ligadas por estas estradas, com o custo em R$ mil:
+
+```text
+Sede-Brejo 4   Ponte-Brejo 3   Sede-Ponte 6   Brejo-Serra 8
+Ponte-Serra 5  Ponte-Lagoa 9   Serra-Lagoa 2  Serra-Vale 7
+Lagoa-Vale 7
+```
+
+O prefeito prometeu asfaltar a estrada Sede-Ponte, que o Kruskal descartaria.
+Escreva o Kruskal que monte a árvore mais barata que CONTENHA essa estrada
+(no empate de custo, vale a ordem da lista) e mostre quanto a promessa custou
+a mais que a árvore mínima sem a exigência.
+
+```text
+Saída esperada:
+Sede-Ponte (6) obrigatória
+Serra-Lagoa (2)
+Ponte-Brejo (3)
+Ponte-Serra (5)
+Serra-Vale (7)
+Total: R$ 23 mil
+Custo extra da exigência: R$ 2 mil
+```
+
+**Exercício E910** · ★★☆
+
+Oito sítios (índices 0 a 7: Ipê, Buriti, Jatobá, Pequi, Aroeira, Babaçu,
+Cedro e Juçara) querem dividir o custo de puxar cabo de energia. Os trechos
+possíveis, em km, são:
+
+```text
+Ipê-Jatobá 3   Jatobá-Aroeira 4  Ipê-Aroeira 6    Aroeira-Cedro 2
+Jatobá-Cedro 5 Buriti-Pequi 7    Pequi-Babaçu 1   Babaçu-Juçara 3
+Buriti-Juçara 4  Pequi-Juçara 2
+```
+
+Um rio sem ponte separa os dois grupos de quatro sítios, então não existe
+árvore que ligue todos: o resultado é uma FLORESTA, uma árvore mínima por
+margem. Escreva o Kruskal que funciona nesse caso e mostre cada rede (os
+sítios em ordem de índice e o total de km dela), listando as redes pela ordem
+do primeiro sítio de cada uma.
+
+```text
+Saída esperada:
+Rede 1 (Ipê Jatobá Aroeira Cedro): 9 km
+Rede 2 (Buriti Pequi Babaçu Juçara): 7 km
+Sem travessia: 2 redes separadas, 6 cabos, 16 km
+```
+
+**Exercício E911** · ★★★
+
+O parque de diversões vai ligar seis atrações com os trilhos de um trenzinho,
+gastando o mínimo. As atrações (índices 0 a 5) são Entrada, Carrossel, Roda,
+Lago, Castelo e Montanha. Os trilhos possíveis, com o custo em R$ mil, na
+ordem em que foram levantados:
+
+```text
+Entrada-Carrossel 4  Roda-Lago 5        Carrossel-Lago 6
+Entrada-Roda 7       Lago-Castelo 8     Castelo-Montanha 9
+Roda-Montanha 10     Carrossel-Castelo 11  Entrada-Montanha 12
+```
+
+Escreva o Kruskal: ordene as arestas por custo com qsort, use union-find
+(vetor pai[] e função acha com compressão de caminho) e ligue as RAÍZES dos
+dois grupos a cada aresta aceita. Pare quando houver V - 1 trilhos e mostre
+cada um, na ordem em que entra, e o total.
+
+```text
+Saída esperada:
+Entrada-Carrossel (4)
+Roda-Lago (5)
+Carrossel-Lago (6)
+Lago-Castelo (8)
+Castelo-Montanha (9)
+Total: R$ 32 mil
+```
+
+---
+
+## 0153 · Prim: a árvore que cresce
+
+### Conceito
+
+- **Prim**: sai de um vértice e, a cada passo, escolhe a aresta mais leve entre
+  um vértice da árvore e um de fora. Mantém **uma árvore só**, que cresce da
+  origem; o Kruskal junta florestas (PRIM, 1957).
+- **Por que acerta**: é guloso e vale a propriedade do corte (0152)
+  (CORMEN et al., 2024, cap. 21).
+- **Heap de mínimo** (0102): cada item diz "dá para ligar `v` com `chave` a
+  partir de `de`". Quando um vértice entra, as arestas que saem dele entram no
+  heap.
+- **Versão preguiçosa**: item cujo vértice já está na árvore é **descartado**;
+  nada se atualiza dentro do heap (SEDGEWICK; WAYNE, 2011).
+- **Versão do Cormen** (`MST-PRIM`): todos os vértices no heap com chave
+  infinita, e `DECREASE-KEY` baixa a chave no lugar. Com heap binário, as duas
+  custam O(E log V) (CORMEN et al., 2024, cap. 21).
+- **Prim e Dijkstra** (0112): mesmo código, muda a chave de quem entra no heap.
+
+| | chave de `w` ao sair de `v` | o que a árvore minimiza |
+| --- | --- | --- |
+| Prim | `cano[v][w]` | a soma de **todos** os canos |
+| Dijkstra | `dist[v] + cano[v][w]` | a distância de **cada** casa até o Poço |
+
+> [!WARNING]
+> Sem `if (na_rede[it.v]) continue;`, o total soma cano que ninguém instala
+> (aqui, 49 m). Sem `!na_rede[w]`, o heap enche de itens inúteis e `CAP` pode
+> estourar. Prim e Kruskal só valem para grafo **não dirigido**.
+
+### Exemplos de uso
 
 Cinco chácaras vão dividir a água de um poço com o mínimo de cano. Os números
 são a ordem de entrada na rede, as arestas verdes são os canos escolhidos, e à
@@ -1181,7 +1415,146 @@ int main(void) {
 gcc ~/LPEDC/material/A306.c -o ~/LPEDC/material/A306 && ~/LPEDC/material/A306
 ```
 
-### 0154 · Bellman-Ford: pesos negativos
+### Exercícios
+
+**Exercício E913** · ★☆☆
+
+Na orla, um gerador vai alimentar quatro quiosques: Coco, Pastel, Açaí e
+Milho. A matriz tem os metros de cabo de cada trecho possível (0 quer dizer
+"não dá para passar cabo"):
+
+```text
+            Gerador  Coco  Pastel  Açaí  Milho
+Gerador        0      12     20     25     0
+Coco          12       0      9      0    30
+Pastel        20       9      0      6    15
+Açaí          25       0      6      0    11
+Milho          0      30     15     11     0
+```
+
+Escreva o Prim sem heap, em O(V²), a partir do Gerador: vetores chave[],
+pai[] e na_rede[]; a cada passo, entra o vértice fora da rede com a menor
+chave. Mostre cada cabo na ordem em que entra e o total.
+
+```text
+Saída esperada:
+Gerador - Coco: 12 m
+Coco - Pastel: 9 m
+Pastel - Açaí: 6 m
+Açaí - Milho: 11 m
+Total: 38 m
+```
+
+**Exercício E915** · ★★☆
+
+Seis estações de bicicleta (índices 0 a 5: Rodoviária, Praça, Museu, Orla,
+Feira e Estádio) podem ser ligadas por ciclovias de mão dupla, com a
+distância em km:
+
+```text
+Rodoviária-Praça 5   Rodoviária-Feira 3   Praça-Museu 4   Praça-Feira 6
+Museu-Orla 2         Feira-Orla 7         Orla-Estádio 8  Museu-Estádio 9
+Feira-Estádio 10
+```
+
+Começar o Prim por outra estação muda alguma coisa? Escreva prim(origem), na
+versão sem heap (O(V²)), que mostra a origem, a ordem em que as estações
+entram na rede e o total, e chame-a para cada uma das seis origens.
+
+```text
+Saída esperada:
+Rodoviária: Rodoviária Feira Praça Museu Orla Estádio | 22
+Praça: Praça Museu Orla Rodoviária Feira Estádio | 22
+Museu: Museu Orla Praça Rodoviária Feira Estádio | 22
+Orla: Orla Museu Praça Rodoviária Feira Estádio | 22
+Feira: Feira Rodoviária Praça Museu Orla Estádio | 22
+Estádio: Estádio Orla Museu Praça Rodoviária Feira | 22
+```
+
+**Exercício E916** · ★★☆
+
+A operadora de internet vai levar fibra da Central a sete pontos do bairro.
+Os pontos (índices 0 a 7) são Central, Padaria, Escola, Igreja, Farmácia,
+Praça, Posto e Clínica. Os trechos possíveis, em km:
+
+```text
+Central-Padaria 2   Central-Escola 4   Padaria-Escola 3   Padaria-Igreja 5
+Escola-Farmácia 2   Igreja-Praça 1     Farmácia-Praça 6   Escola-Posto 7
+Farmácia-Clínica 3  Posto-Clínica 2    Central-Posto 9
+```
+
+Escreva o Prim a partir da Central, guardando o pai de cada ponto em pai[].
+Depois escreva a função recursiva mostra(v, nivel), que imprime a árvore como
+um organograma: cada ponto com 2 espaços de recuo por nível e, entre
+parênteses, os km da fibra que o liga ao pai. Os filhos de um ponto aparecem
+em ordem de índice, logo abaixo dele. Termine com o total.
+
+```text
+Saída esperada:
+Central
+  Padaria (2)
+    Escola (3)
+      Farmácia (2)
+        Clínica (3)
+          Posto (2)
+    Igreja (5)
+      Praça (1)
+Total: 18 km
+```
+
+**Exercício E917** · ★★★
+
+Quatro casas de um sítio precisam de água. Cada casa pode cavar o próprio
+poço (Ana R$ 8 mil, Beto 5, Cida 9, Davi 7) ou receber cano de uma casa
+vizinha que já tem água. Os canos possíveis (R$ mil):
+
+```text
+Ana-Beto 2, Beto-Cida 3, Cida-Davi 9, Ana-Davi 10, Ana-Cida 10
+```
+
+Qual a solução mais barata? Crie um vértice imaginário, a "Água" (índice 0),
+ligado a cada casa por uma aresta com o custo do poço dela: cavar um poço
+vira "ligar a casa na Água", e o problema vira uma árvore geradora mínima
+comum. Escreva o programa com Prim a partir da Água e mostre a decisão de
+cada casa, na ordem em que entram.
+
+```text
+Saída esperada:
+Beto: cava poço (R$ 5 mil)
+Ana: cano de Beto (R$ 2 mil)
+Cida: cano de Beto (R$ 3 mil)
+Davi: cava poço (R$ 7 mil)
+Total: R$ 17 mil (2 poços)
+```
+
+---
+
+## 0154 · Bellman-Ford: pesos negativos
+
+### Conceito
+
+- **Peso negativo**: o Dijkstra (0112) quebra, porque fixa um vértice cedo
+  supondo que somar pesos só aumenta (CORMEN et al., 2024, cap. 22).
+- **Relaxar** a aresta `u -> v` de custo `c`: se `dist[u] + c < dist[v]`,
+  atualize `dist[v]` e `anterior[v]` (no Cormen, `RELAX`, com `v.d` e `v.π`)
+  (CORMEN et al., 2024, cap. 22).
+- **Bellman-Ford**: `dist[origem] = 0`, INFINITO no resto, e **V - 1 rodadas**
+  relaxando **todas** as arestas, sem escolher o menor (BELLMAN, 1958).
+- **Por que V - 1**: um caminho mínimo não repete vértice, tem até V - 1
+  arestas, e a rodada `i` acerta a `i`-ésima. Rodada sem mudança permite parar.
+- **Ciclo negativo**: circuito de soma menor que zero; acaba com o caminho
+  mínimo. Uma **rodada extra** que ainda melhora alguma aresta o detecta
+  (CORMEN et al., 2024, cap. 22).
+- **Custo**: O(V · E), contra O((V + E) log V) do Dijkstra com heap. Num DAG,
+  relaxar cada aresta uma vez na ordem topológica (0151) dá O(V + E), mesmo com
+  negativos (CORMEN et al., 2024, cap. 22).
+
+> [!WARNING]
+> O teste `dist[u] != INFINITO` é obrigatório: `INT_MAX + (-4)` **não** estoura,
+> e um vértice inalcançável "melhora" outro com distância falsa. Em grafo **não
+> dirigido**, uma aresta negativa já é um ciclo negativo (ir e voltar).
+
+### Exemplos de uso
 
 Um motoboy vai da Base para Casa, e alguns trechos pagam mais que a gasolina:
 do Shopping ao Centro o **custo líquido** é R$ -4. O Dijkstra diria R$ 12 até
@@ -1417,7 +1790,142 @@ int main(void) {
 gcc ~/LPEDC/material/A308.c -o ~/LPEDC/material/A308 && ~/LPEDC/material/A308
 ```
 
-### 0155 · Floyd-Warshall: todos os pares
+### Exercícios
+
+**Exercício E919** · ★☆☆
+
+Viagem de carro da Garagem até o Sítio. Cada trecho tem um custo em R$
+(gasolina e pedágio), mas o aplicativo do Posto A dá cashback para quem
+abastece lá e segue para o Posto B: esse trecho custa R$ -10. Os trechos são
+de mão única (lugares de 0 a 4: Garagem, Posto A, Posto B, Pedágio, Sítio):
+
+```text
+Garagem -> Posto A 30    Garagem -> Posto B 45    Posto A -> Posto B -10
+Posto A -> Pedágio 25    Posto B -> Pedágio 12    Pedágio -> Sítio 8
+Posto B -> Sítio 40
+```
+
+Escreva o Bellman-Ford do zero, com os trechos numa lista de arestas, e
+mostre o menor custo da Garagem até cada lugar.
+
+```text
+Saída esperada:
+Garagem: R$ 0
+Posto A: R$ 30
+Posto B: R$ 20
+Pedágio: R$ 32
+Sítio: R$ 40
+```
+
+**Exercício E921** · ★★☆
+
+Um drone de entregas sai da Base. Cada voo gasta uma porcentagem da bateria;
+o voo da Torre até a Praia é uma descida planando com o painel solar ligado e
+RECARREGA 5% (gasto -5). Os pontos (índices 0 a 6) são Base, Ponte, Torre,
+Praia, Farol, Ilha e Mata. Os voos, de mão única, são:
+
+```text
+Base -> Ponte 10   Base -> Torre 25   Ponte -> Torre 8   Torre -> Praia -5
+Ponte -> Praia 20  Praia -> Farol 7   Farol -> Ilha 12   Torre -> Ilha 30
+Mata -> Farol 3    Ilha -> Praia 4
+```
+
+Escreva o Bellman-Ford com o vetor anterior[] e mostre, para cada ponto, o
+gasto mínimo e a rota completa, ou "inalcançável" se nenhum voo chega lá (é o
+caso da Mata, que só tem voo de saída).
+
+```text
+Saída esperada:
+Ponte (10%): Base -> Ponte
+Torre (18%): Base -> Ponte -> Torre
+Praia (13%): Base -> Ponte -> Torre -> Praia
+Farol (20%): Base -> Ponte -> Torre -> Praia -> Farol
+Ilha (32%): Base -> Ponte -> Torre -> Praia -> Farol -> Ilha
+Mata: inalcançável
+```
+
+**Exercício E922** · ★★☆
+
+Num jogo, passar por um portal custa créditos, mas o portal da Caverna para a
+Floresta DEVOLVE 4 créditos (custo -4). As salas (índices 0 a 4) são Início,
+Floresta, Caverna, Castelo e Saída, e os portais, de mão única:
+
+```text
+Início -> Floresta 2   Início -> Caverna 5   Caverna -> Floresta -4
+Floresta -> Castelo 6  Castelo -> Saída 1    Caverna -> Castelo 9
+```
+
+Guarde os custos numa matriz custo[][] (0 = sem portal) e escreva dijkstra (o
+do assunto 0112, O(V²), que nunca reabre um vértice já fixo) e bellman_ford,
+ambos a partir do Início. Compare as duas respostas para cada sala e marque
+as que o Dijkstra erra.
+
+```text
+Saída esperada:
+Floresta: Dijkstra 2, Bellman-Ford 1 (Dijkstra errou)
+Caverna: Dijkstra 5, Bellman-Ford 5
+Castelo: Dijkstra 8, Bellman-Ford 7 (Dijkstra errou)
+Saída: Dijkstra 9, Bellman-Ford 8 (Dijkstra errou)
+```
+
+**Exercício E924** · ★★★
+
+Você quer voar de Recife a Curitiba, mas odeia conexões. As cidades (índices
+0 a 4) são Recife, Salvador, Brasília, São Paulo e Curitiba. Os voos (mão
+única, preço em R$):
+
+```text
+Recife -> Curitiba 900      Recife -> Salvador 200
+Salvador -> Brasília 250    Brasília -> Curitiba 300
+Recife -> Brasília 500      Salvador -> São Paulo 350
+São Paulo -> Curitiba 150   Brasília -> São Paulo 120
+```
+
+Escreva mais_barato(origem, destino, k): o menor preço usando NO MÁXIMO k
+voos. Use o Bellman-Ford com k rodadas, mas em cada rodada relaxe lendo uma
+CÓPIA da dist da rodada anterior: assim a rodada r acrescenta no máximo um
+voo a cada caminho. Mostre o resultado para k de 1 a 3.
+
+```text
+Saída esperada:
+Até 1 trecho: R$ 900
+Até 2 trechos: R$ 800
+Até 3 trechos: R$ 700
+```
+
+---
+
+## 0155 · Floyd-Warshall: todos os pares
+
+### Conceito
+
+- **Todos os pares**: a menor distância de cada vértice a cada outro, numa
+  matriz `d` (CORMEN et al., 2024, cap. 23).
+- **Floyd-Warshall**: programação dinâmica (módulo 21) sobre os vértices que um
+  caminho pode usar **como passagem**. Começa com `d[i][j]` = peso da aresta
+  direta, INFINITO se não há, 0 na diagonal (FLOYD, 1962).
+- **Rodada `k`**: depois dela, `d[i][j]` é o melhor de `i` a `j` usando como
+  passagem só os vértices de 0 a `k`. Por isso o `k` é o laço **de fora**.
+- **Custo**: **O(V³)** de tempo e O(V²) de memória: 125 passos para 5 vértices,
+  64 milhões para 400. Para grafos grandes e esparsos, Dijkstra com heap
+  (CORMEN et al., 2024, cap. 23).
+- **Pesos negativos**: aceita, sem ciclo negativo; com ciclo, aparece
+  `d[i][i] < 0` no fim.
+- **Fecho transitivo**: trocar `+` e `min` por `&&` e `||` responde "existe
+  caminho?" (algoritmo de Warshall) (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 8).
+
+```text
+para cada k:            (o bairro que passa a valer como passagem)
+    para cada i, j:
+        d[i][j] = mínimo(d[i][j], d[i][k] + d[k][j])
+```
+
+> [!WARNING]
+> Pôr o `k` no laço de **dentro** compila, roda e erra sem aviso: `d[i][k]` e
+> `d[k][j]` ainda não estão prontos. E `d[i][k] + d[k][j]` precisa do teste de
+> INFINITO: com `INT_MAX`, estoura.
+
+### Exemplos de uso
 
 Um aplicativo de corrida quer o tempo de cada bairro a cada outro, com ruas de
 **mão única**. As setas são as ruas em minutos, e o melhor caminho de Centro
@@ -1601,7 +2109,140 @@ int main(void) {
 gcc ~/LPEDC/material/A310.c -o ~/LPEDC/material/A310 && ~/LPEDC/material/A310
 ```
 
-### 0156 · Juntando tudo: o assistente do calouro
+### Exercícios
+
+**Exercício E925** · ★☆☆
+
+Uma cooperativa tem quatro galpões: Milho, Leite, Frutas e Mel (índices
+0 a 3). As estradas internas são de mão única, em km:
+
+```text
+Milho -> Leite 8     Leite -> Frutas 3    Frutas -> Milho 4
+Milho -> Mel 15      Frutas -> Mel 5      Mel -> Leite 2
+```
+
+Escreva o Floyd-Warshall do zero e mostre a tabela de distâncias, uma
+linha por galpão de origem (nome com %-7s e cada número com %4d).
+
+```text
+Saída esperada:
+Milho     0   8  11  15
+Leite     7   0   3   8
+Frutas    4   7   0   5
+Mel       9   2   5   0
+```
+
+**Exercício E927** · ★★☆
+
+A prefeitura vai construir um posto de saúde num dos seis bairros (índices 0
+a 5: Vila Rica, Jardim, Centro, Lagoa, Bosque e Porto). O morador que fica
+mais longe do posto deve ficar o mais perto possível. As ruas são de mão
+dupla (km):
+
+```text
+Vila Rica-Jardim 4, Jardim-Centro 3, Centro-Lagoa 5, Lagoa-Bosque 2,
+Centro-Bosque 6, Bosque-Porto 7, Jardim-Lagoa 9, Vila Rica-Porto 20
+```
+
+Rode o Floyd-Warshall e, para cada bairro, mostre qual bairro fica mais longe
+dele e a que distância (o primeiro com a maior, em ordem de índice). No fim,
+mostre o bairro em que essa pior distância é a menor.
+
+```text
+Saída esperada:
+Vila Rica: o mais longe é Porto, a 20 km
+Jardim: o mais longe é Porto, a 16 km
+Centro: o mais longe é Porto, a 13 km
+Lagoa: o mais longe é Vila Rica, a 12 km
+Bosque: o mais longe é Vila Rica, a 13 km
+Porto: o mais longe é Vila Rica, a 20 km
+Melhor bairro para o posto: Lagoa (ninguém fica a mais de 12 km)
+```
+
+**Exercício E928** · ★★☆
+
+Uma casa de câmbio cobra uma taxa fixa (em centavos) por conversão entre
+Real, Dólar, Euro e Cripto (índices 0 a 3). As conversões de uma semana, de
+mão única, são:
+
+```text
+Real -> Dólar 30     Dólar -> Euro 20      Euro -> Real 25
+Real -> Cripto 50    Cripto -> Dólar -10   Dólar -> Real 35
+Euro -> Cripto 15
+```
+
+Na semana 2 de promoção, Cripto -> Dólar dá um bônus maior (-40 em vez de
+-10). Escreva analisa(semana, ...), que roda o Floyd-Warshall e, olhando a
+diagonal, diz se existe um ciclo negativo (trocar em roda e sair ganhando) e
+por quais moedas ele passa. Analise as duas semanas.
+
+```text
+Saída esperada:
+Semana 1: sem ciclo negativo
+Semana 2: ciclo negativo passando por Dólar Euro Cripto
+```
+
+**Exercício E930** · ★★★
+
+Cinco bairros (índices 0 a 4: Centro, Porto, Vila, Alto e Feira) têm estas
+ruas de mão única, em minutos:
+
+```text
+Centro -> Vila 2   Vila -> Porto 3   Centro -> Porto 6   Porto -> Alto 4
+Alto -> Centro 5   Vila -> Feira 7   Feira -> Alto 1     Porto -> Feira 2
+```
+
+Calcule a tabela com o Floyd-Warshall. Depois a prefeitura abre a rua Feira
+-> Vila, de 1 minuto. Refazer o Floyd custa O(V³): escreva nova_rua(d, a, b,
+w), que atualiza a tabela em O(V²). Qualquer caminho que melhora com a rua
+nova passa por ela uma vez só: "de i até a", mais w, mais "de b até j".
+Confira o resultado contra um Floyd completo refeito do zero, mostrando a
+tabela (nome com %-7s e cada número com %4d).
+
+```text
+Saída esperada:
+Centro    0   5   2   8   7
+Porto     8   0   3   3   2
+Vila     11   3   0   6   5
+Alto      5  10   7   0  12
+Feira     6   4   1   1   0
+Confere com o Floyd completo: sim
+```
+
+---
+
+## 0156 · Juntando tudo: o assistente do calouro
+
+### Conceito
+
+- **Cada pergunta, um algoritmo**: o tipo do grafo (dirigido ou não, com peso ou
+  sem) e a pergunta escolhem a técnica (ZIVIANI, 2010, cap. 7).
+- **Grade de disciplinas**: um **DAG** de setas "antes de", sem peso. "Quantos
+  semestres" é o Kahn por rodadas (A302), que também acusa pré-requisito
+  circular (CORMEN et al., 2024, cap. 20).
+- **Campus**: grafo **não dirigido** e ponderado. Com muitas consultas, compensa
+  calcular a tabela uma vez com o **Floyd-Warshall** e guardar o **próximo
+  passo** de cada rota (A309) (CORMEN et al., 2024, cap. 23).
+- **Um tipo `Grafo`** serve aos dois: número de vértices, nomes e matriz de
+  pesos. As funções recebem `const Grafo *` para não copiar a struct, que passa
+  de 300 bytes.
+
+| Pergunta | Algoritmo | Custo |
+| --- | --- | --- |
+| Quais pedaços são independentes? | componentes (DFS + laço externo) | O(V + E) |
+| Tem ciclo num grafo dirigido? | DFS com três cores | O(V + E) |
+| Em que ordem fazer, respeitando as setas? | ordenação topológica (Kahn ou DFS) | O(V + E) |
+| Ligar todos pelo menor custo total | Kruskal ou Prim (árvore geradora mínima) | O(E log E) ou O(E log V) |
+| Menor caminho de uma origem, pesos >= 0 | Dijkstra (assunto 0112) | O((V + E) log V) |
+| Menor caminho de uma origem, com pesos negativos | Bellman-Ford | O(V · E) |
+| Menor caminho entre todos os pares | Floyd-Warshall | O(V³) |
+
+> [!WARNING]
+> Na matriz com "0 = sem aresta", uma aresta de peso **zero** some. Não misture
+> as perguntas: Floyd-Warshall com 100 mil vértices é inviável (10¹⁵ passos), e
+> a árvore mínima não dá caminho mínimo (21 m contra 18 m no 0153).
+
+### Exemplos de uso
 
 O calouro quer saber em quantos semestres se forma e qual o caminho mais rápido
 entre os prédios do campus. O desenho mostra a grade, com o semestre de cada
@@ -1909,633 +2550,7 @@ int main(void) {
 gcc ~/LPEDC/material/A312.c -o ~/LPEDC/material/A312 && ~/LPEDC/material/A312
 ```
 
----
-
-## 3. Exercícios práticos
-
-Cada exercício é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta. Compile como os exemplos: `gcc ~/LPEDC/material/E007.c -o ~/LPEDC/material/E007 && ~/LPEDC/material/E007`. Resoluções em `_respostas/23-grafos-avancados/`.
-
-### 0150 · Componentes e ciclos
-
-**Exercício E895** · ★☆☆
-
-Um arquipélago tem sete ilhas: Norte, Sul, Leste, Oeste, Coral, Farol e
-Gaivota (índices 0 a 6). As pontes, todas de mão dupla, são:
-
-```text
-Norte-Farol, Farol-Coral, Sul-Leste, Oeste-Sul
-```
-
-Escreva o programa do zero: monte a matriz de adjacência, descubra os
-grupos de ilhas ligadas por ponte (os componentes) com uma DFS e um laço
-externo, mostre cada grupo e quantas pontes novas, no mínimo, ligariam o
-arquipélago inteiro.
-
-```text
-Saída esperada:
-Grupos de ilhas: 3
-  grupo 1: Norte Coral Farol
-  grupo 2: Sul Leste Oeste
-  grupo 3: Gaivota
-Pontes novas para ligar tudo: 2
-```
-
-**Exercício E897** · ★★☆
-
-A prefeitura mapeou as ciclovias entre nove bairros (índices 0 a 8):
-Centro, Prainha, Jardim, Lagoa, Industrial, Vila Nova, Alto, Porto e
-Mangue. As ciclovias, de mão dupla, são:
-
-```text
-Centro-Prainha, Prainha-Jardim, Jardim-Centro, Lagoa-Alto,
-Centro-Porto, Alto-Vila Nova
-```
-
-Escreva o programa do zero. Ele mostra o maior grupo de bairros ligados
-por ciclovia (quantos e quais), os bairros sem nenhuma ciclovia e quantas
-ciclovias novas, no mínimo, ligariam a cidade toda.
-
-```text
-Saída esperada:
-Maior grupo: 4 bairros (Centro, Prainha, Jardim, Porto)
-Sem ciclovia: Industrial Mangue
-Ciclovias novas para ligar tudo: 3
-```
-
-**Exercício E898** · ★★☆
-
-Um parque nacional tem três parques menores, e o mapa de trilhas (mão dupla)
-liga 11 pontos, numerados de 0 a 10: Portaria, Mirante, Cachoeira, Lago,
-Bosque, Pico, Gruta, Rio, Ponte, Ninho e Toca. As trilhas são:
-
-```text
-0-1 1-2 2-0 | 3-4 4-5 4-6 | 7-8 8-9 9-7 7-10
-```
-
-Escreva o programa do zero: separe os pontos em grupos (os parques) com uma
-DFS e mostre, para cada parque, seus pontos em ordem de índice, quantos
-pontos e quantas trilhas ele tem e se existe um circuito (dá para sair de um
-ponto e voltar a ele sem repetir trilha), sem escrever outra DFS.
-
-```text
-Saída esperada:
-Parque 1: Portaria Mirante Cachoeira | 3 pontos, 3 trilhas, tem circuito
-Parque 2: Lago Bosque Pico Gruta | 4 pontos, 3 trilhas, sem circuito
-Parque 3: Rio Ponte Ninho Toca | 4 pontos, 4 trilhas, tem circuito
-```
-
-**Exercício E900** · ★★★
-
-O restaurante tem dois turnos, A e B, e oito funcionários: Ana, Bia, Caio,
-Duda, Enzo, Flor, Gui e Hana (índices 0 a 7). Alguns pares não podem
-trabalhar juntos (conflito, de mão dupla): 0-1, 1-2, 2-3, 3-0, 4-5, 6-7 e
-5-6.
-
-Escreva divide(): ela põe cada pessoa num turno, com todo par em conflito
-em turnos diferentes, e mostra os dois turnos; se for impossível, mostra o
-primeiro par que cairia junto. Use uma DFS que pinta: quem começa uma DFS
-nova vai para o turno A e cada vizinho recebe o turno oposto (vizinhos em
-ordem de índice). Chame divide() e de novo após acrescentar Ana-Caio.
-
-```text
-Saída esperada:
-Turno A: Ana Caio Enzo Gui
-Turno B: Bia Duda Flor Hana
-Impossível: Caio e Ana cairiam no mesmo turno
-```
-
-### 0151 · Ordenação topológica
-
-**Exercício E901** · ★☆☆
-
-A receita de bolo tem oito passos (índices 0 a 7): bater os ovos,
-desenformar, despejar na forma, misturar os secos, juntar tudo,
-preaquecer o forno, untar a forma e assar. As regras "a antes de b" são:
-
-```text
-bater os ovos -> juntar tudo       misturar os secos -> juntar tudo
-juntar tudo -> despejar na forma   untar a forma -> despejar na forma
-despejar na forma -> assar         preaquecer o forno -> assar
-assar -> desenformar
-```
-
-Escreva do zero o algoritmo de Kahn (matriz, grau de entrada, fila) e
-mostre os passos numerados. Examine os vizinhos em ordem de índice.
-
-```text
-Saída esperada:
-1. bater os ovos
-2. misturar os secos
-3. preaquecer o forno
-4. untar a forma
-5. juntar tudo
-6. despejar na forma
-7. assar
-8. desenformar
-```
-
-**Exercício E903** · ★★☆
-
-A equipe de suporte tem sete chamados, #101 a #107 (índices 0 a 6), e alguns
-só podem ser resolvidos depois de outros:
-
-```text
-#105 -> #101   #105 -> #102   #106 -> #102   #102 -> #103
-#107 -> #104   #101 -> #104
-```
-
-O Kahn com fila atende na ordem em que os chamados ficam livres. A chefe quer
-outra regra: entre os livres, sempre o de MENOR número. Escreva kahn_fila()
-(o Kahn com fila) e kahn_menor() (a cada passo, procura o menor índice ainda
-não feito com grau de entrada 0). Mostre as duas ordens.
-
-```text
-Saída esperada:
-Fila:   #105 #106 #107 #101 #102 #104 #103
-Menor:  #105 #101 #106 #102 #103 #107 #104
-```
-
-**Exercício E904** · ★★☆
-
-Uma obra tem oito serviços (índices 0 a 7, com a duração em dias): Elétrica
-5, Fundação 10, Hidráulica 6, Paredes 15, Piso 4, Pintura 6, Reboco 8 e
-Telhado 7. As regras "a antes de b" são:
-
-```text
-Fundação -> Paredes    Paredes -> Telhado     Paredes -> Elétrica
-Paredes -> Hidráulica  Telhado -> Reboco      Elétrica -> Reboco
-Hidráulica -> Reboco   Hidráulica -> Piso     Reboco -> Pintura
-Piso -> Pintura
-```
-
-Com equipes em paralelo, um serviço começa no dia em que o ÚLTIMO dos que ele
-espera termina. Escreva o Kahn com fila (vizinhos em ordem de índice) e
-mostre, na ordem em que os serviços saem da fila, o dia de início e o de fim
-de cada um, o prazo total e o caminho crítico (a corrente de serviços que, se
-atrasar um dia, atrasa a obra).
-
-```text
-Saída esperada:
-Fundação: dia 0 ao 10
-Paredes: dia 10 ao 25
-Elétrica: dia 25 ao 30
-Hidráulica: dia 25 ao 31
-Telhado: dia 25 ao 32
-Piso: dia 31 ao 35
-Reboco: dia 32 ao 40
-Pintura: dia 40 ao 46
-Obra pronta em 46 dias
-Caminho crítico: Fundação -> Paredes -> Telhado -> Reboco -> Pintura
-```
-
-**Exercício E906** · ★★★
-
-Quantas ordens diferentes existem para a rotina da manhã? As tarefas são
-café, banho, vestir, escovar e sair (índices 0 a 4), com as regras:
-
-```text
-banho -> vestir   café -> escovar   vestir -> sair   escovar -> sair
-```
-
-Escreva conta(): ela gera TODAS as ordenações topológicas com backtracking
-(assunto 0127), mostra cada uma quando mostrar é true e devolve quantas são.
-Depois acrescente uma sexta tarefa, ler as mensagens (antes de sair), e peça
-só o total.
-
-```text
-Saída esperada:
-café, banho, vestir, escovar, sair
-café, banho, escovar, vestir, sair
-café, escovar, banho, vestir, sair
-banho, café, vestir, escovar, sair
-banho, café, escovar, vestir, sair
-banho, vestir, café, escovar, sair
-Total com 5 tarefas: 6
-Total com 6 tarefas: 30
-```
-
-### 0152 · Kruskal: árvore geradora mínima
-
-**Exercício E907** · ★☆☆
-
-A horta comunitária vai levar água a cinco canteiros com mangueira. Os
-trechos possíveis já vêm em ordem crescente de metros:
-
-```text
-Alface-Couve 2, Tomate-Ervas 3, Alface-Tomate 4, Couve-Tomate 5,
-Cenoura-Ervas 6, Couve-Cenoura 8, Alface-Ervas 9
-```
-
-Escreva o Kruskal do zero, sem union-find: guarde em grupo[v] o número
-do grupo de cada canteiro (começa com grupo[v] = v). Uma aresta entre
-grupos iguais fecharia ciclo; entre grupos diferentes, aceite e passe
-todo o grupo de b para o grupo de a.
-
-```text
-Saída esperada:
-Alface-Couve (2 m)
-Tomate-Ervas (3 m)
-Alface-Tomate (4 m)
-Cenoura-Ervas (6 m)
-Mangueira total: 15 m
-```
-
-**Exercício E909** · ★★☆
-
-Seis vilas (Sede, Ponte, Brejo, Serra, Lagoa e Vale, índices 0 a 5) podem ser
-ligadas por estas estradas, com o custo em R$ mil:
-
-```text
-Sede-Brejo 4   Ponte-Brejo 3   Sede-Ponte 6   Brejo-Serra 8
-Ponte-Serra 5  Ponte-Lagoa 9   Serra-Lagoa 2  Serra-Vale 7
-Lagoa-Vale 7
-```
-
-O prefeito prometeu asfaltar a estrada Sede-Ponte, que o Kruskal descartaria.
-Escreva o Kruskal que monte a árvore mais barata que CONTENHA essa estrada
-(no empate de custo, vale a ordem da lista) e mostre quanto a promessa custou
-a mais que a árvore mínima sem a exigência.
-
-```text
-Saída esperada:
-Sede-Ponte (6) obrigatória
-Serra-Lagoa (2)
-Ponte-Brejo (3)
-Ponte-Serra (5)
-Serra-Vale (7)
-Total: R$ 23 mil
-Custo extra da exigência: R$ 2 mil
-```
-
-**Exercício E910** · ★★☆
-
-Oito sítios (índices 0 a 7: Ipê, Buriti, Jatobá, Pequi, Aroeira, Babaçu,
-Cedro e Juçara) querem dividir o custo de puxar cabo de energia. Os trechos
-possíveis, em km, são:
-
-```text
-Ipê-Jatobá 3   Jatobá-Aroeira 4  Ipê-Aroeira 6    Aroeira-Cedro 2
-Jatobá-Cedro 5 Buriti-Pequi 7    Pequi-Babaçu 1   Babaçu-Juçara 3
-Buriti-Juçara 4  Pequi-Juçara 2
-```
-
-Um rio sem ponte separa os dois grupos de quatro sítios, então não existe
-árvore que ligue todos: o resultado é uma FLORESTA, uma árvore mínima por
-margem. Escreva o Kruskal que funciona nesse caso e mostre cada rede (os
-sítios em ordem de índice e o total de km dela), listando as redes pela ordem
-do primeiro sítio de cada uma.
-
-```text
-Saída esperada:
-Rede 1 (Ipê Jatobá Aroeira Cedro): 9 km
-Rede 2 (Buriti Pequi Babaçu Juçara): 7 km
-Sem travessia: 2 redes separadas, 6 cabos, 16 km
-```
-
-**Exercício E911** · ★★★
-
-O parque de diversões vai ligar seis atrações com os trilhos de um trenzinho,
-gastando o mínimo. As atrações (índices 0 a 5) são Entrada, Carrossel, Roda,
-Lago, Castelo e Montanha. Os trilhos possíveis, com o custo em R$ mil, na
-ordem em que foram levantados:
-
-```text
-Entrada-Carrossel 4  Roda-Lago 5        Carrossel-Lago 6
-Entrada-Roda 7       Lago-Castelo 8     Castelo-Montanha 9
-Roda-Montanha 10     Carrossel-Castelo 11  Entrada-Montanha 12
-```
-
-Escreva o Kruskal: ordene as arestas por custo com qsort, use union-find
-(vetor pai[] e função acha com compressão de caminho) e ligue as RAÍZES dos
-dois grupos a cada aresta aceita. Pare quando houver V - 1 trilhos e mostre
-cada um, na ordem em que entra, e o total.
-
-```text
-Saída esperada:
-Entrada-Carrossel (4)
-Roda-Lago (5)
-Carrossel-Lago (6)
-Lago-Castelo (8)
-Castelo-Montanha (9)
-Total: R$ 32 mil
-```
-
-### 0153 · Prim: a árvore que cresce
-
-**Exercício E913** · ★☆☆
-
-Na orla, um gerador vai alimentar quatro quiosques: Coco, Pastel, Açaí e
-Milho. A matriz tem os metros de cabo de cada trecho possível (0 quer dizer
-"não dá para passar cabo"):
-
-```text
-            Gerador  Coco  Pastel  Açaí  Milho
-Gerador        0      12     20     25     0
-Coco          12       0      9      0    30
-Pastel        20       9      0      6    15
-Açaí          25       0      6      0    11
-Milho          0      30     15     11     0
-```
-
-Escreva o Prim sem heap, em O(V²), a partir do Gerador: vetores chave[],
-pai[] e na_rede[]; a cada passo, entra o vértice fora da rede com a menor
-chave. Mostre cada cabo na ordem em que entra e o total.
-
-```text
-Saída esperada:
-Gerador - Coco: 12 m
-Coco - Pastel: 9 m
-Pastel - Açaí: 6 m
-Açaí - Milho: 11 m
-Total: 38 m
-```
-
-**Exercício E915** · ★★☆
-
-Seis estações de bicicleta (índices 0 a 5: Rodoviária, Praça, Museu, Orla,
-Feira e Estádio) podem ser ligadas por ciclovias de mão dupla, com a
-distância em km:
-
-```text
-Rodoviária-Praça 5   Rodoviária-Feira 3   Praça-Museu 4   Praça-Feira 6
-Museu-Orla 2         Feira-Orla 7         Orla-Estádio 8  Museu-Estádio 9
-Feira-Estádio 10
-```
-
-Começar o Prim por outra estação muda alguma coisa? Escreva prim(origem), na
-versão sem heap (O(V²)), que mostra a origem, a ordem em que as estações
-entram na rede e o total, e chame-a para cada uma das seis origens.
-
-```text
-Saída esperada:
-Rodoviária: Rodoviária Feira Praça Museu Orla Estádio | 22
-Praça: Praça Museu Orla Rodoviária Feira Estádio | 22
-Museu: Museu Orla Praça Rodoviária Feira Estádio | 22
-Orla: Orla Museu Praça Rodoviária Feira Estádio | 22
-Feira: Feira Rodoviária Praça Museu Orla Estádio | 22
-Estádio: Estádio Orla Museu Praça Rodoviária Feira | 22
-```
-
-**Exercício E916** · ★★☆
-
-A operadora de internet vai levar fibra da Central a sete pontos do bairro.
-Os pontos (índices 0 a 7) são Central, Padaria, Escola, Igreja, Farmácia,
-Praça, Posto e Clínica. Os trechos possíveis, em km:
-
-```text
-Central-Padaria 2   Central-Escola 4   Padaria-Escola 3   Padaria-Igreja 5
-Escola-Farmácia 2   Igreja-Praça 1     Farmácia-Praça 6   Escola-Posto 7
-Farmácia-Clínica 3  Posto-Clínica 2    Central-Posto 9
-```
-
-Escreva o Prim a partir da Central, guardando o pai de cada ponto em pai[].
-Depois escreva a função recursiva mostra(v, nivel), que imprime a árvore como
-um organograma: cada ponto com 2 espaços de recuo por nível e, entre
-parênteses, os km da fibra que o liga ao pai. Os filhos de um ponto aparecem
-em ordem de índice, logo abaixo dele. Termine com o total.
-
-```text
-Saída esperada:
-Central
-  Padaria (2)
-    Escola (3)
-      Farmácia (2)
-        Clínica (3)
-          Posto (2)
-    Igreja (5)
-      Praça (1)
-Total: 18 km
-```
-
-**Exercício E917** · ★★★
-
-Quatro casas de um sítio precisam de água. Cada casa pode cavar o próprio
-poço (Ana R$ 8 mil, Beto 5, Cida 9, Davi 7) ou receber cano de uma casa
-vizinha que já tem água. Os canos possíveis (R$ mil):
-
-```text
-Ana-Beto 2, Beto-Cida 3, Cida-Davi 9, Ana-Davi 10, Ana-Cida 10
-```
-
-Qual a solução mais barata? Crie um vértice imaginário, a "Água" (índice 0),
-ligado a cada casa por uma aresta com o custo do poço dela: cavar um poço
-vira "ligar a casa na Água", e o problema vira uma árvore geradora mínima
-comum. Escreva o programa com Prim a partir da Água e mostre a decisão de
-cada casa, na ordem em que entram.
-
-```text
-Saída esperada:
-Beto: cava poço (R$ 5 mil)
-Ana: cano de Beto (R$ 2 mil)
-Cida: cano de Beto (R$ 3 mil)
-Davi: cava poço (R$ 7 mil)
-Total: R$ 17 mil (2 poços)
-```
-
-### 0154 · Bellman-Ford: pesos negativos
-
-**Exercício E919** · ★☆☆
-
-Viagem de carro da Garagem até o Sítio. Cada trecho tem um custo em R$
-(gasolina e pedágio), mas o aplicativo do Posto A dá cashback para quem
-abastece lá e segue para o Posto B: esse trecho custa R$ -10. Os trechos são
-de mão única (lugares de 0 a 4: Garagem, Posto A, Posto B, Pedágio, Sítio):
-
-```text
-Garagem -> Posto A 30    Garagem -> Posto B 45    Posto A -> Posto B -10
-Posto A -> Pedágio 25    Posto B -> Pedágio 12    Pedágio -> Sítio 8
-Posto B -> Sítio 40
-```
-
-Escreva o Bellman-Ford do zero, com os trechos numa lista de arestas, e
-mostre o menor custo da Garagem até cada lugar.
-
-```text
-Saída esperada:
-Garagem: R$ 0
-Posto A: R$ 30
-Posto B: R$ 20
-Pedágio: R$ 32
-Sítio: R$ 40
-```
-
-**Exercício E921** · ★★☆
-
-Um drone de entregas sai da Base. Cada voo gasta uma porcentagem da bateria;
-o voo da Torre até a Praia é uma descida planando com o painel solar ligado e
-RECARREGA 5% (gasto -5). Os pontos (índices 0 a 6) são Base, Ponte, Torre,
-Praia, Farol, Ilha e Mata. Os voos, de mão única, são:
-
-```text
-Base -> Ponte 10   Base -> Torre 25   Ponte -> Torre 8   Torre -> Praia -5
-Ponte -> Praia 20  Praia -> Farol 7   Farol -> Ilha 12   Torre -> Ilha 30
-Mata -> Farol 3    Ilha -> Praia 4
-```
-
-Escreva o Bellman-Ford com o vetor anterior[] e mostre, para cada ponto, o
-gasto mínimo e a rota completa, ou "inalcançável" se nenhum voo chega lá (é o
-caso da Mata, que só tem voo de saída).
-
-```text
-Saída esperada:
-Ponte (10%): Base -> Ponte
-Torre (18%): Base -> Ponte -> Torre
-Praia (13%): Base -> Ponte -> Torre -> Praia
-Farol (20%): Base -> Ponte -> Torre -> Praia -> Farol
-Ilha (32%): Base -> Ponte -> Torre -> Praia -> Farol -> Ilha
-Mata: inalcançável
-```
-
-**Exercício E922** · ★★☆
-
-Num jogo, passar por um portal custa créditos, mas o portal da Caverna para a
-Floresta DEVOLVE 4 créditos (custo -4). As salas (índices 0 a 4) são Início,
-Floresta, Caverna, Castelo e Saída, e os portais, de mão única:
-
-```text
-Início -> Floresta 2   Início -> Caverna 5   Caverna -> Floresta -4
-Floresta -> Castelo 6  Castelo -> Saída 1    Caverna -> Castelo 9
-```
-
-Guarde os custos numa matriz custo[][] (0 = sem portal) e escreva dijkstra (o
-do assunto 0112, O(V²), que nunca reabre um vértice já fixo) e bellman_ford,
-ambos a partir do Início. Compare as duas respostas para cada sala e marque
-as que o Dijkstra erra.
-
-```text
-Saída esperada:
-Floresta: Dijkstra 2, Bellman-Ford 1 (Dijkstra errou)
-Caverna: Dijkstra 5, Bellman-Ford 5
-Castelo: Dijkstra 8, Bellman-Ford 7 (Dijkstra errou)
-Saída: Dijkstra 9, Bellman-Ford 8 (Dijkstra errou)
-```
-
-**Exercício E924** · ★★★
-
-Você quer voar de Recife a Curitiba, mas odeia conexões. As cidades (índices
-0 a 4) são Recife, Salvador, Brasília, São Paulo e Curitiba. Os voos (mão
-única, preço em R$):
-
-```text
-Recife -> Curitiba 900      Recife -> Salvador 200
-Salvador -> Brasília 250    Brasília -> Curitiba 300
-Recife -> Brasília 500      Salvador -> São Paulo 350
-São Paulo -> Curitiba 150   Brasília -> São Paulo 120
-```
-
-Escreva mais_barato(origem, destino, k): o menor preço usando NO MÁXIMO k
-voos. Use o Bellman-Ford com k rodadas, mas em cada rodada relaxe lendo uma
-CÓPIA da dist da rodada anterior: assim a rodada r acrescenta no máximo um
-voo a cada caminho. Mostre o resultado para k de 1 a 3.
-
-```text
-Saída esperada:
-Até 1 trecho: R$ 900
-Até 2 trechos: R$ 800
-Até 3 trechos: R$ 700
-```
-
-### 0155 · Floyd-Warshall: todos os pares
-
-**Exercício E925** · ★☆☆
-
-Uma cooperativa tem quatro galpões: Milho, Leite, Frutas e Mel (índices
-0 a 3). As estradas internas são de mão única, em km:
-
-```text
-Milho -> Leite 8     Leite -> Frutas 3    Frutas -> Milho 4
-Milho -> Mel 15      Frutas -> Mel 5      Mel -> Leite 2
-```
-
-Escreva o Floyd-Warshall do zero e mostre a tabela de distâncias, uma
-linha por galpão de origem (nome com %-7s e cada número com %4d).
-
-```text
-Saída esperada:
-Milho     0   8  11  15
-Leite     7   0   3   8
-Frutas    4   7   0   5
-Mel       9   2   5   0
-```
-
-**Exercício E927** · ★★☆
-
-A prefeitura vai construir um posto de saúde num dos seis bairros (índices 0
-a 5: Vila Rica, Jardim, Centro, Lagoa, Bosque e Porto). O morador que fica
-mais longe do posto deve ficar o mais perto possível. As ruas são de mão
-dupla (km):
-
-```text
-Vila Rica-Jardim 4, Jardim-Centro 3, Centro-Lagoa 5, Lagoa-Bosque 2,
-Centro-Bosque 6, Bosque-Porto 7, Jardim-Lagoa 9, Vila Rica-Porto 20
-```
-
-Rode o Floyd-Warshall e, para cada bairro, mostre qual bairro fica mais longe
-dele e a que distância (o primeiro com a maior, em ordem de índice). No fim,
-mostre o bairro em que essa pior distância é a menor.
-
-```text
-Saída esperada:
-Vila Rica: o mais longe é Porto, a 20 km
-Jardim: o mais longe é Porto, a 16 km
-Centro: o mais longe é Porto, a 13 km
-Lagoa: o mais longe é Vila Rica, a 12 km
-Bosque: o mais longe é Vila Rica, a 13 km
-Porto: o mais longe é Vila Rica, a 20 km
-Melhor bairro para o posto: Lagoa (ninguém fica a mais de 12 km)
-```
-
-**Exercício E928** · ★★☆
-
-Uma casa de câmbio cobra uma taxa fixa (em centavos) por conversão entre
-Real, Dólar, Euro e Cripto (índices 0 a 3). As conversões de uma semana, de
-mão única, são:
-
-```text
-Real -> Dólar 30     Dólar -> Euro 20      Euro -> Real 25
-Real -> Cripto 50    Cripto -> Dólar -10   Dólar -> Real 35
-Euro -> Cripto 15
-```
-
-Na semana 2 de promoção, Cripto -> Dólar dá um bônus maior (-40 em vez de
--10). Escreva analisa(semana, ...), que roda o Floyd-Warshall e, olhando a
-diagonal, diz se existe um ciclo negativo (trocar em roda e sair ganhando) e
-por quais moedas ele passa. Analise as duas semanas.
-
-```text
-Saída esperada:
-Semana 1: sem ciclo negativo
-Semana 2: ciclo negativo passando por Dólar Euro Cripto
-```
-
-**Exercício E930** · ★★★
-
-Cinco bairros (índices 0 a 4: Centro, Porto, Vila, Alto e Feira) têm estas
-ruas de mão única, em minutos:
-
-```text
-Centro -> Vila 2   Vila -> Porto 3   Centro -> Porto 6   Porto -> Alto 4
-Alto -> Centro 5   Vila -> Feira 7   Feira -> Alto 1     Porto -> Feira 2
-```
-
-Calcule a tabela com o Floyd-Warshall. Depois a prefeitura abre a rua Feira
--> Vila, de 1 minuto. Refazer o Floyd custa O(V³): escreva nova_rua(d, a, b,
-w), que atualiza a tabela em O(V²). Qualquer caminho que melhora com a rua
-nova passa por ela uma vez só: "de i até a", mais w, mais "de b até j".
-Confira o resultado contra um Floyd completo refeito do zero, mostrando a
-tabela (nome com %-7s e cada número com %4d).
-
-```text
-Saída esperada:
-Centro    0   5   2   8   7
-Porto     8   0   3   3   2
-Vila     11   3   0   6   5
-Alto      5  10   7   0  12
-Feira     6   4   1   1   0
-Confere com o Floyd completo: sim
-```
-
-### 0156 · Juntando tudo: o assistente do calouro
+### Exercícios
 
 **Exercício E931** · ★☆☆
 
@@ -2647,11 +2662,13 @@ Loja -> Carla -> Ana -> Bruno -> Loja: 28 min
 Melhor roteiro (22 min): Loja -> Ana -> Bruno -> Carla -> Loja
 ```
 
-### Lista do módulo
+---
+
+## Lista do módulo
 
 30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P2301.c a P2330.c, em `material/`; resoluções em `_respostas/23-grafos-avancados/lista/`.
 
-#### ★☆☆ Aquecimento
+### ★☆☆ Aquecimento
 
 **Exercício P2301** · ★☆☆ · Grupos do condomínio
 
@@ -2956,7 +2973,7 @@ Edu     0   0    0    1   0   chega em 1
 
 **Resposta esperada:** Ana, Bia e Caio chegam em 3 pessoas cada; Davi em nenhuma; Edu só em Davi.
 
-#### ★★☆ Para pensar
+### ★★☆ Para pensar
 
 **Exercício P2311** · ★★☆ · Kosaraju nas rotas de barco
 
@@ -3256,7 +3273,7 @@ Praia: 8
 
 **Resposta esperada:** 8 trajetos chegam à Praia.
 
-#### ★★★ Desafio
+### ★★★ Desafio
 
 **Exercício P2321** · ★★★ · A segunda melhor rede
 
@@ -3574,7 +3591,7 @@ Ruas novas, no mínimo: 2
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas para resolver no papel e, quando fizer sentido, num arquivo `.c`
 seu. Eles misturam os assuntos do módulo.
@@ -3723,7 +3740,7 @@ fim, o Kruskal também conta componentes, como o union-find do A300.
 
 </details>
 
-### Questões do POSCOMP
+## Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -3734,7 +3751,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 
 O gabarito oficial de 2025 não estava disponível quando este material foi montado.
 
-### Questões no estilo da prova
+## Questões no estilo da prova
 
 Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma
 alternativa certa. As questões 1 e 2 usam o mesmo grafo **não dirigido**,

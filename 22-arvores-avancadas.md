@@ -60,9 +60,12 @@ no union-find, a raiz verde representa o grupo.
 
 ---
 
-## 1. Conceitos gerais
+> [!NOTE]
+> Cada assunto é um capítulo: **Conceito** (a explicação), **Exemplos de uso** (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e **Exercícios** (cada um é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta; resoluções em `_respostas/22-arvores-avancadas/`).
 
-### 0144 · Árvores gerais: primeiro filho, próximo irmão
+## 0144 · Árvores gerais: primeiro filho, próximo irmão
+
+### Conceito
 
 - **Árvore geral** (ou n-ária): cada nó pode ter qualquer número de filhos
   (SZWARCFITER; MARKENZON, 2010).
@@ -90,157 +93,7 @@ for (const NoG *p = r->filho; p != NULL; p = p->irmao) { ... }
 > `1 + maior(altura(r->filho), altura(r->irmao))`, conta cada irmão como um
 > andar: no orçamento dá 6 em vez de 3. Só `filho` desce um nível.
 
-### 0145 · Rubro-negra esquerdista (LLRB): inserção
-
-- **Árvore 2-3**: cada nó tem **uma chave** (2 filhos) ou **duas** (3 filhos).
-  A chave entra numa folha; com três, a do meio sobe. Só cresce quando a raiz
-  estoura, então **todas as folhas ficam no mesmo nível** (SEDGEWICK; WAYNE, 2011).
-- **LLRB** (*left-leaning red-black*): guarda a 2-3 em nós binários. O nó `[a b]`
-  vira o `b` com o `a` à esquerda por um **link vermelho**; os outros links são
-  **pretos**. Cada nó guarda a cor do link que chega nele (SEDGEWICK, 2008).
-- **Regras**: vermelho **só à esquerda**; nunca **dois vermelhos seguidos**;
-  todo caminho da raiz a um `NULL` tem a mesma **altura preta**. A raiz é preta
-  (SEDGEWICK, 2008).
-- **Altura**: o caminho mais longo tem no máximo o dobro do mais curto; a altura
-  fica abaixo de 2 · log₂(n + 1) (CORMEN et al., 2024, cap. 13).
-- **Inserção**: pendura um nó **vermelho**, como na BST, e cada ancestral aplica
-  na volta três consertos, nesta ordem (tabela).
-- **Inversão de cores**: pinta os dois filhos de preto e `h` de vermelho; a
-  chave do meio sobe para o pai e pode disparar os consertos de novo.
-- **Rubro-negra clássica** (Cormen, a da prova do PPGI): a cor fica no **nó**,
-  aceita vermelho dos dois lados (equivale à 2-3-4), usa folhas `NIL` pretas e
-  conserta pelos casos do **tio**, com até duas rotações. Veja o assunto 0177
-  (CORMEN et al., 2024, cap. 13).
-
-| Situação em `h` | Conserto | Na árvore 2-3 |
-| --- | --- | --- |
-| filho direito vermelho, esquerdo preto | rotação à esquerda | deita o nó de 2 chaves para a esquerda |
-| filho esquerdo e neto esquerdo vermelhos | rotação à direita | arruma um nó de 3 chaves temporário |
-| os dois filhos vermelhos | inverte as cores | o nó de 3 chaves estoura e a do meio sobe |
-
-> [!WARNING]
-> Na rotação, quem sobe herda a cor de quem desce (`x->vermelho = h->vermelho`);
-> sem isso, a altura preta se desencontra. E a raiz pode ficar vermelha após
-> uma inversão no topo: `rn_insere` a pinta de preto em **toda** inserção.
-
-### 0146 · Árvore B: busca, divisão e inserção
-
-- **Árvore B**: árvore de busca com nós gordos, feita para disco. Cada nó guarda
-  **várias chaves em ordem** e tem um filho a mais do que chaves; em geral um nó
-  ocupa um bloco (BAYER; McCREIGHT, 1972).
-- **Motivo**: um HD leva uns 10 ms por bloco. Numa AVL com 2 milhões de chaves a
-  busca desce uns 21 nós; na B, poucos (ZIVIANI, 2010, cap. 6).
-- **Grau mínimo `t`**: todo nó, menos a raiz, tem de `t - 1` a `2t - 1` chaves; um
-  nó interno com `k` chaves tem `k + 1` filhos; **todas as folhas ficam no mesmo
-  nível**. A altura é `h ≤ log_t((n + 1) / 2)` (CORMEN et al., 2024, cap. 18).
-- **`t = 2`**: de 1 a 3 chaves e de 2 a 4 filhos por nó, a árvore 2-3-4. É o
-  valor do TAD.
-- **Busca**: a da BST com um laço dentro do nó; lê um nó por nível, altura + 1
-  nós (CORMEN et al., 2024, cap. 18).
-- **Divisão**: o nó cheio (`2t - 1` chaves) vira dois de `t - 1`, e a **chave do
-  meio sobe** para o pai. O TAD divide na descida todo nó cheio do caminho; a
-  raiz cheia vira raiz nova, e a árvore cresce por cima (CORMEN et al., 2024, cap. 18).
-- **Na prática**: com `int` e ponteiros de 8 bytes, `t = 170` cabe num bloco de
-  4096 bytes, e um bilhão de chaves fica em altura 3.
-
-> [!WARNING]
-> Depois de `divide(x, i)`, a chave que subiu está em `x->chave[i]`. Sem
-> `if (chave > x->chave[i]) i++;`, chaves grandes vão para a metade errada. E
-> "ordem m" muda de livro para livro (m filhos no Knuth, de m a 2m registros no
-> Ziviani); o curso usa o `t` do Cormen.
-
-### 0147 · Trie: árvore de prefixos e autocompletar
-
-- **Trie** (de *retrieval*) ou **árvore de prefixos**: cada aresta **é** uma
-  letra, e o caminho da raiz até um nó soletra um prefixo. As palavras com esse
-  prefixo moram embaixo dele (FREDKIN, 1960).
-- **Marca de fim**: o prefixo "bol" tem nó, mas não é palavra. Cada nó guarda um
-  `bool fim` que diz se alguma palavra **termina** ali (ZIVIANI, 2010, cap. 5).
-- **Nó com vetor**: com minúsculas sem acento, o nó tem 26 ponteiros, e o filho
-  da letra `c` fica em `filho[c - 'a']` (CORTÉS, 2015).
-- **Inserir**: desça pelo filho de cada letra, criando-o se faltar; no fim,
-  `fim = true`. **Buscar**: desça letra por letra; faltou filho, não existe; no
-  fim, vale o `fim` do nó.
-- **Autocompletar**: desça até o nó do prefixo e percorra a subárvore, de `a` a
-  `z`, imprimindo cada caminho que termina num `fim`.
-- **Custo**: inserir e buscar custam **O(L)**, L o tamanho da palavra, sem
-  depender de quantas há. Uma BST de 100 mil palavras faz umas 17 comparações de
-  strings (SEDGEWICK; WAYNE, 2011).
-- **Memória**: cada `NoTrie` tem 216 bytes, quase todos ponteiros `NULL`. Lista
-  de filhos (0144) ou árvore ternária gastam menos.
-
-> [!WARNING]
-> Achar o nó não é achar a palavra: a busca olha o `fim`
-> (`return n != NULL && n->fim;`). E o índice só vale de `'a'` a `'z'`:
-> `'B' - 'a'` dá -31 e `'ã'` não é um `char` só em UTF-8.
-
-### 0148 · Union-find: conjuntos disjuntos
-
-- **Conjuntos disjuntos**: grupos que não se misturam, com duas operações
-  (CORMEN et al., 2024, cap. 19):
-  **acha(x)** devolve o **representante** do grupo de x; **une(a, b)** junta os
-  grupos de a e de b. Dois elementos estão juntos se têm o mesmo representante.
-- **Floresta num vetor**: `pai[x]` é o pai de x, e a raiz aponta para si mesma
-  (`pai[x] == x`); a raiz é o representante. `acha` sobe até a raiz; `une`
-  pendura uma raiz na outra (SEDGEWICK; WAYNE, 2011).
-- **União por tamanho**: pendure a raiz do grupo **menor** na do maior. Um
-  elemento só desce quando o grupo dele pelo menos dobra: altura até log₂ n
-  (LINTZMAYER; MOTA, 2023).
-- **Compressão de caminho**: depois de achar a raiz, `acha` faz todo o caminho
-  apontar **direto** para ela. Por isso consultar **modifica** `pai`.
-- **Custo**: com os dois truques, m operações custam O(m · α(n)), e α não passa
-  de 4 para nenhum n realista: O(1) amortizado na prática (TARJAN, 1975).
-- **No Cormen**: `MAKE-SET`, `FIND-SET` e `UNION`, com **união por posto**
-  (*rank*), um limite da altura que só cresce quando dois postos iguais se
-  juntam. Mesma garantia; o Kruskal (0152) usa esta estrutura
-  (CORMEN et al., 2024, cap. 19).
-
-> [!WARNING]
-> O representante é a **raiz**. `pai[a] = b` arranca o `a` do grupo; o certo é
-> `pai[acha(a)] = acha(b)`. Testar `pai[a] == pai[b]` falha com mais de um nível:
-> o teste é `acha(a) == acha(b)`. E `tam[x]` só vale na raiz.
-
-### 0149 · Juntando tudo: corretor ortográfico
-
-- **Duas perguntas ao dicionário**: "esta palavra existe?" (busca exata) e "quais
-  palavras estão perto desta?". Perto é a poucas **edições** (assunto 0142):
-  tirar, pôr ou trocar uma letra, ou trocar duas vizinhas.
-- **Gerar candidatos**: aplicar à palavra errada todas as edições e ver quais
-  existem. "fiera" gera 290 candidatos, e só "feira" existe.
-- **Dicionário em trie** (assunto 0147): cada busca custa O(L), e um candidato
-  sem prefixo válido ("fx...") morre no segundo nó (ZIVIANI, 2010, cap. 5).
-- **Alternativas**: a hash faz a busca exata em O(1) na média; a BST, em
-  O(log n) comparações de string (SZWARCFITER; MARKENZON, 2010).
-- **Memória e cache**: 84 palavras viram 239 nós de 216 bytes (cerca de 51 KB),
-  espalhados no heap. Cada acesso pode faltar no cache, e por isso a hash costuma
-  vencer na busca exata.
-
-O A297 compara as três com 2500 palavras de duas sílabas e 5000 buscas (metade
-acha, metade não):
-
-| | BST | Tabela hash | Trie |
-| --- | --- | --- | --- |
-| custo da busca exata | 17,2 comparações de string | 1,3 comparação de string | 4 nós (o tamanho da palavra) |
-| memória | 60 KB | 60 KB | 661 KB |
-| palavras com um prefixo | dá, com um percurso por intervalo | não dá | desce até o prefixo e lista |
-| ordem alfabética | percurso em ordem | não dá | percurso por letra |
-| depende de n? | sim, log n | não (com fator de carga bom) | não |
-
-A trie ganha em tudo que envolve **prefixo**; um corretor de verdade combina
-trie e hash.
-
-> [!WARNING]
-> `cor_proxima` só reconhece `'a'` a `'z'`: maiúscula e acento viram separadores
-> ("Hoje" sai "oje"; "pão" sai "p" e "o"). E `cor_sugere` usa um vetor de
-> `COR_MAX + 1` posições, porque pôr uma letra aumenta a palavra.
-
----
-
-## 2. Exemplos de uso
-
-Cada exemplo compila sozinho. Rode com o comando abaixo dele e compare com a saída no fim do código.
-
-### 0144 · Árvores gerais: primeiro filho, próximo irmão
+### Exemplos de uso
 
 O orçamento de uma reforma em tópicos, com 10 nós; os tópicos que só agrupam
 valem 0. Em cima a árvore, embaixo a memória: setas verdes para o primeiro
@@ -463,7 +316,171 @@ int main(void) {
 gcc ~/LPEDC/material/A288.c ~/LPEDC/material/0144-arvgen.c -o ~/LPEDC/material/A288 && ~/LPEDC/material/A288
 ```
 
-### 0145 · Rubro-negra esquerdista (LLRB): inserção
+### Exercícios
+
+**Exercício E859** · ★☆☆
+
+A lista de compras do churrasco é uma árvore geral (arvgen.h). Monte-a no
+main com ag_cria e ag_adiciona:
+
+```text
+churrasco
+  carnes: picanha 120, linguica 35, frango 28
+  bebidas: refri 24, cerveja 60
+  carvao 30
+```
+
+Os grupos (churrasco, carnes e bebidas) valem 0. Escreva folhas(r), que conta
+os nós sem filhos (os itens do carrinho), e grupos(r), que conta os nós com
+pelo menos um filho (a raiz entra). Mostre também o total com ag_total.
+
+```text
+Saída esperada:
+Itens (folhas): 6
+Grupos (nós com filhos): 3
+Total: R$ 297
+```
+
+```bash
+gcc ~/LPEDC/material/E859.c ~/LPEDC/material/0144-arvgen.c -o ~/LPEDC/material/E859 && ~/LPEDC/material/E859
+```
+
+**Exercício E861** · ★★☆
+
+O orçamento de uma reforma é uma árvore geral (arvgen.h). Monte-a no main:
+
+```text
+reforma
+  cozinha: piso 1800, pia 650
+  banheiro: box 900, loucas (vaso 420, cuba 280)
+  pintura 1200
+```
+
+Escreva caminho(r, nome): mostra a trilha da raiz até o item, separada por "
+> ", e a profundidade do item. Se o item não existir, avisa. Teste com vaso,
+pia, reforma e janela.
+
+```text
+Saída esperada:
+vaso: reforma > banheiro > loucas > vaso (profundidade 3)
+pia: reforma > cozinha > pia (profundidade 2)
+reforma: reforma (profundidade 0)
+janela: não encontrado
+```
+
+```bash
+gcc ~/LPEDC/material/E861.c ~/LPEDC/material/0144-arvgen.c -o ~/LPEDC/material/E861 && ~/LPEDC/material/E861
+```
+
+**Exercício E862** · ★★☆
+
+A árvore genealógica de seu Joaquim é uma árvore geral (arvgen.h). Monte-a no
+main:
+
+```text
+Joaquim
+  Rosa: Paulo, Rita (Leo)
+  Jorge: Nina, Otto, Pedro
+  Vera
+```
+
+Para a foto da festa, escreva conta_nivel(r, alvo), que conta as pessoas na
+profundidade alvo, e mostra_nivel(r, alvo), que imprime os nomes dessa
+profundidade, da esquerda para a direita. No main, use ag_altura para saber
+quantas gerações existem.
+
+```text
+Saída esperada:
+Geração 0 (1): Joaquim
+Geração 1 (3): Rosa Jorge Vera
+Geração 2 (5): Paulo Rita Nina Otto Pedro
+Geração 3 (1): Leo
+```
+
+```bash
+gcc ~/LPEDC/material/E862.c ~/LPEDC/material/0144-arvgen.c -o ~/LPEDC/material/E862 && ~/LPEDC/material/E862
+```
+
+**Exercício E864** · ★★★
+
+Monte uma árvore geral (arvgen.h) pela entrada. Cada linha tem "pai nome
+valor"; na primeira, o pai é "-" e o nome é a raiz. Um filho novo entra no
+fim da fila de irmãos do pai. Se o pai não existir, avise e ignore a linha.
+No fim, mostre a árvore (ag_mostra), o número de nós, a altura e qual filho
+da raiz tem o maior total. Sem nenhuma linha, mostre "Árvore vazia".
+
+```text
+Entrada:
+- casamento 0
+casamento buffet 0
+buffet salgados 1800
+buffet bolo 950
+casamento decoracao 0
+decoracao flores 1200
+igreja padre 300
+decoracao luzes 400
+casamento musica 2500
+buffet doces 700
+```
+
+```text
+Saída esperada:
+pai igreja não existe: linha ignorada
+casamento: 7550
+  buffet: 3450
+    salgados: 1800
+    bolo: 950
+    doces: 700
+  decoracao: 1600
+    flores: 1200
+    luzes: 400
+  musica: 2500
+Itens: 9 | altura: 2
+Maior gasto: buffet (R$ 3450)
+```
+
+```bash
+gcc ~/LPEDC/material/E864.c ~/LPEDC/material/0144-arvgen.c -o ~/LPEDC/material/E864 && ~/LPEDC/material/E864
+```
+
+---
+
+## 0145 · Rubro-negra esquerdista (LLRB): inserção
+
+### Conceito
+
+- **Árvore 2-3**: cada nó tem **uma chave** (2 filhos) ou **duas** (3 filhos).
+  A chave entra numa folha; com três, a do meio sobe. Só cresce quando a raiz
+  estoura, então **todas as folhas ficam no mesmo nível** (SEDGEWICK; WAYNE, 2011).
+- **LLRB** (*left-leaning red-black*): guarda a 2-3 em nós binários. O nó `[a b]`
+  vira o `b` com o `a` à esquerda por um **link vermelho**; os outros links são
+  **pretos**. Cada nó guarda a cor do link que chega nele (SEDGEWICK, 2008).
+- **Regras**: vermelho **só à esquerda**; nunca **dois vermelhos seguidos**;
+  todo caminho da raiz a um `NULL` tem a mesma **altura preta**. A raiz é preta
+  (SEDGEWICK, 2008).
+- **Altura**: o caminho mais longo tem no máximo o dobro do mais curto; a altura
+  fica abaixo de 2 · log₂(n + 1) (CORMEN et al., 2024, cap. 13).
+- **Inserção**: pendura um nó **vermelho**, como na BST, e cada ancestral aplica
+  na volta três consertos, nesta ordem (tabela).
+- **Inversão de cores**: pinta os dois filhos de preto e `h` de vermelho; a
+  chave do meio sobe para o pai e pode disparar os consertos de novo.
+- **Rubro-negra clássica** (Cormen, a da prova do PPGI): a cor fica no **nó**,
+  aceita vermelho dos dois lados (equivale à 2-3-4), usa folhas `NIL` pretas e
+  conserta pelos casos do **tio**, com até duas rotações. Veja o assunto 0177
+  (CORMEN et al., 2024, cap. 13).
+
+| Situação em `h` | Conserto | Na árvore 2-3 |
+| --- | --- | --- |
+| filho direito vermelho, esquerdo preto | rotação à esquerda | deita o nó de 2 chaves para a esquerda |
+| filho esquerdo e neto esquerdo vermelhos | rotação à direita | arruma um nó de 3 chaves temporário |
+| os dois filhos vermelhos | inverte as cores | o nó de 3 chaves estoura e a do meio sobe |
+
+> [!WARNING]
+> Na rotação, quem sobe herda a cor de quem desce (`x->vermelho = h->vermelho`);
+> sem isso, a altura preta se desencontra. E a raiz pode ficar vermelha após
+> uma inversão no topo: `rn_insere` a pinta de preto em **toda** inserção.
+
+### Exemplos de uso
 
 As tags da cancela de um condomínio: 30, 10 e 20 formam um zigue-zague e
 disparam os três consertos. Com 50 e 40, o 20 vermelho fica colado no 40, o nó
@@ -683,7 +700,145 @@ int main(void) {
 gcc ~/LPEDC/material/A290.c ~/LPEDC/material/0145-rubronegra.c -o ~/LPEDC/material/A290 && ~/LPEDC/material/A290
 ```
 
-### 0146 · Árvore B: busca, divisão e inserção
+### Exercícios
+
+**Exercício E865** · ★☆☆
+
+Insira os códigos de 1 a 10, em ordem, numa rubro-negra (rubronegra.h) e
+escreva conta_vermelhos(r), que devolve quantos nós vermelhos a árvore tem.
+Escreva também conta_nos(r) e mostre quantos nós são pretos. Mostre ainda a
+pré-ordem (rn_pre_ordem) numa linha que começa com "pré:".
+
+```text
+Saída esperada:
+pré: 4 2 1 3 8 6* 5 7 10 9*
+nós: 10 | vermelhos: 2 | pretos: 8
+```
+
+```bash
+gcc ~/LPEDC/material/E865.c ~/LPEDC/material/0145-rubronegra.c -o ~/LPEDC/material/E865 && ~/LPEDC/material/E865
+```
+
+**Exercício E867** · ★★☆
+
+Escreva confere(r), o fiscal da rubro-negra esquerdista. Ela devolve a altura
+preta (quantos nós pretos há da raiz até um NULL) se as três regras valerem,
+ou um código negativo com a primeira regra quebrada que achar:
+
+```text
+-1: um link vermelho à direita;
+-2: dois vermelhos seguidos (um vermelho com filho esquerdo vermelho);
+-3: dois caminhos com quantidades diferentes de nós pretos.
+```
+
+Teste com quatro árvores: a do TAD (rubronegra.h) com as chaves de 1 a 20 e
+três montadas à mão com malloc (escreva uma função no(chave, vermelho, esq,
+dir)), cada nó dado como chave/cor:
+
+```text
+A: 20 preto, filho esquerdo 10 preto, filho direito 30 vermelho
+B: 30 preto, esquerdo 20 vermelho (com filho esquerdo 10 vermelho),
+   direito 40 preto
+C: 20 preto, esquerdo 10 preto (com filho esquerdo 5 preto),
+   direito 30 preto sem filhos
+```
+
+```text
+Saída esperada:
+TAD (1 a 20): ok, altura preta 4
+Árvore A: quebra a regra 1
+Árvore B: quebra a regra 2
+Árvore C: quebra a regra 3
+```
+
+```bash
+gcc ~/LPEDC/material/E867.c ~/LPEDC/material/0145-rubronegra.c -o ~/LPEDC/material/E867 && ~/LPEDC/material/E867
+```
+
+**Exercício E868** · ★★☆
+
+A eleição do síndico guarda os números votados numa rubro-negra esquerdista
+que você escreve do zero. Cada nó tem numero e qtd (quantos votos): número
+repetido não cria nó novo, só soma 1 em qtd. Escreva insere, apura(r), que
+mostra cada número em ordem crescente com a quantidade ("voto" no singular
+quando for 1), e vencedor(r), que devolve o nó com mais votos.
+
+A urna tem estes 12 votos, na ordem:
+
+```text
+45 12 45 13 30 12 45 13 45 30 12 99
+```
+
+```text
+Saída esperada:
+12: 3 votos
+13: 2 votos
+30: 2 votos
+45: 4 votos
+99: 1 voto
+Vencedor: 45 com 4 de 12 votos
+```
+
+```bash
+gcc ~/LPEDC/material/E868.c ~/LPEDC/material/0145-rubronegra.c -o ~/LPEDC/material/E868 && ~/LPEDC/material/E868
+```
+
+**Exercício E870** · ★★★
+
+Escreva do zero (sem o rubronegra.h, que guarda int) uma rubro-negra
+esquerdista de NOMES para a lista de convidados de uma festa. Compare com
+strcmp; nome repetido é ignorado. Insira, nesta ordem:
+
+```text
+Marcos Ana Teresa Bruno Lia Zeca Carla Otavio Duda Ana
+```
+
+Mostre a lista em ordem, a pré-ordem com * nos vermelhos, a altura, a
+altura preta e o resultado de duas buscas.
+
+```text
+Saída esperada:
+Em ordem: Ana Bruno Carla Duda Lia Marcos Otavio Teresa Zeca
+Pré-ordem: Marcos Duda Bruno* Ana Carla Lia Teresa Otavio Zeca
+Altura 3, altura preta 3
+Lia: na lista | Rafa: fora
+```
+
+```bash
+gcc ~/LPEDC/material/E870.c ~/LPEDC/material/0145-rubronegra.c -o ~/LPEDC/material/E870 && ~/LPEDC/material/E870
+```
+
+---
+
+## 0146 · Árvore B: busca, divisão e inserção
+
+### Conceito
+
+- **Árvore B**: árvore de busca com nós gordos, feita para disco. Cada nó guarda
+  **várias chaves em ordem** e tem um filho a mais do que chaves; em geral um nó
+  ocupa um bloco (BAYER; McCREIGHT, 1972).
+- **Motivo**: um HD leva uns 10 ms por bloco. Numa AVL com 2 milhões de chaves a
+  busca desce uns 21 nós; na B, poucos (ZIVIANI, 2010, cap. 6).
+- **Grau mínimo `t`**: todo nó, menos a raiz, tem de `t - 1` a `2t - 1` chaves; um
+  nó interno com `k` chaves tem `k + 1` filhos; **todas as folhas ficam no mesmo
+  nível**. A altura é `h ≤ log_t((n + 1) / 2)` (CORMEN et al., 2024, cap. 18).
+- **`t = 2`**: de 1 a 3 chaves e de 2 a 4 filhos por nó, a árvore 2-3-4. É o
+  valor do TAD.
+- **Busca**: a da BST com um laço dentro do nó; lê um nó por nível, altura + 1
+  nós (CORMEN et al., 2024, cap. 18).
+- **Divisão**: o nó cheio (`2t - 1` chaves) vira dois de `t - 1`, e a **chave do
+  meio sobe** para o pai. O TAD divide na descida todo nó cheio do caminho; a
+  raiz cheia vira raiz nova, e a árvore cresce por cima (CORMEN et al., 2024, cap. 18).
+- **Na prática**: com `int` e ponteiros de 8 bytes, `t = 170` cabe num bloco de
+  4096 bytes, e um bilhão de chaves fica em altura 3.
+
+> [!WARNING]
+> Depois de `divide(x, i)`, a chave que subiu está em `x->chave[i]`. Sem
+> `if (chave > x->chave[i]) i++;`, chaves grandes vão para a metade errada. E
+> "ordem m" muda de livro para livro (m filhos no Knuth, de m a 2m registros no
+> Ziviani); o curso usa o `t` do Cormen.
+
+### Exemplos de uso
 
 O acervo de uma biblioteca recebe 11 livros: 40, 10, 70, 20, 50, 80, 30, 60, 90,
 25 e 85. O 25 divide a folha `[10 20 30]` e o 20 sobe; o 85 divide a raiz
@@ -903,7 +1058,124 @@ int main(void) {
 gcc ~/LPEDC/material/A292.c ~/LPEDC/material/0146-arvoreb.c -o ~/LPEDC/material/A292 && ~/LPEDC/material/A292
 ```
 
-### 0147 · Trie: árvore de prefixos e autocompletar
+### Exercícios
+
+**Exercício E871** · ★☆☆
+
+Insira os códigos de 1 a 20, em ordem, numa árvore B (arvoreb.h, T = 2) e
+escreva duas funções recursivas: conta_chaves(r), o total de chaves, e
+conta_nos(r), o total de nós. Mostre a árvore com ab_mostra e a média de
+chaves por nó.
+
+```text
+Saída esperada:
+  nível 0: [8]
+  nível 1: [4] [12]
+  nível 2: [2] [6] [10] [14 16 18]
+  nível 3: [1] [3] [5] [7] [9] [11] [13] [15] [17] [19 20]
+chaves: 20 | nós: 17 | média: 1.18 chaves por nó
+```
+
+```bash
+gcc ~/LPEDC/material/E871.c ~/LPEDC/material/0146-arvoreb.c -o ~/LPEDC/material/E871 && ~/LPEDC/material/E871
+```
+
+**Exercício E873** · ★★☆
+
+No disco, cada nó da árvore B ocupa um bloco inteiro, cheio ou não. A
+ocupação é a fração das vagas de chave que estão em uso:
+chaves / (nós · AB_MAX). Monte duas árvores com as chaves de 1 a 200: uma
+inserindo em ordem crescente e outra na ordem embaralhada i * 37 % 200 + 1
+(i de 0 a 199, que passa por todos os números de 1 a 200 uma vez só).
+Escreva mede(r, &chaves, &nos), que soma as chaves e os nós de uma árvore,
+e mostre nós, altura e ocupação de cada uma.
+
+```text
+Saída esperada:
+crescente:   nós 195 | altura 6 | ocupação 34.2%
+embaralhada: nós 127 | altura 5 | ocupação 52.5%
+```
+
+```bash
+gcc ~/LPEDC/material/E873.c ~/LPEDC/material/0146-arvoreb.c -o ~/LPEDC/material/E873 && ~/LPEDC/material/E873
+```
+
+**Exercício E874** · ★★☆
+
+A contabilidade quer as notas fiscais de uma faixa de números. Insira estas
+15 notas numa árvore B (arvoreb.h, que fica com 9 nós), na ordem:
+
+```text
+512 87 340 905 23 678 150 401 799 266 33 960 610 445 118
+```
+
+Escreva intervalo(r, a, b, &visitados): mostra, em ordem crescente, as chaves
+de a até b e conta quantos nós foram lidos. Não leia subárvores que não podem
+ter chave na faixa. Teste com as faixas 300-700, 100-160 e 970-999.
+
+```text
+Saída esperada:
+notas de 300 a 700: 340 401 445 512 610 678 (7 nós lidos de 9)
+notas de 100 a 160: 118 150 (3 nós lidos de 9)
+notas de 970 a 999: (3 nós lidos de 9)
+```
+
+```bash
+gcc ~/LPEDC/material/E874.c ~/LPEDC/material/0146-arvoreb.c -o ~/LPEDC/material/E874 && ~/LPEDC/material/E874
+```
+
+**Exercício E876** · ★★★
+
+Escreva do zero uma árvore B de grau mínimo T = 3: cada nó guarda de 2 a 5
+chaves (a raiz pode ter 1) e tem até 6 filhos. Use a inserção com divisão
+na descida, como no texto, mas com T e MAX definidos no seu arquivo (o TAD
+arvoreb.h tem T = 2 fixo). Insira i * 7 % 31 para i de 1 a 30 (são os
+números de 1 a 30, embaralhados: 7, 14, 21, 28, 4, 11...). Mostre a árvore
+por nível e o resultado de duas buscas, contando os blocos lidos.
+
+```text
+Saída esperada:
+nível 0: [14]
+nível 1: [4 7 11] [18 21 26]
+nível 2: [1 2 3] [5 6] [8 9 10] [12 13] [15 16 17] [19 20] [22 23 24 25] [27 28 29 30]
+busca 23: achou, 3 blocos lidos
+busca 31: não achou, 3 blocos lidos
+```
+
+```bash
+gcc ~/LPEDC/material/E876.c ~/LPEDC/material/0146-arvoreb.c -o ~/LPEDC/material/E876 && ~/LPEDC/material/E876
+```
+
+---
+
+## 0147 · Trie: árvore de prefixos e autocompletar
+
+### Conceito
+
+- **Trie** (de *retrieval*) ou **árvore de prefixos**: cada aresta **é** uma
+  letra, e o caminho da raiz até um nó soletra um prefixo. As palavras com esse
+  prefixo moram embaixo dele (FREDKIN, 1960).
+- **Marca de fim**: o prefixo "bol" tem nó, mas não é palavra. Cada nó guarda um
+  `bool fim` que diz se alguma palavra **termina** ali (ZIVIANI, 2010, cap. 5).
+- **Nó com vetor**: com minúsculas sem acento, o nó tem 26 ponteiros, e o filho
+  da letra `c` fica em `filho[c - 'a']` (CORTÉS, 2015).
+- **Inserir**: desça pelo filho de cada letra, criando-o se faltar; no fim,
+  `fim = true`. **Buscar**: desça letra por letra; faltou filho, não existe; no
+  fim, vale o `fim` do nó.
+- **Autocompletar**: desça até o nó do prefixo e percorra a subárvore, de `a` a
+  `z`, imprimindo cada caminho que termina num `fim`.
+- **Custo**: inserir e buscar custam **O(L)**, L o tamanho da palavra, sem
+  depender de quantas há. Uma BST de 100 mil palavras faz umas 17 comparações de
+  strings (SEDGEWICK; WAYNE, 2011).
+- **Memória**: cada `NoTrie` tem 216 bytes, quase todos ponteiros `NULL`. Lista
+  de filhos (0144) ou árvore ternária gastam menos.
+
+> [!WARNING]
+> Achar o nó não é achar a palavra: a busca olha o `fim`
+> (`return n != NULL && n->fim;`). E o índice só vale de `'a'` a `'z'`:
+> `'B' - 'a'` dá -31 e `'ã'` não é um `char` só em UTF-8.
+
+### Exemplos de uso
 
 Um teclado guarda bolo, bola, bolsa, boleto, bom, bombom, pão e pastel (sem
 acento: `pao`). No ramo do `b`, o caminho verde é o prefixo "bol"; os nós verdes
@@ -1101,7 +1373,166 @@ int main(void) {
 gcc ~/LPEDC/material/A294.c ~/LPEDC/material/0147-trie.c -o ~/LPEDC/material/A294 && ~/LPEDC/material/A294
 ```
 
-### 0148 · Union-find: conjuntos disjuntos
+### Exercícios
+
+**Exercício E878** · ★☆☆
+
+O terminal completa comandos com a tecla Tab. Guarde estes comandos numa trie
+(trie.h): cd, cat, chmod, chown, ls, less, mkdir, man. Escreva classifica(r,
+texto), que devolve uma de três mensagens: "comando" (o texto é um comando
+inteiro), "só começo de comando" (algum comando começa assim, mas o texto não
+é um) ou "não está". Teste, nesta ordem, com:
+
+```text
+cat ch le less rm c mkdirs
+```
+
+```text
+Saída esperada:
+cat     comando
+ch      só começo de comando
+le      só começo de comando
+less    comando
+rm      não está
+c       só começo de comando
+mkdirs  não está
+```
+
+```bash
+gcc ~/LPEDC/material/E878.c ~/LPEDC/material/0147-trie.c -o ~/LPEDC/material/E878 && ~/LPEDC/material/E878
+```
+
+**Exercício E879** · ★★☆
+
+Conte quantas vezes cada palavra aparece num texto com uma trie em que o nó
+guarda um contador (int qtd) no lugar do bool fim. Defina o struct NoFreq (26
+filhos e qtd) e escreva: - conta(r, p, tam): soma 1 na palavra de tam letras
+que começa em p (o texto
+
+```text
+não tem '\0' depois de cada palavra, por isso o tam);
+```
+
+- lista(n, buf, nivel, &distintas): mostra as palavras em ordem alfabética
+
+```text
+com a contagem e conta quantas palavras diferentes existem;
+```
+
+- libera(n).
+
+O texto é "o rato roeu a roupa do rei de roma o rei riu da roupa".
+
+```text
+Saída esperada:
+a      1
+da     1
+de     1
+do     1
+o      2
+rato   1
+rei    2
+riu    1
+roeu   1
+roma   1
+roupa  2
+14 palavras, 11 diferentes
+```
+
+```bash
+gcc ~/LPEDC/material/E879.c ~/LPEDC/material/0147-trie.c -o ~/LPEDC/material/E879 && ~/LPEDC/material/E879
+```
+
+**Exercício E880** · ★★☆
+
+Guarde estes bichos do zoológico numa trie (trie.h): gato, girafa, guaxinim,
+hipopotamo, jacare, onca, ornitorrinco, rinoceronte, tatu, tamandua,
+orangotango. Escreva duas funções que percorrem a trie montando a palavra num
+buffer: - maior_palavra(n, buf, nivel, maior): copia para maior a palavra
+mais
+
+```text
+comprida (no empate, a primeira em ordem alfabética);
+```
+
+- por_tamanho(n, buf, nivel, alvo): mostra as palavras com exatamente alvo
+
+```text
+letras, sem descer além do nível alvo.
+```
+
+Mostre a maior palavra e as de 4, 6 e 11 letras.
+
+```text
+Saída esperada:
+maior: ornitorrinco (12 letras)
+com 4 letras: gato onca tatu
+com 6 letras: girafa jacare
+com 11 letras: orangotango rinoceronte
+```
+
+```bash
+gcc ~/LPEDC/material/E880.c ~/LPEDC/material/0147-trie.c -o ~/LPEDC/material/E880 && ~/LPEDC/material/E880
+```
+
+**Exercício E882** · ★★★
+
+O TAD (trie.h) não sabe tirar palavras. Escreva bool remove_palavra(NoTrie
+*n, const char *p, bool *tirou), que desmarca o fim da palavra e libera, de
+baixo para cima, os nós que ficarem inúteis (sem fim e sem filhos); os nós
+que outra palavra ainda usa ficam. Em *tirou, diz se a palavra estava lá.
+Devolve true se n ficou inútil.
+
+Insira sol, sola, solado, solteiro e sal. Mostre o início e, depois de tirar
+cada palavra de solado, so, sol, solteiro, sal e sola, o tamanho da trie
+(trie_nos) e as palavras que sobram (trie_autocompleta com prefixo "").
+
+```text
+Saída esperada:
+início | nós: 14 | palavras: sal sol sola solado solteiro
+tira solado: tirou | nós: 12 | sobram: sal sol sola solteiro
+tira so: não estava | nós: 12 | sobram: sal sol sola solteiro
+tira sol: tirou | nós: 12 | sobram: sal sola solteiro
+tira solteiro: tirou | nós: 7 | sobram: sal sola
+tira sal: tirou | nós: 5 | sobram: sola
+tira sola: tirou | nós: 1 | sobram:
+```
+
+```bash
+gcc ~/LPEDC/material/E882.c ~/LPEDC/material/0147-trie.c -o ~/LPEDC/material/E882 && ~/LPEDC/material/E882
+```
+
+---
+
+## 0148 · Union-find: conjuntos disjuntos
+
+### Conceito
+
+- **Conjuntos disjuntos**: grupos que não se misturam, com duas operações
+  (CORMEN et al., 2024, cap. 19):
+  **acha(x)** devolve o **representante** do grupo de x; **une(a, b)** junta os
+  grupos de a e de b. Dois elementos estão juntos se têm o mesmo representante.
+- **Floresta num vetor**: `pai[x]` é o pai de x, e a raiz aponta para si mesma
+  (`pai[x] == x`); a raiz é o representante. `acha` sobe até a raiz; `une`
+  pendura uma raiz na outra (SEDGEWICK; WAYNE, 2011).
+- **União por tamanho**: pendure a raiz do grupo **menor** na do maior. Um
+  elemento só desce quando o grupo dele pelo menos dobra: altura até log₂ n
+  (LINTZMAYER; MOTA, 2023).
+- **Compressão de caminho**: depois de achar a raiz, `acha` faz todo o caminho
+  apontar **direto** para ela. Por isso consultar **modifica** `pai`.
+- **Custo**: com os dois truques, m operações custam O(m · α(n)), e α não passa
+  de 4 para nenhum n realista: O(1) amortizado na prática (TARJAN, 1975).
+- **No Cormen**: `MAKE-SET`, `FIND-SET` e `UNION`, com **união por posto**
+  (*rank*), um limite da altura que só cresce quando dois postos iguais se
+  juntam. Mesma garantia; o Kruskal (0152) usa esta estrutura
+  (CORMEN et al., 2024, cap. 19).
+
+> [!WARNING]
+> O representante é a **raiz**. `pai[a] = b` arranca o `a` do grupo; o certo é
+> `pai[acha(a)] = acha(b)`. Testar `pai[a] == pai[b]` falha com mais de um nível:
+> o teste é `acha(a) == acha(b)`. E `tam[x]` só vale na raiz.
+
+### Exemplos de uso
 
 Oito colegas de uma turma, de 0 (Ana) a 7 (Hugo), e sete amizades: quem se
 conhece cai no mesmo sorteio de amigo secreto. Sobram dois grupos, e Duda e Hugo
@@ -1355,7 +1786,143 @@ int main(void) {
 gcc ~/LPEDC/material/A296.c ~/LPEDC/material/0148-uniao.c -o ~/LPEDC/material/A296 && ~/LPEDC/material/A296
 ```
 
-### 0149 · Juntando tudo: corretor ortográfico
+### Exercícios
+
+**Exercício E883** · ★☆☆
+
+Depois da enchente, só algumas estradas entre sete cidades continuam abertas.
+Use o TAD (uniao.h). As cidades, de 0 a 6, são Araras, Bauru, Catanduva,
+Dourado, Embu, Franca e Garça. As estradas abertas ligam os pares 0-2, 1-5,
+2-3, 5-6 e 0-3. Una as cidades de cada estrada, mostre quantos grupos de
+cidades ligadas existem e responda se dá para ir (passando por outras, se
+preciso) de 0 a 3, de 1 a 6, de 3 a 5 e de 4 a 4.
+
+```text
+Saída esperada:
+Grupos de cidades ligadas: 3
+Araras -> Dourado: dá para ir
+Bauru -> Garça: dá para ir
+Dourado -> Franca: não dá para ir
+Embu -> Embu: dá para ir
+```
+
+```bash
+gcc ~/LPEDC/material/E883.c ~/LPEDC/material/0148-uniao.c -o ~/LPEDC/material/E883 && ~/LPEDC/material/E883
+```
+
+**Exercício E885** · ★★☆
+
+O técnico ligou os 7 computadores do escritório (0 a 6) com 9 cabos, nesta
+ordem:
+
+```text
+0-1 1-2 3-4 2-0 4-5 5-6 1-4 6-3 2-5
+```
+
+Um cabo é redundante quando liga dois computadores que JÁ conversavam por
+outros cabos (ele fecha um ciclo). Com o TAD (uniao.h), mostre cada cabo
+redundante, quantos cabos bastariam e se a rede ficou toda ligada.
+
+```text
+Saída esperada:
+cabo 4 (2-0) é redundante
+cabo 8 (6-3) é redundante
+cabo 9 (2-5) é redundante
+3 cabos redundantes; 6 cabos bastam; rede toda ligada
+```
+
+```bash
+gcc ~/LPEDC/material/E885.c ~/LPEDC/material/0148-uniao.c -o ~/LPEDC/material/E885 && ~/LPEDC/material/E885
+```
+
+**Exercício E886** · ★★☆
+
+Na pelada de quinta, quem já jogou junto fica no mesmo time, e "jogou com
+quem jogou com" também conta. Os nove jogadores, de 0 a 8, são Alex, Bia,
+Cadu, Davi, Eli, Fabi, Gabo, Hana e Ivo. As duplas que já jogaram juntas:
+
+```text
+0-4 2-7 4-8 1-5 7-3 8-0
+```
+
+Com o TAD (uniao.h), una as duplas e liste cada time com seus jogadores e o
+tamanho. Os times saem na ordem do seu primeiro jogador (o de menor número),
+e os jogadores de cada time, em ordem de número.
+
+```text
+Saída esperada:
+Time 1 (3): Alex Eli Ivo
+Time 2 (2): Bia Fabi
+Time 3 (3): Cadu Davi Hana
+Time 4 (1): Gabo
+```
+
+```bash
+gcc ~/LPEDC/material/E886.c ~/LPEDC/material/0148-uniao.c -o ~/LPEDC/material/E886 && ~/LPEDC/material/E886
+```
+
+**Exercício E888** · ★★★
+
+Teste de infiltração. Uma placa de 5x5 quadradinhos começa toda tapada, e
+o técnico fura um quadradinho por vez, na ordem c = (i * 9 + 7) % 25 para
+i = 0, 1, 2... (c = linha * 5 + coluna). A água jogada em cima passa para
+baixo quando existe um caminho de quadradinhos furados, vizinhos em cima,
+embaixo ou dos lados, da linha 0 até a linha 4. Descubra em qual furo a água
+passa e mostre a placa nesse momento (# furado, . tapado).
+
+```text
+Saída esperada:
+A água passou no passo 13 (13 de 25 abertas)
+#.#.#
+.##.#
+.#.#.
+##.#.
+#.#..
+```
+
+```bash
+gcc ~/LPEDC/material/E888.c ~/LPEDC/material/0148-uniao.c -o ~/LPEDC/material/E888 && ~/LPEDC/material/E888
+```
+
+---
+
+## 0149 · Juntando tudo: corretor ortográfico
+
+### Conceito
+
+- **Duas perguntas ao dicionário**: "esta palavra existe?" (busca exata) e "quais
+  palavras estão perto desta?". Perto é a poucas **edições** (assunto 0142):
+  tirar, pôr ou trocar uma letra, ou trocar duas vizinhas.
+- **Gerar candidatos**: aplicar à palavra errada todas as edições e ver quais
+  existem. "fiera" gera 290 candidatos, e só "feira" existe.
+- **Dicionário em trie** (assunto 0147): cada busca custa O(L), e um candidato
+  sem prefixo válido ("fx...") morre no segundo nó (ZIVIANI, 2010, cap. 5).
+- **Alternativas**: a hash faz a busca exata em O(1) na média; a BST, em
+  O(log n) comparações de string (SZWARCFITER; MARKENZON, 2010).
+- **Memória e cache**: 84 palavras viram 239 nós de 216 bytes (cerca de 51 KB),
+  espalhados no heap. Cada acesso pode faltar no cache, e por isso a hash costuma
+  vencer na busca exata.
+
+O A297 compara as três com 2500 palavras de duas sílabas e 5000 buscas (metade
+acha, metade não):
+
+| | BST | Tabela hash | Trie |
+| --- | --- | --- | --- |
+| custo da busca exata | 17,2 comparações de string | 1,3 comparação de string | 4 nós (o tamanho da palavra) |
+| memória | 60 KB | 60 KB | 661 KB |
+| palavras com um prefixo | dá, com um percurso por intervalo | não dá | desce até o prefixo e lista |
+| ordem alfabética | percurso em ordem | não dá | percurso por letra |
+| depende de n? | sim, log n | não (com fator de carga bom) | não |
+
+A trie ganha em tudo que envolve **prefixo**; um corretor de verdade combina
+trie e hash.
+
+> [!WARNING]
+> `cor_proxima` só reconhece `'a'` a `'z'`: maiúscula e acento viram separadores
+> ("Hoje" sai "oje"; "pão" sai "p" e "o"). E `cor_sugere` usa um vetor de
+> `COR_MAX + 1` posições, porque pôr uma letra aumenta a palavra.
+
+### Exemplos de uso
 
 O secretário da associação do bairro quer revisar o aviso da semana. São 18
 palavras e cinco problemas: três erros com uma sugestão só, um "caa" que pode
@@ -1712,563 +2279,7 @@ int main(void) {
 gcc ~/LPEDC/material/A298.c ~/LPEDC/material/0149-corretor.c -o ~/LPEDC/material/A298 && ~/LPEDC/material/A298
 ```
 
----
-
-## 3. Exercícios práticos
-
-Cada exercício é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta. Compile como os exemplos: `gcc ~/LPEDC/material/E007.c -o ~/LPEDC/material/E007 && ~/LPEDC/material/E007`. Resoluções em `_respostas/22-arvores-avancadas/`.
-
-### 0144 · Árvores gerais: primeiro filho, próximo irmão
-
-**Exercício E859** · ★☆☆
-
-A lista de compras do churrasco é uma árvore geral (arvgen.h). Monte-a no
-main com ag_cria e ag_adiciona:
-
-```text
-churrasco
-  carnes: picanha 120, linguica 35, frango 28
-  bebidas: refri 24, cerveja 60
-  carvao 30
-```
-
-Os grupos (churrasco, carnes e bebidas) valem 0. Escreva folhas(r), que conta
-os nós sem filhos (os itens do carrinho), e grupos(r), que conta os nós com
-pelo menos um filho (a raiz entra). Mostre também o total com ag_total.
-
-```text
-Saída esperada:
-Itens (folhas): 6
-Grupos (nós com filhos): 3
-Total: R$ 297
-```
-
-```bash
-gcc ~/LPEDC/material/E859.c ~/LPEDC/material/0144-arvgen.c -o ~/LPEDC/material/E859 && ~/LPEDC/material/E859
-```
-
-**Exercício E861** · ★★☆
-
-O orçamento de uma reforma é uma árvore geral (arvgen.h). Monte-a no main:
-
-```text
-reforma
-  cozinha: piso 1800, pia 650
-  banheiro: box 900, loucas (vaso 420, cuba 280)
-  pintura 1200
-```
-
-Escreva caminho(r, nome): mostra a trilha da raiz até o item, separada por "
-> ", e a profundidade do item. Se o item não existir, avisa. Teste com vaso,
-pia, reforma e janela.
-
-```text
-Saída esperada:
-vaso: reforma > banheiro > loucas > vaso (profundidade 3)
-pia: reforma > cozinha > pia (profundidade 2)
-reforma: reforma (profundidade 0)
-janela: não encontrado
-```
-
-```bash
-gcc ~/LPEDC/material/E861.c ~/LPEDC/material/0144-arvgen.c -o ~/LPEDC/material/E861 && ~/LPEDC/material/E861
-```
-
-**Exercício E862** · ★★☆
-
-A árvore genealógica de seu Joaquim é uma árvore geral (arvgen.h). Monte-a no
-main:
-
-```text
-Joaquim
-  Rosa: Paulo, Rita (Leo)
-  Jorge: Nina, Otto, Pedro
-  Vera
-```
-
-Para a foto da festa, escreva conta_nivel(r, alvo), que conta as pessoas na
-profundidade alvo, e mostra_nivel(r, alvo), que imprime os nomes dessa
-profundidade, da esquerda para a direita. No main, use ag_altura para saber
-quantas gerações existem.
-
-```text
-Saída esperada:
-Geração 0 (1): Joaquim
-Geração 1 (3): Rosa Jorge Vera
-Geração 2 (5): Paulo Rita Nina Otto Pedro
-Geração 3 (1): Leo
-```
-
-```bash
-gcc ~/LPEDC/material/E862.c ~/LPEDC/material/0144-arvgen.c -o ~/LPEDC/material/E862 && ~/LPEDC/material/E862
-```
-
-**Exercício E864** · ★★★
-
-Monte uma árvore geral (arvgen.h) pela entrada. Cada linha tem "pai nome
-valor"; na primeira, o pai é "-" e o nome é a raiz. Um filho novo entra no
-fim da fila de irmãos do pai. Se o pai não existir, avise e ignore a linha.
-No fim, mostre a árvore (ag_mostra), o número de nós, a altura e qual filho
-da raiz tem o maior total. Sem nenhuma linha, mostre "Árvore vazia".
-
-```text
-Entrada:
-- casamento 0
-casamento buffet 0
-buffet salgados 1800
-buffet bolo 950
-casamento decoracao 0
-decoracao flores 1200
-igreja padre 300
-decoracao luzes 400
-casamento musica 2500
-buffet doces 700
-```
-
-```text
-Saída esperada:
-pai igreja não existe: linha ignorada
-casamento: 7550
-  buffet: 3450
-    salgados: 1800
-    bolo: 950
-    doces: 700
-  decoracao: 1600
-    flores: 1200
-    luzes: 400
-  musica: 2500
-Itens: 9 | altura: 2
-Maior gasto: buffet (R$ 3450)
-```
-
-```bash
-gcc ~/LPEDC/material/E864.c ~/LPEDC/material/0144-arvgen.c -o ~/LPEDC/material/E864 && ~/LPEDC/material/E864
-```
-
-### 0145 · Rubro-negra esquerdista (LLRB): inserção
-
-**Exercício E865** · ★☆☆
-
-Insira os códigos de 1 a 10, em ordem, numa rubro-negra (rubronegra.h) e
-escreva conta_vermelhos(r), que devolve quantos nós vermelhos a árvore tem.
-Escreva também conta_nos(r) e mostre quantos nós são pretos. Mostre ainda a
-pré-ordem (rn_pre_ordem) numa linha que começa com "pré:".
-
-```text
-Saída esperada:
-pré: 4 2 1 3 8 6* 5 7 10 9*
-nós: 10 | vermelhos: 2 | pretos: 8
-```
-
-```bash
-gcc ~/LPEDC/material/E865.c ~/LPEDC/material/0145-rubronegra.c -o ~/LPEDC/material/E865 && ~/LPEDC/material/E865
-```
-
-**Exercício E867** · ★★☆
-
-Escreva confere(r), o fiscal da rubro-negra esquerdista. Ela devolve a altura
-preta (quantos nós pretos há da raiz até um NULL) se as três regras valerem,
-ou um código negativo com a primeira regra quebrada que achar:
-
-```text
--1: um link vermelho à direita;
--2: dois vermelhos seguidos (um vermelho com filho esquerdo vermelho);
--3: dois caminhos com quantidades diferentes de nós pretos.
-```
-
-Teste com quatro árvores: a do TAD (rubronegra.h) com as chaves de 1 a 20 e
-três montadas à mão com malloc (escreva uma função no(chave, vermelho, esq,
-dir)), cada nó dado como chave/cor:
-
-```text
-A: 20 preto, filho esquerdo 10 preto, filho direito 30 vermelho
-B: 30 preto, esquerdo 20 vermelho (com filho esquerdo 10 vermelho),
-   direito 40 preto
-C: 20 preto, esquerdo 10 preto (com filho esquerdo 5 preto),
-   direito 30 preto sem filhos
-```
-
-```text
-Saída esperada:
-TAD (1 a 20): ok, altura preta 4
-Árvore A: quebra a regra 1
-Árvore B: quebra a regra 2
-Árvore C: quebra a regra 3
-```
-
-```bash
-gcc ~/LPEDC/material/E867.c ~/LPEDC/material/0145-rubronegra.c -o ~/LPEDC/material/E867 && ~/LPEDC/material/E867
-```
-
-**Exercício E868** · ★★☆
-
-A eleição do síndico guarda os números votados numa rubro-negra esquerdista
-que você escreve do zero. Cada nó tem numero e qtd (quantos votos): número
-repetido não cria nó novo, só soma 1 em qtd. Escreva insere, apura(r), que
-mostra cada número em ordem crescente com a quantidade ("voto" no singular
-quando for 1), e vencedor(r), que devolve o nó com mais votos.
-
-A urna tem estes 12 votos, na ordem:
-
-```text
-45 12 45 13 30 12 45 13 45 30 12 99
-```
-
-```text
-Saída esperada:
-12: 3 votos
-13: 2 votos
-30: 2 votos
-45: 4 votos
-99: 1 voto
-Vencedor: 45 com 4 de 12 votos
-```
-
-```bash
-gcc ~/LPEDC/material/E868.c ~/LPEDC/material/0145-rubronegra.c -o ~/LPEDC/material/E868 && ~/LPEDC/material/E868
-```
-
-**Exercício E870** · ★★★
-
-Escreva do zero (sem o rubronegra.h, que guarda int) uma rubro-negra
-esquerdista de NOMES para a lista de convidados de uma festa. Compare com
-strcmp; nome repetido é ignorado. Insira, nesta ordem:
-
-```text
-Marcos Ana Teresa Bruno Lia Zeca Carla Otavio Duda Ana
-```
-
-Mostre a lista em ordem, a pré-ordem com * nos vermelhos, a altura, a
-altura preta e o resultado de duas buscas.
-
-```text
-Saída esperada:
-Em ordem: Ana Bruno Carla Duda Lia Marcos Otavio Teresa Zeca
-Pré-ordem: Marcos Duda Bruno* Ana Carla Lia Teresa Otavio Zeca
-Altura 3, altura preta 3
-Lia: na lista | Rafa: fora
-```
-
-```bash
-gcc ~/LPEDC/material/E870.c ~/LPEDC/material/0145-rubronegra.c -o ~/LPEDC/material/E870 && ~/LPEDC/material/E870
-```
-
-### 0146 · Árvore B: busca, divisão e inserção
-
-**Exercício E871** · ★☆☆
-
-Insira os códigos de 1 a 20, em ordem, numa árvore B (arvoreb.h, T = 2) e
-escreva duas funções recursivas: conta_chaves(r), o total de chaves, e
-conta_nos(r), o total de nós. Mostre a árvore com ab_mostra e a média de
-chaves por nó.
-
-```text
-Saída esperada:
-  nível 0: [8]
-  nível 1: [4] [12]
-  nível 2: [2] [6] [10] [14 16 18]
-  nível 3: [1] [3] [5] [7] [9] [11] [13] [15] [17] [19 20]
-chaves: 20 | nós: 17 | média: 1.18 chaves por nó
-```
-
-```bash
-gcc ~/LPEDC/material/E871.c ~/LPEDC/material/0146-arvoreb.c -o ~/LPEDC/material/E871 && ~/LPEDC/material/E871
-```
-
-**Exercício E873** · ★★☆
-
-No disco, cada nó da árvore B ocupa um bloco inteiro, cheio ou não. A
-ocupação é a fração das vagas de chave que estão em uso:
-chaves / (nós · AB_MAX). Monte duas árvores com as chaves de 1 a 200: uma
-inserindo em ordem crescente e outra na ordem embaralhada i * 37 % 200 + 1
-(i de 0 a 199, que passa por todos os números de 1 a 200 uma vez só).
-Escreva mede(r, &chaves, &nos), que soma as chaves e os nós de uma árvore,
-e mostre nós, altura e ocupação de cada uma.
-
-```text
-Saída esperada:
-crescente:   nós 195 | altura 6 | ocupação 34.2%
-embaralhada: nós 127 | altura 5 | ocupação 52.5%
-```
-
-```bash
-gcc ~/LPEDC/material/E873.c ~/LPEDC/material/0146-arvoreb.c -o ~/LPEDC/material/E873 && ~/LPEDC/material/E873
-```
-
-**Exercício E874** · ★★☆
-
-A contabilidade quer as notas fiscais de uma faixa de números. Insira estas
-15 notas numa árvore B (arvoreb.h, que fica com 9 nós), na ordem:
-
-```text
-512 87 340 905 23 678 150 401 799 266 33 960 610 445 118
-```
-
-Escreva intervalo(r, a, b, &visitados): mostra, em ordem crescente, as chaves
-de a até b e conta quantos nós foram lidos. Não leia subárvores que não podem
-ter chave na faixa. Teste com as faixas 300-700, 100-160 e 970-999.
-
-```text
-Saída esperada:
-notas de 300 a 700: 340 401 445 512 610 678 (7 nós lidos de 9)
-notas de 100 a 160: 118 150 (3 nós lidos de 9)
-notas de 970 a 999: (3 nós lidos de 9)
-```
-
-```bash
-gcc ~/LPEDC/material/E874.c ~/LPEDC/material/0146-arvoreb.c -o ~/LPEDC/material/E874 && ~/LPEDC/material/E874
-```
-
-**Exercício E876** · ★★★
-
-Escreva do zero uma árvore B de grau mínimo T = 3: cada nó guarda de 2 a 5
-chaves (a raiz pode ter 1) e tem até 6 filhos. Use a inserção com divisão
-na descida, como no texto, mas com T e MAX definidos no seu arquivo (o TAD
-arvoreb.h tem T = 2 fixo). Insira i * 7 % 31 para i de 1 a 30 (são os
-números de 1 a 30, embaralhados: 7, 14, 21, 28, 4, 11...). Mostre a árvore
-por nível e o resultado de duas buscas, contando os blocos lidos.
-
-```text
-Saída esperada:
-nível 0: [14]
-nível 1: [4 7 11] [18 21 26]
-nível 2: [1 2 3] [5 6] [8 9 10] [12 13] [15 16 17] [19 20] [22 23 24 25] [27 28 29 30]
-busca 23: achou, 3 blocos lidos
-busca 31: não achou, 3 blocos lidos
-```
-
-```bash
-gcc ~/LPEDC/material/E876.c ~/LPEDC/material/0146-arvoreb.c -o ~/LPEDC/material/E876 && ~/LPEDC/material/E876
-```
-
-### 0147 · Trie: árvore de prefixos e autocompletar
-
-**Exercício E878** · ★☆☆
-
-O terminal completa comandos com a tecla Tab. Guarde estes comandos numa trie
-(trie.h): cd, cat, chmod, chown, ls, less, mkdir, man. Escreva classifica(r,
-texto), que devolve uma de três mensagens: "comando" (o texto é um comando
-inteiro), "só começo de comando" (algum comando começa assim, mas o texto não
-é um) ou "não está". Teste, nesta ordem, com:
-
-```text
-cat ch le less rm c mkdirs
-```
-
-```text
-Saída esperada:
-cat     comando
-ch      só começo de comando
-le      só começo de comando
-less    comando
-rm      não está
-c       só começo de comando
-mkdirs  não está
-```
-
-```bash
-gcc ~/LPEDC/material/E878.c ~/LPEDC/material/0147-trie.c -o ~/LPEDC/material/E878 && ~/LPEDC/material/E878
-```
-
-**Exercício E879** · ★★☆
-
-Conte quantas vezes cada palavra aparece num texto com uma trie em que o nó
-guarda um contador (int qtd) no lugar do bool fim. Defina o struct NoFreq (26
-filhos e qtd) e escreva: - conta(r, p, tam): soma 1 na palavra de tam letras
-que começa em p (o texto
-
-```text
-não tem '\0' depois de cada palavra, por isso o tam);
-```
-
-- lista(n, buf, nivel, &distintas): mostra as palavras em ordem alfabética
-
-```text
-com a contagem e conta quantas palavras diferentes existem;
-```
-
-- libera(n).
-
-O texto é "o rato roeu a roupa do rei de roma o rei riu da roupa".
-
-```text
-Saída esperada:
-a      1
-da     1
-de     1
-do     1
-o      2
-rato   1
-rei    2
-riu    1
-roeu   1
-roma   1
-roupa  2
-14 palavras, 11 diferentes
-```
-
-```bash
-gcc ~/LPEDC/material/E879.c ~/LPEDC/material/0147-trie.c -o ~/LPEDC/material/E879 && ~/LPEDC/material/E879
-```
-
-**Exercício E880** · ★★☆
-
-Guarde estes bichos do zoológico numa trie (trie.h): gato, girafa, guaxinim,
-hipopotamo, jacare, onca, ornitorrinco, rinoceronte, tatu, tamandua,
-orangotango. Escreva duas funções que percorrem a trie montando a palavra num
-buffer: - maior_palavra(n, buf, nivel, maior): copia para maior a palavra
-mais
-
-```text
-comprida (no empate, a primeira em ordem alfabética);
-```
-
-- por_tamanho(n, buf, nivel, alvo): mostra as palavras com exatamente alvo
-
-```text
-letras, sem descer além do nível alvo.
-```
-
-Mostre a maior palavra e as de 4, 6 e 11 letras.
-
-```text
-Saída esperada:
-maior: ornitorrinco (12 letras)
-com 4 letras: gato onca tatu
-com 6 letras: girafa jacare
-com 11 letras: orangotango rinoceronte
-```
-
-```bash
-gcc ~/LPEDC/material/E880.c ~/LPEDC/material/0147-trie.c -o ~/LPEDC/material/E880 && ~/LPEDC/material/E880
-```
-
-**Exercício E882** · ★★★
-
-O TAD (trie.h) não sabe tirar palavras. Escreva bool remove_palavra(NoTrie
-*n, const char *p, bool *tirou), que desmarca o fim da palavra e libera, de
-baixo para cima, os nós que ficarem inúteis (sem fim e sem filhos); os nós
-que outra palavra ainda usa ficam. Em *tirou, diz se a palavra estava lá.
-Devolve true se n ficou inútil.
-
-Insira sol, sola, solado, solteiro e sal. Mostre o início e, depois de tirar
-cada palavra de solado, so, sol, solteiro, sal e sola, o tamanho da trie
-(trie_nos) e as palavras que sobram (trie_autocompleta com prefixo "").
-
-```text
-Saída esperada:
-início | nós: 14 | palavras: sal sol sola solado solteiro
-tira solado: tirou | nós: 12 | sobram: sal sol sola solteiro
-tira so: não estava | nós: 12 | sobram: sal sol sola solteiro
-tira sol: tirou | nós: 12 | sobram: sal sola solteiro
-tira solteiro: tirou | nós: 7 | sobram: sal sola
-tira sal: tirou | nós: 5 | sobram: sola
-tira sola: tirou | nós: 1 | sobram:
-```
-
-```bash
-gcc ~/LPEDC/material/E882.c ~/LPEDC/material/0147-trie.c -o ~/LPEDC/material/E882 && ~/LPEDC/material/E882
-```
-
-### 0148 · Union-find: conjuntos disjuntos
-
-**Exercício E883** · ★☆☆
-
-Depois da enchente, só algumas estradas entre sete cidades continuam abertas.
-Use o TAD (uniao.h). As cidades, de 0 a 6, são Araras, Bauru, Catanduva,
-Dourado, Embu, Franca e Garça. As estradas abertas ligam os pares 0-2, 1-5,
-2-3, 5-6 e 0-3. Una as cidades de cada estrada, mostre quantos grupos de
-cidades ligadas existem e responda se dá para ir (passando por outras, se
-preciso) de 0 a 3, de 1 a 6, de 3 a 5 e de 4 a 4.
-
-```text
-Saída esperada:
-Grupos de cidades ligadas: 3
-Araras -> Dourado: dá para ir
-Bauru -> Garça: dá para ir
-Dourado -> Franca: não dá para ir
-Embu -> Embu: dá para ir
-```
-
-```bash
-gcc ~/LPEDC/material/E883.c ~/LPEDC/material/0148-uniao.c -o ~/LPEDC/material/E883 && ~/LPEDC/material/E883
-```
-
-**Exercício E885** · ★★☆
-
-O técnico ligou os 7 computadores do escritório (0 a 6) com 9 cabos, nesta
-ordem:
-
-```text
-0-1 1-2 3-4 2-0 4-5 5-6 1-4 6-3 2-5
-```
-
-Um cabo é redundante quando liga dois computadores que JÁ conversavam por
-outros cabos (ele fecha um ciclo). Com o TAD (uniao.h), mostre cada cabo
-redundante, quantos cabos bastariam e se a rede ficou toda ligada.
-
-```text
-Saída esperada:
-cabo 4 (2-0) é redundante
-cabo 8 (6-3) é redundante
-cabo 9 (2-5) é redundante
-3 cabos redundantes; 6 cabos bastam; rede toda ligada
-```
-
-```bash
-gcc ~/LPEDC/material/E885.c ~/LPEDC/material/0148-uniao.c -o ~/LPEDC/material/E885 && ~/LPEDC/material/E885
-```
-
-**Exercício E886** · ★★☆
-
-Na pelada de quinta, quem já jogou junto fica no mesmo time, e "jogou com
-quem jogou com" também conta. Os nove jogadores, de 0 a 8, são Alex, Bia,
-Cadu, Davi, Eli, Fabi, Gabo, Hana e Ivo. As duplas que já jogaram juntas:
-
-```text
-0-4 2-7 4-8 1-5 7-3 8-0
-```
-
-Com o TAD (uniao.h), una as duplas e liste cada time com seus jogadores e o
-tamanho. Os times saem na ordem do seu primeiro jogador (o de menor número),
-e os jogadores de cada time, em ordem de número.
-
-```text
-Saída esperada:
-Time 1 (3): Alex Eli Ivo
-Time 2 (2): Bia Fabi
-Time 3 (3): Cadu Davi Hana
-Time 4 (1): Gabo
-```
-
-```bash
-gcc ~/LPEDC/material/E886.c ~/LPEDC/material/0148-uniao.c -o ~/LPEDC/material/E886 && ~/LPEDC/material/E886
-```
-
-**Exercício E888** · ★★★
-
-Teste de infiltração. Uma placa de 5x5 quadradinhos começa toda tapada, e
-o técnico fura um quadradinho por vez, na ordem c = (i * 9 + 7) % 25 para
-i = 0, 1, 2... (c = linha * 5 + coluna). A água jogada em cima passa para
-baixo quando existe um caminho de quadradinhos furados, vizinhos em cima,
-embaixo ou dos lados, da linha 0 até a linha 4. Descubra em qual furo a água
-passa e mostre a placa nesse momento (# furado, . tapado).
-
-```text
-Saída esperada:
-A água passou no passo 13 (13 de 25 abertas)
-#.#.#
-.##.#
-.#.#.
-##.#.
-#.#..
-```
-
-```bash
-gcc ~/LPEDC/material/E888.c ~/LPEDC/material/0148-uniao.c -o ~/LPEDC/material/E888 && ~/LPEDC/material/E888
-```
-
-### 0149 · Juntando tudo: corretor ortográfico
+### Exercícios
 
 **Exercício E889** · ★☆☆
 
@@ -2365,11 +2376,13 @@ mercadorias: nenhuma
 gcc ~/LPEDC/material/E894.c ~/LPEDC/material/0149-corretor.c -o ~/LPEDC/material/E894 && ~/LPEDC/material/E894
 ```
 
-### Lista do módulo
+---
+
+## Lista do módulo
 
 30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P2201.c a P2230.c, em `material/`; resoluções em `_respostas/22-arvores-avancadas/lista/`.
 
-#### ★☆☆ Aquecimento
+### ★☆☆ Aquecimento
 
 **Exercício P2201** · ★☆☆ · Quantos níveis tem o organograma?
 
@@ -2614,7 +2627,7 @@ Nível 2: [1] [3] [5] [7] [9] [11 12]
 
 **Resposta esperada:** 3 níveis, com [4] na raiz e [2] e [6 8 10] embaixo. Todas as folhas ficam no mesmo nível: é a regra da árvore B.
 
-#### ★★☆ Para pensar
+### ★★☆ Para pensar
 
 **Exercício P2211** · ★★☆ · O fiscal completo da rubro-negra
 
@@ -2874,7 +2887,7 @@ Pedido 42: piso 41, teto 43
 
 **Resposta esperada:** para 36, piso 35 e teto 37; para 33 não há piso; para 46 não há teto; 40 está em estoque.
 
-#### ★★★ Desafio
+### ★★★ Desafio
 
 **Exercício P2221** · ★★★ · A rubro-negra que se fiscaliza
 
@@ -3169,7 +3182,7 @@ Embaralhadas: comum 24, rubro-negra 13, B 8 níveis
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas para resolver no papel e, quando fizer sentido, num arquivo `.c` seu
 usando os TADs do módulo. Eles misturam os assuntos.
@@ -3330,7 +3343,7 @@ altura continua 2. Confira com `ab_insere` e `ab_mostra`.
 
 </details>
 
-### Questões do POSCOMP
+## Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -3341,7 +3354,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 
 O gabarito de 2023 vem de um blog de terceiros que reproduz o gabarito definitivo; confira no PDF oficial da SBC.
 
-### Questões no estilo da prova
+## Questões no estilo da prova
 
 Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma
 alternativa certa. As definições seguem o Cormen: rubro-negra **clássica**
@@ -3600,7 +3613,7 @@ chaves para `t = 3`. Veja 0146.
 
 </details>
 
-### Questões de provas do PPGI
+## Questões de provas do PPGI
 
 Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.
 

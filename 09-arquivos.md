@@ -58,9 +58,12 @@ sudo apt install strace     # Debian / Ubuntu
 
 ---
 
-## 1. Conceitos gerais
+> [!NOTE]
+> Cada assunto é um capítulo: **Conceito** (a explicação), **Exemplos de uso** (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e **Exercícios** (cada um é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta; resoluções em `_respostas/09-arquivos/`).
 
-### 0067 · Arquivos texto
+## 0067 · Arquivos texto
+
+### Conceito
 
 - **Arquivo**: sequência de bytes guardada no disco. Variáveis moram na RAM e
   somem quando o programa termina; o arquivo fica (BACKES, 2013, cap. 12).
@@ -95,102 +98,7 @@ sudo apt install strace     # Debian / Ubuntu
 > leitura falhou, e a última linha é processada duas vezes. Teste o retorno da
 > leitura (`fgets(...) != NULL`). Com `fgetc`, guarde em `int`, não em `char`.
 
-### 0068 · Arquivos binários
-
-- **Arquivo binário**: grava os bytes **exatamente como estão na memória**, sem
-  converter em texto. Um `int` ocupa sempre 4 bytes (BACKES, 2013, cap. 12).
-- **Registro de tamanho fixo**: o registro `i` começa no byte
-  `i * sizeof(registro)`, e dá para ir direto a ele
-  (DEITEL; DEITEL, 2011, cap. 11).
-- **Modo com `b`**: `"wb"`, `"rb"`, `"ab"`, `"rb+"`. No Linux não muda nada; no
-  Windows, sem ele, `\n` vira `\r\n` e estraga os bytes (BACKES, 2013, cap. 12).
-- **`fwrite(endereco, tamanho, quantidade, arq)`** e **`fread`**: copiam
-  `tamanho * quantidade` bytes e devolvem **quantos itens** processaram. Menos
-  que o pedido indica fim ou erro (BACKES, 2013, cap. 12).
-- **`fseek(arq, deslocamento, origem)`**: muda a posição a partir de `SEEK_SET`
-  (começo), `SEEK_CUR` (atual) ou `SEEK_END` (fim). Não lê nada: pular para o
-  registro 2 custa o mesmo que para o 2 milhões (DEITEL; DEITEL, 2011, cap. 11).
-- **`ftell`** devolve a posição em bytes e **`rewind`** volta ao byte 0.
-  `fseek` até o fim e `ftell` medem o arquivo (BACKES, 2013, cap. 12).
-- **Busca binária no arquivo**: com registros em ordem, uns 20 `fread` acham
-  um em 1 milhão, sem carregar tudo na RAM (assunto 0090) (ZIVIANI, 2010).
-
-| | texto (`fprintf`) | binário (`fwrite`) |
-| --- | --- | --- |
-| o `int` 12345678 | 8 bytes: `'1' '2' ... '8'` | 4 bytes: `4E 61 BC 00` |
-| abre no editor? | sim | vira lixo na tela |
-| converte na ida e na volta? | sim (mais lento) | não, só copia bytes |
-| acesso direto ao registro `i`? | não | sim, com `fseek` |
-| lê em outra máquina? | sim | só se `int`, alinhamento e ordem dos bytes forem iguais |
-
-> [!WARNING]
-> `fwrite` copia bytes, não dados. Struct com ponteiro (`char *nome`) grava o
-> **endereço**, que não vale na próxima execução: use `char nome[20]`. E um
-> `.bin` pode não ser lido igual em outra máquina; para trocar dados, use texto.
-
-### 0069 · Argumentos da linha de comando
-
-- **Argumentos da linha de comando**: dados que vão junto do comando, como em
-  `cp origem destino`. Chegam como parâmetros do `main`
-  (BACKES, 2013, cap. 13).
-
-```c
-int main(int argc, char *argv[])
-```
-
-- **`argc`** (*argument count*): quantos itens vieram, **contando o nome do
-  programa**. Vale pelo menos 1 (FEOFILOFF, 2009, ap. H).
-- **`argv`** (*argument vector*): vetor de `char *`, uma string por item.
-  `argv[0]` é o nome do programa e `argv[argc]` é `NULL`
-  (KERNIGHAN; RITCHIE, 1989).
-- **Shell**: corta a linha antes de o programa começar. Separa nos espaços,
-  tira as aspas e expande coringas: `"São Paulo"` chega como um argumento só.
-- **Tudo é texto**: o `4` chega como `"4"`. `strtol(texto, &fim, 10)` e
-  `strtod(texto, &fim)` convertem e apontam `fim` para o que sobrou; se
-  `*fim != '\0'`, veio lixo (LINUX MAN-PAGES PROJECT, s.d.).
-- **`atoi` e `atof`**: não avisam erro, `atoi("quatro")` devolve 0. Servem para
-  teste rápido (BACKES, 2013, cap. 13).
-- **`stderr` e código de saída**: erros vão para `stderr`, que aparece mesmo com
-  `> saida.txt`. O `return` do `main` é 0 no sucesso e outro valor na falha; o
-  shell guarda em `$?` (BACKES, 2013, cap. 12).
-
-> [!WARNING]
-> Nunca use `argv[1]` sem conferir o `argc`: sem argumentos, ele é `NULL` e
-> `atoi(NULL)` derruba o programa. E em `./calc 9 * 3` o shell troca o `*`
-> pelos nomes dos arquivos da pasta; use aspas (`'*'`) ou `x`.
-
-### 0070 · Juntando tudo: a caderneta de gastos
-
-- **Argumentos** (0069): `argv[1]` diz **o que** fazer e os seguintes trazem os
-  dados, como nos subcomandos do `git`. O `main` confere o `argc` e chama a
-  função certa (FEOFILOFF, 2009, ap. H).
-- **Arquivo binário** (0068): cada gasto é um registro `Gasto` de tamanho fixo,
-  gravado com `fwrite` em modo `"ab"`, sempre no fim. `ftell / sizeof(Gasto)`
-  diz quantos já existem (DEITEL; DEITEL, 2011, cap. 11).
-- **Arquivo texto** (0067): o `exporta` lê os registros e escreve com `fprintf`
-  um **CSV** separado por `;`, que as planilhas abrem direto
-  (BACKES, 2013, cap. 12).
-- **Validar antes de gravar**: `strtod` com `*fim != '\0'` impede que "abc"
-  entre como R$ 0,00 (LINUX MAN-PAGES PROJECT, s.d.).
-- **Não gravar lixo**: o `memset` zera `categoria` antes do `strncpy`, então os
-  bytes que sobram são zeros, não restos da pilha.
-- **Arquivo inexistente nem sempre é erro**: no `lista`, significa "nenhum
-  gasto ainda".
-- **`"ab"` vai sempre para o fim**, mesmo depois de um `fseek`: dois programas
-  anotando ao mesmo tempo não se sobrescrevem (LINUX MAN-PAGES PROJECT, s.d.).
-
-> [!WARNING]
-> Trocar `"ab"` por `"wb"` no `novo` apaga os gastos anteriores, sem aviso. E não
-> leia, por outro `FILE *`, o que acabou de escrever antes do `fclose` (ou
-> `fflush`): os bytes ainda estão no buffer.
-
----
-
-## 2. Exemplos de uso
-
-Cada exemplo compila sozinho. Rode com o comando abaixo dele e compare com a saída no fim do código.
-
-### 0067 · Arquivos texto
+### Exemplos de uso
 
 O programa grava as três despesas do mês (mercado, luz, internet) em
 `/tmp/despesas.txt`, reabre o arquivo em leitura e o `fgets` traz as linhas,
@@ -359,7 +267,136 @@ int main(void) {
 gcc ~/LPEDC/material/A134.c -o ~/LPEDC/material/A134 && ~/LPEDC/material/A134
 ```
 
-### 0068 · Arquivos binários
+### Exercícios
+
+**Exercício E397** · ★☆☆
+
+Grave a tabuada do 7 no arquivo /tmp/tabuada7.txt, uma conta por linha,
+usando fprintf. Feche o arquivo, abra de novo em modo leitura e mostre o
+conteúdo na tela com fgets. Confira se o fopen deu certo nas duas vezes.
+
+```text
+Saída esperada:
+7 x 1 = 7
+7 x 2 = 14
+7 x 3 = 21
+7 x 4 = 28
+7 x 5 = 35
+7 x 6 = 42
+7 x 7 = 49
+7 x 8 = 56
+7 x 9 = 63
+7 x 10 = 70
+```
+
+**Exercício E399** · ★★☆
+
+Faça um "wc" caseiro. Primeiro, grave em /tmp/recado.txt exatamente estas
+três linhas (cada uma termina com '\n'):
+
+```text
+Feira no domingo
+leve sacolas
+e o dinheiro do pastel
+```
+
+Depois, abra o arquivo para leitura e leia caractere por caractere com
+fgetc, contando linhas, palavras e caracteres (bytes).
+
+```text
+Saída esperada:
+Linhas: 3
+Palavras: 10
+Caracteres: 53
+```
+
+**Exercício E400** · ★★☆
+
+Escreva um programa que cria o arquivo /tmp/turma.txt com fprintf, uma linha
+por aluno com o nome e duas notas: "Bruna 9.0 7.5", "Diego 4.0 7.0" e
+"Lia 6.5 7.5". Feche, reabra para leitura e leia com fscanf num laço que
+pare quando a linha não vier completa. Mostre a média de cada um e a
+situação (aprovado com média >= 7.0) e, no fim, a média da turma. Confira os
+fopen e apague o arquivo no final.
+
+```text
+Saída esperada:
+Bruna    média 8.25  aprovada(o)
+Diego    média 5.50  reprovada(o)
+Lia      média 7.00  aprovada(o)
+Média da turma: 6.92
+```
+
+**Exercício E402** · ★★★
+
+Lista de compras automática. Escreva um programa que:
+
+1. cria /tmp/estoque.txt com as linhas "arroz 3", "cafe 0", "leite 8",
+
+```text
+ "ovos 2" e "sabao 6" (produto e quantidade em casa);
+```
+
+2. lê o estoque e, com os DOIS arquivos abertos ao mesmo tempo, grava em
+
+```text
+ /tmp/comprar.txt só os produtos com menos de 5 unidades, já com quanto
+ falta para chegar a 5 ("arroz 2");
+```
+
+3. fecha tudo, reabre /tmp/comprar.txt e mostra o resultado. Se o segundo
+
+```text
+ fopen falhar, feche o primeiro arquivo antes de sair.
+```
+
+```text
+Saída esperada:
+Comprar:
+- arroz: 2
+- cafe: 5
+- ovos: 3
+3 itens na lista
+```
+
+---
+
+## 0068 · Arquivos binários
+
+### Conceito
+
+- **Arquivo binário**: grava os bytes **exatamente como estão na memória**, sem
+  converter em texto. Um `int` ocupa sempre 4 bytes (BACKES, 2013, cap. 12).
+- **Registro de tamanho fixo**: o registro `i` começa no byte
+  `i * sizeof(registro)`, e dá para ir direto a ele
+  (DEITEL; DEITEL, 2011, cap. 11).
+- **Modo com `b`**: `"wb"`, `"rb"`, `"ab"`, `"rb+"`. No Linux não muda nada; no
+  Windows, sem ele, `\n` vira `\r\n` e estraga os bytes (BACKES, 2013, cap. 12).
+- **`fwrite(endereco, tamanho, quantidade, arq)`** e **`fread`**: copiam
+  `tamanho * quantidade` bytes e devolvem **quantos itens** processaram. Menos
+  que o pedido indica fim ou erro (BACKES, 2013, cap. 12).
+- **`fseek(arq, deslocamento, origem)`**: muda a posição a partir de `SEEK_SET`
+  (começo), `SEEK_CUR` (atual) ou `SEEK_END` (fim). Não lê nada: pular para o
+  registro 2 custa o mesmo que para o 2 milhões (DEITEL; DEITEL, 2011, cap. 11).
+- **`ftell`** devolve a posição em bytes e **`rewind`** volta ao byte 0.
+  `fseek` até o fim e `ftell` medem o arquivo (BACKES, 2013, cap. 12).
+- **Busca binária no arquivo**: com registros em ordem, uns 20 `fread` acham
+  um em 1 milhão, sem carregar tudo na RAM (assunto 0090) (ZIVIANI, 2010).
+
+| | texto (`fprintf`) | binário (`fwrite`) |
+| --- | --- | --- |
+| o `int` 12345678 | 8 bytes: `'1' '2' ... '8'` | 4 bytes: `4E 61 BC 00` |
+| abre no editor? | sim | vira lixo na tela |
+| converte na ida e na volta? | sim (mais lento) | não, só copia bytes |
+| acesso direto ao registro `i`? | não | sim, com `fseek` |
+| lê em outra máquina? | sim | só se `int`, alinhamento e ordem dos bytes forem iguais |
+
+> [!WARNING]
+> `fwrite` copia bytes, não dados. Struct com ponteiro (`char *nome`) grava o
+> **endereço**, que não vale na próxima execução: use `char nome[20]`. E um
+> `.bin` pode não ser lido igual em outra máquina; para trocar dados, use texto.
+
+### Exemplos de uso
 
 O estoque do mercadinho tem três produtos de 32 bytes cada. Um `fwrite` grava
 os três (96 bytes). Para ler o café, o programa pula 2 × 32 = 64 bytes e faz um
@@ -555,7 +592,120 @@ int main(void) {
 gcc ~/LPEDC/material/A136.c -o ~/LPEDC/material/A136 && ~/LPEDC/material/A136
 ```
 
-### 0069 · Argumentos da linha de comando
+### Exercícios
+
+**Exercício E403** · ★☆☆
+
+Uma estação meteorológica registrou as máximas da semana útil: 31, 29, 33,
+35 e 30 graus. Grave o vetor inteiro em /tmp/maximas.bin com UM fwrite.
+Depois leia tudo de volta, com UM fread, para outro vetor, confira se vieram
+os 5 valores e mostre a média.
+
+```text
+Saída esperada:
+Lidos: 5 valores
+Média: 31.6 graus
+```
+
+**Exercício E405** · ★★☆
+
+Crie o tipo Conta (int numero, double saldo). No main, grave com UM fwrite
+em /tmp/contas.bin as contas 1001 (250.00), 1002 (80.50) e 1003 (1200.00).
+Escreva void listar(void), que mostra as contas lendo registro por registro,
+e int depositar(int posicao, double valor): abre em "rb+", vai até o
+registro da posição com fseek, lê, soma o valor ao saldo, volta ao começo
+do mesmo registro e grava por cima (1 se deu certo, 0 se não). Liste,
+deposite R$ 100.00 na posição 1 e liste de novo.
+
+```text
+Saída esperada:
+Antes:
+1001  R$   250.00
+1002  R$    80.50
+1003  R$  1200.00
+Depois:
+1001  R$   250.00
+1002  R$   180.50
+1003  R$  1200.00
+```
+
+**Exercício E406** · ★★☆
+
+Escreva a função
+
+```text
+long contar_registros(const char *caminho, size_t tamanho_registro);
+```
+
+que descobre quantos registros um arquivo binário tem SEM ler nenhum deles:
+só olhando o tamanho do arquivo. Se não conseguir abrir, devolve -1.
+
+No main, grave em /tmp/notas.bin as notas de 7 alunos num vetor de
+struct { int matricula; float nota; } (os valores são livres), feche, e
+mostre:
+
+```text
+Saída esperada:
+Tamanho do registro: 8 bytes
+Registros em /tmp/notas.bin: 7
+Registros em /tmp/nao-existe.bin: -1
+```
+
+**Exercício E408** · ★★★
+
+O extrato do banco mostra os lançamentos mais recentes primeiro. Grave em
+/tmp/extrato.bin estes 6 lançamentos, nesta ordem (do mais antigo para o
+mais novo), como registros de struct { char descricao[24]; double valor; }:
+Salário +3500.00, Aluguel -1200.00, Mercado -387.60, Pix da Ana +45.00,
+Farmácia -62.30 e Padaria -18.90. Depois, SEM carregar o arquivo inteiro na
+memória (um registro por vez), mostre os 3 últimos, do mais novo para o mais
+antigo, e o saldo de TODOS os lançamentos (printf com %-15s %+8.2f).
+
+```text
+Saída esperada:
+Últimos lançamentos:
+Padaria           -18.90
+Farmácia         -62.30
+Pix da Ana        +45.00
+Saldo: R$ 1876.20
+```
+
+---
+
+## 0069 · Argumentos da linha de comando
+
+### Conceito
+
+- **Argumentos da linha de comando**: dados que vão junto do comando, como em
+  `cp origem destino`. Chegam como parâmetros do `main`
+  (BACKES, 2013, cap. 13).
+
+```c
+int main(int argc, char *argv[])
+```
+
+- **`argc`** (*argument count*): quantos itens vieram, **contando o nome do
+  programa**. Vale pelo menos 1 (FEOFILOFF, 2009, ap. H).
+- **`argv`** (*argument vector*): vetor de `char *`, uma string por item.
+  `argv[0]` é o nome do programa e `argv[argc]` é `NULL`
+  (KERNIGHAN; RITCHIE, 1989).
+- **Shell**: corta a linha antes de o programa começar. Separa nos espaços,
+  tira as aspas e expande coringas: `"São Paulo"` chega como um argumento só.
+- **Tudo é texto**: o `4` chega como `"4"`. `strtol(texto, &fim, 10)` e
+  `strtod(texto, &fim)` convertem e apontam `fim` para o que sobrou; se
+  `*fim != '\0'`, veio lixo (LINUX MAN-PAGES PROJECT, s.d.).
+- **`atoi` e `atof`**: não avisam erro, `atoi("quatro")` devolve 0. Servem para
+  teste rápido (BACKES, 2013, cap. 13).
+- **`stderr` e código de saída**: erros vão para `stderr`, que aparece mesmo com
+  `> saida.txt`. O `return` do `main` é 0 no sucesso e outro valor na falha; o
+  shell guarda em `$?` (BACKES, 2013, cap. 12).
+
+> [!WARNING]
+> Nunca use `argv[1]` sem conferir o `argc`: sem argumentos, ele é `NULL` e
+> `atoi(NULL)` derruba o programa. E em `./calc 9 * 3` o shell troca o `*`
+> pelos nomes dos arquivos da pasta; use aspas (`'*'`) ou `x`.
+
+### Exemplos de uso
 
 Fim do rodízio de pizza: conta de R$ 187,40 para 4 pessoas. O comando
 `./racha 187.40 4` chega com `argc = 3`. O programa confere a quantidade,
@@ -728,7 +878,124 @@ int main(int argc, char *argv[]) {
 gcc ~/LPEDC/material/A138.c -o ~/LPEDC/material/A138 && ~/LPEDC/material/A138
 ```
 
-### 0070 · Juntando tudo: a caderneta de gastos
+### Exercícios
+
+**Exercício E409** · ★☆☆
+
+Faça o seu próprio "echo": o programa mostra os argumentos recebidos, na
+mesma linha, separados por um espaço (sem espaço sobrando no fim), e na
+linha de baixo quantos foram. Sem argumentos, mostra só "0 argumentos".
+
+```text
+Argumentos:
+bom dia Brasil
+```
+
+```text
+Saída esperada:
+bom dia Brasil
+3 argumentos
+```
+
+**Exercício E411** · ★★☆
+
+As notas da prova chegam pela linha de comando. Mostre quantas notas
+válidas vieram, a média, a maior e a menor. Argumento que não é número (ou
+que está fora de 0 a 10) é ignorado com um aviso em stderr. Sem nenhuma
+nota válida, mostre "Nenhuma nota válida" e devolva 1.
+
+```text
+Argumentos:
+8.5 7 nove 9.25 6 11
+```
+
+```text
+Saída esperada:
+Ignorando "nove"
+Ignorando "11"
+Notas: 4
+Média: 7.69
+Maior: 9.25
+Menor: 6.00
+```
+
+**Exercício E412** · ★★☆
+
+Escreva um programa que cumprimenta alguém um certo número de vezes. Ele
+recebe o nome e o número de vezes pela linha de comando. Sem os dois
+argumentos, ou com um número de vezes que não é inteiro positivo, mostra uma
+mensagem de uso em stderr e devolve 1.
+
+```text
+Argumentos:
+Ana 3
+```
+
+```text
+Saída esperada:
+Olá, Ana!
+Olá, Ana!
+Olá, Ana!
+```
+
+**Exercício E413** · ★★★
+
+Faça um "wc" de verdade: o nome do arquivo vem pela linha de comando. O
+programa abre o arquivo, conta linhas, palavras e bytes e mostra no formato
+abaixo. Se não vier exatamente um argumento, mostre o uso em stderr e
+devolva 1. Se o arquivo não abrir, use perror com o nome dele e devolva 1.
+
+```text
+Argumentos (o arquivo tem 4 linhas: "Oi, Ana", "tudo certo?", uma vazia
+e "Até amanhã"):
+/tmp/recado.txt
+```
+
+```text
+Saída esperada:
+4 linhas, 6 palavras, 34 bytes em /tmp/recado.txt
+```
+
+```text
+Argumentos (arquivo que não existe):
+/tmp/nao-existe.txt
+```
+
+```text
+Saída esperada (em stderr):
+/tmp/nao-existe.txt: No such file or directory
+```
+
+---
+
+## 0070 · Juntando tudo: a caderneta de gastos
+
+### Conceito
+
+- **Argumentos** (0069): `argv[1]` diz **o que** fazer e os seguintes trazem os
+  dados, como nos subcomandos do `git`. O `main` confere o `argc` e chama a
+  função certa (FEOFILOFF, 2009, ap. H).
+- **Arquivo binário** (0068): cada gasto é um registro `Gasto` de tamanho fixo,
+  gravado com `fwrite` em modo `"ab"`, sempre no fim. `ftell / sizeof(Gasto)`
+  diz quantos já existem (DEITEL; DEITEL, 2011, cap. 11).
+- **Arquivo texto** (0067): o `exporta` lê os registros e escreve com `fprintf`
+  um **CSV** separado por `;`, que as planilhas abrem direto
+  (BACKES, 2013, cap. 12).
+- **Validar antes de gravar**: `strtod` com `*fim != '\0'` impede que "abc"
+  entre como R$ 0,00 (LINUX MAN-PAGES PROJECT, s.d.).
+- **Não gravar lixo**: o `memset` zera `categoria` antes do `strncpy`, então os
+  bytes que sobram são zeros, não restos da pilha.
+- **Arquivo inexistente nem sempre é erro**: no `lista`, significa "nenhum
+  gasto ainda".
+- **`"ab"` vai sempre para o fim**, mesmo depois de um `fseek`: dois programas
+  anotando ao mesmo tempo não se sobrescrevem (LINUX MAN-PAGES PROJECT, s.d.).
+
+> [!WARNING]
+> Trocar `"ab"` por `"wb"` no `novo` apaga os gastos anteriores, sem aviso. E não
+> leia, por outro `FILE *`, o que acabou de escrever antes do `fclose` (ou
+> `fflush`): os bytes ainda estão no buffer.
+
+### Exemplos de uso
 
 O controle de gastos do mês roda no terminal, um comando por execução, com os
 dados guardados em arquivo entre uma execução e outra:
@@ -1118,271 +1385,7 @@ int main(int argc, char *argv[]) {
 gcc ~/LPEDC/material/A140.c -o ~/LPEDC/material/A140 && ~/LPEDC/material/A140
 ```
 
----
-
-## 3. Exercícios práticos
-
-Cada exercício é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta. Compile como os exemplos: `gcc ~/LPEDC/material/E007.c -o ~/LPEDC/material/E007 && ~/LPEDC/material/E007`. Resoluções em `_respostas/09-arquivos/`.
-
-### 0067 · Arquivos texto
-
-**Exercício E397** · ★☆☆
-
-Grave a tabuada do 7 no arquivo /tmp/tabuada7.txt, uma conta por linha,
-usando fprintf. Feche o arquivo, abra de novo em modo leitura e mostre o
-conteúdo na tela com fgets. Confira se o fopen deu certo nas duas vezes.
-
-```text
-Saída esperada:
-7 x 1 = 7
-7 x 2 = 14
-7 x 3 = 21
-7 x 4 = 28
-7 x 5 = 35
-7 x 6 = 42
-7 x 7 = 49
-7 x 8 = 56
-7 x 9 = 63
-7 x 10 = 70
-```
-
-**Exercício E399** · ★★☆
-
-Faça um "wc" caseiro. Primeiro, grave em /tmp/recado.txt exatamente estas
-três linhas (cada uma termina com '\n'):
-
-```text
-Feira no domingo
-leve sacolas
-e o dinheiro do pastel
-```
-
-Depois, abra o arquivo para leitura e leia caractere por caractere com
-fgetc, contando linhas, palavras e caracteres (bytes).
-
-```text
-Saída esperada:
-Linhas: 3
-Palavras: 10
-Caracteres: 53
-```
-
-**Exercício E400** · ★★☆
-
-Escreva um programa que cria o arquivo /tmp/turma.txt com fprintf, uma linha
-por aluno com o nome e duas notas: "Bruna 9.0 7.5", "Diego 4.0 7.0" e
-"Lia 6.5 7.5". Feche, reabra para leitura e leia com fscanf num laço que
-pare quando a linha não vier completa. Mostre a média de cada um e a
-situação (aprovado com média >= 7.0) e, no fim, a média da turma. Confira os
-fopen e apague o arquivo no final.
-
-```text
-Saída esperada:
-Bruna    média 8.25  aprovada(o)
-Diego    média 5.50  reprovada(o)
-Lia      média 7.00  aprovada(o)
-Média da turma: 6.92
-```
-
-**Exercício E402** · ★★★
-
-Lista de compras automática. Escreva um programa que:
-
-1. cria /tmp/estoque.txt com as linhas "arroz 3", "cafe 0", "leite 8",
-
-```text
- "ovos 2" e "sabao 6" (produto e quantidade em casa);
-```
-
-2. lê o estoque e, com os DOIS arquivos abertos ao mesmo tempo, grava em
-
-```text
- /tmp/comprar.txt só os produtos com menos de 5 unidades, já com quanto
- falta para chegar a 5 ("arroz 2");
-```
-
-3. fecha tudo, reabre /tmp/comprar.txt e mostra o resultado. Se o segundo
-
-```text
- fopen falhar, feche o primeiro arquivo antes de sair.
-```
-
-```text
-Saída esperada:
-Comprar:
-- arroz: 2
-- cafe: 5
-- ovos: 3
-3 itens na lista
-```
-
-### 0068 · Arquivos binários
-
-**Exercício E403** · ★☆☆
-
-Uma estação meteorológica registrou as máximas da semana útil: 31, 29, 33,
-35 e 30 graus. Grave o vetor inteiro em /tmp/maximas.bin com UM fwrite.
-Depois leia tudo de volta, com UM fread, para outro vetor, confira se vieram
-os 5 valores e mostre a média.
-
-```text
-Saída esperada:
-Lidos: 5 valores
-Média: 31.6 graus
-```
-
-**Exercício E405** · ★★☆
-
-Crie o tipo Conta (int numero, double saldo). No main, grave com UM fwrite
-em /tmp/contas.bin as contas 1001 (250.00), 1002 (80.50) e 1003 (1200.00).
-Escreva void listar(void), que mostra as contas lendo registro por registro,
-e int depositar(int posicao, double valor): abre em "rb+", vai até o
-registro da posição com fseek, lê, soma o valor ao saldo, volta ao começo
-do mesmo registro e grava por cima (1 se deu certo, 0 se não). Liste,
-deposite R$ 100.00 na posição 1 e liste de novo.
-
-```text
-Saída esperada:
-Antes:
-1001  R$   250.00
-1002  R$    80.50
-1003  R$  1200.00
-Depois:
-1001  R$   250.00
-1002  R$   180.50
-1003  R$  1200.00
-```
-
-**Exercício E406** · ★★☆
-
-Escreva a função
-
-```text
-long contar_registros(const char *caminho, size_t tamanho_registro);
-```
-
-que descobre quantos registros um arquivo binário tem SEM ler nenhum deles:
-só olhando o tamanho do arquivo. Se não conseguir abrir, devolve -1.
-
-No main, grave em /tmp/notas.bin as notas de 7 alunos num vetor de
-struct { int matricula; float nota; } (os valores são livres), feche, e
-mostre:
-
-```text
-Saída esperada:
-Tamanho do registro: 8 bytes
-Registros em /tmp/notas.bin: 7
-Registros em /tmp/nao-existe.bin: -1
-```
-
-**Exercício E408** · ★★★
-
-O extrato do banco mostra os lançamentos mais recentes primeiro. Grave em
-/tmp/extrato.bin estes 6 lançamentos, nesta ordem (do mais antigo para o
-mais novo), como registros de struct { char descricao[24]; double valor; }:
-Salário +3500.00, Aluguel -1200.00, Mercado -387.60, Pix da Ana +45.00,
-Farmácia -62.30 e Padaria -18.90. Depois, SEM carregar o arquivo inteiro na
-memória (um registro por vez), mostre os 3 últimos, do mais novo para o mais
-antigo, e o saldo de TODOS os lançamentos (printf com %-15s %+8.2f).
-
-```text
-Saída esperada:
-Últimos lançamentos:
-Padaria           -18.90
-Farmácia         -62.30
-Pix da Ana        +45.00
-Saldo: R$ 1876.20
-```
-
-### 0069 · Argumentos da linha de comando
-
-**Exercício E409** · ★☆☆
-
-Faça o seu próprio "echo": o programa mostra os argumentos recebidos, na
-mesma linha, separados por um espaço (sem espaço sobrando no fim), e na
-linha de baixo quantos foram. Sem argumentos, mostra só "0 argumentos".
-
-```text
-Argumentos:
-bom dia Brasil
-```
-
-```text
-Saída esperada:
-bom dia Brasil
-3 argumentos
-```
-
-**Exercício E411** · ★★☆
-
-As notas da prova chegam pela linha de comando. Mostre quantas notas
-válidas vieram, a média, a maior e a menor. Argumento que não é número (ou
-que está fora de 0 a 10) é ignorado com um aviso em stderr. Sem nenhuma
-nota válida, mostre "Nenhuma nota válida" e devolva 1.
-
-```text
-Argumentos:
-8.5 7 nove 9.25 6 11
-```
-
-```text
-Saída esperada:
-Ignorando "nove"
-Ignorando "11"
-Notas: 4
-Média: 7.69
-Maior: 9.25
-Menor: 6.00
-```
-
-**Exercício E412** · ★★☆
-
-Escreva um programa que cumprimenta alguém um certo número de vezes. Ele
-recebe o nome e o número de vezes pela linha de comando. Sem os dois
-argumentos, ou com um número de vezes que não é inteiro positivo, mostra uma
-mensagem de uso em stderr e devolve 1.
-
-```text
-Argumentos:
-Ana 3
-```
-
-```text
-Saída esperada:
-Olá, Ana!
-Olá, Ana!
-Olá, Ana!
-```
-
-**Exercício E413** · ★★★
-
-Faça um "wc" de verdade: o nome do arquivo vem pela linha de comando. O
-programa abre o arquivo, conta linhas, palavras e bytes e mostra no formato
-abaixo. Se não vier exatamente um argumento, mostre o uso em stderr e
-devolva 1. Se o arquivo não abrir, use perror com o nome dele e devolva 1.
-
-```text
-Argumentos (o arquivo tem 4 linhas: "Oi, Ana", "tudo certo?", uma vazia
-e "Até amanhã"):
-/tmp/recado.txt
-```
-
-```text
-Saída esperada:
-4 linhas, 6 palavras, 34 bytes em /tmp/recado.txt
-```
-
-```text
-Argumentos (arquivo que não existe):
-/tmp/nao-existe.txt
-```
-
-```text
-Saída esperada (em stderr):
-/tmp/nao-existe.txt: No such file or directory
-```
-
-### 0070 · Juntando tudo: a caderneta de gastos
+### Exercícios
 
 **Exercício E415** · ★☆☆
 
@@ -1509,11 +1512,13 @@ Saída esperada:
 0 linhas
 ```
 
-### Lista do módulo
+---
+
+## Lista do módulo
 
 30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P0901.c a P0930.c, em `material/`; resoluções em `_respostas/09-arquivos/lista/`.
 
-#### ★☆☆ Aquecimento
+### ★☆☆ Aquecimento
 
 **Exercício P0901** · ★☆☆ · Calor de Manaus no arquivo
 
@@ -1732,7 +1737,7 @@ Total: R$ 23.49
 
 **Resposta esperada:** 3 preços gravados e Total: R$ 23.49.
 
-#### ★★☆ Para pensar
+### ★★☆ Para pensar
 
 **Exercício P0911** · ★★☆ · Só os aprovados vão para o outro arquivo
 
@@ -1983,7 +1988,7 @@ Melhor vendedor: 2 (R$ 510)
 
 **Resposta esperada:** semanas 415, 340, 380 e 310; o vendedor 2, com 510.
 
-#### ★★★ Desafio
+### ★★★ Desafio
 
 **Exercício P0921** · ★★★ · A agenda que se mantém em ordem no disco
 
@@ -2322,7 +2327,7 @@ Saída esperada:
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas do médio ao difícil. Crie os arquivos de teste com
 `printf '...' > /tmp/teste.txt`.
@@ -2487,7 +2492,7 @@ pequenos o texto até ganha (`7\n` tem 2 bytes); para grandes, o binário ganha.
 
 </details>
 
-### Questões no estilo da prova
+## Questões no estilo da prova
 
 Formato da prova do mestrado do PPGI/UFAM. Resolva no papel, marque uma letra
 e só depois abra o gabarito. Os trechos foram compilados com

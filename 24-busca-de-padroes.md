@@ -56,9 +56,12 @@ TAD `padroes.h`, compilado junto com os exemplos da pasta. Tudo trabalha com
 
 ---
 
-## 1. Conceitos gerais
+> [!NOTE]
+> Cada assunto é um capítulo: **Conceito** (a explicação), **Exemplos de uso** (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e **Exercícios** (cada um é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta; resoluções em `_respostas/24-busca-de-padroes/`).
 
-### 0157 · Força bruta
+## 0157 · Força bruta
+
+### Conceito
 
 - **Busca de padrão**: achar um **padrão** de `m` letras dentro de um **texto**
   de `n` letras, `m <= n`. É o problema do Ctrl+F e do `grep`
@@ -82,123 +85,7 @@ TAD `padroes.h`, compilado junto com os exemplos da pasta. Tudo trabalha com
 > Guarde `n` e `m` em `int`: `strlen` devolve `size_t`, sem sinal, e com padrão
 > maior que o texto `n - m` **dá a volta**.
 
-### 0158 · KMP
-
-- **KMP** (Knuth, Morris e Pratt): busca que nunca volta no texto, lê cada letra
-  uma vez e custa **O(n + m)** sempre (KNUTH; MORRIS; PRATT, 1977).
-- **Ideia**: se `k` letras casaram e a próxima falhou, o fim do texto lido é
-  `padrao[0..k-1]`. O quanto disso ainda serve depende **só do padrão** e se
-  calcula antes (CORMEN et al., 2024, cap. 32).
-- **Borda**: o maior prefixo próprio que também é sufixo. Em `1212` é `12`; em
-  `121`, `1`; em `1213`, nenhuma (SZWARCFITER; MARKENZON, 2010).
-- **Tabela π**: `pi[j]` é o tamanho da borda de `padrao[0..j]`. Para `12123`,
-  `pi = [0, 0, 1, 2, 0]`. Sai procurando o padrão nele mesmo.
-- **Busca**: guarda só `k`. Se a letra é `padrao[k]`, `k++`; se não e `k > 0`,
-  recua `k = pi[k - 1]` e tenta a **mesma** letra; se `k == m`, achou e recua
-  para `pi[m - 1]` (CORMEN et al., 2024, cap. 32).
-- **Por que O(n)**: `k` sobe no máximo 1 por letra, `n` vezes no total; cada
-  recuo o diminui e ele nunca fica negativo. São no máximo `2n` comparações; a
-  tabela custa O(m) pelo mesmo argumento.
-
-> [!WARNING]
-> O recuo é um `while`, não um `if`: depois de `k = pi[k - 1]` a letra pode
-> continuar não servindo (o E947 testa isso). E os livros usam convenções
-> diferentes para a tabela (começando em 1, com -1): misturar dá erro de um.
-
-### 0159 · Horspool
-
-- **Comparar da direita para a esquerda**: olhe a letra do texto sob a
-  **última** casa do padrão. Se ela não aparece no padrão, o padrão pula `m`
-  casas (FEOFILOFF, 2009, cap. 13).
-- **Horspool**: versão simples do **Boyer-Moore**. Se a letra aparece, o salto
-  leva a ocorrência **mais à direita** dela no padrão até ficar sob ela
-  (HORSPOOL, 1980).
-- **Tabela de saltos**: uma casa por byte (256). Toda letra começa com `m`; para
-  `j` de 0 até `m - 2`, `salto[padrao[j]] = m - 1 - j`. A última letra fica de
-  fora: seu salto seria 0 (ZIVIANI, 2010, cap. 8).
-- **Avanço**: achando ou não, o próximo alinhamento é
-  `i + salto[texto[i + m - 1]]`.
-- **Custo**: com alfabeto grande, o salto fica perto de `m` e a busca olha umas
-  `n / m` letras: padrão **maior**, busca **mais rápida** (A317). O pior caso
-  segue O(n·m): "baaa" num texto só de `a` (E952) (ZIVIANI, 2010, cap. 8).
-- **Boyer-Moore completo**: acrescenta a tabela do **bom sufixo**, que garante
-  busca linear; o Horspool troca essa garantia por um código curto.
-
-> [!WARNING]
-> O índice da tabela tem que ser `unsigned char`: em UTF-8, o `ã` começa com o
-> byte 0xC3, que num `char` com sinal vale **-61**, e `salto[-61]` escreve fora
-> do vetor. E não ponha a última letra do padrão na tabela.
-
-### 0160 · Rabin-Karp
-
-- **Impressão digital**: o hash (assunto 0105) resume um texto. Hashes
-  diferentes garantem textos diferentes; hashes iguais só pedem conferência.
-- **Rabin-Karp**: calcula o hash do padrão e o de cada **janela** de `m` letras
-  do texto, e só compara letra a letra quando os hashes batem
-  (KARP; RABIN, 1987).
-- **Hash rolante**: a janela seguinte perde uma letra e ganha outra, e o hash
-  novo sai do antigo em O(1). Com dígitos, de `271` para `718`:
-  `(271 - 2·100)·10 + 8` (CORMEN et al., 2024, cap. 32).
-- **Módulo `q`**: com letras, base 256 e tudo **módulo um primo `q`** grande
-  (como 1.000.003), em `long long`, porque os números ficam enormes
-  (SEDGEWICK; WAYNE, 2011).
-- **Colisão** ou **falso positivo**: janelas diferentes com o mesmo resto. Por
-  isso a conferência letra a letra nunca pode ser pulada (A319 mostra os falsos
-  positivos caindo com `q` maior).
-- **Custo**: O(n + m) na média com `q` grande; O(n·m) se tudo colidir
-  (CORMEN et al., 2024, cap. 32).
-
-> [!WARNING]
-> Em C, `-7 % 13` vale `-7`, não `6`. `ht - t[i] * pot` fica negativo, e um hash
-> negativo nunca bate: a busca **perde ocorrências** sem erro. Por isso a linha
-> é `(ht - t[i] * pot % Q + Q) % Q`.
-
-### 0161 · Juntando tudo
-
-- **Grep**: mostra as linhas de um arquivo que têm um padrão fixo
-  (KERNIGHAN; RITCHIE, 1989).
-- **Mesma assinatura**: os quatro algoritmos do módulo ficam num TAD
-  (`padroes.h`, `padroes.c`), devolvem quantas ocorrências acharam, guardam as
-  primeiras `max` posições em `pos` (ou nada, se `NULL`) e **somam** em
-  `*comparacoes` as comparações de letra.
-- **Ponteiro para função** (assunto 0050): `Busca` aponta para qualquer um dos
-  quatro, e um vetor de structs `{nome, busca}` troca de algoritmo pelo índice
-  (KERNIGHAN; RITCHIE, 1989).
-- **Comparação de letra** é um cronômetro que não depende da máquina, mas não é
-  tempo: o Rabin-Karp troca comparações por contas de hash.
-- **`clock()`** (`<time.h>`): tempo de processador em tiques; divida a diferença
-  por `CLOCKS_PER_SEC`. Com `-O2`, o `gcc` pode apagar uma busca cujo resultado
-  ninguém usa, e por isso o A321 imprime o total.
-
-```c
-typedef int (*Busca)(const char *texto, int n, const char *padrao, int m,
-                     int pos[], int max, long *comparacoes);
-
-int pb_forca_bruta(...);   // os quatro com os mesmos parâmetros
-int pb_kmp(...);
-int pb_horspool(...);
-int pb_rabin_karp(...);
-```
-
-| | preparo | memória extra | pior caso | caso comum | ponto forte |
-| --- | --- | --- | --- | --- | --- |
-| força bruta | nenhum | nenhuma | O(n·m) | perto de `n` | simples; ótima para padrão curto |
-| KMP | tabela π, O(m) | `m` inteiros | O(n + m) | entre `n` e `2n` | garantia; lê o texto uma vez, sem voltar |
-| Horspool | saltos, O(256 + m) | 256 inteiros | O(n·m) | perto de `n / m` | pula letras; melhora com padrão longo |
-| Rabin-Karp | hash do padrão, O(m) | nenhuma | O(n·m) | O(n + m) | vários padrões de uma vez; texto como números |
-
-> [!WARNING]
-> Os algoritmos trabalham com **bytes**: em UTF-8, "Reunião" tem 8 bytes, as
-> posições são de byte, e "garagem" não acha "GARAGEM" (E963 e E951). O seu grep
-> trata só padrões fixos.
-
----
-
-## 2. Exemplos de uso
-
-Cada exemplo compila sozinho. Rode com o comando abaixo dele e compare com a saída no fim do código.
-
-### 0157 · Força bruta
+### Exemplos de uso
 
 Procure "ana" em "banana bacana": são 11 alinhamentos, com ocorrências no 1, no
 3 e no 10. O 0 falha no "b" e o 5 falha no espaço:
@@ -373,7 +260,122 @@ int main(void) {
 gcc ~/LPEDC/material/A314.c -o ~/LPEDC/material/A314 && ~/LPEDC/material/A314
 ```
 
-### 0158 · KMP
+### Exercícios
+
+**Exercício E937** · ★☆☆
+
+O narrador gritou tanto que a transcrição ficou "gol gol golaco do gol".
+Escreva int conta_ocorrencias(const char *texto, const char *padrao), que
+faz a busca por força bruta, mostra cada posição onde o padrão começa e
+devolve quantas vezes ele aparece (ocorrências sobrepostas também contam).
+No main, procure "gol" e "o" na transcrição:
+
+```text
+Saída esperada:
+gol: 0 4 8 18 (4 vezes)
+o: 1 5 9 13 16 19 (6 vezes)
+```
+
+**Exercício E939** · ★★☆
+
+O cliente escreve "pix" de todo jeito. Escreva a função
+int busca_sem_caixa(const char *texto, const char *padrao), uma força bruta
+que ignora a diferença entre maiúsculas e minúsculas, mostra a posição e o
+trecho achado (do jeito que está no texto) e devolve o total. Teste com a
+mensagem abaixo e o padrão "pix":
+
+```text
+"Recebi um PIX, mandei outro Pix e tem um pix agendado"
+```
+
+```text
+Saída esperada:
+posição 10: PIX
+posição 28: Pix
+posição 41: pix
+3 ocorrências
+```
+
+**Exercício E940** · ★★☆
+
+A tia quer as abreviações do grupo por extenso. Escreva a função
+
+```text
+int substitui(const char *texto, const char *velho, const char *novo,
+              char saida[], int cap)
+```
+
+que copia texto para saida trocando cada ocorrência de velho por novo e
+devolve quantas trocas fez. Nunca escreva mais que cap posições em saida
+(contando o '\0'). Use a força bruta para saber se velho começa em cada
+posição i. Teste:
+
+```text
+texto: "vc vem? se vc não vier, vc avisa"   velho: "vc"   novo: "você"
+```
+
+```text
+Saída esperada:
+você vem? se você não vier, você avisa
+3 trocas
+```
+
+**Exercício E942** · ★★★
+
+Caça-palavras da revistinha. A grade tem 5 linhas e 8 colunas, guardada
+numa matriz de char (cada linha é uma string). Procure as palavras "SOL",
+"MAR", "LUA", "CEU" e "RIO" na horizontal (da esquerda para a direita) e
+na vertical (de cima para baixo), por força bruta: teste cada casa como
+começo e cada direção.
+
+```text
+S O L X M A R Z
+A Q L U A P E O
+B M U S O L X R
+R A A I B Z X A
+A R R C E U P S
+```
+
+```text
+Saída esperada:
+SOL: linha 0, coluna 0, horizontal
+SOL: linha 2, coluna 3, horizontal
+MAR: linha 0, coluna 4, horizontal
+MAR: linha 2, coluna 1, vertical
+LUA: linha 1, coluna 2, horizontal
+LUA: linha 1, coluna 2, vertical
+CEU: linha 4, coluna 3, horizontal
+RIO: não está na grade
+```
+
+---
+
+## 0158 · KMP
+
+### Conceito
+
+- **KMP** (Knuth, Morris e Pratt): busca que nunca volta no texto, lê cada letra
+  uma vez e custa **O(n + m)** sempre (KNUTH; MORRIS; PRATT, 1977).
+- **Ideia**: se `k` letras casaram e a próxima falhou, o fim do texto lido é
+  `padrao[0..k-1]`. O quanto disso ainda serve depende **só do padrão** e se
+  calcula antes (CORMEN et al., 2024, cap. 32).
+- **Borda**: o maior prefixo próprio que também é sufixo. Em `1212` é `12`; em
+  `121`, `1`; em `1213`, nenhuma (SZWARCFITER; MARKENZON, 2010).
+- **Tabela π**: `pi[j]` é o tamanho da borda de `padrao[0..j]`. Para `12123`,
+  `pi = [0, 0, 1, 2, 0]`. Sai procurando o padrão nele mesmo.
+- **Busca**: guarda só `k`. Se a letra é `padrao[k]`, `k++`; se não e `k > 0`,
+  recua `k = pi[k - 1]` e tenta a **mesma** letra; se `k == m`, achou e recua
+  para `pi[m - 1]` (CORMEN et al., 2024, cap. 32).
+- **Por que O(n)**: `k` sobe no máximo 1 por letra, `n` vezes no total; cada
+  recuo o diminui e ele nunca fica negativo. São no máximo `2n` comparações; a
+  tabela custa O(m) pelo mesmo argumento.
+
+> [!WARNING]
+> O recuo é um `while`, não um `if`: depois de `k = pi[k - 1]` a letra pode
+> continuar não servindo (o E947 testa isso). E os livros usam convenções
+> diferentes para a tabela (começando em 1, com -1): misturar dá erro de um.
+
+### Exemplos de uso
 
 A central de um alarme desarma quando a senha `12123` aparece no teclado, sem
 guardar histórico. Com as teclas `1 2 1 2 1 2 3`, a quinta tecla falha, a
@@ -604,7 +606,109 @@ int main(void) {
 gcc ~/LPEDC/material/A316.c -o ~/LPEDC/material/A316 && ~/LPEDC/material/A316
 ```
 
-### 0159 · Horspool
+### Exercícios
+
+**Exercício E943** · ★☆☆
+
+Escreva void calcula_pi(const char *p, int m, int pi[]): pi[j] é o
+tamanho da maior borda de p[0..j], isto é, do maior prefixo próprio de
+p[0..j] que também é sufixo dele. No main, mostre a tabela de cinco
+palavras:
+
+```text
+Saída esperada:
+papapa: 0 0 1 2 3 4
+cacau: 0 0 1 2 0
+ovo: 0 0 1
+pix: 0 0 0
+tatuta: 0 0 1 0 1 2
+```
+
+**Exercício E945** · ★★☆
+
+O log do servidor chega pelo teclado, letra por letra, e pode ser enorme:
+não dá para guardar tudo num vetor. Escreva um programa que lê com getchar
+até o EOF e, usando KMP (calcula_pi incluída), mostra a linha e a coluna
+(contando de 1) de cada "erro". Ele não guarda o texto: só o k, a linha e
+a coluna.
+
+```text
+Entrada:
+ok
+erro 42
+ok
+terror no erro
+```
+
+```text
+Saída esperada:
+linha 2, coluna 1
+linha 4, coluna 2
+linha 4, coluna 11
+3 ocorrências
+```
+
+**Exercício E946** · ★★☆
+
+Meça quanto o KMP economiza. Escreva
+long forca_bruta(const char *t, const char *p, int *achados) e
+long kmp(const char *t, const char *p, int *achados): as duas devolvem
+quantas comparações de letra fizeram (no KMP, conte também as do recuo
+pela tabela pi) e guardam em *achados as ocorrências. No main, use um
+texto de 29 'a' seguidos de um 'b' e mostre os dois lado a lado:
+
+```text
+Saída esperada:
+aaaab: força bruta 130, KMP 55 (achou 1 e 1)
+baaaa: força bruta  26, KMP 30 (achou 0 e 0)
+aaaaa: força bruta 130, KMP 34 (achou 25 e 25)
+```
+
+**Exercício E947** · ★★★
+
+A central do alarme desarma quando a senha 1112 aparece nas teclas. Escreva
+void central(const char *senha, const char *teclas), que usa KMP
+(calcula_pi incluída) e recebe as teclas uma a uma, sem voltar atrás: ao
+achar a senha, mostra a tecla (contando de 1) em que desarmou e a posição
+onde a senha começou (contando de 0) e para; se nunca achar, avisa que
+continua armado. Atenção a sequências como 1, 1, 2, 1, 1, 2: o recuo pela
+tabela pode ter de se repetir. Teste com duas sequências:
+
+```text
+Saída esperada:
+1121112: desarmou na tecla 7 (a senha começou na posição 3)
+112112111: continua armado
+```
+
+---
+
+## 0159 · Horspool
+
+### Conceito
+
+- **Comparar da direita para a esquerda**: olhe a letra do texto sob a
+  **última** casa do padrão. Se ela não aparece no padrão, o padrão pula `m`
+  casas (FEOFILOFF, 2009, cap. 13).
+- **Horspool**: versão simples do **Boyer-Moore**. Se a letra aparece, o salto
+  leva a ocorrência **mais à direita** dela no padrão até ficar sob ela
+  (HORSPOOL, 1980).
+- **Tabela de saltos**: uma casa por byte (256). Toda letra começa com `m`; para
+  `j` de 0 até `m - 2`, `salto[padrao[j]] = m - 1 - j`. A última letra fica de
+  fora: seu salto seria 0 (ZIVIANI, 2010, cap. 8).
+- **Avanço**: achando ou não, o próximo alinhamento é
+  `i + salto[texto[i + m - 1]]`.
+- **Custo**: com alfabeto grande, o salto fica perto de `m` e a busca olha umas
+  `n / m` letras: padrão **maior**, busca **mais rápida** (A317). O pior caso
+  segue O(n·m): "baaa" num texto só de `a` (E952) (ZIVIANI, 2010, cap. 8).
+- **Boyer-Moore completo**: acrescenta a tabela do **bom sufixo**, que garante
+  busca linear; o Horspool troca essa garantia por um código curto.
+
+> [!WARNING]
+> O índice da tabela tem que ser `unsigned char`: em UTF-8, o `ã` começa com o
+> byte 0xC3, que num `char` com sinal vale **-61**, e `salto[-61]` escreve fora
+> do vetor. E não ponha a última letra do padrão na tabela.
+
+### Exemplos de uso
 
 Procure "MANGA" (`m = 5`) na placa "A BANCA VENDE MANGA" (19 letras). Os saltos
 são M = 4, A = 3, N = 2, G = 1 e 5 para as outras; o padrão salta 2, 3, 5 e 4
@@ -834,7 +938,106 @@ int main(void) {
 gcc ~/LPEDC/material/A318.c -o ~/LPEDC/material/A318 && ~/LPEDC/material/A318
 ```
 
-### 0160 · Rabin-Karp
+### Exercícios
+
+**Exercício E949** · ★☆☆
+
+Escreva void monta_saltos(const char *p, int m, int salto[]), a tabela do
+Horspool: as 256 casas começam com m e, para cada letra p[j] com j de 0
+até m - 2, salto[p[j]] = m - 1 - j (a letra mais à direita vence). No main,
+mostre a tabela de "PIPOCA" e de "ARARA" ("outras" é qualquer letra que
+não está no padrão):
+
+```text
+Saída esperada:
+P=3 I=4 O=2 C=1 A=6 outras=6
+A=2 R=1 outras=5
+```
+
+**Exercício E951** · ★★☆
+
+O cardápio da feira foi digitado com o Caps Lock ligando e desligando.
+Escreva int horspool_todas(const char *texto, const char *padrao): um
+Horspool que ignora maiúsculas e minúsculas, mostra cada ocorrência (como
+está escrita no texto) e devolve o total. Procure "banana" em:
+
+```text
+"Banana na BANANEIRA, banana no prato, BANANA no bolo"
+```
+
+```text
+Saída esperada:
+posição  0: Banana
+posição 21: banana
+posição 38: BANANA
+3 ocorrências
+```
+
+**Exercício E952** · ★★☆
+
+O Horspool também tem pior caso. Escreva
+long forca_bruta(const char *t, const char *p) e
+long horspool(const char *t, const char *p, int *alinhamentos): as duas
+devolvem o número de comparações de letra; a segunda guarda também em
+*alinhamentos quantas janelas examinou. Use um texto de trinta 'a' e
+mostre tudo no main:
+
+```text
+Saída esperada:
+baaa: força bruta  27, Horspool 108 (27 alinhamentos)
+aaab: força bruta 108, Horspool  27 (27 alinhamentos)
+abbb: força bruta  54, Horspool   9 (9 alinhamentos)
+```
+
+**Exercício E954** · ★★★
+
+Compare o Horspool com o algoritmo de Sunday (1990). O Sunday olha a letra
+logo DEPOIS da janela, t[i + m]: a tabela começa com m + 1 e, para j de 0
+até m - 1 (agora a última letra entra), salto[p[j]] = m - j; compare da
+esquerda para a direita. Escreva int horspool(t, p, &achados) e
+int sunday(t, p, &achados), que devolvem o número de alinhamentos e
+guardam as ocorrências. Procure três padrões no cardápio:
+
+```text
+"PASTEL DE CARNE, PASTEL DE PIZZA E PASTEL DE QUEIJO"
+```
+
+```text
+Saída esperada:
+QUEIJO: Horspool  9 alinhamentos, Sunday  8 (achou 1 e 1)
+PASTEL: Horspool  9 alinhamentos, Sunday  8 (achou 3 e 3)
+FRANGO: Horspool  9 alinhamentos, Sunday  8 (achou 0 e 0)
+```
+
+---
+
+## 0160 · Rabin-Karp
+
+### Conceito
+
+- **Impressão digital**: o hash (assunto 0105) resume um texto. Hashes
+  diferentes garantem textos diferentes; hashes iguais só pedem conferência.
+- **Rabin-Karp**: calcula o hash do padrão e o de cada **janela** de `m` letras
+  do texto, e só compara letra a letra quando os hashes batem
+  (KARP; RABIN, 1987).
+- **Hash rolante**: a janela seguinte perde uma letra e ganha outra, e o hash
+  novo sai do antigo em O(1). Com dígitos, de `271` para `718`:
+  `(271 - 2·100)·10 + 8` (CORMEN et al., 2024, cap. 32).
+- **Módulo `q`**: com letras, base 256 e tudo **módulo um primo `q`** grande
+  (como 1.000.003), em `long long`, porque os números ficam enormes
+  (SEDGEWICK; WAYNE, 2011).
+- **Colisão** ou **falso positivo**: janelas diferentes com o mesmo resto. Por
+  isso a conferência letra a letra nunca pode ser pulada (A319 mostra os falsos
+  positivos caindo com `q` maior).
+- **Custo**: O(n + m) na média com `q` grande; O(n·m) se tudo colidir
+  (CORMEN et al., 2024, cap. 32).
+
+> [!WARNING]
+> Em C, `-7 % 13` vale `-7`, não `6`. `ht - t[i] * pot` fica negativo, e um hash
+> negativo nunca bate: a busca **perde ocorrências** sem erro. Por isso a linha
+> é `(ht - t[i] * pot % Q + Q) % Q`.
+
+### Exemplos de uso
 
 Procure `182` em `2718281828459` com `q = 13`, pequeno de propósito. O hash do
 padrão é 0, e nas 11 janelas o 0 aparece três vezes: duas são o `182` e uma é o
@@ -1085,7 +1288,123 @@ int main(void) {
 gcc ~/LPEDC/material/A320.c -o ~/LPEDC/material/A320 && ~/LPEDC/material/A320
 ```
 
-### 0161 · Juntando tudo
+### Exercícios
+
+**Exercício E955** · ★☆☆
+
+A data de hoje sem as barras é "18102026". Escreva
+int hash_digitos(const char *s, int m, int q), que devolve o número formado
+pelos m primeiros dígitos de s, mod q, sem nunca montar o número inteiro
+(regra de Horner, tirando o resto a cada passo). Mostre o hash, com q = 97,
+de cada janela de 4 dígitos, calculando cada uma do zero:
+
+```text
+Saída esperada:
+1810 -> 64
+8102 -> 51
+1020 -> 50
+0202 ->  8
+2026 -> 86
+```
+
+**Exercício E957** · ★★☆
+
+Quanto o tamanho do módulo pesa? Escreva void rabin_karp(const char *t,
+const char *p, int q), o Rabin-Karp de dígitos (base 10, hash rolante
+módulo q) que conta as ocorrências e os falsos positivos (hash igual, texto
+diferente). Procure "2026" nesta série de 48 dígitos, com q = 7, 13, 101 e
+10007:
+
+```text
+"902620261187420263355926102026738920261049582026"
+```
+
+```text
+Saída esperada:
+q =     7: 5 ocorrências,  4 falsos positivos
+q =    13: 5 ocorrências,  3 falsos positivos
+q =   101: 5 ocorrências,  0 falsos positivos
+q = 10007: 5 ocorrências,  0 falsos positivos
+```
+
+**Exercício E958** · ★★☆
+
+O professor desconfia de cópia. Escreva um detector simples: calcule o hash
+de todas as janelas de 8 letras do texto original e guarde num vetor; depois
+role uma janela de 8 pelo texto suspeito e, quando o hash dela estiver no
+vetor (e as letras conferirem), marque as 8 letras como copiadas. No fim,
+mostre o suspeito com as letras copiadas em MAIÚSCULAS e a porcentagem:
+
+```text
+original: "o projeto mede a agua da chuva com sensores baratos"
+suspeito: "nosso trabalho mede a agua da chuva com um balde"
+```
+
+```text
+Saída esperada:
+nosso trabalhO MEDE A AGUA DA CHUVA COM um balde
+27 de 48 letras em trechos copiados (56%)
+```
+
+**Exercício E960** · ★★★
+
+Por que o hash do Rabin-Karp é um polinômio, e não a simples soma dos
+bytes? A soma também rola fácil (tira um byte, soma outro), mas ignora a
+ORDEM das letras. Escreva duas buscas que contam as verificações letra a
+letra (hash igual) e as ocorrências: busca_soma, com o hash soma, e
+busca_polinomial, com base 256 e Q = 1000003. Procure "amor" em
+"roma, amor, mora, ramo, omar e amora":
+
+```text
+Saída esperada:
+soma:       7 verificações, 2 ocorrências
+polinomial: 2 verificações, 2 ocorrências
+```
+
+---
+
+## 0161 · Juntando tudo
+
+### Conceito
+
+- **Grep**: mostra as linhas de um arquivo que têm um padrão fixo
+  (KERNIGHAN; RITCHIE, 1989).
+- **Mesma assinatura**: os quatro algoritmos do módulo ficam num TAD
+  (`padroes.h`, `padroes.c`), devolvem quantas ocorrências acharam, guardam as
+  primeiras `max` posições em `pos` (ou nada, se `NULL`) e **somam** em
+  `*comparacoes` as comparações de letra.
+- **Ponteiro para função** (assunto 0050): `Busca` aponta para qualquer um dos
+  quatro, e um vetor de structs `{nome, busca}` troca de algoritmo pelo índice
+  (KERNIGHAN; RITCHIE, 1989).
+- **Comparação de letra** é um cronômetro que não depende da máquina, mas não é
+  tempo: o Rabin-Karp troca comparações por contas de hash.
+- **`clock()`** (`<time.h>`): tempo de processador em tiques; divida a diferença
+  por `CLOCKS_PER_SEC`. Com `-O2`, o `gcc` pode apagar uma busca cujo resultado
+  ninguém usa, e por isso o A321 imprime o total.
+
+```c
+typedef int (*Busca)(const char *texto, int n, const char *padrao, int m,
+                     int pos[], int max, long *comparacoes);
+
+int pb_forca_bruta(...);   // os quatro com os mesmos parâmetros
+int pb_kmp(...);
+int pb_horspool(...);
+int pb_rabin_karp(...);
+```
+
+| | preparo | memória extra | pior caso | caso comum | ponto forte |
+| --- | --- | --- | --- | --- | --- |
+| força bruta | nenhum | nenhuma | O(n·m) | perto de `n` | simples; ótima para padrão curto |
+| KMP | tabela π, O(m) | `m` inteiros | O(n + m) | entre `n` e `2n` | garantia; lê o texto uma vez, sem voltar |
+| Horspool | saltos, O(256 + m) | 256 inteiros | O(n·m) | perto de `n / m` | pula letras; melhora com padrão longo |
+| Rabin-Karp | hash do padrão, O(m) | nenhuma | O(n·m) | O(n + m) | vários padrões de uma vez; texto como números |
+
+> [!WARNING]
+> Os algoritmos trabalham com **bytes**: em UTF-8, "Reunião" tem 8 bytes, as
+> posições são de byte, e "garagem" não acha "GARAGEM" (E963 e E951). O seu grep
+> trata só padrões fixos.
+
+### Exemplos de uso
 
 O síndico quer os avisos do condomínio que falam da garagem. São 8 avisos e o
 grep mostra as linhas 3, 5 e 8 (a 3 tem duas ocorrências). Os quatro algoritmos
@@ -1371,319 +1690,7 @@ int main(int argc, char *argv[]) {
 gcc ~/LPEDC/material/A322.c ~/LPEDC/material/0161-padroes.c -o ~/LPEDC/material/A322 && ~/LPEDC/material/A322
 ```
 
----
-
-## 3. Exercícios práticos
-
-Cada exercício é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta. Compile como os exemplos: `gcc ~/LPEDC/material/E007.c -o ~/LPEDC/material/E007 && ~/LPEDC/material/E007`. Resoluções em `_respostas/24-busca-de-padroes/`.
-
-### 0157 · Força bruta
-
-**Exercício E937** · ★☆☆
-
-O narrador gritou tanto que a transcrição ficou "gol gol golaco do gol".
-Escreva int conta_ocorrencias(const char *texto, const char *padrao), que
-faz a busca por força bruta, mostra cada posição onde o padrão começa e
-devolve quantas vezes ele aparece (ocorrências sobrepostas também contam).
-No main, procure "gol" e "o" na transcrição:
-
-```text
-Saída esperada:
-gol: 0 4 8 18 (4 vezes)
-o: 1 5 9 13 16 19 (6 vezes)
-```
-
-**Exercício E939** · ★★☆
-
-O cliente escreve "pix" de todo jeito. Escreva a função
-int busca_sem_caixa(const char *texto, const char *padrao), uma força bruta
-que ignora a diferença entre maiúsculas e minúsculas, mostra a posição e o
-trecho achado (do jeito que está no texto) e devolve o total. Teste com a
-mensagem abaixo e o padrão "pix":
-
-```text
-"Recebi um PIX, mandei outro Pix e tem um pix agendado"
-```
-
-```text
-Saída esperada:
-posição 10: PIX
-posição 28: Pix
-posição 41: pix
-3 ocorrências
-```
-
-**Exercício E940** · ★★☆
-
-A tia quer as abreviações do grupo por extenso. Escreva a função
-
-```text
-int substitui(const char *texto, const char *velho, const char *novo,
-              char saida[], int cap)
-```
-
-que copia texto para saida trocando cada ocorrência de velho por novo e
-devolve quantas trocas fez. Nunca escreva mais que cap posições em saida
-(contando o '\0'). Use a força bruta para saber se velho começa em cada
-posição i. Teste:
-
-```text
-texto: "vc vem? se vc não vier, vc avisa"   velho: "vc"   novo: "você"
-```
-
-```text
-Saída esperada:
-você vem? se você não vier, você avisa
-3 trocas
-```
-
-**Exercício E942** · ★★★
-
-Caça-palavras da revistinha. A grade tem 5 linhas e 8 colunas, guardada
-numa matriz de char (cada linha é uma string). Procure as palavras "SOL",
-"MAR", "LUA", "CEU" e "RIO" na horizontal (da esquerda para a direita) e
-na vertical (de cima para baixo), por força bruta: teste cada casa como
-começo e cada direção.
-
-```text
-S O L X M A R Z
-A Q L U A P E O
-B M U S O L X R
-R A A I B Z X A
-A R R C E U P S
-```
-
-```text
-Saída esperada:
-SOL: linha 0, coluna 0, horizontal
-SOL: linha 2, coluna 3, horizontal
-MAR: linha 0, coluna 4, horizontal
-MAR: linha 2, coluna 1, vertical
-LUA: linha 1, coluna 2, horizontal
-LUA: linha 1, coluna 2, vertical
-CEU: linha 4, coluna 3, horizontal
-RIO: não está na grade
-```
-
-### 0158 · KMP
-
-**Exercício E943** · ★☆☆
-
-Escreva void calcula_pi(const char *p, int m, int pi[]): pi[j] é o
-tamanho da maior borda de p[0..j], isto é, do maior prefixo próprio de
-p[0..j] que também é sufixo dele. No main, mostre a tabela de cinco
-palavras:
-
-```text
-Saída esperada:
-papapa: 0 0 1 2 3 4
-cacau: 0 0 1 2 0
-ovo: 0 0 1
-pix: 0 0 0
-tatuta: 0 0 1 0 1 2
-```
-
-**Exercício E945** · ★★☆
-
-O log do servidor chega pelo teclado, letra por letra, e pode ser enorme:
-não dá para guardar tudo num vetor. Escreva um programa que lê com getchar
-até o EOF e, usando KMP (calcula_pi incluída), mostra a linha e a coluna
-(contando de 1) de cada "erro". Ele não guarda o texto: só o k, a linha e
-a coluna.
-
-```text
-Entrada:
-ok
-erro 42
-ok
-terror no erro
-```
-
-```text
-Saída esperada:
-linha 2, coluna 1
-linha 4, coluna 2
-linha 4, coluna 11
-3 ocorrências
-```
-
-**Exercício E946** · ★★☆
-
-Meça quanto o KMP economiza. Escreva
-long forca_bruta(const char *t, const char *p, int *achados) e
-long kmp(const char *t, const char *p, int *achados): as duas devolvem
-quantas comparações de letra fizeram (no KMP, conte também as do recuo
-pela tabela pi) e guardam em *achados as ocorrências. No main, use um
-texto de 29 'a' seguidos de um 'b' e mostre os dois lado a lado:
-
-```text
-Saída esperada:
-aaaab: força bruta 130, KMP 55 (achou 1 e 1)
-baaaa: força bruta  26, KMP 30 (achou 0 e 0)
-aaaaa: força bruta 130, KMP 34 (achou 25 e 25)
-```
-
-**Exercício E947** · ★★★
-
-A central do alarme desarma quando a senha 1112 aparece nas teclas. Escreva
-void central(const char *senha, const char *teclas), que usa KMP
-(calcula_pi incluída) e recebe as teclas uma a uma, sem voltar atrás: ao
-achar a senha, mostra a tecla (contando de 1) em que desarmou e a posição
-onde a senha começou (contando de 0) e para; se nunca achar, avisa que
-continua armado. Atenção a sequências como 1, 1, 2, 1, 1, 2: o recuo pela
-tabela pode ter de se repetir. Teste com duas sequências:
-
-```text
-Saída esperada:
-1121112: desarmou na tecla 7 (a senha começou na posição 3)
-112112111: continua armado
-```
-
-### 0159 · Horspool
-
-**Exercício E949** · ★☆☆
-
-Escreva void monta_saltos(const char *p, int m, int salto[]), a tabela do
-Horspool: as 256 casas começam com m e, para cada letra p[j] com j de 0
-até m - 2, salto[p[j]] = m - 1 - j (a letra mais à direita vence). No main,
-mostre a tabela de "PIPOCA" e de "ARARA" ("outras" é qualquer letra que
-não está no padrão):
-
-```text
-Saída esperada:
-P=3 I=4 O=2 C=1 A=6 outras=6
-A=2 R=1 outras=5
-```
-
-**Exercício E951** · ★★☆
-
-O cardápio da feira foi digitado com o Caps Lock ligando e desligando.
-Escreva int horspool_todas(const char *texto, const char *padrao): um
-Horspool que ignora maiúsculas e minúsculas, mostra cada ocorrência (como
-está escrita no texto) e devolve o total. Procure "banana" em:
-
-```text
-"Banana na BANANEIRA, banana no prato, BANANA no bolo"
-```
-
-```text
-Saída esperada:
-posição  0: Banana
-posição 21: banana
-posição 38: BANANA
-3 ocorrências
-```
-
-**Exercício E952** · ★★☆
-
-O Horspool também tem pior caso. Escreva
-long forca_bruta(const char *t, const char *p) e
-long horspool(const char *t, const char *p, int *alinhamentos): as duas
-devolvem o número de comparações de letra; a segunda guarda também em
-*alinhamentos quantas janelas examinou. Use um texto de trinta 'a' e
-mostre tudo no main:
-
-```text
-Saída esperada:
-baaa: força bruta  27, Horspool 108 (27 alinhamentos)
-aaab: força bruta 108, Horspool  27 (27 alinhamentos)
-abbb: força bruta  54, Horspool   9 (9 alinhamentos)
-```
-
-**Exercício E954** · ★★★
-
-Compare o Horspool com o algoritmo de Sunday (1990). O Sunday olha a letra
-logo DEPOIS da janela, t[i + m]: a tabela começa com m + 1 e, para j de 0
-até m - 1 (agora a última letra entra), salto[p[j]] = m - j; compare da
-esquerda para a direita. Escreva int horspool(t, p, &achados) e
-int sunday(t, p, &achados), que devolvem o número de alinhamentos e
-guardam as ocorrências. Procure três padrões no cardápio:
-
-```text
-"PASTEL DE CARNE, PASTEL DE PIZZA E PASTEL DE QUEIJO"
-```
-
-```text
-Saída esperada:
-QUEIJO: Horspool  9 alinhamentos, Sunday  8 (achou 1 e 1)
-PASTEL: Horspool  9 alinhamentos, Sunday  8 (achou 3 e 3)
-FRANGO: Horspool  9 alinhamentos, Sunday  8 (achou 0 e 0)
-```
-
-### 0160 · Rabin-Karp
-
-**Exercício E955** · ★☆☆
-
-A data de hoje sem as barras é "18102026". Escreva
-int hash_digitos(const char *s, int m, int q), que devolve o número formado
-pelos m primeiros dígitos de s, mod q, sem nunca montar o número inteiro
-(regra de Horner, tirando o resto a cada passo). Mostre o hash, com q = 97,
-de cada janela de 4 dígitos, calculando cada uma do zero:
-
-```text
-Saída esperada:
-1810 -> 64
-8102 -> 51
-1020 -> 50
-0202 ->  8
-2026 -> 86
-```
-
-**Exercício E957** · ★★☆
-
-Quanto o tamanho do módulo pesa? Escreva void rabin_karp(const char *t,
-const char *p, int q), o Rabin-Karp de dígitos (base 10, hash rolante
-módulo q) que conta as ocorrências e os falsos positivos (hash igual, texto
-diferente). Procure "2026" nesta série de 48 dígitos, com q = 7, 13, 101 e
-10007:
-
-```text
-"902620261187420263355926102026738920261049582026"
-```
-
-```text
-Saída esperada:
-q =     7: 5 ocorrências,  4 falsos positivos
-q =    13: 5 ocorrências,  3 falsos positivos
-q =   101: 5 ocorrências,  0 falsos positivos
-q = 10007: 5 ocorrências,  0 falsos positivos
-```
-
-**Exercício E958** · ★★☆
-
-O professor desconfia de cópia. Escreva um detector simples: calcule o hash
-de todas as janelas de 8 letras do texto original e guarde num vetor; depois
-role uma janela de 8 pelo texto suspeito e, quando o hash dela estiver no
-vetor (e as letras conferirem), marque as 8 letras como copiadas. No fim,
-mostre o suspeito com as letras copiadas em MAIÚSCULAS e a porcentagem:
-
-```text
-original: "o projeto mede a agua da chuva com sensores baratos"
-suspeito: "nosso trabalho mede a agua da chuva com um balde"
-```
-
-```text
-Saída esperada:
-nosso trabalhO MEDE A AGUA DA CHUVA COM um balde
-27 de 48 letras em trechos copiados (56%)
-```
-
-**Exercício E960** · ★★★
-
-Por que o hash do Rabin-Karp é um polinômio, e não a simples soma dos
-bytes? A soma também rola fácil (tira um byte, soma outro), mas ignora a
-ORDEM das letras. Escreva duas buscas que contam as verificações letra a
-letra (hash igual) e as ocorrências: busca_soma, com o hash soma, e
-busca_polinomial, com base 256 e Q = 1000003. Procure "amor" em
-"roma, amor, mora, ramo, omar e amora":
-
-```text
-Saída esperada:
-soma:       7 verificações, 2 ocorrências
-polinomial: 2 verificações, 2 ocorrências
-```
-
-### 0161 · Juntando tudo
+### Exercícios
 
 **Exercício E961** · ★☆☆
 
@@ -1783,11 +1790,13 @@ Saída esperada:
 gcc ~/LPEDC/material/E965.c ~/LPEDC/material/0161-padroes.c -o ~/LPEDC/material/E965 && ~/LPEDC/material/E965
 ```
 
-### Lista do módulo
+---
+
+## Lista do módulo
 
 30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P2401.c a P2430.c, em `material/`; resoluções em `_respostas/24-busca-de-padroes/lista/`.
 
-#### ★☆☆ Aquecimento
+### ★☆☆ Aquecimento
 
 **Exercício P2401** · ★☆☆ · O último Pix do extrato
 
@@ -2020,7 +2029,7 @@ ABCDE girado 12: CDEAB
 
 **Resposta esperada:** depois do 4º passo, [30 CENTRO 0]; ABCDE girado 12 vira CDEAB (12 % 5 = 2).
 
-#### ★★☆ Para pensar
+### ★★☆ Para pensar
 
 **Exercício P2411** · ★★☆ · A tabela π atrasada
 
@@ -2291,7 +2300,7 @@ m = 4: ACGT CGTA GTAC TACG CGTT GTTA TTAC ACGA CGAA GAAC AACG
 
 **Resposta esperada:** 9 diferentes de tamanho 3 (6 conferências) e 11 de tamanho 4 (3 conferências).
 
-#### ★★★ Desafio
+### ★★★ Desafio
 
 **Exercício P2421** · ★★★ · A senha do cofre
 
@@ -2543,7 +2552,7 @@ aa: 10* (1)
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas para fechar o módulo, misturando os assuntos. Escreva em C e rode
 com as flags de estudo.
@@ -2684,7 +2693,7 @@ máquina de estados com `fgets`, e a busca continua sendo uma chamada só.
 
 </details>
 
-### Questões no estilo da prova
+## Questões no estilo da prova
 
 Questões no formato da prova do PPGI, que treinam o que cai nela: contar passos, reconhecer a complexidade e seguir
 uma tabela à mão. Uma alternativa certa em cada.

@@ -43,7 +43,7 @@ AddressSanitizer pega, ao rodar: leia o relatório inteiro, com o tipo do erro
 
 ---
 
-### Desafios do módulo
+## Desafios do módulo
 
 Problemas para fazer num arquivo seu, misturando os assuntos do módulo. Use
 o gcc com as flags de estudo em todos: resposta certa com vazamento não vale.
@@ -222,7 +222,7 @@ entrando no meio).
 
 </details>
 
-### Questões do POSCOMP
+## Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -232,7 +232,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 | 2024 | 24 | Lista encadeada ordenada, tipo de lista | E | [caderno](https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2024.pdf) |
 
 
-### Questões de provas do PPGI
+## Questões de provas do PPGI
 
 Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.
 

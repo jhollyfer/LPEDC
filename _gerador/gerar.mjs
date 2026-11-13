@@ -13,11 +13,11 @@
 //   npm run gerar -- 03-     só o módulo 03 (o .md e os desenhos)
 //   npm run gerar -- 0016    só o módulo do assunto 0016, redesenhando só a 0016
 //
-// O .md do módulo tem três partes: 1. Conceitos gerais, 2. Exemplos de uso e
-// 3. Exercícios práticos. No texto.md, o que vem antes de {{exemplo}} é o conceito
-// e o que vem depois é o exemplo trabalhado; {{ideia}} e {{fluxograma}} viram as
-// imagens. No modulo.md, {{indice}} vira a tabela de assuntos e {{assuntos}} vira
-// as três partes (com a lista prática no fim da parte 3).
+// Cada assunto sai inteiro, como um capítulo: ### Conceito, ### Exemplos de uso e
+// ### Exercícios, um depois do outro. No texto.md, o que vem antes de {{exemplo}}
+// é o conceito e o que vem depois é o exemplo trabalhado; {{ideia}} e
+// {{fluxograma}} viram as imagens. No modulo.md, {{indice}} vira a tabela de
+// assuntos e {{assuntos}} vira os assuntos em ordem, com a lista prática no fim.
 import { readFileSync, writeFileSync, readdirSync, existsSync } from 'node:fs'
 import { join, dirname, posix } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
@@ -124,8 +124,8 @@ const exercicio = (caminho, nome) => {
 const exemplosDoAssunto = (pasta) => ARQUIVOS[pasta.slice(0, 4)].A.map((a) => exemplo(a, a).join('\n')).join('\n\n')
 const exerciciosDoAssunto = (pasta) => ARQUIVOS[pasta.slice(0, 4)].E.map((a) => exercicio(a, a).join('\n')).join('\n\n')
 
-// Lista prática do módulo: material/P????.c vira uma subseção de
-// "3. Exercícios práticos".
+// Lista prática do módulo: material/P????.c vira a seção "Lista do módulo",
+// depois do último assunto.
 const lista = (modulo) => {
   const numero = modulo.slice(0, 2)
   const arquivos = readdirSync(MAT)
@@ -135,14 +135,14 @@ const lista = (modulo) => {
   const niveis = [['★☆☆', 'Aquecimento'], ['★★☆', 'Para pensar'], ['★★★', 'Desafio']]
   const blocos = arquivos.map((a) => exercicio(a, a))
   const partes = [
-    '### Lista do módulo',
+    '## Lista do módulo',
     '',
     `${arquivos.length} exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos ${arquivos[0]} a ${arquivos.at(-1)}, em \`material/\`; resoluções em \`_respostas/${modulo}/lista/\`.`,
   ]
   for (const [estrelas, nomeNivel] of niveis) {
     const doNivel = blocos.filter((md) => md[0].includes(estrelas))
     if (!doNivel.length) continue
-    partes.push('', `#### ${estrelas} ${nomeNivel}`, '', doNivel.map((md) => md.join('\n')).join('\n\n---\n\n'))
+    partes.push('', `### ${estrelas} ${nomeNivel}`, '', doNivel.map((md) => md.join('\n')).join('\n\n---\n\n'))
   }
   return partes.join('\n') + '\n'
 }
@@ -189,9 +189,7 @@ for (const modulo of readdirSync(pastaModulos).filter((n) => /^\d{2}-/.test(n)).
   if (filtro && !doModulo && (porModulo || !assuntos.some((a) => a.includes(filtro)))) continue
   const desenharTudo = doModulo
   const indice = []
-  const conceitos = []
-  const exemplos = []
-  const exercicios = []
+  const capitulos = []
 
   for (const pasta of assuntos) {
     if (!ARQUIVOS[pasta.slice(0, 4)]) throw new Error(`assunto ${pasta} não está em arquivos.json`)
@@ -211,46 +209,34 @@ for (const modulo of readdirSync(pastaModulos).filter((n) => /^\d{2}-/.test(n)).
 
     indice.push(`| [${numero}](#${ancora(titulo)}) | ${assunto.replaceAll('|', '\\|')} |`)
     if (!texto.includes('{{exemplo}}')) throw new Error(`${pasta}/texto.md precisa do marcador {{exemplo}} entre o conceito e o exemplo`)
-    // o título do assunto desce um nível (### dentro de cada parte) e o passo a passo também
+    // o passo a passo desce para dentro do Conceito (###)
     const corpo = texto
-      .replace(/^## (\d{4} · .+)$/m, '### $1')
       .replace(/^### Passo a passo/gm, '#### Passo a passo')
       .replace('{{pratique}}', '')
       .replace('{{ideia}}', () => imagem(`material/${pasta.slice(0, 4)}-ideia.svg`, `Diagrama da ideia: ${assunto}`, svgIdeia))
       .replace('{{fluxograma}}', () => imagem(`material/${pasta.slice(0, 4)}-fluxograma.svg`, `Fluxograma: ${assunto}`, svgFluxo))
+      .replace(/^## \d{4} · .+$/m, '')
     const [conceito, trabalhado] = corpo.split('{{exemplo}}').map((t) => t.trim())
-    conceitos.push(conceito)
-    exemplos.push([`### ${titulo}`, '', trabalhado, '', exemplosDoAssunto(pasta)].join('\n'))
-    exercicios.push([`### ${titulo}`, '', exerciciosDoAssunto(pasta)].join('\n'))
+    capitulos.push([
+      `## ${titulo}`, '',
+      '### Conceito', '', conceito, '',
+      '### Exemplos de uso', '', trabalhado, '', exemplosDoAssunto(pasta), '',
+      '### Exercícios', '', exerciciosDoAssunto(pasta),
+    ].join('\n'))
   }
 
   let texto = readFileSync(join(origem, 'modulo.md'), 'utf8')
   const secaoLista = lista(modulo)
-  const tresPartes = [
-    '## 1. Conceitos gerais',
+  const assuntosMd = [
+    '> [!NOTE]',
+    '> Cada assunto é um capítulo: **Conceito** (a explicação), **Exemplos de uso** (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e **Exercícios** (cada um é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta; resoluções em `_respostas/' + modulo + '/`).',
     '',
-    conceitos.join('\n\n'),
-    '',
-    '---',
-    '',
-    '## 2. Exemplos de uso',
-    '',
-    'Cada exemplo compila sozinho. Rode com o comando abaixo dele e compare com a saída no fim do código.',
-    '',
-    exemplos.join('\n\n'),
-    '',
-    '---',
-    '',
-    '## 3. Exercícios práticos',
-    '',
-    'Cada exercício é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta. Compile como os exemplos: `gcc ~/LPEDC/material/E007.c -o ~/LPEDC/material/E007 && ~/LPEDC/material/E007`. Resoluções em `_respostas/' + modulo + '/`.',
-    '',
-    exercicios.join('\n\n'),
-    ...(secaoLista ? ['', secaoLista.trimEnd()] : []),
+    capitulos.join('\n\n---\n\n'),
+    ...(secaoLista ? ['', '---', '', secaoLista.trimEnd()] : []),
   ].join('\n')
   texto = texto
     .replace('{{indice}}', () => ['| # | Assunto |', '| --- | --- |', ...indice].join('\n'))
-    .replace('{{assuntos}}', () => tresPartes)
+    .replace('{{assuntos}}', () => assuntosMd)
   texto = texto.replace(/^(# .+\n)/, (t) => `${t}\n${mapaDaFase(modulo, assuntos, secaoLista ? (secaoLista.match(/^(\d+) exercícios/m)?.[1] ?? 0) : 0)}`)
   const aviso = `<!-- Gerado por _gerador. Para mudar este arquivo, edite _gerador/modulos/${modulo}/ e rode: cd _gerador && npm run gerar -->\n\n`
   // linhas em branco repetidas fora dos blocos de código viram uma só
