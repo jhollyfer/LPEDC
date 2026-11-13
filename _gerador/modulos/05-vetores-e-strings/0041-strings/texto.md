@@ -1,19 +1,17 @@
 ## 0041 · Strings
 
-- **String**: vetor de `char` terminado pelo caractere nulo `'\0'` (código 0).
-  O C não tem tipo "string"; o `'\0'` marca o fim, e o que vem depois é
-  ignorado (DEITEL; DEITEL, 2011, cap. 8).
-- **N + 1**: as aspas duplas já põem o `'\0'`. `"Bruna"` ocupa 6 bytes; um
-  texto de N caracteres precisa de N + 1 posições (BACKES, 2013, cap. 7).
-- **Aspas simples e duplas**: `'B'` é um `char` (o número 66); `"B"` é uma
-  string de 2 bytes (BACKES, 2013, cap. 7).
-- **`<string.h>`**: como string é vetor, não se atribui com `=` nem se compara
-  com `==`; usam-se funções. O destino vem primeiro, como em `dest = orig`
-  (KERNIGHAN; RITCHIE, 1989, cap. 5).
-- **`strlen`**: anda até o `'\0'` a cada chamada e devolve `size_t` (`%zu`).
-  Calcule antes do laço, não no `i < strlen(s)` (CPPREFERENCE, s.d.).
-- **Lista de nomes**: uma matriz de `char`, uma string por linha
-  (`char nomes[3][10]`) (CELES; CERQUEIRA; RANGEL, 2016).
+Na entrada de um evento, a recepção imprime o crachá juntando nome e
+sobrenome: "Bruna", um espaço e "Matos". Depois confere se o nome bate com o
+do cadastro. Em C, o `+` não junta textos e o `==` não compara textos. Para
+entender por quê, você precisa saber o que um texto é na memória.
+
+Em C não existe um tipo próprio para texto. Uma **string** é um vetor de
+`char` que termina com o caractere nulo `'\0'`, o de código 0 (DEITEL;
+DEITEL, 2011, cap. 8). Pense numa fita de etiquetas com um ponto final
+impresso: quem lê vai letra por letra até o ponto e para ali, mesmo que a
+fita continue. O `'\0'` é esse ponto final. O `printf` com `%s` e todas as
+funções de texto andam pelo vetor até achá-lo, e o que vem depois dele é
+ignorado.
 
 ```c
 char nome[] = "Bruna";   // 6 posições: 'B' 'r' 'u' 'n' 'a' '\0'
@@ -22,6 +20,24 @@ char letra = 'B';        // aspas simples: UM char (o número 66)
 char texto[] = "B";      // aspas duplas: uma string, 2 bytes ('B' e '\0')
 ```
 
+Quando você escreve um texto entre aspas duplas, o compilador já põe o `'\0'`
+no fim. Por isso `"Bruna"` ocupa 6 bytes, e não 5. A regra geral: um texto de
+N caracteres precisa de **N + 1** posições (BACKES, 2013, cap. 7). Esquecer
+esse +1 é o erro mais comum com string; num vetor `char cracha[20]`, cabem 19
+letras.
+
+As aspas também mudam o tipo. `'B'`, entre aspas simples, é um `char`:
+o número 66. `"B"`, entre aspas duplas, é uma string de 2 bytes: o `'B'`
+e o `'\0'` (BACKES, 2013, cap. 7). Trocar uma pela outra dá erro ou aviso de
+compilação.
+
+Como string é vetor (assunto 0037), ela herda as limitações dele: não se
+atribui com `=` depois da declaração e não se compara com `==`, que compararia
+endereços e não letras. As operações com texto são funções da biblioteca
+**`<string.h>`**. Nas que copiam, o **destino vem primeiro**, na mesma ordem
+de `dest = orig` (KERNIGHAN; RITCHIE, 1989, cap. 5). A tabela reúne as quatro
+que você mais vai usar:
+
 | função | faz |
 | --- | --- |
 | `strlen(s)` | conta os caracteres até o `'\0'` (sem ele) |
@@ -29,10 +45,23 @@ char texto[] = "B";      // aspas duplas: uma string, 2 bytes ('B' e '\0')
 | `strcat(dest, orig)` | cola `orig` no fim de `dest` |
 | `strcmp(a, b)` | 0 se iguais; negativo se `a` vem antes; positivo se depois |
 
+O `strlen` merece atenção. A string não guarda o próprio tamanho, então ele
+anda pelo vetor contando até o `'\0'`, a cada chamada. O resultado é um
+`size_t`, o inteiro sem sinal que o C usa para tamanhos, e se mostra com
+`%zu`. Como cada chamada percorre o texto, escrever `for (i = 0; i <
+strlen(s); i++)` refaz a contagem a cada volta; calcule o tamanho antes do
+laço (CPPREFERENCE, s.d.). Ele conta bytes, não letras: `strlen("Belém")` é 6,
+porque o "é" ocupa 2 bytes no UTF-8.
+
+Uma lista de nomes é uma matriz de `char` (assunto 0039), com uma string por
+linha. Em `char nomes[3][10] = {"Ana", "Bia", "Caio"};`, `nomes[1]` é "Bia" e
+cada nome tem até 9 caracteres mais o `'\0'` (CELES; CERQUEIRA; RANGEL, 2016).
+
 > [!WARNING]
-> `strcpy` e `strcat` não sabem o tamanho do destino: "Bruna Matos" num
-> `char cracha[8]` é **estouro de buffer**. E `strcmp` devolve **0 quando são
-> iguais**: escreva sempre `== 0`.
+> `strcpy` e `strcat` não sabem o tamanho do destino: escrevem até acabar a
+> origem. "Bruna Matos" num `char cracha[8]` é **estouro de buffer**, falha de
+> segurança clássica. E `strcmp` devolve **0 quando são iguais**; como 0 é
+> falso, `if (strcmp(a, b))` quer dizer "se forem diferentes". Escreva `== 0`.
 
 {{exemplo}}
 

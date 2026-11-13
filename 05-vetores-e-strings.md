@@ -58,22 +58,21 @@ string. Diante de `stack-buffer-overflow`, leia a linha indicada: quase sempre
 
 ### Conceito
 
-- **Vetor** (*array*): várias variáveis do mesmo tipo com um nome só, lado a
-  lado na memória. É um dado composto **homogêneo**; a struct (módulo 08) é o
-  heterogêneo (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 1).
-- **Índice**: a posição entre colchetes, de `0` a `tamanho - 1`. Num vetor de
-  7, o último é `v[6]`. Pode ser qualquer expressão inteira (`v[i + 1]`)
-  (DEITEL; DEITEL, 2011, cap. 6).
-- **Por que começa em 0**: o nome marca o começo e o índice diz quantos itens
-  pular. Acessar `v[0]` ou `v[999]` custa o mesmo (BACKES, 2013, cap. 6).
-- **Tamanho fixo**: decidido na declaração; use um `#define`. O VLA do C99
-  (`int v[n];`, assunto 0172) também não cresce (DEITEL; DEITEL, 2011, cap. 6).
-- **Inicialização**: com chaves, só na declaração. Os itens que faltam viram 0;
-  sem tamanho, o compilador conta (DEITEL; DEITEL, 2011, cap. 6).
-- **Sem `.length`**: quem sabe o tamanho é você. Onde o vetor foi declarado,
-  `sizeof(v) / sizeof(v[0])` dá a conta (KERNIGHAN; RITCHIE, 1989, cap. 5).
-- **Cópia**: `copia = passos;` não compila. Vetor se copia item por item, num
-  laço (BACKES, 2013, cap. 6).
+O relógio da academia contou seus passos na semana: 8200 no domingo, 10450 na
+segunda, e assim por diante. Para somar, tirar a média e achar o recorde, você
+precisaria de sete variáveis, `passos_dom`, `passos_seg` e as outras. No mês
+seriam trinta; no ano, 365. Cada nova variável pede uma linha nova de soma, e
+nenhum laço consegue andar por nomes diferentes. Falta um jeito de dar um nome
+só a um grupo de valores e escolher um deles por número.
+
+Pense num armário de escritório com gavetas numeradas. O armário tem um nome
+na porta, e cada gaveta guarda uma coisa do mesmo tipo. Para pegar uma pasta,
+você diz o nome do armário e o número da gaveta. Em C, esse armário é o
+**vetor** (*array*, também chamado de arranjo): um conjunto de variáveis do
+mesmo tipo, com um nome só, guardadas lado a lado na memória. Por ter todos os
+itens do mesmo tipo, ele é um dado composto **homogêneo**; a struct do módulo
+08, que junta tipos diferentes, é o caso **heterogêneo** (TENENBAUM; LANGSAM;
+AUGENSTEIN, 1995, cap. 1).
 
 ```c
 int passos[7];                 // 7 gavetas de int, com lixo dentro
@@ -82,10 +81,54 @@ int zeros[100] = {0};          // a 1ª vira 0 e as outras também
 int dias[] = {31, 28, 31};     // sem tamanho: o compilador conta (3)
 ```
 
+A declaração diz o tipo, o nome e, entre colchetes, quantas gavetas o vetor
+tem. Para chegar a uma gaveta, você escreve o nome e o **índice**, a posição
+entre colchetes: `passos[0]` é a primeira, `passos[6]` é a última. O índice
+vai de `0` a `tamanho - 1`, então num vetor de 7 não existe `passos[7]`. Ele
+pode ser qualquer expressão inteira, como `v[i + 1]` ou `v[n - 1]`, e é isso
+que casa o vetor com o `for`: o contador do laço vira o número da gaveta
+(DEITEL; DEITEL, 2011, cap. 6).
+
+Contar a partir de 0 parece estranho, mas tem um motivo concreto. As 7
+gavetas de `int` ocupam 28 bytes seguidos (7 × 4). O nome do vetor marca o
+começo desse bloco, e o índice diz **quantos itens pular** a partir dali:
+`passos[5]` fica no começo mais 5 × 4 bytes. O primeiro item não pula nada,
+por isso é o 0. A mesma conta explica por que ler `v[0]` ou `v[999]` custa o
+mesmo tempo: é uma multiplicação e uma soma, sem percorrer nada (BACKES, 2013,
+cap. 6).
+
+Cada gaveta se comporta como uma variável comum. Ela entra em conta, em `if`,
+em `printf` e em `scanf("%d", &notas[i])`. A diferença está só no jeito de
+nomeá-la.
+
+O tamanho do vetor é **fixo**: você o decide na declaração e ele não cresce
+depois. Por isso vale guardar o tamanho num `#define`, como `#define DIAS 7`:
+se a semana virar mês, você muda um número e o laço acompanha. Desde o C99 o
+tamanho pode vir de uma variável (`int v[n];`), o **VLA** do assunto 0172, mas
+ele também não cresce depois de criado (DEITEL; DEITEL, 2011, cap. 6).
+
+Para dar valores na declaração, use chaves. Se você listar menos valores que
+gavetas, as que sobram recebem 0, e é assim que `{0}` zera um vetor inteiro.
+Se deixar os colchetes vazios, o compilador conta os valores e decide o
+tamanho. As chaves só valem na declaração: `passos = {1, 2};` numa linha
+depois não compila (DEITEL; DEITEL, 2011, cap. 6).
+
+O vetor também não guarda o próprio tamanho; quem sabe quantas gavetas existem
+é você. No mesmo bloco em que o vetor foi declarado, `sizeof(v) /
+sizeof(v[0])` faz a conta: os bytes do vetor inteiro divididos pelos bytes de
+um item (KERNIGHAN; RITCHIE, 1989, cap. 5). O assunto 0038 mostra por que essa
+conta falha dentro de uma função.
+
+Por fim, um vetor não se copia com `=`. A linha `copia = passos;` não compila,
+porque o nome do vetor não é uma variável que se possa trocar de lugar. Para
+copiar, ande pelas gavetas num laço e copie uma por uma (BACKES, 2013, cap. 6).
+
 > [!WARNING]
 > **O C não confere o índice.** `v[7] = 0` num `int v[7]` compila e mexe na
-> memória vizinha: comportamento indefinido. O erro clássico é `i <= 7` no
-> laço; o AddressSanitizer mostra `stack-buffer-overflow`.
+> memória vizinha, talvez em outra variável sua. É **comportamento
+> indefinido**: pode não acontecer nada, pode mudar outro valor ou derrubar o
+> programa. O erro clássico é o `i <= 7` no laço, que passa uma vez a mais; o
+> AddressSanitizer mostra `stack-buffer-overflow`.
 
 ### Exemplos de uso
 
@@ -312,31 +355,60 @@ Saída esperada:
 
 ### Conceito
 
-- **Vetor como argumento**: o C não copia o vetor; passa **o endereço onde ele
-  começa**. Por isso a função mexe no vetor original (DEITEL; DEITEL, 2011,
-  cap. 6).
-- **Sintaxe**: no parâmetro, colchetes vazios (`double precos[]`); na chamada,
-  só o nome (`cardapio`). Um número dentro dos colchetes do parâmetro é
-  ignorado (BACKES, 2013, cap. 9).
-- **Tamanho junto**: só o endereço chega, então o tamanho vai num parâmetro à
-  parte. Vetor + tamanho é um par do curso inteiro (BACKES, 2013, cap. 9).
-- **`const`**: `const double precos[]` promete só ler; escrever nele é erro de
-  compilação (DEITEL; DEITEL, 2011, cap. 6).
-- **Elemento sozinho**: `cardapio[0]` vai por valor, como qualquer `double`
-  (DEITEL; DEITEL, 2011, cap. 6).
-- **Custo**: passar um vetor custa um endereço (8 bytes), tenha ele 4 itens ou
-  um milhão. No módulo 06 esse endereço vira **ponteiro** (KERNIGHAN; RITCHIE,
-  1989, cap. 5).
+A lanchonete da esquina vai reajustar o cardápio em 10%. A coxinha de
+R$ 12,50 passa a R$ 13,75 e o suco de R$ 8,00 vai para R$ 8,80. Você escreve
+uma função `reajustar` e passa a ela o vetor de preços. A pergunta é: ela
+mexe nos preços do `main` ou numa cópia deles?
+
+No assunto 0029 você viu que o C passa argumentos **por valor**: a função
+recebe uma cópia e o original fica intacto. Com vetor a regra é outra. O C
+nunca copia um vetor inteiro para dentro da função; ele entrega **o endereço
+em que o vetor começa** (DEITEL; DEITEL, 2011, cap. 6). Pense em emprestar a
+chave do armário em vez de fazer um armário igual: quem recebe a chave abre
+as mesmas gavetas. Por isso a função escreve no vetor original, e a coxinha
+do `main` passa mesmo a custar R$ 13,75.
+
+No parâmetro, o vetor aparece com colchetes vazios; na chamada, vai só o
+nome, sem colchetes e sem índice:
 
 ```c
 void reajustar(double precos[], int n, double percentual); // protótipo
 reajustar(cardapio, 4, 10);                                // chamada
 ```
 
+Um número dentro dos colchetes do parâmetro não muda nada: `double
+precos[4]`, `double precos[100]` e `double precos[]` são a mesma coisa para o
+compilador, que ignora o número (BACKES, 2013, cap. 9). Prefira os colchetes
+vazios, que não prometem um tamanho que ninguém confere.
+
+Repare no `int n` do protótipo. Como só o endereço chega à função, o tamanho
+do vetor fica para trás, e a função não tem como descobri-lo sozinha. Então o
+tamanho viaja num parâmetro à parte. Esse par, vetor mais tamanho, aparece no
+curso inteiro, em toda função de busca e de ordenação (BACKES, 2013, cap. 9).
+
+Às vezes a função só precisa ler o vetor, como uma que mostra o cardápio na
+tela. Nesse caso, marque o parâmetro com **`const`**: `void mostrar(const
+double precos[], int n)`. O `const` é uma promessa conferida pelo compilador.
+Se alguém escrever `precos[0] = 0;` dentro de `mostrar`, a compilação falha,
+e o erro aparece antes de estragar algum preço (DEITEL; DEITEL, 2011, cap. 6).
+
+Um item sozinho do vetor segue a regra antiga. Em `aplicar(cardapio[0])`, a
+função recebe uma cópia do `double` que está na gaveta 0, como receberia
+qualquer outro número; mudar essa cópia não muda o cardápio (DEITEL; DEITEL,
+2011, cap. 6).
+
+Passar o endereço também tem a ver com custo. Na chamada, o frame da função
+(assunto 0031) recebe um endereço de 8 bytes, um `int` e um `double`; os
+bytes do vetor continuam no frame do `main`. Passar um vetor de 4 itens ou de
+um milhão custa os mesmos 8 bytes. No módulo 06 esse endereço ganha nome,
+**ponteiro**, e `double precos[]` vira só outro jeito de escrever um ponteiro
+(KERNIGHAN; RITCHIE, 1989, cap. 5).
+
 > [!WARNING]
-> **`sizeof` dentro da função não dá o tamanho do vetor.** Em `reajustar`,
-> `sizeof(precos)` vale 8, o tamanho de um endereço. O gcc avisa
-> (`-Wsizeof-array-argument`).
+> **`sizeof` dentro da função não dá o tamanho do vetor.** No `main`,
+> `sizeof(cardapio)` vale 32 (4 × 8 bytes). Em `reajustar`, `sizeof(precos)`
+> vale 8, o tamanho de um endereço, e o laço anda 1 item em vez de 4. O gcc
+> avisa (`-Wsizeof-array-argument`); passe o tamanho como parâmetro.
 
 ### Exemplos de uso
 
@@ -588,20 +660,17 @@ Saída esperada:
 
 ### Conceito
 
-- **Matriz**: um **vetor de vetores** (bidimensional). `int vendas[3][4]` são
-  3 linhas, cada uma um vetor de 4 `int` (BACKES, 2013, cap. 6).
-- **Dois índices**: primeiro a linha, depois a coluna, os dois a partir de 0:
-  `vendas[2][0]` é a linha 3, coluna 1 (DEITEL; DEITEL, 2011, cap. 6).
-- **Inicialização**: uma chave por linha; o que falta vira 0. Só a 1ª dimensão
-  pode ser omitida (DEITEL; DEITEL, 2011, cap. 6).
-- **Dois laços aninhados**: o de fora escolhe a linha, o de dentro anda pelas
-  colunas. Para somar por coluna, inverta (BACKES, 2013, cap. 6).
-- **Linha após linha** (*row-major*): a matriz é um bloco contínuo.
-  `vendas[l][s]` é o item `l × 4 + s` da fila (KERNIGHAN; RITCHIE, 1989,
-  cap. 5).
-- **Matriz como parâmetro**: vai o endereço, mas todas as dimensões menos a
-  primeira são obrigatórias (`int m[][4]`), porque a conta acima precisa das
-  colunas (DEITEL; DEITEL, 2011, cap. 6).
+Uma rede de açaí tem 3 lojas e quer comparar as vendas de 4 semanas. Na
+planilha, cada loja ocupa uma linha e cada semana uma coluna; o total da loja
+fica no fim da linha e o da semana no pé da coluna. Um vetor só dá conta de
+uma linha. Para a planilha inteira, você precisa de um nome para a tabela e
+de dois números para achar uma célula.
+
+Em C, essa tabela é a **matriz**, um **vetor de vetores**, também chamada de
+vetor **bidimensional**. Em `int vendas[3][4]`, o primeiro número diz quantas
+linhas existem e o segundo quantos itens cada linha tem: são 3 linhas, e cada
+uma é um vetor de 4 `int` (BACKES, 2013, cap. 6). A imagem certa é a de uma
+estante: 3 prateleiras, cada uma com 4 caixas.
 
 ```c
 int vendas[3][4];                          // 12 int com lixo
@@ -610,10 +679,47 @@ int z[2][3] = {{1}, {4, 5}};               // o que falta vira 0: 1 0 0 / 4 5 0
 int t[][2] = {{1, 2}, {3, 4}, {5, 6}};     // só a 1ª dimensão pode sumir: 3 linhas
 ```
 
+Para chegar a uma célula, você usa dois índices, **primeiro a linha, depois a
+coluna**, e os dois começam em 0. `vendas[2][0]` é a loja 3 na semana 1. Cada
+célula se comporta como uma variável comum, igual às gavetas do vetor
+(DEITEL; DEITEL, 2011, cap. 6).
+
+Na inicialização, cada linha ganha o seu par de chaves. Como no vetor, o que
+você não listar vira 0: em `z`, a primeira linha fica `1 0 0` e a segunda
+`4 5 0`. Dá para deixar vazia só a primeira dimensão, a das linhas, e o
+compilador conta quantas chaves internas você escreveu; a das colunas é
+obrigatória (DEITEL; DEITEL, 2011, cap. 6). Também é possível omitir as
+chaves internas e escrever os seis valores seguidos, que enchem a matriz
+linha por linha, mas o gcc avisa (`-Wmissing-braces`). Use as chaves: elas
+mostram a forma da tabela.
+
+Dois índices pedem **dois laços aninhados** (assunto 0024). O laço de fora
+escolhe a linha; o de dentro anda pelas colunas daquela linha. Assim você
+soma o total de cada loja. Para somar por semana, inverta a ordem: a coluna
+por fora, a linha por dentro (BACKES, 2013, cap. 6).
+
+A memória, porém, não tem linhas nem colunas: é uma fila só de bytes. O C
+guarda a matriz como **um bloco contínuo**, linha após linha, arranjo chamado
+de *row-major*. As 12 células de `vendas` ficam enfileiradas: a linha 0
+inteira, depois a linha 1, depois a 2. A célula `vendas[l][s]` é o item
+`l × 4 + s` da fila; `vendas[1][2]` é o item 6, o sétimo (KERNIGHAN; RITCHIE,
+1989, cap. 5).
+
+Essa conta tem duas consequências. A primeira aparece quando a matriz vai
+para uma função. Como no vetor, vai só o endereço do começo, mas a função
+precisa saber quantas colunas cada linha tem para fazer a conta `l × 4 + s`.
+Por isso o parâmetro exige todas as dimensões menos a primeira: `int m[][4]`
+(DEITEL; DEITEL, 2011, cap. 6). A segunda é de desempenho. Percorrer linha
+por linha lê bytes vizinhos, que o processador já trouxe para o **cache**, a
+memória pequena e rápida que fica dentro dele. Percorrer coluna por coluna
+pula 16 bytes a cada passo e, numa matriz grande, deixa o programa bem mais
+lento, com o mesmo resultado.
+
 > [!WARNING]
-> Escreva `m[l][c]`, nunca `m[l, c]`: a vírgula descarta o da esquerda e
-> `m[1, 2]` vira `m[2]`. E não troque os limites: com `int m[3][4]`, linhas
-> até 3 e colunas até 4.
+> Escreva `m[l][c]`, nunca `m[l, c]`: a vírgula é um operador que descarta o
+> da esquerda, e `m[1, 2]` vira `m[2]`, a linha inteira. E não troque os
+> limites: com `int m[3][4]`, o laço das linhas vai até 3 e o das colunas até
+> 4. Trocados, o laço lê `m[3][...]`, fora da matriz.
 
 ### Exemplos de uso
 
@@ -887,22 +993,19 @@ Saída esperada:
 
 ### Conceito
 
-- **Caractere é número**: o `char` é um inteiro de 1 byte, e cada símbolo tem
-  um código na **tabela ASCII**. `'A'` e `65` são o mesmo valor (DEITEL;
-  DEITEL, 2011, cap. 8).
-- **`%c` e `%d`**: o `printf` mostra o símbolo ou o código. Como é número, dá
-  para calcular: `'a' + 1` é `'b'` e `c - '0'` transforma `'7'` em 7 (BACKES,
-  2013, cap. 7).
-- **`<ctype.h>`**: testes (`isalpha`, `isdigit`, `isalnum`, `isspace`,
-  `isupper`, `islower`, `ispunct`) e conversões (`toupper`, `tolower`). O que
-  não é letra volta igual (DEITEL; DEITEL, 2011, cap. 8).
-- **Verdadeiro é não zero**: os testes não devolvem necessariamente 1.
-  Escreva `if (isdigit(c))`, nunca `== 1` (LINUX MAN-PAGES PROJECT, s.d.).
-- **`getchar()`**: lê um caractere e devolve um **`int`**, o código ou
-  **`EOF`** (negativo, fim da entrada). Guarde num `int` (DEITEL; DEITEL, 2011,
-  cap. 8).
-- **Acento**: o "ç" em UTF-8 ocupa dois bytes e não cabe num `char`. Para o
-  `ctype.h`, use `toupper((unsigned char) c)` (CPPREFERENCE, s.d.).
+No app do Detran, você digita a placa em minúsculas, `bra2e19`, e ele mostra
+`BRA2E19` e confere o formato: três letras, um dígito, uma letra, dois
+dígitos. Para isso o programa precisa saber que `b` é letra, que `2` é dígito
+e qual é a maiúscula de `b`. Antes de juntar caracteres em textos, vale
+entender o que um caractere é para o computador.
+
+A resposta curta: **caractere é número**. O tipo `char` guarda um inteiro de
+1 byte, e cada símbolo tem um código combinado numa tabela, a **tabela
+ASCII**. É como o número de chamada de uma turma: a professora fala "17" e
+todo mundo sabe quem é. Na ASCII, `'A'` é 65, `'B'` é 66, `'a'` é 97, `'0'` é
+48, o espaço é 32 e o `'\n'` é 10. As aspas simples só escrevem esse número de
+um jeito legível: `'A'` e `65` são o mesmo valor (DEITEL; DEITEL, 2011,
+cap. 8).
 
 | símbolos | códigos | repare |
 | --- | --- | --- |
@@ -910,9 +1013,45 @@ Saída esperada:
 | `'A'` a `'Z'` | 65 a 90 | em ordem alfabética |
 | `'a'` a `'z'` | 97 a 122 | cada minúscula = maiúscula + 32 |
 
+Quem decide o que aparece na tela é o `printf`. Com `%c` ele mostra o
+símbolo; com `%d`, o código. Como o `char` é número, dá para fazer conta e
+comparar: `'a' + 1` é `'b'`, e `c >= 'A' && c <= 'Z'` pergunta se `c` é uma
+maiúscula. A conta mais útil é `c - '0'`: como os dígitos estão em ordem a
+partir do 48, ela transforma o caractere `'7'` no número 7 (BACKES, 2013,
+cap. 7). A tabela mostra outra regularidade: cada minúscula fica 32 posições
+depois da sua maiúscula.
+
+Fazer essas contas na mão funciona, mas o `<ctype.h>` já traz as funções
+prontas. Há testes, que respondem sim ou não: `isalpha` (é letra?),
+`isdigit` (é dígito?), `isalnum` (letra ou dígito?), `isspace` (espaço, `\t`
+ou `\n`?), `isupper`, `islower` e `ispunct` (pontuação?). E há conversões:
+`toupper` devolve a maiúscula e `tolower` a minúscula. O que não é letra volta
+igual, então `toupper('2')` é `'2'` (DEITEL; DEITEL, 2011, cap. 8).
+
+Os testes seguem a regra do C para verdadeiro: qualquer valor **diferente de
+zero**. Eles não prometem devolver 1; podem devolver 8 ou 1024. Por isso
+escreva `if (isdigit(c))`, nunca `if (isdigit(c) == 1)`, que pode falhar
+mesmo quando `c` é um dígito (LINUX MAN-PAGES PROJECT, s.d.).
+
+Para ler um caractere do teclado, existe o `getchar()`. Ele devolve um
+**`int`**, e não um `char`, porque precisa de um valor a mais: além dos 256
+códigos possíveis, ele pode devolver **`EOF`**, um número negativo que avisa
+que a entrada acabou (Ctrl+D no Linux). Guarde o resultado num `int`, ou o
+`EOF` pode se confundir com um caractere de verdade (DEITEL; DEITEL, 2011,
+cap. 8).
+
+Acento pede um cuidado. O C não garante se o `char` tem sinal; no x86 ele vai
+de -128 a 127. No UTF-8, o "ç" ocupa **dois** bytes (`0xC3 0xA7`) e não cabe
+num `char`. Num `char` com sinal, esses bytes viram números negativos, e
+passar um negativo que não seja `EOF` às funções do `<ctype.h>` é
+comportamento indefinido. O jeito seguro é converter antes:
+`toupper((unsigned char) c)` (CPPREFERENCE, s.d.).
+
 > [!WARNING]
-> Letra não é "tudo entre `'A'` e `'z'`": no meio ficam `[ \ ] ^ _` e a crase.
-> Use `isalpha(c)`. E `'0'` (código 48) não é `0` (o caractere nulo `'\0'`).
+> Letra não é "tudo entre `'A'` e `'z'`": entre o `'Z'` (90) e o `'a'` (97)
+> ficam `[ \ ] ^ _` e a crase, então esse teste aceita `_` como letra. Use
+> `isalpha(c)`. E não confunda `'0'` (o caractere zero, código 48) com `0`
+> (o número zero, que é o caractere nulo `'\0'`).
 
 ### Exemplos de uso
 
@@ -1162,20 +1301,18 @@ Diferenças em 128 códigos: 0
 
 ### Conceito
 
-- **String**: vetor de `char` terminado pelo caractere nulo `'\0'` (código 0).
-  O C não tem tipo "string"; o `'\0'` marca o fim, e o que vem depois é
-  ignorado (DEITEL; DEITEL, 2011, cap. 8).
-- **N + 1**: as aspas duplas já põem o `'\0'`. `"Bruna"` ocupa 6 bytes; um
-  texto de N caracteres precisa de N + 1 posições (BACKES, 2013, cap. 7).
-- **Aspas simples e duplas**: `'B'` é um `char` (o número 66); `"B"` é uma
-  string de 2 bytes (BACKES, 2013, cap. 7).
-- **`<string.h>`**: como string é vetor, não se atribui com `=` nem se compara
-  com `==`; usam-se funções. O destino vem primeiro, como em `dest = orig`
-  (KERNIGHAN; RITCHIE, 1989, cap. 5).
-- **`strlen`**: anda até o `'\0'` a cada chamada e devolve `size_t` (`%zu`).
-  Calcule antes do laço, não no `i < strlen(s)` (CPPREFERENCE, s.d.).
-- **Lista de nomes**: uma matriz de `char`, uma string por linha
-  (`char nomes[3][10]`) (CELES; CERQUEIRA; RANGEL, 2016).
+Na entrada de um evento, a recepção imprime o crachá juntando nome e
+sobrenome: "Bruna", um espaço e "Matos". Depois confere se o nome bate com o
+do cadastro. Em C, o `+` não junta textos e o `==` não compara textos. Para
+entender por quê, você precisa saber o que um texto é na memória.
+
+Em C não existe um tipo próprio para texto. Uma **string** é um vetor de
+`char` que termina com o caractere nulo `'\0'`, o de código 0 (DEITEL;
+DEITEL, 2011, cap. 8). Pense numa fita de etiquetas com um ponto final
+impresso: quem lê vai letra por letra até o ponto e para ali, mesmo que a
+fita continue. O `'\0'` é esse ponto final. O `printf` com `%s` e todas as
+funções de texto andam pelo vetor até achá-lo, e o que vem depois dele é
+ignorado.
 
 ```c
 char nome[] = "Bruna";   // 6 posições: 'B' 'r' 'u' 'n' 'a' '\0'
@@ -1184,6 +1321,24 @@ char letra = 'B';        // aspas simples: UM char (o número 66)
 char texto[] = "B";      // aspas duplas: uma string, 2 bytes ('B' e '\0')
 ```
 
+Quando você escreve um texto entre aspas duplas, o compilador já põe o `'\0'`
+no fim. Por isso `"Bruna"` ocupa 6 bytes, e não 5. A regra geral: um texto de
+N caracteres precisa de **N + 1** posições (BACKES, 2013, cap. 7). Esquecer
+esse +1 é o erro mais comum com string; num vetor `char cracha[20]`, cabem 19
+letras.
+
+As aspas também mudam o tipo. `'B'`, entre aspas simples, é um `char`:
+o número 66. `"B"`, entre aspas duplas, é uma string de 2 bytes: o `'B'`
+e o `'\0'` (BACKES, 2013, cap. 7). Trocar uma pela outra dá erro ou aviso de
+compilação.
+
+Como string é vetor (assunto 0037), ela herda as limitações dele: não se
+atribui com `=` depois da declaração e não se compara com `==`, que compararia
+endereços e não letras. As operações com texto são funções da biblioteca
+**`<string.h>`**. Nas que copiam, o **destino vem primeiro**, na mesma ordem
+de `dest = orig` (KERNIGHAN; RITCHIE, 1989, cap. 5). A tabela reúne as quatro
+que você mais vai usar:
+
 | função | faz |
 | --- | --- |
 | `strlen(s)` | conta os caracteres até o `'\0'` (sem ele) |
@@ -1191,10 +1346,23 @@ char texto[] = "B";      // aspas duplas: uma string, 2 bytes ('B' e '\0')
 | `strcat(dest, orig)` | cola `orig` no fim de `dest` |
 | `strcmp(a, b)` | 0 se iguais; negativo se `a` vem antes; positivo se depois |
 
+O `strlen` merece atenção. A string não guarda o próprio tamanho, então ele
+anda pelo vetor contando até o `'\0'`, a cada chamada. O resultado é um
+`size_t`, o inteiro sem sinal que o C usa para tamanhos, e se mostra com
+`%zu`. Como cada chamada percorre o texto, escrever `for (i = 0; i <
+strlen(s); i++)` refaz a contagem a cada volta; calcule o tamanho antes do
+laço (CPPREFERENCE, s.d.). Ele conta bytes, não letras: `strlen("Belém")` é 6,
+porque o "é" ocupa 2 bytes no UTF-8.
+
+Uma lista de nomes é uma matriz de `char` (assunto 0039), com uma string por
+linha. Em `char nomes[3][10] = {"Ana", "Bia", "Caio"};`, `nomes[1]` é "Bia" e
+cada nome tem até 9 caracteres mais o `'\0'` (CELES; CERQUEIRA; RANGEL, 2016).
+
 > [!WARNING]
-> `strcpy` e `strcat` não sabem o tamanho do destino: "Bruna Matos" num
-> `char cracha[8]` é **estouro de buffer**. E `strcmp` devolve **0 quando são
-> iguais**: escreva sempre `== 0`.
+> `strcpy` e `strcat` não sabem o tamanho do destino: escrevem até acabar a
+> origem. "Bruna Matos" num `char cracha[8]` é **estouro de buffer**, falha de
+> segurança clássica. E `strcmp` devolve **0 quando são iguais**; como 0 é
+> falso, `if (strcmp(a, b))` quer dizer "se forem diferentes". Escreva `== 0`.
 
 ### Exemplos de uso
 
@@ -1428,35 +1596,71 @@ Saída esperada:
 
 ### Conceito
 
-- **`scanf("%s", nome)`**: sem `&`, porque o nome do vetor já é o endereço
-  (assunto 0038). Lê **uma palavra** e para no primeiro espaço (BACKES, 2013,
-  cap. 7).
-- **Largura**: o `scanf` não sabe o tamanho do vetor; limite com
-  `scanf("%39s", nome)` num `char nome[40]` (BACKES, 2013, cap. 7).
-- **`fgets`**: lê uma **linha inteira** até o Enter ou até `tamanho - 1`
-  caracteres, e sempre põe o `'\0'`. Devolve `NULL` se a entrada acabar
-  (LINUX MAN-PAGES PROJECT, s.d.).
-- **O `'\n'` fica**: o `fgets` guarda o Enter, se couber.
-  `strcspn(s, "\n")` dá a posição do primeiro `'\n'` (ou o tamanho), e trocá-la
-  por `'\0'` limpa nos dois casos (LINUX MAN-PAGES PROJECT, s.d.).
-- **Buffer**: o terminal só entrega no Enter, e `scanf`, `getchar` e `fgets`
-  tiram bytes do mesmo buffer: o que um deixa, o próximo pega (DEITEL; DEITEL,
-  2011, cap. 8).
-- **`gets`**: lia sem limite e estourava a memória; foi a brecha do worm de
-  Morris (SPAFFORD, 1989). Saiu no C11: use `fgets`.
+No cadastro de um app de consultas, a pessoa digita "Maria Clara" e o
+programa responde "Olá, Maria!". O "Clara" sumiu. O culpado é o `scanf`, que
+com `%s` lê **uma palavra** e para no primeiro espaço. O "Clara" fica
+esperando na entrada e atrapalha a próxima leitura. Ler texto do teclado pede
+ferramentas próprias, e cada uma tem uma regra que você precisa conhecer.
+
+Comece pelo `scanf("%s", nome)`. Ele não leva `&`, porque o nome do vetor já
+é o endereço do começo dele (assunto 0038). Ele pula os espaços iniciais, lê
+letras até o primeiro espaço, tab ou Enter, e põe o `'\0'` no fim (BACKES,
+2013, cap. 7). Serve para uma palavra solta, como uma sigla ou um login.
+
+O `scanf` também não sabe quantos bytes o vetor tem. Se a pessoa digitar 60
+letras num `char nome[40]`, ele escreve as 60 e passa do fim do vetor. A
+proteção é a **largura**, um número entre o `%` e o `s`: `scanf("%39s",
+nome)` lê no máximo 39 letras e deixa a 40ª posição para o `'\0'` (BACKES,
+2013, cap. 7).
+
+Para ler uma **linha inteira**, com espaços, a ferramenta é o **`fgets`**:
 
 ```c
 fgets(nome, sizeof(nome), stdin);
 ```
 
+Os três argumentos são onde guardar, quantos bytes cabem ali e de onde ler; o
+`stdin` é a entrada padrão, normalmente o teclado. O `fgets` lê até o Enter
+**ou** até encher o vetor, o que vier primeiro, guardando no máximo
+`tamanho - 1` caracteres, e **sempre** põe o `'\0'` no fim. Com
+`sizeof(nome)` no segundo argumento, ele nunca passa do fim do vetor. Se a
+entrada acabar (Ctrl+D no Linux), ele devolve `NULL` (LINUX MAN-PAGES
+PROJECT, s.d.).
+
+O `fgets` tem uma diferença que pega todo mundo: ele **guarda o `'\n'`** do
+Enter, se couber. "Maria Clara" chega como `"Maria Clara\n"`, e um `printf`
+depois dela pula uma linha a mais. Para tirar esse `'\n'`, use o
+**`strcspn`** do `<string.h>`: `strcspn(s, "\n")` devolve a posição do
+primeiro `'\n'` da string ou, se não houver nenhum, o tamanho dela. Trocar
+essa posição por `'\0'` termina o texto antes do Enter (LINUX MAN-PAGES
+PROJECT, s.d.):
+
 ```c
 nome[strcspn(nome, "\n")] = '\0';
 ```
 
+A linha funciona nos dois casos. Com `'\n'`, ele vira `'\0'`; sem `'\n'`
+(a linha encheu o vetor), a posição devolvida já é a do `'\0'`, que é trocado
+por ele mesmo.
+
+Para entender o warning abaixo, falta saber como a entrada chega. O terminal
+junta o que você digita num **buffer**, uma área de espera, e só entrega
+quando você aperta Enter. `scanf`, `getchar` e `fgets` tiram bytes desse
+mesmo buffer, em fila: o que uma leitura deixa, a próxima pega (DEITEL;
+DEITEL, 2011, cap. 8). Por isso o "Clara" do começo não se perde; ele fica no
+buffer até alguém lê-lo.
+
+Em material antigo você ainda vai encontrar o `gets`. Ele lia uma linha sem
+receber o tamanho do vetor e escrevia além do fim quando a linha era longa.
+Essa falha foi a brecha usada pelo worm de Morris, em 1988, que parou boa
+parte da internet da época (SPAFFORD, 1989). O `gets` foi removido no C11;
+use o `fgets`.
+
 > [!WARNING]
-> `scanf("%d")` seguido de `fgets` "pula" a leitura: o Enter que sobrou vira
-> uma linha vazia. Descarte o resto com
-> `while ((c = getchar()) != '\n' && c != EOF) {}`. Não use `fflush(stdin)`.
+> `scanf("%d")` seguido de `fgets` "pula" a leitura: o `scanf` deixa o Enter
+> no buffer, e o `fgets` o lê como uma linha vazia. Descarte o resto com
+> `while ((c = getchar()) != '\n' && c != EOF) {}`, com `int c`. Não use
+> `fflush(stdin)`: é comportamento indefinido.
 
 ### Exemplos de uso
 
@@ -1698,24 +1902,58 @@ pedaço 3: [uva\n] fim da linha 2 (3 letras)
 
 ### Conceito
 
-- **Laço de leitura com `fgets`**: lê uma linha por vez até devolver `NULL`;
-  é um laço com sentinela (assunto 0025) (LINUX MAN-PAGES PROJECT, s.d.).
-- **Normalizar**: `strcspn` tira o `'\n'` e `tolower` iguala "BOTO" e "boto";
-  o `(unsigned char)` protege contra acento (DEITEL; DEITEL, 2011, cap. 8).
-- **Matriz de `char`**: os nomes dos candidatos, um por linha;
-  `nomes[i]` fica em início + i × 12, por isso `[TAM_NOME]` no parâmetro
-  (BACKES, 2013, cap. 9).
-- **Vetor de contadores**: `votos[i]` conta os votos do candidato `i`, na
-  mesma posição do nome na matriz (DEITEL; DEITEL, 2011, cap. 6).
-- **Busca que devolve -1**: `buscar` devolve a posição ou -1, e o voto
-  inválido cai fora sem `if` especial (BACKES, 2013, cap. 9).
-- **Trocar strings**: como não se atribui com `=`, trocar dois nomes é um
-  `strcpy` triplo com uma auxiliar; o A086 ordena uma lista assim (KERNIGHAN;
-  RITCHIE, 1989, cap. 5).
+A escola do bairro abriu uma enquete para o mascote da festa junina: arara,
+boto ou capivara. Os votos chegam um por linha, do jeito que cada pessoa
+digitou: `boto`, `Arara`, `CAPIVARA`, `Tatu`. Você precisa contar os votos,
+desenhar um gráfico de barras e anunciar o vencedor. Nenhuma peça é nova; o
+trabalho está em encaixar as peças do módulo.
+
+A entrada vem primeiro. O `fgets` (assunto 0042) lê um voto por linha e
+devolve `NULL` quando a entrada acaba. Isso vira um **laço com sentinela**
+(assunto 0025): o laço continua enquanto o `fgets` não devolve `NULL`, e você
+não precisa saber de antemão quantos votos vão chegar (LINUX MAN-PAGES
+PROJECT, s.d.).
+
+Cada linha lida precisa de uma limpeza antes da comparação, um passo chamado
+de **normalizar**. O `strcspn` tira o `'\n'` que o `fgets` guardou, e o
+`tolower` (assunto 0040) passa cada letra para minúscula, para que "BOTO",
+"Boto" e "boto" virem o mesmo texto. O `(unsigned char)` antes do `tolower`
+protege contra votos com acento (DEITEL; DEITEL, 2011, cap. 8).
+
+Os candidatos ficam numa **matriz de `char`** (assunto 0039), um nome por
+linha: `char nomes[3][12]`. Ela ocupa 36 bytes contínuos; "arara" usa 6 bytes
+da linha 0, e o resto da linha fica com zeros. `nomes[i]` começa em início +
+i × 12, e é essa conta que obriga o `[TAM_NOME]` no parâmetro da função que
+recebe a matriz (BACKES, 2013, cap. 9). Nomes de tamanhos muito diferentes
+desperdiçam espaço; no módulo 07, a memória dinâmica guarda cada nome com o
+tamanho exato.
+
+A contagem usa um **vetor de contadores** (assunto 0037), `int votos[3]`. A
+ideia é casar as posições: `votos[i]` conta os votos do candidato que está em
+`nomes[i]`. Se a capivara é a linha 2 da matriz, os votos dela ficam em
+`votos[2]` (DEITEL; DEITEL, 2011, cap. 6).
+
+Falta ligar o voto à posição. A função `buscar` compara a linha com cada
+nome usando `strcmp` e devolve a posição em que achou ou -1, como no A076. O
+-1 resolve o voto inválido sem `if` especial: "Tatu" não está na matriz, a
+busca devolve -1, e o `main` soma esse voto aos inválidos (BACKES, 2013,
+cap. 9).
+
+As funções seguem o assunto 0038. `normalizar` recebe a linha e a altera,
+porque recebeu o endereço do vetor; `buscar` só lê, então os parâmetros dela
+podem levar `const`. O `main` cuida do laço e do resultado, e cada função faz
+uma coisa só.
+
+Por fim, uma operação que aparece no exercício de ordenar uma lista: trocar
+dois nomes de lugar. Como string não se atribui com `=`, a troca é um
+`strcpy` triplo com uma variável auxiliar: copia o primeiro para a auxiliar,
+o segundo para o primeiro e a auxiliar para o segundo. O A086 ordena uma
+lista assim (KERNIGHAN; RITCHIE, 1989, cap. 5).
 
 > [!WARNING]
-> **Empate**: com `>`, ganha quem aparece primeiro na matriz; com `>=`, o
-> último. Decida de propósito. E `"boto "`, com espaço no fim, é inválido:
+> **Empate**: com `votos[i] > votos[vencedor]`, ganha quem aparece primeiro na
+> matriz; com `>=`, o último. É uma regra escondida no operador: decida de
+> propósito. E `"boto "`, com espaço no fim, é inválido para o `strcmp`:
 > `normalizar` não corta espaços.
 
 ### Exemplos de uso

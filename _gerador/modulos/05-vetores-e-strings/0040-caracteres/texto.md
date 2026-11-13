@@ -1,21 +1,18 @@
 ## 0040 · Caracteres
 
-- **Caractere é número**: o `char` é um inteiro de 1 byte, e cada símbolo tem
-  um código na **tabela ASCII**. `'A'` e `65` são o mesmo valor (DEITEL;
-  DEITEL, 2011, cap. 8).
-- **`%c` e `%d`**: o `printf` mostra o símbolo ou o código. Como é número, dá
-  para calcular: `'a' + 1` é `'b'` e `c - '0'` transforma `'7'` em 7 (BACKES,
-  2013, cap. 7).
-- **`<ctype.h>`**: testes (`isalpha`, `isdigit`, `isalnum`, `isspace`,
-  `isupper`, `islower`, `ispunct`) e conversões (`toupper`, `tolower`). O que
-  não é letra volta igual (DEITEL; DEITEL, 2011, cap. 8).
-- **Verdadeiro é não zero**: os testes não devolvem necessariamente 1.
-  Escreva `if (isdigit(c))`, nunca `== 1` (LINUX MAN-PAGES PROJECT, s.d.).
-- **`getchar()`**: lê um caractere e devolve um **`int`**, o código ou
-  **`EOF`** (negativo, fim da entrada). Guarde num `int` (DEITEL; DEITEL, 2011,
-  cap. 8).
-- **Acento**: o "ç" em UTF-8 ocupa dois bytes e não cabe num `char`. Para o
-  `ctype.h`, use `toupper((unsigned char) c)` (CPPREFERENCE, s.d.).
+No app do Detran, você digita a placa em minúsculas, `bra2e19`, e ele mostra
+`BRA2E19` e confere o formato: três letras, um dígito, uma letra, dois
+dígitos. Para isso o programa precisa saber que `b` é letra, que `2` é dígito
+e qual é a maiúscula de `b`. Antes de juntar caracteres em textos, vale
+entender o que um caractere é para o computador.
+
+A resposta curta: **caractere é número**. O tipo `char` guarda um inteiro de
+1 byte, e cada símbolo tem um código combinado numa tabela, a **tabela
+ASCII**. É como o número de chamada de uma turma: a professora fala "17" e
+todo mundo sabe quem é. Na ASCII, `'A'` é 65, `'B'` é 66, `'a'` é 97, `'0'` é
+48, o espaço é 32 e o `'\n'` é 10. As aspas simples só escrevem esse número de
+um jeito legível: `'A'` e `65` são o mesmo valor (DEITEL; DEITEL, 2011,
+cap. 8).
 
 | símbolos | códigos | repare |
 | --- | --- | --- |
@@ -23,9 +20,45 @@
 | `'A'` a `'Z'` | 65 a 90 | em ordem alfabética |
 | `'a'` a `'z'` | 97 a 122 | cada minúscula = maiúscula + 32 |
 
+Quem decide o que aparece na tela é o `printf`. Com `%c` ele mostra o
+símbolo; com `%d`, o código. Como o `char` é número, dá para fazer conta e
+comparar: `'a' + 1` é `'b'`, e `c >= 'A' && c <= 'Z'` pergunta se `c` é uma
+maiúscula. A conta mais útil é `c - '0'`: como os dígitos estão em ordem a
+partir do 48, ela transforma o caractere `'7'` no número 7 (BACKES, 2013,
+cap. 7). A tabela mostra outra regularidade: cada minúscula fica 32 posições
+depois da sua maiúscula.
+
+Fazer essas contas na mão funciona, mas o `<ctype.h>` já traz as funções
+prontas. Há testes, que respondem sim ou não: `isalpha` (é letra?),
+`isdigit` (é dígito?), `isalnum` (letra ou dígito?), `isspace` (espaço, `\t`
+ou `\n`?), `isupper`, `islower` e `ispunct` (pontuação?). E há conversões:
+`toupper` devolve a maiúscula e `tolower` a minúscula. O que não é letra volta
+igual, então `toupper('2')` é `'2'` (DEITEL; DEITEL, 2011, cap. 8).
+
+Os testes seguem a regra do C para verdadeiro: qualquer valor **diferente de
+zero**. Eles não prometem devolver 1; podem devolver 8 ou 1024. Por isso
+escreva `if (isdigit(c))`, nunca `if (isdigit(c) == 1)`, que pode falhar
+mesmo quando `c` é um dígito (LINUX MAN-PAGES PROJECT, s.d.).
+
+Para ler um caractere do teclado, existe o `getchar()`. Ele devolve um
+**`int`**, e não um `char`, porque precisa de um valor a mais: além dos 256
+códigos possíveis, ele pode devolver **`EOF`**, um número negativo que avisa
+que a entrada acabou (Ctrl+D no Linux). Guarde o resultado num `int`, ou o
+`EOF` pode se confundir com um caractere de verdade (DEITEL; DEITEL, 2011,
+cap. 8).
+
+Acento pede um cuidado. O C não garante se o `char` tem sinal; no x86 ele vai
+de -128 a 127. No UTF-8, o "ç" ocupa **dois** bytes (`0xC3 0xA7`) e não cabe
+num `char`. Num `char` com sinal, esses bytes viram números negativos, e
+passar um negativo que não seja `EOF` às funções do `<ctype.h>` é
+comportamento indefinido. O jeito seguro é converter antes:
+`toupper((unsigned char) c)` (CPPREFERENCE, s.d.).
+
 > [!WARNING]
-> Letra não é "tudo entre `'A'` e `'z'`": no meio ficam `[ \ ] ^ _` e a crase.
-> Use `isalpha(c)`. E `'0'` (código 48) não é `0` (o caractere nulo `'\0'`).
+> Letra não é "tudo entre `'A'` e `'z'`": entre o `'Z'` (90) e o `'a'` (97)
+> ficam `[ \ ] ^ _` e a crase, então esse teste aceita `_` como letra. Use
+> `isalpha(c)`. E não confunda `'0'` (o caractere zero, código 48) com `0`
+> (o número zero, que é o caractere nulo `'\0'`).
 
 {{exemplo}}
 
