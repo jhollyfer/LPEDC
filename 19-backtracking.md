@@ -63,18 +63,44 @@ vermelho, casa proibida.
 
 ### Conceito
 
-- **Subconjunto**: cada item entra ou não entra. Com `n` itens há **2ⁿ**
-  subconjuntos, contando o vazio e o conjunto inteiro; a lista de todos é o
-  **conjunto das partes** (FEOFILOFF, 2009).
-- **Enumerar**: gerar todos os casos sem esquecer nem repetir nenhum
-  (FEOFILOFF, 2009).
-- **Árvore de decisões**: cada nível decide um item; um ramo deixa o item de
-  fora e o outro o põe. As folhas são os subconjuntos (ZIVIANI, 2010, cap. 2).
-- **Versão recursiva**: `gera(i, k)` abre dois caminhos para o item `i`, sem
-  ele e com ele, e mostra a escolha quando `i` chega a `n`. Como `k` é
-  **parâmetro**, a escolha se desfaz sozinha na volta (KERNIGHAN; RITCHIE, 1989).
-- **Versão por bits**: conte `m` de 0 a 2ⁿ - 1 e leia o bit `i` de `m` como "o
-  item `i` entra" (assunto 0065). O 5 é `101`: itens 0 e 2 (KNUTH, 2011).
+Muitos problemas se resolvem testando todas as possibilidades: todas as
+combinações de itens que cabem num orçamento, todas as escalas de plantão,
+todas as jogadas. Para isso, você precisa de um jeito de gerar cada
+possibilidade uma vez, sem esquecer nenhuma e sem repetir. Este módulo começa
+pelo caso mais simples: escolher quais itens de uma lista entram.
+
+Pense num copo de açaí com três complementos à escolha: granola, banana e
+paçoca. Para cada complemento a pergunta é sim ou não, e as respostas são
+independentes. Dois jeitos para a granola, vezes dois para a banana, vezes
+dois para a paçoca: 2 × 2 × 2 = 8 copos. Cada copo é um **subconjunto** do
+conjunto {granola, banana, paçoca}: um grupo formado por alguns dos itens, em
+que a ordem não importa. Com `n` itens há **2ⁿ** subconjuntos, contando o
+vazio (o copo puro) e o conjunto inteiro (o copo com tudo). A coleção de todos
+eles se chama **conjunto das partes** (FEOFILOFF, 2009).
+
+Gerar todos os casos de um problema, sem esquecer nem repetir nenhum, se chama
+**enumerar** (FEOFILOFF, 2009). A enumeração fica fácil de enxergar numa
+**árvore de decisões**. Cada nível da árvore decide um item. De cada nó saem
+dois ramos: um deixa o item de fora, o outro o põe. Depois de `n` níveis, cada
+caminho da raiz até uma folha é uma sequência completa de decisões, e as
+folhas são exatamente os 2ⁿ subconjuntos (ZIVIANI, 2010, cap. 2).
+
+A recursão do assunto 0032 percorre essa árvore. A função `gera(i, k)` cuida
+do item `i` e abre os dois ramos: chama `gera(i + 1, ...)` sem o item e depois
+chama de novo com o item dentro. Quando `i` chega a `n`, todas as decisões
+foram tomadas, e a função mostra o subconjunto. Os itens escolhidos ficam num
+vetor `cesta`, e `k` conta quantas posições dele estão ocupadas. Como `k` é
+**parâmetro**, cada chamada recebe a sua cópia. Quando uma chamada termina, a
+anterior continua com o `k` dela, e a escolha feita lá embaixo se desfaz
+sozinha (KERNIGHAN; RITCHIE, 1989).
+
+Há um segundo jeito, sem recursão, que usa os bits de um número inteiro
+(assunto 0065). Um número de `n` bits tem exatamente 2ⁿ valores, de 0 a
+2ⁿ - 1, e cada bit pode valer 0 ou 1, como cada item pode estar fora ou
+dentro. Conte `m` de 0 a 2ⁿ - 1 e leia o bit `i` de `m` como "o item `i`
+entra". O 5 em binário é `101`: bits 0 e 2 ligados, itens 0 e 2 dentro, ou
+seja, granola e paçoca (KNUTH, 2011). O teste do bit usa `1 << i`, um 1
+deslocado `i` casas para a esquerda:
 
 ```c
 for (int m = 0; m < (1 << N); m++)      // 1 << 3 vale 8
@@ -82,8 +108,16 @@ for (int m = 0; m < (1 << N); m++)      // 1 << 3 vale 8
         if (m & (1 << i)) { /* o item i está no subconjunto m */ }
 ```
 
-- **Custo**: 2ⁿ⁺¹ - 1 chamadas e 2ⁿ folhas; mostrar cada uma custa até `n`,
-  logo **O(n · 2ⁿ)**. Só serve para `n` pequeno (FEOFILOFF, 2009).
+Escreva o teste como `if (m & (1 << i))`, sem comparar com nada. Se escrever
+`m & 1 << i == 1`, o `==` é avaliado antes do `&`, e a conta sai outra.
+
+Quanto custa enumerar tudo? A árvore tem 2ⁿ folhas e 2ⁿ⁺¹ - 1 nós ao todo,
+então a versão recursiva faz 2ⁿ⁺¹ - 1 chamadas: 15 para três itens. Mostrar
+cada subconjunto custa até `n` passos, e o total é **O(n · 2ⁿ)**. O número
+dobra a cada item novo: 20 itens já dão mais de um milhão de subconjuntos, e
+o método só serve para `n` pequeno (FEOFILOFF, 2009). A memória é bem menor:
+a pilha guarda só os frames de um caminho da raiz até a folha, no máximo
+`n + 1` ao mesmo tempo, 4 para três itens.
 
 > [!WARNING]
 > `m & (1 << i)` não dá 1 com o bit ligado: dá o próprio `1 << i`. Com `== 1`,
@@ -353,21 +387,51 @@ Saída esperada:
 
 ### Conceito
 
-- **Permutação**: uma ordem dos `n` elementos. Há **n!** delas: `n` escolhas
-  para a primeira posição, `n - 1` para a segunda, e assim por diante
-  (FEOFILOFF, 2009).
-- **Uma posição por vez**: `permuta(v, i)` sabe que `0..i-1` já estão
-  decididas; os candidatos à posição `i` estão em `v[i..n-1]`
-  (WIRTH, 1989).
-- **Escolhe, desce, desfaz**: para cada `j` de `i` a `n - 1`, troca `v[i]` com
-  `v[j]`, chama `permuta(v, i + 1)` e troca de novo (FEOFILOFF, 2009).
-- **Desfazer**: a troca mexe no **vetor**, que é um só para todas as chamadas.
-  Sem destrocar, as chamadas seguintes recebem o vetor bagunçado
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 3).
-- **Ordem de saída**: o método da troca **não** gera a ordem de dicionário
-  (KNUTH, 2011).
-- **Custo**: `n!` folhas com `n` passos cada, **O(n · n!)**, pior que os 2ⁿ
-  dos subconjuntos. 13! já não cabe num `int` de 32 bits (FEOFILOFF, 2009).
+No assunto 0125, a pergunta era quais itens entram. Agora todos entram, e a
+pergunta é em que ordem. A organização de um sarau com três grupos, rap, samba
+e forró, quer conhecer todas as ordens possíveis de apresentação para escolher
+a melhor. Qualquer um dos 3 pode abrir a noite; para o segundo lugar sobram 2;
+para o último, 1. São 3 × 2 × 1 = 6 ordens.
+
+Cada ordem é uma **permutação**: um arranjo dos `n` elementos em sequência,
+usando cada um exatamente uma vez. A conta do sarau vale em geral: há `n`
+escolhas para a primeira posição, `n - 1` para a segunda, e assim por diante
+até 1, e o total é o fatorial, **n!** (FEOFILOFF, 2009).
+
+A recursão gera as permutações decidindo **uma posição por vez**. A função
+`permuta(v, i)` trabalha com uma promessa: as posições `0` até `i - 1` do vetor
+já estão decididas, e os candidatos à posição `i` são os elementos que sobraram,
+guardados em `v[i..n-1]` (WIRTH, 1989). Quando `i` chega a `n`, não há mais
+posição a decidir, e a ordem completa é mostrada.
+
+Para cada candidato `j`, de `i` até `n - 1`, a função faz três movimentos.
+**Escolhe**: troca `v[i]` com `v[j]`, e o candidato vai para a posição `i`.
+**Desce**: chama `permuta(v, i + 1)`, que cuida das posições seguintes.
+**Desfaz**: troca `v[i]` com `v[j]` de novo, e o vetor volta a ser o que era
+antes da escolha (FEOFILOFF, 2009). Com o vetor {rap, samba, forró} e `i = 0`,
+a primeira volta do laço troca o rap com ele mesmo e gera as ordens que abrem
+com rap; a segunda troca rap com samba e gera as que abrem com samba; a
+terceira, as que abrem com forró.
+
+O terceiro movimento é o que separa este assunto do anterior. Nos
+subconjuntos, a escolha ficava num parâmetro e se desfazia sozinha na volta da
+chamada. Aqui a troca mexe no **vetor**, e o vetor é um só, compartilhado por
+todas as chamadas, porque o C passa vetor como endereço. Se você não destroca,
+a próxima volta do laço recebe o vetor bagunçado pela chamada anterior, e os
+candidatos deixam de ser os que deveriam (TENENBAUM; LANGSAM; AUGENSTEIN,
+1995, cap. 3).
+
+Um efeito colateral das trocas: as ordens não saem em ordem de dicionário.
+Para três elementos a diferença aparece só no fim, mas cresce com `n`. Quem
+precisa da ordem lexicográfica usa outro método de geração (KNUTH, 2011).
+
+O custo cresce mais rápido que o dos subconjuntos. São `n!` folhas, e cada uma
+gasta `n` passos para mostrar a ordem, então o total é **O(n · n!)**, pior que
+O(n · 2ⁿ). Para ter ideia, 13! vale 6.227.020.800 e já não cabe num `int` de
+32 bits; 20!, cerca de 2,4 · 10¹⁸, fica perto do limite de um `long long`
+(FEOFILOFF, 2009). Se os elementos são textos, troque os ponteiros e não os
+textos: trocar dois `char *` custa 8 bytes por elemento, qualquer que seja o
+tamanho do nome.
 
 > [!WARNING]
 > Sem o **desfaz**, o programa ainda mostra n! linhas, mas com ordens
@@ -630,21 +694,53 @@ depois de 1 3 5 4 2 vem 1 4 2 3 5
 
 ### Conceito
 
-- **Backtracking** (retrocesso, ou **tentativa e erro**): enumeração que
-  **desiste cedo**. A cada escolha, pergunta se o começo ainda pode virar
-  solução; se não, volta um passo (ZIVIANI, 2010, cap. 2).
-- **Poda**: cortar um galho inteiro da árvore de decisões sem visitá-lo
-  (WIRTH, 1989).
-- **Esqueleto**: (1) **parada**: a solução está completa? mostre e volte;
-  (2) **poda**: o começo é inviável? volte sem descer; (3) **escolha**: para
-  cada opção, escolha, desça e **desfaça** (FEOFILOFF, 2009).
-- **Soma de subconjuntos**: achar os itens que somam um alvo exato. Com
-  preços positivos, soma acima do alvo não tem conserto e pode ser podada
-  (FEOFILOFF, 2009).
-- **Estado na volta**: o que é **parâmetro** se desfaz sozinho; o que é
-  global (`leva[]`) precisa ser desfeito à mão (KERNIGHAN; RITCHIE, 1989).
-- **Custo**: o pior caso continua **O(2ⁿ)**. A poda muda o quanto da árvore
-  você visita, não a garantia (ROVAI, 2018).
+A enumeração dos assuntos 0125 e 0126 visita tudo, inclusive o que já nasceu
+perdido. Imagine um cartão-presente de R$ 35 que não dá troco: ou você gasta o
+valor exato, ou o resto se perde. Na vitrine há um atlas de R$ 30, um mangá de
+R$ 20, um livro de poesia de R$ 15 e um marcador de R$ 5. Você quer as
+combinações que fecham R$ 35. Bastaria testar os 2⁴ = 16 subconjuntos, só que
+atlas e mangá juntos já somam R$ 50, e a enumeração cega continua testando
+todo subconjunto que começa assim, como se ainda houvesse chance.
+
+O **backtracking**, que também se chama retrocesso ou **tentativa e erro**, é
+a enumeração que **desiste cedo**. A cada escolha, ele pergunta se o começo
+montado até ali ainda pode virar uma solução. Se não pode, volta um passo e
+tenta outra coisa, sem completar o que já está condenado (ZIVIANI, 2010,
+cap. 2).
+
+Na árvore de decisões, desistir cedo tem um efeito grande. Cada nó tem abaixo
+dele uma subárvore inteira de possibilidades, e voltar daquele nó descarta
+todas de uma vez. Cortar um galho inteiro sem visitá-lo se chama **poda**
+(WIRTH, 1989). Quanto mais perto da raiz a poda acontece, mais folhas ela
+elimina.
+
+Todo backtracking segue o mesmo esqueleto, com três partes, nesta ordem
+(FEOFILOFF, 2009). Primeiro, o **caso de parada**: a solução está completa? Se
+está, mostre ou conte e volte. Segundo, a **poda**: o começo já é inviável? Se
+é, volte sem descer. Terceiro, a **escolha**: para cada opção disponível,
+escolha, desça com uma chamada recursiva e, na volta, **desfaça** a escolha,
+como nas permutações.
+
+O problema do cartão é um caso clássico, a **soma de subconjuntos**: achar
+quais itens de uma lista somam exatamente um valor-alvo (FEOFILOFF, 2009). A
+poda vem de uma propriedade dos dados. Os preços são positivos, então
+acrescentar um item só aumenta a soma. Se a soma **passou** de 35, nenhum item
+a mais conserta, e o galho pode ser cortado. E se a soma bateu
+**exatamente** 35, a solução está pronta, e também não há por que descer. Com
+atlas e mangá na cesta, a soma de 50 corta de uma vez os quatro subconjuntos
+que começam com os dois.
+
+Assim como nos subconjuntos, a volta precisa deixar o estado como estava. O
+que é **parâmetro**, como a soma acumulada, se desfaz sozinho: cada chamada tem
+a sua cópia, e voltar devolve o valor anterior. O que é global, como o vetor
+`leva[]` que marca os itens escolhidos, é um só para todas as chamadas e
+precisa ser desfeito à mão: `leva[i] = false` antes de tentar o caminho sem o
+item (KERNIGHAN; RITCHIE, 1989).
+
+A poda não muda a garantia de pior caso. Se os dados forem desfavoráveis, ela
+quase não corta nada, e o backtracking continua **O(2ⁿ)**. O que muda é quanto
+da árvore você visita na prática, e em muitos problemas a diferença é enorme
+(ROVAI, 2018).
 
 > [!WARNING]
 > A poda só corta o que **com certeza** não leva a solução. Poda com `>=` no
@@ -937,22 +1033,52 @@ Saída esperada:
 
 ### Conceito
 
-- **Problema das N-rainhas**: pôr `N` rainhas num tabuleiro `N × N` sem que
-  uma ataque outra na linha, na coluna ou na diagonal. É o exemplo clássico de
-  tentativa e erro (WIRTH, 1989).
-- **Uma por linha**: duas rainhas na mesma linha se atacam, então a solução é
-  um vetor `pos` com a coluna da rainha de cada linha
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 3).
-- **Busca**: `rainha(l)` tenta cada coluna, **poda** as casas atacadas e, na
-  casa livre, marca, desce para `l + 1` e desmarca na volta (FEOFILOFF, 2009).
-- **Diagonais**: na ↗, `l + c` é igual em todas as casas (0 a `2N - 2`); na ↘,
-  `l - c` é igual, e somar `N - 1` dá um índice válido (WIRTH, 1989).
-- **Ataque em O(1)**: três vetores de `bool` (`coluna[N]`, `diag1[2N - 1]`,
-  `diag2[2N - 1]`) trocam o laço pelas rainhas anteriores por três leituras
-  (WIRTH, 1989).
-- **Atribuição em cadeia**: `a = b = c = true` funciona porque a atribuição
-  devolve o valor atribuído, da direita para a esquerda
-  (KERNIGHAN; RITCHIE, 1989).
+O backtracking do assunto 0127 mostra a força real num quebra-cabeça antigo.
+No xadrez, a rainha ataca qualquer peça na mesma linha, na mesma coluna ou na
+mesma diagonal, a qualquer distância. O desafio é pôr `N` rainhas num
+tabuleiro `N × N` sem que nenhuma ataque outra. Esse é o **problema das
+N-rainhas**, o exemplo clássico de tentativa e erro (WIRTH, 1989).
+
+Comece pelo tamanho do problema. Num tabuleiro 4 × 4, a força bruta escolheria
+4 das 16 casas, sem olhar mais nada: são 1820 jeitos. A primeira observação
+corta isso. Duas rainhas na mesma linha se atacam, e há `N` rainhas para `N`
+linhas, então cada linha tem **exatamente uma** rainha. A solução deixa de ser
+"quais casas" e vira "em que coluna fica a rainha de cada linha", um vetor
+`pos` em que `pos[l]` é a coluna da rainha da linha `l` (TENENBAUM; LANGSAM;
+AUGENSTEIN, 1995, cap. 3).
+
+A busca segue o esqueleto do assunto 0127, uma linha por chamada. A função
+`rainha(l)` tenta cada coluna `c` da linha `l`. Se a casa `(l, c)` é atacada
+por alguma rainha já posta nas linhas de cima, a busca **poda** e passa para a
+próxima coluna. Se a casa está livre, ela marca a rainha ali, desce para
+`rainha(l + 1)` e, na volta, desmarca, para a casa estar limpa quando a
+próxima coluna for tentada (FEOFILOFF, 2009). Quando `l` chega a `N`, todas as
+linhas têm rainha, e a solução é mostrada.
+
+Falta testar o ataque. O jeito óbvio é um laço pelas rainhas anteriores,
+conferindo coluna e diagonais de cada uma. Há um jeito melhor, que depende de
+uma propriedade das diagonais. Na diagonal que sobe para a direita, ↗, a
+soma `l + c` é a mesma em todas as casas: andar uma casa na diagonal diminui a
+linha em 1 e aumenta a coluna em 1. Essa soma vai de 0 a `2N - 2`, e serve
+direto de índice. Na diagonal que desce para a direita, ↘, o que se mantém é a
+diferença `l - c`, que vai de `-(N - 1)` a `N - 1`. Como índice de vetor não
+pode ser negativo, some `N - 1`, e a faixa vira 0 a `2N - 2` (WIRTH, 1989).
+Num 4 × 4, a casa da linha 1, coluna 3, está na ↗ de número 4 e na ↘ de número
+`1 - 3 + 3 = 1`.
+
+Com esses números, três vetores de `bool` guardam o que está ocupado:
+`coluna[N]`, `diag1[2N - 1]` para as ↗ e `diag2[2N - 1]` para as ↘. A casa
+`(l, c)` está livre se `coluna[c]`, `diag1[l + c]` e `diag2[l - c + N - 1]`
+estão todos falsos. O laço pelas rainhas anteriores vira três leituras, em
+O(1) (WIRTH, 1989). Com isso, o 8-rainhas acha as 92 soluções com 2057
+chamadas.
+
+Para marcar a rainha, o código usa uma **atribuição em cadeia**:
+`coluna[c] = diag1[l + c] = diag2[l - c + N - 1] = true`. Ela funciona porque,
+em C, a atribuição é uma expressão que devolve o valor atribuído, e o
+operador agrupa da direita para a esquerda: a atribuição mais à direita
+acontece primeiro, e o valor dela alimenta a seguinte (KERNIGHAN; RITCHIE,
+1989). Na volta, a mesma linha com `false` desmarca as três.
 
 > [!WARNING]
 > O índice da ↘ é `l - c + N - 1`, não `l - c`: para (0, 3), `diag2[-3]`
@@ -1258,24 +1384,60 @@ vetores limpos no fim: sim
 
 ### Conceito
 
-- **Labirinto em matriz**: `char lab[L][C + 1]`, com `'#'` de parede, `'.'` de
-  corredor, `'S'` de entrada e `'F'` de saída
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 3).
-- **`anda(l, c)`**: responde "dá para chegar à saída daqui?". Recusa fora do
-  mapa, parede e casa já marcada; senão **marca** com `'*'`, tenta os quatro
-  vizinhos e, se nenhum serve, **desfaz** a marca (DEITEL; DEITEL, 2011).
-- **Marca de beco**: o desfazer põe `'x'`, não `'.'`. Assim cada casa é
-  visitada no máximo uma vez, e o custo é **O(L · C)** (ROVAI, 2018).
-- **Busca em profundidade** (DFS): é o mesmo algoritmo do assunto 0111, com a
-  matriz no papel do grafo e os quatro vizinhos no das arestas
-  (CORMEN et al., 2024, cap. 20).
-- **Curto-circuito**: no `||`, quando um vizinho devolve `true`, os seguintes
-  não são chamados; a ordem das direções decide o caminho (KERNIGHAN; RITCHIE, 1989).
-- **Um caminho, não o menor**: para o menor, use a busca em largura (BFS,
-  assunto 0110) (CORMEN et al., 2024, cap. 20).
-- **Flood fill** (preenchimento por inundação): a mesma recursão sem a saída e
-  sem desfazer; é o balde de tinta do editor de imagens
-  (CASTILHO; SILVA; WEINGAERTNER, 2020).
+Num labirinto de milho, quem sai sem mapa usa uma estratégia que todo mundo
+conhece. Segue por um corredor; num beco, volta até a última bifurcação e
+tenta outro corredor; e deixa pedrinhas pelo caminho para não andar em
+círculos. Isso é backtracking, e o labirinto é o lugar mais concreto para
+vê-lo funcionar.
+
+No C, o labirinto vira uma **matriz** de caracteres, `char lab[L][C + 1]`, em
+que cada linha é uma string (daí o `+ 1`, para o `'\0'`). O caractere `'#'` é
+parede, `'.'` é corredor livre, `'S'` é a entrada e `'F'` é a saída
+(TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 3). Cada casa é um par
+`(l, c)`, e os vizinhos dela são as quatro casas à direita, abaixo, à
+esquerda e acima.
+
+A função recursiva `anda(l, c)` responde uma pergunta só: "dá para chegar à
+saída a partir desta casa?". Ela recusa logo três casos: casa fora do mapa,
+parede e casa que já está marcada. Se a casa é a saída, responde sim. Senão,
+**marca** a casa com `'*'`, como uma pedrinha, e tenta os quatro vizinhos. Se
+algum responder sim, ela também responde sim, e as casas com `'*'` formam o
+caminho. Se nenhum servir, ela **desfaz** a marca e responde não (DEITEL;
+DEITEL, 2011).
+
+O desfazer tem um detalhe. A casa não volta a ser `'.'`: ela vira `'x'`, uma
+marca de beco. Uma casa de onde não se chega à saída continua sem levar à
+saída na próxima vez que a busca passar por ela, então não adianta entrar de
+novo. Com essa marca, cada casa é visitada no máximo uma vez, e o custo fica
+em **O(L · C)**, proporcional ao tamanho do mapa (ROVAI, 2018).
+
+Se você olhar com atenção, já viu esse algoritmo. É a busca em profundidade,
+a DFS do assunto 0111: a matriz faz o papel do grafo, cada casa livre é um
+vértice e os quatro vizinhos são as arestas. A marca `'*'` ou `'x'` é o
+`visitado[]` (CORMEN et al., 2024, cap. 20).
+
+Os quatro vizinhos são tentados numa expressão só, ligados por `||`. O
+operador `||` do assunto 0013 tem **curto-circuito**: avalia da esquerda para
+a direita e, assim que um termo dá verdadeiro, para, sem avaliar os seguintes.
+Quando um vizinho devolve `true`, os outros nem são chamados (KERNIGHAN;
+RITCHIE, 1989). Por isso a ordem das direções no código, direita, baixo,
+esquerda, cima, decide qual caminho sai.
+
+Como é uma DFS, o caminho achado é **um** caminho, não necessariamente o mais
+curto. Ele depende da ordem das direções e pode dar voltas enormes. Para o
+menor caminho, use a busca em largura, a BFS do assunto 0110, que explora a
+matriz em ondas (CORMEN et al., 2024, cap. 20).
+
+A profundidade da recursão é o tamanho do caminho atual, que pode chegar a
+`L · C` casas. Um mapa de 1000 × 1000 pede até um milhão de frames, mais que
+os 8 MB de pilha que o Linux costuma dar. Para mapas grandes, troque a
+recursão por uma pilha explícita de coordenadas, como no assunto 0082.
+
+A mesma recursão tem outro uso famoso. Tire a saída e tire o desfazer: a
+função marca a casa e se espalha para os quatro vizinhos, até preencher toda a
+região conectada. Isso é o **flood fill**, ou preenchimento por inundação, a
+ferramenta do balde de tinta dos editores de imagem (CASTILHO; SILVA;
+WEINGAERTNER, 2020).
 
 > [!WARNING]
 > Sem a marca de visitada, a busca anda em círculos: (0, 0) chama (0, 1), que
@@ -1580,23 +1742,53 @@ menor caminho: 9 passos
 
 ### Conceito
 
-- **Sudoku**: completar a grade 9 × 9 com dígitos de 1 a 9 sem repetir numa
-  linha, numa coluna ou numa das nove caixas 3 × 3. É problema de satisfação
-  de restrições, resolvido por tentativa e erro (DEITEL; DEITEL, 2011).
-- **Grade**: matriz `int g[9][9]`, com 0 de casa vazia. Cada casa vazia é uma
-  decisão com 9 opções (DEITEL; DEITEL, 2011).
-- **Vetores de marcação**: `na_linha[l][d]`, `na_coluna[c][d]` e
-  `na_caixa[b][d]` dizem se o dígito `d` já aparece; a poda vira três
-  leituras, como nas N-rainhas (WIRTH, 1989).
-- **Caixa**: a casa `(l, c)` está na caixa `b = (l / 3) * 3 + c / 3`, de 0 a 8.
-- **`resolve(k)`**: percorre as casas em ordem de leitura (linha `k / 9`,
-  coluna `k % 9`), pula as dadas e, na primeira vazia, tenta os dígitos que
-  passam pela poda: **escreve e marca**, desce, **apaga e desmarca**
-  (FEOFILOFF, 2009).
-- **Ordem das casas**: escolher a casa com menos candidatos poda muito mais
-  cedo (ZIVIANI, 2010, cap. 2).
-- **Dígito para número**: `jogo[l][c] - '0'` funciona porque os dígitos são
-  consecutivos na tabela de caracteres (assunto 0040) (KERNIGHAN; RITCHIE, 1989).
+O sudoku junta tudo o que o módulo mostrou num problema que muita gente
+resolve no papel. A grade tem 9 × 9 casas, algumas já preenchidas. O objetivo
+é completar as vazias com dígitos de 1 a 9 sem repetir nenhum dígito numa
+linha, numa coluna ou numa das nove caixas 3 × 3 em que a grade se divide.
+Problemas assim, em que se procura uma atribuição de valores que respeite um
+conjunto de regras, se chamam **problemas de satisfação de restrições**, e o
+backtracking é a forma natural de atacá-los (DEITEL; DEITEL, 2011).
+
+A grade vira uma matriz `int g[9][9]`, com 0 marcando a casa vazia. Do ponto
+de vista do backtracking, cada casa vazia é uma decisão com 9 opções, e a
+árvore de decisões tem um nível por casa vazia (DEITEL; DEITEL, 2011). Com 51
+casas vazias, a força bruta pura teria 9⁵¹ folhas, um número impossível de
+percorrer. A poda é o que torna o problema viável.
+
+A poda é a própria regra do jogo: um dígito que já aparece na linha, na
+coluna ou na caixa da casa não pode entrar. Para testar isso sem varrer a
+grade, o programa usa **vetores de marcação**, como os das N-rainhas no
+assunto 0128. `na_linha[l][d]` diz se o dígito `d` já está na linha `l`;
+`na_coluna[c][d]` faz o mesmo para a coluna `c`; e `na_caixa[b][d]`, para a
+caixa `b`. O teste vira três leituras, em O(1) (WIRTH, 1989). Os vetores têm 10
+posições por linha, e o índice 0 fica sem uso, para que o próprio dígito sirva
+de índice.
+
+Falta numerar as caixas. As linhas 0 a 2 formam a primeira faixa de caixas, as
+linhas 3 a 5 a segunda e as 6 a 8 a terceira; o mesmo vale para as colunas. A
+divisão inteira `l / 3` dá a faixa da linha e `c / 3` dá a faixa da coluna, e a
+casa `(l, c)` fica na caixa `b = (l / 3) * 3 + c / 3`, um número de 0 a 8. A
+casa (4, 7), por exemplo, está na caixa `1 * 3 + 2 = 5`.
+
+A função `resolve(k)` percorre as casas em ordem de leitura, da esquerda para
+a direita e de cima para baixo. A casa número `k`, de 0 a 80, fica na linha
+`k / 9` e na coluna `k % 9`. A função pula as casas já preenchidas e, na
+primeira vazia, tenta cada dígito que passa pela poda: **escreve e marca**,
+desce para `resolve(k + 1)` e, se não deu certo, **apaga e desmarca**
+(FEOFILOFF, 2009). Quando não sobra casa vazia, a grade está completa, e o
+`true` sobe pelas chamadas até o `main`.
+
+A ordem em que as casas são decididas pesa muito. Ir em ordem de leitura é
+simples, mas escolher primeiro a casa com **menos** candidatos poda muito mais
+cedo: uma casa com uma opção só não gera ramo nenhum, e uma escolha errada é
+descoberta antes de a árvore crescer (ZIVIANI, 2010, cap. 2).
+
+A grade do exemplo chega como texto, uma string por linha, com `.` para casa
+vazia. Para transformar o caractere `'7'` no número 7, o código faz
+`jogo[l][c] - '0'`. A conta funciona porque os caracteres de `'0'` a `'9'` são
+consecutivos na tabela de caracteres (assunto 0040): a distância entre `'7'` e
+`'0'` é exatamente 7 (KERNIGHAN; RITCHIE, 1989).
 
 > [!WARNING]
 > No desfazer, as duas coisas voltam: `g[l][c] = 0` **e**

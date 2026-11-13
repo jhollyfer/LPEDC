@@ -1,22 +1,52 @@
 ## 0130 · Juntando tudo
 
-- **Sudoku**: completar a grade 9 × 9 com dígitos de 1 a 9 sem repetir numa
-  linha, numa coluna ou numa das nove caixas 3 × 3. É problema de satisfação
-  de restrições, resolvido por tentativa e erro (DEITEL; DEITEL, 2011).
-- **Grade**: matriz `int g[9][9]`, com 0 de casa vazia. Cada casa vazia é uma
-  decisão com 9 opções (DEITEL; DEITEL, 2011).
-- **Vetores de marcação**: `na_linha[l][d]`, `na_coluna[c][d]` e
-  `na_caixa[b][d]` dizem se o dígito `d` já aparece; a poda vira três
-  leituras, como nas N-rainhas (WIRTH, 1989).
-- **Caixa**: a casa `(l, c)` está na caixa `b = (l / 3) * 3 + c / 3`, de 0 a 8.
-- **`resolve(k)`**: percorre as casas em ordem de leitura (linha `k / 9`,
-  coluna `k % 9`), pula as dadas e, na primeira vazia, tenta os dígitos que
-  passam pela poda: **escreve e marca**, desce, **apaga e desmarca**
-  (FEOFILOFF, 2009).
-- **Ordem das casas**: escolher a casa com menos candidatos poda muito mais
-  cedo (ZIVIANI, 2010, cap. 2).
-- **Dígito para número**: `jogo[l][c] - '0'` funciona porque os dígitos são
-  consecutivos na tabela de caracteres (assunto 0040) (KERNIGHAN; RITCHIE, 1989).
+O sudoku junta tudo o que o módulo mostrou num problema que muita gente
+resolve no papel. A grade tem 9 × 9 casas, algumas já preenchidas. O objetivo
+é completar as vazias com dígitos de 1 a 9 sem repetir nenhum dígito numa
+linha, numa coluna ou numa das nove caixas 3 × 3 em que a grade se divide.
+Problemas assim, em que se procura uma atribuição de valores que respeite um
+conjunto de regras, se chamam **problemas de satisfação de restrições**, e o
+backtracking é a forma natural de atacá-los (DEITEL; DEITEL, 2011).
+
+A grade vira uma matriz `int g[9][9]`, com 0 marcando a casa vazia. Do ponto
+de vista do backtracking, cada casa vazia é uma decisão com 9 opções, e a
+árvore de decisões tem um nível por casa vazia (DEITEL; DEITEL, 2011). Com 51
+casas vazias, a força bruta pura teria 9⁵¹ folhas, um número impossível de
+percorrer. A poda é o que torna o problema viável.
+
+A poda é a própria regra do jogo: um dígito que já aparece na linha, na
+coluna ou na caixa da casa não pode entrar. Para testar isso sem varrer a
+grade, o programa usa **vetores de marcação**, como os das N-rainhas no
+assunto 0128. `na_linha[l][d]` diz se o dígito `d` já está na linha `l`;
+`na_coluna[c][d]` faz o mesmo para a coluna `c`; e `na_caixa[b][d]`, para a
+caixa `b`. O teste vira três leituras, em O(1) (WIRTH, 1989). Os vetores têm 10
+posições por linha, e o índice 0 fica sem uso, para que o próprio dígito sirva
+de índice.
+
+Falta numerar as caixas. As linhas 0 a 2 formam a primeira faixa de caixas, as
+linhas 3 a 5 a segunda e as 6 a 8 a terceira; o mesmo vale para as colunas. A
+divisão inteira `l / 3` dá a faixa da linha e `c / 3` dá a faixa da coluna, e a
+casa `(l, c)` fica na caixa `b = (l / 3) * 3 + c / 3`, um número de 0 a 8. A
+casa (4, 7), por exemplo, está na caixa `1 * 3 + 2 = 5`.
+
+A função `resolve(k)` percorre as casas em ordem de leitura, da esquerda para
+a direita e de cima para baixo. A casa número `k`, de 0 a 80, fica na linha
+`k / 9` e na coluna `k % 9`. A função pula as casas já preenchidas e, na
+primeira vazia, tenta cada dígito que passa pela poda: **escreve e marca**,
+desce para `resolve(k + 1)` e, se não deu certo, **apaga e desmarca**
+(FEOFILOFF, 2009). Quando não sobra casa vazia, a grade está completa, e o
+`true` sobe pelas chamadas até o `main`.
+
+A ordem em que as casas são decididas pesa muito. Ir em ordem de leitura é
+simples, mas escolher primeiro a casa com **menos** candidatos poda muito mais
+cedo: uma casa com uma opção só não gera ramo nenhum, e uma escolha errada é
+descoberta antes de a árvore crescer (ZIVIANI, 2010, cap. 2).
+
+A grade do exemplo chega como texto, uma string por linha, com `.` para casa
+vazia. Para transformar o caractere `'7'` no número 7, o código faz
+`jogo[l][c] - '0'`. A conta funciona porque os caracteres de `'0'` a `'9'` são
+consecutivos na tabela de caracteres (assunto 0040): a distância entre `'7'` e
+`'0'` é exatamente 7 (KERNIGHAN; RITCHIE, 1989).
 
 > [!WARNING]
 > No desfazer, as duas coisas voltam: `g[l][c] = 0` **e**

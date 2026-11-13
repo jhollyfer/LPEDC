@@ -1,21 +1,51 @@
 ## 0128 · N-rainhas
 
-- **Problema das N-rainhas**: pôr `N` rainhas num tabuleiro `N × N` sem que
-  uma ataque outra na linha, na coluna ou na diagonal. É o exemplo clássico de
-  tentativa e erro (WIRTH, 1989).
-- **Uma por linha**: duas rainhas na mesma linha se atacam, então a solução é
-  um vetor `pos` com a coluna da rainha de cada linha
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 3).
-- **Busca**: `rainha(l)` tenta cada coluna, **poda** as casas atacadas e, na
-  casa livre, marca, desce para `l + 1` e desmarca na volta (FEOFILOFF, 2009).
-- **Diagonais**: na ↗, `l + c` é igual em todas as casas (0 a `2N - 2`); na ↘,
-  `l - c` é igual, e somar `N - 1` dá um índice válido (WIRTH, 1989).
-- **Ataque em O(1)**: três vetores de `bool` (`coluna[N]`, `diag1[2N - 1]`,
-  `diag2[2N - 1]`) trocam o laço pelas rainhas anteriores por três leituras
-  (WIRTH, 1989).
-- **Atribuição em cadeia**: `a = b = c = true` funciona porque a atribuição
-  devolve o valor atribuído, da direita para a esquerda
-  (KERNIGHAN; RITCHIE, 1989).
+O backtracking do assunto 0127 mostra a força real num quebra-cabeça antigo.
+No xadrez, a rainha ataca qualquer peça na mesma linha, na mesma coluna ou na
+mesma diagonal, a qualquer distância. O desafio é pôr `N` rainhas num
+tabuleiro `N × N` sem que nenhuma ataque outra. Esse é o **problema das
+N-rainhas**, o exemplo clássico de tentativa e erro (WIRTH, 1989).
+
+Comece pelo tamanho do problema. Num tabuleiro 4 × 4, a força bruta escolheria
+4 das 16 casas, sem olhar mais nada: são 1820 jeitos. A primeira observação
+corta isso. Duas rainhas na mesma linha se atacam, e há `N` rainhas para `N`
+linhas, então cada linha tem **exatamente uma** rainha. A solução deixa de ser
+"quais casas" e vira "em que coluna fica a rainha de cada linha", um vetor
+`pos` em que `pos[l]` é a coluna da rainha da linha `l` (TENENBAUM; LANGSAM;
+AUGENSTEIN, 1995, cap. 3).
+
+A busca segue o esqueleto do assunto 0127, uma linha por chamada. A função
+`rainha(l)` tenta cada coluna `c` da linha `l`. Se a casa `(l, c)` é atacada
+por alguma rainha já posta nas linhas de cima, a busca **poda** e passa para a
+próxima coluna. Se a casa está livre, ela marca a rainha ali, desce para
+`rainha(l + 1)` e, na volta, desmarca, para a casa estar limpa quando a
+próxima coluna for tentada (FEOFILOFF, 2009). Quando `l` chega a `N`, todas as
+linhas têm rainha, e a solução é mostrada.
+
+Falta testar o ataque. O jeito óbvio é um laço pelas rainhas anteriores,
+conferindo coluna e diagonais de cada uma. Há um jeito melhor, que depende de
+uma propriedade das diagonais. Na diagonal que sobe para a direita, ↗, a
+soma `l + c` é a mesma em todas as casas: andar uma casa na diagonal diminui a
+linha em 1 e aumenta a coluna em 1. Essa soma vai de 0 a `2N - 2`, e serve
+direto de índice. Na diagonal que desce para a direita, ↘, o que se mantém é a
+diferença `l - c`, que vai de `-(N - 1)` a `N - 1`. Como índice de vetor não
+pode ser negativo, some `N - 1`, e a faixa vira 0 a `2N - 2` (WIRTH, 1989).
+Num 4 × 4, a casa da linha 1, coluna 3, está na ↗ de número 4 e na ↘ de número
+`1 - 3 + 3 = 1`.
+
+Com esses números, três vetores de `bool` guardam o que está ocupado:
+`coluna[N]`, `diag1[2N - 1]` para as ↗ e `diag2[2N - 1]` para as ↘. A casa
+`(l, c)` está livre se `coluna[c]`, `diag1[l + c]` e `diag2[l - c + N - 1]`
+estão todos falsos. O laço pelas rainhas anteriores vira três leituras, em
+O(1) (WIRTH, 1989). Com isso, o 8-rainhas acha as 92 soluções com 2057
+chamadas.
+
+Para marcar a rainha, o código usa uma **atribuição em cadeia**:
+`coluna[c] = diag1[l + c] = diag2[l - c + N - 1] = true`. Ela funciona porque,
+em C, a atribuição é uma expressão que devolve o valor atribuído, e o
+operador agrupa da direita para a esquerda: a atribuição mais à direita
+acontece primeiro, e o valor dela alimenta a seguinte (KERNIGHAN; RITCHIE,
+1989). Na volta, a mesma linha com `false` desmarca as três.
 
 > [!WARNING]
 > O índice da ↘ é `l - c + N - 1`, não `l - c`: para (0, 3), `diag2[-3]`

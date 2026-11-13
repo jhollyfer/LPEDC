@@ -1,17 +1,43 @@
 ## 0125 · Subconjuntos
 
-- **Subconjunto**: cada item entra ou não entra. Com `n` itens há **2ⁿ**
-  subconjuntos, contando o vazio e o conjunto inteiro; a lista de todos é o
-  **conjunto das partes** (FEOFILOFF, 2009).
-- **Enumerar**: gerar todos os casos sem esquecer nem repetir nenhum
-  (FEOFILOFF, 2009).
-- **Árvore de decisões**: cada nível decide um item; um ramo deixa o item de
-  fora e o outro o põe. As folhas são os subconjuntos (ZIVIANI, 2010, cap. 2).
-- **Versão recursiva**: `gera(i, k)` abre dois caminhos para o item `i`, sem
-  ele e com ele, e mostra a escolha quando `i` chega a `n`. Como `k` é
-  **parâmetro**, a escolha se desfaz sozinha na volta (KERNIGHAN; RITCHIE, 1989).
-- **Versão por bits**: conte `m` de 0 a 2ⁿ - 1 e leia o bit `i` de `m` como "o
-  item `i` entra" (assunto 0065). O 5 é `101`: itens 0 e 2 (KNUTH, 2011).
+Muitos problemas se resolvem testando todas as possibilidades: todas as
+combinações de itens que cabem num orçamento, todas as escalas de plantão,
+todas as jogadas. Para isso, você precisa de um jeito de gerar cada
+possibilidade uma vez, sem esquecer nenhuma e sem repetir. Este módulo começa
+pelo caso mais simples: escolher quais itens de uma lista entram.
+
+Pense num copo de açaí com três complementos à escolha: granola, banana e
+paçoca. Para cada complemento a pergunta é sim ou não, e as respostas são
+independentes. Dois jeitos para a granola, vezes dois para a banana, vezes
+dois para a paçoca: 2 × 2 × 2 = 8 copos. Cada copo é um **subconjunto** do
+conjunto {granola, banana, paçoca}: um grupo formado por alguns dos itens, em
+que a ordem não importa. Com `n` itens há **2ⁿ** subconjuntos, contando o
+vazio (o copo puro) e o conjunto inteiro (o copo com tudo). A coleção de todos
+eles se chama **conjunto das partes** (FEOFILOFF, 2009).
+
+Gerar todos os casos de um problema, sem esquecer nem repetir nenhum, se chama
+**enumerar** (FEOFILOFF, 2009). A enumeração fica fácil de enxergar numa
+**árvore de decisões**. Cada nível da árvore decide um item. De cada nó saem
+dois ramos: um deixa o item de fora, o outro o põe. Depois de `n` níveis, cada
+caminho da raiz até uma folha é uma sequência completa de decisões, e as
+folhas são exatamente os 2ⁿ subconjuntos (ZIVIANI, 2010, cap. 2).
+
+A recursão do assunto 0032 percorre essa árvore. A função `gera(i, k)` cuida
+do item `i` e abre os dois ramos: chama `gera(i + 1, ...)` sem o item e depois
+chama de novo com o item dentro. Quando `i` chega a `n`, todas as decisões
+foram tomadas, e a função mostra o subconjunto. Os itens escolhidos ficam num
+vetor `cesta`, e `k` conta quantas posições dele estão ocupadas. Como `k` é
+**parâmetro**, cada chamada recebe a sua cópia. Quando uma chamada termina, a
+anterior continua com o `k` dela, e a escolha feita lá embaixo se desfaz
+sozinha (KERNIGHAN; RITCHIE, 1989).
+
+Há um segundo jeito, sem recursão, que usa os bits de um número inteiro
+(assunto 0065). Um número de `n` bits tem exatamente 2ⁿ valores, de 0 a
+2ⁿ - 1, e cada bit pode valer 0 ou 1, como cada item pode estar fora ou
+dentro. Conte `m` de 0 a 2ⁿ - 1 e leia o bit `i` de `m` como "o item `i`
+entra". O 5 em binário é `101`: bits 0 e 2 ligados, itens 0 e 2 dentro, ou
+seja, granola e paçoca (KNUTH, 2011). O teste do bit usa `1 << i`, um 1
+deslocado `i` casas para a esquerda:
 
 ```c
 for (int m = 0; m < (1 << N); m++)      // 1 << 3 vale 8
@@ -19,8 +45,16 @@ for (int m = 0; m < (1 << N); m++)      // 1 << 3 vale 8
         if (m & (1 << i)) { /* o item i está no subconjunto m */ }
 ```
 
-- **Custo**: 2ⁿ⁺¹ - 1 chamadas e 2ⁿ folhas; mostrar cada uma custa até `n`,
-  logo **O(n · 2ⁿ)**. Só serve para `n` pequeno (FEOFILOFF, 2009).
+Escreva o teste como `if (m & (1 << i))`, sem comparar com nada. Se escrever
+`m & 1 << i == 1`, o `==` é avaliado antes do `&`, e a conta sai outra.
+
+Quanto custa enumerar tudo? A árvore tem 2ⁿ folhas e 2ⁿ⁺¹ - 1 nós ao todo,
+então a versão recursiva faz 2ⁿ⁺¹ - 1 chamadas: 15 para três itens. Mostrar
+cada subconjunto custa até `n` passos, e o total é **O(n · 2ⁿ)**. O número
+dobra a cada item novo: 20 itens já dão mais de um milhão de subconjuntos, e
+o método só serve para `n` pequeno (FEOFILOFF, 2009). A memória é bem menor:
+a pilha guarda só os frames de um caminho da raiz até a folha, no máximo
+`n + 1` ao mesmo tempo, 4 para três itens.
 
 > [!WARNING]
 > `m & (1 << i)` não dá 1 com o bit ligado: dá o próprio `1 << i`. Com `== 1`,

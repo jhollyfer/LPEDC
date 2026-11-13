@@ -1,20 +1,50 @@
 ## 0126 · Permutações
 
-- **Permutação**: uma ordem dos `n` elementos. Há **n!** delas: `n` escolhas
-  para a primeira posição, `n - 1` para a segunda, e assim por diante
-  (FEOFILOFF, 2009).
-- **Uma posição por vez**: `permuta(v, i)` sabe que `0..i-1` já estão
-  decididas; os candidatos à posição `i` estão em `v[i..n-1]`
-  (WIRTH, 1989).
-- **Escolhe, desce, desfaz**: para cada `j` de `i` a `n - 1`, troca `v[i]` com
-  `v[j]`, chama `permuta(v, i + 1)` e troca de novo (FEOFILOFF, 2009).
-- **Desfazer**: a troca mexe no **vetor**, que é um só para todas as chamadas.
-  Sem destrocar, as chamadas seguintes recebem o vetor bagunçado
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 3).
-- **Ordem de saída**: o método da troca **não** gera a ordem de dicionário
-  (KNUTH, 2011).
-- **Custo**: `n!` folhas com `n` passos cada, **O(n · n!)**, pior que os 2ⁿ
-  dos subconjuntos. 13! já não cabe num `int` de 32 bits (FEOFILOFF, 2009).
+No assunto 0125, a pergunta era quais itens entram. Agora todos entram, e a
+pergunta é em que ordem. A organização de um sarau com três grupos, rap, samba
+e forró, quer conhecer todas as ordens possíveis de apresentação para escolher
+a melhor. Qualquer um dos 3 pode abrir a noite; para o segundo lugar sobram 2;
+para o último, 1. São 3 × 2 × 1 = 6 ordens.
+
+Cada ordem é uma **permutação**: um arranjo dos `n` elementos em sequência,
+usando cada um exatamente uma vez. A conta do sarau vale em geral: há `n`
+escolhas para a primeira posição, `n - 1` para a segunda, e assim por diante
+até 1, e o total é o fatorial, **n!** (FEOFILOFF, 2009).
+
+A recursão gera as permutações decidindo **uma posição por vez**. A função
+`permuta(v, i)` trabalha com uma promessa: as posições `0` até `i - 1` do vetor
+já estão decididas, e os candidatos à posição `i` são os elementos que sobraram,
+guardados em `v[i..n-1]` (WIRTH, 1989). Quando `i` chega a `n`, não há mais
+posição a decidir, e a ordem completa é mostrada.
+
+Para cada candidato `j`, de `i` até `n - 1`, a função faz três movimentos.
+**Escolhe**: troca `v[i]` com `v[j]`, e o candidato vai para a posição `i`.
+**Desce**: chama `permuta(v, i + 1)`, que cuida das posições seguintes.
+**Desfaz**: troca `v[i]` com `v[j]` de novo, e o vetor volta a ser o que era
+antes da escolha (FEOFILOFF, 2009). Com o vetor {rap, samba, forró} e `i = 0`,
+a primeira volta do laço troca o rap com ele mesmo e gera as ordens que abrem
+com rap; a segunda troca rap com samba e gera as que abrem com samba; a
+terceira, as que abrem com forró.
+
+O terceiro movimento é o que separa este assunto do anterior. Nos
+subconjuntos, a escolha ficava num parâmetro e se desfazia sozinha na volta da
+chamada. Aqui a troca mexe no **vetor**, e o vetor é um só, compartilhado por
+todas as chamadas, porque o C passa vetor como endereço. Se você não destroca,
+a próxima volta do laço recebe o vetor bagunçado pela chamada anterior, e os
+candidatos deixam de ser os que deveriam (TENENBAUM; LANGSAM; AUGENSTEIN,
+1995, cap. 3).
+
+Um efeito colateral das trocas: as ordens não saem em ordem de dicionário.
+Para três elementos a diferença aparece só no fim, mas cresce com `n`. Quem
+precisa da ordem lexicográfica usa outro método de geração (KNUTH, 2011).
+
+O custo cresce mais rápido que o dos subconjuntos. São `n!` folhas, e cada uma
+gasta `n` passos para mostrar a ordem, então o total é **O(n · n!)**, pior que
+O(n · 2ⁿ). Para ter ideia, 13! vale 6.227.020.800 e já não cabe num `int` de
+32 bits; 20!, cerca de 2,4 · 10¹⁸, fica perto do limite de um `long long`
+(FEOFILOFF, 2009). Se os elementos são textos, troque os ponteiros e não os
+textos: trocar dois `char *` custa 8 bytes por elemento, qualquer que seja o
+tamanho do nome.
 
 > [!WARNING]
 > Sem o **desfaz**, o programa ainda mostra n! linhas, mas com ordens

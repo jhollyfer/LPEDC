@@ -1,20 +1,52 @@
 ## 0127 · Backtracking
 
-- **Backtracking** (retrocesso, ou **tentativa e erro**): enumeração que
-  **desiste cedo**. A cada escolha, pergunta se o começo ainda pode virar
-  solução; se não, volta um passo (ZIVIANI, 2010, cap. 2).
-- **Poda**: cortar um galho inteiro da árvore de decisões sem visitá-lo
-  (WIRTH, 1989).
-- **Esqueleto**: (1) **parada**: a solução está completa? mostre e volte;
-  (2) **poda**: o começo é inviável? volte sem descer; (3) **escolha**: para
-  cada opção, escolha, desça e **desfaça** (FEOFILOFF, 2009).
-- **Soma de subconjuntos**: achar os itens que somam um alvo exato. Com
-  preços positivos, soma acima do alvo não tem conserto e pode ser podada
-  (FEOFILOFF, 2009).
-- **Estado na volta**: o que é **parâmetro** se desfaz sozinho; o que é
-  global (`leva[]`) precisa ser desfeito à mão (KERNIGHAN; RITCHIE, 1989).
-- **Custo**: o pior caso continua **O(2ⁿ)**. A poda muda o quanto da árvore
-  você visita, não a garantia (ROVAI, 2018).
+A enumeração dos assuntos 0125 e 0126 visita tudo, inclusive o que já nasceu
+perdido. Imagine um cartão-presente de R$ 35 que não dá troco: ou você gasta o
+valor exato, ou o resto se perde. Na vitrine há um atlas de R$ 30, um mangá de
+R$ 20, um livro de poesia de R$ 15 e um marcador de R$ 5. Você quer as
+combinações que fecham R$ 35. Bastaria testar os 2⁴ = 16 subconjuntos, só que
+atlas e mangá juntos já somam R$ 50, e a enumeração cega continua testando
+todo subconjunto que começa assim, como se ainda houvesse chance.
+
+O **backtracking**, que também se chama retrocesso ou **tentativa e erro**, é
+a enumeração que **desiste cedo**. A cada escolha, ele pergunta se o começo
+montado até ali ainda pode virar uma solução. Se não pode, volta um passo e
+tenta outra coisa, sem completar o que já está condenado (ZIVIANI, 2010,
+cap. 2).
+
+Na árvore de decisões, desistir cedo tem um efeito grande. Cada nó tem abaixo
+dele uma subárvore inteira de possibilidades, e voltar daquele nó descarta
+todas de uma vez. Cortar um galho inteiro sem visitá-lo se chama **poda**
+(WIRTH, 1989). Quanto mais perto da raiz a poda acontece, mais folhas ela
+elimina.
+
+Todo backtracking segue o mesmo esqueleto, com três partes, nesta ordem
+(FEOFILOFF, 2009). Primeiro, o **caso de parada**: a solução está completa? Se
+está, mostre ou conte e volte. Segundo, a **poda**: o começo já é inviável? Se
+é, volte sem descer. Terceiro, a **escolha**: para cada opção disponível,
+escolha, desça com uma chamada recursiva e, na volta, **desfaça** a escolha,
+como nas permutações.
+
+O problema do cartão é um caso clássico, a **soma de subconjuntos**: achar
+quais itens de uma lista somam exatamente um valor-alvo (FEOFILOFF, 2009). A
+poda vem de uma propriedade dos dados. Os preços são positivos, então
+acrescentar um item só aumenta a soma. Se a soma **passou** de 35, nenhum item
+a mais conserta, e o galho pode ser cortado. E se a soma bateu
+**exatamente** 35, a solução está pronta, e também não há por que descer. Com
+atlas e mangá na cesta, a soma de 50 corta de uma vez os quatro subconjuntos
+que começam com os dois.
+
+Assim como nos subconjuntos, a volta precisa deixar o estado como estava. O
+que é **parâmetro**, como a soma acumulada, se desfaz sozinho: cada chamada tem
+a sua cópia, e voltar devolve o valor anterior. O que é global, como o vetor
+`leva[]` que marca os itens escolhidos, é um só para todas as chamadas e
+precisa ser desfeito à mão: `leva[i] = false` antes de tentar o caminho sem o
+item (KERNIGHAN; RITCHIE, 1989).
+
+A poda não muda a garantia de pior caso. Se os dados forem desfavoráveis, ela
+quase não corta nada, e o backtracking continua **O(2ⁿ)**. O que muda é quanto
+da árvore você visita na prática, e em muitos problemas a diferença é enorme
+(ROVAI, 2018).
 
 > [!WARNING]
 > A poda só corta o que **com certeza** não leva a solução. Poda com `>=` no
