@@ -1,19 +1,52 @@
 ## 0083 · Pilha encadeada
 
-- **Pilha encadeada**: cada item fica num **nó** alocado com `malloc`, como
-  na lista do módulo 11. A pilha só "enche" quando acaba a memória
-  (CELES; RANGEL, 2002).
-- **Topo no começo da lista**: inserir e remover no início é O(1). Remover
-  do fim exigiria achar o penúltimo, O(n) (FEOFILOFF, 2009).
-- **Empilhar** = inserir no início: o novo nó aponta para o antigo topo, e o
-  topo passa a ser o novo (DEITEL; DEITEL, 2011, cap. 12).
-- **Desempilhar** = remover do início: guarda o valor, avança o topo e
-  libera o nó velho. **Vazia** é `topo == NULL` (DEITEL; DEITEL, 2011,
-  cap. 12).
-- **Mesma interface**: o `pilha.h` é idêntico ao do 0082; só o `pilha.c`
-  muda, e quem usa não percebe a troca (CELES; RANGEL, 2002).
-- **Custo de espaço**: cada nó ocupa 16 bytes em 64 bits, contra 4 por item
-  no vetor. A encadeada troca espaço por não ter teto.
+A pilha do 0082 mora num vetor de 100 posições. Isso basta para um pedido de
+delivery, mas não para o Ctrl+Z de uma planilha: ninguém sabe quantas edições
+a pessoa vai fazer antes de desfazer. Com teto fixo, a edição 101 dá overflow
+e o histórico se perde. O que falta é uma pilha que cresça enquanto houver
+memória.
+
+A saída é a lista encadeada do módulo 11. Em vez de gavetas lado a lado, cada
+item fica num **nó**, um bloco alocado com `malloc` que guarda o valor e o
+endereço do nó seguinte. A **pilha encadeada** é uma pilha montada sobre essa
+lista: ela só "enche" quando o `malloc` não consegue mais memória e devolve
+`NULL` (CELES; RANGEL, 2002). Pense numa corrente de clipes: você engata um
+clipe novo na ponta e a corrente cresce um elo, sem precisar reservar espaço
+antes.
+
+A primeira escolha é em que ponta da lista fica o topo. Fica no **começo**.
+Inserir ou remover o primeiro nó custa O(1), porque só o ponteiro de entrada
+muda. Remover o último exigiria achar o **penúltimo** para que ele passasse a
+apontar para `NULL`, e numa lista simples isso obriga a percorrer todos os
+nós, O(n) (FEOFILOFF, 2009). Como a pilha só mexe numa ponta, você escolhe a
+ponta barata.
+
+**Empilhar**, então, é inserir no início. O nó novo recebe o valor, passa a
+apontar para o antigo topo, e o topo passa a ser o nó novo (DEITEL; DEITEL,
+2011, cap. 12). A ordem dessas duas atribuições é tudo: primeiro o nó novo
+segura o resto da pilha, depois a pilha passa a começar nele.
+
+```c
+novo->prox = p->topo; // 1º: o novo segura o resto da pilha
+p->topo = novo;       // 2º: a pilha passa a começar no novo
+```
+
+**Desempilhar** é remover do início. Você guarda o endereço do nó do topo,
+copia o valor dele, avança o topo para o nó de baixo e só então libera o nó
+velho com `free`. A pilha está **vazia** quando `topo == NULL`, e esse é o
+teste de underflow desta versão (DEITEL; DEITEL, 2011, cap. 12).
+
+O melhor da troca é que quem usa a pilha não percebe nada. O `pilha.h` é
+idêntico ao do 0082; só o `pilha.c` muda. O programa do delivery compila e
+roda sem alterar uma linha, porque ele conhece as operações e não os campos
+(CELES; RANGEL, 2002). É para isso que serve o tipo opaco do TAD: trocar a
+implementação sem mexer em quem usa.
+
+Não ter teto tem preço em espaço. Num sistema de 64 bits, cada nó ocupa 16
+bytes: 4 do `int`, 4 de preenchimento para alinhar o ponteiro e 8 do próprio
+ponteiro, como você viu no 0076. No vetor, o mesmo item ocupa 4 bytes. A
+pilha encadeada gasta quatro vezes mais memória por item e, em troca, nunca
+recusa um `push` enquanto houver memória livre.
 
 > [!WARNING]
 > Trocar a ordem destrói a pilha: com `p->topo = novo` antes de

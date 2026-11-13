@@ -1,20 +1,45 @@
 ## 0087 · Deque
 
-- **Deque** (*double-ended queue*, pronuncia-se "deck"): uma **fila dupla**,
-  que entra e sai pelas **duas** pontas (CELES; RANGEL, 2002).
-- **Quatro operações**: `deque_insere_inicio` e `deque_retira_inicio` mexem
-  na frente; `deque_insere_fim` e `deque_retira_fim`, no fundo
-  (CELES; RANGEL, 2002).
-- **Generaliza pilha e fila**: inserindo e retirando no fim, é uma
-  **pilha**; inserindo no fim e retirando no início, uma **fila**
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 4).
-- **Em vetor circular**: é a fila do 0085 com o `inicio` andando também para
-  **trás**. Para inserir na frente, ele recua uma gaveta; da 0 volta para a
-  última. Retirar do fim só diminui `n`. Tudo O(1) (CELES; RANGEL, 2002).
-- **Encadeado**: exige lista **dupla** (0079), porque para retirar do fim o
-  último nó precisa conhecer o penúltimo (CELES; RANGEL, 2002).
-- **`static` numa função**: tira a função da ligação externa e a torna
-  **privada** do arquivo (KERNIGHAN; RITCHIE, 1988).
+No app de música, a fila de reprodução tem as faixas 5, 8 e 3. Você toca em
+"tocar em seguida" e a faixa 11 vai para a **frente**. Depois se arrepende e
+tira a última faixa adicionada, pelo **fim**. A pilha só mexe numa ponta, a
+fila insere numa e retira na outra, e nenhuma das duas faz isso. Falta uma
+estrutura que aceite as duas operações nas duas pontas.
+
+Essa estrutura é o **deque**, do inglês *double-ended queue* (pronuncia-se
+"deck"), também chamado de **fila dupla**: uma sequência que deixa inserir e
+retirar tanto pela frente quanto pelo fundo (CELES; RANGEL, 2002). Pense numa
+fila de embarque com porta nas duas pontas: a pessoa com prioridade entra
+pela frente, e quem desiste sai por trás.
+
+As operações são quatro. `deque_insere_inicio` e `deque_retira_inicio` mexem
+na frente; `deque_insere_fim` e `deque_retira_fim` mexem no fundo (CELES;
+RANGEL, 2002). Com elas, o deque imita as estruturas anteriores. Se você só
+insere e retira pelo fim, ele se comporta como **pilha**. Se insere pelo fim
+e retira pelo início, ele se comporta como **fila** (TENENBAUM; LANGSAM;
+AUGENSTEIN, 1995, cap. 4). Quando o item que sai é o de maior prioridade, e
+não o de uma ponta, a estrutura passa a ser outra, a fila de prioridade, que
+o assunto 0102 monta com heap.
+
+A versão em vetor reaproveita a fila circular do 0085. A única novidade é que
+o `inicio` agora anda também para **trás**. Para inserir na frente, ele recua
+uma gaveta e o valor entra ali; se o início estava na gaveta 0, ele dá a
+volta e vai para a última. Inserir no fim e retirar do início são iguais aos
+da fila. Retirar do fim é o mais simples de todos: o último item fica em
+`(inicio + n - 1) % CAPACIDADE`, e basta ler ali e diminuir `n` (CELES;
+RANGEL, 2002). As quatro operações custam **O(1)**, enquanto num vetor comum
+inserir no início obrigaria a empurrar tudo, O(n).
+
+A conta de recuar uma gaveta fica numa função auxiliar marcada com `static`.
+Numa função escrita fora de qualquer bloco, `static` não cria variável
+estática: ele tira a função da **ligação externa**, e ela fica **privada** do
+arquivo (KERNIGHAN; RITCHIE, 1988). O `deque.c` pode usá-la, mas nenhum outro
+arquivo enxerga o nome, e o TAD continua expondo só o que está no `.h`.
+
+Se você quiser o deque encadeado, a lista simples não basta. Retirar do fim
+exige que o último nó conheça o penúltimo, para que o penúltimo passe a ser o
+fim. Isso pede a lista **duplamente encadeada** do assunto 0079, em que cada
+nó aponta para o próximo e para o anterior (CELES; RANGEL, 2002).
 
 > [!WARNING]
 > Em C, o resto de negativo é **negativo**: `-1 % 8` vale `-1`, não 7. Assim

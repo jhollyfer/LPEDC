@@ -1,19 +1,43 @@
 ## 0086 · Fila encadeada
 
-- **Fila encadeada**: troca o vetor por **nós**, como a pilha encadeada. Só
-  recusa um item quando acaba a memória (CELES; RANGEL, 2002).
-- **Dois ponteiros**: `inicio`, o próximo a sair, e `fim`, o último que
-  entrou. Na fila vazia, os dois são `NULL` (FEOFILOFF, 2009).
-- **Retirar** do começo é `inicio = inicio->prox`, O(1). **Inserir** no fim
-  é `fim->prox = novo; fim = novo`, também O(1) graças ao `fim`
-  (DEITEL; DEITEL, 2011, cap. 12).
-- **Sai pelo início, entra pelo fim**: o contrário não serve numa lista
-  simples, porque remover o último exige o penúltimo (CELES; RANGEL, 2002).
-- **Casos de borda**: inserir na fila vazia atualiza também o `inicio`;
-  retirar o último zera também o `fim` (CELES; RANGEL, 2002).
-- **Mesma interface**: o `fila.h` é o do 0085; só o `fila.c` muda. Cada
-  inserção chama `malloc` e cada retirada `free`, mais caros que uma gaveta
-  de vetor.
+Sexta à noite, a cozinha da pizzaria recebe os pedidos do app numa fila. O
+painel de 8 lugares do 0085 lotou às 20h, e o nono pedido foi recusado com
+overflow. É o mesmo problema que a pilha teve no 0082, e a solução é a mesma:
+trocar o vetor por nós alocados com `malloc`.
+
+A **fila encadeada** é uma fila montada sobre uma lista encadeada: cada pedido
+fica num nó com o valor e o endereço do próximo, e a fila só recusa um item
+quando a memória acaba (CELES; RANGEL, 2002). A diferença para a pilha
+encadeada está nas pontas. A pilha mexe numa ponta só, e por isso um ponteiro
+bastava. A fila retira de uma ponta e insere na outra, então precisa de dois.
+
+O primeiro ponteiro é o **início**, que aponta o próximo a sair. Retirar dele
+é fácil: você avança com `inicio = inicio->prox` e libera o nó velho, em
+O(1). O segundo é o **fim**, que aponta o último que entrou. Sem ele, inserir
+exigiria andar a lista toda até achar o último nó, O(n). Com ele, basta
+pendurar o nó novo atrás do último e mover o fim: `fim->prox = novo; fim =
+novo`, também O(1) (DEITEL; DEITEL, 2011, cap. 12). Na fila vazia, os dois
+ponteiros valem `NULL` (FEOFILOFF, 2009).
+
+A escolha das pontas não é arbitrária. A fila **sai pelo início e entra pelo
+fim**, e o contrário não funcionaria bem. Numa lista simples, cada nó conhece
+o seguinte, mas não o anterior. Remover o último obrigaria a achar o
+penúltimo para fazê-lo apontar para `NULL`, e achar o penúltimo é percorrer a
+lista (CELES; RANGEL, 2002). Já inserir depois do último e remover o primeiro
+não pedem conhecer ninguém para trás.
+
+Os cuidados ficam nas bordas, quando a fila passa de vazia para um item ou de
+um item para vazia. Inserir na fila vazia precisa atualizar também o
+`inicio`, porque o nó novo é ao mesmo tempo o primeiro e o último. Retirar o
+último item precisa zerar também o `fim`, porque o nó para o qual ele
+apontava acabou de ser liberado (CELES; RANGEL, 2002). Os dois casos são
+testes de uma linha, e esquecer qualquer um deles quebra a fila.
+
+Quem usa a fila de novo não percebe a troca. O `fila.h` é o mesmo do 0085, e
+só o `fila.c` muda. O que muda é o custo de cada operação: a fila circular só
+escreve numa gaveta, enquanto a encadeada chama `malloc` a cada inserção e
+`free` a cada retirada, e essas chamadas são bem mais caras. Você troca
+velocidade por não ter limite de tamanho.
 
 > [!WARNING]
 > Retirar o **último** sem zerar o `fim` deixa o `fim` apontando para o nó

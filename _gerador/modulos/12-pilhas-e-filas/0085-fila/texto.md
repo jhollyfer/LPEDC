@@ -1,10 +1,21 @@
 ## 0085 · Fila
 
-- **Fila** (*queue*): entra pelo **fim** e sai pelo **início**. O primeiro a
-  entrar é o primeiro a sair, **FIFO** (*first in, first out*), o contrário
-  da pilha (FEOFILOFF, 2009).
-- **TAD**: a mesma cara da pilha, com inserir, retirar, olhar o primeiro e
-  vazia? (CELES; RANGEL, 2002).
+A pilha atende o mais recente primeiro, e isso é justo para o "desfazer", mas
+seria um desastre na lotérica. Lá você pega a senha 35 e espera; quem chegou
+antes é atendido antes, e a senha 40, recém-saída da maquininha, espera todo
+mundo da frente. Para guardar dados nessa ordem, você precisa de outra
+estrutura: uma que entregue o item mais **antigo**.
+
+Essa estrutura é a **fila** (*queue*). O item novo entra pelo **fim** e o
+próximo a sair está no **início**, como na fila do banco. O primeiro a entrar
+é o primeiro a sair: a sigla é **FIFO**, do inglês *first in, first out*, o
+contrário do LIFO da pilha (FEOFILOFF, 2009). No Cormen, inserir se chama
+ENQUEUE e retirar se chama DEQUEUE (CORMEN et al., 2024, cap. 10).
+
+Como TAD, a fila tem a mesma cara da pilha do 0082: inserir no fim, retirar
+do início, olhar quem é o próximo sem tirar e perguntar se está vazia (CELES;
+RANGEL, 2002). O valor retirado sai por ponteiro, e o `bool` diz se a
+operação deu certo:
 
 ```c
 typedef struct fila Fila; // tipo opaco: os campos ficam no fila.c
@@ -18,18 +29,35 @@ bool fila_retira(Fila *f, int *valor);          // sai do início: false se vazi
 bool fila_primeiro(const Fila *f, int *valor);  // olha quem é o próximo, sem tirar
 ```
 
-- **Fila em vetor**: mexe nas duas pontas. Empurrar todo mundo a cada
-  retirada custa O(n); sem empurrar, a fila bate no fim do vetor com as
-  primeiras gavetas vazias (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 4).
-- **Fila circular**: passou da última gaveta, volta à 0. Guarde o
-  **início** e o número de itens `n`; a próxima vaga é
-  `(inicio + n) % CAPACIDADE` (CELES; RANGEL, 2002).
-- **Cheia ou vazia**: só com `inicio` e `fim`, as duas têm `inicio == fim`.
-  Ou se guarda `n`, ou se **sacrifica uma gaveta**: cheia quando
-  `(fim + 1) % CAPACIDADE == inicio`, como no Cormen com `Q.head` e `Q.tail`
-  (CORMEN et al., 2024, cap. 10).
-- **Custo**: inserir e retirar são O(1). Retirar não apaga: o valor fica na
-  gaveta até alguém escrever por cima (FEOFILOFF, 2009).
+Guardar a fila num vetor parece simples e esconde um problema. A pilha mexe
+numa ponta só; a fila mexe nas duas. Se o início fica sempre em `itens[0]`,
+cada retirada obriga a empurrar todos os itens uma casa para a frente, e isso
+custa O(n). Se você não empurra e só avança o índice do início, a fila anda
+para a direita e bate no fim do vetor com as primeiras gavetas vazias
+(TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 4).
+
+A saída é a **fila circular**: quando o índice passa da última gaveta, ele
+volta à gaveta 0, como os ponteiros de um relógio voltam ao 12. Você guarda o
+**início** (a gaveta do próximo a sair) e o número de itens `n`. A próxima
+vaga é `(inicio + n) % CAPACIDADE`: o resto da divisão faz a volta sozinho
+(CELES; RANGEL, 2002). Com 8 gavetas, depois da 7 vem `(7 + 1) % 8 = 0`.
+Retirar lê `itens[inicio]` e avança o início da mesma forma, com
+`(inicio + 1) % CAPACIDADE`.
+
+Por que guardar `n` em vez de um índice de fim? Com só `inicio` e `fim`, a
+fila vazia e a fila cheia ficam com a mesma cara: nas duas, `inicio == fim`.
+Há duas saídas. A primeira é guardar `n`, como este curso faz. A segunda é
+**sacrificar uma gaveta** e declarar a fila cheia quando
+`(fim + 1) % CAPACIDADE == inicio`, de modo que cabem 7 itens em 8 gavetas.
+O Cormen usa a segunda, com `Q.head` e `Q.tail` (a próxima vaga): num vetor
+de n posições, a fila guarda no máximo n − 1 itens (CORMEN et al., 2024,
+cap. 10).
+
+Inserir e retirar custam **O(1)**: uma conta de resto, uma atribuição e um
+ajuste de contador. Como na pilha, retirar não apaga nada; o valor fica na
+gaveta até alguém escrever por cima (FEOFILOFF, 2009). Um detalhe de
+desempenho: com capacidade potência de 2, `i % 8` dá o mesmo que `i & 7`, e o
+compilador costuma fazer essa troca sozinho.
 
 > [!WARNING]
 > O tamanho como `fim - inicio` dá negativo depois da volta: com início 4 e

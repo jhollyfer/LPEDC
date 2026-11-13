@@ -1,24 +1,59 @@
 ## 0088 · Juntando tudo: a calculadora de expressões
 
-- **Duas etapas**: **converter** a infixa em pós-fixa e **avaliar** a
-  pós-fixa, com uma **fila** no meio e duas **pilhas**
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 2).
-- **Pátio de manobras** (*shunting-yard*): os números vão direto para a fila
-  de saída; os operadores esperam numa pilha até nenhum operador mais forte
-  precisar passar na frente. O algoritmo é de Dijkstra (DIJKSTRA, 1961).
-- **Regras da conversão**: número vai para a fila; `(` empilha; `)`
-  desempilha para a fila até achar o `(`, que é descartado; operador
-  desempilha enquanto o topo tiver precedência **maior ou igual** e depois se
-  empilha; no fim, o que sobrou vai para a fila (FEOFILOFF, 2009).
-- **Avaliar**: os itens saem da fila na ordem de entrada (FIFO) e passam por
-  uma **pilha de valores**, como no 0084 (KERNIGHAN; RITCHIE, 1988, seç. 4.3).
-- **Produtor e consumidor**: a etapa 1 produz itens e a 2 os consome na mesma
-  ordem; a fila também guarda o 35 inteiro, sem juntar dígitos de novo.
-- **Códigos negativos**: a fila e a pilha só guardam `int`. Os números são
-  `>= 0`, então os operadores viram negativos num `enum` (0063): `SOMA = -1`,
-  `SUB = -2`. Na avaliação, `t < 0` é operador.
-- **Custo**: cada símbolo entra e sai da fila uma vez e de cada pilha no
-  máximo uma: O(n).
+No bar do 0084 você escreveu `35 25 + 3 * 4 /` em pós-fixa e a pilha deu 45.
+Só que ninguém digita assim. A pessoa digita `(35 + 25) * 3 / 4` e quer ver
+45. Para fechar o caminho, o programa precisa traduzir a notação infixa da
+escola para a pós-fixa e só então fazer a conta. Este assunto junta tudo o
+que o módulo construiu: uma **fila** e duas **pilhas** trabalhando em duas
+etapas (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 2).
+
+A primeira etapa **converte** a infixa em pós-fixa. O algoritmo se chama
+**pátio de manobras** (*shunting-yard*) e foi criado por Dijkstra para um
+tradutor de Algol (DIJKSTRA, 1961). O nome vem da ferrovia: os vagões de
+número seguem direto pelo trilho principal até a fila de saída, e os vagões
+de operador esperam num desvio, que é uma pilha, até que nenhum operador mais
+forte precise passar na frente deles.
+
+As regras olham um símbolo de cada vez. A precedência é a força do operador:
+`*` e `/` são mais fortes que `+` e `-`, e por isso fazem a conta antes. A
+tabela resume o que fazer com cada tipo de símbolo (FEOFILOFF, 2009):
+
+| Símbolo lido | O que fazer |
+| --- | --- |
+| número | vai direto para a **fila** de saída |
+| `(` | empilha |
+| `)` | desempilha para a fila até achar o `(`, que é descartado |
+| operador | enquanto o topo tiver precedência **maior ou igual**, desempilha para a fila; depois empilha o operador |
+| fim da expressão | o que sobrou na pilha vai para a fila |
+
+Com `(35 + 25) * 3 / 4`, a fila de saída termina como `35 25 + 3 * 4 /`. O
+`+` ficou preso entre os parênteses e saiu no `)`. O `*` saiu quando chegou o
+`/`, porque os dois têm a mesma força e o `*` estava antes.
+
+A segunda etapa **avalia** a pós-fixa exatamente como no 0084. Os itens saem
+da fila na ordem em que entraram (FIFO) e passam por uma **pilha de
+valores**: número empilha, operador desempilha dois, calcula e empilha o
+resultado (KERNIGHAN; RITCHIE, 1988, seç. 4.3). Quando chega o `/`, a pilha
+tem 180 e 4, e a última conta dá 45.
+
+Por que uma fila no meio, e não uma string? Porque a etapa 1 produz itens e a
+etapa 2 os consome na mesma ordem em que foram produzidos. Esse é o padrão
+**produtor e consumidor**, e a fila é a estrutura natural para ele. A fila
+também guarda o 35 como um número inteiro, e a avaliação não precisa juntar
+os dígitos de novo.
+
+Resta um detalhe de C. A fila e a pilha do curso só guardam `int`, e a fila
+de saída mistura números e operadores. Como os números da calculadora são
+sempre `>= 0`, os operadores viram **códigos negativos** num `enum` (assunto
+0063): `SOMA = -1`, `SUB = -2` e assim por diante. Na avaliação, `t >= 0` é
+número e `t < 0` é operador. A alternativa seria uma `struct` com uma
+etiqueta que diz o tipo do item. O nome dos tipos não atrapalha: `No` e
+`NoFila` podiam até ser iguais em arquivos separados, porque tipo não tem
+ligação. O conflito só aparece entre **funções** de mesmo nome, e por isso
+cada TAD prefixa as suas com `pilha_` ou `fila_`.
+
+A calculadora inteira é **O(n)** para uma expressão de n símbolos: cada
+símbolo entra e sai da fila uma vez, e de cada pilha no máximo uma vez.
 
 > [!WARNING]
 > O "maior **ou igual**" muda o resultado. Só com "maior", `8 - 3 - 2` vira
