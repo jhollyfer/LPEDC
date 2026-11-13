@@ -1,26 +1,55 @@
 ## 0106 · Encadeamento
 
-- **Encadeamento** (ou encadeamento separado): cada balde guarda a **cabeça
-  de uma lista encadeada** com os itens que caíram ali. A tabela vira um vetor
-  de ponteiros, `No *baldes[m]` (CORMEN et al., 2024, cap. 11).
-- **Operações**: calcule `i = hash(chave) % m` e use a lista de `baldes[i]`
-  (módulo 11). Inserir procura a chave; se não achar, põe um nó **no início**
-  em O(1). Buscar e remover andam só nessa lista (CELES; RANGEL, 2002).
-- **Custo médio**: com hash que espalha bem, cada lista tem em média α nós e
-  a busca custa Θ(1 + α). Se `m` cresce com `n`, α fica constante e a busca é
-  O(1) na média (CORMEN et al., 2024, cap. 11).
-- **Pior caso**: um hash ruim joga tudo num balde, a tabela vira uma lista só
-  e a busca é O(n) (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-- **Nunca enche**: α pode passar de 1 (exemplo A211: 8 itens em 2 baldes)
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-- **Liberar**: cada nó é um `malloc`. `tabela_libera` dá `free` em todos,
-  guardando o `prox` antes; `free(t->baldes)` sozinho vaza as listas
-  (CELES; CERQUEIRA; RANGEL, 2016).
+O assunto 0105 terminou com uma certeza incômoda: duas chaves diferentes vão
+cair no mesmo balde. Se cada balde guarda um item só, o segundo não tem onde
+ficar. A primeira saída é deixar o balde guardar quantos itens precisar.
+
+Pense no hortifrúti com o estoque em 5 prateleiras. Cada fruta tem a sua
+prateleira, dada por uma regra. Quando duas frutas caem na mesma, ficam lado a
+lado, e achar o kiwi é olhar só a prateleira dele, nunca o estoque inteiro.
+Esse é o **encadeamento**, também chamado de encadeamento separado: cada balde
+guarda a **cabeça de uma lista encadeada** com todos os itens cujo hash caiu
+ali (CORMEN et al., 2024, cap. 11). A tabela vira um vetor de ponteiros,
+`No *baldes[m]`, e um balde vazio é só um ponteiro `NULL`.
+
+Toda operação começa igual: calcule o balde, `i = hash(chave) % m`. Daí em
+diante, é lista encadeada do módulo 11. Para **inserir**, procure a chave na
+lista de `baldes[i]`. Se ela já está lá, troque o valor; se não está, crie um
+nó e ponha **no início** da lista, que custa O(1) porque não precisa andar até
+o fim. Para **buscar**, percorra só essa lista. Para **remover**, faça a
+remoção de lista que você já conhece, guardando o nó anterior para religar o
+`prox` (CELES; RANGEL, 2002).
+
+Quanto custa buscar? Depende do tamanho da lista do balde. Se a função espalha
+bem, as `n` chaves se dividem por igual entre os `m` baldes, e cada lista tem
+em média `α = n / m` nós, o fator de carga do 0105. A busca então gasta um
+passo para calcular o balde e mais α para percorrer a lista: Θ(1 + α) na
+média (CORMEN et al., 2024, cap. 11). Se você aumenta `m` sempre que `n`
+cresce, α fica parado num valor constante, e a busca passa a custar O(1) na
+média. Esse é o motivo de a tabela hash ser tão usada.
+
+O pior caso é outra história. Uma função ruim, que joga todas as chaves no
+mesmo balde, transforma a tabela numa lista única, e a busca volta a ser O(n)
+(TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7). A estrutura é a mesma; quem
+decide se ela é rápida é a função hash.
+
+Uma propriedade boa do encadeamento: a tabela **nunca enche**. Cada balde
+cresce o quanto precisar, então α pode passar de 1 sem problema. O exemplo
+A211 guarda 8 itens em 2 baldes, com α = 4. Fica lento, mas funciona
+(TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
+
+O preço está na memória. Cada nó é um `malloc` separado, e o sistema não
+libera nada sozinho. A função `tabela_libera` percorre cada balde e dá `free`
+em todos os nós, guardando o `prox` numa variável antes de liberar o nó atual,
+porque depois do `free` ler `p->prox` é ler memória que não é mais sua. Dar
+só `free(t->baldes)` libera o vetor de ponteiros e deixa as listas perdidas na
+memória, sem ninguém apontando para elas (CELES; CERQUEIRA; RANGEL, 2016).
 
 > [!WARNING]
 > Compare chave de texto com `strcmp`, nunca com `==`: `p->chave == chave`
-> compara **endereços**. O nó guarda a sua **cópia** da chave, porque o buffer
-> de quem chamou é reaproveitado.
+> compara **endereços**. Pode funcionar com literais e quebra com chave vinda
+> do teclado. O nó guarda a sua **cópia** da chave, porque o buffer de quem
+> chamou é reaproveitado.
 
 {{exemplo}}
 

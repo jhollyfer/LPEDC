@@ -1,30 +1,61 @@
 ## 0107 · Endereçamento aberto
 
-- **Endereçamento aberto**: sem lista. Os itens ficam **dentro do vetor**, e
-  quem colide tenta outras posições numa sequência fixa. Cada tentativa é uma
-  **sondagem** (CORMEN et al., 2024, cap. 11).
-- **Sondagem linear**: começa em `chave % m` e anda uma casa por vez, dando a
-  volta no fim: `i = (i + 1) % m`. No Cormen, `h(k, i) = (h'(k) + i) mod m`
-  (CORMEN et al., 2024, cap. 11).
-- **Outros passos**: a **quadrática**, `(h'(k) + c₁i + c₂i²) mod m`, e a
-  **dispersão dupla**, `(h₁(k) + i · h₂(k)) mod m` (assunto 0179)
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-- **Operações**: inserir sonda até uma posição livre. Buscar sonda até achar
-  a chave ou uma posição **livre**, onde ela teria parado (ZIVIANI, 2010,
-  cap. 5).
-- **Lápide**: remover marca a posição como **removida** (*tombstone*, o
-  `DELETED` do Cormen). A busca passa reto e a inserção pode reaproveitá-la
-  (CORMEN et al., 2024, cap. 11).
-- **A tabela enche**: α nunca passa de 1. As ocupadas formam blocos que
-  atraem mais chaves, o **agrupamento primário**. Com α = 0,5, uma busca sem
-  sucesso olha 2,5 posições; com 0,9, cerca de 50 (KNUTH, 1998, seção 6.4).
-- **Reconstruir**: passando de 70% a 75% de ocupação, crie uma tabela maior e
-  reinsira tudo (exemplo A213). Num bloco só, sem `malloc` por item, a cache
-  ajuda (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
+O encadeamento resolve a colisão com listas, e cada item custa um `malloc`.
+Existe outro caminho: guardar tudo dentro do próprio vetor e, quando o balde
+está ocupado, procurar outro.
+
+Pense no estacionamento de um condomínio com 11 vagas. A vaga de cada carro é o
+número do apartamento com resto por 11. Se a vaga está ocupada, o motorista
+tenta a seguinte, e assim por diante. Na saída, o porteiro refaz o mesmo
+caminho para achar o carro. Esse é o **endereçamento aberto**: não há lista, os
+itens moram **dentro do vetor**, e quem colide tenta outras posições numa
+sequência fixa. Cada tentativa se chama **sondagem** (CORMEN et al., 2024, cap. 11).
+
+A sequência mais simples é a **sondagem linear**. Ela começa em
+`i = chave % m` e anda uma casa por vez; ao passar da última posição, volta para
+a primeira, e por isso o passo é `i = (i + 1) % m`. Na notação do Cormen, a
+tentativa número `i`, contada a partir de 0, olha a posição
+`h(k, i) = (h'(k) + i) mod m`, sendo `h'` a função hash comum (CORMEN et al.,
+2024, cap. 11). Com `m = 11`, a chave 301 começa na posição 4; se a 4 está
+ocupada, tenta a 5, depois a 6.
+
+Trocando o passo, nascem outras sondagens. A **sondagem quadrática** pula
+distâncias que crescem com o quadrado da tentativa,
+`(h'(k) + c₁i + c₂i²) mod m`, com `c₁` e `c₂` constantes. A **dispersão dupla**
+usa uma segunda função hash para decidir o tamanho do pulo,
+`(h₁(k) + i · h₂(k)) mod m`, e fica para o assunto 0179 (TENENBAUM; LANGSAM;
+AUGENSTEIN, 1995, cap. 7).
+
+As operações seguem a sequência de sondagens. **Inserir** sonda até achar uma
+posição livre e grava ali. **Buscar** sonda até achar a chave ou até cair numa
+posição **livre**. Parar na livre é seguro: se a chave existisse, a inserção
+teria parado nessa vaga ou antes dela (ZIVIANI, 2010, cap. 5).
+
+**Remover** é onde mora a pegadinha. Se você esvazia a vaga, quebra a
+sequência de quem passou por ela para chegar mais longe. A solução é uma
+terceira marca, além de livre e ocupada: **removida**, chamada de **lápide**
+(*tombstone*; no Cormen, `DELETED`). A busca passa reto pela lápide, como se a
+vaga estivesse ocupada, e a inserção pode reaproveitá-la (CORMEN et al., 2024,
+cap. 11). Com muitas lápides, as buscas sem sucesso ficam longas até a tabela
+ser reconstruída.
+
+Ao contrário do encadeamento, aqui a tabela **enche**: `α = n / m` nunca passa
+de 1, e ela fica lenta bem antes disso. As posições ocupadas formam blocos
+contínuos, e toda chave que cai num bloco vai parar no fim dele, aumentando o
+bloco. É o **agrupamento primário**, e ele piora rápido. Com sondagem linear e
+α = 0,5, uma busca sem sucesso olha em média 2,5 posições; com α = 0,9, cerca
+de 50 (KNUTH, 1998, seção 6.4).
+
+Por isso, quando a ocupação passa de 70% a 75%, crie uma tabela maior e
+reinsira tudo nela (exemplo A213). Mesmo com esse cuidado, o endereçamento
+aberto costuma ganhar do encadeamento na prática: as vagas formam um bloco só
+de memória, sem `malloc` por item, e andar para a vaga seguinte aproveita a
+cache do processador, a memória rápida que guarda os bytes vizinhos do que
+você acabou de ler (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
 
 > [!WARNING]
 > Remover **não** é marcar a posição como livre. Se a vaga 5 (do 301) volta a
-> `LIVRE`, a busca pelo 1104 começa na 4, vê a 5 livre e diz "não está",
+> `LIVRE`, a busca pelo 1104 começa na 4, vê a 5 livre e conclui "não está",
 > embora ele esteja na 6. Use a lápide (exemplo A214).
 
 {{exemplo}}

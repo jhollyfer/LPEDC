@@ -59,26 +59,62 @@ direita; vermelho marca colisão.
 
 ### Conceito
 
-- **Endereçamento direto**: a chave é o próprio índice do vetor e o acesso
-  custa O(1). Falha quando a chave é grande (um CPF tem 11 dígitos) ou não é
-  número (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-- **Função hash**: recebe a chave e devolve um índice de `0` a `m - 1`, com
-  `m` o tamanho da tabela. O vetor é a **tabela hash** e cada posição é um
-  **balde** (CORMEN et al., 2024, cap. 11).
-- **Boa função**: **determinística** (mesma chave, mesmo índice), **rápida** e
-  **espalhadora** (chaves diferentes em baldes diferentes). Deve depender de
-  todas as partes da chave (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-- **Método da divisão**: `h(k) = k mod m`, em C `k % m`. Prefira `m` primo e
-  longe de potência de 2: com `m = 2^p`, o resto só vê os `p` bits de baixo
-  (CORMEN et al., 2024, cap. 11). O **da multiplicação** fica para o 0178.
-- **Colisão**: duas chaves diferentes no mesmo balde. Há mais chaves possíveis
-  que baldes, então ela **vai** acontecer; trata-se nos assuntos 0106 e 0107
-  (KNUTH, 1998, seção 6.4).
-- **Fator de carga**: `α = n / m`, itens por balde. 5 itens em 7 baldes dão
-  α ≈ 0,71; perto de 1, as colisões crescem (CORMEN et al., 2024, cap. 11).
-- **Bytes sem sinal**: no gcc de PC, `char` tem sinal e letra acentuada em
-  UTF-8 vira byte negativo. A função lê `unsigned char` e soma em `unsigned`,
-  cujo estouro é definido (KERNIGHAN; RITCHIE, 1988, seção 6.6).
+Num vetor, `v[i]` custa **O(1)**: o C calcula o endereço da posição `i` e vai
+direto a ela, sem olhar as outras. A busca sequencial e a binária não têm essa
+sorte, porque precisam comparar a chave com vários itens até achar o certo. A
+tabela hash nasce de uma pergunta simples: dá para transformar a chave num
+índice e ter o acesso direto do vetor para qualquer tipo de chave?
+
+Quando a chave já é um número pequeno, a resposta é sim, e de graça. Com
+`const char *estado[100]`, o DDD 61 serve de índice e `estado[61]` devolve "DF"
+num passo só. Isso se chama **endereçamento direto**: a chave é o próprio
+índice do vetor (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7). O exemplo A209
+mostra essa tabela. O método falha em dois casos. Se a chave é grande, o vetor
+fica impossível: um CPF tem 11 dígitos e pediria cem bilhões de posições para
+guardar algumas centenas de clientes. E se a chave nem é número, como um nome,
+não há índice para usar.
+
+Pense no guarda-volumes de uma academia. A recepcionista não procura armário
+vago de porta em porta: aplica uma regra ao seu nome, e a regra devolve o
+número do armário. Na saída, a mesma regra diz onde estão as suas coisas. Essa
+regra é a **função hash**, que recebe a chave e devolve um índice entre `0` e
+`m - 1`, sendo `m` o tamanho do vetor. O vetor que guarda os itens é a
+**tabela hash**, e cada posição dele é um **balde** (CORMEN et al., 2024, cap. 11).
+
+Nem toda regra serve. A função precisa ser **determinística**: a mesma chave
+sempre dá o mesmo índice, senão você guarda num balde e procura em outro. Ela
+precisa ser **rápida**, porque roda a cada busca e a cada inserção. E precisa
+**espalhar**: chaves diferentes devem cair em baldes diferentes o máximo
+possível. Para espalhar bem, o cálculo deve usar todas as partes da chave. Uma
+função que olha só a primeira letra põe "Ana" e "Alice" sempre juntas
+(TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
+
+Para chave inteira, a regra mais usada é o **método da divisão**: `h(k) = k mod m`,
+que em C se escreve `k % m`. O resto da divisão por `m` sempre fica entre `0` e
+`m - 1`, que é exatamente a faixa dos baldes. A escolha de `m` pesa. Prefira um
+primo longe de uma potência de 2. Com `m = 2^p`, o resto guarda só os `p` bits
+de baixo da chave e ignora o resto dela: com `m = 16`, as chaves 5, 21 e 37
+caem todas no balde 5 (CORMEN et al., 2024, cap. 11). O **método da
+multiplicação** fica para o assunto 0178.
+
+Para texto, o caminho mais simples é somar os códigos das letras e tirar o
+resto por `m`. A letra é um `char`, e no gcc de PC o `char` tem sinal: os bytes
+do "ã" em UTF-8 viram números negativos, e um resto negativo (`-98 % 8` dá `-2`)
+seria um índice fora do vetor. Por isso a função lê cada letra como
+`unsigned char` e acumula a soma num `unsigned`. Quando um `unsigned` estoura,
+ele volta a contar do zero (aritmética módulo 2³²), e isso é definido pela
+norma; o estouro de `int` não é (KERNIGHAN; RITCHIE, 1988, seção 6.6).
+
+Agora o ponto que define todo o resto do módulo. Existem muito mais chaves
+possíveis do que baldes, então duas chaves diferentes **vão** cair no mesmo
+balde. Isso é uma **colisão**, e nenhuma função a evita para sempre (KNUTH,
+1998, seção 6.4). O que se faz é tratá-la, e os assuntos 0106 e 0107 mostram
+as duas maneiras clássicas.
+
+O aperto da tabela tem nome: **fator de carga**, `α = n / m`, o número de itens
+dividido pelo número de baldes, ou quantos itens cabem em média em cada balde.
+Cinco itens em 7 baldes dão α ≈ 0,71. Quanto mais perto de 1, mais colisões
+aparecem e mais devagar a tabela fica (CORMEN et al., 2024, cap. 11).
 
 > [!WARNING]
 > A soma **não vê a ordem das letras**: "amor", "roma", "mora" e "ramo" somam
@@ -335,27 +371,56 @@ void -> 8
 
 ### Conceito
 
-- **Encadeamento** (ou encadeamento separado): cada balde guarda a **cabeça
-  de uma lista encadeada** com os itens que caíram ali. A tabela vira um vetor
-  de ponteiros, `No *baldes[m]` (CORMEN et al., 2024, cap. 11).
-- **Operações**: calcule `i = hash(chave) % m` e use a lista de `baldes[i]`
-  (módulo 11). Inserir procura a chave; se não achar, põe um nó **no início**
-  em O(1). Buscar e remover andam só nessa lista (CELES; RANGEL, 2002).
-- **Custo médio**: com hash que espalha bem, cada lista tem em média α nós e
-  a busca custa Θ(1 + α). Se `m` cresce com `n`, α fica constante e a busca é
-  O(1) na média (CORMEN et al., 2024, cap. 11).
-- **Pior caso**: um hash ruim joga tudo num balde, a tabela vira uma lista só
-  e a busca é O(n) (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-- **Nunca enche**: α pode passar de 1 (exemplo A211: 8 itens em 2 baldes)
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-- **Liberar**: cada nó é um `malloc`. `tabela_libera` dá `free` em todos,
-  guardando o `prox` antes; `free(t->baldes)` sozinho vaza as listas
-  (CELES; CERQUEIRA; RANGEL, 2016).
+O assunto 0105 terminou com uma certeza incômoda: duas chaves diferentes vão
+cair no mesmo balde. Se cada balde guarda um item só, o segundo não tem onde
+ficar. A primeira saída é deixar o balde guardar quantos itens precisar.
+
+Pense no hortifrúti com o estoque em 5 prateleiras. Cada fruta tem a sua
+prateleira, dada por uma regra. Quando duas frutas caem na mesma, ficam lado a
+lado, e achar o kiwi é olhar só a prateleira dele, nunca o estoque inteiro.
+Esse é o **encadeamento**, também chamado de encadeamento separado: cada balde
+guarda a **cabeça de uma lista encadeada** com todos os itens cujo hash caiu
+ali (CORMEN et al., 2024, cap. 11). A tabela vira um vetor de ponteiros,
+`No *baldes[m]`, e um balde vazio é só um ponteiro `NULL`.
+
+Toda operação começa igual: calcule o balde, `i = hash(chave) % m`. Daí em
+diante, é lista encadeada do módulo 11. Para **inserir**, procure a chave na
+lista de `baldes[i]`. Se ela já está lá, troque o valor; se não está, crie um
+nó e ponha **no início** da lista, que custa O(1) porque não precisa andar até
+o fim. Para **buscar**, percorra só essa lista. Para **remover**, faça a
+remoção de lista que você já conhece, guardando o nó anterior para religar o
+`prox` (CELES; RANGEL, 2002).
+
+Quanto custa buscar? Depende do tamanho da lista do balde. Se a função espalha
+bem, as `n` chaves se dividem por igual entre os `m` baldes, e cada lista tem
+em média `α = n / m` nós, o fator de carga do 0105. A busca então gasta um
+passo para calcular o balde e mais α para percorrer a lista: Θ(1 + α) na
+média (CORMEN et al., 2024, cap. 11). Se você aumenta `m` sempre que `n`
+cresce, α fica parado num valor constante, e a busca passa a custar O(1) na
+média. Esse é o motivo de a tabela hash ser tão usada.
+
+O pior caso é outra história. Uma função ruim, que joga todas as chaves no
+mesmo balde, transforma a tabela numa lista única, e a busca volta a ser O(n)
+(TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7). A estrutura é a mesma; quem
+decide se ela é rápida é a função hash.
+
+Uma propriedade boa do encadeamento: a tabela **nunca enche**. Cada balde
+cresce o quanto precisar, então α pode passar de 1 sem problema. O exemplo
+A211 guarda 8 itens em 2 baldes, com α = 4. Fica lento, mas funciona
+(TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
+
+O preço está na memória. Cada nó é um `malloc` separado, e o sistema não
+libera nada sozinho. A função `tabela_libera` percorre cada balde e dá `free`
+em todos os nós, guardando o `prox` numa variável antes de liberar o nó atual,
+porque depois do `free` ler `p->prox` é ler memória que não é mais sua. Dar
+só `free(t->baldes)` libera o vetor de ponteiros e deixa as listas perdidas na
+memória, sem ninguém apontando para elas (CELES; CERQUEIRA; RANGEL, 2016).
 
 > [!WARNING]
 > Compare chave de texto com `strcmp`, nunca com `==`: `p->chave == chave`
-> compara **endereços**. O nó guarda a sua **cópia** da chave, porque o buffer
-> de quem chamou é reaproveitado.
+> compara **endereços**. Pode funcionar com literais e quebra com chave vinda
+> do teclado. O nó guarda a sua **cópia** da chave, porque o buffer de quem
+> chamou é reaproveitado.
 
 ### Exemplos de uso
 
@@ -670,31 +735,62 @@ gcc ~/LPEDC/material/E636.c ~/LPEDC/material/0106-tabela.c -o ~/LPEDC/material/E
 
 ### Conceito
 
-- **Endereçamento aberto**: sem lista. Os itens ficam **dentro do vetor**, e
-  quem colide tenta outras posições numa sequência fixa. Cada tentativa é uma
-  **sondagem** (CORMEN et al., 2024, cap. 11).
-- **Sondagem linear**: começa em `chave % m` e anda uma casa por vez, dando a
-  volta no fim: `i = (i + 1) % m`. No Cormen, `h(k, i) = (h'(k) + i) mod m`
-  (CORMEN et al., 2024, cap. 11).
-- **Outros passos**: a **quadrática**, `(h'(k) + c₁i + c₂i²) mod m`, e a
-  **dispersão dupla**, `(h₁(k) + i · h₂(k)) mod m` (assunto 0179)
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-- **Operações**: inserir sonda até uma posição livre. Buscar sonda até achar
-  a chave ou uma posição **livre**, onde ela teria parado (ZIVIANI, 2010,
-  cap. 5).
-- **Lápide**: remover marca a posição como **removida** (*tombstone*, o
-  `DELETED` do Cormen). A busca passa reto e a inserção pode reaproveitá-la
-  (CORMEN et al., 2024, cap. 11).
-- **A tabela enche**: α nunca passa de 1. As ocupadas formam blocos que
-  atraem mais chaves, o **agrupamento primário**. Com α = 0,5, uma busca sem
-  sucesso olha 2,5 posições; com 0,9, cerca de 50 (KNUTH, 1998, seção 6.4).
-- **Reconstruir**: passando de 70% a 75% de ocupação, crie uma tabela maior e
-  reinsira tudo (exemplo A213). Num bloco só, sem `malloc` por item, a cache
-  ajuda (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
+O encadeamento resolve a colisão com listas, e cada item custa um `malloc`.
+Existe outro caminho: guardar tudo dentro do próprio vetor e, quando o balde
+está ocupado, procurar outro.
+
+Pense no estacionamento de um condomínio com 11 vagas. A vaga de cada carro é o
+número do apartamento com resto por 11. Se a vaga está ocupada, o motorista
+tenta a seguinte, e assim por diante. Na saída, o porteiro refaz o mesmo
+caminho para achar o carro. Esse é o **endereçamento aberto**: não há lista, os
+itens moram **dentro do vetor**, e quem colide tenta outras posições numa
+sequência fixa. Cada tentativa se chama **sondagem** (CORMEN et al., 2024, cap. 11).
+
+A sequência mais simples é a **sondagem linear**. Ela começa em
+`i = chave % m` e anda uma casa por vez; ao passar da última posição, volta para
+a primeira, e por isso o passo é `i = (i + 1) % m`. Na notação do Cormen, a
+tentativa número `i`, contada a partir de 0, olha a posição
+`h(k, i) = (h'(k) + i) mod m`, sendo `h'` a função hash comum (CORMEN et al.,
+2024, cap. 11). Com `m = 11`, a chave 301 começa na posição 4; se a 4 está
+ocupada, tenta a 5, depois a 6.
+
+Trocando o passo, nascem outras sondagens. A **sondagem quadrática** pula
+distâncias que crescem com o quadrado da tentativa,
+`(h'(k) + c₁i + c₂i²) mod m`, com `c₁` e `c₂` constantes. A **dispersão dupla**
+usa uma segunda função hash para decidir o tamanho do pulo,
+`(h₁(k) + i · h₂(k)) mod m`, e fica para o assunto 0179 (TENENBAUM; LANGSAM;
+AUGENSTEIN, 1995, cap. 7).
+
+As operações seguem a sequência de sondagens. **Inserir** sonda até achar uma
+posição livre e grava ali. **Buscar** sonda até achar a chave ou até cair numa
+posição **livre**. Parar na livre é seguro: se a chave existisse, a inserção
+teria parado nessa vaga ou antes dela (ZIVIANI, 2010, cap. 5).
+
+**Remover** é onde mora a pegadinha. Se você esvazia a vaga, quebra a
+sequência de quem passou por ela para chegar mais longe. A solução é uma
+terceira marca, além de livre e ocupada: **removida**, chamada de **lápide**
+(*tombstone*; no Cormen, `DELETED`). A busca passa reto pela lápide, como se a
+vaga estivesse ocupada, e a inserção pode reaproveitá-la (CORMEN et al., 2024,
+cap. 11). Com muitas lápides, as buscas sem sucesso ficam longas até a tabela
+ser reconstruída.
+
+Ao contrário do encadeamento, aqui a tabela **enche**: `α = n / m` nunca passa
+de 1, e ela fica lenta bem antes disso. As posições ocupadas formam blocos
+contínuos, e toda chave que cai num bloco vai parar no fim dele, aumentando o
+bloco. É o **agrupamento primário**, e ele piora rápido. Com sondagem linear e
+α = 0,5, uma busca sem sucesso olha em média 2,5 posições; com α = 0,9, cerca
+de 50 (KNUTH, 1998, seção 6.4).
+
+Por isso, quando a ocupação passa de 70% a 75%, crie uma tabela maior e
+reinsira tudo nela (exemplo A213). Mesmo com esse cuidado, o endereçamento
+aberto costuma ganhar do encadeamento na prática: as vagas formam um bloco só
+de memória, sem `malloc` por item, e andar para a vaga seguinte aproveita a
+cache do processador, a memória rápida que guarda os bytes vizinhos do que
+você acabou de ler (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
 
 > [!WARNING]
 > Remover **não** é marcar a posição como livre. Se a vaga 5 (do 301) volta a
-> `LIVRE`, a busca pelo 1104 começa na 4, vê a 5 livre e diz "não está",
+> `LIVRE`, a busca pelo 1104 começa na 4, vê a 5 livre e conclui "não está",
 > embora ele esteja na 6. Use a lápide (exemplo A214).
 
 ### Exemplos de uso
@@ -983,29 +1079,57 @@ gcc ~/LPEDC/material/E642.c ~/LPEDC/material/0107-aberta.c -o ~/LPEDC/material/E
 
 ### Conceito
 
-- **Tabela como dicionário**: a chave é a palavra e o valor é a contagem.
-  Cada palavra do texto vira uma busca e um `+1` (KERNIGHAN; RITCHIE, 1988,
-  seção 6.6).
-- **Quebrar em palavras**: `ctype.h` testa letras e passa para minúsculas,
-  para "Pão" e "pão" contarem juntas (CPPREFERENCE, s.d.).
-- **Encadeamento** (0106): `contador_soma` soma 1 à palavra do balde ou cria o
-  nó com a palavra **copiada** (CELES; RANGEL, 2002).
-- **Ranking com `qsort`** (0050 e 0096): a tabela não guarda ordem. As
-  contagens vão para um vetor, ordenado por vezes e, no empate, pela palavra
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
-- **Custo**: com `N` palavras e `d` diferentes, a busca sequencial custa
-  O(N · d); a tabela custa O(N) em média, mais O(d log d) do `qsort`
-  (CORMEN et al., 2024, cap. 11).
-- **Base e `m` sem fator comum**: com base 31 e `m = 31`, o balde depende só
-  da última letra. O exemplo usa `m = 17` (CORMEN et al., 2024, cap. 11).
-- **O vetor aponta para a tabela**: cada `palavra` de `Contagem` aponta para
-  um nó, então `free(lista)` vem antes de `contador_libera`
-  (CELES; CERQUEIRA; RANGEL, 2016).
+Contar quantas vezes cada palavra aparece num texto é o problema que mais
+mostra para que serve uma tabela hash. Sem ela, cada palavra lida exige
+procurar numa lista de palavras já vistas, comparando uma por uma. Com ela, a
+procura cai direto no balde certo.
+
+A ideia é usar a tabela como um **dicionário**: um conjunto de pares em que a
+**chave** é a palavra e o **valor** é a contagem. Cada palavra do texto vira
+uma busca seguida de um `+1`. Se a palavra ainda não existe, ela entra com
+contagem 1 (KERNIGHAN; RITCHIE, 1988, seção 6.6). É o mesmo que o caixa da
+padaria faria com um caderno indexado pela primeira letra: abre na página
+certa e risca mais um ao lado do nome.
+
+Antes de contar, o texto precisa virar palavras. As funções de `ctype.h`
+resolvem isso: `isalpha` diz se um byte é letra, e `tolower` passa a letra para
+minúscula. Com tudo em minúsculas, "Pão" e "pão" viram a mesma chave e contam
+juntas (CPPREFERENCE, s.d.). Os bytes de letras acentuadas em UTF-8 ficam acima
+de 127; o exemplo trata todo byte a partir de 128 como parte da palavra, e
+"pão" e "café" não se partem no meio.
+
+A tabela usa encadeamento, do assunto 0106, empacotada como um TAD em
+`palavras.h`. A função `contador_soma` calcula o balde, procura a palavra na
+lista dele e soma 1 se achar. Se não achar, cria um nó com uma **cópia** da
+palavra, porque o texto de onde ela veio vai ser reaproveitado para a palavra
+seguinte (CELES; RANGEL, 2002).
+
+O ranking pede ordem, e a tabela não tem nenhuma: a função hash espalha as
+palavras de propósito. Por isso as contagens saem da tabela para um vetor, e o
+`qsort` (assuntos 0050 e 0096) ordena esse vetor pelo número de vezes e, no
+empate, pela palavra em ordem alfabética (TENENBAUM; LANGSAM; AUGENSTEIN, 1995,
+cap. 7).
+
+Faça a conta do ganho. Com `N` palavras no texto e `d` palavras
+diferentes, a busca sequencial compara cada uma das `N` com até `d` já vistas:
+O(N · d). A tabela faz cada busca em O(1) na média, então o total é O(N), mais
+O(d log d) do `qsort` no fim (CORMEN et al., 2024, cap. 11).
+
+Um detalhe na escolha de `m`. O hash polinomial usa base 31, e a base e `m` não
+podem ter fator comum. Com base 31 e `m = 31`, toda parcela multiplicada por 31
+some no resto, e o balde passa a depender só da última letra. O exemplo usa
+`m = 17`, primo e diferente de 31 (CORMEN et al., 2024, cap. 11).
+
+Outro detalhe, de memória. O vetor de contagens não copia as palavras: cada
+campo `palavra` aponta para o texto guardado num nó da tabela. Se você libera a
+tabela primeiro, o vetor fica apontando para memória devolvida. Por isso o
+`free(lista)` vem antes de `contador_libera` (CELES; CERQUEIRA; RANGEL, 2016).
 
 > [!WARNING]
 > `isalpha` e `tolower` exigem um `unsigned char` (0 a 255) ou `EOF`. Os bytes
-> do "ã" em UTF-8 são negativos num `char` com sinal, e `isalpha(s[i])` com
-> negativo é **comportamento indefinido**. Use `isalpha((unsigned char)s[i])`.
+> do "ã" em UTF-8 são negativos num `char` com sinal (assunto 0105), e
+> `isalpha(s[i])` com negativo é **comportamento indefinido**. Converta:
+> `isalpha((unsigned char)s[i])`.
 
 ### Exemplos de uso
 
