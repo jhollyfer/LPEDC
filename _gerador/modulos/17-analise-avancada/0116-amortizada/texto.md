@@ -1,31 +1,67 @@
 ## 0116 · Análise amortizada
 
-- **Análise amortizada**: mede uma **sequência** de operações no pior caso e
-  divide pelo número de operações. O **custo amortizado** é uma garantia
-  sobre o total, sem sorteio (CORMEN et al., 2024, cap. 16).
-- **Vetor que dobra** (0075): inserir no fim custa uma escrita, até encher;
-  aí aloca o dobro e **copia tudo**. Isolada, a inserção é O(n); em sequência,
-  as caras são raras (ROVAI, 2018).
-- **Método agregado**: some tudo. Com capacidade inicial 1, `n` inserções
-  fazem `n` escritas mais cópias `1 + 2 + 4 + ...`, menos de `2n`. O total
-  fica abaixo de `3n`: **O(1) amortizado** (CORMEN et al., 2024, cap. 16).
-- **Método do banqueiro** (contábil): cada inserção paga **3 moedas**, 1 pela
-  escrita e 2 para um cofrinho. Quando `c` vira `2c`, os `c` mais novos
-  guardaram as `c` cópias. O cofrinho nunca fica negativo
-  (SZWARCFITER; MARKENZON, 2010).
-- **Método do potencial**: o cofrinho vira uma função Φ do estado (aqui,
-  Φ = 2 · n - capacidade). Custo amortizado = real + Φ(depois) - Φ(antes)
-  (CORMEN et al., 2024, cap. 16).
-- **Não é caso médio**: o médio supõe entradas sorteadas; o amortizado vale
-  para a **pior** sequência. E não promete que cada operação é rápida: um
-  sistema que não pode travar precisa de outra solução
-  (SZWARCFITER; MARKENZON, 2010).
-- **Outros exemplos**: o **contador binário** troca menos de 2 bits por soma
-  em média (A231) e a pilha com `multipop(k)` tira cada item uma vez (A232)
-  (CORMEN et al., 2024, cap. 16).
-- **Na prática**: usa-se `realloc` (0055), que às vezes estica no lugar; a
-  análise conta o pior caso. O preço é memória: logo após dobrar, metade está
-  vazia (CORTÉS, 2015).
+Mudar de apartamento custa um dia inteiro carregando **todos** os móveis. Mas
+mudança é rara, e ninguém mede o custo de morar num lugar pela pior semana do
+ano. A análise deste assunto faz a mesma conta com operações de uma estrutura
+de dados.
+
+O caso clássico é o vetor que cresce, do assunto 0075. Inserir no fim custa
+uma escrita, até o vetor encher. Cheio, é preciso alocar um vetor maior e
+**copiar tudo** para ele. Olhando uma inserção isolada no pior caso, ela custa
+O(n), e a conta pessimista diria que `n` inserções custam O(n²). Essa conta
+erra porque as inserções caras não vêm em sequência: depois de uma cópia
+grande, vêm muitas inserções baratas até o próximo aperto (ROVAI, 2018).
+
+A **análise amortizada** olha para isso do jeito certo. Ela mede o custo de
+uma **sequência** de operações no pior caso e divide pelo número de operações.
+O resultado é o **custo amortizado** de cada operação, e ele é uma garantia
+sobre o total: nenhuma sorte entra na conta (CORMEN et al., 2024, cap. 16). O
+Cormen ensina três maneiras de fazer essa conta, e as três chegam ao mesmo
+número para o vetor que dobra.
+
+O **método agregado** soma tudo de uma vez. Comece com capacidade 1 e dobre
+sempre que encher. As `n` inserções fazem `n` escritas. As cópias acontecem
+quando a capacidade passa de 1 para 2, de 2 para 4, de 4 para 8, e copiam
+`1 + 2 + 4 + ...` elementos. Essa soma de potências de 2 fica abaixo de `2n`,
+porque cada termo é maior que todos os anteriores juntos. O total é menor que
+`3n`, e dividindo por `n` cada inserção custa **O(1) amortizado** (CORMEN et
+al., 2024, cap. 16).
+
+O **método do banqueiro**, também chamado de contábil, troca a soma por um
+cofrinho. Cada inserção paga **3 moedas**: 1 pela própria escrita e 2 que vão
+para o cofrinho. Quando a capacidade `c` enche e vira `2c`, os `c/2` elementos
+que entraram depois da última cópia guardaram 2 moedas cada, `c` moedas no
+total, e isso paga exatamente as `c` cópias. Se o cofrinho nunca fica
+negativo, nenhuma operação deixou de ser paga, e o custo amortizado é 3
+(SZWARCFITER; MARKENZON, 2010).
+
+O **método do potencial** formaliza o cofrinho. Em vez de contar moedas, você
+define uma função Φ do estado da estrutura, o **potencial**, que mede a
+"energia guardada". Para o vetor, Φ = 2 · n - capacidade, com `n` os elementos
+guardados. O custo amortizado de uma operação é o custo real mais a variação
+do potencial: real + Φ(depois) - Φ(antes). Uma inserção barata aumenta Φ em 2;
+uma cópia grande gasta o potencial acumulado (CORMEN et al., 2024, cap. 16).
+
+Dois mal-entendidos rondam esse assunto. O primeiro é confundir amortizado com
+**caso médio**. O caso médio supõe que as entradas são sorteadas e calcula uma
+média sobre elas. O amortizado não sorteia nada: vale para a **pior**
+sequência possível. O segundo é achar que o amortizado promete que cada
+operação é rápida. Ele promete o total. Um sistema que não pode travar nem
+por um instante, como o controle de um freio, precisa de outra solução
+(SZWARCFITER; MARKENZON, 2010).
+
+A técnica serve para outras estruturas. Num **contador binário** que soma 1 a
+cada passo, uma soma pode trocar muitos bits (de 0111 para 1000 trocam 4), mas
+em média cada soma troca menos de 2 bits (exemplo A231). Numa pilha com a
+operação `multipop(k)`, que tira `k` itens de uma vez, um `multipop` pode ser
+caro, mas cada item só sai uma vez depois de ter entrado uma vez (exemplo
+A232) (CORMEN et al., 2024, cap. 16).
+
+No C, o vetor que cresce usa `realloc` (assunto 0055), que às vezes consegue
+esticar o bloco no lugar e nem copia. A análise conta o pior caso, copiar
+tudo. O preço que sobra é memória: logo depois de dobrar, metade do vetor está
+vazia (CORTÉS, 2015). Use o `realloc` seguro, guardando o resultado num
+ponteiro à parte e conferindo `NULL` antes de trocar.
 
 > [!WARNING]
 > Crescer por **tamanho fixo** estraga tudo. Com `nova = cap + 10`, as cópias

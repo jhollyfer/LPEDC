@@ -61,30 +61,65 @@ contador de comparações. Os tempos variam entre execuções; as comparações,
 
 ### Conceito
 
-- **Recorrência**: equação que dá o custo de uma função recursiva em termos do
-  custo dela em entradas menores, mais um caso base
-  (CORMEN et al., 2024, cap. 4).
-- **Ler a recorrência no código**: quantas chamadas e de que tamanho (o termo
-  `2 T(n/2)`)? Quanto trabalho fora delas (o `+ n`)? Qual o caso base e seu
-  custo (`T(1) = 1`)? (ZIVIANI, 2010, cap. 2).
-- **Árvore de recursão**: cada chamada vira um nó com o trabalho que faz
-  sozinha, e a soma é feita **nível por nível**. Serve para resolver e para
-  chutar a resposta (LINTZMAYER; MOTA, 2023).
-- **Substituição**: chute a resposta e prove por indução. No passo é preciso
-  chegar **exatamente** na expressão chutada (CORMEN et al., 2024, cap. 4).
-- **Θ** (teta): a função cresce **exatamente** naquele ritmo. O `O` (0072) é
-  teto; o Θ é teto e piso. Definições formais no 0166
-  (CORMEN et al., 2024, cap. 3).
-- **Tempo e memória**: o tempo é a soma dos nós da árvore; a memória é a
-  altura, os frames vivos na pilha (0031) (FEOFILOFF, 2009).
+No módulo 10, você mediu o custo de um algoritmo contando as voltas dos laços.
+Uma função recursiva quase não tem laço: o trabalho está espalhado pelas
+chamadas que ela faz a si mesma. Pense na contabilidade de uma rede de
+farmácias. A chefe recebe um lote de notas fiscais, confere o lote inteiro,
+divide em dois lotes iguais e entrega cada metade a um auditor, que faz o
+mesmo com a sua metade. Com uma nota só, o auditor confere e para. Quantas
+notas são olhadas no total? Contar laços não responde.
+
+A ferramenta para isso é a **recorrência**: uma equação que dá o custo de uma
+função recursiva para uma entrada de tamanho `n` em termos do custo dela para
+entradas menores, mais um caso base que diz quanto custa a menor entrada
+(CORMEN et al., 2024, cap. 4). Chamando de `T(n)` o custo de conferir um lote
+de `n` notas, a auditoria fica assim:
 
 ```text
 T(1) = 1                  (caso base: confere a nota e para)
 T(n) = 2 T(n/2) + n       (duas chamadas com metade, mais n de trabalho)
 ```
 
-Os lotes caem pela metade até 1: há `log₂ n + 1` níveis de custo `n`, e o
-total é `n log₂ n + n`, ou **Θ(n log n)**.
+Para escrever a recorrência a partir do código, faça três perguntas. Quantas
+chamadas recursivas a função faz, e com que tamanho? Aqui são 2, com metade
+cada, e isso vira o termo `2 T(n/2)`. Quanto trabalho ela faz fora das
+chamadas? Aqui, olhar as `n` notas, e isso vira o `+ n`. Qual é o caso base e
+quanto ele custa? Aqui, `T(1) = 1` (ZIVIANI, 2010, cap. 2).
+
+A recorrência tem `T` dos dois lados, então ainda não diz quanto custa.
+**Resolver** é chegar numa fórmula só em `n`. O jeito mais visual é a **árvore
+de recursão**: cada chamada vira um nó, e dentro do nó fica o trabalho que ela
+faz sozinha, sem contar as filhas. Depois você soma **nível por nível**
+(LINTZMAYER; MOTA, 2023). Na auditoria, o nível 0 é a chefe, com `n` notas. O
+nível 1 tem 2 auditores com `n/2` cada, que somam `n`. O nível `k` tem `2^k`
+chamadas de `n/2^k` notas, e de novo a soma dá `n`. Os lotes caem pela metade
+até chegar em 1, o que leva `log₂ n` divisões, então há `log₂ n + 1` níveis.
+O total é `n log₂ n + n`, ou **Θ(n log n)**.
+
+O símbolo **Θ** (teta) diz que a função cresce **exatamente** naquele ritmo. O
+`O` do assunto 0072 é um teto: garante que o custo não passa daquilo. O Θ é
+teto e piso ao mesmo tempo: o custo nem passa nem fica abaixo daquele ritmo,
+fora constantes. As definições formais estão no assunto 0166 (CORMEN et al.,
+2024, cap. 3).
+
+A árvore também serve para chutar a resposta de uma recorrência difícil. O
+chute então é confirmado pelo **método da substituição**: você supõe que a
+resposta vale para entradas menores e prova por indução que vale para `n`. O
+cuidado é chegar **exatamente** na expressão chutada no passo da indução; uma
+constante a mais que "não faz diferença" invalida a prova (CORMEN et al.,
+2024, cap. 4). O terceiro método, o teorema mestre, é o assunto 0115.
+
+A árvore mostra ainda os dois recursos que uma função recursiva gasta, porque
+ela é o filme da pilha de chamadas do assunto 0031. O **tempo** é a soma de
+todos os nós: para 8 notas, são `2n - 1 = 15` chamadas. A **memória** é a
+altura da árvore, porque só os frames de um caminho da raiz até uma folha
+ficam vivos ao mesmo tempo: no máximo `log₂ n + 1 = 4` (FEOFILOFF, 2009).
+
+A forma da recorrência decide a forma da árvore, e a forma da árvore decide o
+resultado. Uma chamada só, com tamanho caindo de 1 em 1, dá uma linha de `n`
+nós. Uma chamada só, com tamanho caindo pela metade, dá uma linha de `log n`
+nós. Duas chamadas com tamanho caindo de 1 em 1 dão uma árvore que dobra a
+cada nível. A tabela reúne os casos que mais aparecem:
 
 | recorrência | árvore | resultado | exemplo |
 | --- | --- | --- | --- |
@@ -442,34 +477,52 @@ C(40) / C(39) = 1.6180
 
 ### Conceito
 
-- **Teorema mestre**: a soma da árvore de recursão (0114) já feita em geral,
-  para recorrências de divisão e conquista. O resultado cabe em três linhas
-  (CORMEN et al., 2024, cap. 4).
-- **Forma simplificada**: `T(n) = a T(n/b) + n^k`. `a` (pelo menos 1) é
-  quantas chamadas; `b` (maior que 1) é quanto o tamanho encolhe; `n^k` é o
-  trabalho fora das chamadas (LINTZMAYER; MOTA, 2023).
-- **Por que funciona**: o nível `j` tem `a^j` chamadas de tamanho `n/b^j` e
-  custa `n^k · (a/b^k)^j`. De um nível ao seguinte, o custo é multiplicado
-  por `a/b^k` (LINTZMAYER; MOTA, 2023).
-- **Forma do Cormen**: `T(n) = a T(n/b) + f(n)`, com `f(n)` comparada a
-  `n^(log_b a)`. O caso 2 aceita `f(n) = Θ(n^(log_b a) · logᵖ n)`, p ≥ 0, e dá
-  Θ(n^(log_b a) · log^(p+1) n). O caso 3 exige também `a f(n/b) ≤ c f(n)`,
-  c < 1 (CORMEN et al., 2024, cap. 4).
-- **Quando não se aplica**: `T(n) = T(n-1) + n` (o tamanho cai subtraindo),
-  `T(n) = T(n/3) + T(2n/3) + n` (pedaços diferentes). Volte à árvore, que
-  sempre funciona (exemplo A230) (LINTZMAYER; MOTA, 2023).
-- **Divisão inteira**: arredondar `n / 2` para cima ou para baixo não muda o
-  Θ (CORMEN et al., 2024, cap. 4).
+Montar a árvore de recursão do assunto 0114 para cada algoritmo funciona, mas
+cansa. Na declaração do Imposto de Renda, você não refaz a conta da alíquota:
+acha a sua faixa na tabela e lê o resultado. O **teorema mestre** é essa
+tabela para as recorrências de divisão e conquista: alguém já somou a árvore
+em geral, e o resultado cabe em três linhas (CORMEN et al., 2024, cap. 4).
+
+A forma mais usada, simplificada, é esta:
 
 ```text
 T(n) = a T(n/b) + n^k
 ```
+
+Cada letra responde uma das perguntas do 0114. O `a`, que vale pelo menos 1,
+é **quantas chamadas** cada chamada faz. O `b`, maior que 1, é **quanto o
+tamanho encolhe**: cada chamada recebe `n/b`. E `n^k` é o **trabalho fora das
+chamadas**: `k = 0` quer dizer trabalho constante, `k = 1` quer dizer
+trabalho linear (LINTZMAYER; MOTA, 2023). O merge sort, com duas metades e uma
+intercalação linear, tem `a = 2`, `b = 2` e `k = 1`.
+
+Para ver de onde vêm as três linhas, monte a árvore dessa forma geral. O nível
+`j` tem `a^j` chamadas, cada uma com tamanho `n/b^j`, e cada uma trabalha
+`(n/b^j)^k`. Multiplicando, o nível `j` custa `n^k · (a/b^k)^j`. Repare no que
+isso diz: de um nível para o seguinte, o custo é multiplicado sempre pelo
+mesmo número, a razão `a/b^k` (LINTZMAYER; MOTA, 2023). Toda a análise se
+resume a comparar `a` com `b^k`, e só há três possibilidades.
+
+Se `a > b^k`, a razão passa de 1 e o custo **cresce** a cada nível. O último
+nível, o das folhas, manda no total: ele tem `a^(log_b n) = n^(log_b a)` folhas,
+e os níveis de cima somam só um múltiplo fixo dele. O resultado é
+Θ(n^(log_b a)). Se `a = b^k`, a razão é 1 e todo nível custa o mesmo `n^k`.
+São `log_b n + 1` níveis, e o total é Θ(n^k log n). Se `a < b^k`, a razão fica
+abaixo de 1 e o custo **cai** a cada nível. A raiz sozinha já é uma fração
+fixa do total, e o resultado é Θ(n^k).
 
 | caso | comparação | o custo por nível... | quem pesa | resultado |
 | --- | --- | --- | --- | --- |
 | 1 | `a > b^k` | **cresce** a cada nível | as folhas | Θ(n^(log_b a)) |
 | 2 | `a = b^k` | fica **igual** | todos os níveis | Θ(n^k log n) |
 | 3 | `a < b^k` | **cai** a cada nível | a raiz | Θ(n^k) |
+
+Aplicar é ler `a`, `b` e `k` no código, calcular `b^k` e achar a linha. A
+busca binária faz uma chamada com metade e trabalho constante: `a = 1`,
+`b^k = 2^0 = 1`, caso 2, Θ(log n). O merge sort tem `a = 2` e `b^k = 2`, caso
+2, Θ(n log n). A multiplicação de polinômios de Karatsuba faz 3 produtos de
+metade do tamanho com trabalho linear: `a = 3 > 2`, caso 1, Θ(n^(log₂ 3)), que
+é cerca de Θ(n^1,585).
 
 | algoritmo | a | b | k | b^k | resultado |
 | --- | --- | --- | --- | --- | --- |
@@ -478,6 +531,27 @@ T(n) = a T(n/b) + n^k
 | merge sort | 2 | 2 | 1 | 2 | caso 2: Θ(n log n) |
 | multiplicar polinômios com 3 produtos (Karatsuba) | 3 | 2 | 1 | 2 | caso 1: Θ(n^1,585) |
 | algo que lê tudo e segue numa metade | 1 | 2 | 1 | 2 | caso 3: Θ(n) |
+
+O Cormen enuncia o teorema numa forma mais geral, `T(n) = a T(n/b) + f(n)`,
+em que o trabalho `f(n)` pode ser qualquer função e é comparado com
+`n^(log_b a)`, o número de folhas. No caso 1, `f(n)` fica abaixo de
+`n^(log_b a)` por um fator polinomial, e as folhas mandam. No caso 2, `f(n)`
+é Θ(n^(log_b a) · logᵖ n) com p ≥ 0, e o resultado ganha mais um fator de log:
+Θ(n^(log_b a) · log^(p+1) n). Com p = 1, `2 T(n/2) + n log n` dá
+Θ(n log² n), o que o exemplo A230 mede. No caso 3, `f(n)` fica acima por um
+fator polinomial **e** precisa cumprir a condição de regularidade
+`a f(n/b) ≤ c f(n)` para alguma constante c < 1; aí o resultado é Θ(f(n))
+(CORMEN et al., 2024, cap. 4).
+
+O teorema não cobre tudo. Em `T(n) = T(n-1) + n`, o tamanho cai subtraindo, e
+não existe `b`. Em `T(n) = T(n/3) + T(2n/3) + n`, os pedaços têm tamanhos
+diferentes. Nesses casos, volte à árvore de recursão, que sempre funciona
+(LINTZMAYER; MOTA, 2023).
+
+Um detalhe do C. O `n / 2` no código é divisão inteira, e arredondar para cima
+ou para baixo não muda o Θ (CORMEN et al., 2024, cap. 4). O que muda é o caso
+base: com `if (n == 1)`, uma chamada com `n = 0` passa reto, `0 / 2` dá 0 de
+novo e a pilha estoura. Prefira `if (n <= 1)`.
 
 > [!WARNING]
 > Quatro estagiários com metade cada um é `4 T(n/2)`, não `4 T(n/4)`. Em
@@ -807,32 +881,68 @@ n = 256:  65536 contra  6561 multiplicações, mesmo resultado
 
 ### Conceito
 
-- **Análise amortizada**: mede uma **sequência** de operações no pior caso e
-  divide pelo número de operações. O **custo amortizado** é uma garantia
-  sobre o total, sem sorteio (CORMEN et al., 2024, cap. 16).
-- **Vetor que dobra** (0075): inserir no fim custa uma escrita, até encher;
-  aí aloca o dobro e **copia tudo**. Isolada, a inserção é O(n); em sequência,
-  as caras são raras (ROVAI, 2018).
-- **Método agregado**: some tudo. Com capacidade inicial 1, `n` inserções
-  fazem `n` escritas mais cópias `1 + 2 + 4 + ...`, menos de `2n`. O total
-  fica abaixo de `3n`: **O(1) amortizado** (CORMEN et al., 2024, cap. 16).
-- **Método do banqueiro** (contábil): cada inserção paga **3 moedas**, 1 pela
-  escrita e 2 para um cofrinho. Quando `c` vira `2c`, os `c` mais novos
-  guardaram as `c` cópias. O cofrinho nunca fica negativo
-  (SZWARCFITER; MARKENZON, 2010).
-- **Método do potencial**: o cofrinho vira uma função Φ do estado (aqui,
-  Φ = 2 · n - capacidade). Custo amortizado = real + Φ(depois) - Φ(antes)
-  (CORMEN et al., 2024, cap. 16).
-- **Não é caso médio**: o médio supõe entradas sorteadas; o amortizado vale
-  para a **pior** sequência. E não promete que cada operação é rápida: um
-  sistema que não pode travar precisa de outra solução
-  (SZWARCFITER; MARKENZON, 2010).
-- **Outros exemplos**: o **contador binário** troca menos de 2 bits por soma
-  em média (A231) e a pilha com `multipop(k)` tira cada item uma vez (A232)
-  (CORMEN et al., 2024, cap. 16).
-- **Na prática**: usa-se `realloc` (0055), que às vezes estica no lugar; a
-  análise conta o pior caso. O preço é memória: logo após dobrar, metade está
-  vazia (CORTÉS, 2015).
+Mudar de apartamento custa um dia inteiro carregando **todos** os móveis. Mas
+mudança é rara, e ninguém mede o custo de morar num lugar pela pior semana do
+ano. A análise deste assunto faz a mesma conta com operações de uma estrutura
+de dados.
+
+O caso clássico é o vetor que cresce, do assunto 0075. Inserir no fim custa
+uma escrita, até o vetor encher. Cheio, é preciso alocar um vetor maior e
+**copiar tudo** para ele. Olhando uma inserção isolada no pior caso, ela custa
+O(n), e a conta pessimista diria que `n` inserções custam O(n²). Essa conta
+erra porque as inserções caras não vêm em sequência: depois de uma cópia
+grande, vêm muitas inserções baratas até o próximo aperto (ROVAI, 2018).
+
+A **análise amortizada** olha para isso do jeito certo. Ela mede o custo de
+uma **sequência** de operações no pior caso e divide pelo número de operações.
+O resultado é o **custo amortizado** de cada operação, e ele é uma garantia
+sobre o total: nenhuma sorte entra na conta (CORMEN et al., 2024, cap. 16). O
+Cormen ensina três maneiras de fazer essa conta, e as três chegam ao mesmo
+número para o vetor que dobra.
+
+O **método agregado** soma tudo de uma vez. Comece com capacidade 1 e dobre
+sempre que encher. As `n` inserções fazem `n` escritas. As cópias acontecem
+quando a capacidade passa de 1 para 2, de 2 para 4, de 4 para 8, e copiam
+`1 + 2 + 4 + ...` elementos. Essa soma de potências de 2 fica abaixo de `2n`,
+porque cada termo é maior que todos os anteriores juntos. O total é menor que
+`3n`, e dividindo por `n` cada inserção custa **O(1) amortizado** (CORMEN et
+al., 2024, cap. 16).
+
+O **método do banqueiro**, também chamado de contábil, troca a soma por um
+cofrinho. Cada inserção paga **3 moedas**: 1 pela própria escrita e 2 que vão
+para o cofrinho. Quando a capacidade `c` enche e vira `2c`, os `c/2` elementos
+que entraram depois da última cópia guardaram 2 moedas cada, `c` moedas no
+total, e isso paga exatamente as `c` cópias. Se o cofrinho nunca fica
+negativo, nenhuma operação deixou de ser paga, e o custo amortizado é 3
+(SZWARCFITER; MARKENZON, 2010).
+
+O **método do potencial** formaliza o cofrinho. Em vez de contar moedas, você
+define uma função Φ do estado da estrutura, o **potencial**, que mede a
+"energia guardada". Para o vetor, Φ = 2 · n - capacidade, com `n` os elementos
+guardados. O custo amortizado de uma operação é o custo real mais a variação
+do potencial: real + Φ(depois) - Φ(antes). Uma inserção barata aumenta Φ em 2;
+uma cópia grande gasta o potencial acumulado (CORMEN et al., 2024, cap. 16).
+
+Dois mal-entendidos rondam esse assunto. O primeiro é confundir amortizado com
+**caso médio**. O caso médio supõe que as entradas são sorteadas e calcula uma
+média sobre elas. O amortizado não sorteia nada: vale para a **pior**
+sequência possível. O segundo é achar que o amortizado promete que cada
+operação é rápida. Ele promete o total. Um sistema que não pode travar nem
+por um instante, como o controle de um freio, precisa de outra solução
+(SZWARCFITER; MARKENZON, 2010).
+
+A técnica serve para outras estruturas. Num **contador binário** que soma 1 a
+cada passo, uma soma pode trocar muitos bits (de 0111 para 1000 trocam 4), mas
+em média cada soma troca menos de 2 bits (exemplo A231). Numa pilha com a
+operação `multipop(k)`, que tira `k` itens de uma vez, um `multipop` pode ser
+caro, mas cada item só sai uma vez depois de ter entrado uma vez (exemplo
+A232) (CORMEN et al., 2024, cap. 16).
+
+No C, o vetor que cresce usa `realloc` (assunto 0055), que às vezes consegue
+esticar o bloco no lugar e nem copia. A análise conta o pior caso, copiar
+tudo. O preço que sobra é memória: logo depois de dobrar, metade do vetor está
+vazia (CORTÉS, 2015). Use o `realloc` seguro, guardando o resultado num
+ponteiro à parte e conferindo `NULL` antes de trocar.
 
 > [!WARNING]
 > Crescer por **tamanho fixo** estraga tudo. Com `nova = cap + 10`, as cópias
@@ -1184,22 +1294,57 @@ atendidos: 1 2 3 4 5 6 7 8
 
 ### Conceito
 
-- **Limite inferior**: uma afirmação sobre o **problema**, não sobre um
-  algoritmo. Diz que nenhum método resolve com menos que tanto
-  (SZWARCFITER; MARKENZON, 2010).
-- **Ordenação por comparação**: só aprende a ordem perguntando "x > y?". Vale
-  para o módulo 13, o heapsort e o `qsort`, que só conhece a ordem pelas
-  respostas da `compara` (CORMEN et al., 2024, cap. 8).
-- **Árvore de decisão**: cada nó interno é uma pergunta, cada aresta uma
-  resposta e cada folha uma ordem final. O pior caso é a **altura**
-  (CORMEN et al., 2024, cap. 8).
-- **O argumento**: há `n!` ordens e cada uma precisa da sua folha. Com 2
-  respostas por pergunta, altura `h` dá no máximo `2^h` folhas. Logo
-  `2^h ≥ n!`, isto é, **`h ≥ log₂(n!)`** (LINTZMAYER; MOTA, 2023).
-- **Ω(n log n)**: `log₂(n!)` cresce como `n log₂ n`. O **Ω** (ômega) é o piso,
-  o contrário do teto `O` (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
-- **Assintoticamente ótimo**: merge sort e heapsort fazem O(n log n) e
-  alcançam o limite (CORMEN et al., 2024, cap. 8).
+Até aqui, toda análise media **um algoritmo**: o merge sort faz Θ(n log n), o
+insertion sort faz Θ(n²). Agora a pergunta muda de lado e passa a ser sobre o
+**problema**. Existe algum jeito de ordenar com menos trabalho do que o merge
+sort, ou ele já é o melhor possível? Para responder, você precisa de um
+argumento que valha para todo algoritmo, inclusive os que ninguém inventou
+ainda.
+
+Esse tipo de resposta se chama **limite inferior**: uma afirmação de que
+nenhum método resolve o problema gastando menos do que certa quantidade
+(SZWARCFITER; MARKENZON, 2010). Um limite superior se prova mostrando um
+algoritmo. Um limite inferior exige mostrar que todos os algoritmos possíveis
+gastam pelo menos aquilo.
+
+O argumento precisa de uma regra do jogo. Imagine três encomendas nos
+Correios e uma balança de dois pratos, que só diz qual lado pesa mais. Você
+não pode ler o peso; só pode comparar duas encomendas por vez. Os algoritmos
+que funcionam assim formam a **ordenação por comparação**: eles só aprendem a
+ordem dos elementos perguntando "x é maior que y?" (CORMEN et al., 2024,
+cap. 8). Todos os do módulo 13 são assim, o heapsort também, e o `qsort` da
+biblioteca idem: ele recebe o vetor como `void *` e só fica sabendo da ordem
+pelas respostas da função `compara`.
+
+Para enxergar todas as execuções de um algoritmo desses de uma vez, use a
+**árvore de decisão**. Cada nó interno é uma pergunta, como "A pesa mais que
+B?". Cada aresta é uma resposta, sim ou não. Cada folha é uma ordem final dos
+elementos. Rodar o algoritmo numa entrada é descer da raiz até uma folha,
+seguindo as respostas. O número de perguntas no pior caso é o caminho mais
+longo da raiz até uma folha, a **altura** da árvore (CORMEN et al., 2024,
+cap. 8).
+
+Agora o argumento, em três passos. Com `n` elementos distintos, há `n!`
+ordens possíveis, e cada uma precisa de uma folha só dela: se duas ordens
+diferentes caíssem na mesma folha, o algoritmo daria a mesma resposta para as
+duas, e uma delas sairia errada. Cada pergunta tem 2 respostas, então uma
+árvore de altura `h` tem no máximo `2^h` folhas. Juntando, `2^h ≥ n!`, isto é,
+**`h ≥ log₂(n!)`** (LINTZMAYER; MOTA, 2023). Com 3 encomendas há `3! = 6`
+ordens; altura 2 só comporta 4 folhas, então nenhum método garante a ordem com
+menos de 3 pesagens.
+
+Falta ver quanto vale `log₂(n!)`. O fatorial é o produto de `n` números, e
+metade deles é pelo menos `n/2`. Por isso `n!` passa de `(n/2)^(n/2)`, e
+`log₂(n!)` cresce no mesmo ritmo de `n log₂ n`. Toda ordenação por comparação
+faz **Ω(n log n)** comparações no pior caso. O **Ω** (ômega) é o piso, o
+oposto do teto `O`: diz que o custo não fica abaixo daquele ritmo (TENENBAUM;
+LANGSAM; AUGENSTEIN, 1995, cap. 6). Para `n = 1000`, alguma entrada obriga
+qualquer implementação do `qsort` a chamar a `compara` mais de 8.530 vezes.
+
+O merge sort e o heapsort fazem O(n log n) comparações no pior caso e
+encostam nesse piso. Algoritmos assim se chamam **assintoticamente ótimos**:
+fora constantes, ninguém que só compara faz melhor (CORMEN et al., 2024,
+cap. 8). A tabela compara o limite com o que o merge sort gasta:
 
 | n | n! | limite ⌈log₂ n!⌉ | merge sort (pior caso) |
 | --- | --- | --- | --- |
@@ -1622,21 +1767,50 @@ pior caso: 5 comparações (limite: 5)
 
 ### Conceito
 
-- **Prever antes de rodar**: conhecida a classe de custo, uma medida num
-  tamanho pequeno estima o tamanho grande (ZIVIANI, 2010, cap. 1).
-- **Conhecer a classe**: insertion sort, `T(n) = T(n-1) + n`, Θ(n²); merge
-  sort, `2 T(n/2) + n`, Θ(n log n) pelo teorema mestre; heapsort, `n` descidas
-  de O(log n); quick sort, Θ(n log n) em média (CORMEN et al., 2024, cap. 4).
-- **Teste da razão**: meça em `n` e `2n`. Dobrar multiplica o custo por 4 na
-  classe n² e por pouco mais de 2 na classe n log n (FEOFILOFF, 2009).
-- **Extrapolar**: de `n` para `N`, multiplique por `(N/n)²` na classe n², ou
-  por `(N log N)/(n log n)` na classe n log n (ZIVIANI, 2010, cap. 1).
-- **Duas réguas**: a **contagem de comparações**, igual em qualquer
-  computador, e o **tempo**, que varia entre máquinas
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
-- **`clock()`**: devolve tiques de processador; `CLOCKS_PER_SEC` diz quantos
-  cabem num segundo. Os dois são inteiros, por isso o `1000.0 *` na frente da
-  divisão (CPPREFERENCE, s.d.).
+O relatório de uma loja virtual vai ordenar 1 milhão de pedidos, e o
+programador só testou com 16 mil. Rodar para ver pode levar meia hora, ou
+nunca terminar. A análise do módulo serve exatamente para isso: **prever**
+antes de rodar. Conhecida a classe de custo de um algoritmo, uma medida num
+tamanho pequeno estima o tamanho grande (ZIVIANI, 2010, cap. 1).
+
+O primeiro passo é conhecer a classe de cada candidato, com as ferramentas dos
+assuntos anteriores. O insertion sort tem recorrência `T(n) = T(n-1) + n`, que
+a árvore de recursão resolve em Θ(n²). O merge sort tem `2 T(n/2) + n`, caso 2
+do teorema mestre, Θ(n log n). O heapsort faz `n` descidas no heap, cada uma
+de O(log n). O quick sort fica em Θ(n log n) na média (CORMEN et al., 2024,
+cap. 4).
+
+O segundo passo é medir em dois tamanhos, um o dobro do outro, e olhar a
+razão entre as medidas. Ela confirma a classe. Na classe n², dobrar `n`
+multiplica o custo por 4, porque `(2n)² = 4n²`. Na classe n log n, multiplica
+por pouco mais de 2: o fator 2 vem do `n`, e o log também sobe um pouco
+(FEOFILOFF, 2009). Se você esperava 2 e mediu 4, a classe não é a que você
+pensava.
+
+O terceiro passo é extrapolar. Para ir de um tamanho `n` medido a um tamanho
+`N` maior, multiplique a medida por `(N/n)²` na classe n², ou por
+`(N log N)/(n log n)` na classe n log n (ZIVIANI, 2010, cap. 1). De 16 mil
+para 1 milhão, `N/n` é 62,5. Na classe n², isso multiplica o custo por cerca
+de 3.900; na classe n log n, por cerca de 89. É a diferença entre alguns
+segundos e algumas horas. O quarto passo, quando dá, é rodar o tamanho grande
+e conferir a previsão.
+
+Há duas réguas para medir. A **contagem de comparações** dá o mesmo número em
+qualquer computador, porque depende só do algoritmo e da entrada. O **tempo**
+varia de máquina para máquina e de execução para execução (TENENBAUM;
+LANGSAM; AUGENSTEIN, 1995, cap. 6). O exemplo usa as duas: as quatro
+ordenações ficam num TAD, e toda comparação passa por uma função escondida no
+`.c` que conta as chamadas.
+
+Para o tempo, `<time.h>` oferece `clock()`, que devolve quantos tiques de
+processador o programa já gastou. A constante `CLOCKS_PER_SEC` diz quantos
+tiques cabem num segundo, e no Linux vale 1.000.000. Os dois são inteiros, e
+isso pega muita gente: `(clock() - ini) / CLOCKS_PER_SEC` é divisão inteira e
+dá **0** para qualquer trecho abaixo de um segundo. Por isso o código põe
+`1000.0 *` na frente, que força a conta em `double` e já converte para
+milissegundos (CPPREFERENCE, s.d.). O exemplo compila sem otimização e com
+AddressSanitizer, o verificador de memória do gcc: os tempos saem maiores, mas
+as **razões** entre eles não mudam.
 
 > [!WARNING]
 > Na classe n log n, dobrar `n` **não** dá ×2 exato: de 8 mil para 16 mil, é

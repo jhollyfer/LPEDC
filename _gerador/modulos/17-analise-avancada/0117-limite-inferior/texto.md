@@ -1,21 +1,56 @@
 ## 0117 · Limite inferior da ordenação
 
-- **Limite inferior**: uma afirmação sobre o **problema**, não sobre um
-  algoritmo. Diz que nenhum método resolve com menos que tanto
-  (SZWARCFITER; MARKENZON, 2010).
-- **Ordenação por comparação**: só aprende a ordem perguntando "x > y?". Vale
-  para o módulo 13, o heapsort e o `qsort`, que só conhece a ordem pelas
-  respostas da `compara` (CORMEN et al., 2024, cap. 8).
-- **Árvore de decisão**: cada nó interno é uma pergunta, cada aresta uma
-  resposta e cada folha uma ordem final. O pior caso é a **altura**
-  (CORMEN et al., 2024, cap. 8).
-- **O argumento**: há `n!` ordens e cada uma precisa da sua folha. Com 2
-  respostas por pergunta, altura `h` dá no máximo `2^h` folhas. Logo
-  `2^h ≥ n!`, isto é, **`h ≥ log₂(n!)`** (LINTZMAYER; MOTA, 2023).
-- **Ω(n log n)**: `log₂(n!)` cresce como `n log₂ n`. O **Ω** (ômega) é o piso,
-  o contrário do teto `O` (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
-- **Assintoticamente ótimo**: merge sort e heapsort fazem O(n log n) e
-  alcançam o limite (CORMEN et al., 2024, cap. 8).
+Até aqui, toda análise media **um algoritmo**: o merge sort faz Θ(n log n), o
+insertion sort faz Θ(n²). Agora a pergunta muda de lado e passa a ser sobre o
+**problema**. Existe algum jeito de ordenar com menos trabalho do que o merge
+sort, ou ele já é o melhor possível? Para responder, você precisa de um
+argumento que valha para todo algoritmo, inclusive os que ninguém inventou
+ainda.
+
+Esse tipo de resposta se chama **limite inferior**: uma afirmação de que
+nenhum método resolve o problema gastando menos do que certa quantidade
+(SZWARCFITER; MARKENZON, 2010). Um limite superior se prova mostrando um
+algoritmo. Um limite inferior exige mostrar que todos os algoritmos possíveis
+gastam pelo menos aquilo.
+
+O argumento precisa de uma regra do jogo. Imagine três encomendas nos
+Correios e uma balança de dois pratos, que só diz qual lado pesa mais. Você
+não pode ler o peso; só pode comparar duas encomendas por vez. Os algoritmos
+que funcionam assim formam a **ordenação por comparação**: eles só aprendem a
+ordem dos elementos perguntando "x é maior que y?" (CORMEN et al., 2024,
+cap. 8). Todos os do módulo 13 são assim, o heapsort também, e o `qsort` da
+biblioteca idem: ele recebe o vetor como `void *` e só fica sabendo da ordem
+pelas respostas da função `compara`.
+
+Para enxergar todas as execuções de um algoritmo desses de uma vez, use a
+**árvore de decisão**. Cada nó interno é uma pergunta, como "A pesa mais que
+B?". Cada aresta é uma resposta, sim ou não. Cada folha é uma ordem final dos
+elementos. Rodar o algoritmo numa entrada é descer da raiz até uma folha,
+seguindo as respostas. O número de perguntas no pior caso é o caminho mais
+longo da raiz até uma folha, a **altura** da árvore (CORMEN et al., 2024,
+cap. 8).
+
+Agora o argumento, em três passos. Com `n` elementos distintos, há `n!`
+ordens possíveis, e cada uma precisa de uma folha só dela: se duas ordens
+diferentes caíssem na mesma folha, o algoritmo daria a mesma resposta para as
+duas, e uma delas sairia errada. Cada pergunta tem 2 respostas, então uma
+árvore de altura `h` tem no máximo `2^h` folhas. Juntando, `2^h ≥ n!`, isto é,
+**`h ≥ log₂(n!)`** (LINTZMAYER; MOTA, 2023). Com 3 encomendas há `3! = 6`
+ordens; altura 2 só comporta 4 folhas, então nenhum método garante a ordem com
+menos de 3 pesagens.
+
+Falta ver quanto vale `log₂(n!)`. O fatorial é o produto de `n` números, e
+metade deles é pelo menos `n/2`. Por isso `n!` passa de `(n/2)^(n/2)`, e
+`log₂(n!)` cresce no mesmo ritmo de `n log₂ n`. Toda ordenação por comparação
+faz **Ω(n log n)** comparações no pior caso. O **Ω** (ômega) é o piso, o
+oposto do teto `O`: diz que o custo não fica abaixo daquele ritmo (TENENBAUM;
+LANGSAM; AUGENSTEIN, 1995, cap. 6). Para `n = 1000`, alguma entrada obriga
+qualquer implementação do `qsort` a chamar a `compara` mais de 8.530 vezes.
+
+O merge sort e o heapsort fazem O(n log n) comparações no pior caso e
+encostam nesse piso. Algoritmos assim se chamam **assintoticamente ótimos**:
+fora constantes, ninguém que só compara faz melhor (CORMEN et al., 2024,
+cap. 8). A tabela compara o limite com o que o merge sort gasta:
 
 | n | n! | limite ⌈log₂ n!⌉ | merge sort (pior caso) |
 | --- | --- | --- | --- |

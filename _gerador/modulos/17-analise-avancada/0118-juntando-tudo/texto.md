@@ -1,20 +1,49 @@
 ## 0118 · Juntando tudo
 
-- **Prever antes de rodar**: conhecida a classe de custo, uma medida num
-  tamanho pequeno estima o tamanho grande (ZIVIANI, 2010, cap. 1).
-- **Conhecer a classe**: insertion sort, `T(n) = T(n-1) + n`, Θ(n²); merge
-  sort, `2 T(n/2) + n`, Θ(n log n) pelo teorema mestre; heapsort, `n` descidas
-  de O(log n); quick sort, Θ(n log n) em média (CORMEN et al., 2024, cap. 4).
-- **Teste da razão**: meça em `n` e `2n`. Dobrar multiplica o custo por 4 na
-  classe n² e por pouco mais de 2 na classe n log n (FEOFILOFF, 2009).
-- **Extrapolar**: de `n` para `N`, multiplique por `(N/n)²` na classe n², ou
-  por `(N log N)/(n log n)` na classe n log n (ZIVIANI, 2010, cap. 1).
-- **Duas réguas**: a **contagem de comparações**, igual em qualquer
-  computador, e o **tempo**, que varia entre máquinas
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).
-- **`clock()`**: devolve tiques de processador; `CLOCKS_PER_SEC` diz quantos
-  cabem num segundo. Os dois são inteiros, por isso o `1000.0 *` na frente da
-  divisão (CPPREFERENCE, s.d.).
+O relatório de uma loja virtual vai ordenar 1 milhão de pedidos, e o
+programador só testou com 16 mil. Rodar para ver pode levar meia hora, ou
+nunca terminar. A análise do módulo serve exatamente para isso: **prever**
+antes de rodar. Conhecida a classe de custo de um algoritmo, uma medida num
+tamanho pequeno estima o tamanho grande (ZIVIANI, 2010, cap. 1).
+
+O primeiro passo é conhecer a classe de cada candidato, com as ferramentas dos
+assuntos anteriores. O insertion sort tem recorrência `T(n) = T(n-1) + n`, que
+a árvore de recursão resolve em Θ(n²). O merge sort tem `2 T(n/2) + n`, caso 2
+do teorema mestre, Θ(n log n). O heapsort faz `n` descidas no heap, cada uma
+de O(log n). O quick sort fica em Θ(n log n) na média (CORMEN et al., 2024,
+cap. 4).
+
+O segundo passo é medir em dois tamanhos, um o dobro do outro, e olhar a
+razão entre as medidas. Ela confirma a classe. Na classe n², dobrar `n`
+multiplica o custo por 4, porque `(2n)² = 4n²`. Na classe n log n, multiplica
+por pouco mais de 2: o fator 2 vem do `n`, e o log também sobe um pouco
+(FEOFILOFF, 2009). Se você esperava 2 e mediu 4, a classe não é a que você
+pensava.
+
+O terceiro passo é extrapolar. Para ir de um tamanho `n` medido a um tamanho
+`N` maior, multiplique a medida por `(N/n)²` na classe n², ou por
+`(N log N)/(n log n)` na classe n log n (ZIVIANI, 2010, cap. 1). De 16 mil
+para 1 milhão, `N/n` é 62,5. Na classe n², isso multiplica o custo por cerca
+de 3.900; na classe n log n, por cerca de 89. É a diferença entre alguns
+segundos e algumas horas. O quarto passo, quando dá, é rodar o tamanho grande
+e conferir a previsão.
+
+Há duas réguas para medir. A **contagem de comparações** dá o mesmo número em
+qualquer computador, porque depende só do algoritmo e da entrada. O **tempo**
+varia de máquina para máquina e de execução para execução (TENENBAUM;
+LANGSAM; AUGENSTEIN, 1995, cap. 6). O exemplo usa as duas: as quatro
+ordenações ficam num TAD, e toda comparação passa por uma função escondida no
+`.c` que conta as chamadas.
+
+Para o tempo, `<time.h>` oferece `clock()`, que devolve quantos tiques de
+processador o programa já gastou. A constante `CLOCKS_PER_SEC` diz quantos
+tiques cabem num segundo, e no Linux vale 1.000.000. Os dois são inteiros, e
+isso pega muita gente: `(clock() - ini) / CLOCKS_PER_SEC` é divisão inteira e
+dá **0** para qualquer trecho abaixo de um segundo. Por isso o código põe
+`1000.0 *` na frente, que força a conta em `double` e já converte para
+milissegundos (CPPREFERENCE, s.d.). O exemplo compila sem otimização e com
+AddressSanitizer, o verificador de memória do gcc: os tempos saem maiores, mas
+as **razões** entre eles não mudam.
 
 > [!WARNING]
 > Na classe n log n, dobrar `n` **não** dá ×2 exato: de 8 mil para 16 mil, é
