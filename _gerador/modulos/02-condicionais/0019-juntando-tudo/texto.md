@@ -1,11 +1,16 @@
 ## 0019 · Juntando tudo: a conta de luz
 
-A conta de luz do módulo 01 voltou, agora com decisões. O valor depende do
-consumo, da **bandeira** do mês (verde, amarela ou vermelha), da **tarifa
-social**, de uma taxa de iluminação que muda com o consumo, e um carimbo diz
-se o consumo foi baixo, médio ou alto.
-
-Cada decisão pede uma ferramenta do módulo:
+- **Escolher a ferramenta**: valores exatos pedem `switch`; duas condições
+  juntas, `if` com `&&`; um valor entre dois, ternário; faixas, `else if`
+  (DEITEL; DEITEL, 2011, cap. 4).
+- **Validar a entrada**: o `scanf` devolve quantos valores leu; com "abc" no
+  lugar de um número, devolve 0. Confira antes de usar
+  (BACKES, 2013, cap. 2).
+- **Cláusula de guarda**: trate o caso ruim primeiro, avise e saia com
+  `return 1` (o código de erro que `echo $?` mostra). O resto fica reto, sem
+  um `else` gigante.
+- **Tarifas simplificadas**: R$ 0,80 por kWh; bandeira amarela com R$ 0,02 a
+  mais por kWh e vermelha com R$ 0,05; desconto social de 40%.
 
 | Decisão | Ferramenta | Por quê |
 | --- | --- | --- |
@@ -15,22 +20,17 @@ Cada decisão pede uma ferramenta do módulo:
 | consumo baixo, médio ou alto? | `else if` | faixas, testadas em ordem |
 | a leitura deu certo e o consumo não é negativo? | `if` com `\|\|` | barra a entrada ruim logo no começo |
 
-A última linha cuida da entrada: quem lê do teclado precisa desconfiar de
-quem digita. O `scanf` devolve **quantos valores leu** (0006): se pediu um
-número e veio "abc", devolve 0. A primeira decisão do programa é essa: com
-entrada inválida, avisa e sai com `return 1` (o código de erro que o terminal
-enxerga; `echo $?` o mostra). Esse padrão é a **cláusula de guarda**: trate o
-caso ruim primeiro e o resto fica reto, sem um `else` gigante.
+> [!WARNING]
+> **A ordem dos passos é parte da regra.** O desconto vale sobre energia e
+> bandeira, não sobre a iluminação. Teste um caso que passe por todos os
+> ramos: 150 kWh, verde, social dá 120 + 0 - 48 + 15 = **R$ 87.00**.
 
-As tarifas são simplificadas: energia a R$ 0,80 por kWh, bandeira amarela com
-R$ 0,02 a mais por kWh, vermelha com R$ 0,05, desconto social de 40%.
+{{exemplo}}
 
-No exemplo, consumo de 230 kWh, bandeira amarela, sem tarifa social. Cada
-decisão do módulo entra uma vez, e o total sai no terminal:
+A conta de luz do módulo 01 volta com decisões. Com 230 kWh, bandeira amarela
+e sem tarifa social, cada decisão do módulo entra uma vez:
 
 {{ideia}}
-
-O programa lê os três dados; o comentário no fim mostra uma execução:
 
 ```c
 #include <stdbool.h>
@@ -116,17 +116,3 @@ A guarda tem uma saída direta para o Fim. Depois dela, o caminho é quase reto,
 com um único desvio opcional para o desconto:
 
 {{fluxograma}}
-
-> [!WARNING]
-> **A ordem dos passos é parte da regra.** O desconto social vale sobre a
-> energia **e** a bandeira, não sobre a iluminação. Somar a iluminação antes
-> dos 40% muda a conta sem erro algum. Faça um **teste de mesa** com um caso
-> que passe por todos os ramos (150 kWh, verde, com tarifa social:
-> 120 + 0 - 48 + 15 = **R$ 87.00**) e confira com a saída.
-
-> [!NOTE]
-> **Pergunta para você:** com 400 kWh, bandeira vermelha e tarifa social,
-> quanto dá a conta? O desconto entra? Faça a conta no papel e depois rode o
-> código acima com essa entrada.
-
-{{pratique}}

@@ -1,17 +1,20 @@
 ## 0013 · Lógicos: E, OU, NÃO
 
-Bilheteria do cinema. Paga meia quem é estudante **ou** tem 60 anos ou mais,
-**e** a sessão **não** é pré-estreia. São três respostas de sim ou não,
-ligadas por E, OU e NÃO.
-
-Os **operadores lógicos** juntam comparações:
-
-- `a && b` (**E**): verdade só se as duas forem verdade;
-- `a || b` (**OU**): verdade se pelo menos uma for verdade;
-- `!a` (**NÃO**): inverte. `!1` vale 0 e `!0` vale 1.
-
-A **tabela-verdade** mostra todas as combinações. Como no 0012, o resultado é
-um `int` 0 ou 1:
+- **Operadores lógicos**: `a && b` (**E**) é verdade só se as duas forem;
+  `a || b` (**OU**) é verdade se pelo menos uma for; `!a` (**NÃO**) inverte. O
+  resultado é um `int` 0 ou 1 (DEITEL; DEITEL, 2011, cap. 4).
+- **Intervalo**: 18 ≤ idade ≤ 65 vira `idade >= 18 && idade <= 65`. Escrever
+  `18 <= idade <= 65` compila, mas compara o 0 ou 1 da primeira parte com 65
+  (BACKES, 2013, cap. 3).
+- **Precedência**, da mais forte para a mais fraca: `!`, aritméticos,
+  relacionais, igualdade, `&&` e por último `||`. `a || b && c` é
+  `a || (b && c)` (KERNIGHAN; RITCHIE, 1988, cap. 2).
+- **Curto-circuito**: o C avalia da esquerda para a direita e **para assim que
+  sabe a resposta**. Em `a && b`, se `a` é falso, `b` nem é calculado; em
+  `a || b`, se `a` é verdade, `b` é pulado. Assim,
+  `n != 0 && total / n > 3` nunca divide por zero (DEITEL; DEITEL, 2011, cap. 4).
+- **De Morgan**: o NÃO entra nos parênteses e troca E por OU. `!(a && b)` é
+  `!a || !b`, e `!(a || b)` é `!a && !b` (DEITEL; DEITEL, 2011, cap. 4).
 
 | `a` | `b` | `a && b` | `a \|\| b` | `!a` |
 | --- | --- | --- | --- | --- |
@@ -20,33 +23,19 @@ um `int` 0 ou 1:
 | 1 | 0 | 0 | 1 | 0 |
 | 1 | 1 | 1 | 1 | 0 |
 
-Na escola, 18 ≤ idade ≤ 65. No C, intervalo é um E de duas comparações:
-`idade >= 18 && idade <= 65`. `18 <= idade <= 65` compila, mas compara o 0 ou
-1 da primeira parte com 65 (veja o 0012).
+> [!WARNING]
+> **`&` não é `&&`.** O `&` é o E **bit a bit** (0065): sem curto-circuito e
+> com precedência **menor** que a do `==`. `if (x & 1 == 0)` vira
+> `x & (1 == 0)`, sempre 0. O `-Wall` avisa: "suggest parentheses".
 
-**Precedência**, da mais forte para a mais fraca: `!` (e o menos unário), os
-aritméticos, os relacionais (`<` `>` `<=` `>=`), a igualdade (`==` `!=`), o
-`&&` e por último o `||`. Por isso `x > 0 && x < 10` dispensa parênteses, e
-`a || b && c` é `a || (b && c)`. Na dúvida, use parênteses: mostram a
-intenção.
+{{exemplo}}
 
-No **curto-circuito**, o C avalia da esquerda para a direita e **para assim
-que sabe a resposta**, garantido pelo padrão. Em `a && b`, se `a` é falso, o
-`b` nem é calculado. Em `a || b`, se `a` é verdade, o `b` é pulado. Isso
-protege contas perigosas: `convidados != 0 && fatias / convidados > 3` nunca
-divide por zero. Ponha à esquerda o teste mais barato ou o que mais dá falso.
-
-As **leis de De Morgan** negam uma condição composta: o NÃO entra nos
-parênteses e troca E por OU. `!(a && b)` é `!a || !b`, e `!(a || b)` é
-`!a && !b`. "Não é (estudante ou idoso)" é "não é estudante e não é idoso".
-
-No exemplo, uma pessoa de 67 anos, não estudante, numa sessão comum. O OU dá
-verdade pela idade, o NÃO da pré-estreia dá verdade, e o E fecha com
+No cinema, paga meia quem é estudante **ou** tem 60 anos ou mais, **e** a
+sessão **não** é pré-estreia. Para uma pessoa de 67 anos, não estudante, numa
+sessão comum, o OU dá verdade pela idade, o NÃO dá verdade e o E fecha com
 meia-entrada:
 
 {{ideia}}
-
-A bilheteria em C:
 
 ```c
 #include <stdbool.h>
@@ -69,22 +58,8 @@ int main(void) {
 // Ingresso: R$ 20.00
 ```
 
-O C avalia como no fluxograma, uma pergunta de cada vez. Como `estudante` é
-falso, olha a idade; se fosse verdade, pularia direto para a pré-estreia. É o
-curto-circuito desenhado.
+O C pergunta uma coisa de cada vez: como `estudante` é falso, olha a idade; se
+fosse verdade, pularia direto para a pré-estreia. É o curto-circuito
+desenhado:
 
 {{fluxograma}}
-
-> [!WARNING]
-> **`&` não é `&&`.** O `&` simples é o E **bit a bit** (assunto 0065): não tem
-> curto-circuito e sua precedência é **menor** que a do `==`. Em
-> `if (x & 1 == 0)`, o C calcula `x & (1 == 0)`, ou seja `x & 0`, **sempre
-> 0**. O certo é `(x & 1) == 0` ou, mais claro, `x % 2 == 0`. O mesmo vale
-> para `|` e `||`. O `-Wall` avisa: "suggest parentheses".
-
-> [!NOTE]
-> **Pergunta para você:** se a pessoa fosse estudante, a comparação
-> `idade >= 60` seria feita? E se a sessão fosse pré-estreia, a idade mudaria
-> alguma coisa? Siga o fluxograma e depois mude os valores no código acima.
-
-{{pratique}}

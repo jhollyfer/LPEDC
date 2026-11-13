@@ -1,21 +1,9 @@
 # Módulo 02 · Decisões
 
-Até aqui, todo programa descia de cima para baixo, sempre pelo mesmo caminho.
-Agora ele **escolhe**: cobrar ou não o frete, liberar ou barrar a catraca,
-achar a faixa da multa. É a segunda das três peças de qualquer algoritmo.
-
-A sintaxe é curta: `if`, `else`, `switch` e o ternário. O importante é o que
-está por baixo: no C, a verdade é um **número**, 0 é falso e todo o resto é
-verdade. Daí vêm pegadinhas como `=` no lugar de `==`, que compila, roda e
-estraga a variável em silêncio.
-
-Os focos do módulo são escrever decisões claras e **desconfiar** das que
-parecem certas. Os avisos do compilador ajudam: com as flags de estudo, quase
-toda pegadinha deste módulo dispara um.
-
-Progressão: o módulo usa do 01 as variáveis, o `scanf` e seu retorno, a
-aritmética (em especial o `%`) e o `math.h`. Ele prepara o 03, em que uma
-decisão passa a controlar uma repetição.
+A segunda peça de todo algoritmo: o programa **escolhe** um caminho. O módulo
+cobre relacionais e lógicos, `if`, `if/else`, `else if`, o ternário e o
+`switch`, com as pegadinhas que compilam e erram em silêncio. Depende do
+módulo 01 (variáveis, `scanf` e seu retorno, `%`, `math.h`) e prepara o 03.
 
 ## O que você vai aprender
 
@@ -33,21 +21,19 @@ decisão passa a controlar uma repetição.
 Nos fluxogramas, o caminho verde mostra por onde o exemplo passou.
 
 > [!TIP]
-> Teste **cada caminho** e, principalmente, os **valores de fronteira**: se a
-> regra é "a partir de R$ 200", teste 199,99, 200 e 200,01. A maioria dos
-> erros de decisão é a troca de `>` por `>=`.
+> Teste **cada caminho** e os **valores de fronteira**: se a regra é "a partir
+> de R$ 200", teste 199,99, 200 e 200,01. A maioria dos erros de decisão é a
+> troca de `>` por `>=`.
 
-Você precisa conhecer o módulo 01: variáveis, `printf`, `scanf` (e seu
-retorno), operadores aritméticos (em especial o `%`) e `math.h`. Os exercícios
-com teclado aceitam entrada por pipe, o que facilita testar vários casos:
+Os exercícios com teclado aceitam entrada por pipe, o que facilita testar
+vários casos:
 
 ```bash
 gcc ~/LPEDC/material/A028.c -o ~/LPEDC/material/A028 && printf '12.90 8.50\n' | ~/LPEDC/material/A028
 ```
 
-Os exercícios "ache o erro" trazem o código quebrado **de propósito** e mostram
-avisos ao compilar; o enunciado diz quando é o caso. Nos demais, vale a regra:
-**zero avisos**.
+Os exercícios "ache o erro" trazem código quebrado **de propósito** e mostram
+avisos; o enunciado avisa quando é o caso. Nos demais, **zero avisos**.
 
 {{indice}}
 

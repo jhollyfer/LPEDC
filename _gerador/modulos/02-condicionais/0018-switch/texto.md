@@ -1,11 +1,8 @@
 ## 0018 · switch, case, break e fall-through
 
-Na lanchonete, o cardápio tem número: 1 é X-Burger, 2 é X-Salada, 3 é Misto
-quente. Você diz "um 2", e o atendente só procura **qual número é igual** ao
-que você falou, sem testar faixas.
-
-Para "qual destes valores exatos?", o C tem o **`switch`**, a **seleção
-múltipla** (nome usado pelo Deitel e pela prova):
+- **`switch`**: a **seleção múltipla**. Calcula a expressão uma vez e **pula
+  direto** para o `case` de mesmo valor; o **`default`** pega o que não casou
+  (DEITEL; DEITEL, 2011, cap. 4).
 
 ```c
 switch (codigo) {
@@ -20,34 +17,30 @@ default:
 }
 ```
 
-O `switch` calcula a expressão uma vez e **pula direto** para o `case` de mesmo
-valor. O **`default`** pega o que não casou com nenhum `case` (opcional, mas
-vale tratar o inválido).
+- **Expressão inteira**: `int`, `char` ou parecido. `double` e texto não
+  compilam (DEITEL; DEITEL, 2011, cap. 4).
+- **`case` constante**: valor conhecido na compilação (`case 2:`,
+  `case 'S':`); `case x:` e `case > 10:` não valem, nem dois `case` iguais
+  (KERNIGHAN; RITCHIE, 1988, cap. 3).
+- **Fall-through**: o `case` é só um **rótulo** de entrada. Depois de entrar,
+  o C executa **tudo para baixo**, atravessando os outros `case`, até um
+  **`break`** ou o fim do `switch` (BACKES, 2013, cap. 4).
+- **Fall-through de propósito**: `case` empilhados dividem o mesmo trecho
+  (`case 'S': case 's':`). Com código no meio, avise com `// fall through`,
+  que o gcc reconhece (GNU, s.d.).
 
-As regras são mais rígidas que as do `if`:
+> [!WARNING]
+> **Esquecer o `break`.** Sem o do `case 2`, pedir X-Salada mostra também
+> "Misto quente" e o preço vira **9.00**. O compilador não vê erro; o
+> `-Wextra` avisa ("this statement may fall through").
 
-- a expressão tem que ser **inteira**: `int`, `char` (que é número) ou
-  parecido. `double` e string (`switch (nome)` com texto) não compilam;
-- cada `case` leva uma **constante** conhecida na compilação (`case 2:`,
-  `case 'S':`); `case x:` e `case > 10:` não valem;
-- dois `case` não podem ter o mesmo valor.
+{{exemplo}}
 
-O `case` é só um **rótulo**, um ponto de entrada. Depois de entrar, o C executa
-**tudo para baixo**, atravessando os outros `case`, até um **`break`** ou o
-fim do `switch`. Isso é o **fall-through** ("cair através"); o `break` manda
-sair do `switch`.
-
-Às vezes o fall-through é desejado: `case` empilhados sem código entre eles
-dividem o mesmo trecho (`case 'S': case 's':` aceita maiúscula e minúscula).
-Se for de propósito e houver código no meio, avise com o comentário
-`// fall through` (o `gcc` o reconhece).
-
-No pedido do desenho, o código 2 entra, o `switch` pula direto para o
-`case 2`, sem testar o 1 nem o 3, e o `break` sai antes do `case 3`:
+Na lanchonete, 1 é X-Burger, 2 é X-Salada, 3 é Misto quente. O código 2
+entra, o `switch` pula direto para o `case 2`, sem testar o 1 nem o 3, e o
+`break` sai antes do `case 3`:
 
 {{ideia}}
-
-O pedido em C:
 
 ```c
 #include <stdio.h>
@@ -85,21 +78,3 @@ O losango do `switch` tem **várias** saídas, uma por `case` e uma para o
 `default`; as setas levam o valor no lugar de Sim e Não:
 
 {{fluxograma}}
-
-> [!WARNING]
-> **Esquecer o `break`.** Sem o `break` do `case 2`, pedir X-Salada mostra
-> "X-Salada", "Misto quente" e o preço fica **9.00**: o `case 3` também rodou
-> e sobrescreveu o preço. O compilador não vê erro. O `-Wextra` ajuda
-> (`-Wimplicit-fallthrough`: "this statement may fall through"). Escreva o
-> `break` logo depois do `case`, antes do miolo.
-
-> [!TIP]
-> Como os `case` são constantes, com valores próximos (1, 2, 3...) o
-> compilador monta uma **tabela de saltos** e vai direto ao `case` em um passo
-> só, mais rápido que uma escada de `else if`.
-
-> [!NOTE]
-> **Pergunta para você:** com `codigo = 7`, o que aparece? E o total? Pense
-> no valor inicial de `preco` antes de mudar o código acima.
-
-{{pratique}}
