@@ -69,23 +69,58 @@ sudo apt install gdb        # Debian / Ubuntu
 
 ### Conceito
 
-- **Memória**: uma fileira de gavetas de **1 byte**, cada uma com um número, o
-  **endereço** (FEOFILOFF, 2009, ap. D).
-- **Endereço da variável**: o da primeira gaveta que ela ocupa. Cada tipo
-  ocupa um número de gavetas (`char` 1, `int` 4, `double` 8) (BACKES, 2013,
-  cap. 10).
-- **Nome e endereço**: você usa o nome; o processador só conhece endereços, e
-  o compilador troca um pelo outro (BACKES, 2013, cap. 10).
-- **`&`** (endereço de): `&idade` pergunta "em que gaveta você mora?". É o `&`
-  do `scanf`: ele precisa saber **onde** guardar (DEITEL; DEITEL, 2011,
-  cap. 7).
-- **`%p`**: mostra um endereço em hexadecimal; espera um `void *`, então
-  escreva `(void *)&idade` (assunto 0051) (DEITEL; DEITEL, 2011, cap. 7).
+Até aqui você guardou valores em variáveis e as chamou pelo nome. Funcionou
+porque o compilador cuidou de um detalhe por você: decidir em que lugar da
+memória cada variável fica. Para entender ponteiros, passagem por referência
+e memória dinâmica, você precisa enxergar esse detalhe. Este assunto abre o
+módulo mostrando o que é a memória e como se chega a um lugar dentro dela.
+
+Pense no guarda-volumes do mercado. Você entrega a mochila e recebe a ficha
+47. Não precisa saber em que prateleira ela ficou: com o número, o
+funcionário vai direto à gaveta certa. A **memória** principal do computador,
+a RAM, funciona assim. Ela é uma fileira enorme de gavetas de **1 byte**, e
+cada gaveta tem um número, o seu **endereço** (FEOFILOFF, 2009, ap. D).
+
+Quando você declara `int idade = 30;`, o compilador separa 4 gavetas
+seguidas para `idade` e guarda o 30 nelas. O **endereço da variável** é o
+número da primeira dessas gavetas. Cada tipo ocupa uma quantidade diferente:
+o `char` usa 1 gaveta, o `int` usa 4 e o `double` usa 8, como o `sizeof` do
+assunto 0002 mostra. Seja qual for o tamanho, o endereço da variável é sempre
+o da primeira gaveta (BACKES, 2013, cap. 10).
+
+Você pensa em nomes, como `idade` e `preco`. O processador não conhece nomes;
+ele só sabe ler e escrever em endereços. Quem faz a ponte é o compilador:
+ao traduzir o programa, ele troca cada nome pelo endereço correspondente
+(BACKES, 2013, cap. 10). Os nomes existem para você, e os endereços para a
+máquina.
+
+O C deixa você perguntar o endereço de uma variável com o operador **`&`**,
+lido como "endereço de". `&idade` é a pergunta "em que gaveta você mora?".
+Você usa esse operador desde o assunto 0006, no `scanf("%d", &idade)`: o
+`scanf` precisa saber **onde** guardar o número que leu, e o `&` entrega esse
+lugar (DEITEL; DEITEL, 2011, cap. 7). O assunto 0046 conta essa história
+inteira.
+
+Para ver um endereço na tela, o `printf` tem o **`%p`**, que mostra o número
+em hexadecimal, a base 16, como `0x7ffd5e8c`. O `%p` espera um valor do tipo
+`void *`, então a forma correta é `printf("%p\n", (void *)&idade);`. O
+assunto 0051 explica esse tipo (DEITEL; DEITEL, 2011, cap. 7).
+
+Se você rodar o mesmo programa duas vezes, os endereços mudam. Não é erro: o
+sistema sorteia em que região o programa vai morar a cada execução, um
+recurso de segurança chamado **ASLR**. Quem tenta explorar uma falha não sabe
+de antemão onde as coisas estão. Por isso, não decore endereços nem conte com
+eles de uma execução para outra.
+
+As variáveis locais, como `idade` dentro do `main`, ficam na **pilha** que
+você viu no assunto 0031. O módulo 07 mostra o mapa completo da memória de um
+programa, com a pilha e as outras regiões.
 
 > [!WARNING]
-> Nunca mostre endereço com `%d` ou `%x`: são 8 bytes, e o `%d` lê 4. Use `%p`
-> com `(void *)`. E não deduza nada da ordem de variáveis soltas: só num vetor
-> a ordem é garantida.
+> Nunca mostre endereço com `%d` ou `%x`: o endereço tem 8 bytes em 64 bits,
+> e o `%d` lê só 4, então o número sai cortado ou negativo. Use `%p` com
+> `(void *)`. E não deduza nada da ordem de variáveis soltas: o compilador as
+> arruma como quiser. Só num vetor a ordem é garantida.
 
 ### Exemplos de uso
 
@@ -285,25 +320,63 @@ sizeof v = 12, a + b + c = 12
 
 ### Conceito
 
-- **Ponteiro**: variável que guarda um **endereço**. Ele também mora numa
-  gaveta, mas guarda o número de **outra**. Ziviani e a tradução do K&R dizem
-  **apontador** (ZIVIANI, 2010).
-- **Declaração**: `int *cartao;` lê-se "ponteiro para int". O tipo diz o que
-  mora lá e quantos bytes ler (DEITEL; DEITEL, 2011, cap. 7).
-- **`&` e `*`**: `&x` dá o endereço; `*p` vai ao endereço guardado e lê ou
-  escreve lá, que é **desreferenciar** (KERNIGHAN; RITCHIE, 1989, cap. 5).
-- **Três papéis do `*`**: multiplicação (`a * b`), declaração (`int *p`) e
-  desreferência (`*p = 5`) (BACKES, 2013, cap. 10).
-- **`NULL`**: endereço que quer dizer "lugar nenhum". Teste
-  `if (p != NULL)` antes de usar; desreferenciá-lo derruba o programa
-  (*segmentation fault*) (DEITEL; DEITEL, 2011, cap. 7).
-- **Tamanho**: todo ponteiro de dado tem 8 bytes em 64 bits; o tipo muda só a
-  leitura (BACKES, 2013, cap. 10).
+O assunto 0044 mostrou que toda variável mora num endereço e que o `&`
+descobre esse número. Falta guardá-lo. Se o endereço é um número, ele pode
+ficar numa variável, e com ele na mão você consegue chegar à variável
+original de qualquer parte do programa, mesmo sem saber o nome dela.
+
+Pense no entregador do app de comida. Ele não carrega a sua casa no celular;
+carrega o **endereço**. Com ele, chega à porta e entrega o pedido. Em C, a
+variável que faz o papel desse celular é o **ponteiro**: uma variável que
+guarda um endereço em vez de um valor comum. O ponteiro também mora numa
+gaveta e tem endereço próprio, mas o que ele guarda é o número de **outra**
+gaveta. Ziviani e a tradução do livro de Kernighan e Ritchie usam o nome
+**apontador**; é a mesma coisa (ZIVIANI, 2010).
+
+Na declaração, um `*` antes do nome indica que a variável é um ponteiro:
+`int *cartao;` lê-se "cartao é um ponteiro para int". O tipo antes do `*`
+diz **o que** mora no endereço apontado e, com isso, quantos bytes ler lá:
+4 para um `int`, 8 para um `double` (DEITEL; DEITEL, 2011, cap. 7).
+
+Dois operadores fazem todo o trabalho. O `&x`, que você já conhece, dá o
+endereço de `x`, e esse endereço vai para o ponteiro: `cartao = &pontos;`.
+O `*cartao` faz o caminho de volta: vai ao endereço guardado em `cartao` e
+mexe no que está lá. Essa operação se chama **desreferenciar** o ponteiro
+(KERNIGHAN; RITCHIE, 1989, cap. 5). Ler `*cartao` dá o valor de `pontos`;
+escrever `*cartao = 150;` muda `pontos`, sem que o nome `pontos` apareça na
+linha.
+
+```c
+int pontos = 120;
+int *cartao = &pontos;   // cartao guarda o endereço de pontos
+*cartao = *cartao + 30;  // vai até pontos e soma 30
+printf("%d\n", pontos);  // 150
+```
+
+O mesmo símbolo `*` tem três papéis, e só o contexto os separa. Entre dois
+valores, como em `a * b`, é a multiplicação. Numa declaração, como em
+`int *p`, diz que `p` é um ponteiro. Na frente de um ponteiro já declarado,
+como em `*p = 5`, é a desreferência (BACKES, 2013, cap. 10). Quando a leitura
+travar, pergunte em qual dos três casos você está.
+
+Às vezes o ponteiro ainda não tem para onde apontar. Para isso existe o
+**`NULL`**, um endereço especial que quer dizer "lugar nenhum". Na prática é
+o endereço 0, uma região que o sistema proíbe de propósito: desreferenciar
+`NULL` derruba o programa na hora, com o erro *segmentation fault*, em vez de
+estragar algum dado em silêncio. Antes de usar um ponteiro que pode estar
+vazio, teste `if (cartao != NULL)` (DEITEL; DEITEL, 2011, cap. 7).
+
+Um último detalhe ajuda a montar a imagem certa. Todo ponteiro para dado tem
+o mesmo tamanho, 8 bytes num computador de 64 bits, porque todos guardam a
+mesma coisa: um endereço. O tipo do ponteiro não muda o tamanho dele; muda a
+**leitura**. `*cartao` busca 4 bytes e os trata como `int` porque `cartao` é
+um `int *` (BACKES, 2013, cap. 10).
 
 > [!WARNING]
-> `int *p;` sem valor guarda **lixo**, e `*p = 10;` escreve numa gaveta
-> desconhecida. Inicialize com um endereço ou `NULL`. E em `int *a, b;` só `a`
-> é ponteiro.
+> `int *p;` sem valor guarda **lixo**, um endereço qualquer, e `*p = 10;`
+> escreve numa gaveta desconhecida: pode travar na hora ou corromper outra
+> variável e dar problema só depois. Inicialize com um endereço ou `NULL`. E
+> em `int *a, b;` só `a` é ponteiro; para dois, `int *a, *b;`.
 
 ### Exemplos de uso
 
@@ -511,26 +584,57 @@ p = q         a = 9, b = 8, *p = 8, *q = 8
 
 ### Conceito
 
-- **Só existe passagem por valor** no C: a função recebe uma cópia (assunto
-  0029) (DEITEL; DEITEL, 2011, cap. 7).
-- **Passagem por referência**: o C a simula passando o **endereço**. A cópia
-  do endereço aponta para a mesma gaveta, e `*a` é a própria variável de quem
-  chamou (KERNIGHAN; RITCHIE, 1989, cap. 5).
-- **Sintaxe**: a função recebe ponteiros (`void troca(int *a, int *b)`); quem
-  chama passa endereços (`troca(&arroz, &feijao)`) (BACKES, 2013, cap. 10).
-- **O `&` do `scanf`**: ele precisa escrever na variável, então pede o
-  endereço. `scanf("%s", nome)` vai sem `&` porque o nome do vetor já é
-  endereço (BACKES, 2013, cap. 10).
-- **Vários resultados**: o `return` devolve um valor só; para devolver mais,
-  a função escreve em ponteiros recebidos (o A092 racha a conta) (DEITEL;
-  DEITEL, 2011, cap. 7).
-- **`const int *p`**: a função só lê; o compilador recusa `*p = ...`. Struct
-  grande vai assim (DEITEL; DEITEL, 2011, cap. 7).
+No mercadinho, as etiquetas saíram trocadas: o arroz ficou a R$ 8 e o feijão
+a R$ 25. Você quer uma função `troca` que conserte isso, recebendo os dois
+preços e trocando um pelo outro. A versão óbvia, que recebe dois `int` e
+troca, compila e roda, mas os preços do `main` continuam errados. O motivo
+está no jeito como o C chama funções.
+
+No C, **todo argumento é passado por valor** (assunto 0029): a função recebe
+uma **cópia** do que você mandou (DEITEL; DEITEL, 2011, cap. 7). Uma chamada
+`troca_copias(arroz, feijao)` cria duas variáveis novas, `a` e `b`, com 8 e
+25. A função troca essas cópias e termina, e as cópias somem junto com o
+frame dela (assunto 0031). O `arroz` do `main` nem fica sabendo.
+
+A imagem é a de uma reforma. Se você entrega ao pintor uma foto da sua sala,
+ele pinta a foto e a parede continua igual. Se entrega o endereço da casa, ele
+vai até lá e pinta a parede de verdade. Em C, a saída é entregar o
+**endereço** em vez do valor. O endereço também chega como cópia, mas a
+cópia aponta para **a mesma gaveta**, e `*a` dentro da função é a própria
+variável de quem chamou. Esse arranjo se chama **passagem por referência**; o
+C não tem esse mecanismo pronto e o simula com ponteiros (KERNIGHAN; RITCHIE,
+1989, cap. 5).
+
+Na prática, a mudança aparece nos dois lados. A função declara ponteiros nos
+parâmetros, `void troca(int *a, int *b)`, e quem chama passa endereços,
+`troca(&arroz, &feijao)` (BACKES, 2013, cap. 10). Dentro da função, cada
+leitura e escrita no dado de fora passa pelo `*`: guarde `*a` numa auxiliar,
+copie `*b` para `*a` e a auxiliar para `*b`.
+
+Isso explica o `&` que você escreve no `scanf` desde o começo do curso.
+`scanf("%d", &total)` precisa **escrever** na variável, então pede o
+endereço dela. Sem o `&`, ele receberia uma cópia do lixo guardado em
+`total` e escreveria num endereço inventado. Já `scanf("%s", nome)` vai sem
+`&` porque o nome de um vetor já é o endereço do primeiro elemento (BACKES,
+2013, cap. 10); o assunto 0047 detalha essa conversão.
+
+O mesmo recurso resolve outro limite. O `return` devolve **um** valor só.
+Quando a função precisa entregar dois ou mais resultados, ela recebe
+ponteiros e escreve neles: cada ponteiro é uma caixa de saída que quem chamou
+preparou. O A092 racha a conta de um restaurante assim, devolvendo o valor de
+cada pessoa e a sobra (DEITEL; DEITEL, 2011, cap. 7).
+
+Passar um endereço custa 8 bytes, seja qual for o tamanho do dado apontado.
+Por isso, no módulo 08, uma struct grande vai para a função por ponteiro,
+mesmo quando a função só precisa lê-la. Nesse caso, marque o parâmetro como
+`const int *p`: a função pode ler `*p`, e o compilador recusa qualquer
+`*p = ...` lá dentro (DEITEL; DEITEL, 2011, cap. 7).
 
 > [!WARNING]
-> Esquecer o `&` na chamada manda o número 8 onde se espera um endereço, e o
-> programa cai. Esquecer o `*` na função (`a = b;`) troca só os ponteiros
-> locais. Quem mexe no dado de quem chamou é sempre `*a`.
+> Esquecer o `&` na chamada, `troca(arroz, feijao)`, manda o número 8 onde se
+> espera um endereço; o compilador avisa e, se rodar, o programa cai.
+> Esquecer o `*` na função (`a = b;`) troca só os ponteiros locais, que são
+> cópias. Quem mexe no dado de quem chamou é sempre `*a`.
 
 ### Exemplos de uso
 
@@ -755,25 +859,61 @@ gcc ~/LPEDC/material/E275.c -o ~/LPEDC/material/E275 -lm && ~/LPEDC/material/E27
 
 ### Conceito
 
-- **Decaimento**: numa expressão, o nome do vetor quase sempre **vira** o
-  endereço do primeiro elemento: `kwh` vale `&kwh[0]` (KERNIGHAN; RITCHIE,
-  1989, cap. 5).
-- **Aritmética de ponteiros**: `p + 1` é o **próximo elemento**, não o próximo
-  byte; o C multiplica pelo tamanho do tipo. `p++` avança um, `q - p` dá
-  quantos elementos há entre eles (DEITEL; DEITEL, 2011, cap. 7).
-- **`v[i]` é `*(v + i)`**: ande `i` elementos e pegue o que tem lá. Vale para
-  ponteiro: `p[2]` é `*(p + 2)`, contado de onde `p` aponta agora (DEITEL;
-  DEITEL, 2011, cap. 7).
-- **Vetor não é ponteiro**: `sizeof kwh` dá o vetor inteiro (20), `sizeof p`
-  dá 8, e `kwh++` não compila (BACKES, 2013, cap. 10).
-- **Matriz**: `m[i][j]` é `*(*(m + i) + j)`. Em `int m[3][4]`, `m + 1` anda uma
-  linha (16 bytes) e `m[0] + 1` anda 4 (BACKES, 2013, cap. 10).
-- **Um depois do último**: `kwh + 5` pode ser calculado e comparado, nunca
-  lido (KERNIGHAN; RITCHIE, 1989, cap. 5).
+Numa rua de loteamento, os números das casas sobem de 4 em 4: 1000, 1004,
+1008. "Três casas depois da 1000" é a 1012, não a 1003. Num vetor de `int`
+acontece o mesmo: as gavetas ficam coladas e cada item ocupa 4 bytes. Os
+ponteiros sabem disso e fazem a conta por você, e é essa conta que liga
+ponteiros e vetores.
+
+Comece pelo nome do vetor. Numa expressão, ele quase sempre **vira** o
+endereço do primeiro elemento: `kwh` vale `&kwh[0]`. Essa conversão se chama
+**decaimento**; diz-se que o vetor decai para ponteiro (KERNIGHAN; RITCHIE,
+1989, cap. 5). É por isso que você passa um vetor a uma função sem `&` e a
+função altera o original (assunto 0038): ela recebe esse endereço.
+
+Com um ponteiro dentro de um vetor, vale a **aritmética de ponteiros**. A
+regra principal: `p + 1` é o endereço do **próximo elemento**, e não do
+próximo byte. O C multiplica o 1 pelo tamanho do tipo apontado, 4 bytes num
+`int *` e 8 num `double *`. Daí saem as outras operações. `p++` avança um
+elemento e `p--` volta um. Se `p` e `q` apontam para o mesmo vetor, `q - p`
+dá **quantos elementos** há entre eles, e `p < q` diz qual vem antes (DEITEL;
+DEITEL, 2011, cap. 7). Comparar ponteiros de vetores diferentes não tem
+sentido.
+
+Juntando as peças, chega-se à regra central: **`v[i]` é exatamente
+`*(v + i)`**. Ande `i` elementos a partir do começo e pegue o que tem lá. Os
+colchetes são só um jeito mais curto de escrever essa conta, e por isso valem
+para ponteiro também: `p[2]` é `*(p + 2)`, contado de onde `p` aponta
+**agora**, e não do começo do vetor (DEITEL; DEITEL, 2011, cap. 7).
+
+```c
+int kwh[5] = {210, 185, 190, 240, 175};
+int *p = &kwh[1];               // p aponta para o 185
+printf("%d %d\n", p[0], p[2]);  // 185 240
+printf("%td\n", p - kwh);       // 1 (elementos, não bytes)
+```
+
+Mesmo com tanta semelhança, vetor **não é** ponteiro. `sizeof kwh` dá o
+tamanho do vetor inteiro (20 bytes), enquanto `sizeof p` dá 8, o tamanho de
+um endereço. E o nome do vetor é um endereço fixo: `kwh = outro;` e `kwh++`
+não compilam, enquanto `p++` é permitido (BACKES, 2013, cap. 10).
+
+Na matriz (assunto 0039), a regra vale em dois níveis: `m[i][j]` é
+`*(*(m + i) + j)`. O ponto que a prova adora é o tamanho do passo. Em
+`int m[3][4]`, cada elemento de `m` é uma linha inteira, então `m + 1` anda
+**16 bytes** (4 `int`). Já `m[0]` é a primeira linha, que decai para um
+`int *`, e `m[0] + 1` anda só 4 bytes (BACKES, 2013, cap. 10).
+
+Ao percorrer um vetor com ponteiro, o laço costuma parar em `kwh + 5`, o
+endereço **um depois do último**. O C garante que esse endereço pode ser
+calculado e comparado, mas nunca lido: não há elemento ali (KERNIGHAN;
+RITCHIE, 1989, cap. 5). Os laços com `p++` e com `i++` têm o mesmo
+desempenho; prefira o índice, que quase sempre fica mais claro.
 
 > [!WARNING]
-> `*p + 1` soma 1 ao valor; `*(p + 1)` anda uma gaveta. `*p++` lê e depois
-> avança; `(*p)++` soma 1 no valor. Passar do fim (`p <= kwh + 5`) dá
+> `*p + 1` soma 1 ao valor; `*(p + 1)` anda uma gaveta e pega o valor dela,
+> porque o `*` vem antes do `+`. `*p++` lê o valor e depois avança o
+> ponteiro; `(*p)++` soma 1 no valor. E passar do fim (`p <= kwh + 5`) dá
 > `stack-buffer-overflow` no AddressSanitizer.
 
 ### Exemplos de uso
@@ -997,26 +1137,62 @@ Campeã: filial 0
 
 ### Conceito
 
-- **`char *`**: toda função de string recebe o endereço do primeiro caractere
-  e anda até o `'\0'` (KERNIGHAN; RITCHIE, 1989, cap. 5).
-- **Literal de string**: um texto entre aspas, guardado **uma vez só** numa
-  região **somente leitura** (DEITEL; DEITEL, 2011, cap. 7).
-- **`char nome[] = "ana";`**: cria um vetor de 4 `char` e **copia** o literal.
-  O vetor é seu: `nome[0] = 'A'` vale (DEITEL; DEITEL, 2011, cap. 7).
-- **`const char *apelido = "bia";`**: cria só um ponteiro para o literal. Com
-  `const`, o compilador recusa `apelido[0] = 'B'` (DEITEL; DEITEL, 2011,
-  cap. 7).
-- **Mudar de alvo**: `apelido = "bibi";` vale; `nome = "joana";` não compila
-  (use `strcpy`). `sizeof nome` dá 4 e `sizeof apelido` dá 8 (BACKES, 2013,
-  cap. 10).
-- **Vetor de ponteiros**: `const char *dias[]` gasta 8 bytes por nome mais o
-  texto; a matriz `char[4][10]` reserva 10 bytes por linha (DEITEL; DEITEL,
-  2011, cap. 7).
+Na recepção do evento, o nome do crachá é digitado numa ficha sua: dá para
+corrigir uma letra ou passar tudo para maiúsculas. O apelido só aparece num
+cartaz pregado na parede: você lê, mas não escreve nele. Em C, essas duas
+situações se escrevem quase igual e se comportam de jeitos bem diferentes. A
+diferença está em quem é dono dos bytes do texto.
+
+Junte duas coisas que você já sabe. Uma string é um vetor de `char`
+terminado em `'\0'` (assunto 0041), e o nome de um vetor vira o endereço do
+primeiro elemento (assunto 0047). Por isso toda função de string, de
+`strlen` a `printf` com `%s`, recebe um **`char *`**: o endereço do primeiro
+caractere. Com ele, a função anda gaveta por gaveta até achar o `'\0'`
+(KERNIGHAN; RITCHIE, 1989, cap. 5).
+
+Agora o texto entre aspas. Quando você escreve `"bia"` no código, cria um
+**literal de string**. O compilador guarda cada literal **uma vez só**, numa
+região de **somente leitura** da memória do programa, junto com o código
+(DEITEL; DEITEL, 2011, cap. 7). Essa região se chama `.rodata` (*read-only
+data*), e o sistema barra qualquer tentativa de escrever nela. Literais
+iguais podem até dividir o mesmo endereço.
+
+Com isso, as duas declarações do crachá ficam claras. `char nome[] = "ana";`
+cria um **vetor** de 4 `char` na pilha e **copia** o literal para dentro
+dele. O vetor é seu, como a ficha: `nome[0] = 'A'` vale (DEITEL; DEITEL,
+2011, cap. 7). Já `const char *apelido = "bia";` cria só um **ponteiro**, de 8
+bytes, com o endereço do literal, sem cópia nenhuma. Ele é a seta para o
+cartaz. Escrever pelo ponteiro, como `apelido[0] = 'B'`, seria escrever na
+região de somente leitura; o `const` faz o compilador recusar essa linha
+antes de o programa rodar (DEITEL; DEITEL, 2011, cap. 7).
+
+```c
+char nome[] = "ana";            // vetor seu, cópia do literal
+const char *apelido = "bia";    // seta para o literal
+nome[0] = 'A';                  // vale: nome vira "Ana"
+apelido = "bibi";               // vale: a seta aponta para outro literal
+printf("%zu %zu\n", sizeof nome, sizeof apelido);  // 4 8
+```
+
+O código mostra a outra metade da diferença. O ponteiro pode mudar de alvo:
+`apelido = "bibi";` só troca o endereço guardado. O vetor não pode:
+`nome = "joana";` não compila, porque o nome do vetor é um endereço fixo; para
+trocar o conteúdo, use `strcpy`. E o `sizeof` mede coisas diferentes:
+`sizeof nome` dá 4, os bytes do vetor, enquanto `sizeof apelido` dá 8, o
+tamanho de um endereço (BACKES, 2013, cap. 10).
+
+A mesma escolha aparece numa lista de textos fixos, como os dias da semana.
+Um vetor de ponteiros, `const char *dias[]`, gasta 8 bytes por nome mais os
+bytes de cada literal. Uma matriz `char dias[4][10]` reserva 10 bytes por
+linha, mesmo para um nome curto como "sexta" (DEITEL; DEITEL, 2011, cap. 7).
+O vetor de ponteiros economiza quando os textos têm tamanhos diferentes e
+não precisam mudar.
 
 > [!WARNING]
 > `char *s = "ola"; s[0] = 'O';` compila sem aviso e cai na execução
-> (`segmentation fault`). Use `const char *` ou `char s[]`. E `==` entre
-> strings compara endereços: use `strcmp`.
+> (`segmentation fault`), porque o literal é só de leitura. Use
+> `const char *` para apontar para literal, ou `char s[]` quando precisar
+> mudar o texto. E `==` entre strings compara endereços: use `strcmp`.
 
 ### Exemplos de uso
 
@@ -1225,22 +1401,60 @@ pix caiu: não
 
 ### Conceito
 
-- **Ponteiro para ponteiro**: variável que guarda o endereço de um ponteiro.
-  `int **pp;` lê-se "pp aponta para um `int *`" (BACKES, 2013, cap. 10).
-- **Níveis**: com `int *p = &vagas; int **pp = &p;`, `*pp` é o próprio `p` e
-  `**pp` é `vagas`. Cada `*` da declaração é um nível, e o acesso usa o mesmo
-  número de `*` (BACKES, 2013, cap. 10).
-- **Mudar o ponteiro de quem chamou**: para mudar um `int`, a função recebe
-  `int *`; para mudar um `int *`, recebe `int **`. As listas do módulo 11 mudam
-  o início assim (DEITEL; DEITEL, 2011, cap. 7).
-- **Vetor de ponteiros**: o nome de `const char *dias[]` decai para
-  `const char **`, o tipo do `char **argv` (assunto 0069) (KERNIGHAN; RITCHIE,
-  1989, cap. 5).
+Você pergunta ao porteiro onde fica o salão de festas. Ele não leva você até
+lá; aponta para o quadro de avisos, e o mapa do quadro mostra o salão. Você
+chegou em **dois saltos**: porteiro, quadro, salão. Em C há situações em que
+é preciso andar assim, guardando não o endereço do dado, mas o endereço de
+quem guarda esse endereço.
+
+Um ponteiro é uma variável como outra qualquer: mora numa gaveta e tem
+endereço próprio (assunto 0045). Então dá para guardar **o endereço de um
+ponteiro** em outra variável. Essa variável é um **ponteiro para ponteiro**,
+e se declara com dois asteriscos: `int **pp;` lê-se "pp aponta para um
+`int *`" (BACKES, 2013, cap. 10).
+
+Veja os níveis num exemplo. Com `int vagas = 40; int *p = &vagas; int **pp =
+&p;`, a variável `pp` guarda o endereço de `p`. Um salto, `*pp`, leva ao
+próprio `p`, que guarda o endereço de `vagas`. Dois saltos, `**pp`, chegam a
+`vagas`, que vale 40. A regra é contar as estrelas: cada `*` da declaração é
+um nível, e para chegar ao dado você usa o mesmo número de `*` (BACKES,
+2013, cap. 10). Acima de dois níveis o código vira charada, e quase nunca é
+necessário.
+
+```c
+int vagas = 40;
+int *p = &vagas;
+int **pp = &p;
+**pp = **pp - 2;        // dois saltos: chega a vagas
+printf("%d\n", vagas);  // 38
+```
+
+Para que serve isso? O primeiro uso é **mudar o ponteiro de quem chamou**. No
+assunto 0046, para uma função mudar um `int` do `main`, ela recebia um
+`int *`. Se a função precisa mudar um `int *` do `main`, fazendo-o apontar
+para outro lugar, ela recebe um `int **`. É a mesma regra, um nível acima: a
+função recebe o endereço daquilo que vai mudar (DEITEL; DEITEL, 2011,
+cap. 7). O A098 escolhe o posto de combustível mais barato assim, e as listas
+encadeadas do módulo 11 trocam o início da lista do mesmo jeito.
+
+O segundo uso é o **vetor de ponteiros**. `const char *dias[]` (assunto 0048)
+é um vetor cujos itens são `const char *`. Pela regra do decaimento (assunto
+0047), o nome do vetor vira o endereço do primeiro item, que é um ponteiro;
+o resultado é um `const char **`. É o tipo do `char **argv`, que o `main`
+recebe com os argumentos da linha de comando (assunto 0069), e da matriz
+alocada no módulo 07 (KERNIGHAN; RITCHIE, 1989, cap. 5).
+
+Cada nível tem um custo. Cada ponteiro é uma variável de 8 bytes, e ler
+`**pp` são três leituras de memória em sequência, cada uma esperando a
+anterior para saber aonde ir. Por isso estruturas cheias de ponteiros, como
+listas e árvores, costumam ser percorridas mais devagar que um vetor com os
+itens colados, tema do módulo 10.
 
 > [!WARNING]
-> Estrela a menos: `*pp = 38;` não muda `vagas`, guarda 38 **em `p`** como
-> endereço, e o próximo `*p` derruba o programa. Para a função mudar o seu
-> ponteiro, passe `&posto`, não `posto`.
+> Estrela a menos: `*pp = 38;` não muda `vagas`; guarda o número 38 **em
+> `p`**, como se fosse endereço, e o próximo `*p` derruba o programa. O
+> compilador avisa. Para a função mudar o seu ponteiro, passe `&posto`, não
+> `posto`: sem o `&`, ela recebe uma cópia.
 
 ### Exemplos de uso
 
@@ -1466,30 +1680,70 @@ Originais: j1=9 j2=7 j3=10 j4=8
 
 ### Conceito
 
-- **Ponteiro para função**: o código da função mora na memória, e o nome dela,
-  sem parênteses, já é o endereço. Uma variável que guarda esse endereço é um
-  ponteiro para função (BACKES, 2013, cap. 13).
-- **Declaração**: `int (*criterio)(int);` lê-se de dentro para fora. Sem os
-  parênteses, `int *criterio(int);` é uma função que devolve `int *` (DEITEL;
-  DEITEL, 2011, cap. 7).
-- **Assinatura**: o ponteiro só aceita funções com o mesmo protótipo (BACKES,
-  2013, cap. 13).
-- **Uso**: `criterio = eh_calor;` guarda o endereço; `criterio(31)` chama.
-  `(*criterio)(31)` também vale (DEITEL; DEITEL, 2011, cap. 7).
-- **Callback**: a função passada como parâmetro. A função que recebe fica
-  genérica, e quem chama decide o comportamento (CELES; RANGEL, 2002).
-- **`qsort`**: ordena qualquer vetor com a sua função de comparação, que recebe
-  dois `const void *` e devolve negativo, zero ou positivo (o A100 usa)
-  (KERRISK, s.d.).
+Às vezes uma função precisa receber **outra função**. Uma rotina que conta
+dias quentes e outra que conta dias frios fazem quase a mesma coisa: andam
+pelo vetor de temperaturas e contam quem passa num teste. Só o teste muda.
+Escrever uma função por teste repete o laço inteiro. O ideal seria uma rotina
+só, que recebesse o teste pronto e se limitasse a chamá-lo. Em C, o mecanismo
+para isso é um ponteiro.
+
+O raciocínio começa na memória. O código de uma função também fica guardado
+nela, numa área própria, a área de **código**. Se a função mora num lugar,
+ela tem endereço, e o nome da função, sem parênteses, **já é esse
+endereço**, do mesmo jeito que o nome de um vetor é o endereço do primeiro
+item. Uma variável que guarda esse endereço é um **ponteiro para função**
+(BACKES, 2013, cap. 13). Pense no número de telefone de um eletricista: você
+não carrega o eletricista no bolso, só o número, e liga quando precisa.
+
+A declaração parece estranha à primeira vista:
 
 ```text
 int (*criterio)(int);
 ```
 
+Leia de dentro para fora. `*criterio` diz que `criterio` é um ponteiro; o
+`(int)` à direita diz que ele aponta para uma função que recebe um `int`; o
+`int` à esquerda é o que essa função devolve. Os parênteses em volta de
+`*criterio` são obrigatórios. Sem eles, `int *criterio(int);` declara uma
+**função** chamada `criterio` que devolve `int *`, e não um ponteiro (DEITEL;
+DEITEL, 2011, cap. 7).
+
+O tipo do ponteiro inclui a **assinatura** da função, isto é, os tipos dos
+parâmetros e do retorno. Por isso `criterio` só aceita funções que recebem um
+`int` e devolvem `int`; uma função com outro protótipo não cabe ali (BACKES,
+2013, cap. 13).
+
+O uso é curto. `criterio = eh_calor;` guarda o endereço da função, sem `&` e
+sem parênteses. `criterio(31)` chama a função apontada, passando 31, como se
+`criterio` fosse o próprio nome dela. A forma `(*criterio)(31)` também vale e
+aparece em código antigo; as duas fazem a mesma chamada (DEITEL; DEITEL,
+2011, cap. 7).
+
+O uso típico é passar o ponteiro como **parâmetro**. A função que o recebe
+fica genérica, e quem chama decide o comportamento. A função entregue dessa
+forma se chama **callback**, porque a rotina genérica "liga de volta" para
+ela na hora certa (CELES; RANGEL, 2002). Com isso, uma única `conta_se`
+conta dias quentes ou frios, dependendo de qual teste você entrega.
+
+A biblioteca padrão usa esse recurso no **`qsort`**, do `<stdlib.h>`. Ele
+ordena um vetor de qualquer tipo, desde que você entregue a função que
+compara dois elementos. Essa função recebe dois `const void *`, os endereços
+dos dois elementos (o assunto 0051 explica esse tipo), e devolve um número
+negativo se o primeiro vem antes, zero se empatam e positivo se o primeiro
+vem depois (KERRISK, s.d.). O A100 ordena a tabela do campeonato assim.
+
+Chamar por ponteiro tem um custo pequeno. É uma **chamada indireta**: o
+processador lê o endereço guardado na variável e salta para ele. Isso impede
+o compilador de copiar o corpo da função no lugar da chamada, otimização
+chamada *inline*, então `criterio(v[i])` pode sair mais lento que escrever o
+teste `v[i] >= 30` direto no laço. Na maioria dos programas a diferença não
+aparece.
+
 > [!WARNING]
-> `return *(const int *)a - *(const int *)b;` estoura o `int` com sinais
-> opostos (`signed integer overflow`). Use `return (x > y) - (x < y);`. E
-> `int *f(int)` é função, não ponteiro.
+> A comparação "esperta" `return *(const int *)a - *(const int *)b;` estoura
+> o `int` quando os números têm sinais opostos e são grandes (`signed integer
+> overflow`), e a ordem sai errada. Use `return (x > y) - (x < y);`. E não
+> esqueça os parênteses: `int *f(int)` é função, não ponteiro.
 
 ### Exemplos de uso
 
@@ -1746,23 +2000,65 @@ Saída esperada:
 
 ### Conceito
 
-- **`void *`**: **ponteiro genérico**. Guarda o endereço de qualquer dado, mas
-  não diz o que mora lá (DEITEL; DEITEL, 2011, cap. 7).
-- **Conversão livre**: em C, qualquer ponteiro de dado vira `void *` e volta
-  sem cast (`int *q = p;`) (DEITEL; DEITEL, 2011, cap. 7).
-- **Não se desreferencia**: `*p` não compila, porque o compilador não sabe
-  quantos bytes ler. Converta antes com um **cast**: `*(int *)p`. E `p + 1` não
-  existe no C padrão (BACKES, 2013, cap. 10).
-- **O cast é uma promessa**: `(double *)` num endereço de `int` lê 8 bytes onde
-  havia 4 e mostra lixo (BACKES, 2013, cap. 10).
-- **Funções genéricas**: recebem `void *` e o tamanho em bytes, e olham a
-  memória com `unsigned char *`, o único tipo que lê qualquer objeto byte a
-  byte. Assim funcionam `memcpy`, `qsort` e `malloc` (CELES; RANGEL, 2002).
+A função `troca` do assunto 0046 troca dois `int`. Para trocar dois `double`,
+você escreveria outra, quase igual; para dois caracteres, mais uma. O
+`qsort` do assunto 0050 tem o mesmo problema ao contrário: ele precisa
+receber vetores de qualquer tipo sem saber qual. Falta um ponteiro que aceite
+qualquer endereço.
+
+Pense no funcionário dos Correios que carimba e despacha caixas sem abri-las.
+Para ele, cada caixa tem um endereço e um peso, e só. Quem recebe abre e
+descobre se é um livro ou um tênis. Em C, essa caixa fechada é o **`void
+*`**, o **ponteiro genérico**: ele guarda o endereço de qualquer dado, seja
+`int`, `double`, vetor ou outro ponteiro, mas não diz o que mora lá (DEITEL;
+DEITEL, 2011, cap. 7).
+
+A primeira regra é a da conversão livre. Em C, qualquer ponteiro para dado
+vira `void *` e volta para o tipo original sem precisar escrever nada:
+`void *p = &senha;` e depois `int *q = p;` compilam limpos (DEITEL; DEITEL,
+2011, cap. 7). Ponteiro para função não entra nessa regra.
+
+A segunda regra é a que dá trabalho: um `void *` **não se desreferencia**.
+Escrever `*p` com `p` do tipo `void *` não compila, porque o compilador não
+sabe quantos bytes ler nem como interpretá-los. Antes de usar o dado, você
+diz o tipo com um **cast**, um tipo entre parênteses na frente da expressão:
+`*(int *)p` primeiro trata `p` como `int *` e depois lê o `int`. Pelo mesmo
+motivo, `p + 1` não existe no C padrão, já que o compilador não sabe o
+tamanho do passo; o `gcc` aceita como extensão e o `-pedantic` avisa (BACKES,
+2013, cap. 10).
+
+```c
+int senha = 1234;
+void *p = &senha;               // caixa fechada com o endereço de senha
+printf("%d\n", *(int *)p);      // 1234: o cast diz o que tem dentro
+```
+
+O cast é uma promessa sua, e o compilador acredita nela sem conferir. Se você
+diz `(double *)` para um endereço em que mora um `int`, ele lê 8 bytes onde
+só havia 4 e mostra lixo (BACKES, 2013, cap. 10).
+
+A caixa fechada permite escrever funções que trabalham com **qualquer
+tipo**. Elas recebem `void *` e, como não conhecem o tamanho do dado,
+recebem também o tamanho em bytes. Por dentro, tratam a memória como uma
+fileira de bytes, com um `unsigned char *`, o único tipo que o C deixa olhar
+qualquer objeto byte a byte. Assim funcionam `memcpy` e `memset`, o `qsort`
+e o `malloc` do módulo 07, que devolve `void *` porque não sabe o que você
+vai guardar (CELES; RANGEL, 2002).
+
+Olhar os bytes ensina como o computador guarda um número. O A102 espia uma
+variável com `const unsigned char *`. O `int` 1000, que em hexadecimal é
+`0x000003E8`, aparece como `e8 03 00 00`: o byte menos significativo vem
+primeiro, no endereço menor. Esse arranjo se chama **little-endian**, e é o
+dos processadores Intel, AMD e ARM. Só os tipos `char` podem fazer essa
+leitura com segurança; ler um `float` por um `int *` quebra a regra de
+*strict aliasing*, que proíbe acessar um objeto por um ponteiro de outro
+tipo.
 
 > [!WARNING]
 > O `void *` desliga a conferência de tipos: `troca_generica(&senha_a,
-> &preco_a, sizeof preco_a)` compila e troca 8 bytes numa variável de 4. Use o
-> `sizeof` da própria variável, nunca um número à mão.
+> &preco_a, sizeof preco_a)` compila sem aviso e troca 8 bytes a partir de
+> uma variável de 4, e o AddressSanitizer acusa `stack-buffer-overflow`. Use o
+> `sizeof` da própria variável, nunca um número digitado à mão.
 
 ### Exemplos de uso
 
@@ -1996,28 +2292,61 @@ bruno no índice -1
 
 ### Conceito
 
-- **Vetores paralelos**: nome, quantidade e preço de cada barraca na mesma
-  posição, e o faturamento `fat[i] = qtd[i] * preco[i]` (DEITEL; DEITEL, 2011,
-  cap. 7).
-- **Vetor de ponteiros como índice**: `const double *ordem[N]` aponta para os
-  elementos de `fat`. Ordena-se `ordem`, não `fat`, como o índice de um livro
-  (assunto 0049) (CELES; RANGEL, 2002).
-- **`qsort` com ponteiros**: cada elemento de `ordem` é um `const double *`, e
-  o `qsort` entrega o endereço dele como `const void *`; dois saltos (`**`)
-  levam ao faturamento (KERRISK, s.d.).
-- **Subtração de ponteiros**: `ordem[i] - fat` dá o índice em `fat`, o mesmo
-  do nome em `produtos` (assunto 0047) (KERNIGHAN; RITCHIE, 1989, cap. 5).
-- **Dois resultados por referência**: `resumo` devolve o total num `double *`
-  e **onde** está o maior num `const double **` (assunto 0046) (DEITEL;
-  DEITEL, 2011, cap. 7).
-- **Ler `const` da direita para a esquerda**: `const double * const *` é
-  ponteiro para ponteiro constante para `double` constante (DEITEL; DEITEL,
-  2011, cap. 7).
+Sábado, fim de feira. A associação dos feirantes quer o ranking das barracas
+pelo faturamento do dia e o nome da campeã. Há uma condição: a planilha
+original não pode mudar de ordem, porque outras contas usam a posição de
+cada barraca. Ordenar sem mexer nos dados parece contraditório, e resolver
+isso usa quase tudo o que o módulo mostrou.
+
+Os dados ficam em **vetores paralelos**: `produtos`, `qtd` e `preco` guardam
+o nome, a quantidade vendida e o preço de cada barraca, e a mesma posição
+`i` fala da mesma barraca nos três. O faturamento sai de uma conta por
+posição, `fat[i] = qtd[i] * preco[i]`, e vai para um quarto vetor (DEITEL;
+DEITEL, 2011, cap. 7).
+
+A ideia central é ordenar **ponteiros** em vez de dados. Pense no índice
+remissivo de um livro: as páginas não mudam de lugar, só a lista que aponta
+para elas. Aqui, o índice é um **vetor de ponteiros** `const double
+*ordem[N]` (assunto 0049), em que cada posição aponta para um elemento de
+`fat`. O programa ordena `ordem`, e `fat` continua na ordem de sempre (CELES;
+RANGEL, 2002).
+
+Quem ordena é o **`qsort`** (assunto 0050), com uma função de comparação
+escrita por você. Repare no que ela recebe. Os elementos de `ordem` são
+`const double *`, e o `qsort` entrega à comparação o **endereço** de cada
+elemento, como `const void *` (assunto 0051). A função converte esse
+endereço para um ponteiro para ponteiro e dá dois saltos, `**`, até chegar
+ao faturamento (KERRISK, s.d.).
+
+Depois da ordenação, `ordem[0]` aponta para o maior faturamento. Para saber
+o nome dessa barraca, falta a posição dela em `fat`. A **subtração de
+ponteiros** (assunto 0047) resolve: `ordem[i] - fat` dá quantos elementos
+existem entre o começo de `fat` e o elemento apontado, que é o índice. O
+mesmo índice dá o nome em `produtos` (KERNIGHAN; RITCHIE, 1989, cap. 5).
+
+O resumo da feira usa a **passagem por referência** (assunto 0046). A função
+`resumo` devolve duas respostas: o total do dia, num `double *`, e **onde**
+está o maior faturamento, num `const double **`. O segundo parâmetro tem dois
+asteriscos porque a função muda um ponteiro do `main`, fazendo-o apontar para
+a campeã (DEITEL; DEITEL, 2011, cap. 7).
+
+Com tantos `const` e `*`, as declarações ficam longas. A técnica é ler da
+direita para a esquerda: `const double * const *p` é "p é ponteiro para um
+ponteiro constante para `double` constante". Cada `const` protege o que está
+imediatamente à esquerda dele, ou o tipo, quando vem no começo (DEITEL;
+DEITEL, 2011, cap. 7).
+
+Ordenar ponteiros é uma técnica clássica por dois motivos. Cada troca do
+`qsort` move só 8 bytes, mesmo que cada dado seja uma struct de 200 bytes
+(módulo 08). E vários vetores de ponteiros, um por faturamento e outro por
+nome, podem existir ao mesmo tempo sobre os mesmos dados; é a ideia dos
+índices de um banco de dados.
 
 > [!WARNING]
 > `sizeof(double)` no `qsort` de `ordem` está errado: os elementos são
-> **ponteiros**. Aqui os dois têm 8 bytes e o erro se esconde; com `int *` não.
-> Escreva sempre `sizeof ordem[0]`.
+> **ponteiros**. Aqui os dois têm 8 bytes e o erro se esconde; com
+> `int *ordem[]` e `sizeof(int)`, o `qsort` trocaria meio ponteiro. Escreva
+> sempre `sizeof ordem[0]`.
 
 ### Exemplos de uso
 

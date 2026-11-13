@@ -1,24 +1,60 @@
 ## 0047 · Ponteiros e vetores
 
-- **Decaimento**: numa expressão, o nome do vetor quase sempre **vira** o
-  endereço do primeiro elemento: `kwh` vale `&kwh[0]` (KERNIGHAN; RITCHIE,
-  1989, cap. 5).
-- **Aritmética de ponteiros**: `p + 1` é o **próximo elemento**, não o próximo
-  byte; o C multiplica pelo tamanho do tipo. `p++` avança um, `q - p` dá
-  quantos elementos há entre eles (DEITEL; DEITEL, 2011, cap. 7).
-- **`v[i]` é `*(v + i)`**: ande `i` elementos e pegue o que tem lá. Vale para
-  ponteiro: `p[2]` é `*(p + 2)`, contado de onde `p` aponta agora (DEITEL;
-  DEITEL, 2011, cap. 7).
-- **Vetor não é ponteiro**: `sizeof kwh` dá o vetor inteiro (20), `sizeof p`
-  dá 8, e `kwh++` não compila (BACKES, 2013, cap. 10).
-- **Matriz**: `m[i][j]` é `*(*(m + i) + j)`. Em `int m[3][4]`, `m + 1` anda uma
-  linha (16 bytes) e `m[0] + 1` anda 4 (BACKES, 2013, cap. 10).
-- **Um depois do último**: `kwh + 5` pode ser calculado e comparado, nunca
-  lido (KERNIGHAN; RITCHIE, 1989, cap. 5).
+Numa rua de loteamento, os números das casas sobem de 4 em 4: 1000, 1004,
+1008. "Três casas depois da 1000" é a 1012, não a 1003. Num vetor de `int`
+acontece o mesmo: as gavetas ficam coladas e cada item ocupa 4 bytes. Os
+ponteiros sabem disso e fazem a conta por você, e é essa conta que liga
+ponteiros e vetores.
+
+Comece pelo nome do vetor. Numa expressão, ele quase sempre **vira** o
+endereço do primeiro elemento: `kwh` vale `&kwh[0]`. Essa conversão se chama
+**decaimento**; diz-se que o vetor decai para ponteiro (KERNIGHAN; RITCHIE,
+1989, cap. 5). É por isso que você passa um vetor a uma função sem `&` e a
+função altera o original (assunto 0038): ela recebe esse endereço.
+
+Com um ponteiro dentro de um vetor, vale a **aritmética de ponteiros**. A
+regra principal: `p + 1` é o endereço do **próximo elemento**, e não do
+próximo byte. O C multiplica o 1 pelo tamanho do tipo apontado, 4 bytes num
+`int *` e 8 num `double *`. Daí saem as outras operações. `p++` avança um
+elemento e `p--` volta um. Se `p` e `q` apontam para o mesmo vetor, `q - p`
+dá **quantos elementos** há entre eles, e `p < q` diz qual vem antes (DEITEL;
+DEITEL, 2011, cap. 7). Comparar ponteiros de vetores diferentes não tem
+sentido.
+
+Juntando as peças, chega-se à regra central: **`v[i]` é exatamente
+`*(v + i)`**. Ande `i` elementos a partir do começo e pegue o que tem lá. Os
+colchetes são só um jeito mais curto de escrever essa conta, e por isso valem
+para ponteiro também: `p[2]` é `*(p + 2)`, contado de onde `p` aponta
+**agora**, e não do começo do vetor (DEITEL; DEITEL, 2011, cap. 7).
+
+```c
+int kwh[5] = {210, 185, 190, 240, 175};
+int *p = &kwh[1];               // p aponta para o 185
+printf("%d %d\n", p[0], p[2]);  // 185 240
+printf("%td\n", p - kwh);       // 1 (elementos, não bytes)
+```
+
+Mesmo com tanta semelhança, vetor **não é** ponteiro. `sizeof kwh` dá o
+tamanho do vetor inteiro (20 bytes), enquanto `sizeof p` dá 8, o tamanho de
+um endereço. E o nome do vetor é um endereço fixo: `kwh = outro;` e `kwh++`
+não compilam, enquanto `p++` é permitido (BACKES, 2013, cap. 10).
+
+Na matriz (assunto 0039), a regra vale em dois níveis: `m[i][j]` é
+`*(*(m + i) + j)`. O ponto que a prova adora é o tamanho do passo. Em
+`int m[3][4]`, cada elemento de `m` é uma linha inteira, então `m + 1` anda
+**16 bytes** (4 `int`). Já `m[0]` é a primeira linha, que decai para um
+`int *`, e `m[0] + 1` anda só 4 bytes (BACKES, 2013, cap. 10).
+
+Ao percorrer um vetor com ponteiro, o laço costuma parar em `kwh + 5`, o
+endereço **um depois do último**. O C garante que esse endereço pode ser
+calculado e comparado, mas nunca lido: não há elemento ali (KERNIGHAN;
+RITCHIE, 1989, cap. 5). Os laços com `p++` e com `i++` têm o mesmo
+desempenho; prefira o índice, que quase sempre fica mais claro.
 
 > [!WARNING]
-> `*p + 1` soma 1 ao valor; `*(p + 1)` anda uma gaveta. `*p++` lê e depois
-> avança; `(*p)++` soma 1 no valor. Passar do fim (`p <= kwh + 5`) dá
+> `*p + 1` soma 1 ao valor; `*(p + 1)` anda uma gaveta e pega o valor dela,
+> porque o `*` vem antes do `+`. `*p++` lê o valor e depois avança o
+> ponteiro; `(*p)++` soma 1 no valor. E passar do fim (`p <= kwh + 5`) dá
 > `stack-buffer-overflow` no AddressSanitizer.
 
 {{exemplo}}

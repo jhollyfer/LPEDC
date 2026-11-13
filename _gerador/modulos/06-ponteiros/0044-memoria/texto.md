@@ -1,22 +1,57 @@
 ## 0044 · Memória e endereços
 
-- **Memória**: uma fileira de gavetas de **1 byte**, cada uma com um número, o
-  **endereço** (FEOFILOFF, 2009, ap. D).
-- **Endereço da variável**: o da primeira gaveta que ela ocupa. Cada tipo
-  ocupa um número de gavetas (`char` 1, `int` 4, `double` 8) (BACKES, 2013,
-  cap. 10).
-- **Nome e endereço**: você usa o nome; o processador só conhece endereços, e
-  o compilador troca um pelo outro (BACKES, 2013, cap. 10).
-- **`&`** (endereço de): `&idade` pergunta "em que gaveta você mora?". É o `&`
-  do `scanf`: ele precisa saber **onde** guardar (DEITEL; DEITEL, 2011,
-  cap. 7).
-- **`%p`**: mostra um endereço em hexadecimal; espera um `void *`, então
-  escreva `(void *)&idade` (assunto 0051) (DEITEL; DEITEL, 2011, cap. 7).
+Até aqui você guardou valores em variáveis e as chamou pelo nome. Funcionou
+porque o compilador cuidou de um detalhe por você: decidir em que lugar da
+memória cada variável fica. Para entender ponteiros, passagem por referência
+e memória dinâmica, você precisa enxergar esse detalhe. Este assunto abre o
+módulo mostrando o que é a memória e como se chega a um lugar dentro dela.
+
+Pense no guarda-volumes do mercado. Você entrega a mochila e recebe a ficha
+47. Não precisa saber em que prateleira ela ficou: com o número, o
+funcionário vai direto à gaveta certa. A **memória** principal do computador,
+a RAM, funciona assim. Ela é uma fileira enorme de gavetas de **1 byte**, e
+cada gaveta tem um número, o seu **endereço** (FEOFILOFF, 2009, ap. D).
+
+Quando você declara `int idade = 30;`, o compilador separa 4 gavetas
+seguidas para `idade` e guarda o 30 nelas. O **endereço da variável** é o
+número da primeira dessas gavetas. Cada tipo ocupa uma quantidade diferente:
+o `char` usa 1 gaveta, o `int` usa 4 e o `double` usa 8, como o `sizeof` do
+assunto 0002 mostra. Seja qual for o tamanho, o endereço da variável é sempre
+o da primeira gaveta (BACKES, 2013, cap. 10).
+
+Você pensa em nomes, como `idade` e `preco`. O processador não conhece nomes;
+ele só sabe ler e escrever em endereços. Quem faz a ponte é o compilador:
+ao traduzir o programa, ele troca cada nome pelo endereço correspondente
+(BACKES, 2013, cap. 10). Os nomes existem para você, e os endereços para a
+máquina.
+
+O C deixa você perguntar o endereço de uma variável com o operador **`&`**,
+lido como "endereço de". `&idade` é a pergunta "em que gaveta você mora?".
+Você usa esse operador desde o assunto 0006, no `scanf("%d", &idade)`: o
+`scanf` precisa saber **onde** guardar o número que leu, e o `&` entrega esse
+lugar (DEITEL; DEITEL, 2011, cap. 7). O assunto 0046 conta essa história
+inteira.
+
+Para ver um endereço na tela, o `printf` tem o **`%p`**, que mostra o número
+em hexadecimal, a base 16, como `0x7ffd5e8c`. O `%p` espera um valor do tipo
+`void *`, então a forma correta é `printf("%p\n", (void *)&idade);`. O
+assunto 0051 explica esse tipo (DEITEL; DEITEL, 2011, cap. 7).
+
+Se você rodar o mesmo programa duas vezes, os endereços mudam. Não é erro: o
+sistema sorteia em que região o programa vai morar a cada execução, um
+recurso de segurança chamado **ASLR**. Quem tenta explorar uma falha não sabe
+de antemão onde as coisas estão. Por isso, não decore endereços nem conte com
+eles de uma execução para outra.
+
+As variáveis locais, como `idade` dentro do `main`, ficam na **pilha** que
+você viu no assunto 0031. O módulo 07 mostra o mapa completo da memória de um
+programa, com a pilha e as outras regiões.
 
 > [!WARNING]
-> Nunca mostre endereço com `%d` ou `%x`: são 8 bytes, e o `%d` lê 4. Use `%p`
-> com `(void *)`. E não deduza nada da ordem de variáveis soltas: só num vetor
-> a ordem é garantida.
+> Nunca mostre endereço com `%d` ou `%x`: o endereço tem 8 bytes em 64 bits,
+> e o `%d` lê só 4, então o número sai cortado ou negativo. Use `%p` com
+> `(void *)`. E não deduza nada da ordem de variáveis soltas: o compilador as
+> arruma como quiser. Só num vetor a ordem é garantida.
 
 {{exemplo}}
 

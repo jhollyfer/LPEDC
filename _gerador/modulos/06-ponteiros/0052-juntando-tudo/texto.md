@@ -1,27 +1,60 @@
 ## 0052 · Juntando tudo: o ranking da feira
 
-- **Vetores paralelos**: nome, quantidade e preço de cada barraca na mesma
-  posição, e o faturamento `fat[i] = qtd[i] * preco[i]` (DEITEL; DEITEL, 2011,
-  cap. 7).
-- **Vetor de ponteiros como índice**: `const double *ordem[N]` aponta para os
-  elementos de `fat`. Ordena-se `ordem`, não `fat`, como o índice de um livro
-  (assunto 0049) (CELES; RANGEL, 2002).
-- **`qsort` com ponteiros**: cada elemento de `ordem` é um `const double *`, e
-  o `qsort` entrega o endereço dele como `const void *`; dois saltos (`**`)
-  levam ao faturamento (KERRISK, s.d.).
-- **Subtração de ponteiros**: `ordem[i] - fat` dá o índice em `fat`, o mesmo
-  do nome em `produtos` (assunto 0047) (KERNIGHAN; RITCHIE, 1989, cap. 5).
-- **Dois resultados por referência**: `resumo` devolve o total num `double *`
-  e **onde** está o maior num `const double **` (assunto 0046) (DEITEL;
-  DEITEL, 2011, cap. 7).
-- **Ler `const` da direita para a esquerda**: `const double * const *` é
-  ponteiro para ponteiro constante para `double` constante (DEITEL; DEITEL,
-  2011, cap. 7).
+Sábado, fim de feira. A associação dos feirantes quer o ranking das barracas
+pelo faturamento do dia e o nome da campeã. Há uma condição: a planilha
+original não pode mudar de ordem, porque outras contas usam a posição de
+cada barraca. Ordenar sem mexer nos dados parece contraditório, e resolver
+isso usa quase tudo o que o módulo mostrou.
+
+Os dados ficam em **vetores paralelos**: `produtos`, `qtd` e `preco` guardam
+o nome, a quantidade vendida e o preço de cada barraca, e a mesma posição
+`i` fala da mesma barraca nos três. O faturamento sai de uma conta por
+posição, `fat[i] = qtd[i] * preco[i]`, e vai para um quarto vetor (DEITEL;
+DEITEL, 2011, cap. 7).
+
+A ideia central é ordenar **ponteiros** em vez de dados. Pense no índice
+remissivo de um livro: as páginas não mudam de lugar, só a lista que aponta
+para elas. Aqui, o índice é um **vetor de ponteiros** `const double
+*ordem[N]` (assunto 0049), em que cada posição aponta para um elemento de
+`fat`. O programa ordena `ordem`, e `fat` continua na ordem de sempre (CELES;
+RANGEL, 2002).
+
+Quem ordena é o **`qsort`** (assunto 0050), com uma função de comparação
+escrita por você. Repare no que ela recebe. Os elementos de `ordem` são
+`const double *`, e o `qsort` entrega à comparação o **endereço** de cada
+elemento, como `const void *` (assunto 0051). A função converte esse
+endereço para um ponteiro para ponteiro e dá dois saltos, `**`, até chegar
+ao faturamento (KERRISK, s.d.).
+
+Depois da ordenação, `ordem[0]` aponta para o maior faturamento. Para saber
+o nome dessa barraca, falta a posição dela em `fat`. A **subtração de
+ponteiros** (assunto 0047) resolve: `ordem[i] - fat` dá quantos elementos
+existem entre o começo de `fat` e o elemento apontado, que é o índice. O
+mesmo índice dá o nome em `produtos` (KERNIGHAN; RITCHIE, 1989, cap. 5).
+
+O resumo da feira usa a **passagem por referência** (assunto 0046). A função
+`resumo` devolve duas respostas: o total do dia, num `double *`, e **onde**
+está o maior faturamento, num `const double **`. O segundo parâmetro tem dois
+asteriscos porque a função muda um ponteiro do `main`, fazendo-o apontar para
+a campeã (DEITEL; DEITEL, 2011, cap. 7).
+
+Com tantos `const` e `*`, as declarações ficam longas. A técnica é ler da
+direita para a esquerda: `const double * const *p` é "p é ponteiro para um
+ponteiro constante para `double` constante". Cada `const` protege o que está
+imediatamente à esquerda dele, ou o tipo, quando vem no começo (DEITEL;
+DEITEL, 2011, cap. 7).
+
+Ordenar ponteiros é uma técnica clássica por dois motivos. Cada troca do
+`qsort` move só 8 bytes, mesmo que cada dado seja uma struct de 200 bytes
+(módulo 08). E vários vetores de ponteiros, um por faturamento e outro por
+nome, podem existir ao mesmo tempo sobre os mesmos dados; é a ideia dos
+índices de um banco de dados.
 
 > [!WARNING]
 > `sizeof(double)` no `qsort` de `ordem` está errado: os elementos são
-> **ponteiros**. Aqui os dois têm 8 bytes e o erro se esconde; com `int *` não.
-> Escreva sempre `sizeof ordem[0]`.
+> **ponteiros**. Aqui os dois têm 8 bytes e o erro se esconde; com
+> `int *ordem[]` e `sizeof(int)`, o `qsort` trocaria meio ponteiro. Escreva
+> sempre `sizeof ordem[0]`.
 
 {{exemplo}}
 
