@@ -245,3 +245,31 @@ for (const modulo of readdirSync(pastaModulos).filter((n) => /^\d{2}-/.test(n)).
   console.log(`ok  ${modulo}.md`)
 }
 writeFileSync(join(MAT, 'legenda.svg'), desenharLegenda())
+
+// Sumário do README: a rota do jogo (fases.json), mundo por mundo, cada módulo
+// com seus assuntos e o link direto para o capítulo. Fica entre os marcadores
+// <!-- sumario:inicio --> e <!-- sumario:fim -->.
+const sumario = () => {
+  const linhas = []
+  let mundo = ''
+  FASES.forEach((f, i) => {
+    if (f.mundo !== mundo) {
+      mundo = f.mundo
+      linhas.push(`### ${mundo}`, '')
+    }
+    const pasta = join(pastaModulos, f.modulo)
+    linhas.push(`**${i + 1}. [${tituloDoModulo(f.modulo)}](${f.modulo}.md)**${f.bonus ? ' ★' : ''}: ${f.missao}.`, '')
+    for (const a of readdirSync(pasta).filter((n) => /^\d{4}-/.test(n)).sort()) {
+      const titulo = readFileSync(join(pasta, a, 'texto.md'), 'utf8').match(/^## (.+)$/m)[1]
+      linhas.push(`- [${titulo}](${f.modulo}.md#${ancora(titulo)})`)
+    }
+    linhas.push('')
+  })
+  return linhas.join('\n').trimEnd()
+}
+const readme = join(RAIZ, 'README.md')
+const textoReadme = readFileSync(readme, 'utf8')
+if (textoReadme.includes('<!-- sumario:inicio -->')) {
+  writeFileSync(readme, textoReadme.replace(/<!-- sumario:inicio -->[\s\S]*<!-- sumario:fim -->/, () => `<!-- sumario:inicio -->\n\n${sumario()}\n\n<!-- sumario:fim -->`))
+  console.log('ok  README.md (sumário)')
+}

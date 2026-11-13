@@ -20,7 +20,7 @@ TypeScript, JavaScript, Python, Java...): tudo é explicado em termos de C.
 O curso começa direto em C: o módulo 01 abre com algoritmo e o modelo
 entrada → processamento → saída (a estrutura sequencial); depois vêm
 decisões, laços, funções e assim por diante. A instalação está no
-[`README.md`](../README.md#2-exemplos-de-uso).
+[`README.md`](../README.md#preparar-o-computador).
 
 **Objetivo principal:** preparar para a Prova de Conhecimentos do Mestrado do
 PPGI/UFAM (escopo em `PRD.md`; mapa edital → assuntos e roteiro em
