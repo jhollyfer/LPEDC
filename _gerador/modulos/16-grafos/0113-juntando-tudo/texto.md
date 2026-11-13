@@ -1,8 +1,22 @@
 ## 0113 · Juntando tudo: a central de entregas
 
-Uma transportadora tem um centro de distribuição (CD) e seis lugares a
-atender. Dá para chegar em todos? Qual rota tem menos trechos? Qual roda menos
-quilômetros? Cada pergunta tem o seu algoritmo:
+- **Um esqueleto, três buscas**: DFS, BFS e Dijkstra usam marcas, `pai[]` e um
+  laço que descobre vizinhos. Muda a **ordem** de saída: pilha, fila ou "menor
+  `dist`" (CORMEN et al., 2024, caps. 20 e 22).
+- **"Menor em quê?"**: com arestas de mesmo custo, a BFS basta, em O(V + E).
+  Com pesos variados, ela erra sem aviso (FEOFILOFF, 2009, cap. 5).
+- **Alcance primeiro**: a DFS diz quem dá para alcançar. Se o destino está
+  fora, não há rota a calcular (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 8).
+- **Árvore geradora mínima**: o conjunto de arestas que liga todos os
+  vértices com a menor soma de pesos (CORMEN et al., 2024, cap. 21).
+- **Prim**: é o Dijkstra com uma linha trocada. Em vez de
+  `dist[u] + custo < dist[v]`, compara só `custo < chave[v]`
+  (CORMEN et al., 2024, cap. 21).
+- **Grafo como struct**: `Grafo` junta vértices, nomes e matriz de km. As
+  funções recebem `const Grafo *`: passa 8 bytes em vez de 328 e promete não
+  mexer no mapa (KERNIGHAN; RITCHIE, 1989).
+- **Inicializador designado** (C99): `{.n = 7, .nomes = {...}}` cita só os
+  campos que quer; o resto, como `km`, começa zerado (ISO/IEC, 2018).
 
 | Pergunta | Algoritmo | Estrutura auxiliar |
 | --- | --- | --- |
@@ -11,15 +25,16 @@ quilômetros? Cada pergunta tem o seu algoritmo:
 | Menor caminho em soma de pesos (pesos >= 0) | Dijkstra | vetor `dist` (ou heap) |
 | Ligar todos com o menor custo total | Prim | vetor `chave` |
 
-As três primeiras têm o mesmo esqueleto (marcas, `pai[]` e um laço que descobre
-vizinhos); muda a **ordem** de saída: pilha, fila ou "menor `dist`".
+> [!WARNING]
+> Na matriz de pesos, `0` quer dizer "sem aresta", o que só funciona se nenhum
+> peso real for zero. Se um trecho pode custar R$ 0, use outra marca,
+> como `-1`.
 
-O programa usa o tipo `Grafo` (vértices, nomes e matriz de km) e uma função por
-algoritmo, com `const Grafo *`: a struct passa de 300 bytes, e o `const`
-promete que ninguém altera o mapa.
+{{exemplo}}
 
-A Ilha só tem balsa, e a DFS a deixa de fora. A BFS acha a rota de 2 trechos
-pelo Centro (12 km); o Dijkstra, a de 4 trechos, em verde (10 km):
+Uma transportadora tem um centro de distribuição (CD) e seis lugares a
+atender. A Ilha só tem balsa, e a DFS a deixa de fora. A BFS acha a rota de 2
+trechos pelo Centro (16 km); o Dijkstra, a de 4 trechos, em verde (10 km):
 
 {{ideia}}
 
@@ -145,32 +160,8 @@ int main(void) {
 // Menos km:      CD -> Feira -> Morro -> Porto -> Vila (4 trechos, 10 km)
 ```
 
-A DFS vem primeiro, como porteiro: com a Vila fora da rede, não há rota.
+A DFS vem primeiro, como porteiro: com a Vila fora da rede, não há rota. O
+A225 conta as partes soltas de um mapa e o A226 liga cinco cidades com fibra
+óptica pelo Prim:
 
 {{fluxograma}}
-
-"Menor caminho" pede "menor em quê?". Com arestas de mesmo custo, a BFS basta,
-em O(V + E). Com pesos variados, erra sem aviso, como nos 16 km acima.
-
-O exemplo A225 compara BFS e Dijkstra num mapa com duas partes soltas e usa a
-DFS para contá-las. O A226 liga cinco cidades com fibra óptica gastando o
-mínimo: uma **árvore geradora mínima**, o conjunto de cabos que conecta todos
-com a menor soma. O **Prim** é o Dijkstra com uma linha trocada: em vez de
-`dist[u] + custo < dist[v]`, compara só `custo < chave[v]`.
-
-> [!WARNING]
-> Na matriz de pesos, `0` quer dizer "sem aresta", o que só funciona se nenhum
-> peso real for zero. Se um trecho pode custar R$ 0, use outra marca,
-> como `-1`.
-
-> [!TIP]
-> **Por dentro do C:** `Grafo g` mora na pilha de `main` (328 bytes) e `&g`
-> copia só 8. `{.n = 7, .nomes = {...}}` usa **inicializadores designados** do
-> C99; o que não foi citado, como `km`, começa zerado. Com `MAX` 1000, a matriz
-> teria 4 MB e a struct iria para o heap.
-
-> [!NOTE]
-> **Pergunta para você:** com a estrada Centro–Vila em 5 km em vez de 12, as
-> duas rotas viram a mesma? Quantos km e trechos?
-
-{{pratique}}

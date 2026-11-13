@@ -1,12 +1,9 @@
 # Módulo 16 · Grafos
 
-Ruas se cruzam, pessoas se seguem sem reciprocidade, pacotes dependem uns dos
-outros. Para isso existe o **grafo**: pontos e ligações, sem regra de forma.
-GPS, rede social e gerenciador de pacotes rodam os algoritmos deste módulo.
-
-A pergunta passa a ser "quem são os vizinhos e em que ordem visito?". Quase
-tudo é a mesma **busca** com uma estrutura auxiliar diferente: fila (BFS),
-pilha da recursão (DFS) ou "menor primeiro" (Dijkstra).
+Grafo é pontos e ligações, sem regra de forma: ruas, redes sociais,
+dependências. O módulo cobre representação, BFS, DFS e Dijkstra, quase tudo a
+mesma busca com fila, pilha ou "menor primeiro". Usa fila e pilha (módulo 12),
+a lista dos baldes (módulo 15) e o heap (módulo 14).
 
 ## O que você vai aprender
 
@@ -23,17 +20,11 @@ pilha da recursão (DFS) ou "menor primeiro" (Dijkstra).
 Usa matrizes (0039), structs (0059 e 0060), `malloc` e `free` (0054), lista
 (0076), pilha (0082), fila (0085), recursão (0032) e heap (0102).
 
-Os vértices são números de 0 a V-1, com os nomes num vetor de strings à
-parte. Os exemplos examinam os vizinhos em ordem crescente de índice, o que
-decide empates: mudar a numeração muda a saída, sem estar errada.
-
-O assunto 0109 traz o TAD `grafo.h` e `grafo.c`, com lista de adjacência; o
-comando do exemplo compila o `grafo.c` junto. Nos demais, cada arquivo é
-completo, com matriz.
-
-**Progressão.** A lista de adjacência do 0109 é a lista encadeada do balde
-(módulo 15), com um balde por vértice. Fila e pilha (módulo 12) viram BFS e
-DFS, e o heap (módulo 14) acelera o Dijkstra. O módulo 17 mede o custo.
+Vértices são números de 0 a V-1, com os nomes num vetor à parte. Os vizinhos
+são examinados em ordem crescente de índice, o que decide empates: outra
+numeração muda a saída sem estar errada. O 0109 traz o TAD `grafo.h` e
+`grafo.c` (lista de adjacência); os demais arquivos usam matriz e são
+completos.
 
 {{indice}}
 
@@ -559,4 +550,5 @@ pelo lema do aperto de mãos: a soma dos graus é par. O máximo num grafo simpl
 - ZIVIANI, N. *Projeto de algoritmos com implementações em Pascal e C*. 3. ed. São Paulo: Cengage Learning, 2010. Cap. 7: algoritmos em grafos.
 - DIJKSTRA, E. W. A note on two problems in connexion with graphs. *Numerische Mathematik*, v. 1, p. 269-271, 1959.
 - KERNIGHAN, B. W.; RITCHIE, D. M. *C: a linguagem de programação padrão ANSI*. Rio de Janeiro: Campus, 1989.
+- ISO/IEC. *ISO/IEC 9899:2018*: Information technology: Programming languages: C. Genebra: ISO, 2018.
 - CPPREFERENCE. *Numeric limits* (`INT_MAX`) e *Arithmetic operators* (estouro de inteiro com sinal). Disponível em: <https://en.cppreference.com/w/c/types/limits>.

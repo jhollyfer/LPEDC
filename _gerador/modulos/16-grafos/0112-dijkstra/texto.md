@@ -1,34 +1,38 @@
 ## 0112 · Dijkstra: caminho mínimo
 
-Rumo à praia, o Waze conhece o tempo de cada rua: Casa até a Padaria, 4
-minutos; Casa até a Escola, 1; Escola até a Padaria, 2. A rua direta parece
-óbvia, mas passar pela Escola dá 3.
+- **Grafo ponderado**: cada aresta tem um **peso** (minutos, km, reais). O
+  menor caminho é o de **menor soma de pesos**, não o de menos arestas; aí a
+  BFS erra (CORMEN et al., 2024, cap. 22).
+- **Dijkstra**: acha os menores caminhos a partir de uma origem quando
+  **nenhum peso é negativo** (DIJKSTRA, 1959).
+- **O que ele guarda**: `dist[v]`, o melhor tempo **conhecido** até `v` (0 na
+  origem, INFINITO no resto); `fixo[v]`, se ele já é definitivo; `anterior[v]`,
+  de onde se chega em `v` (o `pai[]` da BFS) (ZIVIANI, 2010, cap. 7).
+- **Relaxar**: se `dist[u] + peso[u][v] < dist[v]`, atualiza `dist[v]` e
+  `anterior[v]`. No Cormen é `RELAX(u, v, w)`, com `v.d`, `v.π` e o conjunto S
+  dos fixos (CORMEN et al., 2024, cap. 22).
+- **Guloso**: a cada passo fixa o não fixo de menor `dist` e relaxa as arestas
+  dele; a escolha nunca se desfaz. É seguro porque, sem pesos negativos, outro
+  caminho até ele passaria por um vértice de `dist` maior ou igual
+  (CORMEN et al., 2024, cap. 22).
+- **Peso negativo**: o argumento cai e o Dijkstra erra sem avisar. Aí entra o
+  Bellman-Ford (0154), que relaxa todas as arestas V - 1 vezes
+  (CORMEN et al., 2024, cap. 22).
+- **Custo**: com matriz, cada um dos V passos varre V vértices, O(V²). Com
+  lista e **heap** (0102), O((V + E) log V) (CORMEN et al., 2024, cap. 22).
 
-O grafo agora é **ponderado**: cada aresta tem um **peso** (minutos, km, reais)
-e o menor caminho é o de **menor soma de pesos**, não o de menos arestas. A BFS
-erra: acharia Casa, Padaria, Praia (duas ruas, 14 minutos) e perderia o caminho
-de 11 minutos com quatro ruas.
+> [!WARNING]
+> `INT_MAX + 3` **estoura**: comportamento indefinido em `int` com sinal, que
+> na prática vira negativo e "ganha" no `<`. Por isso o código só escolhe `u`
+> com `dist[u] != INFINITO`. Um INFINITO folgado (`1000000000`) também evita o
+> estouro (CPPREFERENCE, s.d.).
 
-O **Dijkstra** resolve isso quando nenhum peso é negativo. Ele guarda:
+{{exemplo}}
 
-- `dist[v]`: o melhor tempo **conhecido** de Casa até `v` (0 em Casa, INFINITO
-  no resto);
-- `fixo[v]`: se `dist[v]` já é definitivo;
-- `anterior[v]`: de onde se chega em `v` no melhor caminho (o `pai[]` da BFS).
-
-A cada passo, pega o vértice **não fixo de menor `dist`**, fixa essa distância
-e **relaxa** as arestas que saem dele: se `dist[u] + peso[u][v] < dist[v]`,
-atualiza `dist[v]` e `anterior[v]`. No Cormen, o teste é `RELAX(u, v, w)`, os vetores são `v.d` e `v.π` e os
-fixos formam o conjunto S.
-
-Fixar o menor é seguro: sem pesos negativos, qualquer outro caminho até ele
-passa por um vértice de `dist` maior ou igual. O algoritmo é **guloso**: a
-escolha nunca se desfaz. Com aresta **negativa** o
-argumento cai; aí entra o Bellman-Ford (assunto 0154), que relaxa todas as
-arestas V - 1 vezes.
-
-No mapa, os números das arestas são minutos, o de cada lugar é a `dist` final e
-as arestas verdes formam a rota até a Praia:
+Rumo à praia, o Waze sabe que Casa até Padaria leva 4 minutos, mas Casa,
+Escola, Padaria leva 3. A BFS acharia Casa, Padaria, Praia (14 minutos). Os
+números das arestas são minutos, o de cada lugar é a `dist` final e as arestas
+verdes formam a rota de 11 minutos:
 
 {{ideia}}
 
@@ -117,20 +121,3 @@ Mercado de 9 para 8:
 
 O exemplo A223 para ao fixar o destino. O A224 usa grafo dirigido (ônibus, em
 reais) e trata uma cidade que nenhuma linha alcança.
-
-> [!WARNING]
-> `INT_MAX + 3` **estoura**: comportamento indefinido em `int` com sinal, que na
-> prática vira negativo e "ganha" no `<`. Por isso o código só escolhe `u` com
-> `dist[u] != INFINITO` e para quando não sobra ninguém. Um INFINITO folgado
-> (`1000000000`) também evita o estouro.
-
-> [!TIP]
-> **Por dentro do C:** com matriz, cada um dos V passos varre V vértices para
-> achar o menor e V para relaxar: O(V²). Com lista de adjacência e **heap**
-> (assunto 0102), cai para O((V + E) log V).
-
-> [!NOTE]
-> **Pergunta para você:** com a rua Padaria–Praia em 7 minutos em vez de 10,
-> qual é a nova rota e o novo tempo até a Praia?
-
-{{pratique}}
