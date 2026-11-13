@@ -1,25 +1,69 @@
 ## 0158 · KMP
 
-- **KMP** (Knuth, Morris e Pratt): busca que nunca volta no texto, lê cada letra
-  uma vez e custa **O(n + m)** sempre (KNUTH; MORRIS; PRATT, 1977).
-- **Ideia**: se `k` letras casaram e a próxima falhou, o fim do texto lido é
-  `padrao[0..k-1]`. O quanto disso ainda serve depende **só do padrão** e se
-  calcula antes (CORMEN et al., 2024, cap. 32).
-- **Borda**: o maior prefixo próprio que também é sufixo. Em `1212` é `12`; em
-  `121`, `1`; em `1213`, nenhuma (SZWARCFITER; MARKENZON, 2010).
-- **Tabela π**: `pi[j]` é o tamanho da borda de `padrao[0..j]`. Para `12123`,
-  `pi = [0, 0, 1, 2, 0]`. Sai procurando o padrão nele mesmo.
-- **Busca**: guarda só `k`. Se a letra é `padrao[k]`, `k++`; se não e `k > 0`,
-  recua `k = pi[k - 1]` e tenta a **mesma** letra; se `k == m`, achou e recua
-  para `pi[m - 1]` (CORMEN et al., 2024, cap. 32).
-- **Por que O(n)**: `k` sobe no máximo 1 por letra, `n` vezes no total; cada
-  recuo o diminui e ele nunca fica negativo. São no máximo `2n` comparações; a
-  tabela custa O(m) pelo mesmo argumento.
+A central do alarme desarma quando a senha `12123` aparece no teclado. Ela
+não guarda o histórico das teclas: só lembra quanto da senha já foi
+digitado. Você digita `1 2 1 2`, erra e aperta `1`. A central precisa
+recomeçar do zero? A força bruta recomeçaria: voltaria no texto e testaria o
+alinhamento seguinte. Só que as últimas teclas lidas, `1 2 1`, já formam o
+começo da senha, e jogar isso fora é desperdício.
+
+O **KMP**, de Knuth, Morris e Pratt, é a busca que nunca volta no texto: lê
+cada letra uma única vez, da esquerda para a direita, e custa **O(n + m)** em
+qualquer caso (KNUTH; MORRIS; PRATT, 1977). O segredo está numa observação
+simples. Se `k` letras já casaram e a próxima falhou, você sabe exatamente o
+que acabou de ler: as últimas `k` letras do texto são `padrao[0..k-1]`. Então
+a pergunta "quanto do que li ainda serve?" depende **só do padrão**, e pode
+ser respondida antes de olhar o texto (CORMEN et al., 2024, cap. 32).
+
+A resposta tem nome. Um **prefixo próprio** de uma string é um pedaço do
+começo dela que não é ela inteira; um **sufixo** é um pedaço do fim. A
+**borda** de uma string é o maior prefixo próprio que também é sufixo
+(SZWARCFITER; MARKENZON, 2010). Em `1212`, o prefixo `12` também fecha a
+string, então a borda é `12`. Em `121`, a borda é `1`. Em `1213`, nenhum
+prefixo próprio termina a string, e a borda é vazia, de tamanho 0. A borda
+diz quanto do casamento sobrevive a uma falha: se a central leu `1212` e a
+próxima tecla não serve, o `12` do fim ainda pode ser o começo da senha.
+
+A **tabela π** (pi) guarda a borda de cada começo do padrão: `pi[j]` é o
+tamanho da borda de `padrao[0..j]`. Para `12123`, os pedaços são `1`, `12`,
+`121`, `1212` e `12123`, com bordas de tamanho 0, 0, 1, 2 e 0. Logo
+`pi = [0, 0, 1, 2, 0]`. A tabela se calcula com a mesma lógica da busca: é
+o padrão sendo procurado dentro dele mesmo, em O(m).
+
+Com a tabela pronta, a busca guarda um único número, `k`, quantas letras do
+padrão já casaram. Para cada letra do texto, três coisas podem acontecer. Se
+a letra é `padrao[k]`, o casamento cresce: `k++`. Se não é e `k > 0`, o
+casamento encolhe para a borda, `k = pi[k - 1]`, e a **mesma** letra é
+testada de novo; isso pode se repetir várias vezes, até a letra servir ou
+`k` chegar a 0. Se `k` chega a `m`, achou uma ocorrência, e `k` recua para
+`pi[m - 1]` para não perder ocorrências sobrepostas (CORMEN et al., 2024,
+cap. 32).
+
+```c
+while (k > 0 && texto[i] != padrao[k]) k = pi[k - 1];
+if (texto[i] == padrao[k]) k++;
+```
+
+Volte ao alarme. As teclas `1 2 1 2` casam quatro letras, `k = 4`. A quinta
+tecla, `1`, não é o `3` esperado. A central consulta `pi[3] = 2`: o `12` do
+fim continua valendo, e `k` vira 2. Agora o `1` é testado contra
+`padrao[2]`, que é `1`, e casa. O padrão escorregou duas casas sem que a
+central relesse nada.
+
+Por que o custo é linear? Olhe o `k`. Ele sobe no máximo 1 por letra do
+texto, então sobe no máximo `n` vezes no total. Cada recuo o diminui pelo
+menos 1, e ele nunca fica negativo, então não dá para recuar mais vezes do
+que ele subiu. Somando subidas e recuos, a busca faz no máximo `2n`
+comparações. A tabela custa O(m) pelo mesmo argumento, e o total é
+O(n + m). A garantia vale para qualquer texto, inclusive os que levam a
+força bruta ao pior caso.
 
 > [!WARNING]
 > O recuo é um `while`, não um `if`: depois de `k = pi[k - 1]` a letra pode
-> continuar não servindo (o E947 testa isso). E os livros usam convenções
-> diferentes para a tabela (começando em 1, com -1): misturar dá erro de um.
+> continuar não servindo. Com `if`, a busca "acha" ocorrências que não
+> existem (o E947 testa isso). E os livros usam convenções diferentes para a
+> tabela (começando em 1, deslocada, com -1): misturar convenções dá erro de
+> um.
 
 {{exemplo}}
 

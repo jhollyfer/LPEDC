@@ -1,26 +1,66 @@
 ## 0160 · Rabin-Karp
 
-- **Impressão digital**: o hash (assunto 0105) resume um texto. Hashes
-  diferentes garantem textos diferentes; hashes iguais só pedem conferência.
-- **Rabin-Karp**: calcula o hash do padrão e o de cada **janela** de `m` letras
-  do texto, e só compara letra a letra quando os hashes batem
-  (KARP; RABIN, 1987).
-- **Hash rolante**: a janela seguinte perde uma letra e ganha outra, e o hash
-  novo sai do antigo em O(1). Com dígitos, de `271` para `718`:
-  `(271 - 2·100)·10 + 8` (CORMEN et al., 2024, cap. 32).
-- **Módulo `q`**: com letras, base 256 e tudo **módulo um primo `q`** grande
-  (como 1.000.003), em `long long`, porque os números ficam enormes
-  (SEDGEWICK; WAYNE, 2011).
-- **Colisão** ou **falso positivo**: janelas diferentes com o mesmo resto. Por
-  isso a conferência letra a letra nunca pode ser pulada (A319 mostra os falsos
-  positivos caindo com `q` maior).
-- **Custo**: O(n + m) na média com `q` grande; O(n·m) se tudo colidir
-  (CORMEN et al., 2024, cap. 32).
+Você tem dois arquivos de 1 GB e quer saber se são iguais. Comparar byte a
+byte funciona, mas existe um atalho: calcular um **hash** de cada um, um
+número pequeno que resume o conteúdo (hashing, assunto 0105). O hash
+funciona como uma **impressão digital**. Se os hashes diferem, os arquivos
+com certeza diferem. Se batem, os arquivos provavelmente são iguais, e só
+então vale conferir byte a byte.
+
+O **algoritmo de Rabin-Karp** leva essa ideia para a busca de padrão
+(KARP; RABIN, 1987). Ele calcula o hash do padrão uma vez. Depois calcula o
+hash de cada **janela** do texto, isto é, de cada trecho de `m` letras
+seguidas, e só compara letra a letra quando o hash da janela bate com o do
+padrão. A maioria das janelas é descartada por uma única comparação de
+números.
+
+Há um obstáculo. Calcular o hash de uma janela do zero custa `m` passos, e
+com `n - m + 1` janelas voltamos ao O(n·m) da força bruta. A saída é o
+**hash rolante**: a janela seguinte é quase a mesma, perde uma letra à
+esquerda e ganha outra à direita, e o hash novo pode sair do antigo em O(1)
+(CORMEN et al., 2024, cap. 32).
+
+Veja com dígitos, que é mais fácil. No texto `2718`, com `m = 3`, a primeira
+janela `271` é o número 271. A próxima, `718`, sai assim: tire o dígito que
+sai, multiplicado pelo peso dele (`2 · 100`), desloque uma casa
+multiplicando por 10 e some o dígito que entra.
+
+```c
+// janela 271 -> janela 718
+int nova = (271 - 2 * 100) * 10 + 8;   // 718
+```
+
+O peso do dígito que sai é `10^(m-1)`, calculado uma vez antes da busca.
+Com letras a conta é a mesma, só que na base 256, já que cada letra é um
+byte.
+
+Só que um número de `m` letras na base 256 fica enorme e estoura qualquer
+tipo inteiro do C. Por isso toda conta é feita **módulo um primo `q`**:
+guarda-se só o resto da divisão por `q`, e as somas e multiplicações
+continuam funcionando sobre os restos (SEDGEWICK; WAYNE, 2011). Com letras, `q` deve ser um primo
+grande, como 1.000.003, e as contas vão em `long long` (assunto 0003),
+porque o produto de dois restos estoura um `int`, e overflow de inteiro com
+sinal é comportamento indefinido.
+
+O resto tem um preço. Janelas diferentes podem deixar o mesmo resto: com
+`q = 13`, `182` e `845` deixam resto 0. Isso é uma **colisão**, também
+chamada de **falso positivo**: o hash diz "talvez", e a janela não é o
+padrão. Por isso a conferência letra a letra nunca pode ser pulada. Quanto
+maior o `q`, mais raras as colisões; o A319 mostra os falsos positivos
+caindo de 48 para 0 conforme o `q` cresce.
+
+O custo segue dessas duas peças. Com `q` grande, quase nenhuma janela pede
+conferência, e a busca custa O(n + m) na média. No pior caso, se toda janela
+colidir, cada uma pede `m` comparações, e o custo volta a O(n·m) (CORMEN et
+al., 2024, cap. 32). O ponto forte do Rabin-Karp é outro: como ele trata o
+texto como números, procurar vários padrões de mesmo tamanho ao mesmo tempo
+custa quase o mesmo que procurar um.
 
 > [!WARNING]
-> Em C, `-7 % 13` vale `-7`, não `6`. `ht - t[i] * pot` fica negativo, e um hash
-> negativo nunca bate: a busca **perde ocorrências** sem erro. Por isso a linha
-> é `(ht - t[i] * pot % Q + Q) % Q`.
+> Em C, o resto de número negativo é negativo: `-7 % 13` vale `-7`, não `6`.
+> `ht - t[i] * pot` fica negativo com frequência, e um hash negativo nunca
+> bate com o do padrão: a busca **perde ocorrências** sem erro. Por isso a
+> linha é `(ht - t[i] * pot % Q + Q) % Q`.
 
 {{exemplo}}
 

@@ -63,27 +63,71 @@ TAD `padroes.h`, compilado junto com os exemplos da pasta. Tudo trabalha com
 
 ### Conceito
 
-- **Busca de padrão**: achar um **padrão** de `m` letras dentro de um **texto**
-  de `n` letras, `m <= n`. É o problema do Ctrl+F e do `grep`
-  (CORMEN et al., 2024, cap. 32).
-- **Alinhamento**: encostar o padrão no texto a partir da posição `i`. Se as `m`
-  letras batem com `texto[i..i+m-1]`, há uma **ocorrência** em `i`.
-- **Força bruta** (busca ingênua): testa todos os alinhamentos, de `i = 0` a
-  `n - m`, comparando da esquerda para a direita e desistindo na primeira
-  diferença (FEOFILOFF, 2009, cap. 13).
-- **Sobreposição**: em "banana", "ana" aparece em 1 e em 3; como anda de 1 em 1,
-  a força bruta acha as duas.
-- **Custo**: num texto comum, perto de `n` comparações. No **pior caso**,
-  `(n - m + 1) · m`, ou **O(n·m)**, como `"00001"` num código de vinte zeros
-  (A314). Memória O(1) (ZIVIANI, 2010, cap. 8).
-- **`strstr(texto, padrao)`** (`string.h`): devolve um ponteiro para a primeira
-  ocorrência ou `NULL`; a posição é `p - texto`. Para a próxima, chame de novo a
-  partir de `p + 1` (A313) (DEITEL; DEITEL, 2011, cap. 8).
+Você aperta Ctrl+F no PDF do contrato de aluguel e digita "multa". Em menos
+de um segundo o leitor pinta cada lugar em que a palavra aparece. Por trás
+disso há um problema clássico: dado um **texto** de `n` letras e um
+**padrão** de `m` letras, com `m <= n`, dizer em que posições o padrão
+aparece. É o mesmo problema que o `grep` resolve num arquivo e que um
+antivírus resolve ao procurar a assinatura de um vírus dentro de um programa
+(CORMEN et al., 2024, cap. 32). Este módulo apresenta quatro jeitos de
+resolvê-lo, e o primeiro é o mais direto de todos.
+
+Imagine uma régua de papel com o padrão escrito nela, deitada sobre o texto.
+Você encosta a régua no começo do texto, confere letra por letra e depois
+escorrega a régua uma casa para a direita. Cada posição da régua é um
+**alinhamento**: encostar o padrão no texto a partir da posição `i`. Se as
+`m` letras do padrão batem com `texto[i..i+m-1]`, há uma **ocorrência** em
+`i`. Em "banana", o padrão "ana" tem ocorrência em 1, porque `texto[1..3]` é
+"ana".
+
+A **força bruta**, também chamada de busca ingênua, é exatamente a régua:
+ela testa todos os alinhamentos, de `i = 0` até `i = n - m`, e em cada um
+compara da esquerda para a direita, desistindo na primeira letra diferente
+(FEOFILOFF, 2009, cap. 13). O último alinhamento é `n - m` porque, a partir
+dele, o padrão já não cabe no que sobra do texto. Com `n = 6` e `m = 3`, os
+alinhamentos são 0, 1, 2 e 3: quatro ao todo, ou `n - m + 1`.
+
+```c
+for (int i = 0; i <= n - m; i++) {
+    int j = 0;
+    while (j < m && texto[i + j] == padrao[j]) j++;
+    if (j == m) printf("ocorrência em %d\n", i);
+}
+```
+
+Como a régua anda sempre de uma em uma casa, a força bruta acha também as
+ocorrências que se **sobrepõem**, isto é, que dividem letras. Em "banana",
+"ana" aparece em 1 e em 3, e as duas ocorrências compartilham o "a" da
+posição 3. Um algoritmo que pulasse o padrão inteiro depois de achar perderia
+a segunda.
+
+Quanto isso custa? O trabalho se mede em **comparações de letra**. Num texto
+comum, quase todo alinhamento falha logo na primeira ou na segunda letra,
+então o total fica perto de `n`. O **pior caso** aparece quando quase todo
+alinhamento casa o padrão inteiro antes de falhar na última letra: procurar
+`"00001"` num código de vinte zeros compara cinco letras em cada um dos 16
+alinhamentos. No geral, o teto é `(n - m + 1) · m` comparações, o que dá
+**O(n·m)**. A memória extra é O(1): só os índices `i` e `j` (ZIVIANI, 2010,
+cap. 8). O A314 mede esse pior caso.
+
+A biblioteca padrão já traz uma busca pronta. `strstr(texto, padrao)`, de
+`string.h`, devolve um ponteiro para a primeira ocorrência, ou `NULL` se o
+padrão não aparece (DEITEL; DEITEL, 2011, cap. 8). A posição sai da
+diferença de ponteiros, `p - texto`. Para achar a próxima, chame de novo a
+partir de `p + 1`; se chamar a partir de `p + m`, as sobreposições somem (o
+A313 compara os dois). Não escreva pelo ponteiro que o `strstr` devolve
+quando o texto é um literal: isso é comportamento indefinido (assunto 0048).
+
+Os próximos assuntos atacam o desperdício da força bruta. Depois de casar
+`k` letras e falhar, ela joga fora tudo o que leu e recomeça uma casa
+adiante. O KMP aproveita o que já leu; o Horspool pula casas; o Rabin-Karp
+troca a comparação de letras por uma conta.
 
 > [!WARNING]
-> O laço vai até `i <= n - m`, **inclusive**: com `<`, a última ocorrência some.
-> Guarde `n` e `m` em `int`: `strlen` devolve `size_t`, sem sinal, e com padrão
-> maior que o texto `n - m` **dá a volta**.
+> O laço vai até `i <= n - m`, **inclusive**: com `<`, a última ocorrência
+> some. Guarde `n` e `m` em `int`: `strlen` devolve `size_t`, sem sinal, e com
+> padrão maior que o texto `n - m` **dá a volta**, vira um número enorme e o
+> laço lê além do `'\0'`.
 
 ### Exemplos de uso
 
@@ -354,26 +398,70 @@ RIO: não está na grade
 
 ### Conceito
 
-- **KMP** (Knuth, Morris e Pratt): busca que nunca volta no texto, lê cada letra
-  uma vez e custa **O(n + m)** sempre (KNUTH; MORRIS; PRATT, 1977).
-- **Ideia**: se `k` letras casaram e a próxima falhou, o fim do texto lido é
-  `padrao[0..k-1]`. O quanto disso ainda serve depende **só do padrão** e se
-  calcula antes (CORMEN et al., 2024, cap. 32).
-- **Borda**: o maior prefixo próprio que também é sufixo. Em `1212` é `12`; em
-  `121`, `1`; em `1213`, nenhuma (SZWARCFITER; MARKENZON, 2010).
-- **Tabela π**: `pi[j]` é o tamanho da borda de `padrao[0..j]`. Para `12123`,
-  `pi = [0, 0, 1, 2, 0]`. Sai procurando o padrão nele mesmo.
-- **Busca**: guarda só `k`. Se a letra é `padrao[k]`, `k++`; se não e `k > 0`,
-  recua `k = pi[k - 1]` e tenta a **mesma** letra; se `k == m`, achou e recua
-  para `pi[m - 1]` (CORMEN et al., 2024, cap. 32).
-- **Por que O(n)**: `k` sobe no máximo 1 por letra, `n` vezes no total; cada
-  recuo o diminui e ele nunca fica negativo. São no máximo `2n` comparações; a
-  tabela custa O(m) pelo mesmo argumento.
+A central do alarme desarma quando a senha `12123` aparece no teclado. Ela
+não guarda o histórico das teclas: só lembra quanto da senha já foi
+digitado. Você digita `1 2 1 2`, erra e aperta `1`. A central precisa
+recomeçar do zero? A força bruta recomeçaria: voltaria no texto e testaria o
+alinhamento seguinte. Só que as últimas teclas lidas, `1 2 1`, já formam o
+começo da senha, e jogar isso fora é desperdício.
+
+O **KMP**, de Knuth, Morris e Pratt, é a busca que nunca volta no texto: lê
+cada letra uma única vez, da esquerda para a direita, e custa **O(n + m)** em
+qualquer caso (KNUTH; MORRIS; PRATT, 1977). O segredo está numa observação
+simples. Se `k` letras já casaram e a próxima falhou, você sabe exatamente o
+que acabou de ler: as últimas `k` letras do texto são `padrao[0..k-1]`. Então
+a pergunta "quanto do que li ainda serve?" depende **só do padrão**, e pode
+ser respondida antes de olhar o texto (CORMEN et al., 2024, cap. 32).
+
+A resposta tem nome. Um **prefixo próprio** de uma string é um pedaço do
+começo dela que não é ela inteira; um **sufixo** é um pedaço do fim. A
+**borda** de uma string é o maior prefixo próprio que também é sufixo
+(SZWARCFITER; MARKENZON, 2010). Em `1212`, o prefixo `12` também fecha a
+string, então a borda é `12`. Em `121`, a borda é `1`. Em `1213`, nenhum
+prefixo próprio termina a string, e a borda é vazia, de tamanho 0. A borda
+diz quanto do casamento sobrevive a uma falha: se a central leu `1212` e a
+próxima tecla não serve, o `12` do fim ainda pode ser o começo da senha.
+
+A **tabela π** (pi) guarda a borda de cada começo do padrão: `pi[j]` é o
+tamanho da borda de `padrao[0..j]`. Para `12123`, os pedaços são `1`, `12`,
+`121`, `1212` e `12123`, com bordas de tamanho 0, 0, 1, 2 e 0. Logo
+`pi = [0, 0, 1, 2, 0]`. A tabela se calcula com a mesma lógica da busca: é
+o padrão sendo procurado dentro dele mesmo, em O(m).
+
+Com a tabela pronta, a busca guarda um único número, `k`, quantas letras do
+padrão já casaram. Para cada letra do texto, três coisas podem acontecer. Se
+a letra é `padrao[k]`, o casamento cresce: `k++`. Se não é e `k > 0`, o
+casamento encolhe para a borda, `k = pi[k - 1]`, e a **mesma** letra é
+testada de novo; isso pode se repetir várias vezes, até a letra servir ou
+`k` chegar a 0. Se `k` chega a `m`, achou uma ocorrência, e `k` recua para
+`pi[m - 1]` para não perder ocorrências sobrepostas (CORMEN et al., 2024,
+cap. 32).
+
+```c
+while (k > 0 && texto[i] != padrao[k]) k = pi[k - 1];
+if (texto[i] == padrao[k]) k++;
+```
+
+Volte ao alarme. As teclas `1 2 1 2` casam quatro letras, `k = 4`. A quinta
+tecla, `1`, não é o `3` esperado. A central consulta `pi[3] = 2`: o `12` do
+fim continua valendo, e `k` vira 2. Agora o `1` é testado contra
+`padrao[2]`, que é `1`, e casa. O padrão escorregou duas casas sem que a
+central relesse nada.
+
+Por que o custo é linear? Olhe o `k`. Ele sobe no máximo 1 por letra do
+texto, então sobe no máximo `n` vezes no total. Cada recuo o diminui pelo
+menos 1, e ele nunca fica negativo, então não dá para recuar mais vezes do
+que ele subiu. Somando subidas e recuos, a busca faz no máximo `2n`
+comparações. A tabela custa O(m) pelo mesmo argumento, e o total é
+O(n + m). A garantia vale para qualquer texto, inclusive os que levam a
+força bruta ao pior caso.
 
 > [!WARNING]
 > O recuo é um `while`, não um `if`: depois de `k = pi[k - 1]` a letra pode
-> continuar não servindo (o E947 testa isso). E os livros usam convenções
-> diferentes para a tabela (começando em 1, com -1): misturar dá erro de um.
+> continuar não servindo. Com `if`, a busca "acha" ocorrências que não
+> existem (o E947 testa isso). E os livros usam convenções diferentes para a
+> tabela (começando em 1, deslocada, com -1): misturar convenções dá erro de
+> um.
 
 ### Exemplos de uso
 
@@ -686,27 +774,69 @@ Saída esperada:
 
 ### Conceito
 
-- **Comparar da direita para a esquerda**: olhe a letra do texto sob a
-  **última** casa do padrão. Se ela não aparece no padrão, o padrão pula `m`
-  casas (FEOFILOFF, 2009, cap. 13).
-- **Horspool**: versão simples do **Boyer-Moore**. Se a letra aparece, o salto
-  leva a ocorrência **mais à direita** dela no padrão até ficar sob ela
-  (HORSPOOL, 1980).
-- **Tabela de saltos**: uma casa por byte (256). Toda letra começa com `m`; para
-  `j` de 0 até `m - 2`, `salto[padrao[j]] = m - 1 - j`. A última letra fica de
-  fora: seu salto seria 0 (ZIVIANI, 2010, cap. 8).
-- **Avanço**: achando ou não, o próximo alinhamento é
-  `i + salto[texto[i + m - 1]]`.
-- **Custo**: com alfabeto grande, o salto fica perto de `m` e a busca olha umas
-  `n / m` letras: padrão **maior**, busca **mais rápida** (A317). O pior caso
-  segue O(n·m): "baaa" num texto só de `a` (E952) (ZIVIANI, 2010, cap. 8).
-- **Boyer-Moore completo**: acrescenta a tabela do **bom sufixo**, que garante
-  busca linear; o Horspool troca essa garantia por um código curto.
+Na feira, você procura a banca que vende "MANGA" lendo as placas. A força
+bruta e o KMP leem todas as letras do texto, uma por uma. Dá para ler
+**menos** do que isso? Dá, se você olhar primeiro para o lugar certo.
+
+A ideia é comparar o padrão **da direita para a esquerda**. Encoste o padrão
+no texto e olhe primeiro a letra do texto que está sob a **última** casa do
+padrão. Se essa letra nem existe no padrão, nenhum alinhamento que a cubra
+pode dar certo, e o padrão pode pular `m` casas de uma vez (FEOFILOFF, 2009,
+cap. 13). Procurando "MANGA" (`m = 5`), se sob a última casa aparece um `E`,
+você avança cinco posições sem olhar as outras quatro letras.
+
+E se a letra existe no padrão? Então ela pode fazer parte de uma ocorrência,
+e o salto tem de ser menor. O **algoritmo de Horspool** move o padrão até
+que a ocorrência **mais à direita** dessa letra no padrão fique exatamente
+sob ela (HORSPOOL, 1980). Ele é uma versão simplificada do **Boyer-Moore**,
+de quem ele herda a comparação da direita para a esquerda.
+
+Os saltos dependem só do padrão, e por isso ficam numa **tabela de saltos**
+calculada antes da busca. Como uma letra em C é um byte, a tabela tem uma
+casa para cada um dos 256 valores possíveis. Ela se monta em dois passos
+(ZIVIANI, 2010, cap. 8). Primeiro, toda letra recebe `m`, o salto de quem
+não está no padrão. Depois, para cada `j` de 0 até `m - 2`,
+`salto[padrao[j]] = m - 1 - j`, a distância da posição `j` até a última
+casa. Como `j` cresce, uma letra repetida fica com o valor da ocorrência mais
+à direita, que é o menor salto e o mais seguro.
+
+Para "MANGA", o `M` está na posição 0 e salta `5 - 1 - 0 = 4`; o primeiro
+`A` daria 3, o `N` dá 2 e o `G` dá 1. O último `A`, na posição 4, fica de
+fora: seu salto seria 0, e a busca não sairia do lugar. Assim, a tabela fica
+M = 4, A = 3, N = 2, G = 1, e 5 para todas as outras letras.
+
+A busca em si é curta. Em cada alinhamento `i`, compare de `j = m - 1` para
+trás enquanto as letras baterem. Achando ou não, o próximo alinhamento é
+`i + salto[texto[i + m - 1]]`: quem decide o salto é sempre a letra do texto
+sob a última casa do padrão.
+
+```c
+while (i <= n - m) {
+    int j = m - 1;
+    while (j >= 0 && texto[i + j] == padrao[j]) j--;
+    if (j < 0) printf("ocorrência em %d\n", i);
+    i += salto[(unsigned char) texto[i + m - 1]];
+}
+```
+
+O ganho aparece com alfabeto grande, como o das letras e sinais de um texto
+comum. A maioria das letras do texto não está no padrão, o salto fica perto
+de `m` e a busca olha mais ou menos `n / m` letras. Daí uma propriedade que
+surpreende: quanto **maior** o padrão, **mais rápida** a busca (ZIVIANI,
+2010, cap. 8). O A317 mede isso. O pior caso, porém, continua O(n·m):
+procurar "baaa" num texto só de `a` compara quatro letras e salta só uma
+casa por alinhamento (E952).
+
+O Boyer-Moore completo acrescenta uma segunda tabela, a do **bom sufixo**,
+que aproveita as letras que já casaram e garante busca linear. O Horspool
+abre mão dessa garantia em troca de um código de poucas linhas, que no texto
+do dia a dia é tão rápido quanto.
 
 > [!WARNING]
-> O índice da tabela tem que ser `unsigned char`: em UTF-8, o `ã` começa com o
-> byte 0xC3, que num `char` com sinal vale **-61**, e `salto[-61]` escreve fora
-> do vetor. E não ponha a última letra do padrão na tabela.
+> O índice da tabela tem que ser `unsigned char`. Em UTF-8, o `ã` começa com
+> o byte 0xC3, que num `char` com sinal vale **-61**, e `salto[-61]` escreve
+> fora do vetor sem erro de compilação. Converta: `salto[(unsigned char) c]`.
+> E não ponha a última letra do padrão na tabela.
 
 ### Exemplos de uso
 
@@ -1015,27 +1145,67 @@ FRANGO: Horspool  9 alinhamentos, Sunday  8 (achou 0 e 0)
 
 ### Conceito
 
-- **Impressão digital**: o hash (assunto 0105) resume um texto. Hashes
-  diferentes garantem textos diferentes; hashes iguais só pedem conferência.
-- **Rabin-Karp**: calcula o hash do padrão e o de cada **janela** de `m` letras
-  do texto, e só compara letra a letra quando os hashes batem
-  (KARP; RABIN, 1987).
-- **Hash rolante**: a janela seguinte perde uma letra e ganha outra, e o hash
-  novo sai do antigo em O(1). Com dígitos, de `271` para `718`:
-  `(271 - 2·100)·10 + 8` (CORMEN et al., 2024, cap. 32).
-- **Módulo `q`**: com letras, base 256 e tudo **módulo um primo `q`** grande
-  (como 1.000.003), em `long long`, porque os números ficam enormes
-  (SEDGEWICK; WAYNE, 2011).
-- **Colisão** ou **falso positivo**: janelas diferentes com o mesmo resto. Por
-  isso a conferência letra a letra nunca pode ser pulada (A319 mostra os falsos
-  positivos caindo com `q` maior).
-- **Custo**: O(n + m) na média com `q` grande; O(n·m) se tudo colidir
-  (CORMEN et al., 2024, cap. 32).
+Você tem dois arquivos de 1 GB e quer saber se são iguais. Comparar byte a
+byte funciona, mas existe um atalho: calcular um **hash** de cada um, um
+número pequeno que resume o conteúdo (hashing, assunto 0105). O hash
+funciona como uma **impressão digital**. Se os hashes diferem, os arquivos
+com certeza diferem. Se batem, os arquivos provavelmente são iguais, e só
+então vale conferir byte a byte.
+
+O **algoritmo de Rabin-Karp** leva essa ideia para a busca de padrão
+(KARP; RABIN, 1987). Ele calcula o hash do padrão uma vez. Depois calcula o
+hash de cada **janela** do texto, isto é, de cada trecho de `m` letras
+seguidas, e só compara letra a letra quando o hash da janela bate com o do
+padrão. A maioria das janelas é descartada por uma única comparação de
+números.
+
+Há um obstáculo. Calcular o hash de uma janela do zero custa `m` passos, e
+com `n - m + 1` janelas voltamos ao O(n·m) da força bruta. A saída é o
+**hash rolante**: a janela seguinte é quase a mesma, perde uma letra à
+esquerda e ganha outra à direita, e o hash novo pode sair do antigo em O(1)
+(CORMEN et al., 2024, cap. 32).
+
+Veja com dígitos, que é mais fácil. No texto `2718`, com `m = 3`, a primeira
+janela `271` é o número 271. A próxima, `718`, sai assim: tire o dígito que
+sai, multiplicado pelo peso dele (`2 · 100`), desloque uma casa
+multiplicando por 10 e some o dígito que entra.
+
+```c
+// janela 271 -> janela 718
+int nova = (271 - 2 * 100) * 10 + 8;   // 718
+```
+
+O peso do dígito que sai é `10^(m-1)`, calculado uma vez antes da busca.
+Com letras a conta é a mesma, só que na base 256, já que cada letra é um
+byte.
+
+Só que um número de `m` letras na base 256 fica enorme e estoura qualquer
+tipo inteiro do C. Por isso toda conta é feita **módulo um primo `q`**:
+guarda-se só o resto da divisão por `q`, e as somas e multiplicações
+continuam funcionando sobre os restos (SEDGEWICK; WAYNE, 2011). Com letras, `q` deve ser um primo
+grande, como 1.000.003, e as contas vão em `long long` (assunto 0003),
+porque o produto de dois restos estoura um `int`, e overflow de inteiro com
+sinal é comportamento indefinido.
+
+O resto tem um preço. Janelas diferentes podem deixar o mesmo resto: com
+`q = 13`, `182` e `845` deixam resto 0. Isso é uma **colisão**, também
+chamada de **falso positivo**: o hash diz "talvez", e a janela não é o
+padrão. Por isso a conferência letra a letra nunca pode ser pulada. Quanto
+maior o `q`, mais raras as colisões; o A319 mostra os falsos positivos
+caindo de 48 para 0 conforme o `q` cresce.
+
+O custo segue dessas duas peças. Com `q` grande, quase nenhuma janela pede
+conferência, e a busca custa O(n + m) na média. No pior caso, se toda janela
+colidir, cada uma pede `m` comparações, e o custo volta a O(n·m) (CORMEN et
+al., 2024, cap. 32). O ponto forte do Rabin-Karp é outro: como ele trata o
+texto como números, procurar vários padrões de mesmo tamanho ao mesmo tempo
+custa quase o mesmo que procurar um.
 
 > [!WARNING]
-> Em C, `-7 % 13` vale `-7`, não `6`. `ht - t[i] * pot` fica negativo, e um hash
-> negativo nunca bate: a busca **perde ocorrências** sem erro. Por isso a linha
-> é `(ht - t[i] * pot % Q + Q) % Q`.
+> Em C, o resto de número negativo é negativo: `-7 % 13` vale `-7`, não `6`.
+> `ht - t[i] * pot` fica negativo com frequência, e um hash negativo nunca
+> bate com o do padrão: a busca **perde ocorrências** sem erro. Por isso a
+> linha é `(ht - t[i] * pot % Q + Q) % Q`.
 
 ### Exemplos de uso
 
@@ -1367,20 +1537,18 @@ polinomial: 2 verificações, 2 ocorrências
 
 ### Conceito
 
-- **Grep**: mostra as linhas de um arquivo que têm um padrão fixo
-  (KERNIGHAN; RITCHIE, 1989).
-- **Mesma assinatura**: os quatro algoritmos do módulo ficam num TAD
-  (`padroes.h`, `padroes.c`), devolvem quantas ocorrências acharam, guardam as
-  primeiras `max` posições em `pos` (ou nada, se `NULL`) e **somam** em
-  `*comparacoes` as comparações de letra.
-- **Ponteiro para função** (assunto 0050): `Busca` aponta para qualquer um dos
-  quatro, e um vetor de structs `{nome, busca}` troca de algoritmo pelo índice
-  (KERNIGHAN; RITCHIE, 1989).
-- **Comparação de letra** é um cronômetro que não depende da máquina, mas não é
-  tempo: o Rabin-Karp troca comparações por contas de hash.
-- **`clock()`** (`<time.h>`): tempo de processador em tiques; divida a diferença
-  por `CLOCKS_PER_SEC`. Com `-O2`, o `gcc` pode apagar uma busca cujo resultado
-  ninguém usa, e por isso o A321 imprime o total.
+O síndico quer ler só os avisos do condomínio que falam da garagem. No
+terminal, `grep garagem avisos.txt` resolve: o **grep** é o programa que
+mostra as linhas de um arquivo que contêm um padrão (KERNIGHAN; RITCHIE,
+1989). Aqui você monta um mini-grep com os quatro algoritmos do módulo e
+usa o próprio programa para medir qual deles trabalha menos. O seu grep
+trata só **padrões fixos**, palavras exatas, sem os curingas do grep de
+verdade.
+
+Para trocar de algoritmo sem reescrever o programa, os quatro precisam
+aceitar os mesmos parâmetros e devolver a mesma coisa. Eles ficam num TAD,
+com a interface em `padroes.h` e a implementação em `padroes.c`, todos com a
+mesma **assinatura**, a lista de tipos dos parâmetros e do retorno:
 
 ```c
 typedef int (*Busca)(const char *texto, int n, const char *padrao, int m,
@@ -1392,6 +1560,36 @@ int pb_horspool(...);
 int pb_rabin_karp(...);
 ```
 
+Cada função devolve quantas ocorrências achou. As posições das primeiras
+`max` ocorrências vão no vetor `pos`; se `pos` for `NULL`, a função só
+conta. O último parâmetro é um contador: a função **soma** em
+`*comparacoes` as comparações de letra que fez, em vez de zerar. Assim, ao
+chamar a busca linha a linha, o contador acumula o custo do arquivo inteiro.
+
+O `typedef` da primeira linha cria o tipo `Busca`, um **ponteiro para
+função** (assunto 0050): uma variável que guarda o endereço de uma função e
+permite chamá-la depois (KERNIGHAN; RITCHIE, 1989). Qualquer um dos quatro
+algoritmos cabe numa variável `Busca`, porque todos têm a assinatura certa.
+Com um vetor de structs `{nome, busca}`, cada posição guarda o nome de um
+algoritmo e o ponteiro para ele, e trocar de algoritmo vira trocar o índice:
+`algs[a].busca(...)`.
+
+Para comparar os quatro, o programa conta **comparações de letra**. Esse
+número é um cronômetro que não depende da máquina: dá o mesmo resultado no
+seu computador e no de qualquer outra pessoa. Só que ele não é tempo. O
+Rabin-Karp troca comparações de letra por multiplicações e restos, que o
+contador não vê, e o Horspool consulta a tabela de saltos a cada
+alinhamento. Para medir tempo de verdade, use `clock()`, de `<time.h>`, que
+devolve o tempo de processador em tiques: a diferença entre duas chamadas,
+dividida por `CLOCKS_PER_SEC`, dá segundos. Meça trechos grandes, de
+milhões de letras, porque uma busca curta termina antes de o relógio andar.
+E cuidado com a otimização: com `-O2`, o `gcc` pode apagar uma busca cujo
+resultado ninguém usa. Por isso o A321 imprime o total achado.
+
+Nenhum dos quatro vence sempre, e a tabela resume quando cada um compensa.
+O **preparo** é o que o algoritmo calcula antes de ler o texto; a **memória
+extra** é o que ele guarda além do texto e do padrão:
+
 | | preparo | memória extra | pior caso | caso comum | ponto forte |
 | --- | --- | --- | --- | --- | --- |
 | força bruta | nenhum | nenhuma | O(n·m) | perto de `n` | simples; ótima para padrão curto |
@@ -1399,10 +1597,17 @@ int pb_rabin_karp(...);
 | Horspool | saltos, O(256 + m) | 256 inteiros | O(n·m) | perto de `n / m` | pula letras; melhora com padrão longo |
 | Rabin-Karp | hash do padrão, O(m) | nenhuma | O(n·m) | O(n + m) | vários padrões de uma vez; texto como números |
 
+Repare na coluna do caso comum. Num texto do dia a dia, a força bruta
+falha logo na primeira letra de quase todo alinhamento, e o KMP, que paga o
+preço de recuar, pode fazer até mais comparações que ela. O KMP só mostra a
+vantagem quando o texto tem muita repetição parcial do padrão. O Horspool,
+que pula letras, costuma ser o mais rápido em texto comum.
+
 > [!WARNING]
-> Os algoritmos trabalham com **bytes**: em UTF-8, "Reunião" tem 8 bytes, as
-> posições são de byte, e "garagem" não acha "GARAGEM" (E963 e E951). O seu grep
-> trata só padrões fixos.
+> Os algoritmos trabalham com **bytes**, não com letras. Em UTF-8,
+> "Reunião" tem 7 letras e 8 bytes, as posições que o grep mostra são de
+> byte, e "garagem" não acha "GARAGEM", porque maiúscula e minúscula são
+> bytes diferentes (E963 e E951).
 
 ### Exemplos de uso
 
