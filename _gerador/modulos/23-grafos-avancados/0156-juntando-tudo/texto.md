@@ -1,11 +1,16 @@
 ## 0156 · Juntando tudo: o assistente do calouro
 
-O calouro tem duas dúvidas. A de calendário: com esses pré-requisitos, em
-quantos semestres ele se forma, e o que cursa em cada um? A de geografia:
-qual o caminho mais rápido entre os prédios do campus?
-
-São dois grafos, e cada pergunta tem o seu algoritmo. A tabela resume o
-módulo:
+- **Cada pergunta, um algoritmo**: o tipo do grafo (dirigido ou não, com peso ou
+  sem) e a pergunta escolhem a técnica (ZIVIANI, 2010, cap. 7).
+- **Grade de disciplinas**: um **DAG** de setas "antes de", sem peso. "Quantos
+  semestres" é o Kahn por rodadas (A302), que também acusa pré-requisito
+  circular (CORMEN et al., 2024, cap. 20).
+- **Campus**: grafo **não dirigido** e ponderado. Com muitas consultas, compensa
+  calcular a tabela uma vez com o **Floyd-Warshall** e guardar o **próximo
+  passo** de cada rota (A309) (CORMEN et al., 2024, cap. 23).
+- **Um tipo `Grafo`** serve aos dois: número de vértices, nomes e matriz de
+  pesos. As funções recebem `const Grafo *` para não copiar a struct, que passa
+  de 300 bytes.
 
 | Pergunta | Algoritmo | Custo |
 | --- | --- | --- |
@@ -17,22 +22,16 @@ módulo:
 | Menor caminho de uma origem, com pesos negativos | Bellman-Ford | O(V · E) |
 | Menor caminho entre todos os pares | Floyd-Warshall | O(V³) |
 
-A grade é um **DAG** (assunto 0151): setas "antes de", sem peso. "Quantos
-semestres" é o Kahn por rodadas do A302, que também avisa de um
-pré-requisito circular.
+> [!WARNING]
+> Na matriz com "0 = sem aresta", uma aresta de peso **zero** some. Não misture
+> as perguntas: Floyd-Warshall com 100 mil vértices é inviável (10¹⁵ passos), e
+> a árvore mínima não dá caminho mínimo (21 m contra 18 m no 0153).
 
-O campus é um grafo **não dirigido** e ponderado, com seis prédios. Como as
-rotas pedidas variam, compensa calcular a tabela uma vez com o
-**Floyd-Warshall**, guardando o próximo passo de cada rota (A309), e
-consultar a matriz.
+{{exemplo}}
 
-Um tipo `Grafo` serve aos dois mapas: número de vértices, nomes e matriz de
-pesos. `liga` recebe se a aresta é de mão dupla. Na grade, o peso (1) só
-marca a seta; no campus, são minutos a pé. As funções recebem
-`const Grafo *` para não copiar a struct, que passa de 300 bytes.
-
-O desenho mostra a grade, com o semestre de cada disciplina, e o campus, com
-as duas rotas em verde:
+O calouro quer saber em quantos semestres se forma e qual o caminho mais rápido
+entre os prédios do campus. O desenho mostra a grade, com o semestre de cada
+disciplina, e o campus, com as duas rotas em verde:
 
 {{ideia}}
 
@@ -148,21 +147,3 @@ O fluxograma é o `main`: a grade passa pelo Kahn, e o campus passa uma vez
 pelo Floyd-Warshall e depois só consulta a tabela:
 
 {{fluxograma}}
-
-O A311 escolhe entre Dijkstra e Bellman-Ford conforme exista peso negativo.
-O A312 é um mini gerenciador de pacotes: instala as dependências do pacote
-pedido, na ordem certa, com a DFS em pós-ordem.
-
-> [!WARNING]
-> Na matriz com "0 = sem aresta", uma aresta de peso **zero** de verdade
-> some; esse mapa precisaria de outra marca, como o INFINITO. Não misture as
-> perguntas: Floyd-Warshall com 100 mil vértices é inviável (10¹⁵ passos), e
-> a árvore mínima não dá caminho mínimo (21 m contra 18 m no 0153).
-
-> [!NOTE]
-> **Pergunta para você:** se a coordenação colocar Projeto como pré-requisito
-> de Cálculo (`liga(&grade, 6, 1, 1, 0)`), o que o programa mostra? E se a
-> trilha Lab-Reitoria fechar para obra, qual passa a ser a rota do Lab ao
-> Ginásio, e quantos minutos leva?
-
-{{pratique}}

@@ -1,39 +1,32 @@
 ## 0154 · Bellman-Ford: pesos negativos
 
-O motoboy sai da Base para chegar em Casa gastando o mínimo. Alguns trechos
-coincidem com uma corrida que paga mais que a gasolina: do Shopping ao
-Centro ele gasta R$ 2 e recebe R$ 6, um **custo líquido** de **R$ -4**.
+- **Peso negativo**: o Dijkstra (0112) quebra, porque fixa um vértice cedo
+  supondo que somar pesos só aumenta (CORMEN et al., 2024, cap. 22).
+- **Relaxar** a aresta `u -> v` de custo `c`: se `dist[u] + c < dist[v]`,
+  atualize `dist[v]` e `anterior[v]` (no Cormen, `RELAX`, com `v.d` e `v.π`)
+  (CORMEN et al., 2024, cap. 22).
+- **Bellman-Ford**: `dist[origem] = 0`, INFINITO no resto, e **V - 1 rodadas**
+  relaxando **todas** as arestas, sem escolher o menor (BELLMAN, 1958).
+- **Por que V - 1**: um caminho mínimo não repete vértice, tem até V - 1
+  arestas, e a rodada `i` acerta a `i`-ésima. Rodada sem mudança permite parar.
+- **Ciclo negativo**: circuito de soma menor que zero; acaba com o caminho
+  mínimo. Uma **rodada extra** que ainda melhora alguma aresta o detecta
+  (CORMEN et al., 2024, cap. 22).
+- **Custo**: O(V · E), contra O((V + E) log V) do Dijkstra com heap. Num DAG,
+  relaxar cada aresta uma vez na ordem topológica (0151) dá O(V + E), mesmo com
+  negativos (CORMEN et al., 2024, cap. 22).
 
-O grafo é dirigido e tem **pesos negativos**, onde o Dijkstra (assunto 0112)
-quebra. Ele fixa o Centro com R$ 4 (direto da Base) antes de olhar o
-Shopping, mas Base, Shopping, Centro custa 6 - 4 = **R$ 2**. A premissa
-"somar pesos só aumenta" falha, e ele diz que Casa custa R$ 12, quando custa
-R$ 10.
+> [!WARNING]
+> O teste `dist[u] != INFINITO` é obrigatório: `INT_MAX + (-4)` **não** estoura,
+> e um vértice inalcançável "melhora" outro com distância falsa. Em grafo **não
+> dirigido**, uma aresta negativa já é um ciclo negativo (ir e voltar).
 
-O **Bellman-Ford** não fixa ninguém cedo. Ele **relaxa todas as arestas**,
-uma rodada inteira por vez, sem escolher o menor:
+{{exemplo}}
 
-- `dist[origem] = 0` e INFINITO no resto;
-- repita V - 1 vezes: para cada aresta `u -> v` com custo `c`, se
-  `dist[u] + c < dist[v]`, atualize `dist[v]` e `anterior[v]` (no Cormen,
-  `v.d` e `v.π`; esse teste é o `RELAX`).
-
-V - 1 rodadas bastam: um caminho mínimo não repete vértice e tem no máximo
-V - 1 arestas, e a rodada `i` acerta a `i`-ésima. Uma rodada sem mudança
-permite parar antes.
-
-Um **ciclo negativo** (circuito de soma menor que zero) elimina o caminho
-mínimo: cada volta diminui o custo. Uma rodada extra **detecta** o ciclo: se
-depois das V - 1 rodadas alguma aresta ainda melhora, há ciclo negativo
-alcançável.
-
-O custo é **O(V · E)**, contra O((V + E) log V) do Dijkstra com heap: com
-peso negativo, Bellman-Ford; sem ele, Dijkstra. Num DAG, relaxar cada aresta
-uma vez na ordem topológica (0151) dá os mínimos em O(V + E), mesmo com
-pesos negativos.
-
-No desenho, as setas mostram o custo líquido, cada lugar mostra a `dist`
-final, e a rota até Casa é verde. Embaixo, o vetor `dist` a cada rodada:
+Um motoboy vai da Base para Casa, e alguns trechos pagam mais que a gasolina:
+do Shopping ao Centro o **custo líquido** é R$ -4. O Dijkstra diria R$ 12 até
+Casa; o certo é R$ 10. As setas mostram o custo, cada lugar a `dist` final, e
+embaixo o vetor `dist` a cada rodada:
 
 {{ideia}}
 
@@ -124,20 +117,4 @@ na rodada 4, quando a melhora do Centro chega até ela:
 | 4 | Casa via Hospital: 7 + 3 | 0 | 6 | 2 | 11 | 7 | 10 |
 | 5 | nada muda: para | 0 | 6 | 2 | 11 | 7 | 10 |
 
-Com a lista na ordem "natural" (arestas da Base primeiro), uma rodada já
-bastaria; o A308 mede isso. O A307 caça um ciclo negativo numa tabela de
-câmbio.
-
-> [!WARNING]
-> Com `INT_MAX` como INFINITO, o teste `dist[u] != INFINITO` é obrigatório:
-> `INT_MAX + (-4)` **não** estoura, dá `INT_MAX - 4`, e um vértice
-> inalcançável "melhora" outro com uma distância gigante e falsa. Em grafo
-> **não dirigido**, uma aresta negativa já é um ciclo negativo (ir e voltar).
-
-> [!NOTE]
-> **Pergunta para você:** se a corrida da Faculdade para o Hospital passar a
-> pagar mais (custo -6 em vez de -2), qual a nova rota até Casa e quanto ela
-> custa? E se, além disso, existir um trecho Hospital -> Faculdade de custo
-> 3, o que o programa mostra?
-
-{{pratique}}
+Com as arestas da Base primeiro na lista, uma rodada já bastaria (A308).

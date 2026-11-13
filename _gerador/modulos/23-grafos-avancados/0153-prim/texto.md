@@ -1,37 +1,35 @@
 ## 0153 · Prim: a árvore que cresce
 
-Cinco chácaras vão dividir a água de um poço artesiano. O encanador mediu os
-trechos por onde passa cano: do Poço à Ana são 4 m, da Ana ao Beto 3 m, e
-assim por diante. O objetivo é o do Kruskal: ligar todo mundo com o **mínimo
-de cano**.
-
-O encanador sai do Poço e vai **esticando a rede**: a cada passo, entre os
-canos que ligam uma casa atendida a uma sem água, escolhe o **mais curto**.
-Esse é o algoritmo de **Prim**.
-
-O Prim é guloso e acerta pela propriedade do corte (assunto 0152): o cano
-mais curto entre casas atendidas e não atendidas sempre cabe numa árvore
-mínima. O Kruskal junta florestas espalhadas; o Prim mantém **uma árvore
-só**, que cresce da origem.
-
-Para achar o cano mais curto que sai da rede, o Prim usa o **heap de mínimo**
-do assunto 0102. Cada item diz "dá para ligar `v` com `chave` metros a
-partir de `de`". Quando uma casa entra, os canos que saem dela entram no
-heap. Item cuja casa já está na rede é **descartado**. Essa versão, que não
-atualiza itens dentro do heap, é a **preguiçosa**. A do Cormen (`MST-PRIM`)
-põe todos os vértices no heap com chave infinita e baixa a chave no lugar
-(`DECREASE-KEY`). Com heap binário, as duas custam O(E log V).
-
-O código lembra o Dijkstra (assunto 0112); muda a chave de quem entra no
-heap:
+- **Prim**: sai de um vértice e, a cada passo, escolhe a aresta mais leve entre
+  um vértice da árvore e um de fora. Mantém **uma árvore só**, que cresce da
+  origem; o Kruskal junta florestas (PRIM, 1957).
+- **Por que acerta**: é guloso e vale a propriedade do corte (0152)
+  (CORMEN et al., 2024, cap. 21).
+- **Heap de mínimo** (0102): cada item diz "dá para ligar `v` com `chave` a
+  partir de `de`". Quando um vértice entra, as arestas que saem dele entram no
+  heap.
+- **Versão preguiçosa**: item cujo vértice já está na árvore é **descartado**;
+  nada se atualiza dentro do heap (SEDGEWICK; WAYNE, 2011).
+- **Versão do Cormen** (`MST-PRIM`): todos os vértices no heap com chave
+  infinita, e `DECREASE-KEY` baixa a chave no lugar. Com heap binário, as duas
+  custam O(E log V) (CORMEN et al., 2024, cap. 21).
+- **Prim e Dijkstra** (0112): mesmo código, muda a chave de quem entra no heap.
 
 | | chave de `w` ao sair de `v` | o que a árvore minimiza |
 | --- | --- | --- |
 | Prim | `cano[v][w]` | a soma de **todos** os canos |
 | Dijkstra | `dist[v] + cano[v][w]` | a distância de **cada** casa até o Poço |
 
-No desenho, os números são a ordem de entrada na rede, as arestas verdes são
-os canos escolhidos, e à direita está o heap logo depois que a Ana entra:
+> [!WARNING]
+> Sem `if (na_rede[it.v]) continue;`, o total soma cano que ninguém instala
+> (aqui, 49 m). Sem `!na_rede[w]`, o heap enche de itens inúteis e `CAP` pode
+> estourar. Prim e Kruskal só valem para grafo **não dirigido**.
+
+{{exemplo}}
+
+Cinco chácaras vão dividir a água de um poço com o mínimo de cano. Os números
+são a ordem de entrada na rede, as arestas verdes são os canos escolhidos, e à
+direita está o heap logo depois que a Ana entra:
 
 {{ideia}}
 
@@ -138,24 +136,5 @@ itens velhos:
 | Davi (2) | Elza 4 | Elza 4, Beto 6, Cida 8, Davi 8, Elza 9 |
 | Elza (4) | | sobram 4 itens velhos, todos descartados |
 
-No Dijkstra a partir do Poço, o Beto ficaria no Poço (6 m direto, contra
-4 + 3 = 7 pela Ana), e o resto seguiria Beto, Cida, Davi, Elza. Cada casa
-ficaria o mais perto possível do Poço, e a rede gastaria
-4 + 6 + 5 + 2 + 4 = **21 m**. O Prim gasta **18 m**: outra pergunta, outra
-árvore.
-
-O A305 faz o Prim sem heap, em O(V²), para um grafo completo, onde a versão
-com vetor ganha. O A306 roda Prim e Dijkstra no mesmo mapa.
-
-> [!WARNING]
-> Sem `if (na_rede[it.v]) continue;`, o total soma cano que ninguém instala
-> (aqui, 18 + 6 + 8 + 8 + 9 = 49 m). Sem `!na_rede[w]` nos vizinhos, o heap
-> enche de itens inúteis e `CAP` pode estourar. Prim e Kruskal só valem para
-> grafo **não dirigido**.
-
-> [!NOTE]
-> **Pergunta para você:** se o cano Ana-Beto custar 7 m em vez de 3, quem
-> pendura o Beto na rede, e qual o novo total? Monte a tabela do heap antes de
-> trocar o `{1, 2, 3}`.
-
-{{pratique}}
+O Dijkstra a partir do Poço ligaria o Beto direto ao Poço (6 m, contra 7 pela
+Ana) e gastaria **21 m**; o Prim gasta **18 m**. Outra pergunta, outra árvore.

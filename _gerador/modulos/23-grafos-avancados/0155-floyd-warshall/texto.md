@@ -1,17 +1,19 @@
 ## 0155 · Floyd-Warshall: todos os pares
 
-Um aplicativo de corrida precisa do tempo de cada bairro a cada outro, para
-estimar o preço. São cinco bairros com ruas de **mão única**: Centro, Porto,
-Vila, Alto e Feira. A pergunta é "**de todo mundo para todo mundo**".
-
-Dá para rodar o Dijkstra a partir de cada bairro. O **Floyd-Warshall** monta
-a tabela inteira com uma matriz e três laços aninhados. A ideia é da
-programação dinâmica (módulo 21): pense nos bairros que um caminho pode usar
-**como passagem**, não em caminhos inteiros.
-
-Comece com `d[i][j]` = tempo da rua direta de `i` para `j` (INFINITO se não
-existe, 0 na diagonal). Libere o Centro como passagem: vale ir de `i` ao
-Centro e do Centro a `j`? Depois libere o Porto, a Vila, e assim por diante:
+- **Todos os pares**: a menor distância de cada vértice a cada outro, numa
+  matriz `d` (CORMEN et al., 2024, cap. 23).
+- **Floyd-Warshall**: programação dinâmica (módulo 21) sobre os vértices que um
+  caminho pode usar **como passagem**. Começa com `d[i][j]` = peso da aresta
+  direta, INFINITO se não há, 0 na diagonal (FLOYD, 1962).
+- **Rodada `k`**: depois dela, `d[i][j]` é o melhor de `i` a `j` usando como
+  passagem só os vértices de 0 a `k`. Por isso o `k` é o laço **de fora**.
+- **Custo**: **O(V³)** de tempo e O(V²) de memória: 125 passos para 5 vértices,
+  64 milhões para 400. Para grafos grandes e esparsos, Dijkstra com heap
+  (CORMEN et al., 2024, cap. 23).
+- **Pesos negativos**: aceita, sem ciclo negativo; com ciclo, aparece
+  `d[i][i] < 0` no fim.
+- **Fecho transitivo**: trocar `+` e `min` por `&&` e `||` responde "existe
+  caminho?" (algoritmo de Warshall) (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 8).
 
 ```text
 para cada k:            (o bairro que passa a valer como passagem)
@@ -19,18 +21,16 @@ para cada k:            (o bairro que passa a valer como passagem)
         d[i][j] = mínimo(d[i][j], d[i][k] + d[k][j])
 ```
 
-Depois da rodada `k`, `d[i][j]` é o melhor tempo de `i` a `j` usando como
-passagem só os bairros de 0 a `k`. O `k` **tem** que ser o laço de fora: ele
-é a rodada.
+> [!WARNING]
+> Pôr o `k` no laço de **dentro** compila, roda e erra sem aviso: `d[i][k]` e
+> `d[k][j]` ainda não estão prontos. E `d[i][k] + d[k][j]` precisa do teste de
+> INFINITO: com `INT_MAX`, estoura.
 
-O custo é **O(V³)**, com memória O(V²): 125 passos para 5 bairros, 64
-milhões para 400. Para 100 mil esquinas, use Dijkstra com heap. O
-Floyd-Warshall aceita pesos negativos (sem ciclo negativo); com ciclo, aparece
-`d[i][i] < 0` no fim.
+{{exemplo}}
 
-No desenho, as setas são as ruas com os minutos, e o melhor caminho de
-Centro até Alto, em verde, passa por três bairros. Embaixo, a tabela final,
-com a linha do Centro destacada:
+Um aplicativo de corrida quer o tempo de cada bairro a cada outro, com ruas de
+**mão única**. As setas são as ruas em minutos, e o melhor caminho de Centro
+até Alto, em verde, passa por três bairros. Embaixo, a tabela final:
 
 {{ideia}}
 
@@ -93,22 +93,5 @@ A casa `d[Centro][Alto]`, rodada a rodada:
 | k = Alto | 9 | passar pelo próprio destino não ajuda |
 | k = Feira | 8 | Centro → Vila → Porto → Feira → Alto: 2 + 3 + 2 + 1 |
 
-Na rodada da Vila, o programa soma `d[Centro][Vila]` (2) com
-`d[Vila][Alto]` (7, da rodada do Porto): cada rodada aproveita as anteriores.
-
-O A309 guarda o próximo passo de cada rota e imprime o caminho entre dois
-bairros. O A310 troca `+` e `min` por `&&` e `||` e responde "existe
-caminho?", o **fecho transitivo**.
-
-> [!WARNING]
-> Pôr o `k` no laço de **dentro** compila, roda e dá resposta errada sem
-> aviso: `d[i][k]` e `d[k][j]` ainda não estão prontos. A soma
-> `d[i][k] + d[k][j]` também precisa do teste de INFINITO (ou de um INFINITO
-> folgado como o daqui): com `INT_MAX`, ela estoura.
-
-> [!NOTE]
-> **Pergunta para você:** se a prefeitura abrir uma rua Alto → Porto de 2
-> minutos, que casas da tabela mudam? Calcule a nova linha do Alto e a nova
-> coluna do Porto antes de acrescentar `{3, 1, 2}` (e trocar o 8 por 9).
-
-{{pratique}}
+Cada rodada aproveita as anteriores: na da Vila, `d[Vila][Alto]` já vale 7,
+calculado na rodada do Porto.

@@ -1,38 +1,31 @@
 ## 0152 · Kruskal: árvore geradora mínima
 
-A prefeitura quer asfaltar estradas entre seis vilas: Sede, Ponte, Brejo,
-Serra, Lagoa e Vale. A engenharia orçou nove trechos, de R$ 2 mil a R$ 9 mil.
-Depois da obra, deve dar para ir de qualquer vila a qualquer outra.
+- **Árvore**: grafo conexo e sem ciclo; com V vértices tem **V - 1 arestas**.
+- **Árvore geradora mínima** (MST, *minimum spanning tree*): árvore que toca
+  todos os vértices de um grafo **não dirigido** ponderado com a menor soma de
+  pesos (CORMEN et al., 2024, cap. 21). Não é o caminho mais curto entre dois.
+- **Kruskal**: ordene as arestas da mais barata para a mais cara, aceite cada
+  uma que **não feche ciclo** e pare com V - 1. É guloso (assunto 0133)
+  (KRUSKAL, 1956).
+- **Teste do ciclo**: o **union-find** (0148). Se `acha(a)` e `acha(b)` dão o
+  mesmo representante, a aresta fecha ciclo; senão, `une` junta os grupos
+  (SEDGEWICK; WAYNE, 2011).
+- **Custo**: a ordenação domina, O(E log E) = O(E log V); o union-find é quase
+  O(1) por operação (CORMEN et al., 2024, cap. 21).
+- **Propriedade do corte**: a aresta mais barata que cruza de um grupo ao outro
+  (**leve**) é **segura**: entra sem estragar a MST (CORMEN et al., 2024, cap. 21).
+- **Empates**: a MST pode não ser única; o custo mínimo é.
 
-O pedido é um conjunto de estradas que **ligue todo mundo** com a **menor
-soma**, não o caminho mais curto entre duas vilas. Esse conjunto nunca tem
-ciclo: num ciclo, tirar a estrada mais cara mantém tudo ligado, por menos.
-Um grafo conexo e sem ciclo é uma **árvore**, e uma árvore com V vértices
-tem **V - 1 arestas**.
+> [!WARNING]
+> Testar `pai[a] != pai[b]` no lugar de `acha(a) != acha(b)` é o erro clássico:
+> `pai` não é o representante. E no `qsort`, `x->custo - y->custo` estoura perto
+> de `INT_MAX`; use `(x->custo > y->custo) - (x->custo < y->custo)`.
 
-A **árvore geradora mínima** (MST, de *minimum spanning tree*) toca todos
-os vértices com a menor soma de pesos, num grafo **não dirigido** e
-ponderado.
+{{exemplo}}
 
-O **Kruskal** é guloso (assunto 0133):
-
-1. ordene as arestas da mais barata para a mais cara;
-2. percorra a lista e **aceite** cada aresta que **não feche ciclo** com as
-   já aceitas;
-3. pare com V - 1 arestas.
-
-O passo 2 usa o **union-find** do assunto 0148: cada grupo de vilas ligadas
-é um conjunto. Se `acha(a)` e `acha(b)` dão o mesmo representante, a aresta
-fecharia um ciclo; senão, `une` junta os grupos. A ordenação domina o custo:
-O(E log E) = O(E log V), porque E < V². O union-find custa quase O(1) por
-operação.
-
-O guloso acerta pela **propriedade do corte**: toda árvore que liga tudo
-cruza de um grupo ao outro, e cruzar pela aresta mais barata nunca é pior.
-No Cormen, essa aresta **leve** é **segura**: entra sem estragar a MST.
-
-No desenho, verde entrou, vermelho fecharia ciclo e cinza nem foi olhado,
-porque as 5 arestas já tinham saído:
+A prefeitura quer asfaltar estradas entre seis vilas com o menor custo, a partir
+de nove trechos orçados. Verde entrou, vermelho fecharia ciclo e cinza nem foi
+olhado, porque as 5 arestas já tinham saído:
 
 {{ideia}}
 
@@ -132,21 +125,4 @@ Brejo:
 | Serra-Vale 7 | diferentes | aceita | todas juntas: 5 arestas, para |
 
 Lagoa-Vale também custa 7: se viesse antes, entraria no lugar de Serra-Vale,
-com **mesmo total**. Com empates, a MST pode não ser única; o custo mínimo é.
-
-O A303 para o Kruskal antes do fim, para separar clientes em regiões. O A304
-inverte a ordenação e acha a árvore de **maior** soma.
-
-> [!WARNING]
-> Testar `pai[a] != pai[b]` no lugar de `acha(a) != acha(b)` é o erro
-> clássico: o `pai` não é o representante, e dois vértices do mesmo grupo
-> podem ter pais diferentes. No `qsort`, a subtração `x->custo - y->custo`
-> estoura perto de `INT_MAX`; use `(x->custo > y->custo) - (x->custo <
-> y->custo)`.
-
-> [!NOTE]
-> **Pergunta para você:** se o trecho Ponte-Serra subir de 5 para 10 mil, qual
-> estrada entra no lugar dele e qual passa a ser o total? Refaça a tabela
-> antes de mudar o `{1, 3, 5}`.
-
-{{pratique}}
+com o **mesmo total**.

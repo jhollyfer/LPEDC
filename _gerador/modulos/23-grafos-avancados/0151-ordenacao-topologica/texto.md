@@ -1,37 +1,30 @@
 ## 0151 · Ordenação topológica
 
-O mestre de obras tem oito serviços para encaixar no cronograma: não dá para
-levantar parede sem fundação, nem pintar com o reboco molhado. Ele precisa de
-uma lista em que **todo serviço apareça depois dos que ele espera**.
+- **Ordenação topológica**: ordem dos vértices em que toda seta `a -> b` aponta
+  para a frente. Só existe se o grafo não tem ciclo (CORMEN et al., 2024, cap. 20).
+- **DAG** (*directed acyclic graph*): grafo dirigido sem ciclos.
+- **Grau de entrada**: quantas setas chegam ao vértice, ou quantos serviços ele
+  espera.
+- **Algoritmo de Kahn**: ponha numa fila (0085) todos com grau 0; tire um,
+  escreva na lista e faça `grau[v]--` em quem esperava por ele; quem chegar a 0
+  entra na fila. Repita até esvaziar (KAHN, 1962).
+- **Detecta ciclo**: se a lista terminar com menos de V vértices, sobraram os
+  que estão num ciclo ou depois dele. Custo O(V + E) com lista, O(V²) com
+  matriz (SZWARCFITER; MARKENZON, 2010).
+- **Não é única**: vértices livres ao mesmo tempo saem na ordem da fila.
+- **Pela DFS**: empilhe `u` quando `dfs(u)` termina; a pós-ordem de trás para a
+  frente é uma ordenação topológica (tempo de término decrescente, no Cormen;
+  A301) (CORMEN et al., 2024, cap. 20).
 
-Cada regra "a antes de b" é uma seta `a -> b`. A lista é a **ordenação
-topológica**: uma ordem dos vértices em que toda seta aponta para a frente.
-Ela só existe se o grafo não tem ciclo. Um grafo dirigido sem ciclos é um
-**DAG** (*directed acyclic graph*).
+> [!WARNING]
+> O grau que importa é o de **entrada**: `grau[b] += antes[a][b]`, somando pela
+> coluna. Pela linha dá o de saída e acusa ciclo que não existe. Sem
+> `feitas < V`, um ciclo gera uma lista incompleta que parece certa.
 
-O **algoritmo de Kahn** faz o que o mestre de obras faria:
+{{exemplo}}
 
-1. conte, para cada serviço, quantos ele espera: o **grau de entrada**;
-2. ponha numa fila (assunto 0085) todos com grau 0;
-3. tire um da fila e escreva na lista. Quem esperava por ele passa a esperar
-   **um a menos**: `grau[v]--`. Quem chegar a 0 entra na fila;
-4. repita até a fila esvaziar.
-
-Se a lista terminar com menos de V serviços, sobraram os que estão num ciclo
-ou depois dele: o Kahn detecta o ciclo sem custo extra. Cada vértice e cada
-seta são tratados uma vez: O(V + E) com lista de adjacência, O(V²) com
-matriz.
-
-A resposta **não é única**: Elétrica, Hidráulica e Telhado ficam livres
-juntos, e a fila e a ordem de índice decidem o empate.
-
-O segundo caminho usa a DFS (assunto 0111). Quando `dfs(u)` termina, tudo o
-que depende de `u` já terminou. A ordem de término (**pós-ordem**), de trás
-para a frente, é uma ordenação topológica: empilhe `u` no fim de `dfs(u)` e
-desempilhe tudo no final, como no A301. É a versão do Cormen (tempo de
-término `u.f` decrescente).
-
-No desenho, o número em cada serviço é a posição dele na lista:
+Oito serviços de uma obra: não dá para levantar parede sem fundação nem pintar
+com o reboco molhado. O número em cada serviço é a posição dele na lista:
 
 {{ideia}}
 
@@ -101,19 +94,4 @@ quantos saíram, comparado com V.
 | Reboco | Pintura 1 → 0 | Pintura | Pintura |
 | Pintura | | | (vazia) |
 
-O A302 reaproveita o Kahn: quantos semestres, no mínimo, um curso precisa,
-cursando em paralelo tudo que já está liberado.
-
-> [!WARNING]
-> O grau que importa é o de **entrada**: `grau[b] += antes[a][b]`, somando
-> pela coluna. Somar pela linha dá o grau de saída, e o programa acusa um
-> ciclo que não existe. Sem `feitas < V`, um ciclo de verdade gera uma lista
-> incompleta que parece certa.
-
-> [!NOTE]
-> **Pergunta para você:** se o Piso também passar a esperar o Telhado
-> (acrescente `{7, 4}` nas regras e troque o 10 por 11), em que posição o
-> Piso sai? E se a Fundação passar a esperar a Pintura (`{5, 1}`), o que o
-> programa mostra?
-
-{{pratique}}
+O A302 usa o Kahn para contar o mínimo de semestres de um curso.

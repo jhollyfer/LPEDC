@@ -1,13 +1,9 @@
 # Módulo 23 · Grafos: estrutura e caminhos
 
-O módulo 16 ensinou BFS, DFS e Dijkstra: "como eu ando pelo grafo?". Aqui a
-pergunta é "**o que ele esconde?**": pedaços soltos, ciclos, ordem das
-tarefas, o jeito mais barato de ligar todos, pesos negativos e caminhos de
-todos para todos.
-
-Cada assunto reaproveita uma peça conhecida: a DFS vira detector de ciclos e
-ordenação topológica, a fila vira o Kahn, `qsort` e union-find viram o
-Kruskal, o heap vira o Prim e a tabela da PD vira o Floyd-Warshall.
+Depois de BFS, DFS e Dijkstra (módulo 16), o que o grafo esconde: componentes,
+ciclos, ordem das tarefas, árvore geradora mínima, pesos negativos e caminhos
+entre todos os pares. Depende também de fila, heap, union-find (0148) e PD
+(módulo 21).
 
 ## O que você vai aprender
 
@@ -23,16 +19,14 @@ Kruskal, o heap vira o Prim e a tabela da PD vira o Floyd-Warshall.
 
 ## Antes de começar
 
+Revise o módulo 16 (matriz de adjacência, BFS 0110, DFS 0111 e Dijkstra 0112),
+fila (0085), heap (0102), `qsort` (0096), union-find (0148), recursão (0032),
+permutações (0126) e PD (módulo 21). Grau, circuitos, eulerianos,
+hamiltonianos, pontes e articulações estão nos assuntos 0182 a 0184.
+
 Cada assunto traz o algoritmo inteiro num arquivo, sem TAD. Nos desenhos, a
 origem é roxa e as arestas verdes são as escolhidas; na DFS de três cores,
 amarelo é o cinza (na pilha) e verde é o preto (terminado).
-
-Você precisa do módulo 16 (matriz de adjacência, BFS 0110, DFS 0111 e
-Dijkstra 0112, a reler antes do 0153), fila (0085), heap (0102), `qsort`
-(0096), union-find (0148), recursão (0032), permutações (0126) e PD (módulo
-21). Grau, circuitos, grafos eulerianos e hamiltonianos, pontes e
-articulações, que o edital do PPGI também cobra, estão nos assuntos 0182 a
-0184.
 
 Três convenções valem para o módulo:
 
