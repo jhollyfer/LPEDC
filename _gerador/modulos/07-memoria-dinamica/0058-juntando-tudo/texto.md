@@ -1,21 +1,53 @@
 ## 0058 · Juntando tudo
 
-- **Heap** (0053): o caderno de fiado dura o programa todo e cresce, então mora
-  no heap (CELES; RANGEL, 2002).
-- **`malloc` e `free`** (0054): `duplicar` copia cada nome para um bloco do
-  tamanho exato, `strlen + 1` (BACKES, 2013, cap. 11).
-- **`realloc`** (0055): dois vetores paralelos (`nomes` e `centavos`) dobram a
-  capacidade juntos, com ponteiro temporário (CELES; RANGEL, 2002).
-- **Vetor de ponteiros** (0056): `char **nomes` é um vetor de `char *`, como as
-  linhas de tamanhos diferentes de uma matriz dinâmica (BACKES, 2013, cap. 11).
-- **`char ***`**: `crescer` precisa mudar o ponteiro `nomes` do `main`, então
-  recebe o endereço dele (assunto 0049) (FEOFILOFF, 2009, ap. F).
-- **Centavos**: valores em `int` não têm erro de arredondamento; R$ 12,50 vira
-  `1250`.
+O mercadinho anota o fiado num caderno: o nome do cliente e quanto ele deve.
+Cliente novo ganha uma linha, cliente antigo soma na conta e quem paga fica
+zerado. O caderno não tem número fixo de páginas, e cada nome tem um
+tamanho. Os dois problemas, quantidade desconhecida e tamanhos diferentes,
+são exatamente o que o módulo ensinou a resolver.
+
+Comece por onde o caderno mora. Ele precisa durar o programa todo e crescer
+conforme chegam clientes, então não cabe num frame da pilha; mora no **heap**
+(assunto 0053). Quem decide quando ele some é o próprio programa, no fim
+(CELES; RANGEL, 2002).
+
+Cada nome digitado chega numa variável temporária, que vai ser reaproveitada
+na próxima leitura. Para guardá-lo de vez, a função `duplicar` pede ao
+`malloc` (assunto 0054) um bloco do tamanho exato, `strlen(nome) + 1` bytes,
+e copia o texto para lá. O `+ 1` é o lugar do `'\0'` (BACKES, 2013, cap. 11).
+"Bia" ocupa 4 bytes e "Dona Cida", 10; nenhum espaço é desperdiçado.
+
+O caderno em si são **dois vetores paralelos**: `nomes`, com o endereço do
+nome de cada cliente, e `centavos`, com o quanto cada um deve, na mesma
+posição. Quando os dois enchem, a função `crescer` dobra a capacidade dos
+dois juntos com `realloc` (assunto 0055), sempre por um ponteiro temporário,
+para não perder o bloco se o pedido falhar (CELES; RANGEL, 2002).
+
+O vetor `nomes` tem tipo `char **`: é um vetor de `char *`, e cada item
+aponta para um bloco de tamanho próprio. É a mesma forma da matriz dinâmica
+com linhas de tamanhos diferentes (assunto 0056) (BACKES, 2013, cap. 11).
+
+A novidade do programa está no parâmetro de `crescer`. O `realloc` pode
+mudar o bloco de lugar, então a função precisa **mudar** o ponteiro `nomes`
+do `main`. Pela regra do assunto 0049, ela recebe o endereço desse ponteiro.
+Como `nomes` é `char **`, o endereço dele é um `char ***`: três estrelas,
+uma para cada salto até a letra (FEOFILOFF, 2009, ap. F). O mesmo raciocínio
+dá `int **` para o vetor `centavos`.
+
+Os valores ficam em **centavos**, guardados em `int`. Um `double` não
+representa 0,10 com exatidão, e somas de muitos valores acumulam erro de
+arredondamento; inteiros não têm esse problema. R$ 12,50 vira `1250`, e a
+conversão para reais acontece só na hora de mostrar.
+
+Por fim, a limpeza segue a ordem do assunto 0056: primeiro cada nome, depois
+os dois vetores. Os dois vetores paralelos funcionam, mas são um remendo. A
+`struct` do módulo 08 junta "nome e saldo" numa coisa só, e um vetor de
+`struct cliente` precisa de um `realloc` só.
 
 > [!WARNING]
-> Liberar só `nomes` vaza todos os nomes: cada `nomes[i]` tem seu `malloc`. São
-> 2 `malloc` no começo e 5 nomes, então `liberar` faz 5 + 2 `free`. Confira com
+> Liberar só `nomes` vaza todos os nomes: cada `nomes[i]` tem seu `malloc`,
+> dentro de `duplicar`. São 2 `malloc` no começo e 5 nomes (os `realloc` só
+> trocam um bloco por outro), então `liberar` faz 5 + 2 `free`. Confira com
 > `valgrind ./programa` a linha `All heap blocks were freed`.
 
 {{exemplo}}

@@ -72,20 +72,44 @@ depois dele**.
 
 ### Conceito
 
-- **Regiões da memória**: o programa recebe uma faixa de endereços dividida em
-  código, dados, heap e pilha. Cada região tem um dono e um tempo de vida
-  próprios (CELES; RANGEL, 2002).
-- **Pilha** (*stack*): cada chamada empilha um **frame** com as locais e os
-  parâmetros; o `return` o desempilha (assunto 0031). É automática, rápida e
-  pequena: no Linux, 8 MiB (`ulimit -s` mostra `8192`, em KiB) (CELES; RANGEL, 2002).
-- **Heap**: depósito do tamanho da memória livre. Você pede um bloco de N bytes
-  em tempo de execução e recebe o **endereço** dele. O bloco não pertence a
-  função nenhuma e vive até o `free` (BACKES, 2013, cap. 11).
-- **Estática, automática e dinâmica**: os nomes dos livros para a alocação nos
-  dados (tamanho fixo desde a compilação), na pilha e no heap
-  (CELES; RANGEL, 2002).
-- **Sem coletor de lixo**: o C não apaga sozinho o que ninguém usa. Tudo o que
-  sai do heap volta com `free` (FEOFILOFF, 2009, ap. F).
+Sexta à noite, restaurante cheio. O garçom anota o pedido da mesa 4 num
+bloquinho, arranca a folha e prende a comanda no balcão da cozinha. O
+bloquinho volta limpo para o bolso; a comanda fica no balcão até alguém
+pagar a conta e jogá-la fora. Um programa lida com a memória do mesmo jeito:
+há rascunho que só dura enquanto uma função trabalha, e há dado que precisa
+sobreviver a ela. Até aqui você só usou o primeiro tipo. Este módulo trata do
+segundo.
+
+Para entender a diferença, olhe o mapa. Quando o programa começa, o sistema
+operacional lhe entrega uma faixa de endereços dividida em **regiões**, e
+cada uma tem um dono e um tempo de vida próprios (CELES; RANGEL, 2002). A
+região de **código** guarda as instruções e os literais de string, como
+`"bom dia"` (assunto 0048), e é só de leitura. A região de **dados** guarda
+as variáveis globais e as `static`. As outras duas, a pilha e o heap, são as
+que interessam aqui.
+
+A **pilha** (*stack*) você conhece do assunto 0031. A cada chamada de função,
+ela empilha um **frame**, o espaço com as variáveis locais e os parâmetros
+daquela chamada; no `return`, o frame é desempilhado. É o bloquinho do
+garçom: automática, porque ninguém precisa pedir nem devolver, e rápida. Mas
+tem dois limites. O frame some no `return`, então nada que mora nele
+sobrevive à função. E a pilha é pequena: no Linux, 8 MiB por padrão; o
+comando `ulimit -s` mostra `8192`, em KiB (CELES; RANGEL, 2002). Um vetor
+local de 20 MB não cabe nela.
+
+O **heap** é o balcão da cozinha. É um depósito do tamanho da memória livre
+da máquina, e nele você pede, com o programa já rodando, um bloco de N
+bytes. Em troca, recebe o **endereço** desse bloco, que você guarda num
+ponteiro e usa como vetor. O bloco não pertence a função nenhuma: ele fica
+vivo até você devolvê-lo com `free` (BACKES, 2013, cap. 11). Por isso dá para
+criar um dado numa função e usá-lo em outra, depois que a primeira já
+retornou. O assunto 0054 mostra como pedir e devolver.
+
+Os livros dão nomes a esses três jeitos de conseguir memória. A alocação
+**estática** acontece na região de dados, com tamanho e endereço fixos desde
+a compilação. A **automática** acontece na pilha, a cada chamada. A
+**dinâmica** acontece no heap, quando você pede (CELES; RANGEL, 2002). A
+tabela resume o mapa:
 
 | Região | O que guarda | Quem cria e quem apaga | Dura |
 | --- | --- | --- | --- |
@@ -94,10 +118,17 @@ depois dele**.
 | **heap** | blocos pedidos com `malloc` | **você** pede e **você** devolve | até o `free` |
 | **pilha** | locais e parâmetros (os frames) | a chamada e o `return` | enquanto a função roda |
 
+A coluna do meio guarda a responsabilidade nova. O C não tem **coletor de
+lixo** (*garbage collector*), o mecanismo que apaga sozinho o que ninguém
+mais usa. Tudo o que você tira do heap, você devolve com `free`; o que fica
+esquecido continua ocupado até o programa acabar (FEOFILOFF, 2009, ap. F).
+
 > [!WARNING]
-> Nunca devolva o endereço de uma variável local: `char senha[8]; ... return senha;`
-> aponta para um frame que já morreu. O gcc avisa e devolve `NULL` no lugar.
-> Saídas: quem chama empresta o vetor, a variável vira `static` ou o bloco vem do heap.
+> Nunca devolva o endereço de uma variável local: `char senha[8]; ... return
+> senha;` aponta para um frame que deixa de existir no `return`. O gcc avisa
+> (`function returns address of local variable`) e devolve `NULL` no lugar.
+> Saídas: quem chama empresta o vetor, a variável vira `static` ou o bloco
+> vem do heap.
 
 ### Exemplos de uso
 
@@ -368,34 +399,65 @@ sai n=0: devolve 51
 
 ### Conceito
 
-- **`malloc`** (*memory allocation*, de `<stdlib.h>`): recebe **quantos bytes**
-  você quer e devolve o endereço de um bloco no heap. O ponteiro que recebe age
-  como vetor (BACKES, 2013, cap. 11).
+Fim do mês, hora de somar as corridas de aplicativo. Teve mês com 4 corridas
+e teve mês com 60. Se você declarar `double corridas[100];`, desperdiça
+espaço nos meses fracos e estoura no mês em que passar de 100. O tamanho
+certo só aparece quando o programa já está rodando e pergunta quantas
+corridas foram. Falta um jeito de pedir memória nessa hora, do tamanho exato.
+
+Quem atende o pedido é o **`malloc`** (*memory allocation*, alocação de
+memória), da biblioteca `<stdlib.h>`. Você diz **quantos bytes** quer, e ele
+separa um bloco desse tamanho no heap (assunto 0053) e devolve o
+**endereço** do começo. Esse endereço vai para um ponteiro, e o ponteiro age
+como vetor: `corridas[i]` funciona como em qualquer vetor, pela regra
+`v[i] == *(v + i)` do assunto 0047 (BACKES, 2013, cap. 11).
 
 ```c
 double *corridas = malloc(n * sizeof(double)); // n * 8 bytes
 ```
 
-- **Conta em bytes**: `malloc(4)` dá 4 bytes, não 4 `double`. Por isso
-  `n * sizeof(tipo)` (CELES; RANGEL, 2002).
-- **`void *`**: o retorno vira `double *` sozinho; em C o cast é dispensável
-  (BACKES, 2013, cap. 11).
-- **`NULL`**: é o que volta quando falta memória. Confira sempre antes de usar
-  (FEOFILOFF, 2009, ap. F).
-- **Lixo**: o `malloc` não zera o bloco. Preencha antes de ler
-  (BACKES, 2013, cap. 11).
-- **`free(p)`**: devolve o bloco, com exatamente o endereço que o `malloc` deu.
-  O tamanho fica num cabeçalho escondido, por isso `free(p + 1)` dá errado
-  (KERNIGHAN; RITCHIE, 1989, seção 8.7).
-- **Depois do `free`**, o ponteiro ainda guarda o endereço antigo. O hábito é
-  `p = NULL;` (FEOFILOFF, 2009, ap. F).
-- **Vazamento** (*memory leak*): bloco que ninguém libera. Todo `malloc` tem um
-  `free` (DEITEL; DEITEL, 2011, cap. 12).
+Leia a linha devagar, porque cada parte tem um motivo. O `malloc` conta em
+**bytes**, não em elementos: `malloc(4)` dá 4 bytes, e não 4 `double`. Por
+isso o pedido é `n * sizeof(double)`, o número de itens vezes o tamanho de
+cada um; com `n` igual a 4, são 32 bytes (CELES; RANGEL, 2002).
+
+O retorno do `malloc` é um `void *` (assunto 0051), porque ele não sabe o
+que você vai guardar. Em C, esse `void *` vira `double *` sozinho na
+atribuição, então o cast `(double *)` na frente do `malloc` é dispensável
+(BACKES, 2013, cap. 11).
+
+O pedido pode falhar. Se não houver memória livre suficiente, o `malloc`
+devolve **`NULL`** em vez de um endereço. Confira sempre, com `if (corridas
+== NULL)`, antes de usar o bloco; escrever num `NULL` derruba o programa
+(FEOFILOFF, 2009, ap. F).
+
+O bloco também não vem limpo. O `malloc` não zera nada, e os bytes guardam o
+**lixo** que estava ali antes. Preencha cada posição antes de ler (BACKES,
+2013, cap. 11). O assunto 0055 mostra o `calloc`, que entrega o bloco
+zerado.
+
+Quando não precisar mais do bloco, devolva-o com **`free(corridas)`**,
+passando exatamente o endereço que o `malloc` deu. O `free` não pergunta o
+tamanho porque o `malloc` anotou esse número num cabeçalho escondido, logo
+antes do bloco. É por isso que `free(p + 1)` dá errado: o `free` procuraria o
+cabeçalho no lugar errado (KERNIGHAN; RITCHIE, 1989, seção 8.7).
+
+Depois do `free`, o ponteiro continua guardando o endereço antigo, que já
+não é seu. Ele aponta para um lugar devolvido, e usá-lo é um erro. O hábito
+que evita isso é anular o ponteiro logo em seguida: `corridas = NULL;`
+(FEOFILOFF, 2009, ap. F).
+
+A regra que resume tudo: **todo `malloc` tem um `free`**. O bloco esquecido
+fica ocupado até o programa acabar, e se o pedido se repete num laço a
+memória vai sumindo aos poucos. Esse erro se chama **vazamento de memória**
+(*memory leak*) (DEITEL; DEITEL, 2011, cap. 12), e o assunto 0057 mostra como
+encontrá-lo.
 
 > [!WARNING]
 > O erro mais comum é contar elementos em vez de bytes: `malloc(n)` para `n`
 > inteiros reserva um quarto do necessário. Tire o tipo do próprio ponteiro:
-> `int *v = malloc(n * sizeof *v);`.
+> `int *v = malloc(n * sizeof *v);`. Se `v` virar `double *`, a conta
+> acompanha.
 
 ### Exemplos de uso
 
@@ -642,30 +704,57 @@ Crachá: Maria Clara Fonseca (19 caracteres)
 
 ### Conceito
 
-- **`calloc(n, tam)`**: recebe quantidade e tamanho separados e entrega o bloco
-  **zerado**. Serve para contadores, placares e tabelas de frequência
-  (BACKES, 2013, cap. 11).
+Você abriu uma vaquinha para o churrasco e os Pix vão chegando: R$ 50,
+R$ 120, R$ 35. Você não sabe quantos serão. O `malloc` do assunto 0054 pede
+um bloco de tamanho certo, mas o tamanho precisa ser conhecido na hora do
+pedido. Aqui ele só se descobre no fim. O bloco não cresce sozinho; quem o
+faz crescer é você, com o `realloc`. Antes dele, vale conhecer um parente do
+`malloc` que resolve outro incômodo.
+
+O **`calloc`** recebe a quantidade de itens e o tamanho de cada um em
+argumentos separados, e entrega o bloco **zerado** (BACKES, 2013, cap. 11):
 
 ```c
 int *contagem = calloc(5, sizeof(int)); // 5 ints, todos valendo 0
 ```
 
-- **`realloc(p, novo_tamanho)`**: muda o tamanho de um bloco e **preserva o
-  conteúdo** até o menor dos dois tamanhos. A parte nova vem com lixo
-  (BACKES, 2013, cap. 11).
-- **Bloco que muda de lugar**: se não der para esticar no lugar, o `realloc`
-  aloca outro bloco, copia, libera o antigo e devolve o **endereço novo**.
-  Ponteiros para o bloco velho viram soltos (BACKES, 2013, cap. 11).
-- **Falha**: o `realloc` devolve `NULL` e não mexe no bloco antigo. Guarde o
-  resultado num ponteiro **temporário** e só depois troque (CELES; RANGEL, 2002).
-- **Quantidade e capacidade**: elementos usados e quantos cabem. Encheu,
-  **dobre** a capacidade: para 1000 elementos, começando com 1, bastam 10
-  `realloc`.
+Use o `calloc` quando o zero inicial importa: contadores, placares, tabelas
+de frequência. Com o `malloc`, o bloco viria com lixo e você precisaria de um
+laço só para zerá-lo. Como o `malloc`, ele devolve `NULL` se faltar memória.
+
+Agora o crescimento. O **`realloc(p, novo_tamanho)`** muda o tamanho de um
+bloco que já está no heap e **preserva o conteúdo** até o menor dos dois
+tamanhos. Se o bloco cresceu, a parte nova vem com lixo; se encolheu, o que
+passava do novo tamanho se perde (BACKES, 2013, cap. 11).
+
+Para crescer, o `realloc` tenta primeiro esticar o bloco no próprio lugar,
+se o espaço logo depois dele estiver livre. Quando não está, ele faz uma
+mudança completa: aloca um bloco novo em outro lugar, copia o conteúdo,
+libera o antigo e devolve o **endereço novo** (BACKES, 2013, cap. 11). É
+como trocar de casa quando a família cresce: os móveis vão junto, mas o
+endereço muda. Daí a regra que mais pega: depois de um `realloc`, o endereço
+antigo pode não valer mais. Todo ponteiro que apontava para dentro do bloco
+velho virou um **ponteiro solto**, que aponta para memória devolvida.
+
+O `realloc` também pode falhar. Se faltar memória, ele devolve `NULL` e **não
+mexe no bloco antigo**, que continua inteiro e ocupado. Isso cria uma
+armadilha: se você escrever o resultado direto no único ponteiro que tinha o
+endereço do bloco, perde esse endereço. A saída é guardar o resultado num
+ponteiro **temporário**, conferir se não é `NULL` e só então trocar (CELES;
+RANGEL, 2002).
+
+Resta decidir quanto crescer. Chamar o `realloc` a cada Pix funciona, mas
+cada mudança de lugar copia o vetor inteiro. Para evitar isso, guarde dois
+números: a **quantidade**, quantos elementos você já usou, e a
+**capacidade**, quantos cabem no bloco. Enquanto a quantidade for menor que
+a capacidade, o novo Pix entra sem `realloc`. Quando encher, **dobre** a
+capacidade. Os `realloc` ficam raros: para guardar 1000 elementos começando
+com capacidade 1, bastam 10 dobras (1, 2, 4, até 1024).
 
 > [!WARNING]
 > `v = realloc(v, n)` é o erro clássico: se falhar, `v` vira `NULL` e o bloco
-> antigo fica no heap sem dono. Use um temporário. E não guarde `&v[3]` antes de
-> um `realloc`: o bloco pode ter mudado de lugar.
+> antigo fica no heap sem dono, com os dados perdidos. Use um temporário. E
+> não guarde `&v[3]` antes de um `realloc`: o bloco pode ter mudado de lugar.
 
 ### Exemplos de uso
 
@@ -897,28 +986,61 @@ dobrar: 10 realocações, 1023 cópias
 
 ### Conceito
 
-- **Só vetores**: o C aloca blocos de uma dimensão. A matriz dinâmica é montada
-  com vetores, de dois jeitos (CELES; RANGEL, 2002).
-- **Bloco único**: `linhas * colunas` elementos, com o elemento `(i, j)` em
-  `v[i * colunas + j]`. Um `malloc`, um `free`, mas `v[i][j]` não funciona
-  (BACKES, 2013, cap. 11).
-- **Vetor de ponteiros**: um vetor de `linhas` ponteiros (`int **m`) e um
-  `malloc` por linha. Agora `m[i][j]` funciona, e as linhas podem ter tamanhos
-  diferentes (FEOFILOFF, 2009, ap. F).
-- **Regra do `sizeof`**: o que você aloca tem um `*` a menos que o ponteiro
-  que recebe. Use `sizeof *m` e `sizeof *m[i]` (BACKES, 2013, cap. 11).
-- **Liberar na ordem**: primeiro cada linha, depois o vetor de ponteiros. Se
-  uma linha falhar ao criar, desfaça as anteriores antes de devolver `NULL`
-  (CELES; RANGEL, 2002).
-- **VLA** (C99): `int vendas[lojas][semanas];` mora na pilha, que é pequena e
-  não avisa quando estoura (BACKES, 2013).
-- **Custo**: `m[i][j]` com `int **` faz dois acessos à memória; o bloco único
-  faz um (CELES; RANGEL, 2002).
+Uma rede de lojas quer a planilha de vendas: uma linha por loja, uma coluna
+por semana. Este mês são 3 lojas e 4 semanas. No mês que vem abre a quarta
+loja, e o relatório do trimestre tem 13 semanas. Uma matriz fixa como `int
+vendas[3][4]` (assunto 0039) não serve, porque as dimensões só aparecem com
+o programa rodando. Você precisa de uma matriz pedida ao heap.
+
+O problema é que o `malloc` só entrega blocos de **uma dimensão**: uma fila
+de bytes, sem linhas nem colunas. A matriz dinâmica é montada a partir de
+vetores, e há dois jeitos clássicos de montá-la (CELES; RANGEL, 2002).
+
+O primeiro é o **bloco único**. Você aloca `linhas * colunas` elementos de
+uma vez, uma fila só, e calcula a posição de cada célula: o elemento da linha
+`i` e coluna `j` fica em `v[i * colunas + j]`. É a mesma conta que o
+compilador faz por você numa matriz fixa, guardada linha após linha. A
+vantagem é a simplicidade: um `malloc`, um `free` e tudo colado na memória.
+O preço é a escrita: `v[i][j]` não funciona, porque `v` é um vetor simples
+(BACKES, 2013, cap. 11).
+
+O segundo é o **vetor de ponteiros**. Primeiro você aloca um vetor com
+`linhas` ponteiros, guardado num `int **m`; depois faz um `malloc` por linha,
+cada um com `colunas` inteiros, e guarda o endereço em `m[i]`. Agora
+`m[i][j]` funciona: `m[i]` é o endereço da linha `i`, e o `[j]` anda dentro
+dela, os dois saltos do assunto 0049. Pense num fichário: a primeira folha é
+um índice que diz em que página começa cada loja, e cada página é uma linha.
+Como cada linha é pedida em separado, elas podem ter **tamanhos diferentes**;
+no triângulo de Pascal, a linha `i` tem `i + 1` elementos (FEOFILOFF, 2009,
+ap. F).
+
+Na hora de pedir, o `sizeof` confunde. A regra é: **o que você aloca tem um
+`*` a menos que o ponteiro que recebe**. `int **m` recebe um vetor de
+`int *`, então o primeiro pedido usa o tamanho de um `int *`. `m[i]`, que é
+um `int *`, recebe um vetor de `int`. Escrever `sizeof *m` e `sizeof *m[i]`
+deixa o compilador fazer essa conta por você (BACKES, 2013, cap. 11).
+
+Liberar também tem ordem: **primeiro cada linha, depois o vetor de
+ponteiros**. Se você fizer `free(m)` antes, perde os endereços das linhas, e
+elas ficam presas no heap. O mesmo cuidado vale na criação: se o `malloc` da
+terceira linha falhar, as duas primeiras já foram alocadas, e a função
+precisa liberá-las antes de devolver `NULL` (CELES; RANGEL, 2002).
+
+O C99 oferece um atalho, o **VLA**: `int vendas[lojas][semanas];`, com as
+dimensões vindas de variáveis. Ele mora na **pilha**, que é pequena e não
+avisa quando estoura (BACKES, 2013). O assunto 0172 mostra quando ele vale a
+pena.
+
+Os dois jeitos têm custos diferentes. Com `int **`, cada `m[i][j]` faz
+**dois** acessos à memória, um para buscar o ponteiro `m[i]` e outro para o
+inteiro. No bloco único, ou numa matriz fixa, é um acesso só (CELES; RANGEL,
+2002). Em troca, o vetor de ponteiros dá a escrita `m[i][j]` e as linhas de
+tamanhos diferentes.
 
 > [!WARNING]
-> `int **m = malloc(linhas * sizeof(int));` é bug: num PC de 64 bits, `int` tem
-> 4 bytes e `int *` tem 8. Você aloca metade e grava fora do bloco. Escreva
-> `sizeof *m`.
+> `int **m = malloc(linhas * sizeof(int));` é bug: num PC de 64 bits, `int`
+> tem 4 bytes e `int *` tem 8. Você aloca metade do necessário e as últimas
+> linhas são gravadas fora do bloco. Escreva `sizeof *m`.
 
 ### Exemplos de uso
 
@@ -1229,22 +1351,58 @@ A * A: dimensões incompatíveis
 
 ### Conceito
 
-- **Vazamento** (*memory leak*): bloco que ninguém libera e ninguém mais acha.
-  O programa fica lento e trava depois de horas (DEITEL; DEITEL, 2011, cap. 12).
-- **Ponteiro solto** (*dangling pointer*): depois de `free(p)`, `p` guarda o
-  mesmo endereço. Usar `p` pode ler o valor antigo por sorte, até o `malloc`
-  entregar o pedaço a outro (BACKES, 2013, cap. 11).
-- **Free duplo**: liberar o mesmo bloco duas vezes (GOOGLE, s.d.).
-- **Estouro** no heap: passar do fim do bloco estraga o cabeçalho do vizinho, e
-  o programa quebra depois, num `free` sem culpa
-  (KERNIGHAN; RITCHIE, 1989, seção 8.7).
-- **AddressSanitizer** (ASan): `gcc -fsanitize=address -g`. Confere cada acesso,
-  para no primeiro erro e mostra onde o bloco foi alocado e liberado. No fim, o
-  **LeakSanitizer** lista o que vazou (GOOGLE, s.d.).
-- **valgrind**: roda o executável sem recompilar, 20 a 50 vezes mais lento, e
-  pega leitura de memória que nunca recebeu valor. Instale com `sudo pacman -S
-  valgrind` (Arch) ou `sudo apt install valgrind` (Debian/Ubuntu) e rode
-  `valgrind ./programa` (VALGRIND DEVELOPERS, s.d.).
+O sistema do caixa da padaria funciona de manhã. Às seis da tarde está
+lento, e no sábado trava. Ninguém mexeu no código. A cada venda, um
+pedacinho de memória ficava para trás, e depois de milhares de vendas o heap
+acabou. Com o heap nas mãos, você ganhou poder e uma responsabilidade nova:
+no C, quem cria esse tipo de erro e quem o corrige é você.
+
+O que torna esses erros perigosos é que o programa costuma **funcionar**.
+Ele mostra a saída certa, termina sem reclamar e quebra só na máquina do
+cliente, dias depois. Por isso existem ferramentas que vigiam a memória
+durante a execução. Antes delas, vale conhecer os quatro erros clássicos, um
+de cada vez.
+
+O primeiro é o da padaria, o **vazamento de memória** (*memory leak*): um
+bloco que ninguém liberou e cujo endereço ninguém mais guarda. Ele fica
+ocupado até o programa acabar. Uma vez só não faz falta; repetido a cada
+venda, deixa o programa lento e o derruba depois de horas (DEITEL; DEITEL,
+2011, cap. 12). Acontece, por exemplo, quando uma função faz `malloc` num
+ponteiro local e retorna sem `free`: o endereço morre com o frame, e o bloco
+fica.
+
+O segundo nasce do **ponteiro solto** (*dangling pointer*). Depois de
+`free(p)`, a variável `p` continua guardando o mesmo endereço; o `free`
+devolve o bloco, mas não apaga o ponteiro. Usar `p` depois disso é o **uso
+depois do free**. O pior é que pode até ler o valor antigo, porque ninguém
+apagou os bytes. Funciona por sorte, até o `malloc` entregar aquele pedaço a
+outra parte do programa, que passa a dividir a memória com você sem saber
+(BACKES, 2013, cap. 11).
+
+O terceiro é o **free duplo**: liberar o mesmo bloco duas vezes, em geral
+por dois ponteiros que apontavam para ele ou por um ponteiro solto que
+ninguém anulou (GOOGLE, s.d.). O hábito `free(p); p = NULL;` do assunto 0054
+ajuda, porque `free(NULL)` não faz nada.
+
+O quarto é o **estouro** no heap: ler ou escrever além do fim (ou antes do
+começo) de um bloco. Ele é traiçoeiro porque, logo depois do bloco, costuma
+morar o cabeçalho escondido do bloco vizinho (assunto 0054). Um byte a mais
+estraga a contabilidade do `malloc`, e o programa quebra depois, num `free`
+que não tem culpa nenhuma (KERNIGHAN; RITCHIE, 1989, seção 8.7).
+
+A primeira ferramenta é o **AddressSanitizer** (ASan), que vem no `gcc`.
+Compile com `-fsanitize=address -g`. O compilador põe vigias em volta de
+cada bloco e confere cada acesso; no primeiro erro, o programa para e mostra
+a linha do erro, a linha em que o bloco foi alocado e a linha em que foi
+liberado. No fim da execução, uma parte dele, o **LeakSanitizer**, lista o
+que vazou (GOOGLE, s.d.). As flags de estudo do curso já o ligam.
+
+A segunda é o **valgrind**. Ele roda o executável normal, sem recompilar,
+numa máquina virtual que vigia cada byte. Fica de 20 a 50 vezes mais lento,
+mas pega uma coisa que o ASan não pega: ler memória que nunca recebeu valor.
+Instale com `sudo pacman -S valgrind` (Arch) ou `sudo apt install valgrind`
+(Debian/Ubuntu) e rode `valgrind ./programa` (VALGRIND DEVELOPERS, s.d.). A
+tabela junta os quatro erros e a mensagem do ASan para cada um:
 
 | Erro | O que é | O AddressSanitizer diz |
 | --- | --- | --- |
@@ -1255,8 +1413,9 @@ A * A: dimensões incompatíveis
 
 > [!WARNING]
 > "Rodou e deu a saída certa" não prova nada em C. Uso depois do `free`,
-> estouro e leitura de lixo são **comportamento indefinido**. Rode com o ASan
-> (flags de estudo) e, na dúvida, com `valgrind ./programa`.
+> estouro de um byte e leitura de lixo são **comportamento indefinido**: o
+> programa pode funcionar hoje e quebrar com outro compilador. Rode com o
+> ASan (flags de estudo) e, na dúvida, com `valgrind ./programa`.
 
 ### Exemplos de uso
 
@@ -1511,22 +1670,54 @@ Presentes: 11 27 35 48
 
 ### Conceito
 
-- **Heap** (0053): o caderno de fiado dura o programa todo e cresce, então mora
-  no heap (CELES; RANGEL, 2002).
-- **`malloc` e `free`** (0054): `duplicar` copia cada nome para um bloco do
-  tamanho exato, `strlen + 1` (BACKES, 2013, cap. 11).
-- **`realloc`** (0055): dois vetores paralelos (`nomes` e `centavos`) dobram a
-  capacidade juntos, com ponteiro temporário (CELES; RANGEL, 2002).
-- **Vetor de ponteiros** (0056): `char **nomes` é um vetor de `char *`, como as
-  linhas de tamanhos diferentes de uma matriz dinâmica (BACKES, 2013, cap. 11).
-- **`char ***`**: `crescer` precisa mudar o ponteiro `nomes` do `main`, então
-  recebe o endereço dele (assunto 0049) (FEOFILOFF, 2009, ap. F).
-- **Centavos**: valores em `int` não têm erro de arredondamento; R$ 12,50 vira
-  `1250`.
+O mercadinho anota o fiado num caderno: o nome do cliente e quanto ele deve.
+Cliente novo ganha uma linha, cliente antigo soma na conta e quem paga fica
+zerado. O caderno não tem número fixo de páginas, e cada nome tem um
+tamanho. Os dois problemas, quantidade desconhecida e tamanhos diferentes,
+são exatamente o que o módulo ensinou a resolver.
+
+Comece por onde o caderno mora. Ele precisa durar o programa todo e crescer
+conforme chegam clientes, então não cabe num frame da pilha; mora no **heap**
+(assunto 0053). Quem decide quando ele some é o próprio programa, no fim
+(CELES; RANGEL, 2002).
+
+Cada nome digitado chega numa variável temporária, que vai ser reaproveitada
+na próxima leitura. Para guardá-lo de vez, a função `duplicar` pede ao
+`malloc` (assunto 0054) um bloco do tamanho exato, `strlen(nome) + 1` bytes,
+e copia o texto para lá. O `+ 1` é o lugar do `'\0'` (BACKES, 2013, cap. 11).
+"Bia" ocupa 4 bytes e "Dona Cida", 10; nenhum espaço é desperdiçado.
+
+O caderno em si são **dois vetores paralelos**: `nomes`, com o endereço do
+nome de cada cliente, e `centavos`, com o quanto cada um deve, na mesma
+posição. Quando os dois enchem, a função `crescer` dobra a capacidade dos
+dois juntos com `realloc` (assunto 0055), sempre por um ponteiro temporário,
+para não perder o bloco se o pedido falhar (CELES; RANGEL, 2002).
+
+O vetor `nomes` tem tipo `char **`: é um vetor de `char *`, e cada item
+aponta para um bloco de tamanho próprio. É a mesma forma da matriz dinâmica
+com linhas de tamanhos diferentes (assunto 0056) (BACKES, 2013, cap. 11).
+
+A novidade do programa está no parâmetro de `crescer`. O `realloc` pode
+mudar o bloco de lugar, então a função precisa **mudar** o ponteiro `nomes`
+do `main`. Pela regra do assunto 0049, ela recebe o endereço desse ponteiro.
+Como `nomes` é `char **`, o endereço dele é um `char ***`: três estrelas,
+uma para cada salto até a letra (FEOFILOFF, 2009, ap. F). O mesmo raciocínio
+dá `int **` para o vetor `centavos`.
+
+Os valores ficam em **centavos**, guardados em `int`. Um `double` não
+representa 0,10 com exatidão, e somas de muitos valores acumulam erro de
+arredondamento; inteiros não têm esse problema. R$ 12,50 vira `1250`, e a
+conversão para reais acontece só na hora de mostrar.
+
+Por fim, a limpeza segue a ordem do assunto 0056: primeiro cada nome, depois
+os dois vetores. Os dois vetores paralelos funcionam, mas são um remendo. A
+`struct` do módulo 08 junta "nome e saldo" numa coisa só, e um vetor de
+`struct cliente` precisa de um `realloc` só.
 
 > [!WARNING]
-> Liberar só `nomes` vaza todos os nomes: cada `nomes[i]` tem seu `malloc`. São
-> 2 `malloc` no começo e 5 nomes, então `liberar` faz 5 + 2 `free`. Confira com
+> Liberar só `nomes` vaza todos os nomes: cada `nomes[i]` tem seu `malloc`,
+> dentro de `duplicar`. São 2 `malloc` no começo e 5 nomes (os `realloc` só
+> trocam um bloco por outro), então `liberar` faz 5 + 2 `free`. Confira com
 > `valgrind ./programa` a linha `All heap blocks were freed`.
 
 ### Exemplos de uso

@@ -1,19 +1,43 @@
 ## 0053 · Pilha e heap
 
-- **Regiões da memória**: o programa recebe uma faixa de endereços dividida em
-  código, dados, heap e pilha. Cada região tem um dono e um tempo de vida
-  próprios (CELES; RANGEL, 2002).
-- **Pilha** (*stack*): cada chamada empilha um **frame** com as locais e os
-  parâmetros; o `return` o desempilha (assunto 0031). É automática, rápida e
-  pequena: no Linux, 8 MiB (`ulimit -s` mostra `8192`, em KiB) (CELES; RANGEL, 2002).
-- **Heap**: depósito do tamanho da memória livre. Você pede um bloco de N bytes
-  em tempo de execução e recebe o **endereço** dele. O bloco não pertence a
-  função nenhuma e vive até o `free` (BACKES, 2013, cap. 11).
-- **Estática, automática e dinâmica**: os nomes dos livros para a alocação nos
-  dados (tamanho fixo desde a compilação), na pilha e no heap
-  (CELES; RANGEL, 2002).
-- **Sem coletor de lixo**: o C não apaga sozinho o que ninguém usa. Tudo o que
-  sai do heap volta com `free` (FEOFILOFF, 2009, ap. F).
+Sexta à noite, restaurante cheio. O garçom anota o pedido da mesa 4 num
+bloquinho, arranca a folha e prende a comanda no balcão da cozinha. O
+bloquinho volta limpo para o bolso; a comanda fica no balcão até alguém
+pagar a conta e jogá-la fora. Um programa lida com a memória do mesmo jeito:
+há rascunho que só dura enquanto uma função trabalha, e há dado que precisa
+sobreviver a ela. Até aqui você só usou o primeiro tipo. Este módulo trata do
+segundo.
+
+Para entender a diferença, olhe o mapa. Quando o programa começa, o sistema
+operacional lhe entrega uma faixa de endereços dividida em **regiões**, e
+cada uma tem um dono e um tempo de vida próprios (CELES; RANGEL, 2002). A
+região de **código** guarda as instruções e os literais de string, como
+`"bom dia"` (assunto 0048), e é só de leitura. A região de **dados** guarda
+as variáveis globais e as `static`. As outras duas, a pilha e o heap, são as
+que interessam aqui.
+
+A **pilha** (*stack*) você conhece do assunto 0031. A cada chamada de função,
+ela empilha um **frame**, o espaço com as variáveis locais e os parâmetros
+daquela chamada; no `return`, o frame é desempilhado. É o bloquinho do
+garçom: automática, porque ninguém precisa pedir nem devolver, e rápida. Mas
+tem dois limites. O frame some no `return`, então nada que mora nele
+sobrevive à função. E a pilha é pequena: no Linux, 8 MiB por padrão; o
+comando `ulimit -s` mostra `8192`, em KiB (CELES; RANGEL, 2002). Um vetor
+local de 20 MB não cabe nela.
+
+O **heap** é o balcão da cozinha. É um depósito do tamanho da memória livre
+da máquina, e nele você pede, com o programa já rodando, um bloco de N
+bytes. Em troca, recebe o **endereço** desse bloco, que você guarda num
+ponteiro e usa como vetor. O bloco não pertence a função nenhuma: ele fica
+vivo até você devolvê-lo com `free` (BACKES, 2013, cap. 11). Por isso dá para
+criar um dado numa função e usá-lo em outra, depois que a primeira já
+retornou. O assunto 0054 mostra como pedir e devolver.
+
+Os livros dão nomes a esses três jeitos de conseguir memória. A alocação
+**estática** acontece na região de dados, com tamanho e endereço fixos desde
+a compilação. A **automática** acontece na pilha, a cada chamada. A
+**dinâmica** acontece no heap, quando você pede (CELES; RANGEL, 2002). A
+tabela resume o mapa:
 
 | Região | O que guarda | Quem cria e quem apaga | Dura |
 | --- | --- | --- | --- |
@@ -22,10 +46,17 @@
 | **heap** | blocos pedidos com `malloc` | **você** pede e **você** devolve | até o `free` |
 | **pilha** | locais e parâmetros (os frames) | a chamada e o `return` | enquanto a função roda |
 
+A coluna do meio guarda a responsabilidade nova. O C não tem **coletor de
+lixo** (*garbage collector*), o mecanismo que apaga sozinho o que ninguém
+mais usa. Tudo o que você tira do heap, você devolve com `free`; o que fica
+esquecido continua ocupado até o programa acabar (FEOFILOFF, 2009, ap. F).
+
 > [!WARNING]
-> Nunca devolva o endereço de uma variável local: `char senha[8]; ... return senha;`
-> aponta para um frame que já morreu. O gcc avisa e devolve `NULL` no lugar.
-> Saídas: quem chama empresta o vetor, a variável vira `static` ou o bloco vem do heap.
+> Nunca devolva o endereço de uma variável local: `char senha[8]; ... return
+> senha;` aponta para um frame que deixa de existir no `return`. O gcc avisa
+> (`function returns address of local variable`) e devolve `NULL` no lugar.
+> Saídas: quem chama empresta o vetor, a variável vira `static` ou o bloco
+> vem do heap.
 
 {{exemplo}}
 

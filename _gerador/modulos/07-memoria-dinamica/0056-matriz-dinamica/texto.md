@@ -1,27 +1,60 @@
 ## 0056 · Matriz dinâmica
 
-- **Só vetores**: o C aloca blocos de uma dimensão. A matriz dinâmica é montada
-  com vetores, de dois jeitos (CELES; RANGEL, 2002).
-- **Bloco único**: `linhas * colunas` elementos, com o elemento `(i, j)` em
-  `v[i * colunas + j]`. Um `malloc`, um `free`, mas `v[i][j]` não funciona
-  (BACKES, 2013, cap. 11).
-- **Vetor de ponteiros**: um vetor de `linhas` ponteiros (`int **m`) e um
-  `malloc` por linha. Agora `m[i][j]` funciona, e as linhas podem ter tamanhos
-  diferentes (FEOFILOFF, 2009, ap. F).
-- **Regra do `sizeof`**: o que você aloca tem um `*` a menos que o ponteiro
-  que recebe. Use `sizeof *m` e `sizeof *m[i]` (BACKES, 2013, cap. 11).
-- **Liberar na ordem**: primeiro cada linha, depois o vetor de ponteiros. Se
-  uma linha falhar ao criar, desfaça as anteriores antes de devolver `NULL`
-  (CELES; RANGEL, 2002).
-- **VLA** (C99): `int vendas[lojas][semanas];` mora na pilha, que é pequena e
-  não avisa quando estoura (BACKES, 2013).
-- **Custo**: `m[i][j]` com `int **` faz dois acessos à memória; o bloco único
-  faz um (CELES; RANGEL, 2002).
+Uma rede de lojas quer a planilha de vendas: uma linha por loja, uma coluna
+por semana. Este mês são 3 lojas e 4 semanas. No mês que vem abre a quarta
+loja, e o relatório do trimestre tem 13 semanas. Uma matriz fixa como `int
+vendas[3][4]` (assunto 0039) não serve, porque as dimensões só aparecem com
+o programa rodando. Você precisa de uma matriz pedida ao heap.
+
+O problema é que o `malloc` só entrega blocos de **uma dimensão**: uma fila
+de bytes, sem linhas nem colunas. A matriz dinâmica é montada a partir de
+vetores, e há dois jeitos clássicos de montá-la (CELES; RANGEL, 2002).
+
+O primeiro é o **bloco único**. Você aloca `linhas * colunas` elementos de
+uma vez, uma fila só, e calcula a posição de cada célula: o elemento da linha
+`i` e coluna `j` fica em `v[i * colunas + j]`. É a mesma conta que o
+compilador faz por você numa matriz fixa, guardada linha após linha. A
+vantagem é a simplicidade: um `malloc`, um `free` e tudo colado na memória.
+O preço é a escrita: `v[i][j]` não funciona, porque `v` é um vetor simples
+(BACKES, 2013, cap. 11).
+
+O segundo é o **vetor de ponteiros**. Primeiro você aloca um vetor com
+`linhas` ponteiros, guardado num `int **m`; depois faz um `malloc` por linha,
+cada um com `colunas` inteiros, e guarda o endereço em `m[i]`. Agora
+`m[i][j]` funciona: `m[i]` é o endereço da linha `i`, e o `[j]` anda dentro
+dela, os dois saltos do assunto 0049. Pense num fichário: a primeira folha é
+um índice que diz em que página começa cada loja, e cada página é uma linha.
+Como cada linha é pedida em separado, elas podem ter **tamanhos diferentes**;
+no triângulo de Pascal, a linha `i` tem `i + 1` elementos (FEOFILOFF, 2009,
+ap. F).
+
+Na hora de pedir, o `sizeof` confunde. A regra é: **o que você aloca tem um
+`*` a menos que o ponteiro que recebe**. `int **m` recebe um vetor de
+`int *`, então o primeiro pedido usa o tamanho de um `int *`. `m[i]`, que é
+um `int *`, recebe um vetor de `int`. Escrever `sizeof *m` e `sizeof *m[i]`
+deixa o compilador fazer essa conta por você (BACKES, 2013, cap. 11).
+
+Liberar também tem ordem: **primeiro cada linha, depois o vetor de
+ponteiros**. Se você fizer `free(m)` antes, perde os endereços das linhas, e
+elas ficam presas no heap. O mesmo cuidado vale na criação: se o `malloc` da
+terceira linha falhar, as duas primeiras já foram alocadas, e a função
+precisa liberá-las antes de devolver `NULL` (CELES; RANGEL, 2002).
+
+O C99 oferece um atalho, o **VLA**: `int vendas[lojas][semanas];`, com as
+dimensões vindas de variáveis. Ele mora na **pilha**, que é pequena e não
+avisa quando estoura (BACKES, 2013). O assunto 0172 mostra quando ele vale a
+pena.
+
+Os dois jeitos têm custos diferentes. Com `int **`, cada `m[i][j]` faz
+**dois** acessos à memória, um para buscar o ponteiro `m[i]` e outro para o
+inteiro. No bloco único, ou numa matriz fixa, é um acesso só (CELES; RANGEL,
+2002). Em troca, o vetor de ponteiros dá a escrita `m[i][j]` e as linhas de
+tamanhos diferentes.
 
 > [!WARNING]
-> `int **m = malloc(linhas * sizeof(int));` é bug: num PC de 64 bits, `int` tem
-> 4 bytes e `int *` tem 8. Você aloca metade e grava fora do bloco. Escreva
-> `sizeof *m`.
+> `int **m = malloc(linhas * sizeof(int));` é bug: num PC de 64 bits, `int`
+> tem 4 bytes e `int *` tem 8. Você aloca metade do necessário e as últimas
+> linhas são gravadas fora do bloco. Escreva `sizeof *m`.
 
 {{exemplo}}
 

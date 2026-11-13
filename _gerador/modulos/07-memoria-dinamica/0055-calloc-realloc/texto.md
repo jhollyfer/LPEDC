@@ -1,29 +1,56 @@
 ## 0055 · calloc e realloc
 
-- **`calloc(n, tam)`**: recebe quantidade e tamanho separados e entrega o bloco
-  **zerado**. Serve para contadores, placares e tabelas de frequência
-  (BACKES, 2013, cap. 11).
+Você abriu uma vaquinha para o churrasco e os Pix vão chegando: R$ 50,
+R$ 120, R$ 35. Você não sabe quantos serão. O `malloc` do assunto 0054 pede
+um bloco de tamanho certo, mas o tamanho precisa ser conhecido na hora do
+pedido. Aqui ele só se descobre no fim. O bloco não cresce sozinho; quem o
+faz crescer é você, com o `realloc`. Antes dele, vale conhecer um parente do
+`malloc` que resolve outro incômodo.
+
+O **`calloc`** recebe a quantidade de itens e o tamanho de cada um em
+argumentos separados, e entrega o bloco **zerado** (BACKES, 2013, cap. 11):
 
 ```c
 int *contagem = calloc(5, sizeof(int)); // 5 ints, todos valendo 0
 ```
 
-- **`realloc(p, novo_tamanho)`**: muda o tamanho de um bloco e **preserva o
-  conteúdo** até o menor dos dois tamanhos. A parte nova vem com lixo
-  (BACKES, 2013, cap. 11).
-- **Bloco que muda de lugar**: se não der para esticar no lugar, o `realloc`
-  aloca outro bloco, copia, libera o antigo e devolve o **endereço novo**.
-  Ponteiros para o bloco velho viram soltos (BACKES, 2013, cap. 11).
-- **Falha**: o `realloc` devolve `NULL` e não mexe no bloco antigo. Guarde o
-  resultado num ponteiro **temporário** e só depois troque (CELES; RANGEL, 2002).
-- **Quantidade e capacidade**: elementos usados e quantos cabem. Encheu,
-  **dobre** a capacidade: para 1000 elementos, começando com 1, bastam 10
-  `realloc`.
+Use o `calloc` quando o zero inicial importa: contadores, placares, tabelas
+de frequência. Com o `malloc`, o bloco viria com lixo e você precisaria de um
+laço só para zerá-lo. Como o `malloc`, ele devolve `NULL` se faltar memória.
+
+Agora o crescimento. O **`realloc(p, novo_tamanho)`** muda o tamanho de um
+bloco que já está no heap e **preserva o conteúdo** até o menor dos dois
+tamanhos. Se o bloco cresceu, a parte nova vem com lixo; se encolheu, o que
+passava do novo tamanho se perde (BACKES, 2013, cap. 11).
+
+Para crescer, o `realloc` tenta primeiro esticar o bloco no próprio lugar,
+se o espaço logo depois dele estiver livre. Quando não está, ele faz uma
+mudança completa: aloca um bloco novo em outro lugar, copia o conteúdo,
+libera o antigo e devolve o **endereço novo** (BACKES, 2013, cap. 11). É
+como trocar de casa quando a família cresce: os móveis vão junto, mas o
+endereço muda. Daí a regra que mais pega: depois de um `realloc`, o endereço
+antigo pode não valer mais. Todo ponteiro que apontava para dentro do bloco
+velho virou um **ponteiro solto**, que aponta para memória devolvida.
+
+O `realloc` também pode falhar. Se faltar memória, ele devolve `NULL` e **não
+mexe no bloco antigo**, que continua inteiro e ocupado. Isso cria uma
+armadilha: se você escrever o resultado direto no único ponteiro que tinha o
+endereço do bloco, perde esse endereço. A saída é guardar o resultado num
+ponteiro **temporário**, conferir se não é `NULL` e só então trocar (CELES;
+RANGEL, 2002).
+
+Resta decidir quanto crescer. Chamar o `realloc` a cada Pix funciona, mas
+cada mudança de lugar copia o vetor inteiro. Para evitar isso, guarde dois
+números: a **quantidade**, quantos elementos você já usou, e a
+**capacidade**, quantos cabem no bloco. Enquanto a quantidade for menor que
+a capacidade, o novo Pix entra sem `realloc`. Quando encher, **dobre** a
+capacidade. Os `realloc` ficam raros: para guardar 1000 elementos começando
+com capacidade 1, bastam 10 dobras (1, 2, 4, até 1024).
 
 > [!WARNING]
 > `v = realloc(v, n)` é o erro clássico: se falhar, `v` vira `NULL` e o bloco
-> antigo fica no heap sem dono. Use um temporário. E não guarde `&v[3]` antes de
-> um `realloc`: o bloco pode ter mudado de lugar.
+> antigo fica no heap sem dono, com os dados perdidos. Use um temporário. E
+> não guarde `&v[3]` antes de um `realloc`: o bloco pode ter mudado de lugar.
 
 {{exemplo}}
 
