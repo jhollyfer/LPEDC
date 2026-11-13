@@ -1,28 +1,59 @@
 ## 0141 · Maior subsequência comum (LCS)
 
-- **Subsequência**: o que sobra depois de apagar letras, sem mudar a ordem.
-  `MNG` é subsequência de `MORANGO`; `GNA` não é
-  (CORMEN et al., 2024, cap. 14).
-- **LCS** (*longest common subsequence*): a maior subsequência das duas
-  strings. Testar todas é inviável: 30 letras já têm mais de um bilhão
-  (CORMEN et al., 2024, cap. 14).
-- **Recorrência**: olhe a última letra de cada uma. **Iguais**: ela fecha a
-  LCS, some 1 à das duas sem ela. **Diferentes**: tire a última de `a` ou a de
-  `b` e fique com a melhor (CORMEN et al., 2024, cap. 14).
-- **Tabela**: `c[i][j]` é o tamanho da LCS dos **prefixos** `a[0..i-1]` e
-  `b[0..j-1]`; a resposta fica em `c[m][n]` (LINTZMAYER; MOTA, 2023).
-- **Recuperação**: do canto até a borda; letra igual entra na resposta e o
-  caminho vai na diagonal, senão vai para o vizinho de onde o valor veio
-  (CORMEN et al., 2024, cap. 14).
-- **Custo**: `(m + 1) × (n + 1)` células de O(1), **O(m × n)** de tempo e de
-  memória. Só o tamanho cabe em duas linhas; as letras pedem a tabela inteira
-  (KLEINBERG; TARDOS, 2006, cap. 6).
+Você ditou **MORANGO** e o seu sobrinho escreveu **MANGA**. Quantas letras
+ele acertou na ordem certa? Comparar posição por posição não serve, porque
+um erro no começo desalinha o resto. A pergunta certa é: qual a maior
+sequência de letras que aparece nas duas palavras, na mesma ordem, mesmo com
+outras letras no meio? Aqui é **MANG**, quatro letras. A mesma pergunta
+compara versões de um arquivo e trechos de DNA.
+
+Uma **subsequência** de uma string é o que sobra depois de apagar algumas
+letras dela, sem mudar a ordem das que ficam (CORMEN et al., 2024, cap. 14).
+`MNG` é subsequência de `MORANGO`: apague O, R, A e O. `GNA` não é, porque
+em MORANGO o G vem depois do N e do A. A **maior subsequência comum**
+(*longest common subsequence*, LCS) de duas strings é a mais comprida que é
+subsequência das duas ao mesmo tempo (CORMEN et al., 2024, cap. 14).
+
+Testar todas não dá. Cada letra pode ficar ou sair, então uma palavra de 30
+letras tem 2³⁰, mais de um bilhão, de subsequências (CORMEN et al., 2024, cap.
+14). A PD (0138) resolve olhando só a **última letra** de cada string. Se as
+duas forem **iguais**, essa letra pode fechar a LCS: a resposta é 1 mais a
+LCS das duas strings sem a última letra. Se forem **diferentes**, pelo menos
+uma delas não entra na LCS. Então tire a última de `a` ou a última de `b`,
+resolva cada caso e fique com o melhor (CORMEN et al., 2024, cap. 14).
+
+Cada passo encurta uma string ou as duas, e o que sobra são sempre
+**prefixos**, os começos das strings. Daí a tabela: `c[i][j]` é o tamanho da
+LCS do prefixo de `a` com `i` letras, `a[0..i-1]`, com o prefixo de `b` com
+`j` letras, `b[0..j-1]`. Com `m` e `n` letras nas duas strings, a resposta
+fica em `c[m][n]` (LINTZMAYER; MOTA, 2023). A linha 0 e a coluna 0 valem 0,
+porque nada é comum com um prefixo vazio.
+
+Repare no deslocamento de índice. A linha `i` da tabela fala da letra
+`a[i-1]`, porque a linha 0 é reservada ao prefixo vazio. Comparar `a[i]` com
+`b[j]` é o erro clássico. A tabela resume os três casos, e cada célula olha
+no máximo três vizinhas já preenchidas: a de cima, a da esquerda e a da
+diagonal:
 
 | caso | `c[i][j]` |
 | --- | --- |
 | `i == 0` ou `j == 0` | 0 (um prefixo vazio) |
 | `a[i-1] == b[j-1]` | `c[i-1][j-1] + 1` (diagonal) |
 | letras diferentes | o maior entre `c[i-1][j]` (cima) e `c[i][j-1]` (esquerda) |
+
+O número no canto diz o tamanho, mas não quais letras. A **recuperação**
+anda do canto `c[m][n]` até a borda. Se as letras da posição são iguais,
+ela entra na resposta e o caminho segue na diagonal. Se não, o caminho vai
+para o vizinho, de cima ou da esquerda, de onde o valor veio (CORMEN et al.,
+2024, cap. 14). As letras saem de trás para a frente: em MORANGO e MANGA,
+primeiro G, depois N, A e M. O Cormen guarda a direção de cada célula numa
+tabela de setas; também dá para refazer a comparação na volta.
+
+O custo é o tamanho da tabela. São `(m + 1) × (n + 1)` células, cada uma
+calculada em O(1), o que dá **O(m × n)** de tempo e de memória. Se você só
+quer o **tamanho** da LCS, duas linhas bastam, porque cada linha só olha a
+anterior. Para **recuperar** as letras, porém, o caminho de volta precisa da
+tabela inteira (KLEINBERG; TARDOS, 2006, cap. 6).
 
 > [!WARNING]
 > Subsequência não é **substring** (pedaço contíguo): a maior substring comum

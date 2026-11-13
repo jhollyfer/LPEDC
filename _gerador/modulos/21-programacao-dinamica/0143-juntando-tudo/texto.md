@@ -1,21 +1,55 @@
 ## 0143 · Juntando tudo: um mini-diff
 
-- **`diff`**: mostra o que mudou entre duas versões de um arquivo. Comparar
-  linha com linha não serve: uma linha nova no começo faz todas parecerem
-  diferentes (LINUX MAN-PAGES, s.d.).
-- **LCS de linhas**: a LCS (assunto 0141) com linhas no lugar de letras; duas
-  linhas casam quando `strcmp` dá 0. As da LCS ficaram iguais; as que só estão
-  na antiga foram **removidas** (`-`); as que só estão na nova, **adicionadas**
-  (`+`) (CORMEN et al., 2024, cap. 14).
-- **Tabela de sufixos**: `c[i][j]` é a LCS de `a[i..m-1]` e `b[j..n-1]`. A
-  resposta fica em `c[0][0]` e a volta anda do **começo** para o fim
-  (LINTZMAYER; MOTA, 2023).
-- **Ler linhas**: `fgets` guarda o `'\n'`; `buf[strcspn(buf, "\n")] = '\0'`
-  corta-o se existir (CPPREFERENCE, s.d.).
-- **Matriz num bloco**: a tabela vem de um único `malloc`, e a célula `(i, j)`
-  mora em `c[i * w + j]`, com `w = n + 1` (KERNIGHAN; RITCHIE, 1989).
-- **Algoritmo de Myers**: o `diff` real gasta O((m + n) × D), com D o número
-  de diferenças, em vez de O(m × n) (MYERS, 1986).
+Você e a sua mãe dividem a lista de compras num arquivo de texto, uma coisa
+por linha. Ela abriu, mexeu e salvou. O que mudou? O programa que responde
+isso é o `diff`: ele recebe duas versões de um arquivo e mostra o que entrou
+e o que saiu (LINUX MAN-PAGES, s.d.). Este projeto monta uma versão pequena
+dele.
+
+A primeira ideia, comparar a linha 1 com a linha 1, a 2 com a 2, e assim
+por diante, não serve. Se ela acrescentou "açúcar" no começo, todas as
+linhas descem uma posição, e todas parecem diferentes, embora quase nada
+tenha mudado (LINUX MAN-PAGES, s.d.). O que você quer é achar o maior
+pedaço que ficou igual, na mesma ordem, mesmo com linhas novas no meio.
+
+Isso é a LCS do assunto 0141, com **linhas** no lugar de letras. Duas linhas
+casam quando `strcmp` devolve 0. As linhas que entram na LCS ficaram iguais
+nas duas versões. As que só estão na versão antiga foram **removidas** e
+saem com `-`. As que só estão na nova foram **adicionadas** e saem com `+`
+(CORMEN et al., 2024, cap. 14). Uma linha alterada, como "leite" que virou
+"leite sem lactose", aparece como uma remoção e uma adição.
+
+Há um ajuste na tabela. Na LCS do 0141, `c[i][j]` falava dos prefixos e a
+volta andava do fim para o começo, então as letras saíam ao contrário. Para
+o diff, a saída tem de vir na ordem do arquivo. A solução é trabalhar com
+**sufixos**, os finais das listas: `c[i][j]` é a LCS de `a[i..m-1]` e
+`b[j..n-1]`. A tabela se enche de trás para a frente, a resposta fica em
+`c[0][0]` e a volta anda do **começo** para o fim, imprimindo na ordem
+certa (LINTZMAYER; MOTA, 2023).
+
+Na volta, em cada posição `(i, j)`, se as linhas são iguais, a linha sai
+com dois espaços na frente e as duas listas avançam. Se não são, olhe os
+vizinhos `c[i+1][j]` e `c[i][j+1]`: o maior diz qual lado avançar. Avançar
+em `a` quer dizer que a linha `a[i]` não está na nova versão, e ela sai com
+`-`; avançar em `b` quer dizer que `b[j]` é nova, e ela sai com `+`.
+
+Para ler as linhas, o programa usa `fgets`, que traz a linha inteira para
+um buffer, inclusive o `'\n'` do fim. Esse `'\n'` atrapalha a comparação e
+precisa sair. A linha `buf[strcspn(buf, "\n")] = '\0'` resolve: `strcspn`
+devolve a posição do primeiro `'\n'`, ou o tamanho da string se não houver
+nenhum, e ali entra o terminador (CPPREFERENCE, s.d.).
+
+A tabela pode ser grande. Dois arquivos de 2000 linhas pedem 4 milhões de
+células, 16 MB de `int`, o dobro da pilha padrão do Linux. Por isso ela não
+é uma matriz local: vem de um único `malloc` de `(m + 1) × (n + 1)` inteiros,
+e a célula `(i, j)` mora na posição `i * w + j` desse bloco, com `w = n + 1`,
+a largura de uma linha (KERNIGHAN; RITCHIE, 1989).
+
+Mesmo assim, O(m × n) não escala. Com 100 mil linhas de cada lado, seriam
+40 GB de tabela. O `diff` de verdade usa o algoritmo de Myers, que gasta
+O((m + n) × D), com D o número de diferenças (MYERS, 1986). Como dois
+arquivos parecidos têm poucas diferenças, ele roda rápido justamente no caso
+mais comum.
 
 > [!WARNING]
 > Sem tirar o `'\n'`, "banana\n" e "banana" diferem no `strcmp` e o diff acusa

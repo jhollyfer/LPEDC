@@ -66,24 +66,73 @@ e **cinza** o que não chega a ser usado.
 
 ### Conceito
 
-- **Programação dinâmica** (PD): combina respostas de **subproblemas que se
-  repetem**, calculando cada um uma vez só. "Programação" quer dizer
-  planejamento numa tabela (CORMEN et al., 2024, cap. 14).
-- **Subestrutura ótima**: a resposta sai das respostas ótimas de problemas
-  menores do mesmo tipo (CORMEN et al., 2024, cap. 14).
-- **Subproblemas sobrepostos**: os problemas menores **se repetem**. Nas
-  metades do merge sort, que não se repetem, guardar não ajuda
-  (CORMEN et al., 2024, cap. 14).
-- **Memoização** (de *memo*, lembrete): a recursão consulta um vetor `memo[]`
-  antes de calcular. Resolve de **cima para baixo** (*top-down*)
-  (LINTZMAYER; MOTA, 2023).
-- **Tabela**: sem recursão, enche um vetor do menor subproblema para o maior.
-  Resolve de **baixo para cima** (*bottom-up*) (CORMEN et al., 2024, cap. 14).
-- **Custo de uma PD**: número de subproblemas × trabalho de cada um. O
-  Fibonacci recursivo puro é exponencial; com tabela, O(n)
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 3).
-- **Pilha**: a memoização empilha um frame por chamada; a tabela é só um laço
-  (FEOFILOFF, 2009).
+Você vai subir 35 degraus a pé, de um em um ou de dois em dois. De quantos
+jeitos diferentes dá para chegar ao topo? Contar na mão é impossível, e a
+pergunta esconde a ideia que guia o módulo inteiro.
+
+Pense no **último passo**. Para pisar no degrau `n`, você veio do degrau
+`n - 1`, com um passo simples, ou do `n - 2`, com um passo duplo. Então o
+número de jeitos de chegar a `n` é a soma dos jeitos de chegar a cada um
+desses dois: `formas(n) = formas(n - 1) + formas(n - 2)`, com `formas(0) =
+formas(1) = 1`. É a recorrência de Fibonacci, que você viu no assunto 0033.
+
+Escrita como recursão pura, essa função é **exponencial**. `formas(35)` faz
+quase 30 milhões de chamadas, porque `formas(33)` é calculada duas vezes,
+`formas(32)` três, e assim por diante, numa avalanche de contas repetidas
+(TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 3). E só existem 36 perguntas
+diferentes, de `formas(0)` a `formas(35)`. O desperdício é refazer conta
+pronta. A saída é **anotar cada resposta na primeira vez e consultar nas
+próximas**, como quem cola um lembrete na geladeira.
+
+Essa é a **programação dinâmica** (PD): resolver um problema combinando as
+respostas de **subproblemas que se repetem**, calculando cada um uma vez só
+(CORMEN et al., 2024, cap. 14). O nome engana. "Programação" aqui não quer
+dizer escrever código; quer dizer planejamento, preencher uma tabela, no
+sentido antigo da palavra.
+
+A PD exige duas condições do problema. A primeira é a **subestrutura
+ótima**: a resposta do problema sai das respostas ótimas de problemas
+menores do mesmo tipo (CORMEN et al., 2024, cap. 14). Nos degraus, a resposta
+de `n` sai das de `n - 1` e `n - 2`. A segunda é ter **subproblemas
+sobrepostos**: os problemas menores **se repetem** ao longo da recursão
+(CORMEN et al., 2024, cap. 14). É ela que separa a PD da divisão e conquista
+(0131). As metades do merge sort nunca se repetem, e guardar a resposta
+delas não economizaria nada.
+
+Há dois jeitos de anotar. Na **memoização** (de *memo*, lembrete), você
+mantém a recursão como está e acrescenta um vetor `memo[]`. Antes de
+calcular, a função consulta o vetor; se a resposta já está lá, devolve na
+hora; se não, calcula, anota e devolve. Ela resolve de **cima para baixo**
+(*top-down*): parte do problema grande e desce só até os subproblemas de
+que precisa (LINTZMAYER; MOTA, 2023).
+
+```c
+long long formas_memo(int n) {
+    if (n <= 1) return 1;
+    if (memo[n] != -1) return memo[n];          // já sei: devolve
+    memo[n] = formas_memo(n - 1) + formas_memo(n - 2);
+    return memo[n];
+}
+```
+
+O outro jeito é a **tabela**. Você joga a recursão fora e enche um vetor
+num laço, do menor subproblema para o maior: `t[0]`, `t[1]`, depois `t[2]`
+a partir deles, e assim até `t[n]`. Ela resolve de **baixo para cima**
+(*bottom-up*): quando chega a vez de `t[i]`, tudo de que ele depende já está
+pronto (CORMEN et al., 2024, cap. 14). O Cormen chama as duas versões de
+*top-down with memoization* e *bottom-up method*.
+
+Com as anotações, `formas(35)` cai de 29 860 703 chamadas para 69 na
+memoização e 34 voltas de laço na tabela. A conta de custo vale para toda
+PD: **número de subproblemas × trabalho de cada um**. Aqui são 35
+subproblemas com uma soma cada, O(n), contra o crescimento exponencial da
+recursão pura (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 3).
+
+As duas versões têm o mesmo custo de tempo, mas diferem na pilha. A
+memoização ainda é recursiva e empilha um frame por chamada aberta, então
+`formas_memo(100000)` estouraria a pilha. A tabela é um laço comum, sem
+chamadas (FEOFILOFF, 2009). A memoização ganha quando só uma parte dos
+subproblemas é necessária, porque ela calcula só essa parte.
 
 > [!WARNING]
 > O valor de "ainda não calculei" deve ser **impossível** como resposta (aqui,
@@ -387,22 +436,55 @@ subproblemas guardados no memo: 1044
 
 ### Conceito
 
-- **Troco mínimo**: o menor número de moedas que somam **exatamente** um
-  valor. O guloso (assunto 0133) erra em sistemas não canônicos; a PD testa
-  todas as escolhas sem repetir trabalho (CORMEN et al., 2024, cap. 14).
-- **Recorrência**: pelo **último** selo, `dp[v] = 1 + mín(dp[v - s])` para
-  cada selo `s ≤ v`, com `dp[0] = 0` (LINTZMAYER; MOTA, 2023).
-- **Subestrutura ótima**: tirando o último selo de uma solução ótima, o resto
-  continua ótimo; senão daria para melhorar o todo
-  (CORMEN et al., 2024, cap. 14).
-- **Recuperar a solução**: `ultimo[v]` guarda o selo que deu o mínimo; anda-se
-  para trás de `v` até 0 por `v - ultimo[v]` (ZIVIANI, 2010, cap. 2).
-- **Custo**: `total` subproblemas, cada um testando `k` selos:
-  **O(total × k)** de tempo e O(total) de memória
-  (LINTZMAYER; MOTA, 2023).
-- **Tabela grande**: para totais altos, aloque `dp` com `malloc` (assunto
-  0054); na pilha, 1 milhão de `int` já passa do limite padrão
-  (KERNIGHAN; RITCHIE, 1989).
+Nos Correios, o balcão só tem selos de R$ 1, R$ 4 e R$ 5, e a sua carta
+custa R$ 8 de porte. Você quer colar o **menor número de selos** que somam
+exatamente R$ 8. É o problema do **troco mínimo**: dado um conjunto de
+valores, achar o menor número de peças que somam exatamente um total
+(CORMEN et al., 2024, cap. 14).
+
+O atendente guloso do assunto 0133 pega o maior selo que cabe, R$ 5, e
+completa com três de R$ 1: quatro selos. Dois selos de R$ 4 resolvem com
+dois. É o mesmo tropeço das fichas `{1, 3, 4}` de lá: o sistema não é
+canônico, e a escolha que parece melhor agora estraga o resto. O guloso
+aposta numa escolha e não volta atrás. A PD (0138) não aposta: ela testa
+**todas** as escolhas, mas sem repetir trabalho.
+
+O raciocínio é o mesmo dos degraus: olhe para o **último selo** colado. Ele
+foi de R$ 1, de R$ 4 ou de R$ 5. Antes dele, sobrou um valor menor, que já
+foi pago com o mínimo de selos. Então, chamando de `dp[v]` o menor número de
+selos que somam exatamente `v` reais, vale `dp[v] = 1 + mín(dp[v - s])`,
+tomando o mínimo sobre cada selo `s` que cabe em `v`, isto é, com `s ≤ v`. O
+caso base é `dp[0] = 0`: pagar zero não pede selo nenhum (LINTZMAYER; MOTA,
+2023).
+
+Veja a conta para R$ 8. Se o último selo foi de R$ 1, antes sobraram 7, e
+`dp[7] = 3`, total 4. Se foi de R$ 4, sobraram 4, e `dp[4] = 1`, total 2. Se
+foi de R$ 5, sobraram 3, e `dp[3] = 3`, total 4. O menor é 2, pelo selo de
+R$ 4. Para essa conta funcionar, `dp[7]`, `dp[4]` e `dp[3]` precisam estar
+prontos antes, e por isso a tabela se enche de `v = 1` até o total.
+
+Por que olhar só o último selo basta? Pela **subestrutura ótima**. Tire o
+último selo de uma solução ótima para `v`: o que sobra é uma solução para
+`v - s`, e ela também é ótima. Se não fosse, daria para trocá-la por uma
+melhor e melhorar a solução de `v` inteira, o que contradiz ela ser ótima
+(CORMEN et al., 2024, cap. 14).
+
+A tabela `dp` diz **quantos** selos, mas não **quais**. Para isso, guarde
+num segundo vetor, `ultimo[v]`, o selo que deu o mínimo em cada `v`. Depois,
+ande para trás: comece em `v`, anote `ultimo[v]`, vá para `v - ultimo[v]` e
+repita até chegar a 0 (ZIVIANI, 2010, cap. 2). Para R$ 8, `ultimo[8] = 4`
+leva a `v = 4`, e `ultimo[4] = 4` leva a 0: dois selos de R$ 4.
+
+Alguns valores podem ser impossíveis. Com selos de R$ 4 e R$ 5 apenas, não
+dá para pagar R$ 3. A célula de um valor impossível guarda um "infinito",
+um número maior que qualquer resposta de verdade, e ele nunca vence a
+comparação do mínimo.
+
+O custo segue a regra da PD: `total` subproblemas, cada um testando `k`
+selos, dá **O(total × k)** de tempo e O(total) de memória (LINTZMAYER; MOTA,
+2023). Para totais altos, a tabela pesa. Um milhão de `int` são 4 MB, e
+`dp` e `ultimo` juntos já batem nos 8 MB da pilha padrão do Linux. Aloque
+os vetores com `malloc` (assunto 0054) (KERNIGHAN; RITCHIE, 1989).
 
 > [!WARNING]
 > O "infinito" precisa sobreviver a um `+ 1`. Com `INT_MAX`, a conta
@@ -684,25 +766,55 @@ até 6 moedas: 7 combinações
 
 ### Conceito
 
-- **Mochila 0/1**: capacidade `W` e `n` itens com peso e lucro; cada item vai
-  inteiro (1) ou não vai (0). São `2ⁿ` escolhas
-  (CORMEN et al., 2024, seção 15.2).
-- **Guloso falha**: ordenar por lucro por quilo, que resolve a fracionária
-  (assunto 0135), aqui pode deixar espaço vazio e perder lucro
-  (CORMEN et al., 2024, seção 15.2).
-- **Tabela**: `t[i][c]` é o maior lucro usando só os itens `1..i` com
-  capacidade `c`. A linha 0 é toda zero e a resposta fica em `t[n][W]`
-  (KLEINBERG; TARDOS, 2006, cap. 6).
-- **Recorrência**: o item `i` **não vai** (`t[i-1][c]`) ou **vai**, se
-  `peso[i] <= c` (`lucro[i] + t[i-1][c - peso[i]]`); fica o maior
-  (KLEINBERG; TARDOS, 2006, cap. 6).
-- **Recuperação**: de baixo para cima, se `t[i][c]` é igual a `t[i-1][c]`, o
-  item `i` ficou de fora; se mudou, foi junto e `c` perde `peso[i]`
-  (ZIVIANI, 2010, cap. 2).
-- **Pseudopolinomial**: são `(n + 1) × (W + 1)` células, **O(n × W)**. Mas `W`
-  é um número escrito com uns log₂ W bits; dobrar os bits eleva `W` ao
-  quadrado. A mochila 0/1 continua NP-difícil (assunto 0186)
-  (LINTZMAYER; MOTA, 2023).
+Um vendedor ambulante tem um isopor que aguenta 7 kg e quatro opções para
+levar à praia: um fardo de água (2 kg, lucro de R$ 18), uma caixa de
+refrigerante (3 kg, R$ 24), uma caixa de suco (4 kg, R$ 30) e um pote de
+açaí (5 kg, R$ 35). Cada coisa vai inteira ou não vai: ninguém leva meia
+caixa de suco. O que ele põe no isopor para lucrar o máximo?
+
+Esse é o problema da **mochila 0/1**. Há uma capacidade `W` e `n` itens,
+cada um com peso e lucro, e cada item vai inteiro (1) ou fica de fora (0).
+O objetivo é o maior lucro sem passar de `W` (CORMEN et al., 2024, seção
+15.2). Como cada item tem duas opções, são `2ⁿ` escolhas possíveis. Para 50
+itens, testar todas está fora de cogitação.
+
+Na mochila fracionária (assunto 0135), o guloso pelo lucro por quilo
+resolvia. Aqui ele erra (CORMEN et al., 2024, seção 15.2). Pela razão, a
+água (R$ 9/kg) vem antes do refrigerante (R$ 8/kg). Os dois juntos pesam 5
+kg e dão R$ 42, e nada mais cabe nos 2 kg que sobram. Mas refrigerante e
+suco pesam exatamente 7 kg e dão **R$ 54**. O guloso deixou espaço vazio, e
+como não dá para partir o suco, esse espaço virou prejuízo.
+
+A PD (0138) olha **um item de cada vez** e pergunta: o último item, o de
+número `i`, vai ou não vai? Se não vai, o lucro é o melhor que os itens de 1
+a `i - 1` conseguem com a mesma capacidade `c`. Se vai, e só pode ir se
+`peso[i] <= c`, o lucro é `lucro[i]` mais o melhor que os itens de 1 a
+`i - 1` conseguem no espaço que sobrou, `c - peso[i]`. A resposta é a maior
+das duas (KLEINBERG; TARDOS, 2006, cap. 6).
+
+Para guardar essas respostas, a tabela é uma matriz. A célula `t[i][c]` é o
+maior lucro usando só os itens de 1 a `i`, com capacidade `c`. A recorrência
+fica: `t[i][c]` é o maior entre `t[i-1][c]` e `lucro[i] + t[i-1][c -
+peso[i]]`, este último só quando o item cabe. A linha 0, sem nenhum item, é
+toda zero. A resposta fica no canto de baixo, em `t[n][W]` (KLEINBERG;
+TARDOS, 2006, cap. 6). No isopor, `t[3][7]` escolhe entre não levar o suco
+(`t[2][7] = 42`) e levar (`30 + t[2][3] = 30 + 24 = 54`), e fica com 54.
+
+A tabela diz o lucro, mas não **o que levar**. A **recuperação** responde
+isso andando de baixo para cima, a partir de `t[n][W]`. Em cada linha, compare
+`t[i][c]` com a célula de cima, `t[i-1][c]`. Se forem iguais, o item `i` não
+fez diferença e ficou de fora. Se mudou, o item `i` foi junto, e a busca
+segue na linha de cima com a capacidade reduzida, `c - peso[i]` (ZIVIANI,
+2010, cap. 2). No isopor, o açaí não muda nada e fica; o suco muda e vai, e
+a capacidade cai para 3; o refrigerante muda e vai, e ela cai para 0.
+
+O custo é o tamanho da tabela: `(n + 1) × (W + 1)` células, cada uma
+preenchida em tempo constante, ou seja, **O(n × W)**. Parece polinomial, mas
+há uma pegadinha. `W` é um **número**, e um número se escreve com uns log₂ W
+bits. Dobrar o tamanho da entrada, de 20 para 40 bits, eleva `W` ao
+quadrado. Por isso esse custo se chama **pseudopolinomial**: é polinomial
+no valor de `W`, não no tamanho da entrada. A mochila 0/1 continua
+NP-difícil (assunto 0186) (LINTZMAYER; MOTA, 2023).
 
 > [!WARNING]
 > Na recuperação, o teste é "o valor **mudou**?", e não "dá para levar?". E
@@ -1034,29 +1146,60 @@ Força bruta: R$ 79
 
 ### Conceito
 
-- **Subsequência**: o que sobra depois de apagar letras, sem mudar a ordem.
-  `MNG` é subsequência de `MORANGO`; `GNA` não é
-  (CORMEN et al., 2024, cap. 14).
-- **LCS** (*longest common subsequence*): a maior subsequência das duas
-  strings. Testar todas é inviável: 30 letras já têm mais de um bilhão
-  (CORMEN et al., 2024, cap. 14).
-- **Recorrência**: olhe a última letra de cada uma. **Iguais**: ela fecha a
-  LCS, some 1 à das duas sem ela. **Diferentes**: tire a última de `a` ou a de
-  `b` e fique com a melhor (CORMEN et al., 2024, cap. 14).
-- **Tabela**: `c[i][j]` é o tamanho da LCS dos **prefixos** `a[0..i-1]` e
-  `b[0..j-1]`; a resposta fica em `c[m][n]` (LINTZMAYER; MOTA, 2023).
-- **Recuperação**: do canto até a borda; letra igual entra na resposta e o
-  caminho vai na diagonal, senão vai para o vizinho de onde o valor veio
-  (CORMEN et al., 2024, cap. 14).
-- **Custo**: `(m + 1) × (n + 1)` células de O(1), **O(m × n)** de tempo e de
-  memória. Só o tamanho cabe em duas linhas; as letras pedem a tabela inteira
-  (KLEINBERG; TARDOS, 2006, cap. 6).
+Você ditou **MORANGO** e o seu sobrinho escreveu **MANGA**. Quantas letras
+ele acertou na ordem certa? Comparar posição por posição não serve, porque
+um erro no começo desalinha o resto. A pergunta certa é: qual a maior
+sequência de letras que aparece nas duas palavras, na mesma ordem, mesmo com
+outras letras no meio? Aqui é **MANG**, quatro letras. A mesma pergunta
+compara versões de um arquivo e trechos de DNA.
+
+Uma **subsequência** de uma string é o que sobra depois de apagar algumas
+letras dela, sem mudar a ordem das que ficam (CORMEN et al., 2024, cap. 14).
+`MNG` é subsequência de `MORANGO`: apague O, R, A e O. `GNA` não é, porque
+em MORANGO o G vem depois do N e do A. A **maior subsequência comum**
+(*longest common subsequence*, LCS) de duas strings é a mais comprida que é
+subsequência das duas ao mesmo tempo (CORMEN et al., 2024, cap. 14).
+
+Testar todas não dá. Cada letra pode ficar ou sair, então uma palavra de 30
+letras tem 2³⁰, mais de um bilhão, de subsequências (CORMEN et al., 2024, cap.
+14). A PD (0138) resolve olhando só a **última letra** de cada string. Se as
+duas forem **iguais**, essa letra pode fechar a LCS: a resposta é 1 mais a
+LCS das duas strings sem a última letra. Se forem **diferentes**, pelo menos
+uma delas não entra na LCS. Então tire a última de `a` ou a última de `b`,
+resolva cada caso e fique com o melhor (CORMEN et al., 2024, cap. 14).
+
+Cada passo encurta uma string ou as duas, e o que sobra são sempre
+**prefixos**, os começos das strings. Daí a tabela: `c[i][j]` é o tamanho da
+LCS do prefixo de `a` com `i` letras, `a[0..i-1]`, com o prefixo de `b` com
+`j` letras, `b[0..j-1]`. Com `m` e `n` letras nas duas strings, a resposta
+fica em `c[m][n]` (LINTZMAYER; MOTA, 2023). A linha 0 e a coluna 0 valem 0,
+porque nada é comum com um prefixo vazio.
+
+Repare no deslocamento de índice. A linha `i` da tabela fala da letra
+`a[i-1]`, porque a linha 0 é reservada ao prefixo vazio. Comparar `a[i]` com
+`b[j]` é o erro clássico. A tabela resume os três casos, e cada célula olha
+no máximo três vizinhas já preenchidas: a de cima, a da esquerda e a da
+diagonal:
 
 | caso | `c[i][j]` |
 | --- | --- |
 | `i == 0` ou `j == 0` | 0 (um prefixo vazio) |
 | `a[i-1] == b[j-1]` | `c[i-1][j-1] + 1` (diagonal) |
 | letras diferentes | o maior entre `c[i-1][j]` (cima) e `c[i][j-1]` (esquerda) |
+
+O número no canto diz o tamanho, mas não quais letras. A **recuperação**
+anda do canto `c[m][n]` até a borda. Se as letras da posição são iguais,
+ela entra na resposta e o caminho segue na diagonal. Se não, o caminho vai
+para o vizinho, de cima ou da esquerda, de onde o valor veio (CORMEN et al.,
+2024, cap. 14). As letras saem de trás para a frente: em MORANGO e MANGA,
+primeiro G, depois N, A e M. O Cormen guarda a direção de cada célula numa
+tabela de setas; também dá para refazer a comparação na volta.
+
+O custo é o tamanho da tabela. São `(m + 1) × (n + 1)` células, cada uma
+calculada em O(1), o que dá **O(m × n)** de tempo e de memória. Se você só
+quer o **tamanho** da LCS, duas linhas bastam, porque cada linha só olha a
+anterior. Para **recuperar** as letras, porém, o caminho de volta precisa da
+tabela inteira (KLEINBERG; TARDOS, 2006, cap. 6).
 
 > [!WARNING]
 > Subsequência não é **substring** (pedaço contíguo): a maior substring comum
@@ -1405,26 +1548,63 @@ Preços: 28 30 33 36 40 41
 
 ### Conceito
 
-- **Distância de edição** (ou **de Levenshtein**): o menor número de
-  operações que transforma uma string em outra. Cada operação custa 1:
-  **inserir**, **remover** ou **trocar** uma letra (LEVENSHTEIN, 1966).
-- **Recorrência**: como na LCS (assunto 0141), olhe o fim. Últimas letras
-  **iguais**: custa o mesmo que as palavras sem elas. **Diferentes**: 1 + a
-  mais barata entre trocar, remover e inserir (KLEINBERG; TARDOS, 2006, cap. 6).
-- **Tabela**: `d[i][j]` é a distância entre os prefixos `a[0..i-1]` e
-  `b[0..j-1]`; a resposta fica em `d[m][n]` (LINTZMAYER; MOTA, 2023).
-- **Borda**: diferente da LCS, `d[i][0] = i` (`i` remoções) e `d[0][j] = j`
-  (`j` inserções) (LINTZMAYER; MOTA, 2023).
-- **Custo**: **O(m × n)**. A distância é pelo menos a diferença dos tamanhos,
-  o que ajuda um corretor a descartar palavras cedo
-  (KLEINBERG; TARDOS, 2006, cap. 6).
-- **Alinhamento**: a volta pela tabela mostra quais edições foram feitas, do
-  fim para o começo (KLEINBERG; TARDOS, 2006, cap. 6).
+Você digita "pesoa" e o corretor oferece "pessoa". Ele percebeu que falta
+um `s`, e que "pesoa" está muito mais perto de "pessoa" do que de "pedra".
+Para ordenar as sugestões, o corretor precisa de um número que diga o
+quanto duas palavras são parecidas. A medida mais usada conta quantas
+correções separam uma da outra.
+
+A **distância de edição**, também chamada **distância de Levenshtein**, é o
+menor número de operações que transforma uma string em outra. São três
+operações, e cada uma custa 1: **inserir** uma letra, **remover** uma letra
+e **trocar** uma letra por outra (LEVENSHTEIN, 1966). De "pesoa" para
+"pessoa", basta inserir um `s`: distância 1. De CARTA para ARTES, a
+distância é 3: remova o C (ARTA), insira um E (ARTEA) e troque o último A
+por S (ARTES).
+
+A PD segue o mesmo raciocínio da LCS (0141): olhe o **fim** das duas
+palavras. Se as últimas letras são **iguais**, elas não pedem correção, e a
+distância é a mesma das palavras sem elas. Se são **diferentes**, alguma
+operação tem de resolver essa última posição, e há três candidatas
+(KLEINBERG; TARDOS, 2006, cap. 6).
+
+Cada candidata deixa um problema menor. **Trocar** a última letra de `a`
+pela última de `b` custa 1, e sobra transformar as duas palavras sem a
+última letra. **Remover** a última letra de `a` custa 1, e sobra transformar
+`a` sem ela em `b` inteira. **Inserir** no fim de `a` a última letra de `b`
+custa 1, e sobra transformar `a` inteira em `b` sem a última letra. A
+distância é 1 mais a mais barata das três.
+
+A tabela segue os prefixos, como na LCS. A célula `d[i][j]` é a distância
+entre o prefixo `a[0..i-1]`, com `i` letras, e o prefixo `b[0..j-1]`, com
+`j` letras. A resposta fica em `d[m][n]` (LINTZMAYER; MOTA, 2023). As três
+operações viram três vizinhas: a diagonal `d[i-1][j-1]` é a troca, a de
+cima `d[i-1][j]` é a remoção e a da esquerda `d[i][j-1]` é a inserção. A
+tabela de consulta resume:
 
 | caso | `d[i][j]` |
 | --- | --- |
 | `a[i-1] == b[j-1]` | `d[i-1][j-1]` (diagonal, de graça) |
 | letras diferentes | `1 +` o menor entre `d[i-1][j-1]` (troca), `d[i-1][j]` (remove) e `d[i][j-1]` (insere) |
+
+A diferença para a LCS está na **borda**. Na LCS, a linha e a coluna 0
+valiam zero. Aqui, transformar `i` letras numa palavra vazia pede `i`
+remoções, então `d[i][0] = i`. E transformar a palavra vazia em `j` letras
+pede `j` inserções, então `d[0][j] = j` (LINTZMAYER; MOTA, 2023).
+
+O custo é o da tabela: `(m + 1) × (n + 1)` células de O(1), **O(m × n)**.
+Um corretor que compara a palavra digitada com 300 mil palavras do
+dicionário não quer pagar isso para todas. Ele usa um limite inferior
+barato: a distância é pelo menos a diferença dos tamanhos, porque cada
+letra a mais pede uma remoção ou inserção. Palavras de tamanho muito
+diferente saem antes de qualquer tabela (KLEINBERG; TARDOS, 2006, cap. 6).
+
+A tabela dá o número; a volta dá as edições. Partindo de `d[m][n]`, você
+pergunta em cada célula de qual vizinha o valor veio: diagonal sem custo
+quer dizer letras iguais; diagonal com custo é troca; de cima é remoção; da
+esquerda é inserção. As operações saem do fim para o começo. Escritas em
+ordem, elas formam um **alinhamento** das duas palavras, como o que se usa
+para comparar trechos de DNA (KLEINBERG; TARDOS, 2006, cap. 6).
 
 > [!WARNING]
 > A borda **não** é zero, como na LCS: sem `d[i][0] = i` e `d[0][j] = j`,
@@ -1786,22 +1966,56 @@ ESTRELA -> ESTERIL: distância 3
 
 ### Conceito
 
-- **`diff`**: mostra o que mudou entre duas versões de um arquivo. Comparar
-  linha com linha não serve: uma linha nova no começo faz todas parecerem
-  diferentes (LINUX MAN-PAGES, s.d.).
-- **LCS de linhas**: a LCS (assunto 0141) com linhas no lugar de letras; duas
-  linhas casam quando `strcmp` dá 0. As da LCS ficaram iguais; as que só estão
-  na antiga foram **removidas** (`-`); as que só estão na nova, **adicionadas**
-  (`+`) (CORMEN et al., 2024, cap. 14).
-- **Tabela de sufixos**: `c[i][j]` é a LCS de `a[i..m-1]` e `b[j..n-1]`. A
-  resposta fica em `c[0][0]` e a volta anda do **começo** para o fim
-  (LINTZMAYER; MOTA, 2023).
-- **Ler linhas**: `fgets` guarda o `'\n'`; `buf[strcspn(buf, "\n")] = '\0'`
-  corta-o se existir (CPPREFERENCE, s.d.).
-- **Matriz num bloco**: a tabela vem de um único `malloc`, e a célula `(i, j)`
-  mora em `c[i * w + j]`, com `w = n + 1` (KERNIGHAN; RITCHIE, 1989).
-- **Algoritmo de Myers**: o `diff` real gasta O((m + n) × D), com D o número
-  de diferenças, em vez de O(m × n) (MYERS, 1986).
+Você e a sua mãe dividem a lista de compras num arquivo de texto, uma coisa
+por linha. Ela abriu, mexeu e salvou. O que mudou? O programa que responde
+isso é o `diff`: ele recebe duas versões de um arquivo e mostra o que entrou
+e o que saiu (LINUX MAN-PAGES, s.d.). Este projeto monta uma versão pequena
+dele.
+
+A primeira ideia, comparar a linha 1 com a linha 1, a 2 com a 2, e assim
+por diante, não serve. Se ela acrescentou "açúcar" no começo, todas as
+linhas descem uma posição, e todas parecem diferentes, embora quase nada
+tenha mudado (LINUX MAN-PAGES, s.d.). O que você quer é achar o maior
+pedaço que ficou igual, na mesma ordem, mesmo com linhas novas no meio.
+
+Isso é a LCS do assunto 0141, com **linhas** no lugar de letras. Duas linhas
+casam quando `strcmp` devolve 0. As linhas que entram na LCS ficaram iguais
+nas duas versões. As que só estão na versão antiga foram **removidas** e
+saem com `-`. As que só estão na nova foram **adicionadas** e saem com `+`
+(CORMEN et al., 2024, cap. 14). Uma linha alterada, como "leite" que virou
+"leite sem lactose", aparece como uma remoção e uma adição.
+
+Há um ajuste na tabela. Na LCS do 0141, `c[i][j]` falava dos prefixos e a
+volta andava do fim para o começo, então as letras saíam ao contrário. Para
+o diff, a saída tem de vir na ordem do arquivo. A solução é trabalhar com
+**sufixos**, os finais das listas: `c[i][j]` é a LCS de `a[i..m-1]` e
+`b[j..n-1]`. A tabela se enche de trás para a frente, a resposta fica em
+`c[0][0]` e a volta anda do **começo** para o fim, imprimindo na ordem
+certa (LINTZMAYER; MOTA, 2023).
+
+Na volta, em cada posição `(i, j)`, se as linhas são iguais, a linha sai
+com dois espaços na frente e as duas listas avançam. Se não são, olhe os
+vizinhos `c[i+1][j]` e `c[i][j+1]`: o maior diz qual lado avançar. Avançar
+em `a` quer dizer que a linha `a[i]` não está na nova versão, e ela sai com
+`-`; avançar em `b` quer dizer que `b[j]` é nova, e ela sai com `+`.
+
+Para ler as linhas, o programa usa `fgets`, que traz a linha inteira para
+um buffer, inclusive o `'\n'` do fim. Esse `'\n'` atrapalha a comparação e
+precisa sair. A linha `buf[strcspn(buf, "\n")] = '\0'` resolve: `strcspn`
+devolve a posição do primeiro `'\n'`, ou o tamanho da string se não houver
+nenhum, e ali entra o terminador (CPPREFERENCE, s.d.).
+
+A tabela pode ser grande. Dois arquivos de 2000 linhas pedem 4 milhões de
+células, 16 MB de `int`, o dobro da pilha padrão do Linux. Por isso ela não
+é uma matriz local: vem de um único `malloc` de `(m + 1) × (n + 1)` inteiros,
+e a célula `(i, j)` mora na posição `i * w + j` desse bloco, com `w = n + 1`,
+a largura de uma linha (KERNIGHAN; RITCHIE, 1989).
+
+Mesmo assim, O(m × n) não escala. Com 100 mil linhas de cada lado, seriam
+40 GB de tabela. O `diff` de verdade usa o algoritmo de Myers, que gasta
+O((m + n) × D), com D o número de diferenças (MYERS, 1986). Como dois
+arquivos parecidos têm poucas diferenças, ele roda rápido justamente no caso
+mais comum.
 
 > [!WARNING]
 > Sem tirar o `'\n'`, "banana\n" e "banana" diferem no `strcmp` e o diff acusa
