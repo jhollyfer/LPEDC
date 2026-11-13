@@ -1,23 +1,61 @@
 ## 0177 · Rubro-negra clássica
 
-- **Árvore rubro-negra**: BST em que cada nó tem cor e valem cinco
-  propriedades: (1) todo nó é vermelho ou preto; (2) a raiz é preta; (3) toda
-  folha (`T.nil`) é preta; (4) nó vermelho tem os dois filhos pretos; (5) todo
-  caminho de um nó até as folhas abaixo tem o mesmo número de pretos
-  (CORMEN et al., 2024, cap. 13).
-- **Origem**: o esquema de duas cores para árvores balanceadas é de Guibas e
-  Sedgewick; a LLRB do 0145 é uma variante (GUIBAS; SEDGEWICK, 1978).
-- **Sentinela `T.nil`**: as folhas não guardam chave; todas são um nó só,
-  preto, como na lista do 0174. O pai da raiz também é `T.nil`
-  (CORMEN et al., 2024, cap. 13).
-- **Altura negra** `bh(x)`: pretos de `x` até uma folha, sem contar `x`. Como
-  `bh(raiz) >= h/2`, sai **h ≤ 2 log₂(n + 1)** e busca custa O(log n)
-  (CORMEN et al., 2024, cap. 13).
-- **Inserção**: pendura `z` como na BST e o pinta de **vermelho**. Só a
-  propriedade 4 pode quebrar, e o conserto olha o **tio** de `z`
-  (CORMEN et al., 2024, cap. 13).
-- **Remoção**: quatro casos, olhando o **irmão**; custa O(log n) e faz no
-  máximo **três rotações** (SZWARCFITER; MARKENZON, 2010).
+Uma BST que recebe chaves quase em ordem vira uma corrente: cada nó novo vai
+para a direita do anterior, a altura chega a n e a busca volta a custar O(n).
+No 0145 você viu uma saída para isso, a rubro-negra **esquerdista** (LLRB). A
+prova cobra a versão **clássica**, a do Cormen: as mesmas duas cores, outras
+regras de conserto e um ponteiro para o pai em cada nó.
+
+A ideia de pintar os nós de duas cores para manter uma árvore balanceada é
+de Guibas e Sedgewick, e a LLRB é uma variante dela (GUIBAS; SEDGEWICK,
+1978). A cor não guarda dado nenhum. Ela serve de etiqueta para impor regras
+que impedem um caminho de ficar muito mais comprido que outro.
+
+Uma **árvore rubro-negra** é uma BST em que cada nó tem uma cor, vermelho ou
+preto, e valem cinco propriedades (CORMEN et al., 2024, cap. 13):
+
+1. todo nó é vermelho ou preto;
+2. a raiz é preta;
+3. toda folha (`T.nil`) é preta;
+4. se um nó é vermelho, os dois filhos dele são pretos;
+5. para cada nó, todos os caminhos dele até as folhas abaixo passam pelo
+   mesmo número de nós pretos.
+
+A propriedade 3 fala de "folhas" num sentido próprio. As folhas do Cormen não
+guardam chave: elas ocupam os lugares onde a BST comum teria `NULL`. E não são
+várias: todas são **um nó só**, a sentinela `T.nil`, preta, como a da lista
+do 0174. O pai da raiz também é `T.nil` (CORMEN et al., 2024, cap. 13). A
+vantagem é a mesma da lista: o código lê a cor de qualquer vizinho sem
+testar `NULL` antes, porque o vizinho "vazio" é um nó de verdade.
+
+As propriedades 4 e 5 são as que seguram a altura. A **altura negra**
+`bh(x)` é o número de nós pretos no caminho de `x` até uma folha, sem contar
+o próprio `x` e contando a folha `T.nil`. Pela propriedade 5, esse número é o
+mesmo em qualquer caminho, então `bh(x)` está bem definido. Pela propriedade
+4, não existem dois vermelhos seguidos, então pelo menos metade dos nós de
+qualquer caminho da raiz até uma folha é preta: `bh(raiz) >= h/2`. Juntando
+isso com o fato de que a subárvore de `x` tem pelo menos `2^bh(x) - 1` nós,
+sai **h ≤ 2 log₂(n + 1)**. Busca, mínimo e sucessor custam O(log n) (CORMEN
+et al., 2024, cap. 13).
+
+A **inserção** começa como a da BST: desce até um lugar vazio e pendura o nó
+novo `z` ali. Depois pinta `z` de **vermelho**. A escolha tem motivo: um nó
+vermelho não muda a contagem de pretos de caminho nenhum, então a propriedade
+5 continua valendo. A única que pode quebrar é a 4, quando o pai de `z` também
+é vermelho. O conserto (`RB-INSERT-FIXUP`) olha o **tio** de `z`, o irmão do
+pai dele (CORMEN et al., 2024, cap. 13).
+
+Se o tio é vermelho (caso 1), não há rotação. Pai e tio viram pretos, o avô
+vira vermelho, e a contagem de pretos fica igual em todos os caminhos. Só que
+o avô agora é vermelho e pode ter pai vermelho, então o problema **sobe**: `z`
+passa a ser o avô e o laço continua.
+
+Se o tio é preto, o conserto usa rotação, e o formato importa. No caso 2, `z`
+forma um **triângulo** com o pai e o avô: é filho direito de um filho
+esquerdo, ou o espelho. Uma rotação no pai endireita o triângulo e cai no
+caso 3. No caso 3, `z` forma uma **linha**: filho esquerdo de um filho
+esquerdo, ou o espelho. Pinte o pai de preto, o avô de vermelho, gire no avô,
+e o conserto acaba. A tabela resume os três:
 
 | Caso | Situação | O que fazer |
 | --- | --- | --- |
@@ -25,8 +63,13 @@
 | 2 | tio **preto**, `z` em **triângulo** (filho direito de um filho esquerdo, ou o espelho) | gira no pai e cai no caso 3 |
 | 3 | tio **preto**, `z` em **linha** (filho esquerdo de um filho esquerdo, ou o espelho) | pinta o pai de preto e o avô de vermelho, gira no avô. Acabou |
 
-O caso 1 só troca cores e pode subir até a raiz; os casos 2 e 3 fazem no
-máximo duas rotações e encerram. No fim, a raiz vira preta.
+O caso 1 só troca cores e pode subir até a raiz. Os casos 2 e 3 fazem no
+máximo duas rotações e encerram. No fim, a raiz é pintada de preto, para
+garantir a propriedade 2.
+
+A **remoção** é mais longa: são quatro casos, e o conserto olha o **irmão**
+do nó que ficou com um preto a menos no caminho. Para a prova, guarde o custo:
+O(log n), com no máximo **três rotações** (SZWARCFITER; MARKENZON, 2010).
 
 > [!WARNING]
 > Erros comuns: esquecer de **subir** no caso 1 (`z = avo`) e trocar a ordem

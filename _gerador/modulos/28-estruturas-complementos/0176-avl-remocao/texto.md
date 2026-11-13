@@ -1,19 +1,53 @@
 ## 0176 · AVL: remoção
 
-- **Remoção na AVL**: começa como a da BST (0100). Folha some; com um filho,
-  o filho ocupa o lugar; com dois, a chave do **sucessor** é copiada e o
-  sucessor é removido lá embaixo (SZWARCFITER; MARKENZON, 2010).
-- **Conserto na volta**: tirar um nó encurta um caminho. Na volta da
-  recursão, cada ancestral recalcula a altura, confere o fator e, se passar
-  de 1 ou -1, faz a rotação do 0101 (ADELSON-VELSKY; LANDIS, 1962).
-- **Filho com fator 0**: na remoção, o filho do lado pesado pode ter fator 0,
-  o que nunca ocorre na inserção. Fator 0 ou de mesmo sinal: **rotação
-  simples**; sinal contrário: **dupla** (SZWARCFITER; MARKENZON, 2010).
-- **Várias rotações**: a rotação pode deixar a subárvore um nível mais baixa,
-  e o desequilíbrio sobe para o avô. Uma remoção pode rodar até a raiz:
-  O(log n) rotações no pior caso (ZIVIANI, 2010).
-- **Cópia da chave**: com dois filhos, o código copia a chave do sucessor e
-  libera o nó dele; um ponteiro guardado para esse nó fica pendurado.
+A AVL do 0101 sabe receber chaves sem perder o equilíbrio. Só que dado também
+sai: o pedido entregue deixa a fila da cozinha, o cliente cancela a conta. Se
+a remoção for a da BST comum, um lado da árvore pode encolher até o fator de
+algum nó chegar a 2 ou -2, e a garantia de altura O(log n) se perde. Este
+assunto mostra como tirar um nó e consertar a árvore no caminho de volta.
+
+A primeira parte é igual à remoção da BST do 0100, com três casos. Se o nó é
+folha, ele some. Se tem um filho só, esse filho ocupa o lugar dele, e a
+subárvore do filho já é AVL. Se tem dois filhos, o nó não pode sumir sem
+deixar dois órfãos; então você copia para ele a chave do **sucessor** (o
+mínimo da subárvore direita, visto no 0175) e remove o sucessor lá embaixo,
+onde ele tem no máximo um filho (SZWARCFITER; MARKENZON, 2010).
+
+Tirar um nó **encurta** um caminho da árvore. Os ancestrais do nó removido
+podem ter perdido um nível de um lado, e o fator deles muda. O conserto segue
+a ideia da inserção: na **volta da recursão**, cada ancestral recalcula a
+própria altura, confere o fator e, se ele passou de 1 ou de -1, faz uma das
+rotações do 0101 (ADELSON-VELSKY; LANDIS, 1962). Como a remoção é recursiva,
+a volta passa por todos os ancestrais, um por um, até a raiz.
+
+Duas coisas mudam em relação à inserção, e a prova cobra as duas. A primeira é
+o fator do filho do lado pesado. Na inserção, o nó novo acabou de entrar por
+um lado, e esse filho sempre pende para algum lado: fator 1 ou -1. Na
+remoção, o lado pesado não recebeu nada; ele só ficou mais alto que o outro,
+e o filho dele pode estar equilibrado, com **fator 0** (SZWARCFITER;
+MARKENZON, 2010).
+
+A regra para escolher a rotação fica assim. Se o filho do lado pesado tem
+fator 0 ou o mesmo sinal do pai, basta uma **rotação simples**. Se tem sinal
+contrário, o peso está "no meio", e só a **rotação dupla** resolve. Exemplo:
+um nó com fator 2 (esquerda pesada) e filho esquerdo com fator 0 pede uma
+rotação simples à direita; com filho esquerdo de fator -1, pede a dupla
+(esquerda no filho, depois direita no nó). No caso do fator 0, a subárvore
+mantém a altura de antes depois da rotação, e o conserto para ali.
+
+A segunda diferença é o que acontece depois da rotação. Na inserção, uma
+rotação devolve a subárvore à altura que ela tinha antes, e o resto da árvore
+nem percebe. Na remoção, a rotação pode deixar a subárvore **um nível mais
+baixa** que antes. Para o avô, é como se outra remoção tivesse acontecido, e
+o desequilíbrio sobe. Por isso uma remoção pode fazer **várias rotações**, uma
+em cada nível, até a raiz: O(log n) rotações no pior caso (ZIVIANI, 2010). O
+custo total continua O(log n), porque cada rotação mexe em poucos ponteiros.
+
+Um último detalhe vem do caso de dois filhos. O código não move o nó do
+sucessor para cima: ele copia a chave e libera o nó do sucessor lá embaixo.
+Se outra parte do programa guardava um ponteiro para o nó do sucessor, esse
+ponteiro passa a apontar para memória liberada, e usá-lo é comportamento
+indefinido.
 
 > [!WARNING]
 > Copiar da inserção o teste `avr_fator(r->esq) <= 0` faz a dupla com fator 0

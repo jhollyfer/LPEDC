@@ -77,23 +77,63 @@ marca as posições olhadas e verde, onde achou a chave.
 
 ### Conceito
 
-- **Nó sentinela** (`L.nil`): um nó falso, sem dado, entre o último e o
-  primeiro. A lista vira **dupla e circular**, e nenhum `NULL` sobra dentro
-  dela (CORMEN et al., 2024, cap. 10).
-- **Por que existe**: na lista dupla comum, o primeiro e o último têm `NULL` de
-  um lado, e cada `NULL` é um caso especial na remoção (TENENBAUM; LANGSAM;
-  AUGENSTEIN, 1995).
-- **Lista vazia**: a sentinela aponta para si (`nil.prox == &nil`);
-  `nil.prox` é o primeiro e `nil.ant` é o último (CORMEN et al., 2024, cap. 10).
-- **Inserir depois de `y`**: quatro ponteiros, sempre os mesmos, com `y`
-  podendo ser a sentinela (começo) ou o último (fim).
-- **Remover `x`**: `x->ant->prox = x->prox` e `x->prox->ant = x->ant`. Duas
-  linhas, sem `if` (CELES; CERQUEIRA; RANGEL, 2016).
-- **Buscar com a chave na sentinela**: guarde a chave procurada em `nil`
-  antes do laço; ele sempre para e faz um teste por volta em vez de dois. Se
-  parar na sentinela, não achou (CORMEN et al., 2024, cap. 10).
-- **Custo**: um nó a mais por lista. Como a sentinela fica dentro da `ListaS`,
-  `&L->nil` é fixo e os laços sabem onde parar.
+A lista duplamente encadeada do 0079 funciona, mas a remoção dela é cheia de
+`if`. Antes de mexer nos ponteiros, o código pergunta: o nó é o primeiro? É o
+último? É o único? Cada pergunta existe por um motivo só: o primeiro nó tem
+`NULL` à esquerda e o último tem `NULL` à direita. Quem segue `x->ant->prox`
+num nó sem vizinho à esquerda tenta ler um campo de `NULL`, e o programa cai.
+Esses casos especiais são o lugar preferido dos bugs em listas (TENENBAUM;
+LANGSAM; AUGENSTEIN, 1995).
+
+Pense numa mesa redonda com uma cadeira vazia reservada. Ninguém senta nela,
+mas ela está ali, entre o último e o primeiro convidado. Todo convidado tem
+vizinho dos dois lados, nem que seja a cadeira vazia. Na lista, essa cadeira é
+o **nó sentinela**: um nó falso, sem dado, colocado entre o último e o
+primeiro, que transforma a lista em **duplamente encadeada e circular**. O
+Cormen o chama de `L.nil` (CORMEN et al., 2024, cap. 10).
+
+Com a sentinela no lugar, os dois extremos da lista ficam guardados nela
+mesma: `nil.prox` é o primeiro nó real e `nil.ant` é o último. A lista vazia
+é a sentinela sozinha, apontando para si dos dois lados (`nil.prox == &nil` e
+`nil.ant == &nil`). Repare que nenhum ponteiro dentro da lista vale `NULL`. É
+isso que elimina os casos especiais (CORMEN et al., 2024, cap. 10).
+
+```c
+typedef struct NoS {
+    int chave;
+    struct NoS *ant, *prox;
+} NoS;
+
+typedef struct {
+    NoS nil; // a sentinela mora dentro da lista, não vem do malloc
+    int n;   // conta só os nós reais
+} ListaS;
+```
+
+Veja a inserção de um nó `x` logo depois de um nó `y`. São sempre os mesmos
+quatro ponteiros: `x` aponta para `y` e para o antigo vizinho de `y`, e esses
+dois passam a apontar para `x`. Se `y` for a sentinela, o novo nó entra no
+começo; se `y` for o último, entra no fim. O código é o mesmo nos dois casos,
+porque `y` sempre tem vizinho à direita.
+
+A remoção de `x` fica em duas linhas, sem nenhum `if`: o vizinho da esquerda
+passa a apontar para o da direita (`x->ant->prox = x->prox`), e o da direita
+passa a apontar para o da esquerda (`x->prox->ant = x->ant`). Funciona para o
+primeiro, para o último e para o único, porque os dois vizinhos sempre
+existem (CELES; CERQUEIRA; RANGEL, 2016).
+
+A busca anda de `nil.prox` em diante até achar a chave. Numa lista comum o
+laço testa duas coisas a cada volta: se a lista acabou e se achou a chave. O
+Cormen usa um truque: antes do laço, ele **guarda a chave procurada dentro da
+sentinela**. Assim o laço sempre para, no pior caso ao voltar à sentinela, e
+basta um teste por volta, `x->chave != chave`. Quando o laço termina, você
+olha onde parou: se foi em `&L->nil`, a chave não estava na lista (CORMEN et
+al., 2024, cap. 10).
+
+O preço é um nó a mais por lista, 24 bytes numa máquina de 64 bits (um `int`,
+o alinhamento e dois ponteiros). Como a sentinela fica dentro da struct
+`ListaS`, o endereço `&L->nil` não muda nunca, e todo laço sabe onde parar:
+começa em `L->nil.prox` e segue enquanto `x != &L->nil`.
 
 > [!WARNING]
 > A sentinela **não é um dado**: o laço para quando volta a ela e começa em
@@ -404,22 +444,64 @@ gcc ~/LPEDC/material/E1044.c ~/LPEDC/material/0174-sentinela.c -o ~/LPEDC/materi
 
 ### Conceito
 
-- **Grau**: quantos filhos o nó tem; grau 0 é **folha**. O grau da árvore é o
-  maior grau entre os nós (SZWARCFITER; MARKENZON, 2010).
-- **Profundidade** e **nível**: arestas do nó até a raiz, que tem
-  profundidade 0. Alguns livros contam o nível a partir de 1: confira o
-  enunciado (CORMEN et al., 2024, cap. 12).
-- **Altura**: o maior número de arestas do nó até uma folha abaixo. Folha tem
-  altura 0 e árvore vazia, -1 (CORMEN et al., 2024, cap. 12).
-- **Fator de balanceamento**: `altura(esq) - altura(dir)`, que a AVL mantém
-  em -1, 0 ou 1 (ADELSON-VELSKY; LANDIS, 1962).
-- **Sucessor** de `x`: a menor chave maior que `x`. Com subárvore direita, é o
-  **mínimo** dela; sem ela, sobe enquanto vier de um filho direito, e o
-  primeiro ancestral alcançado por um filho esquerdo é a resposta
-  (CORMEN et al., 2024, cap. 12).
-- **Ponteiro `pai`** (`x.p` no Cormen): permite a subida, sem pilha nem
-  recursão; custa 8 bytes por nó. O **antecessor** é o espelho, e os dois
-  custam O(h) (CORMEN et al., 2024, cap. 12).
+Questão de prova sobre árvore quase sempre começa com vocabulário: "qual a
+altura do nó 7?", "quantas folhas há no nível 2?". Se você conta altura por
+nós e o enunciado conta por arestas, erra a questão sabendo o assunto. Por
+isso este assunto fixa os termos antes de chegar à pergunta que dá o nome a
+ele: numa árvore binária de busca, qual chave vem logo depois de uma chave
+dada?
+
+Comece pelo **grau** de um nó, que é quantos filhos ele tem. Numa árvore
+binária o grau vai de 0 a 2. Nó de grau 0 é uma **folha**: não tem ninguém
+abaixo. O **grau da árvore** é o maior grau entre todos os nós (SZWARCFITER;
+MARKENZON, 2010). Uma árvore binária com pelo menos um nó de dois filhos tem
+grau 2.
+
+Depois vêm as medidas de posição. A **profundidade** de um nó é o número de
+arestas no caminho dele até a raiz; a raiz tem profundidade 0, os filhos dela
+têm 1, os netos, 2. O **nível** agrupa os nós de mesma profundidade, e a raiz
+fica no nível 0 (CORMEN et al., 2024, cap. 12). Aqui mora a primeira
+armadilha: alguns livros contam o nível a partir de 1, com a raiz no nível 1.
+Antes de responder, confira qual convenção o enunciado usa.
+
+A **altura** olha para baixo: é o maior número de arestas do nó até uma folha
+abaixo dele. Folha tem altura 0, porque não desce nada. A altura da árvore é
+a altura da raiz, e a árvore vazia tem altura -1 por convenção, o que faz a
+conta `1 + max(altura(esq), altura(dir))` funcionar até no nó sem filhos
+(CORMEN et al., 2024, cap. 12). Profundidade conta para cima, altura conta
+para baixo; o curso segue o Cormen e conta as duas em arestas, como no módulo
+14.
+
+Com a altura em mãos sai o **fator de balanceamento** de um nó:
+`altura(esq) - altura(dir)`. Fator positivo quer dizer que a esquerda pesa
+mais; negativo, a direita. A AVL do 0101 mantém o fator de todo nó em -1, 0
+ou 1, e essa regra garante altura O(log n) (ADELSON-VELSKY; LANDIS, 1962).
+
+Agora a pergunta do sucessor. Pense no painel de uma rodoviária com os
+horários guardados numa BST: qual ônibus sai logo depois do seu? Em ordem
+crescente, o **sucessor** de um nó `x` é o nó com a menor chave maior que a
+de `x`. O **antecessor** é o espelho, a maior chave menor que a de `x`
+(CORMEN et al., 2024, cap. 12). Há dois casos.
+
+No caso 1, `x` tem subárvore direita. Tudo o que é maior que `x` e está
+abaixo dele mora ali, e o menor desses é o **mínimo** da subárvore direita:
+você desce uma vez à direita e depois vai sempre à esquerda até não poder
+mais. Numa árvore com 8 na raiz, 10 à direita e 9 à esquerda do 10, o
+sucessor do 8 é o 9.
+
+No caso 2, `x` não tem subárvore direita, e o sucessor é um ancestral. Para
+achá-lo, você sobe. Enquanto sobe vindo de um filho direito, o ancestral é
+menor que `x` e não serve. O primeiro ancestral alcançado vindo de um filho
+**esquerdo** é a resposta, porque `x` está à esquerda dele e, portanto, ele
+é maior. Se a subida passar da raiz sem achar esse ancestral, `x` é a maior
+chave da árvore e não tem sucessor (CORMEN et al., 2024, cap. 12).
+
+O caso 2 precisa subir, e o nó de uma BST comum só aponta para baixo. Por isso
+cada nó ganha um ponteiro **`pai`** (o `x.p` do Cormen), que vale `NULL` na
+raiz. Com ele, a subida dispensa pilha e recursão. O custo é de 8 bytes a mais
+por nó numa máquina de 64 bits. Sucessor e antecessor percorrem no máximo um
+caminho da raiz até uma folha, então custam O(h), com h a altura da árvore
+(CORMEN et al., 2024, cap. 12).
 
 > [!WARNING]
 > Trocar o lado na subida (`x == y->esq` no lugar de `x == y->dir`) dá um
@@ -742,20 +824,54 @@ gcc ~/LPEDC/material/E1050.c ~/LPEDC/material/0175-arvpai.c -o ~/LPEDC/material/
 
 ### Conceito
 
-- **Remoção na AVL**: começa como a da BST (0100). Folha some; com um filho,
-  o filho ocupa o lugar; com dois, a chave do **sucessor** é copiada e o
-  sucessor é removido lá embaixo (SZWARCFITER; MARKENZON, 2010).
-- **Conserto na volta**: tirar um nó encurta um caminho. Na volta da
-  recursão, cada ancestral recalcula a altura, confere o fator e, se passar
-  de 1 ou -1, faz a rotação do 0101 (ADELSON-VELSKY; LANDIS, 1962).
-- **Filho com fator 0**: na remoção, o filho do lado pesado pode ter fator 0,
-  o que nunca ocorre na inserção. Fator 0 ou de mesmo sinal: **rotação
-  simples**; sinal contrário: **dupla** (SZWARCFITER; MARKENZON, 2010).
-- **Várias rotações**: a rotação pode deixar a subárvore um nível mais baixa,
-  e o desequilíbrio sobe para o avô. Uma remoção pode rodar até a raiz:
-  O(log n) rotações no pior caso (ZIVIANI, 2010).
-- **Cópia da chave**: com dois filhos, o código copia a chave do sucessor e
-  libera o nó dele; um ponteiro guardado para esse nó fica pendurado.
+A AVL do 0101 sabe receber chaves sem perder o equilíbrio. Só que dado também
+sai: o pedido entregue deixa a fila da cozinha, o cliente cancela a conta. Se
+a remoção for a da BST comum, um lado da árvore pode encolher até o fator de
+algum nó chegar a 2 ou -2, e a garantia de altura O(log n) se perde. Este
+assunto mostra como tirar um nó e consertar a árvore no caminho de volta.
+
+A primeira parte é igual à remoção da BST do 0100, com três casos. Se o nó é
+folha, ele some. Se tem um filho só, esse filho ocupa o lugar dele, e a
+subárvore do filho já é AVL. Se tem dois filhos, o nó não pode sumir sem
+deixar dois órfãos; então você copia para ele a chave do **sucessor** (o
+mínimo da subárvore direita, visto no 0175) e remove o sucessor lá embaixo,
+onde ele tem no máximo um filho (SZWARCFITER; MARKENZON, 2010).
+
+Tirar um nó **encurta** um caminho da árvore. Os ancestrais do nó removido
+podem ter perdido um nível de um lado, e o fator deles muda. O conserto segue
+a ideia da inserção: na **volta da recursão**, cada ancestral recalcula a
+própria altura, confere o fator e, se ele passou de 1 ou de -1, faz uma das
+rotações do 0101 (ADELSON-VELSKY; LANDIS, 1962). Como a remoção é recursiva,
+a volta passa por todos os ancestrais, um por um, até a raiz.
+
+Duas coisas mudam em relação à inserção, e a prova cobra as duas. A primeira é
+o fator do filho do lado pesado. Na inserção, o nó novo acabou de entrar por
+um lado, e esse filho sempre pende para algum lado: fator 1 ou -1. Na
+remoção, o lado pesado não recebeu nada; ele só ficou mais alto que o outro,
+e o filho dele pode estar equilibrado, com **fator 0** (SZWARCFITER;
+MARKENZON, 2010).
+
+A regra para escolher a rotação fica assim. Se o filho do lado pesado tem
+fator 0 ou o mesmo sinal do pai, basta uma **rotação simples**. Se tem sinal
+contrário, o peso está "no meio", e só a **rotação dupla** resolve. Exemplo:
+um nó com fator 2 (esquerda pesada) e filho esquerdo com fator 0 pede uma
+rotação simples à direita; com filho esquerdo de fator -1, pede a dupla
+(esquerda no filho, depois direita no nó). No caso do fator 0, a subárvore
+mantém a altura de antes depois da rotação, e o conserto para ali.
+
+A segunda diferença é o que acontece depois da rotação. Na inserção, uma
+rotação devolve a subárvore à altura que ela tinha antes, e o resto da árvore
+nem percebe. Na remoção, a rotação pode deixar a subárvore **um nível mais
+baixa** que antes. Para o avô, é como se outra remoção tivesse acontecido, e
+o desequilíbrio sobe. Por isso uma remoção pode fazer **várias rotações**, uma
+em cada nível, até a raiz: O(log n) rotações no pior caso (ZIVIANI, 2010). O
+custo total continua O(log n), porque cada rotação mexe em poucos ponteiros.
+
+Um último detalhe vem do caso de dois filhos. O código não move o nó do
+sucessor para cima: ele copia a chave e libera o nó do sucessor lá embaixo.
+Se outra parte do programa guardava um ponteiro para o nó do sucessor, esse
+ponteiro passa a apontar para memória liberada, e usá-lo é comportamento
+indefinido.
 
 > [!WARNING]
 > Copiar da inserção o teste `avr_fator(r->esq) <= 0` faz a dupla com fator 0
@@ -1054,24 +1170,62 @@ gcc ~/LPEDC/material/E1056.c ~/LPEDC/material/0176-avlrem.c -o ~/LPEDC/material/
 
 ### Conceito
 
-- **Árvore rubro-negra**: BST em que cada nó tem cor e valem cinco
-  propriedades: (1) todo nó é vermelho ou preto; (2) a raiz é preta; (3) toda
-  folha (`T.nil`) é preta; (4) nó vermelho tem os dois filhos pretos; (5) todo
-  caminho de um nó até as folhas abaixo tem o mesmo número de pretos
-  (CORMEN et al., 2024, cap. 13).
-- **Origem**: o esquema de duas cores para árvores balanceadas é de Guibas e
-  Sedgewick; a LLRB do 0145 é uma variante (GUIBAS; SEDGEWICK, 1978).
-- **Sentinela `T.nil`**: as folhas não guardam chave; todas são um nó só,
-  preto, como na lista do 0174. O pai da raiz também é `T.nil`
-  (CORMEN et al., 2024, cap. 13).
-- **Altura negra** `bh(x)`: pretos de `x` até uma folha, sem contar `x`. Como
-  `bh(raiz) >= h/2`, sai **h ≤ 2 log₂(n + 1)** e busca custa O(log n)
-  (CORMEN et al., 2024, cap. 13).
-- **Inserção**: pendura `z` como na BST e o pinta de **vermelho**. Só a
-  propriedade 4 pode quebrar, e o conserto olha o **tio** de `z`
-  (CORMEN et al., 2024, cap. 13).
-- **Remoção**: quatro casos, olhando o **irmão**; custa O(log n) e faz no
-  máximo **três rotações** (SZWARCFITER; MARKENZON, 2010).
+Uma BST que recebe chaves quase em ordem vira uma corrente: cada nó novo vai
+para a direita do anterior, a altura chega a n e a busca volta a custar O(n).
+No 0145 você viu uma saída para isso, a rubro-negra **esquerdista** (LLRB). A
+prova cobra a versão **clássica**, a do Cormen: as mesmas duas cores, outras
+regras de conserto e um ponteiro para o pai em cada nó.
+
+A ideia de pintar os nós de duas cores para manter uma árvore balanceada é
+de Guibas e Sedgewick, e a LLRB é uma variante dela (GUIBAS; SEDGEWICK,
+1978). A cor não guarda dado nenhum. Ela serve de etiqueta para impor regras
+que impedem um caminho de ficar muito mais comprido que outro.
+
+Uma **árvore rubro-negra** é uma BST em que cada nó tem uma cor, vermelho ou
+preto, e valem cinco propriedades (CORMEN et al., 2024, cap. 13):
+
+1. todo nó é vermelho ou preto;
+2. a raiz é preta;
+3. toda folha (`T.nil`) é preta;
+4. se um nó é vermelho, os dois filhos dele são pretos;
+5. para cada nó, todos os caminhos dele até as folhas abaixo passam pelo
+   mesmo número de nós pretos.
+
+A propriedade 3 fala de "folhas" num sentido próprio. As folhas do Cormen não
+guardam chave: elas ocupam os lugares onde a BST comum teria `NULL`. E não são
+várias: todas são **um nó só**, a sentinela `T.nil`, preta, como a da lista
+do 0174. O pai da raiz também é `T.nil` (CORMEN et al., 2024, cap. 13). A
+vantagem é a mesma da lista: o código lê a cor de qualquer vizinho sem
+testar `NULL` antes, porque o vizinho "vazio" é um nó de verdade.
+
+As propriedades 4 e 5 são as que seguram a altura. A **altura negra**
+`bh(x)` é o número de nós pretos no caminho de `x` até uma folha, sem contar
+o próprio `x` e contando a folha `T.nil`. Pela propriedade 5, esse número é o
+mesmo em qualquer caminho, então `bh(x)` está bem definido. Pela propriedade
+4, não existem dois vermelhos seguidos, então pelo menos metade dos nós de
+qualquer caminho da raiz até uma folha é preta: `bh(raiz) >= h/2`. Juntando
+isso com o fato de que a subárvore de `x` tem pelo menos `2^bh(x) - 1` nós,
+sai **h ≤ 2 log₂(n + 1)**. Busca, mínimo e sucessor custam O(log n) (CORMEN
+et al., 2024, cap. 13).
+
+A **inserção** começa como a da BST: desce até um lugar vazio e pendura o nó
+novo `z` ali. Depois pinta `z` de **vermelho**. A escolha tem motivo: um nó
+vermelho não muda a contagem de pretos de caminho nenhum, então a propriedade
+5 continua valendo. A única que pode quebrar é a 4, quando o pai de `z` também
+é vermelho. O conserto (`RB-INSERT-FIXUP`) olha o **tio** de `z`, o irmão do
+pai dele (CORMEN et al., 2024, cap. 13).
+
+Se o tio é vermelho (caso 1), não há rotação. Pai e tio viram pretos, o avô
+vira vermelho, e a contagem de pretos fica igual em todos os caminhos. Só que
+o avô agora é vermelho e pode ter pai vermelho, então o problema **sobe**: `z`
+passa a ser o avô e o laço continua.
+
+Se o tio é preto, o conserto usa rotação, e o formato importa. No caso 2, `z`
+forma um **triângulo** com o pai e o avô: é filho direito de um filho
+esquerdo, ou o espelho. Uma rotação no pai endireita o triângulo e cai no
+caso 3. No caso 3, `z` forma uma **linha**: filho esquerdo de um filho
+esquerdo, ou o espelho. Pinte o pai de preto, o avô de vermelho, gire no avô,
+e o conserto acaba. A tabela resume os três:
 
 | Caso | Situação | O que fazer |
 | --- | --- | --- |
@@ -1079,8 +1233,13 @@ gcc ~/LPEDC/material/E1056.c ~/LPEDC/material/0176-avlrem.c -o ~/LPEDC/material/
 | 2 | tio **preto**, `z` em **triângulo** (filho direito de um filho esquerdo, ou o espelho) | gira no pai e cai no caso 3 |
 | 3 | tio **preto**, `z` em **linha** (filho esquerdo de um filho esquerdo, ou o espelho) | pinta o pai de preto e o avô de vermelho, gira no avô. Acabou |
 
-O caso 1 só troca cores e pode subir até a raiz; os casos 2 e 3 fazem no
-máximo duas rotações e encerram. No fim, a raiz vira preta.
+O caso 1 só troca cores e pode subir até a raiz. Os casos 2 e 3 fazem no
+máximo duas rotações e encerram. No fim, a raiz é pintada de preto, para
+garantir a propriedade 2.
+
+A **remoção** é mais longa: são quatro casos, e o conserto olha o **irmão**
+do nó que ficou com um preto a menos no caminho. Para a prova, guarde o custo:
+O(log n), com no máximo **três rotações** (SZWARCFITER; MARKENZON, 2010).
 
 > [!WARNING]
 > Erros comuns: esquecer de **subir** no caso 1 (`z = avo`) e trocar a ordem
@@ -1376,21 +1535,64 @@ gcc ~/LPEDC/material/E1061.c ~/LPEDC/material/0177-vermelhopreto.c -o ~/LPEDC/ma
 
 ### Conceito
 
-- **Método da divisão**: **h(k) = k mod m**. É rápido, mas o `m` decide tudo
-  (CORMEN et al., 2024, cap. 11).
-- **m ruins**: `m = 2^p` usa só os p bits de baixo de `k` (`k & (m - 1)`);
-  `m = 10^d`, só os d últimos dígitos; `m = 2^p - 1` não distingue duas letras
-  trocadas de lugar num texto (CORMEN et al., 2024, cap. 11).
-- **m bom**: um **primo longe de uma potência de 2**. Para 2000 chaves com uns
-  3 por balde, 673 serve (longe de 512 e de 1024) (CORMEN et al., 2024, cap. 11).
-- **Método da multiplicação**: **h(k) = ⌊m · (k·A mod 1)⌋**, com `0 < A < 1`.
-  A parte fracionária mistura todos os dígitos de `k`, e o `m` pode ser até
-  potência de 2 (CORMEN et al., 2024, cap. 11).
-- **Constante de Knuth**: **A ≈ (√5 − 1) / 2 = 0,6180339887...**; chaves
-  seguidas pulam pela tabela inteira (KNUTH, 1998).
-- **Versão em inteiros**: com 32 bits e `m = 2^p`, troque `A` por
-  **s = ⌊A · 2^32⌋ = 2654435769**. O balde são os p bits de cima dos 32 de
-  baixo de `k · s`: `(k * s) >> (32 - p)` com `uint32_t` (KNUTH, 1998).
+A tabela de dispersão do 0105 só é rápida se a função hash espalhar as chaves
+pelos baldes. Imagine um atacadão que registra fardos de 16 unidades pelo
+número do último item: 16, 32, 48, até 160. Com 16 baldes e `k % 16`, os dez
+fardos caem todos no balde 0, a lista desse balde tem dez nós e a busca volta
+a custar O(n). A conta está certa; o que falhou foi a escolha do tamanho da
+tabela. Este assunto mostra como escolher bem e apresenta um método que
+depende menos dessa escolha.
+
+O **método da divisão** é o que você já usou: **h(k) = k mod m**, com `m` o
+número de baldes. É uma conta só e roda rápido, mas o resultado depende muito
+do valor de `m` (CORMEN et al., 2024, cap. 11). Alguns valores são ruins por
+um motivo que dá para ver em binário.
+
+Se `m = 2^p`, o resto da divisão por `m` é formado só pelos **p bits de
+baixo** de `k`; em C, `k % 16` dá o mesmo que `k & 15`. O resto dos bits é
+ignorado. Os fardos de 16 em 16 têm os 4 bits de baixo sempre zero, e por
+isso colidem todos. Com `m = 10^d` acontece o mesmo em decimal: só os d
+últimos dígitos contam, e com m = 100 todo preço terminado em 00 cai no balde
+0. E `m = 2^p - 1` é ruim para textos tratados como números: trocar duas
+letras de lugar não muda o balde (CORMEN et al., 2024, cap. 11).
+
+A regra do Cormen para o método da divisão é escolher um **primo longe de uma
+potência de 2**. Se você espera umas 2000 chaves e aceita uns 3 por balde,
+precisa de uns 667 baldes; 673 é primo e fica longe de 512 e de 1024, então
+serve (CORMEN et al., 2024, cap. 11).
+
+O **método da multiplicação** tira o peso da escolha de `m`. Você multiplica a
+chave por uma constante `A`, com `0 < A < 1`, fica só com a **parte
+fracionária** do produto (o que vem depois da vírgula, escrito `k·A mod 1`) e
+multiplica isso por `m`, descartando as casas decimais:
+**h(k) = ⌊m · (k·A mod 1)⌋**. A parte fracionária de `k·A` depende de todos os
+dígitos de `k`, não só dos últimos, então `m` pode ser qualquer valor, até
+uma potência de 2 (CORMEN et al., 2024, cap. 11).
+
+Qualquer `A` entre 0 e 1 funciona, mas alguns espalham melhor. Knuth sugere
+**A ≈ (√5 − 1) / 2 = 0,6180339887...**, o inverso da razão áurea: com ele,
+chaves seguidas caem longe umas das outras e cobrem a tabela inteira (KNUTH,
+1998). Veja a chave 10 com m = 16: 10 · A = 6,180339..., a parte fracionária é
+0,180339..., vezes 16 dá 2,88..., e o balde é 2.
+
+Em `double`, essa conta é lenta e sujeita a arredondamento. A versão usada na
+prática trabalha só com inteiros. Com palavras de 32 bits e `m = 2^p`, troque
+`A` pela constante inteira **s = ⌊A · 2^32⌋ = 2654435769**. O produto `k · s`
+tem até 64 bits; os 32 de baixo representam, em binário, a parte fracionária
+de `k·A`. Os **p bits mais altos** desses 32 são o balde. Em C, um `uint32_t`
+já guarda só os 32 bits de baixo do produto, e um deslocamento à direita de
+`32 - p` posições deixa os p de cima (KNUTH, 1998):
+
+```c
+uint32_t k = 10, s = 2654435769u;
+uint32_t produto = k * s;           // a conta é feita mod 2^32
+printf("%u\n", produto >> (32 - 4)); // m = 16 = 2^4: os 4 bits de cima
+// 2
+```
+
+O resultado bate com a conta em `double`: balde 2. Repare que não há divisão
+nenhuma: só uma multiplicação e um deslocamento, que o processador faz bem
+mais depressa que uma divisão.
 
 > [!WARNING]
 > O produto **tem que ser `unsigned`**: com `int`, `k * 2654435769` estoura
@@ -1668,25 +1870,68 @@ gcc ~/LPEDC/material/E1068.c ~/LPEDC/material/0178-espalha.c -o ~/LPEDC/material
 
 ### Conceito
 
-- **Sequência de sondagem**: no endereçamento aberto, cada chave tem uma lista
-  de posições `h(k, 0), h(k, 1), ...`. A inserção para na primeira livre; a
-  busca refaz o caminho até achar a chave ou uma livre (CORMEN et al., 2024, cap. 11).
-- **Linear**: `h(k, i) = (h'(k) + i) mod m`. Sofre **agrupamento primário**:
-  toda chave que cai em qualquer ponto de um bloco ocupado vai para o fim dele
-  e o aumenta (CORMEN et al., 2024, cap. 11).
-- **Quadrática**: `h(k, i) = (h'(k) + c₁·i + c₂·i²) mod m`. Os saltos crescem
-  (1, 4, 9...) e os blocos se desfazem, mas sobra o **agrupamento
-  secundário**: chaves com o mesmo `h'(k)` seguem a mesma trilha
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995).
-- **Dispersão dupla**: `h(k, i) = (h₁(k) + i·h₂(k)) mod m`. O passo depende
-  da chave, nunca é 0 e é primo com `m`; com `m` primo, `h₂(k) = 1 + (k mod
-  (m - 1))` (CORMEN et al., 2024, cap. 11).
-- **Fator de carga** `α = n / m`: com hash uniforme, a busca sem sucesso faz
-  no máximo `1 / (1 - α)` sondagens em média, e a com sucesso,
-  `(1/α) · ln(1 / (1 - α))`. Com α = 0,9: 10 e 2,6 (CORMEN et al., 2024, cap. 11).
-- **Lápide** (*tombstone*): a remoção marca a posição como removida, nunca
-  como livre, senão corta o caminho de quem pulou por ela. A busca passa reto;
-  a inserção pode reaproveitar (TENENBAUM; LANGSAM; AUGENSTEIN, 1995).
+No endereçamento aberto do 0107, a tabela não tem listas: cada posição guarda
+uma chave ou está livre. Quando a posição calculada já está ocupada, a chave
+precisa de outro lugar, e você viu a resposta mais simples: tentar a posição
+seguinte. Ela funciona, mas cria filas de chaves grudadas que deixam a tabela
+lenta. A pergunta deste assunto é qual "outro lugar" tentar.
+
+Pense num guarda-volumes com 13 armários. O funcionário escolhe o armário
+pelo resto do número do cartão por 13; se estiver ocupado, segue uma regra
+fixa para escolher o próximo. A lista de armários que ele tenta, em ordem, é
+a **sequência de sondagem** da chave: `h(k, 0)`, `h(k, 1)`, `h(k, 2)` e assim
+por diante, com `i` contando as tentativas. A inserção percorre essa
+sequência e para na primeira posição livre. A busca refaz o mesmo caminho e
+para quando acha a chave ou quando encontra uma posição livre, porque a chave
+teria sido guardada ali (CORMEN et al., 2024, cap. 11).
+
+A **sondagem linear** é a do 0107: `h(k, i) = (h'(k) + i) mod m`, com `h'(k)`
+a posição inicial e `m` o tamanho da tabela. O defeito dela se chama
+**agrupamento primário**. As posições ocupadas formam blocos contínuos, e
+toda chave que cai em qualquer ponto de um bloco anda até o fim dele e o
+aumenta em uma posição. Quanto maior o bloco, mais chaves ele atrai, e o
+bloco cresce cada vez mais depressa (CORMEN et al., 2024, cap. 11).
+
+A **sondagem quadrática** espalha os saltos: `h(k, i) = (h'(k) + c₁·i +
+c₂·i²) mod m`, com `c₁` e `c₂` constantes. Com c₁ = 0 e c₂ = 1, a chave
+tenta `h'(k)`, depois 1, 4, 9, 16 posições adiante. Uma chave que cai perto
+de um bloco pula para longe dele em poucas tentativas, e os blocos se
+desfazem. Sobra um defeito menor, o **agrupamento secundário**: duas chaves
+com a mesma posição inicial seguem exatamente a mesma trilha. Com m = 13, os
+cartões 31, 44 e 57 começam todos no armário 5 e tentam 5, 6, 9, 1, na mesma
+ordem (TENENBAUM; LANGSAM; AUGENSTEIN, 1995). Com `m` primo, essa trilha
+passa só por metade das posições, então a quadrática só garante achar lugar
+se a tabela estiver com menos da metade ocupada.
+
+A **dispersão dupla** (*double hashing*) resolve o secundário usando uma
+segunda função hash para o tamanho do passo: `h(k, i) = (h₁(k) + i·h₂(k)) mod
+m`. Duas chaves que começam no mesmo lugar quase sempre têm passos
+diferentes e se separam já na segunda tentativa. De todas, é a que mais se
+aproxima do hash uniforme ideal (CORMEN et al., 2024, cap. 11). No
+guarda-volumes, com `h₂(k) = 1 + (k mod 12)`, o 31 anda de 8 em 8, o 44 de 9
+em 9 e o 57 de 10 em 10.
+
+O passo tem duas exigências. Ele nunca pode ser 0, senão a chave tenta a
+mesma posição para sempre. E precisa ser **primo com m** (sem divisor comum
+além de 1), para que a sequência passe por todas as posições antes de
+repetir. Com `m` primo, a receita do Cormen é `h₁(k) = k mod m` e `h₂(k) = 1 +
+(k mod (m - 1))`, que vai de 1 a m - 1. Com `m = 2^p`, basta um `h₂` que
+sempre dê ímpar (CORMEN et al., 2024, cap. 11).
+
+O custo de todas depende do **fator de carga** `α = n / m`, a fração da
+tabela que está ocupada. Supondo hash uniforme, uma busca **sem sucesso** faz
+em média no máximo `1 / (1 - α)` sondagens, e uma busca **com sucesso**, no
+máximo `(1/α) · ln(1 / (1 - α))`. Com a tabela pela metade (α = 0,5), isso dá
+2 e 1,4; com 90% ocupada (α = 0,9), dá 10 e 2,6 (CORMEN et al., 2024, cap.
+11). A linear fica bem acima desses números quando a carga sobe, por causa do
+agrupamento primário.
+
+Falta a remoção, que vale para as três. Se você apaga uma chave e marca a
+posição como livre, quebra a busca de quem passou por ali: uma chave que
+pulou essa posição para ser guardada mais adiante deixa de ser achada, porque
+a busca para na posição livre. Por isso a remoção deixa uma **lápide**
+(*tombstone*), uma marca de "removido". A busca passa reto pela lápide; a
+inserção pode reaproveitá-la (TENENBAUM; LANGSAM; AUGENSTEIN, 1995).
 
 > [!WARNING]
 > O passo `h₂(k)` **não pode ser 0** nem ter fator comum com `m`: com `m = 12`
@@ -2004,29 +2249,72 @@ gcc ~/LPEDC/material/E1074.c ~/LPEDC/material/0179-sondagem.c -o ~/LPEDC/materia
 
 ### Conceito
 
-- **Pigeonhole sort** (casas de pombo): para chave inteira num intervalo
-  pequeno `[min, max]`. Cria `r = max - min + 1` casas; põe cada registro no
-  fim da fila da sua casa e depois esvazia as casas em ordem. Custa O(n + r).
-- **Primo do counting sort** (0120): o counting só conta e calcula posições;
-  o pigeonhole guarda os registros, cada casa uma fila.
-- **Ordenação estável**: registros com chaves iguais saem na ordem relativa em
-  que entraram. O pigeonhole é estável porque cada casa é uma fila
-  (ZIVIANI, 2010).
-- **Quem é estável**: merge (se no empate pegar da esquerda) e inserção (se só
-  deslocar quem é estritamente maior). Os não estáveis trocam elementos
-  distantes (ZIVIANI, 2010).
-- **Chave composta com comparador**: compara o campo principal e, no empate,
-  o secundário. É o jeito do `qsort`, que o padrão não garante estável
-  (CPPREFERENCE, s.d.).
-- **Chave composta em passadas**: ordene pela chave menos importante e, com
-  método estável, pela mais importante. A última passada manda; as anteriores
-  desempatam, como no radix LSD (CORMEN et al., 2024).
-- **Memória proporcional a `r`**: CPF (11 dígitos) pediria 100 bilhões de
-  casas; para chaves grandes, use o radix (0121).
+Uma ordenação que só compara pares de elementos faz da ordem de n log n
+comparações no pior caso (módulo 17). O módulo 18 mostrou que, quando a chave
+é um inteiro num intervalo curto, como uma nota de 0 a 10, dá para ordenar
+sem comparar ninguém com ninguém. Aqui entra mais um método desse tipo, e com
+ele uma pergunta que aparece em todo sistema real: como ordenar por mais de
+um critério, "pela nota e, quem empatar, pelo nome"?
+
+Imagine o pombal de um correio antigo: uma parede de escaninhos numerados,
+um para cada rua. O carteiro pega cada carta e a põe no escaninho da rua dela,
+sem comparar uma carta com outra. Depois esvazia os escaninhos da esquerda
+para a direita, e as cartas saem agrupadas por rua. Esse é o **pigeonhole
+sort** (ordenação por casas de pombo): para chaves inteiras num intervalo
+`[min, max]`, ele cria uma **casa** para cada valor possível, `r = max - min +
+1` casas ao todo.
+
+O método tem duas passadas. Na primeira, cada registro entra **no fim da
+fila** da casa da sua chave, a casa de índice `chave - min`. Na segunda, você
+percorre as casas em ordem e tira os registros de cada fila, na ordem em que
+entraram. A primeira passada custa O(n) e a segunda passa pelas `r` casas e
+pelos `n` registros, então o total é **O(n + r)**. Se `r` for pequeno perto de
+`n`, o custo é linear. Com notas de 0 a 10, `r` é 11, qualquer que seja o
+tamanho da turma.
+
+O pigeonhole é primo do **counting sort** do 0120. O counting só **conta**
+quantas chaves há de cada valor e calcula a posição final de cada uma; ele
+nem precisa guardar os registros em casas. O pigeonhole **guarda os
+registros**, e cada casa é uma fila. É essa fila que dá ao pigeonhole a
+propriedade da segunda metade do assunto.
+
+Uma ordenação é **estável** quando registros com chaves iguais saem na mesma
+ordem relativa em que entraram (ZIVIANI, 2010). Se Ana e Elisa tiraram 7 e
+Ana vinha antes na lista, numa ordenação estável Ana continua antes. O
+pigeonhole é estável porque cada casa é uma fila: quem entra primeiro sai
+primeiro. A tabela mostra os métodos clássicos:
 
 | Estáveis | Não estáveis |
 | --- | --- |
 | bubble, inserção, merge sort, counting, radix (LSD), bucket (com filas), pigeonhole | seleção, shell sort, quick sort, heapsort |
+
+Dois da coluna da esquerda dependem de um detalhe de código. O merge sort é
+estável se, no empate, pegar primeiro o elemento da metade esquerda. A
+inserção é estável se deslocar só quem é **estritamente** maior que o
+elemento sendo inserido. Os da coluna da direita perdem a estabilidade porque
+trocam elementos distantes: a seleção, por exemplo, troca o menor com o
+primeiro da parte não ordenada e pode jogar um registro para depois de outro
+de chave igual (ZIVIANI, 2010).
+
+A **chave composta** junta vários campos em ordem de prioridade, como "nota
+e, no empate, nome". O primeiro jeito de ordenar por ela é um **comparador
+composto**: uma função que compara o campo principal e, só quando ele empata,
+compara o secundário. É o jeito de usar o `qsort` da biblioteca padrão, que
+recebe o comparador por ponteiro para função e não garante estabilidade; o
+desempate tem de estar escrito no comparador (CPPREFERENCE, s.d.).
+
+O segundo jeito usa várias passadas de um método estável, **da chave menos
+importante para a mais importante**. Para "nota e, no empate, nome", ordene
+primeiro pelo nome e depois, com um método estável, pela nota. A última passada
+decide a ordem principal; como ela é estável, quem empata na nota mantém a
+ordem que a passada anterior deixou, e essa ordem é a do nome. É o mesmo
+raciocínio do radix LSD, que ordena dígito a dígito começando pelo menos
+significativo (CORMEN et al., 2024).
+
+O pigeonhole tem um limite: a memória cresce com `r`, não com `n`. Ordenar
+por CPF, que tem 11 dígitos, pediria 100 bilhões de casas para poucos
+registros. Para chaves grandes, o caminho é o radix do 0121, que quebra a
+chave em dígitos e usa poucas casas por passada.
 
 > [!WARNING]
 > Nas passadas em sequência, a ordem é **da menos importante para a mais
@@ -2332,22 +2620,55 @@ gcc ~/LPEDC/material/E1079.c ~/LPEDC/material/0180-pombal.c -o ~/LPEDC/material/
 
 ### Conceito
 
-- **Pacientes numa hash com dispersão dupla** (0179), pelo CPF: busca exata
-  em O(1) em média, com `m = 101` primo e carga abaixo de 1/2
-  (CORMEN et al., 2024, cap. 11).
-- **Horários numa rubro-negra** com sentinela (0177), pela hora em HHMM:
-  marcar custa O(log n); "a próxima depois de tal hora" é o teto seguido do
-  **sucessor** (0175) (CORMEN et al., 2024, cap. 13).
-- **Fila de espera numa lista dupla circular com sentinela** (0174): entra no
-  fim e sai do começo ou do meio, sem caso especial (CORMEN et al., 2024, cap. 10).
-- **Ligação por chaves**: o nó da árvore guarda o CPF, o paciente guarda o
-  horário, a fila guarda CPFs. Rotação ou sondagem não invalidam as outras
-  estruturas.
-- **Horário vago**: a rubro-negra do 0177 não tem remoção; a consulta
-  desmarcada deixa `cpf = 0` no nó, como a lápide da hash.
-- **Tipo opaco**: o `.h` só declara `typedef struct Agenda Agenda`; dá para
-  trocar a rubro-negra por uma AVL sem mudar o cliente (CELES; CERQUEIRA;
-  RANGEL, 2016).
+Um sistema de verdade raramente cabe numa estrutura só. A recepção de um
+posto de saúde responde a três perguntas o dia inteiro: "esse CPF já tem
+cadastro?", "qual a próxima consulta depois das 8h45?" e "a paciente
+desmarcou; quem estava esperando?". Cada pergunta tem uma estrutura do módulo
+que a responde bem, e o trabalho deste assunto é fazer as três funcionarem
+juntas sem que uma desarrume a outra.
+
+A primeira pergunta é uma busca exata: dado um CPF, ache o paciente. Não
+interessa a ordem dos CPFs, só achar rápido. Isso pede uma **tabela hash**,
+aqui com a **dispersão dupla** do 0179, que dá busca em O(1) em média. O
+tamanho escolhido é `m = 101`, um primo, como a dispersão dupla pede, e a
+tabela fica com menos da metade ocupada, o que mantém as sondagens poucas
+(CORMEN et al., 2024, cap. 11).
+
+A segunda pergunta é de ordem: "a próxima depois de tal hora". Uma hash não
+responde isso, porque ela espalha as chaves de propósito. Os horários vão
+então para uma **rubro-negra clássica** com sentinela, a do 0177, com a hora
+escrita como número no formato HHMM (8h45 vira 845). Marcar um horário custa
+O(log n). Para achar a próxima consulta, você usa o **teto** da hora pedida,
+o menor horário maior ou igual a ela. Se esse horário estiver vago, você
+segue pelo **sucessor** do 0175 até achar um ocupado (CORMEN et al., 2024,
+cap. 13).
+
+A terceira pergunta é de chegada: quem pediu primeiro tem a vez. A **fila de
+espera** é a lista dupla circular com sentinela do 0174. O paciente entra no
+fim; sai do começo quando um horário vaga, ou do meio se desistir. Graças à
+sentinela, nenhuma dessas saídas tem caso especial (CORMEN et al., 2024, cap.
+10).
+
+O ponto delicado é a ligação entre as três. Elas conversam por **chaves**, não
+por ponteiros: o nó da árvore guarda o CPF de quem marcou, o paciente na hash
+guarda o horário dele, e a fila guarda CPFs. Isso importa porque as
+estruturas mexem nos próprios nós. Uma rotação na rubro-negra muda quem é
+filho de quem, e uma sondagem pode pôr o paciente numa posição diferente da
+inicial. Se uma estrutura guardasse um ponteiro para dentro da outra, essas
+mudanças poderiam deixá-lo apontando para o lugar errado. Com chaves, cada
+estrutura faz o que quiser por dentro, e a outra continua achando o dado pela
+chave.
+
+Falta decidir o que acontece com um horário desmarcado sem ninguém na espera.
+A rubro-negra do 0177 não implementou a remoção, então o nó continua na
+árvore com `cpf = 0`, marcando o **horário vago**. É a mesma ideia da lápide
+da hash: a posição existe, mas não guarda ninguém.
+
+Por fim, o cliente não precisa saber de nada disso. O `agenda.h` só declara
+`typedef struct Agenda Agenda`, sem mostrar os campos. Isso é um **tipo
+opaco**: o programa da recepção usa a agenda só pelas funções do `.h`, e você
+pode trocar a rubro-negra por uma AVL sem mudar uma linha dele (CELES;
+CERQUEIRA; RANGEL, 2016).
 
 > [!WARNING]
 > Quando duas estruturas guardam a mesma informação, elas mudam **juntas**.

@@ -1,20 +1,63 @@
 ## 0178 · Hash: divisão e multiplicação
 
-- **Método da divisão**: **h(k) = k mod m**. É rápido, mas o `m` decide tudo
-  (CORMEN et al., 2024, cap. 11).
-- **m ruins**: `m = 2^p` usa só os p bits de baixo de `k` (`k & (m - 1)`);
-  `m = 10^d`, só os d últimos dígitos; `m = 2^p - 1` não distingue duas letras
-  trocadas de lugar num texto (CORMEN et al., 2024, cap. 11).
-- **m bom**: um **primo longe de uma potência de 2**. Para 2000 chaves com uns
-  3 por balde, 673 serve (longe de 512 e de 1024) (CORMEN et al., 2024, cap. 11).
-- **Método da multiplicação**: **h(k) = ⌊m · (k·A mod 1)⌋**, com `0 < A < 1`.
-  A parte fracionária mistura todos os dígitos de `k`, e o `m` pode ser até
-  potência de 2 (CORMEN et al., 2024, cap. 11).
-- **Constante de Knuth**: **A ≈ (√5 − 1) / 2 = 0,6180339887...**; chaves
-  seguidas pulam pela tabela inteira (KNUTH, 1998).
-- **Versão em inteiros**: com 32 bits e `m = 2^p`, troque `A` por
-  **s = ⌊A · 2^32⌋ = 2654435769**. O balde são os p bits de cima dos 32 de
-  baixo de `k · s`: `(k * s) >> (32 - p)` com `uint32_t` (KNUTH, 1998).
+A tabela de dispersão do 0105 só é rápida se a função hash espalhar as chaves
+pelos baldes. Imagine um atacadão que registra fardos de 16 unidades pelo
+número do último item: 16, 32, 48, até 160. Com 16 baldes e `k % 16`, os dez
+fardos caem todos no balde 0, a lista desse balde tem dez nós e a busca volta
+a custar O(n). A conta está certa; o que falhou foi a escolha do tamanho da
+tabela. Este assunto mostra como escolher bem e apresenta um método que
+depende menos dessa escolha.
+
+O **método da divisão** é o que você já usou: **h(k) = k mod m**, com `m` o
+número de baldes. É uma conta só e roda rápido, mas o resultado depende muito
+do valor de `m` (CORMEN et al., 2024, cap. 11). Alguns valores são ruins por
+um motivo que dá para ver em binário.
+
+Se `m = 2^p`, o resto da divisão por `m` é formado só pelos **p bits de
+baixo** de `k`; em C, `k % 16` dá o mesmo que `k & 15`. O resto dos bits é
+ignorado. Os fardos de 16 em 16 têm os 4 bits de baixo sempre zero, e por
+isso colidem todos. Com `m = 10^d` acontece o mesmo em decimal: só os d
+últimos dígitos contam, e com m = 100 todo preço terminado em 00 cai no balde
+0. E `m = 2^p - 1` é ruim para textos tratados como números: trocar duas
+letras de lugar não muda o balde (CORMEN et al., 2024, cap. 11).
+
+A regra do Cormen para o método da divisão é escolher um **primo longe de uma
+potência de 2**. Se você espera umas 2000 chaves e aceita uns 3 por balde,
+precisa de uns 667 baldes; 673 é primo e fica longe de 512 e de 1024, então
+serve (CORMEN et al., 2024, cap. 11).
+
+O **método da multiplicação** tira o peso da escolha de `m`. Você multiplica a
+chave por uma constante `A`, com `0 < A < 1`, fica só com a **parte
+fracionária** do produto (o que vem depois da vírgula, escrito `k·A mod 1`) e
+multiplica isso por `m`, descartando as casas decimais:
+**h(k) = ⌊m · (k·A mod 1)⌋**. A parte fracionária de `k·A` depende de todos os
+dígitos de `k`, não só dos últimos, então `m` pode ser qualquer valor, até
+uma potência de 2 (CORMEN et al., 2024, cap. 11).
+
+Qualquer `A` entre 0 e 1 funciona, mas alguns espalham melhor. Knuth sugere
+**A ≈ (√5 − 1) / 2 = 0,6180339887...**, o inverso da razão áurea: com ele,
+chaves seguidas caem longe umas das outras e cobrem a tabela inteira (KNUTH,
+1998). Veja a chave 10 com m = 16: 10 · A = 6,180339..., a parte fracionária é
+0,180339..., vezes 16 dá 2,88..., e o balde é 2.
+
+Em `double`, essa conta é lenta e sujeita a arredondamento. A versão usada na
+prática trabalha só com inteiros. Com palavras de 32 bits e `m = 2^p`, troque
+`A` pela constante inteira **s = ⌊A · 2^32⌋ = 2654435769**. O produto `k · s`
+tem até 64 bits; os 32 de baixo representam, em binário, a parte fracionária
+de `k·A`. Os **p bits mais altos** desses 32 são o balde. Em C, um `uint32_t`
+já guarda só os 32 bits de baixo do produto, e um deslocamento à direita de
+`32 - p` posições deixa os p de cima (KNUTH, 1998):
+
+```c
+uint32_t k = 10, s = 2654435769u;
+uint32_t produto = k * s;           // a conta é feita mod 2^32
+printf("%u\n", produto >> (32 - 4)); // m = 16 = 2^4: os 4 bits de cima
+// 2
+```
+
+O resultado bate com a conta em `double`: balde 2. Repare que não há divisão
+nenhuma: só uma multiplicação e um deslocamento, que o processador faz bem
+mais depressa que uma divisão.
 
 > [!WARNING]
 > O produto **tem que ser `unsigned`**: com `int`, `k * 2654435769` estoura

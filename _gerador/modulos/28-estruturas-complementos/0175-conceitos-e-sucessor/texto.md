@@ -1,21 +1,63 @@
 ## 0175 · Conceitos e sucessor
 
-- **Grau**: quantos filhos o nó tem; grau 0 é **folha**. O grau da árvore é o
-  maior grau entre os nós (SZWARCFITER; MARKENZON, 2010).
-- **Profundidade** e **nível**: arestas do nó até a raiz, que tem
-  profundidade 0. Alguns livros contam o nível a partir de 1: confira o
-  enunciado (CORMEN et al., 2024, cap. 12).
-- **Altura**: o maior número de arestas do nó até uma folha abaixo. Folha tem
-  altura 0 e árvore vazia, -1 (CORMEN et al., 2024, cap. 12).
-- **Fator de balanceamento**: `altura(esq) - altura(dir)`, que a AVL mantém
-  em -1, 0 ou 1 (ADELSON-VELSKY; LANDIS, 1962).
-- **Sucessor** de `x`: a menor chave maior que `x`. Com subárvore direita, é o
-  **mínimo** dela; sem ela, sobe enquanto vier de um filho direito, e o
-  primeiro ancestral alcançado por um filho esquerdo é a resposta
-  (CORMEN et al., 2024, cap. 12).
-- **Ponteiro `pai`** (`x.p` no Cormen): permite a subida, sem pilha nem
-  recursão; custa 8 bytes por nó. O **antecessor** é o espelho, e os dois
-  custam O(h) (CORMEN et al., 2024, cap. 12).
+Questão de prova sobre árvore quase sempre começa com vocabulário: "qual a
+altura do nó 7?", "quantas folhas há no nível 2?". Se você conta altura por
+nós e o enunciado conta por arestas, erra a questão sabendo o assunto. Por
+isso este assunto fixa os termos antes de chegar à pergunta que dá o nome a
+ele: numa árvore binária de busca, qual chave vem logo depois de uma chave
+dada?
+
+Comece pelo **grau** de um nó, que é quantos filhos ele tem. Numa árvore
+binária o grau vai de 0 a 2. Nó de grau 0 é uma **folha**: não tem ninguém
+abaixo. O **grau da árvore** é o maior grau entre todos os nós (SZWARCFITER;
+MARKENZON, 2010). Uma árvore binária com pelo menos um nó de dois filhos tem
+grau 2.
+
+Depois vêm as medidas de posição. A **profundidade** de um nó é o número de
+arestas no caminho dele até a raiz; a raiz tem profundidade 0, os filhos dela
+têm 1, os netos, 2. O **nível** agrupa os nós de mesma profundidade, e a raiz
+fica no nível 0 (CORMEN et al., 2024, cap. 12). Aqui mora a primeira
+armadilha: alguns livros contam o nível a partir de 1, com a raiz no nível 1.
+Antes de responder, confira qual convenção o enunciado usa.
+
+A **altura** olha para baixo: é o maior número de arestas do nó até uma folha
+abaixo dele. Folha tem altura 0, porque não desce nada. A altura da árvore é
+a altura da raiz, e a árvore vazia tem altura -1 por convenção, o que faz a
+conta `1 + max(altura(esq), altura(dir))` funcionar até no nó sem filhos
+(CORMEN et al., 2024, cap. 12). Profundidade conta para cima, altura conta
+para baixo; o curso segue o Cormen e conta as duas em arestas, como no módulo
+14.
+
+Com a altura em mãos sai o **fator de balanceamento** de um nó:
+`altura(esq) - altura(dir)`. Fator positivo quer dizer que a esquerda pesa
+mais; negativo, a direita. A AVL do 0101 mantém o fator de todo nó em -1, 0
+ou 1, e essa regra garante altura O(log n) (ADELSON-VELSKY; LANDIS, 1962).
+
+Agora a pergunta do sucessor. Pense no painel de uma rodoviária com os
+horários guardados numa BST: qual ônibus sai logo depois do seu? Em ordem
+crescente, o **sucessor** de um nó `x` é o nó com a menor chave maior que a
+de `x`. O **antecessor** é o espelho, a maior chave menor que a de `x`
+(CORMEN et al., 2024, cap. 12). Há dois casos.
+
+No caso 1, `x` tem subárvore direita. Tudo o que é maior que `x` e está
+abaixo dele mora ali, e o menor desses é o **mínimo** da subárvore direita:
+você desce uma vez à direita e depois vai sempre à esquerda até não poder
+mais. Numa árvore com 8 na raiz, 10 à direita e 9 à esquerda do 10, o
+sucessor do 8 é o 9.
+
+No caso 2, `x` não tem subárvore direita, e o sucessor é um ancestral. Para
+achá-lo, você sobe. Enquanto sobe vindo de um filho direito, o ancestral é
+menor que `x` e não serve. O primeiro ancestral alcançado vindo de um filho
+**esquerdo** é a resposta, porque `x` está à esquerda dele e, portanto, ele
+é maior. Se a subida passar da raiz sem achar esse ancestral, `x` é a maior
+chave da árvore e não tem sucessor (CORMEN et al., 2024, cap. 12).
+
+O caso 2 precisa subir, e o nó de uma BST comum só aponta para baixo. Por isso
+cada nó ganha um ponteiro **`pai`** (o `x.p` do Cormen), que vale `NULL` na
+raiz. Com ele, a subida dispensa pilha e recursão. O custo é de 8 bytes a mais
+por nó numa máquina de 64 bits. Sucessor e antecessor percorrem no máximo um
+caminho da raiz até uma folha, então custam O(h), com h a altura da árvore
+(CORMEN et al., 2024, cap. 12).
 
 > [!WARNING]
 > Trocar o lado na subida (`x == y->esq` no lugar de `x == y->dir`) dá um
