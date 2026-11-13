@@ -1,24 +1,59 @@
 ## 0066 · Juntando tudo: o cardápio
 
-- **Struct e typedef** (0059, 0060): `Item` junta nome, categoria, preço e
-  tags (BACKES, 2013, cap. 8).
-- **Enum** (0063): `Categoria` nomeia as categorias, e `QTD_CATEGORIAS`
-  dimensiona o vetor de nomes (DEITEL; DEITEL, 2011, cap. 10).
-- **Flags** (0065): vegano, sem glúten e picante são bits num `unsigned tags`
-  (DEITEL; DEITEL, 2011, cap. 10).
-- **Vetor de structs no heap** (0061): `Cardapio` guarda o ponteiro para os
-  itens, quantos existem (`n`) e quantos cabem (`cap`), e dobra quando enche.
-  É a semente do vetor dinâmico do módulo 11 (CELES; RANGEL, 2002).
-- **Ponteiros** (0062): `Cardapio *c` para mexer no cardápio e `const Item *it`
-  para ler sem copiar (FEOFILOFF, 2009, ap. E).
-- **Filtro "tem todas"**: `(tags & mascara) == mascara`. O `&` apaga as tags
-  fora da máscara; se sobra a própria máscara, nenhuma faltou. Máscara 0 deixa
-  todo item passar.
+A lanchonete quer um cardápio no app. Cada item tem nome, preço, categoria
+(lanche, bebida ou sobremesa) e marcações: vegano, sem glúten, picante. O
+cliente quer filtrar "só o que é vegano **e** sem glúten", e o dono quer
+cadastrar itens novos sem mudar o código. Nenhuma peça do módulo resolve isso
+sozinha; juntas, resolvem com pouco código.
+
+Pense numa ficha de cardápio impressa: cada prato tem as suas informações
+numa linha, e símbolos pequenos ao lado do nome marcam as restrições. O
+programa monta essa ficha com uma struct. `Item` junta nome, categoria, preço
+e marcações, e o `typedef` dá a ela um nome curto, como nos assuntos 0059 e
+0060 (BACKES, 2013, cap. 8).
+
+A categoria é uma escolha entre três valores fixos, o caso exato do enum do
+assunto 0063. `Categoria` dá nome a `LANCHE`, `BEBIDA` e `SOBREMESA`, e um
+último nome, `QTD_CATEGORIAS`, vale 3 e dimensiona o vetor de textos que
+traduz cada categoria para a tela (DEITEL; DEITEL, 2011, cap. 10). Se a
+lanchonete criar a categoria "porção", o vetor acompanha.
+
+As marcações são sim ou não, e um item pode ter várias ao mesmo tempo. Isso
+pede as flags do assunto 0065: vegano é o bit 0, sem glúten o bit 1, picante
+o bit 2, todos num `unsigned tags` (DEITEL; DEITEL, 2011, cap. 10). O suco
+de caju, vegano e sem glúten, tem `tags = VEGANO | SEM_GLUTEN`, o binário
+`011`.
+
+O filtro "tem todas estas marcações" cabe numa linha:
+`(tags & mascara) == mascara`. A máscara traz ligados os bits que o cliente
+exige. O `&` apaga as tags do item que estão fora da máscara; se o que sobra
+é a própria máscara, nenhuma exigência faltou. O suco (`011`) contra a máscara
+`011` dá `011`, e passa. O burger de grão-de-bico (`001`) dá `001`: falta o
+sem glúten, e ele fica de fora. Com máscara 0, a conta sempre dá 0, que é
+igual à máscara, e todo item passa; a mesma função lista o cardápio inteiro.
+
+Os itens moram num vetor de structs, como a tabela do assunto 0061, mas no
+heap, porque o dono não sabe quantos vão ser. Uma struct `Cardapio`
+administra esse vetor com três dados: o ponteiro para os itens, quantos
+existem (`n`) e quantos cabem (`cap`). Quando `n` chega a `cap`, o
+`realloc` dobra a capacidade: de 0 vai a 2, depois 4, depois 8. Com 6 itens,
+sobram 2 vagas. Esse trio de ponteiro, tamanho e capacidade é a semente do
+**vetor dinâmico** que o módulo 11 transforma em tipo abstrato (CELES; RANGEL,
+2002).
+
+As funções recebem ponteiros, como no assunto 0062. `cardapio_adicionar`
+recebe `Cardapio *c`, porque precisa mudar `n`, `cap` e o próprio ponteiro
+dos itens. `mostrar_item` recebe `const Item *it`, porque só lê: o ponteiro
+evita copiar os 56 bytes de cada item, e o `const` garante que nada muda
+(FEOFILOFF, 2009, ap. E). Esses 56 bytes são 32 do nome, 4 da categoria, 4 de
+preenchimento para alinhar o `double`, 8 do preço, 4 das tags e mais 4 de
+preenchimento no fim, para o próximo item do vetor também começar alinhado.
 
 > [!WARNING]
-> `c->itens[c->n++] = it` copia o item para **dentro** do vetor: mexer depois em
-> `it` não muda o cardápio. E `Item *p = &c.itens[0]` fica **solto** após o
-> próximo `realloc`. Em vetor que cresce, guarde índices, não ponteiros.
+> `c->itens[c->n++] = it` copia o item para **dentro** do vetor: mexer depois
+> em `it` não muda o cardápio. E `Item *p = &c.itens[0]` fica **solto** após o
+> próximo `realloc`, porque o vetor pode ter mudado de endereço. Em vetor que
+> cresce, guarde índices, não ponteiros.
 
 {{exemplo}}
 

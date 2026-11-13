@@ -1,19 +1,32 @@
 ## 0060 · Typedef
 
-- **Typedef**: dá um **apelido** a um tipo que já existe. Cria um sinônimo, não
-  um tipo novo (BACKES, 2013, cap. 8).
-- **Regra de leitura**: escreva a declaração de uma variável e ponha `typedef`
-  na frente. O nome que seria a variável vira o nome do tipo
-  (FEOFILOFF, 2009, ap. J).
+No assunto anterior, todo pedido era declarado como `struct pedido p1;`. As
+duas palavras sempre juntas cansam num programa grande, e o nome do tipo fica
+mais comprido que a ideia que ele representa. O C oferece um jeito de dar um
+nome mais curto, ou mais expressivo, a um tipo que já existe.
+
+No grupo da família, ninguém chama o seu tio de "José Carlos da Silva". É
+"Zé". O apelido não cria outra pessoa: é o mesmo tio, com um nome mais
+prático. O **typedef** faz isso com tipos: ele dá um **apelido** a um tipo
+existente e cria um sinônimo, sem criar um tipo novo (BACKES, 2013, cap. 8).
+
+A forma de escrever segue uma regra simples. Escreva a declaração de uma
+variável do jeito de sempre e ponha a palavra `typedef` na frente. O nome que
+seria a variável passa a ser o nome do tipo (FEOFILOFF, 2009, ap. J):
 
 ```c
 double Reais;          // uma variável chamada Reais
 typedef double Reais;  // um apelido: Reais agora é o mesmo que double
 ```
 
-- **Com struct**: batize uma struct existente (`typedef struct pix Pix;`) ou
-  faça tudo de uma vez, sem nome para a struct. Depois basta `Pix p;`
-  (DEITEL; DEITEL, 2011, cap. 10).
+Depois da segunda linha, `Reais saldo;` e `double saldo;` declaram
+exatamente a mesma coisa. O ganho é de leitura: quem vê `Reais` entende que
+ali mora dinheiro, e o compilador continua vendo um `double`.
+
+O uso mais comum é com struct, e há duas maneiras. Você pode batizar uma
+struct que já tem nome, com `typedef struct pix Pix;`, ou fazer tudo de uma
+vez, declarando a struct sem nome e dando o apelido logo depois da chave
+(DEITEL; DEITEL, 2011, cap. 10):
 
 ```c
 typedef struct {
@@ -23,18 +36,33 @@ typedef struct {
 } Pix;
 ```
 
-- **Tipos definidos pelo programador**: struct, union e enum, com ou sem
-  `typedef` (CELES; CERQUEIRA; RANGEL, 2016).
-- **Convenção**: inicial maiúscula em nome de tipo, para não confundir tipo com
-  variável (DEITEL; DEITEL, 2011, cap. 10).
-- **Typedefs da biblioteca**: `size_t`, `uint8_t`, `int32_t` e `FILE` são
-  apelidos definidos nos cabeçalhos. `uint8_t` diz "8 bits sem sinal" em
-  qualquer máquina (KERNIGHAN; RITCHIE, 1988, cap. 6).
+A partir daí, `Pix p;` basta, sem a palavra `struct`. Repare que o campo
+`valor` usa o apelido `Reais` definido antes: um typedef pode usar outro.
+Escrever nome de tipo com a inicial maiúscula é uma convenção, e ela ajuda a
+separar tipo de variável no meio do código: `Pix` é o tipo, `p` é a variável
+(DEITEL; DEITEL, 2011, cap. 10).
+
+Struct, union e enum, com ou sem `typedef`, formam o que os livros e o edital
+chamam de **tipos definidos pelo programador**: tipos que não vêm prontos com
+a linguagem, e que você monta para descrever o seu problema (CELES; CERQUEIRA;
+RANGEL, 2016). Os próximos assuntos apresentam o enum e a union.
+
+Você já usou vários typedefs sem saber. `size_t`, o tipo que o `sizeof`
+devolve, `uint8_t`, `int32_t` e o `FILE` do módulo 09 são apelidos definidos
+nos cabeçalhos da biblioteca (KERNIGHAN; RITCHIE, 1988, cap. 6). O `uint8_t`
+mostra a vantagem: ele quer dizer "exatamente 8 bits sem sinal" em qualquer
+máquina, e cada compilador o liga ao tipo certo por baixo. Você escreve o
+mesmo código e o apelido cuida da diferença entre máquinas.
+
+Como o typedef só dá outro nome, o compilador não distingue o apelido do
+original. Isso tem um lado bom (o apelido funciona em qualquer lugar que
+aceita o tipo) e um lado perigoso, que o alerta abaixo mostra.
 
 > [!WARNING]
-> `typedef` não cria tipo novo: com `typedef double Reais;` e
-> `typedef double Dolares;`, `Reais r = dolares;` compila. Para barrar a
-> mistura, embrulhe numa struct. E `typedef int *PInt;` esconde que
+> `typedef` cria um **sinônimo**, não um tipo novo. Com `typedef double Reais;`
+> e `typedef double Dolares;`, `Reais r = dolares;` compila: os dois são
+> `double`. Para o compilador barrar a mistura, embrulhe numa struct:
+> `typedef struct { double v; } Reais;`. E `typedef int *PInt;` esconde que
 > `PInt a, b;` são ponteiros.
 
 {{exemplo}}

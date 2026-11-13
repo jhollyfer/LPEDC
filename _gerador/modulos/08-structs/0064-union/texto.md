@@ -1,10 +1,18 @@
 ## 0064 · Union
 
-- **Union** (união): declara-se como a struct, mas **todos os campos começam no
-  mesmo endereço** e dividem os mesmos bytes. Só um campo vale por vez
-  (BACKES, 2013, cap. 8).
-- **Tamanho**: o do maior campo, arredondado ao alinhamento
-  (DEITEL; DEITEL, 2011, cap. 10).
+Um pagamento numa loja é feito por Pix, **ou** por cartão, **ou** por boleto.
+Nunca pelos três ao mesmo tempo. Se você guardar isso numa struct com os
+dados dos três meios, cada pagamento carrega dois terços de espaço que nunca
+vai usar. Às vezes o problema é o contrário: você quer pegar os mesmos bytes
+da memória e lê-los de dois jeitos, como um número inteiro e como uma
+sequência de bytes soltos.
+
+Pense numa mesa de coworking. De manhã ela serve a uma designer; à tarde, a um
+programador. O espaço é um só, e quando um chega, o que o outro deixou em cima
+sai do lugar. A **union** (união) faz isso com a memória. Ela se declara
+igual à struct, mas **todos os campos começam no mesmo endereço** e dividem
+os mesmos bytes, então só um campo guarda um valor com sentido por vez
+(BACKES, 2013, cap. 8).
 
 ```c
 typedef union {
@@ -13,21 +21,47 @@ typedef union {
 } Endereco;
 ```
 
-- **Dois usos**: economizar espaço quando o dado é uma coisa **ou** outra (Pix
-  ou cartão ou boleto) e olhar os mesmos bytes de dois jeitos
-  (KERNIGHAN; RITCHIE, 1988, cap. 6).
-- **Union etiquetada**: um **enum** ao lado diz qual campo vale; quem confere
-  a etiqueta é você (KERNIGHAN; RITCHIE, 1988, cap. 6).
-- **Endianness**: a ordem dos bytes na memória. No **little-endian** (Intel,
-  AMD e quase todo ARM), o byte menos significativo fica no endereço menor; no
-  **big-endian**, a ordem é a de leitura humana (LINUX MAN PAGES, s.d.).
-- **Rede**: a ordem é big-endian; `htonl` e `ntohl`, de `<arpa/inet.h>`,
-  convertem os números (LINUX MAN PAGES, s.d.).
+Compare com a struct. Na struct, cada campo tem o seu pedaço, um depois do
+outro, e o tamanho é a soma (mais o preenchimento). Na union, os campos se
+sobrepõem, e o tamanho é o do **maior campo**, arredondado ao alinhamento
+(DEITEL; DEITEL, 2011, cap. 10). Em `Endereco`, os dois campos têm 4 bytes, e
+`sizeof(Endereco)` dá 4, não 8.
+
+Daí saem os dois usos da union (KERNIGHAN; RITCHIE, 1988, cap. 6). O
+primeiro é **economizar espaço** quando o dado é uma coisa ou outra, como o
+pagamento. O segundo é **olhar os mesmos bytes de dois jeitos**: você grava
+`numero` e lê `bytes[0]`, `bytes[1]`... sem fazer conta de divisão e resto. A
+union não gera código para isso. `ip.numero` e `ip.bytes[0]` estão no mesmo
+endereço; o que muda é só o tipo com que o programa lê aqueles bytes.
+
+No primeiro uso aparece uma dificuldade: olhando a union, como saber qual
+campo foi gravado por último? A união sozinha não guarda essa informação.
+A solução é a **union etiquetada**: uma struct com um **enum** que diz qual
+campo vale (a etiqueta) e, ao lado, a union com os dados. Antes de ler, o
+programa olha a etiqueta. Quem confere é você; o compilador não verifica
+nada (KERNIGHAN; RITCHIE, 1988, cap. 6).
+
+O segundo uso revela um detalhe da máquina. O IP 192.168.0.10 é, por baixo,
+um número de 32 bits: `0xC0A8000A` (C0 = 192, A8 = 168, 00 = 0, 0A = 10).
+Grave esse número em `ip.numero` e leia `ip.bytes` num PC comum: os bytes
+saem `0A 00 A8 C0`, de trás para frente. A ordem em que os bytes de um número
+ficam na memória se chama **endianness**. No **little-endian** (Intel, AMD e
+quase todo ARM), o byte **menos** significativo fica no endereço menor, por
+isso o `0A` do final vem primeiro. No **big-endian**, a ordem é a mesma da
+leitura humana, `C0 A8 00 0A` (LINUX MAN PAGES, s.d.). Nenhuma das duas é a
+certa: é uma escolha de quem projetou o processador.
+
+A diferença importa quando dois computadores trocam números. A rede usa
+big-endian, e as funções `htonl` e `ntohl`, de `<arpa/inet.h>`, convertem um
+número de 32 bits da ordem da máquina para a da rede e de volta (LINUX MAN
+PAGES, s.d.). Numa máquina big-endian elas não fazem nada; numa
+little-endian, invertem os bytes.
 
 > [!WARNING]
-> Escrever num campo **estraga** os outros. Numa union para economizar espaço,
-> ler um campo diferente do último gravado dá lixo, sem aviso. E ler os bytes
-> depende da endianness: a saída muda entre máquinas.
+> Numa union, escrever num campo **estraga** os outros. Numa union para
+> economizar espaço, ler um campo diferente do último gravado dá lixo, e o C
+> não avisa: guarde um enum com a etiqueta e confira antes de ler. E ler os
+> bytes de um número depende da endianness: a saída muda entre máquinas.
 
 {{exemplo}}
 
