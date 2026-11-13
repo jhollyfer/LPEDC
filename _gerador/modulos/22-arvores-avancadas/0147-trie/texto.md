@@ -1,22 +1,57 @@
 ## 0147 · Trie: árvore de prefixos e autocompletar
 
-- **Trie** (de *retrieval*) ou **árvore de prefixos**: cada aresta **é** uma
-  letra, e o caminho da raiz até um nó soletra um prefixo. As palavras com esse
-  prefixo moram embaixo dele (FREDKIN, 1960).
-- **Marca de fim**: o prefixo "bol" tem nó, mas não é palavra. Cada nó guarda um
-  `bool fim` que diz se alguma palavra **termina** ali (ZIVIANI, 2010, cap. 5).
-- **Nó com vetor**: com minúsculas sem acento, o nó tem 26 ponteiros, e o filho
-  da letra `c` fica em `filho[c - 'a']` (CORTÉS, 2015).
-- **Inserir**: desça pelo filho de cada letra, criando-o se faltar; no fim,
-  `fim = true`. **Buscar**: desça letra por letra; faltou filho, não existe; no
-  fim, vale o `fim` do nó.
-- **Autocompletar**: desça até o nó do prefixo e percorra a subárvore, de `a` a
-  `z`, imprimindo cada caminho que termina num `fim`.
-- **Custo**: inserir e buscar custam **O(L)**, L o tamanho da palavra, sem
-  depender de quantas há. Uma BST de 100 mil palavras faz umas 17 comparações de
-  strings (SEDGEWICK; WAYNE, 2011).
-- **Memória**: cada `NoTrie` tem 216 bytes, quase todos ponteiros `NULL`. Lista
-  de filhos (0144) ou árvore ternária gastam menos.
+Você digita `bol` no celular e o teclado oferece "bola", "boleto", "bolo" e
+"bolsa" na hora. Ele não compara `bol` com cada uma das milhares de palavras
+do dicionário. Ele vai direto ao lugar onde moram as palavras que começam
+com `bol`, como quem abre um dicionário de papel na letra B, depois no
+pedaço "bo", depois em "bol". Na estrutura que ele usa, **o prefixo é o
+endereço**.
+
+Essa estrutura é a **trie**, nome tirado de *retrieval* (recuperação),
+também chamada **árvore de prefixos**. Cada aresta da árvore **é** uma
+letra, e o caminho da raiz até um nó soletra um prefixo. Da raiz, a aresta
+`b` leva ao nó de "b"; dele, a aresta `o` leva ao nó de "bo"; dele, a `l`
+leva ao nó de "bol". Todas as palavras que começam com "bol" moram na
+subárvore desse nó (FREDKIN, 1960).
+
+Note que os nós não guardam palavras inteiras. A palavra está espalhada no
+caminho, uma letra por aresta. Isso cria uma dúvida: o nó de "bol" existe,
+porque "bolo" passa por ele, mas "bol" não é uma palavra. Para separar os
+dois casos, cada nó guarda um `bool fim`, verdadeiro quando alguma palavra
+**termina** ali (ZIVIANI, 2010, cap. 5). O nó do `o` depois de "bol" tem `fim`
+verdadeiro, porque "bolo" é palavra; o nó de "bol" tem `fim` falso.
+
+Como achar o filho de uma letra? Com letras minúsculas sem acento, cada nó
+tem um vetor de 26 ponteiros, um por letra. O filho da letra `c` fica em
+`filho[c - 'a']`: a conta transforma `'a'` em 0, `'b'` em 1, e assim até
+`'z'` em 25 (CORTÉS, 2015). Ponteiro `NULL` quer dizer que nenhuma palavra
+segue por aquela letra.
+
+Com isso, as operações são curtas. Para **inserir** uma palavra, desça
+letra por letra pelo filho correspondente; se o filho não existe, crie-o.
+Ao fim da palavra, marque `fim = true` no nó onde você parou. Para
+**buscar**, desça do mesmo jeito; se faltar um filho no meio, a palavra não
+existe. Se chegar ao fim do texto, a resposta é o `fim` daquele nó (ZIVIANI,
+2010, cap. 5).
+
+O **autocompletar** junta as duas ideias. Desça até o nó do prefixo
+digitado. Depois percorra toda a subárvore dele, filho por filho, de `a` a
+`z`, montando as letras do caminho; cada vez que encontrar um nó com `fim`
+verdadeiro, imprima a palavra montada. Como os filhos são visitados em
+ordem alfabética, as sugestões já saem ordenadas.
+
+O custo é a grande vantagem. Inserir e buscar custam **O(L)**, com L o
+tamanho da palavra, e **não dependem de quantas palavras** existem: "bolsa"
+desce 5 nós num dicionário de 10 palavras ou de 100 mil. Uma BST com 100 mil
+palavras faria umas 17 comparações de strings, cada uma podendo olhar várias
+letras (SEDGEWICK; WAYNE, 2011).
+
+O preço é memória. Cada nó com 26 ponteiros e o `fim` ocupa 216 bytes, e
+quase todos os ponteiros são `NULL`, porque poucas letras seguem cada
+prefixo. Oito palavras curtas cabem em 45 bytes como strings e, numa trie,
+ocupam 22 nós, quase 5 KB. Guardar os filhos numa lista, como no primeiro
+filho, próximo irmão (0144), ou numa BST por nó, a árvore ternária, gasta
+bem menos, ao custo de achar o filho com mais passos.
 
 > [!WARNING]
 > Achar o nó não é achar a palavra: a busca olha o `fim`

@@ -1,22 +1,58 @@
 ## 0146 · Árvore B: busca, divisão e inserção
 
-- **Árvore B**: árvore de busca com nós gordos, feita para disco. Cada nó guarda
-  **várias chaves em ordem** e tem um filho a mais do que chaves; em geral um nó
-  ocupa um bloco (BAYER; McCREIGHT, 1972).
-- **Motivo**: um HD leva uns 10 ms por bloco. Numa AVL com 2 milhões de chaves a
-  busca desce uns 21 nós; na B, poucos (ZIVIANI, 2010, cap. 6).
-- **Grau mínimo `t`**: todo nó, menos a raiz, tem de `t - 1` a `2t - 1` chaves; um
-  nó interno com `k` chaves tem `k + 1` filhos; **todas as folhas ficam no mesmo
-  nível**. A altura é `h ≤ log_t((n + 1) / 2)` (CORMEN et al., 2024, cap. 18).
-- **`t = 2`**: de 1 a 3 chaves e de 2 a 4 filhos por nó, a árvore 2-3-4. É o
-  valor do TAD.
-- **Busca**: a da BST com um laço dentro do nó; lê um nó por nível, altura + 1
-  nós (CORMEN et al., 2024, cap. 18).
-- **Divisão**: o nó cheio (`2t - 1` chaves) vira dois de `t - 1`, e a **chave do
-  meio sobe** para o pai. O TAD divide na descida todo nó cheio do caminho; a
-  raiz cheia vira raiz nova, e a árvore cresce por cima (CORMEN et al., 2024, cap. 18).
-- **Na prática**: com `int` e ponteiros de 8 bytes, `t = 170` cabe num bloco de
-  4096 bytes, e um bilhão de chaves fica em altura 3.
+O acervo de uma biblioteca tem milhões de fichas guardadas no disco. Ler
+algo da memória leva nanossegundos; ler um bloco de um HD leva uns 10
+milissegundos, um milhão de vezes mais. Numa AVL com 2 milhões de livros, a
+busca desce uns 21 nós, e cada nó pode estar num bloco diferente: 21 idas ao
+disco, um quinto de segundo por busca (ZIVIANI, 2010, cap. 6). Quando os
+dados moram no disco, o que importa é **ler poucos nós**, e para isso cada
+nó precisa decidir muito mais que "esquerda ou direita".
+
+A **árvore B** é uma árvore de busca com nós gordos, feita para disco. Cada
+nó guarda **várias chaves em ordem** e tem um filho a mais do que chaves.
+Num banco de dados, um nó costuma ocupar exatamente um bloco do disco, e
+uma leitura traz o nó inteiro (BAYER; McCREIGHT, 1972). As chaves do nó
+separam os filhos: num nó `[40 70]`, o filho 0 guarda as chaves menores que
+40, o filho 1 as que ficam entre 40 e 70, e o filho 2 as maiores que 70. É a
+mesma regra da BST, generalizada para várias chaves.
+
+O tamanho dos nós é controlado pelo **grau mínimo** `t`, um número fixo da
+árvore. Todo nó, menos a raiz, tem de `t - 1` a `2t - 1` chaves; a raiz pode
+ter só uma. Um nó interno, que não é folha, com `k` chaves tem `k + 1`
+filhos. E **todas as folhas ficam no mesmo nível** (CORMEN et al., 2024, cap.
+18). O mínimo de `t - 1` chaves impede nós quase vazios, que fariam a árvore
+crescer em altura à toa.
+
+O TAD deste assunto usa `t = 2`: cada nó tem de 1 a 3 chaves e de 2 a 4
+filhos. Essa árvore B pequena tem nome próprio, árvore 2-3-4, e é a prima da
+2-3 que você viu na rubro-negra (0145). Com `t` pequeno, os desenhos cabem na
+página; num banco de dados de verdade, `t` passa de cem.
+
+Como cada nó abaixo da raiz tem pelo menos `t` filhos, a árvore se alarga
+muito a cada nível e a altura fica pequena: com `n` chaves, `h ≤
+log_t((n + 1) / 2)` (CORMEN et al., 2024, cap. 18). Com chaves `int` e
+ponteiros de 8 bytes, `t = 170` faz um nó caber num bloco de 4096 bytes, e um
+bilhão de chaves fica em altura 3. São 4 blocos lidos por busca, contra uns
+30 de uma árvore binária.
+
+A **busca** é a da BST com um laço dentro do nó. Ande pelas chaves do nó
+até achar uma maior ou igual à procurada. Se for igual, achou. Se não, desça
+pelo filho daquela posição e repita. Ela lê um nó por nível, altura + 1 nós
+no total (CORMEN et al., 2024, cap. 18).
+
+A **inserção** sempre põe a chave nova numa folha. Se a folha tem espaço,
+basta encaixar a chave em ordem. Se está cheia, com `2t - 1` chaves,
+acontece a **divisão**: o nó vira dois nós de `t - 1` chaves cada, e a
+**chave do meio sobe** para o pai, entre os dois (CORMEN et al., 2024, cap.
+18). Com `t = 2`, a folha `[10 20 30]` vira `[10]` e `[30]`, e o 20 sobe.
+
+E se o pai também estiver cheio? A chave que sobe não teria onde ficar. O
+TAD evita isso dividindo **na descida**: a caminho da folha, todo nó cheio
+encontrado é dividido antes de entrar nele. Assim o pai de quem se divide
+sempre tem espaço. Se a própria raiz está cheia, ela se divide e a chave do
+meio vira uma raiz nova, acima das duas metades (CORMEN et al., 2024, cap.
+18). A árvore B só cresce **por cima**, pela raiz, e é por isso que as
+folhas continuam todas no mesmo nível.
 
 > [!WARNING]
 > Depois de `divide(x, i)`, a chave que subiu está em `x->chave[i]`. Sem

@@ -67,26 +67,56 @@ no union-find, a raiz verde representa o grupo.
 
 ### Conceito
 
-- **Árvore geral** (ou n-ária): cada nó pode ter qualquer número de filhos
-  (SZWARCFITER; MARKENZON, 2010).
-- **Vetor fixo de filhos** (`filhos[4]`, A193 do módulo 14) trava no quinto
-  filho e desperdiça ponteiros nas folhas.
-- **Primeiro filho / próximo irmão** (*left-child right-sibling*): cada nó
-  guarda `filho`, o primeiro filho, e `irmao`, o próximo filho do mesmo pai
-  (CORMEN et al., 2024, cap. 10).
-- **Filhos como lista**: começam em `filho` e seguem pelos `irmao`. Com dois
-  ponteiros, a árvore geral vira uma **árvore binária** (CELES; RANGEL, 2002).
-- **Recursão**: resolve o nó, pede a resposta de cada filho e junta. Somar a
-  subárvore é **pós-ordem**: os filhos ficam prontos antes do pai
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 5).
-- **Custo**: o nó tem tamanho fixo (40 bytes aqui), mas achar o k-ésimo filho
-  custa k passos pela lista de irmãos.
+O empreiteiro mandou o orçamento da reforma em tópicos. A reforma tem
+cozinha, banheiro e pintura; a cozinha tem piso e pia; o banheiro tem box e
+louças; as louças têm vaso e cuba. O total de cada tópico é a soma do que
+está embaixo dele. Você quer guardar isso na memória e calcular os totais.
 
-Visitar os filhos é o laço da lista:
+A forma é uma árvore, mas não binária: a reforma tem três filhos, a cozinha
+tem dois, e nada impede um tópico de ter dez. Uma **árvore geral**, também
+chamada **n-ária**, é uma árvore em que cada nó pode ter qualquer número de
+filhos (SZWARCFITER; MARKENZON, 2010). Pastas e arquivos de um disco, o
+organograma de uma empresa e o sumário de um livro são árvores gerais.
+
+O primeiro impulso é dar a cada nó um vetor de ponteiros para os filhos,
+como o `filhos[4]` do A193, no módulo 14. Isso trava no quinto filho: o
+tópico com cinco subitens não cabe. E desperdiça memória, porque a maioria
+dos nós de uma árvore são folhas e carregam quatro ponteiros `NULL` sem uso.
+Aumentar o vetor piora o desperdício; diminuir piora a trava.
+
+A saída é a representação **primeiro filho, próximo irmão** (*left-child,
+right-sibling*). Cada nó guarda só dois ponteiros, qualquer que seja o
+número de filhos: `filho` aponta para o primeiro filho do nó, e `irmao`
+aponta para o próximo filho do mesmo pai (CORMEN et al., 2024, cap. 10). Na
+reforma, `filho` aponta para a cozinha; a cozinha aponta, por `irmao`, para
+o banheiro; o banheiro, para a pintura; e o `irmao` da pintura é `NULL`.
+
+Repare no que isso forma: os filhos de um nó viram uma **lista encadeada**,
+que começa em `filho` e segue pelos `irmao` até o `NULL`. Visitar todos os
+filhos é percorrer essa lista, com o mesmo laço de sempre:
 
 ```c
 for (const NoG *p = r->filho; p != NULL; p = p->irmao) { ... }
 ```
+
+Há um efeito curioso. Com dois ponteiros por nó, a estrutura na memória é
+uma **árvore binária**: `filho` faz o papel do ponteiro esquerdo e `irmao`,
+do direito (CELES; RANGEL, 2002). Toda árvore geral pode ser guardada como
+binária. Mas o significado muda: na binária, descer pela direita é descer um
+nível; aqui, andar pelo `irmao` é andar para o lado, no mesmo nível.
+
+As funções sobre a árvore seguem um molde recursivo: resolvem o nó, pedem a
+resposta de cada filho percorrendo a lista e juntam tudo. O total de um
+tópico é o valor dele mais o total de cada filho. Essa ordem, em que os
+filhos ficam prontos antes do pai, é a **pós-ordem** (TENENBAUM; LANGSAM;
+AUGENSTEIN, 1995, cap. 5). No banheiro, a função soma o box (900) e as
+louças (700, que por sua vez já somaram vaso e cuba) e devolve 1600.
+
+O preço da economia está no acesso. Cada nó tem tamanho fixo, 40 bytes no
+TAD deste assunto, tenha ele um filho ou cem. Mas, para chegar ao k-ésimo
+filho, é preciso andar k passos pela lista de irmãos, enquanto o vetor
+chegava lá direto pelo índice. Para percorrer todos os filhos, que é o caso
+comum, a diferença some.
 
 > [!WARNING]
 > O irmão está no **mesmo nível**. A altura escrita como na binária,
@@ -449,31 +479,67 @@ gcc ~/LPEDC/material/E864.c ~/LPEDC/material/0144-arvgen.c -o ~/LPEDC/material/E
 
 ### Conceito
 
-- **Árvore 2-3**: cada nó tem **uma chave** (2 filhos) ou **duas** (3 filhos).
-  A chave entra numa folha; com três, a do meio sobe. Só cresce quando a raiz
-  estoura, então **todas as folhas ficam no mesmo nível** (SEDGEWICK; WAYNE, 2011).
-- **LLRB** (*left-leaning red-black*): guarda a 2-3 em nós binários. O nó `[a b]`
-  vira o `b` com o `a` à esquerda por um **link vermelho**; os outros links são
-  **pretos**. Cada nó guarda a cor do link que chega nele (SEDGEWICK, 2008).
-- **Regras**: vermelho **só à esquerda**; nunca **dois vermelhos seguidos**;
-  todo caminho da raiz a um `NULL` tem a mesma **altura preta**. A raiz é preta
-  (SEDGEWICK, 2008).
-- **Altura**: o caminho mais longo tem no máximo o dobro do mais curto; a altura
-  fica abaixo de 2 · log₂(n + 1) (CORMEN et al., 2024, cap. 13).
-- **Inserção**: pendura um nó **vermelho**, como na BST, e cada ancestral aplica
-  na volta três consertos, nesta ordem (tabela).
-- **Inversão de cores**: pinta os dois filhos de preto e `h` de vermelho; a
-  chave do meio sobe para o pai e pode disparar os consertos de novo.
-- **Rubro-negra clássica** (Cormen, a da prova do PPGI): a cor fica no **nó**,
-  aceita vermelho dos dois lados (equivale à 2-3-4), usa folhas `NIL` pretas e
-  conserta pelos casos do **tio**, com até duas rotações. Veja o assunto 0177
-  (CORMEN et al., 2024, cap. 13).
+O síndico cadastra as tags da cancela do condomínio a qualquer hora, e o
+sistema precisa achar uma tag rápido quando o carro chega. Uma árvore
+binária de busca (BST) degenera numa lista se as tags chegarem em ordem
+crescente, e a busca vira O(n). A AVL resolve, mas guarda alturas em cada
+nó e tem quatro casos de rotação. A **rubro-negra** chega ao mesmo
+equilíbrio com regras mais curtas, e a versão esquerdista de Sedgewick é a
+mais fácil de programar.
+
+Para entendê-la, comece por outra árvore. Na **árvore 2-3**, cada nó tem
+**uma chave** e 2 filhos, ou **duas chaves** e 3 filhos (SEDGEWICK; WAYNE,
+2011). Toda chave nova entra numa folha. Se a folha tinha uma chave, passa a
+ter duas, e acabou. Se já tinha duas, fica com três por um instante e
+**estoura**: a chave do meio sobe para o pai, e as outras duas viram nós
+separados. Se o pai também estourar, o processo se repete para cima. A
+árvore só ganha altura quando a raiz estoura, e aí todos os caminhos crescem
+juntos. Por isso **todas as folhas ficam no mesmo nível**, sempre.
+
+A 2-3 é equilibrada, mas nós de tamanhos diferentes são chatos de programar.
+A **rubro-negra esquerdista** (*left-leaning red-black*, LLRB) guarda a
+mesma árvore 2-3 usando só nós binários (SEDGEWICK, 2008). Um nó de duas
+chaves `[a b]` vira dois nós binários: o `b`, com o `a` pendurado à esquerda
+por um **link vermelho**. Os outros links, que ligam nós de verdade da 2-3,
+são **pretos**. Como cada nó tem um único pai, ele guarda a cor do link que
+chega nele, num `bool vermelho` (SEDGEWICK, 2008).
+
+As regras da LLRB são a árvore 2-3 escrita em cores. Link vermelho **só à
+esquerda**, porque é assim que se escolheu desenhar o nó de duas chaves.
+Nunca **dois vermelhos seguidos**, porque isso seria um nó de três chaves,
+que na 2-3 não existe. E todo caminho da raiz até um `NULL` passa pelo mesmo
+número de links pretos, a **altura preta**, porque na 2-3 todas as folhas
+estão no mesmo nível. A raiz é sempre preta (SEDGEWICK, 2008).
+
+Dessas regras sai a garantia de altura. O caminho mais curto possível só
+tem pretos; o mais longo alterna preto e vermelho, sem dois vermelhos
+juntos. Então o mais longo tem no máximo o dobro do mais curto, e a altura
+fica abaixo de 2 · log₂(n + 1). Busca, inserção e remoção custam O(log n)
+(CORMEN et al., 2024, cap. 13).
+
+A inserção começa como na BST: desce comparando e pendura um nó novo, sempre
+**vermelho**, porque a chave nova se junta a um nó da 2-3 que já existe. Isso
+pode quebrar uma regra. Na volta da recursão, cada ancestral `h` confere três
+situações e aplica o conserto de cada uma, **nesta ordem**. A tabela mostra
+cada conserto e o que ele faz na árvore 2-3 por trás:
 
 | Situação em `h` | Conserto | Na árvore 2-3 |
 | --- | --- | --- |
 | filho direito vermelho, esquerdo preto | rotação à esquerda | deita o nó de 2 chaves para a esquerda |
 | filho esquerdo e neto esquerdo vermelhos | rotação à direita | arruma um nó de 3 chaves temporário |
 | os dois filhos vermelhos | inverte as cores | o nó de 3 chaves estoura e a do meio sobe |
+
+O último conserto merece atenção. A **inversão de cores** pinta os dois
+filhos de `h` de preto e o próprio `h` de vermelho. Na 2-3, é o estouro: as
+chaves dos lados viram nós separados, e a do meio, `h`, passa a fazer parte
+do nó do pai. Lá em cima, esse vermelho novo pode disparar os consertos de
+novo, como o estouro que sobe na 2-3.
+
+A LLRB é a variante de Sedgewick. A **rubro-negra clássica** do Cormen, que
+é a cobrada na prova do PPGI, põe a cor no **nó**, aceita filho vermelho dos
+dois lados (o que equivale a uma árvore 2-3-4), usa folhas `NIL` pretas e
+conserta a inserção pelos casos do **tio**, com no máximo duas rotações. O
+assunto 0177 trata dela (CORMEN et al., 2024, cap. 13).
 
 > [!WARNING]
 > Na rotação, quem sobe herda a cor de quem desce (`x->vermelho = h->vermelho`);
@@ -814,23 +880,59 @@ gcc ~/LPEDC/material/E870.c ~/LPEDC/material/0145-rubronegra.c -o ~/LPEDC/materi
 
 ### Conceito
 
-- **Árvore B**: árvore de busca com nós gordos, feita para disco. Cada nó guarda
-  **várias chaves em ordem** e tem um filho a mais do que chaves; em geral um nó
-  ocupa um bloco (BAYER; McCREIGHT, 1972).
-- **Motivo**: um HD leva uns 10 ms por bloco. Numa AVL com 2 milhões de chaves a
-  busca desce uns 21 nós; na B, poucos (ZIVIANI, 2010, cap. 6).
-- **Grau mínimo `t`**: todo nó, menos a raiz, tem de `t - 1` a `2t - 1` chaves; um
-  nó interno com `k` chaves tem `k + 1` filhos; **todas as folhas ficam no mesmo
-  nível**. A altura é `h ≤ log_t((n + 1) / 2)` (CORMEN et al., 2024, cap. 18).
-- **`t = 2`**: de 1 a 3 chaves e de 2 a 4 filhos por nó, a árvore 2-3-4. É o
-  valor do TAD.
-- **Busca**: a da BST com um laço dentro do nó; lê um nó por nível, altura + 1
-  nós (CORMEN et al., 2024, cap. 18).
-- **Divisão**: o nó cheio (`2t - 1` chaves) vira dois de `t - 1`, e a **chave do
-  meio sobe** para o pai. O TAD divide na descida todo nó cheio do caminho; a
-  raiz cheia vira raiz nova, e a árvore cresce por cima (CORMEN et al., 2024, cap. 18).
-- **Na prática**: com `int` e ponteiros de 8 bytes, `t = 170` cabe num bloco de
-  4096 bytes, e um bilhão de chaves fica em altura 3.
+O acervo de uma biblioteca tem milhões de fichas guardadas no disco. Ler
+algo da memória leva nanossegundos; ler um bloco de um HD leva uns 10
+milissegundos, um milhão de vezes mais. Numa AVL com 2 milhões de livros, a
+busca desce uns 21 nós, e cada nó pode estar num bloco diferente: 21 idas ao
+disco, um quinto de segundo por busca (ZIVIANI, 2010, cap. 6). Quando os
+dados moram no disco, o que importa é **ler poucos nós**, e para isso cada
+nó precisa decidir muito mais que "esquerda ou direita".
+
+A **árvore B** é uma árvore de busca com nós gordos, feita para disco. Cada
+nó guarda **várias chaves em ordem** e tem um filho a mais do que chaves.
+Num banco de dados, um nó costuma ocupar exatamente um bloco do disco, e
+uma leitura traz o nó inteiro (BAYER; McCREIGHT, 1972). As chaves do nó
+separam os filhos: num nó `[40 70]`, o filho 0 guarda as chaves menores que
+40, o filho 1 as que ficam entre 40 e 70, e o filho 2 as maiores que 70. É a
+mesma regra da BST, generalizada para várias chaves.
+
+O tamanho dos nós é controlado pelo **grau mínimo** `t`, um número fixo da
+árvore. Todo nó, menos a raiz, tem de `t - 1` a `2t - 1` chaves; a raiz pode
+ter só uma. Um nó interno, que não é folha, com `k` chaves tem `k + 1`
+filhos. E **todas as folhas ficam no mesmo nível** (CORMEN et al., 2024, cap.
+18). O mínimo de `t - 1` chaves impede nós quase vazios, que fariam a árvore
+crescer em altura à toa.
+
+O TAD deste assunto usa `t = 2`: cada nó tem de 1 a 3 chaves e de 2 a 4
+filhos. Essa árvore B pequena tem nome próprio, árvore 2-3-4, e é a prima da
+2-3 que você viu na rubro-negra (0145). Com `t` pequeno, os desenhos cabem na
+página; num banco de dados de verdade, `t` passa de cem.
+
+Como cada nó abaixo da raiz tem pelo menos `t` filhos, a árvore se alarga
+muito a cada nível e a altura fica pequena: com `n` chaves, `h ≤
+log_t((n + 1) / 2)` (CORMEN et al., 2024, cap. 18). Com chaves `int` e
+ponteiros de 8 bytes, `t = 170` faz um nó caber num bloco de 4096 bytes, e um
+bilhão de chaves fica em altura 3. São 4 blocos lidos por busca, contra uns
+30 de uma árvore binária.
+
+A **busca** é a da BST com um laço dentro do nó. Ande pelas chaves do nó
+até achar uma maior ou igual à procurada. Se for igual, achou. Se não, desça
+pelo filho daquela posição e repita. Ela lê um nó por nível, altura + 1 nós
+no total (CORMEN et al., 2024, cap. 18).
+
+A **inserção** sempre põe a chave nova numa folha. Se a folha tem espaço,
+basta encaixar a chave em ordem. Se está cheia, com `2t - 1` chaves,
+acontece a **divisão**: o nó vira dois nós de `t - 1` chaves cada, e a
+**chave do meio sobe** para o pai, entre os dois (CORMEN et al., 2024, cap.
+18). Com `t = 2`, a folha `[10 20 30]` vira `[10]` e `[30]`, e o 20 sobe.
+
+E se o pai também estiver cheio? A chave que sobe não teria onde ficar. O
+TAD evita isso dividindo **na descida**: a caminho da folha, todo nó cheio
+encontrado é dividido antes de entrar nele. Assim o pai de quem se divide
+sempre tem espaço. Se a própria raiz está cheia, ela se divide e a chave do
+meio vira uma raiz nova, acima das duas metades (CORMEN et al., 2024, cap.
+18). A árvore B só cresce **por cima**, pela raiz, e é por isso que as
+folhas continuam todas no mesmo nível.
 
 > [!WARNING]
 > Depois de `divide(x, i)`, a chave que subiu está em `x->chave[i]`. Sem
@@ -1152,23 +1254,58 @@ gcc ~/LPEDC/material/E876.c ~/LPEDC/material/0146-arvoreb.c -o ~/LPEDC/material/
 
 ### Conceito
 
-- **Trie** (de *retrieval*) ou **árvore de prefixos**: cada aresta **é** uma
-  letra, e o caminho da raiz até um nó soletra um prefixo. As palavras com esse
-  prefixo moram embaixo dele (FREDKIN, 1960).
-- **Marca de fim**: o prefixo "bol" tem nó, mas não é palavra. Cada nó guarda um
-  `bool fim` que diz se alguma palavra **termina** ali (ZIVIANI, 2010, cap. 5).
-- **Nó com vetor**: com minúsculas sem acento, o nó tem 26 ponteiros, e o filho
-  da letra `c` fica em `filho[c - 'a']` (CORTÉS, 2015).
-- **Inserir**: desça pelo filho de cada letra, criando-o se faltar; no fim,
-  `fim = true`. **Buscar**: desça letra por letra; faltou filho, não existe; no
-  fim, vale o `fim` do nó.
-- **Autocompletar**: desça até o nó do prefixo e percorra a subárvore, de `a` a
-  `z`, imprimindo cada caminho que termina num `fim`.
-- **Custo**: inserir e buscar custam **O(L)**, L o tamanho da palavra, sem
-  depender de quantas há. Uma BST de 100 mil palavras faz umas 17 comparações de
-  strings (SEDGEWICK; WAYNE, 2011).
-- **Memória**: cada `NoTrie` tem 216 bytes, quase todos ponteiros `NULL`. Lista
-  de filhos (0144) ou árvore ternária gastam menos.
+Você digita `bol` no celular e o teclado oferece "bola", "boleto", "bolo" e
+"bolsa" na hora. Ele não compara `bol` com cada uma das milhares de palavras
+do dicionário. Ele vai direto ao lugar onde moram as palavras que começam
+com `bol`, como quem abre um dicionário de papel na letra B, depois no
+pedaço "bo", depois em "bol". Na estrutura que ele usa, **o prefixo é o
+endereço**.
+
+Essa estrutura é a **trie**, nome tirado de *retrieval* (recuperação),
+também chamada **árvore de prefixos**. Cada aresta da árvore **é** uma
+letra, e o caminho da raiz até um nó soletra um prefixo. Da raiz, a aresta
+`b` leva ao nó de "b"; dele, a aresta `o` leva ao nó de "bo"; dele, a `l`
+leva ao nó de "bol". Todas as palavras que começam com "bol" moram na
+subárvore desse nó (FREDKIN, 1960).
+
+Note que os nós não guardam palavras inteiras. A palavra está espalhada no
+caminho, uma letra por aresta. Isso cria uma dúvida: o nó de "bol" existe,
+porque "bolo" passa por ele, mas "bol" não é uma palavra. Para separar os
+dois casos, cada nó guarda um `bool fim`, verdadeiro quando alguma palavra
+**termina** ali (ZIVIANI, 2010, cap. 5). O nó do `o` depois de "bol" tem `fim`
+verdadeiro, porque "bolo" é palavra; o nó de "bol" tem `fim` falso.
+
+Como achar o filho de uma letra? Com letras minúsculas sem acento, cada nó
+tem um vetor de 26 ponteiros, um por letra. O filho da letra `c` fica em
+`filho[c - 'a']`: a conta transforma `'a'` em 0, `'b'` em 1, e assim até
+`'z'` em 25 (CORTÉS, 2015). Ponteiro `NULL` quer dizer que nenhuma palavra
+segue por aquela letra.
+
+Com isso, as operações são curtas. Para **inserir** uma palavra, desça
+letra por letra pelo filho correspondente; se o filho não existe, crie-o.
+Ao fim da palavra, marque `fim = true` no nó onde você parou. Para
+**buscar**, desça do mesmo jeito; se faltar um filho no meio, a palavra não
+existe. Se chegar ao fim do texto, a resposta é o `fim` daquele nó (ZIVIANI,
+2010, cap. 5).
+
+O **autocompletar** junta as duas ideias. Desça até o nó do prefixo
+digitado. Depois percorra toda a subárvore dele, filho por filho, de `a` a
+`z`, montando as letras do caminho; cada vez que encontrar um nó com `fim`
+verdadeiro, imprima a palavra montada. Como os filhos são visitados em
+ordem alfabética, as sugestões já saem ordenadas.
+
+O custo é a grande vantagem. Inserir e buscar custam **O(L)**, com L o
+tamanho da palavra, e **não dependem de quantas palavras** existem: "bolsa"
+desce 5 nós num dicionário de 10 palavras ou de 100 mil. Uma BST com 100 mil
+palavras faria umas 17 comparações de strings, cada uma podendo olhar várias
+letras (SEDGEWICK; WAYNE, 2011).
+
+O preço é memória. Cada nó com 26 ponteiros e o `fim` ocupa 216 bytes, e
+quase todos os ponteiros são `NULL`, porque poucas letras seguem cada
+prefixo. Oito palavras curtas cabem em 45 bytes como strings e, numa trie,
+ocupam 22 nós, quase 5 KB. Guardar os filhos numa lista, como no primeiro
+filho, próximo irmão (0144), ou numa BST por nó, a árvore ternária, gasta
+bem menos, ao custo de achar o filho com mais passos.
 
 > [!WARNING]
 > Achar o nó não é achar a palavra: a busca olha o `fim`
@@ -1508,24 +1645,57 @@ gcc ~/LPEDC/material/E882.c ~/LPEDC/material/0147-trie.c -o ~/LPEDC/material/E88
 
 ### Conceito
 
-- **Conjuntos disjuntos**: grupos que não se misturam, com duas operações
-  (CORMEN et al., 2024, cap. 19):
-  **acha(x)** devolve o **representante** do grupo de x; **une(a, b)** junta os
-  grupos de a e de b. Dois elementos estão juntos se têm o mesmo representante.
-- **Floresta num vetor**: `pai[x]` é o pai de x, e a raiz aponta para si mesma
-  (`pai[x] == x`); a raiz é o representante. `acha` sobe até a raiz; `une`
-  pendura uma raiz na outra (SEDGEWICK; WAYNE, 2011).
-- **União por tamanho**: pendure a raiz do grupo **menor** na do maior. Um
-  elemento só desce quando o grupo dele pelo menos dobra: altura até log₂ n
-  (LINTZMAYER; MOTA, 2023).
-- **Compressão de caminho**: depois de achar a raiz, `acha` faz todo o caminho
-  apontar **direto** para ela. Por isso consultar **modifica** `pai`.
-- **Custo**: com os dois truques, m operações custam O(m · α(n)), e α não passa
-  de 4 para nenhum n realista: O(1) amortizado na prática (TARJAN, 1975).
-- **No Cormen**: `MAKE-SET`, `FIND-SET` e `UNION`, com **união por posto**
-  (*rank*), um limite da altura que só cresce quando dois postos iguais se
-  juntam. Mesma garantia; o Kruskal (0152) usa esta estrutura
-  (CORMEN et al., 2024, cap. 19).
+Numa turma, quem se conhece, mesmo que só como "amigo de amigo", cai no
+mesmo sorteio de amigo secreto. As amizades chegam aos poucos, uma por vez,
+e a qualquer momento alguém pergunta: "Ana e Duda caem no mesmo sorteio?".
+Você precisa responder rápido e continuar aceitando amizades novas.
+
+O que está em jogo são **conjuntos disjuntos**: grupos de elementos que não
+se misturam, em que cada elemento pertence a exatamente um grupo (CORMEN et
+al., 2024, cap. 19). A estrutura que cuida deles oferece duas operações. A
+operação **acha(x)** devolve o **representante** do grupo de x, um elemento
+escolhido para responder pelo grupo inteiro. A operação **une(a, b)** junta
+o grupo de a com o grupo de b num só. A pergunta do sorteio vira uma
+comparação: dois elementos estão no mesmo grupo se `acha` devolve o mesmo
+representante para os dois.
+
+O **union-find** guarda cada grupo como uma árvore, e todas as árvores, a
+floresta, cabem num vetor só. A posição `pai[x]` diz quem é o pai de x. A
+raiz é quem aponta para si mesma (`pai[x] == x`), e ela é o representante.
+Assim, `acha(x)` sobe de pai em pai até a raiz, e `une(a, b)` acha as duas
+raízes e pendura uma na outra (SEDGEWICK; WAYNE, 2011). No começo, cada
+pessoa é um grupo sozinho: `pai[x] = x` para todo x.
+
+Do jeito ingênuo, pendurando sempre a primeira raiz na segunda, a árvore
+pode virar uma fila comprida, e `acha` passa a custar O(n). Dois truques
+resolvem isso.
+
+O primeiro é a **união por tamanho**. Guarde, em `tam[raiz]`, quantos
+elementos tem cada grupo, e na união pendure a raiz do grupo **menor** na do
+maior. Por que isso segura a altura? Um elemento só desce um nível quando o
+grupo dele é o menor da união, e então o grupo resultante tem pelo menos o
+dobro do tamanho. Um grupo só pode dobrar log₂ n vezes antes de passar de
+n, então nenhum elemento desce mais que log₂ n níveis (LINTZMAYER; MOTA,
+2023).
+
+O segundo é a **compressão de caminho**. Quando `acha(x)` sobe até a raiz,
+ele já sabe a resposta para todos os nós do caminho. Então, antes de
+devolver, faz cada um desses nós apontar **direto** para a raiz. A próxima
+consulta a qualquer um deles dá um passo só. Isso tem uma consequência no
+código: consultar **modifica** o vetor `pai`, e por isso `acha` não pode
+receber a estrutura como `const`.
+
+Com os dois truques juntos, uma sequência de m operações custa O(m · α(n)),
+em que α é o inverso da função de Ackermann, uma função que cresce tão
+devagar que não passa de 4 para nenhum n que caiba num computador (TARJAN,
+1975). Na prática, cada operação custa O(1) amortizado (assunto 0116).
+
+O Cormen chama as operações de `MAKE-SET` (criar um grupo de um elemento só),
+`FIND-SET` (o acha) e `UNION` (o une). No lugar do tamanho, ele usa a
+**união por posto** (*rank*): cada raiz guarda um limite superior da altura
+da sua árvore, que só cresce 1 quando duas raízes de mesmo posto se juntam.
+A garantia é a mesma. O algoritmo de Kruskal (0152) usa essa estrutura para
+saber se uma aresta fecha um ciclo (CORMEN et al., 2024, cap. 19).
 
 > [!WARNING]
 > O representante é a **raiz**. `pai[a] = b` arranca o `a` do grupo; o certo é
@@ -1890,21 +2060,41 @@ gcc ~/LPEDC/material/E888.c ~/LPEDC/material/0148-uniao.c -o ~/LPEDC/material/E8
 
 ### Conceito
 
-- **Duas perguntas ao dicionário**: "esta palavra existe?" (busca exata) e "quais
-  palavras estão perto desta?". Perto é a poucas **edições** (assunto 0142):
-  tirar, pôr ou trocar uma letra, ou trocar duas vizinhas.
-- **Gerar candidatos**: aplicar à palavra errada todas as edições e ver quais
-  existem. "fiera" gera 290 candidatos, e só "feira" existe.
-- **Dicionário em trie** (assunto 0147): cada busca custa O(L), e um candidato
-  sem prefixo válido ("fx...") morre no segundo nó (ZIVIANI, 2010, cap. 5).
-- **Alternativas**: a hash faz a busca exata em O(1) na média; a BST, em
-  O(log n) comparações de string (SZWARCFITER; MARKENZON, 2010).
-- **Memória e cache**: 84 palavras viram 239 nós de 216 bytes (cerca de 51 KB),
-  espalhados no heap. Cada acesso pode faltar no cache, e por isso a hash costuma
-  vencer na busca exata.
+O secretário da associação do bairro quer um programa que leia o aviso da
+semana, como "o onibus pasou" ou "a fiera da rua", aponte as palavras que
+não existem e sugira a correção. É um corretor ortográfico, e ele junta
+várias estruturas do curso.
 
-O A297 compara as três com 2500 palavras de duas sílabas e 5000 buscas (metade
-acha, metade não):
+Por baixo, o corretor faz **duas perguntas ao dicionário**, milhares de
+vezes por texto. A primeira é "esta palavra existe?", uma busca exata. A
+segunda é "quais palavras de verdade estão perto desta?". Perto, aqui, quer
+dizer a poucas **edições** de distância, no sentido do assunto 0142: tirar
+uma letra, pôr uma letra, trocar uma letra por outra ou trocar duas letras
+vizinhas de lugar. Essa última operação não estava na distância de
+Levenshtein, mas é o erro de digitação mais comum.
+
+A segunda pergunta parece exigir comparar a palavra errada com o
+dicionário inteiro. O corretor faz o contrário: **gera candidatos**. Ele
+aplica à palavra errada todas as edições possíveis e pergunta, para cada
+resultado, se ele existe. Para "fiera", com 5 letras, são 5 jeitos de tirar
+uma letra, 4 de trocar duas vizinhas, 5 × 25 de trocar uma letra e 6 × 26 de
+pôr uma letra: 290 candidatos. Desses, só "feira" existe. A segunda pergunta
+virou 290 buscas exatas, e o custo delas depende de como o dicionário está
+guardado.
+
+O dicionário fica numa **trie** (assunto 0147). Cada busca custa O(L), com
+L o tamanho da palavra, sem depender do tamanho do dicionário. E a trie tem
+uma vantagem extra para candidatos: ela descobre cedo que uma palavra não
+existe. Um candidato que começa com "fx" morre no segundo nó, porque nenhuma
+palavra começa assim (ZIVIANI, 2010, cap. 5).
+
+Há outras opções para o dicionário. Uma **tabela hash** faz a busca exata em
+O(1) na média, calculando direto a posição da palavra. Uma **BST** faz em
+O(log n) comparações de string (SZWARCFITER; MARKENZON, 2010). O exemplo
+A297 monta as três com o mesmo dicionário de 2500 palavras de duas sílabas
+e faz 5000 buscas, metade de palavras que existem e metade de palavras que
+não existem. A tabela resume o que ele mede e o que cada estrutura sabe
+fazer:
 
 | | BST | Tabela hash | Trie |
 | --- | --- | --- | --- |
@@ -1914,8 +2104,15 @@ acha, metade não):
 | ordem alfabética | percurso em ordem | não dá | percurso por letra |
 | depende de n? | sim, log n | não (com fator de carga bom) | não |
 
-A trie ganha em tudo que envolve **prefixo**; um corretor de verdade combina
-trie e hash.
+Leia a tabela pela linha da memória. A trie de 84 palavras do exemplo deste
+assunto tem 239 nós de 216 bytes, cerca de 51 KB, e cada nó fica num ponto
+diferente do heap. Andar de nó em nó obriga o processador a buscar memória
+que não está no cache, a memória rápida perto dele. A hash lê poucas
+posições próximas e costuma vencer a trie na busca exata.
+
+A trie ganha em tudo que envolve **prefixo**: autocompletar, listar em
+ordem alfabética e cortar candidatos que já nascem errados. A hash ganha na
+pergunta "existe?" pura. Por isso um corretor de verdade combina as duas.
 
 > [!WARNING]
 > `cor_proxima` só reconhece `'a'` a `'z'`: maiúscula e acento viram separadores

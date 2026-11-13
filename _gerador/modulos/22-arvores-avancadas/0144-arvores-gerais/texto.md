@@ -1,25 +1,55 @@
 ## 0144 · Árvores gerais: primeiro filho, próximo irmão
 
-- **Árvore geral** (ou n-ária): cada nó pode ter qualquer número de filhos
-  (SZWARCFITER; MARKENZON, 2010).
-- **Vetor fixo de filhos** (`filhos[4]`, A193 do módulo 14) trava no quinto
-  filho e desperdiça ponteiros nas folhas.
-- **Primeiro filho / próximo irmão** (*left-child right-sibling*): cada nó
-  guarda `filho`, o primeiro filho, e `irmao`, o próximo filho do mesmo pai
-  (CORMEN et al., 2024, cap. 10).
-- **Filhos como lista**: começam em `filho` e seguem pelos `irmao`. Com dois
-  ponteiros, a árvore geral vira uma **árvore binária** (CELES; RANGEL, 2002).
-- **Recursão**: resolve o nó, pede a resposta de cada filho e junta. Somar a
-  subárvore é **pós-ordem**: os filhos ficam prontos antes do pai
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 5).
-- **Custo**: o nó tem tamanho fixo (40 bytes aqui), mas achar o k-ésimo filho
-  custa k passos pela lista de irmãos.
+O empreiteiro mandou o orçamento da reforma em tópicos. A reforma tem
+cozinha, banheiro e pintura; a cozinha tem piso e pia; o banheiro tem box e
+louças; as louças têm vaso e cuba. O total de cada tópico é a soma do que
+está embaixo dele. Você quer guardar isso na memória e calcular os totais.
 
-Visitar os filhos é o laço da lista:
+A forma é uma árvore, mas não binária: a reforma tem três filhos, a cozinha
+tem dois, e nada impede um tópico de ter dez. Uma **árvore geral**, também
+chamada **n-ária**, é uma árvore em que cada nó pode ter qualquer número de
+filhos (SZWARCFITER; MARKENZON, 2010). Pastas e arquivos de um disco, o
+organograma de uma empresa e o sumário de um livro são árvores gerais.
+
+O primeiro impulso é dar a cada nó um vetor de ponteiros para os filhos,
+como o `filhos[4]` do A193, no módulo 14. Isso trava no quinto filho: o
+tópico com cinco subitens não cabe. E desperdiça memória, porque a maioria
+dos nós de uma árvore são folhas e carregam quatro ponteiros `NULL` sem uso.
+Aumentar o vetor piora o desperdício; diminuir piora a trava.
+
+A saída é a representação **primeiro filho, próximo irmão** (*left-child,
+right-sibling*). Cada nó guarda só dois ponteiros, qualquer que seja o
+número de filhos: `filho` aponta para o primeiro filho do nó, e `irmao`
+aponta para o próximo filho do mesmo pai (CORMEN et al., 2024, cap. 10). Na
+reforma, `filho` aponta para a cozinha; a cozinha aponta, por `irmao`, para
+o banheiro; o banheiro, para a pintura; e o `irmao` da pintura é `NULL`.
+
+Repare no que isso forma: os filhos de um nó viram uma **lista encadeada**,
+que começa em `filho` e segue pelos `irmao` até o `NULL`. Visitar todos os
+filhos é percorrer essa lista, com o mesmo laço de sempre:
 
 ```c
 for (const NoG *p = r->filho; p != NULL; p = p->irmao) { ... }
 ```
+
+Há um efeito curioso. Com dois ponteiros por nó, a estrutura na memória é
+uma **árvore binária**: `filho` faz o papel do ponteiro esquerdo e `irmao`,
+do direito (CELES; RANGEL, 2002). Toda árvore geral pode ser guardada como
+binária. Mas o significado muda: na binária, descer pela direita é descer um
+nível; aqui, andar pelo `irmao` é andar para o lado, no mesmo nível.
+
+As funções sobre a árvore seguem um molde recursivo: resolvem o nó, pedem a
+resposta de cada filho percorrendo a lista e juntam tudo. O total de um
+tópico é o valor dele mais o total de cada filho. Essa ordem, em que os
+filhos ficam prontos antes do pai, é a **pós-ordem** (TENENBAUM; LANGSAM;
+AUGENSTEIN, 1995, cap. 5). No banheiro, a função soma o box (900) e as
+louças (700, que por sua vez já somaram vaso e cuba) e devolve 1600.
+
+O preço da economia está no acesso. Cada nó tem tamanho fixo, 40 bytes no
+TAD deste assunto, tenha ele um filho ou cem. Mas, para chegar ao k-ésimo
+filho, é preciso andar k passos pela lista de irmãos, enquanto o vetor
+chegava lá direto pelo índice. Para percorrer todos os filhos, que é o caso
+comum, a diferença some.
 
 > [!WARNING]
 > O irmão está no **mesmo nível**. A altura escrita como na binária,

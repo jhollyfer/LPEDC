@@ -1,20 +1,40 @@
 ## 0149 · Juntando tudo: corretor ortográfico
 
-- **Duas perguntas ao dicionário**: "esta palavra existe?" (busca exata) e "quais
-  palavras estão perto desta?". Perto é a poucas **edições** (assunto 0142):
-  tirar, pôr ou trocar uma letra, ou trocar duas vizinhas.
-- **Gerar candidatos**: aplicar à palavra errada todas as edições e ver quais
-  existem. "fiera" gera 290 candidatos, e só "feira" existe.
-- **Dicionário em trie** (assunto 0147): cada busca custa O(L), e um candidato
-  sem prefixo válido ("fx...") morre no segundo nó (ZIVIANI, 2010, cap. 5).
-- **Alternativas**: a hash faz a busca exata em O(1) na média; a BST, em
-  O(log n) comparações de string (SZWARCFITER; MARKENZON, 2010).
-- **Memória e cache**: 84 palavras viram 239 nós de 216 bytes (cerca de 51 KB),
-  espalhados no heap. Cada acesso pode faltar no cache, e por isso a hash costuma
-  vencer na busca exata.
+O secretário da associação do bairro quer um programa que leia o aviso da
+semana, como "o onibus pasou" ou "a fiera da rua", aponte as palavras que
+não existem e sugira a correção. É um corretor ortográfico, e ele junta
+várias estruturas do curso.
 
-O A297 compara as três com 2500 palavras de duas sílabas e 5000 buscas (metade
-acha, metade não):
+Por baixo, o corretor faz **duas perguntas ao dicionário**, milhares de
+vezes por texto. A primeira é "esta palavra existe?", uma busca exata. A
+segunda é "quais palavras de verdade estão perto desta?". Perto, aqui, quer
+dizer a poucas **edições** de distância, no sentido do assunto 0142: tirar
+uma letra, pôr uma letra, trocar uma letra por outra ou trocar duas letras
+vizinhas de lugar. Essa última operação não estava na distância de
+Levenshtein, mas é o erro de digitação mais comum.
+
+A segunda pergunta parece exigir comparar a palavra errada com o
+dicionário inteiro. O corretor faz o contrário: **gera candidatos**. Ele
+aplica à palavra errada todas as edições possíveis e pergunta, para cada
+resultado, se ele existe. Para "fiera", com 5 letras, são 5 jeitos de tirar
+uma letra, 4 de trocar duas vizinhas, 5 × 25 de trocar uma letra e 6 × 26 de
+pôr uma letra: 290 candidatos. Desses, só "feira" existe. A segunda pergunta
+virou 290 buscas exatas, e o custo delas depende de como o dicionário está
+guardado.
+
+O dicionário fica numa **trie** (assunto 0147). Cada busca custa O(L), com
+L o tamanho da palavra, sem depender do tamanho do dicionário. E a trie tem
+uma vantagem extra para candidatos: ela descobre cedo que uma palavra não
+existe. Um candidato que começa com "fx" morre no segundo nó, porque nenhuma
+palavra começa assim (ZIVIANI, 2010, cap. 5).
+
+Há outras opções para o dicionário. Uma **tabela hash** faz a busca exata em
+O(1) na média, calculando direto a posição da palavra. Uma **BST** faz em
+O(log n) comparações de string (SZWARCFITER; MARKENZON, 2010). O exemplo
+A297 monta as três com o mesmo dicionário de 2500 palavras de duas sílabas
+e faz 5000 buscas, metade de palavras que existem e metade de palavras que
+não existem. A tabela resume o que ele mede e o que cada estrutura sabe
+fazer:
 
 | | BST | Tabela hash | Trie |
 | --- | --- | --- | --- |
@@ -24,8 +44,15 @@ acha, metade não):
 | ordem alfabética | percurso em ordem | não dá | percurso por letra |
 | depende de n? | sim, log n | não (com fator de carga bom) | não |
 
-A trie ganha em tudo que envolve **prefixo**; um corretor de verdade combina
-trie e hash.
+Leia a tabela pela linha da memória. A trie de 84 palavras do exemplo deste
+assunto tem 239 nós de 216 bytes, cerca de 51 KB, e cada nó fica num ponto
+diferente do heap. Andar de nó em nó obriga o processador a buscar memória
+que não está no cache, a memória rápida perto dele. A hash lê poucas
+posições próximas e costuma vencer a trie na busca exata.
+
+A trie ganha em tudo que envolve **prefixo**: autocompletar, listar em
+ordem alfabética e cortar candidatos que já nascem errados. A hash ganha na
+pergunta "existe?" pura. Por isso um corretor de verdade combina as duas.
 
 > [!WARNING]
 > `cor_proxima` só reconhece `'a'` a `'z'`: maiúscula e acento viram separadores

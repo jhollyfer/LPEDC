@@ -1,23 +1,56 @@
 ## 0148 · Union-find: conjuntos disjuntos
 
-- **Conjuntos disjuntos**: grupos que não se misturam, com duas operações
-  (CORMEN et al., 2024, cap. 19):
-  **acha(x)** devolve o **representante** do grupo de x; **une(a, b)** junta os
-  grupos de a e de b. Dois elementos estão juntos se têm o mesmo representante.
-- **Floresta num vetor**: `pai[x]` é o pai de x, e a raiz aponta para si mesma
-  (`pai[x] == x`); a raiz é o representante. `acha` sobe até a raiz; `une`
-  pendura uma raiz na outra (SEDGEWICK; WAYNE, 2011).
-- **União por tamanho**: pendure a raiz do grupo **menor** na do maior. Um
-  elemento só desce quando o grupo dele pelo menos dobra: altura até log₂ n
-  (LINTZMAYER; MOTA, 2023).
-- **Compressão de caminho**: depois de achar a raiz, `acha` faz todo o caminho
-  apontar **direto** para ela. Por isso consultar **modifica** `pai`.
-- **Custo**: com os dois truques, m operações custam O(m · α(n)), e α não passa
-  de 4 para nenhum n realista: O(1) amortizado na prática (TARJAN, 1975).
-- **No Cormen**: `MAKE-SET`, `FIND-SET` e `UNION`, com **união por posto**
-  (*rank*), um limite da altura que só cresce quando dois postos iguais se
-  juntam. Mesma garantia; o Kruskal (0152) usa esta estrutura
-  (CORMEN et al., 2024, cap. 19).
+Numa turma, quem se conhece, mesmo que só como "amigo de amigo", cai no
+mesmo sorteio de amigo secreto. As amizades chegam aos poucos, uma por vez,
+e a qualquer momento alguém pergunta: "Ana e Duda caem no mesmo sorteio?".
+Você precisa responder rápido e continuar aceitando amizades novas.
+
+O que está em jogo são **conjuntos disjuntos**: grupos de elementos que não
+se misturam, em que cada elemento pertence a exatamente um grupo (CORMEN et
+al., 2024, cap. 19). A estrutura que cuida deles oferece duas operações. A
+operação **acha(x)** devolve o **representante** do grupo de x, um elemento
+escolhido para responder pelo grupo inteiro. A operação **une(a, b)** junta
+o grupo de a com o grupo de b num só. A pergunta do sorteio vira uma
+comparação: dois elementos estão no mesmo grupo se `acha` devolve o mesmo
+representante para os dois.
+
+O **union-find** guarda cada grupo como uma árvore, e todas as árvores, a
+floresta, cabem num vetor só. A posição `pai[x]` diz quem é o pai de x. A
+raiz é quem aponta para si mesma (`pai[x] == x`), e ela é o representante.
+Assim, `acha(x)` sobe de pai em pai até a raiz, e `une(a, b)` acha as duas
+raízes e pendura uma na outra (SEDGEWICK; WAYNE, 2011). No começo, cada
+pessoa é um grupo sozinho: `pai[x] = x` para todo x.
+
+Do jeito ingênuo, pendurando sempre a primeira raiz na segunda, a árvore
+pode virar uma fila comprida, e `acha` passa a custar O(n). Dois truques
+resolvem isso.
+
+O primeiro é a **união por tamanho**. Guarde, em `tam[raiz]`, quantos
+elementos tem cada grupo, e na união pendure a raiz do grupo **menor** na do
+maior. Por que isso segura a altura? Um elemento só desce um nível quando o
+grupo dele é o menor da união, e então o grupo resultante tem pelo menos o
+dobro do tamanho. Um grupo só pode dobrar log₂ n vezes antes de passar de
+n, então nenhum elemento desce mais que log₂ n níveis (LINTZMAYER; MOTA,
+2023).
+
+O segundo é a **compressão de caminho**. Quando `acha(x)` sobe até a raiz,
+ele já sabe a resposta para todos os nós do caminho. Então, antes de
+devolver, faz cada um desses nós apontar **direto** para a raiz. A próxima
+consulta a qualquer um deles dá um passo só. Isso tem uma consequência no
+código: consultar **modifica** o vetor `pai`, e por isso `acha` não pode
+receber a estrutura como `const`.
+
+Com os dois truques juntos, uma sequência de m operações custa O(m · α(n)),
+em que α é o inverso da função de Ackermann, uma função que cresce tão
+devagar que não passa de 4 para nenhum n que caiba num computador (TARJAN,
+1975). Na prática, cada operação custa O(1) amortizado (assunto 0116).
+
+O Cormen chama as operações de `MAKE-SET` (criar um grupo de um elemento só),
+`FIND-SET` (o acha) e `UNION` (o une). No lugar do tamanho, ele usa a
+**união por posto** (*rank*): cada raiz guarda um limite superior da altura
+da sua árvore, que só cresce 1 quando duas raízes de mesmo posto se juntam.
+A garantia é a mesma. O algoritmo de Kruskal (0152) usa essa estrutura para
+saber se uma aresta fecha um ciclo (CORMEN et al., 2024, cap. 19).
 
 > [!WARNING]
 > O representante é a **raiz**. `pai[a] = b` arranca o `a` do grupo; o certo é
