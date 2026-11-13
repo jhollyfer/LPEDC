@@ -1,48 +1,39 @@
 ## 0002 · Variáveis
 
-Na matrícula da academia, a recepcionista preenche uma ficha: idade 25,
-altura 1,75 m, peso 72,5 kg, plano B. Um mês depois, apaga o peso e escreve
-71,8. A ficha é a mesma; só o conteúdo de um campo mudou.
+- **Variável**: um lugar na memória com **nome**, **tipo** e **valor**. O
+  valor pode mudar durante a execução (DEITEL; DEITEL, 2011, cap. 2).
+- **Tipo**: diz quantos bytes a variável ocupa e como ler esses bytes
+  (BACKES, 2013).
+- **Tipos primitivos**: guardam um valor só (`int`, `float`, `double`,
+  `char`). Vetores e structs juntam vários e são **compostos** (módulos 05 e 08)
+  (CELES; CERQUEIRA; RANGEL, 2016).
+- **Declarar** é criar (`int idade;`); **inicializar** é dar o primeiro valor
+  junto (`int idade = 25;`) (BACKES, 2013).
+- **Atribuir apaga o valor antigo**; ler a variável não muda nada
+  (DEITEL; DEITEL, 2011, cap. 2).
+- **`sizeof`**: operador que dá o tamanho em bytes de um tipo ou variável;
+  mostre com `%zu` (KERNIGHAN; RITCHIE, 1988, cap. 2).
+- **Nome válido**: letras, dígitos e `_`, sem começar por dígito, sem acento e
+  sem palavra reservada. `peso` e `Peso` são nomes diferentes
+  (KERNIGHAN; RITCHIE, 1988, cap. 2).
 
-Uma **variável** é um campo dessa ficha: um pedaço da memória com **nome**,
-**tipo**, **valor** e **endereço**. O nome é para você. O endereço é o número
-do primeiro byte que o valor ocupa. O tipo diz quantos bytes a variável ocupa
-e como lê-los.
-
-O tipo vem **antes** do nome e não muda. Os quatro tipos básicos (tamanhos de
-um PC de 64 bits; o padrão do C só garante mínimos):
-
-| Tipo | Guarda | Tamanho típico | Exemplo |
+| Tipo | Guarda | Tamanho típico | `printf` |
 | --- | --- | --- | --- |
-| `int` | inteiro | 4 bytes | `int idade = 25;` |
-| `float` | real, uns 7 dígitos | 4 bytes | `float altura = 1.75;` |
-| `double` | real, uns 15 dígitos | 8 bytes | `double peso = 72.5;` |
-| `char` | um caractere (um número pequeno) | 1 byte | `char plano = 'B';` |
+| `int` | inteiro | 4 bytes | `%d` |
+| `float` | real, uns 7 dígitos | 4 bytes | `%f` |
+| `double` | real, uns 15 dígitos | 8 bytes | `%f` |
+| `char` | um caractere | 1 byte | `%c` |
 
-Esses são os **tipos primitivos** (também chamados **tipos simples** ou
-**dados simples**): cada variável guarda um valor só. Vetores e structs, que
-juntam vários valores, são os **dados compostos** (módulos 05 e 08).
+> [!WARNING]
+> Variável sem valor não vale zero: vale **lixo**, o que já estava na memória.
+> Inicialize sempre. E o decimal do C é o **ponto**: `72,5` nem compila.
 
-**Declarar** é criar a variável: `int idade;`. **Inicializar** é dar o
-primeiro valor junto: `int idade = 25;`. O `printf` usa `%d` para `int`, `%f`
-para `float` e `double`, `%c` para `char`; `%.1f` limita a uma casa decimal
-(o `printf` completo vem no 0005).
+{{exemplo}}
 
-Guardar um valor novo **apaga** o antigo; ler a variável não muda nada. O
-operador **`sizeof`** dá o tamanho em bytes de um tipo ou variável; o
-`printf` o mostra com `%zu`. O `&peso` é o endereço da variável (`%p`
-mostra endereços).
-
-Nome de variável: letras, dígitos e `_`, sem começar por dígito, sem acento e
-sem espaço; `peso` e `Peso` são diferentes; palavras do C (`int`, `return`...)
-não valem. O curso usa `snake_case`: `peso_atual`, `valor_total`.
-
-A ficha vira quatro caixinhas, cada uma com tipo, tamanho e endereço. Depois,
-o peso recebe um valor novo e o antigo desaparece:
+A ficha de uma academia: idade, altura, peso e plano. Cada dado vira uma
+caixinha com tipo, tamanho e endereço; depois o peso recebe um valor novo:
 
 {{ideia}}
-
-A ficha em C:
 
 ```c
 #include <stdio.h>
@@ -73,19 +64,6 @@ int main(void) {
 // Bytes: 4, 4, 8, 1
 ```
 
-Criar as variáveis (reservar memória) é um passo; trocar o peso é outro.
-Ainda é sequência pura:
+O caminho é sequência pura: criar as variáveis e depois trocar o peso.
 
 {{fluxograma}}
-
-> [!WARNING]
-> Variável sem valor não vale zero: vale **lixo**, o que já estava naqueles
-> bytes. `int total; printf("%d", total);` pode mostrar 0, 32767 ou -1294; o
-> gcc avisa `'total' is used uninitialized`. Inicialize sempre. E o separador
-> decimal do C é o **ponto**: `double peso = 72,5;` nem compila.
-
-> [!NOTE]
-> **Pergunta para você:** o `char` guarda um número pequeno. O que você acha
-> que `printf("%d\n", plano);` mostra? Teste no programa acima.
-
-{{pratique}}

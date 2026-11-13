@@ -54,7 +54,7 @@ terminam palavra; no union-find, a raiz verde representa o grupo.
 
 ---
 
-## Desafios do módulo
+### Desafios do módulo
 
 Problemas para resolver no papel e, quando fizer sentido, num arquivo `.c` seu
 usando os TADs do módulo. Eles misturam os assuntos.
@@ -215,7 +215,7 @@ altura continua 2. Confira com `ab_insere` e `ab_mostra`.
 
 </details>
 
-## Questões do POSCOMP
+### Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -227,7 +227,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 O gabarito de 2023 vem de um blog de terceiros que reproduz o gabarito definitivo; confira no PDF oficial da SBC.
 
 
-## Questões no estilo da prova
+### Questões no estilo da prova
 
 Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma
 alternativa certa. As definições seguem o Cormen: rubro-negra **clássica**
@@ -486,7 +486,7 @@ chaves para `t = 3`. Veja 0146.
 
 </details>
 
-## Questões de provas do PPGI
+### Questões de provas do PPGI
 
 Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.
 

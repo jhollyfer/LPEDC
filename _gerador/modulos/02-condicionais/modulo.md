@@ -57,7 +57,7 @@ avisos ao compilar; o enunciado diz quando é o caso. Nos demais, vale a regra:
 
 ---
 
-## Desafios do módulo
+### Desafios do módulo
 
 Problemas extras, só com decisões (sem laços). Escreva cada um num arquivo
 seu, compile com as flags de estudo e teste todos os caminhos.
@@ -220,7 +220,7 @@ já faz isso).
 
 </details>
 
-## Questões do POSCOMP
+### Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -233,7 +233,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 O gabarito oficial de 2025 não estava disponível quando este material foi montado.
 
 
-## Questões no estilo da prova
+### Questões no estilo da prova
 
 Questões objetivas no formato da Prova do PPGI, com uma alternativa certa.
 Resolva no papel antes do gabarito. Vários trechos fazem o `-Wall` reclamar de

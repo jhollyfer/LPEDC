@@ -1,55 +1,41 @@
 ## 0003 · Tipos e limites
 
-A catraca do estádio conta os torcedores num contador de 16 bits. No clássico
-de domingo, o Maracanã recebeu 78.838 pessoas. Quando passou o torcedor número
-65.536, o painel voltou a **zero**. Ninguém errou a conta: o número não cabia.
+- **Bit e byte**: o bit vale 0 ou 1; oito bits formam um byte. Com `n` bits
+  cabem 2ⁿ valores, então um byte vai de 0 a 255 (FEOFILOFF, 2009, ap. C).
+- **Binário**: base 2; cada casa vale o dobro da casa à direita.
+  `00001101` = 8 + 4 + 1 = 13 (FEOFILOFF, 2009, ap. C).
+- **Hexadecimal**: base 16 (0 a 9 e A a F). Cada dígito vale 4 bits; no C
+  começa com `0x`: `0xFF` = 255 (DEITEL; DEITEL, 2011).
+- **Modificadores**: `short` (menor), `long` e `long long` (maiores) e
+  `unsigned` (sem negativos, o dobro de positivos) (BACKES, 2013).
+- **`<limits.h>` e `<stdint.h>`**: o padrão só garante tamanhos mínimos. O
+  `limits.h` dá os limites reais (`INT_MAX`); o `stdint.h` dá tamanho exato
+  (`int32_t`, `uint16_t`) (ISO/IEC, 2018).
+- **Overflow**: passar do limite do tipo. Em `unsigned` o valor dá a volta,
+  como um odômetro; com sinal é **comportamento indefinido** (ISO/IEC, 2018).
+- **Complemento de dois**: forma de guardar negativos. Por isso a faixa é
+  assimétrica (-128 a 127 num byte) (FEOFILOFF, 2009, ap. C).
 
-A memória é feita de **bits**, chavinhas que valem 0 ou 1. Oito bits formam um
-**byte**. O inteiro é guardado em **binário** (base 2), em que cada casa vale
-o dobro da casa da direita:
-
-| casa | 2⁷ | 2⁶ | 2⁵ | 2⁴ | 2³ | 2² | 2¹ | 2⁰ |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| vale | 128 | 64 | 32 | 16 | 8 | 4 | 2 | 1 |
-
-Para ler um binário, some as casas com 1: `00001101` é 8 + 4 + 1 = 13. Com os
-8 bits ligados, `11111111`, o total é 255. Logo **um byte vai de 0 a 255**:
-2⁸ = 256 combinações. Com `n` bits, cabem 2ⁿ valores.
-
-O **hexadecimal** (base 16) abrevia o binário, com dígitos 0 a 9 e A a F
-(A = 10, ..., F = 15). Cada dígito hexa vale 4 bits, então um byte são dois
-dígitos: `1111 1111` = `FF` = 255. No C, hexadecimal começa com `0x`: `0xFF`.
-
-O tamanho de cada tipo inteiro decide sua **faixa**. Os **modificadores**
-mudam o `int`: `short` (menor), `long` e `long long` (maiores) e `unsigned`
-(sem sinal: troca os negativos por mais positivos). Sem modificador, o tipo é
-**com sinal** (`signed`): `int` e `signed int` são o mesmo tipo. O `char`
-puro depende da máquina; no PC Linux ele tem sinal. Num PC Linux de 64 bits:
-
-| Tipo | Bytes | Faixa |
+| Tipo (PC Linux 64 bits) | Bytes | Faixa |
 | --- | --- | --- |
 | `char` | 1 | -128 a 127 |
 | `unsigned char` | 1 | 0 a 255 |
 | `short` | 2 | -32.768 a 32.767 |
 | `unsigned short` | 2 | 0 a 65.535 |
 | `int` | 4 | cerca de ±2,1 bilhões |
-| `unsigned int` | 4 | 0 a cerca de 4,3 bilhões |
 | `long` / `long long` | 8 | cerca de ±9,2 quintilhões |
 
-O padrão do C só garante mínimos (o `int` pode ter 2 bytes num
-microcontrolador, e o `long` tem 4 bytes no Windows). Por isso, o
-**`<limits.h>`** traz os limites reais da máquina (`INT_MAX`, `SHRT_MIN`,
-`USHRT_MAX`...). Para tamanho exato, o **`<stdint.h>`** tem tipos com os bits
-no nome: `int8_t`, `uint16_t`, `int32_t`, `int64_t`.
+> [!WARNING]
+> Estouro em tipo com sinal não "dá a volta" de forma garantida:
+> `int x = INT_MAX; x = x + 1;` é comportamento indefinido. Com as flags de
+> estudo, o gcc acusa `signed integer overflow`. Escolha um tipo que caiba.
 
-Passar do limite é **overflow** (estouro). Num `unsigned`, o C garante que o
-número dá a volta, como o odômetro que passa de 99999 para 00000. A catraca é
-um `unsigned short` em 65.535, com os 16 bits ligados. Somar 1 dá 65.536, que
-precisa de 17 bits; o bit de cima não cabe e some:
+{{exemplo}}
+
+A catraca de um estádio conta torcedores num `unsigned short` (16 bits). No
+65.536º torcedor, o bit de cima não cabe e o painel volta a zero:
 
 {{ideia}}
-
-A catraca em C:
 
 ```c
 #include <stdio.h>
@@ -74,26 +60,7 @@ int main(void) {
 // Público: 78838 (o int vai até 2147483647)
 ```
 
-No fluxograma, quem pergunta "cabe em 16 bits?" é o hardware. Se não cabe, ele
-guarda só os 16 bits de baixo, sem avisar:
+Quem decide "cabe em 16 bits?" é o hardware; se não cabe, guarda só os 16
+bits de baixo, sem avisar:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Com `unsigned`, o estouro dá a volta. Com tipos **com sinal** (`int`,
-> `long`...), é **comportamento indefinido**: o padrão não diz o que
-> acontece. `int x = INT_MAX; x = x + 1;` costuma virar -2147483648, mas não
-> conte com isso. Com as flags de estudo, o gcc acusa
-> `runtime error: signed integer overflow`. Escolha um tipo que caiba.
-
-> [!TIP]
-> Os negativos usam **complemento de dois**: o bit mais à esquerda pesa
-> negativo (-128 num byte). Por isso a faixa é assimétrica (-128 a 127) e o
-> byte `0xFF` é 255 num `unsigned char` e -1 num `char`: os bits são iguais,
-> o tipo decide como ler.
-
-> [!NOTE]
-> **Pergunta para você:** se a catraca começasse em 65.530 e passassem 10
-> torcedores, o que o painel mostraria? Mude o programa acima e confira.
-
-{{pratique}}

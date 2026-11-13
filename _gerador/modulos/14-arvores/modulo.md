@@ -53,7 +53,7 @@ vazia, -1. Alguns livros contam nós; confira a convenção.
 
 ---
 
-## Desafios do módulo
+### Desafios do módulo
 
 Problemas para fechar o módulo, misturando os assuntos. Escreva em C e compile
 com o gcc e as flags de estudo. Quando o desafio citar `avl.h` ou `heap.h`,
@@ -306,7 +306,7 @@ E611 em escala.
 
 </details>
 
-## Questões do POSCOMP
+### Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -319,7 +319,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 O gabarito de 2023 vem de um blog de terceiros que reproduz o gabarito definitivo; confira no PDF oficial da SBC.
 
 
-## Questões de provas do PPGI
+### Questões de provas do PPGI
 
 Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.
 

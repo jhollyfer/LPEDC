@@ -69,7 +69,7 @@ Convenções do módulo:
 
 ---
 
-## Desafios do módulo
+### Desafios do módulo
 
 Problemas para resolver no papel e, quando fizer sentido, num arquivo `.c`
 seu. Eles misturam os assuntos do módulo.
@@ -207,7 +207,7 @@ O E1132 reconstrói a rota sem a segunda tabela.
 
 </details>
 
-## Questões do POSCOMP
+### Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -217,7 +217,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 | 2024 | 37 | Autômatos, Turing e NP-completo (assertivas) | E | [caderno](https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2024.pdf) |
 
 
-## Questões no estilo da prova
+### Questões no estilo da prova
 
 Questões objetivas como as da prova do PPGI. Todo código foi compilado e
 rodado antes de fixar o gabarito.

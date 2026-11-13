@@ -54,7 +54,7 @@ Nos assuntos 0034 e 0036, a pasta tem arquivos de apoio (`conversao.h` e
 
 ---
 
-## Desafios do módulo
+### Desafios do módulo
 
 Problemas do médio ao difícil, para resolver num arquivo seu.
 
@@ -230,7 +230,7 @@ volta.
 
 </details>
 
-## Questões do POSCOMP
+### Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -244,7 +244,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 O gabarito oficial de 2025 não estava disponível quando este material foi montado.
 
 
-## Questões no estilo da prova
+### Questões no estilo da prova
 
 Questões objetivas no formato da prova do PPGI: uma alternativa certa. Nas de
 recursão, desenhe a pilha: um quadro por chamada, com os parâmetros e o que
@@ -483,7 +483,7 @@ algoritmo de Euclides. Veja 0033.
 
 </details>
 
-## Questões de provas do PPGI
+### Questões de provas do PPGI
 
 Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.
 

@@ -93,7 +93,7 @@ gcc ~/LPEDC/material/A011.c -o ~/LPEDC/material/A011 && printf '3 4.99\n2\n' | ~
 
 ---
 
-## Desafios do módulo
+### Desafios do módulo
 
 Problemas com variáveis, `scanf`, aritmética, conversões, `math.h` e
 `printf`. Nenhum precisa de `if` nem de laço. Escreva cada um num arquivo seu
@@ -266,7 +266,7 @@ sinal estoura, e isso é **comportamento indefinido**: costuma virar
 
 </details>
 
-## Questões do POSCOMP
+### Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -275,7 +275,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 | 2024 | 45 | Tipos de dados básicos de linguagem | A | [caderno](https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2024.pdf) |
 
 
-## Questões no estilo da prova
+### Questões no estilo da prova
 
 Questões objetivas no formato da Prova do PPGI, com uma alternativa certa.
 Resolva no papel antes do gabarito e, na dúvida, rode o trecho com as flags
@@ -465,6 +465,7 @@ o `%d` mostra o próprio número. Veja 0002 (e 0040, no módulo 05).
 ## Para ler mais
 
 - BACKES, A. *Linguagem C: completa e descomplicada*. Rio de Janeiro: Elsevier, 2013. Caps. 1 a 3.
+- FEOFILOFF, P. *Algoritmos em linguagem C*. Rio de Janeiro: Elsevier, 2009. Apêndice C: números inteiros.
 - BACKES, A. R. *Linguagem C: descomplicada*. Apostila. Uberlândia: FACOM/UFU, [s.d.].
 - DEITEL, P.; DEITEL, H. *C: como programar*. 6. ed. São Paulo: Pearson Prentice Hall, 2011. Caps. 2, 3, 5 e 9.
 - CELES, W.; CERQUEIRA, R.; RANGEL, J. L. *Introdução a estruturas de dados: com técnicas de programação em C*. 2. ed. Rio de Janeiro: Elsevier, 2016. Capítulos iniciais: tipos, expressões, entrada e saída.

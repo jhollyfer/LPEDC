@@ -41,7 +41,7 @@ de estudo `-Wall -Wextra`: os avisos pegam vários erros do módulo.
 
 ---
 
-## Desafios do módulo
+### Desafios do módulo
 
 Problemas para resolver num arquivo seu, misturando os assuntos do módulo. Do
 médio ao difícil.
@@ -181,7 +181,7 @@ com `r = -2`.
 
 </details>
 
-## Questões do POSCOMP
+### Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -191,7 +191,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 | 2024 | 33 | Saída de código C com deslocamento de bits | C | [caderno](https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2024.pdf) |
 
 
-## Questões no estilo da prova
+### Questões no estilo da prova
 
 Questões de múltipla escolha, como as da prova do PPGI. Resolva no papel,
 marque a letra e só então abra o gabarito. Os trechos de código estão dentro

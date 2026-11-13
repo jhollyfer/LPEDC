@@ -56,7 +56,7 @@ sudo apt install gdb        # Debian / Ubuntu
 
 ---
 
-## Desafios do módulo
+### Desafios do módulo
 
 Problemas extras que misturam os assuntos do módulo. Resolva num arquivo seu e
 compile com as flags de estudo.
@@ -228,7 +228,7 @@ achou. A busca binária em si é o assunto 0090.
 
 </details>
 
-## Questões do POSCOMP
+### Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -239,7 +239,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 O gabarito de 2023 vem de um blog de terceiros que reproduz o gabarito definitivo; confira no PDF oficial da SBC.
 
 
-## Questões no estilo da prova
+### Questões no estilo da prova
 
 Questões no formato da prova do PPGI/UFAM. Resolva no papel, marque uma letra e
 só então abra o gabarito. Os trechos foram compilados com

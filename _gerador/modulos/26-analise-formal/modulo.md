@@ -52,7 +52,7 @@ e `custo_prof_max` a variáveis suas.
 
 ---
 
-## Desafios do módulo
+### Desafios do módulo
 
 Problemas que misturam os assuntos do módulo. Resolva no papel e, sempre que
 der, confira com um programa compilado e rodado.
@@ -204,7 +204,7 @@ a `n` nesse tempo.
 
 </details>
 
-## Questões do POSCOMP
+### Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -217,7 +217,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 O gabarito oficial de 2025 não estava disponível quando este material foi montado.
 
 
-## Questões no estilo da prova
+### Questões no estilo da prova
 
 Dez questões no formato da prova do PPGI. Marque uma alternativa antes de
 abrir o gabarito.
@@ -430,7 +430,7 @@ pior. Veja 0166 (exemplo A331).
 
 </details>
 
-## Questões de provas do PPGI
+### Questões de provas do PPGI
 
 Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.
 
