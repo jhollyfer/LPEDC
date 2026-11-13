@@ -1,24 +1,10 @@
 # Módulo 01 · Fundamentos de C
 
-Programar é quebrar um problema em passos tão claros que uma máquina consegue
-segui-los. Essa sequência finita de passos sem ambiguidade é um
-**algoritmo**: a receita do bolo, o roteiro do GPS, o passo a passo de um Pix.
-Um programa é um algoritmo escrito numa língua que o computador entende.
-
-Quase todo programa segue o modelo **entrada → processamento → saída**: os
-dados chegam, o programa calcula e mostra o resultado. Todo algoritmo usa só
-três peças: **sequência** (um passo depois do outro), **decisão** ("se o
-saldo cobre, envia") e **repetição** ("enquanto a senha estiver errada,
-pergunte de novo"). Este módulo é a primeira peça, a **estrutura
-sequencial**.
-
-Em C, cada variável é um pedaço de memória com endereço e tamanho, e cada
-número tem um limite. Ao final, você escreve programas completos de entrada,
-processamento e saída.
-
-Progressão: este é o ponto de partida e não depende de nenhum módulo. O
-módulo 02 usa estas variáveis, expressões e a leitura com `scanf` para
-decidir o que o programa faz; o 03 acrescenta a repetição.
+Um **algoritmo** é uma sequência finita de passos sem ambiguidade; um programa
+é um algoritmo escrito em C. Este módulo cobre a **estrutura sequencial**:
+variáveis, tipos e limites, constantes, `printf`, `scanf`, aritmética,
+conversões e `math.h`, no modelo entrada → processamento → saída. É o ponto de
+partida e não depende de nenhum módulo; o 02 e o 03 constroem sobre ele.
 
 ## O que você vai aprender
 
@@ -36,7 +22,7 @@ decidir o que o programa faz; o 03 acrescenta a repetição.
 ## Antes de começar
 
 Você precisa do `gcc` e, para os módulos de memória, do `gdb` e do
-`valgrind`. Cada exercício tem resolução em `_respostas/01-fundamentos/`.
+`valgrind`. As resoluções ficam em `_respostas/01-fundamentos/`.
 
 **Arch Linux** (e derivados, como Manjaro e EndeavourOS):
 
@@ -50,31 +36,24 @@ sudo pacman -S --needed base-devel gdb valgrind
 sudo apt install build-essential gdb valgrind
 ```
 
-**Windows**: use o **WSL** com Ubuntu. No PowerShell como administrador, rode
-`wsl --install`, reinicie, abra o Ubuntu e use o comando do Debian/Ubuntu.
-Clone o curso dentro do Linux do WSL (`~/LPEDC`), não numa pasta do Windows.
+**Windows**: use o **WSL** com Ubuntu (`wsl --install` no PowerShell como
+administrador, reinicie e use o comando do Debian/Ubuntu). Clone o curso
+dentro do Linux do WSL (`~/LPEDC`).
 
-Confira com `gcc --version`. Para rodar um arquivo do curso, compile e
-execute:
+Confira com `gcc --version`. Para compilar e rodar um arquivo do curso:
 
 ```bash
 gcc ~/LPEDC/material/A001.c -o ~/LPEDC/material/A001 && ~/LPEDC/material/A001
 ```
 
-O `-o` dá o nome do executável, que fica ao lado do `.c`. O caminho pode ser
-absoluto ou relativo.
+O `-o` dá o nome do executável. Acrescente antes dele as **flags de estudo**,
+`-std=c17 -Wall -Wextra -pedantic -g -fsanitize=address,undefined -lm`: padrão
+C17, todos os avisos, o **AddressSanitizer** (erros de memória), o detector de
+**comportamento indefinido** e a biblioteca matemática. Os avisos citados nos
+módulos aparecem com elas, e os exercícios devem compilar **sem nenhum aviso**.
 
-Esse comando compila sem conferir nada. As **flags de estudo** fazem o
-compilador vigiar o programa; acrescente
-`-std=c17 -Wall -Wextra -pedantic -g -fsanitize=address,undefined -lm` antes do
-`-o`. Elas ligam o padrão C17, todos os avisos, o **AddressSanitizer** (erros
-de memória), o detector de **comportamento indefinido** (como estouro de
-inteiro) e a biblioteca matemática. Um programa com esses problemas para com
-um relatório que aponta a linha. Os avisos citados nos módulos aparecem com
-essas flags, e os exercícios devem compilar **sem nenhum aviso**.
-
-Programas que leem do teclado esperam a digitação. Para testar sem digitar,
-use um cano (`|`): o que vem antes vira o teclado do programa.
+Para testar sem digitar, use um cano (`|`): o que vem antes vira o teclado do
+programa.
 
 ```bash
 gcc ~/LPEDC/material/A011.c -o ~/LPEDC/material/A011 && printf '3 4.99\n2\n' | ~/LPEDC/material/A011

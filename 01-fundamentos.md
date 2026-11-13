@@ -16,25 +16,11 @@
 > - [ ] Enfrentar os desafios do módulo
 > - [ ] Chefão: resolver as questões de prova do módulo sem consultar
 
-Programar é quebrar um problema em passos tão claros que uma máquina consegue
-segui-los. Essa sequência finita de passos sem ambiguidade é um
-**algoritmo**: a receita do bolo, o roteiro do GPS, o passo a passo de um Pix.
-Um programa é um algoritmo escrito numa língua que o computador entende.
-
-Quase todo programa segue o modelo **entrada → processamento → saída**: os
-dados chegam, o programa calcula e mostra o resultado. Todo algoritmo usa só
-três peças: **sequência** (um passo depois do outro), **decisão** ("se o
-saldo cobre, envia") e **repetição** ("enquanto a senha estiver errada,
-pergunte de novo"). Este módulo é a primeira peça, a **estrutura
-sequencial**.
-
-Em C, cada variável é um pedaço de memória com endereço e tamanho, e cada
-número tem um limite. Ao final, você escreve programas completos de entrada,
-processamento e saída.
-
-Progressão: este é o ponto de partida e não depende de nenhum módulo. O
-módulo 02 usa estas variáveis, expressões e a leitura com `scanf` para
-decidir o que o programa faz; o 03 acrescenta a repetição.
+Um **algoritmo** é uma sequência finita de passos sem ambiguidade; um programa
+é um algoritmo escrito em C. Este módulo cobre a **estrutura sequencial**:
+variáveis, tipos e limites, constantes, `printf`, `scanf`, aritmética,
+conversões e `math.h`, no modelo entrada → processamento → saída. É o ponto de
+partida e não depende de nenhum módulo; o 02 e o 03 constroem sobre ele.
 
 ## O que você vai aprender
 
@@ -52,7 +38,7 @@ decidir o que o programa faz; o 03 acrescenta a repetição.
 ## Antes de começar
 
 Você precisa do `gcc` e, para os módulos de memória, do `gdb` e do
-`valgrind`. Cada exercício tem resolução em `_respostas/01-fundamentos/`.
+`valgrind`. As resoluções ficam em `_respostas/01-fundamentos/`.
 
 **Arch Linux** (e derivados, como Manjaro e EndeavourOS):
 
@@ -66,31 +52,24 @@ sudo pacman -S --needed base-devel gdb valgrind
 sudo apt install build-essential gdb valgrind
 ```
 
-**Windows**: use o **WSL** com Ubuntu. No PowerShell como administrador, rode
-`wsl --install`, reinicie, abra o Ubuntu e use o comando do Debian/Ubuntu.
-Clone o curso dentro do Linux do WSL (`~/LPEDC`), não numa pasta do Windows.
+**Windows**: use o **WSL** com Ubuntu (`wsl --install` no PowerShell como
+administrador, reinicie e use o comando do Debian/Ubuntu). Clone o curso
+dentro do Linux do WSL (`~/LPEDC`).
 
-Confira com `gcc --version`. Para rodar um arquivo do curso, compile e
-execute:
+Confira com `gcc --version`. Para compilar e rodar um arquivo do curso:
 
 ```bash
 gcc ~/LPEDC/material/A001.c -o ~/LPEDC/material/A001 && ~/LPEDC/material/A001
 ```
 
-O `-o` dá o nome do executável, que fica ao lado do `.c`. O caminho pode ser
-absoluto ou relativo.
+O `-o` dá o nome do executável. Acrescente antes dele as **flags de estudo**,
+`-std=c17 -Wall -Wextra -pedantic -g -fsanitize=address,undefined -lm`: padrão
+C17, todos os avisos, o **AddressSanitizer** (erros de memória), o detector de
+**comportamento indefinido** e a biblioteca matemática. Os avisos citados nos
+módulos aparecem com elas, e os exercícios devem compilar **sem nenhum aviso**.
 
-Esse comando compila sem conferir nada. As **flags de estudo** fazem o
-compilador vigiar o programa; acrescente
-`-std=c17 -Wall -Wextra -pedantic -g -fsanitize=address,undefined -lm` antes do
-`-o`. Elas ligam o padrão C17, todos os avisos, o **AddressSanitizer** (erros
-de memória), o detector de **comportamento indefinido** (como estouro de
-inteiro) e a biblioteca matemática. Um programa com esses problemas para com
-um relatório que aponta a linha. Os avisos citados nos módulos aparecem com
-essas flags, e os exercícios devem compilar **sem nenhum aviso**.
-
-Programas que leem do teclado esperam a digitação. Para testar sem digitar,
-use um cano (`|`): o que vem antes vira o teclado do programa.
+Para testar sem digitar, use um cano (`|`): o que vem antes vira o teclado do
+programa.
 
 ```bash
 gcc ~/LPEDC/material/A011.c -o ~/LPEDC/material/A011 && printf '3 4.99\n2\n' | ~/LPEDC/material/A011
@@ -117,53 +96,371 @@ gcc ~/LPEDC/material/A011.c -o ~/LPEDC/material/A011 && printf '3 4.99\n2\n' | ~
 
 ---
 
-## 0001 · O primeiro programa
+## 1. Conceitos gerais
 
-A padaria do bairro comprou um painel de LED e pediu um aviso de três linhas:
-nome, horário da fornada e preço do pão. É só saída, sem entrada nem conta.
+### 0001 · O primeiro programa
 
-Um programa em C é um conjunto de **funções**. A função **`main`** é onde o
-sistema começa a execução. Este esqueleto aparece em todo exemplo do curso:
+- **Programa em C**: um conjunto de **funções**. A execução sempre começa pela
+  função **`main`** (KERNIGHAN; RITCHIE, 1988, cap. 1).
+- **Instrução**: um comando terminado em `;`. As **chaves** `{ }` agrupam
+  instruções num **bloco** (DEITEL; DEITEL, 2011, cap. 2).
+- **`#include <stdio.h>`**: traz as declarações de entrada e saída, como a do
+  `printf`. Linha com `#` é ordem para o pré-processador, não instrução, e
+  não leva `;` (BACKES, 2013, cap. 1).
+- **`return 0`**: encerra a `main` e avisa o sistema que deu tudo certo
+  (BACKES, 2013, cap. 1).
+- **Comentário**: texto que o compilador ignora. `//` vale até o fim da linha;
+  `/* ... */` pode ocupar várias linhas (DEITEL; DEITEL, 2011, cap. 2).
+- **Do `.c` ao executável**: o `gcc` passa por quatro etapas. O
+  **pré-processador** trata as linhas com `#`, o **compilador** traduz para
+  assembly, o **montador** gera o código objeto (`.o`) e o **ligador** junta
+  o `.o` com a biblioteca padrão (GNU, s.d.).
+- **Tipos de erro**: de **compilação** (falta `;`, `Int` no lugar de `int`),
+  de **ligação** (função que não existe, como `prinft`) e de **execução**
+  (roda, mas dá resultado errado ou quebra) (DEITEL; DEITEL, 2011, cap. 2).
 
-| Linha | O que faz |
+| Linha | Para que serve |
 | --- | --- |
-| `// Aviso do painel da padaria` | **comentário**: o compilador ignora; é para quem lê |
-| `#include <stdio.h>` | cola aqui o arquivo que **declara** o `printf` |
-| `int main(void) {` | começa a `main`: não recebe nada (`void`) e devolve um `int` |
-| `printf("...\n");` | mostra um texto na tela; `\n` pula a linha |
-| `return 0;` | termina a `main` e devolve 0 ao sistema: "deu tudo certo" |
-| `}` | fecha o **bloco** da `main` |
+| `#include <stdio.h>` | declara o `printf` |
+| `int main(void) {` | começa a `main`; não recebe nada e devolve um `int` |
+| `printf("...\n");` | mostra texto; `\n` pula a linha |
+| `return 0;` | termina com sucesso |
+| `}` | fecha o bloco |
 
-Regras fixas: toda **instrução** termina em `;` (o `#include` não é
-instrução e não leva); as **chaves** `{ }` agrupam instruções num bloco; o C
-diferencia maiúsculas de minúsculas (`Main` não é `main`); comentário de uma
-linha começa com `//` e o de várias linhas fica entre `/*` e `*/`.
+> [!WARNING]
+> O `printf` não pula linha sozinho: `printf("Pão"); printf("Quente");` mostra
+> `PãoQuente`. E o C diferencia maiúsculas: `Main` e `Printf` não existem.
 
-### Do .c ao executável
+### 0002 · Variáveis
 
-O processador não entende C. O `gcc` comanda quatro estações:
+- **Variável**: um lugar na memória com **nome**, **tipo** e **valor**. O
+  valor pode mudar durante a execução (DEITEL; DEITEL, 2011, cap. 2).
+- **Tipo**: diz quantos bytes a variável ocupa e como ler esses bytes
+  (BACKES, 2013).
+- **Tipos primitivos**: guardam um valor só (`int`, `float`, `double`,
+  `char`). Vetores e structs juntam vários e são **compostos** (módulos 05 e 08)
+  (CELES; CERQUEIRA; RANGEL, 2016).
+- **Declarar** é criar (`int idade;`); **inicializar** é dar o primeiro valor
+  junto (`int idade = 25;`) (BACKES, 2013).
+- **Atribuir apaga o valor antigo**; ler a variável não muda nada
+  (DEITEL; DEITEL, 2011, cap. 2).
+- **`sizeof`**: operador que dá o tamanho em bytes de um tipo ou variável;
+  mostre com `%zu` (KERNIGHAN; RITCHIE, 1988, cap. 2).
+- **Nome válido**: letras, dígitos e `_`, sem começar por dígito, sem acento e
+  sem palavra reservada. `peso` e `Peso` são nomes diferentes
+  (KERNIGHAN; RITCHIE, 1988, cap. 2).
 
-1. **pré-processador**: trata as linhas com `#`. O `#include <stdio.h>`
-   **cola** o conteúdo do `stdio.h` no lugar da linha;
-2. **compilador**: confere a gramática e os tipos e traduz o C para
-   **assembly**, a língua do processador em forma de texto;
-3. **montador**: transforma o assembly em **código objeto** (`.o`), já em
-   binário, mas com buracos: ele sabe que você chamou `printf`, não onde ele
-   está;
-4. **ligador** (*linker*): junta o `.o` com a **biblioteca padrão**, onde mora
-   o código do `printf`, tapa os buracos e grava o **executável**.
+| Tipo | Guarda | Tamanho típico | `printf` |
+| --- | --- | --- | --- |
+| `int` | inteiro | 4 bytes | `%d` |
+| `float` | real, uns 7 dígitos | 4 bytes | `%f` |
+| `double` | real, uns 15 dígitos | 8 bytes | `%f` |
+| `char` | um caractere | 1 byte | `%c` |
 
-Um comando só percorre as quatro: `gcc padaria.c -o padaria`, e depois
-`./padaria`. Com as flags de estudo (`-Wall -Wextra -pedantic`, C17 e o
-**AddressSanitizer**, que vigia a memória durante a execução), o gcc confere
-mais coisas; veja "Antes de começar", acima.
+> [!WARNING]
+> Variável sem valor não vale zero: vale **lixo**, o que já estava na memória.
+> Inicialize sempre. E o decimal do C é o **ponto**: `72,5` nem compila.
 
-O `padaria.c` ganha o `stdio.h`, vira assembly, vira `padaria.o`, é ligado ao
-`printf` e sai como o executável `padaria`:
+### 0003 · Tipos e limites
+
+- **Bit e byte**: o bit vale 0 ou 1; oito bits formam um byte. Com `n` bits
+  cabem 2ⁿ valores, então um byte vai de 0 a 255 (FEOFILOFF, 2009, ap. C).
+- **Binário**: base 2; cada casa vale o dobro da casa à direita.
+  `00001101` = 8 + 4 + 1 = 13 (FEOFILOFF, 2009, ap. C).
+- **Hexadecimal**: base 16 (0 a 9 e A a F). Cada dígito vale 4 bits; no C
+  começa com `0x`: `0xFF` = 255 (DEITEL; DEITEL, 2011).
+- **Modificadores**: `short` (menor), `long` e `long long` (maiores) e
+  `unsigned` (sem negativos, o dobro de positivos) (BACKES, 2013).
+- **`<limits.h>` e `<stdint.h>`**: o padrão só garante tamanhos mínimos. O
+  `limits.h` dá os limites reais (`INT_MAX`); o `stdint.h` dá tamanho exato
+  (`int32_t`, `uint16_t`) (ISO/IEC, 2018).
+- **Overflow**: passar do limite do tipo. Em `unsigned` o valor dá a volta,
+  como um odômetro; com sinal é **comportamento indefinido** (ISO/IEC, 2018).
+- **Complemento de dois**: forma de guardar negativos. Por isso a faixa é
+  assimétrica (-128 a 127 num byte) (FEOFILOFF, 2009, ap. C).
+
+| Tipo (PC Linux 64 bits) | Bytes | Faixa |
+| --- | --- | --- |
+| `char` | 1 | -128 a 127 |
+| `unsigned char` | 1 | 0 a 255 |
+| `short` | 2 | -32.768 a 32.767 |
+| `unsigned short` | 2 | 0 a 65.535 |
+| `int` | 4 | cerca de ±2,1 bilhões |
+| `long` / `long long` | 8 | cerca de ±9,2 quintilhões |
+
+> [!WARNING]
+> Estouro em tipo com sinal não "dá a volta" de forma garantida:
+> `int x = INT_MAX; x = x + 1;` é comportamento indefinido. Com as flags de
+> estudo, o gcc acusa `signed integer overflow`. Escolha um tipo que caiba.
+
+### 0004 · Constantes
+
+- **Literal**: valor escrito direto no código. A forma de escrever decide o
+  tipo: `101` é `int`, `4.90` é `double`, `4.90f` é `float`
+  (BACKES, 2013, cap. 2).
+- **Sufixos e bases**: `L`, `LL` e `U` mudam o tipo do inteiro; `0x1F` é
+  hexadecimal e `017` é **octal** (zero à esquerda muda a base); `1.5e3` é
+  notação científica (KERNIGHAN; RITCHIE, 1988, cap. 2).
+- **`'A'` e `"A"`**: aspas simples dão um caractere, que vale o código (65);
+  aspas duplas dão um texto, a letra mais o byte zero (DEITEL; DEITEL, 2011).
+- **`#define`**: ordem ao pré-processador. Faz um "localizar e substituir"
+  antes da compilação, sem tipo e sem memória. Nome em MAIÚSCULAS, sem `=` e
+  sem `;` (BACKES, 2013, cap. 2).
+- **`const`**: variável de verdade (tipo, endereço, tamanho), mas só de
+  leitura. Mudá-la é erro de compilação, então o valor vem na declaração
+  (BACKES, 2013, cap. 2).
+- **Sequência de escape**: barra invertida dentro das aspas. `\n` pula linha,
+  `\t` tabula, `\"` põe aspas, `\\` é a barra, `\0` é o byte zero. Para `%`
+  no `printf`, use `%%` (DEITEL; DEITEL, 2011, cap. 9).
+
+| Literal | Tipo | Observação |
+| --- | --- | --- |
+| `101` | `int` | inteiro sem ponto |
+| `4.90` | `double` | todo real é `double`, a não ser que... |
+| `4.90f` | `float` | ...tenha o sufixo `f` |
+| `5000000000LL` | `long long` | sufixos `L`, `LL`, `U` |
+| `0x1F`, `017` | `int` | hexadecimal (31) e **octal** (15): zero à esquerda muda a base! |
+| `1.5e3` | `double` | notação científica: 1,5 × 10³ = 1500 |
+| `'A'` | `int` | um caractere: vale o código, 65 |
+| `"A"` | texto | aspas duplas: `'A'` seguido do byte zero |
+
+> [!WARNING]
+> O `#define` cola **exatamente** o texto que vem depois do nome. Com
+> `#define TARIFA 4.90;`, `2 * TARIFA` vira `2 * 4.90;` e não compila. O erro
+> aparece na linha em que o nome é **usado**, não na do `#define`.
+
+### 0005 · printf
+
+- **String de formato**: o primeiro argumento do `printf`. É um texto com
+  **especificadores** (`%d`, `%f`...), buracos que os outros argumentos
+  preenchem **na ordem**, um para cada `%` (BACKES, 2013, cap. 2).
+- **Saída padrão** (`stdout`): onde o `printf` escreve. O `fprintf` do
+  módulo 09 usa o mesmo formato para escrever num arquivo
+  (DEITEL; DEITEL, 2011, cap. 9).
+- **Forma completa**: `%[flags][largura][.precisão]letra`
+  (KERRISK, s.d.).
+- **Largura**: o **mínimo** de caracteres, alinhado à direita. `%6d` de 42 dá
+  `    42`; valor maior sai inteiro, nada é cortado
+  (DEITEL; DEITEL, 2011, cap. 9).
+- **Flags**: `-` alinha à esquerda, `0` completa com zeros, `+` mostra sempre
+  o sinal (DEITEL; DEITEL, 2011, cap. 9).
+- **Precisão**: em real, as casas decimais (`%.2f`); em texto, o máximo de
+  caracteres (`%.3s` de `"Brasil"` dá `Bra`). Ela **arredonda só na tela**: a
+  variável não muda (DEITEL; DEITEL, 2011, cap. 9).
+- **`float` vira `double`** na passagem para o `printf`, por isso `%f` serve
+  para os dois. A largura conta **bytes**: o `ã` ocupa 2 no UTF-8
+  (KERRISK, s.d.).
+
+| Especificador | Mostra | Exemplo | Sai |
+| --- | --- | --- | --- |
+| `%d` | `int` em decimal | `printf("%d", 42)` | `42` |
+| `%u`, `%ld`, `%lld` | `unsigned`, `long`, `long long` | `printf("%ld", 9L)` | `9` |
+| `%f` | `double` ou `float` | `printf("%f", 2.5)` | `2.500000` |
+| `%e`, `%g` | real em notação científica / o mais curto | `printf("%e", 1500.0)` | `1.500000e+03` |
+| `%c` | um caractere | `printf("%c", 'A')` | `A` |
+| `%s` | um texto | `printf("%s", "Pix")` | `Pix` |
+| `%x`, `%X`, `%o` | inteiro em hexa e em octal | `printf("%X", 255)` | `FF` |
+| `%p` | um endereço | `printf("%p", (void *)&n)` | `0x7ffe...` |
+| `%zu` | o resultado do `sizeof` | `printf("%zu", sizeof n)` | `4` |
+| `%%` | o próprio `%` | `printf("10%%")` | `10%` |
+
+> [!WARNING]
+> O `printf` **confia** no formato. Se o especificador não combina com o tipo,
+> lê os bytes do jeito errado: `printf("%d", 9.90)` mostra lixo. O `-Wall`
+> avisa (`format '%d' expects argument of type 'int'`). E no `printf` não vai `&`.
+
+### 0006 · scanf
+
+- **`scanf`**: lê do teclado. O formato diz o que esperar e os outros
+  argumentos dizem **onde guardar** (BACKES, 2013, cap. 2).
+
+```c
+scanf("%d", &dia);
+```
+
+- **`&`**: dá o **endereço** da variável, os bytes onde o `scanf` escreve. Vai
+  em toda variável simples no `scanf` e nunca no `printf`
+  (DEITEL; DEITEL, 2011, cap. 9).
+- **`%lf` para `double`**: no `scanf`, `%lf` escreve 8 bytes e `%f` escreve 4,
+  no formato de `float`. No `printf` os dois servem, porque lá vai o valor, e
+  aqui vai o endereço (DEITEL; DEITEL, 2011).
+- **Buffer**: o que você digita entra numa fila e só chega ao programa no
+  Enter. `%d` e `%lf` pulam espaços e Enters antes do número e param no
+  primeiro caractere inválido. O resto **fica na fila**, inclusive o `'\n'`
+  (KERRISK, s.d.).
+- **Caracteres no formato** precisam aparecer na entrada:
+  `scanf("%d/%d/%d", &d, &m, &a)` lê `7/9/2026` (BACKES, 2013, cap. 2).
+- **Retorno**: quantos itens guardou; 0 se o primeiro já falhou; `EOF` (-1)
+  se a entrada acabou. O `if` do módulo 02 usa esse número
+  (DEITEL; DEITEL, 2011, cap. 9).
+
+| Tipo | Lê com | Mostra com |
+| --- | --- | --- |
+| `int` | `%d` | `%d` |
+| `float` | `%f` | `%f` |
+| `double` | `%lf` | `%f` |
+| `char` | `%c` (ou `" %c"`) | `%c` |
+
+> [!WARNING]
+> Sem o `&`, `scanf("%d", dia)` usa o lixo de `dia` como endereço e escreve
+> num lugar qualquer: `Segmentation fault` ou outra variável estragada. O gcc
+> avisa (`expects argument of type 'int *'`). Ler `double` com `%f` também
+> compila e dá número errado.
+
+### 0007 · Aritmética
+
+- **Expressão**: operadores, operandos e parênteses. Em `24 / 5`, o `/` é o
+  **operador** e 24 e 5 são os **operandos**. Toda expressão tem um valor
+  (DEITEL; DEITEL, 2011, cap. 2).
+- **Divisão inteira**: com **dois** operandos inteiros, o `/` joga fora a
+  parte fracionária, sem arredondar. `7 / 2` dá 3 e `2 / 3` dá 0. Basta **um**
+  lado real para a divisão ser real: `159.0 / 5` dá 31,8
+  (DEITEL; DEITEL, 2011, cap. 2).
+- **Resto (`%`)**: o que sobra da divisão inteira; só com inteiros. Sempre vale
+  `(a / b) * b + a % b == a`. Separa dígitos (`2026 % 10` é 6) e testa
+  paridade (`n % 2`) (DEITEL; DEITEL, 2011, cap. 2).
+- **Negativos**: desde o C99, a divisão corta em direção ao zero (`-7 / 2` dá
+  -3) e o resto segue o sinal do dividendo (`-7 % 3` dá -1)
+  (FEOFILOFF, 2009, ap. C).
+- **Precedência**: `*`, `/` e `%` antes de `+` e `-`. No empate, da esquerda
+  para a direita (**associatividade**): `100 / 10 / 2` é 5. Parênteses mandam
+  em tudo (BACKES, 2013, cap. 3).
+- **Potência**: o C não tem operador para ela (`^` é outra coisa, assunto
+  0065). Use `pow` (0010) ou `x * x` (DEITEL; DEITEL, 2011, cap. 2).
+- **Divisão por zero**: com inteiros, derruba o programa
+  (`Floating point exception`); com `double`, dá `inf` (ISO/IEC, 2018).
+
+| Operador | Faz | Exemplo | Resultado |
+| --- | --- | --- | --- |
+| `+` `-` | soma, subtração | `24 - 4` | `20` |
+| `*` | multiplicação | `3 * 8` | `24` |
+| `/` | divisão | `24 / 5` | `4` (!) |
+| `%` | resto da divisão | `24 % 5` | `4` |
+
+> [!WARNING]
+> Com `int a = 7, b = 8;`, `double media = (a + b) / 2;` guarda **7.0**: a
+> divisão é entre dois `int` **antes** de ir para o `double`. Escreva
+> `(a + b) / 2.0`. E `a + b / 2` divide só o `b`.
+
+### 0008 · Conversão e cast
+
+- **Tipo da expressão**: operandos do mesmo tipo dão resultado desse tipo;
+  `int / int` é `int` (DEITEL; DEITEL, 2011).
+- **Conversão automática**: com tipos diferentes, o operando "menor" sobe para
+  o tipo do "maior". A escada é `char` → `short` → `int` → `long` →
+  `long long` → `float` → `double` (DEITEL; DEITEL, 2011).
+- **Conversão na atribuição**: o valor vira o tipo da variável da **esquerda**,
+  caiba ou não. `int i = 12.76;` guarda 12: a parte fracionária é **cortada**
+  (`-9.99` vira -9). Valor grande demais perde bits (BACKES, 2013, cap. 2).
+- **Cast**: o tipo entre parênteses antes do valor, `(double) km`. Cria uma
+  **cópia temporária** convertida; `km` continua `int`
+  (DEITEL; DEITEL, 2011).
+- **Precedência do cast**: maior que a de `*` e `/`. `(double) km / litros`
+  converte só o `km`, o que basta para a divisão ser real
+  (BACKES, 2013, cap. 3).
+- **Limites da conversão**: o `float` guarda inteiros exatos só até
+  2²⁴ = 16.777.216, e o `double` até 2⁵³. Converter um `double` grande demais
+  para `int` é comportamento indefinido (ISO/IEC, 2018).
+
+> [!WARNING]
+> O cast precisa chegar **antes** da divisão. Em `(double) (km / litros)`, os
+> parênteses mandam dividir primeiro: `523 / 41` dá 12 e o cast só o
+> transforma em 12.0. Converta um operando: `(double) soma / n`.
+
+### 0009 · Atribuição, ++ e --
+
+- **Atribuição (`=`)**: guarda o valor da direita na variável da esquerda; não
+  é o "igual" da matemática. `saldo = saldo + 30.00` calcula com o valor antigo
+  e escreve o novo por cima (BACKES, 2013, cap. 3).
+- **Lado esquerdo**: só algo com endereço, uma variável. `30 = saldo` e
+  `saldo + 1 = 5` não compilam (BACKES, 2013, cap. 3).
+- **Operadores compostos**: `+=`, `-=`, `*=`, `/=`, `%=`. Agem sobre **toda** a
+  expressão da direita: `x *= y + 1` é `x = x * (y + 1)`
+  (DEITEL; DEITEL, 2011, cap. 3).
+- **`++` e `--`**: somam ou tiram 1. Sozinhos na linha, `x++` e `++x` são
+  iguais (DEITEL; DEITEL, 2011, cap. 3).
+- **Pós e pré**: `x++` vale o valor **antigo** e depois aumenta; `++x` aumenta
+  primeiro e vale o valor **novo** (FEOFILOFF, 2009).
+- **Atribuição é expressão**: vale o valor guardado e associa da direita para
+  a esquerda. Em `a = b = c = 7`, o C faz `c = 7`, depois `b` e por fim `a`
+  (DEITEL; DEITEL, 2011, cap. 3).
+
+| Atalho | Quer dizer | Com `x = 10` |
+| --- | --- | --- |
+| `x += 3` | `x = x + 3` | 13 |
+| `x -= 3` | `x = x - 3` | 7 |
+| `x *= 3` | `x = x * 3` | 30 |
+| `x /= 3` | `x = x / 3` | 3 (divisão inteira!) |
+| `x %= 3` | `x = x % 3` | 1 |
+
+> [!WARNING]
+> Nunca altere a mesma variável duas vezes na mesma expressão, nem altere e
+> leia ao mesmo tempo: `i = i++;` e `printf("%d %d", n++, n);` são
+> **comportamento indefinido**. O `-Wall` avisa (`operation on 'i' may be undefined`).
+
+### 0010 · math.h
+
+- **`<math.h>`**: declara a biblioteca de matemática. Quase todas as funções
+  recebem e devolvem `double` (DEITEL; DEITEL, 2011, cap. 5).
+- **`libm`**: o `math.h` só declara; o código está na `libm`, que o ligador
+  junta com `-lm`. Sem ela, aparece `undefined reference to 'pow'`
+  (GNU, s.d.).
+- **Arredondamentos**: `floor` sempre desce (`floor(-2.3)` é -3), `ceil`
+  sempre sobe (`ceil(-2.7)` é -2), `round` vai para o inteiro mais perto. O
+  cast **corta**: `(int) -2.7` dá -2. Para "quantas latas comprar", `ceil`:
+  2,78 viram 3 (DEITEL; DEITEL, 2011, cap. 5).
+- **Sem pi padrão**: o `M_PI` é extensão e não existe com `-std=c17`; crie o
+  seu com `#define` (ISO/IEC, 2018).
+- **`abs` e `fabs`**: o `abs` é de inteiros e fica no `<stdlib.h>`; para real,
+  `fabs` (BACKES, 2013).
+
+| Função | Faz | Exemplo | Resultado |
+| --- | --- | --- | --- |
+| `pow(x, y)` | x elevado a y | `pow(2, 10)` | 1024 |
+| `sqrt(x)` | raiz quadrada | `sqrt(144)` | 12 |
+| `fabs(x)` | valor absoluto de real | `fabs(-7.5)` | 7.5 |
+| `floor(x)` | arredonda para **baixo** | `floor(-2.3)` | -3 |
+| `ceil(x)` | arredonda para **cima** | `ceil(2.1)` | 3 |
+| `round(x)` | para o mais perto (o meio vai para longe do zero) | `round(2.5)` | 3 |
+| `fmod(x, y)` | resto de divisão real | `fmod(7.5, 2)` | 1.5 |
+| `sin`, `cos`, `tan` | trigonometria, em **radianos** | `cos(0)` | 1 |
+
+> [!WARNING]
+> `pow(27, 1/3)` dá **1**, não 3: `1/3` é divisão inteira e vale 0. Escreva
+> `1.0 / 3`. Do mesmo modo, `ceil(7 / 2)` dá 3, não 4: o `ceil` recebe o 3 já
+> cortado.
+
+### 0011 · Juntando tudo
+
+- **Entrada → processamento → saída**: antes de codificar, separe o que o
+  programa lê, o que calcula e o que mostra (LEAL, 2016).
+- **Estrutura sequencial**: os mesmos passos, sempre na mesma ordem, sem
+  decisão nem repetição. Conferir a entrada vem no módulo 02; repetir, no 03
+  (CARVALHO, 2010).
+- **Teste de mesa**: executar o programa no papel, linha a linha, anotando
+  numa tabela o valor de cada variável depois de cada passo
+  (CARVALHO, 2010).
+- **O que o programa reúne**: `#define` para a tarifa e a taxa; `int` para as
+  leituras e `double` para dinheiro; `scanf` com `&` e retorno guardado;
+  `+=`, **cast** e `ceil`; `printf` com largura e duas casas.
+
+> [!WARNING]
+> Sem o cast, `consumo / DIAS` seria `257 / 30` entre dois `int` e daria 8. A
+> ordem também importa: com o `ceil` antes do `* 100`, `ceil(76.4133)` daria
+> R$ 77. Faça o teste de mesa antes de confiar numa fórmula.
+
+---
+
+## 2. Exemplos de uso
+
+Cada exemplo compila sozinho. Rode com o comando abaixo dele e compare com a saída no fim do código.
+
+### 0001 · O primeiro programa
+
+Um aviso de três linhas para o painel de LED de uma padaria. O `padaria.c`
+passa pelas quatro etapas até virar o executável:
 
 <p align="center"><img src="material/0001-ideia.svg" alt="Diagrama da ideia: O primeiro programa" width="866"></p>
-
-O programa completo:
 
 ```c
 // Aviso do painel da padaria
@@ -181,33 +478,9 @@ int main(void) {
 // R$ 0,90 a unidade
 ```
 
-Cada estação pode parar o processo. O exemplo passa por todas sem erro:
+Cada etapa pode parar o processo; aqui todas passam:
 
 <p align="center"><img src="material/0001-fluxograma.svg" alt="Fluxograma: O primeiro programa" width="581"></p>
-
-Saber **quem reclamou** ajuda a consertar. Há três tipos de erro:
-
-- **de compilação**: `#include` de arquivo inexistente (pré-processador),
-  falta de `;`, `Int` no lugar de `int`. O gcc mostra arquivo, linha e coluna
-  e não gera executável;
-- **de ligação**: a gramática está certa, mas a função não existe em lugar
-  nenhum. Com `prinft`, o ligador para com `undefined reference to 'prinft'`;
-- **de execução**: compila e roda, mas mostra o valor errado ou quebra no
-  meio. É o pior tipo, porque o compilador não o vê. Os **avisos**
-  (*warnings*) do gcc e o AddressSanitizer pegam parte deles.
-
-> [!WARNING]
-> O `printf` **não pula linha sozinho**. Sem `\n`, o próximo `printf`
-> continua na mesma linha: `printf("Pão"); printf("Quente");` mostra
-> `PãoQuente`. Se faltar um `;`, o gcc avisa `expected ';' before ...` na
-> linha **seguinte**, onde ele percebe a falta.
-
-> [!NOTE]
-> **Pergunta para você:** se você apagar o `\n` do segundo `printf`, quantas
-> linhas aparecem e como fica cada uma? E se escrever `Printf` com P
-> maiúsculo, qual estação reclama? Responda e teste no `padaria.c`.
-
-### Hora de praticar
 
 **Exemplo A001 · Quem separa as instruções é o ponto e vírgula**
 
@@ -289,133 +562,12 @@ int main(void) {
 gcc ~/LPEDC/material/A002.c -o ~/LPEDC/material/A002 && ~/LPEDC/material/A002
 ```
 
-#### Exercícios
+### 0002 · Variáveis
 
-**Exercício E001** · ★☆☆
-
-Escreva um programa que mostre o letreiro do ônibus, exatamente assim.
-Rode de dois jeitos: com o rodar e na mão, com gcc, gerando um executável
-chamado "letreiro".
-
-
-```text
-Saída esperada:
-Linha 077 - Terminal Centro
-Via Av. Brasil
-Tarifa: R$ 4,90
-```
-
-```bash
-gcc ~/LPEDC/material/E001.c -o ~/LPEDC/material/E001 && ~/LPEDC/material/E001
-```
-
-**Exercício E003** · ★★☆
-
-Escreva do zero o programa do aviso da farmácia: um comentário de bloco
-(/* ... */) no topo com o texto "Aviso da farmácia", o #include necessário
-e a main, que mostra as duas linhas abaixo e termina com return 0.
-
-
-```text
-Saída esperada:
-Farmácia aberta 24h
-Plantão: (11) 5555-0199
-```
-
-```bash
-gcc ~/LPEDC/material/E003.c -o ~/LPEDC/material/E003 && ~/LPEDC/material/E003
-```
-
-**Exercício E004** · ★★☆
-
-Escreva o aviso do cinema com o código bem organizado: um comentário de
-bloco no topo dizendo o que o programa faz, uma instrução por linha, recuo
-de 4 espaços dentro da main e um comentário // sala 2 no fim da linha do
-printf da sessão. O programa mostra as três linhas abaixo.
-
-
-```text
-Saída esperada:
-Cine Estação
-Sessão: 19h30 (sala 2)
-Ingresso: R$ 28,00
-```
-
-```bash
-gcc ~/LPEDC/material/E004.c -o ~/LPEDC/material/E004 && ~/LPEDC/material/E004
-```
-
-**Exercício E005** · ★★★
-
-Escreva o programa de um backup que FALHOU: ele mostra as duas linhas
-abaixo e devolve o código 2 ao sistema com o return da main. Rode de dentro
-desta pasta e confira as três linhas da saída esperada:
-
-
-```text
-~/LPEDC/rodar E005.c; echo "código: $?"
-```
-
-
-
-```text
-Saída esperada:
-Backup falhou: disco cheio
-Código de saída: 2
-código: 2
-```
-
-```bash
-gcc ~/LPEDC/material/E005.c -o ~/LPEDC/material/E005 && ~/LPEDC/material/E005
-```
-
----
-
-## 0002 · Variáveis
-
-Na matrícula da academia, a recepcionista preenche uma ficha: idade 25,
-altura 1,75 m, peso 72,5 kg, plano B. Um mês depois, apaga o peso e escreve
-71,8. A ficha é a mesma; só o conteúdo de um campo mudou.
-
-Uma **variável** é um campo dessa ficha: um pedaço da memória com **nome**,
-**tipo**, **valor** e **endereço**. O nome é para você. O endereço é o número
-do primeiro byte que o valor ocupa. O tipo diz quantos bytes a variável ocupa
-e como lê-los.
-
-O tipo vem **antes** do nome e não muda. Os quatro tipos básicos (tamanhos de
-um PC de 64 bits; o padrão do C só garante mínimos):
-
-| Tipo | Guarda | Tamanho típico | Exemplo |
-| --- | --- | --- | --- |
-| `int` | inteiro | 4 bytes | `int idade = 25;` |
-| `float` | real, uns 7 dígitos | 4 bytes | `float altura = 1.75;` |
-| `double` | real, uns 15 dígitos | 8 bytes | `double peso = 72.5;` |
-| `char` | um caractere (um número pequeno) | 1 byte | `char plano = 'B';` |
-
-Esses são os **tipos primitivos** (também chamados **tipos simples** ou
-**dados simples**): cada variável guarda um valor só. Vetores e structs, que
-juntam vários valores, são os **dados compostos** (módulos 05 e 08).
-
-**Declarar** é criar a variável: `int idade;`. **Inicializar** é dar o
-primeiro valor junto: `int idade = 25;`. O `printf` usa `%d` para `int`, `%f`
-para `float` e `double`, `%c` para `char`; `%.1f` limita a uma casa decimal
-(o `printf` completo vem no 0005).
-
-Guardar um valor novo **apaga** o antigo; ler a variável não muda nada. O
-operador **`sizeof`** dá o tamanho em bytes de um tipo ou variável; o
-`printf` o mostra com `%zu`. O `&peso` é o endereço da variável (`%p`
-mostra endereços).
-
-Nome de variável: letras, dígitos e `_`, sem começar por dígito, sem acento e
-sem espaço; `peso` e `Peso` são diferentes; palavras do C (`int`, `return`...)
-não valem. O curso usa `snake_case`: `peso_atual`, `valor_total`.
-
-A ficha vira quatro caixinhas, cada uma com tipo, tamanho e endereço. Depois,
-o peso recebe um valor novo e o antigo desaparece:
+A ficha de uma academia: idade, altura, peso e plano. Cada dado vira uma
+caixinha com tipo, tamanho e endereço; depois o peso recebe um valor novo:
 
 <p align="center"><img src="material/0002-ideia.svg" alt="Diagrama da ideia: Variáveis" width="858"></p>
-
-A ficha em C:
 
 ```c
 #include <stdio.h>
@@ -446,22 +598,9 @@ int main(void) {
 // Bytes: 4, 4, 8, 1
 ```
 
-Criar as variáveis (reservar memória) é um passo; trocar o peso é outro.
-Ainda é sequência pura:
+O caminho é sequência pura: criar as variáveis e depois trocar o peso.
 
 <p align="center"><img src="material/0002-fluxograma.svg" alt="Fluxograma: Variáveis" width="1184"></p>
-
-> [!WARNING]
-> Variável sem valor não vale zero: vale **lixo**, o que já estava naqueles
-> bytes. `int total; printf("%d", total);` pode mostrar 0, 32767 ou -1294; o
-> gcc avisa `'total' is used uninitialized`. Inicialize sempre. E o separador
-> decimal do C é o **ponto**: `double peso = 72,5;` nem compila.
-
-> [!NOTE]
-> **Pergunta para você:** o `char` guarda um número pequeno. O que você acha
-> que `printf("%d\n", plano);` mostra? Teste no programa acima.
-
-### Hora de praticar
 
 **Exemplo A003 · A cópia que não acompanha e o float que arredonda**
 
@@ -538,160 +677,12 @@ int main(void) {
 gcc ~/LPEDC/material/A004.c -o ~/LPEDC/material/A004 && ~/LPEDC/material/A004
 ```
 
-#### Exercícios
+### 0003 · Tipos e limites
 
-**Exercício E007** · ★☆☆
-
-No mercado, a etiqueta de um produto tem: código 1042, preço R$ 8.99,
-peso 0.5 kg e setor 'H' (hortifrúti). Crie uma variável para cada dado,
-com o tipo certo, e mostre a etiqueta:
-
-
-```text
-Saída esperada:
-Código: 1042
-Preço: R$ 8.99
-Peso: 0.5 kg
-Setor: H
-```
-
-```bash
-gcc ~/LPEDC/material/E007.c -o ~/LPEDC/material/E007 && ~/LPEDC/material/E007
-```
-
-**Exercício E009** · ★★☆
-
-O cadastro de um aluno da autoescola guarda: idade (int, 19), nota da
-prova teórica (double, 8.5), nota da prova prática (double, 9.0),
-categoria da CNH (char, 'B') e número de aulas feitas (int, 20). Declare
-as cinco variáveis e mostre os valores e o sizeof de cada uma, uma por
-linha. Depois, mostre mais duas linhas, calculadas pelo programa: o total
-de bytes das cinco variáveis (somando os sizeof) e quanto seria o total
-se as duas notas fossem float (use sizeof(float) no lugar delas).
-
-
-```text
-Saída esperada:
-idade: 19 (4 bytes)
-teorica: 8.5 (8 bytes)
-pratica: 9.0 (8 bytes)
-categoria: B (1 byte)
-aulas: 20 (4 bytes)
-total: 25 bytes
-com float nas notas: 17 bytes
-```
-
-```bash
-gcc ~/LPEDC/material/E009.c -o ~/LPEDC/material/E009 && ~/LPEDC/material/E009
-```
-
-**Exercício E010** · ★★☆
-
-O placar eletrônico foi digitado invertido: casa = 1 e visitante = 3, e o
-certo é Casa 3 x 1 Visitante. Escreva um programa com as duas variáveis (int)
-que troque os valores usando uma variável auxiliar e mostre o placar
-certo.
-
-
-```text
-Saída esperada:
-Casa 3 x 1 Visitante
-```
-
-```bash
-gcc ~/LPEDC/material/E010.c -o ~/LPEDC/material/E010 && ~/LPEDC/material/E010
-```
-
-**Exercício E012** · ★★★
-
-Para o C, um char é só um número pequeno: o %c mostra o símbolo que tem
-aquele código, e o %d mostra o próprio código. Escreva um programa que
-mostre as linhas abaixo usando UMA variável char, que você vai
-reaproveitando (declara uma vez e troca o valor). As regras:
-
-- nas linhas 1, 3 e 4, o símbolo e o código saem da mesma variável, uma
-
-```text
-vez com %c e outra com %d;
-```
-
-- para o B da linha 2, guarde na variável o NÚMERO 66 (nada de 'B');
-- para o espaço da linha 4, guarde o número 32 (nada de ' ');
-- a última linha mostra lado a lado o caractere '7' e o número 7, os dois
-
-```text
-com %d.
-```
-
-
-
-```text
-Saída esperada:
-A 65
-B
-7 55
-[ ] 32
-'7' vale 55, 7 vale 7
-```
-
-```bash
-gcc ~/LPEDC/material/E012.c -o ~/LPEDC/material/E012 && ~/LPEDC/material/E012
-```
-
----
-
-## 0003 · Tipos e limites
-
-A catraca do estádio conta os torcedores num contador de 16 bits. No clássico
-de domingo, o Maracanã recebeu 78.838 pessoas. Quando passou o torcedor número
-65.536, o painel voltou a **zero**. Ninguém errou a conta: o número não cabia.
-
-A memória é feita de **bits**, chavinhas que valem 0 ou 1. Oito bits formam um
-**byte**. O inteiro é guardado em **binário** (base 2), em que cada casa vale
-o dobro da casa da direita:
-
-| casa | 2⁷ | 2⁶ | 2⁵ | 2⁴ | 2³ | 2² | 2¹ | 2⁰ |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| vale | 128 | 64 | 32 | 16 | 8 | 4 | 2 | 1 |
-
-Para ler um binário, some as casas com 1: `00001101` é 8 + 4 + 1 = 13. Com os
-8 bits ligados, `11111111`, o total é 255. Logo **um byte vai de 0 a 255**:
-2⁸ = 256 combinações. Com `n` bits, cabem 2ⁿ valores.
-
-O **hexadecimal** (base 16) abrevia o binário, com dígitos 0 a 9 e A a F
-(A = 10, ..., F = 15). Cada dígito hexa vale 4 bits, então um byte são dois
-dígitos: `1111 1111` = `FF` = 255. No C, hexadecimal começa com `0x`: `0xFF`.
-
-O tamanho de cada tipo inteiro decide sua **faixa**. Os **modificadores**
-mudam o `int`: `short` (menor), `long` e `long long` (maiores) e `unsigned`
-(sem sinal: troca os negativos por mais positivos). Sem modificador, o tipo é
-**com sinal** (`signed`): `int` e `signed int` são o mesmo tipo. O `char`
-puro depende da máquina; no PC Linux ele tem sinal. Num PC Linux de 64 bits:
-
-| Tipo | Bytes | Faixa |
-| --- | --- | --- |
-| `char` | 1 | -128 a 127 |
-| `unsigned char` | 1 | 0 a 255 |
-| `short` | 2 | -32.768 a 32.767 |
-| `unsigned short` | 2 | 0 a 65.535 |
-| `int` | 4 | cerca de ±2,1 bilhões |
-| `unsigned int` | 4 | 0 a cerca de 4,3 bilhões |
-| `long` / `long long` | 8 | cerca de ±9,2 quintilhões |
-
-O padrão do C só garante mínimos (o `int` pode ter 2 bytes num
-microcontrolador, e o `long` tem 4 bytes no Windows). Por isso, o
-**`<limits.h>`** traz os limites reais da máquina (`INT_MAX`, `SHRT_MIN`,
-`USHRT_MAX`...). Para tamanho exato, o **`<stdint.h>`** tem tipos com os bits
-no nome: `int8_t`, `uint16_t`, `int32_t`, `int64_t`.
-
-Passar do limite é **overflow** (estouro). Num `unsigned`, o C garante que o
-número dá a volta, como o odômetro que passa de 99999 para 00000. A catraca é
-um `unsigned short` em 65.535, com os 16 bits ligados. Somar 1 dá 65.536, que
-precisa de 17 bits; o bit de cima não cabe e some:
+A catraca de um estádio conta torcedores num `unsigned short` (16 bits). No
+65.536º torcedor, o bit de cima não cabe e o painel volta a zero:
 
 <p align="center"><img src="material/0003-ideia.svg" alt="Diagrama da ideia: Tipos e limites" width="858"></p>
-
-A catraca em C:
 
 ```c
 #include <stdio.h>
@@ -716,29 +707,10 @@ int main(void) {
 // Público: 78838 (o int vai até 2147483647)
 ```
 
-No fluxograma, quem pergunta "cabe em 16 bits?" é o hardware. Se não cabe, ele
-guarda só os 16 bits de baixo, sem avisar:
+Quem decide "cabe em 16 bits?" é o hardware; se não cabe, guarda só os 16
+bits de baixo, sem avisar:
 
 <p align="center"><img src="material/0003-fluxograma.svg" alt="Fluxograma: Tipos e limites" width="430"></p>
-
-> [!WARNING]
-> Com `unsigned`, o estouro dá a volta. Com tipos **com sinal** (`int`,
-> `long`...), é **comportamento indefinido**: o padrão não diz o que
-> acontece. `int x = INT_MAX; x = x + 1;` costuma virar -2147483648, mas não
-> conte com isso. Com as flags de estudo, o gcc acusa
-> `runtime error: signed integer overflow`. Escolha um tipo que caiba.
-
-> [!TIP]
-> Os negativos usam **complemento de dois**: o bit mais à esquerda pesa
-> negativo (-128 num byte). Por isso a faixa é assimétrica (-128 a 127) e o
-> byte `0xFF` é 255 num `unsigned char` e -1 num `char`: os bits são iguais,
-> o tipo decide como ler.
-
-> [!NOTE]
-> **Pergunta para você:** se a catraca começasse em 65.530 e passassem 10
-> torcedores, o que o painel mostraria? Mude o programa acima e confira.
-
-### Hora de praticar
 
 **Exemplo A005 · O mesmo byte lido de dois jeitos**
 
@@ -822,143 +794,13 @@ int main(void) {
 gcc ~/LPEDC/material/A006.c -o ~/LPEDC/material/A006 && ~/LPEDC/material/A006
 ```
 
-#### Exercícios
+### 0004 · Constantes
 
-**Exercício E013** · ★☆☆
-
-Converta na mão cada binário para hexadecimal (cada grupo de 4 bits vira
-um dígito hexa) e escreva os números no código SÓ em hexadecimal, com 0x
-na frente. Quem converte para decimal é o printf, com %d. Na tabela de
-quantos valores cabem, use também hexa: 2 elevado a 4 é 0x10.
-
-
-```text
-binários: 0001 0110 e 1111 1111; hexas prontos: 0x1F e 0x100
-```
-
-
-
-```text
-Saída esperada:
-0001 0110 = 0x16 = 22
-1111 1111 = 0xFF = 255
-0x1F = 31
-0x100 = 256
-4 bits: 16 valores
-8 bits: 256 valores
-16 bits: 65536 valores
-```
-
-
-(Binário escrito como 0b10110 só virou padrão no C23; o rodar, que segue o
-C17, avisa se você usar.)
-
-```bash
-gcc ~/LPEDC/material/E013.c -o ~/LPEDC/material/E013 && ~/LPEDC/material/E013
-```
-
-**Exercício E015** · ★★☆
-
-Três contadores unsigned, três estouros que dão a volta. Escreva um
-programa com brilho (unsigned char) = 250, estoque (unsigned int) = 0 e
-odometro (unsigned short) = 65000. Some 10 ao brilho, tire 1 do estoque e
-some 1000 ao odômetro, guardando o resultado na própria variável. Mostre
-uma linha por contador, com o valor de antes, a conta, o valor de depois e o
-máximo do tipo, tirado do limits.h.
-
-
-```text
-Saída esperada:
-brilho: 250 + 10 = 4 (máximo 255)
-estoque: 0 - 1 = 4294967295 (máximo 4294967295)
-odômetro: 65000 + 1000 = 464 (máximo 65535)
-```
-
-```bash
-gcc ~/LPEDC/material/E015.c -o ~/LPEDC/material/E015 && ~/LPEDC/material/E015
-```
-
-**Exercício E016** · ★★☆
-
-De quantas maneiras 13 corredores podem cruzar a linha de chegada? É
-13! (13 fatorial = 1 * 2 * ... * 13). Escreva um programa que guarde
-12! = 479001600 numa variável, multiplique por 13 e mostre o resultado.
-O resultado passa do limite do int, então escolha o tipo que comporta.
-
-
-```text
-Saída esperada:
-13! = 6227020800 maneiras
-```
-
-```bash
-gcc ~/LPEDC/material/E016.c -o ~/LPEDC/material/E016 && ~/LPEDC/material/E016
-```
-
-**Exercício E017** · ★★★
-
-Muitos sistemas guardam a hora como "segundos desde 1/1/1970" num inteiro
-de 32 bits com sinal. Esse contador estoura em 19/01/2038. Escreva um
-programa que mostre por quê: o maior int32_t, quantos segundos têm 68 e 69
-anos (de 365 dias) e o maior int64_t. Compare os números: 1970 + 68 =
-2038, e o contador de 32 bits não aguenta chegar aos 69 anos.
-
-
-```text
-Saída esperada:
-int32_t vai até 2147483647
-68 anos: 2144448000 segundos
-69 anos: 2175984000 segundos
-int64_t vai até 9223372036854775807
-```
-
-```bash
-gcc ~/LPEDC/material/E017.c -o ~/LPEDC/material/E017 && ~/LPEDC/material/E017
-```
-
----
-
-## 0004 · Constantes
-
-A tarifa do ônibus aparece em dez lugares do sistema: letreiro, ida e volta,
-recibo, relatório. Em janeiro ela sobe de R$ 4,40 para R$ 4,90. Com o valor
-escrito à mão em cada lugar, alguém esquece um. O certo é escrevê-lo **uma
-vez só**, com um nome.
-
-Todo valor escrito direto no código é um **literal**, e o jeito de escrever
-decide seu tipo:
-
-| Literal | Tipo | Observação |
-| --- | --- | --- |
-| `101` | `int` | inteiro sem ponto |
-| `4.90` | `double` | todo real é `double`, a não ser que... |
-| `4.90f` | `float` | ...tenha o sufixo `f` |
-| `5000000000LL` | `long long` | sufixos `L`, `LL`, `U` |
-| `0x1F`, `017` | `int` | hexadecimal (31) e **octal** (15): zero à esquerda muda a base! |
-| `1.5e3` | `double` | notação científica: 1,5 × 10³ = 1500 |
-| `'A'` | `int` | um caractere: vale o código, 65 |
-| `"A"` | texto | aspas duplas: `'A'` seguido do byte zero |
-
-O C tem dois jeitos de dar nome a um valor. O **`#define`** é uma ordem para o
-pré-processador: `#define TARIFA 4.90` faz um "localizar e substituir" antes de
-o compilador ver o código, que só enxerga `4.90`. Por convenção, o nome vai em
-MAIÚSCULAS, sem `=` e sem `;`.
-
-O **`const`** cria uma variável de verdade (tipo, endereço, tamanho), mas
-**só de leitura**: `const int linha = 101;`. Mudá-la dá erro de compilação, e
-por isso o valor vem na declaração.
-
-Dentro das aspas, a barra invertida inicia uma **sequência de escape**: `\n`
-pula linha, `\t` é tabulação, `\"` põe aspas no texto, `\\` é a barra e `\0`
-é o byte zero. Para mostrar `%` no `printf`, escreva `%%` (regra do
-`printf`, não escape).
-
-O pré-processador troca `TARIFA` por `4.90` e `EMPRESA` pelo nome da viação.
-A `linha` é uma caixinha com cadeado: tem endereço, mas ninguém escreve nela:
+A tarifa do ônibus aparece em vários lugares do sistema e muda todo ano: fica
+escrita uma vez só, com nome. O pré-processador troca `TARIFA` e `EMPRESA`
+pelos valores; a `linha` é uma caixinha com cadeado:
 
 <p align="center"><img src="material/0004-ideia.svg" alt="Diagrama da ideia: Constantes" width="858"></p>
-
-O mesmo exemplo em C:
 
 ```c
 #include <stdio.h>
@@ -986,25 +828,6 @@ A troca de texto acontece na compilação; o executável já nasce só com os
 números:
 
 <p align="center"><img src="material/0004-fluxograma.svg" alt="Fluxograma: Constantes" width="1240"></p>
-
-> [!WARNING]
-> O `#define` cola **exatamente** o texto que vem depois do nome. Com
-> `#define TARIFA 4.90;`, a linha `printf("%.2f\n", 2 * TARIFA);` vira
-> `printf("%.2f\n", 2 * 4.90;);` e não compila. Com `#define TARIFA = 4.90`,
-> vira `2 * = 4.90`. O erro aparece na linha em que o nome é **usado**, não na
-> do `#define`.
-
-> [!TIP]
-> O `#define` não ocupa memória e não tem tipo; a `const int linha` tem
-> endereço (`&linha`) e `sizeof linha` vale 4. Literais também têm tamanho:
-> `sizeof(4.90)` é 8, `sizeof(4.90f)` é 4, `sizeof('A')` é 4 (no C, `'A'` é
-> `int`) e `sizeof("A")` é 2 (a letra e o byte zero).
-
-> [!NOTE]
-> **Pergunta para você:** o pré-processador troca `TARIFA` dentro das aspas?
-> O que `printf("TARIFA\n");` mostra? Teste no programa acima.
-
-### Hora de praticar
 
 **Exemplo A007 · Uma constante feita de outras**
 
@@ -1087,159 +910,13 @@ int main(void) {
 gcc ~/LPEDC/material/A008.c -o ~/LPEDC/material/A008 && ~/LPEDC/material/A008
 ```
 
-#### Exercícios
+### 0005 · printf
 
-**Exercício E019** · ★☆☆
-
-Mostre exatamente estas linhas, usando sequências de escape. A segunda
-linha tem um \t entre "Saldo:" e o valor.
-
-
-```text
-Saída esperada:
-Backup salvo em C:\Users\ana\notas.txt
-Saldo:	R$ 120,00
-O app avisou: "Pix recebido!"
-Rendimento: 100% do CDI
-```
-
-```bash
-gcc ~/LPEDC/material/E019.c -o ~/LPEDC/material/E019 && ~/LPEDC/material/E019
-```
-
-**Exercício E021** · ★★☆
-
-Escreva um programa com a mensalidade de uma academia. Defina
-MENSALIDADE (89.90) e DESCONTO (10.00) com #define, e o dia do vencimento
-(10) com const int. Mostre os três valores como abaixo, os reais com duas
-casas.
-
-
-```text
-Saída esperada:
-Mensalidade: R$ 89.90
-Desconto: R$ 10.00
-Vencimento: dia 10
-```
-
-```bash
-gcc ~/LPEDC/material/E021.c -o ~/LPEDC/material/E021 && ~/LPEDC/material/E021
-```
-
-**Exercício E022** · ★★☆
-
-O jeito de escrever um literal decide o tipo e, às vezes, o valor. Escreva
-um programa que mostre, para cada literal abaixo, o valor (com %d para os
-inteiros e %.1f para os reais) e o tamanho (sizeof, com %zu). O "0" é
-texto: dele, mostre só o tamanho.
-
-
-```text
-10     10.0     10.0f     010     0x10     '0'     "0"     1e3
-```
-
-
-
-```text
-Saída esperada:
-10: vale 10, 4 bytes
-10.0: vale 10.0, 8 bytes
-10.0f: vale 10.0, 4 bytes
-010: vale 8, 4 bytes
-0x10: vale 16, 4 bytes
-'0': vale 48, 4 bytes
-"0": 2 bytes
-1e3: vale 1000.0, 8 bytes
-```
-
-```bash
-gcc ~/LPEDC/material/E022.c -o ~/LPEDC/material/E022 && ~/LPEDC/material/E022
-```
-
-**Exercício E024** · ★★★
-
-Escreva um programa que mostre as seis linhas abaixo, seguindo as regras
-de cada uma:
-
-1. crie #define CIDADE "Recife" e use-o para o Recife; a palavra CIDADE
-
-```text
- do começo da linha fica dentro das aspas do formato;
-```
-
-2. crie #define DDD 81 e use-o com %d;
-3. os três números saem dos literais 010, 0x10 e 10, com %d;
-4. "Oi!" sai de %c%c%c, com o 'O', o código do i escrito em hexa (0x69)
-
-```text
- e o código do ! escrito em decimal (33);
-```
-
-5. o % aparece na tela;
-6. a barra e o n aparecem de verdade, numa linha só.
-
-
-```text
-Saída esperada:
-CIDADE: Recife
-DDD 81
-8 16 10
-Oi!
-50% off
-a\n b
-```
-
-```bash
-gcc ~/LPEDC/material/E024.c -o ~/LPEDC/material/E024 && ~/LPEDC/material/E024
-```
-
----
-
-## 0005 · printf
-
-O cupom do mercado sai com as colunas alinhadas: produto à esquerda,
-quantidade e preço à direita, sempre com duas casas decimais. Ninguém conta
-espaços à mão: quem faz isso é o **formato**.
-
-O primeiro argumento do `printf` é a **string de formato**: um texto com
-**especificadores** (os `%`), que são buracos a preencher. Os outros
-argumentos os preenchem **na ordem**, um para cada `%`. O `printf` escreve na
-**saída padrão** (`stdout`); o `fprintf` do módulo 09 usa o mesmo formato
-para escrever num arquivo:
-
-| Especificador | Mostra | Exemplo | Sai |
-| --- | --- | --- | --- |
-| `%d` | `int` em decimal | `printf("%d", 42)` | `42` |
-| `%u`, `%ld`, `%lld` | `unsigned`, `long`, `long long` | `printf("%ld", 9L)` | `9` |
-| `%f` | `double` ou `float` | `printf("%f", 2.5)` | `2.500000` |
-| `%e`, `%g` | real em notação científica / o mais curto | `printf("%e", 1500.0)` | `1.500000e+03` |
-| `%c` | um caractere | `printf("%c", 'A')` | `A` |
-| `%s` | um texto | `printf("%s", "Pix")` | `Pix` |
-| `%x`, `%X`, `%o` | inteiro em hexa e em octal | `printf("%X", 255)` | `FF` |
-| `%p` | um endereço | `printf("%p", (void *)&n)` | `0x7ffe...` |
-| `%zu` | o resultado do `sizeof` | `printf("%zu", sizeof n)` | `4` |
-| `%%` | o próprio `%` | `printf("10%%")` | `10%` |
-
-Entre o `%` e a letra cabem ajustes, nesta ordem:
-`%[flags][largura][.precisão]letra`.
-
-- **largura** é o **mínimo** de caracteres: `%6d` de 42 dá `    42`
-  (à direita). Valor maior sai inteiro, nada é cortado;
-- **flags**: `-` alinha à esquerda (`%-6d` dá `42    `), `0` completa com
-  zeros (`%06d` dá `000042`), `+` mostra o sinal sempre;
-- **precisão**: em real, as casas decimais (`%.2f`); em texto, o máximo de
-  caracteres (`%.3s` de `"Brasil"` dá `Bra`).
-
-A precisão **arredonda só na tela**: `%.2f` de 7.499 mostra `7.50`, mas a
-variável continua valendo 7.499.
-
-A linha do arroz tem três buracos: `%-10s` reserva 10 casas para o nome, à
-esquerda; `%3d` reserva 3 para a quantidade; `%9.2f` reserva 9 para o total,
-com 2 decimais:
+O cupom do mercado sai com colunas alinhadas. Na linha do arroz, `%-10s`
+reserva 10 casas para o nome, `%3d` reserva 3 para a quantidade e `%9.2f`
+reserva 9 para o total, com 2 decimais:
 
 <p align="center"><img src="material/0005-ideia.svg" alt="Diagrama da ideia: printf" width="858"></p>
-
-O cupom inteiro em C:
 
 ```c
 #include <stdio.h>
@@ -1260,29 +937,10 @@ int main(void) {
 // TOTAL             131.17
 ```
 
-Cada `printf` é uma saída com o mesmo formato. Para mudar a largura de uma
-coluna, troque um número em cada linha:
+Cada `printf` é uma saída com o mesmo formato. Para mudar uma coluna, troque
+um número em cada linha:
 
 <p align="center"><img src="material/0005-fluxograma.svg" alt="Fluxograma: printf" width="1022"></p>
-
-> [!WARNING]
-> O `printf` **confia** em você: se o especificador não combina com o tipo do
-> argumento, lê os bytes do jeito errado. `printf("%d", 9.90)` não mostra 9
-> nem 10: mostra lixo. `printf("%.2f", 5)` também, e faltar argumento dá no
-> mesmo. O `-Wall` avisa (`format '%d' expects argument of type 'int'`); nunca
-> ignore. E no `printf` não vai `&`: ele quer o valor, não o endereço.
-
-> [!TIP]
-> O `printf` não sabe os tipos dos argumentos: só o formato diz como lê-los.
-> Todo `float` vira `double` nessa passagem, por isso `%f` serve para os dois.
-> A largura conta **bytes**: `"Feijão"` tem 6 letras e 7 bytes (o `ã` ocupa 2
-> no UTF-8), então `%-10s` deixa a coluna dele uma casa mais curta.
-
-> [!NOTE]
-> **Pergunta para você:** o que `printf("[%5.1f]\n", 3456.78);` mostra? A
-> largura 5 corta o número? Teste num programa seu.
-
-### Hora de praticar
 
 **Exemplo A009 · O extrato que corta o nome comprido**
 
@@ -1360,136 +1018,13 @@ int main(void) {
 gcc ~/LPEDC/material/A010.c -o ~/LPEDC/material/A010 && ~/LPEDC/material/A010
 ```
 
-#### Exercícios
+### 0006 · scanf
 
-**Exercício E025** · ★☆☆
-
-Mostre o boletim da Júlia com um printf por linha, usando variáveis:
-nota 8.75 (mostrada com uma casa), 3 faltas e conceito 'B'.
-
-
-```text
-Saída esperada:
-Aluna: Júlia
-Nota: 8.8
-Faltas: 03
-Conceito: B
-```
-
-```bash
-gcc ~/LPEDC/material/E025.c -o ~/LPEDC/material/E025 && ~/LPEDC/material/E025
-```
-
-**Exercício E027** · ★★☆
-
-Monte o painel de preços do posto, com as colunas alinhadas. Guarde cada
-preço numa variável double e use largura no formato (nada de contar
-espaços à mão). A linha de separação tem 22 sinais de igual.
-
-
-```text
-Saída esperada:
-Combustível   Preço/L
-======================
-Gasolina      R$ 6.29
-Etanol        R$ 4.19
-Diesel S10    R$ 6.09
-GNV           R$ 4.99
-```
-
-```bash
-gcc ~/LPEDC/material/E027.c -o ~/LPEDC/material/E027 && ~/LPEDC/material/E027
-```
-
-**Exercício E028** · ★★☆
-
-O pedido da pizzaria tem 3 pizzas de R$ 45.90. Escreva um programa que
-guarde a quantidade (int) e o preço (double), calcule o total e mostre as
-três linhas abaixo, com o formato certo para cada tipo.
-
-
-```text
-Saída esperada:
-Pizzas: 3
-Preço: R$ 45.90
-Total: R$ 137.70
-```
-
-```bash
-gcc ~/LPEDC/material/E028.c -o ~/LPEDC/material/E028 && ~/LPEDC/material/E028
-```
-
-**Exercício E029** · ★★★
-
-No CSS, uma cor é escrita como #RRGGBB: três bytes em hexadecimal, sempre
-com dois dígitos cada. O azul do botão do seu app tem vermelho 30, verde
-144 e azul 255. Guarde os três componentes em variáveis int e mostre a
-cor nos dois formatos do CSS.
-
-
-```text
-Saída esperada:
-#1E90FF
-rgb(30, 144, 255)
-```
-
-
-Teste também com vermelho 0, verde 8 e azul 15: a saída tem de ser
-#00080F, sempre com 7 caracteres.
-
-```bash
-gcc ~/LPEDC/material/E029.c -o ~/LPEDC/material/E029 && ~/LPEDC/material/E029
-```
-
----
-
-## 0006 · scanf
-
-No app do banco, você agenda um Pix: digita o valor, R$ 150,75, e o dia do
-mês, 12. O app lê, guarda e confirma. Até aqui os programas só falavam; agora
-vão **ouvir**: a **entrada** do modelo entrada → processamento → saída vem do
-teclado.
-
-Quem lê é o **`scanf`**, o espelho do `printf`. O formato diz o que esperar e
-os outros argumentos dizem **onde guardar**:
-
-```c
-scanf("%d", &dia);
-```
-
-O `&` é obrigatório: `&dia` é o **endereço** da variável. O `scanf` não quer o
-valor de `dia` (ainda lixo), e sim os bytes onde escrever o número digitado.
-No `printf` não vai `&`; no `scanf`, vai em toda variável simples.
-
-Os especificadores quase repetem os do `printf`, com uma diferença: **`double`
-se lê com `%lf`** e se mostra com `%f`.
-
-| Tipo | Lê com | Mostra com |
-| --- | --- | --- |
-| `int` | `%d` | `%d` |
-| `float` | `%f` | `%f` |
-| `double` | `%lf` | `%f` |
-| `char` | `%c` (ou `" %c"`) | `%c` |
-
-O que você digita vai para um **buffer**, uma fila de caracteres, e só chega
-ao programa no Enter. O `scanf` tira da fila só o que o formato pede. `%d` e
-`%lf` pulam espaços e Enters antes do número e param no primeiro caractere
-inválido. O resto **fica na fila** para a próxima leitura, inclusive o `'\n'`
-do Enter.
-
-Caracteres comuns no formato precisam aparecer na entrada:
-`scanf("%d/%d/%d", &d, &m, &a)` lê `7/9/2026`. O `scanf` **devolve** quantos
-itens guardou: 1, 2, 3..., 0 se o primeiro já falhou, ou `EOF` (-1) se a
-entrada acabou. É assim que o programa sabe se a leitura deu certo; no módulo
-02, o `if` vai usar esse número. Por enquanto, apenas mostre e observe.
-
-Você digita `150.75`, Enter, `12`, Enter. O `%lf` tira `150.75` da fila e
-escreve em `valor`. O `%d` pula o `'\n'` que sobrou, tira o `12` e escreve em
-`dia`. O último `'\n'` continua na fila:
+Um Pix agendado: você digita `150.75`, Enter, `12`, Enter. O `%lf` tira
+`150.75` da fila, o `%d` pula o `'\n'` que sobrou e tira o `12`; o último
+`'\n'` fica na fila:
 
 <p align="center"><img src="material/0006-ideia.svg" alt="Diagrama da ideia: scanf" width="858"></p>
-
-O agendamento em C:
 
 ```c
 #include <stdio.h>
@@ -1514,34 +1049,10 @@ int main(void) {
 // O último scanf leu 1 item
 ```
 
-Para testar sem digitar, salve como `pix.c`, compile com o gcc e use o cano
-(`|`) apresentado no começo do módulo: `printf '150.75\n12\n' | ./pix`.
-
-No fluxograma, as duas leituras são paralelogramos de entrada; cada uma guarda
-o valor numa caixinha. A saída vem depois:
+Para testar sem digitar: `printf '150.75\n12\n' | ./pix`. As duas leituras
+são paralelogramos de entrada, e a saída vem depois:
 
 <p align="center"><img src="material/0006-fluxograma.svg" alt="Fluxograma: scanf" width="1267"></p>
-
-> [!WARNING]
-> Esquecer o `&` é o erro clássico: `scanf("%d", dia)` entrega o lixo de `dia`
-> como se fosse um endereço, e o `scanf` escreve num lugar qualquer da
-> memória. O programa quebra (`Segmentation fault`) ou estraga outra variável.
-> O gcc avisa: `format '%d' expects argument of type 'int *', but argument 2
-> has type 'int'`. Outro erro comum: `%f` para ler um `double`. Compila com
-> aviso e o número sai errado.
-
-> [!TIP]
-> Com `%lf`, o `scanf` escreve 8 bytes no endereço; com `%f`, escreve só 4, no
-> formato de `float`, e o `double` fica errado. No `printf` não há esse
-> problema porque todo `float` vira `double`; no `scanf` vão endereços, e
-> endereço não se converte.
-
-> [!NOTE]
-> **Pergunta para você:** se no dia você digitar `doze`, quanto vale `lidos`?
-> E o que aparece no lugar do dia? Teste com
-> `printf '150.75\ndoze\n' | ./programa`.
-
-### Hora de praticar
 
 **Exemplo A011 · Dois valores numa linha e a sobra que atrapalha**
 
@@ -1622,158 +1133,12 @@ int main(void) {
 gcc ~/LPEDC/material/A012.c -o ~/LPEDC/material/A012 && ~/LPEDC/material/A012
 ```
 
-#### Exercícios
+### 0007 · Aritmética
 
-**Exercício E031** · ★☆☆
-
-Escreva um programa que leia a idade (inteiro) e a altura em metros
-(real), nessa ordem, sem mostrar perguntas, e responda numa frase só, com a
-altura em duas casas.
-
-
-```text
-Entrada:
-30
-1.75
-Saída esperada:
-Você tem 30 anos e 1.75 m de altura.
-```
-
-```bash
-gcc ~/LPEDC/material/E031.c -o ~/LPEDC/material/E031 && ~/LPEDC/material/E031
-```
-
-**Exercício E033** · ★★☆
-
-O alarme do celular pede a hora no formato hh:mm. Escreva um programa
-que comece com hora = 0 e minuto = 0, leia os dois com UM scanf só ("%d:%d")
-e guarde o valor que o scanf devolve. Mostre quantos itens ele leu e a hora
-de dois jeitos. Teste com 6:05 e com "6 05" (espaço no lugar dos dois
-pontos).
-
-
-```text
-Entrada:
-6:05
-Saída esperada:
-Itens lidos: 2
-Alarme para 6h05
-Alarme para 06:05
-```
-
-
-
-```text
-Entrada:
-6 05
-Saída esperada:
-Itens lidos: 1
-Alarme para 6h00
-Alarme para 06:00
-```
-
-```bash
-gcc ~/LPEDC/material/E033.c -o ~/LPEDC/material/E033 && ~/LPEDC/material/E033
-```
-
-**Exercício E034** · ★★☆
-
-A lanchonete lê a quantidade de lanches (int) e a opção, V para viagem ou
-A para comer aqui (char), cada uma em uma linha. Escreva um programa que
-leia as duas, sem mostrar perguntas, e mostre a frase abaixo, com o código
-numérico do caractere no final.
-
-
-```text
-Entrada:
-3
-V
-Saída esperada:
-3 lanche(s), opção V (código 86)
-```
-
-```bash
-gcc ~/LPEDC/material/E034.c -o ~/LPEDC/material/E034 && ~/LPEDC/material/E034
-```
-
-**Exercício E035** · ★★★
-
-Escreva um programa que comece com int a = 0, b = 0;, leia os dois com
-UM scanf("%d %d", &a, &b), guarde o retorno e mostre "lidos=? a=? b=?".
-Teste com as três entradas abaixo.
-
-
-```text
-Entrada:
-7 9
-Saída esperada:
-lidos=2 a=7 b=9
-```
-
-
-
-```text
-Entrada:
-7 x
-Saída esperada:
-lidos=1 a=7 b=0
-```
-
-
-
-```text
-Entrada:
-x 7
-Saída esperada:
-lidos=0 a=0 b=0
-```
-
-```bash
-gcc ~/LPEDC/material/E035.c -o ~/LPEDC/material/E035 && ~/LPEDC/material/E035
-```
-
----
-
-## 0007 · Aritmética
-
-Sexta à noite, cinco amigos pedem três pizzas de 8 fatias. São 24 fatias:
-quantas cada um come e quantas sobram? E a conta de R$ 159, quanto cada um
-paga? Isso é **processamento**: calcular, com o que entrou, o que vai sair.
-
-Em `24 / 5`, o `/` é o **operador** e 24 e 5 são os **operandos**. Operadores,
-operandos e parênteses formam uma **expressão**, e toda expressão tem um
-valor. Os operadores aritméticos:
-
-| Operador | Faz | Exemplo | Resultado |
-| --- | --- | --- | --- |
-| `+` `-` | soma, subtração | `24 - 4` | `20` |
-| `*` | multiplicação | `3 * 8` | `24` |
-| `/` | divisão | `24 / 5` | `4` (!) |
-| `%` | resto da divisão | `24 % 5` | `4` |
-
-A pegadinha está no `/`. Com **dois** operandos inteiros, a divisão é
-**inteira**: o resultado é inteiro e a parte fracionária é jogada fora, sem
-arredondar. `24 / 5` dá 4, `7 / 2` dá 3, `2 / 3` dá 0. Basta **um** lado ser
-real para a divisão ser real: `159.0 / 5` dá 31,8.
-
-O **`%`** (módulo) devolve o resto da divisão inteira e só funciona com
-inteiros. `24 / 5` diz quantas vezes o 5 cabe no 24, e `24 % 5` diz o que
-sobrou; sempre vale `(a / b) * b + a % b == a`. Serve para separar dígitos
-(`2026 % 10` é 6), converter segundos em minutos e testar paridade (`n % 2` é
-0 se `n` é par).
-
-A **precedência** é a da escola: `*`, `/` e `%` antes de `+` e `-`. O empate
-se resolve da esquerda para a direita (**associatividade**): `100 / 10 / 2` é
-`(100 / 10) / 2`, que dá 5. Parênteses mandam em tudo e deixam a intenção
-clara. O C não tem operador de potência (`^` é outra coisa, assunto 0065); use
-`pow` (assunto 0010) ou multiplique: `x * x`.
-
-As 24 fatias são divididas entre os cinco, quatro para cada um. O `/` conta
-as rodadas completas e o `%` as fatias que sobram:
+Cinco amigos dividem três pizzas de 8 fatias e uma conta de R$ 159. O `/`
+conta as rodadas completas de fatias e o `%` as que sobram:
 
 <p align="center"><img src="material/0007-ideia.svg" alt="Diagrama da ideia: Aritmética" width="858"></p>
-
-A divisão das fatias em C:
 
 ```c
 #include <stdio.h>
@@ -1801,29 +1166,10 @@ int main(void) {
 // Com inteiros: R$ 31
 ```
 
-Cada conta é um retângulo de processamento, e a ordem importa: `cada` e
-`sobra` dependem de `fatias`:
+Cada conta é um retângulo, e a ordem importa: `cada` e `sobra` dependem de
+`fatias`:
 
 <p align="center"><img src="material/0007-fluxograma.svg" alt="Fluxograma: Aritmética" width="1662"></p>
-
-> [!WARNING]
-> Com `int a = 7, b = 8;`, a linha `double media = (a + b) / 2;` guarda
-> **7.0**, não 7,5. A divisão é entre dois `int` **antes** de ir para o
-> `double`, e os decimais já se perderam. Escreva `(a + b) / 2.0`. Cuidado
-> também com a precedência: `a + b / 2` divide só o `b`, e `1 / 2 * x` dá
-> sempre zero.
-
-> [!TIP]
-> Desde o C99, a divisão inteira corta em direção ao zero: `-7 / 2` dá -3, e o
-> resto tem o sinal do dividendo: `-7 % 3` dá -1. Dividir **inteiro por zero**
-> derruba o programa (`Floating point exception`); com `double`, o resultado
-> é `inf`.
-
-> [!NOTE]
-> **Pergunta para você:** quanto vale `2 + 3 * 4 % 5`? Resolva na mão, na
-> ordem da precedência, e depois confira com um `printf`.
-
-### Hora de praticar
 
 **Exemplo A013 · O final da placa e o rodízio**
 
@@ -1902,126 +1248,13 @@ int main(void) {
 gcc ~/LPEDC/material/A014.c -o ~/LPEDC/material/A014 && ~/LPEDC/material/A014
 ```
 
-#### Exercícios
+### 0008 · Conversão e cast
 
-**Exercício E037** · ★☆☆
-
-Para a festa, você fez 50 brigadeiros e vai embalar em caixas de 12.
-Quantas caixas ficam cheias e quantos brigadeiros sobram? E os 7 ingressos
-do show a R$ 35 cada, quanto custam juntos? Use variáveis e deixe o
-programa fazer as contas.
-
-
-```text
-Saída esperada:
-Caixas cheias: 4
-Sobram: 2 brigadeiros
-Ingressos: R$ 245
-```
-
-```bash
-gcc ~/LPEDC/material/E037.c -o ~/LPEDC/material/E037 && ~/LPEDC/material/E037
-```
-
-**Exercício E039** · ★★☆
-
-Escreva o programa que racha a conta do restaurante: lê o valor da conta
-e o número de pessoas, sem mostrar perguntas, soma 10% de serviço e mostra
-o serviço, o total e quanto cada um paga, tudo em duas casas.
-
-
-```text
-Entrada:
-237.50
-4
-Saída esperada:
-Serviço (10%): R$ 23.75
-Total: R$ 261.25
-Cada um: R$ 65.31
-```
-
-```bash
-gcc ~/LPEDC/material/E039.c -o ~/LPEDC/material/E039 && ~/LPEDC/material/E039
-```
-
-**Exercício E040** · ★★☆
-
-Escreva um programa com três notas inteiras: 8, 7 e 8. Calcule a média
-como double, de dois jeitos: (1) dividindo a soma por 3.0; (2) convertendo
-a soma para double com um cast antes de dividir por 3. Mostre as duas com
-duas casas.
-
-
-```text
-Saída esperada:
-Média 1: 7.67
-Média 2: 7.67
-```
-
-```bash
-gcc ~/LPEDC/material/E040.c -o ~/LPEDC/material/E040 && ~/LPEDC/material/E040
-```
-
-**Exercício E042** · ★★★
-
-Leia um número de 3 dígitos, sem mostrar pergunta, e mostre ao contrário,
-usando só / e % (nada de texto). O programa tem de funcionar também quando o
-número termina em zero: com 120, a saída é 021, sempre com três dígitos.
-Teste com 472 e com 120.
-
-
-```text
-Entrada:
-472
-Saída esperada:
-Ao contrário: 274
-```
-
-
-
-```text
-Entrada:
-120
-Saída esperada:
-Ao contrário: 021
-```
-
-```bash
-gcc ~/LPEDC/material/E042.c -o ~/LPEDC/material/E042 && ~/LPEDC/material/E042
-```
-
----
-
-## 0008 · Conversão e cast
-
-Você zerou o hodômetro parcial no último tanque. Agora rodou 523 km e gastou
-41 litros para encher de novo. Quantos km por litro? A conta é 523 ÷ 41 ≈
-12,76. O C, com dois `int`, responde 12.
-
-Toda expressão tem um **valor** e um **tipo**. Com operandos do mesmo tipo, o
-resultado tem esse tipo: `int / int` é `int`. Com tipos diferentes, o C faz a
-**conversão automática**: o operando "menor" sobe para o tipo do "maior".
-A escada é `char` → `short` → `int` → `long` → `long long` → `float` →
-`double`. `523 / 41.0` vira `523.0 / 41.0` e dá 12,756...
-
-Na **atribuição** é o contrário: o valor vira o tipo da variável da
-**esquerda**, caiba ou não. `double d = 12;` guarda 12.0. `int i = 12.76;`
-guarda 12: a parte fracionária é **cortada**, não arredondada (`-9.99` vira
--9). Valor grande demais num tipo pequeno perde bits. Com as opções do curso,
-o compilador não avisa.
-
-O **cast** escolhe a conversão: o tipo entre parênteses antes do valor,
-`(double) km`. Ele cria uma **cópia temporária** convertida; `km` continua
-`int`. Sua precedência é maior que a de `*` e `/`, então `(double) km /
-litros` converte só o `km`, o que basta para a divisão ser real.
-
-No desenho, pelo caminho de cima os dois `int` se dividem, sai 12 e só então
-vira 12.0, tarde demais. Pelo de baixo, o cast transforma 523 em 523.0 antes
-da divisão:
+Um carro rodou 523 km com 41 litros. Pelo caminho de cima, os dois `int` se
+dividem, sai 12 e só então vira 12.0; pelo de baixo, o cast transforma 523 em
+523.0 antes da divisão:
 
 <p align="center"><img src="material/0008-ideia.svg" alt="Diagrama da ideia: Conversão e cast" width="858"></p>
-
-O consumo do carro em C:
 
 ```c
 #include <stdio.h>
@@ -2049,30 +1282,10 @@ int main(void) {
 // Num int:       12 km/l
 ```
 
-A pergunta "tem um real na divisão?" é respondida pelo compilador, pelos
-tipos. Com o cast, o exemplo segue pelo Sim:
+Quem responde "tem um real na divisão?" é o compilador, pelos tipos. Com o
+cast, o exemplo segue pelo Sim:
 
 <p align="center"><img src="material/0008-fluxograma.svg" alt="Fluxograma: Conversão e cast" width="511"></p>
-
-> [!WARNING]
-> O cast precisa chegar **antes** da divisão. Em `(double) (km / litros)`, os
-> parênteses mandam dividir primeiro: `523 / 41` dá 12 e o cast só o
-> transforma em 12.0. Igualmente, `double media = soma / n;` com `soma` e `n`
-> inteiros perde os decimais antes do `=`. Converta um operando:
-> `(double) soma / n`.
-
-> [!TIP]
-> Um `int` e um `double` de mesmo valor têm bits diferentes: converter é uma
-> operação real do processador. O `float` guarda inteiros exatos só até
-> 2²⁴ = 16.777.216 (`float f = 16777217;` vira 16777216), e o `double`, até
-> 2⁵³. Converter um `double` grande demais para `int` é comportamento
-> indefinido.
-
-> [!NOTE]
-> **Pergunta para você:** quanto vale `int x = 7 / 2 * 2.0;`? Faça passo a
-> passo, olhando o tipo de cada pedaço, e depois confira.
-
-### Hora de praticar
 
 **Exemplo A015 · O cast que corta de propósito**
 
@@ -2153,126 +1366,12 @@ int main(void) {
 gcc ~/LPEDC/material/A016.c -o ~/LPEDC/material/A016 && ~/LPEDC/material/A016
 ```
 
-#### Exercícios
+### 0009 · Atribuição, ++ e --
 
-**Exercício E043** · ★☆☆
-
-As notas do simulado são inteiras: 7, 8 e 10. Guarde em três int e mostre
-a média com duas casas, usando um cast (sem trocar o tipo das variáveis
-e sem escrever 3.0).
-
-
-```text
-Saída esperada:
-Média: 8.33
-```
-
-```bash
-gcc ~/LPEDC/material/E043.c -o ~/LPEDC/material/E043 && ~/LPEDC/material/E043
-```
-
-**Exercício E045** · ★★☆
-
-Na eleição para síndico, a candidata Marta teve 47 dos 130 votos. Guarde
-os dois números em variáveis int e mostre o percentual dela com duas
-casas. Depois mostre também o resultado das duas fórmulas que o colega
-tentou antes, com as mesmas variáveis e %d, para ver o estrago de cada
-uma.
-
-
-```text
-Saída esperada:
-Marta: 36.15% dos votos
-votos / total * 100 = 0
-100 * votos / total = 36
-```
-
-```bash
-gcc ~/LPEDC/material/E045.c -o ~/LPEDC/material/E045 && ~/LPEDC/material/E045
-```
-
-**Exercício E046** · ★★☆
-
-Na balança do açougue, a picanha custa R$ 45.90 o quilo. Escreva um
-programa com gramas = 600 (int) e preco_kg = 45.90 (double) que calcule e
-mostre o preço dessa quantidade. Os tipos das duas variáveis ficam como
-estão.
-
-
-```text
-Saída esperada:
-600 g: R$ 27.54
-```
-
-```bash
-gcc ~/LPEDC/material/E046.c -o ~/LPEDC/material/E046 && ~/LPEDC/material/E046
-```
-
-**Exercício E048** · ★★★
-
-Letras são números, e as contas com elas seguem as regras de conversão.
-Escreva um programa que comece com char letra = 'g'; e mostre as linhas
-abaixo. Regras: tirando a própria letra 'g', só valem os literais 'a',
-'A', 1 e 3 (nada de escrever 'G', 71, 7, 'j' ou 32). Na última linha, use
-as variáveis double x = 3.7, y = 3.7 e casts para int.
-
-
-```text
-Saída esperada:
-Letra: g (código 103)
-Maiúscula: G (código 71)
-Posição no alfabeto: 7
-Três adiante: j
-Somando e cortando: 7; cortando e somando: 6
-```
-
-```bash
-gcc ~/LPEDC/material/E048.c -o ~/LPEDC/material/E048 && ~/LPEDC/material/E048
-```
-
----
-
-## 0009 · Atribuição, ++ e --
-
-O bilhete único tem R$ 20,00. Você recarrega R$ 30,00, pega dois ônibus de
-R$ 4,40 e o validador conta as viagens. O saldo não é recalculado do zero:
-é **atualizado** a partir do valor que já está lá.
-
-No C, `=` significa "guarde o valor da direita na variável da esquerda", não
-o "igual" da matemática. Por isso `saldo = saldo + 30.00` faz sentido: calcula
-com o valor antigo e escreve o novo por cima. À esquerda só pode ficar algo
-com endereço, uma variável; `30 = saldo` e `saldo + 1 = 5` não compilam.
-
-Os **operadores compostos** são atalhos para atualizar uma variável:
-
-| Atalho | Quer dizer | Com `x = 10` |
-| --- | --- | --- |
-| `x += 3` | `x = x + 3` | 13 |
-| `x -= 3` | `x = x - 3` | 7 |
-| `x *= 3` | `x = x * 3` | 30 |
-| `x /= 3` | `x = x / 3` | 3 (divisão inteira!) |
-| `x %= 3` | `x = x % 3` | 1 |
-
-O composto age sobre **toda** a expressão da direita, como se estivesse entre
-parênteses: `x *= y + 1` é `x = x * (y + 1)`, não `x * y + 1`.
-
-Para somar ou tirar 1, há **`++`** e **`--`**. Sozinhos na linha, `viagens++` e
-`++viagens` são iguais. A diferença aparece quando o valor é **usado** na
-mesma expressão:
-
-- **pós** (`x++`): a expressão vale o valor **antigo**, depois `x` aumenta;
-- **pré** (`++x`): `x` aumenta primeiro, e a expressão vale o valor **novo**.
-
-A atribuição também é uma expressão e vale o valor guardado. Ela associa **da
-direita para a esquerda**: em `a = b = c = 7`, o C faz `c = 7` (que vale 7),
-depois `b = 7` e por fim `a = 7`.
-
-O saldo passa por quatro valores, cada um calculado a partir do anterior, na
-mesma caixinha. As viagens sobem de um em um:
+Um bilhete único com R$ 20,00 recebe uma recarga e paga duas viagens. O saldo
+passa por quatro valores na mesma caixinha, e as viagens sobem de um em um:
 
 <p align="center"><img src="material/0009-ideia.svg" alt="Diagrama da ideia: Atribuição, ++ e --" width="858"></p>
-
-O bilhete único em C:
 
 ```c
 #include <stdio.h>
@@ -2300,23 +1399,9 @@ int main(void) {
 ```
 
 Cada atualização é um retângulo sobre as mesmas duas variáveis. No módulo 03,
-esses passos viram um laço, com `+=` e `++` como acumulador e contador:
+esses passos viram laço, com `+=` e `++` como acumulador e contador:
 
 <p align="center"><img src="material/0009-fluxograma.svg" alt="Fluxograma: Atribuição, ++ e --" width="1570"></p>
-
-> [!WARNING]
-> Nunca altere a mesma variável duas vezes na mesma expressão, nem altere e
-> leia ao mesmo tempo. `i = i++;`, `x = x++ + ++x;` e
-> `printf("%d %d", n++, n);` são **comportamento indefinido**: o padrão não
-> define a ordem e cada compilador faz de um jeito. O `-Wall` avisa
-> (`operation on 'i' may be undefined`). Use `++` e `--` sozinhos na linha ou
-> com a variável aparecendo uma vez só.
-
-> [!NOTE]
-> **Pergunta para você:** com `int x = 5;`, quanto valem `y` e `x` depois de
-> `int y = x++ * 2;`? E se fosse `++x * 2`? Responda e teste.
-
-### Hora de praticar
 
 **Exemplo A017 · Vagas que descem, senhas que sobem (até de letra)**
 
@@ -2411,128 +1496,13 @@ int main(void) {
 gcc ~/LPEDC/material/A018.c -o ~/LPEDC/material/A018 && ~/LPEDC/material/A018
 ```
 
-#### Exercícios
+### 0010 · math.h
 
-**Exercício E049** · ★☆☆
-
-Escreva um programa com pontos = 100, vidas = 3, moedas = 20, tempo = 90
-e fase = 3 (int). Atualize cada um usando só operadores compostos e ++ ou --:
-pontos ganha 10, vidas perde 1, moedas dobra, tempo cai pela metade e fase
-sobe 1. Mostre tudo numa linha só.
-
-
-```text
-Saída esperada:
-pontos 110, vidas 2, moedas 40, tempo 45, fase 4
-```
-
-```bash
-gcc ~/LPEDC/material/E049.c -o ~/LPEDC/material/E049 && ~/LPEDC/material/E049
-```
-
-**Exercício E051** · ★★☆
-
-O cofrinho digital começa vazio. Use uma variável saldo e os operadores
-compostos para registrar o mês, mostrando o saldo depois de cada passo:
-guarda R$ 15.00, guarda R$ 20.00, guarda R$ 12.50, tira R$ 30.00 para um
-presente e, no fim do mês, rende 1% (multiplique por 1.01). Conte também
-quantos depósitos foram feitos, com ++.
-
-
-```text
-Saída esperada:
-Depósito 1: R$ 15.00
-Depósito 2: R$ 35.00
-Depósito 3: R$ 47.50
-Presente: R$ 17.50
-Rendimento: R$ 17.68
-3 depósitos
-```
-
-```bash
-gcc ~/LPEDC/material/E051.c -o ~/LPEDC/material/E051 && ~/LPEDC/material/E051
-```
-
-**Exercício E052** · ★★☆
-
-Escreva um programa com x = 10 e y = 3 (int). Aplique em sequência, uma
-depois da outra, x *= y + 1, x -= y - 1, x /= y + 1 e x %= y + 2, mostrando
-a instrução e o novo valor de x depois de cada uma. Depois, volte x para 10
-e mostre x * 2 + y (só no printf, sem guardar) e x *= 2 + y (guardando em
-x), para ver que são contas diferentes.
-
-
-```text
-Saída esperada:
-x *= y + 1 -> 40
-x -= y - 1 -> 38
-x /= y + 1 -> 9
-x %= y + 2 -> 4
-x * 2 + y = 23
-x *= 2 + y -> 50
-```
-
-```bash
-gcc ~/LPEDC/material/E052.c -o ~/LPEDC/material/E052 && ~/LPEDC/material/E052
-```
-
-**Exercício E054** · ★★★
-
-O placar está invertido: casa = 2 e visitante = 5, e o certo é o
-contrário. Escreva um programa que troque os valores SEM usar uma terceira
-variável, só com += e -= (e, se precisar, um = simples), e mostre o
-placar certo.
-
-
-```text
-Saída esperada:
-Casa 5 x 2 Visitante
-```
-
-```bash
-gcc ~/LPEDC/material/E054.c -o ~/LPEDC/material/E054 && ~/LPEDC/material/E054
-```
-
----
-
-## 0010 · math.h
-
-Na pizzaria, a grande de 35 cm custa R$ 59,90 e a média de 25 cm, R$ 39,90.
-Duas médias dão mais pizza que uma grande? A intuição diz que não, mas a área
-cresce com o **quadrado** do raio. Para tirar a dúvida, são necessários
-potência, raiz e arredondamento, e o C não tem operador para isso.
-
-A biblioteca de matemática, declarada no **`<math.h>`**, tem funções para
-isso. Quase todas recebem e devolvem `double`:
-
-| Função | Faz | Exemplo | Resultado |
-| --- | --- | --- | --- |
-| `pow(x, y)` | x elevado a y | `pow(2, 10)` | 1024 |
-| `sqrt(x)` | raiz quadrada | `sqrt(144)` | 12 |
-| `fabs(x)` | valor absoluto de real | `fabs(-7.5)` | 7.5 |
-| `floor(x)` | arredonda para **baixo** | `floor(-2.3)` | -3 |
-| `ceil(x)` | arredonda para **cima** | `ceil(2.1)` | 3 |
-| `round(x)` | para o mais perto (o meio vai para longe do zero) | `round(2.5)` | 3 |
-| `fmod(x, y)` | resto de divisão real | `fmod(7.5, 2)` | 1.5 |
-| `sin`, `cos`, `tan` | trigonometria, em **radianos** | `cos(0)` | 1 |
-
-Dois avisos. O C padrão não define o pi: o `M_PI` é extensão e não existe com
-`-std=c17`; crie o seu com `#define`. E o `abs` dos inteiros fica no
-`<stdlib.h>`; para real, use `fabs`.
-
-Os três arredondamentos divergem nos negativos: `floor` sempre desce
-(`floor(-2.3)` é -3), `ceil` sempre sobe (`ceil(-2.7)` é -2) e `round` vai
-para o inteiro mais perto. O cast é outra coisa: `(int) -2.7` **corta** e dá
--2. O `ceil` serve para "quantos preciso comprar": 2,78 latas de tinta viram
-3.
-
-Na grande, o diâmetro 35 vira raio 17,5; `pow` eleva ao quadrado; vezes pi,
-dá a área. Nas médias, a mesma conta vezes dois dá 981,75 cm², um pouco mais
-que a grande:
+Duas pizzas médias de 25 cm dão mais pizza que uma grande de 35 cm? A área
+cresce com o quadrado do raio: o diâmetro vira raio, `pow` eleva ao quadrado
+e o resultado vezes pi dá a área:
 
 <p align="center"><img src="material/0010-ideia.svg" alt="Diagrama da ideia: math.h" width="858"></p>
-
-A comparação das pizzas em C:
 
 ```c
 #include <stdio.h>
@@ -2567,31 +1537,10 @@ int main(void) {
 ```
 
 Duas médias dão um pouco mais de pizza, mas cada 100 cm² da grande sai quase
-R$ 2 mais barato.
-
-No fluxograma, `pow(...)` e `sqrt(...)` entram nas contas como qualquer
-valor:
+R$ 2 mais barato. No fluxograma, `pow(...)` e `sqrt(...)` entram nas contas
+como qualquer valor:
 
 <p align="center"><img src="material/0010-fluxograma.svg" alt="Fluxograma: math.h" width="1391"></p>
-
-> [!WARNING]
-> `pow(27, 1/3)` dá **1**, não 3: `1/3` é divisão inteira e vale 0, e todo
-> número elevado a 0 é 1. Escreva `1.0 / 3`. Do mesmo modo, `ceil(7 / 2)` dá
-> 3, não 4: o `ceil` recebe o 3 já cortado. E o `abs` dos inteiros dá 2 em
-> `abs(-2.75)`; o `-Wextra` avisa (`using integer absolute value function
-> 'abs'`). Para real, `fabs`.
-
-> [!TIP]
-> O `math.h` só **declara** as funções (por isso `sqrt(144)` funciona com
-> `int`: o compilador converte para `double`). O código está na biblioteca
-> `libm`, que o ligador junta com `-lm` (já nas flags de estudo). Sem ela,
-> aparece `undefined reference to 'pow'`.
-
-> [!NOTE]
-> **Pergunta para você:** quanto dão `round(-2.5)`, `floor(-0.5)` e
-> `ceil(-0.5)`? O A020 tem uma tabela parecida para conferir.
-
-### Hora de praticar
 
 **Exemplo A019 · A escada no muro e o posto na estrada**
 
@@ -2673,120 +1622,13 @@ int main(void) {
 gcc ~/LPEDC/material/A020.c -o ~/LPEDC/material/A020 -lm && ~/LPEDC/material/A020
 ```
 
-#### Exercícios
+### 0011 · Juntando tudo
 
-**Exercício E055** · ★☆☆
-
-A loja anuncia uma TV com a tela de 121.8 cm de largura e 68.5 cm de
-altura. TVs são vendidas pela diagonal, em polegadas (1 polegada = 2.54
-cm). Calcule a diagonal com Pitágoras e mostre em cm e em polegadas.
-
-
-```text
-Saída esperada:
-Diagonal: 139.74 cm
-TV de 55 polegadas
-```
-
-```bash
-gcc ~/LPEDC/material/E055.c -o ~/LPEDC/material/E055 -lm && ~/LPEDC/material/E055
-```
-
-**Exercício E057** · ★★☆
-
-Você vai pintar 3 paredes de 4.0 m por 2.7 m, com 2 demãos. Uma lata de
-tinta cobre 25 m² e custa R$ 89.90. Lata não se vende pela metade.
-Calcule a área total a pintar, quantas latas comprar e quanto vai gastar.
-
-
-```text
-Saída esperada:
-Área com 2 demãos: 64.80 m²
-Latas: 2.59 -> comprar 3
-Total: R$ 269.70
-```
-
-```bash
-gcc ~/LPEDC/material/E057.c -o ~/LPEDC/material/E057 -lm && ~/LPEDC/material/E057
-```
-
-**Exercício E058** · ★★☆
-
-Você aplica R$ 1000.00 num investimento que rende 1% ao mês, com juros
-compostos (juros sobre juros). O montante depois de n meses é
-capital * (1 + taxa) elevado a n. Mostre o montante e o rendimento depois
-de 12 e de 24 meses. Para comparar, mostre também quanto teria em 24
-meses com juros simples (1% do capital por mês, sem juros sobre juros) e
-a diferença entre os dois em 24 meses.
-
-
-```text
-Saída esperada:
-12 meses: R$ 1126.83 (rendeu R$ 126.83)
-24 meses: R$ 1269.73 (rendeu R$ 269.73)
-Juros simples, 24 meses: R$ 1240.00
-Diferença: R$ 29.73
-```
-
-```bash
-gcc ~/LPEDC/material/E058.c -o ~/LPEDC/material/E058 -lm && ~/LPEDC/material/E058
-```
-
-**Exercício E060** · ★★★
-
-Do alto de uma laje de 1.5 m, você joga uma bola para cima a 20 m/s.
-Desprezando o ar, a altura depois de t segundos é
-h(t) = -5t² + 20t + 1.5. Calcule:
-
-a) o instante em que a bola chega ao chão (h = 0), com a fórmula de
-
-```text
- Bhaskara: t = (-b - raiz(delta)) / (2a), com delta = b² - 4ac;
-```
-
-b) o instante da altura máxima, t = -b / (2a), e a altura nesse instante.
-
-
-```text
-Saída esperada:
-Delta: 430.00
-Chega ao chão em 4.07 s
-Altura máxima: 21.50 m, em 2.00 s
-```
-
-```bash
-gcc ~/LPEDC/material/E060.c -o ~/LPEDC/material/E060 -lm && ~/LPEDC/material/E060
-```
-
----
-
-## 0011 · Juntando tudo
-
-Chegou a conta de luz da república, com três moradores. Todo mês alguém faz a
-divisão no celular e manda no grupo. Um programa pode ler as duas leituras do
-relógio e o número de moradores e devolver o valor de cada um.
-
-Ele reúne tudo o que o módulo ensinou:
-
-- **constantes** (`#define`) para a tarifa e a taxa fixa;
-- **variáveis** com o tipo certo: leituras em `int`, dinheiro em `double`;
-- **entrada** com `scanf`, `&` em cada variável e o retorno guardado;
-- **processamento** com aritmética, um operador composto (`+=`), um **cast**
-  para a média não virar divisão inteira e o `ceil` para arredondar o
-  centavo para cima (ninguém quer pagar um centavo a menos e deixar a conta
-  descoberta);
-- **saída** com `printf` alinhado, largura e duas casas.
-
-É o modelo **entrada → processamento → saída** e **sequência** pura: os mesmos
-passos, na mesma ordem. Ele não confere se a leitura atual é maior que a
-anterior nem repete nada. Isso vem nos módulos 02 (decisão) e 03 (repetição).
-
-Entram três valores; o consumo é 257 kWh, a conta é R$ 229,24 e a divisão por
-três, com o centavo para cima, dá R$ 76,42 para cada um:
+A conta de luz de uma república com três moradores. Entram as duas leituras
+do relógio e os moradores; o consumo é 257 kWh, a conta é R$ 229,24 e cada um
+paga R$ 76,42, com o centavo para cima:
 
 <p align="center"><img src="material/0011-ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
-
-O programa completo:
 
 ```c
 #include <stdio.h>
@@ -2834,10 +1676,10 @@ int main(void) {
 // (o último scanf leu 1 item)
 ```
 
-### Passo a passo
+#### Passo a passo
 
-Teste de mesa com a entrada 45230, 45487 e 3. Cada linha é uma instrução; as
-colunas mostram as variáveis depois dela:
+Teste de mesa com a entrada 45230, 45487 e 3; as colunas mostram as variáveis
+depois de cada instrução:
 
 | Instrução | consumo | total | por_dia | cada |
 | --- | --- | --- | --- | --- |
@@ -2847,28 +1689,13 @@ colunas mostram as variáveis depois dela:
 | `por_dia = (double) consumo / DIAS` | 257 | 229.24 | 8.5666... | |
 | `cada = ceil(total / moradores * 100) / 100` | 257 | 229.24 | 8.5666... | 76.42 |
 
-Na última linha: 229,24 ÷ 3 = 76,4133...; vezes 100 dá 7641,33...; o `ceil`
+Na última linha: 229,24 ÷ 3 = 76,4133...; vezes 100, 7641,33...; o `ceil`
 sobe para 7642; dividido por 100, 76,42. Três vezes 76,42 dá 229,26: sobram
 dois centavos, mas a conta fica paga.
 
-Entrada, quatro contas e saída, sem nenhum losango, como todo programa deste
-módulo:
+Entrada, quatro contas e saída, sem nenhum losango:
 
 <p align="center"><img src="material/0011-fluxograma.svg" alt="Fluxograma: Juntando tudo" width="1853"></p>
-
-> [!WARNING]
-> Sem o cast, `consumo / DIAS` seria `257 / 30` entre dois `int`: daria 8 e a
-> média por dia sairia 8.00. A ordem das contas também importa: com o `ceil`
-> antes da multiplicação por 100, `ceil(76.4133)` daria R$ 77, e cada um
-> pagaria 58 centavos a mais. Faça o teste de mesa antes de confiar numa
-> fórmula.
-
-> [!NOTE]
-> **Pergunta para você:** e se alguém digitar a leitura atual menor que a
-> anterior (45487 e depois 45230)? O que o programa mostra? Que pergunta ele
-> deveria fazer antes de calcular? Guarde a resposta para o módulo 02.
-
-### Hora de praticar
 
 **Exemplo A021 · Quantas caixas de piso comprar**
 
@@ -2983,14 +1810,721 @@ int main(void) {
 gcc ~/LPEDC/material/A022.c -o ~/LPEDC/material/A022 -lm && ~/LPEDC/material/A022
 ```
 
-#### Exercícios
+---
+
+## 3. Exercícios práticos
+
+Cada exercício é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta. Compile como os exemplos: `gcc ~/LPEDC/material/E007.c -o ~/LPEDC/material/E007 && ~/LPEDC/material/E007`. Resoluções em `_respostas/01-fundamentos/`.
+
+### 0001 · O primeiro programa
+
+**Exercício E001** · ★☆☆
+
+Escreva um programa que mostre o letreiro do ônibus, exatamente assim.
+Rode de dois jeitos: com o rodar e na mão, com gcc, gerando um executável
+chamado "letreiro".
+
+```text
+Saída esperada:
+Linha 077 - Terminal Centro
+Via Av. Brasil
+Tarifa: R$ 4,90
+```
+
+**Exercício E003** · ★★☆
+
+Escreva do zero o programa do aviso da farmácia: um comentário de bloco
+(/* ... */) no topo com o texto "Aviso da farmácia", o #include necessário
+e a main, que mostra as duas linhas abaixo e termina com return 0.
+
+```text
+Saída esperada:
+Farmácia aberta 24h
+Plantão: (11) 5555-0199
+```
+
+**Exercício E004** · ★★☆
+
+Escreva o aviso do cinema com o código bem organizado: um comentário de
+bloco no topo dizendo o que o programa faz, uma instrução por linha, recuo
+de 4 espaços dentro da main e um comentário // sala 2 no fim da linha do
+printf da sessão. O programa mostra as três linhas abaixo.
+
+```text
+Saída esperada:
+Cine Estação
+Sessão: 19h30 (sala 2)
+Ingresso: R$ 28,00
+```
+
+**Exercício E005** · ★★★
+
+Escreva o programa de um backup que FALHOU: ele mostra as duas linhas
+abaixo e devolve o código 2 ao sistema com o return da main. Rode de dentro
+desta pasta e confira as três linhas da saída esperada:
+
+```text
+~/LPEDC/rodar E005.c; echo "código: $?"
+```
+
+```text
+Saída esperada:
+Backup falhou: disco cheio
+Código de saída: 2
+código: 2
+```
+
+### 0002 · Variáveis
+
+**Exercício E007** · ★☆☆
+
+No mercado, a etiqueta de um produto tem: código 1042, preço R$ 8.99,
+peso 0.5 kg e setor 'H' (hortifrúti). Crie uma variável para cada dado,
+com o tipo certo, e mostre a etiqueta:
+
+```text
+Saída esperada:
+Código: 1042
+Preço: R$ 8.99
+Peso: 0.5 kg
+Setor: H
+```
+
+**Exercício E009** · ★★☆
+
+O cadastro de um aluno da autoescola guarda: idade (int, 19), nota da
+prova teórica (double, 8.5), nota da prova prática (double, 9.0),
+categoria da CNH (char, 'B') e número de aulas feitas (int, 20). Declare
+as cinco variáveis e mostre os valores e o sizeof de cada uma, uma por
+linha. Depois, mostre mais duas linhas, calculadas pelo programa: o total
+de bytes das cinco variáveis (somando os sizeof) e quanto seria o total
+se as duas notas fossem float (use sizeof(float) no lugar delas).
+
+```text
+Saída esperada:
+idade: 19 (4 bytes)
+teorica: 8.5 (8 bytes)
+pratica: 9.0 (8 bytes)
+categoria: B (1 byte)
+aulas: 20 (4 bytes)
+total: 25 bytes
+com float nas notas: 17 bytes
+```
+
+**Exercício E010** · ★★☆
+
+O placar eletrônico foi digitado invertido: casa = 1 e visitante = 3, e o
+certo é Casa 3 x 1 Visitante. Escreva um programa com as duas variáveis (int)
+que troque os valores usando uma variável auxiliar e mostre o placar
+certo.
+
+```text
+Saída esperada:
+Casa 3 x 1 Visitante
+```
+
+**Exercício E012** · ★★★
+
+Para o C, um char é só um número pequeno: o %c mostra o símbolo que tem
+aquele código, e o %d mostra o próprio código. Escreva um programa que
+mostre as linhas abaixo usando UMA variável char, que você vai
+reaproveitando (declara uma vez e troca o valor). As regras:
+
+- nas linhas 1, 3 e 4, o símbolo e o código saem da mesma variável, uma
+
+```text
+vez com %c e outra com %d;
+```
+
+- para o B da linha 2, guarde na variável o NÚMERO 66 (nada de 'B');
+- para o espaço da linha 4, guarde o número 32 (nada de ' ');
+- a última linha mostra lado a lado o caractere '7' e o número 7, os dois
+
+```text
+com %d.
+```
+
+```text
+Saída esperada:
+A 65
+B
+7 55
+[ ] 32
+'7' vale 55, 7 vale 7
+```
+
+### 0003 · Tipos e limites
+
+**Exercício E013** · ★☆☆
+
+Converta na mão cada binário para hexadecimal (cada grupo de 4 bits vira
+um dígito hexa) e escreva os números no código SÓ em hexadecimal, com 0x
+na frente. Quem converte para decimal é o printf, com %d. Na tabela de
+quantos valores cabem, use também hexa: 2 elevado a 4 é 0x10.
+
+```text
+binários: 0001 0110 e 1111 1111; hexas prontos: 0x1F e 0x100
+```
+
+```text
+Saída esperada:
+0001 0110 = 0x16 = 22
+1111 1111 = 0xFF = 255
+0x1F = 31
+0x100 = 256
+4 bits: 16 valores
+8 bits: 256 valores
+16 bits: 65536 valores
+```
+
+(Binário escrito como 0b10110 só virou padrão no C23; o rodar, que segue o
+C17, avisa se você usar.)
+
+**Exercício E015** · ★★☆
+
+Três contadores unsigned, três estouros que dão a volta. Escreva um
+programa com brilho (unsigned char) = 250, estoque (unsigned int) = 0 e
+odometro (unsigned short) = 65000. Some 10 ao brilho, tire 1 do estoque e
+some 1000 ao odômetro, guardando o resultado na própria variável. Mostre
+uma linha por contador, com o valor de antes, a conta, o valor de depois e o
+máximo do tipo, tirado do limits.h.
+
+```text
+Saída esperada:
+brilho: 250 + 10 = 4 (máximo 255)
+estoque: 0 - 1 = 4294967295 (máximo 4294967295)
+odômetro: 65000 + 1000 = 464 (máximo 65535)
+```
+
+**Exercício E016** · ★★☆
+
+De quantas maneiras 13 corredores podem cruzar a linha de chegada? É
+13! (13 fatorial = 1 * 2 * ... * 13). Escreva um programa que guarde
+12! = 479001600 numa variável, multiplique por 13 e mostre o resultado.
+O resultado passa do limite do int, então escolha o tipo que comporta.
+
+```text
+Saída esperada:
+13! = 6227020800 maneiras
+```
+
+**Exercício E017** · ★★★
+
+Muitos sistemas guardam a hora como "segundos desde 1/1/1970" num inteiro
+de 32 bits com sinal. Esse contador estoura em 19/01/2038. Escreva um
+programa que mostre por quê: o maior int32_t, quantos segundos têm 68 e 69
+anos (de 365 dias) e o maior int64_t. Compare os números: 1970 + 68 =
+2038, e o contador de 32 bits não aguenta chegar aos 69 anos.
+
+```text
+Saída esperada:
+int32_t vai até 2147483647
+68 anos: 2144448000 segundos
+69 anos: 2175984000 segundos
+int64_t vai até 9223372036854775807
+```
+
+### 0004 · Constantes
+
+**Exercício E019** · ★☆☆
+
+Mostre exatamente estas linhas, usando sequências de escape. A segunda
+linha tem um \t entre "Saldo:" e o valor.
+
+```text
+Saída esperada:
+Backup salvo em C:\Users\ana\notas.txt
+Saldo:	R$ 120,00
+O app avisou: "Pix recebido!"
+Rendimento: 100% do CDI
+```
+
+**Exercício E021** · ★★☆
+
+Escreva um programa com a mensalidade de uma academia. Defina
+MENSALIDADE (89.90) e DESCONTO (10.00) com #define, e o dia do vencimento
+(10) com const int. Mostre os três valores como abaixo, os reais com duas
+casas.
+
+```text
+Saída esperada:
+Mensalidade: R$ 89.90
+Desconto: R$ 10.00
+Vencimento: dia 10
+```
+
+**Exercício E022** · ★★☆
+
+O jeito de escrever um literal decide o tipo e, às vezes, o valor. Escreva
+um programa que mostre, para cada literal abaixo, o valor (com %d para os
+inteiros e %.1f para os reais) e o tamanho (sizeof, com %zu). O "0" é
+texto: dele, mostre só o tamanho.
+
+```text
+10     10.0     10.0f     010     0x10     '0'     "0"     1e3
+```
+
+```text
+Saída esperada:
+10: vale 10, 4 bytes
+10.0: vale 10.0, 8 bytes
+10.0f: vale 10.0, 4 bytes
+010: vale 8, 4 bytes
+0x10: vale 16, 4 bytes
+'0': vale 48, 4 bytes
+"0": 2 bytes
+1e3: vale 1000.0, 8 bytes
+```
+
+**Exercício E024** · ★★★
+
+Escreva um programa que mostre as seis linhas abaixo, seguindo as regras
+de cada uma:
+
+1. crie #define CIDADE "Recife" e use-o para o Recife; a palavra CIDADE
+
+```text
+ do começo da linha fica dentro das aspas do formato;
+```
+
+2. crie #define DDD 81 e use-o com %d;
+3. os três números saem dos literais 010, 0x10 e 10, com %d;
+4. "Oi!" sai de %c%c%c, com o 'O', o código do i escrito em hexa (0x69)
+
+```text
+ e o código do ! escrito em decimal (33);
+```
+
+5. o % aparece na tela;
+6. a barra e o n aparecem de verdade, numa linha só.
+
+```text
+Saída esperada:
+CIDADE: Recife
+DDD 81
+8 16 10
+Oi!
+50% off
+a\n b
+```
+
+### 0005 · printf
+
+**Exercício E025** · ★☆☆
+
+Mostre o boletim da Júlia com um printf por linha, usando variáveis:
+nota 8.75 (mostrada com uma casa), 3 faltas e conceito 'B'.
+
+```text
+Saída esperada:
+Aluna: Júlia
+Nota: 8.8
+Faltas: 03
+Conceito: B
+```
+
+**Exercício E027** · ★★☆
+
+Monte o painel de preços do posto, com as colunas alinhadas. Guarde cada
+preço numa variável double e use largura no formato (nada de contar
+espaços à mão). A linha de separação tem 22 sinais de igual.
+
+```text
+Saída esperada:
+Combustível   Preço/L
+======================
+Gasolina      R$ 6.29
+Etanol        R$ 4.19
+Diesel S10    R$ 6.09
+GNV           R$ 4.99
+```
+
+**Exercício E028** · ★★☆
+
+O pedido da pizzaria tem 3 pizzas de R$ 45.90. Escreva um programa que
+guarde a quantidade (int) e o preço (double), calcule o total e mostre as
+três linhas abaixo, com o formato certo para cada tipo.
+
+```text
+Saída esperada:
+Pizzas: 3
+Preço: R$ 45.90
+Total: R$ 137.70
+```
+
+**Exercício E029** · ★★★
+
+No CSS, uma cor é escrita como #RRGGBB: três bytes em hexadecimal, sempre
+com dois dígitos cada. O azul do botão do seu app tem vermelho 30, verde
+144 e azul 255. Guarde os três componentes em variáveis int e mostre a
+cor nos dois formatos do CSS.
+
+```text
+Saída esperada:
+#1E90FF
+rgb(30, 144, 255)
+```
+
+Teste também com vermelho 0, verde 8 e azul 15: a saída tem de ser
+#00080F, sempre com 7 caracteres.
+
+### 0006 · scanf
+
+**Exercício E031** · ★☆☆
+
+Escreva um programa que leia a idade (inteiro) e a altura em metros
+(real), nessa ordem, sem mostrar perguntas, e responda numa frase só, com a
+altura em duas casas.
+
+```text
+Entrada:
+30
+1.75
+Saída esperada:
+Você tem 30 anos e 1.75 m de altura.
+```
+
+**Exercício E033** · ★★☆
+
+O alarme do celular pede a hora no formato hh:mm. Escreva um programa
+que comece com hora = 0 e minuto = 0, leia os dois com UM scanf só ("%d:%d")
+e guarde o valor que o scanf devolve. Mostre quantos itens ele leu e a hora
+de dois jeitos. Teste com 6:05 e com "6 05" (espaço no lugar dos dois
+pontos).
+
+```text
+Entrada:
+6:05
+Saída esperada:
+Itens lidos: 2
+Alarme para 6h05
+Alarme para 06:05
+```
+
+```text
+Entrada:
+6 05
+Saída esperada:
+Itens lidos: 1
+Alarme para 6h00
+Alarme para 06:00
+```
+
+**Exercício E034** · ★★☆
+
+A lanchonete lê a quantidade de lanches (int) e a opção, V para viagem ou
+A para comer aqui (char), cada uma em uma linha. Escreva um programa que
+leia as duas, sem mostrar perguntas, e mostre a frase abaixo, com o código
+numérico do caractere no final.
+
+```text
+Entrada:
+3
+V
+Saída esperada:
+3 lanche(s), opção V (código 86)
+```
+
+**Exercício E035** · ★★★
+
+Escreva um programa que comece com int a = 0, b = 0;, leia os dois com
+UM scanf("%d %d", &a, &b), guarde o retorno e mostre "lidos=? a=? b=?".
+Teste com as três entradas abaixo.
+
+```text
+Entrada:
+7 9
+Saída esperada:
+lidos=2 a=7 b=9
+```
+
+```text
+Entrada:
+7 x
+Saída esperada:
+lidos=1 a=7 b=0
+```
+
+```text
+Entrada:
+x 7
+Saída esperada:
+lidos=0 a=0 b=0
+```
+
+### 0007 · Aritmética
+
+**Exercício E037** · ★☆☆
+
+Para a festa, você fez 50 brigadeiros e vai embalar em caixas de 12.
+Quantas caixas ficam cheias e quantos brigadeiros sobram? E os 7 ingressos
+do show a R$ 35 cada, quanto custam juntos? Use variáveis e deixe o
+programa fazer as contas.
+
+```text
+Saída esperada:
+Caixas cheias: 4
+Sobram: 2 brigadeiros
+Ingressos: R$ 245
+```
+
+**Exercício E039** · ★★☆
+
+Escreva o programa que racha a conta do restaurante: lê o valor da conta
+e o número de pessoas, sem mostrar perguntas, soma 10% de serviço e mostra
+o serviço, o total e quanto cada um paga, tudo em duas casas.
+
+```text
+Entrada:
+237.50
+4
+Saída esperada:
+Serviço (10%): R$ 23.75
+Total: R$ 261.25
+Cada um: R$ 65.31
+```
+
+**Exercício E040** · ★★☆
+
+Escreva um programa com três notas inteiras: 8, 7 e 8. Calcule a média
+como double, de dois jeitos: (1) dividindo a soma por 3.0; (2) convertendo
+a soma para double com um cast antes de dividir por 3. Mostre as duas com
+duas casas.
+
+```text
+Saída esperada:
+Média 1: 7.67
+Média 2: 7.67
+```
+
+**Exercício E042** · ★★★
+
+Leia um número de 3 dígitos, sem mostrar pergunta, e mostre ao contrário,
+usando só / e % (nada de texto). O programa tem de funcionar também quando o
+número termina em zero: com 120, a saída é 021, sempre com três dígitos.
+Teste com 472 e com 120.
+
+```text
+Entrada:
+472
+Saída esperada:
+Ao contrário: 274
+```
+
+```text
+Entrada:
+120
+Saída esperada:
+Ao contrário: 021
+```
+
+### 0008 · Conversão e cast
+
+**Exercício E043** · ★☆☆
+
+As notas do simulado são inteiras: 7, 8 e 10. Guarde em três int e mostre
+a média com duas casas, usando um cast (sem trocar o tipo das variáveis
+e sem escrever 3.0).
+
+```text
+Saída esperada:
+Média: 8.33
+```
+
+**Exercício E045** · ★★☆
+
+Na eleição para síndico, a candidata Marta teve 47 dos 130 votos. Guarde
+os dois números em variáveis int e mostre o percentual dela com duas
+casas. Depois mostre também o resultado das duas fórmulas que o colega
+tentou antes, com as mesmas variáveis e %d, para ver o estrago de cada
+uma.
+
+```text
+Saída esperada:
+Marta: 36.15% dos votos
+votos / total * 100 = 0
+100 * votos / total = 36
+```
+
+**Exercício E046** · ★★☆
+
+Na balança do açougue, a picanha custa R$ 45.90 o quilo. Escreva um
+programa com gramas = 600 (int) e preco_kg = 45.90 (double) que calcule e
+mostre o preço dessa quantidade. Os tipos das duas variáveis ficam como
+estão.
+
+```text
+Saída esperada:
+600 g: R$ 27.54
+```
+
+**Exercício E048** · ★★★
+
+Letras são números, e as contas com elas seguem as regras de conversão.
+Escreva um programa que comece com char letra = 'g'; e mostre as linhas
+abaixo. Regras: tirando a própria letra 'g', só valem os literais 'a',
+'A', 1 e 3 (nada de escrever 'G', 71, 7, 'j' ou 32). Na última linha, use
+as variáveis double x = 3.7, y = 3.7 e casts para int.
+
+```text
+Saída esperada:
+Letra: g (código 103)
+Maiúscula: G (código 71)
+Posição no alfabeto: 7
+Três adiante: j
+Somando e cortando: 7; cortando e somando: 6
+```
+
+### 0009 · Atribuição, ++ e --
+
+**Exercício E049** · ★☆☆
+
+Escreva um programa com pontos = 100, vidas = 3, moedas = 20, tempo = 90
+e fase = 3 (int). Atualize cada um usando só operadores compostos e ++ ou --:
+pontos ganha 10, vidas perde 1, moedas dobra, tempo cai pela metade e fase
+sobe 1. Mostre tudo numa linha só.
+
+```text
+Saída esperada:
+pontos 110, vidas 2, moedas 40, tempo 45, fase 4
+```
+
+**Exercício E051** · ★★☆
+
+O cofrinho digital começa vazio. Use uma variável saldo e os operadores
+compostos para registrar o mês, mostrando o saldo depois de cada passo:
+guarda R$ 15.00, guarda R$ 20.00, guarda R$ 12.50, tira R$ 30.00 para um
+presente e, no fim do mês, rende 1% (multiplique por 1.01). Conte também
+quantos depósitos foram feitos, com ++.
+
+```text
+Saída esperada:
+Depósito 1: R$ 15.00
+Depósito 2: R$ 35.00
+Depósito 3: R$ 47.50
+Presente: R$ 17.50
+Rendimento: R$ 17.68
+3 depósitos
+```
+
+**Exercício E052** · ★★☆
+
+Escreva um programa com x = 10 e y = 3 (int). Aplique em sequência, uma
+depois da outra, x *= y + 1, x -= y - 1, x /= y + 1 e x %= y + 2, mostrando
+a instrução e o novo valor de x depois de cada uma. Depois, volte x para 10
+e mostre x * 2 + y (só no printf, sem guardar) e x *= 2 + y (guardando em
+x), para ver que são contas diferentes.
+
+```text
+Saída esperada:
+x *= y + 1 -> 40
+x -= y - 1 -> 38
+x /= y + 1 -> 9
+x %= y + 2 -> 4
+x * 2 + y = 23
+x *= 2 + y -> 50
+```
+
+**Exercício E054** · ★★★
+
+O placar está invertido: casa = 2 e visitante = 5, e o certo é o
+contrário. Escreva um programa que troque os valores SEM usar uma terceira
+variável, só com += e -= (e, se precisar, um = simples), e mostre o
+placar certo.
+
+```text
+Saída esperada:
+Casa 5 x 2 Visitante
+```
+
+### 0010 · math.h
+
+**Exercício E055** · ★☆☆
+
+A loja anuncia uma TV com a tela de 121.8 cm de largura e 68.5 cm de
+altura. TVs são vendidas pela diagonal, em polegadas (1 polegada = 2.54
+cm). Calcule a diagonal com Pitágoras e mostre em cm e em polegadas.
+
+```text
+Saída esperada:
+Diagonal: 139.74 cm
+TV de 55 polegadas
+```
+
+```bash
+gcc ~/LPEDC/material/E055.c -o ~/LPEDC/material/E055 -lm && ~/LPEDC/material/E055
+```
+
+**Exercício E057** · ★★☆
+
+Você vai pintar 3 paredes de 4.0 m por 2.7 m, com 2 demãos. Uma lata de
+tinta cobre 25 m² e custa R$ 89.90. Lata não se vende pela metade.
+Calcule a área total a pintar, quantas latas comprar e quanto vai gastar.
+
+```text
+Saída esperada:
+Área com 2 demãos: 64.80 m²
+Latas: 2.59 -> comprar 3
+Total: R$ 269.70
+```
+
+```bash
+gcc ~/LPEDC/material/E057.c -o ~/LPEDC/material/E057 -lm && ~/LPEDC/material/E057
+```
+
+**Exercício E058** · ★★☆
+
+Você aplica R$ 1000.00 num investimento que rende 1% ao mês, com juros
+compostos (juros sobre juros). O montante depois de n meses é
+capital * (1 + taxa) elevado a n. Mostre o montante e o rendimento depois
+de 12 e de 24 meses. Para comparar, mostre também quanto teria em 24
+meses com juros simples (1% do capital por mês, sem juros sobre juros) e
+a diferença entre os dois em 24 meses.
+
+```text
+Saída esperada:
+12 meses: R$ 1126.83 (rendeu R$ 126.83)
+24 meses: R$ 1269.73 (rendeu R$ 269.73)
+Juros simples, 24 meses: R$ 1240.00
+Diferença: R$ 29.73
+```
+
+```bash
+gcc ~/LPEDC/material/E058.c -o ~/LPEDC/material/E058 -lm && ~/LPEDC/material/E058
+```
+
+**Exercício E060** · ★★★
+
+Do alto de uma laje de 1.5 m, você joga uma bola para cima a 20 m/s.
+Desprezando o ar, a altura depois de t segundos é
+h(t) = -5t² + 20t + 1.5. Calcule:
+
+a) o instante em que a bola chega ao chão (h = 0), com a fórmula de
+
+```text
+ Bhaskara: t = (-b - raiz(delta)) / (2a), com delta = b² - 4ac;
+```
+
+b) o instante da altura máxima, t = -b / (2a), e a altura nesse instante.
+
+```text
+Saída esperada:
+Delta: 430.00
+Chega ao chão em 4.07 s
+Altura máxima: 21.50 m, em 2.00 s
+```
+
+```bash
+gcc ~/LPEDC/material/E060.c -o ~/LPEDC/material/E060 -lm && ~/LPEDC/material/E060
+```
+
+### 0011 · Juntando tudo
 
 **Exercício E061** · ★☆☆
 
 Escreva a calculadora de IMC (índice de massa corporal): lê o peso em kg
 e a altura em metros, sem mostrar perguntas, e mostra o IMC com uma casa. A
 fórmula é peso / altura².
-
 
 ```text
 Entrada:
@@ -3012,7 +2546,6 @@ perguntas, e mostre o tempo em segundos, e em minutos e segundos. Atenção às
 unidades: 1 GB = 1000 MB, 1 byte = 8 bits. Arredonde os segundos totais para
 o inteiro mais próximo.
 
-
 ```text
 Entrada:
 4.7
@@ -3030,15 +2563,12 @@ gcc ~/LPEDC/material/E063.c -o ~/LPEDC/material/E063 -lm && ~/LPEDC/material/E06
 O celular custa R$ 1299.00 e a loja parcela em 12 vezes com juros de
 1.99% ao mês. A parcela fixa (tabela Price) é
 
-
 ```text
 parcela = valor * taxa / (1 - (1 + taxa) elevado a -n)
 ```
 
-
 Calcule a parcela, arredonde para centavos de verdade (não só na tela) e
 mostre o total pago e quanto foi de juros.
-
 
 ```text
 Saída esperada:
@@ -3058,7 +2588,6 @@ e os minutos de espera, sem mostrar perguntas, e mostre a hora da chegada no
 formato hh:mm e quantos dias depois de hoje ela cai. Sem if: só aritmética.
 Teste com os três casos abaixo.
 
-
 ```text
 Entrada:
 22:45
@@ -3066,8 +2595,6 @@ Entrada:
 Saída esperada:
 Chega às 01:00, 1 dia(s) depois
 ```
-
-
 
 ```text
 Entrada:
@@ -3077,8 +2604,6 @@ Saída esperada:
 Chega às 09:00, 0 dia(s) depois
 ```
 
-
-
 ```text
 Entrada:
 23:59
@@ -3087,13 +2612,543 @@ Saída esperada:
 Chega às 00:00, 3 dia(s) depois
 ```
 
-```bash
-gcc ~/LPEDC/material/E066.c -o ~/LPEDC/material/E066 && ~/LPEDC/material/E066
+### Lista do módulo
+
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P0101.c a P0130.c, em `material/`; resoluções em `_respostas/01-fundamentos/lista/`.
+
+#### ★☆☆ Aquecimento
+
+**Exercício P0101** · ★☆☆ · O plano trimestral da academia
+
+A academia do bairro cobra R$ 119.90 por mês e uma matrícula de R$ 49.90,
+paga uma vez só. Escreva um programa que guarde esses dois valores e o número
+de meses (3) em variáveis e mostre o resumo do plano trimestral:
+
+```text
+Saída esperada:
+Mensalidade: R$ 119.90
+Meses: 3
+Total do plano: R$ 409.60
 ```
 
 ---
 
-## Desafios do módulo
+**Exercício P0102** · ★☆☆ · Gasolina até Itacoatiara
+
+De Manaus a Itacoatiara são 176 km pela AM-010. O carro faz 11.5 km por litro
+e a gasolina custa R$ 6.79. Escreva um programa que calcule quantos litros a
+viagem de ida gasta e quanto custa, com duas casas decimais:
+
+```text
+Saída esperada:
+Distância: 176 km
+Litros: 15.30
+Custo da ida: R$ 103.92
+```
+
+**Resposta esperada:** 15.30 litros e R$ 103.92.
+
+---
+
+**Exercício P0103** · ★☆☆ · Minutos do plano de celular
+
+A fatura do celular diz que você falou 437 minutos no mês. Complete o
+programa: troque os dois zeros pelas contas certas, usando só / e %, para
+mostrar o tempo em horas e minutos:
+
+```text
+Saída esperada:
+437 minutos = 7 h e 17 min
+```
+
+---
+
+**Exercício P0104** · ★☆☆ · O termômetro importado
+
+O termômetro que veio de fora mostra 98.6 °F. O programa abaixo deveria
+converter para Celsius com C = 5 / 9 × (F − 32), mas mostra 0.0. O erro está
+na conta, de propósito. Conserte só a linha da conversão:
+
+```text
+Saída esperada:
+98.6 F = 37.0 C
+```
+
+---
+
+**Exercício P0105** · ★☆☆ · O painel de senhas do banco
+
+O painel do banco está na senha 41. Escreva um programa com int senha = 41;
+e, nesta ordem: guarde em chamada o valor de senha++; depois guarde em
+proxima o valor de ++senha. Mostre as três variáveis:
+
+```text
+Saída esperada:
+Chamada: 41
+Próxima: 43
+Senha no painel: 43
+```
+
+**Resposta esperada:** 41, 43 e 43.
+
+---
+
+**Exercício P0106** · ★☆☆ · Ônibus da excursão
+
+A escola vai levar 158 alunos ao Museu da Amazônia em ônibus de 44 lugares.
+Escreva um programa que mostre quantos ônibus saem lotados, quantos alunos vão
+no último ônibus e quantos ônibus a escola precisa alugar. Sem if: só / e %.
+
+```text
+Saída esperada:
+Ônibus lotados: 3
+Alunos no último: 26
+Ônibus para alugar: 4
+```
+
+**Resposta esperada:** 3, 26 e 4.
+
+---
+
+**Exercício P0107** · ★☆☆ · Os cocos da feira
+
+Na feira, três cocos a R$ 7.99 dão R$ 23.97. O feirante só aceita reais
+inteiros e quer ver quatro jeitos de chegar num valor sem centavos. Mostre o
+total e o resultado de (int), round, floor e ceil sobre ele:
+
+```text
+Saída esperada:
+Total: R$ 23.97
+(int):  23
+round:  24
+floor:  23
+ceil:   24
+```
+
+**Resposta esperada:** 23, 24, 23 e 24.
+
+```bash
+gcc ~/LPEDC/material/P0107.c -o ~/LPEDC/material/P0107 -lm && ~/LPEDC/material/P0107
+```
+
+---
+
+**Exercício P0108** · ★☆☆ · O Pix do país inteiro
+
+Suponha que 160 milhões de pessoas façam, cada uma, um Pix de R$ 25 no mesmo
+dia. Escreva um programa que mostre o maior int, o total em reais guardado
+num long long e quantas vezes o total é maior que o INT_MAX (divisão inteira):
+
+```text
+Saída esperada:
+Maior int: 2147483647
+Total do dia: R$ 4000000000
+O total é 1 vez(es) o INT_MAX
+```
+
+---
+
+**Exercício P0109** · ★☆☆ · Quadro de partidas da rodoviária
+
+O painel da rodoviária mostra destino, horário e preço. Guarde cada hora e
+cada minuto em int (9 e 5, 13 e 40, 22 e 0) e monte o quadro com os destinos
+alinhados à esquerda em 12 colunas, as horas com dois dígitos e os preços
+alinhados à direita em 7 colunas:
+
+```text
+Saída esperada:
+Destino     Hora   Preço
+Manacapuru  09:05   25.50
+Iranduba    13:40    9.80
+Presidente  22:00  112.00
+```
+
+**Resposta esperada:** as três linhas acima, com 09:05, 13:40 e 22:00.
+
+---
+
+**Exercício P0110** · ★☆☆ · Açaí no quilo
+
+A barraca vende açaí no quilo. Escreva um programa que leia o peso em kg e o
+preço do quilo e mostre quanto a pessoa paga. Um exemplo de interação:
+
+```text
+Saída esperada:
+Peso (kg): 1.5
+Preço do quilo: 28.00
+Total: R$ 42.00
+```
+
+**Resposta esperada:** com 1.5 e 28.00, Total: R$ 42.00.
+
+#### ★★☆ Para pensar
+
+**Exercício P0111** · ★★☆ · Quanto tempo leva o backup
+
+O backup das fotos da família vai levar 200000 segundos. Escreva um programa
+que mostre esse tempo em dias, horas, minutos e segundos, só com / e %:
+
+```text
+Saída esperada:
+200000 s = 2 dia(s), 7 h, 33 min e 20 s
+```
+
+---
+
+**Exercício P0112** · ★★☆ · Os dígitos do medidor de luz
+
+O medidor de luz da casa marca 4827 kWh. Escreva um programa que separe os
+quatro dígitos só com / e % e mostre cada um, a soma e o produto deles:
+
+```text
+Saída esperada:
+Dígitos: 4 8 2 7
+Soma: 21
+Produto: 448
+```
+
+**Resposta esperada:** soma 21 e produto 448.
+
+---
+
+**Exercício P0113** · ★★☆ · A média ponderada do concurso
+
+No concurso, a prova objetiva tem peso 2 e a discursiva tem peso 3. Com 6.0 e
+8.0, a média deveria ser (6.0 × 2 + 8.0 × 3) / 5 = 7.2, mas o programa abaixo
+mostra 16.8. O erro é de precedência e está lá de propósito. Conserte só com
+parênteses:
+
+```text
+Saída esperada:
+Média final: 7.2
+```
+
+---
+
+**Exercício P0114** · ★★☆ · O barco para Parintins
+
+De Manaus a Parintins o barco percorre 369 km a 25 km/h. Escreva um programa
+que calcule o tempo em horas (double), converta para minutos arredondando com
+round e mostre em horas e minutos:
+
+```text
+Saída esperada:
+Tempo: 14.76 h
+Em minutos: 886
+Chegada em 14 h e 46 min de viagem
+```
+
+**Resposta esperada:** 886 minutos, 14 h e 46 min.
+
+```bash
+gcc ~/LPEDC/material/P0114.c -o ~/LPEDC/material/P0114 -lm && ~/LPEDC/material/P0114
+```
+
+---
+
+**Exercício P0115** · ★★☆ · O pace da corrida de rua
+
+Você correu os 10 km da corrida de rua em 52 min e 30 s. Escreva um programa
+que mostre o pace (tempo por km) no formato m:ss e a velocidade média em km/h:
+
+```text
+Saída esperada:
+Tempo total: 3150 s
+Pace: 5:15 por km
+Velocidade: 11.43 km/h
+```
+
+**Resposta esperada:** Pace: 5:15 e 11.43 km/h.
+
+---
+
+**Exercício P0116** · ★★☆ · O centavo que sumiu
+
+O caixa da padaria guarda o preço em reais (double) e converte para centavos
+inteiros antes de mandar para a maquininha. Com o pão a R$ 4.35, a maquininha
+recebe 434 centavos. O programa abaixo tem esse erro de propósito: conserte a
+conversão para a maquininha receber 435, e mostre os dois valores:
+
+```text
+Saída esperada:
+Preço: R$ 4.35
+Centavos com (int): 434
+Centavos com round: 435
+```
+
+**Resposta esperada:** 434 com (int) e 435 com round.
+
+```bash
+gcc ~/LPEDC/material/P0116.c -o ~/LPEDC/material/P0116 -lm && ~/LPEDC/material/P0116
+```
+
+---
+
+**Exercício P0117** · ★★☆ · O ângulo dos ponteiros
+
+Num relógio de ponteiros, o das horas anda 30 graus por hora e mais 0.5 grau
+por minuto; o dos minutos anda 6 graus por minuto. Escreva um programa que
+mostre o ângulo entre os ponteiros às 14:20 e às 9:45, usando fabs:
+
+```text
+Saída esperada:
+14:20 -> 50.0 graus
+09:45 -> 22.5 graus
+```
+
+**Resposta esperada:** 50.0 e 22.5 graus.
+
+```bash
+gcc ~/LPEDC/material/P0117.c -o ~/LPEDC/material/P0117 -lm && ~/LPEDC/material/P0117
+```
+
+---
+
+**Exercício P0118** · ★★☆ · A playlist da viagem
+
+Três músicas da playlist duram 3:45, 4:12 e 5:03 (minutos:segundos). Guarde
+cada minuto e cada segundo num int e mostre a duração total e a média por
+música, as duas no formato m:ss:
+
+```text
+Saída esperada:
+Total: 13:00
+Média por música: 4:20
+```
+
+**Resposta esperada:** Total 13:00 e média 4:20.
+
+---
+
+**Exercício P0119** · ★★☆ · A caixa d'água da casa
+
+A caixa d'água cilíndrica tem raio de 0.6 m e altura de 1.2 m. A casa gasta
+180 litros por dia. Escreva um programa com const double PI = 3.14159265; que
+mostre o volume em m³, a capacidade em litros inteiros (corte com cast), por
+quantos dias completos a caixa cheia dura e quantos litros sobram:
+
+```text
+Saída esperada:
+Volume: 1.3572 m3
+Capacidade: 1357 litros
+Dura 7 dias completos e sobram 97 litros
+```
+
+**Resposta esperada:** 1357 litros, 7 dias e 97 litros de sobra.
+
+---
+
+**Exercício P0120** · ★★☆ · A média da ida e volta
+
+Você vai de carro ao sítio, 120 km, a 60 km/h, e volta pelos mesmos 120 km a
+40 km/h. Muita gente diz que a média foi 50 km/h. Escreva um programa que
+calcule o tempo de cada trecho, o tempo total e a velocidade média de verdade
+(distância total / tempo total):
+
+```text
+Saída esperada:
+Ida: 2.0 h
+Volta: 3.0 h
+Total: 240 km em 5.0 h
+Velocidade média: 48.0 km/h
+```
+
+#### ★★★ Desafio
+
+**Exercício P0121** · ★★★ · Os dígitos verificadores do CPF
+
+O CPF tem 9 dígitos e 2 verificadores. O 1º verificador: multiplique os 9
+dígitos pelos pesos 10, 9, 8, ..., 2, some e pegue o resto r da divisão por
+11; se r < 2 o dígito é 0, senão é 11 − r. O 2º usa os 9 dígitos mais o 1º
+verificador, com pesos 11, 10, ..., 2, e a mesma regra. Escreva um programa
+que, sem if, calcule os verificadores de 123456789 e mostre o CPF formatado:
+
+```text
+Saída esperada:
+Soma 1: 210, resto 1, dígito 0
+Soma 2: 255, resto 2, dígito 9
+CPF: 123.456.789-09
+```
+
+---
+
+**Exercício P0122** · ★★★ · Em que dia da semana cai a prova
+
+Dá para descobrir o dia da semana de qualquer data só com contas inteiras.
+Com a = (14 − mês) / 12, y = ano − a e m = mês + 12a − 2, o dia da semana é
+(dia + y + y/4 − y/100 + y/400 + 31m/12) % 7, com 0 = domingo, 1 = segunda,
+..., 6 = sábado. Escreva um programa que mostre o número do dia da semana da
+prova do PPGI (27/11/2026) e do Natal de 2026 (25/12/2026):
+
+```text
+Saída esperada:
+27/11/2026 -> dia 5 da semana (0 = domingo)
+25/12/2026 -> dia 5 da semana (0 = domingo)
+```
+
+**Resposta esperada:** as duas datas caem numa sexta-feira (5).
+
+---
+
+**Exercício P0123** · ★★★ · Quantos dias faltam para a prova
+
+Para contar os dias entre duas datas, transforme cada uma num número de dias
+desde uma data fixa e subtraia. Com a = (14 − mês) / 12, y = ano − a e m =
+mês + 12a − 3, o número do dia é dia + (153m + 2)/5 + 365y + y/4 − y/100 +
+y/400. Escreva um programa que mostre quantos dias há de 15/08/2026 até a
+prova, em 27/11/2026, e quantas semanas completas e dias isso dá:
+
+```text
+Saída esperada:
+De 15/08/2026 a 27/11/2026: 104 dias
+São 14 semanas e 6 dias
+```
+
+**Resposta esperada:** 104 dias, 14 semanas e 6 dias.
+
+---
+
+**Exercício P0124** · ★★★ · O dígito do código de barras
+
+O código de barras dos produtos (EAN-13) tem 12 dígitos e um verificador.
+Multiplique os dígitos, da esquerda para a direita, alternando os pesos 1 e 3;
+o verificador é (10 − soma % 10) % 10. Escreva um programa que guarde
+789123456789 num long long, calcule o verificador sem if e mostre o código
+completo:
+
+```text
+Saída esperada:
+Soma ponderada: 135
+Verificador: 5
+Código: 7891234567895
+```
+
+---
+
+**Exercício P0125** · ★★★ · O byte escrito com zeros e uns
+
+O manual do sensor diz que o registro de configuração deve receber o byte
+10110110. Guarde isso num int como se fosse decimal (int bits = 10110110;),
+separe cada "dígito" com / e % por 10, monte o valor de verdade com os pesos
+128, 64, ..., 1 e mostre em decimal, hexadecimal e octal:
+
+```text
+Saída esperada:
+Bits: 10110110
+Decimal: 182
+Hexadecimal: 0xB6
+Octal: 0266
+```
+
+**Resposta esperada:** 182, 0xB6 e 0266.
+
+---
+
+**Exercício P0126** · ★★★ · Previsão da maratona
+
+A fórmula de Riegel prevê o tempo numa prova mais longa a partir de uma mais
+curta: T2 = T1 × (D2 / D1) elevado a 1.06. Você correu 10 km em 50 min.
+Escreva um programa que preveja o tempo na maratona (42.195 km), arredonde
+para segundos inteiros e mostre no formato h:mm:ss, além do pace previsto:
+
+```text
+Saída esperada:
+Previsão: 13801 s
+Maratona em 3:50:01
+Pace previsto: 5:27 por km
+```
+
+```bash
+gcc ~/LPEDC/material/P0126.c -o ~/LPEDC/material/P0126 -lm && ~/LPEDC/material/P0126
+```
+
+---
+
+**Exercício P0127** · ★★★ · Fibonacci sem laço
+
+Na sequência de Fibonacci (0, 1, 1, 2, 3, 5, 8, ...), o termo n é o inteiro
+mais perto de φⁿ / √5, onde φ = (1 + √5) / 2 é a razão áurea (fórmula de
+Binet). Escreva um programa que calcule φ com sqrt e mostre os termos 10, 30
+e 40 com pow e round, guardando cada um num long:
+
+```text
+Saída esperada:
+phi = 1.6180339887
+F(10) = 55
+F(30) = 832040
+F(40) = 102334155
+```
+
+**Resposta esperada:** 55, 832040 e 102334155.
+
+```bash
+gcc ~/LPEDC/material/P0127.c -o ~/LPEDC/material/P0127 -lm && ~/LPEDC/material/P0127
+```
+
+---
+
+**Exercício P0128** · ★★★ · De Manaus a Belém em linha reta
+
+A distância em linha reta entre dois pontos da Terra sai da fórmula de
+haversine. Com as latitudes e longitudes em radianos, faça
+a = sin²(Δlat/2) + cos(lat1)·cos(lat2)·sin²(Δlon/2) e
+d = 2 · R · asin(√a), com R = 6371 km. Manaus fica em (−3.1190, −60.0217) e
+Belém em (−1.4558, −48.4902), em graus. Escreva um programa, com
+#define PI 3.14159265358979, que mostre a distância arredondada para km:
+
+```text
+Saída esperada:
+Manaus: -3.1190, -60.0217
+Belém: -1.4558, -48.4902
+Distância: 1294 km
+```
+
+```bash
+gcc ~/LPEDC/material/P0128.c -o ~/LPEDC/material/P0128 -lm && ~/LPEDC/material/P0128
+```
+
+---
+
+**Exercício P0129** · ★★★ · A data da Páscoa
+
+A data da Páscoa muda todo ano, mas sai de uma receita só de contas inteiras
+(algoritmo de Meeus). Para o ano A: a = A % 19, b = A / 100, c = A % 100,
+d = b / 4, e = b % 4, f = (b + 8) / 25, g = (b − f + 1) / 3,
+h = (19a + b − d − g + 15) % 30, i = c / 4, k = c % 4,
+l = (32 + 2e + 2i − h − k) % 7, m = (a + 11h + 22l) / 451,
+mês = (h + l − 7m + 114) / 31 e dia = (h + l − 7m + 114) % 31 + 1.
+Escreva um programa que mostre a Páscoa de 2026 e de 2027:
+
+```text
+Saída esperada:
+Páscoa de 2026: 05/04
+Páscoa de 2027: 28/03
+```
+
+**Resposta esperada:** 05/04 em 2026 e 28/03 em 2027.
+
+---
+
+**Exercício P0130** · ★★★ · Os quatro bytes de um int
+
+Um int de 4 bytes guarda o número 305419896. Sem nenhum operador de bits, só
+com / e % por 256, separe os quatro bytes (do mais significativo para o
+menos), mostre cada um em decimal e em hexadecimal com dois dígitos, e depois
+remonte o número a partir dos bytes para conferir:
+
+```text
+Saída esperada:
+Número: 305419896 (0x12345678)
+Bytes: 18 52 86 120
+Em hexa: 12 34 56 78
+Remontado: 305419896
+```
+
+**Resposta esperada:** 18 52 86 120, ou 12 34 56 78 em hexa.
+
+---
+
+### Desafios do módulo
 
 Problemas com variáveis, `scanf`, aritmética, conversões, `math.h` e
 `printf`. Nenhum precisa de `if` nem de laço. Escreva cada um num arquivo seu
@@ -3266,7 +3321,7 @@ sinal estoura, e isso é **comportamento indefinido**: costuma virar
 
 </details>
 
-## Questões do POSCOMP
+### Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -3274,832 +3329,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 | --- | --- | --- | --- | --- |
 | 2024 | 45 | Tipos de dados básicos de linguagem | A | [caderno](https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2024.pdf) |
 
-
-## Lista de exercícios práticos
-
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P0101.c a P0130.c, em `material/`; resoluções em `_respostas/01-fundamentos/lista/`.
-
-### ★☆☆ Aquecimento
-
-**Exercício P0101** · ★☆☆ · O plano trimestral da academia
-
-A academia do bairro cobra R$ 119.90 por mês e uma matrícula de R$ 49.90,
-paga uma vez só. Escreva um programa que guarde esses dois valores e o número
-de meses (3) em variáveis e mostre o resumo do plano trimestral:
-
-
-```text
-Saída esperada:
-Mensalidade: R$ 119.90
-Meses: 3
-Total do plano: R$ 409.60
-```
-
-**Dicas:**
-
-1. Preço é double; quantidade de meses é int.
-2. O total é mensalidade * meses + matricula. O int vira double sozinho na
-   conta.
-3. Resposta esperada: Total do plano: R$ 409.60.
-
-```bash
-gcc ~/LPEDC/material/P0101.c -o ~/LPEDC/material/P0101 && ~/LPEDC/material/P0101
-```
-
----
-
-**Exercício P0102** · ★☆☆ · Gasolina até Itacoatiara
-
-De Manaus a Itacoatiara são 176 km pela AM-010. O carro faz 11.5 km por litro
-e a gasolina custa R$ 6.79. Escreva um programa que calcule quantos litros a
-viagem de ida gasta e quanto custa, com duas casas decimais:
-
-
-```text
-Saída esperada:
-Distância: 176 km
-Litros: 15.30
-Custo da ida: R$ 103.92
-```
-
-**Dicas:**
-
-1. litros = distancia / consumo. Como consumo é double, a divisão é real.
-2. custo = litros * preco. Guarde o valor inteiro de litros; só o printf
-   arredonda para mostrar.
-3. Resposta esperada: 15.30 litros e R$ 103.92.
-
-```bash
-gcc ~/LPEDC/material/P0102.c -o ~/LPEDC/material/P0102 && ~/LPEDC/material/P0102
-```
-
----
-
-**Exercício P0103** · ★☆☆ · Minutos do plano de celular
-
-A fatura do celular diz que você falou 437 minutos no mês. Complete o
-programa: troque os dois zeros pelas contas certas, usando só / e %, para
-mostrar o tempo em horas e minutos:
-
-
-```text
-Saída esperada:
-437 minutos = 7 h e 17 min
-```
-
-**Dicas:**
-
-1. Uma hora tem 60 minutos. A divisão inteira diz quantas horas cabem.
-2. O resto da divisão (%) diz quantos minutos sobram.
-3. Resposta esperada: 7 h e 17 min.
-
-```bash
-gcc ~/LPEDC/material/P0103.c -o ~/LPEDC/material/P0103 && ~/LPEDC/material/P0103
-```
-
----
-
-**Exercício P0104** · ★☆☆ · O termômetro importado
-
-O termômetro que veio de fora mostra 98.6 °F. O programa abaixo deveria
-converter para Celsius com C = 5 / 9 × (F − 32), mas mostra 0.0. O erro está
-na conta, de propósito. Conserte só a linha da conversão:
-
-
-```text
-Saída esperada:
-98.6 F = 37.0 C
-```
-
-**Dicas:**
-
-1. Calcule na mão quanto vale 5 / 9 em C quando os dois são int.
-2. Basta um dos lados ser double: 5.0 / 9 já dá 0.5555...
-3. Resposta esperada: 98.6 F = 37.0 C.
-
-```bash
-gcc ~/LPEDC/material/P0104.c -o ~/LPEDC/material/P0104 && ~/LPEDC/material/P0104
-```
-
----
-
-**Exercício P0105** · ★☆☆ · O painel de senhas do banco
-
-O painel do banco está na senha 41. Escreva um programa com int senha = 41;
-e, nesta ordem: guarde em chamada o valor de senha++; depois guarde em
-proxima o valor de ++senha. Mostre as três variáveis:
-
-
-```text
-Saída esperada:
-Chamada: 41
-Próxima: 43
-Senha no painel: 43
-```
-
-**Dicas:**
-
-1. senha++ entrega o valor antigo e só depois soma 1.
-2. ++senha soma 1 primeiro e entrega o valor novo.
-3. Resposta esperada: 41, 43 e 43.
-
-```bash
-gcc ~/LPEDC/material/P0105.c -o ~/LPEDC/material/P0105 && ~/LPEDC/material/P0105
-```
-
----
-
-**Exercício P0106** · ★☆☆ · Ônibus da excursão
-
-A escola vai levar 158 alunos ao Museu da Amazônia em ônibus de 44 lugares.
-Escreva um programa que mostre quantos ônibus saem lotados, quantos alunos vão
-no último ônibus e quantos ônibus a escola precisa alugar. Sem if: só / e %.
-
-
-```text
-Saída esperada:
-Ônibus lotados: 3
-Alunos no último: 26
-Ônibus para alugar: 4
-```
-
-**Dicas:**
-
-1. Lotados é a divisão inteira; quem sobra é o resto.
-2. Para arredondar a divisão para cima sem if, some 43 (lugares - 1) antes de
-   dividir: (alunos + lugares - 1) / lugares.
-3. Resposta esperada: 3, 26 e 4.
-
-```bash
-gcc ~/LPEDC/material/P0106.c -o ~/LPEDC/material/P0106 && ~/LPEDC/material/P0106
-```
-
----
-
-**Exercício P0107** · ★☆☆ · Os cocos da feira
-
-Na feira, três cocos a R$ 7.99 dão R$ 23.97. O feirante só aceita reais
-inteiros e quer ver quatro jeitos de chegar num valor sem centavos. Mostre o
-total e o resultado de (int), round, floor e ceil sobre ele:
-
-
-```text
-Saída esperada:
-Total: R$ 23.97
-(int):  23
-round:  24
-floor:  23
-ceil:   24
-```
-
-**Dicas:**
-
-1. round, floor e ceil estão no math.h e devolvem double: mostre com %.0f.
-2. O (int) corta a parte decimal, como o floor faz com números positivos.
-3. Resposta esperada: 23, 24, 23 e 24.
-
-```bash
-gcc ~/LPEDC/material/P0107.c -o ~/LPEDC/material/P0107 -lm && ~/LPEDC/material/P0107
-```
-
----
-
-**Exercício P0108** · ★☆☆ · O Pix do país inteiro
-
-Suponha que 160 milhões de pessoas façam, cada uma, um Pix de R$ 25 no mesmo
-dia. Escreva um programa que mostre o maior int, o total em reais guardado
-num long long e quantas vezes o total é maior que o INT_MAX (divisão inteira):
-
-
-```text
-Saída esperada:
-Maior int: 2147483647
-Total do dia: R$ 4000000000
-O total é 1 vez(es) o INT_MAX
-```
-
-**Dicas:**
-
-1. INT_MAX vem de limits.h. A conta 160000000 * 25 entre dois int estoura:
-   escreva 160000000LL * 25 para a conta já acontecer em long long.
-2. long long se mostra com %lld.
-3. Resposta esperada: Total do dia: R$ 4000000000.
-
-```bash
-gcc ~/LPEDC/material/P0108.c -o ~/LPEDC/material/P0108 && ~/LPEDC/material/P0108
-```
-
----
-
-**Exercício P0109** · ★☆☆ · Quadro de partidas da rodoviária
-
-O painel da rodoviária mostra destino, horário e preço. Guarde cada hora e
-cada minuto em int (9 e 5, 13 e 40, 22 e 0) e monte o quadro com os destinos
-alinhados à esquerda em 12 colunas, as horas com dois dígitos e os preços
-alinhados à direita em 7 colunas:
-
-
-```text
-Saída esperada:
-Destino     Hora   Preço
-Manacapuru  09:05   25.50
-Iranduba    13:40    9.80
-Presidente  22:00  112.00
-```
-
-**Dicas:**
-
-1. %-12s alinha o texto à esquerda em 12 colunas; %02d põe o zero na frente.
-2. %7.2f ocupa 7 colunas com duas casas.
-3. Resposta esperada: as três linhas acima, com 09:05, 13:40 e 22:00.
-
-```bash
-gcc ~/LPEDC/material/P0109.c -o ~/LPEDC/material/P0109 && ~/LPEDC/material/P0109
-```
-
----
-
-**Exercício P0110** · ★☆☆ · Açaí no quilo
-
-A barraca vende açaí no quilo. Escreva um programa que leia o peso em kg e o
-preço do quilo e mostre quanto a pessoa paga. Um exemplo de interação:
-
-
-```text
-Saída esperada:
-Peso (kg): 1.5
-Preço do quilo: 28.00
-Total: R$ 42.00
-```
-
-**Dicas:**
-
-1. Leia os dois com %lf, num double, e não esqueça o &.
-2. O total é peso * preco.
-3. Resposta esperada: com 1.5 e 28.00, Total: R$ 42.00.
-
-```bash
-gcc ~/LPEDC/material/P0110.c -o ~/LPEDC/material/P0110 && ~/LPEDC/material/P0110
-```
-
-### ★★☆ Para pensar
-
-**Exercício P0111** · ★★☆ · Quanto tempo leva o backup
-
-O backup das fotos da família vai levar 200000 segundos. Escreva um programa
-que mostre esse tempo em dias, horas, minutos e segundos, só com / e %:
-
-
-```text
-Saída esperada:
-200000 s = 2 dia(s), 7 h, 33 min e 20 s
-```
-
-**Dicas:**
-
-1. Um dia tem 86400 s, uma hora 3600 s. Depois de tirar os dias, trabalhe
-   com o resto.
-2. Faça em cascata: dias = total / 86400; resto = total % 86400; e assim por
-   diante.
-3. Resposta esperada: 2 dia(s), 7 h, 33 min e 20 s.
-
-```bash
-gcc ~/LPEDC/material/P0111.c -o ~/LPEDC/material/P0111 && ~/LPEDC/material/P0111
-```
-
----
-
-**Exercício P0112** · ★★☆ · Os dígitos do medidor de luz
-
-O medidor de luz da casa marca 4827 kWh. Escreva um programa que separe os
-quatro dígitos só com / e % e mostre cada um, a soma e o produto deles:
-
-
-```text
-Saída esperada:
-Dígitos: 4 8 2 7
-Soma: 21
-Produto: 448
-```
-
-**Dicas:**
-
-1. O milhar é n / 1000. A centena é n / 100 % 10. A dezena é n / 10 % 10.
-2. A unidade é n % 10.
-3. Resposta esperada: soma 21 e produto 448.
-
-```bash
-gcc ~/LPEDC/material/P0112.c -o ~/LPEDC/material/P0112 && ~/LPEDC/material/P0112
-```
-
----
-
-**Exercício P0113** · ★★☆ · A média ponderada do concurso
-
-No concurso, a prova objetiva tem peso 2 e a discursiva tem peso 3. Com 6.0 e
-8.0, a média deveria ser (6.0 × 2 + 8.0 × 3) / 5 = 7.2, mas o programa abaixo
-mostra 16.8. O erro é de precedência e está lá de propósito. Conserte só com
-parênteses:
-
-
-```text
-Saída esperada:
-Média final: 7.2
-```
-
-**Dicas:**
-
-1. Em C, * e / são feitos antes de +. Quem está sendo dividido por 5 hoje?
-2. A soma inteira dos pesos tem que acontecer antes da divisão.
-3. Resposta esperada: Média final: 7.2.
-
-```bash
-gcc ~/LPEDC/material/P0113.c -o ~/LPEDC/material/P0113 && ~/LPEDC/material/P0113
-```
-
----
-
-**Exercício P0114** · ★★☆ · O barco para Parintins
-
-De Manaus a Parintins o barco percorre 369 km a 25 km/h. Escreva um programa
-que calcule o tempo em horas (double), converta para minutos arredondando com
-round e mostre em horas e minutos:
-
-
-```text
-Saída esperada:
-Tempo: 14.76 h
-Em minutos: 886
-Chegada em 14 h e 46 min de viagem
-```
-
-**Dicas:**
-
-1. horas = 369.0 / 25. Os minutos totais são round(horas * 60), convertidos
-   para int com um cast.
-2. Depois é / 60 e % 60 nos minutos totais.
-3. Resposta esperada: 886 minutos, 14 h e 46 min.
-
-```bash
-gcc ~/LPEDC/material/P0114.c -o ~/LPEDC/material/P0114 -lm && ~/LPEDC/material/P0114
-```
-
----
-
-**Exercício P0115** · ★★☆ · O pace da corrida de rua
-
-Você correu os 10 km da corrida de rua em 52 min e 30 s. Escreva um programa
-que mostre o pace (tempo por km) no formato m:ss e a velocidade média em km/h:
-
-
-```text
-Saída esperada:
-Tempo total: 3150 s
-Pace: 5:15 por km
-Velocidade: 11.43 km/h
-```
-
-**Dicas:**
-
-1. Passe tudo para segundos: 52 * 60 + 30. O pace em segundos é o total
-   dividido pela distância.
-2. A velocidade é distancia / (segundos / 3600.0). Use 3600.0 para a divisão
-   não ser inteira.
-3. Resposta esperada: Pace: 5:15 e 11.43 km/h.
-
-```bash
-gcc ~/LPEDC/material/P0115.c -o ~/LPEDC/material/P0115 && ~/LPEDC/material/P0115
-```
-
----
-
-**Exercício P0116** · ★★☆ · O centavo que sumiu
-
-O caixa da padaria guarda o preço em reais (double) e converte para centavos
-inteiros antes de mandar para a maquininha. Com o pão a R$ 4.35, a maquininha
-recebe 434 centavos. O programa abaixo tem esse erro de propósito: conserte a
-conversão para a maquininha receber 435, e mostre os dois valores:
-
-
-```text
-Saída esperada:
-Preço: R$ 4.35
-Centavos com (int): 434
-Centavos com round: 435
-```
-
-**Dicas:**
-
-1. 4.35 não cabe exato em binário: 4.35 * 100 dá 434.99999999999994, e o
-   (int) corta tudo depois da vírgula.
-2. Arredonde antes de converter: (int)round(preco * 100), com math.h.
-3. Resposta esperada: 434 com (int) e 435 com round.
-
-```bash
-gcc ~/LPEDC/material/P0116.c -o ~/LPEDC/material/P0116 -lm && ~/LPEDC/material/P0116
-```
-
----
-
-**Exercício P0117** · ★★☆ · O ângulo dos ponteiros
-
-Num relógio de ponteiros, o das horas anda 30 graus por hora e mais 0.5 grau
-por minuto; o dos minutos anda 6 graus por minuto. Escreva um programa que
-mostre o ângulo entre os ponteiros às 14:20 e às 9:45, usando fabs:
-
-
-```text
-Saída esperada:
-14:20 -> 50.0 graus
-09:45 -> 22.5 graus
-```
-
-**Dicas:**
-
-1. Ponteiro das horas: 30 * (h % 12) + 0.5 * m. Dos minutos: 6 * m.
-2. O ângulo é fabs(horas - minutos). Use 0.5 (double) para a conta não virar
-   inteira.
-3. Resposta esperada: 50.0 e 22.5 graus.
-
-```bash
-gcc ~/LPEDC/material/P0117.c -o ~/LPEDC/material/P0117 -lm && ~/LPEDC/material/P0117
-```
-
----
-
-**Exercício P0118** · ★★☆ · A playlist da viagem
-
-Três músicas da playlist duram 3:45, 4:12 e 5:03 (minutos:segundos). Guarde
-cada minuto e cada segundo num int e mostre a duração total e a média por
-música, as duas no formato m:ss:
-
-
-```text
-Saída esperada:
-Total: 13:00
-Média por música: 4:20
-```
-
-**Dicas:**
-
-1. Passe cada música para segundos, some e só depois volte para m:ss.
-2. A média em segundos é o total / 3 (divisão inteira).
-3. Resposta esperada: Total 13:00 e média 4:20.
-
-```bash
-gcc ~/LPEDC/material/P0118.c -o ~/LPEDC/material/P0118 && ~/LPEDC/material/P0118
-```
-
----
-
-**Exercício P0119** · ★★☆ · A caixa d'água da casa
-
-A caixa d'água cilíndrica tem raio de 0.6 m e altura de 1.2 m. A casa gasta
-180 litros por dia. Escreva um programa com const double PI = 3.14159265; que
-mostre o volume em m³, a capacidade em litros inteiros (corte com cast), por
-quantos dias completos a caixa cheia dura e quantos litros sobram:
-
-
-```text
-Saída esperada:
-Volume: 1.3572 m3
-Capacidade: 1357 litros
-Dura 7 dias completos e sobram 97 litros
-```
-
-**Dicas:**
-
-1. Volume do cilindro: PI * r * r * h. Um m³ tem 1000 litros.
-2. Com os litros em int, dias = litros / 180 e sobra = litros % 180.
-3. Resposta esperada: 1357 litros, 7 dias e 97 litros de sobra.
-
-```bash
-gcc ~/LPEDC/material/P0119.c -o ~/LPEDC/material/P0119 && ~/LPEDC/material/P0119
-```
-
----
-
-**Exercício P0120** · ★★☆ · A média da ida e volta
-
-Você vai de carro ao sítio, 120 km, a 60 km/h, e volta pelos mesmos 120 km a
-40 km/h. Muita gente diz que a média foi 50 km/h. Escreva um programa que
-calcule o tempo de cada trecho, o tempo total e a velocidade média de verdade
-(distância total / tempo total):
-
-
-```text
-Saída esperada:
-Ida: 2.0 h
-Volta: 3.0 h
-Total: 240 km em 5.0 h
-Velocidade média: 48.0 km/h
-```
-
-**Dicas:**
-
-1. Tempo = distância / velocidade, em double.
-2. A média é 240 / 5, não (60 + 40) / 2: você passa mais tempo no trecho
-   lento.
-3. Resposta esperada: Velocidade média: 48.0 km/h.
-
-```bash
-gcc ~/LPEDC/material/P0120.c -o ~/LPEDC/material/P0120 && ~/LPEDC/material/P0120
-```
-
-### ★★★ Desafio
-
-**Exercício P0121** · ★★★ · Os dígitos verificadores do CPF
-
-O CPF tem 9 dígitos e 2 verificadores. O 1º verificador: multiplique os 9
-dígitos pelos pesos 10, 9, 8, ..., 2, some e pegue o resto r da divisão por
-11; se r < 2 o dígito é 0, senão é 11 − r. O 2º usa os 9 dígitos mais o 1º
-verificador, com pesos 11, 10, ..., 2, e a mesma regra. Escreva um programa
-que, sem if, calcule os verificadores de 123456789 e mostre o CPF formatado:
-
-
-```text
-Saída esperada:
-Soma 1: 210, resto 1, dígito 0
-Soma 2: 255, resto 2, dígito 9
-CPF: 123.456.789-09
-```
-
-**Dicas:**
-
-1. Separe os dígitos com / e % (d1 = n / 100000000, d2 = n / 10000000 % 10,
-   ... d9 = n % 10).
-2. Truque sem if: (11 - r) % 11 % 10. Com r = 0 dá 0, com r = 1 dá 10 % 10 =
-   0, e com r de 2 a 10 dá 11 − r.
-3. Para formatar: n / 1000000, n / 1000 % 1000 e n % 1000, com %03d.
-4. Resposta esperada: CPF: 123.456.789-09.
-
-```bash
-gcc ~/LPEDC/material/P0121.c -o ~/LPEDC/material/P0121 && ~/LPEDC/material/P0121
-```
-
----
-
-**Exercício P0122** · ★★★ · Em que dia da semana cai a prova
-
-Dá para descobrir o dia da semana de qualquer data só com contas inteiras.
-Com a = (14 − mês) / 12, y = ano − a e m = mês + 12a − 2, o dia da semana é
-(dia + y + y/4 − y/100 + y/400 + 31m/12) % 7, com 0 = domingo, 1 = segunda,
-..., 6 = sábado. Escreva um programa que mostre o número do dia da semana da
-prova do PPGI (27/11/2026) e do Natal de 2026 (25/12/2026):
-
-
-```text
-Saída esperada:
-27/11/2026 -> dia 5 da semana (0 = domingo)
-25/12/2026 -> dia 5 da semana (0 = domingo)
-```
-
-**Dicas:**
-
-1. Todas as divisões são inteiras, e é isso que faz a fórmula
-   funcionar. O a vale 1 em janeiro e fevereiro e 0 nos outros meses.
-2. Repita as contas para a segunda data, com variáveis próprias.
-3. Resposta esperada: as duas datas caem numa sexta-feira (5).
-
-```bash
-gcc ~/LPEDC/material/P0122.c -o ~/LPEDC/material/P0122 && ~/LPEDC/material/P0122
-```
-
----
-
-**Exercício P0123** · ★★★ · Quantos dias faltam para a prova
-
-Para contar os dias entre duas datas, transforme cada uma num número de dias
-desde uma data fixa e subtraia. Com a = (14 − mês) / 12, y = ano − a e m =
-mês + 12a − 3, o número do dia é dia + (153m + 2)/5 + 365y + y/4 − y/100 +
-y/400. Escreva um programa que mostre quantos dias há de 15/08/2026 até a
-prova, em 27/11/2026, e quantas semanas completas e dias isso dá:
-
-
-```text
-Saída esperada:
-De 15/08/2026 a 27/11/2026: 104 dias
-São 14 semanas e 6 dias
-```
-
-**Dicas:**
-
-1. Calcule o número do dia para cada data, com variáveis separadas, e
-   subtraia: o resultado é a distância em dias.
-2. Semanas é a diferença / 7; o resto é a diferença % 7.
-3. Resposta esperada: 104 dias, 14 semanas e 6 dias.
-
-```bash
-gcc ~/LPEDC/material/P0123.c -o ~/LPEDC/material/P0123 && ~/LPEDC/material/P0123
-```
-
----
-
-**Exercício P0124** · ★★★ · O dígito do código de barras
-
-O código de barras dos produtos (EAN-13) tem 12 dígitos e um verificador.
-Multiplique os dígitos, da esquerda para a direita, alternando os pesos 1 e 3;
-o verificador é (10 − soma % 10) % 10. Escreva um programa que guarde
-789123456789 num long long, calcule o verificador sem if e mostre o código
-completo:
-
-
-```text
-Saída esperada:
-Soma ponderada: 135
-Verificador: 5
-Código: 7891234567895
-```
-
-**Dicas:**
-
-1. 12 dígitos não cabem num int: use long long e o sufixo LL.
-2. O 1º dígito é n / 100000000000 % 10, o último é n % 10. Pesos: 1, 3, 1,
-   3, ... (o 1º dígito tem peso 1).
-3. O código completo é n * 10 + verificador, mostrado com %lld.
-4. Resposta esperada: Código: 7891234567895.
-
-```bash
-gcc ~/LPEDC/material/P0124.c -o ~/LPEDC/material/P0124 && ~/LPEDC/material/P0124
-```
-
----
-
-**Exercício P0125** · ★★★ · O byte escrito com zeros e uns
-
-O manual do sensor diz que o registro de configuração deve receber o byte
-10110110. Guarde isso num int como se fosse decimal (int bits = 10110110;),
-separe cada "dígito" com / e % por 10, monte o valor de verdade com os pesos
-128, 64, ..., 1 e mostre em decimal, hexadecimal e octal:
-
-
-```text
-Saída esperada:
-Bits: 10110110
-Decimal: 182
-Hexadecimal: 0xB6
-Octal: 0266
-```
-
-**Dicas:**
-
-1. O bit mais à esquerda é bits / 10000000 % 10 e vale 128; o mais à direita
-   é bits % 10 e vale 1.
-2. %X mostra em hexadecimal maiúsculo e %o em octal.
-3. Resposta esperada: 182, 0xB6 e 0266.
-
-```bash
-gcc ~/LPEDC/material/P0125.c -o ~/LPEDC/material/P0125 && ~/LPEDC/material/P0125
-```
-
----
-
-**Exercício P0126** · ★★★ · Previsão da maratona
-
-A fórmula de Riegel prevê o tempo numa prova mais longa a partir de uma mais
-curta: T2 = T1 × (D2 / D1) elevado a 1.06. Você correu 10 km em 50 min.
-Escreva um programa que preveja o tempo na maratona (42.195 km), arredonde
-para segundos inteiros e mostre no formato h:mm:ss, além do pace previsto:
-
-
-```text
-Saída esperada:
-Previsão: 13801 s
-Maratona em 3:50:01
-Pace previsto: 5:27 por km
-```
-
-**Dicas:**
-
-1. T1 = 50 * 60 segundos. pow(42.195 / 10, 1.06) vem do math.h.
-2. Converta com (int)round(...) e depois use / e % por 3600 e por 60.
-3. O pace é o total em segundos / 42.195, cortado para int.
-4. Resposta esperada: Maratona em 3:50:01.
-
-```bash
-gcc ~/LPEDC/material/P0126.c -o ~/LPEDC/material/P0126 -lm && ~/LPEDC/material/P0126
-```
-
----
-
-**Exercício P0127** · ★★★ · Fibonacci sem laço
-
-Na sequência de Fibonacci (0, 1, 1, 2, 3, 5, 8, ...), o termo n é o inteiro
-mais perto de φⁿ / √5, onde φ = (1 + √5) / 2 é a razão áurea (fórmula de
-Binet). Escreva um programa que calcule φ com sqrt e mostre os termos 10, 30
-e 40 com pow e round, guardando cada um num long:
-
-
-```text
-Saída esperada:
-phi = 1.6180339887
-F(10) = 55
-F(30) = 832040
-F(40) = 102334155
-```
-
-**Dicas:**
-
-1. const double raiz5 = sqrt(5.0); e phi = (1 + raiz5) / 2.
-2. F(n) = (long)round(pow(phi, n) / raiz5). Mostre long com %ld.
-3. Resposta esperada: 55, 832040 e 102334155.
-
-```bash
-gcc ~/LPEDC/material/P0127.c -o ~/LPEDC/material/P0127 -lm && ~/LPEDC/material/P0127
-```
-
----
-
-**Exercício P0128** · ★★★ · De Manaus a Belém em linha reta
-
-A distância em linha reta entre dois pontos da Terra sai da fórmula de
-haversine. Com as latitudes e longitudes em radianos, faça
-a = sin²(Δlat/2) + cos(lat1)·cos(lat2)·sin²(Δlon/2) e
-d = 2 · R · asin(√a), com R = 6371 km. Manaus fica em (−3.1190, −60.0217) e
-Belém em (−1.4558, −48.4902), em graus. Escreva um programa, com
-#define PI 3.14159265358979, que mostre a distância arredondada para km:
-
-
-```text
-Saída esperada:
-Manaus: -3.1190, -60.0217
-Belém: -1.4558, -48.4902
-Distância: 1294 km
-```
-
-**Dicas:**
-
-1. Para converter graus em radianos: graus * PI / 180. sin, cos, asin e
-   sqrt estão no math.h.
-2. sin² de x é sin(x) * sin(x), ou pow(sin(x), 2).
-3. Mostre com %.0f. Resposta esperada: Distância: 1294 km.
-
-```bash
-gcc ~/LPEDC/material/P0128.c -o ~/LPEDC/material/P0128 -lm && ~/LPEDC/material/P0128
-```
-
----
-
-**Exercício P0129** · ★★★ · A data da Páscoa
-
-A data da Páscoa muda todo ano, mas sai de uma receita só de contas inteiras
-(algoritmo de Meeus). Para o ano A: a = A % 19, b = A / 100, c = A % 100,
-d = b / 4, e = b % 4, f = (b + 8) / 25, g = (b − f + 1) / 3,
-h = (19a + b − d − g + 15) % 30, i = c / 4, k = c % 4,
-l = (32 + 2e + 2i − h − k) % 7, m = (a + 11h + 22l) / 451,
-mês = (h + l − 7m + 114) / 31 e dia = (h + l − 7m + 114) % 31 + 1.
-Escreva um programa que mostre a Páscoa de 2026 e de 2027:
-
-
-```text
-Saída esperada:
-Páscoa de 2026: 05/04
-Páscoa de 2027: 28/03
-```
-
-**Dicas:**
-
-1. Siga a receita na ordem, com uma variável para cada letra. Todas as
-   divisões são inteiras.
-2. Para o segundo ano, repita com outro conjunto de variáveis (ou reaproveite
-   as mesmas com atribuição).
-3. Resposta esperada: 05/04 em 2026 e 28/03 em 2027.
-
-```bash
-gcc ~/LPEDC/material/P0129.c -o ~/LPEDC/material/P0129 && ~/LPEDC/material/P0129
-```
-
----
-
-**Exercício P0130** · ★★★ · Os quatro bytes de um int
-
-Um int de 4 bytes guarda o número 305419896. Sem nenhum operador de bits, só
-com / e % por 256, separe os quatro bytes (do mais significativo para o
-menos), mostre cada um em decimal e em hexadecimal com dois dígitos, e depois
-remonte o número a partir dos bytes para conferir:
-
-
-```text
-Saída esperada:
-Número: 305419896 (0x12345678)
-Bytes: 18 52 86 120
-Em hexa: 12 34 56 78
-Remontado: 305419896
-```
-
-**Dicas:**
-
-1. O byte mais baixo é n % 256. O seguinte é n / 256 % 256, depois
-   n / 65536 % 256, e o mais alto é n / 16777216.
-2. %02X mostra um byte com dois dígitos hexadecimais.
-3. Para remontar: b3 * 16777216 + b2 * 65536 + b1 * 256 + b0.
-4. Resposta esperada: 18 52 86 120, ou 12 34 56 78 em hexa.
-
-```bash
-gcc ~/LPEDC/material/P0130.c -o ~/LPEDC/material/P0130 && ~/LPEDC/material/P0130
-```
-
-## Questões no estilo da prova
+### Questões no estilo da prova
 
 Questões objetivas no formato da Prova do PPGI, com uma alternativa certa.
 Resolva no papel antes do gabarito e, na dúvida, rode o trecho com as flags
@@ -4289,6 +3519,7 @@ o `%d` mostra o próprio número. Veja 0002 (e 0040, no módulo 05).
 ## Para ler mais
 
 - BACKES, A. *Linguagem C: completa e descomplicada*. Rio de Janeiro: Elsevier, 2013. Caps. 1 a 3.
+- FEOFILOFF, P. *Algoritmos em linguagem C*. Rio de Janeiro: Elsevier, 2009. Apêndice C: números inteiros.
 - BACKES, A. R. *Linguagem C: descomplicada*. Apostila. Uberlândia: FACOM/UFU, [s.d.].
 - DEITEL, P.; DEITEL, H. *C: como programar*. 6. ed. São Paulo: Pearson Prentice Hall, 2011. Caps. 2, 3, 5 e 9.
 - CELES, W.; CERQUEIRA, R.; RANGEL, J. L. *Introdução a estruturas de dados: com técnicas de programação em C*. 2. ed. Rio de Janeiro: Elsevier, 2016. Capítulos iniciais: tipos, expressões, entrada e saída.

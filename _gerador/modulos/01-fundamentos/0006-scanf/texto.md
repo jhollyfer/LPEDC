@@ -1,23 +1,27 @@
 ## 0006 · scanf
 
-No app do banco, você agenda um Pix: digita o valor, R$ 150,75, e o dia do
-mês, 12. O app lê, guarda e confirma. Até aqui os programas só falavam; agora
-vão **ouvir**: a **entrada** do modelo entrada → processamento → saída vem do
-teclado.
-
-Quem lê é o **`scanf`**, o espelho do `printf`. O formato diz o que esperar e
-os outros argumentos dizem **onde guardar**:
+- **`scanf`**: lê do teclado. O formato diz o que esperar e os outros
+  argumentos dizem **onde guardar** (BACKES, 2013, cap. 2).
 
 ```c
 scanf("%d", &dia);
 ```
 
-O `&` é obrigatório: `&dia` é o **endereço** da variável. O `scanf` não quer o
-valor de `dia` (ainda lixo), e sim os bytes onde escrever o número digitado.
-No `printf` não vai `&`; no `scanf`, vai em toda variável simples.
-
-Os especificadores quase repetem os do `printf`, com uma diferença: **`double`
-se lê com `%lf`** e se mostra com `%f`.
+- **`&`**: dá o **endereço** da variável, os bytes onde o `scanf` escreve. Vai
+  em toda variável simples no `scanf` e nunca no `printf`
+  (DEITEL; DEITEL, 2011, cap. 9).
+- **`%lf` para `double`**: no `scanf`, `%lf` escreve 8 bytes e `%f` escreve 4,
+  no formato de `float`. No `printf` os dois servem, porque lá vai o valor, e
+  aqui vai o endereço (DEITEL; DEITEL, 2011).
+- **Buffer**: o que você digita entra numa fila e só chega ao programa no
+  Enter. `%d` e `%lf` pulam espaços e Enters antes do número e param no
+  primeiro caractere inválido. O resto **fica na fila**, inclusive o `'\n'`
+  (KERRISK, s.d.).
+- **Caracteres no formato** precisam aparecer na entrada:
+  `scanf("%d/%d/%d", &d, &m, &a)` lê `7/9/2026` (BACKES, 2013, cap. 2).
+- **Retorno**: quantos itens guardou; 0 se o primeiro já falhou; `EOF` (-1)
+  se a entrada acabou. O `if` do módulo 02 usa esse número
+  (DEITEL; DEITEL, 2011, cap. 9).
 
 | Tipo | Lê com | Mostra com |
 | --- | --- | --- |
@@ -26,25 +30,19 @@ se lê com `%lf`** e se mostra com `%f`.
 | `double` | `%lf` | `%f` |
 | `char` | `%c` (ou `" %c"`) | `%c` |
 
-O que você digita vai para um **buffer**, uma fila de caracteres, e só chega
-ao programa no Enter. O `scanf` tira da fila só o que o formato pede. `%d` e
-`%lf` pulam espaços e Enters antes do número e param no primeiro caractere
-inválido. O resto **fica na fila** para a próxima leitura, inclusive o `'\n'`
-do Enter.
+> [!WARNING]
+> Sem o `&`, `scanf("%d", dia)` usa o lixo de `dia` como endereço e escreve
+> num lugar qualquer: `Segmentation fault` ou outra variável estragada. O gcc
+> avisa (`expects argument of type 'int *'`). Ler `double` com `%f` também
+> compila e dá número errado.
 
-Caracteres comuns no formato precisam aparecer na entrada:
-`scanf("%d/%d/%d", &d, &m, &a)` lê `7/9/2026`. O `scanf` **devolve** quantos
-itens guardou: 1, 2, 3..., 0 se o primeiro já falhou, ou `EOF` (-1) se a
-entrada acabou. É assim que o programa sabe se a leitura deu certo; no módulo
-02, o `if` vai usar esse número. Por enquanto, apenas mostre e observe.
+{{exemplo}}
 
-Você digita `150.75`, Enter, `12`, Enter. O `%lf` tira `150.75` da fila e
-escreve em `valor`. O `%d` pula o `'\n'` que sobrou, tira o `12` e escreve em
-`dia`. O último `'\n'` continua na fila:
+Um Pix agendado: você digita `150.75`, Enter, `12`, Enter. O `%lf` tira
+`150.75` da fila, o `%d` pula o `'\n'` que sobrou e tira o `12`; o último
+`'\n'` fica na fila:
 
 {{ideia}}
-
-O agendamento em C:
 
 ```c
 #include <stdio.h>
@@ -69,31 +67,7 @@ int main(void) {
 // O último scanf leu 1 item
 ```
 
-Para testar sem digitar, salve como `pix.c`, compile com o gcc e use o cano
-(`|`) apresentado no começo do módulo: `printf '150.75\n12\n' | ./pix`.
-
-No fluxograma, as duas leituras são paralelogramos de entrada; cada uma guarda
-o valor numa caixinha. A saída vem depois:
+Para testar sem digitar: `printf '150.75\n12\n' | ./pix`. As duas leituras
+são paralelogramos de entrada, e a saída vem depois:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Esquecer o `&` é o erro clássico: `scanf("%d", dia)` entrega o lixo de `dia`
-> como se fosse um endereço, e o `scanf` escreve num lugar qualquer da
-> memória. O programa quebra (`Segmentation fault`) ou estraga outra variável.
-> O gcc avisa: `format '%d' expects argument of type 'int *', but argument 2
-> has type 'int'`. Outro erro comum: `%f` para ler um `double`. Compila com
-> aviso e o número sai errado.
-
-> [!TIP]
-> Com `%lf`, o `scanf` escreve 8 bytes no endereço; com `%f`, escreve só 4, no
-> formato de `float`, e o `double` fica errado. No `printf` não há esse
-> problema porque todo `float` vira `double`; no `scanf` vão endereços, e
-> endereço não se converte.
-
-> [!NOTE]
-> **Pergunta para você:** se no dia você digitar `doze`, quanto vale `lidos`?
-> E o que aparece no lugar do dia? Teste com
-> `printf '150.75\ndoze\n' | ./programa`.
-
-{{pratique}}

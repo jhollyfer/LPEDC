@@ -1,30 +1,29 @@
 ## 0011 · Juntando tudo
 
-Chegou a conta de luz da república, com três moradores. Todo mês alguém faz a
-divisão no celular e manda no grupo. Um programa pode ler as duas leituras do
-relógio e o número de moradores e devolver o valor de cada um.
+- **Entrada → processamento → saída**: antes de codificar, separe o que o
+  programa lê, o que calcula e o que mostra (LEAL, 2016).
+- **Estrutura sequencial**: os mesmos passos, sempre na mesma ordem, sem
+  decisão nem repetição. Conferir a entrada vem no módulo 02; repetir, no 03
+  (CARVALHO, 2010).
+- **Teste de mesa**: executar o programa no papel, linha a linha, anotando
+  numa tabela o valor de cada variável depois de cada passo
+  (CARVALHO, 2010).
+- **O que o programa reúne**: `#define` para a tarifa e a taxa; `int` para as
+  leituras e `double` para dinheiro; `scanf` com `&` e retorno guardado;
+  `+=`, **cast** e `ceil`; `printf` com largura e duas casas.
 
-Ele reúne tudo o que o módulo ensinou:
+> [!WARNING]
+> Sem o cast, `consumo / DIAS` seria `257 / 30` entre dois `int` e daria 8. A
+> ordem também importa: com o `ceil` antes do `* 100`, `ceil(76.4133)` daria
+> R$ 77. Faça o teste de mesa antes de confiar numa fórmula.
 
-- **constantes** (`#define`) para a tarifa e a taxa fixa;
-- **variáveis** com o tipo certo: leituras em `int`, dinheiro em `double`;
-- **entrada** com `scanf`, `&` em cada variável e o retorno guardado;
-- **processamento** com aritmética, um operador composto (`+=`), um **cast**
-  para a média não virar divisão inteira e o `ceil` para arredondar o
-  centavo para cima (ninguém quer pagar um centavo a menos e deixar a conta
-  descoberta);
-- **saída** com `printf` alinhado, largura e duas casas.
+{{exemplo}}
 
-É o modelo **entrada → processamento → saída** e **sequência** pura: os mesmos
-passos, na mesma ordem. Ele não confere se a leitura atual é maior que a
-anterior nem repete nada. Isso vem nos módulos 02 (decisão) e 03 (repetição).
-
-Entram três valores; o consumo é 257 kWh, a conta é R$ 229,24 e a divisão por
-três, com o centavo para cima, dá R$ 76,42 para cada um:
+A conta de luz de uma república com três moradores. Entram as duas leituras
+do relógio e os moradores; o consumo é 257 kWh, a conta é R$ 229,24 e cada um
+paga R$ 76,42, com o centavo para cima:
 
 {{ideia}}
-
-O programa completo:
 
 ```c
 #include <stdio.h>
@@ -74,8 +73,8 @@ int main(void) {
 
 ### Passo a passo
 
-Teste de mesa com a entrada 45230, 45487 e 3. Cada linha é uma instrução; as
-colunas mostram as variáveis depois dela:
+Teste de mesa com a entrada 45230, 45487 e 3; as colunas mostram as variáveis
+depois de cada instrução:
 
 | Instrução | consumo | total | por_dia | cada |
 | --- | --- | --- | --- | --- |
@@ -85,25 +84,10 @@ colunas mostram as variáveis depois dela:
 | `por_dia = (double) consumo / DIAS` | 257 | 229.24 | 8.5666... | |
 | `cada = ceil(total / moradores * 100) / 100` | 257 | 229.24 | 8.5666... | 76.42 |
 
-Na última linha: 229,24 ÷ 3 = 76,4133...; vezes 100 dá 7641,33...; o `ceil`
+Na última linha: 229,24 ÷ 3 = 76,4133...; vezes 100, 7641,33...; o `ceil`
 sobe para 7642; dividido por 100, 76,42. Três vezes 76,42 dá 229,26: sobram
 dois centavos, mas a conta fica paga.
 
-Entrada, quatro contas e saída, sem nenhum losango, como todo programa deste
-módulo:
+Entrada, quatro contas e saída, sem nenhum losango:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Sem o cast, `consumo / DIAS` seria `257 / 30` entre dois `int`: daria 8 e a
-> média por dia sairia 8.00. A ordem das contas também importa: com o `ceil`
-> antes da multiplicação por 100, `ceil(76.4133)` daria R$ 77, e cada um
-> pagaria 58 centavos a mais. Faça o teste de mesa antes de confiar numa
-> fórmula.
-
-> [!NOTE]
-> **Pergunta para você:** e se alguém digitar a leitura atual menor que a
-> anterior (45487 e depois 45230)? O que o programa mostra? Que pergunta ele
-> deveria fazer antes de calcular? Guarde a resposta para o módulo 02.
-
-{{pratique}}

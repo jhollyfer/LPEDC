@@ -1,14 +1,24 @@
 ## 0005 · printf
 
-O cupom do mercado sai com as colunas alinhadas: produto à esquerda,
-quantidade e preço à direita, sempre com duas casas decimais. Ninguém conta
-espaços à mão: quem faz isso é o **formato**.
-
-O primeiro argumento do `printf` é a **string de formato**: um texto com
-**especificadores** (os `%`), que são buracos a preencher. Os outros
-argumentos os preenchem **na ordem**, um para cada `%`. O `printf` escreve na
-**saída padrão** (`stdout`); o `fprintf` do módulo 09 usa o mesmo formato
-para escrever num arquivo:
+- **String de formato**: o primeiro argumento do `printf`. É um texto com
+  **especificadores** (`%d`, `%f`...), buracos que os outros argumentos
+  preenchem **na ordem**, um para cada `%` (BACKES, 2013, cap. 2).
+- **Saída padrão** (`stdout`): onde o `printf` escreve. O `fprintf` do
+  módulo 09 usa o mesmo formato para escrever num arquivo
+  (DEITEL; DEITEL, 2011, cap. 9).
+- **Forma completa**: `%[flags][largura][.precisão]letra`
+  (KERRISK, s.d.).
+- **Largura**: o **mínimo** de caracteres, alinhado à direita. `%6d` de 42 dá
+  `    42`; valor maior sai inteiro, nada é cortado
+  (DEITEL; DEITEL, 2011, cap. 9).
+- **Flags**: `-` alinha à esquerda, `0` completa com zeros, `+` mostra sempre
+  o sinal (DEITEL; DEITEL, 2011, cap. 9).
+- **Precisão**: em real, as casas decimais (`%.2f`); em texto, o máximo de
+  caracteres (`%.3s` de `"Brasil"` dá `Bra`). Ela **arredonda só na tela**: a
+  variável não muda (DEITEL; DEITEL, 2011, cap. 9).
+- **`float` vira `double`** na passagem para o `printf`, por isso `%f` serve
+  para os dois. A largura conta **bytes**: o `ã` ocupa 2 no UTF-8
+  (KERRISK, s.d.).
 
 | Especificador | Mostra | Exemplo | Sai |
 | --- | --- | --- | --- |
@@ -23,26 +33,18 @@ para escrever num arquivo:
 | `%zu` | o resultado do `sizeof` | `printf("%zu", sizeof n)` | `4` |
 | `%%` | o próprio `%` | `printf("10%%")` | `10%` |
 
-Entre o `%` e a letra cabem ajustes, nesta ordem:
-`%[flags][largura][.precisão]letra`.
+> [!WARNING]
+> O `printf` **confia** no formato. Se o especificador não combina com o tipo,
+> lê os bytes do jeito errado: `printf("%d", 9.90)` mostra lixo. O `-Wall`
+> avisa (`format '%d' expects argument of type 'int'`). E no `printf` não vai `&`.
 
-- **largura** é o **mínimo** de caracteres: `%6d` de 42 dá `    42`
-  (à direita). Valor maior sai inteiro, nada é cortado;
-- **flags**: `-` alinha à esquerda (`%-6d` dá `42    `), `0` completa com
-  zeros (`%06d` dá `000042`), `+` mostra o sinal sempre;
-- **precisão**: em real, as casas decimais (`%.2f`); em texto, o máximo de
-  caracteres (`%.3s` de `"Brasil"` dá `Bra`).
+{{exemplo}}
 
-A precisão **arredonda só na tela**: `%.2f` de 7.499 mostra `7.50`, mas a
-variável continua valendo 7.499.
-
-A linha do arroz tem três buracos: `%-10s` reserva 10 casas para o nome, à
-esquerda; `%3d` reserva 3 para a quantidade; `%9.2f` reserva 9 para o total,
-com 2 decimais:
+O cupom do mercado sai com colunas alinhadas. Na linha do arroz, `%-10s`
+reserva 10 casas para o nome, `%3d` reserva 3 para a quantidade e `%9.2f`
+reserva 9 para o total, com 2 decimais:
 
 {{ideia}}
-
-O cupom inteiro em C:
 
 ```c
 #include <stdio.h>
@@ -63,26 +65,7 @@ int main(void) {
 // TOTAL             131.17
 ```
 
-Cada `printf` é uma saída com o mesmo formato. Para mudar a largura de uma
-coluna, troque um número em cada linha:
+Cada `printf` é uma saída com o mesmo formato. Para mudar uma coluna, troque
+um número em cada linha:
 
 {{fluxograma}}
-
-> [!WARNING]
-> O `printf` **confia** em você: se o especificador não combina com o tipo do
-> argumento, lê os bytes do jeito errado. `printf("%d", 9.90)` não mostra 9
-> nem 10: mostra lixo. `printf("%.2f", 5)` também, e faltar argumento dá no
-> mesmo. O `-Wall` avisa (`format '%d' expects argument of type 'int'`); nunca
-> ignore. E no `printf` não vai `&`: ele quer o valor, não o endereço.
-
-> [!TIP]
-> O `printf` não sabe os tipos dos argumentos: só o formato diz como lê-los.
-> Todo `float` vira `double` nessa passagem, por isso `%f` serve para os dois.
-> A largura conta **bytes**: `"Feijão"` tem 6 letras e 7 bytes (o `ã` ocupa 2
-> no UTF-8), então `%-10s` deixa a coluna dele uma casa mais curta.
-
-> [!NOTE]
-> **Pergunta para você:** o que `printf("[%5.1f]\n", 3456.78);` mostra? A
-> largura 5 corta o número? Teste num programa seu.
-
-{{pratique}}
