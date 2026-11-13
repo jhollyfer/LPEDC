@@ -16,22 +16,10 @@
 > - [ ] Enfrentar os desafios do módulo
 > - [ ] Chefão: resolver as questões de prova do módulo sem consultar
 
-Até aqui, todo programa do curso nasce, faz a conta e morre levando tudo
-junto: as variáveis moram na RAM, esvaziada quando o processo termina. Para
-**lembrar** de algo (cadastro, configuração, placar), o programa grava em
-**arquivo**.
-
-No C você vê as engrenagens: o `FILE *` do arquivo aberto, o buffer que junta
-os bytes antes do disco, a posição que anda a cada leitura. E há uma escolha:
-**texto**, legível e portável, ou **binário**, cópia exata dos bytes da
-memória, menor e com acesso direto a qualquer registro.
-
-O módulo fecha com os **argumentos da linha de comando**, que transformam seus
-exercícios em ferramentas de terminal, como `git` ou `grep`.
-
-Usa o que veio antes: structs (módulo 08), `fgets` (0042), ponteiros e
-`sizeof`. Prepara o módulo 10, que mede o custo dos programas: o acesso direto
-ao registro `i` é a base da busca binária em disco (0090).
+Como fazer o programa **lembrar** depois de terminar: arquivos texto, arquivos
+binários com acesso direto a um registro e argumentos da linha de comando.
+Depende de structs (módulo 08), `fgets` (0042) e ponteiros; prepara o módulo
+10 e a busca binária em disco (0090).
 
 ## O que você vai aprender
 
@@ -44,11 +32,9 @@ ao registro `i` é a base da busca binária em disco (0090).
 
 ## Antes de começar
 
-Os exemplos gravam em `/tmp` (`/tmp/despesas.txt`, `/tmp/estoque.bin`) e quase
-todos apagam o arquivo no fim com `remove`. Quando um o deixa lá, o comentário
-avisa, para você abrir com `cat`. Nenhum depende de arquivo pré-existente.
-
-Para passar argumentos, escreva-os depois do executável:
+Os exemplos gravam em `/tmp` e quase todos apagam o arquivo no fim com
+`remove`; quando um o deixa lá, o comentário avisa. Nenhum depende de arquivo
+pré-existente. Para passar argumentos, escreva-os depois do executável:
 
 ```bash
 gcc ~/LPEDC/material/A137.c -o ~/LPEDC/material/A137 && ~/LPEDC/material/A137 -r 7 -a 4
@@ -72,23 +58,30 @@ sudo apt install strace     # Debian / Ubuntu
 
 ---
 
-## 0067 · Arquivos texto
+## 1. Conceitos gerais
 
-Todo mês você anota as despesas: mercado, luz, internet. Anotadas só de
-cabeça, somem. No caderno, ficam. Com um programa é igual: as variáveis moram
-na RAM e **somem quando ele termina**. Para lembrar na próxima execução, ele
-escreve num **arquivo**, que fica no disco.
+### 0067 · Arquivos texto
 
-No C são três passos: **abrir**, **ler ou escrever** e **fechar**. Tudo vem do
-`<stdio.h>`, o mesmo do `printf`. Para o C, um arquivo é uma **sequência de
-bytes**. Num **arquivo texto**, esses bytes são caracteres legíveis no editor:
-o número 152.40 vira `'1' '5' '2' '.' '4' '0'`.
-
-**Abrir.** `fopen(caminho, modo)` devolve um `FILE *`, ponteiro para uma
-struct que a biblioteca usa para controlar o arquivo. Se não abrir (pasta
-inexistente, sem permissão, disco cheio), devolve `NULL`. Por isso todo
-`fopen` leva um `if`. O `perror("texto")` mostra o motivo, como
-`No such file or directory`.
+- **Arquivo**: sequência de bytes guardada no disco. Variáveis moram na RAM e
+  somem quando o programa termina; o arquivo fica (BACKES, 2013, cap. 12).
+- **Arquivo texto**: os bytes são caracteres legíveis no editor. O número
+  152.40 vira `'1' '5' '2' '.' '4' '0'` (BACKES, 2013, cap. 12).
+- **Três passos**: abrir, ler ou escrever, fechar. Tudo vem do `<stdio.h>`
+  (KERNIGHAN; RITCHIE, 1989, cap. 7).
+- **`fopen(caminho, modo)`**: devolve um `FILE *` ou `NULL` se não abrir. Todo
+  `fopen` leva um `if`; `perror("texto")` mostra o motivo
+  (CELES; RANGEL, 2002).
+- **Escrever**: `fprintf(arq, ...)` é o `printf` com o arquivo na frente;
+  `fputs` grava uma string (sem `\n`) e `fputc`, um caractere
+  (BACKES, 2013, cap. 12).
+- **Ler**: `fgets` traz uma linha com o `\n` e devolve `NULL` no fim; `fscanf`
+  devolve quantos campos leu; `fgetc` devolve `int`, que vale `EOF` no fim
+  (CELES; RANGEL, 2002).
+- **Buffer e `fclose`**: a escrita para numa área da RAM e o `fclose` (ou
+  `fflush`) a descarrega no disco. Se o programa cair antes, perde-se o que
+  estava no buffer (BACKES, 2013, cap. 12).
+- **`stdin`, `stdout`, `stderr`**: `FILE *` já abertos; `printf("oi")` equivale
+  a `fprintf(stdout, "oi")` (FEOFILOFF, 2009, ap. H).
 
 | modo | o que faz | se o arquivo não existe | se já existe |
 | --- | --- | --- | --- |
@@ -97,31 +90,113 @@ inexistente, sem permissão, disco cheio), devolve `NULL`. Por isso todo
 | `"a"` | escrita no fim (*append*) | cria vazio | mantém e escreve depois do fim |
 | `"r+"` `"w+"` `"a+"` | leitura e escrita | como `r`, `w` e `a` | como `r`, `w` e `a` |
 
-**Escrever.** `fprintf(arq, ...)` é o `printf` com o arquivo na frente.
-`fputs(texto, arq)` grava uma string (sem pôr `\n`) e `fputc(c, arq)`, um
-caractere.
+> [!WARNING]
+> Não use `while (!feof(arq))`: o `feof` só fica verdadeiro **depois** que uma
+> leitura falhou, e a última linha é processada duas vezes. Teste o retorno da
+> leitura (`fgets(...) != NULL`). Com `fgetc`, guarde em `int`, não em `char`.
 
-**Ler.** Três jeitos:
+### 0068 · Arquivos binários
 
-- `fgets(linha, tamanho, arq)`: uma **linha**, com o `\n` no fim. Devolve
-  `NULL` quando o arquivo acaba. É o `fgets` do 0042, lendo do arquivo.
-- `fscanf(arq, "%s %lf", ...)`: campos com formato. Devolve quantos campos
-  leu.
-- `fgetc(arq)`: um **caractere**. Devolve `int`, que vale `EOF` no fim.
+- **Arquivo binário**: grava os bytes **exatamente como estão na memória**, sem
+  converter em texto. Um `int` ocupa sempre 4 bytes (BACKES, 2013, cap. 12).
+- **Registro de tamanho fixo**: o registro `i` começa no byte
+  `i * sizeof(registro)`, e dá para ir direto a ele
+  (DEITEL; DEITEL, 2011, cap. 11).
+- **Modo com `b`**: `"wb"`, `"rb"`, `"ab"`, `"rb+"`. No Linux não muda nada; no
+  Windows, sem ele, `\n` vira `\r\n` e estraga os bytes (BACKES, 2013, cap. 12).
+- **`fwrite(endereco, tamanho, quantidade, arq)`** e **`fread`**: copiam
+  `tamanho * quantidade` bytes e devolvem **quantos itens** processaram. Menos
+  que o pedido indica fim ou erro (BACKES, 2013, cap. 12).
+- **`fseek(arq, deslocamento, origem)`**: muda a posição a partir de `SEEK_SET`
+  (começo), `SEEK_CUR` (atual) ou `SEEK_END` (fim). Não lê nada: pular para o
+  registro 2 custa o mesmo que para o 2 milhões (DEITEL; DEITEL, 2011, cap. 11).
+- **`ftell`** devolve a posição em bytes e **`rewind`** volta ao byte 0.
+  `fseek` até o fim e `ftell` medem o arquivo (BACKES, 2013, cap. 12).
+- **Busca binária no arquivo**: com registros em ordem, uns 20 `fread` acham
+  um em 1 milhão, sem carregar tudo na RAM (assunto 0090) (ZIVIANI, 2010).
 
-**Fechar.** `fclose(arq)` grava o que ficou pendente e libera o `FILE`. Como
-no `malloc`: abriu, fecha.
+| | texto (`fprintf`) | binário (`fwrite`) |
+| --- | --- | --- |
+| o `int` 12345678 | 8 bytes: `'1' '2' ... '8'` | 4 bytes: `4E 61 BC 00` |
+| abre no editor? | sim | vira lixo na tela |
+| converte na ida e na volta? | sim (mais lento) | não, só copia bytes |
+| acesso direto ao registro `i`? | não | sim, com `fseek` |
+| lê em outra máquina? | sim | só se `int`, alinhamento e ordem dos bytes forem iguais |
 
-`stdin`, `stdout` e `stderr` já são `FILE *` abertos pelo programa:
-`printf("oi")` equivale a `fprintf(stdout, "oi")`.
+> [!WARNING]
+> `fwrite` copia bytes, não dados. Struct com ponteiro (`char *nome`) grava o
+> **endereço**, que não vale na próxima execução: use `char nome[20]`. E um
+> `.bin` pode não ser lido igual em outra máquina; para trocar dados, use texto.
 
-O exemplo grava as três despesas do mês. Os `fprintf` param num **buffer**
-(área na RAM); o `fclose` o descarrega em `despesas.txt`. Depois o programa
-reabre o arquivo em leitura e o `fgets` traz as linhas, uma por vez:
+### 0069 · Argumentos da linha de comando
+
+- **Argumentos da linha de comando**: dados que vão junto do comando, como em
+  `cp origem destino`. Chegam como parâmetros do `main`
+  (BACKES, 2013, cap. 13).
+
+```c
+int main(int argc, char *argv[])
+```
+
+- **`argc`** (*argument count*): quantos itens vieram, **contando o nome do
+  programa**. Vale pelo menos 1 (FEOFILOFF, 2009, ap. H).
+- **`argv`** (*argument vector*): vetor de `char *`, uma string por item.
+  `argv[0]` é o nome do programa e `argv[argc]` é `NULL`
+  (KERNIGHAN; RITCHIE, 1989).
+- **Shell**: corta a linha antes de o programa começar. Separa nos espaços,
+  tira as aspas e expande coringas: `"São Paulo"` chega como um argumento só.
+- **Tudo é texto**: o `4` chega como `"4"`. `strtol(texto, &fim, 10)` e
+  `strtod(texto, &fim)` convertem e apontam `fim` para o que sobrou; se
+  `*fim != '\0'`, veio lixo (LINUX MAN-PAGES PROJECT, s.d.).
+- **`atoi` e `atof`**: não avisam erro, `atoi("quatro")` devolve 0. Servem para
+  teste rápido (BACKES, 2013, cap. 13).
+- **`stderr` e código de saída**: erros vão para `stderr`, que aparece mesmo com
+  `> saida.txt`. O `return` do `main` é 0 no sucesso e outro valor na falha; o
+  shell guarda em `$?` (BACKES, 2013, cap. 12).
+
+> [!WARNING]
+> Nunca use `argv[1]` sem conferir o `argc`: sem argumentos, ele é `NULL` e
+> `atoi(NULL)` derruba o programa. E em `./calc 9 * 3` o shell troca o `*`
+> pelos nomes dos arquivos da pasta; use aspas (`'*'`) ou `x`.
+
+### 0070 · Juntando tudo: a caderneta de gastos
+
+- **Argumentos** (0069): `argv[1]` diz **o que** fazer e os seguintes trazem os
+  dados, como nos subcomandos do `git`. O `main` confere o `argc` e chama a
+  função certa (FEOFILOFF, 2009, ap. H).
+- **Arquivo binário** (0068): cada gasto é um registro `Gasto` de tamanho fixo,
+  gravado com `fwrite` em modo `"ab"`, sempre no fim. `ftell / sizeof(Gasto)`
+  diz quantos já existem (DEITEL; DEITEL, 2011, cap. 11).
+- **Arquivo texto** (0067): o `exporta` lê os registros e escreve com `fprintf`
+  um **CSV** separado por `;`, que as planilhas abrem direto
+  (BACKES, 2013, cap. 12).
+- **Validar antes de gravar**: `strtod` com `*fim != '\0'` impede que "abc"
+  entre como R$ 0,00 (LINUX MAN-PAGES PROJECT, s.d.).
+- **Não gravar lixo**: o `memset` zera `categoria` antes do `strncpy`, então os
+  bytes que sobram são zeros, não restos da pilha.
+- **Arquivo inexistente nem sempre é erro**: no `lista`, significa "nenhum
+  gasto ainda".
+- **`"ab"` vai sempre para o fim**, mesmo depois de um `fseek`: dois programas
+  anotando ao mesmo tempo não se sobrescrevem (LINUX MAN-PAGES PROJECT, s.d.).
+
+> [!WARNING]
+> Trocar `"ab"` por `"wb"` no `novo` apaga os gastos anteriores, sem aviso. E não
+> leia, por outro `FILE *`, o que acabou de escrever antes do `fclose` (ou
+> `fflush`): os bytes ainda estão no buffer.
+
+---
+
+## 2. Exemplos de uso
+
+Cada exemplo compila sozinho. Rode com o comando abaixo dele e compare com a saída no fim do código.
+
+### 0067 · Arquivos texto
+
+O programa grava as três despesas do mês (mercado, luz, internet) em
+`/tmp/despesas.txt`, reabre o arquivo em leitura e o `fgets` traz as linhas,
+uma por vez:
 
 <p align="center"><img src="material/0067-ideia.svg" alt="Diagrama da ideia: Arquivos texto" width="858"></p>
-
-O código grava em `/tmp/despesas.txt` e deixa o arquivo lá, para `cat`:
 
 ```c
 #include <stdio.h>
@@ -162,32 +237,10 @@ int main(void) {
 // 3 linhas em /tmp/despesas.txt
 ```
 
-No fluxograma, a leitura é um laço que testa o retorno do `fgets`: o fim do
-arquivo é anunciado pela leitura que falhou:
+A leitura é um laço que testa o retorno do `fgets`: o fim do arquivo é
+anunciado pela leitura que falhou:
 
 <p align="center"><img src="material/0067-fluxograma.svg" alt="Fluxograma: Arquivos texto" width="730"></p>
-
-> [!WARNING]
-> Não use `while (!feof(arq))`, comum em materiais e livros. O `feof` só fica
-> verdadeiro **depois** que uma leitura tentou passar do fim. O laço roda uma
-> vez a mais e processa a última linha duas vezes (rode com um arquivo de 3 linhas e conte). Teste o
-> retorno da leitura: `fgets(...) != NULL`, `fscanf(...) == 2`,
-> `(c = fgetc(arq)) != EOF`. Neste último, `c` é `int`: com `char`, o `EOF`
-> (-1) se confunde com um byte de verdade.
-
-> [!TIP]
-> **Por dentro do C:** cada `fprintf` só copia bytes para o buffer do `FILE`
-> (em geral 4096 bytes). A entrega ao sistema, um `write`, ocorre quando o
-> buffer enche, no `fflush(arq)` ou no `fclose`. Se o programa cair antes do
-> `fclose`, o que estava no buffer se perde.
-
-> [!NOTE]
-> **Pergunta para você:** rode o programa das despesas duas vezes seguidas. O
-> arquivo fica com 3 ou com 6 linhas? E se o primeiro `fopen` usasse `"a"` em
-> vez de `"w"`?
-
-
-### Hora de praticar
 
 **Exemplo A133 · A linha maior que o buffer**
 
@@ -306,168 +359,13 @@ int main(void) {
 gcc ~/LPEDC/material/A134.c -o ~/LPEDC/material/A134 && ~/LPEDC/material/A134
 ```
 
-#### Exercícios
+### 0068 · Arquivos binários
 
-**Exercício E397** · ★☆☆
-
-Grave a tabuada do 7 no arquivo /tmp/tabuada7.txt, uma conta por linha,
-usando fprintf. Feche o arquivo, abra de novo em modo leitura e mostre o
-conteúdo na tela com fgets. Confira se o fopen deu certo nas duas vezes.
-
-
-```text
-Saída esperada:
-7 x 1 = 7
-7 x 2 = 14
-7 x 3 = 21
-7 x 4 = 28
-7 x 5 = 35
-7 x 6 = 42
-7 x 7 = 49
-7 x 8 = 56
-7 x 9 = 63
-7 x 10 = 70
-```
-
-```bash
-gcc ~/LPEDC/material/E397.c -o ~/LPEDC/material/E397 && ~/LPEDC/material/E397
-```
-
-**Exercício E399** · ★★☆
-
-Faça um "wc" caseiro. Primeiro, grave em /tmp/recado.txt exatamente estas
-três linhas (cada uma termina com '\n'):
-
-
-```text
-Feira no domingo
-leve sacolas
-e o dinheiro do pastel
-```
-
-
-Depois, abra o arquivo para leitura e leia caractere por caractere com
-fgetc, contando linhas, palavras e caracteres (bytes).
-
-
-```text
-Saída esperada:
-Linhas: 3
-Palavras: 10
-Caracteres: 53
-```
-
-```bash
-gcc ~/LPEDC/material/E399.c -o ~/LPEDC/material/E399 && ~/LPEDC/material/E399
-```
-
-**Exercício E400** · ★★☆
-
-Escreva um programa que cria o arquivo /tmp/turma.txt com fprintf, uma linha
-por aluno com o nome e duas notas: "Bruna 9.0 7.5", "Diego 4.0 7.0" e
-"Lia 6.5 7.5". Feche, reabra para leitura e leia com fscanf num laço que
-pare quando a linha não vier completa. Mostre a média de cada um e a
-situação (aprovado com média >= 7.0) e, no fim, a média da turma. Confira os
-fopen e apague o arquivo no final.
-
-
-```text
-Saída esperada:
-Bruna    média 8.25  aprovada(o)
-Diego    média 5.50  reprovada(o)
-Lia      média 7.00  aprovada(o)
-Média da turma: 6.92
-```
-
-```bash
-gcc ~/LPEDC/material/E400.c -o ~/LPEDC/material/E400 && ~/LPEDC/material/E400
-```
-
-**Exercício E402** · ★★★
-
-Lista de compras automática. Escreva um programa que:
-
-1. cria /tmp/estoque.txt com as linhas "arroz 3", "cafe 0", "leite 8",
-
-```text
- "ovos 2" e "sabao 6" (produto e quantidade em casa);
-```
-
-2. lê o estoque e, com os DOIS arquivos abertos ao mesmo tempo, grava em
-
-```text
- /tmp/comprar.txt só os produtos com menos de 5 unidades, já com quanto
- falta para chegar a 5 ("arroz 2");
-```
-
-3. fecha tudo, reabre /tmp/comprar.txt e mostra o resultado. Se o segundo
-
-```text
- fopen falhar, feche o primeiro arquivo antes de sair.
-```
-
-
-
-```text
-Saída esperada:
-Comprar:
-- arroz: 2
-- cafe: 5
-- ovos: 3
-3 itens na lista
-```
-
-```bash
-gcc ~/LPEDC/material/E402.c -o ~/LPEDC/material/E402 && ~/LPEDC/material/E402
-```
-
----
-
-## 0068 · Arquivos binários
-
-O mercadinho guarda o estoque em fichas do mesmo tamanho. Para achar a
-terceira, ninguém lê as duas primeiras: mede com o dedo e puxa. No arquivo
-texto isso não dá, porque cada linha tem um tamanho ("Luz 98.75" tem 9
-caracteres, "Internet 99.90" tem 14). Para chegar à linha 500, lê-se as 499
-anteriores.
-
-Um **arquivo binário** grava os bytes **exatamente como estão na memória**,
-sem converter em texto. Um `int` ocupa sempre 4 bytes; uma struct, sempre
-`sizeof` da struct. Com **registros de tamanho fixo**, o registro `i` começa
-no byte `i * sizeof(registro)`.
-
-| | texto (`fprintf`) | binário (`fwrite`) |
-| --- | --- | --- |
-| o `int` 12345678 | 8 bytes: `'1' '2' ... '8'` | 4 bytes: `4E 61 BC 00` |
-| abre no editor? | sim | vira lixo na tela |
-| converte na ida e na volta? | sim (mais lento) | não, só copia bytes |
-| acesso direto ao registro `i`? | não | sim, com `fseek` |
-| lê em outra máquina? | sim | só se `int`, alinhamento e ordem dos bytes forem iguais |
-
-Ferramentas:
-
-- **Modo com `b`**: `"wb"`, `"rb"`, `"ab"`, `"rb+"`. No Linux e no Mac o `b`
-  não muda nada; no Windows, sem ele, a biblioteca troca `\n` por `\r\n` e
-  estraga os bytes. Escreva sempre.
-- **`fwrite(endereco, tamanho, quantidade, arq)`** copia `tamanho *
-  quantidade` bytes a partir do endereço. Variável e struct vão com `&`; vetor
-  já é endereço. Devolve **quantos itens** gravou.
-- **`fread(endereco, tamanho, quantidade, arq)`** faz o caminho de volta e
-  devolve quantos itens leu. Menos que o pedido indica fim do arquivo ou erro.
-  Esse retorno vai no `while`.
-- **`fseek(arq, deslocamento, origem)`** muda a posição. A origem é `SEEK_SET`
-  (começo), `SEEK_CUR` (posição atual) ou `SEEK_END` (fim). O deslocamento é
-  `long` e pode ser negativo.
-- **`ftell(arq)`** devolve a posição atual em bytes e **`rewind(arq)`** volta
-  ao byte 0. `fseek` até o fim seguido de `ftell` mede o arquivo.
-
-No exemplo, o estoque tem três produtos de 32 bytes cada. Um `fwrite` grava
-os três (96 bytes). Para ler o café, o programa pula 2 × 32 = 64 bytes desde o
-começo e faz um `fread` de um registro:
+O estoque do mercadinho tem três produtos de 32 bytes cada. Um `fwrite` grava
+os três (96 bytes). Para ler o café, o programa pula 2 × 32 = 64 bytes e faz um
+`fread` de um registro:
 
 <p align="center"><img src="material/0068-ideia.svg" alt="Diagrama da ideia: Arquivos binários" width="858"></p>
-
-O arquivo fica em `/tmp/estoque.bin` e é apagado no fim:
 
 ```c
 #include <stdio.h>
@@ -520,36 +418,10 @@ int main(void) {
 // Registro 2: Café, 4 un., R$ 18.50
 ```
 
-No fluxograma não há laço até o café: são dois `fseek` e um `fread`, com 3
-registros ou 3 milhões:
+Não há laço até o café: são dois `fseek` e um `fread`, com 3 registros ou 3
+milhões:
 
 <p align="center"><img src="material/0068-fluxograma.svg" alt="Fluxograma: Arquivos binários" width="441"></p>
-
-Com os registros em ordem de código, dá para fazer **busca binária direto no
-arquivo**: `fseek` no registro do meio, `fread`, compara e descarta metade.
-São uns 20 `fread` para 1 milhão de registros, sem carregar o arquivo na RAM
-(a busca binária é o assunto 0090).
-
-> [!WARNING]
-> `fwrite` copia bytes, não "dados". Se a struct tiver ponteiro (`char *nome`
-> em vez de `char nome[20]`), o arquivo guarda o **endereço**, que não aponta
-> para nada na próxima execução. Use vetores de tamanho fixo dentro da struct.
-> E um `.bin` de um PC pode não ser lido igual em outra máquina: tamanho do
-> `int`, alinhamento e ordem dos bytes mudam. Para trocar dados entre
-> máquinas, prefira texto (CSV, JSON).
-
-> [!TIP]
-> **Por dentro do C:** o `fseek` não lê nada: só troca um número no `FILE`.
-> Pular para o registro 2 custa o mesmo que pular para o registro 2 milhões.
-> Aqui 20 + 4 + 8 dá exatamente 32 bytes, sem enchimento, porque o `double`
-> já cai em endereço múltiplo de 8.
-
-> [!NOTE]
-> **Pergunta para você:** se `nome` fosse `char nome[21]`, quanto daria
-> `sizeof(Produto)`? Lembre que o `int` gosta de começar em múltiplo de 4 e o
-> `double` em múltiplo de 8. Responda e depois confira com um `printf`.
-
-### Hora de praticar
 
 **Exemplo A135 · Ler em lotes: o retorno do fread**
 
@@ -683,151 +555,11 @@ int main(void) {
 gcc ~/LPEDC/material/A136.c -o ~/LPEDC/material/A136 && ~/LPEDC/material/A136
 ```
 
-#### Exercícios
+### 0069 · Argumentos da linha de comando
 
-**Exercício E403** · ★☆☆
-
-Uma estação meteorológica registrou as máximas da semana útil: 31, 29, 33,
-35 e 30 graus. Grave o vetor inteiro em /tmp/maximas.bin com UM fwrite.
-Depois leia tudo de volta, com UM fread, para outro vetor, confira se vieram
-os 5 valores e mostre a média.
-
-
-```text
-Saída esperada:
-Lidos: 5 valores
-Média: 31.6 graus
-```
-
-```bash
-gcc ~/LPEDC/material/E403.c -o ~/LPEDC/material/E403 && ~/LPEDC/material/E403
-```
-
-**Exercício E405** · ★★☆
-
-Crie o tipo Conta (int numero, double saldo). No main, grave com UM fwrite
-em /tmp/contas.bin as contas 1001 (250.00), 1002 (80.50) e 1003 (1200.00).
-Escreva void listar(void), que mostra as contas lendo registro por registro,
-e int depositar(int posicao, double valor): abre em "rb+", vai até o
-registro da posição com fseek, lê, soma o valor ao saldo, volta ao começo
-do mesmo registro e grava por cima (1 se deu certo, 0 se não). Liste,
-deposite R$ 100.00 na posição 1 e liste de novo.
-
-
-```text
-Saída esperada:
-Antes:
-1001  R$   250.00
-1002  R$    80.50
-1003  R$  1200.00
-Depois:
-1001  R$   250.00
-1002  R$   180.50
-1003  R$  1200.00
-```
-
-```bash
-gcc ~/LPEDC/material/E405.c -o ~/LPEDC/material/E405 && ~/LPEDC/material/E405
-```
-
-**Exercício E406** · ★★☆
-
-Escreva a função
-
-
-```text
-long contar_registros(const char *caminho, size_t tamanho_registro);
-```
-
-
-que descobre quantos registros um arquivo binário tem SEM ler nenhum deles:
-só olhando o tamanho do arquivo. Se não conseguir abrir, devolve -1.
-
-No main, grave em /tmp/notas.bin as notas de 7 alunos num vetor de
-struct { int matricula; float nota; } (os valores são livres), feche, e
-mostre:
-
-
-```text
-Saída esperada:
-Tamanho do registro: 8 bytes
-Registros em /tmp/notas.bin: 7
-Registros em /tmp/nao-existe.bin: -1
-```
-
-```bash
-gcc ~/LPEDC/material/E406.c -o ~/LPEDC/material/E406 && ~/LPEDC/material/E406
-```
-
-**Exercício E408** · ★★★
-
-O extrato do banco mostra os lançamentos mais recentes primeiro. Grave em
-/tmp/extrato.bin estes 6 lançamentos, nesta ordem (do mais antigo para o
-mais novo), como registros de struct { char descricao[24]; double valor; }:
-Salário +3500.00, Aluguel -1200.00, Mercado -387.60, Pix da Ana +45.00,
-Farmácia -62.30 e Padaria -18.90. Depois, SEM carregar o arquivo inteiro na
-memória (um registro por vez), mostre os 3 últimos, do mais novo para o mais
-antigo, e o saldo de TODOS os lançamentos (printf com %-15s %+8.2f).
-
-
-```text
-Saída esperada:
-Últimos lançamentos:
-Padaria           -18.90
-Farmácia         -62.30
-Pix da Ana        +45.00
-Saldo: R$ 1876.20
-```
-
-```bash
-gcc ~/LPEDC/material/E408.c -o ~/LPEDC/material/E408 && ~/LPEDC/material/E408
-```
-
----
-
-## 0069 · Argumentos da linha de comando
-
-Fim do rodízio de pizza, conta de R$ 187,40 para 4 pessoas. Um programa
-poderia perguntar total e pessoas com `scanf`. Mas os programas de terminal
-não perguntam: `git commit -m "msg"`, `cp origem destino`,
-`gcc -o prog prog.c`. Os dados vão **junto do comando**, são os **argumentos
-da linha de comando**.
-
-No C, chegam como parâmetros do `main`, que até agora tinha `void`:
-
-```c
-int main(int argc, char *argv[])
-```
-
-- **`argc`** (*argument count*): quantos itens vieram, **contando o nome do
-  programa**. Vale pelo menos 1.
-- **`argv`** (*argument vector*): vetor de `char *`, uma string por item.
-  `argv[0]` é o nome do programa, `argv[1]` é o primeiro argumento seu, e
-  `argv[argc]` é `NULL`, que marca o fim como o `'\0'` numa string.
-
-Quem corta a linha é o **shell** (bash, zsh), antes de o programa começar:
-separa nos espaços, tira as aspas e expande coringas como `*`. `"São Paulo"`
-chega como um argumento só; sem aspas, como dois.
-
-Tudo no `argv` é **texto**: o `4` chega como `"4"`, e `argv[2] * 2` nem
-compila. Para converter:
-
-- **`strtol(texto, &fim, 10)`** converte para `long` e **`strtod(texto,
-  &fim)`** para `double`. Ambos apontam `fim` para o primeiro caractere não
-  convertido. Se `*fim != '\0'`, sobrou lixo: `"4x"`, `"quatro"`.
-- **`atoi`** e **`atof`** são mais curtos, mas não avisam erro:
-  `atoi("quatro")` devolve 0. Servem para teste rápido, não para entrada de
-  usuário.
-
-Duas convenções de programas de terminal. Erros vão para **`stderr`**
-(`fprintf(stderr, ...)`): quem redireciona a saída (`./racha 10 2 > saida.txt`)
-ainda vê o erro na tela. E o `return` do `main` é o **código de saída**: 0 é
-sucesso, outro valor é falha. O shell o guarda em `$?`, e scripts e o `&&`
-decidem com base nele.
-
-O comando `./racha 187.40 4` chega com `argc = 3` e um `argv` de três
-strings mais o `NULL`. O programa confere a quantidade, converte `argv[1]` e
-`argv[2]` e divide:
+Fim do rodízio de pizza: conta de R$ 187,40 para 4 pessoas. O comando
+`./racha 187.40 4` chega com `argc = 3`. O programa confere a quantidade,
+converte `argv[1]` e `argv[2]` e divide:
 
 <p align="center"><img src="material/0069-ideia.svg" alt="Diagrama da ideia: Argumentos da linha de comando" width="870"></p>
 
@@ -870,30 +602,10 @@ int main(int argc, char *argv[]) {
 // Número de pessoas inválido: quatro
 ```
 
-O fluxograma faz duas perguntas antes da conta: veio a quantidade certa de
-argumentos, e são números de verdade? O programa só trabalha no caminho verde:
+Duas perguntas antes da conta: veio a quantidade certa de argumentos, e são
+números de verdade? O programa só trabalha no caminho verde:
 
 <p align="center"><img src="material/0069-fluxograma.svg" alt="Fluxograma: Argumentos da linha de comando" width="634"></p>
-
-> [!WARNING]
-> Nunca use `argv[1]` sem conferir o `argc`. Sem argumentos, `argv[1]` é
-> `NULL`, e `atoi(NULL)` ou `strlen(NULL)` derruba o programa (confira o `argc` primeiro).
-> Cuidado com `*`: em `./calc 9 * 3` o shell troca o `*` pelos nomes dos
-> arquivos da pasta antes de o programa rodar. Use aspas (`'*'`) ou outro
-> símbolo, como `x`.
-
-> [!TIP]
-> **Por dentro do C:** quem chama o `main` é o código de partida da biblioteca
-> (`_start`): ele conta os ponteiros do `argv`, chama `main(argc, argv)` e
-> passa o `return` ao `exit`. Por isso `char *argv[]` e `char **argv` são
-> iguais num parâmetro: vetor como parâmetro vira ponteiro (0038).
-
-> [!NOTE]
-> **Pergunta para você:** quanto vale `argc` em `./racha "187.40 4"`? E em
-> `./racha 187.40 4 > conta.txt`? Pense em quem trata as aspas e o `>` antes
-> de rodar o A138 para conferir.
-
-### Hora de praticar
 
 **Exemplo A137 · Opções com hífen**
 
@@ -1016,133 +728,10 @@ int main(int argc, char *argv[]) {
 gcc ~/LPEDC/material/A138.c -o ~/LPEDC/material/A138 && ~/LPEDC/material/A138
 ```
 
-#### Exercícios
+### 0070 · Juntando tudo: a caderneta de gastos
 
-**Exercício E409** · ★☆☆
-
-Faça o seu próprio "echo": o programa mostra os argumentos recebidos, na
-mesma linha, separados por um espaço (sem espaço sobrando no fim), e na
-linha de baixo quantos foram. Sem argumentos, mostra só "0 argumentos".
-
-
-```text
-Argumentos:
-bom dia Brasil
-```
-
-
-
-```text
-Saída esperada:
-bom dia Brasil
-3 argumentos
-```
-
-```bash
-gcc ~/LPEDC/material/E409.c -o ~/LPEDC/material/E409 && ~/LPEDC/material/E409
-```
-
-**Exercício E411** · ★★☆
-
-As notas da prova chegam pela linha de comando. Mostre quantas notas
-válidas vieram, a média, a maior e a menor. Argumento que não é número (ou
-que está fora de 0 a 10) é ignorado com um aviso em stderr. Sem nenhuma
-nota válida, mostre "Nenhuma nota válida" e devolva 1.
-
-
-```text
-Argumentos:
-8.5 7 nove 9.25 6 11
-```
-
-
-
-```text
-Saída esperada:
-Ignorando "nove"
-Ignorando "11"
-Notas: 4
-Média: 7.69
-Maior: 9.25
-Menor: 6.00
-```
-
-```bash
-gcc ~/LPEDC/material/E411.c -o ~/LPEDC/material/E411 && ~/LPEDC/material/E411
-```
-
-**Exercício E412** · ★★☆
-
-Escreva um programa que cumprimenta alguém um certo número de vezes. Ele
-recebe o nome e o número de vezes pela linha de comando. Sem os dois
-argumentos, ou com um número de vezes que não é inteiro positivo, mostra uma
-mensagem de uso em stderr e devolve 1.
-
-
-```text
-Argumentos:
-Ana 3
-```
-
-
-
-```text
-Saída esperada:
-Olá, Ana!
-Olá, Ana!
-Olá, Ana!
-```
-
-```bash
-gcc ~/LPEDC/material/E412.c -o ~/LPEDC/material/E412 && ~/LPEDC/material/E412
-```
-
-**Exercício E413** · ★★★
-
-Faça um "wc" de verdade: o nome do arquivo vem pela linha de comando. O
-programa abre o arquivo, conta linhas, palavras e bytes e mostra no formato
-abaixo. Se não vier exatamente um argumento, mostre o uso em stderr e
-devolva 1. Se o arquivo não abrir, use perror com o nome dele e devolva 1.
-
-
-```text
-Argumentos (o arquivo tem 4 linhas: "Oi, Ana", "tudo certo?", uma vazia
-e "Até amanhã"):
-/tmp/recado.txt
-```
-
-
-
-```text
-Saída esperada:
-4 linhas, 6 palavras, 34 bytes em /tmp/recado.txt
-```
-
-
-
-```text
-Argumentos (arquivo que não existe):
-/tmp/nao-existe.txt
-```
-
-
-
-```text
-Saída esperada (em stderr):
-/tmp/nao-existe.txt: No such file or directory
-```
-
-```bash
-gcc ~/LPEDC/material/E413.c -o ~/LPEDC/material/E413 && ~/LPEDC/material/E413
-```
-
----
-
-## 0070 · Juntando tudo: a caderneta de gastos
-
-Fim de mês: para onde foi o dinheiro? Você já sabe fazer o controle de gastos
-no terminal: um comando por execução, com os dados guardados em arquivo entre
-uma execução e outra.
+O controle de gastos do mês roda no terminal, um comando por execução, com os
+dados guardados em arquivo entre uma execução e outra:
 
 ```bash
 gastos novo mercado 152.40     # anota um gasto
@@ -1151,28 +740,8 @@ gastos exporta /tmp/gastos.csv # gera uma planilha
 gastos limpa                   # começa do zero
 ```
 
-O programa junta as três peças do módulo:
-
-- **argumentos** (0069): `argv[1]` diz **o que** fazer; os seguintes trazem os
-  dados, como no `git` (`git commit`, `git log`): um programa, vários
-  subcomandos. O `main` confere o `argc` e chama a função certa.
-- **arquivo binário** (0068): a caderneta. Cada gasto é um registro `Gasto` de
-  tamanho fixo, gravado com `fwrite` em modo `"ab"` (sempre no fim, sem ler o
-  que existe). Como os registros têm o mesmo tamanho, `ftell / sizeof(Gasto)`
-  diz quantos já existem.
-- **arquivo texto** (0067): a exportação. Ninguém abre um `.dat` na planilha.
-  O `exporta` lê os registros e escreve com `fprintf` um **CSV** separado por
-  `;`, que o LibreOffice e o Google Planilhas abrem direto.
-
-Três cuidados para quem guarda dados. **Valide antes de gravar**: `strtod`
-com `*fim != '\0'` impede que "abc" entre como R$ 0,00. **Não grave lixo**: o
-`memset` zera `categoria` antes do `strncpy`, então os bytes que sobram são
-zeros, não restos da pilha. **Arquivo inexistente nem sempre é erro**: no
-`lista`, significa "nenhum gasto ainda".
-
-Cada linha do terminal é uma execução separada. O `novo` acrescenta um
-registro de 32 bytes em `gastos.dat`; o `lista` o lê de volta com `fread`; o
-`exporta` transforma o binário em texto:
+O `novo` acrescenta um registro de 32 bytes em `gastos.dat`, o `lista` o lê de
+volta com `fread` e o `exporta` transforma o binário em texto:
 
 <p align="center"><img src="material/0070-ideia.svg" alt="Diagrama da ideia: Juntando tudo: a caderneta de gastos" width="870"></p>
 
@@ -1309,31 +878,10 @@ int main(int argc, char *argv[]) {
 ```
 
 O fluxograma segue o comando `lista`. O `main` testa o comando até achar um
-conhecido; comando desconhecido, ou com argumentos faltando, cai na mensagem
-de uso:
+conhecido; comando desconhecido, ou com argumentos faltando, cai na mensagem de
+uso:
 
 <p align="center"><img src="material/0070-fluxograma.svg" alt="Fluxograma: Juntando tudo: a caderneta de gastos" width="749"></p>
-
-> [!WARNING]
-> Trocar `"ab"` por `"wb"` no `novo` é o erro mais caro do módulo: cada gasto
-> novo apagaria os anteriores, sem aviso. E não leia, por outro `FILE *`, o que
-> acabou de escrever antes do `fclose` (ou `fflush`): os bytes ainda estão no
-> buffer e a leitura acha o arquivo vazio ou pela metade.
-
-> [!TIP]
-> **Por dentro do C:** em `"ab"` (ou `"a"`), **toda** escrita vai para o fim,
-> mesmo depois de um `fseek`: o `fopen` pede `O_APPEND` ao sistema. Por isso
-> dois programas anotando gastos ao mesmo tempo não se sobrescrevem (se cada
-> registro sair num `write` só). E o `return` do `main` vira o código de
-> saída: `./programa novo x abc; echo $?` mostra 1.
-
-> [!NOTE]
-> **Pergunta para você:** a categoria tem 20 bytes. O que acontece com
-> `gastos novo supermercado-do-bairro-novo 10`? O texto aparece inteiro no
-> `lista`? Pense no `strncpy` com `sizeof g.categoria - 1` antes de testar.
-
-
-### Hora de praticar
 
 **Exemplo A139 · Apagar um registro do meio**
 
@@ -1570,7 +1118,271 @@ int main(int argc, char *argv[]) {
 gcc ~/LPEDC/material/A140.c -o ~/LPEDC/material/A140 && ~/LPEDC/material/A140
 ```
 
-#### Exercícios
+---
+
+## 3. Exercícios práticos
+
+Cada exercício é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta. Compile como os exemplos: `gcc ~/LPEDC/material/E007.c -o ~/LPEDC/material/E007 && ~/LPEDC/material/E007`. Resoluções em `_respostas/09-arquivos/`.
+
+### 0067 · Arquivos texto
+
+**Exercício E397** · ★☆☆
+
+Grave a tabuada do 7 no arquivo /tmp/tabuada7.txt, uma conta por linha,
+usando fprintf. Feche o arquivo, abra de novo em modo leitura e mostre o
+conteúdo na tela com fgets. Confira se o fopen deu certo nas duas vezes.
+
+```text
+Saída esperada:
+7 x 1 = 7
+7 x 2 = 14
+7 x 3 = 21
+7 x 4 = 28
+7 x 5 = 35
+7 x 6 = 42
+7 x 7 = 49
+7 x 8 = 56
+7 x 9 = 63
+7 x 10 = 70
+```
+
+**Exercício E399** · ★★☆
+
+Faça um "wc" caseiro. Primeiro, grave em /tmp/recado.txt exatamente estas
+três linhas (cada uma termina com '\n'):
+
+```text
+Feira no domingo
+leve sacolas
+e o dinheiro do pastel
+```
+
+Depois, abra o arquivo para leitura e leia caractere por caractere com
+fgetc, contando linhas, palavras e caracteres (bytes).
+
+```text
+Saída esperada:
+Linhas: 3
+Palavras: 10
+Caracteres: 53
+```
+
+**Exercício E400** · ★★☆
+
+Escreva um programa que cria o arquivo /tmp/turma.txt com fprintf, uma linha
+por aluno com o nome e duas notas: "Bruna 9.0 7.5", "Diego 4.0 7.0" e
+"Lia 6.5 7.5". Feche, reabra para leitura e leia com fscanf num laço que
+pare quando a linha não vier completa. Mostre a média de cada um e a
+situação (aprovado com média >= 7.0) e, no fim, a média da turma. Confira os
+fopen e apague o arquivo no final.
+
+```text
+Saída esperada:
+Bruna    média 8.25  aprovada(o)
+Diego    média 5.50  reprovada(o)
+Lia      média 7.00  aprovada(o)
+Média da turma: 6.92
+```
+
+**Exercício E402** · ★★★
+
+Lista de compras automática. Escreva um programa que:
+
+1. cria /tmp/estoque.txt com as linhas "arroz 3", "cafe 0", "leite 8",
+
+```text
+ "ovos 2" e "sabao 6" (produto e quantidade em casa);
+```
+
+2. lê o estoque e, com os DOIS arquivos abertos ao mesmo tempo, grava em
+
+```text
+ /tmp/comprar.txt só os produtos com menos de 5 unidades, já com quanto
+ falta para chegar a 5 ("arroz 2");
+```
+
+3. fecha tudo, reabre /tmp/comprar.txt e mostra o resultado. Se o segundo
+
+```text
+ fopen falhar, feche o primeiro arquivo antes de sair.
+```
+
+```text
+Saída esperada:
+Comprar:
+- arroz: 2
+- cafe: 5
+- ovos: 3
+3 itens na lista
+```
+
+### 0068 · Arquivos binários
+
+**Exercício E403** · ★☆☆
+
+Uma estação meteorológica registrou as máximas da semana útil: 31, 29, 33,
+35 e 30 graus. Grave o vetor inteiro em /tmp/maximas.bin com UM fwrite.
+Depois leia tudo de volta, com UM fread, para outro vetor, confira se vieram
+os 5 valores e mostre a média.
+
+```text
+Saída esperada:
+Lidos: 5 valores
+Média: 31.6 graus
+```
+
+**Exercício E405** · ★★☆
+
+Crie o tipo Conta (int numero, double saldo). No main, grave com UM fwrite
+em /tmp/contas.bin as contas 1001 (250.00), 1002 (80.50) e 1003 (1200.00).
+Escreva void listar(void), que mostra as contas lendo registro por registro,
+e int depositar(int posicao, double valor): abre em "rb+", vai até o
+registro da posição com fseek, lê, soma o valor ao saldo, volta ao começo
+do mesmo registro e grava por cima (1 se deu certo, 0 se não). Liste,
+deposite R$ 100.00 na posição 1 e liste de novo.
+
+```text
+Saída esperada:
+Antes:
+1001  R$   250.00
+1002  R$    80.50
+1003  R$  1200.00
+Depois:
+1001  R$   250.00
+1002  R$   180.50
+1003  R$  1200.00
+```
+
+**Exercício E406** · ★★☆
+
+Escreva a função
+
+```text
+long contar_registros(const char *caminho, size_t tamanho_registro);
+```
+
+que descobre quantos registros um arquivo binário tem SEM ler nenhum deles:
+só olhando o tamanho do arquivo. Se não conseguir abrir, devolve -1.
+
+No main, grave em /tmp/notas.bin as notas de 7 alunos num vetor de
+struct { int matricula; float nota; } (os valores são livres), feche, e
+mostre:
+
+```text
+Saída esperada:
+Tamanho do registro: 8 bytes
+Registros em /tmp/notas.bin: 7
+Registros em /tmp/nao-existe.bin: -1
+```
+
+**Exercício E408** · ★★★
+
+O extrato do banco mostra os lançamentos mais recentes primeiro. Grave em
+/tmp/extrato.bin estes 6 lançamentos, nesta ordem (do mais antigo para o
+mais novo), como registros de struct { char descricao[24]; double valor; }:
+Salário +3500.00, Aluguel -1200.00, Mercado -387.60, Pix da Ana +45.00,
+Farmácia -62.30 e Padaria -18.90. Depois, SEM carregar o arquivo inteiro na
+memória (um registro por vez), mostre os 3 últimos, do mais novo para o mais
+antigo, e o saldo de TODOS os lançamentos (printf com %-15s %+8.2f).
+
+```text
+Saída esperada:
+Últimos lançamentos:
+Padaria           -18.90
+Farmácia         -62.30
+Pix da Ana        +45.00
+Saldo: R$ 1876.20
+```
+
+### 0069 · Argumentos da linha de comando
+
+**Exercício E409** · ★☆☆
+
+Faça o seu próprio "echo": o programa mostra os argumentos recebidos, na
+mesma linha, separados por um espaço (sem espaço sobrando no fim), e na
+linha de baixo quantos foram. Sem argumentos, mostra só "0 argumentos".
+
+```text
+Argumentos:
+bom dia Brasil
+```
+
+```text
+Saída esperada:
+bom dia Brasil
+3 argumentos
+```
+
+**Exercício E411** · ★★☆
+
+As notas da prova chegam pela linha de comando. Mostre quantas notas
+válidas vieram, a média, a maior e a menor. Argumento que não é número (ou
+que está fora de 0 a 10) é ignorado com um aviso em stderr. Sem nenhuma
+nota válida, mostre "Nenhuma nota válida" e devolva 1.
+
+```text
+Argumentos:
+8.5 7 nove 9.25 6 11
+```
+
+```text
+Saída esperada:
+Ignorando "nove"
+Ignorando "11"
+Notas: 4
+Média: 7.69
+Maior: 9.25
+Menor: 6.00
+```
+
+**Exercício E412** · ★★☆
+
+Escreva um programa que cumprimenta alguém um certo número de vezes. Ele
+recebe o nome e o número de vezes pela linha de comando. Sem os dois
+argumentos, ou com um número de vezes que não é inteiro positivo, mostra uma
+mensagem de uso em stderr e devolve 1.
+
+```text
+Argumentos:
+Ana 3
+```
+
+```text
+Saída esperada:
+Olá, Ana!
+Olá, Ana!
+Olá, Ana!
+```
+
+**Exercício E413** · ★★★
+
+Faça um "wc" de verdade: o nome do arquivo vem pela linha de comando. O
+programa abre o arquivo, conta linhas, palavras e bytes e mostra no formato
+abaixo. Se não vier exatamente um argumento, mostre o uso em stderr e
+devolva 1. Se o arquivo não abrir, use perror com o nome dele e devolva 1.
+
+```text
+Argumentos (o arquivo tem 4 linhas: "Oi, Ana", "tudo certo?", uma vazia
+e "Até amanhã"):
+/tmp/recado.txt
+```
+
+```text
+Saída esperada:
+4 linhas, 6 palavras, 34 bytes em /tmp/recado.txt
+```
+
+```text
+Argumentos (arquivo que não existe):
+/tmp/nao-existe.txt
+```
+
+```text
+Saída esperada (em stderr):
+/tmp/nao-existe.txt: No such file or directory
+```
+
+### 0070 · Juntando tudo: a caderneta de gastos
 
 **Exercício E415** · ★☆☆
 
@@ -1580,36 +1392,25 @@ arquivo (criando o arquivo se ele não existir) e depois mostra todas as
 linhas, numeradas. Com outra quantidade de argumentos, mostra o uso em
 stderr e devolve 1.
 
-
 ```text
 Argumentos (arquivo inexistente):
 /tmp/bolao.txt Rita 2x1
 ```
 
-
-
 ```text
 Saída esperada:
 1. Rita 2x1
 ```
-
-
 
 ```text
 Argumentos (rodando de novo, com o arquivo já criado):
 /tmp/bolao.txt Caio 0x0
 ```
 
-
-
 ```text
 Saída esperada:
 1. Rita 2x1
 2. Caio 0x0
-```
-
-```bash
-gcc ~/LPEDC/material/E415.c -o ~/LPEDC/material/E415 && ~/LPEDC/material/E415
 ```
 
 **Exercício E417** · ★★☆
@@ -1622,17 +1423,12 @@ lê a quantidade, vai até a vaga com fseek, grava o contato, soma 1 e regrava
 o cabeçalho) e listar (mostra a quantidade, o tamanho do arquivo e os
 contatos, nome com %-11s). Adicione Marta, Joel e Iara e liste.
 
-
 ```text
 Saída esperada:
 3 contatos (arquivo de 76 bytes)
 0. Marta       (11) 98888-1234
 1. Joel        (21) 97777-4321
 2. Iara        (31) 96666-0000
-```
-
-```bash
-gcc ~/LPEDC/material/E417.c -o ~/LPEDC/material/E417 && ~/LPEDC/material/E417
 ```
 
 **Exercício E418** · ★★☆
@@ -1654,13 +1450,10 @@ Relatório de vendas da feira. Escreva um programa que:
 
 3. reabre o CSV, mostra o conteúdo com fgets e, por fim, o total geral.
 
-
 ```text
 Argumentos:
 (nenhum)
 ```
-
-
 
 ```text
 Saída esperada:
@@ -1672,10 +1465,6 @@ queijo;4;140.00
 Total geral: R$ 662.50 (gravado em /tmp/vendas.csv)
 ```
 
-```bash
-gcc ~/LPEDC/material/E418.c -o ~/LPEDC/material/E418 && ~/LPEDC/material/E418
-```
-
 **Exercício E420** · ★★★
 
 Faça um "grep" simplificado que recebe [-c] <palavra> <arquivo>. Sem -c,
@@ -1684,19 +1473,14 @@ no fim quantas linhas casaram. Com -c, mostra só a contagem. O código de
 saída é 0 se achou alguma linha e 1 se não achou. Argumentos errados mostram
 o uso em stderr; arquivo que não abre usa perror. Nos dois casos, devolva 2.
 
-
 ```text
 Arquivo /tmp/lista.txt: "arroz 5kg", "feijao", "arroz integral", "cafe".
 ```
-
-
 
 ```text
 Argumentos:
 arroz /tmp/lista.txt
 ```
-
-
 
 ```text
 Saída esperada:
@@ -1705,41 +1489,840 @@ Saída esperada:
 2 linhas
 ```
 
-
-
 ```text
 Argumentos:
 -c arroz /tmp/lista.txt
 ```
-
-
 
 ```text
 Saída esperada:
 2
 ```
 
-
-
 ```text
 Argumentos (código de saída 1):
 leite /tmp/lista.txt
 ```
-
-
 
 ```text
 Saída esperada:
 0 linhas
 ```
 
-```bash
-gcc ~/LPEDC/material/E420.c -o ~/LPEDC/material/E420 && ~/LPEDC/material/E420
+### Lista do módulo
+
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P0901.c a P0930.c, em `material/`; resoluções em `_respostas/09-arquivos/lista/`.
+
+#### ★☆☆ Aquecimento
+
+**Exercício P0901** · ★☆☆ · Calor de Manaus no arquivo
+
+As máximas da semana em Manaus foram 33, 35, 31, 36, 34, 32 e 30 graus.
+Grave os sete valores em /tmp/p0901_temps.txt, um por linha, com fprintf.
+Feche o arquivo, abra de novo para leitura e leia os números com fscanf
+até o arquivo acabar (sem saber de antemão quantos são). Mostre quantos
+dias foram lidos, a maior máxima (e em que dia, contando de 1) e a média.
+No fim, apague o arquivo com remove().
+
+```text
+Saída esperada:
+Dias lidos: 7
+Maior: 36 graus (dia 4)
+Média: 33.0 graus
+```
+
+**Resposta esperada:** 7 dias, maior 36 no dia 4, média 231 / 7 = 33.0.
+
+---
+
+**Exercício P0902** · ★☆☆ · Lista de chamada numerada
+
+Grave em /tmp/p0902_chamada.txt os nomes da chamada do cursinho, um por
+linha: Ana Clara, Bruno, Iara Souza e Joao. Depois leia o arquivo linha a
+linha com fgets e mostre cada nome numerado e com o tamanho (sem contar o
+'\n'). No fim, mostre quantas linhas o arquivo tinha e apague o arquivo.
+
+```text
+Saída esperada:
+1: Ana Clara (9 caracteres)
+2: Bruno (5 caracteres)
+3: Iara Souza (10 caracteres)
+4: Joao (4 caracteres)
+Total: 4 linhas
+```
+
+**Resposta esperada:** a saída acima; sem tirar o '\n', cada tamanho sairia com 1 a mais.
+
+---
+
+**Exercício P0903** · ★☆☆ · O livro-caixa que esquece vendas
+
+A padaria anota as vendas num arquivo texto. De manhã o programa grava
+12, 30 e 8 reais; à tarde ele ACRESCENTA 25 e 15; no fim do dia ele lê
+tudo e soma. O programa abaixo compila sem aviso, mas tem DOIS erros de
+propósito e mostra só "Total do dia: R$ 0". Conserte para a saída ficar:
+
+```text
+Saída esperada:
+Venda: 12
+Venda: 30
+Venda: 8
+Venda: 25
+Venda: 15
+Total do dia: R$ 90
+```
+
+**Resposta esperada:** na tarde, troque "w" por "a" e acrescente fclose(arq) depois dos dois fprintf. A saída fica igual à de cima.
+
+---
+
+**Exercício P0904** · ★☆☆ · Quantos produtos tem o arquivo?
+
+O main abaixo já grava 5 produtos em /tmp/p0904_produtos.bin. Escreva a
+função
+
+```text
+long conta_registros(FILE *arq)
+```
+
+que descobre quantos registros Produto o arquivo tem SEM ler nenhum: vá
+até o fim com fseek, pergunte a posição com ftell e divida pelo tamanho
+de um registro. Depois, no main, leia só o ÚLTIMO produto, com um fseek
+a partir do fim, e mostre-o. Num PC de 64 bits comum, cada Produto ocupa
+16 bytes (4 do int, 4 de preenchimento, 8 do double).
+
+```text
+Saída esperada:
+Tamanho do arquivo: 80 bytes
+Registros: 5
+Último: código 105, R$ 4.99
+```
+
+**Resposta esperada:** 80 bytes, 5 registros, último código 105 a R$ 4.99.
+
+---
+
+**Exercício P0905** · ★☆☆ · A cidade de nome mais comprido
+
+Escreva um programa que recebe nomes de cidades pela linha de comando e
+mostra quantos vieram e qual é o mais comprido (no empate, vale o
+primeiro). Sem nenhum argumento, ele mostra como usar e termina com
+return 1.
+
+```text
+$ ./rodar P0905.c manaus belem parintins tefe
+```
+
+```text
+Saída esperada:
+4 cidades
+Maior nome: parintins (9 letras)
+```
+
+Sem argumentos, a saída é "uso: P0905 cidade1 cidade2 ...".
+
+**Resposta esperada:** 4 cidades, maior nome parintins com 9 letras.
+
+---
+
+**Exercício P0906** · ★☆☆ · O recibo da conta de luz, letra por letra
+
+Grave em /tmp/p0906_recibo.txt as três linhas do recibo:
+
+```text
+Consumo: 230 kWh
+Tarifa: R$ 0.85
+Total: R$ 195.50
+```
+
+(use fprintf e calcule o total no programa: 230 * 0.85). Depois reabra o
+arquivo e leia-o UM CARACTERE POR VEZ com fgetc: mostre cada caractere
+na tela com putchar e conte quantos caracteres e quantas linhas ('\n')
+o arquivo tem. Apague o arquivo no fim.
+
+```text
+Saída esperada:
+Consumo: 230 kWh
+Tarifa: R$ 0.85
+Total: R$ 195.50
+3 linhas, 50 caracteres
+```
+
+**Resposta esperada:** 3 linhas e 50 caracteres (17 + 16 + 17, contando o '\n' de cada linha).
+
+---
+
+**Exercício P0907** · ★☆☆ · O aviso da feira em maiúsculas
+
+Grave em /tmp/p0907_aviso.txt estas duas linhas:
+
+```text
+Bom dia, Manaus!
+A feira abre as 6h.
+```
+
+Depois copie o arquivo, caractere por caractere, para
+/tmp/p0907_grito.txt, trocando cada letra minúscula pela maiúscula (os
+outros caracteres passam iguais). Por fim, mostre o conteúdo do segundo
+arquivo lendo-o com fgets e apague os dois arquivos.
+
+```text
+Saída esperada:
+BOM DIA, MANAUS!
+A FEIRA ABRE AS 6H.
+```
+
+**Resposta esperada:** as duas linhas em maiúsculas, como acima.
+
+---
+
+**Exercício P0908** · ★☆☆ · Pulando de dois em dois no arquivo
+
+Grave em /tmp/p0908_quadrados.bin, em binário, os quadrados de 1 a 10
+(1, 4, 9, ..., 100) como int. Depois leia SÓ os que estão nas posições
+ímpares da contagem humana (1º, 3º, 5º, 7º e 9º): leia um com fread e
+pule o seguinte com fseek a partir da posição atual. Mostre os lidos e
+quantos foram.
+
+```text
+Saída esperada:
+1 9 25 49 81
+Lidos: 5
+```
+
+**Resposta esperada:** 1 9 25 49 81 e Lidos: 5.
+
+---
+
+**Exercício P0909** · ★☆☆ · O boletim que lê o aluno errado
+
+O programa grava 4 alunos (matrícula e nota) em binário e depois lê os
+registros 2, 0 e 3 com a função le_registro. Ele compila sem aviso, mas
+mostra números sem sentido: a função tem um erro de propósito na conta da
+posição. Conserte para a saída ficar:
+
+```text
+Saída esperada:
+Registro 2: matrícula 2203, nota 7.5
+Registro 0: matrícula 2201, nota 9.0
+Registro 3: matrícula 2204, nota 4.0
+```
+
+**Resposta esperada:** fseek(arq, i * (long) sizeof(Aluno), SEEK_SET). A saída fica igual à de cima.
+
+---
+
+**Exercício P0910** · ★☆☆ · Os preços da feira pela linha de comando
+
+Os preços chegam pela linha de comando. Grave cada um em
+/tmp/p0910_precos.txt, um por linha e com duas casas. Feche, reabra para
+leitura, some tudo com fscanf e mostre quantos preços foram gravados e o
+total. Sem argumentos, mostre "uso: P0910 preco1 preco2 ..." e termine
+com return 1. Apague o arquivo no fim.
+
+```text
+$ ./rodar P0910.c 12.50 3.99 7.00
+```
+
+```text
+Saída esperada:
+3 preços gravados
+Total: R$ 23.49
+```
+
+**Resposta esperada:** 3 preços gravados e Total: R$ 23.49.
+
+#### ★★☆ Para pensar
+
+**Exercício P0911** · ★★☆ · Só os aprovados vão para o outro arquivo
+
+Grave em /tmp/p0911_turma.txt a turma do cursinho, uma pessoa por linha
+(nome e duas notas):
+
+```text
+Ana 7.0 8.0
+Beto 5.0 4.5
+Caio 6.0 6.0
+Dani 9.5 8.5
+Edu 3.0 7.0
+```
+
+Depois leia esse arquivo com fscanf e escreva em /tmp/p0911_aprovados.txt
+só quem tem média >= 6, no formato "nome média" (duas casas). Por fim,
+mostre o arquivo dos aprovados (lendo com fgets), quantos passaram e
+apague os dois arquivos.
+
+```text
+Saída esperada:
+Ana 7.50
+Caio 6.00
+Dani 9.00
+Aprovados: 3 de 5
+```
+
+**Resposta esperada:** Ana 7.50, Caio 6.00, Dani 9.00 e Aprovados: 3 de 5.
+
+---
+
+**Exercício P0912** · ★★☆ · Tirando um produto do catálogo
+
+Um arquivo binário não tem "apagar registro do meio". O jeito clássico é
+copiar todos os registros, MENOS o que sai, para um arquivo novo. Escreva
+
+```text
+int remove_produto(const char *origem, const char *destino, int codigo)
+```
+
+que faz essa cópia e devolve quantos registros foram para o destino (ou
+-1 se não conseguir abrir algum arquivo). O main grava 5 produtos em
+/tmp/p0912_catalogo.bin, remove o código 103 gerando
+/tmp/p0912_novo.bin, lista o arquivo novo e apaga os dois no fim.
+
+```text
+Saída esperada:
+Antes: 5 produtos
+Depois: 4 produtos
+101 Arroz        R$  24.90
+102 Feijao       R$   8.75
+104 Farinha      R$   6.40
+105 Cafe         R$  17.30
+```
+
+**Resposta esperada:** Depois: 4 produtos, sem o 103 (Acucar) na lista.
+
+---
+
+**Exercício P0913** · ★★☆ · Busca binária no cadastro do cursinho
+
+O arquivo de alunos está ORDENADO por matrícula, então dá para achar um
+aluno lendo poucos registros: olhe o do meio com fseek e fread e descarte
+a metade que não pode ter a matrícula. Escreva
+
+```text
+int busca(FILE *arq, int n, int matricula, Aluno *achado, int *leituras)
+```
+
+que devolve 1 se achou (e copia o aluno para *achado) ou 0 se não achou,
+e conta em *leituras quantos fread fez. O main grava os 8 alunos e
+procura 2041, 2007 e 2050. O n (quantos registros) deve ser calculado
+pelo tamanho do arquivo, não escrito à mão.
+
+```text
+Saída esperada:
+8 alunos no arquivo
+2041: Kaio (2 leituras)
+2007: Bruna (2 leituras)
+2050: não encontrada (4 leituras)
+```
+
+**Resposta esperada:** Com 8 registros, nenhuma busca passa de 4 leituras (piso de log2 8, mais 1).
+
+---
+
+**Exercício P0914** · ★★☆ · O extrato com sujeira
+
+O app do banco exportou os valores do mês num arquivo texto, separados
+por espaço, mas alguns campos vieram corrompidos. Grave em
+/tmp/p0914_extrato.txt exatamente esta linha:
+
+```text
+150 abc 32 -10 x9 20 7a
+```
+
+Depois leia o arquivo palavra por palavra com fscanf("%31s") e use
+strtol para decidir se cada palavra é um inteiro válido (a palavra
+inteira tem que ser número). Some os válidos e mostre, na ordem, os que
+foram ignorados. Apague o arquivo no fim.
+
+```text
+Saída esperada:
+Válidos: 4 (soma 192)
+Ignorados: abc x9 7a
+```
+
+**Resposta esperada:** válidos 150, 32, -10 e 20 (soma 192); ignorados abc, x9 e 7a.
+
+---
+
+**Exercício P0915** · ★★☆ · A média com modo detalhado
+
+As notas chegam pela linha de comando. Se o PRIMEIRO argumento for "-v"
+(de verboso), o programa mostra cada nota antes da média; sem "-v", mostra
+só a média. Sem nenhuma nota (inclusive quando só veio o "-v"), ele mostra
+"uso: P0915 [-v] nota1 nota2 ..." e termina com return 1.
+
+```text
+$ ./rodar P0915.c -v 7 8 9.5
+```
+
+```text
+Saída esperada:
+nota 1: 7.0
+nota 2: 8.0
+nota 3: 9.5
+Média: 8.17
+```
+
+Com ./rodar P0915.c 7 8 9.5 sai só a linha "Média: 8.17".
+
+**Resposta esperada:** com -v, as três notas e Média: 8.17 (24.5 / 3).
+
+---
+
+**Exercício P0916** · ★★☆ · A linha mais comprida do poema
+
+Grave em /tmp/p0916_poema.txt estas quatro linhas:
+
+```text
+Choveu em Manaus
+o rio subiu devagar
+e a balsa atrasou
+fim
+```
+
+Depois leia o arquivo com fgets e mostre qual é a linha mais comprida e
+qual é a mais curta (número da linha, tamanho sem o '\n' e o texto).
+Apague o arquivo no fim.
+
+```text
+Saída esperada:
+Mais comprida: linha 2 (19 caracteres): o rio subiu devagar
+Mais curta: linha 4 (3 caracteres): fim
+```
+
+**Resposta esperada:** linha 2 com 19 caracteres e linha 4 com 3.
+
+---
+
+**Exercício P0917** · ★★☆ · Virar o arquivo do avesso no lugar
+
+O medidor de pressão gravou 6 leituras em /tmp/p0917_pressao.bin, em
+binário: 120, 118, 125, 130, 122 e 119. Inverta a ordem DENTRO do próprio
+arquivo, sem carregar tudo num vetor: abra com "rb+" e, para cada i de 0
+até n/2 - 1, leia o registro i e o registro n-1-i e grave cada um no
+lugar do outro. Mostre o arquivo antes e depois.
+
+```text
+Saída esperada:
+Antes:  120 118 125 130 122 119
+Depois: 119 122 130 125 118 120
+```
+
+**Resposta esperada:** Depois: 119 122 130 125 118 120 (só 3 trocas para 6 registros).
+
+---
+
+**Exercício P0918** · ★★☆ · Salvar e carregar o orçamento da reforma
+
+Complete as duas funções do programa:
+
+```text
+int salva(const char *caminho, const Item *itens, int n)
+int carrega(const char *caminho, Item *itens, int max)
+```
+
+O formato do arquivo texto é: na 1ª linha, quantos itens vêm; depois, um
+item por linha, "descricao quantidade preco". salva devolve 1 se deu
+certo. carrega lê no máximo max itens e devolve quantos leu (ou -1 se não
+abriu o arquivo). O main já grava, carrega num OUTRO vetor e mostra.
+
+```text
+Saída esperada:
+Carregados: 3 itens
+cimento      10 x R$  32.90 = R$  329.00
+areia         3 x R$ 120.00 = R$  360.00
+tijolo      500 x R$   0.85 = R$  425.00
+Total: R$ 1114.00
+```
+
+**Resposta esperada:** a saída acima; o total é 329 + 360 + 425 = 1114.
+
+---
+
+**Exercício P0919** · ★★☆ · A votação em que o "sim" nunca vence
+
+O condomínio votou a troca do portão, e cada voto ficou numa linha do
+arquivo: sim, nao, sim, sim. O programa abaixo compila sem aviso, mas
+mostra "Votos sim: 2, não: 2, inválidos: 0", um empate que não houve.
+Há DOIS erros de propósito:
+um faz toda comparação falhar e outro faz a ÚLTIMA linha ser contada
+diferente das outras quando o arquivo não termina com '\n'. Conserte
+os dois (sem mudar o que é gravado no arquivo).
+
+```text
+Saída esperada:
+Votos sim: 3, não: 1, inválidos: 0
+```
+
+**Resposta esperada:** troque o corte na marra por linha[strcspn(linha, "\n")] = '\0' e compare com strcmp(...) == 0 (o código compara com != 0). A saída fica igual à de cima.
+
+---
+
+**Exercício P0920** · ★★☆ · A planilha de vendas no arquivo
+
+Três vendedores da loja de açaí, quatro semanas (em reais):
+
+```text
+vendedor 1: 120  90 150  80
+vendedor 2: 200 110  70 130
+vendedor 3:  95 140 160 100
+```
+
+Grave essa matriz 3 x 4 em /tmp/p0920_vendas.txt, uma linha por vendedor.
+Depois leia o arquivo para OUTRA matriz com fscanf e mostre o total de
+cada semana e o vendedor que mais vendeu no mês. Apague o arquivo no fim.
+
+```text
+Saída esperada:
+Semana 1: R$ 415
+Semana 2: R$ 340
+Semana 3: R$ 380
+Semana 4: R$ 310
+Melhor vendedor: 2 (R$ 510)
+```
+
+**Resposta esperada:** semanas 415, 340, 380 e 310; o vendedor 2, com 510.
+
+#### ★★★ Desafio
+
+**Exercício P0921** · ★★★ · A agenda que se mantém em ordem no disco
+
+Uma agenda guarda contatos (nome e telefone) num arquivo binário SEMPRE
+em ordem alfabética, para que a busca seja binária. Escreva:
+
+```text
+void insere(FILE *arq, const Contato *novo, int *deslocados)
+  acha a posição do novo lendo o arquivo do começo; depois empurra uma
+  posição para a frente cada registro que fica depois dele (do último
+  para trás, para não sobrescrever ninguém) e grava o novo no buraco.
+  Conta em *deslocados quantos registros foram empurrados.
+int busca(FILE *arq, const char *nome, Contato *achado, int *leituras)
+  busca binária pelo nome, contando os fread.
+```
+
+No main, abra /tmp/p0921_agenda.bin com "wb+" e insira, nesta ordem:
+Marta 92 99100-0001, Bia 92 99100-0002, Rui 92 99100-0003,
+Caio 92 99100-0004 e Ana 92 99100-0005. Liste a agenda, mostre o total
+de deslocamentos e procure Caio e Zeca. Apague o arquivo no fim.
+
+```text
+Saída esperada:
+0 Ana     92 99100-0005
+1 Bia     92 99100-0002
+2 Caio    92 99100-0004
+3 Marta   92 99100-0001
+4 Rui     92 99100-0003
+Deslocamentos: 7
+Caio: 92 99100-0004 (1 leitura)
+Zeca: não está na agenda (3 leituras)
 ```
 
 ---
 
-## Desafios do módulo
+**Exercício P0922** · ★★★ · O banquinho do bairro processa o dia
+
+O banco comunitário guarda as contas em binário e recebe as operações do
+dia num arquivo texto. Escreva um programa que:
+
+1. grave em /tmp/p0922_contas.bin as contas 101 Ana R$ 500.00,
+
+```text
+ 102 Beto R$ 120.00 e 103 Caio R$ 0.00;
+```
+
+2. grave em /tmp/p0922_dia.txt as operações, uma por linha:
+
+```text
+D 103 250.00
+S 102 200.00
+S 101 80.50
+T 101 103 100.00
+S 104 10.00
+```
+
+```text
+ (D = depósito, S = saque, T = transferência da 1ª conta para a 2ª);
+```
+
+3. leia as operações com fscanf e aplique cada uma DIRETO no arquivo de
+
+```text
+ contas (abra com "rb+", ache o registro, altere e regrave). Saque ou
+ transferência sem saldo é recusado; conta que não existe também;
+```
+
+4. mostre o resultado de cada operação e os saldos finais, e apague os
+
+```text
+ dois arquivos.
+```
+
+```text
+Saída esperada:
+D 103 250.00: ok
+S 102 200.00: saldo insuficiente
+S 101 80.50: ok
+T 101 103 100.00: ok
+S 104 10.00: conta inexistente
+101 Ana    R$  319.50
+102 Beto   R$  120.00
+103 Caio   R$  350.00
+```
+
+**Resposta esperada:** a saída acima (Ana: 500 - 80.50 - 100 = 319.50).
+
+---
+
+**Exercício P0923** · ★★★ · O índice de linhas do cardápio
+
+Num arquivo texto, cada linha tem um tamanho, então não dá para calcular
+onde começa a linha k como num arquivo de registros. Mas dá para montar um
+ÍNDICE: leia o arquivo uma vez e anote, num vetor de long, a posição
+(ftell) do começo de cada linha. Depois, qualquer linha é um fseek e um
+fgets, sem reler o arquivo.
+
+Grave em /tmp/p0923_cardapio.txt estas 6 linhas:
+
+```text
+Tacaca na esquina
+Pirarucu de casaca
+Tucupi no pato
+Bolo de macaxeira
+Cupuacu gelado
+Pupunha com cafe
+```
+
+Monte o índice (no máximo 100 linhas) e mostre as linhas 5, 2, 6 e 9,
+nesta ordem, com o byte onde cada uma começa. Apague o arquivo no fim.
+
+```text
+Saída esperada:
+6 linhas indexadas
+Linha 5 (byte 70): Cupuacu gelado
+Linha 2 (byte 18): Pirarucu de casaca
+Linha 6 (byte 85): Pupunha com cafe
+Linha 9: não existe
+```
+
+---
+
+**Exercício P0924** · ★★★ · Os produtos entre R$ 10 e R$ 20
+
+O arquivo binário do mercadinho tem 10 produtos ORDENADOS por preço (em
+centavos, para não ter erro de arredondamento):
+
+```text
+299 Agua, 450 Pao, 699 Leite, 899 Biscoito, 1050 Cafe, 1290 Queijo,
+1599 Mel, 1890 Manteiga, 2100 Sabao, 3490 Azeite
+```
+
+Para listar os que custam de R$ 10,00 a R$ 20,00 sem ler o arquivo todo,
+faça uma busca binária que acha a POSIÇÃO do primeiro produto com preço
+>= 1000 e, de lá, leia em sequência enquanto o preço for <= 2000. Escreva
+
+```text
+long primeiro_maior_igual(FILE *arq, long n, int alvo, int *leituras)
+```
+
+que devolve a primeira posição com preço >= alvo (ou n, se não houver) e
+conta os fread da busca. Grave o arquivo em /tmp/p0924_precos.bin no
+próprio programa e apague-o no fim.
+
+```text
+Saída esperada:
+Busca: 4 leituras, primeiro na posição 4
+R$ 10.50 Cafe
+R$ 12.90 Queijo
+R$ 15.99 Mel
+R$ 18.90 Manteiga
+4 produtos na faixa
+```
+
+**Resposta esperada:** a saída acima (meios lidos: 5, 2, 4 e 3).
+
+---
+
+**Exercício P0925** · ★★★ · Ordenar a fila da vacina dentro do arquivo
+
+O posto de saúde tem a lista de espera da vacina num arquivo binário, e a
+regra é: mais velho primeiro. O arquivo pode ser grande demais para a
+memória, então ordene-o NO DISCO, com a ordenação por seleção: para cada
+posição i, procure (lendo do arquivo) o paciente mais velho entre i e o
+fim e troque-o com o da posição i. Nunca guarde mais que 3 registros na
+memória ao mesmo tempo, e conte quantos fread e quantos fwrite fez.
+
+Grave em /tmp/p0925_fila.bin: Ana 34, Beto 71, Ceci 18, Davi 65, Eva 80,
+Fabio 42. Ordene, liste e apague o arquivo. Só faça a troca (2 fwrite)
+quando o mais velho não estiver já na posição i.
+
+```text
+Saída esperada:
+1. Eva    80 anos
+2. Beto   71 anos
+3. Davi   65 anos
+4. Fabio  42 anos
+5. Ana    34 anos
+6. Ceci   18 anos
+Leituras: 20, escritas: 6
+```
+
+**Resposta esperada:** Não conte as leituras da listagem.
+
+---
+
+**Exercício P0926** · ★★★ · Compactar a leitura do sensor (RLE)
+
+O sensor da estufa manda uma letra por minuto (A = ok, B = quente,
+C = seco, D = desligado) e repete muito: "AAAAABBBCCCCCCCCDAA". A
+codificação RLE guarda cada SEQUÊNCIA como um par (quantidade, letra):
+5A 3B 8C 1D 2A. Escreva:
+
+```text
+int compacta(const char *texto, const char *caminho)
+  grava os pares em binário (struct Par com unsigned char qtd e char c)
+  e devolve quantos pares gravou (-1 se não abriu o arquivo);
+int descompacta(const char *caminho, char *saida, int max)
+  lê os pares e remonta o texto em saida (no máximo max - 1 letras,
+  mais o '\0'), devolvendo o tamanho remontado.
+```
+
+Use /tmp/p0926_sensor.rle, mostre os tamanhos, os pares, o texto
+remontado e se ele confere com o original. Apague o arquivo no fim.
+
+```text
+Saída esperada:
+Original: 19 bytes
+Compactado: 10 bytes (5 pares)
+5xA 3xB 8xC 1xD 2xA
+Descompactado: AAAAABBBCCCCCCCCDAA
+Confere: sim
+```
+
+**Resposta esperada:** RLE compensa com muita repetição; com "ABCD" o arquivo ficaria com o DOBRO do tamanho.
+
+---
+
+**Exercício P0927** · ★★★ · O cadastro da clínica veterinária
+
+A clínica cadastra um pet por vez num arquivo binário e depois lista
+todos e mostra o pet do meio do arquivo. O programa abaixo compila sem
+aviso, mas não lista nada. Ele tem TRÊS erros de propósito, um em cada
+função de arquivo. Conserte os três para a saída ficar:
+
+```text
+Saída esperada:
+Rex: 3 anos, 12.5 kg
+Mimi: 5 anos, 4.2 kg
+Thor: 2 anos, 30.0 kg
+Do meio: Mimi
+```
+
+**Resposta esperada:** "wb" vira "ab"; sizeof p vira sizeof *p; e o fseek de le_meio usa SEEK_SET em vez de SEEK_END. A saída fica igual à de cima.
+
+---
+
+**Exercício P0928** · ★★★ · A tabela do Barezão
+
+Os jogos da rodada do campeonato estão num arquivo texto, um por linha,
+no formato "mandante gols visitante gols". Grave em /tmp/p0928_jogos.txt:
+
+```text
+Nacional 2 Fast 1
+Manaus 1 Amazonas 1
+Fast 0 Manaus 3
+Amazonas 2 Nacional 2
+Nacional 1 Manaus 0
+Amazonas 3 Fast 1
+```
+
+Leia os jogos com fscanf e monte a tabela num vetor de structs (nome,
+pontos, vitórias, saldo de gols): vitória vale 3, empate 1. Ordene com
+qsort por pontos (maior primeiro), depois saldo, depois nome. Grave a
+classificação em /tmp/p0928_tabela.txt, mostre esse arquivo lendo com
+fgets e apague os dois.
+
+```text
+Saída esperada:
+1. Nacional   7 pts  2 V  saldo +2
+2. Amazonas   5 pts  1 V  saldo +2
+3. Manaus     4 pts  1 V  saldo +2
+4. Fast       0 pts  0 V  saldo -6
+```
+
+---
+
+**Exercício P0929** · ★★★ · O recado cifrado da linha de comando
+
+A cifra de César troca cada letra pela que está k posições adiante no
+alfabeto (com k = 3, a vira d, x vira a). Escreva um programa chamado
+assim:
+
+```text
+$ ./rodar P0929.c 3 ataque ao amanhecer
+```
+
+O primeiro argumento é a chave k; os outros são as palavras do recado. O
+programa cifra o recado (palavras separadas por um espaço), grava o texto
+cifrado em /tmp/p0929_recado.txt (sem '\n' no fim), lê o arquivo de
+volta, mostra o cifrado e o tamanho do arquivo, decifra o que leu (chave
+-k) e mostra o recado de novo. Maiúsculas giram dentro de A-Z, e o que
+não é letra passa igual. Se faltar argumento ou a chave não for número,
+mostre "uso: P0929 chave palavra1 palavra2 ..." e termine com return 1.
+
+```text
+Saída esperada:
+Cifrado: dwdtxh dr dpdqkhfhu
+Arquivo: 19 bytes
+Decifrado: ataque ao amanhecer
+```
+
+---
+
+**Exercício P0930** · ★★★ · O índice da biblioteca
+
+Os livros da biblioteca estão num arquivo de dados na ordem em que
+chegaram, então a busca por código seria sequencial. A solução dos bancos
+de dados é um ÍNDICE: um segundo arquivo, pequeno e ordenado, com pares
+(código, posição no arquivo de dados). Busca-se no índice (binária) e
+depois se vai direto ao registro com um fseek.
+
+1. Grave em /tmp/p0930_dados.bin, nesta ordem: 3071 Vidas Secas 1938,
+
+```text
+ 1150 Macunaima 1928, 4420 Iracema 1865, 2088 Dom Casmurro 1899,
+ 1999 O Cortico 1890 e 3500 Grande Sertao 1956.
+```
+
+2. Monte um vetor de Entrada {codigo, posicao}, ordene com qsort e grave
+
+```text
+ em /tmp/p0930_indice.bin.
+```
+
+3. Escreva long procura(FILE *indice, int codigo, int *leituras): busca
+
+```text
+ binária NO ARQUIVO de índice que devolve a posição no arquivo de dados
+ (ou -1), contando os fread.
+```
+
+4. Procure 2088, 4420 e 1000, leia o livro no arquivo de dados e mostre.
+
+```text
+ Apague os dois arquivos no fim.
+```
+
+```text
+Saída esperada:
+Índice: 1150 1999 2088 3071 3500 4420
+2088: Dom Casmurro (1899), registro 3, 1 leitura no índice
+4420: Iracema (1865), registro 2, 3 leituras no índice
+1000: não cadastrado, 2 leituras no índice
+```
+
+---
+
+### Desafios do módulo
 
 Problemas do médio ao difícil. Crie os arquivos de teste com
 `printf '...' > /tmp/teste.txt`.
@@ -1904,1214 +2487,7 @@ pequenos o texto até ganha (`7\n` tem 2 bytes); para grandes, o binário ganha.
 
 </details>
 
-## Lista de exercícios práticos
-
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P0901.c a P0930.c, em `material/`; resoluções em `_respostas/09-arquivos/lista/`.
-
-### ★☆☆ Aquecimento
-
-**Exercício P0901** · ★☆☆ · Calor de Manaus no arquivo
-
-As máximas da semana em Manaus foram 33, 35, 31, 36, 34, 32 e 30 graus.
-Grave os sete valores em /tmp/p0901_temps.txt, um por linha, com fprintf.
-Feche o arquivo, abra de novo para leitura e leia os números com fscanf
-até o arquivo acabar (sem saber de antemão quantos são). Mostre quantos
-dias foram lidos, a maior máxima (e em que dia, contando de 1) e a média.
-No fim, apague o arquivo com remove().
-
-
-```text
-Saída esperada:
-Dias lidos: 7
-Maior: 36 graus (dia 4)
-Média: 33.0 graus
-```
-
-**Dicas:**
-
-1. Grave com fprintf(arq, "%d\n", t[i]) e feche com fclose antes de
-   reabrir em "r".
-2. O laço de leitura é while (fscanf(arq, "%d", &t) == 1): o fscanf
-   devolve quantos campos converteu e para no fim do arquivo.
-3. Resposta esperada: 7 dias, maior 36 no dia 4, média 231 / 7 = 33.0.
-
-```bash
-gcc ~/LPEDC/material/P0901.c -o ~/LPEDC/material/P0901 && ~/LPEDC/material/P0901
-```
-
----
-
-**Exercício P0902** · ★☆☆ · Lista de chamada numerada
-
-Grave em /tmp/p0902_chamada.txt os nomes da chamada do cursinho, um por
-linha: Ana Clara, Bruno, Iara Souza e Joao. Depois leia o arquivo linha a
-linha com fgets e mostre cada nome numerado e com o tamanho (sem contar o
-'\n'). No fim, mostre quantas linhas o arquivo tinha e apague o arquivo.
-
-
-```text
-Saída esperada:
-1: Ana Clara (9 caracteres)
-2: Bruno (5 caracteres)
-3: Iara Souza (10 caracteres)
-4: Joao (4 caracteres)
-Total: 4 linhas
-```
-
-**Dicas:**
-
-1. fgets(linha, sizeof linha, arq) devolve NULL quando o arquivo acaba.
-2. A linha lida vem com o '\n' no fim: tire com
-   linha[strcspn(linha, "\n")] = '\0' antes do strlen.
-3. Resposta esperada: a saída acima; sem tirar o '\n', cada tamanho sairia
-   com 1 a mais.
-
-```bash
-gcc ~/LPEDC/material/P0902.c -o ~/LPEDC/material/P0902 && ~/LPEDC/material/P0902
-```
-
----
-
-**Exercício P0903** · ★☆☆ · O livro-caixa que esquece vendas
-
-A padaria anota as vendas num arquivo texto. De manhã o programa grava
-12, 30 e 8 reais; à tarde ele ACRESCENTA 25 e 15; no fim do dia ele lê
-tudo e soma. O programa abaixo compila sem aviso, mas tem DOIS erros de
-propósito e mostra só "Total do dia: R$ 0". Conserte para a saída ficar:
-
-
-```text
-Saída esperada:
-Venda: 12
-Venda: 30
-Venda: 8
-Venda: 25
-Venda: 15
-Total do dia: R$ 90
-```
-
-**Dicas:**
-
-1. Que modo de abertura zera o arquivo? E qual escreve depois do fim?
-2. O fprintf não vai direto para o disco: ele enche um buffer na memória,
-   que só é despejado no fclose (ou quando enche). Se você abre o arquivo
-   de novo para ler sem fechar o da escrita, a leitura não enxerga nada.
-3. Resposta esperada: na tarde, troque "w" por "a" e acrescente
-   fclose(arq) depois dos dois fprintf. A saída fica igual à de cima.
-
-```bash
-gcc ~/LPEDC/material/P0903.c -o ~/LPEDC/material/P0903 && ~/LPEDC/material/P0903
-```
-
----
-
-**Exercício P0904** · ★☆☆ · Quantos produtos tem o arquivo?
-
-O main abaixo já grava 5 produtos em /tmp/p0904_produtos.bin. Escreva a
-função
-
-
-```text
-long conta_registros(FILE *arq)
-```
-
-
-que descobre quantos registros Produto o arquivo tem SEM ler nenhum: vá
-até o fim com fseek, pergunte a posição com ftell e divida pelo tamanho
-de um registro. Depois, no main, leia só o ÚLTIMO produto, com um fseek
-a partir do fim, e mostre-o. Num PC de 64 bits comum, cada Produto ocupa
-16 bytes (4 do int, 4 de preenchimento, 8 do double).
-
-
-```text
-Saída esperada:
-Tamanho do arquivo: 80 bytes
-Registros: 5
-Último: código 105, R$ 4.99
-```
-
-**Dicas:**
-
-1. fseek(arq, 0, SEEK_END) e depois ftell(arq) dá o tamanho em bytes.
-2. O último registro começa sizeof(Produto) bytes antes do fim:
-   fseek(arq, -(long) sizeof(Produto), SEEK_END).
-3. Resposta esperada: 80 bytes, 5 registros, último código 105 a R$ 4.99.
-
-```bash
-gcc ~/LPEDC/material/P0904.c -o ~/LPEDC/material/P0904 && ~/LPEDC/material/P0904
-```
-
----
-
-**Exercício P0905** · ★☆☆ · A cidade de nome mais comprido
-
-Escreva um programa que recebe nomes de cidades pela linha de comando e
-mostra quantos vieram e qual é o mais comprido (no empate, vale o
-primeiro). Sem nenhum argumento, ele mostra como usar e termina com
-return 1.
-
-
-```text
-$ ./rodar P0905.c manaus belem parintins tefe
-```
-
-
-
-```text
-Saída esperada:
-4 cidades
-Maior nome: parintins (9 letras)
-```
-
-
-Sem argumentos, a saída é "uso: P0905 cidade1 cidade2 ...".
-
-**Dicas:**
-
-1. argc conta também o argv[0] (o nome do programa): as cidades são
-   argv[1] até argv[argc - 1].
-2. Guarde o ÍNDICE da maior e compare com strlen. Use > (e não >=) para
-   o empate ficar com a primeira.
-3. Resposta esperada: 4 cidades, maior nome parintins com 9 letras.
-
-```bash
-gcc ~/LPEDC/material/P0905.c -o ~/LPEDC/material/P0905 && ~/LPEDC/material/P0905
-```
-
----
-
-**Exercício P0906** · ★☆☆ · O recibo da conta de luz, letra por letra
-
-Grave em /tmp/p0906_recibo.txt as três linhas do recibo:
-
-
-```text
-Consumo: 230 kWh
-Tarifa: R$ 0.85
-Total: R$ 195.50
-```
-
-
-(use fprintf e calcule o total no programa: 230 * 0.85). Depois reabra o
-arquivo e leia-o UM CARACTERE POR VEZ com fgetc: mostre cada caractere
-na tela com putchar e conte quantos caracteres e quantas linhas ('\n')
-o arquivo tem. Apague o arquivo no fim.
-
-
-```text
-Saída esperada:
-Consumo: 230 kWh
-Tarifa: R$ 0.85
-Total: R$ 195.50
-3 linhas, 50 caracteres
-```
-
-**Dicas:**
-
-1. fgetc devolve um int, não um char: guarde em int c e compare com EOF.
-   Um char não consegue distinguir o EOF de um byte de verdade.
-2. O laço é while ((c = fgetc(arq)) != EOF) { ... }.
-3. Resposta esperada: 3 linhas e 50 caracteres (17 + 16 + 17, contando o
-   '\n' de cada linha).
-
-```bash
-gcc ~/LPEDC/material/P0906.c -o ~/LPEDC/material/P0906 && ~/LPEDC/material/P0906
-```
-
----
-
-**Exercício P0907** · ★☆☆ · O aviso da feira em maiúsculas
-
-Grave em /tmp/p0907_aviso.txt estas duas linhas:
-
-
-```text
-Bom dia, Manaus!
-A feira abre as 6h.
-```
-
-
-Depois copie o arquivo, caractere por caractere, para
-/tmp/p0907_grito.txt, trocando cada letra minúscula pela maiúscula (os
-outros caracteres passam iguais). Por fim, mostre o conteúdo do segundo
-arquivo lendo-o com fgets e apague os dois arquivos.
-
-
-```text
-Saída esperada:
-BOM DIA, MANAUS!
-A FEIRA ABRE AS 6H.
-```
-
-**Dicas:**
-
-1. Abra os dois ao mesmo tempo: a origem em "r" e o destino em "w".
-2. Leia com fgetc, converta com toupper (de ctype.h) e grave com fputc.
-3. Resposta esperada: as duas linhas em maiúsculas, como acima.
-
-```bash
-gcc ~/LPEDC/material/P0907.c -o ~/LPEDC/material/P0907 && ~/LPEDC/material/P0907
-```
-
----
-
-**Exercício P0908** · ★☆☆ · Pulando de dois em dois no arquivo
-
-Grave em /tmp/p0908_quadrados.bin, em binário, os quadrados de 1 a 10
-(1, 4, 9, ..., 100) como int. Depois leia SÓ os que estão nas posições
-ímpares da contagem humana (1º, 3º, 5º, 7º e 9º): leia um com fread e
-pule o seguinte com fseek a partir da posição atual. Mostre os lidos e
-quantos foram.
-
-
-```text
-Saída esperada:
-1 9 25 49 81
-Lidos: 5
-```
-
-**Dicas:**
-
-1. Depois de cada fread de um int, o arquivo já andou 4 bytes. Para pular
-   o próximo, fseek(arq, sizeof(int), SEEK_CUR).
-2. O laço pode ser while (fread(&x, sizeof x, 1, arq) == 1): quando o
-   fseek passa do fim, o fread seguinte devolve 0 e o laço para.
-3. Resposta esperada: 1 9 25 49 81 e Lidos: 5.
-
-```bash
-gcc ~/LPEDC/material/P0908.c -o ~/LPEDC/material/P0908 && ~/LPEDC/material/P0908
-```
-
----
-
-**Exercício P0909** · ★☆☆ · O boletim que lê o aluno errado
-
-O programa grava 4 alunos (matrícula e nota) em binário e depois lê os
-registros 2, 0 e 3 com a função le_registro. Ele compila sem aviso, mas
-mostra números sem sentido: a função tem um erro de propósito na conta da
-posição. Conserte para a saída ficar:
-
-
-```text
-Saída esperada:
-Registro 2: matrícula 2203, nota 7.5
-Registro 0: matrícula 2201, nota 9.0
-Registro 3: matrícula 2204, nota 4.0
-```
-
-**Dicas:**
-
-1. O fseek conta em BYTES, não em registros.
-2. O registro i começa no byte i * sizeof(Aluno).
-3. Resposta esperada: fseek(arq, i * (long) sizeof(Aluno), SEEK_SET). A
-   saída fica igual à de cima.
-
-```bash
-gcc ~/LPEDC/material/P0909.c -o ~/LPEDC/material/P0909 && ~/LPEDC/material/P0909
-```
-
----
-
-**Exercício P0910** · ★☆☆ · Os preços da feira pela linha de comando
-
-Os preços chegam pela linha de comando. Grave cada um em
-/tmp/p0910_precos.txt, um por linha e com duas casas. Feche, reabra para
-leitura, some tudo com fscanf e mostre quantos preços foram gravados e o
-total. Sem argumentos, mostre "uso: P0910 preco1 preco2 ..." e termine
-com return 1. Apague o arquivo no fim.
-
-
-```text
-$ ./rodar P0910.c 12.50 3.99 7.00
-```
-
-
-
-```text
-Saída esperada:
-3 preços gravados
-Total: R$ 23.49
-```
-
-**Dicas:**
-
-1. argv[i] é texto: atof(argv[i]) transforma "12.50" em 12.5.
-2. Grave com fprintf(arq, "%.2f\n", preco) e leia com fscanf(arq, "%lf",
-   &preco) num while que confere se devolveu 1.
-3. Resposta esperada: 3 preços gravados e Total: R$ 23.49.
-
-```bash
-gcc ~/LPEDC/material/P0910.c -o ~/LPEDC/material/P0910 && ~/LPEDC/material/P0910
-```
-
-### ★★☆ Para pensar
-
-**Exercício P0911** · ★★☆ · Só os aprovados vão para o outro arquivo
-
-Grave em /tmp/p0911_turma.txt a turma do cursinho, uma pessoa por linha
-(nome e duas notas):
-
-
-```text
-Ana 7.0 8.0
-Beto 5.0 4.5
-Caio 6.0 6.0
-Dani 9.5 8.5
-Edu 3.0 7.0
-```
-
-
-Depois leia esse arquivo com fscanf e escreva em /tmp/p0911_aprovados.txt
-só quem tem média >= 6, no formato "nome média" (duas casas). Por fim,
-mostre o arquivo dos aprovados (lendo com fgets), quantos passaram e
-apague os dois arquivos.
-
-
-```text
-Saída esperada:
-Ana 7.50
-Caio 6.00
-Dani 9.00
-Aprovados: 3 de 5
-```
-
-**Dicas:**
-
-1. Leia cada linha com fscanf(ent, "%19s %lf %lf", nome, &n1, &n2) e
-   pare quando o retorno for diferente de 3.
-2. Deixe os dois arquivos abertos ao mesmo tempo: o da turma em "r" e o
-   dos aprovados em "w". Feche o de escrita antes de reabrir para ler.
-3. Resposta esperada: Ana 7.50, Caio 6.00, Dani 9.00 e Aprovados: 3 de 5.
-
-```bash
-gcc ~/LPEDC/material/P0911.c -o ~/LPEDC/material/P0911 && ~/LPEDC/material/P0911
-```
-
----
-
-**Exercício P0912** · ★★☆ · Tirando um produto do catálogo
-
-Um arquivo binário não tem "apagar registro do meio". O jeito clássico é
-copiar todos os registros, MENOS o que sai, para um arquivo novo. Escreva
-
-
-```text
-int remove_produto(const char *origem, const char *destino, int codigo)
-```
-
-
-que faz essa cópia e devolve quantos registros foram para o destino (ou
--1 se não conseguir abrir algum arquivo). O main grava 5 produtos em
-/tmp/p0912_catalogo.bin, remove o código 103 gerando
-/tmp/p0912_novo.bin, lista o arquivo novo e apaga os dois no fim.
-
-
-```text
-Saída esperada:
-Antes: 5 produtos
-Depois: 4 produtos
-101 Arroz        R$  24.90
-102 Feijao       R$   8.75
-104 Farinha      R$   6.40
-105 Cafe         R$  17.30
-```
-
-**Dicas:**
-
-1. Abra a origem em "rb" e o destino em "wb". Leia um registro por vez
-   com fread e só chame fwrite se o código for diferente do que sai.
-2. Para listar, um while (fread(&p, sizeof p, 1, arq) == 1) basta.
-3. Resposta esperada: Depois: 4 produtos, sem o 103 (Acucar) na lista.
-
-```bash
-gcc ~/LPEDC/material/P0912.c -o ~/LPEDC/material/P0912 && ~/LPEDC/material/P0912
-```
-
----
-
-**Exercício P0913** · ★★☆ · Busca binária no cadastro do cursinho
-
-O arquivo de alunos está ORDENADO por matrícula, então dá para achar um
-aluno lendo poucos registros: olhe o do meio com fseek e fread e descarte
-a metade que não pode ter a matrícula. Escreva
-
-
-```text
-int busca(FILE *arq, int n, int matricula, Aluno *achado, int *leituras)
-```
-
-
-que devolve 1 se achou (e copia o aluno para *achado) ou 0 se não achou,
-e conta em *leituras quantos fread fez. O main grava os 8 alunos e
-procura 2041, 2007 e 2050. O n (quantos registros) deve ser calculado
-pelo tamanho do arquivo, não escrito à mão.
-
-
-```text
-Saída esperada:
-8 alunos no arquivo
-2041: Kaio (2 leituras)
-2007: Bruna (2 leituras)
-2050: não encontrada (4 leituras)
-```
-
-**Dicas:**
-
-1. n = ftell depois de fseek(arq, 0, SEEK_END), dividido por sizeof(Aluno).
-2. Com ini = 0 e fim = n - 1: meio = (ini + fim) / 2, fseek para
-   meio * sizeof(Aluno), fread, compare. Menor: ini = meio + 1; maior:
-   fim = meio - 1. Pare quando ini > fim.
-3. Com 8 registros, nenhuma busca passa
-   de 4 leituras (piso de log2 8, mais 1).
-
-```bash
-gcc ~/LPEDC/material/P0913.c -o ~/LPEDC/material/P0913 && ~/LPEDC/material/P0913
-```
-
----
-
-**Exercício P0914** · ★★☆ · O extrato com sujeira
-
-O app do banco exportou os valores do mês num arquivo texto, separados
-por espaço, mas alguns campos vieram corrompidos. Grave em
-/tmp/p0914_extrato.txt exatamente esta linha:
-
-
-```text
-150 abc 32 -10 x9 20 7a
-```
-
-
-Depois leia o arquivo palavra por palavra com fscanf("%31s") e use
-strtol para decidir se cada palavra é um inteiro válido (a palavra
-inteira tem que ser número). Some os válidos e mostre, na ordem, os que
-foram ignorados. Apague o arquivo no fim.
-
-
-```text
-Saída esperada:
-Válidos: 4 (soma 192)
-Ignorados: abc x9 7a
-```
-
-**Dicas:**
-
-1. long v = strtol(palavra, &fim, 10): fim aponta para o primeiro
-   caractere que NÃO entrou no número.
-2. A palavra é um número válido se fim != palavra (leu algum dígito) e
-   *fim == '\0' (não sobrou nada). O "7a" para no 'a': inválido.
-3. Resposta esperada: válidos 150, 32, -10 e 20 (soma 192); ignorados
-   abc, x9 e 7a.
-
-```bash
-gcc ~/LPEDC/material/P0914.c -o ~/LPEDC/material/P0914 && ~/LPEDC/material/P0914
-```
-
----
-
-**Exercício P0915** · ★★☆ · A média com modo detalhado
-
-As notas chegam pela linha de comando. Se o PRIMEIRO argumento for "-v"
-(de verboso), o programa mostra cada nota antes da média; sem "-v", mostra
-só a média. Sem nenhuma nota (inclusive quando só veio o "-v"), ele mostra
-"uso: P0915 [-v] nota1 nota2 ..." e termina com return 1.
-
-
-```text
-$ ./rodar P0915.c -v 7 8 9.5
-```
-
-
-
-```text
-Saída esperada:
-nota 1: 7.0
-nota 2: 8.0
-nota 3: 9.5
-Média: 8.17
-```
-
-
-Com ./rodar P0915.c 7 8 9.5 sai só a linha "Média: 8.17".
-
-**Dicas:**
-
-1. Compare com strcmp(argv[1], "-v") == 0, mas só se argc >= 2.
-2. Use uma variável "primeira" com o índice da primeira nota: 2 com o
-   "-v", 1 sem ele. O número de notas é argc - primeira.
-3. Resposta esperada: com -v, as três notas e Média: 8.17 (24.5 / 3).
-
-```bash
-gcc ~/LPEDC/material/P0915.c -o ~/LPEDC/material/P0915 && ~/LPEDC/material/P0915
-```
-
----
-
-**Exercício P0916** · ★★☆ · A linha mais comprida do poema
-
-Grave em /tmp/p0916_poema.txt estas quatro linhas:
-
-
-```text
-Choveu em Manaus
-o rio subiu devagar
-e a balsa atrasou
-fim
-```
-
-
-Depois leia o arquivo com fgets e mostre qual é a linha mais comprida e
-qual é a mais curta (número da linha, tamanho sem o '\n' e o texto).
-Apague o arquivo no fim.
-
-
-```text
-Saída esperada:
-Mais comprida: linha 2 (19 caracteres): o rio subiu devagar
-Mais curta: linha 4 (3 caracteres): fim
-```
-
-**Dicas:**
-
-1. Guarde o texto da maior e da menor em dois vetores de char com strcpy,
-   porque o vetor da leitura é sobrescrito a cada fgets.
-2. Tire o '\n' com linha[strcspn(linha, "\n")] = '\0' antes de medir.
-3. Resposta esperada: linha 2 com 19 caracteres e linha 4 com 3.
-
-```bash
-gcc ~/LPEDC/material/P0916.c -o ~/LPEDC/material/P0916 && ~/LPEDC/material/P0916
-```
-
----
-
-**Exercício P0917** · ★★☆ · Virar o arquivo do avesso no lugar
-
-O medidor de pressão gravou 6 leituras em /tmp/p0917_pressao.bin, em
-binário: 120, 118, 125, 130, 122 e 119. Inverta a ordem DENTRO do próprio
-arquivo, sem carregar tudo num vetor: abra com "rb+" e, para cada i de 0
-até n/2 - 1, leia o registro i e o registro n-1-i e grave cada um no
-lugar do outro. Mostre o arquivo antes e depois.
-
-
-```text
-Saída esperada:
-Antes:  120 118 125 130 122 119
-Depois: 119 122 130 125 118 120
-```
-
-**Dicas:**
-
-1. Escreva duas funções pequenas: int le(FILE *arq, int i) e
-   void grava(FILE *arq, int i, int valor), cada uma com um fseek para
-   i * sizeof(int) antes do fread ou fwrite.
-2. Num arquivo aberto com "+", sempre faça um fseek entre uma leitura e
-   uma escrita: a regra do C exige isso para trocar de direção.
-3. Resposta esperada: Depois: 119 122 130 125 118 120 (só 3 trocas para
-   6 registros).
-
-```bash
-gcc ~/LPEDC/material/P0917.c -o ~/LPEDC/material/P0917 && ~/LPEDC/material/P0917
-```
-
----
-
-**Exercício P0918** · ★★☆ · Salvar e carregar o orçamento da reforma
-
-Complete as duas funções do programa:
-
-
-```text
-int salva(const char *caminho, const Item *itens, int n)
-int carrega(const char *caminho, Item *itens, int max)
-```
-
-
-O formato do arquivo texto é: na 1ª linha, quantos itens vêm; depois, um
-item por linha, "descricao quantidade preco". salva devolve 1 se deu
-certo. carrega lê no máximo max itens e devolve quantos leu (ou -1 se não
-abriu o arquivo). O main já grava, carrega num OUTRO vetor e mostra.
-
-
-```text
-Saída esperada:
-Carregados: 3 itens
-cimento      10 x R$  32.90 = R$  329.00
-areia         3 x R$ 120.00 = R$  360.00
-tijolo      500 x R$   0.85 = R$  425.00
-Total: R$ 1114.00
-```
-
-**Dicas:**
-
-1. Em salva: fprintf(arq, "%d\n", n) e depois um fprintf por item.
-2. Em carrega: leia o n com fscanf, e no laço pare em i < n e i < max.
-   Confira se cada fscanf devolveu 3.
-3. Resposta esperada: a saída acima; o total é 329 + 360 + 425 = 1114.
-
-```bash
-gcc ~/LPEDC/material/P0918.c -o ~/LPEDC/material/P0918 && ~/LPEDC/material/P0918
-```
-
----
-
-**Exercício P0919** · ★★☆ · A votação em que o "sim" nunca vence
-
-O condomínio votou a troca do portão, e cada voto ficou numa linha do
-arquivo: sim, nao, sim, sim. O programa abaixo compila sem aviso, mas
-mostra "Votos sim: 2, não: 2, inválidos: 0", um empate que não houve.
-Há DOIS erros de propósito:
-um faz toda comparação falhar e outro faz a ÚLTIMA linha ser contada
-diferente das outras quando o arquivo não termina com '\n'. Conserte
-os dois (sem mudar o que é gravado no arquivo).
-
-
-```text
-Saída esperada:
-Votos sim: 3, não: 1, inválidos: 0
-```
-
-**Dicas:**
-
-1. O que o fgets guarda no vetor, além das letras? Acrescente um
-   printf("[%s]\n", linha) no laço e rode para ver.
-2. Cortar o último caractere "na marra" (linha[strlen(linha) - 1] = '\0')
-   estraga a linha que não tem '\n': ela perde uma letra de verdade.
-3. Resposta esperada: troque o corte na marra por
-   linha[strcspn(linha, "\n")] = '\0' e compare com strcmp(...) == 0 (o
-   código compara com != 0). A saída fica igual à de cima.
-
-```bash
-gcc ~/LPEDC/material/P0919.c -o ~/LPEDC/material/P0919 && ~/LPEDC/material/P0919
-```
-
----
-
-**Exercício P0920** · ★★☆ · A planilha de vendas no arquivo
-
-Três vendedores da loja de açaí, quatro semanas (em reais):
-
-
-```text
-vendedor 1: 120  90 150  80
-vendedor 2: 200 110  70 130
-vendedor 3:  95 140 160 100
-```
-
-
-Grave essa matriz 3 x 4 em /tmp/p0920_vendas.txt, uma linha por vendedor.
-Depois leia o arquivo para OUTRA matriz com fscanf e mostre o total de
-cada semana e o vendedor que mais vendeu no mês. Apague o arquivo no fim.
-
-
-```text
-Saída esperada:
-Semana 1: R$ 415
-Semana 2: R$ 340
-Semana 3: R$ 380
-Semana 4: R$ 310
-Melhor vendedor: 2 (R$ 510)
-```
-
-**Dicas:**
-
-1. Grave com dois for: fprintf(arq, "%d ", v[i][j]) e, no fim da linha,
-   fprintf(arq, "\n"). O fscanf("%d") pula espaços e quebras de linha.
-2. Total da semana j: some a coluna j. Total do vendedor i: some a linha i.
-3. Resposta esperada: semanas 415, 340, 380 e 310; o vendedor 2, com 510.
-
-```bash
-gcc ~/LPEDC/material/P0920.c -o ~/LPEDC/material/P0920 && ~/LPEDC/material/P0920
-```
-
-### ★★★ Desafio
-
-**Exercício P0921** · ★★★ · A agenda que se mantém em ordem no disco
-
-Uma agenda guarda contatos (nome e telefone) num arquivo binário SEMPRE
-em ordem alfabética, para que a busca seja binária. Escreva:
-
-
-```text
-void insere(FILE *arq, const Contato *novo, int *deslocados)
-  acha a posição do novo lendo o arquivo do começo; depois empurra uma
-  posição para a frente cada registro que fica depois dele (do último
-  para trás, para não sobrescrever ninguém) e grava o novo no buraco.
-  Conta em *deslocados quantos registros foram empurrados.
-int busca(FILE *arq, const char *nome, Contato *achado, int *leituras)
-  busca binária pelo nome, contando os fread.
-```
-
-
-No main, abra /tmp/p0921_agenda.bin com "wb+" e insira, nesta ordem:
-Marta 92 99100-0001, Bia 92 99100-0002, Rui 92 99100-0003,
-Caio 92 99100-0004 e Ana 92 99100-0005. Liste a agenda, mostre o total
-de deslocamentos e procure Caio e Zeca. Apague o arquivo no fim.
-
-
-```text
-Saída esperada:
-0 Ana     92 99100-0005
-1 Bia     92 99100-0002
-2 Caio    92 99100-0004
-3 Marta   92 99100-0001
-4 Rui     92 99100-0003
-Deslocamentos: 7
-Caio: 92 99100-0004 (1 leitura)
-Zeca: não está na agenda (3 leituras)
-```
-
-**Dicas:**
-
-1. O número de registros é o tamanho do arquivo (fseek até o fim, ftell)
-   dividido por sizeof(Contato). Faça funções le(arq, i, &c) e
-   grava(arq, i, &c) com o fseek certo dentro.
-2. Para abrir o buraco na posição pos: for (i = n - 1; i >= pos; i--),
-   leia o registro i e grave-o em i + 1. Depois grave o novo em pos.
-3. Deslocamentos: Marta 0, Bia 1, Rui 0, Caio 2 e Ana 4, total 7. É o
-   custo de manter a ordem: inserir é O(n), mas buscar fica O(log n).
-
-```bash
-gcc ~/LPEDC/material/P0921.c -o ~/LPEDC/material/P0921 && ~/LPEDC/material/P0921
-```
-
----
-
-**Exercício P0922** · ★★★ · O banquinho do bairro processa o dia
-
-O banco comunitário guarda as contas em binário e recebe as operações do
-dia num arquivo texto. Escreva um programa que:
-
-1. grave em /tmp/p0922_contas.bin as contas 101 Ana R$ 500.00,
-
-```text
- 102 Beto R$ 120.00 e 103 Caio R$ 0.00;
-```
-
-2. grave em /tmp/p0922_dia.txt as operações, uma por linha:
-
-
-```text
-D 103 250.00
-S 102 200.00
-S 101 80.50
-T 101 103 100.00
-S 104 10.00
-```
-
-
-
-```text
- (D = depósito, S = saque, T = transferência da 1ª conta para a 2ª);
-```
-
-3. leia as operações com fscanf e aplique cada uma DIRETO no arquivo de
-
-```text
- contas (abra com "rb+", ache o registro, altere e regrave). Saque ou
- transferência sem saldo é recusado; conta que não existe também;
-```
-
-4. mostre o resultado de cada operação e os saldos finais, e apague os
-
-```text
- dois arquivos.
-```
-
-
-
-```text
-Saída esperada:
-D 103 250.00: ok
-S 102 200.00: saldo insuficiente
-S 101 80.50: ok
-T 101 103 100.00: ok
-S 104 10.00: conta inexistente
-101 Ana    R$  319.50
-102 Beto   R$  120.00
-103 Caio   R$  350.00
-```
-
-**Dicas:**
-
-1. Escreva long acha(FILE *arq, int numero, Conta *c), que percorre o
-   arquivo e devolve a posição do registro (ou -1), e
-   void regrava(FILE *arq, long pos, const Conta *c).
-2. Leia o tipo com fscanf(op, " %c %d", &tipo, &num): o espaço antes do
-   %c pula o '\n' da linha anterior. Na transferência, leia mais um %d.
-3. Numa transferência, confira as duas contas e o saldo ANTES de mexer em
-   qualquer uma: ou as duas mudam, ou nenhuma.
-4. Resposta esperada: a saída acima (Ana: 500 - 80.50 - 100 = 319.50).
-
-```bash
-gcc ~/LPEDC/material/P0922.c -o ~/LPEDC/material/P0922 && ~/LPEDC/material/P0922
-```
-
----
-
-**Exercício P0923** · ★★★ · O índice de linhas do cardápio
-
-Num arquivo texto, cada linha tem um tamanho, então não dá para calcular
-onde começa a linha k como num arquivo de registros. Mas dá para montar um
-ÍNDICE: leia o arquivo uma vez e anote, num vetor de long, a posição
-(ftell) do começo de cada linha. Depois, qualquer linha é um fseek e um
-fgets, sem reler o arquivo.
-
-Grave em /tmp/p0923_cardapio.txt estas 6 linhas:
-
-
-```text
-Tacaca na esquina
-Pirarucu de casaca
-Tucupi no pato
-Bolo de macaxeira
-Cupuacu gelado
-Pupunha com cafe
-```
-
-
-Monte o índice (no máximo 100 linhas) e mostre as linhas 5, 2, 6 e 9,
-nesta ordem, com o byte onde cada uma começa. Apague o arquivo no fim.
-
-
-```text
-Saída esperada:
-6 linhas indexadas
-Linha 5 (byte 70): Cupuacu gelado
-Linha 2 (byte 18): Pirarucu de casaca
-Linha 6 (byte 85): Pupunha com cafe
-Linha 9: não existe
-```
-
-**Dicas:**
-
-1. Antes de cada fgets da primeira passada, pos[n] = ftell(arq).
-2. Para mostrar a linha k: fseek(arq, pos[k - 1], SEEK_SET) e um fgets.
-3. A linha 2 começa no byte 18 porque a linha 1 tem 17 letras mais o '\n'.
-
-```bash
-gcc ~/LPEDC/material/P0923.c -o ~/LPEDC/material/P0923 && ~/LPEDC/material/P0923
-```
-
----
-
-**Exercício P0924** · ★★★ · Os produtos entre R$ 10 e R$ 20
-
-O arquivo binário do mercadinho tem 10 produtos ORDENADOS por preço (em
-centavos, para não ter erro de arredondamento):
-
-
-```text
-299 Agua, 450 Pao, 699 Leite, 899 Biscoito, 1050 Cafe, 1290 Queijo,
-1599 Mel, 1890 Manteiga, 2100 Sabao, 3490 Azeite
-```
-
-
-Para listar os que custam de R$ 10,00 a R$ 20,00 sem ler o arquivo todo,
-faça uma busca binária que acha a POSIÇÃO do primeiro produto com preço
->= 1000 e, de lá, leia em sequência enquanto o preço for <= 2000. Escreva
-
-
-```text
-long primeiro_maior_igual(FILE *arq, long n, int alvo, int *leituras)
-```
-
-
-que devolve a primeira posição com preço >= alvo (ou n, se não houver) e
-conta os fread da busca. Grave o arquivo em /tmp/p0924_precos.bin no
-próprio programa e apague-o no fim.
-
-
-```text
-Saída esperada:
-Busca: 4 leituras, primeiro na posição 4
-R$ 10.50 Cafe
-R$ 12.90 Queijo
-R$ 15.99 Mel
-R$ 18.90 Manteiga
-4 produtos na faixa
-```
-
-**Dicas:**
-
-1. Use o intervalo meio aberto [ini, fim) com ini = 0 e fim = n. Se o
-   preço do meio é >= alvo, a resposta está em [ini, meio]: fim = meio.
-   Senão, ini = meio + 1. Pare quando ini == fim; a resposta é ini.
-2. Essa busca nunca para "porque achou": ela sempre estreita até sobrar
-   uma posição, por isso funciona até se nenhum produto custar 1000 exato.
-3. Resposta esperada: a saída acima (meios lidos: 5, 2, 4 e 3).
-
-```bash
-gcc ~/LPEDC/material/P0924.c -o ~/LPEDC/material/P0924 && ~/LPEDC/material/P0924
-```
-
----
-
-**Exercício P0925** · ★★★ · Ordenar a fila da vacina dentro do arquivo
-
-O posto de saúde tem a lista de espera da vacina num arquivo binário, e a
-regra é: mais velho primeiro. O arquivo pode ser grande demais para a
-memória, então ordene-o NO DISCO, com a ordenação por seleção: para cada
-posição i, procure (lendo do arquivo) o paciente mais velho entre i e o
-fim e troque-o com o da posição i. Nunca guarde mais que 3 registros na
-memória ao mesmo tempo, e conte quantos fread e quantos fwrite fez.
-
-Grave em /tmp/p0925_fila.bin: Ana 34, Beto 71, Ceci 18, Davi 65, Eva 80,
-Fabio 42. Ordene, liste e apague o arquivo. Só faça a troca (2 fwrite)
-quando o mais velho não estiver já na posição i.
-
-
-```text
-Saída esperada:
-1. Eva    80 anos
-2. Beto   71 anos
-3. Davi   65 anos
-4. Fabio  42 anos
-5. Ana    34 anos
-6. Ceci   18 anos
-Leituras: 20, escritas: 6
-```
-
-**Dicas:**
-
-1. Na passada i, leia o registro i (ele é o "mais velho até agora") e
-   depois cada j de i + 1 a n - 1. São 1 + (n - 1 - i) leituras.
-2. Com n = 6 há 5 passadas: 6 + 5 + 4 + 3 + 2 = 20 leituras. A seleção
-   sempre lê a mesma quantidade, esteja o arquivo como estiver: Θ(n²).
-3. Só 3 passadas precisam trocar (i = 0, 2 e 3): 6 escritas.
-4. Não conte as leituras da listagem.
-
-```bash
-gcc ~/LPEDC/material/P0925.c -o ~/LPEDC/material/P0925 && ~/LPEDC/material/P0925
-```
-
----
-
-**Exercício P0926** · ★★★ · Compactar a leitura do sensor (RLE)
-
-O sensor da estufa manda uma letra por minuto (A = ok, B = quente,
-C = seco, D = desligado) e repete muito: "AAAAABBBCCCCCCCCDAA". A
-codificação RLE guarda cada SEQUÊNCIA como um par (quantidade, letra):
-5A 3B 8C 1D 2A. Escreva:
-
-
-```text
-int compacta(const char *texto, const char *caminho)
-  grava os pares em binário (struct Par com unsigned char qtd e char c)
-  e devolve quantos pares gravou (-1 se não abriu o arquivo);
-int descompacta(const char *caminho, char *saida, int max)
-  lê os pares e remonta o texto em saida (no máximo max - 1 letras,
-  mais o '\0'), devolvendo o tamanho remontado.
-```
-
-
-Use /tmp/p0926_sensor.rle, mostre os tamanhos, os pares, o texto
-remontado e se ele confere com o original. Apague o arquivo no fim.
-
-
-```text
-Saída esperada:
-Original: 19 bytes
-Compactado: 10 bytes (5 pares)
-5xA 3xB 8xC 1xD 2xA
-Descompactado: AAAAABBBCCCCCCCCDAA
-Confere: sim
-```
-
-**Dicas:**
-
-1. Para compactar, ande com i pelo texto; conte quantas letras iguais a
-   texto[i] vêm seguidas (no máximo 255, que é o limite do unsigned char)
-   e grave o par. Depois pule essa sequência.
-2. O tamanho do arquivo vem de fseek até o fim e ftell. Cada Par ocupa
-   2 bytes (dois campos de 1 byte, sem preenchimento).
-3. RLE compensa com muita repetição; com
-   "ABCD" o arquivo ficaria com o DOBRO do tamanho.
-
-```bash
-gcc ~/LPEDC/material/P0926.c -o ~/LPEDC/material/P0926 && ~/LPEDC/material/P0926
-```
-
----
-
-**Exercício P0927** · ★★★ · O cadastro da clínica veterinária
-
-A clínica cadastra um pet por vez num arquivo binário e depois lista
-todos e mostra o pet do meio do arquivo. O programa abaixo compila sem
-aviso, mas não lista nada. Ele tem TRÊS erros de propósito, um em cada
-função de arquivo. Conserte os três para a saída ficar:
-
-
-```text
-Saída esperada:
-Rex: 3 anos, 12.5 kg
-Mimi: 5 anos, 4.2 kg
-Thor: 2 anos, 30.0 kg
-Do meio: Mimi
-```
-
-**Dicas:**
-
-1. cadastra é chamada uma vez por pet. Com que modo de abertura cada
-   chamada preserva os pets anteriores?
-2. Dentro de cadastra, p é um ponteiro. Quanto vale sizeof p? E quanto
-   vale sizeof *p?
-3. O registro do meio é o n / 2, contado a partir de onde?
-4. Resposta esperada: "wb" vira "ab"; sizeof p vira sizeof *p; e o fseek
-   de le_meio usa SEEK_SET em vez de SEEK_END. A saída fica igual à de
-   cima.
-
-```bash
-gcc ~/LPEDC/material/P0927.c -o ~/LPEDC/material/P0927 && ~/LPEDC/material/P0927
-```
-
----
-
-**Exercício P0928** · ★★★ · A tabela do Barezão
-
-Os jogos da rodada do campeonato estão num arquivo texto, um por linha,
-no formato "mandante gols visitante gols". Grave em /tmp/p0928_jogos.txt:
-
-
-```text
-Nacional 2 Fast 1
-Manaus 1 Amazonas 1
-Fast 0 Manaus 3
-Amazonas 2 Nacional 2
-Nacional 1 Manaus 0
-Amazonas 3 Fast 1
-```
-
-
-Leia os jogos com fscanf e monte a tabela num vetor de structs (nome,
-pontos, vitórias, saldo de gols): vitória vale 3, empate 1. Ordene com
-qsort por pontos (maior primeiro), depois saldo, depois nome. Grave a
-classificação em /tmp/p0928_tabela.txt, mostre esse arquivo lendo com
-fgets e apague os dois.
-
-
-```text
-Saída esperada:
-1. Nacional   7 pts  2 V  saldo +2
-2. Amazonas   5 pts  1 V  saldo +2
-3. Manaus     4 pts  1 V  saldo +2
-4. Fast       0 pts  0 V  saldo -6
-```
-
-**Dicas:**
-
-1. Escreva int acha_ou_cria(Time t[], int *n, const char *nome), que
-   devolve o índice do time no vetor e o cria (zerado) se ainda não existe.
-2. Para cada jogo, atualize os dois times: saldo += gols feitos - gols
-   sofridos; pontos e vitórias conforme o placar.
-3. O "%+d" do printf mostra o sinal sempre: +2, -6.
-
-```bash
-gcc ~/LPEDC/material/P0928.c -o ~/LPEDC/material/P0928 && ~/LPEDC/material/P0928
-```
-
----
-
-**Exercício P0929** · ★★★ · O recado cifrado da linha de comando
-
-A cifra de César troca cada letra pela que está k posições adiante no
-alfabeto (com k = 3, a vira d, x vira a). Escreva um programa chamado
-assim:
-
-
-```text
-$ ./rodar P0929.c 3 ataque ao amanhecer
-```
-
-
-O primeiro argumento é a chave k; os outros são as palavras do recado. O
-programa cifra o recado (palavras separadas por um espaço), grava o texto
-cifrado em /tmp/p0929_recado.txt (sem '\n' no fim), lê o arquivo de
-volta, mostra o cifrado e o tamanho do arquivo, decifra o que leu (chave
--k) e mostra o recado de novo. Maiúsculas giram dentro de A-Z, e o que
-não é letra passa igual. Se faltar argumento ou a chave não for número,
-mostre "uso: P0929 chave palavra1 palavra2 ..." e termine com return 1.
-
-
-```text
-Saída esperada:
-Cifrado: dwdtxh dr dpdqkhfhu
-Arquivo: 19 bytes
-Decifrado: ataque ao amanhecer
-```
-
-**Dicas:**
-
-1. Para girar uma minúscula: 'a' + ((c - 'a' + k) % 26 + 26) % 26. O
-   "+ 26) % 26" conserta o resto negativo quando k é negativo.
-2. Valide a chave com strtol e o ponteiro de fim, como no assunto 0069.
-3. Grave com fputc letra por letra (e um espaço entre as palavras) e leia
-   de volta com fgets.
-
-```bash
-gcc ~/LPEDC/material/P0929.c -o ~/LPEDC/material/P0929 && ~/LPEDC/material/P0929
-```
-
----
-
-**Exercício P0930** · ★★★ · O índice da biblioteca
-
-Os livros da biblioteca estão num arquivo de dados na ordem em que
-chegaram, então a busca por código seria sequencial. A solução dos bancos
-de dados é um ÍNDICE: um segundo arquivo, pequeno e ordenado, com pares
-(código, posição no arquivo de dados). Busca-se no índice (binária) e
-depois se vai direto ao registro com um fseek.
-
-1. Grave em /tmp/p0930_dados.bin, nesta ordem: 3071 Vidas Secas 1938,
-
-```text
- 1150 Macunaima 1928, 4420 Iracema 1865, 2088 Dom Casmurro 1899,
- 1999 O Cortico 1890 e 3500 Grande Sertao 1956.
-```
-
-2. Monte um vetor de Entrada {codigo, posicao}, ordene com qsort e grave
-
-```text
- em /tmp/p0930_indice.bin.
-```
-
-3. Escreva long procura(FILE *indice, int codigo, int *leituras): busca
-
-```text
- binária NO ARQUIVO de índice que devolve a posição no arquivo de dados
- (ou -1), contando os fread.
-```
-
-4. Procure 2088, 4420 e 1000, leia o livro no arquivo de dados e mostre.
-
-```text
- Apague os dois arquivos no fim.
-```
-
-
-
-```text
-Saída esperada:
-Índice: 1150 1999 2088 3071 3500 4420
-2088: Dom Casmurro (1899), registro 3, 1 leitura no índice
-4420: Iracema (1865), registro 2, 3 leituras no índice
-1000: não cadastrado, 2 leituras no índice
-```
-
-**Dicas:**
-
-1. O índice tem n entradas: o tamanho do arquivo de índice dividido por
-   sizeof(Entrada).
-2. Achou a entrada? fseek(dados, e.posicao * sizeof(Livro), SEEK_SET) e
-   um fread trazem o livro.
-3. Por que não ordenar o próprio arquivo de dados? Porque registros
-   grandes custam caro para mover, e dá para ter vários índices (por
-   código, por ano...) sobre os mesmos dados.
-
-```bash
-gcc ~/LPEDC/material/P0930.c -o ~/LPEDC/material/P0930 && ~/LPEDC/material/P0930
-```
-
-## Questões no estilo da prova
+### Questões no estilo da prova
 
 Formato da prova do mestrado do PPGI/UFAM. Resolva no papel, marque uma letra
 e só depois abra o gabarito. Os trechos foram compilados com
@@ -3356,6 +2732,7 @@ escrever. Veja 0068 e 0070.
 - ZIVIANI, N. *Projeto de algoritmos: com implementações em Pascal e C*. 3. ed. rev. e ampl. São Paulo: Cengage Learning, 2010. Pesquisa em memória secundária: acesso a registros em disco.
 - ROCHA, A. M. A.; BORGES, A. R. O. S. *Programação, estruturas de dados e algoritmos em C*. Aveiro: Universidade de Aveiro, [s.d.]. Cap. 3: arquivos.
 - ANTONELLO, R. *Linguagem C*. 1. ed. Disponível em: <http://www.antonello.com.br>.
+- FEOFILOFF, P. *Algoritmos em linguagem C*. Rio de Janeiro: Elsevier, 2009. Apêndice H: entrada e saída, arquivos e argumentos da linha de comando.
 - KERNIGHAN, B. W.; RITCHIE, D. M. *C: a linguagem de programação padrão ANSI*. Rio de Janeiro: Campus, 1989. Cap. 7: entrada e saída.
 - CPPREFERENCE. *File input/output*. Disponível em: <https://en.cppreference.com/w/c/io>.
 - LINUX MAN-PAGES PROJECT. *fopen(3)*, *fseek(3)*, *strtol(3)*. Disponível em: <https://man7.org/linux/man-pages/>.

@@ -1,15 +1,22 @@
 ## 0068 · Arquivos binários
 
-O mercadinho guarda o estoque em fichas do mesmo tamanho. Para achar a
-terceira, ninguém lê as duas primeiras: mede com o dedo e puxa. No arquivo
-texto isso não dá, porque cada linha tem um tamanho ("Luz 98.75" tem 9
-caracteres, "Internet 99.90" tem 14). Para chegar à linha 500, lê-se as 499
-anteriores.
-
-Um **arquivo binário** grava os bytes **exatamente como estão na memória**,
-sem converter em texto. Um `int` ocupa sempre 4 bytes; uma struct, sempre
-`sizeof` da struct. Com **registros de tamanho fixo**, o registro `i` começa
-no byte `i * sizeof(registro)`.
+- **Arquivo binário**: grava os bytes **exatamente como estão na memória**, sem
+  converter em texto. Um `int` ocupa sempre 4 bytes (BACKES, 2013, cap. 12).
+- **Registro de tamanho fixo**: o registro `i` começa no byte
+  `i * sizeof(registro)`, e dá para ir direto a ele
+  (DEITEL; DEITEL, 2011, cap. 11).
+- **Modo com `b`**: `"wb"`, `"rb"`, `"ab"`, `"rb+"`. No Linux não muda nada; no
+  Windows, sem ele, `\n` vira `\r\n` e estraga os bytes (BACKES, 2013, cap. 12).
+- **`fwrite(endereco, tamanho, quantidade, arq)`** e **`fread`**: copiam
+  `tamanho * quantidade` bytes e devolvem **quantos itens** processaram. Menos
+  que o pedido indica fim ou erro (BACKES, 2013, cap. 12).
+- **`fseek(arq, deslocamento, origem)`**: muda a posição a partir de `SEEK_SET`
+  (começo), `SEEK_CUR` (atual) ou `SEEK_END` (fim). Não lê nada: pular para o
+  registro 2 custa o mesmo que para o 2 milhões (DEITEL; DEITEL, 2011, cap. 11).
+- **`ftell`** devolve a posição em bytes e **`rewind`** volta ao byte 0.
+  `fseek` até o fim e `ftell` medem o arquivo (BACKES, 2013, cap. 12).
+- **Busca binária no arquivo**: com registros em ordem, uns 20 `fread` acham
+  um em 1 milhão, sem carregar tudo na RAM (assunto 0090) (ZIVIANI, 2010).
 
 | | texto (`fprintf`) | binário (`fwrite`) |
 | --- | --- | --- |
@@ -19,30 +26,18 @@ no byte `i * sizeof(registro)`.
 | acesso direto ao registro `i`? | não | sim, com `fseek` |
 | lê em outra máquina? | sim | só se `int`, alinhamento e ordem dos bytes forem iguais |
 
-Ferramentas:
+> [!WARNING]
+> `fwrite` copia bytes, não dados. Struct com ponteiro (`char *nome`) grava o
+> **endereço**, que não vale na próxima execução: use `char nome[20]`. E um
+> `.bin` pode não ser lido igual em outra máquina; para trocar dados, use texto.
 
-- **Modo com `b`**: `"wb"`, `"rb"`, `"ab"`, `"rb+"`. No Linux e no Mac o `b`
-  não muda nada; no Windows, sem ele, a biblioteca troca `\n` por `\r\n` e
-  estraga os bytes. Escreva sempre.
-- **`fwrite(endereco, tamanho, quantidade, arq)`** copia `tamanho *
-  quantidade` bytes a partir do endereço. Variável e struct vão com `&`; vetor
-  já é endereço. Devolve **quantos itens** gravou.
-- **`fread(endereco, tamanho, quantidade, arq)`** faz o caminho de volta e
-  devolve quantos itens leu. Menos que o pedido indica fim do arquivo ou erro.
-  Esse retorno vai no `while`.
-- **`fseek(arq, deslocamento, origem)`** muda a posição. A origem é `SEEK_SET`
-  (começo), `SEEK_CUR` (posição atual) ou `SEEK_END` (fim). O deslocamento é
-  `long` e pode ser negativo.
-- **`ftell(arq)`** devolve a posição atual em bytes e **`rewind(arq)`** volta
-  ao byte 0. `fseek` até o fim seguido de `ftell` mede o arquivo.
+{{exemplo}}
 
-No exemplo, o estoque tem três produtos de 32 bytes cada. Um `fwrite` grava
-os três (96 bytes). Para ler o café, o programa pula 2 × 32 = 64 bytes desde o
-começo e faz um `fread` de um registro:
+O estoque do mercadinho tem três produtos de 32 bytes cada. Um `fwrite` grava
+os três (96 bytes). Para ler o café, o programa pula 2 × 32 = 64 bytes e faz um
+`fread` de um registro:
 
 {{ideia}}
-
-O arquivo fica em `/tmp/estoque.bin` e é apagado no fim:
 
 ```c
 #include <stdio.h>
@@ -95,33 +90,7 @@ int main(void) {
 // Registro 2: Café, 4 un., R$ 18.50
 ```
 
-No fluxograma não há laço até o café: são dois `fseek` e um `fread`, com 3
-registros ou 3 milhões:
+Não há laço até o café: são dois `fseek` e um `fread`, com 3 registros ou 3
+milhões:
 
 {{fluxograma}}
-
-Com os registros em ordem de código, dá para fazer **busca binária direto no
-arquivo**: `fseek` no registro do meio, `fread`, compara e descarta metade.
-São uns 20 `fread` para 1 milhão de registros, sem carregar o arquivo na RAM
-(a busca binária é o assunto 0090).
-
-> [!WARNING]
-> `fwrite` copia bytes, não "dados". Se a struct tiver ponteiro (`char *nome`
-> em vez de `char nome[20]`), o arquivo guarda o **endereço**, que não aponta
-> para nada na próxima execução. Use vetores de tamanho fixo dentro da struct.
-> E um `.bin` de um PC pode não ser lido igual em outra máquina: tamanho do
-> `int`, alinhamento e ordem dos bytes mudam. Para trocar dados entre
-> máquinas, prefira texto (CSV, JSON).
-
-> [!TIP]
-> **Por dentro do C:** o `fseek` não lê nada: só troca um número no `FILE`.
-> Pular para o registro 2 custa o mesmo que pular para o registro 2 milhões.
-> Aqui 20 + 4 + 8 dá exatamente 32 bytes, sem enchimento, porque o `double`
-> já cai em endereço múltiplo de 8.
-
-> [!NOTE]
-> **Pergunta para você:** se `nome` fosse `char nome[21]`, quanto daria
-> `sizeof(Produto)`? Lembre que o `int` gosta de começar em múltiplo de 4 e o
-> `double` em múltiplo de 8. Responda e depois confira com um `printf`.
-
-{{pratique}}

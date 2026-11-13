@@ -1,8 +1,32 @@
 ## 0070 · Juntando tudo: a caderneta de gastos
 
-Fim de mês: para onde foi o dinheiro? Você já sabe fazer o controle de gastos
-no terminal: um comando por execução, com os dados guardados em arquivo entre
-uma execução e outra.
+- **Argumentos** (0069): `argv[1]` diz **o que** fazer e os seguintes trazem os
+  dados, como nos subcomandos do `git`. O `main` confere o `argc` e chama a
+  função certa (FEOFILOFF, 2009, ap. H).
+- **Arquivo binário** (0068): cada gasto é um registro `Gasto` de tamanho fixo,
+  gravado com `fwrite` em modo `"ab"`, sempre no fim. `ftell / sizeof(Gasto)`
+  diz quantos já existem (DEITEL; DEITEL, 2011, cap. 11).
+- **Arquivo texto** (0067): o `exporta` lê os registros e escreve com `fprintf`
+  um **CSV** separado por `;`, que as planilhas abrem direto
+  (BACKES, 2013, cap. 12).
+- **Validar antes de gravar**: `strtod` com `*fim != '\0'` impede que "abc"
+  entre como R$ 0,00 (LINUX MAN-PAGES PROJECT, s.d.).
+- **Não gravar lixo**: o `memset` zera `categoria` antes do `strncpy`, então os
+  bytes que sobram são zeros, não restos da pilha.
+- **Arquivo inexistente nem sempre é erro**: no `lista`, significa "nenhum
+  gasto ainda".
+- **`"ab"` vai sempre para o fim**, mesmo depois de um `fseek`: dois programas
+  anotando ao mesmo tempo não se sobrescrevem (LINUX MAN-PAGES PROJECT, s.d.).
+
+> [!WARNING]
+> Trocar `"ab"` por `"wb"` no `novo` apaga os gastos anteriores, sem aviso. E não
+> leia, por outro `FILE *`, o que acabou de escrever antes do `fclose` (ou
+> `fflush`): os bytes ainda estão no buffer.
+
+{{exemplo}}
+
+O controle de gastos do mês roda no terminal, um comando por execução, com os
+dados guardados em arquivo entre uma execução e outra:
 
 ```bash
 gastos novo mercado 152.40     # anota um gasto
@@ -11,28 +35,8 @@ gastos exporta /tmp/gastos.csv # gera uma planilha
 gastos limpa                   # começa do zero
 ```
 
-O programa junta as três peças do módulo:
-
-- **argumentos** (0069): `argv[1]` diz **o que** fazer; os seguintes trazem os
-  dados, como no `git` (`git commit`, `git log`): um programa, vários
-  subcomandos. O `main` confere o `argc` e chama a função certa.
-- **arquivo binário** (0068): a caderneta. Cada gasto é um registro `Gasto` de
-  tamanho fixo, gravado com `fwrite` em modo `"ab"` (sempre no fim, sem ler o
-  que existe). Como os registros têm o mesmo tamanho, `ftell / sizeof(Gasto)`
-  diz quantos já existem.
-- **arquivo texto** (0067): a exportação. Ninguém abre um `.dat` na planilha.
-  O `exporta` lê os registros e escreve com `fprintf` um **CSV** separado por
-  `;`, que o LibreOffice e o Google Planilhas abrem direto.
-
-Três cuidados para quem guarda dados. **Valide antes de gravar**: `strtod`
-com `*fim != '\0'` impede que "abc" entre como R$ 0,00. **Não grave lixo**: o
-`memset` zera `categoria` antes do `strncpy`, então os bytes que sobram são
-zeros, não restos da pilha. **Arquivo inexistente nem sempre é erro**: no
-`lista`, significa "nenhum gasto ainda".
-
-Cada linha do terminal é uma execução separada. O `novo` acrescenta um
-registro de 32 bytes em `gastos.dat`; o `lista` o lê de volta com `fread`; o
-`exporta` transforma o binário em texto:
+O `novo` acrescenta um registro de 32 bytes em `gastos.dat`, o `lista` o lê de
+volta com `fread` e o `exporta` transforma o binário em texto:
 
 {{ideia}}
 
@@ -169,28 +173,7 @@ int main(int argc, char *argv[]) {
 ```
 
 O fluxograma segue o comando `lista`. O `main` testa o comando até achar um
-conhecido; comando desconhecido, ou com argumentos faltando, cai na mensagem
-de uso:
+conhecido; comando desconhecido, ou com argumentos faltando, cai na mensagem de
+uso:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Trocar `"ab"` por `"wb"` no `novo` é o erro mais caro do módulo: cada gasto
-> novo apagaria os anteriores, sem aviso. E não leia, por outro `FILE *`, o que
-> acabou de escrever antes do `fclose` (ou `fflush`): os bytes ainda estão no
-> buffer e a leitura acha o arquivo vazio ou pela metade.
-
-> [!TIP]
-> **Por dentro do C:** em `"ab"` (ou `"a"`), **toda** escrita vai para o fim,
-> mesmo depois de um `fseek`: o `fopen` pede `O_APPEND` ao sistema. Por isso
-> dois programas anotando gastos ao mesmo tempo não se sobrescrevem (se cada
-> registro sair num `write` só). E o `return` do `main` vira o código de
-> saída: `./programa novo x abc; echo $?` mostra 1.
-
-> [!NOTE]
-> **Pergunta para você:** a categoria tem 20 bytes. O que acontece com
-> `gastos novo supermercado-do-bairro-novo 10`? O texto aparece inteiro no
-> `lista`? Pense no `strncpy` com `sizeof g.categoria - 1` antes de testar.
-
-
-{{pratique}}

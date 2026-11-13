@@ -1,20 +1,25 @@
 ## 0067 · Arquivos texto
 
-Todo mês você anota as despesas: mercado, luz, internet. Anotadas só de
-cabeça, somem. No caderno, ficam. Com um programa é igual: as variáveis moram
-na RAM e **somem quando ele termina**. Para lembrar na próxima execução, ele
-escreve num **arquivo**, que fica no disco.
-
-No C são três passos: **abrir**, **ler ou escrever** e **fechar**. Tudo vem do
-`<stdio.h>`, o mesmo do `printf`. Para o C, um arquivo é uma **sequência de
-bytes**. Num **arquivo texto**, esses bytes são caracteres legíveis no editor:
-o número 152.40 vira `'1' '5' '2' '.' '4' '0'`.
-
-**Abrir.** `fopen(caminho, modo)` devolve um `FILE *`, ponteiro para uma
-struct que a biblioteca usa para controlar o arquivo. Se não abrir (pasta
-inexistente, sem permissão, disco cheio), devolve `NULL`. Por isso todo
-`fopen` leva um `if`. O `perror("texto")` mostra o motivo, como
-`No such file or directory`.
+- **Arquivo**: sequência de bytes guardada no disco. Variáveis moram na RAM e
+  somem quando o programa termina; o arquivo fica (BACKES, 2013, cap. 12).
+- **Arquivo texto**: os bytes são caracteres legíveis no editor. O número
+  152.40 vira `'1' '5' '2' '.' '4' '0'` (BACKES, 2013, cap. 12).
+- **Três passos**: abrir, ler ou escrever, fechar. Tudo vem do `<stdio.h>`
+  (KERNIGHAN; RITCHIE, 1989, cap. 7).
+- **`fopen(caminho, modo)`**: devolve um `FILE *` ou `NULL` se não abrir. Todo
+  `fopen` leva um `if`; `perror("texto")` mostra o motivo
+  (CELES; RANGEL, 2002).
+- **Escrever**: `fprintf(arq, ...)` é o `printf` com o arquivo na frente;
+  `fputs` grava uma string (sem `\n`) e `fputc`, um caractere
+  (BACKES, 2013, cap. 12).
+- **Ler**: `fgets` traz uma linha com o `\n` e devolve `NULL` no fim; `fscanf`
+  devolve quantos campos leu; `fgetc` devolve `int`, que vale `EOF` no fim
+  (CELES; RANGEL, 2002).
+- **Buffer e `fclose`**: a escrita para numa área da RAM e o `fclose` (ou
+  `fflush`) a descarrega no disco. Se o programa cair antes, perde-se o que
+  estava no buffer (BACKES, 2013, cap. 12).
+- **`stdin`, `stdout`, `stderr`**: `FILE *` já abertos; `printf("oi")` equivale
+  a `fprintf(stdout, "oi")` (FEOFILOFF, 2009, ap. H).
 
 | modo | o que faz | se o arquivo não existe | se já existe |
 | --- | --- | --- | --- |
@@ -23,31 +28,18 @@ inexistente, sem permissão, disco cheio), devolve `NULL`. Por isso todo
 | `"a"` | escrita no fim (*append*) | cria vazio | mantém e escreve depois do fim |
 | `"r+"` `"w+"` `"a+"` | leitura e escrita | como `r`, `w` e `a` | como `r`, `w` e `a` |
 
-**Escrever.** `fprintf(arq, ...)` é o `printf` com o arquivo na frente.
-`fputs(texto, arq)` grava uma string (sem pôr `\n`) e `fputc(c, arq)`, um
-caractere.
+> [!WARNING]
+> Não use `while (!feof(arq))`: o `feof` só fica verdadeiro **depois** que uma
+> leitura falhou, e a última linha é processada duas vezes. Teste o retorno da
+> leitura (`fgets(...) != NULL`). Com `fgetc`, guarde em `int`, não em `char`.
 
-**Ler.** Três jeitos:
+{{exemplo}}
 
-- `fgets(linha, tamanho, arq)`: uma **linha**, com o `\n` no fim. Devolve
-  `NULL` quando o arquivo acaba. É o `fgets` do 0042, lendo do arquivo.
-- `fscanf(arq, "%s %lf", ...)`: campos com formato. Devolve quantos campos
-  leu.
-- `fgetc(arq)`: um **caractere**. Devolve `int`, que vale `EOF` no fim.
-
-**Fechar.** `fclose(arq)` grava o que ficou pendente e libera o `FILE`. Como
-no `malloc`: abriu, fecha.
-
-`stdin`, `stdout` e `stderr` já são `FILE *` abertos pelo programa:
-`printf("oi")` equivale a `fprintf(stdout, "oi")`.
-
-O exemplo grava as três despesas do mês. Os `fprintf` param num **buffer**
-(área na RAM); o `fclose` o descarrega em `despesas.txt`. Depois o programa
-reabre o arquivo em leitura e o `fgets` traz as linhas, uma por vez:
+O programa grava as três despesas do mês (mercado, luz, internet) em
+`/tmp/despesas.txt`, reabre o arquivo em leitura e o `fgets` traz as linhas,
+uma por vez:
 
 {{ideia}}
-
-O código grava em `/tmp/despesas.txt` e deixa o arquivo lá, para `cat`:
 
 ```c
 #include <stdio.h>
@@ -88,29 +80,7 @@ int main(void) {
 // 3 linhas em /tmp/despesas.txt
 ```
 
-No fluxograma, a leitura é um laço que testa o retorno do `fgets`: o fim do
-arquivo é anunciado pela leitura que falhou:
+A leitura é um laço que testa o retorno do `fgets`: o fim do arquivo é
+anunciado pela leitura que falhou:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Não use `while (!feof(arq))`, comum em materiais e livros. O `feof` só fica
-> verdadeiro **depois** que uma leitura tentou passar do fim. O laço roda uma
-> vez a mais e processa a última linha duas vezes (rode com um arquivo de 3 linhas e conte). Teste o
-> retorno da leitura: `fgets(...) != NULL`, `fscanf(...) == 2`,
-> `(c = fgetc(arq)) != EOF`. Neste último, `c` é `int`: com `char`, o `EOF`
-> (-1) se confunde com um byte de verdade.
-
-> [!TIP]
-> **Por dentro do C:** cada `fprintf` só copia bytes para o buffer do `FILE`
-> (em geral 4096 bytes). A entrega ao sistema, um `write`, ocorre quando o
-> buffer enche, no `fflush(arq)` ou no `fclose`. Se o programa cair antes do
-> `fclose`, o que estava no buffer se perde.
-
-> [!NOTE]
-> **Pergunta para você:** rode o programa das despesas duas vezes seguidas. O
-> arquivo fica com 3 ou com 6 linhas? E se o primeiro `fopen` usasse `"a"` em
-> vez de `"w"`?
-
-
-{{pratique}}

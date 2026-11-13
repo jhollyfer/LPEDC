@@ -1,46 +1,39 @@
 ## 0069 · Argumentos da linha de comando
 
-Fim do rodízio de pizza, conta de R$ 187,40 para 4 pessoas. Um programa
-poderia perguntar total e pessoas com `scanf`. Mas os programas de terminal
-não perguntam: `git commit -m "msg"`, `cp origem destino`,
-`gcc -o prog prog.c`. Os dados vão **junto do comando**, são os **argumentos
-da linha de comando**.
-
-No C, chegam como parâmetros do `main`, que até agora tinha `void`:
+- **Argumentos da linha de comando**: dados que vão junto do comando, como em
+  `cp origem destino`. Chegam como parâmetros do `main`
+  (BACKES, 2013, cap. 13).
 
 ```c
 int main(int argc, char *argv[])
 ```
 
 - **`argc`** (*argument count*): quantos itens vieram, **contando o nome do
-  programa**. Vale pelo menos 1.
+  programa**. Vale pelo menos 1 (FEOFILOFF, 2009, ap. H).
 - **`argv`** (*argument vector*): vetor de `char *`, uma string por item.
-  `argv[0]` é o nome do programa, `argv[1]` é o primeiro argumento seu, e
-  `argv[argc]` é `NULL`, que marca o fim como o `'\0'` numa string.
+  `argv[0]` é o nome do programa e `argv[argc]` é `NULL`
+  (KERNIGHAN; RITCHIE, 1989).
+- **Shell**: corta a linha antes de o programa começar. Separa nos espaços,
+  tira as aspas e expande coringas: `"São Paulo"` chega como um argumento só.
+- **Tudo é texto**: o `4` chega como `"4"`. `strtol(texto, &fim, 10)` e
+  `strtod(texto, &fim)` convertem e apontam `fim` para o que sobrou; se
+  `*fim != '\0'`, veio lixo (LINUX MAN-PAGES PROJECT, s.d.).
+- **`atoi` e `atof`**: não avisam erro, `atoi("quatro")` devolve 0. Servem para
+  teste rápido (BACKES, 2013, cap. 13).
+- **`stderr` e código de saída**: erros vão para `stderr`, que aparece mesmo com
+  `> saida.txt`. O `return` do `main` é 0 no sucesso e outro valor na falha; o
+  shell guarda em `$?` (BACKES, 2013, cap. 12).
 
-Quem corta a linha é o **shell** (bash, zsh), antes de o programa começar:
-separa nos espaços, tira as aspas e expande coringas como `*`. `"São Paulo"`
-chega como um argumento só; sem aspas, como dois.
+> [!WARNING]
+> Nunca use `argv[1]` sem conferir o `argc`: sem argumentos, ele é `NULL` e
+> `atoi(NULL)` derruba o programa. E em `./calc 9 * 3` o shell troca o `*`
+> pelos nomes dos arquivos da pasta; use aspas (`'*'`) ou `x`.
 
-Tudo no `argv` é **texto**: o `4` chega como `"4"`, e `argv[2] * 2` nem
-compila. Para converter:
+{{exemplo}}
 
-- **`strtol(texto, &fim, 10)`** converte para `long` e **`strtod(texto,
-  &fim)`** para `double`. Ambos apontam `fim` para o primeiro caractere não
-  convertido. Se `*fim != '\0'`, sobrou lixo: `"4x"`, `"quatro"`.
-- **`atoi`** e **`atof`** são mais curtos, mas não avisam erro:
-  `atoi("quatro")` devolve 0. Servem para teste rápido, não para entrada de
-  usuário.
-
-Duas convenções de programas de terminal. Erros vão para **`stderr`**
-(`fprintf(stderr, ...)`): quem redireciona a saída (`./racha 10 2 > saida.txt`)
-ainda vê o erro na tela. E o `return` do `main` é o **código de saída**: 0 é
-sucesso, outro valor é falha. O shell o guarda em `$?`, e scripts e o `&&`
-decidem com base nele.
-
-O comando `./racha 187.40 4` chega com `argc = 3` e um `argv` de três
-strings mais o `NULL`. O programa confere a quantidade, converte `argv[1]` e
-`argv[2]` e divide:
+Fim do rodízio de pizza: conta de R$ 187,40 para 4 pessoas. O comando
+`./racha 187.40 4` chega com `argc = 3`. O programa confere a quantidade,
+converte `argv[1]` e `argv[2]` e divide:
 
 {{ideia}}
 
@@ -83,27 +76,7 @@ int main(int argc, char *argv[]) {
 // Número de pessoas inválido: quatro
 ```
 
-O fluxograma faz duas perguntas antes da conta: veio a quantidade certa de
-argumentos, e são números de verdade? O programa só trabalha no caminho verde:
+Duas perguntas antes da conta: veio a quantidade certa de argumentos, e são
+números de verdade? O programa só trabalha no caminho verde:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Nunca use `argv[1]` sem conferir o `argc`. Sem argumentos, `argv[1]` é
-> `NULL`, e `atoi(NULL)` ou `strlen(NULL)` derruba o programa (confira o `argc` primeiro).
-> Cuidado com `*`: em `./calc 9 * 3` o shell troca o `*` pelos nomes dos
-> arquivos da pasta antes de o programa rodar. Use aspas (`'*'`) ou outro
-> símbolo, como `x`.
-
-> [!TIP]
-> **Por dentro do C:** quem chama o `main` é o código de partida da biblioteca
-> (`_start`): ele conta os ponteiros do `argv`, chama `main(argc, argv)` e
-> passa o `return` ao `exit`. Por isso `char *argv[]` e `char **argv` são
-> iguais num parâmetro: vetor como parâmetro vira ponteiro (0038).
-
-> [!NOTE]
-> **Pergunta para você:** quanto vale `argc` em `./racha "187.40 4"`? E em
-> `./racha 187.40 4 > conta.txt`? Pense em quem trata as aspas e o `>` antes
-> de rodar o A138 para conferir.
-
-{{pratique}}

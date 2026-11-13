@@ -1,21 +1,9 @@
 # Módulo 09 · Arquivos e linha de comando
 
-Até aqui, todo programa do curso nasce, faz a conta e morre levando tudo
-junto: as variáveis moram na RAM, esvaziada quando o processo termina. Para
-**lembrar** de algo (cadastro, configuração, placar), o programa grava em
-**arquivo**.
-
-No C você vê as engrenagens: o `FILE *` do arquivo aberto, o buffer que junta
-os bytes antes do disco, a posição que anda a cada leitura. E há uma escolha:
-**texto**, legível e portável, ou **binário**, cópia exata dos bytes da
-memória, menor e com acesso direto a qualquer registro.
-
-O módulo fecha com os **argumentos da linha de comando**, que transformam seus
-exercícios em ferramentas de terminal, como `git` ou `grep`.
-
-Usa o que veio antes: structs (módulo 08), `fgets` (0042), ponteiros e
-`sizeof`. Prepara o módulo 10, que mede o custo dos programas: o acesso direto
-ao registro `i` é a base da busca binária em disco (0090).
+Como fazer o programa **lembrar** depois de terminar: arquivos texto, arquivos
+binários com acesso direto a um registro e argumentos da linha de comando.
+Depende de structs (módulo 08), `fgets` (0042) e ponteiros; prepara o módulo
+10 e a busca binária em disco (0090).
 
 ## O que você vai aprender
 
@@ -28,11 +16,9 @@ ao registro `i` é a base da busca binária em disco (0090).
 
 ## Antes de começar
 
-Os exemplos gravam em `/tmp` (`/tmp/despesas.txt`, `/tmp/estoque.bin`) e quase
-todos apagam o arquivo no fim com `remove`. Quando um o deixa lá, o comentário
-avisa, para você abrir com `cat`. Nenhum depende de arquivo pré-existente.
-
-Para passar argumentos, escreva-os depois do executável:
+Os exemplos gravam em `/tmp` e quase todos apagam o arquivo no fim com
+`remove`; quando um o deixa lá, o comentário avisa. Nenhum depende de arquivo
+pré-existente. Para passar argumentos, escreva-os depois do executável:
 
 ```bash
 gcc ~/LPEDC/material/A137.c -o ~/LPEDC/material/A137 && ~/LPEDC/material/A137 -r 7 -a 4
@@ -465,6 +451,7 @@ escrever. Veja 0068 e 0070.
 - ZIVIANI, N. *Projeto de algoritmos: com implementações em Pascal e C*. 3. ed. rev. e ampl. São Paulo: Cengage Learning, 2010. Pesquisa em memória secundária: acesso a registros em disco.
 - ROCHA, A. M. A.; BORGES, A. R. O. S. *Programação, estruturas de dados e algoritmos em C*. Aveiro: Universidade de Aveiro, [s.d.]. Cap. 3: arquivos.
 - ANTONELLO, R. *Linguagem C*. 1. ed. Disponível em: <http://www.antonello.com.br>.
+- FEOFILOFF, P. *Algoritmos em linguagem C*. Rio de Janeiro: Elsevier, 2009. Apêndice H: entrada e saída, arquivos e argumentos da linha de comando.
 - KERNIGHAN, B. W.; RITCHIE, D. M. *C: a linguagem de programação padrão ANSI*. Rio de Janeiro: Campus, 1989. Cap. 7: entrada e saída.
 - CPPREFERENCE. *File input/output*. Disponível em: <https://en.cppreference.com/w/c/io>.
 - LINUX MAN-PAGES PROJECT. *fopen(3)*, *fseek(3)*, *strtol(3)*. Disponível em: <https://man7.org/linux/man-pages/>.
