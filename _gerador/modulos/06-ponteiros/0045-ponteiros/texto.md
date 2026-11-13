@@ -1,39 +1,31 @@
 ## 0045 · Ponteiros
 
-Pelo app de comida, o entregador não leva a sua casa no celular: leva o
-**endereço**. Com ele, chega à porta e entrega o pedido.
+- **Ponteiro**: variável que guarda um **endereço**. Ele também mora numa
+  gaveta, mas guarda o número de **outra**. Ziviani e a tradução do K&R dizem
+  **apontador** (ZIVIANI, 2010).
+- **Declaração**: `int *cartao;` lê-se "ponteiro para int". O tipo diz o que
+  mora lá e quantos bytes ler (DEITEL; DEITEL, 2011, cap. 7).
+- **`&` e `*`**: `&x` dá o endereço; `*p` vai ao endereço guardado e lê ou
+  escreve lá, que é **desreferenciar** (KERNIGHAN; RITCHIE, 1989, cap. 5).
+- **Três papéis do `*`**: multiplicação (`a * b`), declaração (`int *p`) e
+  desreferência (`*p = 5`) (BACKES, 2013, cap. 10).
+- **`NULL`**: endereço que quer dizer "lugar nenhum". Teste
+  `if (p != NULL)` antes de usar; desreferenciá-lo derruba o programa
+  (*segmentation fault*) (DEITEL; DEITEL, 2011, cap. 7).
+- **Tamanho**: todo ponteiro de dado tem 8 bytes em 64 bits; o tipo muda só a
+  leitura (BACKES, 2013, cap. 10).
 
-Um **ponteiro** é uma variável que guarda um **endereço** em vez de um valor
-comum. Ele também mora numa gaveta (tem endereço próprio), mas o que guarda é o
-número de **outra** gaveta. Alguns livros (Ziviani, a tradução do K&R) dizem
-**apontador**: é a mesma coisa.
+> [!WARNING]
+> `int *p;` sem valor guarda **lixo**, e `*p = 10;` escreve numa gaveta
+> desconhecida. Inicialize com um endereço ou `NULL`. E em `int *a, b;` só `a`
+> é ponteiro.
 
-A declaração leva um `*` antes do nome: `int *cartao;` lê-se "cartao é um
-ponteiro para int". O tipo diz **o que** mora no endereço apontado, e portanto
-quantos bytes ler (4 para `int`, 8 para `double`).
+{{exemplo}}
 
-Dois operadores fazem todo o serviço:
-
-- **`&x`** dá o endereço de `x` (assunto 0044), que você guarda no ponteiro:
-  `cartao = &pontos;`;
-- **`*cartao`** vai ao endereço guardado e mexe no que está lá: é
-  **desreferenciar**. Ler `*cartao` dá o valor de `pontos`; escrever
-  `*cartao = 150;` muda `pontos`.
-
-O `*` tem três papéis, separados só pelo contexto: multiplicação (`a * b`),
-declaração (`int *p`) e desreferência (`*p = 5`).
-
-Ponteiro que ainda não aponta para nada recebe **`NULL`**, endereço especial
-que significa "lugar nenhum". Teste com `if (cartao != NULL)` antes de usar.
-
-No caixa da farmácia, o cliente tem 120 pontos no cartão fidelidade. O ponteiro
-`cartao` começa em `NULL`. Quando o cliente passa o cartão, `cartao` recebe
-`&pontos`. A compra de R$ 30 soma 30 pontos **por meio do ponteiro**, e
-`pontos` vira 150:
+No caixa da farmácia, o cliente tem 120 pontos. O ponteiro `cartao` começa em
+`NULL`, recebe `&pontos`, e a compra soma 30 **por meio do ponteiro**:
 
 {{ideia}}
-
-A linha que muda `pontos` nem cita o nome `pontos`:
 
 ```c
 #include <stdio.h>
@@ -65,32 +57,7 @@ int main(void) {
 // &cartao = 0x7f631f200040
 ```
 
-Três números diferentes: `cartao` é o endereço guardado (o de `pontos`),
-`*cartao` é o valor lá dentro (120, depois 150) e `&cartao` é onde o próprio
-ponteiro mora.
-
-Antes de desreferenciar, o programa testa se o ponteiro aponta para algum
-lugar. Esse teste contra `NULL` volta no curso inteiro:
+`cartao` é o endereço guardado, `*cartao` o valor lá dentro e `&cartao` onde o
+próprio ponteiro mora. Antes de desreferenciar, o teste contra `NULL`:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Ponteiro não inicializado (`int *p;`) guarda **lixo**: um endereço qualquer.
-> `*p = 10;` escreve numa gaveta desconhecida: pode travar na hora ou corromper
-> outra variável e dar problema só depois. Inicialize sempre, com um endereço
-> válido ou `NULL`. E em `int *a, b;` o `*` vale só para `a`; `b` é um `int`
-> comum. Para dois ponteiros, `int *a, *b;`.
-
-> [!TIP]
-> **Por dentro do C:** todo ponteiro de dado tem o mesmo tamanho (8 bytes em
-> 64 bits); o tipo muda a **leitura**: `*cartao` busca 4 bytes e os trata como
-> `int`. O `NULL` é, na prática, o endereço 0, região proibida de propósito:
-> desreferenciá-lo derruba o programa na hora (*segmentation fault*), em vez de
-> corromper algo em silêncio.
-
-> [!NOTE]
-> **Pergunta para você:** depois de `int x = 5; int *p = &x; int *q = p;
-> *q = 8;`, quanto valem `x` e `*p`? Quantas variáveis `int` existem nesse
-> trecho?
-
-{{pratique}}

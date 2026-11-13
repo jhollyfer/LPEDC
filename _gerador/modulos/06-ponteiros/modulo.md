@@ -1,14 +1,9 @@
 # Módulo 06 · Ponteiros
 
-Até aqui você usou variáveis pelo **nome**; o compilador trocava cada nome por
-um endereço e escondia isso. Neste módulo a cortina abre: toda variável mora
-numa gaveta numerada da memória, e guardar o número dessa gaveta em outra
-variável permite ler e mudar o dado de qualquer lugar do programa.
-
-No C, para uma função mudar uma variável sua, você entrega o endereço dela. Dá
-trabalho, mas mostra o que cada linha custa e por que o `scanf` pedia o `&`
-desde o módulo 01. Memória dinâmica (módulo 07), structs encadeadas, listas,
-pilhas, filas, árvores e grafos dependem disso. Vá devagar, desenhe as gavetas.
+Endereços, ponteiros, passagem por referência, aritmética de ponteiros,
+`char *`, `**`, ponteiro para função e `void *`. Depende dos módulos 04 e 05
+(funções, vetores e strings) e é a base da memória dinâmica (07), das structs
+(08) e de todas as estruturas encadeadas.
 
 ## O que você vai aprender
 
@@ -23,25 +18,14 @@ pilhas, filas, árvores e grafos dependem disso. Vá devagar, desenhe as gavetas
 
 ## Antes de começar
 
-Este módulo usa vetores, strings e funções (módulos 04 e 05): o nome do vetor
-já era um endereço, e agora ele ganha sintaxe. Ele prepara a memória dinâmica
-(módulo 07) e as structs (módulo 08).
+Erro de ponteiro quase nunca aparece na compilação: surge na execução. Rode
+sempre com as flags de estudo (AddressSanitizer) e leia o relatório de cima
+para baixo: o tipo do erro, a linha e a variável.
 
-Erros de ponteiro raramente aparecem na compilação: surgem na execução, às
-vezes longe da linha culpada. Rode **sempre** com as flags de estudo, que ligam
-o AddressSanitizer, e leia o relatório de cima para baixo: o tipo do erro
-(`stack-buffer-overflow`, `SEGV on unknown address`), a linha e a variável.
-
-Nos diagramas, gaveteiros e setas; o roxo marca os ponteiros.
-
-> [!NOTE]
-> Os endereços dos desenhos são **fictícios** e curtos (`0x1000`, `0x1004`).
-> Os de verdade têm 12 dígitos hexa e **mudam a cada execução**; os dos
-> comentários dos exemplos são de uma execução qualquer. O que importa são as
-> relações entre eles (iguais, 4 bytes depois etc.).
-
-Para seguir um ponteiro passo a passo, use o `gdb` (`print p`, `print *p`,
-`print &x`):
+Nos diagramas, o roxo marca os ponteiros. Os endereços dos desenhos são
+fictícios (`0x1000`, `0x1004`); os reais mudam a cada execução. Importam as
+relações entre eles (iguais, 4 bytes depois). Para seguir um ponteiro, use o
+`gdb` (`print p`, `print *p`, `print &x`):
 
 ```bash
 sudo pacman -S gdb          # Arch Linux
