@@ -1,25 +1,32 @@
 ## 0143 · Juntando tudo: um mini-diff
 
-Você e sua mãe dividem a lista de compras num arquivo, uma coisa por linha.
-O que mudou depois que ela salvou? Comparar linha com linha não serve: uma
-linha nova no começo faz **todas** parecerem diferentes.
+- **`diff`**: mostra o que mudou entre duas versões de um arquivo. Comparar
+  linha com linha não serve: uma linha nova no começo faz todas parecerem
+  diferentes (LINUX MAN-PAGES, s.d.).
+- **LCS de linhas**: a LCS (assunto 0141) com linhas no lugar de letras; duas
+  linhas casam quando `strcmp` dá 0. As da LCS ficaram iguais; as que só estão
+  na antiga foram **removidas** (`-`); as que só estão na nova, **adicionadas**
+  (`+`) (CORMEN et al., 2024, cap. 14).
+- **Tabela de sufixos**: `c[i][j]` é a LCS de `a[i..m-1]` e `b[j..n-1]`. A
+  resposta fica em `c[0][0]` e a volta anda do **começo** para o fim
+  (LINTZMAYER; MOTA, 2023).
+- **Ler linhas**: `fgets` guarda o `'\n'`; `buf[strcspn(buf, "\n")] = '\0'`
+  corta-o se existir (CPPREFERENCE, s.d.).
+- **Matriz num bloco**: a tabela vem de um único `malloc`, e a célula `(i, j)`
+  mora em `c[i * w + j]`, com `w = n + 1` (KERNIGHAN; RITCHIE, 1989).
+- **Algoritmo de Myers**: o `diff` real gasta O((m + n) × D), com D o número
+  de diferenças, em vez de O(m × n) (MYERS, 1986).
 
-O `diff` resolve com a **LCS** do assunto 0141, de **linhas** em vez de
-letras (duas linhas casam quando `strcmp` dá 0). As linhas da LCS ficaram
-iguais; as que só estão na versão antiga foram **removidas** (`-`); as que só
-estão na nova foram **adicionadas** (`+`).
+> [!WARNING]
+> Sem tirar o `'\n'`, "banana\n" e "banana" diferem no `strcmp` e o diff acusa
+> uma mudança invisível. A última linha do arquivo pode vir **sem** `'\n'`.
 
-`linhas.h` e `linhas.c` (assunto 0034) leem com `fgets`, tiram o `'\n'` e
-guardam cada linha num `malloc` exato, num `char **` que dobra com `realloc`
-(assunto 0055).
+{{exemplo}}
 
-A tabela é dos **sufixos**: `c[i][j]` é a LCS de `a[i..m-1]` e `b[j..n-1]`. A
-resposta fica em `c[0][0]` e a volta anda do **começo** para o fim. Linhas
-iguais saem com dois espaços; se não, o vizinho com a LCS maior decide se a
-linha de `a` sai com `-` ou a de `b` com `+`.
-
-No desenho, a lista antiga fica à esquerda, a nova à direita, e os traços
-ligam as cinco linhas da LCS:
+Você e sua mãe dividem a lista de compras num arquivo. `linhas.h` e
+`linhas.c` (assunto 0034) leem as linhas num `char **` que dobra com
+`realloc` (assunto 0055). No desenho, a lista antiga fica à esquerda, a nova à
+direita, e os traços ligam as cinco linhas da LCS:
 
 {{ideia}}
 
@@ -113,29 +120,8 @@ int main(int argc, char *argv[]) {
 // (5 iguais, 2 removidas, 2 adicionadas)
 ```
 
-"leite" e "leite sem lactose" viram uma remoção e uma adição. O A286 usa a
-distância de edição (0142) para perceber que a linha só foi **alterada**.
-
-No fluxograma, o caminho marcado é o das duas primeiras linhas, iguais:
+"leite" e "leite sem lactose" viram uma remoção e uma adição; o A286 usa a
+distância de edição (0142) para ver que a linha só foi **alterada**. O caminho
+marcado é o das duas primeiras linhas, iguais:
 
 {{fluxograma}}
-
-> [!WARNING]
-> `fgets` guarda o `'\n'`, e a última linha do arquivo pode vir **sem** ele.
-> Sem tirá-lo, "banana\n" e "banana" diferem no `strcmp` e o diff acusa uma
-> mudança invisível. O `buf[strcspn(buf, "\n")] = '\0'` do `linhas.c` corta o
-> `'\n'` se existir e não faz nada se não existir.
-
-> [!TIP]
-> **Por dentro do C:** a tabela não pode ser `int c[m + 1][n + 1]` na pilha:
-> dois arquivos de 2.000 linhas pediriam 16 MB, o dobro da pilha. Ela é um
-> bloco só do `malloc`, e a célula `(i, j)` mora em `c[i * w + j]`, com
-> `w = n + 1`. Com 100 mil linhas seriam 40 GB; por isso o `diff` real usa o
-> algoritmo de Myers, O((m + n) × D), com D o número de diferenças.
-
-> [!NOTE]
-> **Pergunta para você:** se sua mãe só tivesse trocado a ordem de "pão" e
-> "banana", quantas linhas sairiam com `-` e com `+`? Troque a ordem em `v2` e
-> confira.
-
-{{pratique}}

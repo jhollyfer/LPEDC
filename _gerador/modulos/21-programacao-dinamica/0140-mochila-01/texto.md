@@ -1,35 +1,36 @@
 ## 0140 · Mochila 0/1
 
-Um vendedor ambulante tem um isopor de 7 kg e quatro opções: fardo de água
-(2 kg, lucro R$ 18), caixa de refrigerante (3 kg, R$ 24), caixa de suco
-(4 kg, R$ 30) e pote de açaí (5 kg, R$ 35). Cada coisa vai inteira ou não
-vai. O que levar para lucrar o máximo?
+- **Mochila 0/1**: capacidade `W` e `n` itens com peso e lucro; cada item vai
+  inteiro (1) ou não vai (0). São `2ⁿ` escolhas
+  (CORMEN et al., 2024, seção 15.2).
+- **Guloso falha**: ordenar por lucro por quilo, que resolve a fracionária
+  (assunto 0135), aqui pode deixar espaço vazio e perder lucro
+  (CORMEN et al., 2024, seção 15.2).
+- **Tabela**: `t[i][c]` é o maior lucro usando só os itens `1..i` com
+  capacidade `c`. A linha 0 é toda zero e a resposta fica em `t[n][W]`
+  (KLEINBERG; TARDOS, 2006, cap. 6).
+- **Recorrência**: o item `i` **não vai** (`t[i-1][c]`) ou **vai**, se
+  `peso[i] <= c` (`lucro[i] + t[i-1][c - peso[i]]`); fica o maior
+  (KLEINBERG; TARDOS, 2006, cap. 6).
+- **Recuperação**: de baixo para cima, se `t[i][c]` é igual a `t[i-1][c]`, o
+  item `i` ficou de fora; se mudou, foi junto e `c` perde `peso[i]`
+  (ZIVIANI, 2010, cap. 2).
+- **Pseudopolinomial**: são `(n + 1) × (W + 1)` células, **O(n × W)**. Mas `W`
+  é um número escrito com uns log₂ W bits; dobrar os bits eleva `W` ao
+  quadrado. A mochila 0/1 continua NP-difícil (assunto 0186)
+  (LINTZMAYER; MOTA, 2023).
 
-Na mochila **fracionária** (assunto 0135), o guloso por lucro por quilo
-resolvia. Aqui erra: água (R$ 9/kg) e refrigerante (R$ 8/kg) dão R$ 42 com
-5 kg e nada mais cabe, mas refrigerante e suco pesam 7 kg e dão **R$ 54**.
+> [!WARNING]
+> Na recuperação, o teste é "o valor **mudou**?", e não "dá para levar?". E
+> confira `peso[i] <= c` antes de ler `t[i - 1][c - peso[i]]`: com índice
+> negativo, o C lê outra linha da matriz sem avisar.
 
-Esta é a **mochila 0/1** (0 = não leva, 1 = leva), com `2ⁿ` escolhas. A PD
-olha **um item de cada vez**: o último item, `i`, vai ou não?
+{{exemplo}}
 
-- **não vai**: vale o melhor dos itens `1..i-1` com a mesma capacidade `c`;
-- **vai** (se `peso[i] <= c`): ganha `lucro[i]`, e os itens `1..i-1` dividem
-  `c - peso[i]`.
-
-A tabela é uma matriz: `t[i][c]` é o maior lucro usando só os itens `1..i`
-com capacidade `c`.
-
-`t[i][c] = o maior entre t[i-1][c] e lucro[i] + t[i-1][c - peso[i]]`
-
-A linha 0 é toda zero, e a resposta fica no canto: `t[n][W]`.
-
-A **recuperação** dá **o que levar**, de baixo para cima: se `t[i][c]` é igual
-a `t[i-1][c]`, o item `i` ficou de fora; se mudou, ele foi junto, e a busca
-segue na linha de cima com `c - peso[i]`.
-
-No desenho, `t[3][7] = 54` (roxo) escolheu entre não levar o suco
-(`t[2][7] = 42`, amarelo) e levar (`30 + t[2][3] = 54`, verde). As células
-verdes são a recuperação:
+Um ambulante tem um isopor de 7 kg: água (2 kg, R$ 18), refri (3 kg, R$ 24),
+suco (4 kg, R$ 30) e açaí (5 kg, R$ 35). O guloso leva água e refri (R$ 42);
+refri e suco dão R$ 54. No desenho, `t[3][7] = 54` (roxo) escolheu entre não
+levar o suco (amarelo) e levar (verde):
 
 {{ideia}}
 
@@ -91,10 +92,6 @@ int main(void) {
 // Leva: suco (4 kg) refri (3 kg)
 ```
 
-São `(n + 1) × (W + 1)` células: **O(n × W)**. Como `W` é um **número**
-escrito com uns log₂ W bits, o custo é **pseudopolinomial**: dobrar os bits
-eleva `W` ao quadrado. A mochila 0/1 continua NP-difícil (assunto 0186).
-
 O fluxograma mostra a decisão de uma célula; o caminho marcado é o de
 `t[3][7]`:
 
@@ -110,20 +107,3 @@ A recuperação, partindo do canto `t[4][7]`:
 | 3 (suco) | 7 | 54 | 42 | sim | **leva** | 7 - 4 = 3 |
 | 2 (refri) | 3 | 24 | 18 | sim | **leva** | 3 - 3 = 0 |
 | 1 (água) | 0 | 0 | 0 | não | fica | 0 |
-
-> [!WARNING]
-> Na recuperação, o teste é "o valor **mudou**?", e não "dá para levar?": o
-> açaí cabe, mas não está na solução. Confira `peso[i] <= c` antes de ler
-> `t[i - 1][c - peso[i]]`: com índice negativo, o C lê outra linha sem avisar.
-
-> [!TIP]
-> **Por dentro do C:** `t[i][c]` mora no deslocamento `i * 8 + c`, e
-> `t[2][-2]` cai em `t[1][6]` sem erro. Uma linha só de `W + 1` posições basta
-> se o laço de `c` andar do maior para o menor (A279).
-
-> [!NOTE]
-> **Pergunta para você:** se o isopor aguentasse 9 kg, o que o ambulante
-> levaria, e com que lucro? Faça mais duas colunas na tabela à mão antes de
-> trocar o `W` no código.
-
-{{pratique}}

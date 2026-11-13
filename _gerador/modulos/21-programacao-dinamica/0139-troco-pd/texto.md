@@ -1,35 +1,34 @@
 ## 0139 · Troco com programação dinâmica
 
-Nos Correios, o balcão só tem selos de R$ 1, R$ 4 e R$ 5, e sua carta custa
-R$ 8 de porte. Você quer o **menor número de selos**.
+- **Troco mínimo**: o menor número de moedas que somam **exatamente** um
+  valor. O guloso (assunto 0133) erra em sistemas não canônicos; a PD testa
+  todas as escolhas sem repetir trabalho (CORMEN et al., 2024, cap. 14).
+- **Recorrência**: pelo **último** selo, `dp[v] = 1 + mín(dp[v - s])` para
+  cada selo `s ≤ v`, com `dp[0] = 0` (LINTZMAYER; MOTA, 2023).
+- **Subestrutura ótima**: tirando o último selo de uma solução ótima, o resto
+  continua ótimo; senão daria para melhorar o todo
+  (CORMEN et al., 2024, cap. 14).
+- **Recuperar a solução**: `ultimo[v]` guarda o selo que deu o mínimo; anda-se
+  para trás de `v` até 0 por `v - ultimo[v]` (ZIVIANI, 2010, cap. 2).
+- **Custo**: `total` subproblemas, cada um testando `k` selos:
+  **O(total × k)** de tempo e O(total) de memória
+  (LINTZMAYER; MOTA, 2023).
+- **Tabela grande**: para totais altos, aloque `dp` com `malloc` (assunto
+  0054); na pilha, 1 milhão de `int` já passa do limite padrão
+  (KERNIGHAN; RITCHIE, 1989).
 
-O guloso do assunto 0133 pega o maior selo que cabe, R$ 5, e completa com
-três de R$ 1: 4 selos. Dois selos de R$ 4 resolvem com 2. É o mesmo
-contraexemplo `{1, 3, 4}` de lá: a escolha que parece melhor agora estraga o
-resto.
+> [!WARNING]
+> O "infinito" precisa sobreviver a um `+ 1`. Com `INT_MAX`, a conta
+> `dp[v - selo[s]] + 1` **estoura** o `int`. Use `1000000`, `total + 1` ou
+> teste `dp[v - selo[s]] != INF` antes de somar.
 
-A PD não aposta: **testa todas as escolhas sem repetir trabalho**. O **último
-selo** colado foi de R$ 1, R$ 4 ou R$ 5, e antes dele sobrou um troco menor,
-já resolvido com o mínimo de selos:
+{{exemplo}}
 
-`dp[v] = 1 + o menor entre dp[v - 1], dp[v - 4] e dp[v - 5]`
-
-só com os selos que cabem em `v`, e `dp[0] = 0`. `dp[v]` é o menor número de
-selos que somam **exatamente** `v` reais.
-
-Isso vale pela **subestrutura ótima**: tirando o último selo de uma solução
-ótima, o resto continua ótimo (senão daria para melhorar a solução inteira).
-
-Para saber **quais** selos usar, `ultimo[v]` guarda o selo que deu o mínimo
-em `v`. Depois anda-se para trás: `v`, `v - ultimo[v]`, até 0.
-
-No desenho, `dp[8]` olha três vizinhos, um por selo, e escolhe o menor, o
-`dp[4]`:
+Nos Correios só há selos de R$ 1, R$ 4 e R$ 5, e a carta custa R$ 8. O guloso
+cola 5 + 1 + 1 + 1, quatro selos; dois de R$ 4 bastam. No desenho, `dp[8]` olha
+três vizinhos e escolhe o menor, o `dp[4]`:
 
 {{ideia}}
-
-O código enche a tabela de 1 até o porte. Valor impossível fica em
-"infinito" (o A278 mostra quando):
 
 ```c
 #include <stdio.h>
@@ -81,11 +80,8 @@ int main(void) {
 // 2 selos para R$ 8: 4 4
 ```
 
-Custo: `total` subproblemas, cada um testando `k` selos, **O(total × k)** de
-tempo e O(total) de memória.
-
-No fluxograma, o laço de fora anda pelos valores e o de dentro testa cada
-selo como "o último":
+O laço de fora anda pelos valores e o de dentro testa cada selo como "o
+último":
 
 {{fluxograma}}
 
@@ -102,21 +98,3 @@ da linha vira `dp[v]`:
 
 Em `v = 6` os selos 1 e 5 empatam. Como o teste é `<`, fica o primeiro que
 achou o mínimo.
-
-> [!WARNING]
-> O "infinito" precisa sobreviver a um `+ 1`. Com `INT_MAX`, a conta
-> `dp[v - selo[s]] + 1` **estoura** o `int` (comportamento indefinido: o gcc
-> com as flags de estudo acusa `signed integer overflow`). Use `1000000`,
-> `total + 1` ou teste `dp[v - selo[s]] != INF` antes de somar.
-
-> [!TIP]
-> **Por dentro do C:** `dp` e `ultimo` ficam na pilha. Para troco de R$ 1
-> milhão, seriam 8 MB e estouraria a pilha padrão do Linux: use `malloc`
-> (assunto 0054).
-
-> [!NOTE]
-> **Pergunta para você:** com selos de R$ 1, R$ 4 e R$ 5, qual é o primeiro
-> porte em que o atendente guloso erra? E o segundo? Mude o `porte` para 15 e
-> compare a linha `dp` com o que o guloso daria em cada valor.
-
-{{pratique}}

@@ -1,32 +1,36 @@
 ## 0142 · Distância de edição
 
-Você digita "pesoa" e o corretor oferece "pessoa": falta inserir um `s`. Ele
-ranqueia as sugestões pelo número de **edições** entre as palavras.
-
-A **distância de edição** (ou **de Levenshtein**) é o menor número de
-operações que transforma uma string em outra. Cada uma custa 1: **inserir**,
-**remover** ou **trocar** uma letra.
-
-Como na LCS (assunto 0141), a PD olha o fim das palavras. Últimas letras
-**iguais**: o custo é o das palavras sem elas. **Diferentes**: vale a mais
-barata das três operações:
-
-- **trocar** a última de `a` pela última de `b`: 1 + resolver as duas sem a
-  última letra;
-- **remover** a última de `a`: 1 + transformar `a` sem ela em `b`;
-- **inserir** a última de `b`: 1 + transformar `a` em `b` sem ela.
-
-Na tabela, `d[i][j]` é a distância entre os prefixos `a[0..i-1]` e
-`b[0..j-1]`. A **borda** difere da LCS: `d[i][0] = i` (`i` remoções) e
-`d[0][j] = j` (`j` inserções).
+- **Distância de edição** (ou **de Levenshtein**): o menor número de
+  operações que transforma uma string em outra. Cada operação custa 1:
+  **inserir**, **remover** ou **trocar** uma letra (LEVENSHTEIN, 1966).
+- **Recorrência**: como na LCS (assunto 0141), olhe o fim. Últimas letras
+  **iguais**: custa o mesmo que as palavras sem elas. **Diferentes**: 1 + a
+  mais barata entre trocar, remover e inserir (KLEINBERG; TARDOS, 2006, cap. 6).
+- **Tabela**: `d[i][j]` é a distância entre os prefixos `a[0..i-1]` e
+  `b[0..j-1]`; a resposta fica em `d[m][n]` (LINTZMAYER; MOTA, 2023).
+- **Borda**: diferente da LCS, `d[i][0] = i` (`i` remoções) e `d[0][j] = j`
+  (`j` inserções) (LINTZMAYER; MOTA, 2023).
+- **Custo**: **O(m × n)**. A distância é pelo menos a diferença dos tamanhos,
+  o que ajuda um corretor a descartar palavras cedo
+  (KLEINBERG; TARDOS, 2006, cap. 6).
+- **Alinhamento**: a volta pela tabela mostra quais edições foram feitas, do
+  fim para o começo (KLEINBERG; TARDOS, 2006, cap. 6).
 
 | caso | `d[i][j]` |
 | --- | --- |
 | `a[i-1] == b[j-1]` | `d[i-1][j-1]` (diagonal, de graça) |
 | letras diferentes | `1 +` o menor entre `d[i-1][j-1]` (troca), `d[i-1][j]` (remove) e `d[i][j-1]` (insere) |
 
-CARTA e ARTES distam 3: remover o C, inserir um E e trocar o último A por S
-(CARTA, ARTA, ARTEA, ARTES). As setas mostram de onde cada célula veio:
+> [!WARNING]
+> A borda **não** é zero, como na LCS: sem `d[i][0] = i` e `d[0][j] = j`,
+> CARTA e ARTES dariam 2. Na volta, confira `i > 0` e `j > 0` antes de ler
+> `d[i - 1][...]` ou `a[i - 1]`.
+
+{{exemplo}}
+
+Um corretor ranqueia sugestões pelo número de edições. CARTA e ARTES distam 3:
+remover o C, inserir um E e trocar o último A por S (CARTA, ARTA, ARTEA,
+ARTES). As setas mostram de onde cada célula veio:
 
 {{ideia}}
 
@@ -117,12 +121,8 @@ int main(void) {
 //   remove C
 ```
 
-O custo é **O(m × n)**. Um corretor que compara a palavra com 300 mil do
-dicionário descarta antes as de tamanho muito diferente: a distância é pelo
-menos a diferença dos tamanhos.
-
-No fluxograma, o caminho marcado é o de `d[5][5]` (A contra S), em que a
-troca ganhou:
+No fluxograma, o caminho marcado é o de `d[5][5]` (A contra S), em que a troca
+ganhou:
 
 {{fluxograma}}
 
@@ -138,19 +138,3 @@ A volta, partindo de `d[5][5] = 3`. Em cada célula: "de qual vizinho eu vim?"
 | (3, 2) | R, R | iguais | diagonal | nenhuma |
 | (2, 1) | A, A | iguais | diagonal | nenhuma |
 | (1, 0) | C, - | borda | cima | remove C |
-
-> [!WARNING]
-> A borda **não** é zero, como na LCS: sem `d[i][0] = i` e `d[0][j] = j`,
-> CARTA e ARTES dariam 2. Na volta, confira `i > 0` e `j > 0` antes de ler
-> `d[i - 1][...]` ou `a[i - 1]`.
-
-> [!TIP]
-> **Por dentro do C:** com `gcc -O2`, o compilador costuma embutir `menor3`
-> no laço (*inline*), sem empilhar um frame por célula.
-
-> [!NOTE]
-> **Pergunta para você:** a distância de A para B é sempre igual à de B para
-> A? Troque `a` e `b` no código e compare a tabela e as operações. O que
-> acontece com cada "insere" e cada "remove"?
-
-{{pratique}}

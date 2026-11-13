@@ -1,18 +1,10 @@
 # Módulo 21 · Programação dinâmica
 
-No módulo 04, `fib(40)` recursivo levou centenas de milhões de chamadas
-porque resolve as **mesmas** perguntas várias vezes. A **programação
-dinâmica** (PD) corrige isso: anota cada resposta na primeira vez e consulta
-nas seguintes.
-
-Todo problema de PD tem a mesma cara: uma **recorrência** que olha para o
-último passo, uma **tabela** de subproblemas e uma **volta** pela tabela que
-reconstrói a solução. Serve para troco, mochila, LCS e distância de edição.
-
-Vem depois dos gulosos (módulo 20): quando o guloso erra, a PD considera
-todas as escolhas e paga cada subproblema uma vez só. A troca é memória por
-tempo. O módulo fecha com um **mini-diff**, que mostra o que mudou entre duas
-versões de um arquivo.
+A **programação dinâmica** (PD) anota a resposta de cada subproblema na
+primeira vez e consulta nas seguintes. Toda PD tem uma **recorrência**, uma
+**tabela** e uma **volta** que reconstrói a solução: troco, mochila 0/1, LCS,
+distância de edição e um **mini-diff**. Depende da recursão (módulo 04) e dos
+gulosos (módulo 20): quando o guloso erra, a PD testa todas as escolhas.
 
 ## O que você vai aprender
 
@@ -28,18 +20,17 @@ versões de um arquivo.
 
 ## Antes de começar
 
-Você precisa de recursão (0032 e 0033), matrizes (0039), strings (0041 e
-0042) e memória dinâmica (0054 e 0055). O 0133 (troco guloso) é o ponto de
-partida do 0139, e a mochila fracionária (0135) é a prima fácil da 0/1.
+Revise recursão (0032 e 0033), matrizes (0039), strings (0041 e 0042) e
+memória dinâmica (0054 e 0055). O troco guloso (0133) e a mochila fracionária
+(0135) são o ponto de partida do 0139 e do 0140.
 
-Os exemplos usam tabela em matriz fixa (`#define MAX 50`) para deixar a
-recorrência à vista; o mini-diff põe a tabela no heap. A cadeia de matrizes,
-outro clássico de PD, tem assunto próprio: o 0185.
+Os exemplos usam matriz fixa (`#define MAX 50`) para deixar a recorrência à
+vista; o mini-diff põe a tabela no heap. A cadeia de matrizes tem assunto
+próprio: o 0185.
 
-Faça o **Passo a passo** com papel e lápis antes de conferir. Nas tabelas,
-**roxa** é a célula calculada (ou de onde a volta parte), **verde** é a
-escolhida ou o caminho da solução, **amarela** é a opção que perdeu e
-**cinza** é o que não chega a ser usado.
+Nas tabelas, **roxa** é a célula calculada (ou de onde a volta parte),
+**verde** a escolhida ou o caminho da solução, **amarela** a opção que perdeu
+e **cinza** o que não chega a ser usado.
 
 {{indice}}
 

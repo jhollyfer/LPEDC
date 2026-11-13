@@ -1,20 +1,22 @@
 ## 0141 · Maior subsequência comum (LCS)
 
-Você ditou **MORANGO** e seu sobrinho escreveu **MANGA**. Quantas letras ele
-acertou na ordem certa? **MANG**: 4.
-
-Uma **subsequência** é o que sobra depois de apagar letras, sem mudar a ordem:
-`MNG` é subsequência de `MORANGO`; `GNA` não é. A **maior subsequência comum**
-(*longest common subsequence*, LCS) é a mais comprida que é subsequência das
-duas strings. Uma palavra de 30 letras tem mais de um bilhão delas.
-
-A PD compara a última letra de cada string:
-
-- **iguais**: a letra fecha a LCS; some 1 à LCS das duas sem ela;
-- **diferentes**: tire a última de `a` ou a de `b` e fique com a melhor.
-
-Na tabela, `c[i][j]` é o tamanho da LCS dos **prefixos** `a[0..i-1]` e
-`b[0..j-1]`:
+- **Subsequência**: o que sobra depois de apagar letras, sem mudar a ordem.
+  `MNG` é subsequência de `MORANGO`; `GNA` não é
+  (CORMEN et al., 2024, cap. 14).
+- **LCS** (*longest common subsequence*): a maior subsequência das duas
+  strings. Testar todas é inviável: 30 letras já têm mais de um bilhão
+  (CORMEN et al., 2024, cap. 14).
+- **Recorrência**: olhe a última letra de cada uma. **Iguais**: ela fecha a
+  LCS, some 1 à das duas sem ela. **Diferentes**: tire a última de `a` ou a de
+  `b` e fique com a melhor (CORMEN et al., 2024, cap. 14).
+- **Tabela**: `c[i][j]` é o tamanho da LCS dos **prefixos** `a[0..i-1]` e
+  `b[0..j-1]`; a resposta fica em `c[m][n]` (LINTZMAYER; MOTA, 2023).
+- **Recuperação**: do canto até a borda; letra igual entra na resposta e o
+  caminho vai na diagonal, senão vai para o vizinho de onde o valor veio
+  (CORMEN et al., 2024, cap. 14).
+- **Custo**: `(m + 1) × (n + 1)` células de O(1), **O(m × n)** de tempo e de
+  memória. Só o tamanho cabe em duas linhas; as letras pedem a tabela inteira
+  (KLEINBERG; TARDOS, 2006, cap. 6).
 
 | caso | `c[i][j]` |
 | --- | --- |
@@ -22,17 +24,18 @@ Na tabela, `c[i][j]` é o tamanho da LCS dos **prefixos** `a[0..i-1]` e
 | `a[i-1] == b[j-1]` | `c[i-1][j-1] + 1` (diagonal) |
 | letras diferentes | o maior entre `c[i-1][j]` (cima) e `c[i][j-1]` (esquerda) |
 
-A resposta fica em `c[m][n]`. A volta anda do canto até a borda: letras
-iguais entram na resposta e o caminho vai na diagonal; senão, vai para o
-vizinho de onde o valor veio (o Cormen guarda isso numa tabela de setas; aqui
-refazemos na volta).
+> [!WARNING]
+> Subsequência não é **substring** (pedaço contíguo): a maior substring comum
+> de MORANGO e MANGA é `ANG` (3), e a LCS tem 4. A linha `i` fala de
+> `a[i - 1]`: escrever `a[i] == b[j]` compila e dá a resposta errada.
 
-No desenho, o caminho sai do canto roxo; as células verdes são as quatro
-letras da resposta, e as amarelas, os passos sem letra:
+{{exemplo}}
+
+Você ditou **MORANGO** e seu sobrinho escreveu **MANGA**. No desenho, o
+caminho sai do canto roxo; as células verdes são as quatro letras da
+resposta, e as amarelas, os passos sem letra:
 
 {{ideia}}
-
-O código enche a tabela e faz a volta:
 
 ```c
 #include <stdio.h>
@@ -106,11 +109,8 @@ int main(void) {
 // LCS de MORANGO e MANGA: MANG (4 letras)
 ```
 
-A tabela tem `(m + 1) × (n + 1)` células de O(1): **O(m × n)** de tempo e de
-memória.
-
-No fluxograma, o caminho marcado é o de `c[6][4]` (G com G): as letras batem
-e o valor vem da diagonal, `3 + 1`:
+O caminho marcado no fluxograma é o de `c[6][4]` (G com G): as letras batem e
+o valor vem da diagonal, `3 + 1`:
 
 {{fluxograma}}
 
@@ -128,20 +128,3 @@ A volta, partindo de `c[7][5]`, monta a resposta **de trás para a frente**:
 | (3, 1) | R, M | não | 1 / 0 | sobe | ANG |
 | (2, 1) | O, M | não | 1 / 0 | sobe | ANG |
 | (1, 1) | M, M | sim | | diagonal | MANG |
-
-> [!WARNING]
-> Subsequência não é **substring** (pedaço contíguo): a maior substring comum
-> de MORANGO e MANGA é `ANG` (3), e a LCS tem 4. A linha `i` fala de
-> `a[i - 1]`: escrever `a[i] == b[j]` compila e dá a resposta errada.
-
-> [!TIP]
-> **Por dentro do C:** para dois textos de 10 mil caracteres a tabela passa de
-> 400 MB: use `malloc`. Só o **tamanho** pede duas linhas de `n + 1` posições
-> (A281); **recuperar** as letras pede a tabela inteira.
-
-> [!NOTE]
-> **Pergunta para você:** a LCS de MORANGO e MANGA é única? Troque o `>=` das
-> duas comparações por `>` (na tabela e na volta) e veja se a resposta muda.
-> E a LCS de `ABAB` e `BABA`?
-
-{{pratique}}
