@@ -1,22 +1,30 @@
 ## 0004 · Constantes
 
-- **Literal**: valor escrito direto no código. A forma de escrever decide o
-  tipo: `101` é `int`, `4.90` é `double`, `4.90f` é `float`
-  (BACKES, 2013, cap. 2).
-- **Sufixos e bases**: `L`, `LL` e `U` mudam o tipo do inteiro; `0x1F` é
-  hexadecimal e `017` é **octal** (zero à esquerda muda a base); `1.5e3` é
-  notação científica (KERNIGHAN; RITCHIE, 1988, cap. 2).
-- **`'A'` e `"A"`**: aspas simples dão um caractere, que vale o código (65);
-  aspas duplas dão um texto, a letra mais o byte zero (DEITEL; DEITEL, 2011).
-- **`#define`**: ordem ao pré-processador. Faz um "localizar e substituir"
-  antes da compilação, sem tipo e sem memória. Nome em MAIÚSCULAS, sem `=` e
-  sem `;` (BACKES, 2013, cap. 2).
-- **`const`**: variável de verdade (tipo, endereço, tamanho), mas só de
-  leitura. Mudá-la é erro de compilação, então o valor vem na declaração
-  (BACKES, 2013, cap. 2).
-- **Sequência de escape**: barra invertida dentro das aspas. `\n` pula linha,
-  `\t` tabula, `\"` põe aspas, `\\` é a barra, `\0` é o byte zero. Para `%`
-  no `printf`, use `%%` (DEITEL; DEITEL, 2011, cap. 9).
+Imagine a tarifa do ônibus escrita à mão em dez lugares do sistema: no
+letreiro, no cálculo de ida e volta, no recibo, no relatório. Em janeiro ela
+sobe de R$ 4,40 para R$ 4,90, e alguém precisa caçar os dez lugares. Se
+esquecer um, o recibo mostra um preço e o relatório outro. O jeito certo é
+escrever o valor **uma vez só**, com um nome, e usar o nome no resto do
+código.
+
+Antes de dar nome a um valor, repare em como você o escreve. Todo valor
+escrito direto no código é um **literal**, e o jeito de escrever decide o
+tipo dele: `101` é `int`, `4.90` é `double` e `4.90f` é `float`
+(BACKES, 2013, cap. 2). Isso importa porque o tipo do literal entra nas
+contas. Sem nenhuma marca, todo número com ponto é `double`; o sufixo `f`
+pede um `float`.
+
+Os inteiros também aceitam marcas. Os sufixos `L`, `LL` e `U` pedem `long`,
+`long long` e `unsigned`, e o prefixo muda a base: `0x1F` é hexadecimal e
+vale 31; `017`, com zero à esquerda, é **octal**, base 8, e vale 15. Já
+`1.5e3` é notação científica, 1,5 × 10³ = 1500 (KERNIGHAN; RITCHIE, 1988,
+cap. 2). O zero à esquerda é uma armadilha: quem escreve `017` pensando em
+dezessete leva quinze.
+
+Aspas simples e duplas também não são a mesma coisa. `'A'` é um caractere,
+e no C ele vale o seu código numérico, 65. `"A"` é um texto: a letra
+seguida de um byte zero, que marca o fim do texto (DEITEL; DEITEL, 2011).
+Por isso `sizeof("A")` vale 2 e `sizeof('A')` vale 4, o tamanho de um `int`.
 
 | Literal | Tipo | Observação |
 | --- | --- | --- |
@@ -29,10 +37,32 @@
 | `'A'` | `int` | um caractere: vale o código, 65 |
 | `"A"` | texto | aspas duplas: `'A'` seguido do byte zero |
 
+O C tem dois jeitos de dar nome a um valor fixo. O primeiro é o
+**`#define`**, uma ordem para o pré-processador, a etapa que roda antes da
+compilação (0001). Ele faz um "localizar e substituir" no texto do código:
+com `#define TARIFA 4.90`, cada `TARIFA` vira `4.90`, e o compilador nem
+chega a ver o nome (BACKES, 2013, cap. 2). Como é só troca de texto, o
+`#define` não tem tipo e não ocupa memória. Por convenção o nome vai em
+MAIÚSCULAS, e a linha não leva `=` nem `;`.
+
+O segundo é o **`const`**. Ele cria uma variável de verdade, com tipo,
+endereço e tamanho, mas **só de leitura**: `const int linha = 101;`. Você
+pode ver o endereço com `&linha`, e `sizeof linha` vale 4. Qualquer tentativa
+de mudar o valor depois é erro de compilação, e por isso o valor tem de vir
+na própria declaração (BACKES, 2013, cap. 2).
+
+Por fim, dentro das aspas a barra invertida tem papel especial: ela inicia
+uma **sequência de escape**, um jeito de escrever um caractere que não dá
+para digitar direto no texto. O `\n` pula linha, o `\t` é uma tabulação, o
+`\"` põe aspas dentro do texto, o `\\` é a própria barra e o `\0` é o byte
+zero. O `%` não é escape; para mostrá-lo no `printf`, escreva `%%`
+(DEITEL; DEITEL, 2011, cap. 9).
+
 > [!WARNING]
 > O `#define` cola **exatamente** o texto que vem depois do nome. Com
-> `#define TARIFA 4.90;`, `2 * TARIFA` vira `2 * 4.90;` e não compila. O erro
-> aparece na linha em que o nome é **usado**, não na do `#define`.
+> `#define TARIFA 4.90;`, `2 * TARIFA` vira `2 * 4.90;` e não compila; com
+> `#define TARIFA = 4.90`, vira `2 * = 4.90`. O erro aparece na linha em que
+> o nome é **usado**, não na do `#define`.
 
 {{exemplo}}
 

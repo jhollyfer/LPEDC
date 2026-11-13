@@ -1,27 +1,34 @@
 ## 0006 · scanf
 
-- **`scanf`**: lê do teclado. O formato diz o que esperar e os outros
-  argumentos dizem **onde guardar** (BACKES, 2013, cap. 2).
+Até aqui os programas só falavam: todo valor estava escrito no código. Um
+programa útil também precisa **ouvir**. No modelo entrada → processamento →
+saída, falta a entrada, e a forma mais simples de entrada é o teclado. Quem
+faz esse papel no C é o `scanf`, o espelho do `printf`.
+
+Pense no app do banco quando você agenda um Pix. Ele pergunta o valor, você
+digita R$ 150,75; pergunta o dia, você digita 12. O app pega o que você
+digitou e guarda cada coisa no seu campo. O **`scanf`** faz o mesmo: o
+primeiro argumento, o formato, diz o que esperar, e os argumentos seguintes
+dizem **onde guardar** cada valor lido (BACKES, 2013, cap. 2).
 
 ```c
 scanf("%d", &dia);
 ```
 
-- **`&`**: dá o **endereço** da variável, os bytes onde o `scanf` escreve. Vai
-  em toda variável simples no `scanf` e nunca no `printf`
-  (DEITEL; DEITEL, 2011, cap. 9).
-- **`%lf` para `double`**: no `scanf`, `%lf` escreve 8 bytes e `%f` escreve 4,
-  no formato de `float`. No `printf` os dois servem, porque lá vai o valor, e
-  aqui vai o endereço (DEITEL; DEITEL, 2011).
-- **Buffer**: o que você digita entra numa fila e só chega ao programa no
-  Enter. `%d` e `%lf` pulam espaços e Enters antes do número e param no
-  primeiro caractere inválido. O resto **fica na fila**, inclusive o `'\n'`
-  (KERRISK, s.d.).
-- **Caracteres no formato** precisam aparecer na entrada:
-  `scanf("%d/%d/%d", &d, &m, &a)` lê `7/9/2026` (BACKES, 2013, cap. 2).
-- **Retorno**: quantos itens guardou; 0 se o primeiro já falhou; `EOF` (-1)
-  se a entrada acabou. O `if` do módulo 02 usa esse número
-  (DEITEL; DEITEL, 2011, cap. 9).
+O `&` antes do nome é a peça nova. Ele dá o **endereço** da variável, o
+lugar exato da memória em que ela mora (0002). O `scanf` não quer o valor
+de `dia`, que ainda é lixo; quer saber em que bytes escrever o número
+digitado. Por isso o `&` vai em toda variável simples no `scanf` e nunca no
+`printf`, que só precisa do valor para mostrar (DEITEL; DEITEL, 2011,
+cap. 9).
+
+Os especificadores quase repetem os do `printf`, com uma diferença que pega
+muita gente: o `double` se lê com **`%lf`** e se mostra com `%f`. O motivo
+está no endereço. Com `%lf`, o `scanf` escreve 8 bytes, no formato de
+`double`; com `%f`, escreve só 4, no formato de `float`, e o `double` fica
+com um número sem sentido. No `printf` os dois servem porque ele recebe o
+valor, e todo `float` vira `double` no caminho; endereço não se converte
+(DEITEL; DEITEL, 2011).
 
 | Tipo | Lê com | Mostra com |
 | --- | --- | --- |
@@ -30,11 +37,33 @@ scanf("%d", &dia);
 | `double` | `%lf` | `%f` |
 | `char` | `%c` (ou `" %c"`) | `%c` |
 
+O que você digita não vai direto para a variável. Os caracteres entram
+numa fila, o **buffer**, e só chegam ao programa quando você aperta Enter.
+O `scanf` tira da fila apenas o que o formato pede. O `%d` e o `%lf` pulam
+espaços e Enters antes do número e param no primeiro caractere que não
+serve; o resto **fica na fila** para a próxima leitura, inclusive o `'\n'`
+do Enter (KERRISK, s.d.). Digitando `150.75`, Enter, `12`, Enter, o `%lf`
+tira `150.75`, o `%d` pula o `'\n'` que sobrou e tira o `12`, e o último
+`'\n'` continua lá. O `%c` não pula nada e leria esse `'\n'`; o espaço em
+`" %c"` manda pular os brancos antes.
+
+O formato também pode ter caracteres comuns, e eles precisam aparecer na
+entrada exatamente como estão. Com `scanf("%d/%d/%d", &d, &m, &a)`, você
+digita `7/9/2026`, e o `scanf` lê um número, consome a barra, lê outro
+número e assim por diante (BACKES, 2013, cap. 2).
+
+Por fim, o `scanf` **devolve** um número: quantos itens ele conseguiu
+guardar. Se tudo deu certo na data acima, devolve 3. Se o primeiro valor já
+falhou, como `doze` no lugar de `12`, devolve 0 e a variável fica como
+estava. Se a entrada acabou, devolve `EOF`, que vale -1 (DEITEL; DEITEL,
+2011, cap. 9). É assim que o programa descobre se a leitura funcionou; no
+módulo 02, o `if` vai usar esse número para decidir o que fazer.
+
 > [!WARNING]
 > Sem o `&`, `scanf("%d", dia)` usa o lixo de `dia` como endereço e escreve
-> num lugar qualquer: `Segmentation fault` ou outra variável estragada. O gcc
-> avisa (`expects argument of type 'int *'`). Ler `double` com `%f` também
-> compila e dá número errado.
+> num lugar qualquer: `Segmentation fault` ou outra variável estragada. O
+> gcc avisa (`expects argument of type 'int *'`). Ler `double` com `%f`
+> também compila e dá número errado.
 
 {{exemplo}}
 

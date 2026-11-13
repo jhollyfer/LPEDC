@@ -103,24 +103,54 @@ gcc ~/LPEDC/material/A011.c -o ~/LPEDC/material/A011 && printf '3 4.99\n2\n' | ~
 
 ### Conceito
 
-- **Programa em C**: um conjunto de **funções**. A execução sempre começa pela
-  função **`main`** (KERNIGHAN; RITCHIE, 1988, cap. 1).
-- **Instrução**: um comando terminado em `;`. As **chaves** `{ }` agrupam
-  instruções num **bloco** (DEITEL; DEITEL, 2011, cap. 2).
-- **`#include <stdio.h>`**: traz as declarações de entrada e saída, como a do
-  `printf`. Linha com `#` é ordem para o pré-processador, não instrução, e
-  não leva `;` (BACKES, 2013, cap. 1).
-- **`return 0`**: encerra a `main` e avisa o sistema que deu tudo certo
-  (BACKES, 2013, cap. 1).
-- **Comentário**: texto que o compilador ignora. `//` vale até o fim da linha;
-  `/* ... */` pode ocupar várias linhas (DEITEL; DEITEL, 2011, cap. 2).
-- **Do `.c` ao executável**: o `gcc` passa por quatro etapas. O
-  **pré-processador** trata as linhas com `#`, o **compilador** traduz para
-  assembly, o **montador** gera o código objeto (`.o`) e o **ligador** junta
-  o `.o` com a biblioteca padrão (GNU, s.d.).
-- **Tipos de erro**: de **compilação** (falta `;`, `Int` no lugar de `int`),
-  de **ligação** (função que não existe, como `prinft`) e de **execução**
-  (roda, mas dá resultado errado ou quebra) (DEITEL; DEITEL, 2011, cap. 2).
+O processador do computador só entende números: sequências de instruções
+em binário, cada uma muito simples. Escrever assim seria impossível para
+qualquer pessoa. Um programa em C é um texto que você consegue ler e
+escrever, e uma ferramenta, o **compilador**, traduz esse texto para a
+língua da máquina. O curso inteiro parte daqui: um arquivo `.c` que vira um
+executável e mostra alguma coisa na tela.
+
+Pense numa receita de bolo. Ela tem um título, uma lista do que você precisa
+ter à mão e os passos, que você segue de cima para baixo. Um programa em C
+tem as mesmas partes. Ele é um conjunto de **funções**, blocos de
+instruções com nome, e a execução sempre começa pela função **`main`**
+(KERNIGHAN; RITCHIE, 1988, cap. 1). O sistema operacional procura a `main`,
+entra nela e executa as instruções na ordem em que aparecem.
+
+```c
+#include <stdio.h>
+
+int main(void) {
+    printf("Bom dia\n");
+    return 0;
+}
+```
+
+Cada **instrução** é um comando completo e termina com ponto e vírgula. As
+**chaves** `{ }` agrupam várias instruções num **bloco**, que funciona como
+uma unidade: tudo o que está entre a `{` depois de `main(void)` e a `}` final
+pertence à `main` (DEITEL; DEITEL, 2011, cap. 2). A linha
+`int main(void)` diz duas coisas: a função não recebe nada de fora (`void`)
+e devolve um número inteiro (`int`) para quem a chamou.
+
+A primeira linha não é instrução. Tudo o que começa com `#` é uma ordem para
+o **pré-processador**, a primeira etapa da tradução, e por isso não leva
+`;`. O `#include <stdio.h>` manda colar ali o conteúdo do arquivo
+`stdio.h`, que declara as funções de entrada e saída, entre elas o `printf`
+(BACKES, 2013, cap. 1). Sem essa linha, o compilador não sabe que o
+`printf` existe nem como chamá-lo.
+
+O `printf("...\n")` mostra o texto entre aspas. O `\n` dentro das aspas é
+um caractere especial que pula para a linha de baixo. O `return 0` encerra
+a `main` e entrega o número 0 ao sistema, o código combinado para "terminou
+bem" (BACKES, 2013, cap. 1). Um valor diferente de zero avisa que algo deu
+errado.
+
+Também cabe no arquivo texto que não é para a máquina. O **comentário** é
+ignorado pelo compilador e serve só para quem lê. O `//` comenta até o fim
+da linha; o par `/* ... */` comenta tudo o que fica entre eles, mesmo em
+várias linhas (DEITEL; DEITEL, 2011, cap. 2). E o C diferencia maiúsculas de
+minúsculas: `Main` e `Printf` são nomes que não existem.
 
 | Linha | Para que serve |
 | --- | --- |
@@ -130,9 +160,33 @@ gcc ~/LPEDC/material/A011.c -o ~/LPEDC/material/A011 && printf '3 4.99\n2\n' | ~
 | `return 0;` | termina com sucesso |
 | `}` | fecha o bloco |
 
+Para o texto virar executável, o `gcc` passa por quatro etapas, uma depois
+da outra (GNU, s.d.). O **pré-processador** trata as linhas com `#` e cola
+o `stdio.h` no lugar do `#include`. O **compilador** confere a gramática e
+os tipos e traduz o C para **assembly**, as instruções do processador
+escritas como texto. O **montador** transforma o assembly em **código
+objeto** (`.o`), já em binário, mas incompleto: ele sabe que você chamou o
+`printf`, não onde o `printf` está. O **ligador** (*linker*) junta o `.o`
+com a **biblioteca padrão**, onde mora o código do `printf`, e grava o
+executável. Um comando faz tudo: `gcc padaria.c -o padaria`, e depois
+`./padaria` roda o resultado.
+
+Saber em que etapa o processo parou ajuda a consertar. Há três tipos de erro
+(DEITEL; DEITEL, 2011, cap. 2). O **erro de compilação** aparece quando o
+texto fere a gramática, como faltar um `;` ou escrever `Int` no lugar de
+`int`: o gcc mostra arquivo, linha e coluna e não gera executável. O **erro
+de ligação** aparece quando a gramática está certa, mas a função não existe
+em lugar nenhum: com `prinft`, o ligador para com `undefined reference to
+'prinft'`. O **erro de execução** é o pior, porque o programa compila,
+roda e mostra um valor errado ou quebra no meio. O compilador não o vê; os
+**avisos** (*warnings*) do gcc com `-Wall` e o AddressSanitizer pegam parte
+deles.
+
 > [!WARNING]
-> O `printf` não pula linha sozinho: `printf("Pão"); printf("Quente");` mostra
-> `PãoQuente`. E o C diferencia maiúsculas: `Main` e `Printf` não existem.
+> O `printf` não pula linha sozinho: `printf("Pão"); printf("Quente");`
+> mostra `PãoQuente`. Ponha o `\n` onde a linha acaba. Se faltar um `;`, o
+> gcc reclama (`expected ';' before ...`) na linha **seguinte**, onde ele
+> percebe a falta.
 
 ### Exemplos de uso
 
@@ -305,22 +359,30 @@ código: 2
 
 ### Conceito
 
-- **Variável**: um lugar na memória com **nome**, **tipo** e **valor**. O
-  valor pode mudar durante a execução (DEITEL; DEITEL, 2011, cap. 2).
-- **Tipo**: diz quantos bytes a variável ocupa e como ler esses bytes
-  (BACKES, 2013).
-- **Tipos primitivos**: guardam um valor só (`int`, `float`, `double`,
-  `char`). Vetores e structs juntam vários e são **compostos** (módulos 05 e 08)
-  (CELES; CERQUEIRA; RANGEL, 2016).
-- **Declarar** é criar (`int idade;`); **inicializar** é dar o primeiro valor
-  junto (`int idade = 25;`) (BACKES, 2013).
-- **Atribuir apaga o valor antigo**; ler a variável não muda nada
-  (DEITEL; DEITEL, 2011, cap. 2).
-- **`sizeof`**: operador que dá o tamanho em bytes de um tipo ou variável;
-  mostre com `%zu` (KERNIGHAN; RITCHIE, 1988, cap. 2).
-- **Nome válido**: letras, dígitos e `_`, sem começar por dígito, sem acento e
-  sem palavra reservada. `peso` e `Peso` são nomes diferentes
-  (KERNIGHAN; RITCHIE, 1988, cap. 2).
+O primeiro programa só mostrava texto fixo. Para fazer conta, o programa
+precisa guardar números em algum lugar enquanto trabalha: a idade de alguém,
+o preço de um produto, o total de uma compra. Esse lugar é a memória do
+computador, e a variável é a forma de usar um pedaço dela pelo nome.
+
+Pense na ficha de matrícula de uma academia. Ela tem campos com rótulo
+(idade, altura, peso, plano), e cada campo aceita um tipo de informação. Um
+mês depois, a recepcionista apaga o peso e escreve o novo. A ficha continua
+a mesma; só o conteúdo de um campo mudou. Uma **variável** é um campo dessa
+ficha: um lugar na memória com **nome**, **tipo** e **valor**, e esse valor
+pode mudar durante a execução (DEITEL; DEITEL, 2011, cap. 2).
+
+O nome é para você, que escreve e lê o código. A máquina usa outra coisa: o
+**endereço**, o número do primeiro byte que o valor ocupa na memória. Você
+vê o endereço de uma variável com `&`, e o `printf` o mostra com `%p`. Por
+enquanto o endereço é só curiosidade; no módulo de ponteiros ele vira
+ferramenta.
+
+O **tipo** diz quantos bytes a variável ocupa e como ler esses bytes
+(BACKES, 2013). Ele vem antes do nome e não muda depois. Os mesmos quatro
+bytes podem ser lidos como um inteiro ou como um real, e o resultado é
+completamente diferente; o tipo é que decide. A tabela mostra os quatro
+tipos básicos, com os tamanhos de um PC de 64 bits (o padrão do C só garante
+mínimos, assunto do 0003):
 
 | Tipo | Guarda | Tamanho típico | `printf` |
 | --- | --- | --- | --- |
@@ -329,9 +391,46 @@ código: 2
 | `double` | real, uns 15 dígitos | 8 bytes | `%f` |
 | `char` | um caractere | 1 byte | `%c` |
 
+Esses são os **tipos primitivos**, também chamados de tipos simples: cada
+variável guarda um valor só. Vetores e structs juntam vários valores numa
+variável e são os tipos **compostos**, que aparecem nos módulos 05 e 08
+(CELES; CERQUEIRA; RANGEL, 2016). Repare que o `char` também guarda um
+número, pequeno: a letra `'B'` fica na memória como o código 66.
+
+Criar a variável é **declarar**: `int idade;` reserva quatro bytes e dá a
+eles o nome `idade`. Dar o primeiro valor no mesmo comando é
+**inicializar**: `int idade = 25;` (BACKES, 2013). As duas coisas parecem
+iguais, mas não são. Uma variável declarada sem valor fica com o que já
+estava naqueles bytes, e isso pode ser qualquer número.
+
+```c
+int idade = 25;        // declara e inicializa
+double peso = 72.5;    // o decimal do C é o ponto
+peso = 71.8;           // atribui: o 72.5 some
+```
+
+**Atribuir** é guardar um valor novo, com `=`, numa variável que já existe.
+O valor antigo é apagado para sempre; não há histórico. Ler a variável, por
+outro lado, não muda nada: você pode mostrar `peso` mil vezes e ele continua
+71.8 (DEITEL; DEITEL, 2011, cap. 2).
+
+Para saber quanto cada tipo ocupa na sua máquina, existe o operador
+**`sizeof`**. Ele dá o tamanho em bytes de um tipo ou de uma variável:
+`sizeof(double)` vale 8 num PC comum. O resultado tem um tipo próprio, e o
+`printf` o mostra com `%zu` (KERNIGHAN; RITCHIE, 1988, cap. 2).
+
+O nome da variável segue regras. Ele usa letras, dígitos e `_`, não começa
+por dígito e não leva acento nem espaço. Palavras do próprio C, como `int`
+e `return`, são reservadas e não servem de nome. E maiúscula conta: `peso`
+e `Peso` são duas variáveis diferentes (KERNIGHAN; RITCHIE, 1988, cap. 2).
+O curso usa `snake_case`, palavras em minúscula ligadas por `_`:
+`peso_atual`, `valor_total`.
+
 > [!WARNING]
-> Variável sem valor não vale zero: vale **lixo**, o que já estava na memória.
-> Inicialize sempre. E o decimal do C é o **ponto**: `72,5` nem compila.
+> Variável sem valor não vale zero: vale **lixo**, o que já estava na
+> memória. `int total; printf("%d", total);` pode mostrar 0, 32767 ou -1294,
+> e o gcc avisa `'total' is used uninitialized`. Inicialize sempre. E o
+> decimal do C é o **ponto**: `72,5` nem compila.
 
 ### Exemplos de uso
 
@@ -533,21 +632,52 @@ B
 
 ### Conceito
 
-- **Bit e byte**: o bit vale 0 ou 1; oito bits formam um byte. Com `n` bits
-  cabem 2ⁿ valores, então um byte vai de 0 a 255 (FEOFILOFF, 2009, ap. C).
-- **Binário**: base 2; cada casa vale o dobro da casa à direita.
-  `00001101` = 8 + 4 + 1 = 13 (FEOFILOFF, 2009, ap. C).
-- **Hexadecimal**: base 16 (0 a 9 e A a F). Cada dígito vale 4 bits; no C
-  começa com `0x`: `0xFF` = 255 (DEITEL; DEITEL, 2011).
-- **Modificadores**: `short` (menor), `long` e `long long` (maiores) e
-  `unsigned` (sem negativos, o dobro de positivos) (BACKES, 2013).
-- **`<limits.h>` e `<stdint.h>`**: o padrão só garante tamanhos mínimos. O
-  `limits.h` dá os limites reais (`INT_MAX`); o `stdint.h` dá tamanho exato
-  (`int32_t`, `uint16_t`) (ISO/IEC, 2018).
-- **Overflow**: passar do limite do tipo. Em `unsigned` o valor dá a volta,
-  como um odômetro; com sinal é **comportamento indefinido** (ISO/IEC, 2018).
-- **Complemento de dois**: forma de guardar negativos. Por isso a faixa é
-  assimétrica (-128 a 127 num byte) (FEOFILOFF, 2009, ap. C).
+Toda variável tem um tamanho fixo, e um tamanho fixo tem um teto. Se o
+número que você quer guardar não cabe, o C não aumenta a variável: ele
+guarda só o pedaço que cabe e segue em frente, muitas vezes sem avisar.
+Para escolher o tipo certo, você precisa saber como o número fica na
+memória e até onde cada tipo vai.
+
+Pense no odômetro de um carro antigo, com cinco rodinhas de 0 a 9. Ele mede
+até 99.999 km. No quilômetro seguinte, todas as rodinhas voltam a zero e o
+painel mostra 00000. O carro andou, mas o mostrador não tem casa para o
+número novo. A memória do computador funciona do mesmo jeito, só que as
+rodinhas têm duas posições em vez de dez.
+
+Cada rodinha é um **bit**, uma chave que vale 0 ou 1. Oito bits formam um
+**byte**. Com `n` bits cabem 2ⁿ combinações diferentes, então um byte guarda
+256 valores, de 0 a 255 (FEOFILOFF, 2009, ap. C). Dois bytes guardam 65.536
+valores; quatro bytes, mais de 4 bilhões.
+
+O inteiro fica na memória em **binário**, a base 2. Na base 10, cada casa
+vale dez vezes a casa da direita (unidade, dezena, centena). Na base 2, cada
+casa vale o **dobro** da casa da direita: 1, 2, 4, 8, 16, 32, 64, 128. Para
+ler um binário, some as casas que têm 1: `00001101` é 8 + 4 + 1 = 13
+(FEOFILOFF, 2009, ap. C). Com os oito bits ligados, `11111111`, a soma dá
+255, o maior valor de um byte.
+
+| casa | 2⁷ | 2⁶ | 2⁵ | 2⁴ | 2³ | 2² | 2¹ | 2⁰ |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| vale | 128 | 64 | 32 | 16 | 8 | 4 | 2 | 1 |
+
+Escrever binário cansa, então se usa uma abreviação: o **hexadecimal**, a
+base 16. Os dígitos vão de 0 a 9 e depois de A (10) a F (15). Cada dígito
+hexa equivale a exatamente 4 bits, e um byte cabe em dois dígitos:
+`1111 1111` é `FF`. No C, um número em hexadecimal começa com `0x`, e
+`0xFF` vale 255 (DEITEL; DEITEL, 2011).
+
+E os negativos? O C guarda os inteiros com sinal em **complemento de dois**:
+o bit mais à esquerda pesa negativo. Num byte, ele vale -128 em vez de +128.
+Assim, `10000000` é -128 e `11111111` é -128 + 127 = -1 (FEOFILOFF, 2009,
+ap. C). Isso explica por que a faixa é assimétrica: há um negativo a mais,
+-128 a 127. E mostra que o mesmo byte `0xFF` vale 255 num `unsigned char` e
+-1 num `char`. Os bits são iguais; o tipo decide como lê-los.
+
+O tamanho do tipo decide a sua **faixa**, o menor e o maior valor que ele
+guarda. Os **modificadores** ajustam o `int`: `short` usa menos bytes,
+`long` e `long long` usam mais, e `unsigned` troca os negativos por mais
+positivos, quase o dobro (BACKES, 2013). Sem modificador o tipo tem sinal:
+`int` e `signed int` são o mesmo tipo. Num PC Linux de 64 bits:
 
 | Tipo (PC Linux 64 bits) | Bytes | Faixa |
 | --- | --- | --- |
@@ -558,10 +688,26 @@ B
 | `int` | 4 | cerca de ±2,1 bilhões |
 | `long` / `long long` | 8 | cerca de ±9,2 quintilhões |
 
+Esses números valem para essa máquina, não para todas. O padrão do C só
+garante tamanhos **mínimos**: o `int` pode ter 2 bytes num
+microcontrolador, e o `long` tem 4 bytes no Windows. Por isso existem dois
+cabeçalhos (ISO/IEC, 2018). O **`<limits.h>`** traz os limites reais da
+máquina em que o programa compila, como `INT_MAX` e `USHRT_MAX`. O
+**`<stdint.h>`** traz tipos com o tamanho exato no nome: `int8_t`,
+`uint16_t`, `int32_t`, `int64_t`.
+
+Passar do limite do tipo se chama **overflow**, ou estouro. Num tipo
+`unsigned`, o C garante o comportamento do odômetro: o valor dá a volta e
+recomeça do zero. Um `unsigned short` em 65.535 tem os 16 bits ligados;
+somar 1 pede um 17º bit, que não existe, e o resultado vira 0. Num tipo com
+sinal, o padrão não promete nada: o estouro é **comportamento indefinido**,
+e o programa pode fazer qualquer coisa (ISO/IEC, 2018).
+
 > [!WARNING]
-> Estouro em tipo com sinal não "dá a volta" de forma garantida:
-> `int x = INT_MAX; x = x + 1;` é comportamento indefinido. Com as flags de
-> estudo, o gcc acusa `signed integer overflow`. Escolha um tipo que caiba.
+> Estouro em tipo com sinal não dá a volta com garantia:
+> `int x = INT_MAX; x = x + 1;` é comportamento indefinido. Costuma virar
+> -2147483648, mas não conte com isso. Com as flags de estudo, o gcc acusa
+> `signed integer overflow`. Escolha um tipo que caiba.
 
 ### Exemplos de uso
 
@@ -757,23 +903,31 @@ int64_t vai até 9223372036854775807
 
 ### Conceito
 
-- **Literal**: valor escrito direto no código. A forma de escrever decide o
-  tipo: `101` é `int`, `4.90` é `double`, `4.90f` é `float`
-  (BACKES, 2013, cap. 2).
-- **Sufixos e bases**: `L`, `LL` e `U` mudam o tipo do inteiro; `0x1F` é
-  hexadecimal e `017` é **octal** (zero à esquerda muda a base); `1.5e3` é
-  notação científica (KERNIGHAN; RITCHIE, 1988, cap. 2).
-- **`'A'` e `"A"`**: aspas simples dão um caractere, que vale o código (65);
-  aspas duplas dão um texto, a letra mais o byte zero (DEITEL; DEITEL, 2011).
-- **`#define`**: ordem ao pré-processador. Faz um "localizar e substituir"
-  antes da compilação, sem tipo e sem memória. Nome em MAIÚSCULAS, sem `=` e
-  sem `;` (BACKES, 2013, cap. 2).
-- **`const`**: variável de verdade (tipo, endereço, tamanho), mas só de
-  leitura. Mudá-la é erro de compilação, então o valor vem na declaração
-  (BACKES, 2013, cap. 2).
-- **Sequência de escape**: barra invertida dentro das aspas. `\n` pula linha,
-  `\t` tabula, `\"` põe aspas, `\\` é a barra, `\0` é o byte zero. Para `%`
-  no `printf`, use `%%` (DEITEL; DEITEL, 2011, cap. 9).
+Imagine a tarifa do ônibus escrita à mão em dez lugares do sistema: no
+letreiro, no cálculo de ida e volta, no recibo, no relatório. Em janeiro ela
+sobe de R$ 4,40 para R$ 4,90, e alguém precisa caçar os dez lugares. Se
+esquecer um, o recibo mostra um preço e o relatório outro. O jeito certo é
+escrever o valor **uma vez só**, com um nome, e usar o nome no resto do
+código.
+
+Antes de dar nome a um valor, repare em como você o escreve. Todo valor
+escrito direto no código é um **literal**, e o jeito de escrever decide o
+tipo dele: `101` é `int`, `4.90` é `double` e `4.90f` é `float`
+(BACKES, 2013, cap. 2). Isso importa porque o tipo do literal entra nas
+contas. Sem nenhuma marca, todo número com ponto é `double`; o sufixo `f`
+pede um `float`.
+
+Os inteiros também aceitam marcas. Os sufixos `L`, `LL` e `U` pedem `long`,
+`long long` e `unsigned`, e o prefixo muda a base: `0x1F` é hexadecimal e
+vale 31; `017`, com zero à esquerda, é **octal**, base 8, e vale 15. Já
+`1.5e3` é notação científica, 1,5 × 10³ = 1500 (KERNIGHAN; RITCHIE, 1988,
+cap. 2). O zero à esquerda é uma armadilha: quem escreve `017` pensando em
+dezessete leva quinze.
+
+Aspas simples e duplas também não são a mesma coisa. `'A'` é um caractere,
+e no C ele vale o seu código numérico, 65. `"A"` é um texto: a letra
+seguida de um byte zero, que marca o fim do texto (DEITEL; DEITEL, 2011).
+Por isso `sizeof("A")` vale 2 e `sizeof('A')` vale 4, o tamanho de um `int`.
 
 | Literal | Tipo | Observação |
 | --- | --- | --- |
@@ -786,10 +940,32 @@ int64_t vai até 9223372036854775807
 | `'A'` | `int` | um caractere: vale o código, 65 |
 | `"A"` | texto | aspas duplas: `'A'` seguido do byte zero |
 
+O C tem dois jeitos de dar nome a um valor fixo. O primeiro é o
+**`#define`**, uma ordem para o pré-processador, a etapa que roda antes da
+compilação (0001). Ele faz um "localizar e substituir" no texto do código:
+com `#define TARIFA 4.90`, cada `TARIFA` vira `4.90`, e o compilador nem
+chega a ver o nome (BACKES, 2013, cap. 2). Como é só troca de texto, o
+`#define` não tem tipo e não ocupa memória. Por convenção o nome vai em
+MAIÚSCULAS, e a linha não leva `=` nem `;`.
+
+O segundo é o **`const`**. Ele cria uma variável de verdade, com tipo,
+endereço e tamanho, mas **só de leitura**: `const int linha = 101;`. Você
+pode ver o endereço com `&linha`, e `sizeof linha` vale 4. Qualquer tentativa
+de mudar o valor depois é erro de compilação, e por isso o valor tem de vir
+na própria declaração (BACKES, 2013, cap. 2).
+
+Por fim, dentro das aspas a barra invertida tem papel especial: ela inicia
+uma **sequência de escape**, um jeito de escrever um caractere que não dá
+para digitar direto no texto. O `\n` pula linha, o `\t` é uma tabulação, o
+`\"` põe aspas dentro do texto, o `\\` é a própria barra e o `\0` é o byte
+zero. O `%` não é escape; para mostrá-lo no `printf`, escreva `%%`
+(DEITEL; DEITEL, 2011, cap. 9).
+
 > [!WARNING]
 > O `#define` cola **exatamente** o texto que vem depois do nome. Com
-> `#define TARIFA 4.90;`, `2 * TARIFA` vira `2 * 4.90;` e não compila. O erro
-> aparece na linha em que o nome é **usado**, não na do `#define`.
+> `#define TARIFA 4.90;`, `2 * TARIFA` vira `2 * 4.90;` e não compila; com
+> `#define TARIFA = 4.90`, vira `2 * = 4.90`. O erro aparece na linha em que
+> o nome é **usado**, não na do `#define`.
 
 ### Exemplos de uso
 
@@ -1246,28 +1422,35 @@ Teste também com vermelho 0, verde 8 e azul 15: a saída tem de ser
 
 ### Conceito
 
-- **`scanf`**: lê do teclado. O formato diz o que esperar e os outros
-  argumentos dizem **onde guardar** (BACKES, 2013, cap. 2).
+Até aqui os programas só falavam: todo valor estava escrito no código. Um
+programa útil também precisa **ouvir**. No modelo entrada → processamento →
+saída, falta a entrada, e a forma mais simples de entrada é o teclado. Quem
+faz esse papel no C é o `scanf`, o espelho do `printf`.
+
+Pense no app do banco quando você agenda um Pix. Ele pergunta o valor, você
+digita R$ 150,75; pergunta o dia, você digita 12. O app pega o que você
+digitou e guarda cada coisa no seu campo. O **`scanf`** faz o mesmo: o
+primeiro argumento, o formato, diz o que esperar, e os argumentos seguintes
+dizem **onde guardar** cada valor lido (BACKES, 2013, cap. 2).
 
 ```c
 scanf("%d", &dia);
 ```
 
-- **`&`**: dá o **endereço** da variável, os bytes onde o `scanf` escreve. Vai
-  em toda variável simples no `scanf` e nunca no `printf`
-  (DEITEL; DEITEL, 2011, cap. 9).
-- **`%lf` para `double`**: no `scanf`, `%lf` escreve 8 bytes e `%f` escreve 4,
-  no formato de `float`. No `printf` os dois servem, porque lá vai o valor, e
-  aqui vai o endereço (DEITEL; DEITEL, 2011).
-- **Buffer**: o que você digita entra numa fila e só chega ao programa no
-  Enter. `%d` e `%lf` pulam espaços e Enters antes do número e param no
-  primeiro caractere inválido. O resto **fica na fila**, inclusive o `'\n'`
-  (KERRISK, s.d.).
-- **Caracteres no formato** precisam aparecer na entrada:
-  `scanf("%d/%d/%d", &d, &m, &a)` lê `7/9/2026` (BACKES, 2013, cap. 2).
-- **Retorno**: quantos itens guardou; 0 se o primeiro já falhou; `EOF` (-1)
-  se a entrada acabou. O `if` do módulo 02 usa esse número
-  (DEITEL; DEITEL, 2011, cap. 9).
+O `&` antes do nome é a peça nova. Ele dá o **endereço** da variável, o
+lugar exato da memória em que ela mora (0002). O `scanf` não quer o valor
+de `dia`, que ainda é lixo; quer saber em que bytes escrever o número
+digitado. Por isso o `&` vai em toda variável simples no `scanf` e nunca no
+`printf`, que só precisa do valor para mostrar (DEITEL; DEITEL, 2011,
+cap. 9).
+
+Os especificadores quase repetem os do `printf`, com uma diferença que pega
+muita gente: o `double` se lê com **`%lf`** e se mostra com `%f`. O motivo
+está no endereço. Com `%lf`, o `scanf` escreve 8 bytes, no formato de
+`double`; com `%f`, escreve só 4, no formato de `float`, e o `double` fica
+com um número sem sentido. No `printf` os dois servem porque ele recebe o
+valor, e todo `float` vira `double` no caminho; endereço não se converte
+(DEITEL; DEITEL, 2011).
 
 | Tipo | Lê com | Mostra com |
 | --- | --- | --- |
@@ -1276,11 +1459,33 @@ scanf("%d", &dia);
 | `double` | `%lf` | `%f` |
 | `char` | `%c` (ou `" %c"`) | `%c` |
 
+O que você digita não vai direto para a variável. Os caracteres entram
+numa fila, o **buffer**, e só chegam ao programa quando você aperta Enter.
+O `scanf` tira da fila apenas o que o formato pede. O `%d` e o `%lf` pulam
+espaços e Enters antes do número e param no primeiro caractere que não
+serve; o resto **fica na fila** para a próxima leitura, inclusive o `'\n'`
+do Enter (KERRISK, s.d.). Digitando `150.75`, Enter, `12`, Enter, o `%lf`
+tira `150.75`, o `%d` pula o `'\n'` que sobrou e tira o `12`, e o último
+`'\n'` continua lá. O `%c` não pula nada e leria esse `'\n'`; o espaço em
+`" %c"` manda pular os brancos antes.
+
+O formato também pode ter caracteres comuns, e eles precisam aparecer na
+entrada exatamente como estão. Com `scanf("%d/%d/%d", &d, &m, &a)`, você
+digita `7/9/2026`, e o `scanf` lê um número, consome a barra, lê outro
+número e assim por diante (BACKES, 2013, cap. 2).
+
+Por fim, o `scanf` **devolve** um número: quantos itens ele conseguiu
+guardar. Se tudo deu certo na data acima, devolve 3. Se o primeiro valor já
+falhou, como `doze` no lugar de `12`, devolve 0 e a variável fica como
+estava. Se a entrada acabou, devolve `EOF`, que vale -1 (DEITEL; DEITEL,
+2011, cap. 9). É assim que o programa descobre se a leitura funcionou; no
+módulo 02, o `if` vai usar esse número para decidir o que fazer.
+
 > [!WARNING]
 > Sem o `&`, `scanf("%d", dia)` usa o lixo de `dia` como endereço e escreve
-> num lugar qualquer: `Segmentation fault` ou outra variável estragada. O gcc
-> avisa (`expects argument of type 'int *'`). Ler `double` com `%f` também
-> compila e dá número errado.
+> num lugar qualquer: `Segmentation fault` ou outra variável estragada. O
+> gcc avisa (`expects argument of type 'int *'`). Ler `double` com `%f`
+> também compila e dá número errado.
 
 ### Exemplos de uso
 
@@ -1487,26 +1692,22 @@ lidos=0 a=0 b=0
 
 ### Conceito
 
-- **Expressão**: operadores, operandos e parênteses. Em `24 / 5`, o `/` é o
-  **operador** e 24 e 5 são os **operandos**. Toda expressão tem um valor
-  (DEITEL; DEITEL, 2011, cap. 2).
-- **Divisão inteira**: com **dois** operandos inteiros, o `/` joga fora a
-  parte fracionária, sem arredondar. `7 / 2` dá 3 e `2 / 3` dá 0. Basta **um**
-  lado real para a divisão ser real: `159.0 / 5` dá 31,8
-  (DEITEL; DEITEL, 2011, cap. 2).
-- **Resto (`%`)**: o que sobra da divisão inteira; só com inteiros. Sempre vale
-  `(a / b) * b + a % b == a`. Separa dígitos (`2026 % 10` é 6) e testa
-  paridade (`n % 2`) (DEITEL; DEITEL, 2011, cap. 2).
-- **Negativos**: desde o C99, a divisão corta em direção ao zero (`-7 / 2` dá
-  -3) e o resto segue o sinal do dividendo (`-7 % 3` dá -1)
-  (FEOFILOFF, 2009, ap. C).
-- **Precedência**: `*`, `/` e `%` antes de `+` e `-`. No empate, da esquerda
-  para a direita (**associatividade**): `100 / 10 / 2` é 5. Parênteses mandam
-  em tudo (BACKES, 2013, cap. 3).
-- **Potência**: o C não tem operador para ela (`^` é outra coisa, assunto
-  0065). Use `pow` (0010) ou `x * x` (DEITEL; DEITEL, 2011, cap. 2).
-- **Divisão por zero**: com inteiros, derruba o programa
-  (`Floating point exception`); com `double`, dá `inf` (ISO/IEC, 2018).
+Com a entrada (0006) e a saída (0005) prontas, falta o meio do modelo:
+o **processamento**, calcular o que vai sair a partir do que entrou. Quase
+todo cálculo começa nas quatro operações da escola, e o C as escreve de um
+jeito familiar. Familiar demais, porque uma delas, a divisão, não se
+comporta como na calculadora.
+
+Pense em cinco amigos que pedem três pizzas de 8 fatias. São 24 fatias, e
+cada um pega uma por rodada. Quatro rodadas completas dão 20 fatias, e
+sobram 4 na caixa. Ninguém corta fatia ao meio. A divisão entre inteiros do
+C funciona assim: conta as rodadas completas e deixa a sobra de lado.
+
+Antes, dois nomes. Em `24 / 5`, o `/` é o **operador**, o símbolo da
+operação, e 24 e 5 são os **operandos**, os valores sobre os quais ele age.
+Operadores, operandos e parênteses formam uma **expressão**, e toda
+expressão tem um valor (DEITEL; DEITEL, 2011, cap. 2). `24 - 4` vale 20;
+`3 * 8` vale 24.
 
 | Operador | Faz | Exemplo | Resultado |
 | --- | --- | --- | --- |
@@ -1514,6 +1715,49 @@ lidos=0 a=0 b=0
 | `*` | multiplicação | `3 * 8` | `24` |
 | `/` | divisão | `24 / 5` | `4` (!) |
 | `%` | resto da divisão | `24 % 5` | `4` |
+
+A pegadinha está no `/`. Quando os **dois** operandos são inteiros, a
+divisão é **inteira**: o resultado é inteiro e a parte fracionária vai
+embora, sem arredondar. `7 / 2` dá 3, e `2 / 3` dá 0. Basta **um** lado
+ser real para a divisão ser real: `159.0 / 5` dá 31,8 (DEITEL; DEITEL,
+2011, cap. 2). O que decide é o tipo dos operandos, não a variável que vai
+receber o resultado.
+
+```c
+printf("%d %d\n", 24 / 5, 24 % 5);   // 4 4
+printf("%.1f\n", 159.0 / 5);         // 31.8
+```
+
+O **`%`**, chamado de módulo, devolve o resto da divisão inteira e só
+aceita inteiros. O `/` diz quantas vezes o 5 cabe no 24; o `%` diz o que
+sobrou. As duas respostas sempre se encaixam:
+`(a / b) * b + a % b == a` (DEITEL; DEITEL, 2011, cap. 2). O resto parece
+modesto, mas aparece em todo lugar. `2026 % 10` dá 6, o último dígito.
+`n % 2` dá 0 quando `n` é par e 1 quando é ímpar. E `segundos % 60` dá os
+segundos que sobram depois de contar os minutos.
+
+Com números negativos, o C segue uma regra fixa desde o C99: a divisão
+corta em direção ao zero, então `-7 / 2` dá -3, e o resto fica com o sinal
+do dividendo, o número da esquerda, então `-7 % 3` dá -1 (FEOFILOFF, 2009,
+ap. C). A igualdade do parágrafo anterior continua valendo: -3 × 2 + (-1)
+dá -7.
+
+Quando a expressão tem vários operadores, entra a **precedência**, a ordem
+em que eles agem. Ela é a da escola: `*`, `/` e `%` antes de `+` e `-`.
+No empate de precedência, a conta segue da esquerda para a direita, regra
+chamada **associatividade**: `100 / 10 / 2` é `(100 / 10) / 2`, que dá 5
+(BACKES, 2013, cap. 3). Em `2 + 3 * 4 % 5`, primeiro `3 * 4` dá 12, depois
+`12 % 5` dá 2 e por fim `2 + 2` dá 4. Parênteses mandam em tudo e deixam a
+intenção clara para quem lê.
+
+Falta a potência, e o C não tem operador para ela. O `^` existe, mas faz
+outra coisa (assunto 0065). Para elevar ao quadrado, multiplique, `x * x`,
+ou use a função `pow` do 0010 (DEITEL; DEITEL, 2011, cap. 2).
+
+Por último, a divisão por zero. Com inteiros, ela derruba o programa na
+hora, com a mensagem `Floating point exception`. Com `double`, o programa
+continua e o resultado é `inf`, o infinito (ISO/IEC, 2018). Nos dois casos
+a conta está errada; confira o divisor antes de dividir.
 
 > [!WARNING]
 > Com `int a = 7, b = 8;`, `double media = (a + b) / 2;` guarda **7.0**: a
@@ -1707,28 +1951,62 @@ Ao contrário: 021
 
 ### Conceito
 
-- **Tipo da expressão**: operandos do mesmo tipo dão resultado desse tipo;
-  `int / int` é `int` (DEITEL; DEITEL, 2011).
-- **Conversão automática**: com tipos diferentes, o operando "menor" sobe para
-  o tipo do "maior". A escada é `char` → `short` → `int` → `long` →
-  `long long` → `float` → `double` (DEITEL; DEITEL, 2011).
-- **Conversão na atribuição**: o valor vira o tipo da variável da **esquerda**,
-  caiba ou não. `int i = 12.76;` guarda 12: a parte fracionária é **cortada**
-  (`-9.99` vira -9). Valor grande demais perde bits (BACKES, 2013, cap. 2).
-- **Cast**: o tipo entre parênteses antes do valor, `(double) km`. Cria uma
-  **cópia temporária** convertida; `km` continua `int`
-  (DEITEL; DEITEL, 2011).
-- **Precedência do cast**: maior que a de `*` e `/`. `(double) km / litros`
-  converte só o `km`, o que basta para a divisão ser real
-  (BACKES, 2013, cap. 3).
-- **Limites da conversão**: o `float` guarda inteiros exatos só até
-  2²⁴ = 16.777.216, e o `double` até 2⁵³. Converter um `double` grande demais
-  para `int` é comportamento indefinido (ISO/IEC, 2018).
+No 0007, `(a + b) / 2` perdeu os decimais porque os dois lados eram
+inteiros. Isso vai acontecer sempre que um cálculo misturar tipos ou
+guardar um resultado num tipo diferente. Para não ser pego de surpresa, você
+precisa saber quando o C converte um valor sozinho e como pedir a conversão
+quando ela não vem.
+
+Pense no carro. Você rodou 523 km e gastou 41 litros para encher o tanque.
+A calculadora diz que o consumo é 523 ÷ 41 ≈ 12,76 km por litro. O C, com
+dois `int`, responde 12. Ninguém errou a conta: o C fez exatamente o que os
+tipos pediam, uma divisão inteira.
+
+O ponto de partida é este: toda expressão tem um valor e um **tipo**.
+Quando os operandos têm o mesmo tipo, o resultado tem esse tipo, e por isso
+`int / int` dá `int` (DEITEL; DEITEL, 2011). Quando os tipos são
+diferentes, o C faz a **conversão automática**, também chamada de
+conversão implícita: o operando "menor" sobe para o tipo do "maior" antes
+da conta. A escada é `char` → `short` → `int` → `long` → `long long` →
+`float` → `double` (DEITEL; DEITEL, 2011). Em `523 / 41.0`, o 523 sobe
+para `double`, a conta vira `523.0 / 41.0` e dá 12,756...
+
+Na **atribuição**, a conversão segue outra regra: o valor vira o tipo da
+variável da **esquerda**, caiba ou não. `double d = 12;` guarda 12.0, sem
+problema. `int i = 12.76;` guarda 12, porque a parte fracionária é
+**cortada**, não arredondada; `-9.99` vira -9 (BACKES, 2013, cap. 2). E um
+valor grande demais para um tipo pequeno perde bits, como o odômetro do
+0003. Com as opções do curso, o compilador não avisa nenhum desses cortes.
+
+Quando a conversão automática não basta, você escolhe a sua com o **cast**,
+ou conversão explícita: o tipo entre parênteses na frente do valor,
+`(double) km`. O cast não muda a variável. Ele cria uma **cópia
+temporária** já convertida e a entrega para a conta; `km` continua `int`
+depois (DEITEL; DEITEL, 2011).
+
+```c
+int km = 523, litros = 41;
+printf("%d\n", km / litros);              // 12
+printf("%.2f\n", (double) km / litros);   // 12.76
+```
+
+Repare na segunda linha. A precedência do cast é maior que a de `*` e `/`,
+então `(double) km / litros` converte só o `km`, e só depois divide
+(BACKES, 2013, cap. 3). Basta isso: com um lado `double`, a conversão
+automática sobe o `litros` e a divisão é real.
+
+Um `int` e um `double` de mesmo valor têm bits completamente diferentes na
+memória, e o processador faz trabalho de verdade para passar de um para o
+outro. Às vezes nem cabe. O `float` guarda
+inteiros exatos só até 2²⁴ = 16.777.216: `float f = 16777217;` vira
+16777216. O `double` vai até 2⁵³. E converter para `int` um `double` maior
+que o `int` aguenta é comportamento indefinido (ISO/IEC, 2018).
 
 > [!WARNING]
-> O cast precisa chegar **antes** da divisão. Em `(double) (km / litros)`, os
-> parênteses mandam dividir primeiro: `523 / 41` dá 12 e o cast só o
-> transforma em 12.0. Converta um operando: `(double) soma / n`.
+> O cast precisa chegar **antes** da divisão. Em `(double) (km / litros)`,
+> os parênteses mandam dividir primeiro: `523 / 41` dá 12 e o cast só o
+> transforma em 12.0. O mesmo vale para `double media = soma / n;` com dois
+> inteiros. Converta um operando: `(double) soma / n`.
 
 ### Exemplos de uso
 
@@ -1911,21 +2189,31 @@ Somando e cortando: 7; cortando e somando: 6
 
 ### Conceito
 
-- **Atribuição (`=`)**: guarda o valor da direita na variável da esquerda; não
-  é o "igual" da matemática. `saldo = saldo + 30.00` calcula com o valor antigo
-  e escreve o novo por cima (BACKES, 2013, cap. 3).
-- **Lado esquerdo**: só algo com endereço, uma variável. `30 = saldo` e
-  `saldo + 1 = 5` não compilam (BACKES, 2013, cap. 3).
-- **Operadores compostos**: `+=`, `-=`, `*=`, `/=`, `%=`. Agem sobre **toda** a
-  expressão da direita: `x *= y + 1` é `x = x * (y + 1)`
-  (DEITEL; DEITEL, 2011, cap. 3).
-- **`++` e `--`**: somam ou tiram 1. Sozinhos na linha, `x++` e `++x` são
-  iguais (DEITEL; DEITEL, 2011, cap. 3).
-- **Pós e pré**: `x++` vale o valor **antigo** e depois aumenta; `++x` aumenta
-  primeiro e vale o valor **novo** (FEOFILOFF, 2009).
-- **Atribuição é expressão**: vale o valor guardado e associa da direita para
-  a esquerda. Em `a = b = c = 7`, o C faz `c = 7`, depois `b` e por fim `a`
-  (DEITEL; DEITEL, 2011, cap. 3).
+Muita conta de programa não começa do zero: ela parte de um valor que já
+existe e o atualiza. O saldo recebe uma recarga, o contador de viagens sobe
+um, o total da compra ganha mais um item. Para isso você precisa entender
+bem o que o `=` faz e conhecer os atalhos que o C oferece para essas
+atualizações.
+
+Pense no bilhete único com R$ 20,00. Você recarrega R$ 30,00 e ele passa a
+ter R$ 50,00. Você pega um ônibus de R$ 4,40 e ele fica com R$ 45,60. Em
+nenhum momento o saldo é recalculado do zero: cada valor novo sai do
+anterior, e o anterior desaparece do visor.
+
+No C, o **`=`** é a **atribuição**: guarde o valor da direita na variável da
+esquerda. Ele não é o "igual" da matemática, que afirma que dois lados são
+iguais (BACKES, 2013, cap. 3). Por isso `saldo = saldo + 30.00` faz sentido:
+o C calcula o lado direito com o valor antigo de `saldo` e depois escreve o
+resultado por cima. Do lado esquerdo só pode ficar algo que tenha endereço,
+uma variável. `30 = saldo` e `saldo + 1 = 5` não compilam, porque 30 e
+`saldo + 1` não são lugares da memória (BACKES, 2013, cap. 3).
+
+Atualizar uma variável é tão comum que o C tem **operadores compostos**
+para isso: `+=`, `-=`, `*=`, `/=` e `%=`. `saldo += 30.00` quer dizer
+`saldo = saldo + 30.00`, com o nome escrito uma vez só. Um detalhe: o
+composto age sobre **toda** a expressão da direita, como se ela estivesse
+entre parênteses. `x *= y + 1` é `x = x * (y + 1)`, e não `x * y + 1`
+(DEITEL; DEITEL, 2011, cap. 3).
 
 | Atalho | Quer dizer | Com `x = 10` |
 | --- | --- | --- |
@@ -1935,10 +2223,37 @@ Somando e cortando: 7; cortando e somando: 6
 | `x /= 3` | `x = x / 3` | 3 (divisão inteira!) |
 | `x %= 3` | `x = x % 3` | 1 |
 
+Somar ou tirar 1 é mais comum ainda, e ganhou operadores próprios: o
+**`++`** (incremento) e o **`--`** (decremento). Sozinhos na linha,
+`viagens++` e `++viagens` fazem a mesma coisa: `viagens` passa a valer um a
+mais (DEITEL; DEITEL, 2011, cap. 3).
+
+A diferença entre os dois aparece quando o valor é **usado** na mesma
+expressão. No **pós-incremento**, `x++`, a expressão vale o valor
+**antigo** e só depois `x` aumenta. No **pré-incremento**, `++x`, o `x`
+aumenta primeiro e a expressão vale o valor **novo** (FEOFILOFF, 2009). Com
+`int x = 5;`, a linha `int y = x++ * 2;` deixa `y` com 10 e `x` com 6. Já
+`int y = ++x * 2;` deixa `y` com 12 e `x` com 6.
+
+```c
+int x = 5;
+int y = x++ * 2;   // y vale 10, x vale 6
+```
+
+A própria atribuição também é uma expressão: ela vale o valor que acabou de
+guardar. E ela se resolve **da direita para a esquerda**. Em
+`a = b = c = 7`, o C faz primeiro `c = 7`, que vale 7; depois `b = 7`; por
+fim `a = 7` (DEITEL; DEITEL, 2011, cap. 3). É assim que uma linha zera três
+variáveis de uma vez.
+
+Esses atalhos voltam o tempo todo no módulo 03: o `+=` vira o acumulador de
+um laço, e o `++`, o contador.
+
 > [!WARNING]
 > Nunca altere a mesma variável duas vezes na mesma expressão, nem altere e
 > leia ao mesmo tempo: `i = i++;` e `printf("%d %d", n++, n);` são
-> **comportamento indefinido**. O `-Wall` avisa (`operation on 'i' may be undefined`).
+> **comportamento indefinido**: o padrão não define a ordem, e cada
+> compilador faz de um jeito. O `-Wall` avisa (`operation on 'i' may be undefined`).
 
 ### Exemplos de uso
 
@@ -2138,19 +2453,24 @@ Casa 5 x 2 Visitante
 
 ### Conceito
 
-- **`<math.h>`**: declara a biblioteca de matemática. Quase todas as funções
-  recebem e devolvem `double` (DEITEL; DEITEL, 2011, cap. 5).
-- **`libm`**: o `math.h` só declara; o código está na `libm`, que o ligador
-  junta com `-lm`. Sem ela, aparece `undefined reference to 'pow'`
-  (GNU, s.d.).
-- **Arredondamentos**: `floor` sempre desce (`floor(-2.3)` é -3), `ceil`
-  sempre sobe (`ceil(-2.7)` é -2), `round` vai para o inteiro mais perto. O
-  cast **corta**: `(int) -2.7` dá -2. Para "quantas latas comprar", `ceil`:
-  2,78 viram 3 (DEITEL; DEITEL, 2011, cap. 5).
-- **Sem pi padrão**: o `M_PI` é extensão e não existe com `-std=c17`; crie o
-  seu com `#define` (ISO/IEC, 2018).
-- **`abs` e `fabs`**: o `abs` é de inteiros e fica no `<stdlib.h>`; para real,
-  `fabs` (BACKES, 2013).
+O C tem operadores para as quatro operações e para o resto, e parou aí.
+Não há operador de potência, de raiz nem de arredondamento. Mesmo assim,
+muita conta do dia a dia precisa deles: a área de um círculo pede o raio ao
+quadrado, a distância entre dois pontos pede uma raiz, e saber quantas latas
+de tinta comprar pede arredondar para cima.
+
+Pense na pizzaria: a grande, de 35 cm, custa R$ 59,90, e a média, de 25 cm,
+R$ 39,90. Duas médias dão mais pizza que uma grande? A intuição diz que
+não, mas a área cresce com o **quadrado** do raio. A conta mostra que duas
+médias somam 981,75 cm², um pouco mais que os 962,11 cm² da grande. Para
+fazer essa conta no C, você recorre a uma caixa de ferramentas pronta.
+
+Essa caixa é a biblioteca de matemática, declarada no cabeçalho
+**`<math.h>`**. Ela traz funções prontas, e quase todas recebem e devolvem
+`double` (DEITEL; DEITEL, 2011, cap. 5). Uma **função** aqui é uma conta
+com nome: você escreve o nome, passa os valores entre parênteses e recebe o
+resultado no lugar da chamada. `pow(2, 10)` vale 1024, e você pode usar
+essa chamada dentro de qualquer expressão, como usaria um número.
 
 | Função | Faz | Exemplo | Resultado |
 | --- | --- | --- | --- |
@@ -2163,10 +2483,35 @@ Casa 5 x 2 Visitante
 | `fmod(x, y)` | resto de divisão real | `fmod(7.5, 2)` | 1.5 |
 | `sin`, `cos`, `tan` | trigonometria, em **radianos** | `cos(0)` | 1 |
 
+O `math.h`, porém, só **declara** as funções: diz o nome, o que cada uma
+recebe e o que devolve. Por isso `sqrt(144)` funciona mesmo com um `int`: o
+compilador lê a declaração e converte o 144 para `double`. O código das
+funções mora em outro lugar, na biblioteca `libm`, e o ligador (0001) só a
+junta ao programa se você pedir com `-lm` no fim do comando do `gcc` (GNU,
+s.d.). Sem isso, a compilação para com `undefined reference to 'pow'`. As
+flags de estudo do curso já incluem o `-lm`.
+
+Os três arredondamentos parecem iguais com números positivos e divergem com
+os negativos. O `floor` sempre desce, rumo ao menos infinito:
+`floor(-2.3)` é -3. O `ceil` sempre sobe: `ceil(-2.7)` é -2. O `round` vai
+para o inteiro mais perto, e quando está bem no meio vai para longe do
+zero: `round(2.5)` é 3 e `round(-2.5)` é -3 (DEITEL; DEITEL, 2011,
+cap. 5). O cast do 0008 é uma quarta coisa: ele **corta** a parte
+fracionária, e `(int) -2.7` dá -2. Para "quantas latas preciso comprar", o
+certo é o `ceil`: 2,78 latas viram 3.
+
+Faltam dois detalhes que pegam desprevenido. O C padrão não define o
+número pi. O `M_PI`, que aparece em muito código por aí, é uma extensão e
+não existe com `-std=c17`; crie o seu com `#define PI 3.14159265358979`
+(ISO/IEC, 2018). E o valor absoluto de inteiros, `abs`, não fica no
+`math.h`, e sim no `<stdlib.h>`. Para números reais, a função é a `fabs`
+(BACKES, 2013). Usar `abs(-2.75)` dá 2, porque o valor é convertido para
+`int` antes; o `-Wextra` avisa.
+
 > [!WARNING]
-> `pow(27, 1/3)` dá **1**, não 3: `1/3` é divisão inteira e vale 0. Escreva
-> `1.0 / 3`. Do mesmo modo, `ceil(7 / 2)` dá 3, não 4: o `ceil` recebe o 3 já
-> cortado.
+> `pow(27, 1/3)` dá **1**, não 3: `1/3` é divisão inteira e vale 0, e todo
+> número elevado a 0 é 1. Escreva `1.0 / 3`. Do mesmo modo, `ceil(7 / 2)`
+> dá 3, não 4: o `ceil` recebe o 3 já cortado.
 
 ### Exemplos de uso
 
@@ -2381,22 +2726,55 @@ gcc ~/LPEDC/material/E060.c -o ~/LPEDC/material/E060 -lm && ~/LPEDC/material/E06
 
 ### Conceito
 
-- **Entrada → processamento → saída**: antes de codificar, separe o que o
-  programa lê, o que calcula e o que mostra (LEAL, 2016).
-- **Estrutura sequencial**: os mesmos passos, sempre na mesma ordem, sem
-  decisão nem repetição. Conferir a entrada vem no módulo 02; repetir, no 03
-  (CARVALHO, 2010).
-- **Teste de mesa**: executar o programa no papel, linha a linha, anotando
-  numa tabela o valor de cada variável depois de cada passo
-  (CARVALHO, 2010).
-- **O que o programa reúne**: `#define` para a tarifa e a taxa; `int` para as
-  leituras e `double` para dinheiro; `scanf` com `&` e retorno guardado;
-  `+=`, **cast** e `ceil`; `printf` com largura e duas casas.
+Cada assunto do módulo ensinou uma peça isolada: variável, tipo, constante,
+`printf`, `scanf`, aritmética, conversão, atribuição e `math.h`. Um problema
+de verdade pede todas ao mesmo tempo, e a dificuldade passa a ser outra:
+decidir por onde começar e em que ordem montar as peças. Ajuda ter um
+jeito fixo de organizar o raciocínio antes de escrever a primeira linha.
+
+Pense na conta de luz de uma república. Todo mês alguém pega a fatura, faz
+a divisão no celular e manda no grupo quanto cada um deve. Antes de abrir a
+calculadora, essa pessoa já sabe três coisas: o que precisa olhar (as duas
+leituras do relógio e quantos moram na casa), que conta fazer e o que
+mandar no grupo. O programa segue o mesmo roteiro.
+
+Esse roteiro tem nome: **entrada → processamento → saída**. Antes de
+codificar, separe o que o programa lê, o que ele calcula a partir disso e o
+que ele mostra no fim (LEAL, 2016). A entrada vira variáveis lidas com
+`scanf`; o processamento vira expressões e atribuições; a saída vira
+`printf`. Com essa separação feita no papel, cada parte do código tem um
+papel claro, e um erro fica mais fácil de achar: você sabe se procura na
+leitura, na conta ou na hora de mostrar.
+
+Todos os programas deste módulo têm a mesma forma, chamada **estrutura
+sequencial**: os passos são sempre os mesmos e rodam sempre na mesma ordem,
+de cima para baixo, sem decidir nada e sem repetir nada (CARVALHO, 2010).
+Isso é também um limite. O programa da conta de luz não confere se a
+leitura atual é maior que a anterior, e não sabe repetir a conta para vários
+meses. Conferir é assunto do módulo 02, com as condicionais; repetir é do
+módulo 03, com os laços.
+
+O programa do exemplo junta as peças assim. A tarifa e a taxa fixa viram
+constantes com `#define` (0004), para mudar num lugar só. As leituras do
+relógio são `int` e o dinheiro é `double` (0002). O `scanf` leva `&` em
+cada variável, e o seu retorno fica guardado (0006). No processamento
+entram o `+=` (0009), um **cast** para a média por dia não virar divisão
+inteira (0008) e o `ceil` (0010) para arredondar o centavo para cima, já que
+ninguém quer pagar um centavo a menos e deixar a conta descoberta. Na saída,
+o `printf` usa largura e duas casas para alinhar as colunas (0005).
+
+Como saber se a fórmula está certa antes de confiar nela? Com o **teste de
+mesa**: você executa o programa no papel, uma linha de cada vez, e anota
+numa tabela o valor de cada variável depois de cada passo (CARVALHO, 2010).
+O teste de mesa obriga você a fazer a conta que o computador faria, com os
+tipos que ele usaria, e por isso pega a divisão inteira, o arredondamento
+no lugar errado e a variável que nunca recebeu valor. O exemplo abaixo traz
+um teste de mesa completo para você acompanhar.
 
 > [!WARNING]
-> Sem o cast, `consumo / DIAS` seria `257 / 30` entre dois `int` e daria 8. A
-> ordem também importa: com o `ceil` antes do `* 100`, `ceil(76.4133)` daria
-> R$ 77. Faça o teste de mesa antes de confiar numa fórmula.
+> Sem o cast, `consumo / DIAS` seria `257 / 30` entre dois `int` e daria 8.
+> A ordem também importa: com o `ceil` antes do `* 100`, `ceil(76.4133)`
+> daria R$ 77. Faça o teste de mesa antes de confiar numa fórmula.
 
 ### Exemplos de uso
 

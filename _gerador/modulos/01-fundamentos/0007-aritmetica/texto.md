@@ -1,25 +1,21 @@
 ## 0007 · Aritmética
 
-- **Expressão**: operadores, operandos e parênteses. Em `24 / 5`, o `/` é o
-  **operador** e 24 e 5 são os **operandos**. Toda expressão tem um valor
-  (DEITEL; DEITEL, 2011, cap. 2).
-- **Divisão inteira**: com **dois** operandos inteiros, o `/` joga fora a
-  parte fracionária, sem arredondar. `7 / 2` dá 3 e `2 / 3` dá 0. Basta **um**
-  lado real para a divisão ser real: `159.0 / 5` dá 31,8
-  (DEITEL; DEITEL, 2011, cap. 2).
-- **Resto (`%`)**: o que sobra da divisão inteira; só com inteiros. Sempre vale
-  `(a / b) * b + a % b == a`. Separa dígitos (`2026 % 10` é 6) e testa
-  paridade (`n % 2`) (DEITEL; DEITEL, 2011, cap. 2).
-- **Negativos**: desde o C99, a divisão corta em direção ao zero (`-7 / 2` dá
-  -3) e o resto segue o sinal do dividendo (`-7 % 3` dá -1)
-  (FEOFILOFF, 2009, ap. C).
-- **Precedência**: `*`, `/` e `%` antes de `+` e `-`. No empate, da esquerda
-  para a direita (**associatividade**): `100 / 10 / 2` é 5. Parênteses mandam
-  em tudo (BACKES, 2013, cap. 3).
-- **Potência**: o C não tem operador para ela (`^` é outra coisa, assunto
-  0065). Use `pow` (0010) ou `x * x` (DEITEL; DEITEL, 2011, cap. 2).
-- **Divisão por zero**: com inteiros, derruba o programa
-  (`Floating point exception`); com `double`, dá `inf` (ISO/IEC, 2018).
+Com a entrada (0006) e a saída (0005) prontas, falta o meio do modelo:
+o **processamento**, calcular o que vai sair a partir do que entrou. Quase
+todo cálculo começa nas quatro operações da escola, e o C as escreve de um
+jeito familiar. Familiar demais, porque uma delas, a divisão, não se
+comporta como na calculadora.
+
+Pense em cinco amigos que pedem três pizzas de 8 fatias. São 24 fatias, e
+cada um pega uma por rodada. Quatro rodadas completas dão 20 fatias, e
+sobram 4 na caixa. Ninguém corta fatia ao meio. A divisão entre inteiros do
+C funciona assim: conta as rodadas completas e deixa a sobra de lado.
+
+Antes, dois nomes. Em `24 / 5`, o `/` é o **operador**, o símbolo da
+operação, e 24 e 5 são os **operandos**, os valores sobre os quais ele age.
+Operadores, operandos e parênteses formam uma **expressão**, e toda
+expressão tem um valor (DEITEL; DEITEL, 2011, cap. 2). `24 - 4` vale 20;
+`3 * 8` vale 24.
 
 | Operador | Faz | Exemplo | Resultado |
 | --- | --- | --- | --- |
@@ -27,6 +23,49 @@
 | `*` | multiplicação | `3 * 8` | `24` |
 | `/` | divisão | `24 / 5` | `4` (!) |
 | `%` | resto da divisão | `24 % 5` | `4` |
+
+A pegadinha está no `/`. Quando os **dois** operandos são inteiros, a
+divisão é **inteira**: o resultado é inteiro e a parte fracionária vai
+embora, sem arredondar. `7 / 2` dá 3, e `2 / 3` dá 0. Basta **um** lado
+ser real para a divisão ser real: `159.0 / 5` dá 31,8 (DEITEL; DEITEL,
+2011, cap. 2). O que decide é o tipo dos operandos, não a variável que vai
+receber o resultado.
+
+```c
+printf("%d %d\n", 24 / 5, 24 % 5);   // 4 4
+printf("%.1f\n", 159.0 / 5);         // 31.8
+```
+
+O **`%`**, chamado de módulo, devolve o resto da divisão inteira e só
+aceita inteiros. O `/` diz quantas vezes o 5 cabe no 24; o `%` diz o que
+sobrou. As duas respostas sempre se encaixam:
+`(a / b) * b + a % b == a` (DEITEL; DEITEL, 2011, cap. 2). O resto parece
+modesto, mas aparece em todo lugar. `2026 % 10` dá 6, o último dígito.
+`n % 2` dá 0 quando `n` é par e 1 quando é ímpar. E `segundos % 60` dá os
+segundos que sobram depois de contar os minutos.
+
+Com números negativos, o C segue uma regra fixa desde o C99: a divisão
+corta em direção ao zero, então `-7 / 2` dá -3, e o resto fica com o sinal
+do dividendo, o número da esquerda, então `-7 % 3` dá -1 (FEOFILOFF, 2009,
+ap. C). A igualdade do parágrafo anterior continua valendo: -3 × 2 + (-1)
+dá -7.
+
+Quando a expressão tem vários operadores, entra a **precedência**, a ordem
+em que eles agem. Ela é a da escola: `*`, `/` e `%` antes de `+` e `-`.
+No empate de precedência, a conta segue da esquerda para a direita, regra
+chamada **associatividade**: `100 / 10 / 2` é `(100 / 10) / 2`, que dá 5
+(BACKES, 2013, cap. 3). Em `2 + 3 * 4 % 5`, primeiro `3 * 4` dá 12, depois
+`12 % 5` dá 2 e por fim `2 + 2` dá 4. Parênteses mandam em tudo e deixam a
+intenção clara para quem lê.
+
+Falta a potência, e o C não tem operador para ela. O `^` existe, mas faz
+outra coisa (assunto 0065). Para elevar ao quadrado, multiplique, `x * x`,
+ou use a função `pow` do 0010 (DEITEL; DEITEL, 2011, cap. 2).
+
+Por último, a divisão por zero. Com inteiros, ela derruba o programa na
+hora, com a mensagem `Floating point exception`. Com `double`, o programa
+continua e o resultado é `inf`, o infinito (ISO/IEC, 2018). Nos dois casos
+a conta está errada; confira o divisor antes de dividir.
 
 > [!WARNING]
 > Com `int a = 7, b = 8;`, `double media = (a + b) / 2;` guarda **7.0**: a

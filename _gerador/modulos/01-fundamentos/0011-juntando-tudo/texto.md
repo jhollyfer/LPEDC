@@ -1,21 +1,54 @@
 ## 0011 · Juntando tudo
 
-- **Entrada → processamento → saída**: antes de codificar, separe o que o
-  programa lê, o que calcula e o que mostra (LEAL, 2016).
-- **Estrutura sequencial**: os mesmos passos, sempre na mesma ordem, sem
-  decisão nem repetição. Conferir a entrada vem no módulo 02; repetir, no 03
-  (CARVALHO, 2010).
-- **Teste de mesa**: executar o programa no papel, linha a linha, anotando
-  numa tabela o valor de cada variável depois de cada passo
-  (CARVALHO, 2010).
-- **O que o programa reúne**: `#define` para a tarifa e a taxa; `int` para as
-  leituras e `double` para dinheiro; `scanf` com `&` e retorno guardado;
-  `+=`, **cast** e `ceil`; `printf` com largura e duas casas.
+Cada assunto do módulo ensinou uma peça isolada: variável, tipo, constante,
+`printf`, `scanf`, aritmética, conversão, atribuição e `math.h`. Um problema
+de verdade pede todas ao mesmo tempo, e a dificuldade passa a ser outra:
+decidir por onde começar e em que ordem montar as peças. Ajuda ter um
+jeito fixo de organizar o raciocínio antes de escrever a primeira linha.
+
+Pense na conta de luz de uma república. Todo mês alguém pega a fatura, faz
+a divisão no celular e manda no grupo quanto cada um deve. Antes de abrir a
+calculadora, essa pessoa já sabe três coisas: o que precisa olhar (as duas
+leituras do relógio e quantos moram na casa), que conta fazer e o que
+mandar no grupo. O programa segue o mesmo roteiro.
+
+Esse roteiro tem nome: **entrada → processamento → saída**. Antes de
+codificar, separe o que o programa lê, o que ele calcula a partir disso e o
+que ele mostra no fim (LEAL, 2016). A entrada vira variáveis lidas com
+`scanf`; o processamento vira expressões e atribuições; a saída vira
+`printf`. Com essa separação feita no papel, cada parte do código tem um
+papel claro, e um erro fica mais fácil de achar: você sabe se procura na
+leitura, na conta ou na hora de mostrar.
+
+Todos os programas deste módulo têm a mesma forma, chamada **estrutura
+sequencial**: os passos são sempre os mesmos e rodam sempre na mesma ordem,
+de cima para baixo, sem decidir nada e sem repetir nada (CARVALHO, 2010).
+Isso é também um limite. O programa da conta de luz não confere se a
+leitura atual é maior que a anterior, e não sabe repetir a conta para vários
+meses. Conferir é assunto do módulo 02, com as condicionais; repetir é do
+módulo 03, com os laços.
+
+O programa do exemplo junta as peças assim. A tarifa e a taxa fixa viram
+constantes com `#define` (0004), para mudar num lugar só. As leituras do
+relógio são `int` e o dinheiro é `double` (0002). O `scanf` leva `&` em
+cada variável, e o seu retorno fica guardado (0006). No processamento
+entram o `+=` (0009), um **cast** para a média por dia não virar divisão
+inteira (0008) e o `ceil` (0010) para arredondar o centavo para cima, já que
+ninguém quer pagar um centavo a menos e deixar a conta descoberta. Na saída,
+o `printf` usa largura e duas casas para alinhar as colunas (0005).
+
+Como saber se a fórmula está certa antes de confiar nela? Com o **teste de
+mesa**: você executa o programa no papel, uma linha de cada vez, e anota
+numa tabela o valor de cada variável depois de cada passo (CARVALHO, 2010).
+O teste de mesa obriga você a fazer a conta que o computador faria, com os
+tipos que ele usaria, e por isso pega a divisão inteira, o arredondamento
+no lugar errado e a variável que nunca recebeu valor. O exemplo abaixo traz
+um teste de mesa completo para você acompanhar.
 
 > [!WARNING]
-> Sem o cast, `consumo / DIAS` seria `257 / 30` entre dois `int` e daria 8. A
-> ordem também importa: com o `ceil` antes do `* 100`, `ceil(76.4133)` daria
-> R$ 77. Faça o teste de mesa antes de confiar numa fórmula.
+> Sem o cast, `consumo / DIAS` seria `257 / 30` entre dois `int` e daria 8.
+> A ordem também importa: com o `ceil` antes do `* 100`, `ceil(76.4133)`
+> daria R$ 77. Faça o teste de mesa antes de confiar numa fórmula.
 
 {{exemplo}}
 
