@@ -1,13 +1,10 @@
 ## 0064 · Union
 
-No coworking, a mesma mesa serve a uma designer de manhã e a um programador à
-tarde. O espaço é um só, e o que estava em cima some (ou fica bagunçado).
-
-A **union** (união) é isso na memória. Declara-se como a struct, com uma
-diferença: na struct, cada campo tem seu pedaço, um depois do outro; na union,
-**todos os campos começam no mesmo endereço** e dividem os mesmos bytes. O
-tamanho é o do maior campo (arredondado ao alinhamento), e só um campo "vale"
-por vez.
+- **Union** (união): declara-se como a struct, mas **todos os campos começam no
+  mesmo endereço** e dividem os mesmos bytes. Só um campo vale por vez
+  (BACKES, 2013, cap. 8).
+- **Tamanho**: o do maior campo, arredondado ao alinhamento
+  (DEITEL; DEITEL, 2011, cap. 10).
 
 ```c
 typedef union {
@@ -16,18 +13,28 @@ typedef union {
 } Endereco;
 ```
 
-A union tem dois usos. O primeiro é **economizar espaço** quando o dado é uma
-coisa **ou** outra: um pagamento é Pix **ou** cartão **ou** boleto. O segundo
-é **olhar os mesmos bytes de dois jeitos**: escrever um número de 4 bytes e
-lê-lo byte a byte, sem conta.
+- **Dois usos**: economizar espaço quando o dado é uma coisa **ou** outra (Pix
+  ou cartão ou boleto) e olhar os mesmos bytes de dois jeitos
+  (KERNIGHAN; RITCHIE, 1988, cap. 6).
+- **Union etiquetada**: um **enum** ao lado diz qual campo vale; quem confere
+  a etiqueta é você (KERNIGHAN; RITCHIE, 1988, cap. 6).
+- **Endianness**: a ordem dos bytes na memória. No **little-endian** (Intel,
+  AMD e quase todo ARM), o byte menos significativo fica no endereço menor; no
+  **big-endian**, a ordem é a de leitura humana (LINUX MAN PAGES, s.d.).
+- **Rede**: a ordem é big-endian; `htonl` e `ntohl`, de `<arpa/inet.h>`,
+  convertem os números (LINUX MAN PAGES, s.d.).
 
-O exemplo mostra o segundo. O IP 192.168.0.10 é, por baixo, um número de 32
-bits: `0xC0A8000A` (C0 = 192, A8 = 168, 00 = 0, 0A = 10). O programa grava em
-`ip.numero` e lê por `ip.bytes`. Observe a ordem dos bytes na memória:
+> [!WARNING]
+> Escrever num campo **estraga** os outros. Numa union para economizar espaço,
+> ler um campo diferente do último gravado dá lixo, sem aviso. E ler os bytes
+> depende da endianness: a saída muda entre máquinas.
+
+{{exemplo}}
+
+O IP 192.168.0.10 é um número de 32 bits, `0xC0A8000A`. O programa grava em
+`ip.numero` e lê por `ip.bytes`; repare na ordem dos bytes na memória:
 
 {{ideia}}
-
-Os bytes saem **ao contrário** do que você escreveu:
 
 ```c
 #include <stdint.h>
@@ -69,34 +76,7 @@ int main(void) {
 // depois de bytes[3] = 10: 0x0AA8000A
 ```
 
-Essa ordem é a **endianness**. No **little-endian** (Intel, AMD e quase todo
-ARM de celular), o byte **menos** significativo fica no endereço menor: o `0A`
-do final vem primeiro. No **big-endian**, a ordem é a de leitura humana:
-`C0 A8 00 0A`. Nenhum é "certo": é escolha de quem projetou o processador, e a
-union deixa você vê-la.
-
-A pergunta sobre o primeiro byte detecta a endianness. Numa máquina
-big-endian, o mesmo programa seguiria pelo outro lado:
+A pergunta sobre o primeiro byte detecta a endianness. Numa máquina big-endian,
+o mesmo programa seguiria pelo outro lado:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Numa union, escrever num campo **estraga** os outros. Gravar `ip.numero` e
-> ler `ip.bytes` é a intenção. Mas numa union para economizar espaço, ler um
-> campo diferente do último gravado dá lixo, e o C não avisa. Por isso a union
-> costuma vir com um **enum** que diz qual campo vale (a union "etiquetada" do
-> A128); quem confere a etiqueta é você. E ler os bytes depende da
-> endianness: a saída muda entre máquinas.
-
-> [!TIP]
-> A union não gera código: `ip.numero` e `ip.bytes[0]` são o mesmo endereço, e
-> muda só o tipo de leitura. Em C, ler outro campo reinterpreta os bytes (é
-> como se inspeciona um `float` bit a bit). Na rede a ordem é big-endian;
-> `htonl` e `ntohl`, de `<arpa/inet.h>`, convertem os números.
-
-> [!NOTE]
-> **Pergunta para você:** se a union tivesse um terceiro campo,
-> `uint16_t metades[2]`, quanto valeria `ip.metades[0]` logo depois de
-> `ip.numero = 0xC0A8000A`? E `sizeof ip` mudaria?
-
-{{pratique}}

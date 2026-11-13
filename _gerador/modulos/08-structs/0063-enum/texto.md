@@ -1,32 +1,36 @@
 ## 0063 · Enum
 
-O app de delivery mostra o pedido em quatro etapas, sempre nesta ordem:
-recebido, em preparo, saiu para entrega, entregue. Como guardar isso?
-
-Números (0, 1, 2...) são ruins: em um mês ninguém lembra o que significa
-`if (status == 2)`. Strings pedem `strcmp` toda hora, são lentas e um erro de
-digitação passa batido. A terceira saída é o **enum** (enumeração).
-
-Um enum é uma lista de **constantes inteiras com nome**:
+- **Enum** (enumeração): lista de **constantes inteiras com nome**. Melhor que
+  número solto (`status == 2` não diz nada) e que string (pede `strcmp`)
+  (BACKES, 2013, cap. 8).
 
 ```c
 typedef enum { RECEBIDO, PREPARANDO, A_CAMINHO, ENTREGUE } Status;
 ```
 
-O primeiro nome vale 0 e cada um vale o anterior mais 1: `RECEBIDO` é 0,
-`ENTREGUE` é 3. Você pode escolher valores (`DEZ = 10, VINTE = 20`); o que vem
-depois continua a contagem. Por convenção, os nomes ficam em MAIÚSCULAS, como
-no `#define`.
+- **Valores**: o primeiro nome vale 0 e cada um vale o anterior mais 1. Dá
+  para escolher (`DEZ = 10, VINTE = 20`), e o seguinte continua a contagem
+  (DEITEL; DEITEL, 2011, cap. 10).
+- **Só um inteiro com apelido**: o compilador deixa somar, comparar com `<` e
+  guardar 42 numa variável `Status`. A variável ocupa o mesmo que um `int`
+  (BACKES, 2013, cap. 8).
+- **Nomes em MAIÚSCULAS**, como no `#define`. Ao contrário dele, o compilador
+  conhece o enum: sem um `case`, o `-Wall` avisa, desde que o `switch` não
+  tenha `default` (DEITEL; DEITEL, 2011, cap. 10).
+- **Contador no fim**: `{ RECEBIDO, ..., ENTREGUE, QTD_STATUS }`. `QTD_STATUS`
+  vale 4 e dimensiona um vetor de textos (`const char *nomes[QTD_STATUS]`).
 
-No C, o enum é **só um inteiro com apelido**: o compilador deixa somar,
-comparar com `<` e guardar 42 numa variável `Status`.
+> [!WARNING]
+> O C **não confere** se o valor de um enum é válido: `Status s = 42;` compila,
+> e `s++` depois de `ENTREGUE` dá 4. E os nomes são globais: dois enums com
+> `ENTREGUE` não compilam. Use prefixo: `STATUS_ENTREGUE`.
 
-A variável `s` começa em `RECEBIDO` e anda uma etapa por vez, com `s++`. Cada
-valor tem um nome no código e um número na memória:
+{{exemplo}}
+
+O pedido no app de delivery passa por quatro etapas. A variável `s` começa em
+`RECEBIDO` e anda uma etapa por vez, com `s++`:
 
 {{ideia}}
-
-O código percorre as etapas e traduz cada uma para texto com um `switch`:
 
 ```c
 #include <stdio.h>
@@ -69,32 +73,7 @@ int main(void) {
 // [3] Pedido entregue. Bom apetite!
 ```
 
-Enum combina com `switch`: cada `case` usa um nome. Um truque é pôr um último
-nome que só conta os outros: `{ RECEBIDO, PREPARANDO, A_CAMINHO, ENTREGUE,
-QTD_STATUS }`. `QTD_STATUS` vale 4 e serve de tamanho para um vetor de textos
-(`const char *nomes[QTD_STATUS]`), que cresce sozinho com novos status.
-
 O laço é comum, controlado por uma pergunta sobre o enum, e o `s++` faz o
 pedido andar:
 
 {{fluxograma}}
-
-> [!WARNING]
-> O C **não confere** se o valor de um enum é válido. `Status s = 42;` compila,
-> e `s++` depois de `ENTREGUE` dá 4. Por isso `nome_status` tem
-> `return "desconhecido"` depois do `switch`. Os nomes de um enum também são
-> globais: dois enums com `ENTREGUE` não compilam. Daí o prefixo:
-> `STATUS_ENTREGUE`, `PAG_PIX`.
-
-> [!TIP]
-> O enum some na compilação: `A_CAMINHO` vira o número 2 e a variável ocupa o
-> mesmo que um `int` (4 bytes, A126). Ao contrário do `#define`, o compilador
-> o conhece: sem o `case ENTREGUE:`, o `-Wall` avisa `enumeration value
-> 'ENTREGUE' not handled in switch`, desde que o `switch` não tenha `default`.
-
-> [!NOTE]
-> **Pergunta para você:** em `enum { BRONZE = 1, PRATA, OURO = 5, DIAMANTE }`, quanto vale
-> cada nível? E se o laço do exemplo usasse `s <= ENTREGUE` em vez de
-> `s != ENTREGUE`, sem o `printf` depois do laço, a saída mudaria?
-
-{{pratique}}

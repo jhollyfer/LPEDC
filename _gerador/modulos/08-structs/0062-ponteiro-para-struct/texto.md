@@ -1,33 +1,31 @@
 ## 0062 · Ponteiro para struct
 
-Você passa o cartão do ônibus na catraca e o validador desconta R$ 4,40. Ele
-mexe no saldo do cartão **de verdade**, não de uma cópia. Se descontasse numa
-cópia, você andaria de graça para sempre.
+- **Struct vai por valor**: a função recebe uma cópia de todos os bytes, e
+  mudar a cópia não muda o original. Para alterar, passe o **endereço**
+  (DEITEL; DEITEL, 2011, cap. 10).
+- **`(*c).saldo`**: `*c` chega à struct e `.saldo` ao campo. Os parênteses são
+  obrigatórios: o ponto tem prioridade, e `*c.saldo` vira `*(c.saldo)`
+  (FEOFILOFF, 2009, ap. E).
+- **Seta** `->`: `c->saldo` é o mesmo que `(*c).saldo`. Variável struct usa
+  ponto; ponteiro para struct usa seta (BACKES, 2013, cap. 8).
+- **Struct no heap**: `malloc(sizeof *c)` reserva a struct inteira. Confira o
+  `NULL` e termine com `free` (CELES; RANGEL, 2002).
+- **Struct grande anda por ponteiro**: por valor, uma struct com
+  `double leituras[1000]` copia 8016 bytes a cada chamada, contra 8 do
+  ponteiro. `const Cartao *c` diz que a função só lê (CELES; RANGEL, 2002).
 
-Com struct em função vale o mesmo. Como todo parâmetro em C, a struct vai
-**por valor**: a função recebe uma cópia de todos os bytes, e mudar a cópia
-não muda o original. Para a função alterar a struct de quem chamou, passe o
-**endereço** dela: um `Cartao *`.
+> [!WARNING]
+> `void recarregar(Cartao c, double v) { c.saldo += v; }` compila, roda e não
+> faz nada: recarrega uma cópia. Passe `Cartao *c`. E `return &cartao;` de uma
+> struct local devolve endereço que morre no `return`.
 
-Com um ponteiro `c` para struct, o campo se acessa assim: `(*c).saldo`.
-Primeiro `*c` chega à struct, depois `.saldo` ao campo. Os parênteses são
-obrigatórios: o ponto tem prioridade maior que o `*`, e `*c.saldo` seria
-`*(c.saldo)`, mas `c` é ponteiro e não tem campo.
+{{exemplo}}
 
-O atalho é a **seta** `->`: `c->saldo` é igual a `(*c).saldo`. Variável struct
-usa ponto (`cartao.saldo`); ponteiro para struct usa seta (`c->saldo`).
-
-O ponteiro também leva a struct para o **heap**. `malloc(sizeof *c)` reserva
-um `Cartao` inteiro e devolve o endereço; `sizeof *c` mede o tipo apontado e
-acompanha mudanças. Como todo `malloc`, confira o `NULL` e termine com `free`.
-
-O cartão da Luana mora no heap com R$ 10,00. A variável `c` no `main` guarda
-só o endereço dele, e `cobrar_passagem` recebe uma cópia desse **endereço**,
-não do cartão. As duas setas apontam para o mesmo lugar:
+O cartão de ônibus da Luana mora no heap com R$ 10,00, e cada passagem custa
+R$ 4,40. `cobrar_passagem` recebe uma cópia do **endereço**, não do cartão: as
+duas setas apontam para o mesmo lugar:
 
 {{ideia}}
-
-São três passagens seguidas, e a terceira não passa:
 
 ```c
 #include <stdbool.h>
@@ -92,26 +90,6 @@ O teste de mesa das três chamadas, olhando o cartão no heap:
 | 3ª | 1.20 | sim: devolve false | 1.20 | 2 |
 
 A pergunta do saldo fica na função, mas o laço das três chamadas é do `main`.
-Como a função mexe no original, cada volta enxerga o saldo da anterior:
+Cada volta enxerga o saldo da anterior:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Struct vai por valor. `void recarregar(Cartao c, double v) { c.saldo += v; }`
-> compila, roda e não faz nada: recarrega uma cópia. Passe `Cartao *c`. Outros
-> erros: `*c.saldo` não compila (use `c->saldo`) e `return &cartao;` de uma
-> struct local devolve endereço que morre no `return` (use `malloc` ou devolva
-> a struct por valor).
-
-> [!TIP]
-> Passar por valor copia a struct **a cada chamada**. Um `Cartao` tem 48 bytes,
-> tanto faz; uma struct com `double leituras[1000]` copia 8016 bytes (A124),
-> contra 8 do ponteiro. Struct grande anda por ponteiro, e `const Cartao *c`
-> deixa claro que a função só lê e faz o compilador barrar alterações.
-
-> [!NOTE]
-> **Pergunta para você:** se `cobrar_passagem` recebesse `Cartao c` (sem o
-> `*`) e o `main` passasse `*c`, o que a saída mostraria nas três viagens? E
-> quantas viagens a Luana teria feito no fim?
-
-{{pratique}}

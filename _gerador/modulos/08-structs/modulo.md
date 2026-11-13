@@ -1,18 +1,9 @@
 # Módulo 08 · Tipos compostos
 
-Até aqui, cada variável guardava uma coisa só: um número, um caractere, um
-vetor de itens iguais. Os dados reais vêm em pacotes: um pedido tem tamanho,
-quantidade e preço; um time tem nome, vitórias e empates. Este módulo ensina o
-C a guardar pacotes.
-
-No C, você desenha o pacote byte a byte: decide a ordem dos campos (e paga as
-sobras de alinhamento), se ele anda por cópia ou por ponteiro (e paga a
-cópia) e se dois campos dividem a mesma memória. Você passa a saber o que um
-objeto **custa**.
-
-O módulo fecha no nível do bit: máscaras e flags, o jeito mais compacto de
-guardar sim/não. Struct, ponteiro para struct e `malloc` são as peças das
-estruturas de dados que começam no módulo 10.
+Como guardar dados que vêm em pacote: struct, typedef, vetor de structs,
+ponteiro para struct, enum, union e, no nível do bit, máscaras e flags. Depende
+de ponteiros (módulo 06) e de `malloc`/`realloc` (módulo 07); struct com
+ponteiro é a peça das estruturas de dados que começam no módulo 10.
 
 ## O que você vai aprender
 
@@ -26,13 +17,9 @@ estruturas de dados que começam no módulo 10.
 
 ## Antes de começar
 
-Este módulo usa os anteriores: funções, vetores, strings com `fgets`,
-ponteiros, `malloc`/`realloc`/`free` (módulo 07) e `qsort`. Se `int *p =
-malloc(n * sizeof *p);` não parece natural, revise o 07.
-
-Os comentários com `sizeof` e ordem de bytes valem para um PC de 64 bits com
-Linux (Intel, AMD ou ARM); em outra máquina os números podem mudar. Ao rodar,
-troque a ordem dos campos de uma struct e compare o `sizeof`.
+Revise o módulo 07 se `int *p = malloc(n * sizeof *p);` não parece natural. Os
+valores de `sizeof` e de ordem de bytes valem para um PC de 64 bits com Linux;
+em outra máquina podem mudar.
 
 ```bash
 gcc ~/LPEDC/material/A117.c -o ~/LPEDC/material/A117 && ~/LPEDC/material/A117
@@ -444,6 +431,7 @@ do parâmetro e da expressão inteira, `((3 + 1) * 2)` dá 8. Veja 0004 e 0060.
 - ZIVIANI, N. *Projeto de algoritmos: com implementações em Pascal e C*. 3. ed. rev. e ampl. São Paulo: Cengage Learning, 2010. Registros e tipos definidos pelo programador nas implementações em C.
 - MARTINS, L. G. A. *Apostila de linguagem C: conceitos básicos*. Uberlândia: FACOM/UFU, [s.d.].
 - ANTONELLO, R. *Linguagem C*. 1. ed. Disponível em: <http://www.antonello.com.br>.
+- FEOFILOFF, P. *Algoritmos em linguagem C*. Rio de Janeiro: Elsevier, 2009. Apêndice C: números binários; apêndice E: registros e structs; apêndice J: typedef.
 - KERNIGHAN, B. W.; RITCHIE, D. M. *The C programming language*. 2. ed. Englewood Cliffs: Prentice Hall, 1988. Cap. 6: structures.
 - CPPREFERENCE. *Struct declaration*; *Union declaration*; *Enumerations*; *Bitwise operators*. Disponível em: <https://en.cppreference.com/w/c/language>.
 - LINUX MAN PAGES. *chmod(2)*, *inode(7)* (bits de permissão) e *byteorder(3)* (`htonl`, `ntohl`). Disponível em: <https://man7.org/linux/man-pages/>.

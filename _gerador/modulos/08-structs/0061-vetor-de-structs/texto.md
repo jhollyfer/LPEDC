@@ -1,17 +1,13 @@
 ## 0061 · Vetor de structs
 
-Na tabela do campeonato, cada linha é um time e todas têm as mesmas colunas:
-nome, vitórias, empates, derrotas. Uma linha é uma struct. A tabela inteira é
-um **vetor de structs**.
-
-`Time tabela[4];` são quatro `Time` seguidos na memória: os bytes das structs
-ficam **dentro** do vetor, um time colado no outro.
-
-Para chegar a um campo, escolha a linha e depois a coluna: `tabela[2].nome`. O
-índice vem **antes** do ponto, porque `tabela[2]` é um `Time`, e um `Time` tem
-o campo `nome`. `tabela.nome[2]` não faz sentido: o vetor não tem campos.
-
-A inicialização junta as duas sintaxes, chaves dentro de chaves:
+- **Vetor de structs**: `Time tabela[4];` são quatro `Time` seguidos na
+  memória, com os bytes de cada struct dentro do vetor (BACKES, 2013, cap. 8).
+- **Índice antes do ponto**: `tabela[2].nome`. Primeiro a posição, depois o
+  campo; `tabela.nome[2]` não faz sentido, porque o vetor não tem campos
+  (BACKES, 2013, cap. 8).
+- **Inicialização**: chaves dentro de chaves. Sem o tamanho entre colchetes, o
+  compilador conta, e `sizeof tabela / sizeof tabela[0]` dá a quantidade
+  (DEITEL; DEITEL, 2011, cap. 10).
 
 ```c
 Time tabela[] = {
@@ -20,16 +16,22 @@ Time tabela[] = {
 };
 ```
 
-Sem o tamanho entre colchetes, o compilador conta os elementos. O truque de
-sempre dá a quantidade: `sizeof tabela / sizeof tabela[0]`.
+- **Cópia inteira**: `tabela[i] = tabela[j]` copia o time todo. Ao ordenar,
+  troque as structs, não campo a campo (BACKES, 2013, cap. 8).
+- **Guardar o índice**: o índice diz **onde** está o elemento e permite mexer
+  nele (`tabela[lider].vitorias++`); uma cópia fica desligada da tabela.
 
-São quatro times. O programa percorre o vetor, calcula os pontos de cada um (3
-por vitória, 1 por empate) e guarda o **índice** do melhor até agora.
+> [!WARNING]
+> O C não confere limites: `tabela[4]` num vetor de 4 times lê lixo ou derruba
+> o programa. E trocar só o nome ao ordenar embaralha nomes e pontos.
+
+{{exemplo}}
+
+Quatro times na tabela do campeonato. O programa calcula os pontos de cada um
+(3 por vitória, 1 por empate) e guarda o **índice** do melhor até agora.
 Palmeiras, no índice 2, termina na frente:
 
 {{ideia}}
-
-O código faz esse passeio:
 
 ```c
 #include <stdio.h>
@@ -74,25 +76,7 @@ int main(void) {
 // A tabela ocupa 128 bytes (4 x 32)
 ```
 
-Guardar o índice, e não uma cópia, é de propósito: com ele você sabe **onde**
-está o líder e pode mexer nele (`tabela[lider].vitorias++`). Uma cópia seria
-um time solto, desligado da tabela.
-
-É o padrão "maior até agora" do módulo de laços, comparando um valor
-calculado de cada struct:
+É o padrão "maior até agora" do módulo de laços, comparando um valor calculado
+de cada struct:
 
 {{fluxograma}}
-
-> [!WARNING]
-> `tabela[i] = tabela[j]` copia o time **inteiro**. Use para trocar dois times
-> ao ordenar: troque as structs, não campo a campo (trocar só o nome embaralha
-> nomes e pontos). O C não confere limites: `tabela[4]` num vetor de 4 times
-> lê lixo ou derruba o programa, como num vetor de `int`.
-
-> [!NOTE]
-> **Pergunta para você:** se o Vasco tivesse 9 vitórias, 7 empates e 0
-> derrotas, quem seria o líder? E se houvesse empate em pontos com o
-> Palmeiras, com o `>` do código, quem ficaria: o primeiro ou o último a
-> aparecer na tabela?
-
-{{pratique}}

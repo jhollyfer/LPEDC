@@ -1,19 +1,14 @@
 ## 0059 · Struct
 
-Você pede açaí pelo app: copo M, 2 unidades, R$ 18,50 cada. Para o sistema, o
-pedido é um pacote de três informações de tipos diferentes (um caractere, um
-inteiro e um preço) que andam sempre juntas.
-
-Com variáveis soltas (`char tamanho`, `int quantidade`, `double preco`), dez
-pedidos seriam trinta variáveis, e nada diz que `tamanho3` e `preco3` são do
-mesmo pedido. O C resolve isso com a **struct**.
-
-Uma struct **agrupa variáveis de tipos diferentes sob um nome só**. Cada
-variável de dentro é um **campo** (ou membro). Nos livros e na prova também se
-chama **registro** (ou estrutura). `int`, `char` e `double` são **dados
-simples**: guardam um valor só. Vetor e struct são **dados compostos**: o
-vetor junta valores do mesmo tipo (homogêneo); a struct, de tipos diferentes
-(heterogêneo). Primeiro você descreve o molde:
+- **Struct**: agrupa variáveis de tipos diferentes sob um nome só. Cada
+  variável de dentro é um **campo** (ou membro); livros e provas também dizem
+  **registro** (BACKES, 2013, cap. 8).
+- **Simples e compostos**: `int`, `char` e `double` guardam um valor só. O
+  vetor junta valores do mesmo tipo (homogêneo); a struct, de tipos diferentes
+  (heterogêneo) (CELES; CERQUEIRA; RANGEL, 2016).
+- **Molde**: a declaração cria o tipo `struct pedido` (as duas palavras) e não
+  reserva memória. A memória aparece ao declarar uma variável:
+  `struct pedido p1;` (DEITEL; DEITEL, 2011, cap. 10).
 
 ```c
 struct pedido {
@@ -23,27 +18,33 @@ struct pedido {
 };   // <- esse ; é obrigatório
 ```
 
-Isso cria um **tipo novo**, `struct pedido` (as duas palavras). O molde não
-ocupa memória: é a planta da casa. A memória aparece ao declarar uma
-variável: `struct pedido p1;`.
+- **Inicialização**: chaves com os valores na ordem dos campos,
+  `{'M', 2, 18.50}`, ou com o nome de cada um (C99),
+  `{.tamanho = 'M', .quantidade = 2, .preco = 18.50}`. Campo não citado começa
+  com zero (BACKES, 2013, cap. 8).
+- **Literal composto**: `(struct pedido){'G', 1, 22.00}` cria uma struct na
+  hora, sem variável, útil para passar a uma função (BACKES, 2013).
+- **Ponto**: `p1.quantidade` lê ou muda um campo. Cada campo é uma variável
+  comum do seu tipo: `&p1.quantidade` é `int *` (FEOFILOFF, 2009, ap. E).
+- **Atribuição**: `b = a` copia todos os bytes entre structs do **mesmo tipo**,
+  inclusive vetores de dentro. Struct pode ter outras structs dentro
+  (`cliente.end.cidade`) (BACKES, 2013, cap. 8).
+- **Preenchimento** (*padding*): o compilador alinha os campos. `char` + `int`
+  + `double` somam 13 bytes e o `sizeof` dá 16. Por esses bytes de lixo o C não
+  compara structs com `==` (DEITEL; DEITEL, 2011, cap. 10).
 
-Para inicializar, use chaves com os valores **na ordem dos campos**:
-`{'M', 2, 18.50}`. Ou, mais seguro, com o nome de cada campo (C99):
-`{.tamanho = 'M', .quantidade = 2, .preco = 18.50}`. Campo não citado começa
-com zero. O **literal composto** cria uma struct "na hora", sem variável:
-`(struct pedido){'G', 1, 22.00}`, útil para passar direto a uma função.
+> [!WARNING]
+> `struct pedido p2 = p1;` cria uma **cópia independente**. Não funcionam
+> `p1 == p2` (compare campo a campo) nem `cliente.nome = "Ana";` (use `strcpy`).
+> E o `;` depois da `}` do molde é obrigatório.
 
-O **ponto** lê ou muda um campo: `p1.quantidade`, `p1.preco = 20.0`. Cada
-campo é uma variável comum do seu tipo: `p1.tamanho` é `char`,
-`&p1.quantidade` é `int *`.
+{{exemplo}}
 
-A variável `p1` é um bloco de memória com os três campos em sequência. O
-programa multiplica dois deles, chega a R$ 37,00 e decide o frete. O buraco
-cinza entre `tamanho` e `quantidade` é explicado na dica abaixo:
+O pedido de açaí: copo M, 2 unidades, R$ 18,50 cada. O programa multiplica dois
+campos, chega a R$ 37,00 e decide o frete. O buraco cinza entre `tamanho` e
+`quantidade` é o preenchimento:
 
 {{ideia}}
-
-O mesmo pedido em C:
 
 ```c
 #include <stdio.h>
@@ -77,33 +78,6 @@ int main(void) {
 // O pedido ocupa 16 bytes
 ```
 
-Uma struct pode ter vetores e outras structs dentro (`cliente.end.cidade`,
-ponto encadeado). A atribuição `b = a` funciona entre structs do **mesmo
-tipo** e copia todos os bytes, inclusive os vetores de dentro (vetor sozinho
-não se copia com `=`).
-
 A struct não muda os passos do programa; só leva os dados num pacote:
 
 {{fluxograma}}
-
-> [!WARNING]
-> `struct pedido p2 = p1;` cria uma **cópia independente**: mudar
-> `p2.quantidade` não mexe em `p1`. Também não funcionam `p1 == p2` (não
-> compila; compare campo a campo) e `cliente.nome = "Ana";` (use
-> `strcpy(cliente.nome, "Ana")`). E o `;` depois da `}` do molde é
-> obrigatório: sem ele o erro aparece numa linha seguinte.
-
-> [!TIP]
-> Os campos seguem a ordem declarada, mas não colados. `char` (1) + `int` (4)
-> + `double` (8) somam 13 bytes e o `sizeof` diz 16: o compilador alinha o
-> `int` em múltiplo de 4 e o `double` em múltiplo de 8, pulando 3 bytes de
-> **preenchimento** (*padding*) depois de `tamanho`. `offsetof(struct pedido,
-> preco)`, de `<stddef.h>`, dá 8. Por causa desses bytes de lixo o C não
-> compara structs com `==`.
-
-> [!NOTE]
-> **Pergunta para você:** se você trocar a ordem dos campos para `double
-> preco; int quantidade; char tamanho;`, o `sizeof` muda? E com `char
-> tamanho; double preco; int quantidade;`? Desenhe os bytes antes de rodar.
-
-{{pratique}}
