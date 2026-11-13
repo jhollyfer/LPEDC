@@ -59,29 +59,65 @@ completos.
 
 ### Conceito
 
-- **Grafo**: um conjunto de **vértices** (pontos) e de **arestas** (ligações
-  entre pares). O Cormen escreve **G = (V, E)** e usa V e E também para as
-  quantidades, de onde vêm Θ(V²) e Θ(V + E) (CORMEN et al., 2024, cap. 20).
-- **Diferente da árvore**: toda árvore é um grafo, mas um grafo pode ter
-  ciclos e partes soltas (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 8).
-- **Vocabulário**: **vizinhos** são ligados por aresta; **grau** é quantas
-  arestas tocam o vértice; **caminho** é uma sequência de vizinhos; **ciclo**
-  volta ao começo; **conexo** liga todos a todos (ZIVIANI, 2010, cap. 7).
-- **Dirigido e ponderado**: com mão única, cada aresta é uma seta e o vértice
-  tem **grau de saída** e **de entrada**. Com um número na aresta (minutos,
-  reais), o grafo é **ponderado** (CORMEN et al., 2024, cap. 20).
-- **Soma dos graus**: cada aresta soma 1 no grau de dois vértices, então a
-  soma é o dobro do número de arestas (ZIVIANI, 2010, cap. 7).
-- **Vértice no C**: um número de 0 a V-1; os nomes ficam num vetor à parte
-  (`nomes[2]` é `"Feira"`) (FEOFILOFF, 2009).
+Uma lista põe os dados em fila indiana: cada item tem um seguinte. Uma árvore
+dá a cada item um pai só e não deixa voltar. Muita coisa do mundo não cabe
+nisso. Pense nas ciclovias de uma cidade: o Centro liga na Praia **e** na
+Feira, e a Praia liga na Feira, fechando um triângulo. Ninguém é pai de
+ninguém, e dá para sair de um ponto e voltar a ele por outro caminho.
+
+Para isso existe o **grafo**: um conjunto de **vértices**, que são os pontos,
+e um conjunto de **arestas**, que são as ligações entre pares de vértices. O
+Cormen escreve **G = (V, E)**, com V o conjunto de vértices e E o de arestas, e
+usa as mesmas letras para as quantidades. É daí que vêm expressões como Θ(V²)
+e Θ(V + E) que você vai ver no módulo inteiro (CORMEN et al., 2024, cap. 20).
+Toda árvore é um grafo, mas a recíproca não vale: um grafo pode ter voltas e
+pedaços soltos, sem ligação com o resto (TENENBAUM; LANGSAM; AUGENSTEIN, 1995,
+cap. 8).
+
+O grafo traz um vocabulário próprio, e cada palavra tem um sentido preciso.
+Dois vértices ligados por uma aresta são **vizinhos**, ou **adjacentes**. O
+**grau** de um vértice é quantas arestas tocam nele: se a Feira tem ciclovia
+para Centro, Praia e Parque, o grau dela é 3. Um **caminho** é uma sequência
+de vértices em que cada um é vizinho do seguinte, como Praia, Feira, Parque.
+Um **ciclo** é um caminho que volta ao vértice de onde saiu, como Centro,
+Praia, Feira, Centro. E um grafo é **conexo** quando dá para ir de qualquer
+vértice a qualquer outro (ZIVIANI, 2010, cap. 7).
+
+Os graus guardam uma conta curiosa. Cada aresta toca dois vértices, então ela
+soma 1 no grau de cada um. Somando os graus de todos os vértices, cada aresta
+foi contada duas vezes, e o total é o dobro do número de arestas (ZIVIANI,
+2010, cap. 7). Cinco ciclovias dão soma de graus 10, sem precisar olhar o
+desenho.
+
+Às vezes a ligação tem mão única, como uma rua. Aí o grafo é **dirigido**:
+cada aresta vira uma seta de um vértice para outro, e cada vértice passa a ter
+**grau de saída** (setas que partem dele) e **grau de entrada** (setas que
+chegam). Quando a aresta carrega um número, como minutos de viagem ou reais de
+pedágio, o grafo é **ponderado**, e esse número é o **peso** da aresta
+(CORMEN et al., 2024, cap. 20). As ciclovias valem nos dois sentidos e não têm
+peso: o grafo delas é não dirigido e sem pesos.
+
+No C, cada vértice vira um número de `0` a `V - 1`, porque número serve de
+índice de vetor. Os nomes ficam num vetor à parte: `nomes[2]` é `"Feira"`
+(FEOFILOFF, 2009). Falta guardar as arestas, e há duas formas clássicas.
+
+A **matriz de adjacência** é um `int adj[V][V]` em que `adj[i][j] = 1` quando
+existe aresta de `i` para `j`. Perguntar se `i` e `j` são vizinhos custa O(1),
+uma leitura. Listar os vizinhos de `i` custa O(V), porque é preciso varrer a
+linha inteira. Num grafo não dirigido, a matriz sai simétrica. A **lista de
+adjacência** é um vetor de V listas encadeadas, em que a lista de `i` guarda só
+os vizinhos de `i`. Ela ocupa O(V + E) e lista os vizinhos de `i` no tempo do
+grau dele. A tabela compara as duas:
 
 | Representação | Espaço | "i e j são vizinhos?" | Listar vizinhos de `i` |
 | --- | --- | --- | --- |
 | **matriz** `int adj[V][V]` | O(V²) | O(1) | O(V), a linha inteira |
 | **lista de adjacência** | O(V + E) | o grau de `i` | o grau de `i` |
 
-Com 100 mil vértices, a matriz teria 10¹⁰ casas, quase todas zero. Grafo
-pequeno ou denso, matriz; grande e esparso, lista.
+A escolha depende do tamanho. `int adj[5][5]` são 25 `int` seguidos, 100
+bytes. Com 100 mil vértices, a matriz teria 10¹⁰ casas, uns 40 GB, quase todas
+zero. Grafo pequeno ou **denso** (com muitas arestas), matriz; grafo grande e
+**esparso** (com poucas arestas perto do máximo), lista.
 
 > [!WARNING]
 > Em grafo não dirigido, a aresta entra **nos dois sentidos**: `adj[a][b] = 1`
@@ -362,28 +398,63 @@ gcc ~/LPEDC/material/E653.c ~/LPEDC/material/0109-grafo.c -o ~/LPEDC/material/E6
 
 ### Conceito
 
-- **Distância**: o menor número de arestas num caminho de `s` até `v`. Não
-  confunda com o grau do 0109 (FEOFILOFF, 2009, cap. 5).
-- **Busca em largura** (BFS, *breadth-first search*): explora em ondas a
-  partir da origem. Primeiro quem está a 1 aresta, depois a 2, e assim por
-  diante (CORMEN et al., 2024, cap. 20).
-- **Fila** (0085): quem foi descoberto primeiro sai primeiro. O laço tira `u`
-  da frente e, para cada vizinho `v` novo, faz `dist[v] = dist[u] + 1`,
-  `pai[v] = u` e põe `v` no fim (FEOFILOFF, 2009, cap. 5).
-- **`dist[]` com -1**: marca o "não descoberto" e impede andar em círculos,
-  porque dá para chegar ao mesmo vértice por caminhos diferentes
-  (FEOFILOFF, 2009, cap. 5).
-- **Árvore da BFS**: os pares (`pai[v]`, `v`). Seguir `pai[]` do destino até
-  `-1` dá o caminho mais curto, de trás para frente
-  (CORMEN et al., 2024, cap. 20).
-- **Cores do Cormen**: **branco** é o não descoberto, **cinza** o que está na
-  fila e **preto** o que já saiu; `v.d` é `dist[v]` e `v.π`, `pai[v]`
-  (CORMEN et al., 2024, cap. 20).
-- **Custo**: cada vértice entra na fila uma vez, então `int fila[V]` basta.
-  O(V²) com matriz e O(V + E) com lista (ZIVIANI, 2010, cap. 7).
-- **Só vale sem peso**: o primeiro caminho achado é o mais curto porque toda
-  aresta custa 1. Com pesos, entra Dijkstra (0112) (CORMEN et al., 2024,
-  cap. 22).
+Num grafo, uma pergunta aparece o tempo todo: qual é o jeito mais curto de
+sair de um vértice e chegar a outro? Você quer uma indicação para uma vaga e
+não conhece a recrutadora, mas conhece pessoas que conhecem pessoas. A
+corrente mais curta de apresentações é o caminho com menos arestas entre você
+e ela no grafo de amizades.
+
+Esse número tem nome. A **distância** de um vértice `s` até um vértice `v` é o
+menor número de arestas de um caminho que sai de `s` e chega a `v`
+(FEOFILOFF, 2009, cap. 5). A "conexão de 2º grau" de uma rede profissional é
+distância 2. Não confunda com o grau do assunto 0109, que conta as arestas que
+tocam um vértice.
+
+Para achar todas as distâncias a partir de `s`, existe a **busca em largura**,
+ou BFS (do inglês *breadth-first search*). Pense numa pedra jogada no lago. A
+onda 0 é o próprio `s`. A onda 1 são os vizinhos dele, a uma aresta. A onda 2
+são os vizinhos desses que ainda não apareceram, a duas arestas. E assim por
+diante, sem pular nenhuma camada (CORMEN et al., 2024, cap. 20). Como a busca
+termina uma onda inteira antes de começar a seguinte, a primeira vez que ela
+encontra um vértice é sempre pelo caminho mais curto.
+
+A peça que garante a ordem das ondas é a **fila** do assunto 0085: quem foi
+descoberto primeiro sai primeiro. O laço tira um vértice `u` da frente da fila
+e olha cada vizinho `v`. Se `v` ainda não foi descoberto, a busca faz
+`dist[v] = dist[u] + 1`, anota `pai[v] = u` e põe `v` no fim da fila
+(FEOFILOFF, 2009, cap. 5). Os vértices da onda 1 entram todos antes dos da
+onda 2, então também saem antes.
+
+O vetor `dist[]` faz dois papéis. Ele guarda a distância de cada vértice e,
+com o valor `-1`, marca quem ainda não foi descoberto. A marca impede a busca
+de andar em círculos: num grafo, dá para chegar ao mesmo vértice por caminhos
+diferentes, e sem ela o vértice entraria na fila de novo a cada caminho
+(FEOFILOFF, 2009, cap. 5).
+
+O vetor `pai[]` guarda quem descobriu cada vértice. Os pares (`pai[v]`, `v`)
+formam a **árvore da BFS**, uma árvore com raiz em `s` que contém um caminho
+mais curto até cada vértice alcançado. Para montar o caminho até um destino,
+siga `pai[]` a partir dele até chegar em `-1`, o pai da origem. O caminho sai
+de trás para a frente, e você o inverte na hora de mostrar (CORMEN et al.,
+2024, cap. 20).
+
+O Cormen descreve o mesmo estado com **cores**. **Branco** é o vértice ainda
+não descoberto, o nosso `dist == -1`. **Cinza** é o que já foi descoberto e
+está na fila. **Preto** é o que já saiu da fila e teve todos os vizinhos
+olhados. Na notação dele, `v.d` é o nosso `dist[v]` e `v.π` é o `pai[v]`
+(CORMEN et al., 2024, cap. 20).
+
+Quanto custa? Cada vértice entra na fila no máximo uma vez, então um vetor
+`int fila[V]` basta e tirar da frente é só `fila[inicio++]`, em O(1). O resto
+do custo é olhar vizinhos. Com matriz, cada vértice varre uma linha de V
+casas, e a BFS custa O(V²). Com lista de adjacência, cada aresta é olhada um
+número constante de vezes, e o total cai para O(V + E) (ZIVIANI, 2010, cap. 7).
+
+A BFS tem um limite claro: ela acha o caminho com menos **arestas**, e isso só
+é o mais curto quando toda aresta custa o mesmo. Se as arestas têm pesos, como
+minutos de viagem, um caminho com mais arestas pode sair mais barato. Para
+esse caso entra o algoritmo de Dijkstra, no assunto 0112 (CORMEN et al., 2024,
+cap. 22).
 
 > [!WARNING]
 > Marque o vértice como descoberto **ao pôr na fila**, não ao tirar. Marcando
@@ -696,27 +767,65 @@ Pior distância: 6
 
 ### Conceito
 
-- **Busca em profundidade** (DFS, *depth-first search*): vai o mais fundo
-  possível e, sem nada novo, **volta** à última escolha pendente, o
-  **backtracking** (CORMEN et al., 2024, cap. 20).
-- **Pilha**: a DFS usa a pilha de chamadas (0031). A função marca o vértice e
-  chama a si mesma para cada vizinho não visitado; ao voltar, o frame lembra
-  onde o laço parou (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 8).
-- **`visitado[]`**: obrigatório, como na BFS. Num ciclo, sem a marca, a
-  recursão nunca acaba (ZIVIANI, 2010, cap. 7).
-- **Árvore da DFS e arestas de retorno**: a DFS desce pelas arestas da
-  árvore. Uma aresta que leva a um vértice ainda na pilha é **de retorno**; em
-  grafo não dirigido, achar uma é achar um ciclo (CORMEN et al., 2024,
-  cap. 20).
-- **Relógio do Cormen**: cada vértice ganha tempo de **descoberta** `v.d` e de
-  **término** `v.f`, com cores branco, cinza (na pilha) e preto. `DFS(G)`
-  recomeça de todo vértice branco (CORMEN et al., 2024, cap. 20).
-- **Grafo dirigido**: as outras arestas são de **retorno** (para ancestral
-  cinza: há ciclo), de **avanço** (descendente preto) ou de **cruzamento**
-  (outro preto). A ordem decrescente de `v.f` dá a **ordenação topológica**
-  de um grafo acíclico (CORMEN et al., 2024, cap. 20).
-- **Custo e caminho**: O(V + E) com lista. A DFS **não** dá o caminho mais
-  curto; para isso há a BFS (FEOFILOFF, 2009, cap. 5).
+A BFS do assunto 0110 explora o grafo em ondas, camada por camada. Há outro
+jeito de visitar todos os vértices alcançáveis, e ele é o jeito de quem
+explora uma trilha a pé: escolher um caminho e seguir por ele até não dar mais.
+
+Imagine um parque com várias trilhas saindo da Sede. Você pega a do Lago,
+segue para a Gruta, sobe ao Topo e desce à Bica. Na Bica a trilha acaba. Você
+volta até a última bifurcação que ainda tem trilha nova e segue por ela. Só
+quando tudo daquele lado está visto você volta à Sede e pega a trilha da
+Ponte. Essa é a **busca em profundidade**, ou DFS (do inglês *depth-first
+search*): ir o mais fundo possível e, quando não há nada novo à frente,
+**voltar** à última escolha pendente. Esse movimento de voltar se chama
+**backtracking**, retrocesso (CORMEN et al., 2024, cap. 20).
+
+A BFS precisava de uma fila para lembrar a ordem das ondas. A DFS precisa de
+uma **pilha**, porque quem foi visitado por último é o primeiro a ser retomado.
+O C já tem uma pronta: a pilha de chamadas do assunto 0031. A função recursiva
+marca o vértice como visitado e chama a si mesma para cada vizinho ainda não
+visitado. Quando `dfs(Bica)` termina, a execução volta para `dfs(Topo)`, que
+continua o laço exatamente de onde parou, porque o frame dela guardou o
+vizinho da vez (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 8). Cada frame
+guarda o endereço de retorno, o vértice `u` e a variável do laço. O vetor
+`visitado[]` fica fora das chamadas, global ou passado por ponteiro, para que
+todas enxerguem o mesmo vetor; uma cópia local em cada chamada não marcaria
+nada para as outras.
+
+Esse vetor é obrigatório, como era o `dist[]` com `-1` na BFS. Se Lago, Gruta e
+Topo formam um **ciclo**, sem a marca `dfs(Topo)` chamaria `dfs(Lago)`, que
+chamaria `dfs(Gruta)`, que chamaria `dfs(Topo)` de novo, e a recursão nunca
+acabaria (ZIVIANI, 2010, cap. 7).
+
+As arestas por onde a DFS desce formam a **árvore da DFS**. As outras arestas
+também contam uma história. Uma aresta que leva a um vértice que ainda está
+na pilha de chamadas, como Topo–Lago, é uma **aresta de retorno**: ela aponta
+para um ancestral na árvore. Num grafo não dirigido, achar uma aresta de
+retorno é achar um ciclo (CORMEN et al., 2024, cap. 20).
+
+O Cormen acrescenta um **relógio** à busca. Um contador global sobe a cada
+evento, e cada vértice ganha dois carimbos: o tempo de **descoberta** `v.d`,
+quando a busca chega nele, e o tempo de **término** `v.f`, quando todos os
+vizinhos dele foram resolvidos. As cores acompanham: **branco** é o não
+descoberto, **cinza** o que está na pilha e **preto** o terminado. Contando de
+1 a partir da Sede, a Sede fica com 1/12 e a Bica com 5/6. O procedimento
+`DFS(G)` do livro não para numa origem só: ele recomeça de **todo** vértice
+ainda branco, e o resultado é uma floresta, várias árvores (CORMEN et al.,
+2024, cap. 20).
+
+Num grafo **dirigido**, as arestas fora da árvore se dividem em três tipos. A
+de **retorno** aponta para um ancestral cinza, e a existência dela prova que há
+ciclo. A de **avanço** aponta para um descendente que já ficou preto. A de
+**cruzamento** aponta para um vértice preto de outro ramo. Os tempos de
+término têm um uso famoso: num grafo dirigido sem ciclos, listar os vértices
+em ordem decrescente de `v.f` dá a **ordenação topológica**, uma ordem em que
+toda seta vai da esquerda para a direita, como as tarefas de uma obra em que
+cada uma só começa depois das que ela depende (CORMEN et al., 2024, cap. 20).
+
+Com lista de adjacência, a DFS custa O(V + E), como a BFS. Ela diz quem é
+alcançável e encontra ciclos, mas **não** dá o caminho mais curto: a trilha
+que ela segue até um vértice pode ser longa só porque foi a primeira tentada.
+Para distância, use a BFS (FEOFILOFF, 2009, cap. 5).
 
 > [!WARNING]
 > Recursão funda estoura a pilha (8 MB é o comum no Linux): um labirinto de
@@ -969,26 +1078,55 @@ Sem log -> auth: sem ciclo
 
 ### Conceito
 
-- **Grafo ponderado**: cada aresta tem um **peso** (minutos, km, reais). O
-  menor caminho é o de **menor soma de pesos**, não o de menos arestas; aí a
-  BFS erra (CORMEN et al., 2024, cap. 22).
-- **Dijkstra**: acha os menores caminhos a partir de uma origem quando
-  **nenhum peso é negativo** (DIJKSTRA, 1959).
-- **O que ele guarda**: `dist[v]`, o melhor tempo **conhecido** até `v` (0 na
-  origem, INFINITO no resto); `fixo[v]`, se ele já é definitivo; `anterior[v]`,
-  de onde se chega em `v` (o `pai[]` da BFS) (ZIVIANI, 2010, cap. 7).
-- **Relaxar**: se `dist[u] + peso[u][v] < dist[v]`, atualiza `dist[v]` e
-  `anterior[v]`. No Cormen é `RELAX(u, v, w)`, com `v.d`, `v.π` e o conjunto S
-  dos fixos (CORMEN et al., 2024, cap. 22).
-- **Guloso**: a cada passo fixa o não fixo de menor `dist` e relaxa as arestas
-  dele; a escolha nunca se desfaz. É seguro porque, sem pesos negativos, outro
-  caminho até ele passaria por um vértice de `dist` maior ou igual
-  (CORMEN et al., 2024, cap. 22).
-- **Peso negativo**: o argumento cai e o Dijkstra erra sem avisar. Aí entra o
-  Bellman-Ford (0154), que relaxa todas as arestas V - 1 vezes
-  (CORMEN et al., 2024, cap. 22).
-- **Custo**: com matriz, cada um dos V passos varre V vértices, O(V²). Com
-  lista e **heap** (0102), O((V + E) log V) (CORMEN et al., 2024, cap. 22).
+A BFS acha o caminho com menos arestas. No trânsito, isso não basta. Um
+aplicativo de rotas sabe que ir de Casa até a Padaria pela rua direta leva 4
+minutos, mas que ir de Casa até a Escola leva 1 e da Escola até a Padaria leva
+2. A rua direta parece óbvia, e passar pela Escola dá 3 minutos.
+
+O grafo agora é **ponderado**: cada aresta carrega um **peso**, que pode ser
+minutos, quilômetros ou reais. O custo de um caminho é a soma dos pesos das
+arestas dele, e o caminho mínimo é o de **menor soma**, não o de menos arestas
+(CORMEN et al., 2024, cap. 22). A BFS erra aqui sem avisar, porque ela para no
+primeiro caminho que chega, e o primeiro a chegar é o de menos ruas.
+
+O algoritmo de **Dijkstra** resolve esse problema. A partir de uma origem, ele
+acha o caminho mínimo até todos os outros vértices, desde que **nenhum peso
+seja negativo** (DIJKSTRA, 1959). Ele trabalha com três vetores. `dist[v]`
+guarda o melhor custo **conhecido até agora** da origem até `v`: começa em 0 na
+origem e em INFINITO no resto, que quer dizer "ainda não sei chegar".
+`fixo[v]` diz se esse custo já é definitivo. `anterior[v]` guarda de onde se
+chega em `v` no melhor caminho, com o mesmo papel do `pai[]` da BFS (ZIVIANI,
+2010, cap. 7).
+
+A operação central se chama **relaxar** uma aresta. Você tem `dist[u]` e uma
+aresta de `u` para `v`. Se `dist[u] + peso[u][v] < dist[v]`, passar por `u`
+melhora o caminho até `v`, e você atualiza `dist[v]` com a soma e anota
+`anterior[v] = u`. Se não melhora, nada muda. No Cormen, esse teste é o
+procedimento `RELAX(u, v, w)`, os vetores são os campos `v.d` e `v.π` e os
+vértices fixos formam o conjunto S (CORMEN et al., 2024, cap. 22). No exemplo
+da padaria, `dist[Padaria]` começa em 4 pela rua direta; quando a Escola é
+fixada com 1, relaxar a aresta Escola–Padaria dá 1 + 2 = 3, que é menor, e o
+4 vira 3.
+
+O algoritmo repete um passo só. Entre os vértices não fixos, pega o de menor
+`dist`, marca como fixo e relaxa todas as arestas que saem dele. Ele é
+**guloso**: em cada passo, faz a escolha que parece melhor naquele momento e
+nunca a desfaz. Fixar o menor é seguro por um motivo simples. Qualquer outro
+caminho até esse vértice teria de sair dos fixos por algum vértice não fixo,
+que já tem `dist` maior ou igual. Sem pesos negativos, andar mais só soma, e o
+outro caminho não fica mais barato (CORMEN et al., 2024, cap. 22).
+
+O argumento depende de "andar mais só soma". Com uma aresta de peso negativo,
+um caminho mais longo pode ficar mais barato depois de um vértice já fixado, e
+o Dijkstra devolve uma resposta errada sem dar nenhum sinal. Para esse caso
+existe o algoritmo de Bellman-Ford, no assunto 0154, que relaxa todas as
+arestas V - 1 vezes (CORMEN et al., 2024, cap. 22).
+
+O custo depende de como você acha o menor `dist`. Com matriz de adjacência,
+cada um dos V passos varre os V vértices para achar o menor não fixo e mais V
+para relaxar a linha: O(V²). Com lista de adjacência e um **heap** de mínimo
+(assunto 0102), que entrega o menor em O(log V), o total cai para
+O((V + E) log V) (CORMEN et al., 2024, cap. 22).
 
 > [!WARNING]
 > `INT_MAX + 3` **estoura**: comportamento indefinido em `int` com sinal, que
@@ -1319,23 +1457,43 @@ Belém: sem voo
 
 ### Conceito
 
-- **Um esqueleto, três buscas**: DFS, BFS e Dijkstra usam marcas, `pai[]` e um
-  laço que descobre vizinhos. Muda a **ordem** de saída: pilha, fila ou "menor
-  `dist`" (CORMEN et al., 2024, caps. 20 e 22).
-- **"Menor em quê?"**: com arestas de mesmo custo, a BFS basta, em O(V + E).
-  Com pesos variados, ela erra sem aviso (FEOFILOFF, 2009, cap. 5).
-- **Alcance primeiro**: a DFS diz quem dá para alcançar. Se o destino está
-  fora, não há rota a calcular (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 8).
-- **Árvore geradora mínima**: o conjunto de arestas que liga todos os
-  vértices com a menor soma de pesos (CORMEN et al., 2024, cap. 21).
-- **Prim**: é o Dijkstra com uma linha trocada. Em vez de
-  `dist[u] + custo < dist[v]`, compara só `custo < chave[v]`
-  (CORMEN et al., 2024, cap. 21).
-- **Grafo como struct**: `Grafo` junta vértices, nomes e matriz de km. As
-  funções recebem `const Grafo *`: passa 8 bytes em vez de 328 e promete não
-  mexer no mapa (KERNIGHAN; RITCHIE, 1989).
-- **Inicializador designado** (C99): `{.n = 7, .nomes = {...}}` cita só os
-  campos que quer; o resto, como `km`, começa zerado (ISO/IEC, 2018).
+Uma transportadora com um centro de distribuição e vários pontos de entrega
+faz perguntas diferentes sobre o mesmo mapa. Dá para chegar em todos os
+pontos? Qual rota tem menos trechos? Qual roda menos quilômetros? Como ligar
+todos os pontos com o mínimo de estrada? Cada pergunta pede um algoritmo do
+módulo, e a graça deste assunto é ver que eles são parentes.
+
+Olhe para os três primeiros lado a lado. DFS, BFS e Dijkstra marcam quem já
+foi visto, anotam em `pai[]` de onde cada vértice veio e repetem um laço que
+tira um vértice e descobre os vizinhos dele. O que muda é a **ordem** em que os
+vértices saem: na DFS, sai o mais recente, como numa pilha; na BFS, o mais
+antigo, como numa fila; no Dijkstra, o de menor `dist` (CORMEN et al., 2024,
+caps. 20 e 22). Trocar a estrutura que guarda os pendentes troca o algoritmo.
+
+Antes de calcular rota, convém perguntar se o destino é alcançável. A DFS
+responde isso: tudo o que ela visita a partir do centro de distribuição dá
+para alcançar, e o que fica de fora, como uma ilha que só tem balsa, não tem
+rota nenhuma a calcular (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 8).
+
+Para a rota em si, a pergunta decisiva é "menor em quê?". Se todo trecho custa
+o mesmo, o caminho mínimo é o de menos trechos, e a BFS resolve em O(V + E).
+Se os trechos têm quilometragens diferentes, a BFS ainda devolve um caminho,
+só que o errado, e não avisa (FEOFILOFF, 2009, cap. 5). Aí é Dijkstra.
+
+A última pergunta é de outra natureza. A transportadora não quer ir de um
+ponto a outro; quer escolher estradas que deixem **todos** os pontos ligados
+gastando o mínimo. Esse conjunto de arestas se chama **árvore geradora
+mínima**: geradora porque alcança todos os vértices, árvore porque não tem
+ciclo (um ciclo teria uma estrada sobrando) e mínima porque a soma dos pesos é
+a menor possível (CORMEN et al., 2024, cap. 21).
+
+O algoritmo de **Prim** constrói essa árvore e é quase o Dijkstra. Ele também
+fixa, a cada passo, o vértice não fixo de menor valor e atualiza os vizinhos.
+A diferença está numa linha. O Dijkstra compara o custo do caminho inteiro,
+`dist[u] + custo < dist[v]`. O Prim compara só o custo da aresta que liga `v`
+à árvore, `custo < chave[v]`, porque o que importa é o preço de pendurar `v`
+na árvore, não a distância até a origem (CORMEN et al., 2024, cap. 21). A
+tabela resume quem responde o quê:
 
 | Pergunta | Algoritmo | Estrutura auxiliar |
 | --- | --- | --- |
@@ -1343,6 +1501,17 @@ Belém: sem voo
 | Menor caminho em número de arestas | BFS | fila |
 | Menor caminho em soma de pesos (pesos >= 0) | Dijkstra | vetor `dist` (ou heap) |
 | Ligar todos com o menor custo total | Prim | vetor `chave` |
+
+No código, o mapa vira um tipo. A struct `Grafo` junta o número de vértices,
+os nomes e a matriz de quilômetros, e cada algoritmo é uma função que recebe
+`const Grafo *`. O ponteiro passa 8 bytes em vez de copiar os 328 da struct, e
+o `const` promete que nenhuma função altera o mapa (KERNIGHAN; RITCHIE, 1989).
+Com 1000 vértices a matriz teria 4 MB, e a struct teria de ir para o heap com
+`malloc`.
+
+Para preencher a struct, o exemplo usa um **inicializador designado**, recurso
+do C99: `{.n = 7, .nomes = {...}}` cita pelo nome só os campos que interessam,
+e todo campo não citado, como `km`, começa zerado (ISO/IEC, 2018).
 
 > [!WARNING]
 > Na matriz de pesos, `0` quer dizer "sem aresta", o que só funciona se nenhum

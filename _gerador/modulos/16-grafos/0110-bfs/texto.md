@@ -1,27 +1,62 @@
 ## 0110 · BFS: busca em largura
 
-- **Distância**: o menor número de arestas num caminho de `s` até `v`. Não
-  confunda com o grau do 0109 (FEOFILOFF, 2009, cap. 5).
-- **Busca em largura** (BFS, *breadth-first search*): explora em ondas a
-  partir da origem. Primeiro quem está a 1 aresta, depois a 2, e assim por
-  diante (CORMEN et al., 2024, cap. 20).
-- **Fila** (0085): quem foi descoberto primeiro sai primeiro. O laço tira `u`
-  da frente e, para cada vizinho `v` novo, faz `dist[v] = dist[u] + 1`,
-  `pai[v] = u` e põe `v` no fim (FEOFILOFF, 2009, cap. 5).
-- **`dist[]` com -1**: marca o "não descoberto" e impede andar em círculos,
-  porque dá para chegar ao mesmo vértice por caminhos diferentes
-  (FEOFILOFF, 2009, cap. 5).
-- **Árvore da BFS**: os pares (`pai[v]`, `v`). Seguir `pai[]` do destino até
-  `-1` dá o caminho mais curto, de trás para frente
-  (CORMEN et al., 2024, cap. 20).
-- **Cores do Cormen**: **branco** é o não descoberto, **cinza** o que está na
-  fila e **preto** o que já saiu; `v.d` é `dist[v]` e `v.π`, `pai[v]`
-  (CORMEN et al., 2024, cap. 20).
-- **Custo**: cada vértice entra na fila uma vez, então `int fila[V]` basta.
-  O(V²) com matriz e O(V + E) com lista (ZIVIANI, 2010, cap. 7).
-- **Só vale sem peso**: o primeiro caminho achado é o mais curto porque toda
-  aresta custa 1. Com pesos, entra Dijkstra (0112) (CORMEN et al., 2024,
-  cap. 22).
+Num grafo, uma pergunta aparece o tempo todo: qual é o jeito mais curto de
+sair de um vértice e chegar a outro? Você quer uma indicação para uma vaga e
+não conhece a recrutadora, mas conhece pessoas que conhecem pessoas. A
+corrente mais curta de apresentações é o caminho com menos arestas entre você
+e ela no grafo de amizades.
+
+Esse número tem nome. A **distância** de um vértice `s` até um vértice `v` é o
+menor número de arestas de um caminho que sai de `s` e chega a `v`
+(FEOFILOFF, 2009, cap. 5). A "conexão de 2º grau" de uma rede profissional é
+distância 2. Não confunda com o grau do assunto 0109, que conta as arestas que
+tocam um vértice.
+
+Para achar todas as distâncias a partir de `s`, existe a **busca em largura**,
+ou BFS (do inglês *breadth-first search*). Pense numa pedra jogada no lago. A
+onda 0 é o próprio `s`. A onda 1 são os vizinhos dele, a uma aresta. A onda 2
+são os vizinhos desses que ainda não apareceram, a duas arestas. E assim por
+diante, sem pular nenhuma camada (CORMEN et al., 2024, cap. 20). Como a busca
+termina uma onda inteira antes de começar a seguinte, a primeira vez que ela
+encontra um vértice é sempre pelo caminho mais curto.
+
+A peça que garante a ordem das ondas é a **fila** do assunto 0085: quem foi
+descoberto primeiro sai primeiro. O laço tira um vértice `u` da frente da fila
+e olha cada vizinho `v`. Se `v` ainda não foi descoberto, a busca faz
+`dist[v] = dist[u] + 1`, anota `pai[v] = u` e põe `v` no fim da fila
+(FEOFILOFF, 2009, cap. 5). Os vértices da onda 1 entram todos antes dos da
+onda 2, então também saem antes.
+
+O vetor `dist[]` faz dois papéis. Ele guarda a distância de cada vértice e,
+com o valor `-1`, marca quem ainda não foi descoberto. A marca impede a busca
+de andar em círculos: num grafo, dá para chegar ao mesmo vértice por caminhos
+diferentes, e sem ela o vértice entraria na fila de novo a cada caminho
+(FEOFILOFF, 2009, cap. 5).
+
+O vetor `pai[]` guarda quem descobriu cada vértice. Os pares (`pai[v]`, `v`)
+formam a **árvore da BFS**, uma árvore com raiz em `s` que contém um caminho
+mais curto até cada vértice alcançado. Para montar o caminho até um destino,
+siga `pai[]` a partir dele até chegar em `-1`, o pai da origem. O caminho sai
+de trás para a frente, e você o inverte na hora de mostrar (CORMEN et al.,
+2024, cap. 20).
+
+O Cormen descreve o mesmo estado com **cores**. **Branco** é o vértice ainda
+não descoberto, o nosso `dist == -1`. **Cinza** é o que já foi descoberto e
+está na fila. **Preto** é o que já saiu da fila e teve todos os vizinhos
+olhados. Na notação dele, `v.d` é o nosso `dist[v]` e `v.π` é o `pai[v]`
+(CORMEN et al., 2024, cap. 20).
+
+Quanto custa? Cada vértice entra na fila no máximo uma vez, então um vetor
+`int fila[V]` basta e tirar da frente é só `fila[inicio++]`, em O(1). O resto
+do custo é olhar vizinhos. Com matriz, cada vértice varre uma linha de V
+casas, e a BFS custa O(V²). Com lista de adjacência, cada aresta é olhada um
+número constante de vezes, e o total cai para O(V + E) (ZIVIANI, 2010, cap. 7).
+
+A BFS tem um limite claro: ela acha o caminho com menos **arestas**, e isso só
+é o mais curto quando toda aresta custa o mesmo. Se as arestas têm pesos, como
+minutos de viagem, um caminho com mais arestas pode sair mais barato. Para
+esse caso entra o algoritmo de Dijkstra, no assunto 0112 (CORMEN et al., 2024,
+cap. 22).
 
 > [!WARNING]
 > Marque o vértice como descoberto **ao pôr na fila**, não ao tirar. Marcando

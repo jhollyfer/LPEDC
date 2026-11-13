@@ -1,22 +1,42 @@
 ## 0113 · Juntando tudo: a central de entregas
 
-- **Um esqueleto, três buscas**: DFS, BFS e Dijkstra usam marcas, `pai[]` e um
-  laço que descobre vizinhos. Muda a **ordem** de saída: pilha, fila ou "menor
-  `dist`" (CORMEN et al., 2024, caps. 20 e 22).
-- **"Menor em quê?"**: com arestas de mesmo custo, a BFS basta, em O(V + E).
-  Com pesos variados, ela erra sem aviso (FEOFILOFF, 2009, cap. 5).
-- **Alcance primeiro**: a DFS diz quem dá para alcançar. Se o destino está
-  fora, não há rota a calcular (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 8).
-- **Árvore geradora mínima**: o conjunto de arestas que liga todos os
-  vértices com a menor soma de pesos (CORMEN et al., 2024, cap. 21).
-- **Prim**: é o Dijkstra com uma linha trocada. Em vez de
-  `dist[u] + custo < dist[v]`, compara só `custo < chave[v]`
-  (CORMEN et al., 2024, cap. 21).
-- **Grafo como struct**: `Grafo` junta vértices, nomes e matriz de km. As
-  funções recebem `const Grafo *`: passa 8 bytes em vez de 328 e promete não
-  mexer no mapa (KERNIGHAN; RITCHIE, 1989).
-- **Inicializador designado** (C99): `{.n = 7, .nomes = {...}}` cita só os
-  campos que quer; o resto, como `km`, começa zerado (ISO/IEC, 2018).
+Uma transportadora com um centro de distribuição e vários pontos de entrega
+faz perguntas diferentes sobre o mesmo mapa. Dá para chegar em todos os
+pontos? Qual rota tem menos trechos? Qual roda menos quilômetros? Como ligar
+todos os pontos com o mínimo de estrada? Cada pergunta pede um algoritmo do
+módulo, e a graça deste assunto é ver que eles são parentes.
+
+Olhe para os três primeiros lado a lado. DFS, BFS e Dijkstra marcam quem já
+foi visto, anotam em `pai[]` de onde cada vértice veio e repetem um laço que
+tira um vértice e descobre os vizinhos dele. O que muda é a **ordem** em que os
+vértices saem: na DFS, sai o mais recente, como numa pilha; na BFS, o mais
+antigo, como numa fila; no Dijkstra, o de menor `dist` (CORMEN et al., 2024,
+caps. 20 e 22). Trocar a estrutura que guarda os pendentes troca o algoritmo.
+
+Antes de calcular rota, convém perguntar se o destino é alcançável. A DFS
+responde isso: tudo o que ela visita a partir do centro de distribuição dá
+para alcançar, e o que fica de fora, como uma ilha que só tem balsa, não tem
+rota nenhuma a calcular (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 8).
+
+Para a rota em si, a pergunta decisiva é "menor em quê?". Se todo trecho custa
+o mesmo, o caminho mínimo é o de menos trechos, e a BFS resolve em O(V + E).
+Se os trechos têm quilometragens diferentes, a BFS ainda devolve um caminho,
+só que o errado, e não avisa (FEOFILOFF, 2009, cap. 5). Aí é Dijkstra.
+
+A última pergunta é de outra natureza. A transportadora não quer ir de um
+ponto a outro; quer escolher estradas que deixem **todos** os pontos ligados
+gastando o mínimo. Esse conjunto de arestas se chama **árvore geradora
+mínima**: geradora porque alcança todos os vértices, árvore porque não tem
+ciclo (um ciclo teria uma estrada sobrando) e mínima porque a soma dos pesos é
+a menor possível (CORMEN et al., 2024, cap. 21).
+
+O algoritmo de **Prim** constrói essa árvore e é quase o Dijkstra. Ele também
+fixa, a cada passo, o vértice não fixo de menor valor e atualiza os vizinhos.
+A diferença está numa linha. O Dijkstra compara o custo do caminho inteiro,
+`dist[u] + custo < dist[v]`. O Prim compara só o custo da aresta que liga `v`
+à árvore, `custo < chave[v]`, porque o que importa é o preço de pendurar `v`
+na árvore, não a distância até a origem (CORMEN et al., 2024, cap. 21). A
+tabela resume quem responde o quê:
 
 | Pergunta | Algoritmo | Estrutura auxiliar |
 | --- | --- | --- |
@@ -24,6 +44,17 @@
 | Menor caminho em número de arestas | BFS | fila |
 | Menor caminho em soma de pesos (pesos >= 0) | Dijkstra | vetor `dist` (ou heap) |
 | Ligar todos com o menor custo total | Prim | vetor `chave` |
+
+No código, o mapa vira um tipo. A struct `Grafo` junta o número de vértices,
+os nomes e a matriz de quilômetros, e cada algoritmo é uma função que recebe
+`const Grafo *`. O ponteiro passa 8 bytes em vez de copiar os 328 da struct, e
+o `const` promete que nenhuma função altera o mapa (KERNIGHAN; RITCHIE, 1989).
+Com 1000 vértices a matriz teria 4 MB, e a struct teria de ir para o heap com
+`malloc`.
+
+Para preencher a struct, o exemplo usa um **inicializador designado**, recurso
+do C99: `{.n = 7, .nomes = {...}}` cita pelo nome só os campos que interessam,
+e todo campo não citado, como `km`, começa zerado (ISO/IEC, 2018).
 
 > [!WARNING]
 > Na matriz de pesos, `0` quer dizer "sem aresta", o que só funciona se nenhum

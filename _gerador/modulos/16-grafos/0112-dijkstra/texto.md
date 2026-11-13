@@ -1,25 +1,54 @@
 ## 0112 · Dijkstra: caminho mínimo
 
-- **Grafo ponderado**: cada aresta tem um **peso** (minutos, km, reais). O
-  menor caminho é o de **menor soma de pesos**, não o de menos arestas; aí a
-  BFS erra (CORMEN et al., 2024, cap. 22).
-- **Dijkstra**: acha os menores caminhos a partir de uma origem quando
-  **nenhum peso é negativo** (DIJKSTRA, 1959).
-- **O que ele guarda**: `dist[v]`, o melhor tempo **conhecido** até `v` (0 na
-  origem, INFINITO no resto); `fixo[v]`, se ele já é definitivo; `anterior[v]`,
-  de onde se chega em `v` (o `pai[]` da BFS) (ZIVIANI, 2010, cap. 7).
-- **Relaxar**: se `dist[u] + peso[u][v] < dist[v]`, atualiza `dist[v]` e
-  `anterior[v]`. No Cormen é `RELAX(u, v, w)`, com `v.d`, `v.π` e o conjunto S
-  dos fixos (CORMEN et al., 2024, cap. 22).
-- **Guloso**: a cada passo fixa o não fixo de menor `dist` e relaxa as arestas
-  dele; a escolha nunca se desfaz. É seguro porque, sem pesos negativos, outro
-  caminho até ele passaria por um vértice de `dist` maior ou igual
-  (CORMEN et al., 2024, cap. 22).
-- **Peso negativo**: o argumento cai e o Dijkstra erra sem avisar. Aí entra o
-  Bellman-Ford (0154), que relaxa todas as arestas V - 1 vezes
-  (CORMEN et al., 2024, cap. 22).
-- **Custo**: com matriz, cada um dos V passos varre V vértices, O(V²). Com
-  lista e **heap** (0102), O((V + E) log V) (CORMEN et al., 2024, cap. 22).
+A BFS acha o caminho com menos arestas. No trânsito, isso não basta. Um
+aplicativo de rotas sabe que ir de Casa até a Padaria pela rua direta leva 4
+minutos, mas que ir de Casa até a Escola leva 1 e da Escola até a Padaria leva
+2. A rua direta parece óbvia, e passar pela Escola dá 3 minutos.
+
+O grafo agora é **ponderado**: cada aresta carrega um **peso**, que pode ser
+minutos, quilômetros ou reais. O custo de um caminho é a soma dos pesos das
+arestas dele, e o caminho mínimo é o de **menor soma**, não o de menos arestas
+(CORMEN et al., 2024, cap. 22). A BFS erra aqui sem avisar, porque ela para no
+primeiro caminho que chega, e o primeiro a chegar é o de menos ruas.
+
+O algoritmo de **Dijkstra** resolve esse problema. A partir de uma origem, ele
+acha o caminho mínimo até todos os outros vértices, desde que **nenhum peso
+seja negativo** (DIJKSTRA, 1959). Ele trabalha com três vetores. `dist[v]`
+guarda o melhor custo **conhecido até agora** da origem até `v`: começa em 0 na
+origem e em INFINITO no resto, que quer dizer "ainda não sei chegar".
+`fixo[v]` diz se esse custo já é definitivo. `anterior[v]` guarda de onde se
+chega em `v` no melhor caminho, com o mesmo papel do `pai[]` da BFS (ZIVIANI,
+2010, cap. 7).
+
+A operação central se chama **relaxar** uma aresta. Você tem `dist[u]` e uma
+aresta de `u` para `v`. Se `dist[u] + peso[u][v] < dist[v]`, passar por `u`
+melhora o caminho até `v`, e você atualiza `dist[v]` com a soma e anota
+`anterior[v] = u`. Se não melhora, nada muda. No Cormen, esse teste é o
+procedimento `RELAX(u, v, w)`, os vetores são os campos `v.d` e `v.π` e os
+vértices fixos formam o conjunto S (CORMEN et al., 2024, cap. 22). No exemplo
+da padaria, `dist[Padaria]` começa em 4 pela rua direta; quando a Escola é
+fixada com 1, relaxar a aresta Escola–Padaria dá 1 + 2 = 3, que é menor, e o
+4 vira 3.
+
+O algoritmo repete um passo só. Entre os vértices não fixos, pega o de menor
+`dist`, marca como fixo e relaxa todas as arestas que saem dele. Ele é
+**guloso**: em cada passo, faz a escolha que parece melhor naquele momento e
+nunca a desfaz. Fixar o menor é seguro por um motivo simples. Qualquer outro
+caminho até esse vértice teria de sair dos fixos por algum vértice não fixo,
+que já tem `dist` maior ou igual. Sem pesos negativos, andar mais só soma, e o
+outro caminho não fica mais barato (CORMEN et al., 2024, cap. 22).
+
+O argumento depende de "andar mais só soma". Com uma aresta de peso negativo,
+um caminho mais longo pode ficar mais barato depois de um vértice já fixado, e
+o Dijkstra devolve uma resposta errada sem dar nenhum sinal. Para esse caso
+existe o algoritmo de Bellman-Ford, no assunto 0154, que relaxa todas as
+arestas V - 1 vezes (CORMEN et al., 2024, cap. 22).
+
+O custo depende de como você acha o menor `dist`. Com matriz de adjacência,
+cada um dos V passos varre os V vértices para achar o menor não fixo e mais V
+para relaxar a linha: O(V²). Com lista de adjacência e um **heap** de mínimo
+(assunto 0102), que entrega o menor em O(log V), o total cai para
+O((V + E) log V) (CORMEN et al., 2024, cap. 22).
 
 > [!WARNING]
 > `INT_MAX + 3` **estoura**: comportamento indefinido em `int` com sinal, que
