@@ -1,11 +1,9 @@
 ## 0020 · While
 
-Você quer um celular de R$ 1.000 e guarda R$ 150 por mês. Em quantos meses
-compra? O raciocínio já é um laço: "guardo, confiro se deu; se não deu, guardo
-de novo".
-
-Esse "de novo" é a **repetição**. Em C, a forma mais simples é o **`while`**
-("enquanto"):
+- **Repetição**: rodar o mesmo trecho várias vezes. Cada passada pelo corpo é
+  uma **iteração** (ou volta) (DEITEL; DEITEL, 2011, cap. 3).
+- **`while`** ("enquanto"): **pergunta**, roda o corpo, volta e pergunta de
+  novo. Com a resposta falsa, segue depois da `}` (BACKES, 2013, cap. 5).
 
 ```c
 while (condição) {
@@ -13,32 +11,28 @@ while (condição) {
 }
 ```
 
-O `while` **pergunta**, roda o corpo, volta e **pergunta de novo**. Quando a
-resposta é falsa, pula o corpo e segue na linha depois da `}`. Cada passada
-pelo corpo é uma **iteração** (ou volta).
+- **Teste no início** (pré-teste): como a pergunta vem antes, o corpo pode
+  rodar **zero vezes** (BACKES, 2013, cap. 5).
+- **Quando usar**: não se sabe quantas voltas vão ocorrer, mas se sabe quando
+  parar (CARVALHO, 2010).
+- **Três peças**: a variável da pergunta tem valor **antes** do laço; a
+  pergunta usa essa variável; o corpo **muda** essa variável rumo ao fim
+  (DEITEL; DEITEL, 2011, cap. 3).
+- **Laço infinito**: sem a terceira peça, a pergunta dá sempre a mesma
+  resposta. No terminal, `Ctrl+C` encerra (BACKES, 2013, cap. 5).
 
-Como a pergunta vem **antes** (laço **com teste no início**, ou pré-teste), o
-corpo pode rodar **zero vezes**: com saldo inicial de R$ 1.200, o laço nem
-entra. A condição é um número, e todo valor diferente de zero é verdadeiro
-(assunto 0012).
+> [!WARNING]
+> Um `;` logo depois do `while` acaba com o laço: `while (saldo < meta);` tem
+> corpo **vazio** e o programa trava. Sem chaves, só a **primeira** linha
+> repete, seja qual for o recuo. Use chaves sempre.
 
-Use o `while` quando **não sabe quantas voltas** vão ocorrer, mas sabe quando
-parar ("quando o saldo chegar na meta"). Três coisas precisam existir:
+{{exemplo}}
 
-1. a variável da pergunta tem valor **antes** do laço (`saldo = 0`);
-2. a pergunta usa essa variável (`saldo < meta`);
-3. o corpo **muda** essa variável, chegando mais perto de parar
-   (`saldo = saldo + deposito`).
-
-Sem a terceira, você tem um **laço infinito**: a pergunta dá sempre a mesma
-resposta. No terminal, `Ctrl+C` encerra.
-
-O saldo começa vazio e "saldo < 1000?" responde Sim sete vezes, com um
-depósito a cada Sim. Na oitava, com R$ 1.050, responde Não:
+Um celular de R$ 1.000, guardando R$ 150 por mês. "saldo < 1000?" responde
+Sim sete vezes, com um depósito a cada Sim; na oitava, com R$ 1.050, responde
+Não:
 
 {{ideia}}
-
-O mesmo cofrinho em C:
 
 ```c
 #include <stdio.h>
@@ -82,23 +76,7 @@ perguntas** para **7 voltas**: a última dá Não.
 | 7ª | 900 | Sim | 1050 | 7 |
 | 8ª | 1050 | **Não** | (sai) | 7 |
 
-No fluxograma, a seta de "Mostrar mês e saldo" **volta para o losango**: assim
-a repetição aparece. O caminho verde passa várias vezes pelo Sim e uma pelo
-Não:
+A seta de "Mostrar mês e saldo" **volta para o losango**: assim a repetição
+aparece. O caminho verde passa várias vezes pelo Sim e uma pelo Não:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Um `;` logo depois do `while` acaba com o laço: `while (saldo < meta);` tem
-> corpo **vazio**, o `{ ... }` seguinte nunca é alcançado e o programa trava.
-> Parecido: sem chaves, só a **primeira** linha depois do `while` repete, seja
-> qual for a indentação. O gcc avisa este caso com `-Wmisleading-indentation`
-> (ligado nas flags de estudo), mas o `;` vazio passa calado. Use chaves
-> sempre.
-
-> [!NOTE]
-> **Pergunta para você:** se o depósito fosse R$ 200, quantas voltas o laço
-> daria e quanto sobraria? E se o saldo começasse em R$ 1.000? Responda pelo
-> teste de mesa e depois mude os valores no código acima e rode.
-
-{{pratique}}

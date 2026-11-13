@@ -1,18 +1,10 @@
 # Módulo 03 · Laços
 
-Sequência e decisão você já tem. Falta a **repetição**: somar 10 preços,
-validar uma senha até acertar, desenhar uma tabela, sortear dados até sair
-dupla. Sem laço, você copiaria o mesmo código cem vezes. Com laço, escreve uma
-vez e diz **quando parar**.
-
-O C tem cinco palavras para repetir: `while`, `do...while`, `for`, `break` e
-`continue`. Todo laço é feito à mão, com contador e condição, e exige três
-decisões: como começa, o que muda a cada volta e qual pergunta o termina. Errar
-uma delas dá o laço infinito ou a volta a mais, os bugs mais comuns da
-programação.
-
-O módulo fecha com os **padrões de laço** (contador, acumulador, maior e menor,
-flag e sentinela), que voltam no resto do curso, e com números **aleatórios**.
+A terceira peça de todo algoritmo: a **repetição**. O módulo cobre `while`,
+`do...while`, `for`, `break` e `continue`, laços aninhados, os padrões de laço
+(contador, acumulador, maior/menor, flag e sentinela) e números aleatórios.
+Depende do módulo 01 (`scanf` e seu retorno) e do 02 (`if`, `switch`,
+ternário e `bool`); prepara o 04, de funções.
 
 ## O que você vai aprender
 
@@ -26,12 +18,7 @@ flag e sentinela), que voltam no resto do curso, e com números **aleatórios**.
 
 ## Antes de começar
 
-Este módulo usa o que você viu antes: `scanf` com o retorno conferido (assunto
-0006), `if`, `switch` e o ternário (módulo 02) e `bool` (assunto 0012). Ele
-prepara o módulo 04: o sorteio repetido do craps (0027) vira função lá. Por
-ora não há funções (módulo 04) nem vetores (módulo 05), então tudo cabe no
-`main`.
-
+Ainda não há funções (módulo 04) nem vetores (módulo 05): tudo cabe no `main`.
 Para não digitar a entrada a cada teste, mande-a pelo `printf` do terminal,
 um valor por linha:
 

@@ -1,10 +1,8 @@
 ## 0022 · For
 
-Você comprou uma TV de R$ 1.800 em 6 parcelas de R$ 300 e quer ver o carnê
-inteiro, da parcela 1 à 6. Aqui você **sabe** quantas voltas são antes de
-começar.
-
-Com `while`, o contador aparece em três lugares:
+- **Laço com contador**: tem começo, condição e passo. Com `while`, o contador
+  aparece em três lugares, e esquecer o passo dá laço infinito
+  (DEITEL; DEITEL, 2011, cap. 4).
 
 ```c
 int parcela = 1;              // começa
@@ -14,8 +12,8 @@ while (parcela <= 6) {        // pergunta
 }
 ```
 
-Esquecer o `parcela++` gera um laço infinito. O **`for`** junta começo,
-pergunta e passo numa linha:
+- **`for`**: junta início, condição e passo numa linha
+  (BACKES, 2013, cap. 5).
 
 ```c
 for (int parcela = 1; parcela <= 6; parcela++) {
@@ -23,36 +21,32 @@ for (int parcela = 1; parcela <= 6; parcela++) {
 }
 ```
 
-A ordem de execução não é a da escrita:
+- **Ordem de execução**: o **início** roda uma vez; a **condição** é testada
+  antes de cada volta; depois vem o **corpo**; o **passo** roda no fim da
+  volta e volta para a condição (CARVALHO, 2010).
+- **`for` e `while`**: o `for` é o `while` reorganizado. Use `for` com
+  contador de começo, fim e passo conhecidos; `while` quando só se sabe a
+  condição de parada (KERNIGHAN; RITCHIE, 1988, cap. 3).
+- **Variações**: o `int` declarado no `for` só existe no laço (C99). O passo
+  pode ser qualquer conta (`c += 10`, `x *= 3`), o contador pode ser `char` e
+  a vírgula permite duas variáveis (A044). Partes vazias valem, mas os dois
+  `;` não: `for (;;)` é laço infinito (BACKES, 2013, cap. 5).
+- **Quantas voltas**: `for (i = a; i < b; i++)` dá `b - a`; com `<=`,
+  `b - a + 1` (DEITEL; DEITEL, 2011, cap. 4).
 
-1. **início** (`int parcela = 1`): roda **uma vez**, antes de tudo;
-2. **condição** (`parcela <= 6`): testada antes de cada volta; falsa, o laço
-   acaba;
-3. **corpo**: o que está entre as chaves;
-4. **passo** (`parcela++`): roda **no fim** de cada volta e volta para a
-   condição.
+> [!WARNING]
+> **Erro por um** (*off-by-one*): `for (int p = 1; p < 6; p++)` mostra 5
+> parcelas. Pergunte qual é o **primeiro** e o **último** valor que passa. E
+> contador é sempre inteiro: `for (double x = 0.1; x != 1.0; x += 0.1)` nunca
+> termina.
 
-O `for` é o `while` acima reorganizado; o compilador trata os dois do mesmo
-jeito. Use `for` quando há um **contador** com começo, fim e passo conhecidos;
-`while` quando só se sabe a condição de parada.
+{{exemplo}}
 
-O `int parcela` declarado no `for` só existe dentro do laço (C99 em diante). O
-passo pode ser qualquer conta: `c += 10`, `s--`, `x *= 3`. O contador pode ser
-`char`, porque `char` é número. A vírgula permite duas variáveis:
-`for (int i = 1, j = 9; i < j; i++, j--)`. O exemplo A044 mostra tudo isso.
-Qualquer parte pode ficar vazia, mas os dois `;` são obrigatórios: `for (;;)` é
-um laço infinito de propósito.
-
-Quantas voltas? `for (i = a; i < b; i++)` dá `b - a`. Com `<=`, dá
-`b - a + 1`. De 1 a 6 com `<=`: 6 voltas.
-
-O carnê começa com `parcela = 1` uma vez só, pergunta "parcela <= 6?", roda o
-corpo, dá o passo e volta à pergunta. Na sétima, com `parcela = 7`, a resposta
-é Não:
+Uma TV de R$ 1.800 em 6 parcelas. O carnê começa com `parcela = 1` uma vez
+só, pergunta "parcela <= 6?", roda o corpo, dá o passo e volta à pergunta; na
+sétima, a resposta é Não:
 
 {{ideia}}
-
-O carnê em C:
 
 ```c
 #include <stdio.h>
@@ -81,24 +75,7 @@ int main(void) {
 // Carnê quitado!
 ```
 
-O fluxograma é igual ao de um `while`, porque o `for` só reorganiza o código.
-O passo `parcela++` fica no fim do corpo, e a seta sai dele de volta ao
-losango:
+O fluxograma é igual ao de um `while`: o passo `parcela++` fica no fim do
+corpo, e a seta sai dele de volta ao losango:
 
 {{fluxograma}}
-
-> [!WARNING]
-> O erro mais comum é o **erro por um** (*off-by-one*): uma volta a mais ou a
-> menos. `for (int p = 1; p < 6; p++)` mostra 5 parcelas;
-> `for (int p = 0; p <= 6; p++)` mostra 7. Pergunte: qual é o **primeiro**
-> valor do contador e qual é o **último** que passa pela condição? Outro
-> clássico: controlar o laço com `double`. `for (double x = 0.1; x != 1.0; x
-> += 0.1)` nunca termina, porque 0,1 não é exato em binário e `x` pula o 1,0.
-> Contador é sempre inteiro.
-
-> [!NOTE]
-> **Pergunta para você:** quantas vezes roda `for (int i = 10; i > 0; i -= 3)`
-> e com quais valores de `i`? E qual valor faz a condição dar falso? Responda
-> no papel e depois coloque um `printf` no corpo para conferir.
-
-{{pratique}}

@@ -16,19 +16,11 @@
 > - [ ] Enfrentar os desafios do módulo
 > - [ ] Chefão: resolver as questões de prova do módulo sem consultar
 
-Sequência e decisão você já tem. Falta a **repetição**: somar 10 preços,
-validar uma senha até acertar, desenhar uma tabela, sortear dados até sair
-dupla. Sem laço, você copiaria o mesmo código cem vezes. Com laço, escreve uma
-vez e diz **quando parar**.
-
-O C tem cinco palavras para repetir: `while`, `do...while`, `for`, `break` e
-`continue`. Todo laço é feito à mão, com contador e condição, e exige três
-decisões: como começa, o que muda a cada volta e qual pergunta o termina. Errar
-uma delas dá o laço infinito ou a volta a mais, os bugs mais comuns da
-programação.
-
-O módulo fecha com os **padrões de laço** (contador, acumulador, maior e menor,
-flag e sentinela), que voltam no resto do curso, e com números **aleatórios**.
+A terceira peça de todo algoritmo: a **repetição**. O módulo cobre `while`,
+`do...while`, `for`, `break` e `continue`, laços aninhados, os padrões de laço
+(contador, acumulador, maior/menor, flag e sentinela) e números aleatórios.
+Depende do módulo 01 (`scanf` e seu retorno) e do 02 (`if`, `switch`,
+ternário e `bool`); prepara o 04, de funções.
 
 ## O que você vai aprender
 
@@ -42,12 +34,7 @@ flag e sentinela), que voltam no resto do curso, e com números **aleatórios**.
 
 ## Antes de começar
 
-Este módulo usa o que você viu antes: `scanf` com o retorno conferido (assunto
-0006), `if`, `switch` e o ternário (módulo 02) e `bool` (assunto 0012). Ele
-prepara o módulo 04: o sorteio repetido do craps (0027) vira função lá. Por
-ora não há funções (módulo 04) nem vetores (módulo 05), então tudo cabe no
-`main`.
-
+Ainda não há funções (módulo 04) nem vetores (módulo 05): tudo cabe no `main`.
 Para não digitar a entrada a cada teste, mande-a pelo `printf` do terminal,
 um valor por linha:
 
@@ -72,14 +59,14 @@ ela.
 
 ---
 
-## 0020 · While
+## 1. Conceitos gerais
 
-Você quer um celular de R$ 1.000 e guarda R$ 150 por mês. Em quantos meses
-compra? O raciocínio já é um laço: "guardo, confiro se deu; se não deu, guardo
-de novo".
+### 0020 · While
 
-Esse "de novo" é a **repetição**. Em C, a forma mais simples é o **`while`**
-("enquanto"):
+- **Repetição**: rodar o mesmo trecho várias vezes. Cada passada pelo corpo é
+  uma **iteração** (ou volta) (DEITEL; DEITEL, 2011, cap. 3).
+- **`while`** ("enquanto"): **pergunta**, roda o corpo, volta e pergunta de
+  novo. Com a resposta falsa, segue depois da `}` (BACKES, 2013, cap. 5).
 
 ```c
 while (condição) {
@@ -87,32 +74,237 @@ while (condição) {
 }
 ```
 
-O `while` **pergunta**, roda o corpo, volta e **pergunta de novo**. Quando a
-resposta é falsa, pula o corpo e segue na linha depois da `}`. Cada passada
-pelo corpo é uma **iteração** (ou volta).
+- **Teste no início** (pré-teste): como a pergunta vem antes, o corpo pode
+  rodar **zero vezes** (BACKES, 2013, cap. 5).
+- **Quando usar**: não se sabe quantas voltas vão ocorrer, mas se sabe quando
+  parar (CARVALHO, 2010).
+- **Três peças**: a variável da pergunta tem valor **antes** do laço; a
+  pergunta usa essa variável; o corpo **muda** essa variável rumo ao fim
+  (DEITEL; DEITEL, 2011, cap. 3).
+- **Laço infinito**: sem a terceira peça, a pergunta dá sempre a mesma
+  resposta. No terminal, `Ctrl+C` encerra (BACKES, 2013, cap. 5).
 
-Como a pergunta vem **antes** (laço **com teste no início**, ou pré-teste), o
-corpo pode rodar **zero vezes**: com saldo inicial de R$ 1.200, o laço nem
-entra. A condição é um número, e todo valor diferente de zero é verdadeiro
-(assunto 0012).
+> [!WARNING]
+> Um `;` logo depois do `while` acaba com o laço: `while (saldo < meta);` tem
+> corpo **vazio** e o programa trava. Sem chaves, só a **primeira** linha
+> repete, seja qual for o recuo. Use chaves sempre.
 
-Use o `while` quando **não sabe quantas voltas** vão ocorrer, mas sabe quando
-parar ("quando o saldo chegar na meta"). Três coisas precisam existir:
+### 0021 · Do-while
 
-1. a variável da pergunta tem valor **antes** do laço (`saldo = 0`);
-2. a pergunta usa essa variável (`saldo < meta`);
-3. o corpo **muda** essa variável, chegando mais perto de parar
-   (`saldo = saldo + deposito`).
+- **`do...while`**: **faz primeiro e pergunta depois**. Roda o corpo e testa;
+  se a condição é verdadeira, volta ao começo do corpo
+  (DEITEL; DEITEL, 2011, cap. 4).
 
-Sem a terceira, você tem um **laço infinito**: a pergunta dá sempre a mesma
-resposta. No terminal, `Ctrl+C` encerra.
+```c
+do {
+    // corpo: roda pelo menos uma vez
+} while (condição);   // o ; no fim é obrigatório
+```
 
-O saldo começa vazio e "saldo < 1000?" responde Sim sete vezes, com um
-depósito a cada Sim. Na oitava, com R$ 1.050, responde Não:
+- **Teste no fim** (pós-teste): o corpo roda **uma ou mais vezes**, nunca
+  zero. Dispensa inventar um valor inválido só para entrar no laço
+  (CARVALHO, 2010).
+- **`;` obrigatório** depois do `while (...)` final (BACKES, 2013, cap. 5).
+- **`repita ... até`**: no pseudocódigo da prova, a condição é de **parar**.
+  `repita ... até x > 10` vira `do { ... } while (!(x > 10));`, que é
+  `while (x <= 10)` (DORNELLES F., 1997).
+- **Quando usar**: a primeira volta é obrigatória. Validação de entrada, menu
+  (o A042 faz um caixa eletrônico) e "jogar de novo?"
+  (BACKES, 2013, cap. 5).
+- **Condição de validação**: descreve o valor **inválido**, o que faz repetir:
+  `parcelas < 1 || parcelas > 12` (DEITEL; DEITEL, 2011, cap. 3).
+
+> [!WARNING]
+> A condição é de **continuar**, não de parar. Com
+> `while (parcelas >= 1 && parcelas <= 12)`, o programa repete com o 4 e
+> aceita o 15. Para inverter um `&&`, use De Morgan (0013): `!a || !b`.
+
+### 0022 · For
+
+- **Laço com contador**: tem começo, condição e passo. Com `while`, o contador
+  aparece em três lugares, e esquecer o passo dá laço infinito
+  (DEITEL; DEITEL, 2011, cap. 4).
+
+```c
+int parcela = 1;              // começa
+while (parcela <= 6) {        // pergunta
+    printf("Parcela %d\n", parcela);
+    parcela++;                // passo, lá no fim do corpo
+}
+```
+
+- **`for`**: junta início, condição e passo numa linha
+  (BACKES, 2013, cap. 5).
+
+```c
+for (int parcela = 1; parcela <= 6; parcela++) {
+    printf("Parcela %d\n", parcela);
+}
+```
+
+- **Ordem de execução**: o **início** roda uma vez; a **condição** é testada
+  antes de cada volta; depois vem o **corpo**; o **passo** roda no fim da
+  volta e volta para a condição (CARVALHO, 2010).
+- **`for` e `while`**: o `for` é o `while` reorganizado. Use `for` com
+  contador de começo, fim e passo conhecidos; `while` quando só se sabe a
+  condição de parada (KERNIGHAN; RITCHIE, 1988, cap. 3).
+- **Variações**: o `int` declarado no `for` só existe no laço (C99). O passo
+  pode ser qualquer conta (`c += 10`, `x *= 3`), o contador pode ser `char` e
+  a vírgula permite duas variáveis (A044). Partes vazias valem, mas os dois
+  `;` não: `for (;;)` é laço infinito (BACKES, 2013, cap. 5).
+- **Quantas voltas**: `for (i = a; i < b; i++)` dá `b - a`; com `<=`,
+  `b - a + 1` (DEITEL; DEITEL, 2011, cap. 4).
+
+> [!WARNING]
+> **Erro por um** (*off-by-one*): `for (int p = 1; p < 6; p++)` mostra 5
+> parcelas. Pergunte qual é o **primeiro** e o **último** valor que passa. E
+> contador é sempre inteiro: `for (double x = 0.1; x != 1.0; x += 0.1)` nunca
+> termina.
+
+### 0023 · Break e continue
+
+- **`break`**: sai do laço **na hora** e segue depois da `}`. É o mesmo
+  `break` do `switch` (0018) (DEITEL; DEITEL, 2011, cap. 4).
+- **`continue`**: abandona só a **volta atual**; o resto do corpo é pulado. No
+  `for`, o passo (`i++`) ainda roda antes da pergunta; no `while`, o salto vai
+  direto para a pergunta (DEITEL; DEITEL, 2011, cap. 4).
+- **Dentro de um `if`**: os dois quase sempre aparecem assim, "se acontecer
+  tal coisa, saia" ou "pule" (BACKES, 2013, cap. 5).
+- **`while (1)`** (ou `for (;;)`): condição sempre verdadeira, com um `break`
+  no meio do corpo. Serve quando o motivo de parar só aparece **depois** de
+  ler o dado (KERNIGHAN; RITCHIE, 1988, cap. 3).
+- **Por que parou?** Depois de um laço com `break`, às vezes é preciso saber
+  se saiu pela condição ou pelo `break`. O A046 testa um primo assim.
+- **Só o mais interno**: `break` e `continue` valem para o laço mais próximo.
+  O C não tem `break` com rótulo; existe o `goto`, que deve ser evitado
+  (BACKES, 2013, cap. 5).
+
+> [!WARNING]
+> `continue` num `while` pode pular o passo. Em
+> `while (i < 10) { if (i == 5) continue; printf("%d", i); i++; }`, o `i`
+> fica 5 para sempre. No `for`, o mesmo código funciona, porque o `i++` está
+> no cabeçalho.
+
+### 0024 · Laços aninhados
+
+- **Laço aninhado**: o corpo de um laço contém outro laço inteiro. A cada
+  volta do laço **de fora**, o **de dentro** roda do começo ao fim, como os
+  ponteiros de horas e minutos (BACKES, 2013, cap. 5).
+- **Recomeço**: o contador de dentro volta ao início a cada volta de fora. No
+  `for`, é automático; no `while`, você zera à mão (o E142 mostra o estrago)
+  (BACKES, 2013, cap. 5).
+- **Voltas**: o corpo de dentro roda (voltas de fora) × (voltas de dentro)
+  vezes: 4 × 5 = 20 (DEITEL; DEITEL, 2011, cap. 4).
+- **Limite dependente**: o de dentro pode usar o contador de fora. Com
+  `for (int col = 1; col <= linha; col++)`, sai um triângulo (A048)
+  (DEITEL; DEITEL, 2011, cap. 4).
+- **Custo**: a conta é uma **multiplicação**. Comparar 1.000 clientes com
+  1.000 pedidos dá 1 milhão de comparações, o **O(n²)** do módulo de análise
+  (CELES; CERQUEIRA; RANGEL, 2016).
+- **Nomes**: `fileira` e `poltrona`, `linha` e `coluna`. Com `i` e `j`, é
+  fácil trocar um pelo outro sem perceber.
+
+> [!WARNING]
+> O `printf("\n")` no lugar errado muda o desenho: dentro do laço de dentro,
+> sai uma poltrona por linha; fora dos dois, tudo numa linha. Pergunte: isto
+> acontece uma vez por poltrona, por fileira ou no programa?
+
+### 0025 · Padrões de laço
+
+- **Padrão de laço**: um uso de variável já resolvido milhares de vezes. A
+  variável ganha valor **antes** do laço, muda **dentro** e é usada **depois**
+  (DEITEL; DEITEL, 2011, cap. 3).
+- **Contador e acumulador**: o contador soma 1 a cada volta; o acumulador soma
+  o valor lido. Ambos começam em 0; o acumulador de **produto** começa em 1
+  (DEITEL; DEITEL, 2011, cap. 3).
+- **Maior e menor**: começam com o **primeiro valor lido**, nunca com 0
+  (BACKES, 2013, cap. 5).
+- **Flag**: um `bool` que só sobe. Sem `else flag = false`, senão um valor
+  comum depois do especial apaga a resposta (LEAL, 2016).
+- **Sentinela**: valor que **não pode** ser dado real e só manda parar; não
+  entra em conta nenhuma (DEITEL; DEITEL, 2011, cap. 3).
+- **Leitura antecipada**: lê **antes** do laço e no **fim** do corpo, para a
+  pergunta do `while` olhar sempre um valor recém-lido
+  (DEITEL; DEITEL, 2011, cap. 3).
+- **Média**: `(double) soma / dias`, e só com `dias > 0`. Com 0 / 0, o `double`
+  dá `nan` e o `int` derruba o programa. O acumulador também estoura: para
+  dinheiro, some **centavos** num `long long` (DEITEL; DEITEL, 2011).
+
+| Padrão | Antes do laço | Dentro do laço | Depois |
+| --- | --- | --- | --- |
+| **contador** | `dias = 0` | `dias++` | quantos foram |
+| **acumulador** | `soma = 0` (produto: `= 1`) | `soma += temp` | total, média |
+| **maior/menor** | o **primeiro** valor | `if (temp > maior) maior = temp` | o recorde |
+| **flag** | `calorao = false` | `if (temp >= 35) calorao = true` | aconteceu ou não? |
+| **sentinela** | ler o primeiro valor | ler o próximo, no fim | (o laço para nela) |
+
+> [!WARNING]
+> `maior = 0` falha no inverno: com máximas de -3, -1 e -4 °C, o programa diz
+> que o dia mais quente teve 0 °C. Comece com o **primeiro valor lido** ou com
+> `INT_MIN` (e `INT_MAX` para o menor), de `<limits.h>`.
+
+### 0026 · Aleatórios
+
+- **Pseudoaleatório**: o computador é determinístico. Ele calcula uma
+  sequência por uma conta fixa, cada número a partir do anterior, que parece
+  aleatória (DEITEL; DEITEL, 2011, cap. 5).
+- **`rand()`**, de `<stdlib.h>`: devolve o próximo número, de 0 até
+  **`RAND_MAX`**. O padrão garante pelo menos 32767; na glibc, 2147483647
+  (CPPREFERENCE, s.d.).
+- **`srand(semente)`**: escolhe onde a sequência começa. A mesma **semente**
+  dá sempre a mesma sequência; sem `srand`, vale `srand(1)`
+  (LINUX MAN-PAGES PROJECT, s.d.).
+- **Faixa**: `1 + rand() % 6` dá de 1 a 6; de `a` até `b`,
+  `a + rand() % (b - a + 1)` (DEITEL; DEITEL, 2011, cap. 5).
+- **Semente fixa** (`srand(2022)`): os mesmos números a cada execução, bom para
+  testar e depurar; os exemplos do curso usam assim
+  (DEITEL; DEITEL, 2011, cap. 5).
+- **Semente do relógio** (`srand(time(NULL))`, com `<time.h>`): os segundos
+  desde 1º/1/1970 mudam a cada execução. Um jogo real usa este
+  (DEITEL; DEITEL, 2011, cap. 5).
+- **Não é cofre**: o `rand` nunca serve para senha ou token; quem descobre a
+  semente prevê tudo (LINUX MAN-PAGES PROJECT, s.d.).
+
+> [!WARNING]
+> `srand(time(NULL))` **dentro** do laço reinicia a sequência com a mesma
+> semente a cada volta, no mesmo segundo, e o dado "sorteia" 4, 4, 4... O
+> `srand` vai uma vez, no começo do `main`; quem sorteia é o `rand`.
+
+### 0027 · Juntando tudo
+
+- **Craps**: jogo de dois dados. No **primeiro** lançamento, soma 7 ou 11
+  ganha e 2, 3 ou 12 perde; qualquer outra soma vira o **ponto**. Depois,
+  relança até repetir o ponto (ganha) ou tirar 7 (perde)
+  (DEITEL; DEITEL, 2011, cap. 5).
+- **Peças do módulo**: sorteio com `rand` (0026), `switch` com casos agrupados
+  no primeiro lançamento (0018), `while` nos relançamentos (0020) e um
+  contador de lançamentos (0025).
+- **Variável de situação**: funciona como flag. `0` continua, `1` ganhou, `-1`
+  perdeu; só o corpo do laço sabe o que saiu, então só ele a muda
+  (DEITEL; DEITEL, 2011, cap. 5).
+- **Número mágico**: `1`, `-1` e `0` exigem lembrar o significado. No módulo
+  08, o `enum` dá nomes a eles (`GANHOU`, `PERDEU`, `CONTINUA`).
+- **Repetição de código**: o sorteio `1 + rand() % 6` aparece quatro vezes. No
+  módulo 04 ele vira a função `lancar()`.
+
+> [!WARNING]
+> Confira se o laço **termina**. Com `while (soma != ponto)` e sem o 7, o jogo
+> nunca perde e o programa está errado sem dar erro. Antes de escrever um
+> `while`, diga **todas** as formas de sair dele e confira cada uma.
+
+---
+
+## 2. Exemplos de uso
+
+Cada exemplo compila sozinho. Rode com o comando abaixo dele e compare com a saída no fim do código.
+
+### 0020 · While
+
+Um celular de R$ 1.000, guardando R$ 150 por mês. "saldo < 1000?" responde
+Sim sete vezes, com um depósito a cada Sim; na oitava, com R$ 1.050, responde
+Não:
 
 <p align="center"><img src="material/0020-ideia.svg" alt="Diagrama da ideia: While" width="858"></p>
-
-O mesmo cofrinho em C:
 
 ```c
 #include <stdio.h>
@@ -143,7 +335,7 @@ int main(void) {
 // Meta batida em 7 meses. Sobra R$ 50.00
 ```
 
-### Passo a passo
+#### Passo a passo
 
 No teste de mesa (uma linha por pergunta, uma coluna por variável), são **8
 perguntas** para **7 voltas**: a última dá Não.
@@ -156,26 +348,10 @@ perguntas** para **7 voltas**: a última dá Não.
 | 7ª | 900 | Sim | 1050 | 7 |
 | 8ª | 1050 | **Não** | (sai) | 7 |
 
-No fluxograma, a seta de "Mostrar mês e saldo" **volta para o losango**: assim
-a repetição aparece. O caminho verde passa várias vezes pelo Sim e uma pelo
-Não:
+A seta de "Mostrar mês e saldo" **volta para o losango**: assim a repetição
+aparece. O caminho verde passa várias vezes pelo Sim e uma pelo Não:
 
 <p align="center"><img src="material/0020-fluxograma.svg" alt="Fluxograma: While" width="581"></p>
-
-> [!WARNING]
-> Um `;` logo depois do `while` acaba com o laço: `while (saldo < meta);` tem
-> corpo **vazio**, o `{ ... }` seguinte nunca é alcançado e o programa trava.
-> Parecido: sem chaves, só a **primeira** linha depois do `while` repete, seja
-> qual for a indentação. O gcc avisa este caso com `-Wmisleading-indentation`
-> (ligado nas flags de estudo), mas o `;` vazio passa calado. Use chaves
-> sempre.
-
-> [!NOTE]
-> **Pergunta para você:** se o depósito fosse R$ 200, quantas voltas o laço
-> daria e quanto sobraria? E se o saldo começasse em R$ 1.000? Responda pelo
-> teste de mesa e depois mude os valores no código acima e rode.
-
-### Hora de praticar
 
 **Exemplo A039 · Dividindo pizzas sem usar a divisão**
 
@@ -254,128 +430,13 @@ int main(void) {
 gcc ~/LPEDC/material/A040.c -o ~/LPEDC/material/A040 && ~/LPEDC/material/A040
 ```
 
-#### Exercícios
+### 0021 · Do-while
 
-**Exercício E116** · ★☆☆
-
-Escreva um programa que mostre, com um while, os múltiplos de 7 menores que
-50, todos na mesma linha e separados por espaço.
-
-
-```text
-Saída esperada:
-7 14 21 28 35 42 49
-```
-
-```bash
-gcc ~/LPEDC/material/E116.c -o ~/LPEDC/material/E116 && ~/LPEDC/material/E116
-```
-
-**Exercício E117** · ★★☆
-
-A caixa d'água tem 1000 litros e a casa gasta 180 litros por dia. Escreva um
-programa com um while que diz para quantos dias COMPLETOS a água dura e
-quantos litros sobram depois deles. Use as variáveis litros, consumo e dias.
-
-
-```text
-Saída esperada:
-Dá para 5 dias. Sobram 100 litros.
-```
-
-```bash
-gcc ~/LPEDC/material/E117.c -o ~/LPEDC/material/E117 && ~/LPEDC/material/E117
-```
-
-**Exercício E118** · ★★☆
-
-Você aplica R$ 1000.00 num investimento que rende 1% ao mês (juros sobre
-juros: todo mês o saldo é multiplicado por 1.01). Em quantos meses o saldo
-passa de R$ 1500.00? Mostre os meses e o saldo final com 2 casas.
-
-
-```text
-Saída esperada:
-Passou de R$ 1500.00 em 41 meses.
-Saldo: R$ 1503.75
-```
-
-```bash
-gcc ~/LPEDC/material/E118.c -o ~/LPEDC/material/E118 && ~/LPEDC/material/E118
-```
-
-**Exercício E120** · ★★★
-
-Escreva um programa com três laços while, um depois do outro, cada um numa
-linha da saída. A linha começa com a letra do trecho, mostra os valores que o
-corpo imprime e termina com o número de voltas e o valor final da variável
-(use um contador por trecho):
-
-
-```text
-A: int i = 0; while (i++ < 5) mostra i
-B: int n = 100; while (n > 1) divide n por 3 e mostra o n novo
-C: int k = 10; while (k < 10) soma 1 em k
-```
-
-
-
-```text
-Saída esperada:
-A: 1 2 3 4 5 | voltas 5, i final 6
-B: 33 11 3 1 | voltas 4, n final 1
-C: | voltas 0, k final 10
-```
-
-```bash
-gcc ~/LPEDC/material/E120.c -o ~/LPEDC/material/E120 && ~/LPEDC/material/E120
-```
-
----
-
-## 0021 · Do-while
-
-A geladeira custa R$ 1.200 e o app pergunta: "em quantas parcelas (1 a 12)?".
-Você digita 15, ele recusa e pergunta de novo. A pergunta **tem** que aparecer
-pelo menos uma vez.
-
-Com o `while`, você precisaria inventar um valor inválido só para entrar no
-laço (`parcelas = 0`). O **`do...while`** evita o truque: **faz primeiro e
-pergunta depois**.
-
-```c
-do {
-    // corpo: roda pelo menos uma vez
-} while (condição);   // o ; no fim é obrigatório
-```
-
-Roda o corpo e testa a condição; se verdadeira, volta ao começo do corpo. O
-corpo roda **uma ou mais vezes**, nunca zero. É o laço **com teste no fim**
-(pós-teste).
-
-No pseudocódigo da prova, `repita ... até condição` também testa no fim, mas a
-condição é de **parar**: `repita ... até x > 10` vira
-`do { ... } while (!(x > 10));`, ou seja, `while (x <= 10)`.
-
-Use quando a primeira volta é obrigatória:
-
-- **validação de entrada**: pergunte e repita enquanto a resposta for
-  inválida;
-- **menu**: mostre as opções, execute a escolhida e repita até "sair" (o
-  exemplo A042 faz um caixa eletrônico);
-- **"jogar de novo?"**: a primeira partida sempre acontece.
-
-A condição descreve quando **repetir**. Numa validação, descreve o valor
-**inválido**: `parcelas < 1 || parcelas > 12`.
-
-No exemplo, a pessoa digita 0, 15 e 4. Os dois primeiros caem fora da faixa:
-"fora de 1 a 12?" responde Sim e o programa pergunta de novo. O 4 está dentro,
-a resposta é Não e o programa segue:
+A geladeira de R$ 1.200 em 1 a 12 parcelas. A pessoa digita 0, 15 e 4: os
+dois primeiros caem fora da faixa e o programa pergunta de novo; o 4 passa. O
+`if` em volta do `scanf` confere se chegou um número (0006):
 
 <p align="center"><img src="material/0021-ideia.svg" alt="Diagrama da ideia: Do-while" width="858"></p>
-
-O mesmo app em C. O `if` em volta do `scanf` confere se chegou um número
-(assunto 0006):
 
 ```c
 #include <stdio.h>
@@ -401,27 +462,10 @@ int main(void) {
 // 4x de R$ 300.00
 ```
 
-A leitura vem **antes** do losango. A seta do Sim sai do losango e volta ao
-começo do corpo, "Mostrar a pergunta". No `while` (assunto 0020) a seta
-voltava ao losango, que abria o laço; aqui ele fecha. O caminho verde passa
-três vezes pelo losango: duas pelo Sim e uma pelo Não:
+A leitura vem **antes** do losango, e a seta do Sim volta ao começo do corpo.
+No `while` o losango abria o laço; aqui ele fecha:
 
 <p align="center"><img src="material/0021-fluxograma.svg" alt="Fluxograma: Do-while" width="392"></p>
-
-> [!WARNING]
-> A condição é de **continuar**, não de parar. Quem escreve
-> `while (parcelas >= 1 && parcelas <= 12)` inverte o programa: repete com o 4
-> e aceita o 15. Leia em voz alta: "faça isso **enquanto** ...". Para inverter
-> uma condição com `&&`, use De Morgan (assunto 0013): o contrário de `a && b`
-> é `!a || !b`.
-
-> [!NOTE]
-> **Pergunta para você:** e se você apagar o `if` em volta do `scanf` e digitar
-> `x`? O `scanf` não consegue ler um número, devolve 0, deixa o `x` no buffer e
-> não muda `parcelas`. O que acontece na próxima volta? Preveja e depois teste
-> no código acima (se travar, `Ctrl+C`).
-
-### Hora de praticar
 
 **Exemplo A041 · Quantos dígitos tem o zero?**
 
@@ -530,188 +574,13 @@ int main(void) {
 gcc ~/LPEDC/material/A042.c -o ~/LPEDC/material/A042 && ~/LPEDC/material/A042
 ```
 
-#### Exercícios
+### 0022 · For
 
-**Exercício E122** · ★☆☆
-
-Escreva um programa com três trechos, um por linha de saída. Cada linha
-mostra os valores impressos pelo trecho e termina com o valor final da
-variável:
-
-
-```text
-A: n = 10; while (n < 5) mostra n e soma 1
-B: m = 10; do { mostra m e soma 1 } while (m < 5);
-C: k = 10; o mesmo que o B, mas escrito com while (sem do-while)
-```
-
-
-
-```text
-Saída esperada:
-| A terminou com n = 10
-10 | B terminou com m = 11
-10 | C terminou com k = 11
-```
-
-```bash
-gcc ~/LPEDC/material/E122.c -o ~/LPEDC/material/E122 && ~/LPEDC/material/E122
-```
-
-**Exercício E123** · ★★☆
-
-No caixa da padaria, a atendente digita o preço de cada item e o sistema
-pergunta "Mais algum item? (s/n)". Escreva o programa com do-while: lê um
-preço ("Preço:"), soma, pergunta e repete enquanto a resposta for s ou S.
-No fim, mostra quantos itens e o total com 2 casas.
-Cada pedido de leitura termina com quebra de linha (\n).
-
-
-```text
-Entrada:
-12.50
-s
-7.00
-S
-3.25
-n
-```
-
-
-
-```text
-Saída esperada:
-Preço:
-Mais algum item? (s/n)
-Preço:
-Mais algum item? (s/n)
-Preço:
-Mais algum item? (s/n)
-Itens: 3
-Total: R$ 22.75
-```
-
-```bash
-gcc ~/LPEDC/material/E123.c -o ~/LPEDC/material/E123 && ~/LPEDC/material/E123
-```
-
-**Exercício E124** · ★★☆
-
-O totem do cinema oferece 3 sessões. Escreva o programa com do-while que
-pergunta "Sessão (1, 2 ou 3):" e repete a pergunta enquanto a opção for
-inválida. Quando a opção for válida, mostra "Sessão N escolhida.".
-Cada pedido de leitura termina com quebra de linha (\n).
-
-
-```text
-Entrada:
-7
-2
-```
-
-
-
-```text
-Saída esperada:
-Sessão (1, 2 ou 3):
-Sessão (1, 2 ou 3):
-Sessão 2 escolhida.
-```
-
-```bash
-gcc ~/LPEDC/material/E124.c -o ~/LPEDC/material/E124 && ~/LPEDC/material/E124
-```
-
-**Exercício E125** · ★★★
-
-A senha do cartão é 4321 e a pessoa tem 3 tentativas. Escreva o programa: lê
-a senha com do-while ("Senha:"), conta as tentativas e para quando acertar
-OU quando acabarem as tentativas. No fim, diz "Senha correta na tentativa N."
-ou, se errou as três, "Cartão bloqueado.".
-Cada pedido de leitura termina com quebra de linha (\n).
-
-
-```text
-Entrada:
-1111
-2222
-4321
-```
-
-
-
-```text
-Saída esperada:
-Senha:
-Senha:
-Senha:
-Senha correta na tentativa 3.
-```
-
-
-Com as entradas 1111, 2222 e 3333, a última linha da saída é "Cartão bloqueado.".
-
-```bash
-gcc ~/LPEDC/material/E125.c -o ~/LPEDC/material/E125 && ~/LPEDC/material/E125
-```
-
----
-
-## 0022 · For
-
-Você comprou uma TV de R$ 1.800 em 6 parcelas de R$ 300 e quer ver o carnê
-inteiro, da parcela 1 à 6. Aqui você **sabe** quantas voltas são antes de
-começar.
-
-Com `while`, o contador aparece em três lugares:
-
-```c
-int parcela = 1;              // começa
-while (parcela <= 6) {        // pergunta
-    printf("Parcela %d\n", parcela);
-    parcela++;                // passo, lá no fim do corpo
-}
-```
-
-Esquecer o `parcela++` gera um laço infinito. O **`for`** junta começo,
-pergunta e passo numa linha:
-
-```c
-for (int parcela = 1; parcela <= 6; parcela++) {
-    printf("Parcela %d\n", parcela);
-}
-```
-
-A ordem de execução não é a da escrita:
-
-1. **início** (`int parcela = 1`): roda **uma vez**, antes de tudo;
-2. **condição** (`parcela <= 6`): testada antes de cada volta; falsa, o laço
-   acaba;
-3. **corpo**: o que está entre as chaves;
-4. **passo** (`parcela++`): roda **no fim** de cada volta e volta para a
-   condição.
-
-O `for` é o `while` acima reorganizado; o compilador trata os dois do mesmo
-jeito. Use `for` quando há um **contador** com começo, fim e passo conhecidos;
-`while` quando só se sabe a condição de parada.
-
-O `int parcela` declarado no `for` só existe dentro do laço (C99 em diante). O
-passo pode ser qualquer conta: `c += 10`, `s--`, `x *= 3`. O contador pode ser
-`char`, porque `char` é número. A vírgula permite duas variáveis:
-`for (int i = 1, j = 9; i < j; i++, j--)`. O exemplo A044 mostra tudo isso.
-Qualquer parte pode ficar vazia, mas os dois `;` são obrigatórios: `for (;;)` é
-um laço infinito de propósito.
-
-Quantas voltas? `for (i = a; i < b; i++)` dá `b - a`. Com `<=`, dá
-`b - a + 1`. De 1 a 6 com `<=`: 6 voltas.
-
-O carnê começa com `parcela = 1` uma vez só, pergunta "parcela <= 6?", roda o
-corpo, dá o passo e volta à pergunta. Na sétima, com `parcela = 7`, a resposta
-é Não:
+Uma TV de R$ 1.800 em 6 parcelas. O carnê começa com `parcela = 1` uma vez
+só, pergunta "parcela <= 6?", roda o corpo, dá o passo e volta à pergunta; na
+sétima, a resposta é Não:
 
 <p align="center"><img src="material/0022-ideia.svg" alt="Diagrama da ideia: For" width="858"></p>
-
-O carnê em C:
 
 ```c
 #include <stdio.h>
@@ -740,27 +609,10 @@ int main(void) {
 // Carnê quitado!
 ```
 
-O fluxograma é igual ao de um `while`, porque o `for` só reorganiza o código.
-O passo `parcela++` fica no fim do corpo, e a seta sai dele de volta ao
-losango:
+O fluxograma é igual ao de um `while`: o passo `parcela++` fica no fim do
+corpo, e a seta sai dele de volta ao losango:
 
 <p align="center"><img src="material/0022-fluxograma.svg" alt="Fluxograma: For" width="608"></p>
-
-> [!WARNING]
-> O erro mais comum é o **erro por um** (*off-by-one*): uma volta a mais ou a
-> menos. `for (int p = 1; p < 6; p++)` mostra 5 parcelas;
-> `for (int p = 0; p <= 6; p++)` mostra 7. Pergunte: qual é o **primeiro**
-> valor do contador e qual é o **último** que passa pela condição? Outro
-> clássico: controlar o laço com `double`. `for (double x = 0.1; x != 1.0; x
-> += 0.1)` nunca termina, porque 0,1 não é exato em binário e `x` pula o 1,0.
-> Contador é sempre inteiro.
-
-> [!NOTE]
-> **Pergunta para você:** quantas vezes roda `for (int i = 10; i > 0; i -= 3)`
-> e com quais valores de `i`? E qual valor faz a condição dar falso? Responda
-> no papel e depois coloque um `printf` no corpo para conferir.
-
-### Hora de praticar
 
 **Exemplo A043 · Postes e vãos: o erro por um na cerca**
 
@@ -847,142 +699,13 @@ int main(void) {
 gcc ~/LPEDC/material/A044.c -o ~/LPEDC/material/A044 && ~/LPEDC/material/A044
 ```
 
-#### Exercícios
+### 0023 · Break e continue
 
-**Exercício E128** · ★☆☆
-
-Escreva um programa com os quatro laços abaixo, um depois do outro. Cada
-um mostra os valores de x numa linha que começa com a letra do laço e, no
-fim da linha, quantas voltas ele deu (use um contador para cada laço):
-
-
-```text
-a) for (int x = 3; x <= 20; x += 4)
-b) for (int x = 50; x > 30; x -= 6)
-c) for (int x = 1; x >= 10; x++)
-d) for (int x = 1; x < 100; x *= 3)
-```
-
-
-
-```text
-Saída esperada:
-a) 3 7 11 15 19 (5 voltas)
-b) 50 44 38 32 (4 voltas)
-c) (0 voltas)
-d) 1 3 9 27 81 (5 voltas)
-```
-
-```bash
-gcc ~/LPEDC/material/E128.c -o ~/LPEDC/material/E128 && ~/LPEDC/material/E128
-```
-
-**Exercício E129** · ★★☆
-
-Você aplica R$ 2000.00 num CDB que rende 0,8% ao mês. Mostre o saldo mês a
-mês durante 12 meses (todo mês o saldo é multiplicado por 1.008). No fim,
-mostre o resultado da fórmula dos juros compostos,
-saldo = 2000 * 1.008 elevado a 12, usando pow (assunto 0010).
-
-
-```text
-Saída esperada:
-Mês  1: R$ 2016.00
-Mês  2: R$ 2032.13
-Mês  3: R$ 2048.39
-Mês  4: R$ 2064.77
-Mês  5: R$ 2081.29
-Mês  6: R$ 2097.94
-Mês  7: R$ 2114.72
-Mês  8: R$ 2131.64
-Mês  9: R$ 2148.70
-Mês 10: R$ 2165.88
-Mês 11: R$ 2183.21
-Mês 12: R$ 2200.68
-Pela fórmula: R$ 2200.68
-```
-
-```bash
-gcc ~/LPEDC/material/E129.c -o ~/LPEDC/material/E129 -lm && ~/LPEDC/material/E129
-```
-
-**Exercício E130** · ★★☆
-
-O treino manda fazer 5 séries de flexões. Escreva um programa com um for que
-mostra "Série 1" até "Série 5", uma por linha.
-
-
-```text
-Saída esperada:
-Série 1
-Série 2
-Série 3
-Série 4
-Série 5
-```
-
-```bash
-gcc ~/LPEDC/material/E130.c -o ~/LPEDC/material/E130 && ~/LPEDC/material/E130
-```
-
-**Exercício E131** · ★★★
-
-Dá para calcular pi com uma soma infinita (série de Leibniz):
-
-
-```text
-pi = 4/1 - 4/3 + 4/5 - 4/7 + 4/9 - ...
-```
-
-
-Escreva um programa com um for que soma os primeiros 1000 termos e mostra o
-resultado com 6 casas.
-
-
-```text
-Saída esperada:
-pi ~ 3.140593
-```
-
-```bash
-gcc ~/LPEDC/material/E131.c -o ~/LPEDC/material/E131 && ~/LPEDC/material/E131
-```
-
----
-
-## 0023 · Break e continue
-
-No caixa do mercado, a atendente passa os produtos um a um. Se o leitor falha
-e marca preço negativo, ela passa de novo. Quando a compra acaba, digita 0 e
-fecha a conta. São dois atalhos na mesma repetição: "pula este" e "para tudo".
-
-Em C, são o **`break`** e o **`continue`**:
-
-- **`break`**: sai do laço **na hora**. O programa segue depois da `}` do
-  laço. É o mesmo `break` do `switch` (assunto 0018).
-- **`continue`**: abandona só a **volta atual**. O resto do corpo é pulado e o
-  laço segue para a próxima pergunta. No `for`, o passo (`i++`) ainda roda
-  antes da pergunta; no `while`, o salto vai direto para a pergunta.
-
-Os dois quase sempre aparecem dentro de um `if`: "se acontecer tal coisa,
-saia" ou "se acontecer tal coisa, pule".
-
-O `break` cria o laço **`while (1)`** (ou `for (;;)`): a condição é sempre
-verdadeira e um `break` no meio do corpo decide a saída. Serve quando o motivo
-de parar só aparece **depois** de ler o dado, como no caixa: você lê o preço e
-só então descobre que é 0.
-
-Depois de um laço com `break`, às vezes é preciso saber **por que** ele parou:
-pela condição ou pelo `break`? O exemplo A046 testa se um número é primo
-assim: se o laço chegou ao fim sem achar divisor, é primo.
-
-A compra do exemplo tem 12,90, uma leitura com erro (-1), 8,50, 4,00 e, para
+No caixa do mercado entram 12,90, uma leitura com erro (-1), 8,50, 4,00 e, para
 fechar, 0. O -1 cai no `continue` e volta direto à leitura, sem passar pela
-soma. O 0 cai no `break` e sai do laço:
+soma; o 0 cai no `break` e sai do laço:
 
 <p align="center"><img src="material/0023-ideia.svg" alt="Diagrama da ideia: Break e continue" width="858"></p>
-
-O caixa em C:
 
 ```c
 #include <stdio.h>
@@ -1024,32 +747,11 @@ int main(void) {
 // Total: R$ 25.40
 ```
 
-O laço tem **duas** setas de volta para "Ler preço". Uma sai do losango
-"preço < 0?" pelo Sim: é o `continue`, que pula a soma. A outra sai do fim
-normal do corpo. A **única** saída é o Sim de "preço == 0?", o `break`:
+O laço tem **duas** setas de volta para "Ler preço": a do `continue`, que pula
+a soma, e a do fim normal do corpo. A **única** saída é o Sim de
+"preço == 0?", o `break`:
 
 <p align="center"><img src="material/0023-fluxograma.svg" alt="Fluxograma: Break e continue" width="726"></p>
-
-> [!WARNING]
-> `continue` num `while` pode pular o passo. Em
-> `while (i < 10) { if (i == 5) continue; printf("%d", i); i++; }`, quando `i`
-> chega a 5, o `continue` volta à pergunta **sem** passar pelo `i++`: `i` fica
-> 5 para sempre e o laço é infinito. No `for`, o mesmo código funciona, porque
-> o passo `i++` fica no cabeçalho e roda mesmo com `continue`. É a única
-> diferença real entre um `for` e o `while` equivalente.
-
-> [!TIP]
-> `break` e `continue` valem só para o laço **mais interno**. O C não tem
-> `break` com rótulo para sair de dois laços de uma vez; existe o `goto`, que
-> deve ser evitado.
-
-> [!NOTE]
-> **Pergunta para você:** se o primeiro preço digitado for 0, o que aparece na
-> tela? E se o primeiro for uma letra? Siga o código com o dedo e depois
-> teste: salve o código acima como `caixa.c`, compile com o gcc e rode
-> `printf '0\n' | ./caixa`.
-
-### Hora de praticar
 
 **Exemplo A045 · Poltronas da excursão: continue com o passo no topo**
 
@@ -1131,171 +833,13 @@ int main(void) {
 gcc ~/LPEDC/material/A046.c -o ~/LPEDC/material/A046 && ~/LPEDC/material/A046
 ```
 
-#### Exercícios
+### 0024 · Laços aninhados
 
-**Exercício E134** · ★☆☆
-
-Escreva um programa com um for de i = 1 a 10 que mostra os valores de i numa
-linha, mas pula (continue) os múltiplos de 4 e para (break) quando i for 7.
-No fim da linha, mostra quantas vezes o continue aconteceu. Na linha
-seguinte, repita o laço com um contador novo, mas agora o break testa i == 8.
-
-
-```text
-Saída esperada:
-1 2 3 5 6 (continue: 1 vez)
-1 2 3 5 6 7 9 10 (continue: 2 vezes)
-```
-
-```bash
-gcc ~/LPEDC/material/E134.c -o ~/LPEDC/material/E134 && ~/LPEDC/material/E134
-```
-
-**Exercício E135** · ★★☆
-
-O elevador aguenta 600 kg e até 8 pessoas. As pessoas entram uma a uma; o
-programa lê o peso de cada uma ("Peso da pessoa N:", no máximo 8 leituras)
-e, se a próxima passar do limite de peso, ela espera e ninguém mais entra
-("A pessoa N (P kg) espera o próximo."). No fim, mostra quantas entraram e o
-peso total.
-Cada pedido de leitura termina com quebra de linha (\n).
-
-
-```text
-Entrada:
-80
-95
-110
-70
-120
-90
-60
-```
-
-
-
-```text
-Saída esperada:
-Peso da pessoa 1:
-Peso da pessoa 2:
-Peso da pessoa 3:
-Peso da pessoa 4:
-Peso da pessoa 5:
-Peso da pessoa 6:
-Peso da pessoa 7:
-A pessoa 7 (60 kg) espera o próximo.
-Entraram 6 pessoas, 565 kg.
-```
-
-```bash
-gcc ~/LPEDC/material/E135.c -o ~/LPEDC/material/E135 && ~/LPEDC/material/E135
-```
-
-**Exercício E136** · ★★☆
-
-Um sensor manda até 5 códigos: 1 = normal, 2 = alerta, 9 = desligou. Escreva
-o programa que lê os códigos com um for e um switch e mostra "normal",
-"alerta" ou "sensor desligou" (qualquer outro: "código desconhecido"). O
-laço tem que parar de ler no 9. No fim, mostra "Leituras: N".
-
-
-```text
-Entrada:
-1
-2
-9
-1
-2
-```
-
-
-
-```text
-Saída esperada:
-normal
-alerta
-sensor desligou
-Leituras: 3
-```
-
-```bash
-gcc ~/LPEDC/material/E136.c -o ~/LPEDC/material/E136 && ~/LPEDC/material/E136
-```
-
-**Exercício E138** · ★★★
-
-Escreva um programa que lê notas ("Nota (-1 encerra):") e calcula a média,
-sem usar break nem continue: use uma variável bool (assunto 0012) na
-condição do while e if/else no corpo. Nota negativa (ou entrada inválida)
-encerra; nota maior que 10 é ignorada e mostra "  nota X ignorada" (1 casa);
-as demais entram na soma. Se houve alguma nota válida, mostra a média.
-Cada pedido de leitura termina com quebra de linha (\n).
-
-
-```text
-Entrada:
-8
-12
-6.5
-9
--1
-```
-
-
-
-```text
-Saída esperada:
-Nota (-1 encerra):
-Nota (-1 encerra):
-  nota 12.0 ignorada
-Nota (-1 encerra):
-Nota (-1 encerra):
-Nota (-1 encerra):
-Média de 3 notas: 7.83
-```
-
-```bash
-gcc ~/LPEDC/material/E138.c -o ~/LPEDC/material/E138 && ~/LPEDC/material/E138
-```
-
----
-
-## 0024 · Laços aninhados
-
-Uma sala de cinema tem 4 fileiras (A a D) com 5 poltronas cada. Para imprimir
-o mapa, você percorre a fileira A da poltrona 1 à 5, desce para a B e repete.
-É uma repetição **dentro** de outra.
-
-Isso é um **laço aninhado**: o corpo de um laço contém outro laço inteiro. A
-regra:
-
-> a cada volta do laço **de fora**, o laço **de dentro** roda **do começo ao
-> fim**.
-
-Como no relógio: o ponteiro dos minutos dá uma volta completa a cada hora. O
-de fora é o das horas, o de dentro é o dos minutos.
-
-Três consequências:
-
-- o contador de dentro **recomeça** a cada volta de fora. No `for`, é
-  automático: o `int poltrona = 1` do cabeçalho roda de novo. No `while`, você
-  zera à mão (o exercício E142 mostra o estrago quando esquece);
-- o corpo de dentro roda **(voltas de fora) x (voltas de dentro)** vezes: 4 x 5
-  = 20 no cinema;
-- o limite de dentro pode **depender** do contador de fora. Com
-  `for (int col = 1; col <= linha; col++)`, a linha 1 tem 1 asterisco, a linha
-  2 tem 2, e sai um triângulo (exemplo A048).
-
-Use nomes que digam quem é quem: `fileira` e `poltrona`, `linha` e `coluna`.
-Com `i` e `j`, é fácil trocar um pelo outro sem perceber.
-
-O desenho congela o mapa no meio do caminho: a fileira A já saiu inteira, a B
-está na poltrona 3, e a C e a D esperam a vez do laço de fora:
+O mapa de um cinema com 4 fileiras (A a D) de 5 poltronas. O desenho congela
+o meio do caminho: a fileira A já saiu inteira, a B está na poltrona 3, e a C
+e a D esperam o laço de fora. O `printf("\n")` fica **entre** os dois laços:
 
 <p align="center"><img src="material/0024-ideia.svg" alt="Diagrama da ideia: Laços aninhados" width="858"></p>
-
-O mapa em C. O `printf("\n")` fica **entre** os dois laços: depois que o de
-dentro termina a fileira, antes de o de fora passar para a próxima:
 
 ```c
 #include <stdio.h>
@@ -1321,34 +865,11 @@ int main(void) {
 // Total: 20 lugares
 ```
 
-No fluxograma, são dois losangos, cada um com sua seta de volta. A volta
-pequena (de "Mostrar e poltrona++" para "poltrona <= 5?") fica **dentro** da
-grande (de "pula linha" para "fileira <= 'D'?"). Logo depois do Sim de fora vem
-`poltrona = 1`: ali o laço de dentro recomeça:
+São dois losangos, cada um com sua seta de volta; a volta pequena fica
+**dentro** da grande. Logo depois do Sim de fora vem `poltrona = 1`: ali o
+laço de dentro recomeça:
 
 <p align="center"><img src="material/0024-fluxograma.svg" alt="Fluxograma: Laços aninhados" width="558"></p>
-
-> [!WARNING]
-> O `printf("\n")` no lugar errado muda o desenho. Dentro do laço de dentro,
-> sai uma poltrona por linha (20 linhas). Fora dos dois, sai tudo numa linha.
-> Pergunte: isto acontece **uma vez por poltrona**, **uma vez por fileira** ou
-> **uma vez no programa**? A resposta diz o nível do comando. E o `break` sai só
-> do laço **mais interno** (assunto 0023).
-
-> [!TIP]
-> O custo de um laço aninhado é a **multiplicação**: 4 x 5 = 20 voltas é nada,
-> mas comparar 1.000 clientes com 1.000 pedidos, cada um contra cada um, dá 1
-> milhão de comparações. É o **O(n²)** do módulo de análise. Ao ver um laço
-> dentro de outro, faça a conta.
-
-> [!NOTE]
-> **Pergunta para você:** se o laço de dentro fosse
-> `for (int poltrona = 1; poltrona <= fileira - 'A' + 1; poltrona++)`, quantas
-> poltronas teria cada fileira e quantos lugares no total? Lembre que `char` é
-> número: `'C' - 'A'` vale 2. Desenhe o mapa no papel e depois troque o laço
-> de dentro no código acima e rode.
-
-### Hora de praticar
 
 **Exemplo A047 · As horas capicua do relógio digital**
 
@@ -1437,139 +958,13 @@ int main(void) {
 gcc ~/LPEDC/material/A048.c -o ~/LPEDC/material/A048 && ~/LPEDC/material/A048
 ```
 
-#### Exercícios
+### 0025 · Padrões de laço
 
-**Exercício E140** · ★☆☆
-
-Escreva dois laços for aninhados: para i de 1 a 3, a linha i mostra os
-produtos i * j com j de 1 até i. Use um contador de quantas vezes o printf
-de dentro rodou e mostre-o depois dos dois laços.
-
-
-```text
-Saída esperada:
-1
-2 4
-3 6 9
-printf de dentro: 6 vezes
-```
-
-```bash
-gcc ~/LPEDC/material/E140.c -o ~/LPEDC/material/E140 && ~/LPEDC/material/E140
-```
-
-**Exercício E141** · ★★☆
-
-Monte a tábua de multiplicação de 1 a 9 como uma tabela, com cabeçalho e
-margem. Cada número ocupa 4 posições (%4d).
-
-
-```text
-Saída esperada:
-  x |   1   2   3   4   5   6   7   8   9
-----+------------------------------------
-  1 |   1   2   3   4   5   6   7   8   9
-  2 |   2   4   6   8  10  12  14  16  18
-  3 |   3   6   9  12  15  18  21  24  27
-  4 |   4   8  12  16  20  24  28  32  36
-  5 |   5  10  15  20  25  30  35  40  45
-  6 |   6  12  18  24  30  36  42  48  54
-  7 |   7  14  21  28  35  42  49  56  63
-  8 |   8  16  24  32  40  48  56  64  72
-  9 |   9  18  27  36  45  54  63  72  81
-```
-
-```bash
-gcc ~/LPEDC/material/E141.c -o ~/LPEDC/material/E141 && ~/LPEDC/material/E141
-```
-
-**Exercício E142** · ★★☆
-
-A escola quer a lista de chamada de 3 turmas com 4 alunos cada, uma turma
-por linha, no formato T1-A1 T1-A2 ... Escreva o programa com dois while
-aninhados (um para a turma, outro para o aluno).
-
-
-```text
-Saída esperada:
-T1-A1 T1-A2 T1-A3 T1-A4
-T2-A1 T2-A2 T2-A3 T2-A4
-T3-A1 T3-A2 T3-A3 T3-A4
-```
-
-```bash
-gcc ~/LPEDC/material/E142.c -o ~/LPEDC/material/E142 && ~/LPEDC/material/E142
-```
-
-**Exercício E143** · ★★★
-
-Desenhe uma pirâmide centralizada com a altura lida do teclado ("Altura:",
-aceite de 1 a 20; confira o retorno do scanf).
-Cada pedido de leitura termina com quebra de linha (\n).
-
-
-```text
-Entrada:
-5
-```
-
-
-
-```text
-Saída esperada:
-Altura:
-    *
-   ***
-  *****
- *******
-*********
-```
-
-```bash
-gcc ~/LPEDC/material/E143.c -o ~/LPEDC/material/E143 && ~/LPEDC/material/E143
-```
-
----
-
-## 0025 · Padrões de laço
-
-Fim de semana de calor e você anotou a máxima de cada dia: 28, 31, 36, 25 e
-30 °C. Quantos dias foram? Qual a média? Qual o dia mais quente e o mais frio?
-Teve algum dia de 35 °C ou mais?
-
-Cada pergunta é um **padrão de laço**: um uso de variável já resolvido
-milhares de vezes. São cinco, com o mesmo roteiro: a variável ganha valor
-**antes** do laço, é atualizada **dentro** e usada **depois**.
-
-| Padrão | Antes do laço | Dentro do laço | Depois |
-| --- | --- | --- | --- |
-| **contador** | `dias = 0` | `dias++` | quantos foram |
-| **acumulador** | `soma = 0` (produto: `= 1`) | `soma += temp` | total, média |
-| **maior/menor** | o **primeiro** valor | `if (temp > maior) maior = temp` | o recorde |
-| **flag** | `calorao = false` | `if (temp >= 35) calorao = true` | aconteceu ou não? |
-| **sentinela** | ler o primeiro valor | ler o próximo, no fim | (o laço para nela) |
-
-Detalhes que separam o código certo do quase certo:
-
-- o acumulador de **produto** começa em **1**: começar em 0 zera tudo;
-- a **flag** só sobe. Sem `else calorao = false`, senão um dia de 25 °C depois
-  do de 36 apagaria a resposta;
-- a **sentinela** é um valor que **não pode** ser dado real. Temperatura pode
-  ser 0 ou negativa, então a sentinela aqui é 999. Ela não entra em conta
-  nenhuma: o laço testa antes de contar;
-- a leitura acontece em dois lugares: **antes** do laço e no **fim** do corpo.
-  É a **leitura antecipada**: a pergunta do `while` sempre olha um valor
-  recém-lido;
-- a média é `(double) soma / dias`, com cast (assunto 0008), e só se
-  `dias > 0`. Se a primeira entrada for a sentinela, a conta vira 0 / 0: com
-  `double`, sai `nan` (*not a number*); com `int`, o programa quebra.
-
-As cinco temperaturas entram uma a uma e cada uma atualiza as caixinhas. O 999
-não muda nada: só manda parar. No fim, as caixinhas guardam as respostas:
+As máximas de cinco dias: 28, 31, 36, 25 e 30 °C, e 999 como sentinela (uma
+temperatura pode ser 0 ou negativa). Cada valor atualiza as caixinhas; o 999
+só manda parar:
 
 <p align="center"><img src="material/0025-ideia.svg" alt="Diagrama da ideia: Padrões de laço" width="858"></p>
-
-Os cinco padrões juntos em C:
 
 ```c
 #include <stdbool.h>
@@ -1627,32 +1022,10 @@ int main(void) {
 // Teve dia de 35 °C ou mais? sim
 ```
 
-Há **duas** caixas de leitura. "Ler temp" fica antes do losango e roda uma vez;
-"Ler a próxima temp" fica no fim do corpo, e dela sai a seta de volta ao
-losango. Assim "temp != 999?" sempre olha o valor que acabou de chegar:
+Há **duas** caixas de leitura: "Ler temp", antes do losango, e "Ler a próxima
+temp", no fim do corpo, de onde sai a seta de volta:
 
 <p align="center"><img src="material/0025-fluxograma.svg" alt="Fluxograma: Padrões de laço" width="540"></p>
-
-> [!WARNING]
-> `maior = 0` parece inofensivo, até o inverno: com máximas de -3, -1 e -4 °C,
-> nenhuma passa de 0, e o programa afirma que o dia mais quente teve 0 °C, um
-> dia que nunca existiu. O maior (e o menor) começa com o **primeiro valor
-> lido**, como no código (`dias == 1 || ...`). Outra saída é começar com o pior
-> valor possível: `INT_MIN` para o maior e `INT_MAX` para o menor, de
-> `<limits.h>` (assunto 0003).
-
-> [!TIP]
-> O acumulador tem os limites do tipo: um `int` que passa de 2.147.483.647 dá a
-> volta e fica negativo (*overflow*, assunto 0003), e somar 0,1 dez vezes em
-> `double` dá 0,9999999999999999. Para dinheiro, acumule **centavos** num
-> inteiro grande (`long long`) e divida por 100 só ao mostrar.
-
-> [!NOTE]
-> **Pergunta para você:** se a primeira coisa digitada for 999, o que o A049
-> mostra? E se você apagar o `if (dias == 0)`, o que aconteceria na média?
-> Preveja e teste: compile com o gcc e rode `printf '999\n' | ./programa`.
-
-### Hora de praticar
 
 **Exemplo A049 · Inverno na serra: maior e menor com INT_MIN e INT_MAX**
 
@@ -1758,191 +1131,13 @@ int main(void) {
 gcc ~/LPEDC/material/A050.c -o ~/LPEDC/material/A050 && ~/LPEDC/material/A050
 ```
 
-#### Exercícios
+### 0026 · Aleatórios
 
-**Exercício E145** · ★☆☆
-
-Leia as 5 notas de um aluno com um for ("Nota N:"). Mostre a soma, a média
-(1 casa) e em quantas provas ele tirou 6 ou mais.
-Cada pedido de leitura termina com quebra de linha (\n).
-
-
-```text
-Entrada:
-7
-4.5
-8
-6
-9.5
-```
-
-
-
-```text
-Saída esperada:
-Nota 1:
-Nota 2:
-Nota 3:
-Nota 4:
-Nota 5:
-Soma: 35.0
-Média: 7.0
-Provas com 6 ou mais: 4
-```
-
-```bash
-gcc ~/LPEDC/material/E145.c -o ~/LPEDC/material/E145 && ~/LPEDC/material/E145
-```
-
-**Exercício E147** · ★★☆
-
-Você anotou o preço da gasolina em 6 postos do caminho. Leia os 6 preços
-("Posto N:") e mostre o mais barato e o mais caro, com o NÚMERO do posto de
-cada um, e a diferença entre eles.
-Cada pedido de leitura termina com quebra de linha (\n).
-
-
-```text
-Entrada:
-5.89
-6.09
-5.79
-5.99
-6.19
-5.85
-```
-
-
-
-```text
-Saída esperada:
-Posto 1:
-Posto 2:
-Posto 3:
-Posto 4:
-Posto 5:
-Posto 6:
-Mais barato: posto 3 (R$ 5.79)
-Mais caro: posto 5 (R$ 6.19)
-Diferença: R$ 0.40 por litro
-```
-
-```bash
-gcc ~/LPEDC/material/E147.c -o ~/LPEDC/material/E147 && ~/LPEDC/material/E147
-```
-
-**Exercício E148** · ★★☆
-
-A lanchonete anota o resultado de cada dia em reais (negativo é prejuízo) e
-digita 9999 para encerrar; o 9999 não conta como dia. Escreva o programa que
-lê os valores e mostra quantos dias foram, a média (2 casas) e o melhor dia.
-
-
-```text
-Entrada:
--30
--10
--45
-9999
-```
-
-
-
-```text
-Saída esperada:
-Dias: 3
-Média: -28.33
-Melhor dia: -10
-```
-
-```bash
-gcc ~/LPEDC/material/E148.c -o ~/LPEDC/material/E148 && ~/LPEDC/material/E148
-```
-
-**Exercício E149** · ★★★
-
-Campeonato de skate: 8 notas de 0 a 100. Leia cada nota UMA vez ("Nota N:",
-sem guardar todas: vetores só no módulo 05) e mostre a maior e a segunda
-maior. Se duas pessoas empatarem no topo, a segunda maior é igual à maior.
-Cada pedido de leitura termina com quebra de linha (\n).
-
-
-```text
-Entrada:
-72
-95
-88
-95
-60
-81
-99
-70
-```
-
-
-
-```text
-Saída esperada:
-Nota 1:
-Nota 2:
-Nota 3:
-Nota 4:
-Nota 5:
-Nota 6:
-Nota 7:
-Nota 8:
-1º lugar: 99
-2º lugar: 95
-```
-
-```bash
-gcc ~/LPEDC/material/E149.c -o ~/LPEDC/material/E149 && ~/LPEDC/material/E149
-```
-
----
-
-## 0026 · Aleatórios
-
-No jogo de tabuleiro, você caiu na prisão. Para sair, precisa tirar **dupla**
-nos dois dados. Joga, não sai, joga de novo. É um `do...while` (assunto 0021)
-com um ingrediente novo: o resultado de cada volta é sorteado.
-
-O computador não sorteia de verdade: é determinístico, e a mesma entrada dá
-sempre a mesma saída. Ele gera números **pseudoaleatórios**: uma sequência
-calculada por uma conta fixa, em que cada número sai do anterior, e que parece
-aleatória.
-
-Em C, as peças ficam em `<stdlib.h>`:
-
-- **`rand()`** devolve o próximo número da sequência, de 0 até **`RAND_MAX`**.
-  O padrão garante `RAND_MAX` de pelo menos 32767; na glibc (Linux), vale
-  2147483647;
-- **`srand(semente)`** escolhe onde a sequência começa. A mesma **semente** dá
-  sempre a mesma sequência.
-
-Para trazer o número à faixa desejada, use o resto da divisão (assunto 0007):
-`rand() % 6` dá de 0 a 5, e `1 + rand() % 6` dá de 1 a 6. Para uma faixa de `a`
-até `b`: `a + rand() % (b - a + 1)`.
-
-A semente depende do objetivo:
-
-- **semente fixa** (`srand(2022)`): sorteia sempre os mesmos números, o que
-  ajuda a **testar** e **depurar**, pois o erro volta a aparecer. Os exemplos
-  do curso usam semente fixa para a saída do comentário bater com a sua;
-- **semente do relógio** (`srand(time(NULL))`, com `<time.h>`): `time(NULL)`
-  devolve os segundos desde 1º de janeiro de 1970. Cada execução começa num
-  segundo diferente e sorteia números diferentes. Um jogo real usa este.
-
-Sem nenhum `srand`, vale `srand(1)`: a mesma sequência sempre.
-
-A semente 2022 entra no gerador, que produz números enormes, cada um calculado
-a partir do anterior. O `% 6 + 1` transforma cada número numa face, e os pares
-de faces são as jogadas. Na quarta, sai 4 e 4:
+No jogo de tabuleiro, só sai da prisão quem tira **dupla**. A semente 2022
+entra no gerador, o `% 6 + 1` vira cada número numa face, e na quarta jogada
+sai 4 e 4. A saída é a da glibc (Linux); em outro sistema, a sequência muda:
 
 <p align="center"><img src="material/0026-ideia.svg" alt="Diagrama da ideia: Aleatórios" width="858"></p>
-
-O mesmo jogo em C. A sequência exata depende da biblioteca: a saída abaixo é a
-da glibc (Linux); no macOS ou no Windows, a semente 2022 dá outros números:
 
 ```c
 #include <stdio.h>
@@ -1972,31 +1167,10 @@ int main(void) {
 // Dupla de 4 na jogada 4. Saiu da prisão!
 ```
 
-O `srand` fica **fora** do laço, antes de tudo, e roda uma vez. O sorteio fica
-dentro, e a seta do Sim volta do losango para ele. No exemplo, o caminho passa
-três vezes pelo Sim e, na quarta jogada, pelo Não:
+O `srand` fica **fora** do laço e roda uma vez; o sorteio fica dentro, e a
+seta do Sim volta do losango para ele:
 
 <p align="center"><img src="material/0026-fluxograma.svg" alt="Fluxograma: Aleatórios" width="360"></p>
-
-> [!WARNING]
-> O erro clássico é chamar `srand(time(NULL))` **dentro** do laço. O laço roda
-> em milissegundos, no mesmo segundo, então toda volta reinicia a sequência com
-> a **mesma** semente, e o `rand()` devolve sempre o mesmo primeiro número: o
-> dado "sorteia" 4, 4, 4, 4... O `srand` vai uma vez, no começo do `main`.
-> Outro tropeço: `srand` não devolve nada (é `void`). Quem sorteia é o `rand`.
-
-> [!TIP]
-> O `rand` **nunca** serve para senha, token ou criptografia: quem descobre a
-> semente prevê tudo. Para isso existe `getrandom` (Linux) ou uma biblioteca de
-> criptografia.
-
-> [!NOTE]
-> **Pergunta para você:** rode o A051 duas vezes. A saída muda? Agora troque
-> o primeiro `srand(2026)` por `srand(time(NULL))` (e inclua `<time.h>`). O
-> que muda na primeira linha, o que continua igual nas outras duas, e o que
-> acontece se você rodar duas vezes dentro do mesmo segundo?
-
-### Hora de praticar
 
 **Exemplo A051 · Mesma semente, mesmo sorteio**
 
@@ -2087,123 +1261,13 @@ int main(void) {
 gcc ~/LPEDC/material/A052.c -o ~/LPEDC/material/A052 && ~/LPEDC/material/A052
 ```
 
-#### Exercícios
+### 0027 · Juntando tudo
 
-**Exercício E152** · ★☆☆
-
-Simule 20 lançamentos de uma moeda: mostre C (cara) ou K (coroa) para cada
-um, na mesma linha, e no fim quantas caras e quantas coroas saíram. Use
-srand(time(NULL)) para o resultado mudar a cada execução.
-
-
-```text
-Saída esperada (exemplo, a sua muda a cada execução):
-C K K C C K C K K K C C K C K K C C K C
-Caras: 10 | Coroas: 10
-```
-
-```bash
-gcc ~/LPEDC/material/E152.c -o ~/LPEDC/material/E152 && ~/LPEDC/material/E152
-```
-
-**Exercício E153** · ★★☆
-
-O jogo clássico: o programa sorteia um número de 1 a 100 (com
-srand(time(NULL))) e a pessoa tenta adivinhar ("Palpite: "). A cada palpite,
-diz "Mais alto." ou "Mais baixo.". No acerto, mostra "Acertou em N
-tentativas!". Se o scanf falhar (letra ou fim da entrada), o jogo encerra
-mostrando o número sorteado.
-
-
-```text
-Saída esperada (exemplo, digitando 50, 25 e 37; o número sorteado muda a cada vez):
-Palpite: 50
-Mais baixo.
-Palpite: 25
-Mais alto.
-Palpite: 37
-Acertou em 3 tentativas!
-```
-
-```bash
-gcc ~/LPEDC/material/E153.c -o ~/LPEDC/material/E153 && ~/LPEDC/material/E153
-```
-
-**Exercício E154** · ★★☆
-
-Escreva um programa que sorteia 10 lançamentos de um dado e mostra os 10
-números na mesma linha. Os números têm que variar de um lançamento para o
-outro e ficar sempre entre 1 e 6. Use srand(time(NULL)) uma vez só.
-
-
-```text
-Saída esperada (exemplo, a sua muda a cada execução):
-4 1 6 3 3 5 2 6 1 4
-```
-
-```bash
-gcc ~/LPEDC/material/E154.c -o ~/LPEDC/material/E154 && ~/LPEDC/material/E154
-```
-
-**Exercício E155** · ★★★
-
-Dá para estimar pi jogando dardos. Sorteie um ponto (x, y) com x e y entre
-0 e 1: ele cai num quadrado de lado 1. O quarto de círculo de raio 1 ocupa
-pi/4 desse quadrado. Então, com muitos pontos:
-
-
-```text
-pi ~ 4 x (pontos dentro do círculo) / (total de pontos)
-```
-
-
-Sorteie 1 000 000 de pontos (com srand(42)) e mostre a estimativa com 4
-casas. Um ponto está dentro se x * x + y * y <= 1.
-
-
-```text
-Saída esperada:
-Dentro do círculo: 784696 de 1000000
-pi ~ 3.1388
-```
-
-```bash
-gcc ~/LPEDC/material/E155.c -o ~/LPEDC/material/E155 && ~/LPEDC/material/E155
-```
-
----
-
-## 0027 · Juntando tudo
-
-Todo filme de cassino tem a mesa de **craps**: alguém sopra os dados, joga e a
-mesa grita. As regras cabem em três linhas:
-
-1. no **primeiro** lançamento de dois dados, soma 7 ou 11 **ganha** na hora;
-   2, 3 ou 12 **perde** na hora;
-2. qualquer outra soma (4, 5, 6, 8, 9 ou 10) vira o **ponto**;
-3. depois, você relança até tirar o ponto de novo (**ganha**) ou um 7
-   (**perde**). As outras somas não fazem nada.
-
-O programa usa quase tudo do módulo: sorteio com `rand` (assunto 0026), um
-`switch` com casos agrupados para o primeiro lançamento (assunto 0018), um
-`while` para os relançamentos, com uma variável de situação que funciona como
-flag (assuntos 0020 e 0025), e um contador de lançamentos.
-
-O `while` dos relançamentos é do tipo "não sei quantas voltas": pode acabar no
-segundo lançamento ou no trigésimo. A condição testa a **situação**: `0`
-continua, `1` ganhou, `-1` perdeu. Só o corpo do laço sabe o que saiu, então só
-ele muda a situação.
-
-O sorteio `1 + rand() % 6` aparece quatro vezes. No módulo 04 ele vira uma
-**função** `lancar()` e o programa encolhe.
-
-Com a semente 21, o primeiro lançamento dá 3 + 6 = 9. O `switch` não acha o 9
-em nenhum caso especial, e ele vira o ponto. O jogo relança: 8, depois 5 (nada
-acontece), depois 9. Saiu o ponto antes do 7: ganhou no quarto lançamento:
+Com a semente 21, o primeiro lançamento dá 3 + 6 = 9, que vira o ponto. O
+jogo relança: 8, depois 5 (nada acontece), depois 9. Saiu o ponto antes do 7:
+ganhou no quarto lançamento:
 
 <p align="center"><img src="material/0027-ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="882"></p>
-
-A rodada em C:
 
 ```c
 #include <stdio.h>
@@ -2261,39 +1325,11 @@ int main(void) {
 // Ganhou em 4 lançamentos.
 ```
 
-O exemplo A054 vai além: põe a rodada dentro de um menu com `do...while`,
-valida a aposta com outro `do...while` e controla uma banca de R$ 100 até você
-sair ou quebrar. É o mesmo algoritmo com mais dois laços.
-
-No fluxograma, as duas primeiras perguntas (7 ou 11? 2, 3 ou 12?) acontecem
-**uma vez**. O laço começa em "soma = novo lançamento", e a seta de volta sai
-do Não de "soma == 7?". As duas saídas do laço vão para os mesmos "Ganhou" e
-"Perdeu" do primeiro lançamento:
+O A054 vai além: menu com `do...while`, aposta validada e uma banca de R$ 100.
+No fluxograma, as perguntas do primeiro lançamento acontecem **uma vez**; o
+laço começa em "soma = novo lançamento" e volta pelo Não de "soma == 7?":
 
 <p align="center"><img src="material/0027-fluxograma.svg" alt="Fluxograma: Juntando tudo" width="719"></p>
-
-> [!WARNING]
-> Num jogo com sorteio, o erro mais traiçoeiro é o laço que **pode** não
-> terminar. Aqui ele sempre termina, pois a cada lançamento há chance de sair o
-> ponto ou o 7. Mas com `while (soma != ponto)` e sem o 7, o jogo nunca perde e
-> o programa está errado sem dar erro nenhum. Antes de escrever um `while`,
-> diga em voz alta **todas** as formas de sair dele e confira se cada uma está
-> na condição ou num `break`.
-
-> [!TIP]
-> `situacao` guarda um código numérico (`1`, `-1`, `0`), um "número mágico" que
-> exige lembrar o significado de cada valor. No módulo 08, o `enum` dá nomes a
-> esses valores (`GANHOU`, `PERDEU`, `CONTINUA`), que continuam sendo `int`.
-
-> [!NOTE]
-> **Pergunta para você:** qual é a chance de ganhar no craps? Antes de chutar,
-> pense: no primeiro lançamento, o 7 e o 11 juntos saem em 8 de 36
-> combinações (o A053 conta todas elas). Depois, rode uma versão do código
-> acima que joga 100 000 rodadas sem os `printf` e conta as vitórias (é o
-> desafio 7 do módulo). A resposta é um pouco menos de 50%, e é daí que o
-> cassino tira o lucro.
-
-### Hora de praticar
 
 **Exemplo A053 · As 36 jogadas do primeiro lançamento, sem sortear**
 
@@ -2443,7 +1479,591 @@ int main(void) {
 gcc ~/LPEDC/material/A054.c -o ~/LPEDC/material/A054 && ~/LPEDC/material/A054
 ```
 
-#### Exercícios
+---
+
+## 3. Exercícios práticos
+
+Cada exercício é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta. Compile como os exemplos: `gcc ~/LPEDC/material/E007.c -o ~/LPEDC/material/E007 && ~/LPEDC/material/E007`. Resoluções em `_respostas/03-repeticoes/`.
+
+### 0020 · While
+
+**Exercício E116** · ★☆☆
+
+Escreva um programa que mostre, com um while, os múltiplos de 7 menores que
+50, todos na mesma linha e separados por espaço.
+
+```text
+Saída esperada:
+7 14 21 28 35 42 49
+```
+
+**Exercício E117** · ★★☆
+
+A caixa d'água tem 1000 litros e a casa gasta 180 litros por dia. Escreva um
+programa com um while que diz para quantos dias COMPLETOS a água dura e
+quantos litros sobram depois deles. Use as variáveis litros, consumo e dias.
+
+```text
+Saída esperada:
+Dá para 5 dias. Sobram 100 litros.
+```
+
+**Exercício E118** · ★★☆
+
+Você aplica R$ 1000.00 num investimento que rende 1% ao mês (juros sobre
+juros: todo mês o saldo é multiplicado por 1.01). Em quantos meses o saldo
+passa de R$ 1500.00? Mostre os meses e o saldo final com 2 casas.
+
+```text
+Saída esperada:
+Passou de R$ 1500.00 em 41 meses.
+Saldo: R$ 1503.75
+```
+
+**Exercício E120** · ★★★
+
+Escreva um programa com três laços while, um depois do outro, cada um numa
+linha da saída. A linha começa com a letra do trecho, mostra os valores que o
+corpo imprime e termina com o número de voltas e o valor final da variável
+(use um contador por trecho):
+
+```text
+A: int i = 0; while (i++ < 5) mostra i
+B: int n = 100; while (n > 1) divide n por 3 e mostra o n novo
+C: int k = 10; while (k < 10) soma 1 em k
+```
+
+```text
+Saída esperada:
+A: 1 2 3 4 5 | voltas 5, i final 6
+B: 33 11 3 1 | voltas 4, n final 1
+C: | voltas 0, k final 10
+```
+
+### 0021 · Do-while
+
+**Exercício E122** · ★☆☆
+
+Escreva um programa com três trechos, um por linha de saída. Cada linha
+mostra os valores impressos pelo trecho e termina com o valor final da
+variável:
+
+```text
+A: n = 10; while (n < 5) mostra n e soma 1
+B: m = 10; do { mostra m e soma 1 } while (m < 5);
+C: k = 10; o mesmo que o B, mas escrito com while (sem do-while)
+```
+
+```text
+Saída esperada:
+| A terminou com n = 10
+10 | B terminou com m = 11
+10 | C terminou com k = 11
+```
+
+**Exercício E123** · ★★☆
+
+No caixa da padaria, a atendente digita o preço de cada item e o sistema
+pergunta "Mais algum item? (s/n)". Escreva o programa com do-while: lê um
+preço ("Preço:"), soma, pergunta e repete enquanto a resposta for s ou S.
+No fim, mostra quantos itens e o total com 2 casas.
+Cada pedido de leitura termina com quebra de linha (\n).
+
+```text
+Entrada:
+12.50
+s
+7.00
+S
+3.25
+n
+```
+
+```text
+Saída esperada:
+Preço:
+Mais algum item? (s/n)
+Preço:
+Mais algum item? (s/n)
+Preço:
+Mais algum item? (s/n)
+Itens: 3
+Total: R$ 22.75
+```
+
+**Exercício E124** · ★★☆
+
+O totem do cinema oferece 3 sessões. Escreva o programa com do-while que
+pergunta "Sessão (1, 2 ou 3):" e repete a pergunta enquanto a opção for
+inválida. Quando a opção for válida, mostra "Sessão N escolhida.".
+Cada pedido de leitura termina com quebra de linha (\n).
+
+```text
+Entrada:
+7
+2
+```
+
+```text
+Saída esperada:
+Sessão (1, 2 ou 3):
+Sessão (1, 2 ou 3):
+Sessão 2 escolhida.
+```
+
+**Exercício E125** · ★★★
+
+A senha do cartão é 4321 e a pessoa tem 3 tentativas. Escreva o programa: lê
+a senha com do-while ("Senha:"), conta as tentativas e para quando acertar
+OU quando acabarem as tentativas. No fim, diz "Senha correta na tentativa N."
+ou, se errou as três, "Cartão bloqueado.".
+Cada pedido de leitura termina com quebra de linha (\n).
+
+```text
+Entrada:
+1111
+2222
+4321
+```
+
+```text
+Saída esperada:
+Senha:
+Senha:
+Senha:
+Senha correta na tentativa 3.
+```
+
+Com as entradas 1111, 2222 e 3333, a última linha da saída é "Cartão bloqueado.".
+
+### 0022 · For
+
+**Exercício E128** · ★☆☆
+
+Escreva um programa com os quatro laços abaixo, um depois do outro. Cada
+um mostra os valores de x numa linha que começa com a letra do laço e, no
+fim da linha, quantas voltas ele deu (use um contador para cada laço):
+
+```text
+a) for (int x = 3; x <= 20; x += 4)
+b) for (int x = 50; x > 30; x -= 6)
+c) for (int x = 1; x >= 10; x++)
+d) for (int x = 1; x < 100; x *= 3)
+```
+
+```text
+Saída esperada:
+a) 3 7 11 15 19 (5 voltas)
+b) 50 44 38 32 (4 voltas)
+c) (0 voltas)
+d) 1 3 9 27 81 (5 voltas)
+```
+
+**Exercício E129** · ★★☆
+
+Você aplica R$ 2000.00 num CDB que rende 0,8% ao mês. Mostre o saldo mês a
+mês durante 12 meses (todo mês o saldo é multiplicado por 1.008). No fim,
+mostre o resultado da fórmula dos juros compostos,
+saldo = 2000 * 1.008 elevado a 12, usando pow (assunto 0010).
+
+```text
+Saída esperada:
+Mês  1: R$ 2016.00
+Mês  2: R$ 2032.13
+Mês  3: R$ 2048.39
+Mês  4: R$ 2064.77
+Mês  5: R$ 2081.29
+Mês  6: R$ 2097.94
+Mês  7: R$ 2114.72
+Mês  8: R$ 2131.64
+Mês  9: R$ 2148.70
+Mês 10: R$ 2165.88
+Mês 11: R$ 2183.21
+Mês 12: R$ 2200.68
+Pela fórmula: R$ 2200.68
+```
+
+```bash
+gcc ~/LPEDC/material/E129.c -o ~/LPEDC/material/E129 -lm && ~/LPEDC/material/E129
+```
+
+**Exercício E130** · ★★☆
+
+O treino manda fazer 5 séries de flexões. Escreva um programa com um for que
+mostra "Série 1" até "Série 5", uma por linha.
+
+```text
+Saída esperada:
+Série 1
+Série 2
+Série 3
+Série 4
+Série 5
+```
+
+**Exercício E131** · ★★★
+
+Dá para calcular pi com uma soma infinita (série de Leibniz):
+
+```text
+pi = 4/1 - 4/3 + 4/5 - 4/7 + 4/9 - ...
+```
+
+Escreva um programa com um for que soma os primeiros 1000 termos e mostra o
+resultado com 6 casas.
+
+```text
+Saída esperada:
+pi ~ 3.140593
+```
+
+### 0023 · Break e continue
+
+**Exercício E134** · ★☆☆
+
+Escreva um programa com um for de i = 1 a 10 que mostra os valores de i numa
+linha, mas pula (continue) os múltiplos de 4 e para (break) quando i for 7.
+No fim da linha, mostra quantas vezes o continue aconteceu. Na linha
+seguinte, repita o laço com um contador novo, mas agora o break testa i == 8.
+
+```text
+Saída esperada:
+1 2 3 5 6 (continue: 1 vez)
+1 2 3 5 6 7 9 10 (continue: 2 vezes)
+```
+
+**Exercício E135** · ★★☆
+
+O elevador aguenta 600 kg e até 8 pessoas. As pessoas entram uma a uma; o
+programa lê o peso de cada uma ("Peso da pessoa N:", no máximo 8 leituras)
+e, se a próxima passar do limite de peso, ela espera e ninguém mais entra
+("A pessoa N (P kg) espera o próximo."). No fim, mostra quantas entraram e o
+peso total.
+Cada pedido de leitura termina com quebra de linha (\n).
+
+```text
+Entrada:
+80
+95
+110
+70
+120
+90
+60
+```
+
+```text
+Saída esperada:
+Peso da pessoa 1:
+Peso da pessoa 2:
+Peso da pessoa 3:
+Peso da pessoa 4:
+Peso da pessoa 5:
+Peso da pessoa 6:
+Peso da pessoa 7:
+A pessoa 7 (60 kg) espera o próximo.
+Entraram 6 pessoas, 565 kg.
+```
+
+**Exercício E136** · ★★☆
+
+Um sensor manda até 5 códigos: 1 = normal, 2 = alerta, 9 = desligou. Escreva
+o programa que lê os códigos com um for e um switch e mostra "normal",
+"alerta" ou "sensor desligou" (qualquer outro: "código desconhecido"). O
+laço tem que parar de ler no 9. No fim, mostra "Leituras: N".
+
+```text
+Entrada:
+1
+2
+9
+1
+2
+```
+
+```text
+Saída esperada:
+normal
+alerta
+sensor desligou
+Leituras: 3
+```
+
+**Exercício E138** · ★★★
+
+Escreva um programa que lê notas ("Nota (-1 encerra):") e calcula a média,
+sem usar break nem continue: use uma variável bool (assunto 0012) na
+condição do while e if/else no corpo. Nota negativa (ou entrada inválida)
+encerra; nota maior que 10 é ignorada e mostra "  nota X ignorada" (1 casa);
+as demais entram na soma. Se houve alguma nota válida, mostra a média.
+Cada pedido de leitura termina com quebra de linha (\n).
+
+```text
+Entrada:
+8
+12
+6.5
+9
+-1
+```
+
+```text
+Saída esperada:
+Nota (-1 encerra):
+Nota (-1 encerra):
+  nota 12.0 ignorada
+Nota (-1 encerra):
+Nota (-1 encerra):
+Nota (-1 encerra):
+Média de 3 notas: 7.83
+```
+
+### 0024 · Laços aninhados
+
+**Exercício E140** · ★☆☆
+
+Escreva dois laços for aninhados: para i de 1 a 3, a linha i mostra os
+produtos i * j com j de 1 até i. Use um contador de quantas vezes o printf
+de dentro rodou e mostre-o depois dos dois laços.
+
+```text
+Saída esperada:
+1
+2 4
+3 6 9
+printf de dentro: 6 vezes
+```
+
+**Exercício E141** · ★★☆
+
+Monte a tábua de multiplicação de 1 a 9 como uma tabela, com cabeçalho e
+margem. Cada número ocupa 4 posições (%4d).
+
+```text
+Saída esperada:
+  x |   1   2   3   4   5   6   7   8   9
+----+------------------------------------
+  1 |   1   2   3   4   5   6   7   8   9
+  2 |   2   4   6   8  10  12  14  16  18
+  3 |   3   6   9  12  15  18  21  24  27
+  4 |   4   8  12  16  20  24  28  32  36
+  5 |   5  10  15  20  25  30  35  40  45
+  6 |   6  12  18  24  30  36  42  48  54
+  7 |   7  14  21  28  35  42  49  56  63
+  8 |   8  16  24  32  40  48  56  64  72
+  9 |   9  18  27  36  45  54  63  72  81
+```
+
+**Exercício E142** · ★★☆
+
+A escola quer a lista de chamada de 3 turmas com 4 alunos cada, uma turma
+por linha, no formato T1-A1 T1-A2 ... Escreva o programa com dois while
+aninhados (um para a turma, outro para o aluno).
+
+```text
+Saída esperada:
+T1-A1 T1-A2 T1-A3 T1-A4
+T2-A1 T2-A2 T2-A3 T2-A4
+T3-A1 T3-A2 T3-A3 T3-A4
+```
+
+**Exercício E143** · ★★★
+
+Desenhe uma pirâmide centralizada com a altura lida do teclado ("Altura:",
+aceite de 1 a 20; confira o retorno do scanf).
+Cada pedido de leitura termina com quebra de linha (\n).
+
+```text
+Entrada:
+5
+```
+
+```text
+Saída esperada:
+Altura:
+    *
+   ***
+  *****
+ *******
+*********
+```
+
+### 0025 · Padrões de laço
+
+**Exercício E145** · ★☆☆
+
+Leia as 5 notas de um aluno com um for ("Nota N:"). Mostre a soma, a média
+(1 casa) e em quantas provas ele tirou 6 ou mais.
+Cada pedido de leitura termina com quebra de linha (\n).
+
+```text
+Entrada:
+7
+4.5
+8
+6
+9.5
+```
+
+```text
+Saída esperada:
+Nota 1:
+Nota 2:
+Nota 3:
+Nota 4:
+Nota 5:
+Soma: 35.0
+Média: 7.0
+Provas com 6 ou mais: 4
+```
+
+**Exercício E147** · ★★☆
+
+Você anotou o preço da gasolina em 6 postos do caminho. Leia os 6 preços
+("Posto N:") e mostre o mais barato e o mais caro, com o NÚMERO do posto de
+cada um, e a diferença entre eles.
+Cada pedido de leitura termina com quebra de linha (\n).
+
+```text
+Entrada:
+5.89
+6.09
+5.79
+5.99
+6.19
+5.85
+```
+
+```text
+Saída esperada:
+Posto 1:
+Posto 2:
+Posto 3:
+Posto 4:
+Posto 5:
+Posto 6:
+Mais barato: posto 3 (R$ 5.79)
+Mais caro: posto 5 (R$ 6.19)
+Diferença: R$ 0.40 por litro
+```
+
+**Exercício E148** · ★★☆
+
+A lanchonete anota o resultado de cada dia em reais (negativo é prejuízo) e
+digita 9999 para encerrar; o 9999 não conta como dia. Escreva o programa que
+lê os valores e mostra quantos dias foram, a média (2 casas) e o melhor dia.
+
+```text
+Entrada:
+-30
+-10
+-45
+9999
+```
+
+```text
+Saída esperada:
+Dias: 3
+Média: -28.33
+Melhor dia: -10
+```
+
+**Exercício E149** · ★★★
+
+Campeonato de skate: 8 notas de 0 a 100. Leia cada nota UMA vez ("Nota N:",
+sem guardar todas: vetores só no módulo 05) e mostre a maior e a segunda
+maior. Se duas pessoas empatarem no topo, a segunda maior é igual à maior.
+Cada pedido de leitura termina com quebra de linha (\n).
+
+```text
+Entrada:
+72
+95
+88
+95
+60
+81
+99
+70
+```
+
+```text
+Saída esperada:
+Nota 1:
+Nota 2:
+Nota 3:
+Nota 4:
+Nota 5:
+Nota 6:
+Nota 7:
+Nota 8:
+1º lugar: 99
+2º lugar: 95
+```
+
+### 0026 · Aleatórios
+
+**Exercício E152** · ★☆☆
+
+Simule 20 lançamentos de uma moeda: mostre C (cara) ou K (coroa) para cada
+um, na mesma linha, e no fim quantas caras e quantas coroas saíram. Use
+srand(time(NULL)) para o resultado mudar a cada execução.
+
+```text
+Saída esperada (exemplo, a sua muda a cada execução):
+C K K C C K C K K K C C K C K K C C K C
+Caras: 10 | Coroas: 10
+```
+
+**Exercício E153** · ★★☆
+
+O jogo clássico: o programa sorteia um número de 1 a 100 (com
+srand(time(NULL))) e a pessoa tenta adivinhar ("Palpite: "). A cada palpite,
+diz "Mais alto." ou "Mais baixo.". No acerto, mostra "Acertou em N
+tentativas!". Se o scanf falhar (letra ou fim da entrada), o jogo encerra
+mostrando o número sorteado.
+
+```text
+Saída esperada (exemplo, digitando 50, 25 e 37; o número sorteado muda a cada vez):
+Palpite: 50
+Mais baixo.
+Palpite: 25
+Mais alto.
+Palpite: 37
+Acertou em 3 tentativas!
+```
+
+**Exercício E154** · ★★☆
+
+Escreva um programa que sorteia 10 lançamentos de um dado e mostra os 10
+números na mesma linha. Os números têm que variar de um lançamento para o
+outro e ficar sempre entre 1 e 6. Use srand(time(NULL)) uma vez só.
+
+```text
+Saída esperada (exemplo, a sua muda a cada execução):
+4 1 6 3 3 5 2 6 1 4
+```
+
+**Exercício E155** · ★★★
+
+Dá para estimar pi jogando dardos. Sorteie um ponto (x, y) com x e y entre
+0 e 1: ele cai num quadrado de lado 1. O quarto de círculo de raio 1 ocupa
+pi/4 desse quadrado. Então, com muitos pontos:
+
+```text
+pi ~ 4 x (pontos dentro do círculo) / (total de pontos)
+```
+
+Sorteie 1 000 000 de pontos (com srand(42)) e mostre a estimativa com 4
+casas. Um ponto está dentro se x * x + y * y <= 1.
+
+```text
+Saída esperada:
+Dentro do círculo: 784696 de 1000000
+pi ~ 3.1388
+```
+
+### 0027 · Juntando tudo
 
 **Exercício E157** · ★☆☆
 
@@ -2451,15 +2071,10 @@ No craps, o 7 é o número mais perigoso (e o mais comum). Lance dois dados
 36 000 vezes (com srand(time(NULL))) e conte quantas vezes a soma deu 7 e
 quantas deu 2. Mostre as contagens e as porcentagens com 1 casa.
 
-
 ```text
 Saída esperada (exemplo, os números mudam a cada execução):
 Soma 7: 6043 (16.8%)
 Soma 2: 1012 (2.8%)
-```
-
-```bash
-gcc ~/LPEDC/material/E157.c -o ~/LPEDC/material/E157 && ~/LPEDC/material/E157
 ```
 
 **Exercício E159** · ★★☆
@@ -2468,15 +2083,10 @@ Um número de 3 dígitos é de Armstrong quando a soma dos cubos dos dígitos
 dá o próprio número: 153 = 1 + 125 + 27. Mostre todos os números de
 Armstrong de 100 a 999 e quantos são.
 
-
 ```text
 Saída esperada:
 153 370 371 407
 Encontrados: 4
-```
-
-```bash
-gcc ~/LPEDC/material/E159.c -o ~/LPEDC/material/E159 && ~/LPEDC/material/E159
 ```
 
 **Exercício E160** · ★★☆
@@ -2488,7 +2098,6 @@ recusada."); 2 repõe uma caixa de 10 e mostra "Repôs 10."; 0 sai; qualquer
 outra mostra "Opção inválida.". No fim, mostra o estoque e o total vendido.
 Cada pedido de leitura termina com quebra de linha (\n).
 
-
 ```text
 Entrada:
 1
@@ -2497,8 +2106,6 @@ Entrada:
 3
 0
 ```
-
-
 
 ```text
 Saída esperada:
@@ -2510,10 +2117,6 @@ Quantos?
 Estoque: 12 | Vendidos: 8
 ```
 
-```bash
-gcc ~/LPEDC/material/E160.c -o ~/LPEDC/material/E160 && ~/LPEDC/material/E160
-```
-
 **Exercício E161** · ★★★
 
 O jogo dos 21 palitos: na mesa há 21 palitos. Você e o computador se
@@ -2522,7 +2125,6 @@ começa. Sua jogada é lida com do-while ("Você tira:") e só vale de 1 a 3 e
 no máximo o que sobrou. O computador tira (palitos - 1) % 4 (se der 0, tira
 1). A cada jogada, mostre quantos palitos sobraram; no fim, quem perdeu.
 Cada pedido de leitura termina com quebra de linha (\n).
-
 
 ```text
 Entrada:
@@ -2533,8 +2135,6 @@ Entrada:
 2
 1
 ```
-
-
 
 ```text
 Saída esperada:
@@ -2552,13 +2152,670 @@ Você tira:
 Sobram 0. Você tirou o último palito. Perdeu!
 ```
 
-```bash
-gcc ~/LPEDC/material/E161.c -o ~/LPEDC/material/E161 && ~/LPEDC/material/E161
+### Lista do módulo
+
+30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P0301.c a P0330.c, em `material/`; resoluções em `_respostas/03-repeticoes/lista/`.
+
+#### ★☆☆ Aquecimento
+
+**Exercício P0301** · ★☆☆ · A tabela do pão francês
+
+A padaria quer colar no balcão uma tabela com o preço de 1 a 8 pães, a
+R$ 0.85 cada. Escreva um programa com um for que mostre a tabela, com a
+quantidade em 2 colunas e o preço em 5:
+
+```text
+Saída esperada:
+ 1 pão(es): R$  0.85
+ 2 pão(es): R$  1.70
+ 3 pão(es): R$  2.55
+ 4 pão(es): R$  3.40
+ 5 pão(es): R$  4.25
+ 6 pão(es): R$  5.10
+ 7 pão(es): R$  5.95
+ 8 pão(es): R$  6.80
+```
+
+**Resposta esperada:** de R$ 0.85 a R$ 6.80.
+
+---
+
+**Exercício P0302** · ★☆☆ · O desafio do cofrinho
+
+No desafio do cofrinho, você guarda R$ 1 no dia 1, R$ 2 no dia 2, e assim
+por diante, um real a mais por dia. Escreva um programa com while que mostre
+quanto há no cofrinho ao fim dos dias 10, 20 e 30, e o total final:
+
+```text
+Saída esperada:
+Dia 10: R$ 55
+Dia 20: R$ 210
+Dia 30: R$ 465
+Total em 30 dias: R$ 465
 ```
 
 ---
 
-## Desafios do módulo
+**Exercício P0303** · ★☆☆ · As filas possíveis no banco
+
+De quantas maneiras 10 pessoas podem formar uma fila? É 10! (10 × 9 × ... ×
+1). Escreva um programa com for que calcule 10! e 20!, num unsigned long long
+(o 20! já não cabe num int de jeito nenhum):
+
+```text
+Saída esperada:
+10! = 3628800
+20! = 2432902008176640000
+```
+
+**Resposta esperada:** 3628800 e 2432902008176640000.
+
+---
+
+**Exercício P0304** · ★☆☆ · Os dígitos do protocolo
+
+O atendimento deu o protocolo 2026110903. Escreva um programa com while que
+conte quantos dígitos ele tem e some esses dígitos, tirando um por vez com %
+e / por 10. O número não cabe num int: use long long.
+
+```text
+Saída esperada:
+Protocolo: 2026110903
+Dígitos: 10
+Soma dos dígitos: 24
+```
+
+**Resposta esperada:** 10 dígitos, soma 24.
+
+---
+
+**Exercício P0305** · ★☆☆ · O tamanho do açaí
+
+A tela do quiosque pede o tamanho do açaí: 1 (300 ml, R$ 12.00), 2 (500 ml,
+R$ 18.00) ou 3 (700 ml, R$ 24.00). Escreva um programa com do...while que
+repita a pergunta até a pessoa digitar 1, 2 ou 3, e depois mostre o preço.
+Um exemplo de interação, em que a pessoa errou duas vezes:
+
+```text
+Saída esperada:
+Tamanho (1, 2 ou 3): 0
+Opção inválida.
+Tamanho (1, 2 ou 3): 5
+Opção inválida.
+Tamanho (1, 2 ou 3): 2
+Açaí de 500 ml: R$ 18.00
+```
+
+**Resposta esperada:** com 0, 5 e 2, Açaí de 500 ml: R$ 18.00.
+
+---
+
+**Exercício P0306** · ★☆☆ · Os números da sorte da promoção
+
+Na promoção do mercado, ganham brinde os cupons cujo número, de 1 a 99, é
+múltiplo de 3 ou de 5. Escreva um programa que conte quantos números de 1 a
+99 ganham brinde e some esses números:
+
+```text
+Saída esperada:
+Cupons premiados: 46
+Soma dos números: 2318
+```
+
+**Resposta esperada:** 46 cupons, soma 2318.
+
+---
+
+**Exercício P0307** · ★☆☆ · A fofoca no grupo da família
+
+Uma fofoca começa com 1 pessoa. A cada rodada, cada pessoa que sabe conta
+para outras 2, então quem sabe triplica (1, 3, 9, 27...). Escreva um programa
+com while que mostre cada rodada e pare na primeira em que mais de 1 milhão
+de pessoas já saibam:
+
+```text
+Saída esperada:
+Rodada 1: 3 pessoas
+Rodada 2: 9 pessoas
+Rodada 3: 27 pessoas
+Rodada 4: 81 pessoas
+Rodada 5: 243 pessoas
+Rodada 6: 729 pessoas
+Rodada 7: 2187 pessoas
+Rodada 8: 6561 pessoas
+Rodada 9: 19683 pessoas
+Rodada 10: 59049 pessoas
+Rodada 11: 177147 pessoas
+Rodada 12: 531441 pessoas
+Rodada 13: 1594323 pessoas
+Passou de 1 milhão na rodada 13
+```
+
+---
+
+**Exercício P0308** · ★☆☆ · O jogo do PIM
+
+No jogo do PIM, a turma conta de 1 em diante, mas todo múltiplo de 4, e todo
+número que termina em 4, vira "PIM". Escreva um programa que mostre a
+contagem de 1 a 20, um número por linha, trocando esses números por PIM:
+
+```text
+Saída esperada:
+1
+2
+3
+PIM
+5
+6
+7
+PIM
+9
+10
+11
+PIM
+13
+PIM
+15
+PIM
+17
+18
+19
+PIM
+```
+
+**Resposta esperada:** PIM no 4, 8, 12, 14, 16 e 20.
+
+---
+
+**Exercício P0309** · ★☆☆ · O mapa da sala de cinema
+
+A sala pequena do cinema tem as fileiras A a E e 6 cadeiras em cada. Escreva
+um programa com dois for, um dentro do outro, que mostre o mapa dos
+assentos. Use um char para a fileira: 'A' + 1 é 'B', porque char é número.
+
+```text
+Saída esperada:
+A1 A2 A3 A4 A5 A6
+B1 B2 B3 B4 B5 B6
+C1 C2 C3 C4 C5 C6
+D1 D2 D3 D4 D5 D6
+E1 E2 E3 E4 E5 E6
+```
+
+**Resposta esperada:** 5 linhas de 6 assentos, de A1 a E6.
+
+---
+
+**Exercício P0310** · ★☆☆ · A parcela que sobrou
+
+A geladeira foi parcelada em 10 vezes de R$ 189.90, mas o programa abaixo
+mostra 11 parcelas e um total errado. O erro está no for, de propósito.
+Conserte o laço para mostrar as 10 parcelas e o total certo:
+
+```text
+Saída esperada:
+Parcela 1: R$ 189.90
+Parcela 2: R$ 189.90
+Parcela 3: R$ 189.90
+Parcela 4: R$ 189.90
+Parcela 5: R$ 189.90
+Parcela 6: R$ 189.90
+Parcela 7: R$ 189.90
+Parcela 8: R$ 189.90
+Parcela 9: R$ 189.90
+Parcela 10: R$ 189.90
+Total: R$ 1899.00
+```
+
+**Resposta esperada:** 10 parcelas, Total: R$ 1899.00.
+
+#### ★★☆ Para pensar
+
+**Exercício P0311** · ★★☆ · O pedido de trás para frente
+
+O sistema da loja grava o número do pedido invertido para embaralhar a
+etiqueta. Escreva um programa com while que inverta o pedido 120345 (o
+resultado é 543021) e confira se o número é igual ao seu inverso (capicua).
+Faça o mesmo com 12321:
+
+```text
+Saída esperada:
+120345 invertido: 543021 (não é capicua)
+12321 invertido: 12321 (é capicua)
+```
+
+**Resposta esperada:** 543021 e 12321.
+
+---
+
+**Exercício P0312** · ★★☆ · Os dois ônibus no mesmo ponto
+
+No terminal, o ônibus 101 sai a cada 12 minutos e o 202 a cada 18. Os dois
+saíram juntos às 06:00. Escreva um programa que descubra, com um laço, daqui
+a quantos minutos eles saem juntos de novo (o MMC de 12 e 18), e mostre os
+três próximos horários em que isso acontece:
+
+```text
+Saída esperada:
+Saem juntos a cada 36 minutos
+06:36
+07:12
+07:48
+```
+
+**Resposta esperada:** 36 minutos; 06:36, 07:12 e 07:48.
+
+---
+
+**Exercício P0313** · ★★☆ · Os números amigos
+
+Dois números são amigos quando a soma dos divisores próprios de um (os
+divisores menores que ele) dá o outro, e vice-versa. Escreva um programa que
+some os divisores próprios de 220 e de 284 com um laço e diga se eles são
+amigos:
+
+```text
+Saída esperada:
+Divisores de 220 somam 284
+Divisores de 284 somam 220
+220 e 284 são amigos
+```
+
+**Resposta esperada:** 284 e 220, são amigos.
+
+---
+
+**Exercício P0314** · ★★☆ · O próximo ano primo
+
+2026 não é primo (é par). Escreva um programa que ache o primeiro ano primo
+depois de 2026 e o último ano primo antes de 2026. Para testar se n é primo,
+basta tentar os divisores d com d * d <= n, e dá para parar no primeiro que
+dividir (break):
+
+```text
+Saída esperada:
+Próximo ano primo: 2027
+Último ano primo antes de 2026: 2017
+```
+
+**Resposta esperada:** 2027 e 2017.
+
+---
+
+**Exercício P0315** · ★★☆ · A dívida do rotativo
+
+Uma dívida de R$ 1000.00 no rotativo do cartão cresce 14% ao mês (juros sobre
+juros). Escreva um programa com while que mostre o saldo mês a mês até a
+dívida passar do dobro, e diga em quantos meses isso aconteceu:
+
+```text
+Saída esperada:
+Mês 1: R$ 1140.00
+Mês 2: R$ 1299.60
+Mês 3: R$ 1481.54
+Mês 4: R$ 1688.96
+Mês 5: R$ 1925.41
+Mês 6: R$ 2194.97
+A dívida dobrou em 6 meses
+```
+
+---
+
+**Exercício P0316** · ★★☆ · O triângulo de Floyd
+
+No triângulo de Floyd, os números naturais vão enchendo as linhas: a linha 1
+tem um número, a linha 2 tem dois, e assim por diante. Escreva um programa
+com laços aninhados que mostre as 5 primeiras linhas, cada número com %3d, e
+a soma da última linha:
+
+```text
+Saída esperada:
+  1
+  2  3
+  4  5  6
+  7  8  9 10
+ 11 12 13 14 15
+Soma da linha 5: 65
+```
+
+---
+
+**Exercício P0317** · ★★☆ · A eleição do síndico
+
+Na assembleia, cada morador digita o voto: 1 para a Marta, 2 para o Jorge e
+qualquer outro número positivo é nulo. O 0 encerra a votação (sentinela).
+Escreva um programa que conte os votos e mostre o resultado, o percentual de
+nulos e quem venceu (ou se deu empate). Um exemplo de interação, com os
+votos 1 2 1 7 1 2 0:
+
+```text
+Saída esperada:
+Voto (0 encerra): Voto (0 encerra): Voto (0 encerra): Voto (0 encerra): Voto (0 encerra): Voto (0 encerra): Voto (0 encerra):
+Marta: 3
+Jorge: 2
+Nulos: 1 (16.7%)
+Vencedor: Marta
+```
+
+**Resposta esperada:** Marta 3, Jorge 2, Nulos 1 (16.7%), Vencedor: Marta.
+
+---
+
+**Exercício P0318** · ★★☆ · A soma que demora a crescer
+
+A soma 1 + 1/2 + 1/3 + 1/4 + ... cresce para sempre, mas bem devagar.
+Escreva um programa com while que descubra quantos termos são precisos para
+a soma passar de 3, e depois de 5, e mostre a soma em cada caso:
+
+```text
+Saída esperada:
+Passa de 3 com 11 termos (soma 3.0199)
+Passa de 5 com 83 termos (soma 5.0021)
+```
+
+**Resposta esperada:** 11 termos e 83 termos.
+
+---
+
+**Exercício P0319** · ★★☆ · O desconto por quantidade
+
+A distribuidora de água dá 2% de desconto por galão comprado, até o máximo de
+15%. O galão custa R$ 12.00. Escreva um programa que mostre a tabela de 1 a
+10 galões, com o desconto e o total de cada linha:
+
+```text
+Saída esperada:
+ 1 galão(ões):  2% -> R$  11.76
+ 2 galão(ões):  4% -> R$  23.04
+ 3 galão(ões):  6% -> R$  33.84
+ 4 galão(ões):  8% -> R$  44.16
+ 5 galão(ões): 10% -> R$  54.00
+ 6 galão(ões): 12% -> R$  63.36
+ 7 galão(ões): 14% -> R$  72.24
+ 8 galão(ões): 15% -> R$  81.60
+ 9 galão(ões): 15% -> R$  91.80
+10 galão(ões): 15% -> R$ 102.00
+```
+
+**Resposta esperada:** a tabela acima, terminando em R$ 102.00.
+
+---
+
+**Exercício P0320** · ★★☆ · A média da turma que dá errado
+
+O programa abaixo deveria somar as 5 notas do simulado (7, 9, 6, 8 e 10) e
+mostrar a média 8.0, mas mostra 2.0. São dois erros de acumulador, de
+propósito: um zera a soma no lugar errado e o outro faz a divisão inteira.
+Conserte os dois:
+
+```text
+Saída esperada:
+Soma: 40
+Média: 8.0
+```
+
+**Resposta esperada:** Soma: 40, Média: 8.0.
+
+#### ★★★ Desafio
+
+**Exercício P0321** · ★★★ · O calendário de qualquer mês
+
+Escreva um programa que leia o mês e o ano e mostre o calendário daquele mês,
+com a semana começando no domingo e cada dia em 3 posições (%3d). O programa
+descobre sozinho em que dia da semana cai o dia 1, com a fórmula (a = (14 −
+mês) / 12, y = ano − a, m = mês + 12a − 2, semana = (1 + y + y/4 − y/100 +
+y/400 + 31m/12) % 7), e quantos dias o mês tem, com bissexto para fevereiro.
+Repita a leitura até o mês valer de 1 a 12. No fim, mostre quantos sábados e
+domingos o mês tem:
+
+```text
+Saída esperada:
+Mês e ano: 2 2028
+  D  S  T  Q  Q  S  S
+          1  2  3  4  5
+  6  7  8  9 10 11 12
+ 13 14 15 16 17 18 19
+ 20 21 22 23 24 25 26
+ 27 28 29
+Fins de semana: 8 dias
+```
+
+**Resposta esperada:** fevereiro de 2028 começa na terça e tem 29 dias; 8 dias de fim de semana.
+
+---
+
+**Exercício P0322** · ★★★ · De decimal para qualquer base
+
+Escreva um programa que leia um número inteiro positivo e uma base de 2 a 16
+e mostre o número naquela base, com os dígitos de 10 a 15 como A a F. Ainda
+não há vetores, então você não pode guardar os restos para mostrar ao
+contrário: em vez disso, ache a maior potência da base que cabe no número e
+vá descendo, mostrando um dígito por potência. Repita a pergunta da base até
+ela valer de 2 a 16. Duas interações:
+
+```text
+Saída esperada:
+Número e base: 2026 16
+2026 na base 16: 7EA
+```
+
+```text
+Número e base: 2026 2
+2026 na base 2: 11111101010
+```
+
+**Resposta esperada:** 7EA na base 16; 11111101010 na base 2; 2026 na base 8 é 3752.
+
+---
+
+**Exercício P0323** · ★★★ · Validação de CPF com laço
+
+Escreva um programa que leia um CPF de 11 dígitos, só números, num long long,
+e diga se ele é válido. Separe os dígitos com um laço. Regras: CPF com os 11
+dígitos iguais é inválido; o 1º verificador vem dos 9 primeiros dígitos com
+pesos de 10 a 2; o 2º vem dos 10 primeiros com pesos de 11 a 2; em cada um,
+r = soma % 11 e o dígito é 0 se r < 2, senão 11 − r. Três interações:
+
+```text
+Saída esperada:
+CPF (11 dígitos): 11144477735
+CPF válido
+```
+
+```text
+CPF (11 dígitos): 11144477734
+CPF inválido: o 2º dígito deveria ser 5
+```
+
+```text
+CPF (11 dígitos): 22222222222
+CPF inválido: dígitos todos iguais
+```
+
+**Resposta esperada:** as três saídas acima.
+
+---
+
+**Exercício P0324** · ★★★ · Os primos até 10 000
+
+Sem vetor, não dá para montar o crivo de Eratóstenes, mas dá para testar cada
+número com a versão econômica: descarte os pares (fora o 2) e tente só os
+divisores ímpares d com d * d <= n. Escreva um programa que conte os primos
+até 10 000, mostre o maior deles e o maior buraco entre dois primos
+seguidos (e quais são eles):
+
+```text
+Saída esperada:
+Primos até 10000: 1229
+Maior primo: 9973
+Maior buraco: 36, entre 9551 e 9587
+```
+
+**Resposta esperada:** 1229 primos, maior 9973, buraco de 36 entre 9551 e 9587.
+
+---
+
+**Exercício P0325** · ★★★ · A rotina de Kaprekar
+
+Pegue um número de 4 dígitos que não tenha os quatro iguais. Ordene os
+dígitos do maior para o menor e do menor para o maior, e subtraia. Repita com
+o resultado (mantendo zeros à esquerda, como em 0378). Em no máximo 7 passos
+você chega em 6174 e fica lá para sempre. Escreva um programa que mostre os
+passos a partir de 3524. Ainda sem vetor, para ordenar os dígitos, ande pelos
+valores de 9 a 0 e, para cada valor, conte quantas vezes ele aparece:
+
+```text
+Saída esperada:
+5432 - 2345 = 3087
+8730 - 0378 = 8352
+8532 - 2358 = 6174
+Chegou em 6174 em 3 passos
+```
+
+**Resposta esperada:** 3 passos até 6174.
+
+---
+
+**Exercício P0326** · ★★★ · A tabela do empréstimo
+
+Você pegou R$ 1200.00 emprestado em 6 parcelas iguais, com juros de 2% ao
+mês (tabela Price). A parcela é P = V · i / (1 − (1 + i)^−n). Todo mês, os
+juros são i vezes o saldo devedor, e o resto da parcela amortiza a dívida.
+Escreva um programa que mostre a tabela mês a mês e, no fim, o total pago e
+o total de juros:
+
+```text
+Saída esperada:
+Parcela: R$ 214.23
+Mês  Juros   Amortização  Saldo
+ 1   24.00      190.23   1009.77
+ 2   20.20      194.04    815.73
+ 3   16.31      197.92    617.82
+ 4   12.36      201.87    415.94
+ 5    8.32      205.91    210.03
+ 6    4.20      210.03      0.00
+Total pago: R$ 1285.39
+Total de juros: R$ 85.39
+```
+
+```bash
+gcc ~/LPEDC/material/P0326.c -o ~/LPEDC/material/P0326 -lm && ~/LPEDC/material/P0326
+```
+
+---
+
+**Exercício P0327** · ★★★ · O juro escondido no parcelamento
+
+A loja anuncia uma TV de R$ 1000.00 "em 10 vezes de R$ 120.00". Qual é o juro
+mensal escondido? Não há fórmula direta, mas dá para achar por bissecção: a
+parcela P(i) = V · i / (1 − (1 + i)^−n) cresce com i. Comece com a taxa entre
+0.0001 e 1 (0,01% e 100%), teste o meio, e jogue fora a metade em que a
+resposta não está, até o intervalo ficar menor que 0.0000001. Mostre a taxa
+e quantas voltas foram precisas:
+
+```text
+Saída esperada:
+Taxa mensal: 3.46%
+Voltas da bissecção: 24
+Conferindo: parcela de R$ 120.00
+```
+
+```bash
+gcc ~/LPEDC/material/P0327.c -o ~/LPEDC/material/P0327 -lm && ~/LPEDC/material/P0327
+```
+
+---
+
+**Exercício P0328** · ★★★ · As datas palíndromas do século
+
+A data 12/02/2021, escrita como 12022021, se lê igual de trás para frente.
+Escreva um programa que ache todas as datas palíndromas (ddmmaaaa) de 2000 a
+2099. Para cada ano, inverta os 4 dígitos: os dois primeiros do inverso são o
+dia, os dois últimos são o mês. Mostre só as datas que existem de verdade
+(mês de 1 a 12, dia dentro do mês, fevereiro com bissexto) e quantas são:
+
+```text
+Saída esperada:
+10/02/2001
+20/02/2002
+01/02/2010
+11/02/2011
+21/02/2012
+02/02/2020
+12/02/2021
+22/02/2022
+03/02/2030
+13/02/2031
+23/02/2032
+04/02/2040
+14/02/2041
+24/02/2042
+05/02/2050
+15/02/2051
+25/02/2052
+06/02/2060
+16/02/2061
+26/02/2062
+07/02/2070
+17/02/2071
+27/02/2072
+08/02/2080
+18/02/2081
+28/02/2082
+09/02/2090
+19/02/2091
+29/02/2092
+Datas palíndromas no século: 29
+```
+
+**Resposta esperada:** 29 datas, de 10/02/2001 a 29/02/2092.
+
+---
+
+**Exercício P0329** · ★★★ · Monty Hall no programa de auditório
+
+No programa de auditório, há 3 portas e um carro atrás de uma delas. Você
+escolhe uma porta; o apresentador, que sabe onde está o carro, abre outra
+porta com um bode; e pergunta se você quer trocar. Escreva uma simulação com
+rand de 1 000 000 de rodadas que conte quantas vezes você ganharia ficando e
+quantas ganharia trocando, e mostre os percentuais sem casas decimais:
+
+```text
+Saída esperada:
+Rodadas: 1000000
+Ficando: 33% de vitórias
+Trocando: 67% de vitórias
+```
+
+**Resposta esperada:** 33% ficando, 67% trocando.
+
+---
+
+**Exercício P0330** · ★★★ · O triângulo de Pascal
+
+No triângulo de Pascal, cada número é a soma dos dois de cima. Sem vetor, dá
+para calcular cada linha da esquerda para a direita: o primeiro é 1, e o
+próximo é c = c * (n − k) / (k + 1), onde n é o número da linha (começando
+em 0) e k a posição. Escreva um programa que mostre as 7 primeiras linhas,
+centralizadas (2 espaços por linha que falta), cada número com %4d, e a soma
+de cada linha:
+
+```text
+Saída esperada:
+               1   (soma 1)
+             1   1   (soma 2)
+           1   2   1   (soma 4)
+         1   3   3   1   (soma 8)
+       1   4   6   4   1   (soma 16)
+     1   5  10  10   5   1   (soma 32)
+   1   6  15  20  15   6   1   (soma 64)
+```
+
+**Resposta esperada:** a última linha é 1 6 15 20 15 6 1, soma 64.
+
+---
+
+### Desafios do módulo
 
 Problemas extras, do médio ao difícil. Crie um arquivo seu para cada um e
 compile com as flags de estudo.
@@ -2718,7 +2975,7 @@ sempre o meio, `(menor + maior) / 2`, e corta metade a cada resposta: com 1,
 
 </details>
 
-## Questões do POSCOMP
+### Questões do POSCOMP
 
 Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.
 
@@ -2729,998 +2986,7 @@ Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no cadern
 
 O gabarito oficial de 2025 não estava disponível quando este material foi montado.
 
-
-## Lista de exercícios práticos
-
-30 exercícios que misturam os assuntos do módulo, no ritmo da prova do PPGI. Arquivos P0301.c a P0330.c, em `material/`; resoluções em `_respostas/03-repeticoes/lista/`.
-
-### ★☆☆ Aquecimento
-
-**Exercício P0301** · ★☆☆ · A tabela do pão francês
-
-A padaria quer colar no balcão uma tabela com o preço de 1 a 8 pães, a
-R$ 0.85 cada. Escreva um programa com um for que mostre a tabela, com a
-quantidade em 2 colunas e o preço em 5:
-
-
-```text
-Saída esperada:
- 1 pão(es): R$  0.85
- 2 pão(es): R$  1.70
- 3 pão(es): R$  2.55
- 4 pão(es): R$  3.40
- 5 pão(es): R$  4.25
- 6 pão(es): R$  5.10
- 7 pão(es): R$  5.95
- 8 pão(es): R$  6.80
-```
-
-**Dicas:**
-
-1. for (int qtd = 1; qtd <= 8; qtd++).
-2. O preço é qtd * 0.85, mostrado com %5.2f.
-3. Resposta esperada: de R$ 0.85 a R$ 6.80.
-
-```bash
-gcc ~/LPEDC/material/P0301.c -o ~/LPEDC/material/P0301 && ~/LPEDC/material/P0301
-```
-
----
-
-**Exercício P0302** · ★☆☆ · O desafio do cofrinho
-
-No desafio do cofrinho, você guarda R$ 1 no dia 1, R$ 2 no dia 2, e assim
-por diante, um real a mais por dia. Escreva um programa com while que mostre
-quanto há no cofrinho ao fim dos dias 10, 20 e 30, e o total final:
-
-
-```text
-Saída esperada:
-Dia 10: R$ 55
-Dia 20: R$ 210
-Dia 30: R$ 465
-Total em 30 dias: R$ 465
-```
-
-**Dicas:**
-
-1. Um acumulador: total começa em 0 e recebe total += dia a cada volta.
-2. Dentro do laço, mostre só quando dia % 10 == 0.
-3. Resposta esperada: Total em 30 dias: R$ 465.
-
-```bash
-gcc ~/LPEDC/material/P0302.c -o ~/LPEDC/material/P0302 && ~/LPEDC/material/P0302
-```
-
----
-
-**Exercício P0303** · ★☆☆ · As filas possíveis no banco
-
-De quantas maneiras 10 pessoas podem formar uma fila? É 10! (10 × 9 × ... ×
-1). Escreva um programa com for que calcule 10! e 20!, num unsigned long long
-(o 20! já não cabe num int de jeito nenhum):
-
-
-```text
-Saída esperada:
-10! = 3628800
-20! = 2432902008176640000
-```
-
-**Dicas:**
-
-1. O acumulador da multiplicação começa em 1, não em 0.
-2. unsigned long long se mostra com %llu.
-3. Resposta esperada: 3628800 e 2432902008176640000.
-
-```bash
-gcc ~/LPEDC/material/P0303.c -o ~/LPEDC/material/P0303 && ~/LPEDC/material/P0303
-```
-
----
-
-**Exercício P0304** · ★☆☆ · Os dígitos do protocolo
-
-O atendimento deu o protocolo 2026110903. Escreva um programa com while que
-conte quantos dígitos ele tem e some esses dígitos, tirando um por vez com %
-e / por 10. O número não cabe num int: use long long.
-
-
-```text
-Saída esperada:
-Protocolo: 2026110903
-Dígitos: 10
-Soma dos dígitos: 24
-```
-
-**Dicas:**
-
-1. Enquanto n > 0: some n % 10, conte mais um, faça n /= 10.
-2. Trabalhe numa cópia, para ainda poder mostrar o número original.
-3. Resposta esperada: 10 dígitos, soma 24.
-
-```bash
-gcc ~/LPEDC/material/P0304.c -o ~/LPEDC/material/P0304 && ~/LPEDC/material/P0304
-```
-
----
-
-**Exercício P0305** · ★☆☆ · O tamanho do açaí
-
-A tela do quiosque pede o tamanho do açaí: 1 (300 ml, R$ 12.00), 2 (500 ml,
-R$ 18.00) ou 3 (700 ml, R$ 24.00). Escreva um programa com do...while que
-repita a pergunta até a pessoa digitar 1, 2 ou 3, e depois mostre o preço.
-Um exemplo de interação, em que a pessoa errou duas vezes:
-
-
-```text
-Saída esperada:
-Tamanho (1, 2 ou 3): 0
-Opção inválida.
-Tamanho (1, 2 ou 3): 5
-Opção inválida.
-Tamanho (1, 2 ou 3): 2
-Açaí de 500 ml: R$ 18.00
-```
-
-**Dicas:**
-
-1. O do...while roda o corpo pelo menos uma vez: perfeito para perguntar.
-2. Confira o retorno do scanf: se não leu número, termine com return 1.
-3. Resposta esperada: com 0, 5 e 2, Açaí de 500 ml: R$ 18.00.
-
-```bash
-gcc ~/LPEDC/material/P0305.c -o ~/LPEDC/material/P0305 && ~/LPEDC/material/P0305
-```
-
----
-
-**Exercício P0306** · ★☆☆ · Os números da sorte da promoção
-
-Na promoção do mercado, ganham brinde os cupons cujo número, de 1 a 99, é
-múltiplo de 3 ou de 5. Escreva um programa que conte quantos números de 1 a
-99 ganham brinde e some esses números:
-
-
-```text
-Saída esperada:
-Cupons premiados: 46
-Soma dos números: 2318
-```
-
-**Dicas:**
-
-1. Um contador e um acumulador, os dois começando em 0.
-2. A condição é n % 3 == 0 || n % 5 == 0: o 15 conta uma vez só.
-3. Resposta esperada: 46 cupons, soma 2318.
-
-```bash
-gcc ~/LPEDC/material/P0306.c -o ~/LPEDC/material/P0306 && ~/LPEDC/material/P0306
-```
-
----
-
-**Exercício P0307** · ★☆☆ · A fofoca no grupo da família
-
-Uma fofoca começa com 1 pessoa. A cada rodada, cada pessoa que sabe conta
-para outras 2, então quem sabe triplica (1, 3, 9, 27...). Escreva um programa
-com while que mostre cada rodada e pare na primeira em que mais de 1 milhão
-de pessoas já saibam:
-
-
-```text
-Saída esperada:
-Rodada 1: 3 pessoas
-Rodada 2: 9 pessoas
-Rodada 3: 27 pessoas
-Rodada 4: 81 pessoas
-Rodada 5: 243 pessoas
-Rodada 6: 729 pessoas
-Rodada 7: 2187 pessoas
-Rodada 8: 6561 pessoas
-Rodada 9: 19683 pessoas
-Rodada 10: 59049 pessoas
-Rodada 11: 177147 pessoas
-Rodada 12: 531441 pessoas
-Rodada 13: 1594323 pessoas
-Passou de 1 milhão na rodada 13
-```
-
-**Dicas:**
-
-1. while (sabem <= 1000000) { sabem *= 3; rodada++; ... }.
-2. Mostre dentro do laço, depois de multiplicar.
-3. Resposta esperada: Passou de 1 milhão na rodada 13.
-
-```bash
-gcc ~/LPEDC/material/P0307.c -o ~/LPEDC/material/P0307 && ~/LPEDC/material/P0307
-```
-
----
-
-**Exercício P0308** · ★☆☆ · O jogo do PIM
-
-No jogo do PIM, a turma conta de 1 em diante, mas todo múltiplo de 4, e todo
-número que termina em 4, vira "PIM". Escreva um programa que mostre a
-contagem de 1 a 20, um número por linha, trocando esses números por PIM:
-
-
-```text
-Saída esperada:
-1
-2
-3
-PIM
-5
-6
-7
-PIM
-9
-10
-11
-PIM
-13
-PIM
-15
-PIM
-17
-18
-19
-PIM
-```
-
-**Dicas:**
-
-1. A condição é n % 4 == 0 || n % 10 == 4.
-2. Um if/else dentro do for: ou mostra PIM, ou mostra o número.
-3. Resposta esperada: PIM no 4, 8, 12, 14, 16 e 20.
-
-```bash
-gcc ~/LPEDC/material/P0308.c -o ~/LPEDC/material/P0308 && ~/LPEDC/material/P0308
-```
-
----
-
-**Exercício P0309** · ★☆☆ · O mapa da sala de cinema
-
-A sala pequena do cinema tem as fileiras A a E e 6 cadeiras em cada. Escreva
-um programa com dois for, um dentro do outro, que mostre o mapa dos
-assentos. Use um char para a fileira: 'A' + 1 é 'B', porque char é número.
-
-
-```text
-Saída esperada:
-A1 A2 A3 A4 A5 A6
-B1 B2 B3 B4 B5 B6
-C1 C2 C3 C4 C5 C6
-D1 D2 D3 D4 D5 D6
-E1 E2 E3 E4 E5 E6
-```
-
-**Dicas:**
-
-1. for (char fila = 'A'; fila <= 'E'; fila++) por fora; as cadeiras de 1 a
-   6 por dentro.
-2. Separe com espaço e quebre a linha depois do laço de dentro. Cuidado com
-   o espaço sobrando no fim da linha: mostre o espaço antes de cada cadeira,
-   menos da primeira.
-3. Resposta esperada: 5 linhas de 6 assentos, de A1 a E6.
-
-```bash
-gcc ~/LPEDC/material/P0309.c -o ~/LPEDC/material/P0309 && ~/LPEDC/material/P0309
-```
-
----
-
-**Exercício P0310** · ★☆☆ · A parcela que sobrou
-
-A geladeira foi parcelada em 10 vezes de R$ 189.90, mas o programa abaixo
-mostra 11 parcelas e um total errado. O erro está no for, de propósito.
-Conserte o laço para mostrar as 10 parcelas e o total certo:
-
-
-```text
-Saída esperada:
-Parcela 1: R$ 189.90
-Parcela 2: R$ 189.90
-Parcela 3: R$ 189.90
-Parcela 4: R$ 189.90
-Parcela 5: R$ 189.90
-Parcela 6: R$ 189.90
-Parcela 7: R$ 189.90
-Parcela 8: R$ 189.90
-Parcela 9: R$ 189.90
-Parcela 10: R$ 189.90
-Total: R$ 1899.00
-```
-
-**Dicas:**
-
-1. Conte quantas voltas o for dá começando em 0 e indo até <= 10.
-2. Ou começa em 1 e vai até <= 10, ou começa em 0 e vai até < 10. O número
-   mostrado tem que ir de 1 a 10.
-3. Resposta esperada: 10 parcelas, Total: R$ 1899.00.
-
-```bash
-gcc ~/LPEDC/material/P0310.c -o ~/LPEDC/material/P0310 && ~/LPEDC/material/P0310
-```
-
-### ★★☆ Para pensar
-
-**Exercício P0311** · ★★☆ · O pedido de trás para frente
-
-O sistema da loja grava o número do pedido invertido para embaralhar a
-etiqueta. Escreva um programa com while que inverta o pedido 120345 (o
-resultado é 543021) e confira se o número é igual ao seu inverso (capicua).
-Faça o mesmo com 12321:
-
-
-```text
-Saída esperada:
-120345 invertido: 543021 (não é capicua)
-12321 invertido: 12321 (é capicua)
-```
-
-**Dicas:**
-
-1. invertido = invertido * 10 + n % 10; depois n /= 10. Repita enquanto n >
-   0.
-2. Guarde o original numa variável antes do laço, porque n vai virando 0.
-3. Para o segundo número, zere o invertido antes de começar de novo.
-4. Resposta esperada: 543021 e 12321.
-
-```bash
-gcc ~/LPEDC/material/P0311.c -o ~/LPEDC/material/P0311 && ~/LPEDC/material/P0311
-```
-
----
-
-**Exercício P0312** · ★★☆ · Os dois ônibus no mesmo ponto
-
-No terminal, o ônibus 101 sai a cada 12 minutos e o 202 a cada 18. Os dois
-saíram juntos às 06:00. Escreva um programa que descubra, com um laço, daqui
-a quantos minutos eles saem juntos de novo (o MMC de 12 e 18), e mostre os
-três próximos horários em que isso acontece:
-
-
-```text
-Saída esperada:
-Saem juntos a cada 36 minutos
-06:36
-07:12
-07:48
-```
-
-**Dicas:**
-
-1. Comece com t = 12 e vá somando 12 enquanto t % 18 != 0: o primeiro t que
-   for múltiplo dos dois é o MMC.
-2. Os horários são 6 * 60 + k * mmc, para k de 1 a 3, mostrados com %02d.
-3. Resposta esperada: 36 minutos; 06:36, 07:12 e 07:48.
-
-```bash
-gcc ~/LPEDC/material/P0312.c -o ~/LPEDC/material/P0312 && ~/LPEDC/material/P0312
-```
-
----
-
-**Exercício P0313** · ★★☆ · Os números amigos
-
-Dois números são amigos quando a soma dos divisores próprios de um (os
-divisores menores que ele) dá o outro, e vice-versa. Escreva um programa que
-some os divisores próprios de 220 e de 284 com um laço e diga se eles são
-amigos:
-
-
-```text
-Saída esperada:
-Divisores de 220 somam 284
-Divisores de 284 somam 220
-220 e 284 são amigos
-```
-
-**Dicas:**
-
-1. Para cada d de 1 a n - 1, se n % d == 0, some d.
-2. Faça um laço para cada número (ou um laço de fora que rode duas vezes).
-3. Resposta esperada: 284 e 220, são amigos.
-
-```bash
-gcc ~/LPEDC/material/P0313.c -o ~/LPEDC/material/P0313 && ~/LPEDC/material/P0313
-```
-
----
-
-**Exercício P0314** · ★★☆ · O próximo ano primo
-
-2026 não é primo (é par). Escreva um programa que ache o primeiro ano primo
-depois de 2026 e o último ano primo antes de 2026. Para testar se n é primo,
-basta tentar os divisores d com d * d <= n, e dá para parar no primeiro que
-dividir (break):
-
-
-```text
-Saída esperada:
-Próximo ano primo: 2027
-Último ano primo antes de 2026: 2017
-```
-
-**Dicas:**
-
-1. Um laço de fora anda pelos anos; um de dentro testa os divisores de 2 até
-   d * d <= ano.
-2. Use uma flag (bool primo = true) que vira false quando achar um divisor.
-3. Para o anterior, o laço de fora anda para trás a partir de 2025.
-4. Resposta esperada: 2027 e 2017.
-
-```bash
-gcc ~/LPEDC/material/P0314.c -o ~/LPEDC/material/P0314 && ~/LPEDC/material/P0314
-```
-
----
-
-**Exercício P0315** · ★★☆ · A dívida do rotativo
-
-Uma dívida de R$ 1000.00 no rotativo do cartão cresce 14% ao mês (juros sobre
-juros). Escreva um programa com while que mostre o saldo mês a mês até a
-dívida passar do dobro, e diga em quantos meses isso aconteceu:
-
-
-```text
-Saída esperada:
-Mês 1: R$ 1140.00
-Mês 2: R$ 1299.60
-Mês 3: R$ 1481.54
-Mês 4: R$ 1688.96
-Mês 5: R$ 1925.41
-Mês 6: R$ 2194.97
-A dívida dobrou em 6 meses
-```
-
-**Dicas:**
-
-1. while (divida <= 2 * inicial) { divida *= 1.14; mes++; ... }.
-2. Não use pow aqui: o laço já multiplica um mês por vez.
-3. Resposta esperada: A dívida dobrou em 6 meses.
-
-```bash
-gcc ~/LPEDC/material/P0315.c -o ~/LPEDC/material/P0315 && ~/LPEDC/material/P0315
-```
-
----
-
-**Exercício P0316** · ★★☆ · O triângulo de Floyd
-
-No triângulo de Floyd, os números naturais vão enchendo as linhas: a linha 1
-tem um número, a linha 2 tem dois, e assim por diante. Escreva um programa
-com laços aninhados que mostre as 5 primeiras linhas, cada número com %3d, e
-a soma da última linha:
-
-
-```text
-Saída esperada:
-  1
-  2  3
-  4  5  6
-  7  8  9 10
- 11 12 13 14 15
-Soma da linha 5: 65
-```
-
-**Dicas:**
-
-1. Um contador n começa em 1 e só cresce, fora dos dois laços.
-2. O laço de dentro roda "linha" vezes: for (int col = 1; col <= linha;
-   col++).
-3. Zere a soma no começo de cada linha; no fim, ela tem a soma da última.
-4. Resposta esperada: Soma da linha 5: 65.
-
-```bash
-gcc ~/LPEDC/material/P0316.c -o ~/LPEDC/material/P0316 && ~/LPEDC/material/P0316
-```
-
----
-
-**Exercício P0317** · ★★☆ · A eleição do síndico
-
-Na assembleia, cada morador digita o voto: 1 para a Marta, 2 para o Jorge e
-qualquer outro número positivo é nulo. O 0 encerra a votação (sentinela).
-Escreva um programa que conte os votos e mostre o resultado, o percentual de
-nulos e quem venceu (ou se deu empate). Um exemplo de interação, com os
-votos 1 2 1 7 1 2 0:
-
-
-```text
-Saída esperada:
-Voto (0 encerra): Voto (0 encerra): Voto (0 encerra): Voto (0 encerra): Voto (0 encerra): Voto (0 encerra): Voto (0 encerra):
-Marta: 3
-Jorge: 2
-Nulos: 1 (16.7%)
-Vencedor: Marta
-```
-
-**Dicas:**
-
-1. while (true): leia o voto; if (voto == 0) break; depois conte.
-2. O percentual é nulos * 100.0 / total; cuidado com total 0.
-3. Para testar sem digitar: printf '1\n2\n1\n7\n1\n2\n0\n' | ./rodar
-   arquivo.c (as perguntas saem todas na mesma linha, porque o pipe não
-   mostra o que foi digitado).
-4. Resposta esperada: Marta 3, Jorge 2, Nulos 1 (16.7%), Vencedor: Marta.
-
-```bash
-gcc ~/LPEDC/material/P0317.c -o ~/LPEDC/material/P0317 && ~/LPEDC/material/P0317
-```
-
----
-
-**Exercício P0318** · ★★☆ · A soma que demora a crescer
-
-A soma 1 + 1/2 + 1/3 + 1/4 + ... cresce para sempre, mas bem devagar.
-Escreva um programa com while que descubra quantos termos são precisos para
-a soma passar de 3, e depois de 5, e mostre a soma em cada caso:
-
-
-```text
-Saída esperada:
-Passa de 3 com 11 termos (soma 3.0199)
-Passa de 5 com 83 termos (soma 5.0021)
-```
-
-**Dicas:**
-
-1. soma += 1.0 / n; o 1.0 é o que faz a divisão ser real.
-2. Dá para fazer um laço só: continue somando depois de passar de 3, e
-   guarde o momento em que passou com uma flag.
-3. Resposta esperada: 11 termos e 83 termos.
-
-```bash
-gcc ~/LPEDC/material/P0318.c -o ~/LPEDC/material/P0318 && ~/LPEDC/material/P0318
-```
-
----
-
-**Exercício P0319** · ★★☆ · O desconto por quantidade
-
-A distribuidora de água dá 2% de desconto por galão comprado, até o máximo de
-15%. O galão custa R$ 12.00. Escreva um programa que mostre a tabela de 1 a
-10 galões, com o desconto e o total de cada linha:
-
-
-```text
-Saída esperada:
- 1 galão(ões):  2% -> R$  11.76
- 2 galão(ões):  4% -> R$  23.04
- 3 galão(ões):  6% -> R$  33.84
- 4 galão(ões):  8% -> R$  44.16
- 5 galão(ões): 10% -> R$  54.00
- 6 galão(ões): 12% -> R$  63.36
- 7 galão(ões): 14% -> R$  72.24
- 8 galão(ões): 15% -> R$  81.60
- 9 galão(ões): 15% -> R$  91.80
-10 galão(ões): 15% -> R$ 102.00
-```
-
-**Dicas:**
-
-1. O desconto da linha é 2 * qtd, mas se passar de 15 vira 15: um ternário
-   resolve.
-2. Total = qtd * 12.00 * (100 - desconto) / 100.0.
-3. Resposta esperada: a tabela acima, terminando em R$ 102.00.
-
-```bash
-gcc ~/LPEDC/material/P0319.c -o ~/LPEDC/material/P0319 && ~/LPEDC/material/P0319
-```
-
----
-
-**Exercício P0320** · ★★☆ · A média da turma que dá errado
-
-O programa abaixo deveria somar as 5 notas do simulado (7, 9, 6, 8 e 10) e
-mostrar a média 8.0, mas mostra 2.0. São dois erros de acumulador, de
-propósito: um zera a soma no lugar errado e o outro faz a divisão inteira.
-Conserte os dois:
-
-
-```text
-Saída esperada:
-Soma: 40
-Média: 8.0
-```
-
-**Dicas:**
-
-1. Uma variável zerada dentro do laço é zerada em toda volta.
-2. soma / 5 entre dois int corta a parte decimal. Use 5.0 ou um cast.
-3. Resposta esperada: Soma: 40, Média: 8.0.
-
-```bash
-gcc ~/LPEDC/material/P0320.c -o ~/LPEDC/material/P0320 && ~/LPEDC/material/P0320
-```
-
-### ★★★ Desafio
-
-**Exercício P0321** · ★★★ · O calendário de qualquer mês
-
-Escreva um programa que leia o mês e o ano e mostre o calendário daquele mês,
-com a semana começando no domingo e cada dia em 3 posições (%3d). O programa
-descobre sozinho em que dia da semana cai o dia 1, com a fórmula (a = (14 −
-mês) / 12, y = ano − a, m = mês + 12a − 2, semana = (1 + y + y/4 − y/100 +
-y/400 + 31m/12) % 7), e quantos dias o mês tem, com bissexto para fevereiro.
-Repita a leitura até o mês valer de 1 a 12. No fim, mostre quantos sábados e
-domingos o mês tem:
-
-
-```text
-Saída esperada:
-Mês e ano: 2 2028
-  D  S  T  Q  Q  S  S
-          1  2  3  4  5
-  6  7  8  9 10 11 12
- 13 14 15 16 17 18 19
- 20 21 22 23 24 25 26
- 27 28 29
-Fins de semana: 8 dias
-```
-
-**Dicas:**
-
-1. Dias do mês: 31 por padrão; 30 em abril, junho, setembro e novembro;
-   fevereiro tem 28 ou 29. Um switch com case empilhados resolve.
-2. Antes do dia 1, um laço mostra "primeiro" vezes três espaços. Depois, um
-   for nos dias; quebre a linha quando (primeiro + dia) % 7 == 0, e no fim só
-   se a última linha não terminou num sábado.
-3. O dia da semana de cada dia é (primeiro + dia - 1) % 7: 0 é domingo, 6 é
-   sábado.
-4. Resposta esperada: fevereiro de 2028 começa na terça e tem 29 dias; 8 dias
-   de fim de semana.
-
-```bash
-gcc ~/LPEDC/material/P0321.c -o ~/LPEDC/material/P0321 && ~/LPEDC/material/P0321
-```
-
----
-
-**Exercício P0322** · ★★★ · De decimal para qualquer base
-
-Escreva um programa que leia um número inteiro positivo e uma base de 2 a 16
-e mostre o número naquela base, com os dígitos de 10 a 15 como A a F. Ainda
-não há vetores, então você não pode guardar os restos para mostrar ao
-contrário: em vez disso, ache a maior potência da base que cabe no número e
-vá descendo, mostrando um dígito por potência. Repita a pergunta da base até
-ela valer de 2 a 16. Duas interações:
-
-
-```text
-Saída esperada:
-Número e base: 2026 16
-2026 na base 16: 7EA
-```
-
-
-
-```text
-Número e base: 2026 2
-2026 na base 2: 11111101010
-```
-
-**Dicas:**
-
-1. potencia = 1; while (potencia <= n / base) potencia *= base; (dividir
-   antes evita estourar o int).
-2. Depois: while (potencia > 0) { digito = n / potencia; n %= potencia;
-   potencia /= base; ... }.
-3. Para mostrar o dígito: se for menor que 10, '0' + digito; senão, 'A' +
-   digito - 10, com %c.
-4. Resposta esperada: 7EA na base 16; 11111101010 na base 2; 2026 na base 8
-   é 3752.
-
-```bash
-gcc ~/LPEDC/material/P0322.c -o ~/LPEDC/material/P0322 && ~/LPEDC/material/P0322
-```
-
----
-
-**Exercício P0323** · ★★★ · Validação de CPF com laço
-
-Escreva um programa que leia um CPF de 11 dígitos, só números, num long long,
-e diga se ele é válido. Separe os dígitos com um laço. Regras: CPF com os 11
-dígitos iguais é inválido; o 1º verificador vem dos 9 primeiros dígitos com
-pesos de 10 a 2; o 2º vem dos 10 primeiros com pesos de 11 a 2; em cada um,
-r = soma % 11 e o dígito é 0 se r < 2, senão 11 − r. Três interações:
-
-
-```text
-Saída esperada:
-CPF (11 dígitos): 11144477735
-CPF válido
-```
-
-
-
-```text
-CPF (11 dígitos): 11144477734
-CPF inválido: o 2º dígito deveria ser 5
-```
-
-
-
-```text
-CPF (11 dígitos): 22222222222
-CPF inválido: dígitos todos iguais
-```
-
-**Dicas:**
-
-1. O dígito na posição p (1 é o mais à esquerda) é cpf / 10^(11 - p) % 10.
-   Num laço, vá dividindo uma potência de 10 que começa em 10000000000.
-2. Some soma1 nas posições 1 a 9 e soma2 nas posições 1 a 10, com os pesos
-   11 - p e 12 - p.
-3. Para os dígitos iguais, compare cada dígito com o primeiro e use uma flag.
-4. Resposta esperada: as três saídas acima.
-
-```bash
-gcc ~/LPEDC/material/P0323.c -o ~/LPEDC/material/P0323 && ~/LPEDC/material/P0323
-```
-
----
-
-**Exercício P0324** · ★★★ · Os primos até 10 000
-
-Sem vetor, não dá para montar o crivo de Eratóstenes, mas dá para testar cada
-número com a versão econômica: descarte os pares (fora o 2) e tente só os
-divisores ímpares d com d * d <= n. Escreva um programa que conte os primos
-até 10 000, mostre o maior deles e o maior buraco entre dois primos
-seguidos (e quais são eles):
-
-
-```text
-Saída esperada:
-Primos até 10000: 1229
-Maior primo: 9973
-Maior buraco: 36, entre 9551 e 9587
-```
-
-**Dicas:**
-
-1. Comece contando o 2 e ande de n = 3 em n += 2.
-2. Guarde o último primo encontrado (anterior). A cada novo primo, compare
-   n - anterior com o maior buraco até agora.
-3. Use break no laço dos divisores assim que achar um.
-4. Resposta esperada: 1229 primos, maior 9973, buraco de 36 entre 9551 e
-   9587.
-
-```bash
-gcc ~/LPEDC/material/P0324.c -o ~/LPEDC/material/P0324 && ~/LPEDC/material/P0324
-```
-
----
-
-**Exercício P0325** · ★★★ · A rotina de Kaprekar
-
-Pegue um número de 4 dígitos que não tenha os quatro iguais. Ordene os
-dígitos do maior para o menor e do menor para o maior, e subtraia. Repita com
-o resultado (mantendo zeros à esquerda, como em 0378). Em no máximo 7 passos
-você chega em 6174 e fica lá para sempre. Escreva um programa que mostre os
-passos a partir de 3524. Ainda sem vetor, para ordenar os dígitos, ande pelos
-valores de 9 a 0 e, para cada valor, conte quantas vezes ele aparece:
-
-
-```text
-Saída esperada:
-5432 - 2345 = 3087
-8730 - 0378 = 8352
-8532 - 2358 = 6174
-Chegou em 6174 em 3 passos
-```
-
-**Dicas:**
-
-1. Para montar o maior: para v de 9 a 0, para cada um dos 4 dígitos de n (n
-   % 10, n / 10 % 10, ...), se o dígito for v, maior = maior * 10 + v.
-2. O menor é o mesmo laço com v de 0 a 9.
-3. Mostre com %04d para manter os zeros à esquerda.
-4. Resposta esperada: 3 passos até 6174.
-
-```bash
-gcc ~/LPEDC/material/P0325.c -o ~/LPEDC/material/P0325 && ~/LPEDC/material/P0325
-```
-
----
-
-**Exercício P0326** · ★★★ · A tabela do empréstimo
-
-Você pegou R$ 1200.00 emprestado em 6 parcelas iguais, com juros de 2% ao
-mês (tabela Price). A parcela é P = V · i / (1 − (1 + i)^−n). Todo mês, os
-juros são i vezes o saldo devedor, e o resto da parcela amortiza a dívida.
-Escreva um programa que mostre a tabela mês a mês e, no fim, o total pago e
-o total de juros:
-
-
-```text
-Saída esperada:
-Parcela: R$ 214.23
-Mês  Juros   Amortização  Saldo
- 1   24.00      190.23   1009.77
- 2   20.20      194.04    815.73
- 3   16.31      197.92    617.82
- 4   12.36      201.87    415.94
- 5    8.32      205.91    210.03
- 6    4.20      210.03      0.00
-Total pago: R$ 1285.39
-Total de juros: R$ 85.39
-```
-
-**Dicas:**
-
-1. pow(1 + i, -n) faz o (1 + i) elevado a −n.
-2. Dentro do laço: juros = saldo * i; amortizacao = parcela - juros; saldo
-   -= amortizacao; some os juros num acumulador.
-3. No último mês, o saldo pode dar -0.00 por causa do arredondamento: use
-   fabs(saldo) < 0.005 para mostrar 0.00.
-4. Resposta esperada: Total de juros: R$ 85.39.
-
-```bash
-gcc ~/LPEDC/material/P0326.c -o ~/LPEDC/material/P0326 -lm && ~/LPEDC/material/P0326
-```
-
----
-
-**Exercício P0327** · ★★★ · O juro escondido no parcelamento
-
-A loja anuncia uma TV de R$ 1000.00 "em 10 vezes de R$ 120.00". Qual é o juro
-mensal escondido? Não há fórmula direta, mas dá para achar por bissecção: a
-parcela P(i) = V · i / (1 − (1 + i)^−n) cresce com i. Comece com a taxa entre
-0.0001 e 1 (0,01% e 100%), teste o meio, e jogue fora a metade em que a
-resposta não está, até o intervalo ficar menor que 0.0000001. Mostre a taxa
-e quantas voltas foram precisas:
-
-
-```text
-Saída esperada:
-Taxa mensal: 3.46%
-Voltas da bissecção: 24
-Conferindo: parcela de R$ 120.00
-```
-
-**Dicas:**
-
-1. while (alto - baixo > 0.0000001) { meio = (baixo + alto) / 2; ... }.
-2. Se a parcela com a taxa do meio passa de 120, a taxa certa é menor: alto
-   = meio. Senão, baixo = meio.
-3. Para conferir, calcule a parcela de novo com a taxa achada.
-4. Resposta esperada: Taxa mensal: 3.46%.
-
-```bash
-gcc ~/LPEDC/material/P0327.c -o ~/LPEDC/material/P0327 -lm && ~/LPEDC/material/P0327
-```
-
----
-
-**Exercício P0328** · ★★★ · As datas palíndromas do século
-
-A data 12/02/2021, escrita como 12022021, se lê igual de trás para frente.
-Escreva um programa que ache todas as datas palíndromas (ddmmaaaa) de 2000 a
-2099. Para cada ano, inverta os 4 dígitos: os dois primeiros do inverso são o
-dia, os dois últimos são o mês. Mostre só as datas que existem de verdade
-(mês de 1 a 12, dia dentro do mês, fevereiro com bissexto) e quantas são:
-
-
-```text
-Saída esperada:
-10/02/2001
-20/02/2002
-01/02/2010
-11/02/2011
-21/02/2012
-02/02/2020
-12/02/2021
-22/02/2022
-03/02/2030
-13/02/2031
-23/02/2032
-04/02/2040
-14/02/2041
-24/02/2042
-05/02/2050
-15/02/2051
-25/02/2052
-06/02/2060
-16/02/2061
-26/02/2062
-07/02/2070
-17/02/2071
-27/02/2072
-08/02/2080
-18/02/2081
-28/02/2082
-09/02/2090
-19/02/2091
-29/02/2092
-Datas palíndromas no século: 29
-```
-
-**Dicas:**
-
-1. O inverso de 2021 é 1202: dia = inverso / 100 = 12, mês = inverso % 100 =
-   02.
-2. Em 2000 a 2099 o mês sai sempre 02 (fevereiro), mas o programa tem que
-   conferir mesmo assim.
-3. 29/02/2092 só vale porque 2092 é bissexto.
-4. Resposta esperada: 29 datas, de 10/02/2001 a 29/02/2092.
-
-```bash
-gcc ~/LPEDC/material/P0328.c -o ~/LPEDC/material/P0328 && ~/LPEDC/material/P0328
-```
-
----
-
-**Exercício P0329** · ★★★ · Monty Hall no programa de auditório
-
-No programa de auditório, há 3 portas e um carro atrás de uma delas. Você
-escolhe uma porta; o apresentador, que sabe onde está o carro, abre outra
-porta com um bode; e pergunta se você quer trocar. Escreva uma simulação com
-rand de 1 000 000 de rodadas que conte quantas vezes você ganharia ficando e
-quantas ganharia trocando, e mostre os percentuais sem casas decimais:
-
-
-```text
-Saída esperada:
-Rodadas: 1000000
-Ficando: 33% de vitórias
-Trocando: 67% de vitórias
-```
-
-**Dicas:**
-
-1. Sorteie o carro e a escolha com rand() % 3. Quem fica ganha quando
-   escolha == carro.
-2. Quem troca ganha exatamente quando quem fica perde: o apresentador sempre
-   tira o outro bode. Não precisa simular a porta aberta.
-3. srand((unsigned) time(NULL)) antes do laço. Com um milhão de rodadas, os
-   percentuais arredondados saem sempre os mesmos.
-4. Resposta esperada: 33% ficando, 67% trocando.
-
-```bash
-gcc ~/LPEDC/material/P0329.c -o ~/LPEDC/material/P0329 && ~/LPEDC/material/P0329
-```
-
----
-
-**Exercício P0330** · ★★★ · O triângulo de Pascal
-
-No triângulo de Pascal, cada número é a soma dos dois de cima. Sem vetor, dá
-para calcular cada linha da esquerda para a direita: o primeiro é 1, e o
-próximo é c = c * (n − k) / (k + 1), onde n é o número da linha (começando
-em 0) e k a posição. Escreva um programa que mostre as 7 primeiras linhas,
-centralizadas (2 espaços por linha que falta), cada número com %4d, e a soma
-de cada linha:
-
-
-```text
-Saída esperada:
-               1   (soma 1)
-             1   1   (soma 2)
-           1   2   1   (soma 4)
-         1   3   3   1   (soma 8)
-       1   4   6   4   1   (soma 16)
-     1   5  10  10   5   1   (soma 32)
-   1   6  15  20  15   6   1   (soma 64)
-```
-
-**Dicas:**
-
-1. Antes dos números, a linha n tem (6 - n) * 2 espaços.
-2. Faça a multiplicação antes da divisão: c * (n - k) / (k + 1) sempre dá
-   exato nessa ordem.
-3. A soma da linha n é 2 elevado a n: confira com a sua.
-4. Resposta esperada: a última linha é 1 6 15 20 15 6 1, soma 64.
-
-```bash
-gcc ~/LPEDC/material/P0330.c -o ~/LPEDC/material/P0330 && ~/LPEDC/material/P0330
-```
-
-## Questões no estilo da prova
+### Questões no estilo da prova
 
 Questões objetivas no formato da prova do PPGI: uma alternativa certa. Faça o
 teste de mesa: uma linha por volta, com o valor de cada variável.

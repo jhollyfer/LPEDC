@@ -1,34 +1,32 @@
 ## 0027 · Juntando tudo
 
-Todo filme de cassino tem a mesa de **craps**: alguém sopra os dados, joga e a
-mesa grita. As regras cabem em três linhas:
+- **Craps**: jogo de dois dados. No **primeiro** lançamento, soma 7 ou 11
+  ganha e 2, 3 ou 12 perde; qualquer outra soma vira o **ponto**. Depois,
+  relança até repetir o ponto (ganha) ou tirar 7 (perde)
+  (DEITEL; DEITEL, 2011, cap. 5).
+- **Peças do módulo**: sorteio com `rand` (0026), `switch` com casos agrupados
+  no primeiro lançamento (0018), `while` nos relançamentos (0020) e um
+  contador de lançamentos (0025).
+- **Variável de situação**: funciona como flag. `0` continua, `1` ganhou, `-1`
+  perdeu; só o corpo do laço sabe o que saiu, então só ele a muda
+  (DEITEL; DEITEL, 2011, cap. 5).
+- **Número mágico**: `1`, `-1` e `0` exigem lembrar o significado. No módulo
+  08, o `enum` dá nomes a eles (`GANHOU`, `PERDEU`, `CONTINUA`).
+- **Repetição de código**: o sorteio `1 + rand() % 6` aparece quatro vezes. No
+  módulo 04 ele vira a função `lancar()`.
 
-1. no **primeiro** lançamento de dois dados, soma 7 ou 11 **ganha** na hora;
-   2, 3 ou 12 **perde** na hora;
-2. qualquer outra soma (4, 5, 6, 8, 9 ou 10) vira o **ponto**;
-3. depois, você relança até tirar o ponto de novo (**ganha**) ou um 7
-   (**perde**). As outras somas não fazem nada.
+> [!WARNING]
+> Confira se o laço **termina**. Com `while (soma != ponto)` e sem o 7, o jogo
+> nunca perde e o programa está errado sem dar erro. Antes de escrever um
+> `while`, diga **todas** as formas de sair dele e confira cada uma.
 
-O programa usa quase tudo do módulo: sorteio com `rand` (assunto 0026), um
-`switch` com casos agrupados para o primeiro lançamento (assunto 0018), um
-`while` para os relançamentos, com uma variável de situação que funciona como
-flag (assuntos 0020 e 0025), e um contador de lançamentos.
+{{exemplo}}
 
-O `while` dos relançamentos é do tipo "não sei quantas voltas": pode acabar no
-segundo lançamento ou no trigésimo. A condição testa a **situação**: `0`
-continua, `1` ganhou, `-1` perdeu. Só o corpo do laço sabe o que saiu, então só
-ele muda a situação.
-
-O sorteio `1 + rand() % 6` aparece quatro vezes. No módulo 04 ele vira uma
-**função** `lancar()` e o programa encolhe.
-
-Com a semente 21, o primeiro lançamento dá 3 + 6 = 9. O `switch` não acha o 9
-em nenhum caso especial, e ele vira o ponto. O jogo relança: 8, depois 5 (nada
-acontece), depois 9. Saiu o ponto antes do 7: ganhou no quarto lançamento:
+Com a semente 21, o primeiro lançamento dá 3 + 6 = 9, que vira o ponto. O
+jogo relança: 8, depois 5 (nada acontece), depois 9. Saiu o ponto antes do 7:
+ganhou no quarto lançamento:
 
 {{ideia}}
-
-A rodada em C:
 
 ```c
 #include <stdio.h>
@@ -86,36 +84,8 @@ int main(void) {
 // Ganhou em 4 lançamentos.
 ```
 
-O exemplo A054 vai além: põe a rodada dentro de um menu com `do...while`,
-valida a aposta com outro `do...while` e controla uma banca de R$ 100 até você
-sair ou quebrar. É o mesmo algoritmo com mais dois laços.
-
-No fluxograma, as duas primeiras perguntas (7 ou 11? 2, 3 ou 12?) acontecem
-**uma vez**. O laço começa em "soma = novo lançamento", e a seta de volta sai
-do Não de "soma == 7?". As duas saídas do laço vão para os mesmos "Ganhou" e
-"Perdeu" do primeiro lançamento:
+O A054 vai além: menu com `do...while`, aposta validada e uma banca de R$ 100.
+No fluxograma, as perguntas do primeiro lançamento acontecem **uma vez**; o
+laço começa em "soma = novo lançamento" e volta pelo Não de "soma == 7?":
 
 {{fluxograma}}
-
-> [!WARNING]
-> Num jogo com sorteio, o erro mais traiçoeiro é o laço que **pode** não
-> terminar. Aqui ele sempre termina, pois a cada lançamento há chance de sair o
-> ponto ou o 7. Mas com `while (soma != ponto)` e sem o 7, o jogo nunca perde e
-> o programa está errado sem dar erro nenhum. Antes de escrever um `while`,
-> diga em voz alta **todas** as formas de sair dele e confira se cada uma está
-> na condição ou num `break`.
-
-> [!TIP]
-> `situacao` guarda um código numérico (`1`, `-1`, `0`), um "número mágico" que
-> exige lembrar o significado de cada valor. No módulo 08, o `enum` dá nomes a
-> esses valores (`GANHOU`, `PERDEU`, `CONTINUA`), que continuam sendo `int`.
-
-> [!NOTE]
-> **Pergunta para você:** qual é a chance de ganhar no craps? Antes de chutar,
-> pense: no primeiro lançamento, o 7 e o 11 juntos saem em 8 de 36
-> combinações (o A053 conta todas elas). Depois, rode uma versão do código
-> acima que joga 100 000 rodadas sem os `printf` e conta as vitórias (é o
-> desafio 7 do módulo). A resposta é um pouco menos de 50%, e é daí que o
-> cassino tira o lucro.
-
-{{pratique}}
