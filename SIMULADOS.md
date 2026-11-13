@@ -1,18 +1,30 @@
 # Simulados da prova do PPGI
 
-Três simulados de 20 questões cada, no formato das provas mais recentes do PPGI: quatro alternativas (a a d), questões de conceito, de afirmações I, II e III combinadas, de simulação, de cálculo e de código C com erro. O peso de cada tema segue [o que caiu de 2016 a 2023](PPGI.md#o-que-caiu-de-2016-a-2023). As questões são originais, com cenários e valores novos.
+Três simulados originais de 20 questões, no formato das provas recentes do PPGI.
 
-Como usar:
+## 1. Conceitos gerais
 
-- Faça um simulado por vez, cronometrando: 3 minutos por questão, 1 hora no total. Pontuação e nota mínima estão no [resumo do edital](PPGI.md).
-- Resolva no papel, sem consultar o curso, e só confira o gabarito no fim, depois de marcar as 20 respostas.
-- Para cada erro, abra o link da coluna Estude, releia o assunto e refaça a questão sem olhar a resposta.
-- Nas questões de simulação, refaça o passo a passo à mão antes de rodar qualquer coisa.
+- **Formato**: 4 alternativas (a a d); questões de conceito, de afirmações I, II e III combinadas,
+  de simulação, de cálculo e de código C com erro.
+- **Peso dos temas**: segue [o que caiu de 2016 a 2023](PPGI.md#o-que-caiu-de-2016-a-2023).
+- **Tempo**: 3 minutos por questão, 1 hora por simulado. Pontuação e nota mínima no
+  [resumo do edital](PPGI.md#o-que-o-edital-pede).
+- **Gabarito**: no fim do arquivo, com o porquê e a coluna **Estude**, que leva ao assunto.
 
-Os gabaritos estão no fim do arquivo, um por simulado.
+## 2. Exemplos de uso
 
+Como corrigir, com a questão 01 do Simulado 1 (AVL com fator +2 e filho em -1):
 
-## Simulado 1
+1. Marque as 20 respostas no papel, sem consultar o curso.
+2. No gabarito, a 01 é **c**: fator +2 com filho de sinal oposto pede rotação dupla.
+3. Errou? Abra o link da coluna Estude (0101), releia o conceito e refaça a questão sem olhar.
+   Nas questões de simulação, refaça o passo a passo à mão antes de rodar qualquer coisa.
+
+## 3. Exercícios práticos
+
+Um simulado por vez. Só abra o gabarito depois de marcar as 20 respostas.
+
+### Simulado 1
 
 **01.** Em uma árvore AVL, o fator de balanceamento de um nó é altura(esquerda) - altura(direita). Depois de uma inserção, o nó P fica com fator +2 e o filho esquerdo de P fica com fator -1. Marque a alternativa CORRETA.
 
@@ -200,7 +212,7 @@ int conta_bits(int x) {
 
 ---
 
-## Simulado 2
+### Simulado 2
 
 **01.** O percurso em pré-ordem de uma árvore binária é M K A R T L P e o percurso em ordem é A K R T M P L (todas as chaves são distintas). Qual é o percurso em pós-ordem?
 
@@ -378,7 +390,7 @@ III. A sondagem linear sofre de agrupamento primário.
 
 ---
 
-## Simulado 3
+### Simulado 3
 
 **01.** Uma AVL, inicialmente vazia, recebe as chaves 12, 24, 36, 48, 60, 72, 84 e 96, nesta ordem, com as rotações necessárias. Qual é o percurso em pré-ordem da árvore final?
 
@@ -579,11 +591,11 @@ int main(void) {
 
 ---
 
-## Gabarito
+### Gabarito
 
 Só abra depois de terminar os três simulados, ou o simulado do dia.
 
-### Simulado 1
+#### Simulado 1
 
 | Q | Letra | Por quê | Estude |
 |---|---|---|---|
@@ -608,7 +620,7 @@ Só abra depois de terminar os três simulados, ou o simulado do dia.
 | 19 | D | O vetor desloca elementos para inserir e remover, mas acha a posição por busca binária; a AVL mantém a altura logarítmica; no pior caso todas as chaves caem na mesma lista do hash. | [0071](10-analise.md), [0072](10-analise.md), [0101](14-arvores.md), [0106](15-hash.md) |
 | 20 | B | Com o bit de sinal replicado, -1 vira -1 a cada >>=1 e x != 0 vale sempre. Rodei a função em C: sem o limite de 100 voltas, não para; com unsigned, devolve 32. | [0171](27-c-detalhes.md), [0170](27-c-detalhes.md) |
 
-### Simulado 2
+#### Simulado 2
 
 | Q | Letra | Por quê | Estude |
 |---|---|---|---|
@@ -633,7 +645,7 @@ Só abra depois de terminar os três simulados, ou o simulado do dia.
 | 19 | C | A média de 1, 2, ..., n é (n + 1) / 2 = 500. Conferido em C. | [0089](13-busca-e-ordenacao.md), [0072](10-analise.md) |
 | 20 | A | O caminho 0→2→1→3→5 custa 3 + 2 + 5 + 4 = 14; os outros custam 16 ou mais. O Dijkstra extraiu os vértices na ordem 0, 2, 1, 3, 4, 5. Conferido em C. | [0112](16-grafos.md) |
 
-### Simulado 3
+#### Simulado 3
 
 | Q | Letra | Por quê | Estude |
 |---|---|---|---|

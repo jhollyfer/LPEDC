@@ -1,11 +1,11 @@
 # Rumo ao PPGI/UFAM · o curso alinhado ao edital
 
-Este guia liga o **Edital n.º 070/2026-PROPESP/UFAM** (Mestrado em Informática,
-ingresso 2027/1) e o **cursinho preparatório do PPGI** (Colabweb) aos assuntos do
-LPEDC. Para cada tópico da prova você encontra onde estudar. O plano de estudo dia a dia
-está em [Comece aqui](#comece-aqui).
+Liga o **Edital n.º 070/2026-PROPESP/UFAM** (Mestrado em Informática, ingresso 2027/1) e o
+cursinho do PPGI aos assuntos do LPEDC. O plano dia a dia está em [Comece aqui](#comece-aqui).
 
-## O que o edital pede
+## 1. Conceitos gerais
+
+### O que o edital pede
 
 | Item | O que diz |
 | --- | --- |
@@ -16,21 +16,23 @@ está em [Comece aqui](#comece-aqui).
 | Nota final | `NF = (2 × NPC + NPT) / 3`; empate: maior NPC, depois maior NPT, depois o mais velho |
 | Vagas | 40 regulares + 8 suplementares + 2 para servidor da UFAM |
 
-Pela conta, a prova de conhecimentos vale o dobro e é eliminatória. Mesmo com
-o Lattes zerado, a NPT é 7: quem tira 9 na prova fica com
-`NF = (18 + 7) / 3 = 8,33`.
+A prova de conhecimentos vale o dobro e elimina. Com o Lattes zerado, a NPT é 7: quem tira 9
+na prova fica com `NF = (18 + 7) / 3 = 8,33`.
 
-A prova usa **pseudocódigo, Python 3 e C**. Os conceitos de C listados no
-edital: seleção (`if`, `else`, `switch`), leitura e escrita na tela e em
-arquivos, `while` e `do while`, operadores aritméticos, lógicos e bit a bit,
-`int`, `char`, `float`, `double`, tipos com e sem sinal, ponteiros, vetores,
-matrizes, structs, uniões, enumerações, funções, **VLA**, `#include` e
-`#define`. Tudo isso está no curso. O LPEDC é todo em C; o trecho de Python da
-prova fica fora daqui (veja o fim deste guia).
+A prova usa **pseudocódigo, Python 3 e C**. O C do edital (seleção, laços, entrada e saída em
+tela e arquivo, operadores aritméticos, lógicos e bit a bit, tipos com e sem sinal, ponteiros,
+vetores, matrizes, structs, uniões, enumerações, funções, **VLA**, `#include` e `#define`) está
+todo no curso. Python fica de fora ([Python 3](#python-3)).
 
-## Tópico por tópico
+### Python 3
 
-### 1. Fundamentos de algoritmos
+A prova traz trechos em Python 3 (listas, tuplas, dicionários, fatiamento, `while`, funções,
+classes). O LPEDC não cobre Python. Use o livro do edital (MENEZES, 2024) e foque em ler código:
+fatia, referência para lista e o que uma função devolve.
+
+### Tópico por tópico
+
+#### 1. Fundamentos de algoritmos
 
 | Edital | Onde estudar |
 | --- | --- |
@@ -41,7 +43,7 @@ prova fica fora daqui (veja o fim deste guia).
 | recursão | 0032, 0033 e [19 · Backtracking](19-backtracking.md) |
 | expressões, operadores, **precedência** | 0007, 0009, 0013 e **0170** ([27 · Detalhes de C](27-c-detalhes.md)) |
 
-### 2. Eficiência computacional
+#### 2. Eficiência computacional
 
 | Edital | Onde estudar |
 | --- | --- |
@@ -53,7 +55,7 @@ prova fica fora daqui (veja o fim deste guia).
 | algoritmos recursivos: recorrências, teorema mestre | [17 · Análise avançada](17-analise-avancada.md) (0114–0118) |
 | precisão e boas práticas | 0008, 0057, 0073 |
 
-### 3. Estruturas de dados elementares
+#### 3. Estruturas de dados elementares
 
 | Edital | Onde estudar |
 | --- | --- |
@@ -69,7 +71,7 @@ prova fica fora daqui (veja o fim deste guia).
 | fila de prioridade | 0102 |
 | arquivos texto e binários | [09 · Arquivos](09-arquivos.md) (0067–0068) |
 
-### 4. Árvores
+#### 4. Árvores
 
 | Edital | Onde estudar |
 | --- | --- |
@@ -81,7 +83,7 @@ prova fica fora daqui (veja o fim deste guia).
 | árvore B | 0146 ([22 · Árvores avançadas](22-arvores-avancadas.md)) |
 | heap binário | 0102, 0103 |
 
-### 5. Tabelas de espalhamento
+#### 5. Tabelas de espalhamento
 
 | Edital | Onde estudar |
 | --- | --- |
@@ -91,14 +93,14 @@ prova fica fora daqui (veja o fim deste guia).
 | endereçamento aberto: sondagem linear | 0107 |
 | **sondagem quadrática e dispersão dupla** | **0179** |
 
-### 6. Busca
+#### 6. Busca
 
 | Edital | Onde estudar |
 | --- | --- |
 | busca sequencial e binária | 0089, 0090 ([13 · Busca e ordenação](13-busca-e-ordenacao.md)) |
 | busca em árvores | 0099, 0146, 0147 |
 
-### 7. Ordenação
+#### 7. Ordenação
 
 | Edital | Onde estudar |
 | --- | --- |
@@ -108,7 +110,7 @@ prova fica fora daqui (veja o fim deste guia).
 | **chave simples e composta, pigeonhole sort** | **0180** |
 | counting, bucket, radix | [18 · Ordenação linear](18-ordenacao-linear.md) (0120–0122) |
 
-### 8. Grafos
+#### 8. Grafos
 
 | Edital | Onde estudar |
 | --- | --- |
@@ -122,10 +124,9 @@ prova fica fora daqui (veja o fim deste guia).
 | caminhos mínimos | 0112 (Dijkstra), 0154 (Bellman-Ford), 0155 (Floyd-Warshall) |
 | árvore geradora mínima | 0152 (Kruskal), 0153 (Prim) |
 
-### O que o cursinho acrescenta
+#### O que o cursinho acrescenta
 
-O cursinho do PPGI tem um bloco de **Análise de Algoritmos** que vai além do
-edital. Ele está coberto assim:
+O cursinho do PPGI tem um bloco de **Análise de Algoritmos** além do edital:
 
 | Aula do cursinho | Onde estudar |
 | --- | --- |
@@ -141,15 +142,13 @@ edital. Ele está coberto assim:
 | 17–22 · P, NP, NP-completo, SAT, clique, reduções, verificação | **0186**, **0187** |
 | 23–24 · algoritmos aproximados, bin packing | **0188** |
 
-E as vídeo-aulas de AED (parte 1 e 2) seguem, quase na mesma ordem, os módulos
-04 a 16 do curso: structs, funções, escopo, passagem de parâmetros, busca
-sequencial e binária, seleção, inserção, recursão, quicksort, merge, matrizes,
-`math.h`, cast, ponteiros, alocação dinâmica, listas (simples, com ponteiro para
-o último, circular, dupla), filas, pilhas, arquivos texto e binários (inclusive
-busca binária em arquivo, que junta o `fseek` do 0068 com o 0090), BST com ponteiro para o pai (0175),
-rubro-negra (0177) e hash por encadeamento (0106).
+As vídeo-aulas de AED (partes 1 e 2) seguem, quase na mesma ordem, os módulos 04 a 16.
 
-## O que caiu de 2016 a 2023
+## 2. Exemplos de uso
+
+O que as provas de 2016 a 2023 cobraram, por tópico e por formato.
+
+### O que caiu de 2016 a 2023
 
 As 11 provas de 2016 a 2023 somam 210 questões. O gabarito comentado de cada uma, com o link
 para o módulo, está em [`PROVAS.md`](PROVAS.md); só a de 2023 (edital 071/2023) tem gabarito
@@ -186,15 +185,16 @@ pilha, a inserção de X e Y numa lista dupla, as afirmações sobre hash por en
 "qual sequência de busca não pode ser de uma ABB", a AVL montada com chaves em ordem crescente
 e a busca binária contando comparações.
 
-## Comece aqui
+## 3. Exercícios práticos
+
+### Comece aqui
 
 Plano de 09/11 até a prova, em 27/11. A ordem de dependência entre os assuntos está em [`TRILHA.md`](TRILHA.md). A ordem segue o peso de cada tópico nas provas de
 2016 a 2023 ([o que caiu](#o-que-caiu-de-2016-a-2023)): árvores primeiro, depois listas,
 pilhas e filas, busca, ordenação e hash. Se começar depois de 09/11, faça o diagnóstico no
 primeiro dia e junte dois dias de assunto num só até alcançar a data da tabela.
 
-Como estudar cada assunto do dia: leia o texto, refaça a **Pergunta para você** e faça os
-exercícios ★★☆ e ★★★. Feche o dia com as **Questões no estilo da prova** do módulo,
+Como estudar cada assunto do dia: leia o conceito e o exemplo e faça os exercícios ★★☆ e ★★★. Feche o dia com as **Questões no estilo da prova** do módulo,
 cronometrando (3 minutos por questão), e os ★★☆ da lista prática. Para cada questão errada,
 volte ao assunto indicado no gabarito.
 
@@ -227,15 +227,7 @@ Outras datas: homologação preliminar em 18/11, local da prova em 24/11 e
 gabarito preliminar no dia da prova. Leve caneta azul ou preta e documento com
 foto; não entra depois do horário.
 
-## Python 3
-
-A prova também traz trechos em Python 3 (listas, tuplas, dicionários, fatiamento,
-`while`, funções, classes). O LPEDC não cobre Python de propósito: o curso
-explica tudo em termos de C. Se precisar desse pedaço, use o livro do edital
-(Menezes, *Introdução à Programação com Python*) e foque em ler código: o que é
-fatia, o que é referência para lista, o que uma função devolve.
-
-## Referências do edital e do cursinho
+## Para ler mais
 
 - CORMEN, T. H.; LEISERSON, C. E.; RIVEST, R. L.; STEIN, C. *Algoritmos: teoria e prática*. 4. ed. Rio de Janeiro: GEN LTC, 2024.
 - ZIVIANI, N. *Projeto de algoritmos com implementações em Pascal e C*. 3. ed. São Paulo: Cengage Learning, 2010.

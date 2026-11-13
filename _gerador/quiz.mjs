@@ -27,7 +27,7 @@ const letrasDoGuia = () => {
   const guia = {}
   let slug = null
   for (const linha of readFileSync(join(RAIZ, 'PROVAS.md'), 'utf8').split('\n')) {
-    const edital = linha.match(/^## Edital (\d{3})\/(\d{4})/)
+    const edital = linha.match(/^#{2,3} Edital (\d{3})\/(\d{4})/)
     if (edital) {
       slug = `${edital[2]}-${edital[1]}`
       guia[slug] = {}

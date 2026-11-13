@@ -1,22 +1,53 @@
 # LPEDC · Lógica de Programação, Estrutura de Dados e C
 
-Material de estudo pessoal para relembrar lógica de programação, aprender
-estrutura de dados e entender de verdade como a linguagem C funciona: a
-memória, os ponteiros, a compilação e o custo de cada escolha.
+Guia de estudo pessoal de lógica, linguagem C e estruturas de dados, feito para a Prova de
+Conhecimentos do Mestrado do PPGI/UFAM (edital 070/2026, prova em 27/11/2026).
 
 > [!IMPORTANT]
-> **Preparação para o Mestrado do PPGI/UFAM.** O curso está alinhado à Prova de
-> Conhecimentos do edital 070/2026 (prova em 27/11/2026). O guia
-> [`PPGI.md`](PPGI.md) liga cada tópico do edital e do cursinho do PPGI ao
-> assunto que o ensina. Para estudar até a prova, comece pelo
-> [plano dia a dia](PPGI.md#comece-aqui); a [`TRILHA.md`](TRILHA.md) mostra o que vem antes de quê.
+> Para estudar até a prova, comece pelo [plano dia a dia](PPGI.md#comece-aqui) do
+> [`PPGI.md`](PPGI.md). A [`TRILHA.md`](TRILHA.md) mostra o que vem antes de quê.
 
-Segue a filosofia do [LPPOO](https://github.com/jhollyfer/LPPOO). Cada assunto
-conta **um exemplo só**, em quatro partes que batem entre si: o texto, o
-**diagrama da ideia**, o código e o **fluxograma**. Depois vêm os exemplos para
-rodar e os exercícios.
+## 1. Conceitos gerais
 
-## Como preparar o computador
+- **Módulo**: um arquivo `.md` na raiz (`01-fundamentos.md`, `02-condicionais.md`...). São 29.
+- **Cada módulo tem três partes**: **1. Conceitos gerais** (definições curtas, com a fonte de cada
+  uma), **2. Exemplos de uso** (código comentado, com desenho e fluxograma) e **3. Exercícios
+  práticos** (exercícios, lista do módulo, desafios e questões de prova com gabarito).
+- **Assunto**: um tópico do módulo, com número fixo (`0002 · Variáveis`). Aparece nas três partes.
+- **Arquivos**: tudo o que se roda fica em `material/`. `A###.c` são exemplos resolvidos, `E###.c`
+  são exercícios (a resposta vai dentro do arquivo), `P####.c` é a lista do módulo. As resoluções
+  ficam em `_respostas/`: só olhe depois de tentar.
+- **Níveis**: ★☆☆ aquecimento, ★★☆ raciocínio, ★★★ desafio.
+- **Cores dos desenhos**: azul é dado entrando ou saindo, roxo é o programa agindo, amarelo
+  (losango) é pergunta, verde é o caminho seguido, cinza o que não é usado e vermelho é erro.
+
+<p align="center"><img src="material/legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
+
+**Fontes.** As definições foram escritas do zero com base nos fichamentos em [`_fontes/`](_fontes/).
+Cada conceito cita a obra; a referência completa fica em "Para ler mais", no fim do módulo:
+
+- CORMEN, T. H. et al. *Algoritmos: teoria e prática*. 4. ed. GEN LTC, 2024 (referência principal do edital do PPGI).
+- ZIVIANI, N. *Projeto de algoritmos com implementações em Pascal e C*. 3. ed. Cengage Learning, 2010.
+- CELES, W.; CERQUEIRA, R.; RANGEL, J. L. *Introdução a estruturas de dados*. 2. ed. Elsevier, 2016.
+- BACKES, A. *Linguagem C: completa e descomplicada*. Elsevier, 2013 (e a apostila *Linguagem C: descomplicada*).
+- DEITEL, P.; DEITEL, H. *C: como programar*. Pearson.
+- FEOFILOFF, P. *Algoritmos em linguagem C*. Elsevier, 2009.
+- CELES, W.; RANGEL, J. L. *Apostila de estruturas de dados*. PUC-Rio, 2002.
+- TENENBAUM, A.; LANGSAM, Y.; AUGENSTEIN, M. *Estruturas de dados usando C*. Makron Books.
+- ROCHA, A. M. A.; BORGES, A. R. O. S. *Programação, estruturas de dados e algoritmos em C*. Universidade de Aveiro.
+- LAUREANO, M. *Estrutura de dados com algoritmos e C*. Rio de Janeiro: Brasport, 2008.
+- LEAL, G. C. L. *Algoritmos e lógica de programação II*. Unicesumar.
+- CARVALHO, V. A. *Lógica de programação*. IFES.
+- ANTONELLO, R. *Linguagem C*.
+- HARA, C.; ZOLA, W.; DELGADO, A. L. N. *Linguagem C: notas de aula*. UFPR, 2008.
+- MARTINS, L. G. A. *Apostila de linguagem C*. UFU.
+- SENAI-RS. *Fundamentos de linguagem C*. 1997.
+- UNICAMP. *Introdução à linguagem C*. Centro de Computação.
+- Apostila "slago" de C e o apêndice *Manual de sintaxe da linguagem C*.
+
+## 2. Exemplos de uso
+
+Preparar o computador:
 
 ```bash
 sudo pacman -S --needed base-devel gdb valgrind git     # Arch Linux
@@ -24,92 +55,36 @@ sudo apt install build-essential gdb valgrind git       # Debian / Ubuntu
 git clone https://github.com/jhollyfer/LPEDC ~/LPEDC
 ```
 
-No Windows, use o WSL com Ubuntu (`wsl --install` no PowerShell) e siga a
-linha do Debian/Ubuntu dentro dele. No macOS, `xcode-select --install` instala
-o compilador (`clang`, que aceita os mesmos comandos).
+No Windows, use o WSL com Ubuntu (`wsl --install`). No macOS, `xcode-select --install`.
 
-## Como rodar um arquivo
-
-Compile com o `gcc` e execute o resultado. O `-o` dá o nome do executável, que fica ao lado do `.c`:
+Rodar um arquivo (o `-o` dá o nome do executável):
 
 ```bash
 gcc ~/LPEDC/material/A003.c -o ~/LPEDC/material/A003 && ~/LPEDC/material/A003
 ```
 
-Para testar sem digitar, mande a entrada por um cano; para passar argumentos, escreva-os depois do executável:
+Mandar a entrada sem digitar e passar argumentos:
 
 ```bash
 gcc ~/LPEDC/material/A011.c -o ~/LPEDC/material/A011 && printf '25\n' | ~/LPEDC/material/A011
 gcc ~/LPEDC/material/A137.c -o ~/LPEDC/material/A137 && ~/LPEDC/material/A137 um dois tres
 ```
 
-Os assuntos com TAD têm `.c` de apoio na pasta (`pilha.c`, `lista.c`...): o comando do exemplo já os lista.
+**Flags de estudo**: acrescente `-std=c17 -Wall -Wextra -pedantic -g -fsanitize=address,undefined -lm`
+antes do `-o`. O compilador passa a apontar a linha de erros de memória e de estouro de inteiro.
+Para vazamento difícil, use `valgrind` no executável compilado com `-g`. Assuntos com TAD têm `.c` de
+apoio (`0076-lista.c`); o comando do exemplo já os inclui.
 
-Para estudar, use as **flags de estudo**: acrescente
-`-std=c17 -Wall -Wextra -pedantic -g -fsanitize=address,undefined -lm` antes do `-o`. O
-**AddressSanitizer** para o programa e aponta a linha quando você acessa memória que não devia ou
-esquece um `free`, e o detector de comportamento indefinido pega o estouro de inteiro. Os avisos
-e relatórios citados nos módulos aparecem com essas flags. Para vazamento difícil, use
-`valgrind ~/LPEDC/<caminho>/A107` sobre o executável compilado com `-g`.
+Como estudar um assunto:
 
-Os arquivos têm nome curto e numeração única no curso inteiro:
+1. Leia o conceito (parte 1).
+2. Leia o exemplo (parte 2), siga o fluxograma e rode o código. Mude um valor e rode de novo.
+3. Faça os exercícios do assunto (parte 3) sem olhar a resposta.
 
-- `A001.c`, `A002.c`... são os **exemplos** resolvidos;
-- `E001.c`, `E002.c`... são os **exercícios**: a resposta vai dentro do próprio
-  arquivo, embaixo de `// Escreva sua resposta abaixo:`;
-- `_respostas/` tem uma resolução de cada exercício. Só olhe **depois** de
-  tentar de verdade.
+## 3. Exercícios práticos
 
-Cada assunto tem 2 exemplos e 4 exercícios, todos de escrever código na mão:
-um ★☆☆ (aquecimento), dois ★★☆ (raciocínio) e um ★★★ (desafio). O enunciado
-traz só o que escrever e a saída esperada. Cada módulo termina com uma
-**lista prática** de 30 exercícios de codificar (pasta `lista/`, arquivos
-`P????.c`, resoluções em `_respostas/<modulo>/lista/`), uma lista de
-**desafios** que misturam tudo e **questões reais das provas do PPGI**, com
-gabarito oficial.
-
-No total: 378 exemplos, 756 exercícios por assunto e 870 exercícios nas listas
-práticas.
-
-## Como cada módulo funciona
-
-Os arquivos do curso ficam todos numa pasta só, `material/`. O texto de cada módulo é um arquivo só
-(`01-fundamentos.md`, `02-condicionais.md`...), com os assuntos, os exemplos, os
-exercícios, a lista prática, os desafios e as questões da prova. Em `material/` moram os
-arquivos que você roda: `A###.c` (exemplos), `E###.c` (exercícios), `P####.c` (lista
-prática) e os desenhos `NNNN-ideia.svg` e `NNNN-fluxograma.svg`. Os TADs de apoio levam o número
-do assunto no nome (`0076-lista.c`). As resoluções ficam em `_respostas/`. A árvore completa
-está em [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md#1-peças).
-
-## Como estudar cada assunto
-
-1. Leia o texto e olhe o **diagrama da ideia**: é o exemplo desenhado, com os
-   mesmos valores do código.
-2. Leia o código do texto. Quando o assunto tem um TAD na pasta, abra o `.c`
-   inteiro também.
-3. Siga o **fluxograma** com o dedo: é o caminho que o exemplo faz. Quando
-   houver um **Passo a passo**, refaça a tabela no papel.
-4. Responda a **Pergunta para você** antes de rodar. Depois rode os exemplos e
-   mexa neles: mude um valor, quebre uma linha, rode de novo.
-5. Faça os exercícios: o enunciado e a saída esperada estão no `.md` do módulo e
-   no topo do arquivo. Escreva o código sozinho e compare a saída.
-6. No fim do módulo, resolva a lista prática, os desafios e as **questões das
-   provas do PPGI**, que cobram o mesmo conteúdo em múltipla escolha.
-
-## As cores e as formas
-
-Nos fluxogramas, caixa azul é dado entrando ou saindo, roxa é o programa
-fazendo alguma coisa e amarela (losango) é pergunta. Verde é o caminho que o
-exemplo segue e o resultado; cinza, o que ele não usa; vermelho, erro. Os
-diagramas da ideia seguem as mesmas cores, e cada módulo avisa, em "Antes de
-começar", o que elas têm de próprio nos desenhos dele.
-
-<p align="center"><img src="material/legenda.svg" alt="Legenda: formas e cores do fluxograma" width="916"></p>
-
-
-## Mapa do jogo
-
-O curso é uma rota de **29 etapas**, agrupadas em **8 mundos**. Cada etapa é um módulo: você só avança quando fecha os checkpoints dela, e cada uma usa o que a anterior ensinou. Os módulos com ★ são **bônus**: o número do arquivo vem depois, mas a etapa destrava antes, no ponto da rota em que ela ajuda. Cada módulo abre com o mapa da fase (missão, de onde você vem, para onde vai e checkpoints) e fecha com o **chefão**: as questões reais de prova.
+O curso é uma rota de 29 etapas em 8 mundos. Cada etapa é um módulo e termina com as questões reais
+de prova. Os módulos com ★ são bônus e entram no ponto da rota em que ajudam.
 
 | Etapa | Mundo | Módulo | Assuntos | Missão |
 | --- | --- | --- | --- | --- |
@@ -143,46 +118,17 @@ O curso é uma rota de **29 etapas**, agrupadas em **8 mundos**. Cada etapa é u
 | 28 | Mundo 8 · Técnicas de projeto | [24 · Busca de padrões em texto](24-busca-de-padroes.md) | 0157–0161 | Achar padrões em texto com KMP, Horspool e Rabin-Karp |
 | 29 | Mundo 8 · Técnicas de projeto | [25 · Estruturas especiais](25-estruturas-extras.md) | 0162–0165 | Conhecer matriz esparsa, skip list e listas autoajustáveis |
 
-Depois da etapa 29 vêm os [simulados](SIMULADOS.md) e as [provas antigas](PROVAS.md). A rota por peso na prova está em [`TRILHA.md`](TRILHA.md) e o plano dia a dia em [`PPGI.md`](PPGI.md#comece-aqui).
+Depois da etapa 29:
 
-O sumário detalhado, assunto por assunto, está em
-[`_fontes/sumario.md`](_fontes/sumario.md).
+- [`SIMULADOS.md`](SIMULADOS.md): 3 simulados de 20 questões no formato atual;
+- [`PROVAS.md`](PROVAS.md): as 11 provas de 2016 a 2023, com gabarito comentado;
+- quiz das provas, com o porquê de cada alternativa: **[jhollyfer.github.io/LPEDC](https://jhollyfer.github.io/LPEDC/)**.
 
-As provas do PPGI de 2016 a 2023 estão resolvidas, com o gabarito comentado e o link para o
-módulo de cada questão, em [`PROVAS.md`](PROVAS.md). Para treinar no formato atual (4 alternativas), há
-3 simulados de 20 questões com gabarito comentado em [`SIMULADOS.md`](SIMULADOS.md).
+---
 
-Para treinar com as provas em formato de quiz, com o porquê de cada alternativa logo depois de responder:
-**[jhollyfer.github.io/LPEDC](https://jhollyfer.github.io/LPEDC/)**.
-
-## De onde veio o conteúdo
-
-O texto, os exemplos e os exercícios foram escritos do zero, tomando como
-referência os fichamentos em [`_fontes/`](_fontes/) dos materiais abaixo:
-
-- CORMEN, T. H. et al. *Algoritmos: teoria e prática*. 4. ed. GEN LTC, 2024 (referência principal do edital do PPGI).
-- ZIVIANI, N. *Projeto de algoritmos com implementações em Pascal e C*. 3. ed. Cengage Learning, 2010.
-- CELES, W.; CERQUEIRA, R.; RANGEL, J. L. *Introdução a estruturas de dados*. 2. ed. Elsevier, 2016.
-- BACKES, A. *Linguagem C: completa e descomplicada*. Elsevier, 2013 (e a apostila *Linguagem C: descomplicada*).
-- DEITEL, P.; DEITEL, H. *C: como programar*. Pearson.
-- FEOFILOFF, P. *Algoritmos em linguagem C*. Elsevier, 2009.
-- CELES, W.; RANGEL, J. L. *Apostila de estruturas de dados*. PUC-Rio, 2002.
-- TENENBAUM, A.; LANGSAM, Y.; AUGENSTEIN, M. *Estruturas de dados usando C*. Makron Books.
-- ROCHA, A. M. A.; BORGES, A. R. O. S. *Programação, estruturas de dados e algoritmos em C*. Universidade de Aveiro.
-- LAUREANO, M. *Estrutura de dados com algoritmos e C*. Rio de Janeiro: Brasport, 2008.
-- LEAL, G. C. L. *Algoritmos e lógica de programação II*. Unicesumar.
-- CARVALHO, V. A. *Lógica de programação*. IFES.
-- ANTONELLO, R. *Linguagem C*.
-- HARA, C.; ZOLA, W.; DELGADO, A. L. N. *Linguagem C: notas de aula*. UFPR, 2008.
-- MARTINS, L. G. A. *Apostila de linguagem C*. UFU.
-- SENAI-RS. *Fundamentos de linguagem C*. 1997.
-- UNICAMP. *Introdução à linguagem C*. Centro de Computação.
-- Apostila "slago" de C e o apêndice *Manual de sintaxe da linguagem C*.
-
-## Para quem for mexer no material
-
-Os `.md` dos módulos (na raiz) e os SVGs são gerados. O guia de escrita está em
-[`docs/RULES.md`](docs/RULES.md) (o ponto de partida para agentes é o [`AGENTS.md`](AGENTS.md)) e o gerador em [`_gerador/`](_gerador/):
+**Para quem for mexer no material.** Os `.md` dos módulos e os SVGs são gerados a partir de
+[`_gerador/`](_gerador/); nunca edite o `.md` do módulo à mão. Regras em
+[`docs/RULES.md`](docs/RULES.md), ponto de partida para agentes em [`AGENTS.md`](AGENTS.md).
 
 ```bash
 cd _gerador && npm install
@@ -190,7 +136,4 @@ npm run gerar           # tudo
 npm run gerar -- 03-    # só o módulo 03
 ```
 
-Como conferir um desenho está em [`docs/DESIGN.md`](docs/DESIGN.md).
-
-A fonte Excalifont (`_gerador/fonte/`) vem do projeto Excalidraw e usa a
-licença SIL Open Font License.
+A fonte Excalifont (`_gerador/fonte/`) vem do projeto Excalidraw, sob a licença SIL Open Font License.

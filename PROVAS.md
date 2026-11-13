@@ -1,29 +1,40 @@
 # Provas anteriores do PPGI/UFAM · gabarito comentado
 
-As 11 provas de conhecimento de 2016 a 2023, resolvidas questão por questão: editais 032/2016,
-053/2016, 024/2017, 055/2017, 023/2018, 061/2018, 033/2019, 060/2019, 057/2022, 020/2023 e
-071/2023. O caderno de cada uma está em [`provas-ppgi-ufam/`](provas-ppgi-ufam/):
-abra a prova lá, resolva cronometrando e só depois confira aqui. Para fazer as provas em formato de quiz, com
-o porquê de cada alternativa, use [jhollyfer.github.io/LPEDC](https://jhollyfer.github.io/LPEDC/).
+As 11 provas de conhecimento de 2016 a 2023, resolvidas questão por questão. Os cadernos estão em
+[`provas-ppgi-ufam/`](provas-ppgi-ufam/); o quiz, com o porquê de cada alternativa, em
+[jhollyfer.github.io/LPEDC](https://jhollyfer.github.io/LPEDC/).
 
-> [!IMPORTANT]
-> As 11 provas têm gabarito oficial: as letras são da banca. As de 2016 a 2019 foram lidas nas
-> folhas de resposta, a 071/2023 no gabarito definitivo, e a 057/2022 e a 020/2023 na marcação em
-> negrito do caderno de respostas. As anuladas aparecem como "anulada". Onde o curso tinha chegado
-> a outra letra, a coluna "Por quê" avisa. As questões de código e de simulação foram conferidas
-> rodando o programa. O caderno de cada prova, com as figuras, está em
-> [`provas-ppgi-ufam/`](provas-ppgi-ufam/) e cada módulo traz as questões reais do seu tema.
+## 1. Conceitos gerais
 
-Desde 2022 as provas têm **4 alternativas** (de 2016 a 2019 eram 5) e trazem trechos em
-Python. Aqui cada trecho em Python aponta para o assunto de C que treina a mesma ideia.
+- **Gabarito oficial**: as letras das 11 provas são da banca. As de 2016 a 2019 vêm das folhas de
+  resposta, a 071/2023 do gabarito definitivo, a 057/2022 e a 020/2023 da marcação do caderno de
+  respostas. Onde o curso chegou a outra letra, a coluna "Por quê" avisa.
+- **Formato**: até 2019, 5 alternativas; desde 2022, **4 alternativas** e trechos em Python (cada
+  trecho aponta para o assunto de C com a mesma ideia).
+- **Colunas da tabela**:
+  - **Letra**: a resposta oficial, ou "anulada";
+  - **Formato**: `afirmações` (I, II, III combinadas), `código` (ler ou achar o erro), `simulação`
+    (executar à mão), `conceito` (definição) ou `cálculo` (altura, comparações, complexidade);
+  - **Tópico**: número do tópico do edital em [`PPGI.md`](PPGI.md#tópico-por-tópico);
+  - **Assuntos**: o link leva ao módulo onde aquilo se estuda;
+  - **Por quê**: a justificativa em uma ou duas frases. Questões de código e simulação foram
+    conferidas rodando o programa.
+- O resumo do que mais cai está em [`PPGI.md`](PPGI.md#o-que-caiu-de-2016-a-2023).
 
-Na coluna **Assuntos**, o link leva ao módulo onde aquilo se estuda. **Tópico** é o número do
-tópico do edital em [`PPGI.md`](PPGI.md#tópico-por-tópico); o resumo do que mais cai está em
-[`PPGI.md`](PPGI.md#o-que-caiu-de-2016-a-2023). **Formato** diz que tipo de questão é:
-`afirmações` (I, II, III combinadas), `código` (ler ou achar o erro), `simulação` (executar à
-mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidade).
+## 2. Exemplos de uso
 
-## Edital 032/2016
+Como corrigir uma questão, com a Q12 do edital 032/2016 (AVL):
+
+1. Resolva no caderno, cronometrando 3 minutos.
+2. Confira a linha: `| 12 | B | simulação | 4 | [0101](14-arvores.md) | Inserir 1..6 dá raiz 4, ... |`.
+3. Errou? O formato `simulação` pede refazer à mão; o assunto 0101 do módulo 14 tem o exemplo e o
+   passo a passo das rotações. Refaça a questão sem olhar a resposta.
+
+## 3. Exercícios práticos
+
+Resolva cada prova inteira no caderno e só depois confira a tabela.
+
+### Edital 032/2016
 
 | Q | Letra | Formato | Tópico | Assuntos | Por quê |
 |---|---|---|---|---|---|
@@ -48,8 +59,7 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 | 19 | D | afirmações | 7 | [0093](13-busca-e-ordenacao.md), [0092](13-busca-e-ordenacao.md), [0121](18-ordenacao-linear.md), [0094](13-busca-e-ordenacao.md) | I verdadeira (inserção faz ~n comparações em quase ordenado, seleção sempre n(n-1)/2); II verdadeira (radix de 1 dígito, ~n+10 passos contra ~n log n); III falsa. |
 | 20 | D | afirmações | 7 | [0038](05-vetores-e-strings.md), [0095](13-busca-e-ordenacao.md), [0096](13-busca-e-ordenacao.md) | I (último elemento) e II (n/2 trocas) verdadeiras; III falsa (Quicksort tem pior caso quadrático). |
 
-
-**Observações**
+#### Observações
 - Anuladas pela banca (folha oficial): 01, 05, 07, 11 e 17. A Q09 (D), a Q10 (B) e a Q13 (E) foram mantidas.
 - Q01: I é o particionamento de Hoare e III o de Lomuto; a anulação vem de IV, que pode ser aceita se "particionamento completo" admitir o pivô ainda fora do lugar.
 - Q09: "colisões secundárias" é termo do endereçamento aberto; a banca leu I e II como falsas (D).
@@ -57,7 +67,7 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 - Q13: I e III verdadeiras, e "I e III" não existe entre as letras; a banca marcou E (nenhuma das anteriores).
 - Q11 e Q17: dependem de considerar a III falsa (árvore B ocupa espaço com nós semicheios; radix in-place); anuladas.
 
-## Edital 053/2016
+### Edital 053/2016
 
 | Q | Letra | Formato | Tópico | Assuntos | Por quê |
 |---|---|---|---|---|---|
@@ -82,8 +92,7 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 | 19 | A | cálculo | 4 | [0097](14-arvores.md) | Nível 5 tem 2^(5-1) = 16 nós. |
 | 20 | A | simulação | 4 | [0099](14-arvores.md) | Só a sequência A respeita os limites da ABB em todos os passos (B, C e D violam). |
 
-
-**Observações**
+#### Observações
 - Nenhuma questão anulada; as 20 letras conferem com a folha oficial.
 - Q11: a figura está no caderno: P com filhos Q (S, T) e R. Pós-ordem S T Q R P, in-ordem S Q T P R: C.
 - Q14: o gabarito oficial é A (definição de árvore binária); a C (percurso em ordem) também é verdadeira.
@@ -92,7 +101,7 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 - Q08: a letra B está cortada e D e E repetem o texto no próprio caderno. A resposta A não depende disso.
 - Q01: se o autor contou comparações e não iterações do laço, a conta é a mesma (9).
 - Q07: a altura em arestas (Cormen) seria 4; o enunciado define raiz no nível 1, então vale 5.
-## Edital 024/2017
+### Edital 024/2017
 | Q | Letra | Formato | Tópico | Assuntos | Por quê |
 |---|---|---|---|---|---|
 | 01 | A | afirmações | 3 | [0101](14-arvores.md), [0082](12-pilhas-e-filas.md), [0076](11-listas.md), [0106](15-hash.md) | I e IV verdadeiras; II falsa (pilha só remove do topo), III falsa (array é contíguo, lista não) |
@@ -116,15 +125,14 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 | 19 | A | conceito | 3 | [0076](11-listas.md) | ponteiros para início e fim dão acesso rápido às extremidades; as outras são falsas ou truncadas |
 | 20 | D | conceito | 3 | [0079](11-listas.md) | lista dupla tem próximo e anterior (mesmas alternativas da 053/2016 Q06) |
 
-
-**Observações**
+#### Observações
 - Q08 e Q10: as figuras estão no caderno (árvores I a IV); a letra E confere nas duas.
 - Q09: anulada pela banca. O estado final correto é só `e` (b, c, RETIRA, a, RETIRA, e, e, RETIRA, RETIRA), e nenhuma alternativa traz isso.
 - Q17: anulada pela banca. D e E são ambas defensáveis (falta o par I-Z, que seria o canônico).
 - Q19: a letra e está completa no caderno; a única correta continua sendo a A.
 - Q20: alternativas iguais às da 053/2016 Q06; a certa é a que cita próximo e anterior.
 
-## Edital 055/2017
+### Edital 055/2017
 | Q | Letra | Formato | Tópico | Assuntos | Por quê |
 |---|---|---|---|---|---|
 | 01 | E | simulação | 1 | [0032](04-funcoes.md) | Gabarito oficial E. Letra conferida com o recorte da prova em `provas-ppgi-ufam/`; o porquê de cada alternativa está no quiz. |
@@ -148,14 +156,13 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 | 19 | A | simulação | 7 | [0095](13-busca-e-ordenacao.md) | 18 (índice 3) e 13 (índice 4) separam maiores à esquerda e menores à direita |
 | 20 | A | simulação | 4 | [0101](14-arvores.md) | rodando AVL (programa em C): raiz 8, esquerda 4 (2, 6), direita 10 (12); diferença 0 |
 
-
-**Observações**
+#### Observações
 - Anuladas pela banca: 03, 09 e 10. O pseudocódigo da Q01 e as árvores da Q04 e da Q16 estão no caderno.
 - Q03: C (912 na subárvore esquerda de 911) e E (299 abaixo de 347 vai à direita, mas 299 < 347) são ambas impossíveis. É o exercício 12.2-1 do Cormen, que também tem as duas.
 - Q15: a II pede mais que √n comparações, não mais que n. Com todas as chaves na mesma lista a busca faz até n comparações, que passa de √n; por isso a II é verdadeira e a letra B da banca está certa.
 - Q13: E depende de contar a pilha de recursão do quicksort como espaço extra, o que é o padrão do Cormen.
 - Q18: gabarito defensável é E; C só serviria se fila inserisse no início e retirasse no fim.
-## Edital 023/2018
+### Edital 023/2018
 | Q | Letra | Formato | Tópico | Assuntos | Por quê |
 |---|---|---|---|---|---|
 | 01 | C | cálculo | 2, 7 | [0094](13-busca-e-ordenacao.md), [0072](10-analise.md) | Intercalar dois vetores ordenados copia 2N elementos, então O(N) mesmo no melhor caso. |
@@ -179,8 +186,7 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 | 19 | E | conceito | 3 | [0076](11-listas.md), [0077](11-listas.md) | Lista encadeada não exige área contígua e cria e remove nós dinamicamente. |
 | 20 | C | afirmações | 3, 4 | [0076](11-listas.md), [0082](12-pilhas-e-filas.md), [0085](12-pilhas-e-filas.md), [0097](14-arvores.md) | Só a III é correta: fila não tem associação a vários elementos, árvore não é LIFO e pilha é LIFO. |
 
-
-**Observações**
+#### Observações
 - Anulada pela banca: Q05, que repete o enunciado da Q03 no próprio caderno.
 - Q10: a figura está no caderno; a remoção pelo antecessor dá 18 (D). O curso (0100) remove pelo sucessor, que daria 21.
 - Q15: gabarito oficial D, apesar de E também ser defensável; nenhuma alternativa associa o heap a "sempre completa" (Z).
@@ -188,7 +194,7 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 - Q12: o vetor `32 8 12 16 20 24 28 16 36` é assim no caderno. O índice 4 vale 20, então E vale.
 - Q17: a pergunta pede a alternativa que lista só as afirmações incorretas.
 
-## Edital 061/2018
+### Edital 061/2018
 | Q | Letra | Formato | Tópico | Assuntos | Por quê |
 |---|---|---|---|---|---|
 | 01 | B | cálculo | 5 | [0105](15-hash.md), [0178](28-estruturas-complementos.md) | `x mod 12000` cobre exatamente 0 a 11.999; a A só gera 1000 endereços. |
@@ -212,8 +218,7 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 | 19 | D | afirmações | 4 | [0101](14-arvores.md), [0176](28-estruturas-complementos.md) | V-V-F: após inserção uma rotação (simples ou dupla) basta; a propagação até a raiz é da remoção. |
 | 20 | A | simulação | 3 | [0082](12-pilhas-e-filas.md), [0085](12-pilhas-e-filas.md) | Fila exibida: 10-29-...-11 (I). Pilha final: topo 11-12-...-10 (II). III e IV são falsas. |
 
-
-**Observações**
+#### Observações
 - Anuladas pela banca: 03, 04, 08, 09 e 17.
 - Q03: a figura existe no caderno (árvore AVL de raiz 23). A, B e E dão a mesma árvore: três certas, anulada.
 - Q08: C e E estão incorretas (pilha é linear, e array dinâmico não vira lista ligada). Duas alternativas erradas: anulada.
@@ -221,7 +226,7 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 - Q17: com I, II e III verdadeiras, nenhuma alternativa serve (a E diz que nenhuma é verdadeira). Anulada.
 - Q18: a III é discutível (hash encadeado ocupa mais espaço que árvore B em memória?). Fica E (I e II); a alternativa A só vale se a III for aceita.
 - Q20: o caderno traz as alternativas (D e E repetidas, ambas "III e IV"). A letra A é a da folha oficial.
-## Edital 033/2019
+### Edital 033/2019
 
 | Q | Letra | Formato | Tópico | Assuntos | Por quê |
 |---|---|---|---|---|---|
@@ -246,8 +251,7 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 | 19 | A | simulação | 4 | [0101](14-arvores.md) | Rodado em C: raiz 6; 3 e 8; 2, 5, 7, 9; 1, 4. |
 | 20 | B | afirmações | 4 | [0101](14-arvores.md) | I falsa (a raiz de uma subárvore pode ser vermelha); II e III verdadeiras. |
 
-
-**Observações**
+#### Observações
 - Anuladas pela banca: 05, 10, 13 e 15. As figuras da Q02, Q04, Q16 e Q19 estão no caderno.
 - Q04: só C sai da fusão padrão; B é uma árvore B válida, mas não sai de remoção padrão.
 - Q09: se "altura 3" contasse níveis, daria 21 x 3 = 63 (letra B). Pelo Cormen (arestas) é 255.
@@ -256,7 +260,7 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 - Q13: I só é verdadeira em heap máximo (e com "menor ou igual"). Se valesse, as três seriam verdadeiras e nenhuma opção bateria.
 - Q20: I é falsa porque a raiz de uma subárvore pode ser vermelha; só B bate com II e III verdadeiras.
 
-## Edital 060/2019
+### Edital 060/2019
 
 | Q | Letra | Formato | Tópico | Assuntos | Por quê |
 |---|---|---|---|---|---|
@@ -281,14 +285,13 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 | 19 | E | conceito | 3 | [0079](11-listas.md) | Com ponteiros de início e fim e elo anterior, as quatro operações são O(1). |
 | 20 | E | conceito | 3 | [0085](12-pilhas-e-filas.md) | Vazia: REAR == FRONT; cheia: (REAR+1) mod n == FRONT. |
 
-
-**Observações**
+#### Observações
 - Q01: a tabela do enunciado põe 12 na posição 2, mas 12 mod 9 = 3 e a sondagem só chegaria lá dando a volta. A transcrição perdeu um vazio: o recorte da prova (`provas-ppgi-ufam/2019-060/figuras/q01-tabela-hash.png`) mostra `9 18 _ 12 3 14 4 21 _`, com o 12 na posição 3. A letra C vale.
 - Anuladas pela banca: 11, 13, 14 e 16. A figura da Q02 existe; a da Q16 não está no caderno ("figura abaixo" sem figura), o que explica a anulação.
 - Q08: heapsort com elementos todos iguais também é O(n) (o max-heapify para na hora). A e B são defensáveis; B é a esperada.
 - Q11: C também é questionável (folha não tem filhos, então "sempre chaves + 1" só vale em nó interno).
 - Q12: figura completa no caderno: A e C são AVL, B não é (50 com esquerda de altura 2 e direita vazia).
-## Edital 057/2022 (gabarito oficial)
+### Edital 057/2022 (gabarito oficial)
 | Q | Letra | Formato | Tópico | Assuntos | Por quê |
 |---|---|---|---|---|---|
 | 01 | d | código | 3 | [0039](05-vetores-e-strings.md) | (Python) produto escalar 0·1+2·0+0·3+0·4+5·0 = 0; rodado. |
@@ -312,8 +315,7 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 | 19 | b | cálculo | 4 | [0176](28-estruturas-complementos.md), [0101](14-arvores.md) | Melhor caso O(1) (sem rebalancear), pior O(log n) (rotações até a raiz). |
 | 20 | b | cálculo | 3 | [0075](11-listas.md), [0072](10-analise.md) | Busca O(n), índice O(1), início O(n), fim O(1), remoção por índice O(n). |
 
-
-**Observações**
+#### Observações
 - As 20 letras em negrito do caderno oficial batem com as que o curso tinha chegado.
 - Q16: a alternativa c tem 8 células no próprio caderno (falta o ø final da posição 8); a banca marcou c mesmo assim.
 - Q19: depende do que se conta. Se a remoção do nó com dois filhos precisar achar o sucessor, o melhor caso também seria O(log n) (alternativa a). A banca marcou b.
@@ -321,7 +323,7 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 - Q15: falta o `;` depois de `l->ant = novo` no caderno (não compila como está); a banca marcou a.
 - Q06 e Q08 são Python mas o conteúdo é de C (alias de ponteiro, Fibonacci recursivo). Q01 também.
 
-## Edital 020/2023 (gabarito oficial)
+### Edital 020/2023 (gabarito oficial)
 | Q | Letra | Formato | Tópico | Assuntos | Por quê |
 |---|---|---|---|---|---|
 | 01 | C | cálculo | 6 | [0090](13-busca-e-ordenacao.md) | 10 elementos: ⌊log2 10⌋ + 1 = 4 comparações no pior caso. |
@@ -335,12 +337,11 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 | 09 | A | código | 1 | [0032](04-funcoes.md) | Gabarito oficial A. O pseudocódigo devolve recursivamente o maior elemento da lista: 13; rodado em Python. |
 | 10 | D | simulação | 3 | [0039](05-vetores-e-strings.md) | Gabarito oficial D. Produto de matrizes 2×3 por 3×2 rodado em Python: {{0, 30}, {45, 0}}. |
 
-
-**Observações**
+#### Observações
 - O caderno com a marcação oficial trouxe as figuras e o código que faltavam no texto (Q06, Q08, Q09, Q10).
 - Q04 e Q05: o caderno numera os itens como a, b, c, mas as alternativas falam em I, II, III.
 
-## Edital 071/2023 (gabarito oficial)
+### Edital 071/2023 (gabarito oficial)
 | Q | Letra | Formato | Tópico | Assuntos | Por quê |
 |---|---|---|---|---|---|
 | 01 | anulada | código | 7 | [0092](13-busca-e-ordenacao.md) | O laço interno começa em j = 0 em vez de i+1 (rodado: {5,3,4,1,2} sai 3 4 5 1 2), faltam `;` e `}`. Provavelmente anulada por não compilar e ter mais de um erro. |
@@ -364,8 +365,7 @@ mão), `conceito` (definição) e `cálculo` (altura, comparações, complexidad
 | 19 | B | código | 3 | [0082](12-pilhas-e-filas.md) | (Python) pop vazio imprime "empty stack" e a pilha final é [2]; rodado. |
 | 20 | B | código | 1 | [0029](04-funcoes.md), [0050](06-ponteiros.md) | (Python) fechamento: 5·3 = 15; rodado. Em C, o equivalente é ponteiro para função (0050), sem closure. |
 
-
-**Observações**
+#### Observações
 - Q01 anulada: o código tem erro de sintaxe e de lógica; não vejo discordância da anulação.
 - Q07 e Q10: motivos de anulação são conjectura minha.
 - Q12: concordo com B; confere com as quatro alternativas.
