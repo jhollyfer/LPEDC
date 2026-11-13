@@ -1,16 +1,9 @@
 # Módulo 25 · Estruturas especiais
 
-Os módulos anteriores montaram a caixa de ferramentas clássica: listas,
-pilhas, filas, árvores, tabelas hash e grafos. Este traz três estruturas que
-nascem de um problema específico, quase sempre uma lista encadeada com um
-truque a mais.
-
-A **matriz esparsa** guarda só o que não é zero. A **skip list** é uma lista
-ordenada com linhas expressas sorteadas por uma moeda: busca O(log n) na
-média, sem rotação. As **listas autoajustáveis** aproveitam que poucos itens
-recebem quase todas as buscas. No fim, BST, AVL, skip list e lista com mover
-para a frente respondem ao mesmo teste: a melhor estrutura depende do uso, e
-o jeito honesto de descobrir é medir.
+Três estruturas nascidas de um problema específico, quase sempre uma lista
+encadeada com um truque a mais: **matriz esparsa**, **skip list** e **listas
+autoajustáveis**. No fim, BST, AVL, skip list e lista com mover para a frente
+respondem ao mesmo teste. É complemento: não cai direto na prova do PPGI.
 
 ## O que você vai aprender
 
@@ -24,25 +17,22 @@ o jeito honesto de descobrir é medir.
 
 ## Antes de começar
 
-Este módulo é complemento: não cai direto na prova do PPGI (o que mais cai
-está em `PPGI.md`, na raiz do curso).
-
-Usa **lista encadeada** com o par `ant` e `p` (0076 a 0078), `malloc` e `free`
-(0054), **ponteiro para ponteiro** (0049), **TAD** (0074), busca sequencial
-(0089), BST (0099), AVL (0101), ponteiros para função (0050) e `void *` (0051).
+Revise **lista encadeada** com o par `ant` e `p` (0076 a 0078), `malloc` e
+`free` (0054), **ponteiro para ponteiro** (0049), **TAD** (0074), busca
+sequencial (0089), BST (0099), AVL (0101), ponteiros para função (0050) e
+`void *` (0051).
 
 Cada assunto tem um TAD na pasta (`esparsa.h`, `skip.h`, `autolista.h`,
-`bancada.h`). Desenhe antes e depois de cada operação. Nos desenhos de lista,
-o nó verde é o achado, os amarelos são os comparados e os cinza, os que a
-busca nem tocou. Os exemplos compilam junto os `.c` de apoio da pasta:
+`bancada.h`). Nos desenhos de lista, o nó verde é o achado, os amarelos são os
+comparados e os cinza, os que a busca nem tocou. Compile junto os `.c` de apoio:
 
 ```bash
 gcc ~/LPEDC/material/A325.c ~/LPEDC/material/0163-skip.c -o ~/LPEDC/material/A325 && ~/LPEDC/material/A325
 ```
 
-O **custo** de uma busca é quantas chaves ela comparou: o mesmo número em
-qualquer computador. Os sorteios usam um gerador próprio de uma linha, para a
-mesma semente dar a mesma saída em qualquer máquina.
+O **custo** de uma busca é quantas chaves ela comparou, o mesmo em qualquer
+máquina. Os sorteios usam um gerador próprio de uma linha: a mesma semente dá a
+mesma saída.
 
 {{indice}}
 

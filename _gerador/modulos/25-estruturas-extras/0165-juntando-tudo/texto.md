@@ -1,22 +1,19 @@
 ## 0165 · Juntando tudo
 
-A loja tem 1000 produtos e 10 mil consultas por dia; os 20 da promoção levam
-80% delas. Qual estrutura guarda o catálogo?
-
-A **BST** (assunto 0099) tem altura que depende da ordem de chegada. A
-**AVL** (0101) garante altura perto de log₂ n com rotações. A **skip list**
-(0163) promete O(log n) esperado, sem rotação. A **lista com mover para a
-frente** (0164) é O(n), mas aposta que os mais procurados ficam na frente. A
-resposta sai de medir.
-
-Três regras para medir com justiça: **as mesmas chaves, na mesma ordem**;
-**as mesmas buscas**, sorteadas uma vez e guardadas num vetor; e o mesmo
-**custo**, as chaves que a busca comparou.
-
-As estruturas ficam atrás de uma **interface comum**: uma struct com
-ponteiros para função (assunto 0050) e a estrutura de dados como `void *`
-(0051). Quem mede chama `e->busca(d, chave, &custo)` sem saber o que há do
-outro lado:
+- **Concorrentes**: a **BST** (0099) tem altura que depende da ordem de chegada;
+  a **AVL** (0101) garante perto de log₂ n com rotações; a **skip list** (0163)
+  promete O(log n) esperado sem rotação (PUGH, 1990); a **lista com mover para
+  a frente** (0164) é O(n), mas aposta nos mais procurados.
+- **Medir com justiça**: as mesmas chaves na mesma ordem, as mesmas buscas
+  (sorteadas uma vez e guardadas) e o mesmo **custo**, as chaves comparadas.
+- **Interface comum**: struct com ponteiros para função (0050) e a estrutura
+  como `void *` (0051); quem mede chama `e->busca(d, chave, &custo)` sem saber o
+  que há do outro lado (KERNIGHAN; RITCHIE, 1989).
+- **Chamada indireta**: o compilador em geral não a expande no lugar, e cada
+  busca paga um salto a mais, visível só no cronômetro.
+- **Resultado**: a BST desaba com chaves em ordem (vira lista); AVL e skip list
+  não percebem; a lista MTF perde com as consultas espalhadas (A329 mostra quando
+  o jogo vira).
 
 ```c
 typedef struct {
@@ -30,12 +27,16 @@ typedef struct {
 extern const Estrutura CONCORRENTES[NUM_CONCORRENTES];
 ```
 
-O `bancada.c` traz os quatro concorrentes (a skip list é a do `skip.h`) e um
-sorteio repetível, `bc_sorteio`, com o gerador de uma linha do `skip.c`.
+> [!WARNING]
+> Gerar as buscas **dentro** de `mede` estraga a comparação: o sorteio continua
+> de onde parou e cada concorrente recebe consultas diferentes. Sorteie uma vez,
+> antes.
 
-Cada concorrente recebe as 1000 chaves duas vezes: embaralhadas e em ordem
-crescente (o catálogo exportado de uma planilha ordenada). Depois responde às
-mesmas 10 mil consultas:
+{{exemplo}}
+
+Uma loja tem 1000 produtos e 10 mil consultas por dia, 80% delas nos 20 da
+promoção. Cada concorrente recebe as chaves embaralhadas e em ordem crescente e
+responde às mesmas consultas:
 
 {{ideia}}
 
@@ -104,27 +105,3 @@ O laço não sabe quem está medindo. Para acrescentar um concorrente, mexa no
 vetor `CONCORRENTES`, nunca no teste:
 
 {{fluxograma}}
-
-A **BST** vai bem com chaves embaralhadas e desaba com a planilha ordenada:
-vira lista, com mais de 500 comparações por busca. A **AVL** não percebe a
-diferença; a **skip list** também não, porque a moeda decide a forma: olha
-uns 18 nós contra uns 9 da AVL, sem rotação. A **lista MTF** perde feio: os
-20% de consultas espalhadas custam umas 500 comparações. O A329 mostra quando
-o jogo vira.
-
-> [!WARNING]
-> Gerar as buscas **dentro** de `mede` estraga a comparação: o sorteio continua
-> de onde parou, e cada concorrente recebe consultas diferentes. Sorteie uma
-> vez, antes, e guarde num vetor.
-
-> [!TIP]
-> `e->busca(d, ...)` é uma chamada **indireta**: o compilador em geral não a
-> expande no lugar, e cada busca paga um salto a mais, visível só no
-> cronômetro.
-
-> [!NOTE]
-> **Pergunta para você:** a coluna da lista MTF quase não muda entre as duas
-> ordens. Por quê? Se a promoção tivesse 5 produtos e 99% das consultas, quem
-> ganharia? Confira no A329.
-
-{{pratique}}

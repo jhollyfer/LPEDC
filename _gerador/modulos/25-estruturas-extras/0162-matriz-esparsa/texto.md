@@ -1,21 +1,22 @@
 ## 0162 · Matriz esparsa
 
-Um streaming guarda a nota (1 a 5) de cada cliente para cada filme: 1 milhão
-de clientes, 50 mil filmes. A matriz `int` cheia ocupa 5 × 10¹⁰ posições de 4
-bytes: **200 GB**. Cada cliente avalia uns 20 filmes, então mais de 99,9% é
-zero.
-
-Uma matriz quase toda de zeros é uma **matriz esparsa** (a rede social, o grafo
-grande). A regra: **zero não se guarda**. Só os valores diferentes de zero
-ocupam memória; o resto vale 0.
-
-O jeito mais simples é um vetor de **triplas** `(linha, coluna, valor)` em
-ordem: serve para gravar em arquivo ou matriz que não muda, pois inserir no
-meio empurra todo mundo.
-
-Quando a matriz muda, use a **lista por linha**: um vetor de ponteiros, um por
-linha, e em cada uma uma lista encadeada (módulo 11) com as células em ordem
-de coluna:
+- **Matriz esparsa**: matriz quase toda de zeros. A regra é **zero não se
+  guarda**: só os não nulos ocupam memória, e o resto vale 0
+  (SZWARCFITER; MARKENZON, 2010).
+- **Triplas**: vetor de `(linha, coluna, valor)` em ordem. Serve para arquivo ou
+  matriz que não muda, pois inserir no meio empurra todo mundo
+  (CELES; CERQUEIRA; RANGEL, 2004).
+- **Lista por linha**: vetor de ponteiros, um por linha, e em cada um uma lista
+  encadeada (módulo 11) com as células em ordem de coluna
+  (SZWARCFITER; MARKENZON, 2010).
+- **Ler `m[i][j]`**: percorrer a linha `i` até passar da coluna `j`; se a célula
+  não aparece, vale 0. O custo depende das células da linha, não do tamanho da
+  matriz.
+- **Gravar**: **inserção ordenada** (assunto 0078), com uma regra a mais: gravar
+  0 numa célula existente a **remove** (FEOFILOFF, 2009).
+- **Quando compensa**: cada `Celula` tem 16 bytes contra 4 do `int`; vale a pena
+  com menos de 1/4 das posições preenchidas. Um streaming com 1 milhão de
+  clientes e 50 mil filmes passa de 200 GB para 320 MB.
 
 ```c
 typedef struct Celula {
@@ -30,13 +31,15 @@ typedef struct {
 } Esparsa;
 ```
 
-Ler `m[i][j]` é percorrer a lista da linha `i` até passar da coluna `j`; se
-a célula não aparece, vale 0. Gravar é uma **inserção ordenada** (assunto
-0078) com uma regra a mais: gravar 0 numa célula existente a **remove**.
+> [!WARNING]
+> Se gravar 0 trocasse o valor, a célula guardaria um 0 e `nao_zeros` mentiria.
+> Toda operação que pode gerar zero (gravar, somar, subtrair) remove a célula.
 
-Uma locadora tem 4 clientes (Ana, Bruno, Carla e Davi, linhas 0 a 3) e 8
-filmes (colunas 0 a 7). Chegam seis notas e Bruno apaga a dele: das 32
-posições, sobram 5 células. A linha de Carla é `NULL`:
+{{exemplo}}
+
+Uma locadora tem 4 clientes (linhas 0 a 3) e 8 filmes (colunas 0 a 7). Chegam
+seis notas e Bruno apaga a dele: das 32 posições, sobram 5 células. A linha de
+Carla é `NULL`:
 
 {{ideia}}
 
@@ -121,20 +124,3 @@ int main(void) {
 verde é Bruno apagando a nota: a coluna 3 existe e o valor novo é 0:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Se `esp_define(m, 1, 3, 0)` trocasse o valor, a célula guardaria um 0 e
-> `nao_zeros` mentiria. Toda operação que pode gerar zero (gravar, somar,
-> subtrair) precisa remover a célula.
-
-> [!TIP]
-> Cada `Celula` ocupa 16 bytes em 64 bits, contra 4 do `int` da matriz cheia.
-> A conta só compensa quando menos de 1/4 das posições tem valor: no
-> streaming, 2 × 10⁷ células dão 320 MB, contra 200 GB.
-
-> [!NOTE]
-> **Pergunta para você:** quantas células são visitadas por
-> `esp_valor(notas, 3, 5)`? E por `esp_valor(notas, 2, 5)`? O custo depende
-> do tamanho da matriz ou das células da linha?
-
-{{pratique}}

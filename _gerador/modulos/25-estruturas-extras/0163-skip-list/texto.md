@@ -1,38 +1,35 @@
 ## 0163 · Skip list
 
-A rodovia tem paradas nos km 5, 12, 18, 23, 31, 40, 47 e 56. O **parador**
-para em todas, o **semidireto** em algumas, o **direto** só nas principais.
-Para o km 47, você vai de direto até onde der, troca para o semidireto e só
-no fim pega o parador.
+- **Skip list**: lista ordenada (0078) com linhas expressas, os **andares**. O
+  andar 0 é a lista completa; o 1 tem parte dos nós, o 2 menos ainda
+  (PUGH, 1990).
+- **Nó**: um vetor `prox`, em que `prox[k]` é o próximo no andar `k`. Uma
+  **cabeça** sem chave está em todos os andares e começa toda busca
+  (MORIN, 2013, cap. 4).
+- **Buscar**: comece no andar mais alto. Se o próximo é menor que a chave,
+  avance; se passou ou não existe, desça. No andar 0, o próximo é a chave ou ela
+  não existe.
+- **Moeda**: todo nó novo entra no andar 0 e sobe mais um enquanto der cara.
+  Metade chega ao andar 1, um quarto ao 2, sem nunca arrumar nada (PUGH, 1990).
+- **Inserir**: buscar guardando, em cada andar, o último nó antes de descer (o
+  vetor `antes`); depois ligar o nó novo após `antes[k]` em cada andar. A
+  remoção usa o mesmo vetor (SEDGEWICK, 1998, cap. 13).
+- **Custo**: **O(log n) esperado**, na média dos sorteios, sem garantia. Com 1
+  milhão de chaves, uns 40 nós por busca.
+- **Memória**: com `prox[SKIP_MAX]` todo nó tem 104 bytes. Um **membro vetor
+  flexível** (`struct NoSkip *prox[];`) aloca só os andares usados
+  (CPPREFERENCE, s.d.).
 
-Uma lista ordenada (assunto 0078) é o ônibus parador: achar uma chave custa
-O(n), e a busca binária não serve, pois lista não tem índice. A BST e a AVL
-(módulo 14) resolvem com rotações.
+> [!WARNING]
+> Na remoção, o nó sai de **todos** os andares. Se o 23 sair só do andar 0 e
+> for liberado, a cabeça ainda aponta para ele no andar 2: ponteiro solto
+> (assunto 0057). O E976 pede essa remoção.
 
-A **skip list** fica com a lista e acrescenta as linhas expressas, os
-**andares**. O andar 0 é a lista completa; o andar 1 tem parte dos nós, o 2
-menos ainda. Cada nó tem um vetor `prox`: `prox[k]` é o próximo no andar `k`.
-Uma **cabeça** sem chave está em todos os andares e começa toda busca.
+{{exemplo}}
 
-**Buscar** é a viagem de ônibus. Comece no andar mais alto da cabeça. Se o
-próximo nó do andar é menor que a chave, avance; se já passou (ou não existe),
-desça. No andar 0, o próximo nó é a chave ou ela não existe.
-
-Os andares de cada nó saem de uma **moeda**: todo nó novo entra no andar 0 e,
-enquanto der cara, sobe mais um. Em média, metade chega ao andar 1, um quarto
-ao 2, um oitavo ao 3, sem nunca arrumar nada.
-
-**Inserir** é buscar guardando, em cada andar, o último nó visitado antes de
-descer (o vetor `antes`). Sorteie os andares do nó novo e ligue-o depois de
-`antes[k]` em cada andar `k`. A remoção usa o mesmo vetor para desligar o nó.
-
-O custo é **O(log n) esperado**: com 1 milhão de chaves, uns 40 nós olhados
-por busca, contra meio milhão na lista simples. "Esperado" é na média dos
-sorteios, sem garantia.
-
-As paradas entram com os andares sorteados: o 23 e o 56 em 3 andares, o 12 e
-o 40 em 2, os outros só no 0. A busca pelo 47 anda no andar 2 até o 23 (o 56
-já passou), desce, anda até o 40, desce, e o próximo no andar 0 é o 47:
+As paradas de uma rodovia, nos km 5 a 56, entram com andares prontos: o 23 e o
+56 em 3, o 12 e o 40 em 2, os outros só no 0. A busca pelo 47 anda no andar 2
+até o 23, desce, anda até o 40, desce, e o próximo no andar 0 é o 47:
 
 {{ideia}}
 
@@ -108,21 +105,3 @@ O laço de dentro avança no andar, o de fora desce. O caminho verde é a busca
 do 47: uma vez no andar 2, uma no andar 1, nenhuma no andar 0:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Na remoção, o nó sai de **todos** os andares em que aparece. Se o 23 sair só
-> do andar 0 e for liberado, a cabeça continua apontando para ele no andar 2:
-> ponteiro solto (assunto 0057). O E976 pede essa remoção.
-
-> [!TIP]
-> Com `prox[SKIP_MAX]`, todo nó ocupa 104 bytes mesmo usando em média 2
-> ponteiros. Um **membro vetor flexível**, `struct NoSkip *prox[];`, com
-> `malloc(sizeof(NoSkip) + andares * sizeof(NoSkip *))`, aloca só o
-> necessário.
-
-> [!NOTE]
-> **Pergunta para você:** se o km 35 entrar com 2 andares, quais ponteiros
-> mudam? Quem fica em `antes[0]` e em `antes[1]`? Desenhe antes de conferir com
-> `skip_insere_andares` e `skip_mostra`.
-
-{{pratique}}

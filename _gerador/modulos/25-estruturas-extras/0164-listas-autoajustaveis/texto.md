@@ -1,30 +1,31 @@
 ## 0164 · Listas autoajustáveis
 
-Na cozinha, o sal fica na frente do armário e o cravo, no fundo: cada pote
-usado volta para a frente.
-
-A busca sequencial (assunto 0089) custa a **posição** do item. Se todos fossem
-procurados na mesma frequência, a ordem não importaria; na agenda do celular,
-meia dúzia de contatos recebe quase todas as ligações.
-
-A **lista autoajustável** descobre sozinha quem são: a cada busca
-bem-sucedida, aproxima o item achado do começo, então a busca também escreve
-na lista. Há três políticas clássicas:
-
-- **mover para a frente** (*move-to-front*): o item achado vira o primeiro.
-  Reage rápido, mas um item procurado uma vez também vai para a frente;
-- **transposição**: o item achado troca de lugar com o anterior. Um acesso
-  isolado quase não bagunça, mas um item popular demora a chegar à frente;
-- **contagem**: cada nó guarda quantas vezes foi achado, e a lista fica em
+- **Custo da busca sequencial** (0089): a **posição** do item. Se poucos itens
+  levam quase todas as buscas, a ordem importa.
+- **Lista autoajustável**: a cada busca bem-sucedida, aproxima o item achado do
+  começo; a busca também escreve na lista (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
+- **Mover para a frente** (*move-to-front*): o item achado vira o primeiro.
+  Reage rápido, mas um acesso isolado também vai para a frente
+  (CORTÉS, 2015).
+- **Transposição**: o item troca de lugar com o anterior. Bagunça pouco, mas um
+  item popular demora a chegar à frente (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).
+- **Contagem**: cada nó guarda quantas vezes foi achado, e a lista fica em
   ordem decrescente. Converge para a melhor ordem fixa, com um campo a mais.
+- **Lista ou vetor**: mover para a frente numa lista são três atribuições; num
+  vetor, copia todos os anteriores (A327). A transposição serve aos dois.
+- **Garantia**: mover para a frente nunca gasta mais que o dobro da melhor ordem
+  fixa escolhida por quem conhece as buscas de antemão
+  (SLEATOR; TARJAN, 1985; CORMEN et al., 2024, cap. 27).
 
-Mover para a frente combina com **lista encadeada**: tirar o nó e pendurá-lo
-no início são três atribuições de ponteiro; num vetor, empurraria todos os
-anteriores. A transposição é a troca de dois vizinhos e serve aos dois.
+> [!WARNING]
+> Se o nó achado já é o primeiro, `ant` é `NULL` e `ant->prox = p->prox`
+> derruba o programa (E982). Sem `l->inicio = p`, o nó some da lista e vaza.
 
-A agenda tem Ana, Bia, Caio, Duda e Edu. As ligações são para Edu, Edu, Caio,
-Edu e Edu. Na terceira, Caio é achado na quarta comparação e vai para a
-frente; Edu desce para o segundo lugar:
+{{exemplo}}
+
+Uma agenda com Ana, Bia, Caio, Duda e Edu recebe ligações para Edu, Edu, Caio,
+Edu e Edu. Na terceira, Caio é achado na quarta comparação e vai para a frente;
+Edu desce para o segundo lugar:
 
 {{ideia}}
 
@@ -107,21 +108,3 @@ Até achar, é a busca de sempre. Depois do "Sim", o nó que não é o primeiro 
 religado no início. O verde é Caio, achado na quarta volta:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Se o nó achado já é o primeiro, `ant` é `NULL` e `ant->prox = p->prox`
-> derruba o programa (o E982 cobre esse caso). Sem `l->inicio = p`, o nó some
-> da lista e vaza memória.
-
-> [!TIP]
-> No vetor, levar o décimo item para a frente copia os nove anteriores (o
-> A327 conta isso). Sleator e Tarjan (1985) provaram que mover para a frente
-> nunca gasta mais que o dobro da melhor ordem fixa, escolhida por quem conhece
-> todas as buscas de antemão.
-
-> [!NOTE]
-> **Pergunta para você:** com as mesmas cinco ligações, quanto custaria a
-> **transposição**? E se as ligações fossem Ana, Bia, Caio, Duda, Edu, Ana, Bia,
-> Caio, Duda, Edu, qual política sairia pior? Confira com `al_busca_transpoe`.
-
-{{pratique}}
