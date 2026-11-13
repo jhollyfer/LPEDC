@@ -1,40 +1,34 @@
 ## 0032 · Recursão
 
-Cinco amigos vão ao cinema e querem saber de quantos jeitos podem sentar nas
-cinco cadeiras. O primeiro tem 5 escolhas. Depois que ele senta, o problema é
-**igual, mas menor**: de quantos jeitos 4 pessoas sentam em 4 cadeiras? E assim
-até sobrar 1 pessoa, com 1 jeito. A resposta é 5 × 4 × 3 × 2 × 1 = 120, o
-**fatorial** de 5.
+- **Função recursiva**: resolve o problema chamando a si mesma com uma versão
+  menor dele (DEITEL; DEITEL, 2011, cap. 5).
+- **Caso base**: o problema pequeno o bastante para responder direto, sem nova
+  chamada (FEOFILOFF, 2009, cap. 5).
+- **Caso recursivo**: reduz o problema e usa a resposta menor
+  (`n * fatorial(n - 1)`). Cada chamada tem de chegar **mais perto** do caso
+  base (FEOFILOFF, 2009, cap. 5).
+- **Confie na função**: suponha que a chamada menor já funciona e monte a
+  resposta de `n` com ela; depois confira o caso base (FEOFILOFF, 2009, cap. 5).
+- **Ida e volta**: cada chamada tem seu quadro (assunto 0031). Na ida a pilha
+  cresce até o caso base; na volta cada quadro combina a resposta e sai
+  (BACKES, 2013, cap. 9).
+- **Recursão e laço**: resolvem os mesmos problemas. A recursão gasta memória
+  proporcional à profundidade e compensa quando o problema é recursivo por
+  natureza: árvores, "divide ao meio" (TENENBAUM; LANGSAM; AUGENSTEIN, 1995,
+  cap. 3).
 
-O raciocínio foi: "para resolver o de 5, resolvo o de 4 e multiplico por 5".
-Uma função que resolve o problema chamando **a si mesma** com uma versão menor
-dele é uma **função recursiva**. Ela tem duas partes:
+> [!WARNING]
+> Caso base que nunca chega: com `if (n == 1)`, `fatorial(0)` chama
+> `fatorial(-1)` e não para. A pilha estoura (**stack overflow**,
+> `Segmentation fault`). E 13! já não cabe num `int` de 32 bits.
 
-- o **caso base**: o problema pequeno o bastante para responder direto, sem
-  chamar ninguém (1 pessoa: 1 jeito);
-- o **caso recursivo**: reduz o problema a um menor e usa a resposta dele
-  (`n * fatorial(n - 1)`).
+{{exemplo}}
 
-Regra que não pode falhar: cada chamada tem que chegar **mais perto** do caso
-base. Senão a função chama a si mesma para sempre.
-
-**Confie na função.** Ao escrever o caso recursivo, não siga as chamadas de
-cabeça. Suponha que `fatorial(n - 1)` já funciona e pergunte: com essa resposta
-na mão, como monto a de `n`? Depois confira o caso base. Com os dois certos, a
-função está certa.
-
-Cada chamada recursiva é comum, com **seu próprio quadro** na pilha (assunto
-0031). `fatorial(5)` empilha `fatorial(4)`, que empilha `fatorial(3)`... São
-cinco quadros de `fatorial` ao mesmo tempo, cada um com seu `n`, todos
-parados, menos o do topo.
-
-Na **ida**, a pilha cresce até `fatorial(1)`, o caso base, que devolve 1 sem
-chamar ninguém. Na **volta**, cada quadro recebe a resposta de cima, multiplica
-e devolve ao de baixo: 1, 2, 6, 24, 120:
+De quantos jeitos 5 amigos sentam em 5 cadeiras? 5 × 4 × 3 × 2 × 1 = 120. Na
+ida a pilha cresce até `fatorial(1)`; na volta cada quadro multiplica e
+devolve: 1, 2, 6, 24, 120:
 
 {{ideia}}
-
-O código é quase a definição matemática:
 
 ```c
 #include <stdio.h>
@@ -56,16 +50,14 @@ int main(void) {
 // 12 amigos: 479001600 jeitos
 ```
 
-Não há `for` nem `while`, mas o fluxograma tem duas voltas. A primeira é a ida
-(empilha de novo com `n - 1` até o caso base); a segunda é a volta (cada quadro
-em espera multiplica e sai):
+Não há laço no código, mas o fluxograma tem duas voltas: a ida (empilha com
+`n - 1`) e a volta (cada quadro multiplica e sai):
 
 {{fluxograma}}
 
 ### Passo a passo
 
-O teste de mesa de `fatorial(5)`. As chamadas descem; os retornos sobem, de
-baixo para cima da tabela:
+O teste de mesa de `fatorial(5)`. As chamadas descem; os retornos sobem:
 
 | Chamada | n | `n <= 1`? | Espera | Devolve |
 | --- | --- | --- | --- | --- |
@@ -74,30 +66,3 @@ baixo para cima da tabela:
 | `fatorial(3)` | 3 | Não | `3 * fatorial(2)` | 3 × 2 = 6 |
 | `fatorial(2)` | 2 | Não | `2 * fatorial(1)` | 2 × 1 = 2 |
 | `fatorial(1)` | 1 | Sim | nada | 1 |
-
-Recursão e laço resolvem os mesmos problemas: todo `for` vira recursão e toda
-recursão vira laço (às vezes com muito trabalho). O fatorial com `for` é mais
-simples e mais barato. A recursão compensa quando o problema **é** recursivo
-por natureza: pastas dentro de pastas, árvores, "divide ao meio e resolve cada
-metade".
-
-> [!WARNING]
-> Caso base que nunca chega. Com `if (n == 1)` no lugar de `if (n <= 1)`,
-> `fatorial(0)` chama `fatorial(-1)`, `fatorial(-2)`... e nunca para. O mesmo
-> ocorre se você esquecer de diminuir (`fatorial(n)` em vez de
-> `fatorial(n - 1)`). Cada chamada empilha um quadro, a pilha acaba e o
-> programa morre com **stack overflow**: o AddressSanitizer mostra
-> `stack-overflow`, e sem ele aparece só `Segmentation fault`.
-
-> [!TIP]
-> A recursão gasta memória proporcional à **profundidade**: `fatorial(5)` usa
-> 5 quadros de uma vez; um laço usaria um. Outro limite é o tipo: 12! =
-> 479.001.600 cabe num `int` de 32 bits, mas 13! = 6.227.020.800 dá overflow (o
-> `-fsanitize=undefined`, nas flags de estudo, acusa).
-
-> [!NOTE]
-> **Pergunta para você:** quanto vale `fatorial(0)` com o código acima? E
-> quantos quadros de `fatorial` a chamada `fatorial(12)` empilha no ponto mais
-> fundo?
-
-{{pratique}}

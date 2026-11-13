@@ -1,26 +1,22 @@
 ## 0034 · Módulos: .h, .c e compilação separada
 
-Quando várias partes de um programa precisam converter quilômetros em milhas,
-ninguém cola a conversão em cada uma. Ela mora num lugar só, e quem precisa a
-usa. No C, esse lugar é um **módulo**: um par de arquivos.
-
-- **`conversao.h`** (o *header*, cabeçalho): a **interface**. Diz **o que** o
-  módulo oferece: protótipos das funções, constantes, tipos. É o contrato que
-  quem usa precisa conhecer.
-- **`conversao.c`**: a **implementação**. Diz **como**: o corpo das funções e
-  tudo o que é interno. Inclui o próprio `.h`, para o compilador conferir que a
-  implementação bate com o contrato.
-
-Quem quer usar escreve `#include "conversao.h"`. O `#include` só **cola** o
-texto do arquivo ali, e com ele o compilador conhece os protótipos e confere
-cada chamada. Com aspas, o arquivo é procurado primeiro na pasta do seu `.c`;
-com `< >`, só nas pastas do sistema.
-
-Cada `.c` é compilado **sozinho**, sem saber dos outros, e vira um **arquivo
-objeto** (`.o`). Ao ver `km_para_milhas(100)` em `viagem.c`, o compilador só
-sabe que a função existe (o protótipo prometeu) e deixa um buraco com o nome
-dela. Quem tapa o buraco é o **ligador** (*linker*), que junta os `.o` e
-procura cada nome. Isso é a **compilação separada**:
+- **Módulo**: um par de arquivos. O `.h` (cabeçalho) é a **interface**: diz
+  **o que** o módulo oferece, com protótipos e constantes. O `.c` é a
+  **implementação**: diz **como**, e inclui o próprio `.h` (BACKES, 2013,
+  cap. 13).
+- **`#include`**: cola o texto do arquivo ali. Com aspas, procura primeiro na
+  pasta do `.c`; com `< >`, só nas pastas do sistema (DEITEL; DEITEL, 2011,
+  cap. 5).
+- **Compilação separada**: cada `.c` vira um **arquivo objeto** (`.o`) sem
+  saber dos outros; o **ligador** (*linker*) junta os `.o` e resolve os nomes
+  (KERNIGHAN; RITCHIE, 1989, cap. 4).
+- **Include guard**: `#ifndef X_H` / `#define X_H` / `#endif` faz o `.h`
+  entrar uma vez só por `.c`, mesmo incluído duas vezes (GNU, s.d.).
+- **`static` fora de função**: esconde a global ou a função dos outros
+  arquivos; o módulo muda por dentro sem quebrar quem o usa (KERNIGHAN;
+  RITCHIE, 1989, cap. 4).
+- **`extern`**: declara uma global definida noutro arquivo (`extern int
+  limite;` no `.h`, `int limite = 10;` em um `.c` só) (BACKES, 2013, cap. 13).
 
 ```bash
 gcc -std=c17 -Wall -Wextra -c conversao.c       # gera conversao.o
@@ -29,16 +25,20 @@ gcc viagem.o conversao.o -o viagem                # o ligador junta
 gcc -std=c17 -Wall -Wextra viagem.c conversao.c -o viagem   # ou tudo de uma vez
 ```
 
-Num projeto grande, mudar um `.c` recompila só ele e liga de novo. No curso, o
-gcc com as flags de estudo compila junto todo `.c` de apoio da pasta (todo
-arquivo que não se chama `A000.c` ou `E000.c`).
+> [!WARNING]
+> Corpo de função no `.h`: dois `.c` que o incluem geram
+> `multiple definition of` no ligador, e o include guard não salva. Nunca
+> escreva `#include "conversao.c"`.
 
-O `conversao.h` é incluído pelos dois `.c`. Cada um vira um `.o`, e o ligador
-junta os dois no executável `viagem`:
+{{exemplo}}
+
+A conversão de unidades mora num módulo só. O `conversao.h` é incluído pelos
+dois `.c`; cada um vira um `.o`, e o ligador junta os dois no executável
+`viagem`:
 
 {{ideia}}
 
-O módulo fica na pasta do assunto. O `conversao.h`:
+O `conversao.h`:
 
 ```c
 // conversao.h · a interface do módulo: O QUE ele oferece
@@ -53,9 +53,8 @@ int conversoes_feitas(void);
 #endif
 ```
 
-O `conversao.c` tem o corpo das quatro funções, um contador `static` e uma
-função auxiliar `static` (abra o arquivo na pasta). O programa que usa só
-precisa do `.h` (chame-o de `viagem.c`):
+O `conversao.c` (na pasta do assunto) tem o corpo das funções, um contador
+`static` e uma função auxiliar `static`. O `viagem.c` só precisa do `.h`:
 
 ```c
 #include <stdio.h>
@@ -76,36 +75,7 @@ int main(void) {
 // R$ 1000.00 = US$ 185.19
 ```
 
-Cada `.c` passa pelo compilador separado, e o erro de "função que não existe"
-só aparece no fim, no ligador:
+Cada `.c` passa pelo compilador separado; o erro de "função que não existe"
+só aparece no ligador:
 
 {{fluxograma}}
-
-Três peças fecham o assunto:
-
-- **include guard**: `#ifndef CONVERSAO_H` / `#define CONVERSAO_H` / `#endif`
-  faz o conteúdo do `.h` entrar **uma vez** por `.c`, mesmo incluído duas vezes
-  (direto e por dentro de outro `.h`). Na primeira vez, `CONVERSAO_H` não
-  existe: o texto entra e o nome é definido. Na segunda, o nome já existe e o
-  texto é pulado. Use o nome do arquivo em maiúsculas.
-- **`static` fora de função** esconde do resto do programa: o `contador` e a
-  `contar` de `conversao.c` não existem para os outros arquivos. Assim o módulo
-  muda por dentro sem quebrar quem o usa.
-- **`extern`** declara uma global **definida** noutro arquivo: `extern int
-  limite;` no `.h`, `int limite = 10;` em **um** `.c` só. Use com moderação:
-  global compartilhada entre arquivos é global de novo.
-
-> [!WARNING]
-> Pôr o **corpo** de uma função no `.h`. Se dois `.c` incluem esse `.h`, a
-> função existe duas vezes e o ligador reclama `multiple definition of`. O
-> include guard **não** salva: ele evita repetição dentro de um `.c`, não entre
-> arquivos. No `.h` vão protótipos, `#define` e, mais adiante, tipos. E nunca
-> escreva `#include "conversao.c"`: funciona por acaso no começo e quebra
-> quando o projeto cresce.
-
-> [!NOTE]
-> **Pergunta para você:** se você apagar o `#include "conversao.h"` do
-> `viagem.c`, o programa compila? O que o gcc avisa? E se você apagar só o
-> `conversao.c` da linha do `gcc`?
-
-{{pratique}}

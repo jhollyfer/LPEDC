@@ -1,7 +1,19 @@
 ## 0031 · A pilha de chamadas
 
-Quando um programa em C quebra dentro do `gdb`, o comando `bt` mostra algo
-assim:
+- **Pilha de chamadas**: a lista das funções em andamento. A de cima roda; as
+  de baixo esperam um retorno (CELES; CERQUEIRA; RANGEL, 2016).
+- **Quadro** (*stack frame*, registro de ativação): a memória de uma chamada,
+  com os **parâmetros**, as **variáveis locais** e o **endereço de retorno**
+  (BACKES, 2013, cap. 9).
+- **LIFO**: chamou, empilha um quadro no topo; retornou, ele sai. A última
+  função a começar é a primeira a terminar (DEITEL; DEITEL, 2011, cap. 5).
+- **Por que a local some**: seu quadro foi desempilhado no `return`. E uma
+  função não vê as locais de quem a chamou: estão noutro quadro (CELES;
+  CERQUEIRA; RANGEL, 2016).
+- **Stack trace**: o `bt` do `gdb` mostra a pilha no momento do erro (GDB, s.d.).
+- **Stack overflow**: chamadas demais esgotam a pilha, que tem tamanho fixo
+  (8 MB no Linux, `ulimit -s`), e o programa morre com `Segmentation fault`
+  (BACKES, 2013, cap. 9).
 
 ```text
 #0  calcular_taxa (valor=0) at pedido.c:12
@@ -9,36 +21,18 @@ assim:
 #2  main () at pedido.c:5
 ```
 
-Isso é um **stack trace** (ou *backtrace*): a **pilha de chamadas** no momento
-do erro. A função de cima estava rodando; foi chamada pela de baixo, que foi
-chamada pela de baixo dela.
+> [!WARNING]
+> Local sem inicializar não "começa limpa": o quadro novo reaproveita a memória
+> de um quadro antigo, com o que ficou lá. O `-Wall` avisa
+> `may be used uninitialized`.
 
-A cada chamada, o programa reserva um pedaço de memória só para ela: o
-**quadro** (*stack frame*, ou registro de ativação). Nele ficam:
-
-- os **parâmetros**, com as cópias dos argumentos;
-- as **variáveis locais** da função;
-- o **endereço de retorno**: o ponto de quem chamou onde o programa continua
-  quando a função acaba.
-
-Os quadros se empilham como pratos. Chamou, empilha um quadro no **topo**.
-Retornou, o quadro do topo sai, e o de baixo continua de onde parou. A última
-função a começar é a primeira a terminar: **último a entrar, primeiro a sair**
-(LIFO, de *last in, first out*). Só o quadro do topo roda; os outros esperam um
-retorno.
-
-Por isso a local "some" no `return`: seu quadro foi desempilhado. Pelo mesmo
-motivo, uma função não enxerga as variáveis de quem a chamou: estão noutro
-quadro, mais embaixo.
+{{exemplo}}
 
 Num pedido de R$ 50,00, o `main` chama `total_com_entrega`, que chama
-`taxa_entrega`. No ponto mais fundo há três quadros. Quando `taxa_entrega`
-devolve 7.90, seu quadro sai, e `total_com_entrega` volta a rodar com o valor:
+`taxa_entrega`. No fundo há três quadros; quando `taxa_entrega` devolve 7.90,
+seu quadro sai:
 
 {{ideia}}
-
-O código imprime "entra" e "sai" em cada função, com recuo, e a pilha aparece
-na saída:
 
 ```c
 #include <stdio.h>
@@ -74,9 +68,8 @@ int main(void) {
 // Total: R$ 57.90
 ```
 
-No fluxograma, as chamadas empilham na descida e os retornos desempilham na
-ordem contrária. A decisão da taxa ocorre no topo, dentro de `taxa_entrega`,
-enquanto as outras duas funções esperam:
+As chamadas empilham na descida e os retornos desempilham na ordem contrária;
+a decisão da taxa ocorre no topo:
 
 {{fluxograma}}
 
@@ -92,24 +85,4 @@ A pilha em cada momento, de baixo para cima (o topo é o último):
 | `taxa_entrega` devolveu 7.90 | `main` → `total_com_entrega` (total = 57.90) | `total_com_entrega` |
 | `total_com_entrega` devolveu 57.90 | `main` (total = 57.90) | `main` |
 
-Há **dois** `valor`, um em cada quadro, e cada função mexe só no seu. E dois
-`total`: o do `main` e o de `total_com_entrega`.
-
-> [!WARNING]
-> Usar uma local sem inicializar e achar que "começa limpa". O quadro novo
-> ocupa o pedaço de memória que um quadro antigo acabou de liberar, e ninguém o
-> apaga. Uma `int soma;` pode nascer com o valor que uma local de outra função
-> deixou ali. Às vezes o programa "funciona" por sorte e quebra quando você
-> muda outra coisa. O `-Wall` avisa `may be used uninitialized`.
-
-> [!TIP]
-> A pilha tem tamanho fixo (no Linux, 8 MB por padrão; confira com
-> `ulimit -s`). Se passar do limite, o sistema mata o programa: é o **stack
-> overflow** (no Linux, `Segmentation fault`). Dá para empilhar centenas de
-> milhares de chamadas, mas não infinitas.
-
-> [!NOTE]
-> **Pergunta para você:** mude o subtotal para 95.00. Quantos quadros a pilha
-> chega a ter? O que muda na saída?
-
-{{pratique}}
+Há dois `valor` e dois `total`, um em cada quadro.

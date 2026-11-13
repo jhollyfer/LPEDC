@@ -1,14 +1,17 @@
 ## 0036 · Juntando tudo: o caixa da lanchonete
 
-Sexta à noite, fila no food truck. O caixa lança os pedidos pelo código, soma,
-põe 10% de serviço, recebe uma nota de R$ 50 e devolve o troco com o menor
-número de notas e moedas. Parece um programa só, mas tem um **módulo** com o
-cardápio, funções pequenas com **parâmetros** e retorno, um contador
-**`static`** escondido, uma **macro** para a taxa e uma função **recursiva**
-para o troco.
-
-Antes de escrever, divida: cada tarefa vira uma função com um nome que diz o
-que ela faz.
+- **Dividir em funções**: cada tarefa vira uma função com nome que diz o que
+  ela faz; o chefe pede, o subordinado resolve (DEITEL; DEITEL, 2011, cap. 5).
+- **Módulo**: o cardápio fica em `cardapio.h` e `cardapio.c` (assunto 0034)
+  (BACKES, 2013, cap. 13).
+- **Dinheiro em centavos**: R$ 7,90 vira `790` num `int`. Com `double`,
+  `0.1 + 0.2` não dá exatamente `0.3` (assunto 0012); o único `double` é o
+  valor pago, convertido com `lround(pago * 100)`.
+- **Troco recursivo**: "se zerou, acabou; se a nota cabe, dê a nota e resolva o
+  resto; senão, tente a seguinte". O troco ou a nota diminui a cada chamada
+  (FEOFILOFF, 2009, cap. 5).
+- **Testar cada peça sozinha**: o exemplo A072 usa a macro `CONFERIR` para
+  testar preço, contador e notas sem digitar nada.
 
 | Peça | Onde | O que usa do módulo |
 | --- | --- | --- |
@@ -19,24 +22,20 @@ que ela faz.
 | `dar_troco` | `caixa.c` | recursão: caso base "troco zerado" |
 | `TAXA_SERVICO` | `caixa.c` | `#define` |
 
-Decisão importante: dinheiro em **centavos**, num `int`. R$ 7,90 vira `790`.
-Com `double`, `0.1 + 0.2` não dá exatamente `0.3` (assunto 0012), e o troco
-pode sair errado. Para mostrar, `%d.%02d` com `total / 100` e `total % 100`
-monta o "42.24". O único `double` é o valor pago, lido do teclado e convertido
-com `lround(pago * 100)`.
+> [!WARNING]
+> Efeito colateral escondido: `preco_centavos` também soma 1 no contador de
+> vendidos. Chamá-la duas vezes para o mesmo pedido conta em dobro. Quando a
+> função muda estado, diga no nome (`registrar_pedido`) ou separe em duas.
 
-O troco recursivo lê como uma frase: "se o troco zerou, acabou; se a nota atual
-cabe, dê essa nota e resolva o resto; se não cabe, tente a nota seguinte". Cada
-chamada chega mais perto do fim, pois o troco ou a nota diminui.
+{{exemplo}}
 
-Os pedidos 1, 2 e 3 somam R$ 38,40. Com 10% de serviço, a conta é R$ 42,24.
-Pagando R$ 50, o troco de R$ 7,76 sai da recursão como
-5 + 2 + 0,50 + 0,25 + 0,01:
+Os pedidos 1, 2 e 3 somam R$ 38,40; com 10% de serviço, R$ 42,24. Pagando
+R$ 50, o troco de R$ 7,76 sai da recursão como 5 + 2 + 0,50 + 0,25 + 0,01:
 
 {{ideia}}
 
-O programa principal, `caixa.c`, usa o módulo do cardápio. O `cardapio.h` e o
-`cardapio.c` estão na pasta do assunto (abra os dois):
+O `caixa.c` usa o módulo do cardápio (o `cardapio.h` e o `cardapio.c` estão na
+pasta do assunto):
 
 ```c
 #include <math.h>
@@ -144,28 +143,7 @@ int main(void) {
 // cardapio.h e do cardapio.c, e rode: printf '1\n2\n3\n9\n0\n50\n' | ./caixa
 ```
 
-O laço dos pedidos termina com o código 0; depois vêm a conta, o pagamento e a
-decisão "pagou o suficiente?". O troco, que parece um laço, é a recursão de
-`dar_troco`:
+O laço dos pedidos termina com o código 0; depois vêm a conta, o pagamento e o
+troco, que é a recursão de `dar_troco`:
 
 {{fluxograma}}
-
-O exemplo A072 mostra a outra vantagem de dividir em funções: **testar cada
-peça sozinha**. Com a macro `CONFERIR`, definida no próprio arquivo, ele confere o
-preço, o contador `static` e a contagem de notas sem digitar nada. Não precisa
-de biblioteca de testes: uma macro de dez linhas resolve.
-
-> [!WARNING]
-> Efeito colateral escondido. `preco_centavos` parece só consultar um preço,
-> mas também soma 1 no contador de itens vendidos. Chamá-la duas vezes para o
-> mesmo pedido (uma para somar, outra para mostrar o preço) conta o item em
-> dobro, e nada no nome avisa. É a armadilha das globais em escala menor.
-> Quando uma função muda estado, deixe isso no nome (`registrar_pedido`) ou
-> separe em duas: uma que consulta e outra que registra.
-
-> [!NOTE]
-> **Pergunta para você:** se o cliente pagar exatamente R$ 42,24, quantas
-> chamadas de `dar_troco` acontecem? E o que o programa mostra se ele digitar
-> 40?
-
-{{pratique}}

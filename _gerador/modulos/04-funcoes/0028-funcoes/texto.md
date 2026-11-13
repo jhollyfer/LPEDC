@@ -1,14 +1,24 @@
 ## 0028 · Funções
 
-O app de corrida mostra o preço antes de você confirmar: R$ 5,00 de bandeirada
-mais R$ 2,50 por quilômetro. Ninguém escreveu a fórmula mil vezes: escreveu
-**uma vez**, deu um nome e chama quando precisa.
-
-Isso é uma **função**: um pedaço de código com nome, que recebe dados, faz uma
-tarefa e devolve um resultado. Você já usa funções (`printf`, `scanf`, `sqrt`),
-escritas por outras pessoas. Agora escreve as suas.
-
-A forma geral em C:
+- **Função**: bloco de código com nome que recebe dados, faz uma tarefa e
+  devolve um resultado. Escreve-se uma vez e chama-se quantas vezes precisar
+  (DEITEL; DEITEL, 2011, cap. 5).
+- **Partes**: o **tipo de retorno** (`void` se não devolve nada), os
+  **parâmetros**, cada um com seu tipo (`double a, double b`, nunca
+  `double a, b`), e o corpo (BACKES, 2013, cap. 9).
+- **`return`**: devolve o valor e encerra a função na hora; o que vem depois,
+  naquele caminho, não roda (KERNIGHAN; RITCHIE, 1989, cap. 4).
+- **Função e procedimento**: em C tudo é função; a `void` faz o papel do
+  **procedimento** dos livros. Dividir o programa em funções é a
+  **modularização** (ROCHA; BORGES, s.d.).
+- **Definição, chamada e protótipo**: a definição é o corpo inteiro; a chamada
+  é o uso (`preco_corrida(4.0)`); o **protótipo** é só o cabeçalho com `;`,
+  posto antes do `main` para o compilador conferir tipos e quantidade de
+  argumentos (ROCHA; BORGES, s.d.).
+- **Argumento e parâmetro**: o valor da chamada (`4.0`) é o argumento; a
+  variável que o recebe (`km`) é o parâmetro (DEITEL; DEITEL, 2011, cap. 5).
+- **Uma tarefa por função**: se não acha um nome curto, ela faz coisas demais.
+  Entrada e saída ficam com quem chama (DEITEL; DEITEL, 2011, cap. 5).
 
 ```c
 tipo_de_retorno nome(tipo parametro1, tipo parametro2) {
@@ -17,31 +27,17 @@ tipo_de_retorno nome(tipo parametro1, tipo parametro2) {
 }
 ```
 
-- o **tipo de retorno** diz o que a função devolve (`int`, `double`...). Se
-  não devolve nada, é `void`;
-- os **parâmetros** são as variáveis que recebem os dados de quem chama, cada
-  uma com seu tipo: `double a, double b`, nunca `double a, b`;
-- o **`return`** devolve o valor e **encerra a função na hora**. O que vem
-  depois, naquele caminho, não roda.
+> [!WARNING]
+> Chamar a função antes de ela aparecer, sem protótipo: o gcc 14 recusa
+> (`implicit declaration`). E esquecer o `return` numa função não `void`: o
+> `-Wall` avisa `control reaches end of non-void function`, e volta lixo.
 
-Termos dos livros e da prova: toda função é uma **sub-rotina** (ou
-subprograma). A que devolve valor é a **função**; a `void`, que só executa uma
-tarefa, é o **procedimento**. No C as duas se escrevem igual. Dividir o
-programa em sub-rotinas é a **modularização**.
+{{exemplo}}
 
-O compilador lê o arquivo **de cima para baixo**, uma vez. Se o `main` chama
-`preco_corrida` antes de ele ver a função, não sabe o tipo de retorno nem os
-parâmetros. A solução é o **protótipo**: o cabeçalho da função com `;` no fim,
-antes do `main`. É uma promessa: "essa função existe, recebe um `double` e
-devolve um `double`; a definição vem depois".
-
-Quando o `main` chama `preco_corrida(4.0)`, o 4.0 é copiado para o parâmetro
-`km`, a função calcula `5.00 + 2.50 * 4.0`, devolve 15.00, e o `main` continua
-de onde parou, com o resultado:
+O app de corrida cobra R$ 5,00 de bandeirada mais R$ 2,50 por km. O `main`
+chama `preco_corrida(4.0)`, o 4.0 vai para `km`, e o 15.00 volta:
 
 {{ideia}}
-
-O app em C, com as três corridas:
 
 ```c
 #include <stdio.h>
@@ -67,33 +63,7 @@ double preco_corrida(double km) {
 // Corrida 3: R$ 11.25
 ```
 
-A chamada é um desvio: o programa sai do `main`, executa o corpo da função e
-**volta ao mesmo ponto**, trazendo o valor. Isso se repete a cada corrida:
+A chamada é um desvio: sai do `main`, roda a função e volta ao mesmo ponto
+com o valor, uma vez por corrida:
 
 {{fluxograma}}
-
-Três termos: a **definição** é o corpo inteiro
-(`double preco_corrida(double km) { ... }`); a **chamada** é o uso
-(`preco_corrida(4.0)`); o **protótipo** é só o cabeçalho com `;`. O valor
-passado na chamada (`4.0`) é o **argumento**; a variável que o recebe (`km`) é
-o **parâmetro**.
-
-Uma função boa faz **uma** tarefa, e o nome diz qual. Se não acha um nome
-curto, ela faz coisas demais: quebre em duas. `preco_corrida` não usa
-`printf`: quem mostra o resultado é o `main`. Assim a função serve para a tela,
-para um arquivo ou para outra conta.
-
-> [!WARNING]
-> Chamar a função antes de ela aparecer no arquivo, sem protótipo. O gcc 13
-> avisa `implicit declaration of function 'preco_corrida'`, e o gcc 14 recusa
-> compilar. No C antigo, o compilador **supunha** retorno `int`, e o `double`
-> voltava como lixo. Outro erro clássico: esquecer o `return` numa função que
-> não é `void`. O `-Wall` avisa `control reaches end of non-void function`, e
-> quem chamou recebe um valor qualquer.
-
-> [!NOTE]
-> **Pergunta para você:** o que mostra
-> `printf("%.2f\n", preco_corrida(preco_corrida(0.0)));`? Resolva de dentro
-> para fora, antes de rodar.
-
-{{pratique}}
