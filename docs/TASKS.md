@@ -57,7 +57,8 @@ Provas recebidas: 11 cadernos de 2016 a 2023 em `_fontes/provas-ppgi.md`; só a 
 | 5.3 | Conceito e exemplo antes de responder, em cada questão | Alta | Feita | campo `dica` no JSON; `quiz.mjs --check` exige |
 | 5.4 | Conceitos curtos com o assunto do curso e interface redesenhada (skill de taste, estilo editorial-greeting) | Alta | Feita | `[NNNN]` vira link para a seção do módulo; até 110 palavras |
 | 5.5 | Trilha de conceitos: os 189 assuntos em escada de pré-requisitos, priorizando o que cai na prova | Alta | Feita | `#trilha`; fonte em `_gerador/trilha/*.json`; `quiz.mjs --check` confere a ordem |
-| 5.6 | Guia de estudo em três partes (conceitos com fonte, exemplos, exercícios) nos 29 módulos e nos guias da raiz | Alta | Feita | `DECISIONS.md` #12; `conferir-texto.py` exige a forma e a fonte; humanizer ainda não passou |
+| 5.6 | Guia de estudo em três partes (conceitos com fonte, exemplos, exercícios) nos 29 módulos e nos guias da raiz | Alta | Substituída por 5.7 | `DECISIONS.md` #12; `conferir-texto.py` exige a forma e a fonte; humanizer ainda não passou |
+| 5.7 | Curso como livro: cada assunto é um capítulo (conceito, exemplos, exercícios juntos), conceito em texto corrido com fonte nos 189 assuntos, README como sumário gerado | Alta | Feita | `DECISIONS.md` #13; `conferir-texto.py` reprova glossário; humanizer-pt ainda não passou |
 
 ---
 

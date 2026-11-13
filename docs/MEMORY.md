@@ -7,22 +7,26 @@
 
 | Atualizado | Fase atual | Progresso | Status |
 |---|---|---|---|
-| 2026-11-13 | 5 · Quiz e guia de estudo (concluída) | 23/23 tarefas | curso pronto para a prova de 2026-11-27 |
+| 2026-11-13 | 5 · Quiz e guia de estudo (concluída) | 24/24 tarefas | curso pronto para a prova de 2026-11-27 |
 
 ## Parou em
 
-Os 29 módulos e os guias da raiz estão em três partes: conceitos gerais (tópicos com a fonte
-citada), exemplos de uso e exercícios práticos (`DECISIONS.md` #12). O `conferir-texto.py` exige a
-forma nova e confere se cada autor citado tem a obra no "Para ler mais".
+O curso lê como livro (`DECISIONS.md` #13). Cada assunto é um capítulo no `.md` do módulo, com
+Conceito, Exemplos de uso e Exercícios juntos. Os 189 conceitos estão em texto corrido, com a fonte
+dentro do texto; o modelo é o 0005 printf. O README é o sumário, gerado pelo `gerar.mjs` a partir
+de `fases.json`, com link para cada assunto. O `conferir-texto.py` dá 0 problema nos 29 módulos.
 
 ## Próximos passos
 
-1. Passar o `humanizer-pt` nos conceitos reescritos (ficou pendente) e conferir à mão as citações que
-   os relatórios marcaram como indiretas (Cormen e Ziviani não têm fichamento; capítulos vêm do
-   "Para ler mais").
-2. 0074: o 1º e o 2º bloco de código são iguais; trocar o 2º pelo `contador.h` (mexe em código).
-3. Se chegarem provas novas, gravar em `_fontes/provas-ppgi.md` e atualizar `PROVAS.md` e o `PPGI.md`.
-4. As questões dos módulos ainda usam 5 alternativas (A a E); as provas desde 2022 usam 4.
+1. Passar o `humanizer-pt` nos 189 conceitos reescritos (não estava disponível na sessão).
+2. Conferir à mão citações sem capítulo ou sem fonte apontadas na reescrita: 0018 (tabela de
+   saltos), 0019 (Deitel cap. 4), 0058 (centavos), 0095 (Hoare 1960 no Cormen cap. 7), 0146
+   (Knuth fora do "Para ler mais"), 0168, 0180 (custo do pigeonhole), 0182 (Euler 1736), 0188
+   (11/9 do FFD).
+3. Decidir com o dono se os guias da raiz (PPGI, TRILHA, PROVAS, SIMULADOS) também viram texto de
+   livro; hoje seguem as três partes de #12.
+4. 0074: o 1º e o 2º bloco de código são iguais; trocar o 2º pelo `contador.h` (mexe em código).
+5. As questões dos módulos ainda usam 5 alternativas (A a E); as provas desde 2022 usam 4.
 
 ## Contexto importante
 
@@ -40,6 +44,7 @@ forma nova e confere se cada autor citado tem a obra no "Para ler mais".
 | 2026-11-09 | Trabalho deixado em outra branch | Só existe a `main`; commit e push direto nela | todo commit |
 | 2026-11-10 | Revisão por busca de padrão (sed/grep) apresentada como leitura | Cada arquivo é lido inteiro; o agente entrega um registro por arquivo e a cobertura é conferida | revisão de texto em lote |
 | 2026-11-12 | Dica do quiz encurtada até virar tautologia, e bloco de código colado no texto quebrou o exemplo no celular; testei uma questão só | Cada conceito tem definição de 10+ palavras e `Ex.:`, conferido pelo `quiz.mjs --check`; toda mudança no quiz roda `quiz-navegador.mjs` nas 210 questões | quiz das provas |
+| 2026-11-13 | Conceito virou glossário em tópicos e o módulo foi partido em três blocos; o dono não conseguia estudar | Conceito é texto de livro (problema, intuição, definição com fonte, peça por peça) e o assunto fica inteiro; mudança de formato em lote começa por um piloto mostrado ao dono | todo texto de estudo |
 | 2026-11-09 | Commits com agente como autor e coautor | Autor único Jhollyfer, sem linha de coautoria | todo commit |
 
 ## Problemas conhecidos
