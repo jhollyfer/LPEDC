@@ -1,13 +1,10 @@
 ## 0085 · Fila
 
-Na lotérica você pega a senha 35 e espera. Quem chegou antes é atendido antes,
-e a senha 40, recém-saída da maquininha, espera todo mundo da frente.
-
-Isso é uma **fila** (*queue*): entra pelo **fim**, sai pelo **início**. O
-primeiro a entrar é o primeiro a sair, **FIFO** (*first in, first out*), o
-contrário da pilha.
-
-O TAD tem a mesma cara da pilha, no [`fila.h`](material/0085-fila.h):
+- **Fila** (*queue*): entra pelo **fim** e sai pelo **início**. O primeiro a
+  entrar é o primeiro a sair, **FIFO** (*first in, first out*), o contrário
+  da pilha (FEOFILOFF, 2009).
+- **TAD**: a mesma cara da pilha, com inserir, retirar, olhar o primeiro e
+  vazia? (CELES; RANGEL, 2002).
 
 ```c
 typedef struct fila Fila; // tipo opaco: os campos ficam no fila.c
@@ -21,14 +18,33 @@ bool fila_retira(Fila *f, int *valor);          // sai do início: false se vazi
 bool fila_primeiro(const Fila *f, int *valor);  // olha quem é o próximo, sem tirar
 ```
 
-Num vetor, a fila mexe nas duas pontas. Empurrar todo mundo uma casa a cada
-atendimento custa **O(n)** por retirada; sem empurrar, a fila bate no fim do
-vetor com as primeiras gavetas vazias.
+- **Fila em vetor**: mexe nas duas pontas. Empurrar todo mundo a cada
+  retirada custa O(n); sem empurrar, a fila bate no fim do vetor com as
+  primeiras gavetas vazias (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 4).
+- **Fila circular**: passou da última gaveta, volta à 0. Guarde o
+  **início** e o número de itens `n`; a próxima vaga é
+  `(inicio + n) % CAPACIDADE` (CELES; RANGEL, 2002).
+- **Cheia ou vazia**: só com `inicio` e `fim`, as duas têm `inicio == fim`.
+  Ou se guarda `n`, ou se **sacrifica uma gaveta**: cheia quando
+  `(fim + 1) % CAPACIDADE == inicio`, como no Cormen com `Q.head` e `Q.tail`
+  (CORMEN et al., 2024, cap. 10).
+- **Custo**: inserir e retirar são O(1). Retirar não apaga: o valor fica na
+  gaveta até alguém escrever por cima (FEOFILOFF, 2009).
 
-A saída é a **fila circular**: passou da última gaveta, volta à 0. Guarde o
-**início** e o número de itens `n`; a próxima vaga é
-`(inicio + n) % CAPACIDADE`. Com 8 gavetas, depois da 7 vem
-`(7 + 1) % 8 = 0`. Parte principal do [`fila.c`](material/0085-fila.c):
+> [!WARNING]
+> O tamanho como `fim - inicio` dá negativo depois da volta: com início 4 e
+> fim 2, dá -2. Use o contador `n` ou `(fim - inicio + CAPACIDADE) %
+> CAPACIDADE`.
+
+{{exemplo}}
+
+Na lotérica, o painel guarda 8 senhas. Chegam as senhas 31 a 36 (gavetas 0 a
+5) e o caixa atende 4. Chegam 37 a 40: o 37 e o 38 ocupam as gavetas 6 e 7, e
+o 39 e o 40 **dão a volta** para as gavetas 0 e 1:
+
+{{ideia}}
+
+Parte principal do `fila.c`:
 
 ```c
 #define CAPACIDADE 8
@@ -60,13 +76,7 @@ bool fila_retira(Fila *f, int *valor) {
 }
 ```
 
-O painel guarda 8 senhas. Chegam as senhas 31 a 36 (gavetas 0 a 5) e o caixa
-atende 4: o início anda até a gaveta 4. Chegam 37 a 40: o 37 e o 38 ocupam as
-gavetas 6 e 7, e o 39 e o 40 **dão a volta** para as gavetas 0 e 1:
-
-{{ideia}}
-
-O programa só vê as funções do `fila.h`; a volta fica no `fila.c`:
+O programa só vê as funções do `fila.h`:
 
 ```c
 #include <stdio.h>
@@ -113,28 +123,6 @@ int main(void) {
 // Na fila (6): 35 36 37 38 39 40
 ```
 
-O fluxograma segue a senha 39, com `inicio = 4` e `n = 4`: o `%` a manda para
-a gaveta 0:
+A senha 39 entra com `inicio = 4` e `n = 4`: o `%` a manda para a gaveta 0:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Sem o contador `n`, fila cheia e vazia ficam **iguais**: com só `inicio` e
-> `fim`, as duas têm `inicio == fim`. Há duas saídas: guardar `n`, como aqui,
-> ou **sacrificar uma gaveta** e declarar a fila cheia quando
-> `(fim + 1) % CAPACIDADE == inicio` (cabem 7 em 8). O Cormen usa a segunda:
-> com `Q.head` e `Q.tail` (a próxima vaga), ENQUEUE e DEQUEUE num vetor de n
-> posições guardam n − 1 itens. Outra armadilha: o tamanho como `fim - inicio`
-> dá -2 com início 4 e fim 2.
-
-> [!TIP]
-> Retirar não apaga nada: o 33 e o 34 continuam nas gavetas 2 e 3 até alguém
-> escrever por cima. Inserir e retirar custam **O(1)**. Com capacidade
-> potência de 2, `i % 8` equivale a `i & 7`.
-
-> [!NOTE]
-> **Pergunta para você:** depois do último laço do programa da lotérica, a
-> fila está vazia. Quanto valem `inicio` e `n` lá dentro? Em que gaveta
-> entraria a próxima senha?
-
-{{pratique}}

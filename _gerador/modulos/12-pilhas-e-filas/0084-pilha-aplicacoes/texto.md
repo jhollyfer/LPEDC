@@ -1,24 +1,35 @@
 ## 0084 · Pilha na prática: parênteses e notação pós-fixa
 
-Você esquece de fechar um colchete no VS Code e o editor sublinha o lugar
-certo. Ele não conta parênteses: usa uma pilha.
+- **Contador não basta**: com um só tipo de parêntese, somar 1 no `(` e
+  tirar 1 no `)` resolve. Com `()`, `[]` e `{}` falha: em `( [ ) ]` as contas
+  fecham, mas o par está errado (TENENBAUM; LANGSAM; AUGENSTEIN, 1995,
+  cap. 2).
+- **Regra**: todo fechamento casa com a abertura **mais recente** ainda
+  pendente, que é o topo de uma pilha (FEOFILOFF, 2009).
+- **Algoritmo**: abriu, **empilha**; fechou, **desempilha** e confere o par
+  (pilha vazia ou par errado é erro); outro caractere, ignora; no fim, a
+  pilha tem de estar **vazia** (FEOFILOFF, 2009).
+- **Infixa e pós-fixa**: na **infixa**, o operador fica no meio e exige
+  parênteses e precedência. Na **pós-fixa** (a da HP 12C), ele vem **depois**
+  dos operandos: `35 25 + 3 * 4 /` (TENENBAUM; LANGSAM; AUGENSTEIN, 1995,
+  cap. 2).
+- **Avaliar a pós-fixa**: número **empilha**; operador **desempilha dois**,
+  calcula e **empilha o resultado**. No fim sobra um número, o resultado
+  (KERNIGHAN; RITCHIE, 1988, seç. 4.3).
+- **Custo**: a pilha nunca passa do número de caracteres; tempo e memória
+  O(n), cada caractere visto uma vez (FEOFILOFF, 2009).
 
-Com um só tipo de parêntese, um contador resolve: soma 1 no `(`, tira 1 no
-`)` e termina em zero. Com três tipos (`()`, `[]`, `{}`) ele falha: em
-`( [ ) ]` as contas fecham, mas o `)` chegou quando quem esperava era o `[`.
+> [!WARNING]
+> Na pós-fixa, o **primeiro** a sair é o operando da **direita**. Em `8 3 -`,
+> sai o 3 (b) e depois o 8 (a): a conta é `a - b = 5`. Teste com `-` e `/`,
+> onde a inversão aparece. Nos parênteses, esquecer o teste final de pilha
+> vazia faz `{ [ (` passar como balanceada.
 
-A regra: **todo fechamento casa com a abertura mais recente ainda pendente**,
-ou seja, o topo de uma pilha. O algoritmo:
-
-1. abriu (`(`, `[` ou `{`): **empilha**;
-2. fechou: **desempilha** e confere o par. Pilha vazia ou par errado: erro;
-3. qualquer outro caractere: ignora;
-4. acabou a string: a pilha tem que estar **vazia**; se sobrou abertura,
-   faltou fechar.
+{{exemplo}}
 
 Em `{ x = v[(i + 1)] }` sobram os delimitadores `{ [ ( ) ] }`. Os três
-primeiros são empilhados. O `)` encontra `(` no topo e casa; depois `]` casa
-com `[` e `}` casa com `{`:
+primeiros são empilhados; o `)` encontra `(` no topo e casa, depois `]` casa
+com `[` e `}` com `{`:
 
 {{ideia}}
 
@@ -84,16 +95,10 @@ no fim da string:
 
 {{fluxograma}}
 
-### Notação pós-fixa
+### Passo a passo: notação pós-fixa
 
-A segunda aplicação é fazer conta: `(35 + 25) * 3 / 4`, a conta do bar dividida
-por 4 amigos. Na **infixa**, o operador fica no meio e exige parênteses e
-precedência. Na **pós-fixa** (a da HP 12C), ele vem **depois** dos operandos:
-`35 25 + 3 * 4 /`. A ordem da escrita já é a ordem das contas.
-
-Para avaliar, use uma pilha de números: número **empilha**; operador
-**desempilha dois**, calcula e **empilha o resultado**. No fim, sobra um só
-número, o resultado:
+A conta do bar, `(35 + 25) * 3 / 4`, dividida por 4 amigos, vira
+`35 25 + 3 * 4 /`:
 
 | lê | faz | pilha (topo à direita) |
 | --- | --- | --- |
@@ -105,24 +110,4 @@ número, o resultado:
 | `4` | empilha | 180 4 |
 | `/` | tira 4 e 180, empilha 180 / 4 | 45 |
 
-Cada um paga R$ 45. O A168 faz essa tabela em C, juntando os dígitos de `35` e
-acusando expressão inválida quando falta operando ou sobra número na pilha.
-
-> [!WARNING]
-> Na pós-fixa, o **primeiro** a sair da pilha é o operando da **direita**. Em
-> `8 3 -`, sai o 3 (b) e depois o 8 (a), e a conta é `a - b = 5`; inverter dá
-> `-5`. O erro some na soma e na multiplicação, então teste com `-` e `/`. No
-> verificador de parênteses, esquecer o passo 4 faz `{ [ (` passar como
-> balanceada.
-
-> [!TIP]
-> O tamanho da pilha nunca passa do número de caracteres da string (no pior
-> caso, `((((((`). Memória **O(n)**, tempo **O(n)**: cada caractere é visto
-> uma vez.
-
-> [!NOTE]
-> **Pergunta para você:** quanto vale `2 3 4 * +`? E `2 3 + 4 *`? Escreva as
-> duas na forma infixa, com parênteses só onde precisa, antes de testar no
-> A168.
-
-{{pratique}}
+Cada um paga R$ 45. O A168 faz essa tabela em C.

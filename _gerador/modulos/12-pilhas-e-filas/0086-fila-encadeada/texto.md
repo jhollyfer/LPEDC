@@ -1,23 +1,35 @@
 ## 0086 · Fila encadeada
 
-Sexta à noite, a cozinha da pizzaria recebe os pedidos do app. O painel de 8
-lugares do 0085 lotou às 20h, e o nono pedido foi recusado.
+- **Fila encadeada**: troca o vetor por **nós**, como a pilha encadeada. Só
+  recusa um item quando acaba a memória (CELES; RANGEL, 2002).
+- **Dois ponteiros**: `inicio`, o próximo a sair, e `fim`, o último que
+  entrou. Na fila vazia, os dois são `NULL` (FEOFILOFF, 2009).
+- **Retirar** do começo é `inicio = inicio->prox`, O(1). **Inserir** no fim
+  é `fim->prox = novo; fim = novo`, também O(1) graças ao `fim`
+  (DEITEL; DEITEL, 2011, cap. 12).
+- **Sai pelo início, entra pelo fim**: o contrário não serve numa lista
+  simples, porque remover o último exige o penúltimo (CELES; RANGEL, 2002).
+- **Casos de borda**: inserir na fila vazia atualiza também o `inicio`;
+  retirar o último zera também o `fim` (CELES; RANGEL, 2002).
+- **Mesma interface**: o `fila.h` é o do 0085; só o `fila.c` muda. Cada
+  inserção chama `malloc` e cada retirada `free`, mais caros que uma gaveta
+  de vetor.
 
-A solução é a da pilha: trocar o vetor por **nós**. Como a fila usa as duas
-pontas, o desenho muda:
+> [!WARNING]
+> Retirar o **último** sem zerar o `fim` deixa o `fim` apontando para o nó
+> liberado, e o próximo `fila_insere` escreve `fim->prox` em memória liberada
+> (`heap-use-after-free`). Inserir na fila vazia sem atualizar o `inicio`
+> deixa a fila "vazia" para sempre.
 
-- **retirar** do começo é fácil: `inicio = inicio->prox`, O(1);
-- **inserir** no fim exigiria andar até o último, O(n), a menos que você
-  guarde um segundo ponteiro, o **fim**, sempre no último nó. Então
-  `fim->prox = novo; fim = novo` também é O(1).
+{{exemplo}}
 
-A fila **sai pelo início e entra pelo fim**. O contrário não funciona bem numa
-lista simples: remover o último exige o penúltimo, e o nó não sabe quem vem
-antes.
+Na pizzaria, chegam os pedidos 501, 502 e 503. A cozinha pega o 501: o início
+anda para o 502 e o nó do 501 é liberado. Chega o 504, pendurado depois do
+503, e o fim passa a apontar para ele:
 
-O [`fila.h`](material/0086-fila.h) é o do 0085. O
-[`fila.c`](material/0086-fila.c) guarda dois ponteiros, e os casos de
-borda moram neles:
+{{ideia}}
+
+O `fila.c` guarda os dois ponteiros:
 
 ```c
 struct fila {
@@ -59,12 +71,6 @@ bool fila_retira(Fila *f, int *valor) {
 }
 ```
 
-Chegam os pedidos 501, 502 e 503. A cozinha pega o 501: o início anda para o
-502 e o nó do 501 é liberado. Chega o 504, pendurado depois do 503, e o fim
-passa a apontar para ele:
-
-{{ideia}}
-
 Programa da cozinha:
 
 ```c
@@ -104,22 +110,3 @@ Na entrada do 504 a fila não estava vazia: o caminho passa por
 `fim->prox = novo`. Na fila vazia, o `inicio` recebe o novo nó:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Os dois bugs comuns estão nas bordas. Inserir na fila **vazia** sem
-> atualizar o `inicio` deixa a fila "vazia" para sempre, mesmo com nós dentro.
-> Retirar o **último** sem zerar o `fim` é pior: o `fim` continua apontando
-> para o nó liberado, e o próximo `fila_insere` escreve `fim->prox` em memória
-> liberada (`heap-use-after-free` no AddressSanitizer).
-
-> [!TIP]
-> A encadeada nunca recusa pedido (só se acabar a memória), mas cada inserção
-> chama `malloc` e cada retirada chama `free`, bem mais caros que escrever
-> numa gaveta de vetor.
-
-> [!NOTE]
-> **Pergunta para você:** no A172, se o cliente 3 levasse 1 minuto em vez de
-> 4, quanto cada um esperaria? A maior fila mudaria? Simule à mão antes de
-> rodar.
-
-{{pratique}}

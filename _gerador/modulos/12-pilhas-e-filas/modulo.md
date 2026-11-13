@@ -1,15 +1,9 @@
 # Módulo 12 · Pilhas e filas
 
-A lista encadeada do módulo 11 deixa inserir e remover em qualquer lugar.
-Este módulo **proíbe**: a pilha só mexe no topo, e a fila entra por um lado e
-sai pelo outro. A restrição dá uma garantia: o desfazer desfaz o último
-passo, e quem chegou primeiro é atendido primeiro.
-
-Você já usa essas estruturas: a pilha de chamadas, o Ctrl+Z e o botão Voltar
-são pilhas; a fila de processos do sistema operacional e a impressora são
-filas. Aqui você constrói as duas, cada uma em vetor e em lista encadeada,
-sempre como **TAD**: o mesmo `.h`, o `.c` trocado por baixo, e o programa
-cliente não muda.
+A **pilha** (LIFO) e a **fila** (FIFO), cada uma em vetor e em lista
+encadeada, sempre como **TAD**: o mesmo `.h`, o `.c` trocado por baixo. Depende
+dos módulos 06, 07, 08 e 11 e do TAD (0074); prepara o 13 (recursão) e o 16
+(busca em largura e em profundidade).
 
 ## O que você vai aprender
 
@@ -23,29 +17,17 @@ cliente não muda.
 
 ## Antes de começar
 
-Nos diagramas da ideia, verde marca o item que está saindo e cinza a gaveta
-que virou vaga.
-
-Você precisa de ponteiros, `malloc`/`free`, `struct` com `->` e listas
-encadeadas (módulos 06, 07, 08 e 11) e da ideia de TAD (assunto 0074).
-
 Cada pasta traz os arquivos do TAD (`pilha.h` e `pilha.c`, `fila.h` e
-`fila.c` ou `deque.h` e `deque.c`) ao lado dos exemplos. Compile com o `gcc`
-esses `.c` de apoio junto com o exemplo ou exercício:
+`fila.c` ou `deque.h` e `deque.c`). Compile esses `.c` de apoio junto com o
+exemplo ou exercício:
 
 ```bash
 gcc ~/LPEDC/material/A163.c ~/LPEDC/material/0082-pilha.c -o ~/LPEDC/material/A163 && ~/LPEDC/material/A163
 ```
 
 Num exercício, **não** crie funções com os nomes do TAD (`pilha_cria`,
-`fila_insere`...): o ligador acusa definição duplicada. Exercícios que pedem
-outra estrutura usam outros nomes e trazem tudo no próprio arquivo.
-
-**Progressão.** Do módulo 11 você usa o nó com `prox`, a inserção e a
-remoção no início da lista e a lista dupla. Este módulo prepara o 13, onde a
-pilha de chamadas explica a recursão do merge sort e do quick sort, e o 16,
-onde a fila conduz a busca em largura (0110) e a pilha apoia a busca em
-profundidade (0111).
+`fila_insere`...): o ligador acusa definição duplicada. Nos diagramas, verde
+marca o item que sai e cinza a gaveta que virou vaga.
 
 {{indice}}
 

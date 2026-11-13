@@ -1,38 +1,35 @@
 ## 0088 · Juntando tudo: a calculadora de expressões
 
-No bar do 0084 você escreveu `35 25 + 3 * 4 /` em pós-fixa. Ninguém digita
-assim: a pessoa digita `(35 + 25) * 3 / 4` e quer ver 45. O programa deste
-assunto faz o caminho inteiro com uma **fila** e duas **pilhas**, em duas
-etapas:
+- **Duas etapas**: **converter** a infixa em pós-fixa e **avaliar** a
+  pós-fixa, com uma **fila** no meio e duas **pilhas**
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 2).
+- **Pátio de manobras** (*shunting-yard*): os números vão direto para a fila
+  de saída; os operadores esperam numa pilha até nenhum operador mais forte
+  precisar passar na frente. O algoritmo é de Dijkstra (DIJKSTRA, 1961).
+- **Regras da conversão**: número vai para a fila; `(` empilha; `)`
+  desempilha para a fila até achar o `(`, que é descartado; operador
+  desempilha enquanto o topo tiver precedência **maior ou igual** e depois se
+  empilha; no fim, o que sobrou vai para a fila (FEOFILOFF, 2009).
+- **Avaliar**: os itens saem da fila na ordem de entrada (FIFO) e passam por
+  uma **pilha de valores**, como no 0084 (KERNIGHAN; RITCHIE, 1988, seç. 4.3).
+- **Produtor e consumidor**: a etapa 1 produz itens e a 2 os consome na mesma
+  ordem; a fila também guarda o 35 inteiro, sem juntar dígitos de novo.
+- **Códigos negativos**: a fila e a pilha só guardam `int`. Os números são
+  `>= 0`, então os operadores viram negativos num `enum` (0063): `SOMA = -1`,
+  `SUB = -2`. Na avaliação, `t < 0` é operador.
+- **Custo**: cada símbolo entra e sai da fila uma vez e de cada pilha no
+  máximo uma: O(n).
 
-1. **converter** a infixa em pós-fixa. Os números vão direto para uma fila de
-   saída. Os operadores esperam numa **pilha** e só vão para a fila quando
-   nenhum operador mais forte precisa passar na frente. É o algoritmo do
-   **pátio de manobras** (*shunting-yard*), de Dijkstra, o mesmo do E503;
-2. **avaliar** a pós-fixa: os itens saem da fila na ordem de entrada (FIFO) e
-   passam por uma **pilha de valores**, como no A168.
+> [!WARNING]
+> O "maior **ou igual**" muda o resultado. Só com "maior", `8 - 3 - 2` vira
+> `8 3 2 - -`, que dá 7; o certo é `(8 - 3) - 2 = 3`. Mesma precedência
+> associa **à esquerda**: o que já está na pilha sai antes do novo.
 
-A fila fica no meio porque a etapa 1 produz itens e a etapa 2 os consome na
-mesma ordem: o padrão **produtor e consumidor**. Ela também guarda o 35
-inteiro, sem juntar dígitos de novo.
+{{exemplo}}
 
-A fila e a pilha do curso só guardam `int`. Como os números são sempre
-`>= 0`, os operadores viram **códigos negativos** com um `enum` (assunto 0063):
-`SOMA = -1`, `SUB = -2` e assim por diante. Na avaliação, `t >= 0` é número e
-`t < 0` é operador. A alternativa seria uma `struct` com uma etiqueta do tipo
-do item.
-
-Regras da conversão, para cada símbolo lido:
-
-- número: vai para a **fila**;
-- `(`: empilha;
-- `)`: desempilha para a fila até achar o `(`, que é descartado;
-- operador: enquanto o topo tiver precedência **maior ou igual**, desempilha
-  para a fila; depois empilha o operador;
-- fim: o que sobrou na pilha vai para a fila.
-
-Com `(35 + 25) * 3 / 4`, a fila de saída fica `35 25 + 3 * 4 /`. Quando chega
-o `/`, a pilha de valores tem 180 e 4, e a última conta dá 45:
+A conta do bar, digitada como `(35 + 25) * 3 / 4`. A fila de saída fica
+`35 25 + 3 * 4 /`; quando chega o `/`, a pilha de valores tem 180 e 4, e a
+última conta dá 45:
 
 {{ideia}}
 
@@ -149,32 +146,7 @@ int main(void) {
 // Resultado: 12
 ```
 
-No fluxograma, as perguntas de erro só aparecem na avaliação, onde a falta de
-operando e a divisão por zero se revelam:
+As perguntas de erro só aparecem na avaliação, onde a falta de operando e a
+divisão por zero se revelam:
 
 {{fluxograma}}
-
-O A176 junta fila e pilha de outro jeito: as letras de uma frase entram nas
-duas. A fila devolve a ordem original e a pilha, a invertida; se as duas
-sequências coincidirem letra a letra, a frase é um palíndromo.
-
-> [!WARNING]
-> O "maior **ou igual**" da conversão muda o resultado. Só com "maior",
-> `8 - 3 - 2` vira `8 3 2 - -`, que dá `8 - (3 - 2) = 7`; o certo é
-> `(8 - 3) - 2 = 3`. Operadores de mesma precedência associam **à esquerda**,
-> então o que já está na pilha sai antes do novo. (A potência associa à
-> direita, por isso o programa não tem `^`.) É o bug do E526.
-
-> [!TIP]
-> Tipos não têm ligação: `No` (pilha) e `NoFila` poderiam ter o mesmo nome em
-> arquivos separados. O conflito só ocorre entre **funções** de mesmo nome, por
-> isso cada TAD prefixa as suas (`pilha_`, `fila_`). Cada símbolo entra e sai
-> da fila uma vez e de cada pilha no máximo uma, então a calculadora é
-> **O(n)**.
-
-> [!NOTE]
-> **Pergunta para você:** como fica a pós-fixa de `100 / (2 + 3) - 4`? E o
-> resultado? Faça a conversão à mão, com a pilha de operadores desenhada,
-> antes de trocar a expressão no programa da calculadora.
-
-{{pratique}}

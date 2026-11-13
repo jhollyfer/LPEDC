@@ -1,24 +1,21 @@
 ## 0082 · Pilha
 
-Você monta o pedido no app de delivery: pizza, refrigerante, pudim. Toca em
-"desfazer" e sai o pudim, o último que entrou.
-
-Esse comportamento é a **pilha** (*stack*). Só o **topo** está ao alcance:
-o último a entrar é o primeiro a sair, **LIFO** (*last in, first out*). A
-pilha de pratos e a pilha de chamadas (assunto 0031) funcionam assim.
-
-Quatro operações:
-
-- **empilhar** (*push*): põe um item no topo;
-- **desempilhar** (*pop*): tira o item do topo e devolve o valor;
-- **olhar o topo** (*peek*): lê o topo sem tirar;
-- **vazia?**: pergunta se ainda tem alguma coisa.
-
-No Cormen, são PUSH, POP e STACK-EMPTY.
-
-O C não traz pilha pronta. Você monta uma como **TAD** (assunto 0074): o
-`pilha.h` diz **o que** a pilha faz e o `pilha.c` decide **como**. Quem usa
-só inclui o `.h`:
+- **Pilha** (*stack*): só o **topo** está ao alcance. O último a entrar é o
+  primeiro a sair, **LIFO** (*last in, first out*) (FEOFILOFF, 2009).
+- **Operações**: **empilhar** (*push*) põe no topo; **desempilhar** (*pop*)
+  tira do topo e devolve o valor; **olhar o topo** (*peek*) lê sem tirar;
+  **vazia?** No Cormen, PUSH, POP e STACK-EMPTY (CORMEN et al., 2024,
+  cap. 10).
+- **Underflow e overflow**: tirar de pilha vazia é **underflow**; empilhar
+  em pilha cheia é **overflow**, possível porque o vetor tem tamanho fixo
+  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 2).
+- **Em vetor**: um contador `n`; o fundo fica em `itens[0]`, o topo em
+  `itens[n - 1]` e `n` é a próxima vaga (FEOFILOFF, 2009).
+- **Custo**: empilhar e desempilhar são O(1). Desempilhar não apaga: o valor
+  fica no vetor e o próximo `push` escreve por cima (CELES; RANGEL, 2002).
+- **TAD** (0074): o C não traz pilha pronta. O `pilha.h` diz **o que** a
+  pilha faz; o `pilha.c` decide **como**. O valor desempilhado vem pelo
+  ponteiro e o `bool` diz se deu certo (CELES; RANGEL, 2002).
 
 ```c
 typedef struct pilha Pilha; // tipo opaco: os campos ficam no pilha.c
@@ -32,13 +29,19 @@ bool pilha_desempilha(Pilha *p, int *valor); // pop: false se estava vazia
 bool pilha_topo(const Pilha *p, int *valor); // peek: olha o topo sem tirar
 ```
 
-O valor desempilhado vem pelo ponteiro; o `bool` diz se deu certo. Tirar de
-pilha vazia é **underflow**; empilhar em pilha cheia é **overflow**, possível
-porque o vetor tem tamanho fixo.
+> [!WARNING]
+> Ler `itens[n]` antes de diminuir `n` pega a gaveta **vazia** acima do topo.
+> Aqui `n` é a próxima vaga: empilha em `itens[n]` e depois `n++`; desempilha
+> com `n--` e depois lê. Muito livro usa `topo = -1`: não misture convenções.
 
-Esta versão usa um **vetor** e um contador `n`: o fundo fica em `itens[0]`, o
-topo em `itens[n - 1]` e `n` é a próxima vaga. Trecho do
-[`pilha.c`](material/0082-pilha.c):
+{{exemplo}}
+
+No app de delivery, os preços entram em centavos (2590, 800 e 1200) nas
+gavetas 0, 1 e 2, com `n` igual a 3. O "desfazer" tira o 1200, o último:
+
+{{ideia}}
+
+Trecho do `pilha.c`:
 
 ```c
 struct pilha {
@@ -64,11 +67,6 @@ bool pilha_desempilha(Pilha *p, int *valor) {
     return true;
 }
 ```
-
-Os preços entram em centavos (2590, 800 e 1200) nas gavetas 0, 1 e 2, com `n`
-igual a 3. O desfazer tira o 1200:
-
-{{ideia}}
 
 O programa só usa as funções do `pilha.h`:
 
@@ -105,24 +103,6 @@ int main(void) {
 // Itens no pedido: 2
 ```
 
-O fluxograma do desfazer testa se a pilha está vazia antes de diminuir `n`:
+O desfazer testa se a pilha está vazia antes de diminuir `n`:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Ler `itens[n]` antes de diminuir `n` pega a gaveta **vazia** acima do topo
-> (lixo). Aqui `n` é a próxima vaga: empilha em `itens[n]` e depois `n++`;
-> desempilha com `n--` e depois lê. Muito livro usa `topo = -1` para pilha
-> vazia; não misture as convenções. O Cormen indexa a partir de 1: pilha vazia
-> é `S.top = 0`.
-
-> [!TIP]
-> Desempilhar não apaga: o 1200 continua na gaveta 2 e o próximo `push`
-> escreve por cima. Por isso as duas operações custam **O(1)**.
-
-> [!NOTE]
-> **Pergunta para você:** no programa do pedido, se o cliente tocar em
-> "desfazer" mais três vezes seguidas, o que cada chamada de
-> `pilha_desempilha` devolve? E o que fica em `preco` na última?
-
-{{pratique}}

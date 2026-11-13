@@ -1,26 +1,35 @@
 ## 0083 · Pilha encadeada
 
-Na planilha, a célula B2 foi de R$ 1500 para 1800, 2100 e 2500, e você aperta
-Ctrl+Z duas vezes. Ninguém sabe quantas edições virão: uma pilha com
-`CAPACIDADE 100` não serve.
+- **Pilha encadeada**: cada item fica num **nó** alocado com `malloc`, como
+  na lista do módulo 11. A pilha só "enche" quando acaba a memória
+  (CELES; RANGEL, 2002).
+- **Topo no começo da lista**: inserir e remover no início é O(1). Remover
+  do fim exigiria achar o penúltimo, O(n) (FEOFILOFF, 2009).
+- **Empilhar** = inserir no início: o novo nó aponta para o antigo topo, e o
+  topo passa a ser o novo (DEITEL; DEITEL, 2011, cap. 12).
+- **Desempilhar** = remover do início: guarda o valor, avança o topo e
+  libera o nó velho. **Vazia** é `topo == NULL` (DEITEL; DEITEL, 2011,
+  cap. 12).
+- **Mesma interface**: o `pilha.h` é idêntico ao do 0082; só o `pilha.c`
+  muda, e quem usa não percebe a troca (CELES; RANGEL, 2002).
+- **Custo de espaço**: cada nó ocupa 16 bytes em 64 bits, contra 4 por item
+  no vetor. A encadeada troca espaço por não ter teto.
 
-A pilha do 0082 tem teto porque mora num vetor. Aqui cada item fica num **nó**
-alocado com `malloc`, como na lista do módulo 11, e a pilha só "enche" quando
-acaba a memória.
+> [!WARNING]
+> Trocar a ordem destrói a pilha: com `p->topo = novo` antes de
+> `novo->prox = p->topo`, o nó aponta para **ele mesmo** e os de baixo vazam.
+> No desempilhar, ler `velho->valor` **depois** do `free` é
+> `heap-use-after-free`.
 
-O topo fica no **começo** da lista: inserir e remover no início custa O(1),
-pois só o ponteiro de entrada muda. Remover do fim exigiria achar o
-**penúltimo**, e isso percorre a lista inteira, O(n).
+{{exemplo}}
 
-- **empilhar** = inserir no início: o novo nó aponta para o antigo topo, e o
-  topo passa a ser o novo;
-- **desempilhar** = remover do início: guarda o valor, avança o topo, libera
-  o nó velho;
-- **vazia** = `topo == NULL`.
+Na planilha, a célula B2 foi de R$ 1500 para 1800, 2100 e 2500. Antes de cada
+edição, o valor antigo vai para a pilha; o 2100 fica no primeiro nó e o
+primeiro Ctrl+Z o devolve:
 
-O [`pilha.h`](material/0083-pilha.h) é **idêntico** ao do 0082; só o
-[`pilha.c`](material/0083-pilha.c) muda, e o programa do delivery roda
-sem alteração. A struct agora guarda um ponteiro:
+{{ideia}}
+
+A struct agora guarda um ponteiro:
 
 ```c
 typedef struct no {
@@ -57,11 +66,6 @@ bool pilha_desempilha(Pilha *p, int *valor) {
     return true;
 }
 ```
-
-Antes de cada edição, o valor antigo da B2 vai para a pilha: 1500, 1800 e
-2100. O 2100 fica no primeiro nó e o primeiro Ctrl+Z o devolve:
-
-{{ideia}}
 
 O programa da planilha:
 
@@ -107,22 +111,3 @@ Ao empilhar o 2100, o novo nó aponta primeiro para o topo antigo; só depois o
 topo muda:
 
 {{fluxograma}}
-
-> [!WARNING]
-> Trocar a ordem destrói a pilha. Com `p->topo = novo` antes de
-> `novo->prox = p->topo`, o novo nó aponta para **ele mesmo** e os nós 1800 e
-> 1500 ficam inalcançáveis (vazamento de memória). No desempilhar, ler
-> `velho->valor` **depois** do `free(velho)` usa memória liberada, e o
-> AddressSanitizer acusa `heap-use-after-free`.
-
-> [!TIP]
-> Cada nó ocupa 16 bytes em 64 bits (4 do `int`, 4 de preenchimento e 8 do
-> ponteiro, como no 0076), contra 4 por item no vetor. A encadeada troca
-> espaço por não ter teto.
-
-> [!NOTE]
-> **Pergunta para você:** no programa da planilha, se o laço do Ctrl+Z
-> rodasse 5 vezes em vez de 2, quantas linhas `Ctrl+Z` apareceriam e qual
-> seria o último valor de B2? Siga a lista do desenho antes de rodar.
-
-{{pratique}}
