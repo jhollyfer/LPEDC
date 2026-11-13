@@ -56,22 +56,61 @@ os avisos pegam vários erros do módulo.
 
 ### Conceito
 
-- **Precedência**: diz qual operador pega os operandos primeiro; `*` vem antes
-  de `+` (DEITEL; DEITEL, 2011, cap. 2).
-- **Associatividade**: desempata operadores do mesmo nível. `100 - 66 - 20` é
-  `(100 - 66) - 20`; `a = b = 5` é `a = (b = 5)` (KERNIGHAN; RITCHIE, 1988, cap. 2).
-- **Três armadilhas da tabela**: `&`, `^` e `|` ficam **abaixo** do `==`; o
-  `?:` fica abaixo de quase tudo; `a *= 2 + 1` é `a = a * (2 + 1)`
-  (CPPREFERENCE, s.d.).
-- **Ordem de avaliação**: agrupar não é calcular. Em `f() + g()` a ordem das
-  chamadas não é especificada. Só `&&`, `||`, `?:` e a vírgula avaliam a
-  esquerda antes da direita (ISO/IEC, 2018).
-- **Curto-circuito**: em `&&`, o lado direito nem roda se o esquerdo der 0;
-  em `||`, se der 1 (DEITEL; DEITEL, 2011, cap. 4).
-- **Efeito colateral**: o que a expressão muda além de dar um valor (`i++`
-  muda `i`, `printf` escreve). Mudar a mesma variável duas vezes sem ordem
-  garantida é **comportamento indefinido**: `i = i++`, `v[i] = i++`
-  (ISO/IEC, 2018).
+Três pacotes de café a R$ 18 cada, mais R$ 12 de frete. Você escreve
+`18 * 3 + 12` e espera 66, e o C dá 66. Mas por que não 270, que seria
+`18 * (3 + 12)`? Porque a ordem em que os operadores pegam seus operandos é
+fixa, e quem escreve a expressão precisa conhecê-la. A prova adora esconder
+essa ordem numa linha só, com cinco operadores e nenhum parêntese.
+
+A primeira regra é a **precedência**: ela diz qual operador pega os
+operandos primeiro (DEITEL; DEITEL, 2011, cap. 2). O `*` tem precedência
+maior que o `+`, então em `18 * 3 + 12` o `*` agarra o 18 e o 3, e o `+`
+recebe o resultado e o 12. Uma boa imagem é uma árvore: o operador de
+**menor** precedência fica na raiz e age por último; os de maior
+precedência ficam nos galhos e agem antes. Os parênteses mudam a árvore:
+`18 * (3 + 12)` põe o `+` num galho.
+
+A segunda regra resolve empates. Quando dois operadores têm a mesma
+precedência, a **associatividade** diz de que lado começa o agrupamento
+(KERNIGHAN; RITCHIE, 1988, cap. 2). A subtração agrupa da esquerda para a
+direita: `100 - 66 - 20` é `(100 - 66) - 20`, que dá 14, e não
+`100 - (66 - 20)`, que daria 54. A atribuição agrupa da direita para a
+esquerda: `a = b = 5` é `a = (b = 5)`, que guarda 5 em `b` e depois o
+mesmo 5 em `a`.
+
+A tabela completa está no fim, mas três pontos dela caem em prova e merecem
+atenção (CPPREFERENCE, s.d.). Os operadores bit a bit `&`, `^` e `|` ficam
+**abaixo** do `==`, então `x & 3 == 3` é `x & (3 == 3)`, que vira `x & 1`.
+O `?:` fica abaixo de quase tudo, então
+`compra + compra >= 50 ? 0 : frete` pergunta se a soma inteira passa de 50.
+E as atribuições compostas têm a precedência mais baixa antes da vírgula:
+`a *= 2 + 1` é `a = a * (2 + 1)`, e não `a * 2 + 1`.
+
+Agora a parte que mais confunde: **agrupar não é calcular**. A precedência
+e a associatividade dizem como a expressão se divide em pedaços; elas não
+dizem em que ordem os pedaços são calculados. Em `f() + g()`, a soma junta
+os dois resultados, mas a **ordem de avaliação**, qual das duas funções
+roda primeiro, não é especificada pela norma. O compilador visita os galhos
+da árvore na ordem que preferir. Só quatro operadores garantem que o lado
+esquerdo é calculado antes do direito: `&&`, `||`, `?:` e a vírgula. E uma
+função só começa depois de todos os seus argumentos estarem prontos
+(ISO/IEC, 2018).
+
+O `&&` e o `||` vão além: eles têm **curto-circuito**. Em `a && b`, se `a`
+dá 0, o resultado já é 0, e o `b` nem é calculado. Em `a || b`, se `a` dá
+diferente de 0, o resultado já é 1, e o `b` também é pulado (DEITEL;
+DEITEL, 2011, cap. 4). É isso que torna seguro escrever
+`p != NULL && p->valor > 0`: se `p` é `NULL`, o acesso `p->valor` não
+acontece.
+
+A ordem de avaliação importa por causa dos **efeitos colaterais**, tudo o
+que uma expressão muda além de produzir um valor. `i++` produz o valor de
+`i` e, como efeito colateral, muda `i`; `printf` produz um número e escreve
+na tela. Se a mesma variável é mudada duas vezes, ou mudada e lida, sem que
+a norma garanta qual vem antes, o resultado é **comportamento
+indefinido**: o programa pode dar qualquer coisa, e cada compilador pode dar
+algo diferente. São exemplos `i = i++`, `v[i] = i++` e
+`printf("%d %d", i, i++)` (ISO/IEC, 2018).
 
 | Nível | Operadores | Agrupa |
 | --- | --- | --- |
@@ -92,9 +131,10 @@ os avisos pegam vários erros do módulo.
 | 15 | `,` | esquerda → direita |
 
 > [!WARNING]
-> `i = i++` é comportamento indefinido, e o gcc com `-Wall` avisa. Ele também
-> avisa `x & 3 == 3` e `a || b && c`, mas **não**
-> `compra + compra >= 50 ? 0 : frete`. Na dúvida, use parênteses.
+> `i = i++` é comportamento indefinido. Com `-Wall`, o gcc avisa
+> (`operation on 'i' may be undefined`). Ele também avisa `x & 3 == 3` e
+> `a || b && c`, mas **não** `compra + compra >= 50 ? 0 : frete`. Na
+> dúvida, use parênteses.
 
 ### Exemplos de uso
 
@@ -374,24 +414,58 @@ vetor vazio: indice -1, leituras 0
 
 ### Conceito
 
-- **Com sinal** (`int`, `signed char`, `long`): guarda negativos; num `int` de
-  32 bits, de -2147483648 a 2147483647 (BACKES, 2013).
-- **Sem sinal** (`unsigned`, `unsigned char`, `size_t`): vai de 0 a
-  4294967295 (`UINT_MAX`). `sizeof` e `strlen` devolvem `size_t`
-  (KERNIGHAN; RITCHIE, 1988, cap. 2).
-- **Volta do sem sinal**: a conta é módulo 2³², como um odômetro. `2u - 3u` é
-  4294967295 e `UINT_MAX + 1u` é 0. Estourar um `int` com sinal é
-  comportamento indefinido (ISO/IEC, 2018).
-- **Complemento de dois**: o -1 de um `int` são 32 bits ligados, que lidos como
-  `unsigned` valem 4294967295 (DEITEL; DEITEL, 2011, apêndice D).
-- **Promoção inteira**: `char`, `short`, `unsigned char`, `bool` e `enum`
-  viram `int` antes da conta. `unsigned char` 200 + 100 dá 300 (ISO/IEC, 2018).
-- **Conversão aritmética usual**: os operandos viram o tipo "maior". Entre
-  `int` e `unsigned` do mesmo tamanho, ganha o `unsigned`; se o com sinal for
-  maior e couber o sem sinal todo (`long` de 64 contra `unsigned` de 32), ganha
-  o com sinal (KERNIGHAN; RITCHIE, 1988, cap. 2).
-- **Bits e máscaras**: use `unsigned`; deslocar negativo é indefinido ou
-  depende da implementação (DEITEL; DEITEL, 2011, cap. 10).
+A loja tinha 2 fones no estoque, vendeu 3, e o sistema anunciou um estoque
+de **4294967295 fones**. Ninguém digitou esse número. O estoque estava numa
+variável `unsigned`, e uma variável sem sinal não consegue guardar -1: a
+conta deu a volta e caiu no maior valor possível. Entender por que isso
+acontece evita uma família inteira de erros silenciosos em C.
+
+Os tipos inteiros do C se dividem em dois grupos. Os **com sinal**, como
+`int`, `signed char` e `long`, guardam números negativos e positivos: num
+`int` de 32 bits, de -2147483648 a 2147483647 (BACKES, 2013). Os **sem
+sinal**, como `unsigned`, `unsigned char` e `size_t`, guardam só zero e
+positivos, e com os mesmos 32 bits vão de 0 a 4294967295, o valor da
+constante `UINT_MAX`. O tipo sem sinal aparece mesmo quando você não o
+pediu: `sizeof` e `strlen` devolvem `size_t` (KERNIGHAN; RITCHIE, 1988,
+cap. 2).
+
+Os mesmos bits podem significar números diferentes, conforme o tipo. O C
+guarda os negativos em **complemento de dois**: o -1 de um `int` são os 32
+bits todos ligados. Lidos como `unsigned`, esses mesmos 32 bits valem
+4294967295 (DEITEL; DEITEL, 2011, apêndice D). O número na memória não
+muda; muda a leitura.
+
+A aritmética sem sinal **dá a volta**, como o odômetro de um carro que passa
+de 999999 para 000000. Toda conta é feita módulo 2³²: `2u - 3u` dá
+4294967295, e `UINT_MAX + 1u` dá 0. Esse comportamento é definido pela
+norma e você pode contar com ele. Já estourar um tipo **com sinal**, como
+em `INT_MAX + 1`, é comportamento indefinido: a norma não diz o que
+acontece (ISO/IEC, 2018).
+
+O perigo maior aparece quando uma expressão mistura tipos. Antes de
+calcular, o C aplica duas regras. A primeira é a **promoção inteira**: os
+tipos menores que `int` (`char`, `short`, `unsigned char`, `bool` e os
+`enum`) viram `int` antes de qualquer conta (ISO/IEC, 2018). Por isso dois
+`unsigned char` valendo 200 e 100 somam 300, um `int`; o excesso só é
+cortado se você guardar o resultado num byte, e aí sobra 44.
+
+A segunda é a **conversão aritmética usual**: quando os dois operandos têm
+tipos diferentes, os dois viram o tipo "maior" antes da conta (KERNIGHAN;
+RITCHIE, 1988, cap. 2). Entre `int` e `unsigned` do mesmo tamanho, ganha o
+`unsigned`. Se o tipo com sinal for maior e conseguir guardar todos os
+valores do sem sinal, como um `long` de 64 bits contra um `unsigned` de 32,
+ganha o com sinal. E se um dos dois é `double`, tudo vira `double`.
+
+Dessa segunda regra sai a pegadinha mais famosa: `-1 > 0u` é
+**verdadeiro**. O `0u` é `unsigned`, então o `-1` é convertido para
+`unsigned` e vira 4294967295, que é maior que 0. Já `-1L < 1u` é
+verdadeiro no Linux de 64 bits, porque lá o `long` tem 64 bits e o
+`unsigned` cabe nele, e a comparação é feita com sinal.
+
+Há um lugar em que o sem sinal é a escolha certa: bits e máscaras. Deslocar
+um número negativo com `<<` é indefinido, e com `>>` depende da
+implementação. Com `unsigned`, os deslocamentos e o `~` fazem exatamente o
+que os bits sugerem (DEITEL; DEITEL, 2011, cap. 10).
 
 | Expressão | Resultado | Por quê |
 | --- | --- | --- |
@@ -400,9 +474,10 @@ vetor vazio: indice -1, leituras 0
 | `2u - 3u` | 4294967295 | volta módulo 2³² |
 
 > [!WARNING]
-> `for (size_t i = n - 1; i >= 0; i--)` nunca termina: o `size_t` passa de 0
-> para 18446744073709551615. Escreva `for (size_t i = n; i-- > 0;)`. E
-> `strlen(a) - strlen(b) > 0` é verdadeiro sempre que os tamanhos diferem.
+> `for (size_t i = n - 1; i >= 0; i--)` nunca termina: o `size_t` é sempre
+> `>= 0` e, ao passar de 0, vira 18446744073709551615. Escreva
+> `for (size_t i = n; i-- > 0;)`. E `strlen(a) - strlen(b) > 0` é
+> verdadeiro sempre que os tamanhos diferem.
 
 ### Exemplos de uso
 
@@ -645,20 +720,52 @@ alterado: nao confere
 
 ### Conceito
 
-- **VLA** (*variable length array*): vetor local cujo tamanho é uma expressão
-  calculada na execução, como `int treinos[alunos][semanas];`. Veio no C99
-  (ISO/IEC, 2018).
-- **Onde mora**: na **pilha**; some no fim do bloco, sem `free`. Não pode ser
-  `static` nem global (CPPREFERENCE, s.d.).
-- **`sizeof` na execução**: `sizeof treinos` vale `alunos * semanas *
-  sizeof(int)`, calculado na hora (ISO/IEC, 2018).
-- **Sem inicializador**: `int v[n] = {0};` é erro no C17; zere com um laço
-  (CPPREFERENCE, s.d.).
-- **VLA como parâmetro**: `void f(int l, int c, int m[l][c])`. As dimensões
-  vêm **antes** da matriz, porque o tipo `m[l][c]` usa as duas
-  (ISO/IEC, 2018).
-- **Opcional desde o C11**: o compilador sem VLA define `__STDC_NO_VLA__`
-  (gcc e clang têm; o da Microsoft não). Para exigir VLA:
+O professor de educação física quer uma planilha de treinos: uma linha por
+aluno, uma coluna por semana. Só que o número de alunos e de semanas só é
+conhecido quando ele digita. Até aqui você tinha duas saídas: declarar uma
+matriz enorme "por garantia", como `int treinos[100][52]`, e usar só um
+canto dela; ou pedir a memória ao `malloc` e cuidar do `free`. O C tem uma
+terceira.
+
+O **VLA**, sigla de *variable length array* (vetor de tamanho variável), é
+um vetor local cujo tamanho é uma expressão calculada durante a execução,
+e não uma constante conhecida na compilação (ISO/IEC, 2018). Ele entrou na
+linguagem no C99. Com ele, a planilha se declara do tamanho exato:
+
+```c
+int alunos = 3, semanas = 4;          // lidos do teclado, na prática
+int treinos[alunos][semanas];         // 12 int, criados agora
+```
+
+O VLA mora na **pilha**, como qualquer variável local. Ele é criado quando
+a execução chega à declaração e some sozinho no fim do bloco, sem `free`.
+Por morar na pilha e depender de um valor calculado na hora, ele não pode
+ser `static` nem global: essas variáveis existem desde o início do
+programa, antes de qualquer valor ser lido (CPPREFERENCE, s.d.).
+
+Como o tamanho só existe na execução, o `sizeof` de um VLA também é
+calculado na execução. Com 3 alunos e 4 semanas, `sizeof treinos` vale
+`alunos * semanas * sizeof(int)`, isto é, `3 * 4 * 4 = 48` bytes (ISO/IEC,
+2018). É uma das poucas situações em que o `sizeof` gera código em vez de
+virar uma constante.
+
+O VLA não aceita inicializador. `int v[n] = {0};` é erro no C17, porque o
+compilador não sabe quantos zeros escrever (CPPREFERENCE, s.d.). Para
+começar com tudo zerado, use um laço depois da declaração.
+
+O uso mais útil do VLA é como **parâmetro** de função. Uma função comum que
+recebe uma matriz precisa saber a largura dela na compilação, e por isso se
+escreve `int m[][4]`: ela só serve para matrizes de 4 colunas. Com VLA, a
+função recebe as dimensões junto com a matriz e serve para qualquer
+tamanho: `void f(int l, int c, int m[l][c])`. A ordem importa: `l` e `c`
+vêm **antes** de `m`, porque o tipo `m[l][c]` usa os dois, e um nome só pode
+ser usado depois de declarado (ISO/IEC, 2018).
+
+O VLA nem sempre está disponível. Ele era obrigatório no C99 e passou a ser
+**opcional** no C11 e no C17. Um compilador que não oferece VLA define a
+macro `__STDC_NO_VLA__`; o gcc e o clang oferecem, e o compilador da
+Microsoft não. Um programa que depende de VLA pode exigir o recurso e
+parar a compilação com uma mensagem clara:
 
 ```c
 #ifdef __STDC_NO_VLA__
@@ -666,13 +773,18 @@ alterado: nao confere
 #endif
 ```
 
-- **VLA no heap**: `int (*m)[c] = malloc(l * sizeof *m);` cria a matriz no
-  heap, e `m[i][j]` continua valendo (veja o A344).
+O tipo VLA também serve para matrizes no heap. A declaração
+`int (*m)[c] = malloc(l * sizeof *m);` cria um ponteiro para linhas de `c`
+inteiros e pede `l` dessas linhas ao `malloc`. A matriz fica no heap, sem o
+limite da pilha, e `m[i][j]` continua funcionando como numa matriz comum
+(veja o A344).
 
 > [!WARNING]
-> O VLA não avisa quando falha. A pilha do Linux tem uns **8 MB** (`ulimit -s`):
-> `int v[n]` com 3 milhões de `int` derruba o programa. Use VLA só para
-> tamanhos pequenos e conferidos; para o resto, `malloc`, que devolve `NULL`.
+> O VLA não avisa quando falha. A pilha do Linux tem uns **8 MB**
+> (`ulimit -s`): `int v[n]` com 3 milhões de `int` pede 12 MB e derruba o
+> programa com *segmentation fault*. Um `n` vindo do usuário pode ser 0,
+> negativo ou gigante. Use VLA só para tamanhos pequenos e conferidos; para
+> o resto, `malloc`, que devolve `NULL`.
 
 ### Exemplos de uso
 
@@ -918,25 +1030,64 @@ loja 2: A = R$ 62, B = R$ 52 -> melhor B
 
 ### Conceito
 
-- **Permissão como bit**: cada permissão é um bit de um `unsigned`
-  (`1u << 2`); ligar é `|`, apagar é `& ~`, testar é `&`
-  (DEITEL; DEITEL, 2011, cap. 10).
-- **Papel como enum**: o `enum` indexa o vetor `base`, que dá o pacote de cada
-  papel (KERNIGHAN; RITCHIE, 1988, cap. 2).
-- **Permissão efetiva**: `(base[u->papel] | u->extra) & ~u->bloqueio`. O `|`
-  junta pacote e extras; o `~` inverte o bloqueio e o `&` apaga esses bits: o
-  **bloqueio vence** (DEITEL; DEITEL, 2011, cap. 10).
-- **Parênteses obrigatórios**: "tem tudo da máscara?" é
-  `(efetivas & mascara) == mascara`, porque o `==` vem antes do `&`, como no 0170
-  (CPPREFERENCE, s.d.).
-- **Tudo `unsigned`**: `~` num `int` daria negativo, e misturar sinais abre a
-  porta para o `-1 > 0u` do 0171 (ISO/IEC, 2018).
-- **Planilha VLA**: `bool acesso[n][QTD_PERMS]`, com `n` numa variável (0172).
+O coworking do bairro tem cinco recursos controlados por crachá: a porta de
+entrada, a sala de reunião, a impressora, a garagem e o painel de
+configuração. Cada pessoa tem um papel, visitante, membro ou admin, e o
+papel dá um pacote de permissões. Só que a vida real tem exceções: o Bruno
+é membro e aluga uma vaga na garagem; a Carla é membro e estourou a cota da
+impressora. Você vai montar esse controle com os três temas do módulo:
+precedência, sinal e VLA.
+
+Cada permissão vira um **bit** de um `unsigned`: `ENTRAR` é `1u << 0`,
+`REUNIAO` é `1u << 1`, `IMPRIMIR` é `1u << 2`, e assim por diante. Um
+conjunto de permissões é um número em que cada bit ligado é uma permissão
+concedida. As três operações de conjunto viram operadores bit a bit
+(DEITEL; DEITEL, 2011, cap. 10). Ligar uma permissão é `p | IMPRIMIR`.
+Apagar é `p & ~IMPRIMIR`: o `~` inverte todos os bits da máscara, e o `&`
+mantém tudo menos o bit da impressora. Testar é `p & IMPRIMIR`, que dá
+diferente de zero se o bit estiver ligado.
+
+O papel vira um **enum**, `VISITANTE`, `MEMBRO` e `ADMIN`, que valem 0, 1
+e 2. Esses números servem de índice para o vetor `base`, que guarda o
+pacote de cada papel na mesma ordem do enum (KERNIGHAN; RITCHIE, 1988,
+cap. 2). A struct `Usuario` guarda o papel e duas máscaras de exceção:
+`extra`, o que a pessoa ganhou além do papel, e `bloqueio`, o que ela
+perdeu mesmo que o papel dê.
+
+A permissão efetiva de cada pessoa sai de uma única expressão:
+
+`(base[u->papel] | u->extra) & ~u->bloqueio`
+
+Leia de dentro para fora. O `|` junta o pacote do papel com os extras; os
+parênteses são necessários porque o `&` tem precedência maior que o `|`, e
+sem eles o `&` agarraria o `u->extra`. O `~`, do nível 2 da tabela, inverte
+o bloqueio. O `&` final apaga da junção os bits bloqueados. Como o bloqueio
+é aplicado por último, **o bloqueio vence**: a Carla, membro com a
+impressora bloqueada, fica sem impressora mesmo que o pacote de membro a
+inclua (DEITEL; DEITEL, 2011, cap. 10).
+
+Perguntar "esta pessoa tem todas as permissões da máscara?" também pede
+parênteses: `(efetivas & mascara) == mascara`. O `&` isola, das permissões
+efetivas, só os bits que interessam; se o resultado é a máscara inteira,
+nenhum bit falta. Os parênteses são obrigatórios porque o `==` tem
+precedência maior que o `&`, a armadilha do assunto 0170 (CPPREFERENCE,
+s.d.).
+
+Todos os tipos de permissão são `unsigned`, e não por acaso. O `~` num
+`int` daria um número negativo, e misturar com sinal e sem sinal numa
+comparação abre a porta para o `-1 > 0u` do assunto 0171 (ISO/IEC, 2018).
+Com tudo `unsigned`, os bits fazem exatamente o que parecem fazer.
+
+Por fim, a planilha de acesso que o programa imprime, uma linha por pessoa
+e uma coluna por permissão, é um **VLA** `bool acesso[n][QTD_PERMS]`, com
+`n` guardado numa variável, como no assunto 0172. Cada casa recebe o
+resultado de testar uma permissão de uma pessoa.
 
 > [!WARNING]
-> `efetivas(u) & mascara == mascara` vira `efetivas(u) & 1` e só olha o bit de
-> ENTRAR (o gcc avisa). E `p = p | ~IMPRIMIR` no lugar de `p = p & ~IMPRIMIR`
-> **liga todas as outras** permissões, sem aviso.
+> `efetivas(u) & mascara == mascara` é lido como
+> `efetivas(u) & (mascara == mascara)`, isto é, `efetivas(u) & 1`: só olha
+> o bit de ENTRAR (o gcc avisa). E `p = p | ~IMPRIMIR` no lugar de
+> `p = p & ~IMPRIMIR` **liga todas as outras** permissões, sem aviso.
 
 ### Exemplos de uso
 

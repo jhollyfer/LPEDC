@@ -1,19 +1,51 @@
 ## 0172 · Vetor de tamanho variável (VLA)
 
-- **VLA** (*variable length array*): vetor local cujo tamanho é uma expressão
-  calculada na execução, como `int treinos[alunos][semanas];`. Veio no C99
-  (ISO/IEC, 2018).
-- **Onde mora**: na **pilha**; some no fim do bloco, sem `free`. Não pode ser
-  `static` nem global (CPPREFERENCE, s.d.).
-- **`sizeof` na execução**: `sizeof treinos` vale `alunos * semanas *
-  sizeof(int)`, calculado na hora (ISO/IEC, 2018).
-- **Sem inicializador**: `int v[n] = {0};` é erro no C17; zere com um laço
-  (CPPREFERENCE, s.d.).
-- **VLA como parâmetro**: `void f(int l, int c, int m[l][c])`. As dimensões
-  vêm **antes** da matriz, porque o tipo `m[l][c]` usa as duas
-  (ISO/IEC, 2018).
-- **Opcional desde o C11**: o compilador sem VLA define `__STDC_NO_VLA__`
-  (gcc e clang têm; o da Microsoft não). Para exigir VLA:
+O professor de educação física quer uma planilha de treinos: uma linha por
+aluno, uma coluna por semana. Só que o número de alunos e de semanas só é
+conhecido quando ele digita. Até aqui você tinha duas saídas: declarar uma
+matriz enorme "por garantia", como `int treinos[100][52]`, e usar só um
+canto dela; ou pedir a memória ao `malloc` e cuidar do `free`. O C tem uma
+terceira.
+
+O **VLA**, sigla de *variable length array* (vetor de tamanho variável), é
+um vetor local cujo tamanho é uma expressão calculada durante a execução,
+e não uma constante conhecida na compilação (ISO/IEC, 2018). Ele entrou na
+linguagem no C99. Com ele, a planilha se declara do tamanho exato:
+
+```c
+int alunos = 3, semanas = 4;          // lidos do teclado, na prática
+int treinos[alunos][semanas];         // 12 int, criados agora
+```
+
+O VLA mora na **pilha**, como qualquer variável local. Ele é criado quando
+a execução chega à declaração e some sozinho no fim do bloco, sem `free`.
+Por morar na pilha e depender de um valor calculado na hora, ele não pode
+ser `static` nem global: essas variáveis existem desde o início do
+programa, antes de qualquer valor ser lido (CPPREFERENCE, s.d.).
+
+Como o tamanho só existe na execução, o `sizeof` de um VLA também é
+calculado na execução. Com 3 alunos e 4 semanas, `sizeof treinos` vale
+`alunos * semanas * sizeof(int)`, isto é, `3 * 4 * 4 = 48` bytes (ISO/IEC,
+2018). É uma das poucas situações em que o `sizeof` gera código em vez de
+virar uma constante.
+
+O VLA não aceita inicializador. `int v[n] = {0};` é erro no C17, porque o
+compilador não sabe quantos zeros escrever (CPPREFERENCE, s.d.). Para
+começar com tudo zerado, use um laço depois da declaração.
+
+O uso mais útil do VLA é como **parâmetro** de função. Uma função comum que
+recebe uma matriz precisa saber a largura dela na compilação, e por isso se
+escreve `int m[][4]`: ela só serve para matrizes de 4 colunas. Com VLA, a
+função recebe as dimensões junto com a matriz e serve para qualquer
+tamanho: `void f(int l, int c, int m[l][c])`. A ordem importa: `l` e `c`
+vêm **antes** de `m`, porque o tipo `m[l][c]` usa os dois, e um nome só pode
+ser usado depois de declarado (ISO/IEC, 2018).
+
+O VLA nem sempre está disponível. Ele era obrigatório no C99 e passou a ser
+**opcional** no C11 e no C17. Um compilador que não oferece VLA define a
+macro `__STDC_NO_VLA__`; o gcc e o clang oferecem, e o compilador da
+Microsoft não. Um programa que depende de VLA pode exigir o recurso e
+parar a compilação com uma mensagem clara:
 
 ```c
 #ifdef __STDC_NO_VLA__
@@ -21,13 +53,18 @@
 #endif
 ```
 
-- **VLA no heap**: `int (*m)[c] = malloc(l * sizeof *m);` cria a matriz no
-  heap, e `m[i][j]` continua valendo (veja o A344).
+O tipo VLA também serve para matrizes no heap. A declaração
+`int (*m)[c] = malloc(l * sizeof *m);` cria um ponteiro para linhas de `c`
+inteiros e pede `l` dessas linhas ao `malloc`. A matriz fica no heap, sem o
+limite da pilha, e `m[i][j]` continua funcionando como numa matriz comum
+(veja o A344).
 
 > [!WARNING]
-> O VLA não avisa quando falha. A pilha do Linux tem uns **8 MB** (`ulimit -s`):
-> `int v[n]` com 3 milhões de `int` derruba o programa. Use VLA só para
-> tamanhos pequenos e conferidos; para o resto, `malloc`, que devolve `NULL`.
+> O VLA não avisa quando falha. A pilha do Linux tem uns **8 MB**
+> (`ulimit -s`): `int v[n]` com 3 milhões de `int` pede 12 MB e derruba o
+> programa com *segmentation fault*. Um `n` vindo do usuário pode ser 0,
+> negativo ou gigante. Use VLA só para tamanhos pequenos e conferidos; para
+> o resto, `malloc`, que devolve `NULL`.
 
 {{exemplo}}
 
