@@ -1,26 +1,63 @@
 ## 0075 · Vetor dinâmico
 
-- **Lista sequencial** (ou **lista em vetor**): guarda os itens lado a lado,
-  na ordem da lista, num vetor (ZIVIANI, 2010, cap. 3).
-- **Vetor fixo**: se sobra espaço, desperdiça; se falta, não há jeito barato
-  de crescer (CELES; RANGEL, 2002).
-- **Três campos**: o endereço do vetor no heap (`itens`), quantos itens estão
-  em uso (`tam`) e quantos cabem (`cap`). Com `tam < cap`, inserir no fim é
-  escrever em `itens[tam]` (FEOFILOFF, 2009, cap. 3).
-- **Crescer**: com `tam == cap`, o `realloc` (0055) pede um bloco maior,
-  copia os itens e libera o antigo. Se falhar, devolve `NULL` e o bloco
-  antigo continua válido (CPPREFERENCE, s.d.).
-- **Dobrar a capacidade**: inserir n itens copia menos de 2n itens (1 + 2 + 4
-  + ... + n), O(1) em média por inserção, o **custo amortizado**. Crescendo de
-  um em um, são cerca de n²/2 cópias (CORMEN et al., 2024).
-- **TAD** (0074): `lista.h` diz **o que** a lista faz; `lista.c` diz **como**,
-  com a `struct lista` escondida (CELES; CERQUEIRA; RANGEL, 2016).
+Você anota as despesas de uma viagem e não sabe quantas serão. Um
+`int despesas[100]` desperdiça memória se forem 5 e estoura se forem 101. O
+vetor de tamanho fixo obriga você a adivinhar o tamanho antes de começar: se
+sobra espaço, ele fica parado; se falta, não há um jeito barato de crescer
+(CELES; RANGEL, 2002). Este assunto abre o módulo de listas com a solução
+mais simples.
+
+Pense numa estante de livros. Enquanto há prateleira livre, o livro novo vai
+no fim. Quando a estante enche, você compra uma com o dobro do tamanho, passa
+os livros para ela na mesma ordem e se desfaz da velha. A **lista
+sequencial**, também chamada **lista em vetor**, funciona assim: ela guarda
+os itens lado a lado num vetor, na ordem da lista (ZIVIANI, 2010, cap. 3).
+Quando o vetor mora no heap e cresce sob demanda, ele é um **vetor
+dinâmico**.
+
+Três campos controlam a lista (FEOFILOFF, 2009, cap. 3). `itens` é o
+endereço do vetor no heap. `tam` diz quantos itens estão em uso, e `cap`
+quantos cabem. A diferença `cap - tam` é a folga. Enquanto `tam < cap`,
+inserir no fim é só escrever em `itens[tam]` e somar 1 a `tam`: os itens
+ocupam as posições 0 a `tam - 1`, e a primeira vaga é exatamente `tam`.
+
+Quando `tam == cap`, a estante encheu. A função `realloc`, vista no assunto
+0055, pede um bloco maior, copia os itens para ele e libera o antigo. Se não
+houver memória, ela devolve `NULL` e não mexe no bloco antigo, que continua
+válido (CPPREFERENCE, s.d.). Por isso o resultado vai primeiro para uma
+variável auxiliar, e só depois de conferido substitui `itens`.
+
+Quanto crescer a cada vez? Crescer de um em um parece econômico, mas cada
+item novo copia todos os anteriores: 1 + 2 + 3 + ... + n, cerca de n²/2
+cópias para n itens. **Dobrar a capacidade** muda a conta. As cópias
+acontecem só quando a lista chega a 1, 2, 4, 8... itens, e somam
+1 + 2 + 4 + ... + n, menos de 2n. Dividido pelas n inserções, dá um custo
+constante por inserção, O(1) em média. Esse custo médio sobre uma sequência
+de operações se chama **custo amortizado**: uma inserção ou outra sai cara,
+mas a soma toda fica barata (CORMEN et al., 2024).
+
+Com a lista começando com espaço para 2, as duas primeiras despesas entram
+direto. A terceira encontra a lista cheia, a capacidade dobra para 4 e ela
+entra. A quinta dobra de novo, para 8, copia as quatro e deixa três vagas.
+
+Ler a posição `i` continua O(1), como em qualquer vetor: `itens[i]` sai de
+uma conta de endereço. Já inserir ou remover no **meio** tem um preço:
+todos os itens seguintes precisam andar uma casa para abrir ou fechar o
+espaço. No pior caso, mexer na posição 0, são n deslocamentos, O(n). A
+tabela reúne os custos:
 
 | Operação | Custo |
 | --- | --- |
 | ler a posição `i` | O(1) |
 | inserir no fim | O(1) amortizado |
 | inserir ou remover no meio | O(n): desloca os seguintes |
+
+A lista é montada como um **TAD**, no molde do assunto 0074: `lista.h` diz
+**o que** a lista faz (criar, inserir, pegar, liberar), e `lista.c` diz
+**como**, com a `struct lista` escondida do cliente (CELES; CERQUEIRA;
+RANGEL, 2016). O `lista_libera` faz dois `free`: primeiro o do vetor de
+itens, depois o da struct, porque depois de liberar a struct não dá mais para
+ler o campo `itens`.
 
 > [!WARNING]
 > Nunca escreva `l->itens = realloc(l->itens, ...)`: se vier `NULL`, o bloco

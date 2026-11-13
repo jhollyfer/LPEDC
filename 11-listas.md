@@ -70,27 +70,64 @@ AddressSanitizer pega, ao rodar: leia o relatório inteiro, com o tipo do erro
 
 ### Conceito
 
-- **Lista sequencial** (ou **lista em vetor**): guarda os itens lado a lado,
-  na ordem da lista, num vetor (ZIVIANI, 2010, cap. 3).
-- **Vetor fixo**: se sobra espaço, desperdiça; se falta, não há jeito barato
-  de crescer (CELES; RANGEL, 2002).
-- **Três campos**: o endereço do vetor no heap (`itens`), quantos itens estão
-  em uso (`tam`) e quantos cabem (`cap`). Com `tam < cap`, inserir no fim é
-  escrever em `itens[tam]` (FEOFILOFF, 2009, cap. 3).
-- **Crescer**: com `tam == cap`, o `realloc` (0055) pede um bloco maior,
-  copia os itens e libera o antigo. Se falhar, devolve `NULL` e o bloco
-  antigo continua válido (CPPREFERENCE, s.d.).
-- **Dobrar a capacidade**: inserir n itens copia menos de 2n itens (1 + 2 + 4
-  + ... + n), O(1) em média por inserção, o **custo amortizado**. Crescendo de
-  um em um, são cerca de n²/2 cópias (CORMEN et al., 2024).
-- **TAD** (0074): `lista.h` diz **o que** a lista faz; `lista.c` diz **como**,
-  com a `struct lista` escondida (CELES; CERQUEIRA; RANGEL, 2016).
+Você anota as despesas de uma viagem e não sabe quantas serão. Um
+`int despesas[100]` desperdiça memória se forem 5 e estoura se forem 101. O
+vetor de tamanho fixo obriga você a adivinhar o tamanho antes de começar: se
+sobra espaço, ele fica parado; se falta, não há um jeito barato de crescer
+(CELES; RANGEL, 2002). Este assunto abre o módulo de listas com a solução
+mais simples.
+
+Pense numa estante de livros. Enquanto há prateleira livre, o livro novo vai
+no fim. Quando a estante enche, você compra uma com o dobro do tamanho, passa
+os livros para ela na mesma ordem e se desfaz da velha. A **lista
+sequencial**, também chamada **lista em vetor**, funciona assim: ela guarda
+os itens lado a lado num vetor, na ordem da lista (ZIVIANI, 2010, cap. 3).
+Quando o vetor mora no heap e cresce sob demanda, ele é um **vetor
+dinâmico**.
+
+Três campos controlam a lista (FEOFILOFF, 2009, cap. 3). `itens` é o
+endereço do vetor no heap. `tam` diz quantos itens estão em uso, e `cap`
+quantos cabem. A diferença `cap - tam` é a folga. Enquanto `tam < cap`,
+inserir no fim é só escrever em `itens[tam]` e somar 1 a `tam`: os itens
+ocupam as posições 0 a `tam - 1`, e a primeira vaga é exatamente `tam`.
+
+Quando `tam == cap`, a estante encheu. A função `realloc`, vista no assunto
+0055, pede um bloco maior, copia os itens para ele e libera o antigo. Se não
+houver memória, ela devolve `NULL` e não mexe no bloco antigo, que continua
+válido (CPPREFERENCE, s.d.). Por isso o resultado vai primeiro para uma
+variável auxiliar, e só depois de conferido substitui `itens`.
+
+Quanto crescer a cada vez? Crescer de um em um parece econômico, mas cada
+item novo copia todos os anteriores: 1 + 2 + 3 + ... + n, cerca de n²/2
+cópias para n itens. **Dobrar a capacidade** muda a conta. As cópias
+acontecem só quando a lista chega a 1, 2, 4, 8... itens, e somam
+1 + 2 + 4 + ... + n, menos de 2n. Dividido pelas n inserções, dá um custo
+constante por inserção, O(1) em média. Esse custo médio sobre uma sequência
+de operações se chama **custo amortizado**: uma inserção ou outra sai cara,
+mas a soma toda fica barata (CORMEN et al., 2024).
+
+Com a lista começando com espaço para 2, as duas primeiras despesas entram
+direto. A terceira encontra a lista cheia, a capacidade dobra para 4 e ela
+entra. A quinta dobra de novo, para 8, copia as quatro e deixa três vagas.
+
+Ler a posição `i` continua O(1), como em qualquer vetor: `itens[i]` sai de
+uma conta de endereço. Já inserir ou remover no **meio** tem um preço:
+todos os itens seguintes precisam andar uma casa para abrir ou fechar o
+espaço. No pior caso, mexer na posição 0, são n deslocamentos, O(n). A
+tabela reúne os custos:
 
 | Operação | Custo |
 | --- | --- |
 | ler a posição `i` | O(1) |
 | inserir no fim | O(1) amortizado |
 | inserir ou remover no meio | O(n): desloca os seguintes |
+
+A lista é montada como um **TAD**, no molde do assunto 0074: `lista.h` diz
+**o que** a lista faz (criar, inserir, pegar, liberar), e `lista.c` diz
+**como**, com a `struct lista` escondida do cliente (CELES; CERQUEIRA;
+RANGEL, 2016). O `lista_libera` faz dois `free`: primeiro o do vetor de
+itens, depois o da struct, porque depois de liberar a struct não dá mais para
+ler o campo `itens`.
 
 > [!WARNING]
 > Nunca escreva `l->itens = realloc(l->itens, ...)`: se vier `NULL`, o bloco
@@ -394,13 +431,27 @@ gcc ~/LPEDC/material/E450.c ~/LPEDC/material/0075-lista.c -o ~/LPEDC/material/E4
 
 ### Conceito
 
-- **Lista encadeada** (ou **lista ligada**): cada item fica num pedaço
-  separado de memória, o **nó**, com o valor e o endereço do próximo. O
-  último aponta para `NULL` (FEOFILOFF, 2009, cap. 4).
-- **Início**: a lista inteira é o endereço do primeiro nó (o `L.head` do
-  Cormen). Lista vazia é `inicio == NULL` (CORMEN et al., 2024, cap. 10).
-- **Struct autorreferenciada**: uma struct não pode conter a si mesma, mas
-  pode conter um **ponteiro** para a própria struct (KERNIGHAN; RITCHIE, 1989).
+No extrato do Pix, cada transferência nova aparece no topo, e as antigas
+descem. No vetor dinâmico do assunto 0075, pôr um item na posição 0 obriga
+todos os outros a andarem uma casa, O(n) a cada Pix. E quando o vetor enche,
+o `realloc` copia tudo. A lista encadeada troca o vetor por peças soltas, e
+inserir na frente passa a custar sempre o mesmo, com 4 itens ou com 4
+milhões.
+
+Pense numa caça ao tesouro. Cada pista está num lugar diferente da cidade e
+traz o endereço da próxima; a última diz "fim". Ninguém precisa que as pistas
+fiquem lado a lado, só que cada uma saiba onde está a seguinte. Uma **lista
+encadeada**, que o Cormen chama de **lista ligada**, guarda cada item num
+pedaço separado de memória, o **nó**. Cada nó traz o valor e o endereço do
+próximo nó, e o último aponta para `NULL` (FEOFILOFF, 2009, cap. 4).
+
+A lista inteira é representada pelo endereço do primeiro nó, o **início**
+(no Cormen, `L.head`). Com ele você chega a todos os outros, seguindo as
+setas. A lista vazia é simplesmente `inicio == NULL`: não há primeiro nó
+(CORMEN et al., 2024, cap. 10).
+
+O nó é uma struct com um detalhe novo: um dos campos aponta para outro nó do
+mesmo tipo. Uma struct assim se chama **struct autorreferenciada**:
 
 ```c
 typedef struct no {
@@ -409,22 +460,45 @@ typedef struct no {
 } No;
 ```
 
-- **Sem acesso direto**: cada nó vem de um `malloc` e cai onde o heap tiver
-  espaço; a ordem está nas setas. Não existe `lista[2]`: para chegar ao
-  terceiro nó, siga duas setas (CELES; RANGEL, 2002).
-- **Inserir no início**: cria o nó, aponta o `prox` dele para o antigo início
-  e devolve o novo nó. É O(1) (CELES; RANGEL, 2002).
-- **Percorrer**: `for (p = inicio; p != NULL; p = p->prox)`, o "for de
-  lista" (FEOFILOFF, 2009, cap. 4).
-- **Liberar**: um `free` por nó, guardando o próximo **antes** do `free`
-  (CELES; RANGEL, 2002).
-- **Inserir no fim** com só o início guardado é O(n); com um ponteiro para o
-  último, vira O(1) (0079 e 0086).
+Uma struct não pode conter a si mesma, porque teria tamanho infinito: o nó
+teria um nó dentro, que teria outro, e assim por diante. Mas pode conter um
+**ponteiro** para a própria struct, porque um ponteiro tem tamanho fixo, 8
+bytes em 64 bits, aponte para o que apontar (KERNIGHAN; RITCHIE, 1989). Por
+isso o campo é `struct no *prox`, com o nome completo da struct: dentro das
+chaves, o apelido `No` ainda não existe.
+
+Cada nó vem de um `malloc` separado e cai onde o heap tiver espaço. Os
+endereços ficam fora de ordem, e a ordem da lista está só nas setas. A
+consequência é que não existe `lista[2]`: para chegar ao terceiro nó, você
+parte do início e segue duas setas (CELES; RANGEL, 2002). Ler a posição `i`,
+que no vetor era O(1), aqui custa O(i).
+
+Três operações formam a base. **Inserir no início** cria o nó com `malloc`,
+põe o valor, aponta o `prox` dele para o antigo início e devolve o novo nó,
+que passa a ser o início. São sempre os mesmos passos, sem andar pela lista:
+O(1) (CELES; RANGEL, 2002). Quem chama precisa guardar o retorno, com
+`inicio = lista_insere_inicio(inicio, 20);`.
+
+**Percorrer** usa um ponteiro auxiliar `p` que começa no início e anda de nó
+em nó: `for (p = inicio; p != NULL; p = p->prox)`. Esse é o "for de lista",
+que você vai escrever em quase toda função do módulo. A cada volta, `p->valor`
+é o valor do nó atual; quando `p` vira `NULL`, a lista acabou (FEOFILOFF,
+2009, cap. 4).
+
+**Liberar** pede um `free` por nó, porque cada nó veio de um `malloc`. O
+cuidado está na ordem: guarde `p->prox` numa variável **antes** de chamar
+`free(p)`, porque depois do `free` o nó não existe mais e ler o campo dele é
+ler memória devolvida (CELES; RANGEL, 2002).
+
+Inserir no **fim** é outra história. Guardando só o início, é preciso andar
+até o último nó, O(n). Guardando também um ponteiro para o último, vira O(1);
+os assuntos 0079 e 0086 fazem isso. O nó ocupa 16 bytes em 64 bits: 4 do
+`int`, 4 de preenchimento para alinhar o ponteiro e 8 do ponteiro.
 
 > [!WARNING]
-> `lista_insere_inicio(inicio, 20);` sem o `inicio =` na frente compila e
-> está errado: o novo início se perde e o nó vaza. No `libera`, o erro comum é ler
-> `p->prox` depois de `free(p)`.
+> `lista_insere_inicio(inicio, 20);` sem o `inicio =` na frente compila sem
+> aviso e está errado: o novo início se perde e o nó vira vazamento. No
+> `libera`, o erro comum é ler `p->prox` depois de `free(p)`.
 
 ### Exemplos de uso
 
@@ -675,26 +749,71 @@ gcc ~/LPEDC/material/E456.c ~/LPEDC/material/0076-lista.c -o ~/LPEDC/material/E4
 
 ### Conceito
 
-- **Buscar**: percorrer até achar, O(n). A função devolve o **endereço do
-  nó** ou `NULL`; com ele você lê ou muda o valor (FEOFILOFF, 2009, cap. 4).
-- **Remover** o nó `p`: o **anterior** passa a apontar para o seguinte. A
-  lista simples não volta, então se percorre com **dois ponteiros**: `ant`
-  anda um passo atrás de `p` (CELES; RANGEL, 2002).
-- **Dois casos**: `ant == NULL` quer dizer que o nó é o **primeiro**, e o
-  início muda; senão, `ant->prox = p->prox` e o anterior pula o `p`. O
-  `free(p)` vem depois de religar (CELES; RANGEL, 2002).
-- **`No **inicio`**: como remover o primeiro muda o início, a função recebe o
-  endereço dele (0049). É o outro estilo comum; a inserção do 0076 devolvia o
-  início novo (FEOFILOFF, 2009, cap. 4).
-- **Nó-cabeça**: um nó de mentira no começo faz todo nó de verdade ter
-  anterior, e o caso especial some. O Cormen usa a **sentinela** `L.nil`
-  (CORMEN et al., 2024, cap. 10).
-- **Custo**: religar é O(1); achar o nó é O(n) (FEOFILOFF, 2009, cap. 4).
+O assunto 0076 sabe criar, percorrer e liberar uma lista encadeada. Falta
+achar um item e tirá-lo do meio sem desmontar o resto. No vetor, remover do
+meio obrigava a deslocar os seguintes. Na lista, ninguém se move: basta
+trocar uma seta. O trabalho está em descobrir **qual** seta trocar.
+
+Na barbearia, as senhas esperam numa lista: 31, 17, 42, 8. O cliente da senha
+42 desiste e vai embora. Os outros não mudam de cadeira; só o 17 passa a ter
+o 8 como próximo a ser chamado. É exatamente o que a remoção numa lista
+encadeada faz.
+
+**Buscar** é percorrer a lista até achar o valor, comparando nó por nó, e
+custa O(n) no pior caso. A função de busca devolve o **endereço do nó** que
+tem o valor, ou `NULL` se a lista acabou sem achar. Com o endereço em mãos,
+você lê o valor ou o altera direto no nó (FEOFILOFF, 2009, cap. 4):
+
+```c
+No *p = inicio;
+while (p != NULL && p->valor != valor) { // o teste do NULL vem primeiro
+    p = p->prox;
+}
+// aqui p é o nó com o valor, ou NULL se não achou
+```
+
+**Remover** o nó `p` exige que o nó **anterior** passe a apontar para o nó
+seguinte, pulando o `p`. O problema é que a lista simples só tem setas para
+a frente: parado no `p`, você não tem como voltar ao anterior. A saída é
+percorrer com **dois ponteiros**, `ant` e `p`, em que `ant` anda sempre um
+passo atrás. Antes de avançar `p`, você faz `ant = p`; assim, quando `p`
+para no nó procurado, `ant` está no nó de antes (CELES; RANGEL, 2002).
+
+Achado o nó, há dois casos, e a diferença está em `ant` (CELES; RANGEL,
+2002). Se `ant` ainda vale `NULL`, o laço nem andou: o nó é o **primeiro** da
+lista, e quem precisa mudar é o próprio início, que passa a ser `p->prox`. Se
+`ant` não é `NULL`, o nó está no meio ou no fim, e `ant->prox = p->prox` faz
+o anterior pular o `p`. Nos dois casos, o `free(p)` vem **depois** de religar,
+porque é preciso ler `p->prox` antes de devolver o nó.
+
+O primeiro caso traz uma complicação. Remover o primeiro nó muda a variável
+`inicio` de quem chamou, e a função recebe só uma cópia dela. A inserção do
+assunto 0076 resolvia isso devolvendo o início novo. A remoção usa o outro
+estilo comum: recebe o **endereço** do início, `No **inicio`, como no
+assunto 0049, e escreve `*inicio = p->prox` para mudar a variável do `main`
+(FEOFILOFF, 2009, cap. 4). Quem chama passa `&fila`.
+
+O caso especial do primeiro nó existe porque o primeiro é o único sem
+anterior. Um truque o elimina: pôr no começo um **nó-cabeça**, um nó de
+mentira que não guarda dado nenhum e nunca sai. Com ele, todo nó de verdade
+tem um anterior, e a remoção vira um caso só. O Cormen usa a mesma ideia com
+o nome de **sentinela**, `L.nil` (CORMEN et al., 2024, cap. 10). O exemplo
+A154 mostra o nó-cabeça, e o assunto 0174 volta à sentinela.
+
+Há ainda um terceiro jeito, sem `ant`. Um ponteiro `No **pp` que aponta para
+"quem aponta para o nó atual" começa em `inicio` e anda com
+`pp = &(*pp)->prox`. Achado o nó, `No *p = *pp; *pp = p->prox; free(p);`
+resolve o primeiro nó e os do meio com o mesmo código, sem `if`.
+
+Quanto ao custo, religar as setas é O(1), não importa o tamanho da lista. O
+que custa é achar o nó, O(n) no pior caso (FEOFILOFF, 2009, cap. 4). Se você
+já tem o anterior em mãos, remover sai de graça.
 
 > [!WARNING]
 > A ordem do `&&` importa. Em `while (p->valor != valor && p != NULL)`, o
 > `p->valor` é lido antes de testar `p` e quebra quando o valor não está na
-> lista. Com `p != NULL` primeiro, o curto-circuito (0013) evita a leitura.
+> lista. Com `p != NULL` primeiro, o curto-circuito (assunto 0013) evita a
+> leitura.
 
 ### Exemplos de uso
 
@@ -1002,21 +1121,67 @@ gcc ~/LPEDC/material/E462.c ~/LPEDC/material/0077-lista.c -o ~/LPEDC/material/E4
 
 ### Conceito
 
-- **Lista ordenada**: mantém os nós em ordem a cada inserção, em vez de
-  reordenar tudo depois (CELES; RANGEL, 2002).
-- **Inserção ordenada**: anda com o par `ant`/`p` (0077) enquanto os valores
-  forem menores que o novo. Ao parar, `p` é o primeiro maior ou igual (ou
-  `NULL`) e `ant` vem antes dele (FEOFILOFF, 2009, cap. 4).
-- **Religar duas setas**, nesta ordem: `novo->prox = p` e depois
-  `ant->prox = novo`. Se `ant` for `NULL`, o novo é o menor e vira o início;
-  o fim não é caso especial (CELES; RANGEL, 2002).
-- **Busca com parada**: dá para desistir ao passar do valor procurado
-  (FEOFILOFF, 2009, cap. 4).
-- **Critério**: está na comparação do `while`. Com
-  `strcmp(p->nome, nome) < 0`, a mesma inserção ordena por nome.
-- **Custo**: cada inserção é O(n) no pior caso, então montar n itens custa
-  O(n²). A busca continua O(n): sem acesso direto não há busca binária
-  (ZIVIANI, 2010, cap. 3).
+Na clínica, as ligações chegam fora de ordem: primeiro alguém marca 14:30,
+depois 09:00, depois 16:00. Mas a recepcionista precisa da agenda sempre em
+ordem de horário, a qualquer momento do dia. Juntar tudo e ordenar no fim
+não serve, porque a agenda é consultada o tempo todo. O jeito é cada marcação
+entrar já no lugar certo.
+
+É o que você faz com cartas na mão durante um jogo: cada carta nova vai
+direto para a posição dela, entre a menor e a maior que ela, e a mão continua
+arrumada. Uma **lista ordenada** mantém os nós em ordem a cada inserção, em
+vez de reordenar tudo depois (CELES; RANGEL, 2002). Numa lista encadeada,
+isso é barato na hora de encaixar: nenhum nó se move, só duas setas mudam.
+
+A **inserção ordenada** reaproveita o par `ant`/`p` do assunto 0077. Os dois
+andam pela lista enquanto os valores encontrados forem menores que o novo.
+Quando o laço para, `p` é o primeiro nó com valor maior ou igual ao novo, ou
+`NULL` se a lista acabou, e `ant` é o nó logo antes dele (FEOFILOFF, 2009,
+cap. 4). O novo nó entra **entre** `ant` e `p`. Na agenda com 09:00, 14:30 e
+16:00, a ligação das 10:15 faz o laço passar pelo 09:00 e parar no 14:30,
+porque `14:30 < 10:15` é falso: `ant` fica no 09:00, `p` no 14:30.
+
+Para encaixar o novo, religue duas setas, nesta ordem: primeiro
+`novo->prox = p`, depois `ant->prox = novo` (CELES; RANGEL, 2002). A ordem
+importa. O novo nó aponta para o seguinte enquanto o anterior ainda segura a
+lista inteira; só então o anterior passa a apontar para o novo.
+
+```c
+while (p != NULL && p->valor < valor) { // anda enquanto os de lá são menores
+    ant = p;
+    p = p->prox;
+}
+novo->prox = p;          // o novo aponta para o primeiro maior (ou NULL)
+if (ant == NULL) {
+    return novo;         // é o menor de todos: vira o início
+}
+ant->prox = novo;        // o anterior passa a apontar para o novo
+return inicio;
+```
+
+Dois extremos merecem atenção. Se o novo é menor que todos, o laço nem anda e
+`ant` continua `NULL`: não há anterior, e o novo vira o início. O fim, ao
+contrário, não é caso especial. Se o novo é maior que todos, `p` chega a
+`NULL`, e `novo->prox = p` grava `NULL` no novo, que vira o último do jeito
+certo (CELES; RANGEL, 2002).
+
+A ordem também ajuda a **busca**. Numa lista sem ordem, para concluir que um
+valor não está lá, você olha todos os nós. Numa lista ordenada, dá para
+desistir assim que passar do valor procurado (FEOFILOFF, 2009, cap. 4).
+Procurando 11:00, a busca para no 14:30: dali em diante, só há horários
+maiores.
+
+O critério da ordem mora todo na comparação do `while`. Trocando
+`p->valor < valor` por `strcmp(p->nome, nome) < 0`, a mesma inserção ordena
+por nome em ordem alfabética. A comparação também decide o que acontece com
+valores repetidos: com `<`, o repetido entra **antes** dos iguais; com `<=`,
+**depois** deles.
+
+Quanto ao custo, cada inserção anda até o lugar certo, O(n) no pior caso, e
+montar uma lista com n itens custa O(n²). A busca, mesmo com parada
+antecipada, continua O(n): sem acesso direto ao meio, não dá para fazer busca
+binária (ZIVIANI, 2010, cap. 3). O vetor ordenado tem o perfil oposto, e a
+tabela compara os dois:
 
 | Estrutura ordenada | Busca | Inserção |
 | --- | --- | --- |
@@ -1306,24 +1471,29 @@ gcc ~/LPEDC/material/E468.c ~/LPEDC/material/0078-lista.c -o ~/LPEDC/material/E4
 
 ### Conceito
 
-- **Lista duplamente encadeada** (no Cormen, **duplamente ligada**, com
-  `next` e `prev`): cada nó guarda `prox` e `ant` (CORMEN et al., 2024,
-  cap. 10).
-- **Por que existe**: na lista simples não se anda de trás para frente e,
-  para remover um nó conhecido, ainda é preciso achar o anterior
-  (CELES; RANGEL, 2002).
-- **O que ganha**: anda nos **dois sentidos**, remove um nó conhecendo **só
-  ele** em O(1) e, com ponteiro para o **último**, insere no fim em O(1)
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 4).
-- **Regra das setas**: para todo nó `p` que não é o último,
-  `p->prox->ant == p`. As setas mudam **aos pares** (FEOFILOFF, 2009, cap. 4).
-- **Remover `p`**: desvia as duas setas que chegam nele, cada uma com seu
-  caso de borda: primeiro nó (muda o `inicio`) e último nó (muda o `fim`)
-  (CELES; RANGEL, 2002).
-- **Custo de memória**: em 64 bits, `sizeof(No)` passa de 16 para 24 bytes,
-  um ponteiro a mais por nó.
+A lista simples dos assuntos anteriores só anda para a frente. Isso cobra
+dois preços (CELES; RANGEL, 2002). Para mostrar os itens de trás para frente,
+não há caminho de volta. E para remover um nó que você já tem em mãos, ainda
+é preciso achar o anterior dele, percorrendo a lista desde o início, O(n),
+porque só o anterior pode ser religado.
 
-A lista desta pasta é uma struct com as duas pontas e o tamanho:
+No pátio da ferrovia, o terceiro vagão de um trem de minério está com o
+freio travado. O manobrista solta os dois engates dele e liga o segundo vagão
+direto ao quarto. Ele não volta à locomotiva para descobrir quem vem antes:
+cada vagão está preso ao da frente e ao de trás, e ele vê os dois. A **lista
+duplamente encadeada** (no Cormen, **duplamente ligada**, com os campos
+`next` e `prev`) faz o mesmo: cada nó guarda o próximo, `prox`, e também o
+anterior, `ant` (CORMEN et al., 2024, cap. 10).
+
+Com a seta a mais, três coisas ficam possíveis (TENENBAUM; LANGSAM;
+AUGENSTEIN, 1995, cap. 4). Você anda nos **dois sentidos**: de trás para a
+frente é o "for de lista" de sempre, começando no último nó e andando com
+`p = p->ant`. Você remove um nó conhecendo **só ele**, em O(1), porque o
+anterior está em `p->ant`. E, guardando um ponteiro para o **último** nó,
+inserir no fim também vira O(1), sem percorrer nada.
+
+A lista desta pasta junta essas peças numa struct com as duas pontas e o
+tamanho:
 
 ```c
 typedef struct no {
@@ -1339,10 +1509,43 @@ typedef struct {
 } Lista;
 ```
 
+Repare que agora a lista não é mais só um ponteiro para o primeiro nó. A
+struct `Lista` carrega o `inicio`, o `fim` e quantos nós existem, e as
+funções recebem `Lista *` para poder atualizar os três.
+
+As setas de ida e as de volta precisam concordar. Para todo nó `p` que não é
+o último, vale `p->prox->ant == p`: o anterior do meu próximo sou eu. Essa
+regra é o invariante da lista dupla, e ela tem uma consequência prática: as
+setas mudam sempre **aos pares**. Toda operação que mexe na seta de ida de um
+nó precisa mexer na seta de volta correspondente (FEOFILOFF, 2009, cap. 4).
+
+Remover um nó `p` mostra isso. Chegam duas setas em `p`: a do anterior, que
+aponta para ele pela frente, e a do seguinte, que aponta para ele por trás.
+As duas precisam ser desviadas, e cada uma tem o seu caso de borda (CELES;
+RANGEL, 2002):
+
+```c
+if (p->ant == NULL) l->inicio = p->prox;  // era o primeiro
+else p->ant->prox = p->prox;              // o anterior pula o p
+if (p->prox == NULL) l->fim = p->ant;     // era o último
+else p->prox->ant = p->ant;               // o seguinte pula o p para trás
+free(p);
+```
+
+Se `p` é o primeiro, não há anterior para religar, e quem muda é o
+`inicio`. Se `p` é o último, não há seguinte, e quem muda é o `fim`. Um nó
+do meio passa pelos dois `else`. Um nó sozinho na lista passa pelos dois
+`if`, e a lista fica vazia, com `inicio` e `fim` em `NULL`.
+
+A seta a mais tem um preço em memória. Em 64 bits, `sizeof(No)` passa de 16
+para 24 bytes: 4 do `int`, 4 de preenchimento e dois ponteiros de 8. São 50%
+a mais por nó, o custo de poder voltar e de remover em O(1).
+
 > [!WARNING]
 > Com uma seta faltando, a lista dupla **parece certa**: se a inserção
 > esquecer o `ant`, só a volta sai errada. Imprima **nos dois sentidos**. Na
-> remoção, `p->ant->prox` no primeiro nó acessa `NULL`.
+> remoção, `p->ant->prox` no primeiro nó acessa `NULL`, e esquecer o `fim` o
+> deixa apontando para memória liberada.
 
 ### Exemplos de uso
 
@@ -1613,29 +1816,70 @@ gcc ~/LPEDC/material/E474.c ~/LPEDC/material/0079-lista.c -o ~/LPEDC/material/E4
 
 ### Conceito
 
-- **Lista circular**: lista encadeada em que o último nó aponta para o
-  **primeiro**, e não para `NULL`. Os nós formam um anel (FEOFILOFF, 2009,
-  cap. 4).
-- **Para que serve**: rodízios, como a vez dos jogadores e a divisão da CPU
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 4).
-- **Ponteiro para o último**: o primeiro é `ultimo->prox`. Inserir no início
-  **e** no fim custa O(1); inserir no fim é inserir no início e declarar o
-  novo como último (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 4).
-- **Percorrer**: sem `NULL`, o laço para ao **voltar ao ponto de partida**.
-  O certo é o **do-while** (0021), que roda o corpo antes de testar; a lista
-  vazia (`ultimo == NULL`) é tratada antes (CELES; RANGEL, 2002).
-- **Girar e juntar**: girar a roda é `ultimo = ultimo->prox`; juntar duas
-  listas circulares é trocar dois ponteiros, O(1).
-- **Circular dupla**: o círculo fecha nos dois sentidos, como no Cormen, com
-  uma sentinela (CORMEN et al., 2024, cap. 10).
-- **Problema de Josephus**: pessoas em roda eliminam uma a cada k passos;
-  tira-se nós do anel até sobrar um que aponta para si mesmo (FEOFILOFF,
-  2009, cap. 4).
+Algumas tarefas não têm fim, só "o próximo". O garçom do rodízio serve as
+mesas 3, 7, 12 e 15 e, depois da última, volta à 3. No jogo de tabuleiro, a
+vez passa de jogador em jogador e, depois do último, volta ao primeiro. Numa
+lista encadeada comum, o último nó aponta para `NULL`, e o programa teria de
+perceber o fim e pular de volta ao início a cada volta.
+
+Pense numa roda de ciranda: cada pessoa segura a mão da seguinte, e a última
+segura a mão da primeira. Não há ponta solta. Uma **lista circular** é uma
+lista encadeada em que o último nó aponta para o **primeiro**, e não para
+`NULL`, e os nós formam um anel (FEOFILOFF, 2009, cap. 4). Ela serve para
+rodízios em geral, como a vez dos jogadores ou a divisão do tempo da CPU entre
+os programas que estão rodando (TENENBAUM; LANGSAM; AUGENSTEIN, 1995,
+cap. 4).
+
+Numa lista circular, convém guardar o ponteiro para o **último** nó, e não
+para o primeiro. Parece estranho, mas o primeiro está a uma seta de
+distância: é `ultimo->prox`. Com o último em mãos, você alcança as duas
+pontas sem percorrer nada, e inserir no início **e** no fim custa O(1)
+(TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 4). Inserir no início é encaixar
+o novo nó entre o último e o primeiro. Inserir no fim é a mesma coisa, com
+um passo a mais: depois de encaixar, declare o novo nó como o último. No
+anel, início e fim são vizinhos, e só o ponteiro `ultimo` diz quem é quem.
+
+Se a lista guardasse o primeiro, inserir no início exigiria mudar a seta do
+último para o novo primeiro, e achar o último custa percorrer o anel inteiro,
+O(n).
+
+Percorrer pede um cuidado novo. Não existe `NULL` para parar o laço; ele para
+ao **voltar ao ponto de partida**. Só que o laço começa justamente no ponto
+de partida, e um `while (p != primeiro)` testaria a condição antes de andar e
+não rodaria nem uma vez. O laço certo é o **do-while** (assunto 0021), que
+executa o corpo antes de testar. A lista vazia, `ultimo == NULL`, não tem
+primeiro, e é tratada antes do laço (CELES; RANGEL, 2002):
+
+```c
+if (ultimo != NULL) {
+    No *p = ultimo->prox;      // começa no primeiro
+    do {
+        printf("%d ", p->valor);
+        p = p->prox;
+    } while (p != ultimo->prox); // parou quando voltou ao primeiro
+}
+```
+
+Duas operações saem quase de graça. **Girar** a roda, fazendo o primeiro
+virar o último, é só `ultimo = ultimo->prox`: nenhum nó muda, só o ponteiro de
+referência anda uma casa. **Juntar** duas listas circulares numa só é trocar
+dois ponteiros, as setas que fecham cada anel, também O(1).
+
+A lista dupla também pode ser circular: o último aponta para o primeiro pela
+frente, e o primeiro aponta para o último por trás. É a forma que o Cormen
+usa, com um nó **sentinela** que fica entre o fim e o começo e nunca guarda
+dado (CORMEN et al., 2024, cap. 10). O assunto 0174 volta a ela.
+
+Um problema clássico usa o anel: o **problema de Josephus**. Pessoas em roda
+eliminam uma a cada k passos, até sobrar uma. Na lista circular, isso vira
+andar k nós, remover o nó, e repetir até restar um nó que aponta para si
+mesmo (FEOFILOFF, 2009, cap. 4).
 
 > [!WARNING]
 > Na lista circular, `p` **nunca** vira `NULL`: um laço `p != NULL` não
-> termina. No `libera`, **corte o círculo** antes (`ultimo->prox = NULL`):
-> o seguinte do último é o primeiro, já liberado.
+> termina. No `libera`, **corte o círculo** antes (`ultimo->prox = NULL`) e
+> trate como lista comum: sem isso, o seguinte do último é o primeiro, já
+> liberado.
 
 ### Exemplos de uso
 
@@ -1896,28 +2140,74 @@ gcc ~/LPEDC/material/E479.c ~/LPEDC/material/0080-lista.c -o ~/LPEDC/material/E4
 
 ### Conceito
 
-- **TAD playlist** (`playlist.h` e `playlist.c`): quem usa vê a struct
-  `Musica` (título, artista, segundos) e as operações; os nós ficam
-  escondidos no `.c` (CELES; CERQUEIRA; RANGEL, 2016).
-- **Nó `Faixa`**: guarda uma `Musica`, `ant` e `prox`. A `struct playlist`
-  guarda `inicio`, `fim`, `atual` (a que toca), `tamanho` e o `bool repetir`
-  (CELES; RANGEL, 2002).
-- **Adicionar**: inserção no fim da lista dupla (0079), O(1) com `fim`.
-- **Remover pelo título**: busca com `strcmp` (0077) e remoção dupla. Se era
-  a atual, o `atual` vai para a seguinte, ou para a anterior se era a última.
-- **Próxima e anterior**: `prox` e `ant`. Com repetir ligado, dão a volta
-  nas pontas como numa lista circular (0080).
-- **Salvar e carregar**: arquivo texto (módulo 09), uma música por linha,
-  `titulo;artista;segundos`, com `fgets` e `sscanf`.
-- **Para cada**: recebe um ponteiro para função e um `void *` (0050 e 0051),
-  sem expor os nós (KERNIGHAN; RITCHIE, 1989).
-- **Não é circular**: o último `prox` continua `NULL`. A volta é decisão da
-  função, então imprimir, liberar e salvar seguem com o `for` de sempre.
+Abra um player de música. Você pula faixas para a frente e para trás, tira
+uma da fila, liga o "repetir tudo" e, depois da última, a primeira volta a
+tocar. Ao fechar o app, a playlist continua lá na próxima vez. Por trás
+dessas ações estão quase todas as peças deste módulo, e montar o player é o
+jeito de vê-las trabalhando juntas.
+
+A playlist é uma fila de músicas com um marcador na que está tocando, como
+o dedo que acompanha a lista de um cardápio. O programa a organiza como um
+**TAD**, no molde do assunto 0074, dividido em `playlist.h` e `playlist.c`.
+Quem usa o TAD vê só a struct `Musica`, com título, artista e duração em
+segundos, e as operações: adicionar, remover, próxima, anterior, salvar. Os
+nós ficam escondidos no `.c` (CELES; CERQUEIRA; RANGEL, 2016).
+
+Dentro do `.c`, cada nó se chama `Faixa` e guarda uma `Musica` e duas setas,
+`ant` e `prox`: é a lista dupla do assunto 0079. A `struct playlist` guarda
+as duas pontas, `inicio` e `fim`, o `tamanho`, um `bool repetir` e um campo
+novo, `atual`, que aponta para a faixa que toca agora (CELES; RANGEL, 2002).
+Esse `atual` é um **cursor**: um ponteiro que marca uma posição da lista e
+anda por ela conforme o usuário pede.
+
+Cada operação reaproveita um assunto. **Adicionar** é a inserção no fim da
+lista dupla, O(1) graças ao ponteiro `fim`. **Remover pelo título** é a busca
+do assunto 0077, comparando com `strcmp`, seguida da remoção dupla, que
+desvia as duas setas que chegam no nó. Há um cuidado a mais: se a faixa
+removida era a atual, o cursor não pode ficar apontando para memória
+liberada. Ele vai para a faixa seguinte, ou para a anterior se a removida
+era a última.
+
+**Próxima** e **anterior** movem o cursor por `prox` e `ant`. Com o
+"repetir" ligado, elas dão a volta nas pontas, como numa lista circular
+(assunto 0080). A volta inteira mora numa função só:
+
+```c
+const Musica *playlist_proxima(Playlist *p) {
+    if (p->atual == NULL) return NULL;
+    if (p->atual->prox != NULL) p->atual = p->atual->prox;
+    else if (p->repetir) p->atual = p->inicio;  // dá a volta
+    else return NULL;                           // fim da playlist
+    return &p->atual->musica;
+}
+```
+
+Repare que a lista **não** é circular: o `prox` do último continua `NULL`. A
+volta é uma decisão da função, que olha o `repetir`. A vantagem é que
+imprimir, liberar e salvar continuam com o "for de lista" de sempre, sem o
+risco de laço infinito do anel.
+
+**Salvar** e **carregar** usam o arquivo texto do módulo 09, com uma música
+por linha no formato `titulo;artista;segundos`. Carregar lê cada linha com
+`fgets` e separa os campos com `sscanf`, que é o `scanf` lendo de uma string.
+
+Por fim, **para cada** permite ao cliente fazer algo com cada música, como
+contar as mais longas, sem ver os nós. A função recebe um ponteiro para
+função, que ela chama uma vez por música, e um `void *` com os dados extras
+dessa função, como nos assuntos 0050 e 0051 (KERNIGHAN; RITCHIE, 1989).
+
+Os tamanhos mostram o preço da organização. A `Musica` tem 40 + 30 bytes de
+texto, 2 de preenchimento e 4 do `int`, 76 bytes. A `Faixa` soma mais 4 de
+preenchimento e dois ponteiros, e `sizeof(Faixa)` dá 96. O `const Musica *`
+que `playlist_proxima` devolve aponta para **dentro** de uma faixa, e fica
+solto se essa faixa for removida depois.
 
 > [!WARNING]
 > `playlist_proxima(p)->titulo` acessa `NULL` quando a função devolve
 > `NULL`, o que ocorre na última música com repetir desligado: guarde o
-> ponteiro e teste antes de usar.
+> ponteiro e teste antes de usar. Copie texto com
+> `snprintf(destino, sizeof destino, "%s", origem)`, que corta em vez de
+> estourar o vetor como o `strcpy`.
 
 ### Exemplos de uso
 

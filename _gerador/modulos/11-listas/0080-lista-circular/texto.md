@@ -1,28 +1,69 @@
 ## 0080 · Lista circular
 
-- **Lista circular**: lista encadeada em que o último nó aponta para o
-  **primeiro**, e não para `NULL`. Os nós formam um anel (FEOFILOFF, 2009,
-  cap. 4).
-- **Para que serve**: rodízios, como a vez dos jogadores e a divisão da CPU
-  (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 4).
-- **Ponteiro para o último**: o primeiro é `ultimo->prox`. Inserir no início
-  **e** no fim custa O(1); inserir no fim é inserir no início e declarar o
-  novo como último (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 4).
-- **Percorrer**: sem `NULL`, o laço para ao **voltar ao ponto de partida**.
-  O certo é o **do-while** (0021), que roda o corpo antes de testar; a lista
-  vazia (`ultimo == NULL`) é tratada antes (CELES; RANGEL, 2002).
-- **Girar e juntar**: girar a roda é `ultimo = ultimo->prox`; juntar duas
-  listas circulares é trocar dois ponteiros, O(1).
-- **Circular dupla**: o círculo fecha nos dois sentidos, como no Cormen, com
-  uma sentinela (CORMEN et al., 2024, cap. 10).
-- **Problema de Josephus**: pessoas em roda eliminam uma a cada k passos;
-  tira-se nós do anel até sobrar um que aponta para si mesmo (FEOFILOFF,
-  2009, cap. 4).
+Algumas tarefas não têm fim, só "o próximo". O garçom do rodízio serve as
+mesas 3, 7, 12 e 15 e, depois da última, volta à 3. No jogo de tabuleiro, a
+vez passa de jogador em jogador e, depois do último, volta ao primeiro. Numa
+lista encadeada comum, o último nó aponta para `NULL`, e o programa teria de
+perceber o fim e pular de volta ao início a cada volta.
+
+Pense numa roda de ciranda: cada pessoa segura a mão da seguinte, e a última
+segura a mão da primeira. Não há ponta solta. Uma **lista circular** é uma
+lista encadeada em que o último nó aponta para o **primeiro**, e não para
+`NULL`, e os nós formam um anel (FEOFILOFF, 2009, cap. 4). Ela serve para
+rodízios em geral, como a vez dos jogadores ou a divisão do tempo da CPU entre
+os programas que estão rodando (TENENBAUM; LANGSAM; AUGENSTEIN, 1995,
+cap. 4).
+
+Numa lista circular, convém guardar o ponteiro para o **último** nó, e não
+para o primeiro. Parece estranho, mas o primeiro está a uma seta de
+distância: é `ultimo->prox`. Com o último em mãos, você alcança as duas
+pontas sem percorrer nada, e inserir no início **e** no fim custa O(1)
+(TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 4). Inserir no início é encaixar
+o novo nó entre o último e o primeiro. Inserir no fim é a mesma coisa, com
+um passo a mais: depois de encaixar, declare o novo nó como o último. No
+anel, início e fim são vizinhos, e só o ponteiro `ultimo` diz quem é quem.
+
+Se a lista guardasse o primeiro, inserir no início exigiria mudar a seta do
+último para o novo primeiro, e achar o último custa percorrer o anel inteiro,
+O(n).
+
+Percorrer pede um cuidado novo. Não existe `NULL` para parar o laço; ele para
+ao **voltar ao ponto de partida**. Só que o laço começa justamente no ponto
+de partida, e um `while (p != primeiro)` testaria a condição antes de andar e
+não rodaria nem uma vez. O laço certo é o **do-while** (assunto 0021), que
+executa o corpo antes de testar. A lista vazia, `ultimo == NULL`, não tem
+primeiro, e é tratada antes do laço (CELES; RANGEL, 2002):
+
+```c
+if (ultimo != NULL) {
+    No *p = ultimo->prox;      // começa no primeiro
+    do {
+        printf("%d ", p->valor);
+        p = p->prox;
+    } while (p != ultimo->prox); // parou quando voltou ao primeiro
+}
+```
+
+Duas operações saem quase de graça. **Girar** a roda, fazendo o primeiro
+virar o último, é só `ultimo = ultimo->prox`: nenhum nó muda, só o ponteiro de
+referência anda uma casa. **Juntar** duas listas circulares numa só é trocar
+dois ponteiros, as setas que fecham cada anel, também O(1).
+
+A lista dupla também pode ser circular: o último aponta para o primeiro pela
+frente, e o primeiro aponta para o último por trás. É a forma que o Cormen
+usa, com um nó **sentinela** que fica entre o fim e o começo e nunca guarda
+dado (CORMEN et al., 2024, cap. 10). O assunto 0174 volta a ela.
+
+Um problema clássico usa o anel: o **problema de Josephus**. Pessoas em roda
+eliminam uma a cada k passos, até sobrar uma. Na lista circular, isso vira
+andar k nós, remover o nó, e repetir até restar um nó que aponta para si
+mesmo (FEOFILOFF, 2009, cap. 4).
 
 > [!WARNING]
 > Na lista circular, `p` **nunca** vira `NULL`: um laço `p != NULL` não
-> termina. No `libera`, **corte o círculo** antes (`ultimo->prox = NULL`):
-> o seguinte do último é o primeiro, já liberado.
+> termina. No `libera`, **corte o círculo** antes (`ultimo->prox = NULL`) e
+> trate como lista comum: sem isso, o seguinte do último é o primeiro, já
+> liberado.
 
 {{exemplo}}
 

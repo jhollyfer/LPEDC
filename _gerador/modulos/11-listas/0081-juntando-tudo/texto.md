@@ -1,27 +1,73 @@
 ## 0081 · Juntando tudo
 
-- **TAD playlist** (`playlist.h` e `playlist.c`): quem usa vê a struct
-  `Musica` (título, artista, segundos) e as operações; os nós ficam
-  escondidos no `.c` (CELES; CERQUEIRA; RANGEL, 2016).
-- **Nó `Faixa`**: guarda uma `Musica`, `ant` e `prox`. A `struct playlist`
-  guarda `inicio`, `fim`, `atual` (a que toca), `tamanho` e o `bool repetir`
-  (CELES; RANGEL, 2002).
-- **Adicionar**: inserção no fim da lista dupla (0079), O(1) com `fim`.
-- **Remover pelo título**: busca com `strcmp` (0077) e remoção dupla. Se era
-  a atual, o `atual` vai para a seguinte, ou para a anterior se era a última.
-- **Próxima e anterior**: `prox` e `ant`. Com repetir ligado, dão a volta
-  nas pontas como numa lista circular (0080).
-- **Salvar e carregar**: arquivo texto (módulo 09), uma música por linha,
-  `titulo;artista;segundos`, com `fgets` e `sscanf`.
-- **Para cada**: recebe um ponteiro para função e um `void *` (0050 e 0051),
-  sem expor os nós (KERNIGHAN; RITCHIE, 1989).
-- **Não é circular**: o último `prox` continua `NULL`. A volta é decisão da
-  função, então imprimir, liberar e salvar seguem com o `for` de sempre.
+Abra um player de música. Você pula faixas para a frente e para trás, tira
+uma da fila, liga o "repetir tudo" e, depois da última, a primeira volta a
+tocar. Ao fechar o app, a playlist continua lá na próxima vez. Por trás
+dessas ações estão quase todas as peças deste módulo, e montar o player é o
+jeito de vê-las trabalhando juntas.
+
+A playlist é uma fila de músicas com um marcador na que está tocando, como
+o dedo que acompanha a lista de um cardápio. O programa a organiza como um
+**TAD**, no molde do assunto 0074, dividido em `playlist.h` e `playlist.c`.
+Quem usa o TAD vê só a struct `Musica`, com título, artista e duração em
+segundos, e as operações: adicionar, remover, próxima, anterior, salvar. Os
+nós ficam escondidos no `.c` (CELES; CERQUEIRA; RANGEL, 2016).
+
+Dentro do `.c`, cada nó se chama `Faixa` e guarda uma `Musica` e duas setas,
+`ant` e `prox`: é a lista dupla do assunto 0079. A `struct playlist` guarda
+as duas pontas, `inicio` e `fim`, o `tamanho`, um `bool repetir` e um campo
+novo, `atual`, que aponta para a faixa que toca agora (CELES; RANGEL, 2002).
+Esse `atual` é um **cursor**: um ponteiro que marca uma posição da lista e
+anda por ela conforme o usuário pede.
+
+Cada operação reaproveita um assunto. **Adicionar** é a inserção no fim da
+lista dupla, O(1) graças ao ponteiro `fim`. **Remover pelo título** é a busca
+do assunto 0077, comparando com `strcmp`, seguida da remoção dupla, que
+desvia as duas setas que chegam no nó. Há um cuidado a mais: se a faixa
+removida era a atual, o cursor não pode ficar apontando para memória
+liberada. Ele vai para a faixa seguinte, ou para a anterior se a removida
+era a última.
+
+**Próxima** e **anterior** movem o cursor por `prox` e `ant`. Com o
+"repetir" ligado, elas dão a volta nas pontas, como numa lista circular
+(assunto 0080). A volta inteira mora numa função só:
+
+```c
+const Musica *playlist_proxima(Playlist *p) {
+    if (p->atual == NULL) return NULL;
+    if (p->atual->prox != NULL) p->atual = p->atual->prox;
+    else if (p->repetir) p->atual = p->inicio;  // dá a volta
+    else return NULL;                           // fim da playlist
+    return &p->atual->musica;
+}
+```
+
+Repare que a lista **não** é circular: o `prox` do último continua `NULL`. A
+volta é uma decisão da função, que olha o `repetir`. A vantagem é que
+imprimir, liberar e salvar continuam com o "for de lista" de sempre, sem o
+risco de laço infinito do anel.
+
+**Salvar** e **carregar** usam o arquivo texto do módulo 09, com uma música
+por linha no formato `titulo;artista;segundos`. Carregar lê cada linha com
+`fgets` e separa os campos com `sscanf`, que é o `scanf` lendo de uma string.
+
+Por fim, **para cada** permite ao cliente fazer algo com cada música, como
+contar as mais longas, sem ver os nós. A função recebe um ponteiro para
+função, que ela chama uma vez por música, e um `void *` com os dados extras
+dessa função, como nos assuntos 0050 e 0051 (KERNIGHAN; RITCHIE, 1989).
+
+Os tamanhos mostram o preço da organização. A `Musica` tem 40 + 30 bytes de
+texto, 2 de preenchimento e 4 do `int`, 76 bytes. A `Faixa` soma mais 4 de
+preenchimento e dois ponteiros, e `sizeof(Faixa)` dá 96. O `const Musica *`
+que `playlist_proxima` devolve aponta para **dentro** de uma faixa, e fica
+solto se essa faixa for removida depois.
 
 > [!WARNING]
 > `playlist_proxima(p)->titulo` acessa `NULL` quando a função devolve
 > `NULL`, o que ocorre na última música com repetir desligado: guarde o
-> ponteiro e teste antes de usar.
+> ponteiro e teste antes de usar. Copie texto com
+> `snprintf(destino, sizeof destino, "%s", origem)`, que corta em vez de
+> estourar o vetor como o `strcpy`.
 
 {{exemplo}}
 
