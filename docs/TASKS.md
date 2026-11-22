@@ -59,7 +59,7 @@ Provas recebidas: 11 cadernos de 2016 a 2023 em `_fontes/provas-ppgi.md`; só a 
 | 5.5 | Trilha de conceitos: os 189 assuntos em escada de pré-requisitos, priorizando o que cai na prova | Alta | Feita | `#trilha`; fonte em `_gerador/trilha/*.json`; `quiz.mjs --check` confere a ordem |
 | 5.6 | Guia de estudo em três partes (conceitos com fonte, exemplos, exercícios) nos 29 módulos e nos guias da raiz | Alta | Substituída por 5.7 | `DECISIONS.md` #12; `conferir-texto.py` exige a forma e a fonte; humanizer ainda não passou |
 | 5.7 | Curso como livro: cada assunto é um capítulo (conceito, exemplos, exercícios juntos), conceito em texto corrido com fonte nos 189 assuntos, README como sumário gerado | Alta | Feita | `DECISIONS.md` #13; `conferir-texto.py` reprova glossário; humanizer-pt ainda não passou |
-| 5.8 | Quiz: tópico 3 do edital separado em Lista, Fila, Pilha e Vetor e matriz, no painel e no filtro | Média | Feita | subtópicos 3.1 a 3.4 no `topico` de `_gerador/provas/*.json`; questão de mais de uma estrutura entra em todas |
+| 5.8 | Quiz: tópico 3 do edital separado em Lista, Fila, Pilha e Vetor e matriz, no painel e no filtro | Média | Feita | subtópicos 3.1 a 3.4 no `topico` de `_gerador/provas/*.json`; questão de mais de uma estrutura entra em todas; `PPGI.md` segue a mesma divisão |
 
 ---
 

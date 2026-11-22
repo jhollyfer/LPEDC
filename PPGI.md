@@ -57,19 +57,47 @@ fatia, referência para lista e o que uma função devolve.
 
 #### 3. Estruturas de dados elementares
 
+O quiz divide este tópico em quatro partes, as mesmas da tabela "O que caiu". A base vem antes
+das quatro.
+
+**Base: tipos, TAD e arquivos**
+
 | Edital | Onde estudar |
 | --- | --- |
 | tipos definidos pelo programador, struct, union, enum | [08 · Tipos compostos](08-structs.md) (0059–0065) |
 | TAD | 0074 e todo módulo a partir do 11 |
-| vetores, matrizes | [05 · Vetores](05-vetores-e-strings.md) (0037–0039), 0056 |
-| **VLA** | **0172** |
 | tipos com e sem sinal, bits | 0003, 0065 e **0171** |
+| arquivos texto e binários | [09 · Arquivos](09-arquivos.md) (0067–0068) |
+
+**3.1 · Lista**
+
+| Edital | Onde estudar |
+| --- | --- |
 | lista em vetor | 0075 |
 | lista ligada, circular, dupla | [11 · Listas](11-listas.md) (0076–0080) |
 | lista **com sentinela** | **0174** ([28 · Complementos](28-estruturas-complementos.md)) |
-| pilhas, filas, filas circulares, deques | [12 · Pilhas e filas](12-pilhas-e-filas.md) (0082–0087) |
+
+**3.2 · Fila**
+
+| Edital | Onde estudar |
+| --- | --- |
+| filas, filas circulares, deques | [12 · Pilhas e filas](12-pilhas-e-filas.md) (0085–0087) |
 | fila de prioridade | 0102 |
-| arquivos texto e binários | [09 · Arquivos](09-arquivos.md) (0067–0068) |
+
+**3.3 · Pilha**
+
+| Edital | Onde estudar |
+| --- | --- |
+| pilhas em vetor e encadeada | [12 · Pilhas e filas](12-pilhas-e-filas.md) (0082–0083) |
+| parênteses, notação pós-fixa | 0084 |
+| recursão usa pilha (pilha de chamadas) | 0031 ([04 · Funções](04-funcoes.md)) |
+
+**3.4 · Vetor e matriz**
+
+| Edital | Onde estudar |
+| --- | --- |
+| vetores, matrizes | [05 · Vetores](05-vetores-e-strings.md) (0037–0039), 0056 |
+| **VLA** | **0172** |
 
 #### 4. Árvores
 
@@ -152,12 +180,17 @@ O que as provas de 2016 a 2023 cobraram, por tópico e por formato.
 
 As 11 provas de 2016 a 2023 somam 210 questões. O gabarito comentado de cada uma, com o link
 para o módulo, está em [`PROVAS.md`](PROVAS.md); só a de 2023 (edital 071/2023) tem gabarito
-oficial. Uma questão pode tocar dois tópicos, por isso a soma passa de 210.
+oficial. Uma questão pode tocar dois tópicos, por isso a soma passa de 210. No tópico 3, a questão que
+cobra pilha e fila conta nas duas linhas, e as quatro partes somam mais que 54.
 
 | Tópico do edital | Questões | Parte da prova |
 | --- | --- | --- |
 | 4 · Árvores (ABB, AVL, heap, árvore B, rubro-negra) | 70 | 33% |
-| 3 · Estruturas elementares (lista, pilha, fila) | 54 | 26% |
+| 3 · Estruturas elementares, no total | 54 | 26% |
+| 3.1 · Lista | 28 | 13% |
+| 3.3 · Pilha | 19 | 9% |
+| 3.2 · Fila | 11 | 5% |
+| 3.4 · Vetor e matriz | 9 | 4% |
 | 7 · Ordenação | 34 | 16% |
 | 5 · Hash | 22 | 10% |
 | 6 · Busca | 19 | 9% |
