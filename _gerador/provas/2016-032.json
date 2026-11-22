@@ -94,7 +94,7 @@
     },
     {
       "numero": 3,
-      "topico": 3,
+      "topico": "3.1",
       "formato": "conceito",
       "enunciado": "Quando um novo nó é removido no meio de uma lista encadeada dinâmica, qual das seguintes afirmações é verdadeira:",
       "alternativas": [
@@ -232,7 +232,7 @@
     },
     {
       "numero": 6,
-      "topico": 3,
+      "topico": "3.3",
       "formato": "conceito",
       "enunciado": "Uma estrutura de dados bastante útil quando deseja-se armazenar elementos para recupera-los posteriormente em ordem reversa a de inserção:",
       "alternativas": [
@@ -320,7 +320,7 @@
     },
     {
       "numero": 8,
-      "topico": 3,
+      "topico": "3.1",
       "formato": "código",
       "enunciado": "Considere os códigos de funções abaixo, assumindo que os mesmos são usados dentro de um programa e que os todos os cabeçalhos necessários são incluídos:\n\n```c\n/*QUADRO I) Código para inserir em uma lista\nencadeada. Cada nó da lista tem um campo\nprox, que é usado para encadea-lo ao próximo\nelemento, e tem um dado do tipo int. */\n/* prim é um ponteiro para o ponteiro ao\nprimeiro elemento da lista */\nvoid insere(tipoNo **prim, int d) {\n  tipoNo *aux;\n  aux = (tipoNo *)malloc(sizeof(tipoNo));\n  if(aux) { aux ->prox = *prim;\n    *prim = aux;\n    aux -> dado = d;\n  }\n}\n```\n\n```c\n/*QUADRO II) Código para remover primeiro\nelemento de uma lista encadeada. Cada nó da\nlista tem um campo prox, que é usado para\nencadea-lo ao próximo elemento, e tem um\ndado do tipo int. */\n/* prim é um ponteiro para o ponteiro ao\nprimeiro elemento da lista */\n1. void remove (tipoNo **prim){\n2.   tipoNo *aux;\n3.   if(*prim) { aux = *prim;\n4.     *prim = aux->prox;\n5.     free(*prim);\n6.     *prim = aux;\n7.   }\n8. }\n```\n\nMarque a alternativa correta dentre as afirmações abaixo:",
       "alternativas": [

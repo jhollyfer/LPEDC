@@ -100,7 +100,7 @@ window.PROVAS = [
    },
    {
     "numero": 3,
-    "topico": 3,
+    "topico": "3.1",
     "formato": "conceito",
     "enunciado": "Quando um novo nó é removido no meio de uma lista encadeada dinâmica, qual das seguintes afirmações é verdadeira:",
     "alternativas": [
@@ -241,7 +241,7 @@ window.PROVAS = [
    },
    {
     "numero": 6,
-    "topico": 3,
+    "topico": "3.3",
     "formato": "conceito",
     "enunciado": "Uma estrutura de dados bastante útil quando deseja-se armazenar elementos para recupera-los posteriormente em ordem reversa a de inserção:",
     "alternativas": [
@@ -331,7 +331,7 @@ window.PROVAS = [
    },
    {
     "numero": 8,
-    "topico": 3,
+    "topico": "3.1",
     "formato": "código",
     "enunciado": "Considere os códigos de funções abaixo, assumindo que os mesmos são usados dentro de um programa e que os todos os cabeçalhos necessários são incluídos:\n\n```c\n/*QUADRO I) Código para inserir em uma lista\nencadeada. Cada nó da lista tem um campo\nprox, que é usado para encadea-lo ao próximo\nelemento, e tem um dado do tipo int. */\n/* prim é um ponteiro para o ponteiro ao\nprimeiro elemento da lista */\nvoid insere(tipoNo **prim, int d) {\n  tipoNo *aux;\n  aux = (tipoNo *)malloc(sizeof(tipoNo));\n  if(aux) { aux ->prox = *prim;\n    *prim = aux;\n    aux -> dado = d;\n  }\n}\n```\n\n```c\n/*QUADRO II) Código para remover primeiro\nelemento de uma lista encadeada. Cada nó da\nlista tem um campo prox, que é usado para\nencadea-lo ao próximo elemento, e tem um\ndado do tipo int. */\n/* prim é um ponteiro para o ponteiro ao\nprimeiro elemento da lista */\n1. void remove (tipoNo **prim){\n2.   tipoNo *aux;\n3.   if(*prim) { aux = *prim;\n4.     *prim = aux->prox;\n5.     free(*prim);\n6.     *prim = aux;\n7.   }\n8. }\n```\n\nMarque a alternativa correta dentre as afirmações abaixo:",
     "alternativas": [
@@ -1142,7 +1142,7 @@ window.PROVAS = [
    },
    {
     "numero": 5,
-    "topico": 3,
+    "topico": "3.2",
     "formato": "simulação",
     "enunciado": "Considere uma estrutura de fila (disciplina FIFO) de números inteiros com duas operações: INSERE(n) e RETIRA( ). Considere, também, que a representação do estado da fila em um instante qualquer é realizada listando os elementos, de forma que o primeiro elemento, da esquerda para a direita, é o mais antigo presente na fila.\n\nSe a fila começa vazia, a sequência:\n\nINSERE(2) → INSERE(3) → RETIRA() → INSERE(1) → RETIRA() → INSERE(4) → INSERE(5) → RETIRA() → RETIRA()\n\nO estado final da fila será:",
     "alternativas": [
@@ -1189,7 +1189,7 @@ window.PROVAS = [
    },
    {
     "numero": 6,
-    "topico": 3,
+    "topico": "3.1",
     "formato": "conceito",
     "enunciado": "Marque a alternativa CORRETA.\nUma lista duplamente encadeada tem como característica ser formada por elementos que:",
     "alternativas": [
@@ -1283,7 +1283,10 @@ window.PROVAS = [
    },
    {
     "numero": 8,
-    "topico": 3,
+    "topico": [
+     "3.2",
+     "3.3"
+    ],
     "formato": "simulação",
     "enunciado": "Sabendo que as seguintes operações foram realizadas:\n\n1. Dados foram inseridos numa PILHA na seguinte ordem: 11, 12, 23, 14, 25, 50, 8, 18, 29, 10.\n2. Repetiu-se 10 vezes o par de operações: retirada da PILHA; inserção na FILA.\n3. A FILA foi exibida (impressa).\n4. Repetiu-se 10 vezes o par de operações: retirada da FILA; inserção na PILHA.\n5. A PILHA foi exibida (impressa).\n\nAs possíveis estruturas exibidas nas operações 3 e 5 são:\n\nI) FILA (começo) 10 - 29 - 18 - 8 - 50 - 25 - 14 - 23 - 12 - 11 (fim)\nII) PILHA: (topo) 11 - 12 - 23 - 14 - 25 - 50 - 8 - 18 - 29 - 10\nIII) PILHA: (topo) 10 - 29 - 18 - 8 - 50 - 25 - 14 - 23 - 12 - 11\nIV) FILA: (começo) 11 - 12 - 23 - 14 - 25 - 50 - 8 - 18 - 29 – 10 (fim)\nV) A PILHA mostrada fica com os elementos em ordem invertida dos dados de entrada\n\nAs estruturas exibidas CORRETAMENTE nas operações 3 e 5 são:",
     "alternativas": [
@@ -1330,7 +1333,7 @@ window.PROVAS = [
    },
    {
     "numero": 9,
-    "topico": 3,
+    "topico": "3.1",
     "formato": "código",
     "enunciado": "Os registros em uma lista duplamente encadeada com 20 elementos possuem, cada um, três campos:\n\n1. próximo: um ponteiro para o próximo elemento da lista;\n2. valor: informação armazenada pelo elemento;\n3. anterior: um ponteiro para o elemento anterior da lista.\n\nSendo \"Z\" o décimo elemento desta lista e \"X\" e \"Y\" dois outros elementos que não pertencem à lista, sendo apontados, respectivamente, pelos seguintes ponteiros \"PZ\", \"PX\" e \"PY\", considere o trecho de código abaixo.\n\n```\nPY->próximo = PX;\nPX->anterior = PY;\nPX->próximo = PZ->próximo;\nPZ->próximo->anterior = PX;\nPZ->próximo = PY;\nPY->anterior = PZ;\n```\n\nEste trecho de código é usado para inserir na lista os elementos:",
     "alternativas": [
@@ -1911,7 +1914,10 @@ window.PROVAS = [
   "questoes": [
    {
     "numero": 1,
-    "topico": 3,
+    "topico": [
+     "3.1",
+     "3.3"
+    ],
     "formato": "afirmações",
     "enunciado": "Avaliando as seguintes sentenças a respeito de estrutura de dados:\n\nI. A diferença entre árvore binária de busca e árvores AVL é o fato de que a segunda pode se reconfigurar dinamicamente, com o intuito de manter um bom nível de balanceamento.\nII. Uma pilha garante que o último elemento inserido seja localizado no seu topo. Porém, do ponto de vista conceitual, qualquer elemento da pilha pode ser removido, ainda que não esteja no seu topo.\nIII. Do ponto de vista conceitual, não há diferença alguma entre uma estrutura de array e uma lista encadeada.\nIV. Tabelas hash são estruturas de dados indicadas para armazenar grande volume de dados. Apesar dessas estruturas permitirem acesso indexado, mais de um elemento pode ter o mesmo índice. Elementos com o mesmo índice podem ser armazenados em uma mesma lista encadeada.\n\nÉ CORRETO afirmar que:",
     "alternativas": [
@@ -2072,7 +2078,7 @@ window.PROVAS = [
    },
    {
     "numero": 4,
-    "topico": 3,
+    "topico": "3.1",
     "formato": "afirmações",
     "enunciado": "Considere as seguintes afirmações sobre a estrutura lista encadeada dinâmica e marque a alternativa CORRETA.\n\nI. A busca em tal estrutura realiza menos comparações do que a melhor opção de algoritmo de busca em um vetor ordenado quando se considera o pior cenário para cada estrutura.\nII. É uma estrutura de dados usada para ordenar chaves por ser mais eficiente no processo de ordenação que o heapsort\nIII. É tipicamente utilizada como estrutura de dados básica na implementação de hash por endereçamento aberto",
     "alternativas": [
@@ -2123,7 +2129,7 @@ window.PROVAS = [
    },
    {
     "numero": 5,
-    "topico": 3,
+    "topico": "3.1",
     "formato": "código",
     "enunciado": "Dada uma lista encadeada onde cada nó da lista é do tipo No, cujos campos são um ponteiro para o próximo elemento (campo prox) e um dado do tipo inteiro (campo dado). Dado também quatro (4) opções (versões) de funções para realizar a busca por um elemento em uma lista encadeada, onde recebe-se um ponteiro para o primeiro elemento da lista e uma chave. A função de busca deve retornar 1 (um) caso encontre o elemento buscado e 0 (zero) em caso contrário.\n\nCom base nas informações anteriores, considere que: (1) a lista encadeada não possui um nó cabeça de lista, portanto todos os nós contém valores presentes na lista; (2) todos os tipos de dados foram previamente declarados no programa; (3) a função não deve ter problemas de alocação de memória, seja por deixar de alocar dinamicamente dados necessários ou por causar alocação dinâmica de dados desnecessária.\n\nAnalise as funções abaixo e marque a alternativa CORRETA\n\n```c\n/* versão I */\nint busca(No *prim, int chave) {\n  No *aux = (No *) malloc(sizeof(No));\n  aux = prim;\n  while(aux!= NULL) {\n    if(aux->dado == chave) return 1;\n    aux = aux>prox;\n  }\n  return 0;\n}\n\n/* versão II */\nint busca(No *prim, int chave) {\n  while(prim!= NULL) {\n    if(prim->dado == chave) return 1;\n    prim = prim->prox;\n  }\n  return 0;\n}\n\n/* versão III */\nint busca(No *prim, int chave) {\n  No * aux = prim;\n  while(prim->prox!= NULL) {\n    if(prim->dado == chave) return 1;\n    aux = aux->prox;\n  }\n  return 0;\n}\n\n/* versão IV */\nint busca(No *prim, int chave) {\n  No *aux = (No *) malloc(sizeof(No));\n  while(aux->prox!= NULL) {\n    if(aux->dado == chave) return 1;\n    aux = aux>prox;\n  }\n  return 0;\n}\n```",
     "alternativas": [
@@ -2174,7 +2180,7 @@ window.PROVAS = [
    },
    {
     "numero": 6,
-    "topico": 3,
+    "topico": "3.3",
     "formato": "simulação",
     "enunciado": "Após a inserção da sequencia de números 3, 4, 6, 8 e 9 em uma pilha, o resultado CORRETO de 3 remoções sucessivas seria:",
     "alternativas": [
@@ -2315,7 +2321,7 @@ window.PROVAS = [
    },
    {
     "numero": 9,
-    "topico": 3,
+    "topico": "3.2",
     "formato": "simulação",
     "enunciado": "Marque a alternativa CORRETA:\nConsidere uma estrutura de fila (disciplina FIFO) de números inteiros com duas operações: INSERE (n) e RETIRA ( ). Considere, também, que a representação do estado da fila em um instante qualquer é realizada listando os elementos, de forma que o primeiro elemento, da esquerda para a direita, é o mais antigo presente na fila.\n\nSe a fila começa vazia, a sequência:\n\nINSERE (b) → INSERE (c) → RETIRA ( ) → INSERE (a) → RETIRA ( ) → INSERE (e) → INSERE (e) → RETIRA ( ) → RETIRA ( )\n\nlevará a uma fila no estado:",
     "alternativas": [
@@ -2499,7 +2505,10 @@ window.PROVAS = [
    },
    {
     "numero": 13,
-    "topico": 3,
+    "topico": [
+     "3.1",
+     "3.3"
+    ],
     "formato": "código",
     "enunciado": "Dada uma lista encadeada onde cada nó da lista é do tipo No, cujos campos são um ponteiro para o próximo elemento (campo prox) e um dado do tipo inteiro (campo dado). Considere que: (1) a lista encadeada não possui um nó cabeça de lista, portanto todos os nós contém valores presentes na lista; (2) todos os tipos de dados foram previamente declarados no programa; (3) a função não deve ter problemas de alocação de memória, seja por deixar de alocar dinamicamente dados necessários ou por causar alocação dinâmica de dados desnecessária.\n\nMarque a alternativa CORRETA sobre as funções função I e função II\n\n```c\n/* função I */\nvoid funcaoI(No *prim, int chave) {\n  No *aux = (No *) malloc(sizeof(No));\n  aux ->chave = chave;\n  aux->prox = prim;\n  prim = aux;\n}\n\n/* função II */\nvoid funcaoI(No **prim, int chave) {\n  No *aux = (No *) malloc(sizeof(No));\n  aux ->chave = chave;\n  aux->prox = *prim;\n  *prim = aux;\n}\n```",
     "alternativas": [
@@ -2744,7 +2753,7 @@ window.PROVAS = [
    },
    {
     "numero": 18,
-    "topico": 3,
+    "topico": "3.1",
     "formato": "código",
     "enunciado": "Considere o código abaixo, assumindo que o mesmo é usado dentro de um programa e que os todos os cabeçalhos necessários são incluídos:\n\n```c\n// Conta ocorrências de uma chave na lista encadeada, retornando o total de ocorrências , zero caso a chave não ocorra\nint ContaOcorrenciasChave(tipoNo *prim, int chave) {\n  tipoNo *aux = prim;\n  int cont = 0;\n  int x;\n  for (x = 0; aux[x] != NULL; x++){\n    if(aux[x].dado == chave)\n      cont++;\n  }\n  return x;\n}\n```\n\nMarque a alternativa CORRETA dentre as afirmações abaixo:",
     "alternativas": [
@@ -2791,7 +2800,7 @@ window.PROVAS = [
    },
    {
     "numero": 19,
-    "topico": 3,
+    "topico": "3.1",
     "formato": "conceito",
     "enunciado": "Uma lista encadeada simples é uma estrutura que corresponde a uma sequência lógica de entradas ou nós. Cada nó armazena a localização do próximo elemento na sequência, ou seja, de seu nó sucessor.\n\nMarque a alternativa CORRETA:",
     "alternativas": [
@@ -2834,7 +2843,7 @@ window.PROVAS = [
    },
    {
     "numero": 20,
-    "topico": 3,
+    "topico": "3.1",
     "formato": "conceito",
     "enunciado": "Marque a alternativa CORRETA. Uma lista duplamente encadeada tem como característica ser formada por elementos que:",
     "alternativas": [
@@ -2930,7 +2939,7 @@ window.PROVAS = [
    },
    {
     "numero": 2,
-    "topico": 3,
+    "topico": "3.2",
     "formato": "conceito",
     "enunciado": "Marque a alternativa INCORRETA.\nEstrutura de Dados básicas como Fila são tipicamente usadas em uma gama variada de aplicações computacionais, EXCETO:",
     "alternativas": [
@@ -3334,7 +3343,7 @@ window.PROVAS = [
    },
    {
     "numero": 11,
-    "topico": 3,
+    "topico": "3.1",
     "formato": "afirmações",
     "enunciado": "Considere as seguintes afirmações sobre a estrutura lista encadeada dinâmica\n\nI. A busca em tal estrutura realiza menos comparações do que a melhor opção de algoritmo de busca em um vetor ordenado quando se considera o pior cenário para cada estrutura.\nII. É uma estrutura de dados usada unicamente no armazenamento de grandes quantidades de chaves por lista, dado o seu dinamismo e velocidade de busca quando comparada a outras estruturas de dados.\nIII. É utilizada como estrutura de dados na implementação de alguns tipos de hash.\n\nMarque a alternativa CORRETA:",
     "alternativas": [
@@ -3640,7 +3649,7 @@ window.PROVAS = [
    },
    {
     "numero": 17,
-    "topico": 3,
+    "topico": "3.3",
     "formato": "simulação",
     "enunciado": "Após a inserção da sequencia de números 10, 1, 3, 4, 6, 8 e 9 em uma pilha, o resultado de três (3) remoções sucessivas seria:",
     "alternativas": [
@@ -3683,7 +3692,10 @@ window.PROVAS = [
    },
    {
     "numero": 18,
-    "topico": 3,
+    "topico": [
+     "3.1",
+     "3.2"
+    ],
     "formato": "código",
     "enunciado": "Considere uma lista encadeada onde cada nó da lista é do tipo No, cujos campos são um ponteiro para o próximo elemento (campo prox) e um dado do tipo inteiro (campo dado). Considere que a lista encadeada não possui um nó cabeça de lista, portanto todos os nós contém valores presentes na lista. Considere que todos os tipos de dados foram previamente declarados no programa. Considere que a função não deve ter problemas de alocação de memória, seja por deixar de alocar dinamicamente dados necessários ou por causar alocação dinâmica de dados desnecessária.\n\n```c\n/* funcaoI */\nvoid funcaoI(No *prim, int chave) {\n  No *aux = (No *) malloc(sizeof(No));\n  aux->chave = chave;\n  aux->prox = prim;\n  prim = aux;\n}\n\n/* funcaoII */\nvoid funcaoII(No **prim, int chave) {\n  No *aux = (No *) malloc(sizeof(No));\n  aux->chave = chave;\n  aux->prox = *prim;\n  *prim = aux;\n}\n```\n\nDadas as considerações, pode-se dizer sobre as funções funcaoI e funcaoII que:",
     "alternativas": [
@@ -4204,7 +4216,7 @@ window.PROVAS = [
    },
    {
     "numero": 9,
-    "topico": 3,
+    "topico": "3.1",
     "formato": "código",
     "enunciado": "Os registros em uma lista, duplamente encadeada com 20 elementos possuem cada um três campos:\n\n- próximo: um ponteiro para o próximo elemento da lista;\n- valor: informação armazenada pelo elemento;\n- anterior: um ponteiro para o elemento anterior da lista.\n\nSendo \"Z\" o décimo elemento desta lista e \"X\" e \"Y\" dois outros elementos que não pertencem à lista, com seus respectivos ponteiros \"pZ\", \"pX\" e \"pY\", considere o trecho de código abaixo.\n\n```\npY↑.próximo = pX;\npX↑.anterior = pY;\npX↑.próximo = pZ↑.próximo;\npZ↑.próximo↑.anterior = pX;\npZ↑.próximo = pY;\npY↑.anterior = pZ;\n```\n\nEste trecho de código é usado para inserir na lista os elementos:",
     "alternativas": [
@@ -4385,7 +4397,7 @@ window.PROVAS = [
    },
    {
     "numero": 13,
-    "topico": 3,
+    "topico": "3.4",
     "formato": "conceito",
     "enunciado": "Considere uma estrutura de dados do tipo vetor. Com respeito a tal estrutura, é CORRETO que seus componentes são, caracteristicamente:",
     "alternativas": [
@@ -4663,7 +4675,7 @@ window.PROVAS = [
    },
    {
     "numero": 19,
-    "topico": 3,
+    "topico": "3.1",
     "formato": "conceito",
     "enunciado": "Marque a alternativa CORRETA. Uma lista encadeada simples é uma estrutura que corresponde a uma sequência lógica de entradas ou nós. Cada nó armazena a localização do próximo elemento na sequência, ou seja, de seu nó sucessor. Nessa estrutura:",
     "alternativas": [
@@ -4711,7 +4723,9 @@ window.PROVAS = [
    {
     "numero": 20,
     "topico": [
-     3,
+     "3.1",
+     "3.2",
+     "3.3",
      4
     ],
     "formato": "afirmações",
@@ -4823,7 +4837,7 @@ window.PROVAS = [
    },
    {
     "numero": 2,
-    "topico": 3,
+    "topico": "3.4",
     "formato": "conceito",
     "enunciado": "Matrizes são estruturas de dados de n-dimensões. Por simplicidade, chamaremos de matrizes as matrizes bidimensionais numéricas (que armazenam números inteiros). Sendo assim, marque a alternativa INCORRETA.",
     "alternativas": [
@@ -5055,7 +5069,8 @@ window.PROVAS = [
    {
     "numero": 7,
     "topico": [
-     3,
+     "3.1",
+     "3.3",
      4,
      5
     ],
@@ -5109,7 +5124,11 @@ window.PROVAS = [
    },
    {
     "numero": 8,
-    "topico": 3,
+    "topico": [
+     "3.1",
+     "3.2",
+     "3.3"
+    ],
     "formato": "conceito",
     "enunciado": "É INCORRETO afirmar que:",
     "alternativas": [
@@ -5200,7 +5219,8 @@ window.PROVAS = [
    {
     "numero": 10,
     "topico": [
-     3,
+     "3.2",
+     "3.3",
      4
     ],
     "formato": "simulação",
@@ -5296,7 +5316,7 @@ window.PROVAS = [
    },
    {
     "numero": 12,
-    "topico": 3,
+    "topico": "3.1",
     "formato": "conceito",
     "enunciado": "Lista circular encadeada é uma das estruturas de dados dinâmicas básicas. Uma questão que deve ser resolvida pelo algoritmo de busca em lista circular encadeada é:",
     "alternativas": [
@@ -5652,7 +5672,10 @@ window.PROVAS = [
    },
    {
     "numero": 20,
-    "topico": 3,
+    "topico": [
+     "3.2",
+     "3.3"
+    ],
     "formato": "simulação",
     "enunciado": "Dados os seguinte valores de entrada - 11, 12, 23, 14, 25, 50, 8, 18, 29, 10 -, insira-os em uma PILHA. Em seguida retire cada um dos valores da PILHA e insira numa FILA. Mostre a FILA. Depois retire os dados da FILA e insira na PILHA. Mostre a PILHA.\n\nAs valores MOSTRADOS ficam\n\nI. FILA (começo) 10 - 29 - 18 - 8 - 50 - 25 - 14 - 23 - 12 - 11 (fim)\nII. PILHA: (topo) 11 - 12 - 23 - 14 - 25 - 50 - 8 - 18 - 29 - 10\nIII. PILHA: (topo) 10 - 29 - 18 - 8 - 50 - 25 - 14 - 23 - 12 - 11\nIV. FILA: (começo) 11 - 12 - 23 - 14 - 25 - 50 - 8 - 18 - 29 – 10 (fim)\n\nEstá CORRETO o que se afirma APENAS em:",
     "alternativas": [
@@ -5798,7 +5821,7 @@ window.PROVAS = [
    },
    {
     "numero": 3,
-    "topico": 3,
+    "topico": "3.3",
     "formato": "simulação",
     "enunciado": "Considere a seguinte operação em uma pilha de tamanho 5:\nPush(1); Pop(); Push(2); Push(3); Pop(); Push(4); Pop(); Pop(); Push(5);\nApós a todos as operações serem realizadas, o número de elementos presentes na pilha é:",
     "alternativas": [
@@ -5895,7 +5918,7 @@ window.PROVAS = [
    },
    {
     "numero": 5,
-    "topico": 3,
+    "topico": "3.1",
     "formato": "conceito",
     "enunciado": "No pior dos casos, o número de comparações necessárias para pesquisar uma lista simplesmente encadeada de comprimento n para um dado elemento é",
     "alternativas": [
@@ -5942,7 +5965,7 @@ window.PROVAS = [
    },
    {
     "numero": 6,
-    "topico": 3,
+    "topico": "3.1",
     "formato": "código",
     "enunciado": "Qual é a saída da seguinte função que inicia apontando para o primeiro nó da seguinte lista encadeada?\n\n`1->2->3->4->5->6`\n\n```c\nvoid fun(struct node* start)\n{\n  if(start == NULL)\n    return;\n  printf(\"%d \", start->data);\n  if(start->next != NULL )\n    fun(start->next->next);\n  printf(\"%d \", start->data);\n}\n```",
     "alternativas": [
@@ -5989,7 +6012,7 @@ window.PROVAS = [
    },
    {
     "numero": 7,
-    "topico": 3,
+    "topico": "3.3",
     "formato": "conceito",
     "enunciado": "Qual estrutura de dados é comumente usada para implementar recursão?",
     "alternativas": [
@@ -6169,7 +6192,7 @@ window.PROVAS = [
    },
    {
     "numero": 11,
-    "topico": 3,
+    "topico": "3.1",
     "formato": "código",
     "enunciado": "Qual a função do seguinte trecho de código?\n\n```java\npublic void function(int data)\n{\n  int flag = 0;\n  if( head != null)\n  {\n    Node temp = head.getNext();\n    while((temp != head) && (!(temp.getItem() == data)))\n    {\n      temp = temp.getNext();\n      flag = 1;\n      break;\n    }\n  }\n  if(flag)\n    System.out.println(\"success\");\n  else\n    System.out.println(\"fail\");\n}\n```",
     "alternativas": [
@@ -6436,7 +6459,10 @@ window.PROVAS = [
    },
    {
     "numero": 17,
-    "topico": 3,
+    "topico": [
+     "3.2",
+     "3.3"
+    ],
     "formato": "conceito",
     "enunciado": "Quantas pilhas são necessárias para implementar uma fila. Considere a situação em que nenhuma outra estrutura de dados, como matrizes, lista encadeada está disponível.",
     "alternativas": [
@@ -6819,7 +6845,7 @@ window.PROVAS = [
    },
    {
     "numero": 5,
-    "topico": 3,
+    "topico": "3.1",
     "formato": "código",
     "enunciado": "Considere o código da função abaixo:\n\n```c\nvoid fun1(struct node* head)\n{\n  if(head == NULL)\n    return;\n  fun1(head->next);\n  printf(\"%d \", head->data);\n}\n```\n\nO que essa função faz, dada uma lista encadeada de valores inteiros como entrada?",
     "alternativas": [
@@ -6909,7 +6935,7 @@ window.PROVAS = [
    },
    {
     "numero": 7,
-    "topico": 3,
+    "topico": "3.1",
     "formato": "código",
     "enunciado": "A seguinte função em C usa uma lista simplesmente encadeada como argumento de entrada. Ela modifica a lista, movendo o último elemento para a frente da lista e retorna a lista modificada.\n\n```c\ntypedef struct node {\n  int value;\n  struct node *next;\n}Node;\n\nNode *move_to_front(Node *head) {\n  Node *p, *q;\n  if ((head == NULL || (head->next == NULL))\n    return head;\n  q = NULL; p = head;\n  while (p-> next !=NULL)\n  {\n    q = p;\n    p = p->next;\n  }\n  _ _ _ _ _ _ _ _ _ _ _ _ _ _\n  return head;\n}\n```\n\nCerta parte do código foi deixada em branco (linha tracejada). Escolha a alternativa CORRETA para substituir a linha em branco.",
     "alternativas": [
@@ -7038,7 +7064,7 @@ window.PROVAS = [
    },
    {
     "numero": 10,
-    "topico": 3,
+    "topico": "3.3",
     "formato": "conceito",
     "enunciado": "Qual das seguintes estruturas de dados é mais usada para implementar recursão?",
     "alternativas": [
@@ -7456,7 +7482,7 @@ window.PROVAS = [
    },
    {
     "numero": 19,
-    "topico": 3,
+    "topico": "3.1",
     "formato": "afirmações",
     "enunciado": "Considere uma lista duplamente encadeada não ordenada (com ponteiros na início e final da lista). Qual das seguintes operações a seguir pode ser implementada no tempo O(1)? Marque a alternativa CORRETA.\n\nI. Inserção na frente da lista encadeada\nII. Inserção no final da lista encadeada\nIII. Exclusão do nó frontal da lista encadeada\nIV. Exclusão do último nó da lista encadeada",
     "alternativas": [
@@ -7499,7 +7525,7 @@ window.PROVAS = [
    },
    {
     "numero": 20,
-    "topico": 3,
+    "topico": "3.2",
     "formato": "conceito",
     "enunciado": "Suponha que uma fila circular de elementos com capacidade (n - 1) seja implementada com um vetor de n elementos. Suponha que a operação de inserção e exclusão seja realizada usando REAR (último elemento da fila) e FRONT (primeiro elemento da fila) como variáveis de índice do vetor, respectivamente. Inicialmente, REAR = FRONT = 0. As condições para detectar a fila cheia e a fila vazia são:",
     "alternativas": [
@@ -7550,7 +7576,7 @@ window.PROVAS = [
   "questoes": [
    {
     "numero": 1,
-    "topico": 3,
+    "topico": "3.4",
     "formato": "código",
     "enunciado": "Indique qual é a saída correta do seguinte programa em python:\n\n```python\nclass Vector():\n   def __init__(self, row: list()):\n       self.row = row\n\n   def dot_product(self, column):\n       return sum(self.row[i] * column.row[i] for i in range(len(self.row)))\n\nvec_1 = Vector([0,2,0,0,5])\nvec_2 = Vector([1,0,3,4,0])\nprint(vec_1.dot_product(vec_2))\n```",
     "dica": "**Cobra:** calcular o produto escalar de dois vetores com um laço sobre os índices.\n\n- **Produto escalar** [0037]: soma, para cada índice `i`, de `a[i] * b[i]`; um só laço percorre os dois vetores na mesma posição. Ex.: `[1, 2]` e `[3, 4]` dão 1*3 + 2*4 = 11.\n- **Acumulador** [0025]: variável que começa em 0 e recebe um termo por volta do laço; um termo nulo não muda o total. Ex.: somar 2, 0, 5 faz 0 → 2 → 2 → 7.\n\n**Como atacar:** escreva o produto de cada par de posições e só então some.",
@@ -7718,7 +7744,10 @@ window.PROVAS = [
    },
    {
     "numero": 5,
-    "topico": 3,
+    "topico": [
+     "3.1",
+     "3.3"
+    ],
     "formato": "conceito",
     "enunciado": "Para a implementação eficiente (O(1)) de uma pilha usando lista simplesmente encadeada, onde os push's e pop's são executados?",
     "dica": "**Cobra:** em que ponta da lista simplesmente encadeada ficam o push e o pop para custar O(1).\n\n- **Pilha (LIFO)** [0082]: push e pop acontecem na mesma ponta, o topo; o último a entrar é o primeiro a sair. Ex.: push 1, push 2, pop devolve o 2.\n- **Lista simplesmente encadeada** [0076]: cada nó só aponta para o próximo; o início é alcançado em O(1) pela cabeça, e o último nó exige percorrer a lista, O(n), se não há ponteiro para o fim. Ex.: em 4 → 7 → 9, inserir antes do 4 mexe só na cabeça; chegar ao 9 custa dois saltos.\n\n**Como atacar:** veja qual ponta a lista alcança sem percorrer nada.",
@@ -7756,7 +7785,7 @@ window.PROVAS = [
    },
    {
     "numero": 6,
-    "topico": 3,
+    "topico": "3.4",
     "formato": "código",
     "enunciado": "Indique qual é a saída correta do seguinte programa escrito em python:\n\n```python\nclass Vector():\n   def __init__(self, row: list()):\n       self.row = row\n\n   def dot_product(self, column):\n       return sum(self.row[i] * column.row[i] for i in range(len(self.row)))\n\nvec_1 = Vector([1,2,3,4,5])\nvec_2 = vec_1\nvec_2.row[2] = 15\nprint(vec_1.row)\n```",
     "dica": "**Cobra:** a saída de um programa em que duas variáveis apontam para a mesma lista.\n\n- **Atribuição copia a referência** [0045]: em Python, `b = a` faz os dois nomes apontarem para o mesmo objeto, como copiar um ponteiro; não nasce uma lista nova. Ex.: com `a = [1, 2]` e `b = a`, `b[0] = 9` deixa `a` como `[9, 2]`.\n- **Índice de vetor** [0037]: a contagem começa em 0, então `v[2]` é o terceiro elemento. Ex.: em `[5, 6, 7]`, `v[2]` vale 7 e `v[0]` vale 5.\n\n**Como atacar:** pergunte quantas listas existem no programa e depois aplique a troca.",
@@ -7924,7 +7953,7 @@ window.PROVAS = [
    },
    {
     "numero": 10,
-    "topico": 3,
+    "topico": "3.4",
     "formato": "conceito",
     "enunciado": "Matrizes são estruturas de dados de n-dimensões que podem ser implementadas utilizando arrays (vetores). Por simplicidade, chamaremos de matrizes as matrizes bidimensionais numéricas (que armazenam números inteiros). Sendo assim, marque a alternativa INCORRETA.",
     "dica": "**Cobra:** achar a afirmação errada sobre matrizes bidimensionais.\n\n- **Produto de matrizes** [0039]: `A` (m×n) vezes `B` (n×p) só existe se as colunas de `A` forem as linhas de `B`, e o resultado tem as linhas de `A` e as colunas de `B`. Ex.: (2×3) · (3×4) dá uma matriz 2×4.\n- **Matriz m×n e dois laços** [0039]: tem m·n elementos, e um laço de linhas por fora e um de colunas por dentro, com um acumulador, visita todos. Ex.: uma 3×4 tem 12 posições e a soma faz 12 voltas.\n\n**Como atacar:** confira cada alternativa com uma matriz pequena e fique com a que falha.",
@@ -8042,7 +8071,7 @@ window.PROVAS = [
    },
    {
     "numero": 13,
-    "topico": 3,
+    "topico": "3.4",
     "formato": "código",
     "enunciado": "O que faz o código C abaixo?\n\n```c\n#include <stdio.h>\n#define MAX 50\n\nint main() {\n    int m, soma=0;\n    int mat[MAX][MAX];\n    scanf(\"%d\", &m);\n    for (int i=0; i<m; i++)\n        for (int j=0; j<m; j++)\n             scanf(\"%d\", &mat[i][j]);\n    for (int i=0; i<m; i++)\n        for (int j=i; j<m; j++)\n             soma += mat[i][j];\n    printf(\"%d\\n\", soma);\n}\n```",
     "dica": "**Cobra:** reconhecer que parte da matriz o laço duplo percorre.\n\n- **Laços aninhados** [0024]: o laço de dentro roda completo a cada passo do de fora, e seu início pode depender do `i`. Ex.: `i < 3` com `j = i` visita (0,0) (0,1) (0,2) (1,1) (1,2) (2,2): 6 pares.\n- **Diagonal principal** [0039]: elementos com `i == j`; acima dela `j > i` e abaixo `j < i`. Ex.: em 3×3, `mat[0][2]` está acima, `mat[2][0]` abaixo e `mat[1][1]` na diagonal.\n\n**Como atacar:** liste os pares (i, j) visitados numa matriz 3×3 e marque na grade.",
@@ -8126,7 +8155,7 @@ window.PROVAS = [
    },
    {
     "numero": 15,
-    "topico": 3,
+    "topico": "3.1",
     "formato": "código",
     "enunciado": "O que faz o seguinte código em C?\n\n```c\nLista* abracadabra (Lista* l, int v) {\n  Lista* novo = (Lista*) malloc(sizeof(Lista));\n  novo->info = v;\n  novo->prox = l;\n  novo->ant = NULL;\n  if (l) { l->ant = novo };\n  return novo;\n}\n```",
     "dica": "**Cobra:** ler uma função que cria um nó e descobrir onde ele entra numa lista duplamente encadeada.\n\n- **Lista duplamente encadeada** [0079]: cada nó aponta para o próximo (`prox`) e para o anterior (`ant`). Ex.: na lista 3 ⇄ 8, o nó 3 tem `ant = NULL` e `prox` apontando para o 8.\n- **Inserir no início × no fim** [0076]: no início o novo nó aponta para a antiga cabeça e vira a cabeça, em O(1); no fim é preciso andar até o último antes de ligar, em O(n). Ex.: inserir 9 no fim de 3 ⇄ 8 exige parar no 8.\n- **malloc e o retorno** [0054]: `malloc` reserva o nó no heap, e a função devolve o ponteiro que o chamador usa como lista. Ex.: `l = cria(l, 5);` troca a cabeça só se a função devolver o novo nó.\n\n**Como atacar:** marque quem aponta para quem depois de cada linha e veja qual nó a função devolve.",
@@ -8328,7 +8357,7 @@ window.PROVAS = [
    },
    {
     "numero": 20,
-    "topico": 3,
+    "topico": "3.1",
     "formato": "cálculo",
     "enunciado": "Considere as seguintes operações em uma lista implementada usando vetores: busca por um elemento, acesso por índice, inserção no início da lista, inserção no final da lista, remoção por índice. As complexidades do pior caso dessas operações, na ordem mencionada, são:",
     "dica": "**Cobra:** o pior caso de cada operação em uma lista implementada com vetor.\n\n- **Vetor: acesso e deslocamento** [0075]: o índice vai direto à posição, O(1); inserir ou remover no meio ou no início desloca os elementos seguintes, O(n). Ex.: inserir 9 no início de `[1, 2, 3]` move os três para a direita antes de gravar.\n- **Pior caso** [0072]: é o custo da entrada mais cara possível para aquela operação. Ex.: achar um valor ausente em 5 elementos custa 5 comparações.\n\n**Como atacar:** para cada operação, imagine quantos elementos precisam se mexer ou ser visitados.",
@@ -8454,7 +8483,7 @@ window.PROVAS = [
    },
    {
     "numero": 3,
-    "topico": 3,
+    "topico": "3.3",
     "formato": "simulação",
     "enunciado": "Dada a pilha de números inteiros [4, 16, 1, 7, 8, 13] onde o topo é o elemento mais à esquerda, após a realização de três (3) operações de desempilhar elementos, uma (1) operação de empilhar que insere o valor 5 e uma (1) operação de empilhar que insere o valor 2, a pilha ficará com qual configuração?",
     "dica": "**Cobra:** simular push e pop numa pilha em que o topo é o elemento mais à esquerda.\n\n- **Pilha (LIFO)** [0082]: push empilha e pop desempilha sempre no topo; o último a entrar é o primeiro a sair. Ex.: com topo à esquerda em `[3, 1]`, push 7 dá `[7, 3, 1]` e pop volta a `[3, 1]`.\n- **Onde fica o topo** [0082]: o enunciado diz de que lado está o topo; operar nele não move o resto. Ex.: com topo à direita em `[1, 2, 3]`, pop tira o 3 e push 9 deixa `[1, 2, 9]`.\n\n**Como atacar:** reescreva a pilha depois de cada operação, na ordem pedida.",
@@ -8749,7 +8778,7 @@ window.PROVAS = [
    },
    {
     "numero": 10,
-    "topico": 3,
+    "topico": "3.4",
     "formato": "simulação",
     "enunciado": "Qual é o resultado do seguinte pseudo-código na variável resultMatrix quando as entradas são duas matrizes \"matrixA\" e \"matrixB\" de dimensões m x n e n x p, respectivamente? Sendo m=2, n=3 e p=2\n\n```java\nint[][] matrixA = {{1, 0, 2}, {0, 5, 0}};\nint[][] matrixB = {{0, 8}, {9, 0}, {0, 11}};\nint[][] resultMatrix = new int[m][p];\n\nfor (int i = 0; i < m; i++) {\n    for (int j = 0; j < p; j++) {\n        int sum = 0;\n        for (int k = 0; k < n; k++) {\n            sum += matrixA[i][k] * matrixB[k][j];\n        }\n        resultMatrix[i][j] = sum;\n    }\n}\n```",
     "dica": "**Cobra:** o resultado do produto de duas matrizes calculado por três laços.\n\n- **Produto de matrizes** [0039]: cada `c[i][j]` é a soma de `a[i][k] * b[k][j]` para todo `k`, linha de `A` com coluna de `B`; o resultado é m×p. Ex.: linha `[1, 2]` com coluna `[3, 4]` dá 1*3 + 2*4 = 11.\n- **Três laços aninhados** [0024]: `i` percorre as linhas de `A`, `j` as colunas de `B` e `k` faz a soma, que zera a cada par (i, j). Ex.: matrizes 2×2 fazem 2*2*2 = 8 multiplicações.\n\n**Como atacar:** calcule cada posição do resultado como linha vezes coluna, na ordem de i e j.",
@@ -9069,7 +9098,7 @@ window.PROVAS = [
    },
    {
     "numero": 8,
-    "topico": 3,
+    "topico": "3.3",
     "formato": "afirmações",
     "enunciado": "Considere uma pilha que inicialmente estava vazia e na qual inseriu-se as chaves 2, 4 e 6, 8 e 10 nessa ordem. Sobre uma operação de remoção de elemento da mesma (retirada padrão de uma pilha), considerando-se que a estrutura de dados usada é uma lista encadeada, pode-se afirmar que:\n\nI) A remoção retira a chave 2\nII) A remoção da chave 10\nIII) Custo computacional proporcional ao tamanho da pilha\nIV) Custo computacional constante, não importando o tamanho da pilha",
     "dica": "**Cobra:** qual chave sai e qual o custo do pop numa pilha feita com lista encadeada.\n\n- **Pilha encadeada** [0083]: o topo é a cabeça da lista; push e pop mexem só na cabeça, em O(1). Ex.: com topo → 6 → 4, o pop devolve o 6 e `topo` passa a apontar para o 4.\n- **Pilha (LIFO)** [0082]: o último elemento inserido é o primeiro a ser removido, e não o mais antigo. Ex.: push 1, 2, 3 e pop tira o 3.\n\n**Como atacar:** descubra qual chave está no topo e qual é o custo de mexer na cabeça.",
@@ -9195,7 +9224,7 @@ window.PROVAS = [
    },
    {
     "numero": 11,
-    "topico": 3,
+    "topico": "3.4",
     "formato": "cálculo",
     "enunciado": "Marque a alternativa correta sobre os custos, no pior caso, dos melhores algoritmos conhecidos para inserir um elemento, remover um elemento e pesquisar por uma chave em um vetor que contenha n elementos, sendo a busca feita pelo campo usado para ordenar o vetor. Considere que o vetor sempre esteja ordenado antes da operação e permaneça ordenado após a operação. Pode-se dizer que as operações de inserção, remoção e busca nesse cenário têm, respectivamente, custo no pior caso:",
     "dica": "**Cobra:** o custo de inserir, remover e buscar num vetor que fica sempre ordenado.\n\n- **Inserir em vetor ordenado** [0075]: achar o lugar custa pouco, mas abrir a vaga desloca até n elementos, e isso domina. Ex.: inserir 0 em `[1, 2, 3, 4]` desloca os 4.\n- **Busca binária** [0090]: funciona porque a busca é pelo campo de ordenação, e custa O(log n). Ex.: com 8 elementos, até 4 comparações.\n- **Soma de custos** [0072]: quando duas etapas acontecem em sequência, o custo total é o da etapa maior. Ex.: n + log n ≤ 2n, logo O(n).\n\n**Como atacar:** some os custos de achar e de deslocar e fique com o maior.",
@@ -9469,7 +9498,7 @@ window.PROVAS = [
    },
    {
     "numero": 18,
-    "topico": 3,
+    "topico": "3.4",
     "formato": "código",
     "enunciado": "Dado o seguinte pseudocódigo Python, indique a saída correta que será impressa na tela do computador:\n\n```python\nimport numpy as np\n\nA = [[0, 2, 1],[1, 0, 0]]\nB = [[7, 0],[0, 10],[11, 0]]\n\ndef operacao_com_matrizes():\n    resultado = np.zeros((2,2))\n    for i in range(len(A)):\n        for j in range(len(B[0])):\n            for k in range(len(B)):\n                resultado[i][j] += A[i][k] * B[k][j]\n    return resultado\n\nprint(operacao_com_matrizes())\n```",
     "dica": "**Cobra:** a saída de um programa que multiplica duas matrizes com numpy.\n\n- **Produto de matrizes** [0039]: `resultado[i][j]` soma `A[i][k] * B[k][j]` sobre `k`; o resultado tem as linhas de `A` e as colunas de `B`. Ex.: `[[1, 2]]` vezes `[[3], [4]]` dá `[[11]]`.\n- **Formato da saída** [0037]: `np.zeros` cria números decimais, então a impressão traz ponto e espaçamento de colunas. Ex.: `np.zeros((1, 2))` imprime `[[0. 0.]]`.\n\n**Como atacar:** calcule cada posição do resultado como linha de A vezes coluna de B e confira o formato.",
@@ -9507,7 +9536,7 @@ window.PROVAS = [
    },
    {
     "numero": 19,
-    "topico": 3,
+    "topico": "3.3",
     "formato": "código",
     "enunciado": "Dado o seguinte pseudocódigo Python, indique a saída correta que será impressa na tela do computador quando a seguinte sequência de comandos é executada:\n\n```python\nclass Stack:\n    def __init__(self):\n        self.stack = []\n\n    def pushit(self,value):\n        self.stack.append(value)\n\n    def popit(self):\n        try:\n            self.stack.pop()\n        except:\n            print('empty stack')\n            self.stack = []\n```\n\nOs comandos executados são:\n\n```python\nstack = Stack(); stack.pushit(1); stack.pushit(3); stack.popit(); stack.popit(); stack.popit(); stack.pushit(2); stack.pushit(1); stack.popit(); print(stack.stack)\n```",
     "dica": "**Cobra:** a saída de uma pilha em Python que trata o pop numa pilha vazia.\n\n- **Pilha (LIFO)** [0082]: push e pop agem no topo; o último a entrar é o primeiro a sair. Ex.: push 1, push 2, pop tira o 2.\n- **Pilha vazia** [0082]: desempilhar sem elementos falha; aqui o `except` imprime a mensagem e reinicia a lista, e o programa segue. Ex.: push 5, push 6, pop, pop, pop: o terceiro pop encontra a pilha vazia.\n\n**Como atacar:** anote a pilha depois de cada comando e a mensagem na hora do erro, antes do `print` final.",

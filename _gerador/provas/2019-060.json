@@ -191,7 +191,7 @@
     },
     {
       "numero": 5,
-      "topico": 3,
+      "topico": "3.1",
       "formato": "código",
       "enunciado": "Considere o código da função abaixo:\n\n```c\nvoid fun1(struct node* head)\n{\n  if(head == NULL)\n    return;\n  fun1(head->next);\n  printf(\"%d \", head->data);\n}\n```\n\nO que essa função faz, dada uma lista encadeada de valores inteiros como entrada?",
       "alternativas": [
@@ -279,7 +279,7 @@
     },
     {
       "numero": 7,
-      "topico": 3,
+      "topico": "3.1",
       "formato": "código",
       "enunciado": "A seguinte função em C usa uma lista simplesmente encadeada como argumento de entrada. Ela modifica a lista, movendo o último elemento para a frente da lista e retorna a lista modificada.\n\n```c\ntypedef struct node {\n  int value;\n  struct node *next;\n}Node;\n\nNode *move_to_front(Node *head) {\n  Node *p, *q;\n  if ((head == NULL || (head->next == NULL))\n    return head;\n  q = NULL; p = head;\n  while (p-> next !=NULL)\n  {\n    q = p;\n    p = p->next;\n  }\n  _ _ _ _ _ _ _ _ _ _ _ _ _ _\n  return head;\n}\n```\n\nCerta parte do código foi deixada em branco (linha tracejada). Escolha a alternativa CORRETA para substituir a linha em branco.",
       "alternativas": [
@@ -405,7 +405,7 @@
     },
     {
       "numero": 10,
-      "topico": 3,
+      "topico": "3.3",
       "formato": "conceito",
       "enunciado": "Qual das seguintes estruturas de dados é mais usada para implementar recursão?",
       "alternativas": [
@@ -812,7 +812,7 @@
     },
     {
       "numero": 19,
-      "topico": 3,
+      "topico": "3.1",
       "formato": "afirmações",
       "enunciado": "Considere uma lista duplamente encadeada não ordenada (com ponteiros na início e final da lista). Qual das seguintes operações a seguir pode ser implementada no tempo O(1)? Marque a alternativa CORRETA.\n\nI. Inserção na frente da lista encadeada\nII. Inserção no final da lista encadeada\nIII. Exclusão do nó frontal da lista encadeada\nIV. Exclusão do último nó da lista encadeada",
       "alternativas": [
@@ -854,7 +854,7 @@
     },
     {
       "numero": 20,
-      "topico": 3,
+      "topico": "3.2",
       "formato": "conceito",
       "enunciado": "Suponha que uma fila circular de elementos com capacidade (n - 1) seja implementada com um vetor de n elementos. Suponha que a operação de inserção e exclusão seja realizada usando REAR (último elemento da fila) e FRONT (primeiro elemento da fila) como variáveis de índice do vetor, respectivamente. Inicialmente, REAR = FRONT = 0. As condições para detectar a fila cheia e a fila vazia são:",
       "alternativas": [

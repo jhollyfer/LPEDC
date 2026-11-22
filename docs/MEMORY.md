@@ -7,7 +7,7 @@
 
 | Atualizado | Fase atual | Progresso | Status |
 |---|---|---|---|
-| 2026-11-13 | 5 · Quiz e guia de estudo (concluída) | 24/24 tarefas | curso pronto para a prova de 2026-11-27 |
+| 2026-11-22 | 5 · Quiz e guia de estudo (concluída) | 25/25 tarefas | curso pronto para a prova de 2026-11-27 |
 
 ## Parou em
 
@@ -15,6 +15,9 @@ O curso lê como livro (`DECISIONS.md` #13). Cada assunto é um capítulo no `.m
 Conceito, Exemplos de uso e Exercícios juntos. Os 189 conceitos estão em texto corrido, com a fonte
 dentro do texto; o modelo é o 0005 printf. O README é o sumário, gerado pelo `gerar.mjs` a partir
 de `fases.json`, com link para cada assunto. O `conferir-texto.py` dá 0 problema nos 29 módulos.
+
+No quiz, o tópico 3 virou quatro subtópicos (3.1 Lista, 3.2 Fila, 3.3 Pilha, 3.4 Vetor e matriz),
+marcados à mão nas 54 questões; `quiz-navegador.mjs` passou nas 210.
 
 ## Próximos passos
 

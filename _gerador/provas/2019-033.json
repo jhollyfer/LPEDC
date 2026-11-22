@@ -93,7 +93,7 @@
     },
     {
       "numero": 3,
-      "topico": 3,
+      "topico": "3.3",
       "formato": "simulação",
       "enunciado": "Considere a seguinte operação em uma pilha de tamanho 5:\nPush(1); Pop(); Push(2); Push(3); Pop(); Push(4); Pop(); Pop(); Push(5);\nApós a todos as operações serem realizadas, o número de elementos presentes na pilha é:",
       "alternativas": [
@@ -184,7 +184,7 @@
     },
     {
       "numero": 5,
-      "topico": 3,
+      "topico": "3.1",
       "formato": "conceito",
       "enunciado": "No pior dos casos, o número de comparações necessárias para pesquisar uma lista simplesmente encadeada de comprimento n para um dado elemento é",
       "alternativas": [
@@ -230,7 +230,7 @@
     },
     {
       "numero": 6,
-      "topico": 3,
+      "topico": "3.1",
       "formato": "código",
       "enunciado": "Qual é a saída da seguinte função que inicia apontando para o primeiro nó da seguinte lista encadeada?\n\n`1->2->3->4->5->6`\n\n```c\nvoid fun(struct node* start)\n{\n  if(start == NULL)\n    return;\n  printf(\"%d \", start->data);\n  if(start->next != NULL )\n    fun(start->next->next);\n  printf(\"%d \", start->data);\n}\n```",
       "alternativas": [
@@ -276,7 +276,7 @@
     },
     {
       "numero": 7,
-      "topico": 3,
+      "topico": "3.3",
       "formato": "conceito",
       "enunciado": "Qual estrutura de dados é comumente usada para implementar recursão?",
       "alternativas": [
@@ -452,7 +452,7 @@
     },
     {
       "numero": 11,
-      "topico": 3,
+      "topico": "3.1",
       "formato": "código",
       "enunciado": "Qual a função do seguinte trecho de código?\n\n```java\npublic void function(int data)\n{\n  int flag = 0;\n  if( head != null)\n  {\n    Node temp = head.getNext();\n    while((temp != head) && (!(temp.getItem() == data)))\n    {\n      temp = temp.getNext();\n      flag = 1;\n      break;\n    }\n  }\n  if(flag)\n    System.out.println(\"success\");\n  else\n    System.out.println(\"fail\");\n}\n```",
       "alternativas": [
@@ -711,7 +711,10 @@
     },
     {
       "numero": 17,
-      "topico": 3,
+      "topico": [
+        "3.2",
+        "3.3"
+      ],
       "formato": "conceito",
       "enunciado": "Quantas pilhas são necessárias para implementar uma fila. Considere a situação em que nenhuma outra estrutura de dados, como matrizes, lista encadeada está disponível.",
       "alternativas": [

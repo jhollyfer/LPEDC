@@ -273,7 +273,7 @@
     },
     {
       "numero": 8,
-      "topico": 3,
+      "topico": "3.3",
       "formato": "afirmações",
       "enunciado": "Considere uma pilha que inicialmente estava vazia e na qual inseriu-se as chaves 2, 4 e 6, 8 e 10 nessa ordem. Sobre uma operação de remoção de elemento da mesma (retirada padrão de uma pilha), considerando-se que a estrutura de dados usada é uma lista encadeada, pode-se afirmar que:\n\nI) A remoção retira a chave 2\nII) A remoção da chave 10\nIII) Custo computacional proporcional ao tamanho da pilha\nIV) Custo computacional constante, não importando o tamanho da pilha",
       "dica": "**Cobra:** qual chave sai e qual o custo do pop numa pilha feita com lista encadeada.\n\n- **Pilha encadeada** [0083]: o topo é a cabeça da lista; push e pop mexem só na cabeça, em O(1). Ex.: com topo → 6 → 4, o pop devolve o 6 e `topo` passa a apontar para o 4.\n- **Pilha (LIFO)** [0082]: o último elemento inserido é o primeiro a ser removido, e não o mais antigo. Ex.: push 1, 2, 3 e pop tira o 3.\n\n**Como atacar:** descubra qual chave está no topo e qual é o custo de mexer na cabeça.",
@@ -396,7 +396,7 @@
     },
     {
       "numero": 11,
-      "topico": 3,
+      "topico": "3.4",
       "formato": "cálculo",
       "enunciado": "Marque a alternativa correta sobre os custos, no pior caso, dos melhores algoritmos conhecidos para inserir um elemento, remover um elemento e pesquisar por uma chave em um vetor que contenha n elementos, sendo a busca feita pelo campo usado para ordenar o vetor. Considere que o vetor sempre esteja ordenado antes da operação e permaneça ordenado após a operação. Pode-se dizer que as operações de inserção, remoção e busca nesse cenário têm, respectivamente, custo no pior caso:",
       "dica": "**Cobra:** o custo de inserir, remover e buscar num vetor que fica sempre ordenado.\n\n- **Inserir em vetor ordenado** [0075]: achar o lugar custa pouco, mas abrir a vaga desloca até n elementos, e isso domina. Ex.: inserir 0 em `[1, 2, 3, 4]` desloca os 4.\n- **Busca binária** [0090]: funciona porque a busca é pelo campo de ordenação, e custa O(log n). Ex.: com 8 elementos, até 4 comparações.\n- **Soma de custos** [0072]: quando duas etapas acontecem em sequência, o custo total é o da etapa maior. Ex.: n + log n ≤ 2n, logo O(n).\n\n**Como atacar:** some os custos de achar e de deslocar e fique com o maior.",
@@ -663,7 +663,7 @@
     },
     {
       "numero": 18,
-      "topico": 3,
+      "topico": "3.4",
       "formato": "código",
       "enunciado": "Dado o seguinte pseudocódigo Python, indique a saída correta que será impressa na tela do computador:\n\n```python\nimport numpy as np\n\nA = [[0, 2, 1],[1, 0, 0]]\nB = [[7, 0],[0, 10],[11, 0]]\n\ndef operacao_com_matrizes():\n    resultado = np.zeros((2,2))\n    for i in range(len(A)):\n        for j in range(len(B[0])):\n            for k in range(len(B)):\n                resultado[i][j] += A[i][k] * B[k][j]\n    return resultado\n\nprint(operacao_com_matrizes())\n```",
       "dica": "**Cobra:** a saída de um programa que multiplica duas matrizes com numpy.\n\n- **Produto de matrizes** [0039]: `resultado[i][j]` soma `A[i][k] * B[k][j]` sobre `k`; o resultado tem as linhas de `A` e as colunas de `B`. Ex.: `[[1, 2]]` vezes `[[3], [4]]` dá `[[11]]`.\n- **Formato da saída** [0037]: `np.zeros` cria números decimais, então a impressão traz ponto e espaçamento de colunas. Ex.: `np.zeros((1, 2))` imprime `[[0. 0.]]`.\n\n**Como atacar:** calcule cada posição do resultado como linha de A vezes coluna de B e confira o formato.",
@@ -700,7 +700,7 @@
     },
     {
       "numero": 19,
-      "topico": 3,
+      "topico": "3.3",
       "formato": "código",
       "enunciado": "Dado o seguinte pseudocódigo Python, indique a saída correta que será impressa na tela do computador quando a seguinte sequência de comandos é executada:\n\n```python\nclass Stack:\n    def __init__(self):\n        self.stack = []\n\n    def pushit(self,value):\n        self.stack.append(value)\n\n    def popit(self):\n        try:\n            self.stack.pop()\n        except:\n            print('empty stack')\n            self.stack = []\n```\n\nOs comandos executados são:\n\n```python\nstack = Stack(); stack.pushit(1); stack.pushit(3); stack.popit(); stack.popit(); stack.popit(); stack.pushit(2); stack.pushit(1); stack.popit(); print(stack.stack)\n```",
       "dica": "**Cobra:** a saída de uma pilha em Python que trata o pop numa pilha vazia.\n\n- **Pilha (LIFO)** [0082]: push e pop agem no topo; o último a entrar é o primeiro a sair. Ex.: push 1, push 2, pop tira o 2.\n- **Pilha vazia** [0082]: desempilhar sem elementos falha; aqui o `except` imprime a mensagem e reinicia a lista, e o programa segue. Ex.: push 5, push 6, pop, pop, pop: o terceiro pop encontra a pilha vazia.\n\n**Como atacar:** anote a pilha depois de cada comando e a mensagem na hora do erro, antes do `print` final.",

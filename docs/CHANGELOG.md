@@ -8,6 +8,9 @@ Mudanças do LPEDC que quem estuda percebe. Formato
 
 ### Mudado
 
+- No quiz, o tópico 3 do edital saiu separado: **3.1 Lista**, **3.2 Fila**, **3.3 Pilha** e
+  **3.4 Vetor e matriz**, cada um com o seu acerto e o seu filtro. Questão que mistura pilha e fila
+  aparece nos dois.
 - O curso lê como um livro. Cada assunto é um capítulo inteiro: **Conceito**, **Exemplos de uso** e
   **Exercícios**, um depois do outro, sem precisar pular de parte em parte.
 - O conceito voltou a ser explicação em texto corrido: parte do problema, dá a intuição com um caso

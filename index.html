@@ -356,15 +356,16 @@ kbd { font: 12px var(--font); border: 1px solid var(--control); border-radius: 4
   <main id="app" aria-live="polite"></main>
 </div>
 
-<script src="quiz/questoes.js?v=f5d230ae"></script>
+<script src="quiz/questoes.js?v=758fe033"></script>
 <script>
 'use strict'
 const REPO = 'https://github.com/jhollyfer/LPEDC/blob/main/'
 const CHAVE = 'lpedc-quiz-v1'
 const DIA_DA_PROVA = new Date('2026-11-27T08:00:00-04:00')
 const TOPICOS = {
-  1: 'Fundamentos', 2: 'Eficiência', 3: 'Lista, pilha e fila', 4: 'Árvores',
-  5: 'Hash', 6: 'Busca', 7: 'Ordenação', 8: 'Grafos',
+  1: 'Fundamentos', 2: 'Eficiência',
+  3.1: 'Lista', 3.2: 'Fila', 3.3: 'Pilha', 3.4: 'Vetor e matriz',
+  4: 'Árvores', 5: 'Hash', 6: 'Busca', 7: 'Ordenação', 8: 'Grafos',
 }
 const PROVAS = window.PROVAS ?? []
 const ASSUNTOS = window.ASSUNTOS ?? {}
@@ -373,7 +374,7 @@ const QUESTOES = PROVAS.flatMap((p) =>
     ...q,
     id: `${p.slug}-q${String(q.numero).padStart(2, '0')}`,
     edital: p.edital, slug: p.slug, ano: p.ano, oficial: p.oficial,
-    topicos: String(q.topico ?? '').split(/[^0-9]+/).filter(Boolean).map(Number),
+    topicos: String(q.topico ?? '').split(/[^0-9.]+/).filter(Boolean).map(Number),
   })),
 )
 const porId = new Map(QUESTOES.map((q) => [q.id, q]))
@@ -516,7 +517,7 @@ function iniciar(titulo, ids) {
 }
 
 // ---------- início ----------
-let filtroTopicos = new Set(ler('lpedc-topicos', []))
+let filtroTopicos = new Set(ler('lpedc-topicos', []).filter((t) => t in TOPICOS))
 
 function telaInicial() {
   rodada = null
@@ -574,7 +575,7 @@ function telaInicial() {
       <section class="painel s3 tp" aria-labelledby="t-topicos">
         <h2 id="t-topicos">Acerto por tópico</h2>
         <p class="texto-painel" style="color:var(--muted)">Toque para filtrar as provas e as embaralhadas.</p>
-        ${Object.entries(TOPICOS).map(topicoLinha).join('')}
+        ${Object.entries(TOPICOS).sort((a, b) => a[0] - b[0]).map(topicoLinha).join('')}
       </section>
 
       <section class="painel s6" aria-labelledby="t-erros">
