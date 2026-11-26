@@ -7,7 +7,7 @@
 
 | Atualizado | Fase atual | Progresso | Status |
 |---|---|---|---|
-| 2026-11-26 | 8 · Painel do quiz que ensina | 28/30 tarefas | piloto no ar, aguardando o aceite do dono |
+| 2026-11-26 | 8 · Painel do quiz que ensina (concluída) | 31/31 tarefas | quiz com aula em toda questão para a prova de 2026-11-27 |
 
 ## Parou em
 
@@ -22,22 +22,23 @@ de `fases.json`, com link para cada assunto. O `conferir-texto.py` dá 0 problem
 No quiz, o tópico 3 virou quatro subtópicos (3.1 Lista, 3.2 Fila, 3.3 Pilha, 3.4 Vetor e matriz),
 marcados à mão nas 54 questões; `quiz-navegador.mjs` passou nas 210.
 
-O painel da direita do quiz está em piloto (fase 8). Cada assunto citado pode ter uma aula em
+O painel da direita do quiz ensina o assunto (fase 8). Tem três abas: **Aula**, **Resumo** e
+**Para pensar**. Cada um dos 67 assuntos citados nas questões tem uma aula em
 `_gerador/aulas/NNNN.json` (o que é, como funciona, características, vantagens, desvantagens,
-exemplo passo a passo, custos, como a prova cobra). Questão de afirmações pode ter `contrapontos`,
-um por afirmação, que provocam sem dizer se é verdadeira ou falsa (o `quiz.mjs --check` barra as
-palavras que entregam). Depois de responder, o porquê aparece num bloco só no topo do painel, e não
-mais embaixo de cada alternativa. Prontas: aulas 0076, 0090, 0099 e 0101; contrapontos em 2016-032
-Q13, 2017-024 Q04 e Q12, 2018-061 Q19.
+exemplo, `passos` com figura, custos, como a prova cobra, fontes). As figuras dos passos usam os
+ícones do curso (`arvore`, `vetor`, `lista`, `pilha`, `hash`, `arvoreB`, `texto`) e saem em
+`quiz/figuras/aula-NNNN-k.svg`. Questão de afirmações tem `contrapontos`, um por afirmação, que
+provocam sem dizer se é verdadeira ou falsa (o `quiz.mjs --check` barra as palavras que entregam).
+Depois de responder, o porquê aparece num bloco só no topo do painel.
 
 ## Próximos passos
-
-0. Com o aceite do piloto, escrever as outras 62 aulas e os contrapontos das outras 52 questões de
-   afirmações (tarefas 8.2 e 8.3).
 
 Ao mudar a lista de arquivos Markdown ou seus títulos, atualize o índice com
 `node _gerador/conteudo.mjs`.
 
+0. As aulas e os contrapontos foram escritos por agentes a partir do `texto.md` de cada assunto e
+   não passaram pelo `humanizer-pt` nem por leitura completa do dono. Conferidas na tela: AVL,
+   heap, hash por encadeamento e recursão.
 1. Passar o `humanizer-pt` nos 189 conceitos reescritos (não estava disponível na sessão).
 2. Conferir à mão citações sem capítulo ou sem fonte apontadas na reescrita: 0018 (tabela de
    saltos), 0019 (Deitel cap. 4), 0058 (centavos), 0095 (Hoare 1960 no Cormen cap. 7), 0146
@@ -47,6 +48,10 @@ Ao mudar a lista de arquivos Markdown ou seus títulos, atualize o índice com
    livro; hoje seguem as três partes de #12.
 4. 0074: o 1º e o 2º bloco de código são iguais; trocar o 2º pelo `contador.h` (mexe em código).
 5. As questões dos módulos ainda usam 5 alternativas (A a E); as provas desde 2022 usam 4.
+6. Altura da árvore B com t = 100 e 1 milhão de chaves: a dica da 2017-055 Q10 diz "no máximo 2" e
+   a da 2019-033 Q13 diz "uns 3" (arestas contra níveis). Uniformizar.
+7. As figuras das aulas somam cerca de 20 MB porque cada SVG embute a fonte; dá para trocar por
+   uma fonte compartilhada.
 
 ## Contexto importante
 
@@ -66,6 +71,7 @@ Ao mudar a lista de arquivos Markdown ou seus títulos, atualize o índice com
 | 2026-11-10 | Revisão por busca de padrão (sed/grep) apresentada como leitura | Cada arquivo é lido inteiro; o agente entrega um registro por arquivo e a cobertura é conferida | revisão de texto em lote |
 | 2026-11-12 | Dica do quiz encurtada até virar tautologia, e bloco de código colado no texto quebrou o exemplo no celular; testei uma questão só | Cada conceito tem definição de 10+ palavras e `Ex.:`, conferido pelo `quiz.mjs --check`; toda mudança no quiz roda `quiz-navegador.mjs` nas 210 questões | quiz das provas |
 | 2026-11-13 | Conceito virou glossário em tópicos e o módulo foi partido em três blocos; o dono não conseguia estudar | Conceito é texto de livro (problema, intuição, definição com fonte, peça por peça) e o assunto fica inteiro; mudança de formato em lote começa por um piloto mostrado ao dono | todo texto de estudo |
+| 2026-11-26 | Painel do quiz só com definições curtas e o porquê embaixo de cada alternativa | No quiz o dono quer aprender na própria questão: aula com conceito da literatura, passo a passo desenhado, contraponto que não entrega a resposta e o porquê num bloco só à direita; tela limpa, sem caixa dentro de caixa | quiz das provas |
 | 2026-11-09 | Commits com agente como autor e coautor | Autor único Jhollyfer, sem linha de coautoria | todo commit |
 
 ## Problemas conhecidos
