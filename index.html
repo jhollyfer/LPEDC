@@ -236,6 +236,13 @@ code { font-family: var(--mono); font-size: .9em; }
 .aula-corpo table { font-size: 13px; }
 .aula-corpo th, .aula-corpo td { padding: 4px 8px 4px 0; vertical-align: top; text-align: left; }
 .aula-corpo table { width: 100%; }
+.antes .aula-corpo ol.passos { list-style: none; margin: 0 0 8px; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.antes .aula-corpo ol.passos > li { display: flex; gap: 10px; background: var(--surface); border-radius: 10px; padding: 10px; margin: 0; }
+.passos .passo-n { flex: none; width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 12px; font-weight: 600; display: grid; place-items: center; margin-top: 1px; }
+.passos li > div { min-width: 0; flex: 1; }
+.passos li > div > strong { display: block; margin-bottom: 2px; }
+.passos img { display: block; max-width: 100%; height: auto; background: #fff; border-radius: 8px; border: 1px solid var(--border); margin-top: 6px; }
+.aula-corpo .fontes { font-size: 13px; color: var(--muted); }
 .aula-fim { margin: 10px 0 0; }
 .aula-fim .ref::before { content: "Capítulo completo: "; color: var(--muted); font-weight: 400; }
 #porque-lado { scroll-margin-top: 12px; }
@@ -405,7 +412,7 @@ kbd { font: 12px var(--font); border: 1px solid var(--control); border-radius: 4
   </main>
 </div>
 
-<script src="quiz/questoes.js?v=447a4f0a"></script>
+<script src="quiz/questoes.js?v=fc973eb4"></script>
 <script>
 'use strict'
 const CHAVE = 'lpedc-quiz-v1'
@@ -779,9 +786,11 @@ function aulaDoAssunto(num, aberta) {
       ${lista('Características', a.caracteristicas)}
       ${lista('Vantagens', a.vantagens, 'pro')}
       ${lista('Desvantagens', a.desvantagens, 'contra')}
-      <h4>Exemplo passo a passo</h4>${md(a.exemplo)}
+      <h4>Exemplo</h4>${md(a.exemplo)}
+      ${a.passos?.length ? `<h4>Passo a passo</h4><ol class="passos">${a.passos.map((p, k) => `<li><span class="passo-n">${k + 1}</span><div>${p.titulo ? `<strong>${emLinha(p.titulo)}</strong>` : ''}${md(p.texto)}${p.svg ? `<img src="quiz/figuras/${p.svg}.svg" alt="${esc(p.alt ?? p.titulo ?? `passo ${k + 1}`)}" loading="lazy" onload="this.style.width=Math.round(this.naturalWidth*0.42)+'px'">` : ''}</div></li>`).join('')}</ol>` : ''}
       ${a.custos ? `<h4>Custos</h4>${md(a.custos)}` : ''}
       ${a.naprova ? `<h4>Como a prova cobra</h4>${md(a.naprova)}` : ''}
+      ${a.fontes?.length ? `<h4>Na literatura</h4><ul class="pontos fontes">${a.fontes.map((t) => `<li>${emLinha(t)}</li>`).join('')}</ul>` : ''}
       <p class="aula-fim">${linkAssunto(num)}</p>
     </div>
   </details>`

@@ -21,5 +21,182 @@
  ],
  "exemplo": "**Inserir 10, 20, 30** (caso Direita-Direita).\n\nDepois do 30, a árvore é uma cadeia. O nó 10 tem esquerda de altura 0 e direita de altura 2: fator -2.\n\n```\n10                 20\n  \\               /  \\\n   20     =>    10    30\n     \\\n      30\n```\n\nRotação simples à esquerda no 10: o 20 sobe, o 10 desce para a esquerda dele.\n\n**Inserir 30, 10, 20** (caso Esquerda-Direita).\n\nO 30 fica com fator +2, mas a chave entrou à **direita** do filho esquerdo. Uma rotação simples não resolve; são duas.\n\n```\n  30            30           20\n /             /            /  \\\n10      =>    20     =>   10    30\n  \\          /\n   20       10\n```\n\nPrimeiro rotação à esquerda no 10, depois rotação à direita no 30.\n\n**Continuando o primeiro exemplo: inserir 40 e 50.** O 40 entra à direita do 30 e nada desequilibra. O 50 entra à direita do 40, e o nó 30 fica com fator -2 (Direita-Direita). Rotação à esquerda no 30:\n\n```\n    20                 20\n   /  \\               /  \\\n 10    30     =>    10    40\n         \\               /  \\\n          40           30    50\n            \\\n             50\n```\n\nEm uma BST comum, 10, 20, 30, 40, 50 dariam uma cadeia de altura 5. Na AVL a altura ficou 3.",
  "custos": "| Operação | AVL | BST sem balanceamento (pior caso) |\n|---|---|---|\n| Buscar | `O(log n)` | `O(n)` |\n| Inserir | `O(log n)`, no máximo 1 rotação simples ou dupla | `O(n)` |\n| Remover | `O(log n)`, até `O(log n)` rotações | `O(n)` |",
- "naprova": "A banca mostra árvores e pergunta quais são AVL (calcule o fator em todos os nós), pede a árvore depois de inserir uma sequência (identifique o caso da rotação) e cobra a diferença entre inserção e remoção quanto ao número de rotações."
+ "naprova": "A banca mostra árvores e pergunta quais são AVL (calcule o fator em todos os nós), pede a árvore depois de inserir uma sequência (identifique o caso da rotação) e cobra a diferença entre inserção e remoção quanto ao número de rotações.",
+ "passos": [
+  {
+   "titulo": "Inserir 1, 2 e 3",
+   "texto": "O 2 é maior que 1 e vai à direita dele. O 3 é maior que 1 e que 2 e vai à direita do 2. Subindo do 3 para a raiz: o nó 1 tem esquerda de altura 0 e direita de altura 2. Fator -2, desbalanceou no 1. A chave entrou à direita do filho direito: caso Direita-Direita.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": 1,
+     "d": {
+      "v": 2,
+      "d": {
+       "v": 3
+      }
+     }
+    },
+    "estados": {
+     "1": "vermelho",
+     "3": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "Rotação à esquerda no 1",
+   "texto": "O filho direito (2) sobe e vira raiz; o 1 desce e vira filho esquerdo do 2; o 3 continua à direita do 2.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": 2,
+     "e": {
+      "v": 1
+     },
+     "d": {
+      "v": 3
+     }
+    },
+    "estados": {
+     "2": "verde"
+    }
+   }
+  },
+  {
+   "titulo": "Inserir 4",
+   "texto": "4 > 2, 4 > 3: entra à direita do 3. Fatores: nó 3 = -1, nó 2 = 1 - 2 = -1. Nenhum passou de 1, então não há rotação.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": 2,
+     "e": {
+      "v": 1
+     },
+     "d": {
+      "v": 3,
+      "d": {
+       "v": 4
+      }
+     }
+    },
+    "estados": {
+     "4": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "Inserir 5",
+   "texto": "Entra à direita do 4. Subindo: o 4 tem fator -1, o 3 tem esquerda 0 e direita 2: fator -2. O primeiro nó desbalanceado de baixo para cima é o 3, e é ele que gira, não a raiz. Caso Direita-Direita de novo.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": 2,
+     "e": {
+      "v": 1
+     },
+     "d": {
+      "v": 3,
+      "d": {
+       "v": 4,
+       "d": {
+        "v": 5
+       }
+      }
+     }
+    },
+    "estados": {
+     "3": "vermelho",
+     "5": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "Rotação à esquerda no 3",
+   "texto": "O 4 sobe para o lugar do 3; o 3 vira filho esquerdo do 4; o 5 fica à direita. O 2 nem percebe: a subárvore direita dele voltou à altura 2 que tinha antes.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": 2,
+     "e": {
+      "v": 1
+     },
+     "d": {
+      "v": 4,
+      "e": {
+       "v": 3
+      },
+      "d": {
+       "v": 5
+      }
+     }
+    },
+    "estados": {
+     "4": "verde"
+    }
+   }
+  },
+  {
+   "titulo": "Inserir 6",
+   "texto": "Entra à direita do 5. Subindo: nó 5 = -1; nó 4 = 1 - 2 = -1; nó 2 tem esquerda de altura 1 e direita de altura 3: fator -2. Agora o desbalanceado é a raiz. Caso Direita-Direita.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": 2,
+     "e": {
+      "v": 1
+     },
+     "d": {
+      "v": 4,
+      "e": {
+       "v": 3
+      },
+      "d": {
+       "v": 5,
+       "d": {
+        "v": 6
+       }
+      }
+     }
+    },
+    "estados": {
+     "2": "vermelho",
+     "6": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "Rotação à esquerda no 2",
+   "texto": "O 4 sobe e vira raiz; o 2 vira filho esquerdo do 4. O 3, que era filho esquerdo do 4, fica sem lugar e passa a ser filho **direito do 2**: ele é maior que 2 e menor que 4, então a ordem continua valendo. Resultado: altura 3, fator 0 na raiz. Em ordem: `1 2 3 4 5 6`.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": 4,
+     "e": {
+      "v": 2,
+      "e": {
+       "v": 1
+      },
+      "d": {
+       "v": 3
+      }
+     },
+     "d": {
+      "v": 5,
+      "d": {
+       "v": 6
+      }
+     }
+    },
+    "estados": {
+     "4": "verde",
+     "3": "amarelo"
+    }
+   }
+  }
+ ],
+ "fontes": [
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., problema 13-3 (árvores AVL).",
+  "Tenenbaum, Langsam e Augenstein, *Estruturas de dados usando C*, cap. 7 (busca: árvores balanceadas).",
+  "Ziviani, *Projeto de algoritmos*, 3. ed., cap. 5 (árvores de pesquisa)."
+ ]
 }

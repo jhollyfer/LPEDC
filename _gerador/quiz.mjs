@@ -91,9 +91,15 @@ function desenharFigura(nome, f) {
     caixa = ICONES.arvoreB(q, { id: 'a', x: MARGEM, y: topo, raiz: structuredClone(f.raiz) })
   } else if (f.tipo === 'vetor') {
     const itens = f.itens.map((v) => String(v ?? ''))
-    caixa = ICONES.array(q, { id: 'a', x: MARGEM, y: topo, itens, celula: f.celula })
+    caixa = ICONES.array(q, { id: 'a', x: MARGEM, y: topo, itens, celula: f.celula, estados: f.estados, nome: f.nome })
+    if (f.nome) caixa.a.h += 54
+  } else if (f.tipo === 'lista') {
+    caixa = ICONES.lista(q, { id: 'a', x: MARGEM, y: topo, itens: f.itens, cabeca: f.cabeca ?? 'inicio', dupla: f.dupla, circular: f.circular, estados: f.estados })
+  } else if (f.tipo === 'pilha') {
+    caixa = ICONES.pilha(q, { id: 'a', x: MARGEM + 20, y: topo + 20, itens: f.itens, estados: f.estados })
+    caixa.a.h += 40
   } else if (f.tipo === 'hash') {
-    caixa = ICONES.tabela(q, { id: 'a', x: MARGEM + 20, y: topo, baldes: f.baldes })
+    caixa = ICONES.tabela(q, { id: 'a', x: MARGEM + 20, y: topo, baldes: f.baldes, estados: f.estados })
     const maior = Math.max(...f.baldes.map((b) => (Array.isArray(b) ? b.length : 0)))
     caixa.a.w += maior * 150
   } else if (f.tipo === 'texto') {
@@ -218,6 +224,13 @@ function conferirAulas() {
     }
     if (!Array.isArray(a.caracteristicas) || a.caracteristicas.length < 2) e.push(`aula ${num}: menos de 2 características`)
     for (const campo of ['vantagens', 'desvantagens']) if (a[campo] && !Array.isArray(a[campo])) e.push(`aula ${num}: "${campo}" não é lista`)
+    if (!Array.isArray(a.fontes) || !a.fontes.length) e.push(`aula ${num}: sem fontes (livro e capítulo)`)
+    ;(a.passos ?? []).forEach((p, k) => {
+      if (!p.texto?.trim()) e.push(`aula ${num}: passo ${k + 1} sem texto`)
+      if (p.figura) {
+        try { desenharFigura(`aula-${num}-${k + 1}`, p.figura) } catch (x) { e.push(`aula ${num}: passo ${k + 1}, figura não desenha (${x.message})`) }
+      }
+    })
   }
   return e
 }
@@ -247,6 +260,16 @@ if (SO_CONFERIR) {
 
 mkdirSync(join(SAIDA, 'figuras'), { recursive: true })
 for (const [nome, f] of Object.entries(figuras)) writeFileSync(join(SAIDA, 'figuras', `${nome}.svg`), desenharFigura(nome, f))
+// figuras do passo a passo das aulas: quiz/figuras/aula-NNNN-k.svg
+let figurasDeAula = 0
+for (const [num, a] of Object.entries(AULAS))
+  (a.passos ?? []).forEach((p, k) => {
+    if (!p.figura) return
+    const nome = `aula-${num}-${k + 1}`
+    writeFileSync(join(SAIDA, 'figuras', `${nome}.svg`), desenharFigura(nome, p.figura))
+    p.svg = nome
+    figurasDeAula++
+  })
 
 // recorte original (PNG da prova) de cada questão, para comparar
 const originais = (slug, numero) => {
@@ -268,7 +291,7 @@ const dados = provas.map((p) => ({
 }))
 writeFileSync(
   join(SAIDA, 'questoes.js'),
-  `// Gerado por _gerador/quiz.mjs a partir de _gerador/provas/. Não edite à mão.\nwindow.ASSUNTOS = ${JSON.stringify(ASSUNTOS)}\nwindow.TRILHA = ${JSON.stringify(TRILHA)}\nwindow.AULAS = ${JSON.stringify(AULAS)}\nwindow.PROVAS = ${JSON.stringify(dados, null, 1)}\n`,
+  `// Gerado por _gerador/quiz.mjs a partir de _gerador/provas/. Não edite à mão.\nwindow.ASSUNTOS = ${JSON.stringify(ASSUNTOS)}\nwindow.TRILHA = ${JSON.stringify(TRILHA)}\nwindow.AULAS = ${JSON.stringify(AULAS, (k, v) => (k === 'figura' ? undefined : v))}\nwindow.PROVAS = ${JSON.stringify(dados, null, 1)}\n`,
 )
 // versão do questoes.js no index.html, para o navegador não misturar dados novos com cache velho
 const versao = createHash('sha1').update(readFileSync(join(SAIDA, 'questoes.js'))).digest('hex').slice(0, 8)

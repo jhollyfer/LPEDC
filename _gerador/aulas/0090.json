@@ -20,5 +20,10 @@
  ],
  "exemplo": "Procurar o **23** em 9 elementos:\n\n```\níndice: 0  1  2  3   4   5   6   7   8\nvalor:  2  5  8  12  16  23  38  56  72\n```\n\n| Passo | ini | fim | meio | v[meio] | Decisão |\n|---|---|---|---|---|---|\n| 1 | 0 | 8 | 4 | 16 | 23 > 16: vai para a direita |\n| 2 | 5 | 8 | 6 | 38 | 23 < 38: vai para a esquerda |\n| 3 | 5 | 5 | 5 | 23 | achou no índice 5 |\n\nForam 3 comparações. A sequencial faria 6.\n\nAgora procure o **7**, que não está: meio 4 (16, esquerda), meio 1 (5, direita), meio 2 (8, esquerda). Sobra `ini = 2` e `fim = 1`: o laço acaba e a resposta é \"não está\", com 3 comparações.",
  "custos": "| Caso | Busca binária | Busca sequencial |\n|---|---|---|\n| Melhor | `O(1)` (está no meio) | `O(1)` (está na primeira posição) |\n| Pior | `O(log n)` | `O(n)` |\n| Exige ordem? | sim | não |",
- "naprova": "Caem três coisas: a exigência de vetor ordenado, o número máximo de comparações (`⌊log₂ n⌋ + 1`) e a simulação, em que a banca pede a sequência de elementos visitados. Confira sempre como o meio é arredondado no código da questão."
+ "naprova": "Caem três coisas: a exigência de vetor ordenado, o número máximo de comparações (`⌊log₂ n⌋ + 1`) e a simulação, em que a banca pede a sequência de elementos visitados. Confira sempre como o meio é arredondado no código da questão.",
+ "fontes": [
+  "Ziviani, *Projeto de algoritmos*, 3. ed., cap. 5 (pesquisa sequencial e binária).",
+  "Tenenbaum, Langsam e Augenstein, *Estruturas de dados usando C*, cap. 7 (busca).",
+  "Feofiloff, *Algoritmos em linguagem C*, capítulo de busca em vetor ordenado."
+ ]
 }
