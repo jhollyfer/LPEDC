@@ -14,7 +14,7 @@
   "Equilibrada, guarda n nós em altura `O(log n)`. É a base da BST, do heap e da AVL."
  ],
  "desvantagens": [
-  "Se cada nó tiver um filho só, a árvore vira uma lista: altura n - 1, e a recursão pode estourar a pilha.",
+  "Se cada nó tiver um filho só, a árvore vira uma lista: altura n - 1 (em arestas), e a recursão pode estourar a pilha.",
   "Sem ponteiro para o pai, subir na árvore exige pilha ou recursão."
  ],
  "exemplo": "A conta `(8-3)*(4+2)` = 30 vira uma árvore de expressão: operadores nos nós internos (roxo), números nas folhas. Os passos fazem os quatro percursos nela; a nota ao lado de cada nó é a ordem em que ele é visitado.\n\n| Percurso | Resultado |\n|---|---|\n| pré-ordem | `* - 8 3 + 4 2` |\n| em ordem | `8 - 3 * 4 + 2` |\n| pós-ordem | `8 3 - 4 2 + *` |\n| por nível | `* - + 8 3 4 2` |",

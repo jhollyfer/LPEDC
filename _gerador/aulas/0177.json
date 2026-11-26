@@ -1,6 +1,6 @@
 {
  "num": "0177",
- "oque": "A árvore rubro-negra (vermelho-preto) é uma árvore binária de busca em que cada nó tem uma **cor**, vermelho ou preto, e as regras de cor garantem que nenhum caminho da raiz a uma folha seja mais que o dobro de outro. Com isso a altura fica em `O(log n)`.",
+ "oque": "A árvore rubro-negra (no Cormen, árvore vermelho-preto) é uma árvore binária de busca em que cada nó tem uma **cor**, vermelho ou preto, e as regras de cor garantem que nenhum caminho da raiz a uma folha seja mais que o dobro de outro. Com isso a altura fica em `O(log n)`.",
  "como": "As cinco propriedades (Cormen):\n\n1. todo nó é vermelho ou preto;\n2. a raiz é preta;\n3. toda folha (`T.nil`, o lugar do `NULL`) é preta;\n4. nó vermelho tem os dois filhos pretos (nunca dois vermelhos seguidos);\n5. de cada nó, todos os caminhos até as folhas passam pelo mesmo número de nós pretos.\n\nA **altura negra** `bh(x)` conta os pretos do caminho de `x` até uma folha, **sem** contar `x` e **contando** a `T.nil`.\n\n**Inserir:** desce como na BST, pendura o nó `z` e pinta de **vermelho** (não muda a contagem de pretos). Se o pai de `z` também é vermelho, a propriedade 4 quebrou, e o conserto olha o **tio** (irmão do pai):\n\n| Caso | Situação | O que fazer |\n|---|---|---|\n| 1 | tio **vermelho** | pai e tio pretos, avô vermelho; `z` vira o avô e o laço continua |\n| 2 | tio preto, `z` em **triângulo** (filho direito de filho esquerdo, ou o espelho) | gira no pai e cai no caso 3 |\n| 3 | tio preto, `z` em **linha** (filho esquerdo de filho esquerdo, ou o espelho) | pai preto, avô vermelho, gira no avô. Fim |\n\nNo fim, a raiz é pintada de preto.",
  "caracteristicas": [
   "Altura **h ≤ 2 log₂(n + 1)**: o caminho mais longo, alternando vermelho e preto, tem no máximo o dobro do mais curto, só de pretos.",
@@ -19,13 +19,13 @@
   "Muitos casos, principalmente na remoção (quatro, com espelhos).",
   "Precisa de ponteiro para o pai e da sentinela `T.nil`."
  ],
- "exemplo": "Vamos inserir **50, 30, 70, 20, 25, 40, 45**. O 20 cai no caso 1, o 25 nos casos 2 e 3, o 40 no caso 1 e o 45 no caso 3 espelhado. Legenda das figuras: nó vermelho aparece em vermelho com a nota `V`; nó preto aparece em roxo com a nota `P`. As folhas `T.nil`, pretas, não aparecem no desenho.",
- "custos": "| Operação | Rubro-negra | AVL | BST comum (pior caso) |\n|---|---|---|---|\n| Buscar | `O(log n)` | `O(log n)` | `O(n)` |\n| Inserir | `O(log n)`, até 2 rotações | `O(log n)`, 1 rotação simples ou dupla | `O(n)` |\n| Remover | `O(log n)`, até 3 rotações | `O(log n)`, até `O(log n)` rotações | `O(n)` |\n| Altura máxima | `2 log₂(n + 1)` | cerca de `1,44 log₂ n` | `n` |",
+ "exemplo": "Vamos inserir **50, 30, 70, 20, 25, 40, 45**. O 20 cai no caso 1, o 25 nos casos 2 e 3, o 40 no caso 1 e o 45 no caso 3 espelhado.",
+ "custos": "| Operação | Rubro-negra | AVL | BST comum (pior caso) |\n|---|---|---|---|\n| Buscar | `O(log n)` | `O(log n)` | `O(n)` |\n| Inserir | `O(log n)`, até 2 rotações | `O(log n)`, 1 rotação simples ou dupla | `O(n)` |\n| Remover | `O(log n)`, até 3 rotações | `O(log n)`, até `O(log n)` rotações | `O(n)` |\n| Altura máxima | `2 log₂(n + 1)` | cerca de `1,44 log₂ n` | `n - 1` |",
  "naprova": "A banca lista as propriedades (raiz preta, folha nula preta, vermelho só com filhos pretos: são da definição) e cobra a altura: no máximo `2 log₂(n + 1)`, não `log n`, e ela **não degenera**. Pegadinhas: \"toda subárvore é rubro-negra\" (a raiz da subárvore pode ser vermelha) e \"diferença de altura maior que 1 implica que não é balanceada\" (só exclui a AVL; a árvore do passo final tem diferença 2 na raiz e é rubro-negra).",
  "passos": [
   {
    "titulo": "Inserir 50, 30, 70",
-   "texto": "O 50 vira a raiz, preta (propriedade 2). O 30 entra à esquerda e o 70 à direita, os dois vermelhos. O pai deles é preto: nada a consertar. Legenda das figuras: nó vermelho aparece em vermelho com a nota `V`; nó preto aparece em roxo com a nota `P`.",
+   "texto": "O 50 vira a raiz, preta (propriedade 2). O 30 entra à esquerda e o 70 à direita, os dois vermelhos. O pai deles é preto: nada a consertar. Legenda das figuras: nó vermelho aparece em vermelho com a nota `V`; nó preto aparece em roxo com a nota `P`. As folhas `T.nil`, pretas, não aparecem no desenho.",
    "figura": {
     "tipo": "arvore",
     "raiz": {

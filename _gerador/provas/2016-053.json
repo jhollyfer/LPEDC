@@ -90,7 +90,7 @@
           "modulo": "04-funcoes.md"
         }
       ],
-      "dica": "**Cobra:** Achar o defeito em duas funções de fatorial.\n\n- **Recursão** [0032]: uma função recursiva chama a si mesma e precisa de um caso base e de uma chamada que se aproxime dele. Ex.: `int f(int n) { return n * f(n - 1); }` não tem caso base e nunca para.\n- **Retorno em todos os caminhos** [0028]: função com tipo de retorno deve devolver um valor em todos os caminhos de execução, não só em alguns. Ex.: `int sinal(int x) { if (x > 0) return 1; }` não devolve nada quando `x <= 0`.\n- **Laço sem condição** [0022]: um `for` com a condição vazia só termina por `break` ou `return`, senão roda sem parar. Ex.: `for (j = 1; ; j++)` não tem parada própria.\n\n**Como atacar:** procure em cada função o caso base, o retorno em todo caminho e a parada do laço.",
+      "dica": "**Cobra:** Dizer qual das duas funções de fatorial é recursiva.\n\n- **Recursão** [0032]: uma função recursiva chama a si mesma e precisa de um caso base e de uma chamada que se aproxime dele. Ex.: `int f(int n) { if (n <= 1) return 1; return n * f(n - 1); }`.\n- **Laço** [0022]: o `for` repete um bloco dentro da mesma chamada, sem a função chamar a si mesma, e isso é iteração. Ex.: `for (i = 0; i < n; i++) s = s + v[i];` soma o vetor sem chamada nenhuma.\n- **Retorno em todos os caminhos** [0028]: função com tipo de retorno deve devolver um valor em todos os caminhos; faltar um `return` é defeito de lógica. Ex.: `int sinal(int x) { if (x > 0) return 1; }` não devolve nada quando `x <= 0`.\n\n**Como atacar:** procure em cada corpo uma chamada à própria função e separe isso dos defeitos do código.",
       "contrapontos": [
         {
           "item": "A",
@@ -261,7 +261,7 @@
         }
       ],
       "gabarito": "E",
-      "resumo": "Na fila sai o mais antigo, o da esquerda. Escreva o estado depois de cada operação e não pule nenhuma: 4 inserções antes de [1 4 5] e 4 retiradas no total, sobra só o 5.",
+      "resumo": "Na fila sai o mais antigo, o da esquerda. Escreva o estado depois de cada operação e não pule nenhuma: 5 inserções e 4 retiradas, sobra só o 5.",
       "assuntos": [
         {
           "num": "0085",
@@ -695,7 +695,7 @@
         {
           "letra": "E",
           "texto": "maior ou igual a 2.",
-          "porque": "Isso valeria para árvore com ramificação mínima (como a B). Na AVL as folhas têm 0."
+          "porque": "Nenhuma árvore cumpre isso: toda árvore tem folhas, e folha tem grau 0. Na AVL o grau vai de 0 a 2."
         }
       ],
       "gabarito": "A",
@@ -1075,7 +1075,7 @@
         }
       ],
       "gabarito": "A",
-      "resumo": "Nível k de uma árvore binária completa tem 2^(k-1) nós (raiz no nível 1). Não confunda com o total acumulado até o nível k, que é 2^k - 1.",
+      "resumo": "Nível k de uma árvore binária cheia tem 2^(k-1) nós (raiz no nível 1). Não confunda com o total acumulado até o nível k, que é 2^k - 1. A questão usa 'completa' no sentido de nível 5 cheio: na definição do curso, o último nível de uma completa pode ter menos nós.",
       "assuntos": [
         {
           "num": "0097",

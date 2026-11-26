@@ -1,7 +1,7 @@
 {
  "num": "0103",
  "oque": "O heapsort ordena um vetor usando um heap de máximo montado nele mesmo: tira o maior, põe no fim e repete com o que sobrou. É uma ordenação por seleção em que achar o maior custa `O(log n)`, e não `O(n)`.",
- "como": "Duas fases, no mesmo vetor:\n\n- **Fase 1, construir o heap** (build-heap): cada pai desce, do índice `n/2 - 1` até 0. Custa `O(n)`.\n- **Fase 2, ordenar:** troca a raiz (o máximo) com o último do heap, encolhe o heap em uma casa e faz a nova raiz descer. Repete até sobrar um.\n\nNa fase 2 o vetor tem o heap no começo e a parte ordenada no fim. A fronteira anda uma casa para a esquerda a cada volta.\n\n```c\nvoid heapsort(int v[], int n) {\n  for (int i = n / 2 - 1; i >= 0; i--)\n    desce(v, n, i);         // fase 1\n  for (int fim = n - 1; fim > 0; fim--) {\n    troca(&v[0], &v[fim]);  // fase 2\n    desce(v, fim, 0);\n  }\n}\n```\n\nO `desce` é o do heap (0102). Na fase 2 ele recebe `fim`, o tamanho do heap, e não `n`; com `n`, a raiz enxergaria os já ordenados como filhos.",
+ "como": "Duas fases, no mesmo vetor:\n\n- **Fase 1, construir o heap** (build-heap): aplica o desce-heap em cada pai, do índice `n/2 - 1` até 0. Custa `O(n)`.\n- **Fase 2, ordenar:** troca a raiz (o máximo) com o último do heap, encolhe o heap em uma casa e aplica o desce-heap na nova raiz. Repete até sobrar um.\n\nNa fase 2 o vetor tem o heap no começo e a parte ordenada no fim. A fronteira anda uma casa para a esquerda a cada volta.\n\n```c\nvoid heapsort(int v[], int n) {\n  for (int i = n / 2 - 1; i >= 0; i--)\n    desce(v, n, i);         // fase 1\n  for (int fim = n - 1; fim > 0; fim--) {\n    troca(&v[0], &v[fim]);  // fase 2\n    desce(v, fim, 0);\n  }\n}\n```\n\nO `desce` é o desce-heap da aula Heap e fila de prioridade. Na fase 2 ele recebe `fim`, o tamanho do heap, e não `n`; com `n`, a raiz enxergaria os já ordenados como filhos.",
  "caracteristicas": [
   "Custa `O(n log n)` no melhor, no médio e no pior caso: nenhuma entrada deixa o heap mais alto que `log₂ n`.",
   "É **in-place**: usa `O(1)` de memória extra e nem precisa de recursão, porque a descida é um laço.",
@@ -268,7 +268,7 @@
   }
  ],
  "custos": "| Caso | Tempo |\n|---|---|\n| Melhor | `O(n log n)` |\n| Médio | `O(n log n)` |\n| Pior | `O(n log n)` |\n| Memória extra | `O(1)` |\n\nFase 1: `O(n)`. Fase 2: n - 1 descidas de até `log₂ n` níveis.\n\n| Algoritmo | Pior caso | Memória extra | Estável |\n|---|---|---|---|\n| heapsort | `O(n log n)` | `O(1)` | não |\n| merge sort | `O(n log n)` | `O(n)` | sim |\n| quick sort | `O(n²)` | pilha, `O(n)` no pior caso | não |",
- "naprova": "A banca cobra as propriedades: pior caso `O(n log n)` (melhor que o quick sort nesse quesito), memória extra constante e não estável. A pegadinha é dizer que o heapsort usa espaço extra proporcional a n ou a n², ou que é estável. Também aparece o heapify de um nó só: acompanhe o índice a cada troca com o maior filho.",
+ "naprova": "A banca cobra as propriedades: pior caso `O(n log n)` (melhor que o quick sort nesse quesito), memória extra constante e não estável. A pegadinha é dizer que o heapsort usa espaço extra proporcional a n ou a n², ou que é estável. Também aparece o desce-heap (heapify) de um nó só: acompanhe o índice a cada troca com o maior filho.",
  "fontes": [
   "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 6 (heapsort).",
   "Tenenbaum, Langsam e Augenstein, *Estruturas de dados usando C*, cap. 6 (classificação: heapsort).",

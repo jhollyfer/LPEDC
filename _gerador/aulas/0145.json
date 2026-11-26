@@ -6,7 +6,7 @@
   "Correspondência um para um com a árvore 2-3: link vermelho = duas chaves no mesmo nó 2-3.",
   "Altura no máximo cerca de `2 log₂ n`, porque o caminho mais longo alterna preto e vermelho.",
   "Busca, inserção e remoção em `O(log n)` no pior caso.",
-  "A clássica do Cormen (0177) aceita vermelho dos dois lados (equivale à 2-3-4) e conserta olhando o **tio**; a LLRB só aceita à esquerda e conserta com três `if` na volta.",
+  "A clássica do Cormen (veja a aula Rubro-negra clássica) aceita vermelho dos dois lados (equivale à 2-3-4) e conserta olhando o **tio**; a LLRB só aceita à esquerda e conserta com três `if` na volta.",
   "A árvore só ganha altura negra quando a inversão chega à raiz: cresce por cima, como a 2-3."
  ],
  "vantagens": [
@@ -19,8 +19,8 @@
   "Não é a versão cobrada no PPGI: a prova usa as 5 propriedades e os casos do tio do Cormen.",
   "A remoção é bem mais difícil que a inserção."
  ],
- "exemplo": "Vamos inserir as tags **30, 10, 20, 50, 40**. Legenda: a cor é a do link que chega no nó; vermelho aparece em vermelho com a nota `V`, preto aparece em roxo com a nota `P`. Ao lado de cada passo, a árvore 2-3 que a LLRB representa. No fim, ela é `[20 40]` com `[10]`, `[30]` e `[50]`: o link vermelho do 20 mostra que ele divide o nó com o 40.",
- "custos": "| Operação | LLRB | BST comum (pior caso) |\n|---|---|---|\n| Buscar | `O(log n)` | `O(n)` |\n| Inserir | `O(log n)`, consertos só no caminho de volta | `O(n)` |\n| Altura máxima | cerca de `2 log₂ n` | `n` |",
+ "exemplo": "Vamos inserir as tags **30, 10, 20, 50, 40**. Ao lado de cada passo, a árvore 2-3 que a LLRB representa. No fim, ela é `[20 40]` com `[10]`, `[30]` e `[50]`: o link vermelho do 20 mostra que ele divide o nó com o 40.",
+ "custos": "| Operação | LLRB | BST comum (pior caso) |\n|---|---|---|\n| Buscar | `O(log n)` | `O(n)` |\n| Inserir | `O(log n)`, consertos só no caminho de volta | `O(n)` |\n| Altura máxima | cerca de `2 log₂ n` | `n - 1` |",
  "naprova": "A banca não cobra os detalhes da LLRB; cobra a rubro-negra como **balanceada**, com altura `O(log n)`, que não degenera com chaves em ordem (quem degenera é a BST comum). Pegadinha: diferença de altura maior que 1 entre subárvores **não** prova que a árvore não é balanceada; só exclui a AVL. Rubro-negra admite isso.",
  "passos": [
   {
@@ -237,7 +237,7 @@
   },
   {
    "titulo": "No 20: rotação à esquerda",
-   "texto": "O 20 tem direito vermelho (40) e esquerdo preto (10): gira à esquerda. O 40 sobe com o preto do 20; o 20 fica vermelho à esquerda, com 10 e 30 embaixo. Três rotações e uma inversão nesta inserção. Altura 2, todo caminho com 2 links pretos. Na 2-3: `[20 40]` com `[10]`, `[30]` e `[50]`.",
+   "texto": "O 20 tem direito vermelho (40) e esquerdo preto (10): gira à esquerda. O 40 sobe com o preto do 20; o 20 fica vermelho à esquerda, com 10 e 30 embaixo. Três rotações e uma inversão nesta inserção. Altura 2 (em arestas), todo caminho com 2 links pretos. Na 2-3: `[20 40]` com `[10]`, `[30]` e `[50]`.",
    "figura": {
     "tipo": "arvore",
     "raiz": {

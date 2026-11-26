@@ -1,10 +1,10 @@
 {
  "num": "0146",
- "oque": "A árvore B é uma árvore de busca **balanceada** feita para disco: cada nó guarda **várias chaves em ordem** e tem um filho a mais do que chaves, e **todas as folhas ficam no mesmo nível**. Com nós gordos, a árvore fica baixa e cada busca lê poucos blocos do disco.",
+ "oque": "A árvore B é uma árvore de busca **balanceada** feita para disco: cada nó guarda **várias chaves em ordem** e tem um filho a mais do que chaves, e **todas as folhas ficam no mesmo nível**. Com muitas chaves por nó, a árvore fica baixa e cada busca lê poucos blocos do disco.",
  "como": "O tamanho dos nós é fixado pelo **grau mínimo** `t` (Cormen):\n\n- todo nó, menos a raiz, tem de `t - 1` a `2t - 1` chaves;\n- a raiz não vazia tem pelo menos 1 chave;\n- nó interno com `k` chaves tem `k + 1` filhos;\n- todas as folhas estão na mesma profundidade.\n\nOutros livros usam a **ordem `m`** (Knuth): no máximo `m` filhos e, fora a raiz e as folhas, pelo menos `⌈m/2⌉`. A árvore com `t = 2` (de 1 a 3 chaves) é a de ordem 4, também chamada **2-3-4**.\n\n**Buscar:** no nó, ande pelas chaves até a primeira `≥ k`. Igual, achou; senão desça pelo filho daquela posição.\n\n```c\nbool busca(NoB *x, int k) {\n    while (x != NULL) {\n        int i = 0;\n        while (i < x->n && k > x->chave[i])\n            i++;\n        if (i < x->n && k == x->chave[i])\n            return true;\n        if (x->folha)\n            return false;\n        x = x->filho[i];\n    }\n    return false;\n}\n```\n\n**Inserir:** a chave sempre entra numa **folha**, em ordem. Na descida, todo nó **cheio** (`2t - 1` chaves) encontrado é **dividido**: a chave do meio sobe para o pai e o resto vira dois nós de `t - 1` chaves. Se a raiz está cheia, a do meio vira uma raiz nova: a árvore só cresce **por cima**.",
  "caracteristicas": [
   "Todas as folhas no mesmo nível, sempre. Ela nunca degenera.",
-  "Altura `h ≤ log_t((n + 1) / 2)`: com `t` na casa das centenas, um bilhão de chaves cabe em altura 3.",
+  "Altura `h ≤ log_t((n + 1) / 2)`: com `t = 1000`, um bilhão de chaves fica em altura no máximo 2.",
   "Nó interno com `k` chaves tem `k + 1` filhos (ou: com `k` filhos, `k - 1` chaves).",
   "O balanceamento é **local**: a divisão só mexe no nó cheio e no pai, e acontece só quando um nó enche.",
   "Na remoção, um nó abaixo do mínimo pega uma chave emprestada do irmão (**redistribuição**) ou se junta a ele (**concatenação**, ou fusão). A divisão é da inserção.",
@@ -199,7 +199,7 @@
   },
   {
    "titulo": "Inserir 85: a raiz divide de novo",
-   "texto": "A raiz `[20 40 70]` está cheia: divide. O 40 vira a raiz nova, com `[20]` e `[70]` embaixo, cada um com seus dois filhos. Agora o 85 desce: 85 > 40, 85 > 70, folha `[80 90]`, que tem espaço: `[80 85 90]`. Altura 2, 4 divisões no total, e as quatro folhas continuam no mesmo nível.",
+   "texto": "A raiz `[20 40 70]` está cheia: divide. O 40 vira a raiz nova, com `[20]` e `[70]` embaixo, cada um com seus dois filhos. Agora o 85 desce: 85 > 40, 85 > 70, folha `[80 90]`, que tem espaço: `[80 85 90]`. Altura 2 (em arestas), 4 divisões no total, e as quatro folhas continuam no mesmo nível.",
    "figura": {
     "tipo": "arvoreB",
     "raiz": {

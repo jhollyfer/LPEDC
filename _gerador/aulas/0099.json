@@ -1,13 +1,13 @@
 {
  "num": "0099",
- "oque": "A árvore binária de busca (BST, ou árvore binária de pesquisa) é uma árvore binária com uma regra de ordem: em **todo** nó, as chaves da subárvore esquerda são menores que a dele e as da direita são maiores.",
- "como": "**Buscar:** comece na raiz e compare. Chave igual, achou. Chave menor, desça para a esquerda. Chave maior, desça para a direita. Chegou em `NULL`, a chave não está.\n\n**Inserir:** faça a mesma descida da busca. O lugar onde você cairia em `NULL` é o lugar do novo nó. Todo nó novo entra como **folha**; nada que já estava muda de lugar.\n\n```c\nstruct No *inserir(struct No *r, int chave) {\n    if (r == NULL) return novoNo(chave);\n    if (chave < r->chave) r->esq = inserir(r->esq, chave);\n    else if (chave > r->chave) r->dir = inserir(r->dir, chave);\n    return r;\n}\n```\n\nO custo das duas operações é o número de nós no caminho, ou seja, a **altura** da árvore.",
+ "oque": "A árvore binária de busca (BST, também chamada de árvore binária de pesquisa ou ABB) é uma árvore binária com uma regra de ordem: em **todo** nó, as chaves da subárvore esquerda são menores que a dele e as da direita são maiores.",
+ "como": "**Buscar:** comece na raiz e compare. Chave igual, achou. Chave menor, desça para a esquerda. Chave maior, desça para a direita. Chegou em `NULL`, a chave não está.\n\n**Inserir:** faça a mesma descida da busca. O lugar onde você cairia em `NULL` é o lugar do novo nó. Todo nó novo entra como **folha**; nada que já estava muda de lugar.\n\n```c\nstruct No *inserir(struct No *r, int chave) {\n    if (r == NULL) return novoNo(chave);\n    if (chave < r->chave)\n        r->esq = inserir(r->esq, chave);\n    else if (chave > r->chave)\n        r->dir = inserir(r->dir, chave);\n    return r;\n}\n```\n\nO custo das duas operações é o número de nós no caminho, no pior caso a altura + 1. Por isso as duas custam `O(h)`, com h a **altura** da árvore (em arestas).",
  "caracteristicas": [
   "A regra de ordem vale para a subárvore inteira, não só para os filhos diretos.",
   "O percurso **em ordem** (esquerda, raiz, direita) entrega as chaves em ordem crescente.",
   "O menor fica no fim do caminho só à esquerda; o maior, no fim do caminho só à direita.",
   "O formato depende da **ordem de inserção**: as mesmas chaves em outra ordem dão outra árvore.",
-  "Ela **não se rebalanceia** sozinha. Quem faz isso é a AVL ou a rubro-negra."
+  "Ela **não se rebalanceia** sozinha. Quem faz isso é a AVL (veja a aula AVL: balanceamento e rotações) ou a rubro-negra."
  ],
  "vantagens": [
   "Com a árvore equilibrada, busca, inserção e remoção custam `O(log n)`.",
@@ -208,7 +208,7 @@
   },
   {
    "titulo": "Caso degenerado: 10, 20, 30, 40",
-   "texto": "Cada chave é maior que todas as anteriores e vai sempre à direita. A árvore vira uma lista: 4 chaves e altura 3 (n - 1). Buscar o 40 passa pelos 4 nós, `O(n)`. Em ordem decrescente, a cadeia sai toda à esquerda.",
+   "texto": "Cada chave é maior que todas as anteriores e vai sempre à direita. A árvore vira uma lista: 4 chaves e altura 3 (n - 1, em arestas). Buscar o 40 passa pelos 4 nós, `O(n)`. Em ordem decrescente, a cadeia sai toda à esquerda.",
    "figura": {
     "tipo": "arvore",
     "raiz": {

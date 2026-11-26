@@ -1,9 +1,9 @@
 {
  "num": "0102",
  "oque": "O **heap de máximo** é uma árvore binária **completa** em que todo pai é maior ou igual aos filhos; por isso o maior de todos fica na raiz. Ele é o jeito clássico de implementar a **fila de prioridade**, a estrutura em que sai sempre o item de maior prioridade, e não o primeiro que chegou.",
- "como": "Duas regras:\n\n- **Forma:** a árvore é completa. Todos os níveis cheios, menos talvez o último, que se enche da esquerda para a direita, sem pular vaga.\n- **Ordem:** todo pai é `>=` aos filhos. Esquerda e direita não se comparam entre si.\n\nComo não há buracos, a árvore mora num vetor, nível por nível:\n\n| Quem | `v[0]` na raiz | Cormen, `A[1..n]` |\n|---|---|---|\n| pai de `i` | `(i - 1) / 2` | `⌊i/2⌋` |\n| filho esquerdo | `2i + 1` | `2i` |\n| filho direito | `2i + 2` | `2i + 1` |\n\n**Inserir:** põe no fim do vetor e **sobe**: troca com o pai enquanto for maior que ele.\n\n**Remover o máximo:** tira `v[0]`, leva o último para a raiz e **desce**: troca com o **maior** dos filhos enquanto for menor que ele.\n\n**Construir (build-heap):** com o vetor já cheio, faz cada pai descer, do último pai (`n/2 - 1`) até a raiz. As folhas já são heaps de um elemento.\n\n```c\nvoid desce(int v[], int n, int i) {\n  while (2 * i + 1 < n) {\n    int f = 2 * i + 1;      // filho esquerdo\n    if (f + 1 < n && v[f + 1] > v[f])\n      f++;            // o direito é maior\n    if (v[i] >= v[f]) break;\n    troca(&v[i], &v[f]);\n    i = f;\n  }\n}\n```",
+ "como": "Duas regras:\n\n- **Forma:** a árvore é completa. Todos os níveis cheios, menos talvez o último, que se enche da esquerda para a direita, sem pular vaga.\n- **Ordem:** todo pai é `>=` aos filhos. Esquerda e direita não se comparam entre si.\n\nComo não há buracos, a árvore mora num vetor, nível por nível:\n\n| Quem | `v[0]` na raiz | Cormen, `A[1..n]` |\n|---|---|---|\n| pai de `i` | `(i - 1) / 2` | `⌊i/2⌋` |\n| filho esquerdo | `2i + 1` | `2i` |\n| filho direito | `2i + 2` | `2i + 1` |\n\n**Inserir:** põe no fim do vetor e faz o **sobe-heap**: troca com o pai enquanto for maior que ele.\n\n**Remover o máximo:** tira `v[0]`, leva o último para a raiz e faz o **desce-heap** (no Cormen, MAX-HEAPIFY): troca com o **maior** dos filhos enquanto for menor que ele.\n\n**Construir** (build-heap, no Cormen BUILD-MAX-HEAP): com o vetor já cheio, aplica o desce-heap em cada pai, do último pai (`n/2 - 1`) até a raiz. As folhas já são heaps de um elemento.\n\n```c\nvoid desce(int v[], int n, int i) {\n  while (2 * i + 1 < n) {\n    int f = 2 * i + 1;      // filho esquerdo\n    if (f + 1 < n && v[f + 1] > v[f])\n      f++;            // o direito é maior\n    if (v[i] >= v[f]) break;\n    troca(&v[i], &v[f]);\n    i = f;\n  }\n}\n```",
  "caracteristicas": [
-  "A altura é sempre `⌊log₂ n⌋`, porque a árvore é completa. O heap nunca degenera.",
+  "A altura (em arestas) é sempre `⌊log₂ n⌋`, porque a árvore é completa. O heap nunca degenera.",
   "Só responde rápido a uma pergunta: \"quem é o maior?\". Buscar uma chave qualquer exige olhar o vetor todo, `O(n)`.",
   "Não usa ponteiros: pai e filhos saem de contas com o índice.",
   "Invertendo as comparações, você tem o **heap de mínimo**, com o menor na raiz e a descida pelo **menor** filho.",
@@ -18,7 +18,7 @@
  ],
  "desvantagens": [
   "Buscar ou remover uma chave que não seja a raiz custa `O(n)`.",
-  "O vetor do heap não está ordenado. Para listar em ordem, é preciso tirar um por um (é o heapsort, 0103).",
+  "O vetor do heap não está ordenado. Para listar em ordem, é preciso tirar um por um (é o heapsort; veja a aula Heapsort).",
   "Com vetor de tamanho fixo, é preciso saber quanto cabe ou realocar quando enche."
  ],
  "exemplo": "No pronto-socorro chegam pacientes com gravidade 40, 70, 20, 90, 50 e 30, nessa ordem (maior = mais urgente). Nos passos, a árvore e o vetor andam juntos: a nota `[i]` ao lado de cada nó é o índice dele no vetor `v`.\n\nDepois, os mesmos seis números, já prontos no vetor na ordem de chegada, viram heap com o build-heap.",
@@ -48,7 +48,7 @@
   },
   {
    "titulo": "Inserir 90",
-   "texto": "Entra em `v[3]`, filho esquerdo do 40 (pai `(3 - 1) / 2 = 1`). 90 > 40: troca e vai para `v[1]`. O novo pai é `v[0] = 70`; 90 > 70: troca de novo e chega à raiz. Duas trocas, que é a altura da árvore. Vetor: `[90 70 20 40]`.",
+   "texto": "Entra em `v[3]`, filho esquerdo do 40 (pai `(3 - 1) / 2 = 1`). 90 > 40: troca e vai para `v[1]`. O novo pai é `v[0] = 70`; 90 > 70: troca de novo e chega à raiz. Duas trocas, que é a altura da árvore (em arestas). Vetor: `[90 70 20 40]`.",
    "figura": {
     "tipo": "arvore",
     "raiz": {
@@ -299,7 +299,7 @@
    }
   }
  ],
- "custos": "| Operação | Pior caso |\n|---|---|\n| Ver o máximo | `O(1)` |\n| Inserir (sobe) | `O(log n)` |\n| Remover o máximo (desce) | `O(log n)` |\n| Construir de um vetor (build-heap) | `O(n)` |\n| Buscar uma chave qualquer | `O(n)` |\n| Memória | `O(n)` do vetor, `O(1)` extra |\n\nInserir n elementos um a um custa `O(n log n)`; o build-heap faz o mesmo serviço em `O(n)`.",
+ "custos": "| Operação | Pior caso |\n|---|---|\n| Ver o máximo | `O(1)` |\n| Inserir (sobe-heap) | `O(log n)` |\n| Remover o máximo (desce-heap) | `O(log n)` |\n| Construir de um vetor (build-heap) | `O(n)` |\n| Buscar uma chave qualquer | `O(n)` |\n| Memória | `O(n)` do vetor, `O(1)` extra |\n\nInserir n elementos um a um custa `O(n log n)`; o build-heap faz o mesmo serviço em `O(n)`.",
  "naprova": "A banca dá um vetor e pergunta se é heap (confira cada pai contra `2i + 1` e `2i + 2`), pede o vetor depois de inserir ou de tirar o topo, e pergunta o custo de remover a raiz, `O(log n)`. As pegadinhas: o índice começa em 0 ou em 1, a heap é de mínimo ou de máximo, e na descida a troca é com o **maior** filho (o menor, na de mínimo).",
  "fontes": [
   "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 6 (heapsort e filas de prioridade).",

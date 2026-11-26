@@ -7,7 +7,7 @@
   "Folha e um filho cabem no mesmo código: \"o filho que existe sobe\", e na folha esse filho é `NULL`.",
   "O sucessor de um nó com dois filhos nunca tem filho esquerdo; o antecessor nunca tem filho direito.",
   "Sucessor e antecessor dão árvores finais diferentes, e as duas são BST válidas.",
-  "A BST comum não se reequilibra depois de remover. A AVL faz isso (0176)."
+  "A BST comum não se reequilibra depois de remover. A AVL faz isso (veja a aula AVL: remoção)."
  ],
  "vantagens": [
   "Nenhum elemento é deslocado: só um ou dois ponteiros mudam.",

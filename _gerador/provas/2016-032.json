@@ -73,7 +73,7 @@
         {
           "letra": "A",
           "texto": "3",
-          "porque": "Seria o resultado de só uma chamada filha e só o último nível. Cada chamada com i > 1 faz duas chamadas, então o total cresce bem mais."
+          "porque": "Seria o total com uma só chamada por nível: teste(5), teste(2) e teste(1). Cada chamada com i > 1 faz duas, então o total cresce bem mais."
         },
         {
           "letra": "B",
@@ -88,7 +88,7 @@
         {
           "letra": "D",
           "texto": "8",
-          "porque": "Seria o caso de uma chamada com i = 4 ou i = 8 tratado como potência de 2 exata. Aqui 5/2 é 2, não 2,5, e o total é 7."
+          "porque": "8 não sai da recorrência. T(5) = 2·T(2) + 1 = 7, e cada chamada soma 1 ao dobro de outra, então o total é sempre ímpar."
         },
         {
           "letra": "E",
@@ -146,11 +146,11 @@
       "resumo": "A vantagem da lista encadeada sobre o vetor é inserir e remover sem deslocar elementos: o custo é achar a posição e trocar um ou dois ponteiros. O enunciado diz 'novo nó' mas fala de remoção. Dica: alternativa que fala em mover nós descreve vetor.",
       "assuntos": [
         {
-          "num": "0076",
+          "num": "0077",
           "modulo": "11-listas.md"
         },
         {
-          "num": "0077",
+          "num": "0076",
           "modulo": "11-listas.md"
         }
       ],
@@ -345,12 +345,12 @@
         {
           "letra": "C",
           "texto": "Apenas as afirmações I e III estão corretas",
-          "porque": "Deixa II de fora. II é verdadeira para vetores de tamanho razoável: a busca binária faz no máximo ⌊log2 n⌋ + 1 comparações, abaixo de 2·log2 n."
+          "porque": "Deixa II de fora. Contando uma comparação de chave por volta, II vale para n ≥ 3: a busca binária faz no máximo ⌊log2 n⌋ + 1 comparações, abaixo de 2·log2 n."
         },
         {
           "letra": "D",
           "texto": "Todas as afirmações estão corretas",
-          "porque": "É o que o conteúdo diz: I, II e III são verdadeiras. A banca anulou, provavelmente porque II falha em vetores minúsculos (n = 1 ou 2) e abre dúvida."
+          "porque": "É o que o conteúdo diz, contando uma comparação por volta: I, II e III são verdadeiras. A banca anulou, provavelmente porque II muda com a contagem (duas comparações por volta passam de 2·log2 n) e falha com n = 1 ou 2."
         },
         {
           "letra": "E",
@@ -359,7 +359,7 @@
         }
       ],
       "gabarito": "anulada",
-      "resumo": "Anulada pela banca. I (precisa estar ordenado), II (no máximo ⌊log2 n⌋ + 1 comparações, menor que 2·log2 n) e III (muito mais rápida que a sequencial em vetor grande ordenado) são verdadeiras. Na prova de busca binária, guarde: ordenado, O(log n), pior caso ⌊log2 n⌋ + 1.",
+      "resumo": "Anulada pela banca. I (precisa estar ordenado) e III (muito mais rápida que a sequencial em vetor grande ordenado) são verdadeiras. II depende de como se conta. Contando uma comparação de chave por volta, o pior caso é ⌊log2 n⌋ + 1 voltas, abaixo de 2·log2 n para n ≥ 3. Se cada volta faz duas comparações (`==` e depois `<`), o pior caso sobe para 2·(⌊log2 n⌋ + 1): com n = 16 dá 10, acima de 2·log2 16 = 8. Com n = 1 ou 2 a conta também falha. Na prova, guarde: vetor ordenado, O(log n), pior caso ⌊log2 n⌋ + 1 voltas.",
       "assuntos": [
         {
           "num": "0090",
@@ -370,7 +370,7 @@
           "modulo": "10-analise.md"
         }
       ],
-      "dica": "**Cobra:** Julgar três afirmações sobre busca binária: requisito, número de comparações e quando compensa.\n\n- **Busca binária** [0090]: compara a chave com o elemento do meio e descarta metade do intervalo; só funciona se o vetor está ordenado e se há acesso por índice. Ex.: em `2 5 8 11 14`, buscar 11: meio 8, vai à direita; meio 11, achou.\n- **Pior caso da busca binária** [0090]: no máximo `⌊log₂ n⌋ + 1` comparações, porque cada volta corta o intervalo ao meio. Ex.: `n = 32`: `5 + 1 = 6` comparações no máximo.\n- **Crescimento do custo** [0072]: `log n` cresce muito mais devagar que `n`, então a vantagem sobre a busca sequencial aumenta com o tamanho do vetor. Ex.: `n = 1000`: cerca de 10 passos contra até 1000.\n\n**Como atacar:** calcule `⌊log₂ n⌋ + 1` para um `n` pequeno e compare com o limite de cada afirmação.",
+      "dica": "**Cobra:** Julgar três afirmações sobre busca binária: requisito, número de comparações e quando compensa.\n\n- **Busca binária** [0090]: compara a chave com o elemento do meio e descarta metade do intervalo; só funciona se o vetor está ordenado e se há acesso por índice. Ex.: em `2 5 8 11 14`, buscar 11: meio 8, vai à direita; meio 11, achou.\n- **Pior caso da busca binária** [0090]: no máximo `⌊log₂ n⌋ + 1` voltas, porque cada volta corta o intervalo ao meio; com uma comparação de chave por volta, é esse o total de comparações. Ex.: `n = 32`: `5 + 1 = 6` voltas no máximo.\n- **Crescimento do custo** [0072]: `log n` cresce muito mais devagar que `n`, então a vantagem sobre a busca sequencial aumenta com o tamanho do vetor. Ex.: `n = 1000`: cerca de 10 passos contra até 1000.\n\n**Como atacar:** calcule `⌊log₂ n⌋ + 1` para um `n` pequeno e compare com o limite de cada afirmação.",
       "contrapontos": [
         {
           "item": "i",
@@ -378,7 +378,7 @@
         },
         {
           "item": "ii",
-          "texto": "O pior caso da busca binária é `⌊log₂ n⌋ + 1` comparações de chave. Para `n = 16`, quanto dá essa conta, e quanto vale `2·log₂ 16`?"
+          "texto": "Contando uma comparação de chave por volta, o pior caso da busca binária é `⌊log₂ n⌋ + 1`. Para `n = 16`, quanto dá essa conta, e quanto vale `2·log₂ 16`? E se cada volta fizer duas comparações, `==` e depois `<`?"
         },
         {
           "item": "iii",
@@ -422,11 +422,11 @@
       "resumo": "Para remover o primeiro nó: guarde o endereço dele, avance `*prim` e só então dê `free` no nó guardado. O código II libera o nó errado (o segundo) e deixa `*prim` apontando para o primeiro, que agora tem um `prox` pendurado. Conferido em C com AddressSanitizer: o nó do início continua na lista e há vazamento.",
       "assuntos": [
         {
-          "num": "0076",
+          "num": "0077",
           "modulo": "11-listas.md"
         },
         {
-          "num": "0077",
+          "num": "0076",
           "modulo": "11-listas.md"
         },
         {
@@ -502,7 +502,7 @@
           "modulo": "15-hash.md"
         }
       ],
-      "dica": "**Cobra:** Julgar afirmações sobre colisões, capacidade e custo do hash por encadeamento.\n\n- **Encadeamento** [0106]: cada posição da tabela guarda uma lista de chaves, então cabem mais chaves que posições; o custo médio depende do fator de carga `α = n/m`. Ex.: `m = 4` e 10 chaves: `α = 2,5`, listas de uns 2,5 nós.\n- **Colisão secundária** [0107]: no endereçamento aberto, uma chave ocupa a posição que seria de outro hash, e chaves de hashes diferentes passam a disputar o mesmo percurso. Ex.: `m = 5`, `k % 5`: 7 vai à 2; 12 vai à 3; o 3 chega à posição 3 e a acha ocupada, sem ter hash 2.\n- **Função hash bem projetada** [0105]: espalha as chaves de modo uniforme; com `α` limitado, listas curtas e custo médio constante por operação. Ex.: `n = 100` chaves em `m = 100` posições: listas de tamanho médio 1.\n\n**Como atacar:** para cada afirmação, pergunte se ela descreve o encadeamento ou o endereçamento aberto.",
+      "dica": "**Cobra:** Julgar afirmações sobre colisões, capacidade e custo do hash por encadeamento.\n\n- **Encadeamento** [0106]: cada posição da tabela guarda uma lista de chaves, então cabem mais chaves que posições; o custo médio depende do fator de carga `α = n/m`. Ex.: `m = 4` e 10 chaves: `α = 2,5`, listas de uns 2,5 nós.\n- **Colisão secundária** [0107]: no endereçamento aberto, a chave acha sua posição ocupada por outra de hash diferente, levada ali pela sondagem; daí nasce o agrupamento primário. Ex.: `m = 5`, `k % 5`: 7 fica na 2; 12 também cai na 2 e vai à 3; o 3 cai na 3 e a acha ocupada pelo 12.\n- **Função hash bem projetada** [0105]: espalha as chaves de modo uniforme; com `α` limitado, listas curtas e custo médio constante por operação. Ex.: `n = 100` chaves em `m = 100` posições: listas de tamanho médio 1.\n\n**Como atacar:** para cada afirmação, pergunte se ela descreve o encadeamento ou o endereçamento aberto.",
       "contrapontos": [
         {
           "item": "I",
@@ -788,7 +788,7 @@
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** Julgar se busca e inserção em ABB precisam ser recursivas e qual o custo da busca.\n\n- **Definição recursiva da árvore** [0097]: uma árvore binária é uma raiz com duas subárvores que também são árvores binárias, mas isso não obriga o código a usar recursão. Ex.: uma subárvore vazia é `NULL`, o caso base.\n- **Busca e inserção na ABB** [0099]: descem comparando a chave com cada nó, e um laço com um ponteiro `p` que desce faz o mesmo trabalho que a recursão. Ex.: `while (p && p->chave != k) p = k < p->chave ? p->esq : p->dir;`.\n- **Altura e custo** [0072]: o custo é a altura: `O(log n)` se a árvore está equilibrada, `O(n)` se degenerada. Ex.: ABB equilibrada com 1 023 nós tem altura 10; em cadeia, 1 023.\n\n**Como atacar:** desconfie de \"impossível\": pergunte se existe versão com laço e quando a altura é `log n`.",
+      "dica": "**Cobra:** Julgar se busca e inserção em ABB precisam ser recursivas e qual o custo da busca.\n\n- **Definição recursiva da árvore** [0097]: uma árvore binária é uma raiz com duas subárvores que também são árvores binárias, mas isso não obriga o código a usar recursão. Ex.: uma subárvore vazia é `NULL`, o caso base.\n- **Busca e inserção na ABB** [0099]: descem comparando a chave com cada nó, e um laço com um ponteiro `p` que desce faz o mesmo trabalho que a recursão. Ex.: `while (p && p->chave != k) p = k < p->chave ? p->esq : p->dir;`.\n- **Altura e custo** [0072]: o custo é a altura: `O(log n)` se a árvore está equilibrada, `O(n)` se degenerada. Ex.: ABB equilibrada com 1 023 nós tem 10 níveis; em cadeia, 1 023 níveis.\n\n**Como atacar:** desconfie de \"impossível\": pergunte se existe versão com laço e quando a altura é `log n`.",
       "contrapontos": [
         {
           "item": "I",
@@ -800,7 +800,7 @@
         },
         {
           "item": "III",
-          "texto": "Inserir `50 30 70 20 40 60 80` dá altura 3; inserir `10 20 30 40 50 60 70` dá uma cadeia de altura 7. Com chaves chegando em ordem aleatória, qual dos dois desenhos costuma aparecer?"
+          "texto": "Inserir `50 30 70 20 40 60 80` dá 3 níveis; inserir `10 20 30 40 50 60 70` dá uma cadeia de 7 níveis. Com chaves chegando em ordem aleatória, qual dos dois desenhos costuma aparecer?"
         }
       ]
     },
@@ -813,7 +813,7 @@
         {
           "letra": "A",
           "texto": "0",
-          "porque": "Correta. A árvore final é 4(2(1,3), 5(-,6)). A subárvore esquerda tem altura 2 e a direita também (5 e 6), então a diferença é 0."
+          "porque": "Correta. A árvore final é 4(2(1,3), 5(-,6)). As duas subárvores da raiz têm 2 níveis (2 sobre 1 e 3; 5 sobre 6), então a diferença é 0."
         },
         {
           "letra": "B",
@@ -833,11 +833,11 @@
         {
           "letra": "E",
           "texto": "4",
-          "porque": "Impossível em AVL com 6 nós, que só tem altura 3."
+          "porque": "Impossível em AVL com 6 nós, que tem no máximo 3 níveis."
         }
       ],
       "gabarito": "A",
-      "resumo": "É a mesma árvore da questão 12. Depois da última rotação, raiz 4 com 2(1,3) à esquerda e 5(-,6) à direita: alturas 2 e 2. Dica: refaça a árvore uma vez e responda as duas questões juntas.",
+      "resumo": "É a mesma árvore da questão 12. Depois da última rotação, raiz 4 com 2(1,3) à esquerda e 5(-,6) à direita: 2 níveis de cada lado. Dica: refaça a árvore uma vez e responda as duas questões juntas.",
       "assuntos": [
         {
           "num": "0101",
@@ -848,7 +848,7 @@
           "modulo": "28-estruturas-complementos.md"
         }
       ],
-      "dica": "**Cobra:** Achar a diferença de altura na raiz de uma AVL após seis inserções em ordem crescente.\n\n- **Fator de balanceamento** [0101]: altura da esquerda menos a da direita; a AVL só deixa o valor ficar entre -1 e 1 em todos os nós. Ex.: esquerda de altura 1 e direita de altura 3: fator -2, hora de rotacionar.\n- **Rotação após cada inserção** [0101]: a árvore é corrigida na hora do desbalanceamento, então o formato final depende do ponto em que cada rotação aconteceu. Ex.: `10, 20, 30, 40, 50` dão `20(10, 40(30, 50))`, raiz com alturas 1 e 2.\n- **Altura de nó** [0175]: o maior caminho do nó até uma folha; a da subárvore vazia vale 0. Ex.: folha: altura 1; nó com uma folha como filho: altura 2.\n\n**Como atacar:** refaça a árvore sem pular rotações e leia as alturas dos dois lados da raiz."
+      "dica": "**Cobra:** Achar a diferença de altura na raiz de uma AVL após seis inserções em ordem crescente.\n\n- **Fator de balanceamento** [0101]: altura da esquerda menos a da direita; a AVL só deixa o valor ficar entre -1 e 1 em todos os nós. Ex.: esquerda de altura 1 e direita de altura 3: fator -2, hora de rotacionar.\n- **Rotação após cada inserção** [0101]: a árvore é corrigida na hora do desbalanceamento, então o formato final depende do ponto em que cada rotação aconteceu. Ex.: `10, 20, 30, 40, 50` dão `20(10, 40(30, 50))`, raiz com 1 nível à esquerda e 2 à direita.\n- **Altura de nó** [0175]: arestas do maior caminho do nó até uma folha; a folha tem altura 0 e a subárvore vazia, -1. Ex.: nó com uma folha como filho: altura 1. Contar níveis dá a mesma diferença.\n\n**Como atacar:** refaça a árvore sem pular rotações e leia as alturas dos dois lados da raiz."
     },
     {
       "numero": 16,
@@ -1116,7 +1116,7 @@
       "resumo": "Em vetor ordenado crescente o maior é o último, acesso O(1). Inverter troca os extremos até o meio: n/2 trocas. 'Sempre a mais rápida' é afirmação absoluta falsa em ordenação.",
       "assuntos": [
         {
-          "num": "0038",
+          "num": "0037",
           "modulo": "05-vetores-e-strings.md"
         },
         {
@@ -1128,7 +1128,7 @@
           "modulo": "13-busca-e-ordenacao.md"
         }
       ],
-      "dica": "**Cobra:** Julgar afirmações sobre maior elemento, inversão de vetor e a fama do Quick sort.\n\n- **Acesso por índice** [0038]: `v[i]` custa o mesmo em qualquer posição, porque o endereço sai de uma conta direta a partir do início do vetor. Ex.: `v[0]` e `v[999]` custam o mesmo número de operações.\n- **Troca no próprio vetor** [0038]: trocar dois elementos usa só uma variável auxiliar, sem copiar o vetor inteiro. Ex.: `t = v[i]; v[i] = v[j]; v[j] = t;`.\n- **Quick sort** [0095]: é muito rápido em média, mas o pior caso é `n²` com pivô ruim. Ex.: pivô sempre o menor elemento: partições de tamanho 0 e `n-1`.\n- **Escolha do algoritmo** [0096]: nenhum algoritmo vence em todos os tamanhos e ordens; em vetores pequenos ou quase ordenados a inserção pode ganhar. Ex.: vetor quase ordenado de 1 000 elementos: a inserção faz cerca de 1 000 comparações.\n\n**Como atacar:** procure contraexemplo para cada afirmação; \"sempre\" e \"qualquer\" costumam quebrar.",
+      "dica": "**Cobra:** Julgar afirmações sobre maior elemento, inversão de vetor e a fama do Quick sort.\n\n- **Acesso por índice** [0037]: `v[i]` custa o mesmo em qualquer posição, porque o endereço sai de uma conta direta a partir do início do vetor. Ex.: `v[0]` e `v[999]` custam o mesmo número de operações.\n- **Troca no próprio vetor** [0037]: trocar dois elementos usa só uma variável auxiliar, sem copiar o vetor inteiro. Ex.: `t = v[i]; v[i] = v[j]; v[j] = t;`.\n- **Quick sort** [0095]: é muito rápido em média, mas o pior caso é `n²` com pivô ruim. Ex.: pivô sempre o menor elemento: partições de tamanho 0 e `n-1`.\n- **Escolha do algoritmo** [0096]: nenhum algoritmo vence em todos os tamanhos e ordens; em vetores pequenos ou quase ordenados a inserção pode ganhar. Ex.: vetor quase ordenado de 1 000 elementos: a inserção faz cerca de 1 000 comparações.\n\n**Como atacar:** procure contraexemplo para cada afirmação; \"sempre\" e \"qualquer\" costumam quebrar.",
       "contrapontos": [
         {
           "item": "I",

@@ -11,7 +11,7 @@
  ],
  "vantagens": [
   "Representa hierarquia (pastas, organograma, expressões), coisa que lista, pilha e fila não fazem.",
-  "Com altura pequena, chega a qualquer nó em poucos passos. É a base da BST, do heap e da árvore B.",
+  "Com altura pequena, chega a qualquer nó em poucos passos. É a base da árvore binária de busca (BST), do heap e da árvore B.",
   "A definição recursiva deixa as funções curtas: resolve em cada filho e combina as respostas."
  ],
  "desvantagens": [
@@ -246,7 +246,7 @@
   },
   {
    "titulo": "Contas de nós por altura",
-   "texto": "O mínimo é a cadeia, um nó por nível. O máximo é a cheia: 1 + 2 + 4 + ... + 2^h. Com a raiz no nível 1 e profundidade 4, a resposta é 4 e 15. No 5º nível de uma cheia (raiz no nível 1) cabem `2^4 = 16` nós.",
+   "texto": "O mínimo é a cadeia, um nó por nível. O máximo é a cheia: 1 + 2 + 4 + ... + 2^h. Se o enunciado põe a raiz no nível 1 e fala em 4 níveis (altura 3, em arestas), a resposta é 4 e 15. No 5º nível de uma cheia (raiz no nível 1) cabem `2^4 = 16` nós.",
    "figura": {
     "tipo": "texto",
     "linhas": [
