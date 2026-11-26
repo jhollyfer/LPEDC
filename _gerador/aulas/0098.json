@@ -1,0 +1,268 @@
+{
+ "num": "0098",
+ "oque": "Árvore binária é a árvore em que cada nó tem no máximo dois filhos, um à esquerda e um à direita, e o lado importa. Percorrer a árvore é visitar cada nó exatamente uma vez; os percursos clássicos são pré-ordem, em ordem, pós-ordem e por nível.",
+ "como": "A definição é recursiva: a árvore binária é vazia (`NULL`) ou é um nó com uma subárvore esquerda e uma direita, cada uma também árvore binária.\n\nOs três percursos recursivos só mudam o momento da visita:\n\n| Percurso | Ordem | Para lembrar |\n|---|---|---|\n| **pré-ordem** | raiz, esquerda, direita | a raiz vem **primeiro** |\n| **em ordem** | esquerda, raiz, direita | a raiz fica **no meio** |\n| **pós-ordem** | esquerda, direita, raiz | a raiz vem **por último** |\n| **por nível** | linha por linha, com uma fila | de cima para baixo |\n\n```c\nvoid pre(No *r) {\n  if (r == NULL) return;\n  printf(\"%c \", r->info); // visita\n  pre(r->esq);\n  pre(r->dir);\n}\n```\n\nMover a linha da visita para o meio dá a em ordem; para o fim, a pós-ordem. O **por nível** não é recursivo: põe a raiz numa fila e, enquanto a fila não esvaziar, tira o da frente, visita e põe os filhos dele no fim.",
+ "caracteristicas": [
+  "`A` com `B` à esquerda e `A` com `B` à direita são árvores **diferentes**.",
+  "Com n nós há `n + 1` ponteiros `NULL`: são `2n` ponteiros, e só `n - 1` apontam para alguém.",
+  "Altura h (em arestas) comporta no máximo `2^(h+1) - 1` nós; com n nós, a altura mínima é `⌊log₂ n⌋`.",
+  "Todo percurso custa `O(n)`, porque cada nó é visitado uma vez.",
+  "Em ordem junto com pré-ordem (ou com pós-ordem) reconstrói a árvore. Só pré e pós, não: `A` com `B` à esquerda e `A` com `B` à direita dão as mesmas duas sequências."
+ ],
+ "vantagens": [
+  "Dois ponteiros fixos por nó deixam o código simples e a recursão natural.",
+  "Equilibrada, guarda n nós em altura `O(log n)`. É a base da BST, do heap e da AVL."
+ ],
+ "desvantagens": [
+  "Se cada nó tiver um filho só, a árvore vira uma lista: altura n - 1, e a recursão pode estourar a pilha.",
+  "Sem ponteiro para o pai, subir na árvore exige pilha ou recursão."
+ ],
+ "exemplo": "A conta `(8-3)*(4+2)` = 30 vira uma árvore de expressão: operadores nos nós internos (roxo), números nas folhas. Os passos fazem os quatro percursos nela; a nota ao lado de cada nó é a ordem em que ele é visitado.\n\n| Percurso | Resultado |\n|---|---|\n| pré-ordem | `* - 8 3 + 4 2` |\n| em ordem | `8 - 3 * 4 + 2` |\n| pós-ordem | `8 3 - 4 2 + *` |\n| por nível | `* - + 8 3 4 2` |",
+ "passos": [
+  {
+   "titulo": "A árvore",
+   "texto": "A raiz é o `*`. A subárvore esquerda é `8 - 3`; a direita, `4 + 2`. Cada operador só pode ser calculado depois dos seus dois filhos.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": "*",
+     "e": {
+      "v": "-",
+      "e": {
+       "v": "8"
+      },
+      "d": {
+       "v": "3"
+      }
+     },
+     "d": {
+      "v": "+",
+      "e": {
+       "v": "4"
+      },
+      "d": {
+       "v": "2"
+      }
+     }
+    },
+    "estados": {
+     "*": "roxo",
+     "-": "roxo",
+     "+": "roxo"
+    }
+   }
+  },
+  {
+   "titulo": "Pré-ordem: raiz, esquerda, direita",
+   "texto": "Visita o `*` (1º) antes de descer. Desce à esquerda: visita o `-` (2º), depois a esquerda dele, o `8` (3º), e a direita, o `3` (4º). Volta e faz o mesmo à direita: `+`, `4`, `2`. Resultado: `* - 8 3 + 4 2`, a notação prefixa.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": "*",
+     "e": {
+      "v": "-",
+      "e": {
+       "v": "8",
+       "nota": "3º"
+      },
+      "d": {
+       "v": "3",
+       "nota": "4º"
+      },
+      "nota": "2º"
+     },
+     "d": {
+      "v": "+",
+      "e": {
+       "v": "4",
+       "nota": "6º"
+      },
+      "d": {
+       "v": "2",
+       "nota": "7º"
+      },
+      "nota": "5º"
+     },
+     "nota": "1º"
+    },
+    "estados": {
+     "*": "amarelo",
+     "-": "roxo",
+     "+": "roxo"
+    }
+   }
+  },
+  {
+   "titulo": "Em ordem: esquerda, raiz, direita",
+   "texto": "Antes de visitar o `*`, termina a esquerda inteira: `8`, `-`, `3`. Só então o `*` (4º). Depois a direita: `4`, `+`, `2`. Resultado: `8 - 3 * 4 + 2`. Os parênteses se perderam: calculada assim, a conta dá -2, e não 30.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": "*",
+     "e": {
+      "v": "-",
+      "e": {
+       "v": "8",
+       "nota": "1º"
+      },
+      "d": {
+       "v": "3",
+       "nota": "3º"
+      },
+      "nota": "2º"
+     },
+     "d": {
+      "v": "+",
+      "e": {
+       "v": "4",
+       "nota": "5º"
+      },
+      "d": {
+       "v": "2",
+       "nota": "7º"
+      },
+      "nota": "6º"
+     },
+     "nota": "4º"
+    },
+    "estados": {
+     "*": "amarelo",
+     "-": "roxo",
+     "+": "roxo"
+    }
+   }
+  },
+  {
+   "titulo": "Pós-ordem: esquerda, direita, raiz",
+   "texto": "Cada nó só é visitado depois dos dois filhos: `8`, `3`, `-`, `4`, `2`, `+` e, por último, o `*` (7º). Resultado: `8 3 - 4 2 + *`, a pós-fixa. A raiz é sempre a última da pós-ordem e a primeira da pré-ordem.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": "*",
+     "e": {
+      "v": "-",
+      "e": {
+       "v": "8",
+       "nota": "1º"
+      },
+      "d": {
+       "v": "3",
+       "nota": "2º"
+      },
+      "nota": "3º"
+     },
+     "d": {
+      "v": "+",
+      "e": {
+       "v": "4",
+       "nota": "4º"
+      },
+      "d": {
+       "v": "2",
+       "nota": "5º"
+      },
+      "nota": "6º"
+     },
+     "nota": "7º"
+    },
+    "estados": {
+     "*": "amarelo",
+     "-": "roxo",
+     "+": "roxo"
+    }
+   }
+  },
+  {
+   "titulo": "Por nível: linha por linha",
+   "texto": "Nível 0: `*`. Nível 1: `-` e `+`. Nível 2: `8`, `3`, `4` e `2`, da esquerda para a direita. Resultado: `* - + 8 3 4 2`.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": "*",
+     "e": {
+      "v": "-",
+      "e": {
+       "v": "8",
+       "nota": "4º"
+      },
+      "d": {
+       "v": "3",
+       "nota": "5º"
+      },
+      "nota": "2º"
+     },
+     "d": {
+      "v": "+",
+      "e": {
+       "v": "4",
+       "nota": "6º"
+      },
+      "d": {
+       "v": "2",
+       "nota": "7º"
+      },
+      "nota": "3º"
+     },
+     "nota": "1º"
+    },
+    "estados": {
+     "*": "roxo",
+     "-": "roxo",
+     "+": "roxo"
+    }
+   }
+  },
+  {
+   "titulo": "A fila do percurso por nível",
+   "texto": "Começa com a raiz na fila. A cada volta, tira o da frente (à esquerda), visita e põe os filhos dele no fim. Como a fila é FIFO, todo o nível 1 sai antes do nível 2.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "começa: fila = *",
+     "sai *, entram - e +: fila = - +",
+     "sai -, entram 8 e 3: fila = + 8 3",
+     "sai +, entram 4 e 2: fila = 8 3 4 2",
+     "sai 8: fila = 3 4 2",
+     "sai 3: fila = 4 2",
+     "sai 4: fila = 2",
+     "sai 2: fila vazia, fim"
+    ],
+    "titulo": "fila: frente à esquerda"
+   }
+  },
+  {
+   "titulo": "O caminho inverso: reconstruir a árvore",
+   "texto": "Prova de 2017: pós-ordem `S T Q R P` e em ordem `S Q T P R`. O último da pós-ordem é a raiz, P. Na em ordem, o que vem antes do P (`S Q T`) é a esquerda, e o que vem depois (`R`) é a direita. Na pós-ordem da esquerda, `S T Q`, a raiz é Q, com S antes dele e T depois na em ordem. Pré-ordem dessa árvore: `P Q S T R`.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": "P",
+     "e": {
+      "v": "Q",
+      "e": {
+       "v": "S"
+      },
+      "d": {
+       "v": "T"
+      }
+     },
+     "d": {
+      "v": "R"
+     }
+    },
+    "estados": {
+     "P": "verde",
+     "Q": "amarelo"
+    }
+   }
+  }
+ ],
+ "custos": "| Percurso | Tempo | Memória extra |\n|---|---|---|\n| pré, em e pós-ordem | `O(n)` | pilha de chamadas, `O(h)` |\n| por nível | `O(n)` | fila de até um nível inteiro, `O(n)` |\n\nCom a árvore equilibrada, h é `O(log n)`; em forma de lista, h = n - 1.",
+ "naprova": "A banca dá a árvore (ou a sequência de inserção numa BST) e pede um percurso, ou dá dois percursos e pede a árvore. O atalho: a pré-ordem começa pela raiz, a pós-ordem termina nela e, numa BST, a em ordem sai crescente. A pegadinha é a ordem do par pedido (\"pós-ordem e in-ordem, respectivamente\").",
+ "fontes": [
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 12 (árvores binárias e percurso em ordem).",
+  "Tenenbaum, Langsam e Augenstein, *Estruturas de dados usando C*, cap. 5 (árvores binárias e percursos).",
+  "Feofiloff, *Algoritmos em linguagem C*, capítulo sobre árvores binárias.",
+  "Celes e Rangel, *Apostila de estruturas de dados*, capítulo sobre árvores."
+ ]
+}

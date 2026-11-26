@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="366" height="434" viewBox="0 0 366 434">
+<title>(n) = profundidade</title>
+<style>text{font-family:ui-monospace,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace;white-space:pre}</style>
+<rect x="0" y="0" width="366" height="434" fill="#ffffff"/>
+<text x="30" y="44" font-size="30" fill="#862e9c" text-anchor="start">(n) = profundidade</text>
+<text x="30" y="100" font-size="24" fill="#1e1e1e" text-anchor="start">casa (0)</text>
+<text x="30" y="136" font-size="24" fill="#1e1e1e" text-anchor="start">  fotos (1)</text>
+<text x="30" y="172" font-size="24" fill="#1e1e1e" text-anchor="start">    praia (2)</text>
+<text x="30" y="208" font-size="24" fill="#1e1e1e" text-anchor="start">    natal (2)</text>
+<text x="30" y="244" font-size="24" fill="#1e1e1e" text-anchor="start">  contas (1)</text>
+<text x="30" y="280" font-size="24" fill="#1e1e1e" text-anchor="start">    agua (2)</text>
+<text x="30" y="316" font-size="24" fill="#1e1e1e" text-anchor="start">    luz (2)</text>
+<text x="30" y="352" font-size="24" fill="#1e1e1e" text-anchor="start">      2025 (3)</text>
+<text x="30" y="388" font-size="24" fill="#1e1e1e" text-anchor="start">  musica (1)</text>
+</svg>

@@ -103,15 +103,18 @@ function desenharFigura(nome, f) {
     const maior = Math.max(...f.baldes.map((b) => (Array.isArray(b) ? b.length : 0)))
     caixa.a.w += maior * 150
   } else if (f.tipo === 'texto') {
-    f.linhas.forEach((l, i) => q.texto(MARGEM, topo + 34 + i * 40, l, { tam: 28 }))
+    f.linhas.forEach((l, i) => q.texto(MARGEM, topo + 30 + i * 36, l, { tam: 24 }))
     const maior = Math.max(...f.linhas.map((l) => l.length))
-    caixa = { a: { x: MARGEM, y: topo, w: maior * 15, h: f.linhas.length * 40 + 10 } }
+    caixa = { a: { x: MARGEM, y: topo, w: maior * 14.6, h: f.linhas.length * 36 + 10 } }
   } else {
     throw new Error(`${nome}: tipo de figura desconhecido "${f.tipo}"`)
   }
   const largura = Math.max(caixa.a.x + caixa.a.w, f.titulo ? f.titulo.length * 17 + MARGEM : 0) + MARGEM
   const altura = caixa.a.y + caixa.a.h + MARGEM
-  return q.svg(f.titulo ?? nome, { x: 0, y: 0, w: Math.ceil(largura), h: Math.ceil(altura) })
+  const svg = q.svg(f.titulo ?? nome, { x: 0, y: 0, w: Math.ceil(largura), h: Math.ceil(altura) })
+  // rastreio e árvore de chamadas precisam de colunas alinhadas: fonte monoespaçada, sem a fonte embutida
+  if (f.tipo === 'texto') return svg.replace(/<style>[\s\S]*?<\/style>/, "<style>text{font-family:ui-monospace,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace;white-space:pre}</style>")
+  return svg
 }
 
 // ---------------------------------------------------------------------------

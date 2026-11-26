@@ -1,0 +1,444 @@
+{
+ "num": "0176",
+ "oque": "Remover de uma AVL é remover como na BST e, na volta da recursão, conferir o fator de cada ancestral e rotacionar onde ele passou de 1 ou de -1. Diferente da inserção, uma rotação pode encurtar a subárvore e desequilibrar o nó de cima, e o conserto pode subir até a raiz.",
+ "como": "- **Remova como na BST** (0100): folha sai, um filho sobe, dois filhos copia o sucessor e remove o sucessor.\n- **Na volta**, cada ancestral recalcula a altura e o fator.\n- **Fator +2:** olhe o filho esquerdo. Com fator 0 ou +1, rotação simples à direita. Com -1, dupla (esquerda no filho, direita no nó).\n- **Fator -2:** o espelho. Filho direito com 0 ou -1, simples à esquerda. Com +1, dupla.\n- **Continue subindo** mesmo depois de rotacionar: se a subárvore ficou mais baixa, o avô pode desequilibrar.\n\n| | Inserção | Remoção |\n|---|---|---|\n| Fator do filho pesado | sempre +1 ou -1 | pode ser 0 |\n| Rotações | no máximo 1 (simples ou dupla) | até uma por nível, `O(log n)` |\n| Depois de rotacionar | a altura volta à de antes: para | a altura pode cair 1: segue |\n\n```c\nNoA *rebalanceia(NoA *r) {\n  atualiza(r);\n  int fb = fator(r);\n  if (fb > 1) {\n    if (fator(r->esq) < 0)  // só -1\n      r->esq = rot_esq(r->esq);\n    return rot_dir(r);\n  }\n  if (fb < -1) {\n    if (fator(r->dir) > 0)  // só +1\n      r->dir = rot_dir(r->dir);\n    return rot_esq(r);\n  }\n  return r;\n}\n```\n\nA remoção termina com `return rebalanceia(r);`, e assim todo ancestral passa por ela.",
+ "caracteristicas": [
+  "A remoção começa exatamente como a da BST; o que muda é a volta.",
+  "Todo ancestral do nó removido passa pelo `rebalanceia`, até a raiz.",
+  "Filho pesado com fator 0 pede rotação **simples**; só o sinal contrário pede a dupla.",
+  "Com o filho de fator 0, a subárvore mantém a altura depois da rotação, e o conserto para ali.",
+  "Uma remoção pode fazer até `O(log n)` rotações, e o custo total continua `O(log n)`."
+ ],
+ "vantagens": [
+  "A árvore continua com altura `O(log n)` depois de qualquer sequência de remoções.",
+  "Cada rotação mexe em poucos ponteiros: custa `O(1)`."
+ ],
+ "desvantagens": [
+  "É o código mais delicado da AVL: o caso do fator 0 e a propagação são fáceis de errar.",
+  "Pode girar vários níveis numa remoção só, enquanto a inserção para na primeira rotação."
+ ],
+ "exemplo": "Uma lanchonete guarda 16 pedidos numa AVL de altura 4, inseridos na ordem 20, 12, 28, 6, 16, 25, 30, 3, 9, 14, 18, 26, 1, 4, 10, 8. Sai o pedido 30. A nota ao lado de cada nó é o fator de balanceamento.\n\nPré-ordem antes: `20 12 6 3 1 4 9 8 10 16 14 18 28 25 26 30`. Depois: `12 6 3 1 4 9 8 10 20 16 14 18 26 25 28`, com altura 3. Foram 3 rotações simples (a dupla conta 2).",
+ "passos": [
+  {
+   "titulo": "A árvore antes",
+   "texto": "Todos os fatores estão entre -1 e 1. O 30 é folha, à direita do 28. A raiz tem esquerda de altura 3 e direita de altura 2.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": 20,
+     "e": {
+      "v": 12,
+      "e": {
+       "v": 6,
+       "e": {
+        "v": 3,
+        "e": {
+         "v": 1,
+         "nota": "fb 0"
+        },
+        "d": {
+         "v": 4,
+         "nota": "fb 0"
+        },
+        "nota": "fb 0"
+       },
+       "d": {
+        "v": 9,
+        "e": {
+         "v": 8,
+         "nota": "fb 0"
+        },
+        "d": {
+         "v": 10,
+         "nota": "fb 0"
+        },
+        "nota": "fb 0"
+       },
+       "nota": "fb 0"
+      },
+      "d": {
+       "v": 16,
+       "e": {
+        "v": 14,
+        "nota": "fb 0"
+       },
+       "d": {
+        "v": 18,
+        "nota": "fb 0"
+       },
+       "nota": "fb 0"
+      },
+      "nota": "fb 1"
+     },
+     "d": {
+      "v": 28,
+      "e": {
+       "v": 25,
+       "d": {
+        "v": 26,
+        "nota": "fb 0"
+       },
+       "nota": "fb -1"
+      },
+      "d": {
+       "v": 30,
+       "nota": "fb 0"
+      },
+      "nota": "fb 1"
+     },
+     "nota": "fb 1"
+    },
+    "estados": {
+     "30": "vermelho"
+    }
+   }
+  },
+  {
+   "titulo": "Remove o 30 e confere o 28",
+   "texto": "O 30 é folha: sai, e o 28 recebe `NULL` à direita. Na volta, o 28 tem esquerda de altura 1 (o 25 com o 26) e direita vazia, -1: fator 2. O filho pesado, 25, tem fator -1, sinal contrário ao do 28: rotação dupla.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": 20,
+     "e": {
+      "v": 12,
+      "e": {
+       "v": 6,
+       "e": {
+        "v": 3,
+        "e": {
+         "v": 1,
+         "nota": "fb 0"
+        },
+        "d": {
+         "v": 4,
+         "nota": "fb 0"
+        },
+        "nota": "fb 0"
+       },
+       "d": {
+        "v": 9,
+        "e": {
+         "v": 8,
+         "nota": "fb 0"
+        },
+        "d": {
+         "v": 10,
+         "nota": "fb 0"
+        },
+        "nota": "fb 0"
+       },
+       "nota": "fb 0"
+      },
+      "d": {
+       "v": 16,
+       "e": {
+        "v": 14,
+        "nota": "fb 0"
+       },
+       "d": {
+        "v": 18,
+        "nota": "fb 0"
+       },
+       "nota": "fb 0"
+      },
+      "nota": "fb 1"
+     },
+     "d": {
+      "v": 28,
+      "e": {
+       "v": 25,
+       "d": {
+        "v": 26,
+        "nota": "fb 0"
+       },
+       "nota": "fb -1"
+      },
+      "nota": "fb 2"
+     },
+     "nota": "fb 1"
+    },
+    "estados": {
+     "28": "vermelho",
+     "25": "amarelo",
+     "26": "amarelo"
+    }
+   }
+  },
+  {
+   "titulo": "Dupla, parte 1: esquerda no 25",
+   "texto": "O 26 sobe para o lugar do 25, e o 25 vira filho esquerdo do 26. Agora o peso do 28 está todo à esquerda, em linha reta: 28, 26, 25.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": 20,
+     "e": {
+      "v": 12,
+      "e": {
+       "v": 6,
+       "e": {
+        "v": 3,
+        "e": {
+         "v": 1,
+         "nota": "fb 0"
+        },
+        "d": {
+         "v": 4,
+         "nota": "fb 0"
+        },
+        "nota": "fb 0"
+       },
+       "d": {
+        "v": 9,
+        "e": {
+         "v": 8,
+         "nota": "fb 0"
+        },
+        "d": {
+         "v": 10,
+         "nota": "fb 0"
+        },
+        "nota": "fb 0"
+       },
+       "nota": "fb 0"
+      },
+      "d": {
+       "v": 16,
+       "e": {
+        "v": 14,
+        "nota": "fb 0"
+       },
+       "d": {
+        "v": 18,
+        "nota": "fb 0"
+       },
+       "nota": "fb 0"
+      },
+      "nota": "fb 1"
+     },
+     "d": {
+      "v": 28,
+      "e": {
+       "v": 26,
+       "e": {
+        "v": 25,
+        "nota": "fb 0"
+       },
+       "nota": "fb 1"
+      },
+      "nota": "fb 2"
+     },
+     "nota": "fb 1"
+    },
+    "estados": {
+     "28": "vermelho",
+     "26": "amarelo"
+    }
+   }
+  },
+  {
+   "titulo": "Dupla, parte 2: direita no 28",
+   "texto": "O 26 sobe e vira a raiz da subárvore, com 25 e 28 de filhos. Essa subárvore tinha altura 2 e agora tem altura 1. Para o 20, é como se a direita tivesse perdido mais um nível: esquerda 3, direita 1, fator 2. O desequilíbrio subiu.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": 20,
+     "e": {
+      "v": 12,
+      "e": {
+       "v": 6,
+       "e": {
+        "v": 3,
+        "e": {
+         "v": 1,
+         "nota": "fb 0"
+        },
+        "d": {
+         "v": 4,
+         "nota": "fb 0"
+        },
+        "nota": "fb 0"
+       },
+       "d": {
+        "v": 9,
+        "e": {
+         "v": 8,
+         "nota": "fb 0"
+        },
+        "d": {
+         "v": 10,
+         "nota": "fb 0"
+        },
+        "nota": "fb 0"
+       },
+       "nota": "fb 0"
+      },
+      "d": {
+       "v": 16,
+       "e": {
+        "v": 14,
+        "nota": "fb 0"
+       },
+       "d": {
+        "v": 18,
+        "nota": "fb 0"
+       },
+       "nota": "fb 0"
+      },
+      "nota": "fb 1"
+     },
+     "d": {
+      "v": 26,
+      "e": {
+       "v": 25,
+       "nota": "fb 0"
+      },
+      "d": {
+       "v": 28,
+       "nota": "fb 0"
+      },
+      "nota": "fb 0"
+     },
+     "nota": "fb 2"
+    },
+    "estados": {
+     "20": "vermelho",
+     "12": "amarelo",
+     "26": "verde"
+    }
+   }
+  },
+  {
+   "titulo": "Propaga: simples à direita no 20",
+   "texto": "O filho pesado, 12, tem fator 1, o mesmo sinal do 20: rotação simples à direita. O 12 sobe e vira a raiz; o 20 desce para a direita dele. O 16, que era filho direito do 12, passa a filho esquerdo do 20, porque é maior que 12 e menor que 20. Altura 3, fator 0 na raiz: dois níveis consertados numa remoção só.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": 12,
+     "e": {
+      "v": 6,
+      "e": {
+       "v": 3,
+       "e": {
+        "v": 1,
+        "nota": "fb 0"
+       },
+       "d": {
+        "v": 4,
+        "nota": "fb 0"
+       },
+       "nota": "fb 0"
+      },
+      "d": {
+       "v": 9,
+       "e": {
+        "v": 8,
+        "nota": "fb 0"
+       },
+       "d": {
+        "v": 10,
+        "nota": "fb 0"
+       },
+       "nota": "fb 0"
+      },
+      "nota": "fb 0"
+     },
+     "d": {
+      "v": 20,
+      "e": {
+       "v": 16,
+       "e": {
+        "v": 14,
+        "nota": "fb 0"
+       },
+       "d": {
+        "v": 18,
+        "nota": "fb 0"
+       },
+       "nota": "fb 0"
+      },
+      "d": {
+       "v": 26,
+       "e": {
+        "v": 25,
+        "nota": "fb 0"
+       },
+       "d": {
+        "v": 28,
+        "nota": "fb 0"
+       },
+       "nota": "fb 0"
+      },
+      "nota": "fb 0"
+     },
+     "nota": "fb 0"
+    },
+    "estados": {
+     "12": "verde",
+     "16": "amarelo"
+    }
+   }
+  },
+  {
+   "titulo": "Quando para: filho com fator 0",
+   "texto": "Outra árvore: 20 com o 10 (filhos 5 e 15) à esquerda e o 30 à direita. Remova o 30: o 20 fica com fator 2, e o filho 10 tem fator **0**, coisa que na inserção nunca acontece. Fator 0 pede rotação simples.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": 20,
+     "e": {
+      "v": 10,
+      "e": {
+       "v": 5,
+       "nota": "fb 0"
+      },
+      "d": {
+       "v": 15,
+       "nota": "fb 0"
+      },
+      "nota": "fb 0"
+     },
+     "nota": "fb 2"
+    },
+    "estados": {
+     "20": "vermelho",
+     "10": "amarelo"
+    }
+   }
+  },
+  {
+   "titulo": "Simples à direita no 20, e para",
+   "texto": "O 10 sobe; o 15 passa para a esquerda do 20. Fatores: 10 = 0 - 1 = -1 e 20 = 0 - (-1) = 1. A subárvore tinha altura 2 e continua com altura 2: quem está acima não percebe, e o conserto para aqui. Regra para a prova: fator 0 ou mesmo sinal, simples; sinal contrário, dupla.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": 10,
+     "e": {
+      "v": 5,
+      "nota": "fb 0"
+     },
+     "d": {
+      "v": 20,
+      "e": {
+       "v": 15,
+       "nota": "fb 0"
+      },
+      "nota": "fb 1"
+     },
+     "nota": "fb -1"
+    },
+    "estados": {
+     "10": "verde",
+     "15": "amarelo"
+    }
+   }
+  }
+ ],
+ "custos": "| Etapa | Custo |\n|---|---|\n| Achar o nó | `O(log n)` |\n| Remover e subir conferindo cada ancestral | `O(log n)` |\n| Rotações numa remoção | até `O(log n)`, cada uma `O(1)` |\n| Total | `O(log n)` no pior caso |",
+ "naprova": "A banca compara inserção e remoção na AVL: quantas rotações cada uma pode exigir e se elas sobem até a raiz. Também cobra o custo do balanceamento, que é limitado pela altura da árvore.",
+ "fontes": [
+  "Szwarcfiter e Markenzon, *Estruturas de dados e seus algoritmos*, 3. ed., capítulo de árvores balanceadas (AVL: inserção e remoção).",
+  "Ziviani, *Projeto de algoritmos*, 3. ed., cap. 5 (árvores de pesquisa balanceadas).",
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., problema 13-3 (árvores AVL)."
+ ]
+}

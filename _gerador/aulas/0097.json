@@ -1,0 +1,273 @@
+{
+ "num": "0097",
+ "oque": "Árvore é uma estrutura hierárquica: cada elemento, o **nó**, tem um único nó acima dele, o pai, menos a **raiz**, que não tem nenhum, e pode ter vários abaixo, os filhos. Vista como grafo, é conexa e sem ciclos, com n nós e n - 1 arestas.",
+ "como": "O vocabulário vem da árvore genealógica:\n\n| Termo | O que é |\n|---|---|\n| **raiz** | o nó do topo, o único sem pai |\n| **folha** | nó sem filhos (grau 0) |\n| **grau** de um nó | quantos filhos ele tem |\n| **grau** da árvore | o maior grau entre os nós |\n| **profundidade** ou **nível** | arestas do nó até a raiz (raiz = 0) |\n| **altura** de um nó | arestas do nó até a folha mais funda abaixo dele |\n| **altura** da árvore | a altura da raiz (folha = 0, vazia = -1) |\n\nProfundidade conta para **cima**; altura conta para **baixo**.\n\nTipos de árvore binária:\n\n- **estritamente binária:** todo nó tem 0 ou 2 filhos;\n- **completa:** nó com subárvore vazia só no último ou no penúltimo nível;\n- **cheia:** nó com subárvore vazia só no último nível (todos os níveis lotados).\n\nToda cheia é completa e estritamente binária. O heap usa a completa com o último nível enchido da esquerda para a direita. Cuidado com o Tenenbaum: ele chama de \"completa\" a que aqui é cheia, e de \"quase completa\" a que aqui é completa.\n\n```c\nint altura(No *r) {\n  if (r == NULL) return -1; // vazia\n  int e = altura(r->esq);\n  int d = altura(r->dir);\n  return 1 + (e > d ? e : d);\n}\n```",
+ "caracteristicas": [
+  "Entre dois nós há um único caminho; não existe ciclo.",
+  "Com n nós há n - 1 arestas: cada nó, menos a raiz, tem uma aresta até o pai.",
+  "Numa árvore binária de altura h (em arestas), há no mínimo h + 1 nós (uma cadeia) e no máximo `2^(h+1) - 1` (a cheia).",
+  "No nível k (raiz no nível 0) cabem até `2^k` nós; a cheia de altura h tem `2^h` folhas.",
+  "A estritamente binária com f folhas tem `2f - 1` nós."
+ ],
+ "vantagens": [
+  "Representa hierarquia (pastas, organograma, expressões), coisa que lista, pilha e fila não fazem.",
+  "Com altura pequena, chega a qualquer nó em poucos passos. É a base da BST, do heap e da árvore B.",
+  "A definição recursiva deixa as funções curtas: resolve em cada filho e combina as respostas."
+ ],
+ "desvantagens": [
+  "Cada nó vem de um `malloc` e guarda ponteiros. Liberar exige percorrer tudo, os filhos antes do pai.",
+  "As convenções mudam de livro para livro (raiz no nível 0 ou 1, altura em nós ou em arestas), e isso muda a resposta da conta."
+ ],
+ "exemplo": "Uma árvore binária com 7 nós: A é a raiz, com os filhos B e C; B tem D e E; C tem só o F, à direita; F tem só o G, à esquerda.\n\n| Nó | Grau | Profundidade | Altura |\n|---|---|---|---|\n| A | 2 | 0 | 3 |\n| B | 2 | 1 | 1 |\n| C | 1 | 1 | 2 |\n| D | 0 | 2 | 0 |\n| E | 0 | 2 | 0 |\n| F | 1 | 2 | 1 |\n| G | 0 | 3 | 0 |\n\nFolhas: D, E e G. Grau da árvore: 2. Altura da árvore: 3.",
+ "passos": [
+  {
+   "titulo": "Pastas: uma árvore qualquer",
+   "texto": "A raiz é `casa`, a única sem pai. `casa` tem 3 filhos, então a árvore tem grau 3 e não é binária. As folhas são praia, natal, agua, 2025 e musica. Altura da árvore: 3, pelo caminho casa, contas, luz, 2025.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "casa (0)",
+     "  fotos (1)",
+     "    praia (2)",
+     "    natal (2)",
+     "  contas (1)",
+     "    agua (2)",
+     "    luz (2)",
+     "      2025 (3)",
+     "  musica (1)"
+    ],
+    "titulo": "(n) = profundidade"
+   }
+  },
+  {
+   "titulo": "Profundidade: conta para cima",
+   "texto": "A raiz tem profundidade 0, e cada descida soma 1. O G está a 3 arestas da raiz. Se o enunciado põe a raiz no **nível 1**, some 1 em tudo: o G fica no nível 4.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": "A",
+     "e": {
+      "v": "B",
+      "e": {
+       "v": "D",
+       "nota": "p 2"
+      },
+      "d": {
+       "v": "E",
+       "nota": "p 2"
+      },
+      "nota": "p 1"
+     },
+     "d": {
+      "v": "C",
+      "d": {
+       "v": "F",
+       "e": {
+        "v": "G",
+        "nota": "p 3"
+       },
+       "nota": "p 2"
+      },
+      "nota": "p 1"
+     },
+     "nota": "p 0"
+    },
+    "estados": {
+     "A": "amarelo"
+    }
+   }
+  },
+  {
+   "titulo": "Altura: conta para baixo",
+   "texto": "Folha tem altura 0. Cada nó vale 1 + a maior altura entre os filhos: F = 1 + 0 = 1, C = 1 + 1 = 2, B = 1 + 0 = 1, A = 1 + max(1, 2) = 3. Quem conta altura em nós (folha = 1) acha 4 para a mesma árvore.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": "A",
+     "e": {
+      "v": "B",
+      "e": {
+       "v": "D",
+       "nota": "h 0"
+      },
+      "d": {
+       "v": "E",
+       "nota": "h 0"
+      },
+      "nota": "h 1"
+     },
+     "d": {
+      "v": "C",
+      "d": {
+       "v": "F",
+       "e": {
+        "v": "G",
+        "nota": "h 0"
+       },
+       "nota": "h 1"
+      },
+      "nota": "h 2"
+     },
+     "nota": "h 3"
+    },
+    "estados": {
+     "G": "amarelo"
+    }
+   }
+  },
+  {
+   "titulo": "Grau e folhas",
+   "texto": "A e B têm grau 2; C e F têm grau 1; D, E e G têm grau 0 e são as folhas (em verde). O grau da árvore é o maior, 2. O C e o F, com um filho só, impedem que ela seja estritamente binária.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": "A",
+     "e": {
+      "v": "B",
+      "e": {
+       "v": "D",
+       "nota": "g 0"
+      },
+      "d": {
+       "v": "E",
+       "nota": "g 0"
+      },
+      "nota": "g 2"
+     },
+     "d": {
+      "v": "C",
+      "d": {
+       "v": "F",
+       "e": {
+        "v": "G",
+        "nota": "g 0"
+       },
+       "nota": "g 1"
+      },
+      "nota": "g 1"
+     },
+     "nota": "g 2"
+    },
+    "estados": {
+     "D": "verde",
+     "E": "verde",
+     "G": "verde",
+     "C": "vermelho",
+     "F": "vermelho"
+    }
+   }
+  },
+  {
+   "titulo": "Estritamente binária",
+   "texto": "Todo nó tem 0 ou 2 filhos. Com f = 3 folhas, tem `2·3 - 1 = 5` nós. Não é cheia: a folha C está no nível 1, e não no último.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": "A",
+     "e": {
+      "v": "B",
+      "e": {
+       "v": "D"
+      },
+      "d": {
+       "v": "E"
+      }
+     },
+     "d": {
+      "v": "C"
+     }
+    },
+    "estados": {
+     "C": "amarelo"
+    }
+   }
+  },
+  {
+   "titulo": "Completa",
+   "texto": "Os nós com alguma subárvore vazia (C, D, E e F) estão só nos dois últimos níveis, 1 e 2. É completa e tem formato de heap. Não é cheia (falta o irmão do F) nem estritamente binária (o C tem um filho só).",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": "A",
+     "e": {
+      "v": "B",
+      "e": {
+       "v": "D"
+      },
+      "d": {
+       "v": "E"
+      }
+     },
+     "d": {
+      "v": "C",
+      "e": {
+       "v": "F"
+      }
+     }
+    },
+    "estados": {
+     "C": "amarelo"
+    }
+   }
+  },
+  {
+   "titulo": "Cheia",
+   "texto": "Todos os níveis lotados: altura 2 e `2^(2+1) - 1 = 7` nós, com 4 folhas no último nível. Toda cheia é também completa e estritamente binária.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": "A",
+     "e": {
+      "v": "B",
+      "e": {
+       "v": "D"
+      },
+      "d": {
+       "v": "E"
+      }
+     },
+     "d": {
+      "v": "C",
+      "e": {
+       "v": "F"
+      },
+      "d": {
+       "v": "G"
+      }
+     }
+    },
+    "estados": {
+     "D": "verde",
+     "E": "verde",
+     "F": "verde",
+     "G": "verde"
+    }
+   }
+  },
+  {
+   "titulo": "Contas de nós por altura",
+   "texto": "O mínimo é a cadeia, um nó por nível. O máximo é a cheia: 1 + 2 + 4 + ... + 2^h. Com a raiz no nível 1 e profundidade 4, a resposta é 4 e 15. No 5º nível de uma cheia (raiz no nível 1) cabem `2^4 = 16` nós.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "altura 0: de 1 a 1 nó",
+     "altura 1: de 2 a 3 nós",
+     "altura 2: de 3 a 7 nós",
+     "altura 3: de 4 a 15 nós",
+     "altura h: de h+1 a 2^(h+1) - 1",
+     "",
+     "raiz no nível 1, profund. d:",
+     "  de d a 2^d - 1 nós",
+     "  nível k: até 2^(k-1) nós"
+    ],
+    "titulo": "árvore binária"
+   }
+  }
+ ],
+ "naprova": "A banca cobra o vocabulário com a convenção dela, muitas vezes raiz no nível 1 e altura contando nós: leia a definição do enunciado antes de contar. Também pede o mínimo e o máximo de nós para uma altura e quem é folha ou pai numa BST montada por inserção.",
+ "fontes": [
+  "Tenenbaum, Langsam e Augenstein, *Estruturas de dados usando C*, cap. 5 (árvores: terminologia, estritamente binária, completa e quase completa).",
+  "Celes e Rangel, *Apostila de estruturas de dados*, capítulo sobre árvores (profundidade e altura).",
+  "Feofiloff, *Algoritmos em linguagem C*, capítulo sobre árvores binárias (altura e definição recursiva)."
+ ]
+}

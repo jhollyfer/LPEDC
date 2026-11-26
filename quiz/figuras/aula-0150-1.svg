@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="484" height="326" viewBox="0 0 484 326">
+<title>componentes</title>
+<style>text{font-family:ui-monospace,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace;white-space:pre}</style>
+<rect x="0" y="0" width="484" height="326" fill="#ffffff"/>
+<text x="30" y="44" font-size="30" fill="#862e9c" text-anchor="start">componentes</text>
+<text x="30" y="100" font-size="24" fill="#1e1e1e" text-anchor="start">grupo 1 (DFS de Total):</text>
+<text x="30" y="136" font-size="24" fill="#1e1e1e" text-anchor="start">  Total Obra Tinta Piso Frete</text>
+<text x="30" y="172" font-size="24" fill="#1e1e1e" text-anchor="start">grupo 2 (DFS de Juros):</text>
+<text x="30" y="208" font-size="24" fill="#1e1e1e" text-anchor="start">  Juros Saldo Parcela</text>
+<text x="30" y="244" font-size="24" fill="#1e1e1e" text-anchor="start"></text>
+<text x="30" y="280" font-size="24" fill="#1e1e1e" text-anchor="start">recomeços = 2 componentes</text>
+</svg>

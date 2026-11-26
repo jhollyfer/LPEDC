@@ -1,0 +1,139 @@
+{
+ "num": "0150",
+ "oque": "Um **componente conexo** é um grupo máximo de vértices em que todo vértice alcança todo outro por algum caminho. Um **ciclo** é um caminho que volta ao vértice de onde saiu. A busca em profundidade (DFS) responde às duas perguntas em O(V + E).",
+ "como": "**Componentes.** Um laço externo percorre os vértices; a cada vértice ainda sem grupo, começa uma DFS nova com um número de grupo novo. Tudo que essa DFS alcança é o componente. O número de recomeços é o número de componentes.\n\n**Ciclo em grafo dirigido.** A DFS pinta os vértices com três cores:\n\n- **branco**: nunca visto;\n- **cinza**: a chamada começou e não terminou (está na pilha da recursão);\n- **preto**: terminado, tudo abaixo dele já explorado.\n\nUma aresta para um **cinza** fecha um ciclo (o Cormen chama de **aresta de retorno**). Uma aresta para um **preto** só leva a algo já resolvido.\n\n```c\nbool ciclo(int u) {\n    cor[u] = CINZA;\n    for (int v = 0; v < V; v++) {\n        if (!adj[u][v]) continue;\n        if (cor[v] == CINZA) return true;\n        if (cor[v] == BRANCO && ciclo(v))\n            return true;\n    }\n    cor[u] = PRETO;\n    return false;\n}\n```\n\n**Ciclo em grafo não dirigido.** Basta achar um vizinho já visitado que **não seja o pai** de quem chegou nele.",
+ "caracteristicas": [
+  "Só com `visitado[]`, o ciclo dá alarme falso: dois caminhos que se encontram não são ciclo. A pergunta certa é \"ainda está na pilha?\".",
+  "Um grafo dirigido é acíclico se e só se a DFS não encontra aresta de retorno.",
+  "**Árvore** = grafo não dirigido conexo e sem ciclos. Tem V − 1 arestas e um único caminho entre dois vértices; acrescentar qualquer aresta cria um ciclo.",
+  "Grafo não dirigido com V vértices, sem ciclos e com c componentes tem V − c arestas (uma floresta).",
+  "Num **componente fortemente conexo** (grafo dirigido), cada vértice alcança cada outro **seguindo** as setas.",
+  "Custo O(V + E) com lista de adjacência e O(V²) com matriz."
+ ],
+ "exemplo": "Uma planilha vira grafo dirigido: `a -> b` quer dizer \"a fórmula de a usa b\".\n\n```\nTotal -> Obra, Frete\nObra  -> Tinta, Piso\nPiso  -> Frete\nJuros -> Saldo\nSaldo -> Parcela\nParcela -> Juros\n```\n\nTinta e Frete não usam ninguém. Vamos contar os grupos independentes e procurar referência circular. Nas figuras, a pilha mostra os vértices **cinza** (chamadas abertas), com o topo em cima.",
+ "passos": [
+  {
+   "titulo": "Componentes: o laço externo",
+   "texto": "Ignorando a direção, a DFS que parte de Total alcança Obra, Tinta, Piso e Frete: grupo 1. O laço segue; Obra, Tinta, Piso e Frete já têm grupo. Juros não tem: nova DFS, que alcança Saldo e Parcela: grupo 2. Dois recomeços, **2 componentes**.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "grupo 1 (DFS de Total):",
+     "  Total Obra Tinta Piso Frete",
+     "grupo 2 (DFS de Juros):",
+     "  Juros Saldo Parcela",
+     "",
+     "recomeços = 2 componentes"
+    ],
+    "titulo": "componentes"
+   }
+  },
+  {
+   "titulo": "Ciclo: entra em Total, Obra, Tinta",
+   "texto": "A DFS com cores começa em Total (cinza), desce para Obra (cinza) e para Tinta (cinza). Três chamadas abertas.",
+   "figura": {
+    "tipo": "pilha",
+    "itens": [
+     "Total",
+     "Obra",
+     "Tinta"
+    ],
+    "estados": {
+     "2": "azul"
+    },
+    "titulo": "cinza: na pilha"
+   }
+  },
+  {
+   "titulo": "Tinta termina; desce Piso e Frete",
+   "texto": "Tinta não usa ninguém: fica **preta** e sai da pilha. Obra olha o próximo vizinho, Piso (branco): desce. Piso usa Frete (branco): desce.",
+   "figura": {
+    "tipo": "pilha",
+    "itens": [
+     "Total",
+     "Obra",
+     "Piso",
+     "Frete"
+    ],
+    "estados": {
+     "3": "azul"
+    },
+    "titulo": "pretos: Tinta"
+   }
+  },
+  {
+   "titulo": "Frete visto de novo: preto, sem alarme",
+   "texto": "Frete, Piso e Obra terminam e ficam pretos. Volta para Total, que olha o próximo vizinho: Frete. Ele já foi visitado, mas é **preto**: são dois caminhos que se encontram (Total → Frete e Total → Obra → Piso → Frete), não um ciclo.",
+   "figura": {
+    "tipo": "pilha",
+    "itens": [
+     "Total"
+    ],
+    "estados": {
+     "0": "amarelo"
+    },
+    "titulo": "Frete é preto: segue"
+   }
+  },
+  {
+   "titulo": "Total termina; entra em Juros, Saldo, Parcela",
+   "texto": "Total fica preto: os 5 da obra estão resolvidos. O laço externo acha Juros branco e começa nele: Juros, Saldo, Parcela, todos cinza.",
+   "figura": {
+    "tipo": "pilha",
+    "itens": [
+     "Juros",
+     "Saldo",
+     "Parcela"
+    ],
+    "estados": {
+     "2": "azul"
+    },
+    "titulo": "pretos: os 5 da obra"
+   }
+  },
+  {
+   "titulo": "Parcela aponta para Juros: cinza, ciclo",
+   "texto": "Parcela usa Juros, e Juros está **cinza**: a chamada dele ainda não terminou. É uma aresta de retorno. Subindo pelos pais de Parcela até Juros: **Juros → Saldo → Parcela → Juros**, a referência circular.",
+   "figura": {
+    "tipo": "pilha",
+    "itens": [
+     "Juros",
+     "Saldo",
+     "Parcela"
+    ],
+    "estados": {
+     "0": "vermelho",
+     "2": "amarelo"
+    },
+    "titulo": "aresta para cinza"
+   }
+  },
+  {
+   "titulo": "No grafo não dirigido",
+   "texto": "Sem direção, toda aresta aparece dos dois lados, e o pai sempre parece \"já visitado\". Por isso a regra muda: ciclo é um vizinho visitado que **não é o pai**. No triângulo A, B, C, saindo de A: B (pai A), C (pai B), e C vê A, que não é o pai dele: ciclo.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "A - B",
+     " \\ |",
+     "   C",
+     "",
+     "A -> B (pai A)",
+     "B vê A: é o pai, ignora",
+     "B -> C (pai B)",
+     "C vê A: visitado, não é pai",
+     "=> ciclo A, B, C"
+    ],
+    "titulo": "regra do pai"
+   }
+  }
+ ],
+ "custos": "| Tarefa | Lista de adjacência | Matriz |\n|---|---|---|\n| Contar componentes | O(V + E) | O(V²) |\n| Detectar ciclo (DFS com cores) | O(V + E) | O(V²) |\n| Memória extra | O(V): cores, pai, pilha da recursão | O(V) |",
+ "naprova": "A banca cobra a definição de árvore como grafo: conexo **e** sem ciclos, com V − 1 arestas e caminho único. As pegadinhas são \"árvore admite ciclos\" e definições que esquecem o \"conexo\" (um grafo sem ciclos e desconexo é floresta, não árvore).",
+ "fontes": [
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 20 (busca em profundidade, classificação de arestas, componentes fortemente conexos).",
+  "Ziviani, *Projeto de algoritmos*, 3. ed., cap. 7 (busca em profundidade e componentes).",
+  "Sedgewick e Wayne, *Algorithms*, 4. ed., seção 4.2 (grafos dirigidos).",
+  "Feofiloff, *Algoritmos para grafos* (IME-USP)."
+ ]
+}

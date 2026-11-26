@@ -1,0 +1,297 @@
+{
+ "num": "0175",
+ "oque": "Este assunto fixa as medidas de um nó (grau, profundidade, nível, altura e fator de balanceamento) e define o **sucessor** numa BST: o nó com a menor chave maior que a de `x`. O **antecessor** é o espelho, o nó com a maior chave menor que a de `x`.",
+ "como": "**Medidas**, na convenção do Cormen (em arestas):\n\n- **grau:** número de filhos (de 0 a 2 na binária);\n- **profundidade:** arestas até a raiz; o **nível** junta os nós de mesma profundidade (raiz no nível 0);\n- **altura:** arestas até a folha mais funda abaixo (folha 0, vazia -1);\n- **fator de balanceamento:** `altura(esq) - altura(dir)`.\n\n**Sucessor de `x`**, dois casos:\n\n- **`x` tem filho direito:** o sucessor é o mínimo da subárvore direita. Desce uma vez à direita e depois sempre à esquerda.\n- **`x` não tem filho direito:** sobe pelos pais. Enquanto chegar vindo de um filho direito, continua subindo. O primeiro ancestral alcançado vindo de um filho **esquerdo** é o sucessor. Se passar da raiz, `x` é o maior e não tem sucessor.\n\n```c\nNoP *sucessor(NoP *x) {\n  if (x->dir != NULL)\n    return minimo(x->dir); // caso 1\n  NoP *y = x->pai;           // caso 2\n  while (y != NULL && x == y->dir) {\n    x = y;\n    y = y->pai;\n  }\n  return y;\n}\n```\n\nPara subir, cada nó precisa do ponteiro `pai` (o `x.p` do Cormen), que vale `NULL` na raiz. O antecessor troca `dir` por `esq` e mínimo por máximo.",
+ "caracteristicas": [
+  "No percurso em ordem, o sucessor é o próximo da lista e o antecessor é o anterior.",
+  "O sucessor pode estar **abaixo** de `x` (caso 1) ou **acima** dele (caso 2).",
+  "No caso 1, o sucessor não tem filho esquerdo. Por isso ele serve na remoção de um nó com dois filhos (0100).",
+  "Sucessor e antecessor custam `O(h)`: andam no máximo um caminho entre a raiz e uma folha.",
+  "Fator fora de -1, 0 e 1 em algum nó quer dizer que a árvore não é AVL."
+ ],
+ "vantagens": [
+  "Com o ponteiro `pai`, a subida do caso 2 dispensa pilha e recursão.",
+  "Sucessor e antecessor respondem \"quem vem depois?\" sem percorrer a árvore toda, como faria a em ordem completa, `O(n)`."
+ ],
+ "desvantagens": [
+  "O ponteiro `pai` custa memória a mais por nó (8 bytes numa máquina de 64 bits).",
+  "Inserção, remoção e rotação têm de acertar o `pai` também; um esquecido estraga a subida."
+ ],
+ "exemplo": "Horários de ônibus inseridos numa BST na ordem 8h00, 6h15, 10h30, 7h00, 6h50, 9h20, 12h00, 7h30. A raiz é 8h00. À esquerda, 6h15 tem só filho direito (7h00), e 7h00 tem 6h50 e 7h30. À direita, 10h30 tem 9h20 e 12h00.\n\n| Horário | Sucessor | Caso |\n|---|---|---|\n| 8h00 | 9h20 | 1: desce |\n| 7h30 | 8h00 | 2: sobe |\n| 6h50 | 7h00 | 2: sobe |\n| 12h00 | nenhum | é o maior |",
+ "passos": [
+  {
+   "titulo": "Nível e grau",
+   "texto": "Nível (profundidade): 8h00 no 0; 6h15 e 10h30 no 1; 7h00, 9h20 e 12h00 no 2; 6h50 e 7h30 no 3. Grau: 8h00, 7h00 e 10h30 têm 2; 6h15 tem 1; as quatro folhas têm 0. Com a raiz no nível 1, some 1 a cada nível.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": "8h00",
+     "e": {
+      "v": "6h15",
+      "d": {
+       "v": "7h00",
+       "e": {
+        "v": "6h50",
+        "nota": "n 3"
+       },
+       "d": {
+        "v": "7h30",
+        "nota": "n 3"
+       },
+       "nota": "n 2"
+      },
+      "nota": "n 1"
+     },
+     "d": {
+      "v": "10h30",
+      "e": {
+       "v": "9h20",
+       "nota": "n 2"
+      },
+      "d": {
+       "v": "12h00",
+       "nota": "n 2"
+      },
+      "nota": "n 1"
+     },
+     "nota": "n 0"
+    }
+   }
+  },
+  {
+   "titulo": "Altura",
+   "texto": "Folhas com altura 0. 7h00 = 1 + 0 = 1; 6h15 = 1 + max(-1, 1) = 2 (a esquerda vazia vale -1); 10h30 = 1; 8h00 = 1 + max(2, 1) = 3. Altura da árvore: 3.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": "8h00",
+     "e": {
+      "v": "6h15",
+      "d": {
+       "v": "7h00",
+       "e": {
+        "v": "6h50",
+        "nota": "h 0"
+       },
+       "d": {
+        "v": "7h30",
+        "nota": "h 0"
+       },
+       "nota": "h 1"
+      },
+      "nota": "h 2"
+     },
+     "d": {
+      "v": "10h30",
+      "e": {
+       "v": "9h20",
+       "nota": "h 0"
+      },
+      "d": {
+       "v": "12h00",
+       "nota": "h 0"
+      },
+      "nota": "h 1"
+     },
+     "nota": "h 3"
+    }
+   }
+  },
+  {
+   "titulo": "Fator de balanceamento",
+   "texto": "8h00: 2 - 1 = 1. 6h15: -1 - 1 = -2, fora do intervalo, então esta BST não é AVL. 7h00 e 10h30: 0 - 0 = 0. Folhas: -1 - (-1) = 0.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": "8h00",
+     "e": {
+      "v": "6h15",
+      "d": {
+       "v": "7h00",
+       "e": {
+        "v": "6h50",
+        "nota": "fb 0"
+       },
+       "d": {
+        "v": "7h30",
+        "nota": "fb 0"
+       },
+       "nota": "fb 0"
+      },
+      "nota": "fb -2"
+     },
+     "d": {
+      "v": "10h30",
+      "e": {
+       "v": "9h20",
+       "nota": "fb 0"
+      },
+      "d": {
+       "v": "12h00",
+       "nota": "fb 0"
+      },
+      "nota": "fb 0"
+     },
+     "nota": "fb 1"
+    },
+    "estados": {
+     "6h15": "vermelho"
+    }
+   }
+  },
+  {
+   "titulo": "Sucessor de 8h00: caso 1",
+   "texto": "8h00 tem filho direito. Desce uma vez à direita (10h30) e depois à esquerda até não dar: 9h20, que não tem filho esquerdo. O sucessor está **dois níveis abaixo** de 8h00.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": "8h00",
+     "e": {
+      "v": "6h15",
+      "d": {
+       "v": "7h00",
+       "e": {
+        "v": "6h50"
+       },
+       "d": {
+        "v": "7h30"
+       }
+      }
+     },
+     "d": {
+      "v": "10h30",
+      "e": {
+       "v": "9h20"
+      },
+      "d": {
+       "v": "12h00"
+      }
+     }
+    },
+    "estados": {
+     "8h00": "roxo",
+     "10h30": "amarelo",
+     "9h20": "verde"
+    }
+   }
+  },
+  {
+   "titulo": "Sucessor de 7h30: caso 2",
+   "texto": "7h30 é folha, sem filho direito: sobe. Chega ao 7h00 vindo da direita; ele é menor, não serve. Sobe: chega ao 6h15, de novo vindo da direita. Sobe: chega ao 8h00 vindo da **esquerda**. Para: 8h00 é o sucessor.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": "8h00",
+     "e": {
+      "v": "6h15",
+      "d": {
+       "v": "7h00",
+       "e": {
+        "v": "6h50"
+       },
+       "d": {
+        "v": "7h30"
+       }
+      }
+     },
+     "d": {
+      "v": "10h30",
+      "e": {
+       "v": "9h20"
+      },
+      "d": {
+       "v": "12h00"
+      }
+     }
+    },
+    "estados": {
+     "7h30": "roxo",
+     "7h00": "amarelo",
+     "6h15": "amarelo",
+     "8h00": "verde"
+    }
+   }
+  },
+  {
+   "titulo": "Antecessor de 8h00: o espelho",
+   "texto": "8h00 tem filho esquerdo. Desce uma vez à esquerda (6h15) e depois à direita até não dar: 7h00, 7h30. O antecessor é 7h30, o maior da subárvore esquerda.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": "8h00",
+     "e": {
+      "v": "6h15",
+      "d": {
+       "v": "7h00",
+       "e": {
+        "v": "6h50"
+       },
+       "d": {
+        "v": "7h30"
+       }
+      }
+     },
+     "d": {
+      "v": "10h30",
+      "e": {
+       "v": "9h20"
+      },
+      "d": {
+       "v": "12h00"
+      }
+     }
+    },
+    "estados": {
+     "8h00": "roxo",
+     "6h15": "amarelo",
+     "7h00": "amarelo",
+     "7h30": "verde"
+    }
+   }
+  },
+  {
+   "titulo": "Sucessor de 12h00: não existe",
+   "texto": "12h00 não tem filho direito. Sobe ao 10h30 vindo da direita, sobe ao 8h00 vindo da direita, e o pai do 8h00 é `NULL`. A subida passou da raiz: 12h00 é a maior chave e não tem sucessor.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": "8h00",
+     "e": {
+      "v": "6h15",
+      "d": {
+       "v": "7h00",
+       "e": {
+        "v": "6h50"
+       },
+       "d": {
+        "v": "7h30"
+       }
+      }
+     },
+     "d": {
+      "v": "10h30",
+      "e": {
+       "v": "9h20"
+      },
+      "d": {
+       "v": "12h00"
+      }
+     },
+     "nota": "pai: NULL"
+    },
+    "estados": {
+     "12h00": "roxo",
+     "10h30": "amarelo",
+     "8h00": "amarelo"
+    }
+   }
+  }
+ ],
+ "custos": "| Operação | Custo |\n|---|---|\n| Mínimo, máximo | `O(h)` |\n| Sucessor, antecessor | `O(h)` |\n| Altura de um nó, calculada por recursão | `O(nós da subárvore)` |\n| Ponteiro `pai` | um ponteiro a mais por nó |\n\nh é `O(log n)` com a árvore equilibrada e `O(n)` com ela degenerada.",
+ "naprova": "A banca mistura convenções (raiz no nível 1, folha com altura 1) e pede altura, nível ou o mínimo de nós de uma AVL de certa altura: leia a definição do enunciado antes de contar. No sucessor, a banca testa se ele fica acima ou abaixo de `x`; confira os dois casos antes de aceitar um \"sempre\".",
+ "fontes": [
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 12 (árvores de busca binária: sucessor e antecessor).",
+  "Szwarcfiter e Markenzon, *Estruturas de dados e seus algoritmos*, 3. ed., capítulo de árvores (grau, nível e altura).",
+  "Feofiloff, *Algoritmos em linguagem C*, capítulo sobre árvores de busca."
+ ]
+}

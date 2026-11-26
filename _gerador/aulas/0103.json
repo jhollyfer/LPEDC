@@ -1,0 +1,277 @@
+{
+ "num": "0103",
+ "oque": "O heapsort ordena um vetor usando um heap de máximo montado nele mesmo: tira o maior, põe no fim e repete com o que sobrou. É uma ordenação por seleção em que achar o maior custa `O(log n)`, e não `O(n)`.",
+ "como": "Duas fases, no mesmo vetor:\n\n- **Fase 1, construir o heap** (build-heap): cada pai desce, do índice `n/2 - 1` até 0. Custa `O(n)`.\n- **Fase 2, ordenar:** troca a raiz (o máximo) com o último do heap, encolhe o heap em uma casa e faz a nova raiz descer. Repete até sobrar um.\n\nNa fase 2 o vetor tem o heap no começo e a parte ordenada no fim. A fronteira anda uma casa para a esquerda a cada volta.\n\n```c\nvoid heapsort(int v[], int n) {\n  for (int i = n / 2 - 1; i >= 0; i--)\n    desce(v, n, i);         // fase 1\n  for (int fim = n - 1; fim > 0; fim--) {\n    troca(&v[0], &v[fim]);  // fase 2\n    desce(v, fim, 0);\n  }\n}\n```\n\nO `desce` é o do heap (0102). Na fase 2 ele recebe `fim`, o tamanho do heap, e não `n`; com `n`, a raiz enxergaria os já ordenados como filhos.",
+ "caracteristicas": [
+  "Custa `O(n log n)` no melhor, no médio e no pior caso: nenhuma entrada deixa o heap mais alto que `log₂ n`.",
+  "É **in-place**: usa `O(1)` de memória extra e nem precisa de recursão, porque a descida é um laço.",
+  "**Não é estável**: a troca da raiz com o fim salta por cima de chaves iguais.",
+  "É ordenação por **comparação** e por **seleção**: a cada volta, seleciona o maior que resta.",
+  "Com heap de máximo, sai em ordem crescente; com heap de mínimo, decrescente."
+ ],
+ "vantagens": [
+  "Garante `O(n log n)` como o merge sort, mas sem o vetor auxiliar de `O(n)`.",
+  "Não tem o pior caso `O(n²)` do quick sort.",
+  "O desempenho quase não varia com a entrada."
+ ],
+ "desvantagens": [
+  "Na prática costuma perder para o quick sort: salta de `i` para `2i + 1` e aproveita mal o cache.",
+  "Não é estável.",
+  "Não aproveita ordem que já exista: um vetor já ordenado também custa `O(n log n)`."
+ ],
+ "exemplo": "Vamos ordenar os tempos de uma corrida, `[52 18 73 40 91 25 66]` (n = 7). Nos passos, verde é a parte já ordenada, no fim do vetor, e amarelo é o que acabou de se mexer.\n\n**Por que não é estável.** Ordene `[5a 5b 3]`, com os dois 5 marcados. O build-heap não troca nada (5a ≥ 5b e 3). Volta 1: o 5a troca com o 3, e o 3 desce trocando com o 5b: `[5b 3 | 5a]`. Volta 2: `[3 | 5b 5a]`. O 5b terminou antes do 5a, ao contrário da entrada.",
+ "passos": [
+  {
+   "titulo": "O vetor visto como árvore",
+   "texto": "Antes de qualquer troca, leia o vetor por níveis: `v[0] = 52` é a raiz, `v[1]` e `v[2]` os filhos dela, e assim por diante. Ainda não é heap: o 18 é menor que os dois filhos. Os pais são os índices de 0 a `n/2 - 1 = 2`; de 3 a 6 são folhas.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": 52,
+     "e": {
+      "v": 18,
+      "e": {
+       "v": 40,
+       "nota": "[3]"
+      },
+      "d": {
+       "v": 91,
+       "nota": "[4]"
+      },
+      "nota": "[1]"
+     },
+     "d": {
+      "v": 73,
+      "e": {
+       "v": 25,
+       "nota": "[5]"
+      },
+      "d": {
+       "v": 66,
+       "nota": "[6]"
+      },
+      "nota": "[2]"
+     },
+     "nota": "[0]"
+    },
+    "estados": {
+     "18": "vermelho"
+    }
+   }
+  },
+  {
+   "titulo": "Fase 1 pronta: o heap",
+   "texto": "Do último pai para a raiz. `v[2] = 73` tem filhos 25 e 66 e é maior: fica. `v[1] = 18` tem filhos 40 e 91: troca com o 91. `v[0] = 52` tem filhos 91 e 73: troca com o 91; no índice 1, os filhos são 40 e 18, e o 52 fica. Heap: `[91 52 73 40 18 25 66]`.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": 91,
+     "e": {
+      "v": 52,
+      "e": {
+       "v": 40,
+       "nota": "[3]"
+      },
+      "d": {
+       "v": 18,
+       "nota": "[4]"
+      },
+      "nota": "[1]"
+     },
+     "d": {
+      "v": 73,
+      "e": {
+       "v": 25,
+       "nota": "[5]"
+      },
+      "d": {
+       "v": 66,
+       "nota": "[6]"
+      },
+      "nota": "[2]"
+     },
+     "nota": "[0]"
+    },
+    "estados": {
+     "91": "amarelo",
+     "52": "amarelo",
+     "18": "amarelo"
+    }
+   }
+  },
+  {
+   "titulo": "Volta 1: troca a raiz com o último",
+   "texto": "O 91 é o máximo: troca com `v[6]`, o 66. O 91 já está na posição final e sai do heap, que agora vai de 0 a 5. O 66 na raiz quebra a ordem.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     66,
+     52,
+     73,
+     40,
+     18,
+     25,
+     91
+    ],
+    "nome": "v",
+    "estados": {
+     "6": "verde",
+     "0": "amarelo"
+    }
+   }
+  },
+  {
+   "titulo": "Volta 1: o 66 desce",
+   "texto": "Filhos de `v[0]`: 52 e 73. Troca com o 73. Em `v[2]`, o único filho dentro do heap é `v[5] = 25` (o `v[6]` já não conta); 66 > 25, para. `[73 52 66 40 18 25 | 91]`.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     73,
+     52,
+     66,
+     40,
+     18,
+     25,
+     91
+    ],
+    "nome": "v",
+    "estados": {
+     "6": "verde",
+     "0": "amarelo",
+     "2": "amarelo"
+    }
+   }
+  },
+  {
+   "titulo": "Volta 2",
+   "texto": "O 73 troca com `v[5] = 25` e vai para o fim. O 25 desce: filhos 52 e 66, troca com o 66. Em `v[2]`, os filhos seriam 5 e 6, fora do heap: para. `[66 52 25 40 18 | 73 91]`.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     66,
+     52,
+     25,
+     40,
+     18,
+     73,
+     91
+    ],
+    "nome": "v",
+    "estados": {
+     "5": "verde",
+     "6": "verde",
+     "0": "amarelo",
+     "2": "amarelo"
+    }
+   }
+  },
+  {
+   "titulo": "Volta 3",
+   "texto": "O 66 troca com `v[4] = 18`. O 18 desce: filhos 52 e 25, troca com o 52. Em `v[1]`, só o filho `v[3] = 40` está no heap; 18 < 40, troca. `[52 40 25 18 | 66 73 91]`.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     52,
+     40,
+     25,
+     18,
+     66,
+     73,
+     91
+    ],
+    "nome": "v",
+    "estados": {
+     "4": "verde",
+     "5": "verde",
+     "6": "verde",
+     "0": "amarelo",
+     "1": "amarelo",
+     "3": "amarelo"
+    }
+   }
+  },
+  {
+   "titulo": "Volta 4",
+   "texto": "O 52 troca com `v[3] = 18`. O 18 desce: filhos 40 e 25, troca com o 40. Em `v[1]` não há filho no heap (o índice 3 já saiu). `[40 18 25 | 52 66 73 91]`.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     40,
+     18,
+     25,
+     52,
+     66,
+     73,
+     91
+    ],
+    "nome": "v",
+    "estados": {
+     "3": "verde",
+     "4": "verde",
+     "5": "verde",
+     "6": "verde",
+     "0": "amarelo",
+     "1": "amarelo"
+    }
+   }
+  },
+  {
+   "titulo": "Volta 5",
+   "texto": "O 40 troca com `v[2] = 25`. O 25 tem um filho no heap, o 18, e é maior que ele: não desce. `[25 18 | 40 52 66 73 91]`.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     25,
+     18,
+     40,
+     52,
+     66,
+     73,
+     91
+    ],
+    "nome": "v",
+    "estados": {
+     "2": "verde",
+     "3": "verde",
+     "4": "verde",
+     "5": "verde",
+     "6": "verde",
+     "0": "amarelo"
+    }
+   }
+  },
+  {
+   "titulo": "Volta 6: ordenado",
+   "texto": "O 25 troca com o 18. Sobra um elemento no heap, e ele já está no lugar. Foram n - 1 = 6 voltas, cada uma com no máximo `⌊log₂ 7⌋ = 2` trocas na descida.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     18,
+     25,
+     40,
+     52,
+     66,
+     73,
+     91
+    ],
+    "nome": "v",
+    "estados": {
+     "0": "verde",
+     "1": "verde",
+     "2": "verde",
+     "3": "verde",
+     "4": "verde",
+     "5": "verde",
+     "6": "verde"
+    }
+   }
+  }
+ ],
+ "custos": "| Caso | Tempo |\n|---|---|\n| Melhor | `O(n log n)` |\n| Médio | `O(n log n)` |\n| Pior | `O(n log n)` |\n| Memória extra | `O(1)` |\n\nFase 1: `O(n)`. Fase 2: n - 1 descidas de até `log₂ n` níveis.\n\n| Algoritmo | Pior caso | Memória extra | Estável |\n|---|---|---|---|\n| heapsort | `O(n log n)` | `O(1)` | não |\n| merge sort | `O(n log n)` | `O(n)` | sim |\n| quick sort | `O(n²)` | pilha, `O(n)` no pior caso | não |",
+ "naprova": "A banca cobra as propriedades: pior caso `O(n log n)` (melhor que o quick sort nesse quesito), memória extra constante e não estável. A pegadinha é dizer que o heapsort usa espaço extra proporcional a n ou a n², ou que é estável. Também aparece o heapify de um nó só: acompanhe o índice a cada troca com o maior filho.",
+ "fontes": [
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 6 (heapsort).",
+  "Tenenbaum, Langsam e Augenstein, *Estruturas de dados usando C*, cap. 6 (classificação: heapsort).",
+  "Feofiloff, *Algoritmos em linguagem C*, capítulo sobre heapsort."
+ ]
+}

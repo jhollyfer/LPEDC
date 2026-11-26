@@ -19,9 +19,216 @@
   "Cada nó gasta dois ponteiros além da chave.",
   "Não tem acesso por índice."
  ],
- "exemplo": "**Inserir 50, 30, 70, 20, 40, 60 nessa ordem.**\n\n- 50: árvore vazia, vira a raiz.\n- 30: menor que 50, vai à esquerda do 50.\n- 70: maior que 50, vai à direita do 50.\n- 20: menor que 50, menor que 30: esquerda do 30.\n- 40: menor que 50, maior que 30: direita do 30.\n- 60: maior que 50, menor que 70: esquerda do 70.\n\n```\n        50\n       /  \\\n     30    70\n    /  \\   /\n  20   40 60\n```\n\n**Buscar o 40:** 50 (menor, esquerda), 30 (maior, direita), 40. Três comparações.\n\n**Em ordem:** `20 30 40 50 60 70`.\n\n**Agora insira 10, 20, 30, 40 em ordem crescente:** cada chave é maior que todas as anteriores e vai sempre à direita.\n\n```\n10\n  \\\n   20\n     \\\n      30\n        \\\n         40\n```\n\nAltura 4 para 4 chaves. Achar o 40 passa por todos os nós.",
+ "exemplo": "**Inserir 50, 30, 70, 20, 40, 60 nessa ordem**, buscar o 40 e o 65, e depois inserir **10, 20, 30, 40** em ordem crescente numa árvore nova.\n\nA regra de cada passo: compare com o nó; menor desce à esquerda, maior desce à direita. O `NULL` em que a descida para é o lugar da chave nova.\n\nNa primeira árvore, o percurso em ordem dá `20 30 40 50 60 70`.",
  "custos": "| Operação | Árvore equilibrada | Árvore degenerada |\n|---|---|---|\n| Buscar | `O(log n)` | `O(n)` |\n| Inserir | `O(log n)` | `O(n)` |\n| Remover | `O(log n)` | `O(n)` |\n| Listar em ordem | `O(n)` | `O(n)` |",
  "naprova": "A banca dá uma sequência de chaves e pede a árvore final ou um percurso, pergunta o custo no pior caso (a árvore degenerada) e compara a BST com vetor ordenado, lista e hash.",
+ "passos": [
+  {
+   "titulo": "Inserir 50 e 30",
+   "texto": "Árvore vazia: o 50 vira a raiz. O 30 compara com o 50: 30 < 50, desce à esquerda. A esquerda do 50 é `NULL`, e o 30 entra ali como folha.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": 50,
+     "e": {
+      "v": 30
+     }
+    },
+    "estados": {
+     "30": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "Inserir 70",
+   "texto": "70 > 50: desce à direita do 50, que está vazia. O 70 entra ali.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": 50,
+     "e": {
+      "v": 30
+     },
+     "d": {
+      "v": 70
+     }
+    },
+    "estados": {
+     "70": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "Inserir 20",
+   "texto": "20 < 50: esquerda, chega ao 30. 20 < 30: esquerda do 30, vazia. Entra como folha, depois de duas comparações.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": 50,
+     "e": {
+      "v": 30,
+      "e": {
+       "v": 20
+      }
+     },
+     "d": {
+      "v": 70
+     }
+    },
+    "estados": {
+     "50": "amarelo",
+     "30": "amarelo",
+     "20": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "Inserir 40",
+   "texto": "40 < 50: esquerda. 40 > 30: direita do 30. O 40 está à direita do 30, mas continua à **esquerda** do 50, e é menor que ele: a regra vale para a subárvore inteira.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": 50,
+     "e": {
+      "v": 30,
+      "e": {
+       "v": 20
+      },
+      "d": {
+       "v": 40
+      }
+     },
+     "d": {
+      "v": 70
+     }
+    },
+    "estados": {
+     "50": "amarelo",
+     "30": "amarelo",
+     "40": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "Inserir 60",
+   "texto": "60 > 50: direita, chega ao 70. 60 < 70: esquerda do 70. Pronto: 6 chaves, altura 2 (em arestas). Nenhum nó antigo mudou de lugar.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": 50,
+     "e": {
+      "v": 30,
+      "e": {
+       "v": 20
+      },
+      "d": {
+       "v": 40
+      }
+     },
+     "d": {
+      "v": 70,
+      "e": {
+       "v": 60
+      }
+     }
+    },
+    "estados": {
+     "50": "amarelo",
+     "70": "amarelo",
+     "60": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "Buscar o 40",
+   "texto": "Compara com o 50: menor, desce à esquerda e descarta o 70 e o 60. Compara com o 30: maior, desce à direita e descarta o 20. Compara com o 40: achou. Três comparações, a altura + 1.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": 50,
+     "e": {
+      "v": 30,
+      "e": {
+       "v": 20
+      },
+      "d": {
+       "v": 40
+      }
+     },
+     "d": {
+      "v": 70,
+      "e": {
+       "v": 60
+      }
+     }
+    },
+    "estados": {
+     "50": "amarelo",
+     "30": "amarelo",
+     "40": "verde",
+     "70": "apagado",
+     "60": "apagado",
+     "20": "apagado"
+    }
+   }
+  },
+  {
+   "titulo": "Buscar o 65, que não está",
+   "texto": "65 > 50: direita. 65 < 70: esquerda, chega ao 60. 65 > 60: direita do 60, que é `NULL`. A chave não está na árvore. Se fosse inserir, o 65 entraria exatamente ali.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": 50,
+     "e": {
+      "v": 30,
+      "e": {
+       "v": 20
+      },
+      "d": {
+       "v": 40
+      }
+     },
+     "d": {
+      "v": 70,
+      "e": {
+       "v": 60,
+       "nota": "dir: NULL"
+      }
+     }
+    },
+    "estados": {
+     "50": "amarelo",
+     "70": "amarelo",
+     "60": "vermelho",
+     "30": "apagado",
+     "20": "apagado",
+     "40": "apagado"
+    }
+   }
+  },
+  {
+   "titulo": "Caso degenerado: 10, 20, 30, 40",
+   "texto": "Cada chave é maior que todas as anteriores e vai sempre à direita. A árvore vira uma lista: 4 chaves e altura 3 (n - 1). Buscar o 40 passa pelos 4 nós, `O(n)`. Em ordem decrescente, a cadeia sai toda à esquerda.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": 10,
+     "d": {
+      "v": 20,
+      "d": {
+       "v": 30,
+       "d": {
+        "v": 40
+       }
+      }
+     }
+    },
+    "estados": {
+     "40": "vermelho"
+    }
+   }
+  }
+ ],
  "fontes": [
   "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 12 (árvores de busca binária).",
   "Ziviani, *Projeto de algoritmos*, 3. ed., cap. 5 (árvores de pesquisa).",

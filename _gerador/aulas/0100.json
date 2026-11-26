@@ -1,0 +1,297 @@
+{
+ "num": "0100",
+ "oque": "Remover da BST é achar o nó e tirá-lo sem quebrar a regra de ordem (esquerda menor, direita maior) em nenhum nó. O que fazer depende de quantos filhos ele tem: nenhum, um ou dois.",
+ "como": "Primeiro, a busca de sempre acha o nó. Depois, três casos:\n\n| Caso | O que fazer |\n|---|---|\n| **folha** | `free` no nó; o pai passa a apontar para `NULL` |\n| **um filho** | o filho sobe para o lugar; o avô \"pula\" o nó |\n| **dois filhos** | copia a chave do **sucessor** e remove o sucessor |\n\nO **sucessor** é o menor da subárvore direita: desça uma vez à direita e depois à esquerda até não dar mais. Ele nunca tem filho esquerdo, então a segunda remoção sempre cai num caso fácil. O **antecessor** (o maior da subárvore esquerda) também serve, mas a árvore final sai diferente.\n\n```c\nNo *remover(No *r, int c) {\n  if (r == NULL) return NULL;\n  if (c < r->chave)\n    r->esq = remover(r->esq, c);\n  else if (c > r->chave)\n    r->dir = remover(r->dir, c);\n  else if (!r->esq || !r->dir) {\n    No *f = r->esq ? r->esq : r->dir;\n    free(r);\n    return f;    // folha ou um filho\n  } else {       // dois filhos\n    No *s = r->dir;\n    while (s->esq) s = s->esq;\n    r->chave = s->chave;\n    r->dir = remover(r->dir, s->chave);\n  }\n  return r;\n}\n```\n\nA função devolve a nova raiz da subárvore, e quem chama guarda o retorno: `raiz = remover(raiz, 30)`.",
+ "caracteristicas": [
+  "O custo é o da descida, `O(h)`: `O(log n)` com a árvore equilibrada, `O(n)` com ela degenerada.",
+  "Folha e um filho cabem no mesmo código: \"o filho que existe sobe\", e na folha esse filho é `NULL`.",
+  "O sucessor de um nó com dois filhos nunca tem filho esquerdo; o antecessor nunca tem filho direito.",
+  "Sucessor e antecessor dão árvores finais diferentes, e as duas são BST válidas.",
+  "A BST comum não se reequilibra depois de remover. A AVL faz isso (0176)."
+ ],
+ "vantagens": [
+  "Nenhum elemento é deslocado: só um ou dois ponteiros mudam.",
+  "A ordem se mantém: o percurso em ordem continua crescente, só sem a chave removida."
+ ],
+ "desvantagens": [
+  "O caso de dois filhos faz uma segunda descida, até o sucessor.",
+  "Esquecer de guardar o retorno (`r->esq = ...`) deixa o pai apontando para memória já liberada."
+ ],
+ "exemplo": "Árvore das matrículas, inserida na ordem 50, 30, 70, 20, 40, 60, 80, 35, 45. Saem o 30 (dois filhos), o 40 (um filho) e o 20 (folha), nessa ordem.\n\nA pré-ordem mostra a forma da árvore: antes, `50 30 20 40 35 45 70 60 80`; no fim, `50 35 45 70 60 80`.",
+ "passos": [
+  {
+   "titulo": "A árvore de partida",
+   "texto": "Inserida na ordem 50, 30, 70, 20, 40, 60, 80, 35, 45. O 30 e o 40 têm dois filhos cada; 20, 35, 45, 60 e 80 são folhas.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": 50,
+     "e": {
+      "v": 30,
+      "e": {
+       "v": 20
+      },
+      "d": {
+       "v": 40,
+       "e": {
+        "v": 35
+       },
+       "d": {
+        "v": 45
+       }
+      }
+     },
+     "d": {
+      "v": 70,
+      "e": {
+       "v": 60
+      },
+      "d": {
+       "v": 80
+      }
+     }
+    }
+   }
+  },
+  {
+   "titulo": "Remover o 30: dois filhos",
+   "texto": "O 30 tem o 20 e o 40. O pai (50) só tem um ponteiro para aquele lugar, então os dois não podem subir. Procure o sucessor, o menor da direita: desce uma vez à direita (40) e à esquerda até não dar (35). O 35 é maior que tudo à esquerda do 30 e menor que tudo à direita.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": 50,
+     "e": {
+      "v": 30,
+      "e": {
+       "v": 20
+      },
+      "d": {
+       "v": 40,
+       "e": {
+        "v": 35
+       },
+       "d": {
+        "v": 45
+       }
+      }
+     },
+     "d": {
+      "v": 70,
+      "e": {
+       "v": 60
+      },
+      "d": {
+       "v": 80
+      }
+     }
+    },
+    "estados": {
+     "30": "vermelho",
+     "40": "amarelo",
+     "35": "amarelo"
+    }
+   }
+  },
+  {
+   "titulo": "Copia o 35 e remove o de baixo",
+   "texto": "A chave 35 vai para o nó do 30. O 35 de baixo sobra, e ele é folha: sai, e o 40 fica só com o 45. Confira a regra: 20 < 35, e 40 e 45 > 35.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": 50,
+     "e": {
+      "v": 35,
+      "e": {
+       "v": 20
+      },
+      "d": {
+       "v": 40,
+       "d": {
+        "v": 45
+       }
+      }
+     },
+     "d": {
+      "v": 70,
+      "e": {
+       "v": 60
+      },
+      "d": {
+       "v": 80
+      }
+     }
+    },
+    "estados": {
+     "35": "verde"
+    }
+   }
+  },
+  {
+   "titulo": "Remover o 40: um filho",
+   "texto": "Busca: 40 < 50, esquerda; 40 > 35, direita: achou. O 40 tem um filho só, o 45, à direita.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": 50,
+     "e": {
+      "v": 35,
+      "e": {
+       "v": 20
+      },
+      "d": {
+       "v": 40,
+       "d": {
+        "v": 45
+       }
+      }
+     },
+     "d": {
+      "v": 70,
+      "e": {
+       "v": 60
+      },
+      "d": {
+       "v": 80
+      }
+     }
+    },
+    "estados": {
+     "40": "vermelho",
+     "45": "amarelo"
+    }
+   }
+  },
+  {
+   "titulo": "O 45 sobe",
+   "texto": "O 35 passa a apontar direto para o 45, pulando o 40, que leva `free`. O 45 já estava à direita do 35, então continua do lado certo.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": 50,
+     "e": {
+      "v": 35,
+      "e": {
+       "v": 20
+      },
+      "d": {
+       "v": 45
+      }
+     },
+     "d": {
+      "v": 70,
+      "e": {
+       "v": 60
+      },
+      "d": {
+       "v": 80
+      }
+     }
+    },
+    "estados": {
+     "45": "verde"
+    }
+   }
+  },
+  {
+   "titulo": "Remover o 20: folha",
+   "texto": "Busca: 20 < 50, 20 < 35: achou, sem filhos. É o caso mais simples.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": 50,
+     "e": {
+      "v": 35,
+      "e": {
+       "v": 20
+      },
+      "d": {
+       "v": 45
+      }
+     },
+     "d": {
+      "v": 70,
+      "e": {
+       "v": 60
+      },
+      "d": {
+       "v": 80
+      }
+     }
+    },
+    "estados": {
+     "20": "vermelho"
+    }
+   }
+  },
+  {
+   "titulo": "Depois das três remoções",
+   "texto": "O 35 passou a apontar para `NULL` à esquerda. Pré-ordem: `50 35 45 70 60 80`. A em ordem continua crescente: `35 45 50 60 70 80`.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": 50,
+     "e": {
+      "v": 35,
+      "d": {
+       "v": 45
+      }
+     },
+     "d": {
+      "v": 70,
+      "e": {
+       "v": 60
+      },
+      "d": {
+       "v": 80
+      }
+     }
+    },
+    "estados": {
+     "35": "verde"
+    }
+   }
+  },
+  {
+   "titulo": "E se fosse o antecessor?",
+   "texto": "Volte à árvore de partida e remova o 30 pelo **antecessor**, o maior da esquerda: desce uma vez à esquerda (20) e à direita até não dar. O 20 não tem filho direito, então é ele. O 20 assume o lugar do 30, e a folha 20 sai. A árvore é outra, mas também é BST. Na prova, calcule os dois candidatos e veja qual está nas alternativas.",
+   "figura": {
+    "tipo": "arvore",
+    "raiz": {
+     "v": 50,
+     "e": {
+      "v": 20,
+      "d": {
+       "v": 40,
+       "e": {
+        "v": 35
+       },
+       "d": {
+        "v": 45
+       }
+      }
+     },
+     "d": {
+      "v": 70,
+      "e": {
+       "v": 60
+      },
+      "d": {
+       "v": 80
+      }
+     }
+    },
+    "estados": {
+     "20": "verde"
+    }
+   }
+  }
+ ],
+ "custos": "| Etapa | Árvore equilibrada | Árvore degenerada |\n|---|---|---|\n| Achar o nó | `O(log n)` | `O(n)` |\n| Folha ou um filho, depois de achar | `O(1)` | `O(1)` |\n| Dois filhos: achar o sucessor | `O(log n)` | `O(n)` |\n| Total | `O(log n)` | `O(n)` |",
+ "naprova": "A banca mostra uma BST e pede a nova raiz depois de remover a raiz, ou a pré e a pós-ordem depois de uma sequência de inserções e remoções. A pegadinha: o curso usa o sucessor, mas a banca de 2018 usou o **antecessor**. Calcule os dois e veja qual aparece nas alternativas.",
+ "fontes": [
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 12 (árvores de busca binária: remoção).",
+  "Tenenbaum, Langsam e Augenstein, *Estruturas de dados usando C*, cap. 7 (busca: remoção em árvore binária de busca).",
+  "Feofiloff, *Algoritmos em linguagem C*, capítulo sobre árvores binárias de busca.",
+  "Celes e Rangel, *Apostila de estruturas de dados*, capítulo sobre árvores binárias de busca."
+ ]
+}

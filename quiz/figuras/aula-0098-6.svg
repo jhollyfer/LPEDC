@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="571" height="398" viewBox="0 0 571 398">
+<title>fila: frente à esquerda</title>
+<style>text{font-family:ui-monospace,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace;white-space:pre}</style>
+<rect x="0" y="0" width="571" height="398" fill="#ffffff"/>
+<text x="30" y="44" font-size="30" fill="#862e9c" text-anchor="start">fila: frente à esquerda</text>
+<text x="30" y="100" font-size="24" fill="#1e1e1e" text-anchor="start">começa: fila = *</text>
+<text x="30" y="136" font-size="24" fill="#1e1e1e" text-anchor="start">sai *, entram - e +: fila = - +</text>
+<text x="30" y="172" font-size="24" fill="#1e1e1e" text-anchor="start">sai -, entram 8 e 3: fila = + 8 3</text>
+<text x="30" y="208" font-size="24" fill="#1e1e1e" text-anchor="start">sai +, entram 4 e 2: fila = 8 3 4 2</text>
+<text x="30" y="244" font-size="24" fill="#1e1e1e" text-anchor="start">sai 8: fila = 3 4 2</text>
+<text x="30" y="280" font-size="24" fill="#1e1e1e" text-anchor="start">sai 3: fila = 4 2</text>
+<text x="30" y="316" font-size="24" fill="#1e1e1e" text-anchor="start">sai 4: fila = 2</text>
+<text x="30" y="352" font-size="24" fill="#1e1e1e" text-anchor="start">sai 2: fila vazia, fim</text>
+</svg>

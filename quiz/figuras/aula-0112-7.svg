@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="455" height="434" viewBox="0 0 455 434">
+<title>peso negativo</title>
+<style>text{font-family:ui-monospace,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace;white-space:pre}</style>
+<rect x="0" y="0" width="455" height="434" fill="#ffffff"/>
+<text x="30" y="44" font-size="30" fill="#862e9c" text-anchor="start">peso negativo</text>
+<text x="30" y="100" font-size="24" fill="#1e1e1e" text-anchor="start">A -&gt; B  2</text>
+<text x="30" y="136" font-size="24" fill="#1e1e1e" text-anchor="start">A -&gt; C  3</text>
+<text x="30" y="172" font-size="24" fill="#1e1e1e" text-anchor="start">C -&gt; B -2</text>
+<text x="30" y="208" font-size="24" fill="#1e1e1e" text-anchor="start"></text>
+<text x="30" y="244" font-size="24" fill="#1e1e1e" text-anchor="start">fixa A: B = 2, C = 3</text>
+<text x="30" y="280" font-size="24" fill="#1e1e1e" text-anchor="start">fixa B (2)   &lt;- cedo demais</text>
+<text x="30" y="316" font-size="24" fill="#1e1e1e" text-anchor="start">fixa C: 3 - 2 = 1 &lt; 2,</text>
+<text x="30" y="352" font-size="24" fill="#1e1e1e" text-anchor="start">        mas B já é fixo</text>
+<text x="30" y="388" font-size="24" fill="#1e1e1e" text-anchor="start">Dijkstra: 2   certo: 1</text>
+</svg>
