@@ -1,0 +1,227 @@
+{
+ "num": "0095",
+ "oque": "O quick sort escolhe um elemento, o **pivô**, e separa o vetor em dois montes: os menores ou iguais a ele à esquerda e os maiores à direita. O pivô fica na sua **posição final**, e cada monte é ordenado do mesmo jeito, por recursão.",
+ "como": "O curso usa a separação de **Lomuto**, que o Cormen chama de `PARTITION`. O pivô é o último, `v[r]`. O índice `k` anda pelo pedaço e `j` marca a fronteira: `v[p..j-1]` são os `<=` pivô. Quando `v[k] <= pivô`, troca `v[k]` com `v[j]` e avança `j`. No fim, troca o pivô com `v[j]`.\n\n```c\nint separa(int v[], int p, int r) {\n    int pivo = v[r], j = p;\n    for (int k = p; k < r; k++)\n        if (v[k] <= pivo) {\n            troca(&v[j], &v[k]);\n            j++;\n        }\n    troca(&v[j], &v[r]);\n    return j;\n}\n\nvoid quick(int v[], int p, int r) {\n    if (p >= r) return;\n    int j = separa(v, p, r);\n    quick(v, p, j - 1);\n    quick(v, j + 1, r);\n}\n```\n\nA separação de **Hoare** (a do Ziviani) usa dois índices que partem das pontas, um procurando quem é grande demais à esquerda e outro quem é pequeno demais à direita, e troca os dois até se cruzarem. Os montes saem diferentes, mas a ideia é a mesma.\n\n**Teste do pivô** (o que a banca cobra): depois da separação, a posição `j` do pivô só é possível se **todo** mundo à esquerda é `<=` `v[j]` e **todo** mundo à direita é `>=` `v[j]`. Em ordem decrescente, inverte.",
+ "caracteristicas": [
+  "Dividir e conquistar com o trabalho na divisão (a separação); juntar sai de graça.",
+  "Depois de cada separação, o pivô está na posição que terá no vetor ordenado e fica fora das duas chamadas.",
+  "**Não é estável**: as trocas de longa distância podem inverter iguais.",
+  "Ordena no próprio vetor, sem rascunho, mas a recursão usa pilha: `O(log n)` na média e `O(n)` no pior caso.",
+  "O pior caso, `O(n²)`, acontece quando o pivô é sempre o menor ou o maior. Com o pivô na ponta, isso ocorre no vetor **já ordenado**."
+ ],
+ "vantagens": [
+  "Na média é o mais rápido na prática: `O(n log n)` com constante baixa.",
+  "Não precisa do vetor auxiliar do merge sort.",
+  "A mediana de três (pivô = valor do meio entre o primeiro, o do meio e o último) afasta o pior caso dos vetores quase ordenados."
+ ],
+ "desvantagens": [
+  "Pior caso `O(n²)`.",
+  "Não é estável.",
+  "No pior caso a recursão desce `n` níveis e pode estourar a pilha, a menos que a chamada recursiva vá só para o lado menor."
+ ],
+ "exemplo": "Preços de 7 fones: **35 12 48 7 29 51 20**. Pivô sempre o último do pedaço. Roxo é o pivô, amarelo é o monte dos `<=` pivô, verde é quem já está na posição final.\n\nTeste do pivô em outro vetor, já separado: `3 1 2 4 9 7 8`. O 4 serve (esquerda `3 1 2`, todos menores; direita `9 7 8`, todos maiores). O 9 não serve, porque tem 7 à direita. O 8 não serve, porque tem 9 à esquerda.",
+ "passos": [
+  {
+   "titulo": "Início: pivô 20",
+   "texto": "Pedaço `v[0..6]`, pivô `v[6] = 20`, `j = 0`. Ninguém foi para o monte dos pequenos ainda.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     35,
+     12,
+     48,
+     7,
+     29,
+     51,
+     20
+    ],
+    "estados": {
+     "6": "roxo"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "k = 0 e k = 1",
+   "texto": "35 <= 20? Não, nada muda. 12 <= 20? Sim: troca `v[0]` com `v[1]` e `j` vira 1.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     12,
+     35,
+     48,
+     7,
+     29,
+     51,
+     20
+    ],
+    "estados": {
+     "0": "amarelo",
+     "6": "roxo"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "k = 2 e k = 3",
+   "texto": "48 <= 20? Não. 7 <= 20? Sim: troca `v[1]` (35) com `v[3]` (7) e `j` vira 2.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     12,
+     7,
+     48,
+     35,
+     29,
+     51,
+     20
+    ],
+    "estados": {
+     "0": "amarelo",
+     "1": "amarelo",
+     "6": "roxo"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "Fim da separação",
+   "texto": "29 e 51 não são `<=` 20. Acabou o `k`: troca `v[2]` com o pivô. São 6 comparações. **Estado depois da partição:** `12 7 20 35 29 51 48`, pivô na posição 2. À esquerda, 12 e 7 são menores; à direita, 35 29 51 48 são maiores. Os montes não estão ordenados, e nem precisam.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     12,
+     7,
+     20,
+     35,
+     29,
+     51,
+     48
+    ],
+    "estados": {
+     "2": "verde"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "Lado esquerdo: v[0..1]",
+   "texto": "Pivô 7. 12 <= 7? Não. Troca `v[0]` com o pivô: `7 12`. O 7 vai para a posição 0; o 12 sobra sozinho (caso base). É 1 comparação.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     7,
+     12,
+     20,
+     35,
+     29,
+     51,
+     48
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "verde",
+     "2": "verde"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "Lado direito: v[3..6]",
+   "texto": "Pivô 48. 35 <= 48: sim (troca consigo mesmo, `j` = 4). 29 <= 48: sim (`j` = 5). 51 <= 48: não. Troca `v[5]` com o pivô: `35 29 48 51`. O 51 sobra sozinho. São 3 comparações.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     7,
+     12,
+     20,
+     35,
+     29,
+     48,
+     51
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "verde",
+     "2": "verde",
+     "5": "verde",
+     "6": "verde"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "Último pedaço: v[3..4]",
+   "texto": "Pivô 29. 35 <= 29? Não. Troca `v[3]` com o pivô: `29 35`. Vetor ordenado. Total: 6 + 1 + 3 + 1 = **11 comparações**.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     7,
+     12,
+     20,
+     29,
+     35,
+     48,
+     51
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "verde",
+     "2": "verde",
+     "3": "verde",
+     "4": "verde",
+     "5": "verde",
+     "6": "verde"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "Pior caso: vetor ordenado",
+   "texto": "Em `1 2 3 4 5`, o pivô 5 é o maior: os 4 outros vão para a esquerda e a direita fica vazia. Depois o pivô 4, depois o 3... São 4 + 3 + 2 + 1 = 10 comparações, `n(n - 1)/2`: **O(n²)**, e a recursão desce `n` níveis.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     1,
+     2,
+     3,
+     4,
+     5
+    ],
+    "estados": {
+     "0": "amarelo",
+     "1": "amarelo",
+     "2": "amarelo",
+     "3": "amarelo",
+     "4": "verde"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "Por que não é estável",
+   "texto": "Separar `2a 2b 1` com pivô 1: 2a <= 1? Não. 2b <= 1? Não. Troca `v[0]` com o pivô: `1 2b 2a`. A troca de longa distância passou o 2a para depois do 2b, e o lado `2b 2a` continua assim.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     "1",
+     "2b",
+     "2a"
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "vermelho",
+     "2": "vermelho"
+    },
+    "nome": "v"
+   }
+  }
+ ],
+ "custos": "| Caso | Quando acontece | Tempo | Pilha |\n|---|---|---|---|\n| Melhor | pivô sempre no meio | `O(n log n)` | `O(log n)` |\n| Médio | dados embaralhados | `O(n log n)` | `O(log n)` |\n| Pior | pivô sempre o menor ou o maior (ex.: vetor ordenado, pivô na ponta) | `O(n²)`, `n(n - 1)/2` comparações | `O(n)` |",
+ "naprova": "A banca mostra o vetor depois da partição e pergunta quem pode ter sido o pivô: aplique o teste da posição final em cada candidato (em ordem decrescente, esquerda `>=` e direita `<=`). Também cobra pior caso `O(n²)` contra médio `O(n log n)`, espaço de pilha `O(log n)` a `O(n)` e que a entrada já ordenada é a pior com pivô na ponta. A pegadinha é \"o quick sort é sempre o mais rápido\" ou \"tem pior caso `O(n log n)`\".",
+ "fontes": [
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 7 (quicksort e `PARTITION`).",
+  "Feofiloff, *Algoritmos em linguagem C*, capítulo de quicksort.",
+  "Ziviani, *Projeto de algoritmos*, 3. ed., cap. 4 (quicksort e a partição com dois índices)."
+ ]
+}

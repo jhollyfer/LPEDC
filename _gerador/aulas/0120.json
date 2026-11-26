@@ -1,0 +1,210 @@
+{
+ "num": "0120",
+ "oque": "O counting sort (ordenação por contagem) não compara chaves: usa o **valor** de cada chave como **índice** num vetor de contadores. Serve para chaves inteiras num intervalo pequeno, de `0` a `k - 1`.",
+ "como": "Três laços:\n\n- **contar**: para cada chave `x`, `c[x]++`;\n- **acumular**: `c[x] += c[x - 1]`, e `c[x]` passa a dizer quantos têm chave `<= x`, isto é, onde termina o bloco de `x` na saída;\n- **distribuir**, de **trás para a frente**: `c[x]--` e grava o elemento em `saida[c[x]]`.\n\n```c\nint c[K] = {0};\nfor (int i = 0; i < n; i++) c[v[i]]++;\nfor (int x = 1; x < K; x++) c[x] += c[x-1];\nfor (int i = n - 1; i >= 0; i--)\n    saida[--c[v[i]]] = v[i];\n```\n\nAndar de trás para a frente faz o último de cada chave pegar a última vaga do bloco. É isso que mantém a ordem dos empates.",
+ "caracteristicas": [
+  "Não é ordenação por comparação, por isso escapa do limite `Ω(n log n)`.",
+  "Custo `Θ(n + k)` em todos os casos: dois laços andam pelos `n` elementos e um pelos `k` contadores.",
+  "**Estável**, desde que o laço de distribuição ande de trás para a frente.",
+  "**Não é in-place**: precisa de `k` contadores e de um vetor de saída com `n` posições.",
+  "É a passada estável que o radix sort usa em cada dígito."
+ ],
+ "vantagens": [
+  "Linear quando `k` é da ordem de `n` ou menor.",
+  "Estável, o que permite ordenar registros pela chave sem bagunçar os empates.",
+  "A ordem inicial dos dados não muda o custo."
+ ],
+ "desvantagens": [
+  "Só serve para chaves inteiras (ou que viram inteiros) num intervalo curto.",
+  "Memória extra `O(n + k)`.",
+  "Com `k` grande, o vetor `c` domina tudo: chaves até 1 bilhão pediriam 4 GB de contadores."
+ ],
+ "exemplo": "Oito avaliações de uma lanchonete, cada uma com código e nota de 0 a 4 estrelas (`K = 5`): **A3 B1 C3 D2 E1 F4 G0 H3**. As três de 3 estrelas chegaram como A, C, H.",
+ "passos": [
+  {
+   "titulo": "Entrada",
+   "texto": "A chave é o número; a letra é o resto do registro. Os pedidos de 3 estrelas estão em amarelo.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     "A3",
+     "B1",
+     "C3",
+     "D2",
+     "E1",
+     "F4",
+     "G0",
+     "H3"
+    ],
+    "estados": {
+     "0": "amarelo",
+     "2": "amarelo",
+     "7": "amarelo"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "1) Contar",
+   "texto": "Uma volta pela entrada somando 1 em `c[nota]`: uma nota 0, duas notas 1, uma nota 2, três notas 3, uma nota 4. O índice de `c` é a nota.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     1,
+     2,
+     1,
+     3,
+     1
+    ],
+    "estados": {
+     "3": "amarelo"
+    },
+    "nome": "c"
+   }
+  },
+  {
+   "titulo": "2) Acumular",
+   "texto": "`c[x] += c[x - 1]`: fica `1 3 4 7 8`. Leia `c[3] = 7` assim: 7 avaliações têm até 3 estrelas, então o bloco das notas 3 termina antes da posição 7 e ocupa 4, 5 e 6.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     1,
+     3,
+     4,
+     7,
+     8
+    ],
+    "estados": {
+     "3": "amarelo"
+    },
+    "nome": "c"
+   }
+  },
+  {
+   "titulo": "3) Distribuir: i = 7",
+   "texto": "De trás para a frente. H3: `c[3]` cai de 7 para 6 e o H3 vai para `saida[6]`, a última vaga do bloco do 3. Agora `c = 1 3 4 6 8`.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     null,
+     null,
+     null,
+     null,
+     null,
+     null,
+     "H3",
+     null
+    ],
+    "estados": {
+     "6": "azul"
+    },
+    "nome": "saida"
+   }
+  },
+  {
+   "titulo": "i = 6 e i = 5",
+   "texto": "G0: `c[0]` cai de 1 para 0, e o G0 vai para `saida[0]`. F4: `c[4]` cai de 8 para 7, e o F4 vai para `saida[7]`. Agora `c = 0 3 4 6 7`.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     "G0",
+     null,
+     null,
+     null,
+     null,
+     null,
+     "H3",
+     "F4"
+    ],
+    "estados": {
+     "0": "azul",
+     "7": "azul"
+    },
+    "nome": "saida"
+   }
+  },
+  {
+   "titulo": "i = 4, 3 e 2",
+   "texto": "E1 vai para `saida[2]` (`c[1]` vira 2). D2 vai para `saida[3]` (`c[2]` vira 3). C3 vai para `saida[5]` (`c[3]` vira 5), logo **antes** do H3, como na entrada.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     "G0",
+     null,
+     "E1",
+     "D2",
+     null,
+     "C3",
+     "H3",
+     "F4"
+    ],
+    "estados": {
+     "2": "azul",
+     "3": "azul",
+     "5": "azul"
+    },
+    "nome": "saida"
+   }
+  },
+  {
+   "titulo": "i = 1 e i = 0: pronto",
+   "texto": "B1 vai para `saida[1]` e A3 para `saida[4]`. Resultado: `G0 B1 E1 D2 A3 C3 H3 F4`. Os de 3 estrelas saíram A, C, H, na ordem de chegada: **estável**. No fim, cada `c[x]` aponta para o começo do bloco de `x`.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     "G0",
+     "B1",
+     "E1",
+     "D2",
+     "A3",
+     "C3",
+     "H3",
+     "F4"
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "verde",
+     "2": "verde",
+     "3": "verde",
+     "4": "verde",
+     "5": "verde",
+     "6": "verde",
+     "7": "verde"
+    },
+    "nome": "saida"
+   }
+  },
+  {
+   "titulo": "Se distribuísse da frente para trás",
+   "texto": "O A3 pegaria a vaga 6, o C3 a 5 e o H3 a 4; o B1 e o E1 também se inverteriam. A saída seria `G0 E1 B1 D2 H3 C3 A3 F4`: ordenada pela nota, mas com os empates trocados, sem nenhum aviso.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     "G0",
+     "E1",
+     "B1",
+     "D2",
+     "H3",
+     "C3",
+     "A3",
+     "F4"
+    ],
+    "estados": {
+     "1": "vermelho",
+     "2": "vermelho",
+     "4": "vermelho",
+     "5": "vermelho",
+     "6": "vermelho"
+    },
+    "nome": "saida"
+   }
+  }
+ ],
+ "custos": "| Caso | Tempo | Memória extra |\n|---|---|---|\n| Melhor | `Θ(n + k)` | `O(n + k)` |\n| Médio | `Θ(n + k)` | `O(n + k)` |\n| Pior | `Θ(n + k)` | `O(n + k)` |\n| Com `k = O(n)` | `Θ(n)` | `O(n)` |",
+ "naprova": "Aparece junto com o radix sort: distribui sem comparar chaves e usa vetor auxiliar proporcional a `n`. A pegadinha é dizer que é linear sempre (só quando `k` não é muito maior que `n`) ou que é in-place.",
+ "fontes": [
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 8 (counting sort).",
+  "Sedgewick e Wayne, *Algorithms*, 4. ed., seção 5.1 (contagem indexada pela chave).",
+  "Szwarcfiter e Markenzon, *Estruturas de dados e seus algoritmos*, 3. ed., caps. de ordenação (ordenação por distribuição)."
+ ]
+}

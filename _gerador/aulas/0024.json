@@ -1,0 +1,123 @@
+{
+ "num": "0024",
+ "oque": "Laço aninhado é um laço dentro do corpo de outro. A cada volta do laço **de fora**, o laço **de dentro** roda do começo ao fim.",
+ "como": "Para saber quantas vezes o corpo de dentro roda, olhe se o limite de dentro é fixo ou depende do contador de fora:\n\n| Laço de fora | Laço de dentro | Vezes que o corpo roda |\n|---|---|---|\n| `i = 0; i < n` | `j = 0; j < m` | `n · m` |\n| `i = 0; i < n` | `j = 0; j < i` | `0 + 1 + ... + (n-1) = n(n-1)/2` |\n| `i = 0; i < n` | `j = i; j < n` | `n + (n-1) + ... + 1 = n(n+1)/2` |\n| `i = 0; i < n` | `j = i + 1; j < n` | `n(n-1)/2` |\n| `i = 1; i < n; i *= 2` | `j = 0; j < n` | `n · ⌈log₂ n⌉` |\n\nLimite fixo: **multiplica**. Limite que depende de `i`: **soma**.\n\n```c\nint cont = 0;\nfor (int i = 0; i < 4; i++)\n    for (int j = i; j < 4; j++)\n        cont++;\nprintf(\"%d\\n\", cont);   // 4+3+2+1 = 10\n```",
+ "caracteristicas": [
+  "O contador de dentro **recomeça** a cada volta de fora. No `for` isso é automático; no `while` você zera à mão antes do laço de dentro.",
+  "Com limites fixos, as voltas se multiplicam; com limite de dentro dependente de `i`, viram uma soma.",
+  "Dois laços até `n` custam `O(n²)`; três, como na multiplicação de matrizes, `O(n³)`.",
+  "`break` e `continue` agem só no laço mais interno.",
+  "Numa matriz, `j` de `i` até o fim visita a diagonal e o que está acima dela; `j` de 0 até `i` visita a diagonal e o que está abaixo."
+ ],
+ "vantagens": [
+  "É o jeito natural de percorrer matriz: linha por fora, coluna por dentro.",
+  "Compara todos os pares de um vetor (ordenação simples, busca de repetidos).",
+  "Desenha padrões em que cada linha tem um tamanho diferente, como um triângulo."
+ ],
+ "desvantagens": [
+  "O custo cresce rápido: 1.000 por 1.000 já dá 1 milhão de voltas, e dobrar `n` quadruplica o trabalho.",
+  "Com `i` e `j`, é fácil trocar um pelo outro numa condição ou num índice, e o programa compila do mesmo jeito.",
+  "No `while`, esquecer de zerar o contador de dentro faz ele rodar só na primeira volta de fora."
+ ],
+ "exemplo": "Rastreio do código acima:\n\n| i | j passa por | Voltas de dentro | cont no fim |\n|---|---|---|---|\n| 0 | 0, 1, 2, 3 | 4 | 4 |\n| 1 | 1, 2, 3 | 3 | 7 |\n| 2 | 2, 3 | 2 | 9 |\n| 3 | 3 | 1 | 10 |\n\nCom `n = 4`: `n(n+1)/2 = 4 · 5 / 2 = 10`. A conta confere.",
+ "passos": [
+  {
+   "titulo": "A matriz e o código",
+   "texto": "Soma com `for (i = 0; i < 3; i++) for (j = i; j < 3; j++) soma += mat[i][j];`. O `j` começa em `i`, então cada linha começa um pouco mais à direita.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "     j=0  j=1  j=2",
+     "i=0   1    2    3",
+     "i=1   4    5    6",
+     "i=2   7    8    9",
+     "",
+     "soma = 0"
+    ],
+    "titulo": "mat 3x3"
+   }
+  },
+  {
+   "titulo": "i = 0: j de 0 a 2",
+   "texto": "O laço de dentro começa em `j = 0` e vai até 2: soma 1 + 2 + 3. Três voltas de dentro.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "     j=0  j=1  j=2",
+     "i=0  [1]  [2]  [3]",
+     "i=1   4    5    6",
+     "i=2   7    8    9",
+     "",
+     "soma = 6"
+    ]
+   }
+  },
+  {
+   "titulo": "i = 1: j de 1 a 2",
+   "texto": "O de dentro recomeça, agora em `j = 1`. O 4 fica de fora. Soma 5 + 6. Duas voltas.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "     j=0  j=1  j=2",
+     "i=0  [1]  [2]  [3]",
+     "i=1   4   [5]  [6]",
+     "i=2   7    8    9",
+     "",
+     "soma = 6 + 11 = 17"
+    ]
+   }
+  },
+  {
+   "titulo": "i = 2: só j = 2",
+   "texto": "Começa em `j = 2` e para logo: só o 9. Uma volta. Total de voltas de dentro: 3 + 2 + 1 = 6. A soma pegou a **diagonal e o que está acima** dela.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "     j=0  j=1  j=2",
+     "i=0  [1]  [2]  [3]",
+     "i=1   4   [5]  [6]",
+     "i=2   7    8   [9]",
+     "",
+     "soma = 17 + 9 = 26"
+    ]
+   }
+  },
+  {
+   "titulo": "Trocando para j <= i",
+   "texto": "Com `for (j = 0; j <= i; j++)`, cada linha vai do começo até a diagonal. Pega a diagonal e o que está **abaixo**: 1 + 4 + 5 + 7 + 8 + 9 = 34. Também são 6 voltas.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "     j=0  j=1  j=2",
+     "i=0  [1]   2    3",
+     "i=1  [4]  [5]   6",
+     "i=2  [7]  [8]  [9]",
+     "",
+     "soma = 34"
+    ]
+   }
+  },
+  {
+   "titulo": "Três laços: produto de matrizes",
+   "texto": "Para `A` (m x n) vezes `B` (n x p), o laço de `i` roda m vezes, o de `j` p vezes e o de `k` n vezes. A multiplicação do corpo roda `m · p · n` vezes. Com m = 2, n = 3, p = 2: 12 multiplicações para um resultado 2 x 2.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "for i < m        2",
+     "  for j < p      2",
+     "    for k < n    3",
+     "      sum += ...",
+     "",
+     "2 · 2 · 3 = 12 vezes"
+    ]
+   }
+  }
+ ],
+ "custos": "| Forma | Voltas do corpo | Ordem |\n|---|---|---|\n| dois laços fixos até `n` | `n²` | `O(n²)` |\n| dentro de `i` até `n` (ou de 0 até `i`) | cerca de `n²/2` | `O(n²)` |\n| três laços até `n` | `n³` | `O(n³)` |\n| fora dobrando, dentro até `n` | `n · log₂ n` | `O(n log n)` |",
+ "naprova": "A banca mostra um laço duplo sobre matriz e pergunta o que ele calcula: olhe o início e o fim do laço de dentro (`j = i` pega a diagonal e acima). Também pede o resultado de três laços aninhados, como o produto de matrizes. Teste com uma matriz 2 x 2 ou 3 x 3 quando tiver dúvida.",
+ "fontes": [
+  "Deitel e Deitel, *C: como programar*, 6. ed., cap. 4 (estruturas de repetição).",
+  "Backes, *Linguagem C: completa e descomplicada*, cap. 5 (comandos de repetição e aninhamento).",
+  "Celes, Cerqueira e Rangel, *Introdução a estruturas de dados*, 2. ed., capítulo de controle de fluxo."
+ ]
+}

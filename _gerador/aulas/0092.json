@@ -1,0 +1,218 @@
+{
+ "num": "0092",
+ "oque": "O selection sort (ordenação por seleção) escolhe o menor elemento e o põe na primeira posição, depois escolhe o menor dos que sobraram e o põe na segunda, e assim por diante.",
+ "como": "Na passada `i` (de 0 a `n - 2`):\n\n- procure o **índice** do menor em `v[i..n-1]`, começando com `menor = i`;\n- troque `v[i]` com `v[menor]`, uma troca só, **fora** do laço de busca;\n- a gaveta `i` fica pronta e nunca mais muda.\n\n```c\nfor (int i = 0; i < n - 1; i++) {\n    int menor = i;\n    for (int j = i + 1; j < n; j++)\n        if (v[j] < v[menor]) menor = j;\n    if (menor != i) {\n        int aux = v[i];\n        v[i] = v[menor];\n        v[menor] = aux;\n    }\n}\n```\n\nCom `<` estrito, um empate não troca o `menor`: fica o primeiro que apareceu.",
+ "caracteristicas": [
+  "Faz `n(n - 1)/2` comparações em **todos** os casos, mesmo com o vetor já ordenado. Não é adaptativo.",
+  "Faz **no máximo `n - 1` trocas**, uma por passada. É o método simples que menos move elementos.",
+  "**Não é estável**: a troca é de longa distância e pode pular por cima de um elemento igual.",
+  "**In-place**: memória extra `O(1)`.",
+  "Depois da passada `i`, as gavetas `0..i` têm os menores do vetor inteiro, já na posição final."
+ ],
+ "vantagens": [
+  "Poucas trocas: bom quando mover um elemento é caro (um vetor de `struct` grandes).",
+  "Custo previsível: não depende da entrada.",
+  "Código curto e in-place."
+ ],
+ "desvantagens": [
+  "`O(n²)` comparações sempre, até no vetor já ordenado.",
+  "Não é estável.",
+  "Perde do insertion sort em vetor quase ordenado."
+ ],
+ "exemplo": "Vetor das provas de 2016: **4 5 2 3 17 2 1 22** (`n = 8`, posições a partir de 0). Há dois 2, nas posições 2 e 5. Cada passo é uma passada: roxo é a gaveta `i`, amarelo é o menor achado, verde é a parte pronta.",
+ "passos": [
+  {
+   "titulo": "Passada 0: procura o menor",
+   "texto": "`menor` começa em 0 (valor 4). 5 não é menor; 2 é (`menor = 2`); 3 e 17 não; o 2 da posição 5 não substitui, porque `2 < 2` é falso; 1 é menor (`menor = 6`); 22 não. São 7 comparações, e o menor é o **1, na posição 6**.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     4,
+     5,
+     2,
+     3,
+     17,
+     2,
+     1,
+     22
+    ],
+    "estados": {
+     "0": "roxo",
+     "6": "amarelo"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "Passada 0: a primeira troca",
+   "texto": "Troca `v[0]` com `v[6]`: a **primeira troca é entre as posições 0 e 6**. O 1 fica pronto. O 4 foi parar na posição 6, longe de onde estava.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     1,
+     5,
+     2,
+     3,
+     17,
+     2,
+     4,
+     22
+    ],
+    "estados": {
+     "0": "verde",
+     "6": "amarelo"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "Passada 1",
+   "texto": "Menor de `v[1..7]` = `5 2 3 17 2 4 22`: o 2 da posição 2 (o outro 2 empata e não troca o `menor`). São 6 comparações. A segunda troca é entre as posições 1 e 2.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     1,
+     2,
+     5,
+     3,
+     17,
+     2,
+     4,
+     22
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "verde",
+     "2": "amarelo"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "Passada 2",
+   "texto": "Menor de `v[2..7]` = `5 3 17 2 4 22`: o 2 da posição 5, com 5 comparações. Troca as posições 2 e 5: o 5 salta para a posição 5.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     1,
+     2,
+     2,
+     3,
+     17,
+     5,
+     4,
+     22
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "verde",
+     "2": "verde",
+     "5": "amarelo"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "Passada 3: sem troca",
+   "texto": "Menor de `v[3..7]` = `3 17 5 4 22`: é o próprio 3, na posição 3. São 4 comparações e `menor == i`, então não troca. As comparações acontecem do mesmo jeito.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     1,
+     2,
+     2,
+     3,
+     17,
+     5,
+     4,
+     22
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "verde",
+     "2": "verde",
+     "3": "verde"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "Passada 4",
+   "texto": "Menor de `v[4..7]` = `17 5 4 22`: o 4, na posição 6, com 3 comparações. Troca as posições 4 e 6.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     1,
+     2,
+     2,
+     3,
+     4,
+     5,
+     17,
+     22
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "verde",
+     "2": "verde",
+     "3": "verde",
+     "4": "verde",
+     "6": "amarelo"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "Passadas 5 e 6",
+   "texto": "O 5 e o 17 já estão no lugar: 2 + 1 comparações, nenhuma troca. Total: 7 + 6 + 5 + 4 + 3 + 2 + 1 = **28 comparações** (`8 · 7 / 2`) e **4 trocas**.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     1,
+     2,
+     2,
+     3,
+     4,
+     5,
+     17,
+     22
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "verde",
+     "2": "verde",
+     "3": "verde",
+     "4": "verde",
+     "5": "verde",
+     "6": "verde",
+     "7": "verde"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "Por que não é estável",
+   "texto": "Neste vetor os dois 2 acabaram na ordem original, por sorte. Veja `2a 2b 1`: a passada 0 acha o 1 e troca as posições 0 e 2, o que dá `1 2b 2a`. A passada 1 compara `2a < 2b`, que é falso, e não troca. O 2a, que vinha antes, terminou **depois** do 2b.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     "1",
+     "2b",
+     "2a"
+    ],
+    "estados": {
+     "1": "vermelho",
+     "2": "vermelho"
+    },
+    "nome": "v"
+   }
+  }
+ ],
+ "custos": "| Caso | Comparações | Trocas | Ordem |\n|---|---|---|---|\n| Melhor (ordenado) | `n(n - 1)/2` | 0 | `O(n²)` |\n| Médio | `n(n - 1)/2` | até `n - 1` | `O(n²)` |\n| Pior | `n(n - 1)/2` | `n - 1` | `O(n²)` |\n| Memória extra | | | `O(1)` |",
+ "naprova": "Cai a simulação: \"a primeira (ou a segunda) troca ocorre entre quais posições?\". Faça passada por passada, guardando o índice do menor. Cai também \"qual faz menos movimentações no pior caso\": é a seleção, com `n - 1` trocas. A pegadinha é dizer que a seleção fica `O(n)` com o vetor ordenado; quem faz isso é a inserção.",
+ "fontes": [
+  "Feofiloff, *Algoritmos em linguagem C*, capítulo de ordenação elementar.",
+  "Ziviani, *Projeto de algoritmos*, 3. ed., cap. 4 (ordenação por seleção).",
+  "Tenenbaum, Langsam e Augenstein, *Estruturas de dados usando C*, cap. 6 (classificação)."
+ ]
+}

@@ -1,0 +1,144 @@
+{
+ "num": "0033",
+ "oque": "Três recursões clássicas mostram quando a técnica compensa. **Fibonacci** (`fib(n) = fib(n-1) + fib(n-2)`) faz duas chamadas que repetem trabalho. A **Torre de Hanói** faz duas chamadas que não repetem nada. O **MDC de Euclides** (`mdc(a, b) = mdc(b, a % b)`) faz uma chamada por vez e encolhe depressa.",
+ "como": "- **Fibonacci**: dois casos base, `fib(0) = 0` e `fib(1) = 1`. Cada termo é a soma dos dois anteriores: 0, 1, 1, 2, 3, 5, 8, 13...\n- **Hanói**: para levar `n` discos de A para C, leve `n - 1` de A para B (usando C), mova o maior de A para C, leve os `n - 1` de B para C (usando A). Caso base: zero discos, nada a fazer.\n- **Euclides**: o MDC de `a` e `b` é o MDC de `b` e `a % b`; quando o segundo chega a 0, o primeiro é a resposta.\n\n```c\nint fib(int n) {\n    if (n < 2) return n;\n    return fib(n - 1) + fib(n - 2);\n}\n\nvoid hanoi(int n, char o, char d, char a) {\n    if (n == 0) return;\n    hanoi(n - 1, o, a, d);\n    printf(\"%c -> %c\\n\", o, d);\n    hanoi(n - 1, a, d, o);\n}\n\nint mdc(int a, int b) {\n    return b == 0 ? a : mdc(b, a % b);\n}\n```",
+ "caracteristicas": [
+  "No Fibonacci recursivo, as duas chamadas não se comunicam: `fib(5)` calcula `fib(3)` duas vezes e `fib(2)` três vezes. São 15 chamadas.",
+  "O número de chamadas de `fib(n)` cresce como 1,618ⁿ (exponencial); a memória acompanha só a altura da árvore, no máximo `n`.",
+  "Hanói com `n` discos faz `2ⁿ - 1` movimentos, e não existe solução mais curta.",
+  "No MDC, a cada duas chamadas o primeiro número cai pelo menos à metade: poucas chamadas até para números enormes.",
+  "Cuidado com os casos base do enunciado: com `f(1) = 0` e `f(2) = 1`, a sequência anda uma casa em relação ao `fib` usual."
+ ],
+ "vantagens": [
+  "Hanói e Euclides ficam curtos e eficientes na forma recursiva; a versão com laço de Hanói é bem mais difícil de ler.",
+  "A definição de Fibonacci vira código quase palavra por palavra, o que ajuda a entender recursão com duas chamadas."
+ ],
+ "desvantagens": [
+  "Fibonacci recursivo repete trabalho: `fib(30)` faz quase 2,7 milhões de chamadas, contra 30 passos de um laço com duas variáveis.",
+  "`fib(47)` = 2.971.215.073 já não cabe num `int` de 32 bits; com `long long` vai até `fib(92)`.",
+  "O custo de Hanói é exponencial de qualquer jeito, porque o próprio problema exige `2ⁿ - 1` movimentos."
+ ],
+ "exemplo": "Vamos montar a árvore de `fib(4)`, contar as chamadas, resolver a versão deslocada da prova, mover 3 discos de Hanói e calcular `mdc(1071, 462)`.",
+ "passos": [
+  {
+   "titulo": "fib(4) desce",
+   "texto": "`fib(4)` chama `fib(3)` e `fib(2)`. O C resolve a primeira chamada inteira antes de começar a segunda. Cada chamada com `n >= 2` abre mais duas, até chegar em `fib(1)` ou `fib(0)`.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "fib(4)",
+     "  fib(3)",
+     "    fib(2)",
+     "      fib(1)",
+     "      fib(0)",
+     "    fib(1)",
+     "  fib(2)",
+     "    fib(1)",
+     "    fib(0)"
+    ]
+   }
+  },
+  {
+   "titulo": "Os casos base respondem",
+   "texto": "`fib(1)` devolve 1 e `fib(0)` devolve 0, sem chamar ninguém. Com os dois, o `fib(2)` mais fundo devolve 1 + 0 = 1.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "fib(4)",
+     "  fib(3)",
+     "    fib(2) = 1",
+     "      fib(1) = 1",
+     "      fib(0) = 0",
+     "    fib(1)",
+     "  fib(2)",
+     "    fib(1)",
+     "    fib(0)"
+    ]
+   }
+  },
+  {
+   "titulo": "Os valores sobem",
+   "texto": "`fib(3) = fib(2) + fib(1) = 1 + 1 = 2`. O segundo `fib(2)` é calculado **de novo**, do zero, e dá 1. No topo: `fib(4) = 2 + 1 = 3`. Foram 9 chamadas.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "fib(4) = 3",
+     "  fib(3) = 2",
+     "    fib(2) = 1",
+     "      fib(1) = 1",
+     "      fib(0) = 0",
+     "    fib(1) = 1",
+     "  fib(2) = 1   (de novo)",
+     "    fib(1) = 1",
+     "    fib(0) = 0"
+    ]
+   }
+  },
+  {
+   "titulo": "Contar as chamadas",
+   "texto": "Cada chamada é ela mesma mais as duas que faz: `C(n) = C(n-1) + C(n-2) + 1`, com `C(0) = C(1) = 1`. A conta quase dobra a cada `n`.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "C(0) = 1",
+     "C(1) = 1",
+     "C(2) = 1 + 1 + 1 = 3",
+     "C(3) = 3 + 1 + 1 = 5",
+     "C(4) = 5 + 3 + 1 = 9",
+     "C(5) = 9 + 5 + 1 = 15"
+    ]
+   }
+  },
+  {
+   "titulo": "A versão deslocada da prova",
+   "texto": "A banca usa `f(1) = 0`, `f(2) = 1` e `f(n) = f(n-1) + f(n-2)`. Escreva a tabela a partir dos casos base dados, sem usar o `fib` de memória.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "n     1  2  3  4  5  6  7",
+     "f(n)  0  1  1  2  3  5  8",
+     "",
+     "f(4) = 2",
+     "f(7) = 8"
+    ]
+   }
+  },
+  {
+   "titulo": "Hanói com 3 discos",
+   "texto": "`hanoi(3, A, C, B)`: os movimentos 1 a 3 levam os 2 discos de cima para B; o 4 move o maior para C; os movimentos 5 a 7 levam os 2 de B para C. São 2³ - 1 = 7 movimentos.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "1. A -> C   (disco 1)",
+     "2. A -> B   (disco 2)",
+     "3. C -> B   (disco 1)",
+     "4. A -> C   (disco 3)",
+     "5. B -> A   (disco 1)",
+     "6. B -> C   (disco 2)",
+     "7. A -> C   (disco 1)"
+    ]
+   }
+  },
+  {
+   "titulo": "Euclides: mdc(1071, 462)",
+   "texto": "1071 = 2 · 462 + 147, então o resto é 147. 462 = 3 · 147 + 21. 147 = 7 · 21 + 0. Quando o segundo número chega a 0, o primeiro é o MDC: 21. Quatro chamadas, uma por vez.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "mdc(1071, 462)  1071 % 462 = 147",
+     "mdc(462, 147)   462 % 147 = 21",
+     "mdc(147, 21)    147 % 21 = 0",
+     "mdc(21, 0)      -> 21"
+    ]
+   }
+  }
+ ],
+ "custos": "| Algoritmo | Tempo | Memória (pilha) |\n|---|---|---|\n| `fib(n)` recursivo | exponencial, cerca de 1,618ⁿ chamadas | `O(n)` |\n| `fib(n)` com laço | `O(n)` | `O(1)` |\n| `hanoi(n)` | `2ⁿ - 1` movimentos, `O(2ⁿ)` | `O(n)` |\n| `mdc(a, b)` | `O(log min(a, b))` chamadas | `O(log min(a, b))` |",
+ "naprova": "A banca pede o valor de um Fibonacci com casos base diferentes do usual, como `f(1) = 0` e `f(2) = 1`: monte a tabela a partir do enunciado e conte as posições com cuidado. A pegadinha é responder com o `fib` de memória e errar por uma casa.",
+ "fontes": [
+  "Deitel e Deitel, *C: como programar*, 6. ed., cap. 5 (Fibonacci, recursão e exercícios de Hanói e MDC).",
+  "Feofiloff, *Algoritmos em linguagem C*, cap. 5 (recursão).",
+  "Backes, *Linguagem C: completa e descomplicada*, cap. 9 (recursão).",
+  "Ziviani, *Projeto de algoritmos*, 3. ed., cap. 2 (recursividade)."
+ ]
+}

@@ -1,0 +1,200 @@
+{
+ "num": "0094",
+ "oque": "O merge sort (ordenação por intercalação) divide o vetor ao meio, ordena cada metade pelo próprio merge sort e **intercala** as duas metades ordenadas numa só. É o exemplo clássico de dividir e conquistar.",
+ "como": "- **Dividir**: ache o meio `q` do pedaço `v[p..r-1]`.\n- **Conquistar**: ordene `v[p..q-1]` e `v[q..r-1]` por recursão. Um pedaço com 0 ou 1 elemento já está ordenado (caso base).\n- **Combinar**: intercale as duas metades num rascunho `w` e copie de volta.\n\nA intercalação olha o primeiro de cada metade e manda o menor para o rascunho. No empate, usa `<=` e pega o da **esquerda**:\n\n```c\n// junta v[p..q-1] e v[q..r-1] em w\nint i = p, j = q, k = 0;\nwhile (i < q && j < r)\n    if (v[i] <= v[j]) w[k++] = v[i++];\n    else              w[k++] = v[j++];\nwhile (i < q) w[k++] = v[i++];\nwhile (j < r) w[k++] = v[j++];\n```\n\nO custo sai da recorrência `T(n) = 2T(n/2) + n`: são `log₂ n` níveis de divisão, e cada nível intercala os `n` elementos uma vez.",
+ "caracteristicas": [
+  "`O(n log n)` em **todos** os casos: a divisão não depende dos valores. Não é adaptativo.",
+  "Usa um rascunho do tamanho do vetor: memória extra `O(n)`. **Não é in-place**.",
+  "**Estável**, por causa do `<=` na intercalação.",
+  "Intercalar `n` elementos custa no máximo `n - 1` comparações.",
+  "O trabalho todo está na combinação; a divisão é só achar o meio."
+ ],
+ "vantagens": [
+  "Pior caso `O(n log n)` garantido, ao contrário do quick sort.",
+  "Estável.",
+  "A intercalação lê as metades em sequência, então a ideia serve também para lista encadeada e para ordenar arquivos grandes."
+ ],
+ "desvantagens": [
+  "Memória extra `O(n)` para o rascunho.",
+  "Não ganha nada com o vetor já ordenado: faz a divisão e as intercalações do mesmo jeito.",
+  "Copiar para o rascunho e de volta pesa em vetores pequenos, onde o insertion sort ganha."
+ ],
+ "exemplo": "Oito notas de prova: **52 18 33 7 41 26 60 12**. O código termina a metade esquerda antes de começar a direita; aqui as intercalações estão agrupadas por nível.",
+ "passos": [
+  {
+   "titulo": "Dividir até pedaços de 1",
+   "texto": "8 vira 4 + 4, cada 4 vira 2 + 2, cada 2 vira 1 + 1. São 3 níveis, `log₂ 8 = 3`. Pedaço de 1 elemento é caso base: já está ordenado, e a recursão volta.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "52 18 33 7  41 26 60 12",
+     "52 18 33 7 | 41 26 60 12",
+     "52 18|33 7 | 41 26|60 12",
+     "52|18|33|7 | 41|26|60|12"
+    ],
+    "titulo": "divisão"
+   }
+  },
+  {
+   "titulo": "Intercalar os pares",
+   "texto": "Cada par custa 1 comparação: 52 com 18 dá `18 52`, 33 com 7 dá `7 33`, 41 com 26 dá `26 41`, 60 com 12 dá `12 60`. São 4 comparações neste nível.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     18,
+     52,
+     7,
+     33,
+     26,
+     41,
+     12,
+     60
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "verde",
+     "4": "verde",
+     "5": "verde",
+     "2": "roxo",
+     "3": "roxo",
+     "6": "roxo",
+     "7": "roxo"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "Intercalar 18 52 com 7 33",
+   "texto": "18 contra 7: vai o 7. 18 contra 33: vai o 18. 52 contra 33: vai o 33. A direita acabou e o 52 desce sem comparar. São 3 comparações.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     7,
+     18,
+     33,
+     52,
+     26,
+     41,
+     12,
+     60
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "verde",
+     "2": "verde",
+     "3": "verde",
+     "4": "roxo",
+     "5": "roxo",
+     "6": "roxo",
+     "7": "roxo"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "Intercalar 26 41 com 12 60",
+   "texto": "26 contra 12: vai o 12. 26 contra 60: vai o 26. 41 contra 60: vai o 41. Sobra o 60. São 3 comparações; no nível do meio, 6 ao todo.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     7,
+     18,
+     33,
+     52,
+     12,
+     26,
+     41,
+     60
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "verde",
+     "2": "verde",
+     "3": "verde",
+     "4": "roxo",
+     "5": "roxo",
+     "6": "roxo",
+     "7": "roxo"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "Última intercalação, no meio",
+   "texto": "No rascunho `w`: 7 contra 12 vai o 7; 18 contra 12 vai o 12; 18 contra 26 vai o 18; 33 contra 26 vai o 26. Agora `i` aponta para o 33 e `j` para o 41.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     7,
+     12,
+     18,
+     26,
+     null,
+     null,
+     null,
+     null
+    ],
+    "estados": {
+     "0": "azul",
+     "1": "azul",
+     "2": "azul",
+     "3": "azul"
+    },
+    "nome": "w"
+   }
+  },
+  {
+   "titulo": "Fim da intercalação",
+   "texto": "33 contra 41: 33. 52 contra 41: 41. 52 contra 60: 52. A esquerda acabou e o 60 entra sem comparar. São 7 comparações, o máximo para 8 elementos. O rascunho volta para `v`. Total: 4 + 6 + 7 = **17 comparações**.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     7,
+     12,
+     18,
+     26,
+     33,
+     41,
+     52,
+     60
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "verde",
+     "2": "verde",
+     "3": "verde",
+     "4": "verde",
+     "5": "verde",
+     "6": "verde",
+     "7": "verde"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "Por que é estável",
+   "texto": "Intercalar `5a 8` com `5b 9`: `5a <= 5b` é verdade, então o 5a, da metade esquerda, vai primeiro. Resultado `5a 5b 8 9`, na ordem de chegada. Com `<` no lugar de `<=`, o 5b passaria na frente.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     "5a",
+     "5b",
+     "8",
+     "9"
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "verde"
+    },
+    "nome": "w"
+   }
+  }
+ ],
+ "custos": "| Caso | Comparações | Ordem |\n|---|---|---|\n| Melhor | cerca de `(n/2) log₂ n` | `O(n log n)` |\n| Médio | cerca de `n log₂ n` | `O(n log n)` |\n| Pior | no máximo `n log₂ n` | `O(n log n)` |\n| Memória extra | rascunho de `n` + pilha de `log₂ n` | `O(n)` |",
+ "naprova": "A banca pede o algoritmo cujo desempenho **não varia** com a entrada (merge ou heap), cobra que o merge gasta espaço `O(n)` (não é constante) e mostra um código com divisão ao meio, duas chamadas recursivas e vetor auxiliar para você reconhecer o merge sort. A pegadinha é chamá-lo de in-place ou dizer que fica mais rápido com o vetor ordenado.",
+ "fontes": [
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 2 (merge sort e dividir e conquistar).",
+  "Feofiloff, *Algoritmos em linguagem C*, capítulo de mergesort.",
+  "Ziviani, *Projeto de algoritmos*, 3. ed., cap. 4 (mergesort)."
+ ]
+}

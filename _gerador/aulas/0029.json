@@ -1,0 +1,158 @@
+{
+ "num": "0029",
+ "oque": "Em C, todo argumento é passado **por valor**: na chamada, o valor do argumento é copiado para o parâmetro, que é uma variável local nova. Mudar o parâmetro não muda a variável de quem chamou.",
+ "como": "O parâmetro da definição é o **parâmetro formal**; o valor da chamada é o **argumento**, ou **parâmetro real**. O formal nasce na chamada, já com a cópia, e some quando a função termina.\n\nA passagem por referência não existe em C, mas é simulada: você passa o **endereço** da variável e a função escreve nela por meio do ponteiro.\n\n```c\nvoid zera(int x)    { x = 0; }\nvoid zeraP(int *p)  { *p = 0; }\nvoid zeraV(int v[]) { v[0] = 0; }\n\nint a = 5, w[2] = {5, 5};\nzera(a);    // a continua 5\nzeraP(&a);  // a vira 0\nzeraV(w);   // w[0] vira 0\n```\n\nO vetor parece exceção, mas não é: o nome `w` vale o endereço do primeiro elemento, e é esse endereço que é copiado.",
+ "caracteristicas": [
+  "Formal = na definição; real (ou argumento) = na chamada.",
+  "O parâmetro é local: dois `x`, um em cada função, são duas variáveis diferentes.",
+  "A cópia converte o tipo como numa atribuição: `2.9` passado para um `int` chega como 2.",
+  "Vetor como argumento entrega o endereço do primeiro elemento: mudar `v[i]` dentro aparece fora.",
+  "Ponteiro também vai por valor: mudar `*p` mexe no apontado, mas mudar `p` não muda o ponteiro de quem chamou."
+ ],
+ "vantagens": [
+  "A função não estraga sem querer as variáveis de quem chamou.",
+  "O argumento pode ser qualquer expressão: `f(a)`, `f(120.0)` e `f(100 + 20)` são iguais para a função."
+ ],
+ "desvantagens": [
+  "Para alterar uma variável de fora, ou devolver mais de um resultado, a função precisa receber o endereço.",
+  "Passar uma `struct` grande por valor copia todos os campos a cada chamada.",
+  "O erro clássico: `void trocar(int a, int b)` troca as cópias e nada muda no `main`."
+ ],
+ "exemplo": "Vamos acompanhar a pilha em três chamadas: `trocar(x, y)` com cópias, `trocar(&x, &y)` com endereços e uma inserção no início de lista que recebe `No *prim`.",
+ "passos": [
+  {
+   "titulo": "trocar(x, y): a chamada",
+   "texto": "O `main` tem `x = 1` e `y = 2` e chama `trocar(x, y)`. Um quadro novo é empilhado com `a = 1` e `b = 2`: cópias, em outro lugar da memória.",
+   "figura": {
+    "tipo": "pilha",
+    "itens": [
+     [
+      "main",
+      "x = 1, y = 2"
+     ],
+     [
+      "trocar",
+      "a = 1, b = 2"
+     ]
+    ],
+    "estados": {
+     "1": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "A troca acontece nas cópias",
+   "texto": "Dentro de `trocar`: `t = a; a = b; b = t;`. Agora `a = 2` e `b = 1`. O quadro do `main`, embaixo, nem foi tocado.",
+   "figura": {
+    "tipo": "pilha",
+    "itens": [
+     [
+      "main",
+      "x = 1, y = 2"
+     ],
+     [
+      "trocar",
+      "a = 2, b = 1"
+     ]
+    ],
+    "estados": {
+     "1": "amarelo"
+    }
+   }
+  },
+  {
+   "titulo": "trocar retorna",
+   "texto": "O quadro de `trocar` sai da pilha, e as cópias somem com ele. No `main`, `x` continua 1 e `y` continua 2. A troca se perdeu.",
+   "figura": {
+    "tipo": "pilha",
+    "itens": [
+     [
+      "main",
+      "x = 1, y = 2"
+     ]
+    ],
+    "estados": {
+     "0": "vermelho"
+    }
+   }
+  },
+  {
+   "titulo": "trocar(&x, &y): com endereços",
+   "texto": "Agora a função é `void trocar(int *a, int *b)`. O que vai copiado são os **endereços**: `a` aponta para o `x` do `main`, `b` para o `y`.",
+   "figura": {
+    "tipo": "pilha",
+    "itens": [
+     [
+      "main",
+      "x = 1, y = 2"
+     ],
+     [
+      "trocar",
+      "a = &x, b = &y"
+     ]
+    ],
+    "estados": {
+     "1": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "A troca passa pelo ponteiro",
+   "texto": "`t = *a; *a = *b; *b = t;` escreve no lugar apontado, que é o quadro do `main`. Ao retornar, `x = 2` e `y = 1`.",
+   "figura": {
+    "tipo": "pilha",
+    "itens": [
+     [
+      "main",
+      "x = 2, y = 1"
+     ]
+    ],
+    "estados": {
+     "0": "verde"
+    }
+   }
+  },
+  {
+   "titulo": "Lista: insere(No *prim, 3)",
+   "texto": "O `main` tem `inicio -> [7]`. Chama `insere(inicio, 3)`, que cria o nó 3, liga ao 7 e faz `prim = novo`. Mas `prim` é cópia do `inicio`.",
+   "figura": {
+    "tipo": "pilha",
+    "itens": [
+     [
+      "main",
+      "inicio -> [7]"
+     ],
+     [
+      "insere",
+      "prim -> [3] -> [7]"
+     ]
+    ],
+    "estados": {
+     "1": "amarelo"
+    }
+   }
+  },
+  {
+   "titulo": "O início não mudou",
+   "texto": "Ao retornar, a cópia `prim` some. O `inicio` do `main` ainda aponta para o 7, e o nó 3 ficou perdido na memória. Para mudar o ponteiro de fora, a função recebe `No **prim` e faz `*prim = novo`.",
+   "figura": {
+    "tipo": "pilha",
+    "itens": [
+     [
+      "main",
+      "inicio -> [7]"
+     ]
+    ],
+    "estados": {
+     "0": "vermelho"
+    }
+   }
+  }
+ ],
+ "naprova": "Cai em toda prova de C. A banca mostra uma inserção ou remoção no início de lista com `No *prim` e pergunta se o início muda (não muda: precisa de `No **`), e compara escalar com vetor passado para função: mudança no escalar some, mudança em `v[i]` aparece fora.",
+ "fontes": [
+  "Deitel e Deitel, *C: como programar*, 6. ed., cap. 5 (chamada por valor e por referência).",
+  "Kernighan e Ritchie, *C: a linguagem de programação padrão ANSI*, cap. 4 (funções e argumentos).",
+  "Backes, *Linguagem C: completa e descomplicada*, cap. 9 (passagem de parâmetros)."
+ ]
+}

@@ -25,5 +25,201 @@
   "Ziviani, *Projeto de algoritmos*, 3. ed., cap. 5 (pesquisa sequencial e binária).",
   "Tenenbaum, Langsam e Augenstein, *Estruturas de dados usando C*, cap. 7 (busca).",
   "Feofiloff, *Algoritmos em linguagem C*, capítulo de busca em vetor ordenado."
+ ],
+ "passos": [
+  {
+   "titulo": "23: ini 0, fim 8",
+   "texto": "`meio = 0 + (8 - 0) / 2 = 4`. `v[4] = 16`. 23 > 16: a chave só pode estar à direita. `ini = meio + 1 = 5`.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     2,
+     5,
+     8,
+     12,
+     16,
+     23,
+     38,
+     56,
+     72
+    ],
+    "estados": {
+     "4": "amarelo"
+    },
+    "nome": "v",
+    "titulo": "ini=0 meio=4 fim=8"
+   }
+  },
+  {
+   "titulo": "23: ini 5, fim 8",
+   "texto": "As posições 0 a 4 saíram. `meio = 5 + (8 - 5) / 2 = 6`. `v[6] = 38`. 23 < 38: só pode estar à esquerda. `fim = meio - 1 = 5`.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     2,
+     5,
+     8,
+     12,
+     16,
+     23,
+     38,
+     56,
+     72
+    ],
+    "estados": {
+     "0": "apagado",
+     "1": "apagado",
+     "2": "apagado",
+     "3": "apagado",
+     "4": "apagado",
+     "6": "amarelo"
+    },
+    "nome": "v",
+    "titulo": "ini=5 meio=6 fim=8"
+   }
+  },
+  {
+   "titulo": "23: ini 5, fim 5",
+   "texto": "Sobrou uma posição. `meio = 5`. `v[5] = 23`: achou, devolve 5. Foram 3 comparações.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     2,
+     5,
+     8,
+     12,
+     16,
+     23,
+     38,
+     56,
+     72
+    ],
+    "estados": {
+     "0": "apagado",
+     "1": "apagado",
+     "2": "apagado",
+     "3": "apagado",
+     "4": "apagado",
+     "6": "apagado",
+     "7": "apagado",
+     "8": "apagado",
+     "5": "verde"
+    },
+    "nome": "v",
+    "titulo": "ini=5 meio=5 fim=5"
+   }
+  },
+  {
+   "titulo": "7: ini 0, fim 8",
+   "texto": "Mesmo começo: meio 4, `v[4] = 16`. 7 < 16: `fim = 3`.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     2,
+     5,
+     8,
+     12,
+     16,
+     23,
+     38,
+     56,
+     72
+    ],
+    "estados": {
+     "4": "amarelo"
+    },
+    "nome": "v",
+    "titulo": "ini=0 meio=4 fim=8"
+   }
+  },
+  {
+   "titulo": "7: ini 0, fim 3",
+   "texto": "`meio = 0 + (3 - 0) / 2 = 1` (a divisão inteira arredonda para baixo). `v[1] = 5`. 7 > 5: `ini = 2`.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     2,
+     5,
+     8,
+     12,
+     16,
+     23,
+     38,
+     56,
+     72
+    ],
+    "estados": {
+     "4": "apagado",
+     "5": "apagado",
+     "6": "apagado",
+     "7": "apagado",
+     "8": "apagado",
+     "1": "amarelo"
+    },
+    "nome": "v",
+    "titulo": "ini=0 meio=1 fim=3"
+   }
+  },
+  {
+   "titulo": "7: ini 2, fim 3",
+   "texto": "`meio = 2 + (3 - 2) / 2 = 2`. `v[2] = 8`. 7 < 8: `fim = 1`.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     2,
+     5,
+     8,
+     12,
+     16,
+     23,
+     38,
+     56,
+     72
+    ],
+    "estados": {
+     "0": "apagado",
+     "1": "apagado",
+     "4": "apagado",
+     "5": "apagado",
+     "6": "apagado",
+     "7": "apagado",
+     "8": "apagado",
+     "2": "amarelo"
+    },
+    "nome": "v",
+    "titulo": "ini=2 meio=2 fim=3"
+   }
+  },
+  {
+   "titulo": "7: ini 2, fim 1",
+   "texto": "`ini > fim`: o trecho ficou vazio, o laço acaba e a função devolve -1. Foram 3 comparações. O `ini = 2` final é onde o 7 entraria, entre o 5 e o 8.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     2,
+     5,
+     8,
+     12,
+     16,
+     23,
+     38,
+     56,
+     72
+    ],
+    "estados": {
+     "0": "apagado",
+     "1": "apagado",
+     "2": "roxo",
+     "3": "apagado",
+     "4": "apagado",
+     "5": "apagado",
+     "6": "apagado",
+     "7": "apagado",
+     "8": "apagado"
+    },
+    "nome": "v",
+    "titulo": "ini=2 fim=1: vazio"
+   }
+  }
  ]
 }

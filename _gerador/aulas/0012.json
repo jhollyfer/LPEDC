@@ -1,0 +1,106 @@
+{
+ "num": "0012",
+ "oque": "Os operadores relacionais (`>`, `<`, `>=`, `<=`, `==`, `!=`) comparam dois valores e produzem um `int`: **1** quando a comparação vale e **0** quando não vale. No caminho de volta, quando o C testa uma condição, **0 é falso e qualquer outro valor é verdadeiro**.",
+ "como": "| Operador | Pergunta | `7` com `3` |\n|---|---|---|\n| `>` | maior? | `7 > 3` vale 1 |\n| `<` | menor? | `7 < 3` vale 0 |\n| `>=` | maior ou igual? | `7 >= 3` vale 1 |\n| `<=` | menor ou igual? | `7 <= 3` vale 0 |\n| `==` | igual? (dois sinais) | `7 == 3` vale 0 |\n| `!=` | diferente? | `7 != 3` vale 1 |\n\nComo a resposta é um número, dá para mostrar com `%d`, somar e guardar. E como o teste aceita qualquer número, `if (n)` é o mesmo que `if (n != 0)`.\n\n```c\nint a = 7, b = 3;\nprintf(\"%d\\n\", a > b);      // 1\nprintf(\"%d\\n\", a == b);     // 0\nprintf(\"%d\\n\", 7 > 3 > 1);  // 0 (!)\nif (a - 7) printf(\"nunca\"); // 0: falso\n```\n\nOs relacionais agem **depois** dos aritméticos: `a + 1 > b` é `(a + 1) > b`.",
+ "caracteristicas": [
+  "O resultado é sempre `int` 0 ou 1, e entra em contas: `3 * (gm > gv) + (gm == gv)` dá os pontos do jogo.",
+  "Num teste, só o 0 é falso. Valem como verdade 1, 42, -3 e até 0.5.",
+  "Comparações em cadeia são resolvidas da esquerda para a direita: `7 > 3 > 1` vira `1 > 1`, que vale 0.",
+  "`=` é atribuição e `==` é comparação. `=<`, `=>` e `<>` não existem em C.",
+  "O `bool` de `<stdbool.h>` guarda só 0 ou 1: `true` vale 1, `false` vale 0, e `bool b = 42;` guarda 1."
+ ],
+ "vantagens": [
+  "Como a resposta é número, dá para contar sem `if`: `pares += (v[i] % 2 == 0);` soma 1 a cada par.",
+  "Qualquer inteiro serve de condição. `while (n)` roda enquanto `n` for diferente de zero, e `if (flag)` testa uma marca guardada num `int`."
+ ],
+ "desvantagens": [
+  "`if (x = 5)` compila: atribui 5 a `x` e testa 5, que é verdadeiro. O `if` sempre entra, e só o `-Wall` avisa.",
+  "`0.1 + 0.2 == 0.3` vale 0, porque 0,1 não é exato em binário. Não compare `double` com `==`; use `fabs(a - b) < 1e-9`.",
+  "`a < b < c` compila e não testa intervalo. O certo é `a < b && b < c` (assunto 0013)."
+ ],
+ "exemplo": "Com `int x = 4;`:\n\n| Expressão | Valor | Por quê |\n|---|---|---|\n| `x > 5` | `0` | 4 não é maior que 5 |\n| `x >= 4` | `1` | 4 é igual a 4 |\n| `x != 4` | `0` | é igual |\n| `(x > 2) + (x == 4)` | `2` | 1 + 1 |\n| `1 < x < 3` | `1` | `(1 < 4)` vale 1, e `1 < 3` vale 1 |\n| `!x` | `0` | 4 é verdade; a negação é 0 |\n\nA penúltima linha engana: 4 não está entre 1 e 3, mas a expressão vale 1.",
+ "passos": [
+  {
+   "titulo": "7 > 3 > 1, primeira comparação",
+   "texto": "O C não lê `7 > 3 > 1` como \"7 maior que 3, que é maior que 1\". O `>` associa da esquerda para a direita, então ele resolve primeiro `7 > 3`.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "7 > 3 > 1",
+     "(7 > 3) > 1"
+    ]
+   }
+  },
+  {
+   "titulo": "A resposta vira número",
+   "texto": "`7 > 3` vale **1**. Esse 1 substitui a comparação, e o que sobra é `1 > 1`.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "7 > 3 > 1",
+     "(7 > 3) > 1",
+     "   1    > 1"
+    ]
+   }
+  },
+  {
+   "titulo": "Resultado: 0",
+   "texto": "`1 > 1` vale 0. A expressão inteira dá falso, embora 7 > 3 e 3 > 1 sejam verdade cada uma. Para juntar as duas, escreva `7 > 3 && 3 > 1`.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "7 > 3 > 1",
+     "(7 > 3) > 1",
+     "   1    > 1",
+     "        0   -> falso"
+    ]
+   }
+  },
+  {
+   "titulo": "if (x = 0)",
+   "texto": "Com um `=` só, o `if` **atribui** 0 a `x` e testa o valor da atribuição, que é 0. O ramo nunca roda, seja qual for o `x` de antes, e o valor antigo de `x` se perde.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "x = 9",
+     "if (x = 0)  ...",
+     "   x recebe 0",
+     "   teste de 0 -> falso",
+     "x agora vale 0"
+    ]
+   }
+  },
+  {
+   "titulo": "if (x == 0)",
+   "texto": "Com `==`, o C compara e não mexe em `x`. Com `x = 9`, `9 == 0` vale 0 e o ramo não roda; com `x = 0`, vale 1 e roda.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "x = 9",
+     "if (x == 0)  ...",
+     "   9 == 0 vale 0 -> falso",
+     "x continua 9"
+    ]
+   }
+  },
+  {
+   "titulo": "Uma flag inteira",
+   "texto": "Muito código de prova guarda o resultado num `int flag` e depois testa `if (flag)`. Lembre a regra: entra no `if` quando `flag` é qualquer valor diferente de 0.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "int flag = 0;",
+     "... achou: flag = 1;",
+     "if (flag)   -> 1: entra",
+     "if (!flag)  -> 0: não entra"
+    ]
+   }
+  }
+ ],
+ "naprova": "O assunto aparece dentro de código maior: um `int flag` testado direto no `if`, condições de laço com `==` e `!=`. As pegadinhas são ler `=` como comparação e achar que `a < b < c` testa um intervalo.",
+ "fontes": [
+  "Deitel e Deitel, *C: como programar*, 6. ed., cap. 2 (operadores de igualdade e relacionais).",
+  "Kernighan e Ritchie, *C: a linguagem de programação padrão ANSI*, cap. 2 (operadores relacionais e lógicos).",
+  "Backes, *Linguagem C: completa e descomplicada*, cap. 3 (operadores)."
+ ]
+}

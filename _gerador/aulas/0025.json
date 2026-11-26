@@ -1,0 +1,117 @@
+{
+ "num": "0025",
+ "oque": "Padrões de laço são jeitos consagrados de usar uma variável numa repetição: **contador**, **acumulador**, **maior/menor**, **flag** e **sentinela**. Todos seguem três tempos: a variável ganha um valor antes do laço, é atualizada dentro e é usada depois.",
+ "como": "| Padrão | Antes do laço | Dentro do laço | Depois |\n|---|---|---|---|\n| contador | `cont = 0` | `cont++` | quantos foram |\n| acumulador | `soma = 0` (produto: `= 1`) | `soma += x` | total, média |\n| maior/menor | o **primeiro** valor | `if (x > maior) maior = x` | o recorde |\n| flag | `achou = 0` | `if (...) achou = 1` | aconteceu? |\n| sentinela | ler o primeiro valor | ler o próximo, no fim | o laço para nela |\n\n```c\nint v[] = {28, 31, 36, 25, 30}, n = 5;\nint soma = 0, maior = v[0], cont = 0;\nfor (int i = 0; i < n; i++) {\n    soma += v[i];                 // acumulador\n    if (v[i] > maior) maior = v[i];\n    if (v[i] >= 30) cont++;       // contador\n}\n// média: (double) soma / n\n```",
+ "caracteristicas": [
+  "Acumulador de soma começa em 0; de **produto**, em 1. Começar o produto em 0 zera tudo na primeira volta.",
+  "Maior e menor começam com o **primeiro valor**, ou com `INT_MIN` e `INT_MAX`, nunca com um número inventado como 0.",
+  "A flag só sobe. Um `else flag = 0` faz ela dizer só o que aconteceu no **último** dado.",
+  "A sentinela não é dado: o laço testa antes de contar ou somar. Por isso a leitura aparece antes do laço e no fim do corpo (leitura antecipada).",
+  "A média pede `(double) soma / cont` e o teste `cont > 0` antes de dividir."
+ ],
+ "vantagens": [
+  "Uma passada só, `O(n)`, responde várias perguntas ao mesmo tempo: quantos, quanto, o maior, se aconteceu.",
+  "Reconhecer o padrão acelera a leitura de código na prova: você vê `cont++` e já sabe o que a função devolve."
+ ],
+ "desvantagens": [
+  "Errar um dos três tempos dá resposta errada mesmo com o laço certo: valor inicial, atualização ou o que se devolve no fim.",
+  "Devolver a variável errada é comum: o contador do laço (`x`) no lugar do contador do padrão (`cont`).",
+  "Acumulador `int` estoura passando de 2.147.483.647; somar `0.1` em `double` acumula erro de arredondamento."
+ ],
+ "exemplo": "Rastreio do código acima:\n\n| i | v[i] | soma | maior | cont (≥ 30) |\n|---|---|---|---|---|\n| antes | | 0 | 28 | 0 |\n| 0 | 28 | 28 | 28 | 0 |\n| 1 | 31 | 59 | 31 | 1 |\n| 2 | 36 | 95 | 36 | 2 |\n| 3 | 25 | 120 | 36 | 2 |\n| 4 | 30 | 150 | 36 | 3 |\n\nDepois do laço: média `150 / 5 = 30.0`, maior 36, três dias com 30 °C ou mais.",
+ "passos": [
+  {
+   "titulo": "maior = 0 com valores negativos",
+   "texto": "Máximas de inverno: -3, -1, -4. Com `maior = 0`, nenhum valor passa no `if (v[i] > maior)`, porque todos são menores que 0. O programa responde 0, um valor que nem está no vetor.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "v[i]   v[i] > maior?  maior",
+     "antes                 0",
+     "-3     não            0",
+     "-1     não            0",
+     "-4     não            0  (!)"
+    ],
+    "titulo": "maior = 0"
+   }
+  },
+  {
+   "titulo": "maior = v[0]",
+   "texto": "Começando pelo primeiro valor, o recorde é sempre um dado real. -1 > -3 troca; -4 > -1 não troca. Resposta: -1.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "v[i]   v[i] > maior?  maior",
+     "antes                 -3",
+     "-3     não            -3",
+     "-1     sim            -1",
+     "-4     não            -1"
+    ],
+    "titulo": "maior = v[0]"
+   }
+  },
+  {
+   "titulo": "Flag com else",
+   "texto": "Pergunta: teve dia de 35 °C ou mais? Dados 36, 25. Com `if (t >= 35) f = 1; else f = 0;`, o 36 levanta a flag e o 25 derruba. A resposta final diz \"não\", e houve um dia de 36.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "t    f com else   f sem else",
+     "     0            0",
+     "36   1            1",
+     "25   0  (!)       1"
+    ]
+   }
+  },
+  {
+   "titulo": "Produto começando em 0",
+   "texto": "Produto de 2, 3 e 4 com `p = 0`: 0 · 2 = 0, e daí em diante tudo é 0. Com `p = 1`: 2, 6, 24.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "x   p = 0     p = 1",
+     "2   0         2",
+     "3   0         6",
+     "4   0         24"
+    ]
+   }
+  },
+  {
+   "titulo": "Acumulador de produtos",
+   "texto": "O produto escalar é um acumulador: `soma += a[i] * b[i]`. Com `a = {0,2,0,0,5}` e `b = {1,0,3,4,0}`, cada zero de um cai onde o outro tem valor. Todas as parcelas dão 0.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "i  a[i]  b[i]  a*b  soma",
+     "0  0     1     0    0",
+     "1  2     0     0    0",
+     "2  0     3     0    0",
+     "3  0     4     0    0",
+     "4  5     0     0    0"
+    ]
+   }
+  },
+  {
+   "titulo": "Sentinela com leitura antecipada",
+   "texto": "Entrada 28, 31, 999 (999 = fim). Lê o 28 antes do laço; o `while (t != 999)` deixa entrar, conta e lê o próximo no fim do corpo. Quando chega o 999, o teste barra antes de contar.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "ler t       -> 28",
+     "28 != 999?  sim: conta, ler",
+     "            -> 31",
+     "31 != 999?  sim: conta, ler",
+     "            -> 999",
+     "999 != 999? não: sai",
+     "dias = 2 (o 999 não conta)"
+    ]
+   }
+  }
+ ],
+ "naprova": "A banca mostra funções com padrão quebrado e pergunta o que está errado: uma que devia contar ocorrências e devolve `x`, o número de voltas, em vez de `cont`; uma busca que devolve 0 e 1 trocados. Também pede o valor de um acumulador, como o produto escalar que dá 0. Confira os três tempos: valor inicial, atualização e o que volta no `return`.",
+ "fontes": [
+  "Deitel e Deitel, *C: como programar*, 6. ed., cap. 3 (repetição controlada por contador e por sentinela).",
+  "Backes, *Linguagem C: completa e descomplicada*, cap. 5 (comandos de repetição).",
+  "Leal, *Algoritmos e lógica de programação II*, unidade de estruturas de repetição."
+ ]
+}

@@ -1,0 +1,160 @@
+{
+ "num": "0096",
+ "oque": "Não existe um método de ordenação melhor em tudo. A escolha se faz por quatro critérios: **custo** (melhor, médio e pior caso), **memória extra**, **estabilidade** e se o método é **adaptativo**. Num programa real, a `qsort` da `stdlib.h` já faz o serviço.",
+ "como": "- **Estável**: chaves iguais saem na ordem em que entraram. Só importa quando o elemento tem outros dados além da chave (um `struct`).\n- **In-place**: ordena no próprio vetor, com `O(1)` de memória extra.\n- **Adaptativo**: fica mais rápido com o vetor quase ordenado.\n- **Por comparação** ou não: counting e radix usam o valor como índice e escapam do limite `Ω(n log n)` (assunto 0117).\n\nA `qsort` ordena qualquer tipo. Você passa o vetor, o número de elementos, o tamanho de cada um e uma função que devolve negativo, zero ou positivo:\n\n```c\nint compara(const void *a, const void *b) {\n    int x = *(const int *) a;\n    int y = *(const int *) b;\n    return (x > y) - (x < y);\n}\n\nqsort(v, n, sizeof v[0], compara);\n```\n\nA norma do C não diz qual algoritmo a `qsort` usa nem promete estabilidade. Se a ordem dos empates importa, desempate dentro da `compara`.",
+ "caracteristicas": [
+  "Estáveis: bubble, insertion, merge, counting e radix. Não estáveis: selection, quick, heap e shell.",
+  "Memória extra `O(1)`: bubble, selection, insertion, heap e shell. O merge usa `O(n)`; o quick usa pilha de `O(log n)` a `O(n)`.",
+  "Pior caso `O(n log n)`: só merge e heap entre os que comparam.",
+  "Adaptativos: insertion e bubble com bandeira (`O(n)` no ordenado). Selection, merge e heap não ganham nada com a ordem.",
+  "Menos trocas no pior caso: selection, com `n - 1`."
+ ],
+ "vantagens": [
+  "Usar a `qsort`: código pronto e testado, que ordena qualquer tipo por qualquer critério.",
+  "Usar a `qsort`: a mesma `compara` serve para a `bsearch`, a busca binária da `stdlib.h`."
+ ],
+ "desvantagens": [
+  "Usar a `qsort`: não garante estabilidade nem o pior caso.",
+  "Usar a `qsort`: cada comparação é uma chamada de função por ponteiro.",
+  "Escrever a `compara` com `return x - y;` dá overflow com valores grandes de sinais opostos."
+ ],
+ "exemplo": "Pedidos que chegaram nesta ordem: **R1 M2 R3 N4 M5 R6** (letra = cidade, número = ordem de chegada). Ordenar por cidade, com M < N < R, mantendo a chegada dentro de cada cidade.",
+ "passos": [
+  {
+   "titulo": "Entrada",
+   "texto": "Os três pedidos de Recife, em amarelo, chegaram como R1, R3, R6. Um método estável tem de devolvê-los nessa ordem.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     "R1",
+     "M2",
+     "R3",
+     "N4",
+     "M5",
+     "R6"
+    ],
+    "estados": {
+     "0": "amarelo",
+     "2": "amarelo",
+     "5": "amarelo"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "Selection, passada 0",
+   "texto": "O menor é o M2, na posição 1 (o M5 empata e não troca o `menor`). Troca as posições 0 e 1.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     "M2",
+     "R1",
+     "R3",
+     "N4",
+     "M5",
+     "R6"
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "amarelo",
+     "2": "amarelo",
+     "5": "amarelo"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "Selection, passada 1",
+   "texto": "O menor de `R1 R3 N4 M5 R6` é o M5, na posição 4. Troca as posições 1 e 4: o R1 salta para a posição 4, **por cima do R3**.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     "M2",
+     "M5",
+     "R3",
+     "N4",
+     "R1",
+     "R6"
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "verde",
+     "4": "vermelho",
+     "2": "amarelo",
+     "5": "amarelo"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "Selection: resultado",
+   "texto": "Passada 2: troca o N4 (posição 3) com o R3 (posição 2). As passadas 3 e 4 só acham empates e não trocam. Saiu `M2 M5 N4 R3 R1 R6`: o R3 ficou antes do R1. A selection **não é estável**.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     "M2",
+     "M5",
+     "N4",
+     "R3",
+     "R1",
+     "R6"
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "verde",
+     "2": "verde",
+     "5": "verde",
+     "3": "vermelho",
+     "4": "vermelho"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "Insertion ou merge: resultado",
+   "texto": "Um método estável nunca passa um igual por cima do outro. Insertion, merge, bubble ou counting devolvem `M2 M5 N4 R1 R3 R6`: dentro de cada cidade, a ordem de chegada.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     "M2",
+     "M5",
+     "N4",
+     "R1",
+     "R3",
+     "R6"
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "verde",
+     "2": "verde",
+     "3": "verde",
+     "4": "verde",
+     "5": "verde"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "Com a qsort",
+   "texto": "A `qsort` não promete estabilidade. A saída é pôr a chegada como desempate na `compara`: compare a cidade e, se empatar, compare o número. Com chave composta, nenhum par empata, e qualquer algoritmo devolve a ordem certa.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "compara(a, b):",
+     "  se cidade(a) != cidade(b):",
+     "    devolve a ordem das cidades",
+     "  senão:",
+     "    devolve a ordem de chegada"
+    ],
+    "titulo": "desempate"
+   }
+  }
+ ],
+ "custos": "| Algoritmo | Melhor | Médio | Pior | Memória extra | Estável | In-place |\n|---|---|---|---|---|---|---|\n| bubble (com bandeira) | `O(n)` | `O(n²)` | `O(n²)` | `O(1)` | sim | sim |\n| selection | `O(n²)` | `O(n²)` | `O(n²)` | `O(1)` | não | sim |\n| insertion | `O(n)` | `O(n²)` | `O(n²)` | `O(1)` | sim | sim |\n| shell (saltos de Knuth) | `O(n log n)` | cerca de `n^1,25` | `O(n^1,5)` | `O(1)` | não | sim |\n| merge | `O(n log n)` | `O(n log n)` | `O(n log n)` | `O(n)` | sim | não |\n| quick | `O(n log n)` | `O(n log n)` | `O(n²)` | pilha `O(log n)` a `O(n)` | não | sim, sem vetor extra |\n| heap (0103) | `O(n log n)` | `O(n log n)` | `O(n log n)` | `O(1)` | não | sim |\n| counting (0120) | `O(n + k)` | `O(n + k)` | `O(n + k)` | `O(n + k)` | sim | não |\n| radix (0121) | `O(d(n + b))` | `O(d(n + b))` | `O(d(n + b))` | `O(n + b)` | sim | não |\n\n`k` = quantidade de valores possíveis da chave; `d` = número de dígitos; `b` = base.",
+ "naprova": "A banca junta quatro algoritmos numa lista de afirmações (\"são estáveis\", \"espaço extra constante\", \"a ordem não influencia\") e pede as INCORRETAS. Decore a tabela: heap e quick não são estáveis; merge não é in-place; o quick não tem espaço constante por causa da pilha; a inserção depende da ordem. Leia o critério do enunciado: pior caso de comparações (heap ou merge), movimentações (seleção) ou vetor quase ordenado (inserção).",
+ "fontes": [
+  "Ziviani, *Projeto de algoritmos*, 3. ed., cap. 4 (ordenação: comparação dos métodos e estabilidade).",
+  "Feofiloff, *Algoritmos em linguagem C*, capítulos de ordenação.",
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., caps. 2, 7 e 8 (custos, quicksort e estabilidade)."
+ ]
+}

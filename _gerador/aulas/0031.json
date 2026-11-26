@@ -1,0 +1,177 @@
+{
+ "num": "0031",
+ "oque": "A pilha de chamadas guarda um **quadro** (registro de ativação, ou *stack frame*) para cada função em andamento. Chamar uma função empilha um quadro; retornar desempilha. A última a começar é a primeira a terminar: **LIFO**.",
+ "como": "Cada quadro guarda três coisas:\n\n- os **parâmetros**, com as cópias dos argumentos;\n- as **variáveis locais**;\n- o **endereço de retorno**: o ponto, em quem chamou, onde o programa continua quando a função acabar.\n\nSó a função do **topo** está rodando; as de baixo estão paradas esperando um retorno. Quando o topo retorna, seu quadro sai e o de baixo continua de onde parou.\n\n```c\nint fatorial(int n) {\n    if (n <= 1) return 1;\n    return n * fatorial(n - 1);\n}\n\nint main(void) {\n    int x = fatorial(3);   // 6\n    return 0;\n}\n```\n\nA recursão não tem nada de especial: cada chamada de `fatorial` é uma chamada comum e ganha **seu próprio quadro**, com seu próprio `n`.",
+ "caracteristicas": [
+  "Política **LIFO** (*last in, first out*): o último quadro empilhado é o primeiro a sair.",
+  "Cada chamada, inclusive cada chamada recursiva, tem quadro próprio: o mesmo nome `n` existe várias vezes, uma por quadro.",
+  "A local \"some\" no `return` porque o quadro dela foi desempilhado.",
+  "O tamanho é fixo (no Linux, 8 MB por padrão; `ulimit -s` mostra). Passar dele é o **stack overflow**, que aparece como `Segmentation fault`.",
+  "Toda recursão pode ser reescrita como laço com uma pilha explícita, porque é isso que o programa faz por baixo."
+ ],
+ "vantagens": [
+  "É o mecanismo que permite a recursão: cada chamada guarda seu estado sem atrapalhar as outras.",
+  "Reservar e liberar o quadro é automático e rápido; não há `malloc` nem `free`.",
+  "O endereço de retorno garante que o programa volte ao ponto exato de onde saiu."
+ ],
+ "desvantagens": [
+  "Recursão muito funda estoura a pilha, mesmo quando a conta está certa.",
+  "Devolver o endereço de uma variável local é erro: o quadro dela já saiu da pilha.",
+  "Local sem inicializar pega o lixo deixado por um quadro antigo na mesma memória."
+ ],
+ "exemplo": "Vamos acompanhar `x = fatorial(3)` chamado do `main`, quadro a quadro. A pilha cresce para cima; o topo é a função que está rodando.",
+ "passos": [
+  {
+   "titulo": "Começa no main",
+   "texto": "Só o quadro do `main` está na pilha. Ele chega na linha `int x = fatorial(3);` e para ali esperando a resposta.",
+   "figura": {
+    "tipo": "pilha",
+    "itens": [
+     [
+      "main",
+      "x = ?"
+     ]
+    ]
+   }
+  },
+  {
+   "titulo": "Empilha fatorial(3)",
+   "texto": "Um quadro novo vai para o topo com `n = 3`. `3 <= 1` é falso, então ele precisa de `fatorial(2)` e fica esperando `3 * ?`.",
+   "figura": {
+    "tipo": "pilha",
+    "itens": [
+     [
+      "main",
+      "x = ?"
+     ],
+     [
+      "fatorial",
+      "n = 3, espera 3 * ?"
+     ]
+    ],
+    "estados": {
+     "1": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "Empilha fatorial(2)",
+   "texto": "Outro quadro, outro `n`, agora 2. Também não é caso base: espera `2 * fatorial(1)`. Há dois `n` na memória ao mesmo tempo.",
+   "figura": {
+    "tipo": "pilha",
+    "itens": [
+     [
+      "main",
+      "x = ?"
+     ],
+     [
+      "fatorial",
+      "n = 3, espera 3 * ?"
+     ],
+     [
+      "fatorial",
+      "n = 2, espera 2 * ?"
+     ]
+    ],
+    "estados": {
+     "2": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "Empilha fatorial(1): caso base",
+   "texto": "Com `n = 1`, `1 <= 1` é verdade. Este quadro não chama ninguém: devolve 1. É o ponto mais alto da pilha, quatro quadros ao todo.",
+   "figura": {
+    "tipo": "pilha",
+    "itens": [
+     [
+      "main",
+      "x = ?"
+     ],
+     [
+      "fatorial",
+      "n = 3, espera 3 * ?"
+     ],
+     [
+      "fatorial",
+      "n = 2, espera 2 * ?"
+     ],
+     [
+      "fatorial",
+      "n = 1, devolve 1"
+     ]
+    ],
+    "estados": {
+     "3": "amarelo"
+    }
+   }
+  },
+  {
+   "titulo": "Desempilha: fatorial(2) recebe 1",
+   "texto": "O quadro de `n = 1` sai. O de `n = 2` volta a rodar no ponto exato onde parou, calcula `2 * 1 = 2` e devolve 2.",
+   "figura": {
+    "tipo": "pilha",
+    "itens": [
+     [
+      "main",
+      "x = ?"
+     ],
+     [
+      "fatorial",
+      "n = 3, espera 3 * ?"
+     ],
+     [
+      "fatorial",
+      "n = 2, devolve 2"
+     ]
+    ],
+    "estados": {
+     "2": "verde"
+    }
+   }
+  },
+  {
+   "titulo": "Desempilha: fatorial(3) recebe 2",
+   "texto": "Sai o quadro de `n = 2`. O de `n = 3` calcula `3 * 2 = 6` e devolve 6.",
+   "figura": {
+    "tipo": "pilha",
+    "itens": [
+     [
+      "main",
+      "x = ?"
+     ],
+     [
+      "fatorial",
+      "n = 3, devolve 6"
+     ]
+    ],
+    "estados": {
+     "1": "verde"
+    }
+   }
+  },
+  {
+   "titulo": "De volta ao main",
+   "texto": "Sai o último quadro de `fatorial`. O `main` guarda `x = 6`. A ordem de saída foi a contrária da de entrada: n = 1, depois 2, depois 3. Isso é LIFO.",
+   "figura": {
+    "tipo": "pilha",
+    "itens": [
+     [
+      "main",
+      "x = 6"
+     ]
+    ],
+    "estados": {
+     "0": "verde"
+    }
+   }
+  }
+ ],
+ "custos": "| Função | Quadros ao mesmo tempo (memória) |\n|---|---|\n| `fatorial(n)` recursivo | `n`, ou seja `O(n)` |\n| `fatorial(n)` com laço | 1, ou seja `O(1)` |\n| `fib(n)` recursivo | até `n`: a altura da árvore, não o número de nós |\n| busca binária recursiva | cerca de `log₂ n` |",
+ "naprova": "A pergunta direta é \"qual estrutura de dados implementa a recursão?\": a **pilha**, não a fila nem a árvore. A banca também pede a saída de uma recursão, como o maior de `[11, 2, 13, 5, 7, 3]`, em que os valores sobem na volta: 3, 7, 7, 13, 13, 13. Escreva a pilha de baixo para cima.",
+ "fontes": [
+  "Backes, *Linguagem C: completa e descomplicada*, cap. 9 (funções, pilha e recursão).",
+  "Deitel e Deitel, *C: como programar*, 6. ed., cap. 5 (pilha de chamadas e registros de ativação).",
+  "Celes, Cerqueira e Rangel, *Introdução a estruturas de dados*, 2. ed., capítulo de funções (pilha de execução)."
+ ]
+}

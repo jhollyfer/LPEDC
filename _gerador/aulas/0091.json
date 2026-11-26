@@ -1,0 +1,151 @@
+{
+ "num": "0091",
+ "oque": "O bubble sort (ordenação por bolha) compara cada par de vizinhos e troca os dois quando o da esquerda é maior. Cada varredura, chamada **passada**, leva o maior que sobrou até o fim do vetor.",
+ "como": "- A passada compara `v[j]` com `v[j + 1]` para `j` de 0 até o fim da parte não pronta, trocando quando `v[j] > v[j + 1]`.\n- Depois da passada `p`, os `p` maiores já estão no lugar final, no fim do vetor. A passada seguinte para antes deles.\n- Bastam `n - 1` passadas.\n- Com a **bandeira** `trocou`: se uma passada inteira não troca nada, o vetor já está ordenado e o laço para.\n\n```c\nfor (int p = 1; p < n; p++) {\n    bool trocou = false;\n    for (int j = 0; j < n - p; j++)\n        if (v[j] > v[j + 1]) {\n            int aux = v[j];\n            v[j] = v[j + 1];\n            v[j + 1] = aux;\n            trocou = true;\n        }\n    if (!trocou) break;\n}\n```",
+ "caracteristicas": [
+  "**Estável**: só troca com `>` estrito, então dois iguais vizinhos nunca trocam de lugar.",
+  "**In-place**: só usa `aux` e os índices, memória extra `O(1)`.",
+  "Cada troca de vizinhos desfaz exatamente uma **inversão** (par fora de ordem). O total de trocas é o número de inversões do vetor.",
+  "Com bandeira, o melhor caso (vetor ordenado) é uma passada: `n - 1` comparações, `O(n)`. Sem bandeira, faz sempre `n(n - 1)/2` comparações.",
+  "Um valor grande corre para o fim numa passada só; um valor pequeno no fim anda só uma casa para a esquerda por passada."
+ ],
+ "vantagens": [
+  "É o método mais simples de entender e de escrever.",
+  "Estável e in-place.",
+  "Com a bandeira, reconhece um vetor já ordenado em uma passada."
+ ],
+ "desvantagens": [
+  "`O(n²)` no caso médio e no pior.",
+  "Faz uma troca (três escritas) por inversão: cerca de `n²/4` num vetor aleatório, mais movimento que o insertion e o selection.",
+  "Na prática é o mais lento dos três métodos simples."
+ ],
+ "exemplo": "Cinco restaurantes prometem entregar em **42, 17, 35, 8 e 23** minutos. Vamos ordenar do mais rápido ao mais lento, com bandeira.",
+ "passos": [
+  {
+   "titulo": "Passada 1, j = 0 e j = 1",
+   "texto": "42 > 17: troca. 42 > 35: troca. O 42 vem sendo carregado para a direita, porque ganha toda comparação.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     17,
+     35,
+     42,
+     8,
+     23
+    ],
+    "estados": {
+     "2": "amarelo"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "Passada 1, j = 2 e j = 3",
+   "texto": "42 > 8: troca. 42 > 23: troca. O maior chegou à última gaveta e não sai mais dali. Passada 1: 4 comparações, 4 trocas.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     17,
+     35,
+     8,
+     23,
+     42
+    ],
+    "estados": {
+     "4": "verde"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "Passada 2",
+   "texto": "Vai até `j < 3`, sem olhar a gaveta 4. 17 > 35? Não. 35 > 8: troca. 35 > 23: troca. O 35 vai para a gaveta 3. São 3 comparações e 2 trocas.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     17,
+     8,
+     23,
+     35,
+     42
+    ],
+    "estados": {
+     "3": "verde",
+     "4": "verde"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "Passada 3",
+   "texto": "17 > 8: troca. 17 > 23? Não. Agora o 23 está no lugar. São 2 comparações e 1 troca.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     8,
+     17,
+     23,
+     35,
+     42
+    ],
+    "estados": {
+     "2": "verde",
+     "3": "verde",
+     "4": "verde"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "Passada 4: nenhuma troca",
+   "texto": "8 > 17? Não. A passada terminou com `trocou == false`, e o laço para. Total: 4 + 3 + 2 + 1 = **10 comparações** e 4 + 2 + 1 = **7 trocas**, que é o número de inversões do vetor original.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     8,
+     17,
+     23,
+     35,
+     42
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "verde",
+     "2": "verde",
+     "3": "verde",
+     "4": "verde"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "Melhor caso: já ordenado",
+   "texto": "Com `8 17 23 35 42` na entrada, a passada 1 faz 4 comparações, nenhuma troca, e a bandeira encerra. São `n - 1` comparações: `O(n)`. Sem a bandeira, o laço faria as 10 comparações do mesmo jeito.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     8,
+     17,
+     23,
+     35,
+     42
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "verde",
+     "2": "verde",
+     "3": "verde",
+     "4": "verde"
+    },
+    "nome": "v"
+   }
+  }
+ ],
+ "custos": "| Caso | Comparações | Trocas | Ordem |\n|---|---|---|---|\n| Melhor, com bandeira (ordenado) | `n - 1` | 0 | `O(n)` |\n| Melhor, sem bandeira | `n(n - 1)/2` | 0 | `O(n²)` |\n| Médio | cerca de `n²/2` | cerca de `n²/4` | `O(n²)` |\n| Pior (invertido) | `n(n - 1)/2` | `n(n - 1)/2` | `O(n²)` |\n| Memória extra | | | `O(1)` |",
+ "naprova": "A banca pergunta a vantagem do bubble sort: é a versão com bandeira, que para em `O(n)` num vetor ordenado. A pegadinha é dar `O(n)` no melhor caso para a versão **sem** bandeira, que faz `n(n - 1)/2` comparações sempre.",
+ "fontes": [
+  "Celes e Rangel, *Apostila de estruturas de dados* (PUC-Rio), parte III (ordenação).",
+  "Tenenbaum, Langsam e Augenstein, *Estruturas de dados usando C*, cap. 6 (classificação).",
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 2 (inversões)."
+ ]
+}

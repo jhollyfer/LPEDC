@@ -1,0 +1,109 @@
+{
+ "num": "0117",
+ "oque": "Um **limite inferior** diz que nenhum algoritmo resolve o problema gastando menos do que certa quantidade. Para ordenar **só comparando** chaves, qualquer algoritmo faz `Ω(n log n)` comparações no pior caso.",
+ "como": "O argumento usa a **árvore de decisão**: cada nó interno é uma pergunta (\"A > B?\"), cada aresta é a resposta e cada folha é uma ordem final. Rodar o algoritmo é descer da raiz a uma folha; o pior caso é a **altura** `h`.\n\n- Com `n` elementos distintos há `n!` ordens, e cada uma precisa de uma folha só dela.\n- Uma árvore binária de altura `h` tem no máximo `2^h` folhas.\n- Então `2^h ≥ n!`, ou seja, `h ≥ log₂(n!)`.\n- Metade dos fatores de `n!` é pelo menos `n/2`, então `n! ≥ (n/2)^(n/2)` e `log₂(n!) ≥ (n/2) · log₂(n/2)`, que cresce como `n log n`.\n\nConclusão: `h = Ω(n log n)`. O **Ω** é o piso, o oposto do teto `O`.",
+ "caracteristicas": [
+  "Vale para **todo** algoritmo que só compara: insertion, merge, quick, heap e a `qsort`, inclusive os que ninguém inventou.",
+  "Fala do **pior caso**. O insertion sort ordena um vetor já ordenado com `n - 1` comparações sem violar nada.",
+  "Merge sort e heapsort fazem `O(n log n)` no pior caso e encostam no piso: são **assintoticamente ótimos**.",
+  "Counting, radix e bucket sort escapam porque usam o **valor** como índice em vez de comparar.",
+  "Para 3 elementos: `3! = 6` ordens, e altura 2 só tem 4 folhas, então são precisas 3 comparações."
+ ],
+ "exemplo": "Três encomendas A, B e C e uma balança de dois pratos, que só diz qual pesa mais. Uma ordem como `C A B` quer dizer: C é a mais leve, B a mais pesada. O algoritmo é o insertion sort de 3 elementos.",
+ "passos": [
+  {
+   "titulo": "As ordens possíveis",
+   "texto": "Com 3 elementos distintos, há `3! = 6` ordens. O algoritmo tem de distinguir todas: se duas caíssem na mesma folha, uma delas sairia errada.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "A B C    A C B",
+     "B A C    B C A",
+     "C A B    C B A"
+    ],
+    "titulo": "3! = 6 folhas"
+   }
+  },
+  {
+   "titulo": "A primeira pergunta",
+   "texto": "\"A > B?\" divide as 6 ordens em dois grupos de 3. Um grupo de 3 não se resolve com mais uma pergunta, porque ela só tem 2 respostas.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "A>B? não: A B C, A C B, C A B",
+     "A>B? sim: B A C, B C A, C B A"
+    ],
+    "titulo": "uma pergunta"
+   }
+  },
+  {
+   "titulo": "A árvore de decisão inteira",
+   "texto": "É o insertion sort de 3 elementos. Para A = 5, B = 9 e C = 2 kg: A > B? não; B > C? sim; A > C? sim; folha `C A B`. Duas folhas ficam a 2 perguntas da raiz, quatro a 3.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "A>B?",
+     " não: B>C?",
+     "   não: A B C",
+     "   sim: A>C?",
+     "     não: A C B",
+     "     sim: C A B",
+     " sim: A>C?",
+     "   não: B A C",
+     "   sim: B>C?",
+     "     não: B C A",
+     "     sim: C B A"
+    ],
+    "titulo": "árvore de decisão"
+   }
+  },
+  {
+   "titulo": "Altura mínima para 3",
+   "texto": "A altura dessa árvore é 3. Dá para fazer com 2? Uma árvore de altura 2 tem no máximo `2² = 4` folhas, e são precisas 6. Então nenhum método garante a ordem de 3 elementos com menos de 3 comparações: aqui o insertion sort é ótimo.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "altura 2: até 4 folhas < 6",
+     "altura 3: até 8 folhas >= 6",
+     "logo h >= 3"
+    ],
+    "titulo": "2^h >= 3!"
+   }
+  },
+  {
+   "titulo": "Para qualquer n",
+   "texto": "A mesma conta: `2^h ≥ n!`, então `h ≥ ⌈log₂ n!⌉`. Para 4 elementos, 24 ordens: `2⁴ = 16` não basta, `2⁵ = 32` basta, logo pelo menos 5 comparações.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "n=3:  3! = 6     h >= 3",
+     "n=4:  4! = 24    h >= 5",
+     "n=5:  5! = 120   h >= 7",
+     "n=10: 3.628.800  h >= 22"
+    ],
+    "titulo": "h >= log2(n!)"
+   }
+  },
+  {
+   "titulo": "De log₂ n! para n log n",
+   "texto": "Metade dos fatores de `n!` vale pelo menos `n/2`, então `log₂ n! ≥ (n/2) log₂(n/2)`, que é `Ω(n log n)`. Para `n = 1000`, o piso é 8.530 comparações; o merge sort faz no máximo 8.977. Ele encosta no limite.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "n! >= (n/2)^(n/2)",
+     "log2 n! >= (n/2)·log2(n/2)",
+     "h = Ω(n log n)"
+    ],
+    "titulo": "o piso"
+   }
+  }
+ ],
+ "custos": "| n | n! | limite ⌈log₂ n!⌉ | merge sort (pior caso) |\n|---|---|---|---|\n| 3 | 6 | 3 | 3 |\n| 4 | 24 | 5 | 5 |\n| 5 | 120 | 7 | 8 |\n| 10 | 3.628.800 | 22 | 25 |\n| 1000 | (2.568 dígitos) | 8.530 | 8.977 |",
+ "naprova": "A banca pergunta se um método por comparação pode ordenar em `O(n)` no pior caso (não pode) e pede para reconhecer heapsort e merge sort como `O(n log n)` no pior caso. A pegadinha é usar o limite contra o counting ou o radix, que não comparam, ou contra o melhor caso do insertion sort.",
+ "fontes": [
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 8 (limite inferior da ordenação e árvore de decisão).",
+  "Szwarcfiter e Markenzon, *Estruturas de dados e seus algoritmos*, 3. ed., cap. 7 (ordenação e árvore de decisão).",
+  "Tenenbaum, Langsam e Augenstein, *Estruturas de dados usando C*, cap. 6 (o limite de log₂ n! comparações).",
+  "Lintzmayer e Mota, *Análise de algoritmos e de estruturas de dados* (notas de aula), limite inferior para ordenação."
+ ]
+}

@@ -1,0 +1,112 @@
+{
+ "num": "0007",
+ "oque": "Os operadores aritméticos do C são `+`, `-`, `*`, `/` e `%`. Quando os **dois** operandos do `/` são inteiros, a divisão é **inteira**: o resultado perde a parte fracionária, sem arredondar. O `%` (módulo) devolve o resto dessa divisão.",
+ "como": "| Operador | Faz | Exemplo | Resultado |\n|---|---|---|---|\n| `+` `-` | soma, subtração | `24 - 4` | `20` |\n| `*` | multiplicação | `3 * 8` | `24` |\n| `/` | divisão | `24 / 5` | `4` |\n| `%` | resto | `24 % 5` | `4` |\n\nQuem decide se a divisão é inteira ou real é o **tipo dos operandos**, não a variável que recebe o resultado. Basta um lado ser real: `24 / 5.0` dá 4.8.\n\nA **precedência** é a da escola: `*`, `/` e `%` agem antes de `+` e `-`. Entre operadores do mesmo nível, a conta segue da esquerda para a direita (**associatividade**). Parênteses mandam em tudo.\n\n```c\nprintf(\"%d %d\\n\", 7 / 2, 7 % 2);  // 3 1\nprintf(\"%.1f\\n\", 7 / 2.0);        // 3.5\nprintf(\"%d\\n\", 2 + 3 * 4 % 5);    // 4\nprintf(\"%d\\n\", 100 / 10 / 2);     // 5\n```",
+ "caracteristicas": [
+  "`int / int` corta em direção ao zero: `7 / 2` dá 3 e `-7 / 2` dá -3 (regra fixa desde o C99).",
+  "O `%` só aceita inteiros, e o resto fica com o sinal do dividendo: `-7 % 3` dá -1.",
+  "As duas respostas sempre se encaixam: `(a / b) * b + a % b == a`.",
+  "`*`, `/` e `%` têm a **mesma** precedência, acima de `+` e `-`. No empate, da esquerda para a direita: `100 / 10 / 2` é `(100 / 10) / 2`.",
+  "Não existe operador de potência. O `^` é o OU exclusivo bit a bit; para elevar, multiplique ou use `pow`."
+ ],
+ "vantagens": [
+  "A divisão inteira e o resto resolvem sem `if` problemas comuns: `n % 2` diz se `n` é par (0) ou ímpar (1).",
+  "`n % 10` dá o último dígito e `n / 10` tira esse dígito. Repetindo os dois num laço, você separa um número em dígitos.",
+  "`i / 2` corta o problema ao meio, que é o passo da busca binária e de muitas recursões."
+ ],
+ "desvantagens": [
+  "Com `int a = 7, b = 8;`, `double media = (a + b) / 2;` guarda **7.0**: a divisão acontece entre dois `int` antes de virar `double`. Escreva `(a + b) / 2.0`.",
+  "`a + b / 2` divide só o `b`. Faltar parênteses muda a conta sem erro de compilação.",
+  "Divisão inteira por zero derruba o programa (`Floating point exception`). Com `double`, o resultado é `inf`."
+ ],
+ "exemplo": "| Expressão | Valor | Por quê |\n|---|---|---|\n| `24 / 5` | `4` | int / int: rodadas completas |\n| `24 % 5` | `4` | 24 = 4 · 5 + 4 |\n| `24 / 5.0` | `4.8` | um lado real basta |\n| `2 / 3` | `0` | corta, não arredonda |\n| `-7 / 2` | `-3` | corta em direção ao zero |\n| `-7 % 3` | `-1` | sinal do dividendo |\n| `5 / 2 / 2` | `1` | (5 / 2) / 2 = 2 / 2 |\n| `(7 + 8) / 2` | `7` | 15 / 2 com inteiros |\n| `(7 + 8) / 2.0` | `7.5` | agora é real |",
+ "passos": [
+  {
+   "titulo": "A expressão",
+   "texto": "Quanto vale `x` em `int x = 10 + 7 / 2 * 3 % 4;`? Há quatro operadores. `/`, `*` e `%` estão no mesmo nível, acima do `+`; entre eles a conta vai da esquerda para a direita. O `+` fica por último.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "x = 10 + 7 / 2 * 3 % 4",
+     "",
+     "1º  7 / 2",
+     "2º  ... * 3",
+     "3º  ... % 4",
+     "4º  10 + ..."
+    ]
+   }
+  },
+  {
+   "titulo": "7 / 2 = 3",
+   "texto": "O primeiro da esquerda no nível alto é `7 / 2`. Os dois são `int`: a divisão é inteira e dá 3, não 3,5. O ,5 some sem aviso.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "10 + 7 / 2 * 3 % 4",
+     "10 + 3 * 3 % 4      7/2 = 3"
+    ]
+   }
+  },
+  {
+   "titulo": "3 * 3 = 9",
+   "texto": "Agora o próximo da esquerda é `3 * 3`, que dá 9.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "10 + 7 / 2 * 3 % 4",
+     "10 + 3 * 3 % 4      7/2 = 3",
+     "10 + 9 % 4          3*3 = 9"
+    ]
+   }
+  },
+  {
+   "titulo": "9 % 4 = 1, depois a soma",
+   "texto": "`9 % 4` é o resto de 9 por 4: 9 = 2 · 4 + 1, resto 1. Só então o `+`: 10 + 1 = 11. Se a divisão fosse real, a conta seria outra; na prova, marque cada `/` entre inteiros.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "10 + 7 / 2 * 3 % 4",
+     "10 + 3 * 3 % 4      7/2 = 3",
+     "10 + 9 % 4          3*3 = 9",
+     "10 + 1              9%4 = 1",
+     "x = 11"
+    ]
+   }
+  },
+  {
+   "titulo": "Separar dígitos com % e /",
+   "texto": "Com `n = 1234`, repita: o último dígito é `n % 10`, e `n = n / 10` corta esse dígito. O laço para quando `n` chega a 0. Os dígitos saem do último para o primeiro.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "n      n % 10   n / 10",
+     "1234   4        123",
+     "123    3        12",
+     "12     2        1",
+     "1      1        0  (para)"
+    ],
+    "titulo": "n = 1234"
+   }
+  },
+  {
+   "titulo": "i / 2 na recursão",
+   "texto": "A recursão `teste(i)` da prova chama `teste(i/2)`. Com `i = 5`, a divisão é inteira: 5 / 2 dá 2, não 2,5. Depois 2 / 2 dá 1. E 4 / 2 também dá 2, então `teste(4)` e `teste(5)` fazem as mesmas chamadas.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "5 / 2 = 2   (não 2,5)",
+     "4 / 2 = 2",
+     "3 / 2 = 1",
+     "2 / 2 = 1",
+     "1 / 2 = 0"
+    ]
+   }
+  }
+ ],
+ "naprova": "A aritmética quase nunca cai sozinha: ela aparece dentro de outra questão. Em `teste(5)`, o `i/2` vale 2 e decide a árvore de chamadas; na busca binária, o meio `(ini + fim) / 2` é arredondado para baixo. A pegadinha é tratar `/` entre inteiros como divisão real.",
+ "fontes": [
+  "Deitel e Deitel, *C: como programar*, 6. ed., cap. 2 (aritmética em C e precedência).",
+  "Backes, *Linguagem C: completa e descomplicada*, cap. 3 (operadores).",
+  "Feofiloff, *Algoritmos em linguagem C*, apêndice C (números inteiros)."
+ ]
+}

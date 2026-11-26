@@ -1,0 +1,189 @@
+{
+ "num": "0110",
+ "oque": "A **busca em largura** (BFS, *breadth-first search*) visita um grafo a partir de uma origem s em **ondas**: primeiro s, depois todos os vizinhos de s, depois os vizinhos deles ainda não vistos, e assim por diante. Ela usa uma **fila** e acha a **distância** (menor número de arestas) de s até cada vértice alcançável.",
+ "como": "O algoritmo:\n\n- marque todos com `dist = -1` (não descoberto); faça `dist[s] = 0` e ponha s na fila;\n- enquanto a fila não estiver vazia, tire o vértice u da **frente**;\n- para cada vizinho v de u com `dist[v] == -1`: `dist[v] = dist[u] + 1`, `pai[v] = u` e ponha v no **fim** da fila.\n\n```c\nwhile (ini < fim) {\n    int u = fila[ini++];      /* tira da frente */\n    for (int v = 0; v < V; v++)\n        if (adj[u][v] && dist[v] == -1) {\n            dist[v] = dist[u] + 1;\n            pai[v] = u;\n            fila[fim++] = v;  /* põe no fim */\n        }\n}\n```\n\nComo a fila é FIFO, todos os vértices da onda k saem antes dos da onda k + 1. Por isso a primeira vez que a busca encontra um vértice é sempre pelo caminho mais curto. Para montar o caminho até um destino, siga `pai[]` de trás para a frente até a origem.",
+ "caracteristicas": [
+  "Usa **fila** (FIFO). A DFS, busca em profundidade, usa **pilha** ou recursão.",
+  "Acha o caminho com **menos arestas**. Isso só é o mais curto quando todas as arestas custam o mesmo; com pesos, use Dijkstra.",
+  "Marca o vértice **ao pôr na fila**, não ao tirar. Assim cada vértice entra na fila uma vez só.",
+  "Os pares (pai[v], v) formam a **árvore da BFS**, com raiz em s.",
+  "No Cormen: branco = não descoberto, cinza = na fila, preto = já saiu da fila e teve os vizinhos olhados.",
+  "Só visita o que s alcança. Vértice de outro componente fica com `dist = -1`."
+ ],
+ "vantagens": [
+  "Dá as distâncias em número de arestas de s a **todos** os vértices numa passada só.",
+  "Custo linear no tamanho do grafo com lista de adjacência: O(V + E).",
+  "Reconstrói o caminho mínimo pelo vetor `pai[]`."
+ ],
+ "desvantagens": [
+  "Ignora pesos: num grafo ponderado, o caminho de menos arestas pode sair mais caro.",
+  "A fila pode guardar uma onda inteira de vértices ao mesmo tempo: O(V) de memória.",
+  "Com matriz de adjacência, cada vértice varre uma linha inteira, e o custo sobe para O(V²)."
+ ],
+ "exemplo": "Lia quer chegar à recrutadora Rita pela rede de amizades. Os vértices são 0 Lia, 1 Max, 2 Nina, 3 Otto, 4 Pedro, 5 Rita, e as amizades (não dirigidas) dão esta lista de adjacência:\n\n```\n0 Lia  : Max, Nina\n1 Max  : Lia, Otto\n2 Nina : Lia, Otto, Pedro\n3 Otto : Max, Nina, Rita\n4 Pedro: Nina, Rita\n5 Rita : Otto, Pedro\n```\n\nA BFS parte de Lia. Na figura de cada passo, a fila é o vetor `fila[]`: quem já saiu fica apagado, quem acabou de entrar fica azul. A frente é o primeiro não apagado; o fim é a última casa preenchida.",
+ "passos": [
+  {
+   "titulo": "Início: Lia na fila",
+   "texto": "`dist[Lia] = 0`; todos os outros com -1. A fila tem só Lia. Onda 0.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     "Lia",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    "estados": {
+     "0": "azul"
+    },
+    "nome": "fila",
+    "titulo": "dist: Lia 0"
+   }
+  },
+  {
+   "titulo": "Tira Lia: entram Max e Nina",
+   "texto": "Vizinhos de Lia: Max e Nina, os dois com dist -1. Recebem dist 1 e pai Lia, e entram no fim da fila, nessa ordem. Onda 1 completa.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     "Lia",
+     "Max",
+     "Nina",
+     "",
+     "",
+     ""
+    ],
+    "estados": {
+     "0": "apagado",
+     "1": "azul",
+     "2": "azul"
+    },
+    "nome": "fila",
+    "titulo": "dist: Max 1, Nina 1"
+   }
+  },
+  {
+   "titulo": "Tira Max: entra Otto",
+   "texto": "Vizinhos de Max: Lia (já tem dist 0, ignora) e Otto (-1). Otto recebe dist 1 + 1 = 2 e pai Max. Fila: Nina, Otto.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     "Lia",
+     "Max",
+     "Nina",
+     "Otto",
+     "",
+     ""
+    ],
+    "estados": {
+     "0": "apagado",
+     "1": "apagado",
+     "3": "azul"
+    },
+    "nome": "fila",
+    "titulo": "dist: Otto 2"
+   }
+  },
+  {
+   "titulo": "Tira Nina: entra só Pedro",
+   "texto": "Vizinhos de Nina: Lia (já vista), Otto (já tem dist 2: **não** entra de novo) e Pedro (-1). Pedro recebe dist 2 e pai Nina. É aqui que marcar ao enfileirar evita Otto duplicado na fila.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     "Lia",
+     "Max",
+     "Nina",
+     "Otto",
+     "Pedro",
+     ""
+    ],
+    "estados": {
+     "0": "apagado",
+     "1": "apagado",
+     "2": "apagado",
+     "4": "azul"
+    },
+    "nome": "fila",
+    "titulo": "dist: Pedro 2"
+   }
+  },
+  {
+   "titulo": "Tira Otto: entra Rita",
+   "texto": "Vizinhos de Otto: Max e Nina (já vistos) e Rita (-1). Rita recebe dist 2 + 1 = 3 e pai Otto. Onda 3.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     "Lia",
+     "Max",
+     "Nina",
+     "Otto",
+     "Pedro",
+     "Rita"
+    ],
+    "estados": {
+     "0": "apagado",
+     "1": "apagado",
+     "2": "apagado",
+     "3": "apagado",
+     "5": "azul"
+    },
+    "nome": "fila",
+    "titulo": "dist: Rita 3"
+   }
+  },
+  {
+   "titulo": "Tira Pedro e Rita: fila vazia",
+   "texto": "Pedro olha Nina e Rita, ambos já com dist: nada entra. Rita olha Otto e Pedro: nada entra. `ini == fim`, a fila esvaziou e a busca termina. Cada vértice entrou e saiu uma vez só.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     "Lia",
+     "Max",
+     "Nina",
+     "Otto",
+     "Pedro",
+     "Rita"
+    ],
+    "estados": {
+     "0": "apagado",
+     "1": "apagado",
+     "2": "apagado",
+     "3": "apagado",
+     "4": "apagado",
+     "5": "apagado"
+    },
+    "nome": "fila",
+    "titulo": "fila vazia"
+   }
+  },
+  {
+   "titulo": "Resultado e caminho até Rita",
+   "texto": "As distâncias saem por onda. Para o caminho, siga `pai[]` a partir de Rita: Rita ← Otto ← Max ← Lia. Invertendo: **Lia → Max → Otto → Rita**, 3 arestas. Lia → Nina → Pedro → Rita também tem 3; a BFS devolve o primeiro que achou.",
+   "figura": {
+    "tipo": "texto",
+    "titulo": "dist e pai",
+    "linhas": [
+     "vértice  dist  pai",
+     "Lia        0   -",
+     "Max        1   Lia",
+     "Nina       1   Lia",
+     "Otto       2   Max",
+     "Pedro      2   Nina",
+     "Rita       3   Otto",
+     "",
+     "Rita <- Otto <- Max <- Lia"
+    ]
+   }
+  }
+ ],
+ "custos": "| Representação | Tempo | Memória extra |\n|---|---|---|\n| Lista de adjacência | O(V + E) | O(V): fila, `dist`, `pai` |\n| Matriz de adjacência | O(V²) | O(V) |",
+ "naprova": "A banca pergunta qual estrutura a busca em largura usa (fila; a DFS usa pilha), pede a ordem de visita a partir de um vértice e compara BFS com DFS. Pegadinha: trocar fila por pilha, ou achar que a BFS dá o caminho mais barato num grafo com pesos.",
+ "fontes": [
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 20 (busca em largura).",
+  "Feofiloff, *Algoritmos em linguagem C*, cap. 5 (filas e distâncias em uma rede).",
+  "Ziviani, *Projeto de algoritmos*, 3. ed., cap. 7 (busca em largura).",
+  "Tenenbaum, Langsam e Augenstein, *Estruturas de dados usando C*, cap. 8 (grafos)."
+ ]
+}

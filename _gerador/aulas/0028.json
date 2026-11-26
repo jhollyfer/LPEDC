@@ -1,0 +1,84 @@
+{
+ "num": "0028",
+ "oque": "Função é um bloco de código com nome que recebe dados pelos **parâmetros**, faz uma tarefa e pode devolver um resultado com `return`. É escrita uma vez e chamada quantas vezes for preciso.",
+ "como": "A forma geral é `tipo_de_retorno nome(parâmetros) { corpo }`.\n\n- **Tipo de retorno**: o que ela devolve. `void` quando não devolve nada.\n- **Parâmetros**: variáveis que recebem os dados da chamada. Cada um com seu tipo: `double a, double b`.\n- **`return`**: devolve o valor **e encerra a função na hora**.\n- **Protótipo**: o cabeçalho com `;` antes do `main`, para o compilador conhecer a função antes do uso.\n\n```c\nint dobro(int x);          // protótipo\n\nint main(void) {\n    int r = dobro(4) + 1;  // chamada\n    printf(\"%d\\n\", r);     // 9\n    return 0;\n}\n\nint dobro(int x) {         // definição\n    return 2 * x;\n}\n```\n\nNa chamada `dobro(4)`, o 4 é o **argumento** e o `x` é o **parâmetro**. O programa pula para o corpo, roda até o `return` e volta ao mesmo ponto trazendo o valor.",
+ "caracteristicas": [
+  "Toda função é uma **sub-rotina**. A que devolve valor é chamada de função; a que não devolve (`void`) é o **procedimento**.",
+  "O `return` encerra a função. Com vários `return`, o primeiro alcançado decide.",
+  "O compilador lê de cima para baixo: sem protótipo, chamar antes da definição é erro no gcc 14 (`implicit declaration`).",
+  "Função que não é `void` e chega ao fim sem `return` devolve lixo; o `-Wall` avisa `control reaches end of non-void function`.",
+  "A função é recursiva quando chama a si mesma, mesmo que tenha outros defeitos."
+ ],
+ "vantagens": [
+  "A regra fica escrita uma vez: mudar a tarifa é mudar um lugar só.",
+  "Dividir o programa em funções pequenas (modularização) permite testar e entender cada parte separada.",
+  "O nome documenta a tarefa: `preco_corrida(km)` se lê melhor que a conta solta."
+ ],
+ "desvantagens": [
+  "Cada chamada tem um custo pequeno: um quadro novo na pilha (assunto 0031).",
+  "A função só devolve **um** valor pelo `return`. Para mais de um, é preciso ponteiro ou `struct`.",
+  "Função que lê do teclado ou imprime dentro do cálculo fica difícil de reaproveitar."
+ ],
+ "exemplo": "Uma função com três `return`:\n\n```\nint sinal(int n) {\n    if (n < 0) return -1;\n    if (n == 0) return 0;\n    return 1;\n}\n```\n\n| Chamada | Primeiro `return` alcançado | Devolve |\n|---|---|---|\n| `sinal(-5)` | `n < 0` | `-1` |\n| `sinal(0)` | `n == 0` | `0` |\n| `sinal(7)` | o último | `1` |",
+ "passos": [
+  {
+   "titulo": "O main chega na chamada",
+   "texto": "Na linha `int r = dobro(4) + 1;`, o `main` para no meio da conta. O argumento 4 é copiado para o parâmetro `x`, e o programa pula para o corpo de `dobro`.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "main:  r = dobro(4) + 1",
+     "             |",
+     "             v",
+     "dobro: x = 4"
+    ]
+   }
+  },
+  {
+   "titulo": "O corpo roda até o return",
+   "texto": "`return 2 * x;` calcula 8, devolve e **encerra** a função. Se houvesse linhas depois do `return`, elas não rodariam.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "dobro: x = 4",
+     "       return 2 * 4",
+     "       devolve 8"
+    ]
+   }
+  },
+  {
+   "titulo": "Volta ao mesmo ponto",
+   "texto": "O 8 entra no lugar de `dobro(4)` e a conta do `main` continua: `r = 8 + 1 = 9`.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "main:  r = dobro(4) + 1",
+     "       r =    8     + 1",
+     "       r = 9"
+    ]
+   }
+  },
+  {
+   "titulo": "Função sem return num caminho",
+   "texto": "Na prova de 2016: `int fatorial(int i) { if (i <= 1) return 1; else fatorial(i-1); }`. Com `i = 3`, o `else` chama `fatorial(2)` e joga o resultado fora. A função chega ao fim sem `return`, e quem chamou recebe lixo. Ela continua **recursiva**: chama a si mesma.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "fatorial(3)",
+     "  else: fatorial(2)",
+     "    else: fatorial(1)",
+     "      return 1",
+     "    (descarta o 1)",
+     "  (descarta)",
+     "fim sem return: lixo"
+    ]
+   }
+  }
+ ],
+ "naprova": "A banca usa funções como pano de fundo: pergunta se uma função é recursiva (ela é se chama a si mesma, mesmo sem `return` no `else`) e mostra código com defeito de retorno. Não deixe o erro do código desviar você do que a pergunta quer.",
+ "fontes": [
+  "Deitel e Deitel, *C: como programar*, 6. ed., cap. 5 (funções).",
+  "Backes, *Linguagem C: completa e descomplicada*, cap. 9 (funções).",
+  "Kernighan e Ritchie, *C: a linguagem de programação padrão ANSI*, cap. 4 (funções e estrutura de programas)."
+ ]
+}

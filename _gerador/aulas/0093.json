@@ -1,0 +1,176 @@
+{
+ "num": "0093",
+ "oque": "O insertion sort (ordenação por inserção) pega cada elemento e o **encaixa** no lugar certo da parte já ordenada à esquerda, como quem arruma as cartas na mão à medida que as recebe.",
+ "como": "Para `j` de 1 a `n - 1`:\n\n- guarde `x = v[j]`;\n- ande para a esquerda a partir de `i = j - 1` e, enquanto `v[i] > x`, **desloque** `v[i]` uma casa para a direita;\n- quando achar alguém `<= x`, ou passar do começo, ponha `x` em `v[i + 1]`.\n\n```c\nfor (int j = 1; j < n; j++) {\n    int x = v[j];\n    int i = j - 1;\n    while (i >= 0 && v[i] > x) {\n        v[i + 1] = v[i];\n        i--;\n    }\n    v[i + 1] = x;\n}\n```\n\nO deslocamento é uma escrita só, não uma troca. A cópia em `x` é obrigatória: o primeiro deslocamento escreve em cima de `v[j]`.",
+ "caracteristicas": [
+  "**Estável**: o laço para no primeiro elemento que **não** é maior que `x`, e `x` entra depois dos iguais.",
+  "**In-place**: memória extra `O(1)`.",
+  "**Adaptativo**: o número de deslocamentos é o número de inversões. Vetor ordenado: `n - 1` comparações, `O(n)`. Vetor invertido: `n(n - 1)/2`, `O(n²)`.",
+  "A parte da esquerda está em ordem **entre si**, mas não na posição final: um valor que ainda vai chegar pode entrar no meio dela.",
+  "É **online**: ordena à medida que os dados chegam."
+ ],
+ "vantagens": [
+  "O melhor dos métodos simples em vetor pequeno ou quase ordenado.",
+  "Estável e in-place.",
+  "Bibliotecas o usam para pedaços pequenos dentro do quick sort e do merge sort."
+ ],
+ "desvantagens": [
+  "`O(n²)` no caso médio e no pior.",
+  "Num vetor invertido, cada elemento atravessa a parte pronta inteira.",
+  "Move muito mais que o selection sort no pior caso."
+ ],
+ "exemplo": "As cartas chegam na ordem **7, 4, 9, 2, 5**. Verde é a parte arrumada, amarelo é a carta que acabou de entrar.",
+ "passos": [
+  {
+   "titulo": "Início",
+   "texto": "A parte pronta é só `v[0] = 7`: um elemento sozinho já está em ordem. O próximo a encaixar é `x = 4`.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     7,
+     4,
+     9,
+     2,
+     5
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "amarelo"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "j = 1, x = 4",
+   "texto": "7 > 4: o 7 desloca para a gaveta 1. `i` vira -1 e o laço para sem comparar. O 4 entra em `v[0]`. São 1 comparação e 1 deslocamento.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     4,
+     7,
+     9,
+     2,
+     5
+    ],
+    "estados": {
+     "0": "amarelo",
+     "1": "verde"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "j = 2, x = 9",
+   "texto": "7 > 9? Não. O laço para na primeira comparação e o 9 fica onde está. É 1 comparação e 0 deslocamento.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     4,
+     7,
+     9,
+     2,
+     5
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "verde",
+     "2": "amarelo"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "j = 3, x = 2: deslocando",
+   "texto": "O 2 fica guardado em `x`. 9 > 2: `v[3] = 9`. 7 > 2: `v[2] = 7`. 4 > 2: `v[1] = 4`. `i` chegou a -1. O 4 aparece duas vezes porque a gaveta 0 virou o buraco onde o 2 vai entrar.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     4,
+     4,
+     7,
+     9,
+     5
+    ],
+    "estados": {
+     "0": "amarelo",
+     "1": "verde",
+     "2": "verde",
+     "3": "verde"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "j = 3: encaixa o 2",
+   "texto": "`v[0] = 2`. Foram 3 comparações e 3 deslocamentos: o 2 atravessou a mão inteira.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     2,
+     4,
+     7,
+     9,
+     5
+    ],
+    "estados": {
+     "0": "amarelo",
+     "1": "verde",
+     "2": "verde",
+     "3": "verde"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "j = 4, x = 5",
+   "texto": "9 > 5: desloca. 7 > 5: desloca. 4 > 5? Não: para. O 5 entra em `v[2]`. São 3 comparações e 2 deslocamentos. Total: 1 + 1 + 3 + 3 = **8 comparações** e **6 deslocamentos** (as 6 inversões de `7 4 9 2 5`).",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     2,
+     4,
+     5,
+     7,
+     9
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "verde",
+     "2": "amarelo",
+     "3": "verde",
+     "4": "verde"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "Melhor caso: já ordenado",
+   "texto": "Com `2 4 5 7 9` na entrada, cada `x` compara uma vez com o vizinho da esquerda, que não é maior, e fica. São 4 comparações e nenhum deslocamento: `n - 1`, ou seja, `O(n)`. Com duas chaves vizinhas trocadas, é só um deslocamento a mais.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     2,
+     4,
+     5,
+     7,
+     9
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "verde",
+     "2": "verde",
+     "3": "verde",
+     "4": "verde"
+    },
+    "nome": "v"
+   }
+  }
+ ],
+ "custos": "| Caso | Comparações | Deslocamentos | Ordem |\n|---|---|---|---|\n| Melhor (ordenado) | `n - 1` | 0 | `O(n)` |\n| Médio | cerca de `n²/4` | cerca de `n²/4` | `O(n²)` |\n| Pior (invertido) | `n(n - 1)/2` | `n(n - 1)/2` | `O(n²)` |\n| Memória extra | | | `O(1)` |",
+ "naprova": "A banca dá um vetor e pergunta como ele fica depois da `k`-ésima rodada: só as `k + 1` primeiras posições estão em ordem entre si, e o resto continua **igual** à entrada. Também pergunta qual método ganha num vetor quase ordenado (a inserção, `O(n)`) e se a ordem da entrada influencia o custo da inserção (influencia, ao contrário do merge sort).",
+ "fontes": [
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 2 (insertion sort).",
+  "Feofiloff, *Algoritmos em linguagem C*, capítulo de ordenação elementar.",
+  "Ziviani, *Projeto de algoritmos*, 3. ed., cap. 4 (ordenação por inserção)."
+ ]
+}

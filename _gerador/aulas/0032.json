@@ -1,0 +1,150 @@
+{
+ "num": "0032",
+ "oque": "Uma função **recursiva** resolve um problema chamando **a si mesma** com uma versão menor dele. Ela tem um **caso base**, que responde direto sem nova chamada, e um **caso recursivo**, que reduz o problema e usa a resposta da chamada menor.",
+ "como": "Três regras:\n\n- o caso base existe e é alcançável;\n- cada chamada chega **mais perto** dele;\n- ao escrever, **confie na função**: suponha que a chamada menor já funciona e monte a resposta a partir dela.\n\nPara seguir uma execução, desenhe a **árvore de chamadas**: um nó por chamada, ligado às chamadas que ele faz. O número de nós é o número de chamadas; a altura é quantos quadros ficam na pilha ao mesmo tempo.\n\n```c\nvoid teste(int i) {\n    if (i > 1) {\n        teste(i / 2);\n        teste(i / 2);\n    }\n    printf(\"#\");\n}\n```\n\nPara contar os `#`, escreva a **recorrência**. Seja `T(i)` o número de `#` de `teste(i)`:\n\n- `T(i) = 1` se `i <= 1` (só o `printf`);\n- `T(i) = 2 · T(i/2) + 1` se `i > 1` (duas chamadas e o próprio `printf`).\n\nO que vem **antes** da chamada recursiva roda na ida, em ordem direta; o que vem **depois** roda na volta, em ordem inversa.",
+ "caracteristicas": [
+  "Sem caso base alcançável, a função chama a si mesma até a pilha acabar: **stack overflow**.",
+  "Cada chamada tem seu quadro na pilha, com seus próprios parâmetros e locais.",
+  "O **tempo** acompanha o número de nós da árvore de chamadas; a **memória**, a altura dela.",
+  "Comando antes da chamada roda na ida; depois da chamada, na volta. Por isso `f(p->prox); printf(p->dado);` imprime a lista ao contrário.",
+  "Toda recursão pode virar laço, e todo laço pode virar recursão.",
+  "Ser recursiva é chamar a si mesma. Uma função com defeito (sem `return` num caminho) continua recursiva."
+ ],
+ "vantagens": [
+  "Código curto e próximo da definição matemática: `n! = n · (n-1)!`.",
+  "É a forma natural para problemas recursivos por natureza: percorrer árvore, dividir vetor ao meio, Hanói.",
+  "A correção se prova por indução: caso base certo e passo certo dão função certa para todo `n`."
+ ],
+ "desvantagens": [
+  "Gasta memória proporcional à profundidade: `fatorial(5)` ocupa 5 quadros, um laço ocuparia 1.",
+  "Cada chamada tem custo de empilhar e desempilhar.",
+  "Quando as chamadas repetem trabalho, como no Fibonacci ingênuo, o tempo explode (assunto 0033)."
+ ],
+ "exemplo": "Quantos `#` saem de `teste(5)`? Lembre que `i / 2` é divisão inteira: 5 / 2 = 2 e 2 / 2 = 1.\n\nA mesma recorrência para outros valores:\n\n| i | i / 2 | T(i) |\n|---|---|---|\n| 1 | | 1 |\n| 2 | 1 | 2 · 1 + 1 = 3 |\n| 3 | 1 | 2 · 1 + 1 = 3 |\n| 4, 5 | 2 | 2 · 3 + 1 = 7 |\n| 6, 7 | 3 | 2 · 3 + 1 = 7 |\n| 8 | 4 | 2 · 7 + 1 = 15 |\n\n**Ida e volta numa lista** `1->2->3->4->5->6`: `fun(p)` imprime `p->dado`, chama `fun(p->next->next)` se `p->next` não é `NULL`, e imprime `p->dado` de novo. A ida passa por 1, 3, 5; o 5 ainda chama, porque o `next` dele é o 6, e `fun(NULL)` só retorna. A volta repete ao contrário: `1 3 5 5 3 1`.",
+ "passos": [
+  {
+   "titulo": "Chamar teste(5)",
+   "texto": "`5 > 1`: sim. Então `teste(5)` faz duas chamadas com `5 / 2 = 2` (divisão inteira, não 2,5). O `#` dele só sai **no fim**, depois que as duas voltarem.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "T(5)    5 > 1? sim",
+     "  T(2)",
+     "  T(2)",
+     "  # de T(5): no fim"
+    ]
+   }
+  },
+  {
+   "titulo": "O primeiro teste(2)",
+   "texto": "`2 > 1`: sim. Chama `teste(2 / 2)`, ou seja `teste(1)`, duas vezes. O segundo `T(2)` ainda nem começou: espera na pilha.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "T(5)",
+     "  T(2)    2 > 1? sim",
+     "    T(1)",
+     "    T(1)",
+     "  T(2)    (espera)"
+    ]
+   }
+  },
+  {
+   "titulo": "teste(1) é o caso base",
+   "texto": "`1 > 1`: não. Não chama ninguém, só imprime um `#` e volta. Esse é o **primeiro** `#` da saída. T(1) = 1.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "T(5)",
+     "  T(2)",
+     "    T(1)  -> #   (1º)",
+     "    T(1)",
+     "  T(2)"
+    ]
+   }
+  },
+  {
+   "titulo": "Fecha o primeiro teste(2)",
+   "texto": "O segundo `T(1)` imprime o 2º `#`. As duas chamadas voltaram, e o próprio `T(2)` imprime o 3º. T(2) = 2 · T(1) + 1 = 3.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "T(5)",
+     "  T(2)        -> # (3º)",
+     "    T(1)      -> # (1º)",
+     "    T(1)      -> # (2º)",
+     "  T(2)"
+    ]
+   }
+  },
+  {
+   "titulo": "O segundo teste(2)",
+   "texto": "Faz exatamente o mesmo caminho: dois `T(1)` e depois ele mesmo. Mais 3 `#`, do 4º ao 6º.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "T(5)",
+     "  T(2)        -> # (3º)",
+     "    T(1)      -> # (1º)",
+     "    T(1)      -> # (2º)",
+     "  T(2)        -> # (6º)",
+     "    T(1)      -> # (4º)",
+     "    T(1)      -> # (5º)"
+    ]
+   }
+  },
+  {
+   "titulo": "A árvore completa",
+   "texto": "Por último, `T(5)` imprime o seu: o 7º. A árvore tem 7 nós, um `#` por nó, porque toda chamada imprime exatamente um. Saída: `#######`. A altura é 3: no máximo 3 quadros de `teste` na pilha.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "T(5)          -> # (7º)",
+     "  T(2)        -> # (3º)",
+     "    T(1)      -> # (1º)",
+     "    T(1)      -> # (2º)",
+     "  T(2)        -> # (6º)",
+     "    T(1)      -> # (4º)",
+     "    T(1)      -> # (5º)",
+     "",
+     "total: 7"
+    ]
+   }
+  },
+  {
+   "titulo": "Contar sem desenhar",
+   "texto": "A recorrência dá o mesmo número sem a árvore. Comece pelo caso base e suba: T(1) = 1, T(2) = 3, T(5) = 7.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "T(1) = 1",
+     "T(2) = 2 · T(1) + 1",
+     "     = 2 · 1 + 1 = 3",
+     "T(5) = 2 · T(2) + 1",
+     "     = 2 · 3 + 1 = 7"
+    ]
+   }
+  },
+  {
+   "titulo": "Conferindo com teste(8)",
+   "texto": "8 / 2 = 4, 4 / 2 = 2, 2 / 2 = 1: um nível a mais. T(4) = 2 · 3 + 1 = 7 e T(8) = 2 · 7 + 1 = 15. Repare que `teste(4)` e `teste(5)` dão o mesmo 7, porque 4 / 2 e 5 / 2 valem 2.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "T(1) = 1",
+     "T(2) = 2 · 1 + 1 = 3",
+     "T(4) = 2 · 3 + 1 = 7",
+     "T(8) = 2 · 7 + 1 = 15"
+    ]
+   }
+  }
+ ],
+ "custos": "| Função | Chamadas (tempo) | Quadros ao mesmo tempo (memória) |\n|---|---|---|\n| `fatorial(n)` | `n`, `O(n)` | `n`, `O(n)` |\n| `teste(n)` | no máximo `2n - 1`, `O(n)` | `⌊log₂ n⌋ + 1`, `O(log n)` |\n| busca binária recursiva | até `⌊log₂ n⌋ + 1`, `O(log n)` | `O(log n)` |\n| versão com laço de qualquer uma | | `O(1)` |",
+ "naprova": "É o assunto mais cobrado da lista. A banca mostra uma função e pede a saída ou quantas vezes algo acontece: os `#` de `teste(5)`, um Fibonacci com casos base deslocados, uma lista impressa ao contrário (o `printf` depois da chamada), quantas chamadas faz a busca binária recursiva. As pegadinhas: a divisão inteira em `i/2`, a posição do `printf` em relação à chamada e esquecer de contar a chamada inicial.",
+ "fontes": [
+  "Feofiloff, *Algoritmos em linguagem C*, cap. 5 (recursão).",
+  "Deitel e Deitel, *C: como programar*, 6. ed., cap. 5 (recursão).",
+  "Backes, *Linguagem C: completa e descomplicada*, cap. 9 (funções e recursão).",
+  "Ziviani, *Projeto de algoritmos*, 3. ed., cap. 2 (recursividade)."
+ ]
+}

@@ -1,0 +1,155 @@
+{
+ "num": "0121",
+ "oque": "O radix sort (ordenação digital) ordena números dígito a dígito, do **menos significativo** para o mais significativo (LSD), com uma passada **estável** por dígito. Não compara um número com outro.",
+ "como": "- Ache o maior número: o número de dígitos dele é o número de passadas.\n- Para `exp` = 1, 10, 100, ...: ordene o vetor pelo dígito `(x / exp) % 10` com um counting sort estável (chaves de 0 a 9).\n- Depois da última passada, o vetor está ordenado.\n\n```c\nfor (int exp = 1; maior / exp > 0; exp *= 10)\n    passada(v, aux, n, exp);\n// passada: counting sort estável\n// pelo dígito (v[i] / exp) % 10\n```\n\nPara `x = 251` e `exp = 10`: `251 / 10 = 25` e `25 % 10 = 5`, o dígito das dezenas.\n\nA base não precisa ser 10. Em C é comum usar base 256, um byte por \"dígito\": `(x >> 8 * b) & 0xFF`. Um `int` de 32 bits sai em 4 passadas.",
+ "caracteristicas": [
+  "Cada passada **tem de ser estável**: números com o mesmo dígito atual mantêm a ordem que a passada anterior deu.",
+  "O número de passadas `d` vem do **maior** elemento, não da média nem do primeiro.",
+  "Custo `O(d · (n + b))`, com `b` a base. Para chaves de tamanho fixo, `d` é constante e o custo é linear.",
+  "Memória extra `O(n + b)`: o vetor auxiliar e os contadores. Não é in-place.",
+  "A ordem inicial não muda o custo, porque nada é comparado."
+ ],
+ "vantagens": [
+  "Linear para inteiros ou strings de tamanho fixo.",
+  "Estável.",
+  "Resolve chaves grandes demais para o counting sort direto, como números de 0 a 999 ou CPFs."
+ ],
+ "desvantagens": [
+  "Só serve para chaves que se quebram em dígitos.",
+  "Precisa de vetor auxiliar.",
+  "Com chaves longas, `d` cresce e as passadas pesam."
+ ],
+ "exemplo": "Oito números de pedido: **251 047 830 509 074 216 553 807**. O maior, 830, tem 3 dígitos: são 3 passadas. Em amarelo, o 807 e o 830, que só se separam pela estabilidade.",
+ "passos": [
+  {
+   "titulo": "Início",
+   "texto": "Os números aparecem com três casas para os dígitos ficarem alinhados.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     "251",
+     "047",
+     "830",
+     "509",
+     "074",
+     "216",
+     "553",
+     "807"
+    ],
+    "estados": {
+     "2": "amarelo",
+     "7": "amarelo"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "Passada 1: unidades",
+   "texto": "Dígitos: 1, 7, 0, 9, 4, 6, 3, 7. Em ordem de dígito: 830 (0), 251 (1), 553 (3), 074 (4), 216 (6), 047 e 807 (7), 509 (9). O 047 e o 807 empatam no 7 e mantêm a ordem da entrada.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     "830",
+     "251",
+     "553",
+     "074",
+     "216",
+     "047",
+     "807",
+     "509"
+    ],
+    "estados": {
+     "0": "amarelo",
+     "6": "amarelo"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "Passada 2: dezenas",
+   "texto": "Dígitos `(x / 10) % 10`: 3, 5, 5, 7, 1, 4, 0, 0. Blocos: `807 509 | 216 | 830 | 047 | 251 553 | 074`. O 807 vem antes do 509 porque já vinha antes. Agora o 807 (dezena 0) está à frente do 830 (dezena 3).",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     "807",
+     "509",
+     "216",
+     "830",
+     "047",
+     "251",
+     "553",
+     "074"
+    ],
+    "estados": {
+     "0": "amarelo",
+     "3": "amarelo"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "Passada 3: centenas",
+   "texto": "Dígitos: 8, 5, 2, 8, 0, 2, 5, 0. O 807 e o 830 empatam no 8, e a passada estável mantém o 807 na frente, como a passada das dezenas deixou. O vetor está ordenado.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     "047",
+     "074",
+     "216",
+     "251",
+     "509",
+     "553",
+     "807",
+     "830"
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "verde",
+     "2": "verde",
+     "3": "verde",
+     "4": "verde",
+     "5": "verde",
+     "6": "verde",
+     "7": "verde"
+    },
+    "nome": "v"
+   }
+  },
+  {
+   "titulo": "Se a passada não fosse estável",
+   "texto": "Na passada das centenas, um método instável poderia trocar os dois que têm 8 e devolver `... 830 807`. O trabalho das dezenas se perde e o resultado sai fora de ordem. Por isso cada passada usa o counting sort com distribuição de trás para a frente.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     "047",
+     "074",
+     "216",
+     "251",
+     "509",
+     "553",
+     "830",
+     "807"
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "verde",
+     "2": "verde",
+     "3": "verde",
+     "4": "verde",
+     "5": "verde",
+     "6": "vermelho",
+     "7": "vermelho"
+    },
+    "nome": "v"
+   }
+  }
+ ],
+ "custos": "| Caso | Tempo | Memória extra |\n|---|---|---|\n| Melhor | `O(d · (n + b))` | `O(n + b)` |\n| Médio | `O(d · (n + b))` | `O(n + b)` |\n| Pior | `O(d · (n + b))` | `O(n + b)` |\n\n`d` = dígitos do maior número; `b` = base (10 no exemplo).",
+ "naprova": "A banca afirma que o radix compara chaves (não compara: distribui por dígito), que o número de passadas depende da média de dígitos (depende do **maior**) e que o espaço auxiliar é proporcional a `n` (é). Com valores de um dígito só, o radix faz uma passada, e a ordem inicial não muda o custo.",
+ "fontes": [
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 8 (radix sort).",
+  "Sedgewick, *Algorithms in C, parts 1-4*, 3. ed., cap. 10 (radix sort).",
+  "Knuth, *The art of computer programming*, v. 3, 2. ed., seção 5.2.5 (ordenação por distribuição).",
+  "Tenenbaum, Langsam e Augenstein, *Estruturas de dados usando C*, cap. 6 (radix sort)."
+ ]
+}

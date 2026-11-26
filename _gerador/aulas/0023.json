@@ -1,0 +1,101 @@
+{
+ "num": "0023",
+ "oque": "O `break` encerra o laço na hora. O `continue` abandona só a volta atual e segue para a próxima. Os dois valem para o laço **mais interno** que os envolve.",
+ "como": "- **`break`**: o resto do corpo não roda, a condição não é testada de novo e o programa segue na primeira linha depois da `}` do laço.\n- **`continue`**: o resto do corpo é pulado. No `for`, ainda roda o **passo** e depois a condição. No `while` e no `do...while`, vai **direto** para a condição.\n\nOs dois quase sempre ficam dentro de um `if`. Um `break` sem `if` encerra o laço na primeira volta.\n\n```c\nfor (int i = 1; i <= 6; i++) {\n    if (i == 5) break;     // sai do for\n    if (i % 2 == 0)\n        continue;          // pula o printf\n    printf(\"%d \", i);\n}\n// Saída: 1 3\n```\n\nO `break` permite o laço `while (1)` (ou `for (;;)`): a condição é sempre verdadeira, e quem decide a saída é um `break` no meio do corpo, depois de ler o dado.",
+ "caracteristicas": [
+  "Depois do `break`, a condição do laço não é testada de novo.",
+  "`continue` no `for` executa o passo (`i++`); no `while`, salta direto para a condição.",
+  "Num laço dentro de outro, o `break` de dentro encerra só o de dentro. O C não tem `break` de dois níveis.",
+  "Dentro de um `switch` que está num laço, o `break` sai só do `switch`; o `continue` age sobre o laço."
+ ],
+ "vantagens": [
+  "Sair assim que a resposta aparece: achou o divisor, achou a chave, não precisa olhar o resto.",
+  "`while (1)` com `break` resolve o caso em que o motivo de parar só aparece depois de ler o dado.",
+  "`continue` descarta um dado inválido sem empilhar `if` dentro de `if`."
+ ],
+ "desvantagens": [
+  "`continue` num `while` pode pular o `i++` que está no fim do corpo: o contador para e o laço não termina.",
+  "Vários pontos de saída tornam o laço mais difícil de ler e de provar correto.",
+  "Depois do laço, é preciso descobrir **por que** ele parou: condição falsa ou `break`?"
+ ],
+ "exemplo": "Rastreio do `for` acima:\n\n| i | `i == 5`? | `i % 2 == 0`? | O que acontece |\n|---|---|---|---|\n| 1 | não | não | imprime 1 |\n| 2 | não | sim | `continue`: pula, `i++` |\n| 3 | não | não | imprime 3 |\n| 4 | não | sim | `continue`: pula, `i++` |\n| 5 | **sim** | | `break`: sai do laço |\n\nO 6 nem chega a ser testado. Saída: `1 3`.",
+ "passos": [
+  {
+   "titulo": "O laço com continue no while",
+   "texto": "Código: `i = 0; while (i < 10) { if (i == 5) continue; printf(\"%d\", i); i++; }`. Nas voltas de 0 a 4, o `if` não dispara: imprime e soma 1.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "i  i==5?  faz",
+     "0  não    imprime 0, i = 1",
+     "1  não    imprime 1, i = 2",
+     "...",
+     "4  não    imprime 4, i = 5"
+    ]
+   }
+  },
+  {
+   "titulo": "i chega a 5",
+   "texto": "Agora `i == 5` é verdade e o `continue` dispara. No `while`, ele salta **direto** para a condição `i < 10`. O `i++` ficou no fim do corpo e não roda.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "i = 5",
+     "5 == 5?  sim -> continue",
+     "volta para: i < 10?",
+     "i++ pulado"
+    ],
+    "titulo": "while"
+   }
+  },
+  {
+   "titulo": "Laço infinito",
+   "texto": "A condição vê `5 < 10` de novo, entra, `i == 5` de novo, `continue` de novo. O `i` nunca sai do 5. A saída fica `01234` e o programa trava.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "5 < 10? sim  continue",
+     "5 < 10? sim  continue",
+     "5 < 10? sim  continue",
+     "...para sempre"
+    ]
+   }
+  },
+  {
+   "titulo": "O mesmo laço com for",
+   "texto": "`for (i = 0; i < 10; i++) { if (i == 5) continue; printf(\"%d\", i); }`. No `for`, o `continue` ainda passa pelo passo `i++`. O 5 é pulado e o laço segue.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "i = 5: continue",
+     "passo: i = 6",
+     "6 < 10? sim: imprime 6",
+     "",
+     "saída: 012346789"
+    ],
+    "titulo": "for"
+   }
+  },
+  {
+   "titulo": "break no laço de dentro",
+   "texto": "Com dois laços, `if (j == 2) break;` no de dentro encerra só a linha atual. O de fora continua e o de dentro recomeça em 0 na próxima linha.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "for i = 0..2",
+     "  for j = 0..3",
+     "    if (j == 2) break;",
+     "    imprime i,j",
+     "",
+     "00 01 / 10 11 / 20 21"
+    ]
+   }
+  }
+ ],
+ "naprova": "A banca já mostrou uma busca numa lista circular com um `break` **sem `if`** no fim do corpo do `while`: o laço roda no máximo uma volta e a busca não acontece de verdade. Diante de um `break`, pergunte sempre em que condição ele dispara e de qual laço ele sai.",
+ "fontes": [
+  "Deitel e Deitel, *C: como programar*, 6. ed., cap. 4 (os comandos `break` e `continue`).",
+  "Backes, *Linguagem C: completa e descomplicada*, cap. 5 (comandos de repetição).",
+  "Kernighan e Ritchie, *C: a linguagem de programação padrão ANSI*, cap. 3 (controle de fluxo)."
+ ]
+}

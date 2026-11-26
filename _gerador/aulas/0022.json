@@ -1,0 +1,94 @@
+{
+ "num": "0022",
+ "oque": "O `for` é o laço com contador: junta numa linha o **início**, a **condição** e o **passo**. É a escolha natural quando você sabe, antes de começar, quantas voltas serão.",
+ "como": "A ordem de execução não é a ordem em que você lê a linha:\n\n- o **início** roda uma vez, antes de tudo;\n- a **condição** é testada antes de cada volta; deu falso, o laço acaba;\n- deu verdadeiro, roda o **corpo**;\n- depois roda o **passo**, e o fluxo volta à condição.\n\nO `for` é um `while` reorganizado; o compilador trata os dois do mesmo jeito:\n\n```c\nfor (int i = 1; i <= 3; i++)\n    printf(\"%d \", i);       // 1 2 3\n\nint k = 1;                  // o mesmo laço\nwhile (k <= 3) {            // escrito com while\n    printf(\"%d \", k);\n    k++;\n}\n```\n\n**Quantas voltas?** Em `for (i = a; i < b; i++)` o contador vai de `a` a `b - 1`: são `b - a` voltas. Com `<=`, vai até `b`: `b - a + 1` voltas.",
+ "caracteristicas": [
+  "O início roda **uma vez**. A condição é testada **antes** de cada volta, então o corpo pode rodar zero vezes.",
+  "O passo é escrito no meio do cabeçalho, mas roda **depois** do corpo.",
+  "A variável declarada no início (`int i = 1`) só existe dentro do laço (C99 em diante).",
+  "Qualquer parte do cabeçalho pode ficar vazia, mas os dois `;` são obrigatórios. Sem condição, `for (;;)` roda para sempre.",
+  "A vírgula controla duas variáveis: `for (i = 0, j = n - 1; i < j; i++, j--)`."
+ ],
+ "vantagens": [
+  "Começo, fim e passo ficam juntos numa linha: dá para contar as voltas sem ler o corpo.",
+  "O passo não se perde no fim de um corpo longo, como acontece no `while`, onde esquecer o `i++` dá laço infinito."
+ ],
+ "desvantagens": [
+  "O **erro por um** (*off-by-one*): `i < n` ou `i <= n`, `i = 0` ou `i = 1`. Uma volta a mais lê fora do vetor.",
+  "Um `;` logo depois do `)` vira o corpo: `for (i = 0; i < 5; i++);` roda 5 voltas vazias, e o bloco seguinte roda uma vez só, com `i` valendo 5.",
+  "Contador `double` com `!=` pode nunca terminar: `x += 0.1` pula o 1,0 exato."
+ ],
+ "exemplo": "Rastreio de `soma = 0; for (i = 1; i < 10; i += 3) soma += i;`\n\n| Volta | i | `i < 10`? | soma depois do corpo | i depois do passo |\n|---|---|---|---|---|\n| 1 | 1 | sim | 1 | 4 |\n| 2 | 4 | sim | 5 | 7 |\n| 3 | 7 | sim | 12 | 10 |\n| fim | 10 | **não** | 12 | |\n\nTrês voltas e `soma = 12`. Se `i` foi declarado fora do laço, ele termina valendo **10**, o primeiro valor que falhou na condição.",
+ "passos": [
+  {
+   "titulo": "Início",
+   "texto": "`for (i = 1; i < 10; i += 3)`. O início `i = 1` roda uma vez só. `soma` já vale 0.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "i = 1     soma = 0",
+     "",
+     "início: feito (só agora)"
+    ]
+   }
+  },
+  {
+   "titulo": "Condição, corpo, passo",
+   "texto": "Testa `1 < 10`: sim. Roda o corpo: `soma = 0 + 1 = 1`. Só depois roda o passo: `i = 1 + 3 = 4`. Volta à condição.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "i = 1     soma = 0",
+     "1 < 10?  sim",
+     "corpo:   soma = 1",
+     "passo:   i = 4"
+    ]
+   }
+  },
+  {
+   "titulo": "Segunda e terceira voltas",
+   "texto": "`4 < 10`: sim, `soma = 5`, `i = 7`. `7 < 10`: sim, `soma = 12`, `i = 10`.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "4 < 10?  sim  soma = 5   i = 7",
+     "7 < 10?  sim  soma = 12  i = 10"
+    ]
+   }
+  },
+  {
+   "titulo": "A condição falha",
+   "texto": "`10 < 10`: não. O laço acaba **sem** rodar corpo nem passo. Foram 3 voltas. O último valor de `i` é 10, não 7: é o primeiro que não passou na condição.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "10 < 10?  não -> sai",
+     "",
+     "voltas = 3",
+     "soma   = 12",
+     "i      = 10"
+    ]
+   }
+  },
+  {
+   "titulo": "Contar voltas sem rodar",
+   "texto": "Com passo 1, olhe o primeiro e o último valor que passam. Com passo `k`, conte os valores da progressão que ainda passam na condição.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "i = 0; i < 6        -> 6",
+     "i = 1; i <= 6       -> 6",
+     "i = 1; i < 6        -> 5",
+     "i = 0; i < 10; i+=3 -> 4",
+     "i = 5; i < 5        -> 0"
+    ]
+   }
+  }
+ ],
+ "naprova": "O `for` vem dentro de código maior, e a banca cobra o detalhe do cabeçalho: um `for (j = 1; ; j++)` sem condição nunca para; na ordenação por seleção, o laço de dentro tem de começar em `i + 1`, e começar em `0` estraga a ordenação.",
+ "fontes": [
+  "Deitel e Deitel, *C: como programar*, 6. ed., cap. 4 (repetição controlada por contador e o comando `for`).",
+  "Backes, *Linguagem C: completa e descomplicada*, cap. 5 (comandos de repetição).",
+  "Kernighan e Ritchie, *C: a linguagem de programação padrão ANSI*, cap. 3 (controle de fluxo)."
+ ]
+}
