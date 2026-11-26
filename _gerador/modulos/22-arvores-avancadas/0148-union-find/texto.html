@@ -1,0 +1,129 @@
+<h2>0148 · Union-find: conjuntos disjuntos</h2>
+<p>Numa turma, quem se conhece, mesmo que só como &quot;amigo de amigo&quot;, cai no
+mesmo sorteio de amigo secreto. As amizades chegam aos poucos, uma por vez,
+e a qualquer momento alguém pergunta: &quot;Ana e Duda caem no mesmo sorteio?&quot;.
+Você precisa responder rápido e continuar aceitando amizades novas.</p>
+<p>O que está em jogo são <strong>conjuntos disjuntos</strong>: grupos de elementos que não
+se misturam, em que cada elemento pertence a exatamente um grupo (CORMEN et
+al., 2024, cap. 19). A estrutura que cuida deles oferece duas operações. A
+operação <strong>acha(x)</strong> devolve o <strong>representante</strong> do grupo de x, um elemento
+escolhido para responder pelo grupo inteiro. A operação <strong>une(a, b)</strong> junta
+o grupo de a com o grupo de b num só. A pergunta do sorteio vira uma
+comparação: dois elementos estão no mesmo grupo se <code>acha</code> devolve o mesmo
+representante para os dois.</p>
+<p>O <strong>union-find</strong> guarda cada grupo como uma árvore, e todas as árvores, a
+floresta, cabem num vetor só. A posição <code>pai[x]</code> diz quem é o pai de x. A
+raiz é quem aponta para si mesma (<code>pai[x] == x</code>), e ela é o representante.
+Assim, <code>acha(x)</code> sobe de pai em pai até a raiz, e <code>une(a, b)</code> acha as duas
+raízes e pendura uma na outra (SEDGEWICK; WAYNE, 2011). No começo, cada
+pessoa é um grupo sozinho: <code>pai[x] = x</code> para todo x.</p>
+<p>Do jeito ingênuo, pendurando sempre a primeira raiz na segunda, a árvore
+pode virar uma fila comprida, e <code>acha</code> passa a custar O(n). Dois truques
+resolvem isso.</p>
+<p>O primeiro é a <strong>união por tamanho</strong>. Guarde, em <code>tam[raiz]</code>, quantos
+elementos tem cada grupo, e na união pendure a raiz do grupo <strong>menor</strong> na do
+maior. Por que isso segura a altura? Um elemento só desce um nível quando o
+grupo dele é o menor da união, e então o grupo resultante tem pelo menos o
+dobro do tamanho. Um grupo só pode dobrar log₂ n vezes antes de passar de
+n, então nenhum elemento desce mais que log₂ n níveis (LINTZMAYER; MOTA,
+2023).</p>
+<p>O segundo é a <strong>compressão de caminho</strong>. Quando <code>acha(x)</code> sobe até a raiz,
+ele já sabe a resposta para todos os nós do caminho. Então, antes de
+devolver, faz cada um desses nós apontar <strong>direto</strong> para a raiz. A próxima
+consulta a qualquer um deles dá um passo só. Isso tem uma consequência no
+código: consultar <strong>modifica</strong> o vetor <code>pai</code>, e por isso <code>acha</code> não pode
+receber a estrutura como <code>const</code>.</p>
+<p>Com os dois truques juntos, uma sequência de m operações custa O(m · α(n)),
+em que α é o inverso da função de Ackermann, uma função que cresce tão
+devagar que não passa de 4 para nenhum n que caiba num computador (TARJAN,
+1975). Na prática, cada operação custa O(1) amortizado (assunto 0116).</p>
+<p>O Cormen chama as operações de <code>MAKE-SET</code> (criar um grupo de um elemento só),
+<code>FIND-SET</code> (o acha) e <code>UNION</code> (o une). No lugar do tamanho, ele usa a
+<strong>união por posto</strong> (<em>rank</em>): cada raiz guarda um limite superior da altura
+da sua árvore, que só cresce 1 quando duas raízes de mesmo posto se juntam.
+A garantia é a mesma. O algoritmo de Kruskal (0152) usa essa estrutura para
+saber se uma aresta fecha um ciclo (CORMEN et al., 2024, cap. 19).</p>
+<blockquote>
+<p>[!WARNING]
+O representante é a <strong>raiz</strong>. <code>pai[a] = b</code> arranca o <code>a</code> do grupo; o certo é
+<code>pai[acha(a)] = acha(b)</code>. Testar <code>pai[a] == pai[b]</code> falha com mais de um nível:
+o teste é <code>acha(a) == acha(b)</code>. E <code>tam[x]</code> só vale na raiz.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>Oito colegas de uma turma, de 0 (Ana) a 7 (Hugo), e sete amizades: quem se
+conhece cai no mesmo sorteio de amigo secreto. Sobram dois grupos, e Duda e Hugo
+ficam a dois passos da raiz até as perguntas comprimirem o caminho:</p>
+<p>{{ideia}}</p>
+<p><code>uf_acha</code> e <code>uf_une</code>, em <code>uniao.c</code>:</p>
+<pre><code class="language-c">int uf_acha(UF *u, int x) {
+    int raiz = x;
+    while (u-&gt;pai[raiz] != raiz) { // sobe até a raiz
+        raiz = u-&gt;pai[raiz];
+    }
+    while (u-&gt;pai[x] != raiz) {    // compressão: todo mundo do caminho
+        int prox = u-&gt;pai[x];      // passa a apontar direto para a raiz
+        u-&gt;pai[x] = raiz;
+        x = prox;
+    }
+    return raiz;
+}
+
+bool uf_une(UF *u, int a, int b) {
+    int ra = uf_acha(u, a);
+    int rb = uf_acha(u, b);
+    if (ra == rb) {
+        return false; // já estavam juntos
+    }
+    if (u-&gt;tam[ra] &lt; u-&gt;tam[rb]) { // ra fica sendo a raiz do grupo maior
+        int t = ra;
+        ra = rb;
+        rb = t;
+    }
+    u-&gt;pai[rb] = ra; // a raiz do menor vira filha da raiz do maior
+    u-&gt;tam[ra] += u-&gt;tam[rb];
+    u-&gt;grupos--;
+    return true;
+}
+</code></pre>
+<p>O cliente registra as amizades e mostra <code>pai</code> depois de cada uma:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;uniao.h&quot;
+
+int main(void) {
+    const char *nome[] = {&quot;Ana&quot;, &quot;Beto&quot;, &quot;Caio&quot;, &quot;Duda&quot;, &quot;Edu&quot;, &quot;Fia&quot;, &quot;Gui&quot;, &quot;Hugo&quot;};
+    int amizades[][2] = {{0, 1}, {2, 3}, {4, 5}, {1, 3}, {6, 7}, {5, 7}, {0, 2}};
+    UF *turma = uf_cria(8);
+
+    for (int i = 0; i &lt; 7; i++) {
+        int a = amizades[i][0], b = amizades[i][1];
+        bool novo = uf_une(turma, a, b);
+        printf(&quot;%s e %s: %s | grupos: %d | &quot;, nome[a], nome[b],
+               novo ? &quot;juntou&quot; : &quot;já estavam&quot;, uf_grupos(turma));
+        uf_mostra(turma);
+    }
+    printf(&quot;Ana e Duda se conhecem? %s\n&quot;, uf_juntos(turma, 0, 3) ? &quot;sim&quot; : &quot;não&quot;);
+    printf(&quot;Caio e Hugo se conhecem? %s\n&quot;, uf_juntos(turma, 2, 7) ? &quot;sim&quot; : &quot;não&quot;);
+    printf(&quot;Grupo do Edu: %d pessoas\n&quot;, uf_tamanho(turma, 4));
+    printf(&quot;Depois das buscas, &quot;);
+    uf_mostra(turma);
+
+    uf_libera(turma);
+    return 0;
+}
+// Saída:
+// Ana e Beto: juntou | grupos: 7 | pai: 0 0 2 3 4 5 6 7
+// Caio e Duda: juntou | grupos: 6 | pai: 0 0 2 2 4 5 6 7
+// Edu e Fia: juntou | grupos: 5 | pai: 0 0 2 2 4 4 6 7
+// Beto e Duda: juntou | grupos: 4 | pai: 0 0 0 2 4 4 6 7
+// Gui e Hugo: juntou | grupos: 3 | pai: 0 0 0 2 4 4 6 6
+// Fia e Hugo: juntou | grupos: 2 | pai: 0 0 0 2 4 4 4 6
+// Ana e Caio: já estavam | grupos: 2 | pai: 0 0 0 2 4 4 4 6
+// Ana e Duda se conhecem? sim
+// Caio e Hugo se conhecem? não
+// Grupo do Edu: 4 pessoas
+// Depois das buscas, pai: 0 0 0 0 4 4 4 4
+</code></pre>
+<p>No empate de tamanhos, a raiz de <code>a</code> continua raiz. O fluxograma segue <code>uf_une</code>
+em &quot;Fia e Hugo&quot;: as raízes 4 (Edu) e 6 (Gui) têm grupos de 2, e o Gui, com o
+Hugo, vira filho do Edu:</p>
+<p>{{fluxograma}}</p>

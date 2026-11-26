@@ -1,0 +1,137 @@
+<h2>0173 · Juntando tudo: o controle de acesso</h2>
+<p>O coworking do bairro tem cinco recursos controlados por crachá: a porta de
+entrada, a sala de reunião, a impressora, a garagem e o painel de
+configuração. Cada pessoa tem um papel, visitante, membro ou admin, e o
+papel dá um pacote de permissões. Só que a vida real tem exceções: o Bruno
+é membro e aluga uma vaga na garagem; a Carla é membro e estourou a cota da
+impressora. Você vai montar esse controle com os três temas do módulo:
+precedência, sinal e VLA.</p>
+<p>Cada permissão vira um <strong>bit</strong> de um <code>unsigned</code>: <code>ENTRAR</code> é <code>1u &lt;&lt; 0</code>,
+<code>REUNIAO</code> é <code>1u &lt;&lt; 1</code>, <code>IMPRIMIR</code> é <code>1u &lt;&lt; 2</code>, e assim por diante. Um
+conjunto de permissões é um número em que cada bit ligado é uma permissão
+concedida. As três operações de conjunto viram operadores bit a bit
+(DEITEL; DEITEL, 2011, cap. 10). Ligar uma permissão é <code>p | IMPRIMIR</code>.
+Apagar é <code>p &amp; ~IMPRIMIR</code>: o <code>~</code> inverte todos os bits da máscara, e o <code>&amp;</code>
+mantém tudo menos o bit da impressora. Testar é <code>p &amp; IMPRIMIR</code>, que dá
+diferente de zero se o bit estiver ligado.</p>
+<p>O papel vira um <strong>enum</strong>, <code>VISITANTE</code>, <code>MEMBRO</code> e <code>ADMIN</code>, que valem 0, 1
+e 2. Esses números servem de índice para o vetor <code>base</code>, que guarda o
+pacote de cada papel na mesma ordem do enum (KERNIGHAN; RITCHIE, 1988,
+cap. 2). A struct <code>Usuario</code> guarda o papel e duas máscaras de exceção:
+<code>extra</code>, o que a pessoa ganhou além do papel, e <code>bloqueio</code>, o que ela
+perdeu mesmo que o papel dê.</p>
+<p>A permissão efetiva de cada pessoa sai de uma única expressão:</p>
+<p><code>(base[u-&gt;papel] | u-&gt;extra) &amp; ~u-&gt;bloqueio</code></p>
+<p>Leia de dentro para fora. O <code>|</code> junta o pacote do papel com os extras; os
+parênteses são necessários porque o <code>&amp;</code> tem precedência maior que o <code>|</code>, e
+sem eles o <code>&amp;</code> agarraria o <code>u-&gt;extra</code>. O <code>~</code>, do nível 2 da tabela, inverte
+o bloqueio. O <code>&amp;</code> final apaga da junção os bits bloqueados. Como o bloqueio
+é aplicado por último, <strong>o bloqueio vence</strong>: a Carla, membro com a
+impressora bloqueada, fica sem impressora mesmo que o pacote de membro a
+inclua (DEITEL; DEITEL, 2011, cap. 10).</p>
+<p>Perguntar &quot;esta pessoa tem todas as permissões da máscara?&quot; também pede
+parênteses: <code>(efetivas &amp; mascara) == mascara</code>. O <code>&amp;</code> isola, das permissões
+efetivas, só os bits que interessam; se o resultado é a máscara inteira,
+nenhum bit falta. Os parênteses são obrigatórios porque o <code>==</code> tem
+precedência maior que o <code>&amp;</code>, a armadilha do assunto 0170 (CPPREFERENCE,
+s.d.).</p>
+<p>Todos os tipos de permissão são <code>unsigned</code>, e não por acaso. O <code>~</code> num
+<code>int</code> daria um número negativo, e misturar com sinal e sem sinal numa
+comparação abre a porta para o <code>-1 &gt; 0u</code> do assunto 0171 (ISO/IEC, 2018).
+Com tudo <code>unsigned</code>, os bits fazem exatamente o que parecem fazer.</p>
+<p>Por fim, a planilha de acesso que o programa imprime, uma linha por pessoa
+e uma coluna por permissão, é um <strong>VLA</strong> <code>bool acesso[n][QTD_PERMS]</code>, com
+<code>n</code> guardado numa variável, como no assunto 0172. Cada casa recebe o
+resultado de testar uma permissão de uma pessoa.</p>
+<blockquote>
+<p>[!WARNING]
+<code>efetivas(u) &amp; mascara == mascara</code> é lido como
+<code>efetivas(u) &amp; (mascara == mascara)</code>, isto é, <code>efetivas(u) &amp; 1</code>: só olha
+o bit de ENTRAR (o gcc avisa). E <code>p = p | ~IMPRIMIR</code> no lugar de
+<code>p = p &amp; ~IMPRIMIR</code> <strong>liga todas as outras</strong> permissões, sem aviso.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>Um coworking dá permissões por papel (visitante, membro, admin), com
+exceções. A Carla é membro (<code>00111</code>) com a impressora bloqueada; o desenho faz
+a conta bit a bit:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdbool.h&gt;
+#include &lt;stdio.h&gt;
+
+typedef enum { VISITANTE, MEMBRO, ADMIN, QTD_PAPEIS } Papel;
+
+// cada permissão é um bit
+#define ENTRAR   (1u &lt;&lt; 0) // E
+#define REUNIAO  (1u &lt;&lt; 1) // R
+#define IMPRIMIR (1u &lt;&lt; 2) // I
+#define GARAGEM  (1u &lt;&lt; 3) // G
+#define CONFIG   (1u &lt;&lt; 4) // C
+#define QTD_PERMS 5
+
+typedef struct {
+    char nome[16];
+    Papel papel;
+    unsigned extra;    // concedidas além do papel
+    unsigned bloqueio; // retiradas, mesmo que o papel dê
+} Usuario;
+
+// o que cada papel ganha de saída (na ordem do enum)
+const unsigned base[QTD_PAPEIS] = {
+    ENTRAR,                                          // visitante
+    ENTRAR | REUNIAO | IMPRIMIR,                     // membro
+    ENTRAR | REUNIAO | IMPRIMIR | GARAGEM | CONFIG,  // admin
+};
+
+unsigned efetivas(const Usuario *u) {
+    return (base[u-&gt;papel] | u-&gt;extra) &amp; ~u-&gt;bloqueio; // o bloqueio vence
+}
+
+bool pode(const Usuario *u, unsigned mascara) {
+    return (efetivas(u) &amp; mascara) == mascara; // tem TODAS da máscara
+}
+
+int main(void) {
+    Usuario equipe[] = {
+        {&quot;Ana&quot;, ADMIN, 0, 0},
+        {&quot;Bruno&quot;, MEMBRO, GARAGEM, 0},
+        {&quot;Carla&quot;, MEMBRO, 0, IMPRIMIR}, // estourou a cota da impressora
+        {&quot;Davi&quot;, VISITANTE, REUNIAO, 0},
+    };
+    int n = 4; // uma variável: a matriz abaixo é um VLA
+    const char *papeis[QTD_PAPEIS] = {&quot;visitante&quot;, &quot;membro&quot;, &quot;admin&quot;};
+
+    bool acesso[n][QTD_PERMS]; // usuário x permissão
+    for (int i = 0; i &lt; n; i++) {
+        for (int b = 0; b &lt; QTD_PERMS; b++) {
+            acesso[i][b] = pode(&amp;equipe[i], 1u &lt;&lt; b);
+        }
+    }
+
+    printf(&quot;usuario  papel      E R I G C\n&quot;);
+    for (int i = 0; i &lt; n; i++) {
+        printf(&quot;%-8s %-10s&quot;, equipe[i].nome, papeis[equipe[i].papel]);
+        for (int b = 0; b &lt; QTD_PERMS; b++) {
+            printf(&quot; %c&quot;, acesso[i][b] ? &#39;X&#39; : &#39;-&#39;);
+        }
+        printf(&quot;\n&quot;);
+    }
+
+    printf(&quot;pode REUNIAO | IMPRIMIR:&quot;);
+    for (int i = 0; i &lt; n; i++) {
+        if (pode(&amp;equipe[i], REUNIAO | IMPRIMIR)) {
+            printf(&quot; %s&quot;, equipe[i].nome);
+        }
+    }
+    printf(&quot;\n&quot;);
+    return 0;
+}
+// Saída:
+// usuario  papel      E R I G C
+// Ana      admin      X X X X X
+// Bruno    membro     X X X X -
+// Carla    membro     X X - - -
+// Davi     visitante  X X - - -
+// pode REUNIAO | IMPRIMIR: Ana Bruno
+</code></pre>
+<p>O fluxograma é um laço pela equipe com uma comparação de bits por pessoa:</p>
+<p>{{fluxograma}}</p>

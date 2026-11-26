@@ -1,0 +1,86 @@
+<h2>0045 · Ponteiros</h2>
+<p>O assunto 0044 mostrou que toda variável mora num endereço e que o <code>&amp;</code>
+descobre esse número. Falta guardá-lo. Se o endereço é um número, ele pode
+ficar numa variável, e com ele na mão você consegue chegar à variável
+original de qualquer parte do programa, mesmo sem saber o nome dela.</p>
+<p>Pense no entregador do app de comida. Ele não carrega a sua casa no celular;
+carrega o <strong>endereço</strong>. Com ele, chega à porta e entrega o pedido. Em C, a
+variável que faz o papel desse celular é o <strong>ponteiro</strong>: uma variável que
+guarda um endereço em vez de um valor comum. O ponteiro também mora numa
+gaveta e tem endereço próprio, mas o que ele guarda é o número de <strong>outra</strong>
+gaveta. Ziviani e a tradução do livro de Kernighan e Ritchie usam o nome
+<strong>apontador</strong>; é a mesma coisa (ZIVIANI, 2010).</p>
+<p>Na declaração, um <code>*</code> antes do nome indica que a variável é um ponteiro:
+<code>int *cartao;</code> lê-se &quot;cartao é um ponteiro para int&quot;. O tipo antes do <code>*</code>
+diz <strong>o que</strong> mora no endereço apontado e, com isso, quantos bytes ler lá:
+4 para um <code>int</code>, 8 para um <code>double</code> (DEITEL; DEITEL, 2011, cap. 7).</p>
+<p>Dois operadores fazem todo o trabalho. O <code>&amp;x</code>, que você já conhece, dá o
+endereço de <code>x</code>, e esse endereço vai para o ponteiro: <code>cartao = &amp;pontos;</code>.
+O <code>*cartao</code> faz o caminho de volta: vai ao endereço guardado em <code>cartao</code> e
+mexe no que está lá. Essa operação se chama <strong>desreferenciar</strong> o ponteiro
+(KERNIGHAN; RITCHIE, 1989, cap. 5). Ler <code>*cartao</code> dá o valor de <code>pontos</code>;
+escrever <code>*cartao = 150;</code> muda <code>pontos</code>, sem que o nome <code>pontos</code> apareça na
+linha.</p>
+<pre><code class="language-c">int pontos = 120;
+int *cartao = &amp;pontos;   // cartao guarda o endereço de pontos
+*cartao = *cartao + 30;  // vai até pontos e soma 30
+printf(&quot;%d\n&quot;, pontos);  // 150
+</code></pre>
+<p>O mesmo símbolo <code>*</code> tem três papéis, e só o contexto os separa. Entre dois
+valores, como em <code>a * b</code>, é a multiplicação. Numa declaração, como em
+<code>int *p</code>, diz que <code>p</code> é um ponteiro. Na frente de um ponteiro já declarado,
+como em <code>*p = 5</code>, é a desreferência (BACKES, 2013, cap. 10). Quando a leitura
+travar, pergunte em qual dos três casos você está.</p>
+<p>Às vezes o ponteiro ainda não tem para onde apontar. Para isso existe o
+<strong><code>NULL</code></strong>, um endereço especial que quer dizer &quot;lugar nenhum&quot;. Na prática é
+o endereço 0, uma região que o sistema proíbe de propósito: desreferenciar
+<code>NULL</code> derruba o programa na hora, com o erro <em>segmentation fault</em>, em vez de
+estragar algum dado em silêncio. Antes de usar um ponteiro que pode estar
+vazio, teste <code>if (cartao != NULL)</code> (DEITEL; DEITEL, 2011, cap. 7).</p>
+<p>Um último detalhe ajuda a montar a imagem certa. Todo ponteiro para dado tem
+o mesmo tamanho, 8 bytes num computador de 64 bits, porque todos guardam a
+mesma coisa: um endereço. O tipo do ponteiro não muda o tamanho dele; muda a
+<strong>leitura</strong>. <code>*cartao</code> busca 4 bytes e os trata como <code>int</code> porque <code>cartao</code> é
+um <code>int *</code> (BACKES, 2013, cap. 10).</p>
+<blockquote>
+<p>[!WARNING]
+<code>int *p;</code> sem valor guarda <strong>lixo</strong>, um endereço qualquer, e <code>*p = 10;</code>
+escreve numa gaveta desconhecida: pode travar na hora ou corromper outra
+variável e dar problema só depois. Inicialize com um endereço ou <code>NULL</code>. E
+em <code>int *a, b;</code> só <code>a</code> é ponteiro; para dois, <code>int *a, *b;</code>.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>No caixa da farmácia, o cliente tem 120 pontos. O ponteiro <code>cartao</code> começa em
+<code>NULL</code>, recebe <code>&amp;pontos</code>, e a compra soma 30 <strong>por meio do ponteiro</strong>:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    int pontos = 120;     // pontos do cartão fidelidade
+    int *cartao = NULL;   // ponteiro para int; NULL: ainda não aponta para nada
+
+    cartao = &amp;pontos;     // o cliente passou o cartão: cartao guarda &amp;pontos
+
+    printf(&quot;&amp;pontos = %p\n&quot;, (void *)&amp;pontos);
+    printf(&quot;cartao  = %p\n&quot;, (void *)cartao); // o mesmo endereço
+    printf(&quot;*cartao = %d\n&quot;, *cartao);        // o que tem na gaveta apontada
+
+    if (cartao != NULL) {
+        *cartao = *cartao + 30; // compra de R$ 30: muda pontos ATRAVÉS do ponteiro
+    } else {
+        printf(&quot;Compra sem cartão\n&quot;);
+    }
+    printf(&quot;pontos  = %d\n&quot;, pontos);
+    printf(&quot;&amp;cartao = %p\n&quot;, (void *)&amp;cartao); // o ponteiro também mora numa gaveta
+    return 0;
+}
+// Saída (os endereços mudam a cada execução):
+// &amp;pontos = 0x7f631f200030
+// cartao  = 0x7f631f200030
+// *cartao = 120
+// pontos  = 150
+// &amp;cartao = 0x7f631f200040
+</code></pre>
+<p><code>cartao</code> é o endereço guardado, <code>*cartao</code> o valor lá dentro e <code>&amp;cartao</code> onde o
+próprio ponteiro mora. Antes de desreferenciar, o teste contra <code>NULL</code>:</p>
+<p>{{fluxograma}}</p>

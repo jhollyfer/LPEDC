@@ -1,0 +1,347 @@
+<h1>Módulo 05 · Vetores, matrizes e strings</h1>
+<p>A primeira estrutura de dados do curso: o <strong>vetor</strong>, e com ele matrizes,
+caracteres e strings (vetor de <code>char</code> terminado em <code>&#39;\0&#39;</code>). Depende dos laços
+e das funções dos módulos 03 e 04 e prepara o 06, de ponteiros.</p>
+<h2>O que você vai aprender</h2>
+<ul>
+<li><strong>vetores</strong>: declarar, inicializar, percorrer, e por que o índice começa em 0</li>
+<li><strong>funções com vetores</strong>: vai o endereço, não uma cópia; <code>const</code> protege</li>
+<li><strong>matrizes</strong>: linhas, colunas e a memória contínua por baixo</li>
+<li><strong>caracteres</strong> como números: tabela ASCII e <code>&lt;ctype.h&gt;</code></li>
+<li><strong>strings</strong>: o <code>&#39;\0&#39;</code>, o <code>&lt;string.h&gt;</code> e o estouro de buffer</li>
+<li><strong>ler texto</strong> com segurança: <code>fgets</code>, o <code>&#39;\n&#39;</code> e por que o <code>gets</code> foi banido</li>
+</ul>
+<h2>Antes de começar</h2>
+<p>Nos desenhos, o índice de cada gaveta fica embaixo, em cinza. Ponteiros ainda
+não aparecem: quando o texto disser &quot;vai o endereço do vetor&quot;, guarde a ideia
+para o módulo 06.</p>
+<p>O <strong>AddressSanitizer</strong>, ativo nas flags de estudo, confere índice e tamanho de
+string. Diante de <code>stack-buffer-overflow</code>, leia a linha indicada: quase sempre
+é um <code>&lt;=</code> no lugar de <code>&lt;</code> ou um <code>&#39;\0&#39;</code> sem lugar.</p>
+<p>{{indice}}</p>
+<hr>
+<p>{{assuntos}}</p>
+<hr>
+<h2>Desafios do módulo</h2>
+<p>Problemas extras que misturam os assuntos do módulo. Resolva num arquivo seu e
+compile com as flags de estudo.</p>
+<p><strong>1. Segundo maior.</strong> Dado <code>int v[] = {14, 9, 27, 3, 27, 18};</code>, ache o segundo
+maior valor <strong>diferente</strong> do maior, numa passada só, sem ordenar.</p>
+<details><summary>Resposta</summary><p>O maior é 27 e o segundo maior é <strong>18</strong> (o outro 27 não conta). Guarde
+<code>maior</code> e <code>segundo</code>. Para cada item: se for maior que <code>maior</code>, o antigo
+<code>maior</code> desce para <code>segundo</code>; senão, se for menor que <code>maior</code> e maior que
+<code>segundo</code>, ele vira o <code>segundo</code>. Comece os dois com o menor <code>int</code> possível
+(<code>INT_MIN</code>, de <code>&lt;limits.h&gt;</code>).</p>
+</details><p><strong>2. Remover duplicados de um vetor ordenado.</strong> <code>int v[] = {2, 2, 3, 5, 5, 5, 8, 9, 9};</code> Deixe cada valor uma vez só, <strong>no próprio vetor</strong>, e devolva o novo
+tamanho.</p>
+<details><summary>Resposta</summary><p>Fica <code>2 3 5 8 9</code> e o tamanho <strong>5</strong>. Use dois índices: <code>escrita</code> começa em 1;
+<code>leitura</code> anda de 1 até o fim e, sempre que <code>v[leitura] != v[escrita - 1]</code>,
+copia para <code>v[escrita]</code> e avança <code>escrita</code>. Uma passada só, sem vetor extra.
+As posições depois do novo tamanho continuam com valores velhos: quem chama
+passa a usar só o tamanho devolvido.</p>
+</details><p><strong>3. Juntar duas listas ordenadas.</strong> <code>a = {1, 4, 9, 12}</code> e <code>b = {2, 3, 10}</code>.
+Monte <code>c</code> com os 7 valores em ordem, sem ordenar <code>c</code> depois.</p>
+<details><summary>Resposta</summary><p><code>1 2 3 4 9 10 12</code>. Um índice em cada vetor: compare <code>a[i]</code> com <code>b[j]</code>, copie
+o menor para <code>c[k]</code> e avance quem foi copiado. Quando um acabar, copie o
+resto do outro. É o coração do <em>merge sort</em> (assunto 0094).</p>
+</details><p><strong>4. Girar a matriz.</strong> Gire <code>{{1, 2, 3}, {4, 5, 6}}</code> (2×3) 90° no sentido
+horário, gerando uma 3×2.</p>
+<details><summary>Resposta</summary><p>Resultado: <code>4 1 / 5 2 / 6 3</code>. A regra é <code>g[c][L - 1 - l] = m[l][c]</code>, com
+<code>L</code> = número de linhas da original (2). Confira com a célula do 6: na
+original está em <code>[1][2]</code>, na girada vai para <code>[2][0]</code>.</p>
+</details><p><strong>5. Quadrado mágico?</strong> Escreva <code>bool eh_magico(int m[][4])</code> para uma matriz
+4×4: todas as linhas, colunas e as duas diagonais com a mesma soma. Teste com
+<code>{{16, 3, 2, 13}, {5, 10, 11, 8}, {9, 6, 7, 12}, {4, 15, 14, 1}}</code>.</p>
+<details><summary>Resposta</summary><p>É mágico: tudo soma <strong>34</strong>. Calcule a soma da primeira linha como referência
+e compare as outras 9 somas (3 linhas, 4 colunas, 2 diagonais) com ela. Na
+primeira diferente, devolva <code>false</code>.</p>
+</details><p><strong>6. Anagramas.</strong> &quot;Roma&quot; e &quot;amor&quot; são anagramas (mesmas letras, outra ordem).
+Escreva <code>bool anagramas(const char a[], const char b[])</code> sem ordenar nada,
+ignorando maiúsculas.</p>
+<details><summary>Resposta</summary><p>Um vetor <code>int conta[26] = {0}</code>: cada letra de <code>a</code> soma 1 em
+<code>conta[tolower(c) - &#39;a&#39;]</code>, cada letra de <code>b</code> subtrai 1. São anagramas se,
+no fim, as 26 posições forem zero. &quot;Roma&quot; e &quot;amor&quot;: <strong>sim</strong>. Antes de usar
+o caractere como índice, confira com <code>isalpha</code>: um espaço ou um byte de &quot;ã&quot;
+daria um índice fora do vetor.</p>
+</details><p><strong>7. Achar uma palavra dentro da outra.</strong> Sem usar <code>strstr</code>, escreva
+<code>int posicao(const char texto[], const char busca[])</code> que devolve a posição em que
+<code>busca</code> começa em <code>texto</code>, ou -1.</p>
+<details><summary>Resposta</summary><p><code>posicao(&quot;banana split&quot;, &quot;na&quot;)</code> é <strong>2</strong>; <code>posicao(&quot;banana&quot;, &quot;uva&quot;)</code> é <strong>-1</strong>.
+Para cada <code>i</code> do texto, compare <code>texto[i + k]</code> com <code>busca[k]</code> enquanto forem
+iguais e <code>busca[k] != &#39;\0&#39;</code>. Se chegou ao <code>&#39;\0&#39;</code> da busca, achou em <code>i</code>. Não
+precisa de cuidado extra com o fim do texto: o <code>&#39;\0&#39;</code> do texto é diferente
+de qualquer letra da busca, e a comparação para ali.</p>
+</details><p><strong>8. Somar números gigantes.</strong> <code>long long</code> vai até uns 9 × 10¹⁸. Some
+<code>&quot;98765432109876543210&quot;</code> com <code>&quot;12345678901234567890&quot;</code> guardando os números
+como strings, dígito a dígito, como na escola.</p>
+<details><summary>Resposta</summary><p><strong>111111111011111111100</strong>. Ande do último dígito para o primeiro nas duas
+strings, some <code>(a[i] - &#39;0&#39;) + (b[j] - &#39;0&#39;) + vai_um</code>, guarde
+<code>soma % 10</code> e leve <code>soma / 10</code>. O resultado sai de trás para frente: inverta
+no fim (ou escreva de trás para frente num vetor com uma posição extra para o
+último &quot;vai um&quot;).</p>
+</details><p><strong>9. Cifra de Vigenère.</strong> É a César com um deslocamento diferente para cada
+letra, dado por uma chave que se repete (A = 0, B = 1, ..., L = 11...).
+Escreva <code>void vigenere(char texto[], const char chave[], int sentido)</code> que
+cifra o texto no próprio vetor com <code>sentido</code> 1 e decifra com -1. No <code>main</code>,
+cifre <code>char msg[] = &quot;ATACARAGORA&quot;</code> com a chave &quot;LIMAO&quot;, mostre, decifre e
+mostre de novo.</p>
+<details><summary>Resposta</summary><pre><code class="language-text">Cifrado:   LBMCOCISOFL
+Decifrado: ATACARAGORA
+</code></pre>
+<p>A letra <code>i</code> do texto anda <code>chave[i % strlen(chave)] - &#39;A&#39;</code> posições: A + L =
+L, T + I = B, A + M = M, C + A = C, A + O = O, R + L = C, e assim por diante,
+sempre com <code>% 26</code>. Para decifrar, ande <code>26 - desloc</code>, o que mantém a conta
+sem número negativo.</p>
+</details><p><strong>10. Jogo da vida, duas gerações.</strong> Numa matriz 5×5 de 0 e 1, cada célula
+viva com 2 ou 3 vizinhas vivas continua viva; uma morta com exatamente 3
+vizinhas nasce; o resto morre ou fica morto. Escreva
+<code>void proxima(int m[5][5], int nova[5][5])</code> e uma função que mostre a matriz
+com <code>#</code> para viva e <code>.</code> para morta. Comece com um &quot;pisca-pisca&quot;, uma linha de
+três vivas no meio (<code>m[2][1]</code>, <code>m[2][2]</code>, <code>m[2][3]</code>), e mostre as gerações 0,
+1 e 2.</p>
+<details><summary>Resposta</summary><pre><code class="language-text">Geração 0:
+.....
+.....
+.###.
+.....
+.....
+Geração 1:
+.....
+..#..
+..#..
+..#..
+.....
+Geração 2:
+.....
+.....
+.###.
+.....
+.....
+</code></pre>
+<p>A linha vira <strong>coluna</strong> e volta a ser linha. O cuidado: calcule tudo numa
+<strong>segunda matriz</strong>. Se você atualizar a original enquanto conta, as células
+já mudadas atrapalham a contagem das vizinhas. A contagem de vizinhas é a do
+campo minado (E234). Para a geração 2, chame <code>proxima(b, a)</code>: as duas
+matrizes revezam.</p>
+</details><h2>Questões no estilo da prova</h2>
+<p>Questões no formato da Prova de Conhecimentos do PPGI, com uma alternativa
+certa. Nas de vetor, desenhe as gavetas com os índices; nas de string, inclua
+a gaveta do <code>&#39;\0&#39;</code>.</p>
+<p><strong>1.</strong> Numa máquina de 64 bits (ponteiro de 8 bytes, <code>int</code> de 4), o que
+<code>tam(v)</code> mostra quando <code>v</code> é um <code>int v[10]</code>?</p>
+<pre><code class="language-c">void tam(int v[]) {
+    printf(&quot;%zu\n&quot;, sizeof(v) / sizeof(v[0]));
+}
+</code></pre>
+<ul>
+<li>(A) 10</li>
+<li>(B) 40</li>
+<li>(C) 2</li>
+<li>(D) 1</li>
+<li>(E) 8</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(C).</strong> Um vetor passado para função chega como o <strong>endereço</strong> do primeiro
+item. Dentro de <code>tam</code>, <code>v</code> é um <code>int *</code>: <code>sizeof(v)</code> é 8, e 8 / 4 = 2. A
+conta <code>sizeof(v) / sizeof(v[0])</code> só funciona no bloco em que o vetor foi
+declarado; por isso o tamanho vai como parâmetro. O gcc avisa
+(<code>-Wsizeof-array-argument</code>). Veja 0038.</p>
+</details><p><strong>2.</strong> Sobre vetores e strings em C, considere as afirmações e marque a alternativa CORRETA.</p>
+<ul>
+<li><p><strong>I.</strong> Uma função que recebe um vetor escreve nas gavetas do vetor original.</p>
+</li>
+<li><p><strong>II.</strong> Dentro dessa função, <code>sizeof(v) / sizeof(v[0])</code> dá a quantidade de elementos do vetor original.</p>
+</li>
+<li><p><strong>III.</strong> <code>char s[] = &quot;ufam&quot;;</code> ocupa 5 bytes.</p>
+</li>
+<li><p><strong>IV.</strong> <code>strlen(&quot;ufam&quot;)</code> vale 5.</p>
+</li>
+<li><p>(A) Apenas I e III</p>
+</li>
+<li><p>(B) Apenas I e II</p>
+</li>
+<li><p>(C) Apenas II e IV</p>
+</li>
+<li><p>(D) Apenas III e IV</p>
+</li>
+<li><p>(E) Apenas I, II e III</p>
+</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A).</strong> I é verdadeira: o que se copia é o endereço do vetor. II é falsa: dentro da função, <code>v</code> é um ponteiro, e o <code>sizeof</code> mede o ponteiro. III é verdadeira: 4 letras mais o <code>&#39;\0&#39;</code>. IV é falsa: o <code>strlen</code> não conta o <code>&#39;\0&#39;</code> e dá 4. Veja 0038 e 0041.</p>
+</details><p><strong>3.</strong> Qual a saída?</p>
+<pre><code class="language-c">char s[20] = &quot;Manaus&quot;;
+printf(&quot;%zu %zu\n&quot;, strlen(s), sizeof(s));
+</code></pre>
+<ul>
+<li>(A) 6 6</li>
+<li>(B) 7 20</li>
+<li>(C) 6 7</li>
+<li>(D) 6 20</li>
+<li>(E) 20 20</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(D).</strong> <code>strlen</code> conta os caracteres <strong>antes</strong> do <code>&#39;\0&#39;</code>: 6. <code>sizeof</code> mede
+o vetor inteiro, 20 bytes, usados ou não. O 7 seria <code>sizeof</code> de
+<code>char s[] = &quot;Manaus&quot;</code>, em que o compilador conta o <code>&#39;\0&#39;</code>. Veja 0041.</p>
+</details><p><strong>4.</strong> Em <code>int m[3][4];</code>, quantos <code>int</code> ficam na memória <strong>antes</strong> de
+<code>m[2][1]</code>?</p>
+<ul>
+<li>(A) 6</li>
+<li>(B) 9</li>
+<li>(C) 5</li>
+<li>(D) 3</li>
+<li>(E) 8</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(B).</strong> O C guarda a matriz linha após linha (<em>row-major</em>). Antes da linha
+2 vêm 2 linhas de 4, e dentro dela vem 1 item: <code>2 * 4 + 1 = 9</code>. O 5 seria a
+conta por colunas (<code>1 * 3 + 2</code>), que não é a do C. Veja 0039.</p>
+</details><p><strong>5.</strong> Considere as afirmações sobre vetores e matrizes e marque a alternativa CORRETA.</p>
+<ul>
+<li><p><strong>I.</strong> Depois de <code>int w[5] = {3, 1};</code>, os três últimos itens valem 0.</p>
+</li>
+<li><p><strong>II.</strong> Se <code>int v[5]</code>, o acesso a <code>v[5]</code> é checado em tempo de execução e interrompe o programa com erro.</p>
+</li>
+<li><p><strong>III.</strong> Em <code>int m[3][4]</code>, <code>sizeof(m)</code> vale <code>12 * sizeof(int)</code>.</p>
+</li>
+<li><p><strong>IV.</strong> Uma string de <code>n</code> caracteres precisa de pelo menos <code>n + 1</code> bytes de vetor.</p>
+</li>
+<li><p>(A) Apenas I e II</p>
+</li>
+<li><p>(B) Apenas II e III</p>
+</li>
+<li><p>(C) Apenas I e IV</p>
+</li>
+<li><p>(D) Apenas III e IV</p>
+</li>
+<li><p>(E) Apenas I, III e IV</p>
+</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(E).</strong> I é verdadeira: com inicializador, o que falta vira zero. II é falsa: o C não confere índice, e <code>v[5]</code> é comportamento indefinido. III é verdadeira: a matriz tem 12 itens, no escopo onde foi declarada. IV é verdadeira: falta a gaveta do <code>&#39;\0&#39;</code> se o vetor for justo. Veja 0037, 0039 e 0041.</p>
+</details><p><strong>6.</strong> Qual a saída?</p>
+<pre><code class="language-c">char t[10] = &quot;ufam\0pg&quot;;
+int i = 0;
+while (t[i])
+    i++;
+printf(&quot;%d\n&quot;, i);
+</code></pre>
+<ul>
+<li>(A) 7</li>
+<li>(B) 10</li>
+<li>(C) 4</li>
+<li>(D) 6</li>
+<li>(E) 8</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(C).</strong> O laço para no primeiro byte zero, e o <code>\0</code> escrito no meio do
+texto é um zero de verdade, na posição 4. Para qualquer função de string, o
+<code>t</code> é só <code>&quot;ufam&quot;</code>; o <code>pg</code> continua na memória, mas ninguém enxerga. Veja 0041.</p>
+</details><p><strong>7.</strong> Qual a saída?</p>
+<pre><code class="language-c">char x[] = &quot;PPGI&quot;, y[] = &quot;PPGI&quot;;
+printf(&quot;%d %d\n&quot;, x == y, strcmp(x, y) == 0);
+</code></pre>
+<ul>
+<li>(A) 1 1</li>
+<li>(B) 0 1</li>
+<li>(C) 1 0</li>
+<li>(D) 0 0</li>
+<li>(E) não compila: vetores não se comparam com <code>==</code></li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(B).</strong> <code>x == y</code> compara os <strong>endereços</strong> dos dois vetores, que são
+diferentes: 0. Quem compara o conteúdo, letra por letra, é o <code>strcmp</code>, que
+devolve 0 quando são iguais. Compila, com o aviso
+<code>comparison between two arrays</code>. Veja 0041.</p>
+</details><p><strong>8.</strong> Sobre o trecho abaixo, é correto afirmar:</p>
+<pre><code class="language-c">int v[5] = {1, 2, 3, 4, 5};
+int s = 0;
+for (int i = 0; i &lt;= 5; i++)
+    s += v[i];
+</code></pre>
+<ul>
+<li>(A) <code>s</code> termina em 15, porque o C ignora índices fora do vetor.</li>
+<li>(B) <code>s</code> termina em 15, porque <code>v[5]</code> vale sempre 0.</li>
+<li>(C) o compilador rejeita o código, porque o laço passa do fim do vetor.</li>
+<li>(D) a última volta lê <code>v[5]</code>, que não existe: é comportamento indefinido.</li>
+<li>(E) o laço roda 5 vezes, de <code>v[0]</code> a <code>v[4]</code>.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(D).</strong> Num vetor de 5, os índices vão de 0 a 4. O <code>&lt;=</code> faz uma sexta
+volta, com <code>i = 5</code>, que lê o que estiver depois do vetor. O C <strong>não confere</strong>
+índices: compila sem erro e o resultado pode ser qualquer coisa. O detector
+do gcc com as flags de estudo acusa <code>index 5 out of bounds</code>. Veja 0037.</p>
+</details><p><strong>9.</strong> Qual o valor de <code>s</code>?</p>
+<pre><code class="language-c">#define N 3
+int m[N][N] = {{2, 0, 1}, {3, 5, 4}, {6, 7, 8}};
+int s = 0;
+for (int k = 0; k &lt; N; k++)
+    s += m[k][N - 1 - k];
+</code></pre>
+<ul>
+<li>(A) 12</li>
+<li>(B) 15</li>
+<li>(C) 13</li>
+<li>(D) 36</li>
+<li>(E) 9</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A).</strong> <code>m[k][N - 1 - k]</code> percorre a <strong>diagonal secundária</strong>: <code>m[0][2]</code>,
+<code>m[1][1]</code> e <code>m[2][0]</code>, ou 1 + 5 + 6 = 12. O 15 é a diagonal principal
+(<code>m[k][k]</code>: 2 + 5 + 8); o 36, a matriz inteira. Veja 0039.</p>
+</details><p><strong>10.</strong> A pessoa digita <code>Manaus</code> e aperta Enter. O que o trecho mostra?</p>
+<pre><code class="language-c">char lin[10];
+if (fgets(lin, sizeof lin, stdin) != NULL)
+    printf(&quot;%zu\n&quot;, strlen(lin));
+</code></pre>
+<ul>
+<li>(A) 6</li>
+<li>(B) 10</li>
+<li>(C) 8</li>
+<li>(D) 9</li>
+<li>(E) 7</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(E).</strong> O <code>fgets</code> guarda a linha <strong>com</strong> o <code>&#39;\n&#39;</code> do Enter, quando cabe:
+<code>lin</code> fica <code>&quot;Manaus\n&quot;</code>, 7 caracteres antes do <code>&#39;\0&#39;</code>. Por isso o costume de
+tirar o <code>&#39;\n&#39;</code> com <code>lin[strcspn(lin, &quot;\n&quot;)] = &#39;\0&#39;;</code>. Veja 0042.</p>
+</details><h2>Questões de provas do PPGI</h2>
+<p>Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.</p>
+<p><strong>Edital 032/2016 · Questão 20</strong></p>
+<p>Considere as afirmações abaixo:</p>
+<p>I) Pode-se determinar o maior elemento de um vetor ordenado a um custo constante (realizando-se um número constante de operações)<br>II) Pode-se inverter a ordem de um vetor já ordenado fazendo-se um número de trocas de posições igual à metade do tamanho do tamanho do vetor e sem ter que criar uma cópia do mesmo<br>III) O Quicksort é sempre a opção mais rápida (com menor tempo de execução) para ordenar qualquer vetor de qualquer tamanho e com qualquer ordenação inicial das chaves\</p>
+<p>Sobre as afirmações, sabe-se que:</p>
+<ul>
+<li>a) Todas as afirmações são verdadeiras</li>
+<li>b) Apenas I é verdadeira</li>
+<li>c) Apenas I e III são verdadeiras</li>
+<li>d) Apenas I e II são verdadeiras</li>
+<li>e) Nenhuma das alternativas anteriores</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>D.</strong> I (último elemento) e II (n/2 trocas) verdadeiras; III falsa (Quicksort tem pior caso quadrático). Assunto 0038.</p>
+</details><p><strong>Edital 023/2018 · Questão 13</strong></p>
+<p>Considere uma estrutura de dados do tipo vetor. Com respeito a tal estrutura, é CORRETO que seus componentes são, caracteristicamente:</p>
+<ul>
+<li>a) heterogêneos e com acesso FIFO.</li>
+<li>b) heterogêneos e com acesso LIFO.</li>
+<li>c) heterogêneos e com acesso indexado-sequencial.</li>
+<li>d) homogêneos e acesso não indexado.</li>
+<li>e) homogêneos e de acesso aleatório por intermédio de índices.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>E.</strong> Vetor: homogêneo e acesso aleatório por índice. Assunto 0037.</p>
+</details><p><strong>Edital 061/2018 · Questão 02</strong></p>
+<p>Matrizes são estruturas de dados de n-dimensões. Por simplicidade, chamaremos de matrizes as matrizes bidimensionais numéricas (que armazenam números inteiros). Sendo assim, marque a alternativa INCORRETA.</p>
+<ul>
+<li>a) Uma matriz de m linhas e n colunas contêm (m * n) dados.</li>
+<li>b) Uma matriz pode ser representada utilizando listas ligadas.</li>
+<li>c) A soma dos elementos de uma matriz pode ser calculada fazendo dois laços aninhados, um sobre as linhas e o outro sobre as colunas.</li>
+<li>d) A soma de duas matrizes de m linhas e n colunas resulta em uma matriz de 2<em>m linhas e 2</em>n colunas.</li>
+<li>e) O produto de duas matrizes de n linhas e n colunas resulta em uma matriz de n linhas e n colunas.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>D.</strong> Soma de matrizes m×n dá m×n, não 2m×2n. Assunto 0039.</p>
+</details><h2>Para ler mais</h2>
+<ul>
+<li>BACKES, A. <em>Linguagem C: completa e descomplicada</em>. Rio de Janeiro: Elsevier, 2013. Caps. 6 (vetores e matrizes), 7 (strings) e 9 (passagem de vetores para funções).</li>
+<li>BACKES, A. <em>Linguagem C: apostila</em>. Uberlândia: UFU, [s.d.]. Seções de vetores, matrizes e strings.</li>
+<li>DEITEL, P.; DEITEL, H. <em>C: como programar</em>. 6. ed. São Paulo: Pearson, 2011. Caps. 6 (arrays) e 8 (caracteres e strings).</li>
+<li>DEITEL, P.; DEITEL, H. <em>C: how to program</em>. 7. ed. Boston: Pearson, 2013. Caps. 6 e 8.</li>
+<li>CELES, W.; CERQUEIRA, R.; RANGEL, J. L. <em>Introdução a estruturas de dados: com técnicas de programação em C</em>. 2. ed. Rio de Janeiro: Elsevier, 2016. Capítulos de vetores, matrizes e cadeias de caracteres.</li>
+<li>TENENBAUM, A. M.; LANGSAM, Y.; AUGENSTEIN, M. J. <em>Estruturas de dados usando C</em>. São Paulo: Makron Books, 1995. Cap. 1: vetores e strings em C.</li>
+<li>ANTONELLO, R. <em>Linguagem C</em>. 1. ed. Disponível em: <a href="http://www.antonello.com.br">http://www.antonello.com.br</a>. Cap. 8.</li>
+<li>LEAL, G. C. L. <em>Algoritmos e lógica de programação II</em>. Maringá: Unicesumar, 2016. Unidades de vetores, matrizes e strings.</li>
+<li>KERNIGHAN, B. W.; RITCHIE, D. M. <em>C: a linguagem de programação padrão ANSI</em>. Rio de Janeiro: Campus, 1989. Caps. 1.6, 1.9 e 5.</li>
+<li>CPPREFERENCE. <em>Null-terminated byte strings</em>. Disponível em: <a href="https://en.cppreference.com/w/c/string/byte">https://en.cppreference.com/w/c/string/byte</a>.</li>
+<li>LINUX MAN-PAGES PROJECT. <em>fgets(3)</em>, <em>string(3)</em>, <em>ctype(3)</em>. Disponível em: <a href="https://man7.org/linux/man-pages/">https://man7.org/linux/man-pages/</a>.</li>
+<li>SPAFFORD, E. H. The Internet worm program: an analysis. <em>ACM SIGCOMM Computer Communication Review</em>, v. 19, n. 1, p. 17-57, 1989.</li>
+</ul>

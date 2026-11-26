@@ -1,0 +1,90 @@
+<h2>0035 · Pré-processador: macros e #ifdef</h2>
+<p>O &quot;localizar e substituir&quot; do editor troca todo <code>TAXA</code> por <code>0.05</code> no arquivo,
+sem entender nada do texto. Ele não sabe se <code>TAXA</code> é variável, comentário ou
+pedaço de outra palavra; só troca. O C tem uma etapa que trabalha desse
+jeito, e você já a usa sem perceber, toda vez que escreve <code>#include</code> ou
+<code>#define</code>.</p>
+<p>Essa etapa é o <strong>pré-processador</strong>. Ele roda <strong>antes</strong> do compilador e cuida
+de toda linha que começa com <code>#</code>, as <strong>diretivas</strong> (DEITEL; DEITEL, 2011, cap.
+13). O <code>#include</code> cola um arquivo; o <code>#define</code> cria uma substituição. Quando o
+compilador recebe o código, as diretivas já sumiram e as trocas já foram
+feitas. O compilador nunca vê o nome <code>TAXA</code>, só o <code>0.05</code> que ficou no lugar.</p>
+<p>Você já usa <code>#define TAXA 0.05</code> para constantes. Com parâmetros, o <code>#define</code>
+vira uma <strong>macro</strong>:</p>
+<pre><code class="language-c">#define QUAD(x) ((x) * (x))
+</code></pre>
+<p>Cada <code>QUAD(alguma coisa)</code> no código vira <code>((alguma coisa) * (alguma coisa))</code>. Parece uma função, mas não é: não tem tipo, não faz chamada, não
+cria quadro na pilha. É <strong>troca de texto</strong>, feita antes de compilar (GNU,
+s.d.). Um detalhe de escrita decide tudo: o nome e o <code>(</code> ficam colados. Com
+espaço, <code>#define QUAD (x) ((x) * (x))</code> define uma constante sem parâmetro,
+que vale o texto <code>(x) ((x) * (x))</code>.</p>
+<p>Por ser troca de texto, a macro não respeita a precedência dos operadores
+(DEITEL; DEITEL, 2011, cap. 13). Suponha <code>#define QUAD_RUIM(x) x * x</code> e o
+terreno com <code>lado = 2</code>. A chamada <code>QUAD_RUIM(lado + 3)</code> chega ao compilador
+como <code>lado + 3 * lado + 3</code>, a multiplicação vem primeiro e o resultado é 11,
+não 25. A regra é pôr <strong>parênteses em volta de cada parâmetro e em volta da
+expressão inteira</strong>, como no <code>QUAD</code> acima. Os de dentro protegem o argumento;
+os de fora protegem a macro quando ela aparece no meio de outra conta.</p>
+<p>O pré-processador também decide o que chega ao compilador. Isso é a
+<strong>compilação condicional</strong> (BACKES, 2013, cap. 13). Um trecho entre
+<code>#ifdef DEPURAR</code> e <code>#endif</code> só é compilado se o nome <code>DEPURAR</code> estiver
+definido; o <code>#ifndef</code> faz o contrário. O <code>#if</code> testa uma expressão constante,
+e <code>#elif</code> e <code>#else</code> dão os outros caminhos, como num <code>if</code> comum. O nome pode
+vir do próprio código ou da linha de comando: <code>gcc -DDEPURAR</code> define
+<code>DEPURAR</code> sem mexer no arquivo. E <code>#if 0</code> ... <code>#endif</code> desliga um trecho
+inteiro de uma vez. O include guard do assunto 0034 é uma compilação
+condicional.</p>
+<p>Algumas peças prontas ajudam a depurar (GNU, s.d.). A macro <code>__LINE__</code> vira o
+número da linha em que aparece. O identificador <code>__func__</code>, que o compilador
+cria dentro de cada função, guarda o nome da função atual. E o operador <code>#</code>,
+usado dentro de uma macro, transforma o argumento em texto: numa macro
+<code>MOSTRAR(x)</code> que imprime <code>#x</code> e depois <code>(x)</code>, a chamada <code>MOSTRAR(lado + 3)</code>
+escreve <code>lado + 3 = 5</code>. Com isso dá para montar mensagens de erro que dizem
+onde e o quê.</p>
+<p>Função ou macro? Para cálculo, prefira uma função pequena (LAGO, s.d.). Ela
+confere os tipos dos argumentos, avalia cada argumento uma vez e aparece no
+depurador. A macro fica para o que só ela faz: constantes, compilação
+condicional, <code>__LINE__</code> e o operador <code>#</code>.</p>
+<blockquote>
+<p>[!WARNING]
+A macro avalia o argumento <strong>cada vez que ele aparece</strong>: com
+<code>#define MAIOR(a, b) ((a) &gt; (b) ? (a) : (b))</code>, <code>MAIOR(x++, y)</code> pode
+incrementar <code>x</code> duas vezes. E sem <code>;</code> no <code>#define</code>: <code>#define TAXA 0.05;</code>
+faz <code>preco * TAXA + 1</code> virar <code>preco * 0.05; + 1</code>.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>O terreno tem <code>lado + 3</code> metros de lado, com <code>lado = 2</code>.
+<code>QUAD_RUIM(lado + 3)</code> chega ao compilador como <code>lado + 3 * lado + 3</code> e dá 11;
+a versão com parênteses dá 25:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+#define QUAD_RUIM(x) x * x       // sem parênteses: perigo
+#define QUAD(x) ((x) * (x))      // parênteses no parâmetro E em volta de tudo
+
+int main(void) {
+    int lado = 2;
+
+    // terreno quadrado de lado (2 + 3) metros
+    printf(&quot;QUAD_RUIM(lado + 3) = %d\n&quot;, QUAD_RUIM(lado + 3)); // 2 + 3 * 2 + 3
+    printf(&quot;QUAD(lado + 3)      = %d\n&quot;, QUAD(lado + 3));      // ((2 + 3) * (2 + 3))
+
+    // quantos lotes de 5 x 5 cabem em 100 m2?
+    printf(&quot;100 / QUAD_RUIM(5)  = %d\n&quot;, 100 / QUAD_RUIM(5));  // 100 / 5 * 5
+    printf(&quot;100 / QUAD(5)       = %d\n&quot;, 100 / QUAD(5));       // 100 / ((5) * (5))
+    return 0;
+}
+// Saída:
+// QUAD_RUIM(lado + 3) = 11
+// QUAD(lado + 3)      = 25
+// 100 / QUAD_RUIM(5)  = 100
+// 100 / QUAD(5)       = 4
+</code></pre>
+<p>O pré-processador só procura o nome e troca; quem acha o erro, quando acha, é
+o compilador:</p>
+<p>{{fluxograma}}</p>
+<p>A compilação condicional, com <code>#define DEPURAR</code> no topo ou <code>gcc -DDEPURAR</code>:</p>
+<pre><code class="language-c">#ifdef DEPURAR          // se o nome DEPURAR foi definido...
+    printf(&quot;[debug] total = %d\n&quot;, total);
+#endif
+</code></pre>

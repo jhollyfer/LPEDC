@@ -1,0 +1,140 @@
+<h2>0130 · Juntando tudo</h2>
+<p>O sudoku junta tudo o que o módulo mostrou num problema que muita gente
+resolve no papel. A grade tem 9 × 9 casas, algumas já preenchidas. O objetivo
+é completar as vazias com dígitos de 1 a 9 sem repetir nenhum dígito numa
+linha, numa coluna ou numa das nove caixas 3 × 3 em que a grade se divide.
+Problemas assim, em que se procura uma atribuição de valores que respeite um
+conjunto de regras, se chamam <strong>problemas de satisfação de restrições</strong>, e o
+backtracking é a forma natural de atacá-los (DEITEL; DEITEL, 2011).</p>
+<p>A grade vira uma matriz <code>int g[9][9]</code>, com 0 marcando a casa vazia. Do ponto
+de vista do backtracking, cada casa vazia é uma decisão com 9 opções, e a
+árvore de decisões tem um nível por casa vazia (DEITEL; DEITEL, 2011). Com 51
+casas vazias, a força bruta pura teria 9⁵¹ folhas, um número impossível de
+percorrer. A poda é o que torna o problema viável.</p>
+<p>A poda é a própria regra do jogo: um dígito que já aparece na linha, na
+coluna ou na caixa da casa não pode entrar. Para testar isso sem varrer a
+grade, o programa usa <strong>vetores de marcação</strong>, como os das N-rainhas no
+assunto 0128. <code>na_linha[l][d]</code> diz se o dígito <code>d</code> já está na linha <code>l</code>;
+<code>na_coluna[c][d]</code> faz o mesmo para a coluna <code>c</code>; e <code>na_caixa[b][d]</code>, para a
+caixa <code>b</code>. O teste vira três leituras, em O(1) (WIRTH, 1989). Os vetores têm 10
+posições por linha, e o índice 0 fica sem uso, para que o próprio dígito sirva
+de índice.</p>
+<p>Falta numerar as caixas. As linhas 0 a 2 formam a primeira faixa de caixas, as
+linhas 3 a 5 a segunda e as 6 a 8 a terceira; o mesmo vale para as colunas. A
+divisão inteira <code>l / 3</code> dá a faixa da linha e <code>c / 3</code> dá a faixa da coluna, e a
+casa <code>(l, c)</code> fica na caixa <code>b = (l / 3) * 3 + c / 3</code>, um número de 0 a 8. A
+casa (4, 7), por exemplo, está na caixa <code>1 * 3 + 2 = 5</code>.</p>
+<p>A função <code>resolve(k)</code> percorre as casas em ordem de leitura, da esquerda para
+a direita e de cima para baixo. A casa número <code>k</code>, de 0 a 80, fica na linha
+<code>k / 9</code> e na coluna <code>k % 9</code>. A função pula as casas já preenchidas e, na
+primeira vazia, tenta cada dígito que passa pela poda: <strong>escreve e marca</strong>,
+desce para <code>resolve(k + 1)</code> e, se não deu certo, <strong>apaga e desmarca</strong>
+(FEOFILOFF, 2009). Quando não sobra casa vazia, a grade está completa, e o
+<code>true</code> sobe pelas chamadas até o <code>main</code>.</p>
+<p>A ordem em que as casas são decididas pesa muito. Ir em ordem de leitura é
+simples, mas escolher primeiro a casa com <strong>menos</strong> candidatos poda muito mais
+cedo: uma casa com uma opção só não gera ramo nenhum, e uma escolha errada é
+descoberta antes de a árvore crescer (ZIVIANI, 2010, cap. 2).</p>
+<p>A grade do exemplo chega como texto, uma string por linha, com <code>.</code> para casa
+vazia. Para transformar o caractere <code>&#39;7&#39;</code> no número 7, o código faz
+<code>jogo[l][c] - &#39;0&#39;</code>. A conta funciona porque os caracteres de <code>&#39;0&#39;</code> a <code>&#39;9&#39;</code> são
+consecutivos na tabela de caracteres (assunto 0040): a distância entre <code>&#39;7&#39;</code> e
+<code>&#39;0&#39;</code> é exatamente 7 (KERNIGHAN; RITCHIE, 1989).</p>
+<blockquote>
+<p>[!WARNING]
+No desfazer, as duas coisas voltam: <code>g[l][c] = 0</code> <strong>e</strong>
+<code>marca(..., false)</code>. Sem o <code>g[l][c] = 0</code>, a casa fica com o último dígito
+tentado e o <code>while</code> passa a tratá-la como <strong>dada</strong>: a grade sai errada.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>Um jogo com 51 casas vazias, escrito como texto (<code>.</code> é casa vazia). Na casa
+(0, 1), a poda deixa só o 5 e o 7. O programa tenta o 5 e, só depois de muitos
+retrocessos, descobre que é o 7:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdbool.h&gt;
+#include &lt;stdio.h&gt;
+
+int g[9][9];
+bool na_linha[9][10];    // na_linha[l][d]: o dígito d já está na linha l?
+bool na_coluna[9][10];
+bool na_caixa[9][10];    // caixas 3 × 3 numeradas de 0 a 8
+long chamadas = 0;
+
+int caixa(int l, int c) {
+    return (l / 3) * 3 + c / 3;
+}
+
+void marca(int l, int c, int d, bool valor) {
+    na_linha[l][d] = na_coluna[c][d] = na_caixa[caixa(l, c)][d] = valor;
+}
+
+// resolve a partir da casa número k (0 a 80, lendo linha por linha)
+bool resolve(int k) {
+    chamadas++;
+    while (k &lt; 81 &amp;&amp; g[k / 9][k % 9] != 0) {
+        k++;                            // pula as casas já preenchidas
+    }
+    if (k == 81) {
+        return true;                    // nenhuma casa vazia: resolvido
+    }
+    int l = k / 9, c = k % 9;
+    for (int d = 1; d &lt;= 9; d++) {
+        if (na_linha[l][d] || na_coluna[c][d] || na_caixa[caixa(l, c)][d]) {
+            continue;                   // poda: d já aparece
+        }
+        g[l][c] = d;                    // escolhe
+        marca(l, c, d, true);
+        if (resolve(k + 1)) {
+            return true;
+        }
+        marca(l, c, d, false);          // desfaz
+        g[l][c] = 0;
+    }
+    return false;                       // nenhum dígito serve: volta
+}
+
+int main(void) {
+    const char *jogo[9] = {
+        &quot;2.3.8....&quot;, &quot;6......7.&quot;, &quot;.412.3.86&quot;,
+        &quot;5........&quot;, &quot;.97.28...&quot;, &quot;164.9...5&quot;,
+        &quot;.3...6...&quot;, &quot;4.....2..&quot;, &quot;.1.832.5.&quot;,
+    };
+    for (int l = 0; l &lt; 9; l++) {
+        for (int c = 0; c &lt; 9; c++) {
+            if (jogo[l][c] != &#39;.&#39;) {
+                g[l][c] = jogo[l][c] - &#39;0&#39;;
+                marca(l, c, g[l][c], true);
+            }
+        }
+    }
+    if (resolve(0)) {
+        for (int l = 0; l &lt; 9; l++) {
+            for (int c = 0; c &lt; 9; c++) {
+                printf(&quot;%d%s&quot;, g[l][c], c == 8 ? &quot;\n&quot; : (c % 3 == 2 ? &quot; | &quot; : &quot; &quot;));
+            }
+            if (l % 3 == 2 &amp;&amp; l &lt; 8) {
+                printf(&quot;------+-------+------\n&quot;);
+            }
+        }
+    }
+    printf(&quot;%ld chamadas\n&quot;, chamadas);
+    return 0;
+}
+// Saída:
+// 2 7 3 | 6 8 5 | 1 4 9
+// 6 8 5 | 9 4 1 | 3 7 2
+// 9 4 1 | 2 7 3 | 5 8 6
+// ------+-------+------
+// 5 2 8 | 1 6 4 | 7 9 3
+// 3 9 7 | 5 2 8 | 4 6 1
+// 1 6 4 | 3 9 7 | 8 2 5
+// ------+-------+------
+// 8 3 2 | 4 5 6 | 9 1 7
+// 4 5 6 | 7 1 9 | 2 3 8
+// 7 1 9 | 8 3 2 | 6 5 4
+// 2999 chamadas
+</code></pre>
+<p>São 2999 chamadas; a força bruta testaria até 9⁵¹ preenchimentos. Escolher a
+casa com menos candidatos derruba este jogo para 64 chamadas (exemplo A260). O
+fluxograma é o esqueleto do módulo, com a regra do jogo no lugar da poda:</p>
+<p>{{fluxograma}}</p>

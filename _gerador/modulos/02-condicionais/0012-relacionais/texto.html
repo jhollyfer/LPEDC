@@ -1,0 +1,121 @@
+<h2>0012 · Relacionais e a verdade em C</h2>
+<p>Os programas do módulo 01 seguiam sempre o mesmo caminho, de cima para
+baixo. Um programa que decide precisa, antes de tudo, de uma pergunta de sim
+ou não: a compra passou de R$ 200? A senha está certa? O saldo dá? Este
+módulo inteiro se apoia nessas perguntas, e elas começam numa comparação.</p>
+<p>Pense na tabela do campeonato no fim do domingo. O jogo terminou 2 x 1 para
+o mandante, e a tabela precisa saber três coisas: o mandante fez mais gols?
+Empatou? Fez menos? Cada resposta é sim ou não, e dela sai a pontuação: 3
+pontos pela vitória, 1 pelo empate, 0 pela derrota.</p>
+<p>Para fazer essas perguntas, o C tem seis <strong>operadores relacionais</strong>, que
+comparam dois valores: <code>&gt;</code> (maior), <code>&lt;</code> (menor), <code>&gt;=</code> (maior ou igual),
+<code>&lt;=</code> (menor ou igual), <code>==</code> (igual, com dois sinais) e <code>!=</code> (diferente)
+(DEITEL; DEITEL, 2011, cap. 2). Toda decisão do curso começa num deles.</p>
+<table>
+<thead>
+<tr>
+<th>Operador</th>
+<th>Pergunta</th>
+<th>Com o placar 2 x 1</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>&gt;</code></td>
+<td>maior que?</td>
+<td><code>2 &gt; 1</code> vale 1</td>
+</tr>
+<tr>
+<td><code>&lt;</code></td>
+<td>menor que?</td>
+<td><code>2 &lt; 1</code> vale 0</td>
+</tr>
+<tr>
+<td><code>&gt;=</code></td>
+<td>maior ou igual?</td>
+<td><code>2 &gt;= 1</code> vale 1</td>
+</tr>
+<tr>
+<td><code>&lt;=</code></td>
+<td>menor ou igual?</td>
+<td><code>2 &lt;= 1</code> vale 0</td>
+</tr>
+<tr>
+<td><code>==</code></td>
+<td>igual? (dois sinais!)</td>
+<td><code>2 == 1</code> vale 0</td>
+</tr>
+<tr>
+<td><code>!=</code></td>
+<td>diferente?</td>
+<td><code>2 != 1</code> vale 1</td>
+</tr>
+</tbody></table>
+<p>Repare na última coluna: a resposta sai como um número. No C, uma
+comparação produz um <code>int</code> que vale <strong>1</strong> quando é verdade e <strong>0</strong> quando
+é mentira (KERNIGHAN; RITCHIE, 1988, cap. 2). Como é um número, dá
+para mostrar com <code>%d</code>, somar e multiplicar. A tabela do campeonato nem
+precisa decidir nada: os pontos do mandante são <code>3 * (gm &gt; gv) + (gm == gv)</code>.
+Com 2 x 1, a conta dá 3 × 1 + 0 = 3.</p>
+<pre><code class="language-c">int gm = 2, gv = 1;
+printf(&quot;%d %d %d\n&quot;, gm &gt; gv, gm == gv, gm &lt; gv);   // 1 0 0
+</code></pre>
+<p>O caminho de volta também existe, e é ele que o <code>if</code> (0014) vai usar.
+Quando o C precisa saber se um valor é verdadeiro, ele segue uma regra
+simples: <strong>0 é falso, e qualquer outro valor é verdadeiro</strong>. Valem como
+verdade 1, 42, -3 e até 0.5. Por isso <code>if (num)</code> é o mesmo que
+<code>if (num != 0)</code> (BACKES, 2013, cap. 3).</p>
+<p>Como a comparação vale número, uma comparação em cadeia não faz o que
+parece. Em <code>7 &gt; 3 &gt; 1</code>, o C resolve da esquerda para a direita: <code>7 &gt; 3</code>
+vale 1, e depois <code>1 &gt; 1</code> vale 0. A expressão inteira dá falso, apesar de 7
+ser maior que 3 e 3 maior que 1. Para juntar duas comparações, você precisa
+do E lógico do 0013.</p>
+<p>Para deixar claro que uma variável guarda sim ou não, o C99 criou o
+cabeçalho <strong><code>&lt;stdbool.h&gt;</code></strong>, com o tipo <strong><code>bool</code></strong> e os nomes <strong><code>true</code></strong>
+(vale 1) e <strong><code>false</code></strong> (vale 0). O <code>bool</code> é rígido: qualquer valor
+diferente de zero vira <code>true</code>, então <code>bool b = 42;</code> guarda 1 (BACKES,
+2013, cap. 3).</p>
+<p>Por fim, três erros de escrita aparecem muito. Os símbolos <code>=&lt;</code>, <code>=&gt;</code> e
+<code>&lt;&gt;</code> não existem: o sinal vem antes do <code>=</code>, e diferente se escreve <code>!=</code>.
+O <code>= =</code> com espaço no meio também não vale. E o <code>=</code> sozinho é
+<strong>atribuição</strong>, não comparação (DEITEL; DEITEL, 2011, cap. 2). Leia <code>=</code>
+como &quot;recebe&quot; e <code>==</code> como &quot;é igual a&quot;; o estrago dessa troca dentro de um
+<code>if</code> aparece no 0015.</p>
+<blockquote>
+<p>[!WARNING]
+<strong>Não compare <code>float</code> ou <code>double</code> com <code>==</code>.</strong> <code>0.1 + 0.2 == 0.3</code> vale
+<strong>0</strong>: 0,1 não tem representação exata em binário, e a soma dá
+0.30000000000000004. Pergunte se estão perto o bastante,
+<code>fabs(a - b) &lt; 1e-9</code>, ou guarde dinheiro em <strong>centavos</strong> num <code>int</code>.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>Fim de jogo, mandante 2 x 1 visitante. Os dois placares viram três perguntas,
+cada resposta é 0 ou 1, e a tabela usa esses números direto na conta dos
+pontos:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdbool.h&gt;
+#include &lt;stdio.h&gt;
+
+int main(void) {
+    int gols_casa = 2;
+    int gols_fora = 1;
+
+    printf(&quot;casa &gt;  fora? %d\n&quot;, gols_casa &gt; gols_fora);
+    printf(&quot;casa == fora? %d\n&quot;, gols_casa == gols_fora);
+    printf(&quot;casa &lt;  fora? %d\n&quot;, gols_casa &lt; gols_fora);
+
+    bool venceu = gols_casa &gt; gols_fora;   // guarda a resposta: true
+    bool empatou = gols_casa == gols_fora; // false
+
+    int pontos = 3 * venceu + empatou;     // 3 * 1 + 0
+    printf(&quot;Pontos do mandante: %d\n&quot;, pontos);
+    return 0;
+}
+// Saída:
+// casa &gt;  fora? 1
+// casa == fora? 0
+// casa &lt;  fora? 0
+// Pontos do mandante: 3
+</code></pre>
+<p>O fluxograma não tem losango: comparar só <strong>calcula</strong> uma resposta e a guarda.
+Quem escolhe o caminho é o <code>if</code> (0014):</p>
+<p>{{fluxograma}}</p>

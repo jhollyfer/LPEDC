@@ -1,0 +1,116 @@
+<h2>0087 · Deque</h2>
+<p>No app de música, a fila de reprodução tem as faixas 5, 8 e 3. Você toca em
+&quot;tocar em seguida&quot; e a faixa 11 vai para a <strong>frente</strong>. Depois se arrepende e
+tira a última faixa adicionada, pelo <strong>fim</strong>. A pilha só mexe numa ponta, a
+fila insere numa e retira na outra, e nenhuma das duas faz isso. Falta uma
+estrutura que aceite as duas operações nas duas pontas.</p>
+<p>Essa estrutura é o <strong>deque</strong>, do inglês <em>double-ended queue</em> (pronuncia-se
+&quot;deck&quot;), também chamado de <strong>fila dupla</strong>: uma sequência que deixa inserir e
+retirar tanto pela frente quanto pelo fundo (CELES; RANGEL, 2002). Pense numa
+fila de embarque com porta nas duas pontas: a pessoa com prioridade entra
+pela frente, e quem desiste sai por trás.</p>
+<p>As operações são quatro. <code>deque_insere_inicio</code> e <code>deque_retira_inicio</code> mexem
+na frente; <code>deque_insere_fim</code> e <code>deque_retira_fim</code> mexem no fundo (CELES;
+RANGEL, 2002). Com elas, o deque imita as estruturas anteriores. Se você só
+insere e retira pelo fim, ele se comporta como <strong>pilha</strong>. Se insere pelo fim
+e retira pelo início, ele se comporta como <strong>fila</strong> (TENENBAUM; LANGSAM;
+AUGENSTEIN, 1995, cap. 4). Quando o item que sai é o de maior prioridade, e
+não o de uma ponta, a estrutura passa a ser outra, a fila de prioridade, que
+o assunto 0102 monta com heap.</p>
+<p>A versão em vetor reaproveita a fila circular do 0085. A única novidade é que
+o <code>inicio</code> agora anda também para <strong>trás</strong>. Para inserir na frente, ele recua
+uma gaveta e o valor entra ali; se o início estava na gaveta 0, ele dá a
+volta e vai para a última. Inserir no fim e retirar do início são iguais aos
+da fila. Retirar do fim é o mais simples de todos: o último item fica em
+<code>(inicio + n - 1) % CAPACIDADE</code>, e basta ler ali e diminuir <code>n</code> (CELES;
+RANGEL, 2002). As quatro operações custam <strong>O(1)</strong>, enquanto num vetor comum
+inserir no início obrigaria a empurrar tudo, O(n).</p>
+<p>A conta de recuar uma gaveta fica numa função auxiliar marcada com <code>static</code>.
+Numa função escrita fora de qualquer bloco, <code>static</code> não cria variável
+estática: ele tira a função da <strong>ligação externa</strong>, e ela fica <strong>privada</strong> do
+arquivo (KERNIGHAN; RITCHIE, 1988). O <code>deque.c</code> pode usá-la, mas nenhum outro
+arquivo enxerga o nome, e o TAD continua expondo só o que está no <code>.h</code>.</p>
+<p>Se você quiser o deque encadeado, a lista simples não basta. Retirar do fim
+exige que o último nó conheça o penúltimo, para que o penúltimo passe a ser o
+fim. Isso pede a lista <strong>duplamente encadeada</strong> do assunto 0079, em que cada
+nó aponta para o próximo e para o anterior (CELES; RANGEL, 2002).</p>
+<blockquote>
+<p>[!WARNING]
+Em C, o resto de negativo é <strong>negativo</strong>: <code>-1 % 8</code> vale <code>-1</code>, não 7. Assim
+<code>(inicio - 1) % CAPACIDADE</code> com <code>inicio = 0</code> escreve em <code>itens[-1]</code>. Some a
+capacidade antes: <code>(inicio - 1 + CAPACIDADE) % CAPACIDADE</code>
+(CPPREFERENCE, s.d.).</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>No app de música, as faixas 5, 8 e 3 entram pelo fim, nas gavetas 0, 1 e 2.
+A 11 entra pela frente (&quot;tocar em seguida&quot;): o início recua da gaveta 0 e dá
+a volta para a 7. A ordem fica 11, 5, 8, 3:</p>
+<p>{{ideia}}</p>
+<p>A conta do recuo fica numa função auxiliar <code>static</code>:</p>
+<pre><code class="language-c">#define CAPACIDADE 8
+
+// gaveta anterior a i, dando a volta: anterior(0) = CAPACIDADE - 1
+static int anterior(int i) {
+    return (i - 1 + CAPACIDADE) % CAPACIDADE; // (i - 1) % CAPACIDADE daria -1 com i = 0
+}
+
+bool deque_insere_inicio(Deque *d, int valor) {
+    if (d-&gt;n == CAPACIDADE) {
+        return false;
+    }
+    d-&gt;inicio = anterior(d-&gt;inicio); // o início recua uma gaveta
+    d-&gt;itens[d-&gt;inicio] = valor;
+    d-&gt;n++;
+    return true;
+}
+
+bool deque_retira_fim(Deque *d, int *valor) {
+    if (d-&gt;n == 0) {
+        return false;
+    }
+    *valor = d-&gt;itens[(d-&gt;inicio + d-&gt;n - 1) % CAPACIDADE]; // o último ocupado
+    d-&gt;n--;
+    return true;
+}
+</code></pre>
+<p>Programa da fila de músicas:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;deque.h&quot;
+
+int main(void) {
+    Deque *fila = deque_cria(); // guarda o número da faixa do álbum
+    if (fila == NULL) {
+        return 1;
+    }
+
+    deque_insere_fim(fila, 5); // &quot;adicionar à fila&quot;: vai para o fim
+    deque_insere_fim(fila, 8);
+    deque_insere_fim(fila, 3);
+    deque_insere_inicio(fila, 11); // &quot;tocar em seguida&quot;: fura a fila
+
+    // ordem agora: 11 5 8 3
+    int faixa;
+    if (deque_retira_inicio(fila, &amp;faixa)) {
+        printf(&quot;Tocando a faixa %d\n&quot;, faixa);
+    }
+    if (deque_retira_fim(fila, &amp;faixa)) { // desistiu da última que adicionou
+        printf(&quot;Removida a faixa %d\n&quot;, faixa);
+    }
+
+    printf(&quot;Ainda na fila:&quot;);
+    while (deque_retira_inicio(fila, &amp;faixa)) {
+        printf(&quot; %d&quot;, faixa);
+    }
+    printf(&quot;\n&quot;);
+
+    deque_libera(fila);
+    return 0;
+}
+// Saída:
+// Tocando a faixa 11
+// Removida a faixa 3
+// Ainda na fila: 5 8
+</code></pre>
+<p>Na entrada da faixa 11, o caminho difere do da fila só no recuo do início com
+<code>anterior</code>, que soma 8 antes do <code>%</code>:</p>
+<p>{{fluxograma}}</p>

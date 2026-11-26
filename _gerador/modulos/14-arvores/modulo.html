@@ -1,0 +1,788 @@
+<h1>Módulo 14 · Árvores</h1>
+<p>Árvores guardam hierarquias e buscam descendo um caminho. O módulo cobre
+árvore binária e percursos, BST (busca, inserção, remoção), AVL, heap e
+heapsort. Usa recursão (0032), <code>malloc</code> (0054), TAD (0074), a fila (0085) e a
+busca binária (0090). O módulo 15 troca a árvore pela tabela hash.</p>
+<h2>O que você vai aprender</h2>
+<ul>
+<li>vocabulário: <strong>raiz</strong>, <strong>filho</strong>, <strong>folha</strong>, <strong>altura</strong> e <strong>profundidade</strong></li>
+<li><strong>árvore binária</strong> em C e os quatro <strong>percursos</strong>: pré-ordem, em ordem,
+pós-ordem e por nível</li>
+<li><strong>BST</strong>: busca, inserção e os três casos da <strong>remoção</strong></li>
+<li>por que a BST pode virar lista e como a <strong>AVL</strong> se equilibra com
+<strong>rotações</strong></li>
+<li><strong>heap</strong> num vetor e <strong>fila de prioridade</strong></li>
+<li><strong>heapsort</strong>: O(n log n) sem memória extra</li>
+<li>um programa que junta BST e heap</li>
+</ul>
+<h2>Antes de começar</h2>
+<p>Do 0098 em diante, cada assunto tem um TAD na pasta (<code>arvore.h</code>, <code>bst.h</code>,
+<code>avl.h</code>, <code>heap.h</code>, <code>cadastro.h</code>); abra também o <code>.c</code>, que tem o algoritmo. Nos
+desenhos, aresta verde é o caminho da busca e nó vermelho é o que sai ou está
+desequilibrado. Desenhe no papel e use a saída para conferir.</p>
+<p>O comando compila junto o <code>.c</code> de apoio da pasta (como <code>bst.c</code>):</p>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A197.c ~/LPEDC/material/0099-bst.c -o ~/LPEDC/material/A197 &amp;&amp; ~/LPEDC/material/A197
+</code></pre>
+<p><strong>Altura conta arestas</strong> em todo o módulo: folha vale 0 e árvore vazia, -1.</p>
+<p>{{indice}}</p>
+<hr>
+<p>{{assuntos}}</p>
+<hr>
+<h2>Desafios do módulo</h2>
+<p>Problemas para fechar o módulo, misturando os assuntos. Escreva em C e compile
+com o gcc e as flags de estudo. Quando o desafio citar <code>avl.h</code> ou <code>heap.h</code>,
+copie o <code>.h</code> e o <code>.c</code> do assunto para a pasta do seu arquivo.</p>
+<p><strong>1. Quantos nós cabem?</strong> Escreva <code>int max_nos(int h)</code>, que soma os níveis
+cheios (1 + 2 + 4 + ...) de uma árvore binária de altura <code>h</code>, e mostre o menor
+e o maior número de nós de uma árvore de altura 4. Com um <code>while</code>, ache a
+menor altura que comporta 1000 chaves. Depois confira na prática com uma BST:
+insira 1, 2, ..., 1000 em ordem e mostre a altura; libere, insira as mesmas
+chaves &quot;pelo meio&quot; (uma função recursiva que insere o meio de <code>[ini, fim]</code> e
+depois chama a si mesma para cada metade) e mostre a altura de novo.</p>
+<details><summary>Resposta</summary><pre><code class="language-text">Altura 4: de 5 a 31 nós
+1000 chaves: altura mínima 9, máxima 999
+BST inserindo 1, 2, ..., 1000: altura 999
+BST inserindo pelo meio: altura 9
+</code></pre>
+<p>O mínimo de altura h é uma fila indiana, h + 1 nós; o máximo é 2^(h+1) - 1,
+todos os níveis cheios. Altura 8 comporta só 511 nós, altura 9 comporta 1023:
+por isso 9. Inserir em ordem dá a pior árvore possível, uma lista de 1000 nós
+(a recursão da altura desce 1000 níveis e ainda cabe na pilha). Inserir pelo
+meio dá a melhor. A altura é a de sempre: vazia vale -1, e cada nó vale
+1 + o maior dos filhos.</p>
+</details><p><strong>2. Reconstrua a árvore.</strong> Uma árvore binária de <code>char</code> tem pré-ordem
+<code>FBADCEGIH</code> e em ordem <code>ABCDEFGHI</code>. Escreva <code>No *reconstroi(const char *pre, const char *em, int n)</code>, que monta a árvore a partir das duas strings, e
+mostre a árvore com recuo de dois espaços por nível (prefixo <code>e: </code> para filho
+esquerdo e <code>d: </code> para direito) e a pós-ordem.</p>
+<details><summary>Resposta</summary><pre><code class="language-text">F
+  e: B
+    e: A
+    d: D
+      e: C
+      d: E
+  d: G
+    d: I
+      e: H
+Pós-ordem: A C E D B H I G F
+</code></pre>
+<p>A pré-ordem diz que <code>pre[0]</code> é a raiz; ache a posição <code>k</code> dela em <code>em</code>: os <code>k</code>
+primeiros de <code>em</code> são a subárvore esquerda, e o resto depois dela, a direita.
+Em código: <code>r-&gt;esq = reconstroi(pre + 1, em, k)</code> e <code>r-&gt;dir = reconstroi(pre + 1 + k, em + k + 1, n - 1 - k)</code>, com <code>n == 0</code> devolvendo <code>NULL</code>. O recuo é
+<code>printf(&quot;%*s%s%c\n&quot;, 2 * nivel, &quot;&quot;, lado, r-&gt;info)</code>. Com pré-ordem e
+pós-ordem sozinhas não dá para reconstruir sempre: um filho único pode ser
+esquerdo ou direito.</p>
+</details><p><strong>3. Conte as BSTs.</strong> Gere as 6 ordens de inserção das chaves 1, 2 e 3 (três
+<code>for</code> de 1 a 3, pulando as repetidas), insira cada ordem numa BST vazia e
+mostre a pré-ordem que sai. Como a pré-ordem de uma BST identifica a árvore,
+guarde as pré-ordens já vistas numa matriz <code>int vistas[6][3]</code> e conte quantas
+BSTs diferentes apareceram e quantas ordens deram raiz 2.</p>
+<details><summary>Resposta</summary><pre><code class="language-text">ordem 1 2 3 -&gt; pré-ordem 1 2 3
+ordem 1 3 2 -&gt; pré-ordem 1 3 2
+ordem 2 1 3 -&gt; pré-ordem 2 1 3
+ordem 2 3 1 -&gt; pré-ordem 2 1 3
+ordem 3 1 2 -&gt; pré-ordem 3 1 2
+ordem 3 2 1 -&gt; pré-ordem 3 2 1
+BSTs diferentes: 5
+Ordens que dão raiz 2: 2
+</code></pre>
+<p>A de raiz 2 (a equilibrada) sai de duas ordens, 2 1 3 e 2 3 1; cada uma das
+outras quatro sai de uma ordem só. Inserir em ordem aleatória favorece as
+árvores mais equilibradas. A pré-ordem vai para um vetor com um contador
+passado por ponteiro (<code>v[(*n)++] = r-&gt;chave</code>), e libere cada árvore antes da
+próxima ordem.</p>
+</details><p><strong>4. A BST de nomes.</strong> Faça uma BST de nomes (<code>char nome[16]</code> no nó, comparação
+com <code>strcmp</code>) e insira, nesta ordem, Maria, Carlos, Tiago, Ana, Fernanda, Rui
+e Zélia. Mostre a altura e os nós por onde passa a busca por &quot;Fernanda&quot;. Por
+fim, insira também &quot;Élio&quot; e mostre todos os nomes em ordem.</p>
+<details><summary>Resposta</summary><pre><code class="language-text">Altura: 2
+Busca por Fernanda: Maria Carlos Fernanda
+Em ordem: Ana Carlos Fernanda Maria Rui Tiago Zélia Élio
+</code></pre>
+<p>Maria na raiz; Carlos (Ana, Fernanda) à esquerda; Tiago (Rui, Zélia) à
+direita. A busca é um <code>while</code> que mostra o nome do nó antes de decidir o lado
+com <code>strcmp</code>. O &quot;Élio&quot; no fim é a pegadinha: <code>strcmp</code> compara bytes, e em
+UTF-8 o <code>É</code> começa com o byte 195, maior que qualquer letra sem acento. Por
+isso ele fica depois de &quot;Zélia&quot;.</p>
+</details><p><strong>5. Remoções em sequência.</strong> Monte a BST inserindo 50, 30, 70, 20, 40, 60 e
+80 e, usando a remoção pelo <strong>sucessor</strong> do assunto 0100, remova 50, depois
+60, depois 70. Mostre a pré-ordem no início e depois de cada remoção.</p>
+<details><summary>Resposta</summary><pre><code class="language-text">Início: 50 30 20 40 70 60 80
+Sem o 50: 60 30 20 40 70 80
+Sem o 60: 70 30 20 40 80
+Sem o 70: 80 30 20 40
+</code></pre>
+<p>Sem o 50, o sucessor 60 sobe. Sem o 60 (raiz de novo, dois filhos), o
+sucessor 70 sobe e o 80 fica à direita dele. Sem o 70, o sucessor é o 80, que
+era folha. Remover sempre pelo sucessor deixa a árvore pendendo para a
+esquerda. A pré-ordem é <code>printf(&quot; %d&quot;, r-&gt;chave)</code> antes das duas
+chamadas recursivas.</p>
+</details><p><strong>6. AVL de 1 a 10.</strong> Com o <code>avl.h</code> do assunto 0101, insira 1, 2, ..., 10
+numa AVL vazia e mostre a pré-ordem, a raiz, a altura (<code>avl_altura</code>) e
+quantas rotações simples aconteceram (<code>avl_rotacoes</code>).</p>
+<details><summary>Resposta</summary><pre><code class="language-text">Pré-ordem: 4 2 1 3 8 6 5 7 9 10
+Raiz: 4
+Altura: 3
+Rotações: 6
+</code></pre>
+<p>As 6 rotações são todas à esquerda, ao inserir 3, 5, 6, 7, 9 e 10: inserir em
+ordem sempre pende a árvore para a direita. Numa BST comum a mesma sequência
+daria altura 9; a AVL fica com 3, o mínimo para 10 nós. A raiz está em
+<code>r-&gt;chave</code>, porque o <code>avl.h</code> deixa a struct à mostra.</p>
+</details><p><strong>7. A AVL mais magra.</strong> Escreva <code>No *magra(int h)</code>, que monta a AVL com o
+<strong>menor</strong> número de nós de altura <code>h</code>: a raiz tem, à esquerda, <code>magra(h - 1)</code>
+e, à direita, <code>magra(h - 2)</code> (altura negativa é <code>NULL</code>). Para h de 0 a 5,
+mostre quantos nós ela tem, quantos tem a árvore cheia da mesma altura, a
+altura medida e se todo nó tem fator entre -1 e 1.</p>
+<details><summary>Resposta</summary><pre><code class="language-text"> h  magra  cheia  altura  AVL?
+ 0      1      1       0  sim
+ 1      2      3       1  sim
+ 2      4      7       2  sim
+ 3      7     15       3  sim
+ 4     12     31       4  sim
+ 5     20     63       5  sim
+</code></pre>
+<p>N(h) = N(h - 1) + N(h - 2) + 1: uma subárvore com altura h - 1, a outra com
+h - 2, mais a raiz. Como cresce como Fibonacci, a altura de uma AVL fica
+abaixo de uns 1,44 · log₂ n. A cheia começa em 1 e vira <code>2 * cheia + 1</code> a cada
+nível. A conferência de AVL é recursiva: o fator da raiz entre -1 e 1 <strong>e</strong> as
+duas subárvores AVL.</p>
+</details><p><strong>8. Heap ou BST?</strong> Insira os preços 45, 12, 78, 33, 90, 5 e 61 num heap de
+máximo (<code>heap.h</code>) e numa BST. Mostre o vetor do heap e, para cada estrutura,
+conte quantos nós ou posições você olha para: achar o menor, achar o maior e
+buscar o 33. No heap, o menor só pode estar nas folhas (de <code>n / 2</code> a
+<code>n - 1</code>), e a busca é sequencial. No fim, liste os preços em ordem pela BST
+(em ordem) e pelo heap (esvaziando com <code>heap_remove</code>).</p>
+<details><summary>Resposta</summary><pre><code class="language-text">Heap: [90 78 61 12 33 5 45]
+BST, menor: 5 (3 nós)
+BST, maior: 90 (3 nós)
+Heap, maior: 90 (1 posição)
+Heap, menor: 5 (4 posições: as folhas)
+BST, busca 33: 3 nós
+Heap, busca 33: 5 posições
+BST em ordem: 5 12 33 45 61 78 90
+Heap esvaziado: 90 78 61 45 33 12 5
+</code></pre>
+<p>O heap só é bom no que ele promete: o maior em O(1). Menor e maior a qualquer
+momento, busca por uma chave qualquer e listagem em ordem são da BST (a
+listagem pelo heap <strong>destrói</strong> o heap; com um milhão de preços, olhar as
+folhas seria olhar meio milhão). Já &quot;atender sempre o pedido mais antigo de
+uma lista que muda&quot; é de um heap de mínimo pela hora do pedido. Para saber se
+um CPF está cadastrado, a BST ganha do heap, e no módulo 15 a tabela hash
+ganha das duas.</p>
+</details><p><strong>9. Heap de 1 a 7.</strong> Com o <code>heap.h</code>, insira 1, 2, 3, 4, 5, 6 e 7, nesta
+ordem, num heap de máximo vazio e mostre o vetor com <code>heap_mostra</code>. Remova o
+máximo duas vezes, mostrando o vetor depois de cada remoção.</p>
+<details><summary>Resposta</summary><pre><code class="language-text">[7 4 6 1 3 2 5]
+sem o 7: [6 4 5 1 3 2]
+sem o 6: [5 4 2 1 3]
+</code></pre>
+<p>Cada número novo entra no fim e sobe enquanto for maior que o pai, por isso o
+7 chega à raiz e o 1 vai parar na posição 3. Sem o 7, o último (5) vai para a
+raiz e desce pelo 6; sem o 6, o 2 vai para a raiz e desce pelo 5.</p>
+</details><p><strong>10. Os 10 maiores de um milhão.</strong> Gere um milhão de números, um de cada vez,
+com <code>x = i * 7919 % 1000003</code> para <code>i</code> de 1 a 1.000.000 (faça a conta em
+<code>long</code>), sem guardar todos. Mantenha um <strong>heap de mínimo</strong> com 10 posições: os
+10 primeiros enchem o heap; depois, cada número que for maior que a raiz
+entra no lugar dela e desce. No fim, mostre os 10 maiores do maior para o
+menor, quantos números entraram no lugar da raiz e quantos bytes o heap usa,
+comparando com guardar o milhão.</p>
+<details><summary>Resposta</summary><pre><code class="language-text">Os 10 maiores: 1000002 1000001 1000000 999999 999998 999997 999996 999995 999994 999993
+Trocas na raiz: 199
+Memória do heap: 40 bytes (guardar tudo: 4000000 bytes)
+</code></pre>
+<p>Cada número custa uma comparação com a raiz e, só quando entra, uma descida de
+log₂ 10 ≈ 3 níveis: O(n log 10). Ordenar tudo custaria O(n log n), uns 20
+milhões de comparações, e guardaria tudo; um heap de máximo com todos também
+guardaria tudo. O <code>desce</code> do heap de mínimo é o do <code>heap.c</code> com os sinais
+trocados (troca com o <strong>menor</strong> filho). Para mostrar do maior para o menor,
+tire a raiz 10 vezes guardando de trás para frente num vetor. É o exercício
+E611 em escala.</p>
+</details><h2>Questões do POSCOMP</h2>
+<p>Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.</p>
+<table>
+<thead>
+<tr>
+<th>Ano</th>
+<th>Questão</th>
+<th>Assunto</th>
+<th>Gabarito</th>
+<th>Prova</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2019</td>
+<td>23</td>
+<td>Terminologia e propriedades de árvores</td>
+<td>B</td>
+<td><a href="https://www.sbc.org.br/wp-content/uploads/2025/02/0518.002_Exame_POSCOMP_2019.pdf">caderno</a></td>
+</tr>
+<tr>
+<td>2023</td>
+<td>25</td>
+<td>Propriedades e operações de árvores binárias de busca</td>
+<td>E</td>
+<td><a href="https://www.sbc.org.br/wp-content/uploads/2025/02/0761.001_Exame_POSCOMP_2023.pdf">caderno</a></td>
+</tr>
+<tr>
+<td>2024</td>
+<td>26</td>
+<td>Caminhamento em árvore, raiz primeiro (pré-ordem)</td>
+<td>D</td>
+<td><a href="https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2024.pdf">caderno</a></td>
+</tr>
+</tbody></table>
+<p>O gabarito de 2023 vem de um blog de terceiros que reproduz o gabarito definitivo; confira no PDF oficial da SBC.</p>
+<h2>Questões de provas do PPGI</h2>
+<p>Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.</p>
+<p><strong>Edital 032/2016 · Questão 12</strong></p>
+<p>Marque a resposta correta. Ao inserirmos as chaves 1, 2 e 3, 4, 5, 6 em uma árvore AVL, sua altura (medida como a quantidade máxima de nós em um caminho entre a raiz e uma folha da árvore, incluindo a raiz e a folha na conta) será:</p>
+<ul>
+<li>a) 2</li>
+<li>b) 3</li>
+<li>c) 4</li>
+<li>d) 5</li>
+<li>e) 6</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>B.</strong> Inserir 1..6 dá raiz 4, esquerda 2(1,3), direita 5(-,6): 3 nós no maior caminho. Assunto 0101.</p>
+</details><p><strong>Edital 032/2016 · Questão 13</strong></p>
+<p>Sobre uma árvore binária de pesquisa sem balanceamento, pode-se afirmar que:</p>
+<p>I) São estruturas de dados que, quando degeneradas, têm custo de inserção proporcional ao número de chaves inseridas<br>II) Não servem para armazenar dados quando deseja-se ter acesso aos mesmos de maneira ordenada<br>III) Têm como principal custo extra de memória os dois apontadores que indicam os nós à esquerda e à direita de cada nó criado\</p>
+<p>Sobre as afirmações, sabe-se que:</p>
+<ul>
+<li>a) Apenas I é verdadeira</li>
+<li>b) Apenas I e II são verdadeiras</li>
+<li>c) Todas as afirmações são verdadeiras</li>
+<li>d) Apenas II e III são verdadeiras</li>
+<li>e) Nenhuma das alternativas anteriores está correta</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>E.</strong> I e III são verdadeiras, II é falsa, e &quot;I e III&quot; não está entre as letras. Assunto 0099.</p>
+</details><p><strong>Edital 032/2016 · Questão 14</strong></p>
+<p>Sobre árvores binárias de pesquisa sem balanceamento, pode-se afirmar que:</p>
+<p>I) É uma estrutura de dados inerentemente recursiva, sendo impossível implementar uma busca em uma árvore de maneira não recursiva<br>II) É uma estrutura de dados inerentemente recursiva, sendo impossível implementar uma inserção em uma árvore de maneira não recursiva<br>III) Em muitos casos práticos, pode ter custo de busca com número de operações proporcional a log n, onde n é o número de elementos inseridos na árvore\</p>
+<p>Sobre as afirmações, sabe-se que:</p>
+<ul>
+<li>a) Apenas I e II estão corretas</li>
+<li>b) Apenas III está correta</li>
+<li>c) Apenas I e III estão corretas</li>
+<li>d) Apenas II e III estão corretas</li>
+<li>e) Nenhuma das alternativas anteriores</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>B.</strong> I e II são falsas (busca e inserção têm versão iterativa); III é verdadeira (árvore razoavelmente balanceada). Assunto 0099.</p>
+</details><p><strong>Edital 032/2016 · Questão 15</strong></p>
+<p>Marque a resposta correta. Ao inserirmos as chaves 1, 2 e 3, 4, 5, 6 em uma árvore AVL, a diferença de altura entre as sub-árvores à esquerda e à direita do nó raiz será:</p>
+<ul>
+<li>a) 0</li>
+<li>b) 1</li>
+<li>c) 2</li>
+<li>d) 3</li>
+<li>e) 4</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> Mesma árvore da Q12: subárvore esquerda 2(1,3) e direita 5(-,6) têm altura 2, diferença 0. Assunto 0101.</p>
+</details><p><strong>Edital 053/2016 · Questão 03</strong></p>
+<p>As seguintes afirmações sobre árvores estão corretas, com EXCEÇÃO de:</p>
+<ul>
+<li>a) É um grafo conexo que admite ciclos.</li>
+<li>b) É um grafo conexo e há exatamente um caminho entre dois vértices quaisquer.</li>
+<li>c) Uma árvore com n vértices possui n-1 arestas.</li>
+<li>d) Toda árvore é um grafo, mas nem todo grafo é uma árvore.</li>
+<li>e) Uma união disjunta de árvores forma uma floresta</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> Árvore é grafo conexo e acíclico; &quot;admite ciclos&quot; é a exceção. Assunto 0097.</p>
+</details><p><strong>Edital 053/2016 · Questão 07</strong></p>
+<p>Considere a estrutura de dados Árvore Binária de Busca (ABB). Se inserirmos numa ABB inicialmente vazia os nós: 60, 10, 20, 80, 15, 75, 12 e 77, nessa ordem. Dado que a raiz encontra-se no nível 1, a altura da árvore e o nível do nó 15, respectivamente, serão:</p>
+<ul>
+<li>a) 5 e 4</li>
+<li>b) 5 e 5</li>
+<li>c) 6 e 5</li>
+<li>d) 6 e 4</li>
+<li>e) 7 e 3</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> Com raiz no nível 1: altura 5 (caminho 60-10-20-15-12), nível do 15 é 4; conferido em C. Assunto 0099.</p>
+</details><p><strong>Edital 053/2016 · Questão 11</strong></p>
+<p>As sequências que representam os percursos da árvore da figura em pós-ordem e in-ordem são, respectivamente:</p>
+<p><img src="_fontes/provas-figuras/2016-053/q11-arvore.png" alt="Questão 11 - árvore"></p>
+<ul>
+<li>a) P Q S T R e P Q S T R</li>
+<li>b) S T Q P R e S T Q R P</li>
+<li>c) S T Q R P e S Q T P R</li>
+<li>d) R P Q T S e S T Q R P</li>
+<li>e) P T Q R S e P Q S T R</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>C.</strong> Assunto 0098.</p>
+</details><p><strong>Edital 053/2016 · Questão 13</strong></p>
+<p>Em uma árvore AVL, todos os nós têm grau</p>
+<ul>
+<li>a) 0, 1 ou 2.</li>
+<li>b) divisível por 2.</li>
+<li>c) 2</li>
+<li>d) 1 e 2</li>
+<li>e) maior ou igual a 2.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> Nó de AVL é binário: grau 0, 1 ou 2. Assunto 0101.</p>
+</details><p><strong>Edital 053/2016 · Questão 14</strong></p>
+<p>A estrutura de dados conhecida como Árvore Binária de Busca (ABB) encontra diversas aplicações em soluções práticas. Sobre esta estrutura é CORRETO afirmar:</p>
+<ul>
+<li>a) Uma ABB é um conjunto finito de nós que possui um nó especial, chamado raiz, do qual partem os nós de duas árvores binárias distintas: a da esquerda e a da direita.</li>
+<li>b) Quando os elementos a serem inseridos na ABB estão em ordem crescente, resulta em uma ABB com altura mínima.</li>
+<li>c) Para se utilizar uma ABB como método de ordenação, basta fazer o caminhamento ou percurso &quot;em-ordem&quot; e obter todos os elementos ordenados.</li>
+<li>d) Uma característica que confere à ABB grande agilidade na pesquisa e recuperação de elementos é que seus nós são sempre rearranjados de forma que a árvore resultante é sempre perfeitamente balanceada.</li>
+<li>e) ABB são um caso especial de listas encadeadas em que nenhum nó aponta para mais de 2 sucessores.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> Assunto 0099.</p>
+</details><p><strong>Edital 053/2016 · Questão 16</strong></p>
+<p>Uma árvore AVL é uma árvore binária de busca com balanceamento automático que respeita algumas propriedades fundamentais. Como todas as árvores, ela tem uma propriedade chamada altura. Sabendo que a altura de uma folha é igual a um e que a altura de um nó pai é igual ao máximo das alturas de seus filhos mais um, qual estrutura NÃO pode representar uma árvore AVL?</p>
+<ul>
+<li>a) Uma árvore com três nós e altura igual a três</li>
+<li>b) Uma árvore com seis nós e altura igual a três</li>
+<li>c) Uma árvore com três nós e altura igual a dois</li>
+<li>d) Uma árvore vazia</li>
+<li>e) Uma árvore com dois nós</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> Três nós em altura 3 é cadeia, fator de balanceamento 2: não é AVL. Assunto 0101.</p>
+</details><p><strong>Edital 053/2016 · Questão 18</strong></p>
+<p>Considere as definições a seguir.</p>
+<p>I) O nível do nó raiz de uma árvore é 1.<br>II) O nível de qualquer nó subsequente é igual ao nível do seu nó pai mais 1.<br>III) A profundidade de uma árvore é igual ao maior nível encontrado dentre todos os seus nós\</p>
+<p>Partindo-se das premissas acima, a menor e a maior quantidade de nós, respectivamente, que poderiam existir em uma árvore binária de profundidade 4 são:</p>
+<ul>
+<li>a) 4 e 15</li>
+<li>b) 3 e 15</li>
+<li>c) 3 e 16</li>
+<li>d) 4 e 16</li>
+<li>e) 5 e 14</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> Mínimo é 1 nó por nível (4), máximo é 2^4-1 = 15. Assunto 0097.</p>
+</details><p><strong>Edital 053/2016 · Questão 19</strong></p>
+<p>Uma árvore binária completa tem no 5º nível uma quantidade de nós igual a</p>
+<ul>
+<li>a) 16</li>
+<li>b) 15</li>
+<li>c) 31</li>
+<li>d) 64</li>
+<li>e) 32</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> Nível 5 tem 2^(5-1) = 16 nós. Assunto 0097.</p>
+</details><p><strong>Edital 053/2016 · Questão 20</strong></p>
+<p>Considere uma árvore binária de busca cujos nós armazenam números inteiros variando de 1 a 100, na qual se quer buscar o número 54. Qual das seguintes sequências representa uma sequência de busca válida dentro desta árvore?</p>
+<ul>
+<li>a) 5, 18, 34, 60, 40, 52, 54</li>
+<li>b) 25, 27, 28, 26, 60, 50, 58, 54</li>
+<li>c) 37, 70, 32, &lt;não encontrou&gt;</li>
+<li>d) 40, 70, 43, 44, 73, 57, 54</li>
+<li>e) Nenhuma das alternativas anteriores</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> Só a sequência A respeita os limites da ABB em todos os passos (B, C e D violam). Assunto 0099.</p>
+</details><p><strong>Edital 024/2017 · Questão 01</strong></p>
+<p>Avaliando as seguintes sentenças a respeito de estrutura de dados:</p>
+<p>I. A diferença entre árvore binária de busca e árvores AVL é o fato de que a segunda pode se reconfigurar dinamicamente, com o intuito de manter um bom nível de balanceamento.<br>II. Uma pilha garante que o último elemento inserido seja localizado no seu topo. Porém, do ponto de vista conceitual, qualquer elemento da pilha pode ser removido, ainda que não esteja no seu topo.<br>III. Do ponto de vista conceitual, não há diferença alguma entre uma estrutura de array e uma lista encadeada.<br>IV. Tabelas hash são estruturas de dados indicadas para armazenar grande volume de dados. Apesar dessas estruturas permitirem acesso indexado, mais de um elemento pode ter o mesmo índice. Elementos com o mesmo índice podem ser armazenados em uma mesma lista encadeada.\</p>
+<p>É CORRETO afirmar que:</p>
+<ul>
+<li>a) apenas I e IV são verdadeiras.</li>
+<li>b) apenas I é verdadeira.</li>
+<li>c) apenas III e IV são verdadeiras.</li>
+<li>d) apenas II e III são verdadeiras.</li>
+<li>e) apenas I, II e IV são verdadeiras.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> I e IV verdadeiras; II falsa (pilha só remove do topo), III falsa (array é contíguo, lista não) Assunto 0101.</p>
+</details><p><strong>Edital 024/2017 · Questão 02</strong></p>
+<p>Marque a alternativa CORRETA.
+Qual dos algoritmos abaixo apresenta o menor custo (em termos de número comparações entre elementos) ao considerar-se, para cada algoritmo, a pior disposição possível para os elementos do vetor a ser ordenado. Considere que o vetor a ser ordenado é muito grande, acima de 1 milhão de elementos.</p>
+<ul>
+<li>a) Heapsort</li>
+<li>b) Quicksort</li>
+<li>c) Inserção</li>
+<li>d) Seleção</li>
+<li>e) Nenhuma das anteriores porque todos apresentam custo igual</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> pior caso: heapsort O(n log n); quicksort, inserção e seleção O(n²) Assunto 0103.</p>
+</details><p><strong>Edital 024/2017 · Questão 08</strong></p>
+<p>Considere as seguintes árvores onde são apresentados apenas os valores das chaves em cada nó, sem mostrar o valor de outros campos eventualmente existentes. Considerando em todos os casos que as árvores não estão em processo de rotação por inserção de chaves, estando portanto em seu estado final após a inserção do conjunto de chaves mostrado.</p>
+<p><img src="_fontes/provas-figuras/2017-024/q08-arvores.png" alt="Questão 08 - árvores (I) a (IV)"></p>
+<p>É CORRETO afirmar que:</p>
+<ul>
+<li>a) Apenas a árvore do quadro I poderia ser uma árvore AVL</li>
+<li>b) Todas as opções apresentadas nos quadros de I a IV podem ser exemplos de árvores AVL</li>
+<li>c) Nenhuma das 4 opções apresentadas podem ser exemplos de árvores AVL</li>
+<li>d) Apenas as opções I e III podem ser exemplos de árvores AVL</li>
+<li>e) Nenhuma das alternativas anteriores (de A até D) está correta</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>E.</strong> Assunto 0101.</p>
+</details><p><strong>Edital 024/2017 · Questão 10</strong></p>
+<p>Considere as seguintes árvores onde são apresentados apenas os valores das chaves em cada nó, sem mostrar o valor de outros campos eventualmente existentes. Considerando em todos os casos que as árvores não estão em processo de rotação por inserção de chaves, estando portanto em seu estado final após a inserção do conjunto de chaves mostrado.</p>
+<p><img src="_fontes/provas-figuras/2017-024/q10-arvores.png" alt="Questão 10 - árvores (I) a (IV)"></p>
+<p>É CORRETO afirmar que:</p>
+<ul>
+<li>a) Apenas a árvore do quadro I poderia ser uma árvore binária de pesquisa sem balanceamento</li>
+<li>b) Todas as 4 opções podem ser exemplos de árvores binárias de pesquisa sem balanceamento</li>
+<li>c) Nenhuma das 4 opções pode ser uma árvore binária de pesquisa sem balanceamento</li>
+<li>d) Apenas as opções II e III podem de árvores binárias de pesquisa sem balanceamento</li>
+<li>e) Nenhuma das alternativas anteriores (de A até D) está correta</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>E.</strong> Assunto 0099.</p>
+</details><p><strong>Edital 024/2017 · Questão 11</strong></p>
+<p>Sabendo que um arvore binária com 5 nós tem como resultados dos seus percursos pós-ordem e in-ordem, respectivamente S T Q R P e S Q T P R.
+É CORRETO afirmar:</p>
+<ul>
+<li>a) O nó raiz tem o valor P</li>
+<li>b) Q é um nó folha</li>
+<li>c) S é um nó interno</li>
+<li>d) T é filho de S</li>
+<li>e) Todas as alternativas estão corretas</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> pós-ordem dá raiz P; Q tem filhos S e T; S e T são folhas Assunto 0098.</p>
+</details><p><strong>Edital 024/2017 · Questão 16</strong></p>
+<p>Considere que o vetor a seguir é uma heap mínima (assuma índice do array iniciando em zero)</p>
+<p><code>4 5 7 10 13 11 15 22</code></p>
+<p>Marque a alternativa que contem a afirmativa CORRETA:</p>
+<ul>
+<li>a) Essa heap possui todos os nós folhas na mesma altura</li>
+<li>b) Ao alterar o valor 22 por 6, 2 trocas são necessárias para corrigir a heap</li>
+<li>c) O valor no índice 7 precisa ser necessariamente menor que o do índice 4</li>
+<li>d) O valor no índice 6 precisa ser obrigatoriamente maior que o do índice 1</li>
+<li>e) Ao alterar o valor 13 por 8, nada precisa ser feito para corrigir a heap</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>E.</strong> índice 4 (13) é folha com pai 5; trocar por 8 mantém a heap; em b só há 1 troca (6 sobe de 10, para abaixo de 5) Assunto 0102.</p>
+</details><p><strong>Edital 055/2017 · Questão 04</strong></p>
+<p>Observe a árvore binária de pesquisa sem balanceamento:</p>
+<p><img src="_fontes/provas-figuras/2017-055/q04-arvore.png" alt="Questão 04 - árvore"></p>
+<p>Considere as afirmativas a seguir.</p>
+<p>I. Os nós 6 e 8 são irmãos.<br>II. O nó 4 é uma das raízes da árvore.<br>III. O nó com valor 3, ao ser inserido, ocuparia a posição iv.<br>IV. O nó com valor 1, ao ser inserido, ocuparia a posição i.\</p>
+<p>Marque a alternativa CORRETA:</p>
+<ul>
+<li>A) Apenas a afirmativa III está correta.</li>
+<li>B) Apenas as afirmativas I e IV estão corretas.</li>
+<li>C) Apenas as afirmativas II e III estão corretas.</li>
+<li>D) Apenas as afirmativas I, II e IV estão corretas.</li>
+<li>E) Todas as afirmativas estão corretas.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>B.</strong> Assunto 0099.</p>
+</details><p><strong>Edital 055/2017 · Questão 07</strong></p>
+<p>Marque a alternativa CORRETA.
+Suponha que T seja uma árvore binária de pesquisa sem balanceamento inicialmente vazia, e considere a inserção dos elementos 30, 50, 60, 20, 40, 10 e 25 em T, exatamente nessa ordem. Qual das sequências abaixo corresponde a um percurso de T em pré-ordem?</p>
+<ul>
+<li>A) 30 50 60 40 20 25 10</li>
+<li>B) 10 25 20 40 60 50 30</li>
+<li>C) 10 20 25 30 40 50 60</li>
+<li>D) 30 20 10 25 50 40 60</li>
+<li>E) 60 50 40 30 25 20 10</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>D.</strong> raiz 30, esquerda 20 (10, 25), direita 50 (40, 60); pré-ordem 30 20 10 25 50 40 60 Assunto 0098.</p>
+</details><p><strong>Edital 055/2017 · Questão 16</strong></p>
+<p>Considere as seguintes árvores onde são apresentados apenas os valores das chaves em cada nó, sem mostrar o valor de outros campos eventualmente existentes. Além disso, note que em todos os casos, as árvores não estão em processo de rotação por inserção de chaves, estando portanto em seu estado final após a inserção do conjunto de chaves mostrado.</p>
+<p><img src="_fontes/provas-figuras/2017-055/q16-arvores.png" alt="Questão 16 - árvores (I) a (IV)"></p>
+<p>É CORRETO afirmar que:</p>
+<ul>
+<li>A) Apenas a árvore do quadro I poderia ser uma árvore AVL.</li>
+<li>B) Apenas a árvore III não poderia ser uma árvore AVL.</li>
+<li>C) Nenhuma das 4 opções apresentadas poderiam ser exemplos de árvores AVL.</li>
+<li>D) Apenas as opções I e II podem ser exemplos de árvores AVL.</li>
+<li>E) Nenhuma das alternativas anteriores (de A, B, C ou D) está correta.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>B.</strong> Assunto 0101.</p>
+</details><p><strong>Edital 055/2017 · Questão 20</strong></p>
+<p>Ao inserirmos as chaves 2, 4, 6, 8, 10 e 12, nessa ordem, em uma árvore AVL que estava originalmente vazia, a diferença de altura entre a sub-árvores que está à direita da raiz e a sub-árvore que está à esquerda da raiz será:</p>
+<ul>
+<li>A) 0.</li>
+<li>B) 2.</li>
+<li>C) 4.</li>
+<li>D) 6.</li>
+<li>E) 8.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> rodando AVL (programa em C): raiz 8, esquerda 4 (2, 6), direita 10 (12); diferença 0 Assunto 0101.</p>
+</details><p><strong>Edital 023/2018 · Questão 03</strong></p>
+<p>Analise as duas afirmativas a seguir, relacionadas a árvores de busca:</p>
+<p>I. Uma árvore AVL é uma árvore binária de busca autobalanceada que respeita algumas propriedades fundamentais.<br>II. Como todas as árvores, ela tem uma propriedade chamada altura, que é igual ao valor da altura de sua raiz.\</p>
+<p>Sabendo que a altura de uma folha é igual a um (01) e que a altura de um nó pai é igual ao máximo das alturas de seus filhos mais um, qual estrutura NÃO pode representar uma árvore AVL?</p>
+<ul>
+<li>a) Uma árvore vazia</li>
+<li>b) Uma árvore com dois nós</li>
+<li>c) Uma árvore com três nós e altura igual a dois</li>
+<li>d) Uma árvore com três nós e altura igual a três</li>
+<li>e) Uma árvore com seis nós e altura igual a três</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>D.</strong> Com folha de altura 1, três nós em altura três é uma cadeia, com fator de balanceamento 2 na raiz. Assunto 0101.</p>
+</details><p><strong>Edital 023/2018 · Questão 04</strong></p>
+<p>Um heap (fila de prioridade) é uma estrutura de dados muito importante, que tem duas utilidades principais: organizar acesso a um recurso com base na prioridade dos requerentes (processos, impressões, etc.) ou servir como base a um algoritmo de ordenação muito eficiente denominado heapsort. Para poder servir a esses propósitos, um heap possui uma série de propriedades especiais que têm que ser mantidas por todas as operações nelas realizadas. Levando em consideração estas propriedades, analise as afirmativas abaixo.</p>
+<p><img src="_fontes/provas-figuras/2018-023/q04-heaps.png" alt="Questão 04 - heaps (afirmativas I, II e III)"></p>
+<p>I. <code>50 40 49 39 45 46</code> representa um heap sintaticamente correto<br>II. Dado o heap <code>21 14 10 9 5</code>, a inserção do elemento 12 se dá através dos passos <code>21 14 10 9 5 12</code> ⇒ <code>21 14 12 9 5 10</code><br>III. Dado o heap <code>21 14 10 9 5</code>, a retirada do elemento do topo se dá através dos passos <code>5 14 10 9</code> ⇒ <code>14 5 12 9</code> ⇒ <code>14 9 12 5</code>\</p>
+<p>É CORRETO APENAS o que se afirma em:</p>
+<ul>
+<li>a) I.</li>
+<li>b) II.</li>
+<li>c) III.</li>
+<li>d) I e II.</li>
+<li>e) II e III.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>B.</strong> Assunto 0102.</p>
+</details><p><strong>Edital 023/2018 · Questão 06</strong></p>
+<p>Uma lista ordenada de N números é inserida em uma pilha e depois retirada, sendo que, a cada POP, o elemento retirado é inserido em uma árvore de busca binária. Após a completa inserção de todos os elementos nesta árvore, são feitas buscas de números na mesma. O tempo médio de busca de um número nesta árvore é</p>
+<ul>
+<li>a) O(1)</li>
+<li>b) O(log N)</li>
+<li>c) O(N)</li>
+<li>d) O(Nlog N)</li>
+<li>e) O(N2)</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>C.</strong> Lista ordenada pela pilha sai ordenada ao contrário e a ABB degenera em lista: busca O(N). Assunto 0099.</p>
+</details><p><strong>Edital 023/2018 · Questão 07</strong></p>
+<p>Assinale cada afirmativa abaixo como verdadeira (V) ou falsa (F). Em seguida, marque a opção que corresponde à sequência CORRETA.</p>
+<p>( ) Uma árvore não-vazia é balanceada AVL se, pelo menos, uma de suas árvores, esquerda ou direita, for balanceada AVL;
+( ) As árvores cheias são árvores balanceadas AVL;
+( ) Uma boa condição de balanceamento AVL deve assegurar que a altura de uma árvore com n nós é da ordem de O(log n);
+( ) Uma árvore AVL é uma árvore balanceada pela altura;
+( ) Ao inserir ou remover um item em uma árvore AVL, o custo adicional para balancear esta árvore é da ordem de O(n/2).</p>
+<ul>
+<li>a) V - V - F - V - V</li>
+<li>b) F - V - V - V - F</li>
+<li>c) V - F - F - V - F</li>
+<li>d) F - V - V - F - V</li>
+<li>e) F - F - V - V - F</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>B.</strong> F-V-V-V-F: AVL exige as duas subárvores AVL, cheias são AVL e o custo de balancear é O(log n), não O(n/2). Assunto 0101.</p>
+</details><p><strong>Edital 023/2018 · Questão 08</strong></p>
+<p>Considere uma estrutura do tipo árvore binária que começa vazia. Nela são introduzidos os números 2, 10, 5, 7, 1, 0 e 8, exatamente nessa ordem. Se essa árvore for lida em pós-ordem, que sequência de números será impressa?</p>
+<ul>
+<li>a) 2, 1, 0, 8, 7, 5, 10</li>
+<li>b) 2, 1, 0, 10, 5, 7, 8</li>
+<li>c) 0, 1, 8, 7, 5, 10, 2</li>
+<li>d) 0, 1, 2, 8, 7, 5, 10</li>
+<li>e) 0, 1, 2, 10, 5, 7, 8</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>C.</strong> Rodado em C: pós-ordem <code>0 1 8 7 5 10 2</code>. Assunto 0098.</p>
+</details><p><strong>Edital 023/2018 · Questão 10</strong></p>
+<p>Considere a seguinte árvore de pesquisa binária:</p>
+<p><img src="_fontes/provas-figuras/2018-023/q10-arvore.png" alt="Questão 10 - árvore de pesquisa binária"></p>
+<p>Ao executarmos o procedimento de remoção da raiz, na nova árvore binária de busca, teremos como novo nó raiz:</p>
+<ul>
+<li>a) 11</li>
+<li>b) 2</li>
+<li>c) 17</li>
+<li>d) 18</li>
+<li>e) Nenhuma das anteriores</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>D.</strong> Assunto 0100.</p>
+</details><p><strong>Edital 023/2018 · Questão 15</strong></p>
+<p>As árvores são estruturas de dados poderosas e se subdividem em vários tipos, cada um dos quais com suas características próprias. Relacione os tipos de árvores, apresentados na coluna da esquerda, com as suas respectivas características, indicadas na coluna da direita:</p>
+<table>
+<thead>
+<tr>
+<th>Tipo de árvore</th>
+<th>Característica</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>I – Heap</td>
+<td>W – Pode degenerar se os elementos forem inseridos de forma ordenada.</td>
+</tr>
+<tr>
+<td>II – Rubro-Negra</td>
+<td>X – É balanceada.</td>
+</tr>
+<tr>
+<td>III – Avore AVL</td>
+<td>Y – Têm altura sempre proporcional/próxima a O(log2 n), onde n é o número de nós que contém.</td>
+</tr>
+<tr>
+<td>IV – Árvores binária de busca</td>
+<td>Z – São sempre completas.</td>
+</tr>
+</tbody></table>
+<p>Estão CORRETAS as associações:</p>
+<ul>
+<li>a) I–X, IV–Z, II–Y</li>
+<li>b) I–Z, IV–X, III–W</li>
+<li>c) I–Z, IV–X, III–Y</li>
+<li>d) I–Y, IV–W, III–X</li>
+<li>e) I–X, IV–W, II–Y</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>D.</strong> Heap com altura log n, ABB que degenera, AVL balanceada. Ver observação. Assunto 0101.</p>
+</details><p><strong>Edital 023/2018 · Questão 16</strong></p>
+<p>Sobre o algoritmo de ordenação heapsort, marque a alternativa CORRETA:</p>
+<ul>
+<li>a) Utiliza ordenação por árvore de decisão, ao invés de ordenação por comparação</li>
+<li>b) A estrutura de dados que utiliza, chamada heap, pode ser interpretada como uma árvore binária</li>
+<li>c) Seu desempenho de pior caso é pior do que o do algoritmo quicksort</li>
+<li>d) Todas as alternativas estão corretas</li>
+<li>e) Nenhuma das alternativas está correta</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>B.</strong> O heap é uma árvore binária em vetor; o pior caso do heapsort é O(n log n), melhor que o do quicksort. Assunto 0103.</p>
+</details><p><strong>Edital 061/2018 · Questão 05</strong></p>
+<p>A árvore binária de busca, formada pela inserção dos números 100, 80, 25, 72, 23, 42 e 5, nesta ordem, terá como nós folha os números <strong>I</strong> e <strong>II</strong>, e como pai do nó 72 o número <strong>III</strong>. As lacunas I, II e III são preenchidas CORRETAMENTE e, respectivamente, por:</p>
+<ul>
+<li>a) 100 – 80 – 100</li>
+<li>b) 5 – 42 – 25</li>
+<li>c) 23 – 25 – 72</li>
+<li>d) 25 – 72 – 100</li>
+<li>e) 72 – 5 – 23</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>B.</strong> Folhas 5 e 42, pai do 72 é o 25. Assunto 0099.</p>
+</details><p><strong>Edital 061/2018 · Questão 13</strong></p>
+<p>Suponha que uma Árvore Binária de Busca possui números entre 1 e 1000 e que se quer procurar pelo número 363. Qual sequência abaixo NÃO poderia ser a sequência de nós examinados?</p>
+<ul>
+<li>a) 2, 252, 401, 398, 330, 344, 397, 363.</li>
+<li>b) 924, 220, 911, 244, 898, 258, 362, 363.</li>
+<li>c) 925, 202, 911, 240, 912, 245, 363.</li>
+<li>d) 2, 399, 387, 219, 266, 382, 381, 278, 363.</li>
+<li>e) 935, 278, 347, 621, 350, 392, 358, 363.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>C.</strong> Só a C é impossível: após 911 vem 240 (à direita de 202, esquerda de 911), e o 912 sairia do intervalo (240, 911). A nova E é válida (350, 392, 358 cabem). Assunto 0099.</p>
+</details><p><strong>Edital 061/2018 · Questão 15</strong></p>
+<p>Se em uma árvore binária de pesquisa a diferença de altura entre a subárvore à esquerda e a subarvore à direita de um dos nós for maior que 1, pode-se concluir que:</p>
+<ul>
+<li>a) A árvore é uma árvore AVL.</li>
+<li>b) Trata-se com certeza de uma árvore binária sem balanceamento.</li>
+<li>c) Trata-se com certeza de uma árvore vermelho e preto.</li>
+<li>d) Tal árvore não pode existir por não se tratar de uma árvore binária de pesquisa.</li>
+<li>e) Nenhuma das alternativas anteriores está correta.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>E.</strong> A ABB com diferença maior que 1 não é AVL, mas pode ser rubro-negra: nada se conclui com certeza. Assunto 0101.</p>
+</details><p><strong>Edital 061/2018 · Questão 19</strong></p>
+<p>Quanto ao algoritmo e estrutura de dados no caso de árvore AVL, analise as afirmativas abaixo como verdadeiras (V) ou falsas (F) e assinale a alternativa que apresenta a sequência CORRETA de cima para baixo:</p>
+<p>( ) Uma árvore AVL é dita balanceada quando, para cada nó da árvore, a diferença entre as alturas das suas sub-árvores (direita e esquerda) não é maior do que um.
+( ) Caso haja diferença de altura maior que 1 ente as sub-árvores à direita e à esquerda de qualquer nó, é necessário que se realizem rotações com o objetivo de reduzir tal diferença.
+( ) A operação de rotação realizada em um ponto da árvore, após a inserção, pode resultar em uma árvore ainda desbalanceada, podendo ser necessária a realização de novas rotações que, na pior das hipóteses, podem ser propagadas até a raiz.</p>
+<ul>
+<li>a) F-V-V</li>
+<li>b) F-F-V</li>
+<li>c) V-F-F</li>
+<li>d) V-V-F</li>
+<li>e) V-V-V</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>D.</strong> V-V-F: após inserção uma rotação (simples ou dupla) basta; a propagação até a raiz é da remoção. Assunto 0101.</p>
+</details><p><strong>Edital 033/2019 · Questão 02</strong></p>
+<p>A parte essencial do Heap Sort é a construção do heap máximo. Considerando a árvore mostrada abaixo, o nó 24 viola a propriedade do heap máximo. Uma vez que o procedimento de heap é aplicado a ele, em que posição ele estará?</p>
+<p><img src="_fontes/provas-figuras/2019-033/q02-heap.png" alt="Questão 02 - heap com posições numeradas"></p>
+<ul>
+<li>a) 4</li>
+<li>b) 5</li>
+<li>c) 8</li>
+<li>d) 9</li>
+<li>e) 6</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>D.</strong> Assunto 0102.</p>
+</details><p><strong>Edital 033/2019 · Questão 04</strong></p>
+<p>A figura abaixo mostra uma árvore B de ordem 5. Qual é o resultado da remoção do nó 130 dessa árvore?</p>
+<p><img src="_fontes/provas-figuras/2019-033/q04-arvore-b.png" alt="Questão 04 - árvore B de ordem 5"></p>
+<p>Alternativas a) e b):</p>
+<p><img src="_fontes/provas-figuras/2019-033/q04-opcoes-ab.png" alt="Questão 04 - alternativas a) e b)"></p>
+<p>Alternativas c) e d):</p>
+<p><img src="_fontes/provas-figuras/2019-033/q04-opcoes-cd.png" alt="Questão 04 - alternativas c) e d)"></p>
+<ul>
+<li>e) Nenhuma das anteriores</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>C.</strong> Folha <code>110</code> fica com 1 chave; irmãos têm o mínimo (2) e não emprestam, então funde com a direita: <code>110 140 144 156</code>, raiz <code>100 160</code>. Assunto 0097.</p>
+</details><p><strong>Edital 033/2019 · Questão 08</strong></p>
+<p>Quais são, respectivamente, o pior caso e o caso médio de uma árvore de busca binária em termos de complexidade?</p>
+<ul>
+<li>a) O(n), O(n)</li>
+<li>b) O(logn), O(logn)</li>
+<li>c) O(logn), O(n)</li>
+<li>d) O(n), O(logn)</li>
+<li>e) Nenhuma das respostas anteriores.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>D.</strong> ABB sem balanceamento: pior caso O(n), caso médio O(log n). Assunto 0099.</p>
+</details><p><strong>Edital 033/2019 · Questão 09</strong></p>
+<p>Uma árvore B de ordem 4 e de altura 3, onde ordem é o número máximo de filhos em cada nó, terá um máximo de chaves igual a?</p>
+<ul>
+<li>a) 255</li>
+<li>b) 63</li>
+<li>c) 127</li>
+<li>d) 188</li>
+<li>e) 256</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> Ordem 4 (4 filhos, 3 chaves), altura 3 em arestas (Cormen): 1+4+16+64 = 85 nós, 85 x 3 = 255 chaves. Assunto 0097.</p>
+</details><p><strong>Edital 033/2019 · Questão 12</strong></p>
+<p>Qual é a altura máxima de qualquer árvore AVL com 7 nós? Assuma que a altura de uma árvore com um único nó seja 0.</p>
+<ul>
+<li>a) 2</li>
+<li>b) 3</li>
+<li>c) 4</li>
+<li>d) 5</li>
+<li>e) 6</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>B.</strong> Mínimo de nós por altura em AVL: 1, 2, 4, 7; 7 nós cabem em altura 3 (nó único = 0). Assunto 0101.</p>
+</details><p><strong>Edital 033/2019 · Questão 16</strong></p>
+<p>Ao se representar a heap máxima da figura abaixo em um array, a ordem dos elementos no array será a seguinte:</p>
+<p><img src="_fontes/provas-figuras/2019-033/q16-heap-maxima.png" alt="Questão 16 - heap máxima"></p>
+<ul>
+<li>a) 88 66 33 44 30 22 5 77 55 75</li>
+<li>b) 86 77 55 75 66 33 44 30 22 5</li>
+<li>c) 86 77 75 66 55 44 33 30 22 5</li>
+<li>d) 5 22 30 75 55 44 33 77 66 86</li>
+<li>e) 88 66 77 33 44 55 75 30 22 5</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>E.</strong> Array por níveis: 88 66 77 33 44 55 75 30 22 5. Assunto 0102.</p>
+</details><p><strong>Edital 033/2019 · Questão 19</strong></p>
+<p>Ao se construir uma árvore AVL, inicialmente vazia, com as seguintes chaves na ordem indicada - 2, 3, 5, 6, 9, 8, 7, 4, 1 – e sabendo que que se uma inserção fizer com que a árvore fique desequilibrada, é necessário executar as rotações para manter o equilíbrio, o resultado final da árvore AVL é:</p>
+<p><img src="_fontes/provas-figuras/2019-033/q19-arvores.png" alt="Questão 19 - alternativas a) a d)"></p>
+<ul>
+<li>e) Nenhuma das alternativas anteriores</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> Rodado em C: raiz 6; 3 e 8; 2, 5, 7, 9; 1, 4. Assunto 0101.</p>
+</details><p><strong>Edital 033/2019 · Questão 20</strong></p>
+<p>Sobre as afirmações abaixo, marque a alternativa CORRETA</p>
+<p>I. A subárvore da raiz de um árvore vermelho e preto é sempre uma árvore vermelha e preta.<br>II. O irmão de uma referência de filho nulo em uma árvore vermelha e preta é outra referência de filho nulo ou um nó vermelho.<br>III. A pior complexidade de tempo da operação de inserção em uma árvore AVL é O(log n), onde n é o número de nós na árvore.\</p>
+<ul>
+<li>a) Somente a sentença I está correta</li>
+<li>b) As sentenças II e III estão correta</li>
+<li>c) Somente a sentença III está correta</li>
+<li>d) As sentenças I e III estão correta</li>
+<li>e) Somente a sentença II está correta</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>B.</strong> I falsa (a raiz de uma subárvore pode ser vermelha); II e III verdadeiras. Assunto 0101.</p>
+</details><p><strong>Edital 060/2019 · Questão 02</strong></p>
+<p>Dado os seguintes elementos (10, 20, 15, 25, 30, 16, 18, 19), qual desenho representa uma árvore AVL, inicialmente vazia, que é preenchida com esses elementos, na ordem apresentada, e que tem as devidas rotações efetuadas?</p>
+<p><img src="_fontes/provas-figuras/2019-060/q02-arvores.png" alt="Questão 02 - árvores (1) a (4)"></p>
+<ul>
+<li>a) 1</li>
+<li>b) 2</li>
+<li>c) 3</li>
+<li>d) 4</li>
+<li>e) Nenhuma das árvores desenhadas representa uma AVL</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> Assunto 0101.</p>
+</details><p><strong>Edital 060/2019 · Questão 09</strong></p>
+<p>Qual das afirmações a seguir é VERDADEIRA sobre árvores rubro-negra (vermelho e preto)?</p>
+<ul>
+<li>a) O caminho do nó raiz até o nó folha mais distante não é maior que o dobro do número de nós do caminho da raiz para a folha mais próxima</li>
+<li>b) O caminho do nó raiz para um nó folha ou para um nó nulo deve conter o mesmo número de nós pretos e vermelhos.</li>
+<li>c) A raiz pode ser vermelha</li>
+<li>d) Se um nó for vermelho, os nós filhos somente serão pretos. O inverso também acontece, ou seja, se um nó for preto, seus nós filhos somente serão vermelhos.</li>
+<li>e) Nenhumas das afirmações é verdadeira</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> Propriedade da rubro-negra: caminho mais longo no máximo o dobro do mais curto. Assunto 0101.</p>
+</details><p><strong>Edital 060/2019 · Questão 12</strong></p>
+<p>Quais das seguintes árvores abaixo respeita as regras básicas de balanceamento de árvores AVL?</p>
+<p><img src="_fontes/provas-figuras/2019-060/q12-arvores.png" alt="Questão 12 - árvores (A), (B) e (C)"></p>
+<ul>
+<li>a) Somente B</li>
+<li>b) A, B e C</li>
+<li>c) B e C</li>
+<li>d) A e C</li>
+<li>e) Nenhuma das árvores é AVL</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>D.</strong> A e C respeitam o fator de balanceamento; em B, o 50 fica com subárvore esquerda de altura 2 e direita vazia. Assunto 0101.</p>
+</details><p><strong>Edital 060/2019 · Questão 15</strong></p>
+<p>Comparando árvores AVL e rubro-negras, qual das seguintes afirmações é VERDADEIRA:</p>
+<ul>
+<li>a) As árvores AVL tendem a ter altura menor em comparação com as árvores rubro-negras, mas podem causar mais rotações durante operações de inserção e exclusão.</li>
+<li>b) As alturas das árvores AVL e rubro-negras são as mesmas, mas as árvores AVL podem causar mais rotações durante a inserção e exclusão.</li>
+<li>c) As árvores rubro-negras tendem a ter altura menor em comparação com as árvores AVL, mas podem causar mais rotações durante a inserção e exclusão.</li>
+<li>d) As alturas das árvores AVL e rubro-negras são as mesmas, mas as árvores rubro-negras podem causar mais rotações durante a inserção e exclusão.</li>
+<li>e) Todas as afirmações anteriores são falsas</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> AVL é mais rígida (altura menor) e rotaciona mais. Assunto 0101.</p>
+</details><h2>Para ler mais</h2>
+<ul>
+<li>CORMEN, T. H.; LEISERSON, C. E.; RIVEST, R. L.; STEIN, C. <em>Algoritmos: teoria e prática</em>. 4. ed. Rio de Janeiro: GEN LTC, 2024. Caps. 6 (heapsort e filas de prioridade), 12 (árvores de busca binária), 13 (árvores rubro-negras) e 18 (árvores B); problema 13-3 (árvores AVL).</li>
+<li>ZIVIANI, N. <em>Projeto de algoritmos: com implementações em Pascal e C</em>. 3. ed. São Paulo: Cengage Learning, 2010. Caps. 5 (pesquisa em memória primária: árvores de pesquisa) e 6 (árvores B).</li>
+<li>FEOFILOFF, P. <em>Algoritmos em linguagem C</em>. Rio de Janeiro: Elsevier, 2009. Capítulos sobre heapsort, árvores binárias e árvores binárias de busca.</li>
+<li>CELES, W.; RANGEL, J. L. <em>Apostila de estruturas de dados</em>. Rio de Janeiro: PUC-Rio, 2002. Capítulos sobre árvores e árvores binárias de busca.</li>
+<li>CELES, W.; CERQUEIRA, R.; RANGEL, J. L. <em>Introdução a estruturas de dados: com técnicas de programação em C</em>. 2. ed. Rio de Janeiro: Elsevier, 2016.</li>
+<li>TENENBAUM, A. M.; LANGSAM, Y.; AUGENSTEIN, M. J. <em>Estruturas de dados usando C</em>. São Paulo: Makron Books, 1995. Caps. 5 (árvores), 6 (classificação: heapsort) e 7 (busca: árvores balanceadas).</li>
+<li>DEITEL, P.; DEITEL, H. <em>C: como programar</em>. 6. ed. São Paulo: Pearson, 2011. Cap. 12: estruturas de dados (árvores binárias de busca).</li>
+<li>LAUREANO, M. <em>Estrutura de dados com algoritmos e C</em>. Rio de Janeiro: Brasport, 2008. Capítulo sobre árvores.</li>
+<li>ROCHA, A. M. A.; BORGES, A. R. O. S. <em>Programação, estruturas de dados e algoritmos em C</em>. Aveiro: Universidade de Aveiro. Apostila.</li>
+<li>ADELSON-VELSKY, G. M.; LANDIS, E. M. An algorithm for the organization of information. <em>Soviet Mathematics Doklady</em>, v. 3, p. 1259-1263, 1962.</li>
+<li>KERNIGHAN, B. W.; RITCHIE, D. M. <em>C: a linguagem de programação padrão ANSI</em>. Rio de Janeiro: Campus, 1989. Seção 6.5: estruturas autorreferenciadas (a árvore de palavras).</li>
+<li>CPPREFERENCE. <em>qsort, qsort_s</em>. Disponível em: <a href="https://en.cppreference.com/w/c/algorithm/qsort">https://en.cppreference.com/w/c/algorithm/qsort</a>.</li>
+</ul>

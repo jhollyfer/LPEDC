@@ -1,0 +1,80 @@
+<h2>0014 · if</h2>
+<p>Com as comparações (0012) e os operadores lógicos (0013), o programa já
+sabe fazer perguntas e calcular a resposta, mas ainda não sabe agir
+diferente conforme ela. Todo programa até aqui executava as mesmas linhas,
+sempre. O <code>if</code> é o primeiro comando que muda o caminho: ele deixa um trecho
+rodar só quando uma condição é verdadeira.</p>
+<p>Pense no caixa do mercado com a placa: compras a partir de R$ 200 ganham
+10% de desconto. A operadora soma tudo e olha o total. Se passou de
+R$ 200, ela faz um passo a mais e aplica o desconto. Se não passou, não faz
+nada de especial e segue para o pagamento. O passo extra depende da
+resposta; o resto acontece de qualquer jeito.</p>
+<p>Esse &quot;só se&quot; é o <strong><code>if</code></strong>, a <strong>seleção simples</strong>. Quando a condição é
+verdadeira, o programa executa o bloco do <code>if</code>; quando é falsa, pula o
+bloco inteiro e continua na linha seguinte. É um passo extra ou nada
+(DEITEL; DEITEL, 2011, cap. 3). Não há &quot;senão&quot; aqui; ele chega no 0015.</p>
+<pre><code class="language-c">if (condição) {
+    // só roda quando a condição é verdadeira
+}
+// daqui em diante roda sempre
+</code></pre>
+<p>A <strong>condição</strong> vem entre parênteses e pode ser qualquer expressão que dê um
+número. Pode ser uma comparação, como <code>total &gt;= 200</code>; uma combinação lógica,
+como <code>idade &gt;= 18 &amp;&amp; tem_cnh</code>; ou uma variável sozinha. Vale a regra do
+0012: <strong>zero é falso, o resto é verdade</strong> (BACKES, 2013, cap. 4). Assim,
+<code>if (saldo)</code> equivale a <code>if (saldo != 0)</code>, e <code>if (!saldo)</code> equivale a
+<code>if (saldo == 0)</code>. As duas formas funcionam; a segunda deixa a pergunta
+mais explícita.</p>
+<p>O <strong>bloco</strong> é o trecho entre chaves, e ele aceita quantas instruções você
+quiser. Tudo o que está entre a <code>{</code> e a <code>}</code> roda junto, ou nada roda. Sem
+chaves, o <code>if</code> controla <strong>uma</strong> instrução só: a primeira que vem depois
+dele (BACKES, 2013, cap. 4). A linha seguinte já está fora do <code>if</code>, mesmo
+que pareça dentro.</p>
+<pre><code class="language-c">if (total &gt;= 200)
+    total = total * 0.9;   // depende do if
+printf(&quot;Pronto\n&quot;);        // NÃO depende, apesar de qualquer recuo
+</code></pre>
+<p>O que engana é o <strong>recuo</strong>, os espaços no começo da linha. Ele existe só
+para quem lê; o compilador o ignora por completo. Se você acrescentar uma
+segunda linha recuada debaixo de um <code>if</code> sem chaves, ela parece fazer parte
+do <code>if</code>, mas roda sempre. Por isso o curso usa <strong>chaves sempre</strong>, mesmo
+quando o bloco tem uma linha só (KERNIGHAN; RITCHIE, 1988, cap. 3). Com as
+chaves, acrescentar uma linha depois não muda o sentido do código.</p>
+<p>Um último detalhe sobre a condição: ela é avaliada uma vez, no momento em
+que o programa chega ao <code>if</code>. Se <code>total</code> mudar depois, o <code>if</code> não volta
+atrás. No exemplo do mercado, o desconto multiplica o total por 0,9 dentro
+do bloco, e a linha que mostra o valor final, fora do bloco, enxerga o
+total já atualizado ou o original, conforme o caminho tomado.</p>
+<blockquote>
+<p>[!WARNING]
+<strong>O <code>;</code> depois do <code>if</code> mata a condição.</strong> Em <code>if (total &gt;= 200);</code>, o <code>;</code>
+é uma <strong>instrução vazia</strong> e vira o corpo; o bloco seguinte roda
+<strong>sempre</strong>, e todo mundo ganha desconto. O <code>-Wextra</code> avisa (&quot;suggest
+braces around empty body&quot;). No fim da linha do <code>if</code> nunca vai <code>;</code>.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>No mercado, compras a partir de R$ 200 ganham 10% de desconto. Entram
+R$ 230, a resposta é Sim e o valor final é R$ 207; com Não, a seta cinza iria
+direto ao final (<code>%%</code> mostra um <code>%</code> no <code>printf</code>):</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    double total = 230.0;
+
+    printf(&quot;Total: R$ %.2f\n&quot;, total);
+    if (total &gt;= 200) {
+        total = total * 0.9; // 10% de desconto
+        printf(&quot;Desconto de 10%% aplicado!\n&quot;);
+    }
+    printf(&quot;A pagar: R$ %.2f\n&quot;, total);
+    return 0;
+}
+// Saída:
+// Total: R$ 230.00
+// Desconto de 10% aplicado!
+// A pagar: R$ 207.00
+</code></pre>
+<p>A saída Não do losango não faz nada: vai direto ao &quot;Mostrar&quot;, onde o Sim chega
+depois do desconto:</p>
+<p>{{fluxograma}}</p>

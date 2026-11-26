@@ -1,0 +1,198 @@
+<h2>0115 · Teorema mestre</h2>
+<p>Montar a árvore de recursão do assunto 0114 para cada algoritmo funciona, mas
+cansa. Na declaração do Imposto de Renda, você não refaz a conta da alíquota:
+acha a sua faixa na tabela e lê o resultado. O <strong>teorema mestre</strong> é essa
+tabela para as recorrências de divisão e conquista: alguém já somou a árvore
+em geral, e o resultado cabe em três linhas (CORMEN et al., 2024, cap. 4).</p>
+<p>A forma mais usada, simplificada, é esta:</p>
+<pre><code class="language-text">T(n) = a T(n/b) + n^k
+</code></pre>
+<p>Cada letra responde uma das perguntas do 0114. O <code>a</code>, que vale pelo menos 1,
+é <strong>quantas chamadas</strong> cada chamada faz. O <code>b</code>, maior que 1, é <strong>quanto o
+tamanho encolhe</strong>: cada chamada recebe <code>n/b</code>. E <code>n^k</code> é o <strong>trabalho fora das
+chamadas</strong>: <code>k = 0</code> quer dizer trabalho constante, <code>k = 1</code> quer dizer
+trabalho linear (LINTZMAYER; MOTA, 2023). O merge sort, com duas metades e uma
+intercalação linear, tem <code>a = 2</code>, <code>b = 2</code> e <code>k = 1</code>.</p>
+<p>Para ver de onde vêm as três linhas, monte a árvore dessa forma geral. O nível
+<code>j</code> tem <code>a^j</code> chamadas, cada uma com tamanho <code>n/b^j</code>, e cada uma trabalha
+<code>(n/b^j)^k</code>. Multiplicando, o nível <code>j</code> custa <code>n^k · (a/b^k)^j</code>. Repare no que
+isso diz: de um nível para o seguinte, o custo é multiplicado sempre pelo
+mesmo número, a razão <code>a/b^k</code> (LINTZMAYER; MOTA, 2023). Toda a análise se
+resume a comparar <code>a</code> com <code>b^k</code>, e só há três possibilidades.</p>
+<p>Se <code>a &gt; b^k</code>, a razão passa de 1 e o custo <strong>cresce</strong> a cada nível. O último
+nível, o das folhas, manda no total: ele tem <code>a^(log_b n) = n^(log_b a)</code> folhas,
+e os níveis de cima somam só um múltiplo fixo dele. O resultado é
+Θ(n^(log_b a)). Se <code>a = b^k</code>, a razão é 1 e todo nível custa o mesmo <code>n^k</code>.
+São <code>log_b n + 1</code> níveis, e o total é Θ(n^k log n). Se <code>a &lt; b^k</code>, a razão fica
+abaixo de 1 e o custo <strong>cai</strong> a cada nível. A raiz sozinha já é uma fração
+fixa do total, e o resultado é Θ(n^k).</p>
+<table>
+<thead>
+<tr>
+<th>caso</th>
+<th>comparação</th>
+<th>o custo por nível...</th>
+<th>quem pesa</th>
+<th>resultado</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><code>a &gt; b^k</code></td>
+<td><strong>cresce</strong> a cada nível</td>
+<td>as folhas</td>
+<td>Θ(n^(log_b a))</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>a = b^k</code></td>
+<td>fica <strong>igual</strong></td>
+<td>todos os níveis</td>
+<td>Θ(n^k log n)</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>a &lt; b^k</code></td>
+<td><strong>cai</strong> a cada nível</td>
+<td>a raiz</td>
+<td>Θ(n^k)</td>
+</tr>
+</tbody></table>
+<p>Aplicar é ler <code>a</code>, <code>b</code> e <code>k</code> no código, calcular <code>b^k</code> e achar a linha. A
+busca binária faz uma chamada com metade e trabalho constante: <code>a = 1</code>,
+<code>b^k = 2^0 = 1</code>, caso 2, Θ(log n). O merge sort tem <code>a = 2</code> e <code>b^k = 2</code>, caso
+2, Θ(n log n). A multiplicação de polinômios de Karatsuba faz 3 produtos de
+metade do tamanho com trabalho linear: <code>a = 3 &gt; 2</code>, caso 1, Θ(n^(log₂ 3)), que
+é cerca de Θ(n^1,585).</p>
+<table>
+<thead>
+<tr>
+<th>algoritmo</th>
+<th>a</th>
+<th>b</th>
+<th>k</th>
+<th>b^k</th>
+<th>resultado</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>busca binária</td>
+<td>1</td>
+<td>2</td>
+<td>0</td>
+<td>1</td>
+<td>caso 2: Θ(log n)</td>
+</tr>
+<tr>
+<td>máximo dividindo ao meio</td>
+<td>2</td>
+<td>2</td>
+<td>0</td>
+<td>1</td>
+<td>caso 1: Θ(n)</td>
+</tr>
+<tr>
+<td>merge sort</td>
+<td>2</td>
+<td>2</td>
+<td>1</td>
+<td>2</td>
+<td>caso 2: Θ(n log n)</td>
+</tr>
+<tr>
+<td>multiplicar polinômios com 3 produtos (Karatsuba)</td>
+<td>3</td>
+<td>2</td>
+<td>1</td>
+<td>2</td>
+<td>caso 1: Θ(n^1,585)</td>
+</tr>
+<tr>
+<td>algo que lê tudo e segue numa metade</td>
+<td>1</td>
+<td>2</td>
+<td>1</td>
+<td>2</td>
+<td>caso 3: Θ(n)</td>
+</tr>
+</tbody></table>
+<p>O Cormen enuncia o teorema numa forma mais geral, <code>T(n) = a T(n/b) + f(n)</code>,
+em que o trabalho <code>f(n)</code> pode ser qualquer função e é comparado com
+<code>n^(log_b a)</code>, o número de folhas. No caso 1, <code>f(n)</code> fica abaixo de
+<code>n^(log_b a)</code> por um fator polinomial, e as folhas mandam. No caso 2, <code>f(n)</code>
+é Θ(n^(log_b a) · logᵖ n) com p ≥ 0, e o resultado ganha mais um fator de log:
+Θ(n^(log_b a) · log^(p+1) n). Com p = 1, <code>2 T(n/2) + n log n</code> dá
+Θ(n log² n), o que o exemplo A230 mede. No caso 3, <code>f(n)</code> fica acima por um
+fator polinomial <strong>e</strong> precisa cumprir a condição de regularidade
+<code>a f(n/b) ≤ c f(n)</code> para alguma constante c &lt; 1; aí o resultado é Θ(f(n))
+(CORMEN et al., 2024, cap. 4).</p>
+<p>O teorema não cobre tudo. Em <code>T(n) = T(n-1) + n</code>, o tamanho cai subtraindo, e
+não existe <code>b</code>. Em <code>T(n) = T(n/3) + T(2n/3) + n</code>, os pedaços têm tamanhos
+diferentes. Nesses casos, volte à árvore de recursão, que sempre funciona
+(LINTZMAYER; MOTA, 2023).</p>
+<p>Um detalhe do C. O <code>n / 2</code> no código é divisão inteira, e arredondar para cima
+ou para baixo não muda o Θ (CORMEN et al., 2024, cap. 4). O que muda é o caso
+base: com <code>if (n == 1)</code>, uma chamada com <code>n = 0</code> passa reto, <code>0 / 2</code> dá 0 de
+novo e a pilha estoura. Prefira <code>if (n &lt;= 1)</code>.</p>
+<blockquote>
+<p>[!WARNING]
+Quatro estagiários com metade cada um é <code>4 T(n/2)</code>, não <code>4 T(n/4)</code>. Em
+<code>T(n) = 2 T(n-1) + 1</code> (Hanói) não existe <code>b</code>: <code>n - 1</code> não é <code>n</code> dividido por
+nada. Use a árvore, que dá Θ(2ⁿ).</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>Um revisor lê as <code>n</code> páginas de um contrato e repassa <strong>metade</strong> a <code>a</code>
+estagiários, que fazem o mesmo. Com <code>b = 2</code> e <code>k = 1</code>, <code>b^k = 2</code>, e <code>a = 1</code>,
+2 ou 4 cai numa linha diferente. O desenho mostra cada árvore para <code>n = 16</code>:</p>
+<p>{{ideia}}</p>
+<p>O código faz as <code>a</code> chamadas de verdade e, no fim, dobra o <code>n</code> para ver por
+quanto o total é multiplicado:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// o revisor lê as n páginas e repassa metade do contrato para &#39;a&#39; estagiários
+// T(n) = a T(n/2) + n, T(1) = 1
+long paginas(int a, int n) {
+    if (n == 1) {
+        return 1;                        // uma página: lê e pronto
+    }
+    long total = n;                      // f(n) = n: lê tudo
+    for (int i = 0; i &lt; a; i++) {
+        total += paginas(a, n / 2);      // a chamadas com metade
+    }
+    return total;
+}
+
+int main(void) {
+    printf(&quot;    n      a = 1      a = 2      a = 4\n&quot;);
+    for (int n = 16; n &lt;= 1024; n *= 2) {
+        printf(&quot;%5d&quot;, n);
+        for (int a = 1; a &lt;= 4; a *= 2) {
+            printf(&quot; %10ld&quot;, paginas(a, n));
+        }
+        printf(&quot;\n&quot;);
+    }
+    printf(&quot;\nquando n dobra (512 -&gt; 1024), o total multiplica por:\n&quot;);
+    for (int a = 1; a &lt;= 4; a *= 2) {
+        printf(&quot;a = %d: %.2f\n&quot;, a, (double)paginas(a, 1024) / paginas(a, 512));
+    }
+    return 0;
+}
+// Saída:
+//     n      a = 1      a = 2      a = 4
+//    16         31         80        496
+//    32         63        192       2016
+//    64        127        448       8128
+//   128        255       1024      32640
+//   256        511       2304     130816
+//   512       1023       5120     523776
+//  1024       2047      11264    2096128
+//
+// quando n dobra (512 -&gt; 1024), o total multiplica por:
+// a = 1: 2.00
+// a = 2: 2.20
+// a = 4: 4.00
+</code></pre>
+<p>Com <code>a = 1</code>, caso 3: Θ(n), total <code>2n - 1</code>. Com <code>a = 2</code>, caso 2: Θ(n log n),
+exatamente <code>n log₂ n + n</code>. Com <code>a = 4</code>, caso 1: Θ(n²), total <code>2n² - n</code>. O
+fluxograma é o teorema como receita; o caminho marcado é o de <code>a = 2</code>:</p>
+<p>{{fluxograma}}</p>

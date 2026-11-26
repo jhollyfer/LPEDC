@@ -1,0 +1,170 @@
+<h2>0186 · P e NP</h2>
+<p>Você organiza o churrasco da firma com cinco condições: alguém precisa levar a
+churrasqueira, dois colegas brigados não vão juntos, e assim por diante. Um
+amigo sugere &quot;chama a Ana e o Davi&quot;, e conferir se a sugestão atende às cinco
+condições leva dez segundos. Achar um grupo bom sem palpite nenhum, porém,
+pode exigir testar todas as combinações de convidados. A pergunta mais famosa
+da computação gira em torno dessa diferença entre <strong>achar</strong> uma resposta e
+<strong>conferir</strong> uma resposta pronta.</p>
+<p>Para comparar problemas, a teoria olha só para <strong>problemas de decisão</strong>,
+aqueles cuja resposta é sim ou não: &quot;este grafo tem ciclo hamiltoniano?&quot;,
+&quot;existe rota de no máximo 300 km?&quot;. Isso não perde generalidade, porque um
+problema de otimização (&quot;qual a menor rota?&quot;) vira um de decisão quando você
+fixa um limite e pergunta se dá para ficar abaixo dele. Se a decisão for
+difícil, a otimização também é (CORMEN et al., 2024, cap. 34).</p>
+<p>A classe <strong>P</strong> reúne os problemas de decisão que se <strong>resolvem</strong> em tempo
+polinomial, isto é, com custo O(n^k) para algum k fixo, sendo n o tamanho da
+entrada. Quase tudo o que você viu no curso está aqui: achar caminho mínimo,
+testar circuito euleriano (0182), achar pontes (0184). Polinomial é a
+fronteira que a teoria usa para &quot;rápido&quot;: n³ cresce devagar perto de 2ⁿ
+(CORMEN et al., 2024, cap. 34).</p>
+<p>A classe <strong>NP</strong> exige menos: não pede para resolver, pede para <strong>conferir</strong>.
+Um problema está em NP quando toda resposta &quot;sim&quot; tem um <strong>certificado</strong>, uma
+prova curta, e existe um <strong>verificador</strong>, um algoritmo polinomial que recebe a
+entrada e o certificado e confirma o &quot;sim&quot; (LINTZMAYER; MOTA, 2023). No
+churrasco, o certificado é a lista de convidados; no ciclo hamiltoniano, é a
+própria rota, que se confere numa passada. Se você resolve um problema rápido,
+também confere rápido: basta ignorar o certificado e resolver. Por isso <strong>P ⊆
+NP</strong>.</p>
+<p>O nome engana. NP vem de <em>polinomial não determinístico</em>, porque a classe foi
+definida com uma máquina que &quot;chuta&quot; o certificado certo e depois o confere.
+Não quer dizer &quot;não polinomial&quot;: todo problema de P também está em NP.</p>
+<p>Dentro de NP há os problemas mais difíceis da classe. Um problema é
+<strong>NP-difícil</strong> quando todo problema de NP se reduz a ele em tempo polinomial;
+a redução é o assunto do 0187, e por ora basta a ideia de que resolver o
+NP-difícil rápido resolveria todos os de NP rápido. Um problema é
+<strong>NP-completo</strong> quando está em NP <strong>e</strong> é NP-difícil. A consequência é forte:
+se um único NP-completo tiver algoritmo polinomial, então P = NP. Ninguém
+sabe se isso acontece; a maioria dos pesquisadores aposta que P ≠ NP, e a
+questão segue em aberto (KLEINBERG; TARDOS, 2006, cap. 8). A tabela resume as
+quatro classes:</p>
+<table>
+<thead>
+<tr>
+<th>Classe</th>
+<th>O que se exige</th>
+<th>Exemplos</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>P</td>
+<td>resolver em tempo polinomial</td>
+<td>caminho mínimo, Euler, pontes, MST</td>
+</tr>
+<tr>
+<td>NP</td>
+<td>verificar um &quot;sim&quot; em tempo polinomial</td>
+<td>tudo de P, SAT, clique, hamiltoniano</td>
+</tr>
+<tr>
+<td>NP-completo</td>
+<td>estar em NP e ser NP-difícil</td>
+<td>SAT, 3-SAT, clique, cobertura de vértices, ciclo hamiltoniano</td>
+</tr>
+<tr>
+<td>NP-difícil</td>
+<td>todo NP se reduz a ele (pode nem estar em NP)</td>
+<td>os NP-completos, caixeiro viajante (otimização)</td>
+</tr>
+</tbody></table>
+<p>O primeiro problema provado NP-completo foi o <strong>SAT</strong>, a satisfatibilidade de
+fórmulas lógicas (COOK, 1971). A fórmula vem em <strong>forma normal conjuntiva</strong>
+(FNC): um E de <strong>cláusulas</strong>, e cada cláusula é um OU de <strong>literais</strong>, sendo
+literal uma variável <code>x</code> ou a negação dela, <code>não x</code>. A pergunta é se existe
+uma atribuição de verdadeiro e falso às variáveis que deixe todas as
+cláusulas verdadeiras. No churrasco, cada colega é uma variável (vai ou não
+vai) e cada condição é uma cláusula. O <strong>3-SAT</strong> limita cada cláusula a no
+máximo três literais (no Cormen, exatamente três) e continua NP-completo
+(KARP, 1972).</p>
+<p>Sem algoritmo esperto, resta a força bruta: testar as 2ⁿ atribuições de n
+variáveis. Em C, a atribuição cabe num inteiro, a <strong>máscara</strong>: o bit <code>v - 1</code>
+diz se a variável <code>v</code> é verdadeira. Contar a máscara de 0 até 2ⁿ - 1 passa
+por todas as atribuições, e cada uma é conferida pelo verificador:</p>
+<pre><code class="language-c">unsigned mascara = 10; // binário 1010
+for (int v = 1; v &lt;= 4; v++) {
+    printf(&quot;x%d = %u\n&quot;, v, (mascara &gt;&gt; (v - 1)) &amp; 1);
+}
+// x1 = 0
+// x2 = 1
+// x3 = 0
+// x4 = 1
+</code></pre>
+<blockquote>
+<p>[!WARNING]
+<strong>NP não quer dizer &quot;não polinomial&quot;</strong>, e sim <em>polinomial não
+determinístico</em>. NP-completo é &quot;sem algoritmo polinomial conhecido&quot;, não
+&quot;impossível&quot;. E reduzir A a B mostra que B é <strong>pelo menos tão difícil</strong>
+quanto A, não o contrário (0187).</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>Um churrasco da firma com cinco condições sobre Ana, Beto, Caio e Davi.
+Conferir um palpite é rápido; achar um grupo pode exigir todas as
+combinações. O palpite falha na quinta cláusula, e a força bruta acha uma
+atribuição na décima primeira de 16:</p>
+<p>{{ideia}}</p>
+<p>A fórmula é uma matriz de literais <code>+v</code> / <code>-v</code> (como no DIMACS), com zero ao
+fim de cada cláusula:</p>
+<pre><code class="language-c">#include &lt;stdbool.h&gt;
+#include &lt;stdio.h&gt;
+
+#define NV 4 // variáveis: 1 Ana, 2 Beto, 3 Caio, 4 Davi
+#define NC 5 // cláusulas
+#define MAXL 3
+
+const char *nomes[NV + 1] = {&quot;&quot;, &quot;Ana&quot;, &quot;Beto&quot;, &quot;Caio&quot;, &quot;Davi&quot;};
+// cada cláusula é um OU de literais; +v = &quot;v vai&quot;, -v = &quot;v não vai&quot;; 0 encerra
+const int formula[NC][MAXL + 1] = {
+    {1, 2, 0},   // Ana ou Beto (alguém precisa levar a churrasqueira)
+    {-1, -3, 0}, // Ana e Caio brigaram: não os dois
+    {3, 4, 0},   // Caio ou Davi (alguém faz o carvão pegar)
+    {-2, 4, 0},  // Beto só vai se Davi for
+    {-4, -1, 3}, // se Davi e Ana forem, Caio tem que ir
+};
+
+// verificador: O(tamanho da fórmula). vai[v] é a atribuição (o certificado)
+bool satisfaz(const bool vai[]) {
+    for (int c = 0; c &lt; NC; c++) {
+        bool algum = false;
+        for (int i = 0; i &lt; MAXL &amp;&amp; formula[c][i] != 0; i++) {
+            int lit = formula[c][i];
+            if ((lit &gt; 0 &amp;&amp; vai[lit]) || (lit &lt; 0 &amp;&amp; !vai[-lit])) algum = true;
+        }
+        if (!algum) return false; // uma cláusula falsa derruba tudo
+    }
+    return true;
+}
+
+void mostra(const bool vai[]) {
+    for (int v = 1; v &lt;= NV; v++) printf(&quot; %s=%s&quot;, nomes[v], vai[v] ? &quot;sim&quot; : &quot;não&quot;);
+    printf(&quot;\n&quot;);
+}
+
+int main(void) {
+    bool palpite[NV + 1] = {false, true, false, false, true}; // Ana e Davi
+    printf(&quot;Palpite:&quot;);
+    mostra(palpite);
+    printf(&quot;Verificador: %s\n&quot;, satisfaz(palpite) ? &quot;satisfaz&quot; : &quot;não satisfaz&quot;);
+
+    // força bruta: as 2^n atribuições, como os bits de um contador
+    long testadas = 0;
+    for (int mascara = 0; mascara &lt; (1 &lt;&lt; NV); mascara++) {
+        bool vai[NV + 1] = {false};
+        for (int v = 1; v &lt;= NV; v++) vai[v] = (mascara &gt;&gt; (v - 1)) &amp; 1;
+        testadas++;
+        if (satisfaz(vai)) {
+            printf(&quot;Achei depois de %ld de %d tentativas:&quot;, testadas, 1 &lt;&lt; NV);
+            mostra(vai);
+            return 0;
+        }
+    }
+    printf(&quot;Insatisfatível: %ld tentativas\n&quot;, testadas);
+    return 0;
+}
+// Saída:
+// Palpite: Ana=sim Beto=não Caio=não Davi=sim
+// Verificador: não satisfaz
+// Achei depois de 11 de 16 tentativas: Ana=não Beto=sim Caio=não Davi=sim
+</code></pre>
+<p>O fluxograma é o verificador, O(tamanho da fórmula). A força bruta o chama
+até 2ⁿ vezes:</p>
+<p>{{fluxograma}}</p>

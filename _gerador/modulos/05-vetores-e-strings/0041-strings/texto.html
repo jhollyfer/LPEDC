@@ -1,0 +1,107 @@
+<h2>0041 · Strings</h2>
+<p>Na entrada de um evento, a recepção imprime o crachá juntando nome e
+sobrenome: &quot;Bruna&quot;, um espaço e &quot;Matos&quot;. Depois confere se o nome bate com o
+do cadastro. Em C, o <code>+</code> não junta textos e o <code>==</code> não compara textos. Para
+entender por quê, você precisa saber o que um texto é na memória.</p>
+<p>Em C não existe um tipo próprio para texto. Uma <strong>string</strong> é um vetor de
+<code>char</code> que termina com o caractere nulo <code>&#39;\0&#39;</code>, o de código 0 (DEITEL;
+DEITEL, 2011, cap. 8). Pense numa fita de etiquetas com um ponto final
+impresso: quem lê vai letra por letra até o ponto e para ali, mesmo que a
+fita continue. O <code>&#39;\0&#39;</code> é esse ponto final. O <code>printf</code> com <code>%s</code> e todas as
+funções de texto andam pelo vetor até achá-lo, e o que vem depois dele é
+ignorado.</p>
+<pre><code class="language-c">char nome[] = &quot;Bruna&quot;;   // 6 posições: &#39;B&#39; &#39;r&#39; &#39;u&#39; &#39;n&#39; &#39;a&#39; &#39;\0&#39;
+char cracha[20];         // cabem até 19 caracteres + o &#39;\0&#39;
+char letra = &#39;B&#39;;        // aspas simples: UM char (o número 66)
+char texto[] = &quot;B&quot;;      // aspas duplas: uma string, 2 bytes (&#39;B&#39; e &#39;\0&#39;)
+</code></pre>
+<p>Quando você escreve um texto entre aspas duplas, o compilador já põe o <code>&#39;\0&#39;</code>
+no fim. Por isso <code>&quot;Bruna&quot;</code> ocupa 6 bytes, e não 5. A regra geral: um texto de
+N caracteres precisa de <strong>N + 1</strong> posições (BACKES, 2013, cap. 7). Esquecer
+esse +1 é o erro mais comum com string; num vetor <code>char cracha[20]</code>, cabem 19
+letras.</p>
+<p>As aspas também mudam o tipo. <code>&#39;B&#39;</code>, entre aspas simples, é um <code>char</code>:
+o número 66. <code>&quot;B&quot;</code>, entre aspas duplas, é uma string de 2 bytes: o <code>&#39;B&#39;</code>
+e o <code>&#39;\0&#39;</code> (BACKES, 2013, cap. 7). Trocar uma pela outra dá erro ou aviso de
+compilação.</p>
+<p>Como string é vetor (assunto 0037), ela herda as limitações dele: não se
+atribui com <code>=</code> depois da declaração e não se compara com <code>==</code>, que compararia
+endereços e não letras. As operações com texto são funções da biblioteca
+<strong><code>&lt;string.h&gt;</code></strong>. Nas que copiam, o <strong>destino vem primeiro</strong>, na mesma ordem
+de <code>dest = orig</code> (KERNIGHAN; RITCHIE, 1989, cap. 5). A tabela reúne as quatro
+que você mais vai usar:</p>
+<table>
+<thead>
+<tr>
+<th>função</th>
+<th>faz</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>strlen(s)</code></td>
+<td>conta os caracteres até o <code>&#39;\0&#39;</code> (sem ele)</td>
+</tr>
+<tr>
+<td><code>strcpy(dest, orig)</code></td>
+<td>copia <code>orig</code> para dentro de <code>dest</code></td>
+</tr>
+<tr>
+<td><code>strcat(dest, orig)</code></td>
+<td>cola <code>orig</code> no fim de <code>dest</code></td>
+</tr>
+<tr>
+<td><code>strcmp(a, b)</code></td>
+<td>0 se iguais; negativo se <code>a</code> vem antes; positivo se depois</td>
+</tr>
+</tbody></table>
+<p>O <code>strlen</code> merece atenção. A string não guarda o próprio tamanho, então ele
+anda pelo vetor contando até o <code>&#39;\0&#39;</code>, a cada chamada. O resultado é um
+<code>size_t</code>, o inteiro sem sinal que o C usa para tamanhos, e se mostra com
+<code>%zu</code>. Como cada chamada percorre o texto, escrever <code>for (i = 0; i &lt; strlen(s); i++)</code> refaz a contagem a cada volta; calcule o tamanho antes do
+laço (CPPREFERENCE, s.d.). Ele conta bytes, não letras: <code>strlen(&quot;Belém&quot;)</code> é 6,
+porque o &quot;é&quot; ocupa 2 bytes no UTF-8.</p>
+<p>Uma lista de nomes é uma matriz de <code>char</code> (assunto 0039), com uma string por
+linha. Em <code>char nomes[3][10] = {&quot;Ana&quot;, &quot;Bia&quot;, &quot;Caio&quot;};</code>, <code>nomes[1]</code> é &quot;Bia&quot; e
+cada nome tem até 9 caracteres mais o <code>&#39;\0&#39;</code> (CELES; CERQUEIRA; RANGEL, 2016).</p>
+<blockquote>
+<p>[!WARNING]
+<code>strcpy</code> e <code>strcat</code> não sabem o tamanho do destino: escrevem até acabar a
+origem. &quot;Bruna Matos&quot; num <code>char cracha[8]</code> é <strong>estouro de buffer</strong>, falha de
+segurança clássica. E <code>strcmp</code> devolve <strong>0 quando são iguais</strong>; como 0 é
+falso, <code>if (strcmp(a, b))</code> quer dizer &quot;se forem diferentes&quot;. Escreva <code>== 0</code>.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>A recepção monta o crachá juntando nome e sobrenome. No vetor de 20, as 11
+primeiras posições guardam &quot;Bruna Matos&quot;, a 12ª o <code>&#39;\0&#39;</code>, e o resto não
+importa:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main(void) {
+    char nome[] = &quot;Bruna&quot;;       // 6 bytes: 5 letras + &#39;\0&#39;
+    char sobrenome[] = &quot;Matos&quot;;
+    char cracha[20];             // espaço de sobra: até 19 letras + &#39;\0&#39;
+
+    strcpy(cracha, nome);        // cracha = &quot;Bruna&quot;
+    strcat(cracha, &quot; &quot;);         // cracha = &quot;Bruna &quot;
+    strcat(cracha, sobrenome);   // cracha = &quot;Bruna Matos&quot;
+
+    printf(&quot;Crachá: %s\n&quot;, cracha);
+    printf(&quot;strlen: %zu caracteres\n&quot;, strlen(cracha)); // conta até o &#39;\0&#39;
+    printf(&quot;sizeof: %zu bytes\n&quot;, sizeof(cracha));      // o vetor inteiro
+
+    if (strcmp(cracha, &quot;Bruna Matos&quot;) == 0) {           // 0 quer dizer iguais
+        printf(&quot;Confere com a inscrição.\n&quot;);
+    }
+    return 0;
+}
+// Saída:
+// Crachá: Bruna Matos
+// strlen: 11 caracteres
+// sizeof: 20 bytes
+// Confere com a inscrição.
+</code></pre>
+<p>O <code>strcat</code> acha o <code>&#39;\0&#39;</code> do destino, escreve por cima e põe um novo no fim.
+Toda função de string é um laço &quot;até achar o <code>&#39;\0&#39;</code>&quot;:</p>
+<p>{{fluxograma}}</p>

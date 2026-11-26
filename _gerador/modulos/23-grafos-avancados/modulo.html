@@ -1,0 +1,352 @@
+<h1>Módulo 23 · Grafos: estrutura e caminhos</h1>
+<p>Depois de BFS, DFS e Dijkstra (módulo 16), o que o grafo esconde: componentes,
+ciclos, ordem das tarefas, árvore geradora mínima, pesos negativos e caminhos
+entre todos os pares. Depende também de fila, heap, union-find (0148) e PD
+(módulo 21).</p>
+<h2>O que você vai aprender</h2>
+<ul>
+<li><strong>componentes conexos</strong> e <strong>ciclos</strong>, com a DFS de três cores nos grafos
+dirigidos</li>
+<li><strong>ordenação topológica</strong>: <strong>Kahn</strong> (fila) e pós-ordem invertida da DFS</li>
+<li><strong>árvore geradora mínima</strong>: <strong>Kruskal</strong> (ordenação + union-find) e <strong>Prim</strong>
+(heap), e a diferença entre Prim e Dijkstra, que mora numa linha</li>
+<li><strong>pesos negativos</strong> e <strong>ciclo negativo</strong> com <strong>Bellman-Ford</strong></li>
+<li><strong>todos os pares</strong> com <strong>Floyd-Warshall</strong> e a reconstrução das rotas</li>
+<li>escolher o algoritmo pela pergunta, num programa que planeja semestres e
+rotas</li>
+</ul>
+<h2>Antes de começar</h2>
+<p>Revise o módulo 16 (matriz de adjacência, BFS 0110, DFS 0111 e Dijkstra 0112),
+fila (0085), heap (0102), <code>qsort</code> (0096), union-find (0148), recursão (0032),
+permutações (0126) e PD (módulo 21). Grau, circuitos, eulerianos,
+hamiltonianos, pontes e articulações estão nos assuntos 0182 a 0184.</p>
+<p>Cada assunto traz o algoritmo inteiro num arquivo, sem TAD. Nos desenhos, a
+origem é roxa e as arestas verdes são as escolhidas; na DFS de três cores,
+amarelo é o cinza (na pilha) e verde é o preto (terminado).</p>
+<p>Três convenções valem para o módulo:</p>
+<ul>
+<li>vértices são números de 0 a V-1, com os nomes num vetor de strings à parte,
+e os vizinhos são examinados em <strong>ordem crescente de índice</strong>; isso decide
+os empates, e mudar a numeração pode mudar a saída sem errar;</li>
+<li>na matriz de pesos, <strong>0 quer dizer &quot;sem aresta&quot;</strong>, salvo aviso (o A311
+mostra o problema disso);</li>
+<li>ao somar distâncias, o INFINITO é <code>1000000000</code>, que somado a outro INFINITO
+ainda cabe num <code>int</code>; quando o código usa <code>INT_MAX</code>, testa antes de somar.</li>
+</ul>
+<p>{{indice}}</p>
+<hr>
+<p>{{assuntos}}</p>
+<hr>
+<h2>Desafios do módulo</h2>
+<p>Problemas para resolver no papel e, quando fizer sentido, num arquivo <code>.c</code>
+seu. Eles misturam os assuntos do módulo.</p>
+<p><strong>1. Três cores à mão.</strong> Grafo dirigido: A → B, A → C, B → C, C → D, D → B.
+Rode a DFS de três cores a partir de A, examinando os vizinhos em ordem
+alfabética. Existe ciclo? Qual é a seta que o denuncia, e quem está cinza
+nesse momento?</p>
+<details><summary>Resposta</summary><p>Existe. A DFS entra em A, B, C e D, todos cinza. D olha B, que está
+<strong>cinza</strong>: a seta <strong>D → B</strong> fecha o ciclo <strong>B → C → D → B</strong>. A seta A → C, que
+seria examinada depois, nem chega a ser vista. Com um <code>visitado[]</code> simples o
+ciclo também seria achado aqui, mas por sorte: troque D → B por A → D e o
+<code>visitado[]</code> gritaria &quot;ciclo&quot; sem haver nenhum.</p>
+</details><p><strong>2. Quantas ordens?</strong> DAG: 0 → 2, 1 → 2, 2 → 3, 2 → 4. Quantas ordenações
+topológicas existem? Qual o Kahn com fila mostra?</p>
+<details><summary>Resposta</summary><p><strong>4</strong>: 0 e 1 vêm antes de 2 em qualquer ordem (2 jeitos), e 3 e 4 vêm depois,
+em qualquer ordem (2 jeitos): 2 × 2. O Kahn mostra <strong>0 1 2 3 4</strong>. O vértice 2
+é um &quot;gargalo&quot;: todo mundo antes dele, todo mundo depois.</p>
+</details><p><strong>3. Kruskal na rede do poço.</strong> Refaça a rede de canos do assunto 0153 com
+Kruskal. Em que ordem os canos entram? O total muda?</p>
+<details><summary>Resposta</summary><p>Ordem: Cida-Davi 2, Ana-Beto 3, Poço-Ana 4, Davi-Elza 4, Beto-Cida 5. Depois
+disso já são 5 canos. Total <strong>18 m</strong>, o mesmo do Prim, com os mesmos canos.
+Só a ordem muda: o Kruskal começa pelo cano mais curto do mapa inteiro, longe
+do Poço; o Prim cresce a partir do Poço.</p>
+</details><p><strong>4. Quantas árvores mínimas?</strong> Triângulo A-B (1), B-C (2), A-C (2), mais
+C-D (3). Quantas árvores geradoras mínimas existem e qual o custo?</p>
+<details><summary>Resposta</summary><p><strong>Duas</strong>, ambas com custo <strong>6</strong>: {A-B, B-C, C-D} e {A-B, A-C, C-D}. O empate
+entre B-C e A-C permite qualquer um dos dois. Com todos os pesos diferentes,
+a árvore mínima seria única.</p>
+</details><p><strong>5. Somar uma constante resolve?</strong> Alguém propõe: &quot;para usar Dijkstra com
+pesos negativos, some 10 em todos os pesos&quot;. Teste no grafo S → A (-2),
+A → T (3), S → T (2).</p>
+<details><summary>Resposta</summary><p><strong>Não resolve.</strong> O certo é S → A → T, custo <strong>1</strong>. Somando 10: S → A vira 8 e
+A → T vira 13, total 21; S → T vira 12, e o Dijkstra escolhe S → T. Somar uma
+constante castiga mais os caminhos com mais arestas, e a ordem entre eles
+muda. Para isso existe o Bellman-Ford (e, para todos os pares, o algoritmo
+de Johnson, que repondera os pesos com uma rodada de Bellman-Ford).</p>
+</details><p><strong>6. Rodadas no pior caso.</strong> Um caminho 0 → 1 → 2 → 3 → 4 → 5, todas as
+arestas com peso 1. Quantas rodadas o Bellman-Ford com parada antecipada faz
+com a lista na ordem do caminho? E com a lista invertida?</p>
+<details><summary>Resposta</summary><p>Na ordem: <strong>2</strong> (a primeira já acerta tudo, a segunda confirma que nada mudou).
+Invertida: <strong>5</strong>, uma aresta do caminho por rodada, e a quinta já é a última
+permitida (V - 1). É o que o A308 mede.</p>
+</details><p><strong>7. Floyd-Warshall à mão.</strong> Grafo dirigido: A → B 5, B → C 2, A → C 9, C → A 3.
+Dê a matriz depois de cada rodada (k = A, B, C).</p>
+<details><summary>Resposta</summary><p>k = A: C → B passa a valer 3 + 5 = <strong>8</strong>. k = B: A → C cai de 9 para 5 + 2 =
+<strong>7</strong>. k = C: B → A passa a valer 2 + 3 = <strong>5</strong>. Matriz final, linhas A, B, C:
+<strong>(0, 5, 7)</strong>, <strong>(5, 0, 2)</strong>, <strong>(3, 8, 0)</strong>.</p>
+</details><p><strong>8. Qual algoritmo?</strong> Para cada pergunta, diga o algoritmo: (a) ligar 500
+casas com o mínimo de cabo; (b) a ordem de compilar os módulos de um
+projeto; (c) achar uma sequência de trocas de moeda que dá lucro; (d) a
+tabela de distâncias entre 50 cidades; (e) quantos grupos de amigos existem,
+com amizades chegando a toda hora; (f) o GPS de uma cidade, sem pesos
+negativos.</p>
+<details><summary>Resposta</summary><p>(a) <strong>Kruskal ou Prim</strong>; (b) <strong>ordenação topológica</strong> (Kahn ou DFS); (c)
+<strong>Bellman-Ford</strong> com pesos -log(taxa), procurando ciclo negativo (A307); (d)
+<strong>Floyd-Warshall</strong> (50³ = 125 mil passos); (e) <strong>union-find</strong> (A300); (f)
+<strong>Dijkstra</strong> com heap.</p>
+</details><p><strong>9. Caminho crítico.</strong> Tarefas com duração em dias: A (3); B (2), depois de A;
+C (4), depois de A; D (1), depois de B e de C. Qual o prazo mínimo com
+equipes em paralelo? Qual o caminho crítico? Quantos dias a tarefa B pode
+atrasar sem atrasar a obra?</p>
+<details><summary>Resposta</summary><p>Prazo <strong>8 dias</strong>: A termina no dia 3, C no dia 7, D começa no 7 e termina no 8.
+Caminho crítico: <strong>A → C → D</strong>. B pode começar no dia 3 e precisa terminar até
+o dia 7 (quando D começa): tem <strong>2 dias de folga</strong>. É o E904 com uma conta a
+mais, a do &quot;mais tarde possível&quot;, feita de trás para frente.</p>
+</details><p><strong>10. Semestres com prioridade.</strong> No E934, escolher as disciplinas pelo índice
+deu 5 semestres. Calcule, para cada disciplina, a &quot;altura&quot;: o tamanho da
+maior corrente de pré-requisitos que ainda vem depois dela. Escolhendo
+sempre as de maior altura, quantos semestres são necessários?</p>
+<details><summary>Resposta</summary><p>Alturas: Algoritmos 3 (Estruturas, Redes, TCC), Cálculo I 2, Estruturas 2,
+Cálculo II 1, Redes 1, Física 0, Inglês 0, TCC 0. Semestres (empate decidido
+pelo índice): {Algoritmos, Cálculo I}, {Estruturas, Cálculo II}, {Redes,
+Inglês}, {TCC, Física}: <strong>4</strong>. A
+altura sai de uma DFS com memória: altura(u) = 1 + maior altura dos
+sucessores (0 se não tem nenhum).</p>
+</details><p><strong>11. Floresta pelo Kruskal.</strong> Você roda o Kruskal até o fim da lista num grafo
+com 10 vértices e ele aceita 7 arestas. Quantos componentes o grafo tem? E
+se o grafo tivesse 15 arestas no total, quantas formariam ciclo?</p>
+<details><summary>Resposta</summary><p>Cada aresta aceita junta dois grupos: 10 - 7 = <strong>3 componentes</strong>. Das 15
+arestas, 7 entraram e <strong>8</strong> foram recusadas por fechar ciclo. Rodado até o
+fim, o Kruskal também conta componentes, como o union-find do A300.</p>
+</details><h2>Questões do POSCOMP</h2>
+<p>Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.</p>
+<table>
+<thead>
+<tr>
+<th>Ano</th>
+<th>Questão</th>
+<th>Assunto</th>
+<th>Gabarito</th>
+<th>Prova</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2019</td>
+<td>36</td>
+<td>Modelagem de mapa rodoviário, caminho mínimo</td>
+<td>C</td>
+<td><a href="https://www.sbc.org.br/wp-content/uploads/2025/02/0518.002_Exame_POSCOMP_2019.pdf">caderno</a></td>
+</tr>
+<tr>
+<td>2025</td>
+<td>49</td>
+<td>Ordenação topológica de grafo acíclico dirigido</td>
+<td>a conferir no gabarito oficial</td>
+<td><a href="https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2025.pdf">caderno</a></td>
+</tr>
+</tbody></table>
+<p>O gabarito oficial de 2025 não estava disponível quando este material foi montado.</p>
+<h2>Questões no estilo da prova</h2>
+<p>Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma
+alternativa certa. As questões 1 e 2 usam o mesmo grafo <strong>não dirigido</strong>,
+com as arestas (peso):</p>
+<pre><code class="language-text">A-B 4   A-C 1   B-C 2   B-D 5   C-D 8
+C-E 10  D-E 2   D-F 6   E-F 3
+</code></pre>
+<p><strong>1.</strong> Rodando o Kruskal nesse grafo, qual é a <strong>primeira</strong> aresta
+rejeitada e qual o peso total da árvore geradora mínima?</p>
+<ul>
+<li>(A) C-D, total 13</li>
+<li>(B) A-B, total 12</li>
+<li>(C) D-F, total 14</li>
+<li>(D) A-B, total 13</li>
+<li>(E) B-D, total 13</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(D).</strong> Em ordem: A-C 1, B-C 2, D-E 2 e E-F 3 entram; A-B 4 fecharia o
+ciclo A-C-B (A e B já estão no mesmo conjunto) e é a primeira rejeitada;
+B-D 5 entra e completa as V − 1 = 5 arestas. Total 1 + 2 + 2 + 3 + 5 = 13.
+B-D não pode ser rejeitada: é a única ligação barata entre {A, B, C} e
+{D, E, F}. Veja 0152.</p>
+</details><p><strong>2.</strong> No mesmo grafo, o Prim a partir de A acrescenta as arestas em que
+ordem?</p>
+<ul>
+<li>(A) A-C, C-B, B-D, D-E, E-F</li>
+<li>(B) A-C, B-C, D-E, E-F, B-D</li>
+<li>(C) A-C, C-B, A-B, B-D, D-E</li>
+<li>(D) A-B, B-C, B-D, D-E, E-F</li>
+<li>(E) A-C, C-B, C-D, D-E, E-F</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A).</strong> O Prim mantém uma árvore só e sempre pega a aresta mais leve que
+sai dela: de {A}, A-C 1; de {A, C}, C-B 2; de {A, B, C}, a mais leve para
+fora é B-D 5 (C-D custa 8, C-E 10); depois D-E 2 e E-F 3. Mesmo total do
+Kruskal (13), outra ordem. A alternativa B é a ordem do <strong>Kruskal</strong>. Veja
+0153.</p>
+</details><p><strong>3.</strong> No grafo dirigido com as arestas A→B, A→C, B→D, C→D, D→E, C→F e
+F→E, qual sequência <strong>não</strong> é uma ordenação topológica?</p>
+<ul>
+<li>(A) A, B, C, D, F, E</li>
+<li>(B) A, C, F, B, D, E</li>
+<li>(C) A, C, B, F, D, E</li>
+<li>(D) A, C, B, D, F, E</li>
+<li>(E) A, B, C, F, E, D</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(E).</strong> A aresta D→E exige D antes de E, e em (E) o E vem antes do D. As
+outras respeitam todas as setas: a ordenação topológica raramente é única.
+No Cormen, ela sai da DFS em ordem decrescente do tempo de término; o Kahn
+dá outra ordem válida. Veja 0151.</p>
+</details><p><strong>4.</strong> O Bellman-Ford roda a partir de <code>s</code> no grafo dirigido com as arestas
+s→a (2), a→b (3), c→d (−3) e d→c (1). O que ele devolve?</p>
+<ul>
+<li>(A) FALSO, porque há um ciclo de peso negativo (c, d, c).</li>
+<li>(B) VERDADEIRO, com <code>a.d = 2</code>, <code>b.d = 5</code> e <code>c.d = d.d = ∞</code>.</li>
+<li>(C) VERDADEIRO, com <code>c.d = −∞</code> e <code>d.d = −∞</code>.</li>
+<li>(D) Ele não termina, porque as distâncias de c e d caem sem parar.</li>
+<li>(E) FALSO, porque há uma aresta de peso negativo.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(B).</strong> O ciclo c→d→c pesa −2, mas não é <strong>alcançável</strong> a partir de <code>s</code>:
+<code>c.d</code> e <code>d.d</code> continuam ∞, nenhuma aresta melhora na rodada extra, e o
+algoritmo devolve VERDADEIRO. Ele termina sempre (são V − 1 rodadas fixas)
+e aceita pesos negativos; só devolve FALSO com ciclo negativo alcançável.
+Acrescente b→c (1) e a resposta vira FALSO. Veja 0154.</p>
+</details><p><strong>5.</strong> Sobre caminhos mínimos, analise as afirmações.</p>
+<ul>
+<li>I. O Dijkstra funciona com pesos negativos, desde que não haja ciclo
+negativo.</li>
+<li>II. O Floyd-Warshall custa Θ(V³) de tempo e Θ(V²) de memória.</li>
+<li>III. Num DAG com pesos negativos, relaxar as arestas na ordem topológica dá
+os caminhos mínimos em O(V + E).</li>
+</ul>
+<p>Marque a alternativa <strong>CORRETA</strong>.</p>
+<ul>
+<li>(A) I, apenas.</li>
+<li>(B) I e II, apenas.</li>
+<li>(C) II e III, apenas.</li>
+<li>(D) I e III, apenas.</li>
+<li>(E) I, II e III.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(C).</strong> I é falsa: o Dijkstra pode errar com qualquer peso negativo, mesmo
+sem ciclo negativo (o exemplo do motoboy no 0154); quem aceita pesos
+negativos sem ciclo negativo é o Bellman-Ford, em O(V · E). II: três laços de
+V voltas e uma matriz V × V. III: no DAG não há ciclo, e cada vértice é
+relaxado depois de todos os seus antecessores. Veja 0151, 0154 e 0155.</p>
+</details><p><strong>6.</strong> O Floyd-Warshall roda no grafo dirigido com os vértices 1 a 4 e as
+arestas 1→2 (3), 1→3 (8), 2→3 (2), 2→4 (7), 3→4 (1) e 4→1 (2). Seja
+<code>d14^(k)</code> a distância de 1 a 4 usando como passagem só os vértices 1..k.
+Quanto valem <code>d14^(2)</code> e <code>d14^(4)</code>?</p>
+<ul>
+<li>(A) ∞ e 6</li>
+<li>(B) 10 e 10</li>
+<li>(C) 7 e 6</li>
+<li>(D) 9 e 6</li>
+<li>(E) 10 e 6</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(E).</strong> Não há aresta 1→4, então <code>d14^(0) = d14^(1) = ∞</code>. Com o 2 liberado,
+1→2→4 = 3 + 7 = 10. Com o 3, 1→2→3→4 = 3 + 2 + 1 = 6, e liberar o 4 não
+melhora. Veja 0155.</p>
+</details><p><strong>7.</strong> O programa roda uma DFS com cores (0 branco, 1 cinza, 2 preto) no
+grafo dirigido com as arestas 0→1, 1→2, 2→0, 0→3, 3→4, 4→3 e 2→4, e conta as
+arestas que chegam a um vértice <strong>cinza</strong>. O que ele mostra?</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int g[5][5], cor[5], voltas = 0;
+
+void dfs(int u) {
+    cor[u] = 1;
+    for (int v = 0; v &lt; 5; v++) {
+        if (!g[u][v]) continue;
+        if (cor[v] == 1) voltas++;
+        else if (cor[v] == 0) dfs(v);
+    }
+    cor[u] = 2;
+}
+
+int main(void) {
+    int e[][2] = {{0, 1}, {1, 2}, {2, 0}, {0, 3}, {3, 4}, {4, 3}, {2, 4}};
+    for (int k = 0; k &lt; 7; k++) g[e[k][0]][e[k][1]] = 1;
+    for (int u = 0; u &lt; 5; u++)
+        if (cor[u] == 0) dfs(u);
+    printf(&quot;%d\n&quot;, voltas);
+    return 0;
+}
+</code></pre>
+<ul>
+<li>(A) 0</li>
+<li>(B) 1</li>
+<li>(C) 2</li>
+<li>(D) 3</li>
+<li>(E) 4</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(C).</strong> A DFS desce 0, 1, 2; de 2, a aresta 2→0 chega a um vértice cinza (uma
+aresta de retorno, e o ciclo 0, 1, 2). A aresta 2→4 é de árvore: o 4 ainda é
+branco e a DFS desce por ele. De 4, vai para 3 (branco); do 3, a aresta 3→4
+chega ao 4, que está cinza: segunda aresta de retorno, o ciclo 3, 4. A aresta
+4→3 já foi tratada como aresta da árvore, e 0→3 chega depois ao 3, já preto.
+Cinza na pilha significa ciclo. Veja 0150.</p>
+</details><p><strong>8.</strong> Quantos componentes <strong>fortemente conexos</strong> tem o grafo dirigido com
+os vértices 1 a 8 e as arestas 1→2, 2→3, 3→1, 3→4, 4→5, 5→4, 5→6, 6→7,
+7→8 e 8→6?</p>
+<ul>
+<li>(A) 1</li>
+<li>(B) 2</li>
+<li>(C) 4</li>
+<li>(D) 3</li>
+<li>(E) 8</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(D).</strong> {1, 2, 3}, {4, 5} e {6, 7, 8}: dentro de cada grupo, todo mundo
+alcança todo mundo seguindo as setas. As setas 3→4 e 5→6 só vão para a
+frente, então os grupos não se fundem. Ignorando a direção, o grafo é um
+componente só (A), que é a conectividade <strong>fraca</strong>. Veja 0150.</p>
+</details><p><strong>9.</strong> Sobre árvores geradoras mínimas (MST) de um grafo conexo e não
+dirigido, analise as afirmações.</p>
+<ul>
+<li>I. Se todos os pesos forem distintos, a MST é única.</li>
+<li>II. Com pesos repetidos, o Kruskal e o Prim podem devolver árvores
+diferentes, mas sempre com o mesmo peso total.</li>
+<li>III. A MST sempre dá o caminho mínimo entre quaisquer dois vértices.</li>
+<li>IV. A MST sempre contém a aresta de maior peso do grafo.</li>
+</ul>
+<p>Marque a alternativa <strong>CORRETA</strong>.</p>
+<ul>
+<li>(A) I e II, apenas.</li>
+<li>(B) II e III, apenas.</li>
+<li>(C) III e IV, apenas.</li>
+<li>(D) I, II e IV, apenas.</li>
+<li>(E) I, II, III e IV.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A).</strong> I e II decorrem da propriedade do corte: a aresta leve que cruza um
+corte é segura, e com empates há mais de uma MST de mesmo total. III é falsa:
+no 0153, a árvore do Dijkstra gasta 21 m e a do Prim, 18 m. IV é falsa: a
+aresta mais pesada de um ciclo, se for a única com aquele peso, não entra em
+MST nenhuma. Veja 0152 e 0153.</p>
+</details><p><strong>10.</strong> Qual a complexidade do Kruskal (com union-find por posto e
+compressão de caminho) e do Prim com heap binário, num grafo com <code>V</code>
+vértices e <code>E</code> arestas?</p>
+<ul>
+<li>(A) O(V²) e O(E²)</li>
+<li>(B) O(E log V) e O(E log V)</li>
+<li>(C) O(V · E) e O(V³)</li>
+<li>(D) O(E) e O(V)</li>
+<li>(E) O(E log E) e O(V²) obrigatoriamente</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(B).</strong> O Kruskal é dominado pela ordenação, O(E log E) = O(E log V)
+porque E &lt; V². O Prim faz até E operações no heap, cada uma O(log V). O
+Prim com vetor em vez de heap é que custa O(V²), bom para grafo denso (o
+A305); com um heap de Fibonacci, o Prim chega a O(E + V log V). Veja 0152 e
+0153.</p>
+</details><h2>Para ler mais</h2>
+<ul>
+<li>CORMEN, T. H.; LEISERSON, C. E.; RIVEST, R. L.; STEIN, C. <em>Algoritmos: teoria e prática</em>. 4. ed. Rio de Janeiro: GEN LTC, 2024. Cap. 20 (busca em profundidade, ordenação topológica e componentes fortemente conexos), cap. 21 (árvores geradoras mínimas: Kruskal e Prim), cap. 22 (caminhos mínimos de fonte única: Bellman-Ford, DAG e Dijkstra) e cap. 23 (caminhos mínimos entre todos os pares: Floyd-Warshall).</li>
+<li>ZIVIANI, N. <em>Projeto de algoritmos: com implementações em Pascal e C</em>. 3. ed. rev. e ampl. São Paulo: Cengage Learning, 2010. Cap. 7 (algoritmos em grafos: busca em profundidade e em largura, ordenação topológica, componentes fortemente conectados, árvore geradora mínima e caminhos mais curtos).</li>
+<li>LINTZMAYER, C. N.; MOTA, G. O. <em>Análise de algoritmos e de estruturas de dados</em>. Santo André: UFABC; São Paulo: IME-USP, 2023. Rascunho. Capítulos sobre grafos, árvores geradoras mínimas e caminhos mínimos.</li>
+<li>SZWARCFITER, J. L.; MARKENZON, L. <em>Estruturas de dados e seus algoritmos</em>. 3. ed. Rio de Janeiro: LTC, 2010. Seção sobre ordenação topológica.</li>
+<li>TENENBAUM, A. M.; LANGSAM, Y.; AUGENSTEIN, M. J. <em>Estruturas de dados usando C</em>. São Paulo: Makron Books, 1995. Cap. 8: grafos e suas aplicações (fecho transitivo, Warshall, árvore geradora mínima, escalonamento por contagem).</li>
+<li>FEOFILOFF, P. <em>Algoritmos para grafos</em>. São Paulo: IME-USP. Disponível em: <a href="https://www.ime.usp.br/~pf/algoritmos_para_grafos/">https://www.ime.usp.br/~pf/algoritmos_para_grafos/</a>.</li>
+<li>FEOFILOFF, P. <em>Algoritmos em linguagem C</em>. Rio de Janeiro: Elsevier, 2009.</li>
+<li>SEDGEWICK, R.; WAYNE, K. <em>Algorithms</em>. 4. ed. Boston: Addison-Wesley, 2011. Seções 4.2 (grafos dirigidos), 4.3 (árvores geradoras mínimas) e 4.4 (caminhos mínimos). Disponível em: <a href="https://algs4.cs.princeton.edu/">https://algs4.cs.princeton.edu/</a>.</li>
+<li>KRUSKAL, J. B. On the shortest spanning subtree of a graph and the traveling salesman problem. <em>Proceedings of the American Mathematical Society</em>, v. 7, n. 1, p. 48-50, 1956.</li>
+<li>PRIM, R. C. Shortest connection networks and some generalizations. <em>Bell System Technical Journal</em>, v. 36, n. 6, p. 1389-1401, 1957.</li>
+<li>BELLMAN, R. On a routing problem. <em>Quarterly of Applied Mathematics</em>, v. 16, n. 1, p. 87-90, 1958.</li>
+<li>FLOYD, R. W. Algorithm 97: shortest path. <em>Communications of the ACM</em>, v. 5, n. 6, p. 345, 1962.</li>
+<li>KAHN, A. B. Topological sorting of large networks. <em>Communications of the ACM</em>, v. 5, n. 11, p. 558-562, 1962.</li>
+<li>CPPREFERENCE. <em>qsort, qsort_s</em> e <em>INFINITY</em>. Disponível em: <a href="https://en.cppreference.com/w/c/algorithm/qsort">https://en.cppreference.com/w/c/algorithm/qsort</a>.</li>
+</ul>

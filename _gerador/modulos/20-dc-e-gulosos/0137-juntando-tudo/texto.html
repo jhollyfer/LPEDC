@@ -1,0 +1,146 @@
+<h2>0137 · Juntando tudo</h2>
+<p>A feira do bairro manda a lista de preços para as barracas por um rádio
+lento, e cada byte economizado é tempo de transmissão a menos. Para isso
+servem dois programas que andam juntos. Um <strong>compactador</strong> grava uma versão
+menor de um arquivo; um <strong>descompactador</strong> recebe essa versão e devolve o
+original, idêntico byte por byte (SZWARCFITER; MARKENZON, 2010). Este
+projeto monta os dois em cima do Huffman (0136).</p>
+<p>No 0136, os códigos eram textos como <code>&quot;1110&quot;</code>, um caractere por bit. Isso
+serve para ver a árvore, mas não economiza nada: cada <code>&#39;1&#39;</code> ocupa um byte
+inteiro. Num arquivo de verdade, o código vira <strong>bits de verdade</strong>. O arquivo
+só sabe gravar bytes, então o programa junta os bits, 8 por vez, num
+<code>unsigned char</code>, empurrando cada bit novo com <code>&lt;&lt;</code> e acendendo-o com <code>|</code>
+(0065). Quando o byte enche, ele vai para o arquivo. O último byte quase
+nunca enche, e vai completado com zeros (KERNIGHAN; RITCHIE, 1989).</p>
+<p>Esses zeros criam um problema. O descompactador lê bits até o fim do
+arquivo, e os zeros de enchimento parecem dados: um <code>0</code> pode ser o código do
+A. Por isso o descompactador precisa saber quantos bytes o original tinha e
+parar exatamente ao escrever o último (LINTZMAYER; MOTA, 2023).</p>
+<p>O descompactador também precisa da <strong>mesma</strong> árvore que o compactador usou,
+senão os códigos não batem. Ele não tem o texto original para contar as
+frequências. A saída é gravar um <strong>cabeçalho</strong> no começo do arquivo
+compactado: uma assinatura, <code>HUF1</code>, que identifica o formato; o tamanho
+original; e as 256 frequências, uma por valor de byte. Com elas, o
+descompactador chama o mesmo <code>huf_constroi</code>, que desempata sempre do mesmo
+jeito, e chega à mesma árvore (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, seção
+5.3).</p>
+<p>O cabeçalho precisa ter o mesmo tamanho em qualquer máquina. O tamanho de
+<code>long</code> varia: 8 bytes no Linux de 64 bits, 4 no Windows. Os tipos <code>uint64_t</code>
+e <code>uint32_t</code>, de <code>stdint.h</code>, têm sempre 8 e 4 bytes (CPPREFERENCE, s.d.). Com
+eles, o cabeçalho tem sempre 4 + 8 + 1024 = 1036 bytes.</p>
+<p>O compactador lê o arquivo <strong>duas vezes</strong>. Na primeira passada, conta quantas
+vezes cada byte aparece e monta a árvore. Na segunda, com a árvore pronta,
+troca cada byte pelo seu código. Entre uma e outra, <code>rewind</code> volta a leitura
+para o começo do arquivo (KERNIGHAN; RITCHIE, 1989).</p>
+<p>O descompactador faz o caminho inverso. Ele lê o cabeçalho, monta a árvore
+e anda nela bit a bit, a partir da raiz: <code>0</code> desce para a esquerda, <code>1</code> para
+a direita. Ao chegar numa folha, escreve o byte dela e volta à raiz para o
+próximo (CORMEN et al., 2024, cap. 15). Como o código é livre de prefixo,
+nunca há dúvida sobre onde um símbolo termina.</p>
+<p>Quanto dá para ganhar? Há um limite. Shannon mostrou que nenhum código sem
+perda comprime abaixo da <strong>entropia</strong> da fonte, uma medida de quanta
+incerteza cada símbolo carrega em média (SHANNON, 1948). Um arquivo com
+poucos símbolos, alguns muito frequentes, tem entropia baixa e comprime bem.
+Um arquivo em que todos os 256 bytes aparecem por igual quase não comprime,
+e o cabeçalho de 1036 bytes ainda o deixa maior.</p>
+<blockquote>
+<p>[!WARNING]
+Sem o <code>descarrega</code> no fim, os bits do byte incompleto se perdem. Teste a ida
+e volta comparando <strong>byte a byte</strong>, e abra os arquivos em modo binário
+(<code>&quot;rb&quot;</code>, <code>&quot;wb&quot;</code>).</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>A feira do bairro manda a lista de preços por um rádio lento. A lista (6
+linhas repetidas 40 vezes) tem 9560 bytes; compactada, 6156: 1036 de
+cabeçalho e 5120 de bits:</p>
+<p>{{ideia}}</p>
+<p>A peça central do <code>compactador.c</code> escreve bits soltos; a struct <code>Bits</code> guarda
+o byte em construção e quantos bits ele já tem:</p>
+<pre><code class="language-c">static void escreve_bit(Bits *b, int bit) {
+    b-&gt;byte = (unsigned char)((b-&gt;byte &lt;&lt; 1) | bit); // entra pela direita
+    b-&gt;n++;
+    if (b-&gt;n == 8) {                                 // byte cheio: grava
+        fputc(b-&gt;byte, b-&gt;f);
+        b-&gt;byte = 0;
+        b-&gt;n = 0;
+    }
+}
+
+static void descarrega(Bits *b) {
+    if (b-&gt;n &gt; 0) {                                  // completa com zeros
+        fputc((unsigned char)(b-&gt;byte &lt;&lt; (8 - b-&gt;n)), b-&gt;f);
+        b-&gt;byte = 0;
+        b-&gt;n = 0;
+    }
+}
+</code></pre>
+<p>O programa cria o arquivo da feira, compacta, descompacta, compara com o
+original e apaga os arquivos de teste:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;compactador.h&quot;
+
+// grava a lista de preços da feira, repetida 40 vezes (um arquivo de uns 10 KB)
+int cria_exemplo(const char *nome) {
+    const char *linhas[] = {
+        &quot;Tomate italiano ........ R$ 8,90 o kg\n&quot;,
+        &quot;Banana prata ........... R$ 5,50 a dúzia\n&quot;,
+        &quot;Alface crespa .......... R$ 3,00 o pé\n&quot;,
+        &quot;Batata inglesa ......... R$ 6,20 o kg\n&quot;,
+        &quot;Ovos caipiras .......... R$ 18,00 a dúzia\n&quot;,
+        &quot;Queijo minas ........... R$ 42,00 o kg\n&quot;,
+    };
+    FILE *f = fopen(nome, &quot;w&quot;);
+    if (f == NULL) {
+        return 0;
+    }
+    for (int r = 0; r &lt; 40; r++) {
+        for (int i = 0; i &lt; 6; i++) {
+            fputs(linhas[i], f);
+        }
+    }
+    fclose(f);
+    return 1;
+}
+
+// confere byte a byte se dois arquivos são iguais
+int iguais(const char *a, const char *b) {
+    FILE *fa = fopen(a, &quot;rb&quot;);
+    FILE *fb = fopen(b, &quot;rb&quot;);
+    int ok = fa != NULL &amp;&amp; fb != NULL;
+    while (ok) {
+        int ca = fgetc(fa), cb = fgetc(fb);
+        if (ca != cb) ok = 0;
+        if (ca == EOF || cb == EOF) break;
+    }
+    if (fa) fclose(fa);
+    if (fb) fclose(fb);
+    return ok;
+}
+
+int main(void) {
+    if (!cria_exemplo(&quot;feira.txt&quot;)) {
+        return 1;
+    }
+    long original = arq_tamanho(&quot;feira.txt&quot;);
+    long compacto = huf_compacta(&quot;feira.txt&quot;, &quot;feira.huf&quot;);
+    long volta = huf_descompacta(&quot;feira.huf&quot;, &quot;feira2.txt&quot;);
+
+    printf(&quot;feira.txt:  %ld bytes\n&quot;, original);
+    printf(&quot;feira.huf:  %ld bytes (%.1f%% do original)\n&quot;, compacto, 100.0 * compacto / original);
+    printf(&quot;feira2.txt: %ld bytes, %s\n&quot;, volta,
+           iguais(&quot;feira.txt&quot;, &quot;feira2.txt&quot;) ? &quot;igual ao original&quot; : &quot;DIFERENTE&quot;);
+
+    remove(&quot;feira.txt&quot;);
+    remove(&quot;feira.huf&quot;);
+    remove(&quot;feira2.txt&quot;);
+    return 0;
+}
+// Saída:
+// feira.txt:  9560 bytes
+// feira.huf:  6156 bytes (64.4% do original)
+// feira2.txt: 9560 bytes, igual ao original
+</code></pre>
+<p>O cabeçalho é custo fixo: pesado em arquivo pequeno, irrelevante nos grandes.
+No <code>huf_descompacta</code>, cada byte começa na raiz e lê bits até uma folha; o laço
+de fora para no tamanho original:</p>
+<p>{{fluxograma}}</p>

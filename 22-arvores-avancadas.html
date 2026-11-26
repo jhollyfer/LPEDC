@@ -1,0 +1,3225 @@
+<!-- Gerado por _gerador. Para mudar este arquivo, edite _gerador/modulos/22-arvores-avancadas/ e rode: cd _gerador && npm run gerar --><h1>Módulo 22 · Árvores e conjuntos avançados</h1>
+<blockquote>
+<p>[!IMPORTANT]
+<strong>Mundo 5 · Árvores · Rota do jogo: etapa 18 de 29</strong></p>
+<p><strong>Missão:</strong> conhecer rubro-negra, árvore B, trie e union-find.</p>
+<p><strong>Vem de:</strong> <a href="14-arvores.html">Módulo 14 · Árvores</a>. <strong>Segue para:</strong> <a href="15-hash.html">Módulo 15 · Tabelas hash</a>.</p>
+<p><strong>Checkpoints desta fase:</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> Ler os assuntos 0144 a 0149 e refazer os exemplos</li>
+<li><input disabled="" type="checkbox"> Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho</li>
+<li><input disabled="" type="checkbox"> Fechar a lista prática (P2201 a P2230)</li>
+<li><input disabled="" type="checkbox"> Enfrentar os desafios do módulo</li>
+<li><input disabled="" type="checkbox"> Chefão: resolver as questões de prova do módulo sem consultar</li>
+</ul>
+</blockquote>
+<p>Árvores e conjuntos além da BST do módulo 14: árvore geral, rubro-negra
+esquerdista, árvore B, trie e union-find. O fim junta a trie com a distância de
+edição do módulo 21 num corretor ortográfico e compara trie, hash e BST.</p>
+<h2>O que você vai aprender</h2>
+<ul>
+<li><strong>árvores gerais</strong> com primeiro filho / próximo irmão</li>
+<li>a <strong>rubro-negra esquerdista</strong> (LLRB): três regras, três consertos e a
+árvore 2-3 por trás</li>
+<li>a <strong>árvore B</strong>: busca, <strong>divisão</strong> do nó cheio e crescimento pela raiz</li>
+<li>a <strong>trie</strong>: prefixo como endereço e <strong>autocompletar</strong></li>
+<li>o <strong>union-find</strong>: <strong>união por tamanho</strong> e <strong>compressão de caminho</strong></li>
+<li>um <strong>corretor ortográfico</strong> comparando trie, hash e BST</li>
+</ul>
+<h2>Antes de começar</h2>
+<p>Revise recursão (0032 e 0033), ponteiros para struct (0062), <code>malloc</code>, <code>calloc</code>
+e <code>free</code> (0054 e 0055), TAD (0074), BST e rotações da AVL (0099 a 0101), hash
+(0105 a 0108), distância de edição (0142) e análise amortizada (0116).</p>
+<p>Cada assunto tem um TAD na pasta (<code>arvgen.h</code>, <code>rubronegra.h</code>, <code>arvoreb.h</code>,
+<code>trie.h</code>, <code>uniao.h</code>, <code>corretor.h</code>). Compile junto os <code>.c</code> de apoio:</p>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A293.c ~/LPEDC/material/0147-trie.c -o ~/LPEDC/material/A293 &amp;&amp; ~/LPEDC/material/A293
+</code></pre>
+<p>Convenções: <strong>altura conta arestas</strong> (folha tem altura 0). A árvore B usa o
+<strong>grau mínimo</strong> <code>t</code> do Cormen; outros livros usam &quot;ordem m&quot;. A rubro-negra do
+0145 é a esquerdista; a clássica do Cormen, cobrada no PPGI, está no 0177. Nos
+desenhos, o nó preto da rubro-negra é cinza; na trie, nó verde termina palavra;
+no union-find, a raiz verde representa o grupo.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Assunto</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="#0144--%C3%A1rvores-gerais-primeiro-filho-pr%C3%B3ximo-irm%C3%A3o">0144</a></td>
+<td>Árvores gerais: primeiro filho, próximo irmão</td>
+</tr>
+<tr>
+<td><a href="#0145--rubro-negra-esquerdista-llrb-inser%C3%A7%C3%A3o">0145</a></td>
+<td>Rubro-negra esquerdista (LLRB): inserção</td>
+</tr>
+<tr>
+<td><a href="#0146--%C3%A1rvore-b-busca-divis%C3%A3o-e-inser%C3%A7%C3%A3o">0146</a></td>
+<td>Árvore B: busca, divisão e inserção</td>
+</tr>
+<tr>
+<td><a href="#0147--trie-%C3%A1rvore-de-prefixos-e-autocompletar">0147</a></td>
+<td>Trie: árvore de prefixos e autocompletar</td>
+</tr>
+<tr>
+<td><a href="#0148--union-find-conjuntos-disjuntos">0148</a></td>
+<td>Union-find: conjuntos disjuntos</td>
+</tr>
+<tr>
+<td><a href="#0149--juntando-tudo-corretor-ortogr%C3%A1fico">0149</a></td>
+<td>Juntando tudo: corretor ortográfico</td>
+</tr>
+</tbody></table>
+<hr>
+<blockquote>
+<p>[!NOTE]
+Cada assunto é um capítulo: <strong>Conceito</strong> (a explicação), <strong>Exemplos de uso</strong> (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e <strong>Exercícios</strong> (cada um é um arquivo em <code>material/</code> com o esqueleto, as dicas e o espaço para a resposta; resoluções em <code>_respostas/22-arvores-avancadas/</code>).</p>
+</blockquote>
+<h2>0144 · Árvores gerais: primeiro filho, próximo irmão</h2>
+<h3>Conceito</h3>
+<p>O empreiteiro mandou o orçamento da reforma em tópicos. A reforma tem
+cozinha, banheiro e pintura; a cozinha tem piso e pia; o banheiro tem box e
+louças; as louças têm vaso e cuba. O total de cada tópico é a soma do que
+está embaixo dele. Você quer guardar isso na memória e calcular os totais.</p>
+<p>A forma é uma árvore, mas não binária: a reforma tem três filhos, a cozinha
+tem dois, e nada impede um tópico de ter dez. Uma <strong>árvore geral</strong>, também
+chamada <strong>n-ária</strong>, é uma árvore em que cada nó pode ter qualquer número de
+filhos (SZWARCFITER; MARKENZON, 2010). Pastas e arquivos de um disco, o
+organograma de uma empresa e o sumário de um livro são árvores gerais.</p>
+<p>O primeiro impulso é dar a cada nó um vetor de ponteiros para os filhos,
+como o <code>filhos[4]</code> do A193, no módulo 14. Isso trava no quinto filho: o
+tópico com cinco subitens não cabe. E desperdiça memória, porque a maioria
+dos nós de uma árvore são folhas e carregam quatro ponteiros <code>NULL</code> sem uso.
+Aumentar o vetor piora o desperdício; diminuir piora a trava.</p>
+<p>A saída é a representação <strong>primeiro filho, próximo irmão</strong> (<em>left-child,
+right-sibling</em>). Cada nó guarda só dois ponteiros, qualquer que seja o
+número de filhos: <code>filho</code> aponta para o primeiro filho do nó, e <code>irmao</code>
+aponta para o próximo filho do mesmo pai (CORMEN et al., 2024, cap. 10). Na
+reforma, <code>filho</code> aponta para a cozinha; a cozinha aponta, por <code>irmao</code>, para
+o banheiro; o banheiro, para a pintura; e o <code>irmao</code> da pintura é <code>NULL</code>.</p>
+<p>Repare no que isso forma: os filhos de um nó viram uma <strong>lista encadeada</strong>,
+que começa em <code>filho</code> e segue pelos <code>irmao</code> até o <code>NULL</code>. Visitar todos os
+filhos é percorrer essa lista, com o mesmo laço de sempre:</p>
+<pre><code class="language-c">for (const NoG *p = r-&gt;filho; p != NULL; p = p-&gt;irmao) { ... }
+</code></pre>
+<p>Há um efeito curioso. Com dois ponteiros por nó, a estrutura na memória é
+uma <strong>árvore binária</strong>: <code>filho</code> faz o papel do ponteiro esquerdo e <code>irmao</code>,
+do direito (CELES; RANGEL, 2002). Toda árvore geral pode ser guardada como
+binária. Mas o significado muda: na binária, descer pela direita é descer um
+nível; aqui, andar pelo <code>irmao</code> é andar para o lado, no mesmo nível.</p>
+<p>As funções sobre a árvore seguem um molde recursivo: resolvem o nó, pedem a
+resposta de cada filho percorrendo a lista e juntam tudo. O total de um
+tópico é o valor dele mais o total de cada filho. Essa ordem, em que os
+filhos ficam prontos antes do pai, é a <strong>pós-ordem</strong> (TENENBAUM; LANGSAM;
+AUGENSTEIN, 1995, cap. 5). No banheiro, a função soma o box (900) e as
+louças (700, que por sua vez já somaram vaso e cuba) e devolve 1600.</p>
+<p>O preço da economia está no acesso. Cada nó tem tamanho fixo, 40 bytes no
+TAD deste assunto, tenha ele um filho ou cem. Mas, para chegar ao k-ésimo
+filho, é preciso andar k passos pela lista de irmãos, enquanto o vetor
+chegava lá direto pelo índice. Para percorrer todos os filhos, que é o caso
+comum, a diferença some.</p>
+<blockquote>
+<p>[!WARNING]
+O irmão está no <strong>mesmo nível</strong>. A altura escrita como na binária,
+<code>1 + maior(altura(r-&gt;filho), altura(r-&gt;irmao))</code>, conta cada irmão como um
+andar: no orçamento dá 6 em vez de 3. Só <code>filho</code> desce um nível.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>O orçamento de uma reforma em tópicos, com 10 nós; os tópicos que só agrupam
+valem 0. Em cima a árvore, embaixo a memória: setas verdes para o primeiro
+filho, roxas para o irmão:</p>
+<p align="center"><img src="material/0144-ideia.svg" alt="Diagrama da ideia: Árvores gerais: primeiro filho, próximo irmão" width="893"></p>
+<p>O TAD está em <code>arvgen.h</code> e <code>arvgen.c</code>. O nó e as funções recursivas:</p>
+<pre><code class="language-c">typedef struct NoG {
+    char nome[20];
+    int valor;          // o valor do próprio nó (um grupo pode ter 0)
+    struct NoG *filho;  // o primeiro filho
+    struct NoG *irmao;  // o próximo irmão (mesmo pai)
+} NoG;
+
+int ag_total(const NoG *r) {
+    int soma = r-&gt;valor;
+    for (const NoG *p = r-&gt;filho; p != NULL; p = p-&gt;irmao) {
+        soma += ag_total(p); // cada filho traz o total da sua subárvore
+    }
+    return soma;
+}
+
+static void mostra(const NoG *r, int nivel) {
+    printf(&quot;%*s%s: %d\n&quot;, 2 * nivel, &quot;&quot;, r-&gt;nome, ag_total(r));
+    for (const NoG *p = r-&gt;filho; p != NULL; p = p-&gt;irmao) {
+        mostra(p, nivel + 1);
+    }
+}
+</code></pre>
+<p><code>ag_adiciona(pai, nome, valor)</code> pendura o filho novo no fim da fila de
+irmãos e devolve o ponteiro dele:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;arvgen.h&quot;
+
+int main(void) {
+    NoG *reforma = ag_cria(&quot;reforma&quot;, 0);
+    NoG *cozinha = ag_adiciona(reforma, &quot;cozinha&quot;, 0);
+    ag_adiciona(cozinha, &quot;piso&quot;, 1800);
+    ag_adiciona(cozinha, &quot;pia&quot;, 650);
+    NoG *banheiro = ag_adiciona(reforma, &quot;banheiro&quot;, 0);
+    ag_adiciona(banheiro, &quot;box&quot;, 900);
+    NoG *loucas = ag_adiciona(banheiro, &quot;loucas&quot;, 0);
+    ag_adiciona(loucas, &quot;vaso&quot;, 420);
+    ag_adiciona(loucas, &quot;cuba&quot;, 280);
+    ag_adiciona(reforma, &quot;pintura&quot;, 1200);
+
+    ag_mostra(reforma);
+    printf(&quot;Itens: %d | altura: %d | grau da raiz: %d\n&quot;,
+           ag_conta(reforma), ag_altura(reforma), ag_grau(reforma));
+
+    ag_libera(reforma);
+    return 0;
+}
+// Saída:
+// reforma: 5250
+//   cozinha: 2450
+//     piso: 1800
+//     pia: 650
+//   banheiro: 1600
+//     box: 900
+//     loucas: 700
+//       vaso: 420
+//       cuba: 280
+//   pintura: 1200
+// Itens: 10 | altura: 3 | grau da raiz: 3
+</code></pre>
+<p>O fluxograma segue <code>ag_total</code> no banheiro: soma o box (900) e as louças (700)
+e para quando <code>p</code> chega a <code>NULL</code>, devolvendo 1600:</p>
+<p align="center"><img src="material/0144-fluxograma.svg" alt="Fluxograma: Árvores gerais: primeiro filho, próximo irmão" width="481"></p>
+<p><strong>Exemplo A287 · O sumário numerado da apostila</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;0144-arvgen.h&quot;
+
+// numera como num sumário: o número de um nó é o do pai + a posição dele
+// entre os irmãos (1, 2, 3...). O prefixo vai crescendo na descida.
+void sumario(const NoG *r, const char *prefixo) {
+    int pos = 1;
+    for (const NoG *p = r-&gt;filho; p != NULL; p = p-&gt;irmao, pos++) {
+        char numero[32];
+        if (prefixo[0] == &#39;\0&#39;) {
+            snprintf(numero, sizeof numero, &quot;%d&quot;, pos);
+        } else {
+            snprintf(numero, sizeof numero, &quot;%s.%d&quot;, prefixo, pos);
+        }
+        if (p-&gt;filho == NULL) {
+            printf(&quot;%-6s %-14s %3d pág.\n&quot;, numero, p-&gt;nome, p-&gt;valor);
+        } else {
+            printf(&quot;%-6s %-14s %3d pág. no total\n&quot;, numero, p-&gt;nome, ag_total(p));
+        }
+        sumario(p, numero); // os filhos de p herdam o número dele
+    }
+}
+
+int main(void) {
+    NoG *apostila = ag_cria(&quot;apostila&quot;, 0);
+    NoG *c1 = ag_adiciona(apostila, &quot;Fundamentos&quot;, 0);
+    ag_adiciona(c1, &quot;Algoritmos&quot;, 6);
+    ag_adiciona(c1, &quot;Tipos&quot;, 9);
+    NoG *c2 = ag_adiciona(apostila, &quot;Condicionais&quot;, 0);
+    ag_adiciona(c2, &quot;if e else&quot;, 8);
+    NoG *sw = ag_adiciona(c2, &quot;switch&quot;, 0);
+    ag_adiciona(sw, &quot;case&quot;, 4);
+    ag_adiciona(sw, &quot;break&quot;, 3);
+    ag_adiciona(apostila, &quot;Projetos&quot;, 15); // capítulo sem seções: é folha
+
+    sumario(apostila, &quot;&quot;);
+    printf(&quot;Total: %d páginas em %d capítulos\n&quot;, ag_total(apostila), ag_grau(apostila));
+
+    ag_libera(apostila);
+    return 0;
+}
+// Saída:
+// 1      Fundamentos     15 pág. no total
+// 1.1    Algoritmos       6 pág.
+// 1.2    Tipos            9 pág.
+// 2      Condicionais    15 pág. no total
+// 2.1    if e else        8 pág.
+// 2.2    switch           7 pág. no total
+// 2.2.1  case             4 pág.
+// 2.2.2  break            3 pág.
+// 3      Projetos        15 pág.
+// Total: 45 páginas em 3 capítulos
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A287.c ~/LPEDC/material/0144-arvgen.c -o ~/LPEDC/material/A287 &amp;&amp; ~/LPEDC/material/A287
+</code></pre>
+<p><strong>Exemplo A288 · A família vista como árvore binária</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;0144-arvgen.h&quot;
+
+// Lendo filho como &quot;esquerdo&quot; e irmão como &quot;direito&quot;, o NoG vira um nó de
+// árvore binária. As funções abaixo percorrem as DUAS leituras.
+
+void pre_geral(const NoG *r) { // o nó, depois cada filho
+    printf(&quot; %s&quot;, r-&gt;nome);
+    for (const NoG *p = r-&gt;filho; p != NULL; p = p-&gt;irmao) {
+        pre_geral(p);
+    }
+}
+
+void pos_geral(const NoG *r) { // cada filho, depois o nó
+    for (const NoG *p = r-&gt;filho; p != NULL; p = p-&gt;irmao) {
+        pos_geral(p);
+    }
+    printf(&quot; %s&quot;, r-&gt;nome);
+}
+
+void pre_binaria(const NoG *r) { // raiz, esquerda (filho), direita (irmão)
+    if (r != NULL) {
+        printf(&quot; %s&quot;, r-&gt;nome);
+        pre_binaria(r-&gt;filho);
+        pre_binaria(r-&gt;irmao);
+    }
+}
+
+void em_ordem_binaria(const NoG *r) { // esquerda, raiz, direita
+    if (r != NULL) {
+        em_ordem_binaria(r-&gt;filho);
+        printf(&quot; %s&quot;, r-&gt;nome);
+        em_ordem_binaria(r-&gt;irmao);
+    }
+}
+
+int altura_binaria(const NoG *r) { // irmão conta como mais um nível aqui
+    if (r == NULL) {
+        return -1;
+    }
+    int he = altura_binaria(r-&gt;filho);
+    int hd = altura_binaria(r-&gt;irmao);
+    return 1 + (he &gt; hd ? he : hd);
+}
+
+int main(void) {
+    NoG *lucia = ag_cria(&quot;Lucia&quot;, 0);
+    NoG *ana = ag_adiciona(lucia, &quot;Ana&quot;, 0);
+    ag_adiciona(ana, &quot;Bia&quot;, 0);
+    ag_adiciona(ana, &quot;Caio&quot;, 0);
+    ag_adiciona(lucia, &quot;Davi&quot;, 0);
+    NoG *eva = ag_adiciona(lucia, &quot;Eva&quot;, 0);
+    ag_adiciona(eva, &quot;Fabio&quot;, 0);
+
+    printf(&quot;Pré-ordem da geral:    &quot;);
+    pre_geral(lucia);
+    printf(&quot;\nPré-ordem da binária:  &quot;);
+    pre_binaria(lucia);
+    printf(&quot;\nPós-ordem da geral:    &quot;);
+    pos_geral(lucia);
+    printf(&quot;\nEm ordem da binária:   &quot;);
+    em_ordem_binaria(lucia);
+    printf(&quot;\nAltura da geral: %d | altura da binária: %d\n&quot;,
+           ag_altura(lucia), altura_binaria(lucia));
+
+    ag_libera(lucia);
+    return 0;
+}
+// Saída:
+// Pré-ordem da geral:     Lucia Ana Bia Caio Davi Eva Fabio
+// Pré-ordem da binária:   Lucia Ana Bia Caio Davi Eva Fabio
+// Pós-ordem da geral:     Bia Caio Ana Davi Fabio Eva Lucia
+// Em ordem da binária:    Bia Caio Ana Davi Fabio Eva Lucia
+// Altura da geral: 2 | altura da binária: 4
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A288.c ~/LPEDC/material/0144-arvgen.c -o ~/LPEDC/material/A288 &amp;&amp; ~/LPEDC/material/A288
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E859</strong> · ★☆☆</p>
+<p>A lista de compras do churrasco é uma árvore geral (arvgen.h). Monte-a no
+main com ag_cria e ag_adiciona:</p>
+<pre><code class="language-text">churrasco
+  carnes: picanha 120, linguica 35, frango 28
+  bebidas: refri 24, cerveja 60
+  carvao 30
+</code></pre>
+<p>Os grupos (churrasco, carnes e bebidas) valem 0. Escreva folhas(r), que conta
+os nós sem filhos (os itens do carrinho), e grupos(r), que conta os nós com
+pelo menos um filho (a raiz entra). Mostre também o total com ag_total.</p>
+<pre><code class="language-text">Saída esperada:
+Itens (folhas): 6
+Grupos (nós com filhos): 3
+Total: R$ 297
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E859.c ~/LPEDC/material/0144-arvgen.c -o ~/LPEDC/material/E859 &amp;&amp; ~/LPEDC/material/E859
+</code></pre>
+<p><strong>Exercício E861</strong> · ★★☆</p>
+<p>O orçamento de uma reforma é uma árvore geral (arvgen.h). Monte-a no main:</p>
+<pre><code class="language-text">reforma
+  cozinha: piso 1800, pia 650
+  banheiro: box 900, loucas (vaso 420, cuba 280)
+  pintura 1200
+</code></pre>
+<p>Escreva caminho(r, nome): mostra a trilha da raiz até o item, separada por &quot;</p>
+<blockquote>
+<p>&quot;, e a profundidade do item. Se o item não existir, avisa. Teste com vaso,
+pia, reforma e janela.</p>
+</blockquote>
+<pre><code class="language-text">Saída esperada:
+vaso: reforma &gt; banheiro &gt; loucas &gt; vaso (profundidade 3)
+pia: reforma &gt; cozinha &gt; pia (profundidade 2)
+reforma: reforma (profundidade 0)
+janela: não encontrado
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E861.c ~/LPEDC/material/0144-arvgen.c -o ~/LPEDC/material/E861 &amp;&amp; ~/LPEDC/material/E861
+</code></pre>
+<p><strong>Exercício E862</strong> · ★★☆</p>
+<p>A árvore genealógica de seu Joaquim é uma árvore geral (arvgen.h). Monte-a no
+main:</p>
+<pre><code class="language-text">Joaquim
+  Rosa: Paulo, Rita (Leo)
+  Jorge: Nina, Otto, Pedro
+  Vera
+</code></pre>
+<p>Para a foto da festa, escreva conta_nivel(r, alvo), que conta as pessoas na
+profundidade alvo, e mostra_nivel(r, alvo), que imprime os nomes dessa
+profundidade, da esquerda para a direita. No main, use ag_altura para saber
+quantas gerações existem.</p>
+<pre><code class="language-text">Saída esperada:
+Geração 0 (1): Joaquim
+Geração 1 (3): Rosa Jorge Vera
+Geração 2 (5): Paulo Rita Nina Otto Pedro
+Geração 3 (1): Leo
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E862.c ~/LPEDC/material/0144-arvgen.c -o ~/LPEDC/material/E862 &amp;&amp; ~/LPEDC/material/E862
+</code></pre>
+<p><strong>Exercício E864</strong> · ★★★</p>
+<p>Monte uma árvore geral (arvgen.h) pela entrada. Cada linha tem &quot;pai nome
+valor&quot;; na primeira, o pai é &quot;-&quot; e o nome é a raiz. Um filho novo entra no
+fim da fila de irmãos do pai. Se o pai não existir, avise e ignore a linha.
+No fim, mostre a árvore (ag_mostra), o número de nós, a altura e qual filho
+da raiz tem o maior total. Sem nenhuma linha, mostre &quot;Árvore vazia&quot;.</p>
+<pre><code class="language-text">Entrada:
+- casamento 0
+casamento buffet 0
+buffet salgados 1800
+buffet bolo 950
+casamento decoracao 0
+decoracao flores 1200
+igreja padre 300
+decoracao luzes 400
+casamento musica 2500
+buffet doces 700
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+pai igreja não existe: linha ignorada
+casamento: 7550
+  buffet: 3450
+    salgados: 1800
+    bolo: 950
+    doces: 700
+  decoracao: 1600
+    flores: 1200
+    luzes: 400
+  musica: 2500
+Itens: 9 | altura: 2
+Maior gasto: buffet (R$ 3450)
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E864.c ~/LPEDC/material/0144-arvgen.c -o ~/LPEDC/material/E864 &amp;&amp; ~/LPEDC/material/E864
+</code></pre>
+<hr>
+<h2>0145 · Rubro-negra esquerdista (LLRB): inserção</h2>
+<h3>Conceito</h3>
+<p>O síndico cadastra as tags da cancela do condomínio a qualquer hora, e o
+sistema precisa achar uma tag rápido quando o carro chega. Uma árvore
+binária de busca (BST) degenera numa lista se as tags chegarem em ordem
+crescente, e a busca vira O(n). A AVL resolve, mas guarda alturas em cada
+nó e tem quatro casos de rotação. A <strong>rubro-negra</strong> chega ao mesmo
+equilíbrio com regras mais curtas, e a versão esquerdista de Sedgewick é a
+mais fácil de programar.</p>
+<p>Para entendê-la, comece por outra árvore. Na <strong>árvore 2-3</strong>, cada nó tem
+<strong>uma chave</strong> e 2 filhos, ou <strong>duas chaves</strong> e 3 filhos (SEDGEWICK; WAYNE,
+2011). Toda chave nova entra numa folha. Se a folha tinha uma chave, passa a
+ter duas, e acabou. Se já tinha duas, fica com três por um instante e
+<strong>estoura</strong>: a chave do meio sobe para o pai, e as outras duas viram nós
+separados. Se o pai também estourar, o processo se repete para cima. A
+árvore só ganha altura quando a raiz estoura, e aí todos os caminhos crescem
+juntos. Por isso <strong>todas as folhas ficam no mesmo nível</strong>, sempre.</p>
+<p>A 2-3 é equilibrada, mas nós de tamanhos diferentes são chatos de programar.
+A <strong>rubro-negra esquerdista</strong> (<em>left-leaning red-black</em>, LLRB) guarda a
+mesma árvore 2-3 usando só nós binários (SEDGEWICK, 2008). Um nó de duas
+chaves <code>[a b]</code> vira dois nós binários: o <code>b</code>, com o <code>a</code> pendurado à esquerda
+por um <strong>link vermelho</strong>. Os outros links, que ligam nós de verdade da 2-3,
+são <strong>pretos</strong>. Como cada nó tem um único pai, ele guarda a cor do link que
+chega nele, num <code>bool vermelho</code> (SEDGEWICK, 2008).</p>
+<p>As regras da LLRB são a árvore 2-3 escrita em cores. Link vermelho <strong>só à
+esquerda</strong>, porque é assim que se escolheu desenhar o nó de duas chaves.
+Nunca <strong>dois vermelhos seguidos</strong>, porque isso seria um nó de três chaves,
+que na 2-3 não existe. E todo caminho da raiz até um <code>NULL</code> passa pelo mesmo
+número de links pretos, a <strong>altura preta</strong>, porque na 2-3 todas as folhas
+estão no mesmo nível. A raiz é sempre preta (SEDGEWICK, 2008).</p>
+<p>Dessas regras sai a garantia de altura. O caminho mais curto possível só
+tem pretos; o mais longo alterna preto e vermelho, sem dois vermelhos
+juntos. Então o mais longo tem no máximo o dobro do mais curto, e a altura
+fica abaixo de 2 · log₂(n + 1). Busca, inserção e remoção custam O(log n)
+(CORMEN et al., 2024, cap. 13).</p>
+<p>A inserção começa como na BST: desce comparando e pendura um nó novo, sempre
+<strong>vermelho</strong>, porque a chave nova se junta a um nó da 2-3 que já existe. Isso
+pode quebrar uma regra. Na volta da recursão, cada ancestral <code>h</code> confere três
+situações e aplica o conserto de cada uma, <strong>nesta ordem</strong>. A tabela mostra
+cada conserto e o que ele faz na árvore 2-3 por trás:</p>
+<table>
+<thead>
+<tr>
+<th>Situação em <code>h</code></th>
+<th>Conserto</th>
+<th>Na árvore 2-3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>filho direito vermelho, esquerdo preto</td>
+<td>rotação à esquerda</td>
+<td>deita o nó de 2 chaves para a esquerda</td>
+</tr>
+<tr>
+<td>filho esquerdo e neto esquerdo vermelhos</td>
+<td>rotação à direita</td>
+<td>arruma um nó de 3 chaves temporário</td>
+</tr>
+<tr>
+<td>os dois filhos vermelhos</td>
+<td>inverte as cores</td>
+<td>o nó de 3 chaves estoura e a do meio sobe</td>
+</tr>
+</tbody></table>
+<p>O último conserto merece atenção. A <strong>inversão de cores</strong> pinta os dois
+filhos de <code>h</code> de preto e o próprio <code>h</code> de vermelho. Na 2-3, é o estouro: as
+chaves dos lados viram nós separados, e a do meio, <code>h</code>, passa a fazer parte
+do nó do pai. Lá em cima, esse vermelho novo pode disparar os consertos de
+novo, como o estouro que sobe na 2-3.</p>
+<p>A LLRB é a variante de Sedgewick. A <strong>rubro-negra clássica</strong> do Cormen, que
+é a cobrada na prova do PPGI, põe a cor no <strong>nó</strong>, aceita filho vermelho dos
+dois lados (o que equivale a uma árvore 2-3-4), usa folhas <code>NIL</code> pretas e
+conserta a inserção pelos casos do <strong>tio</strong>, com no máximo duas rotações. O
+assunto 0177 trata dela (CORMEN et al., 2024, cap. 13).</p>
+<blockquote>
+<p>[!WARNING]
+Na rotação, quem sobe herda a cor de quem desce (<code>x-&gt;vermelho = h-&gt;vermelho</code>);
+sem isso, a altura preta se desencontra. E a raiz pode ficar vermelha após
+uma inversão no topo: <code>rn_insere</code> a pinta de preto em <strong>toda</strong> inserção.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>As tags da cancela de um condomínio: 30, 10 e 20 formam um zigue-zague e
+disparam os três consertos. Com 50 e 40, o 20 vermelho fica colado no 40, o nó
+2-3 <code>[20 40]</code>:</p>
+<p align="center"><img src="material/0145-ideia.svg" alt="Diagrama da ideia: Rubro-negra esquerdista (LLRB): inserção" width="858"></p>
+<p>A inserção de <code>rubronegra.c</code>. A rotação é a da AVL, e a cor do link sobe junto:</p>
+<pre><code class="language-c">static NoRN *gira_esquerda(NoRN *h) {
+    NoRN *x = h-&gt;dir;
+    h-&gt;dir = x-&gt;esq;
+    x-&gt;esq = h;
+    x-&gt;vermelho = h-&gt;vermelho; // x herda a cor do link que chegava em h
+    h-&gt;vermelho = true;
+    rotacoes++;
+    return x;
+}
+
+static NoRN *insere(NoRN *h, int chave) {
+    if (h == NULL) {
+        return novo_no(chave); // todo nó novo chega vermelho
+    }
+    if (chave &lt; h-&gt;chave) {
+        h-&gt;esq = insere(h-&gt;esq, chave);
+    } else if (chave &gt; h-&gt;chave) {
+        h-&gt;dir = insere(h-&gt;dir, chave);
+    }
+    // na volta, os três consertos, nesta ordem
+    if (eh_vermelho(h-&gt;dir) &amp;&amp; !eh_vermelho(h-&gt;esq)) {
+        h = gira_esquerda(h);      // 1. vermelho à direita
+    }
+    if (eh_vermelho(h-&gt;esq) &amp;&amp; eh_vermelho(h-&gt;esq-&gt;esq)) {
+        h = gira_direita(h);       // 2. dois vermelhos seguidos
+    }
+    if (eh_vermelho(h-&gt;esq) &amp;&amp; eh_vermelho(h-&gt;dir)) {
+        inverte_cores(h);          // 3. dois filhos vermelhos
+    }
+    return h;
+}
+
+NoRN *rn_insere(NoRN *raiz, int chave) {
+    raiz = insere(raiz, chave);
+    raiz-&gt;vermelho = false; // a raiz é sempre preta
+    return raiz;
+}
+</code></pre>
+<p><code>eh_vermelho(NULL)</code> devolve <code>false</code>: <code>NULL</code> conta como preto. O cliente
+cadastra as tags e mostra a árvore em pré-ordem, com <code>*</code> nos vermelhos:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;rubronegra.h&quot;
+
+int main(void) {
+    int tags[] = {30, 10, 20, 50, 40};
+    NoRN *raiz = NULL;
+
+    for (int i = 0; i &lt; 5; i++) {
+        raiz = rn_insere(raiz, tags[i]);
+        printf(&quot;Insere %d: pré&quot;, tags[i]);
+        rn_pre_ordem(raiz);
+        printf(&quot; | rotações %d | inversões %d\n&quot;, rn_rotacoes(), rn_inversoes());
+    }
+    printf(&quot;Altura %d, altura preta %d\n&quot;, rn_altura(raiz), rn_altura_preta(raiz));
+
+    raiz = rn_libera(raiz);
+    return 0;
+}
+// Saída:
+// Insere 30: pré 30 | rotações 0 | inversões 0
+// Insere 10: pré 30 10* | rotações 0 | inversões 0
+// Insere 20: pré 20 10 30 | rotações 2 | inversões 1
+// Insere 50: pré 20 10 50 30* | rotações 3 | inversões 1
+// Insere 40: pré 40 20* 10 30 50 | rotações 6 | inversões 2
+// Altura 2, altura preta 2
+</code></pre>
+<p>O fluxograma mostra os três <code>if</code> da volta. O caminho verde é o do nó 30 quando
+a tag 20 chega: ele faz o segundo e o terceiro conserto:</p>
+<p align="center"><img src="material/0145-fluxograma.svg" alt="Fluxograma: Rubro-negra esquerdista (LLRB): inserção" width="412"></p>
+<h4>Passo a passo</h4>
+<p>A tag 40 desce 20, 50, 30 e vira filha direita vermelha do 30, que também é
+vermelho:</p>
+<table>
+<thead>
+<tr>
+<th>Nó na volta</th>
+<th>O que encontra</th>
+<th>Conserto</th>
+<th>Como fica a subárvore</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>30</td>
+<td>filho direito 40 vermelho</td>
+<td>rotação à esquerda</td>
+<td>40* com 30* à esquerda</td>
+</tr>
+<tr>
+<td>50</td>
+<td>40* e 30* seguidos à esquerda</td>
+<td>rotação à direita</td>
+<td>40 com 30* e 50*</td>
+</tr>
+<tr>
+<td>40</td>
+<td>dois filhos vermelhos</td>
+<td>inverte as cores</td>
+<td>40* com 30 e 50 pretos</td>
+</tr>
+<tr>
+<td>20</td>
+<td>filho direito 40 vermelho</td>
+<td>rotação à esquerda</td>
+<td>40 com 20* (10, 30) e 50</td>
+</tr>
+</tbody></table>
+<p>Três rotações e uma inversão neste exemplo.</p>
+<p><strong>Exemplo A289 · Mil chaves em ordem, mil ao contrário</strong></p>
+<pre><code class="language-c">#include &lt;math.h&gt;
+#include &lt;stdio.h&gt;
+#include &quot;0145-rubronegra.h&quot;
+
+void relata(const char *nome, const NoRN *r, int rot, int inv) {
+    printf(&quot;%-12s altura %2d | altura preta %2d | rotações %4d | inversões %4d\n&quot;,
+           nome, rn_altura(r), rn_altura_preta(r), rot, inv);
+}
+
+int main(void) {
+    int n = 1000;
+    NoRN *cresce = NULL;
+    for (int i = 1; i &lt;= n; i++) {
+        cresce = rn_insere(cresce, i);
+    }
+    int rot1 = rn_rotacoes(), inv1 = rn_inversoes();
+    relata(&quot;crescente:&quot;, cresce, rot1, inv1);
+
+    NoRN *desce = NULL; // os contadores são acumulados: desconte os de antes
+    for (int i = n; i &gt;= 1; i--) {
+        desce = rn_insere(desce, i);
+    }
+    relata(&quot;decrescente:&quot;, desce, rn_rotacoes() - rot1, rn_inversoes() - inv1);
+
+    NoRN *mistura = NULL; // 1000 chaves embaralhadas: i * 7919 % 1000
+    int rot2 = rn_rotacoes(), inv2 = rn_inversoes();
+    for (int i = 0; i &lt; n; i++) {
+        mistura = rn_insere(mistura, i * 7919 % n);
+    }
+    relata(&quot;embaralhada:&quot;, mistura, rn_rotacoes() - rot2, rn_inversoes() - inv2);
+
+    printf(&quot;Limite teórico: altura &lt;= 2 log2(n + 1) = %.1f\n&quot;, 2 * log2(n + 1.0));
+    printf(&quot;Busca 777 na crescente: %s\n&quot;, rn_busca(cresce, 777) ? &quot;achou&quot; : &quot;não achou&quot;);
+
+    cresce = rn_libera(cresce);
+    desce = rn_libera(desce);
+    mistura = rn_libera(mistura);
+    return 0;
+}
+// Saída:
+// crescente:   altura  9 | altura preta  9 | rotações  991 | inversões  985
+// decrescente: altura 14 | altura preta  9 | rotações  985 | inversões  985
+// embaralhada: altura 11 | altura preta  8 | rotações  546 | inversões  658
+// Limite teórico: altura &lt;= 2 log2(n + 1) = 19.9
+// Busca 777 na crescente: achou
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A289.c ~/LPEDC/material/0145-rubronegra.c -o ~/LPEDC/material/A289 -lm &amp;&amp; ~/LPEDC/material/A289
+</code></pre>
+<p><strong>Exemplo A290 · A árvore 2-3 escondida na rubro-negra</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;0145-rubronegra.h&quot;
+
+// Cole cada nó vermelho no pai: os dois viram um nó de 2 chaves (um &quot;3-nó&quot;,
+// com 3 filhos). O resultado é uma árvore 2-3, com todas as folhas no mesmo
+// nível. Esta função mostra os nós 2-3 que estão no nível alvo.
+void nivel_23(const NoRN *h, int alvo) {
+    if (h == NULL) {
+        return;
+    }
+    const NoRN *e = h-&gt;esq;
+    bool tres = e != NULL &amp;&amp; e-&gt;vermelho; // h + filho vermelho = 3-nó
+    if (alvo == 0) {
+        if (tres) {
+            printf(&quot; [%d %d]&quot;, e-&gt;chave, h-&gt;chave);
+        } else {
+            printf(&quot; [%d]&quot;, h-&gt;chave);
+        }
+        return;
+    }
+    if (tres) { // os 3 filhos do 3-nó
+        nivel_23(e-&gt;esq, alvo - 1);
+        nivel_23(e-&gt;dir, alvo - 1);
+    } else {
+        nivel_23(h-&gt;esq, alvo - 1);
+    }
+    nivel_23(h-&gt;dir, alvo - 1);
+}
+
+int main(void) {
+    int chaves[] = {50, 20, 80, 10, 30, 60, 90, 40, 70, 25};
+    NoRN *raiz = NULL;
+    for (int i = 0; i &lt; 10; i++) {
+        raiz = rn_insere(raiz, chaves[i]);
+    }
+
+    printf(&quot;Rubro-negra (pré, * = vermelho):&quot;);
+    rn_pre_ordem(raiz);
+    printf(&quot;\nAltura: %d | altura preta: %d\n&quot;, rn_altura(raiz), rn_altura_preta(raiz));
+
+    printf(&quot;Vista como árvore 2-3:\n&quot;);
+    for (int d = 0; d &lt; rn_altura_preta(raiz); d++) {
+        printf(&quot;  nível %d:&quot;, d);
+        nivel_23(raiz, d);
+        printf(&quot;\n&quot;);
+    }
+
+    raiz = rn_libera(raiz);
+    return 0;
+}
+// Saída:
+// Rubro-negra (pré, * = vermelho): 50 30 20* 10 25 40 80 70 60* 90
+// Altura: 3 | altura preta: 3
+// Vista como árvore 2-3:
+//   nível 0: [50]
+//   nível 1: [20 30] [80]
+//   nível 2: [10] [25] [40] [60 70] [90]
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A290.c ~/LPEDC/material/0145-rubronegra.c -o ~/LPEDC/material/A290 &amp;&amp; ~/LPEDC/material/A290
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E865</strong> · ★☆☆</p>
+<p>Insira os códigos de 1 a 10, em ordem, numa rubro-negra (rubronegra.h) e
+escreva conta_vermelhos(r), que devolve quantos nós vermelhos a árvore tem.
+Escreva também conta_nos(r) e mostre quantos nós são pretos. Mostre ainda a
+pré-ordem (rn_pre_ordem) numa linha que começa com &quot;pré:&quot;.</p>
+<pre><code class="language-text">Saída esperada:
+pré: 4 2 1 3 8 6* 5 7 10 9*
+nós: 10 | vermelhos: 2 | pretos: 8
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E865.c ~/LPEDC/material/0145-rubronegra.c -o ~/LPEDC/material/E865 &amp;&amp; ~/LPEDC/material/E865
+</code></pre>
+<p><strong>Exercício E867</strong> · ★★☆</p>
+<p>Escreva confere(r), o fiscal da rubro-negra esquerdista. Ela devolve a altura
+preta (quantos nós pretos há da raiz até um NULL) se as três regras valerem,
+ou um código negativo com a primeira regra quebrada que achar:</p>
+<pre><code class="language-text">-1: um link vermelho à direita;
+-2: dois vermelhos seguidos (um vermelho com filho esquerdo vermelho);
+-3: dois caminhos com quantidades diferentes de nós pretos.
+</code></pre>
+<p>Teste com quatro árvores: a do TAD (rubronegra.h) com as chaves de 1 a 20 e
+três montadas à mão com malloc (escreva uma função no(chave, vermelho, esq,
+dir)), cada nó dado como chave/cor:</p>
+<pre><code class="language-text">A: 20 preto, filho esquerdo 10 preto, filho direito 30 vermelho
+B: 30 preto, esquerdo 20 vermelho (com filho esquerdo 10 vermelho),
+   direito 40 preto
+C: 20 preto, esquerdo 10 preto (com filho esquerdo 5 preto),
+   direito 30 preto sem filhos
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+TAD (1 a 20): ok, altura preta 4
+Árvore A: quebra a regra 1
+Árvore B: quebra a regra 2
+Árvore C: quebra a regra 3
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E867.c ~/LPEDC/material/0145-rubronegra.c -o ~/LPEDC/material/E867 &amp;&amp; ~/LPEDC/material/E867
+</code></pre>
+<p><strong>Exercício E868</strong> · ★★☆</p>
+<p>A eleição do síndico guarda os números votados numa rubro-negra esquerdista
+que você escreve do zero. Cada nó tem numero e qtd (quantos votos): número
+repetido não cria nó novo, só soma 1 em qtd. Escreva insere, apura(r), que
+mostra cada número em ordem crescente com a quantidade (&quot;voto&quot; no singular
+quando for 1), e vencedor(r), que devolve o nó com mais votos.</p>
+<p>A urna tem estes 12 votos, na ordem:</p>
+<pre><code class="language-text">45 12 45 13 30 12 45 13 45 30 12 99
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+12: 3 votos
+13: 2 votos
+30: 2 votos
+45: 4 votos
+99: 1 voto
+Vencedor: 45 com 4 de 12 votos
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E868.c ~/LPEDC/material/0145-rubronegra.c -o ~/LPEDC/material/E868 &amp;&amp; ~/LPEDC/material/E868
+</code></pre>
+<p><strong>Exercício E870</strong> · ★★★</p>
+<p>Escreva do zero (sem o rubronegra.h, que guarda int) uma rubro-negra
+esquerdista de NOMES para a lista de convidados de uma festa. Compare com
+strcmp; nome repetido é ignorado. Insira, nesta ordem:</p>
+<pre><code class="language-text">Marcos Ana Teresa Bruno Lia Zeca Carla Otavio Duda Ana
+</code></pre>
+<p>Mostre a lista em ordem, a pré-ordem com * nos vermelhos, a altura, a
+altura preta e o resultado de duas buscas.</p>
+<pre><code class="language-text">Saída esperada:
+Em ordem: Ana Bruno Carla Duda Lia Marcos Otavio Teresa Zeca
+Pré-ordem: Marcos Duda Bruno* Ana Carla Lia Teresa Otavio Zeca
+Altura 3, altura preta 3
+Lia: na lista | Rafa: fora
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E870.c ~/LPEDC/material/0145-rubronegra.c -o ~/LPEDC/material/E870 &amp;&amp; ~/LPEDC/material/E870
+</code></pre>
+<hr>
+<h2>0146 · Árvore B: busca, divisão e inserção</h2>
+<h3>Conceito</h3>
+<p>O acervo de uma biblioteca tem milhões de fichas guardadas no disco. Ler
+algo da memória leva nanossegundos; ler um bloco de um HD leva uns 10
+milissegundos, um milhão de vezes mais. Numa AVL com 2 milhões de livros, a
+busca desce uns 21 nós, e cada nó pode estar num bloco diferente: 21 idas ao
+disco, um quinto de segundo por busca (ZIVIANI, 2010, cap. 6). Quando os
+dados moram no disco, o que importa é <strong>ler poucos nós</strong>, e para isso cada
+nó precisa decidir muito mais que &quot;esquerda ou direita&quot;.</p>
+<p>A <strong>árvore B</strong> é uma árvore de busca com nós gordos, feita para disco. Cada
+nó guarda <strong>várias chaves em ordem</strong> e tem um filho a mais do que chaves.
+Num banco de dados, um nó costuma ocupar exatamente um bloco do disco, e
+uma leitura traz o nó inteiro (BAYER; McCREIGHT, 1972). As chaves do nó
+separam os filhos: num nó <code>[40 70]</code>, o filho 0 guarda as chaves menores que
+40, o filho 1 as que ficam entre 40 e 70, e o filho 2 as maiores que 70. É a
+mesma regra da BST, generalizada para várias chaves.</p>
+<p>O tamanho dos nós é controlado pelo <strong>grau mínimo</strong> <code>t</code>, um número fixo da
+árvore. Todo nó, menos a raiz, tem de <code>t - 1</code> a <code>2t - 1</code> chaves; a raiz pode
+ter só uma. Um nó interno, que não é folha, com <code>k</code> chaves tem <code>k + 1</code>
+filhos. E <strong>todas as folhas ficam no mesmo nível</strong> (CORMEN et al., 2024, cap.
+18). O mínimo de <code>t - 1</code> chaves impede nós quase vazios, que fariam a árvore
+crescer em altura à toa.</p>
+<p>O TAD deste assunto usa <code>t = 2</code>: cada nó tem de 1 a 3 chaves e de 2 a 4
+filhos. Essa árvore B pequena tem nome próprio, árvore 2-3-4, e é a prima da
+2-3 que você viu na rubro-negra (0145). Com <code>t</code> pequeno, os desenhos cabem na
+página; num banco de dados de verdade, <code>t</code> passa de cem.</p>
+<p>Como cada nó abaixo da raiz tem pelo menos <code>t</code> filhos, a árvore se alarga
+muito a cada nível e a altura fica pequena: com <code>n</code> chaves, <code>h ≤ log_t((n + 1) / 2)</code> (CORMEN et al., 2024, cap. 18). Com chaves <code>int</code> e
+ponteiros de 8 bytes, <code>t = 170</code> faz um nó caber num bloco de 4096 bytes, e um
+bilhão de chaves fica em altura 3. São 4 blocos lidos por busca, contra uns
+30 de uma árvore binária.</p>
+<p>A <strong>busca</strong> é a da BST com um laço dentro do nó. Ande pelas chaves do nó
+até achar uma maior ou igual à procurada. Se for igual, achou. Se não, desça
+pelo filho daquela posição e repita. Ela lê um nó por nível, altura + 1 nós
+no total (CORMEN et al., 2024, cap. 18).</p>
+<p>A <strong>inserção</strong> sempre põe a chave nova numa folha. Se a folha tem espaço,
+basta encaixar a chave em ordem. Se está cheia, com <code>2t - 1</code> chaves,
+acontece a <strong>divisão</strong>: o nó vira dois nós de <code>t - 1</code> chaves cada, e a
+<strong>chave do meio sobe</strong> para o pai, entre os dois (CORMEN et al., 2024, cap.
+18). Com <code>t = 2</code>, a folha <code>[10 20 30]</code> vira <code>[10]</code> e <code>[30]</code>, e o 20 sobe.</p>
+<p>E se o pai também estiver cheio? A chave que sobe não teria onde ficar. O
+TAD evita isso dividindo <strong>na descida</strong>: a caminho da folha, todo nó cheio
+encontrado é dividido antes de entrar nele. Assim o pai de quem se divide
+sempre tem espaço. Se a própria raiz está cheia, ela se divide e a chave do
+meio vira uma raiz nova, acima das duas metades (CORMEN et al., 2024, cap.
+18). A árvore B só cresce <strong>por cima</strong>, pela raiz, e é por isso que as
+folhas continuam todas no mesmo nível.</p>
+<blockquote>
+<p>[!WARNING]
+Depois de <code>divide(x, i)</code>, a chave que subiu está em <code>x-&gt;chave[i]</code>. Sem
+<code>if (chave &gt; x-&gt;chave[i]) i++;</code>, chaves grandes vão para a metade errada. E
+&quot;ordem m&quot; muda de livro para livro (m filhos no Knuth, de m a 2m registros no
+Ziviani); o curso usa o <code>t</code> do Cormen.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>O acervo de uma biblioteca recebe 11 livros: 40, 10, 70, 20, 50, 80, 30, 60, 90,
+25 e 85. O 25 divide a folha <code>[10 20 30]</code> e o 20 sobe; o 85 divide a raiz
+<code>[20 40 70]</code> e o 40 vira a raiz nova. A busca pelo 60 lê três nós:</p>
+<p align="center"><img src="material/0146-ideia.svg" alt="Diagrama da ideia: Árvore B: busca, divisão e inserção" width="899"></p>
+<p>A divisão e a inserção na raiz, em <code>arvoreb.c</code> (<code>AB_T</code> é o <code>t</code>; <code>AB_MAX</code>, <code>2t - 1</code>):</p>
+<pre><code class="language-c">static void divide(NoB *pai, int i) {
+    NoB *y = pai-&gt;filho[i];         // o filho cheio
+    NoB *z = novo_no(y-&gt;folha);     // a metade da direita
+    z-&gt;n = AB_T - 1;
+    for (int j = 0; j &lt; AB_T - 1; j++) {
+        z-&gt;chave[j] = y-&gt;chave[j + AB_T]; // as chaves depois do meio
+    }
+    if (!y-&gt;folha) {
+        for (int j = 0; j &lt; AB_T; j++) {
+            z-&gt;filho[j] = y-&gt;filho[j + AB_T]; // e os filhos delas
+        }
+    }
+    y-&gt;n = AB_T - 1; // y fica com as chaves antes do meio
+
+    for (int j = pai-&gt;n; j &gt; i; j--) { // abre espaço no pai
+        pai-&gt;filho[j + 1] = pai-&gt;filho[j];
+    }
+    pai-&gt;filho[i + 1] = z;
+    for (int j = pai-&gt;n - 1; j &gt;= i; j--) {
+        pai-&gt;chave[j + 1] = pai-&gt;chave[j];
+    }
+    pai-&gt;chave[i] = y-&gt;chave[AB_T - 1]; // a chave do meio sobe
+    pai-&gt;n++;
+}
+
+NoB *ab_insere(NoB *raiz, int chave) {
+    if (ab_busca(raiz, chave, NULL)) {
+        return raiz; // repetida
+    }
+    if (raiz == NULL) {
+        raiz = novo_no(true);
+    }
+    if (raiz-&gt;n == AB_MAX) { // raiz cheia: a árvore cresce por cima
+        NoB *s = novo_no(false);
+        s-&gt;filho[0] = raiz;
+        divide(s, 0);
+        raiz = s;
+    }
+    insere_nao_cheio(raiz, chave);
+    return raiz;
+}
+</code></pre>
+<p>A <code>divide</code> só diminui <code>y-&gt;n</code>: as chaves do fim ficam no vetor, fora da parte em uso.
+O cliente:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;arvoreb.h&quot;
+
+int main(void) {
+    int livros[] = {40, 10, 70, 20, 50, 80, 30, 60, 90, 25, 85};
+    NoB *acervo = NULL;
+    for (int i = 0; i &lt; 11; i++) {
+        acervo = ab_insere(acervo, livros[i]);
+    }
+
+    printf(&quot;Árvore B com 11 livros (altura %d, %d divisões):\n&quot;,
+           ab_altura(acervo), ab_divisoes());
+    ab_mostra(acervo);
+
+    int procura[] = {60, 65};
+    for (int i = 0; i &lt; 2; i++) {
+        int lidos;
+        bool achou = ab_busca(acervo, procura[i], &amp;lidos);
+        printf(&quot;Livro %d: %s, %d nós lidos\n&quot;, procura[i],
+               achou ? &quot;achou&quot; : &quot;não tem&quot;, lidos);
+    }
+
+    acervo = ab_libera(acervo);
+    return 0;
+}
+// Saída:
+// Árvore B com 11 livros (altura 2, 4 divisões):
+//   nível 0: [40]
+//   nível 1: [20] [70]
+//   nível 2: [10] [25 30] [50 60] [80 85 90]
+// Livro 60: achou, 3 nós lidos
+// Livro 65: não tem, 3 nós lidos
+</code></pre>
+<p>O fluxograma segue <code>insere_nao_cheio</code> na raiz <code>[40 70]</code> quando o 25 chega. O
+filho 0, cheio, se divide e o 20 sobe. Como 25 &gt; 20, o <code>i++</code> leva a chave à
+metade nova, folha <code>[30]</code>:</p>
+<p align="center"><img src="material/0146-fluxograma.svg" alt="Fluxograma: Árvore B: busca, divisão e inserção" width="608"></p>
+<p><strong>Exemplo A291 · Quantas idas ao disco</strong></p>
+<pre><code class="language-c">#include &lt;math.h&gt;
+#include &lt;stdio.h&gt;
+#include &quot;0146-arvoreb.h&quot;
+
+// Num banco de dados, cada nó da árvore B é um bloco do disco, e ler um bloco
+// custa muito mais que comparar chaves na memória. O que importa é a altura.
+
+int main(void) {
+    // 1. na prática, com o TAD (T = 2, até 3 chaves por nó)
+    NoB *r = NULL;
+    int n = 100000;
+    for (int i = 1; i &lt;= n; i++) {
+        r = ab_insere(r, i);
+    }
+    int lidos;
+    ab_busca(r, 77777, &amp;lidos);
+    printf(&quot;TAD com T = 2 e %d chaves: altura %d, busca do 77777 leu %d nós\n&quot;,
+           n, ab_altura(r), lidos);
+    printf(&quot;Uma árvore binária perfeita com %d chaves teria altura %d\n&quot;,
+           n, (int)floor(log2(n)));
+    r = ab_libera(r);
+
+    // 2. na teoria: altura máxima de uma árvore B, h &lt;= log_t((n + 1) / 2)
+    int ts[] = {2, 50, 500};
+    double ns[] = {1e6, 1e9};
+    printf(&quot;\nAltura máxima (nós lidos = altura + 1):\n&quot;);
+    printf(&quot;%14s %8s %8s %8s\n&quot;, &quot;chaves&quot;, &quot;T=2&quot;, &quot;T=50&quot;, &quot;T=500&quot;);
+    for (int j = 0; j &lt; 2; j++) {
+        printf(&quot;%14.0f&quot;, ns[j]);
+        for (int i = 0; i &lt; 3; i++) {
+            double h = log((ns[j] + 1) / 2) / log(ts[i]); // log na base t
+            printf(&quot; %8d&quot;, (int)floor(h));
+        }
+        printf(&quot;\n&quot;);
+    }
+    return 0;
+}
+// Saída:
+// TAD com T = 2 e 100000 chaves: altura 15, busca do 77777 leu 16 nós
+// Uma árvore binária perfeita com 100000 chaves teria altura 16
+//
+// Altura máxima (nós lidos = altura + 1):
+//         chaves      T=2     T=50    T=500
+//        1000000       18        3        2
+//     1000000000       28        5        3
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A291.c ~/LPEDC/material/0146-arvoreb.c -o ~/LPEDC/material/A291 -lm &amp;&amp; ~/LPEDC/material/A291
+</code></pre>
+<p><strong>Exemplo A292 · As notas fiscais em ordem</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;0146-arvoreb.h&quot;
+
+// Em ordem num nó de várias chaves: filho 0, chave 0, filho 1, chave 1, ...,
+// chave n-1, filho n. Cada chave fica entre as subárvores das menores e das
+// maiores que ela, como na BST.
+void em_ordem(const NoB *r) {
+    for (int i = 0; i &lt; r-&gt;n; i++) {
+        if (!r-&gt;folha) {
+            em_ordem(r-&gt;filho[i]);
+        }
+        printf(&quot; %d&quot;, r-&gt;chave[i]);
+    }
+    if (!r-&gt;folha) {
+        em_ordem(r-&gt;filho[r-&gt;n]); // o último filho, depois da última chave
+    }
+}
+
+// quantas chaves há em cada nível (nivel conta a partir da raiz)
+void conta_por_nivel(const NoB *r, int nivel, int qtd[]) {
+    qtd[nivel] += r-&gt;n;
+    if (!r-&gt;folha) {
+        for (int i = 0; i &lt;= r-&gt;n; i++) {
+            conta_por_nivel(r-&gt;filho[i], nivel + 1, qtd);
+        }
+    }
+}
+
+int main(void) {
+    int notas[] = {512, 87, 340, 905, 23, 678, 150, 401, 799, 266, 33, 960, 610, 445, 118};
+    NoB *r = NULL;
+    for (int i = 0; i &lt; 15; i++) {
+        r = ab_insere(r, notas[i]);
+    }
+
+    printf(&quot;Por nível:\n&quot;);
+    ab_mostra(r);
+    printf(&quot;Em ordem:&quot;);
+    em_ordem(r);
+    printf(&quot;\n&quot;);
+
+    int qtd[10] = {0};
+    conta_por_nivel(r, 0, qtd);
+    for (int d = 0; d &lt;= ab_altura(r); d++) {
+        printf(&quot;chaves no nível %d: %d\n&quot;, d, qtd[d]);
+    }
+
+    r = ab_libera(r);
+    return 0;
+}
+// Saída:
+// Por nível:
+//   nível 0: [340]
+//   nível 1: [87] [512 678]
+//   nível 2: [23 33] [118 150 266] [401 445] [610] [799 905 960]
+// Em ordem: 23 33 87 118 150 266 340 401 445 512 610 678 799 905 960
+// chaves no nível 0: 1
+// chaves no nível 1: 3
+// chaves no nível 2: 11
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A292.c ~/LPEDC/material/0146-arvoreb.c -o ~/LPEDC/material/A292 &amp;&amp; ~/LPEDC/material/A292
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E871</strong> · ★☆☆</p>
+<p>Insira os códigos de 1 a 20, em ordem, numa árvore B (arvoreb.h, T = 2) e
+escreva duas funções recursivas: conta_chaves(r), o total de chaves, e
+conta_nos(r), o total de nós. Mostre a árvore com ab_mostra e a média de
+chaves por nó.</p>
+<pre><code class="language-text">Saída esperada:
+  nível 0: [8]
+  nível 1: [4] [12]
+  nível 2: [2] [6] [10] [14 16 18]
+  nível 3: [1] [3] [5] [7] [9] [11] [13] [15] [17] [19 20]
+chaves: 20 | nós: 17 | média: 1.18 chaves por nó
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E871.c ~/LPEDC/material/0146-arvoreb.c -o ~/LPEDC/material/E871 &amp;&amp; ~/LPEDC/material/E871
+</code></pre>
+<p><strong>Exercício E873</strong> · ★★☆</p>
+<p>No disco, cada nó da árvore B ocupa um bloco inteiro, cheio ou não. A
+ocupação é a fração das vagas de chave que estão em uso:
+chaves / (nós · AB_MAX). Monte duas árvores com as chaves de 1 a 200: uma
+inserindo em ordem crescente e outra na ordem embaralhada i * 37 % 200 + 1
+(i de 0 a 199, que passa por todos os números de 1 a 200 uma vez só).
+Escreva mede(r, &amp;chaves, &amp;nos), que soma as chaves e os nós de uma árvore,
+e mostre nós, altura e ocupação de cada uma.</p>
+<pre><code class="language-text">Saída esperada:
+crescente:   nós 195 | altura 6 | ocupação 34.2%
+embaralhada: nós 127 | altura 5 | ocupação 52.5%
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E873.c ~/LPEDC/material/0146-arvoreb.c -o ~/LPEDC/material/E873 &amp;&amp; ~/LPEDC/material/E873
+</code></pre>
+<p><strong>Exercício E874</strong> · ★★☆</p>
+<p>A contabilidade quer as notas fiscais de uma faixa de números. Insira estas
+15 notas numa árvore B (arvoreb.h, que fica com 9 nós), na ordem:</p>
+<pre><code class="language-text">512 87 340 905 23 678 150 401 799 266 33 960 610 445 118
+</code></pre>
+<p>Escreva intervalo(r, a, b, &amp;visitados): mostra, em ordem crescente, as chaves
+de a até b e conta quantos nós foram lidos. Não leia subárvores que não podem
+ter chave na faixa. Teste com as faixas 300-700, 100-160 e 970-999.</p>
+<pre><code class="language-text">Saída esperada:
+notas de 300 a 700: 340 401 445 512 610 678 (7 nós lidos de 9)
+notas de 100 a 160: 118 150 (3 nós lidos de 9)
+notas de 970 a 999: (3 nós lidos de 9)
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E874.c ~/LPEDC/material/0146-arvoreb.c -o ~/LPEDC/material/E874 &amp;&amp; ~/LPEDC/material/E874
+</code></pre>
+<p><strong>Exercício E876</strong> · ★★★</p>
+<p>Escreva do zero uma árvore B de grau mínimo T = 3: cada nó guarda de 2 a 5
+chaves (a raiz pode ter 1) e tem até 6 filhos. Use a inserção com divisão
+na descida, como no texto, mas com T e MAX definidos no seu arquivo (o TAD
+arvoreb.h tem T = 2 fixo). Insira i * 7 % 31 para i de 1 a 30 (são os
+números de 1 a 30, embaralhados: 7, 14, 21, 28, 4, 11...). Mostre a árvore
+por nível e o resultado de duas buscas, contando os blocos lidos.</p>
+<pre><code class="language-text">Saída esperada:
+nível 0: [14]
+nível 1: [4 7 11] [18 21 26]
+nível 2: [1 2 3] [5 6] [8 9 10] [12 13] [15 16 17] [19 20] [22 23 24 25] [27 28 29 30]
+busca 23: achou, 3 blocos lidos
+busca 31: não achou, 3 blocos lidos
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E876.c ~/LPEDC/material/0146-arvoreb.c -o ~/LPEDC/material/E876 &amp;&amp; ~/LPEDC/material/E876
+</code></pre>
+<hr>
+<h2>0147 · Trie: árvore de prefixos e autocompletar</h2>
+<h3>Conceito</h3>
+<p>Você digita <code>bol</code> no celular e o teclado oferece &quot;bola&quot;, &quot;boleto&quot;, &quot;bolo&quot; e
+&quot;bolsa&quot; na hora. Ele não compara <code>bol</code> com cada uma das milhares de palavras
+do dicionário. Ele vai direto ao lugar onde moram as palavras que começam
+com <code>bol</code>, como quem abre um dicionário de papel na letra B, depois no
+pedaço &quot;bo&quot;, depois em &quot;bol&quot;. Na estrutura que ele usa, <strong>o prefixo é o
+endereço</strong>.</p>
+<p>Essa estrutura é a <strong>trie</strong>, nome tirado de <em>retrieval</em> (recuperação),
+também chamada <strong>árvore de prefixos</strong>. Cada aresta da árvore <strong>é</strong> uma
+letra, e o caminho da raiz até um nó soletra um prefixo. Da raiz, a aresta
+<code>b</code> leva ao nó de &quot;b&quot;; dele, a aresta <code>o</code> leva ao nó de &quot;bo&quot;; dele, a <code>l</code>
+leva ao nó de &quot;bol&quot;. Todas as palavras que começam com &quot;bol&quot; moram na
+subárvore desse nó (FREDKIN, 1960).</p>
+<p>Note que os nós não guardam palavras inteiras. A palavra está espalhada no
+caminho, uma letra por aresta. Isso cria uma dúvida: o nó de &quot;bol&quot; existe,
+porque &quot;bolo&quot; passa por ele, mas &quot;bol&quot; não é uma palavra. Para separar os
+dois casos, cada nó guarda um <code>bool fim</code>, verdadeiro quando alguma palavra
+<strong>termina</strong> ali (ZIVIANI, 2010, cap. 5). O nó do <code>o</code> depois de &quot;bol&quot; tem <code>fim</code>
+verdadeiro, porque &quot;bolo&quot; é palavra; o nó de &quot;bol&quot; tem <code>fim</code> falso.</p>
+<p>Como achar o filho de uma letra? Com letras minúsculas sem acento, cada nó
+tem um vetor de 26 ponteiros, um por letra. O filho da letra <code>c</code> fica em
+<code>filho[c - &#39;a&#39;]</code>: a conta transforma <code>&#39;a&#39;</code> em 0, <code>&#39;b&#39;</code> em 1, e assim até
+<code>&#39;z&#39;</code> em 25 (CORTÉS, 2015). Ponteiro <code>NULL</code> quer dizer que nenhuma palavra
+segue por aquela letra.</p>
+<p>Com isso, as operações são curtas. Para <strong>inserir</strong> uma palavra, desça
+letra por letra pelo filho correspondente; se o filho não existe, crie-o.
+Ao fim da palavra, marque <code>fim = true</code> no nó onde você parou. Para
+<strong>buscar</strong>, desça do mesmo jeito; se faltar um filho no meio, a palavra não
+existe. Se chegar ao fim do texto, a resposta é o <code>fim</code> daquele nó (ZIVIANI,
+2010, cap. 5).</p>
+<p>O <strong>autocompletar</strong> junta as duas ideias. Desça até o nó do prefixo
+digitado. Depois percorra toda a subárvore dele, filho por filho, de <code>a</code> a
+<code>z</code>, montando as letras do caminho; cada vez que encontrar um nó com <code>fim</code>
+verdadeiro, imprima a palavra montada. Como os filhos são visitados em
+ordem alfabética, as sugestões já saem ordenadas.</p>
+<p>O custo é a grande vantagem. Inserir e buscar custam <strong>O(L)</strong>, com L o
+tamanho da palavra, e <strong>não dependem de quantas palavras</strong> existem: &quot;bolsa&quot;
+desce 5 nós num dicionário de 10 palavras ou de 100 mil. Uma BST com 100 mil
+palavras faria umas 17 comparações de strings, cada uma podendo olhar várias
+letras (SEDGEWICK; WAYNE, 2011).</p>
+<p>O preço é memória. Cada nó com 26 ponteiros e o <code>fim</code> ocupa 216 bytes, e
+quase todos os ponteiros são <code>NULL</code>, porque poucas letras seguem cada
+prefixo. Oito palavras curtas cabem em 45 bytes como strings e, numa trie,
+ocupam 22 nós, quase 5 KB. Guardar os filhos numa lista, como no primeiro
+filho, próximo irmão (0144), ou numa BST por nó, a árvore ternária, gasta
+bem menos, ao custo de achar o filho com mais passos.</p>
+<blockquote>
+<p>[!WARNING]
+Achar o nó não é achar a palavra: a busca olha o <code>fim</code>
+(<code>return n != NULL &amp;&amp; n-&gt;fim;</code>). E o índice só vale de <code>&#39;a&#39;</code> a <code>&#39;z&#39;</code>:
+<code>&#39;B&#39; - &#39;a&#39;</code> dá -31 e <code>&#39;ã&#39;</code> não é um <code>char</code> só em UTF-8.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>Um teclado guarda bolo, bola, bolsa, boleto, bom, bombom, pão e pastel (sem
+acento: <code>pao</code>). No ramo do <code>b</code>, o caminho verde é o prefixo &quot;bol&quot;; os nós verdes
+marcam o fim de uma palavra:</p>
+<p align="center"><img src="material/0147-ideia.svg" alt="Diagrama da ideia: Trie: árvore de prefixos e autocompletar" width="876"></p>
+<p>O nó e a inserção, em <code>trie.c</code> (o <code>calloc</code> deixa os ponteiros <code>NULL</code> e <code>fim</code>
+falso):</p>
+<pre><code class="language-c">typedef struct NoTrie {
+    struct NoTrie *filho[TRIE_LETRAS]; // filho[&#39;c&#39; - &#39;a&#39;] segue a letra c
+    bool fim;                          // uma palavra termina aqui?
+} NoTrie;
+
+bool trie_insere(NoTrie *r, const char *palavra) {
+    for (const char *p = palavra; *p != &#39;\0&#39;; p++) { // confere antes de mexer
+        if (*p &lt; &#39;a&#39; || *p &gt; &#39;z&#39;) {
+            return false;
+        }
+    }
+    for (; *palavra != &#39;\0&#39;; palavra++) {
+        int i = *palavra - &#39;a&#39;;
+        if (r-&gt;filho[i] == NULL) {
+            r-&gt;filho[i] = trie_cria(); // o caminho ainda não existe: cria
+        }
+        r = r-&gt;filho[i];
+    }
+    r-&gt;fim = true; // marca o fim da palavra
+    return true;
+}
+</code></pre>
+<p>O cliente monta o dicionário e testa três textos:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;trie.h&quot;
+
+int main(void) {
+    const char *dicionario[] = {&quot;bolo&quot;, &quot;bola&quot;, &quot;bolsa&quot;, &quot;boleto&quot;, &quot;bom&quot;, &quot;bombom&quot;, &quot;pao&quot;, &quot;pastel&quot;};
+    NoTrie *teclado = trie_cria();
+    for (int i = 0; i &lt; 8; i++) {
+        trie_insere(teclado, dicionario[i]);
+    }
+
+    const char *testes[] = {&quot;bol&quot;, &quot;bom&quot;, &quot;pa&quot;};
+    for (int i = 0; i &lt; 3; i++) {
+        printf(&quot;\&quot;%s\&quot;: palavra? %s | sugestões:&quot;, testes[i],
+               trie_busca(teclado, testes[i]) ? &quot;sim&quot; : &quot;não&quot;);
+        trie_autocompleta(teclado, testes[i], 4);
+        printf(&quot;\n&quot;);
+    }
+    printf(&quot;Nós: %d (%zu bytes cada)\n&quot;, trie_nos(teclado), sizeof(NoTrie));
+
+    trie_libera(teclado);
+    return 0;
+}
+// Saída:
+// &quot;bol&quot;: palavra? não | sugestões: bola boleto bolo bolsa
+// &quot;bom&quot;: palavra? sim | sugestões: bom bombom
+// &quot;pa&quot;: palavra? não | sugestões: pao pastel
+// Nós: 22 (216 bytes cada)
+</code></pre>
+<p>O fluxograma mostra a inserção de &quot;bom&quot;. O <code>b</code> e o <code>o</code> já existem; o <code>m</code> é novo
+e recebe <code>fim = true</code>:</p>
+<p align="center"><img src="material/0147-fluxograma.svg" alt="Fluxograma: Trie: árvore de prefixos e autocompletar" width="650"></p>
+<p><strong>Exemplo A293 · Quanto custa uma trie</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &quot;0147-trie.h&quot;
+
+// conta os ponteiros de filho que estão em NULL (vagas sem uso)
+int nulos(const NoTrie *r) {
+    int total = 0;
+    for (int i = 0; i &lt; TRIE_LETRAS; i++) {
+        if (r-&gt;filho[i] == NULL) {
+            total++;
+        } else {
+            total += nulos(r-&gt;filho[i]);
+        }
+    }
+    return total;
+}
+
+int main(void) {
+    const char *feira[] = {&quot;alface&quot;, &quot;alho&quot;, &quot;abacate&quot;, &quot;abacaxi&quot;, &quot;banana&quot;, &quot;batata&quot;,
+                           &quot;beterraba&quot;, &quot;cebola&quot;, &quot;cenoura&quot;, &quot;chuchu&quot;, &quot;couve&quot;, &quot;laranja&quot;,
+                           &quot;limao&quot;, &quot;mamao&quot;, &quot;manga&quot;, &quot;maracuja&quot;, &quot;melancia&quot;, &quot;milho&quot;,
+                           &quot;tomate&quot;, &quot;uva&quot;, &quot;Pera&quot;, &quot;caqui!&quot;};
+    int n = sizeof feira / sizeof feira[0];
+    NoTrie *t = trie_cria();
+    int aceitas = 0;
+    size_t letras = 0;
+    for (int i = 0; i &lt; n; i++) {
+        if (trie_insere(t, feira[i])) {
+            aceitas++;
+            letras += strlen(feira[i]);
+        } else {
+            printf(&quot;recusada: %s (só a-z)\n&quot;, feira[i]);
+        }
+    }
+
+    int nos = trie_nos(t);
+    printf(&quot;%d palavras, %zu letras no total\n&quot;, aceitas, letras);
+    printf(&quot;trie: %d nós x %zu bytes = %zu bytes\n&quot;, nos, sizeof(NoTrie), nos * sizeof(NoTrie));
+    printf(&quot;as mesmas palavras em strings: %zu bytes (letras + um &#39;\\0&#39; cada)\n&quot;,
+           letras + aceitas);
+    printf(&quot;ponteiros em NULL: %d de %d (%.1f%%)\n&quot;, nulos(t), nos * TRIE_LETRAS,
+           100.0 * nulos(t) / (nos * TRIE_LETRAS));
+
+    trie_libera(t);
+    return 0;
+}
+// Saída:
+// recusada: Pera (só a-z)
+// recusada: caqui! (só a-z)
+// 20 palavras, 121 letras no total
+// trie: 100 nós x 216 bytes = 21600 bytes
+// as mesmas palavras em strings: 141 bytes (letras + um &#39;\0&#39; cada)
+// ponteiros em NULL: 2501 de 2600 (96.2%)
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A293.c ~/LPEDC/material/0147-trie.c -o ~/LPEDC/material/A293 &amp;&amp; ~/LPEDC/material/A293
+</code></pre>
+<p><strong>Exemplo A294 · A trie ordena e acha o prefixo comum</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;0147-trie.h&quot;
+
+// quantos filhos o nó tem e, em *unico, o índice do último achado
+int filhos(const NoTrie *n, int *unico) {
+    int qtd = 0;
+    for (int i = 0; i &lt; TRIE_LETRAS; i++) {
+        if (n-&gt;filho[i] != NULL) {
+            qtd++;
+            *unico = i;
+        }
+    }
+    return qtd;
+}
+
+// maior prefixo comum a TODAS as palavras: desce enquanto o caminho não se
+// divide (um filho só) e nenhuma palavra termina no meio do caminho
+void prefixo_comum(const NoTrie *r, char saida[]) {
+    int k = 0, i = 0;
+    while (!r-&gt;fim &amp;&amp; filhos(r, &amp;i) == 1 &amp;&amp; k &lt; TRIE_MAX - 1) {
+        saida[k++] = (char)(&#39;a&#39; + i);
+        r = r-&gt;filho[i];
+    }
+    saida[k] = &#39;\0&#39;;
+}
+
+int main(void) {
+    const char *obra[] = {&quot;pedreiro&quot;, &quot;pedra&quot;, &quot;pedregulho&quot;, &quot;pedrada&quot;, &quot;pedrisco&quot;};
+    NoTrie *t = trie_cria();
+    for (int i = 0; i &lt; 5; i++) {
+        trie_insere(t, obra[i]);
+    }
+
+    printf(&quot;Em ordem alfabética:&quot;);
+    trie_autocompleta(t, &quot;&quot;, 100); // prefixo vazio: a trie inteira
+    char pc[TRIE_MAX];
+    prefixo_comum(t, pc);
+    printf(&quot;\nPrefixo comum: \&quot;%s\&quot;\n&quot;, pc);
+
+    trie_insere(t, &quot;pe&quot;); // uma palavra curta corta o prefixo comum
+    prefixo_comum(t, pc);
+    printf(&quot;Com \&quot;pe\&quot; no dicionário: \&quot;%s\&quot;\n&quot;, pc);
+
+    trie_insere(t, &quot;areia&quot;); // outra letra inicial: não sobra prefixo
+    prefixo_comum(t, pc);
+    printf(&quot;Com \&quot;areia\&quot; também: \&quot;%s\&quot;\n&quot;, pc);
+
+    trie_libera(t);
+    return 0;
+}
+// Saída:
+// Em ordem alfabética: pedra pedrada pedregulho pedreiro pedrisco
+// Prefixo comum: &quot;pedr&quot;
+// Com &quot;pe&quot; no dicionário: &quot;pe&quot;
+// Com &quot;areia&quot; também: &quot;&quot;
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A294.c ~/LPEDC/material/0147-trie.c -o ~/LPEDC/material/A294 &amp;&amp; ~/LPEDC/material/A294
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E878</strong> · ★☆☆</p>
+<p>O terminal completa comandos com a tecla Tab. Guarde estes comandos numa trie
+(trie.h): cd, cat, chmod, chown, ls, less, mkdir, man. Escreva classifica(r,
+texto), que devolve uma de três mensagens: &quot;comando&quot; (o texto é um comando
+inteiro), &quot;só começo de comando&quot; (algum comando começa assim, mas o texto não
+é um) ou &quot;não está&quot;. Teste, nesta ordem, com:</p>
+<pre><code class="language-text">cat ch le less rm c mkdirs
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+cat     comando
+ch      só começo de comando
+le      só começo de comando
+less    comando
+rm      não está
+c       só começo de comando
+mkdirs  não está
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E878.c ~/LPEDC/material/0147-trie.c -o ~/LPEDC/material/E878 &amp;&amp; ~/LPEDC/material/E878
+</code></pre>
+<p><strong>Exercício E879</strong> · ★★☆</p>
+<p>Conte quantas vezes cada palavra aparece num texto com uma trie em que o nó
+guarda um contador (int qtd) no lugar do bool fim. Defina o struct NoFreq (26
+filhos e qtd) e escreva: - conta(r, p, tam): soma 1 na palavra de tam letras
+que começa em p (o texto</p>
+<pre><code class="language-text">não tem &#39;\0&#39; depois de cada palavra, por isso o tam);
+</code></pre>
+<ul>
+<li>lista(n, buf, nivel, &amp;distintas): mostra as palavras em ordem alfabética</li>
+</ul>
+<pre><code class="language-text">com a contagem e conta quantas palavras diferentes existem;
+</code></pre>
+<ul>
+<li>libera(n).</li>
+</ul>
+<p>O texto é &quot;o rato roeu a roupa do rei de roma o rei riu da roupa&quot;.</p>
+<pre><code class="language-text">Saída esperada:
+a      1
+da     1
+de     1
+do     1
+o      2
+rato   1
+rei    2
+riu    1
+roeu   1
+roma   1
+roupa  2
+14 palavras, 11 diferentes
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E879.c ~/LPEDC/material/0147-trie.c -o ~/LPEDC/material/E879 &amp;&amp; ~/LPEDC/material/E879
+</code></pre>
+<p><strong>Exercício E880</strong> · ★★☆</p>
+<p>Guarde estes bichos do zoológico numa trie (trie.h): gato, girafa, guaxinim,
+hipopotamo, jacare, onca, ornitorrinco, rinoceronte, tatu, tamandua,
+orangotango. Escreva duas funções que percorrem a trie montando a palavra num
+buffer: - maior_palavra(n, buf, nivel, maior): copia para maior a palavra
+mais</p>
+<pre><code class="language-text">comprida (no empate, a primeira em ordem alfabética);
+</code></pre>
+<ul>
+<li>por_tamanho(n, buf, nivel, alvo): mostra as palavras com exatamente alvo</li>
+</ul>
+<pre><code class="language-text">letras, sem descer além do nível alvo.
+</code></pre>
+<p>Mostre a maior palavra e as de 4, 6 e 11 letras.</p>
+<pre><code class="language-text">Saída esperada:
+maior: ornitorrinco (12 letras)
+com 4 letras: gato onca tatu
+com 6 letras: girafa jacare
+com 11 letras: orangotango rinoceronte
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E880.c ~/LPEDC/material/0147-trie.c -o ~/LPEDC/material/E880 &amp;&amp; ~/LPEDC/material/E880
+</code></pre>
+<p><strong>Exercício E882</strong> · ★★★</p>
+<p>O TAD (trie.h) não sabe tirar palavras. Escreva bool remove_palavra(NoTrie
+*n, const char *p, bool *tirou), que desmarca o fim da palavra e libera, de
+baixo para cima, os nós que ficarem inúteis (sem fim e sem filhos); os nós
+que outra palavra ainda usa ficam. Em *tirou, diz se a palavra estava lá.
+Devolve true se n ficou inútil.</p>
+<p>Insira sol, sola, solado, solteiro e sal. Mostre o início e, depois de tirar
+cada palavra de solado, so, sol, solteiro, sal e sola, o tamanho da trie
+(trie_nos) e as palavras que sobram (trie_autocompleta com prefixo &quot;&quot;).</p>
+<pre><code class="language-text">Saída esperada:
+início | nós: 14 | palavras: sal sol sola solado solteiro
+tira solado: tirou | nós: 12 | sobram: sal sol sola solteiro
+tira so: não estava | nós: 12 | sobram: sal sol sola solteiro
+tira sol: tirou | nós: 12 | sobram: sal sola solteiro
+tira solteiro: tirou | nós: 7 | sobram: sal sola
+tira sal: tirou | nós: 5 | sobram: sola
+tira sola: tirou | nós: 1 | sobram:
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E882.c ~/LPEDC/material/0147-trie.c -o ~/LPEDC/material/E882 &amp;&amp; ~/LPEDC/material/E882
+</code></pre>
+<hr>
+<h2>0148 · Union-find: conjuntos disjuntos</h2>
+<h3>Conceito</h3>
+<p>Numa turma, quem se conhece, mesmo que só como &quot;amigo de amigo&quot;, cai no
+mesmo sorteio de amigo secreto. As amizades chegam aos poucos, uma por vez,
+e a qualquer momento alguém pergunta: &quot;Ana e Duda caem no mesmo sorteio?&quot;.
+Você precisa responder rápido e continuar aceitando amizades novas.</p>
+<p>O que está em jogo são <strong>conjuntos disjuntos</strong>: grupos de elementos que não
+se misturam, em que cada elemento pertence a exatamente um grupo (CORMEN et
+al., 2024, cap. 19). A estrutura que cuida deles oferece duas operações. A
+operação <strong>acha(x)</strong> devolve o <strong>representante</strong> do grupo de x, um elemento
+escolhido para responder pelo grupo inteiro. A operação <strong>une(a, b)</strong> junta
+o grupo de a com o grupo de b num só. A pergunta do sorteio vira uma
+comparação: dois elementos estão no mesmo grupo se <code>acha</code> devolve o mesmo
+representante para os dois.</p>
+<p>O <strong>union-find</strong> guarda cada grupo como uma árvore, e todas as árvores, a
+floresta, cabem num vetor só. A posição <code>pai[x]</code> diz quem é o pai de x. A
+raiz é quem aponta para si mesma (<code>pai[x] == x</code>), e ela é o representante.
+Assim, <code>acha(x)</code> sobe de pai em pai até a raiz, e <code>une(a, b)</code> acha as duas
+raízes e pendura uma na outra (SEDGEWICK; WAYNE, 2011). No começo, cada
+pessoa é um grupo sozinho: <code>pai[x] = x</code> para todo x.</p>
+<p>Do jeito ingênuo, pendurando sempre a primeira raiz na segunda, a árvore
+pode virar uma fila comprida, e <code>acha</code> passa a custar O(n). Dois truques
+resolvem isso.</p>
+<p>O primeiro é a <strong>união por tamanho</strong>. Guarde, em <code>tam[raiz]</code>, quantos
+elementos tem cada grupo, e na união pendure a raiz do grupo <strong>menor</strong> na do
+maior. Por que isso segura a altura? Um elemento só desce um nível quando o
+grupo dele é o menor da união, e então o grupo resultante tem pelo menos o
+dobro do tamanho. Um grupo só pode dobrar log₂ n vezes antes de passar de
+n, então nenhum elemento desce mais que log₂ n níveis (LINTZMAYER; MOTA,
+2023).</p>
+<p>O segundo é a <strong>compressão de caminho</strong>. Quando <code>acha(x)</code> sobe até a raiz,
+ele já sabe a resposta para todos os nós do caminho. Então, antes de
+devolver, faz cada um desses nós apontar <strong>direto</strong> para a raiz. A próxima
+consulta a qualquer um deles dá um passo só. Isso tem uma consequência no
+código: consultar <strong>modifica</strong> o vetor <code>pai</code>, e por isso <code>acha</code> não pode
+receber a estrutura como <code>const</code>.</p>
+<p>Com os dois truques juntos, uma sequência de m operações custa O(m · α(n)),
+em que α é o inverso da função de Ackermann, uma função que cresce tão
+devagar que não passa de 4 para nenhum n que caiba num computador (TARJAN,
+1975). Na prática, cada operação custa O(1) amortizado (assunto 0116).</p>
+<p>O Cormen chama as operações de <code>MAKE-SET</code> (criar um grupo de um elemento só),
+<code>FIND-SET</code> (o acha) e <code>UNION</code> (o une). No lugar do tamanho, ele usa a
+<strong>união por posto</strong> (<em>rank</em>): cada raiz guarda um limite superior da altura
+da sua árvore, que só cresce 1 quando duas raízes de mesmo posto se juntam.
+A garantia é a mesma. O algoritmo de Kruskal (0152) usa essa estrutura para
+saber se uma aresta fecha um ciclo (CORMEN et al., 2024, cap. 19).</p>
+<blockquote>
+<p>[!WARNING]
+O representante é a <strong>raiz</strong>. <code>pai[a] = b</code> arranca o <code>a</code> do grupo; o certo é
+<code>pai[acha(a)] = acha(b)</code>. Testar <code>pai[a] == pai[b]</code> falha com mais de um nível:
+o teste é <code>acha(a) == acha(b)</code>. E <code>tam[x]</code> só vale na raiz.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>Oito colegas de uma turma, de 0 (Ana) a 7 (Hugo), e sete amizades: quem se
+conhece cai no mesmo sorteio de amigo secreto. Sobram dois grupos, e Duda e Hugo
+ficam a dois passos da raiz até as perguntas comprimirem o caminho:</p>
+<p align="center"><img src="material/0148-ideia.svg" alt="Diagrama da ideia: Union-find: conjuntos disjuntos" width="879"></p>
+<p><code>uf_acha</code> e <code>uf_une</code>, em <code>uniao.c</code>:</p>
+<pre><code class="language-c">int uf_acha(UF *u, int x) {
+    int raiz = x;
+    while (u-&gt;pai[raiz] != raiz) { // sobe até a raiz
+        raiz = u-&gt;pai[raiz];
+    }
+    while (u-&gt;pai[x] != raiz) {    // compressão: todo mundo do caminho
+        int prox = u-&gt;pai[x];      // passa a apontar direto para a raiz
+        u-&gt;pai[x] = raiz;
+        x = prox;
+    }
+    return raiz;
+}
+
+bool uf_une(UF *u, int a, int b) {
+    int ra = uf_acha(u, a);
+    int rb = uf_acha(u, b);
+    if (ra == rb) {
+        return false; // já estavam juntos
+    }
+    if (u-&gt;tam[ra] &lt; u-&gt;tam[rb]) { // ra fica sendo a raiz do grupo maior
+        int t = ra;
+        ra = rb;
+        rb = t;
+    }
+    u-&gt;pai[rb] = ra; // a raiz do menor vira filha da raiz do maior
+    u-&gt;tam[ra] += u-&gt;tam[rb];
+    u-&gt;grupos--;
+    return true;
+}
+</code></pre>
+<p>O cliente registra as amizades e mostra <code>pai</code> depois de cada uma:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;uniao.h&quot;
+
+int main(void) {
+    const char *nome[] = {&quot;Ana&quot;, &quot;Beto&quot;, &quot;Caio&quot;, &quot;Duda&quot;, &quot;Edu&quot;, &quot;Fia&quot;, &quot;Gui&quot;, &quot;Hugo&quot;};
+    int amizades[][2] = {{0, 1}, {2, 3}, {4, 5}, {1, 3}, {6, 7}, {5, 7}, {0, 2}};
+    UF *turma = uf_cria(8);
+
+    for (int i = 0; i &lt; 7; i++) {
+        int a = amizades[i][0], b = amizades[i][1];
+        bool novo = uf_une(turma, a, b);
+        printf(&quot;%s e %s: %s | grupos: %d | &quot;, nome[a], nome[b],
+               novo ? &quot;juntou&quot; : &quot;já estavam&quot;, uf_grupos(turma));
+        uf_mostra(turma);
+    }
+    printf(&quot;Ana e Duda se conhecem? %s\n&quot;, uf_juntos(turma, 0, 3) ? &quot;sim&quot; : &quot;não&quot;);
+    printf(&quot;Caio e Hugo se conhecem? %s\n&quot;, uf_juntos(turma, 2, 7) ? &quot;sim&quot; : &quot;não&quot;);
+    printf(&quot;Grupo do Edu: %d pessoas\n&quot;, uf_tamanho(turma, 4));
+    printf(&quot;Depois das buscas, &quot;);
+    uf_mostra(turma);
+
+    uf_libera(turma);
+    return 0;
+}
+// Saída:
+// Ana e Beto: juntou | grupos: 7 | pai: 0 0 2 3 4 5 6 7
+// Caio e Duda: juntou | grupos: 6 | pai: 0 0 2 2 4 5 6 7
+// Edu e Fia: juntou | grupos: 5 | pai: 0 0 2 2 4 4 6 7
+// Beto e Duda: juntou | grupos: 4 | pai: 0 0 0 2 4 4 6 7
+// Gui e Hugo: juntou | grupos: 3 | pai: 0 0 0 2 4 4 6 6
+// Fia e Hugo: juntou | grupos: 2 | pai: 0 0 0 2 4 4 4 6
+// Ana e Caio: já estavam | grupos: 2 | pai: 0 0 0 2 4 4 4 6
+// Ana e Duda se conhecem? sim
+// Caio e Hugo se conhecem? não
+// Grupo do Edu: 4 pessoas
+// Depois das buscas, pai: 0 0 0 0 4 4 4 4
+</code></pre>
+<p>No empate de tamanhos, a raiz de <code>a</code> continua raiz. O fluxograma segue <code>uf_une</code>
+em &quot;Fia e Hugo&quot;: as raízes 4 (Edu) e 6 (Gui) têm grupos de 2, e o Gui, com o
+Hugo, vira filho do Edu:</p>
+<p align="center"><img src="material/0148-fluxograma.svg" alt="Fluxograma: Union-find: conjuntos disjuntos" width="665"></p>
+<p><strong>Exemplo A295 · Sem os dois truques, a árvore vira lista</strong></p>
+<pre><code class="language-c">#include &lt;stdbool.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+#define N 10000
+
+int pai[N], tam[N];
+long passos; // quantas vezes alguém subiu de um nó para o pai
+
+void inicia(void) {
+    for (int i = 0; i &lt; N; i++) {
+        pai[i] = i;
+        tam[i] = 1;
+    }
+    passos = 0;
+}
+
+int acha(int x, bool comprime) {
+    int raiz = x;
+    while (pai[raiz] != raiz) {
+        raiz = pai[raiz];
+        passos++;
+    }
+    while (comprime &amp;&amp; pai[x] != raiz) {
+        int prox = pai[x];
+        pai[x] = raiz;
+        x = prox;
+    }
+    return raiz;
+}
+
+void une(int a, int b, bool por_tamanho, bool comprime) {
+    int ra = acha(a, comprime), rb = acha(b, comprime);
+    if (ra == rb) {
+        return;
+    }
+    if (por_tamanho &amp;&amp; tam[ra] &lt; tam[rb]) {
+        int t = ra;
+        ra = rb;
+        rb = t;
+    }
+    if (por_tamanho) {
+        pai[rb] = ra; // o menor vai para baixo do maior
+        tam[ra] += tam[rb];
+    } else {
+        pai[ra] = rb; // ingênuo: o grupo de a vai sempre para baixo do de b
+    }
+}
+
+int profundidade_maxima(void) {
+    int maior = 0;
+    for (int i = 0; i &lt; N; i++) {
+        int d = 0;
+        for (int x = i; pai[x] != x; x = pai[x]) {
+            d++;
+        }
+        if (d &gt; maior) {
+            maior = d;
+        }
+    }
+    return maior;
+}
+
+void testa(const char *nome, bool por_tamanho, bool comprime) {
+    inicia();
+    for (int i = 1; i &lt; N; i++) {
+        une(0, i, por_tamanho, comprime); // o 0 chama todo mundo para o grupo dele
+    }
+    long nas_unioes = passos;
+    int prof = profundidade_maxima();
+    passos = 0;
+    for (int i = 0; i &lt; N; i++) {
+        acha(i, comprime); // depois, cada um pergunta quem é o representante
+    }
+    printf(&quot;%s passos nas uniões: %9ld | profundidade: %4d | passos nas buscas: %8ld\n&quot;,
+           nome, nas_unioes, prof, passos);
+}
+
+int main(void) {
+    testa(&quot;ingênuo:             &quot;, false, false);
+    testa(&quot;só por tamanho:      &quot;, true, false);
+    testa(&quot;ingênuo + compressão:&quot;, false, true);
+    return 0;
+}
+// Saída:
+// ingênuo:              passos nas uniões:  49985001 | profundidade: 9999 | passos nas buscas: 49995000
+// só por tamanho:       passos nas uniões:         0 | profundidade:    1 | passos nas buscas:     9999
+// ingênuo + compressão: passos nas uniões:     19995 | profundidade: 9998 | passos nas buscas:    19997
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A295.c ~/LPEDC/material/0148-uniao.c -o ~/LPEDC/material/A295 &amp;&amp; ~/LPEDC/material/A295
+</code></pre>
+<p><strong>Exemplo A296 · As ilhas do mapa</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;0148-uniao.h&quot;
+
+#define LIN 5
+#define COL 8
+
+// cada célula (i, j) vira o elemento i * COL + j do union-find
+int main(void) {
+    const char *mapa[LIN] = {
+        &quot;##..#...&quot;,
+        &quot;#...##..&quot;,
+        &quot;..#..#.#&quot;,
+        &quot;.###...#&quot;,
+        &quot;....##.#&quot;,
+    };
+    UF *u = uf_cria(LIN * COL);
+    int terra = 0;
+    for (int i = 0; i &lt; LIN; i++) {
+        for (int j = 0; j &lt; COL; j++) {
+            if (mapa[i][j] != &#39;#&#39;) {
+                continue;
+            }
+            terra++;
+            // basta olhar para a direita e para baixo: as outras duas
+            // direções já foram vistas pelas células anteriores
+            if (j + 1 &lt; COL &amp;&amp; mapa[i][j + 1] == &#39;#&#39;) {
+                uf_une(u, i * COL + j, i * COL + j + 1);
+            }
+            if (i + 1 &lt; LIN &amp;&amp; mapa[i + 1][j] == &#39;#&#39;) {
+                uf_une(u, i * COL + j, (i + 1) * COL + j);
+            }
+        }
+    }
+    // os grupos do union-find contam também as células de água (sozinhas)
+    int agua = LIN * COL - terra;
+    printf(&quot;Ilhas: %d\n&quot;, uf_grupos(u) - agua);
+
+    int maior = 0, onde = 0;
+    for (int c = 0; c &lt; LIN * COL; c++) {
+        if (mapa[c / COL][c % COL] == &#39;#&#39; &amp;&amp; uf_tamanho(u, c) &gt; maior) {
+            maior = uf_tamanho(u, c);
+            onde = c;
+        }
+    }
+    printf(&quot;Maior ilha: %d células, uma delas na linha %d, coluna %d\n&quot;,
+           maior, onde / COL, onde % COL);
+    printf(&quot;(0, 4) e (2, 5) na mesma ilha? %s\n&quot;,
+           uf_juntos(u, 0 * COL + 4, 2 * COL + 5) ? &quot;sim&quot; : &quot;não&quot;);
+    printf(&quot;(2, 2) e (4, 4) na mesma ilha? %s\n&quot;,
+           uf_juntos(u, 2 * COL + 2, 4 * COL + 4) ? &quot;sim&quot; : &quot;não&quot;);
+
+    uf_libera(u);
+    return 0;
+}
+// Saída:
+// Ilhas: 5
+// Maior ilha: 4 células, uma delas na linha 0, coluna 4
+// (0, 4) e (2, 5) na mesma ilha? sim
+// (2, 2) e (4, 4) na mesma ilha? não
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A296.c ~/LPEDC/material/0148-uniao.c -o ~/LPEDC/material/A296 &amp;&amp; ~/LPEDC/material/A296
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E883</strong> · ★☆☆</p>
+<p>Depois da enchente, só algumas estradas entre sete cidades continuam abertas.
+Use o TAD (uniao.h). As cidades, de 0 a 6, são Araras, Bauru, Catanduva,
+Dourado, Embu, Franca e Garça. As estradas abertas ligam os pares 0-2, 1-5,
+2-3, 5-6 e 0-3. Una as cidades de cada estrada, mostre quantos grupos de
+cidades ligadas existem e responda se dá para ir (passando por outras, se
+preciso) de 0 a 3, de 1 a 6, de 3 a 5 e de 4 a 4.</p>
+<pre><code class="language-text">Saída esperada:
+Grupos de cidades ligadas: 3
+Araras -&gt; Dourado: dá para ir
+Bauru -&gt; Garça: dá para ir
+Dourado -&gt; Franca: não dá para ir
+Embu -&gt; Embu: dá para ir
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E883.c ~/LPEDC/material/0148-uniao.c -o ~/LPEDC/material/E883 &amp;&amp; ~/LPEDC/material/E883
+</code></pre>
+<p><strong>Exercício E885</strong> · ★★☆</p>
+<p>O técnico ligou os 7 computadores do escritório (0 a 6) com 9 cabos, nesta
+ordem:</p>
+<pre><code class="language-text">0-1 1-2 3-4 2-0 4-5 5-6 1-4 6-3 2-5
+</code></pre>
+<p>Um cabo é redundante quando liga dois computadores que JÁ conversavam por
+outros cabos (ele fecha um ciclo). Com o TAD (uniao.h), mostre cada cabo
+redundante, quantos cabos bastariam e se a rede ficou toda ligada.</p>
+<pre><code class="language-text">Saída esperada:
+cabo 4 (2-0) é redundante
+cabo 8 (6-3) é redundante
+cabo 9 (2-5) é redundante
+3 cabos redundantes; 6 cabos bastam; rede toda ligada
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E885.c ~/LPEDC/material/0148-uniao.c -o ~/LPEDC/material/E885 &amp;&amp; ~/LPEDC/material/E885
+</code></pre>
+<p><strong>Exercício E886</strong> · ★★☆</p>
+<p>Na pelada de quinta, quem já jogou junto fica no mesmo time, e &quot;jogou com
+quem jogou com&quot; também conta. Os nove jogadores, de 0 a 8, são Alex, Bia,
+Cadu, Davi, Eli, Fabi, Gabo, Hana e Ivo. As duplas que já jogaram juntas:</p>
+<pre><code class="language-text">0-4 2-7 4-8 1-5 7-3 8-0
+</code></pre>
+<p>Com o TAD (uniao.h), una as duplas e liste cada time com seus jogadores e o
+tamanho. Os times saem na ordem do seu primeiro jogador (o de menor número),
+e os jogadores de cada time, em ordem de número.</p>
+<pre><code class="language-text">Saída esperada:
+Time 1 (3): Alex Eli Ivo
+Time 2 (2): Bia Fabi
+Time 3 (3): Cadu Davi Hana
+Time 4 (1): Gabo
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E886.c ~/LPEDC/material/0148-uniao.c -o ~/LPEDC/material/E886 &amp;&amp; ~/LPEDC/material/E886
+</code></pre>
+<p><strong>Exercício E888</strong> · ★★★</p>
+<p>Teste de infiltração. Uma placa de 5x5 quadradinhos começa toda tapada, e
+o técnico fura um quadradinho por vez, na ordem c = (i * 9 + 7) % 25 para
+i = 0, 1, 2... (c = linha * 5 + coluna). A água jogada em cima passa para
+baixo quando existe um caminho de quadradinhos furados, vizinhos em cima,
+embaixo ou dos lados, da linha 0 até a linha 4. Descubra em qual furo a água
+passa e mostre a placa nesse momento (# furado, . tapado).</p>
+<pre><code class="language-text">Saída esperada:
+A água passou no passo 13 (13 de 25 abertas)
+#.#.#
+.##.#
+.#.#.
+##.#.
+#.#..
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E888.c ~/LPEDC/material/0148-uniao.c -o ~/LPEDC/material/E888 &amp;&amp; ~/LPEDC/material/E888
+</code></pre>
+<hr>
+<h2>0149 · Juntando tudo: corretor ortográfico</h2>
+<h3>Conceito</h3>
+<p>O secretário da associação do bairro quer um programa que leia o aviso da
+semana, como &quot;o onibus pasou&quot; ou &quot;a fiera da rua&quot;, aponte as palavras que
+não existem e sugira a correção. É um corretor ortográfico, e ele junta
+várias estruturas do curso.</p>
+<p>Por baixo, o corretor faz <strong>duas perguntas ao dicionário</strong>, milhares de
+vezes por texto. A primeira é &quot;esta palavra existe?&quot;, uma busca exata. A
+segunda é &quot;quais palavras de verdade estão perto desta?&quot;. Perto, aqui, quer
+dizer a poucas <strong>edições</strong> de distância, no sentido do assunto 0142: tirar
+uma letra, pôr uma letra, trocar uma letra por outra ou trocar duas letras
+vizinhas de lugar. Essa última operação não estava na distância de
+Levenshtein, mas é o erro de digitação mais comum.</p>
+<p>A segunda pergunta parece exigir comparar a palavra errada com o
+dicionário inteiro. O corretor faz o contrário: <strong>gera candidatos</strong>. Ele
+aplica à palavra errada todas as edições possíveis e pergunta, para cada
+resultado, se ele existe. Para &quot;fiera&quot;, com 5 letras, são 5 jeitos de tirar
+uma letra, 4 de trocar duas vizinhas, 5 × 25 de trocar uma letra e 6 × 26 de
+pôr uma letra: 290 candidatos. Desses, só &quot;feira&quot; existe. A segunda pergunta
+virou 290 buscas exatas, e o custo delas depende de como o dicionário está
+guardado.</p>
+<p>O dicionário fica numa <strong>trie</strong> (assunto 0147). Cada busca custa O(L), com
+L o tamanho da palavra, sem depender do tamanho do dicionário. E a trie tem
+uma vantagem extra para candidatos: ela descobre cedo que uma palavra não
+existe. Um candidato que começa com &quot;fx&quot; morre no segundo nó, porque nenhuma
+palavra começa assim (ZIVIANI, 2010, cap. 5).</p>
+<p>Há outras opções para o dicionário. Uma <strong>tabela hash</strong> faz a busca exata em
+O(1) na média, calculando direto a posição da palavra. Uma <strong>BST</strong> faz em
+O(log n) comparações de string (SZWARCFITER; MARKENZON, 2010). O exemplo
+A297 monta as três com o mesmo dicionário de 2500 palavras de duas sílabas
+e faz 5000 buscas, metade de palavras que existem e metade de palavras que
+não existem. A tabela resume o que ele mede e o que cada estrutura sabe
+fazer:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>BST</th>
+<th>Tabela hash</th>
+<th>Trie</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>custo da busca exata</td>
+<td>17,2 comparações de string</td>
+<td>1,3 comparação de string</td>
+<td>4 nós (o tamanho da palavra)</td>
+</tr>
+<tr>
+<td>memória</td>
+<td>60 KB</td>
+<td>60 KB</td>
+<td>661 KB</td>
+</tr>
+<tr>
+<td>palavras com um prefixo</td>
+<td>dá, com um percurso por intervalo</td>
+<td>não dá</td>
+<td>desce até o prefixo e lista</td>
+</tr>
+<tr>
+<td>ordem alfabética</td>
+<td>percurso em ordem</td>
+<td>não dá</td>
+<td>percurso por letra</td>
+</tr>
+<tr>
+<td>depende de n?</td>
+<td>sim, log n</td>
+<td>não (com fator de carga bom)</td>
+<td>não</td>
+</tr>
+</tbody></table>
+<p>Leia a tabela pela linha da memória. A trie de 84 palavras do exemplo deste
+assunto tem 239 nós de 216 bytes, cerca de 51 KB, e cada nó fica num ponto
+diferente do heap. Andar de nó em nó obriga o processador a buscar memória
+que não está no cache, a memória rápida perto dele. A hash lê poucas
+posições próximas e costuma vencer a trie na busca exata.</p>
+<p>A trie ganha em tudo que envolve <strong>prefixo</strong>: autocompletar, listar em
+ordem alfabética e cortar candidatos que já nascem errados. A hash ganha na
+pergunta &quot;existe?&quot; pura. Por isso um corretor de verdade combina as duas.</p>
+<blockquote>
+<p>[!WARNING]
+<code>cor_proxima</code> só reconhece <code>&#39;a&#39;</code> a <code>&#39;z&#39;</code>: maiúscula e acento viram separadores
+(&quot;Hoje&quot; sai &quot;oje&quot;; &quot;pão&quot; sai &quot;p&quot; e &quot;o&quot;). E <code>cor_sugere</code> usa um vetor de
+<code>COR_MAX + 1</code> posições, porque pôr uma letra aumenta a palavra.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>O secretário da associação do bairro quer revisar o aviso da semana. São 18
+palavras e cinco problemas: três erros com uma sugestão só, um &quot;caa&quot; que pode
+ser três palavras e um &quot;esquina&quot; certo, mas fora do dicionário de 84 palavras:</p>
+<p align="center"><img src="material/0149-ideia.svg" alt="Diagrama da ideia: Juntando tudo: corretor ortográfico" width="887"></p>
+<p>No miolo de <code>cor_sugere</code>, <code>anota</code> confere cada candidato na trie, descarta
+repetidos e mantém a lista em ordem alfabética:</p>
+<pre><code class="language-c">int cor_sugere(const NoC *d, const char *palavra, char sug[][COR_MAX], int max) {
+    int n = (int)strlen(palavra);
+    int qtd = 0;
+    char c[COR_MAX + 1];
+    if (n &gt;= COR_MAX - 1) {
+        return 0;
+    }
+    for (int i = 0; i &lt; n; i++) { // 1. tirar a letra i
+        memcpy(c, palavra, i);
+        strcpy(c + i, palavra + i + 1);
+        anota(d, c, sug, &amp;qtd, max);
+    }
+    for (int i = 0; i + 1 &lt; n; i++) { // 2. trocar as letras i e i + 1 de lugar
+        strcpy(c, palavra);
+        char t = c[i];
+        c[i] = c[i + 1];
+        c[i + 1] = t;
+        anota(d, c, sug, &amp;qtd, max);
+    }
+    for (int i = 0; i &lt; n; i++) { // 3. trocar a letra i por outra
+        strcpy(c, palavra);
+        for (char l = &#39;a&#39;; l &lt;= &#39;z&#39;; l++) {
+            if (l != palavra[i]) {
+                c[i] = l;
+                anota(d, c, sug, &amp;qtd, max);
+            }
+        }
+    }
+    for (int i = 0; i &lt;= n; i++) { // 4. pôr uma letra na posição i
+        for (char l = &#39;a&#39;; l &lt;= &#39;z&#39;; l++) {
+            memcpy(c, palavra, i);
+            c[i] = l;
+            strcpy(c + i + 1, palavra + i);
+            anota(d, c, sug, &amp;qtd, max);
+        }
+    }
+    return qtd;
+}
+</code></pre>
+<p>O programa do secretário:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;corretor.h&quot;
+
+int main(void) {
+    NoC *dic = cor_cria();
+    int n = cor_carrega_basico(dic);
+    printf(&quot;Dicionário: %d palavras em %d nós\n&quot;, n, cor_nos(dic));
+
+    const char *texto = &quot;hoje o onibus pasou no ponto, e a fiera tinha bolo e cafe baratoo na caa da esquina.&quot;;
+    char palavra[COR_MAX], sug[5][COR_MAX];
+    int total = 0, erros = 0;
+    while (cor_proxima(&amp;texto, palavra)) {
+        total++;
+        if (cor_contem(dic, palavra)) {
+            continue;
+        }
+        erros++;
+        int k = cor_sugere(dic, palavra, sug, 5);
+        printf(&quot;\&quot;%s\&quot;? Sugestões:&quot;, palavra);
+        for (int i = 0; i &lt; k; i++) {
+            printf(&quot; %s&quot;, sug[i]);
+        }
+        printf(k == 0 ? &quot; nenhuma\n&quot; : &quot;\n&quot;);
+    }
+    printf(&quot;%d palavras, %d para revisar\n&quot;, total, erros);
+
+    cor_libera(dic);
+    return 0;
+}
+// Saída:
+// Dicionário: 84 palavras em 239 nós
+// &quot;pasou&quot;? Sugestões: passou
+// &quot;fiera&quot;? Sugestões: feira
+// &quot;baratoo&quot;? Sugestões: barato
+// &quot;caa&quot;? Sugestões: cama cara casa
+// &quot;esquina&quot;? Sugestões: nenhuma
+// 18 palavras, 5 para revisar
+</code></pre>
+<p>O fluxograma é um laço sobre as palavras: só as desconhecidas pagam o preço dos
+candidatos. O caminho verde é o de &quot;fiera&quot;, seguido do fim do texto:</p>
+<p align="center"><img src="material/0149-fluxograma.svg" alt="Fluxograma: Juntando tudo: corretor ortográfico" width="615"></p>
+<p><strong>Exemplo A297 · Trie, hash e BST no mesmo dicionário</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &quot;0149-corretor.h&quot;
+
+// dicionário sintético: as 2500 palavras de duas sílabas (ba, be, ..., zu)
+#define N 2500
+#define BALDES 2503 // primo, perto de N
+
+long passos; // comparações de string (BST e hash) ou nós visitados (trie)
+
+// ---- BST de strings ----
+typedef struct NoS {
+    char p[8];
+    struct NoS *esq, *dir;
+} NoS;
+
+NoS *bst_poe(NoS *r, const char *p) {
+    if (r == NULL) {
+        NoS *n = malloc(sizeof(NoS));
+        if (n == NULL) {
+            exit(1);
+        }
+        strcpy(n-&gt;p, p);
+        n-&gt;esq = n-&gt;dir = NULL;
+        return n;
+    }
+    int c = strcmp(p, r-&gt;p);
+    if (c &lt; 0) {
+        r-&gt;esq = bst_poe(r-&gt;esq, p);
+    } else if (c &gt; 0) {
+        r-&gt;dir = bst_poe(r-&gt;dir, p);
+    }
+    return r;
+}
+
+int bst_tem(const NoS *r, const char *p) {
+    while (r != NULL) {
+        passos++;
+        int c = strcmp(p, r-&gt;p);
+        if (c == 0) {
+            return 1;
+        }
+        r = c &lt; 0 ? r-&gt;esq : r-&gt;dir;
+    }
+    return 0;
+}
+
+int bst_altura(const NoS *r) {
+    if (r == NULL) {
+        return -1;
+    }
+    int e = bst_altura(r-&gt;esq), d = bst_altura(r-&gt;dir);
+    return 1 + (e &gt; d ? e : d);
+}
+
+void bst_solta(NoS *r) {
+    if (r != NULL) {
+        bst_solta(r-&gt;esq);
+        bst_solta(r-&gt;dir);
+        free(r);
+    }
+}
+
+// ---- tabela hash com encadeamento ----
+typedef struct NoH {
+    char p[8];
+    struct NoH *prox;
+} NoH;
+
+unsigned espalha(const char *p) { // djb2
+    unsigned h = 5381;
+    for (; *p != &#39;\0&#39;; p++) {
+        h = h * 33 + (unsigned char)*p;
+    }
+    return h % BALDES;
+}
+
+void hash_poe(NoH *t[], const char *p) {
+    NoH *n = malloc(sizeof(NoH));
+    if (n == NULL) {
+        exit(1);
+    }
+    strcpy(n-&gt;p, p);
+    unsigned b = espalha(p);
+    n-&gt;prox = t[b];
+    t[b] = n;
+}
+
+int hash_tem(NoH *t[], const char *p) {
+    for (const NoH *n = t[espalha(p)]; n != NULL; n = n-&gt;prox) {
+        passos++;
+        if (strcmp(n-&gt;p, p) == 0) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+// ---- trie (do TAD): conta os nós visitados ----
+int trie_tem(const NoC *d, const char *p) {
+    for (; *p != &#39;\0&#39; &amp;&amp; d != NULL; p++) {
+        passos++;
+        d = d-&gt;filho[*p - &#39;a&#39;];
+    }
+    return d != NULL &amp;&amp; d-&gt;fim;
+}
+
+int main(void) {
+    const char *cons = &quot;bcdfglmprz&quot;, *vog = &quot;aeiou&quot;;
+    static char pal[N][8];
+    for (int i = 0; i &lt; N; i++) { // sílaba 1 = i / 50, sílaba 2 = i % 50
+        int s1 = i / 50, s2 = i % 50;
+        snprintf(pal[i], 8, &quot;%c%c%c%c&quot;, cons[s1 / 5], vog[s1 % 5], cons[s2 / 5], vog[s2 % 5]);
+    }
+
+    // embaralha a ordem de inserção (Fisher-Yates com um gerador fixo), senão
+    // a BST receberia as palavras em ordem alfabética e viraria uma lista
+    static int ordem[N];
+    unsigned x = 2024;
+    for (int i = 0; i &lt; N; i++) {
+        ordem[i] = i;
+    }
+    for (int i = N - 1; i &gt; 0; i--) {
+        x = x * 1103515245u + 12345u;
+        int j = (int)((x &gt;&gt; 8) % (unsigned)(i + 1));
+        int t = ordem[i];
+        ordem[i] = ordem[j];
+        ordem[j] = t;
+    }
+
+    NoS *bst = NULL;
+    static NoH *tabela[BALDES];
+    NoC *trie = cor_cria();
+    for (int i = 0; i &lt; N; i++) {
+        const char *p = pal[ordem[i]];
+        bst = bst_poe(bst, p);
+        hash_poe(tabela, p);
+        cor_insere(trie, p);
+    }
+
+    // 2500 buscas que acham e 2500 que não acham (troca a última vogal por &#39;x&#39;)
+    long pb = 0, ph = 0, pt = 0;
+    for (int i = 0; i &lt; N; i++) {
+        char falsa[8];
+        strcpy(falsa, pal[i]);
+        falsa[3] = &#39;x&#39;;
+        passos = 0; bst_tem(bst, pal[i]); bst_tem(bst, falsa); pb += passos;
+        passos = 0; hash_tem(tabela, pal[i]); hash_tem(tabela, falsa); ph += passos;
+        passos = 0; trie_tem(trie, pal[i]); trie_tem(trie, falsa); pt += passos;
+    }
+    int maior_balde = 0;
+    for (int b = 0; b &lt; BALDES; b++) {
+        int k = 0;
+        for (const NoH *n = tabela[b]; n != NULL; n = n-&gt;prox) {
+            k++;
+        }
+        maior_balde = k &gt; maior_balde ? k : maior_balde;
+    }
+
+    printf(&quot;%d palavras, %d buscas\n&quot;, N, 2 * N);
+    printf(&quot;BST:  %4.1f comparações de string por busca | altura %d | %zu bytes\n&quot;,
+           (double)pb / (2 * N), bst_altura(bst), N * sizeof(NoS));
+    printf(&quot;hash: %4.1f comparações de string por busca | maior balde %d | %zu bytes\n&quot;,
+           (double)ph / (2 * N), maior_balde, N * sizeof(NoH) + BALDES * sizeof(NoH *));
+    printf(&quot;trie: %4.1f nós visitados por busca         | %d nós | %zu bytes\n&quot;,
+           (double)pt / (2 * N), cor_nos(trie), cor_nos(trie) * sizeof(NoC));
+
+    bst_solta(bst);
+    for (int b = 0; b &lt; BALDES; b++) {
+        while (tabela[b] != NULL) {
+            NoH *prox = tabela[b]-&gt;prox;
+            free(tabela[b]);
+            tabela[b] = prox;
+        }
+    }
+    cor_libera(trie);
+    return 0;
+}
+// Saída:
+// 2500 palavras, 5000 buscas
+// BST:  17.2 comparações de string por busca | altura 29 | 60000 bytes
+// hash:  1.3 comparações de string por busca | maior balde 5 | 60024 bytes
+// trie:  4.0 nós visitados por busca         | 3061 nós | 661176 bytes
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A297.c ~/LPEDC/material/0149-corretor.c -o ~/LPEDC/material/A297 &amp;&amp; ~/LPEDC/material/A297
+</code></pre>
+<p><strong>Exemplo A298 · O corretor que aprende palavras novas</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;0149-corretor.h&quot;
+
+// Lê o texto linha por linha. Uma linha que começa com &#39;+&#39; ensina palavras
+// novas ao dicionário; as outras são conferidas.
+//
+//   printf &#39;hoje tem fieira na rua\n+ pastel esquina\na fiera da esquina tem pastel\n&#39; | ~/LPEDC/rodar 22-arvores-avancadas/0149-juntando-tudo/A298.c
+
+int main(void) {
+    NoC *dic = cor_cria();
+    cor_carrega_basico(dic);
+    int nos_antes = cor_nos(dic);
+
+    char linha[256], palavra[COR_MAX], sug[3][COR_MAX];
+    int num = 0, aprendidas = 0;
+    while (fgets(linha, sizeof linha, stdin) != NULL) {
+        num++;
+        const char *p = linha;
+        if (linha[0] == &#39;+&#39;) {
+            int antes = aprendidas;
+            while (cor_proxima(&amp;p, palavra)) {
+                if (!cor_contem(dic, palavra) &amp;&amp; cor_insere(dic, palavra)) {
+                    aprendidas++;
+                }
+            }
+            printf(&quot;linha %d: aprendi %d palavra(s)\n&quot;, num, aprendidas - antes);
+            continue;
+        }
+        int erros = 0;
+        while (cor_proxima(&amp;p, palavra)) {
+            if (cor_contem(dic, palavra)) {
+                continue;
+            }
+            erros++;
+            int k = cor_sugere(dic, palavra, sug, 3);
+            printf(&quot;linha %d: \&quot;%s\&quot;?&quot;, num, palavra);
+            for (int i = 0; i &lt; k; i++) {
+                printf(&quot; %s&quot;, sug[i]);
+            }
+            printf(&quot;\n&quot;);
+        }
+        if (erros == 0) {
+            printf(&quot;linha %d: tudo certo\n&quot;, num);
+        }
+    }
+    printf(&quot;Palavras aprendidas: %d (a trie foi de %d para %d nós)\n&quot;,
+           aprendidas, nos_antes, cor_nos(dic));
+
+    cor_libera(dic);
+    return 0;
+}
+// Saída:
+// linha 1: &quot;fieira&quot;? feira
+// linha 2: aprendi 2 palavra(s)
+// linha 3: &quot;fiera&quot;? feira
+// Palavras aprendidas: 2 (a trie foi de 239 para 247 nós)
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A298.c ~/LPEDC/material/0149-corretor.c -o ~/LPEDC/material/A298 &amp;&amp; ~/LPEDC/material/A298
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E889</strong> · ★☆☆</p>
+<p>Use o TAD do corretor (corretor.h) para conferir este recado da escola:</p>
+<pre><code class="language-text">a escola da cidade tem muitos alunos e um onibus amarelo na porta
+</code></pre>
+<p>Separe o texto em palavras com cor_proxima, mostre as que não estão no
+dicionário básico (cor_carrega_basico) e conte quantas são, de quantas no
+total.</p>
+<pre><code class="language-text">Saída esperada:
+desconhecidas: muitos alunos
+2 de 13 palavras fora do dicionário
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E889.c ~/LPEDC/material/0149-corretor.c -o ~/LPEDC/material/E889 &amp;&amp; ~/LPEDC/material/E889
+</code></pre>
+<p><strong>Exercício E891</strong> · ★★☆</p>
+<p>Quando uma palavra está longe demais de tudo, as sugestões a uma edição de
+distância não acham nada. Outra pista é o começo da palavra. Com o dicionário
+básico (corretor.h), escreva pelo_prefixo(d, palavra, max): desça na trie
+enquanto as letras da palavra existirem, mostre o maior prefixo em comum e
+sugira até max palavras do dicionário que começam com ele, em ordem
+alfabética. Teste com esquina, cafezinho, mercadinho, portaria e xis.</p>
+<pre><code class="language-text">Saída esperada:
+esquina: prefixo &quot;es&quot; | escola
+cafezinho: prefixo &quot;cafe&quot; | cafe
+mercadinho: prefixo &quot;mercad&quot; | mercado
+portaria: prefixo &quot;porta&quot; | porta portao
+xis: prefixo &quot;&quot; | nenhuma
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E891.c ~/LPEDC/material/0149-corretor.c -o ~/LPEDC/material/E891 &amp;&amp; ~/LPEDC/material/E891
+</code></pre>
+<p><strong>Exercício E892</strong> · ★★☆</p>
+<p>O revisor quer um relatório das palavras fora do dicionário básico
+(corretor.h) deste texto, em ordem alfabética, com quantas vezes cada uma
+apareceu:</p>
+<pre><code class="language-text">hoje a fiera tem pao barato e cafe barato mas ontem a fiera tinha pao
+caro e o onibus pasou cedo
+</code></pre>
+<p>Guarde as desconhecidas numa BST de strings (assunto 0099) com um contador no
+nó: palavra repetida soma 1. No fim, um percurso em ordem imprime o relatório
+e conta as palavras diferentes e as ocorrências.</p>
+<pre><code class="language-text">Saída esperada:
+cedo: 1
+fiera: 2
+mas: 1
+pasou: 1
+4 palavras diferentes, 5 ocorrências
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E892.c ~/LPEDC/material/0149-corretor.c -o ~/LPEDC/material/E892 &amp;&amp; ~/LPEDC/material/E892
+</code></pre>
+<p><strong>Exercício E894</strong> · ★★★</p>
+<p>Sugira palavras a até DUAS edições (distância de Levenshtein, assunto 0142)
+sem calcular a distância contra cada palavra do dicionário. Desça na trie do
+dicionário básico (corretor.h) com uma DFS que leva a última linha da tabela
+da distância: cada nó acrescenta uma linha (a letra dele contra a palavra
+procurada). Se o menor valor da linha nova já passar de 2, corte o ramo.
+Escreva parecidas(d, alvo), que mostra, em ordem alfabética, as palavras a
+distância 2 ou menos, com a distância entre parênteses. Teste com carrro,
+jnaela, bolsa e mercadorias.</p>
+<pre><code class="language-text">Saída esperada:
+carrro: bairro(2) caro(2) carro(1)
+jnaela: janela(2)
+bolsa: boa(2) bola(1) bolo(2)
+mercadorias: nenhuma
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E894.c ~/LPEDC/material/0149-corretor.c -o ~/LPEDC/material/E894 &amp;&amp; ~/LPEDC/material/E894
+</code></pre>
+<hr>
+<h2>Lista do módulo</h2>
+<p>30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P2201.c a P2230.c, em <code>material/</code>; resoluções em <code>_respostas/22-arvores-avancadas/lista/</code>.</p>
+<h3>★☆☆ Aquecimento</h3>
+<p><strong>Exercício P2201</strong> · ★☆☆ · Quantos níveis tem o organograma?</p>
+<p>O organograma da prefeitura está numa árvore geral guardada como
+filho-esquerdo/irmão-direito: cada nó aponta para o PRIMEIRO filho e para
+o PRÓXIMO irmão. Complete altura(r), que devolve o número de níveis
+(uma árvore só com a raiz tem 1 nível; vazia, 0). O main já monta a
+árvore e mostra a resposta.</p>
+<pre><code class="language-text">Prefeito
+├── Saúde
+│   ├── UBS Centro
+│   └── UBS Norte
+│       └── Farmácia
+├── Educação
+│   └── Creche
+└── Obras
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Níveis: 4
+</code></pre>
+<p><strong>Resposta esperada:</strong> 4 níveis (Prefeito, Saúde, UBS Norte, Farmácia).</p>
+<hr>
+<p><strong>Exercício P2202</strong> · ★☆☆ · Quem tem mais filhos</p>
+<p>A árvore genealógica da família Saraiva está em filho-esquerdo/irmão-
+direito. Escreva do zero o struct, a montagem (a mesma do main da
+resposta, com as funções novo e filho) e a função mais_filhos(r, &amp;max),
+que percorre a árvore toda e devolve o nó com mais filhos (no empate, o
+primeiro encontrado na pré-ordem). Mostre também quantos filhos cada
+pessoa tem, em pré-ordem, com recuo de 2 espaços por nível.</p>
+<pre><code class="language-text">Raimundo: filhos Joana, Pedro, Rita
+Joana: filhos Ana, Bruno
+Pedro: filhos Caio, Davi, Elis, Fábio
+Rita: filha Gabi
+Elis: filha Helena
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Raimundo (3)
+  Joana (2)
+    Ana (0)
+    Bruno (0)
+  Pedro (4)
+    Caio (0)
+    Davi (0)
+    Elis (1)
+      Helena (0)
+    Fábio (0)
+  Rita (1)
+    Gabi (0)
+Mais filhos: Pedro, com 4
+</code></pre>
+<p><strong>Resposta esperada:</strong> Pedro, com 4 filhos.</p>
+<hr>
+<p><strong>Exercício P2203</strong> · ★☆☆ · Vermelho com filho vermelho</p>
+<p>Na rubro-negra do Cormen (a clássica, não a esquerdista), cada NÓ é
+vermelho ou preto, e uma das regras é: um nó vermelho não tem filho
+vermelho. O programa abaixo monta à mão duas árvores (V é vermelho, P é
+preto) e chama sem_vv(r), que devia devolver 1 se a regra vale em toda a
+árvore e 0 se algum vermelho tem filho vermelho (mostrando qual). Complete
+sem_vv. As árvores estão escritas como raiz(esquerda, direita), com - no
+lugar de um filho vazio:</p>
+<pre><code class="language-text">Árvore 1: 20P(10V(5P, 15P), 30V(25P, -))
+Árvore 2: 20P(10P, 30V(25V, 40P))
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Árvore 1:
+  regra vale
+Árvore 2:
+  30 vermelho tem filho vermelho
+  regra quebrada
+</code></pre>
+<p><strong>Resposta esperada:</strong> a árvore 1 vale; na 2, o 30 vermelho tem o filho 25 vermelho.</p>
+<hr>
+<p><strong>Exercício P2204</strong> · ★☆☆ · A altura negra de cada caminho</p>
+<p>Outra regra da rubro-negra: todo caminho de um nó até um NULL passa pelo
+MESMO número de nós pretos. Esse número, contado a partir da raiz, é a
+ALTURA NEGRA. Complete altura_negra(r): ela devolve a altura negra da
+árvore (NULL conta 0 aqui) ou -1 se dois caminhos discordam. O main
+testa as duas árvores (V vermelho, P preto, escritas como raiz(esquerda,
+direita), com - no lugar de um filho vazio) e mostra o resultado.</p>
+<pre><code class="language-text">Árvore 1: 30P(15V(8P, 20P), 45P(-, 50V))
+Árvore 2: 30P(15P(8P, -), 45P(40P, 50P))
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Árvore 1: altura negra 2
+Árvore 2: altura negra -1
+</code></pre>
+<p><strong>Resposta esperada:</strong> 2 na árvore 1; -1 na 2 (pela esquerda do 15 são 3 pretos; pela direita do 15, só 2).</p>
+<hr>
+<p><strong>Exercício P2205</strong> · ★☆☆ · Quantas páginas a busca lê</p>
+<p>O cartório guarda os números de protocolo numa árvore B com grau mínimo
+t = 2 (cada nó tem de 1 a 3 chaves). Num disco, cada nó é uma PÁGINA, e
+ler uma página é o que custa caro. O programa abaixo já insere os
+protocolos 5, 10, 15, ..., 100. Escreva busca(x, k, &amp;paginas): ela
+procura k a partir do nó x, conta cada nó visitado e devolve 1 se achou.
+Procure 40, 60, 42 e 100.</p>
+<pre><code class="language-text">Saída esperada:
+Protocolo 40: achado (páginas lidas: 1)
+Protocolo 60: achado (páginas lidas: 2)
+Protocolo 42: não existe (páginas lidas: 4)
+Protocolo 100: achado (páginas lidas: 4)
+</code></pre>
+<p><strong>Resposta esperada:</strong> o 40 está na raiz (1 página) e o 60 no nível de baixo (2); o 42 não existe e o 100 está numa folha: 4 páginas cada, o número de níveis da árvore.</p>
+<hr>
+<p><strong>Exercício P2206</strong> · ★☆☆ · O começo que todas têm</p>
+<p>O professor de português escreveu no quadro as palavras da família de
+&quot;comer&quot;: comer, comida, comilão, comedor, comestível (sem acento, para a
+trie de &#39;a&#39; a &#39;z&#39;: comer, comida, comilao, comedor, comestivel). Qual o
+MAIOR PREFIXO COMUM a todas? Escreva do zero uma trie (26 filhos e um
+bool fim por nó) e a função prefixo_comum(r, buf): desça a partir da
+raiz enquanto o nó tem EXATAMENTE um filho e não é fim de palavra,
+anotando as letras. Mostre o resultado para as duas listas do main.</p>
+<pre><code class="language-text">Saída esperada:
+comer, comida, comilao, comedor, comestivel: prefixo comum &quot;com&quot;
+solar, sol, solteiro, soldado: prefixo comum &quot;sol&quot;
+</code></pre>
+<p><strong>Resposta esperada:</strong> &quot;com&quot; para a primeira lista e &quot;sol&quot; para a segunda. Libere a trie no fim.</p>
+<hr>
+<p><strong>Exercício P2207</strong> · ★☆☆ · As redes da comunidade</p>
+<p>Na comunidade ribeirinha, 10 casas (0 a 9) estão ganhando internet por
+rádio, e cada enlace liga duas casas. Escreva do zero um union-find com
+UNIÃO POR POSTO (rank) e COMPRESSÃO DE CAMINHO: acha(x) devolve a raiz e
+pendura todo o caminho direto nela; une(a, b) liga a raiz de posto menor
+embaixo da de posto maior (no empate, a de b embaixo da de a, e o posto
+de a sobe 1). Processe os enlaces e mostre quantas redes separadas
+sobraram e as casas de cada uma.</p>
+<pre><code class="language-text">Enlaces: 0-1  2-3  1-4  5-6  3-7  4-8  6-9  0-8
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Redes: 3
+  { 0 1 4 8 }
+  { 2 3 7 }
+  { 5 6 9 }
+</code></pre>
+<p><strong>Resposta esperada:</strong> 3 redes: {0 1 4 8}, {2 3 7} e {5 6 9}.</p>
+<hr>
+<p><strong>Exercício P2208</strong> · ★☆☆ · A torre que o posto não deixa crescer</p>
+<p>O union-find abaixo é o ingênuo: une(a, b) pendura a raiz de a embaixo da
+raiz de b, sempre, e acha não comprime o caminho. Com as uniões une(0,
+1), une(1, 2), ..., une(14, 15), a árvore vira uma fila de 16 andares.
+Estenda o programa: escreva une_posto(a, b), com união por POSTO (rank)
+e o mesmo acha sem compressão, rode as mesmas 15 uniões num segundo
+vetor de pais e mostre a profundidade máxima (em arestas) nas duas
+versões.</p>
+<pre><code class="language-text">Saída esperada:
+Sem posto: profundidade máxima 15
+Com posto: profundidade máxima 1
+</code></pre>
+<p><strong>Resposta esperada:</strong> 15 sem posto e 1 com posto. Com posto, a altura nunca passa de lg n, mesmo sem compressão.</p>
+<hr>
+<p><strong>Exercício P2209</strong> · ★☆☆ · O trabalho escondido da rubro-negra</p>
+<p>A rubro-negra esquerdista (assunto 0145) mantém o equilíbrio com
+rotações e inversões de cor. Quanto trabalho é isso? O programa abaixo
+tem a inserção completa. Instrumente-o: conte as rotações à esquerda, as
+rotações à direita e as inversões de cor ao inserir os códigos de 1 a
+15, em ordem crescente (o pior caso de uma árvore de busca comum), e
+mostre também a altura final (em nós).</p>
+<pre><code class="language-text">Saída esperada:
+Raiz: 8
+Rotações à esquerda: 11
+Rotações à direita: 0
+Inversões de cor: 11
+Altura: 4 nós
+</code></pre>
+<p><strong>Resposta esperada:</strong> altura 4 (uma árvore de busca comum teria 15) e os contadores da saída. Em ordem crescente, nenhuma rotação à direita acontece.</p>
+<hr>
+<p><strong>Exercício P2210</strong> · ★☆☆ · A árvore B andar por andar</p>
+<p>O programa abaixo insere os códigos 1 a 12, em ordem, numa árvore B de
+grau mínimo t = 2. Para ver a forma da árvore, escreva mostra_niveis(r):
+um percurso em LARGURA com uma fila de ponteiros (um vetor basta), que
+mostra cada nó como [chaves] e põe cada nível numa linha.</p>
+<pre><code class="language-text">Saída esperada:
+Nível 0: [4]
+Nível 1: [2] [6 8 10]
+Nível 2: [1] [3] [5] [7] [9] [11 12]
+</code></pre>
+<p><strong>Resposta esperada:</strong> 3 níveis, com [4] na raiz e [2] e [6 8 10] embaixo. Todas as folhas ficam no mesmo nível: é a regra da árvore B.</p>
+<h3>★★☆ Para pensar</h3>
+<p><strong>Exercício P2211</strong> · ★★☆ · O fiscal completo da rubro-negra</p>
+<p>Escreva do zero o fiscal da rubro-negra clássica (Cormen), que confere,
+nesta ordem, as regras que fazem sentido num nó com cor: (1) é árvore de
+busca (cada chave entre um mínimo e um máximo herdados); (2) a raiz é
+preta; (3) nenhum vermelho tem filho vermelho; (4) todo caminho até um
+NULL tem o mesmo número de pretos. Ele devolve o número da primeira
+regra quebrada (0 se todas valem) e, se valem, a altura negra. Teste as
+quatro árvores do main (raiz(esquerda, direita), - é vazio):</p>
+<pre><code class="language-text">A: 40P(20V(10P, 30P), 60V(50P, 70P))
+B: 40P(20P(10V, 30V), 60P(50V, 45V))
+C: 40V(20P, 60P)
+D: 40P(20P(10P, -), 60P(50V, 70P))
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+A: rubro-negra válida, altura negra 2
+B: quebra a regra 1
+C: quebra a regra 2
+D: quebra a regra 4
+</code></pre>
+<p><strong>Resposta esperada:</strong> A vale (altura negra 2); B quebra a regra 1 (45 à direita de 60); C quebra a 2; D quebra a 4.</p>
+<hr>
+<p><strong>Exercício P2212</strong> · ★★☆ · A árvore 2-3 escondida na rubro-negra</p>
+<p>Toda rubro-negra esquerdista é uma árvore 2-3 desenhada com cores: um nó
+com filho esquerdo VERMELHO é, junto com esse filho, um único nó 3 com
+duas chaves. O programa abaixo insere 10, 20, ..., 90 numa LLRB.
+Escreva mostra23(h, nivel), que percorre a LLRB e mostra a árvore 2-3
+correspondente, em pré-ordem, com 2 espaços de recuo por nível: um nó 2
+sai como [k]; um nó 3, como [a b], e seus três filhos são o esquerdo e o
+direito do vermelho e o direito de h.</p>
+<pre><code class="language-text">Saída esperada:
+[40]
+  [20]
+    [10]
+    [30]
+  [60 80]
+    [50]
+    [70]
+    [90]
+</code></pre>
+<p><strong>Resposta esperada:</strong> a 2-3 de cima. Todas as folhas estão no mesmo nível, e é esse equilíbrio perfeito da 2-3 que garante a altura O(lg n) da rubro-negra.</p>
+<hr>
+<p><strong>Exercício P2213</strong> · ★★☆ · Quantas divisões custa encher a árvore B</p>
+<p>O programa abaixo tem a árvore B do assunto 0146 com o grau mínimo t
+numa variável (até 4), e insere os códigos 1 a 40, em ordem. Estenda-o:
+conte as DIVISÕES de nó, conte os nós da árvore pronta e calcule a altura
+(em arestas), e rode para t = 2, 3 e 4.</p>
+<pre><code class="language-text">Saída esperada:
+t = 2: 31 divisões, 36 nós, altura 4
+t = 3: 15 divisões, 18 nós, altura 2
+t = 4: 10 divisões, 13 nós, altura 2
+</code></pre>
+<p><strong>Resposta esperada:</strong> com t maior, menos divisões, menos nós e uma árvore mais baixa (veja os números). É por isso que árvores B de disco usam t na casa das centenas.</p>
+<hr>
+<p><strong>Exercício P2214</strong> · ★★☆ · O menor apelido de cada palavra</p>
+<p>O sistema da biblioteca quer abreviar o nome de cada sala pelo MENOR
+PREFIXO que não é prefixo de nenhuma outra. As salas são: acervo,
+acesso, arquivo, auditorio, biblioteca, brinquedoteca. Escreva do zero
+uma trie em que cada nó guarda passam, quantas palavras passam por ele.
+O menor prefixo único de uma palavra termina no primeiro nó do caminho
+com passam == 1.</p>
+<pre><code class="language-text">Saída esperada:
+acervo: acer
+acesso: aces
+arquivo: ar
+auditorio: au
+biblioteca: bi
+brinquedoteca: br
+</code></pre>
+<p><strong>Resposta esperada:</strong> acer, aces, ar, au, bi, br.</p>
+<hr>
+<p><strong>Exercício P2215</strong> · ★★☆ · Amizades e perguntas no aplicativo</p>
+<p>Um aplicativo de caronas de Manaus tem 8 usuários (0 a 7). Ao longo do
+dia chegam operações: &quot;U a b&quot; quer dizer que a e b viraram contatos;
+&quot;P a b&quot; pergunta se a e b estão ligados por alguma corrente de contatos
+(amigo de amigo de amigo...). Escreva do zero o union-find (posto e
+compressão) e processe as operações NA ORDEM, respondendo cada pergunta
+com o que se sabe naquele momento.</p>
+<pre><code class="language-text">U 0 1   U 2 3   P 0 3   U 1 2   P 0 3   U 4 5   P 3 5
+U 6 7   U 5 6   P 4 7   U 3 4   P 0 7
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+0 e 3: não
+0 e 3: sim
+3 e 5: não
+4 e 7: sim
+0 e 7: sim
+</code></pre>
+<p><strong>Resposta esperada:</strong> não, sim, não, sim, sim.</p>
+<hr>
+<p><strong>Exercício P2216</strong> · ★★☆ · As ilhas que surgem na vazante</p>
+<p>Na vazante do rio, bancos de areia vão aparecendo numa área mapeada como
+uma grade 4 × 5. Cada dia surge uma casa de areia nova, nesta ordem
+(linha, coluna):</p>
+<pre><code class="language-text">(0,0) (0,1) (2,2) (1,4) (2,1) (1,1) (3,4) (2,4) (0,3) (1,3)
+</code></pre>
+<p>Duas casas de areia vizinhas na horizontal ou na vertical são a mesma
+ilha. Depois de cada dia, quantas ilhas há? Escreva do zero: cada casa
+(l, c) é o elemento l * 5 + c de um union-find; ao surgir uma casa, conte
++1 ilha e una com cada vizinha que já é areia (cada união de raízes
+diferentes tira 1 ilha).</p>
+<pre><code class="language-text">Saída esperada:
+Dia  1, areia em (0,0): 1 ilha(s)
+Dia  2, areia em (0,1): 1 ilha(s)
+Dia  3, areia em (2,2): 2 ilha(s)
+Dia  4, areia em (1,4): 3 ilha(s)
+Dia  5, areia em (2,1): 3 ilha(s)
+Dia  6, areia em (1,1): 2 ilha(s)
+Dia  7, areia em (3,4): 3 ilha(s)
+Dia  8, areia em (2,4): 2 ilha(s)
+Dia  9, areia em (0,3): 3 ilha(s)
+Dia 10, areia em (1,3): 2 ilha(s)
+</code></pre>
+<p><strong>Resposta esperada:</strong> a contagem da saída, terminando com 2 ilhas.</p>
+<hr>
+<p><strong>Exercício P2217</strong> · ★★☆ · O cardápio entre parênteses</p>
+<p>O cardápio do restaurante está numa árvore geral (filho-esquerdo/irmão-
+direito). Para mandar o cardápio por mensagem, o dono quer a árvore numa
+linha só, no formato raiz(filho1 filho2 ...), em que cada filho que tem
+filhos sai do mesmo jeito. Complete escreve(r).</p>
+<pre><code class="language-text">Cardápio
+├── Entradas
+│   ├── Caldo
+│   └── Bolinho
+├── Pratos
+│   ├── Peixe
+│   │   ├── Tambaqui
+│   │   └── Pirarucu
+│   └── Frango
+└── Bebidas
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Cardápio(Entradas(Caldo Bolinho) Pratos(Peixe(Tambaqui Pirarucu) Frango) Bebidas)
+</code></pre>
+<p><strong>Resposta esperada:</strong> a linha de cima.</p>
+<hr>
+<p><strong>Exercício P2218</strong> · ★★☆ · Rotações com ponteiro para o pai</p>
+<p>No Cormen, cada nó da rubro-negra tem também um ponteiro pai, e as
+rotações precisam acertar seis ponteiros. Complete rot_esq(raiz, x) e
+rot_dir(raiz, y), que giram em torno de x (ou y) e devolvem a raiz da
+árvore toda (que muda se o nó girado era a raiz). O main monta a árvore
+de busca de cima, faz rot_esq no 10, depois rot_dir no 20, e confere
+depois de cada uma que o percurso em ordem não mudou e que todo filho
+aponta de volta para o pai certo.</p>
+<pre><code class="language-text">10(5, 20(15, 30))
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Início: raiz 10, em ordem 5 10 15 20 30, pais OK
+rot_esq(10): raiz 20, em ordem 5 10 15 20 30, pais OK
+rot_dir(20): raiz 10, em ordem 5 10 15 20 30, pais OK
+</code></pre>
+<p><strong>Resposta esperada:</strong> depois de rot_esq(10), a raiz é 20; depois de rot_dir(20), volta a ser 10. Em ordem sempre 5 10 15 20 30 e pais OK.</p>
+<hr>
+<p><strong>Exercício P2219</strong> · ★★☆ · A agenda de ramais consistente</p>
+<p>Na central telefônica da universidade, o aluno digita o ramal e a
+ligação completa assim que os dígitos formam um ramal cadastrado. Por
+isso a lista só é CONSISTENTE se nenhum ramal é prefixo de outro (se 911
+e 91125 existem, ninguém consegue ligar para o 91125). É a mesma regra do
+código livre de prefixo do Huffman. Escreva do zero uma trie de dígitos
+(10 filhos) que, ao inserir cada ramal, detecta o problema nos dois
+sentidos: o novo passa por um nó que já é fim de ramal, ou termina num
+nó que já tem filhos. Teste as duas listas.</p>
+<pre><code class="language-text">Lista 1: 4012 4078 5231 40 7766
+Lista 2: 3021 3304 4471 6650 4479
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Lista 1: inconsistente (conflito ao inserir 40)
+Lista 2: consistente
+</code></pre>
+<p><strong>Resposta esperada:</strong> a lista 1 é inconsistente (40 é prefixo de 4012 e 4078; o conflito aparece ao inserir o 40) e a lista 2 é consistente.</p>
+<hr>
+<p><strong>Exercício P2220</strong> · ★★☆ · O tamanho de sapato mais próximo</p>
+<p>A sapataria guarda os números que tem em estoque numa rubro-negra
+esquerdista: 34, 35, 37, 38, 40, 41, 43 e 45. Quando o cliente pede um
+número que acabou, o vendedor oferece o PISO (o maior em estoque &lt;= ao
+pedido) e o TETO (o menor em estoque &gt;= ao pedido). Complete piso(r, x) e
+teto(r, x), que devolvem -1 quando não existe, usando a ordem da árvore
+de busca: no piso, se x &lt; chave, a resposta está à esquerda; se não, a
+chave é candidata e talvez haja algo melhor à direita.</p>
+<pre><code class="language-text">Saída esperada:
+Pedido 36: piso 35, teto 37
+Pedido 33: piso nenhum, teto 34
+Pedido 46: piso 45, teto nenhum
+Pedido 40: piso 40, teto 40
+Pedido 42: piso 41, teto 43
+</code></pre>
+<p><strong>Resposta esperada:</strong> para 36, piso 35 e teto 37; para 33 não há piso; para 46 não há teto; 40 está em estoque.</p>
+<h3>★★★ Desafio</h3>
+<p><strong>Exercício P2221</strong> · ★★★ · A rubro-negra que se fiscaliza</p>
+<p>Escreva do zero uma rubro-negra esquerdista completa (inserção com
+rot_esq, rot_dir e inverte) e um fiscal que confere as três regras da
+LLRB: (1) nenhum link vermelho à direita; (2) nunca dois links vermelhos
+seguidos (um vermelho com filho esquerdo vermelho); (3) todo caminho da
+raiz até um NULL tem o mesmo número de links pretos. Insira 1000 senhas
+de atendimento geradas por s = (s * 41 + 11) % 1000, começando em s = 0
+(essa fórmula passa por todos os números de 0 a 999), e, a cada 200
+inserções, rode o fiscal e mostre a altura (em nós) e a altura preta.
+Compare com 2 lg(n + 1), o limite do Cormen.</p>
+<pre><code class="language-text">Saída esperada:
+n =  200: aprovada, altura 10, altura preta 6, limite 15.3
+n =  400: aprovada, altura 12, altura preta 7, limite 17.3
+n =  600: aprovada, altura 13, altura preta 8, limite 18.5
+n =  800: aprovada, altura 13, altura preta 8, limite 19.3
+n = 1000: aprovada, altura 13, altura preta 8, limite 19.9
+</code></pre>
+<p><strong>Resposta esperada:</strong> o fiscal aprova todas as vezes, e a altura fica bem abaixo do limite (veja os números).</p>
+<pre><code class="language-bash">gcc ~/LPEDC/material/P2221.c -o ~/LPEDC/material/P2221 -lm &amp;&amp; ~/LPEDC/material/P2221
+</code></pre>
+<hr>
+<p><strong>Exercício P2222</strong> · ★★★ · A árvore B dos códigos de rastreio</p>
+<p>Escreva do zero uma árvore B de grau mínimo t = 2 (de 1 a 3 chaves por
+nó, até 4 filhos), com a inserção do Cormen que DIVIDE os nós cheios na
+descida, a busca e um percurso por níveis. Insira os códigos de rastreio
+abaixo, nesta ordem, mostre a árvore por níveis, a altura (em arestas) e
+o resultado da busca de 57 e de 60, com o número de nós visitados.</p>
+<pre><code class="language-text">41 17 88 5 63 29 72 95 12 57 34 80 3 66 21 48 99 9
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Nível 0: [41]
+Nível 1: [5 17] [63 72 88]
+Nível 2: [3] [9 12] [21 29 34] [48 57] [66] [80] [95 99]
+Altura: 2
+Busca 57: achou (nós visitados: 3)
+Busca 60: não achou (nós visitados: 3)
+</code></pre>
+<p><strong>Resposta esperada:</strong> a árvore da saída, com todas as folhas no mesmo nível; o 57 está na árvore e o 60 não.</p>
+<hr>
+<p><strong>Exercício P2223</strong> · ★★★ · As estradas que a cheia fecha</p>
+<p>Seis comunidades (0 a 5) são ligadas por 7 estradas de terra. Na cheia,
+a Defesa Civil já sabe a ordem em que as estradas vão ficar alagadas:</p>
+<pre><code class="language-text">ordem:   1    2    3    4    5    6    7
+estrada 0-1  2-3  1-2  3-4  4-5  0-5  2-4
+</code></pre>
+<p>Depois de cada fechamento, quantos grupos de comunidades ainda se
+alcançam? O union-find sabe UNIR, mas não sabe separar. O truque é
+pensar AO CONTRÁRIO: comece com tudo fechado (6 grupos) e reabra as
+estradas da última para a primeira; o número de grupos antes de reabrir
+a estrada k é a resposta depois de fechar a estrada k. Escreva do zero
+(union-find com posto e compressão) e mostre a resposta na ordem dos
+fechamentos.</p>
+<pre><code class="language-text">Saída esperada:
+Fecha 0-1: 1 grupo(s)
+Fecha 2-3: 1 grupo(s)
+Fecha 1-2: 2 grupo(s)
+Fecha 3-4: 3 grupo(s)
+Fecha 4-5: 4 grupo(s)
+Fecha 0-5: 5 grupo(s)
+Fecha 2-4: 6 grupo(s)
+</code></pre>
+<p><strong>Resposta esperada:</strong> 1 1 2 3 4 5 6.</p>
+<hr>
+<p><strong>Exercício P2224</strong> · ★★★ · Caça-palavras com trie</p>
+<p>No caça-palavras 4 × 4 da revistinha, uma palavra se forma andando por
+casas vizinhas (horizontal, vertical ou diagonal), sem repetir casa. O
+dicionário tem as palavras abaixo. Escreva do zero: guarde o dicionário
+numa trie e faça um backtracking (módulo 19) a partir de cada casa que
+desce na trie junto com o caminho; se a letra não tem filho na trie,
+CORTE o caminho na hora (nenhuma palavra começa assim). Mostre as
+palavras achadas em ordem alfabética, sem repetir, e quantas casas o
+backtracking visitou.</p>
+<pre><code class="language-text">Grade:  C A S A
+        O R T E
+        L A M O
+        A P E S
+</code></pre>
+<pre><code class="language-text">Dicionário: casa, cara, caro, arte, mar, mesa, pe, ame, rato, lago,
+            cola, mel, sapo, tear, ramo
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Achadas (11): ame arte cara caro casa cola mar mesa pe ramo rato
+Casas visitadas: 54
+</code></pre>
+<p><strong>Resposta esperada:</strong> as palavras da saída. Sem a trie, o backtracking teria que seguir todos os caminhos da grade até um tamanho máximo.</p>
+<hr>
+<p><strong>Exercício P2225</strong> · ★★★ · Pintar uma árvore de busca de rubro-negra</p>
+<p>Nem toda árvore de busca pode virar rubro-negra só escolhendo as cores:
+a forma precisa deixar. Escreva do zero um backtracking (módulo 19) que
+tenta pintar os nós de uma árvore de busca, um por um em pré-ordem, de
+preto ou vermelho, cortando o ramo assim que um vermelho ganha um pai
+vermelho; quando todos têm cor, confira a raiz preta e a altura negra
+igual em todos os caminhos. Conte quantas colorações válidas cada árvore
+tem e mostre a primeira (vermelho com *, em pré-ordem).</p>
+<pre><code class="language-text">A: 20(10(5, 15), 30(25, 40))
+B: 20(10(5, -), 30(25, 40(-, 50)))
+C: 20(10, 30(25, 40(-, 50(-, 60))))
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+A: 5 coloração(ões), a primeira: 20 10 5 15 30 25 40
+B: 1 coloração(ões), a primeira: 20 10 5* 30* 25 40 50*
+C: 0 coloração(ões)
+</code></pre>
+<p><strong>Resposta esperada:</strong> A tem 5 colorações; B, só 1; C nenhuma (o ramo da direita é comprido demais: numa rubro-negra, o caminho mais longo até um NULL não passa do dobro do mais curto).</p>
+<hr>
+<p><strong>Exercício P2226</strong> · ★★★ · Quantos metros acima?</p>
+<p>Uma equipe de topografia mede DIFERENÇAS de altitude entre marcos (0 a
+6), nunca a altitude de um marco sozinho. Cada medição &quot;a b d&quot; quer dizer
+&quot;b está d metros acima de a&quot;. Depois, perguntam a diferença entre dois
+marcos: se eles estão ligados por medições, dá para calcular; se não,
+&quot;desconhecida&quot;. E se uma medição nova contradiz as anteriores, ela é
+rejeitada. Escreva do zero um UNION-FIND COM PESOS: além de pai[x],
+guarde dif[x] = altitude(x) - altitude(pai[x]). Na compressão de
+caminho, some as diferenças do caminho; na união, calcule a diferença
+entre as duas raízes.</p>
+<pre><code class="language-text">Medições: 0 1 5   1 2 3   3 4 -2   2 3 4   0 4 10   5 6 7   0 2 9
+Perguntas: 0 3   4 1   2 5   6 5
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Medição 0 1 5: aceita
+Medição 1 2 3: aceita
+Medição 3 4 -2: aceita
+Medição 2 3 4: aceita
+Medição 0 4 10: aceita
+Medição 5 6 7: aceita
+Medição 0 2 9: rejeitada (contradiz)
+0 -&gt; 3: 12 m
+4 -&gt; 1: -5 m
+2 -&gt; 5: desconhecida
+6 -&gt; 5: -7 m
+</code></pre>
+<p><strong>Resposta esperada:</strong> a medição 0 4 10 confere com as anteriores (5 + 3 + 4 - 2 = 10) e é aceita; a 0 2 9 contradiz (de 0 a 2 já dá 8 m) e é rejeitada. Nas perguntas: 12 m, -5 m, desconhecida e -7 m.</p>
+<hr>
+<p><strong>Exercício P2227</strong> · ★★★ · A busca que desce pelo filho errado</p>
+<p>Este programa tem um erro de propósito. A árvore B (t = 2) dos
+prontuários do hospital recebe os números de 10 a 200, de 10 em 10, e
+depois procura alguns. A inserção está certa; a busca tem UM erro. Ela
+compila sem aviso e roda limpo, mas dos 7 prontuários que existem só
+acha o 80. Conserte a busca.</p>
+<pre><code class="language-text">Saída esperada:
+Prontuário 10: achado
+Prontuário 30: achado
+Prontuário 80: achado
+Prontuário 120: achado
+Prontuário 150: achado
+Prontuário 190: achado
+Prontuário 200: achado
+Prontuário 55: não existe
+Achados: 7 de 8
+</code></pre>
+<p><strong>Resposta esperada:</strong> desça por x-&gt;filho[i], não x-&gt;filho[i + 1]. Com isso, todos os prontuários de 10 a 200 são achados e o 55 não.</p>
+<hr>
+<p><strong>Exercício P2228</strong> · ★★★ · O parente comum mais próximo</p>
+<p>Na árvore genealógica da família Bezerra (uma árvore geral com filho e
+irmão, e agora também um ponteiro pai em cada nó), escreva do zero:
+(1) profundidade(x), contando os passos até a raiz; (2) lca(a, b), o
+ANCESTRAL COMUM MAIS PRÓXIMO: suba o mais fundo até os dois ficarem na
+mesma profundidade e depois suba os dois juntos até se encontrarem; (3) a
+distância entre a e b na árvore, prof(a) + prof(b) - 2 · prof(lca).
+Responda os pares do main.</p>
+<pre><code class="language-text">Severino
+├── Antônio
+│   ├── Carla
+│   │   └── Igor
+│   └── Diego
+└── Benedita
+    ├── Elaine
+    │   ├── Júlia
+    │   └── Kauã
+    ├── Fábio
+    └── Glória
+        └── Hugo
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Igor e Diego: Antônio (distância 3)
+Júlia e Hugo: Benedita (distância 4)
+Kauã e Elaine: Elaine (distância 1)
+Igor e Hugo: Severino (distância 6)
+</code></pre>
+<p><strong>Resposta esperada:</strong> Igor e Diego têm Antônio em comum (distância 3); Júlia e Hugo, Benedita (distância 4); Kauã e Elaine, a própria Elaine (1); Igor e Hugo, Severino (6).</p>
+<hr>
+<p><strong>Exercício P2229</strong> · ★★★ · As três sugestões mais usadas</p>
+<p>O teclado do celular aprende com o que você digita: cada palavra fica
+numa trie com um contador de vezes. Ao digitar um prefixo, ele sugere
+as TRÊS palavras mais usadas que começam com ele (empate: ordem
+alfabética). Escreva do zero: monte a trie com as palavras do texto
+abaixo (o main já separa as palavras), depois, para cada prefixo, desça
+até o nó do prefixo, colete todas as palavras da subárvore com seus
+contadores, ordene com qsort e mostre as três primeiras.</p>
+<pre><code class="language-text">Texto: &quot;bom dia boa tarde bom jogo bola bonita bom dia boa noite
+bolo de bolo bom bolo tarde tapioca taxi tapioca tarde bom&quot;
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+&quot;bo&quot;: bom (5) bolo (3) boa (2)
+&quot;ta&quot;: tarde (3) tapioca (2) taxi (1)
+&quot;bol&quot;: bolo (3) bola (1)
+&quot;x&quot;: nenhuma sugestão
+</code></pre>
+<p><strong>Resposta esperada:</strong> para &quot;bo&quot;, bom (5), bolo (3) e boa (2).</p>
+<hr>
+<p><strong>Exercício P2230</strong> · ★★★ · Três árvores, mil chaves</p>
+<p>Escreva do zero, no mesmo programa, três estruturas de busca: a árvore
+de busca comum (sem balanceamento), a rubro-negra esquerdista e a árvore
+B com t = 2. Insira as chaves 0 a 999 em dois cenários: (a) em ordem
+crescente; (b) na ordem de s = (s * 41 + 11) % 1000 a partir de s = 0
+(passa por todos os números, embaralhados). Mostre a altura de cada uma
+em cada cenário: para as binárias, o número de nós do caminho mais
+longo; para a B, o número de níveis.</p>
+<pre><code class="language-text">Saída esperada:
+Em ordem: comum 1000, rubro-negra 10, B 9 níveis
+Embaralhadas: comum 24, rubro-negra 13, B 8 níveis
+</code></pre>
+<p><strong>Resposta esperada:</strong> a árvore comum tem altura 1000 em ordem e 24 embaralhada; a rubro-negra fica com 10 e 13, e a B com 9 e 8 níveis.</p>
+<hr>
+<h2>Desafios do módulo</h2>
+<p>Problemas para resolver no papel e, quando fizer sentido, num arquivo <code>.c</code> seu
+usando os TADs do módulo. Eles misturam os assuntos.</p>
+<p><strong>1. A geral e a binária.</strong> A árvore geral A tem os filhos B, C e D, nesta
+ordem; B tem os filhos E e F; D tem o filho G. Dê a pré-ordem e a pós-ordem da
+árvore geral. Depois desenhe a versão primeiro filho / próximo irmão como árvore
+binária (filho à esquerda, irmão à direita) e dê a em ordem e a altura dela.</p>
+<details><summary>Resposta</summary><p>Pré-ordem: <strong>A B E F C D G</strong>. Pós-ordem: <strong>E F B C G D A</strong>. Na binária, A tem B
+à esquerda; B tem E à esquerda e C à direita; E tem F à direita; C tem D à
+direita; D tem G à esquerda. A em ordem da binária é <strong>E F B C G D A</strong>, igual à
+pós-ordem da geral (o A288 mostra isso no código). A altura da geral é <strong>2</strong>; a
+da binária é <strong>4</strong> (A, B, C, D, G), porque cada irmão vira um degrau.</p>
+</details><p><strong>2. Rubro-negra ao contrário.</strong> Insira 7, 6, 5, 4, 3, 2 e 1, nesta ordem, numa
+LLRB vazia. Qual é a pré-ordem final? Quantos nós vermelhos sobram, quantas
+rotações e quantas inversões de cor aconteceram?</p>
+<details><summary>Resposta</summary><p>Pré-ordem <strong>4 2 1 3 6 5 7</strong>, todos pretos: a árvore 2-3 equivalente é perfeita,
+com sete nós de uma chave. Foram <strong>4 rotações</strong> (todas à direita: dois vermelhos
+seguidos à esquerda) e <strong>4 inversões</strong>. Altura 2, altura preta 3. Confira com
+<code>rn_pre_ordem</code>, <code>rn_rotacoes</code> e <code>rn_inversoes</code>.</p>
+</details><p><strong>3. Quantos nós cabem na altura preta?</strong> Uma LLRB tem altura preta 3 (três nós
+pretos da raiz até qualquer <code>NULL</code>). Qual é o menor e o maior número de nós que
+ela pode ter?</p>
+<details><summary>Resposta</summary><p>Pense na árvore 2-3 equivalente, com 3 níveis. No mínimo, todo nó tem uma
+chave: 1 + 2 + 4 = <strong>7</strong> nós, todos pretos. No máximo, todo nó tem duas chaves e
+três filhos: 1 + 3 + 9 = 13 nós 2-3, com 26 chaves. Na LLRB, são <strong>26</strong> nós: 13
+pretos, cada um com um vermelho colado à esquerda. Em geral, com altura preta b,
+a LLRB tem de 2^b - 1 a 3^b - 1 nós.</p>
+</details><p><strong>4. Escrevendo a 2-3 em cores.</strong> A árvore 2-3 tem a raiz <code>[20 40]</code> e os filhos
+<code>[10]</code>, <code>[30]</code> e <code>[50 60]</code>. Escreva a LLRB equivalente em pré-ordem, com <code>*</code> nos
+vermelhos. Que ordem de inserção produz exatamente essa árvore?</p>
+<details><summary>Resposta</summary><p>Pré-ordem <strong>40 20* 10 30 60 50*</strong>: cada nó de duas chaves vira a chave maior
+preta com a menor vermelha à esquerda. A ordem 20, 40, 10, 30, 50, 60 produz essa
+árvore (confira com o TAD). Repare que a LLRB nunca tem o vermelho à direita: o
+<code>[50 60]</code> vira 60 com 50 pendurado à esquerda, e não 50 com 60 à direita.</p>
+</details><p><strong>5. Limites da árvore B.</strong> Numa árvore B com grau mínimo t = 3 (de 2 a 5 chaves
+por nó, a raiz pode ter 1), qual é o maior e o menor número de chaves que cabe em
+altura 2?</p>
+<details><summary>Resposta</summary><p>Maior: todos os nós com 5 chaves e 6 filhos: 5 + 6 · 5 + 36 · 5 = <strong>215</strong>, ou
+6³ - 1. Menor: a raiz com 1 chave e 2 filhos, e cada nó abaixo com 2 chaves e 3
+filhos: 1 + 2 · 2 + 6 · 2 = <strong>17</strong>, ou 2 · t² - 1. Para buscar em qualquer
+árvore B de altura 2, três nós são lidos, tenha ela 17 ou 215 chaves.</p>
+</details><p><strong>6. A trie das palavras parecidas.</strong> Quantos nós (contando a raiz) tem a trie com
+&quot;casa&quot;, &quot;casaco&quot;, &quot;caso&quot;, &quot;cama&quot; e &quot;camelo&quot;? Quantas palavras começam com
+&quot;cam&quot;, e qual é o maior prefixo comum a todas as cinco?</p>
+<details><summary>Resposta</summary><p><strong>13 nós</strong>: raiz, c, a; s, a (casa), c, o (casaco), o (caso); m, a (cama), e, l, o
+(camelo). Com &quot;cam&quot; começam <strong>2</strong> (cama e camelo). O maior prefixo comum é
+<strong>&quot;ca&quot;</strong>: no nó do <code>a</code>, o caminho se divide em <code>s</code> e <code>m</code>. Confira com <code>trie_nos</code>
+e com o <code>prefixo_comum</code> do A294.</p>
+</details><p><strong>7. O vetor pai no fim.</strong> Num union-find de 10 elementos (TAD do 0148, união por
+tamanho e compressão), faça, nesta ordem: une(0,1), une(2,3), une(4,5), une(6,7),
+une(0,2), une(4,6), une(0,4), une(8,9), une(9,7). Qual é o vetor <code>pai</code> no fim?</p>
+<details><summary>Resposta</summary><p><strong>pai = 0 0 0 2 0 4 0 0 0 8</strong>. Até une(0,4), as raízes vão se pendurando (nos
+empates, a raiz de a fica). Em une(9,7), <code>acha(7)</code> sobe 7, 6, 4, 0 e comprime: o
+7 e o 6 passam a apontar direto para o 0. Depois, o grupo do 8 (tamanho 2) vai
+para baixo do 0 (tamanho 8). O 3, o 5 e o 9 continuam a dois passos da raiz até
+alguém perguntar por eles.</p>
+</details><p><strong>8. Igualdades impossíveis.</strong> Um sistema recebe restrições sobre variáveis:
+x1 = x2, x3 = x4, x5 = x1, x2 = x3 e x4 ≠ x5. Dá para atender todas? Como um
+union-find responde isso para mil restrições?</p>
+<details><summary>Resposta</summary><p><strong>Não dá.</strong> As quatro igualdades juntam x1, x2, x3, x4 e x5 num grupo só, e aí
+x4 ≠ x5 é uma contradição. O método: primeiro faça une(a, b) para cada igualdade;
+depois, para cada diferença, confira <code>uf_juntos(a, b)</code>: se der verdadeiro, é
+impossível. Custo quase linear no número de restrições. A ordem importa: as
+diferenças só podem ser conferidas depois de todas as igualdades.</p>
+</details><p><strong>9. Qual estrutura?</strong> Escolha entre trie, tabela hash, rubro-negra, árvore B e
+union-find: (a) o campo de busca que completa nomes de cidade a cada letra; (b)
+contar visitantes únicos do site pelo CPF; (c) o índice de uma tabela de 500
+milhões de registros num banco de dados; (d) uma agenda em memória que recebe
+compromissos o tempo todo e lista os próximos em ordem de horário; (e) saber se
+duas pessoas estão ligadas por uma corrente de amizades que cresce a cada
+minuto.</p>
+<details><summary>Resposta</summary><p>(a) <strong>trie</strong>: o prefixo leva direto às cidades; (b) <strong>hash</strong>: só busca exata, a
+mais rápida; (c) <strong>árvore B</strong>: poucos blocos lidos do disco por busca; (d)
+<strong>rubro-negra</strong>: inserção em O(log n) no pior caso e percurso em ordem; (e)
+<strong>union-find</strong>: cada amizade é um une, cada pergunta é um acha.</p>
+</details><p><strong>10. A conta da memória.</strong> Um dicionário de 100 mil palavras vira uma trie de
+26 ponteiros com 250 mil nós. Quanta memória a trie ocupa? E as mesmas palavras
+como strings, com média de 9 letras?</p>
+<details><summary>Resposta</summary><p>Cada nó tem 216 bytes: 250 000 · 216 = 54 000 000 bytes, cerca de <strong>54 MB</strong>. As
+strings ocupam 100 000 · (9 + 1) = 1 000 000 bytes, cerca de <strong>1 MB</strong>. A trie
+gasta mais de 50 vezes mais, quase tudo em ponteiros <code>NULL</code>. É por isso que
+tries de verdade usam nós menores: lista de filhos (a ideia do 0144), vetor só
+das letras que existem ou árvore ternária de busca.</p>
+</details><p><strong>11. A divisão em cascata.</strong> Na árvore B do texto do 0146 (raiz <code>[40]</code>, nível
+1 <code>[20] [70]</code>, folhas <code>[10] [25 30] [50 60] [80 85 90]</code>), insira 87, 95, 97 e
+99, nesta ordem. Quantas divisões acontecem e como fica a árvore?</p>
+<details><summary>Resposta</summary><p>O 87 divide a folha <code>[80 85 90]</code> (o 85 sobe para <code>[70 85]</code>) e entra em
+<code>[87 90]</code>. O 95 vai para <code>[87 90 95]</code>. O 97 encontra essa folha cheia, que se
+divide (o 90 sobe: <code>[70 85 90]</code>), e entra em <code>[95 97]</code>. O 99 encontra o nó
+<code>[70 85 90]</code> cheio no caminho: ele se divide antes de descer (o 85 sobe para a
+raiz, <code>[40 85]</code>), e o 99 termina em <code>[95 97 99]</code>. São <strong>3 divisões</strong>. Por nível:
+<code>[40 85]</code>; <code>[20] [70] [90]</code>; <code>[10] [25 30] [50 60] [80] [87] [95 97 99]</code>. A
+altura continua 2. Confira com <code>ab_insere</code> e <code>ab_mostra</code>.</p>
+</details><h2>Questões do POSCOMP</h2>
+<p>Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.</p>
+<table>
+<thead>
+<tr>
+<th>Ano</th>
+<th>Questão</th>
+<th>Assunto</th>
+<th>Gabarito</th>
+<th>Prova</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2023</td>
+<td>41</td>
+<td>Uso de árvores trie para busca de palavras</td>
+<td>E</td>
+<td><a href="https://www.sbc.org.br/wp-content/uploads/2025/02/0761.001_Exame_POSCOMP_2023.pdf">caderno</a></td>
+</tr>
+<tr>
+<td>2024</td>
+<td>53</td>
+<td>Árvores B e B+, nós com ponteiros de dados</td>
+<td>B</td>
+<td><a href="https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2024.pdf">caderno</a></td>
+</tr>
+</tbody></table>
+<p>O gabarito de 2023 vem de um blog de terceiros que reproduz o gabarito definitivo; confira no PDF oficial da SBC.</p>
+<h2>Questões no estilo da prova</h2>
+<p>Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma
+alternativa certa. As definições seguem o Cormen: rubro-negra <strong>clássica</strong>
+(cor no nó, assunto 0177), árvore B pelo <strong>grau mínimo</strong> <code>t</code> (a raiz no
+nível 0 quando o enunciado falar em altura da B) e união por posto com
+compressão de caminho.</p>
+<p><strong>1.</strong> Considere as afirmações sobre árvores rubro-negras (Cormen):</p>
+<p>I. Um nó vermelho nunca tem filho vermelho.<br>II. Todos os nós da árvore têm a mesma altura negra.<br>III. Com <code>n</code> nós internos, a altura é no máximo 2 · lg(n + 1).<br>IV. Toda inserção exige pelo menos uma rotação, com certeza.</p>
+<p>Estão corretas:</p>
+<ul>
+<li>(A) Apenas I.</li>
+<li>(B) Apenas I e III.</li>
+<li>(C) Apenas II e IV.</li>
+<li>(D) Apenas I, III e IV.</li>
+<li>(E) Apenas III e IV.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>B.</strong> A I é uma das propriedades. A II confunde: é todo <strong>caminho a partir de
+um mesmo nó</strong> que tem o mesmo número de nós pretos; a raiz tem altura negra
+maior que a dos filhos pretos. A III é o teorema do Cormen. Na IV, &quot;com
+certeza&quot; derruba: o nó novo entra vermelho, e se o pai é preto nada muda; se
+o tio é vermelho, só há recoloração. Veja 0145 e 0177.</p>
+</details><p><strong>2.</strong> Pelo Cormen, a altura negra <code>bh(x)</code> não conta o próprio <code>x</code> e conta a
+folha <code>NIL</code>. Qual o menor número de nós internos de uma subárvore rubro-negra
+cuja raiz tem <code>bh = 5</code>?</p>
+<ul>
+<li>(A) 5</li>
+<li>(B) 10</li>
+<li>(C) 32</li>
+<li>(D) 31</li>
+<li>(E) 63</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>D.</strong> A subárvore de um nó <code>x</code> tem pelo menos 2^bh(x) - 1 nós internos, e o
+mínimo vem da árvore toda preta e perfeita: 2^5 - 1 = 31. O 32 erra por um, e
+o 63 usa <code>bh = 6</code>. É esse limite que leva à altura de até 2 lg(n + 1): pelo
+menos metade dos nós de um caminho é preta. Veja 0145 e 0177.</p>
+</details><p><strong>3.</strong> Insere-se, nesta ordem, as chaves <code>15 8 23 4 42 16 31 12 27 19</code> numa
+árvore B de grau mínimo <code>t = 2</code> (cada nó guarda de 1 a 3 chaves), pelo
+algoritmo do Cormen, que divide na descida todo nó cheio que encontra. Depois
+das dez inserções, quais são a raiz, o número de folhas e o número de divisões
+de nó que aconteceram?</p>
+<ul>
+<li>(A) raiz <code>15 23</code>; 3 folhas; 2 divisões</li>
+<li>(B) raiz <code>15 23</code>; 3 folhas; 3 divisões</li>
+<li>(C) raiz <code>15</code>; 2 folhas; 2 divisões</li>
+<li>(D) raiz <code>15 23</code>; 4 folhas; 3 divisões</li>
+<li>(E) raiz <code>15</code>; 3 folhas; 3 divisões</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> As três primeiras chaves enchem a raiz <code>8 15 23</code>. O 4 encontra a raiz
+cheia: divisão 1, o 15 sobe e a raiz fica <code>15</code> com filhos <code>4 8</code> e <code>23</code>. A
+seguir entram 42 e 16 (o filho <code>23</code> vira <code>16 23 42</code>). O 31 encontra esse
+filho cheio: divisão 2, o 23 sobe, e a raiz fica <code>15 23</code>. O 12, o 27 e o 19
+só entram nas folhas, que terminam em <code>4 8 12</code>, <code>16 19</code> e <code>27 31 42</code>. A altura
+não passou de 1. Veja 0146.</p>
+</details><p><strong>4.</strong> Uma árvore B de grau mínimo <code>t = 5</code> tem altura 3 (a raiz no nível 0 e
+as folhas no nível 3). Cada nó guarda no máximo <code>2t - 1 = 9</code> chaves. Qual o
+número máximo de chaves da árvore?</p>
+<ul>
+<li>(A) 1 111</li>
+<li>(B) 999</li>
+<li>(C) 4 999</li>
+<li>(D) 10 000</li>
+<li>(E) 9 999</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>E.</strong> Cada nó cheio tem 9 chaves e 10 filhos. Os níveis 0 a 3 têm 1, 10, 100
+e 1000 nós: 1 111 nós, e 1 111 · 9 = 9 999 chaves, que é (2t)^(h+1) - 1. A
+(A) conta nós em vez de chaves e a (B), só o último nível de uma árvore de
+altura 2. Veja 0146.</p>
+</details><p><strong>5.</strong> Os elementos de 0 a 9 começam cada um no seu conjunto, com posto 0. O
+<code>UNION(a, b)</code> chama <code>LINK(FIND-SET(a), FIND-SET(b))</code>, e o <code>LINK(x, y)</code> faz:
+se <code>x.rank &gt; y.rank</code>, <code>y.p = x</code>; senão <code>x.p = y</code>, e se os postos eram iguais,
+<code>y.rank</code> aumenta 1. Executam-se <code>UNION(1, 2)</code>, <code>UNION(3, 4)</code>, <code>UNION(1, 3)</code>,
+<code>UNION(5, 6)</code>, <code>UNION(7, 8)</code>, <code>UNION(5, 7)</code>, <code>UNION(9, 5)</code> e <code>UNION(2, 9)</code>, e
+depois <code>FIND-SET(1)</code> com compressão de caminho. Qual o representante, o posto
+dele e quais nós mudam de pai nesse <code>FIND-SET</code>?</p>
+<ul>
+<li>(A) representante 4; mudam de pai o 1 e o 2</li>
+<li>(B) representante 8, posto 3; muda de pai só o 1</li>
+<li>(C) representante 8, posto 3; mudam de pai o 1 e o 2</li>
+<li>(D) representante 8, posto 2, pois a compressão reduz o posto; mudam de pai o 1 e o 2</li>
+<li>(E) representante 9; mudam de pai o 1, o 2 e o 4</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>C.</strong> Os conjuntos crescem assim: <code>2</code> sobre o 1 (posto 1), <code>4</code> sobre o 3,
+depois <code>4</code> sobre o 2 (posto 2); <code>6</code> sobre o 5, <code>8</code> sobre o 7, depois <code>8</code>
+sobre o 6 (posto 2); o 9, de posto 0, vai para baixo do 8. Na última união
+as raízes 4 e 8 têm posto 2: o 4 vai para baixo do 8, que ganha posto 3. O
+caminho do 1 é 1, 2, 4, 8: a compressão liga o 1 e o 2 direto ao 8, e o 4 já
+estava. A compressão nunca altera o posto. Veja 0148.</p>
+</details><p><strong>6.</strong> As palavras <code>rio rios rima rimar pia pio piano rio</code>, nesta ordem
+(a última é repetida), são inseridas numa trie de letras minúsculas, cada nó
+com um vetor de 26 filhos. Sem contar a raiz, que não guarda letra, quantos
+nós a trie tem?</p>
+<ul>
+<li>(A) 12</li>
+<li>(B) 14</li>
+<li>(C) 27</li>
+<li>(D) 13</li>
+<li>(E) 8</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>D.</strong> Cada nó é uma letra nova num prefixo novo. De <code>rio</code> saem <code>r</code>, <code>i</code>, <code>o</code>
+(3); <code>rios</code> acrescenta o <code>s</code> (4); <code>rima</code> aproveita <code>ri</code> e cria <code>m</code>, <code>a</code> (6);
+<code>rimar</code>, o <code>r</code> (7); <code>pia</code> cria <code>p</code>, <code>i</code>, <code>a</code> (10); <code>pio</code> só o <code>o</code> (11);
+<code>piano</code> aproveita <code>pia</code> e cria <code>n</code>, <code>o</code> (13); o <code>rio</code> repetido não cria nada,
+só reafirma a marca de fim. A (C) soma as letras de todas as palavras
+distintas, como se não houvesse prefixo comum. Veja 0147.</p>
+</details><p><strong>7.</strong> Considere as afirmações sobre a trie:</p>
+<p>I. A busca de uma chave de tamanho <code>m</code> custa O(m), com os filhos em vetor de
+tamanho fixo, qualquer que seja o número de chaves guardadas.<br>II. A trie sempre ocupa menos memória do que uma tabela hash com as mesmas
+chaves.<br>III. Percorrer a trie em pré-ordem, visitando os filhos em ordem alfabética e
+anotando os nós que fecham uma palavra, entrega as palavras em ordem
+lexicográfica.</p>
+<p>Estão corretas:</p>
+<ul>
+<li>(A) Apenas I e III.</li>
+<li>(B) Apenas II.</li>
+<li>(C) Apenas I e II.</li>
+<li>(D) Apenas II e III.</li>
+<li>(E) I, II e III.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> A I vale: a busca anda uma letra por nível. A II cai no &quot;sempre&quot;: com
+vetor de 26 ponteiros por nó, e chaves que quase não dividem prefixo, a trie
+gasta muito mais que o hash. A III vale: um prefixo é visitado antes das
+palavras que o estendem (<code>rio</code> antes de <code>rios</code>), e os irmãos saem em ordem
+alfabética. Veja 0147.</p>
+</details><p><strong>8.</strong> O trecho abaixo monta e consulta uma trie de letras minúsculas. Em
+<code>main</code>, <code>ins(r, &quot;rio&quot;)</code> e depois <code>busca(r, &quot;rio&quot;)</code> deveriam dar 1, mas o
+resultado depende do que havia na memória. Qual é o defeito?</p>
+<pre><code class="language-c">typedef struct T {
+    struct T *f[26];
+    int fim;
+} T;
+
+T *novo(void) {
+    T *t = malloc(sizeof *t);
+    t-&gt;fim = 0;
+    return t;
+}
+
+void ins(T *r, const char *s) {
+    for (; *s; s++) {
+        int c = *s - &#39;a&#39;;
+        if (!r-&gt;f[c]) r-&gt;f[c] = novo();
+        r = r-&gt;f[c];
+    }
+    r-&gt;fim = 1;
+}
+</code></pre>
+<ul>
+<li>(A) <code>ins</code> deveria receber <code>T **r</code>, pois altera a raiz.</li>
+<li>(B) <code>novo</code> devolve o endereço de uma variável local.</li>
+<li>(C) <code>malloc</code> não zera o vetor <code>f</code>: o teste <code>!r-&gt;f[c]</code> lê ponteiros indeterminados. Falta <code>calloc</code> (ou <code>memset</code>).</li>
+<li>(D) Falta um <code>free(r)</code> no fim de <code>ins</code>.</li>
+<li>(E) O índice <code>*s - &#39;a&#39;</code> sai do vetor para a letra <code>z</code>.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>C.</strong> O <code>malloc</code> devolve memória com lixo: só o <code>fim</code> é inicializado, e os 26
+ponteiros de <code>f</code> ficam indeterminados. Então <code>!r-&gt;f[c]</code> pode ser falso para um
+filho que nunca existiu, e o código anda por um endereço inválido. No
+valgrind, aparece &quot;Conditional jump depends on uninitialised value&quot;. A
+correção é <code>calloc(1, sizeof(T))</code>, que deixa tudo em <code>NULL</code> e <code>0</code>. A raiz não
+muda dentro de <code>ins</code> (A), o <code>malloc</code> devolve memória do heap (B), e <code>&#39;z&#39; - &#39;a&#39;</code>
+é 25, dentro do vetor (E). Veja 0147.</p>
+</details><p><strong>9.</strong> Uma árvore geral com 20 nós é guardada com a representação
+filho-esquerdo, irmão-direito: cada nó tem dois ponteiros, o do primeiro
+filho e o do próximo irmão. Quantos desses ponteiros valem <code>NULL</code>?</p>
+<ul>
+<li>(A) 19</li>
+<li>(B) 20</li>
+<li>(C) 39</li>
+<li>(D) 40</li>
+<li>(E) 21</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>E.</strong> São 2n = 40 ponteiros. Os não nulos apontam cada um para um nó
+diferente, e todo nó, menos a raiz, é apontado exatamente uma vez: 19
+ponteiros. Sobram 40 - 19 = 21 nulos, o que dá n + 1 para qualquer n. É a
+mesma conta da árvore binária de n nós, que tem n + 1 subárvores vazias. Veja
+0144.</p>
+</details><p><strong>10.</strong> Considere as afirmações sobre a árvore B (Cormen):</p>
+<p>I. Todas as folhas ficam no mesmo nível.<br>II. A altura só cresce quando a raiz está cheia e se divide.<br>III. A remoção nunca diminui a altura da árvore.<br>IV. Com <code>t = 3</code>, um nó interno que não é a raiz pode ter apenas 1 chave.</p>
+<p>Estão corretas:</p>
+<ul>
+<li>(A) Apenas I.</li>
+<li>(B) Apenas I e II.</li>
+<li>(C) Apenas II e III.</li>
+<li>(D) Apenas I, II e IV.</li>
+<li>(E) Apenas III e IV.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>B.</strong> A I é a razão de a busca ter sempre o mesmo custo no pior caso. A II
+vale: dividir uma folha ou um nó interno só passa uma chave ao pai, e a
+altura sobe apenas quando é a raiz que se divide. Na III, &quot;nunca&quot; derruba: se
+a raiz fica sem chave depois de uma fusão dos dois únicos filhos, o filho
+vira a raiz e a altura diminui. Na IV, um nó que não é raiz tem de 2 a 5
+chaves para <code>t = 3</code>. Veja 0146.</p>
+</details><h2>Questões de provas do PPGI</h2>
+<p>Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.</p>
+<p><strong>Edital 023/2018 · Questão 02</strong></p>
+<p>Dadas as seguintes afirmações a respeito de árvores B,</p>
+<p>I. Em uma árvore B de ordem &quot;m&quot; cada nó tem, no máximo, &quot;m&quot; filhos.<br>II. Em uma árvore B de ordem &quot;m&quot; cada nó (exceto a raíz e as folhas) tem pelo menos &quot;m/2&quot; filhos.<br>III. Árvores B precisam ser rebalanceadas frequentemente.<br>IV. Um nó não-folha com &quot;k&quot; filhos deve ter k chaves.<br>V. Todas as folhas aparecem no mesmo nível e carregam informação.\</p>
+<p>estão CORRETOS os itens</p>
+<ul>
+<li>a) I e III, apenas.</li>
+<li>b) I, III, IV e V.</li>
+<li>c) I, II e V, apenas.</li>
+<li>d) III, IV e V, apenas.</li>
+<li>e) II, III e IV, apenas.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>C.</strong> I, II e V são as propriedades da árvore B; III é falsa (balanceia pouco) e IV é falsa (k filhos têm k-1 chaves). Assunto 0146.</p>
+</details><p><strong>Edital 061/2018 · Questão 11</strong></p>
+<p>Para remoção de uma chave cuja página esteja com o número mínimo, em árvore B, é CORRETO afirmar que:</p>
+<ul>
+<li>a) Deve-se fazer o processo de SPLIT sempre na página onde se encontrar a chave.</li>
+<li>b) Deve-se fazer o processo de SPLIT na página onde se encontrar a chave, exceto quanto é um elemento da raiz da árvore.</li>
+<li>c) Se a página onde se encontrar a chave não é folha, deve-se fazer procedimento de concatenação ou redistribuição, considerando os irmãos.</li>
+<li>d) Remove-se a chave, e a substitui por uma chave do nó irmão.</li>
+<li>e) No caso de só haver uma única página, a remoção não causa a necessidade de balanceamento.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>E.</strong> Com uma só página (raiz folha), remover não pede balanceamento. As outras confundem split com remoção. Assunto 0146.</p>
+</details><p><strong>Edital 061/2018 · Questão 14</strong></p>
+<p>Analise as afirmativas a seguir sobre árvores B e árvores binárias</p>
+<p>I. Diferente das árvores binárias, cada nó de uma árvore B deverá sempre ter mais de dois filhos.<br>II. Um nó de árvore B tem um campo ou um método para indicar se é um nó folha ou não. Característica esta herdada da AVL.<br>III. As folhas da árvore B são dispostas mais flexivelmente que as da árvore binária: suas folhas poderão estar em níveis diferentes, desde zero até o valor da altura da árvore.<br>IV. A árvore B tem um método de balanceamento muito custoso, por isso, sua indicação para trabalhar com dispositivos de armazenamento secundário, deve ser avaliada com muita cautela.\</p>
+<p>e assinale a alternativa CORRETA.</p>
+<ul>
+<li>a) Todas as afirmativas estão corretas.</li>
+<li>b) Somente as afirmativas II e III estão corretas</li>
+<li>c) Somente as afirmativas I, II e IV estão corretas.</li>
+<li>d) Somente as afirmativas I, III e IV estão corretas.</li>
+<li>e) Todas as afirmativas estão incorretas</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>E.</strong> I, II, III e IV são falsas: nó com 2 filhos é possível, não vem da AVL, folhas no mesmo nível, árvore B serve justamente para armazenamento secundário. Assunto 0146.</p>
+</details><h2>Para ler mais</h2>
+<ul>
+<li>CORMEN, T. H.; LEISERSON, C. E.; RIVEST, R. L.; STEIN, C. <em>Algoritmos: teoria e prática</em>. 4. ed. Rio de Janeiro: GEN LTC, 2024. Caps. 10 (representação de árvores enraizadas), 13 (árvores vermelho-preto, as rubro-negras), 18 (árvores B) e 19 (estruturas de dados para conjuntos disjuntos).</li>
+<li>ZIVIANI, N. <em>Projeto de algoritmos: com implementações em Pascal e C</em>. 3. ed. rev. e ampl. São Paulo: Cengage Learning, 2010. Cap. 5 (pesquisa em memória primária: árvores binárias balanceadas e tries) e cap. 6 (pesquisa em memória secundária: árvores B e B*).</li>
+<li>SZWARCFITER, J. L.; MARKENZON, L. <em>Estruturas de dados e seus algoritmos</em>. 3. ed. Rio de Janeiro: LTC, 2010. Árvores gerais, árvores rubro-negras, árvores B, árvores digitais e o problema da união de conjuntos.</li>
+<li>SEDGEWICK, R.; WAYNE, K. <em>Algorithms</em>. 4. ed. Boston: Addison-Wesley, 2011. Seções 1.5 (union-find), 3.3 (árvores balanceadas: 2-3 e rubro-negras) e 5.2 (tries). Disponível em: <a href="https://algs4.cs.princeton.edu/home/">https://algs4.cs.princeton.edu/home/</a>.</li>
+<li>SEDGEWICK, R. <em>Left-leaning red-black trees</em>. Princeton: Princeton University, 2008. Disponível em: <a href="https://sedgewick.io/wp-content/themes/sedgewick/papers/2008LLRB.pdf">https://sedgewick.io/wp-content/themes/sedgewick/papers/2008LLRB.pdf</a>.</li>
+<li>TENENBAUM, A. M.; LANGSAM, Y.; AUGENSTEIN, M. J. <em>Estruturas de dados usando C</em>. São Paulo: Makron Books, 1995. Cap. 5 (árvores gerais como árvores binárias) e cap. 7 (árvores B e tries).</li>
+<li>CELES, W.; RANGEL, J. L. <em>Apostila de estruturas de dados</em>. Rio de Janeiro: PUC-Rio, 2002. Capítulo sobre árvores genéricas (primeiro filho, próximo irmão).</li>
+<li>CORTÉS, M. I. <em>Estrutura de dados</em>. 3. ed. Fortaleza: EdUECE, 2015. Capítulo de busca avançada: árvore digital (trie).</li>
+<li>LINTZMAYER, C. N.; MOTA, G. O. <em>Análise de algoritmos e de estruturas de dados</em>. Santo André: UFABC, 2023. Notas de aula. Capítulo sobre union-find.</li>
+<li>BAYER, R.; McCREIGHT, E. Organization and maintenance of large ordered indexes. <em>Acta Informatica</em>, v. 1, n. 3, p. 173-189, 1972.</li>
+<li>TARJAN, R. E. Efficiency of a good but not linear set union algorithm. <em>Journal of the ACM</em>, v. 22, n. 2, p. 215-225, 1975.</li>
+<li>FREDKIN, E. Trie memory. <em>Communications of the ACM</em>, v. 3, n. 9, p. 490-499, 1960.</li>
+<li>KERNIGHAN, B. W.; RITCHIE, D. M. <em>C: a linguagem de programação padrão ANSI</em>. Rio de Janeiro: Campus, 1989. Seção 6.5: estruturas autorreferenciadas.</li>
+<li>CPPREFERENCE. <em>tolower</em>. Disponível em: <a href="https://en.cppreference.com/w/c/string/byte/tolower">https://en.cppreference.com/w/c/string/byte/tolower</a>.</li>
+</ul>

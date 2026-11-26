@@ -1,0 +1,131 @@
+<h2>0057 · Erros de memória</h2>
+<p>O sistema do caixa da padaria funciona de manhã. Às seis da tarde está
+lento, e no sábado trava. Ninguém mexeu no código. A cada venda, um
+pedacinho de memória ficava para trás, e depois de milhares de vendas o heap
+acabou. Com o heap nas mãos, você ganhou poder e uma responsabilidade nova:
+no C, quem cria esse tipo de erro e quem o corrige é você.</p>
+<p>O que torna esses erros perigosos é que o programa costuma <strong>funcionar</strong>.
+Ele mostra a saída certa, termina sem reclamar e quebra só na máquina do
+cliente, dias depois. Por isso existem ferramentas que vigiam a memória
+durante a execução. Antes delas, vale conhecer os quatro erros clássicos, um
+de cada vez.</p>
+<p>O primeiro é o da padaria, o <strong>vazamento de memória</strong> (<em>memory leak</em>): um
+bloco que ninguém liberou e cujo endereço ninguém mais guarda. Ele fica
+ocupado até o programa acabar. Uma vez só não faz falta; repetido a cada
+venda, deixa o programa lento e o derruba depois de horas (DEITEL; DEITEL,
+2011, cap. 12). Acontece, por exemplo, quando uma função faz <code>malloc</code> num
+ponteiro local e retorna sem <code>free</code>: o endereço morre com o frame, e o bloco
+fica.</p>
+<p>O segundo nasce do <strong>ponteiro solto</strong> (<em>dangling pointer</em>). Depois de
+<code>free(p)</code>, a variável <code>p</code> continua guardando o mesmo endereço; o <code>free</code>
+devolve o bloco, mas não apaga o ponteiro. Usar <code>p</code> depois disso é o <strong>uso
+depois do free</strong>. O pior é que pode até ler o valor antigo, porque ninguém
+apagou os bytes. Funciona por sorte, até o <code>malloc</code> entregar aquele pedaço a
+outra parte do programa, que passa a dividir a memória com você sem saber
+(BACKES, 2013, cap. 11).</p>
+<p>O terceiro é o <strong>free duplo</strong>: liberar o mesmo bloco duas vezes, em geral
+por dois ponteiros que apontavam para ele ou por um ponteiro solto que
+ninguém anulou (GOOGLE, s.d.). O hábito <code>free(p); p = NULL;</code> do assunto 0054
+ajuda, porque <code>free(NULL)</code> não faz nada.</p>
+<p>O quarto é o <strong>estouro</strong> no heap: ler ou escrever além do fim (ou antes do
+começo) de um bloco. Ele é traiçoeiro porque, logo depois do bloco, costuma
+morar o cabeçalho escondido do bloco vizinho (assunto 0054). Um byte a mais
+estraga a contabilidade do <code>malloc</code>, e o programa quebra depois, num <code>free</code>
+que não tem culpa nenhuma (KERNIGHAN; RITCHIE, 1989, seção 8.7).</p>
+<p>A primeira ferramenta é o <strong>AddressSanitizer</strong> (ASan), que vem no <code>gcc</code>.
+Compile com <code>-fsanitize=address -g</code>. O compilador põe vigias em volta de
+cada bloco e confere cada acesso; no primeiro erro, o programa para e mostra
+a linha do erro, a linha em que o bloco foi alocado e a linha em que foi
+liberado. No fim da execução, uma parte dele, o <strong>LeakSanitizer</strong>, lista o
+que vazou (GOOGLE, s.d.). As flags de estudo do curso já o ligam.</p>
+<p>A segunda é o <strong>valgrind</strong>. Ele roda o executável normal, sem recompilar,
+numa máquina virtual que vigia cada byte. Fica de 20 a 50 vezes mais lento,
+mas pega uma coisa que o ASan não pega: ler memória que nunca recebeu valor.
+Instale com <code>sudo pacman -S valgrind</code> (Arch) ou <code>sudo apt install valgrind</code>
+(Debian/Ubuntu) e rode <code>valgrind ./programa</code> (VALGRIND DEVELOPERS, s.d.). A
+tabela junta os quatro erros e a mensagem do ASan para cada um:</p>
+<table>
+<thead>
+<tr>
+<th>Erro</th>
+<th>O que é</th>
+<th>O AddressSanitizer diz</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>vazamento</strong></td>
+<td>um bloco que ninguém libera e ninguém mais acha</td>
+<td><code>detected memory leaks</code></td>
+</tr>
+<tr>
+<td><strong>uso depois do free</strong></td>
+<td>ler ou escrever num bloco já devolvido (ponteiro solto)</td>
+<td><code>heap-use-after-free</code></td>
+</tr>
+<tr>
+<td><strong>free duplo</strong></td>
+<td>liberar o mesmo bloco duas vezes</td>
+<td><code>attempting double-free</code></td>
+</tr>
+<tr>
+<td><strong>estouro</strong></td>
+<td>passar do fim (ou do começo) de um bloco</td>
+<td><code>heap-buffer-overflow</code></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>[!WARNING]
+&quot;Rodou e deu a saída certa&quot; não prova nada em C. Uso depois do <code>free</code>,
+estouro de um byte e leitura de lixo são <strong>comportamento indefinido</strong>: o
+programa pode funcionar hoje e quebrar com outro compilador. Rode com o
+ASan (flags de estudo) e, na dúvida, com <code>valgrind ./programa</code>.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>A função <code>total_do_pedido</code> copia os 4 preços de um pedido para um bloco de 16
+bytes e soma. A primeira versão esquecia o <code>free</code>: cada um dos 3 pedidos
+deixava 16 bytes perdidos, e o ASan mostra isso no fim:</p>
+<p>{{ideia}}</p>
+<p>O relatório da versão sem o <code>free</code> (salva como <code>pedido.c</code>): o tipo do erro,
+quanto vazou e a pilha de chamadas do <code>malloc</code>:</p>
+<pre><code class="language-text">==12072==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 48 byte(s) in 3 object(s) allocated from:
+    #0 0x7f1503afd9c7 in malloc
+    #1 0x55bff3c602ef in total_do_pedido pedido.c:5
+    #2 0x55bff3c6071c in main pedido.c:20
+
+SUMMARY: AddressSanitizer: 48 byte(s) leaked in 3 allocation(s).
+</code></pre>
+<p>A versão corrigida tem uma linha a mais:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int total_do_pedido(const int *precos, int itens) {
+    int *copia = malloc(itens * sizeof *copia);
+    if (copia == NULL) {
+        return -1;
+    }
+    int total = 0;
+    for (int i = 0; i &lt; itens; i++) {
+        copia[i] = precos[i];
+        total += copia[i];
+    }
+    free(copia); // sem esta linha, cada pedido deixaria 16 bytes para trás
+    return total;
+}
+
+int main(void) {
+    int pedido[] = {30, 12, 45, 8};
+    for (int p = 1; p &lt;= 3; p++) {
+        printf(&quot;Pedido %d: R$ %d\n&quot;, p, total_do_pedido(pedido, 4));
+    }
+    return 0;
+}
+// Saída:
+// Pedido 1: R$ 95
+// Pedido 2: R$ 95
+// Pedido 3: R$ 95
+</code></pre>
+<p>O <code>free</code> precisa vir antes do <code>return</code>, que destrói a única variável que sabia
+onde o bloco estava:</p>
+<p>{{fluxograma}}</p>

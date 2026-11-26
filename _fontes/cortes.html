@@ -1,0 +1,638 @@
+<h1>Fichamento: Estrutura de Dados (Mariela Inés Cortés)</h1>
+<ul>
+<li><strong>Autora:</strong> Mariela Inés Cortés (UECE; doutora pela PUC-Rio, área de Engenharia de Software)</li>
+<li><strong>Edição:</strong> 3ª ed., EdUECE / UAB, Fortaleza, 2015 (arquivo rotulado 2014), 126 p., Licenciatura em Informática a distância</li>
+<li><strong>Lido:</strong> 2936 linhas, por completo (Apresentação + 7 capítulos: complexidade, representação de dados/TAD, listas, pilhas, filas, árvores/BST/AVL, busca avançada: hash, árvore digital, autoajustáveis)</li>
+</ul>
+<h2>Avaliação geral</h2>
+<p>Apostila de EaD curta e <strong>conceitual</strong>. O texto explica bem o <em>porquê</em> das decisões de projeto:
+onde pôr o topo da pilha (no fim do vetor, mas na cabeça da lista encadeada), por que a fila insere
+no fim e remove no início, por que a fila sobre vetor precisa ser circular, e o custo de cada
+operação em O(·). Também traz um exemplo completo e correto de construção de AVL (1, 4, 7, 9, 8, 12, 10).
+Os pontos fortes são os capítulos 1, 2 e 6 e a seção de <strong>estruturas autoajustáveis</strong>, que é rara em
+material brasileiro e serve de semente para os NOVOS &quot;listas autoajustáveis&quot; e &quot;análise amortizada&quot;.</p>
+<p>O ponto fraco é grave: o <strong>código é pseudo-C cheio de bugs</strong> e, na extração, muitos corpos de função
+vieram vazios (as figuras se perderam). Também há afirmações teóricas erradas. <strong>Use as ideias e as figuras mentais; não copie código.</strong> Os bugs viram
+ótimos exercícios de &quot;ache o erro&quot; (lista na seção final).</p>
+<hr>
+<h3>0076-eficiencia</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>Qualidade de programa depende do ponto de vista. Para o usuário contam interface, compatibilidade,
+velocidade e memória. Para a organização contam portabilidade, documentação, manutenção e reuso.
+Velocidade e memória são os dois critérios que <strong>crescem com o tamanho da entrada</strong>.</li>
+<li>Fatores <strong>acidentais</strong> (hardware, SO, compilador) versus <strong>essenciais</strong> (tempo e espaço inerentes ao
+algoritmo). Medir com cronômetro mistura os dois, por isso se conta operações.</li>
+<li>Complexidade temporal = nº aproximado de instruções. Espacial = memória usada. As duas são funções de n.</li>
+<li>Além do tamanho, a <strong>organização</strong> da entrada importa (vetor quase ordenado vs. embaralhado).</li>
+<li>Três cenários: pior caso (pessimista, dá cota superior e é o mais usado), melhor caso (otimista) e
+caso médio (média sobre todas as entradas de tamanho n).</li>
+</ul>
+<p><strong>Explicações boas</strong></p>
+<ul>
+<li>Busca de um elemento num conjunto de 100: achar na 1ª comparação ou comparar com os 100 e não achar.
+É a entrada natural para melhor e pior caso.</li>
+<li>Regras de contagem por estrutura de controle: sequência → soma (fica o maior); <code>if</code> → condição O(1)
+mais o ramo <strong>mais caro</strong>; laço → custo do corpo × nº de iterações, analisando <strong>de dentro para fora</strong>;
+atribuição → O(1).</li>
+<li>Análise linha a linha do <code>Maximo(v, n)</code>: corpo do laço O(1), n−1 iterações → O(n).</li>
+</ul>
+<p><strong>Pegadinhas</strong></p>
+<ul>
+<li>O texto diz que um programa sem laço nem recursão tem custo constante, mas uma chamada a <code>strlen</code> ou
+<code>printf(&quot;%s&quot;)</code> esconde um laço. &quot;Sem laço visível&quot; não quer dizer O(1).</li>
+<li>No exemplo do <code>Maximo</code> aparece <code>if (n = 0)</code>, que é atribuição. Ótimo para lembrar a pegadinha do
+módulo 02.</li>
+</ul>
+<p><strong>Ideia de exemplo:</strong> instrumentar o <code>Max</code> com contador e testar vetores crescente, decrescente e aleatório.</p>
+<p><strong>Ideias de exercícios</strong></p>
+<ul>
+<li>Quantas comparações entre elementos o <code>Max</code> faz em um vetor de n elementos? → <strong>n−1, sempre</strong> (melhor =
+pior = médio). O que varia é o número de <strong>atribuições</strong> <code>Temp = A[i]</code>: 0 se o máximo está em A[0], n−1
+se o vetor é crescente.</li>
+<li>Melhor e pior caso de &quot;remover um elemento dado de um vetor desordenado&quot;. → Se a ordem tem de ser
+preservada, busca + deslocamento somam sempre cerca de n passos (achar no início = 1 comparação + n−1
+deslocamentos; achar no fim = n comparações + 0 deslocamentos): <strong>Θ(n) em todos os casos</strong>. Se a ordem
+não importa (vetor desordenado!), dá para copiar o último para o buraco. Aí o melhor caso é <strong>O(1)</strong>
+(elemento em v[0]) e o pior é O(n) (ausente). Bom para mostrar que a especificação muda a complexidade.</li>
+</ul>
+<h3>0077-big-o</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>Interessa o comportamento para <strong>n grande</strong> (assintótico). Para entradas pequenas até algoritmo ruim é rápido.</li>
+<li>f domina g se, a partir de um ponto m, f fica sempre acima. Os casos são: f sempre abaixo (escolha
+óbvia), as curvas se cruzam infinitas vezes (empate, ex. funções oscilantes) e as curvas se cruzam um
+número finito de vezes (vence a que fica embaixo no fim).</li>
+<li>Definição: C(n) = O(F(n)) se existem c &gt; 0 e m tais que C(n) ≤ c·F(n) para todo n ≥ m.</li>
+<li>Teste do limite: lim f/g = 0 → g é cota superior de f; = constante → mesma ordem; = ∞ → f domina.</li>
+<li>Ω (cota inferior), Θ (exata), o (estritamente menor). Só cita, sem definir formalmente.</li>
+<li>Álgebra do O: c·O(f) = O(f); O(f)+O(g) = O(max); O(f)·O(g) = O(f·g); O(O(f)) = O(f).</li>
+<li>Notação atribuída a Knuth (1968), com box biográfico.</li>
+</ul>
+<p><strong>Explicações boas</strong></p>
+<ul>
+<li>(n+1)² = O(n²) com c = 4 e m = 1. Exemplo pequeno e verificável à mão.</li>
+<li>&quot;2n² é O(n⁴), O(n³) e O(n²): todas corretas, mas a menor é a resposta útil&quot;. Boa para separar
+&quot;verdadeiro&quot; de &quot;informativo&quot;.</li>
+<li>Tabela de funções comuns: constante, linear, n log n, quadrática, cúbica, polinomial, exponencial.</li>
+</ul>
+<p><strong>Pegadinhas</strong></p>
+<ul>
+<li>A tabela do livro rotula <code>n · log n</code> como <strong>&quot;Logarítmica&quot;</strong>. Está errado: log n é logarítmica e
+n log n é &quot;linearítmica&quot; (ou &quot;n log n&quot;).</li>
+<li>O livro diz que &quot;o algoritmo assintoticamente mais eficiente é o melhor para todas as entradas&quot;.
+Falso: é o melhor para n <strong>grande</strong>. 1000·n² ganha de 0,1·n³ até n = 10 000.</li>
+<li>Confusão comum que o texto alimenta: O é cota superior e não sinônimo de &quot;pior caso&quot;. Dá para falar
+em O do melhor caso.</li>
+</ul>
+<p><strong>Ideia de exemplo:</strong> programa C que imprime a tabela de log n, n, n log n, n², 2ⁿ para n = 1, 2, 4, …, 64.</p>
+<p><strong>Ideias de exercícios</strong></p>
+<ul>
+<li>C_A(n) = 1000n² e C_B(n) = 0,1n³. A partir de que n o B fica pior? → 0,1n³ &gt; 1000n² ⇔ n &gt; <strong>10 000</strong>.</li>
+<li>Ordene do melhor ao pior para n grande: 100·n log n, 1000·n, 4n², 10⁻⁵·eⁿ. → <strong>1000n &lt; 100 n log n &lt;
+4n² &lt; 10⁻⁵eⁿ</strong>. As constantes não salvam a exponencial.</li>
+<li>Mostre que 3n³+2n²+n = O(n³). → Para n ≥ 1, 2n² ≤ 2n³ e n ≤ n³, então a soma ≤ 6n³. Basta <strong>c = 6, m = 1</strong>.</li>
+<li>g(n) = n e f(n) = n²: qual vale, f = O(g) ou g = O(f)? → <strong>g = O(f)</strong> (c = 1, m = 1). f = O(g) é falso
+porque n²/n → ∞.</li>
+</ul>
+<h3>0095-busca-binaria</h3>
+<p><strong>Conceito-chave:</strong> aparece como exercício do cap. 1 (<code>inf</code>, <code>sup</code>, <code>meio</code>, <code>while (inf &lt;= sup)</code>).</p>
+<p><strong>Pegadinha:</strong> <code>(inf+sup)/2</code> pode estourar <code>int</code> em vetores enormes. Use <code>inf + (sup-inf)/2</code>.</p>
+<p><strong>Ideias de exercícios</strong></p>
+<ul>
+<li>Quantas iterações, no máximo, para concluir que a chave não está num vetor de 15 elementos? → <strong>4</strong>
+(15 → 7 → 3 → 1 → 0; ⌊log₂15⌋+1).</li>
+<li>Melhor caso? → a chave está no meio: <strong>1</strong> iteração. Pior → ausente: ⌊log₂n⌋+1, ou seja, O(log n).</li>
+</ul>
+<h3>0079-tad</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>Abstração: o modelo guarda só o relevante. O &quot;fosso semântico&quot; é a distância entre a descrição de alto
+nível (domínio do problema) e a de baixo nível (bits).</li>
+<li>Tipo de dado = conjunto de valores + quantos bits reservar + como interpretar o padrão de bits.</li>
+<li>Primitivos vêm com operações prontas. Tipos estruturados definidos pelo usuário (<code>struct</code>) <strong>só trazem
+o armazenamento, sem operações</strong>. TAD = tipo + operações + <strong>ocultamento</strong> (interface separada da
+implementação).</li>
+<li>Estrutura homogênea (vetor, lista) vs. heterogênea (registro).</li>
+<li>Bom TAD: operações coesas e de propósito único, e conjunto <strong>completo</strong> (toda propriedade acessível pela
+interface).</li>
+<li>Independência de representação: troca-se vetor por lista sem afetar o cliente.</li>
+</ul>
+<p><strong>Explicações boas</strong></p>
+<ul>
+<li>TAD Retângulo (altura, largura, área, perímetro), mínimo e simpático. Lista de entidades para modelar como <code>struct</code> e depois como TAD: Livro, Círculo, Filme, Pessoa, Aluno,
+Item de estoque, Conta bancária.</li>
+</ul>
+<p><strong>Pegadinhas</strong></p>
+<ul>
+<li>O Retângulo do livro usa variáveis <strong>globais</strong> <code>altura</code> e <code>largura</code> (ao estilo de um objeto), então só
+existe um retângulo no programa. Em C o certo é passar <code>Retangulo *r</code>. Bom contraexemplo.</li>
+<li>O livro chama TAD de &quot;conceito central da orientação a objetos&quot;. Em C não há classes: o ocultamento é
+feito com ponteiro opaco no <code>.h</code>.</li>
+</ul>
+<p><strong>Ideias de exercícios</strong></p>
+<ul>
+<li>Reescrever o TAD Retângulo com tipo opaco (<code>typedef struct retangulo Retangulo;</code> no <code>.h</code>) e funções
+<code>ret_cria</code>, <code>ret_area</code>, <code>ret_libera</code>. → O cliente não consegue fazer <code>r-&gt;altura</code>: o compilador acusa
+&quot;incomplete type&quot;.</li>
+</ul>
+<h3>0058-pilha-e-heap</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>Três jeitos de reservar memória: global/estática (vive o programa inteiro), local (vive enquanto a
+função roda, na pilha de execução) e dinâmica (até o <code>free</code>).</li>
+<li>Desenho clássico: código, globais, pilha crescendo de um lado e heap do outro. Pilha que encontra o
+limite &quot;estoura&quot; e o programa aborta. <code>malloc</code> sem memória retorna NULL, que deve ser tratado.</li>
+<li>Estática/contígua: acesso direto O(1) por aritmética de endereço, mas tamanho fixo e
+inserção/remoção O(n) por deslocamento. Dinâmica/encadeada: cresce sob demanda e insere/remove só
+ajustando ponteiros, mas acesso ao i-ésimo é O(n) e o código é mais propenso a erro.</li>
+</ul>
+<p><strong>Explicações boas</strong></p>
+<ul>
+<li>Tabela &quot;endereço | conteúdo | ponteiro&quot; mostrando nós espalhados (3FFB → 1D34 → BD2F … → null). Ótima
+para desenhar a lista encadeada como gaveteiro numerado.</li>
+</ul>
+<p><strong>Pegadinha:</strong> &quot;Se não liberar, o SO libera ao terminar.&quot; É verdade, mas não desculpa vazamento.</p>
+<h3>0080-vetor-dinamico</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>TAD Lista com interface mínima: Criar, Inserir(pos), consultaElemento(pos), Remover(pos), Vazia, Cheia,
+Tamanho, proximoElemento, Busca. O tipo <code>corrente</code> abstrai a &quot;posição&quot; (índice no vetor e ponteiro na
+versão encadeada). É uma boa ideia de projeto de interface.</li>
+<li>Implementação com <code>tipo_base v[tamanho]</code> + <code>quant_Elem</code>. Inserir na posição p desloca para a direita
+do fim até p (pior caso: p = 0, O(n)). Remover desloca para a esquerda (O(n)). Consulta por posição é O(1).
+Busca por conteúdo é O(n).</li>
+</ul>
+<p><strong>Explicações boas</strong></p>
+<ul>
+<li>Desenho de inserir na posição 3 de uma lista de 5: os 3 últimos andam uma casa.</li>
+</ul>
+<p><strong>Pegadinhas</strong> (do código do livro)</p>
+<ul>
+<li><code>Busca</code> usa <code>for (i = 0; i &lt;= tamanho(l); i++)</code>. O <code>&lt;=</code> lê uma posição além do último elemento.</li>
+<li><code>Consulta</code> devolve <code>v[pos-1]</code> enquanto o resto da interface usa posições a partir de 0 (inconsistência
+de base).</li>
+<li>A descrição de <code>validaPos</code> diz &quot;posição maior que a quantidade − 1&quot;. A condição está invertida.</li>
+<li>O loop do deslocamento precisa começar em <code>quant_elem</code> e ir <strong>até <code>&gt; pos</code></strong> (<code>v[i] = v[i-1]</code>). Com
+<code>&gt;= pos</code> lê-se <code>v[pos-1]</code>, que para pos = 0 é <code>v[-1]</code>.</li>
+</ul>
+<p><strong>Ideias de exercícios</strong></p>
+<ul>
+<li>Implemente <code>Tamanho</code> nas duas versões. → Vetor com contador: <strong>O(1)</strong>. Lista encadeada sem contador:
+<strong>O(n)</strong>.</li>
+</ul>
+<h3>0081-lista-encadeada</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>Nó autorreferenciado <code>{ elemento; prox; }</code>. A lista é um ponteiro para o primeiro nó, e a lista vazia é NULL.</li>
+<li>Usar um ponteiro auxiliar (<code>corrente</code>) para percorrer evita &quot;perder a cabeça&quot; da lista.</li>
+<li>Exercícios clássicos: intercalar duas listas, liberar a lista toda, união/interseção, gerar lista
+ordenada a partir de outra, concatenar e inverter.</li>
+</ul>
+<p><strong>Pegadinhas</strong></p>
+<ul>
+<li><code>Inserir(Lista l, …)</code> faz <code>l = novo</code> <strong>dentro da função</strong>, mas <code>l</code> é cópia, então a cabeça não muda no
+chamador. Soluções: retornar a nova cabeça ou receber <code>Lista *l</code>. É o bug nº 1 de lista em C e o livro o
+comete em Inserir, Remover, Push e Pop.</li>
+<li>Cast de <code>malloc</code> para <code>Lista</code> quando o tipo certo é ponteiro para nó: só funciona porque
+<code>Lista == no_ptr</code>. Vale explicar.</li>
+</ul>
+<p><strong>Ideias de exercícios</strong></p>
+<ul>
+<li>&quot;Ache o erro&quot;: mostrar o <code>Push</code> do livro (<code>p = novo;</code>) e perguntar por que, após 3 pushes, a pilha
+continua vazia no <code>main</code>. → Passagem por valor do ponteiro: alterar a cópia não altera o original.
+Correção: <code>Pilha *p</code> e <code>*p = novo</code>, ou retornar <code>novo</code>.</li>
+</ul>
+<h3>0082-lista-busca-remocao</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>Remover tem dois casos: o 1º nó (atualiza a cabeça) ou um nó do meio/fim (o anterior &quot;pula&quot; o removido:
+<em>by-pass</em>). Depois sempre <code>free</code>.</li>
+<li>A função <code>Anterior</code> custa O(n). Por isso remoção em lista simples é O(n), embora o religamento em si
+seja O(1).</li>
+</ul>
+<p><strong>Pegadinhas</strong> (código do livro)</p>
+<ul>
+<li><code>Anterior</code> usa <code>&amp;</code> (bit a bit) no lugar de <code>&amp;&amp;</code> e <strong>retorna 1</strong> em vez de <code>ant</code>. A segunda versão tem
+chave sem fechar.</li>
+<li><code>while (atual != NULL &amp; atual-&gt;prox != pos)</code>: com <code>&amp;</code> não há curto-circuito, então quando <code>atual</code> é
+NULL ainda se avalia <code>atual-&gt;prox</code> e o programa quebra. É exemplo perfeito para o módulo 02 (curto-circuito).</li>
+</ul>
+<p><strong>Ideias de exercícios</strong></p>
+<ul>
+<li>Escreva <code>remover(Lista *l, int x)</code> sem função <code>Anterior</code>, guardando <code>ant</code> durante a busca. → Um único
+percurso O(n). Casos testados: lista vazia, remover o 1º, o último, um do meio e valor ausente.</li>
+</ul>
+<h3>0083-lista-ordenada</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> a inserção acontece &quot;no lugar certo&quot; pelo campo-chave, e a busca pode <strong>parar cedo</strong>
+(ao passar do valor procurado).</li>
+<li><strong>Ideia de exercício:</strong> busca em lista ordenada que para ao encontrar elemento maior. Quantas comparações
+para buscar 15 em 2, 5, 9, 20, 31? → <strong>4</strong> (para no 20, sem ir até o fim).</li>
+</ul>
+<h3>0084-lista-dupla</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> ponteiro extra para o anterior. Custa espaço e mais ponteiros para ajustar, mas a
+remoção dado o nó vira O(1) (não precisa procurar o anterior) e dá para percorrer de trás para frente.</li>
+<li><strong>Ideia de exercício:</strong> quantas atribuições de ponteiro para remover um nó do meio de uma lista dupla?
+→ <strong>2</strong> (<code>p-&gt;ant-&gt;prox = p-&gt;prox; p-&gt;prox-&gt;ant = p-&gt;ant;</code>) + <code>free</code>.</li>
+</ul>
+<h3>0085-lista-circular</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> o último nó aponta para o primeiro, então &quot;prox == NULL&quot; nunca acontece. O critério
+de parada é voltar ao nó inicial ou contar elementos.</li>
+<li><strong>Pegadinha:</strong> percorrer com <code>while (p != NULL)</code> vira laço infinito. <strong>Exemplo:</strong> Josephus (de k em k numa roda).</li>
+</ul>
+<h3>0087-pilha</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>Pilha = lista com inserção e remoção <strong>num só extremo</strong> (topo), LIFO. Busca no meio não faz parte do TAD.</li>
+<li>Interface: Criar, Push, Top, Pop, Vazia, Cheia, Tamanho.</li>
+<li>No vetor o topo fica no <strong>fim</strong> (índice <code>topo</code>): push e pop O(1). Pôr o topo em <code>v[0]</code> exigiria
+deslocar tudo, O(n).</li>
+<li>Comentário bom: depois do vetor, a pilha é a abstração mais fundamental, a ponto de existir nas
+instruções de máquina (pilha de chamadas).</li>
+</ul>
+<p><strong>Explicações boas</strong></p>
+<ul>
+<li>Pilha de <strong>livros pesados</strong>: só o de cima é visível. Para pegar um do meio, tira os de cima um a um.</li>
+</ul>
+<p><strong>Pegadinhas</strong> (código do livro)</p>
+<ul>
+<li><code>Criar</code> faz <code>topo = -1</code>, mas <code>Vazia</code> testa <code>topo == 0</code>. Com um elemento a pilha &quot;está vazia&quot;, e vazia
+de verdade (−1) &quot;não está&quot;. <strong>Ótimo exercício.</strong></li>
+<li><code>Pop</code> não verifica pilha vazia antes de ler <code>elementos[topo]</code>.</li>
+</ul>
+<p><strong>Ideias de exercícios</strong></p>
+<ul>
+<li>Por que o topo no fim do vetor e no início da lista encadeada? → No vetor o fim é acessível por índice
+em O(1) sem deslocar. Na lista simples o início é O(1) e o fim exigiria achar o penúltimo, O(n).</li>
+<li>Inverter uma lista usando pilha; maior, menor e média de uma pilha usando só a interface (desempilhar
+numa auxiliar e reempilhar para não destruir).</li>
+</ul>
+<h3>0088-pilha-encadeada</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> o topo é a cabeça da lista. Push = inserir no início; Pop = remover o primeiro,
+guardar o valor, <code>free</code> e devolver.</li>
+<li><strong>Pegadinha:</strong> o <code>Push</code> do livro testa <code>no_tmp == NULL</code>, mas a variável alocada se chama <code>novo</code> (não
+compila). O <code>Pop</code> devolve 0 quando a pilha está vazia, valor indistinguível de um 0 empilhado. Melhor
+devolver status e o valor por ponteiro.</li>
+<li><strong>Exercício:</strong> liberar a pilha. → Pop até vazia: <strong>O(n)</strong>.</li>
+</ul>
+<h3>0090-fila</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>FIFO: insere num extremo (fim) e remove no outro (início). Fila de banco.</li>
+<li>Sobre vetor, guardar <code>ini</code>, <code>fim</code> e <code>quant</code>. Sem circularidade, a fila &quot;parece cheia&quot; com espaço livre
+no começo. Solução: <strong>incremento circular</strong> (ao chegar no fim do vetor, volta a 0), com o fim lógico
+dado pela quantidade de elementos.</li>
+</ul>
+<p><strong>Pegadinhas</strong> (código do livro)</p>
+<ul>
+<li><code>incrementar</code> termina com <code>return (pos++)</code>: o pós-incremento <strong>devolve o valor antigo</strong>, então a função
+não avança. O certo é <code>return pos + 1;</code> ou <code>(pos + 1) % N</code>. Liga direto com o assunto 0014.</li>
+<li>O texto diz que manter os índices dá acesso direto &quot;O(n)&quot; (quis dizer O(1)).</li>
+<li>O livro usa <code>ini = fim = -1</code> como sentinela de vazia <strong>e</strong> um contador. Redundante e fonte de bug.
+Basta <code>ini</code>, <code>quant</code> e <code>fim = (ini + quant) % N</code>.</li>
+</ul>
+<p><strong>Ideias de exercícios</strong></p>
+<ul>
+<li>Mostre o estado de <code>ini</code>, <code>fim</code> e <code>quant</code> numa fila circular de tamanho 5 após: insere a, b, c, d;
+remove; remove; insere e, f, g. → Resposta com ini = 0 inicial e fim = próxima livre: depois de
+a,b,c,d: ini = 0, quant = 4. Duas remoções: ini = 2, quant = 2. Inserir e, f, g ocupa as posições 4, 0, 1:
+<strong>ini = 2, quant = 5, vetor = [f, g, c, d, e]</strong> (cheia).</li>
+<li>Por que remover no início e inserir no fim (e não o contrário)? → Na versão encadeada, remover o último
+exige achar o penúltimo, O(n). Inserir no fim com ponteiro <code>fim</code> é O(1).</li>
+</ul>
+<h3>0091-fila-encadeada</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> um &quot;nó cabeçalho&quot; com <code>ini</code> e <code>fim</code>. Inserir no fim (atualiza <code>fim-&gt;prox</code> e <code>fim</code>;
+se estava vazia, também <code>ini</code>). Remover do início (se ficou vazia, zera também <code>fim</code>).</li>
+<li><strong>Pegadinha (bug clássico no livro):</strong> no <code>remover</code>, quando a fila esvazia, o livro escreve
+<code>f-&gt;ini == NULL</code> (comparação, não atribuição) onde deveria ser <code>f-&gt;fim = NULL</code>. Resultado: <code>fim</code> fica
+apontando para nó liberado e a próxima inserção escreve em memória solta. Excelente para mostrar no
+valgrind (0062).</li>
+<li><strong>Ideia de exercício:</strong> filas PAR e ÍMPAR + PILHA (exercício 5 do cap. 5): ler inteiros até 0,
+separar por paridade, retirar alternando (começando pela ímpar), empilhar positivos e desempilhar nos
+negativos. Ex.: entrada 3, −4, 6, −1, 8, 0. Ímpar = [3, −1], par = [−4, 6, 8]. Ordem de retirada:
+3, −4, −1, 6, 8. Pilha: push 3 → [3]; −4 → pop (sai o 3) → []; −1 → pop em pilha vazia (tem de
+ser tratado: é o ponto do exercício); push 6; push 8. <strong>Saída (topo→base): 8, 6</strong>.</li>
+</ul>
+<h3>0102-arvores</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>Definição recursiva: vazia, ou raiz + subárvores disjuntas que também são árvores.</li>
+<li>Grau de um nó (nº de filhos), grau da árvore (maior grau), folha, caminho, comprimento, nível,
+altura. Só existe <strong>um</strong> caminho da raiz a cada nó.</li>
+<li>Árvore binária vs. genérica (nº de filhos indefinido).</li>
+</ul>
+<p><strong>Explicações boas</strong></p>
+<ul>
+<li>Conjuntos aninhados (diagrama de Venn) ↔ árvore. Diretórios como exemplo de hierarquia.</li>
+</ul>
+<p><strong>Pegadinhas</strong></p>
+<ul>
+<li>O livro dá <strong>duas definições incompatíveis de altura</strong>: altura da árvore com só a raiz = 0 (contando
+arestas) e depois &quot;folhas têm altura 1&quot; (contando nós). O nível da raiz é 0 &quot;por definição&quot;, mas o
+nível foi definido como nº de nós no caminho. <strong>Fixe uma convenção no curso</strong> (sugestão: arestas;
+folha = 0; árvore vazia = −1) e avise que os livros divergem.</li>
+</ul>
+<p><strong>Ideias de exercícios</strong></p>
+<ul>
+<li>Para uma árvore desenhada, dar grau de cada nó, grau da árvore, folhas, nível e altura de cada nó.</li>
+</ul>
+<h3>0103-arvore-binaria</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>Estritamente binária (0 ou 2 filhos), completa (nós com subárvore vazia só nos dois últimos níveis),
+cheia (todos os vazios no último nível).</li>
+<li>Altura h ⇒ no máximo 2^(h+1) − 1 nós, logo altura mínima ~ log₂ n. Altura máxima = n − 1 (degenerada).</li>
+<li>Percursos pré, em (simétrica) e pós-ordem, recursivos.</li>
+<li>Árvore de expressão: folhas operandos, nós internos operadores.</li>
+</ul>
+<p><strong>Explicações boas</strong></p>
+<ul>
+<li>Árvore de (5 + 9) * (3 − 7) + 7 com os três percursos: pré <code>+ * + 5 9 − 3 7 7</code>, pós <code>5 9 + 3 7 − * 7 +</code>.</li>
+<li>Função <code>cheia(a)</code> recursiva (exercício resolvido): vazia → 1; um filho só → 0; senão
+cheia(esq) &amp;&amp; cheia(dir).</li>
+</ul>
+<p><strong>Pegadinhas</strong></p>
+<ul>
+<li>O livro afirma que o percurso em ordem dá &quot;5 + 9 * 3 − 7 + 7&quot; e que isso &quot;é uma expressão válida&quot;.
+Válida sintaticamente, mas <strong>com outro valor</strong> (sem parênteses a precedência muda: 5 + 27 − 7 + 7 = 32,
+quando o certo é 14 · (−4) + 7 = −49). Em ordem precisa repor parênteses. Pré e pós-ordem dispensam
+parênteses, ao contrário do que o livro sugere ao chamá-las de &quot;não válidas&quot;.</li>
+<li><code>printf(Conteudo(a))</code> sem string de formato. Correto: <code>printf(&quot;%d &quot;, a-&gt;info)</code>.</li>
+</ul>
+<p><strong>Ideias de exercícios</strong></p>
+<ul>
+<li>Avalie a árvore da expressão acima recursivamente. → <strong>−49</strong>.</li>
+<li>Nº máximo de nós com altura 3 (arestas). → <strong>15</strong>.</li>
+</ul>
+<h3>0104-bst-busca-insercao</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>Propriedade: tudo à esquerda &lt; nó &lt; tudo à direita, valendo recursivamente.</li>
+<li>Busca desce à esquerda ou à direita. Inserção segue a busca e sempre cria uma <strong>folha</strong>.</li>
+<li>Duplicatas: em vez de repetir o nó, manter um <strong>contador de frequência</strong> no nó (árvore menos funda).</li>
+<li>Custo proporcional à altura: O(log n) em média para inserções aleatórias e O(n) no pior caso.</li>
+</ul>
+<p><strong>Pegadinhas</strong></p>
+<ul>
+<li>O livro define a BST com &quot;≤ à esquerda e ≥ à direita&quot; e logo diz que não há repetidas. Escolha uma
+regra estrita (&lt;, &gt;) e trate repetidas à parte.</li>
+<li>&quot;Como a profundidade média é O(log n), as operações também&quot; esconde que inserir já ordenado dá lista
+(o livro mostra no exercício 1, 2, …, 7).</li>
+<li>A inserção do livro não fecha o <code>else</code> com a chamada recursiva (corpo perdido). Lembre que a versão
+recursiva precisa de <code>T-&gt;esq = Inserir(x, T-&gt;esq)</code>.</li>
+</ul>
+<p><strong>Ideias de exercícios</strong></p>
+<ul>
+<li>Insira 20, 5, 12, 36, 27, 45, 9, 2, 6, 17, 40. → Raiz 20. Esq: 5 (esq 2; dir 12 (esq 9 (esq 6); dir 17)).
+Dir: 36 (esq 27; dir 45 (esq 40)). Em ordem: 2 5 6 9 12 17 20 27 36 40 45.</li>
+<li>Insira 1..7 em ordem. → Degenerada (só filhos à direita), <strong>altura 6</strong>: buscar 7 custa 7 comparações,
+igual a uma lista.</li>
+<li>Contar nós com valor em [x1, x2] podando subárvores fora do intervalo.</li>
+</ul>
+<h3>0105-bst-remocao</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>Folha: remove direto. Um filho: o pai passa a apontar para o neto (by-pass). Dois filhos: copia o
+<strong>sucessor</strong> (menor da direita) ou o antecessor (maior da esquerda) e remove esse nó, que tem no máximo
+um filho.</li>
+<li><code>buscaMin</code> recursivo e iterativo. O iterativo economiza pilha.</li>
+<li>Remoções repetidas usando sempre o sucessor desequilibram a árvore para um lado.</li>
+</ul>
+<p><strong>Pegadinha:</strong></p>
+<ul>
+<li>O <code>Remover</code> do livro mistura nomes (<code>v</code>, <code>T</code>, <code>tmp_cell</code>), compara <code>pai-&gt;dir == T</code> e não trata a raiz
+(pai NULL). Versão limpa: <code>No *remover(No *r, int x)</code> recursiva, que devolve a nova raiz da subárvore.</li>
+</ul>
+<p><strong>Ideias de exercícios</strong></p>
+<ul>
+<li>Na BST de 20, 5, 12, …, 40, remova 9, depois 5, depois 20 (sucessor). → Remove 9 (um filho): 12 fica
+com esq 6. Remove 5 (dois filhos): o sucessor é 6, o 5 vira 6 e o 6 antigo some. Remove 20: o sucessor
+é 27, a raiz vira 27 e o 36 fica sem esq. <strong>Final: 27 (esq 6 (esq 2; dir 12 (dir 17)); dir 36 (dir 45 (esq 40)))</strong>.
+Em ordem: 2 6 12 17 27 36 40 45.</li>
+</ul>
+<h3>0106-avl</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>AVL (Adel&#39;son-Vel&#39;skii e Landis): em todo nó, |altura(esq) − altura(dir)| ≤ 1, o que garante altura
+O(log n).</li>
+<li>Fator de balanceamento FB = h(esq) − h(dir), com folha FB = 0. Na inserção, só os nós do caminho de
+volta à raiz podem desregular.</li>
+<li>Quatro casos: FB &gt; 1 com filho esquerdo pendendo à esquerda → rotação simples à direita; FB &gt; 1 com
+filho pendendo à direita → dupla à direita; espelhos com FB &lt; −1.</li>
+<li>Função <code>Altura</code> recursiva (vazia = −1).</li>
+</ul>
+<p><strong>Explicações boas</strong></p>
+<ul>
+<li><strong>Exemplo passo a passo correto</strong>: inserir 1, 4, 7, 9, 8, 12, 10 → rotação simples esq. em 1; dupla esq.
+em 7; simples esq. na raiz 4; dupla esq. em 9. Final <strong>8 (4 (1, 7), 10 (9, 12))</strong>, altura 2. Sem
+balancear, a BST teria altura 5 (caminho 1→4→7→9→12→10, em arestas), como o livro diz.</li>
+</ul>
+<p><strong>Pegadinhas</strong></p>
+<ul>
+<li>O livro diz &quot;se FB ≤ 1 está balanceado&quot;. Falta o <strong>módulo</strong>: FB = −5 também é ≤ 1. Correto: |FB| ≤ 1.</li>
+<li>Também afirma que &quot;todas as operações são O(log n), exceto possivelmente a inserção&quot;. Errado: inserção
+e remoção são O(log n). A inserção faz no máximo uma rotação (simples ou dupla). A remoção pode fazer
+O(log n) rotações.</li>
+<li>Tipos II/III usam rotação dupla quando o filho tem FB <strong>&quot;menor ou igual&quot;</strong>. Na inserção o caso &quot;igual&quot;
+não ocorre. Na <strong>remoção</strong>, filho com FB = 0 pede rotação <strong>simples</strong>. Regra correta: dupla só quando o
+sinal do FB do filho é oposto ao do nó.</li>
+<li><code>Altura</code> do livro usa <code>:=</code> (Pascal), <code>if (no = NULL)</code> e troca SAD/SAE nos nomes. Recalcular altura
+recursivamente a cada inserção dá O(n): guarde a altura no nó.</li>
+</ul>
+<p><strong>Ideias de exercícios</strong></p>
+<ul>
+<li>Construa a AVL com 50, 20, 30, 25, 10, 15, remove 20, insere 20, insere 40 (ex. 5 do livro). →
+50, 20, 30: LR em 50 → 30 (20, 50). +25, +10: 30 (20 (10, 25), 50). +15: desregula 30 (esq h2, dir h0),
+filho 20 com FB +1 → simples à direita → <strong>20 (10 (−, 15), 30 (25, 50))</strong>. −20 (sucessor 25) →
+25 (10 (−, 15), 30 (−, 50)). +20: desregula 10 (RR) → rotação esq. → 25 (15 (10, 20), 30 (−, 50)).
++40: desregula 30 (RL) → <strong>25 (15 (10, 20), 40 (30, 50))</strong>, árvore perfeita.</li>
+<li>Sequência de letras A, Z, B, Y, C, X, D, P, E, V, F (ex. 4 do livro), boa para treinar dupla rotação
+(zigue-zague).</li>
+</ul>
+<h3>0110-hashing</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>Busca sequencial O(n) e BST O(log n) comparam chaves. Hashing <strong>calcula</strong> o endereço a partir da chave
+e tem custo médio O(1).</li>
+<li>Duas etapas: escolher a função de dispersão e tratar colisões.</li>
+<li>Endereçamento direto (n = m e chaves 0..m−1) é o caso ideal raro.</li>
+<li>Hash não preserva ordem: listar em ordem exige outra estrutura.</li>
+<li>Usos citados: índices de bancos de dados e tabela de transposição em xadrez.</li>
+</ul>
+<p><strong>Explicações boas</strong></p>
+<ul>
+<li>Arquivo de pastas por inicial do sobrenome (chave = sobrenome, endereço = inicial). Analogia intuitiva
+e já com colisões embutidas.</li>
+<li><code>hashExemplo(chave) = chave[0] − 65</code>: função ruim de propósito, boa para discutir distribuição.</li>
+</ul>
+<p><strong>Pegadinhas</strong></p>
+<ul>
+<li>Rodapé: &quot;com 50 pessoas, <strong>pelo menos duas</strong> fazem aniversário no mesmo dia&quot;. Falso como certeza: a
+probabilidade é cerca de 97%. Com 23 pessoas já passa de 50%. A certeza só vem com 367 pessoas (casa dos
+pombos).</li>
+<li><code>chave[0] − 65</code> dá negativo para minúsculas e dígitos, e índice negativo corrompe memória. Use
+<code>(unsigned char)</code> e <code>% m</code>.</li>
+<li>&quot;Funções perfeitas só em criptografia&quot; confunde hash criptográfico com hash perfeito. São conceitos
+diferentes.</li>
+</ul>
+<p><strong>Ideias de exercícios</strong></p>
+<ul>
+<li>Probabilidade de colisão com 23 chaves em 365 posições. → ≈ <strong>50,7%</strong>. Programa em C que calcula
+1 − Π(365−i)/365.</li>
+</ul>
+<h3>0111-encadeamento</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> cada posição aponta para uma lista dos elementos que colidiram. Inserir/remover =
+operar na lista daquela posição. Trocar a lista por AVL baixa o pior caso por posição para O(log n).</li>
+<li><strong>Pegadinha:</strong> o texto diz que a AVL melhora o &quot;tempo médio&quot; de O(n) para O(log n). Com boa função e
+fator de carga baixo o tempo médio já é O(1). A AVL melhora o <strong>pior caso</strong>.</li>
+<li><strong>Ideia de exercício:</strong> m = 7, h(k) = k % 7, inserir 10, 17, 24, 3, 5 com encadeamento. → Posição 3:
+[10, 17, 24, 3] (inserindo no fim); posição 5: [5]. Discutir por que m primo e chaves &quot;de 7 em 7&quot; são
+um par ruim.</li>
+</ul>
+<h3>0112-enderecamento-aberto</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> sem estrutura auxiliar, o elemento que colide vai para outra posição da própria
+tabela segundo uma sequência de sondagem: linear, quadrática ou dispersão dupla.</li>
+<li><strong>Pegadinhas (erros do livro):</strong><ul>
+<li>Sondagem quadrática descrita como &quot;posição 10, depois 100, 1000…&quot;. Errado: é h(k) + i² (h, h+1, h+4,
+h+9…) módulo m. 10, 100, 1000 nem é quadrático.</li>
+<li>Dispersão dupla descrita como &quot;aplicar uma nova função ao valor gerado pela anterior&quot;. Errado: a
+segunda função é aplicada à <strong>chave</strong> e dá o <strong>passo</strong>: (h₁(k) + i·h₂(k)) mod m, com h₂(k) ≠ 0.</li>
+<li>Não fala de remoção. No endereçamento aberto é preciso marcar <strong>lápide</strong> (removido), senão buscas
+posteriores param cedo demais.</li>
+</ul>
+</li>
+<li><strong>Ideia de exercício:</strong> m = 11, h(k) = k % 11, sondagem linear, inserir 22, 1, 13, 11, 24, 33. → 22→0;
+1→1; 13→2; 11→0 ocupado → 1 → 2 → <strong>3</strong>; 24→2 → 3 → <strong>4</strong>; 33→0 → 1 → 2 → 3 → 4 → <strong>5</strong>. Mostra o
+agrupamento primário.</li>
+</ul>
+<hr>
+<h3>NOVO: trie (árvore digital / busca digital)</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>Busca digital compara a chave <strong>dígito a dígito</strong> (caractere a caractere), não chave inteira contra
+chave inteira. Boa para chaves longas e de tamanho variável.</li>
+<li>Árvore digital m-ária: o j-ésimo filho corresponde ao j-ésimo símbolo do alfabeto e o caminho da raiz
+até um nó é um <strong>prefixo</strong> de alguma chave. Nó marcado (ponteiro para a informação, ou flag) indica fim
+de chave válida.</li>
+<li>Caso binário (alfabeto {0,1}): esquerda = 0 e direita = 1.</li>
+<li>Busca por prefixo sai de graça (autocompletar, linguística).</li>
+<li>Contexto: processamento de cadeias = casamento de padrões (achar P de tamanho m em T de tamanho n) +
+compressão.</li>
+</ul>
+<p><strong>Explicações boas</strong></p>
+<ul>
+<li>Dicionário de papel: a primeira letra leva à &quot;página&quot; das palavras com aquela letra.</li>
+<li>Chaves binárias 00, 0010, 010, 010111, 010110, 00100, 11, 110, 1101: 010 é prefixo de 010110 e
+010111, e por isso o nó de 010 precisa de marca.</li>
+</ul>
+<p><strong>Pegadinhas</strong></p>
+<ul>
+<li>O livro diz que a busca digital acha ocorrências &quot;em O(log n) em relação ao tamanho do texto&quot;. Para
+trie de palavras o custo é <strong>O(comprimento da chave)</strong>, independente de n. O &quot;O(log n)&quot; não se sustenta.</li>
+<li>Trie com vetor de 26 filhos por nó gasta muita memória. Alternativas: lista de filhos ou árvore ternária.</li>
+</ul>
+<p><strong>Ideia de exemplo:</strong> trie de minúsculas em C (<code>struct no { struct no *filho[26]; bool fim; }</code>).</p>
+<p><strong>Ideias de exercícios</strong></p>
+<ul>
+<li>Construa a trie binária de 00, 0000, 00010, 00011, 0101100, 0101101, 10, 101, 1010 (ex. do livro).
+Quantos nós marcados? → <strong>9</strong> (um por chave). Quais chaves são prefixo de outras? → 00 (de 0000, 00010,
+00011), 10 (de 101, 1010), 101 (de 1010).</li>
+</ul>
+<h3>NOVO: listas autoajustáveis</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>Em estrutura autoajustável, a <strong>busca também altera a forma</strong> para acelerar buscas futuras dos itens
+mais procurados.</li>
+<li>Três políticas para lista: <strong>mover para frente</strong> (o acessado vai para a cabeça), <strong>transposição</strong>
+(troca com o anterior, sobe uma casa por acesso) e <strong>contador de frequência</strong> (campo extra; mantém a
+lista em ordem decrescente de acessos). Há também híbridos.</li>
+<li>Trade-offs: mover-para-frente reage rápido, mas um acesso raro joga lixo no topo. Transposição é
+conservadora. Contador gasta memória e mantém ordem.</li>
+<li>Em vetor, mover para frente custa O(n) de deslocamento. Na lista encadeada custa O(1) depois de achar.</li>
+</ul>
+<p><strong>Ideia de exemplo:</strong> simular as três políticas sobre os acessos A A B A C A A D A, contando comparações.</p>
+<p><strong>Ideias de exercícios</strong></p>
+<ul>
+<li>Lista inicial [A, B, C, D], acessos D, D, D, A. Custo (comparações) com mover-para-frente vs.
+transposição. → MTF: D custa 4 → [D, A, B, C]; D custa 1; D custa 1; A custa 2. <strong>Total 8</strong>.
+Transposição: D custa 4 → [A, B, D, C]; D custa 3 → [A, D, B, C]; D custa 2 → [D, A, B, C]; A custa 2.
+<strong>Total 11</strong>.</li>
+<li>Que adaptação o TAD Lista precisa para virar autoajustável (ex. 2 do livro)? → <code>Busca</code> passa a receber
+<code>Lista *</code> (porque muda a cabeça). Com contador: campo <code>freq</code> no nó e reposicionamento após incrementar.</li>
+</ul>
+<h3>NOVO: análise amortizada</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>O livro introduz o termo no contexto de autoajuste: quando uma operação muda a estrutura para o futuro,
+analisar o pior caso de <strong>uma</strong> operação isolada engana. A complexidade amortizada olha o custo
+<strong>acumulado de uma sequência</strong> de operações.</li>
+<li>Gancho no curso: vetor que dobra (0060, 0080) e tabela hash que dobra. Uma inserção ocasional custa
+O(n), mas n inserções custam O(n) no total, ou seja, O(1) amortizado.</li>
+</ul>
+<p><strong>Ideias de exercícios</strong></p>
+<ul>
+<li>Vetor que começa com capacidade 1 e dobra quando enche: quantas cópias de elementos em 16 inserções?
+→ 1 + 2 + 4 + 8 = <strong>15</strong> (&lt; 2·16). Generalizando: &lt; 2n, logo O(1) amortizado por inserção.</li>
+</ul>
+<h3>NOVO: árvores gerais, recorrências, Huffman (só sementes)</h3>
+<ul>
+<li><strong>Árvores gerais:</strong> o livro só define (nº de filhos indefinido; grau). Completar com
+filho-esquerdo/irmão-direito, de outra fonte.</li>
+<li><strong>Recorrências:</strong> o rodapé do cap. 1 manda contar chamadas × custo de cada uma. Exercício: busca
+binária recursiva → T(n) = T(n/2) + O(1) ⇒ <strong>O(log n)</strong>.</li>
+<li><strong>Huffman/compressão:</strong> só citado como &quot;representar o texto com menos bits&quot;. Sem algoritmo.</li>
+</ul>
+<hr>
+<h2>Obsoleto / evitar</h2>
+<ul>
+<li><strong>Todo o código do livro como modelo.</strong> É pseudo-C não compilável, com blocos perdidos na extração.
+Lista de bugs aproveitáveis como &quot;ache o erro&quot;:<ol>
+<li>Cabeça de lista/pilha alterada dentro da função por valor (<code>l = novo</code>, <code>p = novo</code>, <code>l = l-&gt;prox</code>).</li>
+<li><code>&amp;</code> em vez de <code>&amp;&amp;</code> em <code>Anterior</code> (sem curto-circuito → desreferencia NULL).</li>
+<li><code>Anterior</code> retorna <code>1</code> em vez do ponteiro.</li>
+<li><code>Vazia</code> da pilha testa <code>topo == 0</code> com topo iniciado em −1.</li>
+<li><code>incrementar</code> devolve <code>pos++</code> (valor antigo).</li>
+<li>Fila encadeada: <code>f-&gt;ini == NULL</code> onde deveria ser <code>f-&gt;fim = NULL</code> (ponteiro solto).</li>
+<li><code>Busca</code> com <code>i &lt;= tamanho</code> (lê além do fim); <code>Consulta</code> com <code>pos-1</code> (base inconsistente).</li>
+<li><code>if (n = 0)</code> no <code>Maximo</code>; <code>if (no = NULL)</code> e <code>:=</code> na <code>Altura</code>.</li>
+<li><code>printf(Conteudo(a))</code> sem formato.</li>
+<li><code>main()</code> sem tipo e <code>Printf (Hello Word!\n&quot;)</code> no &quot;Hello World&quot; (maiúscula, aspas faltando).</li>
+</ol>
+</li>
+<li>Funções que imprimem erro e fazem <code>return;</code> sem valor em função não-void (<code>Criar</code>).</li>
+<li><code>Malloc</code> com maiúscula, <code>struct no dl</code>, <code>typedef no_PTR</code>, mistura de <code>next</code>/<code>prox</code> e <code>and</code>.</li>
+<li>Afirmações teóricas erradas: sondagem quadrática &quot;10, 100, 1000&quot;; dispersão dupla &quot;hash do hash&quot;;
+<code>n log n</code> = &quot;logarítmica&quot;; FB sem módulo; inserção AVL como exceção ao O(log n); busca digital
+O(log n); paradoxo do aniversário como certeza; AVL melhorando o &quot;tempo médio&quot; do hash encadeado.</li>
+<li>Duas convenções de altura/nível no mesmo capítulo.</li>
+<li>TAD com estado global (Retângulo), apresentado como &quot;objeto&quot;.</li>
+</ul>
+<h2>Recomendações</h2>
+<ol>
+<li><strong>Usar para teoria de 0076/0077:</strong> regras de contagem por estrutura de controle, os três casos, a
+definição formal com c e m, o teste do limite e os exercícios numéricos (10 000; ranking de 4 funções;
+c = 6). Corrigir &quot;n log n = logarítmica&quot;.</li>
+<li><strong>0079-tad:</strong> reaproveitar a lista de entidades (Livro, Círculo, Conta…) como banco de exercícios e o
+Retângulo como contraexemplo de estado global, convertido para tipo opaco.</li>
+<li><strong>Listas, pilhas e filas:</strong> aproveitar as <strong>justificativas de projeto</strong> (topo no fim do vetor e na
+cabeça da lista; inserir no fim/remover no início; fila circular) e a interface com tipo <code>corrente</code>.
+Transformar os bugs 1, 4, 5 e 6 em exercícios &quot;ache o erro&quot; (o 6 é ótimo para valgrind/ASan no 0062).</li>
+<li><strong>0102–0106:</strong> usar o exemplo AVL 1, 4, 7, 9, 8, 12, 10 (correto e completo) e os exercícios de
+construção (BST 20, 5, 12, …; AVL 50, 20, 30, …; letras A, Z, B…), com os gabaritos acima. Fixar uma
+convenção de altura e corrigir FB com módulo.</li>
+<li><strong>0103:</strong> árvore de expressão (5 + 9)·(3 − 7) + 7 para os percursos, com o alerta de que em ordem sem
+parênteses muda o valor.</li>
+<li><strong>Hash (0110–0112):</strong> usar a analogia das pastas por inicial e o <code>hashExemplo</code> como função ruim. Não
+usar as descrições de sondagem quadrática e dupla (erradas) e acrescentar remoção com lápide (ausente).</li>
+<li><strong>NOVOS sugeridos por esta fonte:</strong> <em>trie</em> (com o exercício binário e o gabarito), <em>listas
+autoajustáveis</em> (MTF/transposição/contador, com o exercício de custo 8 vs 11) e <em>análise amortizada</em>
+(gancho do vetor que dobra). Huffman, casamento de padrões e árvores gerais aparecem só como menção:
+buscar em outras fontes.</li>
+</ol>

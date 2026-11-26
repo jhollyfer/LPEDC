@@ -1,0 +1,75 @@
+<h2>0015 · if/else e o = no lugar do ==</h2>
+<p>O <code>if</code> do 0014 fazia um passo a mais ou nada. Muitas situações, porém, têm
+dois desfechos, e um deles <strong>sempre</strong> acontece: o aluno passa ou fica de
+recuperação, o pagamento é aprovado ou recusado. Com um <code>if</code> só, você teria
+de escrever a pergunta duas vezes, uma afirmando e outra negando. O C
+oferece um jeito direto de dizer &quot;se não, faça isto&quot;.</p>
+<p>Pense na catraca do metrô. Você encosta o cartão, e ela faz uma pergunta:
+há saldo para a tarifa de R$ 5,00? Se há, ela libera a passagem e
+desconta. Se não há, ela barra e mostra quanto falta. Não existe terceira
+saída, e as duas nunca acontecem juntas.</p>
+<p>Esse segundo caminho é o <strong><code>else</code></strong>, &quot;senão&quot; em inglês. Junto com o <code>if</code>,
+ele forma a <strong>seleção dupla</strong>: exatamente um dos dois blocos roda, nunca os
+dois e nunca nenhum (DEITEL; DEITEL, 2011, cap. 3). Com a condição
+verdadeira, roda o bloco do <code>if</code>; com ela falsa, roda o bloco do <code>else</code>.
+Depois, os dois caminhos se reencontram na linha seguinte.</p>
+<pre><code class="language-c">if (condição) {
+    // caminho do Sim
+} else {
+    // caminho do Não
+}
+</code></pre>
+<p>O <code>else</code> <strong>não tem condição</strong>. Ele significa &quot;todo o resto&quot;, tudo o que não
+satisfez o <code>if</code>. Por isso <code>else (saldo &lt; 5)</code> é erro de compilação: se você
+precisa de outra pergunta, ela vira um novo <code>if</code>, assunto do 0016 (BACKES,
+2013, cap. 4).</p>
+<p>As regras de chaves do 0014 continuam valendo. Sem chaves, o <code>else</code>
+controla uma instrução só, e o curso usa chaves sempre. O <code>;</code> depois do
+<code>if</code>, que no 0014 compilava e errava em silêncio, agora costuma ser pego:
+em <code>if (c); { ... } else { ... }</code>, o <code>;</code> encerra o <code>if</code>, o bloco fica solto
+e o <code>else</code> aparece sem nenhum <code>if</code> antes dele. O compilador recusa (DEITEL;
+DEITEL, 2011, cap. 3).</p>
+<p>Agora a pegadinha mais famosa do C, que o compilador <strong>não</strong> recusa: o <code>=</code>
+no lugar do <code>==</code>. Ela funciona assim. No 0009 você viu que a atribuição é
+uma expressão e vale o valor que acabou de guardar. Então <code>if (saldo = 0)</code>
+não compara nada: ele <strong>guarda 0</strong> em <code>saldo</code> e depois testa esse 0, que é
+falso (DEITEL; DEITEL, 2011, cap. 4). O saldo some e o <code>else</code> roda sempre.
+Do mesmo jeito, <code>if (opcao = 1)</code> guarda 1 e é sempre verdade, qualquer que
+fosse a opção digitada.</p>
+<p>Na execução, nada denuncia o erro; o único alerta vem do compilador.
+Com <code>-Wall</code>, o gcc acusa &quot;suggest parentheses around assignment
+used as truth value&quot; na linha do <code>if</code> (GNU, s.d.). Trate todo aviso como
+erro: código bom compila com zero avisos. Há também um truque de escrita:
+pôr a constante à esquerda, <code>if (0 == saldo)</code>. Se faltar um <code>=</code>, a linha
+vira <code>0 = saldo</code>, que não compila, porque 0 não é um lugar da memória.</p>
+<blockquote>
+<p>[!WARNING]
+<strong><code>=</code> no lugar de <code>==</code></strong> compila e erra em silêncio: com
+<code>if (saldo = 0)</code>, o saldo vira zero e o <code>else</code> roda sempre. Compile com
+<code>-Wall</code> ou escreva a constante à esquerda: <code>0 = saldo</code> não compila.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>Na catraca do metrô, o cartão tem R$ 3,50 e a tarifa é R$ 5,00. A resposta é
+Não, e o caminho de baixo é o que vale:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    double saldo = 3.50;
+    double tarifa = 5.00;
+
+    if (saldo &gt;= tarifa) {
+        saldo = saldo - tarifa;
+        printf(&quot;Catraca liberada. Saldo: R$ %.2f\n&quot;, saldo);
+    } else {
+        printf(&quot;Saldo insuficiente.\n&quot;);
+        printf(&quot;Faltam R$ %.2f\n&quot;, tarifa - saldo);
+    }
+    return 0;
+}
+// Saída:
+// Saldo insuficiente.
+// Faltam R$ 1.50
+</code></pre>
+<p>Cada lado do losango tem seu bloco, e os dois se reencontram no Fim:</p>
+<p>{{fluxograma}}</p>

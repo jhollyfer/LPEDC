@@ -1,0 +1,160 @@
+<h2>0117 · Limite inferior da ordenação</h2>
+<p>Até aqui, toda análise media <strong>um algoritmo</strong>: o merge sort faz Θ(n log n), o
+insertion sort faz Θ(n²). Agora a pergunta muda de lado e passa a ser sobre o
+<strong>problema</strong>. Existe algum jeito de ordenar com menos trabalho do que o merge
+sort, ou ele já é o melhor possível? Para responder, você precisa de um
+argumento que valha para todo algoritmo, inclusive os que ninguém inventou
+ainda.</p>
+<p>Esse tipo de resposta se chama <strong>limite inferior</strong>: uma afirmação de que
+nenhum método resolve o problema gastando menos do que certa quantidade
+(SZWARCFITER; MARKENZON, 2010). Um limite superior se prova mostrando um
+algoritmo. Um limite inferior exige mostrar que todos os algoritmos possíveis
+gastam pelo menos aquilo.</p>
+<p>O argumento precisa de uma regra do jogo. Imagine três encomendas nos
+Correios e uma balança de dois pratos, que só diz qual lado pesa mais. Você
+não pode ler o peso; só pode comparar duas encomendas por vez. Os algoritmos
+que funcionam assim formam a <strong>ordenação por comparação</strong>: eles só aprendem a
+ordem dos elementos perguntando &quot;x é maior que y?&quot; (CORMEN et al., 2024,
+cap. 8). Todos os do módulo 13 são assim, o heapsort também, e o <code>qsort</code> da
+biblioteca idem: ele recebe o vetor como <code>void *</code> e só fica sabendo da ordem
+pelas respostas da função <code>compara</code>.</p>
+<p>Para enxergar todas as execuções de um algoritmo desses de uma vez, use a
+<strong>árvore de decisão</strong>. Cada nó interno é uma pergunta, como &quot;A pesa mais que
+B?&quot;. Cada aresta é uma resposta, sim ou não. Cada folha é uma ordem final dos
+elementos. Rodar o algoritmo numa entrada é descer da raiz até uma folha,
+seguindo as respostas. O número de perguntas no pior caso é o caminho mais
+longo da raiz até uma folha, a <strong>altura</strong> da árvore (CORMEN et al., 2024,
+cap. 8).</p>
+<p>Agora o argumento, em três passos. Com <code>n</code> elementos distintos, há <code>n!</code>
+ordens possíveis, e cada uma precisa de uma folha só dela: se duas ordens
+diferentes caíssem na mesma folha, o algoritmo daria a mesma resposta para as
+duas, e uma delas sairia errada. Cada pergunta tem 2 respostas, então uma
+árvore de altura <code>h</code> tem no máximo <code>2^h</code> folhas. Juntando, <code>2^h ≥ n!</code>, isto é,
+<strong><code>h ≥ log₂(n!)</code></strong> (LINTZMAYER; MOTA, 2023). Com 3 encomendas há <code>3! = 6</code>
+ordens; altura 2 só comporta 4 folhas, então nenhum método garante a ordem com
+menos de 3 pesagens.</p>
+<p>Falta ver quanto vale <code>log₂(n!)</code>. O fatorial é o produto de <code>n</code> números, e
+metade deles é pelo menos <code>n/2</code>. Por isso <code>n!</code> passa de <code>(n/2)^(n/2)</code>, e
+<code>log₂(n!)</code> cresce no mesmo ritmo de <code>n log₂ n</code>. Toda ordenação por comparação
+faz <strong>Ω(n log n)</strong> comparações no pior caso. O <strong>Ω</strong> (ômega) é o piso, o
+oposto do teto <code>O</code>: diz que o custo não fica abaixo daquele ritmo (TENENBAUM;
+LANGSAM; AUGENSTEIN, 1995, cap. 6). Para <code>n = 1000</code>, alguma entrada obriga
+qualquer implementação do <code>qsort</code> a chamar a <code>compara</code> mais de 8.530 vezes.</p>
+<p>O merge sort e o heapsort fazem O(n log n) comparações no pior caso e
+encostam nesse piso. Algoritmos assim se chamam <strong>assintoticamente ótimos</strong>:
+fora constantes, ninguém que só compara faz melhor (CORMEN et al., 2024,
+cap. 8). A tabela compara o limite com o que o merge sort gasta:</p>
+<table>
+<thead>
+<tr>
+<th>n</th>
+<th>n!</th>
+<th>limite ⌈log₂ n!⌉</th>
+<th>merge sort (pior caso)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>3</td>
+<td>6</td>
+<td>3</td>
+<td>3</td>
+</tr>
+<tr>
+<td>4</td>
+<td>24</td>
+<td>5</td>
+<td>5</td>
+</tr>
+<tr>
+<td>5</td>
+<td>120</td>
+<td>7</td>
+<td>8</td>
+</tr>
+<tr>
+<td>10</td>
+<td>3.628.800</td>
+<td>22</td>
+<td>25</td>
+</tr>
+<tr>
+<td>1000</td>
+<td>(2.568 dígitos)</td>
+<td>8.530</td>
+<td>8.977</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>[!WARNING]
+O limite vale para o <strong>pior caso</strong> de <strong>qualquer</strong> algoritmo que só compara.
+O insertion sort ordena um vetor já em ordem com <code>n - 1</code> comparações, e o
+counting sort (módulo 18) usa o valor como <strong>índice</strong> e escapa do limite.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>Nos Correios, três encomendas e uma balança de dois pratos. Há <code>3! = 6</code>
+ordens e altura 2 só dá 4 folhas: são precisas 3 pesagens. O desenho é o
+insertion sort de 3 elementos; o caminho verde (A = 5, B = 9, C = 2 kg) acaba
+na folha C A B:</p>
+<p>{{ideia}}</p>
+<p>O programa passa as 6 ordens pela balança; <code>mais_pesada</code> anota cada pergunta:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+typedef struct {
+    char nome;
+    int peso; // kg
+} Encomenda;
+
+int pesagens = 0;
+
+// a balança de dois pratos: x é mais pesada que y? (anota a pergunta)
+int mais_pesada(Encomenda x, Encomenda y) {
+    pesagens++;
+    int resposta = x.peso &gt; y.peso;
+    printf(&quot;%c&gt;%c? %s  &quot;, x.nome, y.nome, resposta ? &quot;sim&quot; : &quot;não&quot;);
+    return resposta;
+}
+
+// insertion sort de 3 encomendas, do mais leve ao mais pesado, só com a balança
+void ordena3(Encomenda e[]) {
+    for (int i = 1; i &lt; 3; i++) {
+        Encomenda atual = e[i];
+        int j = i - 1;
+        while (j &gt;= 0 &amp;&amp; mais_pesada(e[j], atual)) {
+            e[j + 1] = e[j];
+            j--;
+        }
+        e[j + 1] = atual;
+    }
+}
+
+int main(void) {
+    // as 3! = 6 maneiras de os pesos 2, 5 e 9 kg chegarem como A, B e C
+    int chegada[6][3] = {{2, 5, 9}, {2, 9, 5}, {5, 2, 9}, {5, 9, 2}, {9, 2, 5}, {9, 5, 2}};
+    int pior = 0;
+    for (int k = 0; k &lt; 6; k++) {
+        Encomenda e[3] = {{&#39;A&#39;, chegada[k][0]}, {&#39;B&#39;, chegada[k][1]}, {&#39;C&#39;, chegada[k][2]}};
+        printf(&quot;%d %d %d | &quot;, chegada[k][0], chegada[k][1], chegada[k][2]);
+        pesagens = 0;
+        ordena3(e);
+        printf(&quot;%s-&gt; %c %c %c (%d)\n&quot;, pesagens == 2 ? &quot;          &quot; : &quot;&quot;,  // alinha
+               e[0].nome, e[1].nome, e[2].nome, pesagens);
+        if (pesagens &gt; pior) {
+            pior = pesagens;
+        }
+    }
+    printf(&quot;pior caso: %d pesagens\n&quot;, pior);
+    return 0;
+}
+// Saída:
+// 2 5 9 | A&gt;B? não  B&gt;C? não            -&gt; A B C (2)
+// 2 9 5 | A&gt;B? não  B&gt;C? sim  A&gt;C? não  -&gt; A C B (3)
+// 5 2 9 | A&gt;B? sim  A&gt;C? não            -&gt; B A C (2)
+// 5 9 2 | A&gt;B? não  B&gt;C? sim  A&gt;C? sim  -&gt; C A B (3)
+// 9 2 5 | A&gt;B? sim  A&gt;C? sim  B&gt;C? não  -&gt; B C A (3)
+// 9 5 2 | A&gt;B? sim  A&gt;C? sim  B&gt;C? sim  -&gt; C B A (3)
+// pior caso: 3 pesagens
+</code></pre>
+<p>Cada linha é um caminho da raiz a uma folha, e o pior caso, 3, iguala o
+limite: para 3 elementos, o insertion sort é <strong>ótimo</strong>. O fluxograma é o
+argumento inteiro, para qualquer método que só compara:</p>
+<p>{{fluxograma}}</p>

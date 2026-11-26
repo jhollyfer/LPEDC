@@ -1,0 +1,202 @@
+<h2>0084 · Pilha na prática: parênteses e notação pós-fixa</h2>
+<p>Você esquece de fechar um colchete no editor de código e ele sublinha o lugar
+exato do erro. Para isso, o editor precisa saber, a cada <code>)</code>, <code>]</code> ou <code>}</code>, qual
+abertura ele está fechando. A pilha resolve esse problema e mais um, que
+aparece em toda calculadora: fazer contas sem depender de parênteses. São as
+duas aplicações clássicas da pilha.</p>
+<p>Comece pelo jeito ingênuo. Com um só tipo de parêntese, um contador basta:
+soma 1 em cada <code>(</code>, tira 1 em cada <code>)</code> e, no fim, o contador tem de valer
+zero sem nunca ter ficado negativo. Com três tipos (<code>()</code>, <code>[]</code> e <code>{}</code>), o
+contador falha. Em <code>( [ ) ]</code> as contas fecham, mas o <code>)</code> chegou quando quem
+esperava fechamento era o <code>[</code> (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 2).
+Falta lembrar a <strong>ordem</strong> das aberturas, e não só quantas são.</p>
+<p>A regra que resolve é esta: todo fechamento casa com a abertura <strong>mais
+recente</strong> que ainda está pendente. &quot;A mais recente pendente&quot; é exatamente o
+topo de uma pilha, porque a última abertura empilhada é a primeira que pede
+fechamento (FEOFILOFF, 2009). Pense em caixas dentro de caixas: você só fecha
+a caixa de fora depois de fechar a de dentro.</p>
+<p>O algoritmo percorre a string uma vez. Se o caractere abre (<code>(</code>, <code>[</code> ou <code>{</code>),
+você <strong>empilha</strong>. Se fecha, você <strong>desempilha</strong> e confere se o par combina; se
+a pilha estava vazia ou o par não combina, a expressão tem erro. Qualquer
+outro caractere é ignorado. Quando a string acaba, a pilha tem de estar
+<strong>vazia</strong>: se sobrou abertura, faltou fechar alguma coisa (FEOFILOFF, 2009).
+Em <code>{ x = v[(i + 1)] }</code>, os três primeiros delimitadores entram na pilha; o
+<code>)</code> encontra <code>(</code> no topo, o <code>]</code> encontra <code>[</code> e o <code>}</code> encontra <code>{</code>.</p>
+<p>A segunda aplicação é a conta. O jeito de escrever que você aprendeu na
+escola é a <strong>notação infixa</strong>: o operador fica no meio dos operandos, como em
+<code>(35 + 25) * 3 / 4</code>. Ela precisa de parênteses e de regras de precedência
+para dizer o que vem primeiro. Na <strong>notação pós-fixa</strong>, também chamada de
+polonesa reversa, o operador vem <strong>depois</strong> dos dois operandos: a mesma conta
+fica <code>35 25 + 3 * 4 /</code> (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 2). A
+calculadora HP 12C funciona assim. A ordem da escrita já é a ordem das
+contas, e nenhum parêntese é necessário.</p>
+<p>Avaliar a pós-fixa exige uma pilha de números. Leu um número, <strong>empilha</strong>.
+Leu um operador, <strong>desempilha dois</strong> números, faz a conta e <strong>empilha o
+resultado</strong>. No fim sobra um só número na pilha, e ele é o resultado
+(KERNIGHAN; RITCHIE, 1988, seç. 4.3). Se faltar operando para um operador, ou
+se sobrar mais de um número no fim, a expressão está mal escrita. A tabela
+mostra a conta do bar de R$ 60 com 3 rodadas, dividida por 4 amigos:</p>
+<table>
+<thead>
+<tr>
+<th>lê</th>
+<th>faz</th>
+<th>pilha (topo à direita)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>35</code></td>
+<td>empilha</td>
+<td>35</td>
+</tr>
+<tr>
+<td><code>25</code></td>
+<td>empilha</td>
+<td>35 25</td>
+</tr>
+<tr>
+<td><code>+</code></td>
+<td>tira 25 e 35, empilha 35 + 25</td>
+<td>60</td>
+</tr>
+<tr>
+<td><code>3</code></td>
+<td>empilha</td>
+<td>60 3</td>
+</tr>
+<tr>
+<td><code>*</code></td>
+<td>tira 3 e 60, empilha 60 * 3</td>
+<td>180</td>
+</tr>
+<tr>
+<td><code>4</code></td>
+<td>empilha</td>
+<td>180 4</td>
+</tr>
+<tr>
+<td><code>/</code></td>
+<td>tira 4 e 180, empilha 180 / 4</td>
+<td>45</td>
+</tr>
+</tbody></table>
+<p>As duas aplicações custam o mesmo. Cada caractere é lido uma vez, então o
+tempo é O(n) para uma string de n caracteres. A pilha nunca passa de n itens
+(o pior caso é <code>((((((</code>), então a memória também é O(n) (FEOFILOFF, 2009).</p>
+<blockquote>
+<p>[!WARNING]
+Na pós-fixa, o <strong>primeiro</strong> a sair é o operando da <strong>direita</strong>. Em <code>8 3 -</code>,
+sai o 3 (b) e depois o 8 (a): a conta é <code>a - b = 5</code>. Teste com <code>-</code> e <code>/</code>,
+onde a inversão aparece. Nos parênteses, esquecer o teste final de pilha
+vazia faz <code>{ [ (</code> passar como balanceada.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>Em <code>{ x = v[(i + 1)] }</code> sobram os delimitadores <code>{ [ ( ) ] }</code>. Os três
+primeiros são empilhados; o <code>)</code> encontra <code>(</code> no topo e casa, depois <code>]</code> casa
+com <code>[</code> e <code>}</code> com <code>{</code>:</p>
+<p>{{ideia}}</p>
+<p>O verificador testa quatro expressões, com o <code>pilha.h</code> e o <code>pilha.c</code> do 0083:</p>
+<pre><code class="language-c">#include &lt;stdbool.h&gt;
+#include &lt;stdio.h&gt;
+#include &quot;pilha.h&quot;
+
+// a abertura que combina com cada fechamento
+char abertura_de(char fecha) {
+    if (fecha == &#39;)&#39;) {
+        return &#39;(&#39;;
+    }
+    if (fecha == &#39;]&#39;) {
+        return &#39;[&#39;;
+    }
+    return &#39;{&#39;;
+}
+
+bool balanceada(const char *s) {
+    Pilha *p = pilha_cria();
+    if (p == NULL) {
+        return false;
+    }
+    bool ok = true;
+    for (int i = 0; s[i] != &#39;\0&#39; &amp;&amp; ok; i++) {
+        char c = s[i];
+        if (c == &#39;(&#39; || c == &#39;[&#39; || c == &#39;{&#39;) {
+            pilha_empilha(p, c); // abriu: espera o fechamento lá na frente
+        } else if (c == &#39;)&#39; || c == &#39;]&#39; || c == &#39;}&#39;) {
+            int topo;
+            // fechou: tem que existir uma abertura e ela tem que ser do mesmo tipo
+            if (!pilha_desempilha(p, &amp;topo) || topo != abertura_de(c)) {
+                ok = false;
+            }
+        }
+    }
+    if (!pilha_vazia(p)) {
+        ok = false; // sobrou abertura sem fechamento
+    }
+    pilha_libera(p);
+    return ok;
+}
+
+int main(void) {
+    const char *testes[] = {&quot;{ x = v[(i + 1)] }&quot;, &quot;( [ ) ]&quot;, &quot;(a + b))&quot;, &quot;{ [ (&quot;};
+    for (int i = 0; i &lt; 4; i++) {
+        printf(&quot;%-20s %s\n&quot;, testes[i], balanceada(testes[i]) ? &quot;balanceada&quot; : &quot;com erro&quot;);
+    }
+    return 0;
+}
+// Saída:
+// { x = v[(i + 1)] }   balanceada
+// ( [ ) ]              com erro
+// (a + b))             com erro
+// { [ (                com erro
+</code></pre>
+<p>O laço tem duas saídas antecipadas para o erro; &quot;pilha vazia?&quot; só é testada
+no fim da string:</p>
+<p>{{fluxograma}}</p>
+<h3>Passo a passo: notação pós-fixa</h3>
+<p>A conta do bar, <code>(35 + 25) * 3 / 4</code>, dividida por 4 amigos, vira
+<code>35 25 + 3 * 4 /</code>:</p>
+<table>
+<thead>
+<tr>
+<th>lê</th>
+<th>faz</th>
+<th>pilha (topo à direita)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>35</code></td>
+<td>empilha</td>
+<td>35</td>
+</tr>
+<tr>
+<td><code>25</code></td>
+<td>empilha</td>
+<td>35 25</td>
+</tr>
+<tr>
+<td><code>+</code></td>
+<td>tira 25 e 35, empilha 35 + 25</td>
+<td>60</td>
+</tr>
+<tr>
+<td><code>3</code></td>
+<td>empilha</td>
+<td>60 3</td>
+</tr>
+<tr>
+<td><code>*</code></td>
+<td>tira 3 e 60, empilha 60 * 3</td>
+<td>180</td>
+</tr>
+<tr>
+<td><code>4</code></td>
+<td>empilha</td>
+<td>180 4</td>
+</tr>
+<tr>
+<td><code>/</code></td>
+<td>tira 4 e 180, empilha 180 / 4</td>
+<td>45</td>
+</tr>
+</tbody></table>
+<p>Cada um paga R$ 45. O A168 faz essa tabela em C.</p>

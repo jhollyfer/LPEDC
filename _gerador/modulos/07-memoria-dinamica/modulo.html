@@ -1,0 +1,379 @@
+<h1>Módulo 07 · Memória dinâmica</h1>
+<p>Como pedir memória <strong>enquanto o programa roda</strong>, do tamanho exato, e
+devolvê-la ao acabar: heap, <code>malloc</code>, <code>free</code>, <code>calloc</code>, <code>realloc</code>, matrizes
+dinâmicas e os erros de memória. Depende dos ponteiros do módulo 06 e prepara
+listas, pilhas, filas, árvores e o módulo 08 (structs).</p>
+<h2>O que você vai aprender</h2>
+<ul>
+<li>as quatro regiões da memória: <strong>código, dados, heap e pilha</strong>, e quanto tempo vive cada coisa</li>
+<li><strong><code>malloc</code></strong> e <strong><code>free</code></strong>, sempre conferindo o <code>NULL</code></li>
+<li><strong><code>calloc</code></strong> (memória zerada) e <strong><code>realloc</code></strong>, para o vetor crescer conforme os dados chegam</li>
+<li><strong>matrizes dinâmicas</strong>: bloco único com <code>i * colunas + j</code> ou vetor de ponteiros com <code>m[i][j]</code></li>
+<li><strong>vazamento, ponteiro solto, free duplo e estouro</strong>, caçados com o <strong>AddressSanitizer</strong> e o <strong>valgrind</strong></li>
+<li>um programa com vetores que crescem e strings de tamanho exato, sem deixar nada para trás</li>
+</ul>
+<h2>Antes de começar</h2>
+<p>Domine ponteiros (módulo 06): <code>&amp;</code>, <code>*</code>, <code>NULL</code>, <code>a[i] == *(a + i)</code>, <code>char *</code> e
+<code>**</code>. Se <code>int **m</code> assusta, releia 0047 e 0049. Nos diagramas, o verde é o bloco
+do heap. Escreva cada exercício do zero, compile com as flags de estudo e leia
+o relatório do AddressSanitizer se algo estourar.</p>
+<p>O gcc com as flags de estudo já compila com o <strong>AddressSanitizer</strong>, que avisa
+de vazamentos no fim. Para o assunto 0057, instale também o <strong>valgrind</strong>:</p>
+<pre><code class="language-bash">sudo pacman -S valgrind        # Arch Linux
+sudo apt install valgrind      # Debian / Ubuntu
+</code></pre>
+<p>Rode qualquer arquivo com ele assim (sem AddressSanitizer):</p>
+<pre><code class="language-bash">gcc -g ~/LPEDC/material/A114.c -o ~/LPEDC/material/A114 &amp;&amp; valgrind ~/LPEDC/material/A114
+</code></pre>
+<p>A regra do módulo: <strong>todo <code>malloc</code> tem um <code>free</code>, e nenhum ponteiro é usado
+depois dele</strong>.</p>
+<p>{{indice}}</p>
+<hr>
+<p>{{assuntos}}</p>
+<hr>
+<h2>Desafios do módulo</h2>
+<p>Resolva num arquivo seu, com as flags de estudo (e <code>valgrind ./programa</code> como
+segunda opinião). A versão final não pode gerar relatório de erro.</p>
+<p><strong>1. Apagar do caderno.</strong> No caderninho de fiado do texto do assunto 0058,
+escreva <code>int remover(char **nomes, int *centavos, int *qtd, const char *nome)</code>,
+que apaga a linha do cliente e puxa as de baixo para cima. Teste removendo
+&quot;Seu Jorge&quot; e mostre o caderno.</p>
+<details><summary>Resposta</summary><p>Ficam Dona Cida (17.20), Bia (20.00), Tonho (3.15) e Rosa (5.60), total
+R$ 45.95. O caminho: ache o índice <code>i</code>, faça <code>free(nomes[i])</code> (o nome é um
+bloco), depois copie <code>nomes[k] = nomes[k + 1]</code> e <code>centavos[k] = centavos[k + 1]</code>
+para <code>k</code> de <code>i</code> até <code>qtd - 2</code> e faça <code>(*qtd)--</code>. Um <code>free</code> só: os ponteiros
+puxados continuam apontando para os mesmos blocos.</p>
+</details><p><strong>2. A matriz de dois mallocs.</strong> Escreva <code>int **criar_matriz(int l, int c)</code>
+que usa só dois <code>malloc</code>: um bloco com os <code>l * c</code> inteiros e um vetor de <code>l</code>
+ponteiros com <code>m[i] = bloco + i * c</code>. Escreva também o <code>liberar</code>. Teste com
+uma matriz 3 x 4 preenchida com <code>i * 4 + j</code> e mostre <code>m[2][3]</code>.</p>
+<details><summary>Resposta</summary><p><code>m[2][3]</code> vale <strong>11</strong>. Para liberar: <code>free(m[0])</code> (é o endereço do bloco de
+dados) e <code>free(m)</code>. Dois <code>malloc</code>, dois <code>free</code>, dados contíguos e a notação
+<code>m[i][j]</code> preservada. Cuidado: <code>free(m[1])</code> seria um erro, porque <code>m[1]</code> não
+veio de um <code>malloc</code>.</p>
+</details><p><strong>3. Matriz simétrica econômica.</strong> Numa tabela de distâncias entre 4
+cidades, <code>d[i][j] == d[j][i]</code> e a diagonal é 0. Guarde só o triângulo de baixo
+(com a diagonal) num vetor alocado com <code>malloc</code> de <code>n * (n + 1) / 2</code>
+posições, com o elemento <code>(i, j)</code>, <code>i &gt;= j</code>, em <code>i * (i + 1) / 2 + j</code>.
+Escreva <code>int indice(int i, int j)</code>, que troca <code>i</code> e <code>j</code> quando <code>i &lt; j</code>.
+Preencha o vetor com a tabela <code>{{0, 12, 30, 25}, {12, 0, 18, 40}, {30, 18, 0, 22}, {25, 40, 22, 0}}</code> (só o triângulo de baixo), imprima quantas
+posições o vetor tem, os índices de <code>(3, 1)</code> e de <code>(1, 3)</code> e, por fim, a
+tabela 4 x 4 inteira lida só do vetor, com <code>%4d</code>.</p>
+<details><summary>Resposta</summary><pre><code>posicoes: 10 (matriz cheia: 16)
+(3,1) -&gt; 7   (1,3) -&gt; 7
+   0  12  30  25
+  12   0  18  40
+  30  18   0  22
+  25  40  22   0
+</code></pre>
+<p>Dica: preencha com dois laços, <code>j</code> indo só até <code>i</code>, gravando
+<code>d[indice(i, j)] = dist[i][j]</code>. Na hora de imprimir, os dois laços vão até
+<code>n</code> e o <code>indice</code> cuida da metade de cima: <code>(1, 3)</code> vira <code>(3, 1)</code>, índice
+3 * 4 / 2 + 1 = 7. Com n = 1000, a economia passa de 499 mil posições.</p>
+</details><p><strong>4. O gerente do heap.</strong> O heap tem dois blocos livres, de 120 e de 60 bytes
+(<code>int livre[2] = {120, 60}</code>), e chegam três pedidos: 30, 80 e 55. Escreva
+<code>void simula(const char *nome, int best)</code> que atende os pedidos na ordem,
+descontando do bloco escolhido, e imprime a cada pedido o bloco usado e o que
+sobrou nos dois (ou &quot;falhou&quot;). Com <code>best == 0</code> é <strong>first fit</strong> (o primeiro
+bloco que serve, olhando o 0 antes); com <code>best == 1</code> é <strong>best fit</strong> (o menor
+bloco que serve). Chame as duas.</p>
+<details><summary>Resposta</summary><pre><code>first fit:
+  30: bloco 0, livres 90 e 60
+  80: bloco 0, livres 10 e 60
+  55: bloco 1, livres 10 e 5
+best fit:
+  30: bloco 1, livres 120 e 30
+  80: bloco 0, livres 40 e 30
+  55: falhou (livres 40 e 30)
+</code></pre>
+<p>Dica: para cada pedido, percorra os dois blocos guardando o índice escolhido
+(começando em -1); no first fit pare no primeiro que serve, no best fit troque
+a escolha quando achar um bloco que serve e é menor. Escolher &quot;o mais justo&quot;
+nem sempre é o melhor: deixa sobras pequenas demais. Os <code>malloc</code> reais usam
+variações de first fit com listas por tamanho.</p>
+</details><p><strong>5. Tem memória, mas não cabe.</strong> Simule um heap de 1000 bytes com um
+<code>char heap[1000]</code>, todo preenchido com <code>&#39;.&#39;</code> (livre). Escreva
+<code>int aloca(char dono, int tam)</code>, que procura <code>tam</code> posições livres
+<strong>seguidas</strong> a partir do começo, marca com a letra do dono e devolve o índice em que o
+bloco começa (ou -1), e <code>void libera(char dono)</code>. Escreva também um
+<code>relatorio</code> que imprime o total livre e o maior pedaço livre contíguo. Aloque
+A = 300, B = 200 e C = 400, libere B, mostre o relatório e tente alocar
+D = 250. Depois libere C, mostre o relatório e tente D de novo.</p>
+<details><summary>Resposta</summary><pre><code>A em 0
+B em 300
+C em 500
+livres: 300, maior pedaco contiguo: 200
+D (250) em -1
+livres: 700, maior pedaco contiguo: 700
+D (250) em 300
+</code></pre>
+<p>Dica: no <code>aloca</code>, conte uma &quot;corrida&quot; de livres (zere ao achar uma posição
+ocupada); quando ela chegar a <code>tam</code>, o bloco começa em <code>i - tam + 1</code>. Há 300
+bytes livres, mas em dois pedaços (200 onde era B e 100 no fim), e um bloco
+precisa ser contíguo: é a <strong>fragmentação externa</strong>. Liberando C, os pedaços
+se juntam num de 700.</p>
+</details><p><strong>6. Repetir texto.</strong> Escreva <code>char *repetir(const char *s, int n)</code> que
+devolve uma string nova com <code>s</code> repetida <code>n</code> vezes. Quantos bytes
+<code>repetir(&quot;ab&quot;, 3)</code> pede? E <code>repetir(&quot;ab&quot;, 0)</code>?</p>
+<details><summary>Resposta</summary><p><code>&quot;ababab&quot;</code> precisa de 2 * 3 + 1 = <strong>7</strong> bytes. Com n = 0, 1 byte só com o
+<code>&#39;\0&#39;</code>: uma string vazia válida, que quem chama também precisa liberar.
+Monte com <code>strcpy</code> no primeiro e <code>strcat</code> nos seguintes, ou copiando com um
+índice.</p>
+</details><p><strong>7. O vetor que encolhe.</strong> Escreva um vetor dinâmico de <code>int</code> que começa
+com capacidade 1, dobra com <code>realloc</code> quando enche e <strong>corta pela metade</strong>
+quando a quantidade fica menor que um quarto da capacidade. Use
+<code>int insere(int **v, int *qtd, int *cap, int x)</code> e
+<code>void remove_fim(int **v, int *qtd, int *cap)</code>. Insira 10, 20, ..., 90 e
+depois remova 6 vezes, imprimindo <code>qtd</code> e <code>cap</code> depois de cada operação.</p>
+<details><summary>Resposta</summary><pre><code>insere 10: qtd 1 cap 1
+insere 20: qtd 2 cap 2
+insere 30: qtd 3 cap 4
+insere 40: qtd 4 cap 4
+insere 50: qtd 5 cap 8
+insere 60: qtd 6 cap 8
+insere 70: qtd 7 cap 8
+insere 80: qtd 8 cap 8
+insere 90: qtd 9 cap 16
+remove: qtd 8 cap 16
+remove: qtd 7 cap 16
+remove: qtd 6 cap 16
+remove: qtd 5 cap 16
+remove: qtd 4 cap 16
+remove: qtd 3 cap 8
+</code></pre>
+<p>Dica: a função recebe <code>int **v</code> porque o <code>realloc</code> pode mudar o endereço do
+bloco; use um ponteiro temporário e só troque <code>*v</code> se ele não for <code>NULL</code>. No
+<code>remove_fim</code>, depois de <code>(*qtd)--</code>, teste <code>*cap &gt; 1 &amp;&amp; *qtd &lt; *cap / 4</code>. O
+&quot;um quarto&quot; (e não &quot;metade&quot;) evita o vai e vem: com metade, um insere e um
+remove alternados na fronteira fariam um <code>realloc</code> a cada operação.</p>
+</details><p><strong>8. Dois nomes, um bloco.</strong> Monte um programa com o trecho abaixo e rode
+com as flags de estudo:</p>
+<pre><code class="language-c">int *a = malloc(3 * sizeof *a);
+int *b = a;
+b[0] = 5;
+free(a);
+a = NULL;
+printf(&quot;%d\n&quot;, b == NULL);
+printf(&quot;%d\n&quot;, b[0]);
+</code></pre>
+<p>Anote o que aparece. Depois conserte: guarde o valor de <code>b[0]</code> numa variável
+<strong>antes</strong> do <code>free</code>, zere os dois ponteiros e imprima
+<code>guardado = ...</code> e <code>a == NULL: ..., b == NULL: ...</code>.</p>
+<details><summary>Resposta</summary><p>A primeira versão mostra <code>0</code> e cai no <code>b[0]</code>: o compilador já avisa
+<code>pointer &#39;b&#39; used after &#39;free&#39;</code> e o ASan acusa
+<code>ERROR: AddressSanitizer: heap-use-after-free</code>. A consertada mostra:</p>
+<pre><code>guardado = 5
+a == NULL: 1, b == NULL: 1
+</code></pre>
+<p>Dica: <code>a = NULL</code> muda só a variável <code>a</code>; <code>b</code> continua com o endereço do bloco
+liberado (um ponteiro solto). Zerar o ponteiro ajuda, mas não substitui saber
+<strong>quem é o dono</strong> do bloco.</p>
+</details><p><strong>9. O vazamento a conta-gotas.</strong> Escreva <code>void tarefa(int chamada)</code>, que faz
+um <code>malloc</code> de 24 bytes, escreve um caractere no bloco e só dá <code>free</code> quando
+<code>chamada</code> é par; nas ímpares, soma 24 numa variável global <code>vazou</code>. Chame
+<code>tarefa</code> de 1 a 1000, imprima <code>bytes sem free: ...</code> e rode com as flags de estudo.
+Depois conserte a função e rode de novo.</p>
+<details><summary>Resposta</summary><pre><code>bytes sem free: 12000
+
+==...==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 12000 byte(s) in 500 object(s) allocated from:
+    #0 ... in malloc ...
+    #1 ... in tarefa ...
+</code></pre>
+<p>O seu contador e o LeakSanitizer batem: 500 chamadas ímpares × 24 = 12000
+bytes em 500 blocos, com a linha do <code>malloc</code> apontada. Consertado (<code>free</code>
+sempre), sai só <code>bytes sem free: 0</code>, sem relatório. Dica: num servidor que
+roda essa função 1 milhão de vezes por dia, são 12 MB por dia.</p>
+</details><p><strong>10. Frase ao contrário.</strong> Use o <code>dividir</code> do E348 e uma função de juntar
+para inverter a ordem das palavras: &quot;o rato roeu a roupa&quot; vira
+&quot;roupa a roeu rato o&quot;. A frase resultante deve ser um bloco novo, do tamanho
+exato.</p>
+<details><summary>Resposta</summary><p><code>dividir</code> com <code>&#39; &#39;</code> dá 5 pedaços. O tamanho final é a soma dos <code>strlen</code> (15)
+mais 4 espaços mais o <code>&#39;\0&#39;</code>: <strong>20 bytes</strong>, o mesmo tamanho da frase original.
+Monte percorrendo os pedaços do último para o primeiro. No fim, libere os 5
+pedaços, o vetor deles e a frase nova.</p>
+</details><h2>Questões no estilo da prova</h2>
+<p>Formato da prova do mestrado do PPGI/UFAM. Resolva no papel, marque uma letra
+e só então abra o gabarito. Os trechos foram compilados com
+<code>gcc -std=c17 -Wall -Wextra</code> (e rodados com o AddressSanitizer nos casos de
+vazamento).</p>
+<p><strong>Questão 1.</strong> No programa abaixo, em que região da memória fica cada coisa:
+<code>total</code>, <code>chamadas</code>, <code>n</code> e o bloco apontado por <code>v</code>?</p>
+<pre><code class="language-c">int total = 0;
+
+void registra(int n) {
+    static int chamadas = 0;
+    int *v = malloc(n * sizeof *v);
+    chamadas++;
+    free(v);
+}
+</code></pre>
+<ul>
+<li>(A) pilha, pilha, pilha, heap</li>
+<li>(B) dados, pilha, pilha, heap</li>
+<li>(C) dados, dados, pilha, heap</li>
+<li>(D) heap, dados, pilha, heap</li>
+<li>(E) dados, dados, heap, pilha</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(C)</strong>. Global e <code>static</code> moram nos <strong>dados</strong> (alocação estática) e duram o
+programa todo. Parâmetro e local moram na <strong>pilha</strong> (alocação automática).
+O bloco do <code>malloc</code> mora no <strong>heap</strong> (alocação dinâmica). A variável
+<code>v</code> está na pilha; o bloco para onde ela aponta, no heap. Veja 0053.</p>
+</details><p><strong>Questão 2.</strong> Sobre alocação dinâmica em C, considere as afirmações e marque a alternativa CORRETA.</p>
+<ul>
+<li><p><strong>I.</strong> <code>calloc(n, tam)</code> zera o bloco reservado, e <code>malloc</code> não.</p>
+</li>
+<li><p><strong>II.</strong> Depois de <code>free(p)</code>, o ponteiro <code>p</code> passa a valer <code>NULL</code> automaticamente.</p>
+</li>
+<li><p><strong>III.</strong> Se <code>realloc</code> falha, ele devolve <code>NULL</code> e o bloco antigo continua válido.</p>
+</li>
+<li><p><strong>IV.</strong> <code>malloc</code> pode devolver <code>NULL</code>, e o resultado deve ser conferido antes do uso.</p>
+</li>
+<li><p>(A) Apenas I e III</p>
+</li>
+<li><p>(B) Apenas I, III e IV</p>
+</li>
+<li><p>(C) Apenas II e III</p>
+</li>
+<li><p>(D) Apenas II e IV</p>
+</li>
+<li><p>(E) Apenas I, II e IV</p>
+</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(B).</strong> I é verdadeira: só o <code>calloc</code> inicializa com zeros. II é falsa: o <code>free</code> não altera <code>p</code>, que passa a apontar para memória devolvida (ponteiro pendurado). III e IV são verdadeiras. Por isso o <code>realloc</code> usa um ponteiro auxiliar: <code>v = realloc(v, ...)</code> perde o bloco antigo se falhar. Veja 0055.</p>
+</details><p><strong>Questão 3.</strong> <code>v</code> aponta para um bloco do <code>malloc</code> que precisa crescer para
+<code>n</code> inteiros. Qual forma é a correta?</p>
+<ul>
+<li>(A) <code>v = realloc(v, n);</code></li>
+<li>(B) <code>v = realloc(v, n * sizeof *v); if (v == NULL) return 1;</code></li>
+<li>(C) <code>free(v); v = realloc(v, n * sizeof *v);</code></li>
+<li>(D) <code>realloc(v, n * sizeof *v);</code> e continuar usando <code>v</code></li>
+<li>(E) <code>int *novo = realloc(v, n * sizeof *v); if (novo == NULL) { free(v); return 1; } v = novo;</code></li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(E)</strong>. Se o <code>realloc</code> falha, devolve <code>NULL</code> e <strong>o bloco antigo continua
+vivo</strong>. Em (B), <code>v = NULL</code> apaga o único endereço dele: vazamento. (A)
+esquece o <code>sizeof</code>. (C) usa o ponteiro depois do <code>free</code>. (D) ignora que o
+bloco pode ter mudado de endereço. Veja 0055.</p>
+</details><p><strong>Questão 4.</strong> Rodado com o AddressSanitizer, o que o relatório de
+vazamento acusa ao final?</p>
+<pre><code class="language-c">char *p = NULL;
+for (int i = 0; i &lt; 3; i++) {
+    p = malloc(10);
+    if (p == NULL) return 1;
+}
+free(p);
+</code></pre>
+<ul>
+<li>(A) nada: houve um <code>free</code></li>
+<li>(B) 30 bytes em 3 blocos</li>
+<li>(C) 10 bytes em 1 bloco</li>
+<li>(D) 20 bytes em 2 blocos</li>
+<li>(E) <em>double free</em></li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(D)</strong>. Cada volta sobrescreve <code>p</code> com um endereço novo, e os dois blocos
+anteriores ficam sem ninguém que os aponte. O <code>free</code> final libera só o
+terceiro. O ASan mostra <code>20 byte(s) leaked in 2 allocation(s)</code>. Veja 0057.</p>
+</details><p><strong>Questão 5.</strong> Um vetor dinâmico começa com capacidade 1 e <strong>dobra</strong> a
+capacidade (com <code>realloc</code>) sempre que enche. Depois de inserir 100
+elementos, quantos <code>realloc</code> foram feitos e qual é a capacidade final?</p>
+<ul>
+<li>(A) 7 e 128</li>
+<li>(B) 100 e 100</li>
+<li>(C) 6 e 64</li>
+<li>(D) 99 e 100</li>
+<li>(E) 50 e 128</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A)</strong>. A capacidade passa por 1, 2, 4, 8, 16, 32, 64, 128: sete
+dobras. As cópias somam 1 + 2 + ... + 64 = 127 &lt; 2 · 100, então o custo total
+das inserções é O(n) e o custo <strong>amortizado</strong> de cada uma é O(1). Crescer
+de 1 em 1 faria 99 <code>realloc</code> e custo total O(n²). Veja 0055.</p>
+</details><p><strong>Questão 6.</strong> Uma matriz de 3 linhas e 4 colunas foi alocada como um bloco
+único: <code>int *v = malloc(3 * 4 * sizeof *v);</code>. Em que índice de <code>v</code> fica o
+elemento da linha 2, coluna 3 (contando de 0)?</p>
+<ul>
+<li>(A) 9</li>
+<li>(B) 14</li>
+<li>(C) 11</li>
+<li>(D) 6</li>
+<li>(E) 12</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(C)</strong>. Linha após linha (<em>row-major</em>): <code>i * colunas + j</code> = 2 · 4 + 3 = 11.
+O 12 já está fora do bloco, que vai de 0 a 11. Veja 0056.</p>
+</details><p><strong>Questão 7.</strong> Uma matriz dinâmica de <code>L</code> linhas foi montada como vetor de ponteiros: <code>int **m</code>, com um <code>malloc</code> para o vetor de ponteiros e um para cada linha. Considere as afirmações e marque a alternativa CORRETA.</p>
+<ul>
+<li><p><strong>I.</strong> São <code>L + 1</code> chamadas de <code>malloc</code>.</p>
+</li>
+<li><p><strong>II.</strong> Para liberar, primeiro se libera cada <code>m[i]</code> e só depois <code>m</code>.</p>
+</li>
+<li><p><strong>III.</strong> As linhas ficam garantidamente vizinhas na memória.</p>
+</li>
+<li><p><strong>IV.</strong> Alocar tudo num bloco único, com <code>malloc(L * C * sizeof *v)</code>, precisa de um só <code>free</code>.</p>
+</li>
+<li><p>(A) Apenas I e II</p>
+</li>
+<li><p>(B) Apenas II e III</p>
+</li>
+<li><p>(C) Apenas I e III</p>
+</li>
+<li><p>(D) Apenas III e IV</p>
+</li>
+<li><p>(E) Apenas I, II e IV</p>
+</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(E).</strong> I é verdadeira: uma chamada para o vetor de ponteiros e uma por linha. II é verdadeira: se <code>m</code> for liberado antes, os endereços das linhas se perdem e elas vazam. III é falsa: cada <code>malloc</code> pode cair num lugar diferente do heap. IV é verdadeira: é a variante de bloco único, indexada por <code>i * C + j</code>. Veja 0056.</p>
+</details><p><strong>Questão 8.</strong> Em uma plataforma de 64 bits típica (<code>int</code> de 4 bytes,
+ponteiro de 8), o que há de errado em
+<code>int **m = malloc(3 * sizeof(int));</code> para guardar 3 linhas?</p>
+<ul>
+<li>(A) Reserva 12 bytes, mas 3 ponteiros precisam de 24.</li>
+<li>(B) Nada: <code>int</code> e <code>int *</code> têm o mesmo tamanho.</li>
+<li>(C) Reserva 24 bytes, mas 3 ponteiros precisam de 12.</li>
+<li>(D) Não compila: <code>malloc</code> devolve <code>void *</code>.</li>
+<li>(E) Só dá errado se as linhas tiverem mais de 3 colunas.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A)</strong>. O vetor guarda <code>int *</code>, de 8 bytes. Com <code>sizeof(int)</code> o bloco tem
+metade do tamanho certo, e gravar <code>m[1]</code> já passa do fim. Escrever
+<code>malloc(3 * sizeof *m)</code> evita o erro. (D) é falsa: <code>void *</code> converte sozinho
+para qualquer ponteiro de dado. Veja 0056.</p>
+</details><p><strong>Questão 9.</strong> O que acontece com o programa abaixo?</p>
+<pre><code class="language-c">int *cria(void) {
+    int v[3] = {1, 2, 3};
+    return v;
+}
+
+int main(void) {
+    int *p = cria();
+    printf(&quot;%d\n&quot;, p[0]);
+    return 0;
+}
+</code></pre>
+<ul>
+<li>(A) Imprime 1, porque o vetor foi inicializado.</li>
+<li>(B) Não compila: função não pode devolver ponteiro.</li>
+<li>(C) Imprime 1, porque o <code>return</code> copia o vetor para o <code>main</code>.</li>
+<li>(D) Comportamento indefinido: <code>v</code> morre no <code>return</code> e <code>p</code> aponta para um frame que já não existe.</li>
+<li>(E) Imprime 0, porque o frame é zerado no <code>return</code>.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(D)</strong>. <code>v</code> mora no frame de <code>cria</code>, na pilha, e o frame some no <code>return</code>.
+O gcc avisa (<code>function returns address of local variable</code>) e, na prática,
+devolve <code>NULL</code> de propósito. O conserto é alocar com <code>malloc</code> (e o <code>main</code>
+dar <code>free</code>) ou receber o vetor como parâmetro. Veja 0053.</p>
+</details><h2>Para ler mais</h2>
+<ul>
+<li>BACKES, A. <em>Linguagem C: completa e descomplicada</em>. Rio de Janeiro: Elsevier, 2013. Cap. 11: alocação dinâmica.</li>
+<li>BACKES, A. <em>Linguagem C descomplicada</em>. Apostila. Uberlândia: FACOM/UFU. Capítulo de alocação dinâmica.</li>
+<li>CELES, W.; RANGEL, J. L. <em>Apostila de estruturas de dados</em>. Rio de Janeiro: PUC-Rio, 2002. Alocação dinâmica e matrizes dinâmicas.</li>
+<li>DEITEL, P.; DEITEL, H. <em>C: como programar</em>. 6. ed. São Paulo: Pearson, 2011. Cap. 12: estruturas de dados (alocação dinâmica).</li>
+<li>CELES, W.; CERQUEIRA, R.; RANGEL, J. L. <em>Introdução a estruturas de dados: com técnicas de programação em C</em>. 2. ed. Rio de Janeiro: Elsevier, 2016. Alocação dinâmica, vetores e matrizes dinâmicas.</li>
+<li>ZIVIANI, N. <em>Projeto de algoritmos: com implementações em Pascal e C</em>. 3. ed. rev. e ampl. São Paulo: Cengage Learning, 2010. Alocação dinâmica com apontadores nas estruturas de dados.</li>
+<li>FEOFILOFF, P. <em>Algoritmos em linguagem C</em>. Rio de Janeiro: Elsevier, 2009. Apêndice F: alocação dinâmica de memória.</li>
+<li>LAUREANO, M. <em>Estrutura de dados com algoritmos e C</em>. Rio de Janeiro: Brasport, 2008. Cap. 2: uso de memória.</li>
+<li>ROCHA, A. M. A.; BORGES, A. R. O. S. <em>Programação, estruturas de dados e algoritmos em C</em>. Aveiro: Universidade de Aveiro. Apostila da disciplina Programação II.</li>
+<li>TENENBAUM, A. M.; LANGSAM, Y.; AUGENSTEIN, M. J. <em>Estruturas de dados usando C</em>. São Paulo: Makron Books, 1995. Cap. 9: gerenciamento de armazenamento.</li>
+<li>KERNIGHAN, B. W.; RITCHIE, D. M. <em>C: a linguagem de programação padrão ANSI</em>. Rio de Janeiro: Campus, 1989. Seção 8.7: um alocador de memória.</li>
+<li>CPPREFERENCE. <em>Dynamic memory management</em>. Disponível em: <a href="https://en.cppreference.com/w/c/memory">https://en.cppreference.com/w/c/memory</a>.</li>
+<li>LINUX MAN-PAGES. <em>malloc(3)</em>. Disponível em: <a href="https://man7.org/linux/man-pages/man3/malloc.3.html">https://man7.org/linux/man-pages/man3/malloc.3.html</a>.</li>
+<li>GOOGLE. <em>AddressSanitizer</em>. Disponível em: <a href="https://github.com/google/sanitizers/wiki/AddressSanitizer">https://github.com/google/sanitizers/wiki/AddressSanitizer</a>.</li>
+<li>VALGRIND DEVELOPERS. <em>Valgrind user manual: Memcheck</em>. Disponível em: <a href="https://valgrind.org/docs/manual/mc-manual.html">https://valgrind.org/docs/manual/mc-manual.html</a>.</li>
+</ul>

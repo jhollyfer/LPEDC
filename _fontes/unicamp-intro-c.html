@@ -1,0 +1,173 @@
+<h1>Fichamento: &quot;Introdução à Linguagem C&quot; (versão 2.0)</h1>
+<ul>
+<li><strong>Autor:</strong> Gerência de Atendimento ao Cliente (GACLI), Centro de Computação da UNICAMP (sem data,
+anos 1990; bibliografia: K&amp;R 1986, Schildt Turbo C 1988, Mizrahi 1990).</li>
+<li><strong>Avaliação geral:</strong> apostila-resumo curta, quase só sintaxe + um exemplo por tópico, sem
+exercícios. Escrita em C pré-ANSI (K&amp;R): <code>main()</code> sem tipo, definições de função no estilo
+<code>int f(a, b) int a, b; {...}</code>, protótipos sem parâmetros, <code>#include &lt;stdio&gt;</code>. Vários exemplos têm
+erros de digitação ou de lógica. Serve como fonte de exemplos curtos de printf e ponteiros e
+como material de &quot;isto é C antigo, não faça assim&quot;. Não cobre estruturas de dados.</li>
+</ul>
+<h3>logica5-compilacao</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> cadeia editor → pré-processador (fonte expandido) → compilador (objeto) →
+ligador (executável); no UNIX o comando era <code>cc</code> (hoje <code>gcc</code>/<code>cc</code>). C nasceu para reescrever o
+UNIX (antes em assembly).</li>
+</ul>
+<h3>0002-variaveis / 0003-tipos-e-limites</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> identificadores começam com letra ou <code>_</code>, case sensitive; árvore de tipos
+(escalares: aritméticos e ponteiros; não escalares: struct, union, matriz). Tabela de faixas
+mínimas garantidas (int ≥ 16 bits, long ≥ 32), boa ideia, ao contrário de tabelas &quot;fixas&quot;.
+Programa que imprime <code>sizeof</code> de cada tipo.</li>
+<li><strong>Pegadinhas (erros da fonte):</strong> <code>char</code> com faixa <code>[0,128)</code>; 2^32 escrito como 4.294.967.298
+(é …296); &quot;unsigned sort/log&quot;; <code>sizeof</code> impresso com <code>%d</code> (o correto é <code>%zu</code>).</li>
+<li><strong>Ideias de exercícios:</strong> comparar a tabela mínima com o que <code>limits.h</code> mostra na máquina.</li>
+</ul>
+<h3>0005-printf (melhor parte da fonte)</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> largura menor que o número não trunca (<code>%2d</code> de 350 → <code>350</code>); <code>%6d</code> alinha à
+direita; <code>%10.2f</code> para colunas alinhadas; <code>%04d</code> e <code>%06d</code> completam com zeros; <code>%6.4d</code> de 21 →
+<code>  0016</code> (precisão em inteiro = mínimo de dígitos).</li>
+<li><strong>Ideias de exemplos:</strong> <code>printf(&quot;%d %c %x %o\n&quot;, &#39;A&#39;,&#39;A&#39;,&#39;A&#39;,&#39;A&#39;)</code> → <code>65 A 41 101</code>;
+<code>printf(&quot;%c %c %c %c\n&quot;, &#39;A&#39;, 65, 0x41, 0101)</code> → <code>A A A A</code> (mesmo valor em quatro bases).
+Tabela de valores 8.0 / 15.3 / 584.13 alinhada com <code>%10.2f</code>.</li>
+<li><strong>Pegadinhas:</strong> <code>%4.2f</code> de 3456.78 imprime <code>3456.78</code> (a largura é mínima, não máxima);
+<code>printf(&quot;%u&quot;, &amp;num)</code> para endereço (usar <code>%p</code>).</li>
+<li><strong>Ideias de exercícios:</strong> prever a saída das quatro linhas de <code>%04d %06d %6.4d %6.0d</code> com 21.</li>
+</ul>
+<h3>0006-scanf</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> argumentos são endereços; memória como bytes numerados de 0 em diante; o
+endereço de uma variável é o do seu primeiro byte.</li>
+<li><strong>Pegadinhas:</strong> <code>scanf(%d,%d,&amp;x,&amp;y)</code> sem aspas (erro da fonte); formato <code>&quot;%d,%d&quot;</code> exige a vírgula
+digitada.</li>
+</ul>
+<h3>0007-aritmetica / 0009-atribuicao</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>%</code> = resto da divisão inteira (10/3 → 3, 10%3 → 1); atribuição é expressão
+(<code>if ((produto = x*y) &gt; 0)</code>); <code>x *= y + 1</code> ≡ <code>x = x*(y+1)</code>; <code>++x</code> × <code>x++</code> com printf.</li>
+<li><strong>Ideias de exercícios:</strong> prever saída de <code>x=0; printf x++; printf x; printf ++x; printf x</code> →
+0, 1, 2, 2.</li>
+</ul>
+<h3>0008-conversao</h3>
+<ul>
+<li><strong>Ideias de exemplos:</strong> <code>printf(&quot;%f&quot;, (float) i/3)</code> com i = 1 → 0.333333 (cast antes da divisão).</li>
+</ul>
+<h3>0012-relacionais / 0013-logicos / 0014-if</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> verdadeiro = qualquer não-zero; relacionais/lógicos devolvem 0 ou 1 e têm
+precedência menor que os aritméticos. <code>if (b)</code> como teste de divisor não nulo.</li>
+<li><strong>Ideias de exemplos:</strong> imprimir <code>i == j é 0/1</code> para todos os relacionais com dois números lidos.</li>
+</ul>
+<h3>0017-ternario</h3>
+<ul>
+<li><strong>Pegadinhas:</strong> o exemplo <code>max = (x&gt;y) ? 1 : 0</code> não calcula o máximo (devolve um indicador); bom
+&quot;ache o erro&quot;: corrigir para <code>max = (x &gt; y) ? x : y</code>.</li>
+</ul>
+<h3>0018-switch / 0021-do-while</h3>
+<ul>
+<li><strong>Ideias de exemplos:</strong> menu &quot;1. inclusão 2. alteração 3. exclusão&quot; com <code>getchar</code> + <code>switch</code>,
+depois envolvido num <code>do...while</code> que repete enquanto a opção for inválida.</li>
+</ul>
+<h3>0022-for / 0023-break-continue / 0024-lacos-aninhados</h3>
+<ul>
+<li><strong>Ideias de exemplos:</strong> <code>for (x=0, y=0; x+y &lt; 100; ++x, ++y)</code> (vírgula); <code>for(;;)</code> + <code>break</code>
+quando lê &#39;a&#39;; <code>continue</code> para imprimir só pares (<code>if (x % 2) continue;</code>); 24 linhas × 39 traços.</li>
+<li><strong>Pegadinhas:</strong> <code>while (ch != &#39;a&#39;)</code> com <code>ch</code> não inicializado.</li>
+</ul>
+<h3>0026-aleatorios</h3>
+<ul>
+<li><strong>Ideias de exemplos:</strong> jogo &quot;adivinhe o número&quot; com <code>srand(time(NULL))</code> e dicas &quot;muito alto /
+muito baixo&quot;.</li>
+<li><strong>Pegadinhas:</strong> <code>segredo = rand()/100</code> gera números enormes; usar <code>rand() % 100 + 1</code>.</li>
+</ul>
+<h3>0037-vetores / 0039-matrizes</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> memória contígua, índice de 0 a N−1, C não verifica limites (exemplo que
+escreve 100 posições num vetor de 10).</li>
+<li><strong>Pegadinhas:</strong> média de notas com <code>soma/5</code> inteira; afirmação de que vetor local só pode ser
+inicializado se <code>static</code>: restrição do C pré-ANSI, obsoleta. Exemplo de matriz percorre só a
+diagonal sem dizer.</li>
+</ul>
+<h3>0041-strings / 0042-lendo-strings</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> string = vetor de char com <code>&#39;\0&#39;</code>; constante entre aspas recebe o <code>&#39;\0&#39;</code>
+automático; <code>puts</code> acrescenta <code>\n</code>; <code>strcpy</code>, <code>strcat</code> (não verifica tamanho), <code>strcmp</code> (0 se
+iguais; exemplo de senha &quot;laranja&quot;).</li>
+<li><strong>Pegadinhas:</strong> usa <code>gets</code> (e admite que não testa limites); <code>static re[] = &quot;lagarto&quot;</code> sem tipo.</li>
+</ul>
+<h3>0045-ponteiros / 0047-ponteiros-e-vetores</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>px = &amp;x; y = *px;</code> ≡ <code>y = x</code>; <code>*px + 1</code> (soma no conteúdo) × <code>*(px+1)</code>
+(próxima posição); <code>(*px)++</code> incrementa o conteúdo, <code>*px++</code> avança o ponteiro (unários associam
+da direita para a esquerda); <code>pa = a</code> ≡ <code>pa = &amp;a[0]</code>; <code>pa+i</code> = <code>&amp;a[i]</code>, <code>*(pa+i)</code> = <code>a[i]</code>.
+Cópia de string em versão vetor (<code>while (t[i] = s[i]) i++;</code>) e versão ponteiro
+(<code>while (*ps) *pt++ = *ps++;</code>).</li>
+<li><strong>Pegadinhas:</strong> &quot;ponteiro perdido&quot;: <code>int *p; *p = 10;</code> grava em lugar desconhecido; a versão
+ponteiro da cópia não copia o <code>&#39;\0&#39;</code> final; ponteiros impressos com <code>%d</code>/<code>%u</code>; afirmação de que
+ponteiros são &quot;geralmente mais rápidos&quot; que índices (não vale com compiladores modernos).</li>
+<li><strong>Ideias de exercícios:</strong> tabela de saída do programa que imprime <code>x</code>, <code>px</code>, <code>*px+1</code>, <code>(*px)++</code>,
+<code>*(px++)</code> em sequência.</li>
+</ul>
+<h3>0048-ponteiros-e-strings / 0049-ponteiro-para-ponteiro</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>char *texto = &quot;composto&quot;</code> aponta para constante; vetor de ponteiros para
+mensagens de erro (<code>char *erro[] = {&quot;arquivo não encontrado\n&quot;, &quot;erro de leitura\n&quot;}</code>);
+<code>int x, *p, **q; q = &amp;p; **q</code> → 10.</li>
+<li><strong>Pegadinhas:</strong> a fonte diz que <code>char *texto = &quot;...&quot;</code> &quot;funciona como <code>static char texto[]</code>&quot;.
+Falso: o literal é só leitura, o vetor é modificável.</li>
+</ul>
+<h3>0028-funcoes / 0029-parametros / 0030-escopo</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> void para função sem retorno; chamada por valor (<code>sqr(t)</code> não altera t) e por
+referência (<code>troca(&amp;x, &amp;y)</code>); locais na pilha, globais em área fixa, <code>static</code> local conserva valor;
+local com mesmo nome oculta a global (exemplo <code>cont</code> em func1/func2).</li>
+<li><strong>Pegadinhas:</strong> todas as definições em estilo K&R; <code>return;</code> sem valor em função <code>int</code>
+(<code>elevado</code> com expoente negativo); <code>void linha;</code> (falta parênteses).</li>
+<li><strong>Ideias de exercícios:</strong> reescrever <code>elevado(base, expoente)</code> e <code>pertence(string, caracter)</code> em C
+moderno com protótipo completo.</li>
+</ul>
+<h3>0038-vetores-e-funcoes</h3>
+<ul>
+<li><strong>Ideias de exemplos:</strong> <code>mostra(int num[])</code> ≡ <code>mostra(int *num)</code>; <code>maiusc(char *s)</code> que altera a
+string original com <code>toupper</code>.</li>
+</ul>
+<h3>0059-struct / 0061-vetor-de-structs / 0062-ponteiro-para-struct</h3>
+<ul>
+<li><strong>Ideias de exemplos:</strong> <code>struct lapis {int dureza; char fabricante; int numero;}</code>, vetor de 3
+lápis impresso em tabela com <code>\t</code>; <code>(*p).dureza</code> ≡ <code>p-&gt;dureza</code>.</li>
+</ul>
+<h3>0054-malloc-free</h3>
+<ul>
+<li><strong>Ideias de exemplos:</strong> alocar 40 ints, preencher com <code>*(p+t) = t</code>, imprimir, liberar; ler N
+floats e achar o maior.</li>
+<li><strong>Pegadinhas:</strong> diz que malloc vem de <code>stdio.h</code> (é <code>stdlib.h</code>); <code>#include &lt;stdio&gt;</code> sem <code>.h</code>; aloca
+<code>quant+1</code> e usa índices de 1 a quant (desperdício e confusão).</li>
+</ul>
+<h3>0067-arquivos-texto</h3>
+<ul>
+<li><strong>Ideias de exemplos:</strong> gravar inteiros até digitar 0 com <code>fprintf</code>, fechar, reabrir em <code>&quot;r&quot;</code> e
+reler com <code>fscanf</code>.</li>
+<li><strong>Pegadinhas:</strong> laço <code>while (!feof(fp))</code>; não testa se <code>fopen</code> retornou NULL; não fecha o arquivo
+no fim.</li>
+</ul>
+<h3>0069-argumentos</h3>
+<ul>
+<li><strong>Ideias de exemplos:</strong> <code>alo &lt;nome&gt;</code> com checagem <code>argc != 2</code>; contagem regressiva a partir de
+<code>atoi(argv[1])</code> com opção <code>display</code> comparada por <code>strcmp</code> e bip <code>printf(&quot;%c&quot;, 7)</code>.</li>
+</ul>
+<hr>
+<h2>Obsoleto / evitar</h2>
+<ul>
+<li><code>main()</code> sem <code>int</code>; tipo implícito (<code>static re[]</code>); definições de função K&R; protótipos vazios
+(<code>int elevado();</code>).</li>
+<li><code>#include &lt;stdio&gt;</code> sem <code>.h</code>; malloc &quot;em stdio.h&quot;; <code>cc</code> como único compilador.</li>
+<li><code>gets</code>; <code>while(!feof(fp))</code>; ponteiros impressos com <code>%d</code>/<code>%u</code>.</li>
+<li>Inicialização de vetor local &quot;só se static&quot; (regra pré-ANSI).</li>
+<li><code>rand()/100</code> para sortear; &quot;ponteiro é mais rápido que índice&quot;.</li>
+</ul>
+<h2>Extras que não cabem no sumário</h2>
+<ul>
+<li>História de C/UNIX; árvore de classificação dos tipos (escalares × agregados; incompletos).</li>
+</ul>

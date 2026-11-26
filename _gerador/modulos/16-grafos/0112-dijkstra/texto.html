@@ -1,0 +1,186 @@
+<h2>0112 · Dijkstra: caminho mínimo</h2>
+<p>A BFS acha o caminho com menos arestas. No trânsito, isso não basta. Um
+aplicativo de rotas sabe que ir de Casa até a Padaria pela rua direta leva 4
+minutos, mas que ir de Casa até a Escola leva 1 e da Escola até a Padaria leva
+2. A rua direta parece óbvia, e passar pela Escola dá 3 minutos.</p>
+<p>O grafo agora é <strong>ponderado</strong>: cada aresta carrega um <strong>peso</strong>, que pode ser
+minutos, quilômetros ou reais. O custo de um caminho é a soma dos pesos das
+arestas dele, e o caminho mínimo é o de <strong>menor soma</strong>, não o de menos arestas
+(CORMEN et al., 2024, cap. 22). A BFS erra aqui sem avisar, porque ela para no
+primeiro caminho que chega, e o primeiro a chegar é o de menos ruas.</p>
+<p>O algoritmo de <strong>Dijkstra</strong> resolve esse problema. A partir de uma origem, ele
+acha o caminho mínimo até todos os outros vértices, desde que <strong>nenhum peso
+seja negativo</strong> (DIJKSTRA, 1959). Ele trabalha com três vetores. <code>dist[v]</code>
+guarda o melhor custo <strong>conhecido até agora</strong> da origem até <code>v</code>: começa em 0 na
+origem e em INFINITO no resto, que quer dizer &quot;ainda não sei chegar&quot;.
+<code>fixo[v]</code> diz se esse custo já é definitivo. <code>anterior[v]</code> guarda de onde se
+chega em <code>v</code> no melhor caminho, com o mesmo papel do <code>pai[]</code> da BFS (ZIVIANI,
+2010, cap. 7).</p>
+<p>A operação central se chama <strong>relaxar</strong> uma aresta. Você tem <code>dist[u]</code> e uma
+aresta de <code>u</code> para <code>v</code>. Se <code>dist[u] + peso[u][v] &lt; dist[v]</code>, passar por <code>u</code>
+melhora o caminho até <code>v</code>, e você atualiza <code>dist[v]</code> com a soma e anota
+<code>anterior[v] = u</code>. Se não melhora, nada muda. No Cormen, esse teste é o
+procedimento <code>RELAX(u, v, w)</code>, os vetores são os campos <code>v.d</code> e <code>v.π</code> e os
+vértices fixos formam o conjunto S (CORMEN et al., 2024, cap. 22). No exemplo
+da padaria, <code>dist[Padaria]</code> começa em 4 pela rua direta; quando a Escola é
+fixada com 1, relaxar a aresta Escola–Padaria dá 1 + 2 = 3, que é menor, e o
+4 vira 3.</p>
+<p>O algoritmo repete um passo só. Entre os vértices não fixos, pega o de menor
+<code>dist</code>, marca como fixo e relaxa todas as arestas que saem dele. Ele é
+<strong>guloso</strong>: em cada passo, faz a escolha que parece melhor naquele momento e
+nunca a desfaz. Fixar o menor é seguro por um motivo simples. Qualquer outro
+caminho até esse vértice teria de sair dos fixos por algum vértice não fixo,
+que já tem <code>dist</code> maior ou igual. Sem pesos negativos, andar mais só soma, e o
+outro caminho não fica mais barato (CORMEN et al., 2024, cap. 22).</p>
+<p>O argumento depende de &quot;andar mais só soma&quot;. Com uma aresta de peso negativo,
+um caminho mais longo pode ficar mais barato depois de um vértice já fixado, e
+o Dijkstra devolve uma resposta errada sem dar nenhum sinal. Para esse caso
+existe o algoritmo de Bellman-Ford, no assunto 0154, que relaxa todas as
+arestas V - 1 vezes (CORMEN et al., 2024, cap. 22).</p>
+<p>O custo depende de como você acha o menor <code>dist</code>. Com matriz de adjacência,
+cada um dos V passos varre os V vértices para achar o menor não fixo e mais V
+para relaxar a linha: O(V²). Com lista de adjacência e um <strong>heap</strong> de mínimo
+(assunto 0102), que entrega o menor em O(log V), o total cai para
+O((V + E) log V) (CORMEN et al., 2024, cap. 22).</p>
+<blockquote>
+<p>[!WARNING]
+<code>INT_MAX + 3</code> <strong>estoura</strong>: comportamento indefinido em <code>int</code> com sinal, que
+na prática vira negativo e &quot;ganha&quot; no <code>&lt;</code>. Por isso o código só escolhe <code>u</code>
+com <code>dist[u] != INFINITO</code>. Um INFINITO folgado (<code>1000000000</code>) também evita o
+estouro (CPPREFERENCE, s.d.).</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>Rumo à praia, o Waze sabe que Casa até Padaria leva 4 minutos, mas Casa,
+Escola, Padaria leva 3. A BFS acharia Casa, Padaria, Praia (14 minutos). Os
+números das arestas são minutos, o de cada lugar é a <code>dist</code> final e as arestas
+verdes formam a rota de 11 minutos:</p>
+<p>{{ideia}}</p>
+<p>O código usa matriz de pesos (0 é &quot;sem rua direta&quot;) e reconstrói a rota pelo
+<code>anterior[]</code>:</p>
+<pre><code class="language-c">#include &lt;limits.h&gt;
+#include &lt;stdbool.h&gt;
+#include &lt;stdio.h&gt;
+
+#define V 5
+#define INFINITO INT_MAX // &quot;ainda não sei chegar&quot;
+
+int main(void) {
+    const char *nomes[V] = {&quot;Casa&quot;, &quot;Escola&quot;, &quot;Padaria&quot;, &quot;Mercado&quot;, &quot;Praia&quot;};
+    int peso[V][V] = {0}; // minutos; 0 = sem rua direta
+    int ruas[][3] = {{0, 2, 4}, {0, 1, 1}, {1, 2, 2}, {2, 3, 5}, {1, 3, 8}, {3, 4, 3}, {2, 4, 10}};
+    for (int k = 0; k &lt; 7; k++) {
+        peso[ruas[k][0]][ruas[k][1]] = ruas[k][2];
+        peso[ruas[k][1]][ruas[k][0]] = ruas[k][2]; // mão dupla
+    }
+
+    int dist[V], anterior[V];
+    bool fixo[V]; // distância definitiva?
+    for (int v = 0; v &lt; V; v++) {
+        dist[v] = INFINITO;
+        anterior[v] = -1;
+        fixo[v] = false;
+    }
+    dist[0] = 0; // saindo de Casa
+
+    for (int passo = 0; passo &lt; V; passo++) {
+        // escolhe o vértice não fixo com a menor distância conhecida
+        int u = -1;
+        for (int v = 0; v &lt; V; v++)
+            if (!fixo[v] &amp;&amp; dist[v] != INFINITO &amp;&amp; (u == -1 || dist[v] &lt; dist[u])) u = v;
+        if (u == -1) break; // o que sobrou é inalcançável
+        fixo[u] = true;
+
+        // relaxa: passar por u encurta o caminho até v?
+        for (int v = 0; v &lt; V; v++) {
+            if (peso[u][v] &amp;&amp; !fixo[v] &amp;&amp; dist[u] + peso[u][v] &lt; dist[v]) {
+                dist[v] = dist[u] + peso[u][v];
+                anterior[v] = u;
+            }
+        }
+    }
+
+    for (int v = 0; v &lt; V; v++) printf(&quot;%s: %d min\n&quot;, nomes[v], dist[v]);
+
+    int rota[V], n = 0;
+    for (int v = 4; v != -1; v = anterior[v]) rota[n++] = v;
+    printf(&quot;Rota até a Praia:&quot;);
+    for (int i = n - 1; i &gt;= 0; i--) printf(&quot; %s%s&quot;, nomes[rota[i]], i &gt; 0 ? &quot; -&gt;&quot; : &quot;&quot;);
+    printf(&quot;\n&quot;);
+    return 0;
+}
+// Saída:
+// Casa: 0 min
+// Escola: 1 min
+// Padaria: 3 min
+// Mercado: 8 min
+// Praia: 11 min
+// Rota até a Praia: Casa -&gt; Escola -&gt; Padaria -&gt; Mercado -&gt; Praia
+</code></pre>
+<p>É a estrutura da BFS, com a fila trocada por &quot;menor <code>dist</code> não fixo&quot;. O laço
+acaba com todos fixos ou quando o menor que sobrou é INFINITO:</p>
+<p>{{fluxograma}}</p>
+<h3>Passo a passo</h3>
+<p>Cada linha fixa um vértice e relaxa os vizinhos: a Padaria cai de 4 para 3 e o
+Mercado de 9 para 8:</p>
+<table>
+<thead>
+<tr>
+<th>Fixa</th>
+<th>Casa</th>
+<th>Escola</th>
+<th>Padaria</th>
+<th>Mercado</th>
+<th>Praia</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>(início)</td>
+<td>0</td>
+<td>∞</td>
+<td>∞</td>
+<td>∞</td>
+<td>∞</td>
+</tr>
+<tr>
+<td>Casa (0)</td>
+<td><strong>0</strong></td>
+<td>1</td>
+<td>4</td>
+<td>∞</td>
+<td>∞</td>
+</tr>
+<tr>
+<td>Escola (1)</td>
+<td></td>
+<td><strong>1</strong></td>
+<td>3</td>
+<td>9</td>
+<td>∞</td>
+</tr>
+<tr>
+<td>Padaria (3)</td>
+<td></td>
+<td></td>
+<td><strong>3</strong></td>
+<td>8</td>
+<td>13</td>
+</tr>
+<tr>
+<td>Mercado (8)</td>
+<td></td>
+<td></td>
+<td></td>
+<td><strong>8</strong></td>
+<td>11</td>
+</tr>
+<tr>
+<td>Praia (11)</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><strong>11</strong></td>
+</tr>
+</tbody></table>
+<p>O exemplo A223 para ao fixar o destino. O A224 usa grafo dirigido (ônibus, em
+reais) e trata uma cidade que nenhuma linha alcança.</p>

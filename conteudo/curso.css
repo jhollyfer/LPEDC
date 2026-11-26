@@ -1,11 +1,17 @@
 #curso[hidden],
-.link-curso[hidden] {
+.link-curso[hidden],
+.livro-paginacao[hidden],
+.livro-capitulos[hidden] {
   display: none;
 }
 
 .link-curso[aria-current] {
   border-color: var(--accent);
   color: var(--accent);
+}
+
+.cabeca:has(.link-curso[aria-current]) #modo-prova {
+  display: none;
 }
 
 @media (max-width: 460px) {
@@ -15,32 +21,178 @@
   }
 }
 
-.curso-navegacao,
-.curso-leitura {
-  max-width: 78ch;
-  margin-inline: auto;
+#curso {
+  --papel: #fffcf6;
+  padding-top: 36px;
 }
 
-.curso-navegacao {
+:root[data-theme="dark"] #curso { --papel: var(--surface); }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) #curso { --papel: var(--surface); }
+}
+
+.livro-sumario {
+  margin-bottom: 24px;
+  border-block: 1px solid var(--border);
+  font-size: 0.9375rem;
+}
+
+.livro-sumario > summary {
+  padding: 12px 0;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.livro-sumario nav {
+  display: grid;
+  gap: 4px;
+  padding: 8px 0 12px;
+}
+
+.livro-sumario ul {
+  list-style: none;
+  margin: 0;
+  padding-left: 12px;
+}
+
+.livro-sumario a,
+.livro-sumario .livro-parte > summary {
+  display: block;
+  padding: 6px 8px;
+  border-radius: 4px;
+  text-decoration: none;
+  line-height: 1.4;
+}
+
+.livro-sumario .livro-parte > summary {
+  display: list-item;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.livro-sumario a:hover,
+.livro-sumario .livro-parte > summary:hover {
+  background: var(--surface);
+}
+
+.livro-sumario a[aria-current] {
+  background: var(--accent-pale);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.livro-sumario .livro-capitulos {
+  margin-left: 8px;
+  padding-left: 6px;
+  border-inline-start: 1px solid var(--border);
+}
+
+.livro-sumario .livro-apendices {
+  margin-top: 8px;
+  padding: 8px 0 0;
+  border-top: 1px solid var(--border);
+}
+
+.livro-miolo { min-width: 0; }
+
+.livro-caminho {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 20px;
-  margin-bottom: 32px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--border);
-  color: var(--accent);
+  gap: 4px 10px;
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: 0.875rem;
 }
 
-.curso-navegacao [aria-current] {
-  color: var(--text);
-  font-weight: 600;
-  text-decoration: none;
+.livro-caminho > :not(:first-child)::before {
+  content: '/';
+  margin-inline-end: 10px;
+  color: var(--muted);
 }
 
 .curso-leitura {
   overflow-wrap: anywhere;
-  line-height: 1.65;
+  padding: clamp(18px, 4.5vw, 54px);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--papel);
+  font: 1.0625rem/1.72 Georgia, serif;
 }
+
+@media (min-width: 850px) {
+  #curso {
+    display: grid;
+    grid-template-columns: 225px minmax(0, 1fr);
+    gap: clamp(24px, 4vw, 56px);
+    align-items: start;
+  }
+
+  .livro-sumario {
+    position: sticky;
+    top: 16px;
+    max-height: calc(100vh - 32px);
+    margin: 0;
+    overflow: auto;
+    border-block: 0;
+  }
+
+  .livro-sumario > summary { display: none; }
+}
+
+.livro-capa {
+  padding-block: clamp(12px, 4vw, 48px) 24px;
+  margin-bottom: 28px;
+  border-bottom: 1px solid var(--control);
+}
+
+.livro-capa h1 {
+  max-width: 19ch;
+  font-size: clamp(2.75rem, 6vw, 5rem);
+  letter-spacing: -0.025em;
+}
+
+.livro-capa p { max-width: 57ch; }
+
+.livro-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  margin-top: 24px;
+  font: 500 0.9375rem/1.4 var(--font);
+}
+
+.livro-acoes a:first-child {
+  padding: 10px 16px;
+  border-radius: 4px;
+  background: var(--primary);
+  color: var(--on-primary);
+  text-decoration: none;
+}
+
+.livro-paginacao {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+  overflow-wrap: anywhere;
+}
+
+.livro-paginacao a {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+.livro-paginacao a:hover { border-color: var(--accent); }
+.livro-paginacao a > span { color: var(--muted); font-size: 0.875rem; }
+.livro-paginacao a > strong { font-weight: 500; }
+.livro-paginacao .seguinte { grid-column: 2; text-align: right; }
 
 .curso-leitura h1,
 .curso-leitura h2 {
@@ -66,6 +218,10 @@
 
 .curso-leitura [id] {
   scroll-margin-top: 20px;
+}
+
+.curso-leitura [tabindex="-1"]:focus {
+  outline: none;
 }
 
 .curso-leitura p {

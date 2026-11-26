@@ -1,0 +1,99 @@
+<h1>Plano de testes</h1>
+<p><strong>LPEDC</strong> · o que se confere antes de dar uma mudança como pronta</p>
+<h2>1. Código C</h2>
+<table>
+<thead>
+<tr>
+<th>O quê</th>
+<th>Como</th>
+<th>Passa quando</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>um arquivo</td>
+<td><code>gcc ... -o A013 &amp;&amp; ./A013</code> com as flags de estudo (C17, <code>-Wall -Wextra -pedantic</code>, ASan e UBSan)</td>
+<td>compila sem aviso, roda sem erro do sanitizer, e a saída bate com o comentário</td>
+</tr>
+<tr>
+<td>arquivo que lê do teclado</td>
+<td><code>gcc ... -o A013 &amp;&amp; printf &#39;25\n&#39; | ./A013</code></td>
+<td>idem</td>
+</tr>
+<tr>
+<td>vazamento difícil</td>
+<td><code>valgrind ./A013</code> (compilado com <code>-g</code>)</td>
+<td>sem bloco perdido</td>
+</tr>
+</tbody></table>
+<h2>2. Módulo inteiro</h2>
+<p><code>_gerador/conferir.sh &lt;modulo&gt;</code> compila e roda os exemplos, os exercícios, a lista e as respostas
+do módulo. Exercício &quot;conserte o bug&quot; fica de fora (o esqueleto vem quebrado de propósito; a
+resposta é conferida). Passa com <code>&lt;modulo&gt;: 0 com problema</code>.</p>
+<h2>3. Texto</h2>
+<table>
+<thead>
+<tr>
+<th>O quê</th>
+<th>Como</th>
+<th>Passa quando</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>revisão não mexeu no que não pode</td>
+<td><code>python3 _gerador/conferir-texto.py &lt;modulo&gt; ...</code> (compara com o <code>HEAD</code>: blocos de código, títulos de assunto e gabaritos; e confere a forma do <code>texto.html</code>: marcadores <code>{{exemplo}} {{ideia}} {{fluxograma}}</code>, um <code>WARNING</code>, citação de fonte com a obra no &quot;Para ler mais&quot;)</td>
+<td><code>0 problema(s)</code></td>
+</tr>
+<tr>
+<td>humanizer</td>
+<td>skill <code>humanizer-pt</code> e o script <code>auditoria_pos_edicao.py antes.txt depois.txt</code></td>
+<td>valores, força da norma, certeza e corte OK; o BLOQUEIO em &quot;vestígios de ferramenta&quot; é falso positivo se o arquivo do <code>HEAD</code> contra ele mesmo der o mesmo</td>
+</tr>
+<tr>
+<td><code>.html</code> gerado</td>
+<td>o gerador do módulo (<code>ARCHITECTURE.html</code> §1)</td>
+<td>sem erro, e o <code>git diff</code> do <code>.html</code> mostra só o que mudou na fonte</td>
+</tr>
+<tr>
+<td>links</td>
+<td>links e imagens relativos dos <code>.html</code> da raiz apontam para arquivo que existe</td>
+<td>nenhum quebrado</td>
+</tr>
+<tr>
+<td>desenho</td>
+<td><code>ver.mjs</code> e abrir o PNG (<code>DESIGN.html</code>)</td>
+<td>sem sobreposição, texto cortado ou seta solta (<code>DESIGN.html</code>)</td>
+</tr>
+</tbody></table>
+<h2>3.1 Quiz das provas</h2>
+<table>
+<thead>
+<tr>
+<th>O quê</th>
+<th>Como</th>
+<th>Passa quando</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>dados do quiz</td>
+<td><code>cd _gerador &amp;&amp; node quiz.mjs --check</code> (letra igual ao <code>PROVAS.html</code>, porquê de toda alternativa, dica no formato com 2 a 4 conceitos, cada um com definição e <code>Ex.:</code>, assunto <code>[NNNN]</code> que existe, cerca de código na própria linha)</td>
+<td><code>0 erros</code></td>
+</tr>
+<tr>
+<td>quiz no navegador</td>
+<td><code>cd _gerador &amp;&amp; node quiz-navegador.mjs</code> (as 210 questões a 390px e a 1440px)</td>
+<td><code>0 com problema, 0 erros de script</code> nas duas larguras</td>
+</tr>
+</tbody></table>
+<h2>3.2 Leitor do curso</h2>
+<p><code>node _gerador/conteudo.mjs --check</code> confere o índice e o sumário.
+Abra o prefácio e siga para o primeiro módulo. Avance um capítulo, volte e recarregue uma rota
+com âncora. Confira figuras, blocos de código, tabelas e gabaritos. Abra um documento de subpasta pelo
+acervo. Na trilha do quiz, confira se o link <strong>Estudar no curso</strong> abre o capítulo correspondente.</p>
+<h2>4. Definição de pronto</h2>
+<ul>
+<li><input disabled="" type="checkbox"> <code>conferir.sh</code> do módulo tocado com 0 problema, rodado no <code>HEAD</code> atual.</li>
+<li><input disabled="" type="checkbox"> <code>conferir-texto.py</code> com 0 problema quando o texto mudou.</li>
+<li><input disabled="" type="checkbox"> <code>.html</code> do módulo gerado de novo no mesmo commit da fonte.</li>
+<li><input disabled="" type="checkbox"> Gabarito de questão nova conferido rodando o código.</li>
+<li><input disabled="" type="checkbox"> <code>docs/</code> atualizado no mesmo commit (<code>AGENTS.html</code>, &quot;Ao terminar&quot;).</li>
+</ul>

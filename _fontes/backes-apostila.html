@@ -1,0 +1,734 @@
+<h1>Fichamento: &quot;Linguagem C: Descomplicada&quot; (apostila)</h1>
+<ul>
+<li><strong>Autor:</strong> Prof. André R. Backes (apostila, ~345 páginas, 12 capítulos).</li>
+<li><strong>Lido:</strong> integralmente (8089 linhas do .md convertido).</li>
+<li><strong>Avaliação geral:</strong> didática, muito &quot;passo a passo&quot;, com caixas de alerta (&quot;pegadinhas&quot;) em
+quase toda página e muitos exemplos curtos lado a lado (certo × errado, com × sem). Cobre do
+esqueleto do programa até alocação dinâmica, arquivos e um capítulo &quot;Avançado&quot; bem rico
+(diretivas, ponteiro para função, argc/argv, printf/scanf completos, classes de armazenamento,
+campos de bits, volatile, funções variádicas). <strong>Não cobre estruturas de dados</strong> (listas, pilhas,
+filas, árvores, hash, grafos), nem busca/ordenação, nem análise de algoritmos: só C.
+Pontos fracos: estilo Windows/Code::Blocks dos anos 2010, tabelas com erros factuais e vários
+exemplos com bugs ou comportamento indefinido (listados abaixo, ótimos como material de &quot;ache o
+erro&quot;).</li>
+<li><strong>O que a apostila tem de mais útil em relação ao livro (para nosso curso):</strong><ol>
+<li>Catálogo comentado das bibliotecas padrão (stdio, stdlib, math, ctype, string, time) logo no cap. 1.</li>
+<li>Passo a passo do <em>debugger</em> (breakpoint, watches, next line, step into/out, continue).</li>
+<li>Capítulo de alocação dinâmica com <strong>três soluções para matriz dinâmica</strong> (vetor 1D com
+<code>i*ncol+j</code>; <code>int**</code> com linhas separadas, inclusive matriz triangular; <code>int**</code> apontando
+para um bloco único) e a ordem correta de <code>free</code>.</li>
+<li>Capítulo de arquivos completo: modos de abertura, caminhos relativo/absoluto, <code>fputc/fgetc</code>,
+<code>EOF</code> × <code>feof</code>, <code>fflush</code>, <code>ftell</code>, <code>fputs/fgets</code>, <code>fwrite/fread</code>, <code>fprintf/fscanf</code>, <code>fseek</code>,
+<code>rewind</code>, <code>remove</code>, <code>ferror/perror</code>, gravar o tamanho antes da string.</li>
+<li>Capítulo &quot;Avançado&quot;: <code>#line</code>, <code>#error</code>, <code>#pragma</code>, <code>__LINE__/__FILE__/__DATE__/__TIME__</code>,
+operadores <code>#</code> e <code>##</code>, ponteiro para array × array de ponteiros, vetor de ponteiros para
+função (calculadora), <code>printf</code> com flags/largura/precisão/<code>*</code>, <code>scanf</code> com <code>*</code>, largura e
+<em>scanset</em> <code>%[...]</code>, <code>auto/extern/static/register</code>, campos de bits, <code>volatile</code>, <code>stdarg.h</code>.</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h2>00-logica</h2>
+<h3>logica1-algoritmo / logica3-fluxograma</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> a apostila não ensina algoritmo do zero, mas usa fluxogramas (losango =
+decisão) para explicar <code>if</code>, <code>else</code>, <code>switch</code>, <code>while</code>, <code>for</code>, <code>do-while</code>, <code>break</code>, <code>continue</code>.
+Mostra o mesmo laço em pseudocódigo (&quot;enquanto A &lt; B faça…&quot;) e em fluxograma.</li>
+<li><strong>Analogias/explicações boas:</strong> laço = losango cuja saída &quot;volta&quot; para a condição depois do bloco;
+<code>do-while</code> = o bloco vem antes do losango.</li>
+<li><strong>Ideias de exemplos:</strong> &quot;imprimir todos os inteiros entre a e b&quot; desenhado como fluxograma e
+depois traduzido para <code>while</code>, <code>for</code> e <code>do-while</code> (o mesmo problema nas três formas).</li>
+<li><strong>Ideias de exercícios:</strong> dado o pseudocódigo &quot;X ← 4; enquanto X &lt; 5: X ← X − 1; imprima X&quot;,
+dizer o que acontece. Resposta: laço infinito (X só diminui, nunca chega a 5).</li>
+</ul>
+<h3>logica4-binario</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> literais em octal (prefixo <code>0</code>) e hexadecimal (<code>0x</code>); conversão manual
+(<code>044</code> = 4·8+4 = 36; <code>0x44</code> = 4·16+4 = 68). Número 44 em binário = <code>00101100</code> (usado nos
+exemplos de operadores bit a bit).</li>
+<li><strong>Pegadinhas:</strong> um zero à esquerda muda a base: <code>int x = 010;</code> vale 8, não 10.</li>
+<li><strong>Ideias de exercícios:</strong> quanto vale <code>int a = 017;</code>? (15). E <code>0x1F</code>? (31). Imprimir 125 em
+<code>%o</code>, <code>%x</code>, <code>%X</code> → <code>175</code>, <code>7d</code>, <code>7D</code>.</li>
+</ul>
+<h3>logica5-compilacao</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> compilar arquivo → objeto; <em>build</em> → compila tudo e liga (linkagem) →
+executável; <em>build and run</em>. Diretivas são processadas antes da compilação pelo pré-processador.
+<code>#include &lt;...&gt;</code> procura nos diretórios do sistema; <code>#include &quot;...&quot;</code> procura primeiro na pasta do
+projeto (aceita caminho).</li>
+<li><strong>Extra valioso:</strong> roteiro de <strong>depuração</strong>: colocar breakpoints, iniciar o debugger, abrir a
+janela de <em>watches</em>, avançar linha a linha (<em>next line</em>), entrar na função (<em>step into</em>), sair
+dela (<em>step out</em>), ir ao próximo breakpoint (<em>continue</em>), parar. Exemplo usado: programa que lê x
+e calcula fatorial se positivo. Adaptar para <code>gdb</code> (<code>break</code>, <code>run</code>, <code>next</code>, <code>step</code>, <code>finish</code>,
+<code>continue</code>, <code>print</code>/<code>display</code>).</li>
+<li><strong>Ideias de exercícios:</strong> pôr breakpoint dentro de <code>fatorial(n)</code> e anotar o valor de <code>f</code> a cada
+volta para n = 4 (1, 2, 6, 24).</li>
+</ul>
+<hr>
+<h2>01-fundamentos</h2>
+<h3>0001-primeiro-programa</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> esqueleto (<code>#include</code>, <code>int main()</code>, chaves delimitam bloco, <code>return 0</code>
+avisa que terminou bem); quase todo comando termina em <code>;</code>; parênteses delimitam argumentos de
+função; indentação mostra hierarquia (o mesmo programa em 3 linhas compila, mas é ilegível);
+comentários <code>//</code> (linha) e <code>/* */</code> (bloco), que servem de documentação interna.</li>
+<li><strong>Pegadinhas:</strong> <code>system(&quot;pause&quot;)</code> aparece em todo exemplo, mas é só do Windows; <strong>não usar</strong> no curso.</li>
+<li><strong>Ideias de exercícios:</strong> reescrever um programa &quot;achatado&quot; em uma linha com indentação correta.</li>
+</ul>
+<h3>0002-variaveis</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> variável = posição de memória com nome e tipo; o tipo define valores e
+operações possíveis; declarar antes de usar; várias na mesma linha separadas por vírgula.
+Regras de nome: letras, dígitos e <code>_</code>, começando por letra ou <code>_</code>; maiúsculas ≠ minúsculas
+(<code>Soma</code>, <code>soma</code>, <code>SOMA</code> são três variáveis); palavras reservadas proibidas.
+<code>sizeof</code> dá o tamanho em bytes de tipo (<code>sizeof(int)</code>) ou variável (<code>sizeof x</code>).</li>
+<li><strong>Analogias/explicações boas:</strong> &quot;memória nunca está vazia&quot;: toda posição já tem 0s e 1s; variável
+recém-criada contém <strong>lixo</strong>. Exemplo: imprimir <code>x</code> antes de atribuir → &quot;qualquer valor&quot;.</li>
+<li><strong>Pegadinhas:</strong> usar variável não inicializada; char sempre entre aspas simples (<code>&#39;a&#39;</code>), senão o
+compilador acha que <code>a</code> é outra variável; número real usa ponto, não vírgula.</li>
+<li><strong>Ideias de exemplos:</strong> tabela de nomes válidos × inválidos (<code>cont</code>, <code>Cont</code>, <code>_x</code>, <code>int1</code> válidos;
+<code>1cont</code>, <code>-x</code>, <code>comp!</code>, <code>int</code>, <code>x&amp;</code> inválidos).</li>
+<li><strong>Ideias de exercícios:</strong> classificar 10 nomes como válidos ou não, justificando.</li>
+</ul>
+<h3>0003-tipos-e-limites</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> tipos básicos <code>char</code>, <code>int</code>, <code>float</code>, <code>double</code>, <code>void</code>; modificadores
+<code>signed</code>, <code>unsigned</code>, <code>short</code>, <code>long</code> (podem combinar: <code>unsigned long int</code>). <code>unsigned</code> &quot;ganha&quot; o
+bit de sinal e dobra o máximo positivo. <code>void</code> não serve para variável.</li>
+<li><strong>Pegadinhas (erros da própria apostila, não copiar):</strong> tabela diz <code>signed int</code> 32 bits com faixa
+−32768..32767 (incoerente); <code>void</code> com &quot;8 bits&quot;; afirma que <code>short</code> tem 16 e <code>long</code> 32 bits
+&quot;independente do processador&quot; (o padrão só garante mínimos); diz que <code>float</code> ocupa mais memória
+que <code>int</code> (em geral ambos têm 4 bytes). A lista de palavras reservadas traz <code>typeof</code> no lugar de
+<code>typedef</code>. Usar <code>limits.h</code>/<code>stdint.h</code> para mostrar os valores reais da máquina.</li>
+<li><strong>Ideias de exemplos:</strong> <code>unsigned int n = 2147483647; n = n + 1;</code> impresso com <code>%d</code> e com <code>%u</code>
+(−2147483648 × 2147483648): mostra que o mesmo bit-padrão é lido de jeitos diferentes.</li>
+<li><strong>Ideias de exercícios:</strong> prever a saída do exemplo acima; escrever programa que imprime
+<code>sizeof</code> de todos os tipos e compara com a tabela.</li>
+</ul>
+<h3>0004-constantes</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>#define NOME valor</code> (substituição textual antes da compilação) × <code>const tipo NOME = valor;</code> (variável que não pode mudar, segue regras de escopo). Constante precisa ser
+inicializada na declaração. <code>#define TAMANHO 100</code> permite redimensionar todos os vetores mudando
+uma linha. Sequências de escape: <code>\a \b \n \v \t \r \&#39; \&quot; \\ \f</code>. Notação científica:
+<code>5.0e10</code>.</li>
+<li><strong>Ideias de exemplos:</strong> imprimir <code>&quot;Hello \\ World&quot;</code> e <code>&quot;\&quot;Hello World\&quot;&quot;</code>.</li>
+<li><strong>Ideias de exercícios:</strong> escrever um <code>printf</code> que produza exatamente: <code>Caminho: C:\temp\novo</code> e
+outra linha com aspas. Resposta: <code>printf(&quot;Caminho: C:\\temp\\novo\n\&quot;ok\&quot;\n&quot;);</code></li>
+</ul>
+<h3>0005-printf</h3>
+<ul>
+<li><strong>Conceitos-chave (básico, cap. 2):</strong> string de formato + lista de valores na mesma ordem;
+<code>%c %d %i %u %f %s %p %e</code>; texto livre antes/entre/depois dos especificadores; <code>printf</code> <strong>não</strong> usa
+<code>&amp;</code>. <code>putchar</code> escreve um caractere (aceita int: <code>putchar(65)</code> imprime <code>A</code>).</li>
+<li><strong>Conceitos-chave (avançado, cap. 12):</strong> formato completo <code>%[flag][largura][.precisão][comprimento]tipo</code>.
+Flags: <code>-</code> (alinha à esquerda), <code>+</code> (sempre mostra sinal), espaço, <code>#</code> (prefixo <code>0</code>/<code>0x</code> em
+octal/hex; força ponto decimal), <code>0</code> (completa com zeros). Largura pode vir de variável: <code>%*d</code>
+(<code>printf(&quot;%*d&quot;, largura, n)</code>). Precisão: em real = casas decimais; em inteiro = mínimo de dígitos
+com zeros (<code>%.8d</code> de 125 → <code>00000125</code>); em <code>%g</code> = dígitos significativos; em string = máximo de
+caracteres (<code>%.3s</code> de &quot;Meu programa C&quot; → <code>Meu</code>); também via <code>%.*f</code>. <code>%%</code> imprime <code>%</code>. <code>%o %x %X %g %G</code>. Comprimento <code>h</code>, <code>l</code>, <code>L</code>. <code>printf</code> retorna o nº de caracteres escritos (negativo se erro).
+Uma string longa pode continuar na linha seguinte com <code>\</code> no fim.</li>
+<li><strong>Pegadinhas:</strong> <code>%d</code> com <code>unsigned</code> acima de INT_MAX mostra negativo; imprimir endereço com <code>%x</code>
+ou <code>%d</code> em vez de <code>%p</code> (errado em 64 bits); <code>%c</code> com <code>char</code> e <code>%d</code> com o mesmo <code>char</code> mostram letra
+× código ASCII.</li>
+<li><strong>Ideias de exemplos:</strong> tabela de preços alinhada: <code>printf(&quot;%-10s|%8.2f\n&quot;, nome, preco);</code>;
+&quot;Juros de 25%%&quot;; mostrar 125 em decimal/octal/hex com e sem <code>#</code>.</li>
+<li><strong>Ideias de exercícios:</strong> prever a saída de <code>printf(&quot;[%5d][%-5d][%05d][%+d]&quot;, 5,5,5,5)</code> →
+<code>[    5][5    ][00005][+5]</code>; imprimir <code>123.45678</code> com <code>%.3f</code>, <code>%.5e</code>, <code>%.5g</code>.</li>
+</ul>
+<h3>0006-scanf</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> cada variável lida leva <code>&amp;</code> (scanf precisa do endereço); <code>%d%d</code> e <code>%d %d</code> são
+equivalentes (espaços em branco são ignorados); usuário pode separar com espaço ou ENTER.
+Caracteres fixos no formato precisam ser digitados e são descartados: <code>scanf(&quot;%d/%d/%d&quot;, &amp;d,&amp;m,&amp;a)</code>
+para datas. <code>getchar()</code> lê um caractere e devolve <code>int</code> (EOF em erro).
+<strong>Avançado:</strong> retorno = nº de itens lidos (ou EOF); <code>%*d</code> lê e descarta (ex.: &quot;nome idade curso&quot;
+guardando só nome e curso); largura máxima (<code>%2d</code> para dia; <code>%10s</code> num <code>char[11]</code> evita estouro);
+<em>scanset</em>: <code>%[aeiou]</code> só aceita vogais, <code>%[A-Z0-9]</code> intervalos; para no primeiro caractere fora
+da lista; <code>%i</code> aceita <code>0x..</code> e octal; modificadores <code>h</code>, <code>l</code>, <code>L</code> (<code>%lf</code> para double!).</li>
+<li><strong>Pegadinhas:</strong> esquecer <code>&amp;</code>; ler <code>double</code> com <code>%f</code> (a apostila faz isso num exemplo, e está errado:
+é <code>%lf</code>); ler <code>char</code> com <code>%d</code> (a apostila sugere, mas escreve 4 bytes num <code>char</code>: UB); sobras no
+buffer depois de <code>%d</code> atrapalham <code>%c</code>/<code>gets</code> seguintes. <strong>A apostila recomenda <code>fflush(stdin)</code> e
+<code>setbuf(stdin, NULL)</code> para &quot;limpar o buffer&quot;: ambos errados</strong> (<code>fflush</code> em entrada é indefinido;
+<code>setbuf</code> só muda o modo de buffer, a explicação dada é falsa). Ensinar: <code>scanf(&quot; %c&quot;, &amp;c)</code> ou laço
+<code>while ((c = getchar()) != &#39;\n&#39; &amp;&amp; c != EOF);</code>.</li>
+<li><strong>Ideias de exercícios:</strong> ler data <code>dd/mm/aaaa</code> e imprimir <code>aaaa-mm-dd</code>; ler &quot;Ana 20 Computação&quot;
+com <code>%s %*d %s</code>; validar retorno do scanf (repetir até ler um inteiro).</li>
+</ul>
+<h3>0007-aritmetica</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>+ - * / %</code>; menos unário inverte sinal; <code>/</code> entre inteiros descarta a parte
+fracionária (<code>5/4</code> = 1, <code>5/4.0</code> = 1.25); <code>%</code> só para inteiros; precedência segue a matemática,
+parênteses forçam ordem. Tabela grande de precedência no fim do cap. 2.</li>
+<li><strong>Pegadinhas:</strong> <code>float x = 5/4;</code> dá 1.000000 (a divisão acontece antes da conversão). A tabela de
+precedência da apostila coloca pré-incremento <strong>acima</strong> de <code>()</code> e <code>[]</code>, o que está errado (pós-fixos
+têm a maior precedência).</li>
+<li><strong>Ideias de exercícios:</strong> média de 3 notas inteiras: por que <code>(a+b+c)/3</code> erra e <code>(a+b+c)/3.0</code>
+acerta?</li>
+</ul>
+<h3>0008-conversao</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> atribuição entre tipos diferentes converte para o tipo da esquerda, podendo
+perder informação: <code>char ch = 65;</code> → &#39;A&#39;; <code>int x = 25.1;</code> → 25; <code>float f = ch;</code> → 65.0. Cast
+explícito <code>(tipo)expressão</code>: <code>y = (int)(65.5/10.0)</code> → 6.0.</li>
+<li><strong>Ideias de exemplos:</strong> o exemplo <code>x = f/10.0</code> × <code>y = (int)(f/10.0)</code> com f = 65.5 (6.55 × 6.00).</li>
+</ul>
+<h3>0009-atribuicao</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>=</code> copia o valor da direita para a variável da esquerda (<code>5 = x</code> e
+<code>y + 5 = x</code> são erros); atribuição múltipla <code>x = y = z = 5</code> (da direita para a esquerda);
+compostos <code>+= -= *= /= %= &amp;= |= ^= &lt;&lt;= &gt;&gt;=</code> (<code>x += 10*y</code> ≡ <code>x = x + 10*y</code>); <code>++x</code> incrementa antes
+de usar, <code>x++</code> depois (<code>y = ++x</code> → x=11,y=11; <code>y = x++</code> → x=11,y=10). Operador vírgula:
+<code>x = (y = 2, y + 3)</code> → x = 5; vírgula separa, ponto e vírgula termina.</li>
+<li><strong>Pegadinhas:</strong> a apostila mostra <code>*p = (*p)++;</code> e <code>index = (index==3) ? 0 : ++index;</code>: ambos
+modificam a mesma variável duas vezes sem ponto de sequência (comportamento indefinido). Corrigir
+para <code>(*p)++;</code> e <code>index = (index + 1) % 4;</code>.</li>
+<li><strong>Ideias de exercícios:</strong> prever x e y após <code>x=10; y = x++ + 1;</code> (x=11, y=11).</li>
+</ul>
+<h3>0010-math</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> lista de <code>math.h</code>: trigonométricas (radianos), hiperbólicas, <code>exp</code>, <code>log</code>,
+<code>log10</code>, <code>modf</code>, <code>pow</code>, <code>sqrt</code>, <code>ceil</code>, <code>floor</code>, <code>fabs</code>, <code>fmod</code>. <code>stdlib.h</code>: <code>abs</code>, <code>labs</code>,
+<code>div</code>, <code>ldiv</code>.</li>
+<li><strong>Ideias de exercícios:</strong> usar <code>modf</code> para separar parte inteira e fracionária de 3.75; <code>fmod(7.5, 2)</code>
+= 1.5.</li>
+</ul>
+<hr>
+<h2>02-condicionais</h2>
+<h3>0012-relacionais</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>&gt; &gt;= &lt; &lt;= == !=</code> devolvem 1 (verdadeiro) ou 0 (falso); em C qualquer valor
+≠ 0 é verdadeiro: <code>if (num)</code> ≡ <code>if (num != 0)</code>; <code>if (!num)</code> ≡ <code>if (num == 0)</code>. Condição pode
+misturar aritméticos, relacionais e lógicos (<code>x/2 &gt; y - 3</code>).</li>
+<li><strong>Pegadinhas:</strong> não existem <code>=&lt;</code>, <code>=&gt;</code> nem <code>&lt;&gt;</code> (este é do Pascal).</li>
+<li><strong>Ideias de exercícios:</strong> com x=5, y=3, avaliar <code>x &gt; 4</code>, <code>x == 4</code>, <code>x != y</code>, <code>x != y+2</code> → 1,0,1,0.</li>
+</ul>
+<h3>0013-logicos</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>&amp;&amp;</code>, <code>||</code>, <code>!</code> com tabela-verdade; intervalo 0 &lt; x &lt; 10 vira <code>x &gt; 0 &amp;&amp; x &lt; 10</code>.</li>
+<li><strong>Pegadinhas:</strong> escrever <code>0 &lt; x &lt; 10</code> em C compila mas não faz o que parece. (A apostila não fala
+de curto-circuito; completar com outra fonte.)</li>
+<li><strong>Ideias de exercícios:</strong> montar a tabela-verdade de <code>!a || b</code>.</li>
+</ul>
+<h3>0014-if / 0015-if-else</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>if</code> executa só o comando seguinte, a menos que haja bloco <code>{}</code>; <code>else</code> não
+tem condição (é o &quot;caso contrário&quot;); cada um tem seu próprio par de chaves.</li>
+<li><strong>Pegadinhas (todas com exemplo certo × errado):</strong> <code>if (num &gt; 10);</code>: o <code>;</code> vira o corpo do if e o
+printf roda sempre (compila sem erro!); <code>else (num != 10) {</code> é erro; <code>else;</code> também esvazia o
+else; usar <code>=</code> no lugar de <code>==</code> compila e quebra a lógica (o contrário dá erro de compilação).</li>
+<li><strong>Ideias de exemplos:</strong> &quot;número digitado é igual a 10?&quot; em versão certa e nas três versões erradas.</li>
+<li><strong>Ideias de exercícios:</strong> &quot;ache o erro&quot;: entregar 4 trechos com <code>;</code> após if, <code>else (cond)</code>, <code>=</code> no
+lugar de <code>==</code>, chaves faltando; pedir a saída para num = 3.</li>
+</ul>
+<h3>0016-else-if</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> if aninhado para três caminhos (igual/maior/menor que 10). O <code>else</code> liga-se
+ao <code>if</code> mais próximo sem else dentro do mesmo bloco, <strong>independente da indentação</strong>; para ligar ao
+de fora, isolar o interno com <code>{}</code>. Não existe &quot;else de else&quot;.</li>
+<li><strong>Ideias de exercícios:</strong> prever saída de <code>if (a&gt;0) if (b&gt;0) printf(&quot;A&quot;); else printf(&quot;B&quot;);</code> para
+a = −1, b = 5 (não imprime nada).</li>
+</ul>
+<h3>0017-ternario</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>cond ? expr1 : expr2</code>, típico em atribuição (<code>z = x &gt; y ? x : y</code>); pode
+chamar funções nos ramos.</li>
+<li><strong>Ideias de exemplos:</strong> contador circular 0,1,2,3,0,… (corrigido: <code>i = (i == 3) ? 0 : i + 1</code>).</li>
+</ul>
+<h3>0018-switch</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> compara uma variável inteira/char com constantes (<code>case</code>), <code>default</code>
+opcional; mais elegante que cadeia de if-else para igualdades. Sem <code>break</code> a execução &quot;cai&quot; nos
+cases seguintes. Se o primeiro comando de um case declara variável, envolver o case em <code>{}</code>
+(um salto não pode pular uma declaração no mesmo escopo).</li>
+<li><strong>Analogias/explicações boas:</strong> o fall-through como recurso: contagem regressiva por extenso:
+digitar 5 imprime &quot;Cinco, Quatro, …, Zero&quot; (cases de 9 a 0 sem break).</li>
+<li><strong>Ideias de exemplos:</strong> classificar pontuação (<code>.</code>, <code>,</code>, <code>:</code>, <code>;</code>); calculadora com <code>+ - * /</code>.</li>
+<li><strong>Ideias de exercícios:</strong> o exemplo de pontuação <strong>sem</strong> break: o que sai digitando <code>.</code>? (todas as
+mensagens, inclusive &quot;Não é pontuação&quot;).</li>
+</ul>
+<hr>
+<h2>03-repeticoes</h2>
+<h3>0020-while</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> testa antes, repete 0 ou mais vezes; atua só no comando seguinte sem <code>{}</code>.
+Laço infinito: falta condição de parada ou ela nunca é atingida (variável da condição não muda, ou
+muda no sentido errado).</li>
+<li><strong>Pegadinhas:</strong> <code>while (a &lt; b); { ... }</code>: laço infinito vazio.</li>
+<li><strong>Ideias de exercícios:</strong> imprimir os inteiros entre a e b (exclusivo) com while.</li>
+</ul>
+<h3>0021-do-while</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> executa ao menos uma vez; exige <code>;</code> após <code>while(cond)</code>. Uso típico: menu que
+repete enquanto opção inválida (<code>while (i &lt; 1 || i &gt; 3)</code>).</li>
+<li><strong>Ideias de exercícios:</strong> menu de 3 opções com validação; depois transformar em função <code>int menu()</code>.</li>
+</ul>
+<h3>0022-for</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> inicialização → teste → corpo → incremento → teste…; qualquer cláusula pode
+ser omitida mas os dois <code>;</code> ficam; sem condição = laço infinito; &quot;incremento&quot; pode ser qualquer
+atualização (<code>c = c + 2</code>, ou até <code>scanf</code>); vírgula permite duas variáveis
+(<code>for (i=0, j=100; i&lt;j; i++, j--)</code>); variável de controle pode ser <code>char</code> (<code>for (c=&#39;A&#39;; c&lt;=&#39;Z&#39;; c++)</code>).
+Comparação lado a lado for × while (soma de 1 a 10).</li>
+<li><strong>Ideias de exercícios:</strong> imprimir o alfabeto; i sobe de 0 e j desce de 100 até se cruzarem:
+quantas linhas? (50).</li>
+</ul>
+<h3>0023-break-continue</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>break</code> sai do laço/switch; <code>continue</code> pula para a próxima iteração (só em
+laços). <code>goto rótulo</code> (mesma função) existe, programação estruturada dispensa; único uso defendido:
+sair de laços aninhados.</li>
+<li><strong>Pegadinhas:</strong> a apostila escreve &quot;o comando break interrompe apenas aquela repetição&quot; no
+parágrafo do continue (troca de palavras).</li>
+<li><strong>Ideias de exemplos:</strong> ler opções até digitar 5, ignorando (continue) valores fora de 1..5.</li>
+<li><strong>Ideias de exercícios:</strong> três laços aninhados (i,j,k de 0 a 4) que param quando i=2, j=3, k=1:
+fazer com <code>goto</code>, depois sem goto (flag ou função com <code>return</code>).</li>
+</ul>
+<h3>0024-lacos-aninhados</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> laço dentro de laço para percorrer pares (linha, coluna); pode misturar tipos
+de laço.</li>
+<li><strong>Ideias de exemplos:</strong> matriz identidade 4×4 impressa com dois <code>for</code> e com dois <code>while</code>.</li>
+</ul>
+<h3>0025-padroes-de-laco</h3>
+<ul>
+<li><strong>Ideias de exemplos (cap. 5):</strong> soma de vetor, maior valor (começa com <code>lista[0]</code> e varre de 1),
+média (<code>soma / 5.0</code>), soma de matriz, impressão linha a linha.</li>
+</ul>
+<h3>0026-aleatorios</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> apenas listados (<code>rand</code>, <code>srand</code> em stdlib; <code>time</code>, <code>clock</code>, <code>difftime</code>,
+<code>CLOCKS_PER_SEC</code> em time.h). Sem exemplos; completar com outra fonte.</li>
+</ul>
+<hr>
+<h2>04-funcoes</h2>
+<h3>0028-funcoes</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> motivos: estruturar o programa em blocos e reutilizar código. Forma
+<code>tipo nome(parâmetros) { ... }</code>; definir antes do <code>main</code> ou declarar <strong>protótipo</strong> antes (nomes
+dos parâmetros são opcionais no protótipo). Funcionamento: chamada interrompe o fluxo, valores são
+copiados para os parâmetros, corpo executa, <code>return</code> devolve e o fluxo volta ao ponto da chamada.
+<code>return</code> encerra a função na hora (código depois dele nunca roda); <code>return;</code> em função <code>void</code>;
+vários <code>return</code> são permitidos (a apostila prefere um só, com variável auxiliar). Função não pode
+retornar vetor, mas pode retornar <code>struct</code> que contém vetor.</li>
+<li><strong>Analogias/explicações boas:</strong> função deve fazer só sua tarefa: cálculo do fatorial recebe n e
+devolve o resultado; <code>scanf</code>/<code>printf</code> ficam em quem chama (generalidade). Exceção legítima: função
+cujo objetivo é a interação (ex.: <code>menu()</code> que valida a opção).</li>
+<li><strong>Pegadinhas:</strong> <code>int soma(int x, y)</code> é erro: cada parâmetro precisa de tipo. <code>void f()</code> ×
+<code>void f(void)</code>: com parênteses vazios o compilador aceita <code>f(5)</code> sem reclamar; com <code>void</code> é erro.</li>
+<li><strong>Ideias de exercícios:</strong> extrair o fatorial do <code>main</code> para uma função; escrever <code>int maior(int,int)</code>
+com um e com dois <code>return</code>.</li>
+</ul>
+<h3>0029-parametros</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> em C tudo é passado por valor (cópia); alterar o parâmetro não altera a
+variável original (<code>soma_mais_um(x)</code>: antes 5, dentro 6, depois 5). Parâmetro é variável local.</li>
+<li><strong>Ideias de exercícios:</strong> prever a saída do exemplo <code>Troca(x, y)</code> por valor (dentro troca, fora
+não): ponte para ponteiros.</li>
+</ul>
+<h3>0030-escopo</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> escopo = onde e quando a variável vale. Global (fora de funções) vive o
+programa todo e é visível em todo lugar; local vive só no bloco <code>{}</code>. Variável local com mesmo nome
+<strong>oculta</strong> a global/externa; a declaração mais próxima vence. Exemplo célebre: x global = 5, depois
+<code>int x = 4</code> no main, depois bloco interno <code>int x = 3</code>, e de volta: saída 5, 4, 3, 4 (o primeiro
+printf vem antes da declaração local, por isso enxerga a global).
+<strong>Avançado (12.6):</strong> <code>auto</code> (padrão das locais), <code>extern</code> (avisa que a variável global foi definida
+em outro arquivo, não pode ser inicializada ali), <code>static</code> local (mantém valor entre chamadas; o
+exemplo imprime 0..9 em 10 chamadas), <code>static</code> em função/global (visível só no arquivo),
+<code>register</code> (dica de usar registrador; não aceita <code>&amp;</code>; compiladores ignoram).</li>
+<li><strong>Pegadinhas:</strong> evitar globais (qualquer parte altera, difícil manter, ocupam memória o tempo todo)
+e evitar nomes repetidos. <strong>Erro da apostila:</strong> afirma que <code>static</code> é &quot;o modo padrão&quot; das globais e
+usa <code>static y = 10;</code> sem tipo (int implícito é inválido desde C99). Correto: global sem <code>static</code>
+tem ligação externa; com <code>static</code> fica restrita ao arquivo.</li>
+<li><strong>Ideias de exercícios:</strong> prever a saída do exemplo 5/4/3/4; função <code>contaChamadas()</code> com <code>static</code>.</li>
+</ul>
+<h3>0031-pilha-de-chamadas</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> cada chamada guarda parâmetros, locais e endereço de retorno; na recursão isso
+é empilhado a cada chamada, por isso custa memória e tempo. Figura de fatorial(3) descendo
+(chamadas) e subindo (retornos).</li>
+</ul>
+<h3>0032-recursao / 0033-recursao-na-pratica</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> função que chama a si mesma; &quot;definição circular&quot;; dividir para conquistar.
+Dois cuidados: <strong>critério de parada</strong> (0! = 1) e <strong>parâmetro que muda</strong> a cada chamada (n−1).
+Versões recursiva e iterativa de fatorial e Fibonacci.</li>
+<li><strong>Analogias/explicações boas:</strong> a árvore de chamadas de <code>fibo(4)</code> e <code>fibo(5)</code> com os
+sub-cálculos repetidos destacados: &quot;elegância não é eficiência&quot;.</li>
+<li><strong>Ideias de exercícios:</strong> contar quantas chamadas <code>fibo(5)</code> faz (15); escrever Fibonacci
+iterativo com a, b, c.</li>
+</ul>
+<h3>0034-modulos</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>#include &quot;arquivo.h&quot;</code> com caminho; <code>extern</code> para compartilhar global entre
+arquivos; <code>static</code> para esconder função no arquivo. (Não mostra include guards explicitamente, mas
+mostra <code>#ifndef ... #define ... #endif</code>, que é a base.)</li>
+</ul>
+<h3>0035-preprocessador</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> diretivas começam com <code>#</code>, uma por linha. <code>#define</code> em três usos: símbolo
+(só para testar com <code>#ifdef</code>), constante, macro com parâmetros. <code>#undef</code> apaga para redefinir.
+<code>#ifdef/#ifndef/#if/#elif/#else/#endif</code>. Macro multilinha com <code>\</code> no fim. <code>#x</code> transforma
+parâmetro em string; <code>x ## y</code> cola tokens (<code>concatena(print, f)</code> vira <code>printf</code>). <code>#line</code>, <code>#error</code>
+(aborta a compilação com mensagem, ex.: &quot;PI não definido&quot;), <code>#pragma</code> (específico do compilador,
+ignorado se desconhecido). Macros pré-definidas <code>__LINE__</code>, <code>__FILE__</code>, <code>__DATE__</code>, <code>__TIME__</code>.</li>
+<li><strong>Analogias/explicações boas:</strong> &quot;macro não é função, é substituição de texto&quot;: <code>prod1(a+2, b)</code> com
+<code>x*y</code> vira <code>a+2*b</code> = 5; com <code>(x)*(y)</code> vira <code>(a+2)*(b)</code> = 6 (a = 1, b = 2).</li>
+<li><strong>Pegadinhas:</strong> parâmetros sem parênteses; a apostila põe <code>;</code> no fim do <code>#define prod1</code> (gera <code>;;</code>,
+mau hábito). Macro de troca genérica <code>TROCA(a,b,tipo)</code> precisa de <code>{}</code> para criar escopo do
+temporário. <strong>Erro da apostila:</strong> diz que <code>#if</code> não resolve expressões matemáticas: resolve
+expressões inteiras constantes (<code>#if TAMANHO &gt; 100</code> é exatamente isso).</li>
+<li><strong>Ideias de exercícios:</strong> prever c e d no exemplo prod1/prod2; escrever <code>QUADRADO(x)</code> e testar com
+<code>QUADRADO(1+2)</code>; usar <code>#ifndef TAMANHO / #define TAMANHO 100</code>; macro <code>DEBUG</code> que imprime
+<code>__FILE__:__LINE__</code>.</li>
+</ul>
+<hr>
+<h2>05-vetores-e-strings</h2>
+<h3>0037-vetores</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> motivação: 5 alunos com 5 variáveis já é ruim, 100 é inviável → um nome só
+com índice. <code>tipo nome[N]</code>, índices de 0 a N−1; cada posição é uma variável comum (scanf com
+<code>&amp;notas[i]</code>); acesso em tempo igual para qualquer posição; o nome indica onde começa e o índice
+quantas posições pular (por isso começa em 0). Inicialização com <code>{}</code> só na declaração; tamanho
+pode ser omitido (<code>int v[] = {1,...,10}</code> → 10). Vetor não se atribui a vetor (<code>v1 = v</code> é erro):
+copiar elemento a elemento.</li>
+<li><strong>Pegadinhas:</strong> C não confere limites: <code>notas[100]</code> ou <code>notas[-1]</code> acessam memória de outras
+variáveis sem aviso.</li>
+<li><strong>Ideias de exemplos:</strong> o problema &quot;imprimir alunos com nota acima da média&quot; (motivador).</li>
+<li><strong>Ideias de exercícios:</strong> ler 5 notas, calcular média e listar as acima da média.</li>
+</ul>
+<h3>0038-vetores-e-funcoes</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> vetor é sempre passado por &quot;referência&quot; (vai o endereço do 1º elemento),
+evita cópia e a função altera o original; passar o tamanho em outro parâmetro.
+<code>int *m</code>, <code>int m[]</code>, <code>int m[5]</code> são equivalentes no parâmetro (o 5 é ignorado). Na chamada, só o
+nome, sem colchetes.</li>
+<li><strong>Ideias de exercícios:</strong> <code>void imprime(int *v, int n)</code>; função que dobra todos os elementos.</li>
+</ul>
+<h3>0039-matrizes</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>tipo m[L][C]</code>; dois índices; multidimensionais com um par de colchetes por
+dimensão; armazenamento linear, <strong>o índice mais à direita varia mais rápido</strong>; inicialização com
+um único <code>{}</code> (preenche linha a linha) ou com chaves aninhadas; só a 1ª dimensão pode ficar sem
+tamanho (<code>int m[][2] = {1,...,10}</code> → 5 linhas). Em parâmetro precisa de todas as dimensões menos a
+primeira (<code>int m[][5]</code>): matriz é &quot;vetor de vetores&quot; e o compilador precisa do tamanho de cada
+linha. Pode-se passar <code>&amp;mat[0][0]</code> e tratar como vetor 1D de L·C elementos.</li>
+<li><strong>Ideias de exercícios:</strong> zerar um cubo 5×5×5; somar matriz 3×3; imprimir matriz 3×2 via função
+com <code>int m[][2]</code> e via ponteiro 1D.</li>
+</ul>
+<h3>0040-caracteres</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>char</code> guarda número pequeno ou código ASCII; <code>%c</code> × <code>%d</code> do mesmo char;
+<code>putchar(65)</code> → <code>A</code>. Lista de <code>ctype.h</code>: <code>isalnum isalpha iscntrl isdigit islower isprint ispunct isspace isupper isxdigit tolower toupper</code>. <code>enum</code> pode receber caracteres (<code>novalinha = &#39;\n&#39;</code>).</li>
+</ul>
+<h3>0041-strings</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> string = vetor de <code>char</code> terminado em <code>&#39;\0&#39;</code>; o <code>&#39;\0&#39;</code> separa o texto do lixo
+nas posições não usadas; num <code>char s[50]</code> cabem 49 letras. Inicializar com aspas duplas já põe o
+<code>&#39;\0&#39;</code> (<code>char texto[] = &quot;Linguagem C.&quot;</code> tem 13 posições). Acesso por índice (<code>str[0] = &#39;L&#39;</code>
+troca &quot;Teste&quot; por &quot;Leste&quot;). String não se atribui com <code>=</code> nem se compara com <code>==</code>.
+<code>strlen</code> (conta até o <code>&#39;\0&#39;</code>, não o tamanho do vetor: &quot;teste&quot; num <code>char[15]</code> → 5), <code>strcpy(dest, orig)</code>, <code>strcat(dest, orig)</code> (a 1ª letra de orig ocupa o lugar do <code>&#39;\0&#39;</code> de dest), <code>strcmp</code> (0 se
+iguais; diferencia maiúsculas). Cópia manual com laço até <code>&#39;\0&#39;</code> e pôr o <code>&#39;\0&#39;</code> no fim.
+Catálogo de <code>string.h</code>: <code>memcpy memmove strncpy strncat memcmp strncmp memchr strchr strcspn strpbrk strrchr strspn strtok memset strerror</code>.</li>
+<li><strong>Pegadinhas:</strong> destino pequeno em <code>strcpy</code>/<code>strcat</code> → estouro de buffer; aspas duplas para string,
+simples para char.</li>
+<li><strong>Ideias de exemplos:</strong> &quot;bom&quot; + &quot;dia&quot; com strcat (sem espaço! → &quot;bomdia&quot;).</li>
+<li><strong>Ideias de exercícios:</strong> implementar <code>meu_strlen</code> e <code>meu_strcpy</code>; comparar senha com <code>strcmp</code>.</li>
+</ul>
+<h3>0042-lendo-strings</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>scanf(&quot;%s&quot;, str)</code> sem <code>&amp;</code> lê só até o primeiro espaço; <code>fgets(str, tam, stdin)</code> lê até ENTER ou tam−1 caracteres e <strong>guarda o <code>&#39;\n&#39;</code></strong>; <code>fputs(str, stdout)</code>.</li>
+<li><strong>Pegadinhas:</strong> a apostila apresenta <code>gets</code> como &quot;alternativa mais eficiente&quot; e a usa em dezenas
+de exemplos (inclusive <code>gets</code> depois de <code>scanf(&quot;%d&quot;)</code>, que lê a linha vazia). <strong>gets foi removida
+do C11</strong>; no curso, sempre <code>fgets</code> + remover o <code>&#39;\n&#39;</code> (<code>str[strcspn(str, &quot;\n&quot;)] = &#39;\0&#39;</code>).
+Não ensinar <code>setbuf(stdin, NULL)</code>.</li>
+<li><strong>Ideias de exercícios:</strong> ler nome completo com fgets e imprimir quantas letras tem (sem contar o
+<code>&#39;\n&#39;</code>).</li>
+</ul>
+<hr>
+<h2>06-ponteiros</h2>
+<h3>0044-memoria</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> toda informação está na memória e tem endereço; o programador pensa no nome,
+o computador no endereço. <code>&amp;x</code> dá o endereço; <code>%p</code> imprime.</li>
+<li><strong>Analogias/explicações boas:</strong> ponteiro para ponteiro = &quot;anotar o endereço de um papel que contém o
+endereço da casa do seu amigo&quot; (vale também para ponteiro simples: o ponteiro é o papel com o
+endereço).</li>
+</ul>
+<h3>0045-ponteiros</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> variável guarda valor; ponteiro guarda endereço. <code>tipo *p;</code>: o tipo diz para
+que tipo ele pode apontar. <code>*</code> tem três papéis conforme o contexto: multiplicação (binário),
+declaração, acesso ao conteúdo. Ponteiro não inicializado aponta para lugar indefinido (UB);
+<code>NULL</code> = endereço de lugar nenhum (≠ não inicializado). <code>p = &amp;count; *p = 12;</code> muda <code>count</code>.
+Atribuir endereço de <code>float</code> a <code>int*</code> compila mas lê lixo (1101004800); com cast <code>*(float*)p</code>
+funciona. Ponteiros do mesmo tipo podem ser atribuídos entre si. Pode-se pôr um endereço literal
+(<code>0x3F8</code>), útil em microcontroladores, perigoso em PC.</li>
+<li><strong>Pegadinhas:</strong> <code>int soma, *p2;</code>: o <code>*</code> vale só para p2. Na apostila os exemplos de endereço
+literal fazem <code>int *p = 0x5DC;</code> sem cast (gera aviso) e imprimem ponteiro com <code>%d</code> (errado).</li>
+<li><strong>Ideias de exercícios:</strong> tabela &quot;o que vale&quot; para <code>x</code>, <code>&amp;x</code>, <code>p</code>, <code>*p</code>, <code>&amp;p</code> após <code>p = &amp;x</code>.</li>
+</ul>
+<h3>0046-passagem-por-referencia</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> passar o endereço (<code>&amp;x</code> na chamada) e receber ponteiro (<code>int *n</code>), usando
+<code>*n</code> dentro; é o que <code>scanf</code> faz, por isso o <code>&amp;</code>. Troca (swap) por valor (não funciona fora) ×
+por referência (funciona): saídas &quot;Antes 2 e 3 / Dentro 3 e 2 / Depois 2 e 3&quot; × &quot;... Depois 3 e 2&quot;.
+Struct por referência: <code>(*p).x</code>: os parênteses são obrigatórios porque <code>.</code> tem precedência maior
+que <code>*</code> (<code>*p.x</code> significa <code>*(p.x)</code>); <code>p-&gt;x</code> substitui <code>(*p).x</code>.</li>
+<li><strong>Ideias de exercícios:</strong> <code>void minmax(int *v, int n, int *min, int *max)</code>; função que zera uma
+struct ponto recebida por ponteiro, nas duas notações.</li>
+</ul>
+<h3>0047-ponteiros-e-vetores</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> nome do vetor = endereço do 1º elemento (<code>p = vet</code> ≡ <code>p = &amp;vet[0]</code>);
+<code>p[i]</code> ≡ <code>*(p+i)</code>; <code>&amp;vet[i]</code> ≡ <code>vet + i</code>. Aritmética só soma/subtrai inteiros e anda em unidades
+do tipo (int* +1 → +4 bytes; double* +1 → +8). <code>void*</code> anda de 1 em 1 byte (extensão do GCC; no
+padrão é proibido). Comparação: <code>==</code>/<code>!=</code> (mesma posição), <code>&lt; &gt;</code> (mais adiante na memória; só faz
+sentido dentro do mesmo vetor). Matriz via ponteiro: <code>*(*(mat + l) + c)</code> ou <code>int *p = &amp;mat[0][0]</code> percorrendo L·C posições.</li>
+<li><strong>Pegadinhas:</strong> comparar com <code>&gt;</code> ponteiros de variáveis diferentes (como faz a apostila) não tem
+significado garantido.</li>
+<li><strong>Ideias de exercícios:</strong> percorrer vetor com <code>*(p+i)</code> e com <code>p++</code>; somar matriz 2×2 com um único
+laço via ponteiro.</li>
+</ul>
+<h3>0048-ponteiros-e-strings</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> ponteiro pode percorrer string; vetor de ponteiros (<code>int *pvet[2]</code>) guarda
+endereço de variável ou de outro vetor (<code>pvet[1] = y; pvet[1][1]</code>).
+<strong>Avançado:</strong> <code>int (*p3)[10]</code> = ponteiro para vetor de 10 ints; <code>int *p4[10]</code> = vetor de 10
+ponteiros para int.</li>
+<li><strong>Pegadinhas:</strong> a apostila escreve <code>typedef vetor int[10];</code> (sintaxe errada; o certo é
+<code>typedef int vetor[10];</code>).</li>
+</ul>
+<h3>0049-ponteiro-para-ponteiro</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>int **p2 = &amp;p;</code>: <code>*p2</code> é o endereço de x, <code>**p2</code> é x; nº de <code>*</code> =
+níveis; evitar muitos níveis. Base para matriz dinâmica (cada nível = uma dimensão).</li>
+<li><strong>Ideias de exemplos:</strong> <code>char letra = &#39;a&#39;</code> acessada por <code>*ptrChar</code>, <code>**ptrPtrChar</code>, <code>***ptrPtr</code>.</li>
+</ul>
+<h3>0050-ponteiro-para-funcao</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> função também está na memória; o nome da função é seu endereço (<code>p = max;</code>
+sem <code>&amp;</code>); declaração <code>int (*p)(int, int);</code>, parênteses obrigatórios (sem eles é função que
+retorna <code>int*</code>); só aponta para funções com o mesmo protótipo; chamar <code>p(x, y)</code>; pode ser NULL;
+passar como parâmetro: <code>int executa(int (*op)(int,int), int x, int y)</code>; vetor de ponteiros para
+função: <code>int (*ops[4])(int,int) = {soma, sub, prod, div}</code>.</li>
+<li><strong>Analogias/explicações boas:</strong> motivação: uma ordenação genérica que recebe a função de
+comparação (ponte para <code>qsort</code>).</li>
+<li><strong>Ideias de exemplos:</strong> calculadora: lê <code>+ - * /</code>, escolhe a função num switch (ou índice no
+vetor de funções) e chama <code>ops[i](x, y)</code>.</li>
+<li><strong>Ideias de exercícios:</strong> reescrever a calculadora sem switch, mapeando o caractere para índice.</li>
+</ul>
+<h3>0051-void-generico</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>void *pp</code> aceita endereço de qualquer tipo (até de ponteiro), mas não pode
+ser desreferenciado sem cast: <code>*(int*)pp</code>. <code>malloc</code> retorna <code>void*</code> porque não sabe o uso.</li>
+</ul>
+<hr>
+<h2>07-memoria-dinamica</h2>
+<h3>0053-pilha-e-heap</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> motivação: salários de uma empresa: <code>float salarios[1000]</code> desperdiça se
+houver menos e não cabe se houver mais; alocação dinâmica pede memória em tempo de execução e
+devolve o endereço num ponteiro. Variáveis comuns são liberadas automaticamente; dinâmicas não.
+<code>exit(1)</code> encerra o programa (fecha arquivos abertos). Locais ficam na pilha (dito no capítulo de
+funções).</li>
+</ul>
+<h3>0054-malloc-free</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>malloc(nbytes)</code> → <code>void*</code> (ou NULL); sempre <code>n * sizeof(tipo)</code> (1000 bytes
+= 1000 chars, mas 250 ints); testar <code>if (p == NULL)</code>; usar como vetor (<code>p[i]</code>). <code>free(p)</code> com o
+ponteiro do início do bloco; o sistema sabe o tamanho por uma tabela interna. Depois de <code>free</code>, o
+ponteiro continua com o endereço antigo (pode &quot;funcionar&quot; e ler lixo) → fazer <code>p = NULL</code>.
+<code>sizeof</code> funciona com tipo ou variável.</li>
+<li><strong>Pegadinhas:</strong> usar memória após <code>free</code> (a apostila mostra que &quot;nenhum erro ocorre&quot;, um UB
+silencioso, ótimo para discutir); esquecer de liberar. A apostila chama <code>sizeof</code> de &quot;função&quot; (é
+operador) e tem o typo &quot;50 * 4 bytes&quot; para 5 ints.</li>
+<li><strong>Ideias de exercícios:</strong> ler N, alocar N notas, calcular média, liberar.</li>
+</ul>
+<h3>0055-calloc-realloc</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>calloc(n, tam)</code> recebe quantidade e tamanho separados e zera todos os bits
+(comparar impressão de <code>calloc</code> × <code>malloc</code> não inicializado); <code>realloc(p, novoTam)</code> aumenta ou
+diminui, pode mover o bloco (copia o conteúdo), área nova não inicializada; <code>realloc(NULL, t)</code> ≡
+<code>malloc(t)</code>; se falhar, devolve NULL e o bloco antigo fica intacto.</li>
+<li><strong>Pegadinhas:</strong> <code>p = realloc(p, t)</code> (como na apostila) perde o bloco original se falhar → usar
+ponteiro temporário. <code>realloc(p, 0)</code> como <code>free</code> é dependente da implementação (e indefinido no
+C23); não ensinar.</li>
+<li><strong>Ideias de exemplos:</strong> vetor 1..5, encolhe para 3, cresce para 10 e imprime (as 7 novas posições
+com lixo).</li>
+<li><strong>Ideias de exercícios:</strong> ler números até 0, dobrando a capacidade com realloc quando encher.</li>
+</ul>
+<h3>0056-matriz-dinamica (destaque da apostila)</h3>
+<ul>
+<li><strong>Conceitos-chave (três soluções):</strong><ol>
+<li><strong>Vetor 1D</strong> de L·C elementos, acesso <code>p[i*ncol + j]</code> (perde-se <code>p[i][j]</code>; um <code>malloc</code>, um
+<code>free</code>).</li>
+<li><strong><code>int **p</code></strong>: <code>malloc(L * sizeof(int*))</code> para as linhas e, para cada linha,
+<code>malloc(C * sizeof(int))</code>. Mantém <code>p[i][j]</code>. Liberar na ordem inversa: cada <code>p[i]</code> e depois
+<code>p</code> (se liberar <code>p</code> primeiro perde os endereços das linhas). Permite linhas de tamanhos
+diferentes: matriz triangular inferior com <code>malloc((i+1)*sizeof(int))</code>.</li>
+<li><strong>Bloco único + vetor de ponteiros</strong>: <code>v = malloc(L*C*sizeof(int))</code>, <code>p = malloc(L*sizeof(int*))</code>,
+<code>p[i] = v + i*C</code>. Mantém <code>p[i][j]</code>, só dois <code>malloc</code> e dois <code>free</code>, memória contígua.</li>
+</ol>
+</li>
+<li><strong>Analogias/explicações boas:</strong> &quot;o que se aloca tem sempre um nível de ponteiro a menos que o
+ponteiro que recebe&quot; (int** recebe vetor de int*; int* recebe vetor de int).</li>
+<li><strong>Ideias de exercícios:</strong> implementar as três para uma matriz 3×4 lida do teclado e comparar o nº
+de malloc/free; triângulo de Pascal com matriz triangular.</li>
+</ul>
+<h3>0057-erros-de-memoria</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> ponteiro solto (<em>dangling</em>) após free; ponteiro não inicializado; usar
+memória liberada; esquecer free. (Sem valgrind/ASan; completar.)</li>
+</ul>
+<hr>
+<h2>08-structs</h2>
+<h3>0059-struct</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> agrupa variáveis de tipos possivelmente diferentes sob um nome (&quot;variável que
+contém variáveis&quot;); declarada em geral no escopo global; <code>;</code> obrigatório após <code>}</code>; pode declarar
+variáveis junto (<code>} cad1, cad2;</code>); declarar com <code>struct cadastro c;</code>; acesso com <code>.</code>; campos string
+recebem com <code>strcpy</code>. Inicialização <code>{&quot;Carlos&quot;, 18, &quot;Avenida Brasil&quot;, 1082}</code> na ordem dos campos;
+omitidos viram 0/&quot;&quot; . Atribuição <code>p1 = p2</code> copia tudo (inclusive vetores internos!) mas só entre
+variáveis do <strong>mesmo tipo struct</strong> (struct ponto × struct novo_ponto com campos iguais = erro).
+Struct aninhada: <code>c.ender.rua</code>.</li>
+<li><strong>Ideias de exemplos:</strong> comparar declarar 4 cadastros com 16 variáveis soltas × <code>struct cadastro c1, c2, c3, c4</code> × <code>struct cadastro c[4]</code>.</li>
+<li><strong>Ideias de exercícios:</strong> struct <code>endereco</code> dentro de <code>cadastro</code>; ler e imprimir.</li>
+</ul>
+<h3>0060-typedef</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>typedef</code> cria sinônimo, não tipo novo (<code>typedef int inteiro;</code>: int e
+inteiro se misturam livremente). Uso principal: <code>typedef struct cadastro cad;</code> ou tudo junto
+<code>typedef struct { ... } cad;</code> (nome da struct pode ser omitido).</li>
+<li><strong>Pegadinhas:</strong> sinônimos que escondem demais confundem: <code>typedef unsigned int positivos[5];</code>:
+<code>positivos v;</code> não deixa claro que v é vetor.</li>
+</ul>
+<h3>0061-vetor-de-structs</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>struct cadastro c[4]</code>; acesso <code>c[i].nome</code> (índice antes do ponto);
+<code>c[1] = c[2]</code> é válido.</li>
+</ul>
+<h3>0062-ponteiro-para-struct</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> struct por valor (cópia inteira) ou só um campo (<code>imprime_valor(p1.x)</code>); por
+referência com <code>(*p).x</code> ou <code>p-&gt;x</code>. Função pode retornar struct (truque para &quot;retornar vetor&quot;).</li>
+<li><strong>Pegadinhas:</strong> exemplo <code>imprime_valor(int x)</code> da apostila usa <code>p.x</code> dentro da função (não
+compila).</li>
+</ul>
+<h3>0063-enum</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> lista de constantes inteiras com nome; primeira vale 0, cada uma vale a
+anterior + 1; pode fixar valores (<code>Domingo = 1, ..., Quarta = 7, Quinta</code> → 8); aceita caracteres
+(<code>&#39;\n&#39;</code>); como são inteiros, <code>s1 + s2</code> compila (mesmo sem sentido).</li>
+<li><strong>Ideias de exercícios:</strong> prever valores de <code>enum {A=1, B, C, D=7, E, F}</code> → 1,2,3,7,8,9.</li>
+</ul>
+<h3>0064-union</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> sintaxe igual à struct, mas todos os campos compartilham a mesma memória; o
+tamanho é o do maior campo; só um valor válido por vez (alterar um altera os outros). Exemplo:
+<code>union { short x; unsigned char c; }</code> com x = 1545 → c = 9 (byte baixo); c = 69 → x = 1605. Uso
+típico: acessar os bytes de um tipo maior (<code>unsigned char c[2]</code> sobre um <code>short</code>).</li>
+<li><strong>Pegadinhas:</strong> o resultado depende da ordem dos bytes da máquina (little-endian).</li>
+<li><strong>Ideias de exercícios:</strong> explicar 1545 = 6·256 + 9 e 1605 = 6·256 + 69.</li>
+</ul>
+<h3>0065-bits</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>~ &amp; | ^ &lt;&lt; &gt;&gt;</code> sobre inteiros (não em float/double, cuja representação é
+mantissa × 2^expoente). Com x = 44 (<code>00101100</code>) em <code>unsigned char</code>: <code>~x</code> = 211, <code>x &amp; 167</code> = 36,
+<code>x | 129</code> = 173, <code>x ^ 167</code> = 139, <code>x &lt;&lt; 2</code> = 176, <code>x &gt;&gt; 2</code> = 11; deslocar 1 posição ≈ ×2 ou ÷2.
+Compostos <code>&amp;= |= ^= &lt;&lt;= &gt;&gt;=</code>. <strong>Campos de bits</strong> (12.7): membros de struct/union com largura em
+bits (<code>unsigned int ligado:1; signed int valor:4; unsigned int :3;</code>); campo sem nome preenche
+(<em>padding</em>); largura 0 força alinhamento; não têm endereço (sem <code>&amp;</code>, ponteiro, vetor ou <code>sizeof</code>);
+<code>signed</code> de 1 bit não faz sentido; preferir <code>unsigned</code>. Usos: flags, hardware, formatos de arquivo.</li>
+<li><strong>Ideias de exercícios:</strong> fazer as contas de 44 com 167/129 à mão em binário; struct <code>status</code> com
+campo ligado e valor de −8 a 7.</li>
+</ul>
+<hr>
+<h2>09-arquivos</h2>
+<h3>0067-arquivos-texto</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> arquivo = sequência de bytes em memória secundária; vantagens: persistência,
+volume, acesso aleatório. <strong>Texto</strong> (legível, convertido para caracteres, maior e mais lento; <code>\n</code>
+pode virar <code>\r\n</code>) × <strong>binário</strong> (cópia da memória, sem conversão). Ex.: o int 12345678 ocupa 4
+bytes em binário e 8 em texto. <code>FILE *fp</code> = ponteiro para a estrutura/buffer do arquivo.
+<code>fopen(nome, modo)</code> → NULL em erro; modos <code>r w a</code> (+<code>b</code>, +<code>+</code>): <code>w</code> cria/apaga, <code>a</code> acrescenta,
+<code>r</code> exige existência. Caminho absoluto × relativo; no Windows escrever <code>\\</code> na string. Sempre
+testar NULL e <code>exit(1)</code>. <code>fclose</code> grava o que restou no buffer (0 = sucesso).
+<code>fputc/fgetc</code> (um caractere; <code>fgetc</code> devolve <strong>int</strong> para caber o <code>EOF</code>, que vale −1 em muitos
+sistemas); <code>stdin</code>, <code>stdout</code>, <code>stderr</code> são arquivos já abertos. <code>fputs</code> (não acrescenta <code>\n</code> nem
+espaço: &quot;Hello&quot;+&quot;World&quot; vira &quot;HelloWorld&quot;), <code>fgets</code> (para no <code>\n</code>, que fica na string, ou em
+tam−1; NULL no fim). <code>fprintf/fscanf</code> = printf/scanf com <code>FILE*</code> na frente.</li>
+<li><strong>Analogias/explicações boas:</strong> buffer = área intermediária; gravar caractere a caractere no disco
+exigiria mover a cabeça de leitura a cada byte; junta-se tudo e grava de uma vez; <code>fflush(fp)</code>
+força a gravação.</li>
+<li><strong>Pegadinhas (erros presentes nos exemplos, para usar como &quot;ache o erro&quot;):</strong>
+<code>char c; while ((c = fgetc(arq)) != EOF)</code>: <code>c</code> deve ser <code>int</code>; <code>while (!feof(fp)) { c = fgetc(fp); printf(...) }</code> imprime um lixo a mais no fim (feof só fica verdadeiro <strong>depois</strong> de uma leitura
+falhar); o mesmo bug soma o último número duas vezes no exemplo da matriz com <code>fscanf</code>;
+comparar o retorno de <code>fgets</code> com <code>EOF</code> (é ponteiro, compara-se com NULL); <code>fflush</code> em arquivo de
+leitura é indefinido. <code>stdaux</code>/<code>stdprn</code> não são padrão.</li>
+<li><strong>Ideias de exemplos:</strong> gravar &quot;Nome: Ricardo / Idade: 30 / Altura: 1.74&quot; com fprintf e reler com
+fscanf pulando os rótulos; gravar matriz 2×2 em texto e somar ao reler.</li>
+<li><strong>Ideias de exercícios:</strong> copiar um arquivo texto caractere a caractere; contar linhas de um
+arquivo com fgets; corrigir o laço <code>while(!feof)</code> para <code>while (fscanf(arq, &quot;%d&quot;, &amp;v) == 1)</code>.</li>
+</ul>
+<h3>0068-arquivos-binarios</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>fwrite(ptr, tamItem, qtd, fp)</code> / <code>fread(...)</code> → devolvem quantos itens
+foram processados (menor que qtd = erro/fim). Variáveis simples e structs com <code>&amp;</code>, vetores sem.
+Pode gravar parte de vetor (qtd = 2 grava só as 2 primeiras posições). Ao ler string, pôr o
+<code>&#39;\0&#39;</code> manualmente; <strong>gravar o tamanho antes da string/vetor</strong> facilita a leitura (<code>fwrite(&amp;t,...)</code>
+e depois os t caracteres). <code>ftell</code> (posição; em binário = bytes desde o início); com
+<code>fseek(arq, 0, SEEK_END)</code> dá o tamanho do arquivo. <code>fseek(fp, n, origem)</code> com <code>SEEK_SET</code>,
+<code>SEEK_CUR</code>, <code>SEEK_END</code> (n pode ser negativo); <code>rewind</code>; <code>remove(nome)</code>; <code>ferror(fp)</code> (testar logo
+após cada operação) e <code>perror(&quot;msg&quot;)</code> (imprime &quot;msg: No such file or directory&quot;).</li>
+<li><strong>Pegadinhas:</strong> a apostila diz que as três constantes SEEK valem 0 (são 0, 1, 2); usa extensão
+<code>.txt</code> para arquivo binário; <code>fprintf/fscanf</code> × <code>fwrite/fread</code>: velocidade/tamanho favorecem os
+binários.</li>
+<li><strong>Ideias de exemplos:</strong> escrever &quot;1234567890&quot;, <code>fseek(arq, 5, SEEK_SET)</code>, escrever &quot;abcde&quot; →
+arquivo fica &quot;12345abcde&quot;.</li>
+<li><strong>Ideias de exercícios:</strong> cadastro de structs em binário; ler o 3º registro direto com
+<code>fseek(fp, 2*sizeof(struct r), SEEK_SET)</code>; descobrir o tamanho de um arquivo.</li>
+</ul>
+<h3>0069-argumentos</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>int main(int argc, char *argv[])</code>; <code>argc</code> ≥ 1 (o nome do programa conta);
+<code>argv[0]</code> = nome do programa; <code>atoi</code> converte texto em número.</li>
+<li><strong>Ideias de exemplos:</strong> listar parâmetros (<code>prog par1 par2</code> → &quot;Parametro 1: par1 …&quot;); somar os
+números da linha de comando.</li>
+<li><strong>Ideias de exercícios:</strong> <code>./soma 3 4 5</code> → 12; mensagem de uso se <code>argc == 1</code>.</li>
+</ul>
+<hr>
+<h2>Funções variádicas (12.9): encaixar como extra do módulo 04</h2>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>tipo f(int n, ...)</code>; precisa de ao menos um parâmetro fixo (que diz quantos
+e/ou de que tipo são os demais, como o formato do printf); <code>stdarg.h</code>: <code>va_list</code>, <code>va_start(lista, ultimo_fixo)</code>, <code>va_arg(lista, tipo)</code>, <code>va_end(lista)</code>. Sem verificação de tipo → perigoso;
+<code>printf</code> com <code>%x</code> a mais vaza memória (ataque de string de formato).</li>
+<li><strong>Ideias de exercícios:</strong> <code>soma_int(3, 4, 5, 6)</code> → 15; <code>maior(n, ...)</code>.</li>
+</ul>
+<hr>
+<h2>Obsoleto / evitar</h2>
+<ul>
+<li><code>system(&quot;pause&quot;)</code> em todos os exemplos (Windows) e <code>#include &lt;stdlib.h&gt;</code> só para isso.</li>
+<li>Code::Blocks 10.05 e link do BerliOS (fora do ar); substituir por gcc + terminal + gdb/VS Code.</li>
+<li><code>gets</code> (removida no C11) e <code>gets</code> após <code>scanf</code>.</li>
+<li><code>fflush(stdin)</code> e <code>setbuf(stdin, NULL)</code> para &quot;limpar o buffer&quot; (indefinido / explicação falsa).</li>
+<li><code>while (!feof(fp))</code> como laço de leitura.</li>
+<li><code>char c = fgetc(...)</code> comparado com <code>EOF</code>.</li>
+<li><code>realloc(p, 0)</code> como free; <code>p = realloc(p, ...)</code> sem temporário.</li>
+<li><code>int</code> implícito (<code>static y = 10;</code>, <code>static n = 0;</code>) e <code>main()</code> sem <code>int</code>.</li>
+<li>Ponteiros impressos com <code>%d</code>/<code>%u</code>; <code>int *p = 0x5DC</code> sem cast; aritmética em <code>void*</code>.</li>
+<li><code>*p = (*p)++</code> e <code>index = (index==3) ? 0 : ++index</code> (UB).</li>
+<li>Tabelas com erros: faixa de <code>signed int</code>, <code>void</code> com 8 bits, <code>typeof</code> como palavra reservada,
+precedência de <code>++</code> pré acima de <code>()</code>, valores de <code>SEEK_*</code> todos 0, &quot;float ocupa mais que int&quot;.</li>
+<li><code>stdaux</code>, <code>stdprn</code>; <code>register</code> (inútil hoje); truque <code>volatile</code> por cast.</li>
+<li>Afirmação de que <code>#if</code> não avalia expressões; de que <code>static</code> é o padrão das globais.</li>
+<li>Ler <code>char</code> com <code>%d</code> e <code>double</code> com <code>%f</code> no scanf.</li>
+</ul>
+<h2>Extras que não cabem no sumário</h2>
+<ul>
+<li>Catálogo de funções por biblioteca (stdio, stdlib: <code>atof atoi atol strtod strtol strtoul abort atexit exit getenv system bsearch qsort abs div</code>; math, ctype, string, time: <code>clock difftime mktime time asctime ctime gmtime localtime strftime</code>, <code>struct tm</code>, <code>CLOCKS_PER_SEC</code>). Bom para um
+apêndice de referência.</li>
+<li>História/influência de C (Ritchie, 1972, ANSI 1989; C++, Java, C#, PHP herdaram a sintaxe).</li>
+<li>Dica de segurança: ponteiros soltos podem ser explorados; strings de formato controladas pelo
+usuário vazam memória.</li>
+</ul>

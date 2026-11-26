@@ -1,0 +1,113 @@
+<h2>0147 · Trie: árvore de prefixos e autocompletar</h2>
+<p>Você digita <code>bol</code> no celular e o teclado oferece &quot;bola&quot;, &quot;boleto&quot;, &quot;bolo&quot; e
+&quot;bolsa&quot; na hora. Ele não compara <code>bol</code> com cada uma das milhares de palavras
+do dicionário. Ele vai direto ao lugar onde moram as palavras que começam
+com <code>bol</code>, como quem abre um dicionário de papel na letra B, depois no
+pedaço &quot;bo&quot;, depois em &quot;bol&quot;. Na estrutura que ele usa, <strong>o prefixo é o
+endereço</strong>.</p>
+<p>Essa estrutura é a <strong>trie</strong>, nome tirado de <em>retrieval</em> (recuperação),
+também chamada <strong>árvore de prefixos</strong>. Cada aresta da árvore <strong>é</strong> uma
+letra, e o caminho da raiz até um nó soletra um prefixo. Da raiz, a aresta
+<code>b</code> leva ao nó de &quot;b&quot;; dele, a aresta <code>o</code> leva ao nó de &quot;bo&quot;; dele, a <code>l</code>
+leva ao nó de &quot;bol&quot;. Todas as palavras que começam com &quot;bol&quot; moram na
+subárvore desse nó (FREDKIN, 1960).</p>
+<p>Note que os nós não guardam palavras inteiras. A palavra está espalhada no
+caminho, uma letra por aresta. Isso cria uma dúvida: o nó de &quot;bol&quot; existe,
+porque &quot;bolo&quot; passa por ele, mas &quot;bol&quot; não é uma palavra. Para separar os
+dois casos, cada nó guarda um <code>bool fim</code>, verdadeiro quando alguma palavra
+<strong>termina</strong> ali (ZIVIANI, 2010, cap. 5). O nó do <code>o</code> depois de &quot;bol&quot; tem <code>fim</code>
+verdadeiro, porque &quot;bolo&quot; é palavra; o nó de &quot;bol&quot; tem <code>fim</code> falso.</p>
+<p>Como achar o filho de uma letra? Com letras minúsculas sem acento, cada nó
+tem um vetor de 26 ponteiros, um por letra. O filho da letra <code>c</code> fica em
+<code>filho[c - &#39;a&#39;]</code>: a conta transforma <code>&#39;a&#39;</code> em 0, <code>&#39;b&#39;</code> em 1, e assim até
+<code>&#39;z&#39;</code> em 25 (CORTÉS, 2015). Ponteiro <code>NULL</code> quer dizer que nenhuma palavra
+segue por aquela letra.</p>
+<p>Com isso, as operações são curtas. Para <strong>inserir</strong> uma palavra, desça
+letra por letra pelo filho correspondente; se o filho não existe, crie-o.
+Ao fim da palavra, marque <code>fim = true</code> no nó onde você parou. Para
+<strong>buscar</strong>, desça do mesmo jeito; se faltar um filho no meio, a palavra não
+existe. Se chegar ao fim do texto, a resposta é o <code>fim</code> daquele nó (ZIVIANI,
+2010, cap. 5).</p>
+<p>O <strong>autocompletar</strong> junta as duas ideias. Desça até o nó do prefixo
+digitado. Depois percorra toda a subárvore dele, filho por filho, de <code>a</code> a
+<code>z</code>, montando as letras do caminho; cada vez que encontrar um nó com <code>fim</code>
+verdadeiro, imprima a palavra montada. Como os filhos são visitados em
+ordem alfabética, as sugestões já saem ordenadas.</p>
+<p>O custo é a grande vantagem. Inserir e buscar custam <strong>O(L)</strong>, com L o
+tamanho da palavra, e <strong>não dependem de quantas palavras</strong> existem: &quot;bolsa&quot;
+desce 5 nós num dicionário de 10 palavras ou de 100 mil. Uma BST com 100 mil
+palavras faria umas 17 comparações de strings, cada uma podendo olhar várias
+letras (SEDGEWICK; WAYNE, 2011).</p>
+<p>O preço é memória. Cada nó com 26 ponteiros e o <code>fim</code> ocupa 216 bytes, e
+quase todos os ponteiros são <code>NULL</code>, porque poucas letras seguem cada
+prefixo. Oito palavras curtas cabem em 45 bytes como strings e, numa trie,
+ocupam 22 nós, quase 5 KB. Guardar os filhos numa lista, como no primeiro
+filho, próximo irmão (0144), ou numa BST por nó, a árvore ternária, gasta
+bem menos, ao custo de achar o filho com mais passos.</p>
+<blockquote>
+<p>[!WARNING]
+Achar o nó não é achar a palavra: a busca olha o <code>fim</code>
+(<code>return n != NULL &amp;&amp; n-&gt;fim;</code>). E o índice só vale de <code>&#39;a&#39;</code> a <code>&#39;z&#39;</code>:
+<code>&#39;B&#39; - &#39;a&#39;</code> dá -31 e <code>&#39;ã&#39;</code> não é um <code>char</code> só em UTF-8.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>Um teclado guarda bolo, bola, bolsa, boleto, bom, bombom, pão e pastel (sem
+acento: <code>pao</code>). No ramo do <code>b</code>, o caminho verde é o prefixo &quot;bol&quot;; os nós verdes
+marcam o fim de uma palavra:</p>
+<p>{{ideia}}</p>
+<p>O nó e a inserção, em <code>trie.c</code> (o <code>calloc</code> deixa os ponteiros <code>NULL</code> e <code>fim</code>
+falso):</p>
+<pre><code class="language-c">typedef struct NoTrie {
+    struct NoTrie *filho[TRIE_LETRAS]; // filho[&#39;c&#39; - &#39;a&#39;] segue a letra c
+    bool fim;                          // uma palavra termina aqui?
+} NoTrie;
+
+bool trie_insere(NoTrie *r, const char *palavra) {
+    for (const char *p = palavra; *p != &#39;\0&#39;; p++) { // confere antes de mexer
+        if (*p &lt; &#39;a&#39; || *p &gt; &#39;z&#39;) {
+            return false;
+        }
+    }
+    for (; *palavra != &#39;\0&#39;; palavra++) {
+        int i = *palavra - &#39;a&#39;;
+        if (r-&gt;filho[i] == NULL) {
+            r-&gt;filho[i] = trie_cria(); // o caminho ainda não existe: cria
+        }
+        r = r-&gt;filho[i];
+    }
+    r-&gt;fim = true; // marca o fim da palavra
+    return true;
+}
+</code></pre>
+<p>O cliente monta o dicionário e testa três textos:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;trie.h&quot;
+
+int main(void) {
+    const char *dicionario[] = {&quot;bolo&quot;, &quot;bola&quot;, &quot;bolsa&quot;, &quot;boleto&quot;, &quot;bom&quot;, &quot;bombom&quot;, &quot;pao&quot;, &quot;pastel&quot;};
+    NoTrie *teclado = trie_cria();
+    for (int i = 0; i &lt; 8; i++) {
+        trie_insere(teclado, dicionario[i]);
+    }
+
+    const char *testes[] = {&quot;bol&quot;, &quot;bom&quot;, &quot;pa&quot;};
+    for (int i = 0; i &lt; 3; i++) {
+        printf(&quot;\&quot;%s\&quot;: palavra? %s | sugestões:&quot;, testes[i],
+               trie_busca(teclado, testes[i]) ? &quot;sim&quot; : &quot;não&quot;);
+        trie_autocompleta(teclado, testes[i], 4);
+        printf(&quot;\n&quot;);
+    }
+    printf(&quot;Nós: %d (%zu bytes cada)\n&quot;, trie_nos(teclado), sizeof(NoTrie));
+
+    trie_libera(teclado);
+    return 0;
+}
+// Saída:
+// &quot;bol&quot;: palavra? não | sugestões: bola boleto bolo bolsa
+// &quot;bom&quot;: palavra? sim | sugestões: bom bombom
+// &quot;pa&quot;: palavra? não | sugestões: pao pastel
+// Nós: 22 (216 bytes cada)
+</code></pre>
+<p>O fluxograma mostra a inserção de &quot;bom&quot;. O <code>b</code> e o <code>o</code> já existem; o <code>m</code> é novo
+e recebe <code>fim = true</code>:</p>
+<p>{{fluxograma}}</p>

@@ -1,0 +1,118 @@
+<h2>0079 · Lista dupla</h2>
+<p>A lista simples dos assuntos anteriores só anda para a frente. Isso cobra
+dois preços (CELES; RANGEL, 2002). Para mostrar os itens de trás para frente,
+não há caminho de volta. E para remover um nó que você já tem em mãos, ainda
+é preciso achar o anterior dele, percorrendo a lista desde o início, O(n),
+porque só o anterior pode ser religado.</p>
+<p>No pátio da ferrovia, o terceiro vagão de um trem de minério está com o
+freio travado. O manobrista solta os dois engates dele e liga o segundo vagão
+direto ao quarto. Ele não volta à locomotiva para descobrir quem vem antes:
+cada vagão está preso ao da frente e ao de trás, e ele vê os dois. A <strong>lista
+duplamente encadeada</strong> (no Cormen, <strong>duplamente ligada</strong>, com os campos
+<code>next</code> e <code>prev</code>) faz o mesmo: cada nó guarda o próximo, <code>prox</code>, e também o
+anterior, <code>ant</code> (CORMEN et al., 2024, cap. 10).</p>
+<p>Com a seta a mais, três coisas ficam possíveis (TENENBAUM; LANGSAM;
+AUGENSTEIN, 1995, cap. 4). Você anda nos <strong>dois sentidos</strong>: de trás para a
+frente é o &quot;for de lista&quot; de sempre, começando no último nó e andando com
+<code>p = p-&gt;ant</code>. Você remove um nó conhecendo <strong>só ele</strong>, em O(1), porque o
+anterior está em <code>p-&gt;ant</code>. E, guardando um ponteiro para o <strong>último</strong> nó,
+inserir no fim também vira O(1), sem percorrer nada.</p>
+<p>A lista desta pasta junta essas peças numa struct com as duas pontas e o
+tamanho:</p>
+<pre><code class="language-c">typedef struct no {
+    int valor;
+    struct no *ant;  // o anterior, ou NULL no primeiro
+    struct no *prox; // o próximo, ou NULL no último
+} No;
+
+typedef struct {
+    No *inicio;
+    No *fim;
+    int tamanho;
+} Lista;
+</code></pre>
+<p>Repare que agora a lista não é mais só um ponteiro para o primeiro nó. A
+struct <code>Lista</code> carrega o <code>inicio</code>, o <code>fim</code> e quantos nós existem, e as
+funções recebem <code>Lista *</code> para poder atualizar os três.</p>
+<p>As setas de ida e as de volta precisam concordar. Para todo nó <code>p</code> que não é
+o último, vale <code>p-&gt;prox-&gt;ant == p</code>: o anterior do meu próximo sou eu. Essa
+regra é o invariante da lista dupla, e ela tem uma consequência prática: as
+setas mudam sempre <strong>aos pares</strong>. Toda operação que mexe na seta de ida de um
+nó precisa mexer na seta de volta correspondente (FEOFILOFF, 2009, cap. 4).</p>
+<p>Remover um nó <code>p</code> mostra isso. Chegam duas setas em <code>p</code>: a do anterior, que
+aponta para ele pela frente, e a do seguinte, que aponta para ele por trás.
+As duas precisam ser desviadas, e cada uma tem o seu caso de borda (CELES;
+RANGEL, 2002):</p>
+<pre><code class="language-c">if (p-&gt;ant == NULL) l-&gt;inicio = p-&gt;prox;  // era o primeiro
+else p-&gt;ant-&gt;prox = p-&gt;prox;              // o anterior pula o p
+if (p-&gt;prox == NULL) l-&gt;fim = p-&gt;ant;     // era o último
+else p-&gt;prox-&gt;ant = p-&gt;ant;               // o seguinte pula o p para trás
+free(p);
+</code></pre>
+<p>Se <code>p</code> é o primeiro, não há anterior para religar, e quem muda é o
+<code>inicio</code>. Se <code>p</code> é o último, não há seguinte, e quem muda é o <code>fim</code>. Um nó
+do meio passa pelos dois <code>else</code>. Um nó sozinho na lista passa pelos dois
+<code>if</code>, e a lista fica vazia, com <code>inicio</code> e <code>fim</code> em <code>NULL</code>.</p>
+<p>A seta a mais tem um preço em memória. Em 64 bits, <code>sizeof(No)</code> passa de 16
+para 24 bytes: 4 do <code>int</code>, 4 de preenchimento e dois ponteiros de 8. São 50%
+a mais por nó, o custo de poder voltar e de remover em O(1).</p>
+<blockquote>
+<p>[!WARNING]
+Com uma seta faltando, a lista dupla <strong>parece certa</strong>: se a inserção
+esquecer o <code>ant</code>, só a volta sai errada. Imprima <strong>nos dois sentidos</strong>. Na
+remoção, <code>p-&gt;ant-&gt;prox</code> no primeiro nó acessa <code>NULL</code>, e esquecer o <code>fim</code> o
+deixa apontando para memória liberada.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>Um trem de minério tem vagões de 98, 105, 87 e 110 toneladas, e o de 87 está
+com o freio travado. Com <code>p</code> nele, o 105 passa a apontar para o 110, e o 110
+aponta de volta para o 105:</p>
+<p>{{ideia}}</p>
+<p>A remoção, sem procurar o anterior:</p>
+<pre><code class="language-c">void lista_remove_no(Lista *l, No *p) {
+    if (p-&gt;ant == NULL) l-&gt;inicio = p-&gt;prox;  // era o primeiro
+    else p-&gt;ant-&gt;prox = p-&gt;prox;              // o anterior pula o p
+    if (p-&gt;prox == NULL) l-&gt;fim = p-&gt;ant;     // era o último
+    else p-&gt;prox-&gt;ant = p-&gt;ant;               // o seguinte pula o p para trás
+    free(p);
+    l-&gt;tamanho--;
+}
+</code></pre>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;lista.h&quot;
+
+int main(void) {
+    Lista trem;
+    lista_inicia(&amp;trem);
+    int cargas[] = {98, 105, 87, 110}; // toneladas, da locomotiva para o fim
+    for (int i = 0; i &lt; 4; i++) lista_insere_fim(&amp;trem, cargas[i]);
+
+    printf(&quot;da locomotiva: &quot;);
+    lista_imprime(&amp;trem);
+    printf(&quot;do fim:        &quot;);
+    lista_imprime_reverso(&amp;trem);
+
+    No *vagao = lista_busca(&amp;trem, 87);
+    if (vagao != NULL) {
+        lista_remove_no(&amp;trem, vagao); // sem procurar o anterior: p-&gt;ant
+        printf(&quot;desengatou o vagão de 87 t (%d vagões)\n&quot;, trem.tamanho);
+    }
+
+    printf(&quot;da locomotiva: &quot;);
+    lista_imprime(&amp;trem);
+    printf(&quot;do fim:        &quot;);
+    lista_imprime_reverso(&amp;trem);
+
+    lista_libera(&amp;trem);
+    return 0;
+}
+// Saída:
+// da locomotiva: 98 &lt;-&gt; 105 &lt;-&gt; 87 &lt;-&gt; 110
+// do fim:        110 &lt;-&gt; 87 &lt;-&gt; 105 &lt;-&gt; 98
+// desengatou o vagão de 87 t (3 vagões)
+// da locomotiva: 98 &lt;-&gt; 105 &lt;-&gt; 110
+// do fim:        110 &lt;-&gt; 105 &lt;-&gt; 98
+</code></pre>
+<p>Duas perguntas, uma por ponta. O vagão de 87 passa pelos dois Não; o primeiro
+vagão daria Sim na primeira, o último na segunda:</p>
+<p>{{fluxograma}}</p>

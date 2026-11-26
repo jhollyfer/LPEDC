@@ -1,0 +1,139 @@
+<h2>0020 · While</h2>
+<p>Você quer um celular de R$ 1.000 e guarda R$ 150 por mês. Em quantos meses
+consegue comprar? Com o que você viu até aqui, teria de escrever um <code>if</code> para
+cada mês, sem saber quantos <code>if</code> seriam necessários. O raciocínio que você faz
+de cabeça já mostra a saída: &quot;guardo, confiro se deu; se não deu, guardo de
+novo&quot;. Falta ao programa esse &quot;de novo&quot;.</p>
+<p>Esse &quot;de novo&quot; é a <strong>repetição</strong>: rodar o mesmo trecho de código várias vezes.
+Cada passada pelo trecho repetido se chama <strong>iteração</strong>, ou volta, e o trecho
+em si é o <strong>corpo</strong> do laço (DEITEL; DEITEL, 2011, cap. 3). A forma mais
+simples de repetir em C é o <strong><code>while</code></strong> (&quot;enquanto&quot;): ele faz uma pergunta e,
+enquanto a resposta for verdadeira, roda o corpo (BACKES, 2013, cap. 5).</p>
+<pre><code class="language-c">while (condição) {
+    // corpo: roda enquanto a condição for verdadeira
+}
+</code></pre>
+<p>A leitura segue o ciclo do cofrinho. O <code>while</code> testa a condição; se ela vale,
+roda o corpo inteiro, volta ao topo e testa de novo. Quando a resposta for
+falsa, ele pula o corpo e o programa segue na linha depois da <code>}</code>. A condição
+é a mesma que você já usa no <code>if</code>: um número, e todo valor diferente de zero
+conta como verdadeiro (assunto 0012). A diferença para o <code>if</code> é a volta: o
+<code>if</code> pergunta uma vez, o <code>while</code> pergunta a cada passada.</p>
+<p>Como a pergunta vem <strong>antes</strong> do corpo, o <code>while</code> é um laço <strong>com teste no
+início</strong>, também chamado de pré-teste. Isso tem uma consequência prática: o
+corpo pode rodar <strong>zero vezes</strong>. Se o saldo já começasse em R$ 1.200, a
+primeira pergunta daria falso e o programa nem entraria no laço (BACKES, 2013,
+cap. 5). Esse comportamento é o certo aqui, porque quem já tem o dinheiro não
+precisa guardar nada.</p>
+<p>O <code>while</code> serve bem quando você <strong>não sabe quantas voltas</strong> vão acontecer, mas
+sabe <strong>quando parar</strong>. No cofrinho, ninguém diz &quot;repita 7 vezes&quot;; a regra é
+&quot;repita até o saldo chegar na meta&quot;. O número de voltas sai como resultado da
+conta, não como dado de entrada (CARVALHO, 2010).</p>
+<p>Para um <code>while</code> funcionar, três peças precisam estar no lugar, todas ligadas à
+mesma variável (DEITEL; DEITEL, 2011, cap. 3). Primeiro, a variável da
+pergunta tem um valor <strong>antes</strong> do laço: <code>saldo = 0</code>. Sem isso, a primeira
+pergunta compara lixo de memória. Segundo, a condição usa essa variável:
+<code>saldo &lt; meta</code>. Terceiro, o corpo <strong>muda</strong> essa variável na direção de parar:
+<code>saldo = saldo + deposito</code>. É a terceira peça que garante o fim, porque cada
+volta deixa o saldo mais perto da meta.</p>
+<p>Se a terceira peça falta, a condição dá sempre a mesma resposta e o laço nunca
+acaba. Esse é o <strong>laço infinito</strong>. O programa parece travado: não aparece
+nada novo ou aparece a mesma linha sem parar. No terminal, <code>Ctrl+C</code> interrompe
+o programa (BACKES, 2013, cap. 5). Quando isso acontecer, procure no corpo a
+linha que deveria mudar a variável da condição.</p>
+<p>Para conferir quantas voltas um laço dá, monte um <strong>teste de mesa</strong>: uma
+linha por pergunta, uma coluna por variável. O detalhe que mais engana é
+contar as perguntas. Um laço que roda o corpo 7 vezes faz 8 perguntas, porque
+a última pergunta é a que responde &quot;não&quot; e libera a saída.</p>
+<blockquote>
+<p>[!WARNING]
+Um <code>;</code> logo depois do <code>while</code> acaba com o laço: <code>while (saldo &lt; meta);</code> tem
+corpo <strong>vazio</strong>, o bloco seguinte nunca é alcançado e o programa trava. Sem
+chaves, só a <strong>primeira</strong> linha depois do <code>while</code> repete, seja qual for o
+recuo. O gcc avisa este caso com <code>-Wmisleading-indentation</code>, mas o <code>;</code> vazio
+passa calado. Use chaves sempre.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>Um celular de R$ 1.000, guardando R$ 150 por mês. &quot;saldo &lt; 1000?&quot; responde
+Sim sete vezes, com um depósito a cada Sim; na oitava, com R$ 1.050, responde
+Não:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    double meta = 1000.0;    // o celular custa R$ 1000
+    double deposito = 150.0; // quanto você guarda por mês
+    double saldo = 0.0;
+    int meses = 0;
+
+    while (saldo &lt; meta) {   // pergunta ANTES de cada volta
+        saldo = saldo + deposito;
+        meses++;
+        printf(&quot;Mês %d: R$ %.2f\n&quot;, meses, saldo);
+    }
+
+    printf(&quot;Meta batida em %d meses. Sobra R$ %.2f\n&quot;, meses, saldo - meta);
+    return 0;
+}
+// Saída:
+// Mês 1: R$ 150.00
+// Mês 2: R$ 300.00
+// Mês 3: R$ 450.00
+// Mês 4: R$ 600.00
+// Mês 5: R$ 750.00
+// Mês 6: R$ 900.00
+// Mês 7: R$ 1050.00
+// Meta batida em 7 meses. Sobra R$ 50.00
+</code></pre>
+<h3>Passo a passo</h3>
+<p>No teste de mesa (uma linha por pergunta, uma coluna por variável), são <strong>8
+perguntas</strong> para <strong>7 voltas</strong>: a última dá Não.</p>
+<table>
+<thead>
+<tr>
+<th>Pergunta</th>
+<th>saldo antes</th>
+<th><code>saldo &lt; 1000?</code></th>
+<th>saldo depois</th>
+<th>meses</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1ª</td>
+<td>0</td>
+<td>Sim</td>
+<td>150</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2ª</td>
+<td>150</td>
+<td>Sim</td>
+<td>300</td>
+<td>2</td>
+</tr>
+<tr>
+<td>...</td>
+<td>...</td>
+<td>Sim</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr>
+<td>7ª</td>
+<td>900</td>
+<td>Sim</td>
+<td>1050</td>
+<td>7</td>
+</tr>
+<tr>
+<td>8ª</td>
+<td>1050</td>
+<td><strong>Não</strong></td>
+<td>(sai)</td>
+<td>7</td>
+</tr>
+</tbody></table>
+<p>A seta de &quot;Mostrar mês e saldo&quot; <strong>volta para o losango</strong>: assim a repetição
+aparece. O caminho verde passa várias vezes pelo Sim e uma pelo Não:</p>
+<p>{{fluxograma}}</p>

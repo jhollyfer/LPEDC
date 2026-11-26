@@ -1,0 +1,433 @@
+<h1>Módulo 10 · Pensar como cientista da computação</h1>
+<p>Três ideias que atravessam o resto do curso: <strong>medir o custo</strong> contando passos
+e resumindo o crescimento na notação O, <strong>provar que está certo</strong> com
+invariantes de laço e <strong>esconder os detalhes</strong> num tipo abstrato de dado.
+Depende de funções, vetores, ponteiros, <code>malloc</code> e <code>struct</code> (módulos 04 a 08);
+prepara os módulos 11 a 16.</p>
+<h2>O que você vai aprender</h2>
+<ul>
+<li>medir a <strong>eficiência</strong> contando passos: melhor, pior e caso médio</li>
+<li>ler e escrever a <strong>notação O</strong>: O(1), O(log n), O(n), O(n log n) e O(n²), e por que constantes somem</li>
+<li>enunciar <strong>invariantes de laço</strong> e usá-los para provar um laço (e achar bugs)</li>
+<li>montar um <strong>tipo abstrato de dado</strong> com interface (<code>.h</code>), implementação (<code>.c</code>) e tipo opaco: o padrão dos próximos módulos</li>
+</ul>
+<h2>Antes de começar</h2>
+<p>Mude o n, troque os dados e quebre um invariante de propósito para ver o
+<code>assert</code> disparar. Nos desenhos de custo, verde é o que continua leve e
+vermelho, o que explodiu. Os contadores medem passos, não segundos.</p>
+<ul>
+<li><code>&lt;assert.h&gt;</code>: <code>assert(condicao)</code> para o programa se a condição for falsa.</li>
+<li><strong>arquivos de apoio</strong>: no 0074, a pasta tem <code>contador.h</code>, <code>contador.c</code>,
+<code>conta.h</code> e <code>conta.c</code>. O comando do exemplo compila junto todo <code>.c</code> da pasta
+que não se chama <code>A000.c</code>/<code>E000.c</code>:</li>
+</ul>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A147.c ~/LPEDC/material/0074-conta.c ~/LPEDC/material/0074-contador.c -o ~/LPEDC/material/A147 &amp;&amp; ~/LPEDC/material/A147
+</code></pre>
+<p>{{indice}}</p>
+<hr>
+<p>{{assuntos}}</p>
+<hr>
+<h2>Desafios do módulo</h2>
+<p>Problemas dos quatro assuntos, do médio ao difícil. Todos pedem código:
+escreva num arquivo seu e compile com as flags de estudo.</p>
+<p><strong>1. Convidados em comum.</strong> A sua lista de convidados é <code>{&quot;Ana&quot;, &quot;Bia&quot;, &quot;Caio&quot;, &quot;Davi&quot;, &quot;Edu&quot;, &quot;Fabi&quot;}</code> e a do seu amigo é <code>{&quot;Bia&quot;, &quot;Davi&quot;, &quot;Edu&quot;, &quot;Gil&quot;, &quot;Hugo&quot;}</code>, as duas em ordem alfabética. Escreva um programa que mostre
+quem está nas duas de dois jeitos, contando os <code>strcmp</code> numa variável: (1)
+cada nome seu contra cada nome dele; (2) um índice em cada lista, como numa
+intercalação, avançando o do nome menor. Imprima os nomes e o contador de
+cada jeito.</p>
+<details><summary>Resposta</summary><pre><code>ingenuo: Bia Davi Edu (30 comparacoes)
+ordenado: Bia Davi Edu (6 comparacoes)
+</code></pre>
+<p>Dica: no segundo jeito, <code>while (i &lt; n &amp;&amp; j &lt; m)</code>; se o <code>strcmp</code> der 0,
+imprima e avance os dois; se der negativo, avance <code>i</code>; senão, <code>j</code>. O
+ingênuo faz sempre <strong>n · m</strong> comparações, O(n · m); o ordenado faz no máximo
+<strong>n + m</strong>, porque cada comparação avança pelo menos um índice: O(n).</p>
+</details><p><strong>2. O cronômetro dedurou.</strong> Um relatório leva 2 s com 1 milhão de linhas e
+8 s com 2 milhões. O código dele, para cada linha, compara com todas as
+anteriores. Escreva <code>long relatorio(int n)</code> com esses dois laços (<code>j</code> de 0 a
+<code>i - 1</code>), contando um passo por comparação. Imprima os passos para n = 1000,
+2000 e 4000, a razão entre cada contagem e a anterior e, usando a última
+razão, a previsão de tempo para 4 milhões de linhas (partindo dos 8 s).</p>
+<details><summary>Resposta</summary><pre><code>n = 1000: 499500 passos
+n = 2000: 1999000 passos (razao 4.00)
+n = 4000: 7998000 passos (razao 4.00)
+previsao para 4 milhoes de linhas: 32 s
+</code></pre>
+<p>Dica: guarde a contagem anterior numa variável e divida em <code>double</code>. Dobrou
+n, os passos (e o tempo) multiplicaram por 4: é <strong>O(n²)</strong>, a regra do dobro
+do E430. Daí 8 × 4 = 32 s.</p>
+</details><p><strong>3. Um milhão de CPFs.</strong> Aloque com <code>malloc</code> um vetor ordenado de
+1.000.000 de &quot;CPFs&quot; (use <code>v[i] = 2 * i</code>) e procure um valor que não está lá
+(<code>2 * n</code>) com a busca binária e com a sequencial. Cada função recebe um
+<code>int *comp</code> e conta uma comparação por volta do laço. Imprima os dois
+contadores.</p>
+<details><summary>Resposta</summary><pre><code>binaria: 20 comparacoes (achou: -1)
+sequencial: 1000000 comparacoes (achou: -1)
+</code></pre>
+<p>Dica: a binária usa <code>ini &lt;= fim</code> e <code>meio = ini + (fim - ini) / 2</code>, e faz
+<code>(*comp)++</code> no começo de cada volta. Ela corta pela metade a cada volta e
+2²⁰ = 1.048.576 ≥ 1.000.000, por isso <strong>20</strong>: a tabela de O(log n) contra
+O(n) do assunto 0072, com números de verdade.</p>
+</details><p><strong>4. A conta da pergunta.</strong> No assunto 0072: um algoritmo O(n²) leva 1 s com
+10.000 pedidos. Escreva um programa que calcule quanto ele leva com 100.000 e
+quanto leva um O(n log n) que também leva 1 s com 10.000. Faça a conta do
+O(n log n) duas vezes, uma com <code>log2</code> e outra com <code>log10</code> (de <code>math.h</code>), e
+imprima com uma casa.</p>
+<details><summary>Resposta</summary><pre><code>O(n^2):     100.0 s
+O(n log n): 12.5 s (log2) e 12.5 s (log10)
+</code></pre>
+<p>Dica: o tempo novo é <code>t1 * f(n2) / f(n1)</code>, com <code>f(n) = n * n</code> ou
+<code>f(n) = n * log(n)</code>. O O(n²) multiplica por 10² = 100; o O(n log n), por
+10 × 5/4 = 12,5. As duas bases dão o mesmo resultado porque a base do log se
+cancela na divisão.</p>
+</details><p><strong>5. Soma dos dígitos com invariante.</strong> Escreva uma função que soma os dígitos
+de n ≥ 0 tirando o último dígito com <code>% 10</code> e <code>/ 10</code>. Enuncie o invariante e
+teste com 4096.</p>
+<details><summary>Resposta</summary><p>Com <code>m</code> começando em n e <code>soma</code> em 0, o invariante é
+<strong>soma + (soma dos dígitos de m) == soma dos dígitos de n</strong>. Cada volta passa
+o último dígito de <code>m</code> para <code>soma</code>, então a igualdade continua valendo. Quando
+<code>m</code> chega a 0, a soma dos dígitos de <code>m</code> é 0 e <code>soma</code> é a resposta. A variante
+é <code>m</code>, que cai a cada volta. Para 4096: 4 + 0 + 9 + 6 = <strong>19</strong>.</p>
+</details><p><strong>6. Potência em O(log n).</strong> Calcule 3¹³ sem fazer 12 multiplicações:
+enquanto o expoente <code>e</code> for maior que 0, se <code>e</code> for ímpar multiplique o
+resultado <code>r</code> pela base <code>b</code>; depois <code>b = b * b</code> e <code>e = e / 2</code>. Use
+<code>long long</code>. A cada volta, imprima <code>r</code>, <code>b</code>, <code>e</code> e se o invariante
+<strong>r · bᵉ == 3¹³</strong> continua valendo (calcule <code>bᵉ</code> e 3¹³ com uma função de
+potência ingênua). No fim, mostre o resultado e quantas voltas o laço deu.</p>
+<details><summary>Resposta</summary><pre><code>volta 1: r = 3, b = 9, e = 6, r * b^e == 3^13? sim
+volta 2: r = 3, b = 81, e = 3, r * b^e == 3^13? sim
+volta 3: r = 243, b = 6561, e = 1, r * b^e == 3^13? sim
+volta 4: r = 1594323, b = 43046721, e = 0, r * b^e == 3^13? sim
+3^13 = 1594323 em 4 voltas
+</code></pre>
+<p>Dica: a potência ingênua (<code>r *= b</code> <code>e</code> vezes) serve só para conferir; ela é
+O(e). O expoente passa por 13, 6, 3, 1 e 0: cai pela metade a cada volta,
+então o laço rápido é O(log e). Quando <code>e</code> chega a 0, <code>bᵉ</code> é 1 e o
+invariante diz que <code>r</code> é a resposta.</p>
+</details><p><strong>7. Projete antes de codar.</strong> Escreva o <code>fila_senhas.h</code> de um TAD para as
+senhas de atendimento do banco, seguindo o padrão do assunto 0074 (tipo
+opaco e contrato de cada função): <code>fila_senhas_cria</code>, <code>fila_senhas_libera</code>,
+<code>fila_senhas_tira</code> (devolve o número da nova senha, começando em 1),
+<code>bool fila_senhas_chama(FilaSenhas *f, int *senha)</code> (false se ninguém espera)
+e <code>fila_senhas_esperando</code>. Depois escreva o <code>fila_senhas.c</code> e um <code>main</code> que
+tira 3 senhas, mostra quantos esperam, chama até esvaziar, mostra quantos
+esperam, tenta chamar de novo, tira mais uma e mostra quantos esperam.</p>
+<details><summary>Resposta</summary><pre><code>tirou a senha 1
+tirou a senha 2
+tirou a senha 3
+esperando: 3
+chamando a senha 1
+chamando a senha 2
+chamando a senha 3
+esperando: 0
+ninguem na fila
+tirou a senha 4
+esperando: 1
+</code></pre>
+<p>Dica: como as senhas saem em sequência, o <code>.c</code> nem precisa de vetor: a struct
+guarda a próxima senha a tirar e a próxima a chamar, e quem espera é a
+diferença entre as duas. Nada no <code>.h</code> revela isso, então trocar por uma fila
+de verdade (módulo 12) não muda uma linha do <code>main</code>.</p>
+</details><p><strong>8. O contrato fala de custo?</strong> Escreva duas implementações de um
+contador de entradas: a versão 1 guarda o valor num <code>int</code>; a versão 2 guarda
+o horário de cada entrada num vetor de 1000 posições e, ao pedir o valor,
+conta as entradas com um laço. Use uma variável global <code>passos</code> que soma 1 a
+cada entrada registrada e a cada volta de laço (na versão 1, 1 por consulta).
+Simule um cliente que registra 1000 entradas e consulta o valor depois de
+cada uma, e imprima o valor final e os passos de cada versão.</p>
+<details><summary>Resposta</summary><pre><code>versao 1: valor 1000, 2000 passos
+versao 2: valor 1000, 501500 passos
+</code></pre>
+<p>Dica: zere <code>passos</code> antes de cada simulação. As duas cumprem o contrato
+(devolvem o mesmo valor), mas a consulta da versão 1 é O(1) e a da versão 2 é
+O(n): o cliente passa de O(n) para O(n²) sem mudar uma linha (1000 +
+1 + 2 + ... + 1000 = 501500). Por isso boas bibliotecas documentam o custo
+junto com o contrato.</p>
+</details><p><strong>9. O par que soma 100.</strong> Escreva
+<code>long par_100(const int *v, int n, int *pi, int *pj)</code>, que procura o primeiro
+par (i &lt; j) com <code>v[i] + v[j] == 100</code> usando dois laços, para no primeiro
+achado e devolve quantas somas testou (com <code>-1</code> em <code>*pi</code> e <code>*pj</code> se não
+achar). Teste com <code>{40, 60, 10, 20, 30}</code>, com <code>{10, 20, 30, 40, 50}</code> e com
+um vetor de 1000 posições com <code>v[k] = 1000 + k</code>.</p>
+<details><summary>Resposta</summary><pre><code>melhor caso: par (0, 1) com 1 comparacoes
+sem par, n = 5: 10 comparacoes
+sem par, n = 1000: 499500 comparacoes
+</code></pre>
+<p>Dica: o <code>j</code> começa em <code>i + 1</code> e o <code>return</code> sai dos dois laços de uma vez.
+Sem par, todos os n(n − 1)/2 pares são testados: o pior caso é <strong>O(n²)</strong>, e
+essa é a classe que se informa. O <code>return</code> antecipado melhora a média, não a
+garantia.</p>
+</details><p><strong>10. Maior e menor de uma vez.</strong> Achar o maior e o menor de n números com
+dois laços separados custa 2n − 2 comparações. Existe um jeito com cerca de
+3n/2: pegue os números de dois em dois, compare os dois entre si e só depois
+compare o maior do par com o maior geral e o menor do par com o menor geral.
+Implemente com contador e confira para n = 10.</p>
+<details><summary>Resposta</summary><p>Para n = 10: o jeito separado faz <strong>18</strong> comparações; o de pares, <strong>13</strong>
+(1 para o primeiro par e 3 para cada um dos outros 4 pares: 3n/2 − 2). As duas
+são O(n): a notação O não enxerga a diferença, o contador enxerga. Como no
+assunto 0071, a constante importa quando n é fixo.</p>
+</details><h2>Questões do POSCOMP</h2>
+<p>Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.</p>
+<table>
+<thead>
+<tr>
+<th>Ano</th>
+<th>Questão</th>
+<th>Assunto</th>
+<th>Gabarito</th>
+<th>Prova</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2019</td>
+<td>25</td>
+<td>Complexidade de função em C</td>
+<td>B</td>
+<td><a href="https://www.sbc.org.br/wp-content/uploads/2025/02/0518.002_Exame_POSCOMP_2019.pdf">caderno</a></td>
+</tr>
+<tr>
+<td>2023</td>
+<td>21</td>
+<td>Conceitos de complexidade de algoritmos</td>
+<td>E</td>
+<td><a href="https://www.sbc.org.br/wp-content/uploads/2025/02/0761.001_Exame_POSCOMP_2023.pdf">caderno</a></td>
+</tr>
+<tr>
+<td>2023</td>
+<td>22</td>
+<td>Análise de algoritmos recursivos versus iterativos</td>
+<td>E</td>
+<td><a href="https://www.sbc.org.br/wp-content/uploads/2025/02/0761.001_Exame_POSCOMP_2023.pdf">caderno</a></td>
+</tr>
+<tr>
+<td>2023</td>
+<td>23</td>
+<td>Complexidade assintótica de laços aninhados</td>
+<td>E</td>
+<td><a href="https://www.sbc.org.br/wp-content/uploads/2025/02/0761.001_Exame_POSCOMP_2023.pdf">caderno</a></td>
+</tr>
+<tr>
+<td>2024</td>
+<td>21</td>
+<td>Custo da busca sequencial em arquivo, casos</td>
+<td>A</td>
+<td><a href="https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2024.pdf">caderno</a></td>
+</tr>
+<tr>
+<td>2025</td>
+<td>22</td>
+<td>Custo de tempo e espaço de Fibonacci recursivo</td>
+<td>a conferir no gabarito oficial</td>
+<td><a href="https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2025.pdf">caderno</a></td>
+</tr>
+</tbody></table>
+<p>O gabarito de 2023 vem de um blog de terceiros que reproduz o gabarito definitivo; confira no PDF oficial da SBC. O gabarito oficial de 2025 não estava disponível quando este material foi montado.</p>
+<h2>Questões no estilo da prova</h2>
+<p>Formato da prova do mestrado do PPGI/UFAM. Resolva no papel, marque uma letra
+e só depois abra o gabarito. Nas questões de contagem, o resultado foi
+conferido rodando o trecho em C (<code>gcc -std=c17 -Wall</code>) com um contador. As
+definições de O, Ω e Θ seguem o Cormen. Desconfie de &quot;sempre&quot;, &quot;com certeza&quot;
+e &quot;nunca&quot;: quase sempre derrubam a afirmação.</p>
+<p><strong>Questão 1.</strong> Seja f(n) = 3n² + 40n + 7. Marque a alternativa <strong>INCORRETA</strong>.</p>
+<ul>
+<li>(A) f(n) é O(n²).</li>
+<li>(B) f(n) é Θ(n³).</li>
+<li>(C) f(n) é O(n³).</li>
+<li>(D) f(n) é Ω(n).</li>
+<li>(E) f(n) é Θ(n²).</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(B)</strong>. Θ é teto e piso ao mesmo tempo. Como f cresce como n², o teto n³ é
+folgado (C é verdadeira) e o piso n é folgado (D é verdadeira), mas n³ nunca
+serve de piso: f não é Ω(n³), logo não é Θ(n³). Só n² é teto e piso juntos
+(A e E). Veja 0072.</p>
+</details><p><strong>Questão 2.</strong> Sobre a busca em um vetor de <code>n</code> inteiros, considere as afirmações:</p>
+<p>I. A busca sequencial tem melhor caso O(1), mesmo com o vetor desordenado.
+II. A busca binária funciona em qualquer vetor, desde que <code>n</code> seja potência de 2.
+III. No pior caso, a busca binária examina ⌊log₂ n⌋ + 1 elementos.
+IV. A busca binária é, com certeza, mais rápida que a sequencial para qualquer chave.</p>
+<ul>
+<li>(A) Apenas I.</li>
+<li>(B) Apenas II e III.</li>
+<li>(C) Apenas III e IV.</li>
+<li>(D) Todas estão corretas.</li>
+<li>(E) Apenas I e III.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(E)</strong>. I é verdadeira: se a chave está na posição 0, a sequencial pára no
+primeiro exame. II é falsa: o que a binária exige é o vetor <strong>ordenado</strong>, não
+um tamanho especial. III é verdadeira (para n = 1000, são 10 exames no pior
+caso). IV é falsa por causa do &quot;com certeza&quot;: para uma chave que está na
+posição 0, a sequencial faz 1 comparação e a binária, 3 ou mais. Veja 0071
+e 0072 (e 0090 para a busca binária).</p>
+</details><p><strong>Questão 3.</strong> O vetor ordenado abaixo tem 12 posições. A busca binária usa
+<code>meio = (ini + fim) / 2</code> e conta <strong>uma comparação por elemento <code>v[meio]</code>
+examinado</strong> (acertou ou errou). Quantas comparações, no total, são feitas ao
+buscar em sequência as chaves 4, 82 e 50?</p>
+<pre><code class="language-c">int v[] = {4, 9, 15, 22, 27, 31, 38, 44, 53, 61, 70, 82};
+</code></pre>
+<ul>
+<li>(A) 9</li>
+<li>(B) 10</li>
+<li>(C) 11</li>
+<li>(D) 12</li>
+<li>(E) 13</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(C)</strong>. Chave 4: examina <code>v[5]</code> = 31, <code>v[2]</code> = 15, <code>v[0]</code> = 4: 3
+comparações. Chave 82: <code>v[5]</code>, <code>v[8]</code> = 53, <code>v[10]</code> = 70, <code>v[11]</code> = 82: 4.
+Chave 50 (não existe): <code>v[5]</code>, <code>v[8]</code> = 53, <code>v[6]</code> = 38, <code>v[7]</code> = 44, e
+então <code>ini</code> passa de <code>fim</code>: 4. Total 3 + 4 + 4 = 11. Com 12 elementos o máximo
+é ⌊log₂ 12⌋ + 1 = 4 por busca. Veja 0090.</p>
+</details><p><strong>Questão 4.</strong> Quantas vezes a linha <code>c++</code> executa para <code>n = 81</code>?</p>
+<pre><code class="language-c">long c = 0;
+for (int i = 1; i &lt;= n; i *= 3)
+    for (int j = 0; j &lt; i; j++)
+        c++;
+</code></pre>
+<ul>
+<li>(A) 40</li>
+<li>(B) 81</li>
+<li>(C) 120</li>
+<li>(D) 121</li>
+<li>(E) 243</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(D)</strong>. <code>i</code> assume 1, 3, 9, 27 e 81 (o 243 já passa de <code>n</code>), e a cada valor
+o laço de dentro roda <code>i</code> vezes: 1 + 3 + 9 + 27 + 81 = 121. É uma soma
+geométrica, dominada pelo último termo, então o custo é Θ(n). A (C) esquece
+o 1 da primeira volta. Veja 0071 e 0072.</p>
+</details><p><strong>Questão 5.</strong> Considere as afirmações sobre invariantes de laço:</p>
+<p>I. O invariante precisa valer antes da primeira iteração e continuar valendo
+depois de cada iteração.
+II. Quando o laço termina, o invariante, junto com a negação da condição do
+laço, deve implicar que o resultado está correto.
+III. Um invariante verdadeiro garante, sempre, que o algoritmo está correto,
+não importando o que o laço faz ao terminar.</p>
+<ul>
+<li>(A) Apenas I e II.</li>
+<li>(B) Apenas II e III.</li>
+<li>(C) Apenas I e III.</li>
+<li>(D) Apenas III.</li>
+<li>(E) Todas estão corretas.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A)</strong>. I e II são as etapas de início, manutenção e término da prova por
+invariante. III é falsa: o invariante <code>i &gt;= 0</code> vale em quase todo laço e não
+prova nada. Ele só serve se, no término, junto com a condição de parada,
+levar ao resultado que a função promete. Veja 0073.</p>
+</details><p><strong>Questão 6.</strong> A função abaixo deveria devolver o maior elemento de <code>v</code> (com
+<code>n &gt;= 1</code>). O programador quer manter o invariante &quot;no começo de cada volta,
+<code>m</code> é um máximo de <code>v[0..i-1]</code>&quot;. Qual afirmação sobre o código é <strong>correta</strong>?</p>
+<pre><code class="language-c">int maior(int v[], int n) {
+    int m = v[0];
+    for (int i = 1; i &lt;= n; i++) {
+        if (v[i] &gt; m)
+            m = v[i];
+    }
+    return m;
+}
+</code></pre>
+<ul>
+<li>(A) <code>m</code> deveria começar em 0, senão o invariante não vale antes da primeira volta.</li>
+<li>(B) O laço deveria começar em <code>i = 0</code>, porque <code>v[0]</code> ainda não foi comparado.</li>
+<li>(C) A condição <code>i &lt;= n</code> faz a última volta ler <code>v[n]</code>, fora do vetor, e o resultado pode ficar errado.</li>
+<li>(D) O código está correto: <code>v[n]</code> existe, e o <code>&gt;</code> já garante o máximo.</li>
+<li>(E) O código devolve o menor elemento, pois o invariante está invertido.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(C)</strong>. Com <code>i = n</code>, a função lê <code>v[n]</code>, uma posição que não existe (um
+vetor de <code>n</code> posições vai de 0 a <code>n - 1</code>). O comportamento é indefinido: com o
+vetor <code>{3, 9, 4}</code> e <code>n = 3</code>, o AddressSanitizer acusa <code>heap-buffer-overflow</code>
+ao ler a quarta posição. A (A) está errada porque <code>m = v[0]</code> já faz o
+invariante valer com <code>i = 1</code>; começar em 0 quebraria o caso de vetor só de
+negativos. B só repete uma comparação, e E confunde o sentido do <code>&gt;</code>. O
+laço correto é <code>i &lt; n</code>. Veja 0073 e 0054.</p>
+</details><p><strong>Questão 7.</strong> Quantas vezes a função <code>t</code> é chamada ao executar <code>t(8)</code>,
+contando a chamada inicial?</p>
+<pre><code class="language-c">void t(int n) {
+    if (n &gt; 2) {
+        t(n - 2);
+        t(n - 3);
+    }
+}
+</code></pre>
+<ul>
+<li>(A) 8</li>
+<li>(B) 13</li>
+<li>(C) 15</li>
+<li>(D) 21</li>
+<li>(E) 24</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(B)</strong>. Seja C(n) o número de chamadas: C(n) = 1 quando n ≤ 2 e
+C(n) = 1 + C(n − 2) + C(n − 3) quando n &gt; 2. Daí C(3) = 3, C(4) = 3,
+C(5) = 5, C(6) = 7, C(7) = 9 e C(8) = 1 + C(6) + C(5) = 1 + 7 + 5 = 13.
+Conferido rodando o programa com um contador. Veja 0071 e 0032.</p>
+</details><p><strong>Questão 8.</strong> Um algoritmo de custo Θ(n²) leva 2 segundos para processar
+uma entrada de tamanho n = 2000. Desprezando os termos menores, quanto
+tempo ele leva, aproximadamente, para n = 10000?</p>
+<ul>
+<li>(A) 10 s</li>
+<li>(B) 20 s</li>
+<li>(C) 25 s</li>
+<li>(D) 40 s</li>
+<li>(E) 50 s</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(E)</strong>. O tamanho foi multiplicado por 5, e o custo, que cresce com n²,
+é multiplicado por 5² = 25: 2 s × 25 = 50 s. A (A) seria o raciocínio de um
+algoritmo linear. A (C) esquece de multiplicar pelos 2 s originais. Veja
+0072.</p>
+</details><p><strong>Questão 9.</strong> Considere as afirmações sobre tipos abstratos de dados (TAD)
+em C:</p>
+<p>I. Num tipo opaco, o <code>.h</code> declara apenas <code>typedef struct pilha Pilha;</code> e a
+definição da <code>struct</code> fica no <code>.c</code>.
+II. Com um tipo opaco, é possível trocar a implementação (por exemplo, de
+vetor para lista encadeada) sem alterar o código de quem usa o TAD.
+III. Quem usa um TAD opaco pode acessar <code>p-&gt;topo</code> diretamente, desde que
+inclua o <code>.h</code>.
+IV. O TAD define <strong>o que</strong> cada operação faz; <strong>como</strong> ela faz, e portanto o
+seu custo, depende da implementação escolhida.</p>
+<ul>
+<li>(A) Apenas I e II.</li>
+<li>(B) Apenas II e III.</li>
+<li>(C) Apenas III e IV.</li>
+<li>(D) Apenas I, II e IV.</li>
+<li>(E) Todas estão corretas.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(D)</strong>. I, II e IV descrevem o TAD como o curso o usa. III é falsa: com o
+tipo opaco o compilador só conhece o nome, e <code>p-&gt;topo</code> dá erro de &quot;tipo
+incompleto&quot;. É justamente isso que protege o invariante da estrutura. Veja
+0074.</p>
+</details><p><strong>Questão 10.</strong> Um vetor tem 100 chaves distintas, e a chave buscada está
+no vetor, com a mesma probabilidade em cada posição. Na busca sequencial, o
+número médio de comparações é:</p>
+<ul>
+<li>(A) 50,5</li>
+<li>(B) 50</li>
+<li>(C) 51</li>
+<li>(D) 99,5</li>
+<li>(E) 100</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A)</strong>. Achar a chave na posição k custa k comparações, com k de 1 a 100,
+todas igualmente prováveis. A média é (1 + 2 + ... + 100) / 100 = (n + 1) / 2
+= 50,5. O pior caso (100, alternativa E) e o melhor (1) são os
+extremos; a média fica no meio. Veja 0071.</p>
+</details><h2>Questões de provas do PPGI</h2>
+<p>Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.</p>
+<p><strong>Edital 060/2019 · Questão 03</strong></p>
+<p>Qual a alternativa que completa corretamente a seguinte frase: Um algoritmo que possui número de operações _______________ em função de uma entrada de tamanho n é linear.</p>
+<ul>
+<li>a) n³ + 9</li>
+<li>b) 3n² + 3n + 2</li>
+<li>c) 6</li>
+<li>d) 2n + 1</li>
+<li>e) n² + 1</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>D.</strong> 2n+1 é linear. Assunto 0071.</p>
+</details><h2>Para ler mais</h2>
+<ul>
+<li>FEOFILOFF, P. <em>Algoritmos em linguagem C</em>. Rio de Janeiro: Elsevier, 2009. Partes sobre documentação, invariantes e análise de algoritmos. Disponível em: <a href="https://www.ime.usp.br/~pf/algoritmos/">https://www.ime.usp.br/~pf/algoritmos/</a>.</li>
+<li>CELES, W.; RANGEL, J. L. <em>Apostila de estruturas de dados</em>. Rio de Janeiro: PUC-Rio, Departamento de Informática, 2002. Cap. 9: tipos abstratos de dados.</li>
+<li>CELES, W.; CERQUEIRA, R.; RANGEL, J. L. <em>Introdução a estruturas de dados: com técnicas de programação em C</em>. 2. ed. Rio de Janeiro: Elsevier, 2016. Tipos abstratos de dados e eficiência.</li>
+<li>TENENBAUM, A. M.; LANGSAM, Y.; AUGENSTEIN, M. J. <em>Estruturas de dados usando C</em>. São Paulo: Makron Books, 1995. Cap. 1 (tipos abstratos de dados) e seção 6.1 (eficiência e notação O).</li>
+<li>DEITEL, P.; DEITEL, H. <em>C: como programar</em>. 6. ed. São Paulo: Pearson Prentice Hall, 2011. Cap. 6: busca e ordenação de vetores.</li>
+<li>ROCHA, A. M. A.; BORGES, A. R. O. S. <em>Programação, estruturas de dados e algoritmos em C</em>. Aveiro: Universidade de Aveiro, Departamento de Eletrônica e Telecomunicações. Cap. 5: memórias e programação modular.</li>
+<li>CORMEN, T. H.; LEISERSON, C. E.; RIVEST, R. L.; STEIN, C. <em>Algoritmos: teoria e prática</em>. 4. ed. Rio de Janeiro: GEN LTC, 2024. Cap. 2 (invariantes de laço e análise de algoritmos) e cap. 3 (notação O, Ω e Θ). Referência do edital: em caso de divergência, siga as definições dele.</li>
+<li>ZIVIANI, N. <em>Projeto de algoritmos: com implementações em Pascal e C</em>. 3. ed. rev. e ampl. São Paulo: Cengage Learning, 2010. Cap. 1: função de complexidade, melhor, pior e caso médio, notação O.</li>
+<li>KERNIGHAN, B. W.; RITCHIE, D. M. <em>C: a linguagem de programação padrão ANSI</em>. Rio de Janeiro: Campus, 1989. Seção 4.5: arquivos de cabeçalho.</li>
+<li>CPPREFERENCE. <em>assert</em>. Disponível em: <a href="https://en.cppreference.com/w/c/error/assert">https://en.cppreference.com/w/c/error/assert</a>.</li>
+</ul>

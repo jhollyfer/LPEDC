@@ -1,0 +1,148 @@
+<h2>0005 · printf</h2>
+<p>Até aqui o programa calcula, mas quem usa só enxerga o que aparece na tela. O
+<code>printf</code> é a ponte entre a memória e o terminal: ele pega valores que estão em
+variáveis e os escreve como texto. A graça é que você não escreve o texto
+pronto. Você escreve um <strong>molde</strong> e diz o que vai em cada lacuna.</p>
+<p>Pense num formulário de papel: &quot;Nome: ______  Idade: ___&quot;. O formulário já
+traz o texto fixo e reserva os espaços; quem preenche só põe os dados. No
+<code>printf</code> o formulário é o primeiro argumento, a <strong>string de formato</strong>, e cada
+lacuna é um <strong>especificador</strong>, que começa com <code>%</code>. Os argumentos que vêm
+depois preenchem as lacunas <strong>na ordem</strong>: o primeiro valor vai no primeiro
+<code>%</code>, o segundo no segundo, e assim por diante (BACKES, 2013, cap. 2).</p>
+<pre><code class="language-c">printf(&quot;Idade: %d anos, altura: %.2f m\n&quot;, 34, 1.72);
+// Idade: 34 anos, altura: 1.72 m
+</code></pre>
+<p>A letra depois do <code>%</code> diz <strong>como ler</strong> o valor. <code>%d</code> lê um inteiro e o mostra
+em decimal; <code>%f</code> lê um real; <code>%c</code>, um caractere; <code>%s</code>, um texto. Isso importa
+porque o <code>printf</code> não sabe o tipo das variáveis que você passou: ele só
+recebe bytes e confia no molde para interpretá-los. Um detalhe dessa
+passagem: todo <code>float</code> chega ao <code>printf</code> convertido em <code>double</code>, e é por isso
+que o mesmo <code>%f</code> serve para os dois (KERRISK, s.d.). A tabela reúne as
+letras que você vai usar no curso:</p>
+<table>
+<thead>
+<tr>
+<th>Especificador</th>
+<th>Mostra</th>
+<th>Exemplo</th>
+<th>Sai</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>%d</code></td>
+<td><code>int</code> em decimal</td>
+<td><code>printf(&quot;%d&quot;, 42)</code></td>
+<td><code>42</code></td>
+</tr>
+<tr>
+<td><code>%u</code>, <code>%ld</code>, <code>%lld</code></td>
+<td><code>unsigned</code>, <code>long</code>, <code>long long</code></td>
+<td><code>printf(&quot;%ld&quot;, 9L)</code></td>
+<td><code>9</code></td>
+</tr>
+<tr>
+<td><code>%f</code></td>
+<td><code>double</code> ou <code>float</code></td>
+<td><code>printf(&quot;%f&quot;, 2.5)</code></td>
+<td><code>2.500000</code></td>
+</tr>
+<tr>
+<td><code>%e</code>, <code>%g</code></td>
+<td>real em notação científica / o mais curto</td>
+<td><code>printf(&quot;%e&quot;, 1500.0)</code></td>
+<td><code>1.500000e+03</code></td>
+</tr>
+<tr>
+<td><code>%c</code></td>
+<td>um caractere</td>
+<td><code>printf(&quot;%c&quot;, &#39;A&#39;)</code></td>
+<td><code>A</code></td>
+</tr>
+<tr>
+<td><code>%s</code></td>
+<td>um texto</td>
+<td><code>printf(&quot;%s&quot;, &quot;Pix&quot;)</code></td>
+<td><code>Pix</code></td>
+</tr>
+<tr>
+<td><code>%x</code>, <code>%X</code>, <code>%o</code></td>
+<td>inteiro em hexa e em octal</td>
+<td><code>printf(&quot;%X&quot;, 255)</code></td>
+<td><code>FF</code></td>
+</tr>
+<tr>
+<td><code>%p</code></td>
+<td>um endereço</td>
+<td><code>printf(&quot;%p&quot;, (void *)&amp;n)</code></td>
+<td><code>0x7ffe...</code></td>
+</tr>
+<tr>
+<td><code>%zu</code></td>
+<td>o resultado do <code>sizeof</code></td>
+<td><code>printf(&quot;%zu&quot;, sizeof n)</code></td>
+<td><code>4</code></td>
+</tr>
+<tr>
+<td><code>%%</code></td>
+<td>o próprio <code>%</code></td>
+<td><code>printf(&quot;10%%&quot;)</code></td>
+<td><code>10%</code></td>
+</tr>
+</tbody></table>
+<p>Só a letra já resolve a maior parte dos casos. Para alinhar colunas ou
+controlar casas decimais, cabem ajustes entre o <code>%</code> e a letra, sempre nesta
+ordem: <code>%[flags][largura][.precisão]letra</code> (KERRISK, s.d.). Vale ler um por
+vez.</p>
+<p>A <strong>largura</strong> é o número <strong>mínimo</strong> de caracteres que o valor ocupa. Se o
+valor for menor, o <code>printf</code> completa com espaços à esquerda, e o número fica
+encostado à direita: <code>%6d</code> de 42 sai <code>    42</code> (quatro espaços e o 42). Se o
+valor for maior que a largura, ele sai inteiro; a largura nunca corta nada
+(DEITEL; DEITEL, 2011, cap. 9). Um cuidado com acentos: a largura conta
+<strong>bytes</strong>, e no UTF-8 o <code>ã</code> ocupa dois. <code>&quot;Feijão&quot;</code> tem 6 letras e 7 bytes,
+então numa coluna <code>%-10s</code> ele parece uma casa mais curto que <code>&quot;Arroz&quot;</code>.</p>
+<p>As <strong>flags</strong> mudam o preenchimento. O <code>-</code> encosta o valor à esquerda e põe
+os espaços depois (<code>%-6d</code> sai <code>42    </code>); o <code>0</code> troca os espaços por zeros
+(<code>%06d</code> sai <code>000042</code>); o <code>+</code> mostra o sinal mesmo quando o número é positivo
+(DEITEL; DEITEL, 2011, cap. 9).</p>
+<p>A <strong>precisão</strong> vem depois de um ponto. Num real, ela é o número de casas
+decimais: <code>%.2f</code> de 3.14159 sai <code>3.14</code>. Num texto, é o máximo de caracteres:
+<code>%.3s</code> de <code>&quot;Brasil&quot;</code> sai <code>Bra</code>. Repare que a precisão <strong>arredonda só na
+tela</strong>: <code>%.2f</code> de 7.499 mostra <code>7.50</code>, mas a variável continua valendo 7.499
+na memória (DEITEL; DEITEL, 2011, cap. 9). O cálculo seguinte usa o valor
+completo, não o que você viu.</p>
+<p>Por fim, o <code>printf</code> escreve na <strong>saída padrão</strong>, o <code>stdout</code>, que normalmente
+é o terminal. No módulo 09, o <code>fprintf</code> usa exatamente o mesmo molde para
+escrever num arquivo, então tudo o que você aprende aqui vale lá também
+(DEITEL; DEITEL, 2011, cap. 9).</p>
+<blockquote>
+<p>[!WARNING]
+O <code>printf</code> <strong>confia</strong> no formato. Se a letra não combina com o tipo do
+valor, ele lê os bytes do jeito errado: <code>printf(&quot;%d&quot;, 9.90)</code> não mostra 9
+nem 10, mostra lixo. O <code>-Wall</code> avisa (<code>format &#39;%d&#39; expects argument of type &#39;int&#39;</code>); nunca ignore. E no <code>printf</code> não vai <code>&amp;</code>: ele quer o valor, não o
+endereço.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>O cupom do mercado sai com colunas alinhadas. Na linha do arroz, <code>%-10s</code>
+reserva 10 casas para o nome, <code>%3d</code> reserva 3 para a quantidade e <code>%9.2f</code>
+reserva 9 para o total, com 2 decimais:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    printf(&quot;%-10s %3s %9s\n&quot;, &quot;Item&quot;, &quot;Qtd&quot;, &quot;Total&quot;);
+    printf(&quot;%-10s %3d %9.2f\n&quot;, &quot;Arroz 5kg&quot;, 2, 51.80);
+    printf(&quot;%-10s %3d %9.2f\n&quot;, &quot;Leite&quot;, 12, 71.88);
+    printf(&quot;%-10s %3d %9.2f\n&quot;, &quot;Banana&quot;, 1, 7.49);
+    printf(&quot;%-10s %13.2f\n&quot;, &quot;TOTAL&quot;, 131.17);
+    return 0;
+}
+// Saída:
+// Item       Qtd     Total
+// Arroz 5kg    2     51.80
+// Leite       12     71.88
+// Banana       1      7.49
+// TOTAL             131.17
+</code></pre>
+<p>Cada <code>printf</code> é uma saída com o mesmo formato. Para mudar uma coluna, troque
+um número em cada linha:</p>
+<p>{{fluxograma}}</p>

@@ -1,0 +1,2359 @@
+<!-- Gerado por _gerador. Para mudar este arquivo, edite _gerador/modulos/09-arquivos/ e rode: cd _gerador && npm run gerar --><h1>Módulo 09 · Arquivos e linha de comando</h1>
+<blockquote>
+<p>[!IMPORTANT]
+<strong>Mundo 2 · Memória e dados · Rota do jogo: etapa 10 de 29</strong></p>
+<p><strong>Missão:</strong> ler e gravar arquivos e receber argumentos na linha de comando.</p>
+<p><strong>Vem de:</strong> <a href="27-c-detalhes.html">Módulo 27 · Detalhes de C que caem em prova</a>. <strong>Segue para:</strong> <a href="10-analise.html">Módulo 10 · Pensar como cientista da computação</a>.</p>
+<p><strong>Checkpoints desta fase:</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> Ler os assuntos 0067 a 0070 e refazer os exemplos</li>
+<li><input disabled="" type="checkbox"> Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho</li>
+<li><input disabled="" type="checkbox"> Fechar a lista prática (P0901 a P0930)</li>
+<li><input disabled="" type="checkbox"> Enfrentar os desafios do módulo</li>
+<li><input disabled="" type="checkbox"> Chefão: resolver as questões de prova do módulo sem consultar</li>
+</ul>
+</blockquote>
+<p>Como fazer o programa <strong>lembrar</strong> depois de terminar: arquivos texto, arquivos
+binários com acesso direto a um registro e argumentos da linha de comando.
+Depende de structs (módulo 08), <code>fgets</code> (0042) e ponteiros; prepara o módulo
+10 e a busca binária em disco (0090).</p>
+<h2>O que você vai aprender</h2>
+<ul>
+<li>abrir, escrever, ler e fechar <strong>arquivos texto</strong> (<code>fopen</code>, <code>fprintf</code>, <code>fgets</code>, <code>fscanf</code>, <code>fgetc</code>, <code>fclose</code>)</li>
+<li>os modos <code>&quot;r&quot;</code>, <code>&quot;w&quot;</code> e <code>&quot;a&quot;</code>, o <strong>buffer</strong> e por que nunca usar <code>while (!feof(f))</code></li>
+<li><strong>arquivos binários</strong> com <code>fwrite</code> e <code>fread</code>, e acesso direto a um registro com <code>fseek</code> e <code>ftell</code></li>
+<li>quando escolher texto e quando escolher binário</li>
+<li>receber dados por <code>argc</code> e <code>argv</code>, converter com <code>strtol</code> e <code>strtod</code> e devolver o <strong>código de saída</strong></li>
+<li>juntar tudo numa ferramenta de terminal com subcomandos</li>
+</ul>
+<h2>Antes de começar</h2>
+<p>Os exemplos gravam em <code>/tmp</code> e quase todos apagam o arquivo no fim com
+<code>remove</code>; quando um o deixa lá, o comentário avisa. Nenhum depende de arquivo
+pré-existente. Para passar argumentos, escreva-os depois do executável:</p>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A137.c -o ~/LPEDC/material/A137 &amp;&amp; ~/LPEDC/material/A137 -r 7 -a 4
+</code></pre>
+<p>Duas ferramentas mostram o que os programas gravam: <code>od -A d -t x1 arquivo</code>
+(bytes em hexadecimal, já vem no sistema) e o <code>strace</code> (chamadas ao sistema,
+como cada <code>write</code>):</p>
+<pre><code class="language-bash">sudo pacman -S strace       # Arch Linux
+sudo apt install strace     # Debian / Ubuntu
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Assunto</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="#0067--arquivos-texto">0067</a></td>
+<td>Arquivos texto</td>
+</tr>
+<tr>
+<td><a href="#0068--arquivos-bin%C3%A1rios">0068</a></td>
+<td>Arquivos binários</td>
+</tr>
+<tr>
+<td><a href="#0069--argumentos-da-linha-de-comando">0069</a></td>
+<td>Argumentos da linha de comando</td>
+</tr>
+<tr>
+<td><a href="#0070--juntando-tudo-a-caderneta-de-gastos">0070</a></td>
+<td>Juntando tudo: a caderneta de gastos</td>
+</tr>
+</tbody></table>
+<hr>
+<blockquote>
+<p>[!NOTE]
+Cada assunto é um capítulo: <strong>Conceito</strong> (a explicação), <strong>Exemplos de uso</strong> (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e <strong>Exercícios</strong> (cada um é um arquivo em <code>material/</code> com o esqueleto, as dicas e o espaço para a resposta; resoluções em <code>_respostas/09-arquivos/</code>).</p>
+</blockquote>
+<h2>0067 · Arquivos texto</h2>
+<h3>Conceito</h3>
+<p>Todo programa que você escreveu até aqui esquece tudo ao terminar. As
+variáveis moram na RAM, a memória de trabalho do computador, e <strong>somem quando
+o programa acaba</strong>. Se ele calcula as despesas do mês, na próxima execução
+começa do zero. Para lembrar de uma vez para outra, o programa precisa
+guardar os dados no disco, que mantém o conteúdo mesmo com a máquina
+desligada.</p>
+<p>É a diferença entre anotar as despesas de cabeça e anotar num caderno. O
+caderno do programa é o <strong>arquivo</strong>: uma sequência de bytes guardada no
+disco, com um nome, que continua lá depois que o programa termina (BACKES,
+2013, cap. 12). Num <strong>arquivo texto</strong>, esses bytes são caracteres que você
+lê num editor comum. O número 152.40 não fica guardado como um <code>double</code> de 8
+bytes, mas como os seis caracteres <code>&#39;1&#39; &#39;5&#39; &#39;2&#39; &#39;.&#39; &#39;4&#39; &#39;0&#39;</code> (BACKES, 2013,
+cap. 12). O assunto 0068 mostra a outra opção, o arquivo binário.</p>
+<p>Trabalhar com arquivo sempre segue três passos: <strong>abrir</strong>, <strong>ler ou
+escrever</strong> e <strong>fechar</strong>. Todas as funções vêm do <code>&lt;stdio.h&gt;</code>, o mesmo
+cabeçalho do <code>printf</code> (KERNIGHAN; RITCHIE, 1989, cap. 7).</p>
+<p>Para abrir, use <code>fopen(caminho, modo)</code>. O caminho é o nome do arquivo, como
+<code>&quot;despesas.txt&quot;</code> ou <code>&quot;/tmp/despesas.txt&quot;</code>. O modo diz o que você quer fazer:
+<code>&quot;r&quot;</code> para ler, <code>&quot;w&quot;</code> para escrever do zero, <code>&quot;a&quot;</code> para acrescentar no fim.
+O <code>fopen</code> devolve um <code>FILE *</code>, um ponteiro para uma struct que a biblioteca
+usa para controlar o arquivo; você nunca mexe nos campos dela, só passa o
+ponteiro adiante. Se o arquivo não abrir, porque a pasta não existe, falta
+permissão ou o disco encheu, o <code>fopen</code> devolve <code>NULL</code>. Por isso todo <code>fopen</code>
+vem seguido de um <code>if</code>, e o <code>perror(&quot;Erro ao abrir&quot;)</code> escreve o motivo, como
+<code>No such file or directory</code> (CELES; RANGEL, 2002). A tabela mostra o que
+cada modo faz com um arquivo que existe ou não:</p>
+<table>
+<thead>
+<tr>
+<th>modo</th>
+<th>o que faz</th>
+<th>se o arquivo não existe</th>
+<th>se já existe</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>&quot;r&quot;</code></td>
+<td>só leitura</td>
+<td><code>fopen</code> devolve <code>NULL</code></td>
+<td>lê do começo</td>
+</tr>
+<tr>
+<td><code>&quot;w&quot;</code></td>
+<td>só escrita</td>
+<td>cria vazio</td>
+<td><strong>apaga tudo</strong> e começa vazio</td>
+</tr>
+<tr>
+<td><code>&quot;a&quot;</code></td>
+<td>escrita no fim (<em>append</em>)</td>
+<td>cria vazio</td>
+<td>mantém e escreve depois do fim</td>
+</tr>
+<tr>
+<td><code>&quot;r+&quot;</code> <code>&quot;w+&quot;</code> <code>&quot;a+&quot;</code></td>
+<td>leitura e escrita</td>
+<td>como <code>r</code>, <code>w</code> e <code>a</code></td>
+<td>como <code>r</code>, <code>w</code> e <code>a</code></td>
+</tr>
+</tbody></table>
+<p>Para escrever, você já conhece quase tudo. <code>fprintf(arq, &quot;Luz %.2f\n&quot;, 98.75)</code> é o <code>printf</code> com o arquivo como primeiro argumento, e usa o mesmo
+molde do assunto 0005. <code>fputs(texto, arq)</code> grava uma string inteira, sem
+acrescentar <code>\n</code>, e <code>fputc(c, arq)</code> grava um caractere (BACKES, 2013,
+cap. 12).</p>
+<p>Para ler, há três jeitos, e cada um devolve um valor que diz se deu certo
+(CELES; RANGEL, 2002). <code>fgets(linha, tamanho, arq)</code> traz uma linha inteira,
+com o <code>\n</code> no fim, e devolve <code>NULL</code> quando o arquivo acaba; é o mesmo <code>fgets</code>
+do assunto 0042, lendo do arquivo. <code>fscanf(arq, &quot;%s %lf&quot;, nome, &amp;valor)</code> lê
+campos com formato, como o <code>scanf</code>, e devolve quantos campos conseguiu ler.
+<code>fgetc(arq)</code> lê um caractere e devolve um <code>int</code>, que vale a constante <code>EOF</code>
+(<em>end of file</em>, fim de arquivo) quando não há mais nada.</p>
+<p>Por fim, <code>fclose(arq)</code> fecha. Ele importa mais do que parece, por causa do
+<strong>buffer</strong>: o <code>fprintf</code> não vai ao disco a cada chamada, porque o disco é
+lento. Ele copia os bytes para uma área na RAM, e só quando essa área enche,
+ou no <code>fflush(arq)</code>, ou no <code>fclose</code>, os bytes descem para o disco. Se o
+programa cair antes do <code>fclose</code>, o que estava no buffer se perde (BACKES,
+2013, cap. 12). Como no <code>malloc</code>: abriu, fecha.</p>
+<p>Você já usou três arquivos sem abrir nenhum. <code>stdin</code> (o teclado), <code>stdout</code> (a
+tela) e <code>stderr</code> (a saída de erros) são <code>FILE *</code> que o programa recebe
+abertos. <code>printf(&quot;oi&quot;)</code> é o mesmo que <code>fprintf(stdout, &quot;oi&quot;)</code>, e
+<code>fgets(linha, 100, stdin)</code> lê do teclado (FEOFILOFF, 2009, ap. H).</p>
+<blockquote>
+<p>[!WARNING]
+Não use <code>while (!feof(arq))</code>: o <code>feof</code> só fica verdadeiro <strong>depois</strong> que uma
+leitura falhou, e a última linha é processada duas vezes. Teste o retorno da
+leitura (<code>fgets(...) != NULL</code>, <code>fscanf(...) == 2</code>). Com <code>fgetc</code>, guarde em
+<code>int</code>, não em <code>char</code>: num <code>char</code>, o <code>EOF</code> (-1) se confunde com um byte real.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>O programa grava as três despesas do mês (mercado, luz, internet) em
+<code>/tmp/despesas.txt</code>, reabre o arquivo em leitura e o <code>fgets</code> traz as linhas,
+uma por vez:</p>
+<p align="center"><img src="material/0067-ideia.svg" alt="Diagrama da ideia: Arquivos texto" width="858"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    const char *caminho = &quot;/tmp/despesas.txt&quot;;
+
+    FILE *arq = fopen(caminho, &quot;w&quot;);          // &quot;w&quot;: cria (ou apaga) o arquivo
+    if (arq == NULL) {
+        perror(&quot;Erro ao criar o arquivo&quot;);
+        return 1;
+    }
+    fprintf(arq, &quot;Mercado %.2f\n&quot;, 152.40);   // printf, mas no arquivo
+    fprintf(arq, &quot;Luz %.2f\n&quot;, 98.75);
+    fprintf(arq, &quot;Internet %.2f\n&quot;, 99.90);
+    fclose(arq);                              // descarrega o buffer no disco
+
+    arq = fopen(caminho, &quot;r&quot;);                // agora para ler
+    if (arq == NULL) {
+        perror(&quot;Erro ao abrir o arquivo&quot;);
+        return 1;
+    }
+    char linha[100];
+    int n = 0;
+    while (fgets(linha, sizeof linha, arq) != NULL) { // NULL = acabou
+        n++;
+        printf(&quot;%d: %s&quot;, n, linha);           // a linha já traz o &#39;\n&#39;
+    }
+    fclose(arq);
+
+    printf(&quot;%d linhas em %s\n&quot;, n, caminho);
+    return 0;
+}
+// Saída:
+// 1: Mercado 152.40
+// 2: Luz 98.75
+// 3: Internet 99.90
+// 3 linhas em /tmp/despesas.txt
+</code></pre>
+<p>A leitura é um laço que testa o retorno do <code>fgets</code>: o fim do arquivo é
+anunciado pela leitura que falhou:</p>
+<p align="center"><img src="material/0067-fluxograma.svg" alt="Fluxograma: Arquivos texto" width="730"></p>
+<p><strong>Exemplo A133 · A linha maior que o buffer</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+// O fgets nunca passa do tamanho que você dá: se a linha não cabe, ela chega
+// em pedaços. Quem diz se a linha acabou é o &#39;\n&#39; no fim do pedaço.
+int main(void) {
+    const char *caminho = &quot;/tmp/recados.txt&quot;;
+
+    FILE *arq = fopen(caminho, &quot;w&quot;);
+    if (arq == NULL) {
+        perror(caminho);
+        return 1;
+    }
+    fputs(&quot;Pagar luz\n&quot;, arq);                         // 9 letras + &#39;\n&#39;
+    fputs(&quot;Levar o carro na revisao de sabado\n&quot;, arq); // não cabe em 12
+    fputs(&quot;Pix\n&quot;, arq);
+    fclose(arq);
+
+    arq = fopen(caminho, &quot;r&quot;);
+    if (arq == NULL) {
+        perror(caminho);
+        return 1;
+    }
+    char pedaco[12]; // cabem 11 caracteres + o &#39;\0&#39;
+    int chamadas = 0;
+    int linhas = 0;
+    while (fgets(pedaco, sizeof pedaco, arq) != NULL) {
+        chamadas++;
+        size_t n = strlen(pedaco);
+        int fim_da_linha = n &gt; 0 &amp;&amp; pedaco[n - 1] == &#39;\n&#39;;
+        if (fim_da_linha) {
+            pedaco[n - 1] = &#39;\0&#39;; // tira o &#39;\n&#39; só para mostrar
+            linhas++;
+        }
+        printf(&quot;fgets %d: [%s]%s\n&quot;, chamadas, pedaco,
+               fim_da_linha ? &quot; &lt;- fim da linha&quot; : &quot;&quot;);
+    }
+    fclose(arq);
+    remove(caminho);
+
+    printf(&quot;%d chamadas do fgets, %d linhas\n&quot;, chamadas, linhas);
+    return 0;
+}
+// Saída:
+// fgets 1: [Pagar luz] &lt;- fim da linha
+// fgets 2: [Levar o car]
+// fgets 3: [ro na revis]
+// fgets 4: [ao de sabad]
+// fgets 5: [o] &lt;- fim da linha
+// fgets 6: [Pix] &lt;- fim da linha
+// 6 chamadas do fgets, 3 linhas
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A133.c -o ~/LPEDC/material/A133 &amp;&amp; ~/LPEDC/material/A133
+</code></pre>
+<p><strong>Exemplo A134 · Acrescentar e somar</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// Grava duas contas com &quot;w&quot;, acrescenta uma terceira com &quot;a&quot; e depois lê tudo
+// com fscanf para somar. No fim apaga o arquivo com remove.
+int main(void) {
+    const char *caminho = &quot;/tmp/contas-do-mes.txt&quot;;
+
+    FILE *arq = fopen(caminho, &quot;w&quot;);
+    if (arq == NULL) {
+        perror(caminho);
+        return 1;
+    }
+    fprintf(arq, &quot;Aluguel 1200.00\n&quot;);
+    fprintf(arq, &quot;Academia 89.90\n&quot;);
+    fclose(arq);
+
+    arq = fopen(caminho, &quot;a&quot;); // &quot;a&quot;: escreve no fim, sem apagar nada
+    if (arq == NULL) {
+        perror(caminho);
+        return 1;
+    }
+    fprintf(arq, &quot;Streaming 39.90\n&quot;);
+    fclose(arq);
+
+    arq = fopen(caminho, &quot;r&quot;);
+    if (arq == NULL) {
+        perror(caminho);
+        return 1;
+    }
+    char nome[30];
+    double valor;
+    double total = 0.0;
+    // fscanf devolve quantos campos conseguiu ler: 2 = linha completa
+    while (fscanf(arq, &quot;%29s %lf&quot;, nome, &amp;valor) == 2) {
+        printf(&quot;%-10s R$ %8.2f\n&quot;, nome, valor);
+        total += valor;
+    }
+    fclose(arq);
+    printf(&quot;%-10s R$ %8.2f\n&quot;, &quot;Total&quot;, total);
+
+    remove(caminho); // apaga o arquivo do disco
+    return 0;
+}
+// Saída:
+// Aluguel    R$  1200.00
+// Academia   R$    89.90
+// Streaming  R$    39.90
+// Total      R$  1329.80
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A134.c -o ~/LPEDC/material/A134 &amp;&amp; ~/LPEDC/material/A134
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E397</strong> · ★☆☆</p>
+<p>Grave a tabuada do 7 no arquivo /tmp/tabuada7.txt, uma conta por linha,
+usando fprintf. Feche o arquivo, abra de novo em modo leitura e mostre o
+conteúdo na tela com fgets. Confira se o fopen deu certo nas duas vezes.</p>
+<pre><code class="language-text">Saída esperada:
+7 x 1 = 7
+7 x 2 = 14
+7 x 3 = 21
+7 x 4 = 28
+7 x 5 = 35
+7 x 6 = 42
+7 x 7 = 49
+7 x 8 = 56
+7 x 9 = 63
+7 x 10 = 70
+</code></pre>
+<p><strong>Exercício E399</strong> · ★★☆</p>
+<p>Faça um &quot;wc&quot; caseiro. Primeiro, grave em /tmp/recado.txt exatamente estas
+três linhas (cada uma termina com &#39;\n&#39;):</p>
+<pre><code class="language-text">Feira no domingo
+leve sacolas
+e o dinheiro do pastel
+</code></pre>
+<p>Depois, abra o arquivo para leitura e leia caractere por caractere com
+fgetc, contando linhas, palavras e caracteres (bytes).</p>
+<pre><code class="language-text">Saída esperada:
+Linhas: 3
+Palavras: 10
+Caracteres: 53
+</code></pre>
+<p><strong>Exercício E400</strong> · ★★☆</p>
+<p>Escreva um programa que cria o arquivo /tmp/turma.txt com fprintf, uma linha
+por aluno com o nome e duas notas: &quot;Bruna 9.0 7.5&quot;, &quot;Diego 4.0 7.0&quot; e
+&quot;Lia 6.5 7.5&quot;. Feche, reabra para leitura e leia com fscanf num laço que
+pare quando a linha não vier completa. Mostre a média de cada um e a
+situação (aprovado com média &gt;= 7.0) e, no fim, a média da turma. Confira os
+fopen e apague o arquivo no final.</p>
+<pre><code class="language-text">Saída esperada:
+Bruna    média 8.25  aprovada(o)
+Diego    média 5.50  reprovada(o)
+Lia      média 7.00  aprovada(o)
+Média da turma: 6.92
+</code></pre>
+<p><strong>Exercício E402</strong> · ★★★</p>
+<p>Lista de compras automática. Escreva um programa que:</p>
+<ol>
+<li>cria /tmp/estoque.txt com as linhas &quot;arroz 3&quot;, &quot;cafe 0&quot;, &quot;leite 8&quot;,</li>
+</ol>
+<pre><code class="language-text"> &quot;ovos 2&quot; e &quot;sabao 6&quot; (produto e quantidade em casa);
+</code></pre>
+<ol start="2">
+<li>lê o estoque e, com os DOIS arquivos abertos ao mesmo tempo, grava em</li>
+</ol>
+<pre><code class="language-text"> /tmp/comprar.txt só os produtos com menos de 5 unidades, já com quanto
+ falta para chegar a 5 (&quot;arroz 2&quot;);
+</code></pre>
+<ol start="3">
+<li>fecha tudo, reabre /tmp/comprar.txt e mostra o resultado. Se o segundo</li>
+</ol>
+<pre><code class="language-text"> fopen falhar, feche o primeiro arquivo antes de sair.
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Comprar:
+- arroz: 2
+- cafe: 5
+- ovos: 3
+3 itens na lista
+</code></pre>
+<hr>
+<h2>0068 · Arquivos binários</h2>
+<h3>Conceito</h3>
+<p>O arquivo texto tem um limite. Cada linha tem um tamanho diferente: &quot;Luz
+98.75&quot; tem 9 caracteres, &quot;Internet 99.90&quot; tem 14. Para chegar à linha 500, o
+programa precisa ler as 499 anteriores, contando os <code>\n</code>, porque não há como
+saber em que byte ela começa. E cada número passa por uma conversão na ida
+(<code>double</code> para texto) e outra na volta (texto para <code>double</code>).</p>
+<p>Pense no estoque do mercadinho guardado em fichas todas do mesmo tamanho,
+numa gaveta. Para pegar a terceira ficha, ninguém lê as duas primeiras: mede
+com o dedo e puxa. O <strong>arquivo binário</strong> permite isso. Ele grava os bytes
+<strong>exatamente como estão na memória</strong>, sem converter nada em texto, e por
+isso um <code>int</code> ocupa sempre 4 bytes no disco, e uma struct ocupa sempre o seu
+<code>sizeof</code> (BACKES, 2013, cap. 12).</p>
+<p>Quando todos os registros têm o mesmo tamanho, a posição de cada um vira uma
+conta. Um <strong>registro</strong> aqui é uma struct gravada no arquivo, como um
+<code>Produto</code> de 32 bytes. O registro 0 começa no byte 0, o registro 1 no byte
+32, e o registro <code>i</code> começa no byte <code>i * sizeof(Produto)</code> (DEITEL; DEITEL,
+2011, cap. 11). Com essa conta, o programa vai direto ao registro que quer.</p>
+<p>Para abrir um arquivo binário, acrescente um <code>b</code> ao modo: <code>&quot;wb&quot;</code>, <code>&quot;rb&quot;</code>,
+<code>&quot;ab&quot;</code>, <code>&quot;rb+&quot;</code>. No Linux e no Mac, o <code>b</code> não muda nada. No Windows, sem ele,
+a biblioteca troca cada <code>\n</code> por <code>\r\n</code> ao gravar, e qualquer byte de valor
+10 no meio de um número sai estragado (BACKES, 2013, cap. 12). Escreva o <code>b</code>
+sempre, e o programa funciona nos dois sistemas.</p>
+<p>Para gravar, use <code>fwrite(endereco, tamanho, quantidade, arq)</code>. Ele copia
+<code>tamanho * quantidade</code> bytes a partir do endereço que você deu. Uma variável
+ou uma struct vai com <code>&amp;</code> (<code>fwrite(&amp;p, sizeof p, 1, arq)</code>); um vetor já é
+endereço e vai sem <code>&amp;</code> (<code>fwrite(estoque, sizeof(Produto), 3, arq)</code> grava os
+três produtos de uma vez). O <code>fread</code>, com os mesmos argumentos, faz o caminho
+de volta. Os dois devolvem <strong>quantos itens</strong> processaram, e não quantos
+bytes. Se o <code>fread</code> devolver menos que o pedido, o arquivo acabou ou deu erro,
+e é esse retorno que vai na condição do <code>while</code> (BACKES, 2013, cap. 12).</p>
+<p>Para pular até um registro, use <code>fseek(arq, deslocamento, origem)</code>. A origem
+diz de onde contar: <code>SEEK_SET</code> é o começo do arquivo, <code>SEEK_CUR</code> é a posição
+atual e <code>SEEK_END</code> é o fim. O deslocamento é um <code>long</code> e pode ser negativo.
+<code>fseek(arq, 2 * sizeof(Produto), SEEK_SET)</code> põe a posição no byte 64, e o
+próximo <code>fread</code> traz o registro 2. O <code>fseek</code> não lê nada: ele só troca um
+número guardado no <code>FILE</code>. Pular para o registro 2 custa o mesmo que pular
+para o registro 2 milhões (DEITEL; DEITEL, 2011, cap. 11).</p>
+<p>Duas funções completam o conjunto. <code>ftell(arq)</code> devolve a posição atual em
+bytes, e <code>rewind(arq)</code> volta ao byte 0. Juntando <code>fseek(arq, 0, SEEK_END)</code> e
+<code>ftell(arq)</code>, você mede o arquivo; dividindo pelo <code>sizeof</code> do registro,
+descobre quantos registros ele tem (BACKES, 2013, cap. 12).</p>
+<p>O acesso direto abre uma possibilidade grande. Com os registros gravados em
+ordem de código, dá para fazer <strong>busca binária direto no arquivo</strong>: <code>fseek</code>
+no registro do meio, <code>fread</code>, compara, descarta a metade que não serve e
+repete. Uns 20 <code>fread</code> acham um registro entre 1 milhão, sem carregar o
+arquivo na RAM (ZIVIANI, 2010). A busca binária é o assunto 0090.</p>
+<p>A tabela resume o que muda entre os dois tipos de arquivo:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>texto (<code>fprintf</code>)</th>
+<th>binário (<code>fwrite</code>)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>o <code>int</code> 12345678</td>
+<td>8 bytes: <code>&#39;1&#39; &#39;2&#39; ... &#39;8&#39;</code></td>
+<td>4 bytes: <code>4E 61 BC 00</code></td>
+</tr>
+<tr>
+<td>abre no editor?</td>
+<td>sim</td>
+<td>vira lixo na tela</td>
+</tr>
+<tr>
+<td>converte na ida e na volta?</td>
+<td>sim (mais lento)</td>
+<td>não, só copia bytes</td>
+</tr>
+<tr>
+<td>acesso direto ao registro <code>i</code>?</td>
+<td>não</td>
+<td>sim, com <code>fseek</code></td>
+</tr>
+<tr>
+<td>lê em outra máquina?</td>
+<td>sim</td>
+<td>só se <code>int</code>, alinhamento e ordem dos bytes forem iguais</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>[!WARNING]
+<code>fwrite</code> copia bytes, não dados. Struct com ponteiro (<code>char *nome</code>) grava o
+<strong>endereço</strong>, que não aponta para nada na próxima execução: use
+<code>char nome[20]</code>. E um <code>.bin</code> pode não ser lido igual em outra máquina
+(tamanho do <code>int</code>, alinhamento, ordem dos bytes): para trocar dados, use texto.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>O estoque do mercadinho tem três produtos de 32 bytes cada. Um <code>fwrite</code> grava
+os três (96 bytes). Para ler o café, o programa pula 2 × 32 = 64 bytes e faz um
+<code>fread</code> de um registro:</p>
+<p align="center"><img src="material/0068-ideia.svg" alt="Diagrama da ideia: Arquivos binários" width="858"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+typedef struct {
+    char nome[20];
+    int qtd;
+    double preco;
+} Produto;
+
+int main(void) {
+    const char *caminho = &quot;/tmp/estoque.bin&quot;;
+    Produto estoque[3] = {
+        {&quot;Arroz&quot;, 12, 25.90},
+        {&quot;Feijão&quot;, 7, 8.75},
+        {&quot;Café&quot;, 4, 18.50},
+    };
+
+    FILE *arq = fopen(caminho, &quot;wb&quot;);
+    if (arq == NULL) {
+        perror(caminho);
+        return 1;
+    }
+    size_t gravados = fwrite(estoque, sizeof(Produto), 3, arq); // vetor: sem &amp;
+    fclose(arq);
+    printf(&quot;Cada registro: %zu bytes\n&quot;, sizeof(Produto));
+    printf(&quot;Gravados: %zu registros\n&quot;, gravados);
+
+    arq = fopen(caminho, &quot;rb&quot;);
+    if (arq == NULL) {
+        perror(caminho);
+        return 1;
+    }
+    fseek(arq, 0, SEEK_END);                    // vai para o fim...
+    printf(&quot;Arquivo: %ld bytes\n&quot;, ftell(arq)); // ...e pergunta a posição
+
+    Produto p;
+    fseek(arq, 2 * sizeof(Produto), SEEK_SET);  // byte 64: começo do registro 2
+    if (fread(&amp;p, sizeof(Produto), 1, arq) == 1) {
+        printf(&quot;Registro 2: %s, %d un., R$ %.2f\n&quot;, p.nome, p.qtd, p.preco);
+    }
+    fclose(arq);
+    remove(caminho);
+    return 0;
+}
+// Saída:
+// Cada registro: 32 bytes
+// Gravados: 3 registros
+// Arquivo: 96 bytes
+// Registro 2: Café, 4 un., R$ 18.50
+</code></pre>
+<p>Não há laço até o café: são dois <code>fseek</code> e um <code>fread</code>, com 3 registros ou 3
+milhões:</p>
+<p align="center"><img src="material/0068-fluxograma.svg" alt="Fluxograma: Arquivos binários" width="441"></p>
+<p><strong>Exemplo A135 · Ler em lotes: o retorno do fread</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// O fread devolve quantos itens leu de verdade. Pedindo 3 de cada vez num
+// arquivo com 7, vêm 3, 3, 1 e depois 0. O último lote vem incompleto, e é o
+// retorno (não o tamanho do vetor) que diz quantos valem.
+int main(void) {
+    const char *caminho = &quot;/tmp/passos.bin&quot;;
+    int passos[7] = {8200, 10450, 6300, 12010, 9800, 4100, 11500}; // da semana
+
+    FILE *arq = fopen(caminho, &quot;wb&quot;);
+    if (arq == NULL) {
+        perror(caminho);
+        return 1;
+    }
+    fwrite(passos, sizeof(int), 7, arq);
+    fclose(arq);
+
+    arq = fopen(caminho, &quot;rb&quot;);
+    if (arq == NULL) {
+        perror(caminho);
+        return 1;
+    }
+    int lote[3];
+    size_t lidos;
+    long total = 0;
+    int dia = 1;
+    while ((lidos = fread(lote, sizeof(int), 3, arq)) &gt; 0) {
+        printf(&quot;Pedi 3, vieram %zu:&quot;, lidos);
+        for (size_t i = 0; i &lt; lidos; i++) { // só os que vieram
+            printf(&quot; dia %d=%d&quot;, dia, lote[i]);
+            total += lote[i];
+            dia++;
+        }
+        printf(&quot;\n&quot;);
+    }
+    printf(&quot;Pedi 3, vieram 0: fim (feof = %d)\n&quot;, feof(arq) != 0);
+
+    // fseek para depois do fim não dá erro, mas o fread não acha nada
+    fseek(arq, 100 * (long) sizeof(int), SEEK_SET);
+    long posicao = ftell(arq);
+    int x = -1;
+    size_t r = fread(&amp;x, sizeof x, 1, arq);
+    printf(&quot;No byte %ld: fread devolveu %zu, x continua %d\n&quot;, posicao, r, x);
+    fclose(arq);
+    remove(caminho);
+
+    printf(&quot;Total da semana: %ld passos\n&quot;, total);
+    return 0;
+}
+// Saída:
+// Pedi 3, vieram 3: dia 1=8200 dia 2=10450 dia 3=6300
+// Pedi 3, vieram 3: dia 4=12010 dia 5=9800 dia 6=4100
+// Pedi 3, vieram 1: dia 7=11500
+// Pedi 3, vieram 0: fim (feof = 1)
+// No byte 400: fread devolveu 0, x continua -1
+// Total da semana: 62360 passos
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A135.c -o ~/LPEDC/material/A135 &amp;&amp; ~/LPEDC/material/A135
+</code></pre>
+<p><strong>Exemplo A136 · O mesmo número em texto e em binário</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// Mostra o tamanho do arquivo e cada byte dele em hexadecimal
+void mostrar_bytes(const char *caminho) {
+    FILE *arq = fopen(caminho, &quot;rb&quot;);
+    if (arq == NULL) {
+        perror(caminho);
+        return;
+    }
+    fseek(arq, 0, SEEK_END);
+    long tamanho = ftell(arq);
+    rewind(arq); // volta para o byte 0
+
+    printf(&quot;%-18s %ld bytes:&quot;, caminho, tamanho);
+    int c;
+    while ((c = fgetc(arq)) != EOF) {
+        printf(&quot; %02X&quot;, c);
+    }
+    printf(&quot;\n&quot;);
+    fclose(arq);
+}
+
+int main(void) {
+    int codigo = 12345678;
+
+    FILE *txt = fopen(&quot;/tmp/codigo.txt&quot;, &quot;w&quot;);
+    FILE *bin = fopen(&quot;/tmp/codigo.bin&quot;, &quot;wb&quot;);
+    if (txt == NULL || bin == NULL) {
+        perror(&quot;fopen&quot;);
+        if (txt != NULL) fclose(txt);
+        if (bin != NULL) fclose(bin);
+        return 1;
+    }
+    fprintf(txt, &quot;%d&quot;, codigo);               // vira os caracteres &#39;1&#39; &#39;2&#39; ... &#39;8&#39;
+    fwrite(&amp;codigo, sizeof codigo, 1, bin);   // copia os 4 bytes do int
+    fclose(txt);
+    fclose(bin);
+
+    mostrar_bytes(&quot;/tmp/codigo.txt&quot;);
+    mostrar_bytes(&quot;/tmp/codigo.bin&quot;);
+
+    // ler de volta o binário: os 4 bytes voltam direto para um int
+    int lido = 0;
+    bin = fopen(&quot;/tmp/codigo.bin&quot;, &quot;rb&quot;);
+    if (bin != NULL) {
+        if (fread(&amp;lido, sizeof lido, 1, bin) == 1) {
+            printf(&quot;Lido do binário: %d\n&quot;, lido);
+        }
+        fclose(bin);
+    }
+    remove(&quot;/tmp/codigo.txt&quot;);
+    remove(&quot;/tmp/codigo.bin&quot;);
+    return 0;
+}
+// Saída:
+// /tmp/codigo.txt    8 bytes: 31 32 33 34 35 36 37 38
+// /tmp/codigo.bin    4 bytes: 4E 61 BC 00
+// Lido do binário: 12345678
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A136.c -o ~/LPEDC/material/A136 &amp;&amp; ~/LPEDC/material/A136
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E403</strong> · ★☆☆</p>
+<p>Uma estação meteorológica registrou as máximas da semana útil: 31, 29, 33,
+35 e 30 graus. Grave o vetor inteiro em /tmp/maximas.bin com UM fwrite.
+Depois leia tudo de volta, com UM fread, para outro vetor, confira se vieram
+os 5 valores e mostre a média.</p>
+<pre><code class="language-text">Saída esperada:
+Lidos: 5 valores
+Média: 31.6 graus
+</code></pre>
+<p><strong>Exercício E405</strong> · ★★☆</p>
+<p>Crie o tipo Conta (int numero, double saldo). No main, grave com UM fwrite
+em /tmp/contas.bin as contas 1001 (250.00), 1002 (80.50) e 1003 (1200.00).
+Escreva void listar(void), que mostra as contas lendo registro por registro,
+e int depositar(int posicao, double valor): abre em &quot;rb+&quot;, vai até o
+registro da posição com fseek, lê, soma o valor ao saldo, volta ao começo
+do mesmo registro e grava por cima (1 se deu certo, 0 se não). Liste,
+deposite R$ 100.00 na posição 1 e liste de novo.</p>
+<pre><code class="language-text">Saída esperada:
+Antes:
+1001  R$   250.00
+1002  R$    80.50
+1003  R$  1200.00
+Depois:
+1001  R$   250.00
+1002  R$   180.50
+1003  R$  1200.00
+</code></pre>
+<p><strong>Exercício E406</strong> · ★★☆</p>
+<p>Escreva a função</p>
+<pre><code class="language-text">long contar_registros(const char *caminho, size_t tamanho_registro);
+</code></pre>
+<p>que descobre quantos registros um arquivo binário tem SEM ler nenhum deles:
+só olhando o tamanho do arquivo. Se não conseguir abrir, devolve -1.</p>
+<p>No main, grave em /tmp/notas.bin as notas de 7 alunos num vetor de
+struct { int matricula; float nota; } (os valores são livres), feche, e
+mostre:</p>
+<pre><code class="language-text">Saída esperada:
+Tamanho do registro: 8 bytes
+Registros em /tmp/notas.bin: 7
+Registros em /tmp/nao-existe.bin: -1
+</code></pre>
+<p><strong>Exercício E408</strong> · ★★★</p>
+<p>O extrato do banco mostra os lançamentos mais recentes primeiro. Grave em
+/tmp/extrato.bin estes 6 lançamentos, nesta ordem (do mais antigo para o
+mais novo), como registros de struct { char descricao[24]; double valor; }:
+Salário +3500.00, Aluguel -1200.00, Mercado -387.60, Pix da Ana +45.00,
+Farmácia -62.30 e Padaria -18.90. Depois, SEM carregar o arquivo inteiro na
+memória (um registro por vez), mostre os 3 últimos, do mais novo para o mais
+antigo, e o saldo de TODOS os lançamentos (printf com %-15s %+8.2f).</p>
+<pre><code class="language-text">Saída esperada:
+Últimos lançamentos:
+Padaria           -18.90
+Farmácia         -62.30
+Pix da Ana        +45.00
+Saldo: R$ 1876.20
+</code></pre>
+<hr>
+<h2>0069 · Argumentos da linha de comando</h2>
+<h3>Conceito</h3>
+<p>Fim do rodízio de pizza, conta de R$ 187,40 para 4 pessoas. Um programa
+poderia perguntar o total e o número de pessoas com <code>scanf</code>. Mas repare nos
+programas de terminal que você já usa: <code>cp origem destino</code>,
+<code>gcc -o prog prog.c</code>, <code>git commit -m &quot;msg&quot;</code>. Nenhum deles pergunta nada. Os
+dados vão escritos <strong>junto do comando</strong>, na mesma linha, e o programa já
+começa sabendo o que fazer. Isso permite usar o programa dentro de scripts,
+sem ninguém digitando.</p>
+<p>É como pedir um café no balcão já dizendo tudo de uma vez: &quot;um expresso
+duplo, sem açúcar&quot;. O atendente não precisa fazer perguntas. Os dados que vão
+junto do comando se chamam <strong>argumentos da linha de comando</strong>, e no C eles
+chegam como parâmetros do <code>main</code> (BACKES, 2013, cap. 13). Até aqui o <code>main</code>
+tinha <code>void</code> entre os parênteses; para receber argumentos, ele ganha dois
+parâmetros:</p>
+<pre><code class="language-c">int main(int argc, char *argv[])
+</code></pre>
+<p>O primeiro, <code>argc</code> (<em>argument count</em>, contagem de argumentos), diz quantos
+itens vieram na linha, <strong>contando o nome do programa</strong>. Por isso ele vale
+pelo menos 1 (FEOFILOFF, 2009, ap. H). Em <code>./racha 187.40 4</code>, <code>argc</code> vale 3:
+o nome do programa e os dois números.</p>
+<p>O segundo, <code>argv</code> (<em>argument vector</em>, vetor de argumentos), é um vetor de
+<code>char *</code>, com uma string por item. <code>argv[0]</code> é o nome do programa,
+<code>./racha</code>; <code>argv[1]</code> é <code>&quot;187.40&quot;</code>, o primeiro argumento seu; <code>argv[2]</code> é
+<code>&quot;4&quot;</code>. Depois do último vem <code>argv[argc]</code>, que vale <code>NULL</code> e marca o fim do
+vetor, do mesmo jeito que o <code>&#39;\0&#39;</code> marca o fim de uma string (KERNIGHAN;
+RITCHIE, 1989). Como vetor em parâmetro vira ponteiro, <code>char **argv</code> é outra
+forma de escrever a mesma coisa.</p>
+<p>Quem separa a linha em pedaços não é o seu programa, é o <strong>shell</strong>, o
+programa que lê o que você digita no terminal (bash, zsh). Antes de o seu
+programa começar, o shell corta a linha nos espaços, tira as aspas e troca
+coringas como <code>*</code> pelos nomes de arquivos. Assim, <code>&quot;São Paulo&quot;</code> entre aspas
+chega como um argumento só; sem aspas, chega como dois. E o <code>&gt; saida.txt</code> de
+um redirecionamento é tratado pelo shell e nem aparece no <code>argv</code>.</p>
+<p>Tudo no <code>argv</code> é <strong>texto</strong>. O <code>4</code> chega como a string <code>&quot;4&quot;</code>, e
+<code>argv[2] * 2</code> nem compila. Para virar número, é preciso converter. A função
+<code>strtol(texto, &amp;fim, 10)</code> converte para <code>long</code> na base 10, e
+<code>strtod(texto, &amp;fim)</code> converte para <code>double</code>. As duas apontam <code>fim</code> para o
+primeiro caractere que não conseguiram converter. Se <code>*fim</code> não for <code>&#39;\0&#39;</code>,
+sobrou lixo no texto, como em <code>&quot;4x&quot;</code> ou <code>&quot;quatro&quot;</code>, e o programa pode recusar
+a entrada (LINUX MAN-PAGES PROJECT, s.d.).</p>
+<p>Existem atalhos mais curtos, <code>atoi</code> e <code>atof</code>, mas eles não avisam erro:
+<code>atoi(&quot;quatro&quot;)</code> devolve 0, igual a <code>atoi(&quot;0&quot;)</code>, e o programa não tem como
+saber se o usuário digitou zero ou bobagem. Servem para um teste rápido, não
+para entrada de usuário (BACKES, 2013, cap. 13).</p>
+<p>Dois costumes de programas de terminal fecham o assunto (BACKES, 2013,
+cap. 12). Mensagens de erro vão para o <code>stderr</code>, com
+<code>fprintf(stderr, ...)</code>. Quem redireciona a saída para um arquivo continua
+vendo o erro na tela, porque o <code>&gt;</code> só desvia o <code>stdout</code>. E o <code>return</code> do
+<code>main</code> vira o <strong>código de saída</strong> do programa: 0 quer dizer sucesso, e
+qualquer outro valor quer dizer falha. O shell guarda esse número na variável
+<code>$?</code>, e o <code>&amp;&amp;</code> só roda o comando seguinte se o anterior devolveu 0.</p>
+<blockquote>
+<p>[!WARNING]
+Nunca use <code>argv[1]</code> sem conferir o <code>argc</code>: sem argumentos, ele é <code>NULL</code> e
+<code>atoi(NULL)</code> derruba o programa. E em <code>./calc 9 * 3</code> o shell troca o <code>*</code>
+pelos nomes dos arquivos da pasta antes de o programa rodar; use aspas
+(<code>&#39;*&#39;</code>) ou outro símbolo, como <code>x</code>.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>Fim do rodízio de pizza: conta de R$ 187,40 para 4 pessoas. O comando
+<code>./racha 187.40 4</code> chega com <code>argc = 3</code>. O programa confere a quantidade,
+converte <code>argv[1]</code> e <code>argv[2]</code> e divide:</p>
+<p align="center"><img src="material/0069-ideia.svg" alt="Diagrama da ideia: Argumentos da linha de comando" width="870"></p>
+<p>Salve como <code>racha.c</code>, compile com as flags de estudo e passe os argumentos
+depois do executável: <code>./programa 187.40 4</code>.</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(int argc, char *argv[]) {
+    if (argc != 3) {
+        fprintf(stderr, &quot;Uso: %s &lt;total&gt; &lt;pessoas&gt;\n&quot;, argv[0]);
+        return 1;                             // diferente de 0: deu errado
+    }
+
+    char *fim;
+    double total = strtod(argv[1], &amp;fim);     // texto -&gt; double
+    if (*fim != &#39;\0&#39; || total &lt;= 0) {
+        fprintf(stderr, &quot;Total inválido: %s\n&quot;, argv[1]);
+        return 1;
+    }
+    long pessoas = strtol(argv[2], &amp;fim, 10); // texto -&gt; inteiro, base 10
+    if (*fim != &#39;\0&#39; || pessoas &lt;= 0) {
+        fprintf(stderr, &quot;Número de pessoas inválido: %s\n&quot;, argv[2]);
+        return 1;
+    }
+
+    printf(&quot;Conta: R$ %.2f\n&quot;, total);
+    printf(&quot;Pessoas: %ld\n&quot;, pessoas);
+    printf(&quot;Cada um: R$ %.2f\n&quot;, total / pessoas);
+    return 0;
+}
+// $ ./programa 187.40 4
+// Conta: R$ 187.40
+// Pessoas: 4
+// Cada um: R$ 46.85
+//
+// $ ./programa 187.40 quatro
+// Número de pessoas inválido: quatro
+</code></pre>
+<p>Duas perguntas antes da conta: veio a quantidade certa de argumentos, e são
+números de verdade? O programa só trabalha no caminho verde:</p>
+<p align="center"><img src="material/0069-fluxograma.svg" alt="Fluxograma: Argumentos da linha de comando" width="634"></p>
+<p><strong>Exemplo A137 · Opções com hífen</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdbool.h&gt;
+
+// Uma tabuada com opções, no estilo dos programas de terminal:
+//   tabuada [-a ate] [-r] &lt;numero&gt;
+// -a muda até onde vai (padrão 10) e precisa de um valor logo depois;
+// -r mostra de trás para frente. As opções podem vir em qualquer ordem.
+//
+// Rode assim:  ~/LPEDC/rodar 09-arquivos/0069-argumentos/A137.c -r 7 -a 4
+
+// converte texto em inteiro positivo; devolve 0 se não for
+long positivo(const char *texto) {
+    char *fim;
+    long n = strtol(texto, &amp;fim, 10);
+    if (fim == texto || *fim != &#39;\0&#39; || n &lt;= 0) {
+        return 0;
+    }
+    return n;
+}
+
+int main(int argc, char *argv[]) {
+    long numero = 0;
+    long ate = 10;
+    bool inverso = false;
+
+    for (int i = 1; i &lt; argc; i++) {
+        if (strcmp(argv[i], &quot;-r&quot;) == 0) {
+            inverso = true;
+        } else if (strcmp(argv[i], &quot;-a&quot;) == 0) {
+            if (i + 1 &gt;= argc) { // -a era o último: falta o valor
+                fprintf(stderr, &quot;A opção -a precisa de um valor\n&quot;);
+                return 1;
+            }
+            i++; // o valor é consumido aqui; o laço não olha para ele de novo
+            ate = positivo(argv[i]);
+            if (ate == 0) {
+                fprintf(stderr, &quot;Valor inválido para -a: %s\n&quot;, argv[i]);
+                return 1;
+            }
+        } else if (argv[i][0] == &#39;-&#39;) {
+            fprintf(stderr, &quot;Opção desconhecida: %s\n&quot;, argv[i]);
+            return 1;
+        } else {
+            numero = positivo(argv[i]);
+            if (numero == 0) {
+                fprintf(stderr, &quot;Número inválido: %s\n&quot;, argv[i]);
+                return 1;
+            }
+        }
+    }
+    if (numero == 0) {
+        fprintf(stderr, &quot;Uso: %s [-a ate] [-r] &lt;numero&gt;\n&quot;, argv[0]);
+        return 1;
+    }
+
+    for (long k = 1; k &lt;= ate; k++) {
+        long m = inverso ? ate - k + 1 : k;
+        printf(&quot;%ld x %ld = %ld\n&quot;, numero, m, numero * m);
+    }
+    return 0;
+}
+// $ rodar A137.c -r 7 -a 4
+// 7 x 4 = 28
+// 7 x 3 = 21
+// 7 x 2 = 14
+// 7 x 1 = 7
+//
+// $ rodar A137.c 3 -a 2
+// 3 x 1 = 3
+// 3 x 2 = 6
+//
+// $ rodar A137.c 7 -a
+// A opção -a precisa de um valor
+//
+// $ rodar A137.c 7 -x
+// Opção desconhecida: -x
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A137.c -o ~/LPEDC/material/A137 &amp;&amp; ~/LPEDC/material/A137
+</code></pre>
+<p><strong>Exemplo A138 · O que chega no argv</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+// Rode assim:  ~/LPEDC/rodar 09-arquivos/0069-argumentos/A138.c 10 -v &quot;São Paulo&quot; 3.5
+int main(int argc, char *argv[]) {
+    printf(&quot;argc = %d\n&quot;, argc);
+    // argv[0] é o caminho do executável; os seus argumentos começam no 1
+    for (int i = 1; i &lt; argc; i++) {
+        printf(&quot;argv[%d] = \&quot;%s\&quot; (%zu bytes)&quot;, i, argv[i], strlen(argv[i]));
+        if (argv[i][0] == &#39;-&#39;) {
+            printf(&quot;  &lt;- parece uma opção&quot;);
+        }
+        printf(&quot;\n&quot;);
+    }
+    // o vetor termina com um ponteiro NULL, como uma string termina em &#39;\0&#39;
+    printf(&quot;argv[%d] é %s\n&quot;, argc, argv[argc] == NULL ? &quot;NULL&quot; : &quot;outra coisa&quot;);
+    return 0;
+}
+// $ rodar A138.c 10 -v &quot;São Paulo&quot; 3.5
+// argc = 5
+// argv[1] = &quot;10&quot; (2 bytes)
+// argv[2] = &quot;-v&quot; (2 bytes)  &lt;- parece uma opção
+// argv[3] = &quot;São Paulo&quot; (10 bytes)
+// argv[4] = &quot;3.5&quot; (3 bytes)
+// argv[5] é NULL
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A138.c -o ~/LPEDC/material/A138 &amp;&amp; ~/LPEDC/material/A138
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E409</strong> · ★☆☆</p>
+<p>Faça o seu próprio &quot;echo&quot;: o programa mostra os argumentos recebidos, na
+mesma linha, separados por um espaço (sem espaço sobrando no fim), e na
+linha de baixo quantos foram. Sem argumentos, mostra só &quot;0 argumentos&quot;.</p>
+<pre><code class="language-text">Argumentos:
+bom dia Brasil
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+bom dia Brasil
+3 argumentos
+</code></pre>
+<p><strong>Exercício E411</strong> · ★★☆</p>
+<p>As notas da prova chegam pela linha de comando. Mostre quantas notas
+válidas vieram, a média, a maior e a menor. Argumento que não é número (ou
+que está fora de 0 a 10) é ignorado com um aviso em stderr. Sem nenhuma
+nota válida, mostre &quot;Nenhuma nota válida&quot; e devolva 1.</p>
+<pre><code class="language-text">Argumentos:
+8.5 7 nove 9.25 6 11
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Ignorando &quot;nove&quot;
+Ignorando &quot;11&quot;
+Notas: 4
+Média: 7.69
+Maior: 9.25
+Menor: 6.00
+</code></pre>
+<p><strong>Exercício E412</strong> · ★★☆</p>
+<p>Escreva um programa que cumprimenta alguém um certo número de vezes. Ele
+recebe o nome e o número de vezes pela linha de comando. Sem os dois
+argumentos, ou com um número de vezes que não é inteiro positivo, mostra uma
+mensagem de uso em stderr e devolve 1.</p>
+<pre><code class="language-text">Argumentos:
+Ana 3
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Olá, Ana!
+Olá, Ana!
+Olá, Ana!
+</code></pre>
+<p><strong>Exercício E413</strong> · ★★★</p>
+<p>Faça um &quot;wc&quot; de verdade: o nome do arquivo vem pela linha de comando. O
+programa abre o arquivo, conta linhas, palavras e bytes e mostra no formato
+abaixo. Se não vier exatamente um argumento, mostre o uso em stderr e
+devolva 1. Se o arquivo não abrir, use perror com o nome dele e devolva 1.</p>
+<pre><code class="language-text">Argumentos (o arquivo tem 4 linhas: &quot;Oi, Ana&quot;, &quot;tudo certo?&quot;, uma vazia
+e &quot;Até amanhã&quot;):
+/tmp/recado.txt
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+4 linhas, 6 palavras, 34 bytes em /tmp/recado.txt
+</code></pre>
+<pre><code class="language-text">Argumentos (arquivo que não existe):
+/tmp/nao-existe.txt
+</code></pre>
+<pre><code class="language-text">Saída esperada (em stderr):
+/tmp/nao-existe.txt: No such file or directory
+</code></pre>
+<hr>
+<h2>0070 · Juntando tudo: a caderneta de gastos</h2>
+<h3>Conceito</h3>
+<p>Fim de mês, e a pergunta de sempre: para onde foi o dinheiro? Com o que o
+módulo mostrou, você monta um controle de gastos de terminal. Cada comando é
+uma execução separada do programa, e os dados ficam guardados num arquivo
+entre uma execução e outra:</p>
+<pre><code class="language-bash">gastos novo mercado 152.40     # anota um gasto
+gastos lista                   # mostra tudo e o total
+gastos exporta /tmp/gastos.csv # gera uma planilha
+gastos limpa                   # começa do zero
+</code></pre>
+<p>Pense numa caderneta de papel que mora na gaveta. Cada vez que você gasta,
+abre, anota no fim e guarda. No fim do mês, abre e soma. O programa faz o
+mesmo, e cada peça do módulo cuida de uma parte do trabalho.</p>
+<p>A primeira peça são os argumentos do assunto 0069. O <code>argv[1]</code> diz <strong>o que</strong>
+fazer (<code>novo</code>, <code>lista</code>, <code>exporta</code>, <code>limpa</code>), e os argumentos seguintes trazem
+os dados daquele comando. É o mesmo arranjo do <code>git</code>, um programa só com
+vários <strong>subcomandos</strong> (<code>git commit</code>, <code>git log</code>). O <code>main</code> confere o <code>argc</code>,
+compara o <code>argv[1]</code> com cada nome e chama a função certa; se nada bater, ou
+se faltar argumento, mostra a mensagem de uso (FEOFILOFF, 2009, ap. H).</p>
+<p>A segunda peça é o arquivo binário do assunto 0068, que serve de caderneta.
+Cada gasto é um registro <code>Gasto</code>, de tamanho fixo, gravado com <code>fwrite</code>. O
+modo <code>&quot;ab&quot;</code> abre para acrescentar no fim, sem ler nem apagar o que já existe.
+Como todos os registros têm o mesmo tamanho, <code>ftell(arq) / sizeof(Gasto)</code>
+diz quantos já estão gravados: logo depois de gravar o terceiro, a posição é
+96 e a conta dá 3 (DEITEL; DEITEL, 2011, cap. 11).</p>
+<p>A terceira peça é o arquivo texto do assunto 0067, para a exportação.
+Ninguém abre um <code>.dat</code> numa planilha. O comando <code>exporta</code> lê os registros
+binários com <code>fread</code> e escreve cada um com <code>fprintf</code> numa linha de <strong>CSV</strong>
+(<em>comma-separated values</em>, valores separados por um sinal), um formato de
+texto em que cada linha é uma linha da planilha e um separador divide as
+colunas. Aqui o separador é o <code>;</code>, que as planilhas em português abrem direto
+(BACKES, 2013, cap. 12).</p>
+<p>Quem guarda dados precisa de três cuidados. O primeiro é <strong>validar antes de
+gravar</strong>: <code>strtod</code> com o teste <code>*fim != &#39;\0&#39;</code> impede que um &quot;abc&quot; digitado
+por engano entre na caderneta como R$ 0,00 (LINUX MAN-PAGES PROJECT, s.d.).
+Depois de gravado, o erro fica lá para sempre.</p>
+<p>O segundo cuidado é <strong>não gravar lixo</strong>. O campo <code>categoria</code> tem 20 bytes, e
+&quot;luz&quot; ocupa só 4 com o <code>&#39;\0&#39;</code>. Os outros 16 guardariam o que estivesse antes
+naquela parte da memória. O <code>memset</code> zera o campo inteiro antes do
+<code>strncpy</code>, e os bytes que sobram vão para o arquivo como zeros.</p>
+<p>O terceiro é lembrar que <strong>arquivo inexistente nem sempre é erro</strong>. Se o
+<code>fopen</code> em <code>&quot;rb&quot;</code> devolve <code>NULL</code> no comando <code>lista</code>, quase sempre quer dizer
+que ninguém anotou nada ainda. O programa responde &quot;Nenhum gasto ainda.&quot; e
+termina com sucesso, em vez de mostrar uma mensagem de falha.</p>
+<p>Um detalhe do modo <code>&quot;ab&quot;</code> protege a caderneta: nele, <strong>toda</strong> escrita vai
+para o fim do arquivo, mesmo que alguém tenha chamado <code>fseek</code> antes. O
+sistema garante isso, e por isso dois programas anotando gastos ao mesmo
+tempo não escrevem um por cima do outro (LINUX MAN-PAGES PROJECT, s.d.).</p>
+<blockquote>
+<p>[!WARNING]
+Trocar <code>&quot;ab&quot;</code> por <code>&quot;wb&quot;</code> no <code>novo</code> apaga os gastos anteriores a cada
+anotação, sem aviso. E não leia, por outro <code>FILE *</code>, o que acabou de
+escrever antes do <code>fclose</code> (ou <code>fflush</code>): os bytes ainda estão no buffer, e
+a leitura acha o arquivo vazio ou pela metade.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>O controle de gastos do mês roda no terminal, um comando por execução, com os
+dados guardados em arquivo entre uma execução e outra:</p>
+<pre><code class="language-bash">gastos novo mercado 152.40     # anota um gasto
+gastos lista                   # mostra tudo e o total
+gastos exporta /tmp/gastos.csv # gera uma planilha
+gastos limpa                   # começa do zero
+</code></pre>
+<p>O <code>novo</code> acrescenta um registro de 32 bytes em <code>gastos.dat</code>, o <code>lista</code> o lê de
+volta com <code>fread</code> e o <code>exporta</code> transforma o binário em texto:</p>
+<p align="center"><img src="material/0070-ideia.svg" alt="Diagrama da ideia: Juntando tudo: a caderneta de gastos" width="870"></p>
+<p>Cada função repete os exemplos dos três assuntos anteriores, e o <code>main</code> só
+despacha. Salve como <code>gastos.c</code>.</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+#define ARQUIVO &quot;/tmp/gastos.dat&quot;
+
+typedef struct {
+    char categoria[20];
+    double valor;
+} Gasto;
+
+void uso(const char *programa) {
+    fprintf(stderr, &quot;Uso: %s novo &lt;categoria&gt; &lt;valor&gt;\n&quot;, programa);
+    fprintf(stderr, &quot;     %s lista | exporta &lt;arquivo.csv&gt; | limpa\n&quot;, programa);
+}
+
+int novo(const char *categoria, const char *texto_valor) {
+    Gasto g;
+    char *fim;
+    g.valor = strtod(texto_valor, &amp;fim);
+    if (*fim != &#39;\0&#39; || g.valor &lt;= 0) {
+        fprintf(stderr, &quot;Valor inválido: %s\n&quot;, texto_valor);
+        return 1;
+    }
+    memset(g.categoria, 0, sizeof g.categoria);          // sem lixo no arquivo
+    strncpy(g.categoria, categoria, sizeof g.categoria - 1);
+
+    FILE *arq = fopen(ARQUIVO, &quot;ab&quot;); // binário, sempre no fim
+    if (arq == NULL) {
+        perror(ARQUIVO);
+        return 1;
+    }
+    if (fwrite(&amp;g, sizeof g, 1, arq) != 1) {
+        perror(ARQUIVO);
+        fclose(arq);
+        return 1;
+    }
+    long registro = ftell(arq) / (long) sizeof(Gasto) - 1;
+    fclose(arq);
+    printf(&quot;Gravado: %s R$ %.2f (registro %ld)\n&quot;, g.categoria, g.valor, registro);
+    return 0;
+}
+
+int lista(void) {
+    FILE *arq = fopen(ARQUIVO, &quot;rb&quot;);
+    if (arq == NULL) {
+        printf(&quot;Nenhum gasto ainda.\n&quot;);
+        return 0;
+    }
+    Gasto g;
+    int n = 0;
+    double total = 0.0;
+    while (fread(&amp;g, sizeof g, 1, arq) == 1) {
+        printf(&quot;%d  %-12s R$ %8.2f\n&quot;, n, g.categoria, g.valor);
+        total += g.valor;
+        n++;
+    }
+    fclose(arq);
+    printf(&quot;Total: R$ %.2f em %d gastos\n&quot;, total, n);
+    return 0;
+}
+
+int exporta(const char *destino) {
+    FILE *ent = fopen(ARQUIVO, &quot;rb&quot;);
+    if (ent == NULL) {
+        perror(ARQUIVO);
+        return 1;
+    }
+    FILE *sai = fopen(destino, &quot;w&quot;); // texto, para abrir na planilha
+    if (sai == NULL) {
+        perror(destino);
+        fclose(ent);
+        return 1;
+    }
+    fprintf(sai, &quot;categoria;valor\n&quot;);
+    Gasto g;
+    int n = 0;
+    while (fread(&amp;g, sizeof g, 1, ent) == 1) {
+        fprintf(sai, &quot;%s;%.2f\n&quot;, g.categoria, g.valor);
+        n++;
+    }
+    fclose(ent);
+    fclose(sai);
+    printf(&quot;%d gastos exportados para %s\n&quot;, n, destino);
+    return 0;
+}
+
+int main(int argc, char *argv[]) {
+    if (argc &lt; 2) {
+        uso(argv[0]);
+        return 1;
+    }
+    const char *comando = argv[1];
+
+    if (strcmp(comando, &quot;novo&quot;) == 0 &amp;&amp; argc == 4) {
+        return novo(argv[2], argv[3]);
+    }
+    if (strcmp(comando, &quot;lista&quot;) == 0 &amp;&amp; argc == 2) {
+        return lista();
+    }
+    if (strcmp(comando, &quot;exporta&quot;) == 0 &amp;&amp; argc == 3) {
+        return exporta(argv[2]);
+    }
+    if (strcmp(comando, &quot;limpa&quot;) == 0 &amp;&amp; argc == 2) {
+        remove(ARQUIVO);
+        printf(&quot;Caderneta apagada.\n&quot;);
+        return 0;
+    }
+    uso(argv[0]);
+    return 1;
+}
+// $ ./programa limpa
+// Caderneta apagada.
+// $ ./programa novo mercado 152.40
+// Gravado: mercado R$ 152.40 (registro 0)
+// $ ./programa novo luz 98.75
+// Gravado: luz R$ 98.75 (registro 1)
+// $ ./programa novo farmacia 45.30
+// Gravado: farmacia R$ 45.30 (registro 2)
+// $ ./programa lista
+// 0  mercado      R$   152.40
+// 1  luz          R$    98.75
+// 2  farmacia     R$    45.30
+// Total: R$ 296.45 em 3 gastos
+// $ ./programa exporta /tmp/gastos.csv
+// 3 gastos exportados para /tmp/gastos.csv
+</code></pre>
+<p>O fluxograma segue o comando <code>lista</code>. O <code>main</code> testa o comando até achar um
+conhecido; comando desconhecido, ou com argumentos faltando, cai na mensagem de
+uso:</p>
+<p align="center"><img src="material/0070-fluxograma.svg" alt="Fluxograma: Juntando tudo: a caderneta de gastos" width="749"></p>
+<p><strong>Exemplo A139 · Apagar um registro do meio</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+// Arquivo binário não tem &quot;apagar a linha 2&quot;. O jeito clássico: copiar todos
+// os registros, menos o que sai, para um arquivo temporário e depois trocar
+// um pelo outro com rename. O número do registro vem pela linha de comando.
+//
+// Rode assim:  ~/LPEDC/rodar 09-arquivos/0070-juntando-tudo/A139.c 1
+
+#define ARQUIVO &quot;/tmp/caderneta.dat&quot;
+#define TEMPORARIO &quot;/tmp/caderneta.tmp&quot;
+
+typedef struct {
+    char categoria[20];
+    double valor;
+} Gasto;
+
+void listar(const char *titulo) {
+    FILE *arq = fopen(ARQUIVO, &quot;rb&quot;);
+    if (arq == NULL) {
+        perror(ARQUIVO);
+        return;
+    }
+    printf(&quot;%s\n&quot;, titulo);
+    Gasto g;
+    int i = 0;
+    while (fread(&amp;g, sizeof g, 1, arq) == 1) {
+        printf(&quot;  %d  %-10s R$ %7.2f\n&quot;, i, g.categoria, g.valor);
+        i++;
+    }
+    fclose(arq);
+}
+
+// copia tudo menos o registro &quot;alvo&quot;; devolve quantos copiou (-1 = erro)
+int apagar(long alvo) {
+    FILE *ent = fopen(ARQUIVO, &quot;rb&quot;);
+    if (ent == NULL) {
+        perror(ARQUIVO);
+        return -1;
+    }
+    FILE *sai = fopen(TEMPORARIO, &quot;wb&quot;);
+    if (sai == NULL) {
+        perror(TEMPORARIO);
+        fclose(ent);
+        return -1;
+    }
+    Gasto g;
+    long i = 0;
+    int copiados = 0;
+    while (fread(&amp;g, sizeof g, 1, ent) == 1) {
+        if (i != alvo) {
+            fwrite(&amp;g, sizeof g, 1, sai);
+            copiados++;
+        }
+        i++;
+    }
+    fclose(ent);
+    fclose(sai);                           // tudo no disco antes de trocar
+    if (rename(TEMPORARIO, ARQUIVO) != 0) { // o temporário vira a caderneta
+        perror(&quot;rename&quot;);
+        return -1;
+    }
+    return copiados;
+}
+
+int main(int argc, char *argv[]) {
+    if (argc != 2) {
+        fprintf(stderr, &quot;Uso: %s &lt;registro&gt;\n&quot;, argv[0]);
+        return 1;
+    }
+    // uma caderneta de exemplo, recriada a cada execução
+    Gasto gastos[4] = {
+        {&quot;mercado&quot;, 152.40}, {&quot;luz&quot;, 98.75}, {&quot;farmacia&quot;, 45.30}, {&quot;gas&quot;, 120.00},
+    };
+    FILE *arq = fopen(ARQUIVO, &quot;wb&quot;);
+    if (arq == NULL) {
+        perror(ARQUIVO);
+        return 1;
+    }
+    fwrite(gastos, sizeof(Gasto), 4, arq);
+    fclose(arq);
+
+    char *fim;
+    long alvo = strtol(argv[1], &amp;fim, 10);
+    if (fim == argv[1] || *fim != &#39;\0&#39; || alvo &lt; 0 || alvo &gt;= 4) {
+        fprintf(stderr, &quot;Registro inválido: %s (use 0 a 3)\n&quot;, argv[1]);
+        remove(ARQUIVO);
+        return 1;
+    }
+
+    listar(&quot;Antes:&quot;);
+    int restantes = apagar(alvo);
+    if (restantes &lt; 0) {
+        remove(ARQUIVO);
+        return 1;
+    }
+    listar(&quot;Depois:&quot;);
+    printf(&quot;Registro %ld apagado, sobraram %d\n&quot;, alvo, restantes);
+    remove(ARQUIVO);
+    return 0;
+}
+// $ rodar A139.c 1
+// Antes:
+//   0  mercado    R$  152.40
+//   1  luz        R$   98.75
+//   2  farmacia   R$   45.30
+//   3  gas        R$  120.00
+// Depois:
+//   0  mercado    R$  152.40
+//   1  farmacia   R$   45.30
+//   2  gas        R$  120.00
+// Registro 1 apagado, sobraram 3
+//
+// $ rodar A139.c 9
+// Registro inválido: 9 (use 0 a 3)
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A139.c -o ~/LPEDC/material/A139 &amp;&amp; ~/LPEDC/material/A139
+</code></pre>
+<p><strong>Exemplo A140 · Do texto para o binário</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+// Converte uma lista de alunos em texto (fácil de editar) para um arquivo
+// binário de registros fixos (fácil de consultar). Com um número na linha de
+// comando, mostra só aquele aluno, indo direto ao registro com fseek.
+//
+// Rode assim:  ~/LPEDC/rodar 09-arquivos/0070-juntando-tudo/A140.c 2
+
+typedef struct {
+    char nome[20];
+    double n1, n2;
+} Aluno;
+
+const char *TEXTO = &quot;/tmp/turma.txt&quot;;
+const char *BINARIO = &quot;/tmp/turma.bin&quot;;
+
+// lê o texto e grava o binário; devolve quantos alunos converteu (-1 = erro)
+int converter(void) {
+    FILE *ent = fopen(TEXTO, &quot;r&quot;);
+    if (ent == NULL) {
+        perror(TEXTO);
+        return -1;
+    }
+    FILE *sai = fopen(BINARIO, &quot;wb&quot;);
+    if (sai == NULL) {
+        perror(BINARIO);
+        fclose(ent);
+        return -1;
+    }
+    Aluno a = {0};
+    int n = 0;
+    while (fscanf(ent, &quot;%19s %lf %lf&quot;, a.nome, &amp;a.n1, &amp;a.n2) == 3) {
+        fwrite(&amp;a, sizeof a, 1, sai);
+        n++;
+    }
+    fclose(ent);
+    fclose(sai);
+    return n;
+}
+
+void mostrar(int i, const Aluno *a) {
+    printf(&quot;Aluno %d: %-6s média %.2f\n&quot;, i, a-&gt;nome, (a-&gt;n1 + a-&gt;n2) / 2);
+}
+
+int main(int argc, char *argv[]) {
+    // 1. o arquivo texto, como alguém digitaria num editor
+    FILE *arq = fopen(TEXTO, &quot;w&quot;);
+    if (arq == NULL) {
+        perror(TEXTO);
+        return 1;
+    }
+    fprintf(arq, &quot;Ana 8.5 7.0\nBruno 6.0 5.5\nCarla 9.0 9.0\nDavi 7.5 8.0\n&quot;);
+    fclose(arq);
+
+    // 2. texto -&gt; binário
+    int total = converter();
+    if (total &lt; 0) {
+        return 1;
+    }
+    printf(&quot;%d alunos convertidos (%zu bytes cada)\n&quot;, total, sizeof(Aluno));
+
+    // 3. consulta: um aluno direto pelo número, ou todos
+    arq = fopen(BINARIO, &quot;rb&quot;);
+    if (arq == NULL) {
+        perror(BINARIO);
+        return 1;
+    }
+    Aluno a;
+    if (argc == 2) {
+        char *fim;
+        long i = strtol(argv[1], &amp;fim, 10);
+        if (*fim != &#39;\0&#39; || fim == argv[1] || i &lt; 0 || i &gt;= total) {
+            fprintf(stderr, &quot;Não existe o aluno %s (use 0 a %d)\n&quot;, argv[1], total - 1);
+        } else {
+            fseek(arq, i * (long) sizeof(Aluno), SEEK_SET);
+            if (fread(&amp;a, sizeof a, 1, arq) == 1) {
+                mostrar((int) i, &amp;a);
+            }
+        }
+    } else {
+        int i = 0;
+        while (fread(&amp;a, sizeof a, 1, arq) == 1) {
+            mostrar(i, &amp;a);
+            i++;
+        }
+    }
+    fclose(arq);
+    remove(TEXTO);
+    remove(BINARIO);
+    return 0;
+}
+// $ rodar A140.c
+// 4 alunos convertidos (40 bytes cada)
+// Aluno 0: Ana    média 7.75
+// Aluno 1: Bruno  média 5.75
+// Aluno 2: Carla  média 9.00
+// Aluno 3: Davi   média 7.75
+//
+// $ rodar A140.c 2
+// 4 alunos convertidos (40 bytes cada)
+// Aluno 2: Carla  média 9.00
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A140.c -o ~/LPEDC/material/A140 &amp;&amp; ~/LPEDC/material/A140
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E415</strong> · ★☆☆</p>
+<p>Placar do bolão. O programa recebe três argumentos: o arquivo, o nome de
+quem apostou e o palpite. Ele ACRESCENTA a linha &quot;nome palpite&quot; no fim do
+arquivo (criando o arquivo se ele não existir) e depois mostra todas as
+linhas, numeradas. Com outra quantidade de argumentos, mostra o uso em
+stderr e devolve 1.</p>
+<pre><code class="language-text">Argumentos (arquivo inexistente):
+/tmp/bolao.txt Rita 2x1
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+1. Rita 2x1
+</code></pre>
+<pre><code class="language-text">Argumentos (rodando de novo, com o arquivo já criado):
+/tmp/bolao.txt Caio 0x0
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+1. Rita 2x1
+2. Caio 0x0
+</code></pre>
+<p><strong>Exercício E417</strong> · ★★☆</p>
+<p>Agenda em arquivo binário com cabeçalho. O arquivo /tmp/agenda.bin começa
+com um int com a quantidade de contatos, seguido dos contatos, registros de
+tamanho fixo (struct { char nome[8]; char telefone[16]; }). Escreva criar
+(grava só o cabeçalho, com 0), adicionar(nome, telefone) (abre com &quot;rb+&quot;,
+lê a quantidade, vai até a vaga com fseek, grava o contato, soma 1 e regrava
+o cabeçalho) e listar (mostra a quantidade, o tamanho do arquivo e os
+contatos, nome com %-11s). Adicione Marta, Joel e Iara e liste.</p>
+<pre><code class="language-text">Saída esperada:
+3 contatos (arquivo de 76 bytes)
+0. Marta       (11) 98888-1234
+1. Joel        (21) 97777-4321
+2. Iara        (31) 96666-0000
+</code></pre>
+<p><strong>Exercício E418</strong> · ★★☆</p>
+<p>Relatório de vendas da feira. Escreva um programa que:</p>
+<ol>
+<li>grava em /tmp/vendas.bin quatro vendas, como registros de</li>
+</ol>
+<pre><code class="language-text"> struct { char produto[16]; int qtd; double preco; }: pastel 30 x 8.00,
+ caldo de cana 25 x 6.50, tapioca 12 x 10.00 e queijo 4 x 35.00;
+</code></pre>
+<ol start="2">
+<li>exporta para CSV (texto, separado por &#39;;&#39;, com cabeçalho) no arquivo</li>
+</ol>
+<pre><code class="language-text"> cujo nome vem em argv[1] (sem argumento, usa /tmp/vendas.csv);
+</code></pre>
+<ol start="3">
+<li>reabre o CSV, mostra o conteúdo com fgets e, por fim, o total geral.</li>
+</ol>
+<pre><code class="language-text">Argumentos:
+(nenhum)
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+produto;qtd;total
+pastel;30;240.00
+caldo de cana;25;162.50
+tapioca;12;120.00
+queijo;4;140.00
+Total geral: R$ 662.50 (gravado em /tmp/vendas.csv)
+</code></pre>
+<p><strong>Exercício E420</strong> · ★★★</p>
+<p>Faça um &quot;grep&quot; simplificado que recebe [-c] <palavra> <arquivo>. Sem -c,
+mostra cada linha do arquivo que contém a palavra, com o número da linha, e
+no fim quantas linhas casaram. Com -c, mostra só a contagem. O código de
+saída é 0 se achou alguma linha e 1 se não achou. Argumentos errados mostram
+o uso em stderr; arquivo que não abre usa perror. Nos dois casos, devolva 2.</p>
+<pre><code class="language-text">Arquivo /tmp/lista.txt: &quot;arroz 5kg&quot;, &quot;feijao&quot;, &quot;arroz integral&quot;, &quot;cafe&quot;.
+</code></pre>
+<pre><code class="language-text">Argumentos:
+arroz /tmp/lista.txt
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+1: arroz 5kg
+3: arroz integral
+2 linhas
+</code></pre>
+<pre><code class="language-text">Argumentos:
+-c arroz /tmp/lista.txt
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+2
+</code></pre>
+<pre><code class="language-text">Argumentos (código de saída 1):
+leite /tmp/lista.txt
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+0 linhas
+</code></pre>
+<hr>
+<h2>Lista do módulo</h2>
+<p>30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P0901.c a P0930.c, em <code>material/</code>; resoluções em <code>_respostas/09-arquivos/lista/</code>.</p>
+<h3>★☆☆ Aquecimento</h3>
+<p><strong>Exercício P0901</strong> · ★☆☆ · Calor de Manaus no arquivo</p>
+<p>As máximas da semana em Manaus foram 33, 35, 31, 36, 34, 32 e 30 graus.
+Grave os sete valores em /tmp/p0901_temps.txt, um por linha, com fprintf.
+Feche o arquivo, abra de novo para leitura e leia os números com fscanf
+até o arquivo acabar (sem saber de antemão quantos são). Mostre quantos
+dias foram lidos, a maior máxima (e em que dia, contando de 1) e a média.
+No fim, apague o arquivo com remove().</p>
+<pre><code class="language-text">Saída esperada:
+Dias lidos: 7
+Maior: 36 graus (dia 4)
+Média: 33.0 graus
+</code></pre>
+<p><strong>Resposta esperada:</strong> 7 dias, maior 36 no dia 4, média 231 / 7 = 33.0.</p>
+<hr>
+<p><strong>Exercício P0902</strong> · ★☆☆ · Lista de chamada numerada</p>
+<p>Grave em /tmp/p0902_chamada.txt os nomes da chamada do cursinho, um por
+linha: Ana Clara, Bruno, Iara Souza e Joao. Depois leia o arquivo linha a
+linha com fgets e mostre cada nome numerado e com o tamanho (sem contar o
+&#39;\n&#39;). No fim, mostre quantas linhas o arquivo tinha e apague o arquivo.</p>
+<pre><code class="language-text">Saída esperada:
+1: Ana Clara (9 caracteres)
+2: Bruno (5 caracteres)
+3: Iara Souza (10 caracteres)
+4: Joao (4 caracteres)
+Total: 4 linhas
+</code></pre>
+<p><strong>Resposta esperada:</strong> a saída acima; sem tirar o &#39;\n&#39;, cada tamanho sairia com 1 a mais.</p>
+<hr>
+<p><strong>Exercício P0903</strong> · ★☆☆ · O livro-caixa que esquece vendas</p>
+<p>A padaria anota as vendas num arquivo texto. De manhã o programa grava
+12, 30 e 8 reais; à tarde ele ACRESCENTA 25 e 15; no fim do dia ele lê
+tudo e soma. O programa abaixo compila sem aviso, mas tem DOIS erros de
+propósito e mostra só &quot;Total do dia: R$ 0&quot;. Conserte para a saída ficar:</p>
+<pre><code class="language-text">Saída esperada:
+Venda: 12
+Venda: 30
+Venda: 8
+Venda: 25
+Venda: 15
+Total do dia: R$ 90
+</code></pre>
+<p><strong>Resposta esperada:</strong> na tarde, troque &quot;w&quot; por &quot;a&quot; e acrescente fclose(arq) depois dos dois fprintf. A saída fica igual à de cima.</p>
+<hr>
+<p><strong>Exercício P0904</strong> · ★☆☆ · Quantos produtos tem o arquivo?</p>
+<p>O main abaixo já grava 5 produtos em /tmp/p0904_produtos.bin. Escreva a
+função</p>
+<pre><code class="language-text">long conta_registros(FILE *arq)
+</code></pre>
+<p>que descobre quantos registros Produto o arquivo tem SEM ler nenhum: vá
+até o fim com fseek, pergunte a posição com ftell e divida pelo tamanho
+de um registro. Depois, no main, leia só o ÚLTIMO produto, com um fseek
+a partir do fim, e mostre-o. Num PC de 64 bits comum, cada Produto ocupa
+16 bytes (4 do int, 4 de preenchimento, 8 do double).</p>
+<pre><code class="language-text">Saída esperada:
+Tamanho do arquivo: 80 bytes
+Registros: 5
+Último: código 105, R$ 4.99
+</code></pre>
+<p><strong>Resposta esperada:</strong> 80 bytes, 5 registros, último código 105 a R$ 4.99.</p>
+<hr>
+<p><strong>Exercício P0905</strong> · ★☆☆ · A cidade de nome mais comprido</p>
+<p>Escreva um programa que recebe nomes de cidades pela linha de comando e
+mostra quantos vieram e qual é o mais comprido (no empate, vale o
+primeiro). Sem nenhum argumento, ele mostra como usar e termina com
+return 1.</p>
+<pre><code class="language-text">$ ./rodar P0905.c manaus belem parintins tefe
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+4 cidades
+Maior nome: parintins (9 letras)
+</code></pre>
+<p>Sem argumentos, a saída é &quot;uso: P0905 cidade1 cidade2 ...&quot;.</p>
+<p><strong>Resposta esperada:</strong> 4 cidades, maior nome parintins com 9 letras.</p>
+<hr>
+<p><strong>Exercício P0906</strong> · ★☆☆ · O recibo da conta de luz, letra por letra</p>
+<p>Grave em /tmp/p0906_recibo.txt as três linhas do recibo:</p>
+<pre><code class="language-text">Consumo: 230 kWh
+Tarifa: R$ 0.85
+Total: R$ 195.50
+</code></pre>
+<p>(use fprintf e calcule o total no programa: 230 * 0.85). Depois reabra o
+arquivo e leia-o UM CARACTERE POR VEZ com fgetc: mostre cada caractere
+na tela com putchar e conte quantos caracteres e quantas linhas (&#39;\n&#39;)
+o arquivo tem. Apague o arquivo no fim.</p>
+<pre><code class="language-text">Saída esperada:
+Consumo: 230 kWh
+Tarifa: R$ 0.85
+Total: R$ 195.50
+3 linhas, 50 caracteres
+</code></pre>
+<p><strong>Resposta esperada:</strong> 3 linhas e 50 caracteres (17 + 16 + 17, contando o &#39;\n&#39; de cada linha).</p>
+<hr>
+<p><strong>Exercício P0907</strong> · ★☆☆ · O aviso da feira em maiúsculas</p>
+<p>Grave em /tmp/p0907_aviso.txt estas duas linhas:</p>
+<pre><code class="language-text">Bom dia, Manaus!
+A feira abre as 6h.
+</code></pre>
+<p>Depois copie o arquivo, caractere por caractere, para
+/tmp/p0907_grito.txt, trocando cada letra minúscula pela maiúscula (os
+outros caracteres passam iguais). Por fim, mostre o conteúdo do segundo
+arquivo lendo-o com fgets e apague os dois arquivos.</p>
+<pre><code class="language-text">Saída esperada:
+BOM DIA, MANAUS!
+A FEIRA ABRE AS 6H.
+</code></pre>
+<p><strong>Resposta esperada:</strong> as duas linhas em maiúsculas, como acima.</p>
+<hr>
+<p><strong>Exercício P0908</strong> · ★☆☆ · Pulando de dois em dois no arquivo</p>
+<p>Grave em /tmp/p0908_quadrados.bin, em binário, os quadrados de 1 a 10
+(1, 4, 9, ..., 100) como int. Depois leia SÓ os que estão nas posições
+ímpares da contagem humana (1º, 3º, 5º, 7º e 9º): leia um com fread e
+pule o seguinte com fseek a partir da posição atual. Mostre os lidos e
+quantos foram.</p>
+<pre><code class="language-text">Saída esperada:
+1 9 25 49 81
+Lidos: 5
+</code></pre>
+<p><strong>Resposta esperada:</strong> 1 9 25 49 81 e Lidos: 5.</p>
+<hr>
+<p><strong>Exercício P0909</strong> · ★☆☆ · O boletim que lê o aluno errado</p>
+<p>O programa grava 4 alunos (matrícula e nota) em binário e depois lê os
+registros 2, 0 e 3 com a função le_registro. Ele compila sem aviso, mas
+mostra números sem sentido: a função tem um erro de propósito na conta da
+posição. Conserte para a saída ficar:</p>
+<pre><code class="language-text">Saída esperada:
+Registro 2: matrícula 2203, nota 7.5
+Registro 0: matrícula 2201, nota 9.0
+Registro 3: matrícula 2204, nota 4.0
+</code></pre>
+<p><strong>Resposta esperada:</strong> fseek(arq, i * (long) sizeof(Aluno), SEEK_SET). A saída fica igual à de cima.</p>
+<hr>
+<p><strong>Exercício P0910</strong> · ★☆☆ · Os preços da feira pela linha de comando</p>
+<p>Os preços chegam pela linha de comando. Grave cada um em
+/tmp/p0910_precos.txt, um por linha e com duas casas. Feche, reabra para
+leitura, some tudo com fscanf e mostre quantos preços foram gravados e o
+total. Sem argumentos, mostre &quot;uso: P0910 preco1 preco2 ...&quot; e termine
+com return 1. Apague o arquivo no fim.</p>
+<pre><code class="language-text">$ ./rodar P0910.c 12.50 3.99 7.00
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+3 preços gravados
+Total: R$ 23.49
+</code></pre>
+<p><strong>Resposta esperada:</strong> 3 preços gravados e Total: R$ 23.49.</p>
+<h3>★★☆ Para pensar</h3>
+<p><strong>Exercício P0911</strong> · ★★☆ · Só os aprovados vão para o outro arquivo</p>
+<p>Grave em /tmp/p0911_turma.txt a turma do cursinho, uma pessoa por linha
+(nome e duas notas):</p>
+<pre><code class="language-text">Ana 7.0 8.0
+Beto 5.0 4.5
+Caio 6.0 6.0
+Dani 9.5 8.5
+Edu 3.0 7.0
+</code></pre>
+<p>Depois leia esse arquivo com fscanf e escreva em /tmp/p0911_aprovados.txt
+só quem tem média &gt;= 6, no formato &quot;nome média&quot; (duas casas). Por fim,
+mostre o arquivo dos aprovados (lendo com fgets), quantos passaram e
+apague os dois arquivos.</p>
+<pre><code class="language-text">Saída esperada:
+Ana 7.50
+Caio 6.00
+Dani 9.00
+Aprovados: 3 de 5
+</code></pre>
+<p><strong>Resposta esperada:</strong> Ana 7.50, Caio 6.00, Dani 9.00 e Aprovados: 3 de 5.</p>
+<hr>
+<p><strong>Exercício P0912</strong> · ★★☆ · Tirando um produto do catálogo</p>
+<p>Um arquivo binário não tem &quot;apagar registro do meio&quot;. O jeito clássico é
+copiar todos os registros, MENOS o que sai, para um arquivo novo. Escreva</p>
+<pre><code class="language-text">int remove_produto(const char *origem, const char *destino, int codigo)
+</code></pre>
+<p>que faz essa cópia e devolve quantos registros foram para o destino (ou
+-1 se não conseguir abrir algum arquivo). O main grava 5 produtos em
+/tmp/p0912_catalogo.bin, remove o código 103 gerando
+/tmp/p0912_novo.bin, lista o arquivo novo e apaga os dois no fim.</p>
+<pre><code class="language-text">Saída esperada:
+Antes: 5 produtos
+Depois: 4 produtos
+101 Arroz        R$  24.90
+102 Feijao       R$   8.75
+104 Farinha      R$   6.40
+105 Cafe         R$  17.30
+</code></pre>
+<p><strong>Resposta esperada:</strong> Depois: 4 produtos, sem o 103 (Acucar) na lista.</p>
+<hr>
+<p><strong>Exercício P0913</strong> · ★★☆ · Busca binária no cadastro do cursinho</p>
+<p>O arquivo de alunos está ORDENADO por matrícula, então dá para achar um
+aluno lendo poucos registros: olhe o do meio com fseek e fread e descarte
+a metade que não pode ter a matrícula. Escreva</p>
+<pre><code class="language-text">int busca(FILE *arq, int n, int matricula, Aluno *achado, int *leituras)
+</code></pre>
+<p>que devolve 1 se achou (e copia o aluno para *achado) ou 0 se não achou,
+e conta em *leituras quantos fread fez. O main grava os 8 alunos e
+procura 2041, 2007 e 2050. O n (quantos registros) deve ser calculado
+pelo tamanho do arquivo, não escrito à mão.</p>
+<pre><code class="language-text">Saída esperada:
+8 alunos no arquivo
+2041: Kaio (2 leituras)
+2007: Bruna (2 leituras)
+2050: não encontrada (4 leituras)
+</code></pre>
+<p><strong>Resposta esperada:</strong> Com 8 registros, nenhuma busca passa de 4 leituras (piso de log2 8, mais 1).</p>
+<hr>
+<p><strong>Exercício P0914</strong> · ★★☆ · O extrato com sujeira</p>
+<p>O app do banco exportou os valores do mês num arquivo texto, separados
+por espaço, mas alguns campos vieram corrompidos. Grave em
+/tmp/p0914_extrato.txt exatamente esta linha:</p>
+<pre><code class="language-text">150 abc 32 -10 x9 20 7a
+</code></pre>
+<p>Depois leia o arquivo palavra por palavra com fscanf(&quot;%31s&quot;) e use
+strtol para decidir se cada palavra é um inteiro válido (a palavra
+inteira tem que ser número). Some os válidos e mostre, na ordem, os que
+foram ignorados. Apague o arquivo no fim.</p>
+<pre><code class="language-text">Saída esperada:
+Válidos: 4 (soma 192)
+Ignorados: abc x9 7a
+</code></pre>
+<p><strong>Resposta esperada:</strong> válidos 150, 32, -10 e 20 (soma 192); ignorados abc, x9 e 7a.</p>
+<hr>
+<p><strong>Exercício P0915</strong> · ★★☆ · A média com modo detalhado</p>
+<p>As notas chegam pela linha de comando. Se o PRIMEIRO argumento for &quot;-v&quot;
+(de verboso), o programa mostra cada nota antes da média; sem &quot;-v&quot;, mostra
+só a média. Sem nenhuma nota (inclusive quando só veio o &quot;-v&quot;), ele mostra
+&quot;uso: P0915 [-v] nota1 nota2 ...&quot; e termina com return 1.</p>
+<pre><code class="language-text">$ ./rodar P0915.c -v 7 8 9.5
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+nota 1: 7.0
+nota 2: 8.0
+nota 3: 9.5
+Média: 8.17
+</code></pre>
+<p>Com ./rodar P0915.c 7 8 9.5 sai só a linha &quot;Média: 8.17&quot;.</p>
+<p><strong>Resposta esperada:</strong> com -v, as três notas e Média: 8.17 (24.5 / 3).</p>
+<hr>
+<p><strong>Exercício P0916</strong> · ★★☆ · A linha mais comprida do poema</p>
+<p>Grave em /tmp/p0916_poema.txt estas quatro linhas:</p>
+<pre><code class="language-text">Choveu em Manaus
+o rio subiu devagar
+e a balsa atrasou
+fim
+</code></pre>
+<p>Depois leia o arquivo com fgets e mostre qual é a linha mais comprida e
+qual é a mais curta (número da linha, tamanho sem o &#39;\n&#39; e o texto).
+Apague o arquivo no fim.</p>
+<pre><code class="language-text">Saída esperada:
+Mais comprida: linha 2 (19 caracteres): o rio subiu devagar
+Mais curta: linha 4 (3 caracteres): fim
+</code></pre>
+<p><strong>Resposta esperada:</strong> linha 2 com 19 caracteres e linha 4 com 3.</p>
+<hr>
+<p><strong>Exercício P0917</strong> · ★★☆ · Virar o arquivo do avesso no lugar</p>
+<p>O medidor de pressão gravou 6 leituras em /tmp/p0917_pressao.bin, em
+binário: 120, 118, 125, 130, 122 e 119. Inverta a ordem DENTRO do próprio
+arquivo, sem carregar tudo num vetor: abra com &quot;rb+&quot; e, para cada i de 0
+até n/2 - 1, leia o registro i e o registro n-1-i e grave cada um no
+lugar do outro. Mostre o arquivo antes e depois.</p>
+<pre><code class="language-text">Saída esperada:
+Antes:  120 118 125 130 122 119
+Depois: 119 122 130 125 118 120
+</code></pre>
+<p><strong>Resposta esperada:</strong> Depois: 119 122 130 125 118 120 (só 3 trocas para 6 registros).</p>
+<hr>
+<p><strong>Exercício P0918</strong> · ★★☆ · Salvar e carregar o orçamento da reforma</p>
+<p>Complete as duas funções do programa:</p>
+<pre><code class="language-text">int salva(const char *caminho, const Item *itens, int n)
+int carrega(const char *caminho, Item *itens, int max)
+</code></pre>
+<p>O formato do arquivo texto é: na 1ª linha, quantos itens vêm; depois, um
+item por linha, &quot;descricao quantidade preco&quot;. salva devolve 1 se deu
+certo. carrega lê no máximo max itens e devolve quantos leu (ou -1 se não
+abriu o arquivo). O main já grava, carrega num OUTRO vetor e mostra.</p>
+<pre><code class="language-text">Saída esperada:
+Carregados: 3 itens
+cimento      10 x R$  32.90 = R$  329.00
+areia         3 x R$ 120.00 = R$  360.00
+tijolo      500 x R$   0.85 = R$  425.00
+Total: R$ 1114.00
+</code></pre>
+<p><strong>Resposta esperada:</strong> a saída acima; o total é 329 + 360 + 425 = 1114.</p>
+<hr>
+<p><strong>Exercício P0919</strong> · ★★☆ · A votação em que o &quot;sim&quot; nunca vence</p>
+<p>O condomínio votou a troca do portão, e cada voto ficou numa linha do
+arquivo: sim, nao, sim, sim. O programa abaixo compila sem aviso, mas
+mostra &quot;Votos sim: 2, não: 2, inválidos: 0&quot;, um empate que não houve.
+Há DOIS erros de propósito:
+um faz toda comparação falhar e outro faz a ÚLTIMA linha ser contada
+diferente das outras quando o arquivo não termina com &#39;\n&#39;. Conserte
+os dois (sem mudar o que é gravado no arquivo).</p>
+<pre><code class="language-text">Saída esperada:
+Votos sim: 3, não: 1, inválidos: 0
+</code></pre>
+<p><strong>Resposta esperada:</strong> troque o corte na marra por linha[strcspn(linha, &quot;\n&quot;)] = &#39;\0&#39; e compare com strcmp(...) == 0 (o código compara com != 0). A saída fica igual à de cima.</p>
+<hr>
+<p><strong>Exercício P0920</strong> · ★★☆ · A planilha de vendas no arquivo</p>
+<p>Três vendedores da loja de açaí, quatro semanas (em reais):</p>
+<pre><code class="language-text">vendedor 1: 120  90 150  80
+vendedor 2: 200 110  70 130
+vendedor 3:  95 140 160 100
+</code></pre>
+<p>Grave essa matriz 3 x 4 em /tmp/p0920_vendas.txt, uma linha por vendedor.
+Depois leia o arquivo para OUTRA matriz com fscanf e mostre o total de
+cada semana e o vendedor que mais vendeu no mês. Apague o arquivo no fim.</p>
+<pre><code class="language-text">Saída esperada:
+Semana 1: R$ 415
+Semana 2: R$ 340
+Semana 3: R$ 380
+Semana 4: R$ 310
+Melhor vendedor: 2 (R$ 510)
+</code></pre>
+<p><strong>Resposta esperada:</strong> semanas 415, 340, 380 e 310; o vendedor 2, com 510.</p>
+<h3>★★★ Desafio</h3>
+<p><strong>Exercício P0921</strong> · ★★★ · A agenda que se mantém em ordem no disco</p>
+<p>Uma agenda guarda contatos (nome e telefone) num arquivo binário SEMPRE
+em ordem alfabética, para que a busca seja binária. Escreva:</p>
+<pre><code class="language-text">void insere(FILE *arq, const Contato *novo, int *deslocados)
+  acha a posição do novo lendo o arquivo do começo; depois empurra uma
+  posição para a frente cada registro que fica depois dele (do último
+  para trás, para não sobrescrever ninguém) e grava o novo no buraco.
+  Conta em *deslocados quantos registros foram empurrados.
+int busca(FILE *arq, const char *nome, Contato *achado, int *leituras)
+  busca binária pelo nome, contando os fread.
+</code></pre>
+<p>No main, abra /tmp/p0921_agenda.bin com &quot;wb+&quot; e insira, nesta ordem:
+Marta 92 99100-0001, Bia 92 99100-0002, Rui 92 99100-0003,
+Caio 92 99100-0004 e Ana 92 99100-0005. Liste a agenda, mostre o total
+de deslocamentos e procure Caio e Zeca. Apague o arquivo no fim.</p>
+<pre><code class="language-text">Saída esperada:
+0 Ana     92 99100-0005
+1 Bia     92 99100-0002
+2 Caio    92 99100-0004
+3 Marta   92 99100-0001
+4 Rui     92 99100-0003
+Deslocamentos: 7
+Caio: 92 99100-0004 (1 leitura)
+Zeca: não está na agenda (3 leituras)
+</code></pre>
+<hr>
+<p><strong>Exercício P0922</strong> · ★★★ · O banquinho do bairro processa o dia</p>
+<p>O banco comunitário guarda as contas em binário e recebe as operações do
+dia num arquivo texto. Escreva um programa que:</p>
+<ol>
+<li>grave em /tmp/p0922_contas.bin as contas 101 Ana R$ 500.00,</li>
+</ol>
+<pre><code class="language-text"> 102 Beto R$ 120.00 e 103 Caio R$ 0.00;
+</code></pre>
+<ol start="2">
+<li>grave em /tmp/p0922_dia.txt as operações, uma por linha:</li>
+</ol>
+<pre><code class="language-text">D 103 250.00
+S 102 200.00
+S 101 80.50
+T 101 103 100.00
+S 104 10.00
+</code></pre>
+<pre><code class="language-text"> (D = depósito, S = saque, T = transferência da 1ª conta para a 2ª);
+</code></pre>
+<ol start="3">
+<li>leia as operações com fscanf e aplique cada uma DIRETO no arquivo de</li>
+</ol>
+<pre><code class="language-text"> contas (abra com &quot;rb+&quot;, ache o registro, altere e regrave). Saque ou
+ transferência sem saldo é recusado; conta que não existe também;
+</code></pre>
+<ol start="4">
+<li>mostre o resultado de cada operação e os saldos finais, e apague os</li>
+</ol>
+<pre><code class="language-text"> dois arquivos.
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+D 103 250.00: ok
+S 102 200.00: saldo insuficiente
+S 101 80.50: ok
+T 101 103 100.00: ok
+S 104 10.00: conta inexistente
+101 Ana    R$  319.50
+102 Beto   R$  120.00
+103 Caio   R$  350.00
+</code></pre>
+<p><strong>Resposta esperada:</strong> a saída acima (Ana: 500 - 80.50 - 100 = 319.50).</p>
+<hr>
+<p><strong>Exercício P0923</strong> · ★★★ · O índice de linhas do cardápio</p>
+<p>Num arquivo texto, cada linha tem um tamanho, então não dá para calcular
+onde começa a linha k como num arquivo de registros. Mas dá para montar um
+ÍNDICE: leia o arquivo uma vez e anote, num vetor de long, a posição
+(ftell) do começo de cada linha. Depois, qualquer linha é um fseek e um
+fgets, sem reler o arquivo.</p>
+<p>Grave em /tmp/p0923_cardapio.txt estas 6 linhas:</p>
+<pre><code class="language-text">Tacaca na esquina
+Pirarucu de casaca
+Tucupi no pato
+Bolo de macaxeira
+Cupuacu gelado
+Pupunha com cafe
+</code></pre>
+<p>Monte o índice (no máximo 100 linhas) e mostre as linhas 5, 2, 6 e 9,
+nesta ordem, com o byte onde cada uma começa. Apague o arquivo no fim.</p>
+<pre><code class="language-text">Saída esperada:
+6 linhas indexadas
+Linha 5 (byte 70): Cupuacu gelado
+Linha 2 (byte 18): Pirarucu de casaca
+Linha 6 (byte 85): Pupunha com cafe
+Linha 9: não existe
+</code></pre>
+<hr>
+<p><strong>Exercício P0924</strong> · ★★★ · Os produtos entre R$ 10 e R$ 20</p>
+<p>O arquivo binário do mercadinho tem 10 produtos ORDENADOS por preço (em
+centavos, para não ter erro de arredondamento):</p>
+<pre><code class="language-text">299 Agua, 450 Pao, 699 Leite, 899 Biscoito, 1050 Cafe, 1290 Queijo,
+1599 Mel, 1890 Manteiga, 2100 Sabao, 3490 Azeite
+</code></pre>
+<p>Para listar os que custam de R$ 10,00 a R$ 20,00 sem ler o arquivo todo,
+faça uma busca binária que acha a POSIÇÃO do primeiro produto com preço</p>
+<blockquote>
+<p>= 1000 e, de lá, leia em sequência enquanto o preço for &lt;= 2000. Escreva</p>
+</blockquote>
+<pre><code class="language-text">long primeiro_maior_igual(FILE *arq, long n, int alvo, int *leituras)
+</code></pre>
+<p>que devolve a primeira posição com preço &gt;= alvo (ou n, se não houver) e
+conta os fread da busca. Grave o arquivo em /tmp/p0924_precos.bin no
+próprio programa e apague-o no fim.</p>
+<pre><code class="language-text">Saída esperada:
+Busca: 4 leituras, primeiro na posição 4
+R$ 10.50 Cafe
+R$ 12.90 Queijo
+R$ 15.99 Mel
+R$ 18.90 Manteiga
+4 produtos na faixa
+</code></pre>
+<p><strong>Resposta esperada:</strong> a saída acima (meios lidos: 5, 2, 4 e 3).</p>
+<hr>
+<p><strong>Exercício P0925</strong> · ★★★ · Ordenar a fila da vacina dentro do arquivo</p>
+<p>O posto de saúde tem a lista de espera da vacina num arquivo binário, e a
+regra é: mais velho primeiro. O arquivo pode ser grande demais para a
+memória, então ordene-o NO DISCO, com a ordenação por seleção: para cada
+posição i, procure (lendo do arquivo) o paciente mais velho entre i e o
+fim e troque-o com o da posição i. Nunca guarde mais que 3 registros na
+memória ao mesmo tempo, e conte quantos fread e quantos fwrite fez.</p>
+<p>Grave em /tmp/p0925_fila.bin: Ana 34, Beto 71, Ceci 18, Davi 65, Eva 80,
+Fabio 42. Ordene, liste e apague o arquivo. Só faça a troca (2 fwrite)
+quando o mais velho não estiver já na posição i.</p>
+<pre><code class="language-text">Saída esperada:
+1. Eva    80 anos
+2. Beto   71 anos
+3. Davi   65 anos
+4. Fabio  42 anos
+5. Ana    34 anos
+6. Ceci   18 anos
+Leituras: 20, escritas: 6
+</code></pre>
+<p><strong>Resposta esperada:</strong> Não conte as leituras da listagem.</p>
+<hr>
+<p><strong>Exercício P0926</strong> · ★★★ · Compactar a leitura do sensor (RLE)</p>
+<p>O sensor da estufa manda uma letra por minuto (A = ok, B = quente,
+C = seco, D = desligado) e repete muito: &quot;AAAAABBBCCCCCCCCDAA&quot;. A
+codificação RLE guarda cada SEQUÊNCIA como um par (quantidade, letra):
+5A 3B 8C 1D 2A. Escreva:</p>
+<pre><code class="language-text">int compacta(const char *texto, const char *caminho)
+  grava os pares em binário (struct Par com unsigned char qtd e char c)
+  e devolve quantos pares gravou (-1 se não abriu o arquivo);
+int descompacta(const char *caminho, char *saida, int max)
+  lê os pares e remonta o texto em saida (no máximo max - 1 letras,
+  mais o &#39;\0&#39;), devolvendo o tamanho remontado.
+</code></pre>
+<p>Use /tmp/p0926_sensor.rle, mostre os tamanhos, os pares, o texto
+remontado e se ele confere com o original. Apague o arquivo no fim.</p>
+<pre><code class="language-text">Saída esperada:
+Original: 19 bytes
+Compactado: 10 bytes (5 pares)
+5xA 3xB 8xC 1xD 2xA
+Descompactado: AAAAABBBCCCCCCCCDAA
+Confere: sim
+</code></pre>
+<p><strong>Resposta esperada:</strong> RLE compensa com muita repetição; com &quot;ABCD&quot; o arquivo ficaria com o DOBRO do tamanho.</p>
+<hr>
+<p><strong>Exercício P0927</strong> · ★★★ · O cadastro da clínica veterinária</p>
+<p>A clínica cadastra um pet por vez num arquivo binário e depois lista
+todos e mostra o pet do meio do arquivo. O programa abaixo compila sem
+aviso, mas não lista nada. Ele tem TRÊS erros de propósito, um em cada
+função de arquivo. Conserte os três para a saída ficar:</p>
+<pre><code class="language-text">Saída esperada:
+Rex: 3 anos, 12.5 kg
+Mimi: 5 anos, 4.2 kg
+Thor: 2 anos, 30.0 kg
+Do meio: Mimi
+</code></pre>
+<p><strong>Resposta esperada:</strong> &quot;wb&quot; vira &quot;ab&quot;; sizeof p vira sizeof *p; e o fseek de le_meio usa SEEK_SET em vez de SEEK_END. A saída fica igual à de cima.</p>
+<hr>
+<p><strong>Exercício P0928</strong> · ★★★ · A tabela do Barezão</p>
+<p>Os jogos da rodada do campeonato estão num arquivo texto, um por linha,
+no formato &quot;mandante gols visitante gols&quot;. Grave em /tmp/p0928_jogos.txt:</p>
+<pre><code class="language-text">Nacional 2 Fast 1
+Manaus 1 Amazonas 1
+Fast 0 Manaus 3
+Amazonas 2 Nacional 2
+Nacional 1 Manaus 0
+Amazonas 3 Fast 1
+</code></pre>
+<p>Leia os jogos com fscanf e monte a tabela num vetor de structs (nome,
+pontos, vitórias, saldo de gols): vitória vale 3, empate 1. Ordene com
+qsort por pontos (maior primeiro), depois saldo, depois nome. Grave a
+classificação em /tmp/p0928_tabela.txt, mostre esse arquivo lendo com
+fgets e apague os dois.</p>
+<pre><code class="language-text">Saída esperada:
+1. Nacional   7 pts  2 V  saldo +2
+2. Amazonas   5 pts  1 V  saldo +2
+3. Manaus     4 pts  1 V  saldo +2
+4. Fast       0 pts  0 V  saldo -6
+</code></pre>
+<hr>
+<p><strong>Exercício P0929</strong> · ★★★ · O recado cifrado da linha de comando</p>
+<p>A cifra de César troca cada letra pela que está k posições adiante no
+alfabeto (com k = 3, a vira d, x vira a). Escreva um programa chamado
+assim:</p>
+<pre><code class="language-text">$ ./rodar P0929.c 3 ataque ao amanhecer
+</code></pre>
+<p>O primeiro argumento é a chave k; os outros são as palavras do recado. O
+programa cifra o recado (palavras separadas por um espaço), grava o texto
+cifrado em /tmp/p0929_recado.txt (sem &#39;\n&#39; no fim), lê o arquivo de
+volta, mostra o cifrado e o tamanho do arquivo, decifra o que leu (chave
+-k) e mostra o recado de novo. Maiúsculas giram dentro de A-Z, e o que
+não é letra passa igual. Se faltar argumento ou a chave não for número,
+mostre &quot;uso: P0929 chave palavra1 palavra2 ...&quot; e termine com return 1.</p>
+<pre><code class="language-text">Saída esperada:
+Cifrado: dwdtxh dr dpdqkhfhu
+Arquivo: 19 bytes
+Decifrado: ataque ao amanhecer
+</code></pre>
+<hr>
+<p><strong>Exercício P0930</strong> · ★★★ · O índice da biblioteca</p>
+<p>Os livros da biblioteca estão num arquivo de dados na ordem em que
+chegaram, então a busca por código seria sequencial. A solução dos bancos
+de dados é um ÍNDICE: um segundo arquivo, pequeno e ordenado, com pares
+(código, posição no arquivo de dados). Busca-se no índice (binária) e
+depois se vai direto ao registro com um fseek.</p>
+<ol>
+<li>Grave em /tmp/p0930_dados.bin, nesta ordem: 3071 Vidas Secas 1938,</li>
+</ol>
+<pre><code class="language-text"> 1150 Macunaima 1928, 4420 Iracema 1865, 2088 Dom Casmurro 1899,
+ 1999 O Cortico 1890 e 3500 Grande Sertao 1956.
+</code></pre>
+<ol start="2">
+<li>Monte um vetor de Entrada {codigo, posicao}, ordene com qsort e grave</li>
+</ol>
+<pre><code class="language-text"> em /tmp/p0930_indice.bin.
+</code></pre>
+<ol start="3">
+<li>Escreva long procura(FILE *indice, int codigo, int *leituras): busca</li>
+</ol>
+<pre><code class="language-text"> binária NO ARQUIVO de índice que devolve a posição no arquivo de dados
+ (ou -1), contando os fread.
+</code></pre>
+<ol start="4">
+<li>Procure 2088, 4420 e 1000, leia o livro no arquivo de dados e mostre.</li>
+</ol>
+<pre><code class="language-text"> Apague os dois arquivos no fim.
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Índice: 1150 1999 2088 3071 3500 4420
+2088: Dom Casmurro (1899), registro 3, 1 leitura no índice
+4420: Iracema (1865), registro 2, 3 leituras no índice
+1000: não cadastrado, 2 leituras no índice
+</code></pre>
+<hr>
+<h2>Desafios do módulo</h2>
+<p>Problemas do médio ao difícil. Crie os arquivos de teste com
+<code>printf &#39;...&#39; &gt; /tmp/teste.txt</code>.</p>
+<p><strong>1. O seu <code>cp</code>.</strong> Escreva <code>copia &lt;origem&gt; &lt;destino&gt;</code>, que copia qualquer
+arquivo (texto ou não) byte a byte. Confira o <code>argc</code>, os dois <code>fopen</code> e mostre
+quantos bytes copiou. Teste copiando o próprio executável e comparando com
+<code>cmp</code>.</p>
+<details><summary>Resposta</summary><p>Abra a origem com <code>&quot;rb&quot;</code> e o destino com <code>&quot;wb&quot;</code>. Se o segundo <code>fopen</code> falhar,
+feche o primeiro. O laço é <code>while ((c = fgetc(ent)) != EOF) { fputc(c, sai); n++; }</code> com <code>int c</code>. Com <code>char c</code>, um byte 0xFF no meio do arquivo vira -1 e o
+laço para antes da hora e a cópia de um executável sai cortada. Use o modo
+<code>b</code> para funcionar no Windows também.</p>
+</details><p><strong>2. O seu <code>tac</code>.</strong> Mostre as linhas de um arquivo de trás para frente. O
+arquivo pode ter qualquer quantidade de linhas (até 255 caracteres cada).
+Para <code>printf &#39;um\ndois\ntres\n&#39;</code>, a saída é <code>tres</code>, <code>dois</code>, <code>um</code>.</p>
+<details><summary>Resposta</summary><p>Leia com <code>fgets</code> e guarde cada linha num vetor de <code>char *</code> que cresce com
+<code>realloc</code> (dobrando a capacidade), com uma cópia de cada linha feita com
+<code>malloc</code> + <code>strcpy</code>. Depois imprima do último para o primeiro e libere cada
+linha e o vetor. Outro caminho, sem guardar tudo: anote com <code>ftell</code> onde cada
+linha começa e depois volte com <code>fseek</code>.</p>
+</details><p><strong>3. Frequência de letras.</strong> Conte quantas vezes cada letra de <code>a</code> a <code>z</code>
+aparece num arquivo, sem diferenciar maiúscula de minúscula, e mostre só as
+que aparecem. Para um arquivo com <code>Banana</code>, a saída é <code>a: 3</code>, <code>b: 1</code>, <code>n: 2</code>.</p>
+<details><summary>Resposta</summary><p>Um <code>int freq[26] = {0}</code>, um laço com <code>fgetc</code> e, para cada <code>c</code> com
+<code>isalpha(c)</code>, <code>freq[tolower(c) - &#39;a&#39;]++</code>. Letras acentuadas em UTF-8 ocupam 2
+bytes que não são letras ASCII, então ficam de fora: isso é esperado.</p>
+</details><p><strong>4. Quanto pesa cada arquivo.</strong> Escreva <code>tamanho &lt;arq1&gt; &lt;arq2&gt; ...</code>, que
+mostra o tamanho de cada arquivo passado e o total, sem ler o conteúdo.
+Arquivo que não abre mostra o erro e não entra no total, mas os outros
+continuam.</p>
+<details><summary>Resposta</summary><p>Para cada <code>argv[i]</code>, de 1 a <code>argc - 1</code>: <code>fopen</code> com <code>&quot;rb&quot;</code>, <code>fseek(f, 0, SEEK_END)</code>, <code>ftell(f)</code>, <code>fclose</code>. Se o <code>fopen</code> falhar, <code>perror(argv[i])</code> e
+<code>continue</code>. O código de saída pode ser 1 se algum falhou, como faz o <code>ls</code>.</p>
+</details><p><strong>5. Busca binária no disco.</strong> Um arquivo binário tem 1000 registros
+<code>{ int codigo; double preco; }</code> <strong>ordenados por código</strong>. Ache o preço do
+código 4321 lendo o mínimo possível de registros. No máximo, quantos <code>fread</code>?</p>
+<details><summary>Resposta</summary><p>Busca binária com <code>fseek</code>: <code>ini = 0</code>, <code>fim = 999</code>; leia o registro do <code>meio</code>
+com <code>fseek(f, meio * (long) sizeof(Registro), SEEK_SET)</code> e um <code>fread</code>; compare
+e corte metade. São no máximo <strong>10 leituras</strong>, porque 2¹⁰ = 1024 ≥ 1000. Isso
+depende de os registros terem tamanho fixo: num arquivo texto, você não sabe
+onde fica o &quot;meio&quot;.</p>
+</details><p><strong>6. Reajuste de 10%.</strong> Um arquivo binário tem vários registros de
+<code>Produto</code> (<code>nome[20]</code>, <code>qtd</code>, <code>preco</code>). Aumente o preço de todos em 10%,
+alterando o arquivo <strong>no lugar</strong>, sem criar outro e sem carregar tudo na
+memória.</p>
+<details><summary>Resposta</summary><p>Abra com <code>&quot;rb+&quot;</code>. Para cada registro: <code>fread</code>, <code>p.preco *= 1.10</code>,
+<code>fseek(f, -(long) sizeof p, SEEK_CUR)</code> para voltar, <code>fwrite</code>, e um
+<code>fseek(f, 0, SEEK_CUR)</code> antes do próximo <code>fread</code>: o C exige um
+posicionamento entre escrever e ler no mesmo <code>FILE</code>. Sem a volta, o <code>fwrite</code>
+gravaria por cima do registro <strong>seguinte</strong>.</p>
+</details><p><strong>7. Intercalar dois arquivos.</strong> Dois arquivos texto têm números inteiros em
+ordem crescente, um por linha. Gere um terceiro com todos os números, ainda em
+ordem, lendo cada arquivo uma vez só. Com <code>1 4 9</code> e <code>2 3 10</code>, sai
+<code>1 2 3 4 9 10</code>.</p>
+<details><summary>Resposta</summary><p>Leia o primeiro número de cada arquivo. Enquanto os dois tiverem número,
+grave o menor e leia o próximo <strong>daquele</strong> arquivo. Quando um acabar, copie o
+resto do outro. É a etapa de intercalação do merge sort (assunto 0094), e é
+assim que se ordena um arquivo maior que a RAM.</p>
+</details><p><strong>8. Editar no meio do arquivo.</strong> Escreva um programa que grave
+<code>Ana 25\nBia 31\n</code> em <code>/tmp/pessoas.txt</code>, feche, abra de novo com <code>&quot;r+&quot;</code> e
+grave <code>Mariana 25\n</code> logo no começo. Volte ao início com <code>fseek</code> e imprima
+cada linha do arquivo entre colchetes. Depois faça o mesmo com registros
+binários <code>typedef struct { char nome[12]; int idade; } Pessoa;</code>: grave
+Ana (25) e Bia (31) em <code>/tmp/pessoas.bin</code>, reabra com <code>&quot;rb+&quot;</code>, grave por cima
+do primeiro o registro Mariana (25) e imprima os registros.</p>
+<details><summary>Resposta</summary><pre><code>texto:
+[Mariana 25]
+[31]
+binario:
+[Mariana 25]
+[Bia 31]
+</code></pre>
+<p>Dica: tire o <code>&#39;\n&#39;</code> do <code>fgets</code> antes de imprimir, e use <code>fseek(f, 0, SEEK_SET)</code> entre escrever e ler. No texto, a linha nova tem 11 bytes, ocupa os
+7 da linha da Ana e os 4 primeiros da Bia (<code>Bia </code>) e sobra o <code>31</code> solto:
+arquivo não &quot;abre espaço&quot; no meio, escrever é sempre sobrescrever. Com
+registros de tamanho fixo, o novo valor ocupa exatamente os bytes do antigo.</p>
+</details><p><strong>9. O seu <code>cmp</code>.</strong> Escreva <code>compara &lt;a&gt; &lt;b&gt;</code>, que diz se dois arquivos são
+iguais e, se não forem, o primeiro byte diferente (contando do 0) e os dois
+valores. Para <code>casa\n</code> e <code>cama\n</code>: <code>diferem no byte 2: &#39;s&#39; x &#39;m&#39;</code>. Código de
+saída 0 se iguais, 1 se diferentes.</p>
+<details><summary>Resposta</summary><p>Leia os dois com <code>fgetc</code> no mesmo laço, contando a posição. Pare quando os
+bytes forem diferentes ou quando um dos dois for <code>EOF</code>. Se só um acabou, os
+arquivos diferem no tamanho: um é o começo do outro. Se os dois acabaram
+juntos, são iguais.</p>
+</details><p><strong>10. Texto ou binário, medido.</strong> Escreva um programa que grave os números
+de 0 a 999.999 em <code>/tmp/numeros.txt</code> (um por linha, com <code>fprintf</code>) e em
+<code>/tmp/numeros.bin</code> (como <code>int</code>, com <code>fwrite</code>), feche os dois e imprima o
+tamanho de cada um com <code>fseek</code> e <code>ftell</code>, e quantos por cento o texto ocupa
+a mais.</p>
+<details><summary>Resposta</summary><pre><code>texto:   6888890 bytes
+binario: 4000000 bytes
+o texto ocupa 72.2% a mais
+</code></pre>
+<p>Dica: escreva uma <code>long tamanho(const char *nome)</code> que abre com <code>&quot;rb&quot;</code>, vai
+ao fim com <code>fseek(f, 0, SEEK_END)</code> e devolve o <code>ftell</code>. A conta bate com o
+papel: binário é 1.000.000 × 4; texto é 10 × 1 + 90 × 2 + 900 × 3 + 9.000 × 4</p>
+<ul>
+<li>90.000 × 5 + 900.000 × 6 dígitos, mais 1.000.000 de <code>\n</code>. Para números
+pequenos o texto até ganha (<code>7\n</code> tem 2 bytes); para grandes, o binário ganha.</li>
+</ul>
+</details><h2>Questões no estilo da prova</h2>
+<p>Formato da prova do mestrado do PPGI/UFAM. Resolva no papel, marque uma letra
+e só depois abra o gabarito. Os trechos foram compilados com
+<code>gcc -std=c17 -Wall -Wextra</code> e rodados no Linux. Neles, a conferência de <code>NULL</code>
+depois do <code>fopen</code> foi omitida para encurtar; no seu código, é obrigatória.</p>
+<p><strong>Questão 1.</strong> Sobre arquivos em C, considere as afirmações e marque a alternativa CORRETA.</p>
+<ul>
+<li><p><strong>I.</strong> <code>&quot;w&quot;</code> apaga o conteúdo de um arquivo que já existe.</p>
+</li>
+<li><p><strong>II.</strong> <code>&quot;a&quot;</code> escreve sempre no fim do arquivo.</p>
+</li>
+<li><p><strong>III.</strong> <code>&quot;r&quot;</code> cria o arquivo quando ele não existe.</p>
+</li>
+<li><p><strong>IV.</strong> <code>fwrite</code> devolve o número de bytes gravados.</p>
+</li>
+<li><p>(A) Apenas I</p>
+</li>
+<li><p>(B) Apenas II e III</p>
+</li>
+<li><p>(C) Apenas I e II</p>
+</li>
+<li><p>(D) Apenas III e IV</p>
+</li>
+<li><p>(E) Apenas I, II e IV</p>
+</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(C).</strong> I e II são verdadeiras. III é falsa: <code>&quot;r&quot;</code> devolve <code>NULL</code> se o arquivo não existe. IV é falsa: <code>fwrite</code> devolve o número de <strong>itens</strong> gravados, não de bytes. Veja 0067 e 0068.</p>
+</details><p><strong>Questão 2.</strong> Depois do trecho abaixo, o que há no arquivo <code>g.txt</code>?</p>
+<pre><code class="language-c">FILE *f = fopen(&quot;g.txt&quot;, &quot;w&quot;); fprintf(f, &quot;abc&quot;); fclose(f);
+f = fopen(&quot;g.txt&quot;, &quot;a&quot;);       fprintf(f, &quot;de&quot;);  fclose(f);
+f = fopen(&quot;g.txt&quot;, &quot;w&quot;);       fprintf(f, &quot;xy&quot;);  fclose(f);
+f = fopen(&quot;g.txt&quot;, &quot;a&quot;);       fprintf(f, &quot;z&quot;);   fclose(f);
+</code></pre>
+<ul>
+<li>(A) <code>abcdexyz</code></li>
+<li>(B) <code>xyz</code></li>
+<li>(C) <code>z</code></li>
+<li>(D) <code>xycdez</code></li>
+<li>(E) <code>abcdez</code></li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(B)</strong>. O segundo <code>&quot;w&quot;</code> zera o arquivo e joga fora o <code>abcde</code>. Depois dele
+ficam <code>xy</code> e o <code>z</code> acrescentado no fim. Veja 0067.</p>
+</details><p><strong>Questão 3.</strong> Em uma plataforma com <code>int</code> de 4 bytes, o trecho grava os
+mesmos três números num arquivo texto (<code>t</code>) e num binário (<code>b</code>). O que o
+<code>fwrite</code> devolve e qual o tamanho, em bytes, de cada arquivo?</p>
+<pre><code class="language-c">int v[3] = {7, 42, 1000};
+for (int i = 0; i &lt; 3; i++) fprintf(t, &quot;%d\n&quot;, v[i]);
+size_t n = fwrite(v, sizeof(int), 3, b);
+</code></pre>
+<ul>
+<li>(A) <code>n</code> = 3; texto com 10 bytes; binário com 12</li>
+<li>(B) <code>n</code> = 12; texto com 10 bytes; binário com 12</li>
+<li>(C) <code>n</code> = 3; texto com 12 bytes; binário com 12</li>
+<li>(D) <code>n</code> = 3; texto com 7 bytes; binário com 12</li>
+<li>(E) <code>n</code> = 12; texto com 7 bytes; binário com 3</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A)</strong>. O <code>fwrite</code> devolve <strong>quantos itens</strong> gravou (3), não quantos
+bytes. No texto, cada número vira seus dígitos mais o <code>\n</code>: 2 + 3 + 5 = 10
+bytes. No binário, cada <code>int</code> ocupa sempre 4 bytes: 12. Veja 0068.</p>
+</details><p><strong>Questão 4.</strong> Um arquivo binário tem 5 registros <code>Produto</code> gravados em
+sequência, cada um com <code>sizeof(Produto)</code> = 32. Depois de</p>
+<pre><code class="language-c">fseek(f, 3 * sizeof(Produto), SEEK_SET);
+fread(&amp;p, sizeof p, 1, f);
+</code></pre>
+<p>qual registro está em <code>p</code> (contando de 0) e quanto vale <code>ftell(f)</code>?</p>
+<ul>
+<li>(A) o registro 3; 96</li>
+<li>(B) o registro 2; 96</li>
+<li>(C) o registro 4; 128</li>
+<li>(D) o registro 2; 128</li>
+<li>(E) o registro 3; 128</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(E)</strong>. O registro <code>i</code> começa no byte <code>i * 32</code>: o 3 começa no 96. O <code>fread</code>
+lê 32 bytes e deixa a posição no fim do que leu, 128, que é o começo do
+registro 4. Veja 0068.</p>
+</details><p><strong>Questão 5.</strong> Sobre leitura e escrita de arquivos, considere as afirmações e marque a alternativa CORRETA.</p>
+<ul>
+<li><p><strong>I.</strong> <code>fscanf</code> devolve a quantidade de campos que conseguiu converter.</p>
+</li>
+<li><p><strong>II.</strong> Num arquivo texto com linhas de tamanhos diferentes, <code>fseek(f, k * tam, SEEK_SET)</code> leva ao início da linha <code>k</code>.</p>
+</li>
+<li><p><strong>III.</strong> Num arquivo binário de registros de tamanho fixo, o registro <code>i</code> começa no byte <code>i * sizeof(registro)</code>.</p>
+</li>
+<li><p><strong>IV.</strong> <code>feof</code> só passa a valer verdadeiro depois que uma leitura tenta passar do fim do arquivo.</p>
+</li>
+<li><p>(A) Apenas I e II</p>
+</li>
+<li><p>(B) Apenas II e III</p>
+</li>
+<li><p>(C) Apenas I e III</p>
+</li>
+<li><p>(D) Apenas I, III e IV</p>
+</li>
+<li><p>(E) Apenas II, III e IV</p>
+</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(D).</strong> I é verdadeira. II é falsa: as linhas não têm tamanho fixo, então não há conta para chegar à linha <code>k</code>. III é verdadeira, e é por isso que a busca binária direto no arquivo funciona. IV é verdadeira: testar <code>feof</code> antes de ler leva à volta extra clássica. Veja 0067 e 0068.</p>
+</details><p><strong>Questão 6.</strong> O arquivo <code>precos.txt</code> tem as quatro linhas abaixo. Quanto
+vale <code>lidos</code> no fim?</p>
+<pre><code class="language-text">arroz 5.50
+feijao 8.90
+cafe x
+leite 4.20
+</code></pre>
+<pre><code class="language-c">char nome[20];
+double preco;
+int lidos = 0;
+while (fscanf(f, &quot;%19s %lf&quot;, nome, &amp;preco) == 2) lidos++;
+</code></pre>
+<ul>
+<li>(A) 4</li>
+<li>(B) 2</li>
+<li>(C) 3</li>
+<li>(D) 0</li>
+<li>(E) o laço não termina</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(B)</strong>. O <code>fscanf</code> devolve quantos campos converteu. Nas duas primeiras
+linhas, 2. Na terceira, <code>x</code> não é número: devolve 1, o laço para e <code>leite</code>
+nem é lido. Com <code>!= EOF</code> no lugar de <code>== 2</code>, o laço daria 5 voltas e
+&quot;leria&quot; <code>cafe</code> e <code>x</code> com o preço velho (8.90) ainda em <code>preco</code>. Veja 0067.</p>
+</details><p><strong>Questão 7.</strong> O programa abaixo é chamado como <code>./divide pix 25.90 maria</code>.
+O que ele imprime?</p>
+<pre><code class="language-c">int main(int argc, char *argv[]) {
+    printf(&quot;%d %s %c\n&quot;, argc, argv[2], argv[3][1]);
+    return 0;
+}
+</code></pre>
+<ul>
+<li>(A) <code>3 pix a</code></li>
+<li>(B) <code>3 25.90 m</code></li>
+<li>(C) <code>4 pix a</code></li>
+<li>(D) <code>4 25.90 a</code></li>
+<li>(E) <code>4 25.90 m</code></li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(D)</strong>. <code>argv[0]</code> é o nome do programa, então são 4 argumentos. <code>argv[2]</code>
+é <code>&quot;25.90&quot;</code> (texto, não número) e <code>argv[3][1]</code> é o segundo caractere de
+<code>&quot;maria&quot;</code>. Veja 0069.</p>
+</details><p><strong>Questão 8.</strong> Um arquivo binário tem 1.000.000 de registros de tamanho
+fixo, ordenados pelo código. Uma busca binária feita direto no arquivo
+(<code>fseek</code> até o registro do meio e um <code>fread</code> por passo) faz, no pior caso,
+cerca de quantas leituras?</p>
+<ul>
+<li>(A) 20</li>
+<li>(B) 1.000</li>
+<li>(C) 500.000</li>
+<li>(D) 1.000.000</li>
+<li>(E) 10</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A)</strong>. Cada leitura descarta metade dos registros que sobram, e
+2²⁰ = 1.048.576 ≥ 1.000.000: no máximo ⌊log₂ n⌋ + 1 = 20 leituras. Isso só
+funciona porque o registro <code>i</code> está no byte <code>i * sizeof(registro)</code>. Num
+arquivo texto, com linhas de tamanhos diferentes, não dá para pular para o
+meio. Veja 0068 e 0090.</p>
+</details><p><strong>Questão 9.</strong> Um programa grava com <code>fwrite(&amp;c, sizeof c, 1, f)</code> uma
+variável do tipo abaixo e, em outra execução, lê de volta com <code>fread</code>. O que
+acontece com o nome?</p>
+<pre><code class="language-c">typedef struct { char *nome; int idade; } Cliente;
+</code></pre>
+<ul>
+<li>(A) O nome volta certo, porque o <code>fwrite</code> segue o ponteiro.</li>
+<li>(B) O nome volta certo só se o arquivo for aberto com <code>&quot;rb&quot;</code>.</li>
+<li>(C) Não compila: struct com ponteiro não pode ir para <code>fwrite</code>.</li>
+<li>(D) O nome volta certo se <code>nome</code> tiver até 8 caracteres.</li>
+<li>(E) O arquivo guarda o endereço, não o texto; na outra execução, <code>nome</code> aponta para lixo.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(E)</strong>. O <code>fwrite</code> copia os bytes da struct, e o campo <code>nome</code> é um
+endereço (8 bytes num sistema de 64 bits). O texto apontado nunca vai para o
+arquivo. Para gravar em binário, use <code>char nome[40]</code> dentro da struct.
+Veja 0068.</p>
+</details><p><strong>Questão 10.</strong> Você precisa trocar o preço do registro 2 de um arquivo
+binário que já existe, sem perder os outros registros. Qual modo de
+abertura serve?</p>
+<ul>
+<li>(A) <code>&quot;wb&quot;</code></li>
+<li>(B) <code>&quot;ab&quot;</code></li>
+<li>(C) <code>&quot;rb+&quot;</code></li>
+<li>(D) <code>&quot;wb+&quot;</code></li>
+<li>(E) <code>&quot;rb&quot;</code></li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(C)</strong>. <code>&quot;rb+&quot;</code> abre para leitura <strong>e</strong> escrita sem apagar nada: dá para
+<code>fseek</code> até o registro, <code>fread</code>, alterar e <code>fwrite</code> por cima (com um <code>fseek</code>
+entre a leitura e a escrita). <code>&quot;wb&quot;</code> e <code>&quot;wb+&quot;</code> apagam o arquivo. <code>&quot;ab&quot;</code>
+escreve sempre no fim, mesmo depois de um <code>fseek</code>. <code>&quot;rb&quot;</code> não deixa
+escrever. Veja 0068 e 0070.</p>
+</details><h2>Para ler mais</h2>
+<ul>
+<li>BACKES, A. <em>Linguagem C: completa e descomplicada</em>. Rio de Janeiro: Elsevier, 2013. Cap. 12: arquivos; cap. 13: argumentos do main.</li>
+<li>BACKES, A. R. <em>Linguagem C: descomplicada</em>. Uberlândia: FACOM/UFU, [s.d.]. Apostila. Capítulos de arquivos e de recursos avançados.</li>
+<li>DEITEL, P.; DEITEL, H. <em>C: como programar</em>. 6. ed. São Paulo: Pearson Prentice Hall, 2011. Cap. 11: processamento de arquivos.</li>
+<li>CELES, W.; RANGEL, J. L. <em>Apostila de estruturas de dados</em>. Rio de Janeiro: PUC-Rio, 2002. Capítulo de arquivos.</li>
+<li>CELES, W.; CERQUEIRA, R.; RANGEL, J. L. <em>Introdução a estruturas de dados: com técnicas de programação em C</em>. 2. ed. Rio de Janeiro: Elsevier, 2016. Arquivos texto e binários.</li>
+<li>ZIVIANI, N. <em>Projeto de algoritmos: com implementações em Pascal e C</em>. 3. ed. rev. e ampl. São Paulo: Cengage Learning, 2010. Pesquisa em memória secundária: acesso a registros em disco.</li>
+<li>ROCHA, A. M. A.; BORGES, A. R. O. S. <em>Programação, estruturas de dados e algoritmos em C</em>. Aveiro: Universidade de Aveiro, [s.d.]. Cap. 3: arquivos.</li>
+<li>ANTONELLO, R. <em>Linguagem C</em>. 1. ed. Disponível em: <a href="http://www.antonello.com.br">http://www.antonello.com.br</a>.</li>
+<li>FEOFILOFF, P. <em>Algoritmos em linguagem C</em>. Rio de Janeiro: Elsevier, 2009. Apêndice H: entrada e saída, arquivos e argumentos da linha de comando.</li>
+<li>KERNIGHAN, B. W.; RITCHIE, D. M. <em>C: a linguagem de programação padrão ANSI</em>. Rio de Janeiro: Campus, 1989. Cap. 7: entrada e saída.</li>
+<li>CPPREFERENCE. <em>File input/output</em>. Disponível em: <a href="https://en.cppreference.com/w/c/io">https://en.cppreference.com/w/c/io</a>.</li>
+<li>LINUX MAN-PAGES PROJECT. <em>fopen(3)</em>, <em>fseek(3)</em>, <em>strtol(3)</em>. Disponível em: <a href="https://man7.org/linux/man-pages/">https://man7.org/linux/man-pages/</a>.</li>
+</ul>

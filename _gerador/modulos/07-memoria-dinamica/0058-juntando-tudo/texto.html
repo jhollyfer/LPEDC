@@ -1,0 +1,167 @@
+<h2>0058 · Juntando tudo</h2>
+<p>O mercadinho anota o fiado num caderno: o nome do cliente e quanto ele deve.
+Cliente novo ganha uma linha, cliente antigo soma na conta e quem paga fica
+zerado. O caderno não tem número fixo de páginas, e cada nome tem um
+tamanho. Os dois problemas, quantidade desconhecida e tamanhos diferentes,
+são exatamente o que o módulo ensinou a resolver.</p>
+<p>Comece por onde o caderno mora. Ele precisa durar o programa todo e crescer
+conforme chegam clientes, então não cabe num frame da pilha; mora no <strong>heap</strong>
+(assunto 0053). Quem decide quando ele some é o próprio programa, no fim
+(CELES; RANGEL, 2002).</p>
+<p>Cada nome digitado chega numa variável temporária, que vai ser reaproveitada
+na próxima leitura. Para guardá-lo de vez, a função <code>duplicar</code> pede ao
+<code>malloc</code> (assunto 0054) um bloco do tamanho exato, <code>strlen(nome) + 1</code> bytes,
+e copia o texto para lá. O <code>+ 1</code> é o lugar do <code>&#39;\0&#39;</code> (BACKES, 2013, cap. 11).
+&quot;Bia&quot; ocupa 4 bytes e &quot;Dona Cida&quot;, 10; nenhum espaço é desperdiçado.</p>
+<p>O caderno em si são <strong>dois vetores paralelos</strong>: <code>nomes</code>, com o endereço do
+nome de cada cliente, e <code>centavos</code>, com o quanto cada um deve, na mesma
+posição. Quando os dois enchem, a função <code>crescer</code> dobra a capacidade dos
+dois juntos com <code>realloc</code> (assunto 0055), sempre por um ponteiro temporário,
+para não perder o bloco se o pedido falhar (CELES; RANGEL, 2002).</p>
+<p>O vetor <code>nomes</code> tem tipo <code>char **</code>: é um vetor de <code>char *</code>, e cada item
+aponta para um bloco de tamanho próprio. É a mesma forma da matriz dinâmica
+com linhas de tamanhos diferentes (assunto 0056) (BACKES, 2013, cap. 11).</p>
+<p>A novidade do programa está no parâmetro de <code>crescer</code>. O <code>realloc</code> pode
+mudar o bloco de lugar, então a função precisa <strong>mudar</strong> o ponteiro <code>nomes</code>
+do <code>main</code>. Pela regra do assunto 0049, ela recebe o endereço desse ponteiro.
+Como <code>nomes</code> é <code>char **</code>, o endereço dele é um <code>char ***</code>: três estrelas,
+uma para cada salto até a letra (FEOFILOFF, 2009, ap. F). O mesmo raciocínio
+dá <code>int **</code> para o vetor <code>centavos</code>.</p>
+<p>Os valores ficam em <strong>centavos</strong>, guardados em <code>int</code>. Um <code>double</code> não
+representa 0,10 com exatidão, e somas de muitos valores acumulam erro de
+arredondamento; inteiros não têm esse problema. R$ 12,50 vira <code>1250</code>, e a
+conversão para reais acontece só na hora de mostrar.</p>
+<p>Por fim, a limpeza segue a ordem do assunto 0056: primeiro cada nome, depois
+os dois vetores. Os dois vetores paralelos funcionam, mas são um remendo. A
+<code>struct</code> do módulo 08 junta &quot;nome e saldo&quot; numa coisa só, e um vetor de
+<code>struct cliente</code> precisa de um <code>realloc</code> só.</p>
+<blockquote>
+<p>[!WARNING]
+Liberar só <code>nomes</code> vaza todos os nomes: cada <code>nomes[i]</code> tem seu <code>malloc</code>,
+dentro de <code>duplicar</code>. São 2 <code>malloc</code> no começo e 5 nomes (os <code>realloc</code> só
+trocam um bloco por outro), então <code>liberar</code> faz 5 + 2 <code>free</code>. Confira com
+<code>valgrind ./programa</code> a linha <code>All heap blocks were freed</code>.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>Chegam seis anotações: Dona Cida (R$ 12,50), Seu Jorge (R$ 8,30), Dona Cida de
+novo (R$ 4,70), Bia (R$ 20,00), Tonho (R$ 3,15) e Rosa (R$ 5,60). São 5
+clientes, então o caderno cresce de 2 para 4 e de 4 para 8. Depois Seu Jorge
+paga tudo:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+// Cópia de uma string num bloco do tamanho exato.
+char *duplicar(const char *texto) {
+    char *copia = malloc(strlen(texto) + 1);
+    if (copia != NULL) {
+        strcpy(copia, texto);
+    }
+    return copia;
+}
+
+// Dobra a capacidade dos dois vetores paralelos. Recebe o ENDEREÇO dos
+// ponteiros do main (char *** e int **) porque o realloc pode mudá-los.
+int crescer(char ***nomes, int **centavos, int *cap) {
+    int nova = *cap * 2;
+    char **mais_nomes = realloc(*nomes, nova * sizeof **nomes);
+    if (mais_nomes == NULL) {
+        return 0;
+    }
+    *nomes = mais_nomes;
+    int *mais_centavos = realloc(*centavos, nova * sizeof **centavos);
+    if (mais_centavos == NULL) {
+        return 0;
+    }
+    *centavos = mais_centavos;
+    printf(&quot;(caderno cresceu: %d -&gt; %d clientes)\n&quot;, *cap, nova);
+    *cap = nova;
+    return 1;
+}
+
+int buscar(char **nomes, int qtd, const char *nome) {
+    for (int i = 0; i &lt; qtd; i++) {
+        if (strcmp(nomes[i], nome) == 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+// Soma uma compra na conta do cliente; cria a conta se ela não existe.
+int anotar(char ***nomes, int **centavos, int *qtd, int *cap, const char *nome, int valor) {
+    int i = buscar(*nomes, *qtd, nome);
+    if (i &gt;= 0) {
+        (*centavos)[i] += valor;
+        return 1;
+    }
+    if (*qtd == *cap &amp;&amp; !crescer(nomes, centavos, cap)) {
+        return 0;
+    }
+    char *copia = duplicar(nome);
+    if (copia == NULL) {
+        return 0;
+    }
+    (*nomes)[*qtd] = copia;
+    (*centavos)[*qtd] = valor;
+    (*qtd)++;
+    return 1;
+}
+
+void liberar(char **nomes, int *centavos, int qtd) {
+    for (int i = 0; i &lt; qtd; i++) {
+        free(nomes[i]); // cada nome é um bloco
+    }
+    free(nomes);        // depois o vetor de ponteiros
+    free(centavos);
+}
+
+int main(void) {
+    int qtd = 0;
+    int cap = 2;
+    char **nomes = malloc(cap * sizeof *nomes);
+    int *centavos = malloc(cap * sizeof *centavos);
+    if (nomes == NULL || centavos == NULL) {
+        free(nomes);
+        free(centavos);
+        return 1;
+    }
+
+    const char *quem[] = {&quot;Dona Cida&quot;, &quot;Seu Jorge&quot;, &quot;Dona Cida&quot;, &quot;Bia&quot;, &quot;Tonho&quot;, &quot;Rosa&quot;};
+    int valor[] = {1250, 830, 470, 2000, 315, 560}; // em centavos
+    for (int k = 0; k &lt; 6; k++) {
+        if (!anotar(&amp;nomes, &amp;centavos, &amp;qtd, &amp;cap, quem[k], valor[k])) {
+            liberar(nomes, centavos, qtd);
+            return 1;
+        }
+    }
+
+    int i = buscar(nomes, qtd, &quot;Seu Jorge&quot;); // Seu Jorge pagou tudo
+    if (i &gt;= 0) {
+        centavos[i] = 0;
+    }
+
+    int total = 0;
+    for (int k = 0; k &lt; qtd; k++) {
+        printf(&quot;%-10s R$ %3d.%02d\n&quot;, nomes[k], centavos[k] / 100, centavos[k] % 100);
+        total += centavos[k];
+    }
+    printf(&quot;Total na rua: R$ %d.%02d\n&quot;, total / 100, total % 100);
+
+    liberar(nomes, centavos, qtd);
+    return 0;
+}
+// Saída:
+// (caderno cresceu: 2 -&gt; 4 clientes)
+// (caderno cresceu: 4 -&gt; 8 clientes)
+// Dona Cida  R$  17.20
+// Seu Jorge  R$   0.00
+// Bia        R$  20.00
+// Tonho      R$   3.15
+// Rosa       R$   5.60
+// Total na rua: R$ 45.95
+</code></pre>
+<p>Cada anotação passa por uma busca. Achou, soma; não achou, talvez cresça e cria
+a linha. Todo caminho de erro termina em <code>liberar</code>:</p>
+<p>{{fluxograma}}</p>

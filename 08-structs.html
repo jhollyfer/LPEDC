@@ -1,0 +1,3390 @@
+<!-- Gerado por _gerador. Para mudar este arquivo, edite _gerador/modulos/08-structs/ e rode: cd _gerador && npm run gerar --><h1>Módulo 08 · Tipos compostos</h1>
+<blockquote>
+<p>[!IMPORTANT]
+<strong>Mundo 2 · Memória e dados · Rota do jogo: etapa 8 de 29</strong></p>
+<p><strong>Missão:</strong> agrupar dados com <code>struct</code>, <code>union</code>, <code>enum</code> e operações com bits.</p>
+<p><strong>Vem de:</strong> <a href="07-memoria-dinamica.html">Módulo 07 · Memória dinâmica</a>. <strong>Segue para:</strong> <a href="27-c-detalhes.html">Módulo 27 · Detalhes de C que caem em prova</a>.</p>
+<p><strong>Checkpoints desta fase:</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> Ler os assuntos 0059 a 0066 e refazer os exemplos</li>
+<li><input disabled="" type="checkbox"> Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho</li>
+<li><input disabled="" type="checkbox"> Fechar a lista prática (P0801 a P0830)</li>
+<li><input disabled="" type="checkbox"> Enfrentar os desafios do módulo</li>
+<li><input disabled="" type="checkbox"> Chefão: resolver as questões de prova do módulo sem consultar</li>
+</ul>
+</blockquote>
+<p>Como guardar dados que vêm em pacote: struct, typedef, vetor de structs,
+ponteiro para struct, enum, union e, no nível do bit, máscaras e flags. Depende
+de ponteiros (módulo 06) e de <code>malloc</code>/<code>realloc</code> (módulo 07); struct com
+ponteiro é a peça das estruturas de dados que começam no módulo 10.</p>
+<h2>O que você vai aprender</h2>
+<ul>
+<li><strong>struct</strong>: campos, ponto, cópia por atribuição e alinhamento</li>
+<li><strong>typedef</strong>, e por que não cria um tipo novo</li>
+<li><strong>vetores de structs</strong>: montar, percorrer e ordenar</li>
+<li><strong>ponteiro para struct</strong>: seta <code>-&gt;</code>, struct no heap e custo de passar por valor</li>
+<li><strong>enum</strong> para estados e opções</li>
+<li><strong>union</strong> e <strong>endianness</strong></li>
+<li><strong>bits</strong> com <code>&amp; | ^ ~ &lt;&lt; &gt;&gt;</code>, máscaras e flags (as permissões <code>rwx</code> do Linux)</li>
+</ul>
+<h2>Antes de começar</h2>
+<p>Revise o módulo 07 se <code>int *p = malloc(n * sizeof *p);</code> não parece natural. Os
+valores de <code>sizeof</code> e de ordem de bytes valem para um PC de 64 bits com Linux;
+em outra máquina podem mudar.</p>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A117.c -o ~/LPEDC/material/A117 &amp;&amp; ~/LPEDC/material/A117
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Assunto</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="#0059--struct">0059</a></td>
+<td>Struct</td>
+</tr>
+<tr>
+<td><a href="#0060--typedef">0060</a></td>
+<td>Typedef</td>
+</tr>
+<tr>
+<td><a href="#0061--vetor-de-structs">0061</a></td>
+<td>Vetor de structs</td>
+</tr>
+<tr>
+<td><a href="#0062--ponteiro-para-struct">0062</a></td>
+<td>Ponteiro para struct</td>
+</tr>
+<tr>
+<td><a href="#0063--enum">0063</a></td>
+<td>Enum</td>
+</tr>
+<tr>
+<td><a href="#0064--union">0064</a></td>
+<td>Union</td>
+</tr>
+<tr>
+<td><a href="#0065--bits-m%C3%A1scaras-e-flags">0065</a></td>
+<td>Bits, máscaras e flags</td>
+</tr>
+<tr>
+<td><a href="#0066--juntando-tudo-o-card%C3%A1pio">0066</a></td>
+<td>Juntando tudo: o cardápio</td>
+</tr>
+</tbody></table>
+<hr>
+<blockquote>
+<p>[!NOTE]
+Cada assunto é um capítulo: <strong>Conceito</strong> (a explicação), <strong>Exemplos de uso</strong> (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e <strong>Exercícios</strong> (cada um é um arquivo em <code>material/</code> com o esqueleto, as dicas e o espaço para a resposta; resoluções em <code>_respostas/08-structs/</code>).</p>
+</blockquote>
+<h2>0059 · Struct</h2>
+<h3>Conceito</h3>
+<p>Você pede açaí pelo app: copo M, 2 unidades, R$ 18,50 cada. Para o sistema,
+esse pedido junta três informações de tipos diferentes (um caractere, um
+inteiro e um preço) que andam sempre juntas. Com variáveis soltas, dez
+pedidos virariam trinta variáveis (<code>tamanho3</code>, <code>quantidade3</code>, <code>preco3</code>...), e
+nada no código diria que as três do final 3 pertencem ao mesmo pedido.</p>
+<p>Pense na ficha de cadastro de um consultório: uma folha só, com espaço para
+nome, idade e telefone. Quem pega a ficha leva tudo de uma vez. A <strong>struct</strong> é
+essa ficha: ela <strong>agrupa variáveis de tipos diferentes sob um nome só</strong>, e
+cada variável de dentro se chama <strong>campo</strong> (ou membro). Livros e provas
+também chamam a struct de <strong>registro</strong> ou estrutura (BACKES, 2013, cap. 8).</p>
+<p>Até aqui você usou dois tipos de dado. Os <strong>simples</strong>, como <code>int</code>, <code>char</code> e
+<code>double</code>, guardam um valor só. Os <strong>compostos</strong> guardam vários: o vetor junta
+valores do mesmo tipo, por isso se diz <strong>homogêneo</strong>; a struct junta valores
+de tipos diferentes, e é <strong>heterogênea</strong> (CELES; CERQUEIRA; RANGEL, 2016).</p>
+<p>O primeiro passo é descrever o molde, dizendo quais campos a ficha tem:</p>
+<pre><code class="language-c">struct pedido {
+    char tamanho;
+    int quantidade;
+    double preco;
+};   // &lt;- esse ; é obrigatório
+</code></pre>
+<p>Essa declaração cria um <strong>tipo novo</strong>, chamado <code>struct pedido</code> (as duas
+palavras juntas formam o nome). O molde não ocupa memória nenhuma: ele é a
+planta da casa, não a casa. A memória só aparece quando você declara uma
+variável desse tipo, como <code>struct pedido p1;</code>, e aí <code>p1</code> ganha espaço para os
+três campos (DEITEL; DEITEL, 2011, cap. 10).</p>
+<p>Para dar valores na declaração, use chaves com os valores <strong>na ordem dos
+campos</strong>: <code>struct pedido p1 = {&#39;M&#39;, 2, 18.50};</code>. Desde o C99 você também pode
+nomear cada campo, <code>{.tamanho = &#39;M&#39;, .quantidade = 2, .preco = 18.50}</code>, o que
+protege contra trocar a ordem sem perceber. Campo que você não citar começa
+com zero (BACKES, 2013, cap. 8). Se precisar de uma struct só por um
+instante, por exemplo para passar a uma função, o <strong>literal composto</strong> cria
+uma sem variável: <code>(struct pedido){&#39;G&#39;, 1, 22.00}</code> (BACKES, 2013).</p>
+<p>Para ler ou mudar um campo, use o <strong>ponto</strong>: <code>p1.quantidade</code> vale 2, e
+<code>p1.preco = 20.0;</code> troca o preço. Cada campo se comporta como uma variável
+comum do seu tipo. <code>p1.tamanho</code> é um <code>char</code>, e <code>&amp;p1.quantidade</code> é o endereço
+de um <code>int</code>, do tipo <code>int *</code>, que você pode passar ao <code>scanf</code> (FEOFILOFF,
+2009, ap. E).</p>
+<p>A struct pode ter vetores e outras structs dentro. Se o cliente tem um campo
+<code>end</code> que é uma struct de endereço, você chega à cidade com dois pontos:
+<code>cliente.end.cidade</code>. E a atribuição <code>b = a</code> funciona entre structs do
+<strong>mesmo tipo</strong>: ela copia todos os bytes de uma vez, inclusive os vetores que
+estão dentro. Isso chama a atenção porque vetor sozinho não se copia com <code>=</code>;
+dentro de uma struct, copia (BACKES, 2013, cap. 8).</p>
+<p>Falta entender o tamanho. Os campos ficam na memória na ordem em que você os
+declarou, mas não necessariamente colados. O processador lê mais rápido um
+<code>int</code> que começa num endereço múltiplo de 4 e um <code>double</code> que começa num
+múltiplo de 8, então o compilador <strong>alinha</strong> os campos e pula bytes quando
+precisa. Esses bytes vazios se chamam <strong>preenchimento</strong> (<em>padding</em>). No
+<code>struct pedido</code>, <code>char</code> (1) + <code>int</code> (4) + <code>double</code> (8) somam 13 bytes, mas o
+<code>sizeof</code> dá 16: o compilador deixa 3 bytes livres depois de <code>tamanho</code>, e o
+<code>preco</code> começa no byte 8 (DEITEL; DEITEL, 2011, cap. 10). A macro
+<code>offsetof(struct pedido, preco)</code>, de <code>&lt;stddef.h&gt;</code>, confirma: devolve 8. A
+ordem dos campos muda a conta. Com <code>char</code>, <code>double</code> e <code>int</code>, nessa ordem, o
+<code>sizeof</code> sobe para 24.</p>
+<p>Esse preenchimento explica uma proibição do C: você não pode comparar duas
+structs com <code>==</code>. Os bytes de enchimento guardam lixo, e duas structs com os
+mesmos campos poderiam diferir nesses bytes. Para saber se dois pedidos são
+iguais, compare campo a campo (DEITEL; DEITEL, 2011, cap. 10).</p>
+<blockquote>
+<p>[!WARNING]
+<code>struct pedido p2 = p1;</code> cria uma <strong>cópia independente</strong>: mudar
+<code>p2.quantidade</code> não mexe em <code>p1</code>. Também não funcionam <code>p1 == p2</code> (não
+compila; compare campo a campo) nem <code>cliente.nome = &quot;Ana&quot;;</code> (use
+<code>strcpy(cliente.nome, &quot;Ana&quot;)</code>). E o <code>;</code> depois da <code>}</code> do molde é
+obrigatório: sem ele, o erro aparece numa linha seguinte.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>O pedido de açaí: copo M, 2 unidades, R$ 18,50 cada. O programa multiplica dois
+campos, chega a R$ 37,00 e decide o frete. O buraco cinza entre <code>tamanho</code> e
+<code>quantidade</code> é o preenchimento:</p>
+<p align="center"><img src="material/0059-ideia.svg" alt="Diagrama da ideia: Struct" width="916"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// o molde: diz quais campos um pedido tem (ainda não reserva memória)
+struct pedido {
+    char tamanho;   // &#39;P&#39;, &#39;M&#39; ou &#39;G&#39;
+    int quantidade; // quantos copos
+    double preco;   // preço de cada copo
+};
+
+int main(void) {
+    struct pedido p1 = {&#39;M&#39;, 2, 18.50}; // os valores vão na ordem dos campos
+
+    double total = p1.quantidade * p1.preco; // o ponto acessa um campo
+    printf(&quot;Pedido: %d copos %c de R$ %.2f\n&quot;, p1.quantidade, p1.tamanho, p1.preco);
+    printf(&quot;Total: R$ %.2f\n&quot;, total);
+
+    if (total &gt;= 30.0) {
+        printf(&quot;Frete grátis!\n&quot;);
+    } else {
+        printf(&quot;Frete: R$ 5.00\n&quot;);
+    }
+    printf(&quot;O pedido ocupa %zu bytes\n&quot;, sizeof(struct pedido));
+    return 0;
+}
+// Saída:
+// Pedido: 2 copos M de R$ 18.50
+// Total: R$ 37.00
+// Frete grátis!
+// O pedido ocupa 16 bytes
+</code></pre>
+<p>A struct não muda os passos do programa; só leva os dados num pacote:</p>
+<p align="center"><img src="material/0059-fluxograma.svg" alt="Fluxograma: Struct" width="462"></p>
+<p><strong>Exemplo A117 · A matrícula na academia</strong></p>
+<pre><code class="language-c">#include &lt;stddef.h&gt;
+#include &lt;stdio.h&gt;
+
+struct aluno {
+    char plano;       // &#39;M&#39; mensal, &#39;T&#39; trimestral, &#39;A&#39; anual
+    int faltas;       // faltas no mês
+    double mensalidade;
+    int armario;      // 0 = sem armário
+};
+
+int main(void) {
+    // com nome de campo, a ordem é livre; quem não aparece começa com zero
+    struct aluno caio = {.mensalidade = 99.90, .plano = &#39;M&#39;};
+    printf(&quot;Caio: plano %c, R$ %.2f, %d faltas, armário %d\n&quot;,
+           caio.plano, caio.mensalidade, caio.faltas, caio.armario);
+
+    // literal composto: troca a struct inteira de uma vez
+    caio = (struct aluno){&#39;A&#39;, 0, 79.90, 12};
+    printf(&quot;Caio: plano %c, R$ %.2f, %d faltas, armário %d\n&quot;,
+           caio.plano, caio.mensalidade, caio.faltas, caio.armario);
+
+    // comparar structs: campo a campo (== entre structs não compila)
+    struct aluno duda = caio;
+    duda.armario = 13;
+    if (duda.plano == caio.plano &amp;&amp; duda.mensalidade == caio.mensalidade) {
+        printf(&quot;Duda e Caio têm o mesmo plano\n&quot;);
+    }
+    if (duda.armario != caio.armario) {
+        printf(&quot;mas armários diferentes: %d e %d\n&quot;, duda.armario, caio.armario);
+    }
+
+    // onde cada campo começa dentro da struct
+    printf(&quot;plano em %zu, faltas em %zu, mensalidade em %zu, armario em %zu\n&quot;,
+           offsetof(struct aluno, plano), offsetof(struct aluno, faltas),
+           offsetof(struct aluno, mensalidade), offsetof(struct aluno, armario));
+    // 16 + 4 = 20, mas o total arredonda para múltiplo de 8 (o double): 24
+    printf(&quot;sizeof: %zu bytes\n&quot;, sizeof(struct aluno));
+    return 0;
+}
+// Saída:
+// Caio: plano M, R$ 99.90, 0 faltas, armário 0
+// Caio: plano A, R$ 79.90, 0 faltas, armário 12
+// Duda e Caio têm o mesmo plano
+// mas armários diferentes: 13 e 12
+// plano em 0, faltas em 4, mensalidade em 8, armario em 16
+// sizeof: 24 bytes
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A117.c -o ~/LPEDC/material/A117 &amp;&amp; ~/LPEDC/material/A117
+</code></pre>
+<p><strong>Exemplo A118 · A ficha copiada</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+struct endereco {
+    char cidade[20];
+    char uf[3];
+};
+
+// uma struct pode ter outra struct dentro (struct aninhada)
+struct cliente {
+    char nome[20];
+    int pontos;
+    struct endereco end;
+};
+
+int main(void) {
+    // inicialização com nomes de campo (C99): a ordem não importa
+    struct cliente ana = {
+        .nome = &quot;Ana&quot;,
+        .pontos = 120,
+        .end = {.cidade = &quot;Recife&quot;, .uf = &quot;PE&quot;},
+    };
+
+    struct cliente copia = ana; // copia TODOS os bytes, inclusive os vetores
+    strcpy(copia.nome, &quot;Bia&quot;);  // campo vetor: strcpy, não =
+    copia.pontos = 0;
+    strcpy(copia.end.cidade, &quot;Natal&quot;); // ponto encadeado: copia.end.cidade
+
+    printf(&quot;%s, %d pontos, %s-%s\n&quot;, ana.nome, ana.pontos, ana.end.cidade, ana.end.uf);
+    printf(&quot;%s, %d pontos, %s-%s\n&quot;, copia.nome, copia.pontos, copia.end.cidade, copia.end.uf);
+    return 0;
+}
+// Saída:
+// Ana, 120 pontos, Recife-PE
+// Bia, 0 pontos, Natal-PE
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A118.c -o ~/LPEDC/material/A118 &amp;&amp; ~/LPEDC/material/A118
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E349</strong> · ★☆☆</p>
+<p>Crie uma struct livro com os campos titulo (até 39 letras), autor (até 29
+letras), ano (int) e preco (double). Declare uma variável já inicializada
+com o livro abaixo e mostre os campos e o preço com 10% de desconto.</p>
+<pre><code class="language-text">Saída esperada:
+Livro: Dom Casmurro
+Autor: Machado de Assis
+Ano: 1899
+Preço: R$ 34.90
+Na promoção: R$ 31.41
+</code></pre>
+<p><strong>Exercício E351</strong> · ★★☆</p>
+<p>Um terreno retangular é descrito por dois cantos: o inferior esquerdo
+(2, 1) e o superior direito (10, 6), em metros. Crie uma struct ponto
+(x e y, double) e uma struct retangulo com dois campos struct ponto. Escreva
+funções que recebem o retângulo e devolvem a área e o perímetro, e uma que
+diz se um ponto (uma árvore, por exemplo) está dentro do terreno.</p>
+<pre><code class="language-text">Saída esperada:
+Largura: 8.0 m, altura: 5.0 m
+Área: 40.0 m2
+Perímetro: 26.0 m
+Árvore em (4.0, 3.0): dentro
+Árvore em (11.0, 2.0): fora
+</code></pre>
+<p><strong>Exercício E352</strong> · ★★☆</p>
+<p>Crie a struct jogadora com nome (até 19 letras) e gols (int). Guarde em a a
+artilheira Marta, com 17 gols (o nome entra com strcpy), copie a para b com
+uma atribuição e mostre b. Depois confira se as duas fichas são iguais,
+comparando campo a campo (o == não funciona com struct).</p>
+<pre><code class="language-text">Saída esperada:
+Marta: 17 gols
+a e b são iguais
+</code></pre>
+<p><strong>Exercício E353</strong> · ★★★</p>
+<p>Crie uma struct data (dia, mes, ano) e escreva:</p>
+<pre><code class="language-text">- struct data dia_seguinte(struct data d): devolve a data do dia seguinte,
+  tratando fim de mês, fim de ano e fevereiro em ano bissexto;
+- int comparar(struct data a, struct data b): devolve -1 se a vem antes,
+  0 se são iguais e 1 se a vem depois.
+</code></pre>
+<p>Teste com as datas abaixo:</p>
+<pre><code class="language-text">Saída esperada:
+28/02/2024 -&gt; 29/02/2024
+28/02/2025 -&gt; 01/03/2025
+31/12/2025 -&gt; 01/01/2026
+15/03/2025 vem antes de 02/11/2025
+</code></pre>
+<hr>
+<h2>0060 · Typedef</h2>
+<h3>Conceito</h3>
+<p>No assunto anterior, todo pedido era declarado como <code>struct pedido p1;</code>. As
+duas palavras sempre juntas cansam num programa grande, e o nome do tipo fica
+mais comprido que a ideia que ele representa. O C oferece um jeito de dar um
+nome mais curto, ou mais expressivo, a um tipo que já existe.</p>
+<p>No grupo da família, ninguém chama o seu tio de &quot;José Carlos da Silva&quot;. É
+&quot;Zé&quot;. O apelido não cria outra pessoa: é o mesmo tio, com um nome mais
+prático. O <strong>typedef</strong> faz isso com tipos: ele dá um <strong>apelido</strong> a um tipo
+existente e cria um sinônimo, sem criar um tipo novo (BACKES, 2013, cap. 8).</p>
+<p>A forma de escrever segue uma regra simples. Escreva a declaração de uma
+variável do jeito de sempre e ponha a palavra <code>typedef</code> na frente. O nome que
+seria a variável passa a ser o nome do tipo (FEOFILOFF, 2009, ap. J):</p>
+<pre><code class="language-c">double Reais;          // uma variável chamada Reais
+typedef double Reais;  // um apelido: Reais agora é o mesmo que double
+</code></pre>
+<p>Depois da segunda linha, <code>Reais saldo;</code> e <code>double saldo;</code> declaram
+exatamente a mesma coisa. O ganho é de leitura: quem vê <code>Reais</code> entende que
+ali mora dinheiro, e o compilador continua vendo um <code>double</code>.</p>
+<p>O uso mais comum é com struct, e há duas maneiras. Você pode batizar uma
+struct que já tem nome, com <code>typedef struct pix Pix;</code>, ou fazer tudo de uma
+vez, declarando a struct sem nome e dando o apelido logo depois da chave
+(DEITEL; DEITEL, 2011, cap. 10):</p>
+<pre><code class="language-c">typedef struct {
+    char chave[40];
+    Reais valor;
+    int hora;
+} Pix;
+</code></pre>
+<p>A partir daí, <code>Pix p;</code> basta, sem a palavra <code>struct</code>. Repare que o campo
+<code>valor</code> usa o apelido <code>Reais</code> definido antes: um typedef pode usar outro.
+Escrever nome de tipo com a inicial maiúscula é uma convenção, e ela ajuda a
+separar tipo de variável no meio do código: <code>Pix</code> é o tipo, <code>p</code> é a variável
+(DEITEL; DEITEL, 2011, cap. 10).</p>
+<p>Struct, union e enum, com ou sem <code>typedef</code>, formam o que os livros e o edital
+chamam de <strong>tipos definidos pelo programador</strong>: tipos que não vêm prontos com
+a linguagem, e que você monta para descrever o seu problema (CELES; CERQUEIRA;
+RANGEL, 2016). Os próximos assuntos apresentam o enum e a union.</p>
+<p>Você já usou vários typedefs sem saber. <code>size_t</code>, o tipo que o <code>sizeof</code>
+devolve, <code>uint8_t</code>, <code>int32_t</code> e o <code>FILE</code> do módulo 09 são apelidos definidos
+nos cabeçalhos da biblioteca (KERNIGHAN; RITCHIE, 1988, cap. 6). O <code>uint8_t</code>
+mostra a vantagem: ele quer dizer &quot;exatamente 8 bits sem sinal&quot; em qualquer
+máquina, e cada compilador o liga ao tipo certo por baixo. Você escreve o
+mesmo código e o apelido cuida da diferença entre máquinas.</p>
+<p>Como o typedef só dá outro nome, o compilador não distingue o apelido do
+original. Isso tem um lado bom (o apelido funciona em qualquer lugar que
+aceita o tipo) e um lado perigoso, que o alerta abaixo mostra.</p>
+<blockquote>
+<p>[!WARNING]
+<code>typedef</code> cria um <strong>sinônimo</strong>, não um tipo novo. Com <code>typedef double Reais;</code>
+e <code>typedef double Dolares;</code>, <code>Reais r = dolares;</code> compila: os dois são
+<code>double</code>. Para o compilador barrar a mistura, embrulhe numa struct:
+<code>typedef struct { double v; } Reais;</code>. E <code>typedef int *PInt;</code> esconde que
+<code>PInt a, b;</code> são ponteiros.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>Um Pix de R$ 1.500,00 às 22h esbarra no limite noturno de R$ 1.000,00 (entre
+20h e 6h). <code>Pix</code> e <code>Reais</code> são só etiquetas coladas em tipos que já existiam:</p>
+<p align="center"><img src="material/0060-ideia.svg" alt="Diagrama da ideia: Typedef" width="858"></p>
+<pre><code class="language-c">#include &lt;stdbool.h&gt;
+#include &lt;stdio.h&gt;
+
+typedef double Reais; // Reais é só outro nome para double
+
+typedef struct {      // struct sem nome, batizada de Pix pelo typedef
+    char chave[40];
+    Reais valor;
+    int hora;         // 0 a 23
+} Pix;
+
+#define LIMITE_NOTURNO 1000.0
+
+bool pix_permitido(Pix p) {
+    bool noturno = p.hora &gt;= 20 || p.hora &lt; 6;
+    return !(noturno &amp;&amp; p.valor &gt; LIMITE_NOTURNO);
+}
+
+int main(void) {
+    Pix p = {&quot;ana@email.com&quot;, 1500.00, 22}; // sem a palavra struct
+
+    printf(&quot;Pix de R$ %.2f para %s às %dh\n&quot;, p.valor, p.chave, p.hora);
+    if (pix_permitido(p)) {
+        printf(&quot;Enviado!\n&quot;);
+    } else {
+        printf(&quot;Bloqueado: o limite noturno é R$ %.2f\n&quot;, LIMITE_NOTURNO);
+    }
+    return 0;
+}
+// Saída:
+// Pix de R$ 1500.00 para ana@email.com às 22h
+// Bloqueado: o limite noturno é R$ 1000.00
+</code></pre>
+<p>O Pix só é bloqueado se for horário noturno <strong>e</strong> o valor passar do limite:</p>
+<p align="center"><img src="material/0060-fluxograma.svg" alt="Fluxograma: Typedef" width="403"></p>
+<p><strong>Exemplo A119 · A frota de ônibus</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+typedef char Placa[8];      // apelido para um vetor: Placa é &quot;char[8]&quot;
+typedef unsigned Minutos;   // apelido para um tipo simples
+
+typedef struct onibus Onibus; // apelido antes da struct existir
+
+struct onibus {             // a struct com nome: dá para usar os dois nomes
+    Placa placa;
+    int linha;
+    Minutos atraso;
+};
+
+void mostrar(Onibus o) {
+    printf(&quot;Linha %d (%s): %u min de atraso\n&quot;, o.linha, o.placa, o.atraso);
+}
+
+int main(void) {
+    Onibus a = {&quot;QWE1R23&quot;, 512, 0};
+    struct onibus b = {&quot;RTY4U56&quot;, 307, 15}; // o nome completo também vale
+    Minutos tolerancia = 10;
+
+    mostrar(a);
+    mostrar(b);
+    if (b.atraso &gt; tolerancia) {
+        printf(&quot;Linha %d passou da tolerância de %u min\n&quot;, b.linha, tolerancia);
+    }
+
+    Placa nova;              // é um vetor de 8 char, como qualquer outro
+    strcpy(nova, &quot;ZXC7V89&quot;); // vetor: strcpy, não =
+    printf(&quot;Placa nova: %s, %zu bytes\n&quot;, nova, sizeof nova);
+    printf(&quot;Onibus ocupa %zu bytes, igual a struct onibus: %zu\n&quot;,
+           sizeof(Onibus), sizeof(struct onibus));
+    return 0;
+}
+// Saída:
+// Linha 512 (QWE1R23): 0 min de atraso
+// Linha 307 (RTY4U56): 15 min de atraso
+// Linha 307 passou da tolerância de 10 min
+// Placa nova: ZXC7V89, 8 bytes
+// Onibus ocupa 16 bytes, igual a struct onibus: 16
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A119.c -o ~/LPEDC/material/A119 &amp;&amp; ~/LPEDC/material/A119
+</code></pre>
+<p><strong>Exemplo A120 · A cor do site</strong></p>
+<pre><code class="language-c">#include &lt;stdint.h&gt;
+#include &lt;stdio.h&gt;
+
+typedef uint8_t Byte; // uint8_t já é um typedef (de unsigned char)
+
+typedef struct {
+    Byte r, g, b;     // cada canal de 0 a 255
+} Cor;
+
+Cor misturar(Cor a, Cor b) {
+    Cor m = {(a.r + b.r) / 2, (a.g + b.g) / 2, (a.b + b.b) / 2};
+    return m;
+}
+
+void mostrar(const char *nome, Cor c) {
+    printf(&quot;%-8s #%02X%02X%02X  (%3d, %3d, %3d)\n&quot;, nome, c.r, c.g, c.b, c.r, c.g, c.b);
+}
+
+int main(void) {
+    Cor laranja = {255, 136, 0};
+    Cor branco = {255, 255, 255};
+
+    mostrar(&quot;laranja&quot;, laranja);
+    mostrar(&quot;branco&quot;, branco);
+    mostrar(&quot;mistura&quot;, misturar(laranja, branco));
+    printf(&quot;Uma Cor ocupa %zu bytes\n&quot;, sizeof(Cor));
+    return 0;
+}
+// Saída:
+// laranja  #FF8800  (255, 136,   0)
+// branco   #FFFFFF  (255, 255, 255)
+// mistura  #FFC37F  (255, 195, 127)
+// Uma Cor ocupa 3 bytes
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A120.c -o ~/LPEDC/material/A120 &amp;&amp; ~/LPEDC/material/A120
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E355</strong> · ★☆☆</p>
+<p>Crie com typedef o tipo Produto (nome até 19 letras, quantidade int e preco
+double). Escreva double subtotal(Produto p) e void mostrar(Produto p). No
+main, crie Café (3 unidades a R$ 12.50) e Leite (6 a R$ 4.99), mostre os dois
+e o total da compra.</p>
+<pre><code class="language-text">Saída esperada:
+Café: 3 x R$ 12.50 = R$ 37.50
+Leite: 6 x R$ 4.99 = R$ 29.94
+Total: R$ 67.44
+</code></pre>
+<p><strong>Exercício E357</strong> · ★★☆</p>
+<p>Na receita de bolo você soma 1/4 de xícara com 1/6 de xícara. Crie o tipo
+Fracao (numerador e denominador inteiros) com typedef e escreva:</p>
+<pre><code class="language-text">- Fracao simplificar(Fracao f): divide os dois pelo MDC;
+- Fracao somar(Fracao a, Fracao b) e Fracao multiplicar(Fracao a, Fracao b),
+  que já devolvem a fração simplificada.
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+1/4 + 1/6 = 5/12
+2/3 * 9/4 = 3/2
+3/4 + 1/4 = 1/1
+</code></pre>
+<p><strong>Exercício E358</strong> · ★★☆</p>
+<p>Crie com typedef o apelido Reais para double e o tipo Cartao (struct sem
+nome, com titular de até 19 letras e saldo em Reais). Escreva
+Cartao pagar(Cartao c, Reais valor), que devolve uma cópia do cartão com o
+valor descontado do saldo. Ana tem R$ 600.00 no vale-refeição e paga um
+almoço de R$ 36.50: mostre o saldo antes e depois.</p>
+<pre><code class="language-text">Saída esperada:
+Ana: R$ 600.00 -&gt; R$ 563.50
+</code></pre>
+<p><strong>Exercício E359</strong> · ★★★</p>
+<p>Ponteiro para função (assunto 0050) tem uma declaração difícil de ler:
+double (*f)(double, double). Com typedef ela fica limpa. Crie:</p>
+<pre><code class="language-text">typedef double (*Operacao)(double, double);
+</code></pre>
+<p>e um tipo Botao (struct com um char simbolo e uma Operacao). Monte um
+vetor com os quatro botões de uma calculadora (+ - * /) e, num laço, aplique
+cada um aos números 12 e 4.</p>
+<pre><code class="language-text">Saída esperada:
+12 + 4 = 16
+12 - 4 = 8
+12 * 4 = 48
+12 / 4 = 3
+</code></pre>
+<hr>
+<h2>0061 · Vetor de structs</h2>
+<h3>Conceito</h3>
+<p>Uma struct guarda um time. Um campeonato tem vinte. Declarar <code>Time t1, t2, t3...</code> traz de volta o problema das variáveis soltas: não dá para percorrer
+os times com um laço, nem achar o líder sem escrever vinte comparações. A
+saída é juntar as duas ferramentas que você já conhece, o vetor e a struct.</p>
+<p>Olhe a tabela do campeonato no jornal. Cada linha é um time, e todas as
+linhas têm as mesmas colunas: nome, vitórias, empates, derrotas. Uma linha é
+uma struct; a tabela inteira é um <strong>vetor de structs</strong>, um vetor em que cada
+posição guarda uma struct completa. <code>Time tabela[4];</code> declara quatro <code>Time</code>
+seguidos na memória, com os bytes de cada struct guardados dentro do próprio
+vetor, um time colado no outro (BACKES, 2013, cap. 8).</p>
+<p>Para chegar a um dado, você escolhe primeiro a linha e depois a coluna:
+<code>tabela[2].nome</code>. O índice vem <strong>antes</strong> do ponto, e o motivo está nos
+tipos. <code>tabela</code> é um vetor; <code>tabela[2]</code> é um <code>Time</code>; e um <code>Time</code> tem o campo
+<code>nome</code>. Já <code>tabela.nome[2]</code> não faz sentido, porque o vetor em si não tem
+campos, só posições (BACKES, 2013, cap. 8). Lendo da esquerda para a direita,
+cada operador entrega o tipo que o próximo espera.</p>
+<p>A inicialização junta as duas sintaxes que você já viu: as chaves do vetor
+por fora e as chaves de cada struct por dentro (DEITEL; DEITEL, 2011,
+cap. 10):</p>
+<pre><code class="language-c">Time tabela[] = {
+    {&quot;Bahia&quot;, 8, 5, 3},
+    {&quot;Flamengo&quot;, 9, 6, 1},
+};
+</code></pre>
+<p>Repare que os colchetes ficaram vazios. Quando você não diz o tamanho, o
+compilador conta os elementos da lista. Para o programa saber quantos são, use
+a conta de sempre: <code>sizeof tabela / sizeof tabela[0]</code>, o tamanho total do
+vetor dividido pelo tamanho de um time. Com dois times de 32 bytes, dá 64 / 32
+= 2 (DEITEL; DEITEL, 2011, cap. 10). Essa conta só funciona no mesmo bloco
+em que o vetor foi declarado; dentro de uma função que o recebeu, ele já virou
+ponteiro e o <code>sizeof</code> mede o ponteiro.</p>
+<p>Uma posição do vetor é uma struct inteira, então <code>tabela[i] = tabela[j]</code>
+copia o time todo de uma vez: nome, vitórias, empates e derrotas. Isso é o
+que você quer na hora de ordenar a tabela. Para trocar dois times de lugar,
+troque as structs com uma variável auxiliar do tipo <code>Time</code>, e não campo a
+campo (BACKES, 2013, cap. 8). Se trocar só o nome, o Bahia fica com os
+pontos do Flamengo.</p>
+<p>Quando você procura um elemento, como o time com mais pontos, guarde o
+<strong>índice</strong> dele, não uma cópia. O índice diz em que posição o líder está, e
+com ele você pode mexer no time verdadeiro: <code>tabela[lider].vitorias++</code> muda a
+tabela. Uma cópia (<code>Time melhor = tabela[i];</code>) seria um time solto,
+desligado do vetor; aumentar <code>melhor.vitorias</code> não altera nada na tabela.</p>
+<p>Percorrer o vetor segue o mesmo padrão de qualquer vetor: um <code>for</code> de 0 até
+<code>n - 1</code>, e em cada volta você lê os campos de <code>tabela[i]</code>. A diferença é que
+agora cada elemento traz vários dados juntos, e o laço pode calcular algo com
+eles, como os pontos (3 por vitória, 1 por empate).</p>
+<blockquote>
+<p>[!WARNING]
+O C não confere limites: <code>tabela[4]</code> num vetor de 4 times (índices 0 a 3)
+lê lixo ou derruba o programa, como num vetor de <code>int</code>. E ao ordenar,
+troque o time <strong>inteiro</strong> (<code>tabela[i] = tabela[j]</code>): trocar só o nome
+embaralha nomes e pontos.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>Quatro times na tabela do campeonato. O programa calcula os pontos de cada um
+(3 por vitória, 1 por empate) e guarda o <strong>índice</strong> do melhor até agora.
+Palmeiras, no índice 2, termina na frente:</p>
+<p align="center"><img src="material/0061-ideia.svg" alt="Diagrama da ideia: Vetor de structs" width="858"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+typedef struct {
+    char nome[20];
+    int vitorias;
+    int empates;
+    int derrotas;
+} Time;
+
+int pontos(Time t) {
+    return 3 * t.vitorias + t.empates;
+}
+
+int main(void) {
+    Time tabela[] = {
+        {&quot;Bahia&quot;, 8, 5, 3},
+        {&quot;Flamengo&quot;, 9, 6, 1},
+        {&quot;Palmeiras&quot;, 10, 4, 2},
+        {&quot;Vasco&quot;, 7, 7, 2},
+    };
+    int n = sizeof tabela / sizeof tabela[0]; // 4 times
+
+    int lider = 0; // índice do melhor até agora
+    for (int i = 0; i &lt; n; i++) {
+        printf(&quot;%d. %-10s %2d pts\n&quot;, i, tabela[i].nome, pontos(tabela[i]));
+        if (pontos(tabela[i]) &gt; pontos(tabela[lider])) {
+            lider = i;
+        }
+    }
+    printf(&quot;Líder: %s, com %d pontos\n&quot;, tabela[lider].nome, pontos(tabela[lider]));
+    printf(&quot;A tabela ocupa %zu bytes (%d x %zu)\n&quot;, sizeof tabela, n, sizeof(Time));
+    return 0;
+}
+// Saída:
+// 0. Bahia      29 pts
+// 1. Flamengo   33 pts
+// 2. Palmeiras  34 pts
+// 3. Vasco      28 pts
+// Líder: Palmeiras, com 34 pontos
+// A tabela ocupa 128 bytes (4 x 32)
+</code></pre>
+<p>É o padrão &quot;maior até agora&quot; do módulo de laços, comparando um valor calculado
+de cada struct:</p>
+<p align="center"><img src="material/0061-fluxograma.svg" alt="Fluxograma: Vetor de structs" width="575"></p>
+<p><strong>Exemplo A121 · O estoque da farmácia</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+typedef struct {
+    char nome[20];
+    int estoque;
+    int minimo; // abaixo disso, precisa repor
+} Remedio;
+
+// devolve o índice do remédio com esse nome, ou -1 se não achar
+int buscar(const Remedio v[], int n, const char *nome) {
+    for (int i = 0; i &lt; n; i++) {
+        if (strcmp(v[i].nome, nome) == 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void vender(Remedio v[], int n, const char *nome, int qtd) {
+    int i = buscar(v, n, nome);
+    if (i == -1) {
+        printf(&quot;%s: não temos\n&quot;, nome);
+    } else if (v[i].estoque &lt; qtd) {
+        printf(&quot;%s: só restam %d\n&quot;, nome, v[i].estoque);
+    } else {
+        v[i].estoque -= qtd; // mexe direto no elemento do vetor
+        printf(&quot;%s: vendidas %d, restam %d\n&quot;, nome, qtd, v[i].estoque);
+    }
+}
+
+int main(void) {
+    Remedio farmacia[] = {
+        {&quot;Dipirona&quot;, 40, 10},
+        {&quot;Paracetamol&quot;, 12, 10},
+        {&quot;Ibuprofeno&quot;, 5, 8},
+    };
+    int n = sizeof farmacia / sizeof farmacia[0];
+
+    vender(farmacia, n, &quot;Paracetamol&quot;, 3);
+    vender(farmacia, n, &quot;Ibuprofeno&quot;, 6);
+    vender(farmacia, n, &quot;Amoxicilina&quot;, 1);
+    vender(farmacia, n, &quot;Dipirona&quot;, 30);
+
+    printf(&quot;Repor:\n&quot;);
+    for (int i = 0; i &lt; n; i++) {
+        if (farmacia[i].estoque &lt; farmacia[i].minimo) { // 10 de 10 ainda não
+            printf(&quot;  %s (%d de %d)\n&quot;, farmacia[i].nome, farmacia[i].estoque,
+                   farmacia[i].minimo);
+        }
+    }
+    return 0;
+}
+// Saída:
+// Paracetamol: vendidas 3, restam 9
+// Ibuprofeno: só restam 5
+// Amoxicilina: não temos
+// Dipirona: vendidas 30, restam 10
+// Repor:
+//   Paracetamol (9 de 10)
+//   Ibuprofeno (5 de 8)
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A121.c -o ~/LPEDC/material/A121 &amp;&amp; ~/LPEDC/material/A121
+</code></pre>
+<p><strong>Exemplo A122 · A classificação ordenada</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+typedef struct {
+    char nome[20];
+    int vitorias;
+    int empates;
+} Time;
+
+int pontos(Time t) {
+    return 3 * t.vitorias + t.empates;
+}
+
+// qsort entrega ponteiros genéricos para dois elementos do vetor
+int comparar(const void *a, const void *b) {
+    Time x = *(const Time *)a; // copia o time apontado
+    Time y = *(const Time *)b;
+    if (pontos(x) != pontos(y)) {
+        return pontos(y) - pontos(x); // mais pontos primeiro
+    }
+    return y.vitorias - x.vitorias; // desempate: mais vitórias
+}
+
+int main(void) {
+    Time tabela[] = {
+        {&quot;Bahia&quot;, 8, 5},
+        {&quot;Flamengo&quot;, 9, 6},
+        {&quot;Palmeiras&quot;, 10, 4},
+        {&quot;Fortaleza&quot;, 10, 3},
+        {&quot;Vasco&quot;, 7, 7},
+    };
+    int n = sizeof tabela / sizeof tabela[0];
+
+    // qsort troca structs inteiras de lugar (28 bytes por vez)
+    qsort(tabela, n, sizeof tabela[0], comparar);
+
+    for (int i = 0; i &lt; n; i++) {
+        printf(&quot;%dº %-10s %2d pts, %2d vitórias\n&quot;, i + 1, tabela[i].nome,
+               pontos(tabela[i]), tabela[i].vitorias);
+    }
+    return 0;
+}
+// Saída:
+// 1º Palmeiras  34 pts, 10 vitórias
+// 2º Fortaleza  33 pts, 10 vitórias
+// 3º Flamengo   33 pts,  9 vitórias
+// 4º Bahia      29 pts,  8 vitórias
+// 5º Vasco      28 pts,  7 vitórias
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A122.c -o ~/LPEDC/material/A122 &amp;&amp; ~/LPEDC/material/A122
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E361</strong> · ★☆☆</p>
+<p>Monte a lista de compras abaixo como um vetor de structs (nome,
+quantidade, preço unitário). Percorra o vetor mostrando o subtotal de cada
+item, o total da compra e o item que mais pesou no bolso.</p>
+<pre><code class="language-text">Arroz 5kg   2 x R$ 27.90
+Feijão      3 x R$ 8.49
+Café        1 x R$ 18.90
+Óleo        4 x R$ 7.99
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Arroz 5kg: R$ 55.80
+Feijão: R$ 25.47
+Café: R$ 18.90
+Óleo: R$ 31.96
+Total: R$ 132.13
+Mais caro: Arroz 5kg
+</code></pre>
+<p><strong>Exercício E363</strong> · ★★☆</p>
+<p>Leia do teclado 3 atletas: o nome (pode ter espaço) numa linha e, na linha
+seguinte, a altura e a idade. Não mostre mensagens antes de ler. Guarde num
+vetor de structs e mostre o mais alto e o mais velho.</p>
+<pre><code class="language-text">Entrada:
+Rebeca Andrade
+1.55 26
+Darlan Romani
+1.88 34
+Rayssa Leal
+1.50 17
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Mais alto: Darlan Romani (1.88 m)
+Mais velho: Darlan Romani (34 anos)
+</code></pre>
+<p><strong>Exercício E364</strong> · ★★☆</p>
+<p>Uma loja tem estes celulares em estoque:</p>
+<pre><code class="language-text">Moto G     R$ 1299.00
+Galaxy A   R$ 1899.00
+iPhone     R$ 5499.00
+Redmi      R$ 999.00
+</code></pre>
+<p>Use qsort (assunto 0050) duas vezes: primeiro em ordem alfabética do nome,
+depois do mais caro para o mais barato. Mostre a lista após cada ordenação.</p>
+<pre><code class="language-text">Saída esperada:
+Por nome:
+  Galaxy A   R$ 1899.00
+  Moto G     R$ 1299.00
+  Redmi      R$ 999.00
+  iPhone     R$ 5499.00
+Por preço:
+  iPhone     R$ 5499.00
+  Galaxy A   R$ 1899.00
+  Moto G     R$ 1299.00
+  Redmi      R$ 999.00
+</code></pre>
+<p><strong>Exercício E366</strong> · ★★★</p>
+<p>Um terreno irregular tem 5 cantos, em metros, dados em ordem (dando a volta
+no terreno):</p>
+<pre><code class="language-text">(0, 0)  (6, 0)  (6, 4)  (3, 7)  (0, 4)
+</code></pre>
+<p>Guarde os cantos num vetor de struct Ponto e calcule a área e o perímetro.
+Para a área, use a fórmula do cadarço (shoelace): some x[i] * y[j] -
+x[j] * y[i] para cada canto i, com j sendo o canto seguinte, e divida o
+valor absoluto da soma por 2. O canto seguinte ao último é o primeiro.</p>
+<pre><code class="language-text">Saída esperada:
+Área: 33.00 m2
+Perímetro: 22.49 m
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E366.c -o ~/LPEDC/material/E366 -lm &amp;&amp; ~/LPEDC/material/E366
+</code></pre>
+<hr>
+<h2>0062 · Ponteiro para struct</h2>
+<h3>Conceito</h3>
+<p>Você passa o cartão do ônibus na catraca e o validador desconta R$ 4,40. Ele
+mexe no saldo do cartão <strong>de verdade</strong>. Se descontasse numa cópia do cartão,
+o seu saldo nunca baixaria e você andaria de graça para sempre. Quando uma
+função precisa mudar uma struct, ela enfrenta esse mesmo problema.</p>
+<p>Em C, todo parâmetro vai <strong>por valor</strong>, e com struct não é diferente: a
+função recebe uma cópia de todos os bytes da struct, e o que ela muda fica na
+cópia. A struct de quem chamou continua igual. Para a função alterar o
+original, passe o <strong>endereço</strong> da struct, um ponteiro do tipo <code>Cartao *</code>
+(DEITEL; DEITEL, 2011, cap. 10). A cópia agora é do endereço, e um endereço
+copiado ainda aponta para o mesmo cartão.</p>
+<p>Com o ponteiro <code>c</code> em mãos, você chega a um campo em dois passos. <code>*c</code> segue
+o endereço e entrega a struct; <code>.saldo</code> escolhe o campo. Juntos, ficam
+<code>(*c).saldo</code>. Os parênteses são obrigatórios porque o ponto tem prioridade
+maior que o <code>*</code>. Sem eles, <code>*c.saldo</code> seria lido como <code>*(c.saldo)</code>, e <code>c</code> é
+um ponteiro, que não tem campo nenhum: o compilador recusa (FEOFILOFF, 2009,
+ap. E).</p>
+<p>Como esse caso aparece o tempo todo, o C tem um atalho, a <strong>seta</strong> <code>-&gt;</code>.
+<code>c-&gt;saldo</code> quer dizer exatamente o mesmo que <code>(*c).saldo</code>. A regra de uso
+cabe numa frase: variável struct usa ponto (<code>cartao.saldo</code>); ponteiro para
+struct usa seta (<code>c-&gt;saldo</code>) (BACKES, 2013, cap. 8). Se você errar, o
+compilador avisa que o operando da seta não é ponteiro, ou que o do ponto
+é.</p>
+<p>O ponteiro também abre a porta do <strong>heap</strong>, a área de memória que você pede
+com <code>malloc</code> e devolve com <code>free</code>, vista no módulo 07. <code>Cartao *c = malloc(sizeof *c);</code> reserva um <code>Cartao</code> inteiro e guarda o endereço em <code>c</code>.
+O <code>sizeof *c</code> mede o tipo para o qual <code>c</code> aponta; se um dia o tipo mudar, a
+conta acompanha sozinha. Como em todo <code>malloc</code>, confira se voltou <code>NULL</code>
+antes de usar e chame <code>free(c)</code> quando terminar (CELES; RANGEL, 2002).</p>
+<p>A struct no heap resolve outro problema: o tempo de vida. Uma struct
+declarada dentro de uma função é <strong>local</strong> e deixa de existir no <code>return</code>.
+Devolver o endereço dela (<code>return &amp;cartao;</code>) entrega um endereço de memória
+que já foi liberada. Quem precisa sobreviver à função vai para o heap, ou é
+devolvido por valor, como cópia.</p>
+<p>Há ainda a questão do custo. Passar por valor copia a struct <strong>a cada
+chamada</strong>. Um <code>Cartao</code> de 48 bytes pouco pesa, mas uma struct com
+<code>double leituras[1000]</code> copia 8016 bytes toda vez, contra os 8 bytes de um
+ponteiro. Por isso struct grande anda por ponteiro mesmo quando a função só
+precisa ler. Nesse caso, escreva <code>const Cartao *c</code>: o <code>const</code> avisa a quem lê
+que a função não altera nada, e faz o compilador barrar uma alteração por
+engano (CELES; RANGEL, 2002).</p>
+<blockquote>
+<p>[!WARNING]
+<code>void recarregar(Cartao c, double v) { c.saldo += v; }</code> compila, roda e não
+faz nada: recarrega uma cópia. Passe <code>Cartao *c</code> e escreva <code>c-&gt;saldo += v</code>.
+Outros dois erros comuns: <code>*c.saldo</code> não compila (use <code>c-&gt;saldo</code>), e
+<code>return &amp;cartao;</code> de uma struct local devolve um endereço que morre no
+<code>return</code>.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>O cartão de ônibus da Luana mora no heap com R$ 10,00, e cada passagem custa
+R$ 4,40. <code>cobrar_passagem</code> recebe uma cópia do <strong>endereço</strong>, não do cartão: as
+duas setas apontam para o mesmo lugar:</p>
+<p align="center"><img src="material/0062-ideia.svg" alt="Diagrama da ideia: Ponteiro para struct" width="858"></p>
+<pre><code class="language-c">#include &lt;stdbool.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+#define TARIFA 4.40
+
+typedef struct {
+    char titular[30];
+    double saldo;
+    int viagens;
+} Cartao;
+
+// recebe o ENDEREÇO do cartão: mexe no original, não numa cópia
+bool cobrar_passagem(Cartao *c) {
+    if (c-&gt;saldo &lt; TARIFA) { // c-&gt;saldo é o mesmo que (*c).saldo
+        return false;
+    }
+    c-&gt;saldo -= TARIFA;
+    c-&gt;viagens++;
+    return true;
+}
+
+int main(void) {
+    Cartao *c = malloc(sizeof *c); // um Cartao inteiro no heap
+    if (c == NULL) {
+        return 1;
+    }
+    strcpy(c-&gt;titular, &quot;Luana&quot;);
+    c-&gt;saldo = 10.00;
+    c-&gt;viagens = 0;
+
+    for (int i = 1; i &lt;= 3; i++) {
+        if (cobrar_passagem(c)) {
+            printf(&quot;Viagem %d: liberada, saldo R$ %.2f\n&quot;, i, c-&gt;saldo);
+        } else {
+            printf(&quot;Viagem %d: saldo insuficiente (R$ %.2f)\n&quot;, i, c-&gt;saldo);
+        }
+    }
+    printf(&quot;%s fez %d viagens\n&quot;, c-&gt;titular, c-&gt;viagens);
+
+    free(c);
+    return 0;
+}
+// Saída:
+// Viagem 1: liberada, saldo R$ 5.60
+// Viagem 2: liberada, saldo R$ 1.20
+// Viagem 3: saldo insuficiente (R$ 1.20)
+// Luana fez 2 viagens
+</code></pre>
+<h4>Passo a passo</h4>
+<p>O teste de mesa das três chamadas, olhando o cartão no heap:</p>
+<table>
+<thead>
+<tr>
+<th>Chamada</th>
+<th>saldo antes</th>
+<th>saldo &lt; 4.40?</th>
+<th>saldo depois</th>
+<th>viagens</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1ª</td>
+<td>10.00</td>
+<td>não</td>
+<td>5.60</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2ª</td>
+<td>5.60</td>
+<td>não</td>
+<td>1.20</td>
+<td>2</td>
+</tr>
+<tr>
+<td>3ª</td>
+<td>1.20</td>
+<td>sim: devolve false</td>
+<td>1.20</td>
+<td>2</td>
+</tr>
+</tbody></table>
+<p>A pergunta do saldo fica na função, mas o laço das três chamadas é do <code>main</code>.
+Cada volta enxerga o saldo da anterior:</p>
+<p align="center"><img src="material/0062-fluxograma.svg" alt="Fluxograma: Ponteiro para struct" width="820"></p>
+<p><strong>Exemplo A123 · As comandas do bar</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+typedef struct {
+    int mesa;
+    double total;
+    int itens;
+} Comanda;
+
+// cria um vetor de comandas no heap e devolve o endereço (NULL se falhar)
+Comanda *abrir_comandas(int n) {
+    Comanda *v = malloc(n * sizeof *v);
+    if (v == NULL) {
+        return NULL;
+    }
+    for (int i = 0; i &lt; n; i++) {
+        v[i] = (Comanda){i + 1, 0.0, 0}; // mesas 1, 2, 3...
+    }
+    return v;
+}
+
+void lancar(Comanda *c, double preco) {
+    c-&gt;total += preco;
+    c-&gt;itens++;
+}
+
+// devolve um ponteiro para a comanda mais cara: sem copiar nenhuma
+const Comanda *mais_cara(const Comanda *v, int n) {
+    const Comanda *m = &amp;v[0];
+    for (int i = 1; i &lt; n; i++) {
+        if (v[i].total &gt; m-&gt;total) {
+            m = &amp;v[i];
+        }
+    }
+    return m;
+}
+
+int main(void) {
+    int n = 3;
+    Comanda *bar = abrir_comandas(n);
+    if (bar == NULL) {
+        return 1;
+    }
+
+    lancar(&amp;bar[0], 12.00); // chope na mesa 1
+    lancar(&amp;bar[2], 35.90); // porção na mesa 3
+    lancar(&amp;bar[0], 12.00);
+    lancar(bar + 1, 8.50);  // bar + 1 é o mesmo que &amp;bar[1]
+
+    // o ponteiro anda de comanda em comanda: p++ pula sizeof(Comanda) bytes
+    for (Comanda *p = bar; p &lt; bar + n; p++) {
+        printf(&quot;Mesa %d: %d itens, R$ %.2f\n&quot;, p-&gt;mesa, p-&gt;itens, p-&gt;total);
+    }
+
+    const Comanda *top = mais_cara(bar, n);
+    printf(&quot;Maior conta: mesa %d\n&quot;, top-&gt;mesa);
+
+    free(bar); // depois disso, top também fica solto: não use mais
+    return 0;
+}
+// Saída:
+// Mesa 1: 2 itens, R$ 24.00
+// Mesa 2: 1 itens, R$ 8.50
+// Mesa 3: 1 itens, R$ 35.90
+// Maior conta: mesa 3
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A123.c -o ~/LPEDC/material/A123 &amp;&amp; ~/LPEDC/material/A123
+</code></pre>
+<p><strong>Exemplo A124 · O preço da cópia</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+typedef struct {
+    char placa[8];
+    double leituras[1000]; // velocidades registradas pelo radar
+    int n;
+} Radar;
+
+// por valor: a função recebe uma CÓPIA dos 8016 bytes
+void zerar_copia(Radar r) {
+    r.n = 0; // zera a cópia; o original não muda
+    printf(&quot;  dentro de zerar_copia: sizeof r = %zu\n&quot;, sizeof r);
+}
+
+// por ponteiro: a função recebe só um endereço (8 bytes)
+void zerar(Radar *r) {
+    r-&gt;n = 0;
+    printf(&quot;  dentro de zerar: sizeof r = %zu\n&quot;, sizeof r);
+}
+
+// const: só lê; o compilador barra qualquer tentativa de alterar
+double maior(const Radar *r) {
+    double m = r-&gt;leituras[0];
+    for (int i = 1; i &lt; r-&gt;n; i++) {
+        if (r-&gt;leituras[i] &gt; m) {
+            m = r-&gt;leituras[i];
+        }
+    }
+    return m;
+}
+
+int main(void) {
+    Radar r = {&quot;ABC1D23&quot;, {62.5, 71.0, 58.3}, 3}; // o resto das leituras vira 0
+
+    printf(&quot;Maior velocidade: %.1f km/h\n&quot;, maior(&amp;r));
+    zerar_copia(r);
+    printf(&quot;Depois de zerar_copia: n = %d\n&quot;, r.n);
+    zerar(&amp;r);
+    printf(&quot;Depois de zerar: n = %d\n&quot;, r.n);
+    return 0;
+}
+// Saída:
+// Maior velocidade: 71.0 km/h
+//   dentro de zerar_copia: sizeof r = 8016
+// Depois de zerar_copia: n = 3
+//   dentro de zerar: sizeof r = 8
+// Depois de zerar: n = 0
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A124.c -o ~/LPEDC/material/A124 &amp;&amp; ~/LPEDC/material/A124
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E367</strong> · ★☆☆</p>
+<p>A empresa deu 8% de reajuste. Crie o tipo Funcionario (nome e salário) e
+escreva duas funções:</p>
+<pre><code class="language-text">- void reajustar(Funcionario *f, double pct): aumenta o salário do
+  funcionário original;
+- void mostrar(const Funcionario *f): só mostra (por isso o const).
+</code></pre>
+<p>Aplique o reajuste em Ana (R$ 3200.00) e Beto (R$ 4100.00).</p>
+<pre><code class="language-text">Saída esperada:
+Ana: R$ 3200.00
+Beto: R$ 4100.00
+Depois do reajuste:
+Ana: R$ 3456.00
+Beto: R$ 4428.00
+</code></pre>
+<p><strong>Exercício E369</strong> · ★★☆</p>
+<p>Crie o tipo Conta (titular e saldo) e três funções:</p>
+<pre><code class="language-text">- Conta *conta_criar(const char *titular, double saldo): aloca com malloc,
+  preenche e devolve (NULL se faltar memória);
+- bool transferir(Conta *de, Conta *para, double valor): só transfere se
+  houver saldo, e devolve se deu certo;
+- void conta_destruir(Conta *c): libera.
+</code></pre>
+<p>Crie Ana com R$ 500.00 e Beto com R$ 120.00. Transfira R$ 200.00 de Ana
+para Beto e depois R$ 400.00 de Beto para Ana.</p>
+<pre><code class="language-text">Saída esperada:
+Ana -&gt; Beto, R$ 200.00: ok
+Beto -&gt; Ana, R$ 400.00: saldo insuficiente
+Ana: R$ 300.00 | Beto: R$ 320.00
+</code></pre>
+<p><strong>Exercício E370</strong> · ★★☆</p>
+<p>Escreva Produto *criar_produto(const char *nome, double preco), que aloca
+com malloc um Produto (struct com nome de até 29 letras e preco double),
+preenche e devolve o ponteiro (NULL se faltar memória). No main, crie o fone
+abaixo, mostre e libere com free.</p>
+<pre><code class="language-text">Saída esperada:
+Fone Bluetooth: R$ 149.90
+</code></pre>
+<p><strong>Exercício E371</strong> · ★★★</p>
+<p>Leia produtos (nome sem espaço e preço) até a entrada acabar, guardando
+num vetor de structs no heap que começa com capacidade 2 e dobra com
+realloc quando enche. Mostre cada vez que a capacidade crescer e, no fim, a
+lista e o total.</p>
+<pre><code class="language-text">Entrada:
+Arroz 27.90
+Feijao 8.49
+Cafe 18.90
+Oleo 7.99
+Acucar 4.59
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+capacidade: 2 -&gt; 4
+capacidade: 4 -&gt; 8
+5 produtos:
+  Arroz      R$ 27.90
+  Feijao     R$ 8.49
+  Cafe       R$ 18.90
+  Oleo       R$ 7.99
+  Acucar     R$ 4.59
+Total: R$ 67.87
+</code></pre>
+<hr>
+<h2>0063 · Enum</h2>
+<h3>Conceito</h3>
+<p>O app de delivery mostra o pedido em quatro etapas, sempre nesta ordem:
+recebido, em preparo, saiu para entrega, entregue. O programa precisa guardar
+em que etapa cada pedido está. Com números soltos (0, 1, 2, 3), daqui a um mês
+ninguém lembra o que quer dizer <code>if (status == 2)</code>. Com strings, cada
+comparação pede um <code>strcmp</code>, que é lento, e um erro de digitação como
+<code>&quot;entrege&quot;</code> passa sem nenhum aviso.</p>
+<p>Pense nas etapas de um processo num painel de senhas: cada etapa tem um nome
+para quem lê e um número para a máquina. O <strong>enum</strong> (enumeração) faz isso: é
+uma lista de <strong>constantes inteiras com nome</strong>, em que você escreve o nome e o
+compilador usa o número (BACKES, 2013, cap. 8):</p>
+<pre><code class="language-c">typedef enum { RECEBIDO, PREPARANDO, A_CAMINHO, ENTREGUE } Status;
+</code></pre>
+<p>A linha cria o tipo <code>Status</code> (com o <code>typedef</code> do assunto anterior) e quatro
+constantes. Agora o código diz <code>if (s == A_CAMINHO)</code>, e quem lê entende na
+hora. Uma variável <code>Status s = RECEBIDO;</code> guarda a etapa de um pedido.</p>
+<p>Os valores seguem uma regra fixa. O primeiro nome vale 0, e cada um vale o
+anterior mais 1: <code>RECEBIDO</code> é 0, <code>PREPARANDO</code> é 1, <code>A_CAMINHO</code> é 2 e
+<code>ENTREGUE</code> é 3. Se precisar de outros números, escolha: em
+<code>enum { DEZ = 10, ONZE, VINTE = 20 }</code>, <code>ONZE</code> vale 11, porque o nome sem
+valor continua a contagem do anterior (DEITEL; DEITEL, 2011, cap. 10). Por
+convenção, os nomes ficam em MAIÚSCULAS, como as constantes do <code>#define</code>.</p>
+<p>Por baixo, o enum é <strong>só um inteiro com apelido</strong>. Na compilação, <code>A_CAMINHO</code>
+vira o número 2, e uma variável <code>Status</code> ocupa o mesmo espaço que um <code>int</code>
+(BACKES, 2013, cap. 8). Por isso o compilador deixa fazer contas com ela:
+somar, comparar com <code>&lt;</code>, avançar com <code>s++</code>. É prático para andar pelas
+etapas em ordem, e é também a origem do perigo do alerta abaixo.</p>
+<p>Se o enum vira número, por que não usar <code>#define RECEBIDO 0</code>? Porque o
+<code>#define</code> é só troca de texto antes da compilação, e o enum o compilador
+conhece como tipo. Isso aparece no <code>switch</code>: quando cada <code>case</code> usa um nome
+do enum e você esquece um deles, o <code>-Wall</code> avisa <code>enumeration value &#39;ENTREGUE&#39; not handled in switch</code>. O aviso só aparece se o <code>switch</code> não tiver
+<code>default</code>, porque o <code>default</code> cobre os casos que faltam (DEITEL; DEITEL,
+2011, cap. 10).</p>
+<p>Um truque útil é pôr no fim um nome que só conta os outros:
+<code>{ RECEBIDO, PREPARANDO, A_CAMINHO, ENTREGUE, QTD_STATUS }</code>. Como a contagem
+começa em 0, <code>QTD_STATUS</code> vale 4, exatamente o número de etapas. Ele serve de
+tamanho para um vetor de textos, <code>const char *nomes[QTD_STATUS]</code>, e o vetor
+cresce sozinho se você acrescentar uma etapa antes dele.</p>
+<p>Os nomes de um enum valem no arquivo todo, não só dentro do enum. Dois enums
+diferentes não podem ter um nome igual, e por isso projetos maiores usam
+prefixo: <code>STATUS_ENTREGUE</code>, <code>PAG_PIX</code>.</p>
+<blockquote>
+<p>[!WARNING]
+O C <strong>não confere</strong> se o valor de um enum é válido. <code>Status s = 42;</code>
+compila, e <code>s++</code> depois de <code>ENTREGUE</code> dá 4, que não é etapa nenhuma. Quem
+traduz o enum para texto precisa de uma saída para valor inválido depois do
+<code>switch</code>. E dois enums com <code>ENTREGUE</code> não compilam: use prefixo.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>O pedido no app de delivery passa por quatro etapas. A variável <code>s</code> começa em
+<code>RECEBIDO</code> e anda uma etapa por vez, com <code>s++</code>:</p>
+<p align="center"><img src="material/0063-ideia.svg" alt="Diagrama da ideia: Enum" width="870"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+typedef enum {
+    RECEBIDO,   // 0
+    PREPARANDO, // 1
+    A_CAMINHO,  // 2
+    ENTREGUE    // 3
+} Status;
+
+const char *nome_status(Status s) {
+    switch (s) {
+    case RECEBIDO:
+        return &quot;recebido pelo restaurante&quot;;
+    case PREPARANDO:
+        return &quot;em preparo&quot;;
+    case A_CAMINHO:
+        return &quot;saiu para entrega&quot;;
+    case ENTREGUE:
+        return &quot;entregue&quot;;
+    }
+    return &quot;desconhecido&quot;; // só chega aqui com um valor inválido
+}
+
+int main(void) {
+    Status s = RECEBIDO;
+
+    while (s != ENTREGUE) {
+        printf(&quot;[%d] Pedido %s\n&quot;, s, nome_status(s));
+        s++; // enum é um inteiro: avança para o próximo status
+    }
+    printf(&quot;[%d] Pedido %s. Bom apetite!\n&quot;, s, nome_status(s));
+    return 0;
+}
+// Saída:
+// [0] Pedido recebido pelo restaurante
+// [1] Pedido em preparo
+// [2] Pedido saiu para entrega
+// [3] Pedido entregue. Bom apetite!
+</code></pre>
+<p>O laço é comum, controlado por uma pergunta sobre o enum, e o <code>s++</code> faz o
+pedido andar:</p>
+<p align="center"><img src="material/0063-fluxograma.svg" alt="Fluxograma: Enum" width="503"></p>
+<p><strong>Exemplo A125 · As formas de pagamento</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// prefixo PAG_ evita choque de nomes; QTD_PAG conta quantas formas existem
+typedef enum { PAG_PIX, PAG_DEBITO, PAG_CREDITO, PAG_DINHEIRO, QTD_PAG } Pagamento;
+
+typedef struct {
+    double valor;
+    Pagamento forma; // um enum dentro de uma struct
+} Venda;
+
+int main(void) {
+    // vetores do tamanho do enum, indexados pelo próprio enum
+    const char *nomes[QTD_PAG] = {&quot;Pix&quot;, &quot;débito&quot;, &quot;crédito&quot;, &quot;dinheiro&quot;};
+    const double taxa[QTD_PAG] = {0.0, 1.5, 3.2, 0.0}; // % que a maquininha cobra
+
+    Venda vendas[] = {
+        {50.00, PAG_PIX},
+        {120.00, PAG_CREDITO},
+        {35.00, PAG_DEBITO},
+        {80.00, PAG_PIX},
+        {20.00, 7}, // compila! o C não confere se 7 é uma forma válida
+    };
+    int n = sizeof vendas / sizeof vendas[0];
+
+    int contagem[QTD_PAG] = {0};
+    double taxas = 0;
+    for (int i = 0; i &lt; n; i++) {
+        Pagamento f = vendas[i].forma;
+        if (f &lt; 0 || f &gt;= QTD_PAG) { // quem confere é você
+            printf(&quot;venda %d: forma inválida (%d)\n&quot;, i, f);
+            continue;
+        }
+        contagem[f]++;
+        taxas += vendas[i].valor * taxa[f] / 100;
+    }
+
+    for (Pagamento f = PAG_PIX; f &lt; QTD_PAG; f++) {
+        printf(&quot;%s: %d venda(s)\n&quot;, nomes[f], contagem[f]);
+    }
+    printf(&quot;Taxas pagas: R$ %.2f\n&quot;, taxas);
+    return 0;
+}
+// Saída:
+// venda 4: forma inválida (7)
+// Pix: 2 venda(s)
+// débito: 1 venda(s)
+// crédito: 1 venda(s)
+// dinheiro: 0 venda(s)
+// Taxas pagas: R$ 4.37
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A125.c -o ~/LPEDC/material/A125 &amp;&amp; ~/LPEDC/material/A125
+</code></pre>
+<p><strong>Exemplo A126 · O troco em notas</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// cada nome vale o que está escrito na nota: os valores não precisam ser seguidos
+typedef enum {
+    DOIS = 2,
+    CINCO = 5,
+    DEZ = 10,
+    VINTE = 20,
+    CINQUENTA = 50,
+    CEM = 100,
+} Nota;
+
+int main(void) {
+    const Nota notas[] = {CEM, CINQUENTA, VINTE, DEZ, CINCO, DOIS};
+    int n = sizeof notas / sizeof notas[0];
+    int troco = 137;
+
+    printf(&quot;Troco de R$ %d:\n&quot;, troco);
+    for (int i = 0; i &lt; n; i++) {
+        int qtd = troco / notas[i];
+        if (qtd &gt; 0) {
+            printf(&quot;  %d nota(s) de R$ %d\n&quot;, qtd, notas[i]);
+            troco %= notas[i];
+        }
+    }
+    if (troco &gt; 0) {
+        printf(&quot;  sobrou R$ %d sem nota\n&quot;, troco);
+    }
+    printf(&quot;sizeof(Nota) = %zu bytes\n&quot;, sizeof(Nota));
+    return 0;
+}
+// Saída:
+// Troco de R$ 137:
+//   1 nota(s) de R$ 100
+//   1 nota(s) de R$ 20
+//   1 nota(s) de R$ 10
+//   1 nota(s) de R$ 5
+//   1 nota(s) de R$ 2
+// sizeof(Nota) = 4 bytes
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A126.c -o ~/LPEDC/material/A126 &amp;&amp; ~/LPEDC/material/A126
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E373</strong> · ★☆☆</p>
+<p>Declare o enum abaixo, com alguns valores escolhidos e outros não:</p>
+<pre><code class="language-text">enum Tamanho { P = 1, M, G, GG = 10, XG, XXG = GG * 2, ESP };
+</code></pre>
+<p>Guarde os sete tamanhos num vetor e os nomes deles num vetor de textos, e
+mostre um por linha, num laço. Depois guarde G + XG numa variável
+enum Tamanho e mostre: o C deixa, mesmo que somar tamanhos não faça
+sentido.</p>
+<pre><code class="language-text">Saída esperada:
+P = 1
+M = 2
+G = 3
+GG = 10
+XG = 11
+XXG = 20
+ESP = 21
+G + XG = 14
+</code></pre>
+<p><strong>Exercício E375</strong> · ★★☆</p>
+<p>Jokenpô! Crie os enums Jogada { PEDRA, PAPEL, TESOURA } e
+Resultado { EMPATE, VITORIA, DERROTA }. Escreva
+Resultado jogar(Jogada voce, Jogada outro) e rode as 5 partidas abaixo,
+mostrando o placar no fim.</p>
+<pre><code class="language-text">voce     x outro
+pedra    x tesoura
+papel    x tesoura
+tesoura  x tesoura
+papel    x pedra
+pedra    x papel
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+pedra x tesoura: vitória
+papel x tesoura: derrota
+tesoura x tesoura: empate
+papel x pedra: vitória
+pedra x papel: derrota
+Placar: 2 vitórias, 1 empate, 2 derrotas
+</code></pre>
+<p><strong>Exercício E376</strong> · ★★☆</p>
+<p>Crie o enum Naipe { OUROS, ESPADAS, COPAS, PAUS } e a função
+const char *nome_naipe(Naipe n), com um switch que tem um case para cada
+naipe e nenhum default (assim o gcc avisa se um naipe for esquecido). O
+&quot;???&quot; é devolvido depois do switch, só para valores inválidos. No main, um
+laço mostra o 7 de cada naipe.</p>
+<pre><code class="language-text">Saída esperada:
+7 de ouros
+7 de espadas
+7 de copas
+7 de paus
+</code></pre>
+<p><strong>Exercício E377</strong> · ★★★</p>
+<p>A catraca do metrô é uma máquina de estados. Ela está TRAVADA ou LIBERADA,
+e recebe dois eventos: BILHETE e EMPURRAO. As regras:</p>
+<pre><code class="language-text">TRAVADA  + BILHETE  -&gt; LIBERADA
+TRAVADA  + EMPURRAO -&gt; TRAVADA   (alguém tentou passar sem pagar)
+LIBERADA + EMPURRAO -&gt; TRAVADA   (uma pessoa passou)
+LIBERADA + BILHETE  -&gt; LIBERADA  (bilhete desperdiçado)
+</code></pre>
+<p>Use dois enums (Estado e Evento) e uma função
+Estado transicao(Estado e, Evento ev). Começando TRAVADA, processe a
+sequência BILHETE, EMPURRAO, EMPURRAO, BILHETE, BILHETE, EMPURRAO, EMPURRAO
+e conte quantos passaram, quantas tentativas foram barradas e quantos
+bilhetes foram desperdiçados.</p>
+<pre><code class="language-text">Saída esperada:
+travada + bilhete -&gt; liberada
+liberada + empurrão -&gt; travada
+travada + empurrão -&gt; travada
+travada + bilhete -&gt; liberada
+liberada + bilhete -&gt; liberada
+liberada + empurrão -&gt; travada
+travada + empurrão -&gt; travada
+Passaram: 2 | Barrados: 2 | Bilhetes desperdiçados: 1
+</code></pre>
+<hr>
+<h2>0064 · Union</h2>
+<h3>Conceito</h3>
+<p>Um pagamento numa loja é feito por Pix, <strong>ou</strong> por cartão, <strong>ou</strong> por boleto.
+Nunca pelos três ao mesmo tempo. Se você guardar isso numa struct com os
+dados dos três meios, cada pagamento carrega dois terços de espaço que nunca
+vai usar. Às vezes o problema é o contrário: você quer pegar os mesmos bytes
+da memória e lê-los de dois jeitos, como um número inteiro e como uma
+sequência de bytes soltos.</p>
+<p>Pense numa mesa de coworking. De manhã ela serve a uma designer; à tarde, a um
+programador. O espaço é um só, e quando um chega, o que o outro deixou em cima
+sai do lugar. A <strong>union</strong> (união) faz isso com a memória. Ela se declara
+igual à struct, mas <strong>todos os campos começam no mesmo endereço</strong> e dividem
+os mesmos bytes, então só um campo guarda um valor com sentido por vez
+(BACKES, 2013, cap. 8).</p>
+<pre><code class="language-c">typedef union {
+    uint32_t numero;        // 4 bytes
+    unsigned char bytes[4]; // os MESMOS 4 bytes
+} Endereco;
+</code></pre>
+<p>Compare com a struct. Na struct, cada campo tem o seu pedaço, um depois do
+outro, e o tamanho é a soma (mais o preenchimento). Na union, os campos se
+sobrepõem, e o tamanho é o do <strong>maior campo</strong>, arredondado ao alinhamento
+(DEITEL; DEITEL, 2011, cap. 10). Em <code>Endereco</code>, os dois campos têm 4 bytes, e
+<code>sizeof(Endereco)</code> dá 4, não 8.</p>
+<p>Daí saem os dois usos da union (KERNIGHAN; RITCHIE, 1988, cap. 6). O
+primeiro é <strong>economizar espaço</strong> quando o dado é uma coisa ou outra, como o
+pagamento. O segundo é <strong>olhar os mesmos bytes de dois jeitos</strong>: você grava
+<code>numero</code> e lê <code>bytes[0]</code>, <code>bytes[1]</code>... sem fazer conta de divisão e resto. A
+union não gera código para isso. <code>ip.numero</code> e <code>ip.bytes[0]</code> estão no mesmo
+endereço; o que muda é só o tipo com que o programa lê aqueles bytes.</p>
+<p>No primeiro uso aparece uma dificuldade: olhando a union, como saber qual
+campo foi gravado por último? A união sozinha não guarda essa informação.
+A solução é a <strong>union etiquetada</strong>: uma struct com um <strong>enum</strong> que diz qual
+campo vale (a etiqueta) e, ao lado, a union com os dados. Antes de ler, o
+programa olha a etiqueta. Quem confere é você; o compilador não verifica
+nada (KERNIGHAN; RITCHIE, 1988, cap. 6).</p>
+<p>O segundo uso revela um detalhe da máquina. O IP 192.168.0.10 é, por baixo,
+um número de 32 bits: <code>0xC0A8000A</code> (C0 = 192, A8 = 168, 00 = 0, 0A = 10).
+Grave esse número em <code>ip.numero</code> e leia <code>ip.bytes</code> num PC comum: os bytes
+saem <code>0A 00 A8 C0</code>, de trás para frente. A ordem em que os bytes de um número
+ficam na memória se chama <strong>endianness</strong>. No <strong>little-endian</strong> (Intel, AMD e
+quase todo ARM), o byte <strong>menos</strong> significativo fica no endereço menor, por
+isso o <code>0A</code> do final vem primeiro. No <strong>big-endian</strong>, a ordem é a mesma da
+leitura humana, <code>C0 A8 00 0A</code> (LINUX MAN PAGES, s.d.). Nenhuma das duas é a
+certa: é uma escolha de quem projetou o processador.</p>
+<p>A diferença importa quando dois computadores trocam números. A rede usa
+big-endian, e as funções <code>htonl</code> e <code>ntohl</code>, de <code>&lt;arpa/inet.h&gt;</code>, convertem um
+número de 32 bits da ordem da máquina para a da rede e de volta (LINUX MAN
+PAGES, s.d.). Numa máquina big-endian elas não fazem nada; numa
+little-endian, invertem os bytes.</p>
+<blockquote>
+<p>[!WARNING]
+Numa union, escrever num campo <strong>estraga</strong> os outros. Numa union para
+economizar espaço, ler um campo diferente do último gravado dá lixo, e o C
+não avisa: guarde um enum com a etiqueta e confira antes de ler. E ler os
+bytes de um número depende da endianness: a saída muda entre máquinas.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>O IP 192.168.0.10 é um número de 32 bits, <code>0xC0A8000A</code>. O programa grava em
+<code>ip.numero</code> e lê por <code>ip.bytes</code>; repare na ordem dos bytes na memória:</p>
+<p align="center"><img src="material/0064-ideia.svg" alt="Diagrama da ideia: Union" width="882"></p>
+<pre><code class="language-c">#include &lt;stdint.h&gt;
+#include &lt;stdio.h&gt;
+
+// os dois campos começam no MESMO endereço: são dois jeitos de ler 4 bytes
+typedef union {
+    uint32_t numero;
+    unsigned char bytes[4];
+} Endereco;
+
+int main(void) {
+    Endereco ip;
+    ip.numero = 0xC0A8000A; // 192.168.0.10, escrito como um número só
+
+    printf(&quot;sizeof: %zu bytes\n&quot;, sizeof ip);
+    printf(&quot;numero: 0x%08X\n&quot;, (unsigned)ip.numero);
+    printf(&quot;bytes na memória:&quot;);
+    for (int i = 0; i &lt; 4; i++) {
+        printf(&quot; %02X&quot;, ip.bytes[i]); // lê os mesmos 4 bytes, um por um
+    }
+    printf(&quot;\n&quot;);
+
+    if (ip.bytes[0] == 0x0A) {
+        printf(&quot;little-endian: o byte menos significativo vem primeiro\n&quot;);
+    } else {
+        printf(&quot;big-endian: o byte mais significativo vem primeiro\n&quot;);
+    }
+
+    ip.bytes[3] = 10; // muda um byte: o número inteiro muda junto
+    printf(&quot;depois de bytes[3] = 10: 0x%08X\n&quot;, (unsigned)ip.numero);
+    return 0;
+}
+// Saída (num PC Intel/AMD ou ARM):
+// sizeof: 4 bytes
+// numero: 0xC0A8000A
+// bytes na memória: 0A 00 A8 C0
+// little-endian: o byte menos significativo vem primeiro
+// depois de bytes[3] = 10: 0x0AA8000A
+</code></pre>
+<p>A pergunta sobre o primeiro byte detecta a endianness. Numa máquina big-endian,
+o mesmo programa seguiria pelo outro lado:</p>
+<p align="center"><img src="material/0064-fluxograma.svg" alt="Fluxograma: Union" width="426"></p>
+<p><strong>Exemplo A127 · A balança da feira</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// um produto da feira é vendido por unidade OU por quilo, nunca pelos dois
+typedef union {
+    int unidades;
+    double quilos;
+} Quantidade;
+
+// a mesma informação numa struct: os dois campos ocupam espaço sempre
+typedef struct {
+    int unidades;
+    double quilos;
+} QuantidadeStruct;
+
+int main(void) {
+    Quantidade q;
+
+    q.unidades = 12; // uma dúzia de ovos
+    printf(&quot;unidades: %d\n&quot;, q.unidades);
+
+    q.quilos = 2.5;  // agora 2,5 kg de tomate: os mesmos bytes, reescritos
+    printf(&quot;quilos: %.1f\n&quot;, q.quilos);
+    // 2.5 em double é 0x4004000000000000; num PC little-endian, os 4 bytes
+    // que o int lê são os de baixo, todos zero
+    printf(&quot;unidades agora: %d (lixo: a dúzia sumiu)\n&quot;, q.unidades);
+
+    printf(&quot;union: %zu bytes, struct: %zu bytes\n&quot;, sizeof(Quantidade),
+           sizeof(QuantidadeStruct));
+    printf(&quot;1000 produtos: %zu contra %zu bytes\n&quot;, 1000 * sizeof(Quantidade),
+           1000 * sizeof(QuantidadeStruct));
+    printf(&quot;mesmo endereço? %s\n&quot;, (void *)&amp;q.unidades == (void *)&amp;q.quilos ? &quot;sim&quot; : &quot;não&quot;);
+    return 0;
+}
+// Saída (num PC Intel/AMD ou ARM):
+// unidades: 12
+// quilos: 2.5
+// unidades agora: 0 (lixo: a dúzia sumiu)
+// union: 8 bytes, struct: 16 bytes
+// 1000 produtos: 8000 contra 16000 bytes
+// mesmo endereço? sim
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A127.c -o ~/LPEDC/material/A127 &amp;&amp; ~/LPEDC/material/A127
+</code></pre>
+<p><strong>Exemplo A128 · Um pagamento, três formas</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+typedef enum { PIX, CARTAO, BOLETO } TipoPagamento;
+
+// union &quot;etiquetada&quot;: o enum diz qual campo da union vale agora
+typedef struct {
+    TipoPagamento tipo;
+    double valor;
+    union {
+        char chave[40];        // PIX
+        struct {               // CARTAO
+            char final[5];
+            int parcelas;
+        } cartao;
+        char codigo[48];       // BOLETO
+    } dados;
+} Pagamento;
+
+void mostrar(const Pagamento *p) {
+    printf(&quot;R$ %7.2f via &quot;, p-&gt;valor);
+    switch (p-&gt;tipo) {
+    case PIX:
+        printf(&quot;Pix para %s\n&quot;, p-&gt;dados.chave);
+        break;
+    case CARTAO:
+        printf(&quot;cartão final %s em %dx\n&quot;, p-&gt;dados.cartao.final, p-&gt;dados.cartao.parcelas);
+        break;
+    case BOLETO:
+        printf(&quot;boleto %.10s...\n&quot;, p-&gt;dados.codigo);
+        break;
+    }
+}
+
+int main(void) {
+    Pagamento lista[] = {
+        {PIX, 89.90, .dados.chave = &quot;loja@exemplo.com&quot;},
+        {CARTAO, 1250.00, .dados.cartao = {&quot;4321&quot;, 10}},
+        {BOLETO, 342.17, .dados.codigo = &quot;23790123456789012345678901234567890123456789&quot;},
+    };
+
+    for (int i = 0; i &lt; 3; i++) {
+        mostrar(&amp;lista[i]);
+    }
+    printf(&quot;sizeof(Pagamento) = %zu (a union ocupa só o maior campo: 48)\n&quot;, sizeof(Pagamento));
+    return 0;
+}
+// Saída:
+// R$   89.90 via Pix para loja@exemplo.com
+// R$ 1250.00 via cartão final 4321 em 10x
+// R$  342.17 via boleto 2379012345...
+// sizeof(Pagamento) = 64 (a union ocupa só o maior campo: 48)
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A128.c -o ~/LPEDC/material/A128 &amp;&amp; ~/LPEDC/material/A128
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E379</strong> · ★☆☆</p>
+<p>Escreva um programa que declare os três tipos abaixo e mostre o sizeof de
+cada um. Para a union Caixa e a struct Ficha, mostre também onde cada campo
+começa (offsetof): é a diferença entre as duas, em números.</p>
+<pre><code class="language-text">union Caixa  { char c; int i; double d; };
+struct Ficha { char c; int i; double d; };
+union Nome   { char texto[10]; int codigo; };
+</code></pre>
+<pre><code class="language-text">Saída esperada (num PC de 64 bits):
+union Caixa: 8 bytes, campos em 0, 0 e 0
+struct Ficha: 16 bytes, campos em 0, 4 e 8
+union Nome: 12 bytes
+</code></pre>
+<p><strong>Exercício E381</strong> · ★★☆</p>
+<p>Um arquivo vindo de uma máquina big-endian guardou números de 16 bits com
+os dois bytes na ordem oposta à do seu PC. Escreva
+uint16_t trocar_bytes(uint16_t x) usando uma union de um uint16_t com um
+unsigned char[2] (sem operadores de bits), e teste com três valores.</p>
+<pre><code class="language-text">Saída esperada:
+0xABCD -&gt; 0xCDAB
+0x0102 -&gt; 0x0201
+258 -&gt; 513
+</code></pre>
+<p><strong>Exercício E382</strong> · ★★☆</p>
+<p>Um app de reforma calcula a área de peças de formatos diferentes. Crie uma
+union etiquetada:</p>
+<pre><code class="language-text">typedef enum { CIRCULO, RETANGULO, TRIANGULO } TipoForma;
+typedef struct {
+    TipoForma tipo;
+    union {
+        double raio;
+        struct { double largura, altura; } ret;
+        struct { double base, altura; } tri;
+    } medida;
+} Forma;
+</code></pre>
+<p>Escreva double area(const Forma *f) com um switch no tipo e some as
+áreas de: um círculo de raio 2, um retângulo 3 x 4 e um triângulo de base 6
+e altura 5.</p>
+<pre><code class="language-text">Saída esperada:
+círculo: 12.57 m2
+retângulo: 12.00 m2
+triângulo: 15.00 m2
+Total: 39.57 m2
+</code></pre>
+<p><strong>Exercício E384</strong> · ★★★</p>
+<p>Na rede, a convenção é mandar os números em big-endian (a &quot;ordem de
+rede&quot;). Use a union abaixo para escrever:</p>
+<pre><code class="language-text">typedef union {
+    uint32_t n;
+    uint16_t m[2];
+    unsigned char b[4];
+} Visao;
+</code></pre>
+<pre><code class="language-text">- void mostrar_memoria(Visao x): mostra os 4 bytes na ordem da memória;
+- int little_endian(void): devolve 1 se a máquina é little-endian;
+- uint32_t ordem_de_rede(uint32_t x): devolve o número com os bytes
+  arrumados para que, na memória, apareçam do mais significativo para o
+  menos. Numa máquina big-endian, devolve x sem mexer.
+</code></pre>
+<p>Teste com x.n = 0x11223344: mostre a memória, m[0] e m[1], a endianness e
+a memória do número convertido.</p>
+<pre><code class="language-text">Saída esperada (num PC Intel/AMD ou ARM):
+memória: 44 33 22 11
+m[0] = 0x3344, m[1] = 0x1122
+esta máquina é little-endian
+em ordem de rede, memória: 11 22 33 44
+</code></pre>
+<hr>
+<h2>0065 · Bits, máscaras e flags</h2>
+<h3>Conceito</h3>
+<p>O <code>ls -l</code> mostra <code>-rwxr-xr-x</code> ao lado de cada arquivo, e o comando
+<code>chmod 755</code> muda isso. Por que 755? Porque cada permissão (ler, escrever,
+executar) é <strong>um bit</strong>, um sim ou não guardado numa casa de um número. Para
+entender esse número e mexer nele, você precisa ver o inteiro como o
+processador vê: uma fileira de zeros e uns.</p>
+<p>Um <strong>bit</strong> é 0 ou 1, e oito bits formam um <strong>byte</strong>. Um inteiro na memória é
+uma fileira de bits em <strong>base 2</strong>: cada casa vale o dobro da casa à direita,
+1, 2, 4, 8, 16 e assim por diante. Para ler um binário, some as casas que têm
+1: <code>0110</code> é 4 + 2 = 6. Para escrever 13 em binário, tire a maior casa que
+cabe e repita com o resto: 13 = 8 + 4 + 1 = <code>1101</code>. Os bits se numeram da
+direita para a esquerda, a partir do <strong>bit 0</strong>, o que vale 1 (FEOFILOFF,
+2009, ap. C). O assunto 0003 tem a revisão completa.</p>
+<p>Binário fica comprido rápido, e há dois atalhos. Na <strong>base 16</strong>
+(hexadecimal), os dígitos vão de 0 a 9 e de A a F (10 a 15), e cada dígito
+vale <strong>exatamente 4 bits</strong>: <code>1110 1101</code> = <code>0xED</code> = 237. Na <strong>base 8</strong>
+(octal), cada dígito vale <strong>3 bits</strong>, e por isso ele aparece nas permissões,
+que vêm em grupos de três. No C, <code>0x</code> começa um hexadecimal e um <strong>zero à
+esquerda</strong> começa um octal: <code>0755</code> é octal e vale 493, não 755 (BACKES,
+2013).</p>
+<p>Para mexer nesses bits, o C tem os <strong>operadores bit a bit</strong>, que agem casa
+por casa, comparando o bit 0 de um número com o bit 0 do outro, o bit 1 com o
+bit 1, e assim por diante (BACKES, 2013). O <code>&amp;</code> (E) dá 1 só se os dois bits
+são 1; o <code>|</code> (OU) dá 1 se algum deles é 1; o <code>^</code> (OU exclusivo) dá 1 se os
+bits são diferentes; o <code>~</code> (NÃO) inverte cada bit de um número só. Os
+deslocamentos empurram a fileira: <code>a &lt;&lt; 1</code> anda uma casa para a esquerda e
+multiplica por 2; <code>a &gt;&gt; 1</code> anda para a direita e divide por 2, com divisão
+inteira. Daí sai uma expressão que você vai usar sempre: <code>1u &lt;&lt; n</code> é o
+número com só o bit <code>n</code> ligado. A tabela resume, com <code>a = 0110</code> (6) e
+<code>b = 0011</code> (3):</p>
+<table>
+<thead>
+<tr>
+<th>Operador</th>
+<th>Nome</th>
+<th>Regra para cada bit</th>
+<th><code>a op b</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>a &amp; b</code></td>
+<td>E</td>
+<td>1 se os dois são 1</td>
+<td><code>0010</code> (2)</td>
+</tr>
+<tr>
+<td><code>a | b</code></td>
+<td>OU</td>
+<td>1 se algum é 1</td>
+<td><code>0111</code> (7)</td>
+</tr>
+<tr>
+<td><code>a ^ b</code></td>
+<td>OU exclusivo</td>
+<td>1 se são diferentes</td>
+<td><code>0101</code> (5)</td>
+</tr>
+<tr>
+<td><code>~a</code></td>
+<td>NÃO</td>
+<td>inverte cada bit</td>
+<td><code>...1001</code></td>
+</tr>
+<tr>
+<td><code>a &lt;&lt; 1</code></td>
+<td>desloca à esquerda</td>
+<td>empurra, entra 0 à direita</td>
+<td><code>1100</code> (12)</td>
+</tr>
+<tr>
+<td><code>a &gt;&gt; 1</code></td>
+<td>desloca à direita</td>
+<td>empurra, sai o bit 0</td>
+<td><code>0011</code> (3)</td>
+</tr>
+</tbody></table>
+<p>Agora as permissões. Uma <strong>flag</strong> é um bit que responde sim ou não, e várias
+cabem num inteiro, cada uma na sua casa: <code>LER</code> vale 4 (<code>100</code>), <code>ESCREVER</code>
+vale 2 (<code>010</code>) e <code>EXECUTAR</code> vale 1 (<code>001</code>). Num <code>unsigned</code> de 4 bytes cabem
+32 flags, no espaço que um só <code>bool</code> ocuparia se cada uma tivesse o seu
+(DEITEL; DEITEL, 2011, cap. 10). É por isso que bibliotecas recebem opções
+juntas com <code>|</code>, como em <code>O_WRONLY | O_CREAT | O_APPEND</code>.</p>
+<p>Um valor que escolhe certos bits se chama <strong>máscara</strong>. Com ela, quatro
+receitas resolvem tudo (DEITEL; DEITEL, 2011, cap. 10):</p>
+<pre><code class="language-c">p |= ESCREVER;          // liga: o OU acende o bit e não mexe nos outros
+p &amp;= ~ESCREVER;         // desliga: ~ESCREVER tem todos os bits menos esse
+if (p &amp; ESCREVER) { }   // testa: sobra 0 se o bit estava desligado
+p ^= ESCREVER;          // inverte: o OU exclusivo troca 0 por 1 e 1 por 0
+</code></pre>
+<p>Cada receita funciona pelo mesmo motivo: nas casas em que a máscara tem 0, o
+operador deixa o bit de <code>p</code> como estava. Para ler um bit qualquer como 0 ou
+1, empurre-o para a casa 0 e apague o resto: <code>(p &gt;&gt; 2) &amp; 1u</code> é o bit 2.</p>
+<p>A struct também sabe guardar campos de poucos bits, os <strong>campos de bits</strong>:
+<code>unsigned ler : 1;</code> reserva um bit só para <code>ler</code>. A ordem desses bits dentro
+do inteiro, porém, fica a critério do compilador. Para formatos de arquivo e
+protocolos de rede, em que a posição de cada bit é combinada, prefira
+máscaras explícitas (BACKES, 2013, cap. 13).</p>
+<blockquote>
+<p>[!WARNING]
+<code>&amp;</code>, <code>^</code> e <code>|</code> ficam <strong>abaixo</strong> do <code>==</code>: <code>if (p &amp; W == 0)</code> vira <code>p &amp; 0</code>,
+sempre falso; use <code>if ((p &amp; W) == 0)</code>. <code>&amp;</code> não é <code>&amp;&amp;</code>: <code>p &amp;&amp; W</code> só pergunta
+se os dois são diferentes de zero. E use <strong>unsigned</strong>: deslocar negativo, ou
+por casas demais (<code>1u &lt;&lt; 32</code>), é comportamento indefinido.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>As permissões de <code>ls -l</code> (<code>rwx</code>) são três bits: <code>LER</code> = 4, <code>ESCREVER</code> = 2,
+<code>EXECUTAR</code> = 1. Um arquivo começa com <code>rw-</code> (110); o OU com a máscara <code>001</code>
+acende só o último bit:</p>
+<p align="center"><img src="material/0065-ideia.svg" alt="Diagrama da ideia: Bits, máscaras e flags" width="858"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// cada permissão é um bit: 4 = 100, 2 = 010, 1 = 001
+#define LER      4u // r
+#define ESCREVER 2u // w
+#define EXECUTAR 1u // x
+
+void mostrar(const char *passo, unsigned p) {
+    printf(&quot;%-12s %u%u%u = %u  %c%c%c\n&quot;, passo,
+           (p &gt;&gt; 2) &amp; 1u, (p &gt;&gt; 1) &amp; 1u, p &amp; 1u, p, // os 3 bits, um por um
+           (p &amp; LER) ? &#39;r&#39; : &#39;-&#39;,
+           (p &amp; ESCREVER) ? &#39;w&#39; : &#39;-&#39;,
+           (p &amp; EXECUTAR) ? &#39;x&#39; : &#39;-&#39;);
+}
+
+int main(void) {
+    unsigned perm = LER | ESCREVER; // liga dois bits de uma vez: 110
+    mostrar(&quot;inicial&quot;, perm);
+
+    perm |= EXECUTAR;               // OU liga um bit
+    mostrar(&quot;liga x&quot;, perm);
+
+    perm &amp;= ~ESCREVER;              // E com o inverso desliga um bit
+    mostrar(&quot;desliga w&quot;, perm);
+
+    if (perm &amp; ESCREVER) {          // E isola um bit para testar
+        printf(&quot;pode escrever\n&quot;);
+    } else {
+        printf(&quot;não pode escrever\n&quot;);
+    }
+
+    perm ^= EXECUTAR;               // OU exclusivo inverte um bit
+    mostrar(&quot;inverte x&quot;, perm);
+    return 0;
+}
+// Saída:
+// inicial      110 = 6  rw-
+// liga x       111 = 7  rwx
+// desliga w    101 = 5  r-x
+// não pode escrever
+// inverte x    100 = 4  r--
+</code></pre>
+<p><code>(p &gt;&gt; 2) &amp; 1u</code> lê o bit 2: empurra-o para a casa 0 e apaga o resto. A pergunta
+&quot;pode escrever?&quot; é um <code>&amp;</code> com a máscara; se sobrou algum bit, a resposta é Sim:</p>
+<p align="center"><img src="material/0065-fluxograma.svg" alt="Fluxograma: Bits, máscaras e flags" width="488"></p>
+<p><strong>Exemplo A129 · Os ingredientes da pizza</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// cada ingrediente é um bit: 1u &lt;&lt; n liga só o bit n
+#define QUEIJO    (1u &lt;&lt; 0)
+#define TOMATE    (1u &lt;&lt; 1)
+#define CEBOLA    (1u &lt;&lt; 2)
+#define CALABRESA (1u &lt;&lt; 3)
+#define AZEITONA  (1u &lt;&lt; 4)
+
+void mostrar(const char *nome, unsigned p) {
+    const char *ingredientes[] = {&quot;queijo&quot;, &quot;tomate&quot;, &quot;cebola&quot;, &quot;calabresa&quot;, &quot;azeitona&quot;};
+    printf(&quot;%-12s&quot;, nome);
+    for (int b = 0; b &lt; 5; b++) {
+        if (p &amp; (1u &lt;&lt; b)) {
+            printf(&quot; %s&quot;, ingredientes[b]);
+        }
+    }
+    printf(&quot;\n&quot;);
+}
+
+int main(void) {
+    unsigned calabresa = QUEIJO | CALABRESA | CEBOLA | AZEITONA;
+    unsigned marguerita = QUEIJO | TOMATE;
+    mostrar(&quot;calabresa&quot;, calabresa);
+    mostrar(&quot;marguerita&quot;, marguerita);
+
+    unsigned meu = calabresa &amp; ~(CEBOLA | AZEITONA); // tira dois de uma vez
+    mostrar(&quot;a minha&quot;, meu);
+
+    mostrar(&quot;em comum&quot;, calabresa &amp; marguerita);   // E: o que as duas têm
+    mostrar(&quot;meio a meio&quot;, calabresa | marguerita); // OU: tudo junto
+
+    unsigned alergia = CEBOLA | TOMATE;
+    // &quot;tem ALGUM&quot; e &quot;tem TODOS&quot; são testes diferentes
+    printf(&quot;marguerita tem algum de cebola/tomate? %s\n&quot;,
+           (marguerita &amp; alergia) != 0 ? &quot;sim&quot; : &quot;não&quot;);
+    printf(&quot;marguerita tem todos? %s\n&quot;,
+           (marguerita &amp; alergia) == alergia ? &quot;sim&quot; : &quot;não&quot;);
+    return 0;
+}
+// Saída:
+// calabresa    queijo cebola calabresa azeitona
+// marguerita   queijo tomate
+// a minha      queijo calabresa
+// em comum     queijo
+// meio a meio  queijo tomate cebola calabresa azeitona
+// marguerita tem algum de cebola/tomate? sim
+// marguerita tem todos? não
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A129.c -o ~/LPEDC/material/A129 &amp;&amp; ~/LPEDC/material/A129
+</code></pre>
+<p><strong>Exemplo A130 · O chmod 755</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// três grupos de 3 bits: dono (bits 8-6), grupo (5-3) e outros (2-0)
+#define DONO   6
+#define GRUPO  3
+#define OUTROS 0
+
+unsigned montar(unsigned dono, unsigned grupo, unsigned outros) {
+    return (dono &lt;&lt; DONO) | (grupo &lt;&lt; GRUPO) | (outros &lt;&lt; OUTROS);
+}
+
+void mostrar(unsigned modo) {
+    const char letras[] = &quot;rwx&quot;;
+    printf(&quot;octal %03o, hexa 0x%03X, decimal %u\n&quot;, modo, modo, modo);
+    printf(&quot;bits  &quot;);
+    for (int b = 8; b &gt;= 0; b--) {
+        printf(&quot;%u&quot;, (modo &gt;&gt; b) &amp; 1u);
+    }
+    printf(&quot;\nls    &quot;);
+    for (int b = 8; b &gt;= 0; b--) {
+        // bit 8 é r, 7 é w, 6 é x, e o padrão se repete a cada 3
+        printf(&quot;%c&quot;, ((modo &gt;&gt; b) &amp; 1u) ? letras[(8 - b) % 3] : &#39;-&#39;);
+    }
+    printf(&quot;\n&quot;);
+}
+
+int main(void) {
+    unsigned modo = montar(7, 5, 5); // rwx r-x r-x
+    mostrar(modo);
+
+    unsigned outros = (modo &gt;&gt; OUTROS) &amp; 7u; // máscara 111 pega 3 bits
+    printf(&quot;outros podem escrever? %s\n&quot;, (outros &amp; 2u) ? &quot;sim&quot; : &quot;não&quot;);
+    printf(&quot;é igual ao literal octal 0755? %s\n&quot;, modo == 0755 ? &quot;sim&quot; : &quot;não&quot;);
+    return 0;
+}
+// Saída:
+// octal 755, hexa 0x1ED, decimal 493
+// bits  111101101
+// ls    rwxr-xr-x
+// outros podem escrever? não
+// é igual ao literal octal 0755? sim
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A130.c -o ~/LPEDC/material/A130 &amp;&amp; ~/LPEDC/material/A130
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E385</strong> · ★☆☆</p>
+<p>Escreva a função void mostrar(const char *nome, unsigned char r), que
+mostra o nome, os 8 bits de r (com um espaço no meio), o valor em hexa e
+em decimal. Com a = 0xCA e b = 0x5C (dois unsigned char), use a função
+para mostrar a, b e os seis resultados abaixo, guardando cada um num
+unsigned char:</p>
+<pre><code class="language-text">a &amp; b    a | b    a ^ b    ~a    a &lt;&lt; 1    a &gt;&gt; 3
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+a       1100 1010 = 0xCA = 202
+b       0101 1100 = 0x5C = 92
+a &amp; b   0100 1000 = 0x48 = 72
+a | b   1101 1110 = 0xDE = 222
+a ^ b   1001 0110 = 0x96 = 150
+~a      0011 0101 = 0x35 = 53
+a &lt;&lt; 1  1001 0100 = 0x94 = 148
+a &gt;&gt; 3  0001 1001 = 0x19 = 25
+</code></pre>
+<p><strong>Exercício E387</strong> · ★★☆</p>
+<p>Escreva duas funções para um uint16_t (16 bits):</p>
+<pre><code class="language-text">- void mostrar_bits(uint16_t x): mostra os 16 bits, do 15 ao 0, com um
+  espaço a cada 4;
+- int contar_uns(uint16_t x): conta quantos bits estão ligados.
+</code></pre>
+<p>Use as duas em 2025, 255 e 4096 e diga a paridade (par ou ímpar) da
+quantidade de bits 1. Esse &quot;bit de paridade&quot; é um jeito antigo e barato de
+detectar um bit corrompido numa transmissão.</p>
+<pre><code class="language-text">Saída esperada:
+2025: 0000 0111 1110 1001 -&gt; 8 bits 1 (par)
+255: 0000 0000 1111 1111 -&gt; 8 bits 1 (par)
+4096: 0001 0000 0000 0000 -&gt; 1 bits 1 (ímpar)
+</code></pre>
+<p><strong>Exercício E388</strong> · ★★☆</p>
+<p>As notificações do app ficam em flags: EMAIL (1), SMS (2) e PUSH (4).
+Escreva void mostrar(unsigned f), que mostra numa linha se cada uma está
+ligada ou desligada. Comece com email e push ligados, mostre, desligue o
+push (só ele, sem mexer nos outros bits) e mostre de novo.</p>
+<pre><code class="language-text">Saída esperada:
+email: ligado | sms: desligado | push: ligado
+email: ligado | sms: desligado | push: desligado
+</code></pre>
+<p><strong>Exercício E389</strong> · ★★★</p>
+<p>No CSS, uma cor como #FF8800 são três bytes juntos: vermelho (FF), verde
+(88) e azul (00). Guarde cores num uint32_t (os 8 bits de cima ficam
+zerados) e escreva:</p>
+<pre><code class="language-text">- uint32_t rgb(unsigned r, unsigned g, unsigned b): empacota;
+- unsigned canal_r(uint32_t c), canal_g e canal_b: desempacotam;
+- uint32_t escurecer(uint32_t c): divide cada canal por 2;
+- uint32_t cinza(uint32_t c): os três canais viram a média deles.
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+rgb(255, 136, 0) = #FF8800
+#3366CC -&gt; r = 51, g = 102, b = 204
+#FF8800 escurecida = #7F4400
+#3366CC em cinza = #777777
+</code></pre>
+<hr>
+<h2>0066 · Juntando tudo: o cardápio</h2>
+<h3>Conceito</h3>
+<p>A lanchonete quer um cardápio no app. Cada item tem nome, preço, categoria
+(lanche, bebida ou sobremesa) e marcações: vegano, sem glúten, picante. O
+cliente quer filtrar &quot;só o que é vegano <strong>e</strong> sem glúten&quot;, e o dono quer
+cadastrar itens novos sem mudar o código. Nenhuma peça do módulo resolve isso
+sozinha; juntas, resolvem com pouco código.</p>
+<p>Pense numa ficha de cardápio impressa: cada prato tem as suas informações
+numa linha, e símbolos pequenos ao lado do nome marcam as restrições. O
+programa monta essa ficha com uma struct. <code>Item</code> junta nome, categoria, preço
+e marcações, e o <code>typedef</code> dá a ela um nome curto, como nos assuntos 0059 e
+0060 (BACKES, 2013, cap. 8).</p>
+<p>A categoria é uma escolha entre três valores fixos, o caso exato do enum do
+assunto 0063. <code>Categoria</code> dá nome a <code>LANCHE</code>, <code>BEBIDA</code> e <code>SOBREMESA</code>, e um
+último nome, <code>QTD_CATEGORIAS</code>, vale 3 e dimensiona o vetor de textos que
+traduz cada categoria para a tela (DEITEL; DEITEL, 2011, cap. 10). Se a
+lanchonete criar a categoria &quot;porção&quot;, o vetor acompanha.</p>
+<p>As marcações são sim ou não, e um item pode ter várias ao mesmo tempo. Isso
+pede as flags do assunto 0065: vegano é o bit 0, sem glúten o bit 1, picante
+o bit 2, todos num <code>unsigned tags</code> (DEITEL; DEITEL, 2011, cap. 10). O suco
+de caju, vegano e sem glúten, tem <code>tags = VEGANO | SEM_GLUTEN</code>, o binário
+<code>011</code>.</p>
+<p>O filtro &quot;tem todas estas marcações&quot; cabe numa linha:
+<code>(tags &amp; mascara) == mascara</code>. A máscara traz ligados os bits que o cliente
+exige. O <code>&amp;</code> apaga as tags do item que estão fora da máscara; se o que sobra
+é a própria máscara, nenhuma exigência faltou. O suco (<code>011</code>) contra a máscara
+<code>011</code> dá <code>011</code>, e passa. O burger de grão-de-bico (<code>001</code>) dá <code>001</code>: falta o
+sem glúten, e ele fica de fora. Com máscara 0, a conta sempre dá 0, que é
+igual à máscara, e todo item passa; a mesma função lista o cardápio inteiro.</p>
+<p>Os itens moram num vetor de structs, como a tabela do assunto 0061, mas no
+heap, porque o dono não sabe quantos vão ser. Uma struct <code>Cardapio</code>
+administra esse vetor com três dados: o ponteiro para os itens, quantos
+existem (<code>n</code>) e quantos cabem (<code>cap</code>). Quando <code>n</code> chega a <code>cap</code>, o
+<code>realloc</code> dobra a capacidade: de 0 vai a 2, depois 4, depois 8. Com 6 itens,
+sobram 2 vagas. Esse trio de ponteiro, tamanho e capacidade é a semente do
+<strong>vetor dinâmico</strong> que o módulo 11 transforma em tipo abstrato (CELES; RANGEL,
+2002).</p>
+<p>As funções recebem ponteiros, como no assunto 0062. <code>cardapio_adicionar</code>
+recebe <code>Cardapio *c</code>, porque precisa mudar <code>n</code>, <code>cap</code> e o próprio ponteiro
+dos itens. <code>mostrar_item</code> recebe <code>const Item *it</code>, porque só lê: o ponteiro
+evita copiar os 56 bytes de cada item, e o <code>const</code> garante que nada muda
+(FEOFILOFF, 2009, ap. E). Esses 56 bytes são 32 do nome, 4 da categoria, 4 de
+preenchimento para alinhar o <code>double</code>, 8 do preço, 4 das tags e mais 4 de
+preenchimento no fim, para o próximo item do vetor também começar alinhado.</p>
+<blockquote>
+<p>[!WARNING]
+<code>c-&gt;itens[c-&gt;n++] = it</code> copia o item para <strong>dentro</strong> do vetor: mexer depois
+em <code>it</code> não muda o cardápio. E <code>Item *p = &amp;c.itens[0]</code> fica <strong>solto</strong> após o
+próximo <code>realloc</code>, porque o vetor pode ter mudado de endereço. Em vetor que
+cresce, guarde índices, não ponteiros.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>O cardápio da lanchonete tem 6 itens. O suco de caju tem as tags <code>011</code> (vegano
+e sem glúten) e passa na máscara <code>011</code>; o burger de grão-de-bico tem <code>001</code>,
+falta o sem glúten, e fica de fora:</p>
+<p align="center"><img src="material/0066-ideia.svg" alt="Diagrama da ideia: Juntando tudo: o cardápio" width="957"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+typedef enum { LANCHE, BEBIDA, SOBREMESA, QTD_CATEGORIAS } Categoria;
+
+// flags: cada característica é um bit
+#define VEGANO     (1u &lt;&lt; 0)
+#define SEM_GLUTEN (1u &lt;&lt; 1)
+#define PICANTE    (1u &lt;&lt; 2)
+
+typedef struct {
+    char nome[32];
+    Categoria categoria;
+    double preco;
+    unsigned tags;
+} Item;
+
+typedef struct {
+    Item *itens; // vetor no heap
+    int n;       // quantos itens tem
+    int cap;     // quantos cabem
+} Cardapio;
+
+int cardapio_adicionar(Cardapio *c, Item it) {
+    if (c-&gt;n == c-&gt;cap) {
+        int nova = c-&gt;cap == 0 ? 2 : 2 * c-&gt;cap;
+        Item *novo = realloc(c-&gt;itens, nova * sizeof *novo);
+        if (novo == NULL) {
+            return 0;
+        }
+        c-&gt;itens = novo;
+        c-&gt;cap = nova;
+    }
+    c-&gt;itens[c-&gt;n++] = it; // copia a struct inteira para dentro do vetor
+    return 1;
+}
+
+void mostrar_item(const Item *it) {
+    const char *categorias[QTD_CATEGORIAS] = {&quot;lanche&quot;, &quot;bebida&quot;, &quot;sobremesa&quot;};
+    printf(&quot;  R$ %5.2f  %s (%s)%s%s%s\n&quot;, it-&gt;preco, it-&gt;nome, categorias[it-&gt;categoria],
+           (it-&gt;tags &amp; VEGANO) ? &quot; [V]&quot; : &quot;&quot;,
+           (it-&gt;tags &amp; SEM_GLUTEN) ? &quot; [SG]&quot; : &quot;&quot;,
+           (it-&gt;tags &amp; PICANTE) ? &quot; [P]&quot; : &quot;&quot;);
+}
+
+// mostra os itens que têm TODAS as tags da máscara
+void filtrar(const Cardapio *c, unsigned mascara) {
+    for (int i = 0; i &lt; c-&gt;n; i++) {
+        if ((c-&gt;itens[i].tags &amp; mascara) == mascara) {
+            mostrar_item(&amp;c-&gt;itens[i]);
+        }
+    }
+}
+
+int main(void) {
+    Cardapio c = {NULL, 0, 0};
+    Item itens[] = {
+        {&quot;X-Burger&quot;, LANCHE, 28.90, 0},
+        {&quot;Burger de grão-de-bico&quot;, LANCHE, 32.00, VEGANO},
+        {&quot;Tapioca de frango&quot;, LANCHE, 18.50, SEM_GLUTEN},
+        {&quot;Asinha apimentada&quot;, LANCHE, 24.00, PICANTE | SEM_GLUTEN},
+        {&quot;Suco de caju&quot;, BEBIDA, 9.00, VEGANO | SEM_GLUTEN},
+        {&quot;Pudim&quot;, SOBREMESA, 12.00, SEM_GLUTEN},
+    };
+    int n = sizeof itens / sizeof itens[0];
+
+    for (int i = 0; i &lt; n; i++) {
+        if (!cardapio_adicionar(&amp;c, itens[i])) {
+            free(c.itens);
+            return 1;
+        }
+    }
+
+    printf(&quot;Cardápio (%d itens, capacidade %d):\n&quot;, c.n, c.cap);
+    filtrar(&amp;c, 0); // máscara vazia: todo item passa
+    printf(&quot;Veganos e sem glúten:\n&quot;);
+    filtrar(&amp;c, VEGANO | SEM_GLUTEN);
+
+    free(c.itens);
+    return 0;
+}
+// Saída:
+// Cardápio (6 itens, capacidade 8):
+//   R$ 28.90  X-Burger (lanche)
+//   R$ 32.00  Burger de grão-de-bico (lanche) [V]
+//   R$ 18.50  Tapioca de frango (lanche) [SG]
+//   R$ 24.00  Asinha apimentada (lanche) [SG] [P]
+//   R$  9.00  Suco de caju (bebida) [V] [SG]
+//   R$ 12.00  Pudim (sobremesa) [SG]
+// Veganos e sem glúten:
+//   R$  9.00  Suco de caju (bebida) [V] [SG]
+</code></pre>
+<p>O fluxograma é o do <code>filtrar</code>: um laço sobre o vetor e uma pergunta de bits por
+item, para qualquer máscara:</p>
+<p align="center"><img src="material/0066-fluxograma.svg" alt="Fluxograma: Juntando tudo: o cardápio" width="504"></p>
+<p><strong>Exemplo A131 · Os alunos da academia</strong></p>
+<pre><code class="language-c">#include &lt;stdbool.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+typedef enum { MENSAL, TRIMESTRAL, ANUAL, QTD_PLANOS } Plano;
+
+// modalidades: cada uma é um bit
+#define MUSCULACAO (1u &lt;&lt; 0)
+#define NATACAO    (1u &lt;&lt; 1)
+#define YOGA       (1u &lt;&lt; 2)
+
+typedef struct {
+    char nome[16];
+    Plano plano;
+    unsigned modalidades;
+} Aluno;
+
+typedef struct {
+    Aluno *v;
+    int n, cap;
+} Academia;
+
+bool matricular(Academia *a, const char *nome, Plano plano, unsigned mods) {
+    if (a-&gt;n == a-&gt;cap) {
+        int nova = a-&gt;cap == 0 ? 2 : 2 * a-&gt;cap;
+        Aluno *novo = realloc(a-&gt;v, nova * sizeof *novo);
+        if (novo == NULL) {
+            return false;
+        }
+        a-&gt;v = novo;
+        a-&gt;cap = nova;
+    }
+    Aluno *al = &amp;a-&gt;v[a-&gt;n]; // ponteiro usado logo, antes de outro realloc
+    strcpy(al-&gt;nome, nome);
+    al-&gt;plano = plano;
+    al-&gt;modalidades = mods;
+    a-&gt;n++;
+    return true;
+}
+
+// devolve o índice (e não um ponteiro: o vetor pode mudar de lugar)
+int procurar(const Academia *a, const char *nome) {
+    for (int i = 0; i &lt; a-&gt;n; i++) {
+        if (strcmp(a-&gt;v[i].nome, nome) == 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+// &quot;alguma&quot; das modalidades da máscara, não &quot;todas&quot;
+void listar_alguma(const Academia *a, unsigned mascara) {
+    for (int i = 0; i &lt; a-&gt;n; i++) {
+        if ((a-&gt;v[i].modalidades &amp; mascara) != 0) {
+            printf(&quot;  %s\n&quot;, a-&gt;v[i].nome);
+        }
+    }
+}
+
+int main(void) {
+    const char *planos[QTD_PLANOS] = {&quot;mensal&quot;, &quot;trimestral&quot;, &quot;anual&quot;};
+    Academia a = {NULL, 0, 0};
+
+    bool ok = matricular(&amp;a, &quot;Bruna&quot;, ANUAL, MUSCULACAO | YOGA) &amp;&amp;
+              matricular(&amp;a, &quot;Davi&quot;, MENSAL, NATACAO) &amp;&amp;
+              matricular(&amp;a, &quot;Elis&quot;, MENSAL, MUSCULACAO) &amp;&amp;
+              matricular(&amp;a, &quot;Fabio&quot;, TRIMESTRAL, MUSCULACAO | NATACAO | YOGA) &amp;&amp;
+              matricular(&amp;a, &quot;Gil&quot;, ANUAL, 0);
+    if (!ok) {
+        free(a.v);
+        return 1;
+    }
+
+    int i = procurar(&amp;a, &quot;Davi&quot;);
+    if (i != -1) {
+        a.v[i].modalidades |= YOGA; // Davi entrou na yoga
+        a.v[i].plano = ANUAL;       // e trocou de plano
+    }
+
+    int por_plano[QTD_PLANOS] = {0};
+    for (int k = 0; k &lt; a.n; k++) {
+        por_plano[a.v[k].plano]++;
+    }
+    for (Plano p = MENSAL; p &lt; QTD_PLANOS; p++) {
+        printf(&quot;%s: %d aluno(s)\n&quot;, planos[p], por_plano[p]);
+    }
+
+    printf(&quot;Fazem natação ou yoga:\n&quot;);
+    listar_alguma(&amp;a, NATACAO | YOGA);
+    printf(&quot;%d alunos, capacidade %d\n&quot;, a.n, a.cap);
+
+    free(a.v);
+    return 0;
+}
+// Saída:
+// mensal: 1 aluno(s)
+// trimestral: 1 aluno(s)
+// anual: 3 aluno(s)
+// Fazem natação ou yoga:
+//   Bruna
+//   Davi
+//   Fabio
+// 5 alunos, capacidade 8
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A131.c -o ~/LPEDC/material/A131 &amp;&amp; ~/LPEDC/material/A131
+</code></pre>
+<p><strong>Exemplo A132 · A comanda e o pagamento</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+typedef struct {
+    char nome[24];
+    double preco;
+} Item;
+
+typedef struct {
+    const Item *item; // aponta para o cardápio: não copia o item
+    int qtd;
+} Linha;
+
+typedef enum { PIX, CARTAO, DINHEIRO } FormaPagamento;
+
+typedef struct {
+    FormaPagamento forma;
+    union {
+        char chave[40];   // PIX
+        int parcelas;     // CARTAO
+        double entregue;  // DINHEIRO: quanto o cliente deu
+    } dados;
+} Pagamento;
+
+double total_comanda(const Linha linhas[], int n) {
+    double total = 0;
+    for (int i = 0; i &lt; n; i++) {
+        total += linhas[i].item-&gt;preco * linhas[i].qtd; // ponteiro dentro de struct
+    }
+    return total;
+}
+
+void pagar(const Pagamento *p, double total) {
+    switch (p-&gt;forma) {
+    case PIX:
+        printf(&quot;Pix de R$ %.2f para %s\n&quot;, total, p-&gt;dados.chave);
+        break;
+    case CARTAO:
+        printf(&quot;Cartão: %dx de R$ %.2f\n&quot;, p-&gt;dados.parcelas, total / p-&gt;dados.parcelas);
+        break;
+    case DINHEIRO:
+        printf(&quot;Dinheiro: recebeu R$ %.2f, troco R$ %.2f\n&quot;, p-&gt;dados.entregue,
+               p-&gt;dados.entregue - total);
+        break;
+    }
+}
+
+int main(void) {
+    const Item cardapio[] = {{&quot;X-Burger&quot;, 28.90}, {&quot;Suco de caju&quot;, 9.00}, {&quot;Pudim&quot;, 12.00}};
+
+    Linha mesa7[] = {{&amp;cardapio[0], 2}, {&amp;cardapio[1], 2}, {&amp;cardapio[2], 1}};
+    int n = sizeof mesa7 / sizeof mesa7[0];
+
+    double total = total_comanda(mesa7, n);
+    for (int i = 0; i &lt; n; i++) {
+        printf(&quot;%d x %s\n&quot;, mesa7[i].qtd, mesa7[i].item-&gt;nome);
+    }
+    printf(&quot;Total: R$ %.2f\n&quot;, total);
+
+    Pagamento formas[] = {
+        {PIX, .dados.chave = &quot;lanchonete@exemplo.com&quot;},
+        {CARTAO, .dados.parcelas = 3},
+        {DINHEIRO, .dados.entregue = 100.00},
+    };
+    for (int i = 0; i &lt; 3; i++) {
+        pagar(&amp;formas[i], total);
+    }
+    return 0;
+}
+// Saída:
+// 2 x X-Burger
+// 2 x Suco de caju
+// 1 x Pudim
+// Total: R$ 87.80
+// Pix de R$ 87.80 para lanchonete@exemplo.com
+// Cartão: 3x de R$ 29.27
+// Dinheiro: recebeu R$ 100.00, troco R$ 12.20
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A132.c -o ~/LPEDC/material/A132 &amp;&amp; ~/LPEDC/material/A132
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E391</strong> · ★☆☆</p>
+<p>O mercado imprime etiquetas para a prateleira. Crie:</p>
+<pre><code class="language-text">- um enum Setor { HORTIFRUTI, LATICINIOS, PADARIA };
+- flags PROMO (bit 0), ORGANICO (bit 1) e REFRIGERADO (bit 2);
+- um typedef struct Produto com nome, setor, preço e flags;
+- void etiqueta(const Produto *p), que mostra uma linha por produto.
+</code></pre>
+<p>Use os três produtos abaixo.</p>
+<pre><code class="language-text">Saída esperada:
+Banana prata (hortifrúti) R$ 6.99/kg [orgânico]
+Iogurte natural (laticínios) R$ 4.50/kg [promo] [refrigerado]
+Pão francês (padaria) R$ 16.90/kg
+</code></pre>
+<p><strong>Exercício E393</strong> · ★★☆</p>
+<p>Monte um estoque que cresce: typedef struct { Produto *v; int n, cap; }
+Estoque; com as funções</p>
+<pre><code class="language-text">- bool estoque_adicionar(Estoque *e, const char *nome, int qtd);
+- bool estoque_remover(Estoque *e, const char *nome): acha pelo nome e
+  puxa os seguintes uma posição para trás (a ordem se mantém);
+- void estoque_listar(const Estoque *e) e void estoque_liberar(Estoque *e).
+</code></pre>
+<p>Adicione Arroz (12), Feijão (30), Café (8), Açúcar (15) e Leite (24).
+Remova &quot;Feijão&quot; e depois &quot;Macarrão&quot; (que não existe).</p>
+<pre><code class="language-text">Saída esperada:
+remover Feijão: ok
+remover Macarrão: não encontrado
+4 produtos (capacidade 8):
+  Arroz: 12
+  Café: 8
+  Açúcar: 15
+  Leite: 24
+</code></pre>
+<p><strong>Exercício E394</strong> · ★★☆</p>
+<p>Crie o tipo Item (nome até 19 letras, preco e tags) com as flags DESTAQUE
+(bit 0) e VEGANO (bit 1). Aloque com malloc um vetor de 3 itens: X-Burger
+28.90 sem tags, Suco de caju 9.00 (DESTAQUE e VEGANO) e Pudim 12.00
+(DESTAQUE). Escreva void listar(const Item *itens, int n), que mostra nome,
+preço e &quot; [destaque]&quot; se a tag estiver ligada. Liste, tire o destaque só do
+suco, liste de novo e libere o vetor.</p>
+<pre><code class="language-text">Saída esperada:
+X-Burger R$ 28.90
+Suco de caju R$ 9.00 [destaque]
+Pudim R$ 12.00 [destaque]
+-- tira o destaque do suco --
+X-Burger R$ 28.90
+Suco de caju R$ 9.00
+Pudim R$ 12.00 [destaque]
+</code></pre>
+<p><strong>Exercício E395</strong> · ★★★</p>
+<p>Uma agenda de tarefas. Cada Tarefa tem título, Prioridade (enum BAIXA,
+MEDIA, ALTA), prazo (dia do mês) e tags em bits: TRABALHO, CASA, URGENTE.
+Aloque o vetor com malloc, preencha com as 6 tarefas abaixo, ordene com
+qsort (prioridade mais alta primeiro; empate: prazo menor primeiro) e
+mostre a lista inteira e depois só as tarefas de TRABALHO.</p>
+<pre><code class="language-text">título            prioridade  prazo  tags
+Pagar aluguel     ALTA        5      CASA | URGENTE
+Revisar PR        MEDIA       3      TRABALHO
+Comprar ração     BAIXA       8      CASA
+Deploy da API     ALTA        2      TRABALHO | URGENTE
+Reunião 1:1       MEDIA       3      TRABALHO
+Lavar o carro     BAIXA       12     CASA
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+[alta] dia 2: Deploy da API
+[alta] dia 5: Pagar aluguel
+[média] dia 3: Reunião 1:1
+[média] dia 3: Revisar PR
+[baixa] dia 8: Comprar ração
+[baixa] dia 12: Lavar o carro
+Trabalho:
+[alta] dia 2: Deploy da API
+[média] dia 3: Reunião 1:1
+[média] dia 3: Revisar PR
+</code></pre>
+<hr>
+<h2>Lista do módulo</h2>
+<p>30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P0801.c a P0830.c, em <code>material/</code>; resoluções em <code>_respostas/08-structs/lista/</code>.</p>
+<h3>★☆☆ Aquecimento</h3>
+<p><strong>Exercício P0801</strong> · ★☆☆ · A distância entre as paradas</p>
+<p>No mapa da linha de ônibus, cada parada tem coordenadas (x, y) em km.
+Crie typedef struct { double x, y; } Ponto; e escreva:</p>
+<pre><code class="language-text">double distancia(Ponto a, Ponto b);   // sqrt((bx - ax)² + (by - ay)²)
+Ponto meio(Ponto a, Ponto b);         // o ponto médio, para o abrigo
+</code></pre>
+<p>Para as paradas abaixo, mostre a distância de cada trecho, o total do
+percurso e o ponto médio entre a primeira e a última:</p>
+<pre><code class="language-text">Ponto paradas[4] = {{0.0, 0.0}, {3.0, 4.0}, {6.0, 8.0}, {6.0, 11.5}};
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Parada 1 -&gt; 2: 5.00 km
+Parada 2 -&gt; 3: 5.00 km
+Parada 3 -&gt; 4: 3.50 km
+Total: 13.50 km
+Abrigo no meio: (3.00, 5.75)
+</code></pre>
+<p><strong>Resposta esperada:</strong> a saída acima (13.50 km no total).</p>
+<pre><code class="language-bash">gcc ~/LPEDC/material/P0801.c -o ~/LPEDC/material/P0801 -lm &amp;&amp; ~/LPEDC/material/P0801
+</code></pre>
+<hr>
+<p><strong>Exercício P0802</strong> · ★☆☆ · A que horas o voo chega</p>
+<p>Crie typedef struct { int h, m; } Horario; e escreva</p>
+<pre><code class="language-text">Horario somar(Horario ini, int minutos, int *dias);
+</code></pre>
+<p>que devolve o horário depois de passar minutos, sempre normalizado (m de 0
+a 59, h de 0 a 23), e guarda em *dias quantas vezes passou da meia-noite.
+Teste os três voos:</p>
+<pre><code class="language-text">Manaus 22:45 + 230 min (3h50)
+Belém 06:10 + 95 min
+Rio Branco 23:30 + 1500 min (uma viagem com conexões)
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Manaus 22:45 + 230 min = 02:35 (+1 dia)
+Belém 06:10 + 95 min = 07:45
+Rio Branco 23:30 + 1500 min = 00:30 (+2 dias)
+</code></pre>
+<hr>
+<p><strong>Exercício P0803</strong> · ★☆☆ · O estoque baixo da farmácia</p>
+<p>Crie o tipo Remedio (codigo int, nome com até 23 letras, estoque int,
+minimo int) e guarde os 6 remédios abaixo num vetor de structs:</p>
+<pre><code class="language-text">101 Dipirona 40 20      102 Amoxicilina 8 15     103 Losartana 22 25
+104 Omeprazol 60 30     105 Insulina 3 10        106 Paracetamol 35 20
+</code></pre>
+<p>Escreva int buscar(const Remedio *v, int n, int codigo), que devolve o
+índice do remédio (ou -1). Mostre os remédios com estoque abaixo do
+mínimo e quanto falta comprar, e depois procure os códigos 105 e 110:</p>
+<pre><code class="language-text">Saída esperada:
+Comprar:
+  Amoxicilina  faltam 7
+  Losartana    faltam 3
+  Insulina     faltam 7
+Código 105: Insulina, estoque 3
+Código 110: não cadastrado
+</code></pre>
+<hr>
+<p><strong>Exercício P0804</strong> · ★☆☆ · O carro e o tanque</p>
+<p>Crie typedef struct { char modelo[16]; double tanque, capacidade,
+km_por_litro, odometro; } Carro; e escreva duas funções que recebem um
+PONTEIRO para o carro e mexem nele com -&gt;:</p>
+<pre><code class="language-text">double abastecer(Carro *c, double litros);  // devolve quanto entrou
+double rodar(Carro *c, double km);          // devolve quanto rodou
+</code></pre>
+<p>abastecer não passa da capacidade; rodar gasta km / km_por_litro litros
+e, se o combustível acabar antes, roda só o que der. Comece com um Mobi
+(tanque 5 L, capacidade 47 L, 13.5 km/L, odômetro 10230) e faça: abastecer
+50 L, rodar 300 km, rodar 400 km, abastecer 20 L.</p>
+<pre><code class="language-text">Saída esperada:
+Abasteceu 42.00 L
+  Mobi: tanque 47.00 L, odômetro 10230.0 km
+Rodou 300.0 km
+  Mobi: tanque 24.78 L, odômetro 10530.0 km
+Rodou 334.5 km
+  Mobi: tanque 0.00 L, odômetro 10864.5 km
+Abasteceu 20.00 L
+  Mobi: tanque 20.00 L, odômetro 10864.5 km
+</code></pre>
+<hr>
+<p><strong>Exercício P0805</strong> · ★☆☆ · Quantos dias tem o mês</p>
+<p>Crie typedef enum { JAN = 1, FEV, MAR, ABR, MAI, JUN, JUL, AGO, SET, OUT,
+NOV, DEZ } Mes; e escreva:</p>
+<pre><code class="language-text">bool bissexto(int ano);
+int dias_no_mes(Mes m, int ano);
+</code></pre>
+<p>Use um switch no dias_no_mes (fevereiro depende do ano). Mostre os dias de
+fevereiro em 2024, 2026, 1900 e 2000, e o total de dias de 2026 somando os
+12 meses num laço que anda pelo enum:</p>
+<pre><code class="language-text">Saída esperada:
+fev/2024: 29 dias
+fev/2026: 28 dias
+fev/1900: 28 dias
+fev/2000: 29 dias
+2026: 365 dias
+</code></pre>
+<p><strong>Resposta esperada:</strong> a saída acima (2026 tem 365 dias).</p>
+<hr>
+<p><strong>Exercício P0806</strong> · ★☆☆ · As permissões do arquivo</p>
+<p>No Linux, as permissões de um arquivo são 9 bits: rwx do dono, rwx do
+grupo e rwx dos outros, do bit 8 ao bit 0 (r vale 4, w vale 2 e x vale 1
+dentro de cada trio). Por isso chmod 754 é 111 101 100 em binário.
+Escreva void mostrar(const char *rotulo, unsigned modo), que mostra o
+rótulo, o número em octal (%o) e as letras (com &#39;-&#39; no lugar do bit
+desligado), e teste com 0754 e 0644.
+Depois, partindo de 0644, ligue o x do dono, desligue o r dos outros e
+INVERTA o w do grupo, mostrando o modo depois de cada passo:</p>
+<pre><code class="language-text">Saída esperada:
+chmod 754:             754 rwxr-xr--
+chmod 644:             644 rw-r--r--
+liga x do dono:        744 rwxr--r--
+desliga r dos outros:  740 rwxr-----
+inverte w do grupo:    760 rwxrw----
+</code></pre>
+<hr>
+<p><strong>Exercício P0807</strong> · ★☆☆ · O endereço IP em 32 bits</p>
+<p>Um endereço IPv4 como 192.168.10.42 são 4 bytes, e cabe num uint32_t
+(do stdint.h), com o primeiro número nos 8 bits de cima. Escreva:</p>
+<pre><code class="language-text">uint32_t montar(int a, int b, int c, int d);
+void mostrar(const char *rotulo, uint32_t ip);  // os 4 bytes: &gt;&gt; e &amp; 0xFF
+</code></pre>
+<p>A máscara de rede /24 tem os 24 bits de cima ligados: 0xFFFFFF00. A REDE
+de um IP é ip &amp; mascara, e o número do computador na rede é ip &amp; ~mascara.
+Mostre o IP, em hexa e em pontos, a rede e o computador, para /24 e /16:</p>
+<pre><code class="language-text">Saída esperada:
+192.168. 10. 42  0xC0A80A2A  IP
+Com /24:
+255.255.255.  0  0xFFFFFF00  máscara
+192.168. 10.  0  0xC0A80A00  rede
+  0.  0.  0. 42  0x0000002A  máquina
+Com /16:
+255.255.  0.  0  0xFFFF0000  máscara
+192.168.  0.  0  0xC0A80000  rede
+  0.  0. 10. 42  0x00000A2A  máquina
+</code></pre>
+<hr>
+<p><strong>Exercício P0808</strong> · ★☆☆ · Conserte o cadastro do sócio</p>
+<p>O clube quer dar 20% de desconto na mensalidade dos sócios com mais de 10
+anos de casa. O programa abaixo tem DOIS erros de propósito: o gcc avisa de
+um (leia o warning); o outro é de lógica: o desconto é calculado, mas não
+chega no sócio. Conserte os dois. O programa deve mostrar:</p>
+<pre><code class="language-text">Saída esperada:
+Seu Lourival  23 anos: R$ 120.00
+Kelly          4 anos: R$ 150.00
+Dona Ivete    11 anos: R$ 96.00
+</code></pre>
+<hr>
+<p><strong>Exercício P0809</strong> · ★☆☆ · O mais velho da família</p>
+<p>Crie typedef struct { int dia, mes, ano; } Data; e typedef struct { char
+nome[20]; Data nascimento; } Pessoa; (uma struct dentro da outra). Escreva
+int compara_data(Data a, Data b), que devolve negativo se a vem antes de
+b, 0 se são iguais e positivo se a vem depois. Com a família abaixo,
+mostre o mais velho, o mais novo e quem faz aniversário em março:</p>
+<pre><code class="language-text">Pessoa familia[5] = {{&quot;Vó Nazaré&quot;, {12, 3, 1941}},
+                     {&quot;Tio Edu&quot;, {30, 11, 1968}},
+                     {&quot;Mãe&quot;, {5, 3, 1972}},
+                     {&quot;Lucas&quot;, {19, 7, 2001}},
+                     {&quot;Bia&quot;, {2, 1, 2009}}};
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Mais velho: Vó Nazaré (1941)
+Mais novo: Bia (2009)
+Aniversário em março: Vó Nazaré (dia 12) Mãe (dia 5)
+</code></pre>
+<hr>
+<p><strong>Exercício P0810</strong> · ★☆☆ · A configuração com campos nomeados</p>
+<p>O som do carro tem uma struct de configuração com vários campos:</p>
+<pre><code class="language-text">typedef struct {
+    int volume, graves, agudos, balanco;
+    bool loudness;
+    char fonte[12];
+} Config;
+</code></pre>
+<p>Com os inicializadores designados do C99, você escreve só os campos que
+importam, em qualquer ordem, e o resto vira zero (false, &quot;&quot; para a
+string): Config c = {.fonte = &quot;Bluetooth&quot;, .volume = 18};. Monte os três
+perfis abaixo assim e mostre cada um com uma função
+void mostrar(const char *nome, const Config *c):</p>
+<ul>
+<li>padrao: nada informado (tudo zero);</li>
+<li>estrada: volume 22, graves 3, loudness ligado, fonte &quot;Radio FM&quot;;</li>
+<li>show: fonte &quot;Pendrive&quot;, agudos 4, graves 5, volume 30, balanco -2.</li>
+</ul>
+<pre><code class="language-text">Saída esperada:
+padrao   vol  0, graves 0, agudos 0, balanço  0, loudness não, fonte &quot;&quot;
+estrada  vol 22, graves 3, agudos 0, balanço  0, loudness sim, fonte &quot;Radio FM&quot;
+show     vol 30, graves 5, agudos 4, balanço -2, loudness não, fonte &quot;Pendrive&quot;
+</code></pre>
+<h3>★★☆ Para pensar</h3>
+<p><strong>Exercício P0811</strong> · ★★☆ · O cardápio em duas ordens</p>
+<p>A lanchonete guarda o cardápio num vetor de structs:</p>
+<pre><code class="language-text">typedef struct { char nome[24]; double preco; int calorias; } Item;
+</code></pre>
+<pre><code class="language-text">X-Caboquinho      22.90  780 kcal     Tapioca           12.00  420 kcal
+Pastel de carne    9.50  510 kcal     Açaí 500 ml       18.00  640 kcal
+Suco de cupuaçu    8.00  190 kcal     Misto quente       9.50  380 kcal
+</code></pre>
+<p>(o vetor já está pronto no esqueleto). Ordene com qsort duas vezes: primeiro
+em ordem alfabética do nome; depois
+pelo preço (do mais barato ao mais caro; no empate, o de menos calorias
+primeiro). Mostre as duas listas:</p>
+<pre><code class="language-text">Saída esperada:
+Por nome:
+  R$ 18.00  640 kcal  Açaí 500 ml
+  R$  9.50  380 kcal  Misto quente
+  R$  9.50  510 kcal  Pastel de carne
+  R$  8.00  190 kcal  Suco de cupuaçu
+  R$ 12.00  420 kcal  Tapioca
+  R$ 22.90  780 kcal  X-Caboquinho
+Por preço:
+  R$  8.00  190 kcal  Suco de cupuaçu
+  R$  9.50  380 kcal  Misto quente
+  R$  9.50  510 kcal  Pastel de carne
+  R$ 12.00  420 kcal  Tapioca
+  R$ 18.00  640 kcal  Açaí 500 ml
+  R$ 22.90  780 kcal  X-Caboquinho
+</code></pre>
+<hr>
+<p><strong>Exercício P0812</strong> · ★★☆ · Ordenar os ponteiros, não as fichas</p>
+<p>As fichas dos pacientes são grandes (cada uma tem um histórico de 200
+caracteres), e mover uma ficha inteira a cada troca do qsort custa caro.
+Crie as fichas no heap e um vetor de PONTEIROS para elas, e ordene os
+ponteiros pela idade (do mais velho para o mais novo). As fichas não saem
+do lugar:</p>
+<pre><code class="language-text">typedef struct { char nome[20]; int idade; char historico[200]; } Ficha;
+</code></pre>
+<p>Escreva Ficha *nova_ficha(const char *nome, int idade, const char *hist),
+que aloca e preenche uma ficha (antes do strcpy, confira com strlen se o
+texto cabe no campo; se não couber, devolva NULL). Crie as 4 fichas abaixo,
+ordene e
+mostre; mostre também quantos bytes cada troca move no qsort de ponteiros e
+quantos moveria no de fichas. Libere tudo:</p>
+<pre><code class="language-text">Raimundo 58 &quot;hipertensão&quot;    Jéssica 31 &quot;asma&quot;
+Benedito 74 &quot;diabetes tipo 2&quot;    Karina 45 &quot;nenhum&quot;
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+1. 74 anos: Benedito (diabetes tipo 2)
+2. 58 anos: Raimundo (hipertensão)
+3. 45 anos: Karina (nenhum)
+4. 31 anos: Jéssica (asma)
+A ficha do Raimundo continua no mesmo endereço, agora na posição 2
+Bytes por troca: 8 (ponteiro) contra 224 (ficha)
+</code></pre>
+<p><strong>Resposta esperada:</strong> a saída acima (os bytes por troca: 8 e 224).</p>
+<hr>
+<p><strong>Exercício P0813</strong> · ★★☆ · Pix, cartão ou dinheiro</p>
+<p>O caixa da loja aceita três formas de pagamento, e cada uma tem dados
+diferentes. Represente com uma union etiquetada:</p>
+<pre><code class="language-text">typedef enum { PIX, CARTAO, DINHEIRO } Forma;
+typedef struct {
+    Forma forma;   // a etiqueta: diz qual campo da union vale
+    double valor;
+    union {
+        char chave[40];                              // PIX
+        struct { char final[5]; int parcelas; } cartao; // CARTAO
+        double recebido;                             // DINHEIRO
+    } dados;
+} Pagamento;
+</code></pre>
+<p>Escreva void recibo(const Pagamento *p), que usa um switch na etiqueta e
+mostra o que vale para aquela forma (no dinheiro, o troco; no cartão, o
+valor de cada parcela). Mostre os recibos dos três pagamentos abaixo e o
+sizeof da union e do Pagamento:</p>
+<pre><code class="language-text">Saída esperada:
+PIX de R$ 87.50 para loja@exemplo.com.br
+Cartão final 4467: R$ 359.70 em 3x de R$ 119.90
+Dinheiro: R$ 42.30, recebido R$ 50.00, troco R$ 7.70
+sizeof da union: 40 bytes; sizeof do Pagamento: 56 bytes
+</code></pre>
+<hr>
+<p><strong>Exercício P0814</strong> · ★★☆ · A cor em 16 bits</p>
+<p>Telas pequenas (como a de uma maquininha de cartão) guardam cada cor em 16
+bits no formato RGB565: 5 bits de vermelho (bits 15 a 11), 6 de verde (10 a
+5) e 5 de azul (4 a 0). Partindo de uma cor de 8 bits por canal (0 a 255),
+escreva:</p>
+<pre><code class="language-text">uint16_t para_565(int r, int g, int b);   // guarda os bits mais altos
+void de_565(uint16_t c, int *r, int *g, int *b);  // volta para 0..255
+</code></pre>
+<p>Para converter, jogue fora os bits de baixo: r &gt;&gt; 3 (fica com 5 bits),
+g &gt;&gt; 2 (6 bits), b &gt;&gt; 3. Para voltar, desloque para a esquerda e repita os
+bits de cima nos de baixo: r8 = (r5 &lt;&lt; 3) | (r5 &gt;&gt; 2) (e g8 = (g6 &lt;&lt; 2) |
+(g6 &gt;&gt; 4)). Converta as cores abaixo, mostrando o valor em hexa e a cor
+recuperada (algumas perdem um pouco de precisão):</p>
+<pre><code class="language-text">laranja (255, 136, 0), verde-bandeira (0, 156, 59), branco (255, 255, 255)
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+laranja        (255, 136,   0) -&gt; 0xFC40 -&gt; (255, 138,   0)
+verde-bandeira (  0, 156,  59) -&gt; 0x04E7 -&gt; (  0, 158,  57)
+branco         (255, 255, 255) -&gt; 0xFFFF -&gt; (255, 255, 255)
+</code></pre>
+<hr>
+<p><strong>Exercício P0815</strong> · ★★☆ · O estoque por categoria</p>
+<p>Uma loja de material de construção tem produtos de quatro categorias:</p>
+<pre><code class="language-text">typedef enum { HIDRAULICA, ELETRICA, PINTURA, FERRAGEM,
+               N_CATEGORIAS } Categoria;
+</code></pre>
+<p>O último nome do enum (N_CATEGORIAS) vale 4 e serve de tamanho para vetores
+indexados pela categoria. Com os produtos abaixo (nome, categoria,
+quantidade, preço), calcule, num vetor de N_CATEGORIAS posições, quantos
+itens e quanto dinheiro há em estoque em cada categoria, e mostre a
+categoria com mais dinheiro parado:</p>
+<pre><code class="language-text">Tubo PVC 25mm      HIDRAULICA  40  12.90
+Fio 2,5mm (rolo)   ELETRICA    15  189.00
+Tinta 18L          PINTURA      8  329.90
+Registro 3/4       HIDRAULICA  22  45.50
+Disjuntor 20A      ELETRICA    30  28.00
+Parafuso (cento)   FERRAGEM    60  9.80
+Rolo de lã         PINTURA     25  24.90
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+ 62 itens  R$  1517.00  Hidráulica
+ 45 itens  R$  3675.00  Elétrica
+ 33 itens  R$  3261.70  Pintura
+ 60 itens  R$   588.00  Ferragem
+Mais dinheiro parado: Elétrica
+</code></pre>
+<hr>
+<p><strong>Exercício P0816</strong> · ★★☆ · Batalha naval</p>
+<p>O tabuleiro de batalha naval é uma matriz 5x5 de structs:</p>
+<pre><code class="language-text">typedef struct { bool navio; bool atingida; } Casa;
+</code></pre>
+<p>Os navios ocupam as casas marcadas com &#39;#&#39; no mapa abaixo. Monte a matriz a
+partir do mapa (as linhas são strings), dispare os tiros da lista e mostre,
+para cada tiro, &quot;água&quot;, &quot;fogo!&quot; ou &quot;repetido&quot;. No fim, mostre o tabuleiro
+(&#39;X&#39; navio atingido, &#39;o&#39; tiro na água, &#39;#&#39; navio intacto, &#39;.&#39; nada) e
+quantas casas de navio sobraram:</p>
+<pre><code class="language-text">const char *mapa[5] = {&quot;.##..&quot;, &quot;.....&quot;, &quot;#...#&quot;, &quot;#...#&quot;, &quot;#....&quot;};
+int tiros[7][2] = {{0, 1}, {2, 2}, {0, 2}, {3, 0}, {0, 1}, {4, 4}, {2, 4}};
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Tiro (0, 1): fogo!
+Tiro (2, 2): água
+Tiro (0, 2): fogo!
+Tiro (3, 0): fogo!
+Tiro (0, 1): repetido
+Tiro (4, 4): água
+Tiro (2, 4): fogo!
+.XX..
+.....
+#.o.X
+X...#
+#...o
+Sobram 3 casas de navio
+</code></pre>
+<p><strong>Resposta esperada:</strong> a saída acima (sobram 3 casas de navio).</p>
+<hr>
+<p><strong>Exercício P0817</strong> · ★★☆ · Conserte a promoção da vitrine</p>
+<p>O programa abaixo deveria dar 15% de desconto em todos os produtos da
+vitrine e mostrar o total. Ele tem DOIS erros de propósito: um faz a
+promoção não chegar nos produtos (o programa roda e mostra o preço
+antigo); o outro o AddressSanitizer acusa quando roda. O gcc não avisa de
+nenhum. Conserte os dois. O programa deve mostrar:</p>
+<pre><code class="language-text">Saída esperada:
+Rede de dormir     R$ 102.00
+Cuia pintada       R$  29.75
+Colar de sementes  R$  40.80
+Farinha 1 kg       R$  11.90
+Total              R$ 184.45
+</code></pre>
+<hr>
+<p><strong>Exercício P0818</strong> · ★★☆ · Os números complexos</p>
+<p>Crie typedef struct { double re, im; } Complexo; e escreva soma,
+multiplica (as duas devolvem um Complexo novo), double modulo(Complexo z)
+e void mostrar(const char *rotulo, Complexo z), que mostra no formato
+&quot;a + bi&quot; ou &quot;a - bi&quot;. Com z = 1 + 2i e w = 3 - i, mostre z + w, z * w e
+|z * w|. Depois mostre as potências de i, de i¹ a i⁸, multiplicando uma de
+cada vez:</p>
+<pre><code class="language-text">Saída esperada:
+z + w = 4 + 1i
+z * w = 5 + 5i
+|z * w| = 7.0711
+i^1 = 0 + 1i
+i^2 = -1 + 0i
+i^3 = 0 - 1i
+i^4 = 1 + 0i
+i^5 = 0 + 1i
+i^6 = -1 + 0i
+i^7 = 0 - 1i
+i^8 = 1 + 0i
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/P0818.c -o ~/LPEDC/material/P0818 -lm &amp;&amp; ~/LPEDC/material/P0818
+</code></pre>
+<hr>
+<p><strong>Exercício P0819</strong> · ★★☆ · A senha escondida com XOR</p>
+<p>O operador ^ (ou exclusivo) tem uma propriedade útil: (x ^ k) ^ k == x.
+Aplicar a mesma chave duas vezes devolve o original. Escreva void
+cifrar(char *s, size_t n, unsigned char chave), que aplica ^ chave em cada
+um dos n bytes de s, e void hexa(const char *s, size_t n), que mostra os n
+bytes em hexadecimal. Cifre a mensagem com a chave 0x5A, mostre os bytes,
+decifre e mostre de novo. Depois conte quantos bits a chave tem ligados e
+mostre a chave em binário:</p>
+<pre><code class="language-text">char msg[] = &quot;Encontro no Teatro Amazonas, 19h&quot;;
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Cifrada:
+1F 34 39 35 34 2E 28 35 7A 34 35 7A 0E 3F 3B 2E
+28 35 7A 1B 37 3B 20 35 34 3B 29 76 7A 6B 63 32
+Decifrada: Encontro no Teatro Amazonas, 19h
+Chave 0x5A = 01011010 (4 bits ligados)
+</code></pre>
+<hr>
+<p><strong>Exercício P0820</strong> · ★★☆ · A série do tamanho certo</p>
+<p>Desde o C99, o ÚLTIMO campo de uma struct pode ser um vetor sem tamanho (o
+&quot;membro flexível&quot;): typedef struct { char nome[16]; int n; double v[]; }
+Serie;. O sizeof da struct não conta o vetor, e você aloca a struct junto
+com quantas posições quiser, num bloco só:</p>
+<pre><code class="language-text">Serie *s = malloc(sizeof *s + n * sizeof s-&gt;v[0]);
+</code></pre>
+<p>Escreva Serie *nova_serie(const char *nome, const double *dados, int n), e
+crie duas séries de chuva (em mm), uma de 3 dias e outra de 7. Mostre cada
+série, a média, o sizeof da struct e quantos bytes cada bloco tem. Libere
+com UM free por série:</p>
+<pre><code class="language-text">Belém: 12.5 30.0 8.0
+Manaus: 0.0 4.5 22.0 18.0 0.0 6.5 11.0
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+sizeof(Serie) = 24 bytes
+Belém (3 dias): 12.5 30.0  8.0
+  média 16.83 mm, bloco de 48 bytes
+Manaus (7 dias):  0.0  4.5 22.0 18.0  0.0  6.5 11.0
+  média 8.86 mm, bloco de 80 bytes
+</code></pre>
+<h3>★★★ Desafio</h3>
+<p><strong>Exercício P0821</strong> · ★★★ · O catálogo ordenado por três chaves</p>
+<p>O catálogo de uma loja de eletrônicos é um vetor de structs:</p>
+<pre><code class="language-text">typedef enum { CELULAR, NOTEBOOK, FONE } Categoria;
+typedef struct {
+    char nome[24]; Categoria cat; double preco; int estoque;
+} Produto;
+</code></pre>
+<p>Ordene com qsort por uma chave COMPOSTA: primeiro a categoria (na ordem do
+enum), depois o preço (do mais barato ao mais caro) e, no empate, o nome
+(ordem alfabética). Depois mostre o catálogo agrupado, com um cabeçalho por
+categoria e, no fim de cada grupo, o valor do estoque (preço x estoque) da
+categoria:</p>
+<pre><code class="language-text">Saída esperada:
+== Celulares ==
+  Celular Lite       R$   999.00  x18
+  Celular Alfa       R$  1899.00  x 4
+  Celular Mega 5G    R$  1899.00  x10
+  Estoque: R$ 44568.00
+== Notebooks ==
+  Notebook Basic     R$  2499.00  x 7
+  Notebook Ultra 14  R$  4299.00  x 3
+  Notebook Pro 16    R$  8999.00  x 1
+  Estoque: R$ 39389.00
+== Fones ==
+  Fone com fio       R$    39.90  x60
+  Fone Bluetooth X   R$   199.90  x25
+  Fone Gamer         R$   199.90  x12
+  Estoque: R$ 9790.30
+</code></pre>
+<hr>
+<p><strong>Exercício P0822</strong> · ★★★ · O conjunto de bits dos assentos</p>
+<p>Um ônibus de viagem tem 100 lugares (0 a 99), e cada lugar vendido é um
+bit: 100 bits cabem em 13 bytes (unsigned char v[13]). Crie</p>
+<pre><code class="language-text">typedef struct { unsigned char bits[13]; } Conjunto;
+</code></pre>
+<p>e escreva inserir, remover, contem (bool), tamanho (quantos bits ligados),
+uniao e intersecao (as duas devolvem um Conjunto novo) e mostrar (lista os
+números). Dois aplicativos venderam lugares sem conversar entre si:</p>
+<pre><code class="language-text">app A: 3 7 12 40 41 42 77 98
+app B: 7 15 40 63 98 99
+</code></pre>
+<p>Mostre os vendidos de cada app, a união (todos os vendidos), a interseção
+(lugares vendidos DUAS vezes: problema!) e quantos lugares ainda estão
+livres. Depois o app A cancela o lugar 7; mostre a nova interseção:</p>
+<pre><code class="language-text">Saída esperada:
+App A (8): 3 7 12 40 41 42 77 98
+App B (6): 7 15 40 63 98 99
+Vendidos (11): 3 7 12 15 40 41 42 63 77 98 99
+Vendidos duas vezes (3): 7 40 98
+Livres: 89 de 100 (em 13 bytes)
+Depois do cancelamento, duas vezes (2): 40 98
+</code></pre>
+<hr>
+<p><strong>Exercício P0823</strong> · ★★★ · Do CSV para o vetor de structs</p>
+<p>O formulário de inscrição da corrida de rua exportou um CSV, uma pessoa por
+linha (nome;idade;cidade), e algumas linhas vieram com defeito:</p>
+<pre><code class="language-text">const char *linhas[7] = {&quot;Ana Paula;34;Manaus&quot;, &quot;Joel;abc;Parintins&quot;,
+                         &quot;Rosa;52;Manaus&quot;, &quot;Iuri;19;Itacoatiara&quot;,
+                         &quot;Sem cidade;40&quot;, &quot;Marta;27;Parintins&quot;,
+                         &quot;Caio;61;Manaus&quot;};
+</code></pre>
+<p>Crie typedef struct { char nome[24]; int idade; char cidade[16]; } Atleta;
+e escreva bool ler_atleta(const char *linha, Atleta *a), que separa os
+três campos (com strchr ou andando com um ponteiro), confere se a idade é
+só de dígitos, se há exatamente 3 campos e se cada texto cabe no seu
+campo, e preenche *a. Guarde as linhas boas num vetor de Atleta, mostre as
+recusadas e, das aceitas, a média de idade, o mais velho e quantos atletas
+há por cidade:</p>
+<pre><code class="language-text">Saída esperada:
+Recusada: &quot;Joel;abc;Parintins&quot;
+Recusada: &quot;Sem cidade;40&quot;
+Aceitas: 5
+Média de idade: 38.6
+Mais velho: Caio, 61 anos
+Manaus: 3
+Itacoatiara: 1
+Parintins: 1
+</code></pre>
+<hr>
+<p><strong>Exercício P0824</strong> · ★★★ · Matriz esparsa vezes vetor</p>
+<p>A rede de distribuição de água de um bairro tem 6 reservatórios, e a
+matriz A diz quanto (em mil litros) cada reservatório j manda para o
+ponto i. Quase tudo é zero, então A é guardada só pelos termos não nulos:</p>
+<pre><code class="language-text">typedef struct { int l, c; double v; } Termo;
+</code></pre>
+<pre><code class="language-text">Termo a[7] = {{0, 0, 2.0}, {0, 3, 1.5}, {1, 1, 4.0}, {2, 5, 0.5},
+              {3, 0, 1.0}, {3, 2, 3.0}, {5, 4, 2.5}};
+</code></pre>
+<p>Escreva void mult(const Termo *t, int k, const double *x, double *y,
+int linhas), que calcula y = A x passando UMA vez pelos k termos (sem
+montar a matriz 6x6): cada termo (l, c, v) soma v * x[c] em y[l]. Com o
+vetor x de horas de bomba ligada abaixo, mostre y, quantas multiplicações
+foram feitas e quantas a matriz cheia faria. Depois calcule a transposta
+(troque l e c de cada termo) e mostre Aᵀ x:</p>
+<pre><code class="language-text">double x[6] = {3, 1, 2, 4, 2, 6};
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+A x = 12.0 4.0 3.0 9.0 0.0 5.0
+Multiplicações: 7 (a matriz cheia faria 36)
+At x = 10.0 4.0 12.0 4.5 15.0 1.0
+</code></pre>
+<hr>
+<p><strong>Exercício P0825</strong> · ★★★ · Conserte o painel de sensores</p>
+<p>O painel de uma estufa lê sensores de tipos diferentes, guardados numa
+union etiquetada, e cada sensor tem flags de estado em bits. O programa
+tem TRÊS erros de propósito: o gcc avisa de dois (leia os warnings) e o
+terceiro é de lógica (o programa roda, mas mostra coisa errada).
+Conserte os três. O programa deve mostrar:</p>
+<pre><code class="language-text">Saída esperada:
+Estufa 1: 38.5 graus
+  ALERTA
+Estufa 2: 81% de umidade
+Depósito: porta aberta
+  bateria fraca
+</code></pre>
+<hr>
+<p><strong>Exercício P0826</strong> · ★★★ · Os conflitos da agenda</p>
+<p>A agenda de uma fisioterapeuta está fora de ordem e tem compromissos que se
+sobrepõem. Crie:</p>
+<pre><code class="language-text">typedef enum { SEG, TER, QUA, QUI, SEX } Dia;
+typedef struct { int h, m; } Horario;
+typedef struct { char titulo[24]; Dia dia; Horario ini, fim; } Compromisso;
+</code></pre>
+<p>Ordene com qsort por dia e, no mesmo dia, pelo horário de início. Depois
+mostre a agenda e, para cada par de compromissos SEGUIDOS (na ordem) do
+mesmo dia que se sobrepõem, uma linha de conflito com quantos minutos se
+cruzam. Encostar (um termina 10:00 e o outro começa 10:00) não é conflito:</p>
+<pre><code class="language-text">Saída esperada:
+seg 08:00-09:15 RPG Larissa
+seg 09:00-10:00 Hidroterapia Seu Juca
+seg 14:30-15:30 Avaliação Sr. Moacir
+qua 09:00-10:00 Pilates Dona Cleide
+qua 09:40-11:00 Reunião da clínica
+qua 11:00-11:30 Retorno Paulinho
+sex 18:00-20:00 Curso online
+Conflito (seg): &quot;RPG Larissa&quot; e &quot;Hidroterapia Seu Juca&quot;, 15 min
+Conflito (qua): &quot;Pilates Dona Cleide&quot; e &quot;Reunião da clínica&quot;, 20 min
+</code></pre>
+<p><strong>Resposta esperada:</strong> a saída acima (dois conflitos).</p>
+<hr>
+<p><strong>Exercício P0827</strong> · ★★★ · O crivo de primos em bits</p>
+<p>O crivo de Eratóstenes marca os números compostos até N. Com um bool por
+número, N = 1000 gasta 1001 bytes; com um BIT por número, gasta 126. Crie</p>
+<pre><code class="language-text">typedef struct { int n; unsigned char bits[126]; } Crivo;
+</code></pre>
+<p>em que o bit k ligado quer dizer &quot;k é composto&quot;. Escreva void
+montar(Crivo *c, int n), bool eh_primo(const Crivo *c, int k) e use-as
+para mostrar quantos primos há até 1000, os primos entre 900 e 1000, o
+maior intervalo entre dois primos seguidos até 1000 e a memória usada:</p>
+<pre><code class="language-text">Saída esperada:
+Primos até 1000: 168
+Entre 900 e 1000: 907 911 919 929 937 941 947 953 967 971 977 983 991 997
+Maior intervalo: 20 (de 887 a 907)
+Memória: 126 bytes de bits (com bool seriam 1001)
+</code></pre>
+<p><strong>Resposta esperada:</strong> a saída acima (168 primos).</p>
+<hr>
+<p><strong>Exercício P0828</strong> · ★★★ · O cabeçalho do pacote em 32 bits</p>
+<p>Um protocolo de sensores sem fio manda, antes de cada pacote, um cabeçalho
+de 32 bits com quatro campos:</p>
+<pre><code class="language-text">bits 31-28: versão (4 bits)    bits 27-24: tipo (4 bits)
+bits 23-16: tamanho (8 bits)   bits 15-0:  id (16 bits)
+</code></pre>
+<p>Crie typedef struct { unsigned versao, tipo, tamanho, id; } Cabecalho; e
+escreva:</p>
+<pre><code class="language-text">bool empacotar(const Cabecalho *c, uint32_t *saida); // false: não cabe
+Cabecalho desempacotar(uint32_t x);
+</code></pre>
+<p>Empacote os três cabeçalhos abaixo, mostre em hexa, desempacote e confira
+que voltou igual. O terceiro tem tamanho 300, que não cabe em 8 bits:
+empacotar recusa. Por fim, compare com uma struct de CAMPOS DE BITS
+(unsigned versao : 4; ...), em que o compilador faz os deslocamentos, e
+mostre o sizeof das duas:</p>
+<pre><code class="language-text">{2, 5, 64, 1027}   {15, 0, 255, 65535}   {1, 3, 300, 7}
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+{2, 5, 64, 1027} -&gt; 0x25400403 -&gt; {2, 5, 64, 1027} ok
+{15, 0, 255, 65535} -&gt; 0xF0FFFFFF -&gt; {15, 0, 255, 65535} ok
+{1, 3, 300, 7} -&gt; recusado: campo grande demais
+Campos de bits: {2, 5, 64, 1027}
+sizeof(Cabecalho) = 16, sizeof(Compacto) = 4
+</code></pre>
+<hr>
+<p><strong>Exercício P0829</strong> · ★★★ · A multa da biblioteca</p>
+<p>A biblioteca municipal empresta livros por 14 dias e cobra R$ 1,50 por dia
+de atraso. Crie typedef struct { int dia, mes, ano; } Data; e
+typedef struct { char titulo[32]; char leitor[16]; Data saida, devolucao; }
+Emprestimo;. Escreva long dias_desde_inicio(Data d), que conta os dias de
+01/01/0001 até d (somando 365 ou 366 por ano completo e os dias dos meses
+completos do ano de d), e use a diferença entre duas datas para achar o
+atraso. Mostre, para cada empréstimo, os dias com o livro, o atraso e a
+multa, e o total arrecadado:</p>
+<pre><code class="language-text">Saída esperada:
+Dois Irmãos (Clarice): 9 dias, atraso 0, multa R$ 0.00
+Vidas Secas (Otávio): 21 dias, atraso 7, multa R$ 10.50
+Macunaíma (Fabiana): 32 dias, atraso 18, multa R$ 27.00
+O Cortiço (Ramon): 21 dias, atraso 7, multa R$ 10.50
+Total: R$ 48.00
+</code></pre>
+<p><strong>Resposta esperada:</strong> a saída acima (total R$ 48.00).</p>
+<hr>
+<p><strong>Exercício P0830</strong> · ★★★ · A fila da triagem</p>
+<p>No pronto-socorro, a triagem classifica cada paciente por cor, e a fila de
+atendimento é ordenada pela gravidade (vermelho antes de laranja, antes de
+amarelo, antes de verde) e, na mesma cor, pela ordem de chegada:</p>
+<pre><code class="language-text">typedef enum { VERDE, AMARELO, LARANJA, VERMELHO } Cor;
+typedef struct { char nome[16]; Cor cor; int chegada; } Paciente;
+</code></pre>
+<p>A fila é um vetor de Paciente mantido SEMPRE em ordem: escreva
+bool entrar(Paciente *fila, int *n, int cap, Paciente p), que encaixa o
+paciente no lugar certo (como no P0514, empurrando quem tem prioridade
+menor), e Paciente atender(Paciente *fila, int *n), que tira o primeiro.
+Simule os eventos abaixo, na ordem, mostrando a fila depois de cada um
+(chegada é o minuto em que o paciente chegou):</p>
+<pre><code class="language-text">chega Josué (verde, 0)    chega Ana (amarelo, 2)   chega Rui (verde, 3)
+atende                    chega Lia (vermelho, 7)  chega Téo (amarelo, 8)
+atende                    atende
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Chega Josué (verde, min 0)
+  fila: Josué(verde)
+Chega Ana (amarelo, min 2)
+  fila: Ana(amarelo) Josué(verde)
+Chega Rui (verde, min 3)
+  fila: Ana(amarelo) Josué(verde) Rui(verde)
+Atende Ana
+  fila: Josué(verde) Rui(verde)
+Chega Lia (vermelho, min 7)
+  fila: Lia(vermelho) Josué(verde) Rui(verde)
+Chega Téo (amarelo, min 8)
+  fila: Lia(vermelho) Téo(amarelo) Josué(verde) Rui(verde)
+Atende Lia
+  fila: Téo(amarelo) Josué(verde) Rui(verde)
+Atende Téo
+  fila: Josué(verde) Rui(verde)
+</code></pre>
+<hr>
+<h2>Desafios do módulo</h2>
+<p>Resolva num arquivo seu, misturando os assuntos do módulo, do médio ao
+difícil.</p>
+<p><strong>1. Agenda com busca.</strong> Monte uma agenda com 5 contatos (nome, telefone,
+aniversário como struct <code>Data</code>). Leia um nome com <code>fgets</code> e mostre o contato,
+ou &quot;não encontrado&quot;. Depois mostre quem faz aniversário no mês 10.</p>
+<details><summary>Resposta</summary><p>Um vetor de <code>Contato</code>, cada um com um campo <code>Data</code> aninhado
+(<code>agenda[i].aniversario.mes</code>). A busca é um laço com
+<code>strcmp(agenda[i].nome, nome) == 0</code>; tire o <code>&#39;\n&#39;</code> do <code>fgets</code> antes de
+comparar, senão nada bate. Devolva o <strong>índice</strong> encontrado (ou -1), não uma
+cópia.</p>
+</details><p><strong>2. Desempate do campeonato.</strong> Ordene uma tabela de times por pontos; no
+empate, por saldo de gols; no empate, por gols marcados; e, por fim, pelo nome.</p>
+<details><summary>Resposta</summary><p>Uma comparadora para o <code>qsort</code> com uma cascata de <code>if</code>: compare pontos; se
+diferentes, devolva a diferença invertida (maior primeiro); senão passe para o
+saldo, depois gols, e termine com <code>strcmp</code> nos nomes. O último critério garante
+uma ordem única, porque o <code>qsort</code> não é estável.</p>
+</details><p><strong>3. Os retângulos se encostam?</strong> Com <code>typedef struct { double x, y; } Ponto;</code>
+e um retângulo dado por dois cantos, escreva <code>bool sobrepoe(Retangulo a, Retangulo b)</code>. Teste com (0,0)-(4,3) e (3,2)-(6,5), e com (0,0)-(2,2) e
+(3,3)-(5,5).</p>
+<details><summary>Resposta</summary><p>Dois retângulos <strong>não</strong> se sobrepõem quando um está todo à esquerda, à
+direita, acima ou abaixo do outro: <code>a.sup.x &lt; b.inf.x || b.sup.x &lt; a.inf.x || a.sup.y &lt; b.inf.y || b.sup.y &lt; a.inf.y</code>. Negue isso. O primeiro par se
+sobrepõe (no quadrado de (3,2) a (4,3)); o segundo, não.</p>
+</details><p><strong>4. A struct gorda.</strong> Escreva um programa que mostre o <code>sizeof</code> e o
+<code>offsetof</code> de cada campo de <code>struct Sensor { char id; double leitura; char status; int contador; };</code>. Crie uma versão com os campos reorganizados para
+ocupar o mínimo e mostre quantos bytes ela economiza num vetor de 1 milhão de
+sensores.</p>
+<details><summary>Resposta</summary><p><code>id</code> no byte 0, 7 de sobra, <code>leitura</code> no 8, <code>status</code> no 16, 3 de sobra,
+<code>contador</code> no 20: <strong>24 bytes</strong>. Na ordem <code>double</code>, <code>int</code>, <code>char</code>, <code>char</code>: 8 + 4</p>
+<ul>
+<li>1 + 1 = 14, arredondado para <strong>16</strong>. São 8 bytes por sensor, 8 MB a menos no
+vetor. Confira com <code>sizeof</code> e <code>offsetof</code>.</li>
+</ul>
+</details><p><strong>5. Dentro do float.</strong> Com uma union de <code>float</code> e <code>uint32_t</code>, separe os
+campos do <code>-6.25f</code>: o bit de sinal (bit 31), o expoente (bits 30 a 23) e a
+mantissa (bits 22 a 0).</p>
+<details><summary>Resposta</summary><p>Os bits são <code>0xC0C80000</code>. Sinal: <code>bits &gt;&gt; 31</code> = <strong>1</strong> (negativo). Expoente:
+<code>(bits &gt;&gt; 23) &amp; 0xFF</code> = <strong>129</strong>, que, menos o desvio de 127, dá 2. Mantissa:
+<code>bits &amp; 0x7FFFFF</code> = <code>0x480000</code>, que representa a parte fracionária de
+1,5625. E 1,5625 × 2² = 6,25.</p>
+</details><p><strong>6. Quantos bits mudaram?</strong> Escreva <code>int distancia(unsigned a, unsigned b)</code>
+que conta em quantas casas os bits de <code>a</code> e <code>b</code> diferem (a distância de
+Hamming). Quanto dá para 11 e 6?</p>
+<details><summary>Resposta</summary><p>O <code>^</code> liga exatamente as casas diferentes; depois é só contar os bits 1:
+<code>11 ^ 6</code> = <code>1011 ^ 0110</code> = <code>1101</code>, <strong>3 bits</strong>. É assim que códigos de correção
+de erro medem quantos bits uma transmissão estragou.</p>
+</details><p><strong>7. Potência de 2 numa linha.</strong> Escreva <code>bool potencia_de_2(unsigned n)</code> só
+com <code>n &gt; 0 &amp;&amp; (n &amp; (n - 1)) == 0</code>. Para 64, 96 e 1, mostre o resultado e os
+bits de <code>n</code> e de <code>n - 1</code>, um embaixo do outro, para ver por que funciona.</p>
+<details><summary>Resposta</summary><p>Uma potência de 2 tem <strong>um</strong> bit ligado (<code>64</code> = <code>1000000</code>). Subtrair 1 apaga
+esse bit e liga todos à direita (<code>63</code> = <code>0111111</code>), então o <code>&amp;</code> dá zero. Se
+houver mais de um bit ligado (<code>96</code> = <code>1100000</code>, <code>95</code> = <code>1011111</code>), o bit mais
+alto sobrevive ao <code>&amp;</code>. 64 e 1 dão verdadeiro; 96, falso.</p>
+</details><p><strong>8. A data em 16 bits.</strong> O sistema de arquivos FAT guarda uma data em 16
+bits: dia nos bits 0 a 4, mês nos bits 5 a 8 e (ano - 1980) nos bits 9 a 15.
+Empacote 18/10/2026 e desempacote de volta.</p>
+<details><summary>Resposta</summary><p><code>(46 &lt;&lt; 9) | (10 &lt;&lt; 5) | 18</code> = 23552 + 320 + 18 = <strong>23890</strong> (<code>0x5D52</code>). Para
+voltar: dia = <code>d &amp; 0x1F</code>, mês = <code>(d &gt;&gt; 5) &amp; 0xF</code>, ano = <code>(d &gt;&gt; 9) + 1980</code>.
+Cinco bits para o dia porque 2⁵ = 32 &gt; 31; quatro para o mês, porque 2⁴ = 16 &gt;
+12; sete para o ano, o que vai até 1980 + 127 = 2107.</p>
+</details><p><strong>9. Um conjunto em 64 bits.</strong> Represente conjuntos de números de 0 a 63 num
+<code>uint64_t</code> e escreva <code>inserir</code>, <code>contem</code>, <code>uniao</code>, <code>intersecao</code> e <code>tamanho</code>.
+Teste com {1, 3, 5, 7} e {3, 4, 5}.</p>
+<details><summary>Resposta</summary><p>Inserir <code>x</code>: <code>s |= (uint64_t)1 &lt;&lt; x</code> (o 1 precisa ser de 64 bits, senão o
+deslocamento estoura). Contém: <code>(s &gt;&gt; x) &amp; 1</code>. União é <code>|</code>, interseção é <code>&amp;</code>,
+tamanho é contar bits. União {1, 3, 4, 5, 7} (5 elementos), interseção {3, 5}
+(2 elementos). Cada operação de conjunto custa uma instrução.</p>
+</details><p><strong>10. Playlist encadeada.</strong> Sem <code>malloc</code>, crie 4 variáveis <code>Musica</code> (título,
+duração em segundos e <code>struct Musica *proxima</code>) ligadas em sequência, com
+<code>NULL</code> na última. Percorra a partir da primeira, mostrando cada uma e a duração
+total em minutos e segundos.</p>
+<details><summary>Resposta</summary><p>A struct precisa de nome para apontar para si mesma: <code>typedef struct Musica { ...; struct Musica *proxima; } Musica;</code>. O laço é <code>for (const Musica *m = &amp;primeira; m != NULL; m = m-&gt;proxima)</code>. Total em segundos <code>t</code>: <code>t / 60</code> minutos
+e <code>t % 60</code> segundos. Isso já é uma <strong>lista encadeada</strong>; no módulo 11 os nós
+passam a vir do <code>malloc</code>.</p>
+</details><h2>Questões do POSCOMP</h2>
+<p>Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.</p>
+<table>
+<thead>
+<tr>
+<th>Ano</th>
+<th>Questão</th>
+<th>Assunto</th>
+<th>Gabarito</th>
+<th>Prova</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2023</td>
+<td>45</td>
+<td>Tipo enumeração, constantes nomeadas</td>
+<td>C</td>
+<td><a href="https://www.sbc.org.br/wp-content/uploads/2025/02/0761.001_Exame_POSCOMP_2023.pdf">caderno</a></td>
+</tr>
+<tr>
+<td>2024</td>
+<td>46</td>
+<td>Estruturas (struct) em linguagens de programação</td>
+<td>E</td>
+<td><a href="https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2024.pdf">caderno</a></td>
+</tr>
+</tbody></table>
+<p>O gabarito de 2023 vem de um blog de terceiros que reproduz o gabarito definitivo; confira no PDF oficial da SBC.</p>
+<h2>Questões no estilo da prova</h2>
+<p>Formato da prova do mestrado do PPGI/UFAM. Resolva no papel, marque uma letra
+e só então abra o gabarito. Os trechos foram compilados com
+<code>gcc -std=c17 -Wall -Wextra</code>. Quando a resposta depende da máquina, a questão
+diz qual.</p>
+<p><strong>Questão 1.</strong> Em uma plataforma de 64 bits típica (<code>int</code> de 4 bytes,
+alinhado em 4), quanto valem <code>sizeof(struct a)</code> e <code>sizeof(struct b)</code>?</p>
+<pre><code class="language-c">struct a { char x; int y; char z; };
+struct b { int y; char x; char z; };
+</code></pre>
+<ul>
+<li>(A) 6 e 6</li>
+<li>(B) 12 e 8</li>
+<li>(C) 12 e 12</li>
+<li>(D) 8 e 8</li>
+<li>(E) 9 e 6</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(B)</strong>. Em <code>a</code>: <code>x</code> no byte 0, 3 bytes de preenchimento, <code>y</code> nos bytes 4 a
+7, <code>z</code> no 8 e mais 3 de preenchimento no fim para o tamanho ser múltiplo de 4
+(um vetor de <code>struct a</code> precisa manter cada <code>y</code> alinhado): 12. Em <code>b</code>: <code>y</code>
+de 0 a 3, <code>x</code> no 4, <code>z</code> no 5, 2 bytes no fim: 8. Mesmos campos, ordem
+diferente, tamanho diferente. Veja 0059.</p>
+</details><p><strong>Questão 2.</strong> Sobre struct, union e enum, considere as afirmações e marque a alternativa CORRETA.</p>
+<ul>
+<li><p><strong>I.</strong> O tamanho de uma <code>union</code> é o do maior campo, arredondado para o alinhamento.</p>
+</li>
+<li><p><strong>II.</strong> O <code>sizeof</code> de uma <code>struct</code> é sempre a soma dos tamanhos dos campos.</p>
+</li>
+<li><p><strong>III.</strong> Num <code>enum</code> sem valores explícitos, o primeiro nome vale 0 e os seguintes sobem de 1 em 1.</p>
+</li>
+<li><p><strong>IV.</strong> Se <code>p</code> é um ponteiro para struct, <code>p-&gt;campo</code> equivale a <code>(*p).campo</code>.</p>
+</li>
+<li><p>(A) Apenas I e II</p>
+</li>
+<li><p>(B) Apenas II e IV</p>
+</li>
+<li><p>(C) Apenas I e III</p>
+</li>
+<li><p>(D) Apenas I, III e IV</p>
+</li>
+<li><p>(E) Apenas II, III e IV</p>
+</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(D).</strong> I é verdadeira: os campos dividem o mesmo endereço. II é falsa: o compilador insere preenchimento (padding) para alinhar os campos, e a ordem deles muda o tamanho. III e IV são verdadeiras. Veja 0059, 0063 e 0064.</p>
+</details><p><strong>Questão 3.</strong> O que o trecho imprime?</p>
+<pre><code class="language-c">enum cor { AZUL, VERDE = 5, AMARELO, ROXO = 2, CINZA };
+printf(&quot;%d %d %d %d %d\n&quot;, AZUL, VERDE, AMARELO, ROXO, CINZA);
+</code></pre>
+<ul>
+<li>(A) <code>0 5 6 2 3</code></li>
+<li>(B) <code>1 5 6 2 3</code></li>
+<li>(C) <code>0 5 2 2 3</code></li>
+<li>(D) <code>0 5 6 2 7</code></li>
+<li>(E) não compila: valores de enum fora de ordem</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A)</strong>. O primeiro vale 0; cada nome sem valor vale o anterior mais 1.
+<code>AMARELO</code> continua do 5 (6), e <code>CINZA</code> continua do 2 (3). Valores fora de
+ordem e até repetidos são permitidos. Veja 0063.</p>
+</details><p><strong>Questão 4.</strong> O que o trecho imprime?</p>
+<pre><code class="language-c">typedef struct { int qtd; double preco; } Item;
+
+Item a = {2, 9.5};
+Item b = a;
+Item *p = &amp;a;
+b.qtd = 7;
+p-&gt;preco = 10.0;
+printf(&quot;%d %.1f %d %.1f\n&quot;, a.qtd, a.preco, b.qtd, b.preco);
+</code></pre>
+<ul>
+<li>(A) <code>7 10.0 7 10.0</code></li>
+<li>(B) <code>2 9.5 7 10.0</code></li>
+<li>(C) <code>7 9.5 7 9.5</code></li>
+<li>(D) <code>2 10.0 7 10.0</code></li>
+<li>(E) <code>2 10.0 7 9.5</code></li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(E)</strong>. <code>b = a</code> copia o registro inteiro: <code>b</code> é independente, e mudar
+<code>b.qtd</code> não mexe em <code>a</code>. Já <code>p</code> guarda o endereço de <code>a</code>, então
+<code>p-&gt;preco</code> (o mesmo que <code>(*p).preco</code>) muda <code>a.preco</code>. <code>b.preco</code> continua com
+a cópia antiga, 9.5. Veja 0059 e 0062.</p>
+</details><p><strong>Questão 5.</strong> Com <code>unsigned x = 0xB4;</code> (binário <code>1011 0100</code>), quanto valem
+<code>x &amp; 0x0F</code>, <code>x | 0x01</code> e <code>x &gt;&gt; 2</code>?</p>
+<ul>
+<li>(A) <code>0x0B</code>, <code>0xB5</code>, <code>0x2D</code></li>
+<li>(B) <code>0x04</code>, <code>0xB4</code>, <code>0x2D</code></li>
+<li>(C) <code>0x04</code>, <code>0xB5</code>, <code>0x2D</code></li>
+<li>(D) <code>0x04</code>, <code>0xB5</code>, <code>0x5A</code></li>
+<li>(E) <code>0xB0</code>, <code>0xB5</code>, <code>0x2D</code></li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(C)</strong>. <code>&amp; 0x0F</code> guarda só os 4 bits de baixo (<code>0100</code> = 0x04). <code>| 0x01</code>
+liga o bit 0 (<code>1011 0101</code> = 0xB5). <code>&gt;&gt; 2</code> empurra tudo duas casas para a
+direita (<code>0010 1101</code> = 0x2D); a resposta 0x5A seria <code>&gt;&gt; 1</code>. Veja 0065.</p>
+</details><p><strong>Questão 6.</strong> Qual o valor final de <code>flags</code> e o que o <code>printf</code> mostra?</p>
+<pre><code class="language-c">unsigned flags = 0x05;          /* 0101 */
+flags |= 1u &lt;&lt; 3;
+flags &amp;= ~(1u &lt;&lt; 0);
+printf(&quot;%u\n&quot;, (flags &gt;&gt; 2) &amp; 1u);
+</code></pre>
+<ul>
+<li>(A) <code>flags</code> = 0x0D; imprime 1</li>
+<li>(B) <code>flags</code> = 0x0C; imprime 1</li>
+<li>(C) <code>flags</code> = 0x0C; imprime 0</li>
+<li>(D) <code>flags</code> = 0x08; imprime 0</li>
+<li>(E) <code>flags</code> = 0x04; imprime 1</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(B)</strong>. <code>|= 1u &lt;&lt; 3</code> liga o bit 3: <code>1101</code> (0x0D). <code>&amp;= ~(1u &lt;&lt; 0)</code> desliga o
+bit 0: <code>1100</code> (0x0C). <code>(flags &gt;&gt; 2) &amp; 1u</code> testa o bit 2, que está ligado: 1.
+São as três operações clássicas: ligar com <code>|</code>, desligar com <code>&amp; ~</code>, testar
+com <code>&gt;&gt;</code> e <code>&amp;</code>. Veja 0065.</p>
+</details><p><strong>Questão 7.</strong> Em uma plataforma com <code>int</code> de 32 bits, o que o trecho
+imprime?</p>
+<pre><code class="language-c">unsigned char c = 250;
+c += 10;
+int x = -1;
+unsigned int u = 1;
+printf(&quot;%d %d\n&quot;, c, x &lt; u);
+</code></pre>
+<ul>
+<li>(A) <code>260 1</code></li>
+<li>(B) <code>4 1</code></li>
+<li>(C) <code>260 0</code></li>
+<li>(D) <code>-6 1</code></li>
+<li>(E) <code>4 0</code></li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(E)</strong>. <code>unsigned char</code> vai de 0 a 255 e a conta &quot;dá a volta&quot; módulo 256:
+260 − 256 = 4 (para tipos sem sinal, isso é garantido pelo padrão). Na
+comparação, o <code>int</code> −1 é convertido para <code>unsigned</code>, virando 4294967295, que
+não é menor que 1: dá 0. O gcc avisa com <code>-Wsign-compare</code>. Veja 0065 (e
+0171, que aprofunda com e sem sinal).</p>
+</details><p><strong>Questão 8.</strong> Em uma plataforma de 64 bits típica, o que o trecho imprime?</p>
+<pre><code class="language-c">#define PINT int *
+typedef int *Pint;
+
+int n = 0;
+PINT a = &amp;n, b = 0;
+Pint c = &amp;n, d = &amp;n;
+printf(&quot;%zu %zu %zu %zu\n&quot;, sizeof a, sizeof b, sizeof c, sizeof d);
+</code></pre>
+<ul>
+<li>(A) <code>8 4 8 8</code></li>
+<li>(B) <code>8 8 8 8</code></li>
+<li>(C) <code>8 4 8 4</code></li>
+<li>(D) <code>4 4 8 8</code></li>
+<li>(E) não compila: <code>PINT</code> e <code>Pint</code> têm o mesmo nome</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A)</strong>. O <code>#define</code> só troca texto: a linha vira <code>int * a = &amp;n, b = 0;</code>, e o
+<code>*</code> vale só para <code>a</code>; <code>b</code> é um <code>int</code> (4 bytes). O <code>typedef</code> cria um nome de
+tipo de verdade: <code>c</code> e <code>d</code> são os dois <code>int *</code> (8 bytes). E o C diferencia
+maiúsculas de minúsculas, então os nomes não colidem. Veja 0060.</p>
+</details><p><strong>Questão 9.</strong> Sobre operadores bit a bit, com e sem sinal, considere as afirmações e marque a alternativa CORRETA.</p>
+<ul>
+<li><p><strong>I.</strong> Em <code>unsigned</code>, <code>x &lt;&lt; 1</code> equivale a multiplicar por 2, desde que não haja estouro.</p>
+</li>
+<li><p><strong>II.</strong> Com <code>int x = -1;</code> e <code>unsigned u = 1;</code>, a comparação <code>x &lt; u</code> vale 1.</p>
+</li>
+<li><p><strong>III.</strong> <code>0x0F &amp; 0xB4</code> vale <code>0x04</code>.</p>
+</li>
+<li><p><strong>IV.</strong> O deslocamento <code>&gt;&gt;</code> sobre um <code>unsigned</code> entra com bits 1 pela esquerda.</p>
+</li>
+<li><p>(A) Apenas I e III</p>
+</li>
+<li><p>(B) Apenas I e II</p>
+</li>
+<li><p>(C) Apenas II e IV</p>
+</li>
+<li><p>(D) Apenas III e IV</p>
+</li>
+<li><p>(E) Apenas I, II e III</p>
+</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A).</strong> I e III são verdadeiras (<code>1011 0100 &amp; 0000 1111</code> deixa <code>0100</code>). II é falsa: o <code>-1</code> é convertido para <code>unsigned</code>, vira 4294967295 e a comparação dá 0. IV é falsa: em <code>unsigned</code>, o <code>&gt;&gt;</code> entra com zeros. Veja 0065 e 0171.</p>
+</details><p><strong>Questão 10.</strong> O que o trecho imprime?</p>
+<pre><code class="language-c">#define DOBRO(x) x * 2
+#define DOBRO_OK(x) ((x) * 2)
+
+printf(&quot;%d %d\n&quot;, DOBRO(3 + 1), DOBRO_OK(3 + 1));
+</code></pre>
+<ul>
+<li>(A) <code>8 8</code></li>
+<li>(B) <code>5 5</code></li>
+<li>(C) <code>5 8</code></li>
+<li>(D) <code>8 5</code></li>
+<li>(E) não compila: macro não recebe expressão</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(C)</strong>. O pré-processador cola o texto antes de compilar: <code>DOBRO(3 + 1)</code>
+vira <code>3 + 1 * 2</code>, e a multiplicação vem primeiro: 5. Com parênteses em volta
+do parâmetro e da expressão inteira, <code>((3 + 1) * 2)</code> dá 8. Veja 0004 e 0060.</p>
+</details><h2>Para ler mais</h2>
+<ul>
+<li>BACKES, A. <em>Linguagem C: completa e descomplicada</em>. Rio de Janeiro: Elsevier, 2013. Cap. 8: struct, union, enum e typedef; cap. 13: campos de bits.</li>
+<li>BACKES, A. <em>Linguagem C: descomplicada</em>. Apostila. Uberlândia: FACOM/UFU, [s.d.].</li>
+<li>DEITEL, P.; DEITEL, H. <em>C: como programar</em>. 6. ed. São Paulo: Pearson, 2011. Cap. 10: estruturas, uniões, manipulações de bits e enumerações.</li>
+<li>CELES, W.; RANGEL, J. L. <em>Apostila de estruturas de dados</em>. Rio de Janeiro: PUC-Rio, 2002.</li>
+<li>CELES, W.; CERQUEIRA, R.; RANGEL, J. L. <em>Introdução a estruturas de dados: com técnicas de programação em C</em>. 2. ed. Rio de Janeiro: Elsevier, 2016. Tipos estruturados: struct, union, enum e typedef.</li>
+<li>TENENBAUM, A. M.; LANGSAM, Y.; AUGENSTEIN, M. J. <em>Estruturas de dados usando C</em>. São Paulo: Makron Books, 1995. Cap. 1: estruturas e uniões em C.</li>
+<li>ZIVIANI, N. <em>Projeto de algoritmos: com implementações em Pascal e C</em>. 3. ed. rev. e ampl. São Paulo: Cengage Learning, 2010. Registros e tipos definidos pelo programador nas implementações em C.</li>
+<li>MARTINS, L. G. A. <em>Apostila de linguagem C: conceitos básicos</em>. Uberlândia: FACOM/UFU, [s.d.].</li>
+<li>ANTONELLO, R. <em>Linguagem C</em>. 1. ed. Disponível em: <a href="http://www.antonello.com.br">http://www.antonello.com.br</a>.</li>
+<li>FEOFILOFF, P. <em>Algoritmos em linguagem C</em>. Rio de Janeiro: Elsevier, 2009. Apêndice C: números binários; apêndice E: registros e structs; apêndice J: typedef.</li>
+<li>KERNIGHAN, B. W.; RITCHIE, D. M. <em>The C programming language</em>. 2. ed. Englewood Cliffs: Prentice Hall, 1988. Cap. 6: structures.</li>
+<li>CPPREFERENCE. <em>Struct declaration</em>; <em>Union declaration</em>; <em>Enumerations</em>; <em>Bitwise operators</em>. Disponível em: <a href="https://en.cppreference.com/w/c/language">https://en.cppreference.com/w/c/language</a>.</li>
+<li>LINUX MAN PAGES. <em>chmod(2)</em>, <em>inode(7)</em> (bits de permissão) e <em>byteorder(3)</em> (<code>htonl</code>, <code>ntohl</code>). Disponível em: <a href="https://man7.org/linux/man-pages/">https://man7.org/linux/man-pages/</a>.</li>
+</ul>

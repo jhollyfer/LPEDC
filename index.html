@@ -357,18 +357,21 @@ kbd { font: 12px var(--font); border: 1px solid var(--control); border-radius: 4
   </header>
   <main id="app" aria-live="polite"></main>
   <main id="curso" hidden>
-    <nav class="curso-navegacao" aria-label="Curso">
-      <a href="#conteudo">Sumário</a>
-      <a href="#conteudo/arquivos">Todos os arquivos</a>
-    </nav>
-    <article class="curso-leitura"></article>
+    <details class="livro-sumario">
+      <summary>Sumário do livro</summary>
+      <nav aria-label="Sumário do livro"></nav>
+    </details>
+    <div class="livro-miolo">
+      <nav class="livro-caminho" aria-label="Localização no livro"></nav>
+      <article class="curso-leitura"></article>
+      <nav class="livro-paginacao" aria-label="Capítulos anterior e seguinte" hidden></nav>
+    </div>
   </main>
 </div>
 
 <script src="quiz/questoes.js?v=758fe033"></script>
 <script>
 'use strict'
-const REPO = 'https://github.com/jhollyfer/LPEDC/blob/main/'
 const CHAVE = 'lpedc-quiz-v1'
 const DIA_DA_PROVA = new Date('2026-11-27T08:00:00-04:00')
 const TOPICOS = {
@@ -431,10 +434,11 @@ botaoProva.onclick = () => {
 }
 
 // ---------- assuntos do curso ----------
+const linkParaCurso = (a) => `#conteudo/${encodeURI(a.modulo.replace(/\.md$/, ''))}#${encodeURIComponent(a.ancora)}`
 const linkAssunto = (num) => {
   const a = ASSUNTOS[num]
   if (!a) return `<span class="ref"><span class="n">${esc(num)}</span></span>`
-  return `<a class="ref" href="${REPO}${encodeURI(a.modulo)}#${a.ancora}" target="_blank" rel="noopener"><span class="n">${esc(num)}</span> ${esc(a.titulo)}</a>`
+  return `<a class="ref" href="${linkParaCurso(a)}" target="_blank" rel="noopener"><span class="n">${esc(num)}</span> ${esc(a.titulo)}</a>`
 }
 
 // ---------- mini-markdown: parágrafo, lista, código, tabela, `inline`, **negrito**, [NNNN] ----------
@@ -670,7 +674,7 @@ function telaTrilha(alvo) {
         <ul>${(d.saia ?? []).map((t) => `<li>${emLinha(t)}</li>`).join('')}</ul>
         ${a.ideia ? `<details class="desenho"><summary>Ver o desenho do assunto</summary><img src="material/${d.num}-ideia.svg" alt="Diagrama da ideia: ${esc(a.titulo)}" loading="lazy"></details>` : ''}
         <div class="acoes">
-          <a class="botao" href="${REPO}${encodeURI(a.modulo)}#${a.ancora}" target="_blank" rel="noopener">Estudar no curso</a>
+          <a class="botao" href="${linkParaCurso(a)}" target="_blank" rel="noopener">Estudar no curso</a>
           ${qs.length ? `<button class="botao" data-treinar="${d.num}">Treinar ${qs.length} ${qs.length === 1 ? 'questão' : 'questões'}</button>` : ''}
           <button class="botao ${feito ? '' : 'principal'}" data-dominei="${d.num}" aria-pressed="${feito}">${feito ? 'Desmarcar' : 'Dominei'}</button>
         </div>

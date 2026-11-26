@@ -1,0 +1,149 @@
+<h2>0011 · Juntando tudo</h2>
+<p>Cada assunto do módulo ensinou uma peça isolada: variável, tipo, constante,
+<code>printf</code>, <code>scanf</code>, aritmética, conversão, atribuição e <code>math.h</code>. Um problema
+de verdade pede todas ao mesmo tempo, e a dificuldade passa a ser outra:
+decidir por onde começar e em que ordem montar as peças. Ajuda ter um
+jeito fixo de organizar o raciocínio antes de escrever a primeira linha.</p>
+<p>Pense na conta de luz de uma república. Todo mês alguém pega a fatura, faz
+a divisão no celular e manda no grupo quanto cada um deve. Antes de abrir a
+calculadora, essa pessoa já sabe três coisas: o que precisa olhar (as duas
+leituras do relógio e quantos moram na casa), que conta fazer e o que
+mandar no grupo. O programa segue o mesmo roteiro.</p>
+<p>Esse roteiro tem nome: <strong>entrada → processamento → saída</strong>. Antes de
+codificar, separe o que o programa lê, o que ele calcula a partir disso e o
+que ele mostra no fim (LEAL, 2016). A entrada vira variáveis lidas com
+<code>scanf</code>; o processamento vira expressões e atribuições; a saída vira
+<code>printf</code>. Com essa separação feita no papel, cada parte do código tem um
+papel claro, e um erro fica mais fácil de achar: você sabe se procura na
+leitura, na conta ou na hora de mostrar.</p>
+<p>Todos os programas deste módulo têm a mesma forma, chamada <strong>estrutura
+sequencial</strong>: os passos são sempre os mesmos e rodam sempre na mesma ordem,
+de cima para baixo, sem decidir nada e sem repetir nada (CARVALHO, 2010).
+Isso é também um limite. O programa da conta de luz não confere se a
+leitura atual é maior que a anterior, e não sabe repetir a conta para vários
+meses. Conferir é assunto do módulo 02, com as condicionais; repetir é do
+módulo 03, com os laços.</p>
+<p>O programa do exemplo junta as peças assim. A tarifa e a taxa fixa viram
+constantes com <code>#define</code> (0004), para mudar num lugar só. As leituras do
+relógio são <code>int</code> e o dinheiro é <code>double</code> (0002). O <code>scanf</code> leva <code>&amp;</code> em
+cada variável, e o seu retorno fica guardado (0006). No processamento
+entram o <code>+=</code> (0009), um <strong>cast</strong> para a média por dia não virar divisão
+inteira (0008) e o <code>ceil</code> (0010) para arredondar o centavo para cima, já que
+ninguém quer pagar um centavo a menos e deixar a conta descoberta. Na saída,
+o <code>printf</code> usa largura e duas casas para alinhar as colunas (0005).</p>
+<p>Como saber se a fórmula está certa antes de confiar nela? Com o <strong>teste de
+mesa</strong>: você executa o programa no papel, uma linha de cada vez, e anota
+numa tabela o valor de cada variável depois de cada passo (CARVALHO, 2010).
+O teste de mesa obriga você a fazer a conta que o computador faria, com os
+tipos que ele usaria, e por isso pega a divisão inteira, o arredondamento
+no lugar errado e a variável que nunca recebeu valor. O exemplo abaixo traz
+um teste de mesa completo para você acompanhar.</p>
+<blockquote>
+<p>[!WARNING]
+Sem o cast, <code>consumo / DIAS</code> seria <code>257 / 30</code> entre dois <code>int</code> e daria 8.
+A ordem também importa: com o <code>ceil</code> antes do <code>* 100</code>, <code>ceil(76.4133)</code>
+daria R$ 77. Faça o teste de mesa antes de confiar numa fórmula.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>A conta de luz de uma república com três moradores. Entram as duas leituras
+do relógio e os moradores; o consumo é 257 kWh, a conta é R$ 229,24 e cada um
+paga R$ 76,42, com o centavo para cima:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;math.h&gt;
+
+#define TARIFA_KWH 0.82    // R$ por kWh
+#define ILUMINACAO 18.50   // taxa fixa de iluminação pública
+#define DIAS 30
+
+int main(void) {
+    int anterior, atual, moradores;
+
+    // entrada
+    printf(&quot;Leitura anterior (kWh): &quot;);
+    scanf(&quot;%d&quot;, &amp;anterior);
+    printf(&quot;Leitura atual (kWh): &quot;);
+    scanf(&quot;%d&quot;, &amp;atual);
+    printf(&quot;Moradores: &quot;);
+    int lidos = scanf(&quot;%d&quot;, &amp;moradores);
+
+    // processamento
+    int consumo = atual - anterior;
+    double total = consumo * TARIFA_KWH;
+    total += ILUMINACAO;
+    double por_dia = (double) consumo / DIAS;
+    double cada = ceil(total / moradores * 100) / 100; // centavo para cima
+
+    // saída
+    printf(&quot;\n%-18s %8d kWh\n&quot;, &quot;Consumo:&quot;, consumo);
+    printf(&quot;%-18s %8.2f kWh\n&quot;, &quot;Por dia:&quot;, por_dia);
+    printf(&quot;%-18s R$ %8.2f\n&quot;, &quot;Total da conta:&quot;, total);
+    printf(&quot;%-18s R$ %8.2f\n&quot;, &quot;Cada morador:&quot;, cada);
+    printf(&quot;(o último scanf leu %d item)\n&quot;, lidos);
+    return 0;
+}
+// Exemplo de execução:
+// Leitura anterior (kWh): 45230
+// Leitura atual (kWh): 45487
+// Moradores: 3
+//
+// Consumo:                257 kWh
+// Por dia:               8.57 kWh
+// Total da conta:    R$   229.24
+// Cada morador:      R$    76.42
+// (o último scanf leu 1 item)
+</code></pre>
+<h3>Passo a passo</h3>
+<p>Teste de mesa com a entrada 45230, 45487 e 3; as colunas mostram as variáveis
+depois de cada instrução:</p>
+<table>
+<thead>
+<tr>
+<th>Instrução</th>
+<th>consumo</th>
+<th>total</th>
+<th>por_dia</th>
+<th>cada</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>consumo = atual - anterior</code></td>
+<td>257</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>total = consumo * TARIFA_KWH</code></td>
+<td>257</td>
+<td>210.74</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>total += ILUMINACAO</code></td>
+<td>257</td>
+<td>229.24</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>por_dia = (double) consumo / DIAS</code></td>
+<td>257</td>
+<td>229.24</td>
+<td>8.5666...</td>
+<td></td>
+</tr>
+<tr>
+<td><code>cada = ceil(total / moradores * 100) / 100</code></td>
+<td>257</td>
+<td>229.24</td>
+<td>8.5666...</td>
+<td>76.42</td>
+</tr>
+</tbody></table>
+<p>Na última linha: 229,24 ÷ 3 = 76,4133...; vezes 100, 7641,33...; o <code>ceil</code>
+sobe para 7642; dividido por 100, 76,42. Três vezes 76,42 dá 229,26: sobram
+dois centavos, mas a conta fica paga.</p>
+<p>Entrada, quatro contas e saída, sem nenhum losango:</p>
+<p>{{fluxograma}}</p>

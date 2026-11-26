@@ -1,0 +1,134 @@
+<h2>0067 · Arquivos texto</h2>
+<p>Todo programa que você escreveu até aqui esquece tudo ao terminar. As
+variáveis moram na RAM, a memória de trabalho do computador, e <strong>somem quando
+o programa acaba</strong>. Se ele calcula as despesas do mês, na próxima execução
+começa do zero. Para lembrar de uma vez para outra, o programa precisa
+guardar os dados no disco, que mantém o conteúdo mesmo com a máquina
+desligada.</p>
+<p>É a diferença entre anotar as despesas de cabeça e anotar num caderno. O
+caderno do programa é o <strong>arquivo</strong>: uma sequência de bytes guardada no
+disco, com um nome, que continua lá depois que o programa termina (BACKES,
+2013, cap. 12). Num <strong>arquivo texto</strong>, esses bytes são caracteres que você
+lê num editor comum. O número 152.40 não fica guardado como um <code>double</code> de 8
+bytes, mas como os seis caracteres <code>&#39;1&#39; &#39;5&#39; &#39;2&#39; &#39;.&#39; &#39;4&#39; &#39;0&#39;</code> (BACKES, 2013,
+cap. 12). O assunto 0068 mostra a outra opção, o arquivo binário.</p>
+<p>Trabalhar com arquivo sempre segue três passos: <strong>abrir</strong>, <strong>ler ou
+escrever</strong> e <strong>fechar</strong>. Todas as funções vêm do <code>&lt;stdio.h&gt;</code>, o mesmo
+cabeçalho do <code>printf</code> (KERNIGHAN; RITCHIE, 1989, cap. 7).</p>
+<p>Para abrir, use <code>fopen(caminho, modo)</code>. O caminho é o nome do arquivo, como
+<code>&quot;despesas.txt&quot;</code> ou <code>&quot;/tmp/despesas.txt&quot;</code>. O modo diz o que você quer fazer:
+<code>&quot;r&quot;</code> para ler, <code>&quot;w&quot;</code> para escrever do zero, <code>&quot;a&quot;</code> para acrescentar no fim.
+O <code>fopen</code> devolve um <code>FILE *</code>, um ponteiro para uma struct que a biblioteca
+usa para controlar o arquivo; você nunca mexe nos campos dela, só passa o
+ponteiro adiante. Se o arquivo não abrir, porque a pasta não existe, falta
+permissão ou o disco encheu, o <code>fopen</code> devolve <code>NULL</code>. Por isso todo <code>fopen</code>
+vem seguido de um <code>if</code>, e o <code>perror(&quot;Erro ao abrir&quot;)</code> escreve o motivo, como
+<code>No such file or directory</code> (CELES; RANGEL, 2002). A tabela mostra o que
+cada modo faz com um arquivo que existe ou não:</p>
+<table>
+<thead>
+<tr>
+<th>modo</th>
+<th>o que faz</th>
+<th>se o arquivo não existe</th>
+<th>se já existe</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>&quot;r&quot;</code></td>
+<td>só leitura</td>
+<td><code>fopen</code> devolve <code>NULL</code></td>
+<td>lê do começo</td>
+</tr>
+<tr>
+<td><code>&quot;w&quot;</code></td>
+<td>só escrita</td>
+<td>cria vazio</td>
+<td><strong>apaga tudo</strong> e começa vazio</td>
+</tr>
+<tr>
+<td><code>&quot;a&quot;</code></td>
+<td>escrita no fim (<em>append</em>)</td>
+<td>cria vazio</td>
+<td>mantém e escreve depois do fim</td>
+</tr>
+<tr>
+<td><code>&quot;r+&quot;</code> <code>&quot;w+&quot;</code> <code>&quot;a+&quot;</code></td>
+<td>leitura e escrita</td>
+<td>como <code>r</code>, <code>w</code> e <code>a</code></td>
+<td>como <code>r</code>, <code>w</code> e <code>a</code></td>
+</tr>
+</tbody></table>
+<p>Para escrever, você já conhece quase tudo. <code>fprintf(arq, &quot;Luz %.2f\n&quot;, 98.75)</code> é o <code>printf</code> com o arquivo como primeiro argumento, e usa o mesmo
+molde do assunto 0005. <code>fputs(texto, arq)</code> grava uma string inteira, sem
+acrescentar <code>\n</code>, e <code>fputc(c, arq)</code> grava um caractere (BACKES, 2013,
+cap. 12).</p>
+<p>Para ler, há três jeitos, e cada um devolve um valor que diz se deu certo
+(CELES; RANGEL, 2002). <code>fgets(linha, tamanho, arq)</code> traz uma linha inteira,
+com o <code>\n</code> no fim, e devolve <code>NULL</code> quando o arquivo acaba; é o mesmo <code>fgets</code>
+do assunto 0042, lendo do arquivo. <code>fscanf(arq, &quot;%s %lf&quot;, nome, &amp;valor)</code> lê
+campos com formato, como o <code>scanf</code>, e devolve quantos campos conseguiu ler.
+<code>fgetc(arq)</code> lê um caractere e devolve um <code>int</code>, que vale a constante <code>EOF</code>
+(<em>end of file</em>, fim de arquivo) quando não há mais nada.</p>
+<p>Por fim, <code>fclose(arq)</code> fecha. Ele importa mais do que parece, por causa do
+<strong>buffer</strong>: o <code>fprintf</code> não vai ao disco a cada chamada, porque o disco é
+lento. Ele copia os bytes para uma área na RAM, e só quando essa área enche,
+ou no <code>fflush(arq)</code>, ou no <code>fclose</code>, os bytes descem para o disco. Se o
+programa cair antes do <code>fclose</code>, o que estava no buffer se perde (BACKES,
+2013, cap. 12). Como no <code>malloc</code>: abriu, fecha.</p>
+<p>Você já usou três arquivos sem abrir nenhum. <code>stdin</code> (o teclado), <code>stdout</code> (a
+tela) e <code>stderr</code> (a saída de erros) são <code>FILE *</code> que o programa recebe
+abertos. <code>printf(&quot;oi&quot;)</code> é o mesmo que <code>fprintf(stdout, &quot;oi&quot;)</code>, e
+<code>fgets(linha, 100, stdin)</code> lê do teclado (FEOFILOFF, 2009, ap. H).</p>
+<blockquote>
+<p>[!WARNING]
+Não use <code>while (!feof(arq))</code>: o <code>feof</code> só fica verdadeiro <strong>depois</strong> que uma
+leitura falhou, e a última linha é processada duas vezes. Teste o retorno da
+leitura (<code>fgets(...) != NULL</code>, <code>fscanf(...) == 2</code>). Com <code>fgetc</code>, guarde em
+<code>int</code>, não em <code>char</code>: num <code>char</code>, o <code>EOF</code> (-1) se confunde com um byte real.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>O programa grava as três despesas do mês (mercado, luz, internet) em
+<code>/tmp/despesas.txt</code>, reabre o arquivo em leitura e o <code>fgets</code> traz as linhas,
+uma por vez:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    const char *caminho = &quot;/tmp/despesas.txt&quot;;
+
+    FILE *arq = fopen(caminho, &quot;w&quot;);          // &quot;w&quot;: cria (ou apaga) o arquivo
+    if (arq == NULL) {
+        perror(&quot;Erro ao criar o arquivo&quot;);
+        return 1;
+    }
+    fprintf(arq, &quot;Mercado %.2f\n&quot;, 152.40);   // printf, mas no arquivo
+    fprintf(arq, &quot;Luz %.2f\n&quot;, 98.75);
+    fprintf(arq, &quot;Internet %.2f\n&quot;, 99.90);
+    fclose(arq);                              // descarrega o buffer no disco
+
+    arq = fopen(caminho, &quot;r&quot;);                // agora para ler
+    if (arq == NULL) {
+        perror(&quot;Erro ao abrir o arquivo&quot;);
+        return 1;
+    }
+    char linha[100];
+    int n = 0;
+    while (fgets(linha, sizeof linha, arq) != NULL) { // NULL = acabou
+        n++;
+        printf(&quot;%d: %s&quot;, n, linha);           // a linha já traz o &#39;\n&#39;
+    }
+    fclose(arq);
+
+    printf(&quot;%d linhas em %s\n&quot;, n, caminho);
+    return 0;
+}
+// Saída:
+// 1: Mercado 152.40
+// 2: Luz 98.75
+// 3: Internet 99.90
+// 3 linhas em /tmp/despesas.txt
+</code></pre>
+<p>A leitura é um laço que testa o retorno do <code>fgets</code>: o fim do arquivo é
+anunciado pela leitura que falhou:</p>
+<p>{{fluxograma}}</p>

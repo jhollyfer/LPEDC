@@ -1,0 +1,112 @@
+<h2>0172 · Vetor de tamanho variável (VLA)</h2>
+<p>O professor de educação física quer uma planilha de treinos: uma linha por
+aluno, uma coluna por semana. Só que o número de alunos e de semanas só é
+conhecido quando ele digita. Até aqui você tinha duas saídas: declarar uma
+matriz enorme &quot;por garantia&quot;, como <code>int treinos[100][52]</code>, e usar só um
+canto dela; ou pedir a memória ao <code>malloc</code> e cuidar do <code>free</code>. O C tem uma
+terceira.</p>
+<p>O <strong>VLA</strong>, sigla de <em>variable length array</em> (vetor de tamanho variável), é
+um vetor local cujo tamanho é uma expressão calculada durante a execução,
+e não uma constante conhecida na compilação (ISO/IEC, 2018). Ele entrou na
+linguagem no C99. Com ele, a planilha se declara do tamanho exato:</p>
+<pre><code class="language-c">int alunos = 3, semanas = 4;          // lidos do teclado, na prática
+int treinos[alunos][semanas];         // 12 int, criados agora
+</code></pre>
+<p>O VLA mora na <strong>pilha</strong>, como qualquer variável local. Ele é criado quando
+a execução chega à declaração e some sozinho no fim do bloco, sem <code>free</code>.
+Por morar na pilha e depender de um valor calculado na hora, ele não pode
+ser <code>static</code> nem global: essas variáveis existem desde o início do
+programa, antes de qualquer valor ser lido (CPPREFERENCE, s.d.).</p>
+<p>Como o tamanho só existe na execução, o <code>sizeof</code> de um VLA também é
+calculado na execução. Com 3 alunos e 4 semanas, <code>sizeof treinos</code> vale
+<code>alunos * semanas * sizeof(int)</code>, isto é, <code>3 * 4 * 4 = 48</code> bytes (ISO/IEC,
+2018). É uma das poucas situações em que o <code>sizeof</code> gera código em vez de
+virar uma constante.</p>
+<p>O VLA não aceita inicializador. <code>int v[n] = {0};</code> é erro no C17, porque o
+compilador não sabe quantos zeros escrever (CPPREFERENCE, s.d.). Para
+começar com tudo zerado, use um laço depois da declaração.</p>
+<p>O uso mais útil do VLA é como <strong>parâmetro</strong> de função. Uma função comum que
+recebe uma matriz precisa saber a largura dela na compilação, e por isso se
+escreve <code>int m[][4]</code>: ela só serve para matrizes de 4 colunas. Com VLA, a
+função recebe as dimensões junto com a matriz e serve para qualquer
+tamanho: <code>void f(int l, int c, int m[l][c])</code>. A ordem importa: <code>l</code> e <code>c</code>
+vêm <strong>antes</strong> de <code>m</code>, porque o tipo <code>m[l][c]</code> usa os dois, e um nome só pode
+ser usado depois de declarado (ISO/IEC, 2018).</p>
+<p>O VLA nem sempre está disponível. Ele era obrigatório no C99 e passou a ser
+<strong>opcional</strong> no C11 e no C17. Um compilador que não oferece VLA define a
+macro <code>__STDC_NO_VLA__</code>; o gcc e o clang oferecem, e o compilador da
+Microsoft não. Um programa que depende de VLA pode exigir o recurso e
+parar a compilação com uma mensagem clara:</p>
+<pre><code class="language-c">#ifdef __STDC_NO_VLA__
+#error &quot;este programa precisa de VLA&quot;
+#endif
+</code></pre>
+<p>O tipo VLA também serve para matrizes no heap. A declaração
+<code>int (*m)[c] = malloc(l * sizeof *m);</code> cria um ponteiro para linhas de <code>c</code>
+inteiros e pede <code>l</code> dessas linhas ao <code>malloc</code>. A matriz fica no heap, sem o
+limite da pilha, e <code>m[i][j]</code> continua funcionando como numa matriz comum
+(veja o A344).</p>
+<blockquote>
+<p>[!WARNING]
+O VLA não avisa quando falha. A pilha do Linux tem uns <strong>8 MB</strong>
+(<code>ulimit -s</code>): <code>int v[n]</code> com 3 milhões de <code>int</code> pede 12 MB e derruba o
+programa com <em>segmentation fault</em>. Um <code>n</code> vindo do usuário pode ser 0,
+negativo ou gigante. Use VLA só para tamanhos pequenos e conferidos; para
+o resto, <code>malloc</code>, que devolve <code>NULL</code>.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>Uma planilha de treinos em que alunos e semanas só chegam na digitação. Com 3
+alunos e 4 semanas, ela tem 12 <code>int</code>: 48 bytes na pilha:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// treinos fictícios de cada aluno em cada semana (1 a 5)
+void preencher(int l, int c, int m[l][c]) {
+    for (int i = 0; i &lt; l; i++) {
+        for (int j = 0; j &lt; c; j++) {
+            m[i][j] = (3 * i + 2 * j) % 5 + 1;
+        }
+    }
+}
+
+// as dimensões vêm ANTES da matriz: o tipo m[l][c] usa l e c
+int total_do_aluno(int l, int c, int m[l][c], int aluno) {
+    int soma = 0;
+    for (int j = 0; j &lt; c; j++) {
+        soma += m[aluno][j];
+    }
+    return soma;
+}
+
+int main(void) {
+    int alunos, semanas;
+    printf(&quot;Alunos e semanas: &quot;);
+    if (scanf(&quot;%d %d&quot;, &amp;alunos, &amp;semanas) != 2 || alunos &lt; 1 || alunos &gt; 100 ||
+        semanas &lt; 1 || semanas &gt; 52) {
+        printf(&quot;valores inválidos\n&quot;); // VLA de tamanho &lt;= 0 é indefinido
+        return 1;
+    }
+
+    int treinos[alunos][semanas]; // VLA: o tamanho só existe agora
+    printf(&quot;sizeof treinos = %zu bytes\n&quot;, sizeof treinos); // calculado na hora
+
+    preencher(alunos, semanas, treinos);
+    for (int i = 0; i &lt; alunos; i++) {
+        printf(&quot;aluno %d:&quot;, i + 1);
+        for (int j = 0; j &lt; semanas; j++) {
+            printf(&quot; %d&quot;, treinos[i][j]);
+        }
+        printf(&quot;  total %d\n&quot;, total_do_aluno(alunos, semanas, treinos, i));
+    }
+    return 0;
+}
+// Saída (digitando 3 4):
+// Alunos e semanas: 3 4
+// sizeof treinos = 48 bytes
+// aluno 1: 1 3 5 2  total 11
+// aluno 2: 4 1 3 5  total 13
+// aluno 3: 2 4 1 3  total 10
+</code></pre>
+<p>No fluxograma, a validação vem <strong>antes</strong> do VLA: depois da declaração não há
+como desistir nem saber se deu certo:</p>
+<p>{{fluxograma}}</p>

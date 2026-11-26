@@ -1,0 +1,188 @@
+<h2>0098 · Árvore binária e percursos</h2>
+<p>A planilha recebe <code>=(8-3)*(4+2)</code> e precisa decidir o que calcular primeiro.
+Os parênteses dizem que a subtração e a soma vêm antes, e a multiplicação
+junta os dois resultados. Essa estrutura de &quot;a conta de cima depende das duas
+contas de baixo&quot; é uma árvore em que cada operador tem exatamente dois
+operandos. Árvores com no máximo dois filhos por nó aparecem tanto, na prova e
+nos programas, que ganharam nome próprio.</p>
+<p>Uma <strong>árvore binária</strong> é uma árvore em que cada nó tem no máximo dois filhos,
+um à <strong>esquerda</strong> e outro à <strong>direita</strong>. A definição recursiva diz melhor:
+uma árvore binária ou é <strong>vazia</strong>, o que em C se representa com <code>NULL</code>, ou é
+um nó com uma <strong>subárvore esquerda</strong> e uma <strong>subárvore direita</strong>, cada uma
+delas também uma árvore binária (CORMEN et al., 2024, cap. 12). A árvore vazia
+é o caso base que encerra toda recursão sobre a árvore.</p>
+<p>Aqui o lado importa. Um nó <code>A</code> com o filho <code>B</code> à esquerda e um nó <code>A</code> com o
+filho <code>B</code> à direita são árvores <strong>diferentes</strong>, mesmo tendo os mesmos nós
+(TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 5). Na conta, isso é óbvio:
+<code>8 - 3</code> e <code>3 - 8</code> têm os mesmos números e o mesmo operador, e dão resultados
+diferentes. Em C, o nó é uma <code>struct</code> com o dado e dois ponteiros, <code>esq</code> e
+<code>dir</code>, e um filho ausente é um ponteiro <code>NULL</code>.</p>
+<p>Para mostrar, contar ou somar o que está numa árvore, você precisa passar por
+todos os nós. Um <strong>percurso</strong> é um jeito de visitar cada nó exatamente uma
+vez. Os três percursos clássicos são recursivos e só diferem na posição da
+visita em relação às duas chamadas (FEOFILOFF, 2009). Na <strong>pré-ordem</strong>, você
+visita a raiz antes das subárvores; na <strong>em ordem</strong>, entre a esquerda e a
+direita; na <strong>pós-ordem</strong>, depois das duas:</p>
+<pre><code class="language-c">void em_ordem(No *r) {
+    if (r == NULL) return;   // árvore vazia: nada a visitar
+    em_ordem(r-&gt;esq);
+    printf(&quot;%c &quot;, r-&gt;info);  // na pré-ordem, esta linha vem antes; na pós, depois
+    em_ordem(r-&gt;dir);
+}
+</code></pre>
+<p>O quarto percurso, <strong>por nível</strong>, visita a árvore linha por linha, de cima
+para baixo, e não é recursivo. Ele usa uma <strong>fila</strong> (assunto 0085): põe a raiz
+na fila e, enquanto a fila não esvazia, tira o nó da frente, mostra o nó e
+põe os filhos dele no fim (CELES; RANGEL, 2002). Como a fila atende por ordem
+de chegada, todos os nós de um nível saem antes dos nós do nível seguinte.</p>
+<p>A conta do churrasco vira uma <strong>árvore de expressão</strong>: os operadores ficam nos
+nós internos e os números nas folhas. Cada percurso dela produz uma notação
+conhecida, e a pós-ordem dá exatamente a pós-fixa do assunto 0084. Isso não é
+coincidência: o <code>*</code> só pode ser aplicado depois que as duas subárvores foram
+calculadas, e a pós-ordem visita a raiz depois das duas (TENENBAUM; LANGSAM;
+AUGENSTEIN, 1995, cap. 5).</p>
+<table>
+<thead>
+<tr>
+<th>Percurso</th>
+<th>Ordem</th>
+<th>Em <code>(8-3)*(4+2)</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>pré-ordem</strong></td>
+<td>raiz, esquerda, direita</td>
+<td><code>* - 8 3 + 4 2</code> (notação prefixa)</td>
+</tr>
+<tr>
+<td><strong>em ordem</strong></td>
+<td>esquerda, raiz, direita</td>
+<td><code>8 - 3 * 4 + 2</code> (infixa, sem parênteses)</td>
+</tr>
+<tr>
+<td><strong>pós-ordem</strong></td>
+<td>esquerda, direita, raiz</td>
+<td><code>8 3 - 4 2 + *</code> (pós-fixa, a da calculadora HP)</td>
+</tr>
+<tr>
+<td><strong>por nível</strong></td>
+<td>linha por linha, de cima para baixo</td>
+<td><code>* - + 8 3 4 2</code></td>
+</tr>
+</tbody></table>
+<p>Dois números ajudam a prever o comportamento. Uma árvore binária com <code>n</code> nós
+tem <code>n + 1</code> ponteiros <code>NULL</code>: são <code>2n</code> ponteiros no total, e só <code>n - 1</code> deles
+apontam para algum nó, porque todo nó menos a raiz tem um pai. E a recursão
+empilha altura + 1 chamadas de uma vez (TENENBAUM; LANGSAM; AUGENSTEIN, 1995,
+cap. 7). Numa árvore equilibrada de um milhão de nós, isso dá uns 20 quadros
+na pilha; numa árvore em fila indiana, com cada nó tendo um filho só, dá um
+milhão, e a pilha estoura.</p>
+<blockquote>
+<p>[!WARNING]
+A em ordem <strong>perde os parênteses</strong>: <code>8 - 3 * 4 + 2</code> dá <code>8 - 12 + 2 = -2</code>, e
+não 30. Para mostrar a fórmula certa, abra <code>(</code> antes de cada subárvore e
+feche depois (exemplo A196).</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>A conta do churrasco, <code>=(8-3)*(4+2)</code> = 30: 8 pessoas, 3 não bebem, e cada uma
+paga R$ 4 de cerveja e R$ 2 de gelo. Os operadores ficam nos nós internos
+(roxo) e os números nas folhas (azul):</p>
+<p>{{ideia}}</p>
+<p>O nó guarda um <code>char</code> (dígito ou operador) e dois ponteiros. O resto é um TAD
+(assunto 0074), <code>arvore.h</code> e <code>arvore.c</code>:</p>
+<pre><code class="language-c">typedef struct No {
+    char info;
+    struct No *esq; // subárvore da esquerda
+    struct No *dir; // subárvore da direita
+} No;
+</code></pre>
+<p>O cliente monta a árvore de baixo para cima com <code>arv_cria(info, esq, dir)</code> e
+chama os percursos:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;arvore.h&quot;
+
+int main(void) {
+    // (8 - 3) * (4 + 2): 8 pessoas, 3 não bebem; cerveja R$ 4 + gelo R$ 2
+    No *menos = arv_cria(&#39;-&#39;, arv_cria(&#39;8&#39;, NULL, NULL), arv_cria(&#39;3&#39;, NULL, NULL));
+    No *mais = arv_cria(&#39;+&#39;, arv_cria(&#39;4&#39;, NULL, NULL), arv_cria(&#39;2&#39;, NULL, NULL));
+    No *raiz = arv_cria(&#39;*&#39;, menos, mais);
+
+    printf(&quot;Pré-ordem:&quot;);
+    arv_pre_ordem(raiz);
+    printf(&quot;\nEm ordem: &quot;);
+    arv_em_ordem(raiz);
+    printf(&quot;\nPós-ordem:&quot;);
+    arv_pos_ordem(raiz);
+    printf(&quot;\nPor nível:&quot;);
+    arv_por_nivel(raiz);
+    printf(&quot;\nNós: %d, altura: %d\n&quot;, arv_conta(raiz), arv_altura(raiz));
+
+    raiz = arv_libera(raiz);
+    return 0;
+}
+// Saída:
+// Pré-ordem: * - 8 3 + 4 2
+// Em ordem:  8 - 3 * 4 + 2
+// Pós-ordem: 8 3 - 4 2 + *
+// Por nível: * - + 8 3 4 2
+// Nós: 7, altura: 2
+</code></pre>
+<p>Dentro do <code>arvore.c</code>, a em ordem tem três linhas de verdade:</p>
+<pre><code class="language-c">void arv_em_ordem(const No *r) {
+    if (r == NULL) {
+        return;
+    }
+    arv_em_ordem(r-&gt;esq);
+    printf(&quot; %c&quot;, r-&gt;info);
+    arv_em_ordem(r-&gt;dir);
+}
+</code></pre>
+<p>O caso base é a árvore vazia. Mover o <code>printf</code> dá a pré-ordem ou a pós-ordem:</p>
+<p>{{fluxograma}}</p>
+<h3>Passo a passo</h3>
+<p>A pilha de chamadas da em ordem, a partir da raiz <code>*</code>. Cada linha é um
+<code>printf</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Pilha de chamadas (topo à direita)</th>
+<th>Mostra</th>
+<th>Na tela até aqui</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>*</code> → <code>-</code> → <code>8</code></td>
+<td>8</td>
+<td><code>8</code></td>
+</tr>
+<tr>
+<td><code>*</code> → <code>-</code></td>
+<td>-</td>
+<td><code>8 -</code></td>
+</tr>
+<tr>
+<td><code>*</code> → <code>-</code> → <code>3</code></td>
+<td>3</td>
+<td><code>8 - 3</code></td>
+</tr>
+<tr>
+<td><code>*</code></td>
+<td>*</td>
+<td><code>8 - 3 *</code></td>
+</tr>
+<tr>
+<td><code>*</code> → <code>+</code> → <code>4</code></td>
+<td>4</td>
+<td><code>8 - 3 * 4</code></td>
+</tr>
+<tr>
+<td><code>*</code> → <code>+</code></td>
+<td>+</td>
+<td><code>8 - 3 * 4 +</code></td>
+</tr>
+<tr>
+<td><code>*</code> → <code>+</code> → <code>2</code></td>
+<td>2</td>
+<td><code>8 - 3 * 4 + 2</code></td>
+</tr>
+</tbody></table>

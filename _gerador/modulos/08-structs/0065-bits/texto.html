@@ -1,0 +1,154 @@
+<h2>0065 · Bits, máscaras e flags</h2>
+<p>O <code>ls -l</code> mostra <code>-rwxr-xr-x</code> ao lado de cada arquivo, e o comando
+<code>chmod 755</code> muda isso. Por que 755? Porque cada permissão (ler, escrever,
+executar) é <strong>um bit</strong>, um sim ou não guardado numa casa de um número. Para
+entender esse número e mexer nele, você precisa ver o inteiro como o
+processador vê: uma fileira de zeros e uns.</p>
+<p>Um <strong>bit</strong> é 0 ou 1, e oito bits formam um <strong>byte</strong>. Um inteiro na memória é
+uma fileira de bits em <strong>base 2</strong>: cada casa vale o dobro da casa à direita,
+1, 2, 4, 8, 16 e assim por diante. Para ler um binário, some as casas que têm
+1: <code>0110</code> é 4 + 2 = 6. Para escrever 13 em binário, tire a maior casa que
+cabe e repita com o resto: 13 = 8 + 4 + 1 = <code>1101</code>. Os bits se numeram da
+direita para a esquerda, a partir do <strong>bit 0</strong>, o que vale 1 (FEOFILOFF,
+2009, ap. C). O assunto 0003 tem a revisão completa.</p>
+<p>Binário fica comprido rápido, e há dois atalhos. Na <strong>base 16</strong>
+(hexadecimal), os dígitos vão de 0 a 9 e de A a F (10 a 15), e cada dígito
+vale <strong>exatamente 4 bits</strong>: <code>1110 1101</code> = <code>0xED</code> = 237. Na <strong>base 8</strong>
+(octal), cada dígito vale <strong>3 bits</strong>, e por isso ele aparece nas permissões,
+que vêm em grupos de três. No C, <code>0x</code> começa um hexadecimal e um <strong>zero à
+esquerda</strong> começa um octal: <code>0755</code> é octal e vale 493, não 755 (BACKES,
+2013).</p>
+<p>Para mexer nesses bits, o C tem os <strong>operadores bit a bit</strong>, que agem casa
+por casa, comparando o bit 0 de um número com o bit 0 do outro, o bit 1 com o
+bit 1, e assim por diante (BACKES, 2013). O <code>&amp;</code> (E) dá 1 só se os dois bits
+são 1; o <code>|</code> (OU) dá 1 se algum deles é 1; o <code>^</code> (OU exclusivo) dá 1 se os
+bits são diferentes; o <code>~</code> (NÃO) inverte cada bit de um número só. Os
+deslocamentos empurram a fileira: <code>a &lt;&lt; 1</code> anda uma casa para a esquerda e
+multiplica por 2; <code>a &gt;&gt; 1</code> anda para a direita e divide por 2, com divisão
+inteira. Daí sai uma expressão que você vai usar sempre: <code>1u &lt;&lt; n</code> é o
+número com só o bit <code>n</code> ligado. A tabela resume, com <code>a = 0110</code> (6) e
+<code>b = 0011</code> (3):</p>
+<table>
+<thead>
+<tr>
+<th>Operador</th>
+<th>Nome</th>
+<th>Regra para cada bit</th>
+<th><code>a op b</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>a &amp; b</code></td>
+<td>E</td>
+<td>1 se os dois são 1</td>
+<td><code>0010</code> (2)</td>
+</tr>
+<tr>
+<td><code>a | b</code></td>
+<td>OU</td>
+<td>1 se algum é 1</td>
+<td><code>0111</code> (7)</td>
+</tr>
+<tr>
+<td><code>a ^ b</code></td>
+<td>OU exclusivo</td>
+<td>1 se são diferentes</td>
+<td><code>0101</code> (5)</td>
+</tr>
+<tr>
+<td><code>~a</code></td>
+<td>NÃO</td>
+<td>inverte cada bit</td>
+<td><code>...1001</code></td>
+</tr>
+<tr>
+<td><code>a &lt;&lt; 1</code></td>
+<td>desloca à esquerda</td>
+<td>empurra, entra 0 à direita</td>
+<td><code>1100</code> (12)</td>
+</tr>
+<tr>
+<td><code>a &gt;&gt; 1</code></td>
+<td>desloca à direita</td>
+<td>empurra, sai o bit 0</td>
+<td><code>0011</code> (3)</td>
+</tr>
+</tbody></table>
+<p>Agora as permissões. Uma <strong>flag</strong> é um bit que responde sim ou não, e várias
+cabem num inteiro, cada uma na sua casa: <code>LER</code> vale 4 (<code>100</code>), <code>ESCREVER</code>
+vale 2 (<code>010</code>) e <code>EXECUTAR</code> vale 1 (<code>001</code>). Num <code>unsigned</code> de 4 bytes cabem
+32 flags, no espaço que um só <code>bool</code> ocuparia se cada uma tivesse o seu
+(DEITEL; DEITEL, 2011, cap. 10). É por isso que bibliotecas recebem opções
+juntas com <code>|</code>, como em <code>O_WRONLY | O_CREAT | O_APPEND</code>.</p>
+<p>Um valor que escolhe certos bits se chama <strong>máscara</strong>. Com ela, quatro
+receitas resolvem tudo (DEITEL; DEITEL, 2011, cap. 10):</p>
+<pre><code class="language-c">p |= ESCREVER;          // liga: o OU acende o bit e não mexe nos outros
+p &amp;= ~ESCREVER;         // desliga: ~ESCREVER tem todos os bits menos esse
+if (p &amp; ESCREVER) { }   // testa: sobra 0 se o bit estava desligado
+p ^= ESCREVER;          // inverte: o OU exclusivo troca 0 por 1 e 1 por 0
+</code></pre>
+<p>Cada receita funciona pelo mesmo motivo: nas casas em que a máscara tem 0, o
+operador deixa o bit de <code>p</code> como estava. Para ler um bit qualquer como 0 ou
+1, empurre-o para a casa 0 e apague o resto: <code>(p &gt;&gt; 2) &amp; 1u</code> é o bit 2.</p>
+<p>A struct também sabe guardar campos de poucos bits, os <strong>campos de bits</strong>:
+<code>unsigned ler : 1;</code> reserva um bit só para <code>ler</code>. A ordem desses bits dentro
+do inteiro, porém, fica a critério do compilador. Para formatos de arquivo e
+protocolos de rede, em que a posição de cada bit é combinada, prefira
+máscaras explícitas (BACKES, 2013, cap. 13).</p>
+<blockquote>
+<p>[!WARNING]
+<code>&amp;</code>, <code>^</code> e <code>|</code> ficam <strong>abaixo</strong> do <code>==</code>: <code>if (p &amp; W == 0)</code> vira <code>p &amp; 0</code>,
+sempre falso; use <code>if ((p &amp; W) == 0)</code>. <code>&amp;</code> não é <code>&amp;&amp;</code>: <code>p &amp;&amp; W</code> só pergunta
+se os dois são diferentes de zero. E use <strong>unsigned</strong>: deslocar negativo, ou
+por casas demais (<code>1u &lt;&lt; 32</code>), é comportamento indefinido.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>As permissões de <code>ls -l</code> (<code>rwx</code>) são três bits: <code>LER</code> = 4, <code>ESCREVER</code> = 2,
+<code>EXECUTAR</code> = 1. Um arquivo começa com <code>rw-</code> (110); o OU com a máscara <code>001</code>
+acende só o último bit:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// cada permissão é um bit: 4 = 100, 2 = 010, 1 = 001
+#define LER      4u // r
+#define ESCREVER 2u // w
+#define EXECUTAR 1u // x
+
+void mostrar(const char *passo, unsigned p) {
+    printf(&quot;%-12s %u%u%u = %u  %c%c%c\n&quot;, passo,
+           (p &gt;&gt; 2) &amp; 1u, (p &gt;&gt; 1) &amp; 1u, p &amp; 1u, p, // os 3 bits, um por um
+           (p &amp; LER) ? &#39;r&#39; : &#39;-&#39;,
+           (p &amp; ESCREVER) ? &#39;w&#39; : &#39;-&#39;,
+           (p &amp; EXECUTAR) ? &#39;x&#39; : &#39;-&#39;);
+}
+
+int main(void) {
+    unsigned perm = LER | ESCREVER; // liga dois bits de uma vez: 110
+    mostrar(&quot;inicial&quot;, perm);
+
+    perm |= EXECUTAR;               // OU liga um bit
+    mostrar(&quot;liga x&quot;, perm);
+
+    perm &amp;= ~ESCREVER;              // E com o inverso desliga um bit
+    mostrar(&quot;desliga w&quot;, perm);
+
+    if (perm &amp; ESCREVER) {          // E isola um bit para testar
+        printf(&quot;pode escrever\n&quot;);
+    } else {
+        printf(&quot;não pode escrever\n&quot;);
+    }
+
+    perm ^= EXECUTAR;               // OU exclusivo inverte um bit
+    mostrar(&quot;inverte x&quot;, perm);
+    return 0;
+}
+// Saída:
+// inicial      110 = 6  rw-
+// liga x       111 = 7  rwx
+// desliga w    101 = 5  r-x
+// não pode escrever
+// inverte x    100 = 4  r--
+</code></pre>
+<p><code>(p &gt;&gt; 2) &amp; 1u</code> lê o bit 2: empurra-o para a casa 0 e apaga o resto. A pergunta
+&quot;pode escrever?&quot; é um <code>&amp;</code> com a máscara; se sobrou algum bit, a resposta é Sim:</p>
+<p>{{fluxograma}}</p>

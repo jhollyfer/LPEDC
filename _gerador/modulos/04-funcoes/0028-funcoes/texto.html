@@ -1,0 +1,91 @@
+<h2>0028 · Funções</h2>
+<p>O app de corrida mostra o preço antes de você confirmar: R$ 5,00 de bandeirada
+mais R$ 2,50 por quilômetro. Essa conta aparece na tela de estimativa, no
+recibo e no histórico. Se cada lugar tivesse a fórmula copiada, uma mudança na
+tarifa exigiria caçar todas as cópias, e bastaria esquecer uma para o recibo
+discordar da estimativa. Ninguém escreveu a fórmula três vezes: escreveu
+<strong>uma vez</strong>, deu um nome e chama quando precisa.</p>
+<p>Esse pedaço de código com nome é uma <strong>função</strong>: um bloco que recebe dados,
+faz uma tarefa e devolve um resultado, escrito uma vez e chamado quantas vezes
+for preciso (DEITEL; DEITEL, 2011, cap. 5). Pense numa receita de bolo no
+caderno. Você não reescreve a receita a cada festa; abre na página certa,
+separa os ingredientes daquele dia e segue os passos. Você já usa funções
+escritas por outras pessoas, como <code>printf</code>, <code>scanf</code> e <code>sqrt</code>. Agora vai
+escrever as suas. A forma geral em C é esta:</p>
+<pre><code class="language-c">tipo_de_retorno nome(tipo parametro1, tipo parametro2) {
+    // corpo
+    return valor;
+}
+</code></pre>
+<p>Cada parte tem um papel (BACKES, 2013, cap. 9). O <strong>tipo de retorno</strong> diz o
+que a função devolve: <code>int</code>, <code>double</code>, e assim por diante. Se ela não devolve
+nada, o tipo é <code>void</code> (&quot;vazio&quot;). Os <strong>parâmetros</strong>, entre parênteses, são as
+variáveis que recebem os dados de quem chama, os ingredientes da receita.
+Cada um leva o próprio tipo: <code>double a, double b</code>, nunca <code>double a, b</code>, que é
+erro de compilação. O <strong>corpo</strong>, entre chaves, é a tarefa.</p>
+<p>O <strong><code>return</code></strong> faz duas coisas ao mesmo tempo: devolve o valor para quem
+chamou e <strong>encerra a função na hora</strong> (KERNIGHAN; RITCHIE, 1989, cap. 4). O
+que vem depois dele, naquele caminho, não roda. Por isso uma função pode ter
+vários <code>return</code>, um em cada ramo de um <code>if</code>, e o primeiro que for alcançado
+decide o resultado.</p>
+<p>Alguns nomes ajudam a falar de funções sem confusão. A <strong>definição</strong> é a função
+inteira, cabeçalho e corpo. A <strong>chamada</strong> é o uso, como <code>preco_corrida(4.0)</code>.
+Na chamada, o valor entre parênteses, o <code>4.0</code>, é o <strong>argumento</strong>; a variável
+da definição que o recebe, o <code>km</code>, é o <strong>parâmetro</strong> (DEITEL; DEITEL, 2011,
+cap. 5). Na chamada, o programa pula para o corpo da função, roda até o
+<code>return</code> e volta ao ponto de onde saiu, trazendo o resultado.</p>
+<p>Os livros e a prova usam outros termos (ROCHA; BORGES, s.d.). Toda função é
+uma <strong>sub-rotina</strong>, ou subprograma. A que devolve valor se chama <strong>função</strong>;
+a que só executa uma tarefa e não devolve nada se chama <strong>procedimento</strong>. Em C
+as duas se escrevem do mesmo jeito, e o procedimento é a função <code>void</code>.
+Dividir um programa em sub-rotinas, cada uma com sua tarefa, é a
+<strong>modularização</strong>.</p>
+<p>Falta um detalhe de ordem. O compilador lê o arquivo <strong>de cima para baixo</strong>,
+uma vez só. Se o <code>main</code> chama <code>preco_corrida</code> antes de a definição aparecer,
+o compilador ainda não sabe o tipo de retorno nem os parâmetros. A solução é o
+<strong>protótipo</strong>: o cabeçalho da função terminado em <code>;</code>, posto antes do <code>main</code>
+(ROCHA; BORGES, s.d.). Ele funciona como uma promessa: &quot;essa função existe,
+recebe um <code>double</code> e devolve um <code>double</code>; a definição vem depois&quot;. Com ele, o
+compilador confere o tipo e a quantidade de argumentos de cada chamada.</p>
+<p>Uma boa função faz <strong>uma tarefa só</strong> (DEITEL; DEITEL, 2011, cap. 5). Se você
+não acha um nome curto para ela, provavelmente faz coisas demais e pede para
+ser dividida. Pelo mesmo motivo, a função de cálculo recebe os dados por
+parâmetro e devolve pelo <code>return</code>; ler do teclado e mostrar na tela fica com
+quem chama. Assim a mesma <code>preco_corrida</code> serve para a estimativa e para o
+recibo.</p>
+<blockquote>
+<p>[!WARNING]
+Chamar a função antes de ela aparecer no arquivo, sem protótipo: o gcc 14
+recusa compilar (<code>implicit declaration</code>). E esquecer o <code>return</code> numa função
+que não é <code>void</code>: o <code>-Wall</code> avisa <code>control reaches end of non-void function</code>,
+e quem chamou recebe lixo.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>O app de corrida cobra R$ 5,00 de bandeirada mais R$ 2,50 por km. O <code>main</code>
+chama <code>preco_corrida(4.0)</code>, o 4.0 vai para <code>km</code>, e o 15.00 volta:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// protótipo: avisa o compilador que a função existe e como chamá-la
+double preco_corrida(double km);
+
+int main(void) {
+    printf(&quot;Corrida 1: R$ %.2f\n&quot;, preco_corrida(4.0));
+    printf(&quot;Corrida 2: R$ %.2f\n&quot;, preco_corrida(10.0));
+    printf(&quot;Corrida 3: R$ %.2f\n&quot;, preco_corrida(2.5));
+    return 0;
+}
+
+// definição: bandeirada de R$ 5.00 mais R$ 2.50 por km
+double preco_corrida(double km) {
+    double preco = 5.00 + 2.50 * km;
+    return preco; // devolve o valor para quem chamou
+}
+// Saída:
+// Corrida 1: R$ 15.00
+// Corrida 2: R$ 30.00
+// Corrida 3: R$ 11.25
+</code></pre>
+<p>A chamada é um desvio: sai do <code>main</code>, roda a função e volta ao mesmo ponto
+com o valor, uma vez por corrida:</p>
+<p>{{fluxograma}}</p>

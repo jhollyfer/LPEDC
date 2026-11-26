@@ -1,0 +1,33 @@
+<h1>Desenhos do curso</h1>
+<p><strong>LPEDC</strong> · o diagrama da ideia e o fluxograma de cada assunto</p>
+<blockquote>
+<p>A legenda de cores para quem estuda está no <code>README.html</code> (&quot;As cores e as formas&quot;) e em
+<code>legenda.svg</code>. Este arquivo é para quem escreve os desenhos.</p>
+</blockquote>
+<pre><code class="language-js">import { bifurcacao, fileira } from &#39;../../../tipos/ideia.mjs&#39; // opcional
+export const ideia = { caixas: [...], setas: [...], notas: [...] }
+export const fluxograma = { nos: [[id, tipo, texto]], setas: [[de, para, rotulo?]], caminho: [ids] }
+</code></pre>
+<ul>
+<li>Cores: as da legenda do <code>README.html</code>, valem para os dois desenhos.</li>
+<li>Fluxograma: tipos <code>inicio</code>, <code>io</code>, <code>proc</code>, <code>dec</code>. Marque <code>caminho</code> com o
+trajeto do exemplo do texto. Mantenha de 4 a 10 nós.</li>
+<li>Diagrama da ideia: <strong>desenhe o conceito, não o código</strong>. Peças prontas (use
+<code>forma</code>) em <code>_gerador/tipos/icones.mjs</code>:<ul>
+<li><code>caixinha</code> <code>{ nome, valor, tipo, end? }</code>: uma variável (end = endereço)</li>
+<li><code>array</code> <code>{ nome?, itens, estados? }</code>: gavetas com índice</li>
+<li><code>memoria</code> <code>{ celulas: [{ end, nome, valor, tipo, cor }], ponteiros: [[de, para]], titulo }</code>: a RAM</li>
+<li><code>lista</code> <code>{ itens, cabeca: &#39;inicio&#39;, dupla?, circular?, estados?, rotulos? }</code>: lista encadeada</li>
+<li><code>pilha</code> <code>{ itens (de baixo p/ cima, item pode ser array de linhas), topo?, titulo? }</code>: pilha / pilha de chamadas</li>
+<li><code>arvore</code> <code>{ raiz: { v, e, d, nota? }, estados: { valor: cor }, marcadas: [[pai, filho]] }</code></li>
+<li><code>grafo</code> <code>{ vertices: [[nome, x, y]], arestas: [[a, b, peso?]], dirigido?, estados, marcadas, notas }</code></li>
+<li><code>tabela</code> <code>{ baldes: [[], [&#39;ana&#39;], [&#39;bia&#39;, &#39;caio&#39;]] }</code>: hash com encadeamento</li>
+<li><code>terminal</code>, <code>arquivo</code>, <code>balao</code>, <code>pessoa</code>, <code>cardapio</code>, <code>marca</code></li>
+<li>caixas comuns <code>{ id, x, y, w?, h?, cor, rotulo?, texto: [linhas] }</code> e <code>forma: &#39;losango&#39;</code></li>
+</ul>
+</li>
+<li>Coordenadas: o quadro tem ~1600 px de largura útil (x de 100 a 1500).</li>
+<li>Depois de gerar, <strong>olhe o desenho</strong>: <code>cd _gerador &amp;&amp; node ver.mjs ../0002-ideia.svg</code> gera um PNG em <code>/tmp/lpedc-ver/</code>;
+abra o PNG com a ferramenta Read e confira sobreposição, texto cortado e
+setas. Ajuste as coordenadas até ficar limpo.</li>
+</ul>

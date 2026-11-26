@@ -1,0 +1,127 @@
+<h2>0032 · Recursão</h2>
+<p>Cinco amigos vão ao cinema e querem saber de quantos jeitos podem sentar nas
+cinco cadeiras. O primeiro tem 5 escolhas. Depois que ele senta, o problema
+fica <strong>igual, mas menor</strong>: de quantos jeitos 4 pessoas sentam em 4 cadeiras?
+O segundo tem 4 escolhas, e o problema encolhe de novo, até sobrar 1 pessoa
+com 1 jeito. A resposta é 5 × 4 × 3 × 2 × 1 = 120, o <strong>fatorial</strong> de 5,
+escrito 5!.</p>
+<p>Repare no raciocínio: &quot;para resolver o de 5, resolvo o de 4 e multiplico por
+5&quot;. Você descreveu o problema usando ele mesmo, em tamanho menor. Uma função
+que faz isso, que resolve um problema chamando <strong>a si mesma</strong> com uma versão
+menor dele, é uma <strong>função recursiva</strong> (DEITEL; DEITEL, 2011, cap. 5). Pense
+numa boneca russa: para chegar à menor, você abre uma boneca e encontra outra
+igual, só que menor, e repete até a última, que não abre.</p>
+<p>Toda função recursiva tem duas partes (FEOFILOFF, 2009, cap. 5). O <strong>caso
+base</strong> é o problema pequeno o bastante para responder direto, sem nova
+chamada: com 1 pessoa, há 1 jeito. É a boneca que não abre. O <strong>caso
+recursivo</strong> reduz o problema a um menor e usa a resposta dele: para <code>n</code>
+pessoas, a resposta é <code>n * fatorial(n - 1)</code>. Em C, as duas partes cabem num
+<code>if</code>: se <code>n &lt;= 1</code>, devolva 1; senão, devolva <code>n * fatorial(n - 1)</code>.</p>
+<p>Uma regra não pode falhar: cada chamada tem de chegar <strong>mais perto</strong> do caso
+base (FEOFILOFF, 2009, cap. 5). No fatorial, o <code>n</code> diminui 1 a cada chamada e
+acaba chegando a 1. Se o problema não encolhe, ou encolhe sem nunca acertar o
+caso base, a função chama a si mesma para sempre.</p>
+<p>Na hora de escrever, <strong>confie na função</strong> (FEOFILOFF, 2009, cap. 5). Não
+tente seguir todas as chamadas de cabeça, porque elas se aninham fundo
+demais. Suponha que <code>fatorial(n - 1)</code> já funciona e pergunte: com essa
+resposta na mão, como monto a de <code>n</code>? Depois confira o caso base em separado.
+Se os dois estão certos, a função está certa para qualquer <code>n</code>. É o mesmo
+raciocínio da indução matemática.</p>
+<p>Por dentro, nada de especial acontece: cada chamada recursiva é uma chamada
+comum e ganha <strong>seu próprio quadro</strong> na pilha do assunto 0031 (BACKES, 2013,
+cap. 9). Na <strong>ida</strong>, <code>fatorial(5)</code> chama <code>fatorial(4)</code>, que chama <code>fatorial(3)</code>, e
+a pilha cresce até <code>fatorial(1)</code>. Nesse ponto há cinco quadros de <code>fatorial</code>
+ao mesmo tempo, cada um com o seu <code>n</code>, todos parados menos o do topo. Na
+<strong>volta</strong>, o caso base devolve 1, e cada quadro recebe a resposta de cima,
+multiplica pelo seu <code>n</code> e devolve ao de baixo: 1, 2, 6, 24, 120.</p>
+<p>Recursão e laço resolvem os mesmos problemas: todo cálculo recursivo pode ser
+reescrito com repetição, e vice-versa (TENENBAUM; LANGSAM; AUGENSTEIN, 1995,
+cap. 3). A diferença está no custo e na clareza. A recursão gasta memória
+proporcional à <strong>profundidade</strong>: <code>fatorial(5)</code> ocupa 5 quadros de uma vez,
+enquanto um laço usaria um só. Ela compensa quando o problema já é recursivo
+por natureza, como percorrer uma árvore ou dividir um vetor ao meio, porque aí
+a versão com laço fica bem mais difícil de ler.</p>
+<p>O tipo também impõe limite. O fatorial cresce muito depressa: 12! =
+479.001.600 cabe num <code>int</code> de 32 bits, mas 13! = 6.227.020.800 passa do
+máximo de 2.147.483.647 e estoura.</p>
+<blockquote>
+<p>[!WARNING]
+Caso base que nunca chega. Com <code>if (n == 1)</code> no lugar de <code>if (n &lt;= 1)</code>,
+<code>fatorial(0)</code> chama <code>fatorial(-1)</code>, <code>fatorial(-2)</code>... e não para. Cada
+chamada empilha um quadro, a pilha acaba e o programa morre com <strong>stack
+overflow</strong> (<code>Segmentation fault</code>).</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>De quantos jeitos 5 amigos sentam em 5 cadeiras? 5 × 4 × 3 × 2 × 1 = 120. Na
+ida a pilha cresce até <code>fatorial(1)</code>; na volta cada quadro multiplica e
+devolve: 1, 2, 6, 24, 120:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int fatorial(int n) {
+    if (n &lt;= 1) {
+        return 1; // caso base: resolve direto, sem chamar ninguém
+    }
+    return n * fatorial(n - 1); // caso recursivo: um problema menor
+}
+
+int main(void) {
+    printf(&quot;5 amigos: %d jeitos\n&quot;, fatorial(5));
+    printf(&quot;12 amigos: %d jeitos\n&quot;, fatorial(12)); // o maior que cabe num int
+    return 0;
+}
+// Saída:
+// 5 amigos: 120 jeitos
+// 12 amigos: 479001600 jeitos
+</code></pre>
+<p>Não há laço no código, mas o fluxograma tem duas voltas: a ida (empilha com
+<code>n - 1</code>) e a volta (cada quadro multiplica e sai):</p>
+<p>{{fluxograma}}</p>
+<h3>Passo a passo</h3>
+<p>O teste de mesa de <code>fatorial(5)</code>. As chamadas descem; os retornos sobem:</p>
+<table>
+<thead>
+<tr>
+<th>Chamada</th>
+<th>n</th>
+<th><code>n &lt;= 1</code>?</th>
+<th>Espera</th>
+<th>Devolve</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>fatorial(5)</code></td>
+<td>5</td>
+<td>Não</td>
+<td><code>5 * fatorial(4)</code></td>
+<td>5 × 24 = <strong>120</strong></td>
+</tr>
+<tr>
+<td><code>fatorial(4)</code></td>
+<td>4</td>
+<td>Não</td>
+<td><code>4 * fatorial(3)</code></td>
+<td>4 × 6 = 24</td>
+</tr>
+<tr>
+<td><code>fatorial(3)</code></td>
+<td>3</td>
+<td>Não</td>
+<td><code>3 * fatorial(2)</code></td>
+<td>3 × 2 = 6</td>
+</tr>
+<tr>
+<td><code>fatorial(2)</code></td>
+<td>2</td>
+<td>Não</td>
+<td><code>2 * fatorial(1)</code></td>
+<td>2 × 1 = 2</td>
+</tr>
+<tr>
+<td><code>fatorial(1)</code></td>
+<td>1</td>
+<td>Sim</td>
+<td>nada</td>
+<td>1</td>
+</tr>
+</tbody></table>

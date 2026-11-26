@@ -1,0 +1,537 @@
+<h1>Fichamento: &quot;Linguagem C — Notas de Aula&quot; (UFPR)</h1>
+<ul>
+<li><strong>Título:</strong> Linguagem C — Notas de Aula (Parte I: Programação Básica; Parte II: Tópicos Avançados), maio/2008, 140 p.</li>
+<li><strong>Autores:</strong> Profª Carmem Hara e Prof. Wagner Zola; revisão: Prof. Armando Luiz N. Delgado (UFPR).</li>
+<li><strong>Arquivo lido:</strong> <code>2a420542-NotasAula.md</code> (3765 linhas, lido por completo).</li>
+<li><strong>Avaliação geral:</strong> a melhor das cinco fontes em <strong>didática de sala de aula</strong>: explica o &quot;porquê&quot; (variável como
+caixa com nome/tipo/endereço/valor; expressão de atribuição tem valor; registro de ativação LIFO; por que o
+vetor é alterado na função e a variável simples não), traz <strong>muitos &quot;o que é impresso?&quot;</strong> com resposta e
+dezenas de <strong>pegadinhas reais</strong> (<code>=</code> no <code>if</code>, <code>else</code> pendurado, laço sem chaves, <code>!=</code> como condição de parada,
+ordem de avaliação de <code>++</code> em argumentos, sobra no buffer e laço infinito do <code>scanf</code>). Ambiente Dev-C++
+(int de 16 bits nas tabelas, <code>main()</code> sem <code>int</code>, <code>gets</code>). Alguns exemplos têm erros de digitação ou de
+conceito, anotados aqui como material de &quot;ache o erro&quot;. Não cobre estruturas de dados (só busca linear,
+seleção e bolha).</li>
+</ul>
+<blockquote>
+<p>Prioridade deste fichamento: pegadinhas e exercícios &quot;o que imprime?&quot; com resposta.</p>
+</blockquote>
+<hr>
+<h3>logica2-pseudocodigo</h3>
+<ul>
+<li><strong>Ideia de exemplo:</strong> o mesmo problema (perímetro e área do círculo de raio R) escrito como
+<code>ALGORITMO PERIMETRO_AREA ... FIM_ALGORITMO</code> (com <code>Leia</code>, <code>Escreva</code>, <code>**</code> para potência) e depois em C.
+Bom modelo de &quot;tradução&quot; pseudocódigo → C, linha a linha (Leia→scanf, Escreva→printf, <code>**</code>→pow).</li>
+<li><strong>Pegadinha da própria fonte:</strong> no algoritmo, <code>Raio</code> é <code>int</code>, então lê só raio inteiro. Pergunta: e se o usuário
+digitar 2.5? (lê 2 e deixa &quot;.5&quot; no buffer).</li>
+</ul>
+<h3>0001-primeiro-programa</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> programa = uma ou mais funções; <code>main</code> marca o início; sentença simples termina em
+<code>;</code>; sentença composta (bloco) entre chaves; o corpo de <code>main</code> é uma sentença composta.</li>
+<li><strong>Comentários:</strong> <code>/* ... */</code> não aninham: <code>/* a /* b */ c */</code> é ilegal (o primeiro <code>*/</code> fecha tudo e
+sobra <code>c */</code>). Ótima pegadinha.</li>
+<li><strong>Boas regras de comentário (parafraseadas):</strong> comentar a intenção, não transcrever o código (&quot;obtém idade
+e converte em dias&quot; em vez de &quot;usando scanf, obter idade e multiplicar por 365&quot;); não comentar o óbvio
+(<code>i++; /* incrementa i */</code>); documentar cada função com <strong>ação, entrada, saída, suposições, algoritmo</strong>.</li>
+<li><strong>Exercício:</strong> dado um comentário ruim, reescrevê-lo (comentar o código, não codificar o comentário).</li>
+</ul>
+<h3>0002-variaveis</h3>
+<ul>
+<li><strong>Analogia excelente:</strong> variável é uma caixa: nome e endereço nunca mudam, o conteúdo muda, o tipo diz o
+tamanho da caixa e como interpretar o que está dentro. Resumo: <strong>tipo, nome, endereço, valor</strong>.</li>
+<li><strong>Conceitos-chave:</strong> declarar antes de usar (senão, erro de compilação); declarar NÃO dá valor: usar antes
+de atribuir dá &quot;lixo&quot; (o que estava naquele endereço); inicialização na definição (<code>int pera = 3;</code>).
+Regras de nome; convenções: nomes significativos, <code>i, j, k</code> só para contadores, <code>horaInicio</code> ou
+<code>hora_inicio</code>, mas <strong>seja consistente</strong>.</li>
+<li><strong>Pegadinha:</strong> <code>&#39;5&#39;</code> é um caractere (código 53), não o inteiro 5.</li>
+<li><strong>Exercício:</strong> quais nomes são válidos? <code>hora_inicio</code>, <code>tempo</code>, <code>var1</code>, <code>3horas</code>, <code>total$</code>, <code>azul-claro</code>
+(válidos os três primeiros).</li>
+<li><code>float</code> guarda mantissa e expoente (como 6.023e23); só ~6-7 dígitos significativos, gancho para
+&quot;por que 0.1 + 0.2 não dá exatamente 0.3&quot;.</li>
+</ul>
+<h3>0003-tipos-e-limites</h3>
+<ul>
+<li>Tabela de modificadores (<code>short</code>, <code>long</code>, <code>signed</code>, <code>unsigned</code>) com faixas mínimas (int 16 bits na
+tabela; dizer no curso que hoje é 32). <code>sizeof(char *)</code> dá o tamanho de um ponteiro.</li>
+</ul>
+<h3>0004-constantes</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> constantes não ocupam lugar com nome na memória e têm tipo pela forma de escrever:
+<code>2</code> é int, <code>2.0</code> é double (toda constante real é double por convenção). Sequência de escape: a barra
+invertida avisa que o próximo caractere não é ele mesmo (<code>\n</code>, <code>\\</code>). <code>&#39;A&#39; + 1</code> vale 66, e como char é
+<code>&#39;B&#39;</code>. <code>#define PRECO 1.99</code>: o pré-processador troca texto como um &quot;localizar e substituir&quot;; o compilador
+nunca vê o nome <code>PRECO</code>. Convenção: maiúsculas para <code>#define</code>, minúsculas para variáveis. Alternativa:
+<code>const</code>. Vantagem: <code>#define NUM_ALUNOS 81</code> muda num lugar só.</li>
+</ul>
+<h3>0005-printf</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> o 1º argumento é sempre uma string; especificadores casam com os argumentos NA ORDEM;
+argumentos podem ser expressões (<code>peso * PRECO</code>). Largura é mínima: <code>%6d</code>, <code>%6.3f</code>, <code>%.3f</code>, <code>%6.0f</code>; se o
+número não couber, sai inteiro.</li>
+<li><strong>Exemplo pronto:</strong> 3 peras de qualidade &#39;A&#39; pesando 2.5 kg a 1.99/kg → &quot;Existem 3 peras de qualidade A
+pesando 2.500000 quilos.&quot; / &quot;O preco por quilo e 1.990000, total e 4.975000&quot;.</li>
+<li><strong>Pegadinha (excelente):</strong> <code>printf(&quot;%d\n&quot;, 3.14159);</code> compila e imprime lixo (ex.: -31147): o tipo do
+argumento tem de casar com o especificador; o compilador antigo não avisava (hoje use <code>-Wall</code>).</li>
+<li><strong>Pegadinha:</strong> o exemplo da fonte <code>printf(&quot;area do triangulo = &quot;, triang_area(0.03, 1.25));</code> não tem <code>%f</code>:
+o valor é calculado e nunca impresso. Bom &quot;ache o erro&quot;.</li>
+<li><code>%%</code> para imprimir <code>%</code> (ex.: &quot;Juros 7%%.&quot;).</li>
+</ul>
+<h3>0006-scanf</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>&amp;</code> antes de variáveis simples; vários valores num <code>scanf</code> separados por qualquer
+espaço em branco (espaço, tab, Enter); os espaços no formato <code>&quot;%d %d %d&quot;</code> são só estética, <code>&quot;%d%d%d&quot;</code>
+funciona igual; <strong><code>%c</code> NÃO pula espaços</strong> (espaço é caractere, código 32).</li>
+<li><strong>Explicação boa (sobra no buffer):</strong> digitando <code>42␣␣⏎</code>, o <code>scanf(&quot;%d&quot;)</code> consome só 42; os espaços e o
+<code>\n</code> ficam esperando e serão lidos pelo próximo <code>getchar</code>/<code>%c</code>. Remédio: <code>while (getchar() != &#39;\n&#39;);</code>
+depois da leitura, só onde precisa (antes de um <code>getchar</code>/<code>%c</code>, especialmente em laços).</li>
+<li><strong>Pegadinha CLÁSSICA (laço infinito):</strong> num <code>while (total &lt; 20) { scanf(&quot;%d&quot;, &amp;num); total += num; }</code>, se o
+usuário digitar uma letra, o <code>scanf</code> falha, deixa a letra no buffer e falha de novo para sempre. Solução
+da fonte: <code>if (scanf(&quot;%d&quot;, &amp;num) &lt; 1) while (getchar() != &#39;\n&#39;); else total += num;</code>, que usa o <strong>retorno do
+scanf</strong> (nº de itens lidos). Ótimo exemplo para 0011.</li>
+<li><strong>Exemplo:</strong> data de aniversário <code>dd mm aa</code> num só scanf → &quot;Voce nasceu em 12/5/90&quot;.</li>
+<li><strong>Pegadinha da fonte:</strong> <code>double raio; scanf(&quot;%f&quot;, &amp;raio);</code>: para double é <code>%lf</code> no scanf (no printf <code>%f</code>
+serve para os dois). &quot;Ache o erro&quot;.</li>
+</ul>
+<h3>0007-aritmetica</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>* / %</code> mesma precedência, acima de <code>+ -</code>; operadores de mesma precedência associam da
+esquerda para a direita: <code>a * b / c * d % e</code> ≡ <code>((((a*b)/c)*d)%e)</code>. <code>%</code> só com inteiros (<code>22.3 % 5</code> é erro
+de compilação). <code>22 % 5</code> = 2. Expressões podem aparecer onde se usa valor, mas não à esquerda de <code>=</code> nem
+dentro de <code>&amp;</code>: <code>int yucky + 2 = 5;</code> e <code>scanf(&quot;%d&quot;, &amp;(oops * 5))</code> são ilegais.</li>
+<li><strong>Divisão inteira:</strong> <code>30/5</code>=6, <code>31/5</code>=6, <code>29/5</code>=5, <code>3/5</code>=0.</li>
+<li><strong>Pegadinha:</strong> <code>1 / 2 * x</code> é sempre 0 (porque <code>1/2</code> = 0); escrever <code>1.0 / 2.0 * x</code> ou <code>x / 2.0</code>.</li>
+<li><strong>Exercício &quot;o que imprime?&quot; (respostas da fonte):</strong> <code>5 + 10 * 5 % 6</code> → 7; <code>10 / 4</code> → 2; <code>10.0 / 4.0</code> →
+2.5; <code>&#39;A&#39; + 1</code> com <code>%c</code> → B; <code>score + (score == 0)</code> com score = 5 → 5 (e com score = 0 → 1).</li>
+<li><strong>Exercício encadeado (resposta calculada):</strong> ler n1; <code>n1 += n1 * 10; n2 = n1 / 5; n3 = n2 % 5 * 7; n2 *= n3-- % 4; printf(&quot;%d %d %d&quot;, n2, n3, n2 != n3 + 21);</code> com n1 = 1: n1 = 11, n2 = 2, n3 = 14,
+<code>14 % 4</code> = 2 → n2 = 4, n3 = 13 → imprime <strong>4 13 1</strong>.</li>
+<li><strong>Exemplos:</strong> par/ímpar imprimindo <code>numero % 2</code> (0 par, 1 ímpar); soma, média (<code>soma / 3.0</code>) e produto de
+3 inteiros; Fahrenheit → Celsius <code>(f - 32) * 5.0 / 9.0</code>.</li>
+</ul>
+<h3>0008-conversao</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> expressão tem valor <strong>e tipo</strong>; operandos iguais → resultado do mesmo tipo; diferentes
+→ promove para o &quot;mais complexo&quot; (<code>char &lt; int &lt; long &lt; float &lt; double</code>). Na atribuição, converte para o
+tipo da esquerda: <code>float a = 3;</code> → 3.0; <code>int a = 3.1415;</code> → 3 (trunca); valor que não cabe → resultado
+errado. Cast <code>(tipo) expr</code> tem precedência alta: <code>(float) a / b</code> converte só <code>a</code> (suficiente); a
+variável <code>a</code> continua <code>int</code> para sempre.</li>
+<li><strong>Pegadinha (excelente) para exercício:</strong> por que <code>1.0 * a / b</code> ≠ <code>a / b * 1.0</code>? (no segundo, <code>a / b</code> é
+divisão inteira ANTES de virar real; a=7, b=2 → 3.5 × 3.0).</li>
+<li><strong>Exemplo:</strong> fração para decimal com <code>1.0 * a / b</code> e testando <code>b != 0</code> antes (divisão por zero).</li>
+</ul>
+<h3>0009-atribuicao</h3>
+<ul>
+<li><strong>Conceitos-chave (explicação muito boa):</strong> <code>=</code> é um operador e <strong>a atribuição é uma expressão com valor</strong>
+(o valor atribuído). Por isso <code>i = j = k = 0</code> funciona (associa da direita: <code>i = (j = (k = 0))</code>). lvalue =
+algo que tem endereço (por enquanto, só variáveis). Efeito colateral:
+<code>printf(&quot;%d&quot;, (quadrado = n * n) &lt; 50)</code> imprime 1 <strong>e</strong> altera <code>quadrado</code> para 4; precisa dos parênteses
+porque <code>=</code> tem precedência menor que <code>&lt;</code>. Regra prática da fonte: <strong>não use atribuições dentro de outras
+sentenças</strong>.</li>
+<li><code>x *= y + 1</code> ≡ <code>x = x * (y + 1)</code> (não <code>x * y + 1</code>).</li>
+<li><code>k++</code> × <code>++k</code>: com k = 5, <code>printf(&quot;%d&quot;, k++)</code> imprime 5 (k vira 6); <code>printf(&quot;%d&quot;, ++k)</code> imprime 6. O
+valor de <code>x</code> termina igual; o que muda é o <strong>valor da expressão</strong>.</li>
+<li><code>(ack + 2)++</code> e <code>(nope + 3) += 5</code> → erro de compilação (não são lvalues).</li>
+<li><strong>Pegadinha IMPORTANTE (ordem de avaliação):</strong> <code>printf(&quot;%d %d\n&quot;, ++uhoh, uhoh * 2);</code>: C não fixa a ordem
+de avaliação dos argumentos; o resultado muda conforme o compilador. Idem <code>x + x++</code>, <code>y = x + x--</code>,
+<code>x = x++</code> (hoje: comportamento indefinido). Solução: incrementar numa sentença separada.</li>
+<li><strong>Exercício:</strong> o que imprime <code>int k = 5; printf(&quot;%d &quot;, k++); printf(&quot;%d &quot;, k); printf(&quot;%d&quot;, ++k);</code>?
+(5 6 7).</li>
+</ul>
+<h3>0012-relacionais</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> resultado é 0 (falso) ou 1 (verdadeiro); C (antigo) não tem tipo booleano e guarda
+isso em <code>int</code>; mas qualquer valor ≠ 0 conta como verdadeiro. Aritméticos têm precedência maior:
+<code>3 + 5 &lt; 6 * 2</code> ≡ <code>(3+5) &lt; (6*2)</code>.</li>
+<li><strong>Exemplo pronto:</strong> &quot;Pode tirar carteira de motorista? %d&quot; com <code>idade &gt;= 18</code> → 0 para 17, 1 para 35.</li>
+<li><strong>Pegadinha:</strong> <code>=</code> no lugar de <code>==</code> não é erro de sintaxe (ver 0015).</li>
+</ul>
+<h3>0013-logicos</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>!</code> (unário, precedência alta, junto do <code>-</code> unário), <code>&amp;&amp;</code> (verdadeiro só se ambos),
+<code>||</code> (falso só se ambos); <code>&amp;&amp;</code> antes de <code>||</code>; ambos abaixo dos relacionais (dispensa parênteses em
+<code>x &gt;= 3 &amp;&amp; x &lt;= 50</code> e <code>x == 1 || x == 2 || x == 3</code>). <strong>Leis de De Morgan:</strong> <code>!(x &amp;&amp; y)</code> ≡ <code>!x || !y</code>;
+<code>!(x || y)</code> ≡ <code>!x &amp;&amp; !y</code> (usadas para reescrever condição de parada de laço).</li>
+<li><strong>Exercícios &quot;o que imprime?&quot; (respostas da fonte):</strong> x=5, y=8: <code>if (x == 5 &amp;&amp; y == 8)</code> → a. x=4, y=8:
+<code>x == 5 || y == 8</code> → a; <code>!(x == 5 || y == 8)</code> → b; <code>!(x == 5 &amp;&amp; y == 8)</code> → a.
+<code>x == 5 || y == 8 &amp;&amp; z == 10</code> ≡ <code>x == 5 || (y == 8 &amp;&amp; z == 10)</code>.</li>
+<li><strong>Exemplo:</strong> &quot;par e não negativo&quot; com <code>if</code> aninhado × <code>(num &gt;= 0) &amp;&amp; (num % 2 == 0)</code> × <code>!(num % 2)</code>.</li>
+<li><strong>Pegadinha da fonte (ache o erro):</strong> o exemplo do triângulo retângulo tem <code>s2 == s1 + s2</code> (deveria ser
+<code>s3</code>) e um parêntese a mais; e a versão com <code>!(num % 2)</code> usa <code>num &gt; 0</code> em vez de <code>&gt;=</code> (exclui o zero).</li>
+<li>Curto-circuito não é explicado; complementar com outra fonte.</li>
+</ul>
+<h3>0014-if</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> se a expressão vale ≠ 0, executa a sentença (simples ou bloco).</li>
+<li><strong>Exemplos:</strong> fração → decimal só se <code>b != 0</code>; ordenar dois números trocando com <code>aux</code> se <code>num1 &gt; num2</code>
+(gancho para o swap de 0046).</li>
+</ul>
+<h3>0015-if-else</h3>
+<ul>
+<li><strong>Pegadinha MODELO (usar no curso):</strong> <code>int saldo = 2000; if (saldo = 1) printf(&quot;Voce esta quebrado!&quot;); else printf(&quot;Seu saldo e %d&quot;, saldo);</code> → imprime &quot;Voce esta quebrado!&quot; <strong>e</strong> muda o saldo para 1. Com
+<code>==</code> imprime &quot;Seu saldo e 2000&quot;. Não é erro de compilação (use <code>-Wall</code>).</li>
+<li><strong>Exercício &quot;o que imprime?&quot; (resposta da fonte):</strong> x = 4, y = 8:
+<code>if (y = 8) if (x = 5) printf(&quot;a &quot;); else printf(&quot;b &quot;); printf(&quot;c &quot;); printf(&quot;d\n&quot;);</code> → <strong>a c d</strong>. Trocando
+<code>=</code> por <code>==</code> → <strong>b c d</strong>. Desafio: alterar (só com chaves/<code>else</code>) para produzir &quot;a&quot; / &quot;a d&quot; / &quot;b c d&quot;
+conforme x e y.</li>
+<li><strong>Exemplo:</strong> calculadora <code>5 * 3.5</code> → &quot;= 17.50&quot;; <code>10 x 5.0</code> → &quot;Operador invalido&quot; (com <code>else if</code>).</li>
+</ul>
+<h3>0016-else-if</h3>
+<ul>
+<li><strong>Regra do else pendurado (enunciado curto):</strong> um <code>else</code> pertence ao último <code>if</code> sem <code>else</code>.</li>
+<li><strong>Pegadinha MODELO:</strong> número de peras: <code>if (num != 0) if (num == 1) &quot;Voce tem uma pera.&quot;; else &quot;Voce nao tem nenhuma pera.&quot;;</code> A endentação engana: o <code>else</code> é do <code>if (num == 1)</code>, então com 5 peras diz &quot;não tem
+nenhuma&quot; e com 0 não diz nada. Correção com chaves.</li>
+<li><strong>Exemplo:</strong> comparar dois números (iguais / primeiro menor / primeiro maior); a última opção nem
+precisa de teste.</li>
+<li><strong>Exercício:</strong> ler 3 números e imprimir o maior.</li>
+<li><code>if</code> aninhado: positivo/negativo × par/ímpar (4 mensagens).</li>
+</ul>
+<h3>0018-switch</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> compara a expressão com constantes; executa a partir do <code>case</code> igual e <strong>segue
+executando tudo abaixo</strong> até um <code>break</code> (diagrama mostra a diferença com e sem break); lista de sentenças
+do case não precisa de chaves; pode ser vazia, e vários <code>case</code> compartilham a ação:
+<code>case &#39;*&#39;: case &#39;x&#39;: case &#39;X&#39;:</code> multiplicação; <code>case &#39;/&#39;: case &#39;\\&#39;:</code> divisão. <code>default</code> opcional. Regra da
+fonte: case sem break deve ser comentado (<code>/* sem break: continua */</code>).</li>
+<li><strong>Exercício:</strong> ler mês e ano e imprimir o número de dias do mês (fevereiro com ano bissexto: divisível por
+4 e não por 100, ou por 400). Ex.: 2/2024 → 29; 2/1900 → 28; 4/2023 → 30.</li>
+</ul>
+<h3>0020-while</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> testa antes; corpo simples ou bloco; ao sair, a variável de controle vale o primeiro
+valor que falhou (<code>contador</code> termina em 5).</li>
+<li><strong>Exemplo:</strong> pedir números até a soma ≥ 20 (3, 8, 15 → total final 26), com número de repetições desconhecido.</li>
+<li><strong>Pegadinha MODELO (chaves):</strong> <code>while (i &lt; 5) i += 1; j += 1;</code>: só <code>i += 1</code> está no laço, apesar da
+endentação. Regra: use chaves sempre (ao acrescentar uma linha depois, você não esquece).</li>
+<li><strong>Estilo:</strong> três posições de chaves e espaço depois do <code>while</code>: escolha um e seja consistente.</li>
+</ul>
+<h3>0021-do-while</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> testa depois; executa pelo menos uma vez; ideal para validar entrada.</li>
+<li><strong>Exemplo:</strong> &quot;Entre com um numero par&quot;: digita 3, 1, 5, 4 → &quot;Obrigado.&quot; Comparação com a versão <code>while</code>,
+que obriga a inicializar <code>num = 1</code> artificialmente para entrar no laço (explicação ótima de quando usar
+do-while).</li>
+<li>Erro da fonte: <code>#include &lt;stdio&gt;</code> sem <code>.h</code>.</li>
+</ul>
+<h3>0022-for</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> 4 partes (inicialização uma vez, teste, corpo, incremento); equivalência exata com
+<code>inicialização; while (teste) { corpo; incremento; }</code>; vírgula para várias inicializações
+(<code>contador = 0, total = 0</code>); escolha <code>for</code> quando há inicialização + incremento, <code>while</code> quando o nº de
+repetições é desconhecido.</li>
+<li><strong>Pegadinha (boa):</strong> condição <code>contador != 5</code> em vez de <code>&lt; 5</code>: se a inicialização mudar para 25, o laço
+nunca termina. Prefira <code>&lt;</code>/<code>&lt;=</code>.</li>
+<li><strong>Exemplos prontos:</strong> soma acumulada de 0 a 9 (total final 45, imprimindo cada passo); números de 30 a 5
+divisíveis por 3 em ordem decrescente → 30 27 24 21 18 15 12 9 6, soma = 162.</li>
+<li>Pré ou pós-incremento na 3ª parte do <code>for</code> dá no mesmo.</li>
+</ul>
+<h3>0024-lacos-aninhados</h3>
+<ul>
+<li><strong>Exemplos:</strong> tabuada 4×4 com <code>while</code> aninhado e <code>%3d</code>; mesma coisa com o <code>printf(&quot;\n&quot;)</code> dentro do laço
+interno (um número por linha), exercício &quot;onde fica o <code>\n</code>?&quot;; triângulo de asteriscos com <code>\t</code> e
+<code>while (coluna &lt; linha)</code>.</li>
+<li><strong>Pegadinha da fonte (ótima para exercício):</strong> o triângulo com <code>linha</code> de 1 a 7 e <code>coluna &lt; linha</code> imprime
+de 0 a 6 asteriscos (a 1ª linha sai vazia), mas a saída mostrada no texto vai de 1 a 8. Pergunta: quantos
+asteriscos tem a 1ª e a última linha? Como corrigir para 1..7? (<code>coluna &lt;= linha</code>).</li>
+<li>Tabuada 10×10 com cabeçalho de colunas, linha de traços e <code>%2d|</code> na margem.</li>
+</ul>
+<h3>0025-padroes-de-laco</h3>
+<ul>
+<li>Acumulador (<code>total += num</code>), contador, sentinela (EOF / valor negativo), flag <code>ordenado</code> no bubble sort,
+validação com do-while. Contar caracteres até EOF: <code>while ((ch = getchar()) != EOF) total++;</code>.</li>
+</ul>
+<h3>0028-funcoes</h3>
+<ul>
+<li><strong>Por que funções (bem explicado):</strong> evitar repetição (o teste de primo escrito duas vezes no main vira
+<code>ehPrimo(n)</code>), corrigir num só lugar, reduzir complexidade, projeto <em>top-down</em>; quem usa precisa saber <strong>o
+que</strong> a função faz e <strong>como chamar</strong>, não como foi feita (como <code>printf</code>, <code>sqrt</code>).</li>
+<li><strong>Conceitos-chave:</strong> não se define função dentro de função; protótipo = cabeçalho + <code>;</code> (nomes dos
+parâmetros opcionais), permite chamar antes da definição e faz o compilador detectar número/tipo errado
+de argumentos; <code>void alo(void)</code> sem retorno e sem argumentos; chamada é sentença (termina com <code>;</code>);
+<code>return expr;</code> converte para o tipo da função e encerra NA HORA (código depois não roda); vários
+<code>return</code> permitidos; em função <code>void</code>, <code>return;</code> sai antecipadamente.</li>
+<li><strong>Exemplos:</strong> <code>alo()</code> chamado 3 vezes num while; <code>cumprimenta(char, char)</code> com iniciais lidas por
+<code>getchar</code> (&quot;Ola, YK!&quot;); <code>quadrado</code> usado em <code>quadrado(3) + quadrado(4)</code> = 25; <code>cinco()</code> retorna 5;
+<code>obtem_valor()</code> (15 e 4 → soma 19); <code>obtem_valor_positivo</code> (se negativo avisa e retorna <code>-valor</code>);
+<code>instrucoes()</code> com <code>return;</code> se a resposta for &#39;n&#39;; <code>volume(c, l, a)</code>; <code>dinheiro(c25, c10, c5, c1)</code>
+(moedas → reais).</li>
+<li><strong>Exercício:</strong> <code>dinheiro(3, 2, 1, 4)</code> → 0.75 + 0.20 + 0.05 + 0.04 = 1.04.</li>
+</ul>
+<h3>0029-parametros</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> cada parâmetro precisa de tipo e nome; são variáveis locais já definidas no
+cabeçalho (redefini-las no corpo é erro) e já chegam inicializadas pelo chamador; argumentos reais podem
+ser expressões, avaliadas antes da chamada; ordem e tipos devem casar.</li>
+<li><strong>Chamada por valor (explicação ótima):</strong> <code>quadrado(x)</code>, <code>quadrado(5)</code> e <code>quadrado(625/25 - 4*5)</code> são
+indistinguíveis para a função: ela só recebe o número 5, não sabe de onde veio nem onde <code>x</code> mora;
+por isso não consegue alterá-lo.</li>
+<li><strong>Exemplos:</strong> <code>abs</code> que faz <code>x = -x</code> no parâmetro sem afetar <code>n</code>; <code>fahr_para_cels(212.0)</code> = 100.0;
+<code>area(14.0, 21.5)</code> = 301.0; <code>triang_area(raio, circ_area(raio))</code> (chamada como argumento).</li>
+</ul>
+<h3>0030-escopo</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> local = visível só na função (ou bloco), existe só durante a ativação (&quot;automatic&quot;);
+duas funções podem ter <code>x</code> próprios sem conflito; <code>static</code> local guarda o valor entre chamadas; global =
+visível do ponto de definição até o fim do arquivo; local com mesmo nome <strong>esconde</strong> a global.</li>
+<li><strong>Pegadinha:</strong> usar no <code>main</code> uma variável <code>x</code> que só existe dentro de <code>obtem_int()</code> → erro de compilação
+(o certo é a função retornar o valor).</li>
+<li><strong>Exercício &quot;o que imprime?&quot; (EXCELENTE):</strong> <code>int y = 100;</code> global; <code>soma_y(x)</code> retorna <code>x + y</code>;
+<code>soma_yy(x)</code> faz <code>y = 300</code> e retorna <code>x + y</code>; main com <code>z = 0</code> chama <code>soma_y(z)</code>, <code>soma_yy(z)</code>,
+<code>soma_y(z)</code> → <strong>100 300 300</strong> (mesma chamada, resultados diferentes: o perigo das globais).</li>
+<li><strong>Exercício:</strong> <code>int valor = 3;</code> global e <code>int valor = 4;</code> dentro do main; <code>printf</code> → 4.</li>
+<li><strong>Exemplo de global (com ressalva):</strong> caixa eletrônico com <code>saldo</code> global alterado por <code>credito</code>, <code>debito</code>,
+<code>juros</code> (7%): 1000 + 200 − 80 = 1120 × 1.07 = <strong>1198.40</strong>. A fonte só permite globais com autorização.</li>
+</ul>
+<h3>0031-pilha-de-chamadas</h3>
+<ul>
+<li><strong>Explicação ótima:</strong> cada execução de uma função é uma <strong>ativação</strong>; ao chamar, cria-se um <strong>registro de
+ativação</strong> com o endereço de retorno; locais são alocadas na entrada e liberadas na saída; o retorno vai
+para um lugar combinado. Se A chama B e B chama C, C é a última a começar e a primeira a terminar
+(<strong>último que entra, primeiro que sai</strong>), base para desenhar a pilha de frames.</li>
+<li><strong>Exercício:</strong> desenhar os registros de ativação para main → triang_area → (volta) → circ_area.</li>
+</ul>
+<h3>0035-preprocessador</h3>
+<ul>
+<li>Diretivas ocupam a linha inteira; <code>#define</code> = substituição de texto antes da compilação; <code>#include &quot;geom.h&quot;</code> (diretório do projeto, para compartilhar <code>#define PI</code> entre vários arquivos de uma biblioteca
+geométrica) × <code>&lt;stdio.h&gt;</code> (diretório padrão); <code>.h</code> é convenção (<em>header</em>); o pré-processador remove
+comentários. Não trata macros com parâmetro nem <code>#ifdef</code>.</li>
+</ul>
+<h3>0037-vetores</h3>
+<ul>
+<li><strong>Motivação boa:</strong> média de 4 alunos com <code>nota0..nota3</code>; e se fossem 100? → array.</li>
+<li><strong>Conceitos-chave:</strong> elementos do mesmo tipo em endereços adjacentes; índice de 0 a n−1; índice pode ser
+qualquer expressão inteira; o nome do array é um endereço constante; o array como um todo não tem valor,
+cada elemento tem. <code>&amp;nota[i]</code> no scanf dispensa parênteses (<code>[]</code> tem precedência maior que <code>&amp;</code>).
+Tamanho via <code>#define ESTUDANTES 4</code> para mudar num lugar só.</li>
+<li><strong>Inicialização:</strong> <code>{1, 42, -13, 273}</code>; tamanho omitido é contado (<code>int peso[] = {153, 135, 170}</code> ≡ <code>[3]</code>);
+mais valores que o tamanho → erro; só na definição (atribuir <code>{...}</code> depois é erro); sem inicializar →
+lixo.</li>
+<li><strong>ERRO na fonte (usar como pegadinha):</strong> diz que, com menos valores que o tamanho, os restantes ficam
+com lixo, mas ficam <strong>zerados</strong> (<code>int v[5] = {1};</code> → 1 0 0 0 0; <code>int v[100] = {0};</code> zera tudo).
+A fonte também diz que os valores têm de ser constantes (vale para C89; hoje locais aceitam expressões).</li>
+<li><strong>Pegadinha (limites):</strong> <code>int ops[10]; i = 0; while (i &lt;= 10) ops[i++] = 0;</code> escreve em <code>ops[10]</code>,
+fora do vetor: o compilador não reclama e o efeito é imprevisível.</li>
+<li><strong>Exemplo pronto:</strong> notas 93, 85, 74, 100 → média inteira 88.</li>
+<li><strong>Pegadinha:</strong> <code>arr2 = arr1;</code> não copia e <code>arr1 == arr2</code> não compara conteúdos (compara endereços);
+copiar/comparar elemento a elemento.</li>
+</ul>
+<h3>0038-vetores-e-funcoes</h3>
+<ul>
+<li><strong>Explicação MODELO (usar):</strong> <code>troca(x)</code> com x = 10 não altera x (imprime x=10), mas <code>troca_vet(v)</code> com
+v = {30, 40, 50} deixa v = {60, 70, 80}: o nome do array vale o <strong>endereço</strong> do 1º elemento (ex.: 1342),
+e é esse endereço que é copiado para o parâmetro, e a função escreve na mesma memória. Passar um único
+elemento (<code>v[0]</code>) se comporta como variável simples (v[0] continua 30).</li>
+<li><strong>Conceitos-chave:</strong> no parâmetro, <code>int a[]</code> ou <code>int a[TAMANHO]</code> (o tamanho é só legibilidade); para
+multidimensional, todas as dimensões menos a primeira são obrigatórias.</li>
+<li><strong>Exemplos/exercícios:</strong> <code>array_max</code> (73, 85, 42, −103, 15 → 85); <code>inicializaArray(v, n, 42)</code>;
+<code>pesquisa_linear(v, n, chave)</code> devolve índice ou −1; <code>soma_array(a, b, c, n)</code>.</li>
+</ul>
+<h3>0039-matrizes</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> array de arrays; <code>int tabela[3][5]</code> → índices 0..2 e 0..4; armazenamento com o
+<strong>último índice variando mais rápido</strong> (tabela[0][0], [0][1], [0][2], [1][0]...); <code>tabela[4][5]</code> pode ser
+vista como 4 elementos, cada um um vetor de 5 (tabela[1] → {20, 22, 24, 26, 28}); inicialização com
+chaves aninhadas e 1ª dimensão omitível.</li>
+<li><strong>Exemplos:</strong> marcar coordenadas <code>y,x</code> digitadas com 1 numa matriz 5×5 de zeros (negativo sai);
+tabuada 10×10 em matriz; funções <code>pontos</code>, <code>marca_triang</code> (abaixo da diagonal), <code>flip</code> (transpor
+trocando <code>[y][x]</code> com <code>[x][y]</code> só no triângulo <code>x &lt;= y</code>; exercício: o que acontece se percorrer a matriz
+inteira? volta ao original).</li>
+</ul>
+<h3>0040-caracteres</h3>
+<ul>
+<li><code>getchar</code> devolve <code>int</code> (código do caractere ou EOF); digitar <code>AbcD⏎</code> e chamar <code>getchar</code> uma vez lê só o
+&#39;A&#39; (o resto fica no buffer).</li>
+<li><strong>Pegadinha não percebida pela fonte (ótima):</strong> testa letra com <code>if (ch &lt; &#39;A&#39; || ch &gt; &#39;z&#39;)</code> e aceita
+<code>[ \ ] ^ _ `` </code> `` como letras (estão entre &#39;Z&#39; e &#39;a&#39; na ASCII). Correto: <code>isalpha(ch)</code> ou
+<code>(ch &gt;= &#39;A&#39; &amp;&amp; ch &lt;= &#39;Z&#39;) || (ch &gt;= &#39;a&#39; &amp;&amp; ch &lt;= &#39;z&#39;)</code>.</li>
+<li>Ordem garantida só dentro de cada grupo (&#39;0&#39; &lt; ... &lt; &#39;9&#39;, &#39;A&#39; &lt; ... &lt; &#39;Z&#39;, &#39;a&#39; &lt; ... &lt; &#39;z&#39;);
+<code>tolower(&#39;A&#39;)</code> = &#39;a&#39;, <code>tolower(&#39;1&#39;)</code> = &#39;1&#39;.</li>
+</ul>
+<h3>0041-strings</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> string = array de char que <strong>deve</strong> terminar em <code>&#39;\0&#39;</code>; <code>&quot;ci208&quot;</code> ocupa 6; para guardar
+&quot;programar e divertido&quot; (21 caracteres) precisa de 22; <code>puts</code> imprime e pula linha (sem formatação);
+<code>%s</code>; array de strings <code>char nomes[5][20]</code>.</li>
+<li><strong>Implementações próprias (bons exercícios):</strong> <code>strlen</code> (conta até <code>&#39;\0&#39;</code>), <code>strcmp</code> (retorna 0, negativo
+ou positivo; ordem de dicionário: &quot;tudo&quot; &lt; &quot;xadrez&quot;, &quot;calor&quot; &lt; &quot;calorao&quot;, &quot;&quot; &lt; qualquer), <code>strcpy</code>
+(copia inclusive o <code>&#39;\0&#39;</code>). Para comparar sem diferenciar maiúsculas, converter com <code>tolower</code>.</li>
+<li><strong>Pegadinhas da fonte:</strong> compara caracteres com <code>NULL</code> e sugere <code>#define NULL &#39;\0&#39;</code>: confusão entre ponteiro
+nulo e caractere nulo (use <code>&#39;\0&#39;</code>); protótipo <code>void strcmp(...)</code> escrito no lugar de <code>strcpy</code>.</li>
+<li><strong>Exemplo:</strong> &quot;Dostoevsky&quot; → 10 caracteres.</li>
+</ul>
+<h3>0042-lendo-strings</h3>
+<ul>
+<li><code>gets</code> lê a linha toda, mas estoura se o usuário digitar mais que o tamanho (perigoso); <code>scanf(&quot;%s&quot;, nome)</code>
+lê só a 1ª palavra (&quot;Jose Silva&quot; → &quot;Oi, Jose.&quot;) e <strong>sem <code>&amp;</code></strong> (o nome do array já é endereço).</li>
+<li>Na parte de arquivos, a própria fonte pergunta &quot;por que <code>fgets</code> e não <code>gets</code>?&quot; e usa
+<code>while (fgets(linha, 80, stdin) != NULL) fputs(linha, fp);</code>.</li>
+</ul>
+<h3>0044-memoria / 0045-ponteiros</h3>
+<ul>
+<li><strong>Explicação boa:</strong> <code>int i = 5; char c = &#39;G&#39;;</code> desenhados na memória: i no endereço 1342 (ocupa 1342-1343;
+o endereço é onde começa), c em 1346. <code>&amp;i</code> vale 1342. <code>&amp;</code> só se aplica a lvalues.</li>
+<li><strong>Conceitos-chave:</strong> ponteiro guarda endereço; há um tipo de ponteiro para cada tipo (todos os endereços têm
+o mesmo tamanho, mas é preciso saber quantos bytes ler e como interpretar); em <code>int *pi</code>, o nome é <code>pi</code> e o
+tipo é <code>int *</code>; <code>*</code> de dereferência nada tem a ver com multiplicação; <code>*pi</code> pode ser lvalue:
+<code>*pi = *pi + 5</code> muda o valor apontado, não o ponteiro. Acesso direto (pelo nome) × indireto (pelo
+ponteiro).</li>
+<li><strong>Pegadinha:</strong> <code>float *p3 = p1;</code> (p1 é <code>int *</code>) → só aviso, mas está errado.</li>
+</ul>
+<h3>0046-passagem-por-referencia</h3>
+<ul>
+<li><strong>Sequência didática MODELO:</strong> (1) troca no próprio main com <code>temp</code> funciona; (2) função <code>troca(int x, int y)</code>
+NÃO funciona (3 5 → continua 3 5), porque é por valor e <code>return</code> só devolve um valor; (3) <code>troca(int *px, int *py)</code>
+chamada com <code>troca(&amp;a, &amp;b)</code> funciona (5 3). Regra: se a função precisa alterar variável do chamador,
+passe o endereço e use ponteiro no parâmetro. Explica o <code>&amp;</code> do <code>scanf</code>.</li>
+</ul>
+<h3>0047-ponteiros-e-vetores</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> só soma/subtração de inteiros; subtração e comparação entre ponteiros do mesmo tipo
+(com sentido só no mesmo array); somar dois ponteiros não faz sentido. <code>ptr = val</code> ≡ <code>ptr = &amp;val[0]</code>;
+<code>nome + 4</code> ≡ <code>&amp;nome[4]</code>; <code>*(ptr + 3)</code> ≡ <code>ptr[3]</code> ≡ <code>val[3]</code>.</li>
+<li><strong>Pegadinhas MODELO:</strong> <code>pstr = nome++;</code> é erro (nome de array não é variável); <code>ptr += 4; ptr[3] = 20;</code>
+altera <strong>val[7]</strong>, não val[3] (indexar ponteiro é relativo a onde ele aponta agora); <code>diff = pstr - pnum</code>
+com tipos diferentes é incorreto; <code>pstr = &amp;str[30]</code> com <code>str[30]</code> → <code>pstr - str</code> = 30 (endereço &quot;um depois
+do fim&quot; é válido para conta, não para acesso).</li>
+<li><strong>Contraste ótimo:</strong> dentro de <code>func_1(char vet[])</code>, <code>vet++</code> É permitido (o parâmetro é um ponteiro
+comum), enquanto no main <code>ender++</code> não é.</li>
+</ul>
+<h3>0048-ponteiros-e-strings</h3>
+<ul>
+<li>Constante string = array anônimo; seu valor é um ponteiro para o 1º caractere. Array de ponteiros:
+<code>char *frases[60]; frases[3] = &quot;...&quot;; puts(frases[3]);</code>.</li>
+<li><strong>Recomendação da fonte a corrigir no curso:</strong> propõe <code>char *nome = &quot;...&quot;</code> como forma preferida; hoje:
+usar <code>const char *nome = &quot;...&quot;</code> (literal não pode ser modificado) ou <code>char nome[] = &quot;...&quot;</code> (cópia
+modificável). Bom ponto para 0048.</li>
+</ul>
+<h3>0050-ponteiro-para-funcao</h3>
+<ul>
+<li>Não coberto.</li>
+</ul>
+<h3>0054-malloc-free / 0055-calloc-realloc</h3>
+<ul>
+<li><strong>Motivação boa:</strong> reservar o tamanho máximo para todo arquivo desperdiça memória e prejudica outros
+processos num sistema multitarefa (swapping).</li>
+<li><strong>Conceitos-chave:</strong> <code>malloc(bytes)</code>, <code>calloc(n, tam)</code> (zera a área), <code>realloc(p, novo)</code> (pode mover e
+copiar), <code>free(p)</code>; testar NULL sempre.</li>
+<li><strong>Exemplo:</strong> ler inteiros até digitar 0, crescendo o vetor de 1 em 1 com <code>realloc</code> (<code>(i + 2) * sizeof(int)</code>),
+bom ponto de partida para 0055, discutindo o custo de crescer de 1 em 1 × dobrar.</li>
+<li><strong>Pegadinhas/desatualizações:</strong> diz que malloc retorna <code>char *</code> (é <code>void *</code> desde C89; cast desnecessário
+em C); <code>memint = realloc(memint, ...)</code> perde o bloco se falhar; afirma que realloc mantém o endereço ao
+diminuir e muda ao aumentar (não é garantido).</li>
+</ul>
+<h3>0059-struct / 0061-vetor-de-structs / 0062-ponteiro-para-struct</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> declaração de struct cria um TIPO (não aloca); definir variável aloca; membros
+uninicializados = indefinidos; inicialização na ordem <code>{3, &#39;C&#39;}</code>; nomes de membros podem repetir nomes de
+variáveis sem conflito. <strong>Diferença essencial com array:</strong> struct pode ser atribuída inteira com <code>=</code>
+(copia todos os membros, inclusive arrays internos), passada por valor e retornada por função; array não.
+Únicos usos da struct inteira: <code>=</code>, <code>&amp;</code> e acesso a membros (<code>+=</code>, <code>++</code>, <code>==</code> em struct → erro).</li>
+<li><strong>Exemplos:</strong> <code>struct endereco</code> com <code>obtem_endereco()</code> retornando a struct (comparado lado a lado com
+<code>obtem_int()</code>: analogia ótima); vetor de 10 endereços; struct aninhada <code>student</code> com <code>casa</code> e <code>escola</code>
+(<code>pessoa.casa.rua</code>).</li>
+<li><strong>Ponteiro para struct:</strong> <code>(*pfac).num</code> precisa de parênteses porque <code>.</code> tem precedência maior que <code>*</code>;
+<code>-&gt;</code> simplifica: <code>pfac-&gt;num</code>. Regra: <code>.</code> para variável struct, <code>-&gt;</code> para ponteiro. Passar ponteiro é mais
+eficiente que copiar struct grande; se só vai ler, pode passar por valor.</li>
+<li><strong>Exercício:</strong> por que <code>*pfac.num</code> não compila? (vira <code>*(pfac.num)</code>).</li>
+</ul>
+<h3>0063-enum</h3>
+<ul>
+<li><strong>Motivação boa:</strong> códigos mágicos (<code>sexo == 2</code>, <code>cor = cor + sexo</code>) tornam o programa obscuro.
+<code>enum TpSemana {SEG, TER, QUA, QUI, SEX, SAB, DOM};</code> (0..6); usar valor fora da lista (<code>AZUL</code>) é erro.</li>
+<li><strong>Exemplo:</strong> pagamento que cai no fim de semana passa para segunda: <code>if (diaSem == SAB) dia += 2; else if (diaSem == DOM) dia++;</code>; compare com a versão <code>== 5</code>/<code>== 6</code>.</li>
+<li><strong>Pegadinha (para exercício):</strong> no dia 31 isso gera &quot;dia 33&quot;: falta tratar a virada do mês.</li>
+</ul>
+<h3>0067-arquivos-texto</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> arquivo = fluxo sequencial de bytes; abrir → processar → fechar; <code>FILE *</code> aponta para
+o bloco de controle do arquivo; <code>stdin</code>, <code>stdout</code>, <code>stderr</code> já abertos; modos &quot;r&quot;, &quot;w&quot; (cria/apaga), etc.;
+fopen devolve NULL em caso de erro (inexistente para leitura, disco cheio, sem permissão), então teste;
+depois de aberto, o nome é irrelevante; <code>fclose</code> devolve 0 ou EOF. Três jeitos de ler texto: caractere
+(<code>fgetc/fputc</code>), linha (<code>fgets/fputs</code>), formatado (<code>fscanf/fprintf</code>, que devolvem EOF/nº de itens).</li>
+<li><strong>Exemplos:</strong> <code>cat</code> caseiro com <code>while ((ch = fgetc(fp)) != EOF)</code> (ch é <code>int</code>); gravar o que se digita até
+Ctrl-D com <code>fgets</code>/<code>fputs</code>; <strong>base de agentes secretos</strong> (<code>agentes.txt</code>: &quot;Klara 89&quot;, &quot;Edward 888&quot;,
+&quot;ZipZap 109&quot;) com menu e/l/q, carregar/listar/inserir/salvar. Ótimo &quot;juntando tudo&quot; do módulo 09.</li>
+<li><strong>Pegadinhas na fonte:</strong> <code>cargadb</code> não testa <code>fopen</code> nem o limite de 50 registros; compara <code>fscanf</code> com
+<code>EOF</code> (se a linha estiver malformada, retorna 0 e entra em laço infinito; comparar com <code>== 2</code>).</li>
+</ul>
+<h3>0069-argumentos</h3>
+<ul>
+<li><code>main(int argc, char *argv[])</code>; <code>argc</code> ≥ 1; <code>argv[0]</code> = nome do programa; aspas agrupam palavras.
+<strong>Exercício:</strong> <code>nroff -mm -TXR memo1</code> → argc = 4; argv[2] = &quot;-TXR&quot;.</li>
+</ul>
+<h3>0091-bubble-sort / 0092-selection-sort / 0089-busca-sequencial</h3>
+<ul>
+<li><strong>Seleção (traço pronto):</strong> 9 5 2 7 3 8 1 4 6 → após cada passagem: 1 5 2 7 3 8 9 4 6 / 1 2 5 7 3 8 9 4 6 /
+1 2 3 7 5 8 9 4 6 / ... / 1 2 3 4 5 6 7 8 9; sempre n−1 passagens mesmo se já ordenado.</li>
+<li><strong>Bolha (traço pronto):</strong> começando do fim e comparando com o anterior; 9 8 7 6 5 4 3 2 1 → 1 9 8 7 6 5 4 3 2
+→ 1 2 9 8 7 6 5 4 3 → ...; versão otimizada com flag <code>ordenado</code> (para quando uma passagem não troca nada).</li>
+<li><strong>Busca linear:</strong> <code>pesquisa_linear(v, n, chave)</code> → índice ou −1.</li>
+</ul>
+<h3>0105-hashing … 0113</h3>
+<ul>
+<li>Não cobertos.</li>
+</ul>
+<hr>
+<h2>Obsoleto / evitar</h2>
+<table>
+<thead>
+<tr>
+<th>Na fonte</th>
+<th>Problema</th>
+<th>Alternativa em C padrão</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>main()</code> / <code>main(void)</code> sem tipo</td>
+<td>&quot;int implícito&quot; removido no C99</td>
+<td><code>int main(void) { ... return 0; }</code></td>
+</tr>
+<tr>
+<td><code>gets(nome)</code></td>
+<td>estouro de buffer; removida no C11</td>
+<td><code>fgets(nome, sizeof nome, stdin)</code> + tirar <code>&#39;\n&#39;</code></td>
+</tr>
+<tr>
+<td><code>#define NULL &#39;\0&#39;</code></td>
+<td>confunde ponteiro nulo com caractere nulo</td>
+<td><code>&#39;\0&#39;</code> para caractere; <code>NULL</code> (de stdio.h) só para ponteiros</td>
+</tr>
+<tr>
+<td>Dev-C++ / Turbo C (<code>^Z</code>, int 16 bits, ponteiro &quot;5 bytes&quot;)</td>
+<td>ambiente antigo</td>
+<td>gcc no terminal; <code>sizeof</code>; Ctrl-D no Linux</td>
+</tr>
+<tr>
+<td><code>&#39;\xB1&#39;</code> (quadrado da tabela estendida)</td>
+<td>não portátil</td>
+<td><code>&#39;#&#39;</code> ou UTF-8</td>
+</tr>
+<tr>
+<td>malloc &quot;retorna char *&quot; + cast</td>
+<td>desatualizado</td>
+<td><code>int *p = malloc(n * sizeof *p);</code></td>
+</tr>
+<tr>
+<td><code>p = realloc(p, ...)</code></td>
+<td>vaza se falhar</td>
+<td>ponteiro temporário</td>
+</tr>
+<tr>
+<td><code>char *s = &quot;literal&quot;</code> como forma preferida</td>
+<td>literal é só leitura</td>
+<td><code>const char *s</code> ou <code>char s[] = &quot;...&quot;</code></td>
+</tr>
+<tr>
+<td>reiniciar o computador após acesso fora do array</td>
+<td>mito de DOS/Windows 9x</td>
+<td>hoje: segmentation fault; usar <code>-fsanitize=address</code></td>
+</tr>
+</tbody></table>
+<h2>Extras que não cabem no sumário</h2>
+<ul>
+<li>A documentação padrão de função (ver 0001-primeiro-programa) pode virar convenção do curso.</li>
+<li>&quot;Raiz quadrada inteira&quot; por divide-e-calcula-média (Newton com inteiros): para 42 → palpites 1, 21, 11, 7, 6
+(6² = 36 ≤ 42 &lt; 49); condição reescrita com De Morgan; exemplo ótimo de laço com condição composta e
+suposição (x ≥ 0).</li>
+<li>Linhas de texto têm limite (a fonte cita 254 caracteres): curiosidade.</li>
+<li><code>memcpy</code> aparece no exemplo de malloc.</li>
+</ul>

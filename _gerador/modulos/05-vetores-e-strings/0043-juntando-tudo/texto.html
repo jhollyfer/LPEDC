@@ -1,0 +1,128 @@
+<h2>0043 · Juntando tudo</h2>
+<p>A escola do bairro abriu uma enquete para o mascote da festa junina: arara,
+boto ou capivara. Os votos chegam um por linha, do jeito que cada pessoa
+digitou: <code>boto</code>, <code>Arara</code>, <code>CAPIVARA</code>, <code>Tatu</code>. Você precisa contar os votos,
+desenhar um gráfico de barras e anunciar o vencedor. Nenhuma peça é nova; o
+trabalho está em encaixar as peças do módulo.</p>
+<p>A entrada vem primeiro. O <code>fgets</code> (assunto 0042) lê um voto por linha e
+devolve <code>NULL</code> quando a entrada acaba. Isso vira um <strong>laço com sentinela</strong>
+(assunto 0025): o laço continua enquanto o <code>fgets</code> não devolve <code>NULL</code>, e você
+não precisa saber de antemão quantos votos vão chegar (LINUX MAN-PAGES
+PROJECT, s.d.).</p>
+<p>Cada linha lida precisa de uma limpeza antes da comparação, um passo chamado
+de <strong>normalizar</strong>. O <code>strcspn</code> tira o <code>&#39;\n&#39;</code> que o <code>fgets</code> guardou, e o
+<code>tolower</code> (assunto 0040) passa cada letra para minúscula, para que &quot;BOTO&quot;,
+&quot;Boto&quot; e &quot;boto&quot; virem o mesmo texto. O <code>(unsigned char)</code> antes do <code>tolower</code>
+protege contra votos com acento (DEITEL; DEITEL, 2011, cap. 8).</p>
+<p>Os candidatos ficam numa <strong>matriz de <code>char</code></strong> (assunto 0039), um nome por
+linha: <code>char nomes[3][12]</code>. Ela ocupa 36 bytes contínuos; &quot;arara&quot; usa 6 bytes
+da linha 0, e o resto da linha fica com zeros. <code>nomes[i]</code> começa em início +
+i × 12, e é essa conta que obriga o <code>[TAM_NOME]</code> no parâmetro da função que
+recebe a matriz (BACKES, 2013, cap. 9). Nomes de tamanhos muito diferentes
+desperdiçam espaço; no módulo 07, a memória dinâmica guarda cada nome com o
+tamanho exato.</p>
+<p>A contagem usa um <strong>vetor de contadores</strong> (assunto 0037), <code>int votos[3]</code>. A
+ideia é casar as posições: <code>votos[i]</code> conta os votos do candidato que está em
+<code>nomes[i]</code>. Se a capivara é a linha 2 da matriz, os votos dela ficam em
+<code>votos[2]</code> (DEITEL; DEITEL, 2011, cap. 6).</p>
+<p>Falta ligar o voto à posição. A função <code>buscar</code> compara a linha com cada
+nome usando <code>strcmp</code> e devolve a posição em que achou ou -1, como no A076. O
+-1 resolve o voto inválido sem <code>if</code> especial: &quot;Tatu&quot; não está na matriz, a
+busca devolve -1, e o <code>main</code> soma esse voto aos inválidos (BACKES, 2013,
+cap. 9).</p>
+<p>As funções seguem o assunto 0038. <code>normalizar</code> recebe a linha e a altera,
+porque recebeu o endereço do vetor; <code>buscar</code> só lê, então os parâmetros dela
+podem levar <code>const</code>. O <code>main</code> cuida do laço e do resultado, e cada função faz
+uma coisa só.</p>
+<p>Por fim, uma operação que aparece no exercício de ordenar uma lista: trocar
+dois nomes de lugar. Como string não se atribui com <code>=</code>, a troca é um
+<code>strcpy</code> triplo com uma variável auxiliar: copia o primeiro para a auxiliar,
+o segundo para o primeiro e a auxiliar para o segundo. O A086 ordena uma
+lista assim (KERNIGHAN; RITCHIE, 1989, cap. 5).</p>
+<blockquote>
+<p>[!WARNING]
+<strong>Empate</strong>: com <code>votos[i] &gt; votos[vencedor]</code>, ganha quem aparece primeiro na
+matriz; com <code>&gt;=</code>, o último. É uma regra escondida no operador: decida de
+propósito. E <code>&quot;boto &quot;</code>, com espaço no fim, é inválido para o <code>strcmp</code>:
+<code>normalizar</code> não corta espaços.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>A enquete do mascote da festa junina: arara, boto ou capivara. Cada linha lida
+passa pela mesma esteira: normaliza, procura na matriz e soma 1. &quot;Tatu&quot; vai
+para os inválidos:</p>
+<p>{{ideia}}</p>
+<p>Para testar sem digitar, mande os votos com
+<code>printf &#39;boto\nArara\n...&#39; | ./programa</code>:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;ctype.h&gt;
+
+#define CANDIDATOS 3
+#define TAM_NOME 12
+#define TAM_LINHA 40
+
+// tira o &#39;\n&#39; e deixa tudo em minúsculas: &quot;BOTO\n&quot; vira &quot;boto&quot;
+void normalizar(char s[]) {
+    s[strcspn(s, &quot;\n&quot;)] = &#39;\0&#39;;
+    for (int i = 0; s[i] != &#39;\0&#39;; i++) {
+        s[i] = (char) tolower((unsigned char) s[i]);
+    }
+}
+
+// devolve a posição do candidato, ou -1 se o voto não bate com nenhum
+int buscar(char nomes[][TAM_NOME], int n, const char voto[]) {
+    for (int i = 0; i &lt; n; i++) {
+        if (strcmp(nomes[i], voto) == 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void mostrar_barra(const char nome[], int votos) {
+    printf(&quot;%-9s &quot;, nome);
+    for (int i = 0; i &lt; votos; i++) {
+        putchar(&#39;#&#39;);
+    }
+    printf(&quot; %d\n&quot;, votos);
+}
+
+int main(void) {
+    char nomes[CANDIDATOS][TAM_NOME] = {&quot;arara&quot;, &quot;boto&quot;, &quot;capivara&quot;};
+    int votos[CANDIDATOS] = {0};
+    int invalidos = 0;
+    char linha[TAM_LINHA];
+
+    while (fgets(linha, sizeof(linha), stdin) != NULL) { // um voto por linha
+        normalizar(linha);
+        int pos = buscar(nomes, CANDIDATOS, linha);
+        if (pos &gt;= 0) {
+            votos[pos]++;
+        } else {
+            invalidos++;
+        }
+    }
+
+    int vencedor = 0;
+    for (int i = 0; i &lt; CANDIDATOS; i++) {
+        mostrar_barra(nomes[i], votos[i]);
+        if (votos[i] &gt; votos[vencedor]) {
+            vencedor = i;
+        }
+    }
+    printf(&quot;Inválidos: %d\n&quot;, invalidos);
+    printf(&quot;Vencedor: %s\n&quot;, nomes[vencedor]);
+    return 0;
+}
+// Entrada (um voto por linha):
+// boto, Arara, CAPIVARA, boto, Tatu, capivara, Boto, arara, boto
+// Saída:
+// arara     ## 2
+// boto      #### 4
+// capivara  ## 2
+// Inválidos: 1
+// Vencedor: boto
+</code></pre>
+<p>Dentro do laço há uma decisão: achou o candidato ou não. O resultado só sai
+quando a entrada acaba:</p>
+<p>{{fluxograma}}</p>

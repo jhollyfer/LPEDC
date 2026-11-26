@@ -1,0 +1,42 @@
+<h1>LPEDC · instruções para agentes</h1>
+<p>Curso pessoal de lógica de programação, linguagem C e estrutura de dados, em pt-BR, para a
+Prova de Conhecimentos do Mestrado do PPGI/UFAM.</p>
+<h2>O padrão Maiyu, adaptado ao curso</h2>
+<p>Este repositório segue a filosofia do <code>maiyu-pattern</code> (github.com/jhollyfer/maiyu-pattern):
+documentação viva em <code>docs/</code>, autor único, commits Conventional em pt-BR e zero duplicidade. A régua de TypeScript (<code>_doc-lib/</code>, <code>_standards/</code>, skills
+de backend e frontend) não vem para cá: o curso usa HTML estático e JavaScript no navegador. O que muda em relação
+ao padrão está em <code>docs/DECISIONS.html</code>.</p>
+<ul>
+<li>Autor único <code>Jhollyfer Rodrigues &lt;jhollyfer.fr@gmail.com&gt;</code>: nenhum commit ou arquivo leva agente
+como autor ou coautor (sem <code>Co-Authored-By</code>, <code>Claude-Session</code> nem &quot;Generated with&quot;).</li>
+<li>Commits Conventional em pt-BR e atômicos: <code>feat(13-busca): ...</code>, <code>fix(0095): ...</code>,
+<code>docs: ...</code>, <code>refactor(gerador): ...</code>. Nunca <code>claude</code>, <code>anthropic</code> ou outro agente na mensagem.</li>
+<li>Só existe a <code>main</code>, e a mudança vai direto nela, sem branch nem PR (<code>docs/DECISIONS.html</code> #2).</li>
+<li>Texto que alguém vai ler (módulos, README, PPGI, <code>docs/</code>) passa pelo <code>humanizer-pt</code> antes do
+commit (<code>docs/TEST-PLAN.html</code> §3).</li>
+</ul>
+<h2>Antes de qualquer tarefa</h2>
+<ol>
+<li><code>docs/MEMORY.html</code>: onde o trabalho parou e as lições.</li>
+<li><code>docs/TASKS.html</code>: o que está em andamento e o que vem depois.</li>
+<li>O que a tarefa pede:<ul>
+<li>escrever ou revisar conteúdo: <code>docs/RULES.html</code>;</li>
+<li>mexer em pasta, numeração ou gerador: <code>docs/ARCHITECTURE.html</code>;</li>
+<li>desenho (ideia ou fluxograma): <code>docs/DESIGN.html</code>;</li>
+<li>conferir antes de dar como pronto: <code>docs/TEST-PLAN.html</code>;</li>
+<li>escopo do curso, módulo novo, prova: <code>docs/PRD.html</code> e <code>PPGI.html</code>;</li>
+<li>escolha difícil de desfazer: <code>docs/DECISIONS.html</code>.</li>
+</ul>
+</li>
+</ol>
+<p>Leia pela seção (<code>rg -n &#39;&lt;h2&gt;&#39; docs/RULES.html</code>), não o arquivo inteiro.</p>
+<h2>Ao terminar</h2>
+<p>No mesmo commit da mudança:</p>
+<ul>
+<li>status em <code>docs/TASKS.html</code>;</li>
+<li>&quot;Parou em&quot; e &quot;Próximos passos&quot; em <code>docs/MEMORY.html</code>; correção do dono vira linha em &quot;Lições&quot;;</li>
+<li><code>docs/DECISIONS.html</code> se decidiu algo difícil de desfazer;</li>
+<li><code>docs/CHANGELOG.html</code> em <code>[Não lançado]</code> se quem estuda percebe a mudança.</li>
+</ul>
+<h2>Não toque sem perguntar</h2>
+<p>Lista em <code>docs/RULES.html</code> §2.</p>

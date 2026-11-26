@@ -1,0 +1,353 @@
+<h1>Módulo 02 · Decisões</h1>
+<p>A segunda peça de todo algoritmo: o programa <strong>escolhe</strong> um caminho. O módulo
+cobre relacionais e lógicos, <code>if</code>, <code>if/else</code>, <code>else if</code>, o ternário e o
+<code>switch</code>, com as pegadinhas que compilam e erram em silêncio. Depende do
+módulo 01 (variáveis, <code>scanf</code> e seu retorno, <code>%</code>, <code>math.h</code>) e prepara o 03.</p>
+<h2>O que você vai aprender</h2>
+<ul>
+<li><strong>operadores relacionais</strong> e a verdade em C: comparação vale 0 ou 1; <code>bool</code> de <code>&lt;stdbool.h&gt;</code></li>
+<li><strong>operadores lógicos</strong> <code>&amp;&amp;</code>, <code>||</code> e <code>!</code>, tabela-verdade, <strong>curto-circuito</strong> e De Morgan</li>
+<li>o <strong><code>if</code></strong>, as chaves e a armadilha do <code>;</code> depois da condição</li>
+<li>o <strong><code>if/else</code></strong> e a pegadinha do <code>=</code> no lugar de <code>==</code></li>
+<li><strong><code>else if</code></strong>, <code>if</code> aninhado e o <strong>else pendurado</strong></li>
+<li>o <strong>operador ternário</strong>, a decisão que devolve um valor</li>
+<li>o <strong><code>switch</code></strong>, o <code>break</code> e o <strong>fall-through</strong></li>
+<li>um programa que lê dados, valida a entrada e decide</li>
+</ul>
+<h2>Antes de começar</h2>
+<p>Nos fluxogramas, o caminho verde mostra por onde o exemplo passou.</p>
+<blockquote>
+<p>[!TIP]
+Teste <strong>cada caminho</strong> e os <strong>valores de fronteira</strong>: se a regra é &quot;a partir
+de R$ 200&quot;, teste 199,99, 200 e 200,01. A maioria dos erros de decisão é a
+troca de <code>&gt;</code> por <code>&gt;=</code>.</p>
+</blockquote>
+<p>Os exercícios com teclado aceitam entrada por pipe, o que facilita testar
+vários casos:</p>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A028.c -o ~/LPEDC/material/A028 &amp;&amp; printf &#39;12.90 8.50\n&#39; | ~/LPEDC/material/A028
+</code></pre>
+<p>Os exercícios &quot;ache o erro&quot; trazem código quebrado <strong>de propósito</strong> e mostram
+avisos; o enunciado avisa quando é o caso. Nos demais, <strong>zero avisos</strong>.</p>
+<p>{{indice}}</p>
+<hr>
+<p>{{assuntos}}</p>
+<hr>
+<h2>Desafios do módulo</h2>
+<p>Problemas extras, só com decisões (sem laços). Escreva cada um num arquivo
+seu, compile com as flags de estudo e teste todos os caminhos.</p>
+<p><strong>1. Maior e menor de quatro.</strong> Leia quatro números inteiros e mostre o maior
+e o menor, usando só <code>if</code> (sem <code>else</code>). Conte as comparações com uma variável
+<code>comparacoes</code>, somando 1 antes de cada <code>if</code>, e mostre o total. Depois
+acrescente ao mesmo programa uma segunda versão que ache o maior e o menor
+com só 4 comparações e mostre a contagem dela também. Teste com 7 2 9 4.</p>
+<details><summary>Resposta</summary><pre><code class="language-text">Quatro números: 7 2 9 4
+Direto: maior 9, menor 2, 6 comparações
+Em pares: maior 9, menor 2, 4 comparações
+</code></pre>
+<p>O jeito direto (<code>maior = a</code>, depois um <code>if</code> para cada outro número, e o mesmo
+para o menor) faz 6 comparações. A versão de 4 compara em pares (a com b, c
+com d): o maior de cada par disputa o maior e o menor de cada par disputa o
+menor. Zere <code>comparacoes</code> antes da segunda versão.</p>
+</details><p><strong>2. Três números em ordem.</strong> Leia três inteiros e mostre em ordem
+crescente. Use trocas com uma variável auxiliar, como no A028.</p>
+<details><summary>Resposta</summary><p>Com 8, 3, 5 → <strong>3 5 8</strong>. Bastam três <code>if</code> com troca, nesta ordem: se <code>a &gt; b</code>,
+troca a e b; se <code>b &gt; c</code>, troca b e c; se <code>a &gt; b</code> de novo, troca a e b. Depois
+disso <code>a &lt;= b &lt;= c</code>. Teste também com números repetidos (5, 5, 1).</p>
+</details><p><strong>3. Bhaskara completo.</strong> Estenda o E090: se <code>a</code> for 0, avise que não é
+equação do 2º grau (e resolva a do 1º grau, se <code>b</code> não for 0); se delta for
+zero, mostre uma raiz só; se for positivo, as duas; se for negativo, &quot;Sem
+raízes reais&quot;.</p>
+<details><summary>Resposta</summary><p>0 2 -8 → &quot;não é do 2º grau&quot;, x = <strong>4.00</strong>; 1 -6 9 → raiz única <strong>3.00</strong>;
+1 -3 -4 → <strong>4.00</strong> e <strong>-1.00</strong>; 1 0 1 → sem raízes reais. Cuidado com o
+<code>delta == 0</code> em <code>double</code>: com coeficientes inteiros ele funciona, mas com
+valores quebrados prefira <code>fabs(delta) &lt; 1e-9</code>.</p>
+</details><p><strong>4. Conceito por switch.</strong> Leia uma nota inteira de 0 a 100 e mostre o
+conceito: 90 a 100 é A, 80 a 89 é B, 70 a 79 é C, 60 a 69 é D e abaixo de 60
+é F. A regra: use <code>switch</code>, sem nenhum <code>if</code> (fora a validação da faixa).</p>
+<details><summary>Resposta</summary><p>O truque é <code>switch (nota / 10)</code>: a divisão inteira transforma 87 em 8. Os
+casos ficam <code>case 10: case 9:</code> → A (fall-through empilhado: 100 / 10 é 10),
+<code>case 8:</code> → B, <code>case 7:</code> → C, <code>case 6:</code> → D e <code>default:</code> → F. 100 → A,
+87 → B, 60 → D, 59 → F.</p>
+</details><p><strong>5. Bom dia, boa tarde, boa noite.</strong> Leia a hora (0 a 23) e cumprimente: de
+5h a 11h59 &quot;Bom dia&quot;, de 12h a 17h59 &quot;Boa tarde&quot;, senão &quot;Boa noite&quot;. No mesmo
+programa, faça duas versões, uma com <code>else if</code> e outra com ternários
+encadeados dentro de um <code>printf(&quot;%s&quot;)</code>, e mostre as duas respostas, uma por
+linha, para conferir que batem. Rode com 4, 5, 12 e 18.</p>
+<details><summary>Resposta</summary><pre><code class="language-text">Hora: 12
+else if:  Boa tarde
+ternário: Boa tarde
+</code></pre>
+<p>4 → Boa noite; 5 → Bom dia; 18 → Boa noite, nas duas linhas. &quot;Boa
+noite&quot; cobre duas faixas separadas (0 a 4 e 18 a 23): com <code>else if</code>
+começando por <code>hora &gt;= 5 &amp;&amp; hora &lt; 12</code>, ela cai naturalmente no <code>else</code>. O
+ternário encadeado fica <code>cond1 ? &quot;Bom dia&quot; : cond2 ? &quot;Boa tarde&quot; : &quot;Boa noite&quot;</code>: compacto, mas só vale quando cabe numa linha curta.</p>
+</details><p><strong>6. Quem chegou primeiro?</strong> Leia dois horários no formato <code>hh:mm</code> (com
+<code>scanf(&quot;%d:%d&quot;, ...)</code>) e diga qual é mais cedo e quantos minutos separam um
+do outro. Valide as horas (0 a 23) e os minutos (0 a 59).</p>
+<details><summary>Resposta</summary><p>Converta tudo para minutos desde a meia-noite: <code>h * 60 + m</code>. 08:45 e 10:20 →
+525 e 620: o primeiro é mais cedo, <strong>95 minutos</strong> de diferença. Comparar
+horas e minutos separados também funciona, mas exige <code>if</code> aninhado
+(<code>h1 &lt; h2 || (h1 == h2 &amp;&amp; m1 &lt; m2)</code>).</p>
+</details><p><strong>7. De Morgan na prática.</strong> Simplifique, sem mudar o resultado, a condição
+<code>!(nota &lt; 5 || faltas &gt; 15) &amp;&amp; !(trancou != 0)</code>. Depois escreva um programa
+que imprima as duas versões para alguns valores e prove que batem.</p>
+<details><summary>Resposta</summary><p><code>!(nota &lt; 5 || faltas &gt; 15)</code> vira <code>nota &gt;= 5 &amp;&amp; faltas &lt;= 15</code>, e
+<code>!(trancou != 0)</code> vira <code>trancou == 0</code>. Resultado:
+<code>nota &gt;= 5 &amp;&amp; faltas &lt;= 15 &amp;&amp; trancou == 0</code>. Em português: aprovado é quem
+tem nota, frequência e não trancou.</p>
+</details><p><strong>8. O else que trocou de dono.</strong> Sem mudar nenhuma linha, só acrescentando
+chaves, faça este trecho mostrar exatamente o que se pede em cada caso:</p>
+<pre><code class="language-c">if (x &gt; 0)
+if (y &gt; 0)
+printf(&quot;A &quot;);
+else
+printf(&quot;B &quot;);
+printf(&quot;C\n&quot;);
+</code></pre>
+<p>(a) com x = 1 e y = -1, mostrar só &quot;C&quot;; (b) com x = -1 e y = 1, mostrar
+&quot;B C&quot;; (c) com x = 1 e y = 1, mostrar &quot;A C&quot;.</p>
+<details><summary>Resposta</summary><p>Sem chaves, o <code>else</code> é do <code>if (y &gt; 0)</code>: (b) mostraria só &quot;C&quot;. Colocando
+chaves em volta do <code>if (y &gt; 0) printf(&quot;A &quot;);</code>, o <code>else</code> passa para o
+<code>if (x &gt; 0)</code>: (a) &quot;C&quot;, (b) &quot;B C&quot;, (c) &quot;A C&quot;. As três condições pedem a mesma
+versão.</p>
+</details><p><strong>9. Jogo de dados.</strong> Dois dados foram lançados (leia os dois valores, de 1 a
+6). Na primeira jogada do craps: soma 7 ou 11 vence; soma 2, 3 ou 12 perde;
+qualquer outra soma vira o &quot;ponto&quot;. Mostre o resultado com um <code>switch</code> na
+soma.</p>
+<details><summary>Resposta</summary><p><code>case 7: case 11:</code> → vence; <code>case 2: case 3: case 12:</code> → perde;
+<code>default:</code> → &quot;Ponto: %d&quot;. 3 e 4 → soma 7, vence; 1 e 1 → 2, perde; 4 e 6 →
+10, ponto 10. Valide antes os dados (1 a 6) com uma guarda: valor 0 ou 7 não
+existe num dado.</p>
+</details><p><strong>10. Signo pela data.</strong> Leia dia e mês de nascimento e mostre o signo. Cada
+signo começa num dia de um mês e termina no mês seguinte (Áries: 21/03 a
+19/04; Touro: 20/04 a 20/05; e assim por diante).</p>
+<details><summary>Resposta</summary><p>Um <code>switch (mes)</code> com um <code>if</code> dentro de cada <code>case</code>: em abril, por exemplo,
+<code>dia &lt;= 19</code> é Áries, senão Touro. 25/04 → <strong>Touro</strong>; 10/04 → <strong>Áries</strong>. São
+12 <code>case</code>, cada um com um ternário ou <code>if/else</code>. Valide a data antes (o E111
+já faz isso).</p>
+</details><h2>Questões do POSCOMP</h2>
+<p>Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.</p>
+<table>
+<thead>
+<tr>
+<th>Ano</th>
+<th>Questão</th>
+<th>Assunto</th>
+<th>Gabarito</th>
+<th>Prova</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2019</td>
+<td>33</td>
+<td>Estruturas de seleção em programação</td>
+<td>A</td>
+<td><a href="https://www.sbc.org.br/wp-content/uploads/2025/02/0518.002_Exame_POSCOMP_2019.pdf">caderno</a></td>
+</tr>
+<tr>
+<td>2024</td>
+<td>47</td>
+<td>Escolha de instrução condicional encadeada</td>
+<td>D</td>
+<td><a href="https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2024.pdf">caderno</a></td>
+</tr>
+<tr>
+<td>2025</td>
+<td>45</td>
+<td>Comando de seleção simples if</td>
+<td>a conferir no gabarito oficial</td>
+<td><a href="https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2025.pdf">caderno</a></td>
+</tr>
+</tbody></table>
+<p>O gabarito oficial de 2025 não estava disponível quando este material foi montado.</p>
+<h2>Questões no estilo da prova</h2>
+<p>Questões objetivas no formato da Prova do PPGI, com uma alternativa certa.
+Resolva no papel antes do gabarito. Vários trechos fazem o <code>-Wall</code> reclamar de
+propósito: é a pegadinha.</p>
+<p><strong>1.</strong> Qual a saída?</p>
+<pre><code class="language-c">int x = 0, y = 0, z;
+z = x++ &amp;&amp; y++;
+printf(&quot;%d %d %d\n&quot;, x, y, z);
+</code></pre>
+<ul>
+<li>(A) 1 1 0</li>
+<li>(B) 0 0 0</li>
+<li>(C) 1 0 0</li>
+<li>(D) 1 1 1</li>
+<li>(E) 0 1 0</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(C).</strong> <code>x++</code> vale o valor antigo de <code>x</code>, 0 (falso), e <code>x</code> vira 1. Como o
+lado esquerdo do <code>&amp;&amp;</code> deu falso, o <strong>curto-circuito</strong> pula o lado direito: o
+<code>y++</code> nunca roda. O resultado do <code>&amp;&amp;</code> é 0. Veja 0013 (e 0009 para o <code>x++</code>).</p>
+</details><p><strong>2.</strong> Qual o valor de <code>t</code> no fim?</p>
+<pre><code class="language-c">int op = 2, t = 0;
+switch (op) {
+case 1: t += 1;
+case 2: t += 2;
+case 3: t += 3; break;
+default: t += 10;
+}
+</code></pre>
+<ul>
+<li>(A) 2</li>
+<li>(B) 15</li>
+<li>(C) 3</li>
+<li>(D) 6</li>
+<li>(E) 5</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(E).</strong> O <code>switch</code> pula direto para o <code>case 2</code> (o <code>case 1</code> não roda) e, sem
+<code>break</code>, <strong>cai</strong> no <code>case 3</code>: 2 + 3 = 5. O <code>break</code> do <code>case 3</code> sai antes do
+<code>default</code>. Veja 0018.</p>
+</details><p><strong>3.</strong> O que o trecho mostra?</p>
+<pre><code class="language-c">int a = 5, b = 3;
+if (a &gt; 10)
+    if (b &gt; 2) printf(&quot;X&quot;);
+else printf(&quot;Y&quot;);
+printf(&quot;Z\n&quot;);
+</code></pre>
+<ul>
+<li>(A) YZ</li>
+<li>(B) Z</li>
+<li>(C) XZ</li>
+<li>(D) XYZ</li>
+<li>(E) Y</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(B).</strong> É o <strong>else pendurado</strong>: o <code>else</code> pertence ao <code>if</code> mais próximo que
+ainda não tem <code>else</code>, o <code>if (b &gt; 2)</code>, não importa o recuo. Como <code>a &gt; 10</code> é
+falso, o <code>if</code> de fora pula tudo, inclusive o <code>else</code>. Só o <code>Z</code> aparece. O gcc
+avisa: <code>suggest explicit braces to avoid ambiguous &#39;else&#39;</code>. Veja 0016.</p>
+</details><p><strong>4.</strong> Qual a saída?</p>
+<pre><code class="language-c">int n = 0;
+if (n = 5) printf(&quot;sim&quot;); else printf(&quot;nao&quot;);
+printf(&quot; %d\n&quot;, n);
+</code></pre>
+<ul>
+<li>(A) sim 5</li>
+<li>(B) nao 0</li>
+<li>(C) sim 0</li>
+<li>(D) nao 5</li>
+<li>(E) não compila: <code>=</code> não pode aparecer dentro do <code>if</code></li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A).</strong> <code>n = 5</code> é uma <strong>atribuição</strong>, não uma comparação: guarda 5 em <code>n</code> e
+vale 5, que é diferente de zero, logo verdadeiro. Compila (com aviso
+<code>suggest parentheses around assignment used as truth value</code>). Veja 0015.</p>
+</details><p><strong>5.</strong> Com <code>int k = 15;</code>, quanto vale <code>10 &lt; k &lt; 12</code>?</p>
+<ul>
+<li>(A) 0, porque 15 não está entre 10 e 12</li>
+<li>(B) 15</li>
+<li>(C) não compila</li>
+<li>(D) 1</li>
+<li>(E) o valor é indefinido</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(D).</strong> O C lê da esquerda para a direita: <code>10 &lt; k</code> vale 1 (verdade), e
+depois <code>1 &lt; 12</code> também vale 1. O intervalo se escreve com um E:
+<code>k &gt; 10 &amp;&amp; k &lt; 12</code>, que daria 0. Veja 0012 e 0013.</p>
+</details><p><strong>6.</strong> Sobre o comando <code>switch</code> em C, considere as afirmações e marque a alternativa CORRETA.</p>
+<ul>
+<li><p><strong>I.</strong> Sem <code>break</code>, a execução continua no <code>case</code> seguinte.</p>
+</li>
+<li><p><strong>II.</strong> A expressão do <code>switch</code> pode ser um <code>float</code>.</p>
+</li>
+<li><p><strong>III.</strong> O rótulo <code>default</code> precisa ser o último do bloco.</p>
+</li>
+<li><p><strong>IV.</strong> Os rótulos <code>case</code> têm que ser constantes inteiras (ou <code>char</code>) distintas.</p>
+</li>
+<li><p>(A) Apenas I e III</p>
+</li>
+<li><p>(B) Apenas I e IV</p>
+</li>
+<li><p>(C) Apenas II e III</p>
+</li>
+<li><p>(D) Apenas II e IV</p>
+</li>
+<li><p>(E) Apenas III e IV</p>
+</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(B).</strong> I e IV são verdadeiras: é a queda entre <code>case</code>s, e os rótulos são constantes inteiras que não se repetem. II é falsa: o <code>switch</code> só aceita expressão inteira (<code>char</code> entra porque é inteiro). III é falsa: o <code>default</code> pode estar em qualquer posição, e o <code>switch</code> pula para ele quando nenhum <code>case</code> bate. Veja 0018.</p>
+</details><p><strong>7.</strong> Considere as afirmações abaixo e marque a alternativa CORRETA.</p>
+<ul>
+<li><p><strong>I.</strong> <code>!(a &gt; 0 &amp;&amp; b &lt;= 5)</code> é equivalente a <code>a &lt;= 0 || b &gt; 5</code>.</p>
+</li>
+<li><p><strong>II.</strong> Em <code>x &amp;&amp; y++</code>, se <code>x</code> vale 0, o <code>y++</code> não é executado.</p>
+</li>
+<li><p><strong>III.</strong> Para <code>a</code> e <code>b</code> inteiros diferentes de zero, <code>a &amp; b</code> e <code>a &amp;&amp; b</code> sempre dão o mesmo resultado.</p>
+</li>
+<li><p><strong>IV.</strong> <code>if (n = 5)</code> é erro de compilação em C.</p>
+</li>
+<li><p>(A) Apenas I</p>
+</li>
+<li><p>(B) Apenas II e III</p>
+</li>
+<li><p>(C) Apenas I e II</p>
+</li>
+<li><p>(D) Apenas I, II e IV</p>
+</li>
+<li><p>(E) Apenas III e IV</p>
+</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(C).</strong> I é verdadeira (De Morgan: nega cada comparação e troca <code>&amp;&amp;</code> por <code>||</code>). II é verdadeira: o curto-circuito pula o lado direito quando o esquerdo já decide. III é falsa: <code>2 &amp; 4</code> é 0, e <code>2 &amp;&amp; 4</code> é 1. IV é falsa: a atribuição dentro do <code>if</code> compila, só gera aviso. Veja 0013, 0015 e 0065.</p>
+</details><p><strong>8.</strong> Qual a saída?</p>
+<pre><code class="language-c">int p = 2, s = 4;
+printf(&quot;%d %d\n&quot;, p &amp; s, p &amp;&amp; s);
+</code></pre>
+<ul>
+<li>(A) 1 1</li>
+<li>(B) 6 1</li>
+<li>(C) 2 4</li>
+<li>(D) 0 0</li>
+<li>(E) 0 1</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(E).</strong> <code>&amp;</code> é o E <strong>bit a bit</strong>: <code>010 &amp; 100</code> não tem nenhum bit ligado em
+comum, dá 0. <code>&amp;&amp;</code> é o E <strong>lógico</strong>: 2 e 4 são diferentes de zero, os dois
+são verdade, dá 1. O 6 seria o <code>|</code> bit a bit. Veja 0013 (o aviso) e 0065.</p>
+</details><p><strong>9.</strong> O que o trecho mostra?</p>
+<pre><code class="language-c">char c = &#39;b&#39;;
+switch (c) {
+default: printf(&quot;D&quot;);
+case &#39;a&#39;: printf(&quot;A&quot;); break;
+case &#39;c&#39;: printf(&quot;C&quot;);
+}
+</code></pre>
+<ul>
+<li>(A) D</li>
+<li>(B) nada, porque o <code>default</code> tem que ser o último</li>
+<li>(C) DAC</li>
+<li>(D) DA</li>
+<li>(E) não compila: <code>char</code> não pode ir num <code>switch</code></li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(D).</strong> Nenhum <code>case</code> vale <code>&#39;b&#39;</code>, então o <code>switch</code> pula para o <code>default</code>,
+<strong>onde quer que ele esteja</strong>. Sem <code>break</code>, cai no <code>case &#39;a&#39;</code>, mostra <code>A</code> e o
+<code>break</code> sai. <code>char</code> é número, então vale no <code>switch</code>. Veja 0018.</p>
+</details><p><strong>10.</strong> O que o trecho mostra numa máquina comum (IEEE 754)?</p>
+<pre><code class="language-c">float f = 0.1f;
+if (f == 0.1) printf(&quot;igual\n&quot;); else printf(&quot;diferente\n&quot;);
+</code></pre>
+<ul>
+<li>(A) diferente</li>
+<li>(B) igual</li>
+<li>(C) depende de o <code>if</code> ter chaves</li>
+<li>(D) não compila: <code>float</code> não se compara com <code>double</code></li>
+<li>(E) igual, porque o <code>float</code> vira <code>double</code> antes da comparação</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A).</strong> O 0.1 não tem representação exata em binário. O <code>0.1f</code> guarda a
+aproximação de 24 bits; o <code>0.1</code> (sem <code>f</code>) é um <code>double</code>, com 53 bits. O
+<code>float</code> é convertido para <code>double</code> sim, mas a aproximação dele continua
+diferente da do <code>double</code>. Compare reais com uma tolerância:
+<code>fabs(f - 0.1) &lt; 1e-6</code>. Veja 0012.</p>
+</details><h2>Para ler mais</h2>
+<ul>
+<li>DEITEL, P.; DEITEL, H. <em>C: como programar</em>. 6. ed. São Paulo: Pearson Prentice Hall, 2011. Cap. 3 (seleção com <code>if</code> e <code>if...else</code>) e cap. 4 (<code>switch</code> e operadores lógicos).</li>
+<li>CELES, W.; CERQUEIRA, R.; RANGEL, J. L. <em>Introdução a estruturas de dados: com técnicas de programação em C</em>. 2. ed. Rio de Janeiro: Elsevier, 2016. Capítulo de controle de fluxo: <code>if</code>, <code>switch</code> e operadores lógicos.</li>
+<li>BACKES, A. <em>Linguagem C: completa e descomplicada</em>. Rio de Janeiro: Elsevier, 2013. Cap. 3 (operadores) e cap. 4 (comandos de controle condicional).</li>
+<li>BACKES, A. R. <em>Linguagem C: descomplicada</em>. Uberlândia: FACOM/UFU, [s.d.]. Apostila. Capítulos de operadores e de condicionais.</li>
+<li>HARA, C.; ZOLA, W. <em>Linguagem C: notas de aula</em>. Curitiba: UFPR, 2008.</li>
+<li>CARVALHO, V. A. <em>Lógica de programação</em>. Colatina: IFES / e-Tec Brasil, 2010.</li>
+<li>LEAL, G. C. L. <em>Algoritmos e lógica de programação II</em>. Maringá: Unicesumar, 2016.</li>
+<li>ANTONELLO, R. <em>Linguagem C</em>. 1. ed. Disponível em: <a href="http://www.antonello.com.br">http://www.antonello.com.br</a>.</li>
+<li>LAGO, S. <em>Linguagem C</em>. Apostila. São Paulo, [s.d.].</li>
+<li>MARTINS, L. G. A. <em>Apostila de linguagem C: conceitos básicos</em>. Uberlândia: FACOM/UFU, [s.d.].</li>
+<li>DORNELLES F., A. A. <em>Fundamentos de linguagem C</em>. Caxias do Sul: SENAI-RS, 1997.</li>
+<li>KERNIGHAN, B. W.; RITCHIE, D. M. <em>The C programming language</em>. 2. ed. Englewood Cliffs: Prentice Hall, 1988. Seções 2.6 (relacionais e lógicos), 2.11 (expressões condicionais) e 3.1 a 3.4 (<code>if-else</code>, <code>else-if</code>, <code>switch</code>).</li>
+<li>CPPREFERENCE. <em>if statement</em>; <em>switch statement</em>; <em>Operator precedence</em>. Disponível em: <a href="https://en.cppreference.com/w/c/language">https://en.cppreference.com/w/c/language</a>.</li>
+<li>GNU. <em>Using the GNU Compiler Collection (GCC)</em>: Warning Options (<code>-Wparentheses</code>, <code>-Wempty-body</code>, <code>-Wimplicit-fallthrough</code>, <code>-Wdangling-else</code>). Disponível em: <a href="https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html">https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html</a>.</li>
+</ul>

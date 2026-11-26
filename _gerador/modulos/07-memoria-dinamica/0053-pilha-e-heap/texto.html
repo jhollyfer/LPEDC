@@ -1,0 +1,124 @@
+<h2>0053 · Pilha e heap</h2>
+<p>Sexta à noite, restaurante cheio. O garçom anota o pedido da mesa 4 num
+bloquinho, arranca a folha e prende a comanda no balcão da cozinha. O
+bloquinho volta limpo para o bolso; a comanda fica no balcão até alguém
+pagar a conta e jogá-la fora. Um programa lida com a memória do mesmo jeito:
+há rascunho que só dura enquanto uma função trabalha, e há dado que precisa
+sobreviver a ela. Até aqui você só usou o primeiro tipo. Este módulo trata do
+segundo.</p>
+<p>Para entender a diferença, olhe o mapa. Quando o programa começa, o sistema
+operacional lhe entrega uma faixa de endereços dividida em <strong>regiões</strong>, e
+cada uma tem um dono e um tempo de vida próprios (CELES; RANGEL, 2002). A
+região de <strong>código</strong> guarda as instruções e os literais de string, como
+<code>&quot;bom dia&quot;</code> (assunto 0048), e é só de leitura. A região de <strong>dados</strong> guarda
+as variáveis globais e as <code>static</code>. As outras duas, a pilha e o heap, são as
+que interessam aqui.</p>
+<p>A <strong>pilha</strong> (<em>stack</em>) você conhece do assunto 0031. A cada chamada de função,
+ela empilha um <strong>frame</strong>, o espaço com as variáveis locais e os parâmetros
+daquela chamada; no <code>return</code>, o frame é desempilhado. É o bloquinho do
+garçom: automática, porque ninguém precisa pedir nem devolver, e rápida. Mas
+tem dois limites. O frame some no <code>return</code>, então nada que mora nele
+sobrevive à função. E a pilha é pequena: no Linux, 8 MiB por padrão; o
+comando <code>ulimit -s</code> mostra <code>8192</code>, em KiB (CELES; RANGEL, 2002). Um vetor
+local de 20 MB não cabe nela.</p>
+<p>O <strong>heap</strong> é o balcão da cozinha. É um depósito do tamanho da memória livre
+da máquina, e nele você pede, com o programa já rodando, um bloco de N
+bytes. Em troca, recebe o <strong>endereço</strong> desse bloco, que você guarda num
+ponteiro e usa como vetor. O bloco não pertence a função nenhuma: ele fica
+vivo até você devolvê-lo com <code>free</code> (BACKES, 2013, cap. 11). Por isso dá para
+criar um dado numa função e usá-lo em outra, depois que a primeira já
+retornou. O assunto 0054 mostra como pedir e devolver.</p>
+<p>Os livros dão nomes a esses três jeitos de conseguir memória. A alocação
+<strong>estática</strong> acontece na região de dados, com tamanho e endereço fixos desde
+a compilação. A <strong>automática</strong> acontece na pilha, a cada chamada. A
+<strong>dinâmica</strong> acontece no heap, quando você pede (CELES; RANGEL, 2002). A
+tabela resume o mapa:</p>
+<table>
+<thead>
+<tr>
+<th>Região</th>
+<th>O que guarda</th>
+<th>Quem cria e quem apaga</th>
+<th>Dura</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>código</strong></td>
+<td>as instruções e os literais (<code>&quot;bom dia&quot;</code>)</td>
+<td>o compilador</td>
+<td>o programa todo, só leitura</td>
+</tr>
+<tr>
+<td><strong>dados</strong></td>
+<td>globais e <code>static</code></td>
+<td>o compilador</td>
+<td>o programa todo</td>
+</tr>
+<tr>
+<td><strong>heap</strong></td>
+<td>blocos pedidos com <code>malloc</code></td>
+<td><strong>você</strong> pede e <strong>você</strong> devolve</td>
+<td>até o <code>free</code></td>
+</tr>
+<tr>
+<td><strong>pilha</strong></td>
+<td>locais e parâmetros (os frames)</td>
+<td>a chamada e o <code>return</code></td>
+<td>enquanto a função roda</td>
+</tr>
+</tbody></table>
+<p>A coluna do meio guarda a responsabilidade nova. O C não tem <strong>coletor de
+lixo</strong> (<em>garbage collector</em>), o mecanismo que apaga sozinho o que ninguém
+mais usa. Tudo o que você tira do heap, você devolve com <code>free</code>; o que fica
+esquecido continua ocupado até o programa acabar (FEOFILOFF, 2009, ap. F).</p>
+<blockquote>
+<p>[!WARNING]
+Nunca devolva o endereço de uma variável local: <code>char senha[8]; ... return senha;</code> aponta para um frame que deixa de existir no <code>return</code>. O gcc avisa
+(<code>function returns address of local variable</code>) e devolve <code>NULL</code> no lugar.
+Saídas: quem chama empresta o vetor, a variável vira <code>static</code> ou o bloco
+vem do heap.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>A função <code>abrir_comanda</code> monta a comanda da mesa 4 com três itens (R$ 18, 25
+e 7). A variável <code>itens</code> mora na pilha, os valores vão para um bloco no heap e
+o contador <code>pedidos_do_dia</code> mora nos dados:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int pedidos_do_dia = 0; // DADOS: existe do começo ao fim do programa
+
+int *abrir_comanda(int mesa) {
+    int itens = 3; // PILHA: some quando a função retorna
+    int *comanda = malloc(itens * sizeof(int)); // o bloco fica no HEAP
+    if (comanda == NULL) {
+        return NULL;
+    }
+    comanda[0] = 18; // suco
+    comanda[1] = 25; // prato feito
+    comanda[2] = 7;  // pudim
+    pedidos_do_dia++;
+    printf(&quot;Mesa %d: comanda com %d itens\n&quot;, mesa, itens);
+    return comanda; // o endereço volta; o bloco continua vivo no heap
+}
+
+int main(void) {
+    int *comanda = abrir_comanda(4); // PILHA: o ponteiro mora no frame de main
+    if (comanda == NULL) {
+        printf(&quot;Sem memória\n&quot;);
+        return 1;
+    }
+    int total = comanda[0] + comanda[1] + comanda[2];
+    printf(&quot;Total: R$ %d\n&quot;, total);
+    printf(&quot;Pedidos do dia: %d\n&quot;, pedidos_do_dia);
+    free(comanda); // devolve o bloco ao heap
+    return 0;
+}
+// Saída:
+// Mesa 4: comanda com 3 itens
+// Total: R$ 50
+// Pedidos do dia: 1
+</code></pre>
+<p>O frame de <code>abrir_comanda</code> nasce e morre no meio do caminho; o bloco do heap
+atravessa o <code>return</code> e só termina no <code>free</code>:</p>
+<p>{{fluxograma}}</p>

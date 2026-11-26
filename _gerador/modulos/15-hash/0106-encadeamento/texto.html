@@ -1,0 +1,123 @@
+<h2>0106 · Encadeamento</h2>
+<p>O assunto 0105 terminou com uma certeza incômoda: duas chaves diferentes vão
+cair no mesmo balde. Se cada balde guarda um item só, o segundo não tem onde
+ficar. A primeira saída é deixar o balde guardar quantos itens precisar.</p>
+<p>Pense no hortifrúti com o estoque em 5 prateleiras. Cada fruta tem a sua
+prateleira, dada por uma regra. Quando duas frutas caem na mesma, ficam lado a
+lado, e achar o kiwi é olhar só a prateleira dele, nunca o estoque inteiro.
+Esse é o <strong>encadeamento</strong>, também chamado de encadeamento separado: cada balde
+guarda a <strong>cabeça de uma lista encadeada</strong> com todos os itens cujo hash caiu
+ali (CORMEN et al., 2024, cap. 11). A tabela vira um vetor de ponteiros,
+<code>No *baldes[m]</code>, e um balde vazio é só um ponteiro <code>NULL</code>.</p>
+<p>Toda operação começa igual: calcule o balde, <code>i = hash(chave) % m</code>. Daí em
+diante, é lista encadeada do módulo 11. Para <strong>inserir</strong>, procure a chave na
+lista de <code>baldes[i]</code>. Se ela já está lá, troque o valor; se não está, crie um
+nó e ponha <strong>no início</strong> da lista, que custa O(1) porque não precisa andar até
+o fim. Para <strong>buscar</strong>, percorra só essa lista. Para <strong>remover</strong>, faça a
+remoção de lista que você já conhece, guardando o nó anterior para religar o
+<code>prox</code> (CELES; RANGEL, 2002).</p>
+<p>Quanto custa buscar? Depende do tamanho da lista do balde. Se a função espalha
+bem, as <code>n</code> chaves se dividem por igual entre os <code>m</code> baldes, e cada lista tem
+em média <code>α = n / m</code> nós, o fator de carga do 0105. A busca então gasta um
+passo para calcular o balde e mais α para percorrer a lista: Θ(1 + α) na
+média (CORMEN et al., 2024, cap. 11). Se você aumenta <code>m</code> sempre que <code>n</code>
+cresce, α fica parado num valor constante, e a busca passa a custar O(1) na
+média. Esse é o motivo de a tabela hash ser tão usada.</p>
+<p>O pior caso é outra história. Uma função ruim, que joga todas as chaves no
+mesmo balde, transforma a tabela numa lista única, e a busca volta a ser O(n)
+(TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7). A estrutura é a mesma; quem
+decide se ela é rápida é a função hash.</p>
+<p>Uma propriedade boa do encadeamento: a tabela <strong>nunca enche</strong>. Cada balde
+cresce o quanto precisar, então α pode passar de 1 sem problema. O exemplo
+A211 guarda 8 itens em 2 baldes, com α = 4. Fica lento, mas funciona
+(TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).</p>
+<p>O preço está na memória. Cada nó é um <code>malloc</code> separado, e o sistema não
+libera nada sozinho. A função <code>tabela_libera</code> percorre cada balde e dá <code>free</code>
+em todos os nós, guardando o <code>prox</code> numa variável antes de liberar o nó atual,
+porque depois do <code>free</code> ler <code>p-&gt;prox</code> é ler memória que não é mais sua. Dar
+só <code>free(t-&gt;baldes)</code> libera o vetor de ponteiros e deixa as listas perdidas na
+memória, sem ninguém apontando para elas (CELES; CERQUEIRA; RANGEL, 2016).</p>
+<blockquote>
+<p>[!WARNING]
+Compare chave de texto com <code>strcmp</code>, nunca com <code>==</code>: <code>p-&gt;chave == chave</code>
+compara <strong>endereços</strong>. Pode funcionar com literais e quebra com chave vinda
+do teclado. O nó guarda a sua <strong>cópia</strong> da chave, porque o buffer de quem
+chamou é reaproveitado.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>O hortifrúti guarda o estoque em 5 baldes, com o hash polinomial do 0105.
+Banana, uva, pera, kiwi, manga e caju caem em 4, 2, 4, 1, 1 e 4; cada nova
+entra no início. Buscar &quot;kiwi&quot; vai ao balde 1 e faz 2 comparações:</p>
+<p>{{ideia}}</p>
+<p>A estrutura segue o padrão TAD: <code>tabela.h</code> com a interface e o tipo opaco,
+<code>tabela.c</code> com o nó, os baldes e as operações:</p>
+<pre><code class="language-c">typedef struct No {
+    char chave[TAM_CHAVE]; // cópia da chave (não um ponteiro emprestado)
+    int valor;
+    struct No *prox;
+} No;
+
+struct Tabela {
+    int m;       // número de baldes
+    int n;       // número de itens
+    No **baldes; // vetor de m cabeças de lista
+};
+
+bool tabela_busca(const Tabela *t, const char *chave, int *valor, int *comparacoes) {
+    int i = (int)(hash(chave) % (unsigned)t-&gt;m);
+    int olhados = 0;
+    for (No *p = t-&gt;baldes[i]; p != NULL; p = p-&gt;prox) {
+        olhados++;
+        if (strcmp(p-&gt;chave, chave) == 0) {
+            *valor = p-&gt;valor;
+            if (comparacoes != NULL) {
+                *comparacoes = olhados;
+            }
+            return true;
+        }
+    }
+    if (comparacoes != NULL) {
+        *comparacoes = olhados;
+    }
+    return false;
+}
+</code></pre>
+<p>O cliente conhece só o <code>tabela.h</code>:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;tabela.h&quot;
+
+int main(void) {
+    Tabela *estoque = tabela_cria(5);
+    if (estoque == NULL) {
+        return 1;
+    }
+    const char *frutas[] = {&quot;banana&quot;, &quot;uva&quot;, &quot;pera&quot;, &quot;kiwi&quot;, &quot;manga&quot;, &quot;caju&quot;};
+    int caixas[] = {12, 30, 8, 5, 20, 14};
+    for (int i = 0; i &lt; 6; i++) {
+        tabela_insere(estoque, frutas[i], caixas[i]);
+    }
+    tabela_mostra(estoque);
+
+    int qtd, olhados;
+    if (tabela_busca(estoque, &quot;kiwi&quot;, &amp;qtd, &amp;olhados)) {
+        printf(&quot;kiwi: %d caixas (%d comparações)\n&quot;, qtd, olhados);
+    }
+    if (!tabela_busca(estoque, &quot;limao&quot;, &amp;qtd, &amp;olhados)) {
+        printf(&quot;limao: não tem (%d comparações)\n&quot;, olhados);
+    }
+    tabela_libera(estoque);
+    return 0;
+}
+// Saída:
+// [0]
+// [1] -&gt; manga:20 -&gt; kiwi:5
+// [2] -&gt; uva:30
+// [3]
+// [4] -&gt; caju:14 -&gt; pera:8 -&gt; banana:12
+// kiwi: 5 caixas (2 comparações)
+// limao: não tem (0 comparações)
+</code></pre>
+<p>No fluxograma da busca, o hash leva ao balde e o resto é o laço de lista. O
+&quot;kiwi&quot; dá uma volta (passa pela manga) e para no Sim; o &quot;limao&quot; cai no balde
+0, vazio, e sai pelo Não:</p>
+<p>{{fluxograma}}</p>

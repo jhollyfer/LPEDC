@@ -1,0 +1,604 @@
+<h1>Fichamento: Programação, Estruturas de Dados e Algoritmos em C (Aveiro)</h1>
+<ul>
+<li><strong>Título:</strong> Programação, Estruturas de Dados e Algoritmos em C</li>
+<li><strong>Autores:</strong> António Manuel Adrego da Rocha e António Rui Oliveira e Silva Borges, Departamento de Eletrônica e Telecomunicações, Universidade de Aveiro (Portugal)</li>
+<li><strong>Origem:</strong> apostila da disciplina Programação II, padrão ANSI C (C89), ambiente Unix/Linux, escrita para alunos vindos de Pascal</li>
+<li><strong>Lido:</strong> 5564 linhas, por completo (7 capítulos: introdução ao C, complementos, arquivos, recursão, &quot;memórias&quot;/programação modular, pesquisa e ordenação, filas e pilhas)</li>
+<li><strong>Nota de linguagem:</strong> o original está em português de Portugal. Aqui os termos foram trazidos para o Brasil: agregado → vetor/array; ficheiro → arquivo; ciclo → laço; cadeia de caracteres → string; registo → registro; alusão → protótipo/declaração; atribuição de memória → alocação; pesquisa → busca; Concha → Shell sort; Crivo → Shaker sort; tabela de dispersão → tabela hash.</li>
+</ul>
+<h2>Avaliação geral</h2>
+<p>É um material sério e rigoroso, muito bom em <strong>detalhes de C que quase ninguém explica</strong>: conversões de tipo
+com perda, ordem de avaliação, <code>scanf</code> como ferramenta de validação, a dualidade ponteiro/vetor,
+modos do <code>fopen</code>, por que <code>while(!feof())</code> está errado, módulos com <code>static</code> e tipos opacos. Os exemplos de
+ordenação são excelentes: <strong>o mesmo vetor de 10 elementos passa por todos os algoritmos, com contagem de
+comparações e trocas</strong>, o que dá uma tabela comparativa pronta. Pontos fracos: comparações constantes com
+Pascal (inúteis para o nosso público), estilo antigo (identificadores em MAIÚSCULAS, <code>unsigned</code> para
+índice, C89), suposição de máquina de 32 bits e vários bugs nos códigos (listados por assunto e na seção
+final). Não cobre listas encadeadas genéricas, AVL, heap, hash implementado nem grafos (árvore e hash só
+aparecem como conceito).</p>
+<hr>
+<h3>logica4-binario</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> literais inteiros em três bases: decimal, octal (prefixo <code>0</code>) e hexadecimal (<code>0x</code>). Negativos em octal/hex aparecem em complemento de dois. Um <code>char</code> com sinal vai de -128 a 127; um <code>unsigned char</code>, de 0 a 255.</li>
+<li><strong>Exemplos bons:</strong> 54 = <code>066</code> = <code>0x36</code>; -135 em 32 bits = <code>0xFFFFFF79</code>; o caractere &#39;B&#39; pode ser escrito <code>&#39;\102&#39;</code> (octal) ou <code>&#39;\x42&#39;</code> (hex).</li>
+<li><strong>Pegadinhas:</strong> <code>010</code> vale 8, não 10 (o zero à esquerda faz o número ser lido em octal).</li>
+<li><strong>Ideia de exercício:</strong> dados 54 e -135, escrever as formas decimal, octal e hex e conferir com <code>printf(&quot;%d %o %x&quot;)</code>.</li>
+</ul>
+<h3>logica5-compilacao</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>#include &lt;...&gt;</code> procura no diretório do sistema (ex.: <code>/usr/include</code>); <code>#include &quot;...&quot;</code> procura primeiro na pasta do projeto. Compilação separada: <code>cc -c modulo.c</code> gera <code>modulo.o</code>, e depois <code>cc prog.c modulo.o -o prog</code>. O uso de <code>math.h</code> exige <code>-lm</code> na ligação (o erro aparece no ligador, não no compilador).</li>
+<li><strong>Analogia:</strong> o C foi pensado para espalhar o programa em vários arquivos-fonte. O <code>.h</code> é o &quot;contrato&quot; e o <code>.c</code> é a &quot;obra&quot;.</li>
+<li><strong>Pegadinha:</strong> esquecer <code>-lm</code> dá &quot;undefined reference to sqrt&quot;, mesmo com o <code>#include</code> presente.</li>
+</ul>
+<h3>0001-primeiro-programa</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> o programa em C é um &quot;mar de funções&quot; no mesmo nível, e <code>main</code> é a que roda primeiro. <code>main</code> devolve <code>int</code> porque o shell usa esse valor (0 = sucesso), e daí o <code>return 0</code>. Comentários <code>/* */</code> <strong>não se aninham</strong>.</li>
+<li><strong>Ideia de exemplo:</strong> conversão de milhas para km (fator 1,609) com leitura validada em <code>do...while</code> até o valor ser não negativo. É o programa de abertura do livro e serve de &quot;esqueleto completo&quot;.</li>
+<li><strong>Pegadinha:</strong> um <code>*/</code> dentro de um comentário encerra o comentário externo antes da hora.</li>
+</ul>
+<h3>0002-variaveis</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> em C os tipos descrevem <strong>formato de armazenamento</strong>, não significado: <code>char</code> é um número de 1 byte que <em>pode</em> ser lido como caractere. Declarar reserva memória e liga o nome a ela. <strong>O valor inicial é indefinido</strong> até a primeira atribuição. O compilador pode deixar &quot;buracos&quot; de alinhamento entre variáveis. <code>sizeof(expr)</code> não avalia a expressão, só olha o tipo, e o resultado é <code>size_t</code>.</li>
+<li><strong>Exemplos bons:</strong> <code>char c = &#39;A&#39;;</code> e <code>char c = 65;</code> guardam o mesmo byte; já <code>char n = 3;</code> e <code>char c = &#39;3&#39;;</code> são diferentes (3 vs 51). <code>%d</code> e <code>%c</code> mostram o mesmo byte de dois jeitos.</li>
+<li><strong>Pegadinhas:</strong> identificadores que começam com <code>_</code> são reservados à implementação. C diferencia maiúsculas de minúsculas.</li>
+<li><strong>Ideia de exercício:</strong> imprimir <code>&#39;3&#39;</code> com <code>%d</code> e <code>%c</code>, e depois <code>&#39;3&#39; - &#39;0&#39;</code>. Resposta esperada: 51, 3, 3.</li>
+</ul>
+<h3>0003-tipos-e-limites</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>short</code> ≥ 2 bytes; <code>int</code> com 2 ou 4 bytes; <code>long</code> com 4 ou 8; <code>signed</code>/<code>unsigned</code>. Os limites estão em <code>limits.h</code> e <code>float.h</code>. <code>float</code> tem cerca de 6-7 dígitos significativos; <code>double</code>, 15-16.</li>
+<li><strong>Conversões descendentes (ótimas para ilustrar overflow):</strong><ul>
+<li><code>int -1024</code> atribuído a <code>unsigned</code> vira 4294966272 (os bits são os mesmos; só a leitura muda);</li>
+<li><code>unsigned 1025</code> atribuído a <code>unsigned char</code> vira 1 (fica o resto da divisão por 256);</li>
+<li><code>int 1152</code> atribuído a <code>char</code> vira -128 (overflow com troca de sinal).</li>
+</ul>
+</li>
+<li><strong>Pegadinha:</strong> uma expressão que o compilador pode reorganizar, como <code>K1*K1*(K2-K3)</code> com K1=1024, K2=4096, K3=4094, estoura em 32 bits se for transformada em <code>K1*K1*K2 - K1*K1*K3</code>. A saída é quebrar o cálculo em etapas.</li>
+<li><strong>Ideia de exercício:</strong> prever o resultado das três atribuições acima antes de rodar; depois conferir com <code>printf</code>.</li>
+</ul>
+<h3>0004-constantes</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>#define</code> faz substituição textual pura. Se o valor for uma expressão, ponha-o <strong>entre parênteses</strong>. <code>const</code> cria uma variável protegida contra escrita, que ocupa memória (o <code>#define</code> não ocupa). Sufixos <code>U</code>, <code>L</code>, <code>UL</code> e <code>F</code>. Escapes: <code>\n</code>, <code>\t</code>, <code>\b</code>, <code>\&quot;</code>, <code>\?</code>, <code>\0</code>.</li>
+<li><strong>Analogia:</strong> uma constante com nome documenta o valor e centraliza a mudança. Um número repetido no código é um erro esperando para acontecer.</li>
+<li><strong>Pegadinhas:</strong> terminar um <code>#define</code> com <code>;</code> (o <code>;</code> entra na substituição); <code>#define X 2+3</code> seguido de <code>X*2</code> dá 8, não 10.</li>
+</ul>
+<h3>0005-printf</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> as flags <code>-</code> (alinha à esquerda), <code>0</code> (completa com zeros), <code>+</code> (sempre mostra o sinal), espaço e <code>#</code> (prefixo 0x/0, ou ponto decimal forçado). A <strong>precisão</strong> muda de sentido conforme o tipo: no inteiro é o número mínimo de dígitos, no real (<code>f</code>/<code>e</code>) é o número de casas decimais, no <code>g</code> é o máximo de dígitos significativos e na string é o máximo de caracteres. <code>printf</code> devolve o número de caracteres escritos. <code>%%</code> imprime um <code>%</code>.</li>
+<li><strong>Exemplos de valores (reescritos):</strong> <code>%012d</code> de 675 dá <code>000000000675</code>; <code>%12.4f</code> de 675.95 dá <code>    675.9500</code>; <code>%12.1f</code> arredonda para <code>676.0</code>; <code>%.3s</code> de &quot;pim pam&quot; dá <code>pim</code>; <code>%-5c</code> alinha o caractere à esquerda.</li>
+<li><strong>Pegadinha clássica:</strong> no <code>scanf</code>, <code>double</code> pede <code>%lf</code>; no <code>printf</code>, <code>%f</code> já basta (os reais são promovidos a <code>double</code>).</li>
+<li><strong>Ideia de exercício:</strong> montar uma tabela alinhada (nome com <code>%-10s</code>, nota com <code>%6.2f</code>) e prever a saída caractere a caractere.</li>
+</ul>
+<h3>0006-scanf</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>scanf</code> devolve <strong>quantas conversões deram certo</strong>, ou <code>EOF</code>. Num conflito, o caractere que causou o problema <strong>fica no buffer</strong>. Use <code>%*</code> para ler e descartar, <code>%n</code> para contar os caracteres consumidos e <code>%[...]</code> / <code>%[^...]</code> para conjuntos de caracteres. <strong>Ponha sempre a largura máxima em <code>%s</code></strong> (ex.: <code>%7s</code> para um <code>char[8]</code>).</li>
+<li><strong>Idioma muito útil (o &quot;readln&quot; do C):</strong> ler o valor; depois <code>scanf(&quot;%*[^\n]&quot;)</code> para descartar o resto da linha; depois <code>scanf(&quot;%*c&quot;)</code> para consumir o <code>\n</code>; repetir enquanto o retorno for 0. As duas etapas de descarte precisam ser separadas, senão o <code>\n</code> fica para trás quando não há lixo na linha.</li>
+<li><strong>Exemplo bom:</strong> ler uma hora <code>HH:MM:SS</code> com <code>&quot;%2hu:%2hu:%2hu&quot;</code>, repetindo enquanto o retorno for diferente de 3 ou os valores estiverem fora da faixa (H&gt;23, M&gt;59, S&gt;59).</li>
+<li><strong>Pegadinhas:</strong><ul>
+<li>um <code>\n</code> (ou espaço) <strong>no fim</strong> do formato, como em <code>scanf(&quot;%d%d\n&quot;)</code>, faz o <code>scanf</code> esperar um caractere não branco, e o prompt seguinte aparece atrasado;</li>
+<li>inventar um <code>%s[...]</code> (os dois formatos são alternativos, não se combinam);</li>
+<li><code>%s</code> não lê string vazia nem frase com espaço.</li>
+</ul>
+</li>
+<li><strong>Ideias de exercícios:</strong> (1) menu com opção 1-3 que rejeita lixo e linhas longas; (2) ler um telefone só com dígitos usando <code>%9[0123456789]</code>; (3) explicar por que o programa com <code>&quot;%d%d\n&quot;</code> &quot;trava&quot;.</li>
+</ul>
+<h3>0007-aritmetica</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> precedência e associatividade; <code>/</code> faz divisão inteira se os dois operandos forem inteiros; <code>%</code> só aceita inteiros. Relacionais retornam <code>int</code> 0/1, e <code>&gt;=</code>, <code>&lt;=</code> têm precedência <strong>maior</strong> que <code>==</code>, <code>!=</code>.</li>
+<li><strong>Pegadinhas:</strong><ul>
+<li><code>X = K * K++</code> dá resultado imprevisível (9 ou 12). Regra prática: uma variável com efeito colateral deve aparecer <strong>uma vez só</strong> na expressão;</li>
+<li>o livro diz que <code>7/(-3)</code> pode dar -2 ou -3 conforme o compilador. Isso valia no C89; <strong>desde o C99 a divisão sempre trunca em direção a zero</strong> (dá -2).</li>
+</ul>
+</li>
+<li><strong>Ideia de exercício:</strong> com <code>X = 2</code>, avaliar <code>Y = 5 * X++</code> e depois, partindo de novo de <code>X = 2</code>, <code>Y = 5 * ++X</code>. Resposta: Y=10, X=3 e Y=15, X=3.</li>
+</ul>
+<h3>0008-conversao</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> promoções automáticas (<code>char</code>/<code>short</code> → <code>int</code>, <code>float</code> → <code>double</code> nas expressões) e a hierarquia <code>long double &gt; double &gt; float &gt; unsigned long &gt; long &gt; unsigned int &gt; int</code>. Converter subindo na hierarquia é seguro; descendo, pode haver arredondamento, truncamento ou overflow.</li>
+<li><strong>Exemplo bom:</strong> <code>int A=5, B=2; double D;</code> então <code>D = A/B</code> dá 2.0, mas <code>D = (double)A/B</code> dá 2.5.</li>
+<li><strong>Pegadinha:</strong> <code>(double)(A/B)</code> continua dando 2.0, porque o cast vem depois da divisão inteira.</li>
+</ul>
+<h3>0009-atribuicao</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> quatro formas: <code>=</code>, <code>op=</code>, <code>++</code>/<code>--</code> e o condicional <code>?:</code>. A atribuição <strong>também é uma expressão</strong> (vale o valor atribuído), o que permite <code>X = Y = Z</code>.</li>
+<li><strong>Pegadinha:</strong> encadear operadores compostos, como <code>X += Y -= Z</code>, compila mas é ilegível. O livro desaconselha, com razão.</li>
+</ul>
+<h3>0010-math</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>sqrt</code>, <code>pow</code>, <code>fabs</code>, <code>floor</code>, <code>ceil</code>, <code>fmod</code>, <code>exp</code>, <code>log</code>, <code>log10</code> e as trigonométricas. Erros de domínio sinalizam <code>errno = EDOM</code> (resultado <code>nan</code>); estouro sinaliza <code>ERANGE</code> (<code>inf</code>). <code>perror</code>/<code>strerror</code> traduzem o erro.</li>
+<li><strong>Exemplo bom:</strong> zerar <code>errno</code>, chamar <code>sqrt(-1)</code>, testar <code>errno</code> e imprimir <code>strerror(errno)</code> (&quot;Numerical argument out of domain&quot;).</li>
+<li><strong>Lembrete:</strong> compilar com <code>-lm</code>.</li>
+</ul>
+<h3>0012-relacionais / 0013-logicos</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> 0 é falso e qualquer outro valor é verdadeiro. <code>&amp;&amp;</code> e <code>||</code> param assim que o resultado está definido (curto-circuito), da esquerda para a direita. Os operadores bit a bit (<code>&amp; | ^ ~ &lt;&lt; &gt;&gt;</code>) atuam em cada bit.</li>
+<li><strong>Pegadinhas:</strong> <strong>nunca usar <code>==</code> com <code>float</code>/<code>double</code></strong>; não usar um real como contador de laço.</li>
+</ul>
+<h3>0014-if / 0015-if-else / 0016-else-if</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> a condição vem entre parênteses e não há <code>then</code>. Em <code>if</code> encadeado, o <code>else</code> se liga ao <code>if</code> mais próximo.</li>
+<li><strong>Exemplos bons:</strong><ul>
+<li>classificar um caractere em maiúsculo, minúsculo, dígito ou outro com <code>else if</code>;</li>
+<li>&quot;else pendurado&quot;: <code>if (V1&gt;0) if (V2&gt;0) V2++; else V1++;</code> liga o <code>else</code> ao <strong>segundo</strong> <code>if</code>, mesmo que a indentação diga o contrário. Soluções: chaves (a preferida) ou um <code>else ;</code> vazio (só como curiosidade).</li>
+</ul>
+</li>
+<li><strong>Pegadinha:</strong> <code>if (A = 5) B = 2;</code> atribui, a expressão vale 5 (verdadeiro) e B vira sempre 2. O compilador não acusa erro.</li>
+</ul>
+<h3>0017-ternario</h3>
+<ul>
+<li><strong>Exemplo:</strong> valor absoluto: <code>ABSX = X &lt; 0 ? -X : X;</code>. É o único operador ternário do C e associa da direita para a esquerda.</li>
+</ul>
+<h3>0018-switch</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> só aceita valores inteiros. A execução <strong>segue em frente</strong> a partir do <code>case</code> de entrada até achar um <code>break</code> (fall-through). Não aceita faixas de valores.</li>
+<li><strong>Exemplo bom:</strong> vogais &quot;ásperas&quot; (a, e, o) e &quot;doces&quot; (i, u), empilhando vários <code>case</code> para a mesma ação.</li>
+<li><strong>Ideia de exercício:</strong> tirar um <code>break</code> e prever o que é impresso.</li>
+</ul>
+<h3>0020-while / 0021-do-while</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>do...while</code> repete <strong>enquanto</strong> a condição é verdadeira (o <code>repeat...until</code> do Pascal repetia <em>até</em> ela ser verdadeira, ou seja, a condição é a negação).</li>
+<li><strong>Exemplo bom (padrão sentinela):</strong> média de números lidos até aparecer 0. Com <code>do-while</code> é preciso um <code>if</code> dentro do laço para não contar o 0; com <code>while</code>, a leitura acontece antes do laço e de novo no fim do corpo. Os dois lado a lado mostram bem o contraste.</li>
+<li><strong>Pegadinha:</strong> todas as variáveis da condição precisam estar inicializadas antes do laço.</li>
+</ul>
+<h3>0022-for</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> três partes (inicialização, condição, atualização), cada uma pode ser omitida; <code>for(;;)</code> é um laço infinito. O contador tem valor definido depois do laço. Bom estilo: não mexer no contador dentro do corpo.</li>
+<li><strong>Exemplo bom:</strong> potências de 2 com duas variáveis no <code>for</code>: <code>for (POT=1, I=1; I&lt;=N; I++, POT*=2)</code>.</li>
+<li><strong>Pegadinha:</strong> escrever a condição de parada no lugar da de continuação (<code>I == N</code>): o laço não roda nenhuma vez.</li>
+</ul>
+<h3>0023-break-continue</h3>
+<ul>
+<li><strong>Exemplos bons:</strong><ul>
+<li><code>break</code>: somar no máximo 10 valores não negativos, parando antes se aparecer um negativo. A condição do laço fica simples;</li>
+<li><code>continue</code>: contar as letras de uma linha e trocar a caixa só das vogais, pulando o que não é letra ou não é vogal;</li>
+<li>laço de corpo vazio: <code>while (s[++comp] != &#39;\0&#39;);</code> calcula o tamanho da string (é um <code>strlen</code> manual).</li>
+</ul>
+</li>
+</ul>
+<h3>0026-aleatorios</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>rand()</code> devolve um valor de 0 a <code>RAND_MAX</code>; <code>srand(semente)</code> fixa a sequência. Mesma semente, mesma sequência.</li>
+</ul>
+<h3>0028-funcoes / 0029-parametros</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> em C só existe a &quot;função generalizada&quot;; um procedimento é uma função <code>void</code>. Cada função aparece de três formas: definição, chamada e protótipo (o &quot;contrato&quot;, que permite ao compilador conferir quantidade e tipo dos argumentos e converter quando possível). Parâmetros passam <strong>por valor</strong>; para alterar uma variável do chamador, passe o endereço dela.</li>
+<li><strong>Analogia:</strong> função como caixa-preta: entram parâmetros, saem um resultado e/ou parâmetros de saída, e o meio fica escondido.</li>
+<li><strong>Pegadinha:</strong> chegar ao fim de uma função não <code>void</code> sem <code>return</code> deixa o valor devolvido indefinido.</li>
+<li><strong>Ideia de exemplo:</strong> <code>CONVERTE_DISTANCIA(double ml)</code> usada numa atribuição e direto dentro do <code>printf</code>.</li>
+</ul>
+<h3>0030-escopo</h3>
+<ul>
+<li><strong>Conceitos-chave (quatro níveis):</strong> global de programa (visível em todos os arquivos), global de arquivo (<code>static</code> fora de função), local de função e de bloco. <strong><code>static</code> tem dois sentidos:</strong> fora de função limita a visibilidade ao arquivo; dentro de função dá duração permanente. <code>extern</code> declara sem alocar; a definição é única. Vale o nome declarado mais perto (sombreamento).</li>
+<li><strong>Exemplo excelente:</strong> uma função <code>INCREMENTAR</code> com <code>int TEMP = 1;</code> e <code>static int PERM = 1;</code>, as duas incrementadas e impressas. Chamada 3 vezes, imprime TEMP = 2, 2, 2 e PERM = 2, 3, 4.</li>
+<li><strong>Pegadinhas:</strong><ul>
+<li>declarar uma variável local com o mesmo nome de um parâmetro é erro;</li>
+<li>uma <code>static</code> só pode ser inicializada com constante e, sem inicialização, vale 0;</li>
+<li>o livro diz que as globais ficam &quot;na RAM&quot; e as locais &quot;na stack&quot;. Tudo está na RAM: as globais ficam no segmento de dados.</li>
+</ul>
+</li>
+<li><strong>Ideia de exercício:</strong> prever a saída de INCREMENTAR chamada 4 vezes. Resposta: TEMP 2, 2, 2, 2 e PERM 2, 3, 4, 5.</li>
+</ul>
+<h3>0031-pilha-de-chamadas</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> cada chamada copia os parâmetros e guarda o ponto de retorno na pilha. Recursão profunda pode <strong>esgotar a pilha</strong>.</li>
+<li><strong>Ideia de exemplo:</strong> a &quot;árvore de recorrência&quot; do fatorial de 3: cada caixa é uma ativação, e o resultado é montado na volta (1 × 1 × 2 × 3 = 6).</li>
+</ul>
+<h3>0032-recursao</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> um ou mais casos de parada mais um passo que reduz o problema. Esqueleto: se chegou ao caso base, resolve; senão, quebra em subproblemas iguais e menores.</li>
+<li><strong>Exemplos bons:</strong><ul>
+<li>fatorial iterativo e recursivo, com a proteção <code>if (N &lt; 0) return 0;</code> para não cair em recursão infinita;</li>
+<li>seno por série de Taylor reescrito sem fatorial, por fatoração sucessiva (Horner). Iterativo de baixo para cima, recursivo de cima para baixo; a versão recursiva precisa de <strong>duas funções</strong> e é pior.</li>
+</ul>
+</li>
+<li><strong>Dados úteis:</strong> o maior fatorial que cabe em 32 bits é 12! = 479001600.</li>
+<li><strong>Ideia de exercício:</strong> tabela comparando o cosseno por Taylor com 5, 10 e 15 termos contra <code>cos()</code> num intervalo lido do teclado. Uma versão iterativa e uma recursiva.</li>
+</ul>
+<h3>0033-recursao-na-pratica</h3>
+<ul>
+<li><strong>Fibonacci:</strong> a árvore de fib(5) recalcula fib(3) duas vezes, fib(2) três vezes, fib(1) cinco vezes e fib(0) três vezes. As adições crescem 7, 12, 20, 33 (quase dobram a cada passo, ou seja, custo exponencial). Há três versões: recursiva, programação dinâmica (vetor <code>FIB[]</code> com 0, 1, 1) e iterativa com três variáveis (ANTERIOR, ATUAL, PRÓXIMO), que é linear e a melhor. O maior que cabe em <code>unsigned</code> de 32 bits é fib(47) = 2971215073.</li>
+<li><strong>Coeficiente binomial:</strong> a fórmula com fatoriais estoura; usar o triângulo de Pascal, C(n,k) = C(n-1,k) + C(n-1,k-1). Exemplo: C(5,3) = 10. A versão recursiva calcula 2·C(n,k) − 1 termos; a dinâmica com matriz calcula cerca de N·K. O maior que cabe em 32 bits é C(35,16) = 4059928950.</li>
+<li><strong>Permutações (backtracking):</strong> troca, chama a recursão, destroca. &quot;abc&quot; gera 6 permutações.</li>
+<li><strong>Hanói:</strong> move N−1 discos de A para C, o maior de A para B, e N−1 de C para B; são 2^N − 1 movimentos. Há uma simulação completa com três vetores e contadores, imprimindo o estado das torres a cada movimento (com 3 discos: 7 movimentos). Não rodar com mais de ~10 discos.</li>
+<li><strong>Determinante:</strong> cálculo recursivo por operações de colunas até chegar a uma matriz diagonal (exemplo 4×4 com resultado 15). É avançado: só como extra.</li>
+<li><strong>Ideias de exercícios (do livro, reescritas):</strong> MDC de Euclides iterativo e recursivo; Ackermann recursivo e com tabela; permutações de &quot;0123456789&quot; mostrando só as que alternam dígito par e ímpar.</li>
+<li><strong>Pegadinhas:</strong><ul>
+<li>no código de permutações do livro, <code>printf(&quot;%s&quot;, LISTA[J])</code> está errado (o certo é <code>LISTA</code>);</li>
+<li>na árvore de Fibonacci, o código para em N ≤ 2, mas o desenho desce até 0 (inconsistência).</li>
+</ul>
+</li>
+</ul>
+<h3>0034-modulos</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> a programação modular esconde não só o algoritmo mas também os dados (&quot;decida os módulos e encapsule as estruturas neles&quot;). Um módulo é um <code>.h</code> (constantes de erro e protótipos) mais um <code>.c</code> (dados internos <code>static</code> e funções auxiliares <code>static</code>). Proteja o <code>.h</code> com <code>#ifndef/#define/#endif</code>.</li>
+<li><strong>Duas formas de deixar o módulo genérico:</strong><ul>
+<li>(a) <strong>abstrato</strong>: <code>void*</code>, uma função <code>Create(tamanho_do_elemento)</code> e <code>memcpy</code>;</li>
+<li>(b) <strong>concreto</strong>: um <code>elemento.h</code> com <code>typedef ... TIPO_ELEMENTO</code> e <code>N_ELEMENTOS</code>. Exige recompilar o módulo a cada mudança.</li>
+</ul>
+</li>
+<li><strong>Exemplo excelente:</strong> o módulo de números complexos com <strong>tipo opaco</strong>: <code>typedef struct complexo *PtComplexo;</code> no <code>.h</code> e a struct definida só no <code>.c</code>. Permite várias instâncias e trocar a representação (cartesiana ou polar) sem mexer em quem usa. O módulo tem funções para criar, ler, escrever, somar, subtrair, multiplicar, dividir e apagar (<code>Apagar(PtComplexo *)</code> libera e põe NULL).</li>
+<li><strong>Pegadinhas:</strong><ul>
+<li>os guards do livro (<code>_MODULO</code>, <code>_ELEMENTO</code>) começam com <code>_</code> + maiúscula, que é <strong>nome reservado</strong>. Usar <code>MODULO_H</code>;</li>
+<li><code>Complexo_Nulo</code> devolve 0 quando o número É nulo (lógica invertida e confusa);</li>
+<li>na calculadora de complexos, <code>while (Opcao&lt;1 &amp;&amp; Opcao&gt;7)</code> nunca é verdadeiro (o certo é <code>||</code>);</li>
+<li>cada operação cria um novo complexo, que precisa ser apagado (risco de vazamento).</li>
+</ul>
+</li>
+</ul>
+<h3>0035-preprocessador</h3>
+<ul>
+<li>Apenas <code>#define</code> (com o alerta dos parênteses e do <code>;</code>), <code>#include</code> e os guards. Não há conteúdo sobre macros com parâmetros nem <code>#ifdef</code> de depuração.</li>
+</ul>
+<h3>0037-vetores</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> inicialização parcial zera o resto (<code>double B[3] = {10.2, 11.8};</code> deixa <code>B[2] = 0</code>); sem tamanho, o compilador conta os elementos (<code>int C[] = {22, 12};</code>). O índice começa em 0. O nome do vetor é um <strong>ponteiro constante</strong> (<code>A = ...</code> é ilegal).</li>
+<li><strong>Exemplo de pegadinha imperdível:</strong> <code>int I, AR[10]; for (I=0; I&lt;=10; I++) AR[I]=0;</code>. Na máquina do livro, <code>AR[10]</code> caía em cima de <code>I</code>, que voltava a 0, e o laço ficava infinito. Serve para mostrar que <strong>C não confere limites</strong> (na prática é comportamento indefinido e depende do layout).</li>
+<li><strong>Ideia de exercício:</strong> prever o que pode acontecer com o código acima, e depois reproduzir com <code>-fsanitize=address</code>.</li>
+</ul>
+<h3>0038-vetores-e-funcoes</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> a função não sabe o tamanho do vetor recebido, então passe-o junto. <code>sizeof(v)/sizeof(v[0])</code> só funciona <strong>onde o vetor foi declarado</strong>.</li>
+<li><strong>Exemplo:</strong> <code>INICIALIZAR(int A[], int N)</code> zerando o vetor do chamador. Isso mostra que a função altera o original.</li>
+</ul>
+<h3>0039-matrizes</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> uma matriz é um vetor de vetores, guardado linha após linha em memória contígua. Na passagem para função, só a primeira dimensão pode ser omitida (<code>int M[][COL]</code>). Inicialização parcial por linha: <code>int C[3][3] = {{10},{13,14}};</code> deixa todo o resto em zero.</li>
+<li><strong>Exercício pronto:</strong> <code>A[I] = I</code> para I = 0..2; depois <code>B[I][J] = A[(I+J)%3]</code> numa matriz 2×3. Resposta: linha 0 = 0 1 2, linha 1 = 1 2 0.</li>
+<li><strong>Exemplo de layout:</strong> o elemento <code>[i][j][k]</code> de uma matriz X×Y×Z está no deslocamento <code>i*Y*Z + j*Z + k</code>.</li>
+<li><strong>Pegadinha:</strong> o livro passa uma matriz 3D como <code>int AM[][][]</code> / <code>int ***</code>. <strong>Isso não compila (ou está errado):</strong> uma matriz estática não é um ponteiro para ponteiro.</li>
+</ul>
+<h3>0040-caracteres</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>ctype.h</code> tem as funções de teste (<code>isalpha</code>, <code>isdigit</code>, <code>isspace</code>, <code>isupper</code>, ...) e de conversão (<code>toupper</code>, <code>tolower</code>).</li>
+<li><strong>Exemplo excelente (cifra de César):</strong> <code>&#39;a&#39; + (c - &#39;a&#39; + 26 + K) % 26</code>. &#39;z&#39; deslocado 3 vira &#39;c&#39;; o <code>+26</code> permite K negativo.</li>
+<li><strong>Ideia de exercício:</strong> codificar e decodificar &quot;zebra&quot; com K=3 e K=-3 (resposta: &quot;cheud&quot; e de volta &quot;zebra&quot;).</li>
+</ul>
+<h3>0041-strings</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> uma string é um vetor de <code>char</code> terminado em <code>&#39;\0&#39;</code>, então reserve tamanho + 1. Casos de declaração:<ul>
+<li><code>char v[5] = {&#39;a&#39;,&#39;e&#39;,&#39;i&#39;,&#39;o&#39;,&#39;u&#39;};</code> <strong>não</strong> é string (falta o <code>\0</code>);</li>
+<li><code>char c[10] = &quot;aveiro&quot;;</code> é string (o resto do vetor é zerado);</li>
+<li><code>char t[] = &quot;tudo bem&quot;;</code> tem tamanho exato (9).</li>
+</ul>
+</li>
+<li><strong>Biblioteca <code>string.h</code>:</strong><ul>
+<li><code>memcpy</code> exige regiões que não se sobrepõem; <code>memmove</code> aceita sobreposição;</li>
+<li><code>strncpy</code> <strong>pode não colocar o <code>\0</code></strong>;</li>
+<li><code>strcmp</code> devolve &lt;0, 0 ou &gt;0, então <code>!strcmp(a,b)</code> quer dizer &quot;iguais&quot;;</li>
+<li><code>strtok</code> <strong>modifica a string</strong> e guarda estado interno (as chamadas seguintes recebem <code>NULL</code>).</li>
+</ul>
+</li>
+<li><strong>Exemplos bons:</strong><ul>
+<li><code>strtok(&quot;#era$#uma$vez#um$&quot;, &quot;$#&quot;)</code> dá &quot;era&quot;, &quot;uma&quot;, &quot;vez&quot;, &quot;um&quot;;</li>
+<li><code>sscanf(&quot;Aveiro, 25 de Fevereiro de 2003&quot;, &quot;%9[^,],%d de %9s de %d&quot;, ...)</code> separa cidade, dia, mês e ano;</li>
+<li>montar um formato com <code>sprintf(fmt, &quot;%%%ds&quot;, MAX)</code>, que produz &quot;%40s&quot;.</li>
+</ul>
+</li>
+<li><strong>Pegadinhas:</strong> <code>cidade = &quot;Lisboa&quot;</code> é erro (use <code>strcpy</code>); <code>&#39;a&#39;</code> (1 byte) é diferente de <code>&quot;a&quot;</code> (2 bytes).</li>
+<li><strong>Ideia de exercício:</strong> ler frases até digitar &quot;FIM&quot; (no máximo 10), contando-as.</li>
+</ul>
+<h3>0042-lendo-strings</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>scanf(&quot;%79[^\n]&quot;)</code> lê uma linha com espaços e limite; <code>fgets(s, n, f)</code> lê até n−1 caracteres e <strong>guarda o <code>\n</code></strong> se ele couber; <code>fputs</code> não acrescenta <code>\n</code>.</li>
+<li><strong>Exemplo:</strong> depois da leitura, testar o retorno do <code>scanf</code>: se for 0, a linha estava vazia, e então <code>s[0] = &#39;\0&#39;</code>.</li>
+</ul>
+<h3>0044-memoria / 0045-ponteiros</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> um ponteiro não é &quot;só um endereço&quot;: ele tem <strong>tipo</strong>. Dois ponteiros podem guardar o mesmo endereço e ser coisas diferentes (<code>int*</code> olhando 4 bytes, <code>double*</code> olhando 8, no mesmo lugar). <code>NULL</code> não aponta para nada.</li>
+<li><strong>Pegadinhas:</strong><ul>
+<li><code>int *PA; *PA = 23;</code> grava num lugar desconhecido. Inicialize o ponteiro, nem que seja com <code>NULL</code>;</li>
+<li>o livro afirma que todo ponteiro tem 4 bytes (só em 32 bits; hoje são 8).</li>
+</ul>
+</li>
+</ul>
+<h3>0046-passagem-por-referencia</h3>
+<ul>
+<li><strong>Exemplo:</strong> <code>TROCA(int *X, int *Y)</code> chamada com <code>TROCA(&amp;A, &amp;B)</code>. Também explica o <code>&amp;</code> no <code>scanf</code> e por que um vetor vai sem <code>&amp;</code>.</li>
+</ul>
+<h3>0047-ponteiros-e-vetores</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>A == &amp;A[0]</code>, <code>A+i == &amp;A[i]</code>, <code>*(A+i) == A[i]</code>. Somar 1 a um ponteiro avança <code>sizeof(tipo)</code> bytes. A subtração de ponteiros dá a distância em elementos; dá para comparar ponteiros do mesmo tipo; não há aritmética com <code>void*</code>.</li>
+<li><strong>Exemplo:</strong> <code>int A[8], *PA = A; PA++; PA += 4; PA -= 2;</code> deixa PA em A[3]; <code>&amp;A[3] - &amp;A[0]</code> vale 3.</li>
+<li><strong>Matriz:</strong> <code>B[i]</code> equivale a <code>&amp;B[i][0]</code>, e <code>B[i][j]</code> a <code>*(*(B+i)+j)</code>. Ponteiro para linha: <code>int (*PB)[N2] = B;</code>.</li>
+<li><strong>Precedência:</strong> <code>TIPO *AP[4]</code> é um vetor de 4 ponteiros; <code>TIPO (*PA)[4]</code> é um ponteiro para um vetor de 4.</li>
+</ul>
+<h3>0048-ponteiros-e-strings</h3>
+<ul>
+<li><strong>Exemplo bom:</strong> <code>char *PTS = &quot;Aveiro&quot;;</code> aponta para um literal <strong>só de leitura</strong>: <code>*PTS = &#39;A&#39;</code> falha em tempo de execução, mas <code>PTS = &quot;Lisboa&quot;</code> é válido. Já <code>char CIDADE[10] = &quot;aveiro&quot;;</code> permite <code>CIDADE[0] = &#39;A&#39;</code>, mas não <code>CIDADE = &quot;Lisboa&quot;</code>.</li>
+<li><strong>Exemplo de vetor de strings:</strong> <code>char *FLORES[4] = {&quot;rosa&quot;,&quot;dahlia&quot;,&quot;cravo&quot;};</code> deixa o quarto elemento NULL. O mês por extenso usa um vetor de 13 strings com o índice 0 = &quot;MêsErrado&quot; (sentinela para mês inválido).</li>
+</ul>
+<h3>0049-ponteiro-para-ponteiro</h3>
+<ul>
+<li><strong>Exemplos:</strong> <code>int A, *PA = &amp;A, **PPA = &amp;PA; **PPA = 45;</code>. Na agenda em arquivo, <code>ABRIR(char nome[], FILE **FP)</code> devolve o <code>FILE*</code> por referência.</li>
+</ul>
+<h3>0050-ponteiro-para-funcao</h3>
+<ul>
+<li><strong>Exemplo excelente:</strong> <code>typedef int (*PtFComp)(TElem, TElem);</code> com três comparadores (CompNRegisto, CompNome, CompData) que devolvem -1, 0 ou 1, mais um parâmetro <code>tord</code> (1 crescente, -1 decrescente). Troca só se <code>fcomp(a,b) == tord</code>. O mesmo algoritmo ordena pintores por nome (crescente), por data de nascimento (decrescente) e por registro (crescente). <code>fcomp = CompNome;</code> (o nome da função já é um ponteiro).</li>
+<li><strong>Extra:</strong> contar comparações e trocas com uma função &quot;embrulho&quot; que tem um contador <code>static</code> e modos INIC, NORM e REP.</li>
+<li><strong>Pegadinhas:</strong> o livro <strong>define funções dentro do <code>.h</code></strong> (dá definição múltipla se dois <code>.c</code> incluírem o arquivo); passa <code>TElem</code> grande por valor. Ligar com <code>qsort</code> e comparadores <code>const void*</code>.</li>
+</ul>
+<h3>0051-void-generico</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> não existe variável <code>void</code>, só <code>void*</code>. <code>*PV = 5</code> é ilegal; <code>*(int*)PV = 5</code> é válido. <code>void*</code> converte para qualquer ponteiro de objeto e vice-versa sem cast; entre tipos diferentes, só com cast.</li>
+<li><strong>Exemplo grande:</strong> fila e pilha abstratas com <code>memcpy(dest, orig, size)</code>, que trabalham com qualquer tipo.</li>
+</ul>
+<h3>0053-pilha-e-heap / 0054-malloc-free / 0055-calloc-realloc</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>malloc</code> (não inicializa), <code>calloc</code> (zera), <code>realloc</code> (redimensiona, pode mover o bloco) e <code>free</code>. Teste sempre se veio <code>NULL</code>.</li>
+<li><strong>Exemplo bom:</strong> um arquivo cuja primeira linha diz N, seguido de N inteiros: <code>calloc(N, sizeof(int))</code>, leitura, fechar o arquivo, <code>free</code>. Dimensionar o vetor &quot;pelo pior caso&quot; desperdiça memória e mesmo assim pode faltar.</li>
+<li><strong>Implementações &quot;semiestáticas&quot;</strong> (vetor de ponteiros, cada elemento com <code>malloc</code>): uma ponte didática entre o vetor e a lista.</li>
+</ul>
+<h3>0057-erros-de-memoria</h3>
+<ul>
+<li>Fontes de exemplos de erro tiradas do próprio livro: vetor estourado no <code>for</code> (<code>&lt;=</code>); ponteiro não inicializado; <code>strncpy</code> sem <code>\0</code>; função que devolve ponteiro para variável local (o livro &quot;resolve&quot; com <code>static</code>; hoje se prefere devolver a struct por valor ou usar <code>malloc</code>); <code>Merge_Sort</code> com <code>calloc</code> sem testar <code>NULL</code>.</li>
+</ul>
+<h3>0059-struct / 0060-typedef / 0061-vetor-de-structs / 0062-ponteiro-para-struct</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> vetor = acesso por índice; struct = acesso <strong>por nome</strong>. Duas formas de declarar: <code>struct tag {...};</code> ou <code>typedef struct {...} T;</code>. Inicialização em ordem: <code>{&quot;Vincent Van Gogh&quot;, &#39;M&#39;, {30, 3, 1853}}</code>. <strong>Structs podem ser atribuídas</strong> com <code>=</code>, vetores não. <code>p-&gt;campo</code> é o mesmo que <code>(*p).campo</code>. Uma struct que aponta para si mesma precisa da tag: <code>typedef struct tnodo { ...; struct tnodo *prox; } TNODO;</code>.</li>
+<li><strong>Passagem:</strong> por valor quando a função só lê e a struct é pequena; por ponteiro quando altera ou a struct é grande (ex.: <code>LER_DADOS(TDADOS *p)</code> e <code>ESCREVER_DADOS(TDADOS p)</code>).</li>
+<li><strong>Exemplo pronto:</strong> um vetor com 5 pintores (Van Gogh, Vieira da Silva, Modigliani, Monet, O&#39;Keeffe) e a função que conta os homens, em duas versões: com índice e com ponteiro <code>P++</code>.</li>
+<li><strong>Pegadinha:</strong> devolver o endereço de uma struct local é proibido (morre quando a função termina).</li>
+</ul>
+<h3>0063-enum</h3>
+<ul>
+<li><strong>Exemplos:</strong> <code>enum t_cor {BRANCO, AZUL, VERDE, ROSA, PRETO};</code> e <code>typedef enum {SEGUNDA=2, TERCA, QUARTA, QUINTA, SEXTA} T_DIA_UTIL;</code> (os seguintes continuam a contagem). Dá para fazer conta: <code>DIA += 4</code>.</li>
+<li><strong>Pegadinha:</strong> o livro lê um enum com <code>scanf(&quot;%1d&quot;, &amp;DIA)</code>. É arriscado, porque o tamanho do enum não é garantido; leia num <code>int</code> e converta.</li>
+</ul>
+<h3>0065-bits</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>&amp; | ^ ~ &lt;&lt; &gt;&gt;</code>. Deslocar uma quantidade ≥ largura do tipo é indefinido; deslocar valor <code>signed</code> não é portátil, então faça cast para <code>unsigned</code> antes.</li>
+</ul>
+<h3>0067-arquivos-texto</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> todo dispositivo é um <strong>stream</strong> (sequência de bytes num buffer). <code>FILE</code> guarda a posição, o buffer, o indicador de erro e o de EOF. <code>stdin</code>, <code>stdout</code> e <code>stderr</code> já vêm abertos. Modos <code>r</code>, <code>w</code>, <code>a</code>, <code>r+</code>, <code>w+</code>, <code>a+</code> (a tabela de permissões é ótima). <code>fopen</code> devolve NULL e preenche <code>errno</code>.</li>
+<li><strong>Bons hábitos do livro:</strong> testar <code>fopen</code>; mandar o erro para <code>stderr</code> (o <code>stdout</code> pode estar redirecionado); terminar com <code>exit(EXIT_FAILURE)</code>; se a abertura do segundo arquivo falhar, fechar o primeiro; <code>fclose</code> descarrega o buffer.</li>
+<li><strong>Laço de leitura correto:</strong> <code>while ((n = fscanf(f, fmt, ...)) == NITEMS) {...}</code> e depois <code>if (n != EOF)</code> acusa uma linha mal formatada. Variante: continuar lendo e só avisar as linhas ruins.</li>
+<li><strong>Pegadinha central:</strong> <strong>nunca usar <code>while (!feof(f))</code></strong>. O <code>feof</code> só fica verdadeiro <em>depois</em> de uma leitura falhar: a última linha é processada duas vezes e um arquivo vazio dá problema.</li>
+<li><strong>Exemplos:</strong><ul>
+<li>converter um arquivo para minúsculas caractere a caractere (<code>tolower</code>, com os nomes vindos de <code>argv</code>);</li>
+<li>aniversariantes de 29/02: linhas <code>registro:nome:dia:mes:ano:telefone</code> lidas com <code>&quot;%*d:%40[^:]:%d:%d:%*d:%9s\n&quot;</code>.</li>
+</ul>
+</li>
+<li><strong>Ideia de exercício:</strong> gravar os aniversariantes num arquivo de saída cujo nome vem da linha de comando.</li>
+</ul>
+<h3>0068-arquivos-binarios</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> um arquivo binário costuma ter <strong>cabeçalho + registros de tamanho fixo</strong>, o que permite acesso aleatório. <code>fread</code>/<code>fwrite</code> devolvem o número de elementos efetivamente transferidos. <code>fseek</code> com SEEK_SET, SEEK_CUR e SEEK_END (em texto, só SEEK_SET com 0 ou com um valor vindo de <code>ftell</code>); <code>ftell</code>; <code>rewind</code> (também limpa erro e EOF); <code>fflush</code>; <code>remove</code>; <code>rename</code>; <code>tmpfile</code>.</li>
+<li><strong>Exemplo-projeto excelente (agenda telefônica binária):</strong><ul>
+<li>o cabeçalho guarda o número de registros; cada registro tem nome[41], telefone[16] e data;</li>
+<li>menu: inserir em ordem alfabética, apagar por telefone, listar, sair;</li>
+<li>abre com <code>rb+</code>; se o arquivo não existir, pergunta se deve criá-lo com <code>wb+</code> e grava 0 no cabeçalho;</li>
+<li>posição do registro P = <code>sizeof(cabeçalho) + P*sizeof(registro)</code>;</li>
+<li>inserir desloca os registros <strong>de trás para frente</strong>; apagar desloca de frente para trás;</li>
+<li><code>fflush</code> depois de atualizar o cabeçalho; validação de telefone com <code>%15[0123456789]</code>.</li>
+<li>Serve como &quot;juntando-tudo&quot; do módulo 09 (e lembra o insertion sort).</li>
+</ul>
+</li>
+</ul>
+<h3>0069-argumentos</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>int main(int argc, char *argv[])</code>; <code>argv[0]</code> é o nome do programa. Valide <code>argc</code> e imprima o uso: <code>fprintf(stderr, &quot;Uso: %s entrada saida\n&quot;, argv[0]);</code>.</li>
+</ul>
+<h3>0071-eficiencia / 0072-big-o</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> ordem de grandeza = o termo que domina (n² + n é O(n²)). Busca sequencial: pior caso N, média (N+1)/2, ou seja O(N). Busca binária: pior caso log₂(N+1), ou seja O(log N). O pior caso da ordenação é o vetor invertido; o melhor, o já ordenado; o caso médio se mede com vetores aleatórios.</li>
+<li><strong>Critério prático ótimo:</strong> comparação barata com elementos pesados pede minimizar trocas; comparação cara (strings longas) com elementos leves ou ponteiros pede minimizar comparações.</li>
+</ul>
+<h3>0074-tad</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> um TAD é interface (<code>.h</code>) + implementação escondida (<code>.c</code>). Interfaces com <strong>códigos de retorno</strong> (OK, NULL_PTR, NO_MEM, EMPTY, FULL...) em vez de imprimir dentro do módulo.</li>
+<li><strong>As quatro &quot;memórias&quot; (boa visão geral de TADs):</strong><ul>
+<li>RAM: acesso por índice (Read/Write/Search/Sort);</li>
+<li>FIFO: entra na cauda, sai pela cabeça;</li>
+<li>LIFO: entra e sai pelo topo;</li>
+<li>CAM (memória associativa): acesso por chave, sempre ordenada.</li>
+</ul>
+</li>
+<li><strong>Três implementações para o mesmo TAD:</strong><ul>
+<li>estática: vetor de elementos;</li>
+<li>semiestática: vetor de ponteiros;</li>
+<li>dinâmica: lista ou árvore, sem limite.</li>
+</ul>
+</li>
+<li><strong>Exemplo:</strong> a mesma interface <code>Fifo_In</code>/<code>Fifo_Out</code> com três <code>.c</code> diferentes. Mostra que o usuário não muda nada.</li>
+</ul>
+<h3>0076-lista-encadeada</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> o nó tem um ponteiro para o elemento e um para o próximo; o último aponta para NULL. Inserção na fila: aloca o nó, aloca o elemento (se falhar, libera o nó), liga o nó, atualiza a cauda e só então copia o dado. Remoção: copia o dado, avança a cabeça e libera o elemento e o nó, nessa ordem.</li>
+</ul>
+<h3>0079-lista-dupla</h3>
+<ul>
+<li>Aparece só como conceito: a CAM dinâmica linear usa uma lista duplamente encadeada porque precisa andar nos dois sentidos.</li>
+</ul>
+<h3>0082-pilha</h3>
+<ul>
+<li><strong>Implementação estática:</strong> <code>PILHA[top++] = e;</code> e <code>*p = PILHA[--top];</code>; <code>top == N</code> quer dizer cheia, <code>top == 0</code> quer dizer vazia. Aqui o <strong>topo é a primeira posição livre</strong>, enquanto outro material usa topo = -1. Vale comparar as duas convenções.</li>
+<li><strong>Interface:</strong> <code>Stack_Push(TElem e)</code> recebe por valor; <code>Stack_Pop(TElem *p)</code> devolve NULL_PTR se <code>p</code> for nulo e STACK_EMPTY se a pilha estiver vazia.</li>
+</ul>
+<h3>0083-pilha-encadeada</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> cada nó aponta para o anterior (<code>pant</code>). Push: <code>novo-&gt;pant = top; top = novo;</code>. Pop: <code>top = top-&gt;pant;</code>. <code>top == NULL</code> quer dizer vazia; nunca enche (no máximo, falta memória).</li>
+<li><strong>Versão abstrata com várias instâncias:</strong> <code>typedef struct stack *PtStack;</code>, <code>Stack_Create(sizeof(char))</code> e <code>Stack_Destroy(&amp;p)</code>. <strong>Exemplo:</strong> dupla inversão de um texto com duas pilhas.</li>
+</ul>
+<h3>0084-pilha-aplicacoes</h3>
+<ul>
+<li><strong>Exemplo excelente (parênteses balanceados com <code>( [ {</code>):</strong><ul>
+<li>expressão boa: <code>{A+B*[C/(F+A)+(C+D)*(E-F)]}/[(A+B)*C]</code>;</li>
+<li>contraexemplo que <strong>mostra por que contar não basta</strong>: trocar <code>]}</code> por <code>}]</code>;</li>
+<li>algoritmo: empilha os que abrem; ao fechar, desempilha e compara. Se a pilha estiver vazia ao fechar, há mais fechamentos que aberturas; se sobrar algo no fim, há mais aberturas;</li>
+<li>as quatro saídas possíveis: balanceada, &quot;[ e } discordantes&quot;, sobra de direitos, sobra de esquerdos.</li>
+</ul>
+</li>
+<li><strong>Outro exemplo:</strong> palíndromo usando fila e pilha juntas (o da frente da fila contra o topo da pilha).</li>
+<li><strong>Aplicações citadas:</strong> recursão, avaliação de notação pós-fixa e análise sintática de blocos aninhados.</li>
+<li><strong>Pegadinha:</strong> o programa lê a expressão com <code>%80s</code>, então ela não pode ter espaços.</li>
+</ul>
+<h3>0085-fila</h3>
+<ul>
+<li><strong>Fila circular estática:</strong> a cauda é a primeira posição livre; a cabeça é o próximo elemento a sair; <strong>cabeça = N é a sentinela de fila vazia</strong> (assim não sobra ambiguidade entre cheia e vazia sem contador). Ao inserir o primeiro elemento, cabeça = cauda; a fila enche quando a cauda alcança a cabeça; ao tirar o último, a cabeça volta a N. A volta é feita com <code>% N</code>. A alternativa linear desloca todos os elementos (ineficiente).</li>
+<li><strong>Aplicações:</strong> fila de impressão em rede, sincronização de processos, simulação de atendimento.</li>
+<li><strong>Pegadinha grave no código do livro:</strong> <code>tail = ++tail % N_ELEMENTOS;</code> é <strong>comportamento indefinido</strong> (a mesma variável é modificada duas vezes). Escreva <code>tail = (tail + 1) % N;</code>.</li>
+<li><strong>Ideia de exercício:</strong> com N=4, simular In(1), In(2), Out, In(3), In(4), In(5) (cheia?), Out, Out, mostrando cabeça e cauda em cada passo.</li>
+</ul>
+<h3>0086-fila-encadeada</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> ponteiros <code>head</code> e <code>tail</code>; os dois NULL quer dizer vazia. Ao remover o último elemento, zerar também o <code>tail</code> (esquecer isso é um bug clássico).</li>
+<li><strong>Versão abstrata:</strong> <code>typedef struct fifo *PtFifo;</code> com uma struct <code>{size, head, tail}</code>; <code>Fifo_Create(sz)</code> devolve NULL se <code>sz == 0</code>.</li>
+</ul>
+<h3>0089-busca-sequencial</h3>
+<ul>
+<li><strong>Funções com índice de início (reaproveitáveis):</strong> ProcurarMaior, ProcurarMenor (em empate, o primeiro), ProcurarValor (devolve -1 se não achar, com <code>return</code> dentro do <code>for</code>).</li>
+<li><strong>&quot;Encaixe&quot; (ótimo e pouco visto):</strong><ul>
+<li><em>first fit</em>: o primeiro valor ≤ alvo;</li>
+<li><em>best fit</em>: o maior valor ≤ alvo;</li>
+<li><em>worst fit</em>: o menor valor ≤ alvo.</li>
+</ul>
+</li>
+<li><strong>Analogia:</strong> sobra de 100 cm de calha e cortes de 80, 50 e 40 cm. O best fit pega 80 e sobram 20; o worst fit pega 40, depois 50, e sobram só 10.</li>
+<li><strong>Valores prontos:</strong> vetor <code>20 3 330 25 22 24 15 32 42 2 5 1 8 7 6 39 55 145 209 250</code>, começando no índice 7:<ul>
+<li>maior = 250 (índice 19), menor = 1 (índice 11);</li>
+<li>procurar 55 dá o índice 16; procurar 40 dá -1;</li>
+<li>com alvo 40: first fit = 32 (índice 7), best fit = 39 (índice 15), worst fit = 1 (índice 11);</li>
+<li>começando no índice 17, todos dão -1.</li>
+</ul>
+</li>
+<li><strong>Analogia de pauta:</strong> pauta desordenada pede busca sequencial; ordenada por número pede busca binária; separada por curso e depois ordenada pede tabela/hash.</li>
+</ul>
+<h3>0090-busca-binaria</h3>
+<ul>
+<li><strong>Trace pronto:</strong> vetor <code>3 7 20 25 26 28 30 34 42 44 50 60 68 75 86 99 125 145 209 250</code>.<ul>
+<li>Procurar 34: meio no índice 9 (44), depois 4 (26), depois 6 (30), depois 7 (34): achou em 4 tentativas (a sequencial levaria 8).</li>
+<li>Procurar 40: 5 tentativas até mínimo e máximo se cruzarem.</li>
+</ul>
+</li>
+<li><strong>Pegadinhas (todas reais no código do livro):</strong><ul>
+<li><code>return -1</code> dentro do <code>while</code>;</li>
+<li>a versão recursiva <strong>sem <code>return</code></strong> nas chamadas recursivas, o que perde o resultado;</li>
+<li>índices <code>unsigned</code>: <code>maximo = medio - 1</code> com <code>medio = 0</code> dá a volta para um número enorme;</li>
+<li><code>(min+max)/2</code> pode estourar; usar <code>min + (max-min)/2</code>.</li>
+</ul>
+</li>
+<li><strong>Ideia de exercício:</strong> dar o código do livro com esses defeitos e pedir para achá-los.</li>
+</ul>
+<h3>0091-bubble-sort / 0092-selection-sort / 0093-insertion-sort</h3>
+<ul>
+<li><strong>Vetor-padrão do livro:</strong> <code>209 330 25 15 42 2 32 8 55 145</code>, que vira <code>2 8 15 25 32 42 55 145 209 330</code>.</li>
+<li><strong>Tabela comparativa (comparações / trocas):</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Algoritmo</th>
+<th>Comparações</th>
+<th>Trocas</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&quot;Sequencial&quot; (troca sempre que acha um menor)</td>
+<td>45</td>
+<td>25</td>
+</tr>
+<tr>
+<td>Seleção</td>
+<td>45</td>
+<td>7</td>
+</tr>
+<tr>
+<td>Bolha</td>
+<td>45</td>
+<td>25</td>
+</tr>
+<tr>
+<td>Shell v1 (troca)</td>
+<td>52</td>
+<td>11</td>
+</tr>
+<tr>
+<td>Shell v2 (inserção)</td>
+<td>29</td>
+<td>~18</td>
+</tr>
+<tr>
+<td>Shaker</td>
+<td>39</td>
+<td>25</td>
+</tr>
+<tr>
+<td>Inserção</td>
+<td>34</td>
+<td>~14 (43 atribuições)</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>Seleção:</strong> guardar o índice do mínimo e trocar no máximo uma vez por passada, então O(N) trocas, mas continua O(N²) em comparações.</li>
+<li><strong>Bolha:</strong> varre de trás para frente e para quando uma passada não troca nada. É boa para vetor quase ordenado e péssima para vetor muito desordenado.</li>
+<li><strong>Inserção:</strong> analogia da mão de cartas. Cópia para temporário, desloca os maiores, insere. Atribuições = deslocamentos + 2(N−1); uma troca equivale a 3 atribuições. Na média faz cerca de N²/4. <strong>É a melhor das simples para vetores parcialmente ordenados.</strong> O livro tem o trace passo a passo do vetor-padrão.</li>
+<li><strong>Extras:</strong> Shell sort (a sequência de incrementos muda a complexidade: Shell O(N²), Hibbard O(N^1,5), Sedgewick O(N^(4/3))) e Shaker sort (bolha nos dois sentidos, usando a posição da última troca).</li>
+<li><strong>Ideia de exercício:</strong> rodar a seleção no vetor-padrão à mão e contar as trocas (resposta: 7).</li>
+</ul>
+<h3>0094-merge-sort</h3>
+<ul>
+<li><strong>Intercalação de duas listas:</strong> A = <code>8 32 42 209 330</code> e B = <code>2 15 25 55 145</code> dão 8 comparações até B acabar; o resto de A é copiado. Melhor caso N/2 comparações, pior N−1. Funciona também para <strong>ordenação externa</strong> (arquivos).</li>
+<li><strong>Merge sort recursivo:</strong> cópia para um vetor temporário alocado em cada intercalação; no vetor-padrão, 21 comparações e 68 atribuições. Melhor caso (N log N)/2, pior N log N − N + 1.</li>
+<li><strong>Exercício do livro:</strong> intercalação que remove repetidos.</li>
+</ul>
+<h3>0095-quick-sort</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> Hoare (1960). Pivô pela <strong>mediana de três</strong> (início, meio, fim); tratamento especial para 1, 2 e 3 elementos.<ul>
+<li>Versão 1: o pivô anda pelo vetor; 28 comparações e 19 trocas.</li>
+<li>Versão 2: o pivô fica escondido na penúltima posição; 30 comparações e 17 trocas.</li>
+<li>Pior caso (N²−N)/2; média ~1,4(N+1) log₂ N.</li>
+</ul>
+</li>
+<li><strong>Trace:</strong> no vetor-padrão, a mediana entre 209, 42 e 145 é 145, que vira o pivô e termina no índice 7.</li>
+<li><strong>Pegadinha:</strong> índices <code>unsigned</code> em <code>medio-1</code> / <code>fim-inicio+1</code> dão a volta quando o subvetor fica vazio.</li>
+</ul>
+<h3>0096-comparando</h3>
+<ul>
+<li>Use a tabela acima. O livro conclui que inserção e Shell v2 são as melhores simples, e que merge e quick sort são O(N log N). Falta falar de estabilidade e de <code>qsort</code>: complementar com outra fonte.</li>
+</ul>
+<h3>0097-arvores / 0099-bst-busca-insercao (só conceitual)</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> a árvore é recursiva (vazia ou raiz + subárvores). Na árvore binária de busca, menores à esquerda e maiores à direita; o nó tem ponteiros para o elemento, para a esquerda e para a direita. Árvore completa com K níveis tem N = 2^K − 1 nós. A busca só é log₂ N se a árvore estiver balanceada, então inserir e remover deveriam preservar o balanceamento (gancho para AVL).</li>
+</ul>
+<h3>0105-hashing / 0106-encadeamento (só conceitual)</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> a função hash calcula a posição a partir da chave. Problemas: overflow (tabela cheia) e colisão. Solução: <strong>vetor de listas</strong> (encadeamento), busca em dois tempos (hash, depois sequencial na lista curta). Chaves repetidas ficam em ordem de chegada se cada lista funcionar como fila. Limite: o vetor tem tamanho fixo.</li>
+</ul>
+<hr>
+<h2>Ideias de &quot;juntando-tudo&quot; vindas do livro</h2>
+<ul>
+<li><strong>Módulo 03 ou 04:</strong> menu com validação robusta (<code>scanf</code> + descarte da linha).</li>
+<li><strong>Módulo 04 (0036):</strong> calculadora de números complexos com módulo <code>.h</code>/<code>.c</code> e tipo opaco.</li>
+<li><strong>Módulo 09 (0070):</strong> agenda telefônica em arquivo binário com cabeçalho, inserção ordenada e remoção.</li>
+<li><strong>Módulo 12 (0088):</strong> verificador de parênteses mais palíndromo com fila e pilha.</li>
+<li><strong>Módulo 13:</strong> ordenar a mesma base de pintores por nome, data e registro com ponteiro para função e contadores de operações.</li>
+</ul>
+<h2>Obsoleto / evitar</h2>
+<ul>
+<li>Comparações com Pascal (<code>readln</code>, <code>repeat until</code>, <code>:=</code>, <code>case of</code>): retirar.</li>
+<li>Máquina de 32 bits: &quot;ponteiro tem 4 bytes&quot;, &quot;<code>int</code> e <code>long</code> têm 4 bytes&quot;, &quot;deslocar ponteiros custa 4 bytes&quot;.</li>
+<li><code>register</code>: inútil hoje, e não deixa usar <code>&amp;</code>.</li>
+<li><code>tmpnam</code>: inseguro (preferir <code>tmpfile</code>/<code>mkstemp</code>).</li>
+<li><code>atoi</code>/<code>atof</code> sem detecção de erro (preferir <code>strtol</code>/<code>strtod</code>). O livro cita &quot;idiv&quot; (o nome correto é <code>div</code>).</li>
+<li>Identificadores todos em MAIÚSCULAS para variáveis (o costume moderno reserva maiúsculas para macros).</li>
+<li>Índices <code>unsigned</code> em algoritmos que fazem <code>i-1</code> (bugs de volta ao máximo).</li>
+<li>Variáveis de bloco &quot;devem ser evitadas&quot; (opinião antiga: hoje se recomenda declarar perto do uso; o C99 permite <code>for (int i=...)</code>).</li>
+<li>Devolver ponteiro para struct <code>static</code> local (não reentrante).</li>
+<li>Bugs a não copiar:<ul>
+<li><code>tail = ++tail % N</code> (comportamento indefinido);</li>
+<li>busca binária recursiva sem <code>return</code>;</li>
+<li><code>printf(&quot;%s&quot;, LISTA[J])</code>;</li>
+<li><code>int AM[][][]</code>;</li>
+<li><code>while(Opcao&lt;1 &amp;&amp; Opcao&gt;7)</code>;</li>
+<li><code>utroca</code> sem inicialização no shaker;</li>
+<li><code>CCount</code> sem <code>return</code> no fim;</li>
+<li>funções definidas dentro de <code>.h</code>;</li>
+<li><code>EXIT_SUCESS</code> (erro de digitação);</li>
+<li><code>DISCOS_MAX</code> não definido no Hanói.</li>
+</ul>
+</li>
+</ul>
+<h2>Leituras recomendadas pelo livro</h2>
+<ul>
+<li>Darnell &amp; Margolis, <em>C: A Software Approach</em>; Standish, <em>Data Structures, Algorithms and Software Principles in C</em>; Weiss, <em>Data Structures and Algorithm Analysis in C</em>.</li>
+</ul>

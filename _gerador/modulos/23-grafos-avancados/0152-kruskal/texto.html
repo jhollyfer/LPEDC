@@ -1,0 +1,191 @@
+<h2>0152 · Kruskal: árvore geradora mínima</h2>
+<p>A prefeitura quer asfaltar estradas entre seis vilas: Sede, Ponte, Brejo,
+Serra, Lagoa e Vale. A engenharia orçou nove trechos possíveis, de R$ 2 mil
+a R$ 9 mil cada. Depois da obra, deve dar para ir de qualquer vila a
+qualquer outra pelo asfalto, e a prefeitura quer gastar o mínimo. Repare no
+pedido: não é o caminho mais curto entre duas vilas, é um conjunto de
+estradas que <strong>ligue todo mundo</strong> com a <strong>menor soma</strong>.</p>
+<p>Esse conjunto nunca tem ciclo. Se três estradas formassem um triângulo,
+dava para tirar a mais cara delas e as vilas continuariam ligadas pelas
+outras duas, gastando menos. Um grafo conexo e sem ciclo se chama
+<strong>árvore</strong>, e uma árvore com V vértices tem sempre <strong>V - 1 arestas</strong>: menos
+que isso deixa alguém de fora, mais que isso fecha um ciclo. As seis vilas
+ficam ligadas com exatamente cinco estradas.</p>
+<p>O problema tem nome. Uma <strong>árvore geradora</strong> de um grafo é uma árvore que
+usa arestas do grafo e toca todos os vértices dele. A <strong>árvore geradora
+mínima</strong> (MST, de <em>minimum spanning tree</em>) é a de menor soma de pesos, num
+grafo <strong>não dirigido</strong> e ponderado, em que cada aresta tem um peso (CORMEN et
+al., 2024, cap. 21). Redes elétricas, de água e de cabos se planejam assim.</p>
+<p>O <strong>algoritmo de Kruskal</strong> é um guloso (assunto 0133) com uma regra só.
+Ordene as arestas da mais barata para a mais cara. Percorra a lista e
+<strong>aceite</strong> cada aresta que <strong>não feche ciclo</strong> com as já aceitas; recuse as
+que fecham. Pare quando tiver V - 1 arestas (KRUSKAL, 1956). Nas vilas, a
+Serra-Lagoa (2) entra, a Ponte-Brejo (3) entra, e assim por diante, até que
+a Sede-Ponte (6) aparece quando Sede e Ponte já estão ligadas pelo Brejo, e
+é recusada.</p>
+<p>O passo delicado é saber se uma aresta fecha ciclo. Ela fecha quando as
+duas pontas já estão ligadas por arestas aceitas, ou seja, no mesmo grupo.
+Grupos que se juntam e nunca se separam são o caso exato do <strong>union-find</strong>
+(assunto 0148). Cada grupo de vilas já ligadas é um conjunto. Para a aresta
+<code>a-b</code>, se <code>acha(a)</code> e <code>acha(b)</code> dão o mesmo representante, ela fecharia um
+ciclo; se não, ela entra e <code>une</code> junta os dois grupos (SEDGEWICK; WAYNE,
+2011).</p>
+<p>O custo é dominado pela ordenação das arestas, O(E log E). Como um grafo
+simples tem E &lt; V², log E &lt; 2 log V, e o custo também se escreve O(E log V).
+As operações do union-find, com os dois truques do 0148, custam quase O(1)
+cada (CORMEN et al., 2024, cap. 21).</p>
+<p>Por que o guloso acerta? Divida os vértices em dois grupos quaisquer, um
+<strong>corte</strong>. Toda árvore que liga tudo precisa de pelo menos uma aresta
+cruzando de um grupo ao outro. A aresta mais barata que cruza o corte se
+chama <strong>leve</strong>, e a <strong>propriedade do corte</strong> garante que ela é <strong>segura</strong>:
+sempre existe uma MST que a contém, então aceitá-la não estraga nada (CORMEN
+et al., 2024, cap. 21). Quando o Kruskal aceita uma aresta, ela é a mais
+barata que liga o grupo de uma ponta ao resto, porque todas as mais baratas
+já foram vistas antes.</p>
+<p>Com pesos repetidos, pode haver mais de uma MST. Nas vilas, a Lagoa-Vale
+também custa 7; se viesse antes da Serra-Vale na lista ordenada, entraria no
+lugar dela. A árvore muda, mas o custo mínimo, R$ 21 mil, é o mesmo: a MST
+pode não ser única, o custo mínimo é.</p>
+<blockquote>
+<p>[!WARNING]
+Testar <code>pai[a] != pai[b]</code> no lugar de <code>acha(a) != acha(b)</code> é o erro clássico:
+<code>pai</code> não é o representante. E no <code>qsort</code>, <code>x-&gt;custo - y-&gt;custo</code> estoura perto
+de <code>INT_MAX</code>; use <code>(x-&gt;custo &gt; y-&gt;custo) - (x-&gt;custo &lt; y-&gt;custo)</code>.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>A prefeitura quer asfaltar estradas entre seis vilas com o menor custo, a partir
+de nove trechos orçados. Verde entrou, vermelho fecharia ciclo e cinza nem foi
+olhado, porque as 5 arestas já tinham saído:</p>
+<p>{{ideia}}</p>
+<p>A lista de arestas é ordenada com o <code>qsort</code> (assunto 0096); o union-find usa
+compressão de caminho e união por tamanho:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+#define V 6
+#define E 9
+
+typedef struct {
+    int a, b, custo; // estrada entre a e b, em R$ mil
+} Aresta;
+
+const char *vilas[V] = {&quot;Sede&quot;, &quot;Ponte&quot;, &quot;Brejo&quot;, &quot;Serra&quot;, &quot;Lagoa&quot;, &quot;Vale&quot;};
+int pai[V], tamanho[V];
+
+int acha(int x) { // representante do grupo de x, com compressão de caminho
+    if (pai[x] != x) pai[x] = acha(pai[x]);
+    return pai[x];
+}
+
+void une(int ra, int rb) { // junta dois grupos: o menor pendura no maior
+    if (tamanho[ra] &lt; tamanho[rb]) {
+        int t = ra;
+        ra = rb;
+        rb = t;
+    }
+    pai[rb] = ra;
+    tamanho[ra] += tamanho[rb];
+}
+
+int compara(const void *p, const void *q) {
+    const Aresta *x = p, *y = q;
+    if (x-&gt;custo != y-&gt;custo) return x-&gt;custo - y-&gt;custo;
+    return x-&gt;a - y-&gt;a; // empate: decide pelo primeiro vértice
+}
+
+int main(void) {
+    Aresta estradas[E] = {{0, 2, 4}, {1, 2, 3}, {0, 1, 6}, {2, 3, 8}, {1, 3, 5},
+                          {1, 4, 9}, {3, 4, 2}, {3, 5, 7}, {4, 5, 7}};
+    qsort(estradas, E, sizeof(Aresta), compara); // 1) da mais barata à mais cara
+
+    for (int v = 0; v &lt; V; v++) { // 2) cada vila começa sozinha
+        pai[v] = v;
+        tamanho[v] = 1;
+    }
+
+    int total = 0, aceitas = 0;
+    for (int k = 0; k &lt; E &amp;&amp; aceitas &lt; V - 1; k++) { // 3) uma árvore tem V - 1 arestas
+        Aresta e = estradas[k];
+        int ra = acha(e.a), rb = acha(e.b);
+        printf(&quot;%s-%s (%d): &quot;, vilas[e.a], vilas[e.b], e.custo);
+        if (ra == rb) {
+            printf(&quot;fecha ciclo\n&quot;); // as duas pontas já estão ligadas
+            continue;
+        }
+        une(ra, rb);
+        total += e.custo;
+        aceitas++;
+        printf(&quot;aceita\n&quot;);
+    }
+    printf(&quot;Total: R$ %d mil em %d estradas\n&quot;, total, aceitas);
+    return 0;
+}
+// Saída:
+// Serra-Lagoa (2): aceita
+// Ponte-Brejo (3): aceita
+// Sede-Brejo (4): aceita
+// Ponte-Serra (5): aceita
+// Sede-Ponte (6): fecha ciclo
+// Serra-Vale (7): aceita
+// Total: R$ 21 mil em 5 estradas
+</code></pre>
+<p>O laço do fluxograma sai ao acabar a lista ou ao completar V - 1 arestas; o
+union-find decide cada aresta:</p>
+<p>{{fluxograma}}</p>
+<h3>Passo a passo</h3>
+<p>A Sede-Ponte chega quando as duas já estão no mesmo grupo, ligadas pelo
+Brejo:</p>
+<table>
+<thead>
+<tr>
+<th>Aresta</th>
+<th><code>acha</code> das pontas</th>
+<th>Decisão</th>
+<th>Grupos depois</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>(início)</td>
+<td></td>
+<td></td>
+<td>{Sede} {Ponte} {Brejo} {Serra} {Lagoa} {Vale}</td>
+</tr>
+<tr>
+<td>Serra-Lagoa 2</td>
+<td>diferentes</td>
+<td>aceita</td>
+<td>{Serra, Lagoa}, os outros sozinhos</td>
+</tr>
+<tr>
+<td>Ponte-Brejo 3</td>
+<td>diferentes</td>
+<td>aceita</td>
+<td>{Ponte, Brejo} {Serra, Lagoa} {Sede} {Vale}</td>
+</tr>
+<tr>
+<td>Sede-Brejo 4</td>
+<td>diferentes</td>
+<td>aceita</td>
+<td>{Sede, Ponte, Brejo} {Serra, Lagoa} {Vale}</td>
+</tr>
+<tr>
+<td>Ponte-Serra 5</td>
+<td>diferentes</td>
+<td>aceita</td>
+<td>{Sede, Ponte, Brejo, Serra, Lagoa} {Vale}</td>
+</tr>
+<tr>
+<td>Sede-Ponte 6</td>
+<td><strong>iguais</strong></td>
+<td>ciclo</td>
+<td>(igual)</td>
+</tr>
+<tr>
+<td>Serra-Vale 7</td>
+<td>diferentes</td>
+<td>aceita</td>
+<td>todas juntas: 5 arestas, para</td>
+</tr>
+</tbody></table>
+<p>Lagoa-Vale também custa 7: se viesse antes, entraria no lugar de Serra-Vale,
+com o <strong>mesmo total</strong>.</p>

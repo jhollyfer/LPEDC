@@ -1,0 +1,199 @@
+<h2>0074 · TAD: interface (.h) e implementação (.c)</h2>
+<p>Os módulos seguintes constroem listas, pilhas, filas, árvores. Cada uma tem
+dados guardados de um jeito e funções que mexem neles. Se o <code>main</code> puder
+mexer direto nos campos, qualquer descuido estraga a estrutura, e qualquer
+mudança no jeito de guardar obriga a reescrever todo programa que a usa. Falta
+uma parede entre quem usa a estrutura e quem a constrói.</p>
+<p>Na entrada do estacionamento do shopping há um painel: &quot;VAGAS LIVRES: 3&quot;. A
+cancela só abre se houver vaga. Você não sabe se o sistema usa sensor, câmera
+ou planilha, e nem precisa saber. Você usa três &quot;botões&quot;: entrar, sair e ver
+quantas vagas sobram. Um <strong>tipo abstrato de dado</strong> (TAD) leva essa ideia ao
+código. É um tipo definido pelas <strong>operações</strong> que oferece, e não pelo modo
+como guarda os dados. Quem usa o tipo, o <strong>cliente</strong>, conhece só as
+operações; quem implementa pode trocar tudo por dentro, desde que as
+operações cumpram o prometido (CELES; RANGEL, 2002).</p>
+<p>No C, essa divisão é física e fica em dois arquivos (CELES; RANGEL, 2002). O
+primeiro é a <strong>interface</strong>, <code>contador.h</code>: o contrato. Ele declara o tipo e os
+protótipos das funções, cada um com um comentário dizendo o que entra, o que
+sai e o que pode dar errado. O cliente inclui esse arquivo e não vê mais
+nada:</p>
+<pre><code class="language-c">typedef struct contador Contador; // tipo opaco: os campos ficam no contador.c
+
+// Soma 1. Devolve true se somou; false se já estava no limite.
+bool contador_incrementa(Contador *c);
+</code></pre>
+<p>O segundo é a <strong>implementação</strong>, <code>contador.c</code>. Ele define a <code>struct</code> com os
+campos e escreve o corpo das funções. Ele também inclui o próprio <code>.h</code>, para o
+compilador conferir que cada função bate com o protótipo prometido. O cliente
+nunca inclui o <code>.c</code>; ele só é compilado junto (CELES; RANGEL, 2002).</p>
+<p>Repare na primeira linha do trecho acima. O <code>.h</code> diz que existe uma
+<code>struct contador</code>, mas não diz quais campos ela tem. Para o cliente, ela é
+um <strong>tipo incompleto</strong>: dá para ter um ponteiro <code>Contador *</code>, mas não uma
+variável <code>Contador</code>, nem <code>sizeof(Contador)</code>, nem <code>vagas-&gt;valor</code>, porque o
+compilador não sabe o tamanho nem os campos. Esse é o <strong>tipo opaco</strong>, e é ele
+que fecha a porta. Como o cliente não consegue criar a struct, todo TAD opaco
+oferece uma <code>contador_cria</code>, que faz o <code>malloc</code> lá dentro e devolve o
+ponteiro, e uma <code>contador_libera</code>, que faz o <code>free</code> (CELES; CERQUEIRA;
+RANGEL, 2016).</p>
+<p>A porta fechada é o que permite ao TAD cumprir um <strong>invariante</strong>, como no
+assunto 0073. O contador promete <code>0 &lt;= valor &lt;= limite</code> o tempo todo. A
+promessa só vale porque ninguém de fora escreve <code>vagas-&gt;valor = 99</code>: toda
+mudança passa por <code>contador_incrementa</code> e <code>contador_decrementa</code>, que recusam a
+operação em vez de quebrar a regra.</p>
+<p>O <code>#include</code> só cola o texto do <code>.h</code> no começo do arquivo do cliente. O
+cliente vira um <code>.o</code> sem saber o tamanho da struct, e não precisa: ponteiro
+tem sempre o mesmo tamanho. Só o <code>contador.o</code> conhece os campos, e o
+<strong>ligador</strong> (<em>linker</em>) junta os dois <code>.o</code> no executável. Por isso mudar a
+struct exige recompilar só o <code>contador.c</code> (KERNIGHAN; RITCHIE, 1989,
+seção 4.5). Essa é a <strong>compilação separada</strong>.</p>
+<p>Toda estrutura dos módulos 11 a 16 segue o mesmo molde. Para um TAD <code>x</code>:</p>
+<ol>
+<li><strong>Pasta do assunto</strong>: <code>x.h</code>, <code>x.c</code> e os exemplos <code>A###.c</code>. O comando do
+exemplo compila junto todo <code>.c</code> da pasta que não se chama
+<code>A000.c</code>/<code>E000.c</code>. À mão: <code>gcc A147.c contador.c -o a147</code>.</li>
+<li><strong><code>x.h</code></strong>: <em>include guard</em> (<code>#ifndef X_H</code>), que impede o arquivo de ser
+colado duas vezes, <code>typedef struct x X;</code> e protótipos com prefixo <code>x_</code>,
+cada um com seu contrato.</li>
+<li><strong><code>x.c</code></strong>: inclui o próprio <code>&quot;x.h&quot;</code> e define a <code>struct x</code> com o invariante
+comentado; funções auxiliares internas são <code>static</code>, invisíveis fora dele.</li>
+<li><strong>Nomes</strong>: <code>x_cria</code> (devolve <code>NULL</code> se faltar memória), <code>x_libera</code> (aceita
+<code>NULL</code>) e verbos no presente: <code>x_insere</code>, <code>x_remove</code>. Leitura recebe
+<code>const X *</code>.</li>
+<li><strong>Erros</strong>: operação que pode falhar devolve <code>bool</code>, com o valor por
+ponteiro (<code>bool pilha_desempilha(Pilha *p, int *valor)</code>). O TAD não
+imprime erro; o cliente decide o que mostrar.</li>
+<li><strong>Cliente</strong>: <code>#include &quot;x.h&quot;</code> com aspas, guarda só <code>X *</code>, confere o <code>NULL</code>
+do <code>_cria</code> e chama <code>_libera</code> no fim.</li>
+</ol>
+<blockquote>
+<p>[!WARNING]
+<code>vagas-&gt;valor = 0;</code> ou <code>Contador c;</code> no cliente dá erro de <strong>compilação</strong>
+(<code>invalid use of incomplete typedef</code>): é o tipo opaco funcionando. Não mova
+a <code>struct</code> para o <code>.h</code>; se falta uma operação, acrescente uma função. E
+esquecer o <code>contador.c</code> ao compilar à mão dá <code>undefined reference</code>, erro do
+<strong>ligador</strong>.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>O estacionamento do shopping tem 3 vagas e o painel só abre a cancela se houver
+vaga. O cliente (o arquivo do <code>main</code>) tem só um ponteiro para um bloco no heap
+que não consegue abrir:</p>
+<p>{{ideia}}</p>
+<p>O contrato completo está em <code>contador.h</code>, na pasta do assunto. O cliente
+estaciona 4 carros em 3 vagas:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+#include &quot;contador.h&quot; // só a interface: a struct está escondida em contador.c
+
+int main(void) {
+    Contador *vagas = contador_cria(3); // estacionamento com 3 vagas
+    if (vagas == NULL) {
+        printf(&quot;Sem memória\n&quot;);
+        return 1;
+    }
+
+    const char *placas[4] = {&quot;RIO2A18&quot;, &quot;SPX3B45&quot;, &quot;BHZ7C09&quot;, &quot;CWB1D77&quot;};
+    for (int i = 0; i &lt; 4; i++) {
+        if (contador_incrementa(vagas)) {
+            printf(&quot;%s entrou (%d/%d)\n&quot;, placas[i], contador_valor(vagas),
+                   contador_limite(vagas));
+        } else {
+            printf(&quot;%s: lotado, espere\n&quot;, placas[i]);
+        }
+    }
+
+    contador_decrementa(vagas); // um carro sai
+    printf(&quot;Um carro saiu (%d/%d)\n&quot;, contador_valor(vagas), contador_limite(vagas));
+
+    if (contador_incrementa(vagas)) {
+        printf(&quot;CWB1D77 entrou (%d/%d)\n&quot;, contador_valor(vagas), contador_limite(vagas));
+    }
+
+    contador_libera(vagas);
+    return 0;
+}
+// Saída:
+// RIO2A18 entrou (1/3)
+// SPX3B45 entrou (2/3)
+// BHZ7C09 entrou (3/3)
+// CWB1D77: lotado, espere
+// Um carro saiu (2/3)
+// CWB1D77 entrou (3/3)
+</code></pre>
+<p>O mesmo cliente outra vez, para ler lado a lado com a implementação que vem a
+seguir:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+#include &quot;contador.h&quot; // só a interface: a struct está escondida em contador.c
+
+int main(void) {
+    Contador *vagas = contador_cria(3); // estacionamento com 3 vagas
+    if (vagas == NULL) {
+        printf(&quot;Sem memória\n&quot;);
+        return 1;
+    }
+
+    const char *placas[4] = {&quot;RIO2A18&quot;, &quot;SPX3B45&quot;, &quot;BHZ7C09&quot;, &quot;CWB1D77&quot;};
+    for (int i = 0; i &lt; 4; i++) {
+        if (contador_incrementa(vagas)) {
+            printf(&quot;%s entrou (%d/%d)\n&quot;, placas[i], contador_valor(vagas),
+                   contador_limite(vagas));
+        } else {
+            printf(&quot;%s: lotado, espere\n&quot;, placas[i]);
+        }
+    }
+
+    contador_decrementa(vagas); // um carro sai
+    printf(&quot;Um carro saiu (%d/%d)\n&quot;, contador_valor(vagas), contador_limite(vagas));
+
+    if (contador_incrementa(vagas)) {
+        printf(&quot;CWB1D77 entrou (%d/%d)\n&quot;, contador_valor(vagas), contador_limite(vagas));
+    }
+
+    contador_libera(vagas);
+    return 0;
+}
+// Saída:
+// RIO2A18 entrou (1/3)
+// SPX3B45 entrou (2/3)
+// BHZ7C09 entrou (3/3)
+// CWB1D77: lotado, espere
+// Um carro saiu (2/3)
+// CWB1D77 entrou (3/3)
+</code></pre>
+<p>O lado escondido fica em <code>contador.c</code>:</p>
+<pre><code class="language-c">#include &lt;stdlib.h&gt;
+
+#include &quot;contador.h&quot;
+
+// Invariante da struct: 0 &lt;= valor &lt;= limite e limite &gt;= 1.
+struct contador {
+    int valor;
+    int limite;
+};
+
+Contador *contador_cria(int limite) {
+    if (limite &lt; 1) {
+        return NULL;
+    }
+    Contador *c = malloc(sizeof *c);
+    if (c == NULL) {
+        return NULL;
+    }
+    c-&gt;valor = 0;
+    c-&gt;limite = limite;
+    return c;
+}
+
+bool contador_incrementa(Contador *c) {
+    if (c-&gt;valor == c-&gt;limite) {
+        return false; // recusa em vez de quebrar o invariante
+    }
+    c-&gt;valor++;
+    return true;
+}
+// ... contador_libera, contador_decrementa, contador_zera,
+//     contador_valor e contador_limite seguem o mesmo estilo
+</code></pre>
+<p>O cliente fala com o TAD só pelas funções. Quem decide &quot;lotado&quot; é o
+<code>contador_incrementa</code>, que devolve <code>false</code>:</p>
+<p>{{fluxograma}}</p>

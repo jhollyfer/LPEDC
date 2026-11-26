@@ -1,0 +1,140 @@
+<h2>0062 · Ponteiro para struct</h2>
+<p>Você passa o cartão do ônibus na catraca e o validador desconta R$ 4,40. Ele
+mexe no saldo do cartão <strong>de verdade</strong>. Se descontasse numa cópia do cartão,
+o seu saldo nunca baixaria e você andaria de graça para sempre. Quando uma
+função precisa mudar uma struct, ela enfrenta esse mesmo problema.</p>
+<p>Em C, todo parâmetro vai <strong>por valor</strong>, e com struct não é diferente: a
+função recebe uma cópia de todos os bytes da struct, e o que ela muda fica na
+cópia. A struct de quem chamou continua igual. Para a função alterar o
+original, passe o <strong>endereço</strong> da struct, um ponteiro do tipo <code>Cartao *</code>
+(DEITEL; DEITEL, 2011, cap. 10). A cópia agora é do endereço, e um endereço
+copiado ainda aponta para o mesmo cartão.</p>
+<p>Com o ponteiro <code>c</code> em mãos, você chega a um campo em dois passos. <code>*c</code> segue
+o endereço e entrega a struct; <code>.saldo</code> escolhe o campo. Juntos, ficam
+<code>(*c).saldo</code>. Os parênteses são obrigatórios porque o ponto tem prioridade
+maior que o <code>*</code>. Sem eles, <code>*c.saldo</code> seria lido como <code>*(c.saldo)</code>, e <code>c</code> é
+um ponteiro, que não tem campo nenhum: o compilador recusa (FEOFILOFF, 2009,
+ap. E).</p>
+<p>Como esse caso aparece o tempo todo, o C tem um atalho, a <strong>seta</strong> <code>-&gt;</code>.
+<code>c-&gt;saldo</code> quer dizer exatamente o mesmo que <code>(*c).saldo</code>. A regra de uso
+cabe numa frase: variável struct usa ponto (<code>cartao.saldo</code>); ponteiro para
+struct usa seta (<code>c-&gt;saldo</code>) (BACKES, 2013, cap. 8). Se você errar, o
+compilador avisa que o operando da seta não é ponteiro, ou que o do ponto
+é.</p>
+<p>O ponteiro também abre a porta do <strong>heap</strong>, a área de memória que você pede
+com <code>malloc</code> e devolve com <code>free</code>, vista no módulo 07. <code>Cartao *c = malloc(sizeof *c);</code> reserva um <code>Cartao</code> inteiro e guarda o endereço em <code>c</code>.
+O <code>sizeof *c</code> mede o tipo para o qual <code>c</code> aponta; se um dia o tipo mudar, a
+conta acompanha sozinha. Como em todo <code>malloc</code>, confira se voltou <code>NULL</code>
+antes de usar e chame <code>free(c)</code> quando terminar (CELES; RANGEL, 2002).</p>
+<p>A struct no heap resolve outro problema: o tempo de vida. Uma struct
+declarada dentro de uma função é <strong>local</strong> e deixa de existir no <code>return</code>.
+Devolver o endereço dela (<code>return &amp;cartao;</code>) entrega um endereço de memória
+que já foi liberada. Quem precisa sobreviver à função vai para o heap, ou é
+devolvido por valor, como cópia.</p>
+<p>Há ainda a questão do custo. Passar por valor copia a struct <strong>a cada
+chamada</strong>. Um <code>Cartao</code> de 48 bytes pouco pesa, mas uma struct com
+<code>double leituras[1000]</code> copia 8016 bytes toda vez, contra os 8 bytes de um
+ponteiro. Por isso struct grande anda por ponteiro mesmo quando a função só
+precisa ler. Nesse caso, escreva <code>const Cartao *c</code>: o <code>const</code> avisa a quem lê
+que a função não altera nada, e faz o compilador barrar uma alteração por
+engano (CELES; RANGEL, 2002).</p>
+<blockquote>
+<p>[!WARNING]
+<code>void recarregar(Cartao c, double v) { c.saldo += v; }</code> compila, roda e não
+faz nada: recarrega uma cópia. Passe <code>Cartao *c</code> e escreva <code>c-&gt;saldo += v</code>.
+Outros dois erros comuns: <code>*c.saldo</code> não compila (use <code>c-&gt;saldo</code>), e
+<code>return &amp;cartao;</code> de uma struct local devolve um endereço que morre no
+<code>return</code>.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>O cartão de ônibus da Luana mora no heap com R$ 10,00, e cada passagem custa
+R$ 4,40. <code>cobrar_passagem</code> recebe uma cópia do <strong>endereço</strong>, não do cartão: as
+duas setas apontam para o mesmo lugar:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdbool.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+#define TARIFA 4.40
+
+typedef struct {
+    char titular[30];
+    double saldo;
+    int viagens;
+} Cartao;
+
+// recebe o ENDEREÇO do cartão: mexe no original, não numa cópia
+bool cobrar_passagem(Cartao *c) {
+    if (c-&gt;saldo &lt; TARIFA) { // c-&gt;saldo é o mesmo que (*c).saldo
+        return false;
+    }
+    c-&gt;saldo -= TARIFA;
+    c-&gt;viagens++;
+    return true;
+}
+
+int main(void) {
+    Cartao *c = malloc(sizeof *c); // um Cartao inteiro no heap
+    if (c == NULL) {
+        return 1;
+    }
+    strcpy(c-&gt;titular, &quot;Luana&quot;);
+    c-&gt;saldo = 10.00;
+    c-&gt;viagens = 0;
+
+    for (int i = 1; i &lt;= 3; i++) {
+        if (cobrar_passagem(c)) {
+            printf(&quot;Viagem %d: liberada, saldo R$ %.2f\n&quot;, i, c-&gt;saldo);
+        } else {
+            printf(&quot;Viagem %d: saldo insuficiente (R$ %.2f)\n&quot;, i, c-&gt;saldo);
+        }
+    }
+    printf(&quot;%s fez %d viagens\n&quot;, c-&gt;titular, c-&gt;viagens);
+
+    free(c);
+    return 0;
+}
+// Saída:
+// Viagem 1: liberada, saldo R$ 5.60
+// Viagem 2: liberada, saldo R$ 1.20
+// Viagem 3: saldo insuficiente (R$ 1.20)
+// Luana fez 2 viagens
+</code></pre>
+<h3>Passo a passo</h3>
+<p>O teste de mesa das três chamadas, olhando o cartão no heap:</p>
+<table>
+<thead>
+<tr>
+<th>Chamada</th>
+<th>saldo antes</th>
+<th>saldo &lt; 4.40?</th>
+<th>saldo depois</th>
+<th>viagens</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1ª</td>
+<td>10.00</td>
+<td>não</td>
+<td>5.60</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2ª</td>
+<td>5.60</td>
+<td>não</td>
+<td>1.20</td>
+<td>2</td>
+</tr>
+<tr>
+<td>3ª</td>
+<td>1.20</td>
+<td>sim: devolve false</td>
+<td>1.20</td>
+<td>2</td>
+</tr>
+</tbody></table>
+<p>A pergunta do saldo fica na função, mas o laço das três chamadas é do <code>main</code>.
+Cada volta enxerga o saldo da anterior:</p>
+<p>{{fluxograma}}</p>

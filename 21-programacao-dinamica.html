@@ -1,0 +1,3173 @@
+<!-- Gerado por _gerador. Para mudar este arquivo, edite _gerador/modulos/21-programacao-dinamica/ e rode: cd _gerador && npm run gerar --><h1>Módulo 21 · Programação dinâmica</h1>
+<blockquote>
+<p>[!IMPORTANT]
+<strong>Mundo 8 · Técnicas de projeto · Rota do jogo: etapa 27 de 29</strong></p>
+<p><strong>Missão:</strong> guardar subproblemas repetidos para ganhar velocidade.</p>
+<p><strong>Vem de:</strong> <a href="20-dc-e-gulosos.html">Módulo 20 · Divisão e conquista e algoritmos gulosos</a>. <strong>Segue para:</strong> <a href="24-busca-de-padroes.html">Módulo 24 · Busca de padrões em texto</a>.</p>
+<p><strong>Checkpoints desta fase:</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> Ler os assuntos 0138 a 0143 e refazer os exemplos</li>
+<li><input disabled="" type="checkbox"> Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho</li>
+<li><input disabled="" type="checkbox"> Fechar a lista prática (P2101 a P2130)</li>
+<li><input disabled="" type="checkbox"> Enfrentar os desafios do módulo</li>
+<li><input disabled="" type="checkbox"> Chefão: resolver as questões de prova do módulo sem consultar</li>
+</ul>
+</blockquote>
+<p>A <strong>programação dinâmica</strong> (PD) anota a resposta de cada subproblema na
+primeira vez e consulta nas seguintes. Toda PD tem uma <strong>recorrência</strong>, uma
+<strong>tabela</strong> e uma <strong>volta</strong> que reconstrói a solução: troco, mochila 0/1, LCS,
+distância de edição e um <strong>mini-diff</strong>. Depende da recursão (módulo 04) e dos
+gulosos (módulo 20): quando o guloso erra, a PD testa todas as escolhas.</p>
+<h2>O que você vai aprender</h2>
+<ul>
+<li><strong>memoização</strong> (de cima para baixo), <strong>tabela</strong> (de baixo para cima) e o
+custo de uma PD: subproblemas × trabalho de cada um</li>
+<li>quando a PD se aplica: <strong>subproblemas repetidos</strong> e <strong>subestrutura ótima</strong></li>
+<li><strong>troco</strong>: menor número de moedas e quantas combinações existem</li>
+<li><strong>mochila 0/1</strong>: tabela n × W, recuperação dos itens e o truque de uma
+linha só</li>
+<li><strong>LCS</strong> e a volta pela tabela</li>
+<li><strong>distância de edição</strong> (Levenshtein): inserir, remover e trocar</li>
+<li>o <strong>mini-diff</strong>, com leitura de linhas, vetor que cresce e tabela no heap</li>
+</ul>
+<h2>Antes de começar</h2>
+<p>Revise recursão (0032 e 0033), matrizes (0039), strings (0041 e 0042) e
+memória dinâmica (0054 e 0055). O troco guloso (0133) e a mochila fracionária
+(0135) são o ponto de partida do 0139 e do 0140.</p>
+<p>Os exemplos usam matriz fixa (<code>#define MAX 50</code>) para deixar a recorrência à
+vista; o mini-diff põe a tabela no heap. A cadeia de matrizes tem assunto
+próprio: o 0185.</p>
+<p>Nas tabelas, <strong>roxa</strong> é a célula calculada (ou de onde a volta parte),
+<strong>verde</strong> a escolhida ou o caminho da solução, <strong>amarela</strong> a opção que perdeu
+e <strong>cinza</strong> o que não chega a ser usado.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Assunto</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="#0138--memoiza%C3%A7%C3%A3o">0138</a></td>
+<td>Memoização</td>
+</tr>
+<tr>
+<td><a href="#0139--troco-com-programa%C3%A7%C3%A3o-din%C3%A2mica">0139</a></td>
+<td>Troco com programação dinâmica</td>
+</tr>
+<tr>
+<td><a href="#0140--mochila-01">0140</a></td>
+<td>Mochila 0/1</td>
+</tr>
+<tr>
+<td><a href="#0141--maior-subsequ%C3%AAncia-comum-lcs">0141</a></td>
+<td>Maior subsequência comum (LCS)</td>
+</tr>
+<tr>
+<td><a href="#0142--dist%C3%A2ncia-de-edi%C3%A7%C3%A3o">0142</a></td>
+<td>Distância de edição</td>
+</tr>
+<tr>
+<td><a href="#0143--juntando-tudo-um-mini-diff">0143</a></td>
+<td>Juntando tudo: um mini-diff</td>
+</tr>
+</tbody></table>
+<hr>
+<blockquote>
+<p>[!NOTE]
+Cada assunto é um capítulo: <strong>Conceito</strong> (a explicação), <strong>Exemplos de uso</strong> (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e <strong>Exercícios</strong> (cada um é um arquivo em <code>material/</code> com o esqueleto, as dicas e o espaço para a resposta; resoluções em <code>_respostas/21-programacao-dinamica/</code>).</p>
+</blockquote>
+<h2>0138 · Memoização</h2>
+<h3>Conceito</h3>
+<p>Você vai subir 35 degraus a pé, de um em um ou de dois em dois. De quantos
+jeitos diferentes dá para chegar ao topo? Contar na mão é impossível, e a
+pergunta esconde a ideia que guia o módulo inteiro.</p>
+<p>Pense no <strong>último passo</strong>. Para pisar no degrau <code>n</code>, você veio do degrau
+<code>n - 1</code>, com um passo simples, ou do <code>n - 2</code>, com um passo duplo. Então o
+número de jeitos de chegar a <code>n</code> é a soma dos jeitos de chegar a cada um
+desses dois: <code>formas(n) = formas(n - 1) + formas(n - 2)</code>, com <code>formas(0) = formas(1) = 1</code>. É a recorrência de Fibonacci, que você viu no assunto 0033.</p>
+<p>Escrita como recursão pura, essa função é <strong>exponencial</strong>. <code>formas(35)</code> faz
+quase 30 milhões de chamadas, porque <code>formas(33)</code> é calculada duas vezes,
+<code>formas(32)</code> três, e assim por diante, numa avalanche de contas repetidas
+(TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 3). E só existem 36 perguntas
+diferentes, de <code>formas(0)</code> a <code>formas(35)</code>. O desperdício é refazer conta
+pronta. A saída é <strong>anotar cada resposta na primeira vez e consultar nas
+próximas</strong>, como quem cola um lembrete na geladeira.</p>
+<p>Essa é a <strong>programação dinâmica</strong> (PD): resolver um problema combinando as
+respostas de <strong>subproblemas que se repetem</strong>, calculando cada um uma vez só
+(CORMEN et al., 2024, cap. 14). O nome engana. &quot;Programação&quot; aqui não quer
+dizer escrever código; quer dizer planejamento, preencher uma tabela, no
+sentido antigo da palavra.</p>
+<p>A PD exige duas condições do problema. A primeira é a <strong>subestrutura
+ótima</strong>: a resposta do problema sai das respostas ótimas de problemas
+menores do mesmo tipo (CORMEN et al., 2024, cap. 14). Nos degraus, a resposta
+de <code>n</code> sai das de <code>n - 1</code> e <code>n - 2</code>. A segunda é ter <strong>subproblemas
+sobrepostos</strong>: os problemas menores <strong>se repetem</strong> ao longo da recursão
+(CORMEN et al., 2024, cap. 14). É ela que separa a PD da divisão e conquista
+(0131). As metades do merge sort nunca se repetem, e guardar a resposta
+delas não economizaria nada.</p>
+<p>Há dois jeitos de anotar. Na <strong>memoização</strong> (de <em>memo</em>, lembrete), você
+mantém a recursão como está e acrescenta um vetor <code>memo[]</code>. Antes de
+calcular, a função consulta o vetor; se a resposta já está lá, devolve na
+hora; se não, calcula, anota e devolve. Ela resolve de <strong>cima para baixo</strong>
+(<em>top-down</em>): parte do problema grande e desce só até os subproblemas de
+que precisa (LINTZMAYER; MOTA, 2023).</p>
+<pre><code class="language-c">long long formas_memo(int n) {
+    if (n &lt;= 1) return 1;
+    if (memo[n] != -1) return memo[n];          // já sei: devolve
+    memo[n] = formas_memo(n - 1) + formas_memo(n - 2);
+    return memo[n];
+}
+</code></pre>
+<p>O outro jeito é a <strong>tabela</strong>. Você joga a recursão fora e enche um vetor
+num laço, do menor subproblema para o maior: <code>t[0]</code>, <code>t[1]</code>, depois <code>t[2]</code>
+a partir deles, e assim até <code>t[n]</code>. Ela resolve de <strong>baixo para cima</strong>
+(<em>bottom-up</em>): quando chega a vez de <code>t[i]</code>, tudo de que ele depende já está
+pronto (CORMEN et al., 2024, cap. 14). O Cormen chama as duas versões de
+<em>top-down with memoization</em> e <em>bottom-up method</em>.</p>
+<p>Com as anotações, <code>formas(35)</code> cai de 29 860 703 chamadas para 69 na
+memoização e 34 voltas de laço na tabela. A conta de custo vale para toda
+PD: <strong>número de subproblemas × trabalho de cada um</strong>. Aqui são 35
+subproblemas com uma soma cada, O(n), contra o crescimento exponencial da
+recursão pura (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 3).</p>
+<p>As duas versões têm o mesmo custo de tempo, mas diferem na pilha. A
+memoização ainda é recursiva e empilha um frame por chamada aberta, então
+<code>formas_memo(100000)</code> estouraria a pilha. A tabela é um laço comum, sem
+chamadas (FEOFILOFF, 2009). A memoização ganha quando só uma parte dos
+subproblemas é necessária, porque ela calcula só essa parte.</p>
+<blockquote>
+<p>[!WARNING]
+O valor de &quot;ainda não calculei&quot; deve ser <strong>impossível</strong> como resposta (aqui,
+<code>-1</code>). Com <code>0</code> e 0 sendo resposta válida, cada célula 0 é recalculada e o
+tempo volta a ser exponencial, com a resposta certa.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>Subir 35 degraus de um em um ou de dois em dois: pelo último passo,
+<code>formas(n) = formas(n - 1) + formas(n - 2)</code>, com <code>formas(0) = formas(1) = 1</code>.
+Com 5 degraus e memo, as chamadas verdes calculam e anotam, as amarelas acham
+a resposta pronta e o cinza deixa de existir:</p>
+<p align="center"><img src="material/0138-ideia.svg" alt="Diagrama da ideia: Memoização" width="858"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+#define MAX 50
+
+long long chamadas = 0; // conta quantas vezes a função foi chamada
+
+// recursão pura: formas de subir n degraus, de 1 em 1 ou de 2 em 2
+long long formas_rec(int n) {
+    chamadas++;
+    if (n &lt;= 1) {
+        return 1;                       // 0 ou 1 degrau: um jeito só
+    }
+    return formas_rec(n - 1) + formas_rec(n - 2);
+}
+
+long long memo[MAX + 1];                // memo[n] == -1: ainda não sei
+
+// de cima para baixo: a mesma recursão, consultando o memo antes
+long long formas_memo(int n) {
+    chamadas++;
+    if (n &lt;= 1) {
+        return 1;
+    }
+    if (memo[n] != -1) {
+        return memo[n];                 // já calculei: só consulta
+    }
+    memo[n] = formas_memo(n - 1) + formas_memo(n - 2);
+    return memo[n];
+}
+
+// de baixo para cima: enche a tabela do menor para o maior
+long long formas_tabela(int n) {
+    long long t[MAX + 1];
+    t[0] = 1;
+    t[1] = 1;
+    for (int i = 2; i &lt;= n; i++) {
+        t[i] = t[i - 1] + t[i - 2];     // os dois já estão prontos
+    }
+    return t[n];
+}
+
+int main(void) {
+    int degraus = 35;
+
+    chamadas = 0;
+    long long r = formas_rec(degraus);
+    printf(&quot;recursão pura: %lld formas, %lld chamadas\n&quot;, r, chamadas);
+
+    for (int i = 0; i &lt;= MAX; i++) {
+        memo[i] = -1;
+    }
+    chamadas = 0;
+    r = formas_memo(degraus);
+    printf(&quot;memoização:    %lld formas, %lld chamadas\n&quot;, r, chamadas);
+
+    r = formas_tabela(degraus);
+    printf(&quot;tabela:        %lld formas, %d voltas no laço\n&quot;, r, degraus - 1);
+    return 0;
+}
+// Saída:
+// recursão pura: 14930352 formas, 29860703 chamadas
+// memoização:    14930352 formas, 69 chamadas
+// tabela:        14930352 formas, 34 voltas no laço
+</code></pre>
+<p>De 29.860.703 para 69 chamadas: 35 somas, O(n), contra O(1,6ⁿ) da recursão
+pura. No fluxograma, quem já está no memo volta sem chamar ninguém:</p>
+<p align="center"><img src="material/0138-fluxograma.svg" alt="Fluxograma: Memoização" width="730"></p>
+<h4>Passo a passo</h4>
+<p>Versão de baixo para cima, para 5 degraus. Cada linha usa as duas anteriores:</p>
+<table>
+<thead>
+<tr>
+<th>i</th>
+<th>t[i - 2]</th>
+<th>t[i - 1]</th>
+<th>t[i]</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td></td>
+<td></td>
+<td>1 (base)</td>
+</tr>
+<tr>
+<td>1</td>
+<td></td>
+<td></td>
+<td>1 (base)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr>
+<td>4</td>
+<td>2</td>
+<td>3</td>
+<td>5</td>
+</tr>
+<tr>
+<td>5</td>
+<td>3</td>
+<td>5</td>
+<td>8</td>
+</tr>
+</tbody></table>
+<p>São 8 jeitos: 11111, 2111, 1211, 1121, 1112, 221, 212, 122.</p>
+<p><strong>Exemplo A275 · Quantas rotas o entregador tem até o cliente</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+#define LIN 5
+#define COL 6
+
+// O entregador sai do cruzamento do canto de cima à esquerda e vai até o de
+// baixo à direita, andando só para a direita (leste) ou para baixo (sul).
+// Dois cruzamentos estão fechados por obra (marcados com 1).
+int main(void) {
+    int obra[LIN][COL] = {
+        {0, 0, 0, 0, 0, 0},
+        {0, 0, 1, 0, 0, 0},
+        {0, 0, 0, 0, 1, 0},
+        {0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0},
+    };
+    long long rotas[LIN][COL];
+
+    // rotas[i][j] = de quantos jeitos se chega no cruzamento (i, j):
+    // ou vindo de cima (i - 1, j), ou vindo da esquerda (i, j - 1)
+    for (int i = 0; i &lt; LIN; i++) {
+        for (int j = 0; j &lt; COL; j++) {
+            if (obra[i][j]) {
+                rotas[i][j] = 0;              // ninguém passa por aqui
+            } else if (i == 0 &amp;&amp; j == 0) {
+                rotas[i][j] = 1;              // a saída: um jeito, ficar parado
+            } else {
+                long long de_cima = (i &gt; 0) ? rotas[i - 1][j] : 0;
+                long long da_esquerda = (j &gt; 0) ? rotas[i][j - 1] : 0;
+                rotas[i][j] = de_cima + da_esquerda;
+            }
+        }
+    }
+
+    for (int i = 0; i &lt; LIN; i++) {
+        for (int j = 0; j &lt; COL; j++) {
+            if (obra[i][j]) {
+                printf(&quot;   X&quot;);
+            } else {
+                printf(&quot;%4lld&quot;, rotas[i][j]);
+            }
+        }
+        printf(&quot;\n&quot;);
+    }
+    printf(&quot;Rotas até o cliente: %lld (sem as obras seriam 126)\n&quot;, rotas[LIN - 1][COL - 1]);
+    return 0;
+}
+// Saída:
+//    1   1   1   1   1   1
+//    1   2   X   1   2   3
+//    1   3   3   4   X   3
+//    1   4   7  11  11  14
+//    1   5  12  23  34  48
+// Rotas até o cliente: 48 (sem as obras seriam 126)
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A275.c -o ~/LPEDC/material/A275 &amp;&amp; ~/LPEDC/material/A275
+</code></pre>
+<p><strong>Exemplo A276 · Duas variáveis bastam (até o long long acabar)</strong></p>
+<pre><code class="language-c">#include &lt;limits.h&gt;
+#include &lt;stdio.h&gt;
+
+// formas de subir n degraus de 1 ou 2 em 2, de baixo para cima, guardando só
+// os dois últimos valores: O(1) de memória em vez de um vetor de n posições
+int main(void) {
+    long long dois_atras = 1;   // formas(0)
+    long long um_atras = 1;     // formas(1)
+    int n = 1;
+
+    while (1) {
+        // a próxima soma cabe no long long? confere ANTES de somar
+        if (um_atras &gt; LLONG_MAX - dois_atras) {
+            break;
+        }
+        long long atual = um_atras + dois_atras;
+        dois_atras = um_atras;      // a janela anda um degrau:
+        um_atras = atual;           // o velho &quot;um atrás&quot; vira &quot;dois atrás&quot;
+        n++;
+        if (n == 10 || n == 50 || n == 90) {
+            printf(&quot;formas(%d) = %lld\n&quot;, n, um_atras);
+        }
+    }
+    printf(&quot;o último que cabe: formas(%d) = %lld\n&quot;, n, um_atras);
+    printf(&quot;formas(%d) passaria de LLONG_MAX = %lld\n&quot;, n + 1, LLONG_MAX);
+    return 0;
+}
+// Saída:
+// formas(10) = 89
+// formas(50) = 20365011074
+// formas(90) = 4660046610375530309
+// o último que cabe: formas(91) = 7540113804746346429
+// formas(92) passaria de LLONG_MAX = 9223372036854775807
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A276.c -o ~/LPEDC/material/A276 &amp;&amp; ~/LPEDC/material/A276
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E823</strong> · ★☆☆</p>
+<p>Na escadaria da igreja da cidade, os adolescentes sobem de 1, de 2 ou de 3
+degraus por vez. São 10 degraus. Escreva um programa que calcula, de baixo
+para cima, quantos jeitos existem de subir 0, 1, 2, ..., 10 degraus, num
+vetor t[], e mostre a tabela inteira e a resposta.</p>
+<pre><code class="language-text">Saída esperada:
+t: 1 1 2 4 7 13 24 44 81 149 274
+Jeitos de subir 10 degraus: 274
+</code></pre>
+<p><strong>Exercício E825</strong> · ★★☆</p>
+<p>Um motorista de aplicativo cruza o centro da cidade de um canto ao outro,
+andando só para a direita (D) ou para baixo (B). Cada quarteirão tem um
+pedágio de estacionamento rotativo, em reais, que ele paga ao passar
+(inclusive o da saída e o da chegada):</p>
+<pre><code class="language-text">3 1 4 2 5
+2 7 1 8 2
+6 1 3 2 4
+5 2 9 1 3
+</code></pre>
+<p>Escreva um programa que calcula, de baixo para cima, a matriz custo[i][j]
+(o menor gasto da saída até o quarteirão (i, j)) e mostre o menor custo
+até o canto de baixo à direita. Depois, refaça o caminho de trás para a
+frente e mostre a sequência de letras D e B, da saída até a chegada.</p>
+<pre><code class="language-text">Saída esperada:
+Menor custo: R$ 18
+Caminho: DDBBDBD
+</code></pre>
+<p><strong>Exercício E826</strong> · ★★☆</p>
+<p>A feira de domingo tem 8 vagas de barraca enfileiradas, numeradas de 0 a 7.
+Você tem barracas suficientes, mas a prefeitura proíbe montar em duas
+vagas VIZINHAS. O lucro estimado de cada vaga, em reais, é:</p>
+<pre><code class="language-text">vaga:   0   1   2   3   4   5   6   7
+lucro: 40  25  60  30  10  55  35  20
+</code></pre>
+<p>Escreva um programa que calcula, de baixo para cima, melhor[i] = o maior
+lucro usando só as vagas 0..i, mostre o vetor, o lucro máximo e quais
+vagas usar.</p>
+<pre><code class="language-text">Saída esperada:
+melhor: 40 40 100 100 110 155 155 175
+Lucro máximo: R$ 175
+Barracas: 0 2 5 7
+</code></pre>
+<p><strong>Exercício E828</strong> · ★★★</p>
+<p>Na Mega-Sena você escolhe 6 dezenas entre 60. O número de jogos possíveis
+é C(60, 6), e a recorrência do triângulo de Pascal calcula isso sem
+fatorial nenhum (60! não cabe em tipo nenhum do C):</p>
+<pre><code class="language-text">C(n, k) = C(n - 1, k - 1) + C(n - 1, k),   com C(n, 0) = C(n, n) = 1
+</code></pre>
+<p>(a dezena n entra no jogo ou não entra). A recursão pura faria
+2 x C(60, 6) - 1, uns 100 milhões de chamadas. Escreva a função</p>
+<pre><code class="language-text">long long comb(int n, int k)
+</code></pre>
+<p>com memoização numa matriz memo[61][61] e um contador global de chamadas.
+Calcule C(60, 6) e depois, zerando o contador mas SEM limpar o memo,
+C(60, 30). No fim, conte quantas posições do memo foram preenchidas.</p>
+<pre><code class="language-text">Saída esperada:
+Mega-Sena: C(60, 6) = 50063860 (649 chamadas)
+chance de acertar com um jogo: 1 em 50063860
+C(60, 30) = 118264581564861424 (1441 chamadas novas)
+subproblemas guardados no memo: 1044
+</code></pre>
+<hr>
+<h2>0139 · Troco com programação dinâmica</h2>
+<h3>Conceito</h3>
+<p>Nos Correios, o balcão só tem selos de R$ 1, R$ 4 e R$ 5, e a sua carta
+custa R$ 8 de porte. Você quer colar o <strong>menor número de selos</strong> que somam
+exatamente R$ 8. É o problema do <strong>troco mínimo</strong>: dado um conjunto de
+valores, achar o menor número de peças que somam exatamente um total
+(CORMEN et al., 2024, cap. 14).</p>
+<p>O atendente guloso do assunto 0133 pega o maior selo que cabe, R$ 5, e
+completa com três de R$ 1: quatro selos. Dois selos de R$ 4 resolvem com
+dois. É o mesmo tropeço das fichas <code>{1, 3, 4}</code> de lá: o sistema não é
+canônico, e a escolha que parece melhor agora estraga o resto. O guloso
+aposta numa escolha e não volta atrás. A PD (0138) não aposta: ela testa
+<strong>todas</strong> as escolhas, mas sem repetir trabalho.</p>
+<p>O raciocínio é o mesmo dos degraus: olhe para o <strong>último selo</strong> colado. Ele
+foi de R$ 1, de R$ 4 ou de R$ 5. Antes dele, sobrou um valor menor, que já
+foi pago com o mínimo de selos. Então, chamando de <code>dp[v]</code> o menor número de
+selos que somam exatamente <code>v</code> reais, vale <code>dp[v] = 1 + mín(dp[v - s])</code>,
+tomando o mínimo sobre cada selo <code>s</code> que cabe em <code>v</code>, isto é, com <code>s ≤ v</code>. O
+caso base é <code>dp[0] = 0</code>: pagar zero não pede selo nenhum (LINTZMAYER; MOTA,
+2023).</p>
+<p>Veja a conta para R$ 8. Se o último selo foi de R$ 1, antes sobraram 7, e
+<code>dp[7] = 3</code>, total 4. Se foi de R$ 4, sobraram 4, e <code>dp[4] = 1</code>, total 2. Se
+foi de R$ 5, sobraram 3, e <code>dp[3] = 3</code>, total 4. O menor é 2, pelo selo de
+R$ 4. Para essa conta funcionar, <code>dp[7]</code>, <code>dp[4]</code> e <code>dp[3]</code> precisam estar
+prontos antes, e por isso a tabela se enche de <code>v = 1</code> até o total.</p>
+<p>Por que olhar só o último selo basta? Pela <strong>subestrutura ótima</strong>. Tire o
+último selo de uma solução ótima para <code>v</code>: o que sobra é uma solução para
+<code>v - s</code>, e ela também é ótima. Se não fosse, daria para trocá-la por uma
+melhor e melhorar a solução de <code>v</code> inteira, o que contradiz ela ser ótima
+(CORMEN et al., 2024, cap. 14).</p>
+<p>A tabela <code>dp</code> diz <strong>quantos</strong> selos, mas não <strong>quais</strong>. Para isso, guarde
+num segundo vetor, <code>ultimo[v]</code>, o selo que deu o mínimo em cada <code>v</code>. Depois,
+ande para trás: comece em <code>v</code>, anote <code>ultimo[v]</code>, vá para <code>v - ultimo[v]</code> e
+repita até chegar a 0 (ZIVIANI, 2010, cap. 2). Para R$ 8, <code>ultimo[8] = 4</code>
+leva a <code>v = 4</code>, e <code>ultimo[4] = 4</code> leva a 0: dois selos de R$ 4.</p>
+<p>Alguns valores podem ser impossíveis. Com selos de R$ 4 e R$ 5 apenas, não
+dá para pagar R$ 3. A célula de um valor impossível guarda um &quot;infinito&quot;,
+um número maior que qualquer resposta de verdade, e ele nunca vence a
+comparação do mínimo.</p>
+<p>O custo segue a regra da PD: <code>total</code> subproblemas, cada um testando <code>k</code>
+selos, dá <strong>O(total × k)</strong> de tempo e O(total) de memória (LINTZMAYER; MOTA,
+2023). Para totais altos, a tabela pesa. Um milhão de <code>int</code> são 4 MB, e
+<code>dp</code> e <code>ultimo</code> juntos já batem nos 8 MB da pilha padrão do Linux. Aloque
+os vetores com <code>malloc</code> (assunto 0054) (KERNIGHAN; RITCHIE, 1989).</p>
+<blockquote>
+<p>[!WARNING]
+O &quot;infinito&quot; precisa sobreviver a um <code>+ 1</code>. Com <code>INT_MAX</code>, a conta
+<code>dp[v - selo[s]] + 1</code> <strong>estoura</strong> o <code>int</code>. Use <code>1000000</code>, <code>total + 1</code> ou
+teste <code>dp[v - selo[s]] != INF</code> antes de somar.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>Nos Correios só há selos de R$ 1, R$ 4 e R$ 5, e a carta custa R$ 8. O guloso
+cola 5 + 1 + 1 + 1, quatro selos; dois de R$ 4 bastam. No desenho, <code>dp[8]</code> olha
+três vizinhos e escolhe o menor, o <code>dp[4]</code>:</p>
+<p align="center"><img src="material/0139-ideia.svg" alt="Diagrama da ideia: Troco com programação dinâmica" width="858"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+#define MAX 100
+#define INF 1000000 // &quot;impossível&quot;: maior que qualquer resposta de verdade
+
+// dp[v] = menor número de selos que somam exatamente v reais
+// ultimo[v] = o selo usado por último nessa solução
+void minimo_selos(const int selo[], int k, int total, int dp[], int ultimo[]) {
+    dp[0] = 0;                                  // R$ 0: nenhum selo
+    for (int v = 1; v &lt;= total; v++) {
+        dp[v] = INF;
+        for (int s = 0; s &lt; k; s++) {
+            // se o último selo for selo[s], antes dele faltavam v - selo[s]
+            if (selo[s] &lt;= v &amp;&amp; dp[v - selo[s]] + 1 &lt; dp[v]) {
+                dp[v] = dp[v - selo[s]] + 1;
+                ultimo[v] = selo[s];
+            }
+        }
+    }
+}
+
+int main(void) {
+    int selo[] = {1, 4, 5};                     // valores, em reais
+    int porte = 8;
+    int dp[MAX + 1], ultimo[MAX + 1];
+
+    minimo_selos(selo, 3, porte, dp, ultimo);
+
+    printf(&quot;v: &quot;);
+    for (int v = 0; v &lt;= porte; v++) {
+        printf(&quot; %2d&quot;, v);
+    }
+    printf(&quot;\ndp:&quot;);
+    for (int v = 0; v &lt;= porte; v++) {
+        printf(&quot; %2d&quot;, dp[v]);
+    }
+    printf(&quot;\n%d selos para R$ %d:&quot;, dp[porte], porte);
+    for (int v = porte; v &gt; 0; v -= ultimo[v]) { // volta pelo último selo
+        printf(&quot; %d&quot;, ultimo[v]);
+    }
+    printf(&quot;\n&quot;);
+    return 0;
+}
+// Saída:
+// v:   0  1  2  3  4  5  6  7  8
+// dp:  0  1  2  3  1  1  2  3  2
+// 2 selos para R$ 8: 4 4
+</code></pre>
+<p>O laço de fora anda pelos valores e o de dentro testa cada selo como &quot;o
+último&quot;:</p>
+<p align="center"><img src="material/0139-fluxograma.svg" alt="Fluxograma: Troco com programação dinâmica" width="535"></p>
+<h4>Passo a passo</h4>
+<p>As três últimas células. Cada coluna é um selo testado como último; o mínimo
+da linha vira <code>dp[v]</code>:</p>
+<table>
+<thead>
+<tr>
+<th>v</th>
+<th>selo 1: dp[v - 1] + 1</th>
+<th>selo 4: dp[v - 4] + 1</th>
+<th>selo 5: dp[v - 5] + 1</th>
+<th>dp[v]</th>
+<th>ultimo[v]</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>6</td>
+<td>dp[5] + 1 = 2</td>
+<td>dp[2] + 1 = 3</td>
+<td>dp[1] + 1 = 2</td>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr>
+<td>7</td>
+<td>dp[6] + 1 = 3</td>
+<td>dp[3] + 1 = 4</td>
+<td>dp[2] + 1 = 3</td>
+<td>3</td>
+<td>1</td>
+</tr>
+<tr>
+<td>8</td>
+<td>dp[7] + 1 = 4</td>
+<td>dp[4] + 1 = <strong>2</strong></td>
+<td>dp[3] + 1 = 4</td>
+<td>2</td>
+<td>4</td>
+</tr>
+</tbody></table>
+<p>Em <code>v = 6</code> os selos 1 e 5 empatam. Como o teste é <code>&lt;</code>, fica o primeiro que
+achou o mínimo.</p>
+<p><strong>Exemplo A277 · De quantos jeitos dá para pagar R$ 1,00 em moedas</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+#define TOTAL 100 // centavos
+
+int main(void) {
+    int moeda[] = {5, 10, 25, 50};
+    int k = 4;
+    long long jeitos[TOTAL + 1];
+
+    // jeitos[v] = quantas COMBINAÇÕES de moedas somam v centavos.
+    // Laço de fora nas moedas: cada combinação é contada uma vez só, na ordem
+    // &quot;primeiro as de 5, depois as de 10, ...&quot;.
+    for (int v = 0; v &lt;= TOTAL; v++) {
+        jeitos[v] = 0;
+    }
+    jeitos[0] = 1; // somar 0: um jeito, não usar moeda nenhuma
+    printf(&quot;Combinações para pagar R$ 1,00:\n&quot;);
+    for (int m = 0; m &lt; k; m++) {
+        for (int v = moeda[m]; v &lt;= TOTAL; v++) {
+            jeitos[v] += jeitos[v - moeda[m]]; // usa mais uma moeda[m]
+        }
+        printf(&quot;  usando moedas até %2d centavos: %3lld\n&quot;, moeda[m], jeitos[TOTAL]);
+    }
+
+    // Laços trocados: o de fora nos valores. Agora 5 + 10 e 10 + 5 contam
+    // separado: são as SEQUÊNCIAS de moedas jogadas na máquina, uma a uma.
+    long long sequencias[TOTAL + 1];
+    sequencias[0] = 1;
+    for (int v = 1; v &lt;= TOTAL; v++) {
+        sequencias[v] = 0;
+        for (int m = 0; m &lt; k; m++) {
+            if (moeda[m] &lt;= v) {
+                sequencias[v] += sequencias[v - moeda[m]]; // a última moeda foi moeda[m]
+            }
+        }
+    }
+    printf(&quot;com a ordem importando: %lld sequências\n&quot;, sequencias[TOTAL]);
+    return 0;
+}
+// Saída:
+// Combinações para pagar R$ 1,00:
+//   usando moedas até  5 centavos:   1
+//   usando moedas até 10 centavos:  11
+//   usando moedas até 25 centavos:  29
+//   usando moedas até 50 centavos:  40
+// com a ordem importando: 27517 sequências
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A277.c -o ~/LPEDC/material/A277 &amp;&amp; ~/LPEDC/material/A277
+</code></pre>
+<p><strong>Exemplo A278 · Os pedidos que a pastelaria não consegue fechar</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+#define MAX 60
+
+int main(void) {
+    // a pastelaria só vende caixas fechadas de 6, 9 ou 20 pastéis
+    int caixa[] = {6, 9, 20};
+    int k = 3;
+    int inf = MAX + 1; // nunca se usa mais que MAX caixas: MAX + 1 é &quot;impossível&quot;
+    int dp[MAX + 1];   // dp[v] = menor número de caixas com exatamente v pastéis
+
+    dp[0] = 0;
+    for (int v = 1; v &lt;= MAX; v++) {
+        dp[v] = inf;
+        for (int c = 0; c &lt; k; c++) {
+            // só aproveita um resto que tem solução: inf + 1 não é solução
+            if (caixa[c] &lt;= v &amp;&amp; dp[v - caixa[c]] != inf &amp;&amp; dp[v - caixa[c]] + 1 &lt; dp[v]) {
+                dp[v] = dp[v - caixa[c]] + 1;
+            }
+        }
+    }
+
+    printf(&quot;Pedidos impossíveis:&quot;);
+    int maior = 0;
+    for (int v = 1; v &lt;= MAX; v++) {
+        if (dp[v] == inf) {
+            printf(&quot; %d&quot;, v);
+            maior = v;
+        }
+    }
+    // de 44 a 49 tudo dá; somando caixas de 6, todo pedido acima de 43 dá
+    printf(&quot;\nMaior pedido impossível: %d\n&quot;, maior);
+    int pedidos[] = {15, 29, 44, 60};
+    for (int i = 0; i &lt; 4; i++) {
+        printf(&quot;%2d pastéis: %d caixas\n&quot;, pedidos[i], dp[pedidos[i]]);
+    }
+    return 0;
+}
+// Saída:
+// Pedidos impossíveis: 1 2 3 4 5 7 8 10 11 13 14 16 17 19 22 23 25 28 31 34 37 43
+// Maior pedido impossível: 43
+// 15 pastéis: 2 caixas
+// 29 pastéis: 2 caixas
+// 44 pastéis: 4 caixas
+// 60 pastéis: 3 caixas
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A278.c -o ~/LPEDC/material/A278 &amp;&amp; ~/LPEDC/material/A278
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E829</strong> · ★☆☆</p>
+<p>A loja de ferragens vende parafusos só em pacotes fechados de 3, 7 e 11
+unidades. Um marceneiro precisa de exatamente 25 parafusos e quer levar o
+menor número de pacotes. Escreva um programa que monta a tabela dp[v] (o
+menor número de pacotes com exatamente v parafusos) de 0 a 25. Mostre as
+quantidades de 1 a 25 que são impossíveis e a resposta para 25.</p>
+<pre><code class="language-text">Saída esperada:
+Impossíveis até 25: 1 2 4 5 8
+Menor número de pacotes para 25 parafusos: 3
+</code></pre>
+<p><strong>Exercício E831</strong> · ★★☆</p>
+<p>Num jogo de celular, a loja vende pacotes de 1, 6 e 10 gemas. Escreva um
+programa que calcula dp[v], o menor número de pacotes para cada total v de 1
+a 20 gemas, e guarda em ultimo[v] o último pacote usado. Mostre os pacotes da
+solução de 12 gemas.</p>
+<p>Escreva também int guloso(int v), que sempre pega o maior pacote que cabe, e
+mostre, para v de 1 a 20, os totais em que o guloso usa MAIS pacotes que a
+PD, no formato &quot;v: guloso g, PD d&quot;.</p>
+<pre><code class="language-text">Saída esperada:
+12 gemas: 2 pacotes (6 6)
+12: guloso 3, PD 2
+13: guloso 4, PD 3
+14: guloso 5, PD 4
+15: guloso 6, PD 5
+18: guloso 4, PD 3
+19: guloso 5, PD 4
+</code></pre>
+<p><strong>Exercício E832</strong> · ★★☆</p>
+<p>Você vai pagar um lanche de R$ 7 com moedas de R$ 1, cédulas de R$ 2 e
+cédulas de R$ 5. Duas perguntas diferentes:</p>
+<p>a) Quantas COMBINAÇÕES de dinheiro somam R$ 7? (5 + 2 e 2 + 5 são a mesma)
+b) A máquina de autoatendimento aceita uma nota ou moeda por vez. Quantas</p>
+<pre><code class="language-text"> SEQUÊNCIAS diferentes de inserção somam R$ 7? (5 + 2 e 2 + 5 contam
+ separado)
+</code></pre>
+<p>Escreva as funções long long combinacoes(int total) e long long
+sequencias(int total), cada uma com o seu vetor de PD, e mostre as duas
+respostas.</p>
+<pre><code class="language-text">Saída esperada:
+combinações: 6
+sequências:  26
+</code></pre>
+<p><strong>Exercício E834</strong> · ★★★</p>
+<p>A máquina de café do escritório custa R$ 1,00, aceita moedas de 5, 10, 25
+e 50 centavos, mas trava se você colocar mais de 6 moedas. Quantas
+combinações de moedas pagam exatamente R$ 1,00 com até 6 moedas? Mostre
+também quantas usam exatamente 1, 2, ..., 6 moedas.</p>
+<p>Um vetor jeitos[v] não basta: ele não sabe quantas moedas cada combinação
+usou. Acrescente essa informação como uma segunda dimensão:
+w[q][v] = combinações com EXATAMENTE q moedas que somam v centavos.</p>
+<pre><code class="language-text">Saída esperada:
+exatamente 1 moeda: 0
+exatamente 2 moedas: 1
+exatamente 3 moedas: 1
+exatamente 4 moedas: 1
+exatamente 5 moedas: 1
+exatamente 6 moedas: 3
+até 6 moedas: 7 combinações
+</code></pre>
+<hr>
+<h2>0140 · Mochila 0/1</h2>
+<h3>Conceito</h3>
+<p>Um vendedor ambulante tem um isopor que aguenta 7 kg e quatro opções para
+levar à praia: um fardo de água (2 kg, lucro de R$ 18), uma caixa de
+refrigerante (3 kg, R$ 24), uma caixa de suco (4 kg, R$ 30) e um pote de
+açaí (5 kg, R$ 35). Cada coisa vai inteira ou não vai: ninguém leva meia
+caixa de suco. O que ele põe no isopor para lucrar o máximo?</p>
+<p>Esse é o problema da <strong>mochila 0/1</strong>. Há uma capacidade <code>W</code> e <code>n</code> itens,
+cada um com peso e lucro, e cada item vai inteiro (1) ou fica de fora (0).
+O objetivo é o maior lucro sem passar de <code>W</code> (CORMEN et al., 2024, seção
+15.2). Como cada item tem duas opções, são <code>2ⁿ</code> escolhas possíveis. Para 50
+itens, testar todas está fora de cogitação.</p>
+<p>Na mochila fracionária (assunto 0135), o guloso pelo lucro por quilo
+resolvia. Aqui ele erra (CORMEN et al., 2024, seção 15.2). Pela razão, a
+água (R$ 9/kg) vem antes do refrigerante (R$ 8/kg). Os dois juntos pesam 5
+kg e dão R$ 42, e nada mais cabe nos 2 kg que sobram. Mas refrigerante e
+suco pesam exatamente 7 kg e dão <strong>R$ 54</strong>. O guloso deixou espaço vazio, e
+como não dá para partir o suco, esse espaço virou prejuízo.</p>
+<p>A PD (0138) olha <strong>um item de cada vez</strong> e pergunta: o último item, o de
+número <code>i</code>, vai ou não vai? Se não vai, o lucro é o melhor que os itens de 1
+a <code>i - 1</code> conseguem com a mesma capacidade <code>c</code>. Se vai, e só pode ir se
+<code>peso[i] &lt;= c</code>, o lucro é <code>lucro[i]</code> mais o melhor que os itens de 1 a
+<code>i - 1</code> conseguem no espaço que sobrou, <code>c - peso[i]</code>. A resposta é a maior
+das duas (KLEINBERG; TARDOS, 2006, cap. 6).</p>
+<p>Para guardar essas respostas, a tabela é uma matriz. A célula <code>t[i][c]</code> é o
+maior lucro usando só os itens de 1 a <code>i</code>, com capacidade <code>c</code>. A recorrência
+fica: <code>t[i][c]</code> é o maior entre <code>t[i-1][c]</code> e <code>lucro[i] + t[i-1][c - peso[i]]</code>, este último só quando o item cabe. A linha 0, sem nenhum item, é
+toda zero. A resposta fica no canto de baixo, em <code>t[n][W]</code> (KLEINBERG;
+TARDOS, 2006, cap. 6). No isopor, <code>t[3][7]</code> escolhe entre não levar o suco
+(<code>t[2][7] = 42</code>) e levar (<code>30 + t[2][3] = 30 + 24 = 54</code>), e fica com 54.</p>
+<p>A tabela diz o lucro, mas não <strong>o que levar</strong>. A <strong>recuperação</strong> responde
+isso andando de baixo para cima, a partir de <code>t[n][W]</code>. Em cada linha, compare
+<code>t[i][c]</code> com a célula de cima, <code>t[i-1][c]</code>. Se forem iguais, o item <code>i</code> não
+fez diferença e ficou de fora. Se mudou, o item <code>i</code> foi junto, e a busca
+segue na linha de cima com a capacidade reduzida, <code>c - peso[i]</code> (ZIVIANI,
+2010, cap. 2). No isopor, o açaí não muda nada e fica; o suco muda e vai, e
+a capacidade cai para 3; o refrigerante muda e vai, e ela cai para 0.</p>
+<p>O custo é o tamanho da tabela: <code>(n + 1) × (W + 1)</code> células, cada uma
+preenchida em tempo constante, ou seja, <strong>O(n × W)</strong>. Parece polinomial, mas
+há uma pegadinha. <code>W</code> é um <strong>número</strong>, e um número se escreve com uns log₂ W
+bits. Dobrar o tamanho da entrada, de 20 para 40 bits, eleva <code>W</code> ao
+quadrado. Por isso esse custo se chama <strong>pseudopolinomial</strong>: é polinomial
+no valor de <code>W</code>, não no tamanho da entrada. A mochila 0/1 continua
+NP-difícil (assunto 0186) (LINTZMAYER; MOTA, 2023).</p>
+<blockquote>
+<p>[!WARNING]
+Na recuperação, o teste é &quot;o valor <strong>mudou</strong>?&quot;, e não &quot;dá para levar?&quot;. E
+confira <code>peso[i] &lt;= c</code> antes de ler <code>t[i - 1][c - peso[i]]</code>: com índice
+negativo, o C lê outra linha da matriz sem avisar.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>Um ambulante tem um isopor de 7 kg: água (2 kg, R$ 18), refri (3 kg, R$ 24),
+suco (4 kg, R$ 30) e açaí (5 kg, R$ 35). O guloso leva água e refri (R$ 42);
+refri e suco dão R$ 54. No desenho, <code>t[3][7] = 54</code> (roxo) escolheu entre não
+levar o suco (amarelo) e levar (verde):</p>
+<p align="center"><img src="material/0140-ideia.svg" alt="Diagrama da ideia: Mochila 0/1" width="858"></p>
+<p>Os vetores começam no índice 1, para casar com a linha 0 da tabela:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+#define N 4 // itens
+#define W 7 // capacidade do isopor, em kg
+
+int main(void) {
+    const char *nome[N + 1] = {&quot;&quot;, &quot;água&quot;, &quot;refri&quot;, &quot;suco&quot;, &quot;açaí&quot;};
+    int peso[N + 1] = {0, 2, 3, 4, 5};      // kg (o índice 0 não é usado)
+    int lucro[N + 1] = {0, 18, 24, 30, 35}; // reais
+    int t[N + 1][W + 1];
+
+    // t[i][c] = maior lucro usando só os itens 1..i com capacidade c
+    for (int c = 0; c &lt;= W; c++) {
+        t[0][c] = 0;                        // nenhum item: lucro 0
+    }
+    for (int i = 1; i &lt;= N; i++) {
+        for (int c = 0; c &lt;= W; c++) {
+            t[i][c] = t[i - 1][c];          // não leva o item i
+            if (peso[i] &lt;= c &amp;&amp; lucro[i] + t[i - 1][c - peso[i]] &gt; t[i][c]) {
+                t[i][c] = lucro[i] + t[i - 1][c - peso[i]]; // leva o item i
+            }
+        }
+    }
+
+    for (int i = 0; i &lt;= N; i++) {
+        printf(&quot;i=%d:&quot;, i);
+        for (int c = 0; c &lt;= W; c++) {
+            printf(&quot; %2d&quot;, t[i][c]);
+        }
+        printf(&quot;\n&quot;);
+    }
+    printf(&quot;Lucro máximo: R$ %d\n&quot;, t[N][W]);
+
+    // volta pela tabela: se o valor mudou de i - 1 para i, o item i foi junto
+    printf(&quot;Leva:&quot;);
+    int c = W;
+    for (int i = N; i &gt;= 1; i--) {
+        if (t[i][c] != t[i - 1][c]) {
+            printf(&quot; %s (%d kg)&quot;, nome[i], peso[i]);
+            c -= peso[i];                   // o que sobrou para os anteriores
+        }
+    }
+    printf(&quot;\n&quot;);
+    return 0;
+}
+// Saída:
+// i=0:  0  0  0  0  0  0  0  0
+// i=1:  0  0 18 18 18 18 18 18
+// i=2:  0  0 18 24 24 42 42 42
+// i=3:  0  0 18 24 30 42 48 54
+// i=4:  0  0 18 24 30 42 48 54
+// Lucro máximo: R$ 54
+// Leva: suco (4 kg) refri (3 kg)
+</code></pre>
+<p>O fluxograma mostra a decisão de uma célula; o caminho marcado é o de
+<code>t[3][7]</code>:</p>
+<p align="center"><img src="material/0140-fluxograma.svg" alt="Fluxograma: Mochila 0/1" width="451"></p>
+<h4>Passo a passo</h4>
+<p>A recuperação, partindo do canto <code>t[4][7]</code>:</p>
+<table>
+<thead>
+<tr>
+<th>i</th>
+<th>c</th>
+<th>t[i][c]</th>
+<th>t[i-1][c]</th>
+<th>Mudou?</th>
+<th>Decisão</th>
+<th>c depois</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>4 (açaí)</td>
+<td>7</td>
+<td>54</td>
+<td>54</td>
+<td>não</td>
+<td>fica</td>
+<td>7</td>
+</tr>
+<tr>
+<td>3 (suco)</td>
+<td>7</td>
+<td>54</td>
+<td>42</td>
+<td>sim</td>
+<td><strong>leva</strong></td>
+<td>7 - 4 = 3</td>
+</tr>
+<tr>
+<td>2 (refri)</td>
+<td>3</td>
+<td>24</td>
+<td>18</td>
+<td>sim</td>
+<td><strong>leva</strong></td>
+<td>3 - 3 = 0</td>
+</tr>
+<tr>
+<td>1 (água)</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>não</td>
+<td>fica</td>
+<td>0</td>
+</tr>
+</tbody></table>
+<p><strong>Exemplo A279 · O pen drive com uma linha só de tabela</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+#define N 4
+#define CAP 16 // GB livres no pen drive
+
+int tamanho[N] = {5, 4, 7, 3};     // GB de cada videoaula
+int nota[N] = {30, 24, 40, 20};    // o quanto cada uma interessa
+const char *nome[N] = {&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;};
+
+// mochila 0/1 com UM vetor: melhor[c] faz o papel da linha &quot;de cima&quot;.
+// O laço de c DESCE: assim melhor[c - tamanho] ainda é o valor da linha
+// anterior, sem o item i.
+int mochila_descendo(void) {
+    int melhor[CAP + 1] = {0};
+    for (int i = 0; i &lt; N; i++) {
+        for (int c = CAP; c &gt;= tamanho[i]; c--) {
+            int com_i = nota[i] + melhor[c - tamanho[i]];
+            if (com_i &gt; melhor[c]) {
+                melhor[c] = com_i;
+            }
+        }
+    }
+    return melhor[CAP];
+}
+
+// O MESMO código com o laço subindo: melhor[c - tamanho] já pode ter usado
+// o item i nesta mesma volta. O item vira infinito (mochila &quot;ilimitada&quot;).
+int mochila_subindo(int copias[]) {
+    int melhor[CAP + 1] = {0};
+    int ultimo[CAP + 1];
+    for (int c = 0; c &lt;= CAP; c++) {
+        ultimo[c] = -1;
+    }
+    for (int i = 0; i &lt; N; i++) {
+        for (int c = tamanho[i]; c &lt;= CAP; c++) {
+            int com_i = nota[i] + melhor[c - tamanho[i]];
+            if (com_i &gt; melhor[c]) {
+                melhor[c] = com_i;
+                ultimo[c] = i;
+            }
+        }
+    }
+    // conta quantas vezes cada item entrou (anda pelo último item escolhido)
+    for (int c = CAP; c &gt; 0 &amp;&amp; ultimo[c] != -1; c -= tamanho[ultimo[c]]) {
+        copias[ultimo[c]]++;
+    }
+    return melhor[CAP];
+}
+
+int main(void) {
+    // o certo: A + B + C = 16 GB, nota 94; cada aula entra uma vez só
+    printf(&quot;laço descendo (0/1): nota %d\n&quot;, mochila_descendo());
+
+    int copias[N] = {0};
+    printf(&quot;laço subindo:        nota %d, com&quot;, mochila_subindo(copias));
+    for (int i = 0; i &lt; N; i++) {
+        if (copias[i] &gt; 0) {
+            printf(&quot; %s x%d&quot;, nome[i], copias[i]);
+        }
+    }
+    printf(&quot;\n&quot;);
+    return 0;
+}
+// Saída:
+// laço descendo (0/1): nota 94
+// laço subindo:        nota 104, com B x1 D x4
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A279.c -o ~/LPEDC/material/A279 &amp;&amp; ~/LPEDC/material/A279
+</code></pre>
+<p><strong>Exemplo A280 · A conta do mercado dividida ao meio</strong></p>
+<pre><code class="language-c">#include &lt;stdbool.h&gt;
+#include &lt;stdio.h&gt;
+
+#define N 7
+#define MAXS 200
+
+// Dois amigos racharam as compras, mas cada item vai inteiro para a casa de
+// um deles. Quem leva o quê, para os dois gastos ficarem o mais perto
+// possível? É uma mochila 0/1 em que o &quot;lucro&quot; é o próprio preço: a
+// pergunta vira &quot;que somas dá para formar com um subconjunto?&quot;.
+int main(void) {
+    const char *item[N + 1] = {&quot;&quot;, &quot;carne&quot;, &quot;arroz&quot;, &quot;café&quot;, &quot;queijo&quot;,
+                               &quot;frutas&quot;, &quot;sabão&quot;, &quot;pão&quot;};
+    int preco[N + 1] = {0, 41, 23, 17, 35, 28, 12, 9}; // reais (índice 0 sem uso)
+    int total = 0;
+    for (int i = 1; i &lt;= N; i++) {
+        total += preco[i];
+    }
+
+    // pode[i][s] == true: algum subconjunto dos itens 1..i soma exatamente s
+    static bool pode[N + 1][MAXS + 1]; // static: começa tudo false
+    pode[0][0] = true;                 // nenhum item soma 0
+    for (int i = 1; i &lt;= N; i++) {
+        for (int s = 0; s &lt;= total; s++) {
+            pode[i][s] = pode[i - 1][s] ||
+                         (preco[i] &lt;= s &amp;&amp; pode[i - 1][s - preco[i]]);
+        }
+    }
+
+    // a melhor divisão: a maior soma possível que não passa da metade
+    int alvo = total / 2;
+    while (!pode[N][alvo]) {
+        alvo--;
+    }
+    printf(&quot;Total R$ %d: um paga R$ %d, o outro R$ %d\n&quot;, total, alvo, total - alvo);
+
+    // recuperação: se a soma já era possível sem o item i, ele fica de fora
+    printf(&quot;Leva para a casa 1:&quot;);
+    int s = alvo;
+    for (int i = N; i &gt;= 1; i--) {
+        if (!pode[i - 1][s]) {         // sem o item i não dava: ele entra
+            printf(&quot; %s&quot;, item[i]);
+            s -= preco[i];
+        }
+    }
+    printf(&quot;\n&quot;);
+    return 0;
+}
+// Saída:
+// Total R$ 165: um paga R$ 81, o outro R$ 84
+// Leva para a casa 1: café arroz carne
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A280.c -o ~/LPEDC/material/A280 &amp;&amp; ~/LPEDC/material/A280
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E835</strong> · ★☆☆</p>
+<p>Uma padaria tem R$ 10 mil para investir e cinco projetos. Cada projeto é
+feito inteiro ou não é feito (0/1). Custos e retornos em mil reais:</p>
+<pre><code class="language-text">projeto            custo  retorno por ano
+1 fachada nova       4          9
+2 site de pedidos    3          7
+3 curso da equipe    2          4
+4 forno novo         5         11
+5 vitrine refrig.    1          2
+</code></pre>
+<p>Escreva um programa que monta a tabela t[i][c] (maior retorno usando os
+projetos 1..i com c mil reais) e mostre a última linha da tabela e o
+retorno máximo com os R$ 10 mil.</p>
+<pre><code class="language-text">Saída esperada:
+última linha: 0 2 4 7 9 11 13 16 18 20 22
+Retorno máximo com R$ 10 mil: R$ 22 mil por ano
+</code></pre>
+<p><strong>Exercício E837</strong> · ★★☆</p>
+<p>Véspera de vestibular: você tem 6 horas de estudo e uma estimativa de
+quantos pontos cada revisão completa rende. Cada matéria é revisada
+inteira ou não é revisada:</p>
+<pre><code class="language-text">matéria      horas  pontos
+Matemática    2.5     30
+Português     1.5     18
+História      1.0     10
+Física        2.0     25
+Química       1.5     16
+Inglês        0.5      6
+</code></pre>
+<p>O problema: a tabela da mochila precisa de capacidades INTEIRAS, e as
+horas são double. Guarde as horas como double no programa, converta tudo
+para meias horas (unidades inteiras) e resolva a mochila 0/1 com
+recuperação. Mostre o máximo, as matérias e as horas usadas.</p>
+<pre><code class="language-text">Saída esperada:
+Máximo: 73 pontos em 6.0 h
+Estudar: Física Português Matemática
+Horas usadas: 6.0
+</code></pre>
+<p><strong>Exercício E838</strong> · ★★☆</p>
+<p>Sua carteira tem estas cédulas: 2, 5, 5, 10, 10, 20, 20 e 50 reais. Você
+precisa separar exatamente R$ 30 para o rateio do churrasco. De quantos
+jeitos dá para escolher as cédulas? Cada cédula é um papel diferente: as
+duas notas de 20 contam como escolhas distintas.</p>
+<p>Resolva com PD num vetor só (jeitos[s] = quantos subconjuntos das cédulas
+vistas até agora somam s) e confira o resultado com a força bruta por bits
+do assunto 0125, testando os 2^8 subconjuntos.</p>
+<pre><code class="language-text">Saída esperada:
+PD: 7 jeitos de separar R$ 30
+força bruta: 7 jeitos (256 subconjuntos testados)
+</code></pre>
+<p><strong>Exercício E840</strong> · ★★★</p>
+<p>Um drone de entregas carrega até 10 kg E até 8 litros de volume no
+compartimento. Há seis pacotes esperando, cada um com peso, volume e o
+frete que paga:</p>
+<pre><code class="language-text">pacote  peso (kg)  volume (L)  frete (R$)
+  1         3          4           25
+  2         4          2           30
+  3         2          3           18
+  4         5          3           40
+  5         1          2            9
+  6         3          3           22
+</code></pre>
+<p>Agora há DUAS capacidades. Estenda a ideia da mochila 0/1 para uma tabela
+de três dimensões, t[i][p][v] = maior frete usando os pacotes 1..i com
+até p kg e v litros. Mostre o frete máximo, os pacotes (do último para o
+primeiro, como sai da volta pela tabela), o peso e o volume usados, e
+confira o valor com uma força bruta pelos 2^6 subconjuntos.</p>
+<pre><code class="language-text">Saída esperada:
+Frete máximo: R$ 79
+Pacotes: 5 4 2
+Usa 10 kg e 7 L
+Força bruta: R$ 79
+</code></pre>
+<hr>
+<h2>0141 · Maior subsequência comum (LCS)</h2>
+<h3>Conceito</h3>
+<p>Você ditou <strong>MORANGO</strong> e o seu sobrinho escreveu <strong>MANGA</strong>. Quantas letras
+ele acertou na ordem certa? Comparar posição por posição não serve, porque
+um erro no começo desalinha o resto. A pergunta certa é: qual a maior
+sequência de letras que aparece nas duas palavras, na mesma ordem, mesmo com
+outras letras no meio? Aqui é <strong>MANG</strong>, quatro letras. A mesma pergunta
+compara versões de um arquivo e trechos de DNA.</p>
+<p>Uma <strong>subsequência</strong> de uma string é o que sobra depois de apagar algumas
+letras dela, sem mudar a ordem das que ficam (CORMEN et al., 2024, cap. 14).
+<code>MNG</code> é subsequência de <code>MORANGO</code>: apague O, R, A e O. <code>GNA</code> não é, porque
+em MORANGO o G vem depois do N e do A. A <strong>maior subsequência comum</strong>
+(<em>longest common subsequence</em>, LCS) de duas strings é a mais comprida que é
+subsequência das duas ao mesmo tempo (CORMEN et al., 2024, cap. 14).</p>
+<p>Testar todas não dá. Cada letra pode ficar ou sair, então uma palavra de 30
+letras tem 2³⁰, mais de um bilhão, de subsequências (CORMEN et al., 2024, cap.
+14). A PD (0138) resolve olhando só a <strong>última letra</strong> de cada string. Se as
+duas forem <strong>iguais</strong>, essa letra pode fechar a LCS: a resposta é 1 mais a
+LCS das duas strings sem a última letra. Se forem <strong>diferentes</strong>, pelo menos
+uma delas não entra na LCS. Então tire a última de <code>a</code> ou a última de <code>b</code>,
+resolva cada caso e fique com o melhor (CORMEN et al., 2024, cap. 14).</p>
+<p>Cada passo encurta uma string ou as duas, e o que sobra são sempre
+<strong>prefixos</strong>, os começos das strings. Daí a tabela: <code>c[i][j]</code> é o tamanho da
+LCS do prefixo de <code>a</code> com <code>i</code> letras, <code>a[0..i-1]</code>, com o prefixo de <code>b</code> com
+<code>j</code> letras, <code>b[0..j-1]</code>. Com <code>m</code> e <code>n</code> letras nas duas strings, a resposta
+fica em <code>c[m][n]</code> (LINTZMAYER; MOTA, 2023). A linha 0 e a coluna 0 valem 0,
+porque nada é comum com um prefixo vazio.</p>
+<p>Repare no deslocamento de índice. A linha <code>i</code> da tabela fala da letra
+<code>a[i-1]</code>, porque a linha 0 é reservada ao prefixo vazio. Comparar <code>a[i]</code> com
+<code>b[j]</code> é o erro clássico. A tabela resume os três casos, e cada célula olha
+no máximo três vizinhas já preenchidas: a de cima, a da esquerda e a da
+diagonal:</p>
+<table>
+<thead>
+<tr>
+<th>caso</th>
+<th><code>c[i][j]</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>i == 0</code> ou <code>j == 0</code></td>
+<td>0 (um prefixo vazio)</td>
+</tr>
+<tr>
+<td><code>a[i-1] == b[j-1]</code></td>
+<td><code>c[i-1][j-1] + 1</code> (diagonal)</td>
+</tr>
+<tr>
+<td>letras diferentes</td>
+<td>o maior entre <code>c[i-1][j]</code> (cima) e <code>c[i][j-1]</code> (esquerda)</td>
+</tr>
+</tbody></table>
+<p>O número no canto diz o tamanho, mas não quais letras. A <strong>recuperação</strong>
+anda do canto <code>c[m][n]</code> até a borda. Se as letras da posição são iguais,
+ela entra na resposta e o caminho segue na diagonal. Se não, o caminho vai
+para o vizinho, de cima ou da esquerda, de onde o valor veio (CORMEN et al.,
+2024, cap. 14). As letras saem de trás para a frente: em MORANGO e MANGA,
+primeiro G, depois N, A e M. O Cormen guarda a direção de cada célula numa
+tabela de setas; também dá para refazer a comparação na volta.</p>
+<p>O custo é o tamanho da tabela. São <code>(m + 1) × (n + 1)</code> células, cada uma
+calculada em O(1), o que dá <strong>O(m × n)</strong> de tempo e de memória. Se você só
+quer o <strong>tamanho</strong> da LCS, duas linhas bastam, porque cada linha só olha a
+anterior. Para <strong>recuperar</strong> as letras, porém, o caminho de volta precisa da
+tabela inteira (KLEINBERG; TARDOS, 2006, cap. 6).</p>
+<blockquote>
+<p>[!WARNING]
+Subsequência não é <strong>substring</strong> (pedaço contíguo): a maior substring comum
+de MORANGO e MANGA é <code>ANG</code> (3), e a LCS tem 4. A linha <code>i</code> fala de
+<code>a[i - 1]</code>: escrever <code>a[i] == b[j]</code> compila e dá a resposta errada.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>Você ditou <strong>MORANGO</strong> e seu sobrinho escreveu <strong>MANGA</strong>. No desenho, o
+caminho sai do canto roxo; as células verdes são as quatro letras da
+resposta, e as amarelas, os passos sem letra:</p>
+<p align="center"><img src="material/0141-ideia.svg" alt="Diagrama da ideia: Maior subsequência comum (LCS)" width="858"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+#define MAX 50
+
+int main(void) {
+    const char *a = &quot;MORANGO&quot;; // o que foi ditado
+    const char *b = &quot;MANGA&quot;;   // o que foi escrito
+    int m = strlen(a), n = strlen(b);
+    int c[MAX + 1][MAX + 1];
+
+    // c[i][j] = tamanho da maior subsequência comum de a[0..i-1] e b[0..j-1]
+    for (int i = 0; i &lt;= m; i++) {
+        for (int j = 0; j &lt;= n; j++) {
+            if (i == 0 || j == 0) {
+                c[i][j] = 0;                          // um dos dois é vazio
+            } else if (a[i - 1] == b[j - 1]) {
+                c[i][j] = c[i - 1][j - 1] + 1;        // a letra entra nas duas
+            } else if (c[i - 1][j] &gt;= c[i][j - 1]) {
+                c[i][j] = c[i - 1][j];                // descarta a letra de a
+            } else {
+                c[i][j] = c[i][j - 1];                // descarta a letra de b
+            }
+        }
+    }
+
+    printf(&quot;   -&quot;);
+    for (int j = 0; j &lt; n; j++) {
+        printf(&quot; %c&quot;, b[j]);
+    }
+    printf(&quot;\n&quot;);
+    for (int i = 0; i &lt;= m; i++) {
+        printf(&quot;%c &quot;, i == 0 ? &#39;-&#39; : a[i - 1]);
+        for (int j = 0; j &lt;= n; j++) {
+            printf(&quot; %d&quot;, c[i][j]);
+        }
+        printf(&quot;\n&quot;);
+    }
+
+    // recuperação: do canto até a borda, montando a resposta de trás para a frente
+    char lcs[MAX + 1];
+    int k = c[m][n];
+    lcs[k] = &#39;\0&#39;;
+    int i = m, j = n;
+    while (i &gt; 0 &amp;&amp; j &gt; 0) {
+        if (a[i - 1] == b[j - 1]) {
+            lcs[--k] = a[i - 1];                      // letra comum: diagonal
+            i--;
+            j--;
+        } else if (c[i - 1][j] &gt;= c[i][j - 1]) {
+            i--;                                      // sobe
+        } else {
+            j--;                                      // vai para a esquerda
+        }
+    }
+    printf(&quot;LCS de %s e %s: %s (%d letras)\n&quot;, a, b, lcs, c[m][n]);
+    return 0;
+}
+// Saída:
+//    - M A N G A
+// -  0 0 0 0 0 0
+// M  0 1 1 1 1 1
+// O  0 1 1 1 1 1
+// R  0 1 1 1 1 1
+// A  0 1 2 2 2 2
+// N  0 1 2 3 3 3
+// G  0 1 2 3 4 4
+// O  0 1 2 3 4 4
+// LCS de MORANGO e MANGA: MANG (4 letras)
+</code></pre>
+<p>O caminho marcado no fluxograma é o de <code>c[6][4]</code> (G com G): as letras batem e
+o valor vem da diagonal, <code>3 + 1</code>:</p>
+<p align="center"><img src="material/0141-fluxograma.svg" alt="Fluxograma: Maior subsequência comum (LCS)" width="706"></p>
+<h4>Passo a passo</h4>
+<p>A volta, partindo de <code>c[7][5]</code>, monta a resposta <strong>de trás para a frente</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>posição</th>
+<th>letras</th>
+<th>iguais?</th>
+<th><code>c[i-1][j]</code> / <code>c[i][j-1]</code></th>
+<th>movimento</th>
+<th>resposta até aqui</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>(7, 5)</td>
+<td>O, A</td>
+<td>não</td>
+<td>4 / 4</td>
+<td>sobe</td>
+<td></td>
+</tr>
+<tr>
+<td>(6, 5)</td>
+<td>G, A</td>
+<td>não</td>
+<td>3 / 4</td>
+<td>esquerda</td>
+<td></td>
+</tr>
+<tr>
+<td>(6, 4)</td>
+<td>G, G</td>
+<td>sim</td>
+<td></td>
+<td>diagonal</td>
+<td>G</td>
+</tr>
+<tr>
+<td>(5, 3)</td>
+<td>N, N</td>
+<td>sim</td>
+<td></td>
+<td>diagonal</td>
+<td>NG</td>
+</tr>
+<tr>
+<td>(4, 2)</td>
+<td>A, A</td>
+<td>sim</td>
+<td></td>
+<td>diagonal</td>
+<td>ANG</td>
+</tr>
+<tr>
+<td>(3, 1)</td>
+<td>R, M</td>
+<td>não</td>
+<td>1 / 0</td>
+<td>sobe</td>
+<td>ANG</td>
+</tr>
+<tr>
+<td>(2, 1)</td>
+<td>O, M</td>
+<td>não</td>
+<td>1 / 0</td>
+<td>sobe</td>
+<td>ANG</td>
+</tr>
+<tr>
+<td>(1, 1)</td>
+<td>M, M</td>
+<td>sim</td>
+<td></td>
+<td>diagonal</td>
+<td>MANG</td>
+</tr>
+</tbody></table>
+<p><strong>Exemplo A281 · DNA comparado com duas linhas de tabela</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+#define MAX 100
+
+// Só o TAMANHO da LCS: cada linha da tabela só usa a de cima, então bastam
+// duas linhas. Em vez de copiar a linha nova para a velha, os PONTEIROS
+// trocam de papel a cada volta.
+int lcs_tamanho(const char *a, const char *b) {
+    int m = strlen(a), n = strlen(b);
+    int linha1[MAX + 1], linha2[MAX + 1];
+    int *cima = linha1, *atual = linha2;
+
+    for (int j = 0; j &lt;= n; j++) {
+        cima[j] = 0;                    // linha 0: prefixo vazio de a
+    }
+    for (int i = 1; i &lt;= m; i++) {
+        atual[0] = 0;                   // coluna 0: prefixo vazio de b
+        for (int j = 1; j &lt;= n; j++) {
+            if (a[i - 1] == b[j - 1]) {
+                atual[j] = cima[j - 1] + 1;
+            } else {
+                atual[j] = cima[j] &gt; atual[j - 1] ? cima[j] : atual[j - 1];
+            }
+        }
+        int *t = cima;                  // a linha atual vira a &quot;de cima&quot;
+        cima = atual;
+        atual = t;
+    }
+    return cima[n];                     // depois da troca, a última está em cima
+}
+
+int main(void) {
+    const char *amostra = &quot;ATGCGTACGTTAGCCATGACGTAGCTAGGCTTACGATCGA&quot;;
+    const char *suspeito = &quot;ATGCCTACGTAGCATGTCGTAGCAAGGCTACGTTCGA&quot;;
+    const char *outro = &quot;TTAGGCATCCAGTTACGGATCATGCCAGTAATGCTGAA&quot;;
+
+    int m = strlen(amostra);
+    printf(&quot;amostra x suspeito: %d de %d bases em comum, na ordem\n&quot;,
+           lcs_tamanho(amostra, suspeito), m);
+    printf(&quot;amostra x outro:    %d de %d bases em comum, na ordem\n&quot;,
+           lcs_tamanho(amostra, outro), m);
+    printf(&quot;memória: 2 linhas de %d int = %zu bytes (a tabela inteira teria %zu)\n&quot;,
+           MAX + 1, 2 * (MAX + 1) * sizeof(int), (size_t) (MAX + 1) * (MAX + 1) * sizeof(int));
+    return 0;
+}
+// Saída:
+// amostra x suspeito: 33 de 40 bases em comum, na ordem
+// amostra x outro:    25 de 40 bases em comum, na ordem
+// memória: 2 linhas de 101 int = 808 bytes (a tabela inteira teria 40804)
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A281.c -o ~/LPEDC/material/A281 &amp;&amp; ~/LPEDC/material/A281
+</code></pre>
+<p><strong>Exemplo A282 · Pedaço contíguo ou letras na ordem?</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+#define MAX 50
+
+// maior SUBSTRING comum: o pedaço tem que ser contíguo nas duas.
+// s[i][j] = tamanho do maior pedaço comum que TERMINA em a[i-1] e b[j-1].
+// Letras diferentes quebram a sequência: s volta a 0.
+int maior_substring(const char *a, const char *b, int *fim_em_a) {
+    int m = strlen(a), n = strlen(b), melhor = 0;
+    int s[MAX + 1][MAX + 1];
+    for (int i = 0; i &lt;= m; i++) {
+        for (int j = 0; j &lt;= n; j++) {
+            if (i == 0 || j == 0 || a[i - 1] != b[j - 1]) {
+                s[i][j] = 0;
+            } else {
+                s[i][j] = s[i - 1][j - 1] + 1;
+                if (s[i][j] &gt; melhor) {
+                    melhor = s[i][j];
+                    *fim_em_a = i;      // o pedaço é a[i - melhor .. i - 1]
+                }
+            }
+        }
+    }
+    return melhor;
+}
+
+// maior SUBSEQUÊNCIA comum: as letras só precisam estar na mesma ordem
+int maior_subsequencia(const char *a, const char *b) {
+    int m = strlen(a), n = strlen(b);
+    int c[MAX + 1][MAX + 1];
+    for (int i = 0; i &lt;= m; i++) {
+        for (int j = 0; j &lt;= n; j++) {
+            if (i == 0 || j == 0) {
+                c[i][j] = 0;
+            } else if (a[i - 1] == b[j - 1]) {
+                c[i][j] = c[i - 1][j - 1] + 1;
+            } else {
+                c[i][j] = c[i - 1][j] &gt; c[i][j - 1] ? c[i - 1][j] : c[i][j - 1];
+            }
+        }
+    }
+    return c[m][n];
+}
+
+int main(void) {
+    const char *pares[][2] = {
+        {&quot;PARALELEPIPEDO&quot;, &quot;PAPELARIA&quot;},
+        {&quot;FERROVIARIO&quot;, &quot;FERRUGEM&quot;},
+        {&quot;ABCDEF&quot;, &quot;FEDCBA&quot;},
+    };
+    for (int p = 0; p &lt; 3; p++) {
+        const char *a = pares[p][0], *b = pares[p][1];
+        int fim = 0;
+        int sub = maior_substring(a, b, &amp;fim);
+        printf(&quot;%s x %s: substring %d (\&quot;%.*s\&quot;), subsequência %d\n&quot;,
+               a, b, sub, sub, a + fim - sub, maior_subsequencia(a, b));
+    }
+    return 0;
+}
+// Em ABCDEF x FEDCBA as letras são as mesmas, mas em ordem contrária:
+// só uma delas fica &quot;na ordem&quot;.
+// Saída:
+// PARALELEPIPEDO x PAPELARIA: substring 2 (&quot;PA&quot;), subsequência 5
+// FERROVIARIO x FERRUGEM: substring 4 (&quot;FERR&quot;), subsequência 4
+// ABCDEF x FEDCBA: substring 1 (&quot;A&quot;), subsequência 1
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A282.c -o ~/LPEDC/material/A282 &amp;&amp; ~/LPEDC/material/A282
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E841</strong> · ★☆☆</p>
+<p>Duas linhas de ônibus atravessam o centro. Cada ponto tem uma letra:</p>
+<pre><code class="language-text">linha 101: A B C D E F G H
+linha 202: B D C E G A H
+</code></pre>
+<p>Quantos pontos as duas visitam na MESMA ordem (sem precisar ser pontos
+seguidos)? Escreva a função</p>
+<pre><code class="language-text">int lcs(const char *a, const char *b)
+</code></pre>
+<p>que devolve o tamanho da maior subsequência comum, e teste com os pares
+abaixo, mostrando cada um entre aspas.</p>
+<pre><code class="language-text">Saída esperada:
+&quot;ABCDEFGH&quot; x &quot;BDCEGAH&quot;: 5
+&quot;CASA&quot; x &quot;ASA&quot;: 3
+&quot;&quot; x &quot;ABC&quot;: 0
+&quot;XYZ&quot; x &quot;XYZ&quot;: 3
+&quot;ABC&quot; x &quot;DEF&quot;: 0
+</code></pre>
+<p><strong>Exercício E843</strong> · ★★☆</p>
+<p>A LCS não é só para strings. Ana e Beto montaram playlists para a viagem,
+e cada música tem um número de catálogo:</p>
+<pre><code class="language-text">Ana:  12  7 33  5 21  8 40 17
+Beto:  7  5  9 21 40  3 17 12
+</code></pre>
+<p>Eles querem uma playlist em comum que respeite a ordem das DUAS listas.
+Escreva a função</p>
+<pre><code class="language-text">int lcs_vetor(const int a[], int m, const int b[], int n, int saida[])
+</code></pre>
+<p>que grava em saida a maior subsequência comum dos dois vetores e devolve
+o tamanho dela. Mostre o resultado.</p>
+<pre><code class="language-text">Saída esperada:
+5 músicas em comum, na mesma ordem: 7 5 21 40 17
+</code></pre>
+<p><strong>Exercício E844</strong> · ★★☆</p>
+<p>Charada de palavras: qual é a MENOR sequência de letras (não precisa
+existir no dicionário) que contém BANANA e também CABANA como
+subsequências? É a menor supersequência comum, e ela sai da tabela da
+LCS: as letras da LCS aparecem uma vez só, e todas as outras letras das
+duas palavras entram também. Por isso o tamanho é m + n - LCS.</p>
+<p>Monte a tabela da LCS, construa a supersequência numa volta pela tabela
+e confira o resultado com uma função</p>
+<pre><code class="language-text">int eh_subsequencia(const char *p, const char *t)
+</code></pre>
+<p>que diz se p é subsequência de t.</p>
+<pre><code class="language-text">Saída esperada:
+LCS: 4 letras
+Supersequência: CABANANA (8 letras)
+BANANA está nela? sim
+CABANA está nela? sim
+</code></pre>
+<p><strong>Exercício E846</strong> · ★★★</p>
+<p>O fechamento de uma ação em 13 pregões foi, em reais:</p>
+<pre><code class="language-text">31 28 35 30 33 29 36 40 34 38 41 37 33
+</code></pre>
+<p>Qual é a maior sequência de pregões (não precisam ser seguidos) em que o
+preço SEMPRE sobe? Ela é a LCS entre o vetor original e uma cópia dele
+ORDENADA e SEM REPETIDOS.</p>
+<p>Escreva o programa: copie o vetor, ordene a cópia com qsort, tire os
+repetidos, rode a LCS de vetores de int com recuperação e mostre o
+tamanho e os preços.</p>
+<pre><code class="language-text">Saída esperada:
+Maior sequência de altas: 6 dias
+Preços: 28 30 33 36 40 41
+</code></pre>
+<hr>
+<h2>0142 · Distância de edição</h2>
+<h3>Conceito</h3>
+<p>Você digita &quot;pesoa&quot; e o corretor oferece &quot;pessoa&quot;. Ele percebeu que falta
+um <code>s</code>, e que &quot;pesoa&quot; está muito mais perto de &quot;pessoa&quot; do que de &quot;pedra&quot;.
+Para ordenar as sugestões, o corretor precisa de um número que diga o
+quanto duas palavras são parecidas. A medida mais usada conta quantas
+correções separam uma da outra.</p>
+<p>A <strong>distância de edição</strong>, também chamada <strong>distância de Levenshtein</strong>, é o
+menor número de operações que transforma uma string em outra. São três
+operações, e cada uma custa 1: <strong>inserir</strong> uma letra, <strong>remover</strong> uma letra
+e <strong>trocar</strong> uma letra por outra (LEVENSHTEIN, 1966). De &quot;pesoa&quot; para
+&quot;pessoa&quot;, basta inserir um <code>s</code>: distância 1. De CARTA para ARTES, a
+distância é 3: remova o C (ARTA), insira um E (ARTEA) e troque o último A
+por S (ARTES).</p>
+<p>A PD segue o mesmo raciocínio da LCS (0141): olhe o <strong>fim</strong> das duas
+palavras. Se as últimas letras são <strong>iguais</strong>, elas não pedem correção, e a
+distância é a mesma das palavras sem elas. Se são <strong>diferentes</strong>, alguma
+operação tem de resolver essa última posição, e há três candidatas
+(KLEINBERG; TARDOS, 2006, cap. 6).</p>
+<p>Cada candidata deixa um problema menor. <strong>Trocar</strong> a última letra de <code>a</code>
+pela última de <code>b</code> custa 1, e sobra transformar as duas palavras sem a
+última letra. <strong>Remover</strong> a última letra de <code>a</code> custa 1, e sobra transformar
+<code>a</code> sem ela em <code>b</code> inteira. <strong>Inserir</strong> no fim de <code>a</code> a última letra de <code>b</code>
+custa 1, e sobra transformar <code>a</code> inteira em <code>b</code> sem a última letra. A
+distância é 1 mais a mais barata das três.</p>
+<p>A tabela segue os prefixos, como na LCS. A célula <code>d[i][j]</code> é a distância
+entre o prefixo <code>a[0..i-1]</code>, com <code>i</code> letras, e o prefixo <code>b[0..j-1]</code>, com
+<code>j</code> letras. A resposta fica em <code>d[m][n]</code> (LINTZMAYER; MOTA, 2023). As três
+operações viram três vizinhas: a diagonal <code>d[i-1][j-1]</code> é a troca, a de
+cima <code>d[i-1][j]</code> é a remoção e a da esquerda <code>d[i][j-1]</code> é a inserção. A
+tabela de consulta resume:</p>
+<table>
+<thead>
+<tr>
+<th>caso</th>
+<th><code>d[i][j]</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>a[i-1] == b[j-1]</code></td>
+<td><code>d[i-1][j-1]</code> (diagonal, de graça)</td>
+</tr>
+<tr>
+<td>letras diferentes</td>
+<td><code>1 +</code> o menor entre <code>d[i-1][j-1]</code> (troca), <code>d[i-1][j]</code> (remove) e <code>d[i][j-1]</code> (insere)</td>
+</tr>
+</tbody></table>
+<p>A diferença para a LCS está na <strong>borda</strong>. Na LCS, a linha e a coluna 0
+valiam zero. Aqui, transformar <code>i</code> letras numa palavra vazia pede <code>i</code>
+remoções, então <code>d[i][0] = i</code>. E transformar a palavra vazia em <code>j</code> letras
+pede <code>j</code> inserções, então <code>d[0][j] = j</code> (LINTZMAYER; MOTA, 2023).</p>
+<p>O custo é o da tabela: <code>(m + 1) × (n + 1)</code> células de O(1), <strong>O(m × n)</strong>.
+Um corretor que compara a palavra digitada com 300 mil palavras do
+dicionário não quer pagar isso para todas. Ele usa um limite inferior
+barato: a distância é pelo menos a diferença dos tamanhos, porque cada
+letra a mais pede uma remoção ou inserção. Palavras de tamanho muito
+diferente saem antes de qualquer tabela (KLEINBERG; TARDOS, 2006, cap. 6).</p>
+<p>A tabela dá o número; a volta dá as edições. Partindo de <code>d[m][n]</code>, você
+pergunta em cada célula de qual vizinha o valor veio: diagonal sem custo
+quer dizer letras iguais; diagonal com custo é troca; de cima é remoção; da
+esquerda é inserção. As operações saem do fim para o começo. Escritas em
+ordem, elas formam um <strong>alinhamento</strong> das duas palavras, como o que se usa
+para comparar trechos de DNA (KLEINBERG; TARDOS, 2006, cap. 6).</p>
+<blockquote>
+<p>[!WARNING]
+A borda <strong>não</strong> é zero, como na LCS: sem <code>d[i][0] = i</code> e <code>d[0][j] = j</code>,
+CARTA e ARTES dariam 2. Na volta, confira <code>i &gt; 0</code> e <code>j &gt; 0</code> antes de ler
+<code>d[i - 1][...]</code> ou <code>a[i - 1]</code>.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>Um corretor ranqueia sugestões pelo número de edições. CARTA e ARTES distam 3:
+remover o C, inserir um E e trocar o último A por S (CARTA, ARTA, ARTEA,
+ARTES). As setas mostram de onde cada célula veio:</p>
+<p align="center"><img src="material/0142-ideia.svg" alt="Diagrama da ideia: Distância de edição" width="858"></p>
+<p>A volta mostra as edições do fim para o começo (o E852 monta o alinhamento na
+ordem certa):</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+#define MAX 50
+
+int menor3(int x, int y, int z) {
+    int m = x &lt; y ? x : y;
+    return m &lt; z ? m : z;
+}
+
+int main(void) {
+    const char *a = &quot;CARTA&quot;; // de onde parte
+    const char *b = &quot;ARTES&quot;; // aonde quer chegar
+    int m = strlen(a), n = strlen(b);
+    int d[MAX + 1][MAX + 1];
+
+    // d[i][j] = menor número de edições que transforma a[0..i-1] em b[0..j-1]
+    for (int i = 0; i &lt;= m; i++) {
+        d[i][0] = i;                                // apagar as i letras
+    }
+    for (int j = 0; j &lt;= n; j++) {
+        d[0][j] = j;                                // inserir as j letras
+    }
+    for (int i = 1; i &lt;= m; i++) {
+        for (int j = 1; j &lt;= n; j++) {
+            if (a[i - 1] == b[j - 1]) {
+                d[i][j] = d[i - 1][j - 1];          // letra igual: de graça
+            } else {
+                d[i][j] = 1 + menor3(d[i - 1][j - 1], // troca a[i-1] por b[j-1]
+                                     d[i - 1][j],     // remove a[i-1]
+                                     d[i][j - 1]);    // insere b[j-1]
+            }
+        }
+    }
+
+    printf(&quot;     -&quot;);
+    for (int j = 0; j &lt; n; j++) {
+        printf(&quot;  %c&quot;, b[j]);
+    }
+    printf(&quot;\n&quot;);
+    for (int i = 0; i &lt;= m; i++) {
+        printf(&quot;  %c&quot;, i == 0 ? &#39;-&#39; : a[i - 1]);
+        for (int j = 0; j &lt;= n; j++) {
+            printf(&quot;  %d&quot;, d[i][j]);
+        }
+        printf(&quot;\n&quot;);
+    }
+    printf(&quot;distância de %s para %s: %d\n&quot;, a, b, d[m][n]);
+
+    // volta: de onde veio cada célula? As edições saem do fim para o começo
+    int i = m, j = n;
+    while (i &gt; 0 || j &gt; 0) {
+        if (i &gt; 0 &amp;&amp; j &gt; 0 &amp;&amp; a[i - 1] == b[j - 1]) {
+            i--;                                    // igual: não custa nada
+            j--;
+        } else if (i &gt; 0 &amp;&amp; j &gt; 0 &amp;&amp; d[i][j] == d[i - 1][j - 1] + 1) {
+            printf(&quot;  troca %c por %c\n&quot;, a[i - 1], b[j - 1]);
+            i--;
+            j--;
+        } else if (i &gt; 0 &amp;&amp; d[i][j] == d[i - 1][j] + 1) {
+            printf(&quot;  remove %c\n&quot;, a[i - 1]);
+            i--;
+        } else {
+            printf(&quot;  insere %c\n&quot;, b[j - 1]);
+            j--;
+        }
+    }
+    return 0;
+}
+// Saída:
+//      -  A  R  T  E  S
+//   -  0  1  2  3  4  5
+//   C  1  1  2  3  4  5
+//   A  2  1  2  3  4  5
+//   R  3  2  1  2  3  4
+//   T  4  3  2  1  2  3
+//   A  5  4  3  2  2  3
+// distância de CARTA para ARTES: 3
+//   troca A por S
+//   insere E
+//   remove C
+</code></pre>
+<p>No fluxograma, o caminho marcado é o de <code>d[5][5]</code> (A contra S), em que a troca
+ganhou:</p>
+<p align="center"><img src="material/0142-fluxograma.svg" alt="Fluxograma: Distância de edição" width="542"></p>
+<h4>Passo a passo</h4>
+<p>A volta, partindo de <code>d[5][5] = 3</code>. Em cada célula: &quot;de qual vizinho eu vim?&quot;</p>
+<table>
+<thead>
+<tr>
+<th>posição</th>
+<th>letras</th>
+<th>candidatos: troca / remove / insere</th>
+<th>veio de</th>
+<th>operação</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>(5, 5)</td>
+<td>A, S</td>
+<td>2 + 1 / 3 + 1 / 2 + 1</td>
+<td>diagonal (troca, testada primeiro)</td>
+<td>troca A por S</td>
+</tr>
+<tr>
+<td>(4, 4)</td>
+<td>T, E</td>
+<td>2 + 1 / 3 + 1 / 1 + 1</td>
+<td>esquerda</td>
+<td>insere E</td>
+</tr>
+<tr>
+<td>(4, 3)</td>
+<td>T, T</td>
+<td>iguais</td>
+<td>diagonal</td>
+<td>nenhuma</td>
+</tr>
+<tr>
+<td>(3, 2)</td>
+<td>R, R</td>
+<td>iguais</td>
+<td>diagonal</td>
+<td>nenhuma</td>
+</tr>
+<tr>
+<td>(2, 1)</td>
+<td>A, A</td>
+<td>iguais</td>
+<td>diagonal</td>
+<td>nenhuma</td>
+</tr>
+<tr>
+<td>(1, 0)</td>
+<td>C, -</td>
+<td>borda</td>
+<td>cima</td>
+<td>remove C</td>
+</tr>
+</tbody></table>
+<p><strong>Exemplo A283 · O corretor que sugere a palavra mais perto</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+#define MAX 30
+
+int menor3(int x, int y, int z) {
+    int m = x &lt; y ? x : y;
+    return m &lt; z ? m : z;
+}
+
+int distancia(const char *a, const char *b) {
+    int m = strlen(a), n = strlen(b);
+    int d[MAX + 1][MAX + 1];
+    for (int i = 0; i &lt;= m; i++) {
+        d[i][0] = i;
+    }
+    for (int j = 0; j &lt;= n; j++) {
+        d[0][j] = j;
+    }
+    for (int i = 1; i &lt;= m; i++) {
+        for (int j = 1; j &lt;= n; j++) {
+            if (a[i - 1] == b[j - 1]) {
+                d[i][j] = d[i - 1][j - 1];
+            } else {
+                d[i][j] = 1 + menor3(d[i - 1][j - 1], d[i - 1][j], d[i][j - 1]);
+            }
+        }
+    }
+    return d[m][n];
+}
+
+int main(void) {
+    // palavras sem acento: em UTF-8, &quot;ç&quot; e &quot;ã&quot; ocupam 2 bytes cada, e a
+    // distância contaria bytes, não letras
+    const char *dicionario[] = {&quot;pessoa&quot;, &quot;pesca&quot;, &quot;peso&quot;, &quot;lagoa&quot;, &quot;pose&quot;,
+                                &quot;pessoal&quot;, &quot;mesa&quot;, &quot;proa&quot;, &quot;passeio&quot;};
+    int n = 9;
+    const char *digitadas[] = {&quot;pesoa&quot;, &quot;lagao&quot;, &quot;pasoe&quot;};
+
+    for (int k = 0; k &lt; 3; k++) {
+        int melhor = MAX + 1;
+        for (int p = 0; p &lt; n; p++) {
+            int dist = distancia(digitadas[k], dicionario[p]);
+            if (dist &lt; melhor) {
+                melhor = dist;
+            }
+        }
+        printf(&quot;%s -&gt; distância %d:&quot;, digitadas[k], melhor);
+        for (int p = 0; p &lt; n; p++) {       // todas as que empatam no mínimo
+            if (distancia(digitadas[k], dicionario[p]) == melhor) {
+                printf(&quot; %s&quot;, dicionario[p]);
+            }
+        }
+        printf(&quot;\n&quot;);
+    }
+    return 0;
+}
+// Empates são comuns: corretores de verdade desempatam pela frequência de
+// uso de cada palavra. E &quot;lagao&quot; trocou duas letras vizinhas de lugar, mas
+// a distância conta 2: o A284 mostra como contar isso como 1.
+// Saída:
+// pesoa -&gt; distância 1: pessoa pesca peso
+// lagao -&gt; distância 2: lagoa
+// pasoe -&gt; distância 2: peso pose
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A283.c -o ~/LPEDC/material/A283 &amp;&amp; ~/LPEDC/material/A283
+</code></pre>
+<p><strong>Exemplo A284 · Letras trocadas de lugar contam como um erro só</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+#define MAX 30
+
+int menor(int x, int y) {
+    return x &lt; y ? x : y;
+}
+
+// Levenshtein com uma quarta operação: TRANSPOR duas letras vizinhas
+// (&quot;ac&quot; &lt;-&gt; &quot;ca&quot;), também com custo 1. É o erro de digitação mais comum.
+// Com transpoe == 0, é a distância de edição comum.
+int distancia(const char *a, const char *b, int transpoe) {
+    int m = strlen(a), n = strlen(b);
+    int d[MAX + 1][MAX + 1];
+    for (int i = 0; i &lt;= m; i++) {
+        d[i][0] = i;
+    }
+    for (int j = 0; j &lt;= n; j++) {
+        d[0][j] = j;
+    }
+    for (int i = 1; i &lt;= m; i++) {
+        for (int j = 1; j &lt;= n; j++) {
+            int custo = (a[i - 1] == b[j - 1]) ? 0 : 1;
+            d[i][j] = menor(menor(d[i - 1][j] + 1,      // remove
+                                  d[i][j - 1] + 1),     // insere
+                            d[i - 1][j - 1] + custo);   // troca (ou igual)
+            // as duas últimas de a são as duas últimas de b, invertidas?
+            if (transpoe &amp;&amp; i &gt; 1 &amp;&amp; j &gt; 1 &amp;&amp;
+                a[i - 1] == b[j - 2] &amp;&amp; a[i - 2] == b[j - 1]) {
+                d[i][j] = menor(d[i][j], d[i - 2][j - 2] + 1);
+            }
+        }
+    }
+    return d[m][n];
+}
+
+int main(void) {
+    const char *pares[][2] = {
+        {&quot;cmaa&quot;, &quot;cama&quot;},
+        {&quot;lagao&quot;, &quot;lagoa&quot;},
+        {&quot;teclaod&quot;, &quot;teclado&quot;},
+        {&quot;qeuijo&quot;, &quot;queijo&quot;},
+        {&quot;abcd&quot;, &quot;badc&quot;},
+    };
+    printf(&quot;%-8s %-8s  comum  com transposição\n&quot;, &quot;digitou&quot;, &quot;queria&quot;);
+    for (int p = 0; p &lt; 5; p++) {
+        printf(&quot;%-8s %-8s  %5d  %16d\n&quot;, pares[p][0], pares[p][1],
+               distancia(pares[p][0], pares[p][1], 0),
+               distancia(pares[p][0], pares[p][1], 1));
+    }
+    return 0;
+}
+// Saída:
+// digitou  queria    comum  com transposição
+// cmaa     cama          2                 1
+// lagao    lagoa         2                 1
+// teclaod  teclado       2                 1
+// qeuijo   queijo        2                 1
+// abcd     badc          3                 2
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A284.c -o ~/LPEDC/material/A284 &amp;&amp; ~/LPEDC/material/A284
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E847</strong> · ★☆☆</p>
+<p>Escreva a função</p>
+<pre><code class="language-text">int distancia(const char *a, const char *b)
+</code></pre>
+<p>que devolve a distância de Levenshtein entre duas palavras (inserir,
+remover e trocar custam 1), e teste com os pares abaixo, mostrando cada
+um entre aspas.</p>
+<pre><code class="language-text">Saída esperada:
+&quot;LIVRO&quot; -&gt; &quot;LIBRA&quot;: 2
+&quot;&quot; -&gt; &quot;SOL&quot;: 3
+&quot;CASA&quot; -&gt; &quot;CASA&quot;: 0
+&quot;ABACAXI&quot; -&gt; &quot;ABACATE&quot;: 2
+&quot;FUTEBOL&quot; -&gt; &quot;BASQUETE&quot;: 8
+</code></pre>
+<p><strong>Exercício E849</strong> · ★★☆</p>
+<p>Alguns sistemas de controle de versão não &quot;trocam&quot; letras: cada mudança é
+uma remoção seguida de uma inserção. Nessa distância sem troca, BOLO para
+BOLA custa 2 (remove O, insere A), e não 1.</p>
+<p>Escreva int dist_sem_troca(const char *a, const char *b), com a mesma
+tabela da distância de edição mas só com remover e inserir. Escreva também
+int lcs(const char *a, const char *b) e confira, para cada par, que a
+distância sem troca é igual a m + n - 2 x LCS (tudo que não está na LCS
+sai de a ou entra de b).</p>
+<pre><code class="language-text">Saída esperada:
+PALMEIRAS PALMAS     PD:  3   m + n - 2 x LCS = 9 + 6 - 2 x 6 =  3
+CARTA     ARTES      PD:  4   m + n - 2 x LCS = 5 + 5 - 2 x 3 =  4
+BOLO      BOLA       PD:  2   m + n - 2 x LCS = 4 + 4 - 2 x 3 =  2
+RECIFE    FORTALEZA  PD: 11   m + n - 2 x LCS = 6 + 9 - 2 x 2 = 11
+</code></pre>
+<p><strong>Exercício E850</strong> · ★★☆</p>
+<p>A câmera do estacionamento lê placas com erro: troca O por 0, perde um
+caractere no fim, inventa outro. As placas cadastradas são:</p>
+<pre><code class="language-text">BRA2E19 RIO1A23 SPX9F87 BRA2E79 MGA4B56 BRZ2E19 PE1234 AM12B3456
+</code></pre>
+<p>Para cada leitura (BRA2E19, RI01A23, SPX9F8 e XYZ0000), mostre todas as
+placas cadastradas a distância de edição de no máximo 1, com a distância
+entre parênteses, ou &quot;nenhuma&quot;. Antes de montar cada tabela, pule as
+placas cujo tamanho difere da leitura em mais de 1 (a distância é pelo
+menos a diferença dos tamanhos), e conte quantas tabelas foram montadas.</p>
+<pre><code class="language-text">Saída esperada:
+BRA2E19: BRA2E19 (0) BRA2E79 (1) BRZ2E19 (1)
+RI01A23: RIO1A23 (1)
+SPX9F8: SPX9F87 (1)
+XYZ0000: nenhuma
+tabelas montadas: 28 de 32
+</code></pre>
+<p><strong>Exercício E852</strong> · ★★★</p>
+<p>Programas de comparar textos e de bioinformática mostram o ALINHAMENTO
+das duas sequências, uma em cima da outra, com um traço onde falta letra
+e uma marca embaixo dizendo o que aconteceu em cada coluna:</p>
+<pre><code class="language-text">= letras iguais     T troca     R remove (de cima)     I insere (de baixo)
+</code></pre>
+<p>Escreva void alinha(const char *a, const char *b), que monta a tabela da
+distância de edição, faz a volta e mostra a distância e as três linhas do
+alinhamento, com um espaço antes de cada caractere. Teste com SABADO -&gt;
+SALDO e ESTRELA -&gt; ESTERIL.</p>
+<pre><code class="language-text">Saída esperada:
+SABADO -&gt; SALDO: distância 2
+ S A B A D O
+ S A - L D O
+ = = R T = =
+ESTRELA -&gt; ESTERIL: distância 3
+ E S T - R E L A
+ E S T E R I L -
+ = = = I = T = R
+</code></pre>
+<hr>
+<h2>0143 · Juntando tudo: um mini-diff</h2>
+<h3>Conceito</h3>
+<p>Você e a sua mãe dividem a lista de compras num arquivo de texto, uma coisa
+por linha. Ela abriu, mexeu e salvou. O que mudou? O programa que responde
+isso é o <code>diff</code>: ele recebe duas versões de um arquivo e mostra o que entrou
+e o que saiu (LINUX MAN-PAGES, s.d.). Este projeto monta uma versão pequena
+dele.</p>
+<p>A primeira ideia, comparar a linha 1 com a linha 1, a 2 com a 2, e assim
+por diante, não serve. Se ela acrescentou &quot;açúcar&quot; no começo, todas as
+linhas descem uma posição, e todas parecem diferentes, embora quase nada
+tenha mudado (LINUX MAN-PAGES, s.d.). O que você quer é achar o maior
+pedaço que ficou igual, na mesma ordem, mesmo com linhas novas no meio.</p>
+<p>Isso é a LCS do assunto 0141, com <strong>linhas</strong> no lugar de letras. Duas linhas
+casam quando <code>strcmp</code> devolve 0. As linhas que entram na LCS ficaram iguais
+nas duas versões. As que só estão na versão antiga foram <strong>removidas</strong> e
+saem com <code>-</code>. As que só estão na nova foram <strong>adicionadas</strong> e saem com <code>+</code>
+(CORMEN et al., 2024, cap. 14). Uma linha alterada, como &quot;leite&quot; que virou
+&quot;leite sem lactose&quot;, aparece como uma remoção e uma adição.</p>
+<p>Há um ajuste na tabela. Na LCS do 0141, <code>c[i][j]</code> falava dos prefixos e a
+volta andava do fim para o começo, então as letras saíam ao contrário. Para
+o diff, a saída tem de vir na ordem do arquivo. A solução é trabalhar com
+<strong>sufixos</strong>, os finais das listas: <code>c[i][j]</code> é a LCS de <code>a[i..m-1]</code> e
+<code>b[j..n-1]</code>. A tabela se enche de trás para a frente, a resposta fica em
+<code>c[0][0]</code> e a volta anda do <strong>começo</strong> para o fim, imprimindo na ordem
+certa (LINTZMAYER; MOTA, 2023).</p>
+<p>Na volta, em cada posição <code>(i, j)</code>, se as linhas são iguais, a linha sai
+com dois espaços na frente e as duas listas avançam. Se não são, olhe os
+vizinhos <code>c[i+1][j]</code> e <code>c[i][j+1]</code>: o maior diz qual lado avançar. Avançar
+em <code>a</code> quer dizer que a linha <code>a[i]</code> não está na nova versão, e ela sai com
+<code>-</code>; avançar em <code>b</code> quer dizer que <code>b[j]</code> é nova, e ela sai com <code>+</code>.</p>
+<p>Para ler as linhas, o programa usa <code>fgets</code>, que traz a linha inteira para
+um buffer, inclusive o <code>&#39;\n&#39;</code> do fim. Esse <code>&#39;\n&#39;</code> atrapalha a comparação e
+precisa sair. A linha <code>buf[strcspn(buf, &quot;\n&quot;)] = &#39;\0&#39;</code> resolve: <code>strcspn</code>
+devolve a posição do primeiro <code>&#39;\n&#39;</code>, ou o tamanho da string se não houver
+nenhum, e ali entra o terminador (CPPREFERENCE, s.d.).</p>
+<p>A tabela pode ser grande. Dois arquivos de 2000 linhas pedem 4 milhões de
+células, 16 MB de <code>int</code>, o dobro da pilha padrão do Linux. Por isso ela não
+é uma matriz local: vem de um único <code>malloc</code> de <code>(m + 1) × (n + 1)</code> inteiros,
+e a célula <code>(i, j)</code> mora na posição <code>i * w + j</code> desse bloco, com <code>w = n + 1</code>,
+a largura de uma linha (KERNIGHAN; RITCHIE, 1989).</p>
+<p>Mesmo assim, O(m × n) não escala. Com 100 mil linhas de cada lado, seriam
+40 GB de tabela. O <code>diff</code> de verdade usa o algoritmo de Myers, que gasta
+O((m + n) × D), com D o número de diferenças (MYERS, 1986). Como dois
+arquivos parecidos têm poucas diferenças, ele roda rápido justamente no caso
+mais comum.</p>
+<blockquote>
+<p>[!WARNING]
+Sem tirar o <code>&#39;\n&#39;</code>, &quot;banana\n&quot; e &quot;banana&quot; diferem no <code>strcmp</code> e o diff acusa
+uma mudança invisível. A última linha do arquivo pode vir <strong>sem</strong> <code>&#39;\n&#39;</code>.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>Você e sua mãe dividem a lista de compras num arquivo. <code>linhas.h</code> e
+<code>linhas.c</code> (assunto 0034) leem as linhas num <code>char **</code> que dobra com
+<code>realloc</code> (assunto 0055). No desenho, a lista antiga fica à esquerda, a nova à
+direita, e os traços ligam as cinco linhas da LCS:</p>
+<p align="center"><img src="material/0143-ideia.svg" alt="Diagrama da ideia: Juntando tudo: um mini-diff" width="858"></p>
+<p>Sem argumentos, o programa compara duas listas gravadas em <code>/tmp</code>; com dois
+nomes de arquivo (assunto 0069), compara os seus:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &quot;linhas.h&quot;
+
+// diff linha a linha: LCS dos SUFIXOS, para a volta andar do começo ao fim
+void diff(char **a, int m, char **b, int n) {
+    // c[i * w + j] = LCS de a[i..m-1] e b[j..n-1]: a matriz (m+1) x (n+1)
+    // num bloco só do malloc, linha após linha
+    int w = n + 1;
+    int *c = malloc((size_t) (m + 1) * w * sizeof *c);
+    if (c == NULL) {
+        return;
+    }
+    for (int i = m; i &gt;= 0; i--) {
+        for (int j = n; j &gt;= 0; j--) {
+            if (i == m || j == n) {
+                c[i * w + j] = 0;                      // um sufixo vazio
+            } else if (strcmp(a[i], b[j]) == 0) {
+                c[i * w + j] = c[(i + 1) * w + j + 1] + 1;
+            } else {
+                int baixo = c[(i + 1) * w + j], dir = c[i * w + j + 1];
+                c[i * w + j] = baixo &gt;= dir ? baixo : dir;
+            }
+        }
+    }
+
+    int i = 0, j = 0, iguais = 0, menos = 0, mais = 0;
+    while (i &lt; m || j &lt; n) {
+        if (i &lt; m &amp;&amp; j &lt; n &amp;&amp; strcmp(a[i], b[j]) == 0) {
+            printf(&quot;  %s\n&quot;, a[i]);                    // está nas duas versões
+            i++;
+            j++;
+            iguais++;
+        } else if (j == n || (i &lt; m &amp;&amp; c[(i + 1) * w + j] &gt;= c[i * w + j + 1])) {
+            printf(&quot;- %s\n&quot;, a[i]);                    // só na versão antiga
+            i++;
+            menos++;
+        } else {
+            printf(&quot;+ %s\n&quot;, b[j]);                    // só na versão nova
+            j++;
+            mais++;
+        }
+    }
+    printf(&quot;(%d iguais, %d removidas, %d adicionadas)\n&quot;, iguais, menos, mais);
+    free(c);
+}
+
+int main(int argc, char *argv[]) {
+    const char *antigo = &quot;/tmp/compras-v1.txt&quot;;
+    const char *novo = &quot;/tmp/compras-v2.txt&quot;;
+    if (argc == 3) {                                   // ./programa a.txt b.txt
+        antigo = argv[1];
+        novo = argv[2];
+    } else {                                           // sem argumentos: o exemplo
+        const char *v1[] = {&quot;arroz&quot;, &quot;feijão&quot;, &quot;café&quot;, &quot;leite&quot;, &quot;pão&quot;, &quot;banana&quot;,
+                            &quot;sabão&quot;};
+        const char *v2[] = {&quot;arroz&quot;, &quot;feijão&quot;, &quot;açúcar&quot;, &quot;café&quot;, &quot;leite sem lactose&quot;,
+                            &quot;pão&quot;, &quot;banana&quot;};
+        grava_linhas(antigo, v1, 7);
+        grava_linhas(novo, v2, 7);
+    }
+
+    int m = 0, n = 0;
+    char **a = le_linhas(antigo, &amp;m);
+    char **b = le_linhas(novo, &amp;n);
+    if (a != NULL &amp;&amp; b != NULL) {
+        diff(a, m, b, n);
+    }
+    libera_linhas(a, m);
+    libera_linhas(b, n);
+    return 0;
+}
+// Saída:
+//   arroz
+//   feijão
+// + açúcar
+//   café
+// - leite
+// + leite sem lactose
+//   pão
+//   banana
+// - sabão
+// (5 iguais, 2 removidas, 2 adicionadas)
+</code></pre>
+<p>&quot;leite&quot; e &quot;leite sem lactose&quot; viram uma remoção e uma adição; o A286 usa a
+distância de edição (0142) para ver que a linha só foi <strong>alterada</strong>. O caminho
+marcado é o das duas primeiras linhas, iguais:</p>
+<p align="center"><img src="material/0143-fluxograma.svg" alt="Fluxograma: Juntando tudo: um mini-diff" width="796"></p>
+<p><strong>Exemplo A285 · Diff palavra por palavra</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+#define MAXP 30 // palavras por frase
+#define TAM 20  // letras por palavra
+
+// quebra a frase em palavras (separadas por espaço); devolve quantas
+int separa(const char *frase, char palavras[][TAM]) {
+    int n = 0, k = 0;
+    for (const char *p = frase;; p++) {
+        if (*p == &#39; &#39; || *p == &#39;\0&#39;) {
+            if (k &gt; 0 &amp;&amp; n &lt; MAXP) {
+                palavras[n][k] = &#39;\0&#39;;
+                n++;
+            }
+            k = 0;
+            if (*p == &#39;\0&#39;) {
+                break;
+            }
+        } else if (k &lt; TAM - 1) {
+            palavras[n][k++] = *p;
+        }
+    }
+    return n;
+}
+
+// o mesmo diff do texto, com palavras no lugar de linhas: [-saiu-] {+entrou+}
+void diff_palavras(const char *antes, const char *depois) {
+    char a[MAXP][TAM], b[MAXP][TAM];
+    int m = separa(antes, a), n = separa(depois, b);
+    int c[MAXP + 1][MAXP + 1]; // LCS dos sufixos
+    for (int i = m; i &gt;= 0; i--) {
+        for (int j = n; j &gt;= 0; j--) {
+            if (i == m || j == n) {
+                c[i][j] = 0;
+            } else if (strcmp(a[i], b[j]) == 0) {
+                c[i][j] = c[i + 1][j + 1] + 1;
+            } else {
+                c[i][j] = c[i + 1][j] &gt;= c[i][j + 1] ? c[i + 1][j] : c[i][j + 1];
+            }
+        }
+    }
+    int i = 0, j = 0;
+    while (i &lt; m || j &lt; n) {
+        if (i &gt; 0 || j &gt; 0) {
+            printf(&quot; &quot;);                    // espaço entre palavras, não no fim
+        }
+        if (i &lt; m &amp;&amp; j &lt; n &amp;&amp; strcmp(a[i], b[j]) == 0) {
+            printf(&quot;%s&quot;, a[i]);
+            i++;
+            j++;
+        } else if (j == n || (i &lt; m &amp;&amp; c[i + 1][j] &gt;= c[i][j + 1])) {
+            printf(&quot;[-%s-]&quot;, a[i++]);
+        } else {
+            printf(&quot;{+%s+}&quot;, b[j++]);
+        }
+    }
+    printf(&quot;\n&quot;);
+}
+
+int main(void) {
+    diff_palavras(&quot;o ônibus 175 sai do terminal às 8h e passa pelo centro&quot;,
+                  &quot;o ônibus 175 parte do terminal às 7h30 e passa pelo centro e pela orla&quot;);
+    diff_palavras(&quot;reunião de condomínio na quinta no salão&quot;,
+                  &quot;reunião de condomínio adiada para sexta no salão de festas&quot;);
+    return 0;
+}
+// Saída:
+// o ônibus 175 [-sai-] {+parte+} do terminal às [-8h-] {+7h30+} e passa pelo centro {+e+} {+pela+} {+orla+}
+// reunião de condomínio [-na-] [-quinta-] {+adiada+} {+para+} {+sexta+} no salão {+de+} {+festas+}
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A285.c ~/LPEDC/material/0143-linhas.c -o ~/LPEDC/material/A285 &amp;&amp; ~/LPEDC/material/A285
+</code></pre>
+<p><strong>Exemplo A286 · O diff que percebe uma linha só alterada</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &quot;0143-linhas.h&quot;
+
+#define MAXL 100 // linhas por arquivo, neste exemplo
+#define TAM 256
+
+int menor3(int x, int y, int z) {
+    int m = x &lt; y ? x : y;
+    return m &lt; z ? m : z;
+}
+
+// distância de edição (assunto 0142) com duas linhas de tabela
+int distancia(const char *a, const char *b) {
+    int m = strlen(a), n = strlen(b);
+    int ant[TAM + 1], at[TAM + 1];
+    for (int j = 0; j &lt;= n; j++) {
+        ant[j] = j;
+    }
+    for (int i = 1; i &lt;= m; i++) {
+        at[0] = i;
+        for (int j = 1; j &lt;= n; j++) {
+            if (a[i - 1] == b[j - 1]) {
+                at[j] = ant[j - 1];
+            } else {
+                at[j] = 1 + menor3(ant[j - 1], ant[j], at[j - 1]);
+            }
+        }
+        memcpy(ant, at, (n + 1) * sizeof ant[0]);
+    }
+    return ant[n];
+}
+
+// &quot;parecidas&quot;: a distância é no máximo um terço da linha mais comprida
+int parecidas(const char *a, const char *b) {
+    int maior = strlen(a) &gt; strlen(b) ? strlen(a) : strlen(b);
+    return 3 * distancia(a, b) &lt;= maior;
+}
+
+int main(void) {
+    const char *v1[] = {&quot;segunda: feijoada&quot;, &quot;terça: frango assado&quot;, &quot;quarta: lasanha&quot;,
+                        &quot;quinta: peixe frito&quot;, &quot;sexta: pizza&quot;};
+    const char *v2[] = {&quot;segunda: feijoada&quot;, &quot;terça: frango grelhado&quot;, &quot;quarta: lasanha&quot;,
+                        &quot;quinta: strogonoff&quot;, &quot;sexta: pizza&quot;, &quot;sábado: churrasco&quot;};
+    grava_linhas(&quot;/tmp/cardapio-v1.txt&quot;, v1, 5);
+    grava_linhas(&quot;/tmp/cardapio-v2.txt&quot;, v2, 6);
+
+    int m = 0, n = 0;
+    char **a = le_linhas(&quot;/tmp/cardapio-v1.txt&quot;, &amp;m);
+    char **b = le_linhas(&quot;/tmp/cardapio-v2.txt&quot;, &amp;n);
+    if (a == NULL || b == NULL || m &gt; MAXL || n &gt; MAXL) {
+        libera_linhas(a, m);
+        libera_linhas(b, n);
+        return 1;
+    }
+
+    static int c[MAXL + 1][MAXL + 1]; // LCS dos sufixos, como no texto
+    for (int i = m; i &gt;= 0; i--) {
+        for (int j = n; j &gt;= 0; j--) {
+            if (i == m || j == n) {
+                c[i][j] = 0;
+            } else if (strcmp(a[i], b[j]) == 0) {
+                c[i][j] = c[i + 1][j + 1] + 1;
+            } else {
+                c[i][j] = c[i + 1][j] &gt;= c[i][j + 1] ? c[i + 1][j] : c[i][j + 1];
+            }
+        }
+    }
+
+    int i = 0, j = 0;
+    while (i &lt; m || j &lt; n) {
+        if (i &lt; m &amp;&amp; j &lt; n &amp;&amp; strcmp(a[i], b[j]) == 0) {
+            printf(&quot;  %s\n&quot;, a[i]);
+            i++;
+            j++;
+        } else if (i &lt; m &amp;&amp; j &lt; n &amp;&amp; c[i + 1][j + 1] == c[i][j] &amp;&amp; parecidas(a[i], b[j])) {
+            // pular as duas não perde nada da LCS, e elas são parecidas:
+            // em vez de &quot;- a[i]&quot; e &quot;+ b[j]&quot;, é uma linha alterada
+            printf(&quot;~ %s  -&gt;  %s\n&quot;, a[i], b[j]);
+            i++;
+            j++;
+        } else if (j == n || (i &lt; m &amp;&amp; c[i + 1][j] &gt;= c[i][j + 1])) {
+            printf(&quot;- %s\n&quot;, a[i++]);
+        } else {
+            printf(&quot;+ %s\n&quot;, b[j++]);
+        }
+    }
+
+    libera_linhas(a, m);
+    libera_linhas(b, n);
+    return 0;
+}
+// Na saída, &quot;peixe frito&quot; e &quot;strogonoff&quot; são diferentes demais: viram - e +.
+// Saída:
+//   segunda: feijoada
+// ~ terça: frango assado  -&gt;  terça: frango grelhado
+//   quarta: lasanha
+// - quinta: peixe frito
+// + quinta: strogonoff
+//   sexta: pizza
+// + sábado: churrasco
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A286.c ~/LPEDC/material/0143-linhas.c -o ~/LPEDC/material/A286 &amp;&amp; ~/LPEDC/material/A286
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E853</strong> · ★☆☆</p>
+<p>A fila de espera do posto de saúde é um arquivo com um nome por linha.
+Ontem e hoje ela estava assim:</p>
+<pre><code class="language-text">ontem: Ana Bruno Carla Davi Elisa Fábio Gabi Hugo
+hoje:  Ana Carla Davi Igor Elisa Gabi Hugo Júlia Kátia
+</code></pre>
+<p>Sem imprimir o diff, mostre só o resumo, como o &quot;diff --stat&quot;: quantas
+linhas ficaram iguais, quantas saíram e quantas entraram, e a semelhança
+entre as duas versões, 2 x LCS / (m + n), em porcentagem. Guarde as
+listas em vetores de strings no próprio programa (const char *ontem[]) e
+escreva int lcs_linhas(const char *a[], int m, const char *b[], int n).</p>
+<pre><code class="language-text">Saída esperada:
+6 iguais, 2 removidas, 3 adicionadas
+semelhança: 70.6%
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E853.c ~/LPEDC/material/0143-linhas.c -o ~/LPEDC/material/E853 &amp;&amp; ~/LPEDC/material/E853
+</code></pre>
+<p><strong>Exercício E855</strong> · ★★☆</p>
+<p>Duas versões de um programa em C estão em vetores de strings, uma linha por
+posição:</p>
+<pre><code class="language-text">antiga: &quot;#include &lt;stdio.h&gt;&quot;, &quot;// versão 1&quot;, &quot;int main(void) {&quot;,
+        &quot;    printf(\&quot;oi\\n\&quot;);&quot;, &quot;    return 0;&quot;, &quot;}&quot;
+nova:   &quot;#include &lt;stdio.h&gt;&quot;, &quot;// versão 2&quot;, &quot;int main(void) {&quot;,
+        &quot;    int x = 2;&quot;, &quot;    printf(\&quot;%d\\n\&quot;, x);&quot;, &quot;    return 0;&quot;, &quot;}&quot;
+</code></pre>
+<p>Escreva o mini-diff: monte a tabela da LCS dos sufixos e percorra-a do começo
+ao fim. Antes de cada linha, mostre o número dela na versão antiga e na nova
+(igual: os dois; removida: só o antigo; adicionada: só o novo), com estes
+formatos de printf:</p>
+<pre><code class="language-text">igual:      &quot;%3d %3d   %s\n&quot;
+removida:   &quot;%3d     - %s\n&quot;
+adicionada: &quot;    %3d + %s\n&quot;
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+  1   1   #include &lt;stdio.h&gt;
+  2     - // versão 1
+      2 + // versão 2
+  3   3   int main(void) {
+  4     -     printf(&quot;oi\n&quot;);
+      4 +     int x = 2;
+      5 +     printf(&quot;%d\n&quot;, x);
+  5   6       return 0;
+  6   7   }
+(4 iguais, 2 removidas, 3 adicionadas)
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E855.c ~/LPEDC/material/0143-linhas.c -o ~/LPEDC/material/E855 &amp;&amp; ~/LPEDC/material/E855
+</code></pre>
+<p><strong>Exercício E856</strong> · ★★☆</p>
+<p>A saída do diff é um PATCH: a receita para transformar a versão antiga na
+nova. Este é o patch da lista de compras do texto:</p>
+<pre><code class="language-text">&quot;  arroz&quot;, &quot;  feijão&quot;, &quot;+ açúcar&quot;, &quot;  café&quot;, &quot;- leite&quot;,
+&quot;+ leite sem lactose&quot;, &quot;  pão&quot;, &quot;  banana&quot;, &quot;- sabão&quot;
+</code></pre>
+<p>Escreva</p>
+<pre><code class="language-text">int aplica(const char *orig[], int m, const char *patch[], int p,
+           const char *novo[])
+</code></pre>
+<p>que aplica o patch ao original e grava as linhas da versão nova em novo,
+devolvendo quantas são. Linhas &quot;  &quot; e &quot;- &quot; falam de uma linha do original
+e precisam BATER com ela; se não baterem, o patch não se aplica: devolva
+-(número da linha do original, contando de 1). Teste com a lista antiga
+e com uma lista em que a 3ª linha virou &quot;chá&quot;.</p>
+<pre><code class="language-text">Saída esperada:
+v1: arroz, feijão, açúcar, café, leite sem lactose, pão, banana
+outra lista: o patch não se aplica (linha 3)
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E856.c ~/LPEDC/material/0143-linhas.c -o ~/LPEDC/material/E856 &amp;&amp; ~/LPEDC/material/E856
+</code></pre>
+<p><strong>Exercício E858</strong> · ★★★</p>
+<p>Quando dois arquivos têm centenas de linhas e só duas mudaram, o diff
+completo é inútil. O &quot;diff -u&quot; mostra só as linhas mudadas e algumas iguais
+em volta, o CONTEXTO, e troca cada trecho pulado por &quot;...&quot;.</p>
+<p>As duas versões de uma receita de bolo estão nos vetores a[] (12 passos) e
+b[] (13 passos), declarados abaixo. Escreva o diff com 1 linha de contexto
+(#define CONTEXTO 1): uma linha igual só aparece se estiver a no máximo 1
+posição de uma mudança na sequência de operações. Cada trecho escondido
+(inclusive no começo e no fim) vira uma linha &quot;...&quot;. Mudanças saem como &quot;-
+texto&quot; e &quot;+ texto&quot;; contexto, como &quot;  texto&quot;.</p>
+<pre><code class="language-text">Saída esperada:
+...
+  2. Unte a forma com manteiga.
+- 3. Bata 3 ovos com 2 xícaras de açúcar.
++ 3. Bata 3 ovos com 1 xícara de açúcar.
+  4. Junte 1 xícara de leite.
+...
+  11. Desenforme.
+- 12. Sirva.
++ 12. Cubra com calda de chocolate.
++ 13. Sirva.
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E858.c ~/LPEDC/material/0143-linhas.c -o ~/LPEDC/material/E858 &amp;&amp; ~/LPEDC/material/E858
+</code></pre>
+<hr>
+<h2>Lista do módulo</h2>
+<p>30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P2101.c a P2130.c, em <code>material/</code>; resoluções em <code>_respostas/21-programacao-dinamica/lista/</code>.</p>
+<h3>★☆☆ Aquecimento</h3>
+<p><strong>Exercício P2101</strong> · ★☆☆ · Tribonacci com e sem memória</p>
+<p>A sequência de Tribonacci soma os TRÊS anteriores: T(0) = 0, T(1) = 0,
+T(2) = 1 e T(n) = T(n - 1) + T(n - 2) + T(n - 3). O programa abaixo tem
+a versão recursiva ingênua, que conta as chamadas. Estenda-o com a
+versão memoizada: um vetor memo[] com -1 em &quot;ainda não calculado&quot;, e a
+função só calcula quando não sabe a resposta. Mostre T(25) e as chamadas
+das duas versões.</p>
+<pre><code class="language-text">Saída esperada:
+Ingênua: T(25) = 755476, 2700421 chamadas
+Memoizada: T(25) = 755476, 70 chamadas
+</code></pre>
+<p><strong>Resposta esperada:</strong> T(25) = 755476; a ingênua faz 2700421 chamadas e a memoizada, só 70 (cada n de 3 a 25 calcula uma vez e chama 3).</p>
+<hr>
+<p><strong>Exercício P2102</strong> · ★☆☆ · A escada com degraus quebrados</p>
+<p>A escada do mirante tem 12 degraus, e você sobe de 1 ou de 2 degraus por
+vez. Os degraus 4 e 7 estão quebrados: não dá para pisar neles. De
+quantos jeitos dá para chegar ao degrau 12, saindo do chão (degrau 0)?
+Escreva do zero a tabela de baixo para cima: formas[0] = 1 e, para cada
+degrau i, formas[i] = formas[i - 1] + formas[i - 2], menos nos quebrados,
+que ficam com 0. Mostre a tabela e a resposta.</p>
+<pre><code class="language-text">Saída esperada:
+degrau  0: 1
+degrau  1: 1
+degrau  2: 2
+degrau  3: 3
+degrau  4: 0
+degrau  5: 3
+degrau  6: 3
+degrau  7: 0
+degrau  8: 3
+degrau  9: 3
+degrau 10: 6
+degrau 11: 9
+degrau 12: 15
+Jeitos de chegar ao topo: 15
+</code></pre>
+<p><strong>Resposta esperada:</strong> 15 jeitos. Sem degraus quebrados seriam 233.</p>
+<hr>
+<p><strong>Exercício P2103</strong> · ★☆☆ · O carteiro e as ruas em obra</p>
+<p>O carteiro sai da agência no canto de cima à esquerda de um bairro em
+grade 5 × 6 e vai até a última casa, no canto de baixo à direita,
+andando só para a direita ou para baixo. As esquinas com X estão em
+obra e não dá para passar. Quantos caminhos ele tem? Complete o laço que
+preenche a tabela: cam[l][c] = cam[l - 1][c] + cam[l][c - 1], com 0 nas
+esquinas em obra. O programa mostra a tabela inteira.</p>
+<pre><code class="language-text">. . . . . .
+. X . . X .
+. . . X . .
+X . . . . .
+. . X . . .
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+   1   1   1   1   1   1
+   1   0   1   2   0   1
+   1   1   2   0   0   1
+   0   1   3   3   3   4
+   0   1   0   3   6  10
+Caminhos: 10
+</code></pre>
+<p><strong>Resposta esperada:</strong> 10 caminhos. A esquina (3, 0) em obra zera toda a coluna 0 abaixo dela.</p>
+<hr>
+<p><strong>Exercício P2104</strong> · ★☆☆ · As fichas do fliperama</p>
+<p>O fliperama vende fichas em pacotes de 1, 5, 6 e 9 fichas, e você quer
+exatamente 11 fichas com o menor número de pacotes. O guloso pega 9 + 1</p>
+<ul>
+<li>1 (3 pacotes), mas dá para fazer melhor. Complete a tabela do troco
+mínimo, min[v] = 1 + o menor min[v - p] entre os pacotes p que cabem, e
+guarde em ult[v] o pacote usado no ótimo, para reconstruir a compra.</li>
+</ul>
+<pre><code class="language-text">Saída esperada:
+Mínimo para 11 fichas: 2 pacotes
+Compra: 5 6
+</code></pre>
+<p><strong>Resposta esperada:</strong> 2 pacotes, 6 + 5 (ou 5 + 6: a ordem depende de como você testa).</p>
+<hr>
+<p><strong>Exercício P2105</strong> · ★☆☆ · As fatias do bolo de rolo</p>
+<p>A doceira vende bolo de rolo em fatias, e o preço depende do comprimento
+da fatia (o preço por cm muda de um tamanho para outro):</p>
+<pre><code class="language-text">cm     1   2   3   4   5   6
+R$     3   7  11  13  16  20
+</code></pre>
+<p>Um rolo de 10 cm pode ser cortado como ela quiser (ou não cortado, se
+coubesse na tabela). Quanto ela ganha, no máximo? Este é o CORTE DE
+HASTE do Cormen (15.1). Complete o laço de baixo para cima: melhor[j] é o
+maior valor de um pedaço de j cm, testando a primeira fatia de cada
+tamanho i e somando melhor[j - i].</p>
+<pre><code class="language-text">Saída esperada:
+ 1 cm: R$ 3
+ 2 cm: R$ 7
+ 3 cm: R$ 11
+ 4 cm: R$ 14
+ 5 cm: R$ 18
+ 6 cm: R$ 22
+ 7 cm: R$ 25
+ 8 cm: R$ 29
+ 9 cm: R$ 33
+10 cm: R$ 36
+Fatias: 1 3 3 3
+</code></pre>
+<p><strong>Resposta esperada:</strong> R$ 36, com fatias de 1, 3, 3 e 3 cm. A fatia de 3 cm é a que rende mais por cm (R$ 3,67), mas 10 não é múltiplo de 3.</p>
+<hr>
+<p><strong>Exercício P2106</strong> · ★☆☆ · A maior fila em ordem de altura</p>
+<p>Na foto da turma, 10 crianças estão na ordem da chamada, com estas
+alturas em cm:</p>
+<pre><code class="language-text">121 135 118 140 127 132 145 124 150 138
+</code></pre>
+<p>Sem trocar ninguém de lugar, a professora quer tirar crianças da foto
+para que as que ficam estejam em altura crescente, deixando o MAIOR
+número possível. Isso é a SUBSEQUÊNCIA CRESCENTE MÁXIMA. Escreva do zero
+a PD O(n²): lis[i] é o tamanho da maior subsequência crescente que
+TERMINA na criança i; lis[i] = 1 + o maior lis[j] com j &lt; i e altura[j] &lt;
+altura[i]. Mostre lis[] e a resposta.</p>
+<pre><code class="language-text">Saída esperada:
+lis: 1 2 1 3 2 3 4 2 5 4
+Maior fila crescente: 5 crianças
+</code></pre>
+<p><strong>Resposta esperada:</strong> 5 crianças, por exemplo 121 135 140 145 150 ou 121 127 132 145 150.</p>
+<hr>
+<p><strong>Exercício P2107</strong> · ★☆☆ · Plantões sem dois seguidos</p>
+<p>Uma enfermeira pode pegar plantões extras nos próximos 9 dias, mas a
+regra do hospital proíbe dois plantões em dias seguidos. Cada dia paga
+um valor diferente (fim de semana e feriado pagam mais):</p>
+<pre><code class="language-text">dia:   1    2    3    4    5    6    7    8    9
+R$:   180  250  160  300  120  220  400  150  210
+</code></pre>
+<p>Quanto ela ganha, no máximo? Escreva do zero a PD: ganho[i] é o melhor
+valor usando os dias 1 a i. No dia i, ou ela não trabalha (fica
+ganho[i - 1]) ou trabalha (valor[i] + ganho[i - 2]). Depois, reconstrua
+os dias escolhidos andando de trás para a frente.</p>
+<pre><code class="language-text">Saída esperada:
+Ganho máximo: R$ 1160
+Dias: 2 4 7 9
+</code></pre>
+<p><strong>Resposta esperada:</strong> R$ 1160, nos dias 2, 4, 7 e 9.</p>
+<hr>
+<p><strong>Exercício P2108</strong> · ★☆☆ · A tabela da LCS na tela</p>
+<p>Para entender a LCS de verdade, vale ver a tabela. O programa abaixo
+calcula a LCS de ARARA e ARAPUA e mostra só o tamanho. Instrumente-o:
+mostre a tabela inteira, com as letras de B no cabeçalho e as de A na
+frente de cada linha, como na saída. A linha 0 e a coluna 0 (a palavra
+vazia) também aparecem.</p>
+<pre><code class="language-text">Saída esperada:
+     -  A  R  A  P  U  A
+  -  0  0  0  0  0  0  0
+  A  0  1  1  1  1  1  1
+  R  0  1  2  2  2  2  2
+  A  0  1  2  3  3  3  3
+  R  0  1  2  3  3  3  3
+  A  0  1  2  3  3  3  4
+LCS de ARARA e ARAPUA: 4 letras
+</code></pre>
+<p><strong>Resposta esperada:</strong> a tabela de cima, com 4 no canto (ARAA, por exemplo, é comum às duas).</p>
+<hr>
+<p><strong>Exercício P2109</strong> · ★☆☆ · O maior trecho igual</p>
+<p>A LCS deixa pular letras. Às vezes você quer o maior trecho CONTÍGUO que
+aparece nas duas sequências: a MAIOR SUBSTRING COMUM. O laboratório
+comparou dois pedaços de DNA:</p>
+<pre><code class="language-text">A: GATTACAGGT
+B: TTACCAGGTA
+</code></pre>
+<p>Escreva do zero a PD: s[i][j] é o tamanho do maior trecho comum que
+TERMINA em A[i - 1] e B[j - 1]. Se as letras são iguais, s[i][j] =
+s[i - 1][j - 1] + 1; se são diferentes, o trecho quebra: s[i][j] = 0.
+Guarde o maior valor e onde ele termina, e mostre o trecho.</p>
+<pre><code class="language-text">Saída esperada:
+Maior trecho comum: CAGGT (5 letras)
+</code></pre>
+<p><strong>Resposta esperada:</strong> CAGGT, com 5 letras (a LCS das duas é maior).</p>
+<hr>
+<p><strong>Exercício P2110</strong> · ★☆☆ · Quantas mensagens cabem nesses números?</p>
+<p>Um aplicativo antigo codifica letras como números: A = 1, B = 2, ...,
+Z = 26, e manda tudo grudado. A sequência 226 pode ser BZ (2 26), VF
+(22 6) ou BBF (2 2 6): 3 leituras. Quantas leituras tem 1122612?
+Escreva do zero a PD: formas[i] é o número de leituras dos i primeiros
+dígitos. O dígito i sozinho vale se não é &#39;0&#39;; os dígitos i - 1 e i
+juntos valem se formam um número de 10 a 26.</p>
+<pre><code class="language-text">Saída esperada:
+226: 3 leituras
+1122612: 16 leituras
+301: 0 leituras
+</code></pre>
+<p><strong>Resposta esperada:</strong> 3 para 226, 16 para 1122612 e 0 para 301 (o 30 e o 0 sozinho não são letras).</p>
+<h3>★★☆ Para pensar</h3>
+<p><strong>Exercício P2111</strong> · ★★☆ · Dois barcos com o mesmo peso</p>
+<p>Oito caixas de açaí vão descer o rio em dois barcos, e para a viagem ser
+segura os dois precisam levar EXATAMENTE o mesmo peso. As caixas pesam
+(kg): 12 7 9 15 6 11 8 4. Dá para dividir? Este é o problema da
+PARTIÇÃO: com total 72, basta achar um subconjunto que some 36. Escreva
+do zero a tabela booleana pode[i][s] (&quot;com as i primeiras caixas, dá
+para somar s?&quot;) e, se der, reconstrua as caixas do primeiro barco.</p>
+<pre><code class="language-text">Saída esperada:
+Barco 1: 12 9 15 (36 kg)
+Barco 2: 7 6 11 8 4 (36 kg)
+</code></pre>
+<p><strong>Resposta esperada:</strong> dá. Barco 1 com 12 + 9 + 15 = 36 kg (a reconstrução de trás para a frente acha esta) e o resto no barco 2.</p>
+<hr>
+<p><strong>Exercício P2112</strong> · ★★☆ · A mochila de uma linha só</p>
+<p>Este programa tem um erro de propósito. A mochila 0/1 não precisa da
+tabela n × W inteira: uma linha só, melhor[w], basta, desde que o laço
+de w ande de TRÁS PARA A FRENTE. A feirante tem uma caixa térmica de 10
+kg e quatro produtos, cada um levado inteiro ou não levado:</p>
+<pre><code class="language-text">produto   queijo  manteiga  doce  requeijão
+kg          4        3       5       2
+R$         40       27      45      16
+</code></pre>
+<p>O programa compila sem aviso e roda, mas responde R$ 96, mais do que é
+possível: ele está levando o mesmo produto mais de uma vez. Conserte.</p>
+<pre><code class="language-text">Saída esperada:
+Melhor valor em 10 kg: R$ 88
+</code></pre>
+<p><strong>Resposta esperada:</strong> for (int w = CAP; w &gt;= kg[i]; w--). O ótimo é R$ 88: manteiga + doce + requeijão, exatamente 10 kg.</p>
+<hr>
+<p><strong>Exercício P2113</strong> · ★★☆ · LCS de três versões</p>
+<p>Três alunos copiaram o mesmo resumo e cada um errou umas letras. O
+professor quer a maior sequência de letras que aparece, na ordem, nas
+TRÊS versões. É a LCS com três strings: a tabela vira um cubo
+t[i][j][k]. Se as três letras a[i - 1], b[j - 1] e c[k - 1] são iguais,
+t = 1 + t[i - 1][j - 1][k - 1]; senão, o máximo de tirar uma letra de
+cada uma das três (t[i - 1][j][k], t[i][j - 1][k] e t[i][j][k - 1]).
+Escreva do zero e reconstrua a sequência.</p>
+<pre><code class="language-text">A: AMAZONIA
+B: AMAZONAS
+C: MAZOMBA
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Comum às três: MAZOA (5 letras)
+</code></pre>
+<p><strong>Resposta esperada:</strong> MAZOA, 5 letras. O custo é O(m · n · p).</p>
+<hr>
+<p><strong>Exercício P2114</strong> · ★★☆ · Edição com troca mais cara</p>
+<p>No corretor do teclado do celular, trocar uma letra por outra é menos
+provável que esquecer ou repetir uma letra, então a empresa deu pesos:
+inserir custa 1, remover custa 1 e TROCAR custa 2 (o mesmo que remover e
+inserir). O programa abaixo é o Levenshtein comum, com troca custando 1.
+Estenda-o para receber os três custos como parâmetros e mostre, para
+cada par, a distância comum e a ponderada.</p>
+<pre><code class="language-text">Saída esperada:
+CASA -&gt; COISA: comum 2, troca cara 3
+GATO -&gt; PATO: comum 1, troca cara 2
+BOLA -&gt; LOBA: comum 2, troca cara 4
+FEIRA -&gt; FERIADO: comum 4, troca cara 4
+</code></pre>
+<p><strong>Resposta esperada:</strong> com troca 2, a distância de edição é m + n - 2 · LCS. CASA para COISA vai de 2 para 3; veja os outros na saída.</p>
+<hr>
+<p><strong>Exercício P2115</strong> · ★★☆ · A trilha que só sobe</p>
+<p>Um trilheiro mediu a altitude (em metros) de 12 pontos de uma trilha na
+Serra do Tepequém, na ordem do caminho:</p>
+<pre><code class="language-text">640 702 655 690 735 610 760 720 805 780 850 830
+</code></pre>
+<p>Ele quer escolher pontos para fotografar, sem mudar a ordem, de modo que
+cada foto seja num ponto MAIS ALTO que a anterior, com o maior número de
+fotos. Escreva do zero a subsequência crescente máxima O(n²) com
+RECONSTRUÇÃO: além de lis[i], guarde ant[i], o ponto anterior na melhor
+sequência que termina em i (-1 se não há). Mostre a sequência.</p>
+<pre><code class="language-text">Saída esperada:
+Fotos: 7
+Altitudes: 640 655 690 735 760 805 850
+</code></pre>
+<p><strong>Resposta esperada:</strong> 7 fotos: 640 655 690 735 760 805 850. Empate de lis: fica o primeiro j que achou (use &gt;, não &gt;=).</p>
+<hr>
+<p><strong>Exercício P2116</strong> · ★★☆ · Corte de haste com custo de corte</p>
+<p>A serralheria vende barras de alumínio por comprimento, e cada CORTE
+custa R$ 3 de mão de obra (o Cormen propõe essa variação no exercício
+15.1-3). Os preços:</p>
+<pre><code class="language-text">m     1   2   3   4   5   6   7   8
+R$    2   6   9  12  15  18  20  22
+</code></pre>
+<p>O programa abaixo é o corte de haste sem custo de corte, para uma barra
+de 8 m. Estenda-o: some o custo de R$ 3 a cada corte (vender a barra
+inteira não tem corte) e mostre, para as duas versões, o valor máximo e
+os pedaços.</p>
+<pre><code class="language-text">Saída esperada:
+Custo por corte R$ 0: R$ 24, pedaços: 2 6
+Custo por corte R$ 3: R$ 22, pedaços: 8
+</code></pre>
+<p><strong>Resposta esperada:</strong> sem custo, R$ 24 com pedaços de 2 m e 6 m (quatro de 2 m empatam); com R$ 3 por corte, o melhor é vender a barra inteira por R$ 22.</p>
+<hr>
+<p><strong>Exercício P2117</strong> · ★★☆ · Pagar com o mínimo de cédulas da carteira</p>
+<p>No troco mínimo do assunto 0139, cada moeda pode ser usada quantas vezes
+quiser. Na carteira não: há UMA cédula de cada. Você tem 50, 20, 20, 10,
+5, 5, 2 e 2 reais e vai pagar R$ 64 exatos com o menor número de
+cédulas. Escreva do zero a PD 0/1: min[s] é o menor número de cédulas
+que soma s; para cada cédula, atualize min[s] de TRÁS PARA A FRENTE (como
+na mochila de uma linha), e guarde quem foi usada numa tabela usou[i][s]
+para reconstruir.</p>
+<pre><code class="language-text">Saída esperada:
+Mínimo: 4 cédulas
+Cédulas: 2 2 10 50
+</code></pre>
+<p><strong>Resposta esperada:</strong> 4 cédulas, 50 + 10 + 2 + 2.</p>
+<hr>
+<p><strong>Exercício P2118</strong> · ★★☆ · O drone que gasta menos bateria</p>
+<p>Um drone de entregas cruza uma grade 5 × 5 de quarteirões do canto de
+cima à esquerda até o canto de baixo à direita, só para a direita (D) ou
+para baixo (B). Cada quarteirão gasta uma porcentagem da bateria (o
+vento muda), e # é prédio alto, onde ele não pode passar:</p>
+<pre><code class="language-text">3 2 4 1 5
+1 # 2 # 2
+4 1 3 1 1
+2 # 5 2 #
+6 2 1 3 2
+</code></pre>
+<p>Escreva do zero a PD do CAMINHO MÍNIMO EM GRADE: custo[l][c] = gasto do
+quarteirão + o menor entre custo[l - 1][c] e custo[l][c - 1]. Prédio vale
+infinito. Reconstrua o caminho como uma string de D e B.</p>
+<pre><code class="language-text">Saída esperada:
+Bateria gasta: 20%
+Caminho: BBDDDBBD
+</code></pre>
+<p><strong>Resposta esperada:</strong> 20% da bateria, pelo caminho BBDDDBBD.</p>
+<hr>
+<p><strong>Exercício P2119</strong> · ★★☆ · O triângulo do cofrinho</p>
+<p>No jogo da quermesse, as moedas estão num triângulo. Você começa no topo
+e, a cada linha, desce para a moeda logo abaixo ou para a de baixo à
+direita, somando os valores (em reais). Qual o maior total?</p>
+<pre><code class="language-text">      7
+     3 8
+    8 1 0
+   2 7 4 4
+  4 5 2 6 5
+ 1 6 9 3 2 8
+</code></pre>
+<p>Testar todos os caminhos custa 2^(n-1). Escreva do zero a PD de BAIXO
+PARA CIMA: a última linha já é a resposta de cada moeda; em cada linha de
+cima, melhor[l][c] = t[l][c] + o maior entre melhor[l + 1][c] e
+melhor[l + 1][c + 1]. O topo fica com a resposta. Mostre também o
+caminho.</p>
+<pre><code class="language-text">Saída esperada:
+Maior total: R$ 39
+Caminho: 7 3 8 7 5 9
+</code></pre>
+<p><strong>Resposta esperada:</strong> R$ 39, pelo caminho 7 3 8 7 5 9.</p>
+<hr>
+<p><strong>Exercício P2120</strong> · ★★☆ · Quantas árvores de busca diferentes?</p>
+<p>Com as chaves 1, 2 e 3 dá para montar 5 árvores binárias de busca
+diferentes (raiz 1, 2 ou 3, e as formas das subárvores). Quantas há com
+n chaves? Escolhendo a raiz r, as r - 1 chaves menores formam a
+subárvore esquerda e as n - r maiores a direita, e cada combinação vale:</p>
+<pre><code class="language-text">arv(0) = 1;   arv(n) = soma, para r de 1 a n, de arv(r - 1) · arv(n - r)
+</code></pre>
+<p>Esses são os números de CATALAN. Escreva do zero a versão memoizada
+(de cima para baixo, com memo[] e -1 em &quot;não sei&quot;) e mostre arv(n) para
+n de 1 a 15, contando quantas vezes a soma foi de fato calculada.</p>
+<pre><code class="language-text">Saída esperada:
+n =  1: 1
+n =  2: 2
+n =  3: 5
+n =  4: 14
+n =  5: 42
+n =  6: 132
+n =  7: 429
+n =  8: 1430
+n =  9: 4862
+n = 10: 16796
+n = 11: 58786
+n = 12: 208012
+n = 13: 742900
+n = 14: 2674440
+n = 15: 9694845
+Cálculos: 16
+</code></pre>
+<p><strong>Resposta esperada:</strong> 1, 2, 5, 14, 42, ... até 9694845, com 16 cálculos (um para cada n de 0 a 15): sem memo, arv(15) faria milhões de chamadas.</p>
+<h3>★★★ Desafio</h3>
+<p><strong>Exercício P2121</strong> · ★★★ · A ordem das multiplicações de matrizes</p>
+<p>Multiplicar uma matriz p × q por uma q × r custa p · q · r
+multiplicações de números. Num produto A1 A2 A3 A4 A5, o resultado é o
+mesmo em qualquer parentização, mas o custo muda muito. As dimensões
+são (Ai é d[i - 1] × d[i]):</p>
+<pre><code class="language-text">d = 30 35 15 5 10 20
+</code></pre>
+<p>Escreva do zero a PD da MULTIPLICAÇÃO EM CADEIA (Cormen 15.2): m[i][j] é
+o menor custo para multiplicar Ai..Aj; m[i][i] = 0 e, para i &lt; j,
+m[i][j] = min, para k de i a j - 1, de m[i][k] + m[k + 1][j] + d[i - 1]
+· d[k] · d[j]. Preencha por tamanho de trecho crescente, guarde o k
+ótimo em s[i][j] e mostre a parentização com uma função recursiva.
+Compare com a ordem da esquerda para a direita.</p>
+<pre><code class="language-text">Saída esperada:
+Ótimo: 11875 multiplicações com ((A1(A2A3))(A4A5))
+Da esquerda para a direita: 25500 multiplicações
+</code></pre>
+<p><strong>Resposta esperada:</strong> 11875 multiplicações com ((A1(A2A3))(A4A5)), contra 25500 da esquerda para a direita.</p>
+<hr>
+<p><strong>Exercício P2122</strong> · ★★★ · Todas as maiores subsequências comuns</p>
+<p>A LCS nem sempre é única. Entre ABCBDAB e BDCABA (o exemplo clássico do
+Cormen) há várias sequências de tamanho máximo. Escreva do zero: monte a
+tabela da LCS e depois uma recursão que, a partir de (m, n), gera TODAS
+as LCS: se as letras são iguais, a letra entra e você vai na diagonal;
+senão, siga para CADA vizinho (de cima e da esquerda) que tem o mesmo
+valor da casa atual. Caminhos diferentes podem dar a mesma string: guarde
+as achadas num vetor de strings e só acrescente as novas. Mostre-as em
+ordem alfabética (qsort com strcmp).</p>
+<pre><code class="language-text">Saída esperada:
+LCS de ABCBDAB e BDCABA: tamanho 4
+  BCAB
+  BCBA
+  BDAB
+3 sequências diferentes
+</code></pre>
+<p><strong>Resposta esperada:</strong> 3 LCS de 4 letras: BCAB, BCBA e BDAB.</p>
+<hr>
+<p><strong>Exercício P2123</strong> · ★★★ · A árvore de busca ótima do dicionário</p>
+<p>Um dicionário de bolso tem 5 palavras, em ordem alfabética, e se sabe
+quantas vezes cada uma é procurada por mil buscas:</p>
+<pre><code class="language-text">chave    açaí  boto  cuia  jambu  tacacá
+buscas    15    10    5     40     30
+</code></pre>
+<p>Numa árvore binária de busca, procurar uma chave na profundidade p (a
+raiz tem profundidade 1) custa p comparações. Qual árvore minimiza o
+custo total (soma de buscas · profundidade)? Esta é a ÁRVORE DE BUSCA
+ÓTIMA (Cormen 15.5, aqui sem as buscas que falham). Escreva do zero a
+PD: c[i][j] é o custo ótimo para as chaves i..j; escolhendo a raiz r,
+c[i][j] = c[i][r - 1] + c[r + 1][j] + soma das buscas de i a j (todas
+descem um nível). Mostre o custo, a raiz de cada subárvore em pré-ordem e
+compare com a árvore &quot;equilibrada&quot; de raiz cuia.</p>
+<pre><code class="language-text">Saída esperada:
+Custo ótimo: 180 comparações
+  jambu (nível 1)
+  açaí (nível 2)
+  boto (nível 3)
+  cuia (nível 4)
+  tacacá (nível 2)
+Raiz cuia: 235 comparações
+</code></pre>
+<p><strong>Resposta esperada:</strong> custo 180, com jambu na raiz e tacacá logo abaixo. A árvore de raiz cuia (açaí e boto à esquerda, jambu e tacacá à direita) custa 235: equilibrar não é o mesmo que otimizar.</p>
+<hr>
+<p><strong>Exercício P2124</strong> · ★★★ · A mochila quando a capacidade é enorme</p>
+<p>A tabela da mochila 0/1 tem n × W casas. Quando W é enorme (um caminhão
+de 100 000 kg) e os valores são pequenos, é melhor trocar de dimensão:
+menor_peso[v] é o MENOR peso para conseguir valor exatamente v, e a
+resposta é o maior v com menor_peso[v] &lt;= W. Uma transportadora tem 6
+lotes (peso em kg, valor em mil reais) e um caminhão de 100 000 kg:</p>
+<pre><code class="language-text">lote     1      2      3      4      5      6
+kg     41000  23000  37000  18000  29000  52000
+valor    12      7     11      5      9     15
+</code></pre>
+<p>Escreva do zero essa PD (uma linha só, v de trás para a frente, como na
+mochila de uma linha) e reconstrua os lotes guardando, numa tabela
+pegou[i][v], se o lote i melhorou menor_peso[v].</p>
+<pre><code class="language-text">Saída esperada:
+Maior valor: 29 mil reais (99000 kg)
+Lotes: 4 5 6
+Posições da tabela: 60 (a mochila comum teria 100001)
+</code></pre>
+<p><strong>Resposta esperada:</strong> 29 mil reais com os lotes 4, 5 e 6 (99000 kg). Os lotes 1, 2 e 3 valeriam 30, mas pesam 101000 kg.</p>
+<hr>
+<p><strong>Exercício P2125</strong> · ★★★ · Dois times equilibrados</p>
+<p>Dez amigos vão jogar futebol, e cada um tem uma nota de 1 a 10 dada pelo
+grupo: Ana 8, Beto 6, Caio 9, Duda 4, Enzo 7, Fábio 5, Gabi 10, Hugo 3,
+Iara 6 e João 7. Eles querem DOIS TIMES DE 5 com a soma das notas o mais
+parecida possível. Escreva do zero a PD com o tamanho do time na tabela:
+pode[k][s] diz se dá para escolher k jogadores com soma s. Processe os
+jogadores um a um (k e s de trás para a frente, para cada um entrar uma
+vez), guardando quem completou cada casa pela primeira vez para
+reconstruir. Escolha a soma s com 5 jogadores mais perto de total / 2.</p>
+<pre><code class="language-text">Saída esperada:
+Time 1: Ana Beto Caio Duda Fábio (32 pontos)
+Time 2: Enzo Gabi Hugo Iara João (33 pontos)
+</code></pre>
+<p><strong>Resposta esperada:</strong> times de 32 e 33 pontos (diferença 1); confira os nomes na saída.</p>
+<hr>
+<p><strong>Exercício P2126</strong> · ★★★ · Subsequência crescente em O(n log n)</p>
+<p>A PD O(n²) da subsequência crescente máxima fica lenta com 1 milhão de
+valores. Existe um jeito O(n log n): mantenha fim[k] = o MENOR valor que
+termina uma subsequência crescente de tamanho k + 1 achada até agora. O
+vetor fim[] é sempre crescente, então, para cada valor x, uma BUSCA
+BINÁRIA acha a primeira posição com fim[k] &gt;= x: x substitui fim[k] (ou
+estende o vetor, se maior que todos). O tamanho de fim[] é a resposta.</p>
+<p>Na academia, a carga do supino (kg) em 16 treinos seguidos foi:</p>
+<pre><code class="language-text">40 42 38 45 43 47 41 50 48 52 44 55 53 49 58 60
+</code></pre>
+<p>Escreva do zero, guardando o ÍNDICE do valor em cada fim[k] e, para cada
+treino, o índice do anterior na sequência (ant[]), para reconstruir a
+maior sequência de treinos com carga sempre crescente.</p>
+<pre><code class="language-text">Saída esperada:
+Maior sequência crescente: 9 treinos
+Cargas: 40 42 43 47 48 52 53 58 60
+</code></pre>
+<p><strong>Resposta esperada:</strong> 9 treinos: 40 42 43 47 48 52 53 58 60. Há outras de mesmo tamanho (40 42 45 47 50 52 55 58 60, por exemplo); o fim[] com o menor final de cada tamanho leva a esta.</p>
+<hr>
+<p><strong>Exercício P2127</strong> · ★★★ · A distância que erra por uma letra</p>
+<p>Este programa tem um erro de propósito. Ele calcula a distância de
+edição (Levenshtein: inserir, remover ou trocar, custo 1 cada) entre
+pares de palavras e compila sem aviso e roda limpo no sanitizer, mas os
+números estão errados: diz que CAVALO e CAVALO estão a distância 2,
+por exemplo. Ache e conserte o erro. A tabela, a borda e o mínimo dos
+três vizinhos estão certos.</p>
+<pre><code class="language-text">Saída esperada:
+CAVALO -&gt; CAVALO: 0
+CAVALO -&gt; CABELO: 2
+MANAUS -&gt; MANAUARA: 3
+TUCANO -&gt; TUCUMA: 3
+</code></pre>
+<p><strong>Resposta esperada:</strong> compare a[i - 1] com b[j - 1]. A tabela tem uma linha e uma coluna a mais que as strings (a da palavra vazia), por isso os índices andam deslocados de um.</p>
+<hr>
+<p><strong>Exercício P2128</strong> · ★★★ · As reservas que dão mais dinheiro</p>
+<p>O salão de festas recebeu 8 pedidos de reserva para sábado, cada um
+[ini, fim) em horas e com o valor que o cliente paga:</p>
+<pre><code class="language-text">pedido   A       B       C       D        E        F        G        H
+horas  [8,11)  [9,13)  [10,12) [11,15)  [12,16)  [14,18)  [15,20)  [17,22)
+R$      400     700     300     600      500     1500      900      450
+</code></pre>
+<p>Como no módulo 20, só cabe uma festa por vez. Mas agora o objetivo é o
+MAIOR FATURAMENTO, e o guloso &quot;termina primeiro&quot; não serve mais. A PD da
+SELEÇÃO DE INTERVALOS COM PESOS: ordene por fim; p[j] é o último pedido
+(na ordem) que termina até o início do j; melhor[j] = max(melhor[j - 1],
+valor[j] + melhor[p[j]]). Escreva do zero, ache p[j] por busca binária e
+reconstrua os pedidos aceitos.</p>
+<pre><code class="language-text">Saída esperada:
+Faturamento máximo: R$ 2200
+Pedidos: B F
+</code></pre>
+<p><strong>Resposta esperada:</strong> R$ 2200 com B e F. O guloso &quot;termina primeiro&quot; pega A, D e G: mais festas (3), mas só R$ 1900.</p>
+<hr>
+<p><strong>Exercício P2129</strong> · ★★★ · Juntar os sacos vizinhos</p>
+<p>No armazém, 6 sacos de farinha estão enfileirados, com 4, 7, 2, 6, 3 e 5
+kg. A máquina junta DOIS SACOS VIZINHOS num só, e o custo da operação é
+o peso do saco resultante. Ela repete até sobrar um saco. Qual a ordem
+mais barata? Se desse para juntar quaisquer dois (não só vizinhos), o
+guloso de Huffman (módulo 20) resolveria. Com a regra dos vizinhos, o
+guloso falha e entra a PD DE INTERVALOS: c[i][j] é o menor custo para
+transformar os sacos i..j em um; c[i][i] = 0 e c[i][j] = min, para k de
+i a j - 1, de c[i][k] + c[k + 1][j] + soma(i, j). Escreva do zero as
+duas contas e mostre a ordem ótima entre vizinhos como parênteses.</p>
+<pre><code class="language-text">Saída esperada:
+Só vizinhos: custo 70 com ((4 7) ((2 6) (3 5)))
+Quaisquer dois (Huffman): custo 68
+</code></pre>
+<p><strong>Resposta esperada:</strong> o custo entre vizinhos é maior que o de Huffman, e a ordem ótima está na saída.</p>
+<hr>
+<p><strong>Exercício P2130</strong> · ★★★ · O caixeiro viajante do Amazonas</p>
+<p>Um vendedor sai de Manaus, visita Itacoatiara, Manacapuru, Parintins,
+Tefé e Coari (cada uma uma vez) e volta a Manaus. As distâncias (em
+horas de barco, num mapa simplificado) estão na matriz do main. Testar
+as 5! = 120 ordens funciona, mas com 20 cidades seriam 19! (mais de 10^17).
+A PD de HELD-KARP faz O(2^n · n²): custo[S][v] é o menor tempo para sair
+de Manaus, passar por TODAS as cidades do conjunto S (uma máscara de
+bits) e terminar em v (v está em S). Então</p>
+<pre><code class="language-text">custo[S][v] = min, para u em S sem v, de custo[S sem v][u] + dist[u][v]
+</code></pre>
+<p>e a resposta é o min de custo[todas][v] + dist[v][0]. Escreva do zero a
+PD, reconstrua a rota e confira com a força bruta das permutações.</p>
+<pre><code class="language-text">Saída esperada:
+Held-Karp: 94 horas
+Rota: Manaus &gt; Manacapuru &gt; Coari &gt; Tefé &gt; Parintins &gt; Itacoatiara &gt; Manaus
+Força bruta: 94 horas
+</code></pre>
+<p><strong>Resposta esperada:</strong> o tempo mínimo e a rota da saída, iguais nos dois métodos. A PD preenche 32 · 5 casas; a força bruta, 120 rotas.</p>
+<hr>
+<h2>Desafios do módulo</h2>
+<p>Problemas para fechar o módulo, misturando os assuntos. Escreva em C e rode
+com as flags de estudo.</p>
+<p><strong>1. A madeireira e o corte das tábuas.</strong> Uma tábua de 8 m pode ser vendida
+inteira ou cortada em pedaços de metro inteiro. O preço de cada pedaço, por
+tamanho de 1 a 8 m, é: R$ 2, 5, 9, 10, 13, 17, 18 e 22. Qual o maior
+faturamento com uma tábua de 8 m, e quais cortes?</p>
+<details><summary>Resposta</summary><p>É um &quot;troco&quot; de maximização: <code>B[k] = maior entre preco[i] + B[k - i]</code>, para
+<code>i</code> de 1 a <code>k</code>, com <code>B[0] = 0</code>. A tabela fica <code>0 2 5 9 11 14 18 20 23</code>, e a
+resposta é <strong>R$ 23</strong>: pedaços de 2 + 3 + 3 m (5 + 9 + 9). Vender inteira dá
+só R$ 22. Guarde em <code>S[k]</code> o tamanho do primeiro pedaço para reconstruir os
+cortes, como o <code>ultimo[]</code> do assunto 0139.</p>
+</details><p><strong>2. O maior terreno quadrado.</strong> Num mapa de lotes, 1 é terreno livre e 0 é
+ocupado:</p>
+<pre><code>1 0 1 1 1
+1 1 1 1 1
+0 1 1 1 1
+1 1 1 1 0
+1 1 0 1 1
+</code></pre>
+<p>Qual o maior quadrado só de 1s? Resolva em O(linhas × colunas).</p>
+<details><summary>Resposta</summary><p><code>q[i][j]</code> = lado do maior quadrado de 1s com canto inferior direito em
+<code>(i, j)</code>. Se a célula é 1, <code>q[i][j] = 1 + menor(q[i-1][j], q[i][j-1], q[i-1][j-1])</code>; se é 0, vale 0. O maior valor é <strong>3</strong>, terminando em <code>(2, 4)</code>:
+linhas 0 a 2, colunas 2 a 4. É a mesma &quot;olhada para três vizinhos&quot; da
+distância de edição.</p>
+</details><p><strong>3. A grade com atalho diagonal.</strong> Na grade do A275, sem obras, o
+entregador pode andar para a direita, para baixo <strong>ou na diagonal</strong> (direita
+e baixo de uma vez). Quantas rotas existem numa grade de 4 × 4 cruzamentos,
+de um canto ao outro?</p>
+<details><summary>Resposta</summary><p>Agora são três vizinhos: <code>r[i][j] = r[i-1][j] + r[i][j-1] + r[i-1][j-1]</code>,
+com <code>r[0][0] = 1</code>. São <strong>63</strong> rotas (contra 20 sem a diagonal). Esses são
+os números de Delannoy.</p>
+</details><p><strong>4. A palavra que vira palíndromo.</strong> Qual o menor número de letras que é
+preciso <strong>inserir</strong> em ARARAQUARA para ela virar um palíndromo (ler igual
+de trás para a frente)? E em OVO? E em BANANA?</p>
+<details><summary>Resposta</summary><p>O que já é &quot;palíndromo escondido&quot; na palavra é a LCS dela com ela mesma
+invertida; o resto precisa ganhar um par. Inserções = <code>n - LCS(s, reverso(s))</code>: ARARAQUARA precisa de <strong>3</strong>, OVO de <strong>0</strong> e BANANA de <strong>1</strong>
+(BANANAB). Uma PD direta, <code>p[i][j]</code> para o pedaço <code>s[i..j]</code>, dá o mesmo
+resultado.</p>
+</details><p><strong>5. Mochila com estoque infinito.</strong> Com capacidade 10 e itens (peso,
+valor) = (3, 40), (4, 50), (5, 62), compare a mochila 0/1 com a mochila
+<strong>ilimitada</strong>, em que cada item pode ir quantas vezes quiser.</p>
+<details><summary>Resposta</summary><p>A 0/1 dá <strong>112</strong> (pesos 4 + 5). A ilimitada dá <strong>130</strong> (3 + 3 + 4: 40 + 40</p>
+<ul>
+<li>50). A diferença no código é uma só: no vetor de uma linha, o laço de
+capacidade <strong>sobe</strong> em vez de descer, exatamente o &quot;erro&quot; do A279. Na
+mochila ilimitada, ele é o certo.</li>
+</ul>
+</details><p><strong>6. Quantas vezes a palavra se esconde.</strong> Quantas vezes ABC aparece como
+<strong>subsequência</strong> em AABBCC? E ANA em BANANA?</p>
+<details><summary>Resposta</summary><p><code>w[k]</code> = de quantos jeitos os <code>k</code> primeiros caracteres do padrão aparecem
+no texto lido até agora. Para cada letra do texto, de <code>k</code> alto para baixo:
+se ela é igual a <code>padrao[k-1]</code>, <code>w[k] += w[k-1]</code> (o mesmo laço descendo da
+mochila 0/1). AABBCC tem <strong>8</strong> (2 × 2 × 2 escolhas); BANANA tem <strong>4</strong>.</p>
+</details><p><strong>7. A maior sequência crescente, sem LCS.</strong> No E846 você usou a LCS com o
+vetor ordenado. Resolva direto: para <code>10 4 12 6 15 8 9 20 3 11</code>, qual o
+tamanho da maior subsequência estritamente crescente?</p>
+<details><summary>Resposta</summary><p><code>f[i]</code> = tamanho da maior crescente que <strong>termina</strong> em <code>v[i]</code>: <code>f[i] = 1 + maior f[j]</code> com <code>j &lt; i</code> e <code>v[j] &lt; v[i]</code>. O vetor <code>f</code> fica <code>1 1 2 2 3 3 4 5 1 5</code>, e a resposta é <strong>5</strong> (por exemplo 4 6 8 9 20). É O(n²); existe uma
+versão O(n log n) com busca binária (assunto 0090).</p>
+</details><p><strong>8. Dá para dividir ao meio?</strong> Cinco irmãos herdaram objetos avaliados em
+R$ 3, 1, 5, 9 e 12 mil e querem saber se dá para dividir tudo em dois
+lotes de <strong>mesmo</strong> valor. E se fossem R$ 3, 1, 5, 9 e 11 mil?</p>
+<details><summary>Resposta</summary><p>É o A280 com a pergunta &quot;a soma total / 2 é alcançável?&quot;. No primeiro caso
+o total é 30 e 15 = 3 + 12 é alcançável: <strong>sim</strong>. No segundo, o total é 29,
+ímpar: <strong>não</strong>, sem nem montar a tabela.</p>
+</details><p><strong>9. Quebrar sem espaços.</strong> Uma mensagem chegou sem espaços:
+<code>cafecomleitequente</code>. Com o dicionário {cafe, com, leite, quente, co, mleite,
+que, nte}, ela pode ser quebrada em palavras? De quantos jeitos?</p>
+<details><summary>Resposta</summary><p><code>q[i]</code> = de quantos jeitos o prefixo de tamanho <code>i</code> se quebra em palavras;
+<code>q[0] = 1</code> e <code>q[i]</code> soma <code>q[i - tamanho]</code> para cada palavra do dicionário
+que termina exatamente na posição <code>i</code>. São <strong>4</strong> jeitos: &quot;cafe com leite&quot;
+ou &quot;cafe co mleite&quot;, seguido de &quot;quente&quot; ou &quot;que nte&quot;. Com memoização, uma
+recursão que testa cada palavra no começo faz o mesmo.</p>
+</details><p><strong>10. Distância de edição com pouca memória.</strong> Duas sequências de DNA têm
+100 mil bases cada. A tabela inteira da distância de edição teria 10¹⁰
+células. Como calcular só a distância com memória O(n)?</p>
+<details><summary>Resposta</summary><p>Cada linha da tabela só usa a de cima: guarde duas linhas e troque os
+ponteiros a cada volta, como no A281. São 2 × 100.001 <code>int</code>, uns 800 KB, em
+vez de 40 GB. O tempo continua O(m × n). Recuperar as operações com pouca
+memória também é possível (algoritmo de Hirschberg, que divide a tabela ao
+meio recursivamente), mas dá mais trabalho.</p>
+</details><h2>Questões no estilo da prova</h2>
+<p>Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma
+alternativa certa. Resolva no papel, com a tabela à mão, antes de abrir o
+gabarito.</p>
+<p><strong>1.</strong> Na mochila 0/1 com capacidade <code>W = 7</code> e os itens (peso, valor) = (1,
+3), (3, 4), (4, 6) e (5, 7), nessa ordem, <code>t[i][c]</code> é o maior valor usando
+só os itens <code>1..i</code> com capacidade <code>c</code>. Qual o valor de <code>t[4][7]</code>?</p>
+<ul>
+<li>(A) 9</li>
+<li>(B) 13</li>
+<li>(C) 10</li>
+<li>(D) 11</li>
+<li>(E) 16</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(C).</strong> A linha 4 da tabela fica <code>0 3 3 4 7 9 10 10</code>. Dois conjuntos
+empatam em 10: pesos 3 + 4 (4 + 6) e pesos 1 + 5 (3 + 7). O 13 (3 + 4 + 6)
+pesaria 8 kg, e o 16 é a soma de todos os valores, sem limite de peso. Veja
+0140.</p>
+</details><p><strong>2.</strong> Qual o tamanho da maior subsequência comum (LCS) de <code>AMAZONAS</code> e
+<code>MANAUS</code>?</p>
+<ul>
+<li>(A) 5</li>
+<li>(B) 4</li>
+<li>(C) 6</li>
+<li>(D) 3</li>
+<li>(E) 8</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A).</strong> <code>MANAS</code>: M, A, N, A e S aparecem nessa ordem nas duas palavras.
+Uma subsequência não precisa ser contígua; a maior <strong>substring</strong> comum
+seria bem menor. O 6 seria a palavra <code>MANAUS</code> inteira, que não é
+subsequência de <code>AMAZONAS</code> (não tem U). Veja 0141.</p>
+</details><p><strong>3.</strong> Sobre a LCS de duas sequências de tamanhos <code>m</code> e <code>n</code> pela tabela de
+programação dinâmica, é correto afirmar:</p>
+<ul>
+<li>(A) o tempo é Θ(m + n), porque cada letra é lida uma vez.</li>
+<li>(B) o tempo é Θ(2^m), porque toda subsequência de uma das sequências é testada.</li>
+<li>(C) para obter só o tamanho da LCS, a tabela inteira de Θ(m × n) posições é indispensável.</li>
+<li>(D) o tempo é Θ(m × n × min(m, n)), porque cada célula percorre uma linha inteira.</li>
+<li>(E) o tempo é Θ(m × n); para obter só o tamanho, duas linhas, Θ(min(m, n)) de memória, bastam.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(E).</strong> São <code>(m + 1) × (n + 1)</code> células, cada uma em O(1). Cada linha só
+lê a de cima, então duas linhas bastam para o tamanho (escolha a sequência
+menor para as colunas). Para <strong>recuperar</strong> a LCS, o caminho simples precisa
+da tabela inteira. Veja 0141 e o A281.</p>
+</details><p><strong>4.</strong> A mochila 0/1 por programação dinâmica roda em O(n × W), em que <code>W</code>
+é a capacidade. Por que isso <strong>não</strong> prova que o problema é polinomial?</p>
+<ul>
+<li>(A) Porque a PD só funciona quando todos os pesos são iguais.</li>
+<li>(B) Porque <code>W</code> é um número da entrada, escrito com cerca de log₂ W bits: O(n × W) é exponencial no tamanho da entrada (tempo pseudopolinomial).</li>
+<li>(C) Porque a tabela tem 2ⁿ linhas.</li>
+<li>(D) Porque a recuperação dos itens custa O(2ⁿ).</li>
+<li>(E) Porque a PD dá só uma aproximação do ótimo.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(B).</strong> Dobrar o número de bits de <code>W</code> eleva <code>W</code> ao quadrado. O(n × W) é
+polinomial no <strong>valor</strong> de <code>W</code>, não no tamanho da entrada; por isso se diz
+<strong>pseudopolinomial</strong>. A versão de decisão da mochila é NP-completa (assunto
+0186). A tabela tem <code>n + 1</code> linhas, e a recuperação é O(n). Veja 0140.</p>
+</details><p><strong>5.</strong> A função abaixo é chamada com <code>memo[]</code> todo em <code>-1</code>. Quantas vezes
+<code>formas</code> é executada, contando a chamada inicial, em <code>formas(20)</code>?</p>
+<pre><code class="language-c">long long memo[50];
+
+long long formas(int n) {
+    if (n &lt;= 1) {
+        return 1;
+    }
+    if (memo[n] != -1) {
+        return memo[n];
+    }
+    memo[n] = formas(n - 1) + formas(n - 2);
+    return memo[n];
+}
+</code></pre>
+<ul>
+<li>(A) 20</li>
+<li>(B) 21</li>
+<li>(C) 10.946</li>
+<li>(D) 39</li>
+<li>(E) 21.891</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(D).</strong> A primeira descida, <code>formas(20)</code>, <code>formas(19)</code>, ..., <code>formas(1)</code>,
+são 20 chamadas. Na volta, cada <code>n</code> de 2 a 20 faz a segunda chamada,
+<code>formas(n - 2)</code>, que acha a resposta pronta (ou é caso base): mais 19. Em
+geral, <code>2n - 1</code>. Sem o memo seriam 21.891 chamadas, e 10.946 é o valor de
+<code>formas(20)</code>. Veja 0138.</p>
+</details><p><strong>6.</strong> Sobre programação dinâmica (PD), analise as afirmações.</p>
+<ul>
+<li>I. Para a PD servir, o problema precisa ter subestrutura ótima e
+subproblemas sobrepostos.</li>
+<li>II. A memoização (de cima para baixo) e o preenchimento da tabela (de baixo
+para cima) resolvem cada subproblema uma única vez.</li>
+<li>III. Assim como no guloso, a PD nunca precisa guardar o resultado de
+subproblemas.</li>
+</ul>
+<p>Marque a alternativa <strong>CORRETA</strong>.</p>
+<ul>
+<li>(A) I e II, apenas.</li>
+<li>(B) I e III, apenas.</li>
+<li>(C) II e III, apenas.</li>
+<li>(D) I, apenas.</li>
+<li>(E) I, II e III.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A).</strong> I é o critério do Cormen: a solução ótima é feita de soluções ótimas
+de subproblemas (<strong>subestrutura ótima</strong>) e esses subproblemas se repetem
+(<strong>sobrepostos</strong>). II é verdadeira: é por guardar o resultado que o custo cai
+de exponencial para polinomial. III é falsa: guardar os resultados é o
+que define a PD; o guloso é que decide sem olhar para trás (0133). Veja 0138 e
+0139.</p>
+</details><p><strong>7.</strong> Com moedas de 1, 3 e 4 e troco de 6, sejam <code>G</code> o número de moedas
+do algoritmo guloso (maior moeda que cabe) e <code>D</code> o mínimo calculado pela
+programação dinâmica <code>dp[v] = 1 + min(dp[v - moeda])</code>. Então:</p>
+<ul>
+<li>(A) G = 2 e D = 2.</li>
+<li>(B) G = 3 e D = 3.</li>
+<li>(C) G = 3 e D = 2.</li>
+<li>(D) G = 2 e D = 3.</li>
+<li>(E) G = 4 e D = 2.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(C).</strong> O guloso faz 4 + 1 + 1 (três moedas); a PD acha 3 + 3 (duas). A PD
+nunca perde para o guloso, porque testa todas as últimas moedas. Veja 0133
+e 0139.</p>
+</details><p><strong>8.</strong> Qual a distância de edição (Levenshtein: inserir, remover ou trocar
+uma letra, custo 1 cada) entre <code>TERRA</code> e <code>TORTA</code>?</p>
+<ul>
+<li>(A) 0</li>
+<li>(B) 1</li>
+<li>(C) 3</li>
+<li>(D) 4</li>
+<li>(E) 2</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(E).</strong> As palavras têm o mesmo tamanho e diferem em duas posições: troca
+o E por O e o segundo R por T. Não dá com 1, porque uma operação só muda
+uma posição (ou o tamanho). Veja 0142.</p>
+</details><p><strong>9.</strong> O trecho preenche o vetor <code>g</code> com capacidade 7 e os itens (peso,
+valor) = (2, 3) e (3, 5). Repare no sentido do laço de <code>c</code>. Qual o valor
+de <code>g[7]</code> no fim?</p>
+<pre><code class="language-c">int peso[] = {2, 3}, valor[] = {3, 5};
+int g[8] = {0};
+for (int i = 0; i &lt; 2; i++) {
+    for (int c = peso[i]; c &lt;= 7; c++) {
+        if (g[c - peso[i]] + valor[i] &gt; g[c]) {
+            g[c] = g[c - peso[i]] + valor[i];
+        }
+    }
+}
+</code></pre>
+<ul>
+<li>(A) 8</li>
+<li>(B) 11</li>
+<li>(C) 10</li>
+<li>(D) 13</li>
+<li>(E) 5</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(B).</strong> Com <code>c</code> <strong>subindo</strong>, <code>g[c - peso[i]]</code> já pode conter o próprio
+item <code>i</code>, e cada item vale quantas vezes couber: é a mochila <strong>ilimitada</strong>.
+O melhor é 2 + 2 + 3 (3 + 3 + 5 = 11). Com o laço descendo (mochila 0/1),
+seria 8 (os dois itens, uma vez cada). Veja 0140 e o A279.</p>
+</details><p><strong>10.</strong> Sobre memoização (de cima para baixo) e tabela (de baixo para
+cima), analise as afirmações.</p>
+<ul>
+<li>I. A memoização tem complexidade assintótica pior que a da tabela, porque
+faz chamadas recursivas.</li>
+<li>II. A memoização resolve só os subproblemas que a resposta realmente usa; a
+tabela costuma preencher todos.</li>
+<li>III. A tabela exige uma ordem de preenchimento em que as dependências já
+estejam prontas.</li>
+<li>IV. Nas duas, o custo é (número de subproblemas) × (trabalho de cada um).</li>
+</ul>
+<p>Marque a alternativa <strong>CORRETA</strong>.</p>
+<ul>
+<li>(A) I e II, apenas.</li>
+<li>(B) I, III e IV, apenas.</li>
+<li>(C) I e IV, apenas.</li>
+<li>(D) II, III e IV, apenas.</li>
+<li>(E) I, II, III e IV.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(D).</strong> I é falsa: as duas têm o mesmo custo assintótico; a memoização só
+paga o frame de cada chamada (e pode estourar a pilha). II, III e IV são
+verdadeiras. Veja 0138.</p>
+</details><h2>Para ler mais</h2>
+<ul>
+<li>CORMEN, T. H.; LEISERSON, C. E.; RIVEST, R. L.; STEIN, C. <em>Algoritmos: teoria e prática</em>. 4. ed. Rio de Janeiro: GEN LTC, 2024. Cap. 14 (programação dinâmica: corte de hastes, cadeia de matrizes, LCS, subestrutura ótima e subproblemas sobrepostos) e seção 15.2 (mochila 0/1 contra a fracionária).</li>
+<li>ZIVIANI, N. <em>Projeto de algoritmos: com implementações em Pascal e C</em>. 3. ed. rev. e ampl. São Paulo: Cengage Learning, 2010. Cap. 2 (paradigmas de projeto de algoritmos, com programação dinâmica).</li>
+<li>LINTZMAYER, C. N.; MOTA, G. O. <em>Análise de algoritmos e de estruturas de dados</em>. Santo André: UFABC; São Paulo: IME-USP, 2023. Versão preliminar. Cap. de programação dinâmica (memoização, mochila, alinhamento de sequências).</li>
+<li>FEOFILOFF, P. <em>Algoritmos em linguagem C</em>. Rio de Janeiro: Elsevier, 2009. Caps. de recursão e de enumeração, base para entender o custo da recursão pura.</li>
+<li>SZWARCFITER, J. L.; MARKENZON, L. <em>Estruturas de dados e seus algoritmos</em>. 3. ed. Rio de Janeiro: LTC, 2010. Seção de árvore binária de busca ótima, um exemplo clássico de programação dinâmica.</li>
+<li>TENENBAUM, A. M.; LANGSAM, Y.; AUGENSTEIN, M. J. <em>Estruturas de dados usando C</em>. São Paulo: Makron Books, 1995. Cap. 3 (recursão, o custo do Fibonacci recursivo e a versão iterativa).</li>
+<li>KLEINBERG, J.; TARDOS, É. <em>Algorithm design</em>. Boston: Pearson, 2006. Cap. 6 (programação dinâmica: mochila, alinhamento de sequências e o algoritmo de Hirschberg).</li>
+<li>KERNIGHAN, B. W.; RITCHIE, D. M. <em>C: a linguagem de programação padrão ANSI</em>. Rio de Janeiro: Campus, 1989. Seções 5.7 a 5.9 (matrizes multidimensionais e vetores de ponteiros).</li>
+<li>LEVENSHTEIN, V. I. Binary codes capable of correcting deletions, insertions, and reversals. <em>Soviet Physics Doklady</em>, v. 10, n. 8, p. 707-710, 1966.</li>
+<li>MYERS, E. W. An O(ND) difference algorithm and its variations. <em>Algorithmica</em>, v. 1, p. 251-266, 1986.</li>
+<li>LINUX MAN-PAGES. <em>diff(1)</em>. Disponível em: <a href="https://man7.org/linux/man-pages/man1/diff.1.html">https://man7.org/linux/man-pages/man1/diff.1.html</a>.</li>
+<li>CPPREFERENCE. <em>fgets</em> e <em>strcspn</em>. Disponível em: <a href="https://en.cppreference.com/w/c/io/fgets">https://en.cppreference.com/w/c/io/fgets</a>.</li>
+</ul>

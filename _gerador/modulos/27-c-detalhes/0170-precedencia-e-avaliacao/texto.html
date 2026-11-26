@@ -1,0 +1,185 @@
+<h2>0170 · Precedência e ordem de avaliação</h2>
+<p>Três pacotes de café a R$ 18 cada, mais R$ 12 de frete. Você escreve
+<code>18 * 3 + 12</code> e espera 66, e o C dá 66. Mas por que não 270, que seria
+<code>18 * (3 + 12)</code>? Porque a ordem em que os operadores pegam seus operandos é
+fixa, e quem escreve a expressão precisa conhecê-la. A prova adora esconder
+essa ordem numa linha só, com cinco operadores e nenhum parêntese.</p>
+<p>A primeira regra é a <strong>precedência</strong>: ela diz qual operador pega os
+operandos primeiro (DEITEL; DEITEL, 2011, cap. 2). O <code>*</code> tem precedência
+maior que o <code>+</code>, então em <code>18 * 3 + 12</code> o <code>*</code> agarra o 18 e o 3, e o <code>+</code>
+recebe o resultado e o 12. Uma boa imagem é uma árvore: o operador de
+<strong>menor</strong> precedência fica na raiz e age por último; os de maior
+precedência ficam nos galhos e agem antes. Os parênteses mudam a árvore:
+<code>18 * (3 + 12)</code> põe o <code>+</code> num galho.</p>
+<p>A segunda regra resolve empates. Quando dois operadores têm a mesma
+precedência, a <strong>associatividade</strong> diz de que lado começa o agrupamento
+(KERNIGHAN; RITCHIE, 1988, cap. 2). A subtração agrupa da esquerda para a
+direita: <code>100 - 66 - 20</code> é <code>(100 - 66) - 20</code>, que dá 14, e não
+<code>100 - (66 - 20)</code>, que daria 54. A atribuição agrupa da direita para a
+esquerda: <code>a = b = 5</code> é <code>a = (b = 5)</code>, que guarda 5 em <code>b</code> e depois o
+mesmo 5 em <code>a</code>.</p>
+<p>A tabela completa está no fim, mas três pontos dela caem em prova e merecem
+atenção (CPPREFERENCE, s.d.). Os operadores bit a bit <code>&amp;</code>, <code>^</code> e <code>|</code> ficam
+<strong>abaixo</strong> do <code>==</code>, então <code>x &amp; 3 == 3</code> é <code>x &amp; (3 == 3)</code>, que vira <code>x &amp; 1</code>.
+O <code>?:</code> fica abaixo de quase tudo, então
+<code>compra + compra &gt;= 50 ? 0 : frete</code> pergunta se a soma inteira passa de 50.
+E as atribuições compostas têm a precedência mais baixa antes da vírgula:
+<code>a *= 2 + 1</code> é <code>a = a * (2 + 1)</code>, e não <code>a * 2 + 1</code>.</p>
+<p>Agora a parte que mais confunde: <strong>agrupar não é calcular</strong>. A precedência
+e a associatividade dizem como a expressão se divide em pedaços; elas não
+dizem em que ordem os pedaços são calculados. Em <code>f() + g()</code>, a soma junta
+os dois resultados, mas a <strong>ordem de avaliação</strong>, qual das duas funções
+roda primeiro, não é especificada pela norma. O compilador visita os galhos
+da árvore na ordem que preferir. Só quatro operadores garantem que o lado
+esquerdo é calculado antes do direito: <code>&amp;&amp;</code>, <code>||</code>, <code>?:</code> e a vírgula. E uma
+função só começa depois de todos os seus argumentos estarem prontos
+(ISO/IEC, 2018).</p>
+<p>O <code>&amp;&amp;</code> e o <code>||</code> vão além: eles têm <strong>curto-circuito</strong>. Em <code>a &amp;&amp; b</code>, se <code>a</code>
+dá 0, o resultado já é 0, e o <code>b</code> nem é calculado. Em <code>a || b</code>, se <code>a</code> dá
+diferente de 0, o resultado já é 1, e o <code>b</code> também é pulado (DEITEL;
+DEITEL, 2011, cap. 4). É isso que torna seguro escrever
+<code>p != NULL &amp;&amp; p-&gt;valor &gt; 0</code>: se <code>p</code> é <code>NULL</code>, o acesso <code>p-&gt;valor</code> não
+acontece.</p>
+<p>A ordem de avaliação importa por causa dos <strong>efeitos colaterais</strong>, tudo o
+que uma expressão muda além de produzir um valor. <code>i++</code> produz o valor de
+<code>i</code> e, como efeito colateral, muda <code>i</code>; <code>printf</code> produz um número e escreve
+na tela. Se a mesma variável é mudada duas vezes, ou mudada e lida, sem que
+a norma garanta qual vem antes, o resultado é <strong>comportamento
+indefinido</strong>: o programa pode dar qualquer coisa, e cada compilador pode dar
+algo diferente. São exemplos <code>i = i++</code>, <code>v[i] = i++</code> e
+<code>printf(&quot;%d %d&quot;, i, i++)</code> (ISO/IEC, 2018).</p>
+<table>
+<thead>
+<tr>
+<th>Nível</th>
+<th>Operadores</th>
+<th>Agrupa</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><code>()</code> <code>[]</code> <code>-&gt;</code> <code>.</code> <code>x++</code> <code>x--</code></td>
+<td>esquerda → direita</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>++x</code> <code>--x</code> <code>+x</code> <code>-x</code> <code>!</code> <code>~</code> <code>*p</code> <code>&amp;x</code> <code>(tipo)</code> <code>sizeof</code></td>
+<td>direita → esquerda</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>*</code> <code>/</code> <code>%</code></td>
+<td>esquerda → direita</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>+</code> <code>-</code></td>
+<td>esquerda → direita</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>&lt;&lt;</code> <code>&gt;&gt;</code></td>
+<td>esquerda → direita</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>&lt;</code> <code>&lt;=</code> <code>&gt;</code> <code>&gt;=</code></td>
+<td>esquerda → direita</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>==</code> <code>!=</code></td>
+<td>esquerda → direita</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>&amp;</code></td>
+<td>esquerda → direita</td>
+</tr>
+<tr>
+<td>9</td>
+<td><code>^</code></td>
+<td>esquerda → direita</td>
+</tr>
+<tr>
+<td>10</td>
+<td><code>|</code></td>
+<td>esquerda → direita</td>
+</tr>
+<tr>
+<td>11</td>
+<td><code>&amp;&amp;</code></td>
+<td>esquerda → direita</td>
+</tr>
+<tr>
+<td>12</td>
+<td><code>||</code></td>
+<td>esquerda → direita</td>
+</tr>
+<tr>
+<td>13</td>
+<td><code>?:</code></td>
+<td>direita → esquerda</td>
+</tr>
+<tr>
+<td>14</td>
+<td><code>=</code> <code>+=</code> <code>-=</code> <code>*=</code> <code>/=</code> <code>%=</code> <code>&lt;&lt;=</code> <code>&gt;&gt;=</code> <code>&amp;=</code> <code>^=</code> <code>|=</code></td>
+<td>direita → esquerda</td>
+</tr>
+<tr>
+<td>15</td>
+<td><code>,</code></td>
+<td>esquerda → direita</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>[!WARNING]
+<code>i = i++</code> é comportamento indefinido. Com <code>-Wall</code>, o gcc avisa
+(<code>operation on &#39;i&#39; may be undefined</code>). Ele também avisa <code>x &amp; 3 == 3</code> e
+<code>a || b &amp;&amp; c</code>, mas <strong>não</strong> <code>compra + compra &gt;= 50 ? 0 : frete</code>. Na
+dúvida, use parênteses.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>Três pacotes de café a R$ 18 mais R$ 12 de frete, com frete grátis a partir
+de R$ 50. O operador de menor precedência fica na raiz da árvore e age por
+último; no frete grátis, é o <code>?:</code>:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    int preco = 18, qtd = 3, frete = 12; // 3 pacotes de café a R$ 18
+
+    int total = preco * qtd + frete;    // * antes de +: (18 * 3) + 12
+    int outro = preco * (qtd + frete);  // parênteses mandam: 18 * 15
+    printf(&quot;total = %d, outro = %d\n&quot;, total, outro);
+
+    int sobra = 100 - total - 20;       // - é da esquerda: (100 - 66) - 20
+    printf(&quot;sobra = %d\n&quot;, sobra);
+
+    int a, b;
+    a = b = 5;                          // = é da direita: a = (b = 5)
+    a *= 2 + 1;                         // a = a * (2 + 1), não a * 2 + 1
+    printf(&quot;a = %d, b = %d\n&quot;, a, b);
+
+    int compra = preco * qtd;           // 54
+    // frete grátis a partir de R$ 50: o ?: fica ABAIXO do +
+    int pegadinha = compra + compra &gt;= 50 ? 0 : frete; // ((54 + 54) &gt;= 50) ? 0 : 12
+    int certo = compra + (compra &gt;= 50 ? 0 : frete);   // 54 + 0
+    printf(&quot;pegadinha = %d, certo = %d\n&quot;, pegadinha, certo);
+
+    int gratis = compra &gt;= 50 &amp;&amp; qtd &gt;= 3; // relacionais antes de &amp;&amp;: (54 &gt;= 50) &amp;&amp; (3 &gt;= 3)
+    printf(&quot;frete grátis? %d\n&quot;, gratis);
+    return 0;
+}
+// Saída:
+// total = 66, outro = 270
+// sobra = 14
+// a = 15, b = 5
+// pegadinha = 0, certo = 54
+// frete grátis? 1
+</code></pre>
+<p>No fluxograma, o <code>?:</code> é uma pergunta escondida; no <code>certo</code>, ela olha só o
+<code>compra</code>:</p>
+<p>{{fluxograma}}</p>
+<p>Com <code>-Wall</code>, o gcc avisa sobre <code>i = i++</code>:
+<code>warning: operation on &#39;i&#39; may be undefined [-Wsequence-point]</code>.</p>

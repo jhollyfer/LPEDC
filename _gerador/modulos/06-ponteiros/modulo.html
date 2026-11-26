@@ -1,0 +1,323 @@
+<h1>Módulo 06 · Ponteiros</h1>
+<p>Endereços, ponteiros, passagem por referência, aritmética de ponteiros,
+<code>char *</code>, <code>**</code>, ponteiro para função e <code>void *</code>. Depende dos módulos 04 e 05
+(funções, vetores e strings) e é a base da memória dinâmica (07), das structs
+(08) e de todas as estruturas encadeadas.</p>
+<h2>O que você vai aprender</h2>
+<ul>
+<li>a memória como <strong>gaveteiro numerado</strong>: endereço, <code>&amp;</code> e <code>%p</code></li>
+<li><strong>ponteiros</strong>: <code>*</code>, desreferência e <code>NULL</code></li>
+<li><strong>passagem por referência</strong>: a troca (swap), vários resultados e o <code>&amp;</code> do <code>scanf</code></li>
+<li><strong>aritmética de ponteiros</strong>: <code>v[i]</code> é <code>*(v + i)</code></li>
+<li><code>char *</code> contra <code>char []</code>, e o literal de string <strong>só leitura</strong></li>
+<li><strong>ponteiro para ponteiro</strong> (<code>**</code>) e vetor de ponteiros</li>
+<li><strong>ponteiro para função</strong>: callbacks e <code>qsort</code></li>
+<li><strong><code>void *</code></strong>: ponteiro genérico, cast e funções para qualquer tipo</li>
+</ul>
+<h2>Antes de começar</h2>
+<p>Erro de ponteiro quase nunca aparece na compilação: surge na execução. Rode
+sempre com as flags de estudo (AddressSanitizer) e leia o relatório de cima
+para baixo: o tipo do erro, a linha e a variável.</p>
+<p>Nos diagramas, o roxo marca os ponteiros. Os endereços dos desenhos são
+fictícios (<code>0x1000</code>, <code>0x1004</code>); os reais mudam a cada execução. Importam as
+relações entre eles (iguais, 4 bytes depois). Para seguir um ponteiro, use o
+<code>gdb</code> (<code>print p</code>, <code>print *p</code>, <code>print &amp;x</code>):</p>
+<pre><code class="language-bash">sudo pacman -S gdb          # Arch Linux
+sudo apt install gdb        # Debian / Ubuntu
+</code></pre>
+<p>{{indice}}</p>
+<hr>
+<p>{{assuntos}}</p>
+<hr>
+<h2>Desafios do módulo</h2>
+<p>Problemas extras que misturam os assuntos do módulo. Resolva num arquivo seu e
+compile com as flags de estudo.</p>
+<p><strong>1. O gaveteiro de três níveis.</strong> Ponha num <code>main</code> as linhas
+<code>int x = 7; int *p = &amp;x; int **pp = &amp;p; **pp = 9; *pp = NULL;</code> e, depois
+delas, mostre o valor de <code>x</code>, o resultado de <code>p == NULL</code> e o de <code>pp == &amp;p</code>.
+Acrescente então <code>printf(&quot;%d\n&quot;, *p);</code>, rode com as flags de estudo e veja o que
+acontece. Por fim, conserte: só mostre <code>*p</code> se <code>p</code> não for <code>NULL</code>; senão,
+mostre <code>p não aponta para nada</code>.</p>
+<details><summary>Resposta</summary><p>Com o <code>printf</code> de <code>*p</code> solto, o AddressSanitizer derruba o programa:
+<code>AddressSanitizer: SEGV on unknown address 0x000000000000</code>. Depois do
+conserto:</p>
+<pre><code class="language-text">x = 9
+p == NULL: 1
+pp == &amp;p: 1
+p não aponta para nada
+</code></pre>
+<p><code>**pp = 9</code> atravessa dois <code>*</code> e chega no <code>x</code>; <code>*pp = NULL</code> atravessa um só e
+muda o ponteiro <code>p</code>, não o <code>x</code>. O <code>pp</code> continua guardando o endereço de <code>p</code>.
+Desenhe sempre o que cada <code>*</code> atravessa.</p>
+</details><p><strong>2. Minutos de academia.</strong> Escreva
+<code>void resumo(const int *min, int n, int *total, int *dias_acima, double *media)</code>
+que recebe os minutos de treino da semana <code>{45, 0, 60, 30, 75, 0, 50}</code> e
+devolve o total, quantos dias passaram de 40 minutos e a média dos dias em
+que houve treino.</p>
+<details><summary>Resposta</summary><p>Total <strong>260</strong>, <strong>4</strong> dias acima de 40 (45, 60, 75, 50) e média <strong>52.0</strong> (260
+em 5 dias com treino). Caminho: um laço só, três ponteiros de saída; cuidado
+para não dividir por zero se a semana inteira for zero.</p>
+</details><p><strong>3. Rotação da escala.</strong> A escala de plantão <code>{&quot;ana&quot;, &quot;bia&quot;, &quot;caio&quot;, &quot;davi&quot;, &quot;eva&quot;}</code> está num <code>const char *escala[5]</code>. Escreva <code>void gira(const char **v, int n)</code> que move todo mundo uma posição para a esquerda (o primeiro vai para
+o fim), trocando só ponteiros. Gire duas vezes.</p>
+<details><summary>Resposta</summary><p>Depois de duas rotações: <strong>caio davi eva ana bia</strong>. Guarde <code>v[0]</code> num <code>const char *tmp</code>, ande de <code>i = 0</code> a <code>n - 2</code> fazendo <code>v[i] = v[i + 1]</code> e termine
+com <code>v[n - 1] = tmp</code>. Nenhum caractere é copiado: só endereços.</p>
+</details><p><strong>4. O meu strcat.</strong> Escreva <code>char *junta(char *destino, const char *origem)</code> só com ponteiros: ande até o <code>&#39;\0&#39;</code> do destino e copie a origem dali
+em diante. Devolva <code>destino</code>. Teste com <code>char cidade[30] = &quot;Campina&quot;;</code> e
+<code>&quot; Grande&quot;</code>. Depois troque para <code>char cidade[10]</code>, rode de novo com as flags de estudo e veja o erro que ele mostra.</p>
+<details><summary>Resposta</summary><p>Mostra <strong>&quot;Campina Grande&quot;</strong> (14 letras + <code>&#39;\0&#39;</code> = 15 bytes). Com <code>char cidade[10]</code>, a cópia passa do fim e o AddressSanitizer acusa
+<code>stack-buffer-overflow</code>. A função não tem como saber o tamanho do destino:
+é por isso que existe <code>strncat</code>, e por isso quem chama precisa garantir o
+espaço.</p>
+</details><p><strong>5. Palavras de uma frase.</strong> Escreva <code>int conta_palavras(const char *s)</code>
+andando com ponteiro: uma palavra começa quando o caractere atual não é
+espaço e o anterior era espaço (ou é o começo). Teste com
+<code>&quot;  pix   caiu na   conta &quot;</code>.</p>
+<details><summary>Resposta</summary><p><strong>4</strong> palavras. Guarde um &quot;estava em espaço?&quot; (começando verdadeiro); a cada
+caractere não espaço com a marca ligada, conte e desligue a marca; a cada
+espaço, ligue de novo. Espaços repetidos e nas pontas não atrapalham.</p>
+</details><p><strong>6. O laço que se encontra no meio.</strong> Rode o trecho abaixo dentro de um
+<code>main</code> e acrescente, dentro do laço, um <code>printf</code> que mostre a cada volta os
+índices de <code>p</code> e <code>q</code> (<code>p - v</code> e <code>q - v</code>, com <code>%td</code>) e o vetor inteiro.
+Depois troque a condição para <code>p &lt;= q</code> e veja o que muda no <code>v[2]</code>.</p>
+<pre><code class="language-c">int v[5] = {1, 2, 3, 4, 5};
+int *p = v, *q = v + 4;
+while (p &lt; q) {
+    *p += *q;
+    p++;
+    q--;
+}
+printf(&quot;%d %d %d %d %d\n&quot;, v[0], v[1], v[2], v[3], v[4]);
+</code></pre>
+<details><summary>Resposta</summary><p>Duas voltas: <code>p=0 q=4</code> (vira <strong>6</strong> 2 3 4 5) e <code>p=1 q=3</code> (vira 6 <strong>6</strong> 3 4 5);
+aí <code>p</code> e <code>q</code> se encontram em <code>v[2]</code> e o laço para: <strong>6 6 3 4 5</strong>. Com
+<code>p &lt;= q</code> há uma terceira volta com os dois em <code>v[2]</code>, que soma o elemento
+com ele mesmo: <strong>6 6 6 4 5</strong>.</p>
+</details><p><strong>7. Menu sem switch.</strong> Monte um menu de conversões com um vetor de
+ponteiros para função <code>double (*conv[3])(double)</code>: km para milhas (÷ 1.609),
+kg para libras (× 2.205) e °C para °F. Leia a opção (0, 1 ou 2) e o valor
+com <code>scanf</code>, valide a opção e chame <code>conv[op](valor)</code>. Teste com opção 0 e
+10 km.</p>
+<details><summary>Resposta</summary><p>10 km ≈ <strong>6.21 milhas</strong>. O índice lido vira direto a posição no vetor de
+funções. Valide <code>0 &lt;= op &amp;&amp; op &lt; 3</code> antes de chamar: um índice fora do vetor
+&quot;chama&quot; um endereço qualquer, e aí nem o AddressSanitizer salva.</p>
+</details><p><strong>8. qsort em dupla.</strong> Os pedidos do restaurante estão em dois vetores
+paralelos: <code>int mesa[6] = {4, 2, 7, 2, 4, 1}</code> e <code>int minuto[6] = {12, 5, 3, 9, 1, 20}</code> (minuto em que o pedido chegou). Mostre os pedidos ordenados por
+mesa e, dentro da mesma mesa, por minuto, sem mexer nos vetores originais.</p>
+<details><summary>Resposta</summary><p>Ordem: mesa 1 (min 20), mesa 2 (min 5), mesa 2 (min 9), mesa 4 (min 1),
+mesa 4 (min 12), mesa 7 (min 3). Caminho: um vetor de índices <code>int ordem[6] = {0, ..., 5}</code> e uma comparação que lê os vetores paralelos (que
+podem ser <code>static</code> globais), ou um vetor de <code>const int *</code> para <code>mesa</code>, como
+no assunto 0052, usando <code>p - mesa</code> para achar o minuto.</p>
+</details><p><strong>9. Endianness na prática.</strong> Escreva <code>bool little_endian(void)</code> que
+descobre a ordem dos bytes da máquina olhando o primeiro byte de um <code>int</code>
+que vale 1 (por meio de um <code>unsigned char *</code>). Depois escreva
+<code>unsigned int inverte_bytes(unsigned int x)</code> que troca a ordem dos 4 bytes
+usando a <code>troca_generica</code> do assunto 0051 nos bytes certos.</p>
+<details><summary>Resposta</summary><p>No seu PC, <code>little_endian()</code> dá <strong>verdadeiro</strong>: o primeiro byte do 1 é
+<code>01</code>. <code>inverte_bytes(0x0A0B0C0D)</code> dá <strong>0x0D0C0B0A</strong>: troque o byte 0 com o 3
+e o 1 com o 2 (<code>troca_generica(&amp;b[0], &amp;b[3], 1)</code> e assim por diante, com <code>b</code>
+sendo um <code>unsigned char *</code> para <code>x</code>). É o que as funções de rede (<code>htonl</code>)
+fazem.</p>
+</details><p><strong>10. Busca binária genérica.</strong> Escreva <code>void *busca_bin(const void *chave, void *v, size_t n, size_t tam, int (*cmp)(const void *, const void *))</code> que
+faz busca binária num vetor já ordenado de qualquer tipo e devolve o endereço
+do elemento ou <code>NULL</code>. Teste com <code>int cods[8] = {3, 8, 15, 21, 30, 42, 57, 60}</code> procurando 42 e 10, e compare com o <code>bsearch</code> da <code>stdlib.h</code>, que tem
+exatamente essa assinatura.</p>
+<details><summary>Resposta</summary><p>42 está no <strong>índice 5</strong> (subtraia o ponteiro devolvido de <code>cods</code>); 10 dá
+<strong>NULL</strong>. O meio fica em <code>(unsigned char *)v + meio * tam</code>. Compare
+<code>cmp(chave, meio)</code>: negativo, procure à esquerda; positivo, à direita; zero,
+achou. A busca binária em si é o assunto 0090.</p>
+</details><h2>Questões do POSCOMP</h2>
+<p>Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.</p>
+<table>
+<thead>
+<tr>
+<th>Ano</th>
+<th>Questão</th>
+<th>Assunto</th>
+<th>Gabarito</th>
+<th>Prova</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2023</td>
+<td>33</td>
+<td>Saída de código C com ponteiros e printf</td>
+<td>E</td>
+<td><a href="https://www.sbc.org.br/wp-content/uploads/2025/02/0761.001_Exame_POSCOMP_2023.pdf">caderno</a></td>
+</tr>
+</tbody></table>
+<p>O gabarito de 2023 vem de um blog de terceiros que reproduz o gabarito definitivo; confira no PDF oficial da SBC.</p>
+<h2>Questões no estilo da prova</h2>
+<p>Questões no formato da prova do PPGI/UFAM. Resolva no papel, marque uma letra e
+só então abra o gabarito. Os trechos foram compilados com
+<code>gcc -std=c17 -Wall -Wextra</code>.</p>
+<p><strong>Questão 1.</strong> O que o programa imprime?</p>
+<pre><code class="language-c">int v[5] = {10, 20, 30, 40, 50};
+int *p = v + 1;
+printf(&quot;%d %d %d\n&quot;, *(p + 2), p[-1], *p + 2);
+</code></pre>
+<ul>
+<li>(A) <code>30 20 22</code></li>
+<li>(B) <code>40 10 22</code></li>
+<li>(C) <code>40 20 32</code></li>
+<li>(D) <code>30 10 12</code></li>
+<li>(E) <code>40 10 32</code></li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(B)</strong>. <code>p</code> aponta para <code>v[1]</code> (20). <code>*(p + 2)</code> anda duas gavetas e lê
+<code>v[3]</code> = 40; <code>p[-1]</code> é <code>*(p - 1)</code> = <code>v[0]</code> = 10; em <code>*p + 2</code> o <code>*</code> vem
+antes do <code>+</code>: 20 + 2 = 22. Veja 0047.</p>
+</details><p><strong>Questão 2.</strong> O que o programa imprime?</p>
+<pre><code class="language-c">int v[3] = {5, 8, 2};
+int *p = v;
+int a = *p++;
+int b = (*p)++;
+printf(&quot;%d %d %d %d\n&quot;, a, b, v[0], v[1]);
+</code></pre>
+<ul>
+<li>(A) <code>5 8 6 8</code></li>
+<li>(B) <code>5 9 5 9</code></li>
+<li>(C) <code>8 8 5 9</code></li>
+<li>(D) <code>5 8 5 9</code></li>
+<li>(E) <code>5 8 6 9</code></li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(D)</strong>. Em <code>*p++</code> o <code>++</code> vale para o ponteiro: lê <code>v[0]</code> (5) e depois <code>p</code>
+passa para <code>v[1]</code>. Em <code>(*p)++</code> o <code>++</code> vale para o valor: <code>b</code> recebe 8 (o
+pós-incremento devolve o valor antigo) e <code>v[1]</code> vira 9. <code>v[0]</code> nunca muda.
+Veja 0047.</p>
+</details><p><strong>Questão 3.</strong> Sobre ponteiros em C, considere as afirmações e marque a alternativa CORRETA.</p>
+<ul>
+<li><p><strong>I.</strong> Se <code>p</code> é um <code>int *</code>, <code>p + 1</code> aponta para o <code>int</code> seguinte, <code>sizeof(int)</code> bytes adiante.</p>
+</li>
+<li><p><strong>II.</strong> <code>*p++</code> incrementa o valor apontado por <code>p</code>.</p>
+</li>
+<li><p><strong>III.</strong> Desreferenciar um ponteiro <code>NULL</code> é seguro: o programa só devolve 0.</p>
+</li>
+<li><p><strong>IV.</strong> Se <code>v</code> é um vetor, <code>v[i]</code> equivale a <code>*(v + i)</code>.</p>
+</li>
+<li><p>(A) Apenas I e IV</p>
+</li>
+<li><p>(B) Apenas I e II</p>
+</li>
+<li><p>(C) Apenas II e III</p>
+</li>
+<li><p>(D) Apenas III e IV</p>
+</li>
+<li><p>(E) Apenas I, II e IV</p>
+</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A).</strong> I é verdadeira: a aritmética de ponteiros anda em unidades do tipo apontado. II é falsa: o <code>++</code> vale para o ponteiro, e o valor lido é o antigo (para incrementar o valor, é <code>(*p)++</code>). III é falsa: é comportamento indefinido, e na prática costuma derrubar o programa. IV é verdadeira. Veja 0047.</p>
+</details><p><strong>Questão 4.</strong> Qual o valor final de <code>x</code>?</p>
+<pre><code class="language-c">int x = 4;
+int *p = &amp;x;
+int **pp = &amp;p;
+**pp += 3;
+*p *= 2;
+</code></pre>
+<ul>
+<li>(A) 14</li>
+<li>(B) 11</li>
+<li>(C) 8</li>
+<li>(D) 10</li>
+<li>(E) 7</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A)</strong>. <code>**pp</code> atravessa dois <code>*</code> e chega em <code>x</code>: 4 + 3 = 7. <code>*p</code> também é
+<code>x</code>: 7 × 2 = 14. Veja 0049.</p>
+</details><p><strong>Questão 5.</strong> Com <code>double v[10]; double *p = &amp;v[2], *q = &amp;v[7];</code>, os
+valores de <code>q - p</code> e de <code>(char *)q - (char *)p</code> são, respectivamente:</p>
+<ul>
+<li>(A) 5 e 5</li>
+<li>(B) 40 e 40</li>
+<li>(C) 5 e 40</li>
+<li>(D) 6 e 48</li>
+<li>(E) 5 e 20</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(C)</strong>. A diferença de dois ponteiros do mesmo vetor conta <strong>elementos</strong>:
+7 − 2 = 5. Convertidos para <code>char *</code>, eles contam <strong>bytes</strong>: 5 × 8 = 40
+(<code>sizeof(double)</code> é 8). Veja 0047.</p>
+</details><p><strong>Questão 6.</strong> Em uma plataforma de 64 bits típica, o que o trecho imprime?</p>
+<pre><code class="language-c">char s[] = &quot;banana&quot;;
+char *t = &quot;banana&quot;;
+printf(&quot;%zu %zu %zu %zu\n&quot;, sizeof s, strlen(s), sizeof t, strlen(t));
+</code></pre>
+<ul>
+<li>(A) <code>6 6 6 6</code></li>
+<li>(B) <code>7 6 7 6</code></li>
+<li>(C) <code>6 6 8 6</code></li>
+<li>(D) <code>7 7 8 7</code></li>
+<li>(E) <code>7 6 8 6</code></li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(E)</strong>. <code>s</code> é um vetor: <code>sizeof</code> conta os 6 caracteres mais o <code>&#39;\0&#39;</code> (7).
+<code>t</code> é um ponteiro: <code>sizeof t</code> é o tamanho de um endereço (8). O <code>strlen</code> não
+conta o <code>&#39;\0&#39;</code> nos dois casos (6). Veja 0048.</p>
+</details><p><strong>Questão 7.</strong> Em uma plataforma com <code>int</code> de 4 bytes, o que o trecho
+imprime?</p>
+<pre><code class="language-c">int m[3][4] = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};
+printf(&quot;%td %td %d\n&quot;, (char *)(m + 1) - (char *)m,
+       (char *)(m[0] + 1) - (char *)m[0], *(*(m + 2) + 1));
+</code></pre>
+<ul>
+<li>(A) <code>4 4 10</code></li>
+<li>(B) <code>16 16 6</code></li>
+<li>(C) <code>4 16 10</code></li>
+<li>(D) <code>16 4 10</code></li>
+<li>(E) <code>16 4 6</code></li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(D)</strong>. O elemento de <code>m</code> é uma linha inteira (4 <code>int</code>), então <code>m + 1</code>
+anda 16 bytes. <code>m[0]</code> é o endereço do primeiro <code>int</code> da linha 0, e
+<code>m[0] + 1</code> anda 4. <code>*(*(m + 2) + 1)</code> é <code>m[2][1]</code> = 10. Veja 0047 e 0039.</p>
+</details><p><strong>Questão 8.</strong> O que o programa imprime?</p>
+<pre><code class="language-c">int dobro(int x) { return 2 * x; }
+int quadrado(int x) { return x * x; }
+
+int main(void) {
+    int (*f[2])(int) = {dobro, quadrado};
+    printf(&quot;%d\n&quot;, f[1](f[0](3)));
+    return 0;
+}
+</code></pre>
+<ul>
+<li>(A) 18</li>
+<li>(B) 12</li>
+<li>(C) 36</li>
+<li>(D) 9</li>
+<li>(E) 6</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(C)</strong>. <code>f</code> é um vetor de dois ponteiros para função. <code>f[0](3)</code> chama
+<code>dobro(3)</code> = 6; <code>f[1](6)</code> chama <code>quadrado(6)</code> = 36. A resposta (A) troca a
+ordem das chamadas. Veja 0050.</p>
+</details><p><strong>Questão 9.</strong> Com <code>int x = 1, y = 2; const int *p = &amp;x; int *const q = &amp;x;</code>,
+quais das linhas abaixo <strong>compilam</strong>?</p>
+<pre><code class="language-c">p = &amp;y;   /* I   */
+*q = 5;   /* II  */
+*p = 9;   /* III */
+q = &amp;y;   /* IV  */
+</code></pre>
+<ul>
+<li>(A) apenas I</li>
+<li>(B) apenas I e II</li>
+<li>(C) apenas I e III</li>
+<li>(D) apenas II e IV</li>
+<li>(E) todas</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(B)</strong>. Leia da direita para a esquerda. <code>const int *p</code>: ponteiro para
+<code>int</code> constante; o ponteiro pode andar (I), mas <code>*p</code> não pode ser escrito
+(III dá <code>assignment of read-only location</code>). <code>int *const q</code>: ponteiro
+constante para <code>int</code>; <code>*q</code> pode ser escrito (II), mas <code>q</code> não pode mudar
+(IV dá <code>assignment of read-only variable</code>). Veja 0046 e 0047.</p>
+</details><h2>Para ler mais</h2>
+<ul>
+<li>BACKES, A. <em>Linguagem C: completa e descomplicada</em>. Rio de Janeiro: Elsevier, 2013. Cap. 10: ponteiros; cap. 13: ponteiro para função.</li>
+<li>BACKES, A. R. <em>Linguagem C: descomplicada</em>. Apostila. Uberlândia: FACOM/UFU. Capítulos de ponteiros e de recursos avançados.</li>
+<li>DEITEL, P. J.; DEITEL, H. M. <em>C: como programar</em>. 6. ed. São Paulo: Pearson Prentice Hall, 2011. Cap. 7: ponteiros em C.</li>
+<li>CELES, W.; RANGEL, J. L. <em>Apostila de estruturas de dados</em>. Rio de Janeiro: PUC-Rio, 2002. Ponteiros, vetores e ordenação genérica.</li>
+<li>FEOFILOFF, P. <em>Algoritmos em linguagem C</em>. Rio de Janeiro: Elsevier, 2009. Apêndice D: endereços e ponteiros.</li>
+<li>CELES, W.; CERQUEIRA, R.; RANGEL, J. L. <em>Introdução a estruturas de dados: com técnicas de programação em C</em>. 2. ed. Rio de Janeiro: Elsevier, 2016. Ponteiros, vetores e ponteiros para função.</li>
+<li>TENENBAUM, A. M.; LANGSAM, Y.; AUGENSTEIN, M. J. <em>Estruturas de dados usando C</em>. São Paulo: Makron Books, 1995. Cap. 1: vetores, ponteiros e estruturas em C.</li>
+<li>ZIVIANI, N. <em>Projeto de algoritmos: com implementações em Pascal e C</em>. 3. ed. rev. e ampl. São Paulo: Cengage Learning, 2010. Usa o nome <strong>apontador</strong> e o aplica em listas, pilhas e filas.</li>
+<li>LAUREANO, M. <em>Estrutura de dados com algoritmos e C</em>. Rio de Janeiro: Brasport, 2008. Cap. 1 e 2: ponteiros e uso de memória.</li>
+<li>ROCHA, A. M. A.; BORGES, A. R. O. S. <em>Programação, estruturas de dados e algoritmos em C</em>. Aveiro: Universidade de Aveiro, DETI. Ponteiros e ponteiro para função.</li>
+<li>HARA, C.; ZOLA, W. <em>Linguagem C: notas de aula</em>. Curitiba: UFPR, 2008. Ponteiros e passagem por referência.</li>
+<li>KERNIGHAN, B. W.; RITCHIE, D. M. <em>C: a linguagem de programação padrão ANSI</em>. Rio de Janeiro: Campus, 1989. Cap. 5: apontadores e vetores.</li>
+<li>CPPREFERENCE. <em>Pointer declaration</em>. Disponível em: <a href="https://en.cppreference.com/w/c/language/pointer">https://en.cppreference.com/w/c/language/pointer</a>.</li>
+<li>CPPREFERENCE. <em>qsort, qsort_s</em>. Disponível em: <a href="https://en.cppreference.com/w/c/algorithm/qsort">https://en.cppreference.com/w/c/algorithm/qsort</a>.</li>
+<li>KERRISK, M. <em>qsort(3)</em>: Linux manual page. Disponível em: <a href="https://man7.org/linux/man-pages/man3/qsort.3.html">https://man7.org/linux/man-pages/man3/qsort.3.html</a>.</li>
+</ul>

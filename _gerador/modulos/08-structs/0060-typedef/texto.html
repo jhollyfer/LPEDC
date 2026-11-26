@@ -1,0 +1,93 @@
+<h2>0060 · Typedef</h2>
+<p>No assunto anterior, todo pedido era declarado como <code>struct pedido p1;</code>. As
+duas palavras sempre juntas cansam num programa grande, e o nome do tipo fica
+mais comprido que a ideia que ele representa. O C oferece um jeito de dar um
+nome mais curto, ou mais expressivo, a um tipo que já existe.</p>
+<p>No grupo da família, ninguém chama o seu tio de &quot;José Carlos da Silva&quot;. É
+&quot;Zé&quot;. O apelido não cria outra pessoa: é o mesmo tio, com um nome mais
+prático. O <strong>typedef</strong> faz isso com tipos: ele dá um <strong>apelido</strong> a um tipo
+existente e cria um sinônimo, sem criar um tipo novo (BACKES, 2013, cap. 8).</p>
+<p>A forma de escrever segue uma regra simples. Escreva a declaração de uma
+variável do jeito de sempre e ponha a palavra <code>typedef</code> na frente. O nome que
+seria a variável passa a ser o nome do tipo (FEOFILOFF, 2009, ap. J):</p>
+<pre><code class="language-c">double Reais;          // uma variável chamada Reais
+typedef double Reais;  // um apelido: Reais agora é o mesmo que double
+</code></pre>
+<p>Depois da segunda linha, <code>Reais saldo;</code> e <code>double saldo;</code> declaram
+exatamente a mesma coisa. O ganho é de leitura: quem vê <code>Reais</code> entende que
+ali mora dinheiro, e o compilador continua vendo um <code>double</code>.</p>
+<p>O uso mais comum é com struct, e há duas maneiras. Você pode batizar uma
+struct que já tem nome, com <code>typedef struct pix Pix;</code>, ou fazer tudo de uma
+vez, declarando a struct sem nome e dando o apelido logo depois da chave
+(DEITEL; DEITEL, 2011, cap. 10):</p>
+<pre><code class="language-c">typedef struct {
+    char chave[40];
+    Reais valor;
+    int hora;
+} Pix;
+</code></pre>
+<p>A partir daí, <code>Pix p;</code> basta, sem a palavra <code>struct</code>. Repare que o campo
+<code>valor</code> usa o apelido <code>Reais</code> definido antes: um typedef pode usar outro.
+Escrever nome de tipo com a inicial maiúscula é uma convenção, e ela ajuda a
+separar tipo de variável no meio do código: <code>Pix</code> é o tipo, <code>p</code> é a variável
+(DEITEL; DEITEL, 2011, cap. 10).</p>
+<p>Struct, union e enum, com ou sem <code>typedef</code>, formam o que os livros e o edital
+chamam de <strong>tipos definidos pelo programador</strong>: tipos que não vêm prontos com
+a linguagem, e que você monta para descrever o seu problema (CELES; CERQUEIRA;
+RANGEL, 2016). Os próximos assuntos apresentam o enum e a union.</p>
+<p>Você já usou vários typedefs sem saber. <code>size_t</code>, o tipo que o <code>sizeof</code>
+devolve, <code>uint8_t</code>, <code>int32_t</code> e o <code>FILE</code> do módulo 09 são apelidos definidos
+nos cabeçalhos da biblioteca (KERNIGHAN; RITCHIE, 1988, cap. 6). O <code>uint8_t</code>
+mostra a vantagem: ele quer dizer &quot;exatamente 8 bits sem sinal&quot; em qualquer
+máquina, e cada compilador o liga ao tipo certo por baixo. Você escreve o
+mesmo código e o apelido cuida da diferença entre máquinas.</p>
+<p>Como o typedef só dá outro nome, o compilador não distingue o apelido do
+original. Isso tem um lado bom (o apelido funciona em qualquer lugar que
+aceita o tipo) e um lado perigoso, que o alerta abaixo mostra.</p>
+<blockquote>
+<p>[!WARNING]
+<code>typedef</code> cria um <strong>sinônimo</strong>, não um tipo novo. Com <code>typedef double Reais;</code>
+e <code>typedef double Dolares;</code>, <code>Reais r = dolares;</code> compila: os dois são
+<code>double</code>. Para o compilador barrar a mistura, embrulhe numa struct:
+<code>typedef struct { double v; } Reais;</code>. E <code>typedef int *PInt;</code> esconde que
+<code>PInt a, b;</code> são ponteiros.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>Um Pix de R$ 1.500,00 às 22h esbarra no limite noturno de R$ 1.000,00 (entre
+20h e 6h). <code>Pix</code> e <code>Reais</code> são só etiquetas coladas em tipos que já existiam:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdbool.h&gt;
+#include &lt;stdio.h&gt;
+
+typedef double Reais; // Reais é só outro nome para double
+
+typedef struct {      // struct sem nome, batizada de Pix pelo typedef
+    char chave[40];
+    Reais valor;
+    int hora;         // 0 a 23
+} Pix;
+
+#define LIMITE_NOTURNO 1000.0
+
+bool pix_permitido(Pix p) {
+    bool noturno = p.hora &gt;= 20 || p.hora &lt; 6;
+    return !(noturno &amp;&amp; p.valor &gt; LIMITE_NOTURNO);
+}
+
+int main(void) {
+    Pix p = {&quot;ana@email.com&quot;, 1500.00, 22}; // sem a palavra struct
+
+    printf(&quot;Pix de R$ %.2f para %s às %dh\n&quot;, p.valor, p.chave, p.hora);
+    if (pix_permitido(p)) {
+        printf(&quot;Enviado!\n&quot;);
+    } else {
+        printf(&quot;Bloqueado: o limite noturno é R$ %.2f\n&quot;, LIMITE_NOTURNO);
+    }
+    return 0;
+}
+// Saída:
+// Pix de R$ 1500.00 para ana@email.com às 22h
+// Bloqueado: o limite noturno é R$ 1000.00
+</code></pre>
+<p>O Pix só é bloqueado se for horário noturno <strong>e</strong> o valor passar do limite:</p>
+<p>{{fluxograma}}</p>

@@ -1,0 +1,192 @@
+<h2>0088 · Juntando tudo: a calculadora de expressões</h2>
+<p>No bar do 0084 você escreveu <code>35 25 + 3 * 4 /</code> em pós-fixa e a pilha deu 45.
+Só que ninguém digita assim. A pessoa digita <code>(35 + 25) * 3 / 4</code> e quer ver
+45. Para fechar o caminho, o programa precisa traduzir a notação infixa da
+escola para a pós-fixa e só então fazer a conta. Este assunto junta tudo o
+que o módulo construiu: uma <strong>fila</strong> e duas <strong>pilhas</strong> trabalhando em duas
+etapas (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 2).</p>
+<p>A primeira etapa <strong>converte</strong> a infixa em pós-fixa. O algoritmo se chama
+<strong>pátio de manobras</strong> (<em>shunting-yard</em>) e foi criado por Dijkstra para um
+tradutor de Algol (DIJKSTRA, 1961). O nome vem da ferrovia: os vagões de
+número seguem direto pelo trilho principal até a fila de saída, e os vagões
+de operador esperam num desvio, que é uma pilha, até que nenhum operador mais
+forte precise passar na frente deles.</p>
+<p>As regras olham um símbolo de cada vez. A precedência é a força do operador:
+<code>*</code> e <code>/</code> são mais fortes que <code>+</code> e <code>-</code>, e por isso fazem a conta antes. A
+tabela resume o que fazer com cada tipo de símbolo (FEOFILOFF, 2009):</p>
+<table>
+<thead>
+<tr>
+<th>Símbolo lido</th>
+<th>O que fazer</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>número</td>
+<td>vai direto para a <strong>fila</strong> de saída</td>
+</tr>
+<tr>
+<td><code>(</code></td>
+<td>empilha</td>
+</tr>
+<tr>
+<td><code>)</code></td>
+<td>desempilha para a fila até achar o <code>(</code>, que é descartado</td>
+</tr>
+<tr>
+<td>operador</td>
+<td>enquanto o topo tiver precedência <strong>maior ou igual</strong>, desempilha para a fila; depois empilha o operador</td>
+</tr>
+<tr>
+<td>fim da expressão</td>
+<td>o que sobrou na pilha vai para a fila</td>
+</tr>
+</tbody></table>
+<p>Com <code>(35 + 25) * 3 / 4</code>, a fila de saída termina como <code>35 25 + 3 * 4 /</code>. O
+<code>+</code> ficou preso entre os parênteses e saiu no <code>)</code>. O <code>*</code> saiu quando chegou o
+<code>/</code>, porque os dois têm a mesma força e o <code>*</code> estava antes.</p>
+<p>A segunda etapa <strong>avalia</strong> a pós-fixa exatamente como no 0084. Os itens saem
+da fila na ordem em que entraram (FIFO) e passam por uma <strong>pilha de
+valores</strong>: número empilha, operador desempilha dois, calcula e empilha o
+resultado (KERNIGHAN; RITCHIE, 1988, seç. 4.3). Quando chega o <code>/</code>, a pilha
+tem 180 e 4, e a última conta dá 45.</p>
+<p>Por que uma fila no meio, e não uma string? Porque a etapa 1 produz itens e a
+etapa 2 os consome na mesma ordem em que foram produzidos. Esse é o padrão
+<strong>produtor e consumidor</strong>, e a fila é a estrutura natural para ele. A fila
+também guarda o 35 como um número inteiro, e a avaliação não precisa juntar
+os dígitos de novo.</p>
+<p>Resta um detalhe de C. A fila e a pilha do curso só guardam <code>int</code>, e a fila
+de saída mistura números e operadores. Como os números da calculadora são
+sempre <code>&gt;= 0</code>, os operadores viram <strong>códigos negativos</strong> num <code>enum</code> (assunto
+0063): <code>SOMA = -1</code>, <code>SUB = -2</code> e assim por diante. Na avaliação, <code>t &gt;= 0</code> é
+número e <code>t &lt; 0</code> é operador. A alternativa seria uma <code>struct</code> com uma
+etiqueta que diz o tipo do item. O nome dos tipos não atrapalha: <code>No</code> e
+<code>NoFila</code> podiam até ser iguais em arquivos separados, porque tipo não tem
+ligação. O conflito só aparece entre <strong>funções</strong> de mesmo nome, e por isso
+cada TAD prefixa as suas com <code>pilha_</code> ou <code>fila_</code>.</p>
+<p>A calculadora inteira é <strong>O(n)</strong> para uma expressão de n símbolos: cada
+símbolo entra e sai da fila uma vez, e de cada pilha no máximo uma vez.</p>
+<blockquote>
+<p>[!WARNING]
+O &quot;maior <strong>ou igual</strong>&quot; muda o resultado. Só com &quot;maior&quot;, <code>8 - 3 - 2</code> vira
+<code>8 3 2 - -</code>, que dá 7; o certo é <code>(8 - 3) - 2 = 3</code>. Mesma precedência
+associa <strong>à esquerda</strong>: o que já está na pilha sai antes do novo.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>A conta do bar, digitada como <code>(35 + 25) * 3 / 4</code>. A fila de saída fica
+<code>35 25 + 3 * 4 /</code>; quando chega o <code>/</code>, a pilha de valores tem 180 e 4, e a
+última conta dá 45:</p>
+<p>{{ideia}}</p>
+<p>A pasta tem o <code>pilha.c</code> do 0083 e o <code>fila.c</code> do 0086; o comando do exemplo
+compila os quatro com o programa:</p>
+<pre><code class="language-c">#include &lt;stdbool.h&gt;
+#include &lt;stdio.h&gt;
+#include &quot;fila.h&quot;
+#include &quot;pilha.h&quot;
+
+// Na fila e na pilha só cabe int. Números são &gt;= 0; operadores e o &quot;(&quot;
+// viram códigos negativos, que nunca se confundem com um número.
+enum { SOMA = -1, SUB = -2, MULT = -3, DIV = -4, ABRE = -5 };
+
+int codigo_de(char c) {
+    return c == &#39;+&#39; ? SOMA : c == &#39;-&#39; ? SUB : c == &#39;*&#39; ? MULT : DIV;
+}
+
+int precedencia(int op) {
+    return (op == MULT || op == DIV) ? 2 : (op == SOMA || op == SUB) ? 1 : 0; // ABRE: 0
+}
+
+// Etapa 1: infixa -&gt; fila em ordem pós-fixa. A pilha segura os operadores.
+bool converte(const char *s, Fila *saida) {
+    Pilha *ops = pilha_cria();
+    if (ops == NULL) {
+        return false;
+    }
+    int topo;
+    for (int i = 0; s[i] != &#39;\0&#39;; i++) {
+        char c = s[i];
+        if (c &gt;= &#39;0&#39; &amp;&amp; c &lt;= &#39;9&#39;) {
+            int numero = 0;
+            for (; s[i] &gt;= &#39;0&#39; &amp;&amp; s[i] &lt;= &#39;9&#39;; i++) {
+                numero = numero * 10 + (s[i] - &#39;0&#39;);
+            }
+            i--;
+            fila_insere(saida, numero); // número vai direto para a saída
+        } else if (c == &#39;(&#39;) {
+            pilha_empilha(ops, ABRE);
+        } else if (c == &#39;)&#39;) {
+            while (pilha_desempilha(ops, &amp;topo) &amp;&amp; topo != ABRE) {
+                fila_insere(saida, topo);
+            }
+        } else if (c == &#39;+&#39; || c == &#39;-&#39; || c == &#39;*&#39; || c == &#39;/&#39;) {
+            int op = codigo_de(c);
+            // sai antes quem tem precedência maior ou igual (conta da esquerda primeiro)
+            while (pilha_topo(ops, &amp;topo) &amp;&amp; precedencia(topo) &gt;= precedencia(op)) {
+                pilha_desempilha(ops, &amp;topo);
+                fila_insere(saida, topo);
+            }
+            pilha_empilha(ops, op);
+        }
+    }
+    while (pilha_desempilha(ops, &amp;topo)) {
+        fila_insere(saida, topo);
+    }
+    pilha_libera(ops);
+    return true;
+}
+
+// Etapa 2: consome a fila pós-fixa com uma pilha de valores.
+bool avalia(Fila *posfixa, int *resultado) {
+    Pilha *val = pilha_cria();
+    if (val == NULL) {
+        return false;
+    }
+    bool ok = true;
+    int t, a, b;
+    printf(&quot;Pós-fixa: &quot;);
+    while (ok &amp;&amp; fila_retira(posfixa, &amp;t)) {
+        if (t &gt;= 0) {
+            printf(&quot; %d&quot;, t);
+            pilha_empilha(val, t);
+        } else if (!pilha_desempilha(val, &amp;b) || !pilha_desempilha(val, &amp;a) || (t == DIV &amp;&amp; b == 0)) {
+            ok = false;
+        } else {
+            printf(&quot; %c&quot;, t == SOMA ? &#39;+&#39; : t == SUB ? &#39;-&#39; : t == MULT ? &#39;*&#39; : &#39;/&#39;);
+            pilha_empilha(val, t == SOMA ? a + b : t == SUB ? a - b : t == MULT ? a * b : a / b);
+        }
+    }
+    printf(&quot;\n&quot;);
+    ok = ok &amp;&amp; pilha_desempilha(val, resultado) &amp;&amp; pilha_vazia(val);
+    pilha_libera(val);
+    return ok;
+}
+
+int main(void) {
+    const char *contas[] = {&quot;(35 + 25) * 3 / 4&quot;, &quot;2 * (3 + 4) - 10 / 5&quot;};
+    for (int i = 0; i &lt; 2; i++) {
+        Fila *posfixa = fila_cria();
+        if (posfixa == NULL) {
+            return 1;
+        }
+        int r;
+        printf(&quot;Infixa:    %s\n&quot;, contas[i]);
+        if (converte(contas[i], posfixa) &amp;&amp; avalia(posfixa, &amp;r)) {
+            printf(&quot;Resultado: %d\n&quot;, r);
+        } else {
+            printf(&quot;Expressão inválida\n&quot;);
+        }
+        fila_libera(posfixa);
+    }
+    return 0;
+}
+// Saída:
+// Infixa:    (35 + 25) * 3 / 4
+// Pós-fixa:  35 25 + 3 * 4 /
+// Resultado: 45
+// Infixa:    2 * (3 + 4) - 10 / 5
+// Pós-fixa:  2 3 4 + * 10 5 / -
+// Resultado: 12
+</code></pre>
+<p>As perguntas de erro só aparecem na avaliação, onde a falta de operando e a
+divisão por zero se revelam:</p>
+<p>{{fluxograma}}</p>

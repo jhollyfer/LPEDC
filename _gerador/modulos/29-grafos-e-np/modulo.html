@@ -1,0 +1,355 @@
+<h1>Módulo 29 · Grafos: ciclos e cortes; problemas difíceis</h1>
+<p>Fecha os grafos dos módulos 16 e 23. A primeira metade (0182 a 0185) é
+algoritmo: Euler, ciclo hamiltoniano, pontes e articulações, cadeia de
+matrizes. A segunda (0186 a 0189) é a teoria de P e NP, reduções e
+aproximação, e o que fazer quando o problema é difícil.</p>
+<h2>O que você vai aprender</h2>
+<ul>
+<li><strong>grau</strong>, o <strong>lema do aperto de mãos</strong> e <strong>passeio, trajeto, caminho,
+circuito e ciclo</strong> (nomes do Cormen e do edital)</li>
+<li>a condição de <strong>Euler</strong> e o <strong>Hierholzer</strong></li>
+<li>o <strong>ciclo hamiltoniano</strong> por backtracking e por que é difícil quando o
+euleriano é fácil</li>
+<li><strong>pontes</strong> e <strong>articulações</strong> com uma DFS só (<code>tin</code> e <code>low</code>), com o caso
+especial da raiz</li>
+<li>a <strong>cadeia de matrizes</strong> por programação dinâmica</li>
+<li><strong>certificado</strong>, <strong>verificação polinomial</strong>, <strong>P</strong>, <strong>NP</strong>, <strong>NP-difícil</strong>,
+<strong>NP-completo</strong>, <strong>SAT</strong> e <strong>3-SAT</strong></li>
+<li><strong>redução polinomial</strong>: conjunto independente, <strong>clique</strong> e <strong>cobertura de
+vértices</strong>; 3-SAT para clique</li>
+<li><strong>algoritmos aproximados</strong>: cobertura 2-aproximada, <strong>bin packing</strong> e
+<strong>caixeiro viajante</strong> métrico</li>
+<li>o caixeiro viajante exato por <strong>Held-Karp</strong> e quando trocar pelo
+aproximado</li>
+</ul>
+<h2>Antes de começar</h2>
+<p>Usa matriz de adjacência e DFS (0109, 0111), componentes conexos (0150), Prim
+(0153), backtracking (0032, 0126, 0127), programação dinâmica (0138 a 0140),
+<code>qsort</code> (0096) e máscaras de bits (0065).</p>
+<p>Cada arquivo traz o algoritmo completo, sem TAD. Nos grafos, a origem é roxa,
+as arestas verdes são as escolhidas e o amarelo marca os vértices de corte.</p>
+<p>Convenções do módulo:</p>
+<ul>
+<li>vértices de 0 a V-1, nomes num vetor à parte, vizinhos em <strong>ordem crescente
+de índice</strong> (decide os empates);</li>
+<li>grafo não dirigido guarda cada aresta <strong>duas vezes</strong> na matriz; dirigido,
+uma;</li>
+<li>conjuntos pequenos são <strong>máscaras de bits</strong> num <code>int</code>;</li>
+<li>distâncias em <strong>quarteirões</strong>, <code>|dx| + |dy|</code>, que respeita a desigualdade
+triangular;</li>
+<li>os nomes seguem o <strong>Cormen</strong>, e o texto avisa quando o edital usa outro.</li>
+</ul>
+<p>{{indice}}</p>
+<hr>
+<p>{{assuntos}}</p>
+<hr>
+<h2>Desafios do módulo</h2>
+<p>Problemas para resolver no papel e, quando fizer sentido, num arquivo <code>.c</code>
+seu. Eles misturam os assuntos do módulo.</p>
+<p><strong>1. Graus impossíveis.</strong> Existe um grafo simples com cinco vértices, todos
+de grau 3? E com seis vértices de graus 5, 5, 4, 3, 2, 1?</p>
+<details><summary>Resposta</summary><p>O primeiro <strong>não</strong>: a soma dos graus seria 15, ímpar, e ela precisa ser 2E.
+O segundo tem soma 20 (par), mas também <strong>não</strong> existe: os dois vértices de
+grau 5 são ligados a todos os outros cinco, então o vértice de grau 1 já
+estaria ligado a dois. A soma par é necessária, não suficiente. Caminho:
+lema do aperto de mãos e um argumento de contagem.</p>
+</details><p><strong>2. Königsberg com pontes novas.</strong> As sete pontes de Königsberg ligam 4
+margens com graus 5, 3, 3 e 3. Quantas pontes novas, no mínimo, permitem um
+circuito euleriano? E um trajeto aberto?</p>
+<details><summary>Resposta</summary><p>São <strong>4</strong> vértices ímpares. Cada ponte nova muda a paridade de duas pontas.
+Para o circuito, <strong>2</strong> pontes (pareando os ímpares). Para o trajeto aberto,
+basta sobrarem 2 ímpares: <strong>1</strong> ponte. É o raciocínio do E1092 ao contrário.</p>
+</details><p><strong>3. Euler e Hamilton no cubo.</strong> O cubo tem 8 vértices e 12 arestas, todos os
+vértices de grau 3. Ele tem circuito euleriano? E ciclo hamiltoniano?</p>
+<details><summary>Resposta</summary><p>Circuito euleriano, <strong>não</strong> (grau 3 é ímpar). Ciclo hamiltoniano, <strong>sim</strong>:
+numere os vértices de 000 a 111 e percorra 000, 001, 011, 010, 110, 111,
+101, 100 e volte. Cada passo troca um bit só (é o código de Gray). Um dos
+dois pode existir sem o outro.</p>
+</details><p><strong>4. Pontes numa árvore.</strong> Numa árvore com n vértices, quantas pontes
+existem? Quem são as articulações?</p>
+<details><summary>Resposta</summary><p><strong>Todas as n - 1 arestas</strong> são pontes: árvore não tem ciclo, então nenhuma
+aresta tem caminho alternativo. As articulações são <strong>os vértices de grau
+pelo menos 2</strong> (os que não são folhas), desde que n ≥ 3. Confira com o
+programa do texto: em árvore, <code>low[v] = tin[v]</code> para todo v.</p>
+</details><p><strong>5. Ponte e articulação andam juntas?</strong> Se u - v é ponte, u é articulação?
+E o contrário: toda articulação toca uma ponte?</p>
+<details><summary>Resposta</summary><p>Ponte u - v implica que u é articulação <strong>se u tiver grau pelo menos 2</strong>
+(se u for folha, tirá-lo não separa nada). O contrário é <strong>falso</strong>: no
+texto, Flores é articulação e as duas arestas dela que ficam no triângulo
+não são pontes; numa gravata (A365), o Mirante é articulação e não toca
+ponte nenhuma.</p>
+</details><p><strong>6. Três matrizes.</strong> A1 é 2 × 50, A2 é 50 × 2 e A3 é 2 × 50. Qual a melhor
+ordem e quantas multiplicações ela custa? E a pior?</p>
+<details><summary>Resposta</summary><p><code>(A1 A2) A3</code>: 2 · 50 · 2 + 2 · 2 · 50 = 200 + 200 = <strong>400</strong>. A outra,
+<code>A1 (A2 A3)</code>: 50 · 2 · 50 + 2 · 50 · 50 = 5000 + 5000 = <strong>10000</strong>, 25 vezes
+mais. Regra de bolso: elimine logo a dimensão grande que está &quot;no meio&quot;.</p>
+</details><p><strong>7. Certificado para o &quot;não&quot;.</strong> Para &quot;o grafo tem ciclo hamiltoniano?&quot;, o
+certificado do sim é a rota. Qual seria um certificado curto para o &quot;não
+tem&quot;?</p>
+<details><summary>Resposta</summary><p><strong>Não se conhece nenhum.</strong> &quot;Não ter ciclo hamiltoniano&quot; é um problema de
+<strong>co-NP</strong>, e ninguém sabe se NP = co-NP. Em casos especiais existe prova
+curta (um vértice de grau 1, uma articulação), mas não em geral. É por isso
+que o backtracking do A365 só diz &quot;não&quot; depois de esgotar tudo.</p>
+</details><p><strong>8. Estrela.</strong> Na estrela com um centro e 5 pontas, qual a maior clique, o
+maior conjunto independente e a menor cobertura? Quanto a 2-aproximação da
+cobertura devolve?</p>
+<details><summary>Resposta</summary><p>Maior clique: <strong>2</strong> (qualquer aresta). Maior independente: <strong>5</strong> (as
+pontas). Menor cobertura: <strong>1</strong> (o centro), e 5 + 1 = 6 = n, como manda o
+teorema do 0187. A 2-aproximação pega uma aresta e põe as duas pontas:
+<strong>2</strong>, exatamente o dobro do ótimo.</p>
+</details><p><strong>9. O first fit na ordem pior.</strong> Capacidade 10 e itens 2, 2, 2, 2, 8, 8, 8, 8
+(nessa ordem). Quantas caixas o first fit usa? E o first fit decrescente?</p>
+<details><summary>Resposta</summary><p>First fit: os quatro 2 enchem 8 da primeira caixa, e cada 8 vai sozinho:
+<strong>5</strong> caixas. Decrescente: cada 8 abre uma caixa e cada 2 completa uma: <strong>4</strong>,
+que é o limite inferior (40 / 10). A ordem dos itens decide o resultado.</p>
+</details><p><strong>10. Garantia em números.</strong> Num caixeiro viajante métrico, a árvore geradora
+mínima pesa 50. Entre quais valores está o ótimo? E a rota da pré-ordem?</p>
+<details><summary>Resposta</summary><p>O ótimo é <strong>maior que 50</strong> (tirando uma aresta do ciclo ótimo sobra uma
+árvore geradora, que pesa pelo menos 50) e a rota da pré-ordem é <strong>no máximo
+100</strong> (duas vezes a árvore). Logo 50 &lt; ótimo ≤ rota ≤ 100.</p>
+</details><p><strong>11. Memória do Held-Karp.</strong> Com <code>int</code> de 4 bytes, quanto ocupa a tabela
+<code>dp[1 &lt;&lt; n][n]</code> para n = 20 e para n = 30? E a de anteriores?</p>
+<details><summary>Resposta</summary><p>n = 20: 2²⁰ × 20 × 4 bytes = <strong>80 MB</strong>. n = 30: 2³⁰ × 30 × 4 bytes =
+<strong>120 GB</strong> (mais 120 GB para os anteriores, se guardados). O tempo,
+O(n² 2ⁿ), também pesa, mas é a memória que costuma parar o exato primeiro.
+O E1132 reconstrói a rota sem a segunda tabela.</p>
+</details><h2>Questões do POSCOMP</h2>
+<p>Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.</p>
+<table>
+<thead>
+<tr>
+<th>Ano</th>
+<th>Questão</th>
+<th>Assunto</th>
+<th>Gabarito</th>
+<th>Prova</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2019</td>
+<td>40</td>
+<td>Classes P, NP e NP-completo</td>
+<td>E</td>
+<td><a href="https://www.sbc.org.br/wp-content/uploads/2025/02/0518.002_Exame_POSCOMP_2019.pdf">caderno</a></td>
+</tr>
+<tr>
+<td>2024</td>
+<td>37</td>
+<td>Autômatos, Turing e NP-completo (assertivas)</td>
+<td>E</td>
+<td><a href="https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2024.pdf">caderno</a></td>
+</tr>
+</tbody></table>
+<h2>Questões no estilo da prova</h2>
+<p>Questões objetivas como as da prova do PPGI. Todo código foi compilado e
+rodado antes de fixar o gabarito.</p>
+<p><strong>Questão 1.</strong> Um grafo simples não dirigido tem 6 vértices e 9 arestas.
+Cinco vértices têm graus 3, 3, 4, 2 e 2. Qual o grau do sexto?</p>
+<ul>
+<li>(A) 1</li>
+<li>(B) 2</li>
+<li>(C) 3</li>
+<li>(D) 4</li>
+<li>(E) 5</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(D)</strong>. Pelo lema do aperto de mãos, a soma dos graus é 2 × 9 = 18. Os
+cinco somam 14, então o sexto tem grau 4. Veja 0182.</p>
+</details><p><strong>Questão 2.</strong> Qual destes grafos tem circuito euleriano?</p>
+<ul>
+<li>(A) o completo K4</li>
+<li>(B) o bipartido completo K3,3</li>
+<li>(C) o cubo (8 vértices, grau 3)</li>
+<li>(D) a casinha do A364</li>
+<li>(E) o completo K5</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(E)</strong>. No K5 todo vértice tem grau 4 (par) e o grafo é conexo. K4, K3,3 e
+o cubo têm todos os graus iguais a 3; a casinha tem dois vértices de grau 3
+(tem trajeto aberto, não circuito). Veja 0182.</p>
+</details><p><strong>Questão 3.</strong> O que o programa mostra?</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    int g[5][5] = {{0, 1, 1, 0, 0},
+                   {1, 0, 1, 1, 1},
+                   {1, 1, 0, 1, 1},
+                   {0, 1, 1, 0, 0},
+                   {0, 1, 1, 0, 0}};
+    int impares = 0;
+    for (int u = 0; u &lt; 5; u++) {
+        int grau = 0;
+        for (int v = 0; v &lt; 5; v++) grau += g[u][v];
+        if (grau % 2) impares++;
+    }
+    if (impares == 0) printf(&quot;circuito\n&quot;);
+    else if (impares == 2) printf(&quot;trajeto\n&quot;);
+    else printf(&quot;nenhum\n&quot;);
+    return 0;
+}
+</code></pre>
+<ul>
+<li>(A) <code>circuito</code></li>
+<li>(B) <code>trajeto</code></li>
+<li>(C) <code>nenhum</code></li>
+<li>(D) nada</li>
+<li>(E) o programa não compila</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A)</strong>. Os graus são 2, 4, 4, 2, 2: nenhum ímpar. (O programa não confere a
+conexidade, mas este grafo é conexo.) Veja 0182.</p>
+</details><p><strong>Questão 4.</strong> Sobre circuito euleriano e ciclo hamiltoniano, analise as
+afirmações.</p>
+<ul>
+<li>I. Decidir se existe circuito euleriano está em P: basta conferir a
+conexidade e se todos os graus são pares.</li>
+<li>II. Verificar se uma sequência de vértices dada é um ciclo hamiltoniano é
+polinomial, mas decidir se o grafo tem algum é NP-completo.</li>
+<li>III. Todo grafo conexo com todos os graus pares tem ciclo hamiltoniano.</li>
+</ul>
+<p>Marque a alternativa <strong>CORRETA</strong>.</p>
+<ul>
+<li>(A) I, apenas.</li>
+<li>(B) II, apenas.</li>
+<li>(C) I e II, apenas.</li>
+<li>(D) II e III, apenas.</li>
+<li>(E) I e III, apenas.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(C)</strong>. I e II são verdadeiras. III é falsa: a gravata do A365 tem todos os
+graus pares (circuito euleriano) e nenhum ciclo hamiltoniano. Para o
+hamiltoniano não se conhece teste rápido, só o verificador polinomial. Veja
+0183 e 0186.</p>
+</details><p><strong>Questão 5.</strong> O programa abaixo roda a DFS com <code>tin</code> e <code>low</code>. O que ele
+mostra?</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int g[6][6], tin[6], low[6], t = 0;
+
+void dfs(int u, int p) {
+    tin[u] = low[u] = ++t;
+    for (int v = 0; v &lt; 6; v++) {
+        if (!g[u][v] || v == p) continue;
+        if (tin[v]) { if (tin[v] &lt; low[u]) low[u] = tin[v]; continue; }
+        dfs(v, u);
+        if (low[v] &lt; low[u]) low[u] = low[v];
+        if (low[v] &gt; tin[u]) printf(&quot;%d-%d\n&quot;, u, v);
+    }
+}
+
+int main(void) {
+    int e[][2] = {{0, 1}, {1, 2}, {2, 0}, {2, 3}, {3, 4}, {4, 5}, {5, 3}};
+    for (int k = 0; k &lt; 7; k++) g[e[k][0]][e[k][1]] = g[e[k][1]][e[k][0]] = 1;
+    dfs(0, -1);
+    return 0;
+}
+</code></pre>
+<ul>
+<li>(A) nada</li>
+<li>(B) <code>2-3</code></li>
+<li>(C) <code>2-3</code> e <code>3-4</code></li>
+<li>(D) <code>0-1</code> e <code>2-3</code></li>
+<li>(E) <code>2-3</code>, <code>3-4</code> e <code>4-5</code></li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(B)</strong>. São dois triângulos (0-1-2 e 3-4-5) ligados pela aresta 2-3, a única
+ponte. Dentro de cada triângulo há caminho alternativo, então <code>low[v]</code> volta
+ao ancestral e o teste <code>low[v] &gt; tin[u]</code> falha. Veja 0184.</p>
+</details><p><strong>Questão 6.</strong> Matrizes A1 (5 × 10), A2 (10 × 3), A3 (3 × 12) e A4 (12 × 5).
+Qual o menor número de multiplicações escalares para calcular A1 A2 A3 A4?</p>
+<ul>
+<li>(A) 405</li>
+<li>(B) 330</li>
+<li>(C) 580</li>
+<li>(D) 630</li>
+<li>(E) 750</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A)</strong>. A ordem ótima é <code>(A1 A2)(A3 A4)</code>: 150 + 180 + 5 · 3 · 5 = 405. Da
+esquerda para a direita custaria 150 + 180 + 300 = 630; <code>A1 (A2 (A3 A4))</code>,
+580. O 330 é <code>m[1][3]</code> (e também <code>m[2][4]</code>), não a cadeia inteira. Veja
+0185.</p>
+</details><p><strong>Questão 7.</strong> Sobre as classes P e NP, analise as afirmações.</p>
+<ul>
+<li>I. P ⊆ NP.</li>
+<li>II. NP é a classe dos problemas que não têm algoritmo polinomial.</li>
+<li>III. Se algum problema NP-completo tiver algoritmo polinomial, então
+P = NP.</li>
+<li>IV. Já foi provado que P ≠ NP.</li>
+</ul>
+<p>Marque a alternativa <strong>CORRETA</strong>.</p>
+<ul>
+<li>(A) I e II, apenas.</li>
+<li>(B) II e IV, apenas.</li>
+<li>(C) III e IV, apenas.</li>
+<li>(D) I e III, apenas.</li>
+<li>(E) I, II e III, apenas.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(D)</strong>. NP é &quot;verificável em tempo polinomial&quot;, não &quot;não polinomial&quot; (II é
+falsa), e todo problema de P é verificável rápido (I). III é a razão de se
+procurar um algoritmo rápido para qualquer NP-completo. IV é falsa: P versus
+NP está em aberto. Veja 0186.</p>
+</details><p><strong>Questão 8.</strong> Para provar que um problema novo X é NP-difícil, basta:</p>
+<ul>
+<li>(A) reduzir X a SAT em tempo polinomial.</li>
+<li>(B) mostrar que a força bruta de X é exponencial.</li>
+<li>(C) reduzir em tempo polinomial um problema NP-completo conhecido a X.</li>
+<li>(D) mostrar um verificador polinomial para X.</li>
+<li>(E) reduzir X a um problema de P.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(C)</strong>. Se um NP-completo Y satisfaz Y ≤p X, um algoritmo rápido para X
+resolveria Y. A alternativa (A) é o sentido errado: mostra só que X não é
+mais difícil que SAT. (D) mostra que X está em NP, não que é difícil.
+Veja 0187.</p>
+</details><p><strong>Questão 9.</strong> Num grafo G com 10 vértices, o maior conjunto independente tem
+4 vértices. Então:</p>
+<ul>
+<li>(A) a maior clique de G tem 6 vértices.</li>
+<li>(B) a maior clique do complemento de G tem 4 vértices e a menor cobertura de
+vértices de G tem 6.</li>
+<li>(C) a menor cobertura de vértices de G tem 4 vértices.</li>
+<li>(D) a maior clique do complemento de G tem 6 vértices.</li>
+<li>(E) não dá para concluir nada sobre clique e cobertura.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(B)</strong>. S é independente em G ⇔ S é clique no complemento ⇔ V − S é
+cobertura de G. Maior independente com 4 dá maior clique do complemento com
+4 e menor cobertura com 10 − 4 = 6. Sobre a clique do próprio G nada se
+conclui (A). Veja 0187.</p>
+</details><p><strong>Questão 10.</strong> O programa aplica o first fit com caixas de capacidade 10.
+O que ele mostra?</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    int item[] = {5, 7, 5, 2, 4, 2, 5, 1, 6}, livre[9], caixas = 0;
+    for (int i = 0; i &lt; 9; i++) {
+        int c = 0;
+        while (c &lt; caixas &amp;&amp; livre[c] &lt; item[i]) c++;
+        if (c == caixas) livre[caixas++] = 10;
+        livre[c] -= item[i];
+    }
+    printf(&quot;%d\n&quot;, caixas);
+    return 0;
+}
+</code></pre>
+<ul>
+<li>(A) 3</li>
+<li>(B) 4</li>
+<li>(C) 9</li>
+<li>(D) 6</li>
+<li>(E) 5</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(E)</strong>. As caixas ficam (5 5), (7 2 1), (4 2), (5) e (6). O limite inferior
+é 37 / 10 → 4, e 4 caixas são possíveis, por exemplo (5 5), (7 2 1),
+(6 4) e (5 2): o first fit não é ótimo, mas tem garantia. Veja 0188.</p>
+</details><h2>Para ler mais</h2>
+<ul>
+<li>CORMEN, T. H.; LEISERSON, C. E.; RIVEST, R. L.; STEIN, C. <em>Algoritmos: teoria e prática</em>. 4. ed. Rio de Janeiro: GEN LTC, 2024. Apêndice B (grafos: graus, caminhos, ciclos), cap. 20 (busca em profundidade e o problema do percurso de Euler), cap. 14 (multiplicação de cadeia de matrizes), cap. 34 (NP-completude: verificação, reduções, SAT, 3-SAT, clique, cobertura de vértices, ciclo hamiltoniano, caixeiro viajante) e cap. 35 (algoritmos de aproximação: cobertura de vértices e caixeiro viajante métrico).</li>
+<li>ZIVIANI, N. <em>Projeto de algoritmos com implementações em Pascal e C</em>. 3. ed. São Paulo: Cengage Learning, 2010. Cap. 7 (algoritmos em grafos) e cap. 9 (problemas NP-completos e algoritmos aproximados).</li>
+<li>SZWARCFITER, J. L. <em>Teoria computacional de grafos: os algoritmos</em>. Rio de Janeiro: Elsevier, 2018. Capítulos sobre conectividade (articulações e pontes), ciclos eulerianos e hamiltonianos.</li>
+<li>SZWARCFITER, J. L.; MARKENZON, L. <em>Estruturas de dados e seus algoritmos</em>. 3. ed. Rio de Janeiro: LTC, 2010. Capítulo sobre grafos.</li>
+<li>FEOFILOFF, P. <em>Algoritmos para grafos</em>. São Paulo: IME-USP. Disponível em: <a href="https://www.ime.usp.br/~pf/algoritmos_para_grafos/">https://www.ime.usp.br/~pf/algoritmos_para_grafos/</a>. Seções sobre pontes, articulações e ciclos eulerianos.</li>
+<li>FEOFILOFF, P. <em>Análise de algoritmos</em>. São Paulo: IME-USP. Disponível em: <a href="https://www.ime.usp.br/~pf/analise_de_algoritmos/">https://www.ime.usp.br/~pf/analise_de_algoritmos/</a>. Seções sobre programação dinâmica, P, NP e reduções.</li>
+<li>LINTZMAYER, C. N.; MOTA, G. O. <em>Análise de algoritmos e de estruturas de dados</em>. Santo André: UFABC; São Paulo: IME-USP, 2023. Rascunho. Capítulos sobre trilhas eulerianas, redução e P versus NP.</li>
+<li>KLEINBERG, J.; TARDOS, É. <em>Algorithm design</em>. Boston: Pearson, 2006. Cap. 8 (NP e intratabilidade) e cap. 11 (algoritmos de aproximação, bin packing).</li>
+<li>SEDGEWICK, R.; WAYNE, K. <em>Algorithms</em>. 4. ed. Boston: Addison-Wesley, 2011. Seção 6.5 (reduções e intratabilidade). Disponível em: <a href="https://algs4.cs.princeton.edu/">https://algs4.cs.princeton.edu/</a>.</li>
+<li>HIERHOLZER, C.; WIENER, C. Über die Möglichkeit, einen Linienzug ohne Wiederholung und ohne Unterbrechung zu umfahren. <em>Mathematische Annalen</em>, v. 6, n. 1, p. 30-32, 1873.</li>
+<li>TARJAN, R. E. Depth-first search and linear graph algorithms. <em>SIAM Journal on Computing</em>, v. 1, n. 2, p. 146-160, 1972.</li>
+<li>COOK, S. A. The complexity of theorem-proving procedures. In: ACM SYMPOSIUM ON THEORY OF COMPUTING, 3., 1971, Shaker Heights. <em>Proceedings</em> [...]. New York: ACM, 1971. p. 151-158.</li>
+<li>KARP, R. M. Reducibility among combinatorial problems. In: MILLER, R. E.; THATCHER, J. W. (ed.). <em>Complexity of computer computations</em>. New York: Plenum, 1972. p. 85-103.</li>
+<li>HELD, M.; KARP, R. M. A dynamic programming approach to sequencing problems. <em>Journal of the SIAM</em>, v. 10, n. 1, p. 196-210, 1962.</li>
+<li>CHRISTOFIDES, N. <em>Worst-case analysis of a new heuristic for the travelling salesman problem</em>. Pittsburgh: Carnegie Mellon University, 1976. Relatório técnico 388.</li>
+</ul>

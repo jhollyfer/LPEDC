@@ -1,0 +1,109 @@
+<h2>0006 · scanf</h2>
+<p>Até aqui os programas só falavam: todo valor estava escrito no código. Um
+programa útil também precisa <strong>ouvir</strong>. No modelo entrada → processamento →
+saída, falta a entrada, e a forma mais simples de entrada é o teclado. Quem
+faz esse papel no C é o <code>scanf</code>, o espelho do <code>printf</code>.</p>
+<p>Pense no app do banco quando você agenda um Pix. Ele pergunta o valor, você
+digita R$ 150,75; pergunta o dia, você digita 12. O app pega o que você
+digitou e guarda cada coisa no seu campo. O <strong><code>scanf</code></strong> faz o mesmo: o
+primeiro argumento, o formato, diz o que esperar, e os argumentos seguintes
+dizem <strong>onde guardar</strong> cada valor lido (BACKES, 2013, cap. 2).</p>
+<pre><code class="language-c">scanf(&quot;%d&quot;, &amp;dia);
+</code></pre>
+<p>O <code>&amp;</code> antes do nome é a peça nova. Ele dá o <strong>endereço</strong> da variável, o
+lugar exato da memória em que ela mora (0002). O <code>scanf</code> não quer o valor
+de <code>dia</code>, que ainda é lixo; quer saber em que bytes escrever o número
+digitado. Por isso o <code>&amp;</code> vai em toda variável simples no <code>scanf</code> e nunca no
+<code>printf</code>, que só precisa do valor para mostrar (DEITEL; DEITEL, 2011,
+cap. 9).</p>
+<p>Os especificadores quase repetem os do <code>printf</code>, com uma diferença que pega
+muita gente: o <code>double</code> se lê com <strong><code>%lf</code></strong> e se mostra com <code>%f</code>. O motivo
+está no endereço. Com <code>%lf</code>, o <code>scanf</code> escreve 8 bytes, no formato de
+<code>double</code>; com <code>%f</code>, escreve só 4, no formato de <code>float</code>, e o <code>double</code> fica
+com um número sem sentido. No <code>printf</code> os dois servem porque ele recebe o
+valor, e todo <code>float</code> vira <code>double</code> no caminho; endereço não se converte
+(DEITEL; DEITEL, 2011).</p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Lê com</th>
+<th>Mostra com</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>int</code></td>
+<td><code>%d</code></td>
+<td><code>%d</code></td>
+</tr>
+<tr>
+<td><code>float</code></td>
+<td><code>%f</code></td>
+<td><code>%f</code></td>
+</tr>
+<tr>
+<td><code>double</code></td>
+<td><code>%lf</code></td>
+<td><code>%f</code></td>
+</tr>
+<tr>
+<td><code>char</code></td>
+<td><code>%c</code> (ou <code>&quot; %c&quot;</code>)</td>
+<td><code>%c</code></td>
+</tr>
+</tbody></table>
+<p>O que você digita não vai direto para a variável. Os caracteres entram
+numa fila, o <strong>buffer</strong>, e só chegam ao programa quando você aperta Enter.
+O <code>scanf</code> tira da fila apenas o que o formato pede. O <code>%d</code> e o <code>%lf</code> pulam
+espaços e Enters antes do número e param no primeiro caractere que não
+serve; o resto <strong>fica na fila</strong> para a próxima leitura, inclusive o <code>&#39;\n&#39;</code>
+do Enter (KERRISK, s.d.). Digitando <code>150.75</code>, Enter, <code>12</code>, Enter, o <code>%lf</code>
+tira <code>150.75</code>, o <code>%d</code> pula o <code>&#39;\n&#39;</code> que sobrou e tira o <code>12</code>, e o último
+<code>&#39;\n&#39;</code> continua lá. O <code>%c</code> não pula nada e leria esse <code>&#39;\n&#39;</code>; o espaço em
+<code>&quot; %c&quot;</code> manda pular os brancos antes.</p>
+<p>O formato também pode ter caracteres comuns, e eles precisam aparecer na
+entrada exatamente como estão. Com <code>scanf(&quot;%d/%d/%d&quot;, &amp;d, &amp;m, &amp;a)</code>, você
+digita <code>7/9/2026</code>, e o <code>scanf</code> lê um número, consome a barra, lê outro
+número e assim por diante (BACKES, 2013, cap. 2).</p>
+<p>Por fim, o <code>scanf</code> <strong>devolve</strong> um número: quantos itens ele conseguiu
+guardar. Se tudo deu certo na data acima, devolve 3. Se o primeiro valor já
+falhou, como <code>doze</code> no lugar de <code>12</code>, devolve 0 e a variável fica como
+estava. Se a entrada acabou, devolve <code>EOF</code>, que vale -1 (DEITEL; DEITEL,
+2011, cap. 9). É assim que o programa descobre se a leitura funcionou; no
+módulo 02, o <code>if</code> vai usar esse número para decidir o que fazer.</p>
+<blockquote>
+<p>[!WARNING]
+Sem o <code>&amp;</code>, <code>scanf(&quot;%d&quot;, dia)</code> usa o lixo de <code>dia</code> como endereço e escreve
+num lugar qualquer: <code>Segmentation fault</code> ou outra variável estragada. O
+gcc avisa (<code>expects argument of type &#39;int *&#39;</code>). Ler <code>double</code> com <code>%f</code>
+também compila e dá número errado.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>Um Pix agendado: você digita <code>150.75</code>, Enter, <code>12</code>, Enter. O <code>%lf</code> tira
+<code>150.75</code> da fila, o <code>%d</code> pula o <code>&#39;\n&#39;</code> que sobrou e tira o <code>12</code>; o último
+<code>&#39;\n&#39;</code> fica na fila:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    double valor;
+    int dia;
+
+    printf(&quot;Valor do Pix: R$ &quot;);
+    scanf(&quot;%lf&quot;, &amp;valor);            // %lf: double no scanf
+    printf(&quot;Dia do mês: &quot;);
+    int lidos = scanf(&quot;%d&quot;, &amp;dia);   // devolve quantos itens leu
+
+    printf(&quot;Pix de R$ %.2f agendado para o dia %d\n&quot;, valor, dia);
+    printf(&quot;O último scanf leu %d item\n&quot;, lidos);
+    return 0;
+}
+// Exemplo de execução:
+// Valor do Pix: R$ 150.75
+// Dia do mês: 12
+// Pix de R$ 150.75 agendado para o dia 12
+// O último scanf leu 1 item
+</code></pre>
+<p>Para testar sem digitar: <code>printf &#39;150.75\n12\n&#39; | ./pix</code>. As duas leituras
+são paralelogramos de entrada, e a saída vem depois:</p>
+<p>{{fluxograma}}</p>

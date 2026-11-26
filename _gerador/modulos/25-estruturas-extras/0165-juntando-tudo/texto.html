@@ -1,0 +1,121 @@
+<h2>0165 · Juntando tudo</h2>
+<p>Uma loja virtual tem 1000 produtos e recebe 10 mil consultas por dia. Os 20
+produtos da promoção levam 80% delas. Qual estrutura deve guardar o
+catálogo? O módulo e os anteriores deixaram quatro candidatas, cada uma com
+uma promessa diferente, e a pergunta só se responde medindo.</p>
+<p>A <strong>BST</strong> (assunto 0099) busca em tempo proporcional à altura, e a altura
+depende da ordem em que as chaves chegam: chaves embaralhadas dão uma árvore
+baixa, chaves em ordem dão uma árvore que é uma lista. A <strong>AVL</strong> (0101)
+garante altura perto de log₂ n, à custa de rotações a cada inserção. A
+<strong>skip list</strong> (0163) promete O(log n) esperado, sem rotação nenhuma, porque
+a forma dela vem da moeda e não da ordem de chegada (PUGH, 1990). A <strong>lista
+com mover para a frente</strong> (0164) custa O(n) no pior caso, mas aposta que os
+itens mais procurados vão ficar no começo.</p>
+<p>Comparar estruturas exige uma medição justa, e justa quer dizer que só a
+estrutura muda. Todas recebem <strong>as mesmas chaves, na mesma ordem</strong>. Todas
+respondem <strong>às mesmas buscas</strong>, sorteadas uma vez e guardadas num vetor. E
+todas usam o mesmo <strong>custo</strong>: o número de chaves que a busca comparou, que
+não depende da máquina. Se uma dessas três coisas variar, a diferença no
+resultado pode vir dela, não da estrutura.</p>
+<p>Para o programa que mede não precisar conhecer cada estrutura, elas ficam
+atrás de uma <strong>interface comum</strong>: uma struct de ponteiros para função
+(assunto 0050), uma para cada operação, com a estrutura de dados passada
+como <code>void *</code> (assunto 0051), o ponteiro genérico que aponta para qualquer
+coisa (KERNIGHAN; RITCHIE, 1989):</p>
+<pre><code class="language-c">typedef struct {
+    const char *nome;
+    void *(*cria)(void);
+    void (*insere)(void *e, int chave);            // repetida é ignorada
+    bool (*busca)(void *e, int chave, int *custo); // custo: chaves comparadas
+    void (*libera)(void *e);
+} Estrutura;
+
+extern const Estrutura CONCORRENTES[NUM_CONCORRENTES];
+</code></pre>
+<p>Quem mede chama <code>e-&gt;busca(d, chave, &amp;custo)</code> sem saber o que há do outro
+lado: pode ser uma árvore, uma skip list ou uma lista. Para acrescentar um
+concorrente, basta pôr mais uma struct no vetor <code>CONCORRENTES</code>; o teste não
+muda.</p>
+<p>Essa flexibilidade tem um custo pequeno. <code>e-&gt;busca(d, ...)</code> é uma
+<strong>chamada indireta</strong>: o programa só descobre qual função chamar na hora,
+lendo o ponteiro. Por isso o compilador em geral não consegue copiar o
+corpo da função no lugar da chamada, e cada busca paga um salto a mais. Esse
+salto não aparece na contagem de chaves comparadas; só um cronômetro o vê.</p>
+<p>O resultado da medição confirma a teoria. Com as chaves em ordem crescente,
+como num catálogo exportado de uma planilha ordenada, a BST vira lista e
+passa de 500 comparações por busca. A AVL e a skip list nem percebem a
+diferença entre as duas ordens. A lista com mover para a frente perde: os
+20% de consultas espalhadas pelos outros produtos custam centenas de
+comparações cada. O A329 mostra em que ponto o jogo vira a favor dela.</p>
+<blockquote>
+<p>[!WARNING]
+Gerar as buscas <strong>dentro</strong> da função que mede estraga a comparação: o
+sorteio continua de onde parou, e cada concorrente recebe consultas
+diferentes. Sorteie uma vez, antes, e guarde num vetor.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>Uma loja tem 1000 produtos e 10 mil consultas por dia, 80% delas nos 20 da
+promoção. Cada concorrente recebe as chaves embaralhadas e em ordem crescente e
+responde às mesmas consultas:</p>
+<p>{{ideia}}</p>
+<p>O programa monta as duas ordens e as buscas, e a função <code>mede</code> faz o resto:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;bancada.h&quot;
+
+#define N 1000       // produtos no catálogo
+#define BUSCAS 10000 // consultas do dia
+#define QUENTES 20   // os produtos da promoção
+
+// insere as N chaves na ordem dada, faz as buscas e devolve o custo médio
+double mede(const Estrutura *e, const int ordem[], const int buscas[]) {
+    void *d = e-&gt;cria();
+    for (int i = 0; i &lt; N; i++) {
+        e-&gt;insere(d, ordem[i]);
+    }
+    long total = 0;
+    for (int i = 0; i &lt; BUSCAS; i++) {
+        int custo;
+        e-&gt;busca(d, buscas[i], &amp;custo);
+        total += custo;
+    }
+    e-&gt;libera(d);
+    return (double)total / BUSCAS;
+}
+
+int main(void) {
+    unsigned estado = 7;
+    int crescente[N], embaralhada[N], sorteio[N];
+    for (int i = 0; i &lt; N; i++) {
+        crescente[i] = embaralhada[i] = sorteio[i] = i + 1;
+    }
+    bc_embaralha(embaralhada, N, &amp;estado);
+    bc_embaralha(sorteio, N, &amp;estado); // os QUENTES primeiros são a promoção
+
+    // 80% das consultas vão para os 20 produtos da promoção
+    static int buscas[BUSCAS];
+    for (int i = 0; i &lt; BUSCAS; i++) {
+        if (bc_sorteio(&amp;estado) % 100 &lt; 80) {
+            buscas[i] = sorteio[bc_sorteio(&amp;estado) % QUENTES];
+        } else {
+            buscas[i] = bc_sorteio(&amp;estado) % N + 1;
+        }
+    }
+
+    printf(&quot;%-10s %12s %10s\n&quot;, &quot;&quot;, &quot;embaralhada&quot;, &quot;crescente&quot;);
+    for (int k = 0; k &lt; NUM_CONCORRENTES; k++) {
+        const Estrutura *e = &amp;CONCORRENTES[k];
+        printf(&quot;%-10s %12.1f %10.1f\n&quot;, e-&gt;nome, mede(e, embaralhada, buscas),
+               mede(e, crescente, buscas));
+    }
+    return 0;
+}
+// Saída:
+//             embaralhada  crescente
+// BST               11.9      569.7
+// AVL                8.9        9.1
+// skip list         16.4       18.3
+// lista MTF        114.6      114.5
+</code></pre>
+<p>O laço não sabe quem está medindo. Para acrescentar um concorrente, mexa no
+vetor <code>CONCORRENTES</code>, nunca no teste:</p>
+<p>{{fluxograma}}</p>

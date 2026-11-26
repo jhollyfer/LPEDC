@@ -1,0 +1,3169 @@
+<!-- Gerado por _gerador. Para mudar este arquivo, edite _gerador/modulos/11-listas/ e rode: cd _gerador && npm run gerar --><h1>Módulo 11 · Listas</h1>
+<blockquote>
+<p>[!IMPORTANT]
+<strong>Mundo 3 · Custo e estruturas lineares · Rota do jogo: etapa 13 de 29</strong></p>
+<p><strong>Missão:</strong> montar listas encadeadas simples, duplas e circulares.</p>
+<p><strong>Vem de:</strong> <a href="26-analise-formal.html">Módulo 26 · Notação assintótica, somatórios e espaço</a>. <strong>Segue para:</strong> <a href="12-pilhas-e-filas.html">Módulo 12 · Pilhas e filas</a>.</p>
+<p><strong>Checkpoints desta fase:</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> Ler os assuntos 0075 a 0081 e refazer os exemplos</li>
+<li><input disabled="" type="checkbox"> Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho</li>
+<li><input disabled="" type="checkbox"> Fechar a lista prática (P1101 a P1130)</li>
+<li><input disabled="" type="checkbox"> Enfrentar os desafios do módulo</li>
+<li><input disabled="" type="checkbox"> Chefão: resolver as questões de prova do módulo sem consultar</li>
+</ul>
+</blockquote>
+<p>O vetor que dobra quando enche e a <strong>lista encadeada</strong>, feita de nós e
+ponteiros: busca, remoção, inserção em ordem, lista dupla e circular. Depende
+dos módulos 06 (ponteiros), 07 (<code>malloc</code>), 08 (structs) e do TAD (0074); é a
+base do módulo 12.</p>
+<h2>O que você vai aprender</h2>
+<ul>
+<li>montar um <strong>TAD lista sequencial</strong> sobre um vetor que dobra com <code>realloc</code>, e
+o custo amortizado</li>
+<li>criar <strong>nós</strong> com struct autorreferenciada, inserir no início, percorrer e
+liberar uma <strong>lista encadeada</strong></li>
+<li><strong>buscar</strong> e <strong>remover</strong> com o par <code>ant</code>/<code>p</code>, e por que remover o primeiro
+nó é caso especial (e como eliminá-lo)</li>
+<li>manter uma <strong>lista ordenada</strong> inserindo no lugar certo</li>
+<li>usar a <strong>lista dupla</strong> para andar nos dois sentidos e remover em O(1)</li>
+<li>usar a <strong>lista circular</strong> para rodízios</li>
+<li>juntar tudo num <strong>TAD playlist</strong> com arquivo, callbacks e tipo opaco</li>
+</ul>
+<h2>Antes de começar</h2>
+<p>Cada assunto traz <code>lista.h</code> (interface) e <code>lista.c</code> (implementação). O
+comando compila o <code>lista.c</code> junto com o exemplo ou exercício:</p>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A151.c ~/LPEDC/material/0076-lista.c -o ~/LPEDC/material/A151 &amp;&amp; ~/LPEDC/material/A151
+</code></pre>
+<p>Nos exercícios, não repita o nome de uma função do <code>lista.c</code> (como
+<code>lista_imprime</code>): o ligador reclama. Nos desenhos, vermelho marca o nó que
+sai. Desenhe os nós e as setas antes de codar.</p>
+<p>Nos exercícios de &quot;ache o bug&quot;, o erro vem <strong>de propósito</strong>. Às vezes só o
+AddressSanitizer pega, ao rodar: leia o relatório inteiro, com o tipo do erro
+(<code>heap-use-after-free</code>, <code>heap-buffer-overflow</code>, <code>memory leaks</code>) e a linha.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Assunto</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="#0075--vetor-din%C3%A2mico">0075</a></td>
+<td>Vetor dinâmico</td>
+</tr>
+<tr>
+<td><a href="#0076--lista-encadeada">0076</a></td>
+<td>Lista encadeada</td>
+</tr>
+<tr>
+<td><a href="#0077--busca-e-remo%C3%A7%C3%A3o">0077</a></td>
+<td>Busca e remoção</td>
+</tr>
+<tr>
+<td><a href="#0078--lista-ordenada">0078</a></td>
+<td>Lista ordenada</td>
+</tr>
+<tr>
+<td><a href="#0079--lista-dupla">0079</a></td>
+<td>Lista dupla</td>
+</tr>
+<tr>
+<td><a href="#0080--lista-circular">0080</a></td>
+<td>Lista circular</td>
+</tr>
+<tr>
+<td><a href="#0081--juntando-tudo">0081</a></td>
+<td>Juntando tudo</td>
+</tr>
+</tbody></table>
+<hr>
+<blockquote>
+<p>[!NOTE]
+Cada assunto é um capítulo: <strong>Conceito</strong> (a explicação), <strong>Exemplos de uso</strong> (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e <strong>Exercícios</strong> (cada um é um arquivo em <code>material/</code> com o esqueleto, as dicas e o espaço para a resposta; resoluções em <code>_respostas/11-listas/</code>).</p>
+</blockquote>
+<h2>0075 · Vetor dinâmico</h2>
+<h3>Conceito</h3>
+<p>Você anota as despesas de uma viagem e não sabe quantas serão. Um
+<code>int despesas[100]</code> desperdiça memória se forem 5 e estoura se forem 101. O
+vetor de tamanho fixo obriga você a adivinhar o tamanho antes de começar: se
+sobra espaço, ele fica parado; se falta, não há um jeito barato de crescer
+(CELES; RANGEL, 2002). Este assunto abre o módulo de listas com a solução
+mais simples.</p>
+<p>Pense numa estante de livros. Enquanto há prateleira livre, o livro novo vai
+no fim. Quando a estante enche, você compra uma com o dobro do tamanho, passa
+os livros para ela na mesma ordem e se desfaz da velha. A <strong>lista
+sequencial</strong>, também chamada <strong>lista em vetor</strong>, funciona assim: ela guarda
+os itens lado a lado num vetor, na ordem da lista (ZIVIANI, 2010, cap. 3).
+Quando o vetor mora no heap e cresce sob demanda, ele é um <strong>vetor
+dinâmico</strong>.</p>
+<p>Três campos controlam a lista (FEOFILOFF, 2009, cap. 3). <code>itens</code> é o
+endereço do vetor no heap. <code>tam</code> diz quantos itens estão em uso, e <code>cap</code>
+quantos cabem. A diferença <code>cap - tam</code> é a folga. Enquanto <code>tam &lt; cap</code>,
+inserir no fim é só escrever em <code>itens[tam]</code> e somar 1 a <code>tam</code>: os itens
+ocupam as posições 0 a <code>tam - 1</code>, e a primeira vaga é exatamente <code>tam</code>.</p>
+<p>Quando <code>tam == cap</code>, a estante encheu. A função <code>realloc</code>, vista no assunto
+0055, pede um bloco maior, copia os itens para ele e libera o antigo. Se não
+houver memória, ela devolve <code>NULL</code> e não mexe no bloco antigo, que continua
+válido (CPPREFERENCE, s.d.). Por isso o resultado vai primeiro para uma
+variável auxiliar, e só depois de conferido substitui <code>itens</code>.</p>
+<p>Quanto crescer a cada vez? Crescer de um em um parece econômico, mas cada
+item novo copia todos os anteriores: 1 + 2 + 3 + ... + n, cerca de n²/2
+cópias para n itens. <strong>Dobrar a capacidade</strong> muda a conta. As cópias
+acontecem só quando a lista chega a 1, 2, 4, 8... itens, e somam
+1 + 2 + 4 + ... + n, menos de 2n. Dividido pelas n inserções, dá um custo
+constante por inserção, O(1) em média. Esse custo médio sobre uma sequência
+de operações se chama <strong>custo amortizado</strong>: uma inserção ou outra sai cara,
+mas a soma toda fica barata (CORMEN et al., 2024).</p>
+<p>Com a lista começando com espaço para 2, as duas primeiras despesas entram
+direto. A terceira encontra a lista cheia, a capacidade dobra para 4 e ela
+entra. A quinta dobra de novo, para 8, copia as quatro e deixa três vagas.</p>
+<p>Ler a posição <code>i</code> continua O(1), como em qualquer vetor: <code>itens[i]</code> sai de
+uma conta de endereço. Já inserir ou remover no <strong>meio</strong> tem um preço:
+todos os itens seguintes precisam andar uma casa para abrir ou fechar o
+espaço. No pior caso, mexer na posição 0, são n deslocamentos, O(n). A
+tabela reúne os custos:</p>
+<table>
+<thead>
+<tr>
+<th>Operação</th>
+<th>Custo</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ler a posição <code>i</code></td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>inserir no fim</td>
+<td>O(1) amortizado</td>
+</tr>
+<tr>
+<td>inserir ou remover no meio</td>
+<td>O(n): desloca os seguintes</td>
+</tr>
+</tbody></table>
+<p>A lista é montada como um <strong>TAD</strong>, no molde do assunto 0074: <code>lista.h</code> diz
+<strong>o que</strong> a lista faz (criar, inserir, pegar, liberar), e <code>lista.c</code> diz
+<strong>como</strong>, com a <code>struct lista</code> escondida do cliente (CELES; CERQUEIRA;
+RANGEL, 2016). O <code>lista_libera</code> faz dois <code>free</code>: primeiro o do vetor de
+itens, depois o da struct, porque depois de liberar a struct não dá mais para
+ler o campo <code>itens</code>.</p>
+<blockquote>
+<p>[!WARNING]
+Nunca escreva <code>l-&gt;itens = realloc(l-&gt;itens, ...)</code>: se vier <code>NULL</code>, o bloco
+antigo se perde. E um <code>int *p = &amp;itens[0]</code> guardado antes de inserir pode
+apontar para o bloco que o <code>realloc</code> liberou. Guarde o índice.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>As despesas de uma viagem, numa lista que começa com espaço para 2. A 3ª
+dobra para 4; a 5ª (R$ 27) dobra para 8, copia os quatro valores e deixa
+três vagas:</p>
+<p align="center"><img src="material/0075-ideia.svg" alt="Diagrama da ideia: Vetor dinâmico" width="858"></p>
+<p>A peça central do <code>lista.c</code> garante espaço antes de cada inserção:</p>
+<pre><code class="language-c">struct lista {
+    int *itens; // vetor no heap
+    int tam;    // quantos itens estão em uso
+    int cap;    // quantos itens cabem no vetor
+};
+
+// garante espaço para mais um item: se encheu, dobra
+static bool garante_espaco(Lista *l) {
+    if (l-&gt;tam &lt; l-&gt;cap) return true;
+    int nova_cap = l-&gt;cap * 2;
+    int *novo = realloc(l-&gt;itens, nova_cap * sizeof(int));
+    if (novo == NULL) return false; // l-&gt;itens continua valendo
+    l-&gt;itens = novo;
+    l-&gt;cap = nova_cap;
+    return true;
+}
+
+bool lista_insere_fim(Lista *l, int valor) {
+    if (!garante_espaco(l)) return false;
+    l-&gt;itens[l-&gt;tam] = valor;
+    l-&gt;tam++;
+    return true;
+}
+</code></pre>
+<p>Quem usa a lista só enxerga a interface de <code>lista.h</code>:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;lista.h&quot;
+
+int main(void) {
+    int despesas[] = {12, 35, 8, 50, 27}; // em reais
+    Lista *viagem = lista_cria(2);        // começa com espaço para 2
+    if (viagem == NULL) return 1;
+
+    for (int i = 0; i &lt; 5; i++) {
+        lista_insere_fim(viagem, despesas[i]);
+        printf(&quot;inseriu %2d: tam %d, cap %d\n&quot;, despesas[i],
+               lista_tamanho(viagem), lista_capacidade(viagem));
+    }
+    lista_imprime(viagem);
+
+    int total = 0;
+    for (int i = 0; i &lt; lista_tamanho(viagem); i++) {
+        int valor;
+        lista_pega(viagem, i, &amp;valor);
+        total += valor;
+    }
+    printf(&quot;total: R$ %d\n&quot;, total);
+
+    lista_libera(viagem);
+    return 0;
+}
+// Saída:
+// inseriu 12: tam 1, cap 2
+// inseriu 35: tam 2, cap 2
+// inseriu  8: tam 3, cap 4
+// inseriu 50: tam 4, cap 4
+// inseriu 27: tam 5, cap 8
+// [12, 35, 8, 50, 27]
+// total: R$ 132
+</code></pre>
+<p>&quot;Está cheio?&quot; vem antes de escrever. Para o 27 a resposta é Sim: o vetor
+dobra e só então o valor entra em <code>itens[4]</code>:</p>
+<p align="center"><img src="material/0075-fluxograma.svg" alt="Fluxograma: Vetor dinâmico" width="510"></p>
+<p><strong>Exemplo A149 · Quantas vezes o vetor mudou de casa</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;0075-lista.h&quot;
+
+int main(void) {
+    // capacidade 0 não existe: lista_cria corrige para 1
+    Lista *passos = lista_cria(0);
+    if (passos == NULL) return 1;
+    printf(&quot;criou: tam %d, cap %d\n&quot;, lista_tamanho(passos), lista_capacidade(passos));
+
+    // 20 dias de passos no app da academia (em milhares)
+    int crescimentos = 0;
+    for (int dia = 1; dia &lt;= 20; dia++) {
+        int cap_antes = lista_capacidade(passos);
+        if (!lista_insere_fim(passos, 5 + dia % 4)) break;
+        if (lista_capacidade(passos) != cap_antes) { // houve realloc
+            crescimentos++;
+            printf(&quot;dia %2d: cap %2d -&gt; %2d\n&quot;, dia, cap_antes, lista_capacidade(passos));
+        }
+    }
+
+    int tam = lista_tamanho(passos);
+    int cap = lista_capacidade(passos);
+    printf(&quot;%d itens, cap %d, %d vagas livres\n&quot;, tam, cap, cap - tam);
+    printf(&quot;realloc: %d vezes\n&quot;, crescimentos);
+
+    // posição fora da lista: lista_pega recusa e não mexe na variável
+    int valor = -1;
+    if (!lista_pega(passos, 20, &amp;valor)) {
+        printf(&quot;posição 20 não existe; valor continua %d\n&quot;, valor);
+    }
+
+    lista_libera(passos);
+    return 0;
+}
+// Saída:
+// criou: tam 0, cap 1
+// dia  2: cap  1 -&gt;  2
+// dia  3: cap  2 -&gt;  4
+// dia  5: cap  4 -&gt;  8
+// dia  9: cap  8 -&gt; 16
+// dia 17: cap 16 -&gt; 32
+// 20 itens, cap 32, 12 vagas livres
+// realloc: 5 vezes
+// posição 20 não existe; valor continua -1
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A149.c ~/LPEDC/material/0075-lista.c -o ~/LPEDC/material/A149 &amp;&amp; ~/LPEDC/material/A149
+</code></pre>
+<p><strong>Exemplo A150 · Inserir e remover no meio: todo mundo se mexe</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;0075-lista.h&quot;
+
+int main(void) {
+    Lista *viagem = lista_cria(4);
+    if (viagem == NULL) return 1;
+    lista_insere_fim(viagem, 12);
+    lista_insere_fim(viagem, 35);
+    lista_insere_fim(viagem, 8);
+    lista_insere_fim(viagem, 50);
+    lista_imprime(viagem);
+
+    // esqueceu o pedágio de R$ 19, que foi a segunda despesa
+    lista_insere_em(viagem, 1, 19); // 35, 8 e 50 andam uma casa para a direita
+    lista_imprime(viagem);
+
+    // o R$ 8 foi reembolsado: sai da lista
+    int tirado;
+    if (lista_remove_em(viagem, 3, &amp;tirado)) { // 50 anda uma casa para a esquerda
+        printf(&quot;removeu R$ %d\n&quot;, tirado);
+    }
+    lista_imprime(viagem);
+
+    // posição que não existe: a lista recusa em vez de estragar a memória
+    if (!lista_insere_em(viagem, 9, 100)) {
+        printf(&quot;posição 9 não existe (tamanho %d)\n&quot;, lista_tamanho(viagem));
+    }
+
+    lista_libera(viagem);
+    return 0;
+}
+// Saída:
+// [12, 35, 8, 50]
+// [12, 19, 35, 8, 50]
+// removeu R$ 8
+// [12, 19, 35, 50]
+// posição 9 não existe (tamanho 4)
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A150.c ~/LPEDC/material/0075-lista.c -o ~/LPEDC/material/A150 &amp;&amp; ~/LPEDC/material/A150
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E445</strong> · ★☆☆</p>
+<p>O medidor de glicose da sua mãe registrou estas leituras na semana (mg/dL):
+98, 110, 87, 132, 105, 91. Usando só as funções de lista.h, crie uma lista
+com capacidade inicial 4, insira as leituras no fim, mostre a lista, o
+tamanho, a capacidade, a média (uma casa decimal) e a maior leitura.</p>
+<pre><code class="language-text">Saída esperada:
+[98, 110, 87, 132, 105, 91]
+tamanho 6, capacidade 8
+média: 103.8
+maior: 132
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E445.c ~/LPEDC/material/0075-lista.c -o ~/LPEDC/material/E445 &amp;&amp; ~/LPEDC/material/E445
+</code></pre>
+<p><strong>Exercício E447</strong> · ★★☆</p>
+<p>O pluviômetro da escola anota a chuva do dia em mm e grava -1 quando o
+sensor falha. Usando SÓ a interface de lista.h, guarde as leituras
+4, -1, 0, 12, -1, -1, 7 numa lista de capacidade inicial 4 e escreva:</p>
+<pre><code class="language-text">int posicao_de(const Lista *l, int valor)  primeira posição do valor, ou -1
+int remove_todos(Lista *l, int valor)      tira todas as ocorrências e
+                                           devolve quantas tirou
+</code></pre>
+<p>Mostre a lista, remova as falhas (-1) e mostre de novo.</p>
+<pre><code class="language-text">Saída esperada:
+antes:  [4, -1, 0, 12, -1, -1, 7]
+depois: [4, 0, 12, 7]
+3 falhas removidas
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E447.c ~/LPEDC/material/0075-lista.c -o ~/LPEDC/material/E447 &amp;&amp; ~/LPEDC/material/E447
+</code></pre>
+<p><strong>Exercício E448</strong> · ★★☆</p>
+<p>Existem dois jeitos de tirar um item do meio de uma lista sequencial:</p>
+<pre><code class="language-text">deslocando: puxa todos os de depois uma casa para a esquerda (mantém a
+            ordem; custa O(n))
+trocando:   copia o ÚLTIMO item para o buraco e diminui o tamanho
+            (bagunça a ordem; custa O(1))
+</code></pre>
+<p>Escreva as duas funções. Cada uma recebe o vetor, o endereço do tamanho e
+a posição, e devolve quantos itens precisou mover (trocando move 1, ou 0
+quando a posição já é a última). Teste tirando a posição 2 de duas cópias
+das senhas 101 a 108. Depois, para sentir a diferença de custo, esvazie
+as duas cópias tirando SEMPRE a posição 0 e mostre o total de movimentos
+de cada uma:</p>
+<pre><code class="language-text">Saída esperada:
+deslocando: [101, 102, 104, 105, 106, 107, 108]  movimentos: 5
+trocando:   [101, 102, 108, 104, 105, 106, 107]  movimentos: 1
+esvaziando pela frente: deslocando 21, trocando 6
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E448.c ~/LPEDC/material/0075-lista.c -o ~/LPEDC/material/E448 &amp;&amp; ~/LPEDC/material/E448
+</code></pre>
+<p><strong>Exercício E450</strong> · ★★★</p>
+<p>Um vetor que só cresce nunca devolve memória. Usando a struct Vet abaixo,
+escreva vet_empurra (põe no fim; quando tam == cap, dobra a capacidade com
+realloc) e duas funções que tiram o último item, guardam em *saiu e
+encolhem o vetor pela metade (nunca abaixo de capacidade 2):</p>
+<pre><code class="language-text">bool vet_tira(Vet *v, int *saiu)         encolhe se tam &lt;= cap / 4
+bool vet_tira_metade(Vet *v, int *saiu)  encolhe se tam &lt;= cap / 2
+</code></pre>
+<p>Some 1 em v-&gt;reallocs a cada realloc que der certo. No main: comece com um
+vetor de cap 2, empurre 1 a 9, esvazie com vet_tira mostrando cada passo;
+depois crie dois vetores com 1, 2, 3, 4 (tam 4, cap 4, reallocs zerado) e,
+10 vezes, empurre 5 e tire, um com cada regra, mostrando os reallocs.</p>
+<pre><code class="language-text">Saída esperada:
+empurrou 9: tam 9, cap 16
+tirou 9: tam 8, cap 16
+tirou 8: tam 7, cap 16
+tirou 7: tam 6, cap 16
+tirou 6: tam 5, cap 16
+tirou 5: tam 4, cap 8
+tirou 4: tam 3, cap 8
+tirou 3: tam 2, cap 4
+tirou 2: tam 1, cap 2
+tirou 1: tam 0, cap 2
+alternando com 1/2: 20 realloc
+alternando com 1/4: 1 realloc
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E450.c ~/LPEDC/material/0075-lista.c -o ~/LPEDC/material/E450 &amp;&amp; ~/LPEDC/material/E450
+</code></pre>
+<hr>
+<h2>0076 · Lista encadeada</h2>
+<h3>Conceito</h3>
+<p>No extrato do Pix, cada transferência nova aparece no topo, e as antigas
+descem. No vetor dinâmico do assunto 0075, pôr um item na posição 0 obriga
+todos os outros a andarem uma casa, O(n) a cada Pix. E quando o vetor enche,
+o <code>realloc</code> copia tudo. A lista encadeada troca o vetor por peças soltas, e
+inserir na frente passa a custar sempre o mesmo, com 4 itens ou com 4
+milhões.</p>
+<p>Pense numa caça ao tesouro. Cada pista está num lugar diferente da cidade e
+traz o endereço da próxima; a última diz &quot;fim&quot;. Ninguém precisa que as pistas
+fiquem lado a lado, só que cada uma saiba onde está a seguinte. Uma <strong>lista
+encadeada</strong>, que o Cormen chama de <strong>lista ligada</strong>, guarda cada item num
+pedaço separado de memória, o <strong>nó</strong>. Cada nó traz o valor e o endereço do
+próximo nó, e o último aponta para <code>NULL</code> (FEOFILOFF, 2009, cap. 4).</p>
+<p>A lista inteira é representada pelo endereço do primeiro nó, o <strong>início</strong>
+(no Cormen, <code>L.head</code>). Com ele você chega a todos os outros, seguindo as
+setas. A lista vazia é simplesmente <code>inicio == NULL</code>: não há primeiro nó
+(CORMEN et al., 2024, cap. 10).</p>
+<p>O nó é uma struct com um detalhe novo: um dos campos aponta para outro nó do
+mesmo tipo. Uma struct assim se chama <strong>struct autorreferenciada</strong>:</p>
+<pre><code class="language-c">typedef struct no {
+    int valor;
+    struct no *prox; // o próximo nó, ou NULL no último
+} No;
+</code></pre>
+<p>Uma struct não pode conter a si mesma, porque teria tamanho infinito: o nó
+teria um nó dentro, que teria outro, e assim por diante. Mas pode conter um
+<strong>ponteiro</strong> para a própria struct, porque um ponteiro tem tamanho fixo, 8
+bytes em 64 bits, aponte para o que apontar (KERNIGHAN; RITCHIE, 1989). Por
+isso o campo é <code>struct no *prox</code>, com o nome completo da struct: dentro das
+chaves, o apelido <code>No</code> ainda não existe.</p>
+<p>Cada nó vem de um <code>malloc</code> separado e cai onde o heap tiver espaço. Os
+endereços ficam fora de ordem, e a ordem da lista está só nas setas. A
+consequência é que não existe <code>lista[2]</code>: para chegar ao terceiro nó, você
+parte do início e segue duas setas (CELES; RANGEL, 2002). Ler a posição <code>i</code>,
+que no vetor era O(1), aqui custa O(i).</p>
+<p>Três operações formam a base. <strong>Inserir no início</strong> cria o nó com <code>malloc</code>,
+põe o valor, aponta o <code>prox</code> dele para o antigo início e devolve o novo nó,
+que passa a ser o início. São sempre os mesmos passos, sem andar pela lista:
+O(1) (CELES; RANGEL, 2002). Quem chama precisa guardar o retorno, com
+<code>inicio = lista_insere_inicio(inicio, 20);</code>.</p>
+<p><strong>Percorrer</strong> usa um ponteiro auxiliar <code>p</code> que começa no início e anda de nó
+em nó: <code>for (p = inicio; p != NULL; p = p-&gt;prox)</code>. Esse é o &quot;for de lista&quot;,
+que você vai escrever em quase toda função do módulo. A cada volta, <code>p-&gt;valor</code>
+é o valor do nó atual; quando <code>p</code> vira <code>NULL</code>, a lista acabou (FEOFILOFF,
+2009, cap. 4).</p>
+<p><strong>Liberar</strong> pede um <code>free</code> por nó, porque cada nó veio de um <code>malloc</code>. O
+cuidado está na ordem: guarde <code>p-&gt;prox</code> numa variável <strong>antes</strong> de chamar
+<code>free(p)</code>, porque depois do <code>free</code> o nó não existe mais e ler o campo dele é
+ler memória devolvida (CELES; RANGEL, 2002).</p>
+<p>Inserir no <strong>fim</strong> é outra história. Guardando só o início, é preciso andar
+até o último nó, O(n). Guardando também um ponteiro para o último, vira O(1);
+os assuntos 0079 e 0086 fazem isso. O nó ocupa 16 bytes em 64 bits: 4 do
+<code>int</code>, 4 de preenchimento para alinhar o ponteiro e 8 do ponteiro.</p>
+<blockquote>
+<p>[!WARNING]
+<code>lista_insere_inicio(inicio, 20);</code> sem o <code>inicio =</code> na frente compila sem
+aviso e está errado: o novo início se perde e o nó vira vazamento. No
+<code>libera</code>, o erro comum é ler <code>p-&gt;prox</code> depois de <code>free(p)</code>.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>Chegam quatro Pix: R$ 20, 45, 10 e 80, e o 80 aparece primeiro no extrato.
+Embaixo, a lista no heap, com endereços fora de ordem:</p>
+<p align="center"><img src="material/0076-ideia.svg" alt="Diagrama da ideia: Lista encadeada" width="858"></p>
+<p>A inserção no início, do <code>lista.c</code> desta pasta:</p>
+<pre><code class="language-c">No *lista_insere_inicio(No *inicio, int valor) {
+    No *novo = malloc(sizeof(No));
+    if (novo == NULL) { // num programa pequeno, desistir é o mais honesto
+        fprintf(stderr, &quot;sem memória\n&quot;);
+        exit(1);
+    }
+    novo-&gt;valor = valor;
+    novo-&gt;prox = inicio; // o antigo primeiro vira o segundo
+    return novo;         // o novo nó é o novo início
+}
+</code></pre>
+<p>E o extrato montado no <code>main</code>:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;lista.h&quot;
+
+int main(void) {
+    No *extrato = NULL; // lista vazia
+
+    // os Pix chegam nesta ordem: 20, 45, 10, 80
+    extrato = lista_insere_inicio(extrato, 20);
+    extrato = lista_insere_inicio(extrato, 45);
+    extrato = lista_insere_inicio(extrato, 10);
+    extrato = lista_insere_inicio(extrato, 80);
+
+    lista_imprime(extrato); // o último a chegar aparece primeiro
+
+    int total = 0;
+    for (No *p = extrato; p != NULL; p = p-&gt;prox) { // percorrer: siga os prox
+        total += p-&gt;valor;
+    }
+    printf(&quot;%d Pix, total R$ %d\n&quot;, lista_tamanho(extrato), total);
+
+    lista_libera(extrato);
+    return 0;
+}
+// Saída:
+// 80 -&gt; 10 -&gt; 45 -&gt; 20 -&gt; NULL
+// 4 Pix, total R$ 155
+</code></pre>
+<p>O laço pergunta &quot;ainda tem nó?&quot; antes de cada passo; o <code>p</code> vai do 80 ao 20,
+vira <code>NULL</code> e o laço para com total R$ 155:</p>
+<p align="center"><img src="material/0076-fluxograma.svg" alt="Fluxograma: Lista encadeada" width="543"></p>
+<p><strong>Exemplo A151 · Andando pelas setas: o terceiro nó e a lista vazia</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;0076-lista.h&quot;
+
+int main(void) {
+    // temperaturas da semana em Cuiabá, lidas de segunda a domingo
+    int temps[] = {31, 34, 29, 36, 33, 28, 35};
+    No *semana = NULL;
+    for (int i = 0; i &lt; 7; i++) {
+        semana = lista_insere_inicio(semana, temps[i]);
+    }
+    lista_imprime(semana); // domingo na frente: a ordem saiu invertida
+
+    // não existe semana[2]: para chegar no 3º nó, siga duas setas
+    No *p = semana;
+    for (int passo = 0; passo &lt; 2 &amp;&amp; p != NULL; passo++) {
+        p = p-&gt;prox;
+    }
+    if (p != NULL) printf(&quot;3º nó: %d (sexta-feira)\n&quot;, p-&gt;valor);
+
+    // percorrer também serve para procurar o maior
+    int maior = semana-&gt;valor;
+    for (No *q = semana-&gt;prox; q != NULL; q = q-&gt;prox) {
+        if (q-&gt;valor &gt; maior) maior = q-&gt;valor;
+    }
+    printf(&quot;maior: %d\n&quot;, maior);
+
+    // a lista vazia não é caso especial: o laço só não roda nenhuma vez
+    No *vazia = NULL;
+    printf(&quot;vazia tem %d nós: &quot;, lista_tamanho(vazia));
+    lista_imprime(vazia);
+    lista_libera(vazia); // não faz nada, e não quebra
+
+    lista_libera(semana);
+    return 0;
+}
+// Saída:
+// 35 -&gt; 28 -&gt; 33 -&gt; 36 -&gt; 29 -&gt; 34 -&gt; 31 -&gt; NULL
+// 3º nó: 33 (sexta-feira)
+// maior: 36
+// vazia tem 0 nós: NULL
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A151.c ~/LPEDC/material/0076-lista.c -o ~/LPEDC/material/A151 &amp;&amp; ~/LPEDC/material/A151
+</code></pre>
+<p><strong>Exemplo A152 · Inserir no fim com um ponteiro para o último</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &quot;0076-lista.h&quot;
+
+// põe &quot;valor&quot; depois do último nó; *inicio e *fim mudam quando precisa
+static void insere_no_fim(No **inicio, No **fim, int valor) {
+    No *novo = malloc(sizeof(No));
+    if (novo == NULL) exit(1);
+    novo-&gt;valor = valor;
+    novo-&gt;prox = NULL;     // ele vai ser o último
+    if (*inicio == NULL) { // lista vazia: é o primeiro e o último
+        *inicio = novo;
+    } else {
+        (*fim)-&gt;prox = novo; // o antigo último aponta para ele
+    }
+    *fim = novo;
+}
+
+int main(void) {
+    No *inicio = NULL;
+    No *fim = NULL;
+
+    insere_no_fim(&amp;inicio, &amp;fim, 20);
+    insere_no_fim(&amp;inicio, &amp;fim, 45);
+    insere_no_fim(&amp;inicio, &amp;fim, 10);
+    insere_no_fim(&amp;inicio, &amp;fim, 80);
+
+    lista_imprime(inicio); // agora na ordem de chegada
+    printf(&quot;primeiro: %d, último: %d\n&quot;, inicio-&gt;valor, fim-&gt;valor);
+
+    lista_libera(inicio);
+    return 0;
+}
+// Saída:
+// 20 -&gt; 45 -&gt; 10 -&gt; 80 -&gt; NULL
+// primeiro: 20, último: 80
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A152.c ~/LPEDC/material/0076-lista.c -o ~/LPEDC/material/A152 &amp;&amp; ~/LPEDC/material/A152
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E451</strong> · ★☆☆</p>
+<p>O app do banco quer destacar os Pix &quot;grandes&quot;. Monte o extrato inserindo
+no início os Pix 30, 75, 12, 50, 120 e 64 (nesta ordem), mostre a lista e
+escreva a função</p>
+<pre><code class="language-text">int conta_maiores(const No *inicio, int limite)
+</code></pre>
+<p>que devolve quantos valores são MAIORES que o limite. Use limite 50.</p>
+<pre><code class="language-text">Saída esperada:
+64 -&gt; 120 -&gt; 50 -&gt; 12 -&gt; 75 -&gt; 30 -&gt; NULL
+3 Pix acima de R$ 50
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E451.c ~/LPEDC/material/0076-lista.c -o ~/LPEDC/material/E451 &amp;&amp; ~/LPEDC/material/E451
+</code></pre>
+<p><strong>Exercício E453</strong> · ★★☆</p>
+<p>Os preços do hortifruti chegaram num vetor: {5, 18, 7, 22, 9}. Escreva:</p>
+<pre><code class="language-text">No *vetor_para_lista(const int v[], int n)
+    monta a lista NA MESMA ORDEM do vetor, usando só lista_insere_inicio
+int lista_para_vetor(const No *inicio, int v[], int max)
+    copia a lista para o vetor (no máximo max itens) e devolve quantos
+    copiou
+</code></pre>
+<p>Teste indo e voltando:</p>
+<pre><code class="language-text">Saída esperada:
+lista: 5 -&gt; 18 -&gt; 7 -&gt; 22 -&gt; 9 -&gt; NULL
+vetor: 5 18 7 22 9
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E453.c ~/LPEDC/material/0076-lista.c -o ~/LPEDC/material/E453 &amp;&amp; ~/LPEDC/material/E453
+</code></pre>
+<p><strong>Exercício E454</strong> · ★★☆</p>
+<p>Uma lista é NULL ou um nó seguido de outra lista. Essa definição é
+recursiva, e as funções também podem ser. O extrato recebeu os Pix 15, 60,
+35, 90 e 25, inseridos no início. Escreva, SEM laço nenhum:</p>
+<pre><code class="language-text">void imprime_ao_contrario(const No *p)  do mais antigo para o mais novo
+int tamanho_rec(const No *p)            quantos nós
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+mais novo primeiro: 25 -&gt; 90 -&gt; 35 -&gt; 60 -&gt; 15 -&gt; NULL
+mais antigo primeiro: 15 60 35 90 25
+tamanho (recursivo): 5
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E454.c ~/LPEDC/material/0076-lista.c -o ~/LPEDC/material/E454 &amp;&amp; ~/LPEDC/material/E454
+</code></pre>
+<p><strong>Exercício E456</strong> · ★★★</p>
+<p>A fila de embarque foi montada ao contrário: 5 -&gt; 4 -&gt; 3 -&gt; 2 -&gt; 1 (monte
+inserindo no início 1, 2, 3, 4 e 5). Escreva No *inverte(No *inicio), que
+inverte a lista SÓ MEXENDO NOS PONTEIROS: nada de malloc, nada de trocar
+os valores, nada de vetor auxiliar. Ela devolve o novo início. Mostre a
+fila antes e depois e teste também com a lista vazia e com uma lista de
+um nó só (o valor 7).</p>
+<pre><code class="language-text">Saída esperada:
+antes:  5 -&gt; 4 -&gt; 3 -&gt; 2 -&gt; 1 -&gt; NULL
+depois: 1 -&gt; 2 -&gt; 3 -&gt; 4 -&gt; 5 -&gt; NULL
+vazia:  NULL
+um só:  7 -&gt; NULL
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E456.c ~/LPEDC/material/0076-lista.c -o ~/LPEDC/material/E456 &amp;&amp; ~/LPEDC/material/E456
+</code></pre>
+<hr>
+<h2>0077 · Busca e remoção</h2>
+<h3>Conceito</h3>
+<p>O assunto 0076 sabe criar, percorrer e liberar uma lista encadeada. Falta
+achar um item e tirá-lo do meio sem desmontar o resto. No vetor, remover do
+meio obrigava a deslocar os seguintes. Na lista, ninguém se move: basta
+trocar uma seta. O trabalho está em descobrir <strong>qual</strong> seta trocar.</p>
+<p>Na barbearia, as senhas esperam numa lista: 31, 17, 42, 8. O cliente da senha
+42 desiste e vai embora. Os outros não mudam de cadeira; só o 17 passa a ter
+o 8 como próximo a ser chamado. É exatamente o que a remoção numa lista
+encadeada faz.</p>
+<p><strong>Buscar</strong> é percorrer a lista até achar o valor, comparando nó por nó, e
+custa O(n) no pior caso. A função de busca devolve o <strong>endereço do nó</strong> que
+tem o valor, ou <code>NULL</code> se a lista acabou sem achar. Com o endereço em mãos,
+você lê o valor ou o altera direto no nó (FEOFILOFF, 2009, cap. 4):</p>
+<pre><code class="language-c">No *p = inicio;
+while (p != NULL &amp;&amp; p-&gt;valor != valor) { // o teste do NULL vem primeiro
+    p = p-&gt;prox;
+}
+// aqui p é o nó com o valor, ou NULL se não achou
+</code></pre>
+<p><strong>Remover</strong> o nó <code>p</code> exige que o nó <strong>anterior</strong> passe a apontar para o nó
+seguinte, pulando o <code>p</code>. O problema é que a lista simples só tem setas para
+a frente: parado no <code>p</code>, você não tem como voltar ao anterior. A saída é
+percorrer com <strong>dois ponteiros</strong>, <code>ant</code> e <code>p</code>, em que <code>ant</code> anda sempre um
+passo atrás. Antes de avançar <code>p</code>, você faz <code>ant = p</code>; assim, quando <code>p</code>
+para no nó procurado, <code>ant</code> está no nó de antes (CELES; RANGEL, 2002).</p>
+<p>Achado o nó, há dois casos, e a diferença está em <code>ant</code> (CELES; RANGEL,
+2002). Se <code>ant</code> ainda vale <code>NULL</code>, o laço nem andou: o nó é o <strong>primeiro</strong> da
+lista, e quem precisa mudar é o próprio início, que passa a ser <code>p-&gt;prox</code>. Se
+<code>ant</code> não é <code>NULL</code>, o nó está no meio ou no fim, e <code>ant-&gt;prox = p-&gt;prox</code> faz
+o anterior pular o <code>p</code>. Nos dois casos, o <code>free(p)</code> vem <strong>depois</strong> de religar,
+porque é preciso ler <code>p-&gt;prox</code> antes de devolver o nó.</p>
+<p>O primeiro caso traz uma complicação. Remover o primeiro nó muda a variável
+<code>inicio</code> de quem chamou, e a função recebe só uma cópia dela. A inserção do
+assunto 0076 resolvia isso devolvendo o início novo. A remoção usa o outro
+estilo comum: recebe o <strong>endereço</strong> do início, <code>No **inicio</code>, como no
+assunto 0049, e escreve <code>*inicio = p-&gt;prox</code> para mudar a variável do <code>main</code>
+(FEOFILOFF, 2009, cap. 4). Quem chama passa <code>&amp;fila</code>.</p>
+<p>O caso especial do primeiro nó existe porque o primeiro é o único sem
+anterior. Um truque o elimina: pôr no começo um <strong>nó-cabeça</strong>, um nó de
+mentira que não guarda dado nenhum e nunca sai. Com ele, todo nó de verdade
+tem um anterior, e a remoção vira um caso só. O Cormen usa a mesma ideia com
+o nome de <strong>sentinela</strong>, <code>L.nil</code> (CORMEN et al., 2024, cap. 10). O exemplo
+A154 mostra o nó-cabeça, e o assunto 0174 volta à sentinela.</p>
+<p>Há ainda um terceiro jeito, sem <code>ant</code>. Um ponteiro <code>No **pp</code> que aponta para
+&quot;quem aponta para o nó atual&quot; começa em <code>inicio</code> e anda com
+<code>pp = &amp;(*pp)-&gt;prox</code>. Achado o nó, <code>No *p = *pp; *pp = p-&gt;prox; free(p);</code>
+resolve o primeiro nó e os do meio com o mesmo código, sem <code>if</code>.</p>
+<p>Quanto ao custo, religar as setas é O(1), não importa o tamanho da lista. O
+que custa é achar o nó, O(n) no pior caso (FEOFILOFF, 2009, cap. 4). Se você
+já tem o anterior em mãos, remover sai de graça.</p>
+<blockquote>
+<p>[!WARNING]
+A ordem do <code>&amp;&amp;</code> importa. Em <code>while (p-&gt;valor != valor &amp;&amp; p != NULL)</code>, o
+<code>p-&gt;valor</code> é lido antes de testar <code>p</code> e quebra quando o valor não está na
+lista. Com <code>p != NULL</code> primeiro, o curto-circuito (assunto 0013) evita a
+leitura.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>Na barbearia, as senhas 31, 17, 42 e 8 esperam numa lista. O 42 desiste: o
+laço para com <code>p</code> no 42 e <code>ant</code> no 17, a seta do 17 passa a apontar para o 8
+e o nó do 42 volta para o heap:</p>
+<p align="center"><img src="material/0077-ideia.svg" alt="Diagrama da ideia: Busca e remoção" width="858"></p>
+<p>A busca e a remoção do <code>lista.c</code>:</p>
+<pre><code class="language-c">No *lista_busca(No *inicio, int valor) {
+    No *p = inicio;
+    while (p != NULL &amp;&amp; p-&gt;valor != valor) { // o teste do NULL vem primeiro
+        p = p-&gt;prox;
+    }
+    return p; // o nó, ou NULL se a lista acabou
+}
+</code></pre>
+<pre><code class="language-c">bool lista_remove(No **inicio, int valor) {
+    No *ant = NULL;    // sempre um passo atrás de p
+    No *p = *inicio;
+    while (p != NULL &amp;&amp; p-&gt;valor != valor) {
+        ant = p;
+        p = p-&gt;prox;
+    }
+    if (p == NULL) return false; // não achou
+    if (ant == NULL) {
+        *inicio = p-&gt;prox;       // era o primeiro: o início anda
+    } else {
+        ant-&gt;prox = p-&gt;prox;     // o anterior pula o p
+    }
+    free(p);
+    return true;
+}
+</code></pre>
+<p>E a fila da barbearia:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;lista.h&quot;
+
+int main(void) {
+    No *fila = NULL;
+    fila = lista_insere_inicio(fila, 8);
+    fila = lista_insere_inicio(fila, 42);
+    fila = lista_insere_inicio(fila, 17);
+    fila = lista_insere_inicio(fila, 31);
+    lista_imprime(fila);
+
+    // a senha 42 ainda está esperando?
+    No *achou = lista_busca(fila, 42);
+    if (achou != NULL) printf(&quot;senha %d: na fila\n&quot;, achou-&gt;valor);
+
+    // o 42 desistiu: sai do meio
+    lista_remove(&amp;fila, 42);
+    lista_imprime(fila);
+
+    // o 31 foi atendido: sai do começo (o início muda)
+    lista_remove(&amp;fila, 31);
+    lista_imprime(fila);
+
+    // o 99 nunca esteve na fila
+    if (!lista_remove(&amp;fila, 99)) printf(&quot;senha 99: não está na fila\n&quot;);
+
+    lista_libera(fila);
+    return 0;
+}
+// Saída:
+// 31 -&gt; 17 -&gt; 42 -&gt; 8 -&gt; NULL
+// senha 42: na fila
+// 31 -&gt; 17 -&gt; 8 -&gt; NULL
+// 17 -&gt; 8 -&gt; NULL
+// senha 99: não está na fila
+</code></pre>
+<p>Na saída do 42, <code>ant</code> é o 17 (não <code>NULL</code>) e o caminho vai por <code>ant-&gt;prox = p-&gt;prox</code>; na saída do 31, iria por <code>início = p-&gt;prox</code>:</p>
+<p align="center"><img src="material/0077-fluxograma.svg" alt="Fluxograma: Busca e remoção" width="733"></p>
+<p><strong>Exemplo A153 · Buscar por condição e tirar o último</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;0077-lista.h&quot;
+
+// variação da busca: em vez de &quot;igual a&quot;, o primeiro nó &quot;acima de&quot; limite
+static No *busca_acima(No *inicio, int limite) {
+    No *p = inicio;
+    while (p != NULL &amp;&amp; p-&gt;valor &lt;= limite) {
+        p = p-&gt;prox;
+    }
+    return p; // o nó, ou NULL se ninguém passou do limite
+}
+
+int main(void) {
+    // contas do mês, em reais
+    No *contas = NULL;
+    contas = lista_insere_inicio(contas, 480);
+    contas = lista_insere_inicio(contas, 99);
+    contas = lista_insere_inicio(contas, 135);
+    contas = lista_insere_inicio(contas, 62);
+    lista_imprime(contas);
+
+    No *cara = busca_acima(contas, 100);
+    if (cara != NULL) printf(&quot;primeira acima de R$ 100: %d\n&quot;, cara-&gt;valor);
+    if (busca_acima(contas, 500) == NULL) printf(&quot;nenhuma acima de R$ 500\n&quot;);
+
+    // tirar o ÚLTIMO: o anterior dele (99) passa a apontar para NULL
+    lista_remove(&amp;contas, 480);
+    lista_imprime(contas);
+
+    // tirar até sobrar um nó e depois o único: o início vira NULL
+    lista_remove(&amp;contas, 135);
+    lista_remove(&amp;contas, 62);
+    lista_imprime(contas);
+    lista_remove(&amp;contas, 99);
+    lista_imprime(contas);
+
+    // na lista vazia, buscar e remover só devolvem &quot;não achei&quot;
+    if (lista_busca(contas, 62) == NULL &amp;&amp; !lista_remove(&amp;contas, 62)) {
+        printf(&quot;lista vazia: nada para buscar nem tirar\n&quot;);
+    }
+
+    lista_libera(contas);
+    return 0;
+}
+// Saída:
+// 62 -&gt; 135 -&gt; 99 -&gt; 480 -&gt; NULL
+// primeira acima de R$ 100: 135
+// nenhuma acima de R$ 500
+// 62 -&gt; 135 -&gt; 99 -&gt; NULL
+// 99 -&gt; NULL
+// NULL
+// lista vazia: nada para buscar nem tirar
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A153.c ~/LPEDC/material/0077-lista.c -o ~/LPEDC/material/A153 &amp;&amp; ~/LPEDC/material/A153
+</code></pre>
+<p><strong>Exemplo A154 · Nó-cabeça: a remoção sem caso especial</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &quot;0077-lista.h&quot;
+
+// Com um nó-cabeça (um nó &quot;de mentira&quot; no começo, cujo valor ninguém lê),
+// todo nó de verdade tem um anterior. O primeiro não é mais especial.
+
+static void cab_insere(No *cabeca, int valor) {
+    No *novo = malloc(sizeof(No));
+    if (novo == NULL) exit(1);
+    novo-&gt;valor = valor;
+    novo-&gt;prox = cabeca-&gt;prox; // entra logo depois da cabeça
+    cabeca-&gt;prox = novo;
+}
+
+static int cab_remove(No *cabeca, int valor) {
+    No *ant = cabeca;          // nunca é NULL
+    No *p = cabeca-&gt;prox;
+    while (p != NULL &amp;&amp; p-&gt;valor != valor) {
+        ant = p;
+        p = p-&gt;prox;
+    }
+    if (p == NULL) return 0;
+    ant-&gt;prox = p-&gt;prox;       // um caso só: vale até para o primeiro
+    free(p);
+    return 1;
+}
+
+int main(void) {
+    No cabeca = {0, NULL};     // a cabeça pode até morar na pilha
+    cab_insere(&amp;cabeca, 8);
+    cab_insere(&amp;cabeca, 42);
+    cab_insere(&amp;cabeca, 17);
+    cab_insere(&amp;cabeca, 31);
+    lista_imprime(cabeca.prox); // a lista de verdade começa depois da cabeça
+
+    cab_remove(&amp;cabeca, 31);    // o primeiro: nenhum if especial
+    cab_remove(&amp;cabeca, 8);     // o último
+    lista_imprime(cabeca.prox);
+
+    lista_libera(cabeca.prox);  // a cabeça não veio do malloc: não leva free
+    return 0;
+}
+// Saída:
+// 31 -&gt; 17 -&gt; 42 -&gt; 8 -&gt; NULL
+// 17 -&gt; 42 -&gt; NULL
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A154.c ~/LPEDC/material/0077-lista.c -o ~/LPEDC/material/A154 &amp;&amp; ~/LPEDC/material/A154
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E457</strong> · ★☆☆</p>
+<p>A fila do açougue tem as senhas 33 -&gt; 40 -&gt; 7 -&gt; 25 -&gt; 12 (monte inserindo
+no início 12, 25, 7, 40 e 33). Escreva int posicao(const No *inicio, int
+valor), que devolve a posição do valor contando a partir de 1, ou 0 se ele
+não está na lista. O programa lê duas senhas do teclado (sem mostrar
+perguntas), confere o retorno do scanf e responde sobre cada uma.</p>
+<pre><code class="language-text">Entrada:
+7
+50
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+senha 7 está na posição 3
+senha 50 não está na fila
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E457.c ~/LPEDC/material/0077-lista.c -o ~/LPEDC/material/E457 &amp;&amp; ~/LPEDC/material/E457
+</code></pre>
+<p><strong>Exercício E459</strong> · ★★☆</p>
+<p>O sensor de temperatura da estufa grava 0 quando falha. Escreva
+int remove_todos(No **inicio, int valor), que tira TODOS os nós com o
+valor numa passada só (sem chamar lista_remove em laço) e devolve quantos
+tirou. No main, monte a lista com as leituras 0, 19, 0, 21, 0, 0
+inseridas no início, mostre antes e depois da remoção dos 0 e o total
+removido. Depois monte uma lista só com dois 0, remova-os e mostre que
+ela ficou vazia (imprima &quot;só falhas: NULL (2 removidas)&quot; com o total
+devolvido pela função).</p>
+<pre><code class="language-text">Saída esperada:
+antes:  0 -&gt; 0 -&gt; 21 -&gt; 0 -&gt; 19 -&gt; 0 -&gt; NULL
+depois: 21 -&gt; 19 -&gt; NULL
+4 leituras removidas
+só falhas: NULL (2 removidas)
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E459.c ~/LPEDC/material/0077-lista.c -o ~/LPEDC/material/E459 &amp;&amp; ~/LPEDC/material/E459
+</code></pre>
+<p><strong>Exercício E460</strong> · ★★☆</p>
+<p>Num leilão online, a cada rodada o MENOR lance sai da disputa. Os lances
+estão numa lista de structs Lance (declarada abaixo). Escreva</p>
+<pre><code class="language-text">Lance *lance_insere(Lance *inicio, const char *nome, int valor)  no início
+void lance_imprime(const Lance *inicio)  formato do exemplo
+void lance_libera(Lance *inicio)
+bool remove_menor(Lance **inicio, Lance *saiu)
+</code></pre>
+<p>remove_menor acha o nó de menor valor, copia os dados dele para *saiu, tira
+o nó da lista e devolve true (ou false se a lista estiver vazia). Insira
+Ana 150, Bruno 90, Carla 210 e Davi 175 (nesta ordem), mostre a lista e
+rode duas rodadas.</p>
+<pre><code class="language-text">Saída esperada:
+Davi R$ 175 -&gt; Carla R$ 210 -&gt; Bruno R$ 90 -&gt; Ana R$ 150 -&gt; NULL
+saiu Bruno (R$ 90)
+Davi R$ 175 -&gt; Carla R$ 210 -&gt; Ana R$ 150 -&gt; NULL
+saiu Ana (R$ 150)
+Davi R$ 175 -&gt; Carla R$ 210 -&gt; NULL
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E460.c ~/LPEDC/material/0077-lista.c -o ~/LPEDC/material/E460 &amp;&amp; ~/LPEDC/material/E460
+</code></pre>
+<p><strong>Exercício E462</strong> · ★★★</p>
+<p>O vagão do MEIO do trem precisa ir para a manutenção, e você só pode
+percorrer a lista UMA vez (sem contar os nós antes). Escreva
+bool remove_meio(No **inicio), com dois ponteiros que saem do início: um
+anda um nó por vez e o outro anda dois. Com quantidade par, o meio é o
+SEGUNDO dos dois do centro. No main, monte a lista 1 a 7, a lista
+10, 20, 30, 40, 50, 60 e a lista de um nó só (99), inserindo no início;
+remova o meio de cada uma e imprima as três.</p>
+<pre><code class="language-text">Saída esperada:
+1 -&gt; 2 -&gt; 3 -&gt; 5 -&gt; 6 -&gt; 7 -&gt; NULL
+10 -&gt; 20 -&gt; 30 -&gt; 50 -&gt; 60 -&gt; NULL
+NULL
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E462.c ~/LPEDC/material/0077-lista.c -o ~/LPEDC/material/E462 &amp;&amp; ~/LPEDC/material/E462
+</code></pre>
+<hr>
+<h2>0078 · Lista ordenada</h2>
+<h3>Conceito</h3>
+<p>Na clínica, as ligações chegam fora de ordem: primeiro alguém marca 14:30,
+depois 09:00, depois 16:00. Mas a recepcionista precisa da agenda sempre em
+ordem de horário, a qualquer momento do dia. Juntar tudo e ordenar no fim
+não serve, porque a agenda é consultada o tempo todo. O jeito é cada marcação
+entrar já no lugar certo.</p>
+<p>É o que você faz com cartas na mão durante um jogo: cada carta nova vai
+direto para a posição dela, entre a menor e a maior que ela, e a mão continua
+arrumada. Uma <strong>lista ordenada</strong> mantém os nós em ordem a cada inserção, em
+vez de reordenar tudo depois (CELES; RANGEL, 2002). Numa lista encadeada,
+isso é barato na hora de encaixar: nenhum nó se move, só duas setas mudam.</p>
+<p>A <strong>inserção ordenada</strong> reaproveita o par <code>ant</code>/<code>p</code> do assunto 0077. Os dois
+andam pela lista enquanto os valores encontrados forem menores que o novo.
+Quando o laço para, <code>p</code> é o primeiro nó com valor maior ou igual ao novo, ou
+<code>NULL</code> se a lista acabou, e <code>ant</code> é o nó logo antes dele (FEOFILOFF, 2009,
+cap. 4). O novo nó entra <strong>entre</strong> <code>ant</code> e <code>p</code>. Na agenda com 09:00, 14:30 e
+16:00, a ligação das 10:15 faz o laço passar pelo 09:00 e parar no 14:30,
+porque <code>14:30 &lt; 10:15</code> é falso: <code>ant</code> fica no 09:00, <code>p</code> no 14:30.</p>
+<p>Para encaixar o novo, religue duas setas, nesta ordem: primeiro
+<code>novo-&gt;prox = p</code>, depois <code>ant-&gt;prox = novo</code> (CELES; RANGEL, 2002). A ordem
+importa. O novo nó aponta para o seguinte enquanto o anterior ainda segura a
+lista inteira; só então o anterior passa a apontar para o novo.</p>
+<pre><code class="language-c">while (p != NULL &amp;&amp; p-&gt;valor &lt; valor) { // anda enquanto os de lá são menores
+    ant = p;
+    p = p-&gt;prox;
+}
+novo-&gt;prox = p;          // o novo aponta para o primeiro maior (ou NULL)
+if (ant == NULL) {
+    return novo;         // é o menor de todos: vira o início
+}
+ant-&gt;prox = novo;        // o anterior passa a apontar para o novo
+return inicio;
+</code></pre>
+<p>Dois extremos merecem atenção. Se o novo é menor que todos, o laço nem anda e
+<code>ant</code> continua <code>NULL</code>: não há anterior, e o novo vira o início. O fim, ao
+contrário, não é caso especial. Se o novo é maior que todos, <code>p</code> chega a
+<code>NULL</code>, e <code>novo-&gt;prox = p</code> grava <code>NULL</code> no novo, que vira o último do jeito
+certo (CELES; RANGEL, 2002).</p>
+<p>A ordem também ajuda a <strong>busca</strong>. Numa lista sem ordem, para concluir que um
+valor não está lá, você olha todos os nós. Numa lista ordenada, dá para
+desistir assim que passar do valor procurado (FEOFILOFF, 2009, cap. 4).
+Procurando 11:00, a busca para no 14:30: dali em diante, só há horários
+maiores.</p>
+<p>O critério da ordem mora todo na comparação do <code>while</code>. Trocando
+<code>p-&gt;valor &lt; valor</code> por <code>strcmp(p-&gt;nome, nome) &lt; 0</code>, a mesma inserção ordena
+por nome em ordem alfabética. A comparação também decide o que acontece com
+valores repetidos: com <code>&lt;</code>, o repetido entra <strong>antes</strong> dos iguais; com <code>&lt;=</code>,
+<strong>depois</strong> deles.</p>
+<p>Quanto ao custo, cada inserção anda até o lugar certo, O(n) no pior caso, e
+montar uma lista com n itens custa O(n²). A busca, mesmo com parada
+antecipada, continua O(n): sem acesso direto ao meio, não dá para fazer busca
+binária (ZIVIANI, 2010, cap. 3). O vetor ordenado tem o perfil oposto, e a
+tabela compara os dois:</p>
+<table>
+<thead>
+<tr>
+<th>Estrutura ordenada</th>
+<th>Busca</th>
+<th>Inserção</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>lista encadeada</td>
+<td>O(n)</td>
+<td>O(n) para achar, O(1) para religar</td>
+</tr>
+<tr>
+<td>vetor</td>
+<td>O(log n)</td>
+<td>O(n): desloca os seguintes</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>[!WARNING]
+O caso mais esquecido é o <strong>novo menor que todos</strong>: <code>ant</code> fica <code>NULL</code> e
+<code>ant-&gt;prox = novo</code> sem o <code>if</code> derruba o programa. Teste início, meio e fim.
+Com <code>&lt;</code>, um repetido entra <strong>antes</strong> dos iguais; com <code>&lt;=</code>, <strong>depois</strong>.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>A agenda de uma clínica tem 09:00, 14:30 e 16:00 quando chega a ligação das
+10:15. O laço passa pelo 09:00 e para no 14:30; o novo aponta para o 14:30 e
+o 09:00 aponta para ele:</p>
+<p align="center"><img src="material/0078-ideia.svg" alt="Diagrama da ideia: Lista ordenada" width="858"></p>
+<pre><code class="language-c">No *lista_insere_ordenado(No *inicio, int valor) {
+    No *novo = cria_no(valor);
+    No *ant = NULL;
+    No *p = inicio;
+    while (p != NULL &amp;&amp; p-&gt;valor &lt; valor) { // anda enquanto os de lá são menores
+        ant = p;
+        p = p-&gt;prox;
+    }
+    novo-&gt;prox = p;         // o novo aponta para o primeiro maior (ou NULL)
+    if (ant == NULL) {
+        return novo;        // é o menor de todos: vira o início
+    }
+    ant-&gt;prox = novo;       // o anterior passa a apontar para o novo
+    return inicio;
+}
+</code></pre>
+<p>O horário é um <code>int</code> hhmm (1430 é 14:30):</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;lista.h&quot;
+
+// cada horário é um int hhmm: 1430 quer dizer 14:30
+static void mostra_agenda(const No *inicio) {
+    for (const No *p = inicio; p != NULL; p = p-&gt;prox) {
+        printf(&quot;%02d:%02d -&gt; &quot;, p-&gt;valor / 100, p-&gt;valor % 100);
+    }
+    printf(&quot;fim do dia\n&quot;);
+}
+
+int main(void) {
+    No *agenda = NULL;
+    int marcacoes[] = {1430, 900, 1600, 1015}; // na ordem em que ligaram
+
+    for (int i = 0; i &lt; 4; i++) {
+        agenda = lista_insere_ordenado(agenda, marcacoes[i]);
+        mostra_agenda(agenda);
+    }
+
+    // 11:00 está livre? A busca para no 14:30, sem olhar o resto
+    if (lista_busca_ordenada(agenda, 1100) == NULL) printf(&quot;11:00 livre\n&quot;);
+
+    lista_libera(agenda);
+    return 0;
+}
+// Saída:
+// 14:30 -&gt; fim do dia
+// 09:00 -&gt; 14:30 -&gt; fim do dia
+// 09:00 -&gt; 14:30 -&gt; 16:00 -&gt; fim do dia
+// 09:00 -&gt; 10:15 -&gt; 14:30 -&gt; 16:00 -&gt; fim do dia
+// 11:00 livre
+</code></pre>
+<p>Para as 10:15, o laço roda uma vez, <code>ant</code> é o 09:00 e o caminho termina em
+<code>ant-&gt;prox = novo</code>; para as 9:00, <code>ant == NULL</code> e o novo vira o início:</p>
+<p align="center"><img src="material/0078-fluxograma.svg" alt="Fluxograma: Lista ordenada" width="575"></p>
+<p><strong>Exemplo A155 · Tabela do campeonato: maior primeiro</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &quot;0078-lista.h&quot;
+
+// mesma inserção ordenada, com o critério virado: anda enquanto os de lá
+// têm MAIS pontos. Em caso de empate, quem chega fica atrás (&gt;=)
+static No *insere_decrescente(No *inicio, int pontos) {
+    No *novo = malloc(sizeof(No));
+    if (novo == NULL) exit(1);
+    novo-&gt;valor = pontos;
+    No *ant = NULL;
+    No *p = inicio;
+    while (p != NULL &amp;&amp; p-&gt;valor &gt;= pontos) {
+        ant = p;
+        p = p-&gt;prox;
+    }
+    novo-&gt;prox = p;
+    if (ant == NULL) return novo;
+    ant-&gt;prox = novo;
+    return inicio;
+}
+
+int main(void) {
+    No *tabela = NULL;
+    tabela = insere_decrescente(tabela, 40); // lista vazia
+    tabela = insere_decrescente(tabela, 52); // maior de todos: vira o início
+    tabela = insere_decrescente(tabela, 31); // menor de todos: vai para o fim
+    tabela = insere_decrescente(tabela, 45); // cai no meio
+    lista_imprime(tabela);
+
+    tabela = insere_decrescente(tabela, 40); // empate: entra DEPOIS do outro 40
+    lista_imprime(tabela);
+
+    // líder e lanterna saem de graça das pontas
+    No *ultimo = tabela;
+    while (ultimo-&gt;prox != NULL) ultimo = ultimo-&gt;prox;
+    printf(&quot;líder: %d pontos, lanterna: %d pontos\n&quot;, tabela-&gt;valor, ultimo-&gt;valor);
+
+    // as funções do lista.h supõem ordem CRESCENTE: não use a busca
+    // ordenada aqui, ela desistiria logo no 52
+    if (lista_busca_ordenada(tabela, 45) == NULL) {
+        printf(&quot;busca crescente numa lista decrescente: não achou o 45\n&quot;);
+    }
+
+    lista_libera(tabela);
+    return 0;
+}
+// Saída:
+// 52 -&gt; 45 -&gt; 40 -&gt; 31 -&gt; NULL
+// 52 -&gt; 45 -&gt; 40 -&gt; 40 -&gt; 31 -&gt; NULL
+// líder: 52 pontos, lanterna: 31 pontos
+// busca crescente numa lista decrescente: não achou o 45
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A155.c ~/LPEDC/material/0078-lista.c -o ~/LPEDC/material/A155 &amp;&amp; ~/LPEDC/material/A155
+</code></pre>
+<p><strong>Exemplo A156 · A chamada da turma em ordem alfabética</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+// mesma ideia com strings: o critério de ordem vira strcmp
+typedef struct aluno {
+    char nome[20];
+    struct aluno *prox;
+} Aluno;
+
+static Aluno *insere_nome(Aluno *inicio, const char *nome) {
+    Aluno *novo = malloc(sizeof(Aluno));
+    if (novo == NULL) exit(1);
+    snprintf(novo-&gt;nome, sizeof novo-&gt;nome, &quot;%s&quot;, nome);
+    Aluno *ant = NULL;
+    Aluno *p = inicio;
+    while (p != NULL &amp;&amp; strcmp(p-&gt;nome, nome) &lt; 0) { // p vem antes no alfabeto
+        ant = p;
+        p = p-&gt;prox;
+    }
+    novo-&gt;prox = p;
+    if (ant == NULL) return novo;
+    ant-&gt;prox = novo;
+    return inicio;
+}
+
+int main(void) {
+    const char *matriculas[] = {&quot;Renata&quot;, &quot;Caio&quot;, &quot;Yara&quot;, &quot;Bruna&quot;, &quot;Igor&quot;};
+    Aluno *turma = NULL;
+    for (int i = 0; i &lt; 5; i++) turma = insere_nome(turma, matriculas[i]);
+
+    int numero = 1;
+    for (Aluno *p = turma; p != NULL; p = p-&gt;prox) {
+        printf(&quot;%d. %s\n&quot;, numero++, p-&gt;nome);
+    }
+
+    while (turma != NULL) { // libera
+        Aluno *seguinte = turma-&gt;prox;
+        free(turma);
+        turma = seguinte;
+    }
+    return 0;
+}
+// Saída:
+// 1. Bruna
+// 2. Caio
+// 3. Igor
+// 4. Renata
+// 5. Yara
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A156.c ~/LPEDC/material/0078-lista.c -o ~/LPEDC/material/A156 &amp;&amp; ~/LPEDC/material/A156
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E463</strong> · ★☆☆</p>
+<p>As notas do simulado saíram nesta ordem: 7, 3, 9, 5, 10, 1. Insira todas
+com lista_insere_ordenado, mostre a lista e depois a menor e a maior nota.</p>
+<pre><code class="language-text">Saída esperada:
+1 -&gt; 3 -&gt; 5 -&gt; 7 -&gt; 9 -&gt; 10 -&gt; NULL
+menor: 1, maior: 10
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E463.c ~/LPEDC/material/0078-lista.c -o ~/LPEDC/material/E463 &amp;&amp; ~/LPEDC/material/E463
+</code></pre>
+<p><strong>Exercício E465</strong> · ★★☆</p>
+<p>O entregador anotou os números das casas da rua, com repetidos: 5, 3, 5,
+8, 3, 3, 1. Insira tudo em ordem e escreva</p>
+<pre><code class="language-text">int remove_repetidos(No *inicio)
+</code></pre>
+<p>que deixa um só de cada número e devolve quantos nós tirou.</p>
+<pre><code class="language-text">Saída esperada:
+antes:  1 -&gt; 3 -&gt; 3 -&gt; 3 -&gt; 5 -&gt; 5 -&gt; 8 -&gt; NULL
+depois: 1 -&gt; 3 -&gt; 5 -&gt; 8 -&gt; NULL
+3 repetidos removidos
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E465.c ~/LPEDC/material/0078-lista.c -o ~/LPEDC/material/E465 &amp;&amp; ~/LPEDC/material/E465
+</code></pre>
+<p><strong>Exercício E466</strong> · ★★☆</p>
+<p>Duas linhas de ônibus saem do mesmo terminal. Os horários de cada uma
+(em minutos depois das 6h) estão em listas crescentes:</p>
+<pre><code class="language-text">linha 101: 0 -&gt; 25 -&gt; 50 -&gt; 75
+linha 202: 10 -&gt; 25 -&gt; 40 -&gt; 90
+</code></pre>
+<p>Monte as duas com lista_insere_ordenado (entrando fora de ordem) e escreva
+No *intercala(No *a, No *b), que junta as duas numa lista só, também
+crescente, SEM criar nenhum nó novo: só religando os que existem. Mostre
+o resultado.</p>
+<pre><code class="language-text">Saída esperada:
+0 -&gt; 10 -&gt; 25 -&gt; 25 -&gt; 40 -&gt; 50 -&gt; 75 -&gt; 90 -&gt; NULL
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E466.c ~/LPEDC/material/0078-lista.c -o ~/LPEDC/material/E466 &amp;&amp; ~/LPEDC/material/E466
+</code></pre>
+<p><strong>Exercício E468</strong> · ★★★</p>
+<p>Os pedidos do delivery chegaram fora de ordem: 3 -&gt; 7 -&gt; 1 -&gt; 9 -&gt; 4 (monte
+inserindo no início 4, 9, 1, 7 e 3). Escreva No *ordena(No *inicio, int
+*passos), que deixa a lista em ordem crescente pelo método da inserção,
+SÓ RELIGANDO os nós: nada de malloc, nada de free, nada de trocar valores
+entre nós. Para medir o custo, some 1 em *passos cada vez que o laço de
+encaixe anda um nó. Mostre antes, depois e os passos para a lista dos
+pedidos e para o pior caso, uma lista que já chega crescente 1 a 5.</p>
+<pre><code class="language-text">Saída esperada:
+antes:  3 -&gt; 7 -&gt; 1 -&gt; 9 -&gt; 4 -&gt; NULL
+depois: 1 -&gt; 3 -&gt; 4 -&gt; 7 -&gt; 9 -&gt; NULL  (6 passos)
+antes:  1 -&gt; 2 -&gt; 3 -&gt; 4 -&gt; 5 -&gt; NULL
+depois: 1 -&gt; 2 -&gt; 3 -&gt; 4 -&gt; 5 -&gt; NULL  (10 passos)
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E468.c ~/LPEDC/material/0078-lista.c -o ~/LPEDC/material/E468 &amp;&amp; ~/LPEDC/material/E468
+</code></pre>
+<hr>
+<h2>0079 · Lista dupla</h2>
+<h3>Conceito</h3>
+<p>A lista simples dos assuntos anteriores só anda para a frente. Isso cobra
+dois preços (CELES; RANGEL, 2002). Para mostrar os itens de trás para frente,
+não há caminho de volta. E para remover um nó que você já tem em mãos, ainda
+é preciso achar o anterior dele, percorrendo a lista desde o início, O(n),
+porque só o anterior pode ser religado.</p>
+<p>No pátio da ferrovia, o terceiro vagão de um trem de minério está com o
+freio travado. O manobrista solta os dois engates dele e liga o segundo vagão
+direto ao quarto. Ele não volta à locomotiva para descobrir quem vem antes:
+cada vagão está preso ao da frente e ao de trás, e ele vê os dois. A <strong>lista
+duplamente encadeada</strong> (no Cormen, <strong>duplamente ligada</strong>, com os campos
+<code>next</code> e <code>prev</code>) faz o mesmo: cada nó guarda o próximo, <code>prox</code>, e também o
+anterior, <code>ant</code> (CORMEN et al., 2024, cap. 10).</p>
+<p>Com a seta a mais, três coisas ficam possíveis (TENENBAUM; LANGSAM;
+AUGENSTEIN, 1995, cap. 4). Você anda nos <strong>dois sentidos</strong>: de trás para a
+frente é o &quot;for de lista&quot; de sempre, começando no último nó e andando com
+<code>p = p-&gt;ant</code>. Você remove um nó conhecendo <strong>só ele</strong>, em O(1), porque o
+anterior está em <code>p-&gt;ant</code>. E, guardando um ponteiro para o <strong>último</strong> nó,
+inserir no fim também vira O(1), sem percorrer nada.</p>
+<p>A lista desta pasta junta essas peças numa struct com as duas pontas e o
+tamanho:</p>
+<pre><code class="language-c">typedef struct no {
+    int valor;
+    struct no *ant;  // o anterior, ou NULL no primeiro
+    struct no *prox; // o próximo, ou NULL no último
+} No;
+
+typedef struct {
+    No *inicio;
+    No *fim;
+    int tamanho;
+} Lista;
+</code></pre>
+<p>Repare que agora a lista não é mais só um ponteiro para o primeiro nó. A
+struct <code>Lista</code> carrega o <code>inicio</code>, o <code>fim</code> e quantos nós existem, e as
+funções recebem <code>Lista *</code> para poder atualizar os três.</p>
+<p>As setas de ida e as de volta precisam concordar. Para todo nó <code>p</code> que não é
+o último, vale <code>p-&gt;prox-&gt;ant == p</code>: o anterior do meu próximo sou eu. Essa
+regra é o invariante da lista dupla, e ela tem uma consequência prática: as
+setas mudam sempre <strong>aos pares</strong>. Toda operação que mexe na seta de ida de um
+nó precisa mexer na seta de volta correspondente (FEOFILOFF, 2009, cap. 4).</p>
+<p>Remover um nó <code>p</code> mostra isso. Chegam duas setas em <code>p</code>: a do anterior, que
+aponta para ele pela frente, e a do seguinte, que aponta para ele por trás.
+As duas precisam ser desviadas, e cada uma tem o seu caso de borda (CELES;
+RANGEL, 2002):</p>
+<pre><code class="language-c">if (p-&gt;ant == NULL) l-&gt;inicio = p-&gt;prox;  // era o primeiro
+else p-&gt;ant-&gt;prox = p-&gt;prox;              // o anterior pula o p
+if (p-&gt;prox == NULL) l-&gt;fim = p-&gt;ant;     // era o último
+else p-&gt;prox-&gt;ant = p-&gt;ant;               // o seguinte pula o p para trás
+free(p);
+</code></pre>
+<p>Se <code>p</code> é o primeiro, não há anterior para religar, e quem muda é o
+<code>inicio</code>. Se <code>p</code> é o último, não há seguinte, e quem muda é o <code>fim</code>. Um nó
+do meio passa pelos dois <code>else</code>. Um nó sozinho na lista passa pelos dois
+<code>if</code>, e a lista fica vazia, com <code>inicio</code> e <code>fim</code> em <code>NULL</code>.</p>
+<p>A seta a mais tem um preço em memória. Em 64 bits, <code>sizeof(No)</code> passa de 16
+para 24 bytes: 4 do <code>int</code>, 4 de preenchimento e dois ponteiros de 8. São 50%
+a mais por nó, o custo de poder voltar e de remover em O(1).</p>
+<blockquote>
+<p>[!WARNING]
+Com uma seta faltando, a lista dupla <strong>parece certa</strong>: se a inserção
+esquecer o <code>ant</code>, só a volta sai errada. Imprima <strong>nos dois sentidos</strong>. Na
+remoção, <code>p-&gt;ant-&gt;prox</code> no primeiro nó acessa <code>NULL</code>, e esquecer o <code>fim</code> o
+deixa apontando para memória liberada.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>Um trem de minério tem vagões de 98, 105, 87 e 110 toneladas, e o de 87 está
+com o freio travado. Com <code>p</code> nele, o 105 passa a apontar para o 110, e o 110
+aponta de volta para o 105:</p>
+<p align="center"><img src="material/0079-ideia.svg" alt="Diagrama da ideia: Lista dupla" width="858"></p>
+<p>A remoção, sem procurar o anterior:</p>
+<pre><code class="language-c">void lista_remove_no(Lista *l, No *p) {
+    if (p-&gt;ant == NULL) l-&gt;inicio = p-&gt;prox;  // era o primeiro
+    else p-&gt;ant-&gt;prox = p-&gt;prox;              // o anterior pula o p
+    if (p-&gt;prox == NULL) l-&gt;fim = p-&gt;ant;     // era o último
+    else p-&gt;prox-&gt;ant = p-&gt;ant;               // o seguinte pula o p para trás
+    free(p);
+    l-&gt;tamanho--;
+}
+</code></pre>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;lista.h&quot;
+
+int main(void) {
+    Lista trem;
+    lista_inicia(&amp;trem);
+    int cargas[] = {98, 105, 87, 110}; // toneladas, da locomotiva para o fim
+    for (int i = 0; i &lt; 4; i++) lista_insere_fim(&amp;trem, cargas[i]);
+
+    printf(&quot;da locomotiva: &quot;);
+    lista_imprime(&amp;trem);
+    printf(&quot;do fim:        &quot;);
+    lista_imprime_reverso(&amp;trem);
+
+    No *vagao = lista_busca(&amp;trem, 87);
+    if (vagao != NULL) {
+        lista_remove_no(&amp;trem, vagao); // sem procurar o anterior: p-&gt;ant
+        printf(&quot;desengatou o vagão de 87 t (%d vagões)\n&quot;, trem.tamanho);
+    }
+
+    printf(&quot;da locomotiva: &quot;);
+    lista_imprime(&amp;trem);
+    printf(&quot;do fim:        &quot;);
+    lista_imprime_reverso(&amp;trem);
+
+    lista_libera(&amp;trem);
+    return 0;
+}
+// Saída:
+// da locomotiva: 98 &lt;-&gt; 105 &lt;-&gt; 87 &lt;-&gt; 110
+// do fim:        110 &lt;-&gt; 87 &lt;-&gt; 105 &lt;-&gt; 98
+// desengatou o vagão de 87 t (3 vagões)
+// da locomotiva: 98 &lt;-&gt; 105 &lt;-&gt; 110
+// do fim:        110 &lt;-&gt; 105 &lt;-&gt; 98
+</code></pre>
+<p>Duas perguntas, uma por ponta. O vagão de 87 passa pelos dois Não; o primeiro
+vagão daria Sim na primeira, o último na segunda:</p>
+<p align="center"><img src="material/0079-fluxograma.svg" alt="Fluxograma: Lista dupla" width="502"></p>
+<p><strong>Exemplo A157 · Mexendo nas duas pontas: a fila do pronto-socorro</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;0079-lista.h&quot;
+
+static void mostra(const Lista *l) {
+    printf(&quot;(%d) &quot;, l-&gt;tamanho);
+    lista_imprime(l);
+}
+
+int main(void) {
+    Lista fila;
+    lista_inicia(&amp;fila);
+
+    // fichas de atendimento: normais entram atrás, urgente entra na frente
+    lista_insere_fim(&amp;fila, 31);
+    lista_insere_fim(&amp;fila, 32);
+    lista_insere_fim(&amp;fila, 33);
+    lista_insere_inicio(&amp;fila, 90); // caso urgente: passa na frente
+    mostra(&amp;fila);
+
+    // atender o primeiro: remover o início é O(1)
+    printf(&quot;atende %d\n&quot;, fila.inicio-&gt;valor);
+    lista_remove_no(&amp;fila, fila.inicio);
+
+    // o último desistiu: com o ponteiro fim, tirar o último também é O(1)
+    printf(&quot;desistiu %d\n&quot;, fila.fim-&gt;valor);
+    lista_remove_no(&amp;fila, fila.fim);
+    mostra(&amp;fila);
+
+    // esvaziando pela frente: no fim, as DUAS pontas voltam a NULL
+    while (fila.inicio != NULL) lista_remove_no(&amp;fila, fila.inicio);
+    printf(&quot;vazia: inicio %s, fim %s, tamanho %d\n&quot;,
+           fila.inicio == NULL ? &quot;NULL&quot; : &quot;?&quot;,
+           fila.fim == NULL ? &quot;NULL&quot; : &quot;?&quot;, fila.tamanho);
+
+    // e a lista vazia continua pronta para uso
+    lista_insere_inicio(&amp;fila, 34);
+    printf(&quot;um só: início e fim são o mesmo nó? %s\n&quot;,
+           fila.inicio == fila.fim ? &quot;sim&quot; : &quot;não&quot;);
+
+    lista_libera(&amp;fila);
+    return 0;
+}
+// Saída:
+// (4) 90 &lt;-&gt; 31 &lt;-&gt; 32 &lt;-&gt; 33
+// atende 90
+// desistiu 33
+// (2) 31 &lt;-&gt; 32
+// vazia: inicio NULL, fim NULL, tamanho 0
+// um só: início e fim são o mesmo nó? sim
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A157.c ~/LPEDC/material/0079-lista.c -o ~/LPEDC/material/A157 &amp;&amp; ~/LPEDC/material/A157
+</code></pre>
+<p><strong>Exemplo A158 · O controle remoto: canal seguinte e canal anterior</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;0079-lista.h&quot;
+
+int main(void) {
+    Lista canais;
+    lista_inicia(&amp;canais);
+    int numeros[] = {2, 4, 5, 7, 11, 13};
+    for (int i = 0; i &lt; 6; i++) lista_insere_fim(&amp;canais, numeros[i]);
+
+    No *atual = canais.inicio;           // a TV liga no primeiro canal
+    const char *apertos = &quot;&gt;&gt;&gt;&lt;&lt;&gt;&gt;&gt;&gt;&gt;&quot;;  // &gt; próximo, &lt; anterior
+
+    printf(&quot;liga no %d\n&quot;, atual-&gt;valor);
+    for (int i = 0; apertos[i] != &#39;\0&#39;; i++) {
+        if (apertos[i] == &#39;&gt;&#39; &amp;&amp; atual-&gt;prox != NULL) {
+            atual = atual-&gt;prox;         // anda para frente (no 13, fica)
+        } else if (apertos[i] == &#39;&lt;&#39; &amp;&amp; atual-&gt;ant != NULL) {
+            atual = atual-&gt;ant;          // anda para trás: só na lista dupla
+        }
+        printf(&quot;%c canal %d\n&quot;, apertos[i], atual-&gt;valor);
+    }
+
+    lista_libera(&amp;canais);
+    return 0;
+}
+// Saída:
+// liga no 2
+// &gt; canal 4
+// &gt; canal 5
+// &gt; canal 7
+// &lt; canal 5
+// &lt; canal 4
+// &gt; canal 5
+// &gt; canal 7
+// &gt; canal 11
+// &gt; canal 13
+// &gt; canal 13
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A158.c ~/LPEDC/material/0079-lista.c -o ~/LPEDC/material/A158 &amp;&amp; ~/LPEDC/material/A158
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E469</strong> · ★☆☆</p>
+<p>O pátio de manobras quer saber o peso dos ÚLTIMOS 3 vagões do trem, os que
+vão ser desengatados na próxima estação. Monte o trem com lista_insere_fim
+(120, 95, 101, 88, 130 e 76 toneladas) e, começando do fim e andando com
+ant, mostre os 3 últimos (do último para trás) e a soma deles. Não comece
+do início.</p>
+<pre><code class="language-text">Saída esperada:
+76 130 88
+últimos 3: 294 t
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E469.c ~/LPEDC/material/0079-lista.c -o ~/LPEDC/material/E469 &amp;&amp; ~/LPEDC/material/E469
+</code></pre>
+<p><strong>Exercício E471</strong> · ★★☆</p>
+<p>Um palíndromo se lê igual nos dois sentidos. Com uma lista dupla dá para
+conferir sem vetor nenhum: um ponteiro sai do início, outro sai do fim, e
+os dois andam em direção ao meio comparando. Guarde cada letra como int
+(char é número) e escreva:</p>
+<pre><code class="language-text">void monta(Lista *l, const char *palavra)   uma letra por nó, no fim
+bool eh_palindromo(const Lista *l)
+</code></pre>
+<p>Teste com &quot;radar&quot;, &quot;trem&quot;, &quot;arara&quot; e &quot;ab&quot;.</p>
+<pre><code class="language-text">Saída esperada:
+radar: sim
+trem: não
+arara: sim
+ab: não
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E471.c ~/LPEDC/material/0079-lista.c -o ~/LPEDC/material/E471 &amp;&amp; ~/LPEDC/material/E471
+</code></pre>
+<p><strong>Exercício E472</strong> · ★★☆</p>
+<p>Engatar um vagão no meio do trem mexe em QUATRO setas. Monte o trem 98, 105,
+87, 110 com lista_insere_fim e escreva</p>
+<pre><code class="language-text">bool insere_depois(Lista *l, No *p, int valor)
+</code></pre>
+<p>que cria um nó com o valor logo depois do nó p (que está na lista), sem
+esquecer o caso em que p é o último. Engate um vagão de 99 t depois do de
+105 e um de 70 t depois do último. Mostre a lista nos dois sentidos
+(lista_imprime e lista_imprime_reverso) e a quantidade de vagões.</p>
+<pre><code class="language-text">Saída esperada:
+98 &lt;-&gt; 105 &lt;-&gt; 99 &lt;-&gt; 87 &lt;-&gt; 110 &lt;-&gt; 70
+70 &lt;-&gt; 110 &lt;-&gt; 87 &lt;-&gt; 99 &lt;-&gt; 105 &lt;-&gt; 98
+6 vagões
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E472.c ~/LPEDC/material/0079-lista.c -o ~/LPEDC/material/E472 &amp;&amp; ~/LPEDC/material/E472
+</code></pre>
+<p><strong>Exercício E474</strong> · ★★★</p>
+<p>Todo editor de texto tem um cursor que anda para os dois lados, e uma
+lista dupla de letras é um jeito clássico de fazer isso: inserir e apagar
+na posição do cursor custa O(1). Simule o teclado com a string de teclas</p>
+<pre><code class="language-text">&quot;progamr#&lt;&lt;r&gt;&gt;a&quot;
+</code></pre>
+<p>onde letra insere na posição do cursor, &#39;&lt;&#39; anda uma letra para a
+esquerda, &#39;&gt;&#39; anda para a direita e &#39;#&#39; apaga a letra à esquerda do
+cursor (o backspace). Nas pontas, &#39;&lt;&#39;, &#39;&gt;&#39; e &#39;#&#39; não fazem nada. No fim,
+mostre o texto com uma &#39;|&#39; onde está o cursor. Use uma lista dupla de
+letras, com a struct escrita por você.</p>
+<pre><code class="language-text">Saída esperada:
+texto: programa|
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E474.c ~/LPEDC/material/0079-lista.c -o ~/LPEDC/material/E474 &amp;&amp; ~/LPEDC/material/E474
+</code></pre>
+<hr>
+<h2>0080 · Lista circular</h2>
+<h3>Conceito</h3>
+<p>Algumas tarefas não têm fim, só &quot;o próximo&quot;. O garçom do rodízio serve as
+mesas 3, 7, 12 e 15 e, depois da última, volta à 3. No jogo de tabuleiro, a
+vez passa de jogador em jogador e, depois do último, volta ao primeiro. Numa
+lista encadeada comum, o último nó aponta para <code>NULL</code>, e o programa teria de
+perceber o fim e pular de volta ao início a cada volta.</p>
+<p>Pense numa roda de ciranda: cada pessoa segura a mão da seguinte, e a última
+segura a mão da primeira. Não há ponta solta. Uma <strong>lista circular</strong> é uma
+lista encadeada em que o último nó aponta para o <strong>primeiro</strong>, e não para
+<code>NULL</code>, e os nós formam um anel (FEOFILOFF, 2009, cap. 4). Ela serve para
+rodízios em geral, como a vez dos jogadores ou a divisão do tempo da CPU entre
+os programas que estão rodando (TENENBAUM; LANGSAM; AUGENSTEIN, 1995,
+cap. 4).</p>
+<p>Numa lista circular, convém guardar o ponteiro para o <strong>último</strong> nó, e não
+para o primeiro. Parece estranho, mas o primeiro está a uma seta de
+distância: é <code>ultimo-&gt;prox</code>. Com o último em mãos, você alcança as duas
+pontas sem percorrer nada, e inserir no início <strong>e</strong> no fim custa O(1)
+(TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 4). Inserir no início é encaixar
+o novo nó entre o último e o primeiro. Inserir no fim é a mesma coisa, com
+um passo a mais: depois de encaixar, declare o novo nó como o último. No
+anel, início e fim são vizinhos, e só o ponteiro <code>ultimo</code> diz quem é quem.</p>
+<p>Se a lista guardasse o primeiro, inserir no início exigiria mudar a seta do
+último para o novo primeiro, e achar o último custa percorrer o anel inteiro,
+O(n).</p>
+<p>Percorrer pede um cuidado novo. Não existe <code>NULL</code> para parar o laço; ele para
+ao <strong>voltar ao ponto de partida</strong>. Só que o laço começa justamente no ponto
+de partida, e um <code>while (p != primeiro)</code> testaria a condição antes de andar e
+não rodaria nem uma vez. O laço certo é o <strong>do-while</strong> (assunto 0021), que
+executa o corpo antes de testar. A lista vazia, <code>ultimo == NULL</code>, não tem
+primeiro, e é tratada antes do laço (CELES; RANGEL, 2002):</p>
+<pre><code class="language-c">if (ultimo != NULL) {
+    No *p = ultimo-&gt;prox;      // começa no primeiro
+    do {
+        printf(&quot;%d &quot;, p-&gt;valor);
+        p = p-&gt;prox;
+    } while (p != ultimo-&gt;prox); // parou quando voltou ao primeiro
+}
+</code></pre>
+<p>Duas operações saem quase de graça. <strong>Girar</strong> a roda, fazendo o primeiro
+virar o último, é só <code>ultimo = ultimo-&gt;prox</code>: nenhum nó muda, só o ponteiro de
+referência anda uma casa. <strong>Juntar</strong> duas listas circulares numa só é trocar
+dois ponteiros, as setas que fecham cada anel, também O(1).</p>
+<p>A lista dupla também pode ser circular: o último aponta para o primeiro pela
+frente, e o primeiro aponta para o último por trás. É a forma que o Cormen
+usa, com um nó <strong>sentinela</strong> que fica entre o fim e o começo e nunca guarda
+dado (CORMEN et al., 2024, cap. 10). O assunto 0174 volta a ela.</p>
+<p>Um problema clássico usa o anel: o <strong>problema de Josephus</strong>. Pessoas em roda
+eliminam uma a cada k passos, até sobrar uma. Na lista circular, isso vira
+andar k nós, remover o nó, e repetir até restar um nó que aponta para si
+mesmo (FEOFILOFF, 2009, cap. 4).</p>
+<blockquote>
+<p>[!WARNING]
+Na lista circular, <code>p</code> <strong>nunca</strong> vira <code>NULL</code>: um laço <code>p != NULL</code> não
+termina. No <code>libera</code>, <strong>corte o círculo</strong> antes (<code>ultimo-&gt;prox = NULL</code>) e
+trate como lista comum: sem isso, o seguinte do último é o primeiro, já
+liberado.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>O garçom do rodízio serve as mesas 3, 7, 12 e 15 e, na última, volta à 3. O
+ponteiro da lista fica na mesa 15, e a 3 é <code>ultimo-&gt;prox</code>:</p>
+<p align="center"><img src="material/0080-ideia.svg" alt="Diagrama da ideia: Lista circular" width="902"></p>
+<p>As duas inserções do <code>lista.c</code>:</p>
+<pre><code class="language-c">No *lista_insere_inicio(No *ultimo, int valor) {
+    No *novo = cria_no(valor);       // cria_no faz novo-&gt;prox = novo
+    if (ultimo == NULL) return novo; // único nó: primeiro e último
+    novo-&gt;prox = ultimo-&gt;prox;       // o novo aponta para o antigo primeiro
+    ultimo-&gt;prox = novo;             // o último fecha o círculo no novo
+    return ultimo;
+}
+
+No *lista_insere_fim(No *ultimo, int valor) {
+    // inserir no fim = inserir no início e dizer que o novo é o último
+    ultimo = lista_insere_inicio(ultimo, valor);
+    return ultimo-&gt;prox;
+}
+</code></pre>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;lista.h&quot;
+
+int main(void) {
+    No *salao = NULL; // ponteiro para a ÚLTIMA mesa
+    int mesas[] = {3, 7, 12, 15};
+    for (int i = 0; i &lt; 4; i++) salao = lista_insere_fim(salao, mesas[i]);
+    lista_imprime(salao);
+
+    // o garçom sai da primeira mesa e serve 6 vezes, sem nunca achar um fim
+    printf(&quot;serve:&quot;);
+    No *garcom = salao-&gt;prox;
+    for (int i = 0; i &lt; 6; i++) {
+        printf(&quot; %d&quot;, garcom-&gt;valor);
+        garcom = garcom-&gt;prox;
+    }
+    printf(&quot;\n&quot;);
+
+    lista_remove(&amp;salao, 12);
+    printf(&quot;a mesa 12 pagou e foi embora\n&quot;);
+    lista_imprime(salao);
+
+    lista_libera(salao);
+    return 0;
+}
+// Saída:
+// 3 -&gt; 7 -&gt; 12 -&gt; 15 -&gt; (volta ao 3)
+// serve: 3 7 12 15 3 7
+// a mesa 12 pagou e foi embora
+// 3 -&gt; 7 -&gt; 15 -&gt; (volta ao 3)
+</code></pre>
+<p>O <code>lista_imprime</code> testa a lista vazia, põe <code>p</code> na mesa 3 e pergunta &quot;já
+voltei ao primeiro?&quot;: com 4 mesas, Não três vezes e Sim na quarta:</p>
+<p align="center"><img src="material/0080-fluxograma.svg" alt="Fluxograma: Lista circular" width="602"></p>
+<p><strong>Exemplo A159 · A playlist no repetir: um nó só, as duas pontas e o meio</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;0080-lista.h&quot;
+
+int main(void) {
+    No *playlist = NULL; // ponteiro para a ÚLTIMA faixa
+    lista_imprime(playlist);
+
+    // uma faixa só: ela é a primeira e a última, e aponta para si mesma
+    playlist = lista_insere_fim(playlist, 4);
+    lista_imprime(playlist);
+    printf(&quot;aponta para si mesma? %s\n&quot;, playlist-&gt;prox == playlist ? &quot;sim&quot; : &quot;não&quot;);
+
+    // com o ponteiro no último, as duas pontas custam O(1)
+    playlist = lista_insere_fim(playlist, 9);
+    playlist = lista_insere_fim(playlist, 2);
+    playlist = lista_insere_inicio(playlist, 7); // entra antes da primeira
+    lista_imprime(playlist);
+    printf(&quot;primeira: %d, última: %d\n&quot;, playlist-&gt;prox-&gt;valor, playlist-&gt;valor);
+
+    // dá para dar uma volta completa a partir de QUALQUER faixa
+    No *comeco = playlist-&gt;prox;
+    while (comeco-&gt;valor != 9) comeco = comeco-&gt;prox;
+    printf(&quot;tocando a partir da 9:&quot;);
+    No *p = comeco;
+    do {
+        printf(&quot; %d&quot;, p-&gt;valor);
+        p = p-&gt;prox;
+    } while (p != comeco);
+    printf(&quot;\n&quot;);
+
+    // tirar a última: o ponteiro da lista recua para a penúltima
+    lista_remove(&amp;playlist, 2);
+    lista_imprime(playlist);
+    printf(&quot;%d faixas\n&quot;, lista_tamanho(playlist));
+
+    lista_libera(playlist);
+    return 0;
+}
+// Saída:
+// (vazia)
+// 4 -&gt; (volta ao 4)
+// aponta para si mesma? sim
+// 7 -&gt; 4 -&gt; 9 -&gt; 2 -&gt; (volta ao 7)
+// primeira: 7, última: 2
+// tocando a partir da 9: 9 2 7 4
+// 7 -&gt; 4 -&gt; 9 -&gt; (volta ao 7)
+// 3 faixas
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A159.c ~/LPEDC/material/0080-lista.c -o ~/LPEDC/material/A159 &amp;&amp; ~/LPEDC/material/A159
+</code></pre>
+<p><strong>Exemplo A160 · Batata quente: quem sobra na roda?</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &quot;0080-lista.h&quot;
+
+// 8 crianças em roda, numeradas de 1 a 8. A batata começa na 1 e passa de
+// mão em mão; a 3ª criança a pegar a batata sai da roda, e a contagem
+// recomeça na seguinte. Quem sobra? (o problema de Josephus)
+int main(void) {
+    int n = 8, passo = 3;
+    No *roda = NULL;
+    for (int i = 1; i &lt;= n; i++) roda = lista_insere_fim(roda, i);
+    lista_imprime(roda);
+
+    No *ant = roda;          // o último: anterior do primeiro
+    No *p = roda-&gt;prox;      // a batata começa na criança 1
+    printf(&quot;saem:&quot;);
+    while (p-&gt;prox != p) {   // enquanto houver mais de uma criança
+        for (int i = 1; i &lt; passo; i++) {
+            ant = p;
+            p = p-&gt;prox;
+        }
+        printf(&quot; %d&quot;, p-&gt;valor);
+        ant-&gt;prox = p-&gt;prox; // tira p da roda
+        free(p);
+        p = ant-&gt;prox;       // a contagem recomeça na seguinte
+    }
+    printf(&quot;\nsobrou a criança %d\n&quot;, p-&gt;valor);
+
+    lista_libera(p);         // um nó só, que aponta para si mesmo
+    return 0;
+}
+// Saída:
+// 1 -&gt; 2 -&gt; 3 -&gt; 4 -&gt; 5 -&gt; 6 -&gt; 7 -&gt; 8 -&gt; (volta ao 1)
+// saem: 3 6 1 5 2 8 4
+// sobrou a criança 7
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A160.c ~/LPEDC/material/0080-lista.c -o ~/LPEDC/material/A160 &amp;&amp; ~/LPEDC/material/A160
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E475</strong> · ★☆☆</p>
+<p>Numa roda de chimarrão com 5 pessoas (numeradas de 1 a 5), a cuia começa
+com a pessoa 1 e passa para a seguinte 12 vezes. Com quem ela fica? Monte
+a roda com lista_insere_fim e descubra ANDANDO na lista circular. Depois
+confira com uma conta usando %.</p>
+<pre><code class="language-text">Saída esperada:
+1 -&gt; 2 -&gt; 3 -&gt; 4 -&gt; 5 -&gt; (volta ao 1)
+depois de 12 passadas, a cuia está com a pessoa 3
+conferindo com %: pessoa 3
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E475.c ~/LPEDC/material/0080-lista.c -o ~/LPEDC/material/E475 &amp;&amp; ~/LPEDC/material/E475
+</code></pre>
+<p><strong>Exercício E477</strong> · ★★☆</p>
+<p>Rita, Davi e Lia vão de carro de Belo Horizonte a Vitória e voltam: são
+1000 km de estrada. Eles revezam ao volante, nesta ordem, cada um
+dirigindo um trecho de 150 km (o último trecho é o que sobrar). Com uma
+lista circular de structs (nome e km dirigidos), mostre cada trecho e, no
+fim, quanto cada um dirigiu.</p>
+<pre><code class="language-text">Saída esperada:
+trecho 1: Rita dirige 150 km
+trecho 2: Davi dirige 150 km
+trecho 3: Lia dirige 150 km
+trecho 4: Rita dirige 150 km
+trecho 5: Davi dirige 150 km
+trecho 6: Lia dirige 150 km
+trecho 7: Rita dirige 100 km
+Rita: 400 km
+Davi: 300 km
+Lia: 300 km
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E477.c ~/LPEDC/material/0080-lista.c -o ~/LPEDC/material/E477 &amp;&amp; ~/LPEDC/material/E477
+</code></pre>
+<p><strong>Exercício E478</strong> · ★★☆</p>
+<p>Dois salões do restaurante vão virar um só. Cada salão é uma lista
+circular de mesas, guardada pelo último nó: o salão A tem as mesas 1, 2 e
+3 e o B tem 10 e 20 (monte com lista_insere_fim). Escreva
+No *concatena(No *ult_a, No *ult_b), que emenda b depois de a e devolve o
+último da lista nova, em O(1): sem percorrer nada, só trocando ponteiros.
+Trate as listas vazias. Mostre A, B, a junção e a junção com uma lista
+vazia (NULL). No fim, libere a lista juntada uma vez só.</p>
+<pre><code class="language-text">Saída esperada:
+A: 1 -&gt; 2 -&gt; 3 -&gt; (volta ao 1)
+B: 10 -&gt; 20 -&gt; (volta ao 10)
+juntas: 1 -&gt; 2 -&gt; 3 -&gt; 10 -&gt; 20 -&gt; (volta ao 1)
+com vazia: 1 -&gt; 2 -&gt; 3 -&gt; 10 -&gt; 20 -&gt; (volta ao 1)
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E478.c ~/LPEDC/material/0080-lista.c -o ~/LPEDC/material/E478 &amp;&amp; ~/LPEDC/material/E478
+</code></pre>
+<p><strong>Exercício E479</strong> · ★★★</p>
+<p>O sistema operacional divide a CPU entre os programas com o escalonamento
+round-robin: cada processo roda no máximo um QUANTUM de tempo e vai para
+o fim da fila; quem termina sai da roda. Simule com uma lista circular de
+processos (id e tempo que falta), quantum 2, e os processos P1 (precisa de
+5 unidades), P2 (2) e P3 (4), chegando nessa ordem no tempo 0. A struct é sua.</p>
+<pre><code class="language-text">Saída esperada:
+t=0..2: P1 (falta 3)
+t=2..4: P2 (terminou)
+t=4..6: P3 (falta 2)
+t=6..8: P1 (falta 1)
+t=8..10: P3 (terminou)
+t=10..11: P1 (terminou)
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E479.c ~/LPEDC/material/0080-lista.c -o ~/LPEDC/material/E479 &amp;&amp; ~/LPEDC/material/E479
+</code></pre>
+<hr>
+<h2>0081 · Juntando tudo</h2>
+<h3>Conceito</h3>
+<p>Abra um player de música. Você pula faixas para a frente e para trás, tira
+uma da fila, liga o &quot;repetir tudo&quot; e, depois da última, a primeira volta a
+tocar. Ao fechar o app, a playlist continua lá na próxima vez. Por trás
+dessas ações estão quase todas as peças deste módulo, e montar o player é o
+jeito de vê-las trabalhando juntas.</p>
+<p>A playlist é uma fila de músicas com um marcador na que está tocando, como
+o dedo que acompanha a lista de um cardápio. O programa a organiza como um
+<strong>TAD</strong>, no molde do assunto 0074, dividido em <code>playlist.h</code> e <code>playlist.c</code>.
+Quem usa o TAD vê só a struct <code>Musica</code>, com título, artista e duração em
+segundos, e as operações: adicionar, remover, próxima, anterior, salvar. Os
+nós ficam escondidos no <code>.c</code> (CELES; CERQUEIRA; RANGEL, 2016).</p>
+<p>Dentro do <code>.c</code>, cada nó se chama <code>Faixa</code> e guarda uma <code>Musica</code> e duas setas,
+<code>ant</code> e <code>prox</code>: é a lista dupla do assunto 0079. A <code>struct playlist</code> guarda
+as duas pontas, <code>inicio</code> e <code>fim</code>, o <code>tamanho</code>, um <code>bool repetir</code> e um campo
+novo, <code>atual</code>, que aponta para a faixa que toca agora (CELES; RANGEL, 2002).
+Esse <code>atual</code> é um <strong>cursor</strong>: um ponteiro que marca uma posição da lista e
+anda por ela conforme o usuário pede.</p>
+<p>Cada operação reaproveita um assunto. <strong>Adicionar</strong> é a inserção no fim da
+lista dupla, O(1) graças ao ponteiro <code>fim</code>. <strong>Remover pelo título</strong> é a busca
+do assunto 0077, comparando com <code>strcmp</code>, seguida da remoção dupla, que
+desvia as duas setas que chegam no nó. Há um cuidado a mais: se a faixa
+removida era a atual, o cursor não pode ficar apontando para memória
+liberada. Ele vai para a faixa seguinte, ou para a anterior se a removida
+era a última.</p>
+<p><strong>Próxima</strong> e <strong>anterior</strong> movem o cursor por <code>prox</code> e <code>ant</code>. Com o
+&quot;repetir&quot; ligado, elas dão a volta nas pontas, como numa lista circular
+(assunto 0080). A volta inteira mora numa função só:</p>
+<pre><code class="language-c">const Musica *playlist_proxima(Playlist *p) {
+    if (p-&gt;atual == NULL) return NULL;
+    if (p-&gt;atual-&gt;prox != NULL) p-&gt;atual = p-&gt;atual-&gt;prox;
+    else if (p-&gt;repetir) p-&gt;atual = p-&gt;inicio;  // dá a volta
+    else return NULL;                           // fim da playlist
+    return &amp;p-&gt;atual-&gt;musica;
+}
+</code></pre>
+<p>Repare que a lista <strong>não</strong> é circular: o <code>prox</code> do último continua <code>NULL</code>. A
+volta é uma decisão da função, que olha o <code>repetir</code>. A vantagem é que
+imprimir, liberar e salvar continuam com o &quot;for de lista&quot; de sempre, sem o
+risco de laço infinito do anel.</p>
+<p><strong>Salvar</strong> e <strong>carregar</strong> usam o arquivo texto do módulo 09, com uma música
+por linha no formato <code>titulo;artista;segundos</code>. Carregar lê cada linha com
+<code>fgets</code> e separa os campos com <code>sscanf</code>, que é o <code>scanf</code> lendo de uma string.</p>
+<p>Por fim, <strong>para cada</strong> permite ao cliente fazer algo com cada música, como
+contar as mais longas, sem ver os nós. A função recebe um ponteiro para
+função, que ela chama uma vez por música, e um <code>void *</code> com os dados extras
+dessa função, como nos assuntos 0050 e 0051 (KERNIGHAN; RITCHIE, 1989).</p>
+<p>Os tamanhos mostram o preço da organização. A <code>Musica</code> tem 40 + 30 bytes de
+texto, 2 de preenchimento e 4 do <code>int</code>, 76 bytes. A <code>Faixa</code> soma mais 4 de
+preenchimento e dois ponteiros, e <code>sizeof(Faixa)</code> dá 96. O <code>const Musica *</code>
+que <code>playlist_proxima</code> devolve aponta para <strong>dentro</strong> de uma faixa, e fica
+solto se essa faixa for removida depois.</p>
+<blockquote>
+<p>[!WARNING]
+<code>playlist_proxima(p)-&gt;titulo</code> acessa <code>NULL</code> quando a função devolve
+<code>NULL</code>, o que ocorre na última música com repetir desligado: guarde o
+ponteiro e teste antes de usar. Copie texto com
+<code>snprintf(destino, sizeof destino, &quot;%s&quot;, origem)</code>, que corta em vez de
+estourar o vetor como o <code>strcpy</code>.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>Uma playlist de cinco músicas, 20:01 no total. Pulando duas, toca a terceira;
+a &quot;Asa Branca&quot; sai, a playlist chega à última e, com repetir ligado, volta
+para &quot;Aquarela&quot;:</p>
+<p align="center"><img src="material/0081-ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="933"></p>
+<p>O &quot;repetir&quot; mora numa função:</p>
+<pre><code class="language-c">const Musica *playlist_proxima(Playlist *p) {
+    if (p-&gt;atual == NULL) return NULL;
+    if (p-&gt;atual-&gt;prox != NULL) p-&gt;atual = p-&gt;atual-&gt;prox;
+    else if (p-&gt;repetir) p-&gt;atual = p-&gt;inicio;  // dá a volta
+    else return NULL;                           // fim da playlist
+    return &amp;p-&gt;atual-&gt;musica;
+}
+</code></pre>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;playlist.h&quot;
+
+int main(void) {
+    Playlist *viagem = playlist_cria();
+    if (viagem == NULL) return 1;
+    playlist_adiciona(viagem, &quot;Aquarela&quot;, &quot;Toquinho&quot;, 252);
+    playlist_adiciona(viagem, &quot;Asa Branca&quot;, &quot;Luiz Gonzaga&quot;, 186);
+    playlist_adiciona(viagem, &quot;Mas Que Nada&quot;, &quot;Jorge Ben&quot;, 182);
+    playlist_adiciona(viagem, &quot;Evidências&quot;, &quot;Chitãozinho e Xororó&quot;, 279);
+    playlist_adiciona(viagem, &quot;Tempo Perdido&quot;, &quot;Legião Urbana&quot;, 302);
+
+    int total = playlist_duracao(viagem);
+    printf(&quot;%d músicas, %d:%02d no total\n&quot;, playlist_tamanho(viagem), total / 60, total % 60);
+
+    playlist_proxima(viagem);
+    playlist_proxima(viagem);   // pulou duas: agora toca a 3ª
+    playlist_imprime(viagem);
+
+    playlist_remove(viagem, &quot;Asa Branca&quot;);
+    playlist_proxima(viagem);
+    playlist_proxima(viagem);   // chegou na última
+    if (playlist_proxima(viagem) == NULL) printf(&quot;fim da playlist\n&quot;);
+
+    playlist_repetir(viagem, true);
+    printf(&quot;repetir ligado, próxima: %s\n&quot;, playlist_proxima(viagem)-&gt;titulo);
+    printf(&quot;anterior: %s\n&quot;, playlist_anterior(viagem)-&gt;titulo);
+
+    playlist_libera(viagem);
+    return 0;
+}
+// Saída:
+// 5 músicas, 20:01 no total
+//   1. Aquarela - Toquinho (4:12)
+//   2. Asa Branca - Luiz Gonzaga (3:06)
+// &gt; 3. Mas Que Nada - Jorge Ben (3:02)
+//   4. Evidências - Chitãozinho e Xororó (4:39)
+//   5. Tempo Perdido - Legião Urbana (5:02)
+// fim da playlist
+// repetir ligado, próxima: Aquarela
+// anterior: Tempo Perdido
+</code></pre>
+<p>Em &quot;Tempo Perdido&quot; não há próxima: com repetir desligado a função devolve
+<code>NULL</code>; ligado, o <code>atual</code> volta ao início:</p>
+<p align="center"><img src="material/0081-fluxograma.svg" alt="Fluxograma: Juntando tudo" width="669"></p>
+<p><strong>Exemplo A161 · A trilha do trajeto até o trabalho</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;0081-playlist.h&quot;
+
+int main(void) {
+    // uma playlist vazia não toca nada, e não quebra
+    Playlist *trajeto = playlist_cria();
+    if (trajeto == NULL) return 1;
+    if (playlist_atual(trajeto) == NULL &amp;&amp; playlist_proxima(trajeto) == NULL) {
+        printf(&quot;playlist vazia: nada tocando\n&quot;);
+    }
+
+    playlist_adiciona(trajeto, &quot;Trem das Onze&quot;, &quot;Adoniran Barbosa&quot;, 190);
+    playlist_adiciona(trajeto, &quot;Detalhes&quot;, &quot;Roberto Carlos&quot;, 268);
+    playlist_adiciona(trajeto, &quot;O Bêbado e a Equilibrista&quot;, &quot;Elis Regina&quot;, 228);
+    playlist_adiciona(trajeto, &quot;Sina&quot;, &quot;Djavan&quot;, 233);
+    playlist_repetir(trajeto, true); // o ônibus demora mais que a playlist
+
+    // 20 minutos de ônibus: toca música atrás de música até chegar
+    int trajeto_s = 20 * 60;
+    int relogio = 0; // em segundos, desde que entrou no ônibus
+    const Musica *m = playlist_atual(trajeto);
+    while (relogio + m-&gt;segundos &lt;= trajeto_s) {
+        printf(&quot;%2d:%02d %s\n&quot;, relogio / 60, relogio % 60, m-&gt;titulo);
+        relogio += m-&gt;segundos;
+        m = playlist_proxima(trajeto); // com repetir, nunca é NULL
+    }
+    int ouviu = trajeto_s - relogio;
+    printf(&quot;%2d:%02d %s (chegou no ponto depois de %d s)\n&quot;,
+           relogio / 60, relogio % 60, m-&gt;titulo, ouviu);
+
+    // amanhã continua de onde parou: a playlist lembra a música atual
+    printf(&quot;amanhã começa em: %s\n&quot;, playlist_atual(trajeto)-&gt;titulo);
+
+    playlist_libera(trajeto);
+    return 0;
+}
+// Saída:
+// playlist vazia: nada tocando
+//  0:00 Trem das Onze
+//  3:10 Detalhes
+//  7:38 O Bêbado e a Equilibrista
+// 11:26 Sina
+// 15:19 Trem das Onze
+// 18:29 Detalhes (chegou no ponto depois de 91 s)
+// amanhã começa em: Detalhes
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A161.c ~/LPEDC/material/0081-playlist.c -o ~/LPEDC/material/A161 &amp;&amp; ~/LPEDC/material/A161
+</code></pre>
+<p><strong>Exemplo A162 · Salvar a playlist no arquivo e carregar de volta</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;0081-playlist.h&quot;
+
+// callback para playlist_para_cada: conta as músicas com mais de 4 minutos
+static void conta_longas(const Musica *m, void *extra) {
+    int *contador = extra; // o void * volta a ser o que era: um int *
+    if (m-&gt;segundos &gt; 240) (*contador)++;
+}
+
+int main(void) {
+    Playlist *original = playlist_cria();
+    if (original == NULL) return 1;
+    playlist_adiciona(original, &quot;Aquarela&quot;, &quot;Toquinho&quot;, 252);
+    playlist_adiciona(original, &quot;Mas Que Nada&quot;, &quot;Jorge Ben&quot;, 182);
+    playlist_adiciona(original, &quot;Tempo Perdido&quot;, &quot;Legião Urbana&quot;, 302);
+
+    if (!playlist_salva(original, &quot;playlist.txt&quot;)) {
+        printf(&quot;não consegui gravar\n&quot;);
+        playlist_libera(original);
+        return 1;
+    }
+    playlist_libera(original); // a playlist some da memória; o arquivo fica
+
+    Playlist *lida = playlist_carrega(&quot;playlist.txt&quot;);
+    if (lida == NULL) return 1;
+    printf(&quot;carregou %d músicas:\n&quot;, playlist_tamanho(lida));
+    playlist_imprime(lida);
+
+    int longas = 0;
+    playlist_para_cada(lida, conta_longas, &amp;longas);
+    printf(&quot;%d com mais de 4 minutos\n&quot;, longas);
+
+    playlist_libera(lida);
+    remove(&quot;playlist.txt&quot;); // apaga o arquivo de teste
+    return 0;
+}
+// Conteúdo de playlist.txt enquanto existe:
+// Aquarela;Toquinho;252
+// Mas Que Nada;Jorge Ben;182
+// Tempo Perdido;Legião Urbana;302
+//
+// Saída:
+// carregou 3 músicas:
+// &gt; 1. Aquarela - Toquinho (4:12)
+//   2. Mas Que Nada - Jorge Ben (3:02)
+//   3. Tempo Perdido - Legião Urbana (5:02)
+// 2 com mais de 4 minutos
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A162.c ~/LPEDC/material/0081-playlist.c -o ~/LPEDC/material/A162 &amp;&amp; ~/LPEDC/material/A162
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E481</strong> · ★☆☆</p>
+<p>Monte a playlist do churrasco usando só playlist.h, nesta ordem:</p>
+<pre><code class="language-text">Deixa a Vida Me Levar, Zeca Pagodinho, 233 s
+Ai Se Eu Te Pego, Michel Teló, 166 s
+País Tropical, Jorge Ben, 196 s
+Velha Infância, Tribalistas, 251 s
+Garota de Ipanema, Tom Jobim, 194 s
+</code></pre>
+<p>Avance três músicas, volte uma, mostre a playlist, o total em min:seg e o
+que está tocando.</p>
+<pre><code class="language-text">Saída esperada:
+  1. Deixa a Vida Me Levar - Zeca Pagodinho (3:53)
+  2. Ai Se Eu Te Pego - Michel Teló (2:46)
+&gt; 3. País Tropical - Jorge Ben (3:16)
+  4. Velha Infância - Tribalistas (4:11)
+  5. Garota de Ipanema - Tom Jobim (3:14)
+5 músicas, 17:20
+tocando agora: País Tropical - Jorge Ben
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E481.c ~/LPEDC/material/0081-playlist.c -o ~/LPEDC/material/E481 &amp;&amp; ~/LPEDC/material/E481
+</code></pre>
+<p><strong>Exercício E483</strong> · ★★☆</p>
+<p>A playlist não deixa você ver os nós, mas playlist_para_cada chama uma
+função SUA para cada música, levando junto um void *extra. Crie a
+playlist com estas músicas (título, artista, segundos): Aquarela,
+Toquinho, 252; Mas Que Nada, Jorge Ben, 182; Evidências, Chitãozinho e
+Xororó, 279; Tempo Perdido, Legião Urbana, 302; Taj Mahal, Jorge Ben, 189.
+Com dois callbacks seus, mostre a música mais longa (extra aponta para um
+const Musica * que guarda a maior até agora) e quantas músicas e quantos
+segundos (em min:seg) tem Jorge Ben (extra aponta para uma struct sua com
+o nome, a contagem e a soma).</p>
+<pre><code class="language-text">Saída esperada:
+mais longa: Tempo Perdido (5:02)
+Jorge Ben: 2 músicas, 6:11
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E483.c ~/LPEDC/material/0081-playlist.c -o ~/LPEDC/material/E483 &amp;&amp; ~/LPEDC/material/E483
+</code></pre>
+<p><strong>Exercício E484</strong> · ★★☆</p>
+<p>O bolão da Copa da firma mantém um ranking: mais pontos na frente e, em
+caso de empate, ordem alfabética. Escreva, com uma lista encadeada de
+structs (nome e pontos) neste arquivo:</p>
+<pre><code class="language-text">insere no lugar certo do ranking (inserção ordenada)
+remove um participante pelo nome
+imprime com a posição
+</code></pre>
+<p>Participantes, na ordem em que entraram: Ana 12, Beto 15, Cris 12,
+Duda 9, Edu 15. Depois a Cris sai do bolão.</p>
+<pre><code class="language-text">Saída esperada:
+1. Beto 15
+2. Edu 15
+3. Ana 12
+4. Cris 12
+5. Duda 9
+Cris saiu do bolão
+1. Beto 15
+2. Edu 15
+3. Ana 12
+4. Duda 9
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E484.c ~/LPEDC/material/0081-playlist.c -o ~/LPEDC/material/E484 &amp;&amp; ~/LPEDC/material/E484
+</code></pre>
+<p><strong>Exercício E486</strong> · ★★★</p>
+<p>Um polinômio cabe numa lista encadeada: um nó por termo (coeficiente e
+expoente), em ordem DECRESCENTE de expoente, sem termos de coeficiente 0.
+Escreva neste arquivo:</p>
+<pre><code class="language-text">insere_termo(lista, coef, exp)   põe o termo no lugar certo; se já
+                                 existe um com esse expoente, soma os
+                                 coeficientes, e se a soma der 0, tira
+                                 o nó
+soma(p, q)                       devolve um polinômio NOVO com p + q
+imprime(p)                       no formato do exemplo
+avalia(p, x)                     o valor do polinômio para esse x
+</code></pre>
+<p>Teste com P(x) = 3x^4 + 2x^2 - 5 e Q(x) = x^4 - 2x^2 + 7x.</p>
+<pre><code class="language-text">Saída esperada:
+P(x) = 3x^4 + 2x^2 - 5
+Q(x) = x^4 - 2x^2 + 7x
+P + Q = 4x^4 + 7x - 5
+(P + Q)(2) = 73
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E486.c ~/LPEDC/material/0081-playlist.c -o ~/LPEDC/material/E486 &amp;&amp; ~/LPEDC/material/E486
+</code></pre>
+<hr>
+<h2>Lista do módulo</h2>
+<p>30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P1101.c a P1130.c, em <code>material/</code>; resoluções em <code>_respostas/11-listas/lista/</code>.</p>
+<h3>★☆☆ Aquecimento</h3>
+<p><strong>Exercício P1101</strong> · ★☆☆ · Encaixar uma música no meio da playlist</p>
+<p>A playlist da festa junina é uma lista sequencial: um vetor de 8 códigos
+de música e um contador n. Escreva</p>
+<pre><code class="language-text">bool seq_insere(ListaSeq *l, int pos, int codigo)
+</code></pre>
+<p>que põe o código na posição pos (0 &lt;= pos &lt;= n), empurrando uma casa para
+a direita os que estavam de pos em diante, e devolve false se a lista
+estiver cheia ou se pos for inválida. Conte os deslocamentos numa variável
+global. Faça, nesta ordem: insere(0, 10), insere(1, 30), insere(1, 20),
+insere(0, 5) e insere(9, 99).</p>
+<pre><code class="language-text">Saída esperada:
+[5 10 20 30]
+Inserir na posição 9: recusado
+Deslocamentos: 4
+</code></pre>
+<p><strong>Resposta esperada:</strong> a saída acima (0 + 0 + 1 + 3 deslocamentos).</p>
+<hr>
+<p><strong>Exercício P1102</strong> · ★☆☆ · O itinerário do ônibus, parada por parada</p>
+<p>O itinerário da linha 640 é montado na ordem em que as paradas são
+cadastradas: 101, 205, 310, 412 e 520. Sem ponteiro para o último, cada
+inserção no FIM precisa andar a lista até o último nó. Escreva</p>
+<pre><code class="language-text">No *insere_fim(No *inicio, int valor, int *visitados)
+</code></pre>
+<p>que devolve o (possivelmente novo) início e soma em *visitados quantos nós
+percorreu para achar o último. Monte o itinerário, mostre-o, mostre o
+total de nós visitados e libere tudo.</p>
+<pre><code class="language-text">Saída esperada:
+101 -&gt; 205 -&gt; 310 -&gt; 412 -&gt; 520 -&gt; NULL
+Nós visitados: 10
+</code></pre>
+<hr>
+<p><strong>Exercício P1103</strong> · ★☆☆ · Reajuste de preço achando o nó</p>
+<p>A lista do hortifruti guarda código e preço de cada produto. Escreva</p>
+<pre><code class="language-text">Produto *busca(Produto *inicio, int codigo)
+</code></pre>
+<p>que devolve o ENDEREÇO do nó com aquele código (ou NULL). Com esse
+ponteiro em mãos, o main muda o preço direto no nó, sem percorrer de novo.
+Monte a lista inserindo no início os produtos (40, 6.00), (30, 8.50),
+(20, 3.20) e (10, 12.00); reajuste o 30 em 10% e tente reajustar o 99.</p>
+<pre><code class="language-text">Saída esperada:
+Antes:  10: 12.00 | 20: 3.20 | 30: 8.50 | 40: 6.00 |
+Código 30: 8.50 -&gt; 9.35
+Código 99: não encontrado
+Depois: 10: 12.00 | 20: 3.20 | 30: 9.35 | 40: 6.00 |
+</code></pre>
+<p><strong>Resposta esperada:</strong> a saída acima (8.50 * 1.10 = 9.35).</p>
+<hr>
+<p><strong>Exercício P1104</strong> · ★☆☆ · Quem desistiu da fila do restaurante</p>
+<p>A fila de espera do restaurante é uma lista encadeada de nomes. Escreva</p>
+<pre><code class="language-text">Cliente *remove_nome(Cliente *inicio, const char *nome, bool *removeu)
+</code></pre>
+<p>que tira da lista o primeiro cliente com aquele nome (liberando o nó),
+devolve o novo início e diz em *removeu se achou. Monte a fila Ana, Bia,
+Caio, Duda (nesta ordem, inserindo no fim) e remova Bia, depois Ana,
+depois Zeca, mostrando a fila depois de cada tentativa.</p>
+<pre><code class="language-text">Saída esperada:
+Fila: Ana Bia Caio Duda
+Sem Bia: Ana Caio Duda
+Sem Ana: Caio Duda
+Zeca não estava: Caio Duda
+</code></pre>
+<p><strong>Resposta esperada:</strong> a saída acima, sem vazamento no sanitizer.</p>
+<hr>
+<p><strong>Exercício P1105</strong> · ★☆☆ · Engatar o trem da tarde no da manhã em O(1)</p>
+<p>Guardando o início, o fim e o tamanho da lista numa struct, inserir no fim
+e concatenar duas listas custam O(1). Escreva:</p>
+<pre><code class="language-text">void insere_fim(Lista *l, int valor)
+void concatena(Lista *a, Lista *b)   // passa os nós de b para o fim de
+                                     // a; b fica vazia
+</code></pre>
+<p>Monte a com os vagões 1, 2 e 3 e b com 4 e 5. Mostre as duas, concatene,
+mostre de novo e mostre o último de a (sem percorrer). Depois concatene
+a com a b vazia (nada muda) e libere tudo.</p>
+<pre><code class="language-text">Saída esperada:
+a: 1 -&gt; 2 -&gt; 3 -&gt; NULL (3 nós)
+b: 4 -&gt; 5 -&gt; NULL (2 nós)
+a depois: 1 -&gt; 2 -&gt; 3 -&gt; 4 -&gt; 5 -&gt; NULL (5 nós)
+b depois: NULL (0 nós)
+último de a: 5
+a com b vazia: 1 -&gt; 2 -&gt; 3 -&gt; 4 -&gt; 5 -&gt; NULL (5 nós)
+</code></pre>
+<p><strong>Resposta esperada:</strong> Só a lista a é liberada no fim (os nós de b agora são dela).</p>
+<hr>
+<p><strong>Exercício P1106</strong> · ★☆☆ · O metrô nos dois sentidos</p>
+<p>Uma linha de metrô vai e volta pelas mesmas estações: é uma lista dupla.
+Escreva insere_fim para a lista dupla com início e fim, e duas funções de
+impressão: uma do início para o fim (seguindo prox) e outra do fim para o
+início (seguindo ant). Cadastre as estações Sé, Luz, Tiradentes e
+Armênia (nesta ordem) e mostre a ida e a volta. Libere tudo no fim.</p>
+<pre><code class="language-text">Saída esperada:
+Ida:   Sé -&gt; Luz -&gt; Tiradentes -&gt; Armênia
+Volta: Armênia -&gt; Tiradentes -&gt; Luz -&gt; Sé
+</code></pre>
+<hr>
+<p><strong>Exercício P1107</strong> · ★☆☆ · A roda-gigante do parque</p>
+<p>As 6 cabines da roda-gigante formam uma lista circular: depois da 6 vem a</p>
+<ol>
+<li>Cada nó guarda o número da cabine e quantas pessoas estão nela. A
+lista é guardada pelo ponteiro para o ÚLTIMO nó. Escreva:</li>
+</ol>
+<pre><code class="language-text">No *insere_fim(No *ultimo, int cabine, int pessoas)  // devolve o novo último
+int total_pessoas(const No *ultimo)
+void mostra_a_partir(const No *ultimo, int cabine)   // dá uma volta
+                                                      // começando nela
+</code></pre>
+<p>Cadastre as cabines 1 a 6 com 2, 4, 0, 3, 1 e 4 pessoas, mostre o total e
+a volta começando na cabine 4. Libere tudo no fim.</p>
+<pre><code class="language-text">Saída esperada:
+Total: 14 pessoas
+A partir da 4: [4:3] [5:1] [6:4] [1:2] [2:4] [3:0]
+</code></pre>
+<hr>
+<p><strong>Exercício P1108</strong> · ★☆☆ · As senhas da farmácia e a memória</p>
+<p>O painel da farmácia guarda as senhas numa lista. O programa mostra a
+lista, chama (tira do início) duas senhas e libera o resto. A saída na
+tela parece certa, mas o AddressSanitizer reclama: há DOIS erros de
+propósito com a memória. Rode, leia o relatório (procure
+&quot;heap-use-after-free&quot; e &quot;detected memory leaks&quot;) e conserte os dois.</p>
+<pre><code class="language-text">Saída esperada:
+Senhas: 41 -&gt; 42 -&gt; 43 -&gt; 44 -&gt; NULL
+Chamou 41
+Chamou 42
+Senhas: 43 -&gt; 44 -&gt; NULL
+</code></pre>
+<p>(e nenhum relatório do sanitizer depois da saída)</p>
+<p><strong>Resposta esperada:</strong> em libera, guarde No *seguinte = p-&gt;prox ANTES do free(p). Em chama, guarde o nó antigo, avance o início e dê free no nó antigo. A saída fica igual à de cima, sem relatório.</p>
+<hr>
+<p><strong>Exercício P1109</strong> · ★☆☆ · A chamada em ordem alfabética</p>
+<p>Os alunos vão chegando e entrando na lista de chamada, que precisa ficar
+sempre em ordem alfabética. Escreva</p>
+<pre><code class="language-text">Aluno *insere_ordenado(Aluno *inicio, const char *nome)
+</code></pre>
+<p>que cria o nó e o encaixa no lugar certo (comparando com strcmp),
+devolvendo o novo início. Insira Marcos, Ana, Teo, Bia e Lia, nesta ordem,
+mostrando a lista depois de cada inserção. Libere tudo no fim.</p>
+<pre><code class="language-text">Saída esperada:
+Marcos
+Ana Marcos
+Ana Marcos Teo
+Ana Bia Marcos Teo
+Ana Bia Lia Marcos Teo
+</code></pre>
+<hr>
+<p><strong>Exercício P1110</strong> · ★☆☆ · A playlist de trás para frente, no lugar</p>
+<p>A playlist do treino é uma lista sequencial (vetor + tamanho). Escreva</p>
+<pre><code class="language-text">int seq_inverte(ListaSeq *l)
+</code></pre>
+<p>que inverte a ordem DENTRO do próprio vetor, trocando o primeiro com o
+último, o segundo com o penúltimo e assim por diante, e devolve quantas
+trocas fez.
+Teste com a playlist de 7 músicas 11, 22, 33, 44, 55, 66, 77 e com uma
+de 4 músicas 1, 2, 3, 4.</p>
+<pre><code class="language-text">Saída esperada:
+[77 66 55 44 33 22 11] em 3 trocas
+[4 3 2 1] em 2 trocas
+</code></pre>
+<h3>★★☆ Para pensar</h3>
+<p><strong>Exercício P1111</strong> · ★★☆ · Juntar dois rankings já em ordem decrescente</p>
+<p>As notas das turmas A e B estão em listas CRESCENTES:</p>
+<pre><code class="language-text">a: 2 -&gt; 5 -&gt; 8 -&gt; 9 -&gt; NULL
+b: 1 -&gt; 5 -&gt; 7 -&gt; 10 -&gt; 12 -&gt; NULL
+</code></pre>
+<p>O mural precisa delas juntas, em ordem DECRESCENTE. Escreva</p>
+<pre><code class="language-text">No *intercala_decrescente(No *a, No *b)
+</code></pre>
+<p>que faz isso numa passada só, SEM criar nem liberar nó nenhum: a cada
+passo, tire da frente de a ou de b o nó de menor valor e ponha-o no
+INÍCIO da lista resultado. Libere o resultado no fim.</p>
+<pre><code class="language-text">Saída esperada:
+a: 2 -&gt; 5 -&gt; 8 -&gt; 9 -&gt; NULL
+b: 1 -&gt; 5 -&gt; 7 -&gt; 10 -&gt; 12 -&gt; NULL
+mural: 12 -&gt; 10 -&gt; 9 -&gt; 8 -&gt; 7 -&gt; 5 -&gt; 5 -&gt; 2 -&gt; 1 -&gt; NULL
+</code></pre>
+<p><strong>Resposta esperada:</strong> São n + m passos: O(n + m).</p>
+<hr>
+<p><strong>Exercício P1112</strong> · ★★☆ · O leitor de código de barras que repete</p>
+<p>O leitor do caixa às vezes registra o mesmo produto duas vezes. A lista
+de códigos lidos NÃO está em ordem: 7, 3, 7, 9, 3, 3, 1, 9. Escreva</p>
+<pre><code class="language-text">int remove_repetidos(No *inicio)
+</code></pre>
+<p>que deixa só a PRIMEIRA ocorrência de cada código, na ordem original, e
+devolve quantos nós tirou (liberando cada um). Não use vetor auxiliar.</p>
+<pre><code class="language-text">Saída esperada:
+antes:  7 -&gt; 3 -&gt; 7 -&gt; 9 -&gt; 3 -&gt; 3 -&gt; 1 -&gt; 9 -&gt; NULL
+depois: 7 -&gt; 3 -&gt; 9 -&gt; 1 -&gt; NULL
+4 leituras repetidas removidas
+</code></pre>
+<hr>
+<p><strong>Exercício P1113</strong> · ★★☆ · Desengatar o k-ésimo vagão a partir do fim</p>
+<p>O trem é uma lista simples e você não sabe o tamanho dele. Escreva</p>
+<pre><code class="language-text">No *remove_k_do_fim(No *inicio, int k, bool *ok)
+</code></pre>
+<p>que tira o k-ésimo nó contando do FIM (k = 1 é o último), percorrendo a
+lista UMA vez só, e devolve o novo início (*ok diz se o nó existia).
+Monte o trem 10, 20, 30, 40, 50 e remova, nesta ordem, com k = 2, k = 4 e
+k = 5, mostrando o trem depois de cada tentativa.</p>
+<pre><code class="language-text">Saída esperada:
+trem:  10 -&gt; 20 -&gt; 30 -&gt; 40 -&gt; 50 -&gt; NULL
+k = 2: 10 -&gt; 20 -&gt; 30 -&gt; 50 -&gt; NULL
+k = 4: 20 -&gt; 30 -&gt; 50 -&gt; NULL
+k = 5: não existe
+</code></pre>
+<p><strong>Resposta esperada:</strong> Uma passada, O(n), memória O(1).</p>
+<hr>
+<p><strong>Exercício P1114</strong> · ★★☆ · Os contatos que vêm para a frente</p>
+<p>A agenda do celular é uma lista dupla (com início e fim) com Ana, Bia,
+Caio, Duda e Edu. Quem você procura muito deveria ficar no começo. A
+heurística &quot;mover para a frente&quot;: a cada busca bem-sucedida, o nó achado
+sai de onde está e vai para o início. Escreva</p>
+<pre><code class="language-text">int busca_move(Agenda *ag, const char *nome)
+</code></pre>
+<p>que faz a busca sequencial, move o nó para a frente (se achou) e devolve
+quantas comparações fez. Faça as buscas Duda, Duda, Edu, Duda e Ana,
+mostrando a agenda depois de cada uma, e compare o total com o que a
+mesma sequência custaria sem mover ninguém.</p>
+<pre><code class="language-text">Saída esperada:
+Duda: 4 comparações | Duda Ana Bia Caio Edu
+Duda: 1 comparações | Duda Ana Bia Caio Edu
+Edu: 5 comparações | Edu Duda Ana Bia Caio
+Duda: 2 comparações | Duda Edu Ana Bia Caio
+Ana: 3 comparações | Ana Duda Edu Bia Caio
+Total movendo: 15
+Total sem mover: 18
+</code></pre>
+<p><strong>Resposta esperada:</strong> É a ideia por trás de caches como o LRU: o que foi usado há pouco tende a ser usado de novo.</p>
+<hr>
+<p><strong>Exercício P1115</strong> · ★★☆ · Quem lava a louça (Josefo com nomes)</p>
+<p>Depois do almoço de domingo, seis primos fazem uma roda: Ana, Bia, Caio,
+Duda, Edu e Fê. Começando em Ana, contam 1, 2, 3, e quem disser &quot;3&quot; sai da
+roda; a contagem recomeça do seguinte. O último que sobrar lava a louça.
+Monte a roda como uma lista circular de nomes guardada pelo ÚLTIMO nó e
+escreva</p>
+<pre><code class="language-text">No *elimina(No *ultimo, int k)
+</code></pre>
+<p>que mostra quem sai, na ordem, libera cada nó que sai e devolve o nó que
+sobrou. Mostre o vencedor e libere esse último nó também.</p>
+<pre><code class="language-text">Saída esperada:
+Saem: Caio Fê Duda Bia Edu
+Lava a louça: Ana
+</code></pre>
+<p><strong>Resposta esperada:</strong> São n - 1 eliminações de k passos: O(n · k).</p>
+<hr>
+<p><strong>Exercício P1116</strong> · ★★☆ · A agenda do consultório em vetor ordenado</p>
+<p>Os horários marcados do dia ficam numa lista sequencial ORDENADA (em
+minutos desde a meia-noite, num vetor de 10). Escreva:</p>
+<pre><code class="language-text">int ord_busca(const Agenda *a, int x, int *pos)
+  busca binária: devolve 1 se achou (e *pos é onde está) ou 0 (e *pos é
+  onde x deveria entrar para manter a ordem);
+bool ord_insere(Agenda *a, int x)   // recusa repetido e agenda cheia
+bool ord_remove(Agenda *a, int x)
+</code></pre>
+<p>As duas últimas usam ord_busca para achar a posição e depois deslocam os
+itens do vetor. Insira 540, 600, 480, 720 e 600 (repetido), remova o 540
+e procure o 720. Mostre os horários como hh:mm.</p>
+<pre><code class="language-text">Saída esperada:
+Agenda: 08:00 09:00 10:00 12:00
+10:00: horário ocupado
+Sem 09:00: 08:00 10:00 12:00
+12:00 está na posição 2
+</code></pre>
+<hr>
+<p><strong>Exercício P1117</strong> · ★★☆ · Pares na frente, sem mudar a ordem</p>
+<p>As senhas do guichê chegaram nesta ordem: 7, 2, 9, 4, 4, 1, 6. O guichê
+par vai atender primeiro, então as senhas pares devem vir antes das
+ímpares, mas cada grupo mantendo a ordem de chegada (uma partição
+ESTÁVEL). Escreva</p>
+<pre><code class="language-text">No *pares_primeiro(No *inicio)
+</code></pre>
+<p>que reorganiza a lista só religando os nós (sem malloc, sem free, sem
+trocar valores) e devolve o novo início.</p>
+<pre><code class="language-text">Saída esperada:
+antes:  7 -&gt; 2 -&gt; 9 -&gt; 4 -&gt; 4 -&gt; 1 -&gt; 6 -&gt; NULL
+depois: 2 -&gt; 4 -&gt; 4 -&gt; 6 -&gt; 7 -&gt; 9 -&gt; 1 -&gt; NULL
+</code></pre>
+<p><strong>Resposta esperada:</strong> Uma passada: O(n).</p>
+<hr>
+<p><strong>Exercício P1118</strong> · ★★☆ · Desengatar o último vagão sem quebrar o trem</p>
+<p>Numa lista simples, tirar o ÚLTIMO nó exige achar o PENÚLTIMO. A função
+remove_ultimo abaixo tem DOIS erros de propósito: com 3 vagões o
+sanitizer já acusa &quot;heap-use-after-free&quot; na impressão, e com 1 vagão só
+ela derruba o programa. Conserte os dois para a saída ficar:</p>
+<pre><code class="language-text">Saída esperada:
+Trem: 1 -&gt; 2 -&gt; 3 -&gt; NULL
+Saiu 3: 1 -&gt; 2 -&gt; NULL
+Saiu 2: 1 -&gt; NULL
+Saiu 1: NULL
+</code></pre>
+<p><strong>Resposta esperada:</strong> trate inicio-&gt;prox == NULL à parte (guarde o valor, libere o nó e devolva NULL) e, depois do free, faça p-&gt;prox = NULL.</p>
+<hr>
+<p><strong>Exercício P1119</strong> · ★★☆ · O ranking da corrida em lista dupla</p>
+<p>Os tempos da corrida de 5 km (em minutos) chegam fora de ordem: 58, 61,
+55, 70 e 60. Guarde-os numa lista DUPLA com início e fim, sempre em ordem
+crescente. Escreva</p>
+<pre><code class="language-text">void insere_ordenado(Ranking *r, int tempo)
+</code></pre>
+<p>tratando os quatro casos: lista vazia, novo antes do primeiro, novo
+depois do último e novo no meio. Mostre o ranking depois de cada
+inserção, do início para o fim, e no final mostre também do fim para o
+início (o que confere se todas as setas ant ficaram certas).</p>
+<pre><code class="language-text">Saída esperada:
+58
+58 61
+55 58 61
+55 58 61 70
+55 58 60 61 70
+De trás para frente: 70 61 60 58 55
+</code></pre>
+<hr>
+<p><strong>Exercício P1120</strong> · ★★☆ · Girar a escala de plantão</p>
+<p>A escala de plantão da semana é a lista 1 -&gt; 2 -&gt; 3 -&gt; 4 -&gt; 5. Girar k
+posições para a direita leva os k últimos para a frente: com k = 2, fica
+4 -&gt; 5 -&gt; 1 -&gt; 2 -&gt; 3. Escreva</p>
+<pre><code class="language-text">No *gira(No *inicio, int k)
+</code></pre>
+<p>que faz isso só religando nós (sem malloc, sem trocar valores) e devolve
+o novo início. k pode ser maior que o tamanho: girar 7 numa lista de 5 é
+o mesmo que girar 2. Aplique, um depois do outro, k = 2, k = 7 e k = 0.</p>
+<pre><code class="language-text">Saída esperada:
+escala: 1 -&gt; 2 -&gt; 3 -&gt; 4 -&gt; 5 -&gt; NULL
+k = 2:  4 -&gt; 5 -&gt; 1 -&gt; 2 -&gt; 3 -&gt; NULL
+k = 7:  2 -&gt; 3 -&gt; 4 -&gt; 5 -&gt; 1 -&gt; NULL
+k = 0:  2 -&gt; 3 -&gt; 4 -&gt; 5 -&gt; 1 -&gt; NULL
+</code></pre>
+<p><strong>Resposta esperada:</strong> O(n) e memória O(1).</p>
+<h3>★★★ Desafio</h3>
+<p><strong>Exercício P1121</strong> · ★★★ · A agenda que sobrevive ao desligar</p>
+<p>Uma lista encadeada some quando o programa acaba. Junte o módulo 11 com o
+09: escreva uma agenda de contatos (nome e telefone, sem espaços) numa
+lista ordenada por nome, que é salva num arquivo texto e carregada de
+volta. Funções:</p>
+<pre><code class="language-text">Contato *insere(Contato *inicio, const char *nome, const char *fone)
+Contato *remove_nome(Contato *inicio, const char *nome)
+const Contato *busca(const Contato *inicio, const char *nome)
+int salva(const Contato *inicio, const char *caminho)  // quantos gravou
+Contato *carrega(const char *caminho, int *n)          // lista nova
+</code></pre>
+<p>No main: insira Rui (92)98100-0001, Ana (92)98100-0002,
+Lia (92)98100-0003 e Bia (92)98100-0004; remova Lia; salve em
+/tmp/p1121_agenda.txt, uma linha &quot;nome fone&quot; por contato; LIBERE a lista;
+carregue numa lista nova, mostre-a e procure Bia. Apague o arquivo no fim.</p>
+<pre><code class="language-text">Saída esperada:
+Agenda: Ana Bia Lia Rui
+Sem Lia: Ana Bia Rui
+Salvos: 3 contatos
+Carregados: 3 contatos
+Ana (92)98100-0002
+Bia (92)98100-0004
+Rui (92)98100-0001
+Bia: (92)98100-0004
+</code></pre>
+<p><strong>Resposta esperada:</strong> a saída acima, sem vazamento.</p>
+<hr>
+<p><strong>Exercício P1122</strong> · ★★★ · O malloc de brinquedo (first-fit)</p>
+<p>Por baixo do malloc existe uma LISTA DE BLOCOS LIVRES. Simule uma memória
+de 100 posições (endereços 0 a 99) com uma lista encadeada de blocos
+livres {inicio, tamanho}, sempre em ordem de endereço. Escreva:</p>
+<pre><code class="language-text">int aloca(Bloco **livres, int tam)
+  first-fit: usa o PRIMEIRO bloco livre com tamanho &gt;= tam, tirando tam
+  posições do começo dele (se sobrar zero, o bloco sai da lista).
+  Devolve o endereço, ou -1 se nenhum bloco serve;
+void desaloca(Bloco **livres, int ini, int tam)
+  devolve o pedaço à lista, no lugar certo pela ordem de endereço, e
+  FUNDE com o vizinho da esquerda e/ou da direita se encostarem.
+</code></pre>
+<p>Faça, nesta ordem, mostrando a lista de livres depois de cada operação:
+aloca 30, aloca 20, aloca 25, desaloca o de 20, aloca 10, desaloca o de
+30, desaloca o de 25, aloca 50, aloca 40. No fim, mostre o total livre e
+o maior bloco, e libere a lista.</p>
+<pre><code class="language-text">Saída esperada:
+aloca 30 -&gt; 0 | livres: [30,100)
+aloca 20 -&gt; 30 | livres: [50,100)
+aloca 25 -&gt; 50 | livres: [75,100)
+desaloca 30+20 | livres: [30,50) [75,100)
+aloca 10 -&gt; 30 | livres: [40,50) [75,100)
+desaloca 0+30 | livres: [0,30) [40,50) [75,100)
+desaloca 50+25 | livres: [0,30) [40,100)
+aloca 50 -&gt; 40 | livres: [0,30) [90,100)
+aloca 40 -&gt; falhou | livres: [0,30) [90,100)
+Livre: 40 posições, maior bloco: 30
+</code></pre>
+<hr>
+<p><strong>Exercício P1123</strong> · ★★★ · Turmas e alunos: uma lista de listas</p>
+<p>O cursinho guarda uma lista de TURMAS, e cada turma guarda a sua própria
+lista de ALUNOS (em ordem alfabética). Escreva:</p>
+<pre><code class="language-text">Turma *matricula(Turma *turmas, const char *turma, const char *aluno)
+  acha a turma (ou cria no FIM da lista de turmas) e insere o aluno em
+  ordem; devolve o início da lista de turmas;
+bool cancela(Turma *turmas, const char *turma, const char *aluno)
+bool transfere(Turma *turmas, const char *aluno, const char *de,
+               const char *para)
+  NÃO cria nem libera nó: desliga o nó do aluno de uma turma e o encaixa
+  na outra.
+void libera_tudo(Turma *turmas)   // cada aluno de cada turma, e as turmas
+</code></pre>
+<p>Faça as matrículas (C, Bia), (Python, Ana), (C, Ana), (C, Caio),
+(Python, Davi); mostre; transfira Caio de C para Python, cancele Ana em
+Python; mostre de novo.</p>
+<pre><code class="language-text">Saída esperada:
+C (3): Ana Bia Caio
+Python (2): Ana Davi
+--
+C (2): Ana Bia
+Python (2): Caio Davi
+</code></pre>
+<p><strong>Resposta esperada:</strong> a saída acima, sem vazamento.</p>
+<hr>
+<p><strong>Exercício P1124</strong> · ★★★ · Inverter só um trecho da fila</p>
+<p>Na fila do embarque, as pessoas das posições 3 a 6 (contando de 1) são uma
+família que entrou na ordem errada. Escreva</p>
+<pre><code class="language-text">No *inverte_trecho(No *inicio, int a, int b)
+</code></pre>
+<p>que inverte só os nós das posições a até b (1 &lt;= a &lt;= b &lt;= n), numa
+passada, só religando nós, e devolve o novo início (que muda quando a ==
+1). Na fila 1..8, aplique, um depois do outro, os trechos (3, 6), (1, 2)
+e (7, 8).</p>
+<pre><code class="language-text">Saída esperada:
+fila:   1 -&gt; 2 -&gt; 3 -&gt; 4 -&gt; 5 -&gt; 6 -&gt; 7 -&gt; 8 -&gt; NULL
+(3, 6): 1 -&gt; 2 -&gt; 6 -&gt; 5 -&gt; 4 -&gt; 3 -&gt; 7 -&gt; 8 -&gt; NULL
+(1, 2): 2 -&gt; 1 -&gt; 6 -&gt; 5 -&gt; 4 -&gt; 3 -&gt; 7 -&gt; 8 -&gt; NULL
+(7, 8): 2 -&gt; 1 -&gt; 6 -&gt; 5 -&gt; 4 -&gt; 3 -&gt; 8 -&gt; 7 -&gt; NULL
+</code></pre>
+<hr>
+<p><strong>Exercício P1125</strong> · ★★★ · A lista dupla com três setas esquecidas</p>
+<p>A lista dupla abaixo compila sem aviso, e a impressão de ida até parece
+certa, mas a volta sai errada e o sanitizer acusa &quot;heap-use-after-free&quot;.
+São TRÊS erros de propósito, todos de setas que deixaram de ser
+atualizadas: um em insere_inicio e dois em remove_valor. Conserte os três.</p>
+<pre><code class="language-text">Saída esperada:
+Ida:   1 2 3 4
+Volta: 4 3 2 1
+Depois de remover 4 e 1:
+Ida:   2 3
+Volta: 3 2
+</code></pre>
+<p><strong>Resposta esperada:</strong> em insere_inicio, if (l-&gt;inicio != NULL) l-&gt;inicio-&gt;ant = novo; em remove_valor, l-&gt;fim = p-&gt;ant quando p é o último, e p-&gt;prox-&gt;ant = p-&gt;ant sempre que p-&gt;prox existe.</p>
+<hr>
+<p><strong>Exercício P1126</strong> · ★★★ · Lista encadeada sem malloc (cursores)</p>
+<p>Em sistemas embarcados (e em muita prova antiga), a lista encadeada vive
+dentro de um VETOR: cada célula tem valor e o ÍNDICE da próxima (-1 é o
+&quot;NULL&quot;). As células sem uso formam uma segunda lista, a dos LIVRES, de
+onde se tira célula para inserir e para onde ela volta ao remover.</p>
+<pre><code class="language-text">typedef struct { int valor; int prox; } Celula;
+typedef struct { Celula c[6]; int inicio; int livre; } Estatica;
+</code></pre>
+<p>Escreva inicializa (todas livres: 0 -&gt; 1 -&gt; ... -&gt; 5 -&gt; -1, lista vazia),
+bool insere_ordenado(Estatica *l, int x) (false se não há célula livre),
+bool remove_valor(Estatica *l, int x) e mostra. Faça: insere 30, 10, 20;
+mostre; remove 10; mostre; insere 25, 5, 40, 50; mostre; tente inserir
+60; e mostre a tabela das células.</p>
+<pre><code class="language-text">Saída esperada:
+lista: 10 20 30 | início 1, livre 3
+lista: 20 30 | início 2, livre 1
+lista: 5 20 25 30 40 50 | início 3, livre -1
+60: sem célula livre
+célula 0: 30 -&gt; 4
+célula 1: 25 -&gt; 0
+célula 2: 20 -&gt; 1
+célula 3: 5 -&gt; 2
+célula 4: 40 -&gt; 5
+célula 5: 50 -&gt; -1
+</code></pre>
+<hr>
+<p><strong>Exercício P1127</strong> · ★★★ · Dividir a ciranda em duas rodas</p>
+<p>A ciranda da escola é uma lista circular guardada pelo ÚLTIMO nó. Ela
+ficou grande demais e precisa virar duas rodas: a primeira com a metade
+da frente (com n ímpar, ela fica com um a mais) e a segunda com o resto,
+cada uma circular de novo. Escreva</p>
+<pre><code class="language-text">void divide(No *ultimo, No **ultimo1, No **ultimo2)
+</code></pre>
+<p>que faz isso numa passada, só religando nós, com a técnica do lento e do
+rápido (o rápido anda dois passos por vez). Teste com as rodas 1..7 e
+1..6, mostrando cada metade e confirmando que o último de cada uma aponta
+para o primeiro dela.</p>
+<pre><code class="language-text">Saída esperada:
+roda de 7: 1 2 3 4 5 6 7
+  metade 1: 1 2 3 4 (o 4 aponta para o 1)
+  metade 2: 5 6 7 (o 7 aponta para o 5)
+roda de 6: 1 2 3 4 5 6
+  metade 1: 1 2 3 (o 3 aponta para o 1)
+  metade 2: 4 5 6 (o 6 aponta para o 4)
+</code></pre>
+<p><strong>Resposta esperada:</strong> Com n = 1, a metade 2 fica vazia (NULL); trate esse caso também.</p>
+<hr>
+<p><strong>Exercício P1128</strong> · ★★★ · A esteira do sushi em ordem de preço</p>
+<p>Os pratos da esteira do restaurante giram em círculo e ficam em ordem de
+preço: do mais barato até o mais caro, e depois do mais caro volta o
+mais barato. A esteira é uma lista circular guardada pelo ÚLTIMO nó (o
+prato mais caro). Escreva</p>
+<pre><code class="language-text">No *insere_ordenado(No *ultimo, int preco)
+</code></pre>
+<p>que encaixa o prato no lugar certo e devolve o (possivelmente novo)
+último. Ponha, nesta ordem, pratos de 30, 10, 50, 20, 40, 60 e 5 reais,
+mostrando a esteira (do primeiro ao último) depois de cada um.</p>
+<pre><code class="language-text">Saída esperada:
+30 | último: 30
+10 30 | último: 30
+10 30 50 | último: 50
+10 20 30 50 | último: 50
+10 20 30 40 50 | último: 50
+10 20 30 40 50 60 | último: 60
+5 10 20 30 40 50 60 | último: 60
+</code></pre>
+<hr>
+<p><strong>Exercício P1129</strong> · ★★★ · Palíndromo com memória O(1)</p>
+<p>O código do bilhete premiado da quermesse é um palíndromo (lê-se igual
+nos dois sentidos). Os dígitos estão numa lista SIMPLES. Escreva</p>
+<pre><code class="language-text">bool palindromo(No *inicio)
+</code></pre>
+<p>sem vetor, sem pilha e sem lista nova: ache o meio (lento e rápido),
+INVERTA a segunda metade, compare as duas metades andando juntas e, no
+fim, desinverta a segunda metade para devolver a lista como estava.
+Teste com 1 2 3 2 1, 4 7 7 4, 1 2 3 1 e 9, mostrando a lista depois do
+teste (para provar que ela foi restaurada).</p>
+<pre><code class="language-text">Saída esperada:
+1 2 3 2 1: sim | depois: 1 2 3 2 1
+4 7 7 4: sim | depois: 4 7 7 4
+1 2 3 1: não | depois: 1 2 3 1
+9: sim | depois: 9
+</code></pre>
+<p><strong>Resposta esperada:</strong> O(n) de tempo, O(1) de memória.</p>
+<hr>
+<p><strong>Exercício P1130</strong> · ★★★ · Somar matrizes esparsas</p>
+<p>A planilha de estoque de 3 lojas x 5 produtos tem quase tudo zero. Uma
+MATRIZ ESPARSA guarda só o que não é zero: cada linha é uma lista
+encadeada de nós {coluna, valor}, em ordem crescente de coluna. Escreva:</p>
+<pre><code class="language-text">No *insere(No *linha, int coluna, int valor)   // em ordem de coluna
+No *soma_linhas(const No *a, const No *b)
+  cria uma lista nova com a soma, intercalando as duas linhas por
+  coluna e DESCARTANDO os resultados que derem zero;
+void mostra_densa(No *m[], int linhas, int colunas)  // com os zeros
+</code></pre>
+<p>Monte A e B pelos termos (linha, coluna, valor) e mostre A + B na forma
+densa (cada número com &quot;%3d&quot;) e quantos não nulos ela guarda.</p>
+<pre><code class="language-text">A: (0,1,5) (0,4,2) (1,0,3) (2,2,-4) (2,3,1)
+B: (0,1,-5) (0,2,7) (1,0,1) (1,4,9) (2,3,2)
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+  0  0  7  0  2
+  4  0  0  0  9
+  0  0 -4  3  0
+Não nulos: 6 de 15
+</code></pre>
+<p><strong>Resposta esperada:</strong> Libere as três matrizes.</p>
+<hr>
+<h2>Desafios do módulo</h2>
+<p>Problemas para fazer num arquivo seu, misturando os assuntos do módulo. Use
+o gcc com as flags de estudo em todos: resposta certa com vazamento não vale.</p>
+<p><strong>1. Lista com ciclo.</strong> Um bug deixou o <code>prox</code> do último nó apontando para
+um nó do meio, e agora percorrer a lista nunca termina. Escreva
+<code>bool tem_ciclo(const No *inicio)</code> que descobre isso sem alocar memória e sem
+modificar a lista.</p>
+<details><summary>Resposta</summary><p>Lebre e tartaruga (algoritmo de Floyd): a tartaruga anda 1 nó por vez e a
+lebre anda 2. Se a lebre chegar em <code>NULL</code>, não há ciclo. Se houver, a lebre
+dá a volta e alcança a tartaruga: <code>lebre == tartaruga</code> em algum momento.
+O(n) de tempo, O(1) de memória. Bônus: depois do encontro, volte a tartaruga
+para o início e ande os dois de 1 em 1; eles se encontram no primeiro nó do
+ciclo.</p>
+</details><p><strong>2. O k-ésimo a partir do fim.</strong> Numa lista simples de tamanho desconhecido,
+ache o 3º nó contando do fim, percorrendo a lista uma vez só. Em
+<code>10 -&gt; 20 -&gt; 30 -&gt; 40 -&gt; 50</code>, a resposta é 30.</p>
+<details><summary>Resposta</summary><p>Dois ponteiros com distância fixa: adiante o primeiro 3 nós; depois ande os
+dois juntos até o primeiro virar <code>NULL</code>. O segundo está no 3º a partir do
+fim. Trate a lista com menos de 3 nós (o primeiro vira <code>NULL</code> antes de
+completar os 3 passos).</p>
+</details><p><strong>3. Interseção de listas ordenadas.</strong> Dadas duas listas crescentes, monte
+uma terceira (nova, com <code>malloc</code>) só com os valores que aparecem nas duas.
+Para <code>1 3 4 7 9</code> e <code>2 3 7 8 9</code>, o resultado é <code>3 7 9</code>.</p>
+<details><summary>Resposta</summary><p>Um ponteiro em cada lista, como na intercalação do E466: se os valores são
+iguais, copie para a resposta e ande os dois; senão ande só o do menor.
+O(n + m), sem nenhum laço aninhado. Inserir no fim com um ponteiro para o
+último mantém a ordem.</p>
+</details><p><strong>4. Números gigantes.</strong> Um <code>long long</code> vai até uns 9 × 10¹⁸. Some
+<code>98765432109876543210</code> com <code>12345678901234567890</code> guardando cada número numa
+lista com <strong>um dígito por nó, do menos significativo para o mais</strong>.</p>
+<details><summary>Resposta</summary><p><strong>111111111011111111100</strong>. Com os dígitos de trás para frente, a soma anda
+nas duas listas do começo, igual à conta armada: dígito = (a + b + vai_um) %
+10, vai_um = (a + b + vai_um) / 10. No fim, se sobrar vai-um, crie mais um
+nó. Para imprimir, use recursão (como no E454) ou uma lista dupla e ande do
+fim para o começo.</p>
+</details><p><strong>5. Desfazer e refazer.</strong> Um editor guarda o histórico de versões numa
+lista dupla com um cursor na versão atual (<code>inicio</code>, <code>fim</code> e <code>cursor</code> numa
+struct <code>Historico</code>). Escreva <code>digita</code> (que <strong>descarta e libera</strong> as versões
+à frente do cursor antes de inserir a nova depois dele), <code>desfaz</code> (volta o
+cursor, se der), <code>refaz</code> (avança, se der) e <code>mostra</code> (imprime as versões com
+a atual entre colchetes). Digite &quot;v1&quot; a &quot;v4&quot;, desfaça duas vezes, refaça uma,
+digite &quot;v5&quot; e tente refazer, mostrando a lista depois de cada passo.</p>
+<details><summary>Resposta</summary><pre><code>digitou 4:   v1 v2 v3 [v4]
+desfez 2:    v1 [v2] v3 v4
+refez 1:     v1 v2 [v3] v4
+digitou v5:  v1 v2 v3 [v5]
+refez 1:     v1 v2 v3 [v5]
+</code></pre>
+<p>Dica: no <code>digita</code>, libere todos os nós depois do cursor, faça
+<code>cursor-&gt;prox = NULL</code> e <code>fim = cursor</code>, e só então insira no fim. É o
+comportamento de todo editor: depois de editar, o &quot;refazer&quot; some. Esquecer os
+<code>free</code> desses nós é vazamento, e o gcc com as flags de estudo acusa.</p>
+</details><p><strong>6. LRU: o cache das páginas recentes.</strong> Um navegador guarda as últimas 3
+páginas visitadas numa lista dupla (cada nó guarda um <code>char</code>). Visitar uma
+página que já está na lista leva ela para a frente; visitar uma nova com a
+lista cheia expulsa (e libera) a mais antiga, a do fim. Escreva
+<code>void visita(char pg)</code> e simule as visitas A, B, C, A, D, B, imprimindo a
+lista depois de cada uma.</p>
+<details><summary>Resposta</summary><pre><code>A -&gt; A
+B -&gt; B A
+C -&gt; C B A
+A -&gt; A C B
+D -&gt; D A C
+B -&gt; B D A
+</code></pre>
+<p>Dica: duas funções auxiliares resolvem tudo: <code>desliga(p)</code> tira o nó da lista
+sem liberar (cuidando de <code>inicio</code> e <code>fim</code>) e <code>poe_na_frente(p)</code> insere no
+início. Página encontrada: desliga e põe na frente. Página nova: se cheia,
+desliga e libera o <code>fim</code>; depois cria o nó e põe na frente. Achar ainda é
+O(n); com uma tabela hash (módulo 15) apontando para os nós, tudo vira O(1).</p>
+</details><p><strong>7. Sem casos especiais.</strong> Reescreva a lista dupla do assunto 0079 com um
+<strong>nó sentinela</strong> circular: um nó de mentira cujo <code>prox</code> é o primeiro e cujo
+<code>ant</code> é o último. Lista vazia é a sentinela apontando para si mesma nos dois
+sentidos. Quantos <code>if</code> sobram na inserção e na remoção?</p>
+<details><summary>Resposta</summary><p><strong>Nenhum.</strong> Todo nó real tem anterior e seguinte de verdade (às vezes a
+sentinela), então remover é sempre <code>p-&gt;ant-&gt;prox = p-&gt;prox; p-&gt;prox-&gt;ant = p-&gt;ant;</code> e inserir depois de <code>q</code> é sempre as mesmas quatro atribuições.
+Inserir no início é inserir depois da sentinela; no fim, depois de
+<code>sentinela-&gt;ant</code>. Percorrer vai de <code>s-&gt;prox</code> até voltar a <code>s</code>.</p>
+</details><p><strong>8. Inverter de k em k.</strong> Inverta uma lista simples em blocos de 3 nós, só
+mexendo nos ponteiros. <code>1 2 3 4 5 6 7 8</code> vira <code>3 2 1 6 5 4 8 7</code> (o último
+bloco incompleto também é invertido).</p>
+<details><summary>Resposta</summary><p>Aplique a inversão do E456 em pedaços: inverta 3 nós, guardando o primeiro
+do bloco (que vira o último) e o início do resto. Ligue o fim do bloco
+invertido ao resultado da inversão do resto. Com recursão fica curto:
+<code>inverte_k(inicio)</code> inverte os 3 primeiros e faz
+<code>primeiro_do_bloco-&gt;prox = inverte_k(resto)</code>.</p>
+</details><p><strong>9. Ordenar uma lista em O(n log n).</strong> O E468 ordena por inserção em
+O(n²). Escreva o <strong>merge sort</strong> de lista: divida a lista ao meio, ordene cada
+metade recursivamente e intercale. Teste com <code>5 1 4 2 8 3 7 6</code>.</p>
+<details><summary>Resposta</summary><p>Para dividir, use a lebre e a tartaruga (E462): quando a lebre chega ao fim,
+corte depois da tartaruga (<code>meio = tartaruga-&gt;prox; tartaruga-&gt;prox = NULL</code>). Caso base: lista com 0 ou 1 nó. Junte com a intercalação do E466.
+Resultado <code>1 2 3 4 5 6 7 8</code>. Na lista, o merge sort não precisa de vetor
+auxiliar: só religa nós. É o assunto 0094, um módulo adiantado.</p>
+</details><p><strong>10. Josephus: fórmula contra lista.</strong> Com n pessoas em roda e eliminando
+de k em k, a posição do sobrevivente (contando de 0) obedece a J(1) = 0 e
+J(n) = (J(n − 1) + k) % n. Escreva um programa que, para n = 8 e k = 3,
+imprima J(1) a J(8) com um laço e o sobrevivente (numerado de 1), e depois
+simule a roda com uma lista circular (como a batata quente do A160),
+imprimindo a ordem de saída e quem sobra.</p>
+<details><summary>Resposta</summary><pre><code>formula: J(1)=0 J(2)=1 J(3)=1 J(4)=0 J(5)=3 J(6)=0 J(7)=3 J(8)=6
+sobrevivente pela formula: pessoa 7
+simulacao: saem 3 6 1 5 2 8 4, sobra a pessoa 7
+</code></pre>
+<p>Dica: a fórmula é um laço <code>for (m = 2; m &lt;= n; m++) j = (j + k) % m;</code>,
+O(n) e sem memória, e a pessoa é <code>j + 1</code>. A simulação começa com <code>ant</code> no
+último nó e <code>p</code> no primeiro e anda <code>k - 1</code> passos antes de cada remoção. A
+fórmula só diz quem sobra; a lista dá a <strong>ordem</strong> de eliminação e aguenta
+variações que a fórmula não cobre (passo diferente para cada pessoa, alguém
+entrando no meio).</p>
+</details><h2>Questões do POSCOMP</h2>
+<p>Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.</p>
+<table>
+<thead>
+<tr>
+<th>Ano</th>
+<th>Questão</th>
+<th>Assunto</th>
+<th>Gabarito</th>
+<th>Prova</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2019</td>
+<td>26</td>
+<td>Afirmações sobre listas encadeadas</td>
+<td>D</td>
+<td><a href="https://www.sbc.org.br/wp-content/uploads/2025/02/0518.002_Exame_POSCOMP_2019.pdf">caderno</a></td>
+</tr>
+<tr>
+<td>2024</td>
+<td>24</td>
+<td>Lista encadeada ordenada, tipo de lista</td>
+<td>E</td>
+<td><a href="https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2024.pdf">caderno</a></td>
+</tr>
+</tbody></table>
+<h2>Questões de provas do PPGI</h2>
+<p>Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.</p>
+<p><strong>Edital 032/2016 · Questão 03</strong></p>
+<p>Quando um novo nó é removido no meio de uma lista encadeada dinâmica, qual das seguintes afirmações é verdadeira:</p>
+<ul>
+<li>a) Somente os nós que aparecem após o novo nó precisam ser movidos</li>
+<li>b) Somente os nós que aparecem antes do novo nó precisam ser movidos</li>
+<li>c) Os nós que aparecem antes do novo nó e o último nó precisam ser movidos</li>
+<li>d) Os nós que aparecem depois do novo nó e o primeiro nó precisam ser movidos</li>
+<li>e) Nenhuma das opções acima</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>E.</strong> Remover no meio de lista encadeada só religa ponteiros, nenhum nó é movido. Assunto 0076.</p>
+</details><p><strong>Edital 032/2016 · Questão 08</strong></p>
+<p>Considere os códigos de funções abaixo, assumindo que os mesmos são usados dentro de um programa e que os todos os cabeçalhos necessários são incluídos:</p>
+<pre><code class="language-c">/*QUADRO I) Código para inserir em uma lista
+encadeada. Cada nó da lista tem um campo
+prox, que é usado para encadea-lo ao próximo
+elemento, e tem um dado do tipo int. */
+/* prim é um ponteiro para o ponteiro ao
+primeiro elemento da lista */
+void insere(tipoNo **prim, int d) {
+  tipoNo *aux;
+  aux = (tipoNo *)malloc(sizeof(tipoNo));
+  if(aux) { aux -&gt;prox = *prim;
+    *prim = aux;
+    aux -&gt; dado = d;
+  }
+}
+</code></pre>
+<pre><code class="language-c">/*QUADRO II) Código para remover primeiro
+elemento de uma lista encadeada. Cada nó da
+lista tem um campo prox, que é usado para
+encadea-lo ao próximo elemento, e tem um
+dado do tipo int. */
+/* prim é um ponteiro para o ponteiro ao
+primeiro elemento da lista */
+1. void remove (tipoNo **prim){
+2.   tipoNo *aux;
+3.   if(*prim) { aux = *prim;
+4.     *prim = aux-&gt;prox;
+5.     free(*prim);
+6.     *prim = aux;
+7.   }
+8. }
+</code></pre>
+<p>Marque a alternativa correta dentre as afirmações abaixo:</p>
+<ul>
+<li>a) Os dois códigos executam as tarefas propostas sem gerar qualquer tipo de erro de lógica, de vazamento de memória ou falha de segmentação</li>
+<li>b) Apenas os código I realiza sem erros a tarefa descrita nos comentários</li>
+<li>c) Apenas os código II realiza sem erros a tarefa descrita nos comentários</li>
+<li>d) Os dois códigos não executam suas tarefas como descrito nos comentários, mas também não geram vazamento de memória</li>
+<li>e) O primeiro código gera vazamento de memória e o segundo não realiza a tarefa descrita nos comentários</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>B.</strong> O insere está certo; o remove dá free no novo início (*prim) e depois faz *prim = aux, apontando para nó já removido. Assunto 0076.</p>
+</details><p><strong>Edital 053/2016 · Questão 06</strong></p>
+<p>Marque a alternativa CORRETA.
+Uma lista duplamente encadeada tem como característica ser formada por elementos que:</p>
+<ul>
+<li>a) se concatenam de forma circular, de tal maneira que, ao chegar ao final da lista, o próximo elemento volta a ser o primeiro.</li>
+<li>b) contêm, além de um ou mais campos chave, mais um campo de ponteiro: o próximo, que permite o acesso ao elemento que sucede o atual (o próximo) presente na mesma lista.</li>
+<li>c) contêm, além de um campo chave, mais um campo de ponteiro: o próximo, que permite o acesso ao elemento que sucede o atual (o próximo) presente na mesma lista, de tal forma que os campos chave estão ordenados, ou seja, a chave do próximo é sempre maior ou igual à chave do atual elemento.</li>
+<li>d) contêm, além de um ou mais campos chave, dois outros campos de ponteiros: próximo e anterior, que permitem o acesso aos elementos adjacentes (próximo e anterior) presentes na mesma lista.</li>
+<li>e) Estão em posições adjacentes da memória, permitindo o acesso sequencial ao próximo e ao anterior de cada elemento pelo simples uso de um índice.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>D.</strong> Dois ponteiros por nó: próximo e anterior. Assunto 0079.</p>
+</details><p><strong>Edital 053/2016 · Questão 09</strong></p>
+<p>Os registros em uma lista duplamente encadeada com 20 elementos possuem, cada um, três campos:</p>
+<ol>
+<li>próximo: um ponteiro para o próximo elemento da lista;</li>
+<li>valor: informação armazenada pelo elemento;</li>
+<li>anterior: um ponteiro para o elemento anterior da lista.</li>
+</ol>
+<p>Sendo &quot;Z&quot; o décimo elemento desta lista e &quot;X&quot; e &quot;Y&quot; dois outros elementos que não pertencem à lista, sendo apontados, respectivamente, pelos seguintes ponteiros &quot;PZ&quot;, &quot;PX&quot; e &quot;PY&quot;, considere o trecho de código abaixo.</p>
+<pre><code>PY-&gt;próximo = PX;
+PX-&gt;anterior = PY;
+PX-&gt;próximo = PZ-&gt;próximo;
+PZ-&gt;próximo-&gt;anterior = PX;
+PZ-&gt;próximo = PY;
+PY-&gt;anterior = PZ;
+</code></pre>
+<p>Este trecho de código é usado para inserir na lista os elementos:</p>
+<ul>
+<li>a) Y, logo após o Z, e X, logo após o Y.</li>
+<li>b) Y, antes do Z, e X, logo após o Z</li>
+<li>c) Y, antes do Z, e X, antes do Y.</li>
+<li>d) X, logo após o Z, e Y, logo após o X.</li>
+<li>e) X, antes do Z, e Y, logo após o Z.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> As linhas ligam Z → Y → X → antigo próximo de Z. Assunto 0079.</p>
+</details><p><strong>Edital 024/2017 · Questão 04</strong></p>
+<p>Considere as seguintes afirmações sobre a estrutura lista encadeada dinâmica e marque a alternativa CORRETA.</p>
+<p>I. A busca em tal estrutura realiza menos comparações do que a melhor opção de algoritmo de busca em um vetor ordenado quando se considera o pior cenário para cada estrutura.<br>II. É uma estrutura de dados usada para ordenar chaves por ser mais eficiente no processo de ordenação que o heapsort<br>III. É tipicamente utilizada como estrutura de dados básica na implementação de hash por endereçamento aberto\</p>
+<ul>
+<li>a) As três afirmações são falsas</li>
+<li>b) As três afirmações são verdadeiras</li>
+<li>c) Apenas a afirmação I é verdadeira</li>
+<li>d) Apenas a afirmação II é verdadeira</li>
+<li>e) Apenas a afirmação III é verdadeira</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> busca em lista é O(n) contra O(log n) no vetor; lista não ordena melhor que heapsort; endereçamento aberto usa vetor Assunto 0076.</p>
+</details><p><strong>Edital 024/2017 · Questão 05</strong></p>
+<p>Dada uma lista encadeada onde cada nó da lista é do tipo No, cujos campos são um ponteiro para o próximo elemento (campo prox) e um dado do tipo inteiro (campo dado). Dado também quatro (4) opções (versões) de funções para realizar a busca por um elemento em uma lista encadeada, onde recebe-se um ponteiro para o primeiro elemento da lista e uma chave. A função de busca deve retornar 1 (um) caso encontre o elemento buscado e 0 (zero) em caso contrário.</p>
+<p>Com base nas informações anteriores, considere que: (1) a lista encadeada não possui um nó cabeça de lista, portanto todos os nós contém valores presentes na lista; (2) todos os tipos de dados foram previamente declarados no programa; (3) a função não deve ter problemas de alocação de memória, seja por deixar de alocar dinamicamente dados necessários ou por causar alocação dinâmica de dados desnecessária.</p>
+<p>Analise as funções abaixo e marque a alternativa CORRETA</p>
+<pre><code class="language-c">/* versão I */
+int busca(No *prim, int chave) {
+  No *aux = (No *) malloc(sizeof(No));
+  aux = prim;
+  while(aux!= NULL) {
+    if(aux-&gt;dado == chave) return 1;
+    aux = aux&gt;prox;
+  }
+  return 0;
+}
+
+/* versão II */
+int busca(No *prim, int chave) {
+  while(prim!= NULL) {
+    if(prim-&gt;dado == chave) return 1;
+    prim = prim-&gt;prox;
+  }
+  return 0;
+}
+
+/* versão III */
+int busca(No *prim, int chave) {
+  No * aux = prim;
+  while(prim-&gt;prox!= NULL) {
+    if(prim-&gt;dado == chave) return 1;
+    aux = aux-&gt;prox;
+  }
+  return 0;
+}
+
+/* versão IV */
+int busca(No *prim, int chave) {
+  No *aux = (No *) malloc(sizeof(No));
+  while(aux-&gt;prox!= NULL) {
+    if(aux-&gt;dado == chave) return 1;
+    aux = aux&gt;prox;
+  }
+  return 0;
+}
+</code></pre>
+<ul>
+<li>a) A versão I está correta e não apresenta problemas de alocação de memória.</li>
+<li>b) A versão II está correta e não apresenta problemas de alocação de memória.</li>
+<li>c) A versão III está correta e não apresenta problemas de alocação de memória</li>
+<li>d) A versão IV está correta e não apresenta problemas de alocação de memória</li>
+<li>e) Nenhuma das alternativas anteriores está correta</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>B.</strong> só a versão II percorre sem malloc e sem erro; I vaza memória e tem <code>aux&gt;prox</code>, III e IV têm laço errado Assunto 0076.</p>
+</details><p><strong>Edital 024/2017 · Questão 18</strong></p>
+<p>Considere o código abaixo, assumindo que o mesmo é usado dentro de um programa e que os todos os cabeçalhos necessários são incluídos:</p>
+<pre><code class="language-c">// Conta ocorrências de uma chave na lista encadeada, retornando o total de ocorrências , zero caso a chave não ocorra
+int ContaOcorrenciasChave(tipoNo *prim, int chave) {
+  tipoNo *aux = prim;
+  int cont = 0;
+  int x;
+  for (x = 0; aux[x] != NULL; x++){
+    if(aux[x].dado == chave)
+      cont++;
+  }
+  return x;
+}
+</code></pre>
+<p>Marque a alternativa CORRETA dentre as afirmações abaixo:</p>
+<ul>
+<li>a) O código executa a tarefas proposta sem gerar qualquer tipo de erro de lógica ou de vazamento de memória</li>
+<li>b) O código nem compila</li>
+<li>c) O código executa a tarefa proposta sem erros de lógica</li>
+<li>d) O código não gera erro de segmentação</li>
+<li>e) Nenhuma das alternativas anteriores</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>E.</strong> Assunto 0076.</p>
+</details><p><strong>Edital 024/2017 · Questão 19</strong></p>
+<p>Uma lista encadeada simples é uma estrutura que corresponde a uma sequência lógica de entradas ou nós. Cada nó armazena a localização do próximo elemento na sequência, ou seja, de seu nó sucessor.</p>
+<p>Marque a alternativa CORRETA:</p>
+<ul>
+<li>a) A existência de um ponteiro apontando para o 1º elemento e outro para o fim da lista permite que a inserção ou deleção de dados de um nó que esteja nas extremidades da lista seja rapidamente executada</li>
+<li>b) Enquanto a entrada que determina o topo da lista é mantida em um nó descritor dessa lista, a entrada que marca o fim da lista é mantida em todos os nós da lista.</li>
+<li>c) O armazenamento de uma lista requer uma área contígua de memória para permitir a otimização no processamento de busca de valores chaves na lista</li>
+<li>d) O armazenamento de uma lista requer uma área contígua de memória. Como listas são estruturas previamente projetadas e definidas, normalmente são definidos procedimentos que permitem inserir e remover valores com eficiência.</li>
+<li>e) Para estabelecer a ligação entre um nó já pertencente a uma lista e um novo nó, basta fazer com que o novo nó referencie no campo next, o nó que anteriormente era referenciado pelo nó original, desde que esse campo não tenha o valor nulo</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> ponteiros para início e fim dão acesso rápido às extremidades; as outras são falsas ou truncadas Assunto 0076.</p>
+</details><p><strong>Edital 024/2017 · Questão 20</strong></p>
+<p>Marque a alternativa CORRETA. Uma lista duplamente encadeada tem como característica ser formada por elementos que:</p>
+<ul>
+<li>a) Se concatenam de forma circular, de tal maneira que, ao chegar ao final da lista, o próximo elemento volta a ser o primeiro.</li>
+<li>b) Contêm, além de um ou mais campos chave, mais um campo de ponteiro: o próximo, que permite o acesso ao elemento que sucede o atual (o próximo) presente na mesma lista.</li>
+<li>c) Contêm, além de um campo chave, mais um campo de ponteiro: o próximo, que permite o acesso ao elemento que sucede o atual (o próximo) presente na mesma lista, de tal forma que os campos chave estão ordenados, ou seja, a chave do próximo é sempre maior ou igual à chave do atual elemento.</li>
+<li>d) Contêm, além de um ou mais campos chave, dois outros campos de ponteiros: próximo e anterior, que permitem o acesso aos elementos adjacentes (próximo e anterior) presentes na mesma lista.</li>
+<li>e) Estão em posições adjacentes da memória, permitindo o acesso sequencial ao próximo e ao anterior de cada elemento pelo simples uso de um índice.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>D.</strong> lista dupla tem próximo e anterior (mesmas alternativas da 053/2016 Q06) Assunto 0079.</p>
+</details><p><strong>Edital 055/2017 · Questão 11</strong></p>
+<p>Considere as seguintes afirmações sobre a estrutura lista encadeada dinâmica</p>
+<p>I. A busca em tal estrutura realiza menos comparações do que a melhor opção de algoritmo de busca em um vetor ordenado quando se considera o pior cenário para cada estrutura.<br>II. É uma estrutura de dados usada unicamente no armazenamento de grandes quantidades de chaves por lista, dado o seu dinamismo e velocidade de busca quando comparada a outras estruturas de dados.<br>III. É utilizada como estrutura de dados na implementação de alguns tipos de hash.\</p>
+<p>Marque a alternativa CORRETA:</p>
+<ul>
+<li>A) As três afirmações são falsas</li>
+<li>B) Apenas a afirmação I é verdadeira</li>
+<li>C) Apenas a afirmação II é verdadeira</li>
+<li>D) Apenas a afirmação III é verdadeira</li>
+<li>E) Apenas as afirmações I e II são verdadeiras.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>D.</strong> I falsa (lista é O(n)), II falsa (&quot;unicamente&quot;), III verdadeira (encadeamento) Assunto 0076.</p>
+</details><p><strong>Edital 023/2018 · Questão 09</strong></p>
+<p>Os registros em uma lista, duplamente encadeada com 20 elementos possuem cada um três campos:</p>
+<ul>
+<li>próximo: um ponteiro para o próximo elemento da lista;</li>
+<li>valor: informação armazenada pelo elemento;</li>
+<li>anterior: um ponteiro para o elemento anterior da lista.</li>
+</ul>
+<p>Sendo &quot;Z&quot; o décimo elemento desta lista e &quot;X&quot; e &quot;Y&quot; dois outros elementos que não pertencem à lista, com seus respectivos ponteiros &quot;pZ&quot;, &quot;pX&quot; e &quot;pY&quot;, considere o trecho de código abaixo.</p>
+<pre><code>pY↑.próximo = pX;
+pX↑.anterior = pY;
+pX↑.próximo = pZ↑.próximo;
+pZ↑.próximo↑.anterior = pX;
+pZ↑.próximo = pY;
+pY↑.anterior = pZ;
+</code></pre>
+<p>Este trecho de código é usado para inserir na lista os elementos:</p>
+<ul>
+<li>a) Y, logo após o Z, e X, logo após o Y.</li>
+<li>b) Y, antes do Z, e X, logo após o Z.</li>
+<li>c) Y, antes do Z, e X, antes do Y.</li>
+<li>d) X, logo após o Z, e Y, logo após o X.</li>
+<li>e) X, antes do Z, e Y, logo após o Z.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> Ficam Z, Y, X, antigo próximo de Z: Y logo após Z e X logo após Y. Assunto 0079.</p>
+</details><p><strong>Edital 023/2018 · Questão 19</strong></p>
+<p>Marque a alternativa CORRETA. Uma lista encadeada simples é uma estrutura que corresponde a uma sequência lógica de entradas ou nós. Cada nó armazena a localização do próximo elemento na sequência, ou seja, de seu nó sucessor. Nessa estrutura:</p>
+<ul>
+<li>a) Para estabelecer a ligação entre um nó já pertencente a uma lista e um novo nó, basta fazer com que o novo nó referencie no, campo next, o nó que anteriormente era referenciado pelo nó original, desde que esse campo não tenha o valor nulo.</li>
+<li>b) A existência de um ponteiro apontando para o 1º elemento e outro para o fim da lista permite que a inserção ou deleção de dados de um nó que esteja no meio da lista seja rapidamente executada.</li>
+<li>c) Enquanto a entrada que determina o topo da lista é mantida em um nó descritor dessa lista, a entrada que marca o fim da lista é mantida fora do descritor.</li>
+<li>d) O armazenamento de uma lista requer uma área contígua de memória para permitir a otimização no processamento de criação e remoção de nós da lista.</li>
+<li>e) O armazenamento de uma lista não requer uma área contígua de memória. Como listas são estruturas dinâmicas, normalmente são definidos procedimentos que permitem criar e remover nós na memória.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>E.</strong> Lista encadeada não exige área contígua e cria e remove nós dinamicamente. Assunto 0076.</p>
+</details><p><strong>Edital 023/2018 · Questão 20</strong></p>
+<p>A estrutura de dados é um modo de armazenamento e organização de dados para que possam ser usados eficientemente. Dentre as alternativas abaixo, sobre as afirmações de estrutura de dados, escolha a CORRETA:</p>
+<p>I. Uma fila é uma estrutura de dados em que cada elemento tem um ou mais elementos associados.<br>II. A árvore é uma estrutura de dados baseada no princípio Last-in, First-out (LIFO), na qual os dados que foram inseridos primeiro serão os últimos a serem removidos.<br>III. Uma lista é uma estrutura de dados linear, que pode ser encadeada, a qual é composta por nós que apontam para o próximo elemento e o último elemento apontará para nulo.<br>IV. As pilhas são estruturas baseadas no princípio First-in, First-out (FIFO), em que os elementos que foram inseridos no início são os primeiros a serem removidos.\</p>
+<ul>
+<li>a) Somente a afirmação I é verdadeira.</li>
+<li>b) Somente a afirmação II é verdadeira.</li>
+<li>c) Somente a afirmação III é verdadeira.</li>
+<li>d) Somente a afirmação IV é verdadeira.</li>
+<li>e) Todas as afirmativas são verdadeiras.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>C.</strong> Só a III é correta: fila não tem associação a vários elementos, árvore não é LIFO e pilha é LIFO. Assunto 0076.</p>
+</details><p><strong>Edital 061/2018 · Questão 12</strong></p>
+<p>Lista circular encadeada é uma das estruturas de dados dinâmicas básicas. Uma questão que deve ser resolvida pelo algoritmo de busca em lista circular encadeada é:</p>
+<ul>
+<li>a) Saber quando finalizar a busca, se o elemento procurado não estiver na lista circular.</li>
+<li>b) Retornar o elemento anterior ao buscado, dada a propriedade de circularidade da lista.</li>
+<li>c) Devolver o número de elementos constantes na lista.</li>
+<li>d) Parar a busca assim que encontrar um elemento cujo ponteiro para o próximo elemento tenha valor nulo, o que indica o fim da lista.</li>
+<li>e) Devolver o ponteiro de marcação de início, em sua nova posição</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> Na circular não há nulo: é preciso marcar o ponto de parada quando o elemento não existe. Assunto 0080.</p>
+</details><p><strong>Edital 033/2019 · Questão 06</strong></p>
+<p>Qual é a saída da seguinte função que inicia apontando para o primeiro nó da seguinte lista encadeada?</p>
+<p><code>1-&gt;2-&gt;3-&gt;4-&gt;5-&gt;6</code></p>
+<pre><code class="language-c">void fun(struct node* start)
+{
+  if(start == NULL)
+    return;
+  printf(&quot;%d &quot;, start-&gt;data);
+  if(start-&gt;next != NULL )
+    fun(start-&gt;next-&gt;next);
+  printf(&quot;%d &quot;, start-&gt;data);
+}
+</code></pre>
+<ul>
+<li>a) 1 4 6 6 4 1</li>
+<li>b) 1 3 5 1 3 5</li>
+<li>c) 1 2 3 5</li>
+<li>d) 1 3 5 5 3 1</li>
+<li>e) Nenhuma das anteriores</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>D.</strong> Imprime 1, 3, 5, chama com NULL e volta imprimindo 5, 3, 1: <code>1 3 5 5 3 1</code>. Assunto 0076.</p>
+</details><p><strong>Edital 033/2019 · Questão 11</strong></p>
+<p>Qual a função do seguinte trecho de código?</p>
+<pre><code class="language-java">public void function(int data)
+{
+  int flag = 0;
+  if( head != null)
+  {
+    Node temp = head.getNext();
+    while((temp != head) &amp;&amp; (!(temp.getItem() == data)))
+    {
+      temp = temp.getNext();
+      flag = 1;
+      break;
+    }
+  }
+  if(flag)
+    System.out.println(&quot;success&quot;);
+  else
+    System.out.println(&quot;fail&quot;);
+}
+</code></pre>
+<ul>
+<li>a) Imprimir sucess se um determinado elemento não for encontrado</li>
+<li>b) Imprimir fail se um determinado elemento não for encontrado</li>
+<li>c) Imprimir sucess se um elemento em particular for igual a 1</li>
+<li>d) Imprimir fail se a lista estiver vazia e success caso contrário</li>
+<li>e) Nenhuma das respostas anteriores.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>B.</strong> Assunto 0080.</p>
+</details><p><strong>Edital 060/2019 · Questão 05</strong></p>
+<p>Considere o código da função abaixo:</p>
+<pre><code class="language-c">void fun1(struct node* head)
+{
+  if(head == NULL)
+    return;
+  fun1(head-&gt;next);
+  printf(&quot;%d &quot;, head-&gt;data);
+}
+</code></pre>
+<p>O que essa função faz, dada uma lista encadeada de valores inteiros como entrada?</p>
+<ul>
+<li>a) Imprime todos os nós da lista encadeada, começando com primeiro o nó da lista</li>
+<li>b) Imprime todos os nós da lista encadeada, começando com o último nó da lista</li>
+<li>c) Imprime apenas os nós de posições pares da lista encadeada</li>
+<li>d) Imprime apenas os nós de posições impares da lista encadeada</li>
+<li>e) Nenhuma das alternativas anteriores</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>B.</strong> Recursão antes do printf imprime do último ao primeiro. Assunto 0076.</p>
+</details><p><strong>Edital 060/2019 · Questão 07</strong></p>
+<p>A seguinte função em C usa uma lista simplesmente encadeada como argumento de entrada. Ela modifica a lista, movendo o último elemento para a frente da lista e retorna a lista modificada.</p>
+<pre><code class="language-c">typedef struct node {
+  int value;
+  struct node *next;
+}Node;
+
+Node *move_to_front(Node *head) {
+  Node *p, *q;
+  if ((head == NULL || (head-&gt;next == NULL))
+    return head;
+  q = NULL; p = head;
+  while (p-&gt; next !=NULL)
+  {
+    q = p;
+    p = p-&gt;next;
+  }
+  _ _ _ _ _ _ _ _ _ _ _ _ _ _
+  return head;
+}
+</code></pre>
+<p>Certa parte do código foi deixada em branco (linha tracejada). Escolha a alternativa CORRETA para substituir a linha em branco.</p>
+<ul>
+<li>a) q = NULL; p-&gt;next = head; head = p;</li>
+<li>b) q-&gt;next = NULL; head = p; p-&gt;next = head;</li>
+<li>c) head = p; p-&gt;next = q; q-&gt;next = NULL;</li>
+<li>d) q-&gt;next = NULL; p-&gt;next = head; head = p;</li>
+<li>e) A função não precisa ser complementada.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>D.</strong> <code>q-&gt;next = NULL; p-&gt;next = head; head = p;</code> tira o último e o põe na frente. Assunto 0076.</p>
+</details><p><strong>Edital 060/2019 · Questão 19</strong></p>
+<p>Considere uma lista duplamente encadeada não ordenada (com ponteiros na início e final da lista). Qual das seguintes operações a seguir pode ser implementada no tempo O(1)? Marque a alternativa CORRETA.</p>
+<p>I. Inserção na frente da lista encadeada<br>II. Inserção no final da lista encadeada<br>III. Exclusão do nó frontal da lista encadeada<br>IV. Exclusão do último nó da lista encadeada\</p>
+<ul>
+<li>a) I e II</li>
+<li>b) I e III</li>
+<li>c) I, II e III</li>
+<li>d) I, II e IV</li>
+<li>e) Todas as afirmativa estão corretas</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>E.</strong> Com ponteiros de início e fim e elo anterior, as quatro operações são O(1). Assunto 0079.</p>
+</details><h2>Para ler mais</h2>
+<ul>
+<li>CORMEN, T. H.; LEISERSON, C. E.; RIVEST, R. L.; STEIN, C. <em>Algoritmos: teoria e prática</em>. 4. ed. Rio de Janeiro: GEN LTC, 2024. Cap. 10: estruturas de dados elementares (listas ligadas e sentinelas).</li>
+<li>ZIVIANI, N. <em>Projeto de algoritmos: com implementações em Pascal e C</em>. 3. ed. São Paulo: Cengage Learning, 2010. Cap. 3: estruturas de dados básicas (listas lineares).</li>
+<li>CELES, W.; RANGEL, J. L. <em>Apostila de estruturas de dados</em>. Rio de Janeiro: PUC-Rio, Departamento de Informática, 2002. Cap. 10: listas encadeadas.</li>
+<li>CELES, W.; CERQUEIRA, R.; RANGEL, J. L. <em>Introdução a estruturas de dados: com técnicas de programação em C</em>. 2. ed. Rio de Janeiro: Elsevier, 2016.</li>
+<li>FEOFILOFF, P. <em>Algoritmos em linguagem C</em>. Rio de Janeiro: Elsevier, 2009. Cap. 4: listas encadeadas. Disponível em: <a href="https://www.ime.usp.br/~pf/algoritmos/">https://www.ime.usp.br/~pf/algoritmos/</a>.</li>
+<li>TENENBAUM, A. M.; LANGSAM, Y.; AUGENSTEIN, M. J. <em>Estruturas de dados usando C</em>. São Paulo: Makron Books, 1995. Cap. 4: filas e listas.</li>
+<li>LAUREANO, M. <em>Estrutura de dados com algoritmos e C</em>. Rio de Janeiro: Brasport, 2008. Cap. 6: lista.</li>
+<li>ROCHA, A. M. A.; BORGES, A. R. O. S. <em>Programação, estruturas de dados e algoritmos em C</em>. Aveiro: Universidade de Aveiro, Departamento de Eletrônica e Telecomunicações.</li>
+<li>DEITEL, P.; DEITEL, H. <em>C: como programar</em>. 6. ed. São Paulo: Pearson, 2011. Cap. 12: estruturas de dados.</li>
+<li>BACKES, A. <em>Linguagem C: descomplicada</em> (apostila). Cap. sobre alocação dinâmica e structs.</li>
+<li>KERNIGHAN, B. W.; RITCHIE, D. M. <em>C: a linguagem de programação padrão ANSI</em>. Rio de Janeiro: Campus, 1989. Seção 6.5: estruturas autorreferenciadas.</li>
+<li>CPPREFERENCE. <em>realloc</em>. Disponível em: <a href="https://en.cppreference.com/w/c/memory/realloc">https://en.cppreference.com/w/c/memory/realloc</a>.</li>
+<li>GCC. <em>AddressSanitizer</em>. Disponível em: <a href="https://github.com/google/sanitizers/wiki/AddressSanitizer">https://github.com/google/sanitizers/wiki/AddressSanitizer</a>.</li>
+</ul>

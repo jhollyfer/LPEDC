@@ -1,0 +1,127 @@
+<h2>0175 · Conceitos e sucessor</h2>
+<p>Questão de prova sobre árvore quase sempre começa com vocabulário: &quot;qual a
+altura do nó 7?&quot;, &quot;quantas folhas há no nível 2?&quot;. Se você conta altura por
+nós e o enunciado conta por arestas, erra a questão sabendo o assunto. Por
+isso este assunto fixa os termos antes de chegar à pergunta que dá o nome a
+ele: numa árvore binária de busca, qual chave vem logo depois de uma chave
+dada?</p>
+<p>Comece pelo <strong>grau</strong> de um nó, que é quantos filhos ele tem. Numa árvore
+binária o grau vai de 0 a 2. Nó de grau 0 é uma <strong>folha</strong>: não tem ninguém
+abaixo. O <strong>grau da árvore</strong> é o maior grau entre todos os nós (SZWARCFITER;
+MARKENZON, 2010). Uma árvore binária com pelo menos um nó de dois filhos tem
+grau 2.</p>
+<p>Depois vêm as medidas de posição. A <strong>profundidade</strong> de um nó é o número de
+arestas no caminho dele até a raiz; a raiz tem profundidade 0, os filhos dela
+têm 1, os netos, 2. O <strong>nível</strong> agrupa os nós de mesma profundidade, e a raiz
+fica no nível 0 (CORMEN et al., 2024, cap. 12). Aqui mora a primeira
+armadilha: alguns livros contam o nível a partir de 1, com a raiz no nível 1.
+Antes de responder, confira qual convenção o enunciado usa.</p>
+<p>A <strong>altura</strong> olha para baixo: é o maior número de arestas do nó até uma folha
+abaixo dele. Folha tem altura 0, porque não desce nada. A altura da árvore é
+a altura da raiz, e a árvore vazia tem altura -1 por convenção, o que faz a
+conta <code>1 + max(altura(esq), altura(dir))</code> funcionar até no nó sem filhos
+(CORMEN et al., 2024, cap. 12). Profundidade conta para cima, altura conta
+para baixo; o curso segue o Cormen e conta as duas em arestas, como no módulo
+14.</p>
+<p>Com a altura em mãos sai o <strong>fator de balanceamento</strong> de um nó:
+<code>altura(esq) - altura(dir)</code>. Fator positivo quer dizer que a esquerda pesa
+mais; negativo, a direita. A AVL do 0101 mantém o fator de todo nó em -1, 0
+ou 1, e essa regra garante altura O(log n) (ADELSON-VELSKY; LANDIS, 1962).</p>
+<p>Agora a pergunta do sucessor. Pense no painel de uma rodoviária com os
+horários guardados numa BST: qual ônibus sai logo depois do seu? Em ordem
+crescente, o <strong>sucessor</strong> de um nó <code>x</code> é o nó com a menor chave maior que a
+de <code>x</code>. O <strong>antecessor</strong> é o espelho, a maior chave menor que a de <code>x</code>
+(CORMEN et al., 2024, cap. 12). Há dois casos.</p>
+<p>No caso 1, <code>x</code> tem subárvore direita. Tudo o que é maior que <code>x</code> e está
+abaixo dele mora ali, e o menor desses é o <strong>mínimo</strong> da subárvore direita:
+você desce uma vez à direita e depois vai sempre à esquerda até não poder
+mais. Numa árvore com 8 na raiz, 10 à direita e 9 à esquerda do 10, o
+sucessor do 8 é o 9.</p>
+<p>No caso 2, <code>x</code> não tem subárvore direita, e o sucessor é um ancestral. Para
+achá-lo, você sobe. Enquanto sobe vindo de um filho direito, o ancestral é
+menor que <code>x</code> e não serve. O primeiro ancestral alcançado vindo de um filho
+<strong>esquerdo</strong> é a resposta, porque <code>x</code> está à esquerda dele e, portanto, ele
+é maior. Se a subida passar da raiz sem achar esse ancestral, <code>x</code> é a maior
+chave da árvore e não tem sucessor (CORMEN et al., 2024, cap. 12).</p>
+<p>O caso 2 precisa subir, e o nó de uma BST comum só aponta para baixo. Por isso
+cada nó ganha um ponteiro <strong><code>pai</code></strong> (o <code>x.p</code> do Cormen), que vale <code>NULL</code> na
+raiz. Com ele, a subida dispensa pilha e recursão. O custo é de 8 bytes a mais
+por nó numa máquina de 64 bits. Sucessor e antecessor percorrem no máximo um
+caminho da raiz até uma folha, então custam O(h), com h a altura da árvore
+(CORMEN et al., 2024, cap. 12).</p>
+<blockquote>
+<p>[!WARNING]
+Trocar o lado na subida (<code>x == y-&gt;esq</code> no lugar de <code>x == y-&gt;dir</code>) dá um
+&quot;sucessor&quot; <strong>menor</strong> que <code>x</code>. Toda inserção, remoção ou rotação também tem
+que acertar o <code>pai</code> (o da raiz fica <code>NULL</code>).</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>Os horários de ônibus de uma rodoviária entram numa BST na ordem 8h00, 6h15,
+10h30, 7h00, 6h50, 9h20, 12h00, 7h30. O sucessor das 8h00 é caso 1 (10h30 e
+depois à esquerda, 9h20); o das 7h30 é caso 2 e sobe até o 8h00. Ao lado de
+cada nó, a profundidade e a altura:</p>
+<p>{{ideia}}</p>
+<p>O sucessor no <code>arvpai.c</code>:</p>
+<pre><code class="language-c">NoP *ap_sucessor(NoP *x) {
+    if (x-&gt;dir != NULL) {
+        return ap_minimo(x-&gt;dir); // caso 1: o menor da subárvore direita
+    }
+    NoP *y = x-&gt;pai; // caso 2: sobe até chegar por um filho esquerdo
+    while (y != NULL &amp;&amp; x == y-&gt;dir) {
+        x = y;
+        y = y-&gt;pai;
+    }
+    return y;
+}
+</code></pre>
+<p>O painel mostra os conceitos de três nós e as perguntas de horário:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;arvpai.h&quot;
+
+void hora(const NoP *x) {
+    if (x == NULL) {
+        printf(&quot;nenhum&quot;);
+    } else {
+        printf(&quot;%dh%02d&quot;, x-&gt;chave / 100, x-&gt;chave % 100);
+    }
+}
+
+int main(void) {
+    int saidas[] = {800, 615, 1030, 700, 650, 920, 1200, 730};
+    NoP *raiz = NULL;
+    for (int i = 0; i &lt; 8; i++) {
+        raiz = ap_insere(raiz, saidas[i]);
+    }
+    int olhar[] = {800, 615, 730};
+    for (int i = 0; i &lt; 3; i++) {
+        NoP *x = ap_busca(raiz, olhar[i]);
+        printf(&quot;%4d: grau %d | nível %d | altura %d | fator %2d\n&quot;, x-&gt;chave,
+               ap_grau(x), ap_profundidade(x), ap_altura(x), ap_fator(x));
+    }
+    printf(&quot;Altura da árvore: %d\n&quot;, ap_altura(raiz));
+
+    int perguntas[] = {730, 800};
+    for (int i = 0; i &lt; 2; i++) {
+        NoP *x = ap_busca(raiz, perguntas[i]);
+        printf(&quot;Depois das &quot;);
+        hora(x);
+        printf(&quot; sai o das &quot;);
+        hora(ap_sucessor(x));
+        printf(&quot;; antes, o das &quot;);
+        hora(ap_antecessor(x));
+        printf(&quot;\n&quot;);
+    }
+    raiz = ap_libera(raiz);
+    return 0;
+}
+// Saída:
+//  800: grau 2 | nível 0 | altura 3 | fator  1
+//  615: grau 1 | nível 1 | altura 2 | fator -2
+//  730: grau 0 | nível 3 | altura 0 | fator  0
+// Altura da árvore: 3
+// Depois das 7h30 sai o das 8h00; antes, o das 7h00
+// Depois das 8h00 sai o das 9h20; antes, o das 7h30
+</code></pre>
+<p>O fluxograma segue o sucessor das 7h30: sobe duas vezes vindo da direita; na
+terceira, o 6h15 é filho esquerdo do 8h00 e o laço para:</p>
+<p>{{fluxograma}}</p>

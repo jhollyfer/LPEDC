@@ -1,0 +1,143 @@
+<h2>0091 · Bubble sort</h2>
+<p>No app de delivery, cinco restaurantes prometem entregar em 42, 17, 35, 8 e 23
+minutos. Para mostrar do mais rápido ao mais lento, o vetor precisa estar
+<strong>ordenado</strong>. Ordenar também é o que libera a busca binária do 0090, que só
+funciona em vetor ordenado. O módulo apresenta vários métodos de ordenação, e
+este é o mais simples de entender.</p>
+<p>Imagine cinco pessoas numa fila, que devem ficar da mais baixa para a mais
+alta, e só podem trocar de lugar com quem está do lado. Você anda pela fila
+comparando cada par de vizinhos e, se o da esquerda for mais alto, troca os
+dois. O <strong>bubble sort</strong> (ordenação por bolha) faz exatamente isso: compara
+<code>v[j]</code> com <code>v[j + 1]</code> e troca os dois se o da esquerda for maior. Cada
+varredura do começo ao fim do vetor se chama <strong>passada</strong> (CELES; RANGEL,
+2002). O nome vem da imagem dos valores grandes subindo como bolhas, ou, no
+desenho com o vetor na horizontal, indo parar no fim.</p>
+<p>O que torna o método correto é o que acontece com o maior elemento. Assim que
+a passada o encontra, ele vence toda comparação e é carregado troca a troca
+até a última gaveta livre. Depois da primeira passada, o maior está no lugar
+final; depois da segunda, o segundo maior também, e assim por diante (DEITEL;
+DEITEL, 2011, cap. 6). Daí saem duas regras. Bastam <code>n - 1</code> passadas, porque
+com os <code>n - 1</code> maiores no lugar o que sobra só pode ser o menor, já na frente.
+E a passada <code>k</code> não precisa olhar as últimas <code>k - 1</code> gavetas, que já estão
+prontas: o laço interno vai até <code>j &lt; n - passada</code>.</p>
+<p>Uma terceira regra vem de uma variável <code>bool</code>, a <strong>bandeira</strong> <code>trocou</code>. Ela
+começa cada passada valendo <code>false</code> e vira <code>true</code> a cada troca. Se uma passada
+inteira termina sem nenhuma troca, todo vizinho já está em ordem, então o
+vetor está ordenado e o laço pode parar antes das <code>n - 1</code> passadas (CELES;
+RANGEL, 2002).</p>
+<p>No pior caso, com o vetor ao contrário, a primeira passada compara <code>n - 1</code>
+pares, a segunda <code>n - 2</code>, até a última com 1. A soma dá <code>n(n - 1)/2</code>
+comparações, e todas viram trocas: o custo é <strong>O(n²)</strong>. No melhor caso, com o
+vetor já em ordem e a bandeira ligada, uma passada de <code>n - 1</code> comparações
+basta: <strong>O(n)</strong> (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 6).</p>
+<p>Uma forma de medir a bagunça de um vetor é contar <strong>inversões</strong>: pares de
+posições <code>i &lt; j</code> com <code>v[i] &gt; v[j]</code>, ou seja, dois valores na ordem errada. Em
+<code>42 17 35</code>, os pares (42, 17) e (42, 35) são inversões. Cada troca de vizinhos
+desfaz exatamente uma inversão, e um vetor aleatório tem cerca de <code>n²/4</code>
+delas (CORMEN et al., 2024, cap. 2). Por isso o bubble sort serve para
+aprender a ideia, mas não para código real: os métodos dos próximos assuntos
+desfazem as mesmas inversões gastando menos.</p>
+<blockquote>
+<p>[!WARNING]
+<code>v[j] = v[j + 1]; v[j + 1] = v[j];</code> não troca nada: os dois ficam iguais.
+Use uma variável auxiliar. Com <code>j &lt; n</code> no laço interno, a última volta lê
+<code>v[n]</code>, fora do vetor.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>Cinco restaurantes prometem entregar em 42, 17, 35, 8 e 23 minutos. Na
+passada 1 o 42 afunda até o fim; na 2, o 35 acha o seu lugar; na 3, o 8 chega
+à frente. A passada 4 não troca nada e a bandeira encerra:</p>
+<p>{{ideia}}</p>
+<p>O código conta comparações e trocas:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdbool.h&gt;
+
+void mostra(const int v[], int n) {
+    for (int i = 0; i &lt; n; i++) {
+        printf(&quot;%3d&quot;, v[i]);
+    }
+    printf(&quot;\n&quot;);
+}
+
+void bubble_sort(int v[], int n) {
+    int comparacoes = 0, trocas = 0;
+    for (int passada = 1; passada &lt; n; passada++) {
+        bool trocou = false;
+        // os últimos passada-1 já estão no lugar: nem olha
+        for (int j = 0; j &lt; n - passada; j++) {
+            comparacoes++;
+            if (v[j] &gt; v[j + 1]) {      // vizinhos fora de ordem: troca
+                int aux = v[j];
+                v[j] = v[j + 1];
+                v[j + 1] = aux;
+                trocas++;
+                trocou = true;
+            }
+        }
+        printf(&quot;passada %d:&quot;, passada);
+        mostra(v, n);
+        if (!trocou) {
+            break;                      // nenhuma troca: já está ordenado
+        }
+    }
+    printf(&quot;%d comparações, %d trocas\n&quot;, comparacoes, trocas);
+}
+
+int main(void) {
+    int minutos[] = {42, 17, 35, 8, 23};
+    int n = 5;
+
+    printf(&quot;início:   &quot;);
+    mostra(minutos, n);
+    bubble_sort(minutos, n);
+    return 0;
+}
+// Saída:
+// início:    42 17 35  8 23
+// passada 1: 17 35  8 23 42
+// passada 2: 17  8 23 35 42
+// passada 3:  8 17 23 35 42
+// passada 4:  8 17 23 35 42
+// 10 comparações, 7 trocas
+</code></pre>
+<h3>Passo a passo</h3>
+<p>A passada 1 por dentro; em negrito, o par comparado:</p>
+<table>
+<thead>
+<tr>
+<th>j</th>
+<th>antes</th>
+<th><code>v[j] &gt; v[j+1]</code>?</th>
+<th>depois</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td><strong>42 17</strong> 35 8 23</td>
+<td>sim, troca</td>
+<td>17 42 35 8 23</td>
+</tr>
+<tr>
+<td>1</td>
+<td>17 <strong>42 35</strong> 8 23</td>
+<td>sim, troca</td>
+<td>17 35 42 8 23</td>
+</tr>
+<tr>
+<td>2</td>
+<td>17 35 <strong>42 8</strong> 23</td>
+<td>sim, troca</td>
+<td>17 35 8 42 23</td>
+</tr>
+<tr>
+<td>3</td>
+<td>17 35 8 <strong>42 23</strong></td>
+<td>sim, troca</td>
+<td>17 35 8 23 42</td>
+</tr>
+</tbody></table>
+<p>Nas quatro passadas: 4 + 3 + 2 + 1 = <strong>10 comparações</strong> e 4 + 2 + 1 + 0 =
+<strong>7 trocas</strong>, o número de inversões do vetor original.</p>
+<p>O laço de dentro (<code>j</code>) faz uma passada; o de fora repete enquanto a bandeira
+indicar troca:</p>
+<p>{{fluxograma}}</p>

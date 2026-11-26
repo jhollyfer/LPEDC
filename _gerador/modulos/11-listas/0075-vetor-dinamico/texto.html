@@ -1,0 +1,141 @@
+<h2>0075 · Vetor dinâmico</h2>
+<p>Você anota as despesas de uma viagem e não sabe quantas serão. Um
+<code>int despesas[100]</code> desperdiça memória se forem 5 e estoura se forem 101. O
+vetor de tamanho fixo obriga você a adivinhar o tamanho antes de começar: se
+sobra espaço, ele fica parado; se falta, não há um jeito barato de crescer
+(CELES; RANGEL, 2002). Este assunto abre o módulo de listas com a solução
+mais simples.</p>
+<p>Pense numa estante de livros. Enquanto há prateleira livre, o livro novo vai
+no fim. Quando a estante enche, você compra uma com o dobro do tamanho, passa
+os livros para ela na mesma ordem e se desfaz da velha. A <strong>lista
+sequencial</strong>, também chamada <strong>lista em vetor</strong>, funciona assim: ela guarda
+os itens lado a lado num vetor, na ordem da lista (ZIVIANI, 2010, cap. 3).
+Quando o vetor mora no heap e cresce sob demanda, ele é um <strong>vetor
+dinâmico</strong>.</p>
+<p>Três campos controlam a lista (FEOFILOFF, 2009, cap. 3). <code>itens</code> é o
+endereço do vetor no heap. <code>tam</code> diz quantos itens estão em uso, e <code>cap</code>
+quantos cabem. A diferença <code>cap - tam</code> é a folga. Enquanto <code>tam &lt; cap</code>,
+inserir no fim é só escrever em <code>itens[tam]</code> e somar 1 a <code>tam</code>: os itens
+ocupam as posições 0 a <code>tam - 1</code>, e a primeira vaga é exatamente <code>tam</code>.</p>
+<p>Quando <code>tam == cap</code>, a estante encheu. A função <code>realloc</code>, vista no assunto
+0055, pede um bloco maior, copia os itens para ele e libera o antigo. Se não
+houver memória, ela devolve <code>NULL</code> e não mexe no bloco antigo, que continua
+válido (CPPREFERENCE, s.d.). Por isso o resultado vai primeiro para uma
+variável auxiliar, e só depois de conferido substitui <code>itens</code>.</p>
+<p>Quanto crescer a cada vez? Crescer de um em um parece econômico, mas cada
+item novo copia todos os anteriores: 1 + 2 + 3 + ... + n, cerca de n²/2
+cópias para n itens. <strong>Dobrar a capacidade</strong> muda a conta. As cópias
+acontecem só quando a lista chega a 1, 2, 4, 8... itens, e somam
+1 + 2 + 4 + ... + n, menos de 2n. Dividido pelas n inserções, dá um custo
+constante por inserção, O(1) em média. Esse custo médio sobre uma sequência
+de operações se chama <strong>custo amortizado</strong>: uma inserção ou outra sai cara,
+mas a soma toda fica barata (CORMEN et al., 2024).</p>
+<p>Com a lista começando com espaço para 2, as duas primeiras despesas entram
+direto. A terceira encontra a lista cheia, a capacidade dobra para 4 e ela
+entra. A quinta dobra de novo, para 8, copia as quatro e deixa três vagas.</p>
+<p>Ler a posição <code>i</code> continua O(1), como em qualquer vetor: <code>itens[i]</code> sai de
+uma conta de endereço. Já inserir ou remover no <strong>meio</strong> tem um preço:
+todos os itens seguintes precisam andar uma casa para abrir ou fechar o
+espaço. No pior caso, mexer na posição 0, são n deslocamentos, O(n). A
+tabela reúne os custos:</p>
+<table>
+<thead>
+<tr>
+<th>Operação</th>
+<th>Custo</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ler a posição <code>i</code></td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>inserir no fim</td>
+<td>O(1) amortizado</td>
+</tr>
+<tr>
+<td>inserir ou remover no meio</td>
+<td>O(n): desloca os seguintes</td>
+</tr>
+</tbody></table>
+<p>A lista é montada como um <strong>TAD</strong>, no molde do assunto 0074: <code>lista.h</code> diz
+<strong>o que</strong> a lista faz (criar, inserir, pegar, liberar), e <code>lista.c</code> diz
+<strong>como</strong>, com a <code>struct lista</code> escondida do cliente (CELES; CERQUEIRA;
+RANGEL, 2016). O <code>lista_libera</code> faz dois <code>free</code>: primeiro o do vetor de
+itens, depois o da struct, porque depois de liberar a struct não dá mais para
+ler o campo <code>itens</code>.</p>
+<blockquote>
+<p>[!WARNING]
+Nunca escreva <code>l-&gt;itens = realloc(l-&gt;itens, ...)</code>: se vier <code>NULL</code>, o bloco
+antigo se perde. E um <code>int *p = &amp;itens[0]</code> guardado antes de inserir pode
+apontar para o bloco que o <code>realloc</code> liberou. Guarde o índice.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>As despesas de uma viagem, numa lista que começa com espaço para 2. A 3ª
+dobra para 4; a 5ª (R$ 27) dobra para 8, copia os quatro valores e deixa
+três vagas:</p>
+<p>{{ideia}}</p>
+<p>A peça central do <code>lista.c</code> garante espaço antes de cada inserção:</p>
+<pre><code class="language-c">struct lista {
+    int *itens; // vetor no heap
+    int tam;    // quantos itens estão em uso
+    int cap;    // quantos itens cabem no vetor
+};
+
+// garante espaço para mais um item: se encheu, dobra
+static bool garante_espaco(Lista *l) {
+    if (l-&gt;tam &lt; l-&gt;cap) return true;
+    int nova_cap = l-&gt;cap * 2;
+    int *novo = realloc(l-&gt;itens, nova_cap * sizeof(int));
+    if (novo == NULL) return false; // l-&gt;itens continua valendo
+    l-&gt;itens = novo;
+    l-&gt;cap = nova_cap;
+    return true;
+}
+
+bool lista_insere_fim(Lista *l, int valor) {
+    if (!garante_espaco(l)) return false;
+    l-&gt;itens[l-&gt;tam] = valor;
+    l-&gt;tam++;
+    return true;
+}
+</code></pre>
+<p>Quem usa a lista só enxerga a interface de <code>lista.h</code>:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;lista.h&quot;
+
+int main(void) {
+    int despesas[] = {12, 35, 8, 50, 27}; // em reais
+    Lista *viagem = lista_cria(2);        // começa com espaço para 2
+    if (viagem == NULL) return 1;
+
+    for (int i = 0; i &lt; 5; i++) {
+        lista_insere_fim(viagem, despesas[i]);
+        printf(&quot;inseriu %2d: tam %d, cap %d\n&quot;, despesas[i],
+               lista_tamanho(viagem), lista_capacidade(viagem));
+    }
+    lista_imprime(viagem);
+
+    int total = 0;
+    for (int i = 0; i &lt; lista_tamanho(viagem); i++) {
+        int valor;
+        lista_pega(viagem, i, &amp;valor);
+        total += valor;
+    }
+    printf(&quot;total: R$ %d\n&quot;, total);
+
+    lista_libera(viagem);
+    return 0;
+}
+// Saída:
+// inseriu 12: tam 1, cap 2
+// inseriu 35: tam 2, cap 2
+// inseriu  8: tam 3, cap 4
+// inseriu 50: tam 4, cap 4
+// inseriu 27: tam 5, cap 8
+// [12, 35, 8, 50, 27]
+// total: R$ 132
+</code></pre>
+<p>&quot;Está cheio?&quot; vem antes de escrever. Para o 27 a resposta é Sim: o vetor
+dobra e só então o valor entra em <code>itens[4]</code>:</p>
+<p>{{fluxograma}}</p>

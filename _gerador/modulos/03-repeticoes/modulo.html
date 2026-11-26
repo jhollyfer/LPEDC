@@ -1,0 +1,322 @@
+<h1>Módulo 03 · Laços</h1>
+<p>A terceira peça de todo algoritmo: a <strong>repetição</strong>. O módulo cobre <code>while</code>,
+<code>do...while</code>, <code>for</code>, <code>break</code> e <code>continue</code>, laços aninhados, os padrões de laço
+(contador, acumulador, maior/menor, flag e sentinela) e números aleatórios.
+Depende do módulo 01 (<code>scanf</code> e seu retorno) e do 02 (<code>if</code>, <code>switch</code>,
+ternário e <code>bool</code>); prepara o 04, de funções.</p>
+<h2>O que você vai aprender</h2>
+<ul>
+<li>repetir com <strong><code>while</code></strong> quando não sabe quantas voltas vai dar, e evitar o laço infinito</li>
+<li>usar <strong><code>do...while</code></strong> para validar entrada e montar menus</li>
+<li>contar com <strong><code>for</code></strong>: início, condição, passo e o erro por um</li>
+<li>sair de um laço com <strong><code>break</code></strong> e pular uma volta com <strong><code>continue</code></strong></li>
+<li>aninhar laços: tabelas, mapas e desenhos com <code>*</code>, e o custo da multiplicação</li>
+<li>os cinco <strong>padrões de laço</strong>: contador, acumulador, maior/menor, flag e sentinela</li>
+<li>sortear números com <strong><code>rand</code></strong>, <strong><code>srand</code></strong> e <strong><code>time</code></strong>, e por que a semente importa</li>
+</ul>
+<h2>Antes de começar</h2>
+<p>Ainda não há funções (módulo 04) nem vetores (módulo 05): tudo cabe no <code>main</code>.
+Para não digitar a entrada a cada teste, mande-a pelo <code>printf</code> do terminal,
+um valor por linha:</p>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A049.c -o ~/LPEDC/material/A049 &amp;&amp; printf &#39;28\n31\n36\n25\n30\n999\n&#39; | ~/LPEDC/material/A049
+</code></pre>
+<p>Se um programa travar num laço infinito, <code>Ctrl+C</code> encerra. Nos fluxogramas,
+toda repetição é uma seta que <strong>volta</strong>: conte quantas vezes você passa por
+ela.</p>
+<p>{{indice}}</p>
+<hr>
+<p>{{assuntos}}</p>
+<hr>
+<h2>Desafios do módulo</h2>
+<p>Problemas extras, do médio ao difícil. Crie um arquivo seu para cada um e
+compile com as flags de estudo.</p>
+<p><strong>1. Os primos até 100.</strong> Mostre todos os números primos de 2 a 100 e quantos
+são. Para cada candidato, teste os divisores com um laço de dentro e saia dele
+com <code>break</code> no primeiro divisor encontrado.</p>
+<details><summary>Resposta</summary><p>São <strong>25</strong> primos, de 2 a <strong>97</strong>. Para ficar rápido, o laço de dentro só
+precisa ir até a raiz do número: <code>for (d = 2; d * d &lt;= n; d++)</code>. Se <code>n</code> tem
+um divisor maior que a raiz, tem também um menor, que já foi testado.</p>
+</details><p><strong>2. Fibonacci passa de mil.</strong> A sequência começa com 1, 1, e cada termo é a
+soma dos dois anteriores. Escreva um programa que mostre os termos numa linha
+até o primeiro maior que 1000 e, na linha de baixo, esse termo e a posição
+dele, contando as posições numa variável.</p>
+<details><summary>Resposta</summary><pre><code class="language-text">1 1 2 3 5 8 13 21 34 55 89 144 233 377 610 987 1597
+Primeiro acima de 1000: 1597 (posição 17)
+</code></pre>
+<p>É um <code>while (b &lt;= 1000)</code>: você sabe quando parar, mas não quantas voltas são.
+O truque é guardar os dois últimos: <code>prox = a + b; a = b; b = prox;</code>. A
+posição começa em 2 (os dois primeiros 1 já estão contados) e sobe a cada
+volta.</p>
+</details><p><strong>3. O MDC de Euclides.</strong> O maior divisor comum de dois números não muda se
+você trocar o par <code>(a, b)</code> por <code>(b, a % b)</code>. Repita até <code>b</code> virar 0: o MDC é o
+<code>a</code> que sobrou. Calcule o MDC de 1071 e 462 e conte as voltas.</p>
+<details><summary>Resposta</summary><p>(1071, 462) → (462, 147) → (147, 21) → (21, 0). MDC = <strong>21</strong>, em <strong>3</strong>
+voltas. O laço precisa de uma variável auxiliar: <code>resto = a % b; a = b; b = resto;</code>. Esse algoritmo tem mais de 2.300 anos e ainda é o que se usa.</p>
+</details><p><strong>4. Decimal para binário.</strong> Leia um inteiro de 0 a 255 e mostre os 8 bits,
+do mais significativo para o menos. Teste com 200.</p>
+<details><summary>Resposta</summary><p>200 → <strong>11001000</strong>. Um <code>for</code> com a potência começando em 128 e dividindo por
+2 a cada volta: se <code>n &gt;= potencia</code>, mostra 1 e subtrai; senão, mostra 0. Pelo
+caminho do <code>% 2</code> os bits saem ao contrário (do último para o primeiro), e
+sem vetor não dá para guardar e inverter.</p>
+</details><p><strong>5. A raiz quadrada de Herão.</strong> Para calcular a raiz de <code>n</code>, comece com
+<code>x = n</code> e repita <code>x = (x + n / x) / 2</code> até a diferença entre dois valores
+seguidos ficar menor que 0,000000001. Calcule a raiz de 2 e conte as voltas.
+Compare com <code>sqrt(2)</code>.</p>
+<details><summary>Resposta</summary><p><strong>1.414213562</strong> em <strong>5</strong> voltas (2 → 1,5 → 1,41667 → 1,41421569 →
+1,41421356...). O número de casas certas praticamente dobra a cada volta. É um
+<code>do...while</code> (calcula, depois compara com o anterior) e usa <code>fabs</code> de
+<code>&lt;math.h&gt;</code> para a diferença.</p>
+</details><p><strong>6. O losango.</strong> Leia um número ímpar <code>n</code> (repita até ser ímpar, com
+<code>do...while</code>) e desenhe um losango de asteriscos com <code>n</code> linhas. Com <code>n = 5</code>:</p>
+<pre><code class="language-text">  *
+ ***
+*****
+ ***
+  *
+</code></pre>
+<details><summary>Resposta</summary><p>São duas pirâmides: a de cima com <code>(n + 1) / 2</code> linhas, crescendo (como no
+exercício E143), e a de baixo com as linhas restantes, encolhendo. Em cada
+linha, primeiro os espaços, depois os asteriscos. Para <code>n = 9</code>, a linha do
+meio tem 9 asteriscos.</p>
+</details><p><strong>7. O craps tem truque?</strong> Jogue 100 000 rodadas de craps (o algoritmo da
+rodada do assunto 0027, sem os <code>printf</code>, dentro de um <code>for</code>) e calcule a porcentagem de
+vitórias e a média de lançamentos por rodada.</p>
+<details><summary>Resposta</summary><p>Perto de <strong>49,3%</strong> de vitórias e <strong>3,4</strong> lançamentos por rodada (na glibc
+com semente 2026: 49,24% e 3,37). A conta exata dá 244/495, ou 49,29%. A casa
+ganha 1,4% de todo o dinheiro apostado, no longo prazo. A simulação é um laço
+de rodadas com o laço de relançamentos dentro: os contadores da rodada
+recomeçam a cada volta de fora.</p>
+</details><p><strong>8. Triplas pitagóricas.</strong> Ache todas as triplas <code>a &lt; b &lt; c</code>, com <code>c</code> até 30,
+tais que <code>a² + b² = c²</code>. Use três laços aninhados (força bruta) e conte quantas
+são.</p>
+<details><summary>Resposta</summary><p>São <strong>11</strong>: (3, 4, 5), (5, 12, 13), (6, 8, 10), (7, 24, 25), (8, 15, 17),
+(9, 12, 15), (10, 24, 26), (12, 16, 20), (15, 20, 25), (18, 24, 30) e (20, 21,
+29). Começando o laço de <code>b</code> em <code>a + 1</code> e o de <code>c</code> em <code>b + 1</code>, cada tripla
+aparece uma vez só. Dá para tirar o terceiro laço: calcule <code>c * c</code> e teste se
+é um quadrado perfeito.</p>
+</details><p><strong>9. Contando setes.</strong> Escreva um programa que conte quantas vezes o dígito 7
+aparece quando você escreve todos os números de 1 a 1000, e mostre o total.</p>
+<details><summary>Resposta</summary><pre><code class="language-text">Setes de 1 a 1000: 300
+</code></pre>
+<p>Um laço de 1 a 1000 e, dentro, um <code>while</code> que desmonta uma <strong>cópia</strong> do número
+com <code>% 10</code> e <code>/ 10</code> (como o A040), contando os dígitos 7. Se você desmontar o
+próprio contador do <code>for</code>, o laço nunca termina. Para conferir: o 7 aparece
+100 vezes na casa das unidades, 100 na das dezenas e 100 na das centenas.</p>
+</details><p><strong>10. O computador adivinha.</strong> Inverta o jogo do E153: você pensa num número
+de 1 a 1000, e o computador chuta. A cada chute você responde 1 (mais alto),
+2 (mais baixo) ou 0 (acertou). Escreva esse jogo. Depois, para achar o pior
+caso, troque você por um laço que testa cada número secreto de 1 a 1000 e
+calcula a resposta sozinho: conte os chutes de cada número e mostre o maior
+número de chutes, o primeiro secreto que precisou dele e quantos secretos
+precisaram dele.</p>
+<details><summary>Resposta</summary><pre><code class="language-text">Pior caso: 10 chutes (primeiro número assim: 2)
+Números que precisam de 10 chutes: 489
+</code></pre>
+<p>O computador guarda o intervalo possível (<code>menor = 1</code>, <code>maior = 1000</code>), chuta
+sempre o meio, <code>(menor + maior) / 2</code>, e corta metade a cada resposta: com 1,
+<code>menor = chute + 1</code>; com 2, <code>maior = chute - 1</code>. No máximo 10 chutes, porque
+2¹⁰ = 1024 ≥ 1000. É a <strong>busca binária</strong>, que volta no assunto 0090.</p>
+</details><h2>Questões do POSCOMP</h2>
+<p>Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.</p>
+<table>
+<thead>
+<tr>
+<th>Ano</th>
+<th>Questão</th>
+<th>Assunto</th>
+<th>Gabarito</th>
+<th>Prova</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2024</td>
+<td>25</td>
+<td>Instruções de repetição while, do-while, for</td>
+<td>B</td>
+<td><a href="https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2024.pdf">caderno</a></td>
+</tr>
+<tr>
+<td>2025</td>
+<td>46</td>
+<td>Laço for com iterações conhecidas</td>
+<td>a conferir no gabarito oficial</td>
+<td><a href="https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2025.pdf">caderno</a></td>
+</tr>
+</tbody></table>
+<p>O gabarito oficial de 2025 não estava disponível quando este material foi montado.</p>
+<h2>Questões no estilo da prova</h2>
+<p>Questões objetivas no formato da prova do PPGI: uma alternativa certa. Faça o
+teste de mesa: uma linha por volta, com o valor de cada variável.</p>
+<p><strong>1.</strong> Quantas vezes o corpo do laço executa, e quanto vale <code>i</code> no fim?</p>
+<pre><code class="language-c">int i = 10, cont = 0;
+while (i &gt; 0) {
+    i -= 3;
+    cont++;
+}
+</code></pre>
+<ul>
+<li>(A) 3 vezes; <code>i</code> vale 1</li>
+<li>(B) 3 vezes; <code>i</code> vale 0</li>
+<li>(C) 4 vezes; <code>i</code> vale 0</li>
+<li>(D) 4 vezes; <code>i</code> vale -2</li>
+<li>(E) 10 vezes; <code>i</code> vale 0</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(D).</strong> <code>i</code> passa por 10, 7, 4 e 1, sempre positivo na pergunta: 4 voltas.
+Na última, 1 - 3 dá -2, e aí <code>i &gt; 0</code> é falso. O <code>i</code> nunca vale 0. Veja 0020.</p>
+</details><p><strong>2.</strong> Sobre as estruturas de repetição do C, considere as afirmações e marque a alternativa CORRETA.</p>
+<ul>
+<li><p><strong>I.</strong> O <code>do...while</code> executa o corpo pelo menos uma vez.</p>
+</li>
+<li><p><strong>II.</strong> <code>for (;;)</code> é um erro de compilação, porque falta a condição.</p>
+</li>
+<li><p><strong>III.</strong> O <code>continue</code> encerra o laço por completo.</p>
+</li>
+<li><p><strong>IV.</strong> O <code>break</code> dentro do laço mais interno de dois laços aninhados encerra só esse laço interno.</p>
+</li>
+<li><p>(A) Apenas I e IV</p>
+</li>
+<li><p>(B) Apenas I e II</p>
+</li>
+<li><p>(C) Apenas II e III</p>
+</li>
+<li><p>(D) Apenas III e IV</p>
+</li>
+<li><p>(E) Apenas I, III e IV</p>
+</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A).</strong> I é verdadeira: o teste fica no fim. II é falsa: condição omitida vale verdadeiro, e <code>for (;;)</code> é o laço infinito clássico. III é falsa: o <code>continue</code> só pula para a próxima volta. IV é verdadeira: o <code>break</code> sai do laço mais próximo. Veja 0021, 0022 e 0023.</p>
+</details><p><strong>3.</strong> Qual a saída?</p>
+<pre><code class="language-c">int j;
+for (j = 0; j &lt; 5; j++);
+    printf(&quot;%d\n&quot;, j);
+</code></pre>
+<ul>
+<li>(A) 0 1 2 3 4, um por linha</li>
+<li>(B) 4</li>
+<li>(C) 5</li>
+<li>(D) 0 1 2 3 4 5, um por linha</li>
+<li>(E) nada</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(C).</strong> O <code>;</code> logo depois do <code>for</code> é um <strong>corpo vazio</strong>: o laço só conta de
+0 até 5 e acaba. O <code>printf</code>, apesar do recuo, está fora do laço e roda uma vez,
+com <code>j</code> valendo 5 (o valor que fez a condição falhar). Veja 0022.</p>
+</details><p><strong>4.</strong> Quantas vezes <code>c++</code> executa?</p>
+<pre><code class="language-c">int c = 0;
+for (int a = 0; a &lt; 4; a++)
+    for (int b = a; b &lt; 4; b++)
+        c++;
+</code></pre>
+<ul>
+<li>(A) 16</li>
+<li>(B) 4</li>
+<li>(C) 6</li>
+<li>(D) 8</li>
+<li>(E) 10</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(E).</strong> O laço de dentro começa em <code>a</code>: roda 4, 3, 2 e 1 vezes, para <code>a</code>
+igual a 0, 1, 2 e 3. A soma 4 + 3 + 2 + 1 é 10, ou <code>n (n + 1) / 2</code> com
+<code>n = 4</code>. O 16 seria com <code>b</code> começando sempre em 0. Veja 0024.</p>
+</details><p><strong>5.</strong> Qual o valor de <code>s</code> no fim?</p>
+<pre><code class="language-c">int s = 0;
+for (int k = 1; k &lt;= 10; k++) {
+    if (k % 3 == 0) continue;
+    if (k &gt; 7) break;
+    s += k;
+}
+</code></pre>
+<ul>
+<li>(A) 55</li>
+<li>(B) 19</li>
+<li>(C) 28</li>
+<li>(D) 12</li>
+<li>(E) 37</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(B).</strong> O <code>continue</code> pula os múltiplos de 3 (3 e 6) e vai para o <code>k++</code>. O
+<code>break</code> encerra o laço no <code>k = 8</code>. Somam 1 + 2 + 4 + 5 + 7 = 19. O 28 seria a
+soma de 1 a 7 sem o <code>continue</code>. Veja 0023.</p>
+</details><p><strong>6.</strong> Qual valor o pseudocódigo escreve?</p>
+<pre><code class="language-text">x ← 1
+repita
+    x ← x * 2
+até x &gt; 20
+escreva x
+</code></pre>
+<ul>
+<li>(A) 16</li>
+<li>(B) 20</li>
+<li>(C) 2</li>
+<li>(D) 32</li>
+<li>(E) 64</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(D).</strong> <code>x</code> passa por 2, 4, 8, 16 e 32. O <code>repita ... até</code> testa no fim e
+<strong>para</strong> quando a condição fica verdadeira: só com 32 o <code>x &gt; 20</code> vale. Em C,
+fica <code>do { x = x * 2; } while (!(x &gt; 20));</code>. Veja 0021.</p>
+</details><p><strong>7.</strong> Qual a saída?</p>
+<pre><code class="language-c">int k = 0;
+while (k++ &lt; 3)
+    printf(&quot;%d &quot;, k);
+printf(&quot;| %d\n&quot;, k);
+</code></pre>
+<ul>
+<li>(A) <code>1 2 3 | 4</code></li>
+<li>(B) <code>0 1 2 | 3</code></li>
+<li>(C) <code>1 2 3 | 3</code></li>
+<li>(D) <code>0 1 2 3 | 4</code></li>
+<li>(E) <code>1 2 | 3</code></li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A).</strong> O <code>k++</code> compara o valor <strong>antigo</strong> e só depois soma 1. As
+comparações são 0 &lt; 3, 1 &lt; 3 e 2 &lt; 3 (verdade), e dentro do corpo o <code>k</code> já
+vale 1, 2 e 3. A quarta comparação, 3 &lt; 3, é falsa, mas o <code>k++</code> roda mesmo
+assim: <code>k</code> termina em 4. Veja 0020 e 0009.</p>
+</details><p><strong>8.</strong> Quantas vezes o corpo do laço executa?</p>
+<pre><code class="language-c">for (unsigned u = 3; u &gt;= 0; u--)
+    printf(&quot;%u\n&quot;, u);
+</code></pre>
+<ul>
+<li>(A) 3</li>
+<li>(B) 4</li>
+<li>(C) 0</li>
+<li>(D) 5</li>
+<li>(E) infinitas vezes</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(E).</strong> Um <code>unsigned</code> nunca é negativo, então <code>u &gt;= 0</code> é <strong>sempre</strong>
+verdade. Depois do 0, <code>u--</code> dá a volta para o maior <code>unsigned</code> (4294967295
+com 32 bits) e o laço segue. O <code>-Wextra</code> avisa: <code>comparison of unsigned expression in &#39;&gt;= 0&#39; is always true</code>. Veja 0022 e 0003.</p>
+</details><p><strong>9.</strong> Considere as afirmações sobre laços e marque a alternativa CORRETA.</p>
+<ul>
+<li><p><strong>I.</strong> Com <code>n = 0</code>, um <code>for (int i = 0; i &lt; n; i++)</code> executa o corpo zero vezes, e um <code>do...while</code> equivalente o executa uma vez.</p>
+</li>
+<li><p><strong>II.</strong> Dois <code>for</code> aninhados, ambos de 0 a <code>n - 1</code>, executam o corpo interno <code>n * n</code> vezes.</p>
+</li>
+<li><p><strong>III.</strong> Um <code>;</code> logo depois do <code>)</code> do <code>for</code> é erro de compilação.</p>
+</li>
+<li><p><strong>IV.</strong> A variável declarada no cabeçalho, em <code>for (int i = 0; ...)</code>, continua visível depois do laço.</p>
+</li>
+<li><p>(A) Apenas I</p>
+</li>
+<li><p>(B) Apenas I e II</p>
+</li>
+<li><p>(C) Apenas II e IV</p>
+</li>
+<li><p>(D) Apenas I, II e III</p>
+</li>
+<li><p>(E) Apenas III e IV</p>
+</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(B).</strong> I e II são verdadeiras. III é falsa: o <code>;</code> compila e vira corpo vazio, e o <code>printf</code> seguinte roda uma vez só (veja a questão 3). IV é falsa: desde o C99, <code>i</code> morre no fim do <code>for</code>. Veja 0020, 0021, 0022 e 0024.</p>
+</details><h2>Para ler mais</h2>
+<ul>
+<li>DEITEL, P.; DEITEL, H. <em>C: como programar</em>. 6. ed. São Paulo: Pearson Prentice Hall, 2011. Cap. 3 e 4: estruturas de repetição; cap. 5: geração de números aleatórios e o jogo de craps.</li>
+<li>CELES, W.; CERQUEIRA, R.; RANGEL, J. L. <em>Introdução a estruturas de dados: com técnicas de programação em C</em>. 2. ed. Rio de Janeiro: Elsevier, 2016. Capítulo de controle de fluxo: <code>while</code>, <code>do-while</code>, <code>for</code>, <code>break</code> e <code>continue</code>.</li>
+<li>BACKES, A. <em>Linguagem C: completa e descomplicada</em>. Rio de Janeiro: Elsevier, 2013. Cap. 5: comandos de repetição.</li>
+<li>BACKES, A. R. <em>Linguagem C: descomplicada</em>. Apostila. Uberlândia: FACOM/UFU. Cap. 5.</li>
+<li>HARA, C.; ZOLA, W. <em>Linguagem C: notas de aula</em>. Curitiba: UFPR, 2008.</li>
+<li>LEAL, G. C. L. <em>Algoritmos e lógica de programação II</em>. Maringá: Unicesumar, 2016.</li>
+<li>CARVALHO, V. A. <em>Lógica de programação</em>. Colatina: IFES / e-Tec Brasil, 2010.</li>
+<li>ANTONELLO, R. <em>Linguagem C</em>. 1. ed. Disponível em: <a href="http://www.antonello.com.br">http://www.antonello.com.br</a>.</li>
+<li>MARTINS, L. G. A. <em>Apostila de linguagem C: conceitos básicos</em>. Uberlândia: FACOM/UFU.</li>
+<li>DORNELLES F., A. A. <em>Fundamentos de linguagem C</em>. Caxias do Sul: SENAI-RS, 1997.</li>
+<li>KERNIGHAN, B. W.; RITCHIE, D. M. <em>The C programming language</em>. 2. ed. Englewood Cliffs: Prentice Hall, 1988. Seções 3.5 a 3.8: laços, break, continue e goto.</li>
+<li>CPPREFERENCE. <em>rand</em>. Disponível em: <a href="https://en.cppreference.com/w/c/numeric/random/rand">https://en.cppreference.com/w/c/numeric/random/rand</a>.</li>
+<li>LINUX MAN-PAGES PROJECT. <em>rand(3)</em>. Disponível em: <a href="https://man7.org/linux/man-pages/man3/rand.3.html">https://man7.org/linux/man-pages/man3/rand.3.html</a>.</li>
+</ul>

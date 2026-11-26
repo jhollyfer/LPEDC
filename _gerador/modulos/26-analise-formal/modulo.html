@@ -1,0 +1,329 @@
+<h1>Módulo 26 · Notação assintótica, somatórios e espaço</h1>
+<p>Definições formais de O, Ω e Θ (com <code>c</code> e <code>n₀</code>), somatórios que contam
+laços e complexidade espacial. Depende dos módulos 10 (eficiência e notação O)
+e 17 (recorrências).</p>
+<h2>O que você vai aprender</h2>
+<ul>
+<li>as definições de <strong>O</strong>, <strong>Ω</strong> e <strong>Θ</strong> com <code>c</code> e <code>n₀</code>; <strong>provar</strong> e
+<strong>refutar</strong> um limite</li>
+<li><strong>melhor</strong>, <strong>pior</strong> e <strong>médio</strong> caso, que não são O, Ω e Θ</li>
+<li>achar <code>c</code> e <code>n₀</code> com um programa e por que ele não substitui a prova</li>
+<li>transformar laços em <strong>somatórios</strong>: aritmético, quadrático, geométrico,
+harmônico e laços dependentes</li>
+<li>a <strong>complexidade espacial</strong>: espaço extra, <strong>in-place</strong> e pilha da recursão</li>
+<li>a troca de <strong>tempo por espaço</strong>: tabelas, prefixos e memoização</li>
+<li>conferir uma ficha de complexidade medindo passos, bytes e frames</li>
+</ul>
+<h2>Antes de começar</h2>
+<p>Revise contagem de passos e notação O (0071, 0072), pilha de chamadas e
+recursão (0031 a 0033), <code>malloc</code> e <code>free</code> (0053, 0054), merge sort (0094) e
+recorrências (0114 a 0117).</p>
+<p>Faça as contas no papel antes de rodar; depois dobre o <code>n</code> e veja se o
+contador acompanha a fórmula. Nos diagramas, verde é o que vale, vermelho o que
+falha ou cresce com <code>n</code>, amarelo a virada (o <code>n₀</code>) e roxo o trabalho contado.</p>
+<p><code>log₂ n</code> é quantas vezes dá para dividir <code>n</code> por 2 até chegar em 1; <code>ln n</code> é o
+logaritmo natural (<code>log</code> em <code>&lt;math.h&gt;</code>).</p>
+<p>O último assunto tem um TAD, <code>custo.h</code> e <code>custo.c</code>, compilado junto com os
+exemplos da pasta: não use <code>custo_passos</code>, <code>custo_bytes</code> e <code>custo_prof_max</code>
+como nomes de variáveis suas.</p>
+<p>{{indice}}</p>
+<hr>
+<p>{{assuntos}}</p>
+<hr>
+<h2>Desafios do módulo</h2>
+<p>Problemas que misturam os assuntos do módulo. Resolva no papel e, sempre que
+der, confira com um programa compilado e rodado.</p>
+<p><strong>1. Um sanduíche cúbico.</strong> Prove que <code>f(n) = 5n³ + 2n² - 7</code> é Θ(n³):
+encontre <code>c₁</code>, <code>c₂</code> e <code>n₀</code>.</p>
+<details><summary>Resposta</summary><p>Piso: <code>5n³ + 2n² - 7 ≥ 5n³</code> quando <code>2n² ≥ 7</code>, isto é, <code>n ≥ 2</code>. Teto:
+<code>5n³ + 2n² - 7 ≤ 5n³ + 2n³ = 7n³</code> para todo <code>n ≥ 1</code>. Logo <strong><code>c₁ = 5</code>, <code>c₂ = 7</code>
+e <code>n₀ = 2</code></strong>. Confira: <code>f(2) = 41</code>, entre <code>40</code> e <code>56</code>. Com <code>n = 1</code>, <code>f(1) = 0</code>
+fica abaixo de <code>5</code>: por isso o <code>n₀</code> não pode ser 1.</p>
+</details><p><strong>2. A exponencial vence o polinômio.</strong> <code>2ⁿ</code> é O(n¹⁰)? A partir de que <code>n</code> a
+exponencial passa de <code>n¹⁰</code> de vez?</p>
+<details><summary>Resposta</summary><p>Não é. A razão <code>2ⁿ / n¹⁰</code> cresce sem limite: cada passo de <code>n</code> multiplica o
+numerador por 2 e o denominador por <code>((n+1)/n)¹⁰</code>, que tende a 1. Testando,
+<code>2ⁿ ≤ n¹⁰</code> vale até <strong>n = 58</strong> (<code>2⁵⁸ ≈ 2,9 · 10¹⁷</code> contra <code>58¹⁰ ≈ 4,3 · 10¹⁷</code>), e
+de <strong>59</strong> em diante a exponencial fica sempre acima. Para conferir, use
+<code>double</code> e <code>pow</code>: os números passam do <code>long</code>.</p>
+</details><p><strong>3. Expoente somado e expoente multiplicado.</strong> <code>2^(n+10)</code> é O(2ⁿ)? E
+<code>2^(2n)</code>?</p>
+<details><summary>Resposta</summary><p><code>2^(n+10) = 1024 · 2ⁿ</code>: <strong>sim</strong>, com <code>c = 1024</code> e <code>n₀ = 1</code>. Já
+<code>2^(2n) = 4ⁿ = 2ⁿ · 2ⁿ</code>: a razão para <code>2ⁿ</code> é o próprio <code>2ⁿ</code>, que passa de
+qualquer <code>c</code>. <strong>Não</strong>. Somar no expoente multiplica por uma constante;
+multiplicar o expoente muda a base.</p>
+</details><p><strong>4. O logaritmo do fatorial.</strong> Mostre que <code>log₂(n!)</code> é Θ(n log n), sem
+usar a fórmula de Stirling.</p>
+<details><summary>Resposta</summary><p>Teto: <code>n! = 1 · 2 · ... · n ≤ nⁿ</code>, então <code>log₂(n!) ≤ n log₂ n</code>. Piso: os
+<code>n/2</code> maiores fatores do <code>n!</code> são todos pelo menos <code>n/2</code>, então
+<code>n! ≥ (n/2)^(n/2)</code> e <code>log₂(n!) ≥ (n/2) log₂(n/2)</code>, que é pelo menos
+<code>(n/4) log₂ n</code> para <code>n ≥ 4</code>. <strong>Θ(n log n)</strong>, com <code>c₁ = 1/4</code>, <code>c₂ = 1</code> e
+<code>n₀ = 4</code>. É o limite do assunto 0117 visto pelo outro lado.</p>
+</details><p><strong>5. O laço que dobra, contado.</strong> Quantas vezes o <code>x++</code> executa com
+<code>n = 1000</code>?</p>
+<pre><code class="language-c">for (int i = 1; i &lt;= n; i *= 2)
+    for (int j = 1; j &lt;= i; j++)
+        x++;
+</code></pre>
+<details><summary>Resposta</summary><p>O <code>i</code> vale 1, 2, 4, ..., 512 (o próximo, 1024, passa de 1000). A soma
+geométrica dá <code>1 + 2 + ... + 512 = 1023</code>. <strong>1023 vezes</strong>, Θ(n), embora sejam
+dois laços aninhados.</p>
+</details><p><strong>6. Três laços amarrados.</strong> Quantas vezes o <code>x++</code> executa? Dê a fórmula
+e o valor para <code>n = 10</code>.</p>
+<pre><code class="language-c">for (int i = 1; i &lt;= n; i++)
+    for (int j = i; j &lt;= n; j++)
+        for (int k = i; k &lt;= j; k++)
+            x++;
+</code></pre>
+<details><summary>Resposta</summary><p>Para <code>i</code> e <code>j</code> fixos, o laço de <code>k</code> roda <code>j - i + 1</code> vezes. Chamando
+<code>m = n - i + 1</code>, a soma em <code>j</code> dá <code>1 + 2 + ... + m = m(m+1)/2</code>, e somando
+em <code>m</code> de 1 a <code>n</code> sai <strong><code>n(n+1)(n+2)/6</code></strong>, Θ(n³). Para <code>n = 10</code>:
+<code>10 · 11 · 12 / 6 = 220</code>. Um programa com contador confirma.</p>
+</details><p><strong>7. Quick sort sem pilha funda.</strong> No pior caso, o quick sort recursivo
+empilha <code>n</code> frames. Como mudar o código para que a pilha nunca passe de
+uns <code>log₂ n</code> frames, sem mudar o tempo?</p>
+<details><summary>Resposta</summary><p>Depois de particionar, faça a chamada recursiva só para o <strong>pedaço
+menor</strong> e trate o pedaço maior com um laço (troque <code>ini</code> ou <code>fim</code> e volte
+ao começo). Cada frame novo recebe no máximo metade do pedaço do anterior,
+então a profundidade fica <strong>no máximo <code>log₂ n</code> + 1</strong>. O tempo no pior caso
+continua Θ(n²): o truque só muda o espaço.</p>
+</details><p><strong>8. A matriz que não cabe.</strong> Um sistema de logística guarda as distâncias
+entre 50 mil cidades numa matriz de <code>double</code>. Quanta memória isso exige?
+E com listas de adjacência, se houver 200 mil estradas?</p>
+<details><summary>Resposta</summary><p>A matriz tem <code>50.000² = 2,5 · 10⁹</code> posições de 8 bytes: <strong>20 GB</strong>, Θ(n²)
+de espaço. As listas de adjacência guardam cada estrada duas vezes (ida e
+volta): <code>400 mil</code> nós com destino, distância e ponteiro, uns 24 bytes
+cada, mais o vetor de cabeças: <strong>uns 10 MB</strong>, Θ(n + m). Com poucas
+arestas, a matriz é desperdício (assunto 0109).</p>
+</details><p><strong>9. Caso médio com ausentes.</strong> Numa busca sequencial em 1000 elementos,
+metade das consultas procura um valor que está no vetor (em posição
+uniforme) e metade procura um que não está. Qual é o número médio de
+comparações?</p>
+<details><summary>Resposta</summary><p>Presente: em média <code>(n + 1)/2 = 500,5</code>. Ausente: sempre <code>n = 1000</code>. A média
+ponderada é <code>0,5 · 500,5 + 0,5 · 1000 = 750,25</code> comparações. Ainda Θ(n),
+mas com outra constante: o caso médio depende da hipótese sobre as
+entradas, e a hipótese tem que estar escrita.</p>
+</details><p><strong>10. Divisores em série.</strong> Quantas vezes o <code>x++</code> executa com <code>n = 12</code>? E
+qual é a classe?</p>
+<pre><code class="language-c">for (int i = 1; i &lt;= n; i++)
+    for (int j = i; j &lt;= n; j += i)
+        x++;
+</code></pre>
+<details><summary>Resposta</summary><p>O laço de dentro passa pelos múltiplos de <code>i</code>: <code>⌊n/i⌋</code> vezes. Para 12:
+<code>12 + 6 + 4 + 3 + 2 + 2 + 1 + 1 + 1 + 1 + 1 + 1 = 35</code>. A soma harmônica
+dá <strong>Θ(n log n)</strong>. De quebra, o <code>x++</code> executado para cada par (<code>i</code>, <code>j</code>)
+conta os divisores de cada <code>j</code>: dá para montar a tabela de divisores de 1
+a <code>n</code> nesse tempo.</p>
+</details><h2>Questões do POSCOMP</h2>
+<p>Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.</p>
+<table>
+<thead>
+<tr>
+<th>Ano</th>
+<th>Questão</th>
+<th>Assunto</th>
+<th>Gabarito</th>
+<th>Prova</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2019</td>
+<td>22</td>
+<td>Relações entre funções com O e Ômega</td>
+<td>D</td>
+<td><a href="https://www.sbc.org.br/wp-content/uploads/2025/02/0518.002_Exame_POSCOMP_2019.pdf">caderno</a></td>
+</tr>
+<tr>
+<td>2024</td>
+<td>22</td>
+<td>Objetivo da análise assintótica de algoritmos</td>
+<td>E</td>
+<td><a href="https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2024.pdf">caderno</a></td>
+</tr>
+<tr>
+<td>2025</td>
+<td>23</td>
+<td>Notação assintótica O, alternativa incorreta</td>
+<td>a conferir no gabarito oficial</td>
+<td><a href="https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2025.pdf">caderno</a></td>
+</tr>
+</tbody></table>
+<p>O gabarito oficial de 2025 não estava disponível quando este material foi montado.</p>
+<h2>Questões no estilo da prova</h2>
+<p>Dez questões no formato da prova do PPGI. Marque uma alternativa antes de
+abrir o gabarito.</p>
+<p><strong>1.</strong> Seja <code>f(n) = 3n² + 10n + 20</code>. Assinale a alternativa correta.</p>
+<ul>
+<li>(A) <code>f(n)</code> é Θ(n²).</li>
+<li>(B) <code>f(n)</code> é Ω(n³).</li>
+<li>(C) <code>f(n)</code> é O(n).</li>
+<li>(D) <code>f(n)</code> é O(n log n).</li>
+<li>(E) <code>f(n)</code> é Θ(n).</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> <code>3n² ≤ f(n) ≤ 4n²</code> para todo <code>n ≥ 12</code>. (C), (D) e (E) pedem um teto
+menor que n², que nenhum <code>c</code> sustenta; (B) pede um piso n³, que <code>f</code> não
+alcança. Veja 0166.</p>
+</details><p><strong>2.</strong> Qual é o valor de <code>cont</code> ao final do trecho, com <code>n = 10</code>?</p>
+<pre><code class="language-c">int cont = 0;
+for (int i = 0; i &lt; n; i++)
+    for (int j = i; j &lt; n; j++)
+        cont++;
+</code></pre>
+<ul>
+<li>(A) 45</li>
+<li>(B) 50</li>
+<li>(C) 55</li>
+<li>(D) 100</li>
+<li>(E) 110</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>C.</strong> Com <code>j</code> começando em <code>i</code>, a volta <code>i</code> roda <code>n - i</code> vezes:
+<code>10 + 9 + ... + 1 = n(n+1)/2 = 55</code>. O 45 seria <code>j</code> começando em <code>i + 1</code>.
+Veja 0167.</p>
+</details><p><strong>3.</strong> Qual é a complexidade de tempo do trecho abaixo, em função de <code>n</code>?</p>
+<pre><code class="language-c">for (int i = 1; i &lt; n; i *= 2)
+    for (int j = 0; j &lt; i; j++)
+        x++;
+</code></pre>
+<ul>
+<li>(A) Θ(log n)</li>
+<li>(B) Θ(n)</li>
+<li>(C) Θ(n log n)</li>
+<li>(D) Θ(n²)</li>
+<li>(E) Θ(2ⁿ)</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>B.</strong> As voltas internas somam <code>1 + 2 + 4 + ...</code> até a maior potência de 2
+menor que <code>n</code>: uma soma geométrica menor que <code>2n</code> (com <code>n = 1024</code>, dá 1023).
+Dois laços aninhados não garantem Θ(n log n) nem Θ(n²). Veja 0167.</p>
+</details><p><strong>4.</strong> Considere a função:</p>
+<pre><code class="language-c">long soma(const int v[], int n) {
+    if (n == 0) return 0;
+    return v[n - 1] + soma(v, n - 1);
+}
+</code></pre>
+<p>O espaço extra usado por <code>soma(v, n)</code> é:</p>
+<ul>
+<li>(A) Θ(1), porque a função não declara vetores.</li>
+<li>(B) Θ(log n), porque cada chamada reduz o problema.</li>
+<li>(C) Θ(n log n), por causa das somas parciais.</li>
+<li>(D) Θ(n), por causa da pilha de chamadas.</li>
+<li>(E) Θ(n²), porque cada chamada copia o vetor.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>D.</strong> Ficam <code>n + 1</code> frames vivos ao mesmo tempo, cada um de tamanho
+constante. O vetor não é copiado (passa um ponteiro), o que derruba (E).
+Veja 0168.</p>
+</details><p><strong>5.</strong> Analise as afirmações:</p>
+<ul>
+<li>I. Se <code>f(n)</code> é Θ(g(n)), então <code>f(n)</code> é O(g(n)) e Ω(g(n)).</li>
+<li>II. O pior caso da busca sequencial em <code>n</code> elementos é Ω(n).</li>
+<li>III. Toda função que é O(n) também é O(n²).</li>
+</ul>
+<p>Está correto o que se afirma em:</p>
+<ul>
+<li>(A) I, apenas.</li>
+<li>(B) I e II, apenas.</li>
+<li>(C) I e III, apenas.</li>
+<li>(D) II e III, apenas.</li>
+<li>(E) I, II e III.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>E.</strong> I é a definição de Θ. II: o pior caso faz <code>n</code> comparações, logo é
+Θ(n), e portanto Ω(n). III: se <code>f(n) ≤ c · n</code>, então <code>f(n) ≤ c · n²</code> para
+<code>n ≥ 1</code>. O é um teto, e um teto mais alto continua teto. Veja 0166.</p>
+</details><p><strong>6.</strong> Sobre algoritmos de ordenação, analise as afirmações.</p>
+<ul>
+<li>I. O merge sort com vetor auxiliar tem tempo Θ(n log n) em qualquer entrada
+e espaço extra Θ(n).</li>
+<li>II. O heapsort ordena no próprio vetor, com espaço extra Θ(1), e é estável.</li>
+<li>III. O quick sort, com pivô sempre no extremo e vetor já ordenado, tem tempo
+Θ(n²).</li>
+</ul>
+<p>Marque a alternativa <strong>CORRETA</strong>.</p>
+<ul>
+<li>(A) I, apenas.</li>
+<li>(B) I e II, apenas.</li>
+<li>(C) I e III, apenas.</li>
+<li>(D) II e III, apenas.</li>
+<li>(E) I, II e III.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>C.</strong> I: o tempo é Θ(n log n) em qualquer entrada, e o espaço soma o
+auxiliar, Θ(n), e a pilha, Θ(log n): o auxiliar domina. II é falsa: o heapsort
+usa Θ(1) de espaço extra, mas <strong>não</strong> é estável (a troca da raiz com o último
+embaralha chaves iguais). III: o pivô nos extremos só tira um elemento por
+nível, e a recorrência vira <code>T(n) = T(n - 1) + Θ(n)</code>. Veja 0168 e 0169.</p>
+</details><p><strong>7.</strong> Para provar que <code>f(n) = 5n + 40</code> é O(n) com a constante <code>c = 6</code>, qual
+é o <strong>menor</strong> <code>n₀</code> possível?</p>
+<ul>
+<li>(A) 6</li>
+<li>(B) 40</li>
+<li>(C) 20</li>
+<li>(D) 8</li>
+<li>(E) 45</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>B.</strong> <code>5n + 40 ≤ 6n</code> equivale a <code>n ≥ 40</code>. O 20 serve para <code>c = 7</code> e o 8
+para <code>c = 10</code>: quanto maior o <code>c</code>, menor o <code>n₀</code>. Veja 0166 (exercício E991).</p>
+</details><p><strong>8.</strong> Quantas vezes a instrução <code>t ← t + 1</code> é executada para <code>n = 6</code>?</p>
+<pre><code class="language-text">t ← 0
+para i de 0 até n - 1 faça
+    para j de i + 1 até n - 1 faça
+        para k de j + 1 até n - 1 faça
+            t ← t + 1
+</code></pre>
+<ul>
+<li>(A) 20</li>
+<li>(B) 36</li>
+<li>(C) 56</li>
+<li>(D) 120</li>
+<li>(E) 216</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> Cada execução corresponde a um trio <code>i &lt; j &lt; k</code> de <code>{0, ..., 5}</code>:
+<code>C(6, 3) = n(n-1)(n-2)/6 = 20</code>. O 216 seria <code>n³</code>, com os três laços
+independentes. Veja 0167 (exercício E999).</p>
+</details><p><strong>9.</strong> Assinale a relação <strong>falsa</strong>.</p>
+<ul>
+<li>(A) <code>2^(n+1)</code> é O(2ⁿ).</li>
+<li>(B) <code>log₂(n²)</code> é Θ(log n).</li>
+<li>(C) <code>n log n</code> é O(n²).</li>
+<li>(D) <code>100n + 5</code> é O(n).</li>
+<li>(E) <code>4ⁿ</code> é O(2ⁿ).</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>E.</strong> <code>4ⁿ / 2ⁿ = 2ⁿ</code> cresce sem limite: nenhum <code>c</code> serve. Em (A) a razão é
+2; em (B), <code>log₂(n²) = 2 log₂ n</code>; em (C), <code>log n ≤ n</code>; em (D), <code>c = 105</code>
+com <code>n₀ = 1</code>. Veja 0166 (exemplo A332).</p>
+</details><p><strong>10.</strong> Numa busca sequencial em um vetor de 99 elementos distintos, o
+valor procurado sempre está no vetor, com a mesma chance em cada posição.
+O número médio de comparações é:</p>
+<ul>
+<li>(A) 1</li>
+<li>(B) 49</li>
+<li>(C) 49,5</li>
+<li>(D) 50</li>
+<li>(E) 99</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>D.</strong> Na posição <code>i</code> (contando de 1), a busca faz <code>i</code> comparações. A média
+é <code>(1 + 2 + ... + 99) / 99 = (n + 1)/2 = 50</code>. (A) é o melhor caso e (E), o
+pior. Veja 0166 (exemplo A331).</p>
+</details><h2>Questões de provas do PPGI</h2>
+<p>Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.</p>
+<p><strong>Edital 055/2017 · Questão 13</strong></p>
+<p>Marque a alternativa CORRETA.
+Considerando-se para cada algoritmo o pior cenário possível em termos de uso de espaço, são algoritmos que utilizam espaço extra constante, independentemente do número de elementos do vetor de entrada a ser ordenado:</p>
+<ul>
+<li>A) Mergesort e Seleção.</li>
+<li>B) Quicksort e Mergesort.</li>
+<li>C) Mergesort e Heapsort.</li>
+<li>D) Inserção e Quicksort.</li>
+<li>E) Nenhuma das alternativas acima está correta.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>E.</strong> O(1) de espaço no pior caso: seleção, inserção, heap; merge usa O(n) e quick usa pilha de recursão (O(n) no pior caso) Assunto 0168.</p>
+</details><h2>Para ler mais</h2>
+<ul>
+<li>CORMEN, T. H.; LEISERSON, C. E.; RIVEST, R. L.; STEIN, C. <em>Algoritmos: teoria e prática</em>. 4. ed. Rio de Janeiro: GEN LTC, 2024. Cap. 2 (análise do insertion sort: melhor, pior e caso médio), cap. 3 (notações O, Ω e Θ, com as constantes <code>c</code> e <code>n₀</code>) e apêndice A (somatórios: aritmética, geométrica e harmônica). Referência do edital: em caso de divergência, siga as definições dele.</li>
+<li>ZIVIANI, N. <em>Projeto de algoritmos: com implementações em Pascal e C</em>. 3. ed. São Paulo: Cengage Learning, 2010. Cap. 1 (função de complexidade, melhor, pior e caso médio, dominação assintótica e as notações O, Ω e Θ).</li>
+<li>SZWARCFITER, J. L.; MARKENZON, L. <em>Estruturas de dados e seus algoritmos</em>. 3. ed. Rio de Janeiro: LTC, 2010. Cap. 1 (complexidade de pior caso, de melhor caso e média; notações O, Ω e Θ).</li>
+<li>FEOFILOFF, P. <em>Análise de algoritmos</em> (livrinho). São Paulo: IME-USP. Disponível em: <a href="https://www.ime.usp.br/~pf/livrinho-AA/">https://www.ime.usp.br/~pf/livrinho-AA/</a>. Capítulos sobre ordens O, Ω e Θ e sobre somatórios.</li>
+<li>FEOFILOFF, P. <em>Algoritmos em linguagem C</em>. Rio de Janeiro: Elsevier, 2009. Apêndices sobre análise de desempenho e recursão.</li>
+<li>LINTZMAYER, C. N.; MOTA, G. O. <em>Análise de algoritmos e de estruturas de dados</em>. Santo André: UFABC; São Paulo: IME-USP, 2023. Notas de aula. Partes sobre notação assintótica e somatórios.</li>
+<li>TENENBAUM, A. M.; LANGSAM, Y.; AUGENSTEIN, M. J. <em>Estruturas de dados usando C</em>. São Paulo: Makron Books, 1995. Cap. 3 (recursão e o custo da pilha) e cap. 6 (eficiência da classificação).</li>
+<li>KERNIGHAN, B. W.; RITCHIE, D. M. <em>C: a linguagem de programação padrão ANSI</em>. Rio de Janeiro: Campus, 1989. Seções 4.4 (variáveis externas e <code>extern</code>), 4.6 (<code>static</code>) e 4.10 (recursão).</li>
+<li>CPPREFERENCE. <em>Storage duration</em> e <em>malloc</em>. Disponível em: <a href="https://en.cppreference.com/w/c/language/storage_duration">https://en.cppreference.com/w/c/language/storage_duration</a>.</li>
+<li>LINUX MAN-PAGES. <em>getrlimit(2)</em> (o limite da pilha, <code>RLIMIT_STACK</code>) e <em>malloc(3)</em>. Disponível em: <a href="https://man7.org/linux/man-pages/man2/getrlimit.2.html">https://man7.org/linux/man-pages/man2/getrlimit.2.html</a>.</li>
+</ul>

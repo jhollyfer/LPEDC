@@ -1,0 +1,3528 @@
+<!-- Gerado por _gerador. Para mudar este arquivo, edite _gerador/modulos/01-fundamentos/ e rode: cd _gerador && npm run gerar --><h1>Módulo 01 · Fundamentos de C</h1>
+<blockquote>
+<p>[!IMPORTANT]
+<strong>Mundo 1 · Primeiros passos · Rota do jogo: etapa 1 de 29</strong></p>
+<p><strong>Missão:</strong> compilar o primeiro programa, guardar valores em variáveis e mostrar resultados.</p>
+<p><strong>Vem de:</strong> o começo da rota. <strong>Segue para:</strong> <a href="02-condicionais.html">Módulo 02 · Decisões</a>.</p>
+<p><strong>Checkpoints desta fase:</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> Ler os assuntos 0001 a 0011 e refazer os exemplos</li>
+<li><input disabled="" type="checkbox"> Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho</li>
+<li><input disabled="" type="checkbox"> Fechar a lista prática (P0101 a P0130)</li>
+<li><input disabled="" type="checkbox"> Enfrentar os desafios do módulo</li>
+<li><input disabled="" type="checkbox"> Chefão: resolver as questões de prova do módulo sem consultar</li>
+</ul>
+</blockquote>
+<p>Um <strong>algoritmo</strong> é uma sequência finita de passos sem ambiguidade; um programa
+é um algoritmo escrito em C. Este módulo cobre a <strong>estrutura sequencial</strong>:
+variáveis, tipos e limites, constantes, <code>printf</code>, <code>scanf</code>, aritmética,
+conversões e <code>math.h</code>, no modelo entrada → processamento → saída. É o ponto de
+partida e não depende de nenhum módulo; o 02 e o 03 constroem sobre ele.</p>
+<h2>O que você vai aprender</h2>
+<ul>
+<li>o esqueleto de um programa em C e o caminho do <code>.c</code> ao executável</li>
+<li>os três tipos de erro: compilação, ligação e execução</li>
+<li><strong>variáveis</strong>: nome, tipo, valor e endereço; <code>int</code>, <code>float</code>, <code>double</code>, <code>char</code> e <code>sizeof</code></li>
+<li>bit, byte, binário, hexadecimal, limites dos tipos e <strong>overflow</strong></li>
+<li>constantes (<code>#define</code>, <code>const</code>), literais e sequências de escape</li>
+<li><code>printf</code> (largura, precisão, alinhamento) e <code>scanf</code> (o <code>&amp;</code>, o <code>%lf</code>, o buffer)</li>
+<li>aritmética, divisão inteira, resto e precedência</li>
+<li>conversão automática e <strong>cast</strong></li>
+<li>operadores compostos, <code>++</code> e <code>--</code></li>
+<li><code>math.h</code>: <code>pow</code>, <code>sqrt</code>, <code>round</code>, <code>floor</code>, <code>ceil</code>, <code>fabs</code></li>
+</ul>
+<h2>Antes de começar</h2>
+<p>Você precisa do <code>gcc</code> e, para os módulos de memória, do <code>gdb</code> e do
+<code>valgrind</code>. As resoluções ficam em <code>_respostas/01-fundamentos/</code>.</p>
+<p><strong>Arch Linux</strong> (e derivados, como Manjaro e EndeavourOS):</p>
+<pre><code class="language-bash">sudo pacman -S --needed base-devel gdb valgrind
+</code></pre>
+<p><strong>Debian / Ubuntu</strong> (e derivados, como Mint e Pop!_OS):</p>
+<pre><code class="language-bash">sudo apt install build-essential gdb valgrind
+</code></pre>
+<p><strong>Windows</strong>: use o <strong>WSL</strong> com Ubuntu (<code>wsl --install</code> no PowerShell como
+administrador, reinicie e use o comando do Debian/Ubuntu). Clone o curso
+dentro do Linux do WSL (<code>~/LPEDC</code>).</p>
+<p>Confira com <code>gcc --version</code>. Para compilar e rodar um arquivo do curso:</p>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A001.c -o ~/LPEDC/material/A001 &amp;&amp; ~/LPEDC/material/A001
+</code></pre>
+<p>O <code>-o</code> dá o nome do executável. Acrescente antes dele as <strong>flags de estudo</strong>,
+<code>-std=c17 -Wall -Wextra -pedantic -g -fsanitize=address,undefined -lm</code>: padrão
+C17, todos os avisos, o <strong>AddressSanitizer</strong> (erros de memória), o detector de
+<strong>comportamento indefinido</strong> e a biblioteca matemática. Os avisos citados nos
+módulos aparecem com elas, e os exercícios devem compilar <strong>sem nenhum aviso</strong>.</p>
+<p>Para testar sem digitar, use um cano (<code>|</code>): o que vem antes vira o teclado do
+programa.</p>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A011.c -o ~/LPEDC/material/A011 &amp;&amp; printf &#39;3 4.99\n2\n&#39; | ~/LPEDC/material/A011
+</code></pre>
+<blockquote>
+<p>[!NOTE]
+Material antigo de C usa <code>void main</code>, <code>conio.h</code>, <code>getch()</code>,
+<code>system(&quot;pause&quot;)</code>, <code>fflush(stdin)</code> e <code>gets</code>. Nada disso é C padrão ou
+seguro; quando aparecer, o curso mostra a alternativa.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Assunto</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="#0001--o-primeiro-programa">0001</a></td>
+<td>O primeiro programa</td>
+</tr>
+<tr>
+<td><a href="#0002--vari%C3%A1veis">0002</a></td>
+<td>Variáveis</td>
+</tr>
+<tr>
+<td><a href="#0003--tipos-e-limites">0003</a></td>
+<td>Tipos e limites</td>
+</tr>
+<tr>
+<td><a href="#0004--constantes">0004</a></td>
+<td>Constantes</td>
+</tr>
+<tr>
+<td><a href="#0005--printf">0005</a></td>
+<td>printf</td>
+</tr>
+<tr>
+<td><a href="#0006--scanf">0006</a></td>
+<td>scanf</td>
+</tr>
+<tr>
+<td><a href="#0007--aritm%C3%A9tica">0007</a></td>
+<td>Aritmética</td>
+</tr>
+<tr>
+<td><a href="#0008--convers%C3%A3o-e-cast">0008</a></td>
+<td>Conversão e cast</td>
+</tr>
+<tr>
+<td><a href="#0009--atribui%C3%A7%C3%A3o--e---">0009</a></td>
+<td>Atribuição, ++ e --</td>
+</tr>
+<tr>
+<td><a href="#0010--mathh">0010</a></td>
+<td>math.h</td>
+</tr>
+<tr>
+<td><a href="#0011--juntando-tudo">0011</a></td>
+<td>Juntando tudo</td>
+</tr>
+</tbody></table>
+<hr>
+<blockquote>
+<p>[!NOTE]
+Cada assunto é um capítulo: <strong>Conceito</strong> (a explicação), <strong>Exemplos de uso</strong> (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e <strong>Exercícios</strong> (cada um é um arquivo em <code>material/</code> com o esqueleto, as dicas e o espaço para a resposta; resoluções em <code>_respostas/01-fundamentos/</code>).</p>
+</blockquote>
+<h2>0001 · O primeiro programa</h2>
+<h3>Conceito</h3>
+<p>O processador do computador só entende números: sequências de instruções
+em binário, cada uma muito simples. Escrever assim seria impossível para
+qualquer pessoa. Um programa em C é um texto que você consegue ler e
+escrever, e uma ferramenta, o <strong>compilador</strong>, traduz esse texto para a
+língua da máquina. O curso inteiro parte daqui: um arquivo <code>.c</code> que vira um
+executável e mostra alguma coisa na tela.</p>
+<p>Pense numa receita de bolo. Ela tem um título, uma lista do que você precisa
+ter à mão e os passos, que você segue de cima para baixo. Um programa em C
+tem as mesmas partes. Ele é um conjunto de <strong>funções</strong>, blocos de
+instruções com nome, e a execução sempre começa pela função <strong><code>main</code></strong>
+(KERNIGHAN; RITCHIE, 1988, cap. 1). O sistema operacional procura a <code>main</code>,
+entra nela e executa as instruções na ordem em que aparecem.</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    printf(&quot;Bom dia\n&quot;);
+    return 0;
+}
+</code></pre>
+<p>Cada <strong>instrução</strong> é um comando completo e termina com ponto e vírgula. As
+<strong>chaves</strong> <code>{ }</code> agrupam várias instruções num <strong>bloco</strong>, que funciona como
+uma unidade: tudo o que está entre a <code>{</code> depois de <code>main(void)</code> e a <code>}</code> final
+pertence à <code>main</code> (DEITEL; DEITEL, 2011, cap. 2). A linha
+<code>int main(void)</code> diz duas coisas: a função não recebe nada de fora (<code>void</code>)
+e devolve um número inteiro (<code>int</code>) para quem a chamou.</p>
+<p>A primeira linha não é instrução. Tudo o que começa com <code>#</code> é uma ordem para
+o <strong>pré-processador</strong>, a primeira etapa da tradução, e por isso não leva
+<code>;</code>. O <code>#include &lt;stdio.h&gt;</code> manda colar ali o conteúdo do arquivo
+<code>stdio.h</code>, que declara as funções de entrada e saída, entre elas o <code>printf</code>
+(BACKES, 2013, cap. 1). Sem essa linha, o compilador não sabe que o
+<code>printf</code> existe nem como chamá-lo.</p>
+<p>O <code>printf(&quot;...\n&quot;)</code> mostra o texto entre aspas. O <code>\n</code> dentro das aspas é
+um caractere especial que pula para a linha de baixo. O <code>return 0</code> encerra
+a <code>main</code> e entrega o número 0 ao sistema, o código combinado para &quot;terminou
+bem&quot; (BACKES, 2013, cap. 1). Um valor diferente de zero avisa que algo deu
+errado.</p>
+<p>Também cabe no arquivo texto que não é para a máquina. O <strong>comentário</strong> é
+ignorado pelo compilador e serve só para quem lê. O <code>//</code> comenta até o fim
+da linha; o par <code>/* ... */</code> comenta tudo o que fica entre eles, mesmo em
+várias linhas (DEITEL; DEITEL, 2011, cap. 2). E o C diferencia maiúsculas de
+minúsculas: <code>Main</code> e <code>Printf</code> são nomes que não existem.</p>
+<table>
+<thead>
+<tr>
+<th>Linha</th>
+<th>Para que serve</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>#include &lt;stdio.h&gt;</code></td>
+<td>declara o <code>printf</code></td>
+</tr>
+<tr>
+<td><code>int main(void) {</code></td>
+<td>começa a <code>main</code>; não recebe nada e devolve um <code>int</code></td>
+</tr>
+<tr>
+<td><code>printf(&quot;...\n&quot;);</code></td>
+<td>mostra texto; <code>\n</code> pula a linha</td>
+</tr>
+<tr>
+<td><code>return 0;</code></td>
+<td>termina com sucesso</td>
+</tr>
+<tr>
+<td><code>}</code></td>
+<td>fecha o bloco</td>
+</tr>
+</tbody></table>
+<p>Para o texto virar executável, o <code>gcc</code> passa por quatro etapas, uma depois
+da outra (GNU, s.d.). O <strong>pré-processador</strong> trata as linhas com <code>#</code> e cola
+o <code>stdio.h</code> no lugar do <code>#include</code>. O <strong>compilador</strong> confere a gramática e
+os tipos e traduz o C para <strong>assembly</strong>, as instruções do processador
+escritas como texto. O <strong>montador</strong> transforma o assembly em <strong>código
+objeto</strong> (<code>.o</code>), já em binário, mas incompleto: ele sabe que você chamou o
+<code>printf</code>, não onde o <code>printf</code> está. O <strong>ligador</strong> (<em>linker</em>) junta o <code>.o</code>
+com a <strong>biblioteca padrão</strong>, onde mora o código do <code>printf</code>, e grava o
+executável. Um comando faz tudo: <code>gcc padaria.c -o padaria</code>, e depois
+<code>./padaria</code> roda o resultado.</p>
+<p>Saber em que etapa o processo parou ajuda a consertar. Há três tipos de erro
+(DEITEL; DEITEL, 2011, cap. 2). O <strong>erro de compilação</strong> aparece quando o
+texto fere a gramática, como faltar um <code>;</code> ou escrever <code>Int</code> no lugar de
+<code>int</code>: o gcc mostra arquivo, linha e coluna e não gera executável. O <strong>erro
+de ligação</strong> aparece quando a gramática está certa, mas a função não existe
+em lugar nenhum: com <code>prinft</code>, o ligador para com <code>undefined reference to &#39;prinft&#39;</code>. O <strong>erro de execução</strong> é o pior, porque o programa compila,
+roda e mostra um valor errado ou quebra no meio. O compilador não o vê; os
+<strong>avisos</strong> (<em>warnings</em>) do gcc com <code>-Wall</code> e o AddressSanitizer pegam parte
+deles.</p>
+<blockquote>
+<p>[!WARNING]
+O <code>printf</code> não pula linha sozinho: <code>printf(&quot;Pão&quot;); printf(&quot;Quente&quot;);</code>
+mostra <code>PãoQuente</code>. Ponha o <code>\n</code> onde a linha acaba. Se faltar um <code>;</code>, o
+gcc reclama (<code>expected &#39;;&#39; before ...</code>) na linha <strong>seguinte</strong>, onde ele
+percebe a falta.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>Um aviso de três linhas para o painel de LED de uma padaria. O <code>padaria.c</code>
+passa pelas quatro etapas até virar o executável:</p>
+<p align="center"><img src="material/0001-ideia.svg" alt="Diagrama da ideia: O primeiro programa" width="866"></p>
+<pre><code class="language-c">// Aviso do painel da padaria
+#include &lt;stdio.h&gt;
+
+int main(void) {
+    printf(&quot;Padaria Pão Quente\n&quot;);
+    printf(&quot;Pão francês saindo às 17h\n&quot;);
+    printf(&quot;R$ 0,90 a unidade\n&quot;);
+    return 0; // 0 = terminou bem
+}
+// Saída:
+// Padaria Pão Quente
+// Pão francês saindo às 17h
+// R$ 0,90 a unidade
+</code></pre>
+<p>Cada etapa pode parar o processo; aqui todas passam:</p>
+<p align="center"><img src="material/0001-fluxograma.svg" alt="Fluxograma: O primeiro programa" width="581"></p>
+<p><strong>Exemplo A001 · Quem separa as instruções é o ponto e vírgula</strong></p>
+<pre><code class="language-c">/*
+   Para o compilador, quebra de linha, espaço e recuo são só enfeite.
+   O que termina uma instrução é o ; e o que agrupa é o par de chaves.
+*/
+#include &lt;stdio.h&gt;
+
+int main(void) {
+    // duas instruções na mesma linha: o ; separa uma da outra
+    printf(&quot;Banca do Seu Zé\n&quot;); printf(&quot;Frutas e verduras\n&quot;);
+
+    // uma instrução espalhada em três linhas: ela só acaba no ;
+    printf(
+        &quot;Abacaxi: R$ 7,00\n&quot;
+    );
+
+    printf(&quot;\n&quot;); // um printf só com \n deixa uma linha em branco
+
+    printf(&quot;Banana: R$ 5,50 a dúzia\n&quot;); /* comentário de bloco no fim */
+    printf(/* comentário até no meio */ &quot;Laranja: R$ 4,00 o kg\n&quot;);
+    return 0;
+}
+// Saída:
+// Banca do Seu Zé
+// Frutas e verduras
+// Abacaxi: R$ 7,00
+//
+// Banana: R$ 5,50 a dúzia
+// Laranja: R$ 4,00 o kg
+//
+// O recuo de 4 espaços também é só para quem lê: apague todos e rode de
+// novo. A saída é a mesma. Agora apague o ; do primeiro printf e veja o gcc
+// reclamar do printf seguinte, que está na mesma linha.
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A001.c -o ~/LPEDC/material/A001 &amp;&amp; ~/LPEDC/material/A001
+</code></pre>
+<p><strong>Exemplo A002 · Um printf, várias linhas (e vários printf, uma linha)</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+/*
+   Comentário de bloco: pode ocupar várias linhas.
+   Bom para explicar o que o programa faz, no topo do arquivo.
+*/
+int main(void) {
+    // três printf montando UMA linha: sem \n, o cursor fica onde parou
+    printf(&quot;Cardápio: &quot;);
+    printf(&quot;café, &quot;);
+    printf(&quot;pão na chapa\n&quot;);
+
+    // um printf só montando TRÊS linhas: cada \n pula uma
+    printf(&quot;Café: R$ 4,50\nPão na chapa: R$ 6,00\nPingado: R$ 5,00\n&quot;);
+
+    // dois textos entre aspas lado a lado viram um só (útil para linhas longas)
+    printf(&quot;Aberto de segunda a sábado, &quot;
+           &quot;das 6h às 20h\n&quot;);
+
+    // printf(&quot;Esta linha nunca aparece: está comentada\n&quot;);
+    return 0;
+}
+// Saída:
+// Cardápio: café, pão na chapa
+// Café: R$ 4,50
+// Pão na chapa: R$ 6,00
+// Pingado: R$ 5,00
+// Aberto de segunda a sábado, das 6h às 20h
+//
+// Depois de rodar, digite &quot;echo $?&quot; no terminal: aparece 0, o valor do return.
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A002.c -o ~/LPEDC/material/A002 &amp;&amp; ~/LPEDC/material/A002
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E001</strong> · ★☆☆</p>
+<p>Escreva um programa que mostre o letreiro do ônibus, exatamente assim.
+Rode de dois jeitos: com o rodar e na mão, com gcc, gerando um executável
+chamado &quot;letreiro&quot;.</p>
+<pre><code class="language-text">Saída esperada:
+Linha 077 - Terminal Centro
+Via Av. Brasil
+Tarifa: R$ 4,90
+</code></pre>
+<p><strong>Exercício E003</strong> · ★★☆</p>
+<p>Escreva do zero o programa do aviso da farmácia: um comentário de bloco
+(/* ... */) no topo com o texto &quot;Aviso da farmácia&quot;, o #include necessário
+e a main, que mostra as duas linhas abaixo e termina com return 0.</p>
+<pre><code class="language-text">Saída esperada:
+Farmácia aberta 24h
+Plantão: (11) 5555-0199
+</code></pre>
+<p><strong>Exercício E004</strong> · ★★☆</p>
+<p>Escreva o aviso do cinema com o código bem organizado: um comentário de
+bloco no topo dizendo o que o programa faz, uma instrução por linha, recuo
+de 4 espaços dentro da main e um comentário // sala 2 no fim da linha do
+printf da sessão. O programa mostra as três linhas abaixo.</p>
+<pre><code class="language-text">Saída esperada:
+Cine Estação
+Sessão: 19h30 (sala 2)
+Ingresso: R$ 28,00
+</code></pre>
+<p><strong>Exercício E005</strong> · ★★★</p>
+<p>Escreva o programa de um backup que FALHOU: ele mostra as duas linhas
+abaixo e devolve o código 2 ao sistema com o return da main. Rode de dentro
+desta pasta e confira as três linhas da saída esperada:</p>
+<pre><code class="language-text">~/LPEDC/rodar E005.c; echo &quot;código: $?&quot;
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Backup falhou: disco cheio
+Código de saída: 2
+código: 2
+</code></pre>
+<hr>
+<h2>0002 · Variáveis</h2>
+<h3>Conceito</h3>
+<p>O primeiro programa só mostrava texto fixo. Para fazer conta, o programa
+precisa guardar números em algum lugar enquanto trabalha: a idade de alguém,
+o preço de um produto, o total de uma compra. Esse lugar é a memória do
+computador, e a variável é a forma de usar um pedaço dela pelo nome.</p>
+<p>Pense na ficha de matrícula de uma academia. Ela tem campos com rótulo
+(idade, altura, peso, plano), e cada campo aceita um tipo de informação. Um
+mês depois, a recepcionista apaga o peso e escreve o novo. A ficha continua
+a mesma; só o conteúdo de um campo mudou. Uma <strong>variável</strong> é um campo dessa
+ficha: um lugar na memória com <strong>nome</strong>, <strong>tipo</strong> e <strong>valor</strong>, e esse valor
+pode mudar durante a execução (DEITEL; DEITEL, 2011, cap. 2).</p>
+<p>O nome é para você, que escreve e lê o código. A máquina usa outra coisa: o
+<strong>endereço</strong>, o número do primeiro byte que o valor ocupa na memória. Você
+vê o endereço de uma variável com <code>&amp;</code>, e o <code>printf</code> o mostra com <code>%p</code>. Por
+enquanto o endereço é só curiosidade; no módulo de ponteiros ele vira
+ferramenta.</p>
+<p>O <strong>tipo</strong> diz quantos bytes a variável ocupa e como ler esses bytes
+(BACKES, 2013). Ele vem antes do nome e não muda depois. Os mesmos quatro
+bytes podem ser lidos como um inteiro ou como um real, e o resultado é
+completamente diferente; o tipo é que decide. A tabela mostra os quatro
+tipos básicos, com os tamanhos de um PC de 64 bits (o padrão do C só garante
+mínimos, assunto do 0003):</p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Guarda</th>
+<th>Tamanho típico</th>
+<th><code>printf</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>int</code></td>
+<td>inteiro</td>
+<td>4 bytes</td>
+<td><code>%d</code></td>
+</tr>
+<tr>
+<td><code>float</code></td>
+<td>real, uns 7 dígitos</td>
+<td>4 bytes</td>
+<td><code>%f</code></td>
+</tr>
+<tr>
+<td><code>double</code></td>
+<td>real, uns 15 dígitos</td>
+<td>8 bytes</td>
+<td><code>%f</code></td>
+</tr>
+<tr>
+<td><code>char</code></td>
+<td>um caractere</td>
+<td>1 byte</td>
+<td><code>%c</code></td>
+</tr>
+</tbody></table>
+<p>Esses são os <strong>tipos primitivos</strong>, também chamados de tipos simples: cada
+variável guarda um valor só. Vetores e structs juntam vários valores numa
+variável e são os tipos <strong>compostos</strong>, que aparecem nos módulos 05 e 08
+(CELES; CERQUEIRA; RANGEL, 2016). Repare que o <code>char</code> também guarda um
+número, pequeno: a letra <code>&#39;B&#39;</code> fica na memória como o código 66.</p>
+<p>Criar a variável é <strong>declarar</strong>: <code>int idade;</code> reserva quatro bytes e dá a
+eles o nome <code>idade</code>. Dar o primeiro valor no mesmo comando é
+<strong>inicializar</strong>: <code>int idade = 25;</code> (BACKES, 2013). As duas coisas parecem
+iguais, mas não são. Uma variável declarada sem valor fica com o que já
+estava naqueles bytes, e isso pode ser qualquer número.</p>
+<pre><code class="language-c">int idade = 25;        // declara e inicializa
+double peso = 72.5;    // o decimal do C é o ponto
+peso = 71.8;           // atribui: o 72.5 some
+</code></pre>
+<p><strong>Atribuir</strong> é guardar um valor novo, com <code>=</code>, numa variável que já existe.
+O valor antigo é apagado para sempre; não há histórico. Ler a variável, por
+outro lado, não muda nada: você pode mostrar <code>peso</code> mil vezes e ele continua
+71.8 (DEITEL; DEITEL, 2011, cap. 2).</p>
+<p>Para saber quanto cada tipo ocupa na sua máquina, existe o operador
+<strong><code>sizeof</code></strong>. Ele dá o tamanho em bytes de um tipo ou de uma variável:
+<code>sizeof(double)</code> vale 8 num PC comum. O resultado tem um tipo próprio, e o
+<code>printf</code> o mostra com <code>%zu</code> (KERNIGHAN; RITCHIE, 1988, cap. 2).</p>
+<p>O nome da variável segue regras. Ele usa letras, dígitos e <code>_</code>, não começa
+por dígito e não leva acento nem espaço. Palavras do próprio C, como <code>int</code>
+e <code>return</code>, são reservadas e não servem de nome. E maiúscula conta: <code>peso</code>
+e <code>Peso</code> são duas variáveis diferentes (KERNIGHAN; RITCHIE, 1988, cap. 2).
+O curso usa <code>snake_case</code>, palavras em minúscula ligadas por <code>_</code>:
+<code>peso_atual</code>, <code>valor_total</code>.</p>
+<blockquote>
+<p>[!WARNING]
+Variável sem valor não vale zero: vale <strong>lixo</strong>, o que já estava na
+memória. <code>int total; printf(&quot;%d&quot;, total);</code> pode mostrar 0, 32767 ou -1294,
+e o gcc avisa <code>&#39;total&#39; is used uninitialized</code>. Inicialize sempre. E o
+decimal do C é o <strong>ponto</strong>: <code>72,5</code> nem compila.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>A ficha de uma academia: idade, altura, peso e plano. Cada dado vira uma
+caixinha com tipo, tamanho e endereço; depois o peso recebe um valor novo:</p>
+<p align="center"><img src="material/0002-ideia.svg" alt="Diagrama da ideia: Variáveis" width="858"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    int idade = 25;       // inteiro
+    float altura = 1.75;  // real com uns 7 dígitos
+    double peso = 72.5;   // real com uns 15 dígitos
+    char plano = &#39;B&#39;;     // um caractere, entre aspas simples
+
+    printf(&quot;Idade: %d anos\n&quot;, idade);
+    printf(&quot;Altura: %.2f m\n&quot;, altura);
+    printf(&quot;Peso: %.1f kg\n&quot;, peso);
+    printf(&quot;Plano: %c\n&quot;, plano);
+
+    peso = 71.8; // um mês depois: o 72.5 some
+    printf(&quot;Peso novo: %.1f kg\n&quot;, peso);
+    printf(&quot;Bytes: %zu, %zu, %zu, %zu\n&quot;,
+           sizeof idade, sizeof altura, sizeof peso, sizeof plano);
+    return 0;
+}
+// Saída:
+// Idade: 25 anos
+// Altura: 1.75 m
+// Peso: 72.5 kg
+// Plano: B
+// Peso novo: 71.8 kg
+// Bytes: 4, 4, 8, 1
+</code></pre>
+<p>O caminho é sequência pura: criar as variáveis e depois trocar o peso.</p>
+<p align="center"><img src="material/0002-fluxograma.svg" alt="Fluxograma: Variáveis" width="1184"></p>
+<p><strong>Exemplo A003 · A cópia que não acompanha e o float que arredonda</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    // = copia o VALOR: depois disso, as duas variáveis seguem separadas
+    int pao_manha = 40;
+    int pao_tarde = pao_manha;  // a tarde começa com uma cópia: 40
+    pao_manha = 25;             // mudar uma não mexe na outra
+    printf(&quot;Pães de manhã: %d, de tarde: %d\n&quot;, pao_manha, pao_tarde);
+
+    // várias variáveis do mesmo tipo numa linha, separadas por vírgula
+    char fila = &#39;C&#39;, caixa = &#39;3&#39;;
+    printf(&quot;Fila %c, caixa %c\n&quot;, fila, caixa);
+
+    // o float guarda uns 7 dígitos; o double, uns 15
+    float premio_float = 12345678.9;
+    double premio_double = 12345678.9;
+    printf(&quot;Prêmio no float:  %.1f\n&quot;, premio_float);
+    printf(&quot;Prêmio no double: %.1f\n&quot;, premio_double);
+    return 0;
+}
+// Saída:
+// Pães de manhã: 25, de tarde: 40
+// Fila C, caixa 3
+// Prêmio no float:  12345679.0
+// Prêmio no double: 12345678.9
+//
+// O 12345678.9 tem 9 dígitos: o float não dá conta e guarda o valor mais
+// perto que ele consegue representar. Dinheiro e medidas: use double.
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A003.c -o ~/LPEDC/material/A003 &amp;&amp; ~/LPEDC/material/A003
+</code></pre>
+<p><strong>Exemplo A004 · Onde moram as variáveis</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// Cada variável ocupa alguns bytes seguidos da memória. O endereço (&amp;nome)
+// é o número do primeiro desses bytes. O %p mostra endereços em hexadecimal.
+int main(void) {
+    char plano = &#39;B&#39;;
+    int idade = 25;
+    double peso = 72.5;
+
+    printf(&quot;plano: %zu byte  em %p\n&quot;, sizeof plano, (void *)&amp;plano);
+    printf(&quot;idade: %zu bytes em %p\n&quot;, sizeof idade, (void *)&amp;idade);
+    printf(&quot;peso:  %zu bytes em %p\n&quot;, sizeof peso, (void *)&amp;peso);
+
+    printf(&quot;int: %zu, float: %zu, double: %zu, char: %zu\n&quot;,
+           sizeof(int), sizeof(float), sizeof(double), sizeof(char));
+    return 0;
+}
+// Saída (os endereços mudam a cada execução):
+// plano: 1 byte  em 0x7f2e53c00020
+// idade: 4 bytes em 0x7f2e53c00030
+// peso:  8 bytes em 0x7f2e53c00040
+// int: 4, float: 4, double: 8, char: 1
+//
+// Com o rodar, o AddressSanitizer deixa uma folga entre as variáveis para
+// flagrar quem escreve fora do lugar. Sem ele, elas ficam coladas:
+//   gcc A004.c -o a &amp;&amp; ./a
+//   plano: 1 byte  em 0x7ffccb532f1b
+//   idade: 4 bytes em 0x7ffccb532f1c     (logo depois do plano)
+//   peso:  8 bytes em 0x7ffccb532f20     (4 bytes depois da idade)
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A004.c -o ~/LPEDC/material/A004 &amp;&amp; ~/LPEDC/material/A004
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E007</strong> · ★☆☆</p>
+<p>No mercado, a etiqueta de um produto tem: código 1042, preço R$ 8.99,
+peso 0.5 kg e setor &#39;H&#39; (hortifrúti). Crie uma variável para cada dado,
+com o tipo certo, e mostre a etiqueta:</p>
+<pre><code class="language-text">Saída esperada:
+Código: 1042
+Preço: R$ 8.99
+Peso: 0.5 kg
+Setor: H
+</code></pre>
+<p><strong>Exercício E009</strong> · ★★☆</p>
+<p>O cadastro de um aluno da autoescola guarda: idade (int, 19), nota da
+prova teórica (double, 8.5), nota da prova prática (double, 9.0),
+categoria da CNH (char, &#39;B&#39;) e número de aulas feitas (int, 20). Declare
+as cinco variáveis e mostre os valores e o sizeof de cada uma, uma por
+linha. Depois, mostre mais duas linhas, calculadas pelo programa: o total
+de bytes das cinco variáveis (somando os sizeof) e quanto seria o total
+se as duas notas fossem float (use sizeof(float) no lugar delas).</p>
+<pre><code class="language-text">Saída esperada:
+idade: 19 (4 bytes)
+teorica: 8.5 (8 bytes)
+pratica: 9.0 (8 bytes)
+categoria: B (1 byte)
+aulas: 20 (4 bytes)
+total: 25 bytes
+com float nas notas: 17 bytes
+</code></pre>
+<p><strong>Exercício E010</strong> · ★★☆</p>
+<p>O placar eletrônico foi digitado invertido: casa = 1 e visitante = 3, e o
+certo é Casa 3 x 1 Visitante. Escreva um programa com as duas variáveis (int)
+que troque os valores usando uma variável auxiliar e mostre o placar
+certo.</p>
+<pre><code class="language-text">Saída esperada:
+Casa 3 x 1 Visitante
+</code></pre>
+<p><strong>Exercício E012</strong> · ★★★</p>
+<p>Para o C, um char é só um número pequeno: o %c mostra o símbolo que tem
+aquele código, e o %d mostra o próprio código. Escreva um programa que
+mostre as linhas abaixo usando UMA variável char, que você vai
+reaproveitando (declara uma vez e troca o valor). As regras:</p>
+<ul>
+<li>nas linhas 1, 3 e 4, o símbolo e o código saem da mesma variável, uma</li>
+</ul>
+<pre><code class="language-text">vez com %c e outra com %d;
+</code></pre>
+<ul>
+<li>para o B da linha 2, guarde na variável o NÚMERO 66 (nada de &#39;B&#39;);</li>
+<li>para o espaço da linha 4, guarde o número 32 (nada de &#39; &#39;);</li>
+<li>a última linha mostra lado a lado o caractere &#39;7&#39; e o número 7, os dois</li>
+</ul>
+<pre><code class="language-text">com %d.
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+A 65
+B
+7 55
+[ ] 32
+&#39;7&#39; vale 55, 7 vale 7
+</code></pre>
+<hr>
+<h2>0003 · Tipos e limites</h2>
+<h3>Conceito</h3>
+<p>Toda variável tem um tamanho fixo, e um tamanho fixo tem um teto. Se o
+número que você quer guardar não cabe, o C não aumenta a variável: ele
+guarda só o pedaço que cabe e segue em frente, muitas vezes sem avisar.
+Para escolher o tipo certo, você precisa saber como o número fica na
+memória e até onde cada tipo vai.</p>
+<p>Pense no odômetro de um carro antigo, com cinco rodinhas de 0 a 9. Ele mede
+até 99.999 km. No quilômetro seguinte, todas as rodinhas voltam a zero e o
+painel mostra 00000. O carro andou, mas o mostrador não tem casa para o
+número novo. A memória do computador funciona do mesmo jeito, só que as
+rodinhas têm duas posições em vez de dez.</p>
+<p>Cada rodinha é um <strong>bit</strong>, uma chave que vale 0 ou 1. Oito bits formam um
+<strong>byte</strong>. Com <code>n</code> bits cabem 2ⁿ combinações diferentes, então um byte guarda
+256 valores, de 0 a 255 (FEOFILOFF, 2009, ap. C). Dois bytes guardam 65.536
+valores; quatro bytes, mais de 4 bilhões.</p>
+<p>O inteiro fica na memória em <strong>binário</strong>, a base 2. Na base 10, cada casa
+vale dez vezes a casa da direita (unidade, dezena, centena). Na base 2, cada
+casa vale o <strong>dobro</strong> da casa da direita: 1, 2, 4, 8, 16, 32, 64, 128. Para
+ler um binário, some as casas que têm 1: <code>00001101</code> é 8 + 4 + 1 = 13
+(FEOFILOFF, 2009, ap. C). Com os oito bits ligados, <code>11111111</code>, a soma dá
+255, o maior valor de um byte.</p>
+<table>
+<thead>
+<tr>
+<th>casa</th>
+<th>2⁷</th>
+<th>2⁶</th>
+<th>2⁵</th>
+<th>2⁴</th>
+<th>2³</th>
+<th>2²</th>
+<th>2¹</th>
+<th>2⁰</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>vale</td>
+<td>128</td>
+<td>64</td>
+<td>32</td>
+<td>16</td>
+<td>8</td>
+<td>4</td>
+<td>2</td>
+<td>1</td>
+</tr>
+</tbody></table>
+<p>Escrever binário cansa, então se usa uma abreviação: o <strong>hexadecimal</strong>, a
+base 16. Os dígitos vão de 0 a 9 e depois de A (10) a F (15). Cada dígito
+hexa equivale a exatamente 4 bits, e um byte cabe em dois dígitos:
+<code>1111 1111</code> é <code>FF</code>. No C, um número em hexadecimal começa com <code>0x</code>, e
+<code>0xFF</code> vale 255 (DEITEL; DEITEL, 2011).</p>
+<p>E os negativos? O C guarda os inteiros com sinal em <strong>complemento de dois</strong>:
+o bit mais à esquerda pesa negativo. Num byte, ele vale -128 em vez de +128.
+Assim, <code>10000000</code> é -128 e <code>11111111</code> é -128 + 127 = -1 (FEOFILOFF, 2009,
+ap. C). Isso explica por que a faixa é assimétrica: há um negativo a mais,
+-128 a 127. E mostra que o mesmo byte <code>0xFF</code> vale 255 num <code>unsigned char</code> e
+-1 num <code>char</code>. Os bits são iguais; o tipo decide como lê-los.</p>
+<p>O tamanho do tipo decide a sua <strong>faixa</strong>, o menor e o maior valor que ele
+guarda. Os <strong>modificadores</strong> ajustam o <code>int</code>: <code>short</code> usa menos bytes,
+<code>long</code> e <code>long long</code> usam mais, e <code>unsigned</code> troca os negativos por mais
+positivos, quase o dobro (BACKES, 2013). Sem modificador o tipo tem sinal:
+<code>int</code> e <code>signed int</code> são o mesmo tipo. Num PC Linux de 64 bits:</p>
+<table>
+<thead>
+<tr>
+<th>Tipo (PC Linux 64 bits)</th>
+<th>Bytes</th>
+<th>Faixa</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>char</code></td>
+<td>1</td>
+<td>-128 a 127</td>
+</tr>
+<tr>
+<td><code>unsigned char</code></td>
+<td>1</td>
+<td>0 a 255</td>
+</tr>
+<tr>
+<td><code>short</code></td>
+<td>2</td>
+<td>-32.768 a 32.767</td>
+</tr>
+<tr>
+<td><code>unsigned short</code></td>
+<td>2</td>
+<td>0 a 65.535</td>
+</tr>
+<tr>
+<td><code>int</code></td>
+<td>4</td>
+<td>cerca de ±2,1 bilhões</td>
+</tr>
+<tr>
+<td><code>long</code> / <code>long long</code></td>
+<td>8</td>
+<td>cerca de ±9,2 quintilhões</td>
+</tr>
+</tbody></table>
+<p>Esses números valem para essa máquina, não para todas. O padrão do C só
+garante tamanhos <strong>mínimos</strong>: o <code>int</code> pode ter 2 bytes num
+microcontrolador, e o <code>long</code> tem 4 bytes no Windows. Por isso existem dois
+cabeçalhos (ISO/IEC, 2018). O <strong><code>&lt;limits.h&gt;</code></strong> traz os limites reais da
+máquina em que o programa compila, como <code>INT_MAX</code> e <code>USHRT_MAX</code>. O
+<strong><code>&lt;stdint.h&gt;</code></strong> traz tipos com o tamanho exato no nome: <code>int8_t</code>,
+<code>uint16_t</code>, <code>int32_t</code>, <code>int64_t</code>.</p>
+<p>Passar do limite do tipo se chama <strong>overflow</strong>, ou estouro. Num tipo
+<code>unsigned</code>, o C garante o comportamento do odômetro: o valor dá a volta e
+recomeça do zero. Um <code>unsigned short</code> em 65.535 tem os 16 bits ligados;
+somar 1 pede um 17º bit, que não existe, e o resultado vira 0. Num tipo com
+sinal, o padrão não promete nada: o estouro é <strong>comportamento indefinido</strong>,
+e o programa pode fazer qualquer coisa (ISO/IEC, 2018).</p>
+<blockquote>
+<p>[!WARNING]
+Estouro em tipo com sinal não dá a volta com garantia:
+<code>int x = INT_MAX; x = x + 1;</code> é comportamento indefinido. Costuma virar
+-2147483648, mas não conte com isso. Com as flags de estudo, o gcc acusa
+<code>signed integer overflow</code>. Escolha um tipo que caiba.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>A catraca de um estádio conta torcedores num <code>unsigned short</code> (16 bits). No
+65.536º torcedor, o bit de cima não cabe e o painel volta a zero:</p>
+<p align="center"><img src="material/0003-ideia.svg" alt="Diagrama da ideia: Tipos e limites" width="858"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;limits.h&gt;
+
+int main(void) {
+    unsigned short catraca = 65535; // 16 bits, todos ligados
+    printf(&quot;Maior unsigned short: %d\n&quot;, USHRT_MAX);
+    printf(&quot;Catraca: %d (0x%X)\n&quot;, catraca, catraca);
+
+    catraca = catraca + 1; // 65536 não cabe em 16 bits
+    printf(&quot;Mais um torcedor: %d\n&quot;, catraca);
+
+    int publico = 78838; // int tem 32 bits: sobra espaço
+    printf(&quot;Público: %d (o int vai até %d)\n&quot;, publico, INT_MAX);
+    return 0;
+}
+// Saída:
+// Maior unsigned short: 65535
+// Catraca: 65535 (0xFFFF)
+// Mais um torcedor: 0
+// Público: 78838 (o int vai até 2147483647)
+</code></pre>
+<p>Quem decide &quot;cabe em 16 bits?&quot; é o hardware; se não cabe, guarda só os 16
+bits de baixo, sem avisar:</p>
+<p align="center"><img src="material/0003-fluxograma.svg" alt="Fluxograma: Tipos e limites" width="430"></p>
+<p><strong>Exemplo A005 · O mesmo byte lido de dois jeitos</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdint.h&gt;
+
+int main(void) {
+    // o freezer marca -10 °C e guarda a temperatura num byte com sinal
+    int8_t freezer = -10;
+    printf(&quot;Freezer: %d °C\n&quot;, freezer);
+
+    // o painel recebe os MESMOS 8 bits, mas lê como byte sem sinal
+    uint8_t byte_no_cabo = freezer;
+    printf(&quot;No cabo: 0x%X, que sem sinal vale %d\n&quot;, byte_no_cabo, byte_no_cabo);
+
+    // a faixa de cada um: 256 combinações nos dois, deslocadas
+    printf(&quot;int8_t:  %d a %d\n&quot;, INT8_MIN, INT8_MAX);
+    printf(&quot;uint8_t: 0 a %d\n&quot;, UINT8_MAX);
+
+    // -10 e 246 completam juntos 256 (2 elevado a 8)
+    printf(&quot;%d + %d = %d\n&quot;, byte_no_cabo, 10, byte_no_cabo + 10);
+    return 0;
+}
+// Saída:
+// Freezer: -10 °C
+// No cabo: 0xF6, que sem sinal vale 246
+// int8_t:  -128 a 127
+// uint8_t: 0 a 255
+// 246 + 10 = 256
+//
+// Os bits são 1111 0110 nos dois casos. O tipo decide se o bit de cima
+// vale +128 (sem sinal: 246) ou -128 (com sinal: -128 + 118 = -10).
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A005.c -o ~/LPEDC/material/A005 &amp;&amp; ~/LPEDC/material/A005
+</code></pre>
+<p><strong>Exemplo A006 · A tabela de tamanhos e limites desta máquina</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;limits.h&gt;
+#include &lt;stdint.h&gt;
+
+// Cada tipo tem o seu código no printf: %d (int), %u (unsigned),
+// %ld (long), %lld (long long), %llu (unsigned long long).
+int main(void) {
+    printf(&quot;char:      %zu byte,  %d a %d\n&quot;, sizeof(char), CHAR_MIN, CHAR_MAX);
+    printf(&quot;u. char:   %zu byte,  0 a %d\n&quot;, sizeof(unsigned char), UCHAR_MAX);
+    printf(&quot;short:     %zu bytes, %d a %d\n&quot;, sizeof(short), SHRT_MIN, SHRT_MAX);
+    printf(&quot;int:       %zu bytes, %d a %d\n&quot;, sizeof(int), INT_MIN, INT_MAX);
+    printf(&quot;u. int:    %zu bytes, 0 a %u\n&quot;, sizeof(unsigned int), UINT_MAX);
+    printf(&quot;long:      %zu bytes, até %ld\n&quot;, sizeof(long), LONG_MAX);
+    printf(&quot;long long: %zu bytes, até %lld\n&quot;, sizeof(long long), LLONG_MAX);
+
+    // stdint.h: o número de bits está no nome do tipo
+    printf(&quot;int8_t: %zu, uint16_t: %zu, int32_t: %zu, int64_t: %zu bytes\n&quot;,
+           sizeof(int8_t), sizeof(uint16_t), sizeof(int32_t), sizeof(int64_t));
+    printf(&quot;uint64_t vai até %llu\n&quot;, (unsigned long long)UINT64_MAX);
+
+    // hexadecimal no código: 0x na frente; cada dígito vale 4 bits
+    printf(&quot;0xFF = %d, 0xFFFF = %d, 0x7FFFFFFF = %d\n&quot;, 0xFF, 0xFFFF, 0x7FFFFFFF);
+    return 0;
+}
+// Saída (num PC Linux de 64 bits):
+// char:      1 byte,  -128 a 127
+// u. char:   1 byte,  0 a 255
+// short:     2 bytes, -32768 a 32767
+// int:       4 bytes, -2147483648 a 2147483647
+// u. int:    4 bytes, 0 a 4294967295
+// long:      8 bytes, até 9223372036854775807
+// long long: 8 bytes, até 9223372036854775807
+// int8_t: 1, uint16_t: 2, int32_t: 4, int64_t: 8 bytes
+// uint64_t vai até 18446744073709551615
+// 0xFF = 255, 0xFFFF = 65535, 0x7FFFFFFF = 2147483647
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A006.c -o ~/LPEDC/material/A006 &amp;&amp; ~/LPEDC/material/A006
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E013</strong> · ★☆☆</p>
+<p>Converta na mão cada binário para hexadecimal (cada grupo de 4 bits vira
+um dígito hexa) e escreva os números no código SÓ em hexadecimal, com 0x
+na frente. Quem converte para decimal é o printf, com %d. Na tabela de
+quantos valores cabem, use também hexa: 2 elevado a 4 é 0x10.</p>
+<pre><code class="language-text">binários: 0001 0110 e 1111 1111; hexas prontos: 0x1F e 0x100
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+0001 0110 = 0x16 = 22
+1111 1111 = 0xFF = 255
+0x1F = 31
+0x100 = 256
+4 bits: 16 valores
+8 bits: 256 valores
+16 bits: 65536 valores
+</code></pre>
+<p>(Binário escrito como 0b10110 só virou padrão no C23; o rodar, que segue o
+C17, avisa se você usar.)</p>
+<p><strong>Exercício E015</strong> · ★★☆</p>
+<p>Três contadores unsigned, três estouros que dão a volta. Escreva um
+programa com brilho (unsigned char) = 250, estoque (unsigned int) = 0 e
+odometro (unsigned short) = 65000. Some 10 ao brilho, tire 1 do estoque e
+some 1000 ao odômetro, guardando o resultado na própria variável. Mostre
+uma linha por contador, com o valor de antes, a conta, o valor de depois e o
+máximo do tipo, tirado do limits.h.</p>
+<pre><code class="language-text">Saída esperada:
+brilho: 250 + 10 = 4 (máximo 255)
+estoque: 0 - 1 = 4294967295 (máximo 4294967295)
+odômetro: 65000 + 1000 = 464 (máximo 65535)
+</code></pre>
+<p><strong>Exercício E016</strong> · ★★☆</p>
+<p>De quantas maneiras 13 corredores podem cruzar a linha de chegada? É
+13! (13 fatorial = 1 * 2 * ... * 13). Escreva um programa que guarde
+12! = 479001600 numa variável, multiplique por 13 e mostre o resultado.
+O resultado passa do limite do int, então escolha o tipo que comporta.</p>
+<pre><code class="language-text">Saída esperada:
+13! = 6227020800 maneiras
+</code></pre>
+<p><strong>Exercício E017</strong> · ★★★</p>
+<p>Muitos sistemas guardam a hora como &quot;segundos desde 1/1/1970&quot; num inteiro
+de 32 bits com sinal. Esse contador estoura em 19/01/2038. Escreva um
+programa que mostre por quê: o maior int32_t, quantos segundos têm 68 e 69
+anos (de 365 dias) e o maior int64_t. Compare os números: 1970 + 68 =
+2038, e o contador de 32 bits não aguenta chegar aos 69 anos.</p>
+<pre><code class="language-text">Saída esperada:
+int32_t vai até 2147483647
+68 anos: 2144448000 segundos
+69 anos: 2175984000 segundos
+int64_t vai até 9223372036854775807
+</code></pre>
+<hr>
+<h2>0004 · Constantes</h2>
+<h3>Conceito</h3>
+<p>Imagine a tarifa do ônibus escrita à mão em dez lugares do sistema: no
+letreiro, no cálculo de ida e volta, no recibo, no relatório. Em janeiro ela
+sobe de R$ 4,40 para R$ 4,90, e alguém precisa caçar os dez lugares. Se
+esquecer um, o recibo mostra um preço e o relatório outro. O jeito certo é
+escrever o valor <strong>uma vez só</strong>, com um nome, e usar o nome no resto do
+código.</p>
+<p>Antes de dar nome a um valor, repare em como você o escreve. Todo valor
+escrito direto no código é um <strong>literal</strong>, e o jeito de escrever decide o
+tipo dele: <code>101</code> é <code>int</code>, <code>4.90</code> é <code>double</code> e <code>4.90f</code> é <code>float</code>
+(BACKES, 2013, cap. 2). Isso importa porque o tipo do literal entra nas
+contas. Sem nenhuma marca, todo número com ponto é <code>double</code>; o sufixo <code>f</code>
+pede um <code>float</code>.</p>
+<p>Os inteiros também aceitam marcas. Os sufixos <code>L</code>, <code>LL</code> e <code>U</code> pedem <code>long</code>,
+<code>long long</code> e <code>unsigned</code>, e o prefixo muda a base: <code>0x1F</code> é hexadecimal e
+vale 31; <code>017</code>, com zero à esquerda, é <strong>octal</strong>, base 8, e vale 15. Já
+<code>1.5e3</code> é notação científica, 1,5 × 10³ = 1500 (KERNIGHAN; RITCHIE, 1988,
+cap. 2). O zero à esquerda é uma armadilha: quem escreve <code>017</code> pensando em
+dezessete leva quinze.</p>
+<p>Aspas simples e duplas também não são a mesma coisa. <code>&#39;A&#39;</code> é um caractere,
+e no C ele vale o seu código numérico, 65. <code>&quot;A&quot;</code> é um texto: a letra
+seguida de um byte zero, que marca o fim do texto (DEITEL; DEITEL, 2011).
+Por isso <code>sizeof(&quot;A&quot;)</code> vale 2 e <code>sizeof(&#39;A&#39;)</code> vale 4, o tamanho de um <code>int</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Literal</th>
+<th>Tipo</th>
+<th>Observação</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>101</code></td>
+<td><code>int</code></td>
+<td>inteiro sem ponto</td>
+</tr>
+<tr>
+<td><code>4.90</code></td>
+<td><code>double</code></td>
+<td>todo real é <code>double</code>, a não ser que...</td>
+</tr>
+<tr>
+<td><code>4.90f</code></td>
+<td><code>float</code></td>
+<td>...tenha o sufixo <code>f</code></td>
+</tr>
+<tr>
+<td><code>5000000000LL</code></td>
+<td><code>long long</code></td>
+<td>sufixos <code>L</code>, <code>LL</code>, <code>U</code></td>
+</tr>
+<tr>
+<td><code>0x1F</code>, <code>017</code></td>
+<td><code>int</code></td>
+<td>hexadecimal (31) e <strong>octal</strong> (15): zero à esquerda muda a base!</td>
+</tr>
+<tr>
+<td><code>1.5e3</code></td>
+<td><code>double</code></td>
+<td>notação científica: 1,5 × 10³ = 1500</td>
+</tr>
+<tr>
+<td><code>&#39;A&#39;</code></td>
+<td><code>int</code></td>
+<td>um caractere: vale o código, 65</td>
+</tr>
+<tr>
+<td><code>&quot;A&quot;</code></td>
+<td>texto</td>
+<td>aspas duplas: <code>&#39;A&#39;</code> seguido do byte zero</td>
+</tr>
+</tbody></table>
+<p>O C tem dois jeitos de dar nome a um valor fixo. O primeiro é o
+<strong><code>#define</code></strong>, uma ordem para o pré-processador, a etapa que roda antes da
+compilação (0001). Ele faz um &quot;localizar e substituir&quot; no texto do código:
+com <code>#define TARIFA 4.90</code>, cada <code>TARIFA</code> vira <code>4.90</code>, e o compilador nem
+chega a ver o nome (BACKES, 2013, cap. 2). Como é só troca de texto, o
+<code>#define</code> não tem tipo e não ocupa memória. Por convenção o nome vai em
+MAIÚSCULAS, e a linha não leva <code>=</code> nem <code>;</code>.</p>
+<p>O segundo é o <strong><code>const</code></strong>. Ele cria uma variável de verdade, com tipo,
+endereço e tamanho, mas <strong>só de leitura</strong>: <code>const int linha = 101;</code>. Você
+pode ver o endereço com <code>&amp;linha</code>, e <code>sizeof linha</code> vale 4. Qualquer tentativa
+de mudar o valor depois é erro de compilação, e por isso o valor tem de vir
+na própria declaração (BACKES, 2013, cap. 2).</p>
+<p>Por fim, dentro das aspas a barra invertida tem papel especial: ela inicia
+uma <strong>sequência de escape</strong>, um jeito de escrever um caractere que não dá
+para digitar direto no texto. O <code>\n</code> pula linha, o <code>\t</code> é uma tabulação, o
+<code>\&quot;</code> põe aspas dentro do texto, o <code>\\</code> é a própria barra e o <code>\0</code> é o byte
+zero. O <code>%</code> não é escape; para mostrá-lo no <code>printf</code>, escreva <code>%%</code>
+(DEITEL; DEITEL, 2011, cap. 9).</p>
+<blockquote>
+<p>[!WARNING]
+O <code>#define</code> cola <strong>exatamente</strong> o texto que vem depois do nome. Com
+<code>#define TARIFA 4.90;</code>, <code>2 * TARIFA</code> vira <code>2 * 4.90;</code> e não compila; com
+<code>#define TARIFA = 4.90</code>, vira <code>2 * = 4.90</code>. O erro aparece na linha em que
+o nome é <strong>usado</strong>, não na do <code>#define</code>.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>A tarifa do ônibus aparece em vários lugares do sistema e muda todo ano: fica
+escrita uma vez só, com nome. O pré-processador troca <code>TARIFA</code> e <code>EMPRESA</code>
+pelos valores; a <code>linha</code> é uma caixinha com cadeado:</p>
+<p align="center"><img src="material/0004-ideia.svg" alt="Diagrama da ideia: Constantes" width="858"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+#define TARIFA 4.90          // muda aqui, muda no programa todo
+#define EMPRESA &quot;Viação Sol&quot;
+
+int main(void) {
+    const int linha = 101;   // variável só de leitura
+
+    printf(&quot;%s\n&quot;, EMPRESA);
+    printf(&quot;Linha %d \&quot;Centro - Bairro\&quot;\n&quot;, linha);
+    printf(&quot;Tarifa: R$ %.2f\n&quot;, TARIFA);
+    printf(&quot;Ida e volta: R$ %.2f\n&quot;, 2 * TARIFA); // o compilador vê 2 * 4.90
+    return 0;
+}
+// Saída:
+// Viação Sol
+// Linha 101 &quot;Centro - Bairro&quot;
+// Tarifa: R$ 4.90
+// Ida e volta: R$ 9.80
+</code></pre>
+<p>A troca de texto acontece na compilação; o executável já nasce só com os
+números:</p>
+<p align="center"><img src="material/0004-fluxograma.svg" alt="Fluxograma: Constantes" width="1240"></p>
+<p><strong>Exemplo A007 · Uma constante feita de outras</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+#define TARIFA_CHEIA 4.90
+#define DESCONTO_ESTUDANTE 0.5                          // estudante paga meia
+#define TARIFA_MEIA (TARIFA_CHEIA * DESCONTO_ESTUDANTE) // um #define usando outros
+#define CIDADE &quot;Belo Horizonte&quot;
+
+int main(void) {
+    const double recarga = 50.00; // const: tem tipo, tamanho e endereço
+
+    printf(&quot;Ônibus de &quot; CIDADE &quot;\n&quot;); // textos lado a lado viram um só
+    printf(&quot;Inteira: R$ %.2f\n&quot;, TARIFA_CHEIA);
+    printf(&quot;Meia:    R$ %.2f\n&quot;, TARIFA_MEIA);
+    printf(&quot;Recarga: R$ %.2f\n&quot;, recarga);
+
+    // o literal tem tamanho, decidido pelo jeito de escrever
+    printf(&quot;recarga: %zu bytes; 4.90: %zu; 4.90f: %zu\n&quot;,
+           sizeof recarga, sizeof 4.90, sizeof 4.90f);
+    return 0;
+}
+// Saída:
+// Ônibus de Belo Horizonte
+// Inteira: R$ 4.90
+// Meia:    R$ 2.45
+// Recarga: R$ 50.00
+// recarga: 8 bytes; 4.90: 8; 4.90f: 4
+//
+// Veja o que o compilador recebe: gcc -E A007.c | tail -14
+// A linha do printf vira &quot;Ônibus de &quot; &quot;Belo Horizonte&quot; &quot;\n&quot; e a meia vira
+// (4.90 * 0.5): os parênteses do #define TARIFA_MEIA vão junto.
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A007.c -o ~/LPEDC/material/A007 &amp;&amp; ~/LPEDC/material/A007
+</code></pre>
+<p><strong>Exemplo A008 · Escapes e literais em várias bases</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    // \t: tabulação (pula para a próxima coluna de 8 em 8)
+    printf(&quot;Item\tQtd\n&quot;);
+    printf(&quot;Pão\t10\n&quot;);
+    printf(&quot;Leite\t2\n&quot;);
+
+    // \\ e \&quot;: a barra e as aspas dentro do texto
+    printf(&quot;Arquivo: C:\\fotos\\praia.jpg\n&quot;);
+    printf(&quot;Ela disse: \&quot;Pix feito!\&quot;\n&quot;);
+    printf(&quot;Desconto de 15%%\n&quot;); // %% mostra um %
+
+    // o mesmo número escrito em três bases
+    printf(&quot;%d %d %d\n&quot;, 31, 0x1F, 037);
+
+    // um caractere é um número: o código na tabela ASCII
+    printf(&quot;%c = %d, %c = %d\n&quot;, &#39;A&#39;, &#39;A&#39;, &#39;0&#39;, &#39;0&#39;);
+
+    // notação científica: 1.5e3 é 1,5 x 10 elevado a 3
+    printf(&quot;%.1f\n&quot;, 1.5e3);
+    return 0;
+}
+// Saída (o \t alinha &quot;Qtd&quot;, &quot;10&quot; e &quot;2&quot; na coluna 9):
+// Item    Qtd
+// Pão     10
+// Leite   2
+// Arquivo: C:\fotos\praia.jpg
+// Ela disse: &quot;Pix feito!&quot;
+// Desconto de 15%
+// 31 31 31
+// A = 65, 0 = 48
+// 1500.0
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A008.c -o ~/LPEDC/material/A008 &amp;&amp; ~/LPEDC/material/A008
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E019</strong> · ★☆☆</p>
+<p>Mostre exatamente estas linhas, usando sequências de escape. A segunda
+linha tem um \t entre &quot;Saldo:&quot; e o valor.</p>
+<pre><code class="language-text">Saída esperada:
+Backup salvo em C:\Users\ana\notas.txt
+Saldo:	R$ 120,00
+O app avisou: &quot;Pix recebido!&quot;
+Rendimento: 100% do CDI
+</code></pre>
+<p><strong>Exercício E021</strong> · ★★☆</p>
+<p>Escreva um programa com a mensalidade de uma academia. Defina
+MENSALIDADE (89.90) e DESCONTO (10.00) com #define, e o dia do vencimento
+(10) com const int. Mostre os três valores como abaixo, os reais com duas
+casas.</p>
+<pre><code class="language-text">Saída esperada:
+Mensalidade: R$ 89.90
+Desconto: R$ 10.00
+Vencimento: dia 10
+</code></pre>
+<p><strong>Exercício E022</strong> · ★★☆</p>
+<p>O jeito de escrever um literal decide o tipo e, às vezes, o valor. Escreva
+um programa que mostre, para cada literal abaixo, o valor (com %d para os
+inteiros e %.1f para os reais) e o tamanho (sizeof, com %zu). O &quot;0&quot; é
+texto: dele, mostre só o tamanho.</p>
+<pre><code class="language-text">10     10.0     10.0f     010     0x10     &#39;0&#39;     &quot;0&quot;     1e3
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+10: vale 10, 4 bytes
+10.0: vale 10.0, 8 bytes
+10.0f: vale 10.0, 4 bytes
+010: vale 8, 4 bytes
+0x10: vale 16, 4 bytes
+&#39;0&#39;: vale 48, 4 bytes
+&quot;0&quot;: 2 bytes
+1e3: vale 1000.0, 8 bytes
+</code></pre>
+<p><strong>Exercício E024</strong> · ★★★</p>
+<p>Escreva um programa que mostre as seis linhas abaixo, seguindo as regras
+de cada uma:</p>
+<ol>
+<li>crie #define CIDADE &quot;Recife&quot; e use-o para o Recife; a palavra CIDADE</li>
+</ol>
+<pre><code class="language-text"> do começo da linha fica dentro das aspas do formato;
+</code></pre>
+<ol start="2">
+<li>crie #define DDD 81 e use-o com %d;</li>
+<li>os três números saem dos literais 010, 0x10 e 10, com %d;</li>
+<li>&quot;Oi!&quot; sai de %c%c%c, com o &#39;O&#39;, o código do i escrito em hexa (0x69)</li>
+</ol>
+<pre><code class="language-text"> e o código do ! escrito em decimal (33);
+</code></pre>
+<ol start="5">
+<li>o % aparece na tela;</li>
+<li>a barra e o n aparecem de verdade, numa linha só.</li>
+</ol>
+<pre><code class="language-text">Saída esperada:
+CIDADE: Recife
+DDD 81
+8 16 10
+Oi!
+50% off
+a\n b
+</code></pre>
+<hr>
+<h2>0005 · printf</h2>
+<h3>Conceito</h3>
+<p>Até aqui o programa calcula, mas quem usa só enxerga o que aparece na tela. O
+<code>printf</code> é a ponte entre a memória e o terminal: ele pega valores que estão em
+variáveis e os escreve como texto. A graça é que você não escreve o texto
+pronto. Você escreve um <strong>molde</strong> e diz o que vai em cada lacuna.</p>
+<p>Pense num formulário de papel: &quot;Nome: ______  Idade: ___&quot;. O formulário já
+traz o texto fixo e reserva os espaços; quem preenche só põe os dados. No
+<code>printf</code> o formulário é o primeiro argumento, a <strong>string de formato</strong>, e cada
+lacuna é um <strong>especificador</strong>, que começa com <code>%</code>. Os argumentos que vêm
+depois preenchem as lacunas <strong>na ordem</strong>: o primeiro valor vai no primeiro
+<code>%</code>, o segundo no segundo, e assim por diante (BACKES, 2013, cap. 2).</p>
+<pre><code class="language-c">printf(&quot;Idade: %d anos, altura: %.2f m\n&quot;, 34, 1.72);
+// Idade: 34 anos, altura: 1.72 m
+</code></pre>
+<p>A letra depois do <code>%</code> diz <strong>como ler</strong> o valor. <code>%d</code> lê um inteiro e o mostra
+em decimal; <code>%f</code> lê um real; <code>%c</code>, um caractere; <code>%s</code>, um texto. Isso importa
+porque o <code>printf</code> não sabe o tipo das variáveis que você passou: ele só
+recebe bytes e confia no molde para interpretá-los. Um detalhe dessa
+passagem: todo <code>float</code> chega ao <code>printf</code> convertido em <code>double</code>, e é por isso
+que o mesmo <code>%f</code> serve para os dois (KERRISK, s.d.). A tabela reúne as
+letras que você vai usar no curso:</p>
+<table>
+<thead>
+<tr>
+<th>Especificador</th>
+<th>Mostra</th>
+<th>Exemplo</th>
+<th>Sai</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>%d</code></td>
+<td><code>int</code> em decimal</td>
+<td><code>printf(&quot;%d&quot;, 42)</code></td>
+<td><code>42</code></td>
+</tr>
+<tr>
+<td><code>%u</code>, <code>%ld</code>, <code>%lld</code></td>
+<td><code>unsigned</code>, <code>long</code>, <code>long long</code></td>
+<td><code>printf(&quot;%ld&quot;, 9L)</code></td>
+<td><code>9</code></td>
+</tr>
+<tr>
+<td><code>%f</code></td>
+<td><code>double</code> ou <code>float</code></td>
+<td><code>printf(&quot;%f&quot;, 2.5)</code></td>
+<td><code>2.500000</code></td>
+</tr>
+<tr>
+<td><code>%e</code>, <code>%g</code></td>
+<td>real em notação científica / o mais curto</td>
+<td><code>printf(&quot;%e&quot;, 1500.0)</code></td>
+<td><code>1.500000e+03</code></td>
+</tr>
+<tr>
+<td><code>%c</code></td>
+<td>um caractere</td>
+<td><code>printf(&quot;%c&quot;, &#39;A&#39;)</code></td>
+<td><code>A</code></td>
+</tr>
+<tr>
+<td><code>%s</code></td>
+<td>um texto</td>
+<td><code>printf(&quot;%s&quot;, &quot;Pix&quot;)</code></td>
+<td><code>Pix</code></td>
+</tr>
+<tr>
+<td><code>%x</code>, <code>%X</code>, <code>%o</code></td>
+<td>inteiro em hexa e em octal</td>
+<td><code>printf(&quot;%X&quot;, 255)</code></td>
+<td><code>FF</code></td>
+</tr>
+<tr>
+<td><code>%p</code></td>
+<td>um endereço</td>
+<td><code>printf(&quot;%p&quot;, (void *)&amp;n)</code></td>
+<td><code>0x7ffe...</code></td>
+</tr>
+<tr>
+<td><code>%zu</code></td>
+<td>o resultado do <code>sizeof</code></td>
+<td><code>printf(&quot;%zu&quot;, sizeof n)</code></td>
+<td><code>4</code></td>
+</tr>
+<tr>
+<td><code>%%</code></td>
+<td>o próprio <code>%</code></td>
+<td><code>printf(&quot;10%%&quot;)</code></td>
+<td><code>10%</code></td>
+</tr>
+</tbody></table>
+<p>Só a letra já resolve a maior parte dos casos. Para alinhar colunas ou
+controlar casas decimais, cabem ajustes entre o <code>%</code> e a letra, sempre nesta
+ordem: <code>%[flags][largura][.precisão]letra</code> (KERRISK, s.d.). Vale ler um por
+vez.</p>
+<p>A <strong>largura</strong> é o número <strong>mínimo</strong> de caracteres que o valor ocupa. Se o
+valor for menor, o <code>printf</code> completa com espaços à esquerda, e o número fica
+encostado à direita: <code>%6d</code> de 42 sai <code>    42</code> (quatro espaços e o 42). Se o
+valor for maior que a largura, ele sai inteiro; a largura nunca corta nada
+(DEITEL; DEITEL, 2011, cap. 9). Um cuidado com acentos: a largura conta
+<strong>bytes</strong>, e no UTF-8 o <code>ã</code> ocupa dois. <code>&quot;Feijão&quot;</code> tem 6 letras e 7 bytes,
+então numa coluna <code>%-10s</code> ele parece uma casa mais curto que <code>&quot;Arroz&quot;</code>.</p>
+<p>As <strong>flags</strong> mudam o preenchimento. O <code>-</code> encosta o valor à esquerda e põe
+os espaços depois (<code>%-6d</code> sai <code>42    </code>); o <code>0</code> troca os espaços por zeros
+(<code>%06d</code> sai <code>000042</code>); o <code>+</code> mostra o sinal mesmo quando o número é positivo
+(DEITEL; DEITEL, 2011, cap. 9).</p>
+<p>A <strong>precisão</strong> vem depois de um ponto. Num real, ela é o número de casas
+decimais: <code>%.2f</code> de 3.14159 sai <code>3.14</code>. Num texto, é o máximo de caracteres:
+<code>%.3s</code> de <code>&quot;Brasil&quot;</code> sai <code>Bra</code>. Repare que a precisão <strong>arredonda só na
+tela</strong>: <code>%.2f</code> de 7.499 mostra <code>7.50</code>, mas a variável continua valendo 7.499
+na memória (DEITEL; DEITEL, 2011, cap. 9). O cálculo seguinte usa o valor
+completo, não o que você viu.</p>
+<p>Por fim, o <code>printf</code> escreve na <strong>saída padrão</strong>, o <code>stdout</code>, que normalmente
+é o terminal. No módulo 09, o <code>fprintf</code> usa exatamente o mesmo molde para
+escrever num arquivo, então tudo o que você aprende aqui vale lá também
+(DEITEL; DEITEL, 2011, cap. 9).</p>
+<blockquote>
+<p>[!WARNING]
+O <code>printf</code> <strong>confia</strong> no formato. Se a letra não combina com o tipo do
+valor, ele lê os bytes do jeito errado: <code>printf(&quot;%d&quot;, 9.90)</code> não mostra 9
+nem 10, mostra lixo. O <code>-Wall</code> avisa (<code>format &#39;%d&#39; expects argument of type &#39;int&#39;</code>); nunca ignore. E no <code>printf</code> não vai <code>&amp;</code>: ele quer o valor, não o
+endereço.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>O cupom do mercado sai com colunas alinhadas. Na linha do arroz, <code>%-10s</code>
+reserva 10 casas para o nome, <code>%3d</code> reserva 3 para a quantidade e <code>%9.2f</code>
+reserva 9 para o total, com 2 decimais:</p>
+<p align="center"><img src="material/0005-ideia.svg" alt="Diagrama da ideia: printf" width="858"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    printf(&quot;%-10s %3s %9s\n&quot;, &quot;Item&quot;, &quot;Qtd&quot;, &quot;Total&quot;);
+    printf(&quot;%-10s %3d %9.2f\n&quot;, &quot;Arroz 5kg&quot;, 2, 51.80);
+    printf(&quot;%-10s %3d %9.2f\n&quot;, &quot;Leite&quot;, 12, 71.88);
+    printf(&quot;%-10s %3d %9.2f\n&quot;, &quot;Banana&quot;, 1, 7.49);
+    printf(&quot;%-10s %13.2f\n&quot;, &quot;TOTAL&quot;, 131.17);
+    return 0;
+}
+// Saída:
+// Item       Qtd     Total
+// Arroz 5kg    2     51.80
+// Leite       12     71.88
+// Banana       1      7.49
+// TOTAL             131.17
+</code></pre>
+<p>Cada <code>printf</code> é uma saída com o mesmo formato. Para mudar uma coluna, troque
+um número em cada linha:</p>
+<p align="center"><img src="material/0005-fluxograma.svg" alt="Fluxograma: printf" width="1022"></p>
+<p><strong>Exemplo A009 · O extrato que corta o nome comprido</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    // zeros à esquerda: o número da conta tem sempre 6 dígitos
+    printf(&quot;Conta %06d-%d\n&quot;, 4521, 7);
+
+    // %-14.14s: coluna de 14 casas e, se o texto for maior, corta em 14
+    // %+9.2f: sinal sempre, para entrada e saída ficarem claras
+    printf(&quot;%-14.14s %+9.2f\n&quot;, &quot;Pix recebido de Mariana&quot;, 250.00);
+    printf(&quot;%-14.14s %+9.2f\n&quot;, &quot;Mercado&quot;, -87.35);
+    printf(&quot;%-14.14s %+9.2f\n&quot;, &quot;Conta de luz da casa&quot;, -142.10);
+    printf(&quot;%-14s %9.2f\n&quot;, &quot;Saldo&quot;, 20.55);
+
+    // o mesmo valor com precisões diferentes: só a tela muda
+    double juros = 0.0875;
+    printf(&quot;Juros: %.1f%% ou %.3f%%\n&quot;, juros * 100, juros * 100);
+    return 0;
+}
+// Saída:
+// Conta 004521-7
+// Pix recebido d   +250.00
+// Mercado           -87.35
+// Conta de luz d   -142.10
+// Saldo              20.55
+// Juros: 8.8% ou 8.750%
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A009.c -o ~/LPEDC/material/A009 &amp;&amp; ~/LPEDC/material/A009
+</code></pre>
+<p><strong>Exemplo A010 · O mesmo valor em vários formatos</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    int n = 255;
+    double preco = 3.14159;
+    char letra = &#39;A&#39;;
+
+    // inteiros: largura, alinhamento, zeros, sinal e outras bases
+    printf(&quot;[%d] [%6d] [%-6d] [%06d] [%+d]\n&quot;, n, n, n, n, n);
+    printf(&quot;hexa: %x %X %#x   octal: %o\n&quot;, n, n, n, n);
+
+    // reais: casas decimais, largura, científica e o &quot;mais curto&quot;
+    printf(&quot;[%f] [%.2f] [%8.3f] [%e] [%g]\n&quot;, preco, preco, preco, preco, preco);
+
+    // caractere e texto (com precisão, o texto é cortado)
+    printf(&quot;[%c] [%d] [%s] [%.4s] [%8s]\n&quot;, letra, letra, &quot;Brasil&quot;, &quot;Brasil&quot;, &quot;Brasil&quot;);
+
+    // o endereço de uma variável e o próprio %
+    printf(&quot;n mora em %p; 100%% certo\n&quot;, (void *)&amp;n);
+
+    // o printf devolve quantos bytes escreveu
+    int bytes = printf(&quot;Olá\n&quot;);
+    printf(&quot;O printf anterior escreveu %d bytes\n&quot;, bytes);
+    return 0;
+}
+// Saída (o endereço muda a cada execução):
+// [255] [   255] [255   ] [000255] [+255]
+// hexa: ff FF 0xff   octal: 377
+// [3.141590] [3.14] [   3.142] [3.141590e+00] [3.14159]
+// [A] [65] [Brasil] [Bras] [  Brasil]
+// n mora em 0x7f1c2a400020; 100% certo
+// Olá
+// O printf anterior escreveu 5 bytes
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A010.c -o ~/LPEDC/material/A010 &amp;&amp; ~/LPEDC/material/A010
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E025</strong> · ★☆☆</p>
+<p>Mostre o boletim da Júlia com um printf por linha, usando variáveis:
+nota 8.75 (mostrada com uma casa), 3 faltas e conceito &#39;B&#39;.</p>
+<pre><code class="language-text">Saída esperada:
+Aluna: Júlia
+Nota: 8.8
+Faltas: 03
+Conceito: B
+</code></pre>
+<p><strong>Exercício E027</strong> · ★★☆</p>
+<p>Monte o painel de preços do posto, com as colunas alinhadas. Guarde cada
+preço numa variável double e use largura no formato (nada de contar
+espaços à mão). A linha de separação tem 22 sinais de igual.</p>
+<pre><code class="language-text">Saída esperada:
+Combustível   Preço/L
+======================
+Gasolina      R$ 6.29
+Etanol        R$ 4.19
+Diesel S10    R$ 6.09
+GNV           R$ 4.99
+</code></pre>
+<p><strong>Exercício E028</strong> · ★★☆</p>
+<p>O pedido da pizzaria tem 3 pizzas de R$ 45.90. Escreva um programa que
+guarde a quantidade (int) e o preço (double), calcule o total e mostre as
+três linhas abaixo, com o formato certo para cada tipo.</p>
+<pre><code class="language-text">Saída esperada:
+Pizzas: 3
+Preço: R$ 45.90
+Total: R$ 137.70
+</code></pre>
+<p><strong>Exercício E029</strong> · ★★★</p>
+<p>No CSS, uma cor é escrita como #RRGGBB: três bytes em hexadecimal, sempre
+com dois dígitos cada. O azul do botão do seu app tem vermelho 30, verde
+144 e azul 255. Guarde os três componentes em variáveis int e mostre a
+cor nos dois formatos do CSS.</p>
+<pre><code class="language-text">Saída esperada:
+#1E90FF
+rgb(30, 144, 255)
+</code></pre>
+<p>Teste também com vermelho 0, verde 8 e azul 15: a saída tem de ser
+#00080F, sempre com 7 caracteres.</p>
+<hr>
+<h2>0006 · scanf</h2>
+<h3>Conceito</h3>
+<p>Até aqui os programas só falavam: todo valor estava escrito no código. Um
+programa útil também precisa <strong>ouvir</strong>. No modelo entrada → processamento →
+saída, falta a entrada, e a forma mais simples de entrada é o teclado. Quem
+faz esse papel no C é o <code>scanf</code>, o espelho do <code>printf</code>.</p>
+<p>Pense no app do banco quando você agenda um Pix. Ele pergunta o valor, você
+digita R$ 150,75; pergunta o dia, você digita 12. O app pega o que você
+digitou e guarda cada coisa no seu campo. O <strong><code>scanf</code></strong> faz o mesmo: o
+primeiro argumento, o formato, diz o que esperar, e os argumentos seguintes
+dizem <strong>onde guardar</strong> cada valor lido (BACKES, 2013, cap. 2).</p>
+<pre><code class="language-c">scanf(&quot;%d&quot;, &amp;dia);
+</code></pre>
+<p>O <code>&amp;</code> antes do nome é a peça nova. Ele dá o <strong>endereço</strong> da variável, o
+lugar exato da memória em que ela mora (0002). O <code>scanf</code> não quer o valor
+de <code>dia</code>, que ainda é lixo; quer saber em que bytes escrever o número
+digitado. Por isso o <code>&amp;</code> vai em toda variável simples no <code>scanf</code> e nunca no
+<code>printf</code>, que só precisa do valor para mostrar (DEITEL; DEITEL, 2011,
+cap. 9).</p>
+<p>Os especificadores quase repetem os do <code>printf</code>, com uma diferença que pega
+muita gente: o <code>double</code> se lê com <strong><code>%lf</code></strong> e se mostra com <code>%f</code>. O motivo
+está no endereço. Com <code>%lf</code>, o <code>scanf</code> escreve 8 bytes, no formato de
+<code>double</code>; com <code>%f</code>, escreve só 4, no formato de <code>float</code>, e o <code>double</code> fica
+com um número sem sentido. No <code>printf</code> os dois servem porque ele recebe o
+valor, e todo <code>float</code> vira <code>double</code> no caminho; endereço não se converte
+(DEITEL; DEITEL, 2011).</p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Lê com</th>
+<th>Mostra com</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>int</code></td>
+<td><code>%d</code></td>
+<td><code>%d</code></td>
+</tr>
+<tr>
+<td><code>float</code></td>
+<td><code>%f</code></td>
+<td><code>%f</code></td>
+</tr>
+<tr>
+<td><code>double</code></td>
+<td><code>%lf</code></td>
+<td><code>%f</code></td>
+</tr>
+<tr>
+<td><code>char</code></td>
+<td><code>%c</code> (ou <code>&quot; %c&quot;</code>)</td>
+<td><code>%c</code></td>
+</tr>
+</tbody></table>
+<p>O que você digita não vai direto para a variável. Os caracteres entram
+numa fila, o <strong>buffer</strong>, e só chegam ao programa quando você aperta Enter.
+O <code>scanf</code> tira da fila apenas o que o formato pede. O <code>%d</code> e o <code>%lf</code> pulam
+espaços e Enters antes do número e param no primeiro caractere que não
+serve; o resto <strong>fica na fila</strong> para a próxima leitura, inclusive o <code>&#39;\n&#39;</code>
+do Enter (KERRISK, s.d.). Digitando <code>150.75</code>, Enter, <code>12</code>, Enter, o <code>%lf</code>
+tira <code>150.75</code>, o <code>%d</code> pula o <code>&#39;\n&#39;</code> que sobrou e tira o <code>12</code>, e o último
+<code>&#39;\n&#39;</code> continua lá. O <code>%c</code> não pula nada e leria esse <code>&#39;\n&#39;</code>; o espaço em
+<code>&quot; %c&quot;</code> manda pular os brancos antes.</p>
+<p>O formato também pode ter caracteres comuns, e eles precisam aparecer na
+entrada exatamente como estão. Com <code>scanf(&quot;%d/%d/%d&quot;, &amp;d, &amp;m, &amp;a)</code>, você
+digita <code>7/9/2026</code>, e o <code>scanf</code> lê um número, consome a barra, lê outro
+número e assim por diante (BACKES, 2013, cap. 2).</p>
+<p>Por fim, o <code>scanf</code> <strong>devolve</strong> um número: quantos itens ele conseguiu
+guardar. Se tudo deu certo na data acima, devolve 3. Se o primeiro valor já
+falhou, como <code>doze</code> no lugar de <code>12</code>, devolve 0 e a variável fica como
+estava. Se a entrada acabou, devolve <code>EOF</code>, que vale -1 (DEITEL; DEITEL,
+2011, cap. 9). É assim que o programa descobre se a leitura funcionou; no
+módulo 02, o <code>if</code> vai usar esse número para decidir o que fazer.</p>
+<blockquote>
+<p>[!WARNING]
+Sem o <code>&amp;</code>, <code>scanf(&quot;%d&quot;, dia)</code> usa o lixo de <code>dia</code> como endereço e escreve
+num lugar qualquer: <code>Segmentation fault</code> ou outra variável estragada. O
+gcc avisa (<code>expects argument of type &#39;int *&#39;</code>). Ler <code>double</code> com <code>%f</code>
+também compila e dá número errado.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>Um Pix agendado: você digita <code>150.75</code>, Enter, <code>12</code>, Enter. O <code>%lf</code> tira
+<code>150.75</code> da fila, o <code>%d</code> pula o <code>&#39;\n&#39;</code> que sobrou e tira o <code>12</code>; o último
+<code>&#39;\n&#39;</code> fica na fila:</p>
+<p align="center"><img src="material/0006-ideia.svg" alt="Diagrama da ideia: scanf" width="858"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    double valor;
+    int dia;
+
+    printf(&quot;Valor do Pix: R$ &quot;);
+    scanf(&quot;%lf&quot;, &amp;valor);            // %lf: double no scanf
+    printf(&quot;Dia do mês: &quot;);
+    int lidos = scanf(&quot;%d&quot;, &amp;dia);   // devolve quantos itens leu
+
+    printf(&quot;Pix de R$ %.2f agendado para o dia %d\n&quot;, valor, dia);
+    printf(&quot;O último scanf leu %d item\n&quot;, lidos);
+    return 0;
+}
+// Exemplo de execução:
+// Valor do Pix: R$ 150.75
+// Dia do mês: 12
+// Pix de R$ 150.75 agendado para o dia 12
+// O último scanf leu 1 item
+</code></pre>
+<p>Para testar sem digitar: <code>printf &#39;150.75\n12\n&#39; | ./pix</code>. As duas leituras
+são paralelogramos de entrada, e a saída vem depois:</p>
+<p align="center"><img src="material/0006-fluxograma.svg" alt="Fluxograma: scanf" width="1267"></p>
+<p><strong>Exemplo A011 · Dois valores numa linha e a sobra que atrapalha</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    int quantidade = 0;
+    double preco = 0.0;
+    int parcelas = 1;
+
+    // um scanf, dois valores: o %lf pula o espaço entre eles
+    printf(&quot;Quantidade e preço (ex.: 3 4.99): &quot;);
+    int lidos = scanf(&quot;%d%lf&quot;, &amp;quantidade, &amp;preco);
+    printf(&quot;Itens lidos: %d\n&quot;, lidos);
+
+    printf(&quot;Parcelas: &quot;);
+    lidos = scanf(&quot;%d&quot;, &amp;parcelas);
+    printf(&quot;Itens lidos: %d\n&quot;, lidos);
+
+    printf(&quot;%d unidade(s) de R$ %.2f em %d parcela(s)\n&quot;, quantidade, preco, parcelas);
+    return 0;
+}
+// Exemplo de execução:
+// Quantidade e preço (ex.: 3 4.99): 3 4.99
+// Itens lidos: 2
+// Parcelas: 2
+// Itens lidos: 1
+// 3 unidade(s) de R$ 4.99 em 2 parcela(s)
+//
+// Teste: printf &#39;3 4.99\n2\n&#39; | ~/LPEDC/rodar &lt;este arquivo&gt;
+//
+// Agora digite &quot;3 4.99 reais&quot; na primeira pergunta:
+//   printf &#39;3 4.99 reais\n2\n&#39; | ~/LPEDC/rodar &lt;este arquivo&gt;
+// O &quot; reais&quot; fica na fila. O %d das parcelas tropeça no &#39;r&#39;, devolve 0
+// (&quot;Itens lidos: 0&quot;) e parcelas continua com 1. O 2 nem chega a ser lido.
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A011.c -o ~/LPEDC/material/A011 &amp;&amp; ~/LPEDC/material/A011
+</code></pre>
+<p><strong>Exemplo A012 · A data da entrega e o tamanho da camiseta</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    int dia = 0, mes = 0, ano = 0;
+    char tamanho = &#39;?&#39;;
+
+    // caracteres fixos no formato precisam ser digitados: aqui, as barras
+    printf(&quot;Data da entrega (dd/mm/aaaa): &quot;);
+    int lidos = scanf(&quot;%d/%d/%d&quot;, &amp;dia, &amp;mes, &amp;ano);
+    printf(&quot;Itens lidos: %d\n&quot;, lidos);
+
+    // o Enter da linha anterior ficou no buffer. O espaço antes do %c
+    // manda pular espaços e Enters; sem ele, o %c pegaria o &#39;\n&#39;
+    printf(&quot;Tamanho (P, M ou G): &quot;);
+    scanf(&quot; %c&quot;, &amp;tamanho);
+
+    printf(&quot;Entrega em %02d/%02d/%d, camiseta %c\n&quot;, dia, mes, ano, tamanho);
+    return 0;
+}
+// Exemplo de execução:
+// Data da entrega (dd/mm/aaaa): 7/9/2026
+// Itens lidos: 3
+// Tamanho (P, M ou G): G
+// Entrega em 07/09/2026, camiseta G
+//
+// Teste: printf &#39;7/9/2026\nG\n&#39; | ~/LPEDC/rodar &lt;este arquivo&gt;
+// Agora digite a data com traços (7-9-2026): o scanf para no primeiro &quot;-&quot; e
+// lê só 1 item. O &quot;-&quot; fica no buffer, e o %c seguinte pega ele: a saída
+// vira &quot;Entrega em 07/00/0, camiseta -&quot;.
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A012.c -o ~/LPEDC/material/A012 &amp;&amp; ~/LPEDC/material/A012
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E031</strong> · ★☆☆</p>
+<p>Escreva um programa que leia a idade (inteiro) e a altura em metros
+(real), nessa ordem, sem mostrar perguntas, e responda numa frase só, com a
+altura em duas casas.</p>
+<pre><code class="language-text">Entrada:
+30
+1.75
+Saída esperada:
+Você tem 30 anos e 1.75 m de altura.
+</code></pre>
+<p><strong>Exercício E033</strong> · ★★☆</p>
+<p>O alarme do celular pede a hora no formato hh:mm. Escreva um programa
+que comece com hora = 0 e minuto = 0, leia os dois com UM scanf só (&quot;%d:%d&quot;)
+e guarde o valor que o scanf devolve. Mostre quantos itens ele leu e a hora
+de dois jeitos. Teste com 6:05 e com &quot;6 05&quot; (espaço no lugar dos dois
+pontos).</p>
+<pre><code class="language-text">Entrada:
+6:05
+Saída esperada:
+Itens lidos: 2
+Alarme para 6h05
+Alarme para 06:05
+</code></pre>
+<pre><code class="language-text">Entrada:
+6 05
+Saída esperada:
+Itens lidos: 1
+Alarme para 6h00
+Alarme para 06:00
+</code></pre>
+<p><strong>Exercício E034</strong> · ★★☆</p>
+<p>A lanchonete lê a quantidade de lanches (int) e a opção, V para viagem ou
+A para comer aqui (char), cada uma em uma linha. Escreva um programa que
+leia as duas, sem mostrar perguntas, e mostre a frase abaixo, com o código
+numérico do caractere no final.</p>
+<pre><code class="language-text">Entrada:
+3
+V
+Saída esperada:
+3 lanche(s), opção V (código 86)
+</code></pre>
+<p><strong>Exercício E035</strong> · ★★★</p>
+<p>Escreva um programa que comece com int a = 0, b = 0;, leia os dois com
+UM scanf(&quot;%d %d&quot;, &amp;a, &amp;b), guarde o retorno e mostre &quot;lidos=? a=? b=?&quot;.
+Teste com as três entradas abaixo.</p>
+<pre><code class="language-text">Entrada:
+7 9
+Saída esperada:
+lidos=2 a=7 b=9
+</code></pre>
+<pre><code class="language-text">Entrada:
+7 x
+Saída esperada:
+lidos=1 a=7 b=0
+</code></pre>
+<pre><code class="language-text">Entrada:
+x 7
+Saída esperada:
+lidos=0 a=0 b=0
+</code></pre>
+<hr>
+<h2>0007 · Aritmética</h2>
+<h3>Conceito</h3>
+<p>Com a entrada (0006) e a saída (0005) prontas, falta o meio do modelo:
+o <strong>processamento</strong>, calcular o que vai sair a partir do que entrou. Quase
+todo cálculo começa nas quatro operações da escola, e o C as escreve de um
+jeito familiar. Familiar demais, porque uma delas, a divisão, não se
+comporta como na calculadora.</p>
+<p>Pense em cinco amigos que pedem três pizzas de 8 fatias. São 24 fatias, e
+cada um pega uma por rodada. Quatro rodadas completas dão 20 fatias, e
+sobram 4 na caixa. Ninguém corta fatia ao meio. A divisão entre inteiros do
+C funciona assim: conta as rodadas completas e deixa a sobra de lado.</p>
+<p>Antes, dois nomes. Em <code>24 / 5</code>, o <code>/</code> é o <strong>operador</strong>, o símbolo da
+operação, e 24 e 5 são os <strong>operandos</strong>, os valores sobre os quais ele age.
+Operadores, operandos e parênteses formam uma <strong>expressão</strong>, e toda
+expressão tem um valor (DEITEL; DEITEL, 2011, cap. 2). <code>24 - 4</code> vale 20;
+<code>3 * 8</code> vale 24.</p>
+<table>
+<thead>
+<tr>
+<th>Operador</th>
+<th>Faz</th>
+<th>Exemplo</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>+</code> <code>-</code></td>
+<td>soma, subtração</td>
+<td><code>24 - 4</code></td>
+<td><code>20</code></td>
+</tr>
+<tr>
+<td><code>*</code></td>
+<td>multiplicação</td>
+<td><code>3 * 8</code></td>
+<td><code>24</code></td>
+</tr>
+<tr>
+<td><code>/</code></td>
+<td>divisão</td>
+<td><code>24 / 5</code></td>
+<td><code>4</code> (!)</td>
+</tr>
+<tr>
+<td><code>%</code></td>
+<td>resto da divisão</td>
+<td><code>24 % 5</code></td>
+<td><code>4</code></td>
+</tr>
+</tbody></table>
+<p>A pegadinha está no <code>/</code>. Quando os <strong>dois</strong> operandos são inteiros, a
+divisão é <strong>inteira</strong>: o resultado é inteiro e a parte fracionária vai
+embora, sem arredondar. <code>7 / 2</code> dá 3, e <code>2 / 3</code> dá 0. Basta <strong>um</strong> lado
+ser real para a divisão ser real: <code>159.0 / 5</code> dá 31,8 (DEITEL; DEITEL,
+2011, cap. 2). O que decide é o tipo dos operandos, não a variável que vai
+receber o resultado.</p>
+<pre><code class="language-c">printf(&quot;%d %d\n&quot;, 24 / 5, 24 % 5);   // 4 4
+printf(&quot;%.1f\n&quot;, 159.0 / 5);         // 31.8
+</code></pre>
+<p>O <strong><code>%</code></strong>, chamado de módulo, devolve o resto da divisão inteira e só
+aceita inteiros. O <code>/</code> diz quantas vezes o 5 cabe no 24; o <code>%</code> diz o que
+sobrou. As duas respostas sempre se encaixam:
+<code>(a / b) * b + a % b == a</code> (DEITEL; DEITEL, 2011, cap. 2). O resto parece
+modesto, mas aparece em todo lugar. <code>2026 % 10</code> dá 6, o último dígito.
+<code>n % 2</code> dá 0 quando <code>n</code> é par e 1 quando é ímpar. E <code>segundos % 60</code> dá os
+segundos que sobram depois de contar os minutos.</p>
+<p>Com números negativos, o C segue uma regra fixa desde o C99: a divisão
+corta em direção ao zero, então <code>-7 / 2</code> dá -3, e o resto fica com o sinal
+do dividendo, o número da esquerda, então <code>-7 % 3</code> dá -1 (FEOFILOFF, 2009,
+ap. C). A igualdade do parágrafo anterior continua valendo: -3 × 2 + (-1)
+dá -7.</p>
+<p>Quando a expressão tem vários operadores, entra a <strong>precedência</strong>, a ordem
+em que eles agem. Ela é a da escola: <code>*</code>, <code>/</code> e <code>%</code> antes de <code>+</code> e <code>-</code>.
+No empate de precedência, a conta segue da esquerda para a direita, regra
+chamada <strong>associatividade</strong>: <code>100 / 10 / 2</code> é <code>(100 / 10) / 2</code>, que dá 5
+(BACKES, 2013, cap. 3). Em <code>2 + 3 * 4 % 5</code>, primeiro <code>3 * 4</code> dá 12, depois
+<code>12 % 5</code> dá 2 e por fim <code>2 + 2</code> dá 4. Parênteses mandam em tudo e deixam a
+intenção clara para quem lê.</p>
+<p>Falta a potência, e o C não tem operador para ela. O <code>^</code> existe, mas faz
+outra coisa (assunto 0065). Para elevar ao quadrado, multiplique, <code>x * x</code>,
+ou use a função <code>pow</code> do 0010 (DEITEL; DEITEL, 2011, cap. 2).</p>
+<p>Por último, a divisão por zero. Com inteiros, ela derruba o programa na
+hora, com a mensagem <code>Floating point exception</code>. Com <code>double</code>, o programa
+continua e o resultado é <code>inf</code>, o infinito (ISO/IEC, 2018). Nos dois casos
+a conta está errada; confira o divisor antes de dividir.</p>
+<blockquote>
+<p>[!WARNING]
+Com <code>int a = 7, b = 8;</code>, <code>double media = (a + b) / 2;</code> guarda <strong>7.0</strong>: a
+divisão é entre dois <code>int</code> <strong>antes</strong> de ir para o <code>double</code>. Escreva
+<code>(a + b) / 2.0</code>. E <code>a + b / 2</code> divide só o <code>b</code>.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>Cinco amigos dividem três pizzas de 8 fatias e uma conta de R$ 159. O <code>/</code>
+conta as rodadas completas de fatias e o <code>%</code> as que sobram:</p>
+<p align="center"><img src="material/0007-ideia.svg" alt="Diagrama da ideia: Aritmética" width="858"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    int pizzas = 3;
+    int fatias = pizzas * 8;      // 24
+    int amigos = 5;
+
+    int cada = fatias / amigos;   // divisão inteira: 4
+    int sobra = fatias % amigos;  // resto: 4
+
+    printf(&quot;%d fatias para %d amigos\n&quot;, fatias, amigos);
+    printf(&quot;Cada um come %d, sobram %d\n&quot;, cada, sobra);
+
+    double conta = 159.00;
+    printf(&quot;Cada um paga R$ %.2f\n&quot;, conta / amigos); // real / int: divisão real
+    printf(&quot;Com inteiros: R$ %d\n&quot;, 159 / amigos);    // int / int: corta o resto
+    return 0;
+}
+// Saída:
+// 24 fatias para 5 amigos
+// Cada um come 4, sobram 4
+// Cada um paga R$ 31.80
+// Com inteiros: R$ 31
+</code></pre>
+<p>Cada conta é um retângulo, e a ordem importa: <code>cada</code> e <code>sobra</code> dependem de
+<code>fatias</code>:</p>
+<p align="center"><img src="material/0007-fluxograma.svg" alt="Fluxograma: Aritmética" width="1662"></p>
+<p><strong>Exemplo A013 · O final da placa e o rodízio</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// No rodízio de São Paulo, o dia em que o carro não roda depende do último
+// dígito da placa (finais 7 e 8: quinta-feira). Quem separa dígitos é o par
+// / e %, com divisores 10, 100, 1000...
+int main(void) {
+    int placa = 4827;                 // a parte numérica de ABC-4827
+
+    int final = placa % 10;           // o resto por 10 é o último dígito: 7
+    int sem_final = placa / 10;       // a divisão por 10 corta o último: 482
+    int dois_primeiros = placa / 100; // 48
+    int dois_ultimos = placa % 100;   // 27
+
+    printf(&quot;Final da placa: %d\n&quot;, final);
+    printf(&quot;Sem o final: %d\n&quot;, sem_final);
+    printf(&quot;Metades: %d e %d\n&quot;, dois_primeiros, dois_ultimos);
+    printf(&quot;Final %% 2 = %d (0 é par, 1 é ímpar)\n&quot;, final % 2);
+
+    // a regra que amarra os dois: (a / b) * b + a % b devolve o a
+    printf(&quot;%d * 100 + %d = %d\n&quot;, dois_primeiros, dois_ultimos,
+           dois_primeiros * 100 + dois_ultimos);
+
+    // o dígito do meio: corta pela direita com /, isola com %
+    printf(&quot;Dígito das centenas: %d\n&quot;, placa / 100 % 10);
+    return 0;
+}
+// Saída:
+// Final da placa: 7
+// Sem o final: 482
+// Metades: 48 e 27
+// Final % 2 = 1 (0 é par, 1 é ímpar)
+// 48 * 100 + 27 = 4827
+// Dígito das centenas: 8
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A013.c -o ~/LPEDC/material/A013 &amp;&amp; ~/LPEDC/material/A013
+</code></pre>
+<p><strong>Exemplo A014 · Quanto dura o podcast</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// O app mostra a duração em segundos. Divisão inteira e resto convertem
+// para horas, minutos e segundos, sem nenhum número real.
+int main(void) {
+    int total = 5000; // segundos
+
+    int horas = total / 3600;          // 1 (3600 segundos cabem 1 vez)
+    int resto = total % 3600;          // 1400 segundos que sobraram
+    int minutos = resto / 60;          // 23
+    int segundos = resto % 60;         // 20
+
+    printf(&quot;%d s = %dh %02dmin %02ds\n&quot;, total, horas, minutos, segundos);
+
+    // precedência: * / % antes de + -, da esquerda para a direita
+    printf(&quot;%d %d %d\n&quot;, 2 + 3 * 4, (2 + 3) * 4, 100 / 10 / 2);
+
+    // com negativos, a divisão corta em direção ao zero
+    // e o resto fica com o sinal de quem é dividido
+    printf(&quot;%d %d %d %d\n&quot;, 7 / 2, -7 / 2, 7 % 3, -7 % 3);
+    return 0;
+}
+// Saída:
+// 5000 s = 1h 23min 20s
+// 14 20 5
+// 3 -3 1 -1
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A014.c -o ~/LPEDC/material/A014 &amp;&amp; ~/LPEDC/material/A014
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E037</strong> · ★☆☆</p>
+<p>Para a festa, você fez 50 brigadeiros e vai embalar em caixas de 12.
+Quantas caixas ficam cheias e quantos brigadeiros sobram? E os 7 ingressos
+do show a R$ 35 cada, quanto custam juntos? Use variáveis e deixe o
+programa fazer as contas.</p>
+<pre><code class="language-text">Saída esperada:
+Caixas cheias: 4
+Sobram: 2 brigadeiros
+Ingressos: R$ 245
+</code></pre>
+<p><strong>Exercício E039</strong> · ★★☆</p>
+<p>Escreva o programa que racha a conta do restaurante: lê o valor da conta
+e o número de pessoas, sem mostrar perguntas, soma 10% de serviço e mostra
+o serviço, o total e quanto cada um paga, tudo em duas casas.</p>
+<pre><code class="language-text">Entrada:
+237.50
+4
+Saída esperada:
+Serviço (10%): R$ 23.75
+Total: R$ 261.25
+Cada um: R$ 65.31
+</code></pre>
+<p><strong>Exercício E040</strong> · ★★☆</p>
+<p>Escreva um programa com três notas inteiras: 8, 7 e 8. Calcule a média
+como double, de dois jeitos: (1) dividindo a soma por 3.0; (2) convertendo
+a soma para double com um cast antes de dividir por 3. Mostre as duas com
+duas casas.</p>
+<pre><code class="language-text">Saída esperada:
+Média 1: 7.67
+Média 2: 7.67
+</code></pre>
+<p><strong>Exercício E042</strong> · ★★★</p>
+<p>Leia um número de 3 dígitos, sem mostrar pergunta, e mostre ao contrário,
+usando só / e % (nada de texto). O programa tem de funcionar também quando o
+número termina em zero: com 120, a saída é 021, sempre com três dígitos.
+Teste com 472 e com 120.</p>
+<pre><code class="language-text">Entrada:
+472
+Saída esperada:
+Ao contrário: 274
+</code></pre>
+<pre><code class="language-text">Entrada:
+120
+Saída esperada:
+Ao contrário: 021
+</code></pre>
+<hr>
+<h2>0008 · Conversão e cast</h2>
+<h3>Conceito</h3>
+<p>No 0007, <code>(a + b) / 2</code> perdeu os decimais porque os dois lados eram
+inteiros. Isso vai acontecer sempre que um cálculo misturar tipos ou
+guardar um resultado num tipo diferente. Para não ser pego de surpresa, você
+precisa saber quando o C converte um valor sozinho e como pedir a conversão
+quando ela não vem.</p>
+<p>Pense no carro. Você rodou 523 km e gastou 41 litros para encher o tanque.
+A calculadora diz que o consumo é 523 ÷ 41 ≈ 12,76 km por litro. O C, com
+dois <code>int</code>, responde 12. Ninguém errou a conta: o C fez exatamente o que os
+tipos pediam, uma divisão inteira.</p>
+<p>O ponto de partida é este: toda expressão tem um valor e um <strong>tipo</strong>.
+Quando os operandos têm o mesmo tipo, o resultado tem esse tipo, e por isso
+<code>int / int</code> dá <code>int</code> (DEITEL; DEITEL, 2011). Quando os tipos são
+diferentes, o C faz a <strong>conversão automática</strong>, também chamada de
+conversão implícita: o operando &quot;menor&quot; sobe para o tipo do &quot;maior&quot; antes
+da conta. A escada é <code>char</code> → <code>short</code> → <code>int</code> → <code>long</code> → <code>long long</code> →
+<code>float</code> → <code>double</code> (DEITEL; DEITEL, 2011). Em <code>523 / 41.0</code>, o 523 sobe
+para <code>double</code>, a conta vira <code>523.0 / 41.0</code> e dá 12,756...</p>
+<p>Na <strong>atribuição</strong>, a conversão segue outra regra: o valor vira o tipo da
+variável da <strong>esquerda</strong>, caiba ou não. <code>double d = 12;</code> guarda 12.0, sem
+problema. <code>int i = 12.76;</code> guarda 12, porque a parte fracionária é
+<strong>cortada</strong>, não arredondada; <code>-9.99</code> vira -9 (BACKES, 2013, cap. 2). E um
+valor grande demais para um tipo pequeno perde bits, como o odômetro do
+0003. Com as opções do curso, o compilador não avisa nenhum desses cortes.</p>
+<p>Quando a conversão automática não basta, você escolhe a sua com o <strong>cast</strong>,
+ou conversão explícita: o tipo entre parênteses na frente do valor,
+<code>(double) km</code>. O cast não muda a variável. Ele cria uma <strong>cópia
+temporária</strong> já convertida e a entrega para a conta; <code>km</code> continua <code>int</code>
+depois (DEITEL; DEITEL, 2011).</p>
+<pre><code class="language-c">int km = 523, litros = 41;
+printf(&quot;%d\n&quot;, km / litros);              // 12
+printf(&quot;%.2f\n&quot;, (double) km / litros);   // 12.76
+</code></pre>
+<p>Repare na segunda linha. A precedência do cast é maior que a de <code>*</code> e <code>/</code>,
+então <code>(double) km / litros</code> converte só o <code>km</code>, e só depois divide
+(BACKES, 2013, cap. 3). Basta isso: com um lado <code>double</code>, a conversão
+automática sobe o <code>litros</code> e a divisão é real.</p>
+<p>Um <code>int</code> e um <code>double</code> de mesmo valor têm bits completamente diferentes na
+memória, e o processador faz trabalho de verdade para passar de um para o
+outro. Às vezes nem cabe. O <code>float</code> guarda
+inteiros exatos só até 2²⁴ = 16.777.216: <code>float f = 16777217;</code> vira
+16777216. O <code>double</code> vai até 2⁵³. E converter para <code>int</code> um <code>double</code> maior
+que o <code>int</code> aguenta é comportamento indefinido (ISO/IEC, 2018).</p>
+<blockquote>
+<p>[!WARNING]
+O cast precisa chegar <strong>antes</strong> da divisão. Em <code>(double) (km / litros)</code>,
+os parênteses mandam dividir primeiro: <code>523 / 41</code> dá 12 e o cast só o
+transforma em 12.0. O mesmo vale para <code>double media = soma / n;</code> com dois
+inteiros. Converta um operando: <code>(double) soma / n</code>.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>Um carro rodou 523 km com 41 litros. Pelo caminho de cima, os dois <code>int</code> se
+dividem, sai 12 e só então vira 12.0; pelo de baixo, o cast transforma 523 em
+523.0 antes da divisão:</p>
+<p align="center"><img src="material/0008-ideia.svg" alt="Diagrama da ideia: Conversão e cast" width="858"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    int km = 523;     // rodados desde o último tanque
+    int litros = 41;  // para encher de novo
+
+    double errado = km / litros;            // int / int = 12; depois vira 12.0
+    double certo = (double) km / litros;    // 523.0 / 41 = 12.756...
+    double tarde = (double) (km / litros);  // o cast chegou depois da divisão
+
+    printf(&quot;Sem cast:      %.2f km/l\n&quot;, errado);
+    printf(&quot;Com cast:      %.2f km/l\n&quot;, certo);
+    printf(&quot;Cast atrasado: %.2f km/l\n&quot;, tarde);
+
+    int inteiro = certo;                    // double -&gt; int: corta, não arredonda
+    printf(&quot;Num int:       %d km/l\n&quot;, inteiro);
+    return 0;
+}
+// Saída:
+// Sem cast:      12.00 km/l
+// Com cast:      12.76 km/l
+// Cast atrasado: 12.00 km/l
+// Num int:       12 km/l
+</code></pre>
+<p>Quem responde &quot;tem um real na divisão?&quot; é o compilador, pelos tipos. Com o
+cast, o exemplo segue pelo Sim:</p>
+<p align="center"><img src="material/0008-fluxograma.svg" alt="Fluxograma: Conversão e cast" width="511"></p>
+<p><strong>Exemplo A015 · O cast que corta de propósito</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    // quantos pacotes cheios de 2.5 kg saem de 18 kg de café?
+    double estoque = 18.0, pacote = 2.5;
+    int cheios = (int) (estoque / pacote);   // 7.2 vira 7: aqui cortar é o certo
+    double sobra = estoque - cheios * pacote; // int * double: a conta é real
+    printf(&quot;Pacotes cheios: %d\n&quot;, cheios);
+    printf(&quot;Sobram %.1f kg\n&quot;, sobra);
+
+    // horas decimais do ponto eletrônico para horas e minutos
+    double trabalhadas = 2.75;
+    int horas = (int) trabalhadas;                    // 2
+    int minutos = (int) ((trabalhadas - horas) * 60); // 0.75 * 60 = 45
+    printf(&quot;%.2f h = %d h %d min\n&quot;, trabalhadas, horas, minutos);
+
+    // o cast pega só o valor logo à direita dele
+    printf(&quot;(int) 2.75 * 60 = %d\n&quot;, (int) 2.75 * 60);     // 2 * 60
+    printf(&quot;(int) (2.75 * 60) = %d\n&quot;, (int) (2.75 * 60)); // 165.0 vira 165
+    return 0;
+}
+// Saída:
+// Pacotes cheios: 7
+// Sobram 0.5 kg
+// 2.75 h = 2 h 45 min
+// (int) 2.75 * 60 = 120
+// (int) (2.75 * 60) = 165
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A015.c -o ~/LPEDC/material/A015 &amp;&amp; ~/LPEDC/material/A015
+</code></pre>
+<p><strong>Exemplo A016 · Conversões que acontecem sozinhas</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    // na atribuição, o valor vira o tipo da variável da esquerda
+    char letra = 65;          // int -&gt; char: o código 65 é &#39;A&#39;
+    int preco = 9.99;         // double -&gt; int: corta para 9
+    int negativo = -9.99;     // corta em direção ao zero: -9
+    double metade = 7 / 2;    // a divisão inteira vem antes: 3.0
+    printf(&quot;%c %d %d %.1f\n&quot;, letra, preco, negativo, metade);
+
+    // numa conta, o tipo &quot;menor&quot; sobe para o &quot;maior&quot;
+    char minuscula = &#39;g&#39;;
+    printf(&quot;%c\n&quot;, minuscula - 32);    // char vira int: 103 - 32 = 71 = &#39;G&#39;
+    printf(&quot;%.2f\n&quot;, 5 / 2 * 2.0);     // (5 / 2) é 2; 2 * 2.0 = 4.00
+    printf(&quot;%.2f\n&quot;, 5 * 2.0 / 2);     // 5 * 2.0 = 10.0; 10.0 / 2 = 5.00
+
+    // o cast é explícito e cria uma cópia temporária: a variável não muda
+    int gols = 7, jogos = 3;
+    printf(&quot;Média: %.2f gols; gols continua %d\n&quot;, (double) gols / jogos, gols);
+
+    // real em binário é aproximado
+    float grande = 16777217;           // o float não tem dígitos para tanto
+    printf(&quot;%.1f\n&quot;, grande);
+    printf(&quot;%.17f\n&quot;, 0.1 + 0.2);
+    return 0;
+}
+// Saída:
+// A 9 -9 3.0
+// G
+// 4.00
+// 5.00
+// Média: 2.33 gols; gols continua 7
+// 16777216.0
+// 0.30000000000000004
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A016.c -o ~/LPEDC/material/A016 &amp;&amp; ~/LPEDC/material/A016
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E043</strong> · ★☆☆</p>
+<p>As notas do simulado são inteiras: 7, 8 e 10. Guarde em três int e mostre
+a média com duas casas, usando um cast (sem trocar o tipo das variáveis
+e sem escrever 3.0).</p>
+<pre><code class="language-text">Saída esperada:
+Média: 8.33
+</code></pre>
+<p><strong>Exercício E045</strong> · ★★☆</p>
+<p>Na eleição para síndico, a candidata Marta teve 47 dos 130 votos. Guarde
+os dois números em variáveis int e mostre o percentual dela com duas
+casas. Depois mostre também o resultado das duas fórmulas que o colega
+tentou antes, com as mesmas variáveis e %d, para ver o estrago de cada
+uma.</p>
+<pre><code class="language-text">Saída esperada:
+Marta: 36.15% dos votos
+votos / total * 100 = 0
+100 * votos / total = 36
+</code></pre>
+<p><strong>Exercício E046</strong> · ★★☆</p>
+<p>Na balança do açougue, a picanha custa R$ 45.90 o quilo. Escreva um
+programa com gramas = 600 (int) e preco_kg = 45.90 (double) que calcule e
+mostre o preço dessa quantidade. Os tipos das duas variáveis ficam como
+estão.</p>
+<pre><code class="language-text">Saída esperada:
+600 g: R$ 27.54
+</code></pre>
+<p><strong>Exercício E048</strong> · ★★★</p>
+<p>Letras são números, e as contas com elas seguem as regras de conversão.
+Escreva um programa que comece com char letra = &#39;g&#39;; e mostre as linhas
+abaixo. Regras: tirando a própria letra &#39;g&#39;, só valem os literais &#39;a&#39;,
+&#39;A&#39;, 1 e 3 (nada de escrever &#39;G&#39;, 71, 7, &#39;j&#39; ou 32). Na última linha, use
+as variáveis double x = 3.7, y = 3.7 e casts para int.</p>
+<pre><code class="language-text">Saída esperada:
+Letra: g (código 103)
+Maiúscula: G (código 71)
+Posição no alfabeto: 7
+Três adiante: j
+Somando e cortando: 7; cortando e somando: 6
+</code></pre>
+<hr>
+<h2>0009 · Atribuição, ++ e --</h2>
+<h3>Conceito</h3>
+<p>Muita conta de programa não começa do zero: ela parte de um valor que já
+existe e o atualiza. O saldo recebe uma recarga, o contador de viagens sobe
+um, o total da compra ganha mais um item. Para isso você precisa entender
+bem o que o <code>=</code> faz e conhecer os atalhos que o C oferece para essas
+atualizações.</p>
+<p>Pense no bilhete único com R$ 20,00. Você recarrega R$ 30,00 e ele passa a
+ter R$ 50,00. Você pega um ônibus de R$ 4,40 e ele fica com R$ 45,60. Em
+nenhum momento o saldo é recalculado do zero: cada valor novo sai do
+anterior, e o anterior desaparece do visor.</p>
+<p>No C, o <strong><code>=</code></strong> é a <strong>atribuição</strong>: guarde o valor da direita na variável da
+esquerda. Ele não é o &quot;igual&quot; da matemática, que afirma que dois lados são
+iguais (BACKES, 2013, cap. 3). Por isso <code>saldo = saldo + 30.00</code> faz sentido:
+o C calcula o lado direito com o valor antigo de <code>saldo</code> e depois escreve o
+resultado por cima. Do lado esquerdo só pode ficar algo que tenha endereço,
+uma variável. <code>30 = saldo</code> e <code>saldo + 1 = 5</code> não compilam, porque 30 e
+<code>saldo + 1</code> não são lugares da memória (BACKES, 2013, cap. 3).</p>
+<p>Atualizar uma variável é tão comum que o C tem <strong>operadores compostos</strong>
+para isso: <code>+=</code>, <code>-=</code>, <code>*=</code>, <code>/=</code> e <code>%=</code>. <code>saldo += 30.00</code> quer dizer
+<code>saldo = saldo + 30.00</code>, com o nome escrito uma vez só. Um detalhe: o
+composto age sobre <strong>toda</strong> a expressão da direita, como se ela estivesse
+entre parênteses. <code>x *= y + 1</code> é <code>x = x * (y + 1)</code>, e não <code>x * y + 1</code>
+(DEITEL; DEITEL, 2011, cap. 3).</p>
+<table>
+<thead>
+<tr>
+<th>Atalho</th>
+<th>Quer dizer</th>
+<th>Com <code>x = 10</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>x += 3</code></td>
+<td><code>x = x + 3</code></td>
+<td>13</td>
+</tr>
+<tr>
+<td><code>x -= 3</code></td>
+<td><code>x = x - 3</code></td>
+<td>7</td>
+</tr>
+<tr>
+<td><code>x *= 3</code></td>
+<td><code>x = x * 3</code></td>
+<td>30</td>
+</tr>
+<tr>
+<td><code>x /= 3</code></td>
+<td><code>x = x / 3</code></td>
+<td>3 (divisão inteira!)</td>
+</tr>
+<tr>
+<td><code>x %= 3</code></td>
+<td><code>x = x % 3</code></td>
+<td>1</td>
+</tr>
+</tbody></table>
+<p>Somar ou tirar 1 é mais comum ainda, e ganhou operadores próprios: o
+<strong><code>++</code></strong> (incremento) e o <strong><code>--</code></strong> (decremento). Sozinhos na linha,
+<code>viagens++</code> e <code>++viagens</code> fazem a mesma coisa: <code>viagens</code> passa a valer um a
+mais (DEITEL; DEITEL, 2011, cap. 3).</p>
+<p>A diferença entre os dois aparece quando o valor é <strong>usado</strong> na mesma
+expressão. No <strong>pós-incremento</strong>, <code>x++</code>, a expressão vale o valor
+<strong>antigo</strong> e só depois <code>x</code> aumenta. No <strong>pré-incremento</strong>, <code>++x</code>, o <code>x</code>
+aumenta primeiro e a expressão vale o valor <strong>novo</strong> (FEOFILOFF, 2009). Com
+<code>int x = 5;</code>, a linha <code>int y = x++ * 2;</code> deixa <code>y</code> com 10 e <code>x</code> com 6. Já
+<code>int y = ++x * 2;</code> deixa <code>y</code> com 12 e <code>x</code> com 6.</p>
+<pre><code class="language-c">int x = 5;
+int y = x++ * 2;   // y vale 10, x vale 6
+</code></pre>
+<p>A própria atribuição também é uma expressão: ela vale o valor que acabou de
+guardar. E ela se resolve <strong>da direita para a esquerda</strong>. Em
+<code>a = b = c = 7</code>, o C faz primeiro <code>c = 7</code>, que vale 7; depois <code>b = 7</code>; por
+fim <code>a = 7</code> (DEITEL; DEITEL, 2011, cap. 3). É assim que uma linha zera três
+variáveis de uma vez.</p>
+<p>Esses atalhos voltam o tempo todo no módulo 03: o <code>+=</code> vira o acumulador de
+um laço, e o <code>++</code>, o contador.</p>
+<blockquote>
+<p>[!WARNING]
+Nunca altere a mesma variável duas vezes na mesma expressão, nem altere e
+leia ao mesmo tempo: <code>i = i++;</code> e <code>printf(&quot;%d %d&quot;, n++, n);</code> são
+<strong>comportamento indefinido</strong>: o padrão não define a ordem, e cada
+compilador faz de um jeito. O <code>-Wall</code> avisa (<code>operation on &#39;i&#39; may be undefined</code>).</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>Um bilhete único com R$ 20,00 recebe uma recarga e paga duas viagens. O saldo
+passa por quatro valores na mesma caixinha, e as viagens sobem de um em um:</p>
+<p align="center"><img src="material/0009-ideia.svg" alt="Diagrama da ideia: Atribuição, ++ e --" width="858"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    double saldo = 20.00;
+    int viagens = 0;
+
+    saldo += 30.00;   // recarga: saldo = saldo + 30.00
+    saldo -= 4.40;    // 1ª viagem
+    viagens++;        // viagens = viagens + 1
+    saldo -= 4.40;    // 2ª viagem
+    viagens++;
+
+    printf(&quot;Saldo: R$ %.2f depois de %d viagens\n&quot;, saldo, viagens);
+
+    int antes = viagens++;   // pós: usa o 2, depois soma (viagens vira 3)
+    int depois = ++viagens;  // pré: soma primeiro (vira 4), depois usa o 4
+    printf(&quot;antes = %d, depois = %d, viagens = %d\n&quot;, antes, depois, viagens);
+    return 0;
+}
+// Saída:
+// Saldo: R$ 41.20 depois de 2 viagens
+// antes = 2, depois = 4, viagens = 4
+</code></pre>
+<p>Cada atualização é um retângulo sobre as mesmas duas variáveis. No módulo 03,
+esses passos viram laço, com <code>+=</code> e <code>++</code> como acumulador e contador:</p>
+<p align="center"><img src="material/0009-fluxograma.svg" alt="Fluxograma: Atribuição, ++ e --" width="1570"></p>
+<p><strong>Exemplo A017 · Vagas que descem, senhas que sobem (até de letra)</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    // -- conta para baixo: cada carro que entra ocupa uma vaga
+    int vagas = 3;
+    vagas--;                 // 2
+    vagas--;                 // 1
+    printf(&quot;Vagas livres: %d\n&quot;, vagas);
+
+    // ++ num char: o char é número, então ++ vai para a próxima letra
+    char fila = &#39;A&#39;;
+    int senha = 41;
+    printf(&quot;Chamando %c%02d\n&quot;, fila, senha);
+    senha++;
+    printf(&quot;Chamando %c%02d\n&quot;, fila, senha);
+    fila++;                  // &#39;A&#39; (65) vira &#39;B&#39; (66)
+    senha = 1;               // a fila nova recomeça do 1
+    printf(&quot;Chamando %c%02d\n&quot;, fila, senha);
+
+    // /= com int faz divisão inteira: a moeda ímpar some
+    int moedas = 25;
+    moedas /= 2;
+    printf(&quot;Cada irmão fica com %d moedas\n&quot;, moedas);
+
+    // -= com double: o desconto sai do valor que já está lá
+    double conta = 120.00;
+    conta -= 15.50;          // cupom
+    conta -= conta * 0.10;   // mais 10% sobre o que sobrou
+    printf(&quot;Conta final: R$ %.2f\n&quot;, conta);
+    return 0;
+}
+// Saída:
+// Vagas livres: 1
+// Chamando A41
+// Chamando A42
+// Chamando B01
+// Cada irmão fica com 12 moedas
+// Conta final: R$ 94.05
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A017.c -o ~/LPEDC/material/A017 &amp;&amp; ~/LPEDC/material/A017
+</code></pre>
+<p><strong>Exemplo A018 · Pré, pós e o operador que vale para a conta inteira</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    // pós-incremento: a expressão vale o valor ANTIGO
+    int x = 5;
+    int y = x++;            // y = 5, x = 6
+    printf(&quot;x++ : y = %d, x = %d\n&quot;, y, x);
+
+    // pré-incremento: a expressão vale o valor NOVO
+    x = 5;
+    y = ++x;                // x = 6, y = 6
+    printf(&quot;++x : y = %d, x = %d\n&quot;, y, x);
+
+    // o operador composto age sobre TUDO o que está à direita
+    int pontos = 10, bonus = 3;
+    pontos *= bonus + 1;    // pontos = pontos * (bonus + 1) = 40
+    printf(&quot;pontos = %d\n&quot;, pontos);
+
+    // a atribuição também é uma expressão: vale o valor guardado
+    int a, b, c;
+    a = b = c = 7;          // c = 7, depois b = 7, depois a = 7
+    printf(&quot;a = %d, b = %d, c = %d\n&quot;, a, b, c);
+
+    // os mesmos operadores com double e com resto
+    double preco = 80.0;
+    preco *= 0.9;           // 10% de desconto: 72.00
+    int segundos = 135;
+    segundos %= 60;         // sobra 15
+    printf(&quot;preço = %.2f, segundos = %d\n&quot;, preco, segundos);
+    return 0;
+}
+// Saída:
+// x++ : y = 5, x = 6
+// ++x : y = 6, x = 6
+// pontos = 40
+// a = 7, b = 7, c = 7
+// preço = 72.00, segundos = 15
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A018.c -o ~/LPEDC/material/A018 &amp;&amp; ~/LPEDC/material/A018
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E049</strong> · ★☆☆</p>
+<p>Escreva um programa com pontos = 100, vidas = 3, moedas = 20, tempo = 90
+e fase = 3 (int). Atualize cada um usando só operadores compostos e ++ ou --:
+pontos ganha 10, vidas perde 1, moedas dobra, tempo cai pela metade e fase
+sobe 1. Mostre tudo numa linha só.</p>
+<pre><code class="language-text">Saída esperada:
+pontos 110, vidas 2, moedas 40, tempo 45, fase 4
+</code></pre>
+<p><strong>Exercício E051</strong> · ★★☆</p>
+<p>O cofrinho digital começa vazio. Use uma variável saldo e os operadores
+compostos para registrar o mês, mostrando o saldo depois de cada passo:
+guarda R$ 15.00, guarda R$ 20.00, guarda R$ 12.50, tira R$ 30.00 para um
+presente e, no fim do mês, rende 1% (multiplique por 1.01). Conte também
+quantos depósitos foram feitos, com ++.</p>
+<pre><code class="language-text">Saída esperada:
+Depósito 1: R$ 15.00
+Depósito 2: R$ 35.00
+Depósito 3: R$ 47.50
+Presente: R$ 17.50
+Rendimento: R$ 17.68
+3 depósitos
+</code></pre>
+<p><strong>Exercício E052</strong> · ★★☆</p>
+<p>Escreva um programa com x = 10 e y = 3 (int). Aplique em sequência, uma
+depois da outra, x *= y + 1, x -= y - 1, x /= y + 1 e x %= y + 2, mostrando
+a instrução e o novo valor de x depois de cada uma. Depois, volte x para 10
+e mostre x * 2 + y (só no printf, sem guardar) e x *= 2 + y (guardando em
+x), para ver que são contas diferentes.</p>
+<pre><code class="language-text">Saída esperada:
+x *= y + 1 -&gt; 40
+x -= y - 1 -&gt; 38
+x /= y + 1 -&gt; 9
+x %= y + 2 -&gt; 4
+x * 2 + y = 23
+x *= 2 + y -&gt; 50
+</code></pre>
+<p><strong>Exercício E054</strong> · ★★★</p>
+<p>O placar está invertido: casa = 2 e visitante = 5, e o certo é o
+contrário. Escreva um programa que troque os valores SEM usar uma terceira
+variável, só com += e -= (e, se precisar, um = simples), e mostre o
+placar certo.</p>
+<pre><code class="language-text">Saída esperada:
+Casa 5 x 2 Visitante
+</code></pre>
+<hr>
+<h2>0010 · math.h</h2>
+<h3>Conceito</h3>
+<p>O C tem operadores para as quatro operações e para o resto, e parou aí.
+Não há operador de potência, de raiz nem de arredondamento. Mesmo assim,
+muita conta do dia a dia precisa deles: a área de um círculo pede o raio ao
+quadrado, a distância entre dois pontos pede uma raiz, e saber quantas latas
+de tinta comprar pede arredondar para cima.</p>
+<p>Pense na pizzaria: a grande, de 35 cm, custa R$ 59,90, e a média, de 25 cm,
+R$ 39,90. Duas médias dão mais pizza que uma grande? A intuição diz que
+não, mas a área cresce com o <strong>quadrado</strong> do raio. A conta mostra que duas
+médias somam 981,75 cm², um pouco mais que os 962,11 cm² da grande. Para
+fazer essa conta no C, você recorre a uma caixa de ferramentas pronta.</p>
+<p>Essa caixa é a biblioteca de matemática, declarada no cabeçalho
+<strong><code>&lt;math.h&gt;</code></strong>. Ela traz funções prontas, e quase todas recebem e devolvem
+<code>double</code> (DEITEL; DEITEL, 2011, cap. 5). Uma <strong>função</strong> aqui é uma conta
+com nome: você escreve o nome, passa os valores entre parênteses e recebe o
+resultado no lugar da chamada. <code>pow(2, 10)</code> vale 1024, e você pode usar
+essa chamada dentro de qualquer expressão, como usaria um número.</p>
+<table>
+<thead>
+<tr>
+<th>Função</th>
+<th>Faz</th>
+<th>Exemplo</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>pow(x, y)</code></td>
+<td>x elevado a y</td>
+<td><code>pow(2, 10)</code></td>
+<td>1024</td>
+</tr>
+<tr>
+<td><code>sqrt(x)</code></td>
+<td>raiz quadrada</td>
+<td><code>sqrt(144)</code></td>
+<td>12</td>
+</tr>
+<tr>
+<td><code>fabs(x)</code></td>
+<td>valor absoluto de real</td>
+<td><code>fabs(-7.5)</code></td>
+<td>7.5</td>
+</tr>
+<tr>
+<td><code>floor(x)</code></td>
+<td>arredonda para <strong>baixo</strong></td>
+<td><code>floor(-2.3)</code></td>
+<td>-3</td>
+</tr>
+<tr>
+<td><code>ceil(x)</code></td>
+<td>arredonda para <strong>cima</strong></td>
+<td><code>ceil(2.1)</code></td>
+<td>3</td>
+</tr>
+<tr>
+<td><code>round(x)</code></td>
+<td>para o mais perto (o meio vai para longe do zero)</td>
+<td><code>round(2.5)</code></td>
+<td>3</td>
+</tr>
+<tr>
+<td><code>fmod(x, y)</code></td>
+<td>resto de divisão real</td>
+<td><code>fmod(7.5, 2)</code></td>
+<td>1.5</td>
+</tr>
+<tr>
+<td><code>sin</code>, <code>cos</code>, <code>tan</code></td>
+<td>trigonometria, em <strong>radianos</strong></td>
+<td><code>cos(0)</code></td>
+<td>1</td>
+</tr>
+</tbody></table>
+<p>O <code>math.h</code>, porém, só <strong>declara</strong> as funções: diz o nome, o que cada uma
+recebe e o que devolve. Por isso <code>sqrt(144)</code> funciona mesmo com um <code>int</code>: o
+compilador lê a declaração e converte o 144 para <code>double</code>. O código das
+funções mora em outro lugar, na biblioteca <code>libm</code>, e o ligador (0001) só a
+junta ao programa se você pedir com <code>-lm</code> no fim do comando do <code>gcc</code> (GNU,
+s.d.). Sem isso, a compilação para com <code>undefined reference to &#39;pow&#39;</code>. As
+flags de estudo do curso já incluem o <code>-lm</code>.</p>
+<p>Os três arredondamentos parecem iguais com números positivos e divergem com
+os negativos. O <code>floor</code> sempre desce, rumo ao menos infinito:
+<code>floor(-2.3)</code> é -3. O <code>ceil</code> sempre sobe: <code>ceil(-2.7)</code> é -2. O <code>round</code> vai
+para o inteiro mais perto, e quando está bem no meio vai para longe do
+zero: <code>round(2.5)</code> é 3 e <code>round(-2.5)</code> é -3 (DEITEL; DEITEL, 2011,
+cap. 5). O cast do 0008 é uma quarta coisa: ele <strong>corta</strong> a parte
+fracionária, e <code>(int) -2.7</code> dá -2. Para &quot;quantas latas preciso comprar&quot;, o
+certo é o <code>ceil</code>: 2,78 latas viram 3.</p>
+<p>Faltam dois detalhes que pegam desprevenido. O C padrão não define o
+número pi. O <code>M_PI</code>, que aparece em muito código por aí, é uma extensão e
+não existe com <code>-std=c17</code>; crie o seu com <code>#define PI 3.14159265358979</code>
+(ISO/IEC, 2018). E o valor absoluto de inteiros, <code>abs</code>, não fica no
+<code>math.h</code>, e sim no <code>&lt;stdlib.h&gt;</code>. Para números reais, a função é a <code>fabs</code>
+(BACKES, 2013). Usar <code>abs(-2.75)</code> dá 2, porque o valor é convertido para
+<code>int</code> antes; o <code>-Wextra</code> avisa.</p>
+<blockquote>
+<p>[!WARNING]
+<code>pow(27, 1/3)</code> dá <strong>1</strong>, não 3: <code>1/3</code> é divisão inteira e vale 0, e todo
+número elevado a 0 é 1. Escreva <code>1.0 / 3</code>. Do mesmo modo, <code>ceil(7 / 2)</code>
+dá 3, não 4: o <code>ceil</code> recebe o 3 já cortado.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>Duas pizzas médias de 25 cm dão mais pizza que uma grande de 35 cm? A área
+cresce com o quadrado do raio: o diâmetro vira raio, <code>pow</code> eleva ao quadrado
+e o resultado vezes pi dá a área:</p>
+<p align="center"><img src="material/0010-ideia.svg" alt="Diagrama da ideia: math.h" width="858"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;math.h&gt;
+
+#define PI 3.14159265358979 // o C padrão não define o pi
+
+int main(void) {
+    double diametro_grande = 35.0, diametro_media = 25.0; // cm
+    double preco_grande = 59.90, preco_medias = 2 * 39.90;
+
+    double area_grande = PI * pow(diametro_grande / 2, 2);     // pi * r²
+    double area_medias = 2 * PI * pow(diametro_media / 2, 2);
+
+    printf(&quot;Grande: %.0f cm² por R$ %.2f\n&quot;, round(area_grande), preco_grande);
+    printf(&quot;Duas médias: %.0f cm² por R$ %.2f\n&quot;, round(area_medias), preco_medias);
+    printf(&quot;Diferença: %.1f cm²\n&quot;, fabs(area_grande - area_medias));
+    printf(&quot;R$ por 100 cm²: grande %.2f, médias %.2f\n&quot;,
+           preco_grande / area_grande * 100, preco_medias / area_medias * 100);
+
+    // a pizza única com a mesma área das duas médias: r = raiz(área / pi)
+    double diametro_igual = 2 * sqrt(area_medias / PI);
+    printf(&quot;Duas médias = uma pizza de %.1f cm\n&quot;, diametro_igual);
+    return 0;
+}
+// Saída:
+// Grande: 962 cm² por R$ 59.90
+// Duas médias: 982 cm² por R$ 79.80
+// Diferença: 19.6 cm²
+// R$ por 100 cm²: grande 6.23, médias 8.13
+// Duas médias = uma pizza de 35.4 cm
+</code></pre>
+<p>Duas médias dão um pouco mais de pizza, mas cada 100 cm² da grande sai quase
+R$ 2 mais barato. No fluxograma, <code>pow(...)</code> e <code>sqrt(...)</code> entram nas contas
+como qualquer valor:</p>
+<p align="center"><img src="material/0010-fluxograma.svg" alt="Fluxograma: math.h" width="1391"></p>
+<p><strong>Exemplo A019 · A escada no muro e o posto na estrada</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;math.h&gt;
+
+#define PI 3.14159265358979
+
+int main(void) {
+    // sin e cos trabalham em radianos: converta com graus * PI / 180
+    double escada = 5.0;            // metros
+    double graus = 60.0;            // ângulo da escada com o chão
+    double radianos = graus * PI / 180;
+    printf(&quot;Altura no muro: %.2f m\n&quot;, escada * sin(radianos));
+    printf(&quot;Pé da escada a %.2f m do muro\n&quot;, escada * cos(radianos));
+
+    // fmod: o resto de uma divisão entre reais (o % só aceita inteiros)
+    double km = 31.0, entre_postos = 7.5;
+    double desde_ultimo = fmod(km, entre_postos);   // 31 - 4 * 7.5 = 1.0
+    printf(&quot;Último posto há %.1f km; próximo em %.1f km\n&quot;,
+           desde_ultimo, entre_postos - desde_ultimo);
+
+    // fabs: a distância entre dois valores, não importa a ordem da conta
+    double tarde = 14.5, madrugada = -3.0;
+    printf(&quot;Variação no dia: %.1f graus\n&quot;, fabs(madrugada - tarde));
+    return 0;
+}
+// Saída:
+// Altura no muro: 4.33 m
+// Pé da escada a 2.50 m do muro
+// Último posto há 1.0 km; próximo em 6.5 km
+// Variação no dia: 17.5 graus
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A019.c -o ~/LPEDC/material/A019 -lm &amp;&amp; ~/LPEDC/material/A019
+</code></pre>
+<p><strong>Exemplo A020 · Arredondar para cima, para baixo e para o mais perto</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;math.h&gt;
+
+int main(void) {
+    printf(&quot;    x | floor |  ceil | round | (int)\n&quot;);
+    printf(&quot;%5.1f | %5.0f | %5.0f | %5.0f | %5d\n&quot;, 2.4, floor(2.4), ceil(2.4), round(2.4), (int) 2.4);
+    printf(&quot;%5.1f | %5.0f | %5.0f | %5.0f | %5d\n&quot;, 2.5, floor(2.5), ceil(2.5), round(2.5), (int) 2.5);
+    printf(&quot;%5.1f | %5.0f | %5.0f | %5.0f | %5d\n&quot;, -2.5, floor(-2.5), ceil(-2.5), round(-2.5), (int) -2.5);
+    printf(&quot;%5.1f | %5.0f | %5.0f | %5.0f | %5d\n&quot;, -2.6, floor(-2.6), ceil(-2.6), round(-2.6), (int) -2.6);
+
+    // ceil na vida real: quantas latas de tinta para 50 m², se uma cobre 18 m²?
+    double area = 50.0, por_lata = 18.0;
+    printf(&quot;Latas: %.2f -&gt; compre %.0f\n&quot;, area / por_lata, ceil(area / por_lata));
+
+    // potência e raiz: pow também tira raiz com expoente fracionário
+    printf(&quot;pow(2, 10) = %.0f, sqrt(2) = %.4f, raiz cúbica de 27 = %.1f\n&quot;,
+           pow(2, 10), sqrt(2), pow(27, 1.0 / 3));
+
+    // arredondar para 2 casas de verdade (não só na tela)
+    double preco = 7.4567;
+    double preco_2casas = round(preco * 100) / 100;
+    printf(&quot;%.4f vira %.4f\n&quot;, preco, preco_2casas);
+    return 0;
+}
+// Saída:
+//     x | floor |  ceil | round | (int)
+//   2.4 |     2 |     3 |     2 |     2
+//   2.5 |     2 |     3 |     3 |     2
+//  -2.5 |    -3 |    -2 |    -3 |    -2
+//  -2.6 |    -3 |    -2 |    -3 |    -2
+// Latas: 2.78 -&gt; compre 3
+// pow(2, 10) = 1024, sqrt(2) = 1.4142, raiz cúbica de 27 = 3.0
+// 7.4567 vira 7.4600
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A020.c -o ~/LPEDC/material/A020 -lm &amp;&amp; ~/LPEDC/material/A020
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E055</strong> · ★☆☆</p>
+<p>A loja anuncia uma TV com a tela de 121.8 cm de largura e 68.5 cm de
+altura. TVs são vendidas pela diagonal, em polegadas (1 polegada = 2.54
+cm). Calcule a diagonal com Pitágoras e mostre em cm e em polegadas.</p>
+<pre><code class="language-text">Saída esperada:
+Diagonal: 139.74 cm
+TV de 55 polegadas
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E055.c -o ~/LPEDC/material/E055 -lm &amp;&amp; ~/LPEDC/material/E055
+</code></pre>
+<p><strong>Exercício E057</strong> · ★★☆</p>
+<p>Você vai pintar 3 paredes de 4.0 m por 2.7 m, com 2 demãos. Uma lata de
+tinta cobre 25 m² e custa R$ 89.90. Lata não se vende pela metade.
+Calcule a área total a pintar, quantas latas comprar e quanto vai gastar.</p>
+<pre><code class="language-text">Saída esperada:
+Área com 2 demãos: 64.80 m²
+Latas: 2.59 -&gt; comprar 3
+Total: R$ 269.70
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E057.c -o ~/LPEDC/material/E057 -lm &amp;&amp; ~/LPEDC/material/E057
+</code></pre>
+<p><strong>Exercício E058</strong> · ★★☆</p>
+<p>Você aplica R$ 1000.00 num investimento que rende 1% ao mês, com juros
+compostos (juros sobre juros). O montante depois de n meses é
+capital * (1 + taxa) elevado a n. Mostre o montante e o rendimento depois
+de 12 e de 24 meses. Para comparar, mostre também quanto teria em 24
+meses com juros simples (1% do capital por mês, sem juros sobre juros) e
+a diferença entre os dois em 24 meses.</p>
+<pre><code class="language-text">Saída esperada:
+12 meses: R$ 1126.83 (rendeu R$ 126.83)
+24 meses: R$ 1269.73 (rendeu R$ 269.73)
+Juros simples, 24 meses: R$ 1240.00
+Diferença: R$ 29.73
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E058.c -o ~/LPEDC/material/E058 -lm &amp;&amp; ~/LPEDC/material/E058
+</code></pre>
+<p><strong>Exercício E060</strong> · ★★★</p>
+<p>Do alto de uma laje de 1.5 m, você joga uma bola para cima a 20 m/s.
+Desprezando o ar, a altura depois de t segundos é
+h(t) = -5t² + 20t + 1.5. Calcule:</p>
+<p>a) o instante em que a bola chega ao chão (h = 0), com a fórmula de</p>
+<pre><code class="language-text"> Bhaskara: t = (-b - raiz(delta)) / (2a), com delta = b² - 4ac;
+</code></pre>
+<p>b) o instante da altura máxima, t = -b / (2a), e a altura nesse instante.</p>
+<pre><code class="language-text">Saída esperada:
+Delta: 430.00
+Chega ao chão em 4.07 s
+Altura máxima: 21.50 m, em 2.00 s
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E060.c -o ~/LPEDC/material/E060 -lm &amp;&amp; ~/LPEDC/material/E060
+</code></pre>
+<hr>
+<h2>0011 · Juntando tudo</h2>
+<h3>Conceito</h3>
+<p>Cada assunto do módulo ensinou uma peça isolada: variável, tipo, constante,
+<code>printf</code>, <code>scanf</code>, aritmética, conversão, atribuição e <code>math.h</code>. Um problema
+de verdade pede todas ao mesmo tempo, e a dificuldade passa a ser outra:
+decidir por onde começar e em que ordem montar as peças. Ajuda ter um
+jeito fixo de organizar o raciocínio antes de escrever a primeira linha.</p>
+<p>Pense na conta de luz de uma república. Todo mês alguém pega a fatura, faz
+a divisão no celular e manda no grupo quanto cada um deve. Antes de abrir a
+calculadora, essa pessoa já sabe três coisas: o que precisa olhar (as duas
+leituras do relógio e quantos moram na casa), que conta fazer e o que
+mandar no grupo. O programa segue o mesmo roteiro.</p>
+<p>Esse roteiro tem nome: <strong>entrada → processamento → saída</strong>. Antes de
+codificar, separe o que o programa lê, o que ele calcula a partir disso e o
+que ele mostra no fim (LEAL, 2016). A entrada vira variáveis lidas com
+<code>scanf</code>; o processamento vira expressões e atribuições; a saída vira
+<code>printf</code>. Com essa separação feita no papel, cada parte do código tem um
+papel claro, e um erro fica mais fácil de achar: você sabe se procura na
+leitura, na conta ou na hora de mostrar.</p>
+<p>Todos os programas deste módulo têm a mesma forma, chamada <strong>estrutura
+sequencial</strong>: os passos são sempre os mesmos e rodam sempre na mesma ordem,
+de cima para baixo, sem decidir nada e sem repetir nada (CARVALHO, 2010).
+Isso é também um limite. O programa da conta de luz não confere se a
+leitura atual é maior que a anterior, e não sabe repetir a conta para vários
+meses. Conferir é assunto do módulo 02, com as condicionais; repetir é do
+módulo 03, com os laços.</p>
+<p>O programa do exemplo junta as peças assim. A tarifa e a taxa fixa viram
+constantes com <code>#define</code> (0004), para mudar num lugar só. As leituras do
+relógio são <code>int</code> e o dinheiro é <code>double</code> (0002). O <code>scanf</code> leva <code>&amp;</code> em
+cada variável, e o seu retorno fica guardado (0006). No processamento
+entram o <code>+=</code> (0009), um <strong>cast</strong> para a média por dia não virar divisão
+inteira (0008) e o <code>ceil</code> (0010) para arredondar o centavo para cima, já que
+ninguém quer pagar um centavo a menos e deixar a conta descoberta. Na saída,
+o <code>printf</code> usa largura e duas casas para alinhar as colunas (0005).</p>
+<p>Como saber se a fórmula está certa antes de confiar nela? Com o <strong>teste de
+mesa</strong>: você executa o programa no papel, uma linha de cada vez, e anota
+numa tabela o valor de cada variável depois de cada passo (CARVALHO, 2010).
+O teste de mesa obriga você a fazer a conta que o computador faria, com os
+tipos que ele usaria, e por isso pega a divisão inteira, o arredondamento
+no lugar errado e a variável que nunca recebeu valor. O exemplo abaixo traz
+um teste de mesa completo para você acompanhar.</p>
+<blockquote>
+<p>[!WARNING]
+Sem o cast, <code>consumo / DIAS</code> seria <code>257 / 30</code> entre dois <code>int</code> e daria 8.
+A ordem também importa: com o <code>ceil</code> antes do <code>* 100</code>, <code>ceil(76.4133)</code>
+daria R$ 77. Faça o teste de mesa antes de confiar numa fórmula.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>A conta de luz de uma república com três moradores. Entram as duas leituras
+do relógio e os moradores; o consumo é 257 kWh, a conta é R$ 229,24 e cada um
+paga R$ 76,42, com o centavo para cima:</p>
+<p align="center"><img src="material/0011-ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;math.h&gt;
+
+#define TARIFA_KWH 0.82    // R$ por kWh
+#define ILUMINACAO 18.50   // taxa fixa de iluminação pública
+#define DIAS 30
+
+int main(void) {
+    int anterior, atual, moradores;
+
+    // entrada
+    printf(&quot;Leitura anterior (kWh): &quot;);
+    scanf(&quot;%d&quot;, &amp;anterior);
+    printf(&quot;Leitura atual (kWh): &quot;);
+    scanf(&quot;%d&quot;, &amp;atual);
+    printf(&quot;Moradores: &quot;);
+    int lidos = scanf(&quot;%d&quot;, &amp;moradores);
+
+    // processamento
+    int consumo = atual - anterior;
+    double total = consumo * TARIFA_KWH;
+    total += ILUMINACAO;
+    double por_dia = (double) consumo / DIAS;
+    double cada = ceil(total / moradores * 100) / 100; // centavo para cima
+
+    // saída
+    printf(&quot;\n%-18s %8d kWh\n&quot;, &quot;Consumo:&quot;, consumo);
+    printf(&quot;%-18s %8.2f kWh\n&quot;, &quot;Por dia:&quot;, por_dia);
+    printf(&quot;%-18s R$ %8.2f\n&quot;, &quot;Total da conta:&quot;, total);
+    printf(&quot;%-18s R$ %8.2f\n&quot;, &quot;Cada morador:&quot;, cada);
+    printf(&quot;(o último scanf leu %d item)\n&quot;, lidos);
+    return 0;
+}
+// Exemplo de execução:
+// Leitura anterior (kWh): 45230
+// Leitura atual (kWh): 45487
+// Moradores: 3
+//
+// Consumo:                257 kWh
+// Por dia:               8.57 kWh
+// Total da conta:    R$   229.24
+// Cada morador:      R$    76.42
+// (o último scanf leu 1 item)
+</code></pre>
+<h4>Passo a passo</h4>
+<p>Teste de mesa com a entrada 45230, 45487 e 3; as colunas mostram as variáveis
+depois de cada instrução:</p>
+<table>
+<thead>
+<tr>
+<th>Instrução</th>
+<th>consumo</th>
+<th>total</th>
+<th>por_dia</th>
+<th>cada</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>consumo = atual - anterior</code></td>
+<td>257</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>total = consumo * TARIFA_KWH</code></td>
+<td>257</td>
+<td>210.74</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>total += ILUMINACAO</code></td>
+<td>257</td>
+<td>229.24</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>por_dia = (double) consumo / DIAS</code></td>
+<td>257</td>
+<td>229.24</td>
+<td>8.5666...</td>
+<td></td>
+</tr>
+<tr>
+<td><code>cada = ceil(total / moradores * 100) / 100</code></td>
+<td>257</td>
+<td>229.24</td>
+<td>8.5666...</td>
+<td>76.42</td>
+</tr>
+</tbody></table>
+<p>Na última linha: 229,24 ÷ 3 = 76,4133...; vezes 100, 7641,33...; o <code>ceil</code>
+sobe para 7642; dividido por 100, 76,42. Três vezes 76,42 dá 229,26: sobram
+dois centavos, mas a conta fica paga.</p>
+<p>Entrada, quatro contas e saída, sem nenhum losango:</p>
+<p align="center"><img src="material/0011-fluxograma.svg" alt="Fluxograma: Juntando tudo" width="1853"></p>
+<p><strong>Exemplo A021 · Quantas caixas de piso comprar</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;math.h&gt;
+
+#define PERDA 1.10          // 10% a mais para os recortes
+#define M2_POR_CAIXA 2.5    // cada caixa cobre 2,5 m²
+
+int main(void) {
+    double largura = 0, comprimento = 0, preco_caixa = 0;
+
+    // entrada: o retorno de cada scanf vai somando no total de leituras
+    printf(&quot;Largura do cômodo (m): &quot;);
+    int leituras = scanf(&quot;%lf&quot;, &amp;largura);
+    printf(&quot;Comprimento (m): &quot;);
+    leituras += scanf(&quot;%lf&quot;, &amp;comprimento);
+    printf(&quot;Preço da caixa (R$): &quot;);
+    leituras += scanf(&quot;%lf&quot;, &amp;preco_caixa);
+
+    // processamento
+    double area = largura * comprimento;
+    double area_compra = area;
+    area_compra *= PERDA;
+    int caixas = (int) ceil(area_compra / M2_POR_CAIXA); // caixa não vem pela metade
+    double total = caixas * preco_caixa;
+    double sobra = caixas * M2_POR_CAIXA - area_compra;
+
+    // saída: rótulos com acento direto no formato, porque a largura do %s
+    // conta bytes, e cada letra acentuada ocupa 2
+    printf(&quot;\nÁrea do cômodo:   %8.2f m²\n&quot;, area);
+    printf(&quot;Com 10%% de perda: %8.2f m²\n&quot;, area_compra);
+    printf(&quot;Caixas:           %8d\n&quot;, caixas);
+    printf(&quot;Sobra na última:  %8.2f m²\n&quot;, sobra);
+    printf(&quot;Total (R$):       %8.2f\n&quot;, total);
+    printf(&quot;(leituras certas: %d de 3)\n&quot;, leituras);
+    return 0;
+}
+// Exemplo de execução:
+// Largura do cômodo (m): 3.2
+// Comprimento (m): 4.5
+// Preço da caixa (R$): 89.90
+//
+// Área do cômodo:      14.40 m²
+// Com 10% de perda:    15.84 m²
+// Caixas:                  7
+// Sobra na última:      1.66 m²
+// Total (R$):         629.30
+// (leituras certas: 3 de 3)
+//
+// Teste: printf &#39;3.2\n4.5\n89.90\n&#39; | ~/LPEDC/rodar &lt;este arquivo&gt;
+// Com uma letra no preço, printf &#39;3.2\n4.5\nabc\n&#39; | ~/LPEDC/rodar &lt;este arquivo&gt;
+// mostra &quot;(leituras certas: 2 de 3)&quot; e o total sai 0.00: o preço ficou com
+// o valor inicial. No módulo 02, com o if, o programa vai poder parar ali.
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A021.c -o ~/LPEDC/material/A021 -lm &amp;&amp; ~/LPEDC/material/A021
+</code></pre>
+<p><strong>Exemplo A022 · Rachando a gasolina da viagem</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;math.h&gt;
+
+#define PRECO_LITRO 6.19
+
+int main(void) {
+    double distancia, consumo, pedagio;
+    int pessoas;
+
+    printf(&quot;Distância (km): &quot;);
+    scanf(&quot;%lf&quot;, &amp;distancia);
+    printf(&quot;Consumo do carro (km/l): &quot;);
+    scanf(&quot;%lf&quot;, &amp;consumo);
+    printf(&quot;Pedágios (R$): &quot;);
+    scanf(&quot;%lf&quot;, &amp;pedagio);
+    printf(&quot;Pessoas no carro: &quot;);
+    scanf(&quot;%d&quot;, &amp;pessoas);
+
+    double litros = distancia / consumo;
+    double gasolina = litros * PRECO_LITRO;
+    double total = gasolina + pedagio;
+    double cada = ceil(total / pessoas); // arredonda para o real de cima
+
+    // a 80 km/h, quanto tempo de estrada? em minutos inteiros
+    int minutos = (int) round(distancia / 80 * 60);
+
+    printf(&quot;\nLitros: %.1f\n&quot;, litros);
+    printf(&quot;Gasolina: R$ %.2f + pedágios R$ %.2f = R$ %.2f\n&quot;, gasolina, pedagio, total);
+    printf(&quot;Cada um manda um Pix de R$ %.0f\n&quot;, cada);
+    printf(&quot;Tempo a 80 km/h: %dh%02d\n&quot;, minutos / 60, minutos % 60);
+    return 0;
+}
+// Exemplo de execução:
+// Distância (km): 430
+// Consumo do carro (km/l): 12.5
+// Pedágios (R$): 47.80
+// Pessoas no carro: 4
+//
+// Litros: 34.4
+// Gasolina: R$ 212.94 + pedágios R$ 47.80 = R$ 260.74
+// Cada um manda um Pix de R$ 66
+// Tempo a 80 km/h: 5h23
+//
+// Teste: printf &#39;430\n12.5\n47.80\n4\n&#39; | ~/LPEDC/rodar &lt;este arquivo&gt;
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A022.c -o ~/LPEDC/material/A022 -lm &amp;&amp; ~/LPEDC/material/A022
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E061</strong> · ★☆☆</p>
+<p>Escreva a calculadora de IMC (índice de massa corporal): lê o peso em kg
+e a altura em metros, sem mostrar perguntas, e mostra o IMC com uma casa. A
+fórmula é peso / altura².</p>
+<pre><code class="language-text">Entrada:
+72.5
+1.75
+Saída esperada:
+IMC: 23.7
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E061.c -o ~/LPEDC/material/E061 -lm &amp;&amp; ~/LPEDC/material/E061
+</code></pre>
+<p><strong>Exercício E063</strong> · ★★☆</p>
+<p>Quanto tempo leva para baixar um jogo? Leia o tamanho em GB e a
+velocidade da internet em Mbps (megabits por segundo), sem mostrar
+perguntas, e mostre o tempo em segundos, e em minutos e segundos. Atenção às
+unidades: 1 GB = 1000 MB, 1 byte = 8 bits. Arredonde os segundos totais para
+o inteiro mais próximo.</p>
+<pre><code class="language-text">Entrada:
+4.7
+100
+Saída esperada:
+Tempo: 376 s = 6 min 16 s
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E063.c -o ~/LPEDC/material/E063 -lm &amp;&amp; ~/LPEDC/material/E063
+</code></pre>
+<p><strong>Exercício E064</strong> · ★★☆</p>
+<p>O celular custa R$ 1299.00 e a loja parcela em 12 vezes com juros de
+1.99% ao mês. A parcela fixa (tabela Price) é</p>
+<pre><code class="language-text">parcela = valor * taxa / (1 - (1 + taxa) elevado a -n)
+</code></pre>
+<p>Calcule a parcela, arredonde para centavos de verdade (não só na tela) e
+mostre o total pago e quanto foi de juros.</p>
+<pre><code class="language-text">Saída esperada:
+12x de R$ 122.76
+Total: R$ 1473.12
+Juros: R$ 174.12
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E064.c -o ~/LPEDC/material/E064 -lm &amp;&amp; ~/LPEDC/material/E064
+</code></pre>
+<p><strong>Exercício E066</strong> · ★★★</p>
+<p>O app de entregas diz &quot;chega em 135 minutos&quot;. Leia a hora atual (hh:mm)
+e os minutos de espera, sem mostrar perguntas, e mostre a hora da chegada no
+formato hh:mm e quantos dias depois de hoje ela cai. Sem if: só aritmética.
+Teste com os três casos abaixo.</p>
+<pre><code class="language-text">Entrada:
+22:45
+135
+Saída esperada:
+Chega às 01:00, 1 dia(s) depois
+</code></pre>
+<pre><code class="language-text">Entrada:
+08:10
+50
+Saída esperada:
+Chega às 09:00, 0 dia(s) depois
+</code></pre>
+<pre><code class="language-text">Entrada:
+23:59
+2881
+Saída esperada:
+Chega às 00:00, 3 dia(s) depois
+</code></pre>
+<hr>
+<h2>Lista do módulo</h2>
+<p>30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P0101.c a P0130.c, em <code>material/</code>; resoluções em <code>_respostas/01-fundamentos/lista/</code>.</p>
+<h3>★☆☆ Aquecimento</h3>
+<p><strong>Exercício P0101</strong> · ★☆☆ · O plano trimestral da academia</p>
+<p>A academia do bairro cobra R$ 119.90 por mês e uma matrícula de R$ 49.90,
+paga uma vez só. Escreva um programa que guarde esses dois valores e o número
+de meses (3) em variáveis e mostre o resumo do plano trimestral:</p>
+<pre><code class="language-text">Saída esperada:
+Mensalidade: R$ 119.90
+Meses: 3
+Total do plano: R$ 409.60
+</code></pre>
+<hr>
+<p><strong>Exercício P0102</strong> · ★☆☆ · Gasolina até Itacoatiara</p>
+<p>De Manaus a Itacoatiara são 176 km pela AM-010. O carro faz 11.5 km por litro
+e a gasolina custa R$ 6.79. Escreva um programa que calcule quantos litros a
+viagem de ida gasta e quanto custa, com duas casas decimais:</p>
+<pre><code class="language-text">Saída esperada:
+Distância: 176 km
+Litros: 15.30
+Custo da ida: R$ 103.92
+</code></pre>
+<p><strong>Resposta esperada:</strong> 15.30 litros e R$ 103.92.</p>
+<hr>
+<p><strong>Exercício P0103</strong> · ★☆☆ · Minutos do plano de celular</p>
+<p>A fatura do celular diz que você falou 437 minutos no mês. Complete o
+programa: troque os dois zeros pelas contas certas, usando só / e %, para
+mostrar o tempo em horas e minutos:</p>
+<pre><code class="language-text">Saída esperada:
+437 minutos = 7 h e 17 min
+</code></pre>
+<hr>
+<p><strong>Exercício P0104</strong> · ★☆☆ · O termômetro importado</p>
+<p>O termômetro que veio de fora mostra 98.6 °F. O programa abaixo deveria
+converter para Celsius com C = 5 / 9 × (F − 32), mas mostra 0.0. O erro está
+na conta, de propósito. Conserte só a linha da conversão:</p>
+<pre><code class="language-text">Saída esperada:
+98.6 F = 37.0 C
+</code></pre>
+<hr>
+<p><strong>Exercício P0105</strong> · ★☆☆ · O painel de senhas do banco</p>
+<p>O painel do banco está na senha 41. Escreva um programa com int senha = 41;
+e, nesta ordem: guarde em chamada o valor de senha++; depois guarde em
+proxima o valor de ++senha. Mostre as três variáveis:</p>
+<pre><code class="language-text">Saída esperada:
+Chamada: 41
+Próxima: 43
+Senha no painel: 43
+</code></pre>
+<p><strong>Resposta esperada:</strong> 41, 43 e 43.</p>
+<hr>
+<p><strong>Exercício P0106</strong> · ★☆☆ · Ônibus da excursão</p>
+<p>A escola vai levar 158 alunos ao Museu da Amazônia em ônibus de 44 lugares.
+Escreva um programa que mostre quantos ônibus saem lotados, quantos alunos vão
+no último ônibus e quantos ônibus a escola precisa alugar. Sem if: só / e %.</p>
+<pre><code class="language-text">Saída esperada:
+Ônibus lotados: 3
+Alunos no último: 26
+Ônibus para alugar: 4
+</code></pre>
+<p><strong>Resposta esperada:</strong> 3, 26 e 4.</p>
+<hr>
+<p><strong>Exercício P0107</strong> · ★☆☆ · Os cocos da feira</p>
+<p>Na feira, três cocos a R$ 7.99 dão R$ 23.97. O feirante só aceita reais
+inteiros e quer ver quatro jeitos de chegar num valor sem centavos. Mostre o
+total e o resultado de (int), round, floor e ceil sobre ele:</p>
+<pre><code class="language-text">Saída esperada:
+Total: R$ 23.97
+(int):  23
+round:  24
+floor:  23
+ceil:   24
+</code></pre>
+<p><strong>Resposta esperada:</strong> 23, 24, 23 e 24.</p>
+<pre><code class="language-bash">gcc ~/LPEDC/material/P0107.c -o ~/LPEDC/material/P0107 -lm &amp;&amp; ~/LPEDC/material/P0107
+</code></pre>
+<hr>
+<p><strong>Exercício P0108</strong> · ★☆☆ · O Pix do país inteiro</p>
+<p>Suponha que 160 milhões de pessoas façam, cada uma, um Pix de R$ 25 no mesmo
+dia. Escreva um programa que mostre o maior int, o total em reais guardado
+num long long e quantas vezes o total é maior que o INT_MAX (divisão inteira):</p>
+<pre><code class="language-text">Saída esperada:
+Maior int: 2147483647
+Total do dia: R$ 4000000000
+O total é 1 vez(es) o INT_MAX
+</code></pre>
+<hr>
+<p><strong>Exercício P0109</strong> · ★☆☆ · Quadro de partidas da rodoviária</p>
+<p>O painel da rodoviária mostra destino, horário e preço. Guarde cada hora e
+cada minuto em int (9 e 5, 13 e 40, 22 e 0) e monte o quadro com os destinos
+alinhados à esquerda em 12 colunas, as horas com dois dígitos e os preços
+alinhados à direita em 7 colunas:</p>
+<pre><code class="language-text">Saída esperada:
+Destino     Hora   Preço
+Manacapuru  09:05   25.50
+Iranduba    13:40    9.80
+Presidente  22:00  112.00
+</code></pre>
+<p><strong>Resposta esperada:</strong> as três linhas acima, com 09:05, 13:40 e 22:00.</p>
+<hr>
+<p><strong>Exercício P0110</strong> · ★☆☆ · Açaí no quilo</p>
+<p>A barraca vende açaí no quilo. Escreva um programa que leia o peso em kg e o
+preço do quilo e mostre quanto a pessoa paga. Um exemplo de interação:</p>
+<pre><code class="language-text">Saída esperada:
+Peso (kg): 1.5
+Preço do quilo: 28.00
+Total: R$ 42.00
+</code></pre>
+<p><strong>Resposta esperada:</strong> com 1.5 e 28.00, Total: R$ 42.00.</p>
+<h3>★★☆ Para pensar</h3>
+<p><strong>Exercício P0111</strong> · ★★☆ · Quanto tempo leva o backup</p>
+<p>O backup das fotos da família vai levar 200000 segundos. Escreva um programa
+que mostre esse tempo em dias, horas, minutos e segundos, só com / e %:</p>
+<pre><code class="language-text">Saída esperada:
+200000 s = 2 dia(s), 7 h, 33 min e 20 s
+</code></pre>
+<hr>
+<p><strong>Exercício P0112</strong> · ★★☆ · Os dígitos do medidor de luz</p>
+<p>O medidor de luz da casa marca 4827 kWh. Escreva um programa que separe os
+quatro dígitos só com / e % e mostre cada um, a soma e o produto deles:</p>
+<pre><code class="language-text">Saída esperada:
+Dígitos: 4 8 2 7
+Soma: 21
+Produto: 448
+</code></pre>
+<p><strong>Resposta esperada:</strong> soma 21 e produto 448.</p>
+<hr>
+<p><strong>Exercício P0113</strong> · ★★☆ · A média ponderada do concurso</p>
+<p>No concurso, a prova objetiva tem peso 2 e a discursiva tem peso 3. Com 6.0 e
+8.0, a média deveria ser (6.0 × 2 + 8.0 × 3) / 5 = 7.2, mas o programa abaixo
+mostra 16.8. O erro é de precedência e está lá de propósito. Conserte só com
+parênteses:</p>
+<pre><code class="language-text">Saída esperada:
+Média final: 7.2
+</code></pre>
+<hr>
+<p><strong>Exercício P0114</strong> · ★★☆ · O barco para Parintins</p>
+<p>De Manaus a Parintins o barco percorre 369 km a 25 km/h. Escreva um programa
+que calcule o tempo em horas (double), converta para minutos arredondando com
+round e mostre em horas e minutos:</p>
+<pre><code class="language-text">Saída esperada:
+Tempo: 14.76 h
+Em minutos: 886
+Chegada em 14 h e 46 min de viagem
+</code></pre>
+<p><strong>Resposta esperada:</strong> 886 minutos, 14 h e 46 min.</p>
+<pre><code class="language-bash">gcc ~/LPEDC/material/P0114.c -o ~/LPEDC/material/P0114 -lm &amp;&amp; ~/LPEDC/material/P0114
+</code></pre>
+<hr>
+<p><strong>Exercício P0115</strong> · ★★☆ · O pace da corrida de rua</p>
+<p>Você correu os 10 km da corrida de rua em 52 min e 30 s. Escreva um programa
+que mostre o pace (tempo por km) no formato m:ss e a velocidade média em km/h:</p>
+<pre><code class="language-text">Saída esperada:
+Tempo total: 3150 s
+Pace: 5:15 por km
+Velocidade: 11.43 km/h
+</code></pre>
+<p><strong>Resposta esperada:</strong> Pace: 5:15 e 11.43 km/h.</p>
+<hr>
+<p><strong>Exercício P0116</strong> · ★★☆ · O centavo que sumiu</p>
+<p>O caixa da padaria guarda o preço em reais (double) e converte para centavos
+inteiros antes de mandar para a maquininha. Com o pão a R$ 4.35, a maquininha
+recebe 434 centavos. O programa abaixo tem esse erro de propósito: conserte a
+conversão para a maquininha receber 435, e mostre os dois valores:</p>
+<pre><code class="language-text">Saída esperada:
+Preço: R$ 4.35
+Centavos com (int): 434
+Centavos com round: 435
+</code></pre>
+<p><strong>Resposta esperada:</strong> 434 com (int) e 435 com round.</p>
+<pre><code class="language-bash">gcc ~/LPEDC/material/P0116.c -o ~/LPEDC/material/P0116 -lm &amp;&amp; ~/LPEDC/material/P0116
+</code></pre>
+<hr>
+<p><strong>Exercício P0117</strong> · ★★☆ · O ângulo dos ponteiros</p>
+<p>Num relógio de ponteiros, o das horas anda 30 graus por hora e mais 0.5 grau
+por minuto; o dos minutos anda 6 graus por minuto. Escreva um programa que
+mostre o ângulo entre os ponteiros às 14:20 e às 9:45, usando fabs:</p>
+<pre><code class="language-text">Saída esperada:
+14:20 -&gt; 50.0 graus
+09:45 -&gt; 22.5 graus
+</code></pre>
+<p><strong>Resposta esperada:</strong> 50.0 e 22.5 graus.</p>
+<pre><code class="language-bash">gcc ~/LPEDC/material/P0117.c -o ~/LPEDC/material/P0117 -lm &amp;&amp; ~/LPEDC/material/P0117
+</code></pre>
+<hr>
+<p><strong>Exercício P0118</strong> · ★★☆ · A playlist da viagem</p>
+<p>Três músicas da playlist duram 3:45, 4:12 e 5:03 (minutos:segundos). Guarde
+cada minuto e cada segundo num int e mostre a duração total e a média por
+música, as duas no formato m:ss:</p>
+<pre><code class="language-text">Saída esperada:
+Total: 13:00
+Média por música: 4:20
+</code></pre>
+<p><strong>Resposta esperada:</strong> Total 13:00 e média 4:20.</p>
+<hr>
+<p><strong>Exercício P0119</strong> · ★★☆ · A caixa d&#39;água da casa</p>
+<p>A caixa d&#39;água cilíndrica tem raio de 0.6 m e altura de 1.2 m. A casa gasta
+180 litros por dia. Escreva um programa com const double PI = 3.14159265; que
+mostre o volume em m³, a capacidade em litros inteiros (corte com cast), por
+quantos dias completos a caixa cheia dura e quantos litros sobram:</p>
+<pre><code class="language-text">Saída esperada:
+Volume: 1.3572 m3
+Capacidade: 1357 litros
+Dura 7 dias completos e sobram 97 litros
+</code></pre>
+<p><strong>Resposta esperada:</strong> 1357 litros, 7 dias e 97 litros de sobra.</p>
+<hr>
+<p><strong>Exercício P0120</strong> · ★★☆ · A média da ida e volta</p>
+<p>Você vai de carro ao sítio, 120 km, a 60 km/h, e volta pelos mesmos 120 km a
+40 km/h. Muita gente diz que a média foi 50 km/h. Escreva um programa que
+calcule o tempo de cada trecho, o tempo total e a velocidade média de verdade
+(distância total / tempo total):</p>
+<pre><code class="language-text">Saída esperada:
+Ida: 2.0 h
+Volta: 3.0 h
+Total: 240 km em 5.0 h
+Velocidade média: 48.0 km/h
+</code></pre>
+<h3>★★★ Desafio</h3>
+<p><strong>Exercício P0121</strong> · ★★★ · Os dígitos verificadores do CPF</p>
+<p>O CPF tem 9 dígitos e 2 verificadores. O 1º verificador: multiplique os 9
+dígitos pelos pesos 10, 9, 8, ..., 2, some e pegue o resto r da divisão por
+11; se r &lt; 2 o dígito é 0, senão é 11 − r. O 2º usa os 9 dígitos mais o 1º
+verificador, com pesos 11, 10, ..., 2, e a mesma regra. Escreva um programa
+que, sem if, calcule os verificadores de 123456789 e mostre o CPF formatado:</p>
+<pre><code class="language-text">Saída esperada:
+Soma 1: 210, resto 1, dígito 0
+Soma 2: 255, resto 2, dígito 9
+CPF: 123.456.789-09
+</code></pre>
+<hr>
+<p><strong>Exercício P0122</strong> · ★★★ · Em que dia da semana cai a prova</p>
+<p>Dá para descobrir o dia da semana de qualquer data só com contas inteiras.
+Com a = (14 − mês) / 12, y = ano − a e m = mês + 12a − 2, o dia da semana é
+(dia + y + y/4 − y/100 + y/400 + 31m/12) % 7, com 0 = domingo, 1 = segunda,
+..., 6 = sábado. Escreva um programa que mostre o número do dia da semana da
+prova do PPGI (27/11/2026) e do Natal de 2026 (25/12/2026):</p>
+<pre><code class="language-text">Saída esperada:
+27/11/2026 -&gt; dia 5 da semana (0 = domingo)
+25/12/2026 -&gt; dia 5 da semana (0 = domingo)
+</code></pre>
+<p><strong>Resposta esperada:</strong> as duas datas caem numa sexta-feira (5).</p>
+<hr>
+<p><strong>Exercício P0123</strong> · ★★★ · Quantos dias faltam para a prova</p>
+<p>Para contar os dias entre duas datas, transforme cada uma num número de dias
+desde uma data fixa e subtraia. Com a = (14 − mês) / 12, y = ano − a e m =
+mês + 12a − 3, o número do dia é dia + (153m + 2)/5 + 365y + y/4 − y/100 +
+y/400. Escreva um programa que mostre quantos dias há de 15/08/2026 até a
+prova, em 27/11/2026, e quantas semanas completas e dias isso dá:</p>
+<pre><code class="language-text">Saída esperada:
+De 15/08/2026 a 27/11/2026: 104 dias
+São 14 semanas e 6 dias
+</code></pre>
+<p><strong>Resposta esperada:</strong> 104 dias, 14 semanas e 6 dias.</p>
+<hr>
+<p><strong>Exercício P0124</strong> · ★★★ · O dígito do código de barras</p>
+<p>O código de barras dos produtos (EAN-13) tem 12 dígitos e um verificador.
+Multiplique os dígitos, da esquerda para a direita, alternando os pesos 1 e 3;
+o verificador é (10 − soma % 10) % 10. Escreva um programa que guarde
+789123456789 num long long, calcule o verificador sem if e mostre o código
+completo:</p>
+<pre><code class="language-text">Saída esperada:
+Soma ponderada: 135
+Verificador: 5
+Código: 7891234567895
+</code></pre>
+<hr>
+<p><strong>Exercício P0125</strong> · ★★★ · O byte escrito com zeros e uns</p>
+<p>O manual do sensor diz que o registro de configuração deve receber o byte
+10110110. Guarde isso num int como se fosse decimal (int bits = 10110110;),
+separe cada &quot;dígito&quot; com / e % por 10, monte o valor de verdade com os pesos
+128, 64, ..., 1 e mostre em decimal, hexadecimal e octal:</p>
+<pre><code class="language-text">Saída esperada:
+Bits: 10110110
+Decimal: 182
+Hexadecimal: 0xB6
+Octal: 0266
+</code></pre>
+<p><strong>Resposta esperada:</strong> 182, 0xB6 e 0266.</p>
+<hr>
+<p><strong>Exercício P0126</strong> · ★★★ · Previsão da maratona</p>
+<p>A fórmula de Riegel prevê o tempo numa prova mais longa a partir de uma mais
+curta: T2 = T1 × (D2 / D1) elevado a 1.06. Você correu 10 km em 50 min.
+Escreva um programa que preveja o tempo na maratona (42.195 km), arredonde
+para segundos inteiros e mostre no formato h:mm:ss, além do pace previsto:</p>
+<pre><code class="language-text">Saída esperada:
+Previsão: 13801 s
+Maratona em 3:50:01
+Pace previsto: 5:27 por km
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/P0126.c -o ~/LPEDC/material/P0126 -lm &amp;&amp; ~/LPEDC/material/P0126
+</code></pre>
+<hr>
+<p><strong>Exercício P0127</strong> · ★★★ · Fibonacci sem laço</p>
+<p>Na sequência de Fibonacci (0, 1, 1, 2, 3, 5, 8, ...), o termo n é o inteiro
+mais perto de φⁿ / √5, onde φ = (1 + √5) / 2 é a razão áurea (fórmula de
+Binet). Escreva um programa que calcule φ com sqrt e mostre os termos 10, 30
+e 40 com pow e round, guardando cada um num long:</p>
+<pre><code class="language-text">Saída esperada:
+phi = 1.6180339887
+F(10) = 55
+F(30) = 832040
+F(40) = 102334155
+</code></pre>
+<p><strong>Resposta esperada:</strong> 55, 832040 e 102334155.</p>
+<pre><code class="language-bash">gcc ~/LPEDC/material/P0127.c -o ~/LPEDC/material/P0127 -lm &amp;&amp; ~/LPEDC/material/P0127
+</code></pre>
+<hr>
+<p><strong>Exercício P0128</strong> · ★★★ · De Manaus a Belém em linha reta</p>
+<p>A distância em linha reta entre dois pontos da Terra sai da fórmula de
+haversine. Com as latitudes e longitudes em radianos, faça
+a = sin²(Δlat/2) + cos(lat1)·cos(lat2)·sin²(Δlon/2) e
+d = 2 · R · asin(√a), com R = 6371 km. Manaus fica em (−3.1190, −60.0217) e
+Belém em (−1.4558, −48.4902), em graus. Escreva um programa, com
+#define PI 3.14159265358979, que mostre a distância arredondada para km:</p>
+<pre><code class="language-text">Saída esperada:
+Manaus: -3.1190, -60.0217
+Belém: -1.4558, -48.4902
+Distância: 1294 km
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/P0128.c -o ~/LPEDC/material/P0128 -lm &amp;&amp; ~/LPEDC/material/P0128
+</code></pre>
+<hr>
+<p><strong>Exercício P0129</strong> · ★★★ · A data da Páscoa</p>
+<p>A data da Páscoa muda todo ano, mas sai de uma receita só de contas inteiras
+(algoritmo de Meeus). Para o ano A: a = A % 19, b = A / 100, c = A % 100,
+d = b / 4, e = b % 4, f = (b + 8) / 25, g = (b − f + 1) / 3,
+h = (19a + b − d − g + 15) % 30, i = c / 4, k = c % 4,
+l = (32 + 2e + 2i − h − k) % 7, m = (a + 11h + 22l) / 451,
+mês = (h + l − 7m + 114) / 31 e dia = (h + l − 7m + 114) % 31 + 1.
+Escreva um programa que mostre a Páscoa de 2026 e de 2027:</p>
+<pre><code class="language-text">Saída esperada:
+Páscoa de 2026: 05/04
+Páscoa de 2027: 28/03
+</code></pre>
+<p><strong>Resposta esperada:</strong> 05/04 em 2026 e 28/03 em 2027.</p>
+<hr>
+<p><strong>Exercício P0130</strong> · ★★★ · Os quatro bytes de um int</p>
+<p>Um int de 4 bytes guarda o número 305419896. Sem nenhum operador de bits, só
+com / e % por 256, separe os quatro bytes (do mais significativo para o
+menos), mostre cada um em decimal e em hexadecimal com dois dígitos, e depois
+remonte o número a partir dos bytes para conferir:</p>
+<pre><code class="language-text">Saída esperada:
+Número: 305419896 (0x12345678)
+Bytes: 18 52 86 120
+Em hexa: 12 34 56 78
+Remontado: 305419896
+</code></pre>
+<p><strong>Resposta esperada:</strong> 18 52 86 120, ou 12 34 56 78 em hexa.</p>
+<hr>
+<h2>Desafios do módulo</h2>
+<p>Problemas com variáveis, <code>scanf</code>, aritmética, conversões, <code>math.h</code> e
+<code>printf</code>. Nenhum precisa de <code>if</code> nem de laço. Escreva cada um num arquivo seu
+e compile com as flags de estudo.</p>
+<p><strong>1. Troco em moedas.</strong> O caixa da padaria só tem moedas de R$ 1, R$ 0,50,
+R$ 0,25, R$ 0,10 e R$ 0,05. Leia um troco em reais (<code>double</code>) e mostre quantas
+moedas de cada valor entregar, sempre da maior para a menor. Teste com 3.85.</p>
+<details><summary>Resposta</summary><p>3 de R$ 1, 1 de R$ 0,50, 1 de R$ 0,25, 1 de R$ 0,10 e nenhuma de R$ 0,05: <strong>6
+moedas</strong>. O caminho: converta para centavos inteiros <strong>arredondando</strong>
+(<code>(int) round(troco * 100)</code>; sem o round, 19.99 * 100 dá 1998.99999... e o cast cortaria para 1998) e, para cada moeda,
+<code>quantidade = centavos / moeda</code> e <code>centavos %= moeda</code>.</p>
+</details><p><strong>2. Que dia da semana?</strong> Numere os dias de 0 (domingo) a 6 (sábado). Hoje é
+sábado (6). Escreva um programa que leia daqui a quantos dias e mostre o
+número do dia da semana que vai ser. Rode com 100 e com 1000.</p>
+<details><summary>Resposta</summary><pre><code class="language-text">Daqui a quantos dias? 100
+Dia da semana: 1
+</code></pre>
+<p>Com 1000 sai <code>Dia da semana: 5</code>: <strong>segunda-feira</strong> e <strong>sexta-feira</strong>.
+A conta inteira é <code>(6 + dias) % 7</code>. O <code>%</code> serve para tudo que &quot;dá a volta&quot;,
+como dias da semana e horas do relógio.</p>
+</details><p><strong>3. A senha embaralhada.</strong> Uma empresa embaralha senhas de 4 dígitos assim:
+troca cada dígito por <code>(dígito + 7) % 10</code> e depois troca o 1º dígito com o
+3º e o 2º com o 4º. Leia uma senha, mostre a embaralhada com <code>%04d</code> e escreva
+o programa que desfaz. Teste com 2026.</p>
+<details><summary>Resposta</summary><p>2, 0, 2, 6 viram 9, 7, 9, 3 e, com as trocas, <strong>9397</strong>. Para desfazer, troque
+as posições de volta e some 3 em cada dígito, com <code>% 10</code> (somar 7 e depois 3
+dá 10, que o <code>% 10</code> zera). Separe os dígitos com <code>/</code> e <code>%</code> como no E042.</p>
+</details><p><strong>4. Até onde o fatorial cabe?</strong> Qual o maior <code>n</code> cujo fatorial cabe num
+<code>int</code>? E num <code>long long</code>? Escreva um programa que mostre os fatoriais
+multiplicando um por um e use o gcc com as flags de estudo para descobrir onde estoura.</p>
+<details><summary>Resposta</summary><p><strong>12!</strong> = 479.001.600 cabe no <code>int</code>; 13! = 6.227.020.800 passa de <code>INT_MAX</code>.
+No <code>long long</code>, <strong>20!</strong> = 2.432.902.008.176.640.000 cabe; 21! não. O detector
+de comportamento indefinido do gcc com as flags de estudo acusa <code>signed integer overflow</code> na
+primeira multiplicação que estoura.</p>
+</details><p><strong>5. Quanto preciso tirar?</strong> A média final é ponderada: P1 com peso 3, P2 com
+peso 4 e P3 com peso 3. Escreva um programa que leia a P1, a P2 e a média
+desejada e mostre, com duas casas, quanto precisa tirar na P3. Teste com
+5.0, 6.5 e 6.0.</p>
+<details><summary>Resposta</summary><pre><code class="language-text">P1, P2 e média desejada: 5.0 6.5 6.0
+Precisa tirar na P3: 6.33
+</code></pre>
+<p>Média = (3·P1 + 4·P2 + 3·P3) / 10. Isolando: P3 = (média·10 − 3·P1 − 4·P2) / 3
+= (60 − 15 − 26) / 3. Use <code>double</code> em tudo: com <code>int</code>, a divisão final daria 6.</p>
+</details><p><strong>6. O voo noturno.</strong> São Paulo está uma hora à frente de Manaus. Escreva um
+programa que leia a hora e o minuto de saída de um voo em Manaus (horário de
+Manaus) e a duração em minutos, e mostre a hora do pouso no horário de São
+Paulo, no formato <code>hh:mm</code>, e quantos dias ela avançou. Teste com um voo que
+sai às 22:40 e dura 3h50 (230 minutos).</p>
+<details><summary>Resposta</summary><pre><code class="language-text">Saída (hh mm) e duração em minutos: 22 40 230
+Pouso em São Paulo: 03:30 (+1 dia)
+</code></pre>
+<p>Em minutos: 22·60 + 40 = 1360; mais 230 de voo e 60 de fuso = 1650. Os dias
+são <code>1650 / 1440</code> = 1; o resto, <code>1650 % 1440</code> = 210 minutos, vira <code>210 / 60</code>
+horas e <code>210 % 60</code> minutos, mostrados com <code>%02d</code>. É a mesma técnica do E066.</p>
+</details><p><strong>7. O preço na bomba.</strong> Um posto arredonda o total para o múltiplo de 5
+centavos mais próximo. Escreva a conta com <code>round</code> e teste com R$ 6.37, R$
+6.38 e R$ 152.12.</p>
+<details><summary>Resposta</summary><p><code>round(valor / 0.05) * 0.05</code>: 6.37 vira <strong>6.35</strong>, 6.38 vira <strong>6.40</strong> e 152.12
+vira <strong>152.10</strong>. A ideia vale para qualquer passo: divida pelo passo,
+arredonde e multiplique de volta.</p>
+</details><p><strong>8. sizeof de cada um.</strong> Escreva um programa que mostre, uma por linha, o
+<code>sizeof</code> de <code>char</code>, de <code>&#39;a&#39;</code>, de <code>&quot;a&quot;</code>, de <code>1.0f</code> e de <code>1.0</code>, e no fim o total
+das cinco. Rode num PC de 64 bits.</p>
+<details><summary>Resposta</summary><pre><code class="language-text">sizeof(char) = 1
+sizeof(&#39;a&#39;)  = 4
+sizeof(&quot;a&quot;)  = 2
+sizeof(1.0f) = 4
+sizeof(1.0)  = 8
+Total: 19
+</code></pre>
+<p>As armadilhas: <code>&#39;a&#39;</code> é <code>int</code> no C (4 bytes) e <code>&quot;a&quot;</code> tem o byte zero do fim (2
+bytes). O resultado de <code>sizeof</code> é do tipo <code>size_t</code>: mostre com <code>%zu</code>, e para
+o <code>&quot;</code> dentro do <code>printf</code> use a sequência de escape <code>\&quot;</code>.</p>
+</details><p><strong>9. O cronômetro.</strong> O cronômetro do celular guarda o tempo em milissegundos.
+Leia um valor e mostre no formato <code>mm:ss.mmm</code>. Teste com 754321.</p>
+<details><summary>Resposta</summary><p><code>754321 / 60000</code> = 12 minutos; <code>754321 % 60000</code> = 34321; <code>34321 / 1000</code> = 34
+segundos; <code>34321 % 1000</code> = 321. Com <code>printf(&quot;%02d:%02d.%03d\n&quot;, ...)</code> sai
+<strong>12:34.321</strong>. Sem o <code>%03d</code>, 5 milissegundos sairiam como <code>.5</code>, que parece
+meio segundo.</p>
+</details><p><strong>10. Qual dá a volta com garantia?</strong> Coloque os dois trechos abaixo num
+<code>main</code>, mostre <code>placar</code> e <code>pontos</code> com <code>printf</code> e rode com as flags de estudo. Depois
+conserte o trecho que o gcc com as flags de estudo acusar, mudando só o tipo da variável, para
+que ele mostre o valor certo, sem estourar.</p>
+<pre><code class="language-c">unsigned short placar = 65530;
+placar += 10;
+
+int pontos = INT_MAX;
+pontos += 1;
+</code></pre>
+<details><summary>Resposta</summary><p>Na primeira rodada, o gcc com as flags de estudo mostra <code>runtime error: signed integer overflow: 2147483647 + 1 cannot be represented in type &#39;int&#39;</code>. Depois do conserto
+(<code>long long pontos</code>, mostrado com <code>%lld</code>):</p>
+<pre><code class="language-text">placar = 4
+pontos = 2147483648
+</code></pre>
+<p>O <code>unsigned short</code> dá a volta com garantia: 65540 − 65536 = 4. O <code>int</code> com
+sinal estoura, e isso é <strong>comportamento indefinido</strong>: costuma virar
+-2147483648, mas o padrão não garante nada.</p>
+</details><h2>Questões do POSCOMP</h2>
+<p>Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.</p>
+<table>
+<thead>
+<tr>
+<th>Ano</th>
+<th>Questão</th>
+<th>Assunto</th>
+<th>Gabarito</th>
+<th>Prova</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2024</td>
+<td>45</td>
+<td>Tipos de dados básicos de linguagem</td>
+<td>A</td>
+<td><a href="https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2024.pdf">caderno</a></td>
+</tr>
+</tbody></table>
+<h2>Questões no estilo da prova</h2>
+<p>Questões objetivas no formato da Prova do PPGI, com uma alternativa certa.
+Resolva no papel antes do gabarito e, na dúvida, rode o trecho com as flags
+de estudo.</p>
+<p><strong>1.</strong> Qual a saída do trecho abaixo?</p>
+<pre><code class="language-c">int a = 7, b = 2;
+double m = a / b;
+printf(&quot;%.1f\n&quot;, m);
+</code></pre>
+<ul>
+<li>(A) 3.5</li>
+<li>(B) 3.0</li>
+<li>(C) 4.0</li>
+<li>(D) 3</li>
+<li>(E) o programa não compila: <code>int</code> não pode ir para <code>double</code></li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(B).</strong> <code>a / b</code> é uma divisão entre dois <code>int</code>: dá 3, e só <strong>depois</strong> o 3
+vira <code>double</code> na atribuição. O <code>%.1f</code> mostra <code>3.0</code>. Para sair 3.5, um dos
+operandos tem que ser real antes da conta: <code>(double) a / b</code>. O (D) seria o
+<code>printf</code> com <code>%d</code>, que nem combina com <code>double</code>. Veja 0007 e 0008.</p>
+</details><p><strong>2.</strong> Quanto vale a expressão <code>10 - 4 - 3 * 2 % 4</code> em C?</p>
+<ul>
+<li>(A) 0</li>
+<li>(B) 9</li>
+<li>(C) 3</li>
+<li>(D) 4</li>
+<li>(E) 6</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(D).</strong> <code>*</code> e <code>%</code> têm a mesma precedência e associam da esquerda para a
+direita: <code>3 * 2</code> é 6 e <code>6 % 4</code> é 2. Os dois <code>-</code> também vão da esquerda para a
+direita: <code>(10 - 4) - 2</code> é 4. Quem faz <code>4 - 3</code> primeiro chega em 9 ou em
+outros valores. Veja 0007.</p>
+</details><p><strong>3.</strong> Num compilador que segue o C99 ou mais novo, o que mostra
+<code>printf(&quot;%d %d\n&quot;, -7 / 2, -7 % 3);</code>?</p>
+<ul>
+<li>(A) -3 -1</li>
+<li>(B) -4 2</li>
+<li>(C) -3 2</li>
+<li>(D) -4 -1</li>
+<li>(E) -3 1</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A).</strong> Desde o C99, a divisão inteira corta <strong>em direção ao zero</strong>: -3,5
+vira -3. O resto acompanha o sinal do dividendo e mantém a identidade
+<code>(a / b) * b + a % b == a</code>: <code>(-7 / 3) * 3 + (-7 % 3)</code> é <code>-6 + (-1)</code>. O par
+(-4, 2) seria o arredondamento para baixo da matemática. Veja 0007.</p>
+</details><p><strong>4.</strong> Qual a saída?</p>
+<pre><code class="language-c">int x = 5;
+int y = x++ + 2;
+int z = ++x * 2;
+printf(&quot;%d %d %d\n&quot;, x, y, z);
+</code></pre>
+<ul>
+<li>(A) 6 7 12</li>
+<li>(B) 7 8 14</li>
+<li>(C) 5 7 12</li>
+<li>(D) 7 8 16</li>
+<li>(E) 7 7 14</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(E).</strong> O pós-incremento <code>x++</code> vale o valor <strong>antigo</strong> (5) e só depois <code>x</code>
+vira 6: <code>y = 5 + 2 = 7</code>. O pré-incremento <code>++x</code> aumenta primeiro (7) e vale o
+valor novo: <code>z = 7 * 2 = 14</code>. No fim, <code>x</code> é 7. Veja 0009.</p>
+</details><p><strong>5.</strong> Numa máquina em que <code>unsigned char</code> tem 8 bits, o que este trecho
+mostra?</p>
+<pre><code class="language-c">unsigned char c = 250;
+c = c + 10;
+printf(&quot;%d\n&quot;, c);
+</code></pre>
+<ul>
+<li>(A) 260</li>
+<li>(B) 255</li>
+<li>(C) 4</li>
+<li>(D) -6</li>
+<li>(E) o comportamento é indefinido</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(C).</strong> Um <code>unsigned char</code> vai de 0 a 255. Para tipos <strong>sem sinal</strong>, o C
+garante a volta (aritmética módulo 256): 260 - 256 = 4. Comportamento
+indefinido é o estouro de um tipo <strong>com sinal</strong>, como o <code>int</code>. O (B) seria
+uma saturação, que o C não faz. Veja 0003.</p>
+</details><p><strong>6.</strong> Sobre os tipos primitivos do C, considere as afirmações e marque a alternativa CORRETA.</p>
+<ul>
+<li><p><strong>I.</strong> <code>sizeof(char)</code> vale 1 por definição do padrão, em qualquer máquina.</p>
+</li>
+<li><p><strong>II.</strong> <code>int</code> ocupa sempre 4 bytes, por exigência do padrão.</p>
+</li>
+<li><p><strong>III.</strong> <code>sizeof</code> é um operador, e não uma função de <code>&lt;stdlib.h&gt;</code>.</p>
+</li>
+<li><p><strong>IV.</strong> <code>unsigned int</code> ocupa o dobro de bytes de <code>int</code>, porque não guarda o sinal.</p>
+</li>
+<li><p>(A) Apenas I</p>
+</li>
+<li><p>(B) Apenas I e II</p>
+</li>
+<li><p>(C) Apenas II e III</p>
+</li>
+<li><p>(D) Apenas III e IV</p>
+</li>
+<li><p>(E) Apenas I e III</p>
+</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(E).</strong> I é verdadeira: <code>char</code> é a unidade de medida do <code>sizeof</code>. II é falsa: o padrão só exige mínimos (o <code>int</code> tem pelo menos 16 bits). III é verdadeira: <code>sizeof</code> é resolvido na compilação e não precisa de <code>#include</code>. IV é falsa: <code>unsigned</code> muda a faixa de valores, não o tamanho. Veja 0002 e 0003.</p>
+</details><p><strong>7.</strong> Considere as afirmações sobre operadores e conversões e marque a alternativa CORRETA.</p>
+<ul>
+<li><p><strong>I.</strong> Depois de <code>int x = 10; x *= 2 + 3;</code>, <code>x</code> vale 50.</p>
+</li>
+<li><p><strong>II.</strong> Desde o C99, <code>-7 / 2</code> vale -4, porque a divisão inteira arredonda para baixo.</p>
+</li>
+<li><p><strong>III.</strong> Em <code>y = x++;</code>, <code>y</code> recebe o valor que <code>x</code> tinha antes do incremento.</p>
+</li>
+<li><p><strong>IV.</strong> <code>(double) 7 / 2</code> vale 3.5, porque o cast age antes da divisão.</p>
+</li>
+<li><p>(A) Apenas I e II</p>
+</li>
+<li><p>(B) Apenas II e IV</p>
+</li>
+<li><p>(C) Apenas I e III</p>
+</li>
+<li><p>(D) Apenas I, III e IV</p>
+</li>
+<li><p>(E) Apenas II, III e IV</p>
+</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(D).</strong> I é verdadeira: <code>x *= 2 + 3</code> é <code>x = x * (2 + 3)</code>. II é falsa: o C99 corta em direção ao zero e <code>-7 / 2</code> vale -3. III é verdadeira: o pós-incremento entrega o valor antigo. IV é verdadeira: o cast tem precedência maior que o <code>/</code>, então a divisão já é real. Veja 0007, 0008 e 0009.</p>
+</details><p><strong>8.</strong> Qual das expressões abaixo vale <strong>3.5</strong>?</p>
+<ul>
+<li>(A) <code>(double) (7 / 2)</code></li>
+<li>(B) <code>7 / 2 * 1.0</code></li>
+<li>(C) <code>(double) 7 / 2</code></li>
+<li>(D) <code>(int) 7.0 / 2</code></li>
+<li>(E) <code>7 / (int) 2.0</code></li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(C).</strong> O cast tem precedência maior que a divisão: <code>(double) 7</code> vira 7.0
+<strong>antes</strong> do <code>/</code>, e real dividido por inteiro é divisão real. Em (A) e (B) a
+divisão inteira <code>7 / 2</code> acontece primeiro e o 3 vira 3.0 tarde demais. Em (D)
+e (E) os dois operandos são <code>int</code>. Veja 0008.</p>
+</details><p><strong>9.</strong> Qual a saída?</p>
+<pre><code class="language-c">char ch = &#39;A&#39; + 2;
+printf(&quot;%c %d\n&quot;, ch, ch);
+</code></pre>
+<ul>
+<li>(A) C 67</li>
+<li>(B) A2 67</li>
+<li>(C) C 65</li>
+<li>(D) não compila: não se soma número com caractere</li>
+<li>(E) B 66</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A).</strong> Um <code>char</code> é um número pequeno: <code>&#39;A&#39;</code> é 65 na tabela ASCII, e
+65 + 2 = 67, que é o código de <code>&#39;C&#39;</code>. O <code>%c</code> mostra o caractere desse código e
+o <code>%d</code> mostra o próprio número. Veja 0002 (e 0040, no módulo 05).</p>
+</details><h2>Para ler mais</h2>
+<ul>
+<li>BACKES, A. <em>Linguagem C: completa e descomplicada</em>. Rio de Janeiro: Elsevier, 2013. Caps. 1 a 3.</li>
+<li>FEOFILOFF, P. <em>Algoritmos em linguagem C</em>. Rio de Janeiro: Elsevier, 2009. Apêndice C: números inteiros.</li>
+<li>BACKES, A. R. <em>Linguagem C: descomplicada</em>. Apostila. Uberlândia: FACOM/UFU, [s.d.].</li>
+<li>DEITEL, P.; DEITEL, H. <em>C: como programar</em>. 6. ed. São Paulo: Pearson Prentice Hall, 2011. Caps. 2, 3, 5 e 9.</li>
+<li>CELES, W.; CERQUEIRA, R.; RANGEL, J. L. <em>Introdução a estruturas de dados: com técnicas de programação em C</em>. 2. ed. Rio de Janeiro: Elsevier, 2016. Capítulos iniciais: tipos, expressões, entrada e saída.</li>
+<li>HARA, C.; ZOLA, W. <em>Linguagem C: notas de aula</em>. Rev. A. L. N. Delgado. Curitiba: UFPR, 2008.</li>
+<li>LEAL, G. C. L. <em>Algoritmos e lógica de programação II</em>. Maringá: Unicesumar, 2016. Unidade I.</li>
+<li>CARVALHO, V. A. <em>Lógica de programação</em>. Colatina: IFES / e-Tec Brasil, 2010. Aulas 5 a 7.</li>
+<li>ANTONELLO, R. <em>Linguagem C</em>. 1. ed. Disponível em: <a href="http://www.antonello.com.br">http://www.antonello.com.br</a>.</li>
+<li>MARTINS, L. G. A. <em>Apostila de linguagem C: conceitos básicos</em>. Uberlândia: FACOM/UFU, [s.d.].</li>
+<li>DORNELLES FILHO, A. A. <em>Fundamentos de linguagem C</em>. Caxias do Sul: SENAI-RS, 1997.</li>
+<li>LAGO, S. <em>Linguagem C</em>. Apostila, [s.d.].</li>
+<li>UNICAMP. Centro de Computação. <em>Introdução à linguagem C</em>: versão 2.0. Campinas: UNICAMP, [s.d.].</li>
+<li>KERNIGHAN, B. W.; RITCHIE, D. M. <em>The C programming language</em>. 2. ed. Englewood Cliffs: Prentice Hall, 1988. Caps. 1 e 2.</li>
+<li>ISO/IEC. <em>ISO/IEC 9899:2018</em>: Information technology: Programming languages: C. Genebra: ISO, 2018.</li>
+<li>CPPREFERENCE. <em>C reference</em>. Disponível em: <a href="https://en.cppreference.com/w/c">https://en.cppreference.com/w/c</a>.</li>
+<li>KERRISK, M. (org.). <em>Linux man-pages</em>: printf(3), scanf(3), math.h(0p). Disponível em: <a href="https://man7.org/linux/man-pages/">https://man7.org/linux/man-pages/</a>.</li>
+<li>GNU. <em>Using the GNU Compiler Collection (GCC)</em>: Overall options e Warning options. Disponível em: <a href="https://gcc.gnu.org/onlinedocs/gcc/">https://gcc.gnu.org/onlinedocs/gcc/</a>.</li>
+</ul>

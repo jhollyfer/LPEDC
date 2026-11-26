@@ -1,0 +1,407 @@
+<h1>Fichamento: SENAI-RS, &quot;Fundamentos de Linguagem C&quot;</h1>
+<ul>
+<li><strong>Título:</strong> Fundamentos de Linguagem C (&quot;Tudo que você precisa saber sobre C para não passar vergonha!&quot;)</li>
+<li><strong>Autor:</strong> Adalberto A. Dornelles F., Centro Tecnológico de Mecatrônica, SENAI-RS, Caxias do Sul, nov./1997.</li>
+<li><strong>Arquivo lido:</strong> <code>2948665d-apostila_C.md</code> (2967 linhas, lido por completo).</li>
+<li><strong>Avaliação geral:</strong> apostila curta e didática, com boa progressão (constantes → operadores → E/S →
+controle → funções → vetores → ponteiros) e uma lista final de exercícios muito boa (jogo de adivinhação,
+número por extenso, Morse, 8 damas, calculadora RPN, jogo &quot;Reverse&quot;). Porém é muito datada: Turbo C++
+3.0/DOS, <code>int</code> de 2 bytes, <code>void main</code>, <code>conio.h</code>, <code>dos.h</code>, <code>alloc.h</code>, <code>random()</code>. Contém vários erros
+factuais (listados abaixo) que servem, ao contrário, como material de &quot;ache o erro&quot;. Não cobre structs,
+arquivos, nem estruturas de dados.</li>
+</ul>
+<hr>
+<h3>logica1-algoritmo</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> programa = conjunto de instruções que representa um algoritmo; linguagem = símbolos +
+regras de sintaxe. Linguagens de baixo nível (Assembly: rápido, compacto, pouco portátil) × alto nível
+(legível, portátil, precisa de compilador/interpretador). Interpretador executa instrução a instrução;
+compilador traduz tudo e gera executável.</li>
+<li><strong>Boa ideia didática:</strong> mostrar o MESMO algoritmo (tabuada de um número) em pseudocódigo, C, BASIC,
+Fortran e Assembly 8088, lado a lado; evidencia que o algoritmo é independente da linguagem.</li>
+<li><strong>Ideia de exemplo:</strong> tabuada do <code>num</code> lido, de 1 a 10, nas várias &quot;línguas&quot;.</li>
+</ul>
+<h3>logica2-pseudocodigo</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> tabela de correspondência pseudocódigo ↔ C: <code>se/então/senão/fim se</code> ↔ <code>if/else</code>;
+<code>faça ... até condição</code> ↔ <code>do { } while (condição)</code> (atenção: &quot;até&quot; inverte a condição!); <code>←</code> ↔ <code>=</code>.</li>
+<li><strong>Pegadinha:</strong> o &quot;repita... até X&quot; do Portugol termina quando X fica verdadeiro; o <code>do...while(X)</code> do C
+continua enquanto X é verdadeiro. A apostila coloca lado a lado sem alertar; bom ponto para o curso.</li>
+</ul>
+<h3>logica3-fluxograma</h3>
+<ul>
+<li>Fluxogramas simples de <code>do...while</code>, <code>while</code>, <code>if</code>, <code>if-else</code>, <code>else if</code> encadeado e <code>switch</code> (rótulos
+em cascata, mostrando visualmente o fall-through). Útil como modelo de figuras.</li>
+</ul>
+<h3>logica4-binario</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> constantes inteiras em decimal, octal (começa com <code>0</code>) e hexadecimal (<code>0x</code>).
+ASCII: códigos 0–31 controle, 32–127 padrão, 128–255 estendido (depende do fabricante).</li>
+<li><strong>Pegadinhas:</strong> <code>045</code> NÃO é quarenta e cinco: é octal (= 37). <code>01784</code> é inválido (8 não é dígito octal).
+<code>0x ff</code> (com espaço) e <code>FFEE</code> (sem <code>0x</code>) não são hexadecimais.</li>
+<li><strong>Exercício:</strong> classificar constantes como válidas/inválidas e em qual base: <code>0</code>, <code>-45</code>, <code>045</code>, <code>0x4f5a</code>,
+<code>0Xfg34</code>, <code>01784</code>, <code>1,2</code>. (Resp.: dec, dec, octal=37, hex=20314, inválida, inválida, inválida.)</li>
+</ul>
+<h3>logica5-compilacao</h3>
+<ul>
+<li>Diretivas são processadas antes da compilação; <code>#include</code> anexa arquivos; <code>#define</code> cria constantes
+simbólicas. Programa = cabeçalho com diretivas + bloco principal + rotinas + comentários.</li>
+</ul>
+<h3>0001-primeiro-programa</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> estrutura geral; comentários <code>/* */</code> e <code>//</code> (a apostila diz que <code>//</code> é &quot;só C++&quot;;
+hoje é C padrão desde C99).</li>
+<li><strong>Conjunto de caracteres:</strong> acentos e <code>@</code>, <code>$</code> só valem dentro de strings/char, não em identificadores.</li>
+</ul>
+<h3>0002-variaveis</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> declarar = informar nome e tipo para o processador reservar espaço; várias
+variáveis separadas por vírgula; inicialização na declaração; locais (dentro da rotina) × globais.
+Regras de identificadores (letra ou <code>_</code> no início; letras, dígitos e <code>_</code>; maiúsculas ≠ minúsculas).
+Palavras reservadas (inclui lixo de C++/Borland: <code>near</code>, <code>far</code>, <code>huge</code>, <code>class</code>, <code>new</code>...).</li>
+<li><strong>Analogia boa:</strong> a variável tem nome, tipo, tamanho do bloco, valor e endereço do primeiro byte
+(exemplo <code>int num = 17</code> decomposto nesses 5 atributos; ótimo para 0002 e 0044).</li>
+<li><strong>Exercício:</strong> quais nomes são válidos? <code>abc</code>, <code>y24</code>, <code>nota_1</code>, <code>3dia</code>, <code>vetor-1</code>, <code>pao&amp;leite</code>,
+<code>iteração</code>, <code>do</code>, <code>new</code>. (Válidos: abc, y24, nota_1, new; em C, <code>new</code> NÃO é reservada, <code>do</code> é.)</li>
+<li><strong>Exercício divertido:</strong> &quot;posso declarar <code>int do, re, mi, fa, sol, la, si;</code>?&quot; (Não: <code>do</code> é reservada.)</li>
+</ul>
+<h3>0003-tipos-e-limites</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>char</code> 1 byte, <code>int</code> 2 bytes (Turbo C!), <code>float</code> 4 (~7 dígitos), <code>double</code> 8
+(~15 dígitos); modificadores <code>long</code> e <code>unsigned</code> (o bit de sinal passa a guardar valor → dobra a faixa
+positiva). <code>limits.h</code> com <code>INT_MAX</code>/<code>INT_MIN</code>.</li>
+<li><strong>Pegadinha (overflow):</strong> com <code>int</code> de 16 bits, <code>5000 + 30000</code> vira <code>-30536</code> sem nenhum aviso. Adaptar ao
+<code>int</code> de 32 bits: <code>2147483647 + 1</code>. Em C, estourar a faixa não é tratado como erro (e em <code>signed</code> é
+comportamento indefinido, o que a apostila não diz).</li>
+<li><strong>Atualizar no curso:</strong> tamanhos dependem da plataforma; hoje <code>int</code> costuma ter 4 bytes; usar <code>sizeof</code>.</li>
+</ul>
+<h3>0004-constantes</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> 4 tipos de constantes: inteiras, ponto flutuante, caractere (aspas simples), string
+(aspas duplas). Real exige ponto (não vírgula) e aceita notação científica (<code>1.23e4</code>). O número 314 pode
+ser escrito <code>314.</code>, <code>3.14e2</code>, <code>31.4e1</code>, <code>.314E+3</code>... Tabela de sequências de escape (<code>\0 \a \b \t \n \v \f \r \&quot; \&#39; \? \\</code>).</li>
+<li><code>#define NOME valor</code> sem <code>;</code>, por convenção em maiúsculas; o pré-processador troca o texto.
+Constantes pré-definidas: <code>M_PI</code> em <code>math.h</code> (não é padrão ISO; em gcc precisa de <code>_DEFAULT_SOURCE</code> ou
+POSIX).</li>
+<li><strong>Argumento (discutível) da apostila:</strong> <code>#define PI</code> seria melhor que <code>float pi</code> porque não ocupa memória.
+No curso: comparar com <code>const double PI</code> (tem tipo, respeita escopo, aparece no depurador).</li>
+<li><strong>Exercício:</strong> escrever 314 de 5 formas diferentes como literal real.</li>
+</ul>
+<h3>0005-printf</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>printf</code> devolve o nº de caracteres impressos; string de controle = máscara;
+um especificador por argumento; formato <code>%[flag][largura][.precisão]tipo</code>; flags <code>-</code> (alinha à esquerda),
+<code>+</code> (sempre sinal), espaço; <code>0n</code> completa com zeros; tipos <code>d o x f e c s</code>.</li>
+<li><strong>ERRO da apostila (bom para &quot;ache o erro&quot;):</strong> usa <code>&quot;%f.2&quot;</code> achando que dá 2 casas; imprime o número com
+6 casas seguido do texto &quot;.2&quot;. O correto é <code>%.2f</code>.</li>
+<li><strong>Ideia de exemplo:</strong> recibo de troco: total 12.30, dinheiro 15.00, troco 2.70 com <code>%.2f</code>.</li>
+</ul>
+<h3>0006-scanf</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>scanf</code> recebe ENDEREÇOS; variável simples leva <code>&amp;</code>, vetor/string não. Formato
+<code>%[*][largura]tipo</code>; <code>*</code> lê e descarta o campo; largura limita caracteres lidos.</li>
+<li><code>getchar()</code> é <em>line buffered</em>: nada chega ao programa até o Enter; os caracteres extras ficam no buffer
+e são consumidos pelas próximas chamadas (ótimo gancho para &quot;sobra no buffer&quot;).</li>
+<li><strong>Ideia de exercício:</strong> ler 2 reais e imprimir a média (Ex. 4.1); ler graus e imprimir seno, cosseno e
+tangente (lembrar de converter para radianos); volume da esfera <code>4/3·π·R³</code> (pegadinha: <code>4/3</code> inteiro = 1).</li>
+</ul>
+<h3>0007-aritmetica</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>+ - * / %</code>; <code>%</code> só com inteiros; divisão por zero = erro em tempo de execução;
+não há operador de potência (usar <code>pow</code>). Precedência <code>* / %</code> antes de <code>+ -</code>, esquerda para direita;
+parênteses quebram a ordem.</li>
+<li><strong>Tabela ótima para exercício (mesmos operadores, valores diferentes por causa de parênteses):</strong>
+<code>1+2-3</code>=0; <code>24-3*5</code>=9; <code>4-2*6/4+1</code>=2; <code>6/2+11%3*4</code>=11 ×
+<code>1+(2-3)</code>=0; <code>(24-3)*5</code>=105; <code>(4-2*6)/4+1</code>=-1; <code>6/((2+11)%3)*4</code>=24.</li>
+<li><strong>Pegadinha:</strong> <code>7/2</code> = 3, mas <code>7.0/2</code>, <code>7/2.0</code> = 3.5 (tabela com num_i, den_i, num_f, den_f).</li>
+<li><strong>Pegadinha:</strong> <code>6.4 % 3</code> não compila; usar <code>(int)valor % 2</code> ou <code>fmod</code>.</li>
+</ul>
+<h3>0008-conversao</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> em atribuição, o valor da direita é convertido para o tipo da esquerda; conversões
+&quot;perigosas&quot; quando o destino é menor (<code>double → float → int → char</code>) e o compilador não avisa.
+Em expressões, o menor tipo é promovido (<code>char → int → float → double</code>). C tem tipos &quot;macios&quot;.
+Cast <code>(tipo)expr</code> muda o DADO momentaneamente, não a variável.</li>
+<li><strong>Pegadinha:</strong> <code>int i; float r = 654.321; i = r;</code> → i = 654 (trunca, não arredonda).</li>
+<li><strong>Exemplo:</strong> <code>&#39;A&#39; + 1</code> é <code>&#39;B&#39;</code>; <code>&#39;A&#39; + 32</code> é <code>&#39;a&#39;</code> (gancho para 0040).</li>
+</ul>
+<h3>0009-atribuicao</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>=</code> não é igualdade matemática; lado esquerdo tem de ser variável (<code>1 = a</code> e
+<code>b + 1 = a</code> são inválidos). Atribuição múltipla <code>i = j = k = 1</code> da direita para a esquerda.
+<code>+= -= *= /= %=</code>, com a regra <code>num *= 1 + k</code> ≡ <code>num = num * (1 + k)</code> (parênteses implícitos!).</li>
+<li><strong>Exercício de pré/pós (resposta pronta):</strong> <code>int a,b,c,i=3; a=i++; b=++i; c=--i;</code> → a=3, b=5, c=4, i=4.</li>
+<li><strong>Exercício:</strong> reescrever <code>num *= 1 + k</code> sem o operador composto (pegadinha dos parênteses).</li>
+</ul>
+<h3>0010-math</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>abs</code>, <code>fabs</code>, trigonométricas em radianos, <code>ceil</code>, <code>floor</code>, <code>log</code> (natural),
+<code>log10</code>, <code>pow</code>, <code>sqrt</code>. Protótipo como &quot;contrato&quot;: <code>double cos(double)</code>.</li>
+<li><strong>ERRO da apostila:</strong> exemplos trocados: diz <code>ceil(3.2) == 3.0</code> e <code>floor(3.2) == 4.0</code>. Correto: ceil=4.0,
+floor=3.0. Ótimo para &quot;ache o erro&quot;. (Também: <code>abs</code> está em <code>stdlib.h</code>, não em <code>math.h</code>.)</li>
+<li><strong>Exercício (6.1):</strong> função de arredondamento: 5.4 → 5, 6.5 → 7 (hoje existe <code>round</code>).</li>
+</ul>
+<h3>0011-juntando-tudo</h3>
+<ul>
+<li>Ideias: calcular raiz quadrada pelo método de Newton; épsilon da máquina (<code>eps=1.0; while(1.0+eps&gt;1.0) eps/=2;</code>), exemplo excelente e curto de <code>while</code> com reais.</li>
+</ul>
+<h3>0012-relacionais</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> 6 operadores; em C (antigo) não há tipo lógico: verdadeiro vale 1, falso 0; qualquer
+valor ≠ 0 é verdadeiro (inclusive 0.4 e -5.2). Precedência: aritméticos &gt; <code>&lt; &gt; &lt;= &gt;=</code> &gt; <code>== !=</code>.</li>
+<li><strong>Exercício (resposta pronta):</strong> com <code>i=5, j=-3, r=7.3, s=1.7</code>: <code>i==7</code>→0, <code>r!=s</code>→1, <code>i&gt;r</code>→0, <code>6&gt;=i</code>→1,
+<code>i&lt;j</code>→0, <code>s&lt;=5.9</code>→1. Com <code>m=4, n=1</code>: <code>m+n==5</code>→1; <code>m != 2*n &gt; m</code>→1; <code>6&gt;=n&lt;3-m</code>→0; <code>m==n&lt;=m&gt;m</code>→0.</li>
+<li><strong>Tabela (i=0, j=3):</strong> <code>(i==0)</code>→1 verdadeiro; <code>(i&gt;j)</code>→0; <code>(i)</code>→0 falso; <code>(j)</code>→3 verdadeiro.</li>
+</ul>
+<h3>0013-logicos</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>&amp;&amp; || !</code> = AND, OR, NOT; tabelas-verdade; <code>&amp;&amp;</code> tem precedência sobre <code>||</code>; ambos
+abaixo dos relacionais; <code>!</code> no nível dos unários.</li>
+<li><strong>Exercício (a=0,b=1,c=2):</strong> <code>a&amp;&amp;b</code>→0; <code>c&gt;b||a&lt;c</code>→1; <code>a+b &amp;&amp; !c-b</code>→1; <code>!b &amp;&amp; c || a</code>→0.</li>
+<li><strong>Lacuna:</strong> não fala de curto-circuito; complementar com outra fonte.</li>
+</ul>
+<h3>0014-if / 0015-if-else / 0016-else-if</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> condição de controle é qualquer expressão numérica (0 falso, resto verdadeiro); if de
+um bloco, de dois blocos e cadeia <code>else if</code> (só um bloco executa; o <code>else</code> final é o &quot;nenhuma das
+anteriores&quot;). Alerta de não confundir <code>=</code> com <code>==</code>.</li>
+<li><strong>Ideias de exemplo:</strong> limitar número de repetições a 10 (<code>if (iter &gt; 10) iter = 10;</code>); tipo de raízes da
+equação do 2º grau (delta &gt;0, =0, &lt;0); positivo/negativo/nulo.</li>
+<li><strong>Exercícios:</strong> maior valor absoluto entre 3 números (5.1); triângulo: 0 não forma, 1 escaleno,
+2 isósceles, 3 equilátero (6.4).</li>
+</ul>
+<h3>0017-ternario</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>cond ? e1 : e2</code>, precedência só acima das atribuições.</li>
+<li><strong>Exercício (i=1,j=2,k=3):</strong> <code>i ? j : k</code>→2; <code>j&gt;i ? ++k : --k</code>→4; <code>k==i &amp;&amp; k!=j ? i+j : i-j</code>→-1;
+<code>i&gt;k ? i : k</code>→3.</li>
+</ul>
+<h3>0018-switch</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> expressão inteira, rótulos constantes inteiros distintos; execução começa no rótulo e
+segue para baixo; <code>default</code> opcional. Usa o fall-through **de propósito: estágios de usinagem
+(desbaste grosso → fino → acabamento → polimento): começar no estágio N executa todos os seguintes.
+Ótima analogia para ensinar que fall-through pode ser útil.</li>
+<li><strong>ERRO da apostila:</strong> o exemplo &quot;switch com break&quot; da pizza (M/C/A) não tem nenhum <code>break</code>: escolher
+muçarela prepara as três pizzas e ainda imprime &quot;Opção incorreta&quot;. Excelente para &quot;ache o erro&quot;.</li>
+<li><strong>Ideia de exemplo:</strong> valor de um lanche escolhido no cardápio; &quot;piano&quot; no teclado.</li>
+</ul>
+<h3>0020-while / 0021-do-while / 0022-for</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <code>do...while</code> executa ao menos uma vez (validação: repetir enquanto número ≤ 0);
+<code>while</code> pode executar zero vezes; <code>for(init; cond; incr)</code> com várias expressões separadas por vírgula
+(<code>for(i=0, j=10; i&lt;10; i++, j--)</code>), mas uma só condição. Equivalência <code>for</code> ↔ <code>do...while</code>
+(a apostila erra: só são equivalentes se a condição for verdadeira na entrada).</li>
+<li><strong>Ideias:</strong> fatorial com <code>do...while</code>; amplitude (maior − menor) de um conjunto com <code>for</code>; imprimir
+1..10.</li>
+</ul>
+<h3>0023-break-continue</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> média de valores até ler um negativo, resolvida de 4 maneiras: <code>do...while(1)</code> com
+<code>break</code>; sem <code>break</code> (condição repetida); com <code>continue</code>; com <code>goto</code>; e com <code>exit(0)</code>. Excelente para
+discutir estilo e mostrar que todas funcionam, mas a versão estruturada é a mais legível.</li>
+<li><strong>Pegadinha:</strong> dividir <code>soma/num</code> quando nenhum valor válido foi lido → divisão por zero.</li>
+</ul>
+<h3>0025-padroes-de-laco</h3>
+<ul>
+<li>Sentinela (valor negativo encerra), contador (<code>num++</code>), acumulador (<code>soma += val</code>), maior/menor
+(amplitude). Exercícios: ímpares em [a,b] (5.4); 10 primeiros primos (5.3); N primeiros Fibonacci (5.7).</li>
+</ul>
+<h3>0026-aleatorios</h3>
+<ul>
+<li>Usa <code>random(num)</code> (Turbo C, não padrão). Ideia boa: **jogo de adivinhação 1–100 que informa o novo
+intervalo a cada palpite e conta tentativas (5.12): &quot;entre 1 e 100&quot; → palpite 45 → &quot;entre 1 e 44&quot; →
+27 → &quot;entre 28 e 44&quot; → 36 → acertou em 3. Também o algoritmo de embaralhar (Fisher-Yates) do Ex. 7.11:
+para i de n-1 até 0, j aleatório em [0,i], troca v[i] e v[j] (baralho).</li>
+</ul>
+<h3>0028-funcoes / 0029-parametros</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> definição = tipo de retorno + nome + lista de parâmetros + bloco; <code>return</code> dá o fim
+lógico e o valor; só um valor de retorno (contornável com ponteiros); sem tipo declarado o compilador
+antigo assume <code>int</code>; função após <code>main</code> exige protótipo (pode conter só os tipos). Parâmetros formais
+são locais: passagem por valor, a função recebe cópia.</li>
+<li><strong>Ideia de exemplo:</strong> <code>media2(float a, float b)</code>; <code>max(a,b)</code>; &quot;hierarquia de funções&quot; de um jogo de
+jackpot (main → regras, abertura, sorte, saída, simnao...).</li>
+<li><strong>Exercícios:</strong> <code>sim_nao()</code> que devolve 1/0; <code>primo(N)</code>; <code>fib(n)</code>; média aritmético-geométrica de 4 e 7
+≈ 5.5932 (while a&lt;b).</li>
+<li><strong>Prática ruim da apostila:</strong> <code>#include &quot;c:\tc\userbib\stat.h&quot;</code> contendo definições de funções; nomear
+arquivo com várias funções como <code>.h</code>. No curso (0034): <code>.h</code> só com protótipos, <code>.c</code> com definições.</li>
+</ul>
+<h3>0030-escopo</h3>
+<ul>
+<li>Local (criada ao entrar no bloco, destruída ao sair; mesmo nome em funções diferentes = variáveis
+diferentes), formal (parâmetro) e global (vive o programa todo). Exemplo de <code>media2</code> usando globais
+<code>a, b, med</code>, bom para mostrar por que globais acoplam o código.</li>
+</ul>
+<h3>0032-recursao / 0033-recursao-na-pratica</h3>
+<ul>
+<li>Fatorial via <code>n! = n·(n-1)!</code>; cada chamada cria novo conjunto de locais; recursão não ganha velocidade;
+todo recursivo tem versão iterativa. Exercícios: MDC de Euclides recursivo (mdc(20,16)=4, mdc(21,7)=7);
+Fibonacci recursivo; inverter vetor recursivamente.</li>
+</ul>
+<h3>0037-vetores</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> conjunto de variáveis do mesmo tipo com nome e índice; índice 0..tam-1, inteiro;
+memória = tamanho do tipo × nº de elementos; inicialização com <code>{}</code>; C não confere limites.</li>
+<li><strong>Analogia boa:</strong> memória como fila de segmentos; <code>vet[i]</code> é &quot;base + i&quot;; <code>vet[7]</code> num vetor de 3 cai em
+área de outra variável ou lixo, e pode destruí-la sem aviso do compilador.</li>
+<li><strong>Pegadinha:</strong> índice com <code>sqrt(MAX)</code> (double) é inválido.</li>
+<li><strong>Desatualizado:</strong> diz que <code>float valor[num]</code> com <code>num</code> lido é sempre errado; em C99 é VLA (válido, mas
+arriscado e opcional desde C11). Recomenda tamanho via <code>#define MAX</code>.</li>
+<li><strong>Exercícios:</strong> inverter o vetor de fato, não só imprimir ao contrário ({1,3,5,7} → {7,5,3,1});
+multiplicar vetor por k ({1,2,3}, k=5 → {5,10,15}); corrigir prova com gabarito de 10 questões.</li>
+</ul>
+<h3>0038-vetores-e-funcoes</h3>
+<ul>
+<li>Passa-se só o nome; parâmetro <code>tipo v[]</code>; a função PODE alterar o original (passagem por endereço).</li>
+<li><strong>Exercícios:</strong> <code>min_vet</code> (índice do menor); <code>remove_dup</code> (retorna nº removidos); <code>insert(v,n,valor,pos)</code>
+deslocando; <code>merge</code> (união ordenada sem duplicatas); <code>intersec</code>; <code>find</code> de padrão em texto (&quot;As bananas
+do Panamá são bacanas&quot;, &quot;anas&quot; → 6); produto escalar.</li>
+<li><strong>ERRO recorrente:</strong> protótipos <code>void le_vet(int v, int n)</code>: faltou <code>[]</code>/<code>*</code> (bom &quot;ache o erro&quot;).</li>
+</ul>
+<h3>0039-matrizes</h3>
+<ul>
+<li>Tabela de notas 5 alunos × 3 provas; 1º índice = linha, 2º = coluna; inicialização com listas
+aninhadas; na função é obrigatório informar as dimensões (exceto, de fato, a primeira).</li>
+<li><strong>ERRO:</strong> escreve <code>nota[2,1]</code> como notação; em C isso é o operador vírgula (vale <code>nota[1]</code>)! Pegadinha
+excelente para o curso.</li>
+<li><strong>Exercícios:</strong> produto de matrizes; 8 damas; jogo &quot;Reverse&quot; 3×3 (tabela de quais casas invertem).</li>
+</ul>
+<h3>0040-caracteres</h3>
+<ul>
+<li><code>char</code> guardado como inteiro (0–255 / -128..127); aritmética com char; tabela ASCII completa no apêndice.</li>
+<li><strong>Exercício:</strong> imprimir todos os caracteres com código decimal e hexadecimal (5.2); ler decimal e mostrar
+o caractere e o hex (4.2); converter para maiúsculas lendo com <code>getchar</code>/<code>putchar</code>.</li>
+</ul>
+<h3>0041-strings</h3>
+<ul>
+<li>String = vetor de char terminado em <code>&#39;\0&#39;</code>; declarada como <code>char nome[tam]</code> ou <code>char *nome</code>.</li>
+<li><strong>Pegadinha não apontada:</strong> <code>char* nome; nome = &quot;João...&quot;</code> aponta para literal (só leitura), logo não se
+pode modificá-lo nem ler para dentro dele com <code>scanf</code>.</li>
+<li><strong>Exercícios:</strong> relatório de frase (nº palavras, vogais, letras) (5.5); número por extenso 0–1000
+(279 → &quot;duzentos e setenta e nove&quot;); Morse.</li>
+</ul>
+<h3>0044-memoria / 0045-ponteiros</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> ponteiro = variável que guarda endereço; tipo do ponteiro = tipo do bloco apontado;
+<code>&amp;</code> (endereço), <code>*</code> (conteúdo); NULL não aponta para lugar nenhum; <code>scanf(&quot;%d&quot;, &amp;num)</code> explicado como
+&quot;guarde no bloco localizado no endereço de num&quot;.</li>
+<li><strong>ERRO GRAVE da apostila:</strong> afirma que <code>float* s_1, s_2;</code> declara DOIS ponteiros porque o <code>*</code> está colado
+ao tipo. Falso: só <code>s_1</code> é ponteiro; <code>s_2</code> é <code>float</code>. Pegadinha clássica para o curso.</li>
+<li>Outros erros: <code>&amp;(a+b)</code> inválido (correto); atribuição de endereço absoluto <code>0x03F8</code> (porta serial) e
+<code>int *p = 0x3f8</code>, não portável, não usar.</li>
+</ul>
+<h3>0046-passagem-por-referencia</h3>
+<ul>
+<li><code>troca(int *p1, int *p2)</code> com <code>temp</code>; passagem por valor = cópia em bloco diferente; por referência =
+endereço. Retornar vários valores: <code>stat(vet, N, &amp;med, &amp;dsvpd)</code>; <code>extremos(vet, N, &amp;max, &amp;min)</code>.</li>
+<li><strong>ERRO de digitação na apostila:</strong> <code>void troca(int *p1, int *p1)</code> (dois p1), bom para &quot;ache o erro&quot;.</li>
+<li><strong>Exercício:</strong> <code>void round(float *r)</code> que arredonda o próprio número.</li>
+</ul>
+<h3>0047-ponteiros-e-vetores</h3>
+<ul>
+<li>Nome do vetor = endereço do 1º elemento; <code>&amp;vet[i] == vet + i</code>; <code>vet[i] == *(vet + i)</code>; somar n ao
+ponteiro avança n blocos (não n bytes). Comparação de ponteiros do mesmo tipo.</li>
+</ul>
+<h3>0050-ponteiro-para-funcao</h3>
+<ul>
+<li>Declaração <code>float (*pt)(int,int)</code> (parênteses obrigatórios); <code>pt = &amp;fun;</code> <code>(*pt)(10,20)</code>; passar função
+como argumento: <code>grad(x, y, soma)</code>. Exercício: <code>graf(a, b, pf)</code> que desenha o gráfico de uma função.</li>
+</ul>
+<h3>0054-malloc-free</h3>
+<ul>
+<li><code>vet = (int*)malloc(num * sizeof(int))</code>; retorna NULL se falhar; <code>free(pont)</code>.</li>
+<li><strong>Pegadinha:</strong> a apostila mostra <code>malloc(num*2)</code> assumindo int de 2 bytes, motivo para SEMPRE usar
+<code>sizeof</code>. Biblioteca citada <code>alloc.h</code> → padrão é <code>stdlib.h</code>. Em C o cast do <code>malloc</code> é desnecessário.</li>
+<li><strong>Exercício:</strong> vetor de N elementos aleatórios em [0,10] com N lido, e reaproveitar <code>remove_dup</code>.</li>
+</ul>
+<h3>0082-pilha / 0084-pilha-aplicacoes</h3>
+<ul>
+<li>Ex. 7.16: calculadora RPN (HP) com pilha em vetor: <code>2+5*3</code> → 5 Enter 3 <code>*</code> → 15; 2 <code>+</code> → 17.</li>
+</ul>
+<hr>
+<h2>Obsoleto / evitar</h2>
+<table>
+<thead>
+<tr>
+<th>Na apostila</th>
+<th>Problema</th>
+<th>Alternativa em C padrão</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>void main()</code></td>
+<td>não padrão</td>
+<td><code>int main(void)</code> + <code>return 0;</code></td>
+</tr>
+<tr>
+<td><code>conio.h</code>: <code>getch</code>, <code>getche</code>, <code>kbhit</code></td>
+<td>só DOS/Windows</td>
+<td><code>getchar()</code>; para tecla sem Enter, termios/ncurses (fora do escopo)</td>
+</tr>
+<tr>
+<td><code>clrscr</code>, <code>clreol</code>, <code>gotoxy</code>, <code>window</code>, <code>textcolor</code>, <code>textbackground</code>, <code>cprintf</code></td>
+<td>conio/Borland</td>
+<td>não limpar tela; se preciso, sequências ANSI (<code>\x1b[2J</code>) ou ncurses</td>
+</tr>
+<tr>
+<td><code>dos.h</code>: <code>sound</code>, <code>delay</code>, <code>nosound</code></td>
+<td>DOS</td>
+<td><code>\a</code> (campainha); pausa: <code>sleep</code>/<code>nanosleep</code> (POSIX)</td>
+</tr>
+<tr>
+<td><code>random(n)</code></td>
+<td>Borland</td>
+<td><code>rand() % n</code> com <code>srand(time(NULL))</code></td>
+</tr>
+<tr>
+<td><code>alloc.h</code></td>
+<td>Borland</td>
+<td><code>stdlib.h</code></td>
+</tr>
+<tr>
+<td><code>M_PI</code></td>
+<td>não ISO</td>
+<td><code>#define PI 3.14159265358979</code> ou <code>acos(-1.0)</code></td>
+</tr>
+<tr>
+<td><code>int</code> de 2 bytes, tabelas de faixa</td>
+<td>plataforma antiga</td>
+<td><code>sizeof</code>, <code>limits.h</code>, <code>stdint.h</code></td>
+</tr>
+<tr>
+<td><code>#include &quot;c:\tc\...\stat.h&quot;</code> com corpo de funções</td>
+<td>prática ruim</td>
+<td><code>.h</code> com protótipos + <code>.c</code> compilado junto</td>
+</tr>
+<tr>
+<td><code>%f.2</code></td>
+<td>errado</td>
+<td><code>%.2f</code></td>
+</tr>
+<tr>
+<td><code>float valor[num]</code> &quot;proibido&quot;</td>
+<td>desatualizado</td>
+<td>VLA existe (C99), mas preferir <code>malloc</code></td>
+</tr>
+<tr>
+<td>comentário <code>//</code> &quot;só C++&quot;</td>
+<td>desatualizado</td>
+<td>válido desde C99</td>
+</tr>
+<tr>
+<td>arquivos <code>.cpp</code></td>
+<td>é C++</td>
+<td>usar <code>.c</code> e <code>gcc</code></td>
+</tr>
+</tbody></table>
+<h2>Extras que não cabem no sumário</h2>
+<ul>
+<li>Precisão da máquina (épsilon) e raiz por Newton: bons exemplos numéricos de laço.</li>
+<li>Tabela ASCII estendida e caracteres de moldura (179–218): curiosidade; não portáveis (UTF-8 hoje).</li>
+<li>Códigos de tecla especiais (F1 = 0 seguido de 59): histórico.</li>
+<li><code>goto</code> com rótulos e <code>exit(status)</code> (valor vai para o sistema operacional, <code>errorlevel</code> no DOS; hoje
+<code>echo $?</code>).</li>
+<li>Desafios: proteção de tela, mover caractere com setas, 8 damas, Morse sonoro, jogo Reverse,
+média aritmético-geométrica de Gauss.</li>
+</ul>

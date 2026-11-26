@@ -1,0 +1,101 @@
+<h2>0105 · A ideia e a função hash</h2>
+<p>Num vetor, <code>v[i]</code> custa <strong>O(1)</strong>: o C calcula o endereço da posição <code>i</code> e vai
+direto a ela, sem olhar as outras. A busca sequencial e a binária não têm essa
+sorte, porque precisam comparar a chave com vários itens até achar o certo. A
+tabela hash nasce de uma pergunta simples: dá para transformar a chave num
+índice e ter o acesso direto do vetor para qualquer tipo de chave?</p>
+<p>Quando a chave já é um número pequeno, a resposta é sim, e de graça. Com
+<code>const char *estado[100]</code>, o DDD 61 serve de índice e <code>estado[61]</code> devolve &quot;DF&quot;
+num passo só. Isso se chama <strong>endereçamento direto</strong>: a chave é o próprio
+índice do vetor (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7). O exemplo A209
+mostra essa tabela. O método falha em dois casos. Se a chave é grande, o vetor
+fica impossível: um CPF tem 11 dígitos e pediria cem bilhões de posições para
+guardar algumas centenas de clientes. E se a chave nem é número, como um nome,
+não há índice para usar.</p>
+<p>Pense no guarda-volumes de uma academia. A recepcionista não procura armário
+vago de porta em porta: aplica uma regra ao seu nome, e a regra devolve o
+número do armário. Na saída, a mesma regra diz onde estão as suas coisas. Essa
+regra é a <strong>função hash</strong>, que recebe a chave e devolve um índice entre <code>0</code> e
+<code>m - 1</code>, sendo <code>m</code> o tamanho do vetor. O vetor que guarda os itens é a
+<strong>tabela hash</strong>, e cada posição dele é um <strong>balde</strong> (CORMEN et al., 2024, cap. 11).</p>
+<p>Nem toda regra serve. A função precisa ser <strong>determinística</strong>: a mesma chave
+sempre dá o mesmo índice, senão você guarda num balde e procura em outro. Ela
+precisa ser <strong>rápida</strong>, porque roda a cada busca e a cada inserção. E precisa
+<strong>espalhar</strong>: chaves diferentes devem cair em baldes diferentes o máximo
+possível. Para espalhar bem, o cálculo deve usar todas as partes da chave. Uma
+função que olha só a primeira letra põe &quot;Ana&quot; e &quot;Alice&quot; sempre juntas
+(TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).</p>
+<p>Para chave inteira, a regra mais usada é o <strong>método da divisão</strong>: <code>h(k) = k mod m</code>,
+que em C se escreve <code>k % m</code>. O resto da divisão por <code>m</code> sempre fica entre <code>0</code> e
+<code>m - 1</code>, que é exatamente a faixa dos baldes. A escolha de <code>m</code> pesa. Prefira um
+primo longe de uma potência de 2. Com <code>m = 2^p</code>, o resto guarda só os <code>p</code> bits
+de baixo da chave e ignora o resto dela: com <code>m = 16</code>, as chaves 5, 21 e 37
+caem todas no balde 5 (CORMEN et al., 2024, cap. 11). O <strong>método da
+multiplicação</strong> fica para o assunto 0178.</p>
+<p>Para texto, o caminho mais simples é somar os códigos das letras e tirar o
+resto por <code>m</code>. A letra é um <code>char</code>, e no gcc de PC o <code>char</code> tem sinal: os bytes
+do &quot;ã&quot; em UTF-8 viram números negativos, e um resto negativo (<code>-98 % 8</code> dá <code>-2</code>)
+seria um índice fora do vetor. Por isso a função lê cada letra como
+<code>unsigned char</code> e acumula a soma num <code>unsigned</code>. Quando um <code>unsigned</code> estoura,
+ele volta a contar do zero (aritmética módulo 2³²), e isso é definido pela
+norma; o estouro de <code>int</code> não é (KERNIGHAN; RITCHIE, 1988, seção 6.6).</p>
+<p>Agora o ponto que define todo o resto do módulo. Existem muito mais chaves
+possíveis do que baldes, então duas chaves diferentes <strong>vão</strong> cair no mesmo
+balde. Isso é uma <strong>colisão</strong>, e nenhuma função a evita para sempre (KNUTH,
+1998, seção 6.4). O que se faz é tratá-la, e os assuntos 0106 e 0107 mostram
+as duas maneiras clássicas.</p>
+<p>O aperto da tabela tem nome: <strong>fator de carga</strong>, <code>α = n / m</code>, o número de itens
+dividido pelo número de baldes, ou quantos itens cabem em média em cada balde.
+Cinco itens em 7 baldes dão α ≈ 0,71. Quanto mais perto de 1, mais colisões
+aparecem e mais devagar a tabela fica (CORMEN et al., 2024, cap. 11).</p>
+<blockquote>
+<p>[!WARNING]
+A soma <strong>não vê a ordem das letras</strong>: &quot;amor&quot;, &quot;roma&quot;, &quot;mora&quot; e &quot;ramo&quot; somam
+431 e caem no mesmo balde. Use o <strong>polinômio</strong> <code>h = h * 31 + letra</code>, que
+multiplica cada letra pela sua posição (exemplo A210).</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>O guarda-volumes da academia tem 7 armários, e a regra é &quot;soma dos códigos das
+letras, resto por 7&quot;. &quot;caio&quot; soma 412 e cai no 6; &quot;bia&quot; soma 300, também dá 6
+e chegou antes. Os outros três caem em armários livres:</p>
+<p>{{ideia}}</p>
+<p>No código, o vetor <code>dono</code> é a tabela e <code>NULL</code> é armário vazio. O programa só
+<strong>detecta</strong> a colisão:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+#define ARMARIOS 7
+
+// função hash: soma os códigos das letras e reduz para 0..6
+int armario(const char *nome) {
+    unsigned soma = 0;
+    for (int i = 0; nome[i] != &#39;\0&#39;; i++) {
+        soma += (unsigned char)nome[i]; // o byte da letra, sempre &gt;= 0
+    }
+    return (int)(soma % ARMARIOS);
+}
+
+int main(void) {
+    const char *dono[ARMARIOS] = {NULL}; // NULL = armário vazio
+    const char *alunos[] = {&quot;ana&quot;, &quot;davi&quot;, &quot;lia&quot;, &quot;bia&quot;, &quot;caio&quot;};
+
+    for (int i = 0; i &lt; 5; i++) {
+        int a = armario(alunos[i]);
+        if (dono[a] == NULL) {
+            dono[a] = alunos[i];
+            printf(&quot;%-4s -&gt; armário %d\n&quot;, alunos[i], a);
+        } else {
+            printf(&quot;%-4s -&gt; armário %d (colisão com %s!)\n&quot;, alunos[i], a, dono[a]);
+        }
+    }
+    return 0;
+}
+// Saída:
+// ana  -&gt; armário 3
+// davi -&gt; armário 0
+// lia  -&gt; armário 2
+// bia  -&gt; armário 6
+// caio -&gt; armário 6 (colisão com bia!)
+</code></pre>
+<p>O fluxograma mostra o caminho do &quot;caio&quot;: quatro voltas no laço, índice 6,
+armário ocupado, colisão:</p>
+<p>{{fluxograma}}</p>

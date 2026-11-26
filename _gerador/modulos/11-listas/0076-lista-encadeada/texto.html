@@ -1,0 +1,106 @@
+<h2>0076 · Lista encadeada</h2>
+<p>No extrato do Pix, cada transferência nova aparece no topo, e as antigas
+descem. No vetor dinâmico do assunto 0075, pôr um item na posição 0 obriga
+todos os outros a andarem uma casa, O(n) a cada Pix. E quando o vetor enche,
+o <code>realloc</code> copia tudo. A lista encadeada troca o vetor por peças soltas, e
+inserir na frente passa a custar sempre o mesmo, com 4 itens ou com 4
+milhões.</p>
+<p>Pense numa caça ao tesouro. Cada pista está num lugar diferente da cidade e
+traz o endereço da próxima; a última diz &quot;fim&quot;. Ninguém precisa que as pistas
+fiquem lado a lado, só que cada uma saiba onde está a seguinte. Uma <strong>lista
+encadeada</strong>, que o Cormen chama de <strong>lista ligada</strong>, guarda cada item num
+pedaço separado de memória, o <strong>nó</strong>. Cada nó traz o valor e o endereço do
+próximo nó, e o último aponta para <code>NULL</code> (FEOFILOFF, 2009, cap. 4).</p>
+<p>A lista inteira é representada pelo endereço do primeiro nó, o <strong>início</strong>
+(no Cormen, <code>L.head</code>). Com ele você chega a todos os outros, seguindo as
+setas. A lista vazia é simplesmente <code>inicio == NULL</code>: não há primeiro nó
+(CORMEN et al., 2024, cap. 10).</p>
+<p>O nó é uma struct com um detalhe novo: um dos campos aponta para outro nó do
+mesmo tipo. Uma struct assim se chama <strong>struct autorreferenciada</strong>:</p>
+<pre><code class="language-c">typedef struct no {
+    int valor;
+    struct no *prox; // o próximo nó, ou NULL no último
+} No;
+</code></pre>
+<p>Uma struct não pode conter a si mesma, porque teria tamanho infinito: o nó
+teria um nó dentro, que teria outro, e assim por diante. Mas pode conter um
+<strong>ponteiro</strong> para a própria struct, porque um ponteiro tem tamanho fixo, 8
+bytes em 64 bits, aponte para o que apontar (KERNIGHAN; RITCHIE, 1989). Por
+isso o campo é <code>struct no *prox</code>, com o nome completo da struct: dentro das
+chaves, o apelido <code>No</code> ainda não existe.</p>
+<p>Cada nó vem de um <code>malloc</code> separado e cai onde o heap tiver espaço. Os
+endereços ficam fora de ordem, e a ordem da lista está só nas setas. A
+consequência é que não existe <code>lista[2]</code>: para chegar ao terceiro nó, você
+parte do início e segue duas setas (CELES; RANGEL, 2002). Ler a posição <code>i</code>,
+que no vetor era O(1), aqui custa O(i).</p>
+<p>Três operações formam a base. <strong>Inserir no início</strong> cria o nó com <code>malloc</code>,
+põe o valor, aponta o <code>prox</code> dele para o antigo início e devolve o novo nó,
+que passa a ser o início. São sempre os mesmos passos, sem andar pela lista:
+O(1) (CELES; RANGEL, 2002). Quem chama precisa guardar o retorno, com
+<code>inicio = lista_insere_inicio(inicio, 20);</code>.</p>
+<p><strong>Percorrer</strong> usa um ponteiro auxiliar <code>p</code> que começa no início e anda de nó
+em nó: <code>for (p = inicio; p != NULL; p = p-&gt;prox)</code>. Esse é o &quot;for de lista&quot;,
+que você vai escrever em quase toda função do módulo. A cada volta, <code>p-&gt;valor</code>
+é o valor do nó atual; quando <code>p</code> vira <code>NULL</code>, a lista acabou (FEOFILOFF,
+2009, cap. 4).</p>
+<p><strong>Liberar</strong> pede um <code>free</code> por nó, porque cada nó veio de um <code>malloc</code>. O
+cuidado está na ordem: guarde <code>p-&gt;prox</code> numa variável <strong>antes</strong> de chamar
+<code>free(p)</code>, porque depois do <code>free</code> o nó não existe mais e ler o campo dele é
+ler memória devolvida (CELES; RANGEL, 2002).</p>
+<p>Inserir no <strong>fim</strong> é outra história. Guardando só o início, é preciso andar
+até o último nó, O(n). Guardando também um ponteiro para o último, vira O(1);
+os assuntos 0079 e 0086 fazem isso. O nó ocupa 16 bytes em 64 bits: 4 do
+<code>int</code>, 4 de preenchimento para alinhar o ponteiro e 8 do ponteiro.</p>
+<blockquote>
+<p>[!WARNING]
+<code>lista_insere_inicio(inicio, 20);</code> sem o <code>inicio =</code> na frente compila sem
+aviso e está errado: o novo início se perde e o nó vira vazamento. No
+<code>libera</code>, o erro comum é ler <code>p-&gt;prox</code> depois de <code>free(p)</code>.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>Chegam quatro Pix: R$ 20, 45, 10 e 80, e o 80 aparece primeiro no extrato.
+Embaixo, a lista no heap, com endereços fora de ordem:</p>
+<p>{{ideia}}</p>
+<p>A inserção no início, do <code>lista.c</code> desta pasta:</p>
+<pre><code class="language-c">No *lista_insere_inicio(No *inicio, int valor) {
+    No *novo = malloc(sizeof(No));
+    if (novo == NULL) { // num programa pequeno, desistir é o mais honesto
+        fprintf(stderr, &quot;sem memória\n&quot;);
+        exit(1);
+    }
+    novo-&gt;valor = valor;
+    novo-&gt;prox = inicio; // o antigo primeiro vira o segundo
+    return novo;         // o novo nó é o novo início
+}
+</code></pre>
+<p>E o extrato montado no <code>main</code>:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;lista.h&quot;
+
+int main(void) {
+    No *extrato = NULL; // lista vazia
+
+    // os Pix chegam nesta ordem: 20, 45, 10, 80
+    extrato = lista_insere_inicio(extrato, 20);
+    extrato = lista_insere_inicio(extrato, 45);
+    extrato = lista_insere_inicio(extrato, 10);
+    extrato = lista_insere_inicio(extrato, 80);
+
+    lista_imprime(extrato); // o último a chegar aparece primeiro
+
+    int total = 0;
+    for (No *p = extrato; p != NULL; p = p-&gt;prox) { // percorrer: siga os prox
+        total += p-&gt;valor;
+    }
+    printf(&quot;%d Pix, total R$ %d\n&quot;, lista_tamanho(extrato), total);
+
+    lista_libera(extrato);
+    return 0;
+}
+// Saída:
+// 80 -&gt; 10 -&gt; 45 -&gt; 20 -&gt; NULL
+// 4 Pix, total R$ 155
+</code></pre>
+<p>O laço pergunta &quot;ainda tem nó?&quot; antes de cada passo; o <code>p</code> vai do 80 ao 20,
+vira <code>NULL</code> e o laço para com total R$ 155:</p>
+<p>{{fluxograma}}</p>

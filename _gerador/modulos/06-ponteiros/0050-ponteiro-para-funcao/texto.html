@@ -1,0 +1,91 @@
+<h2>0050 · Ponteiro para função</h2>
+<p>Às vezes uma função precisa receber <strong>outra função</strong>. Uma rotina que conta
+dias quentes e outra que conta dias frios fazem quase a mesma coisa: andam
+pelo vetor de temperaturas e contam quem passa num teste. Só o teste muda.
+Escrever uma função por teste repete o laço inteiro. O ideal seria uma rotina
+só, que recebesse o teste pronto e se limitasse a chamá-lo. Em C, o mecanismo
+para isso é um ponteiro.</p>
+<p>O raciocínio começa na memória. O código de uma função também fica guardado
+nela, numa área própria, a área de <strong>código</strong>. Se a função mora num lugar,
+ela tem endereço, e o nome da função, sem parênteses, <strong>já é esse
+endereço</strong>, do mesmo jeito que o nome de um vetor é o endereço do primeiro
+item. Uma variável que guarda esse endereço é um <strong>ponteiro para função</strong>
+(BACKES, 2013, cap. 13). Pense no número de telefone de um eletricista: você
+não carrega o eletricista no bolso, só o número, e liga quando precisa.</p>
+<p>A declaração parece estranha à primeira vista:</p>
+<pre><code class="language-text">int (*criterio)(int);
+</code></pre>
+<p>Leia de dentro para fora. <code>*criterio</code> diz que <code>criterio</code> é um ponteiro; o
+<code>(int)</code> à direita diz que ele aponta para uma função que recebe um <code>int</code>; o
+<code>int</code> à esquerda é o que essa função devolve. Os parênteses em volta de
+<code>*criterio</code> são obrigatórios. Sem eles, <code>int *criterio(int);</code> declara uma
+<strong>função</strong> chamada <code>criterio</code> que devolve <code>int *</code>, e não um ponteiro (DEITEL;
+DEITEL, 2011, cap. 7).</p>
+<p>O tipo do ponteiro inclui a <strong>assinatura</strong> da função, isto é, os tipos dos
+parâmetros e do retorno. Por isso <code>criterio</code> só aceita funções que recebem um
+<code>int</code> e devolvem <code>int</code>; uma função com outro protótipo não cabe ali (BACKES,
+2013, cap. 13).</p>
+<p>O uso é curto. <code>criterio = eh_calor;</code> guarda o endereço da função, sem <code>&amp;</code> e
+sem parênteses. <code>criterio(31)</code> chama a função apontada, passando 31, como se
+<code>criterio</code> fosse o próprio nome dela. A forma <code>(*criterio)(31)</code> também vale e
+aparece em código antigo; as duas fazem a mesma chamada (DEITEL; DEITEL,
+2011, cap. 7).</p>
+<p>O uso típico é passar o ponteiro como <strong>parâmetro</strong>. A função que o recebe
+fica genérica, e quem chama decide o comportamento. A função entregue dessa
+forma se chama <strong>callback</strong>, porque a rotina genérica &quot;liga de volta&quot; para
+ela na hora certa (CELES; RANGEL, 2002). Com isso, uma única <code>conta_se</code>
+conta dias quentes ou frios, dependendo de qual teste você entrega.</p>
+<p>A biblioteca padrão usa esse recurso no <strong><code>qsort</code></strong>, do <code>&lt;stdlib.h&gt;</code>. Ele
+ordena um vetor de qualquer tipo, desde que você entregue a função que
+compara dois elementos. Essa função recebe dois <code>const void *</code>, os endereços
+dos dois elementos (o assunto 0051 explica esse tipo), e devolve um número
+negativo se o primeiro vem antes, zero se empatam e positivo se o primeiro
+vem depois (KERRISK, s.d.). O A100 ordena a tabela do campeonato assim.</p>
+<p>Chamar por ponteiro tem um custo pequeno. É uma <strong>chamada indireta</strong>: o
+processador lê o endereço guardado na variável e salta para ele. Isso impede
+o compilador de copiar o corpo da função no lugar da chamada, otimização
+chamada <em>inline</em>, então <code>criterio(v[i])</code> pode sair mais lento que escrever o
+teste <code>v[i] &gt;= 30</code> direto no laço. Na maioria dos programas a diferença não
+aparece.</p>
+<blockquote>
+<p>[!WARNING]
+A comparação &quot;esperta&quot; <code>return *(const int *)a - *(const int *)b;</code> estoura
+o <code>int</code> quando os números têm sinais opostos e são grandes (<code>signed integer overflow</code>), e a ordem sai errada. Use <code>return (x &gt; y) - (x &lt; y);</code>. E não
+esqueça os parênteses: <code>int *f(int)</code> é função, não ponteiro.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>As máximas da semana estão num vetor. <code>conta_se</code> conta os dias que passam num
+critério que ela não conhece: recebe o endereço de <code>eh_calor</code> (ou <code>eh_frio</code>) e
+chama por ele:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int eh_calor(int t) { return t &gt;= 30; }
+int eh_frio(int t) { return t &lt;= 18; }
+
+// conta quantos elementos passam no teste; QUAL teste, quem chama decide
+int conta_se(const int *v, int n, int (*criterio)(int)) {
+    int cont = 0;
+    for (int i = 0; i &lt; n; i++) {
+        if (criterio(v[i])) { // chama a função para onde criterio aponta
+            cont++;
+        }
+    }
+    return cont;
+}
+
+int main(void) {
+    int temps[7] = {31, 27, 33, 18, 16, 29, 34}; // máximas da semana
+
+    int (*regra)(int) = eh_calor;  // o nome da função já é o endereço dela
+    printf(&quot;Dias de calor: %d\n&quot;, conta_se(temps, 7, regra));
+    printf(&quot;Dias de frio:  %d\n&quot;, conta_se(temps, 7, eh_frio));
+    return 0;
+}
+// Saída:
+// Dias de calor: 3
+// Dias de frio:  2
+</code></pre>
+<p>É o contador do assunto 0025; a novidade é que a pergunta do losango é a
+função que chegou pelo parâmetro:</p>
+<p>{{fluxograma}}</p>

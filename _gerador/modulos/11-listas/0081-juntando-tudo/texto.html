@@ -1,0 +1,119 @@
+<h2>0081 · Juntando tudo</h2>
+<p>Abra um player de música. Você pula faixas para a frente e para trás, tira
+uma da fila, liga o &quot;repetir tudo&quot; e, depois da última, a primeira volta a
+tocar. Ao fechar o app, a playlist continua lá na próxima vez. Por trás
+dessas ações estão quase todas as peças deste módulo, e montar o player é o
+jeito de vê-las trabalhando juntas.</p>
+<p>A playlist é uma fila de músicas com um marcador na que está tocando, como
+o dedo que acompanha a lista de um cardápio. O programa a organiza como um
+<strong>TAD</strong>, no molde do assunto 0074, dividido em <code>playlist.h</code> e <code>playlist.c</code>.
+Quem usa o TAD vê só a struct <code>Musica</code>, com título, artista e duração em
+segundos, e as operações: adicionar, remover, próxima, anterior, salvar. Os
+nós ficam escondidos no <code>.c</code> (CELES; CERQUEIRA; RANGEL, 2016).</p>
+<p>Dentro do <code>.c</code>, cada nó se chama <code>Faixa</code> e guarda uma <code>Musica</code> e duas setas,
+<code>ant</code> e <code>prox</code>: é a lista dupla do assunto 0079. A <code>struct playlist</code> guarda
+as duas pontas, <code>inicio</code> e <code>fim</code>, o <code>tamanho</code>, um <code>bool repetir</code> e um campo
+novo, <code>atual</code>, que aponta para a faixa que toca agora (CELES; RANGEL, 2002).
+Esse <code>atual</code> é um <strong>cursor</strong>: um ponteiro que marca uma posição da lista e
+anda por ela conforme o usuário pede.</p>
+<p>Cada operação reaproveita um assunto. <strong>Adicionar</strong> é a inserção no fim da
+lista dupla, O(1) graças ao ponteiro <code>fim</code>. <strong>Remover pelo título</strong> é a busca
+do assunto 0077, comparando com <code>strcmp</code>, seguida da remoção dupla, que
+desvia as duas setas que chegam no nó. Há um cuidado a mais: se a faixa
+removida era a atual, o cursor não pode ficar apontando para memória
+liberada. Ele vai para a faixa seguinte, ou para a anterior se a removida
+era a última.</p>
+<p><strong>Próxima</strong> e <strong>anterior</strong> movem o cursor por <code>prox</code> e <code>ant</code>. Com o
+&quot;repetir&quot; ligado, elas dão a volta nas pontas, como numa lista circular
+(assunto 0080). A volta inteira mora numa função só:</p>
+<pre><code class="language-c">const Musica *playlist_proxima(Playlist *p) {
+    if (p-&gt;atual == NULL) return NULL;
+    if (p-&gt;atual-&gt;prox != NULL) p-&gt;atual = p-&gt;atual-&gt;prox;
+    else if (p-&gt;repetir) p-&gt;atual = p-&gt;inicio;  // dá a volta
+    else return NULL;                           // fim da playlist
+    return &amp;p-&gt;atual-&gt;musica;
+}
+</code></pre>
+<p>Repare que a lista <strong>não</strong> é circular: o <code>prox</code> do último continua <code>NULL</code>. A
+volta é uma decisão da função, que olha o <code>repetir</code>. A vantagem é que
+imprimir, liberar e salvar continuam com o &quot;for de lista&quot; de sempre, sem o
+risco de laço infinito do anel.</p>
+<p><strong>Salvar</strong> e <strong>carregar</strong> usam o arquivo texto do módulo 09, com uma música
+por linha no formato <code>titulo;artista;segundos</code>. Carregar lê cada linha com
+<code>fgets</code> e separa os campos com <code>sscanf</code>, que é o <code>scanf</code> lendo de uma string.</p>
+<p>Por fim, <strong>para cada</strong> permite ao cliente fazer algo com cada música, como
+contar as mais longas, sem ver os nós. A função recebe um ponteiro para
+função, que ela chama uma vez por música, e um <code>void *</code> com os dados extras
+dessa função, como nos assuntos 0050 e 0051 (KERNIGHAN; RITCHIE, 1989).</p>
+<p>Os tamanhos mostram o preço da organização. A <code>Musica</code> tem 40 + 30 bytes de
+texto, 2 de preenchimento e 4 do <code>int</code>, 76 bytes. A <code>Faixa</code> soma mais 4 de
+preenchimento e dois ponteiros, e <code>sizeof(Faixa)</code> dá 96. O <code>const Musica *</code>
+que <code>playlist_proxima</code> devolve aponta para <strong>dentro</strong> de uma faixa, e fica
+solto se essa faixa for removida depois.</p>
+<blockquote>
+<p>[!WARNING]
+<code>playlist_proxima(p)-&gt;titulo</code> acessa <code>NULL</code> quando a função devolve
+<code>NULL</code>, o que ocorre na última música com repetir desligado: guarde o
+ponteiro e teste antes de usar. Copie texto com
+<code>snprintf(destino, sizeof destino, &quot;%s&quot;, origem)</code>, que corta em vez de
+estourar o vetor como o <code>strcpy</code>.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>Uma playlist de cinco músicas, 20:01 no total. Pulando duas, toca a terceira;
+a &quot;Asa Branca&quot; sai, a playlist chega à última e, com repetir ligado, volta
+para &quot;Aquarela&quot;:</p>
+<p>{{ideia}}</p>
+<p>O &quot;repetir&quot; mora numa função:</p>
+<pre><code class="language-c">const Musica *playlist_proxima(Playlist *p) {
+    if (p-&gt;atual == NULL) return NULL;
+    if (p-&gt;atual-&gt;prox != NULL) p-&gt;atual = p-&gt;atual-&gt;prox;
+    else if (p-&gt;repetir) p-&gt;atual = p-&gt;inicio;  // dá a volta
+    else return NULL;                           // fim da playlist
+    return &amp;p-&gt;atual-&gt;musica;
+}
+</code></pre>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;playlist.h&quot;
+
+int main(void) {
+    Playlist *viagem = playlist_cria();
+    if (viagem == NULL) return 1;
+    playlist_adiciona(viagem, &quot;Aquarela&quot;, &quot;Toquinho&quot;, 252);
+    playlist_adiciona(viagem, &quot;Asa Branca&quot;, &quot;Luiz Gonzaga&quot;, 186);
+    playlist_adiciona(viagem, &quot;Mas Que Nada&quot;, &quot;Jorge Ben&quot;, 182);
+    playlist_adiciona(viagem, &quot;Evidências&quot;, &quot;Chitãozinho e Xororó&quot;, 279);
+    playlist_adiciona(viagem, &quot;Tempo Perdido&quot;, &quot;Legião Urbana&quot;, 302);
+
+    int total = playlist_duracao(viagem);
+    printf(&quot;%d músicas, %d:%02d no total\n&quot;, playlist_tamanho(viagem), total / 60, total % 60);
+
+    playlist_proxima(viagem);
+    playlist_proxima(viagem);   // pulou duas: agora toca a 3ª
+    playlist_imprime(viagem);
+
+    playlist_remove(viagem, &quot;Asa Branca&quot;);
+    playlist_proxima(viagem);
+    playlist_proxima(viagem);   // chegou na última
+    if (playlist_proxima(viagem) == NULL) printf(&quot;fim da playlist\n&quot;);
+
+    playlist_repetir(viagem, true);
+    printf(&quot;repetir ligado, próxima: %s\n&quot;, playlist_proxima(viagem)-&gt;titulo);
+    printf(&quot;anterior: %s\n&quot;, playlist_anterior(viagem)-&gt;titulo);
+
+    playlist_libera(viagem);
+    return 0;
+}
+// Saída:
+// 5 músicas, 20:01 no total
+//   1. Aquarela - Toquinho (4:12)
+//   2. Asa Branca - Luiz Gonzaga (3:06)
+// &gt; 3. Mas Que Nada - Jorge Ben (3:02)
+//   4. Evidências - Chitãozinho e Xororó (4:39)
+//   5. Tempo Perdido - Legião Urbana (5:02)
+// fim da playlist
+// repetir ligado, próxima: Aquarela
+// anterior: Tempo Perdido
+</code></pre>
+<p>Em &quot;Tempo Perdido&quot; não há próxima: com repetir desligado a função devolve
+<code>NULL</code>; ligado, o <code>atual</code> volta ao início:</p>
+<p>{{fluxograma}}</p>

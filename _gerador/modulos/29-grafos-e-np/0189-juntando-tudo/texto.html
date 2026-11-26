@@ -1,0 +1,204 @@
+<h2>0189 · Juntando tudo</h2>
+<p>O entregador da farmácia recebe sete endereços e quer a volta mais curta,
+saindo da farmácia e voltando a ela. No pico da tarde, os endereços passam de
+quarenta. Esse é o <strong>problema do caixeiro viajante</strong> (TSP, da sigla em
+inglês), e ele reúne quase tudo o que o módulo apresentou: é um problema de
+ciclo, é NP-difícil, tem solução aproximada com garantia e tem solução exata
+por programação dinâmica.</p>
+<p>Em termos de grafo, as cidades são vértices, toda dupla de cidades tem uma
+aresta com um custo, e o TSP pede o <strong>ciclo hamiltoniano</strong> (0183) de custo
+total mínimo. A versão de decisão pergunta se existe uma volta de custo no
+máximo L, e ela é NP-completa (CORMEN et al., 2024, cap. 34). A prova é uma
+redução (0187) a partir do próprio ciclo hamiltoniano. Dado um grafo G com V
+vértices, monte um TSP nas mesmas cidades: as arestas que existem em G custam
+1, e as que faltam custam 2. Uma volta de custo V só usa arestas de custo 1,
+que são justamente as arestas de G, e por isso é um ciclo hamiltoniano de G.
+Assim, G tem ciclo hamiltoniano se e só se o TSP tem volta de custo no máximo
+V.</p>
+<p>Quando as distâncias são <strong>métricas</strong>, isto é, obedecem à desigualdade
+triangular (ir direto nunca é mais longo que dar a volta), vale o
+2-aproximado do 0188: árvore geradora mínima, percurso em pré-ordem e volta
+ao começo, com custo no máximo o dobro do ótimo (CORMEN et al., 2024, cap.
+35). Distância em quarteirões, |dx| + |dy|, é métrica.</p>
+<p>Para a resposta exata, o primeiro jeito é a força bruta. Como a volta é um
+ciclo, fixe a farmácia como ponto de partida e teste as (n − 1)! ordens dos
+outros pontos. Com 7 clientes são 5040 rotas, o que passa num piscar; com 15
+pontos são 87 bilhões, e a força bruta já não serve.</p>
+<p>O <strong>algoritmo de Held-Karp</strong> faz programação dinâmica sobre subconjuntos,
+como a cadeia de matrizes (0185) fazia sobre intervalos. A observação central
+é que, para continuar uma rota parcial da melhor forma, só importam duas
+coisas: <strong>quais</strong> pontos já foram visitados e <strong>em qual</strong> deles a rota está
+agora. A ordem em que os visitados foram percorridos não muda o que vem
+depois. Então <code>dp[S][j]</code> guarda o menor custo de um caminho que sai da
+farmácia (o ponto 0), passa exatamente pelos pontos do conjunto S e termina
+em <code>j</code>, que pertence a S (HELD; KARP, 1962). A recorrência estende o caminho
+um ponto por vez:</p>
+<pre><code class="language-text">dp[{0}][0] = 0
+dp[S ∪ {k}][k] = min sobre j em S:  dp[S][j] + d[j][k]
+resposta = min sobre j:  dp[todos][j] + d[j][0]
+</code></pre>
+<p>A segunda linha diz: para chegar a <code>k</code> tendo visitado S e mais <code>k</code>, o melhor
+é vir de algum <code>j</code> de S, pelo melhor caminho até <code>j</code>, mais a distância de <code>j</code>
+a <code>k</code>. A terceira fecha o ciclo voltando à farmácia. Há 2ⁿ conjuntos, n
+pontos finais para cada um e n extensões possíveis: <strong>O(n² · 2ⁿ)</strong> de tempo e
+<strong>O(n · 2ⁿ)</strong> de memória (HELD; KARP, 1962). Continua exponencial, mas bem
+menos que n!. A tabela compara o número de passos:</p>
+<table>
+<thead>
+<tr>
+<th>n</th>
+<th>(n − 1)! rotas</th>
+<th>n² · 2ⁿ (Held-Karp)</th>
+<th>n² (aproximado)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>8</td>
+<td>5 040</td>
+<td>16 384</td>
+<td>64</td>
+</tr>
+<tr>
+<td>15</td>
+<td>8,7 · 10¹⁰</td>
+<td>7,4 · 10⁶</td>
+<td>225</td>
+</tr>
+<tr>
+<td>20</td>
+<td>1,2 · 10¹⁷</td>
+<td>4,2 · 10⁸</td>
+<td>400</td>
+</tr>
+<tr>
+<td>30</td>
+<td>8,8 · 10³⁰</td>
+<td>9,7 · 10¹¹</td>
+<td>900</td>
+</tr>
+</tbody></table>
+<p>Na prática, até uns 20 pontos o Held-Karp resolve em segundos, e o limite é a
+memória da tabela. Acima disso, o caminho é o aproximado, de preferência
+seguido de uma melhoria local como o <strong>2-opt</strong>, que troca duas arestas da rota
+quando a troca a encurta e repete enquanto houver ganho.</p>
+<p>Em C, o conjunto S é uma máscara de bits, como no 0186: o bit <code>j</code> ligado quer
+dizer que o ponto <code>j</code> está em S. As expressões <code>s &gt;&gt; j &amp; 1</code> (o ponto <code>j</code> está
+em S?) e <code>s | 1 &lt;&lt; k</code> (S com <code>k</code> acrescentado) funcionam sem parênteses porque
+os deslocamentos <code>&gt;&gt;</code> e <code>&lt;&lt;</code> têm precedência maior que <code>&amp;</code> e <code>|</code> (0170).</p>
+<blockquote>
+<p>[!WARNING]
+A garantia de 2 × ótimo só vale com a <strong>desigualdade triangular</strong>; com
+distâncias quaisquer, nenhum algoritmo polinomial tem fator constante, a
+menos que P = NP. Held-Karp é <strong>exato</strong> e exponencial; a árvore é
+<strong>aproximada</strong> e polinomial.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>O entregador de uma farmácia tem sete endereços e quer a volta mais curta,
+com distâncias em quarteirões (|dx| + |dy|). À esquerda, a rota exata; à
+direita, a da árvore mínima, com voltas desnecessárias no fim:</p>
+<p>{{ideia}}</p>
+<p>S é uma máscara de bits (0186); o bit 0, a farmácia, está sempre ligado, por
+isso o laço anda de 2 em 2:</p>
+<pre><code class="language-c">#include &lt;stdbool.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+#define N 8
+#define INF 1000000000
+
+const char *pontos[N] = {&quot;Farmácia&quot;, &quot;Ana&quot;, &quot;Bruno&quot;, &quot;Clara&quot;, &quot;Dênis&quot;, &quot;Edna&quot;, &quot;Fábio&quot;, &quot;Gil&quot;};
+const int px[N] = {0, 1, 4, 6, 7, 5, 2, 3};
+const int py[N] = {0, 3, 4, 3, 0, 1, 6, 1};
+int d[N][N];
+long passos;
+
+// exato: Held-Karp. dp[S][j] = menor caminho que sai da farmácia, passa
+// por todos de S e termina em j
+int dp[1 &lt;&lt; N][N], ant[1 &lt;&lt; N][N];
+
+int exato(int rota[]) {
+    for (int s = 0; s &lt; (1 &lt;&lt; N); s++)
+        for (int j = 0; j &lt; N; j++) dp[s][j] = INF;
+    dp[1][0] = 0;
+    for (int s = 1; s &lt; (1 &lt;&lt; N); s += 2)        // só conjuntos com a farmácia (bit 0)
+        for (int j = 0; j &lt; N; j++) {
+            if (!(s &gt;&gt; j &amp; 1) || dp[s][j] == INF) continue;
+            for (int k = 1; k &lt; N; k++) {        // estende o caminho até k
+                if (s &gt;&gt; k &amp; 1) continue;
+                passos++;
+                int t = s | 1 &lt;&lt; k, c = dp[s][j] + d[j][k];
+                if (c &lt; dp[t][k]) dp[t][k] = c, ant[t][k] = j;
+            }
+        }
+    int todos = (1 &lt;&lt; N) - 1, fim = 1;
+    for (int j = 2; j &lt; N; j++)
+        if (dp[todos][j] + d[j][0] &lt; dp[todos][fim] + d[fim][0]) fim = j;
+    int custo = dp[todos][fim] + d[fim][0];
+    for (int i = N - 1, s = todos, j = fim; i &gt;= 0; i--) { // volta pelos anteriores
+        rota[i] = j;
+        int a = ant[s][j];
+        s &amp;= ~(1 &lt;&lt; j);
+        j = a;
+    }
+    return custo;
+}
+
+// aproximado: árvore mínima (Prim) + pré-ordem
+int pai[N], tam;
+void preordem(int u, int rota[]) {
+    rota[tam++] = u;
+    for (int v = 1; v &lt; N; v++)
+        if (pai[v] == u) preordem(v, rota);
+}
+
+int aproximado(int rota[]) {
+    int chave[N];
+    bool dentro[N] = {false};
+    for (int v = 0; v &lt; N; v++) chave[v] = INF, pai[v] = -1;
+    chave[0] = 0;
+    for (int k = 0; k &lt; N; k++) {
+        int u = -1;
+        for (int v = 0; v &lt; N; v++)
+            if (!dentro[v] &amp;&amp; (u == -1 || chave[v] &lt; chave[u])) u = v;
+        dentro[u] = true;
+        for (int v = 0; v &lt; N; v++, passos++)
+            if (!dentro[v] &amp;&amp; d[u][v] &lt; chave[v]) chave[v] = d[u][v], pai[v] = u;
+    }
+    tam = 0;
+    preordem(0, rota);
+    int custo = 0;
+    for (int i = 0; i &lt; N; i++) custo += d[rota[i]][rota[(i + 1) % N]];
+    return custo;
+}
+
+void mostra(const char *nome, int custo, const int rota[]) {
+    printf(&quot;%s: %d quarteirões, %ld passos\n &quot;, nome, custo, passos);
+    for (int i = 0; i &lt; N; i++) printf(&quot; %s&quot;, pontos[rota[i]]);
+    printf(&quot; %s\n&quot;, pontos[0]);
+}
+
+int main(void) {
+    for (int a = 0; a &lt; N; a++)
+        for (int b = 0; b &lt; N; b++) d[a][b] = abs(px[a] - px[b]) + abs(py[a] - py[b]);
+    int rota[N];
+
+    passos = 0;
+    int c1 = exato(rota);
+    mostra(&quot;Exato (Held-Karp)&quot;, c1, rota);
+    passos = 0;
+    int c2 = aproximado(rota);
+    mostra(&quot;Aproximado (árvore)&quot;, c2, rota);
+    printf(&quot;O aproximado gasta %.0f%% a mais\n&quot;, 100.0 * (c2 - c1) / c1);
+    return 0;
+}
+// Saída:
+// Exato (Held-Karp): 28 quarteirões, 1351 passos
+//   Farmácia Gil Edna Dênis Clara Bruno Fábio Ana Farmácia
+// Aproximado (árvore): 36 quarteirões, 64 passos
+//   Farmácia Ana Bruno Clara Edna Dênis Gil Fábio Farmácia
+// O aproximado gasta 29% a mais
+</code></pre>
+<p>O aproximado errou por 29%, longe do dobro permitido, e fez 64 passos contra
+1351. O fluxograma é a decisão de um programa real: poucos pontos, exato;
+muitos, aproximado e melhorado:</p>
+<p>{{fluxograma}}</p>

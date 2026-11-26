@@ -1,0 +1,218 @@
+<h2>0096 · Comparando: estabilidade, custo e qsort</h2>
+<p>A planilha de pedidos vem em ordem de horário, e a logística pede: &quot;agrupa
+por cidade, mas mantém a ordem de chegada dentro de cada cidade&quot;. Você já
+conhece seis métodos de ordenação. Qual deles serve? E, num programa de
+verdade, precisa escrever algum? Este assunto compara os métodos pelos
+critérios que decidem a escolha e apresenta a ordenação que o C já traz
+pronta.</p>
+<p>O pedido da logística depende de <strong>estabilidade</strong>, que o 0092 apresentou: um
+método é estável quando elementos com chave <strong>igual</strong> saem na mesma ordem
+relativa em que entraram (FEOFILOFF, 2009). Se três pedidos de Recife chegaram
+como R1, R3 e R6, um método estável que ordena por cidade devolve R1, R3, R6.
+Um instável pode devolver R3, R1, R6. Num vetor de <code>int</code> isso não faz
+diferença, porque dois 7 são indistinguíveis. Num vetor de <code>struct</code>, em que a
+chave é só um dos campos, faz toda a diferença: os outros campos revelam a
+troca.</p>
+<p>Além da estabilidade, três critérios pesam (ZIVIANI, 2010, cap. 4). O
+primeiro é o <strong>custo</strong> no melhor, no médio e no pior caso; o pior caso importa
+porque é ele que trava um sistema no dia em que a entrada vem ruim. O segundo
+é a <strong>memória extra</strong>: um método <strong>in-place</strong> usa só O(1) além do vetor,
+enquanto o merge sort precisa de um rascunho O(n). O terceiro é ser
+<strong>adaptativo</strong>, isto é, ficar mais rápido quando o vetor já está quase em
+ordem, como o insertion sort e o bubble sort com bandeira. A tabela reúne o
+módulo inteiro, e o heapsort, que entra no assunto 0103:</p>
+<table>
+<thead>
+<tr>
+<th>Algoritmo</th>
+<th>Melhor</th>
+<th>Médio</th>
+<th>Pior</th>
+<th>Memória extra</th>
+<th>Estável</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>bubble (com bandeira)</td>
+<td>O(n)</td>
+<td>O(n²)</td>
+<td>O(n²)</td>
+<td>O(1)</td>
+<td>sim</td>
+</tr>
+<tr>
+<td>selection</td>
+<td>O(n²)</td>
+<td>O(n²)</td>
+<td>O(n²)</td>
+<td>O(1)</td>
+<td>não</td>
+</tr>
+<tr>
+<td>insertion</td>
+<td>O(n)</td>
+<td>O(n²)</td>
+<td>O(n²)</td>
+<td>O(1)</td>
+<td>sim</td>
+</tr>
+<tr>
+<td>merge</td>
+<td>O(n log n)</td>
+<td>O(n log n)</td>
+<td>O(n log n)</td>
+<td>O(n)</td>
+<td>sim</td>
+</tr>
+<tr>
+<td>quick</td>
+<td>O(n log n)</td>
+<td>O(n log n)</td>
+<td>O(n²)</td>
+<td>O(log n) a O(n) de pilha</td>
+<td>não</td>
+</tr>
+<tr>
+<td>heap (assunto 0103)</td>
+<td>O(n log n)</td>
+<td>O(n log n)</td>
+<td>O(n log n)</td>
+<td>O(1)</td>
+<td>não</td>
+</tr>
+</tbody></table>
+<p>A tabela mostra que não existe um método melhor que todos. O insertion sort
+ganha em vetores pequenos ou quase ordenados. O merge sort garante
+O(n log n) e estabilidade, pagando com memória. O quick sort é o mais rápido
+na média, mas tem pior caso O(n²) e não é estável. O selection sort faz o
+mínimo de trocas, o que ajuda quando mover um elemento é caro (FEOFILOFF,
+2009). Para a logística, servem o insertion e o merge, que são estáveis.</p>
+<p>Num programa real, você não escreve a ordenação: usa a <strong><code>qsort</code></strong>, da
+<code>stdlib.h</code>. Ela ordena um vetor de qualquer tipo, e o truque para isso é o
+ponteiro para função do assunto 0050 (KERNIGHAN; RITCHIE, 1989):</p>
+<pre><code class="language-text">void qsort(void *base, size_t n, size_t tamanho,
+           int (*compara)(const void *, const void *));
+</code></pre>
+<p>A <code>qsort</code> não sabe o tipo dos elementos. Por isso recebe o vetor como
+<code>void *</code>, o endereço cru do primeiro byte, junto com o número de elementos e o
+<code>tamanho</code> de cada um em bytes: com esses dados ela sabe onde começa cada
+elemento e consegue copiá-los. O que ela não sabe é qual vem antes, e isso
+você ensina com a <strong>função de comparação</strong>. Ela recebe os endereços de dois
+elementos e devolve um número <strong>negativo</strong> se o primeiro deve vir antes,
+<strong>zero</strong> se os dois empatam e <strong>positivo</strong> se o primeiro deve vir depois, a
+mesma convenção do <code>strcmp</code> (CPPREFERENCE, s.d.).</p>
+<p>A norma do C não diz qual algoritmo a <code>qsort</code> usa, e por isso não promete
+estabilidade. Se a ordem dos empatados importa, ponha o desempate dentro da
+própria função de comparação: compare a cidade e, se empatar, compare o
+horário. Essa é uma <strong>chave composta</strong> (0180) (LINUX MAN-PAGES, s.d.). Para
+buscar num vetor ordenado pela mesma função, a <code>stdlib.h</code> traz a <strong><code>bsearch</code></strong>,
+uma busca binária genérica que recebe a mesma função de comparação (CELES;
+RANGEL, 2002).</p>
+<blockquote>
+<p>[!WARNING]
+<code>return *(const int *) a - *(const int *) b;</code> passa nos testes pequenos,
+mas com sinais opostos e valores grandes (<code>INT_MAX</code> e <code>-5</code>) a subtração dá
+<strong>overflow</strong>. Escreva <code>return (x &gt; y) - (x &lt; y);</code>.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>A planilha de pedidos vem em ordem de horário, e a logística quer agrupar por
+cidade mantendo a ordem de chegada. Um algoritmo estável mantém R1, R3, R6; o
+selection, com trocas de longa distância, entrega R3 antes de R1:</p>
+<p>{{ideia}}</p>
+<p>O desempate pelo horário vai na <code>compara</code>, e o <code>qsort</code> resolve:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+typedef struct {
+    int numero;
+    int hora;          // hhmm
+    char cidade[16];
+} Pedido;
+
+// contrato do qsort: negativo se a vem antes, 0 se empata, positivo se depois
+int compara(const void *a, const void *b) {
+    const Pedido *p = a;
+    const Pedido *q = b;
+    int c = strcmp(p-&gt;cidade, q-&gt;cidade);   // 1º critério: cidade
+    if (c != 0) {
+        return c;
+    }
+    return (p-&gt;hora &gt; q-&gt;hora) - (p-&gt;hora &lt; q-&gt;hora); // desempate: horário
+}
+
+int main(void) {
+    Pedido pedidos[] = {           // chegaram nesta ordem (por horário)
+        {101, 910, &quot;Recife&quot;},
+        {102, 925, &quot;Manaus&quot;},
+        {103, 1005, &quot;Recife&quot;},
+        {104, 1040, &quot;Natal&quot;},
+        {105, 1115, &quot;Manaus&quot;},
+        {106, 1150, &quot;Recife&quot;},
+    };
+    size_t n = sizeof pedidos / sizeof pedidos[0];
+
+    qsort(pedidos, n, sizeof pedidos[0], compara);
+
+    for (size_t i = 0; i &lt; n; i++) {
+        printf(&quot;%-7s %02d:%02d  #%d\n&quot;, pedidos[i].cidade,
+               pedidos[i].hora / 100, pedidos[i].hora % 100, pedidos[i].numero);
+    }
+    return 0;
+}
+// Saída:
+// Manaus  09:25  #102
+// Manaus  11:15  #105
+// Natal   10:40  #104
+// Recife  09:10  #101
+// Recife  10:05  #103
+// Recife  11:50  #106
+</code></pre>
+<h3>Passo a passo</h3>
+<p>O exemplo A192 roda os cinco algoritmos com 1000 números:</p>
+<table>
+<thead>
+<tr>
+<th>n = 1000</th>
+<th>aleatório</th>
+<th>ordenado</th>
+<th>invertido</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>bubble</td>
+<td>499.122</td>
+<td>999</td>
+<td>499.500</td>
+</tr>
+<tr>
+<td>selection</td>
+<td>499.500</td>
+<td>499.500</td>
+<td>499.500</td>
+</tr>
+<tr>
+<td>insertion</td>
+<td>241.308</td>
+<td>999</td>
+<td>499.500</td>
+</tr>
+<tr>
+<td>merge</td>
+<td>8.696</td>
+<td>4.932</td>
+<td>5.044</td>
+</tr>
+<tr>
+<td>quick (pivô no fim)</td>
+<td>10.972</td>
+<td>499.500</td>
+<td>499.500</td>
+</tr>
+</tbody></table>
+<p>No aleatório, os O(n log n) fazem umas 50 vezes menos trabalho. No ordenado,
+bubble e insertion fazem uma passada e o quick com pivô no fim cai no pior
+caso.</p>
+<p>A ordem de chegada cabe como desempate na <code>compara</code>, então o caminho termina
+no <code>qsort</code>:</p>
+<p>{{fluxograma}}</p>

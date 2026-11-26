@@ -1,0 +1,156 @@
+<h2>0025 · Padrões de laço</h2>
+<p>Fim de semana de calor e você anotou a máxima de cada dia: 28, 31, 36, 25 e
+30 °C. Agora quer saber quantos dias foram, qual a média, qual o dia mais
+quente e o mais frio, e se teve algum dia de 35 °C ou mais. O laço que lê as
+temperaturas você já sabe escrever. A dúvida é o que fazer com cada valor lido
+para que, no fim, as respostas estejam prontas.</p>
+<p>Cada uma dessas perguntas tem uma solução conhecida, um <strong>padrão de laço</strong>: um
+jeito de usar uma variável que já foi resolvido milhares de vezes e que você
+só precisa reconhecer (DEITEL; DEITEL, 2011, cap. 3). Todos seguem o mesmo
+roteiro em três tempos. A variável ganha um valor <strong>antes</strong> do laço, é
+atualizada <strong>dentro</strong> dele e é usada <strong>depois</strong>. Errar qualquer um dos três
+tempos dá resposta errada, mesmo com o laço certo.</p>
+<p>O <strong>contador</strong> responde &quot;quantos?&quot;. Começa em 0 e soma 1 a cada volta:
+<code>dias++</code>. O <strong>acumulador</strong> responde &quot;quanto ao todo?&quot;. Também começa em 0, mas
+soma o valor lido: <code>soma += temp</code> (DEITEL; DEITEL, 2011, cap. 3). Com os dois,
+a média sai depois do laço. O acumulador também multiplica, e aí muda o ponto
+de partida: um <strong>produto</strong> começa em 1, porque começar em 0 zera tudo na
+primeira volta.</p>
+<p>O <strong>maior</strong> e o <strong>menor</strong> guardam o recorde até agora. A cada valor lido, você
+compara com o recorde e troca se o novo for melhor:
+<code>if (temp &gt; maior) maior = temp</code>. A pegadinha está no primeiro tempo. O
+recorde começa com o <strong>primeiro valor lido</strong>, nunca com um número inventado
+como 0, porque o 0 pode vencer todos os valores reais (BACKES, 2013, cap. 5).
+O alerta no fim do texto mostra o caso.</p>
+<p>A <strong>flag</strong> (bandeira) responde &quot;aconteceu alguma vez?&quot;. É uma variável <code>bool</code>
+que começa <code>false</code> e sobe para <code>true</code> quando o caso aparece:
+<code>if (temp &gt;= 35) calorao = true</code>. Ela só sobe, nunca desce. Se você puser um
+<code>else calorao = false</code>, um dia de 25 °C depois do de 36 apaga a resposta, e a
+flag passa a dizer só se o <strong>último</strong> dia foi quente (LEAL, 2016).</p>
+<p>A <strong>sentinela</strong> resolve outro problema: como avisar ao programa que os dados
+acabaram. Ela é um valor que <strong>não pode</strong> ser dado real e só serve para mandar
+parar (DEITEL; DEITEL, 2011, cap. 3). Temperatura pode ser 0 ou negativa,
+então a sentinela aqui é 999. Ela não entra em conta nenhuma: o laço testa o
+valor antes de contar ou somar.</p>
+<p>Para isso funcionar, a leitura aparece em dois lugares: uma vez <strong>antes</strong> do
+laço e outra no <strong>fim</strong> do corpo. Essa é a <strong>leitura antecipada</strong>. Com ela, a
+pergunta do <code>while</code> sempre olha um valor que acabou de chegar, e a sentinela é
+barrada antes de entrar no corpo (DEITEL; DEITEL, 2011, cap. 3).</p>
+<p>A média pede dois cuidados. O primeiro é o tipo: <code>soma / dias</code> com dois <code>int</code>
+descarta os decimais, então você escreve <code>(double) soma / dias</code>, com o cast do
+assunto 0008. O segundo é o zero: se a primeira entrada for a sentinela,
+<code>dias</code> fica 0. Com <code>double</code>, 0 / 0 dá <code>nan</code> (<em>not a number</em>); com <code>int</code>, o
+programa quebra. Teste <code>dias &gt; 0</code> antes de dividir. E o acumulador tem os
+limites do tipo: um <code>int</code> que passa de 2.147.483.647 estoura, e somar 0,1 em
+<code>double</code> acumula erro de arredondamento. Para dinheiro, some <strong>centavos</strong> num
+<code>long long</code> e divida por 100 só ao mostrar (DEITEL; DEITEL, 2011).</p>
+<p>A tabela junta os padrões para consulta:</p>
+<table>
+<thead>
+<tr>
+<th>Padrão</th>
+<th>Antes do laço</th>
+<th>Dentro do laço</th>
+<th>Depois</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>contador</strong></td>
+<td><code>dias = 0</code></td>
+<td><code>dias++</code></td>
+<td>quantos foram</td>
+</tr>
+<tr>
+<td><strong>acumulador</strong></td>
+<td><code>soma = 0</code> (produto: <code>= 1</code>)</td>
+<td><code>soma += temp</code></td>
+<td>total, média</td>
+</tr>
+<tr>
+<td><strong>maior/menor</strong></td>
+<td>o <strong>primeiro</strong> valor</td>
+<td><code>if (temp &gt; maior) maior = temp</code></td>
+<td>o recorde</td>
+</tr>
+<tr>
+<td><strong>flag</strong></td>
+<td><code>calorao = false</code></td>
+<td><code>if (temp &gt;= 35) calorao = true</code></td>
+<td>aconteceu ou não?</td>
+</tr>
+<tr>
+<td><strong>sentinela</strong></td>
+<td>ler o primeiro valor</td>
+<td>ler o próximo, no fim</td>
+<td>(o laço para nela)</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>[!WARNING]
+<code>maior = 0</code> parece inofensivo, até o inverno: com máximas de -3, -1 e -4 °C,
+o programa diz que o dia mais quente teve 0 °C, um dia que nunca existiu.
+Comece com o <strong>primeiro valor lido</strong> ou com <code>INT_MIN</code> (e <code>INT_MAX</code> para o
+menor), de <code>&lt;limits.h&gt;</code>.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>As máximas de cinco dias: 28, 31, 36, 25 e 30 °C, e 999 como sentinela (uma
+temperatura pode ser 0 ou negativa). Cada valor atualiza as caixinhas; o 999
+só manda parar:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdbool.h&gt;
+#include &lt;stdio.h&gt;
+
+int main(void) {
+    const int FIM = 999;          // sentinela: nenhuma temperatura real vale 999
+    int temp;
+    int dias = 0;                 // contador
+    int soma = 0;                 // acumulador
+    int maior = 0, menor = 0;     // só valem depois do 1º dia
+    bool calorao = false;         // flag: algum dia passou de 35?
+
+    printf(&quot;Máxima do dia (999 encerra): &quot;);
+    if (scanf(&quot;%d&quot;, &amp;temp) != 1) {
+        temp = FIM;
+    }
+    while (temp != FIM) {
+        dias++;
+        soma += temp;
+        if (dias == 1 || temp &gt; maior) {
+            maior = temp;
+        }
+        if (dias == 1 || temp &lt; menor) {
+            menor = temp;
+        }
+        if (temp &gt;= 35) {
+            calorao = true;       // levanta a flag e não abaixa mais
+        }
+        printf(&quot;Máxima do dia (999 encerra): &quot;);
+        if (scanf(&quot;%d&quot;, &amp;temp) != 1) {
+            temp = FIM;
+        }
+    }
+
+    if (dias == 0) {
+        printf(&quot;Nenhum dia lido.\n&quot;);
+        return 0;
+    }
+    printf(&quot;Dias: %d\n&quot;, dias);
+    printf(&quot;Média: %.1f °C\n&quot;, (double) soma / dias);
+    printf(&quot;Maior: %d °C | Menor: %d °C\n&quot;, maior, menor);
+    printf(&quot;Teve dia de 35 °C ou mais? %s\n&quot;, calorao ? &quot;sim&quot; : &quot;não&quot;);
+    return 0;
+}
+// Máxima do dia (999 encerra): 28
+// Máxima do dia (999 encerra): 31
+// Máxima do dia (999 encerra): 36
+// Máxima do dia (999 encerra): 25
+// Máxima do dia (999 encerra): 30
+// Máxima do dia (999 encerra): 999
+// Dias: 5
+// Média: 30.0 °C
+// Maior: 36 °C | Menor: 25 °C
+// Teve dia de 35 °C ou mais? sim
+</code></pre>
+<p>Há <strong>duas</strong> caixas de leitura: &quot;Ler temp&quot;, antes do losango, e &quot;Ler a próxima
+temp&quot;, no fim do corpo, de onde sai a seta de volta:</p>
+<p>{{fluxograma}}</p>

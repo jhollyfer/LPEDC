@@ -1,0 +1,279 @@
+<h1>Sumário do LPEDC</h1>
+<p>Numeração única no curso todo. Assunto <code>NNNN</code> tem os exemplos <code>A(2N-1)</code> e <code>A(2N)</code> e os
+exercícios <code>E(6N-5)</code> a <code>E(6N)</code>. Ex.: assunto 0002 → A003, A004, E007 a E012.</p>
+<h2>01-fundamentos · Fundamentos de C (algoritmo, entrada → processamento → saída, estrutura sequencial)</h2>
+<ul>
+<li>0001-primeiro-programa · esqueleto, #include, main, printf, return 0, comentários; do .c ao executável e os tipos de erro</li>
+<li>0002-variaveis · variável: um pedaço de memória com nome e tipo; int, float, double, char; sizeof</li>
+<li>0003-tipos-e-limites · short, long, unsigned, limits.h, overflow, stdint.h</li>
+<li>0004-constantes · literais, #define, const, sequências de escape</li>
+<li>0005-printf · %d %f %c %s %x %p, largura e precisão</li>
+<li>0006-scanf · leitura com scanf, o &amp;, retorno do scanf, sobra no buffer</li>
+<li>0007-aritmetica · + - * / %, divisão inteira, precedência</li>
+<li>0008-conversao · conversão automática e cast</li>
+<li>0009-atribuicao · += -= *= /= %=, ++ e -- (pré e pós)</li>
+<li>0010-math · math.h (-lm): pow, sqrt, round, floor, ceil, fabs</li>
+<li>0011-juntando-tudo · programa do módulo</li>
+</ul>
+<h2>02-condicionais · Decisões</h2>
+<ul>
+<li>0012-relacionais · &gt; &lt; &gt;= &lt;= == != e a verdade em C (0 e não-zero), stdbool.h</li>
+<li>0013-logicos · &amp;&amp; || !, tabela-verdade, curto-circuito</li>
+<li>0014-if · if</li>
+<li>0015-if-else · if/else e a pegadinha do = no lugar do ==</li>
+<li>0016-else-if · else if, if aninhado e o else &quot;pendurado&quot;</li>
+<li>0017-ternario · condição ? a : b</li>
+<li>0018-switch · switch, case, break e fall-through</li>
+<li>0019-juntando-tudo · programa do módulo</li>
+</ul>
+<h2>03-repeticoes · Laços</h2>
+<ul>
+<li>0020-while · while</li>
+<li>0021-do-while · do...while: validação e menu</li>
+<li>0022-for · for com contador</li>
+<li>0023-break-continue · break e continue</li>
+<li>0024-lacos-aninhados · laço dentro de laço (tabuada, desenhos com *)</li>
+<li>0025-padroes-de-laco · contador, acumulador, maior/menor, flag, sentinela</li>
+<li>0026-aleatorios · rand, srand e time</li>
+<li>0027-juntando-tudo · programa do módulo</li>
+</ul>
+<h2>04-funcoes · Funções e modularização</h2>
+<ul>
+<li>0028-funcoes · definir, chamar, retornar, protótipo</li>
+<li>0029-parametros · passagem por valor, void</li>
+<li>0030-escopo · local, global, static e tempo de vida</li>
+<li>0031-pilha-de-chamadas · a pilha de execução (frames)</li>
+<li>0032-recursao · recursão: caso base e caso recursivo</li>
+<li>0033-recursao-na-pratica · Fibonacci (e seu custo), Hanói, Euclides</li>
+<li>0034-modulos · .h e .c, include guards, compilação separada</li>
+<li>0035-preprocessador · macros, #ifdef, armadilhas de macro</li>
+<li>0036-juntando-tudo · programa do módulo</li>
+</ul>
+<h2>05-vetores-e-strings · Vetores, matrizes e strings</h2>
+<ul>
+<li>0037-vetores · declarar, inicializar, índice, C não confere limites</li>
+<li>0038-vetores-e-funcoes · passar vetor + tamanho, a função altera o original</li>
+<li>0039-matrizes · matriz 2D, linhas e colunas, memória contínua</li>
+<li>0040-caracteres · char é número, tabela ASCII, ctype.h</li>
+<li>0041-strings · o &#39;\0&#39;, string.h (strlen, strcpy, strcmp, strcat)</li>
+<li>0042-lendo-strings · fgets, tirar o &#39;\n&#39;, estouro de buffer, por que nunca gets</li>
+<li>0043-juntando-tudo · programa do módulo</li>
+</ul>
+<h2>06-ponteiros · Ponteiros</h2>
+<ul>
+<li>0044-memoria · endereço, &amp;, %p: a memória como gaveteiro numerado</li>
+<li>0045-ponteiros · declarar, *, NULL</li>
+<li>0046-passagem-por-referencia · troca (swap) e o &amp; do scanf explicado</li>
+<li>0047-ponteiros-e-vetores · aritmética de ponteiros, a[i] == *(a + i)</li>
+<li>0048-ponteiros-e-strings · char * vs char [], literal só de leitura</li>
+<li>0049-ponteiro-para-ponteiro · **</li>
+<li>0050-ponteiro-para-funcao · callbacks e qsort</li>
+<li>0051-void-generico · void * e cast</li>
+<li>0052-juntando-tudo · programa do módulo</li>
+</ul>
+<h2>07-memoria-dinamica · Memória dinâmica</h2>
+<ul>
+<li>0053-pilha-e-heap · stack, heap, dados e código</li>
+<li>0054-malloc-free · malloc e free</li>
+<li>0055-calloc-realloc · calloc, realloc: o vetor que cresce</li>
+<li>0056-matriz-dinamica · matriz alocada dinamicamente</li>
+<li>0057-erros-de-memoria · vazamento, ponteiro solto, free duplo, estouro; valgrind e ASan</li>
+<li>0058-juntando-tudo · programa do módulo</li>
+</ul>
+<h2>08-structs · Tipos compostos</h2>
+<ul>
+<li>0059-struct · struct</li>
+<li>0060-typedef · typedef</li>
+<li>0061-vetor-de-structs · vetor de structs</li>
+<li>0062-ponteiro-para-struct · -&gt;, struct em função, struct com malloc</li>
+<li>0063-enum · enum</li>
+<li>0064-union · union</li>
+<li>0065-bits · operadores bit a bit, máscaras e flags</li>
+<li>0066-juntando-tudo · programa do módulo</li>
+</ul>
+<h2>09-arquivos · Arquivos e linha de comando</h2>
+<ul>
+<li>0067-arquivos-texto · fopen, fprintf, fgets, fclose</li>
+<li>0068-arquivos-binarios · fwrite, fread, fseek</li>
+<li>0069-argumentos · argc e argv</li>
+<li>0070-juntando-tudo · programa do módulo</li>
+</ul>
+<h2>10-analise · Pensar como cientista da computação</h2>
+<ul>
+<li>0071-eficiencia · contar passos</li>
+<li>0072-big-o · O(1), O(log n), O(n), O(n log n), O(n²)</li>
+<li>0073-invariantes · invariantes de laço e corretude</li>
+<li>0074-tad · tipo abstrato de dado: interface (.h) e implementação (.c)</li>
+</ul>
+<h2>11-listas · Listas</h2>
+<ul>
+<li>0075-vetor-dinamico · lista sequencial (TAD sobre vetor que cresce)</li>
+<li>0076-lista-encadeada · nó, inserir no início, percorrer, liberar</li>
+<li>0077-lista-busca-remocao · busca e remoção</li>
+<li>0078-lista-ordenada · inserção ordenada</li>
+<li>0079-lista-dupla · lista duplamente encadeada</li>
+<li>0080-lista-circular · lista circular</li>
+<li>0081-juntando-tudo · programa do módulo</li>
+</ul>
+<h2>12-pilhas-e-filas · Pilhas e filas</h2>
+<ul>
+<li>0082-pilha · TAD pilha sobre vetor</li>
+<li>0083-pilha-encadeada · pilha sobre lista</li>
+<li>0084-pilha-aplicacoes · parênteses balanceados, notação pós-fixa</li>
+<li>0085-fila · fila circular sobre vetor</li>
+<li>0086-fila-encadeada · fila sobre lista</li>
+<li>0087-deque · fila dupla</li>
+<li>0088-juntando-tudo · programa do módulo</li>
+</ul>
+<h2>13-busca-e-ordenacao · Busca e ordenação</h2>
+<ul>
+<li>0089-busca-sequencial</li>
+<li>0090-busca-binaria</li>
+<li>0091-bubble-sort</li>
+<li>0092-selection-sort</li>
+<li>0093-insertion-sort</li>
+<li>0094-merge-sort</li>
+<li>0095-quick-sort</li>
+<li>0096-comparando · estabilidade, custo, qsort da biblioteca</li>
+</ul>
+<h2>14-arvores · Árvores</h2>
+<ul>
+<li>0097-arvores · raiz, filho, folha, altura, profundidade</li>
+<li>0098-arvore-binaria · representação e percursos (pré, em, pós, por nível)</li>
+<li>0099-bst-busca-insercao · árvore binária de busca: busca e inserção</li>
+<li>0100-bst-remocao · remoção na BST</li>
+<li>0101-avl · balanceamento e rotações</li>
+<li>0102-heap · heap e fila de prioridade</li>
+<li>0103-heapsort · heapsort</li>
+<li>0104-juntando-tudo · programa do módulo</li>
+</ul>
+<h2>15-hash · Tabelas hash</h2>
+<ul>
+<li>0105-hashing · a ideia e a função hash</li>
+<li>0106-encadeamento · colisão resolvida com listas</li>
+<li>0107-enderecamento-aberto · sondagem linear</li>
+<li>0108-juntando-tudo · programa do módulo</li>
+</ul>
+<h2>16-grafos · Grafos</h2>
+<ul>
+<li>0109-grafos · vértices, arestas, matriz e lista de adjacência</li>
+<li>0110-bfs · busca em largura</li>
+<li>0111-dfs · busca em profundidade</li>
+<li>0112-dijkstra · caminho mínimo</li>
+<li>0113-juntando-tudo · programa do módulo</li>
+</ul>
+<h2>17-analise-avancada · Medindo algoritmos recursivos</h2>
+<ul>
+<li>0114-recorrencias · recorrência a partir do código e árvore de recursão</li>
+<li>0115-teorema-mestre · os três casos e quando não se aplica</li>
+<li>0116-amortizada · vetor que dobra, contador binário, pilha com multipop</li>
+<li>0117-limite-inferior · árvore de decisão e o Ω(n log n) da ordenação por comparação</li>
+<li>0118-juntando-tudo · medir e prever o tempo de quatro ordenações reais</li>
+</ul>
+<h2>18-ordenacao-linear · Ordenação além da comparação e seleção</h2>
+<ul>
+<li>0119-shell-sort · insertion sort com saltos (Knuth 3h+1)</li>
+<li>0120-counting-sort · contagem, somas acumuladas e estabilidade</li>
+<li>0121-radix-sort · dígito a dígito (LSD) com base 10 e base 256</li>
+<li>0122-bucket-sort · baldes com listas encadeadas</li>
+<li>0123-quickselect · k-ésimo menor e mediana pelo particionamento</li>
+<li>0124-juntando-tudo · ordenar 1 milhão de registros e comparar com qsort</li>
+</ul>
+<h2>19-backtracking · Enumeração e backtracking</h2>
+<ul>
+<li>0125-subconjuntos · enumeração recursiva e por bits</li>
+<li>0126-permutacoes · troca, recursão e desfazer</li>
+<li>0127-backtracking · poda; soma de subconjuntos</li>
+<li>0128-n-rainhas · N-rainhas com vetores de colunas e diagonais</li>
+<li>0129-labirinto · caminho em matriz e flood fill</li>
+<li>0130-juntando-tudo · resolvedor de sudoku</li>
+</ul>
+<h2>20-dc-e-gulosos · Divisão e conquista e algoritmos gulosos</h2>
+<ul>
+<li>0131-divisao-e-conquista · a técnica; potência rápida</li>
+<li>0132-inversoes-e-subvetor · contar inversões e subvetor de soma máxima</li>
+<li>0133-gulosos · a ideia, troco canônico e o contraexemplo {1,3,4}</li>
+<li>0134-intervalos · seleção de atividades</li>
+<li>0135-mochila-fracionaria · ordenar por valor/peso</li>
+<li>0136-huffman · árvore de Huffman com heap</li>
+<li>0137-juntando-tudo · compactador/descompactador Huffman de arquivos</li>
+</ul>
+<h2>21-programacao-dinamica · Programação dinâmica</h2>
+<ul>
+<li>0138-memoizacao · Fibonacci memoizado e de baixo para cima; escadas e grade</li>
+<li>0139-troco-pd · mínimo de moedas e número de formas</li>
+<li>0140-mochila-01 · tabela n×W e recuperação dos itens</li>
+<li>0141-lcs · maior subsequência comum</li>
+<li>0142-distancia-de-edicao · Levenshtein</li>
+<li>0143-juntando-tudo · mini-diff entre dois arquivos de texto</li>
+</ul>
+<h2>22-arvores-avancadas · Árvores e conjuntos avançados</h2>
+<ul>
+<li>0144-arvores-gerais · filho-esquerdo/irmão-direito</li>
+<li>0145-rubro-negra · rubro-negra esquerdista (LLRB): inserção</li>
+<li>0146-arvore-b · árvore B: busca, divisão e inserção</li>
+<li>0147-trie · árvore de prefixos e autocompletar</li>
+<li>0148-union-find · conjuntos disjuntos com compressão e união por tamanho</li>
+<li>0149-juntando-tudo · corretor ortográfico com trie (e comparação com hash e BST)</li>
+</ul>
+<h2>23-grafos-avancados · Grafos: estrutura e caminhos</h2>
+<ul>
+<li>0150-componentes-e-ciclos · componentes conexos e detecção de ciclo (3 cores)</li>
+<li>0151-ordenacao-topologica · Kahn e DFS</li>
+<li>0152-kruskal · MST com ordenação e union-find</li>
+<li>0153-prim · MST com heap; comparação com Dijkstra</li>
+<li>0154-bellman-ford · pesos negativos e ciclo negativo</li>
+<li>0155-floyd-warshall · todos os pares</li>
+<li>0156-juntando-tudo · planejador de rotas e de pré-requisitos</li>
+</ul>
+<h2>24-busca-de-padroes · Busca de padrões em texto</h2>
+<ul>
+<li>0157-forca-bruta · busca ingênua e strstr</li>
+<li>0158-kmp · tabela de bordas (π) e busca linear</li>
+<li>0159-horspool · Boyer-Moore-Horspool e tabela de saltos</li>
+<li>0160-rabin-karp · hash rolante e falsos positivos</li>
+<li>0161-juntando-tudo · mini-grep com os quatro algoritmos e cronômetro</li>
+</ul>
+<h2>25-estruturas-extras · Estruturas especiais</h2>
+<ul>
+<li>0162-matriz-esparsa · triplas e listas por linha</li>
+<li>0163-skip-list · lista com andares aleatórios</li>
+<li>0164-listas-autoajustaveis · mover para a frente, transposição, contagem</li>
+<li>0165-juntando-tudo · comparar BST, AVL, skip list e lista autoajustável no mesmo teste</li>
+</ul>
+<h2>26-analise-formal · Notação assintótica, somatórios e espaço</h2>
+<ul>
+<li>0166-o-omega-theta · definições de O, Ω e Θ com c e n₀; melhor, pior e caso médio; provar e refutar um limite</li>
+<li>0167-somatorios · somatórios que saem de laços: aritmética, geométrica, harmônica, laços dependentes</li>
+<li>0168-complexidade-espacial · espaço extra, pilha da recursão, in-place, trocar tempo por espaço</li>
+<li>0169-juntando-tudo · medir passos e bytes de cinco funções e conferir com a fórmula</li>
+</ul>
+<h2>27-c-detalhes · Detalhes de C que caem em prova</h2>
+<ul>
+<li>0170-precedencia-e-avaliacao · tabela de precedência e associatividade, efeito colateral, ponto de sequência</li>
+<li>0171-com-e-sem-sinal · signed e unsigned misturados, -1 &gt; 0u, deslocamentos e máscaras</li>
+<li>0172-vla · vetor de tamanho variável (VLA), matriz VLA como parâmetro, o risco da pilha</li>
+<li>0173-juntando-tudo · calculadora de expressões com bits sobre registros de permissão</li>
+</ul>
+<h2>28-estruturas-complementos · Estruturas: o que faltava</h2>
+<ul>
+<li>0174-lista-com-sentinela · lista dupla circular com nó sentinela (sem caso especial)</li>
+<li>0175-conceitos-e-sucessor · grau, nível, profundidade, fator de balanceamento; sucessor e antecessor com ponteiro para o pai</li>
+<li>0176-avl-remocao · remoção na AVL e as rotações na volta</li>
+<li>0177-rubro-negra-classica · rubro-negra das cinco propriedades: inserção e os casos do tio</li>
+<li>0178-hash-multiplicacao · método da divisão e método da multiplicação (constante de Knuth)</li>
+<li>0179-sondagem-quadratica-e-dupla · sondagem linear, quadrática e dispersão dupla; agrupamento e remoção com lápide</li>
+<li>0180-pigeonhole-e-chave-composta · pigeonhole sort, ordenação estável e chave composta</li>
+<li>0181-juntando-tudo · agenda de consultas com sentinela, rubro-negra e hash duplo</li>
+</ul>
+<h2>29-grafos-e-np · Grafos: ciclos e cortes; problemas difíceis</h2>
+<ul>
+<li>0182-caminhos-e-ciclos · grau, caminho, trajeto, circuito, ciclo; circuito euleriano (Hierholzer)</li>
+<li>0183-hamiltoniano · ciclo hamiltoniano por backtracking e o custo exponencial</li>
+<li>0184-pontes-e-articulacoes · tempos de descoberta e low; pontes e vértices de articulação</li>
+<li>0185-cadeia-de-matrizes · multiplicação de cadeia de matrizes por programação dinâmica</li>
+<li>0186-p-e-np · problema de decisão, verificação polinomial, P, NP, NP-completo; verificador de SAT</li>
+<li>0187-reducoes · redução polinomial: conjunto independente, clique e cobertura de vértices</li>
+<li>0188-aproximacao · cobertura de vértices 2-aproximada, bin packing (first fit), caixeiro viajante métrico</li>
+<li>0189-juntando-tudo · roteiro de entregas: exato para poucos pontos, aproximado para muitos</li>
+</ul>

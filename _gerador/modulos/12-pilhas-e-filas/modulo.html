@@ -1,0 +1,349 @@
+<h1>Módulo 12 · Pilhas e filas</h1>
+<p>A <strong>pilha</strong> (LIFO) e a <strong>fila</strong> (FIFO), cada uma em vetor e em lista
+encadeada, sempre como <strong>TAD</strong>: o mesmo <code>.h</code>, o <code>.c</code> trocado por baixo. Depende
+dos módulos 06, 07, 08 e 11 e do TAD (0074); prepara o 13 (recursão) e o 16
+(busca em largura e em profundidade).</p>
+<h2>O que você vai aprender</h2>
+<ul>
+<li>a <strong>pilha</strong> (LIFO) em vetor: empilhar, desempilhar, topo, <em>overflow</em> e <em>underflow</em></li>
+<li>a <strong>pilha encadeada</strong>: por que o topo fica no começo da lista</li>
+<li><strong>parênteses balanceados</strong> e <strong>notação pós-fixa</strong></li>
+<li>a <strong>fila</strong> (FIFO) e a <strong>fila circular</strong>, com o <code>%</code> dando a volta</li>
+<li>a <strong>fila encadeada</strong> com ponteiros de início e fim, e os bugs das bordas</li>
+<li>o <strong>deque</strong>, que usa as duas pontas, e a pegadinha do resto negativo</li>
+<li>uma calculadora que junta tudo: infixa, pós-fixa, resultado</li>
+</ul>
+<h2>Antes de começar</h2>
+<p>Cada pasta traz os arquivos do TAD (<code>pilha.h</code> e <code>pilha.c</code>, <code>fila.h</code> e
+<code>fila.c</code> ou <code>deque.h</code> e <code>deque.c</code>). Compile esses <code>.c</code> de apoio junto com o
+exemplo ou exercício:</p>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A163.c ~/LPEDC/material/0082-pilha.c -o ~/LPEDC/material/A163 &amp;&amp; ~/LPEDC/material/A163
+</code></pre>
+<p>Num exercício, <strong>não</strong> crie funções com os nomes do TAD (<code>pilha_cria</code>,
+<code>fila_insere</code>...): o ligador acusa definição duplicada. Nos diagramas, verde
+marca o item que sai e cinza a gaveta que virou vaga.</p>
+<p>{{indice}}</p>
+<hr>
+<p>{{assuntos}}</p>
+<hr>
+<h2>Desafios do módulo</h2>
+<p>Problemas para resolver num arquivo seu, misturando os assuntos do módulo.
+Use os TADs das pastas ou escreva a estrutura do zero.</p>
+<p><strong>1. Quais saídas são possíveis?</strong> Os números 1, 2, 3, 4 e 5 entram numa
+pilha nessa ordem, e você pode desempilhar quando quiser. Escreva
+<code>bool possivel(const int *saida, int n, char *ops)</code> com o TAD <code>pilha.h</code>,
+que simula a pilha e, quando a saída for possível, preenche <code>ops</code> com a
+sequência de <code>E</code> (empilha) e <code>D</code> (desempilha) usada. Teste com (a) 3 2 1 5 4;
+(b) 4 5 3 1 2; (c) 1 2 3 4 5; (d) 5 4 3 2 1.</p>
+<details><summary>Resposta</summary><pre><code>(a) 3 2 1 5 4: possivel com EEEDDDEEDD
+(b) 4 5 3 1 2: impossivel
+(c) 1 2 3 4 5: possivel com EDEDEDEDED
+(d) 5 4 3 2 1: possivel com EEEEEDDDDD
+</code></pre>
+</details><p><strong>2. Tags HTML balanceadas.</strong> Escreva um verificador para tags simples, sem
+atributos: <code>&lt;p&gt;&lt;b&gt;oi&lt;/b&gt;&lt;/p&gt;</code> está certo, <code>&lt;p&gt;&lt;b&gt;oi&lt;/p&gt;&lt;/b&gt;</code> não. Teste
+também com <code>&lt;ul&gt;&lt;li&gt;a&lt;/li&gt;&lt;li&gt;b&lt;/li&gt;&lt;/ul&gt;</code>.</p>
+<details><summary>Resposta</summary><p>Certo, errado, certo. É o verificador do 0084 com palavras no lugar de
+caracteres: ao ler <code>&lt;nome&gt;</code>, empilhe o nome (numa pilha de strings
+encadeada, como a do E495); ao ler <code>&lt;/nome&gt;</code>, desempilhe e compare com
+<code>strcmp</code>. No fim, a pilha precisa estar vazia.</p>
+</details><p><strong>3. Duas pilhas, uma fila e o custo.</strong> Pegue a fila com duas pilhas do E525
+e conte as chamadas de <code>pilha_empilha</code> numa variável global (troque as
+chamadas por uma <code>conta_empilha</code> que soma 1 e empilha). Faça 1000 inserções
+seguidas e depois 1000 retiradas; zere o contador e faça 1000 vezes &quot;insere
+um, retira um&quot;. Imprima o contador e a soma dos itens retirados nos dois
+casos.</p>
+<details><summary>Resposta</summary><pre><code>1000 insercoes e depois 1000 retiradas: 2000 empilhas (soma 500500)
+alternando 1000 vezes: 2000 empilhas (soma 500500)
+</code></pre>
+</details><p><strong>4. Fila circular que cresce.</strong> Mude o <code>fila.c</code> do 0085 para começar com 4
+gavetas alocadas com <code>malloc</code> e dobrar com <code>realloc</code> quando encher, sem mudar
+o <code>fila.h</code>. Teste inserindo 1 a 10 depois de ter retirado dois itens (para a
+fila já ter dado a volta).</p>
+<details><summary>Resposta</summary><p>A pegadinha: depois do <code>realloc</code>, os itens que deram a volta ficam no lugar
+errado. Com capacidade 4, início 2 e itens nas gavetas 2, 3, 0, 1, dobrar
+para 8 deixa as gavetas 4 a 7 vazias <strong>no meio</strong> da fila. A saída mais simples
+é copiar os <code>n</code> itens, na ordem da fila, para um vetor novo a partir da
+gaveta 0 e zerar o <code>inicio</code>. A ordem de saída tem que continuar 3 4 5 ... 10.</p>
+</details><p><strong>5. O caixa com dois atendentes.</strong> Refaça o A172 com dois caixas e uma fila
+única (como no banco). Com os mesmos clientes (chegadas 0, 1, 2, 5, 6 e
+durações 3, 2, 4, 1, 2), qual é a espera média?</p>
+<details><summary>Resposta</summary><p><strong>0,2 minuto</strong> (contra 2,6 com um caixa). O cliente 1 vai para o caixa A (0
+a 3) e o 2 para o B (1 a 3). O 3 chega no minuto 2 com os dois ocupados e
+espera 1 minuto. O 4 e o 5 encontram um caixa livre. Esperas: 0, 0, 1, 0, 0.
+Simule minuto a minuto, com um contador de &quot;minutos restantes&quot; por caixa.</p>
+</details><p><strong>6. Pós-fixa para infixa.</strong> Escreva o caminho inverso: receba `5 1 2 + 4 *</p>
+<ul>
+<li>3 -<code>e mostre</code>((5 + ((1 + 2) * 4)) - 3)`, com todos os parênteses.</li>
+</ul>
+<details><summary>Resposta</summary><p>Use uma pilha de <strong>strings</strong> (vetores de char num nó encadeado, ou um vetor
+de <code>char[64]</code>). Número: empilha o texto. Operador: desempilha b e a e empilha
+<code>&quot;(&quot; a &quot; op &quot; b &quot;)&quot;</code>, montado com <code>snprintf</code>. O resultado da expressão vale
+14.</p>
+</details><p><strong>7. Deque de entrada restrita.</strong> Um deque que só aceita inserção no fim,
+mas deixa retirar das duas pontas. Os números 1, 2, 3 e 4 chegam nessa ordem,
+e você pode retirar (de qualquer ponta) quando quiser. Escreva
+<code>bool possivel(const int *alvo, int n)</code>, que testa recursivamente todas as
+escolhas (inserir o próximo, tirar do início, tirar do fim) e diz se dá para
+obter a saída <code>alvo</code>. Teste com 4 1 3 2 e 4 2 1 3 e depois passe pelas 24
+ordens de 1 a 4, imprimindo as impossíveis e quantas são.</p>
+<details><summary>Resposta</summary><pre><code>4 1 3 2: possivel
+4 2 1 3: impossivel
+impossivel: 4 2 1 3
+impossivel: 4 2 3 1
+2 de 24 ordens sao impossiveis
+</code></pre>
+</details><p><strong>8. Palíndromo de números.</strong> Sem converter para string, use uma fila e uma
+pilha para dizer se o número 1234321 é palíndromo. E 123321? E 120?</p>
+<details><summary>Resposta</summary><p>Sim, sim e não. Tire os dígitos com <code>% 10</code> e <code>/ 10</code>, colocando cada um na
+fila e na pilha. A fila devolve os dígitos do último para o primeiro (porque
+o <code>% 10</code> começa pelas unidades) e a pilha devolve na ordem original; se as
+duas sequências baterem, é palíndromo. 120 dá 0 2 1 contra 1 2 0.</p>
+</details><p><strong>9. A fila do restaurante com desistência.</strong> Numa fila encadeada, um cliente
+de número x desiste e vai embora do meio da fila. Escreva
+<code>bool fila_desiste(Fila *f, int x)</code> usando só o <code>fila.h</code>, sem acessar os nós.
+Qual é o custo?</p>
+<details><summary>Resposta</summary><p>Gire a fila uma volta completa: retire cada item e insira de novo no fim,
+exceto o x, que é descartado. A ordem dos outros se mantém e o custo é
+<strong>O(n)</strong>. Com acesso aos nós seria O(n) também (precisa achar o x), mas sem
+o malloc e o free de cada volta. A fila não foi feita para remover do meio.</p>
+</details><p><strong>10. Avaliar com variáveis.</strong> Estenda o A175 para aceitar letras como
+variáveis, com os valores num vetor <code>int val[26]</code>: com A = 3, B = 4 e C = 5,
+calcule <code>A + B * C</code> e <code>(A + B) * C</code>.</p>
+<details><summary>Resposta</summary><p><strong>23</strong> e <strong>35</strong>. Na conversão, letra é tratada como número (vai direto para
+a fila), mas guardada com outro código, por exemplo <code>1000 + (letra - &#39;A&#39;)</code>.
+Na avaliação, um código <code>&gt;= 1000</code> empilha <code>val[codigo - 1000]</code>. As
+pós-fixas ficam <code>A B C * +</code> e <code>A B + C *</code>.</p>
+</details><h2>Questões do POSCOMP</h2>
+<p>Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.</p>
+<table>
+<thead>
+<tr>
+<th>Ano</th>
+<th>Questão</th>
+<th>Assunto</th>
+<th>Gabarito</th>
+<th>Prova</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2023</td>
+<td>28</td>
+<td>Conversão de infixa para notação polonesa</td>
+<td>D</td>
+<td><a href="https://www.sbc.org.br/wp-content/uploads/2025/02/0761.001_Exame_POSCOMP_2023.pdf">caderno</a></td>
+</tr>
+</tbody></table>
+<p>O gabarito de 2023 vem de um blog de terceiros que reproduz o gabarito definitivo; confira no PDF oficial da SBC.</p>
+<h2>Questões de provas do PPGI</h2>
+<p>Questões reais das provas de conhecimento do PPGI/UFAM, na íntegra e com o gabarito oficial. Resolva no papel, em 3 minutos por questão, e só depois abra o gabarito.</p>
+<p><strong>Edital 032/2016 · Questão 06</strong></p>
+<p>Uma estrutura de dados bastante útil quando deseja-se armazenar elementos para recupera-los posteriormente em ordem reversa a de inserção:</p>
+<ul>
+<li>a) A árvore é uma árvore AVL</li>
+<li>b) Um hash</li>
+<li>c) Uma fila de prioridades com ordenação reversa de prioridade</li>
+<li>d) Uma pilha</li>
+<li>e) Uma árvore vermelho e preto</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>D.</strong> Pilha é LIFO. Assunto 0082.</p>
+</details><p><strong>Edital 053/2016 · Questão 05</strong></p>
+<p>Considere uma estrutura de fila (disciplina FIFO) de números inteiros com duas operações: INSERE(n) e RETIRA( ). Considere, também, que a representação do estado da fila em um instante qualquer é realizada listando os elementos, de forma que o primeiro elemento, da esquerda para a direita, é o mais antigo presente na fila.</p>
+<p>Se a fila começa vazia, a sequência:</p>
+<p>INSERE(2) → INSERE(3) → RETIRA() → INSERE(1) → RETIRA() → INSERE(4) → INSERE(5) → RETIRA() → RETIRA()</p>
+<p>O estado final da fila será:</p>
+<ul>
+<li>a) 1 2 3 4 5</li>
+<li>b) 2 3 1 4 5</li>
+<li>c) 3 1 4</li>
+<li>d) 4 5</li>
+<li>e) 5</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>E.</strong> Fila: [3], [3 1], [1], [1 4 5], [4 5], [5]. Assunto 0085.</p>
+</details><p><strong>Edital 053/2016 · Questão 08</strong></p>
+<p>Sabendo que as seguintes operações foram realizadas:</p>
+<ol>
+<li>Dados foram inseridos numa PILHA na seguinte ordem: 11, 12, 23, 14, 25, 50, 8, 18, 29, 10.</li>
+<li>Repetiu-se 10 vezes o par de operações: retirada da PILHA; inserção na FILA.</li>
+<li>A FILA foi exibida (impressa).</li>
+<li>Repetiu-se 10 vezes o par de operações: retirada da FILA; inserção na PILHA.</li>
+<li>A PILHA foi exibida (impressa).</li>
+</ol>
+<p>As possíveis estruturas exibidas nas operações 3 e 5 são:</p>
+<p>I) FILA (começo) 10 - 29 - 18 - 8 - 50 - 25 - 14 - 23 - 12 - 11 (fim)<br>II) PILHA: (topo) 11 - 12 - 23 - 14 - 25 - 50 - 8 - 18 - 29 - 10<br>III) PILHA: (topo) 10 - 29 - 18 - 8 - 50 - 25 - 14 - 23 - 12 - 11<br>IV) FILA: (começo) 11 - 12 - 23 - 14 - 25 - 50 - 8 - 18 - 29 – 10 (fim)<br>V) A PILHA mostrada fica com os elementos em ordem invertida dos dados de entrada\</p>
+<p>As estruturas exibidas CORRETAMENTE nas operações 3 e 5 são:</p>
+<ul>
+<li>a) I e II</li>
+<li>b) I e</li>
+<li>c) II e III</li>
+<li>d) III e IV</li>
+<li>e) III e IV</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> Pilha → fila: 10 29 18 8 50 25 14 23 12 11 (I). Fila → pilha: topo 11 12 23 ... 10 (II). Assunto 0082.</p>
+</details><p><strong>Edital 024/2017 · Questão 06</strong></p>
+<p>Após a inserção da sequencia de números 3, 4, 6, 8 e 9 em uma pilha, o resultado CORRETO de 3 remoções sucessivas seria:</p>
+<ul>
+<li>a) 3, 4 e 6, nesta ordem</li>
+<li>b) 6, 3 e 4, nesta ordem</li>
+<li>c) 6, 8 e 9, nesta ordem</li>
+<li>d) 9, 8 e 6, nesta ordem</li>
+<li>e) Nenhuma das alternativas anteriores</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>D.</strong> LIFO: sai 9, 8, 6 Assunto 0082.</p>
+</details><p><strong>Edital 024/2017 · Questão 13</strong></p>
+<p>Dada uma lista encadeada onde cada nó da lista é do tipo No, cujos campos são um ponteiro para o próximo elemento (campo prox) e um dado do tipo inteiro (campo dado). Considere que: (1) a lista encadeada não possui um nó cabeça de lista, portanto todos os nós contém valores presentes na lista; (2) todos os tipos de dados foram previamente declarados no programa; (3) a função não deve ter problemas de alocação de memória, seja por deixar de alocar dinamicamente dados necessários ou por causar alocação dinâmica de dados desnecessária.</p>
+<p>Marque a alternativa CORRETA sobre as funções função I e função II</p>
+<pre><code class="language-c">/* função I */
+void funcaoI(No *prim, int chave) {
+  No *aux = (No *) malloc(sizeof(No));
+  aux -&gt;chave = chave;
+  aux-&gt;prox = prim;
+  prim = aux;
+}
+
+/* função II */
+void funcaoI(No **prim, int chave) {
+  No *aux = (No *) malloc(sizeof(No));
+  aux -&gt;chave = chave;
+  aux-&gt;prox = *prim;
+  *prim = aux;
+}
+</code></pre>
+<ul>
+<li>a) Apenas a função função I pode ser usada para inserir corretamente elementos em uma pilha sem gerar qualquer problema de alocação de memória ou erro na pilha.</li>
+<li>b) Apenas a função função II pode ser usada para inserir corretamente elementos em uma pilha sem gerar qualquer problema de alocação de memória ou erro na pilha.</li>
+<li>c) Ambas as funções podem ser usadas para inserir elementos em uma pilha sem gerar qualquer problema de alocação de memória ou erro na pilha.</li>
+<li>d) Apenas a função função I serve para inserir corretamente elementos em uma lista encadeada sem gerar erros, mas não em uma pilha.</li>
+<li>e) Apenas a função função II serve para inserir corretamente elementos em uma lista encadeada sem gerar erros, mas não em uma pilha.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>B.</strong> a função I altera cópia de <code>prim</code>; a II usa <code>No **</code> e empilha certo Assunto 0083.</p>
+</details><p><strong>Edital 055/2017 · Questão 02</strong></p>
+<p>Marque a alternativa INCORRETA.
+Estrutura de Dados básicas como Fila são tipicamente usadas em uma gama variada de aplicações computacionais, EXCETO:</p>
+<ul>
+<li>A) Sequência de trabalhos submetidas à impressora compartilhada em rede de computadores, onde o primeiro trabalho recebido será o primeiro trabalho a ter sua solicitação atendida.</li>
+<li>B) Fila de processos de comunicação em redes de computadores.</li>
+<li>C) Estruturas hierárquicas de diretórios e subdiretórios.</li>
+<li>D) Buffer para gravação de dados em mídia.</li>
+<li>E) Atendimento de processos requisitados ao um sistema operacional.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>C.</strong> hierarquia de diretórios é árvore, não fila Assunto 0085.</p>
+</details><p><strong>Edital 055/2017 · Questão 17</strong></p>
+<p>Após a inserção da sequencia de números 10, 1, 3, 4, 6, 8 e 9 em uma pilha, o resultado de três (3) remoções sucessivas seria:</p>
+<ul>
+<li>A) 10, 1 e 3 nessa ordem</li>
+<li>B) 4, 3 e 1 nessa ordem</li>
+<li>C) 6, 8 e 9 nessa ordem</li>
+<li>D) 3, 1 e 10 nessa ordem</li>
+<li>E) Nenhuma das alternativas anteriores (A, B, C ou D) está correta</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>E.</strong> Assunto 0082.</p>
+</details><p><strong>Edital 055/2017 · Questão 18</strong></p>
+<p>Considere uma lista encadeada onde cada nó da lista é do tipo No, cujos campos são um ponteiro para o próximo elemento (campo prox) e um dado do tipo inteiro (campo dado). Considere que a lista encadeada não possui um nó cabeça de lista, portanto todos os nós contém valores presentes na lista. Considere que todos os tipos de dados foram previamente declarados no programa. Considere que a função não deve ter problemas de alocação de memória, seja por deixar de alocar dinamicamente dados necessários ou por causar alocação dinâmica de dados desnecessária.</p>
+<pre><code class="language-c">/* funcaoI */
+void funcaoI(No *prim, int chave) {
+  No *aux = (No *) malloc(sizeof(No));
+  aux-&gt;chave = chave;
+  aux-&gt;prox = prim;
+  prim = aux;
+}
+
+/* funcaoII */
+void funcaoII(No **prim, int chave) {
+  No *aux = (No *) malloc(sizeof(No));
+  aux-&gt;chave = chave;
+  aux-&gt;prox = *prim;
+  *prim = aux;
+}
+</code></pre>
+<p>Dadas as considerações, pode-se dizer sobre as funções funcaoI e funcaoII que:</p>
+<ul>
+<li>A) Apenas a função funcaoI pode ser usada para inserir corretamente elementos em uma fila sem gerar qualquer problema de alocação de memória ou erro na fila.</li>
+<li>B) Apenas a função funcaoII pode ser usada para inserir corretamente elementos em uma fila sem gerar qualquer problema de alocação de memória ou erro na fila.</li>
+<li>C) Ambas as funções podem ser usadas para inserir elementos em uma fila sem gerar qualquer problema de alocação de memória ou erro na fila.</li>
+<li>D) Apenas a função funcaoI serve para inserir corretamente elementos em uma lista encadeada sem gerar erros, mas não em uma fila.</li>
+<li>E) Apenas a função funcaoII serve para inserir corretamente elementos em uma lista encadeada sem gerar erros, mas não em uma fila.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>E.</strong> a funcaoII (<code>No **</code>) insere no início, serve para lista e pilha, mas fila insere no fim Assunto 0086.</p>
+</details><p><strong>Edital 061/2018 · Questão 07</strong></p>
+<p>Avaliando as sentenças seguintes a respeito de estrutura de dados,</p>
+<p>I. A diferença entre árvore binária simples e árvores AVL é o fato de que a segunda pode se reconfigurar dinamicamente, com o intuito de manter um bom nível de balanceamento.<br>II. Uma pilha garante que o último elemento inserido seja localizado no seu topo.<br>III. Do ponto de vista conceitual, não há diferença alguma entre uma estrutura de array e uma lista encadeada.<br>IV. Tabelas hash são estruturas de dados indicadas para armazenar grande volume de dados.\</p>
+<p>Verifica-se que:</p>
+<ul>
+<li>a) As sentenças I e IV são verdadeiras.</li>
+<li>b) Apenas a sentença I é verdadeira.</li>
+<li>c) As sentenças III e IV são verdadeiras</li>
+<li>d) As sentenças II e III são verdadeiras.</li>
+<li>e) Apenas I, II e IV são verdadeiras.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>E.</strong> I, II e IV verdadeiras; III falsa (acesso por índice contra encadeamento). Assunto 0082.</p>
+</details><p><strong>Edital 061/2018 · Questão 10</strong></p>
+<p>Dois vetores, v1 e v2, capazes de armazenar N inteiros cada um, estão ordenados de forma crescente e têm a propriedade de que o último elemento de v1 (v1[N-1]) é menor que o primeiro elemento de v2 (v2[0]). É retirado um elemento de cada vez de cada um desses vetores alternadamente, e cada elemento retirado é colocado em uma fila. Posteriormente, os elementos são retirados da fila e inseridos em uma árvore binária de busca. A árvore é percorrida em ordem simétrica, e os elementos são inseridos, assim que retirados, em uma pilha. Depois, cada elemento é retirado da pilha e inserido alternadamente em um dos vetores, começando por v1. Diante do exposto, conclui-se que:</p>
+<ul>
+<li>a) v1[i] ≥ v2[i], ∀ i = 0,1,...,N-1</li>
+<li>b) v1[i] ≤ v2[i], ∀ i = 0,1,...,N-1</li>
+<li>c) v1[N-1] &gt; v2[0]</li>
+<li>d) As listas não estão mais ordenadas.</li>
+<li>e) Todos os elementos de v1 estão armazenados em v2 e vice-versa.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> A ABB em ordem dá v1 e v2 crescentes. Empilhar e desempilhar inverte; alternando começando por v1, v1[i] fica com a posição 2i e v2[i] com a 2i+1 da sequência decrescente: v1[i] ≥ v2[i]. Assunto 0082.</p>
+</details><p><strong>Edital 061/2018 · Questão 20</strong></p>
+<p>Dados os seguinte valores de entrada - 11, 12, 23, 14, 25, 50, 8, 18, 29, 10 -, insira-os em uma PILHA. Em seguida retire cada um dos valores da PILHA e insira numa FILA. Mostre a FILA. Depois retire os dados da FILA e insira na PILHA. Mostre a PILHA.</p>
+<p>As valores MOSTRADOS ficam</p>
+<p>I. FILA (começo) 10 - 29 - 18 - 8 - 50 - 25 - 14 - 23 - 12 - 11 (fim)<br>II. PILHA: (topo) 11 - 12 - 23 - 14 - 25 - 50 - 8 - 18 - 29 - 10<br>III. PILHA: (topo) 10 - 29 - 18 - 8 - 50 - 25 - 14 - 23 - 12 - 11<br>IV. FILA: (começo) 11 - 12 - 23 - 14 - 25 - 50 - 8 - 18 - 29 – 10 (fim)\</p>
+<p>Está CORRETO o que se afirma APENAS em:</p>
+<ul>
+<li>a) I e II</li>
+<li>b) I e IV</li>
+<li>c) II e III</li>
+<li>d) III e IV</li>
+<li>e) III e IV</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> Fila exibida: 10-29-...-11 (I). Pilha final: topo 11-12-...-10 (II). III e IV são falsas. Assunto 0082.</p>
+</details><p><strong>Edital 033/2019 · Questão 03</strong></p>
+<p>Considere a seguinte operação em uma pilha de tamanho 5:
+Push(1); Pop(); Push(2); Push(3); Pop(); Push(4); Pop(); Pop(); Push(5);
+Após a todos as operações serem realizadas, o número de elementos presentes na pilha é:</p>
+<ul>
+<li>a) 1</li>
+<li>b) 2</li>
+<li>c) 3</li>
+<li>d) 4</li>
+<li>e) 5</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> 5 push menos 4 pop deixa 1 elemento (o 1). Assunto 0082.</p>
+</details><p><strong>Edital 033/2019 · Questão 17</strong></p>
+<p>Quantas pilhas são necessárias para implementar uma fila. Considere a situação em que nenhuma outra estrutura de dados, como matrizes, lista encadeada está disponível.</p>
+<ul>
+<li>a) 0</li>
+<li>b) 1</li>
+<li>c) 2</li>
+<li>d) 3</li>
+<li>e) 4</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>C.</strong> Fila com duas pilhas. Assunto 0085.</p>
+</details><p><strong>Edital 060/2019 · Questão 20</strong></p>
+<p>Suponha que uma fila circular de elementos com capacidade (n - 1) seja implementada com um vetor de n elementos. Suponha que a operação de inserção e exclusão seja realizada usando REAR (último elemento da fila) e FRONT (primeiro elemento da fila) como variáveis de índice do vetor, respectivamente. Inicialmente, REAR = FRONT = 0. As condições para detectar a fila cheia e a fila vazia são:</p>
+<ul>
+<li>a) Full: (REAR+1) mod n == FRONT, empty: (FRONT+1) mod n == REAR</li>
+<li>b) Full: REAR == FRONT, empty: (REAR+1) mod n == FRONT</li>
+<li>c) Full: (FRONT+1) mod n == REAR, empty: REAR == FRONT</li>
+<li>d) Full: REAR == FRONT, empty: (FRONT+1) mod n == REAR</li>
+<li>e) Full: (REAR+1) mod n == FRONT, empty: REAR == FRONT</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>E.</strong> Vazia: REAR == FRONT; cheia: (REAR+1) mod n == FRONT. Assunto 0085.</p>
+</details><h2>Para ler mais</h2>
+<ul>
+<li>CORMEN, T. H.; LEISERSON, C. E.; RIVEST, R. L.; STEIN, C. <em>Algoritmos: teoria e prática</em>. 4. ed. Rio de Janeiro: GEN LTC, 2024. Cap. 10: estruturas de dados elementares (pilhas e filas).</li>
+<li>ZIVIANI, N. <em>Projeto de algoritmos: com implementações em Pascal e C</em>. 3. ed. São Paulo: Cengage Learning, 2010. Cap. 3: estruturas de dados básicas (pilhas e filas).</li>
+<li>CELES, W.; CERQUEIRA, R.; RANGEL, J. L. <em>Introdução a estruturas de dados: com técnicas de programação em C</em>. 2. ed. Rio de Janeiro: Elsevier, 2016.</li>
+<li>CELES, W.; RANGEL, J. L. <em>Apostila de estruturas de dados</em>. Rio de Janeiro: PUC-Rio, Departamento de Informática, 2002. Pilhas e filas.</li>
+<li>FEOFILOFF, P. <em>Algoritmos em linguagem C</em>. Rio de Janeiro: Elsevier, 2009. Capítulos de pilhas e filas. Disponível em: <a href="https://www.ime.usp.br/~pf/algoritmos/">https://www.ime.usp.br/~pf/algoritmos/</a>.</li>
+<li>TENENBAUM, A. M.; LANGSAM, Y.; AUGENSTEIN, M. J. <em>Estruturas de dados usando C</em>. São Paulo: Makron Books, 1995. Cap. 2 (pilha) e cap. 4 (filas e listas).</li>
+<li>LAUREANO, M. <em>Estrutura de dados com algoritmos e C</em>. Rio de Janeiro: Brasport, 2008. Caps. 3 (pilha) e 4 (fila).</li>
+<li>ROCHA, A. M. A.; BORGES, A. R. O. S. <em>Programação, estruturas de dados e algoritmos em C</em>. Aveiro: Universidade de Aveiro, Departamento de Eletrônica e Telecomunicações. Cap. 7: filas e pilhas.</li>
+<li>DEITEL, P.; DEITEL, H. <em>C: como programar</em>. 6. ed. São Paulo: Pearson Prentice Hall, 2011. Cap. 12: estruturas de dados.</li>
+<li>KERNIGHAN, B. W.; RITCHIE, D. M. <em>The C programming language</em>. 2. ed. Englewood Cliffs: Prentice Hall, 1988. Seção 4.3: a calculadora polonesa reversa.</li>
+<li>DIJKSTRA, E. W. <em>Algol 60 translation</em>: an Algol 60 translator for the X1. Amsterdam: Mathematisch Centrum, 1961. (Report MR 35). A origem do algoritmo do pátio de manobras.</li>
+<li>CPPREFERENCE. <em>Arithmetic operators</em>: divisão inteira e resto. Disponível em: <a href="https://en.cppreference.com/w/c/language/operator_arithmetic">https://en.cppreference.com/w/c/language/operator_arithmetic</a>.</li>
+</ul>

@@ -1,0 +1,136 @@
+<h2>0085 · Fila</h2>
+<p>A pilha atende o mais recente primeiro, e isso é justo para o &quot;desfazer&quot;, mas
+seria um desastre na lotérica. Lá você pega a senha 35 e espera; quem chegou
+antes é atendido antes, e a senha 40, recém-saída da maquininha, espera todo
+mundo da frente. Para guardar dados nessa ordem, você precisa de outra
+estrutura: uma que entregue o item mais <strong>antigo</strong>.</p>
+<p>Essa estrutura é a <strong>fila</strong> (<em>queue</em>). O item novo entra pelo <strong>fim</strong> e o
+próximo a sair está no <strong>início</strong>, como na fila do banco. O primeiro a entrar
+é o primeiro a sair: a sigla é <strong>FIFO</strong>, do inglês <em>first in, first out</em>, o
+contrário do LIFO da pilha (FEOFILOFF, 2009). No Cormen, inserir se chama
+ENQUEUE e retirar se chama DEQUEUE (CORMEN et al., 2024, cap. 10).</p>
+<p>Como TAD, a fila tem a mesma cara da pilha do 0082: inserir no fim, retirar
+do início, olhar quem é o próximo sem tirar e perguntar se está vazia (CELES;
+RANGEL, 2002). O valor retirado sai por ponteiro, e o <code>bool</code> diz se a
+operação deu certo:</p>
+<pre><code class="language-c">typedef struct fila Fila; // tipo opaco: os campos ficam no fila.c
+
+Fila *fila_cria(void);                          // fila vazia (NULL se faltar memória)
+void fila_libera(Fila *f);                      // devolve toda a memória da fila
+bool fila_vazia(const Fila *f);                 // true se não tem ninguém
+int fila_tamanho(const Fila *f);                // quantos estão na fila
+bool fila_insere(Fila *f, int valor);           // entra no fim: false se não coube
+bool fila_retira(Fila *f, int *valor);          // sai do início: false se vazia
+bool fila_primeiro(const Fila *f, int *valor);  // olha quem é o próximo, sem tirar
+</code></pre>
+<p>Guardar a fila num vetor parece simples e esconde um problema. A pilha mexe
+numa ponta só; a fila mexe nas duas. Se o início fica sempre em <code>itens[0]</code>,
+cada retirada obriga a empurrar todos os itens uma casa para a frente, e isso
+custa O(n). Se você não empurra e só avança o índice do início, a fila anda
+para a direita e bate no fim do vetor com as primeiras gavetas vazias
+(TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 4).</p>
+<p>A saída é a <strong>fila circular</strong>: quando o índice passa da última gaveta, ele
+volta à gaveta 0, como os ponteiros de um relógio voltam ao 12. Você guarda o
+<strong>início</strong> (a gaveta do próximo a sair) e o número de itens <code>n</code>. A próxima
+vaga é <code>(inicio + n) % CAPACIDADE</code>: o resto da divisão faz a volta sozinho
+(CELES; RANGEL, 2002). Com 8 gavetas, depois da 7 vem <code>(7 + 1) % 8 = 0</code>.
+Retirar lê <code>itens[inicio]</code> e avança o início da mesma forma, com
+<code>(inicio + 1) % CAPACIDADE</code>.</p>
+<p>Por que guardar <code>n</code> em vez de um índice de fim? Com só <code>inicio</code> e <code>fim</code>, a
+fila vazia e a fila cheia ficam com a mesma cara: nas duas, <code>inicio == fim</code>.
+Há duas saídas. A primeira é guardar <code>n</code>, como este curso faz. A segunda é
+<strong>sacrificar uma gaveta</strong> e declarar a fila cheia quando
+<code>(fim + 1) % CAPACIDADE == inicio</code>, de modo que cabem 7 itens em 8 gavetas.
+O Cormen usa a segunda, com <code>Q.head</code> e <code>Q.tail</code> (a próxima vaga): num vetor
+de n posições, a fila guarda no máximo n − 1 itens (CORMEN et al., 2024,
+cap. 10).</p>
+<p>Inserir e retirar custam <strong>O(1)</strong>: uma conta de resto, uma atribuição e um
+ajuste de contador. Como na pilha, retirar não apaga nada; o valor fica na
+gaveta até alguém escrever por cima (FEOFILOFF, 2009). Um detalhe de
+desempenho: com capacidade potência de 2, <code>i % 8</code> dá o mesmo que <code>i &amp; 7</code>, e o
+compilador costuma fazer essa troca sozinho.</p>
+<blockquote>
+<p>[!WARNING]
+O tamanho como <code>fim - inicio</code> dá negativo depois da volta: com início 4 e
+fim 2, dá -2. Use o contador <code>n</code> ou <code>(fim - inicio + CAPACIDADE) % CAPACIDADE</code>.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>Na lotérica, o painel guarda 8 senhas. Chegam as senhas 31 a 36 (gavetas 0 a
+5) e o caixa atende 4. Chegam 37 a 40: o 37 e o 38 ocupam as gavetas 6 e 7, e
+o 39 e o 40 <strong>dão a volta</strong> para as gavetas 0 e 1:</p>
+<p>{{ideia}}</p>
+<p>Parte principal do <code>fila.c</code>:</p>
+<pre><code class="language-c">#define CAPACIDADE 8
+
+struct fila {
+    int itens[CAPACIDADE];
+    int inicio; // posição do primeiro da fila (o próximo a sair)
+    int n;      // quantos estão na fila: separa &quot;cheia&quot; de &quot;vazia&quot;
+};
+
+bool fila_insere(Fila *f, int valor) {
+    if (f-&gt;n == CAPACIDADE) {
+        return false; // cheia
+    }
+    int fim = (f-&gt;inicio + f-&gt;n) % CAPACIDADE; // dá a volta no fim do vetor
+    f-&gt;itens[fim] = valor;
+    f-&gt;n++;
+    return true;
+}
+
+bool fila_retira(Fila *f, int *valor) {
+    if (f-&gt;n == 0) {
+        return false; // vazia
+    }
+    *valor = f-&gt;itens[f-&gt;inicio];
+    f-&gt;inicio = (f-&gt;inicio + 1) % CAPACIDADE;
+    f-&gt;n--;
+    return true;
+}
+</code></pre>
+<p>O programa só vê as funções do <code>fila.h</code>:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;fila.h&quot;
+
+int main(void) {
+    Fila *senhas = fila_cria(); // o painel guarda até 8 senhas
+    if (senhas == NULL) {
+        return 1;
+    }
+
+    for (int s = 31; s &lt;= 36; s++) { // chegam 6 pessoas
+        fila_insere(senhas, s);
+    }
+
+    printf(&quot;Atendidas:&quot;);
+    for (int i = 0; i &lt; 4; i++) { // o caixa chama 4
+        int s;
+        if (fila_retira(senhas, &amp;s)) {
+            printf(&quot; %d&quot;, s);
+        }
+    }
+
+    printf(&quot;\nChegaram:&quot;);
+    for (int s = 37; s &lt;= 40; s++) { // 39 e 40 dão a volta no vetor
+        if (fila_insere(senhas, s)) {
+            printf(&quot; %d&quot;, s);
+        }
+    }
+
+    printf(&quot;\nNa fila (%d):&quot;, fila_tamanho(senhas));
+    int s;
+    while (fila_retira(senhas, &amp;s)) {
+        printf(&quot; %d&quot;, s);
+    }
+    printf(&quot;\n&quot;);
+
+    fila_libera(senhas);
+    return 0;
+}
+// Saída:
+// Atendidas: 31 32 33 34
+// Chegaram: 37 38 39 40
+// Na fila (6): 35 36 37 38 39 40
+</code></pre>
+<p>A senha 39 entra com <code>inicio = 4</code> e <code>n = 4</code>: o <code>%</code> a manda para a gaveta 0:</p>
+<p>{{fluxograma}}</p>

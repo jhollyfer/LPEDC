@@ -1,0 +1,146 @@
+<h2>0143 · Juntando tudo: um mini-diff</h2>
+<p>Você e a sua mãe dividem a lista de compras num arquivo de texto, uma coisa
+por linha. Ela abriu, mexeu e salvou. O que mudou? O programa que responde
+isso é o <code>diff</code>: ele recebe duas versões de um arquivo e mostra o que entrou
+e o que saiu (LINUX MAN-PAGES, s.d.). Este projeto monta uma versão pequena
+dele.</p>
+<p>A primeira ideia, comparar a linha 1 com a linha 1, a 2 com a 2, e assim
+por diante, não serve. Se ela acrescentou &quot;açúcar&quot; no começo, todas as
+linhas descem uma posição, e todas parecem diferentes, embora quase nada
+tenha mudado (LINUX MAN-PAGES, s.d.). O que você quer é achar o maior
+pedaço que ficou igual, na mesma ordem, mesmo com linhas novas no meio.</p>
+<p>Isso é a LCS do assunto 0141, com <strong>linhas</strong> no lugar de letras. Duas linhas
+casam quando <code>strcmp</code> devolve 0. As linhas que entram na LCS ficaram iguais
+nas duas versões. As que só estão na versão antiga foram <strong>removidas</strong> e
+saem com <code>-</code>. As que só estão na nova foram <strong>adicionadas</strong> e saem com <code>+</code>
+(CORMEN et al., 2024, cap. 14). Uma linha alterada, como &quot;leite&quot; que virou
+&quot;leite sem lactose&quot;, aparece como uma remoção e uma adição.</p>
+<p>Há um ajuste na tabela. Na LCS do 0141, <code>c[i][j]</code> falava dos prefixos e a
+volta andava do fim para o começo, então as letras saíam ao contrário. Para
+o diff, a saída tem de vir na ordem do arquivo. A solução é trabalhar com
+<strong>sufixos</strong>, os finais das listas: <code>c[i][j]</code> é a LCS de <code>a[i..m-1]</code> e
+<code>b[j..n-1]</code>. A tabela se enche de trás para a frente, a resposta fica em
+<code>c[0][0]</code> e a volta anda do <strong>começo</strong> para o fim, imprimindo na ordem
+certa (LINTZMAYER; MOTA, 2023).</p>
+<p>Na volta, em cada posição <code>(i, j)</code>, se as linhas são iguais, a linha sai
+com dois espaços na frente e as duas listas avançam. Se não são, olhe os
+vizinhos <code>c[i+1][j]</code> e <code>c[i][j+1]</code>: o maior diz qual lado avançar. Avançar
+em <code>a</code> quer dizer que a linha <code>a[i]</code> não está na nova versão, e ela sai com
+<code>-</code>; avançar em <code>b</code> quer dizer que <code>b[j]</code> é nova, e ela sai com <code>+</code>.</p>
+<p>Para ler as linhas, o programa usa <code>fgets</code>, que traz a linha inteira para
+um buffer, inclusive o <code>&#39;\n&#39;</code> do fim. Esse <code>&#39;\n&#39;</code> atrapalha a comparação e
+precisa sair. A linha <code>buf[strcspn(buf, &quot;\n&quot;)] = &#39;\0&#39;</code> resolve: <code>strcspn</code>
+devolve a posição do primeiro <code>&#39;\n&#39;</code>, ou o tamanho da string se não houver
+nenhum, e ali entra o terminador (CPPREFERENCE, s.d.).</p>
+<p>A tabela pode ser grande. Dois arquivos de 2000 linhas pedem 4 milhões de
+células, 16 MB de <code>int</code>, o dobro da pilha padrão do Linux. Por isso ela não
+é uma matriz local: vem de um único <code>malloc</code> de <code>(m + 1) × (n + 1)</code> inteiros,
+e a célula <code>(i, j)</code> mora na posição <code>i * w + j</code> desse bloco, com <code>w = n + 1</code>,
+a largura de uma linha (KERNIGHAN; RITCHIE, 1989).</p>
+<p>Mesmo assim, O(m × n) não escala. Com 100 mil linhas de cada lado, seriam
+40 GB de tabela. O <code>diff</code> de verdade usa o algoritmo de Myers, que gasta
+O((m + n) × D), com D o número de diferenças (MYERS, 1986). Como dois
+arquivos parecidos têm poucas diferenças, ele roda rápido justamente no caso
+mais comum.</p>
+<blockquote>
+<p>[!WARNING]
+Sem tirar o <code>&#39;\n&#39;</code>, &quot;banana\n&quot; e &quot;banana&quot; diferem no <code>strcmp</code> e o diff acusa
+uma mudança invisível. A última linha do arquivo pode vir <strong>sem</strong> <code>&#39;\n&#39;</code>.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>Você e sua mãe dividem a lista de compras num arquivo. <code>linhas.h</code> e
+<code>linhas.c</code> (assunto 0034) leem as linhas num <code>char **</code> que dobra com
+<code>realloc</code> (assunto 0055). No desenho, a lista antiga fica à esquerda, a nova à
+direita, e os traços ligam as cinco linhas da LCS:</p>
+<p>{{ideia}}</p>
+<p>Sem argumentos, o programa compara duas listas gravadas em <code>/tmp</code>; com dois
+nomes de arquivo (assunto 0069), compara os seus:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &quot;linhas.h&quot;
+
+// diff linha a linha: LCS dos SUFIXOS, para a volta andar do começo ao fim
+void diff(char **a, int m, char **b, int n) {
+    // c[i * w + j] = LCS de a[i..m-1] e b[j..n-1]: a matriz (m+1) x (n+1)
+    // num bloco só do malloc, linha após linha
+    int w = n + 1;
+    int *c = malloc((size_t) (m + 1) * w * sizeof *c);
+    if (c == NULL) {
+        return;
+    }
+    for (int i = m; i &gt;= 0; i--) {
+        for (int j = n; j &gt;= 0; j--) {
+            if (i == m || j == n) {
+                c[i * w + j] = 0;                      // um sufixo vazio
+            } else if (strcmp(a[i], b[j]) == 0) {
+                c[i * w + j] = c[(i + 1) * w + j + 1] + 1;
+            } else {
+                int baixo = c[(i + 1) * w + j], dir = c[i * w + j + 1];
+                c[i * w + j] = baixo &gt;= dir ? baixo : dir;
+            }
+        }
+    }
+
+    int i = 0, j = 0, iguais = 0, menos = 0, mais = 0;
+    while (i &lt; m || j &lt; n) {
+        if (i &lt; m &amp;&amp; j &lt; n &amp;&amp; strcmp(a[i], b[j]) == 0) {
+            printf(&quot;  %s\n&quot;, a[i]);                    // está nas duas versões
+            i++;
+            j++;
+            iguais++;
+        } else if (j == n || (i &lt; m &amp;&amp; c[(i + 1) * w + j] &gt;= c[i * w + j + 1])) {
+            printf(&quot;- %s\n&quot;, a[i]);                    // só na versão antiga
+            i++;
+            menos++;
+        } else {
+            printf(&quot;+ %s\n&quot;, b[j]);                    // só na versão nova
+            j++;
+            mais++;
+        }
+    }
+    printf(&quot;(%d iguais, %d removidas, %d adicionadas)\n&quot;, iguais, menos, mais);
+    free(c);
+}
+
+int main(int argc, char *argv[]) {
+    const char *antigo = &quot;/tmp/compras-v1.txt&quot;;
+    const char *novo = &quot;/tmp/compras-v2.txt&quot;;
+    if (argc == 3) {                                   // ./programa a.txt b.txt
+        antigo = argv[1];
+        novo = argv[2];
+    } else {                                           // sem argumentos: o exemplo
+        const char *v1[] = {&quot;arroz&quot;, &quot;feijão&quot;, &quot;café&quot;, &quot;leite&quot;, &quot;pão&quot;, &quot;banana&quot;,
+                            &quot;sabão&quot;};
+        const char *v2[] = {&quot;arroz&quot;, &quot;feijão&quot;, &quot;açúcar&quot;, &quot;café&quot;, &quot;leite sem lactose&quot;,
+                            &quot;pão&quot;, &quot;banana&quot;};
+        grava_linhas(antigo, v1, 7);
+        grava_linhas(novo, v2, 7);
+    }
+
+    int m = 0, n = 0;
+    char **a = le_linhas(antigo, &amp;m);
+    char **b = le_linhas(novo, &amp;n);
+    if (a != NULL &amp;&amp; b != NULL) {
+        diff(a, m, b, n);
+    }
+    libera_linhas(a, m);
+    libera_linhas(b, n);
+    return 0;
+}
+// Saída:
+//   arroz
+//   feijão
+// + açúcar
+//   café
+// - leite
+// + leite sem lactose
+//   pão
+//   banana
+// - sabão
+// (5 iguais, 2 removidas, 2 adicionadas)
+</code></pre>
+<p>&quot;leite&quot; e &quot;leite sem lactose&quot; viram uma remoção e uma adição; o A286 usa a
+distância de edição (0142) para ver que a linha só foi <strong>alterada</strong>. O caminho
+marcado é o das duas primeiras linhas, iguais:</p>
+<p>{{fluxograma}}</p>

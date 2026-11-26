@@ -1,0 +1,321 @@
+<h1>Módulo 17 · Medindo algoritmos recursivos</h1>
+<p>Contar laços (módulo 10) não mede função recursiva. O módulo cobre
+recorrências, árvore de recursão, teorema mestre, análise amortizada e o
+limite Ω(n log n) da ordenação, e fecha prevendo o tempo de quatro ordenações.
+Dá prova aos &quot;n log n&quot; dos módulos 13 e 14.</p>
+<h2>O que você vai aprender</h2>
+<ul>
+<li>a <strong>recorrência</strong> de uma função recursiva e a <strong>árvore de recursão</strong></li>
+<li><code>T(n-1)</code> contra <code>T(n/2)</code>: &quot;duas chamadas&quot; pode ser Θ(n) ou Θ(2ⁿ)</li>
+<li>o <strong>teorema mestre</strong>: os três casos e quando ele <strong>não</strong> se aplica</li>
+<li>a <strong>análise amortizada</strong>: método agregado e do banqueiro</li>
+<li>a <strong>árvore de decisão</strong> e o limite <strong>Ω(n log n)</strong> da ordenação por comparação</li>
+<li>as notações <strong>Θ</strong> e <strong>Ω</strong>, ao lado do <strong>O</strong></li>
+<li><strong>medir</strong> com <code>clock()</code> e contadores, e <strong>prever</strong> o tempo</li>
+</ul>
+<h2>Antes de começar</h2>
+<p>Usa recursão (0031 a 0033), Big-O (0071 e 0072), vetor que cresce (0055 e
+0075), pilha (0082), fila (0085), merge e quick sort (módulo 13), heap (0102 e
+0103) e ponteiro para função (0050).</p>
+<p>Matemática: <code>log₂ n</code> é quantas vezes n se divide por 2 até chegar em 1
+(<code>log₂ 1024 = 10</code>); <code>log_b a</code> é o expoente que leva <code>b</code> a <code>a</code> (<code>log₃ 9 = 2</code>).
+<code>log2</code> e <code>log</code> ficam em <code>&lt;math.h&gt;</code>; as flags de estudo já ligam <code>-lm</code>.</p>
+<p>O 0118 traz o TAD <code>ordena.h</code> e <code>ordena.c</code>, com as quatro ordenações e um
+contador de comparações. Os tempos variam entre execuções; as comparações, não.</p>
+<p>{{indice}}</p>
+<hr>
+<p>{{assuntos}}</p>
+<hr>
+<h2>Desafios do módulo</h2>
+<p>Problemas para fechar o módulo, misturando os assuntos. Resolva no papel e,
+sempre que der, confira com um programa em C compilado com as flags de estudo.</p>
+<p><strong>1. O pior quick sort.</strong> Com o pivô sempre no último elemento, um vetor já
+ordenado faz o quick sort particionar em pedaços de tamanho <code>n - 1</code> e 0.
+Escreva a recorrência das comparações, resolva e calcule para <code>n = 10.000</code>.
+Compare com o melhor caso.</p>
+<details><summary>Resposta</summary><p><code>T(n) = T(n-1) + (n - 1)</code>, com <code>T(1) = 0</code>: a árvore vira uma linha, e a soma
+é <code>(n - 1) + (n - 2) + ... + 1 = n(n - 1)/2</code>. Para 10.000: <strong>49.995.000
+comparações</strong>. No melhor caso (pivô sempre no meio), <code>T(n) = 2 T(n/2) + n</code>,
+uns <code>n log₂ n ≈ 133 mil</code>. Quase 400 vezes menos. Para conferir, conte as
+comparações de um quick sort com pivô no fim num vetor <code>0, 1, ..., 9999</code>.</p>
+</details><p><strong>2. Três terços.</strong> Resolva <code>T(n) = 3 T(n/3) + n</code>, com <code>T(1) = 1</code>, pelo
+teorema mestre e pela árvore. Quanto dá <code>T(81)</code>?</p>
+<details><summary>Resposta</summary><p><code>a = 3</code>, <code>b = 3</code>, <code>k = 1</code>: <code>b^k = 3 = a</code>, caso 2, <strong>Θ(n log n)</strong>. Na árvore,
+cada nível custa <code>n</code> e são <code>log₃ n + 1</code> níveis: <code>T(n) = n (log₃ n + 1)</code>.
+Com <code>n = 81 = 3⁴</code>, são 5 níveis de 81: <strong>T(81) = 405</strong>.</p>
+</details><p><strong>3. Pedaços de tamanhos diferentes.</strong> O teorema mestre não resolve
+<code>T(n) = T(n/2) + T(n/4) + n</code>. Use a árvore de recursão para achar a classe.</p>
+<details><summary>Resposta</summary><p>O nível 0 custa <code>n</code>. O nível 1 tem pedaços de <code>n/2</code> e <code>n/4</code>: custa <code>3n/4</code>. O
+nível 2 custa <code>9n/16</code>, e assim por diante: cada nível custa <code>3/4</code> do
+anterior. A soma de uma progressão geométrica de razão <code>3/4</code> fica abaixo de
+<code>4n</code>, e o primeiro nível já é <code>n</code>. Logo <strong>Θ(n)</strong>: a raiz domina, como num
+caso 3.</p>
+</details><p><strong>4. Quick sort azarado, mas nem tanto.</strong> Um quick sort sempre divide o
+pedaço na proporção 1 para 9 (10% de um lado, 90% do outro). Ele continua
+O(n log n)? Quantos níveis tem a árvore para <code>n = 1 milhão</code>?</p>
+<details><summary>Resposta</summary><p>Sim. Cada nível da árvore custa no máximo <code>n</code> (os pedaços de um nível não se
+sobrepõem). O caminho mais fundo é o que segue sempre os 90%: o tamanho cai
+por <code>10/9</code> a cada nível, então são <code>log_{10/9} n</code> níveis, uns <code>6,6 log₂ n</code>.
+Para 1 milhão, <strong>cerca de 131 níveis</strong>, contra 20 da divisão ao meio. A
+constante piora, mas continua <strong>Θ(n log n)</strong>. Qualquer proporção fixa serve;
+o desastre é dividir em <code>n - 1</code> e 0.</p>
+</details><p><strong>5. A tabela hash que dobra.</strong> Uma tabela hash do módulo 15 começa com
+espaço para 1 elemento e dobra de tamanho quando enche, reinserindo todos os
+elementos na tabela nova. Quantas reinserções acontecem até ela guardar 1024
+elementos? Qual o custo amortizado por inserção?</p>
+<details><summary>Resposta</summary><p>As mudanças acontecem com 1, 2, 4, ..., 512 elementos: <code>1 + 2 + 4 + ... + 512</code> dá <strong>1023 reinserções</strong>, menos que <code>2 · 1024</code>. Somando as 1024 inserções
+normais, menos de 3 operações por elemento: <strong>O(1) amortizado</strong>. É a mesma
+conta do vetor que dobra do assunto 0116.</p>
+</details><p><strong>6. O contador inteiro.</strong> Um contador binário de 10 bits vai de 0 até 1023,
+um incremento por vez. Quantas trocas de bit acontecem no total?</p>
+<details><summary>Resposta</summary><p>O bit 0 troca 1023 vezes, o bit 1, 511, o bit 2, 255... o bit 9, 1 vez. A
+soma é <code>(1024 - 1) + (512 - 1) + ... + (2 - 1) = 2046 - 10</code>:
+<strong>2036 trocas</strong>. Em geral, <code>n</code> incrementos a partir do zero fazem <code>2n</code> menos
+a quantidade de bits 1 de <code>n</code>: aqui, <code>2 · 1023 - 10</code>. Menos de 2 por incremento, como no A231.</p>
+</details><p><strong>7. Intercalar é ótimo?</strong> Juntar duas listas ordenadas de 4 elementos cada
+custa até 7 comparações na intercalação do merge sort. Algum método faz
+menos no pior caso?</p>
+<details><summary>Resposta</summary><p>Não. Conte as folhas da árvore de decisão: o resultado é decidido por
+<strong>quais 4 das 8 posições</strong> ficam com elementos da primeira lista, e isso dá
+<code>C(8, 4) = 70</code> respostas possíveis. Com <code>h</code> comparações cabem <code>2^h</code> folhas:
+<code>2^6 = 64 &lt; 70 ≤ 128 = 2^7</code>. Precisa de <strong>7 comparações</strong> no pior caso, e a
+intercalação comum faz exatamente <code>2 · 4 - 1 = 7</code>: ela é ótima.</p>
+</details><p><strong>8. O vice-campeão.</strong> Ache o <strong>segundo maior</strong> de 16 valores. O jeito
+óbvio (achar o maior, tirá-lo e achar o maior de novo) usa <code>15 + 14 = 29</code>
+comparações. Faça com 18.</p>
+<details><summary>Resposta</summary><p>Um <strong>torneio</strong>: os 16 jogam em pares, os vencedores jogam em pares, até
+sobrar o campeão. São 15 comparações (todo mundo, menos o campeão, perde uma
+vez). O segundo maior só pode ter perdido <strong>para o campeão</strong>, e o campeão
+jogou <code>log₂ 16 = 4</code> vezes. O máximo entre esses 4 adversários sai com 3
+comparações: <code>15 + 3</code>, <strong>18 comparações</strong>. Em geral, <code>n + ⌈log₂ n⌉ - 2</code>.
+Guarde, para cada vencedor, a lista de quem ele derrotou.</p>
+</details><p><strong>9. Prever a multiplicação de números enormes.</strong> Um programa de
+criptografia multiplica números de 10 mil dígitos em 2 segundos com o
+método de Karatsuba, Θ(n^(log₂ 3)). Quanto tempo ele deve levar com 40 mil
+dígitos? E se usasse o método da escola, Θ(n²), com os mesmos 2 segundos em
+10 mil dígitos?</p>
+<details><summary>Resposta</summary><p>O tamanho foi multiplicado por 4. Karatsuba: <code>4^(log₂ 3) = (2²)^(log₂ 3) = 3² = 9</code>, então <strong>uns 18 segundos</strong>. Método da escola: <code>4² = 16</code>, <strong>uns 32
+segundos</strong>. A diferença cresce com <code>n</code>: com 160 mil dígitos seriam 162
+segundos contra 512.</p>
+</details><p><strong>10. Descobrir o expoente.</strong> Você não tem o código de uma função, só pode
+rodá-la. Com <code>n = 50 mil</code> ela leva 1,2 s; com <code>n = 100 mil</code>, 3,4 s. Qual é o
+expoente provável do custo? Quanto deve levar com 400 mil?</p>
+<details><summary>Resposta</summary><p>A razão é <code>3,4 / 1,2 ≈ 2,83</code>. Se o custo é <code>n^p</code>, dobrar <code>n</code> multiplica por
+<code>2^p</code>: <code>p = log₂ 2,83</code>, logo <strong>p ≈ 1,5</strong>. De 100 mil para 400 mil, o tamanho
+multiplica por 4 e o tempo por <code>4^1,5 = 8</code>: <strong>uns 27 segundos</strong>. Antes de
+confiar, meça mais um ponto (200 mil deve dar uns 9,6 s): duas medidas
+apenas não distinguem <code>n^1,5</code> de, digamos, <code>n log² n</code>.</p>
+</details><h2>Questões do POSCOMP</h2>
+<p>Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.</p>
+<table>
+<thead>
+<tr>
+<th>Ano</th>
+<th>Questão</th>
+<th>Assunto</th>
+<th>Gabarito</th>
+<th>Prova</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2019</td>
+<td>21</td>
+<td>Recorrências de algoritmos recursivos, limites Theta</td>
+<td>A</td>
+<td><a href="https://www.sbc.org.br/wp-content/uploads/2025/02/0518.002_Exame_POSCOMP_2019.pdf">caderno</a></td>
+</tr>
+</tbody></table>
+<h2>Questões no estilo da prova</h2>
+<p>Questões objetivas no formato da prova do PPGI. Resolva no papel, marque a
+letra e só depois abra o gabarito. O teorema mestre usado aqui é o da forma
+do Cormen (veja o <code>[!NOTE]</code> do assunto 0115). Quando o enunciado diz que
+cada passo custa 1, conte passo a passo, sem estimar.</p>
+<p><strong>1.</strong> Considere as afirmações sobre notação assintótica:</p>
+<p>I. Se <code>f(n) = Θ(g(n))</code>, então <code>f(n) = O(g(n))</code> e <code>f(n) = Ω(g(n))</code>.
+II. <code>3n² + 10n = O(n³)</code>.
+III. Um algoritmo O(n) é sempre mais rápido que um O(n²), para qualquer
+entrada e qualquer valor de <code>n</code>.
+IV. <code>n log n = O(n²)</code>.</p>
+<p>Marque a alternativa <strong>CORRETA</strong>.</p>
+<ul>
+<li>(A) Apenas I e II.</li>
+<li>(B) Apenas II e III.</li>
+<li>(C) Apenas I, II e IV.</li>
+<li>(D) Apenas III e IV.</li>
+<li>(E) I, II, III e IV.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>C.</strong> A III é falsa por dois &quot;quaisquer&quot;: a notação O descreve o crescimento
+para <code>n</code> grande e esconde constantes. Um algoritmo <code>100n</code> perde para um <code>n²</code> em
+<code>n &lt; 100</code>. O limite superior não precisa ser justo, então II e IV são
+verdadeiras. Veja 0114.</p>
+</details><p><strong>2.</strong> Considere as afirmações sobre recorrências e o teorema mestre:</p>
+<p>I. <code>T(n) = 2T(n/2) + n</code> tem solução Θ(n log n).
+II. <code>T(n) = T(n/2) + n</code> tem solução Θ(n log n).
+III. <code>T(n) = T(n − 1) + n</code> não pode ser resolvida diretamente pelo teorema
+mestre, pois <code>n − 1</code> não é uma fração de <code>n</code>.
+IV. <code>T(n) = 4T(n/2) + n</code> tem solução Θ(n²).</p>
+<p>Marque a alternativa <strong>CORRETA</strong>.</p>
+<ul>
+<li>(A) Apenas I, III e IV.</li>
+<li>(B) Apenas I e II.</li>
+<li>(C) Apenas II e IV.</li>
+<li>(D) Apenas III e IV.</li>
+<li>(E) I, II, III e IV.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> Em I, <code>n^(log₂ 2) = n</code> empata com <code>f(n) = n</code> (caso 2): Θ(n log n). Em II, <code>a = 1</code>
+e <code>n^(log₂ 1) = 1</code>, e <code>f(n) = n</code> domina (caso 3): a solução é Θ(n), não Θ(n log n).
+Em IV, <code>n^(log₂ 4) = n²</code> domina <code>f(n) = n</code> (caso 1): Θ(n²). A III é verdadeira:
+a forma <code>T(n − 1)</code> se resolve pela árvore de recursão (soma <code>n + (n−1) + ...</code>,
+Θ(n²)). Veja 0114 e 0115.</p>
+</details><p><strong>3.</strong> Considere as afirmações:</p>
+<p>I. A análise amortizada dá o custo médio por operação no pior caso de uma
+<strong>sequência</strong> de operações, sem usar probabilidade.
+II. Numa sequência de inserções num vetor dinâmico que dobra a capacidade,
+cada inserção individual custa O(1) no pior caso.
+III. Qualquer algoritmo de ordenação por comparação precisa de Ω(n log n)
+comparações no pior caso.
+IV. O limite Ω(n log n) vale para todo algoritmo de ordenação, inclusive os que
+não comparam chaves.</p>
+<p>Marque a alternativa <strong>CORRETA</strong>.</p>
+<ul>
+<li>(A) Apenas I.</li>
+<li>(B) Apenas I, III e IV.</li>
+<li>(C) Apenas II e III.</li>
+<li>(D) Apenas I, II e III.</li>
+<li>(E) Apenas I e III.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>E.</strong> A II é falsa: a inserção que enche o vetor copia todos os elementos e custa
+Θ(n); só o custo <strong>amortizado</strong> é O(1). A IV é falsa porque o limite vem da
+árvore de decisão, que só existe para quem decide por comparações; ordenações
+que usam os dígitos ou os valores das chaves como índice escapam dele. Veja
+0116 e 0117.</p>
+</details><p><strong>4.</strong> Qual é o valor de <code>conta</code> depois de <code>g(20)</code>? Lembre que <code>20 / 4 = 5</code> e
+<code>1 / 4 = 0</code> em divisão inteira.</p>
+<pre><code class="language-c">int conta = 0;
+
+void g(int n) {
+    if (n &lt;= 1) return;
+    conta++;
+    g(n / 2);
+    g(n / 2);
+    g(n / 4);
+}
+</code></pre>
+<ul>
+<li>(A) 15</li>
+<li>(B) 20</li>
+<li>(C) 19</li>
+<li>(D) 25</li>
+<li>(E) 10</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>B.</strong> Seja <code>c(n)</code> o valor deixado por <code>g(n)</code>. Para <code>n ≤ 1</code>, <code>c = 0</code>. Então
+<code>c(2) = c(3) = 1</code> (só <code>g(1)</code> e <code>g(0)</code> por dentro), <code>c(5) = 1 + 2·c(2) + c(1) = 3</code>,
+<code>c(10) = 1 + 2·c(5) + c(2) = 8</code> e <code>c(20) = 1 + 2·c(10) + c(5) = 1 + 16 + 3 = 20</code>.
+Veja 0114.</p>
+</details><p><strong>5.</strong> Um contador binário de 5 bits começa em 00000. Cada incremento troca os bits
+<code>1</code> finais para <code>0</code> e o primeiro <code>0</code> para <code>1</code>; cada troca de bit custa 1. Qual é
+o custo total de 20 incrementos seguidos?</p>
+<ul>
+<li>(A) 20</li>
+<li>(B) 34</li>
+<li>(C) 36</li>
+<li>(D) 38</li>
+<li>(E) 40</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>D.</strong> O bit 0 troca em todos os 20 incrementos; o bit 1, em 10; o bit 2, em 5;
+o bit 3, em 2; o bit 4, em 1. Total: 20 + 10 + 5 + 2 + 1 = 38 (o valor final do
+contador é 10100). Em geral, <code>n</code> incrementos custam <code>2n − (número de bits 1 de n)</code>, sempre menos que <code>2n</code>: o custo amortizado por incremento é O(1). A (E)
+é o teto grosseiro <code>2n</code>. Veja 0116.</p>
+</details><p><strong>6.</strong> Pelo teorema mestre, qual é a solução de <code>T(n) = 3T(n/3) + n²</code>?</p>
+<ul>
+<li>(A) Θ(n log n)</li>
+<li>(B) Θ(n³)</li>
+<li>(C) Θ(n²)</li>
+<li>(D) Θ(n² log n)</li>
+<li>(E) Θ(n)</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>C.</strong> Aqui <code>a = 3</code>, <code>b = 3</code> e <code>n^(log₃ 3) = n</code>. Como <code>f(n) = n²</code> cresce
+polinomialmente mais que <code>n</code>, é o caso 3. A condição de regularidade vale:
+<code>3 · (n/3)² = n²/3 ≤ c · n²</code> com <code>c = 1/3</code>. Solução Θ(n²). A (A) seria o caso 2,
+se <code>f(n)</code> fosse <code>n</code>. Veja 0115.</p>
+</details><p><strong>7.</strong> Quanto vale <code>passos</code> ao fim do trecho abaixo, com <code>n = 64</code>?</p>
+<pre><code class="language-c">long passos = 0;
+for (int i = n; i &gt;= 1; i /= 2)
+    for (int j = 0; j &lt; n; j++)
+        passos++;
+</code></pre>
+<ul>
+<li>(A) 384</li>
+<li>(B) 64</li>
+<li>(C) 512</li>
+<li>(D) 4096</li>
+<li>(E) 448</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>E.</strong> O laço externo roda com <code>i = 64, 32, 16, 8, 4, 2, 1</code>: sete vezes (<code>log₂ 64 + 1</code>).
+O interno roda <code>n = 64</code> vezes a cada volta: 7 · 64 = 448, ordem Θ(n log n). A (A)
+esquece a volta com <code>i = 1</code>. Veja 0114.</p>
+</details><p><strong>8.</strong> A busca binária recursiva abaixo tem um defeito. O que acontece em
+<code>bb(v, 0, 4, 5)</code>, com <code>v = {2, 5, 9, 14, 20}</code>?</p>
+<pre><code class="language-c">int bb(int v[], int ini, int fim, int x) {
+    if (ini &gt; fim) return -1;
+    int meio = (ini + fim) / 2;
+    if (v[meio] == x) return meio;
+    if (v[meio] &lt; x) return bb(v, meio, fim, x);
+    return bb(v, ini, meio - 1, x);
+}
+</code></pre>
+<ul>
+<li>(A) Não termina (estouro de pilha): a chamada da direita usa <code>meio</code> em vez de <code>meio + 1</code>, e com <code>ini = 0</code>, <code>fim = 1</code> ela se repete idêntica.</li>
+<li>(B) Devolve 1 e termina normalmente.</li>
+<li>(C) Devolve -1, porque a base da recursão está errada.</li>
+<li>(D) Falta um <code>free(v)</code> no fim da função.</li>
+<li>(E) <code>(ini + fim) / 2</code> sempre estoura o <code>int</code>.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>A.</strong> A primeira chamada tem <code>meio = 2</code> e <code>v[2] = 9 &gt; 5</code>, então vai para
+<code>bb(v, 0, 1, 5)</code>. Aí <code>meio = 0</code>, <code>v[0] = 2 &lt; 5</code> e a chamada é <code>bb(v, 0, 1, 5)</code> de novo,
+sem reduzir nada: recursão infinita. Rodando, o programa termina em falha de
+segmentação. O certo é <code>bb(v, meio + 1, fim, x)</code>. O estouro de <code>ini + fim</code> (E)
+só ocorre com índices próximos de <code>INT_MAX</code>. Veja 0114 e 0090.</p>
+</details><p><strong>9.</strong> Sobre o limite inferior de ordenação por comparação, marque a alternativa
+<strong>INCORRETA</strong>.</p>
+<ul>
+<li>(A) A árvore de decisão de um algoritmo que ordena <code>n</code> elementos tem pelo menos <code>n!</code> folhas.</li>
+<li>(B) A altura mínima dessa árvore é ⌈log₂ n⌉.</li>
+<li>(C) Mergesort e heapsort são assintoticamente ótimos entre os algoritmos por comparação.</li>
+<li>(D) <code>log₂(n!) = Θ(n log n)</code>.</li>
+<li>(E) O limite vale para o pior caso: em certas entradas, um algoritmo pode fazer só <code>n − 1</code> comparações.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>B.</strong> Com <code>n!</code> folhas, uma árvore binária tem altura de pelo menos ⌈log₂(n!)⌉, que é
+Θ(n log n), muito maior que ⌈log₂ n⌉. As outras são verdadeiras. Em (E), o
+insertion sort num vetor já ordenado faz <code>n − 1</code> comparações: o limite fala do
+pior caso, não de toda entrada. Veja 0117.</p>
+</details><p><strong>10.</strong> Qual é o limite inferior da árvore de decisão para o número de
+comparações de <strong>qualquer</strong> ordenação por comparação de 6 elementos distintos,
+no pior caso?</p>
+<ul>
+<li>(A) 6</li>
+<li>(B) 7</li>
+<li>(C) 9</li>
+<li>(D) 10</li>
+<li>(E) 12</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>D.</strong> Há 6! = 720 ordens possíveis, e uma árvore binária de altura <code>h</code> tem no
+máximo <code>2^h</code> folhas. Como <code>2^9 = 512 &lt; 720 ≤ 1024 = 2^10</code>, a altura mínima é 10:
+⌈log₂ 720⌉ = 10. A (C) é o piso de <code>log₂ 720 ≈ 9,49</code>; é preciso arredondar para
+cima. Veja 0117.</p>
+</details><h2>Para ler mais</h2>
+<ul>
+<li>CORMEN, T. H. et al. <em>Algoritmos: teoria e prática</em>. 4. ed. Rio de Janeiro: GEN LTC, 2024. Cap. 3 (notações O, Ω e Θ), cap. 4 (recorrências: substituição, árvore de recursão e teorema mestre), cap. 8 (limite inferior da ordenação) e cap. 16 (análise amortizada: métodos agregado, contábil e do potencial).</li>
+<li>ZIVIANI, N. <em>Projeto de algoritmos com implementações em Pascal e C</em>. 3. ed. São Paulo: Cengage Learning, 2010. Cap. 1 (análise de algoritmos e notação assintótica) e cap. 2 (recursividade e divisão e conquista).</li>
+<li>LINTZMAYER, C. N.; MOTA, G. O. <em>Análise de algoritmos e de estruturas de dados</em>. Santo André: UFABC; São Paulo: IME-USP, 2023. Notas de aula. Partes sobre recorrências, teorema mestre e limite inferior para ordenação.</li>
+<li>SZWARCFITER, J. L.; MARKENZON, L. <em>Estruturas de dados e seus algoritmos</em>. 3. ed. Rio de Janeiro: LTC, 2010. Caps. 1 (complexidade e limites inferiores), 7 (ordenação e árvore de decisão) e a análise amortizada.</li>
+<li>FEOFILOFF, P. <em>Análise de algoritmos</em> (livrinho). São Paulo: IME-USP. Disponível em: <a href="https://www.ime.usp.br/~pf/livrinho-AA/">https://www.ime.usp.br/~pf/livrinho-AA/</a>.</li>
+<li>FEOFILOFF, P. <em>Algoritmos em linguagem C</em>. Rio de Janeiro: Elsevier, 2009. Caps. de recursão, mergesort e quicksort.</li>
+<li>TENENBAUM, A. M.; LANGSAM, Y.; AUGENSTEIN, M. J. <em>Estruturas de dados usando C</em>. São Paulo: Makron Books, 1995. Cap. 6 (classificação, eficiência e o limite de log₂ n! comparações).</li>
+<li>CORTÉS, M. I. <em>Estrutura de dados</em>. 3. ed. Fortaleza: EdUECE, 2015. Cap. 1 (complexidade) e a seção de listas autoajustáveis, onde aparece a ideia de custo amortizado.</li>
+<li>ROVAI, K. R. <em>Algoritmos e estrutura de dados</em>. Londrina: Editora e Distribuidora Educacional, 2018. Unidade de tabelas de espalhamento (a tabela que dobra).</li>
+<li>MORIN, P. <em>Open data structures</em>. Edição em C++/Java/pseudocódigo. Disponível em: <a href="https://opendatastructures.org/">https://opendatastructures.org/</a>. Caps. 1 e 2 (análise amortizada do vetor que cresce).</li>
+<li>KERNIGHAN, B. W.; RITCHIE, D. M. <em>C: a linguagem de programação padrão ANSI</em>. Rio de Janeiro: Campus, 1989. Seção 4.10 (recursão).</li>
+<li>CPPREFERENCE. <em>clock</em> e <em>CLOCKS_PER_SEC</em>. Disponível em: <a href="https://en.cppreference.com/w/c/chrono/clock">https://en.cppreference.com/w/c/chrono/clock</a>.</li>
+<li>LINUX MAN-PAGES. <em>clock(3)</em> e <em>log2(3)</em>. Disponível em: <a href="https://man7.org/linux/man-pages/man3/clock.3.html">https://man7.org/linux/man-pages/man3/clock.3.html</a>.</li>
+</ul>

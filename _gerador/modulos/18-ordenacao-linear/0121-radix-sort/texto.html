@@ -1,0 +1,152 @@
+<h2>0121 · Radix sort</h2>
+<p>O counting sort do assunto 0120 é linear, mas só para chaves num intervalo
+curto. Números de pedido de 0 a 999 já pedem 1000 contadores; CPFs pediriam
+centenas de bilhões. O radix sort contorna o problema quebrando cada número em
+dígitos, e cada dígito tem só 10 valores possíveis.</p>
+<p>A ideia vem de antes dos computadores. Nos censos antigos, cada pessoa virava
+um cartão perfurado, e uma máquina <strong>classificadora</strong> jogava cada cartão num
+de 10 escaninhos, do 0 ao 9, conforme o furo de uma coluna. O operador juntava
+os escaninhos na ordem, sem misturar, e passava o maço de novo pela coluna
+seguinte. Ele começava pela coluna <strong>menos</strong> significativa (KNUTH, 1998).</p>
+<p>O <strong>radix sort</strong>, ou ordenação digital, faz o mesmo com números: ordena todos
+pelo dígito das unidades, depois pelo das dezenas, depois pelo das centenas,
+até o dígito mais alto do maior número. Cada passada olha um único dígito
+(CORMEN et al., 2024, cap. 8). Começar pelo dígito menos significativo se
+chama <strong>LSD</strong>, do inglês <em>least significant digit</em>.</p>
+<p>Cada passada é um counting sort com chaves de 0 a 9. Falta só extrair o
+dígito. O dígito de <code>x</code> na casa <code>exp</code>, que vale 1, 10, 100 e assim por diante,
+é <code>(x / exp) % 10</code>: a divisão inteira joga fora as casas da direita, e o resto
+por 10 guarda só a última que sobrou. Para <code>x = 251</code> e <code>exp = 10</code>, <code>251 / 10</code>
+dá 25, e <code>25 % 10</code> dá 5, o dígito das dezenas (SEDGEWICK, 1998, cap. 10).</p>
+<p>O que faz tudo funcionar é a estabilidade. Cada passada <strong>precisa ser estável</strong>:
+números com o mesmo dígito na passada atual têm de ficar na ordem que a
+passada anterior deu a eles (CORMEN et al., 2024, cap. 8). Veja o 807 e o 830.
+Na passada das dezenas, o 807 (dezena 0) fica antes do 830 (dezena 3). Na
+passada das centenas, os dois têm 8. A estabilidade mantém o 807 na frente, e
+o resultado sai certo. Se a passada não fosse estável, ela poderia desfazer o
+trabalho das anteriores. O counting sort com o laço de distribuição de trás
+para a frente garante isso.</p>
+<p>O custo se conta por passada. Com <code>d</code> dígitos e base <code>b</code> (10, no caso
+decimal), cada passada é um counting sort de custo O(n + b), e o total é
+<strong>O(d · (n + b))</strong>. Para números de tamanho fixo, <code>d</code> é uma constante, e o
+radix sort é linear (CORMEN et al., 2024, cap. 8). O Cormen vai além e mostra
+que, para chaves de <code>b</code> bits (aqui <code>b</code> conta bits, não é a base) quebradas em
+dígitos de <code>r</code> bits, o custo é Θ((b/r)(n + 2^r)), e a melhor escolha de <code>r</code>
+fica perto de log₂ n.</p>
+<p>A base não precisa ser 10. Em C, a escolha natural é a <strong>base 256</strong>, em que
+cada &quot;dígito&quot; é um byte. O byte número <code>b</code> de <code>x</code> sai com os operadores bit a
+bit do assunto 0065: <code>(x &gt;&gt; 8 * b) &amp; 0xFF</code>, que desloca o byte desejado para
+a direita e apaga o resto. Um <code>int</code> de 32 bits tem 4 bytes, e o radix sort
+faz só 4 passadas, cada uma com <code>c[256]</code> (KERNIGHAN; RITCHIE, 1989).</p>
+<p>Em nenhum momento o radix sort pergunta se um número é menor que outro: ele
+só lê dígitos e os usa como índice. Por isso escapa do limite de n log n da
+ordenação por comparação (SZWARCFITER; MARKENZON, 2010).</p>
+<blockquote>
+<p>[!WARNING]
+Se a passada distribuir da frente para trás, os empates se invertem e o
+resultado sai fora de ordem, sem erro. O número de passadas vem do <strong>maior</strong>
+elemento, não do primeiro.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>Oito números de pedido, de 047 a 830, ordenados em três passadas. Em amarelo,
+o 807 e o 830: a passada das dezenas põe o 807 na frente, e a das centenas
+respeita essa ordem:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+void mostra(const int v[], int n) {
+    for (int i = 0; i &lt; n; i++) {
+        printf(&quot; %03d&quot;, v[i]);
+    }
+    printf(&quot;\n&quot;);
+}
+
+// counting sort estável de v pelo dígito (v[i] / exp) % 10
+void passada(int v[], int aux[], int n, int exp) {
+    int c[10] = {0};
+    for (int i = 0; i &lt; n; i++) {
+        c[(v[i] / exp) % 10]++;
+    }
+    for (int d = 1; d &lt; 10; d++) {
+        c[d] += c[d - 1];
+    }
+    for (int i = n - 1; i &gt;= 0; i--) {      // de trás para a frente
+        int d = (v[i] / exp) % 10;
+        c[d]--;
+        aux[c[d]] = v[i];
+    }
+    for (int i = 0; i &lt; n; i++) {
+        v[i] = aux[i];
+    }
+}
+
+void radix_sort(int v[], int n) {
+    int maior = v[0];
+    for (int i = 1; i &lt; n; i++) {
+        if (v[i] &gt; maior) {
+            maior = v[i];
+        }
+    }
+    int *aux = malloc(n * sizeof(int));
+    if (aux == NULL) {
+        return;
+    }
+    for (int exp = 1; maior / exp &gt; 0; exp *= 10) {  // um dígito por passada
+        passada(v, aux, n, exp);
+        printf(&quot;exp = %3d:&quot;, exp);
+        mostra(v, n);
+    }
+    free(aux);
+}
+
+int main(void) {
+    int pedidos[] = {251, 47, 830, 509, 74, 216, 553, 807};
+    int n = 8;
+
+    printf(&quot;início:   &quot;);
+    mostra(pedidos, n);
+    radix_sort(pedidos, n);
+    return 0;
+}
+// Saída:
+// início:    251 047 830 509 074 216 553 807
+// exp =   1: 830 251 553 074 216 047 807 509
+// exp =  10: 807 509 216 830 047 251 553 074
+// exp = 100: 047 074 216 251 509 553 807 830
+</code></pre>
+<p>O laço para quando <code>exp</code> passa do maior número: com 830, são três passadas
+(<code>exp</code> = 1, 10, 100), e <code>830 / 1000</code> dá 0:</p>
+<p>{{fluxograma}}</p>
+<h3>Passo a passo</h3>
+<p>A passada das dezenas (<code>exp = 10</code>) recebe o vetor da passada anterior. O
+dígito de cada número é <code>(x / 10) % 10</code>:</p>
+<table>
+<thead>
+<tr>
+<th>número</th>
+<th>830</th>
+<th>251</th>
+<th>553</th>
+<th>074</th>
+<th>216</th>
+<th>047</th>
+<th>807</th>
+<th>509</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>dígito</td>
+<td>3</td>
+<td>5</td>
+<td>5</td>
+<td>7</td>
+<td>1</td>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody></table>
+<p>Contagem por dígito: 0 → 2, 1 → 1, 3 → 1, 4 → 1, 5 → 2, 7 → 1. Os blocos
+na saída ficam <code>807 509 | 216 | 830 | 047 | 251 553 | 074</code>. No bloco do 0, o
+807 vem antes do 509 porque já vinha antes.</p>

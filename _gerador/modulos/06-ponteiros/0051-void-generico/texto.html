@@ -1,0 +1,89 @@
+<h2>0051 · void * e cast</h2>
+<p>A função <code>troca</code> do assunto 0046 troca dois <code>int</code>. Para trocar dois <code>double</code>,
+você escreveria outra, quase igual; para dois caracteres, mais uma. O
+<code>qsort</code> do assunto 0050 tem o mesmo problema ao contrário: ele precisa
+receber vetores de qualquer tipo sem saber qual. Falta um ponteiro que aceite
+qualquer endereço.</p>
+<p>Pense no funcionário dos Correios que carimba e despacha caixas sem abri-las.
+Para ele, cada caixa tem um endereço e um peso, e só. Quem recebe abre e
+descobre se é um livro ou um tênis. Em C, essa caixa fechada é o <strong><code>void *</code></strong>, o <strong>ponteiro genérico</strong>: ele guarda o endereço de qualquer dado, seja
+<code>int</code>, <code>double</code>, vetor ou outro ponteiro, mas não diz o que mora lá (DEITEL;
+DEITEL, 2011, cap. 7).</p>
+<p>A primeira regra é a da conversão livre. Em C, qualquer ponteiro para dado
+vira <code>void *</code> e volta para o tipo original sem precisar escrever nada:
+<code>void *p = &amp;senha;</code> e depois <code>int *q = p;</code> compilam limpos (DEITEL; DEITEL,
+2011, cap. 7). Ponteiro para função não entra nessa regra.</p>
+<p>A segunda regra é a que dá trabalho: um <code>void *</code> <strong>não se desreferencia</strong>.
+Escrever <code>*p</code> com <code>p</code> do tipo <code>void *</code> não compila, porque o compilador não
+sabe quantos bytes ler nem como interpretá-los. Antes de usar o dado, você
+diz o tipo com um <strong>cast</strong>, um tipo entre parênteses na frente da expressão:
+<code>*(int *)p</code> primeiro trata <code>p</code> como <code>int *</code> e depois lê o <code>int</code>. Pelo mesmo
+motivo, <code>p + 1</code> não existe no C padrão, já que o compilador não sabe o
+tamanho do passo; o <code>gcc</code> aceita como extensão e o <code>-pedantic</code> avisa (BACKES,
+2013, cap. 10).</p>
+<pre><code class="language-c">int senha = 1234;
+void *p = &amp;senha;               // caixa fechada com o endereço de senha
+printf(&quot;%d\n&quot;, *(int *)p);      // 1234: o cast diz o que tem dentro
+</code></pre>
+<p>O cast é uma promessa sua, e o compilador acredita nela sem conferir. Se você
+diz <code>(double *)</code> para um endereço em que mora um <code>int</code>, ele lê 8 bytes onde
+só havia 4 e mostra lixo (BACKES, 2013, cap. 10).</p>
+<p>A caixa fechada permite escrever funções que trabalham com <strong>qualquer
+tipo</strong>. Elas recebem <code>void *</code> e, como não conhecem o tamanho do dado,
+recebem também o tamanho em bytes. Por dentro, tratam a memória como uma
+fileira de bytes, com um <code>unsigned char *</code>, o único tipo que o C deixa olhar
+qualquer objeto byte a byte. Assim funcionam <code>memcpy</code> e <code>memset</code>, o <code>qsort</code>
+e o <code>malloc</code> do módulo 07, que devolve <code>void *</code> porque não sabe o que você
+vai guardar (CELES; RANGEL, 2002).</p>
+<p>Olhar os bytes ensina como o computador guarda um número. O A102 espia uma
+variável com <code>const unsigned char *</code>. O <code>int</code> 1000, que em hexadecimal é
+<code>0x000003E8</code>, aparece como <code>e8 03 00 00</code>: o byte menos significativo vem
+primeiro, no endereço menor. Esse arranjo se chama <strong>little-endian</strong>, e é o
+dos processadores Intel, AMD e ARM. Só os tipos <code>char</code> podem fazer essa
+leitura com segurança; ler um <code>float</code> por um <code>int *</code> quebra a regra de
+<em>strict aliasing</em>, que proíbe acessar um objeto por um ponteiro de outro
+tipo.</p>
+<blockquote>
+<p>[!WARNING]
+O <code>void *</code> desliga a conferência de tipos: <code>troca_generica(&amp;senha_a, &amp;preco_a, sizeof preco_a)</code> compila sem aviso e troca 8 bytes a partir de
+uma variável de 4, e o AddressSanitizer acusa <code>stack-buffer-overflow</code>. Use o
+<code>sizeof</code> da própria variável, nunca um número digitado à mão.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>A <code>troca</code> do assunto 0046 só troca <code>int</code>. A <code>troca_generica</code> recebe dois
+endereços sem tipo e o tamanho: com 4, troca duas senhas; com 8, dois preços.
+Byte a byte, ela nem sabe o que troca:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// void *: &quot;endereço de qualquer coisa&quot;. Como a função não sabe o tipo,
+// recebe o tamanho em bytes e troca byte a byte.
+void troca_generica(void *a, void *b, size_t tam) {
+    unsigned char *x = a; // void * vira outro ponteiro sem cast, em C
+    unsigned char *y = b;
+    for (size_t i = 0; i &lt; tam; i++) {
+        unsigned char tmp = x[i];
+        x[i] = y[i];
+        y[i] = tmp;
+    }
+}
+
+int main(void) {
+    int senha_a = 17, senha_b = 42;               // senhas do atendimento
+    double preco_a = 12.90, preco_b = 8.50;       // preços na etiqueta
+
+    troca_generica(&amp;senha_a, &amp;senha_b, sizeof senha_a);   // troca 4 bytes
+    troca_generica(&amp;preco_a, &amp;preco_b, sizeof preco_a);   // troca 8 bytes
+
+    printf(&quot;senhas: %d e %d\n&quot;, senha_a, senha_b);
+    printf(&quot;preços: %.2f e %.2f\n&quot;, preco_a, preco_b);
+    return 0;
+}
+// Saída:
+// senhas: 42 e 17
+// preços: 8.50 e 12.90
+</code></pre>
+<p>O A102 espia os bytes com <code>const unsigned char *</code>: o <code>int</code> 1000 aparece como
+<code>e8 03 00 00</code>, o byte menos significativo primeiro (<strong>little-endian</strong>).</p>
+<p>A função não pergunta &quot;que tipo é?&quot;, só &quot;ainda tem byte para trocar?&quot;:</p>
+<p>{{fluxograma}}</p>

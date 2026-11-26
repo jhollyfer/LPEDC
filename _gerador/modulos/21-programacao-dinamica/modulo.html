@@ -1,0 +1,306 @@
+<h1>Módulo 21 · Programação dinâmica</h1>
+<p>A <strong>programação dinâmica</strong> (PD) anota a resposta de cada subproblema na
+primeira vez e consulta nas seguintes. Toda PD tem uma <strong>recorrência</strong>, uma
+<strong>tabela</strong> e uma <strong>volta</strong> que reconstrói a solução: troco, mochila 0/1, LCS,
+distância de edição e um <strong>mini-diff</strong>. Depende da recursão (módulo 04) e dos
+gulosos (módulo 20): quando o guloso erra, a PD testa todas as escolhas.</p>
+<h2>O que você vai aprender</h2>
+<ul>
+<li><strong>memoização</strong> (de cima para baixo), <strong>tabela</strong> (de baixo para cima) e o
+custo de uma PD: subproblemas × trabalho de cada um</li>
+<li>quando a PD se aplica: <strong>subproblemas repetidos</strong> e <strong>subestrutura ótima</strong></li>
+<li><strong>troco</strong>: menor número de moedas e quantas combinações existem</li>
+<li><strong>mochila 0/1</strong>: tabela n × W, recuperação dos itens e o truque de uma
+linha só</li>
+<li><strong>LCS</strong> e a volta pela tabela</li>
+<li><strong>distância de edição</strong> (Levenshtein): inserir, remover e trocar</li>
+<li>o <strong>mini-diff</strong>, com leitura de linhas, vetor que cresce e tabela no heap</li>
+</ul>
+<h2>Antes de começar</h2>
+<p>Revise recursão (0032 e 0033), matrizes (0039), strings (0041 e 0042) e
+memória dinâmica (0054 e 0055). O troco guloso (0133) e a mochila fracionária
+(0135) são o ponto de partida do 0139 e do 0140.</p>
+<p>Os exemplos usam matriz fixa (<code>#define MAX 50</code>) para deixar a recorrência à
+vista; o mini-diff põe a tabela no heap. A cadeia de matrizes tem assunto
+próprio: o 0185.</p>
+<p>Nas tabelas, <strong>roxa</strong> é a célula calculada (ou de onde a volta parte),
+<strong>verde</strong> a escolhida ou o caminho da solução, <strong>amarela</strong> a opção que perdeu
+e <strong>cinza</strong> o que não chega a ser usado.</p>
+<p>{{indice}}</p>
+<hr>
+<p>{{assuntos}}</p>
+<hr>
+<h2>Desafios do módulo</h2>
+<p>Problemas para fechar o módulo, misturando os assuntos. Escreva em C e rode
+com as flags de estudo.</p>
+<p><strong>1. A madeireira e o corte das tábuas.</strong> Uma tábua de 8 m pode ser vendida
+inteira ou cortada em pedaços de metro inteiro. O preço de cada pedaço, por
+tamanho de 1 a 8 m, é: R$ 2, 5, 9, 10, 13, 17, 18 e 22. Qual o maior
+faturamento com uma tábua de 8 m, e quais cortes?</p>
+<details><summary>Resposta</summary><p>É um &quot;troco&quot; de maximização: <code>B[k] = maior entre preco[i] + B[k - i]</code>, para
+<code>i</code> de 1 a <code>k</code>, com <code>B[0] = 0</code>. A tabela fica <code>0 2 5 9 11 14 18 20 23</code>, e a
+resposta é <strong>R$ 23</strong>: pedaços de 2 + 3 + 3 m (5 + 9 + 9). Vender inteira dá
+só R$ 22. Guarde em <code>S[k]</code> o tamanho do primeiro pedaço para reconstruir os
+cortes, como o <code>ultimo[]</code> do assunto 0139.</p>
+</details><p><strong>2. O maior terreno quadrado.</strong> Num mapa de lotes, 1 é terreno livre e 0 é
+ocupado:</p>
+<pre><code>1 0 1 1 1
+1 1 1 1 1
+0 1 1 1 1
+1 1 1 1 0
+1 1 0 1 1
+</code></pre>
+<p>Qual o maior quadrado só de 1s? Resolva em O(linhas × colunas).</p>
+<details><summary>Resposta</summary><p><code>q[i][j]</code> = lado do maior quadrado de 1s com canto inferior direito em
+<code>(i, j)</code>. Se a célula é 1, <code>q[i][j] = 1 + menor(q[i-1][j], q[i][j-1], q[i-1][j-1])</code>; se é 0, vale 0. O maior valor é <strong>3</strong>, terminando em <code>(2, 4)</code>:
+linhas 0 a 2, colunas 2 a 4. É a mesma &quot;olhada para três vizinhos&quot; da
+distância de edição.</p>
+</details><p><strong>3. A grade com atalho diagonal.</strong> Na grade do A275, sem obras, o
+entregador pode andar para a direita, para baixo <strong>ou na diagonal</strong> (direita
+e baixo de uma vez). Quantas rotas existem numa grade de 4 × 4 cruzamentos,
+de um canto ao outro?</p>
+<details><summary>Resposta</summary><p>Agora são três vizinhos: <code>r[i][j] = r[i-1][j] + r[i][j-1] + r[i-1][j-1]</code>,
+com <code>r[0][0] = 1</code>. São <strong>63</strong> rotas (contra 20 sem a diagonal). Esses são
+os números de Delannoy.</p>
+</details><p><strong>4. A palavra que vira palíndromo.</strong> Qual o menor número de letras que é
+preciso <strong>inserir</strong> em ARARAQUARA para ela virar um palíndromo (ler igual
+de trás para a frente)? E em OVO? E em BANANA?</p>
+<details><summary>Resposta</summary><p>O que já é &quot;palíndromo escondido&quot; na palavra é a LCS dela com ela mesma
+invertida; o resto precisa ganhar um par. Inserções = <code>n - LCS(s, reverso(s))</code>: ARARAQUARA precisa de <strong>3</strong>, OVO de <strong>0</strong> e BANANA de <strong>1</strong>
+(BANANAB). Uma PD direta, <code>p[i][j]</code> para o pedaço <code>s[i..j]</code>, dá o mesmo
+resultado.</p>
+</details><p><strong>5. Mochila com estoque infinito.</strong> Com capacidade 10 e itens (peso,
+valor) = (3, 40), (4, 50), (5, 62), compare a mochila 0/1 com a mochila
+<strong>ilimitada</strong>, em que cada item pode ir quantas vezes quiser.</p>
+<details><summary>Resposta</summary><p>A 0/1 dá <strong>112</strong> (pesos 4 + 5). A ilimitada dá <strong>130</strong> (3 + 3 + 4: 40 + 40</p>
+<ul>
+<li>50). A diferença no código é uma só: no vetor de uma linha, o laço de
+capacidade <strong>sobe</strong> em vez de descer, exatamente o &quot;erro&quot; do A279. Na
+mochila ilimitada, ele é o certo.</li>
+</ul>
+</details><p><strong>6. Quantas vezes a palavra se esconde.</strong> Quantas vezes ABC aparece como
+<strong>subsequência</strong> em AABBCC? E ANA em BANANA?</p>
+<details><summary>Resposta</summary><p><code>w[k]</code> = de quantos jeitos os <code>k</code> primeiros caracteres do padrão aparecem
+no texto lido até agora. Para cada letra do texto, de <code>k</code> alto para baixo:
+se ela é igual a <code>padrao[k-1]</code>, <code>w[k] += w[k-1]</code> (o mesmo laço descendo da
+mochila 0/1). AABBCC tem <strong>8</strong> (2 × 2 × 2 escolhas); BANANA tem <strong>4</strong>.</p>
+</details><p><strong>7. A maior sequência crescente, sem LCS.</strong> No E846 você usou a LCS com o
+vetor ordenado. Resolva direto: para <code>10 4 12 6 15 8 9 20 3 11</code>, qual o
+tamanho da maior subsequência estritamente crescente?</p>
+<details><summary>Resposta</summary><p><code>f[i]</code> = tamanho da maior crescente que <strong>termina</strong> em <code>v[i]</code>: <code>f[i] = 1 + maior f[j]</code> com <code>j &lt; i</code> e <code>v[j] &lt; v[i]</code>. O vetor <code>f</code> fica <code>1 1 2 2 3 3 4 5 1 5</code>, e a resposta é <strong>5</strong> (por exemplo 4 6 8 9 20). É O(n²); existe uma
+versão O(n log n) com busca binária (assunto 0090).</p>
+</details><p><strong>8. Dá para dividir ao meio?</strong> Cinco irmãos herdaram objetos avaliados em
+R$ 3, 1, 5, 9 e 12 mil e querem saber se dá para dividir tudo em dois
+lotes de <strong>mesmo</strong> valor. E se fossem R$ 3, 1, 5, 9 e 11 mil?</p>
+<details><summary>Resposta</summary><p>É o A280 com a pergunta &quot;a soma total / 2 é alcançável?&quot;. No primeiro caso
+o total é 30 e 15 = 3 + 12 é alcançável: <strong>sim</strong>. No segundo, o total é 29,
+ímpar: <strong>não</strong>, sem nem montar a tabela.</p>
+</details><p><strong>9. Quebrar sem espaços.</strong> Uma mensagem chegou sem espaços:
+<code>cafecomleitequente</code>. Com o dicionário {cafe, com, leite, quente, co, mleite,
+que, nte}, ela pode ser quebrada em palavras? De quantos jeitos?</p>
+<details><summary>Resposta</summary><p><code>q[i]</code> = de quantos jeitos o prefixo de tamanho <code>i</code> se quebra em palavras;
+<code>q[0] = 1</code> e <code>q[i]</code> soma <code>q[i - tamanho]</code> para cada palavra do dicionário
+que termina exatamente na posição <code>i</code>. São <strong>4</strong> jeitos: &quot;cafe com leite&quot;
+ou &quot;cafe co mleite&quot;, seguido de &quot;quente&quot; ou &quot;que nte&quot;. Com memoização, uma
+recursão que testa cada palavra no começo faz o mesmo.</p>
+</details><p><strong>10. Distância de edição com pouca memória.</strong> Duas sequências de DNA têm
+100 mil bases cada. A tabela inteira da distância de edição teria 10¹⁰
+células. Como calcular só a distância com memória O(n)?</p>
+<details><summary>Resposta</summary><p>Cada linha da tabela só usa a de cima: guarde duas linhas e troque os
+ponteiros a cada volta, como no A281. São 2 × 100.001 <code>int</code>, uns 800 KB, em
+vez de 40 GB. O tempo continua O(m × n). Recuperar as operações com pouca
+memória também é possível (algoritmo de Hirschberg, que divide a tabela ao
+meio recursivamente), mas dá mais trabalho.</p>
+</details><h2>Questões no estilo da prova</h2>
+<p>Questões objetivas no formato da Prova de Conhecimentos do PPGI: uma
+alternativa certa. Resolva no papel, com a tabela à mão, antes de abrir o
+gabarito.</p>
+<p><strong>1.</strong> Na mochila 0/1 com capacidade <code>W = 7</code> e os itens (peso, valor) = (1,
+3), (3, 4), (4, 6) e (5, 7), nessa ordem, <code>t[i][c]</code> é o maior valor usando
+só os itens <code>1..i</code> com capacidade <code>c</code>. Qual o valor de <code>t[4][7]</code>?</p>
+<ul>
+<li>(A) 9</li>
+<li>(B) 13</li>
+<li>(C) 10</li>
+<li>(D) 11</li>
+<li>(E) 16</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(C).</strong> A linha 4 da tabela fica <code>0 3 3 4 7 9 10 10</code>. Dois conjuntos
+empatam em 10: pesos 3 + 4 (4 + 6) e pesos 1 + 5 (3 + 7). O 13 (3 + 4 + 6)
+pesaria 8 kg, e o 16 é a soma de todos os valores, sem limite de peso. Veja
+0140.</p>
+</details><p><strong>2.</strong> Qual o tamanho da maior subsequência comum (LCS) de <code>AMAZONAS</code> e
+<code>MANAUS</code>?</p>
+<ul>
+<li>(A) 5</li>
+<li>(B) 4</li>
+<li>(C) 6</li>
+<li>(D) 3</li>
+<li>(E) 8</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A).</strong> <code>MANAS</code>: M, A, N, A e S aparecem nessa ordem nas duas palavras.
+Uma subsequência não precisa ser contígua; a maior <strong>substring</strong> comum
+seria bem menor. O 6 seria a palavra <code>MANAUS</code> inteira, que não é
+subsequência de <code>AMAZONAS</code> (não tem U). Veja 0141.</p>
+</details><p><strong>3.</strong> Sobre a LCS de duas sequências de tamanhos <code>m</code> e <code>n</code> pela tabela de
+programação dinâmica, é correto afirmar:</p>
+<ul>
+<li>(A) o tempo é Θ(m + n), porque cada letra é lida uma vez.</li>
+<li>(B) o tempo é Θ(2^m), porque toda subsequência de uma das sequências é testada.</li>
+<li>(C) para obter só o tamanho da LCS, a tabela inteira de Θ(m × n) posições é indispensável.</li>
+<li>(D) o tempo é Θ(m × n × min(m, n)), porque cada célula percorre uma linha inteira.</li>
+<li>(E) o tempo é Θ(m × n); para obter só o tamanho, duas linhas, Θ(min(m, n)) de memória, bastam.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(E).</strong> São <code>(m + 1) × (n + 1)</code> células, cada uma em O(1). Cada linha só
+lê a de cima, então duas linhas bastam para o tamanho (escolha a sequência
+menor para as colunas). Para <strong>recuperar</strong> a LCS, o caminho simples precisa
+da tabela inteira. Veja 0141 e o A281.</p>
+</details><p><strong>4.</strong> A mochila 0/1 por programação dinâmica roda em O(n × W), em que <code>W</code>
+é a capacidade. Por que isso <strong>não</strong> prova que o problema é polinomial?</p>
+<ul>
+<li>(A) Porque a PD só funciona quando todos os pesos são iguais.</li>
+<li>(B) Porque <code>W</code> é um número da entrada, escrito com cerca de log₂ W bits: O(n × W) é exponencial no tamanho da entrada (tempo pseudopolinomial).</li>
+<li>(C) Porque a tabela tem 2ⁿ linhas.</li>
+<li>(D) Porque a recuperação dos itens custa O(2ⁿ).</li>
+<li>(E) Porque a PD dá só uma aproximação do ótimo.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(B).</strong> Dobrar o número de bits de <code>W</code> eleva <code>W</code> ao quadrado. O(n × W) é
+polinomial no <strong>valor</strong> de <code>W</code>, não no tamanho da entrada; por isso se diz
+<strong>pseudopolinomial</strong>. A versão de decisão da mochila é NP-completa (assunto
+0186). A tabela tem <code>n + 1</code> linhas, e a recuperação é O(n). Veja 0140.</p>
+</details><p><strong>5.</strong> A função abaixo é chamada com <code>memo[]</code> todo em <code>-1</code>. Quantas vezes
+<code>formas</code> é executada, contando a chamada inicial, em <code>formas(20)</code>?</p>
+<pre><code class="language-c">long long memo[50];
+
+long long formas(int n) {
+    if (n &lt;= 1) {
+        return 1;
+    }
+    if (memo[n] != -1) {
+        return memo[n];
+    }
+    memo[n] = formas(n - 1) + formas(n - 2);
+    return memo[n];
+}
+</code></pre>
+<ul>
+<li>(A) 20</li>
+<li>(B) 21</li>
+<li>(C) 10.946</li>
+<li>(D) 39</li>
+<li>(E) 21.891</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(D).</strong> A primeira descida, <code>formas(20)</code>, <code>formas(19)</code>, ..., <code>formas(1)</code>,
+são 20 chamadas. Na volta, cada <code>n</code> de 2 a 20 faz a segunda chamada,
+<code>formas(n - 2)</code>, que acha a resposta pronta (ou é caso base): mais 19. Em
+geral, <code>2n - 1</code>. Sem o memo seriam 21.891 chamadas, e 10.946 é o valor de
+<code>formas(20)</code>. Veja 0138.</p>
+</details><p><strong>6.</strong> Sobre programação dinâmica (PD), analise as afirmações.</p>
+<ul>
+<li>I. Para a PD servir, o problema precisa ter subestrutura ótima e
+subproblemas sobrepostos.</li>
+<li>II. A memoização (de cima para baixo) e o preenchimento da tabela (de baixo
+para cima) resolvem cada subproblema uma única vez.</li>
+<li>III. Assim como no guloso, a PD nunca precisa guardar o resultado de
+subproblemas.</li>
+</ul>
+<p>Marque a alternativa <strong>CORRETA</strong>.</p>
+<ul>
+<li>(A) I e II, apenas.</li>
+<li>(B) I e III, apenas.</li>
+<li>(C) II e III, apenas.</li>
+<li>(D) I, apenas.</li>
+<li>(E) I, II e III.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A).</strong> I é o critério do Cormen: a solução ótima é feita de soluções ótimas
+de subproblemas (<strong>subestrutura ótima</strong>) e esses subproblemas se repetem
+(<strong>sobrepostos</strong>). II é verdadeira: é por guardar o resultado que o custo cai
+de exponencial para polinomial. III é falsa: guardar os resultados é o
+que define a PD; o guloso é que decide sem olhar para trás (0133). Veja 0138 e
+0139.</p>
+</details><p><strong>7.</strong> Com moedas de 1, 3 e 4 e troco de 6, sejam <code>G</code> o número de moedas
+do algoritmo guloso (maior moeda que cabe) e <code>D</code> o mínimo calculado pela
+programação dinâmica <code>dp[v] = 1 + min(dp[v - moeda])</code>. Então:</p>
+<ul>
+<li>(A) G = 2 e D = 2.</li>
+<li>(B) G = 3 e D = 3.</li>
+<li>(C) G = 3 e D = 2.</li>
+<li>(D) G = 2 e D = 3.</li>
+<li>(E) G = 4 e D = 2.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(C).</strong> O guloso faz 4 + 1 + 1 (três moedas); a PD acha 3 + 3 (duas). A PD
+nunca perde para o guloso, porque testa todas as últimas moedas. Veja 0133
+e 0139.</p>
+</details><p><strong>8.</strong> Qual a distância de edição (Levenshtein: inserir, remover ou trocar
+uma letra, custo 1 cada) entre <code>TERRA</code> e <code>TORTA</code>?</p>
+<ul>
+<li>(A) 0</li>
+<li>(B) 1</li>
+<li>(C) 3</li>
+<li>(D) 4</li>
+<li>(E) 2</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(E).</strong> As palavras têm o mesmo tamanho e diferem em duas posições: troca
+o E por O e o segundo R por T. Não dá com 1, porque uma operação só muda
+uma posição (ou o tamanho). Veja 0142.</p>
+</details><p><strong>9.</strong> O trecho preenche o vetor <code>g</code> com capacidade 7 e os itens (peso,
+valor) = (2, 3) e (3, 5). Repare no sentido do laço de <code>c</code>. Qual o valor
+de <code>g[7]</code> no fim?</p>
+<pre><code class="language-c">int peso[] = {2, 3}, valor[] = {3, 5};
+int g[8] = {0};
+for (int i = 0; i &lt; 2; i++) {
+    for (int c = peso[i]; c &lt;= 7; c++) {
+        if (g[c - peso[i]] + valor[i] &gt; g[c]) {
+            g[c] = g[c - peso[i]] + valor[i];
+        }
+    }
+}
+</code></pre>
+<ul>
+<li>(A) 8</li>
+<li>(B) 11</li>
+<li>(C) 10</li>
+<li>(D) 13</li>
+<li>(E) 5</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(B).</strong> Com <code>c</code> <strong>subindo</strong>, <code>g[c - peso[i]]</code> já pode conter o próprio
+item <code>i</code>, e cada item vale quantas vezes couber: é a mochila <strong>ilimitada</strong>.
+O melhor é 2 + 2 + 3 (3 + 3 + 5 = 11). Com o laço descendo (mochila 0/1),
+seria 8 (os dois itens, uma vez cada). Veja 0140 e o A279.</p>
+</details><p><strong>10.</strong> Sobre memoização (de cima para baixo) e tabela (de baixo para
+cima), analise as afirmações.</p>
+<ul>
+<li>I. A memoização tem complexidade assintótica pior que a da tabela, porque
+faz chamadas recursivas.</li>
+<li>II. A memoização resolve só os subproblemas que a resposta realmente usa; a
+tabela costuma preencher todos.</li>
+<li>III. A tabela exige uma ordem de preenchimento em que as dependências já
+estejam prontas.</li>
+<li>IV. Nas duas, o custo é (número de subproblemas) × (trabalho de cada um).</li>
+</ul>
+<p>Marque a alternativa <strong>CORRETA</strong>.</p>
+<ul>
+<li>(A) I e II, apenas.</li>
+<li>(B) I, III e IV, apenas.</li>
+<li>(C) I e IV, apenas.</li>
+<li>(D) II, III e IV, apenas.</li>
+<li>(E) I, II, III e IV.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(D).</strong> I é falsa: as duas têm o mesmo custo assintótico; a memoização só
+paga o frame de cada chamada (e pode estourar a pilha). II, III e IV são
+verdadeiras. Veja 0138.</p>
+</details><h2>Para ler mais</h2>
+<ul>
+<li>CORMEN, T. H.; LEISERSON, C. E.; RIVEST, R. L.; STEIN, C. <em>Algoritmos: teoria e prática</em>. 4. ed. Rio de Janeiro: GEN LTC, 2024. Cap. 14 (programação dinâmica: corte de hastes, cadeia de matrizes, LCS, subestrutura ótima e subproblemas sobrepostos) e seção 15.2 (mochila 0/1 contra a fracionária).</li>
+<li>ZIVIANI, N. <em>Projeto de algoritmos: com implementações em Pascal e C</em>. 3. ed. rev. e ampl. São Paulo: Cengage Learning, 2010. Cap. 2 (paradigmas de projeto de algoritmos, com programação dinâmica).</li>
+<li>LINTZMAYER, C. N.; MOTA, G. O. <em>Análise de algoritmos e de estruturas de dados</em>. Santo André: UFABC; São Paulo: IME-USP, 2023. Versão preliminar. Cap. de programação dinâmica (memoização, mochila, alinhamento de sequências).</li>
+<li>FEOFILOFF, P. <em>Algoritmos em linguagem C</em>. Rio de Janeiro: Elsevier, 2009. Caps. de recursão e de enumeração, base para entender o custo da recursão pura.</li>
+<li>SZWARCFITER, J. L.; MARKENZON, L. <em>Estruturas de dados e seus algoritmos</em>. 3. ed. Rio de Janeiro: LTC, 2010. Seção de árvore binária de busca ótima, um exemplo clássico de programação dinâmica.</li>
+<li>TENENBAUM, A. M.; LANGSAM, Y.; AUGENSTEIN, M. J. <em>Estruturas de dados usando C</em>. São Paulo: Makron Books, 1995. Cap. 3 (recursão, o custo do Fibonacci recursivo e a versão iterativa).</li>
+<li>KLEINBERG, J.; TARDOS, É. <em>Algorithm design</em>. Boston: Pearson, 2006. Cap. 6 (programação dinâmica: mochila, alinhamento de sequências e o algoritmo de Hirschberg).</li>
+<li>KERNIGHAN, B. W.; RITCHIE, D. M. <em>C: a linguagem de programação padrão ANSI</em>. Rio de Janeiro: Campus, 1989. Seções 5.7 a 5.9 (matrizes multidimensionais e vetores de ponteiros).</li>
+<li>LEVENSHTEIN, V. I. Binary codes capable of correcting deletions, insertions, and reversals. <em>Soviet Physics Doklady</em>, v. 10, n. 8, p. 707-710, 1966.</li>
+<li>MYERS, E. W. An O(ND) difference algorithm and its variations. <em>Algorithmica</em>, v. 1, p. 251-266, 1986.</li>
+<li>LINUX MAN-PAGES. <em>diff(1)</em>. Disponível em: <a href="https://man7.org/linux/man-pages/man1/diff.1.html">https://man7.org/linux/man-pages/man1/diff.1.html</a>.</li>
+<li>CPPREFERENCE. <em>fgets</em> e <em>strcspn</em>. Disponível em: <a href="https://en.cppreference.com/w/c/io/fgets">https://en.cppreference.com/w/c/io/fgets</a>.</li>
+</ul>

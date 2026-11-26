@@ -1,0 +1,502 @@
+<h1>Fichamento: Algoritmos e Lógica de Programação II (Unicesumar)</h1>
+<ul>
+<li><strong>Autora:</strong> Gislaine Camila Lapasini Leal (revisão técnica: Rogério de Leon Pereira)</li>
+<li><strong>Editora/ano:</strong> UniCesumar (NEAD), Maringá, reimpressão 2018, 203 p.</li>
+<li><strong>Lido:</strong> 4437 linhas (texto integral, incluindo gabaritos das 5 unidades).</li>
+</ul>
+<h2>Avaliação geral</h2>
+<p>Livro-texto de EaD que leva o aluno do &quot;hello world&quot; até funções e arquivos em C, em 5
+unidades (I conceitos iniciais; II condicionais; III repetição; IV vetores, strings,
+matrizes, structs; V funções, recursão, arquivos). Cada unidade tem atividades de
+autoestudo <strong>com gabarito</strong> e &quot;exercícios de fixação&quot; resolvidos. O maior valor do
+material para o LPEDC é esse banco de enunciados com cenário do cotidiano (plano de saúde
+por faixa etária, classe eleitoral, carga de caminhão, calorias de prato e bebida,
+fechamento de notas de turma, pesquisa de opinião).</p>
+<p>O ponto fraco é sério: o C ensinado é de <strong>Turbo C / C++ dos anos 90</strong> (<code>main()</code> sem tipo,
+<code>conio.h</code>, <code>clrscr</code>, <code>iostream.h</code>, <code>cin</code>, <code>gets</code>, <code>fflush(stdin)</code>, struct usada sem a
+palavra <code>struct</code>, funções aninhadas). Os <strong>gabaritos têm muitos bugs</strong> (variável não
+inicializada, <code>!=</code> no lugar de <code>=</code>, índice fora do vetor, enunciado e resposta trocados).
+Isso, curiosamente, vira matéria-prima excelente para exercícios do tipo &quot;ache o erro&quot;.
+Use os enunciados; <strong>nunca copie o código</strong>.</p>
+<hr>
+<h3>logica1-algoritmo</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>O livro já parte da disciplina anterior (Algoritmos I) e trata algoritmo como a
+sequência que vira programa. Usa sempre a decomposição <strong>Entrada → Processamento →
+Saída</strong> antes de codificar (ex.: ler nome, idade e altura; calcular ano de nascimento;
+mostrar tudo).</li>
+<li>Na unidade V retoma a ideia de <strong>refinamento sucessivo / top-down</strong>: quebrar um problema
+grande em subproblemas menores (gancho para funções).</li>
+</ul>
+<p><strong>Ideias de exemplos</strong></p>
+<ul>
+<li>Tabelinha E/P/S preenchida para cada problema antes do código: &quot;Entrada: nome, idade,
+altura | Processamento: ano = ano_atual − idade | Saída: os quatro dados&quot;.</li>
+</ul>
+<p><strong>Ideias de exercícios</strong></p>
+<ul>
+<li>Para cada enunciado do módulo, pedir só a tabela E/P/S (sem código). Bom aquecimento.</li>
+</ul>
+<h3>logica5-compilacao</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>Fluxo descrito: código-fonte (editor) → <strong>compilador</strong> gera código-objeto (linguagem de
+máquina) → <strong>ligador</strong> junta o objeto com as bibliotecas usadas → executável.</li>
+<li>Compilação é o momento em que a sintaxe é verificada.</li>
+</ul>
+<p><strong>Pegadinhas e erros comuns</strong></p>
+<ul>
+<li>O livro não menciona o pré-processador como etapa (só o <code>#include</code> &quot;inclui o conteúdo
+do arquivo stdio.h&quot;). No LPEDC, explicitar as 4 etapas com <code>gcc -E</code>, <code>-c</code>, ligação.</li>
+<li>Atalhos de IDE (Alt+F9, Ctrl+F9 do Turbo C) são obsoletos; ensinar <code>gcc arquivo.c -o prog</code>.</li>
+</ul>
+<h3>0001-primeiro-programa</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>Todo programa tem uma função principal; o conteúdo entre chaves é executado em
+sequência; cada instrução termina com <code>;</code>; <code>return 0</code> sinaliza &quot;terminou sem erro&quot;.</li>
+<li><code>#include &lt;stdio.h&gt;</code> traz as declarações de entrada e saída.</li>
+<li>Comentários <code>/* ... */</code> podem ocupar várias linhas; a autora adota comentar tudo.</li>
+<li>Analogia boa: as chaves de <code>main</code> fazem o papel do &quot;início&quot; e &quot;fim&quot; do algoritmo.</li>
+</ul>
+<p><strong>Pegadinhas e erros comuns</strong></p>
+<ul>
+<li>O livro escreve <code>main()</code> sem <code>int</code> e <code>return (0)</code> com parênteses; mostrar que o certo
+hoje é <code>int main(void)</code> e que os parênteses no <code>return</code> são opcionais.</li>
+<li>Comentário de bloco não fechado engole o resto do código (aparece no exercício &quot;ache os
+erros&quot; da unidade I: o <code>/*</code> da primeira linha nunca é fechado).</li>
+<li>O texto até grafa <code>stdhio.h</code> por engano: bom lembrete de que um erro de digitação no
+include quebra a compilação.</li>
+</ul>
+<p><strong>Ideias de exercícios</strong></p>
+<ul>
+<li><strong>Ache os erros (reescrito do exercício 6 da unidade I)</strong>: programa que lê dois inteiros
+e mostra a soma, com 5 defeitos plantados. Gabarito esperado: (1) comentário <code>/*</code> sem
+<code>*/</code>; (2) falta <code>;</code> após a declaração <code>int num1, num2, total</code>; (3) <code>scanf(&quot;%d&quot;, num1)</code>
+sem <code>&amp;</code>; (4) falta <code>;</code> depois de <code>total = num1 + num2</code>; (5) <code>printf</code> usa a variável
+<code>soma</code>, que não existe (deveria ser <code>total</code>). Excelente exercício de compilação guiada.</li>
+</ul>
+<h3>0002-variaveis</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>Variável = espaço na memória principal que guarda valores diferentes ao longo do tempo;
+declarada como <code>tipo nome;</code>, várias do mesmo tipo na mesma linha.</li>
+<li>Regras de identificador: letras, dígitos e sublinha, começando por letra ou sublinha;
+evitar começar com <code>_</code> (reservado ao compilador). C diferencia maiúsculas: <code>A</code> ≠ <code>a</code>.</li>
+<li>Não existe tipo booleano no C ensinado (qualquer não-zero é verdadeiro) nem tipo string
+(usa-se vetor de <code>char</code>).</li>
+</ul>
+<p><strong>Pegadinhas e erros comuns</strong></p>
+<ul>
+<li>Palavra reservada não pode ser identificador.</li>
+<li>A lista de palavras reservadas do livro mistura C++ e extensões do Turbo C (<code>class</code>,
+<code>template</code>, <code>far</code>, <code>huge</code>, <code>near</code>, <code>asm</code>, <code>interrupt</code>...). Não reaproveitar: usar a lista
+do padrão C.</li>
+</ul>
+<p><strong>Ideias de exercícios</strong></p>
+<ul>
+<li><strong>Marque os identificadores inválidos</strong> (gabarito do livro, conferido): inválidos =
+<code>media idade</code> (espaço), <code>2nome</code> (começa com dígito), <code>nome*r</code>, <code>012</code>, <code>media_peso%</code>,
+<code>endereco+cep</code>, <code>/fone</code>, <code>1234P</code>; válidos = <code>idade</code>, <code>x2</code>, <code>aluno_nota</code>, <code>A</code>.</li>
+<li>Tabela &quot;válido/inválido&quot; própria: <code>A</code>, <code>a</code>, <code>media</code>, <code>altura2</code>, <code>media_idade</code>, <code>x36</code>
+(válidos) vs <code>2a</code>, <code>b@</code>, <code>media idade</code>, <code>x*y</code>, <code>#media</code>, <code>idade!</code> (inválidos).</li>
+</ul>
+<h3>0003-tipos-e-limites</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>Modificadores <code>unsigned</code> (sem sinal: dobra a faixa positiva), <code>short</code> (reduz),
+<code>long</code> (aumenta). A faixa depende do compilador.</li>
+</ul>
+<p><strong>Pegadinhas e erros comuns</strong></p>
+<ul>
+<li>A tabela do livro é de compilador 16 bits: <code>int</code> de 16 bits (−32.768 a 32.767) e ainda
+traz erro de digitação no máximo do <code>long</code> (2.147.489.647). Hoje <code>int</code> costuma ter 32
+bits. Ótimo gancho para ensinar <code>sizeof</code>, <code>limits.h</code> e <code>stdint.h</code> em vez de decorar
+tabela.</li>
+<li>Lista &quot;sete tipos básicos&quot; incluindo <code>enum</code> e <code>pointer</code> como se fossem tipos básicos:
+não seguir essa classificação.</li>
+</ul>
+<h3>0004-constantes</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li><code>#define NOME valor</code>, sem <code>;</code> no final.</li>
+<li>Caracteres entre apóstrofos (<code>&#39;M&#39;</code>), cadeias entre aspas (<code>&quot;Maria&quot;</code>).</li>
+<li>Sequências especiais de saída: <code>\n</code>, <code>\t</code>, <code>\b</code>, <code>\&quot;</code>, <code>\\</code>, <code>\0</code>, <code>\f</code>.</li>
+</ul>
+<p><strong>Pegadinhas e erros comuns</strong></p>
+<ul>
+<li><code>#define pi 3.141593</code> em minúsculas no gabarito: convenção é maiúsculas.</li>
+<li>Pôr <code>;</code> no <code>#define</code> faz o <code>;</code> ser colado onde a constante for usada.</li>
+</ul>
+<h3>0005-printf</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li><code>printf(&quot;controle&quot;, argumentos)</code>: o texto de controle mistura mensagem e
+especificadores. Mostra a diferença entre imprimir tudo grudado e usar <code>\n</code>.</li>
+<li><code>%f</code> mostra 6 casas por padrão; <code>%.2f</code> limita a duas (exemplo: altura).</li>
+</ul>
+<p><strong>Ideias de exemplos</strong></p>
+<ul>
+<li>Mesmo programa impresso duas vezes: com <code>%f</code> (1.750000) e com <code>%.2f</code> (1.75).</li>
+<li>Três <code>printf</code> sem <code>\n</code> saindo numa linha só, depois com <code>\n</code>.</li>
+</ul>
+<h3>0006-scanf</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li><code>scanf(&quot;%d&quot;, &amp;idade)</code>: as variáveis vão precedidas de <code>&amp;</code> (o endereço); para string não
+se usa <code>&amp;</code> porque o nome do vetor já é endereço.</li>
+<li>Tabela de especificadores de leitura: <code>%c %d %i %u %e %f %g %o %s %x %p</code>.</li>
+</ul>
+<p><strong>Pegadinhas e erros comuns</strong></p>
+<ul>
+<li>O livro lista <code>cin</code>, <code>gets</code> e um <code>scanf(&amp;x)</code> (sem formato!) como entradas válidas:
+<code>cin</code> é C++, <code>gets</code> foi removido do C, e <code>scanf(&amp;x)</code> não compila.</li>
+<li>O gabarito usa <code>scanf(&quot;%s&quot;, &amp;nome)</code> com <code>&amp;</code> num vetor (tipo errado; funciona por acaso).</li>
+<li><code>scanf(&quot;%s&quot;)</code> para no primeiro espaço; o livro &quot;resolve&quot; com <code>fflush(stdin)</code> + <code>gets</code>,
+ambos a evitar (comportamento indefinido / função removida). Ensinar <code>fgets</code>.</li>
+<li>Ler <code>%c</code> depois de um <code>%d</code> pega o <code>\n</code> que sobrou no buffer (o exercício do peso ideal
+lê o sexo primeiro justamente por isso, sem explicar). Bom caso para &quot;sobra no buffer&quot;.</li>
+</ul>
+<h3>0007-aritmetica</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>Operadores <code>+ - * / %</code>; expressão aritmética como fórmula matemática.</li>
+<li><code>%</code> dá o resto: com A=3 e B=2, A%B = 1. Divisão por zero não existe.</li>
+</ul>
+<p><strong>Pegadinhas e erros comuns</strong></p>
+<ul>
+<li>A tabela de precedência do livro está errada (põe <code>*</code>, <code>/</code> e <code>%</code> em níveis diferentes e
+diz que atribuição associa à esquerda). Não reaproveitar.</li>
+<li><strong>Divisão inteira</strong> escondida no gabarito: <code>media = soma / quantidade</code> com dois <code>int</code>
+descarta os decimais mesmo guardando em <code>float</code>. O exercício da série harmônica acerta
+ao usar <code>float divisor = i; 1/divisor</code>: contraste perfeito para a aula.</li>
+</ul>
+<p><strong>Ideias de exercícios</strong> (com resposta)</p>
+<ul>
+<li>Antecessor e sucessor de um inteiro (fixação 1): para 10 → 9 e 11. Duas versões:
+com variáveis <code>ant</code>/<code>suc</code> e calculando direto no <code>printf</code>.</li>
+<li>Média de 4 notas com 2 casas (8, 7, 6, 9 → 7.50).</li>
+<li>Rendimento de depósito: depósito 1000, taxa 5 (%) → rendimento 50.00, total 1050.00
+(fórmula <code>deposito * taxa/100</code>).</li>
+<li>Área do trapézio: bases 10 e 6, altura 4 → 32.00.</li>
+</ul>
+<h3>0009-atribuicao</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li><code>=</code> atribui: o lado esquerdo é a variável, o direito uma expressão (<code>x = x + 5</code>).</li>
+<li>Abreviações <code>+= -= *= /= %=</code> e a tabela clara de <code>++</code>/<code>--</code>: <code>y = ++x</code> incrementa
+primeiro e depois copia; <code>y = x++</code> copia primeiro e incrementa depois.</li>
+</ul>
+<p><strong>Pegadinhas e erros comuns</strong></p>
+<ul>
+<li>O livro mostra <code>nome = &quot;Maria&quot;;</code> como atribuição a string, e <strong>isso não compila em C</strong>
+para vetor de <code>char</code>. Ótimo para a seção de pegadinhas (usar <code>strcpy</code>).</li>
+</ul>
+<p><strong>Ideias de exercícios</strong></p>
+<ul>
+<li>Tabela de rastreio: x=5; y=x++; z=++x; → y=5, x=7, z=7.</li>
+</ul>
+<h3>0010-math</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>Funções prontas: <code>ceil</code> (arredonda para cima, 2.3→3), <code>floor</code> (para baixo, 2.3→2),
+<code>pow</code>, <code>sqrt</code>, <code>log</code>, <code>log10</code>, <code>exp</code>, <code>sin/cos/tan</code>, <code>modf</code>.</li>
+</ul>
+<p><strong>Pegadinhas e erros comuns</strong></p>
+<ul>
+<li>O livro coloca <code>abs</code> em math.h (é <code>stdlib.h</code>; em math.h existe <code>fabs</code>) e apresenta
+<code>M_PI</code> como padrão (não é garantido pelo C padrão). Não menciona o <code>-lm</code> do gcc.</li>
+<li>Descreve <code>modf</code> com os papéis invertidos (diz que y recebe a parte fracionária e z a
+inteira; é o contrário: o retorno é a fração e o ponteiro recebe a parte inteira).</li>
+<li>O gabarito do exercício &quot;quadrado e raiz&quot; imprime a raiz com o rótulo &quot;A potencia de&quot;.</li>
+</ul>
+<p><strong>Ideias de exercícios</strong> (com resposta)</p>
+<ul>
+<li>Quadrado e raiz de um inteiro positivo: 16 → 256.00 e 4.00.</li>
+<li>Raio → área e perímetro: r=2 → área ≈ 12.566371, perímetro ≈ 12.566371 (bom caso
+curioso: para r=2 os dois valores coincidem).</li>
+<li><code>pow(num1, num2)</code>: 2 e 10 → 1024.00.</li>
+</ul>
+<h3>0011-juntando-tudo</h3>
+<ul>
+<li>Programa-modelo do livro: ler nome, idade e altura; calcular ano de nascimento
+(ano atual − idade); imprimir tudo com altura em <code>%.2f</code>. Atualizar o ano (o livro usa
+2012 fixo, pegadinha de &quot;número mágico&quot;; usar constante ou ler o ano).</li>
+</ul>
+<hr>
+<h3>0012-relacionais</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>Operadores <code>== != &gt; &lt; &gt;= &lt;=</code>; condição é comparação com só dois resultados possíveis.</li>
+<li>Em C não há booleano: zero é falso, qualquer outro valor é verdadeiro.</li>
+</ul>
+<h3>0013-logicos</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li><code>&amp;&amp;</code> só é verdadeiro se ambos forem; <code>||</code> se pelo menos um for; <code>!</code> inverte.</li>
+</ul>
+<p><strong>Ideias de exercícios</strong> (com resposta)</p>
+<ul>
+<li><strong>Classe eleitoral</strong> (fixação 3): idade &lt; 16 → não eleitor; 16–17 ou &gt; 65 → facultativo;
+18–65 → obrigatório. Teste: 15, 16, 17, 18, 65, 66 → não, fac., fac., obrig., obrig.,
+fac. Usa <code>||</code> naturalmente.</li>
+<li><strong>Divisível por 3 E por 7</strong> (atividade 2): o gabarito testa as duas divisibilidades
+separadamente (imprime &quot;divisível por 3&quot; e/ou &quot;por 7&quot;). Reescrever pedindo o &quot;e&quot; de
+verdade: 21 → sim; 9 → não; 14 → não; 42 → sim.</li>
+</ul>
+<h3>0014-if</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>Se a condição é verdadeira, executa o bloco entre chaves; senão pula para depois dele.</li>
+<li>Chaves obrigatórias quando há mais de um comando.</li>
+</ul>
+<p><strong>Ideias de exemplos</strong></p>
+<ul>
+<li>Ler inteiro; se for par, mostrar a raiz com 3 casas: 18 → 4.243; 15 → nada.</li>
+</ul>
+<h3>0015-if-else</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>Uma única expressão, dois caminhos mutuamente exclusivos.</li>
+</ul>
+<p><strong>Ideias de exemplos</strong></p>
+<ul>
+<li>Par → raiz; ímpar → quadrado: 16 → par, raiz 4.000; 15 → ímpar, quadrado 225.</li>
+<li>Divisível por 5 (fixação 1): 25 → sim; 12 → não.</li>
+<li><strong>Peso ideal</strong> (fixação 4): homem <code>72.7*h − 58</code>, mulher <code>62.1*h − 44.7</code>. Testes:
+homem 1.80 → 72.86; mulher 1.60 → 54.66. Aceitar &#39;F&#39; ou &#39;f&#39; com <code>||</code>.</li>
+</ul>
+<p><strong>Pegadinhas e erros comuns</strong></p>
+<ul>
+<li><code>if (op = 1)</code> no lugar de <code>==</code> (o livro não destaca; acrescentar).</li>
+</ul>
+<h3>0016-else-if</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>Ifs aninhados (&quot;se não, se...&quot;) para várias faixas. Um mesmo problema pode ser resolvido
+com ifs independentes, ifs aninhados ou switch; a diferença é <strong>eficiência</strong> (quantos
+testes são feitos) e <strong>clareza</strong>.</li>
+<li>Analogia boa da autora: com ifs soltos, mesmo depois de achar a operação certa o
+programa continua perguntando as outras; com if/else ou switch ele para de testar.</li>
+</ul>
+<p><strong>Ideias de exercícios</strong> (com resposta)</p>
+<ul>
+<li><strong>Plano de saúde por idade</strong> (fixação 2): até 18 → R$ 50; 19–29 → 70; 30–45 → 90;
+46–65 → 130; acima de 65 → 170. Testes de fronteira: 18, 19, 29, 30, 45, 46, 65, 66.
+O gabarito repete nome/idade em todos os ramos, bom para refatorar (imprimir uma vez,
+só o valor muda).</li>
+<li>Maior e menor de 5 números (atividade 1): o gabarito usa vetor e laço antes de esses
+conteúdos aparecerem. Reescrever só com ifs (ou adiar para o módulo de laços).</li>
+</ul>
+<h3>0018-switch</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>Compara uma variável inteira/caractere com constantes; <code>break</code> impede de cair nos casos
+seguintes; <code>default</code> trata o &quot;nenhum dos anteriores&quot;. Indicado para menus e situações
+mutuamente exclusivas com poucos valores discretos.</li>
+<li>Quadro-resumo útil: <code>if</code> quando há um bloco opcional; <code>if/else</code> para dois caminhos
+exclusivos; <code>switch</code> para muitos valores discretos e finitos.</li>
+</ul>
+<p><strong>Ideias de exercícios</strong> (com resposta)</p>
+<ul>
+<li>Calculadora de 4 operações com menu 1–4 (exemplo do livro) + versão com if/else.</li>
+<li>Número → nome do mês (atividade 3), com &quot;mês inválido&quot; no default: 13 → inválido.</li>
+<li><strong>Aumento por cargo</strong> (atividade 4): 1 servente 40%, 2 pedreiro 35%, 3 mestre de obras
+20%, 4 técnico de segurança 10%. Salário 1000, cargo 2 → aumento 350.00, novo 1350.00.</li>
+<li><strong>Calorias</strong> (fixação 5): prato (italiano 750, japonês 324, salvadorenho 545) + bebida
+(chá 30, suco 80, refrigerante 90) com dois switches acumulando num total. Italiano +
+suco → 830.</li>
+</ul>
+<h3>0019-juntando-tudo</h3>
+<ul>
+<li><strong>Carga de caminhão</strong> (atividade 5): código do estado → % de imposto (1:20, 2:15, 3:10,
+4:5); código da carga → preço/kg (10–20: 180; 21–30: 120; 31–40: 230); peso em
+toneladas. Saídas: peso em kg, preço, imposto, total. Exemplo: estado 2, 3 t, carga 25 →
+3000 kg, preço 360000.00, imposto 54000.00, total 414000.00. O gabarito repete o bloco
+inteiro 4 vezes dentro do switch, perfeito para mostrar que basta o switch escolher o
+percentual e um if/else escolher o preço.</li>
+</ul>
+<hr>
+<h3>0020-while</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>Laço condicional com teste <strong>no início</strong>: pode não executar nenhuma vez.</li>
+<li>A variável de controle precisa ser inicializada <strong>antes</strong> e alterada <strong>dentro</strong>; sem
+isso, laço infinito.</li>
+</ul>
+<p><strong>Pegadinhas e erros comuns</strong></p>
+<ul>
+<li><code>i = 0; while (i != 10)</code> imprime 10 vezes; começar em 1 com a mesma condição imprime só
+9; o livro explora isso bem (para começar em 1, condição <code>i != 11</code>). Preferir <code>&lt;</code>.</li>
+<li><strong>Leitura antes e dentro do laço</strong> (padrão &quot;leitura-prévia&quot;): se esquecer a leitura de
+dentro, a condição nunca muda → laço infinito.</li>
+</ul>
+<h3>0021-do-while</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>Teste no fim: o corpo roda pelo menos uma vez.</li>
+</ul>
+<p><strong>Pegadinhas e erros comuns</strong></p>
+<ul>
+<li><strong>Ótimo contraste do livro:</strong> contar pares e ímpares até digitar 0. Com while e
+leitura-prévia, o 0 não é contado; com do-while ingênuo, o <strong>0 é contado como par</strong>
+(resultado errado: uma unidade a mais em pares). Precisa de um <code>if (num != 0)</code> interno.</li>
+<li>No fechamento de notas com do-while, também é preciso um <code>if (cod != 0)</code> para não pedir
+notas do aluno &quot;0&quot;.</li>
+</ul>
+<p><strong>Ideias de exercícios</strong></p>
+<ul>
+<li><strong>Validação de entrada</strong> (fixação 6): repetir a leitura da opinião enquanto não for 1, 2
+ou 3 (<code>while (op != 1 &amp;&amp; op != 2 &amp;&amp; op != 3)</code>). Uso canônico do do-while.</li>
+</ul>
+<h3>0022-for</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>Laço contado: inicialização (uma vez), condição (antes de cada volta), atualização (fim
+de cada volta). Usar quando se sabe quantas repetições.</li>
+<li>Sem chaves, o corpo é só o próximo comando.</li>
+<li>Todo for pode ser reescrito como while/do-while e vice-versa.</li>
+</ul>
+<p><strong>Pegadinhas e erros comuns</strong></p>
+<ul>
+<li>Condição escrita como <code>i == 10</code> com <code>i</code> começando em 1: o laço <strong>nunca executa</strong>: a
+condição é &quot;continue enquanto&quot;, não &quot;pare quando&quot;. O livro sugere testar isso: aproveitar.</li>
+</ul>
+<p><strong>Ideias de exercícios</strong> (com resposta)</p>
+<ul>
+<li>Imprimir um nome 10 vezes (exemplo base, refeito com while e do-while).</li>
+<li>Múltiplos de 3 menores que 100 com passo 3 (<code>i = i + 3</code>): 3, 6, ..., 99 (33 números).</li>
+<li>Fatorial (fixação 1): 5 → 120. Discutir limite do <code>int</code> (13! estoura 32 bits).</li>
+<li>Soma dos ímpares entre 200 e 500: <strong>52500</strong> (são 150 ímpares). O gabarito esquece de
+zerar <code>soma</code>; usar como &quot;ache o erro&quot;.</li>
+<li>Números &lt; 30 divisíveis por 3 e por 7 (atividade 5): com &quot;e&quot; verdadeiro → só 21.</li>
+<li><strong>Série harmônica</strong> (atividade 2): S = 1 + 1/2 + ... + 1/n; n=4 → 2.083333.</li>
+</ul>
+<h3>0023-break-continue</h3>
+<ul>
+<li>Não aborda break/continue em laços (só o break do switch). Sem material aqui.</li>
+</ul>
+<h3>0024-lacos-aninhados</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>&quot;Encadeamento&quot; de laços: a estrutura interna tem de estar inteira dentro da externa.</li>
+</ul>
+<p><strong>Ideias de exercícios</strong> (com resposta)</p>
+<ul>
+<li>Tabuada de 1 a 10 com dois for (atividade 3).</li>
+<li><strong>Fechamento de notas</strong> (problema 2): ler o número de notas da disciplina; para cada
+aluno (até código 0) ler as notas com um for interno, calcular a média e contar
+aprovados (média ≥ 6) e reprovados. Ex.: 2 notas; aluno 1: 7 e 8 (aprova); aluno 2: 4 e
+5 (reprova); código 0 → 1 aprovado, 1 reprovado. Feito com do-while+for e while+for.</li>
+</ul>
+<h3>0025-padroes-de-laco</h3>
+<p><strong>Conceitos-chave</strong> (o livro usa todos, sem nomeá-los; nomear no LPEDC)</p>
+<ul>
+<li><strong>Contador</strong> (<code>par++</code>), <strong>acumulador</strong> (<code>soma = soma + nota</code>), <strong>sentinela</strong> (0 ou −1
+encerra), <strong>maior</strong> (<code>if (salario &gt; msalario)</code>), <strong>flag</strong> (<code>acha = 0/1</code>).</li>
+</ul>
+<p><strong>Pegadinhas e erros comuns</strong> (todas tiradas dos gabaritos)</p>
+<ul>
+<li>Acumulador sem zerar (soma dos ímpares).</li>
+<li>Maior inicializado com 0: falha se todos os valores forem negativos.</li>
+<li><code>menor != 0;</code> escrito no lugar de <code>menor = 0;</code> (compara e descarta; o compilador
+aceita!). E mesmo <code>menor = 0</code> estaria errado: o certo é iniciar com o primeiro valor lido.</li>
+<li>Teste de ímpar com <code>numero % 2 == 1</code> falha para negativos (−3 % 2 == −1). Usar <code>!= 0</code>.</li>
+<li>Sentinela lida junto com outro dado: no exercício do salário −1 o programa ainda pede o
+número de filhos depois de digitar −1.</li>
+<li>Média de grupo vazio: se a primeira entrada for o sentinela, divide por zero.</li>
+<li><code>strcmp(comodo, &quot;FIM&quot;)</code> testado antes de <code>comodo</code> receber valor (lixo na memória).</li>
+</ul>
+<p><strong>Ideias de exercícios</strong> (com resposta)</p>
+<ul>
+<li><strong>Prefeitura</strong> (fixação 4): salário e nº de filhos até salário −1; média salarial, média
+de filhos e maior salário. Entradas (1000,2), (3000,0), (2000,1), −1 → médias 2000.00 e
+1.00; maior 3000.00.</li>
+<li><strong>Idade e altura</strong> até idade 0 → médias (fixação 5).</li>
+<li><strong>Pesquisa de opinião</strong> (fixação 6): idade e opinião (1 satisfeito, 2 indiferente,
+3 insatisfeito) até idade 0; contar satisfeitos, média de idade deles, contar
+insatisfeitos.</li>
+<li><strong>Área da casa</strong> (atividade 9): nome do cômodo, largura, comprimento até &quot;FIM&quot;; somar
+áreas. Sala 4×5, cozinha 3×3, FIM → 29 m².</li>
+<li>Pedidos até número 0 (atividade 7): total = Σ preço × quantidade.</li>
+<li>Estado civil de várias pessoas com contadores por categoria via switch (atividade 8).</li>
+<li><strong>Primo</strong> (fixação 3): contar divisores de 1 a n; primo se tiver exatamente 2.
+7 → primo; 9 → não. (Discutir que dá para parar antes / testar só até √n.)</li>
+</ul>
+<hr>
+<h3>0028-funcoes / 0029-parametros / 0030-escopo / 0032-recursao (resumo)</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>Função = sub-rotina para uma tarefa específica; <code>tipo nome(parâmetros) { corpo }</code>;
+<code>return</code> encerra e devolve valor compatível com o tipo; <code>void</code> = não devolve.</li>
+<li>Parâmetros <strong>formais</strong> (na definição) × <strong>reais</strong> (na chamada); por valor a função
+recebe cópia.</li>
+<li>Locais morrem ao fim da função; globais vivem o programa todo e devem ser evitadas.</li>
+<li>Protótipo permite escrever a função depois do <code>main</code>.</li>
+<li>Recursão exige critério de parada; exemplos fatorial e Fibonacci recursivo.</li>
+</ul>
+<p><strong>Pegadinhas e erros comuns</strong></p>
+<ul>
+<li>O texto diz que, por referência, x passou de 5 para <strong>25</strong> ao dobrar, mas o correto é 10
+(erro do livro; ótimo para &quot;confira o livro&quot;).</li>
+<li>Gabaritos declaram funções <strong>dentro</strong> do <code>main</code> (extensão do GCC, não é C padrão).</li>
+<li>Conversão kg → libras com fator 2.68 (o certo é ≈ 2,2046).</li>
+<li>Enunciado pede &quot;1 se consoante, 0 se vogal&quot; e o gabarito devolve o contrário.</li>
+<li>Fibonacci recursivo apresentado sem falar do custo exponencial (gancho para 0033).</li>
+</ul>
+<p><strong>Ideias de exercícios</strong></p>
+<ul>
+<li>Celsius → Fahrenheit (<code>c*1.8 + 32</code>): 100 → 212.00. Positivo/negativo/zero. Soma dos
+inteiros entre dois números. Somatório dos N primeiros pares (N=4 → 2+4+6+8 = 20).
+Contar vogais/consoantes de um nome. Reais → dólares dada a cotação.</li>
+</ul>
+<h3>0037-vetores / 0039-matrizes / 0041-strings / 0059-struct (resumo)</h3>
+<p><strong>Conceitos-chave</strong></p>
+<ul>
+<li>Vetor: elementos do mesmo tipo em sequência, índice de 0 a tamanho−1; <strong>o compilador
+não confere limites</strong> (o livro mostra de propósito um laço até 15 num vetor de 10).</li>
+<li>Matriz: um laço por dimensão. String: vetor de <code>char</code> terminado em <code>&#39;\0&#39;</code>, declarar com
+uma posição a mais. Struct agrupa campos de tipos diferentes, acesso com <code>.</code>.</li>
+</ul>
+<p><strong>Pegadinhas e erros comuns</strong></p>
+<ul>
+<li>Gabarito percorre <code>vetor[3]</code> com índices 1..3 (escreve fora do vetor).</li>
+<li>Imprimir palavra de trás para frente começando em <code>strlen</code> imprime o <code>&#39;\0&#39;</code> primeiro.</li>
+<li>Funções <code>strlwr</code>, <code>strupr</code>, <code>strlcpy</code>, <code>stricmp</code> não são padrão.</li>
+<li><code>strstr(...) == 0</code> testado ao contrário no exemplo.</li>
+<li><code>produto ficha;</code> sem <code>struct</code> só compila em C++ (em C, <code>struct produto ficha;</code> ou typedef).</li>
+</ul>
+<p><strong>Ideias de exercícios</strong></p>
+<ul>
+<li>Ler 30 números e imprimir na ordem inversa; soma de dois vetores; tabela de notas 20×4
+com média por aluno e da turma; cadastro de livros/funcionários com busca por código.</li>
+</ul>
+<h3>0067-arquivos-texto (resumo)</h3>
+<ul>
+<li><code>FILE *</code>, <code>fopen</code> (modos r, w, a, r+, w+, a+), checar <code>NULL</code>, <code>fputc/fgetc</code>,
+<code>fputs/fgets</code>, <code>fclose</code>, <code>feof</code>, <code>rewind</code>, <code>remove</code>, <code>rename</code>.</li>
+<li>Pegadinha: laço <code>while (!feof(arq))</code> lê uma vez a mais; o gabarito do exercício 7 usa o
+padrão certo <code>while (fgets(...) != NULL)</code>; contrastar os dois.</li>
+</ul>
+<h3>0089-busca-sequencial / 0091-bubble-sort (resumo)</h3>
+<ul>
+<li>Busca sequencial com flag <code>acha</code> e <code>while (acha == 0 &amp;&amp; i &lt; 10)</code>.</li>
+<li>O &quot;método da bolha&quot; apresentado compara <code>v[i]</code> com todos os <code>v[j]</code> seguintes, e isso é
+<strong>ordenação por troca/seleção ingênua</strong>, não a bolha (que compara vizinhos). Pegadinha
+de nomenclatura a corrigir no módulo 13.</li>
+</ul>
+<hr>
+<h2>Obsoleto / evitar</h2>
+<ul>
+<li>Caminho fixo <code>C:\\arquivo.txt</code>.</li>
+</ul>
+<h2>Extras que não cabem no sumário</h2>
+<ul>
+<li>Comparação de eficiência entre if solto × if/else × switch contando comparações; pode
+virar um &quot;box&quot; em 0018 ou preparar 0071 (contar passos).</li>
+<li>Problema do cadastro de 20 livros com menu (cadastrar, listar, buscar, ordenar por ano):
+bom &quot;juntando tudo&quot; para o módulo 08 (vetor de structs) ou 13.</li>
+<li><code>setlocale(LC_ALL, &quot;Portuguese&quot;)</code> aparece nos gabaritos para acentuação no Windows:
+pode virar nota de rodapé sobre acentos no terminal.</li>
+</ul>

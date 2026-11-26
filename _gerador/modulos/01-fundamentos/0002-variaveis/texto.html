@@ -1,0 +1,124 @@
+<h2>0002 · Variáveis</h2>
+<p>O primeiro programa só mostrava texto fixo. Para fazer conta, o programa
+precisa guardar números em algum lugar enquanto trabalha: a idade de alguém,
+o preço de um produto, o total de uma compra. Esse lugar é a memória do
+computador, e a variável é a forma de usar um pedaço dela pelo nome.</p>
+<p>Pense na ficha de matrícula de uma academia. Ela tem campos com rótulo
+(idade, altura, peso, plano), e cada campo aceita um tipo de informação. Um
+mês depois, a recepcionista apaga o peso e escreve o novo. A ficha continua
+a mesma; só o conteúdo de um campo mudou. Uma <strong>variável</strong> é um campo dessa
+ficha: um lugar na memória com <strong>nome</strong>, <strong>tipo</strong> e <strong>valor</strong>, e esse valor
+pode mudar durante a execução (DEITEL; DEITEL, 2011, cap. 2).</p>
+<p>O nome é para você, que escreve e lê o código. A máquina usa outra coisa: o
+<strong>endereço</strong>, o número do primeiro byte que o valor ocupa na memória. Você
+vê o endereço de uma variável com <code>&amp;</code>, e o <code>printf</code> o mostra com <code>%p</code>. Por
+enquanto o endereço é só curiosidade; no módulo de ponteiros ele vira
+ferramenta.</p>
+<p>O <strong>tipo</strong> diz quantos bytes a variável ocupa e como ler esses bytes
+(BACKES, 2013). Ele vem antes do nome e não muda depois. Os mesmos quatro
+bytes podem ser lidos como um inteiro ou como um real, e o resultado é
+completamente diferente; o tipo é que decide. A tabela mostra os quatro
+tipos básicos, com os tamanhos de um PC de 64 bits (o padrão do C só garante
+mínimos, assunto do 0003):</p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Guarda</th>
+<th>Tamanho típico</th>
+<th><code>printf</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>int</code></td>
+<td>inteiro</td>
+<td>4 bytes</td>
+<td><code>%d</code></td>
+</tr>
+<tr>
+<td><code>float</code></td>
+<td>real, uns 7 dígitos</td>
+<td>4 bytes</td>
+<td><code>%f</code></td>
+</tr>
+<tr>
+<td><code>double</code></td>
+<td>real, uns 15 dígitos</td>
+<td>8 bytes</td>
+<td><code>%f</code></td>
+</tr>
+<tr>
+<td><code>char</code></td>
+<td>um caractere</td>
+<td>1 byte</td>
+<td><code>%c</code></td>
+</tr>
+</tbody></table>
+<p>Esses são os <strong>tipos primitivos</strong>, também chamados de tipos simples: cada
+variável guarda um valor só. Vetores e structs juntam vários valores numa
+variável e são os tipos <strong>compostos</strong>, que aparecem nos módulos 05 e 08
+(CELES; CERQUEIRA; RANGEL, 2016). Repare que o <code>char</code> também guarda um
+número, pequeno: a letra <code>&#39;B&#39;</code> fica na memória como o código 66.</p>
+<p>Criar a variável é <strong>declarar</strong>: <code>int idade;</code> reserva quatro bytes e dá a
+eles o nome <code>idade</code>. Dar o primeiro valor no mesmo comando é
+<strong>inicializar</strong>: <code>int idade = 25;</code> (BACKES, 2013). As duas coisas parecem
+iguais, mas não são. Uma variável declarada sem valor fica com o que já
+estava naqueles bytes, e isso pode ser qualquer número.</p>
+<pre><code class="language-c">int idade = 25;        // declara e inicializa
+double peso = 72.5;    // o decimal do C é o ponto
+peso = 71.8;           // atribui: o 72.5 some
+</code></pre>
+<p><strong>Atribuir</strong> é guardar um valor novo, com <code>=</code>, numa variável que já existe.
+O valor antigo é apagado para sempre; não há histórico. Ler a variável, por
+outro lado, não muda nada: você pode mostrar <code>peso</code> mil vezes e ele continua
+71.8 (DEITEL; DEITEL, 2011, cap. 2).</p>
+<p>Para saber quanto cada tipo ocupa na sua máquina, existe o operador
+<strong><code>sizeof</code></strong>. Ele dá o tamanho em bytes de um tipo ou de uma variável:
+<code>sizeof(double)</code> vale 8 num PC comum. O resultado tem um tipo próprio, e o
+<code>printf</code> o mostra com <code>%zu</code> (KERNIGHAN; RITCHIE, 1988, cap. 2).</p>
+<p>O nome da variável segue regras. Ele usa letras, dígitos e <code>_</code>, não começa
+por dígito e não leva acento nem espaço. Palavras do próprio C, como <code>int</code>
+e <code>return</code>, são reservadas e não servem de nome. E maiúscula conta: <code>peso</code>
+e <code>Peso</code> são duas variáveis diferentes (KERNIGHAN; RITCHIE, 1988, cap. 2).
+O curso usa <code>snake_case</code>, palavras em minúscula ligadas por <code>_</code>:
+<code>peso_atual</code>, <code>valor_total</code>.</p>
+<blockquote>
+<p>[!WARNING]
+Variável sem valor não vale zero: vale <strong>lixo</strong>, o que já estava na
+memória. <code>int total; printf(&quot;%d&quot;, total);</code> pode mostrar 0, 32767 ou -1294,
+e o gcc avisa <code>&#39;total&#39; is used uninitialized</code>. Inicialize sempre. E o
+decimal do C é o <strong>ponto</strong>: <code>72,5</code> nem compila.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>A ficha de uma academia: idade, altura, peso e plano. Cada dado vira uma
+caixinha com tipo, tamanho e endereço; depois o peso recebe um valor novo:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    int idade = 25;       // inteiro
+    float altura = 1.75;  // real com uns 7 dígitos
+    double peso = 72.5;   // real com uns 15 dígitos
+    char plano = &#39;B&#39;;     // um caractere, entre aspas simples
+
+    printf(&quot;Idade: %d anos\n&quot;, idade);
+    printf(&quot;Altura: %.2f m\n&quot;, altura);
+    printf(&quot;Peso: %.1f kg\n&quot;, peso);
+    printf(&quot;Plano: %c\n&quot;, plano);
+
+    peso = 71.8; // um mês depois: o 72.5 some
+    printf(&quot;Peso novo: %.1f kg\n&quot;, peso);
+    printf(&quot;Bytes: %zu, %zu, %zu, %zu\n&quot;,
+           sizeof idade, sizeof altura, sizeof peso, sizeof plano);
+    return 0;
+}
+// Saída:
+// Idade: 25 anos
+// Altura: 1.75 m
+// Peso: 72.5 kg
+// Plano: B
+// Peso novo: 71.8 kg
+// Bytes: 4, 4, 8, 1
+</code></pre>
+<p>O caminho é sequência pura: criar as variáveis e depois trocar o peso.</p>
+<p>{{fluxograma}}</p>

@@ -1,0 +1,102 @@
+<h2>0069 · Argumentos da linha de comando</h2>
+<p>Fim do rodízio de pizza, conta de R$ 187,40 para 4 pessoas. Um programa
+poderia perguntar o total e o número de pessoas com <code>scanf</code>. Mas repare nos
+programas de terminal que você já usa: <code>cp origem destino</code>,
+<code>gcc -o prog prog.c</code>, <code>git commit -m &quot;msg&quot;</code>. Nenhum deles pergunta nada. Os
+dados vão escritos <strong>junto do comando</strong>, na mesma linha, e o programa já
+começa sabendo o que fazer. Isso permite usar o programa dentro de scripts,
+sem ninguém digitando.</p>
+<p>É como pedir um café no balcão já dizendo tudo de uma vez: &quot;um expresso
+duplo, sem açúcar&quot;. O atendente não precisa fazer perguntas. Os dados que vão
+junto do comando se chamam <strong>argumentos da linha de comando</strong>, e no C eles
+chegam como parâmetros do <code>main</code> (BACKES, 2013, cap. 13). Até aqui o <code>main</code>
+tinha <code>void</code> entre os parênteses; para receber argumentos, ele ganha dois
+parâmetros:</p>
+<pre><code class="language-c">int main(int argc, char *argv[])
+</code></pre>
+<p>O primeiro, <code>argc</code> (<em>argument count</em>, contagem de argumentos), diz quantos
+itens vieram na linha, <strong>contando o nome do programa</strong>. Por isso ele vale
+pelo menos 1 (FEOFILOFF, 2009, ap. H). Em <code>./racha 187.40 4</code>, <code>argc</code> vale 3:
+o nome do programa e os dois números.</p>
+<p>O segundo, <code>argv</code> (<em>argument vector</em>, vetor de argumentos), é um vetor de
+<code>char *</code>, com uma string por item. <code>argv[0]</code> é o nome do programa,
+<code>./racha</code>; <code>argv[1]</code> é <code>&quot;187.40&quot;</code>, o primeiro argumento seu; <code>argv[2]</code> é
+<code>&quot;4&quot;</code>. Depois do último vem <code>argv[argc]</code>, que vale <code>NULL</code> e marca o fim do
+vetor, do mesmo jeito que o <code>&#39;\0&#39;</code> marca o fim de uma string (KERNIGHAN;
+RITCHIE, 1989). Como vetor em parâmetro vira ponteiro, <code>char **argv</code> é outra
+forma de escrever a mesma coisa.</p>
+<p>Quem separa a linha em pedaços não é o seu programa, é o <strong>shell</strong>, o
+programa que lê o que você digita no terminal (bash, zsh). Antes de o seu
+programa começar, o shell corta a linha nos espaços, tira as aspas e troca
+coringas como <code>*</code> pelos nomes de arquivos. Assim, <code>&quot;São Paulo&quot;</code> entre aspas
+chega como um argumento só; sem aspas, chega como dois. E o <code>&gt; saida.txt</code> de
+um redirecionamento é tratado pelo shell e nem aparece no <code>argv</code>.</p>
+<p>Tudo no <code>argv</code> é <strong>texto</strong>. O <code>4</code> chega como a string <code>&quot;4&quot;</code>, e
+<code>argv[2] * 2</code> nem compila. Para virar número, é preciso converter. A função
+<code>strtol(texto, &amp;fim, 10)</code> converte para <code>long</code> na base 10, e
+<code>strtod(texto, &amp;fim)</code> converte para <code>double</code>. As duas apontam <code>fim</code> para o
+primeiro caractere que não conseguiram converter. Se <code>*fim</code> não for <code>&#39;\0&#39;</code>,
+sobrou lixo no texto, como em <code>&quot;4x&quot;</code> ou <code>&quot;quatro&quot;</code>, e o programa pode recusar
+a entrada (LINUX MAN-PAGES PROJECT, s.d.).</p>
+<p>Existem atalhos mais curtos, <code>atoi</code> e <code>atof</code>, mas eles não avisam erro:
+<code>atoi(&quot;quatro&quot;)</code> devolve 0, igual a <code>atoi(&quot;0&quot;)</code>, e o programa não tem como
+saber se o usuário digitou zero ou bobagem. Servem para um teste rápido, não
+para entrada de usuário (BACKES, 2013, cap. 13).</p>
+<p>Dois costumes de programas de terminal fecham o assunto (BACKES, 2013,
+cap. 12). Mensagens de erro vão para o <code>stderr</code>, com
+<code>fprintf(stderr, ...)</code>. Quem redireciona a saída para um arquivo continua
+vendo o erro na tela, porque o <code>&gt;</code> só desvia o <code>stdout</code>. E o <code>return</code> do
+<code>main</code> vira o <strong>código de saída</strong> do programa: 0 quer dizer sucesso, e
+qualquer outro valor quer dizer falha. O shell guarda esse número na variável
+<code>$?</code>, e o <code>&amp;&amp;</code> só roda o comando seguinte se o anterior devolveu 0.</p>
+<blockquote>
+<p>[!WARNING]
+Nunca use <code>argv[1]</code> sem conferir o <code>argc</code>: sem argumentos, ele é <code>NULL</code> e
+<code>atoi(NULL)</code> derruba o programa. E em <code>./calc 9 * 3</code> o shell troca o <code>*</code>
+pelos nomes dos arquivos da pasta antes de o programa rodar; use aspas
+(<code>&#39;*&#39;</code>) ou outro símbolo, como <code>x</code>.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>Fim do rodízio de pizza: conta de R$ 187,40 para 4 pessoas. O comando
+<code>./racha 187.40 4</code> chega com <code>argc = 3</code>. O programa confere a quantidade,
+converte <code>argv[1]</code> e <code>argv[2]</code> e divide:</p>
+<p>{{ideia}}</p>
+<p>Salve como <code>racha.c</code>, compile com as flags de estudo e passe os argumentos
+depois do executável: <code>./programa 187.40 4</code>.</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(int argc, char *argv[]) {
+    if (argc != 3) {
+        fprintf(stderr, &quot;Uso: %s &lt;total&gt; &lt;pessoas&gt;\n&quot;, argv[0]);
+        return 1;                             // diferente de 0: deu errado
+    }
+
+    char *fim;
+    double total = strtod(argv[1], &amp;fim);     // texto -&gt; double
+    if (*fim != &#39;\0&#39; || total &lt;= 0) {
+        fprintf(stderr, &quot;Total inválido: %s\n&quot;, argv[1]);
+        return 1;
+    }
+    long pessoas = strtol(argv[2], &amp;fim, 10); // texto -&gt; inteiro, base 10
+    if (*fim != &#39;\0&#39; || pessoas &lt;= 0) {
+        fprintf(stderr, &quot;Número de pessoas inválido: %s\n&quot;, argv[2]);
+        return 1;
+    }
+
+    printf(&quot;Conta: R$ %.2f\n&quot;, total);
+    printf(&quot;Pessoas: %ld\n&quot;, pessoas);
+    printf(&quot;Cada um: R$ %.2f\n&quot;, total / pessoas);
+    return 0;
+}
+// $ ./programa 187.40 4
+// Conta: R$ 187.40
+// Pessoas: 4
+// Cada um: R$ 46.85
+//
+// $ ./programa 187.40 quatro
+// Número de pessoas inválido: quatro
+</code></pre>
+<p>Duas perguntas antes da conta: veio a quantidade certa de argumentos, e são
+números de verdade? O programa só trabalha no caminho verde:</p>
+<p>{{fluxograma}}</p>

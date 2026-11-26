@@ -1,0 +1,145 @@
+<h2>0068 · Arquivos binários</h2>
+<p>O arquivo texto tem um limite. Cada linha tem um tamanho diferente: &quot;Luz
+98.75&quot; tem 9 caracteres, &quot;Internet 99.90&quot; tem 14. Para chegar à linha 500, o
+programa precisa ler as 499 anteriores, contando os <code>\n</code>, porque não há como
+saber em que byte ela começa. E cada número passa por uma conversão na ida
+(<code>double</code> para texto) e outra na volta (texto para <code>double</code>).</p>
+<p>Pense no estoque do mercadinho guardado em fichas todas do mesmo tamanho,
+numa gaveta. Para pegar a terceira ficha, ninguém lê as duas primeiras: mede
+com o dedo e puxa. O <strong>arquivo binário</strong> permite isso. Ele grava os bytes
+<strong>exatamente como estão na memória</strong>, sem converter nada em texto, e por
+isso um <code>int</code> ocupa sempre 4 bytes no disco, e uma struct ocupa sempre o seu
+<code>sizeof</code> (BACKES, 2013, cap. 12).</p>
+<p>Quando todos os registros têm o mesmo tamanho, a posição de cada um vira uma
+conta. Um <strong>registro</strong> aqui é uma struct gravada no arquivo, como um
+<code>Produto</code> de 32 bytes. O registro 0 começa no byte 0, o registro 1 no byte
+32, e o registro <code>i</code> começa no byte <code>i * sizeof(Produto)</code> (DEITEL; DEITEL,
+2011, cap. 11). Com essa conta, o programa vai direto ao registro que quer.</p>
+<p>Para abrir um arquivo binário, acrescente um <code>b</code> ao modo: <code>&quot;wb&quot;</code>, <code>&quot;rb&quot;</code>,
+<code>&quot;ab&quot;</code>, <code>&quot;rb+&quot;</code>. No Linux e no Mac, o <code>b</code> não muda nada. No Windows, sem ele,
+a biblioteca troca cada <code>\n</code> por <code>\r\n</code> ao gravar, e qualquer byte de valor
+10 no meio de um número sai estragado (BACKES, 2013, cap. 12). Escreva o <code>b</code>
+sempre, e o programa funciona nos dois sistemas.</p>
+<p>Para gravar, use <code>fwrite(endereco, tamanho, quantidade, arq)</code>. Ele copia
+<code>tamanho * quantidade</code> bytes a partir do endereço que você deu. Uma variável
+ou uma struct vai com <code>&amp;</code> (<code>fwrite(&amp;p, sizeof p, 1, arq)</code>); um vetor já é
+endereço e vai sem <code>&amp;</code> (<code>fwrite(estoque, sizeof(Produto), 3, arq)</code> grava os
+três produtos de uma vez). O <code>fread</code>, com os mesmos argumentos, faz o caminho
+de volta. Os dois devolvem <strong>quantos itens</strong> processaram, e não quantos
+bytes. Se o <code>fread</code> devolver menos que o pedido, o arquivo acabou ou deu erro,
+e é esse retorno que vai na condição do <code>while</code> (BACKES, 2013, cap. 12).</p>
+<p>Para pular até um registro, use <code>fseek(arq, deslocamento, origem)</code>. A origem
+diz de onde contar: <code>SEEK_SET</code> é o começo do arquivo, <code>SEEK_CUR</code> é a posição
+atual e <code>SEEK_END</code> é o fim. O deslocamento é um <code>long</code> e pode ser negativo.
+<code>fseek(arq, 2 * sizeof(Produto), SEEK_SET)</code> põe a posição no byte 64, e o
+próximo <code>fread</code> traz o registro 2. O <code>fseek</code> não lê nada: ele só troca um
+número guardado no <code>FILE</code>. Pular para o registro 2 custa o mesmo que pular
+para o registro 2 milhões (DEITEL; DEITEL, 2011, cap. 11).</p>
+<p>Duas funções completam o conjunto. <code>ftell(arq)</code> devolve a posição atual em
+bytes, e <code>rewind(arq)</code> volta ao byte 0. Juntando <code>fseek(arq, 0, SEEK_END)</code> e
+<code>ftell(arq)</code>, você mede o arquivo; dividindo pelo <code>sizeof</code> do registro,
+descobre quantos registros ele tem (BACKES, 2013, cap. 12).</p>
+<p>O acesso direto abre uma possibilidade grande. Com os registros gravados em
+ordem de código, dá para fazer <strong>busca binária direto no arquivo</strong>: <code>fseek</code>
+no registro do meio, <code>fread</code>, compara, descarta a metade que não serve e
+repete. Uns 20 <code>fread</code> acham um registro entre 1 milhão, sem carregar o
+arquivo na RAM (ZIVIANI, 2010). A busca binária é o assunto 0090.</p>
+<p>A tabela resume o que muda entre os dois tipos de arquivo:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>texto (<code>fprintf</code>)</th>
+<th>binário (<code>fwrite</code>)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>o <code>int</code> 12345678</td>
+<td>8 bytes: <code>&#39;1&#39; &#39;2&#39; ... &#39;8&#39;</code></td>
+<td>4 bytes: <code>4E 61 BC 00</code></td>
+</tr>
+<tr>
+<td>abre no editor?</td>
+<td>sim</td>
+<td>vira lixo na tela</td>
+</tr>
+<tr>
+<td>converte na ida e na volta?</td>
+<td>sim (mais lento)</td>
+<td>não, só copia bytes</td>
+</tr>
+<tr>
+<td>acesso direto ao registro <code>i</code>?</td>
+<td>não</td>
+<td>sim, com <code>fseek</code></td>
+</tr>
+<tr>
+<td>lê em outra máquina?</td>
+<td>sim</td>
+<td>só se <code>int</code>, alinhamento e ordem dos bytes forem iguais</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>[!WARNING]
+<code>fwrite</code> copia bytes, não dados. Struct com ponteiro (<code>char *nome</code>) grava o
+<strong>endereço</strong>, que não aponta para nada na próxima execução: use
+<code>char nome[20]</code>. E um <code>.bin</code> pode não ser lido igual em outra máquina
+(tamanho do <code>int</code>, alinhamento, ordem dos bytes): para trocar dados, use texto.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>O estoque do mercadinho tem três produtos de 32 bytes cada. Um <code>fwrite</code> grava
+os três (96 bytes). Para ler o café, o programa pula 2 × 32 = 64 bytes e faz um
+<code>fread</code> de um registro:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+typedef struct {
+    char nome[20];
+    int qtd;
+    double preco;
+} Produto;
+
+int main(void) {
+    const char *caminho = &quot;/tmp/estoque.bin&quot;;
+    Produto estoque[3] = {
+        {&quot;Arroz&quot;, 12, 25.90},
+        {&quot;Feijão&quot;, 7, 8.75},
+        {&quot;Café&quot;, 4, 18.50},
+    };
+
+    FILE *arq = fopen(caminho, &quot;wb&quot;);
+    if (arq == NULL) {
+        perror(caminho);
+        return 1;
+    }
+    size_t gravados = fwrite(estoque, sizeof(Produto), 3, arq); // vetor: sem &amp;
+    fclose(arq);
+    printf(&quot;Cada registro: %zu bytes\n&quot;, sizeof(Produto));
+    printf(&quot;Gravados: %zu registros\n&quot;, gravados);
+
+    arq = fopen(caminho, &quot;rb&quot;);
+    if (arq == NULL) {
+        perror(caminho);
+        return 1;
+    }
+    fseek(arq, 0, SEEK_END);                    // vai para o fim...
+    printf(&quot;Arquivo: %ld bytes\n&quot;, ftell(arq)); // ...e pergunta a posição
+
+    Produto p;
+    fseek(arq, 2 * sizeof(Produto), SEEK_SET);  // byte 64: começo do registro 2
+    if (fread(&amp;p, sizeof(Produto), 1, arq) == 1) {
+        printf(&quot;Registro 2: %s, %d un., R$ %.2f\n&quot;, p.nome, p.qtd, p.preco);
+    }
+    fclose(arq);
+    remove(caminho);
+    return 0;
+}
+// Saída:
+// Cada registro: 32 bytes
+// Gravados: 3 registros
+// Arquivo: 96 bytes
+// Registro 2: Café, 4 un., R$ 18.50
+</code></pre>
+<p>Não há laço até o café: são dois <code>fseek</code> e um <code>fread</code>, com 3 registros ou 3
+milhões:</p>
+<p>{{fluxograma}}</p>

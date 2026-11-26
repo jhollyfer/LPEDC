@@ -1,0 +1,101 @@
+<h2>0064 · Union</h2>
+<p>Um pagamento numa loja é feito por Pix, <strong>ou</strong> por cartão, <strong>ou</strong> por boleto.
+Nunca pelos três ao mesmo tempo. Se você guardar isso numa struct com os
+dados dos três meios, cada pagamento carrega dois terços de espaço que nunca
+vai usar. Às vezes o problema é o contrário: você quer pegar os mesmos bytes
+da memória e lê-los de dois jeitos, como um número inteiro e como uma
+sequência de bytes soltos.</p>
+<p>Pense numa mesa de coworking. De manhã ela serve a uma designer; à tarde, a um
+programador. O espaço é um só, e quando um chega, o que o outro deixou em cima
+sai do lugar. A <strong>union</strong> (união) faz isso com a memória. Ela se declara
+igual à struct, mas <strong>todos os campos começam no mesmo endereço</strong> e dividem
+os mesmos bytes, então só um campo guarda um valor com sentido por vez
+(BACKES, 2013, cap. 8).</p>
+<pre><code class="language-c">typedef union {
+    uint32_t numero;        // 4 bytes
+    unsigned char bytes[4]; // os MESMOS 4 bytes
+} Endereco;
+</code></pre>
+<p>Compare com a struct. Na struct, cada campo tem o seu pedaço, um depois do
+outro, e o tamanho é a soma (mais o preenchimento). Na union, os campos se
+sobrepõem, e o tamanho é o do <strong>maior campo</strong>, arredondado ao alinhamento
+(DEITEL; DEITEL, 2011, cap. 10). Em <code>Endereco</code>, os dois campos têm 4 bytes, e
+<code>sizeof(Endereco)</code> dá 4, não 8.</p>
+<p>Daí saem os dois usos da union (KERNIGHAN; RITCHIE, 1988, cap. 6). O
+primeiro é <strong>economizar espaço</strong> quando o dado é uma coisa ou outra, como o
+pagamento. O segundo é <strong>olhar os mesmos bytes de dois jeitos</strong>: você grava
+<code>numero</code> e lê <code>bytes[0]</code>, <code>bytes[1]</code>... sem fazer conta de divisão e resto. A
+union não gera código para isso. <code>ip.numero</code> e <code>ip.bytes[0]</code> estão no mesmo
+endereço; o que muda é só o tipo com que o programa lê aqueles bytes.</p>
+<p>No primeiro uso aparece uma dificuldade: olhando a union, como saber qual
+campo foi gravado por último? A união sozinha não guarda essa informação.
+A solução é a <strong>union etiquetada</strong>: uma struct com um <strong>enum</strong> que diz qual
+campo vale (a etiqueta) e, ao lado, a union com os dados. Antes de ler, o
+programa olha a etiqueta. Quem confere é você; o compilador não verifica
+nada (KERNIGHAN; RITCHIE, 1988, cap. 6).</p>
+<p>O segundo uso revela um detalhe da máquina. O IP 192.168.0.10 é, por baixo,
+um número de 32 bits: <code>0xC0A8000A</code> (C0 = 192, A8 = 168, 00 = 0, 0A = 10).
+Grave esse número em <code>ip.numero</code> e leia <code>ip.bytes</code> num PC comum: os bytes
+saem <code>0A 00 A8 C0</code>, de trás para frente. A ordem em que os bytes de um número
+ficam na memória se chama <strong>endianness</strong>. No <strong>little-endian</strong> (Intel, AMD e
+quase todo ARM), o byte <strong>menos</strong> significativo fica no endereço menor, por
+isso o <code>0A</code> do final vem primeiro. No <strong>big-endian</strong>, a ordem é a mesma da
+leitura humana, <code>C0 A8 00 0A</code> (LINUX MAN PAGES, s.d.). Nenhuma das duas é a
+certa: é uma escolha de quem projetou o processador.</p>
+<p>A diferença importa quando dois computadores trocam números. A rede usa
+big-endian, e as funções <code>htonl</code> e <code>ntohl</code>, de <code>&lt;arpa/inet.h&gt;</code>, convertem um
+número de 32 bits da ordem da máquina para a da rede e de volta (LINUX MAN
+PAGES, s.d.). Numa máquina big-endian elas não fazem nada; numa
+little-endian, invertem os bytes.</p>
+<blockquote>
+<p>[!WARNING]
+Numa union, escrever num campo <strong>estraga</strong> os outros. Numa union para
+economizar espaço, ler um campo diferente do último gravado dá lixo, e o C
+não avisa: guarde um enum com a etiqueta e confira antes de ler. E ler os
+bytes de um número depende da endianness: a saída muda entre máquinas.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>O IP 192.168.0.10 é um número de 32 bits, <code>0xC0A8000A</code>. O programa grava em
+<code>ip.numero</code> e lê por <code>ip.bytes</code>; repare na ordem dos bytes na memória:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdint.h&gt;
+#include &lt;stdio.h&gt;
+
+// os dois campos começam no MESMO endereço: são dois jeitos de ler 4 bytes
+typedef union {
+    uint32_t numero;
+    unsigned char bytes[4];
+} Endereco;
+
+int main(void) {
+    Endereco ip;
+    ip.numero = 0xC0A8000A; // 192.168.0.10, escrito como um número só
+
+    printf(&quot;sizeof: %zu bytes\n&quot;, sizeof ip);
+    printf(&quot;numero: 0x%08X\n&quot;, (unsigned)ip.numero);
+    printf(&quot;bytes na memória:&quot;);
+    for (int i = 0; i &lt; 4; i++) {
+        printf(&quot; %02X&quot;, ip.bytes[i]); // lê os mesmos 4 bytes, um por um
+    }
+    printf(&quot;\n&quot;);
+
+    if (ip.bytes[0] == 0x0A) {
+        printf(&quot;little-endian: o byte menos significativo vem primeiro\n&quot;);
+    } else {
+        printf(&quot;big-endian: o byte mais significativo vem primeiro\n&quot;);
+    }
+
+    ip.bytes[3] = 10; // muda um byte: o número inteiro muda junto
+    printf(&quot;depois de bytes[3] = 10: 0x%08X\n&quot;, (unsigned)ip.numero);
+    return 0;
+}
+// Saída (num PC Intel/AMD ou ARM):
+// sizeof: 4 bytes
+// numero: 0xC0A8000A
+// bytes na memória: 0A 00 A8 C0
+// little-endian: o byte menos significativo vem primeiro
+// depois de bytes[3] = 10: 0x0AA8000A
+</code></pre>
+<p>A pergunta sobre o primeiro byte detecta a endianness. Numa máquina big-endian,
+o mesmo programa seguiria pelo outro lado:</p>
+<p>{{fluxograma}}</p>

@@ -1,0 +1,95 @@
+<h2>0055 · calloc e realloc</h2>
+<p>Você abriu uma vaquinha para o churrasco e os Pix vão chegando: R$ 50,
+R$ 120, R$ 35. Você não sabe quantos serão. O <code>malloc</code> do assunto 0054 pede
+um bloco de tamanho certo, mas o tamanho precisa ser conhecido na hora do
+pedido. Aqui ele só se descobre no fim. O bloco não cresce sozinho; quem o
+faz crescer é você, com o <code>realloc</code>. Antes dele, vale conhecer um parente do
+<code>malloc</code> que resolve outro incômodo.</p>
+<p>O <strong><code>calloc</code></strong> recebe a quantidade de itens e o tamanho de cada um em
+argumentos separados, e entrega o bloco <strong>zerado</strong> (BACKES, 2013, cap. 11):</p>
+<pre><code class="language-c">int *contagem = calloc(5, sizeof(int)); // 5 ints, todos valendo 0
+</code></pre>
+<p>Use o <code>calloc</code> quando o zero inicial importa: contadores, placares, tabelas
+de frequência. Com o <code>malloc</code>, o bloco viria com lixo e você precisaria de um
+laço só para zerá-lo. Como o <code>malloc</code>, ele devolve <code>NULL</code> se faltar memória.</p>
+<p>Agora o crescimento. O <strong><code>realloc(p, novo_tamanho)</code></strong> muda o tamanho de um
+bloco que já está no heap e <strong>preserva o conteúdo</strong> até o menor dos dois
+tamanhos. Se o bloco cresceu, a parte nova vem com lixo; se encolheu, o que
+passava do novo tamanho se perde (BACKES, 2013, cap. 11).</p>
+<p>Para crescer, o <code>realloc</code> tenta primeiro esticar o bloco no próprio lugar,
+se o espaço logo depois dele estiver livre. Quando não está, ele faz uma
+mudança completa: aloca um bloco novo em outro lugar, copia o conteúdo,
+libera o antigo e devolve o <strong>endereço novo</strong> (BACKES, 2013, cap. 11). É
+como trocar de casa quando a família cresce: os móveis vão junto, mas o
+endereço muda. Daí a regra que mais pega: depois de um <code>realloc</code>, o endereço
+antigo pode não valer mais. Todo ponteiro que apontava para dentro do bloco
+velho virou um <strong>ponteiro solto</strong>, que aponta para memória devolvida.</p>
+<p>O <code>realloc</code> também pode falhar. Se faltar memória, ele devolve <code>NULL</code> e <strong>não
+mexe no bloco antigo</strong>, que continua inteiro e ocupado. Isso cria uma
+armadilha: se você escrever o resultado direto no único ponteiro que tinha o
+endereço do bloco, perde esse endereço. A saída é guardar o resultado num
+ponteiro <strong>temporário</strong>, conferir se não é <code>NULL</code> e só então trocar (CELES;
+RANGEL, 2002).</p>
+<p>Resta decidir quanto crescer. Chamar o <code>realloc</code> a cada Pix funciona, mas
+cada mudança de lugar copia o vetor inteiro. Para evitar isso, guarde dois
+números: a <strong>quantidade</strong>, quantos elementos você já usou, e a
+<strong>capacidade</strong>, quantos cabem no bloco. Enquanto a quantidade for menor que
+a capacidade, o novo Pix entra sem <code>realloc</code>. Quando encher, <strong>dobre</strong> a
+capacidade. Os <code>realloc</code> ficam raros: para guardar 1000 elementos começando
+com capacidade 1, bastam 10 dobras (1, 2, 4, até 1024).</p>
+<blockquote>
+<p>[!WARNING]
+<code>v = realloc(v, n)</code> é o erro clássico: se falhar, <code>v</code> vira <code>NULL</code> e o bloco
+antigo fica no heap sem dono, com os dados perdidos. Use um temporário. E
+não guarde <code>&amp;v[3]</code> antes de um <code>realloc</code>: o bloco pode ter mudado de lugar.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>Os Pix de uma vaquinha vão chegando: R$ 50, 120, 35, 80 e 15. O vetor nasce
+com capacidade 2, dobra para 4 no terceiro Pix e para 8 no quinto:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(void) {
+    int chegando[] = {50, 120, 35, 80, 15}; // os Pix do dia, em R$
+    int capacidade = 2;                      // cabem 2 por enquanto
+    int quantidade = 0;                      // quantos já guardei
+    int *pix = malloc(capacidade * sizeof *pix);
+    if (pix == NULL) {
+        return 1;
+    }
+
+    for (int i = 0; i &lt; 5; i++) {
+        if (quantidade == capacidade) { // encheu: dobra a capacidade
+            int nova = capacidade * 2;
+            int *maior = realloc(pix, nova * sizeof *pix); // temporário!
+            if (maior == NULL) {
+                free(pix); // o bloco antigo continua valendo: libera
+                return 1;
+            }
+            printf(&quot;Capacidade: %d -&gt; %d\n&quot;, capacidade, nova);
+            pix = maior;
+            capacidade = nova;
+        }
+        pix[quantidade] = chegando[i]; // o &quot;push&quot;
+        quantidade++;
+    }
+
+    int total = 0;
+    for (int i = 0; i &lt; quantidade; i++) {
+        total += pix[i];
+    }
+    printf(&quot;%d Pix, total R$ %d\n&quot;, quantidade, total);
+    printf(&quot;Sobram %d posições livres\n&quot;, capacidade - quantidade);
+    free(pix);
+    return 0;
+}
+// Saída:
+// Capacidade: 2 -&gt; 4
+// Capacidade: 4 -&gt; 8
+// 5 Pix, total R$ 300
+// Sobram 3 posições livres
+</code></pre>
+<p>A pergunta &quot;encheu?&quot; vem a cada Pix, mas o desvio para o <code>realloc</code> só acontece
+duas vezes:</p>
+<p>{{fluxograma}}</p>

@@ -1,0 +1,126 @@
+<h2>0017 · Ternário: condição ? a : b</h2>
+<p>Muitas decisões servem só para escolher um valor. O frete é zero ou
+R$ 19,90; a palavra é &quot;item&quot; ou &quot;itens&quot;; a nota mínima é 5 ou 6. Com
+<code>if/else</code>, cada escolha dessas ocupa cinco linhas e repete o nome da
+variável nos dois blocos. Quando o programa tem várias delas, o código
+cresce sem dizer nada de novo.</p>
+<p>Pense no carrinho de uma loja on-line. Ele mostra &quot;3 itens&quot; ou &quot;1 item&quot;,
+conforme a quantidade, e mostra o frete, que é zero para compras a partir
+de R$ 199. Nenhuma dessas decisões faz trabalho: cada uma só escolhe o que
+vai aparecer numa lacuna da tela.</p>
+<p>Para isso o C tem o <strong>operador ternário</strong>, o único da linguagem com três
+partes: uma condição, o valor para quando ela é verdadeira e o valor para
+quando é falsa (DEITEL; DEITEL, 2011, cap. 3). O <code>?</code> separa a condição do
+primeiro valor, e o <code>:</code> separa os dois valores.</p>
+<pre><code class="language-c">condição ? valor_se_verdade : valor_se_falso
+</code></pre>
+<p>A diferença para o <code>if</code> está na natureza das duas coisas. O <code>if</code> é um
+comando: ele escolhe quais instruções rodam. O ternário é uma
+<strong>expressão</strong>: ele <strong>devolve um valor</strong>, como <code>2 + 3</code> devolve 5 (BACKES,
+2013, cap. 4). Por isso ele cabe em lugares em que um <code>if</code> não cabe: à
+direita de uma atribuição, dentro dos argumentos de um <code>printf</code>, no meio de
+uma conta.</p>
+<pre><code class="language-c">double frete = total &gt;= 199 ? 0.0 : 19.90;   // escolhe um valor
+printf(&quot;%s\n&quot;, qtd == 1 ? &quot;item&quot; : &quot;itens&quot;); // escolhe um texto
+</code></pre>
+<p>O C avalia primeiro a condição e depois <strong>só um</strong> dos lados, o escolhido. O
+outro nem é calculado, como no curto-circuito do 0013. Isso torna seguro
+escrever <code>b != 0 ? a / b : 0</code>: quando <code>b</code> é zero, a divisão nunca acontece
+(KERNIGHAN; RITCHIE, 1988, cap. 2).</p>
+<p>Como o ternário devolve um valor só, esse valor precisa ter um tipo só. Os
+dois lados são convertidos para um <strong>tipo comum</strong>, pelas regras de
+conversão do 0008. Em <code>n &gt; 0 ? n : 0.5</code>, com <code>n</code> inteiro, o resultado é
+<code>double</code> mesmo quando quem sai é o <code>n</code> (KERNIGHAN; RITCHIE, 1988, cap. 2).
+O mais simples é manter os dois lados do mesmo tipo.</p>
+<p>Com o ternário, você já conhece quase todos os operadores do C, e vale ver
+a ordem completa. A tabela vai do mais forte ao mais fraco. Quando dois
+operadores da mesma linha aparecem juntos, quem decide é a
+<strong>associatividade</strong>, o sentido em que a conta é feita: <code>a - b - c</code> é
+<code>(a - b) - c</code>, da esquerda para a direita, e <code>a = b = c</code> é <code>a = (b = c)</code>,
+da direita para a esquerda (CPPREFERENCE, s.d.). A tabela completa, com os
+operadores de bits e de ponteiros, está no 0170.</p>
+<table>
+<thead>
+<tr>
+<th>Operadores</th>
+<th>Associatividade</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>x++</code> <code>x--</code> (pós)</td>
+<td>esquerda → direita</td>
+</tr>
+<tr>
+<td><code>!</code> <code>-x</code> <code>++x</code> <code>--x</code> <code>(tipo)</code> <code>sizeof</code></td>
+<td>direita → esquerda</td>
+</tr>
+<tr>
+<td><code>*</code> <code>/</code> <code>%</code></td>
+<td>esquerda → direita</td>
+</tr>
+<tr>
+<td><code>+</code> <code>-</code></td>
+<td>esquerda → direita</td>
+</tr>
+<tr>
+<td><code>&lt;</code> <code>&lt;=</code> <code>&gt;</code> <code>&gt;=</code></td>
+<td>esquerda → direita</td>
+</tr>
+<tr>
+<td><code>==</code> <code>!=</code></td>
+<td>esquerda → direita</td>
+</tr>
+<tr>
+<td><code>&amp;&amp;</code></td>
+<td>esquerda → direita</td>
+</tr>
+<tr>
+<td><code>||</code></td>
+<td>esquerda → direita</td>
+</tr>
+<tr>
+<td><code>?:</code></td>
+<td>direita → esquerda</td>
+</tr>
+<tr>
+<td><code>=</code> <code>+=</code> <code>-=</code> <code>*=</code> <code>/=</code> <code>%=</code></td>
+<td>direita → esquerda</td>
+</tr>
+</tbody></table>
+<p>Repare onde o <code>?:</code> ficou: quase no fim, acima só da atribuição. Isso
+explica o erro do alerta abaixo. Use o ternário para escolher <strong>um valor</strong>
+entre dois, com uma condição curta. Se cada lado precisa fazer várias
+coisas, ou se você começa a pôr um ternário dentro de outro, volte ao
+<code>if/else</code>, que se lê com mais facilidade.</p>
+<blockquote>
+<p>[!WARNING]
+<strong>O ternário tem precedência baixíssima.</strong> <code>40 - estudante ? 20 : 0</code> é
+<code>(40 - estudante) ? 20 : 0</code>, que dá 20 para todo mundo. Escreva
+<code>40 - (estudante ? 20 : 0)</code>: no meio de uma conta, ternário entre
+parênteses.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>No carrinho da loja, o frete é zero acima de R$ 199. Entram R$ 150, &quot;passou
+de 199?&quot; é Não, e o ternário devolve 19.90 para a caixinha <code>frete</code>:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    int qtd = 3;
+    double total = 150.0;
+
+    double frete = total &gt;= 199 ? 0.0 : 19.90;
+
+    printf(&quot;%d %s no carrinho\n&quot;, qtd, qtd == 1 ? &quot;item&quot; : &quot;itens&quot;);
+    printf(&quot;Frete: R$ %.2f\n&quot;, frete);
+    printf(&quot;Total: R$ %.2f\n&quot;, total + frete);
+    return 0;
+}
+// Saída:
+// 3 itens no carrinho
+// Frete: R$ 19.90
+// Total: R$ 169.90
+</code></pre>
+<p>O desenho é um <code>if/else</code> em que cada lado só guarda um valor na mesma
+variável; um ternário resolve isso em uma linha:</p>
+<p>{{fluxograma}}</p>

@@ -1,0 +1,3039 @@
+<!-- Gerado por _gerador. Para mudar este arquivo, edite _gerador/modulos/06-ponteiros/ e rode: cd _gerador && npm run gerar --><h1>Módulo 06 · Ponteiros</h1>
+<blockquote>
+<p>[!IMPORTANT]
+<strong>Mundo 2 · Memória e dados · Rota do jogo: etapa 6 de 29</strong></p>
+<p><strong>Missão:</strong> enxergar endereços de memória e usá-los.</p>
+<p><strong>Vem de:</strong> <a href="05-vetores-e-strings.html">Módulo 05 · Vetores, matrizes e strings</a>. <strong>Segue para:</strong> <a href="07-memoria-dinamica.html">Módulo 07 · Memória dinâmica</a>.</p>
+<p><strong>Checkpoints desta fase:</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> Ler os assuntos 0044 a 0052 e refazer os exemplos</li>
+<li><input disabled="" type="checkbox"> Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho</li>
+<li><input disabled="" type="checkbox"> Fechar a lista prática (P0601 a P0630)</li>
+<li><input disabled="" type="checkbox"> Enfrentar os desafios do módulo</li>
+<li><input disabled="" type="checkbox"> Chefão: resolver as questões de prova do módulo sem consultar</li>
+</ul>
+</blockquote>
+<p>Endereços, ponteiros, passagem por referência, aritmética de ponteiros,
+<code>char *</code>, <code>**</code>, ponteiro para função e <code>void *</code>. Depende dos módulos 04 e 05
+(funções, vetores e strings) e é a base da memória dinâmica (07), das structs
+(08) e de todas as estruturas encadeadas.</p>
+<h2>O que você vai aprender</h2>
+<ul>
+<li>a memória como <strong>gaveteiro numerado</strong>: endereço, <code>&amp;</code> e <code>%p</code></li>
+<li><strong>ponteiros</strong>: <code>*</code>, desreferência e <code>NULL</code></li>
+<li><strong>passagem por referência</strong>: a troca (swap), vários resultados e o <code>&amp;</code> do <code>scanf</code></li>
+<li><strong>aritmética de ponteiros</strong>: <code>v[i]</code> é <code>*(v + i)</code></li>
+<li><code>char *</code> contra <code>char []</code>, e o literal de string <strong>só leitura</strong></li>
+<li><strong>ponteiro para ponteiro</strong> (<code>**</code>) e vetor de ponteiros</li>
+<li><strong>ponteiro para função</strong>: callbacks e <code>qsort</code></li>
+<li><strong><code>void *</code></strong>: ponteiro genérico, cast e funções para qualquer tipo</li>
+</ul>
+<h2>Antes de começar</h2>
+<p>Erro de ponteiro quase nunca aparece na compilação: surge na execução. Rode
+sempre com as flags de estudo (AddressSanitizer) e leia o relatório de cima
+para baixo: o tipo do erro, a linha e a variável.</p>
+<p>Nos diagramas, o roxo marca os ponteiros. Os endereços dos desenhos são
+fictícios (<code>0x1000</code>, <code>0x1004</code>); os reais mudam a cada execução. Importam as
+relações entre eles (iguais, 4 bytes depois). Para seguir um ponteiro, use o
+<code>gdb</code> (<code>print p</code>, <code>print *p</code>, <code>print &amp;x</code>):</p>
+<pre><code class="language-bash">sudo pacman -S gdb          # Arch Linux
+sudo apt install gdb        # Debian / Ubuntu
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Assunto</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="#0044--mem%C3%B3ria-e-endere%C3%A7os">0044</a></td>
+<td>Memória e endereços</td>
+</tr>
+<tr>
+<td><a href="#0045--ponteiros">0045</a></td>
+<td>Ponteiros</td>
+</tr>
+<tr>
+<td><a href="#0046--passagem-por-refer%C3%AAncia">0046</a></td>
+<td>Passagem por referência</td>
+</tr>
+<tr>
+<td><a href="#0047--ponteiros-e-vetores">0047</a></td>
+<td>Ponteiros e vetores</td>
+</tr>
+<tr>
+<td><a href="#0048--ponteiros-e-strings">0048</a></td>
+<td>Ponteiros e strings</td>
+</tr>
+<tr>
+<td><a href="#0049--ponteiro-para-ponteiro">0049</a></td>
+<td>Ponteiro para ponteiro</td>
+</tr>
+<tr>
+<td><a href="#0050--ponteiro-para-fun%C3%A7%C3%A3o">0050</a></td>
+<td>Ponteiro para função</td>
+</tr>
+<tr>
+<td><a href="#0051--void--e-cast">0051</a></td>
+<td>void * e cast</td>
+</tr>
+<tr>
+<td><a href="#0052--juntando-tudo-o-ranking-da-feira">0052</a></td>
+<td>Juntando tudo: o ranking da feira</td>
+</tr>
+</tbody></table>
+<hr>
+<blockquote>
+<p>[!NOTE]
+Cada assunto é um capítulo: <strong>Conceito</strong> (a explicação), <strong>Exemplos de uso</strong> (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e <strong>Exercícios</strong> (cada um é um arquivo em <code>material/</code> com o esqueleto, as dicas e o espaço para a resposta; resoluções em <code>_respostas/06-ponteiros/</code>).</p>
+</blockquote>
+<h2>0044 · Memória e endereços</h2>
+<h3>Conceito</h3>
+<p>Até aqui você guardou valores em variáveis e as chamou pelo nome. Funcionou
+porque o compilador cuidou de um detalhe por você: decidir em que lugar da
+memória cada variável fica. Para entender ponteiros, passagem por referência
+e memória dinâmica, você precisa enxergar esse detalhe. Este assunto abre o
+módulo mostrando o que é a memória e como se chega a um lugar dentro dela.</p>
+<p>Pense no guarda-volumes do mercado. Você entrega a mochila e recebe a ficha
+47. Não precisa saber em que prateleira ela ficou: com o número, o
+funcionário vai direto à gaveta certa. A <strong>memória</strong> principal do computador,
+a RAM, funciona assim. Ela é uma fileira enorme de gavetas de <strong>1 byte</strong>, e
+cada gaveta tem um número, o seu <strong>endereço</strong> (FEOFILOFF, 2009, ap. D).</p>
+<p>Quando você declara <code>int idade = 30;</code>, o compilador separa 4 gavetas
+seguidas para <code>idade</code> e guarda o 30 nelas. O <strong>endereço da variável</strong> é o
+número da primeira dessas gavetas. Cada tipo ocupa uma quantidade diferente:
+o <code>char</code> usa 1 gaveta, o <code>int</code> usa 4 e o <code>double</code> usa 8, como o <code>sizeof</code> do
+assunto 0002 mostra. Seja qual for o tamanho, o endereço da variável é sempre
+o da primeira gaveta (BACKES, 2013, cap. 10).</p>
+<p>Você pensa em nomes, como <code>idade</code> e <code>preco</code>. O processador não conhece nomes;
+ele só sabe ler e escrever em endereços. Quem faz a ponte é o compilador:
+ao traduzir o programa, ele troca cada nome pelo endereço correspondente
+(BACKES, 2013, cap. 10). Os nomes existem para você, e os endereços para a
+máquina.</p>
+<p>O C deixa você perguntar o endereço de uma variável com o operador <strong><code>&amp;</code></strong>,
+lido como &quot;endereço de&quot;. <code>&amp;idade</code> é a pergunta &quot;em que gaveta você mora?&quot;.
+Você usa esse operador desde o assunto 0006, no <code>scanf(&quot;%d&quot;, &amp;idade)</code>: o
+<code>scanf</code> precisa saber <strong>onde</strong> guardar o número que leu, e o <code>&amp;</code> entrega esse
+lugar (DEITEL; DEITEL, 2011, cap. 7). O assunto 0046 conta essa história
+inteira.</p>
+<p>Para ver um endereço na tela, o <code>printf</code> tem o <strong><code>%p</code></strong>, que mostra o número
+em hexadecimal, a base 16, como <code>0x7ffd5e8c</code>. O <code>%p</code> espera um valor do tipo
+<code>void *</code>, então a forma correta é <code>printf(&quot;%p\n&quot;, (void *)&amp;idade);</code>. O
+assunto 0051 explica esse tipo (DEITEL; DEITEL, 2011, cap. 7).</p>
+<p>Se você rodar o mesmo programa duas vezes, os endereços mudam. Não é erro: o
+sistema sorteia em que região o programa vai morar a cada execução, um
+recurso de segurança chamado <strong>ASLR</strong>. Quem tenta explorar uma falha não sabe
+de antemão onde as coisas estão. Por isso, não decore endereços nem conte com
+eles de uma execução para outra.</p>
+<p>As variáveis locais, como <code>idade</code> dentro do <code>main</code>, ficam na <strong>pilha</strong> que
+você viu no assunto 0031. O módulo 07 mostra o mapa completo da memória de um
+programa, com a pilha e as outras regiões.</p>
+<blockquote>
+<p>[!WARNING]
+Nunca mostre endereço com <code>%d</code> ou <code>%x</code>: o endereço tem 8 bytes em 64 bits,
+e o <code>%d</code> lê só 4, então o número sai cortado ou negativo. Use <code>%p</code> com
+<code>(void *)</code>. E não deduza nada da ordem de variáveis soltas: o compilador as
+arruma como quiser. Só num vetor a ordem é garantida.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>No cadastro da academia, a idade (<code>int</code>), a mensalidade (<code>double</code>) e o plano
+(<code>char</code>) ganham gavetas. Os endereços do desenho são fictícios:</p>
+<p align="center"><img src="material/0044-ideia.svg" alt="Diagrama da ideia: Memória e endereços" width="858"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    int idade = 30;
+    double mensalidade = 119.90;
+    char plano = &#39;B&#39;;
+
+    // &amp; pergunta &quot;em que gaveta você mora?&quot;; %p mostra a resposta em hexa
+    printf(&quot;idade:       %d, mora em %p, ocupa %zu bytes\n&quot;,
+           idade, (void *)&amp;idade, sizeof idade);
+    printf(&quot;mensalidade: %.2f, mora em %p, ocupa %zu bytes\n&quot;,
+           mensalidade, (void *)&amp;mensalidade, sizeof mensalidade);
+    printf(&quot;plano:       %c, mora em %p, ocupa %zu byte\n&quot;,
+           plano, (void *)&amp;plano, sizeof plano);
+    return 0;
+}
+// Saída (os endereços mudam a cada execução):
+// idade:       30, mora em 0x7f0440e00030, ocupa 4 bytes
+// mensalidade: 119.90, mora em 0x7f0440e00040, ocupa 8 bytes
+// plano:       B, mora em 0x7f0440e00020, ocupa 1 byte
+</code></pre>
+<p>Rode duas vezes: valores e tamanhos se repetem, endereços não (o sistema
+sorteia onde o programa mora). Para cada
+variável, as mesmas três perguntas: o que tem dentro, onde mora e quanto ocupa:</p>
+<p align="center"><img src="material/0044-fluxograma.svg" alt="Fluxograma: Memória e endereços" width="1566"></p>
+<p><strong>Exemplo A087 · O valor muda, a gaveta não</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    double saldo = 250.00; // saldo da conta, antes dos Pix do dia
+
+    printf(&quot;saldo = %7.2f, mora em %p\n&quot;, saldo, (void *)&amp;saldo);
+
+    saldo -= 89.90; // Pix para a conta de luz
+    printf(&quot;saldo = %7.2f, mora em %p\n&quot;, saldo, (void *)&amp;saldo);
+
+    saldo += 1200.00; // salário caiu
+    printf(&quot;saldo = %7.2f, mora em %p\n&quot;, saldo, (void *)&amp;saldo);
+
+    // atribuir troca o conteúdo da gaveta; o endereço fica o mesmo até o fim
+    // do programa
+    double reserva = saldo; // cópia do valor: outra gaveta, mesmo conteúdo
+    printf(&quot;reserva = %7.2f, mora em %p\n&quot;, reserva, (void *)&amp;reserva);
+    // endereços também se comparam com ==
+    printf(&quot;mesmo valor? %d  mesma gaveta? %d\n&quot;, reserva == saldo,
+           &amp;reserva == &amp;saldo);
+    return 0;
+}
+// Saída (os endereços mudam a cada execução, mas se repetem dentro dela):
+// saldo =  250.00, mora em 0x7f8a1c500020
+// saldo =  160.10, mora em 0x7f8a1c500020
+// saldo = 1360.10, mora em 0x7f8a1c500020
+// reserva = 1360.10, mora em 0x7f8a1c500040
+// mesmo valor? 1  mesma gaveta? 0
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A087.c -o ~/LPEDC/material/A087 &amp;&amp; ~/LPEDC/material/A087
+</code></pre>
+<p><strong>Exemplo A088 · As gavetas de um vetor</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    int passos[4] = {8200, 10450, 6300, 12010}; // passos de 4 dias
+    double km[4] = {5.7, 7.3, 4.4, 8.4};        // os mesmos dias, em km
+
+    // num vetor as gavetas ficam coladas: cada uma começa onde a outra acaba
+    for (int i = 0; i &lt; 4; i++) {
+        printf(&quot;passos[%d] em %p    km[%d] em %p\n&quot;,
+               i, (void *)&amp;passos[i], i, (void *)&amp;km[i]);
+    }
+    printf(&quot;int: %zu bytes por gaveta; double: %zu bytes\n&quot;, sizeof passos[0], sizeof km[0]);
+    printf(&quot;o vetor passos inteiro: %zu bytes\n&quot;, sizeof passos);
+    return 0;
+}
+// Saída (os endereços mudam a cada execução; repare no final de cada um):
+// passos[0] em 0x7fe2a0e00020    km[0] em 0x7fe2a0e00040
+// passos[1] em 0x7fe2a0e00024    km[1] em 0x7fe2a0e00048
+// passos[2] em 0x7fe2a0e00028    km[2] em 0x7fe2a0e00050
+// passos[3] em 0x7fe2a0e0002c    km[3] em 0x7fe2a0e00058
+// int: 4 bytes por gaveta; double: 8 bytes
+// o vetor passos inteiro: 16 bytes
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A088.c -o ~/LPEDC/material/A088 &amp;&amp; ~/LPEDC/material/A088
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E259</strong> · ★☆☆</p>
+<p>No ônibus da linha 0.420, o painel guarda três dados: a quantidade de
+passageiros (int, 42), a tarifa (float, 4.40) e a letra do setor
+(char, &#39;X&#39;). Declare as três variáveis e mostre, para cada uma, o valor,
+o endereço e quantos bytes ela ocupa.</p>
+<pre><code class="language-text">Saída esperada (os endereços mudam a cada execução):
+passageiros = 42, endereço 0x7f..., tamanho 4
+tarifa = 4.40, endereço 0x7f..., tamanho 4
+setor = X, endereço 0x7f..., tamanho 1
+</code></pre>
+<p><strong>Exercício E261</strong> · ★★☆</p>
+<p>A lanchonete guarda o preço de 2 tamanhos (linhas) de 3 sucos (colunas)
+numa matriz double precos[2][3]:</p>
+<pre><code class="language-text">{ {6.0, 7.5, 8.0}, {9.0, 11.0, 12.5} }
+</code></pre>
+<p>Mostre o valor e o endereço de cada posição, linha por linha, com dois
+for aninhados. Depois mostre, com sizeof, quantos bytes ocupa uma
+posição, uma linha inteira (precos[0]) e a matriz toda. Compare os
+endereços de precos[0][2] e precos[1][0] na saída: a linha 1 começa logo
+onde a linha 0 acaba.</p>
+<pre><code class="language-text">Saída esperada (endereços mudam a cada execução):
+precos[0][0] = 6.00 em 0x7f...30
+precos[0][1] = 7.50 em 0x7f...38
+...
+precos[1][2] = 12.50 em 0x7f...58
+uma posição: 8 bytes
+uma linha: 24 bytes
+a matriz: 48 bytes
+</code></pre>
+<p><strong>Exercício E262</strong> · ★★☆</p>
+<p>Na pizzaria, declare int pedidos = 15 e um ponteiro int *p que guarda o
+endereço de pedidos. Mostre o valor de pedidos, o endereço de pedidos com
+%p (com o cast (void *)), o endereço guardado em p e, por fim, &quot;sim&quot; ou
+&quot;não&quot; conforme os dois endereços sejam iguais. O endereço muda a cada
+execução.</p>
+<pre><code class="language-text">Saída esperada:
+Valor: 15
+Endereço: 0x7ffe59064b4c
+Pelo ponteiro: 0x7ffe59064b4c
+Mesmo endereço: sim
+</code></pre>
+<p><strong>Exercício E263</strong> · ★★★</p>
+<p>Variáveis declaradas juntas ficam juntas na memória? Escreva um programa
+que declare</p>
+<pre><code class="language-text">int a = 1, b = 2, c = 3;
+int v[3] = {1, 2, 3};
+</code></pre>
+<p>e mostre o endereço de a, b e c (uma linha cada) e depois, com um for, o
+endereço de v[0], v[1] e v[2]. No fim, mostre sizeof v e a soma
+sizeof a + sizeof b + sizeof c. Rode com o rodar. Depois compile SEM o
+sanitizer e rode de novo, para comparar as duas saídas:</p>
+<pre><code class="language-text">gcc -std=c17 E263.c -o e263 &amp;&amp; ./e263
+</code></pre>
+<pre><code class="language-text">Saída esperada (endereços mudam a cada execução; com o rodar):
+a em 0x7f...30
+b em 0x7f...40
+c em 0x7f...50
+v[0] em 0x7f...60
+v[1] em 0x7f...64
+v[2] em 0x7f...68
+sizeof v = 12, a + b + c = 12
+</code></pre>
+<hr>
+<h2>0045 · Ponteiros</h2>
+<h3>Conceito</h3>
+<p>O assunto 0044 mostrou que toda variável mora num endereço e que o <code>&amp;</code>
+descobre esse número. Falta guardá-lo. Se o endereço é um número, ele pode
+ficar numa variável, e com ele na mão você consegue chegar à variável
+original de qualquer parte do programa, mesmo sem saber o nome dela.</p>
+<p>Pense no entregador do app de comida. Ele não carrega a sua casa no celular;
+carrega o <strong>endereço</strong>. Com ele, chega à porta e entrega o pedido. Em C, a
+variável que faz o papel desse celular é o <strong>ponteiro</strong>: uma variável que
+guarda um endereço em vez de um valor comum. O ponteiro também mora numa
+gaveta e tem endereço próprio, mas o que ele guarda é o número de <strong>outra</strong>
+gaveta. Ziviani e a tradução do livro de Kernighan e Ritchie usam o nome
+<strong>apontador</strong>; é a mesma coisa (ZIVIANI, 2010).</p>
+<p>Na declaração, um <code>*</code> antes do nome indica que a variável é um ponteiro:
+<code>int *cartao;</code> lê-se &quot;cartao é um ponteiro para int&quot;. O tipo antes do <code>*</code>
+diz <strong>o que</strong> mora no endereço apontado e, com isso, quantos bytes ler lá:
+4 para um <code>int</code>, 8 para um <code>double</code> (DEITEL; DEITEL, 2011, cap. 7).</p>
+<p>Dois operadores fazem todo o trabalho. O <code>&amp;x</code>, que você já conhece, dá o
+endereço de <code>x</code>, e esse endereço vai para o ponteiro: <code>cartao = &amp;pontos;</code>.
+O <code>*cartao</code> faz o caminho de volta: vai ao endereço guardado em <code>cartao</code> e
+mexe no que está lá. Essa operação se chama <strong>desreferenciar</strong> o ponteiro
+(KERNIGHAN; RITCHIE, 1989, cap. 5). Ler <code>*cartao</code> dá o valor de <code>pontos</code>;
+escrever <code>*cartao = 150;</code> muda <code>pontos</code>, sem que o nome <code>pontos</code> apareça na
+linha.</p>
+<pre><code class="language-c">int pontos = 120;
+int *cartao = &amp;pontos;   // cartao guarda o endereço de pontos
+*cartao = *cartao + 30;  // vai até pontos e soma 30
+printf(&quot;%d\n&quot;, pontos);  // 150
+</code></pre>
+<p>O mesmo símbolo <code>*</code> tem três papéis, e só o contexto os separa. Entre dois
+valores, como em <code>a * b</code>, é a multiplicação. Numa declaração, como em
+<code>int *p</code>, diz que <code>p</code> é um ponteiro. Na frente de um ponteiro já declarado,
+como em <code>*p = 5</code>, é a desreferência (BACKES, 2013, cap. 10). Quando a leitura
+travar, pergunte em qual dos três casos você está.</p>
+<p>Às vezes o ponteiro ainda não tem para onde apontar. Para isso existe o
+<strong><code>NULL</code></strong>, um endereço especial que quer dizer &quot;lugar nenhum&quot;. Na prática é
+o endereço 0, uma região que o sistema proíbe de propósito: desreferenciar
+<code>NULL</code> derruba o programa na hora, com o erro <em>segmentation fault</em>, em vez de
+estragar algum dado em silêncio. Antes de usar um ponteiro que pode estar
+vazio, teste <code>if (cartao != NULL)</code> (DEITEL; DEITEL, 2011, cap. 7).</p>
+<p>Um último detalhe ajuda a montar a imagem certa. Todo ponteiro para dado tem
+o mesmo tamanho, 8 bytes num computador de 64 bits, porque todos guardam a
+mesma coisa: um endereço. O tipo do ponteiro não muda o tamanho dele; muda a
+<strong>leitura</strong>. <code>*cartao</code> busca 4 bytes e os trata como <code>int</code> porque <code>cartao</code> é
+um <code>int *</code> (BACKES, 2013, cap. 10).</p>
+<blockquote>
+<p>[!WARNING]
+<code>int *p;</code> sem valor guarda <strong>lixo</strong>, um endereço qualquer, e <code>*p = 10;</code>
+escreve numa gaveta desconhecida: pode travar na hora ou corromper outra
+variável e dar problema só depois. Inicialize com um endereço ou <code>NULL</code>. E
+em <code>int *a, b;</code> só <code>a</code> é ponteiro; para dois, <code>int *a, *b;</code>.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>No caixa da farmácia, o cliente tem 120 pontos. O ponteiro <code>cartao</code> começa em
+<code>NULL</code>, recebe <code>&amp;pontos</code>, e a compra soma 30 <strong>por meio do ponteiro</strong>:</p>
+<p align="center"><img src="material/0045-ideia.svg" alt="Diagrama da ideia: Ponteiros" width="858"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    int pontos = 120;     // pontos do cartão fidelidade
+    int *cartao = NULL;   // ponteiro para int; NULL: ainda não aponta para nada
+
+    cartao = &amp;pontos;     // o cliente passou o cartão: cartao guarda &amp;pontos
+
+    printf(&quot;&amp;pontos = %p\n&quot;, (void *)&amp;pontos);
+    printf(&quot;cartao  = %p\n&quot;, (void *)cartao); // o mesmo endereço
+    printf(&quot;*cartao = %d\n&quot;, *cartao);        // o que tem na gaveta apontada
+
+    if (cartao != NULL) {
+        *cartao = *cartao + 30; // compra de R$ 30: muda pontos ATRAVÉS do ponteiro
+    } else {
+        printf(&quot;Compra sem cartão\n&quot;);
+    }
+    printf(&quot;pontos  = %d\n&quot;, pontos);
+    printf(&quot;&amp;cartao = %p\n&quot;, (void *)&amp;cartao); // o ponteiro também mora numa gaveta
+    return 0;
+}
+// Saída (os endereços mudam a cada execução):
+// &amp;pontos = 0x7f631f200030
+// cartao  = 0x7f631f200030
+// *cartao = 120
+// pontos  = 150
+// &amp;cartao = 0x7f631f200040
+</code></pre>
+<p><code>cartao</code> é o endereço guardado, <code>*cartao</code> o valor lá dentro e <code>&amp;cartao</code> onde o
+próprio ponteiro mora. Antes de desreferenciar, o teste contra <code>NULL</code>:</p>
+<p align="center"><img src="material/0045-fluxograma.svg" alt="Fluxograma: Ponteiros" width="522"></p>
+<p><strong>Exemplo A089 · Duas cancelas, um contador</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    int vagas = 40; // vagas livres no estacionamento do shopping
+
+    // dois ponteiros podem apontar para a MESMA variável
+    int *entrada = &amp;vagas, *saida = &amp;vagas; // o * vai em cada nome
+    int *cancela_vip = NULL;                // ainda não foi instalada
+
+    *entrada -= 1; // entrou um carro
+    *entrada -= 1; // entrou outro
+    *saida += 1;   // saiu um
+    printf(&quot;vagas = %d\n&quot;, vagas);
+
+    // comparar ponteiros pergunta &quot;apontam para a mesma gaveta?&quot;
+    printf(&quot;entrada == saida? %d\n&quot;, entrada == saida);
+    printf(&quot;*entrada = %d, *saida = %d\n&quot;, *entrada, *saida);
+
+    // antes de usar *cancela_vip, confira: *NULL derruba o programa
+    if (cancela_vip != NULL) {
+        *cancela_vip -= 1;
+    } else {
+        printf(&quot;cancela VIP desligada: nada a fazer\n&quot;);
+    }
+
+    int vagas_moto = 12;
+    saida = &amp;vagas_moto; // saida agora aponta para outra gaveta
+    *saida += 1;
+    printf(&quot;entrada == saida? %d\n&quot;, entrada == saida);
+    printf(&quot;vagas = %d, vagas_moto = %d\n&quot;, vagas, vagas_moto);
+    return 0;
+}
+// Saída:
+// vagas = 39
+// entrada == saida? 1
+// *entrada = 39, *saida = 39
+// cancela VIP desligada: nada a fazer
+// entrada == saida? 0
+// vagas = 39, vagas_moto = 13
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A089.c -o ~/LPEDC/material/A089 &amp;&amp; ~/LPEDC/material/A089
+</code></pre>
+<p><strong>Exemplo A090 · Gasolina ou etanol?</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    float gasolina = 5.89f, etanol = 4.29f;
+    float *escolha = &amp;gasolina; // começa apontando para a gasolina
+
+    // regra dos 70%: se o etanol custa até 70% da gasolina, compensa
+    if (etanol / gasolina &lt;= 0.7f) {
+        escolha = &amp;etanol;      // o ponteiro muda de alvo; as variáveis, não
+    }
+    printf(&quot;Escolhido: R$ %.2f o litro\n&quot;, *escolha);
+    printf(&quot;Com R$ 100 dá %.1f litros\n&quot;, 100.0f / *escolha);
+
+    etanol = 3.99f;            // baixou: 3.99 / 5.89 = 0.68, agora compensa
+    if (etanol / gasolina &lt;= 0.7f) {
+        escolha = &amp;etanol;
+    }
+    printf(&quot;Escolhido: R$ %.2f o litro\n&quot;, *escolha);
+
+    // o ponteiro tem o tamanho de um endereço; *escolha, o tamanho de um float
+    printf(&quot;sizeof escolha = %zu, sizeof *escolha = %zu\n&quot;, sizeof escolha, sizeof *escolha);
+    return 0;
+}
+// Saída:
+// Escolhido: R$ 5.89 o litro
+// Com R$ 100 dá 17.0 litros
+// Escolhido: R$ 3.99 o litro
+// sizeof escolha = 8, sizeof *escolha = 4
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A090.c -o ~/LPEDC/material/A090 &amp;&amp; ~/LPEDC/material/A090
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E265</strong> · ★☆☆</p>
+<p>O ar-condicionado da sala marca 22.5 graus. Declare double temperatura =
+22.5 e um ponteiro pt que aponte para ela. Usando SÓ o ponteiro (sem
+escrever temperatura do lado esquerdo do =), mostre a temperatura,
+aumente 1.5 grau e mostre de novo. No fim, mostre a variável temperatura
+pelo nome para provar que ela mudou.</p>
+<pre><code class="language-text">Saída esperada:
+Pelo ponteiro: 22.5
+Pelo ponteiro: 24.0
+Pela variável: 24.0
+</code></pre>
+<p><strong>Exercício E267</strong> · ★★☆</p>
+<p>Na academia, declare int peso = 0 e int meta = 78, e dois ponteiros, um para
+cada variável (peso_ptr e meta_ptr). Mude o peso para 82 escrevendo pelo
+ponteiro peso_ptr. Depois mostre peso e, lendo pelo ponteiro meta_ptr, a
+meta.</p>
+<pre><code class="language-text">Saída esperada:
+Peso: 82
+Meta: 78
+</code></pre>
+<p><strong>Exercício E268</strong> · ★★☆</p>
+<p>No check-in do aeroporto, a companhia aceita uma mala de até 23 kg sem
+cobrar. Você tem duas malas: mala_azul com 19 kg e mala_preta com 26 kg.
+Complete o programa: faça o ponteiro pesada apontar para a mala mais
+pesada e, usando só o ponteiro, tire 4 kg dela (você passou umas roupas
+para a mochila). Depois mostre as duas malas.</p>
+<pre><code class="language-text">Saída esperada:
+Mais pesada: 26 kg
+Depois de tirar 4 kg: azul 19 kg, preta 22 kg
+</code></pre>
+<p><strong>Exercício E269</strong> · ★★★</p>
+<p>Transforme o trecho abaixo num teste de mesa que o próprio programa
+imprime. Cole o código no main e, depois da declaração e depois de CADA
+uma das cinco linhas, acrescente um printf que mostre a linha executada
+e os valores de a, b, *p e *q naquele momento.</p>
+<pre><code class="language-text">int a = 3, b = 8;
+int *p = &amp;a, *q = &amp;b;
+</code></pre>
+<pre><code class="language-text">*p = *q + 1;
+p = q;
+*p = *p * 2;
+q = &amp;a;
+*q -= 4;
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+início        a = 3, b = 8, *p = 3, *q = 8
+*p = *q + 1   a = 9, b = 8, *p = 9, *q = 8
+p = q         a = 9, b = 8, *p = 8, *q = 8
+...
+*q -= 4       a = 5, b = 16, *p = 16, *q = 5
+</code></pre>
+<hr>
+<h2>0046 · Passagem por referência</h2>
+<h3>Conceito</h3>
+<p>No mercadinho, as etiquetas saíram trocadas: o arroz ficou a R$ 8 e o feijão
+a R$ 25. Você quer uma função <code>troca</code> que conserte isso, recebendo os dois
+preços e trocando um pelo outro. A versão óbvia, que recebe dois <code>int</code> e
+troca, compila e roda, mas os preços do <code>main</code> continuam errados. O motivo
+está no jeito como o C chama funções.</p>
+<p>No C, <strong>todo argumento é passado por valor</strong> (assunto 0029): a função recebe
+uma <strong>cópia</strong> do que você mandou (DEITEL; DEITEL, 2011, cap. 7). Uma chamada
+<code>troca_copias(arroz, feijao)</code> cria duas variáveis novas, <code>a</code> e <code>b</code>, com 8 e
+25. A função troca essas cópias e termina, e as cópias somem junto com o
+frame dela (assunto 0031). O <code>arroz</code> do <code>main</code> nem fica sabendo.</p>
+<p>A imagem é a de uma reforma. Se você entrega ao pintor uma foto da sua sala,
+ele pinta a foto e a parede continua igual. Se entrega o endereço da casa, ele
+vai até lá e pinta a parede de verdade. Em C, a saída é entregar o
+<strong>endereço</strong> em vez do valor. O endereço também chega como cópia, mas a
+cópia aponta para <strong>a mesma gaveta</strong>, e <code>*a</code> dentro da função é a própria
+variável de quem chamou. Esse arranjo se chama <strong>passagem por referência</strong>; o
+C não tem esse mecanismo pronto e o simula com ponteiros (KERNIGHAN; RITCHIE,
+1989, cap. 5).</p>
+<p>Na prática, a mudança aparece nos dois lados. A função declara ponteiros nos
+parâmetros, <code>void troca(int *a, int *b)</code>, e quem chama passa endereços,
+<code>troca(&amp;arroz, &amp;feijao)</code> (BACKES, 2013, cap. 10). Dentro da função, cada
+leitura e escrita no dado de fora passa pelo <code>*</code>: guarde <code>*a</code> numa auxiliar,
+copie <code>*b</code> para <code>*a</code> e a auxiliar para <code>*b</code>.</p>
+<p>Isso explica o <code>&amp;</code> que você escreve no <code>scanf</code> desde o começo do curso.
+<code>scanf(&quot;%d&quot;, &amp;total)</code> precisa <strong>escrever</strong> na variável, então pede o
+endereço dela. Sem o <code>&amp;</code>, ele receberia uma cópia do lixo guardado em
+<code>total</code> e escreveria num endereço inventado. Já <code>scanf(&quot;%s&quot;, nome)</code> vai sem
+<code>&amp;</code> porque o nome de um vetor já é o endereço do primeiro elemento (BACKES,
+2013, cap. 10); o assunto 0047 detalha essa conversão.</p>
+<p>O mesmo recurso resolve outro limite. O <code>return</code> devolve <strong>um</strong> valor só.
+Quando a função precisa entregar dois ou mais resultados, ela recebe
+ponteiros e escreve neles: cada ponteiro é uma caixa de saída que quem chamou
+preparou. O A092 racha a conta de um restaurante assim, devolvendo o valor de
+cada pessoa e a sobra (DEITEL; DEITEL, 2011, cap. 7).</p>
+<p>Passar um endereço custa 8 bytes, seja qual for o tamanho do dado apontado.
+Por isso, no módulo 08, uma struct grande vai para a função por ponteiro,
+mesmo quando a função só precisa lê-la. Nesse caso, marque o parâmetro como
+<code>const int *p</code>: a função pode ler <code>*p</code>, e o compilador recusa qualquer
+<code>*p = ...</code> lá dentro (DEITEL; DEITEL, 2011, cap. 7).</p>
+<blockquote>
+<p>[!WARNING]
+Esquecer o <code>&amp;</code> na chamada, <code>troca(arroz, feijao)</code>, manda o número 8 onde se
+espera um endereço; o compilador avisa e, se rodar, o programa cai.
+Esquecer o <code>*</code> na função (<code>a = b;</code>) troca só os ponteiros locais, que são
+cópias. Quem mexe no dado de quem chamou é sempre <code>*a</code>.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>No mercadinho, as etiquetas saíram trocadas: arroz a R$ 8, feijão a R$ 25. A
+<code>troca</code> recebe <code>0x1000</code> e <code>0x1004</code>, guarda o 8 em <code>tmp</code> e mexe direto nas
+gavetas do <code>main</code>:</p>
+<p align="center"><img src="material/0046-ideia.svg" alt="Diagrama da ideia: Passagem por referência" width="858"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// recebe CÓPIAS: troca as cópias e o main nem fica sabendo
+void troca_copias(int a, int b) {
+    int tmp = a;
+    a = b;
+    b = tmp;
+}
+
+// recebe ENDEREÇOS: troca o que está nas gavetas do main
+void troca(int *a, int *b) {
+    int tmp = *a; // guarda o valor da primeira gaveta
+    *a = *b;      // primeira gaveta recebe o da segunda
+    *b = tmp;     // segunda gaveta recebe o guardado
+}
+
+int main(void) {
+    int arroz = 8, feijao = 25; // digitados trocados: o arroz é o mais caro
+
+    troca_copias(arroz, feijao);
+    printf(&quot;Depois de troca_copias: arroz %d, feijão %d\n&quot;, arroz, feijao);
+
+    if (arroz &lt; feijao) {         // o pacote de arroz deveria custar mais
+        troca(&amp;arroz, &amp;feijao);   // passa os endereços, não os valores
+    }
+    printf(&quot;Depois de troca:        arroz %d, feijão %d\n&quot;, arroz, feijao);
+    return 0;
+}
+// Saída:
+// Depois de troca_copias: arroz 8, feijão 25
+// Depois de troca:        arroz 25, feijão 8
+</code></pre>
+<p>O <code>main</code> só chama a troca se os preços estão fora de ordem; a troca são três
+passos, com a variável auxiliar:</p>
+<p align="center"><img src="material/0046-fluxograma.svg" alt="Fluxograma: Passagem por referência" width="370"></p>
+<h4>Passo a passo</h4>
+<p>Teste de mesa de <code>troca(&amp;arroz, &amp;feijao)</code>, com os endereços do desenho:</p>
+<table>
+<thead>
+<tr>
+<th>linha</th>
+<th><code>a</code></th>
+<th><code>b</code></th>
+<th><code>tmp</code></th>
+<th><code>arroz</code> (0x1000)</th>
+<th><code>feijao</code> (0x1004)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>entrada na função</td>
+<td>0x1000</td>
+<td>0x1004</td>
+<td>?</td>
+<td>8</td>
+<td>25</td>
+</tr>
+<tr>
+<td><code>tmp = *a</code></td>
+<td>0x1000</td>
+<td>0x1004</td>
+<td>8</td>
+<td>8</td>
+<td>25</td>
+</tr>
+<tr>
+<td><code>*a = *b</code></td>
+<td>0x1000</td>
+<td>0x1004</td>
+<td>8</td>
+<td><strong>25</strong></td>
+<td>25</td>
+</tr>
+<tr>
+<td><code>*b = tmp</code></td>
+<td>0x1000</td>
+<td>0x1004</td>
+<td>8</td>
+<td>25</td>
+<td><strong>8</strong></td>
+</tr>
+</tbody></table>
+<p><code>a</code> e <code>b</code> nunca mudam: muda o que está nas gavetas para onde apontam.</p>
+<p><strong>Exemplo A091 · O plantão que vira o relógio</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// parâmetro de ida E volta: lê os valores do main e escreve de volta
+void normaliza(int *horas, int *minutos) {
+    *horas += *minutos / 60; // cada 60 minutos viram uma hora
+    *minutos %= 60;
+    *horas %= 24;            // passou da meia-noite, recomeça do 0
+}
+
+// horas e minutos já SÃO endereços: repassa para normaliza sem &amp;
+void soma_minutos(int *horas, int *minutos, int extra) {
+    *minutos += extra;
+    normaliza(horas, minutos);
+}
+
+int main(void) {
+    int h = 22, m = 40; // começo do plantão no hospital
+
+    soma_minutos(&amp;h, &amp;m, 95); // o primeiro atendimento durou 95 minutos
+    printf(&quot;Fim do 1º atendimento: %02d:%02d\n&quot;, h, m);
+
+    soma_minutos(&amp;h, &amp;m, 50);
+    printf(&quot;Fim do 2º atendimento: %02d:%02d\n&quot;, h, m);
+
+    // normaliza sozinha também arruma um horário anotado errado
+    int h2 = 9, m2 = 135; // alguém anotou 9h135
+    normaliza(&amp;h2, &amp;m2);
+    printf(&quot;9h135 arrumado: %02d:%02d\n&quot;, h2, m2);
+    return 0;
+}
+// Saída:
+// Fim do 1º atendimento: 00:15
+// Fim do 2º atendimento: 01:05
+// 9h135 arrumado: 11:15
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A091.c -o ~/LPEDC/material/A091 &amp;&amp; ~/LPEDC/material/A091
+</code></pre>
+<p><strong>Exemplo A092 · Rachando a conta do bar</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// &quot;devolve&quot; dois resultados: escreve nas variáveis de quem chamou
+void racha(int total, int pessoas, int *cada, int *sobra) {
+    *cada = total / pessoas;
+    *sobra = total % pessoas;
+}
+
+int main(void) {
+    int total, pessoas;
+    int cada, sobra; // a função vai preencher
+
+    printf(&quot;Total da conta (R$): &quot;);
+    if (scanf(&quot;%d&quot;, &amp;total) != 1) { // &amp; : o scanf precisa saber ONDE guardar
+        return 1;
+    }
+    printf(&quot;Quantas pessoas: &quot;);
+    if (scanf(&quot;%d&quot;, &amp;pessoas) != 1 || pessoas &lt;= 0) {
+        return 1;
+    }
+
+    racha(total, pessoas, &amp;cada, &amp;sobra);
+    printf(&quot;Cada um paga R$ %d e sobram R$ %d para a gorjeta\n&quot;, cada, sobra);
+    return 0;
+}
+// Exemplo de execução:
+// Total da conta (R$): 187
+// Quantas pessoas: 4
+// Cada um paga R$ 46 e sobram R$ 3 para a gorjeta
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A092.c -o ~/LPEDC/material/A092 &amp;&amp; ~/LPEDC/material/A092
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E271</strong> · ★☆☆</p>
+<p>Promoção do cinema: quem compra pelo app ganha o dobro de ingressos.
+Escreva a função void dobra(int *quantidade), que dobra o valor da
+variável de quem chamou. No main, comece com ingressos = 3, chame a
+função e mostre o resultado.</p>
+<pre><code class="language-text">Saída esperada:
+Antes: 3 ingressos
+Depois: 6 ingressos
+</code></pre>
+<p><strong>Exercício E273</strong> · ★★☆</p>
+<p>As temperaturas máximas da semana em Cuiabá foram</p>
+<pre><code class="language-text">{ 34, 37, 31, 39, 36, 33, 38 }
+</code></pre>
+<p>Escreva void extremos(const int v[], int n, int *menor, int *maior), que
+acha a menor e a maior temperatura do vetor numa passada só e entrega as
+duas pelos ponteiros. Mostre também a amplitude (maior - menor).</p>
+<pre><code class="language-text">Saída esperada:
+Menor: 31  Maior: 39  Amplitude: 8
+</code></pre>
+<p><strong>Exercício E274</strong> · ★★☆</p>
+<p>A catraca do metrô conta passageiros. Escreva duas funções:</p>
+<pre><code class="language-text">void passa(int *contador)   // soma 1 ao valor apontado
+void zera(int *valor)       // coloca 0 no valor apontado
+</code></pre>
+<p>No main, comece com passageiros = 0 e avulsos = 5, chame passa três vezes
+para passageiros, chame zera para avulsos e mostre os dois.</p>
+<pre><code class="language-text">Saída esperada:
+Passageiros: 3
+Bilhetes avulsos: 0
+</code></pre>
+<p><strong>Exercício E275</strong> · ★★★</p>
+<p>Escreva</p>
+<pre><code class="language-text">int raizes(double a, double b, double c, double *x1, double *x2)
+</code></pre>
+<p>que resolve a<em>x</em>x + b*x + c = 0. A função DEVOLVE quantas raízes reais
+existem (0, 1 ou 2) e escreve as raízes em *x1 e *x2 (quando houver uma
+só, as duas recebem o mesmo valor). Se a for 0, devolve -1 (não é do 2º
+grau). No main, teste as quatro equações abaixo e mostre o resultado com
+duas casas decimais.</p>
+<pre><code class="language-text">Saída esperada:
+x² - 5x + 6 = 0   -&gt;  2 raízes: 3.00 e 2.00
+x² + 2x + 1 = 0   -&gt;  1 raiz: -1.00
+x² + 1 = 0        -&gt;  nenhuma raiz real
+0x² + 3x + 1 = 0  -&gt;  não é do 2º grau
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E275.c -o ~/LPEDC/material/E275 -lm &amp;&amp; ~/LPEDC/material/E275
+</code></pre>
+<hr>
+<h2>0047 · Ponteiros e vetores</h2>
+<h3>Conceito</h3>
+<p>Numa rua de loteamento, os números das casas sobem de 4 em 4: 1000, 1004,
+1008. &quot;Três casas depois da 1000&quot; é a 1012, não a 1003. Num vetor de <code>int</code>
+acontece o mesmo: as gavetas ficam coladas e cada item ocupa 4 bytes. Os
+ponteiros sabem disso e fazem a conta por você, e é essa conta que liga
+ponteiros e vetores.</p>
+<p>Comece pelo nome do vetor. Numa expressão, ele quase sempre <strong>vira</strong> o
+endereço do primeiro elemento: <code>kwh</code> vale <code>&amp;kwh[0]</code>. Essa conversão se chama
+<strong>decaimento</strong>; diz-se que o vetor decai para ponteiro (KERNIGHAN; RITCHIE,
+1989, cap. 5). É por isso que você passa um vetor a uma função sem <code>&amp;</code> e a
+função altera o original (assunto 0038): ela recebe esse endereço.</p>
+<p>Com um ponteiro dentro de um vetor, vale a <strong>aritmética de ponteiros</strong>. A
+regra principal: <code>p + 1</code> é o endereço do <strong>próximo elemento</strong>, e não do
+próximo byte. O C multiplica o 1 pelo tamanho do tipo apontado, 4 bytes num
+<code>int *</code> e 8 num <code>double *</code>. Daí saem as outras operações. <code>p++</code> avança um
+elemento e <code>p--</code> volta um. Se <code>p</code> e <code>q</code> apontam para o mesmo vetor, <code>q - p</code>
+dá <strong>quantos elementos</strong> há entre eles, e <code>p &lt; q</code> diz qual vem antes (DEITEL;
+DEITEL, 2011, cap. 7). Comparar ponteiros de vetores diferentes não tem
+sentido.</p>
+<p>Juntando as peças, chega-se à regra central: <strong><code>v[i]</code> é exatamente
+<code>*(v + i)</code></strong>. Ande <code>i</code> elementos a partir do começo e pegue o que tem lá. Os
+colchetes são só um jeito mais curto de escrever essa conta, e por isso valem
+para ponteiro também: <code>p[2]</code> é <code>*(p + 2)</code>, contado de onde <code>p</code> aponta
+<strong>agora</strong>, e não do começo do vetor (DEITEL; DEITEL, 2011, cap. 7).</p>
+<pre><code class="language-c">int kwh[5] = {210, 185, 190, 240, 175};
+int *p = &amp;kwh[1];               // p aponta para o 185
+printf(&quot;%d %d\n&quot;, p[0], p[2]);  // 185 240
+printf(&quot;%td\n&quot;, p - kwh);       // 1 (elementos, não bytes)
+</code></pre>
+<p>Mesmo com tanta semelhança, vetor <strong>não é</strong> ponteiro. <code>sizeof kwh</code> dá o
+tamanho do vetor inteiro (20 bytes), enquanto <code>sizeof p</code> dá 8, o tamanho de
+um endereço. E o nome do vetor é um endereço fixo: <code>kwh = outro;</code> e <code>kwh++</code>
+não compilam, enquanto <code>p++</code> é permitido (BACKES, 2013, cap. 10).</p>
+<p>Na matriz (assunto 0039), a regra vale em dois níveis: <code>m[i][j]</code> é
+<code>*(*(m + i) + j)</code>. O ponto que a prova adora é o tamanho do passo. Em
+<code>int m[3][4]</code>, cada elemento de <code>m</code> é uma linha inteira, então <code>m + 1</code> anda
+<strong>16 bytes</strong> (4 <code>int</code>). Já <code>m[0]</code> é a primeira linha, que decai para um
+<code>int *</code>, e <code>m[0] + 1</code> anda só 4 bytes (BACKES, 2013, cap. 10).</p>
+<p>Ao percorrer um vetor com ponteiro, o laço costuma parar em <code>kwh + 5</code>, o
+endereço <strong>um depois do último</strong>. O C garante que esse endereço pode ser
+calculado e comparado, mas nunca lido: não há elemento ali (KERNIGHAN;
+RITCHIE, 1989, cap. 5). Os laços com <code>p++</code> e com <code>i++</code> têm o mesmo
+desempenho; prefira o índice, que quase sempre fica mais claro.</p>
+<blockquote>
+<p>[!WARNING]
+<code>*p + 1</code> soma 1 ao valor; <code>*(p + 1)</code> anda uma gaveta e pega o valor dela,
+porque o <code>*</code> vem antes do <code>+</code>. <code>*p++</code> lê o valor e depois avança o
+ponteiro; <code>(*p)++</code> soma 1 no valor. E passar do fim (<code>p &lt;= kwh + 5</code>) dá
+<code>stack-buffer-overflow</code> no AddressSanitizer.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>O consumo de luz de 5 meses está em <code>kwh</code>. O ponteiro <code>p</code> começa em <code>0x1000</code>
+e anda uma gaveta por vez, somando, até chegar a <code>kwh + 5</code>:</p>
+<p align="center"><img src="material/0047-ideia.svg" alt="Diagrama da ideia: Ponteiros e vetores" width="858"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    int kwh[5] = {210, 185, 240, 198, 225}; // consumo de 5 meses
+    int soma = 0;
+
+    // kwh sozinho vira &amp;kwh[0]; kwh + 5 é &quot;um depois do último&quot;
+    for (const int *p = kwh; p &lt; kwh + 5; p++) {
+        printf(&quot;p = %p  *p = %d\n&quot;, (void *)p, *p);
+        soma += *p;
+    }
+    printf(&quot;Total: %d kWh  Média: %.1f kWh\n&quot;, soma, soma / 5.0);
+
+    // as duas notações são a mesma conta
+    printf(&quot;kwh[3] = %d  *(kwh + 3) = %d\n&quot;, kwh[3], *(kwh + 3));
+    return 0;
+}
+// Saída (os endereços mudam a cada execução; repare que sobem de 4 em 4):
+// p = 0x7fa4cb400020  *p = 210
+// p = 0x7fa4cb400024  *p = 185
+// p = 0x7fa4cb400028  *p = 240
+// p = 0x7fa4cb40002c  *p = 198
+// p = 0x7fa4cb400030  *p = 225
+// Total: 1058 kWh  Média: 211.6 kWh
+// kwh[3] = 198  *(kwh + 3) = 198
+</code></pre>
+<p>O <code>const int *p</code> só lê pelo ponteiro, mas pode andar. É o acumulador do
+assunto 0025, com o ponteiro no lugar do índice:</p>
+<p align="center"><img src="material/0047-fluxograma.svg" alt="Fluxograma: Ponteiros e vetores" width="532"></p>
+<h4>Passo a passo</h4>
+<p>Com os endereços fictícios do desenho (<code>kwh</code> em <code>0x1000</code>):</p>
+<table>
+<thead>
+<tr>
+<th>volta</th>
+<th><code>p</code></th>
+<th><code>*p</code></th>
+<th><code>soma</code> depois</th>
+<th><code>p &lt; kwh + 5</code>?</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>0x1000</td>
+<td>210</td>
+<td>210</td>
+<td>sim</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0x1004</td>
+<td>185</td>
+<td>395</td>
+<td>sim</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0x1008</td>
+<td>240</td>
+<td>635</td>
+<td>sim</td>
+</tr>
+<tr>
+<td>4</td>
+<td>0x100C</td>
+<td>198</td>
+<td>833</td>
+<td>sim</td>
+</tr>
+<tr>
+<td>5</td>
+<td>0x1010</td>
+<td>225</td>
+<td>1058</td>
+<td>sim</td>
+</tr>
+<tr>
+<td>fim</td>
+<td>0x1014</td>
+<td>(não lê)</td>
+<td>1058</td>
+<td><strong>não</strong>: para</td>
+</tr>
+</tbody></table>
+<p><strong>Exemplo A093 · De trás para frente, um passo por tipo</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    double temp[5] = {18.5, 21.0, 24.5, 23.0, 19.5}; // de segunda a sexta
+    char turno[3] = {&#39;M&#39;, &#39;T&#39;, &#39;N&#39;};                   // manhã, tarde, noite
+
+    // andar para trás: comece em temp + 5 (um depois do último) e recue
+    // ANTES de usar. Parar em p &gt;= temp obrigaria p a ir para temp - 1,
+    // um endereço que o C não garante que exista
+    printf(&quot;De sexta para segunda:&quot;);
+    for (const double *p = temp + 5; p &gt; temp;) {
+        p--;
+        printf(&quot; %.1f&quot;, *p);
+    }
+    printf(&quot;\n&quot;);
+
+    // p + 1 anda UM elemento: para double são 8 bytes, para char, 1
+    printf(&quot;temp  em %p, temp + 1  em %p\n&quot;, (void *)temp, (void *)(temp + 1));
+    printf(&quot;turno em %p, turno + 1 em %p\n&quot;, (void *)turno, (void *)(turno + 1));
+
+    // a distância entre ponteiros também é contada em elementos
+    const double *quarta = &amp;temp[2];
+    printf(&quot;de segunda até quarta: %td elementos\n&quot;, quarta - temp);
+    printf(&quot;turno[2] = %c, *(turno + 2) = %c\n&quot;, turno[2], *(turno + 2));
+    return 0;
+}
+// Saída (os endereços mudam a cada execução; repare no último dígito):
+// De sexta para segunda: 19.5 23.0 24.5 21.0 18.5
+// temp  em 0x7ff177100030, temp + 1  em 0x7ff177100038
+// turno em 0x7ff177100080, turno + 1 em 0x7ff177100081
+// de segunda até quarta: 2 elementos
+// turno[2] = N, *(turno + 2) = N
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A093.c -o ~/LPEDC/material/A093 &amp;&amp; ~/LPEDC/material/A093
+</code></pre>
+<p><strong>Exemplo A094 · O primeiro dia da meta</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// devolve o endereço do primeiro elemento &gt;= meta, ou NULL se não houver
+const int *primeiro_acima(const int *v, int n, int meta) {
+    for (const int *p = v; p &lt; v + n; p++) {
+        if (*p &gt;= meta) {
+            return p;
+        }
+    }
+    return NULL;
+}
+
+int main(void) {
+    int passos[7] = {6200, 8100, 10400, 7300, 12000, 9800, 11050};
+    const int *achou = primeiro_acima(passos, 7, 10000);
+
+    if (achou != NULL) {
+        // ponteiro menos ponteiro = distância em ELEMENTOS, não em bytes;
+        // o resultado é um ptrdiff_t, e o formato dele é %td
+        printf(&quot;Meta batida no dia %td com %d passos\n&quot;, achou - passos + 1, *achou);
+        if (achou &gt; passos &amp;&amp; achou &lt; passos + 6) { // tem véspera e dia seguinte?
+            printf(&quot;Véspera: %d  Dia seguinte: %d\n&quot;, achou[-1], achou[1]); // relativo a achou
+        }
+    }
+
+    int *p = passos;
+    // vetor não é ponteiro: sizeof mostra a diferença
+    printf(&quot;sizeof passos = %zu  sizeof p = %zu\n&quot;, sizeof passos, sizeof p);
+    return 0;
+}
+// Saída:
+// Meta batida no dia 3 com 10400 passos
+// Véspera: 8100  Dia seguinte: 7300
+// sizeof passos = 28  sizeof p = 8
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A094.c -o ~/LPEDC/material/A094 &amp;&amp; ~/LPEDC/material/A094
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E277</strong> · ★☆☆</p>
+<p>As notas de uma aluna no bimestre estão em</p>
+<pre><code class="language-text">float notas[4] = {7.5, 8.0, 6.5, 9.0};
+</code></pre>
+<p>Mostre as quatro notas e a média SEM usar colchetes depois da
+declaração: só um ponteiro que anda pelo vetor.</p>
+<pre><code class="language-text">Saída esperada:
+7.5 8.0 6.5 9.0
+Média: 7.75
+</code></pre>
+<p><strong>Exercício E279</strong> · ★★☆</p>
+<p>Você quer ouvir a playlist de trás para frente. As faixas estão
+numeradas num vetor:</p>
+<pre><code class="language-text">int faixas[7] = {11, 23, 35, 47, 52, 68, 74};
+</code></pre>
+<p>Escreva void inverte(int *v, int n), que inverte o vetor no lugar usando
+DOIS ponteiros: ini (no começo) e fim (no último). Troque o que eles
+apontam, aproxime um do outro e pare quando se cruzarem. Use a função
+troca do assunto 0046.</p>
+<pre><code class="language-text">Saída esperada:
+74 68 52 47 35 23 11
+</code></pre>
+<p><strong>Exercício E280</strong> · ★★☆</p>
+<p>Na sorveteria, o estoque de 5 sabores está no vetor
+int estoque[5] = {12, 8, 15, 4, 9}. Crie um ponteiro p que aponta para o
+início do vetor e avance-o uma posição (p += 1). Usando p com índice (p[2]),
+mude o estoque do sabor de índice 3 para 20. Depois mostre os 5 valores
+percorrendo o vetor com um ponteiro q, de estoque até estoque + 5, separados
+por espaço.</p>
+<pre><code class="language-text">Saída esperada:
+12 8 15 20 9
+</code></pre>
+<p><strong>Exercício E281</strong> · ★★★</p>
+<p>A loja tem 3 filiais e anotou as vendas de 4 semanas numa matriz</p>
+<pre><code class="language-text">int vendas[3][4] = {
+    {12, 15, 9, 20},
+    {7, 11, 14, 10},
+    {18, 6, 13, 16},
+};
+</code></pre>
+<p>Como a matriz é uma fila só de 12 ints na memória (assunto 0039), dá para
+percorrê-la com UM ponteiro e UM laço. Faça isso: some tudo e descubra
+qual filial vendeu mais, calculando a linha de cada elemento pela
+distância (p - inicio) / 4.</p>
+<pre><code class="language-text">Saída esperada:
+Total: 151
+Filial 0: 56
+Filial 1: 42
+Filial 2: 53
+Campeã: filial 0
+</code></pre>
+<hr>
+<h2>0048 · Ponteiros e strings</h2>
+<h3>Conceito</h3>
+<p>Na recepção do evento, o nome do crachá é digitado numa ficha sua: dá para
+corrigir uma letra ou passar tudo para maiúsculas. O apelido só aparece num
+cartaz pregado na parede: você lê, mas não escreve nele. Em C, essas duas
+situações se escrevem quase igual e se comportam de jeitos bem diferentes. A
+diferença está em quem é dono dos bytes do texto.</p>
+<p>Junte duas coisas que você já sabe. Uma string é um vetor de <code>char</code>
+terminado em <code>&#39;\0&#39;</code> (assunto 0041), e o nome de um vetor vira o endereço do
+primeiro elemento (assunto 0047). Por isso toda função de string, de
+<code>strlen</code> a <code>printf</code> com <code>%s</code>, recebe um <strong><code>char *</code></strong>: o endereço do primeiro
+caractere. Com ele, a função anda gaveta por gaveta até achar o <code>&#39;\0&#39;</code>
+(KERNIGHAN; RITCHIE, 1989, cap. 5).</p>
+<p>Agora o texto entre aspas. Quando você escreve <code>&quot;bia&quot;</code> no código, cria um
+<strong>literal de string</strong>. O compilador guarda cada literal <strong>uma vez só</strong>, numa
+região de <strong>somente leitura</strong> da memória do programa, junto com o código
+(DEITEL; DEITEL, 2011, cap. 7). Essa região se chama <code>.rodata</code> (<em>read-only
+data</em>), e o sistema barra qualquer tentativa de escrever nela. Literais
+iguais podem até dividir o mesmo endereço.</p>
+<p>Com isso, as duas declarações do crachá ficam claras. <code>char nome[] = &quot;ana&quot;;</code>
+cria um <strong>vetor</strong> de 4 <code>char</code> na pilha e <strong>copia</strong> o literal para dentro
+dele. O vetor é seu, como a ficha: <code>nome[0] = &#39;A&#39;</code> vale (DEITEL; DEITEL,
+2011, cap. 7). Já <code>const char *apelido = &quot;bia&quot;;</code> cria só um <strong>ponteiro</strong>, de 8
+bytes, com o endereço do literal, sem cópia nenhuma. Ele é a seta para o
+cartaz. Escrever pelo ponteiro, como <code>apelido[0] = &#39;B&#39;</code>, seria escrever na
+região de somente leitura; o <code>const</code> faz o compilador recusar essa linha
+antes de o programa rodar (DEITEL; DEITEL, 2011, cap. 7).</p>
+<pre><code class="language-c">char nome[] = &quot;ana&quot;;            // vetor seu, cópia do literal
+const char *apelido = &quot;bia&quot;;    // seta para o literal
+nome[0] = &#39;A&#39;;                  // vale: nome vira &quot;Ana&quot;
+apelido = &quot;bibi&quot;;               // vale: a seta aponta para outro literal
+printf(&quot;%zu %zu\n&quot;, sizeof nome, sizeof apelido);  // 4 8
+</code></pre>
+<p>O código mostra a outra metade da diferença. O ponteiro pode mudar de alvo:
+<code>apelido = &quot;bibi&quot;;</code> só troca o endereço guardado. O vetor não pode:
+<code>nome = &quot;joana&quot;;</code> não compila, porque o nome do vetor é um endereço fixo; para
+trocar o conteúdo, use <code>strcpy</code>. E o <code>sizeof</code> mede coisas diferentes:
+<code>sizeof nome</code> dá 4, os bytes do vetor, enquanto <code>sizeof apelido</code> dá 8, o
+tamanho de um endereço (BACKES, 2013, cap. 10).</p>
+<p>A mesma escolha aparece numa lista de textos fixos, como os dias da semana.
+Um vetor de ponteiros, <code>const char *dias[]</code>, gasta 8 bytes por nome mais os
+bytes de cada literal. Uma matriz <code>char dias[4][10]</code> reserva 10 bytes por
+linha, mesmo para um nome curto como &quot;sexta&quot; (DEITEL; DEITEL, 2011, cap. 7).
+O vetor de ponteiros economiza quando os textos têm tamanhos diferentes e
+não precisam mudar.</p>
+<blockquote>
+<p>[!WARNING]
+<code>char *s = &quot;ola&quot;; s[0] = &#39;O&#39;;</code> compila sem aviso e cai na execução
+(<code>segmentation fault</code>), porque o literal é só de leitura. Use
+<code>const char *</code> para apontar para literal, ou <code>char s[]</code> quando precisar
+mudar o texto. E <code>==</code> entre strings compara endereços: use <code>strcmp</code>.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>No crachá, <code>nome</code> é uma cópia na pilha e o laço passa cada letra para
+maiúscula; <code>apelido</code> é só uma seta para o literal <code>&quot;bia&quot;</code>, na área de leitura:</p>
+<p align="center"><img src="material/0048-ideia.svg" alt="Diagrama da ideia: Ponteiros e strings" width="858"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+
+int main(void) {
+    char nome[] = &quot;ana&quot;;          // vetor de 4 chars, CÓPIA do literal: pode mudar
+    const char *apelido = &quot;bia&quot;;  // ponteiro para o literal: só leitura
+
+    // passa o nome para maiúsculas andando com um ponteiro até o &#39;\0&#39;
+    for (char *p = nome; *p != &#39;\0&#39;; p++) {
+        *p = (char)toupper((unsigned char)*p);
+    }
+    printf(&quot;Crachá: %s (%s)\n&quot;, nome, apelido);
+
+    printf(&quot;sizeof nome = %zu, sizeof apelido = %zu\n&quot;, sizeof nome, sizeof apelido);
+
+    apelido = &quot;bibi&quot;;  // vale: o ponteiro passa a apontar para outro literal
+    // nome = &quot;joana&quot;; // não compila: vetor não pode receber outro endereço
+    printf(&quot;Novo apelido: %s\n&quot;, apelido);
+    return 0;
+}
+// Saída:
+// Crachá: ANA (bia)
+// sizeof nome = 4, sizeof apelido = 8
+// Novo apelido: bibi
+</code></pre>
+<p>É o laço clássico de string: em vez de contar posições, pergunta &quot;a gaveta
+atual é o <code>&#39;\0&#39;</code>?&quot;:</p>
+<p align="center"><img src="material/0048-fluxograma.svg" alt="Fluxograma: Ponteiros e strings" width="492"></p>
+<p><strong>Exemplo A095 · A string começa onde o ponteiro aponta</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    char endereco[] = &quot;Rua das Flores, 120 - Centro&quot;; // vetor: dá para mudar
+
+    // procura a vírgula andando com um ponteiro
+    char *virgula = endereco;
+    while (*virgula != &#39;\0&#39; &amp;&amp; *virgula != &#39;,&#39;) {
+        virgula++;
+    }
+
+    // para o printf, a string vai do endereço recebido até o primeiro &#39;\0&#39;
+    printf(&quot;Inteiro:     %s\n&quot;, endereco);
+    printf(&quot;Da vírgula:  %s\n&quot;, virgula);
+    printf(&quot;Depois dela: %s\n&quot;, virgula + 2); // pula a vírgula e o espaço
+
+    // um &#39;\0&#39; no meio corta a string: o resto continua na memória
+    if (*virgula == &#39;,&#39;) {
+        *virgula = &#39;\0&#39;;
+    }
+    printf(&quot;Só a rua:    %s\n&quot;, endereco);
+    printf(&quot;O resto:     %s\n&quot;, virgula + 2); // a parte de trás segue lá
+
+    // com const char * apontando para um literal, isso não seria permitido:
+    // const char *fixo = &quot;Rua A, 10&quot;; fixo[5] = &#39;\0&#39;; não compila
+    return 0;
+}
+// Saída:
+// Inteiro:     Rua das Flores, 120 - Centro
+// Da vírgula:  , 120 - Centro
+// Depois dela: 120 - Centro
+// Só a rua:    Rua das Flores
+// O resto:     120 - Centro
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A095.c -o ~/LPEDC/material/A095 &amp;&amp; ~/LPEDC/material/A095
+</code></pre>
+<p><strong>Exemplo A096 · Os dias da feira</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// conta os caracteres andando até o &#39;\0&#39;: o mesmo que strlen faz
+size_t comprimento(const char *s) {
+    const char *p = s;
+    while (*p != &#39;\0&#39;) {
+        p++;
+    }
+    return (size_t)(p - s); // distância entre o fim e o começo
+}
+
+int main(void) {
+    // vetor de ponteiros: cada posição guarda o endereço de um literal
+    const char *dias[] = {&quot;segunda&quot;, &quot;quarta&quot;, &quot;sexta&quot;, &quot;domingo&quot;};
+    // matriz: cada linha reserva espaço para o maior nome
+    char tabela[4][10] = {&quot;segunda&quot;, &quot;quarta&quot;, &quot;sexta&quot;, &quot;domingo&quot;};
+
+    for (int i = 0; i &lt; 4; i++) {
+        printf(&quot;%-8s %zu letras\n&quot;, dias[i], comprimento(dias[i]));
+    }
+    printf(&quot;vetor de ponteiros: %zu bytes (só os endereços)\n&quot;, sizeof dias);
+    printf(&quot;matriz de chars:    %zu bytes (4 linhas de 10)\n&quot;, sizeof tabela);
+    printf(&quot;dias[2][0] = %c, tabela[2][0] = %c\n&quot;, dias[2][0], tabela[2][0]);
+    return 0;
+}
+// Saída:
+// segunda  7 letras
+// quarta   6 letras
+// sexta    5 letras
+// domingo  7 letras
+// vetor de ponteiros: 32 bytes (só os endereços)
+// matriz de chars:    40 bytes (4 linhas de 10)
+// dias[2][0] = s, tabela[2][0] = s
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A096.c -o ~/LPEDC/material/A096 &amp;&amp; ~/LPEDC/material/A096
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E283</strong> · ★☆☆</p>
+<p>Escreva int conta_vogais(const char *s), que conta as vogais (minúsculas
+a, e, i, o, u) de uma frase andando com um ponteiro até o &#39;\0&#39;, sem usar
+índice nem strlen. Teste com a frase do outdoor:</p>
+<pre><code class="language-text">&quot;promocao de pastel na feira de domingo&quot;
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Vogais: 15
+</code></pre>
+<p><strong>Exercício E285</strong> · ★★☆</p>
+<p>Escreva sua própria versão do strcpy com ponteiros:</p>
+<pre><code class="language-text">void copia(char *destino, const char *origem)
+</code></pre>
+<p>Copie caractere por caractere, INCLUINDO o &#39;\0&#39; do fim. Depois escreva
+uma segunda versão, copia_classica, com o laço clássico de corpo vazio:</p>
+<pre><code class="language-text">while ((*destino++ = *origem++) != &#39;\0&#39;) {
+}
+</code></pre>
+<p>Teste as duas copiando &quot;Porto Alegre&quot; para um vetor char destino[20] e
+mostrando o resultado e o strlen dele. Para provar que a clássica copia
+o &#39;\0&#39;, antes de chamá-la encha destino com &quot;XXXXXXXXXXXXXXXXXXX&quot; (19 X)
+e confira que nenhum X sobra no fim.</p>
+<pre><code class="language-text">Saída esperada:
+copia:          Porto Alegre (12 letras)
+copia_classica: Porto Alegre (12 letras)
+</code></pre>
+<p><strong>Exercício E286</strong> · ★★☆</p>
+<p>Na portaria do condomínio, escreva um programa que:</p>
+<pre><code class="language-text">- cria a saudação &quot;ola, visitante!&quot; de forma que seja possível trocar o
+  primeiro caractere por &#39;O&#39;, e mostra o resultado;
+- copia &quot;B&quot; com strcpy para um vetor bloco de 2 posições e mostra &quot;Bloco: B&quot;;
+- compara o vetor morador, que guarda &quot;ana&quot;, com a string &quot;ana&quot; usando
+  strcmp e mostra &quot;Mesmo morador&quot; se forem iguais.
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Ola, visitante!
+Bloco: B
+Mesmo morador
+</code></pre>
+<p><strong>Exercício E287</strong> · ★★★</p>
+<p>Escreva bool palindromo(const char *s), que diz se uma frase é um
+palíndromo IGNORANDO os espaços. Use dois ponteiros: um no começo e outro
+no último caractere (antes do &#39;\0&#39;), que andam um em direção ao outro,
+pulando espaços. Teste com &quot;arara&quot;, &quot;socorram me subi no onibus em
+marrocos&quot; e &quot;pix caiu&quot;.</p>
+<pre><code class="language-text">Saída esperada:
+arara: sim
+socorram me subi no onibus em marrocos: sim
+pix caiu: não
+</code></pre>
+<hr>
+<h2>0049 · Ponteiro para ponteiro</h2>
+<h3>Conceito</h3>
+<p>Você pergunta ao porteiro onde fica o salão de festas. Ele não leva você até
+lá; aponta para o quadro de avisos, e o mapa do quadro mostra o salão. Você
+chegou em <strong>dois saltos</strong>: porteiro, quadro, salão. Em C há situações em que
+é preciso andar assim, guardando não o endereço do dado, mas o endereço de
+quem guarda esse endereço.</p>
+<p>Um ponteiro é uma variável como outra qualquer: mora numa gaveta e tem
+endereço próprio (assunto 0045). Então dá para guardar <strong>o endereço de um
+ponteiro</strong> em outra variável. Essa variável é um <strong>ponteiro para ponteiro</strong>,
+e se declara com dois asteriscos: <code>int **pp;</code> lê-se &quot;pp aponta para um
+<code>int *</code>&quot; (BACKES, 2013, cap. 10).</p>
+<p>Veja os níveis num exemplo. Com <code>int vagas = 40; int *p = &amp;vagas; int **pp = &amp;p;</code>, a variável <code>pp</code> guarda o endereço de <code>p</code>. Um salto, <code>*pp</code>, leva ao
+próprio <code>p</code>, que guarda o endereço de <code>vagas</code>. Dois saltos, <code>**pp</code>, chegam a
+<code>vagas</code>, que vale 40. A regra é contar as estrelas: cada <code>*</code> da declaração é
+um nível, e para chegar ao dado você usa o mesmo número de <code>*</code> (BACKES,
+2013, cap. 10). Acima de dois níveis o código vira charada, e quase nunca é
+necessário.</p>
+<pre><code class="language-c">int vagas = 40;
+int *p = &amp;vagas;
+int **pp = &amp;p;
+**pp = **pp - 2;        // dois saltos: chega a vagas
+printf(&quot;%d\n&quot;, vagas);  // 38
+</code></pre>
+<p>Para que serve isso? O primeiro uso é <strong>mudar o ponteiro de quem chamou</strong>. No
+assunto 0046, para uma função mudar um <code>int</code> do <code>main</code>, ela recebia um
+<code>int *</code>. Se a função precisa mudar um <code>int *</code> do <code>main</code>, fazendo-o apontar
+para outro lugar, ela recebe um <code>int **</code>. É a mesma regra, um nível acima: a
+função recebe o endereço daquilo que vai mudar (DEITEL; DEITEL, 2011,
+cap. 7). O A098 escolhe o posto de combustível mais barato assim, e as listas
+encadeadas do módulo 11 trocam o início da lista do mesmo jeito.</p>
+<p>O segundo uso é o <strong>vetor de ponteiros</strong>. <code>const char *dias[]</code> (assunto 0048)
+é um vetor cujos itens são <code>const char *</code>. Pela regra do decaimento (assunto
+0047), o nome do vetor vira o endereço do primeiro item, que é um ponteiro;
+o resultado é um <code>const char **</code>. É o tipo do <code>char **argv</code>, que o <code>main</code>
+recebe com os argumentos da linha de comando (assunto 0069), e da matriz
+alocada no módulo 07 (KERNIGHAN; RITCHIE, 1989, cap. 5).</p>
+<p>Cada nível tem um custo. Cada ponteiro é uma variável de 8 bytes, e ler
+<code>**pp</code> são três leituras de memória em sequência, cada uma esperando a
+anterior para saber aonde ir. Por isso estruturas cheias de ponteiros, como
+listas e árvores, costumam ser percorridas mais devagar que um vetor com os
+itens colados, tema do módulo 10.</p>
+<blockquote>
+<p>[!WARNING]
+Estrela a menos: <code>*pp = 38;</code> não muda <code>vagas</code>; guarda o número 38 <strong>em
+<code>p</code></strong>, como se fosse endereço, e o próximo <code>*p</code> derruba o programa. O
+compilador avisa. Para a função mudar o seu ponteiro, passe <code>&amp;posto</code>, não
+<code>posto</code>: sem o <code>&amp;</code>, ela recebe uma cópia.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>O estacionamento do shopping tem 40 vagas. <code>p</code> aponta para <code>vagas</code> e <code>pp</code> para
+<code>p</code>; quando entram 2 carros, o programa atualiza <code>vagas</code> em dois saltos:</p>
+<p align="center"><img src="material/0049-ideia.svg" alt="Diagrama da ideia: Ponteiro para ponteiro" width="858"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void) {
+    int vagas = 40;      // vagas livres no estacionamento do shopping
+    int *p = &amp;vagas;     // p guarda o endereço de vagas
+    int **pp = &amp;p;       // pp guarda o endereço de p
+
+    printf(&quot;&amp;vagas = %p\n&quot;, (void *)&amp;vagas);
+    printf(&quot;p      = %p   (o endereço de vagas)\n&quot;, (void *)p);
+    printf(&quot;&amp;p     = %p\n&quot;, (void *)&amp;p);
+    printf(&quot;pp     = %p   (o endereço de p)\n&quot;, (void *)pp);
+    printf(&quot;*pp    = %p   (o que tem em p)\n&quot;, (void *)*pp);
+    printf(&quot;**pp   = %d\n&quot;, **pp);
+
+    **pp = **pp - 2;     // entraram 2 carros: muda vagas em dois saltos
+    printf(&quot;vagas  = %d\n&quot;, vagas);
+    return 0;
+}
+// Saída (os endereços mudam a cada execução):
+// &amp;vagas = 0x7fe808c00030
+// p      = 0x7fe808c00030   (o endereço de vagas)
+// &amp;p     = 0x7fe808c00040
+// pp     = 0x7fe808c00040   (o endereço de p)
+// *pp    = 0x7fe808c00030   (o que tem em p)
+// **pp   = 40
+// vagas  = 38
+</code></pre>
+<p><code>&amp;vagas</code> e <code>p</code> são iguais; <code>&amp;p</code> e <code>pp</code> também. Primeiro a corrente é montada,
+elo por elo; depois <code>**pp</code> a percorre até <code>vagas</code>:</p>
+<p align="center"><img src="material/0049-fluxograma.svg" alt="Fluxograma: Ponteiro para ponteiro" width="1235"></p>
+<p><strong>Exemplo A097 · A lista de chamada termina em NULL</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// alunos é um const char **: aponta para a primeira casa de um vetor de
+// ponteiros. A lista termina numa casa NULL, então nem precisa do tamanho
+int conta_com_letra(const char **alunos, char letra) {
+    int total = 0;
+    for (const char **p = alunos; *p != NULL; p++) { // *p: um nome
+        if (**p == letra) {                          // **p: a 1ª letra dele
+            total++;
+        }
+    }
+    return total;
+}
+
+int main(void) {
+    const char *turma[] = {&quot;Bruna&quot;, &quot;Caio&quot;, &quot;Beto&quot;, &quot;Davi&quot;, &quot;Bia&quot;, NULL};
+
+    for (const char **p = turma; *p != NULL; p++) {
+        printf(&quot;%-6s começa com %c\n&quot;, *p, **p);
+    }
+    printf(&quot;Com B: %d alunos\n&quot;, conta_com_letra(turma, &#39;B&#39;));
+    printf(&quot;Com Z: %d alunos\n&quot;, conta_com_letra(turma, &#39;Z&#39;));
+
+    // caso de borda: lista vazia, só a marca do fim
+    const char *vazia[] = {NULL};
+    printf(&quot;Lista vazia, com B: %d\n&quot;, conta_com_letra(vazia, &#39;B&#39;));
+
+    // p + 1 anda uma casa do vetor: 8 bytes, o tamanho de um ponteiro
+    printf(&quot;sizeof turma[0] = %zu\n&quot;, sizeof turma[0]);
+    return 0;
+}
+// Saída:
+// Bruna  começa com B
+// Caio   começa com C
+// Beto   começa com B
+// Davi   começa com D
+// Bia    começa com B
+// Com B: 3 alunos
+// Com Z: 0 alunos
+// Lista vazia, com B: 0
+// sizeof turma[0] = 8
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A097.c -o ~/LPEDC/material/A097 &amp;&amp; ~/LPEDC/material/A097
+</code></pre>
+<p><strong>Exemplo A098 · O posto mais barato</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// precisa MUDAR o ponteiro de quem chamou: recebe o endereço dele (double **)
+void mais_barato(double *precos, int n, double **escolhido) {
+    *escolhido = &amp;precos[0];
+    for (int i = 1; i &lt; n; i++) {
+        if (precos[i] &lt; **escolhido) {
+            *escolhido = &amp;precos[i]; // o ponteiro do main passa a apontar aqui
+        }
+    }
+}
+
+int main(void) {
+    double precos[4] = {5.89, 5.74, 5.92, 5.79}; // gasolina em 4 postos
+    double *posto = NULL;
+
+    mais_barato(precos, 4, &amp;posto);  // &amp;posto: o endereço do ponteiro
+    if (posto != NULL) {
+        printf(&quot;Mais barato: posto %td, R$ %.2f\n&quot;, posto - precos, *posto);
+        *posto -= 0.10;              // cupom do app: 10 centavos a menos
+    }
+    for (int i = 0; i &lt; 4; i++) {
+        printf(&quot;%.2f &quot;, precos[i]);
+    }
+    printf(&quot;\n&quot;);
+    return 0;
+}
+// Saída:
+// Mais barato: posto 1, R$ 5.74
+// 5.89 5.64 5.92 5.79
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A098.c -o ~/LPEDC/material/A098 &amp;&amp; ~/LPEDC/material/A098
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E289</strong> · ★☆☆</p>
+<p>A turma do cursinho é identificada por uma letra. Declare</p>
+<pre><code class="language-text">char turma = &#39;k&#39;;
+char *p = &amp;turma;
+char **pp = &amp;p;
+</code></pre>
+<p>Mostre a letra de três jeitos (pela variável, por p e por pp). Depois,
+usando só pp, troque a letra para &#39;K&#39; e mostre a variável turma.</p>
+<pre><code class="language-text">Saída esperada:
+k k k
+Agora: K
+</code></pre>
+<p><strong>Exercício E291</strong> · ★★☆</p>
+<p>A loja recebe mensagens como &quot;Pedido numero 4521 confirmado&quot;. Escreva</p>
+<pre><code class="language-text">void pula_ate_digito(const char **s)
+</code></pre>
+<p>que avança o ponteiro DE QUEM CHAMOU até o primeiro dígito do texto (ou
+até o &#39;\0&#39;, se não houver dígito). No main:</p>
+<pre><code class="language-text">const char *msg = &quot;Pedido numero 4521 confirmado&quot;;
+pula_ate_digito(&amp;msg);
+printf(&quot;%s\n&quot;, msg);
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+4521 confirmado
+</code></pre>
+<p>Teste também com &quot;Sem numero&quot;: deve sair uma linha vazia.</p>
+<p><strong>Exercício E292</strong> · ★★☆</p>
+<p>Num leilão, escreva a função</p>
+<pre><code class="language-text">void aponta_maior(int *a, int *b, int **res)
+</code></pre>
+<p>que faz o ponteiro apontado por res passar a apontar para o maior dos dois
+lances (a ou b). No main, com lance1 = 870 e lance2 = 640, declare
+int *vencedor = NULL, chame a função e mostre o valor do maior lance
+pelo ponteiro vencedor.</p>
+<pre><code class="language-text">Saída esperada:
+Maior lance: R$ 870
+</code></pre>
+<p><strong>Exercício E293</strong> · ★★★</p>
+<p>Quatro jurados deram notas a uma escola de samba, cada uma numa variável:</p>
+<pre><code class="language-text">int j1 = 9, j2 = 7, j3 = 10, j4 = 8;
+</code></pre>
+<p>Você quer mostrar as notas em ordem crescente SEM mexer nas variáveis.
+Monte um vetor de ponteiros int *ordem[4] = {&amp;j1, &amp;j2, &amp;j3, &amp;j4}; e
+ordene OS PONTEIROS pelo valor apontado. Para trocar dois ponteiros do
+vetor, escreva</p>
+<pre><code class="language-text">void troca_ptr(int **a, int **b)
+</code></pre>
+<p>No fim, mostre as notas pela ordem e depois as variáveis originais.</p>
+<pre><code class="language-text">Saída esperada:
+Em ordem: 7 8 9 10
+Originais: j1=9 j2=7 j3=10 j4=8
+</code></pre>
+<hr>
+<h2>0050 · Ponteiro para função</h2>
+<h3>Conceito</h3>
+<p>Às vezes uma função precisa receber <strong>outra função</strong>. Uma rotina que conta
+dias quentes e outra que conta dias frios fazem quase a mesma coisa: andam
+pelo vetor de temperaturas e contam quem passa num teste. Só o teste muda.
+Escrever uma função por teste repete o laço inteiro. O ideal seria uma rotina
+só, que recebesse o teste pronto e se limitasse a chamá-lo. Em C, o mecanismo
+para isso é um ponteiro.</p>
+<p>O raciocínio começa na memória. O código de uma função também fica guardado
+nela, numa área própria, a área de <strong>código</strong>. Se a função mora num lugar,
+ela tem endereço, e o nome da função, sem parênteses, <strong>já é esse
+endereço</strong>, do mesmo jeito que o nome de um vetor é o endereço do primeiro
+item. Uma variável que guarda esse endereço é um <strong>ponteiro para função</strong>
+(BACKES, 2013, cap. 13). Pense no número de telefone de um eletricista: você
+não carrega o eletricista no bolso, só o número, e liga quando precisa.</p>
+<p>A declaração parece estranha à primeira vista:</p>
+<pre><code class="language-text">int (*criterio)(int);
+</code></pre>
+<p>Leia de dentro para fora. <code>*criterio</code> diz que <code>criterio</code> é um ponteiro; o
+<code>(int)</code> à direita diz que ele aponta para uma função que recebe um <code>int</code>; o
+<code>int</code> à esquerda é o que essa função devolve. Os parênteses em volta de
+<code>*criterio</code> são obrigatórios. Sem eles, <code>int *criterio(int);</code> declara uma
+<strong>função</strong> chamada <code>criterio</code> que devolve <code>int *</code>, e não um ponteiro (DEITEL;
+DEITEL, 2011, cap. 7).</p>
+<p>O tipo do ponteiro inclui a <strong>assinatura</strong> da função, isto é, os tipos dos
+parâmetros e do retorno. Por isso <code>criterio</code> só aceita funções que recebem um
+<code>int</code> e devolvem <code>int</code>; uma função com outro protótipo não cabe ali (BACKES,
+2013, cap. 13).</p>
+<p>O uso é curto. <code>criterio = eh_calor;</code> guarda o endereço da função, sem <code>&amp;</code> e
+sem parênteses. <code>criterio(31)</code> chama a função apontada, passando 31, como se
+<code>criterio</code> fosse o próprio nome dela. A forma <code>(*criterio)(31)</code> também vale e
+aparece em código antigo; as duas fazem a mesma chamada (DEITEL; DEITEL,
+2011, cap. 7).</p>
+<p>O uso típico é passar o ponteiro como <strong>parâmetro</strong>. A função que o recebe
+fica genérica, e quem chama decide o comportamento. A função entregue dessa
+forma se chama <strong>callback</strong>, porque a rotina genérica &quot;liga de volta&quot; para
+ela na hora certa (CELES; RANGEL, 2002). Com isso, uma única <code>conta_se</code>
+conta dias quentes ou frios, dependendo de qual teste você entrega.</p>
+<p>A biblioteca padrão usa esse recurso no <strong><code>qsort</code></strong>, do <code>&lt;stdlib.h&gt;</code>. Ele
+ordena um vetor de qualquer tipo, desde que você entregue a função que
+compara dois elementos. Essa função recebe dois <code>const void *</code>, os endereços
+dos dois elementos (o assunto 0051 explica esse tipo), e devolve um número
+negativo se o primeiro vem antes, zero se empatam e positivo se o primeiro
+vem depois (KERRISK, s.d.). O A100 ordena a tabela do campeonato assim.</p>
+<p>Chamar por ponteiro tem um custo pequeno. É uma <strong>chamada indireta</strong>: o
+processador lê o endereço guardado na variável e salta para ele. Isso impede
+o compilador de copiar o corpo da função no lugar da chamada, otimização
+chamada <em>inline</em>, então <code>criterio(v[i])</code> pode sair mais lento que escrever o
+teste <code>v[i] &gt;= 30</code> direto no laço. Na maioria dos programas a diferença não
+aparece.</p>
+<blockquote>
+<p>[!WARNING]
+A comparação &quot;esperta&quot; <code>return *(const int *)a - *(const int *)b;</code> estoura
+o <code>int</code> quando os números têm sinais opostos e são grandes (<code>signed integer overflow</code>), e a ordem sai errada. Use <code>return (x &gt; y) - (x &lt; y);</code>. E não
+esqueça os parênteses: <code>int *f(int)</code> é função, não ponteiro.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>As máximas da semana estão num vetor. <code>conta_se</code> conta os dias que passam num
+critério que ela não conhece: recebe o endereço de <code>eh_calor</code> (ou <code>eh_frio</code>) e
+chama por ele:</p>
+<p align="center"><img src="material/0050-ideia.svg" alt="Diagrama da ideia: Ponteiro para função" width="858"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int eh_calor(int t) { return t &gt;= 30; }
+int eh_frio(int t) { return t &lt;= 18; }
+
+// conta quantos elementos passam no teste; QUAL teste, quem chama decide
+int conta_se(const int *v, int n, int (*criterio)(int)) {
+    int cont = 0;
+    for (int i = 0; i &lt; n; i++) {
+        if (criterio(v[i])) { // chama a função para onde criterio aponta
+            cont++;
+        }
+    }
+    return cont;
+}
+
+int main(void) {
+    int temps[7] = {31, 27, 33, 18, 16, 29, 34}; // máximas da semana
+
+    int (*regra)(int) = eh_calor;  // o nome da função já é o endereço dela
+    printf(&quot;Dias de calor: %d\n&quot;, conta_se(temps, 7, regra));
+    printf(&quot;Dias de frio:  %d\n&quot;, conta_se(temps, 7, eh_frio));
+    return 0;
+}
+// Saída:
+// Dias de calor: 3
+// Dias de frio:  2
+</code></pre>
+<p>É o contador do assunto 0025; a novidade é que a pergunta do losango é a
+função que chegou pelo parâmetro:</p>
+<p align="center"><img src="material/0050-fluxograma.svg" alt="Fluxograma: Ponteiro para função" width="543"></p>
+<p><strong>Exemplo A099 · A promoção do dia é um parâmetro</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+double menos_dez(double preco) { return preco * 0.90; }
+double leve_tres(double preco) { return preco * 2.0 / 3.0; } // leve 3, pague 2
+
+// aplica a regra em cada preço; regra NULL quer dizer &quot;sem promoção hoje&quot;
+void aplica(double *precos, int n, double (*regra)(double)) {
+    if (regra == NULL) {
+        return; // chamar um ponteiro NULL derrubaria o programa
+    }
+    for (int i = 0; i &lt; n; i++) {
+        precos[i] = regra(precos[i]);
+    }
+}
+
+void mostra(const char *titulo, const double *precos, int n) {
+    printf(&quot;%-10s&quot;, titulo);
+    for (int i = 0; i &lt; n; i++) {
+        printf(&quot; %6.2f&quot;, precos[i]);
+    }
+    printf(&quot;\n&quot;);
+}
+
+int main(void) {
+    double cesta[3] = {30.00, 12.90, 8.40}; // café, biscoito, leite
+    int dia = 3;                             // 1 = domingo ... 7 = sábado
+
+    double (*regra)(double) = NULL; // o ponteiro escolhe a regra em tempo de execução
+    if (dia == 3) {
+        regra = menos_dez;          // terça: 10% em tudo
+    } else if (dia == 5) {
+        regra = leve_tres;
+    }
+
+    mostra(&quot;Antes:&quot;, cesta, 3);
+    aplica(cesta, 3, regra);
+    mostra(&quot;Depois:&quot;, cesta, 3);
+
+    // ponteiros para função também se comparam com ==
+    printf(&quot;Regra de hoje: %s\n&quot;, regra == menos_dez ? &quot;10% off&quot; : &quot;outra&quot;);
+
+    aplica(cesta, 3, NULL); // nenhuma regra: nada muda
+    mostra(&quot;Sem regra:&quot;, cesta, 3);
+    return 0;
+}
+// Saída:
+// Antes:      30.00  12.90   8.40
+// Depois:     27.00  11.61   7.56
+// Regra de hoje: 10% off
+// Sem regra:  27.00  11.61   7.56
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A099.c -o ~/LPEDC/material/A099 &amp;&amp; ~/LPEDC/material/A099
+</code></pre>
+<p><strong>Exemplo A100 · A tabela do campeonato com qsort</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+// o qsort entrega ENDEREÇOS de dois elementos como const void *; a função
+// converte para o tipo certo e diz quem vem antes (negativo, zero, positivo)
+int crescente(const void *a, const void *b) {
+    int x = *(const int *)a;
+    int y = *(const int *)b;
+    return (x &gt; y) - (x &lt; y);
+}
+
+int decrescente(const void *a, const void *b) {
+    return crescente(b, a); // inverte a ordem dos argumentos
+}
+
+void mostra(const char *titulo, const int *v, int n) {
+    printf(&quot;%s:&quot;, titulo);
+    for (int i = 0; i &lt; n; i++) {
+        printf(&quot; %d&quot;, v[i]);
+    }
+    printf(&quot;\n&quot;);
+}
+
+int main(void) {
+    int pontos[6] = {45, 61, 38, 52, 57, 40};
+
+    qsort(pontos, 6, sizeof pontos[0], crescente);
+    mostra(&quot;Crescente&quot;, pontos, 6);
+
+    qsort(pontos, 6, sizeof pontos[0], decrescente); // mesmo qsort, outra regra
+    mostra(&quot;Tabela&quot;, pontos, 6);
+    return 0;
+}
+// Saída:
+// Crescente: 38 40 45 52 57 61
+// Tabela: 61 57 52 45 40 38
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A100.c -o ~/LPEDC/material/A100 &amp;&amp; ~/LPEDC/material/A100
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E295</strong> · ★☆☆</p>
+<p>O app de clima converte temperaturas nos dois sentidos. Escreva</p>
+<pre><code class="language-text">double c_para_f(double c)   // f = c * 9 / 5 + 32
+double f_para_c(double f)   // c = (f - 32) * 5 / 9
+</code></pre>
+<p>Declare um ponteiro double (*conv)(double); faça ele apontar para
+c_para_f e converta 30; depois aponte para f_para_c e converta 86.</p>
+<pre><code class="language-text">Saída esperada:
+30.0 -&gt; 86.0
+86.0 -&gt; 30.0
+</code></pre>
+<p><strong>Exercício E297</strong> · ★★☆</p>
+<p>Faça uma calculadora SEM switch. Escreva soma, subtrai, multiplica e
+divide, todas com a assinatura int f(int, int), e guarde-as num vetor de
+ponteiros para função:</p>
+<pre><code class="language-text">int (*ops[4])(int, int) = {soma, subtrai, multiplica, divide};
+</code></pre>
+<p>Leia uma conta no formato &quot;12 * 4&quot; com scanf(&quot;%d %c %d&quot;, ...), ache o
+índice do operador na string &quot;+-*/&quot; e chame ops[indice](a, b). Operador
+desconhecido mostra &quot;Operador inválido&quot;; divisão por zero mostra
+&quot;Divisão por zero&quot;.</p>
+<pre><code class="language-text">Entrada:
+12 * 4
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Resultado: 48
+</code></pre>
+<pre><code class="language-text">Entrada:
+7 / 0
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Divisão por zero
+</code></pre>
+<pre><code class="language-text">Entrada:
+3 % 2
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Operador inválido
+</code></pre>
+<p><strong>Exercício E298</strong> · ★★☆</p>
+<p>Ordene as frutas da barraca em ordem alfabética com qsort:</p>
+<pre><code class="language-text">const char *frutas[] = {&quot;manga&quot;, &quot;abacaxi&quot;, &quot;caju&quot;, &quot;banana&quot;, &quot;acerola&quot;};
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+abacaxi acerola banana caju manga
+</code></pre>
+<p>O detalhe: cada elemento do vetor é um const char *. O qsort entrega à
+comparação o ENDEREÇO de um elemento, ou seja, o endereço de um
+const char * (um ponteiro para ponteiro, assunto 0049).</p>
+<p><strong>Exercício E300</strong> · ★★★</p>
+<p>Você tem R$ 50 no bolso e quer ver os produtos da lojinha do mais perto
+desse valor ao mais longe. Ordene com qsort pela distância até 50
+(|preço - 50|); em caso de empate, o mais barato vem antes.</p>
+<pre><code class="language-text">int precos[7] = {47, 58, 50, 39, 53, 61, 44};
+</code></pre>
+<p>A função de comparação só recebe dois endereços, então guarde o alvo
+numa variável global static. Depois de mostrar a ordem para 50, mude o
+alvo para 60 (você achou mais R$ 10), ordene de novo e mostre.</p>
+<pre><code class="language-text">Saída esperada:
+50 47 53 44 58 39 61
+61 58 53 50 47 44 39
+</code></pre>
+<hr>
+<h2>0051 · void * e cast</h2>
+<h3>Conceito</h3>
+<p>A função <code>troca</code> do assunto 0046 troca dois <code>int</code>. Para trocar dois <code>double</code>,
+você escreveria outra, quase igual; para dois caracteres, mais uma. O
+<code>qsort</code> do assunto 0050 tem o mesmo problema ao contrário: ele precisa
+receber vetores de qualquer tipo sem saber qual. Falta um ponteiro que aceite
+qualquer endereço.</p>
+<p>Pense no funcionário dos Correios que carimba e despacha caixas sem abri-las.
+Para ele, cada caixa tem um endereço e um peso, e só. Quem recebe abre e
+descobre se é um livro ou um tênis. Em C, essa caixa fechada é o <strong><code>void *</code></strong>, o <strong>ponteiro genérico</strong>: ele guarda o endereço de qualquer dado, seja
+<code>int</code>, <code>double</code>, vetor ou outro ponteiro, mas não diz o que mora lá (DEITEL;
+DEITEL, 2011, cap. 7).</p>
+<p>A primeira regra é a da conversão livre. Em C, qualquer ponteiro para dado
+vira <code>void *</code> e volta para o tipo original sem precisar escrever nada:
+<code>void *p = &amp;senha;</code> e depois <code>int *q = p;</code> compilam limpos (DEITEL; DEITEL,
+2011, cap. 7). Ponteiro para função não entra nessa regra.</p>
+<p>A segunda regra é a que dá trabalho: um <code>void *</code> <strong>não se desreferencia</strong>.
+Escrever <code>*p</code> com <code>p</code> do tipo <code>void *</code> não compila, porque o compilador não
+sabe quantos bytes ler nem como interpretá-los. Antes de usar o dado, você
+diz o tipo com um <strong>cast</strong>, um tipo entre parênteses na frente da expressão:
+<code>*(int *)p</code> primeiro trata <code>p</code> como <code>int *</code> e depois lê o <code>int</code>. Pelo mesmo
+motivo, <code>p + 1</code> não existe no C padrão, já que o compilador não sabe o
+tamanho do passo; o <code>gcc</code> aceita como extensão e o <code>-pedantic</code> avisa (BACKES,
+2013, cap. 10).</p>
+<pre><code class="language-c">int senha = 1234;
+void *p = &amp;senha;               // caixa fechada com o endereço de senha
+printf(&quot;%d\n&quot;, *(int *)p);      // 1234: o cast diz o que tem dentro
+</code></pre>
+<p>O cast é uma promessa sua, e o compilador acredita nela sem conferir. Se você
+diz <code>(double *)</code> para um endereço em que mora um <code>int</code>, ele lê 8 bytes onde
+só havia 4 e mostra lixo (BACKES, 2013, cap. 10).</p>
+<p>A caixa fechada permite escrever funções que trabalham com <strong>qualquer
+tipo</strong>. Elas recebem <code>void *</code> e, como não conhecem o tamanho do dado,
+recebem também o tamanho em bytes. Por dentro, tratam a memória como uma
+fileira de bytes, com um <code>unsigned char *</code>, o único tipo que o C deixa olhar
+qualquer objeto byte a byte. Assim funcionam <code>memcpy</code> e <code>memset</code>, o <code>qsort</code>
+e o <code>malloc</code> do módulo 07, que devolve <code>void *</code> porque não sabe o que você
+vai guardar (CELES; RANGEL, 2002).</p>
+<p>Olhar os bytes ensina como o computador guarda um número. O A102 espia uma
+variável com <code>const unsigned char *</code>. O <code>int</code> 1000, que em hexadecimal é
+<code>0x000003E8</code>, aparece como <code>e8 03 00 00</code>: o byte menos significativo vem
+primeiro, no endereço menor. Esse arranjo se chama <strong>little-endian</strong>, e é o
+dos processadores Intel, AMD e ARM. Só os tipos <code>char</code> podem fazer essa
+leitura com segurança; ler um <code>float</code> por um <code>int *</code> quebra a regra de
+<em>strict aliasing</em>, que proíbe acessar um objeto por um ponteiro de outro
+tipo.</p>
+<blockquote>
+<p>[!WARNING]
+O <code>void *</code> desliga a conferência de tipos: <code>troca_generica(&amp;senha_a, &amp;preco_a, sizeof preco_a)</code> compila sem aviso e troca 8 bytes a partir de
+uma variável de 4, e o AddressSanitizer acusa <code>stack-buffer-overflow</code>. Use o
+<code>sizeof</code> da própria variável, nunca um número digitado à mão.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>A <code>troca</code> do assunto 0046 só troca <code>int</code>. A <code>troca_generica</code> recebe dois
+endereços sem tipo e o tamanho: com 4, troca duas senhas; com 8, dois preços.
+Byte a byte, ela nem sabe o que troca:</p>
+<p align="center"><img src="material/0051-ideia.svg" alt="Diagrama da ideia: void * e cast" width="858"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// void *: &quot;endereço de qualquer coisa&quot;. Como a função não sabe o tipo,
+// recebe o tamanho em bytes e troca byte a byte.
+void troca_generica(void *a, void *b, size_t tam) {
+    unsigned char *x = a; // void * vira outro ponteiro sem cast, em C
+    unsigned char *y = b;
+    for (size_t i = 0; i &lt; tam; i++) {
+        unsigned char tmp = x[i];
+        x[i] = y[i];
+        y[i] = tmp;
+    }
+}
+
+int main(void) {
+    int senha_a = 17, senha_b = 42;               // senhas do atendimento
+    double preco_a = 12.90, preco_b = 8.50;       // preços na etiqueta
+
+    troca_generica(&amp;senha_a, &amp;senha_b, sizeof senha_a);   // troca 4 bytes
+    troca_generica(&amp;preco_a, &amp;preco_b, sizeof preco_a);   // troca 8 bytes
+
+    printf(&quot;senhas: %d e %d\n&quot;, senha_a, senha_b);
+    printf(&quot;preços: %.2f e %.2f\n&quot;, preco_a, preco_b);
+    return 0;
+}
+// Saída:
+// senhas: 42 e 17
+// preços: 8.50 e 12.90
+</code></pre>
+<p>O A102 espia os bytes com <code>const unsigned char *</code>: o <code>int</code> 1000 aparece como
+<code>e8 03 00 00</code>, o byte menos significativo primeiro (<strong>little-endian</strong>).</p>
+<p>A função não pergunta &quot;que tipo é?&quot;, só &quot;ainda tem byte para trocar?&quot;:</p>
+<p align="center"><img src="material/0051-fluxograma.svg" alt="Fluxograma: void * e cast" width="560"></p>
+<p><strong>Exemplo A101 · O backup que copia qualquer coisa</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+// copia tam bytes de origem para destino; const void *: só lê a origem.
+// Devolve destino, como o memcpy da string.h
+void *copia_bytes(void *destino, const void *origem, size_t tam) {
+    unsigned char *d = destino;
+    const unsigned char *o = origem;
+    for (size_t i = 0; i &lt; tam; i++) {
+        d[i] = o[i];
+    }
+    return destino;
+}
+
+int main(void) {
+    int itens = 7;
+    double total = 184.35;
+    int qtd[4] = {2, 1, 6, 3}; // quantidade de cada produto no carrinho
+
+    int itens_bkp;
+    double total_bkp;
+    int qtd_bkp[4];
+
+    copia_bytes(&amp;itens_bkp, &amp;itens, sizeof itens);  // 4 bytes
+    copia_bytes(&amp;total_bkp, &amp;total, sizeof total);  // 8 bytes
+    copia_bytes(qtd_bkp, qtd, sizeof qtd);          // o vetor inteiro: 16 bytes
+
+    qtd[2] = 0; // o cliente tirou os 6 iogurtes; o backup não muda
+    printf(&quot;itens: %d, total: %.2f\n&quot;, itens_bkp, total_bkp);
+    printf(&quot;qtd agora:  %d %d %d %d\n&quot;, qtd[0], qtd[1], qtd[2], qtd[3]);
+    printf(&quot;qtd backup: %d %d %d %d\n&quot;, qtd_bkp[0], qtd_bkp[1], qtd_bkp[2], qtd_bkp[3]);
+
+    // o void * devolvido precisa voltar ao tipo certo para ser lido
+    int *volta = copia_bytes(qtd, qtd_bkp, sizeof qtd); // restaura o carrinho
+    printf(&quot;restaurado: %d (o mesmo endereço de qtd? %d)\n&quot;, volta[2], volta == qtd);
+
+    // a biblioteca já tem essa função pronta
+    memcpy(&amp;itens, &amp;itens_bkp, sizeof itens);
+    printf(&quot;memcpy: %d\n&quot;, itens);
+    return 0;
+}
+// Saída:
+// itens: 7, total: 184.35
+// qtd agora:  2 1 0 3
+// qtd backup: 2 1 6 3
+// restaurado: 6 (o mesmo endereço de qtd? 1)
+// memcpy: 7
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A101.c -o ~/LPEDC/material/A101 &amp;&amp; ~/LPEDC/material/A101
+</code></pre>
+<p><strong>Exemplo A102 · Os bytes de verdade</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+// mostra, em hexa, os bytes que estão a partir de um endereço qualquer
+void mostra_bytes(const char *rotulo, const void *p, size_t tam) {
+    const unsigned char *byte = p;
+    printf(&quot;%-10s&quot;, rotulo);
+    for (size_t i = 0; i &lt; tam; i++) {
+        printf(&quot; %02x&quot;, byte[i]);
+    }
+    printf(&quot;\n&quot;);
+}
+
+int main(void) {
+    int mil = 1000;              // 1000 = 0x000003E8
+    int menos_um = -1;
+    char pix[] = &quot;Pix&quot;;
+    double meio = 0.5;
+
+    mostra_bytes(&quot;1000&quot;, &amp;mil, sizeof mil);
+    mostra_bytes(&quot;-1&quot;, &amp;menos_um, sizeof menos_um);
+    mostra_bytes(&quot;\&quot;Pix\&quot;&quot;, pix, sizeof pix);
+    mostra_bytes(&quot;0.5&quot;, &amp;meio, sizeof meio);
+
+    void *qualquer = &amp;mil;
+    printf(&quot;de volta: %d\n&quot;, *(int *)qualquer); // para ler, converta para o tipo certo
+    return 0;
+}
+// Saída (num PC Intel/AMD ou ARM, que são little-endian):
+// 1000       e8 03 00 00
+// -1         ff ff ff ff
+// &quot;Pix&quot;      50 69 78 00
+// 0.5        00 00 00 00 00 00 e0 3f
+// de volta: 1000
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A102.c -o ~/LPEDC/material/A102 &amp;&amp; ~/LPEDC/material/A102
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E301</strong> · ★☆☆</p>
+<p>No cadastro do plano de saúde, declare int idade = 41 e double altura =
+1.83. Use UM único ponteiro void *p: primeiro aponte para idade e mostre
+o valor; depois aponte para altura e mostre o valor.</p>
+<pre><code class="language-text">Saída esperada:
+idade: 41
+altura: 1.83
+</code></pre>
+<p><strong>Exercício E303</strong> · ★★☆</p>
+<p>Escreva sua versão do memset para zerar qualquer coisa:</p>
+<pre><code class="language-text">void zera(void *p, size_t tam)
+</code></pre>
+<p>que coloca 0 em cada um dos tam bytes a partir de p. Teste zerando o
+vetor de placar int gols[5] = {2, 1, 3, 0, 4} e a variável double saldo
+= 99.90. Mostre antes e depois.</p>
+<pre><code class="language-text">Saída esperada:
+antes: 2 1 3 0 4 | 99.90
+depois: 0 0 0 0 0 | 0.00
+</code></pre>
+<p><strong>Exercício E304</strong> · ★★☆</p>
+<p>Escreva uma função que mostra vetores de QUALQUER tipo:</p>
+<pre><code class="language-text">void mostra_vetor(const void *v, size_t n, size_t tam,
+                  void (*mostra)(const void *))
+</code></pre>
+<p>Ela calcula o endereço de cada elemento (o i-ésimo começa i * tam bytes
+depois do início) e chama mostra com esse endereço. Escreva também
+mostra_int e mostra_double. Teste com</p>
+<pre><code class="language-text">int senhas[4] = {101, 102, 103, 104};
+double notas[3] = {7.5, 9.25, 6.0};
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+101 102 103 104
+7.50 9.25 6.00
+</code></pre>
+<p><strong>Exercício E305</strong> · ★★★</p>
+<p>Escreva uma busca linear genérica:</p>
+<pre><code class="language-text">int busca(const void *v, size_t n, size_t tam, const void *alvo,
+          int (*igual)(const void *, const void *))
+</code></pre>
+<p>que devolve o índice do primeiro elemento igual ao alvo (segundo a função
+igual) ou -1. Use com três vetores:</p>
+<pre><code class="language-text">int cods[5] = {310, 422, 518, 422, 907};          alvo 422
+double precos[4] = {9.90, 15.50, 4.25, 30.00};    alvo 4.25
+const char *nomes[3] = {&quot;ana&quot;, &quot;bia&quot;, &quot;caio&quot;};    alvo &quot;caio&quot;
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+422 no índice 1
+4.25 no índice 2
+caio no índice 2
+bruno no índice -1
+</code></pre>
+<hr>
+<h2>0052 · Juntando tudo: o ranking da feira</h2>
+<h3>Conceito</h3>
+<p>Sábado, fim de feira. A associação dos feirantes quer o ranking das barracas
+pelo faturamento do dia e o nome da campeã. Há uma condição: a planilha
+original não pode mudar de ordem, porque outras contas usam a posição de
+cada barraca. Ordenar sem mexer nos dados parece contraditório, e resolver
+isso usa quase tudo o que o módulo mostrou.</p>
+<p>Os dados ficam em <strong>vetores paralelos</strong>: <code>produtos</code>, <code>qtd</code> e <code>preco</code> guardam
+o nome, a quantidade vendida e o preço de cada barraca, e a mesma posição
+<code>i</code> fala da mesma barraca nos três. O faturamento sai de uma conta por
+posição, <code>fat[i] = qtd[i] * preco[i]</code>, e vai para um quarto vetor (DEITEL;
+DEITEL, 2011, cap. 7).</p>
+<p>A ideia central é ordenar <strong>ponteiros</strong> em vez de dados. Pense no índice
+remissivo de um livro: as páginas não mudam de lugar, só a lista que aponta
+para elas. Aqui, o índice é um <strong>vetor de ponteiros</strong> <code>const double *ordem[N]</code> (assunto 0049), em que cada posição aponta para um elemento de
+<code>fat</code>. O programa ordena <code>ordem</code>, e <code>fat</code> continua na ordem de sempre (CELES;
+RANGEL, 2002).</p>
+<p>Quem ordena é o <strong><code>qsort</code></strong> (assunto 0050), com uma função de comparação
+escrita por você. Repare no que ela recebe. Os elementos de <code>ordem</code> são
+<code>const double *</code>, e o <code>qsort</code> entrega à comparação o <strong>endereço</strong> de cada
+elemento, como <code>const void *</code> (assunto 0051). A função converte esse
+endereço para um ponteiro para ponteiro e dá dois saltos, <code>**</code>, até chegar
+ao faturamento (KERRISK, s.d.).</p>
+<p>Depois da ordenação, <code>ordem[0]</code> aponta para o maior faturamento. Para saber
+o nome dessa barraca, falta a posição dela em <code>fat</code>. A <strong>subtração de
+ponteiros</strong> (assunto 0047) resolve: <code>ordem[i] - fat</code> dá quantos elementos
+existem entre o começo de <code>fat</code> e o elemento apontado, que é o índice. O
+mesmo índice dá o nome em <code>produtos</code> (KERNIGHAN; RITCHIE, 1989, cap. 5).</p>
+<p>O resumo da feira usa a <strong>passagem por referência</strong> (assunto 0046). A função
+<code>resumo</code> devolve duas respostas: o total do dia, num <code>double *</code>, e <strong>onde</strong>
+está o maior faturamento, num <code>const double **</code>. O segundo parâmetro tem dois
+asteriscos porque a função muda um ponteiro do <code>main</code>, fazendo-o apontar para
+a campeã (DEITEL; DEITEL, 2011, cap. 7).</p>
+<p>Com tantos <code>const</code> e <code>*</code>, as declarações ficam longas. A técnica é ler da
+direita para a esquerda: <code>const double * const *p</code> é &quot;p é ponteiro para um
+ponteiro constante para <code>double</code> constante&quot;. Cada <code>const</code> protege o que está
+imediatamente à esquerda dele, ou o tipo, quando vem no começo (DEITEL;
+DEITEL, 2011, cap. 7).</p>
+<p>Ordenar ponteiros é uma técnica clássica por dois motivos. Cada troca do
+<code>qsort</code> move só 8 bytes, mesmo que cada dado seja uma struct de 200 bytes
+(módulo 08). E vários vetores de ponteiros, um por faturamento e outro por
+nome, podem existir ao mesmo tempo sobre os mesmos dados; é a ideia dos
+índices de um banco de dados.</p>
+<blockquote>
+<p>[!WARNING]
+<code>sizeof(double)</code> no <code>qsort</code> de <code>ordem</code> está errado: os elementos são
+<strong>ponteiros</strong>. Aqui os dois têm 8 bytes e o erro se esconde; com
+<code>int *ordem[]</code> e <code>sizeof(int)</code>, o <code>qsort</code> trocaria meio ponteiro. Escreva
+sempre <code>sizeof ordem[0]</code>.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>Fim de feira, 4 barracas: tomate (30 × R$ 6,50), alface (45 × R$ 3,00), queijo
+(8 × R$ 32,00) e pastel (60 × R$ 9,00). Depois do <code>qsort</code>, <code>ordem[0]</code> aponta
+para o pastel e <code>ordem[3]</code> para a alface, e <code>fat</code> segue igual:</p>
+<p align="center"><img src="material/0052-ideia.svg" alt="Diagrama da ideia: Juntando tudo: o ranking da feira" width="858"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+#define N 4
+
+// devolve dois resultados: o total (double *) e ONDE está o maior (const double **)
+void resumo(const double *v, int n, double *total, const double **maior) {
+    *total = 0;
+    *maior = v;
+    for (const double *p = v; p &lt; v + n; p++) {
+        *total += *p;
+        if (*p &gt; **maior) {
+            *maior = p;
+        }
+    }
+}
+
+// cada elemento de ordem é um const double *; o qsort entrega o ENDEREÇO dele
+int maior_primeiro(const void *a, const void *b) {
+    double x = **(const double * const *)a;
+    double y = **(const double * const *)b;
+    return (x &lt; y) - (x &gt; y); // decrescente
+}
+
+int main(void) {
+    const char *produtos[N] = {&quot;tomate&quot;, &quot;alface&quot;, &quot;queijo&quot;, &quot;pastel&quot;};
+    int qtd[N] = {30, 45, 8, 60};
+    double preco[N] = {6.50, 3.00, 32.00, 9.00};
+    double fat[N];               // faturamento de cada barraca
+    const double *ordem[N];      // ponteiros para fat: é isso que vamos ordenar
+
+    for (int i = 0; i &lt; N; i++) {
+        fat[i] = qtd[i] * preco[i];
+        ordem[i] = &amp;fat[i];
+    }
+    qsort(ordem, N, sizeof ordem[0], maior_primeiro); // fat continua intacto
+
+    for (int i = 0; i &lt; N; i++) {
+        int k = (int)(ordem[i] - fat); // ponteiro - início = índice do produto
+        printf(&quot;%dº %-7s R$ %7.2f\n&quot;, i + 1, produtos[k], *ordem[i]);
+    }
+
+    double total;
+    const double *maior;
+    resumo(fat, N, &amp;total, &amp;maior);
+    printf(&quot;Total: R$ %.2f  Campeão: %s\n&quot;, total, produtos[maior - fat]);
+    return 0;
+}
+// Saída:
+// 1º pastel  R$  540.00
+// 2º queijo  R$  256.00
+// 3º tomate  R$  195.00
+// 4º alface  R$  135.00
+// Total: R$ 1126.00  Campeão: pastel
+</code></pre>
+<p>Três fases: calcula e aponta, ordena os ponteiros e percorre a ordem nova,
+traduzindo cada ponteiro em índice:</p>
+<p align="center"><img src="material/0052-fluxograma.svg" alt="Fluxograma: Juntando tudo: o ranking da feira" width="548"></p>
+<p><strong>Exemplo A103 · A lista de compras picada no lugar</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+// corta a linha nos &#39;;&#39; (trocando cada um por &#39;\0&#39;) e guarda em campos o
+// endereço do começo de cada pedaço. Nada é copiado: os pedaços continuam
+// morando dentro de linha. Devolve quantos pedaços achou
+int separa(char *linha, char **campos, int max) {
+    int n = 0;
+    char *p = linha;
+    while (n &lt; max) {
+        campos[n++] = p;            // um pedaço começa aqui
+        while (*p != &#39;\0&#39; &amp;&amp; *p != &#39;;&#39;) {
+            p++;
+        }
+        if (*p == &#39;\0&#39;) {
+            break;                  // fim da linha: último pedaço
+        }
+        *p = &#39;\0&#39;;                  // corta
+        p++;                        // o próximo começa depois do corte
+    }
+    return n;
+}
+
+// o qsort entrega o endereço de cada char *: um char ** disfarçado de void *
+int alfabetica(const void *a, const void *b) {
+    const char *x = *(char *const *)a;
+    const char *y = *(char *const *)b;
+    return strcmp(x, y);
+}
+
+int main(void) {
+    char linha[] = &quot;cafe;arroz;leite;banana;feijao&quot;;
+    char *itens[10];
+
+    int n = separa(linha, itens, 10);
+    qsort(itens, (size_t)n, sizeof itens[0], alfabetica); // ordena os ponteiros
+
+    for (int i = 0; i &lt; n; i++) {
+        // a posição na linha original sai da distância entre ponteiros
+        printf(&quot;%d. %-7s (byte %2td da linha)\n&quot;, i + 1, itens[i], itens[i] - linha);
+    }
+
+    // a linha agora tem &#39;\0&#39; no lugar dos &#39;;&#39;: o printf para no primeiro
+    printf(&quot;linha depois: %s\n&quot;, linha);
+
+    // caso de borda: um campo vazio entre dois &#39;;&#39; também vira um pedaço
+    char outra[] = &quot;pao;;ovos&quot;;
+    n = separa(outra, itens, 10);
+    printf(&quot;%d pedaços, o do meio tem %zu letras\n&quot;, n, strlen(itens[1]));
+    return 0;
+}
+// Saída:
+// 1. arroz   (byte  5 da linha)
+// 2. banana  (byte 17 da linha)
+// 3. cafe    (byte  0 da linha)
+// 4. feijao  (byte 24 da linha)
+// 5. leite   (byte 11 da linha)
+// linha depois: cafe
+// 3 pedaços, o do meio tem 0 letras
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A103.c -o ~/LPEDC/material/A103 &amp;&amp; ~/LPEDC/material/A103
+</code></pre>
+<p><strong>Exemplo A104 · O caixa eletrônico de comandos</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int deposita(int *saldo, int valor) {
+    *saldo += valor;
+    return 1;
+}
+
+int saca(int *saldo, int valor) {
+    if (valor &gt; *saldo) {
+        return 0; // negado: o saldo não muda
+    }
+    *saldo -= valor;
+    return 1;
+}
+
+// tabela de comandos: o nome na posição i corresponde à função na posição i
+const char *nomes[] = {&quot;deposito&quot;, &quot;saque&quot;};
+int (*acoes[])(int *, int) = {deposita, saca};
+
+int indice_do(const char *comando) {
+    for (int i = 0; i &lt; 2; i++) {
+        if (strcmp(nomes[i], comando) == 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+int main(void) {
+    int saldo = 100;
+    const char *roteiro[] = {&quot;deposito&quot;, &quot;saque&quot;, &quot;pix&quot;, &quot;saque&quot;};
+    int valores[] = {200, 50, 30, 500};
+
+    for (int i = 0; i &lt; 4; i++) {
+        int k = indice_do(roteiro[i]);
+        if (k &lt; 0) {
+            printf(&quot;%-9s %4d: comando desconhecido\n&quot;, roteiro[i], valores[i]);
+        } else if (acoes[k](&amp;saldo, valores[i])) { // chama pela tabela
+            printf(&quot;%-9s %4d: ok, saldo %d\n&quot;, roteiro[i], valores[i], saldo);
+        } else {
+            printf(&quot;%-9s %4d: negado, saldo %d\n&quot;, roteiro[i], valores[i], saldo);
+        }
+    }
+    return 0;
+}
+// Saída:
+// deposito   200: ok, saldo 300
+// saque       50: ok, saldo 250
+// pix         30: comando desconhecido
+// saque      500: negado, saldo 250
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A104.c -o ~/LPEDC/material/A104 &amp;&amp; ~/LPEDC/material/A104
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E307</strong> · ★☆☆</p>
+<p>O caixa da padaria precisa separar reais e centavos para imprimir o
+cupom. Escreva</p>
+<pre><code class="language-text">void separa(double valor, int *reais, int *centavos)
+</code></pre>
+<p>e teste com 37.85, 0.99 e 19.99.</p>
+<pre><code class="language-text">Saída esperada:
+R$ 37.85 = 37 reais e 85 centavos
+R$ 0.99 = 0 reais e 99 centavos
+R$ 19.99 = 19 reais e 99 centavos
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/E307.c -o ~/LPEDC/material/E307 -lm &amp;&amp; ~/LPEDC/material/E307
+</code></pre>
+<p><strong>Exercício E309</strong> · ★★☆</p>
+<p>Três corredores terminaram a prova com os tempos (em minutos) guardados
+em variáveis soltas: ana = 31, bia = 7, caio = 19. Escreva</p>
+<pre><code class="language-text">void ordena3(int *a, int *b, int *c)
+</code></pre>
+<p>que deixa os três valores em ordem crescente (a o menor, c o maior)
+usando só a função troca do assunto 0046, chamada no máximo 3 vezes.
+Teste com várias ordens.</p>
+<pre><code class="language-text">Saída esperada:
+7 19 31
+</code></pre>
+<p><strong>Exercício E310</strong> · ★★☆</p>
+<p>O mapa do jogo de viagem lista as capitais pelo tamanho do nome (do mais
+curto ao mais comprido); empates ficam em ordem alfabética. Ordene com
+qsort:</p>
+<pre><code class="language-text">const char *capitais[] = {&quot;Natal&quot;, &quot;Rio Branco&quot;, &quot;Recife&quot;, &quot;Palmas&quot;,
+                          &quot;Maceio&quot;, &quot;Salvador&quot;, &quot;Teresina&quot;, &quot;Aracaju&quot;};
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Natal Maceio Palmas Recife Aracaju Salvador Teresina Rio Branco
+</code></pre>
+<p><strong>Exercício E312</strong> · ★★★</p>
+<p>Escreva um &quot;máximo&quot; genérico, que serve para vetores de qualquer tipo:</p>
+<pre><code class="language-text">void *maximo(void *v, size_t n, size_t tam,
+             int (*cmp)(const void *, const void *))
+</code></pre>
+<p>que devolve o ENDEREÇO do maior elemento (o primeiro, em caso de empate)
+segundo a comparação cmp, ou NULL se n for 0. Teste com</p>
+<pre><code class="language-text">int pontos[5] = {12, 47, 33, 47, 5};
+const char *frutas[4] = {&quot;uva&quot;, &quot;maca&quot;, &quot;laranja&quot;, &quot;abacate&quot;};
+</code></pre>
+<p>usando três comparações: inteiros, ordem alfabética (strcmp) e tamanho
+do nome. Mostre o valor e o índice (subtraindo ponteiros). Depois, use o
+endereço devolvido para zerar o maior inteiro dentro do vetor.</p>
+<pre><code class="language-text">Saída esperada:
+maior pontuação: 47 (índice 1)
+última no alfabeto: uva (índice 0)
+nome mais comprido: laranja (índice 2)
+depois de zerar: 12 0 33 47 5
+</code></pre>
+<hr>
+<h2>Lista do módulo</h2>
+<p>30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P0601.c a P0630.c, em <code>material/</code>; resoluções em <code>_respostas/06-ponteiros/lista/</code>.</p>
+<h3>★☆☆ Aquecimento</h3>
+<p><strong>Exercício P0601</strong> · ★☆☆ · O placar pelo ponteiro</p>
+<p>O narrador anotou os gols de Remo x Paysandu numa string, na ordem em que
+saíram: &#39;R&#39; é gol do Remo e &#39;P&#39; é gol do Paysandu.</p>
+<pre><code class="language-text">char gols[] = &quot;RPPRRPR&quot;;
+</code></pre>
+<p>Declare int remo = 0, paysandu = 0; e, para cada letra, faça um ponteiro
+int *alvo apontar para a variável do time que marcou e some o gol com
+(*alvo)++. A soma é feita SEMPRE pelo ponteiro, numa linha só. Mostre o
+placar parcial a cada gol:</p>
+<pre><code class="language-text">Saída esperada:
+Gol 1 (Remo): Remo 1 x 0 Paysandu
+Gol 2 (Paysandu): Remo 1 x 1 Paysandu
+Gol 3 (Paysandu): Remo 1 x 2 Paysandu
+Gol 4 (Remo): Remo 2 x 2 Paysandu
+Gol 5 (Remo): Remo 3 x 2 Paysandu
+Gol 6 (Paysandu): Remo 3 x 3 Paysandu
+Gol 7 (Remo): Remo 4 x 3 Paysandu
+</code></pre>
+<p><strong>Resposta esperada:</strong> a saída acima (4 x 3 para o Remo).</p>
+<hr>
+<p><strong>Exercício P0602</strong> · ★☆☆ · As leituras até o -1</p>
+<p>O hidrômetro manda o consumo diário (em litros) e o -1 marca o fim das
+leituras:</p>
+<pre><code class="language-text">int leituras[] = {312, 280, 455, 301, 298, -1};
+</code></pre>
+<p>Sem usar colchetes depois da declaração, ande com um ponteiro p de
+leituras até achar o -1, somando o consumo. No fim, use a diferença de
+ponteiros p - leituras para saber quantas leituras eram e mostre a média:</p>
+<pre><code class="language-text">Saída esperada:
+Leituras: 5
+Total: 1646 litros
+Média: 329.20 litros por dia
+</code></pre>
+<p><strong>Resposta esperada:</strong> a saída acima (5 leituras, média 329.20 litros).</p>
+<hr>
+<p><strong>Exercício P0603</strong> · ★☆☆ · Rachando a conta do bar</p>
+<p>Escreva</p>
+<pre><code class="language-text">bool rachar(double total, int pessoas, double *por_pessoa, double *gorjeta)
+</code></pre>
+<p>que calcula os 10% do garçom (em *gorjeta) e quanto cada pessoa paga com a
+gorjeta incluída (em *por_pessoa). Se pessoas for menor que 1, a função
+devolve false e não mexe em nada. Teste com R$ 186.00 para 4 pessoas,
+R$ 95.50 para 3 e R$ 50.00 para 0:</p>
+<pre><code class="language-text">Saída esperada:
+R$ 186.00 / 4: gorjeta R$ 18.60, cada um paga R$ 51.15
+R$ 95.50 / 3: gorjeta R$ 9.55, cada um paga R$ 35.02
+R$ 50.00 / 0: ninguém para pagar
+</code></pre>
+<hr>
+<p><strong>Exercício P0604</strong> · ★☆☆ · A placa no padrão Mercosul</p>
+<p>O despachante digitou as placas em minúsculas. Escreva void maiusculas(char
+*s), que passa a string para maiúsculas andando com o próprio ponteiro s
+até o &#39;\0&#39; (sem índice), e bool padrao_mercosul(const char *p), que confere
+o formato LLLNLNN (3 letras, 1 dígito, 1 letra, 2 dígitos). Teste:</p>
+<pre><code class="language-text">char placas[3][8] = {&quot;rio2a18&quot;, &quot;abc1234&quot;, &quot;qxz9b07&quot;};
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+RIO2A18: Mercosul
+ABC1234: modelo antigo
+QXZ9B07: Mercosul
+</code></pre>
+<hr>
+<p><strong>Exercício P0605</strong> · ★☆☆ · Troca de plantão</p>
+<p>O hospital guarda quem está de plantão em dois ponteiros para string:</p>
+<pre><code class="language-text">const char *dia = &quot;Dra. Socorro&quot;;
+const char *noite = &quot;Dr. Wanderley&quot;;
+</code></pre>
+<p>Escreva void troca_plantao(const char **a, const char **b), que troca para
+onde os dois ponteiros apontam (as strings não mudam de lugar: só os
+ponteiros). Mostre a escala antes e depois e, para provar que nenhum texto
+foi copiado, mostre o endereço guardado em dia antes e o guardado em noite
+depois (são o mesmo):</p>
+<pre><code class="language-text">Saída esperada (os endereços mudam a cada execução):
+Antes:  dia = Dra. Socorro, noite = Dr. Wanderley
+Depois: dia = Dr. Wanderley, noite = Dra. Socorro
+dia antes:    0x55d0c3a01004
+noite depois: 0x55d0c3a01004
+</code></pre>
+<p><strong>Resposta esperada:</strong> a saída acima, com as duas últimas linhas iguais.</p>
+<hr>
+<p><strong>Exercício P0606</strong> · ★☆☆ · O pódio do campeonato</p>
+<p>Os pontos dos 8 times do campeonato amazonense, fora de ordem:</p>
+<pre><code class="language-text">int pontos[8] = {21, 34, 18, 29, 34, 12, 25, 30};
+</code></pre>
+<p>Ordene do MAIOR para o menor com qsort, escrevendo a função de comparação
+int decrescente(const void *a, const void *b). Mostre a tabela e o pódio:</p>
+<pre><code class="language-text">Saída esperada:
+Tabela: 34 34 30 29 25 21 18 12
+1º: 34 pontos
+2º: 34 pontos
+3º: 30 pontos
+</code></pre>
+<hr>
+<p><strong>Exercício P0607</strong> · ★☆☆ · A regra de desconto como parâmetro</p>
+<p>A loja tem três promoções, cada uma uma função double regra(double preco):</p>
+<ul>
+<li>black_friday: 30% de desconto;</li>
+<li>cupom10: R$ 10 a menos, mas nunca abaixo de zero;</li>
+<li>leve_mais: 5% de desconto se o preço passar de R$ 100, senão nada.</li>
+</ul>
+<p>Escreva double total_com(const double *precos, int n, double
+(*regra)(double)),
+que soma os preços depois de aplicar a regra recebida em cada um. Para o
+carrinho abaixo, mostre o total sem desconto e com cada promoção:</p>
+<pre><code class="language-text">double carrinho[4] = {129.90, 8.50, 45.00, 210.00};
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Sem desconto  R$  393.40
+Black Friday  R$  275.38
+Cupom R$ 10   R$  354.90
+Leve mais     R$  376.40
+</code></pre>
+<hr>
+<p><strong>Exercício P0608</strong> · ★☆☆ · Conserte os ponteiros soltos</p>
+<p>O programa da bilheteria tem DOIS erros de propósito, e o gcc avisa dos
+dois. Um ponteiro é usado sem apontar para nada, e uma função devolve o
+endereço de uma variável que deixa de existir quando ela termina. Rode, leia
+os avisos (warning) e conserte sem mudar o que o programa mostra:</p>
+<pre><code class="language-text">Saída esperada:
+Público do dia: 229
+Sessão mais cheia: 142
+</code></pre>
+<hr>
+<p><strong>Exercício P0609</strong> · ★☆☆ · Uma função que mostra qualquer coisa</p>
+<p>O painel do posto mostra dados de tipos diferentes. Escreva</p>
+<pre><code class="language-text">void mostrar(const char *rotulo, const void *p, char tipo)
+</code></pre>
+<p>em que tipo diz o que existe no endereço p: &#39;i&#39; (int), &#39;d&#39; (double),
+&#39;c&#39; (char) ou &#39;s&#39; (string). A função converte p para o tipo certo antes de
+ler. No main, mostre as quatro variáveis abaixo com ela:</p>
+<pre><code class="language-text">int bomba = 3;
+double litro = 6.29;
+char combustivel = &#39;G&#39;;
+char frentista[] = &quot;Rosinete&quot;;
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Bomba:       3
+Litro: R$    6.29
+Tipo:        G
+Frentista:   Rosinete
+</code></pre>
+<hr>
+<p><strong>Exercício P0610</strong> · ★☆☆ · O maior da matriz por um ponteiro só</p>
+<p>A matriz guarda as vendas de 3 vendedores (linhas) em 4 semanas (colunas):</p>
+<pre><code class="language-text">int v[3][4] = {{12, 18, 9, 14}, {20, 7, 16, 11}, {13, 15, 22, 8}};
+</code></pre>
+<p>Na memória, as 12 casas ficam uma depois da outra, linha por linha. Use um
+único ponteiro int *p = &amp;v[0][0] e ande pelas 12 casas com p++ (sem
+v[i][j]) para achar o maior valor. Depois, com a POSIÇÃO dele no bloco
+(k = p_maior - &amp;v[0][0]), descubra a linha (k / 4) e a coluna (k % 4):</p>
+<pre><code class="language-text">Saída esperada:
+Maior venda: 22
+Posição no bloco: 10
+Vendedor (linha): 2
+Semana (coluna): 2
+</code></pre>
+<p><strong>Resposta esperada:</strong> a saída acima (22 na posição 10: linha 2, coluna 2).</p>
+<h3>★★☆ Para pensar</h3>
+<p><strong>Exercício P0611</strong> · ★★☆ · Lado par, lado ímpar</p>
+<p>O carteiro recebeu as cartas de uma rua fora de ordem e quer separar o lado
+par do lado ímpar antes de sair:</p>
+<pre><code class="language-text">int casas[10] = {15, 8, 23, 42, 7, 10, 31, 6, 19, 4};
+</code></pre>
+<p>Escreva int separar(int *v, int n), que deixa os pares no começo e os
+ímpares no fim, NO PRÓPRIO VETOR, e devolve quantos pares há. Use dois
+ponteiros: esq começa no
+primeiro elemento e dir no último. Enquanto esq &lt; dir: avance esq enquanto
+ele for par, recue dir enquanto ele for ímpar e, se os dois ainda não se
+cruzaram, troque *esq com *dir. Mostre o vetor e onde começa o lado ímpar:</p>
+<pre><code class="language-text">Saída esperada:
+4 8 6 42 10 7 31 23 19 15
+Pares: 5 casas; o lado ímpar começa na posição 5
+</code></pre>
+<hr>
+<p><strong>Exercício P0612</strong> · ★★☆ · O qsort numa matriz de char</p>
+<p>Os bairros de Manaus estão numa matriz de char (cada linha é uma string de
+até 19 letras), não num vetor de ponteiros:</p>
+<pre><code class="language-text">char bairros[6][20] = {&quot;Flores&quot;, &quot;Adrianopolis&quot;, &quot;Compensa&quot;,
+                       &quot;Aleixo&quot;, &quot;Educandos&quot;, &quot;Cachoeirinha&quot;};
+</code></pre>
+<p>Ordene com qsort em ordem alfabética. Cuidado: aqui cada elemento é uma
+LINHA de 20 bytes, não um char *. O tamanho do elemento é sizeof
+bairros[0], e o que chega na comparação é o endereço do primeiro char da
+linha. Mostre também quantos bytes o qsort move a cada troca:</p>
+<pre><code class="language-text">Saída esperada:
+1. Adrianopolis
+2. Aleixo
+3. Cachoeirinha
+4. Compensa
+5. Educandos
+6. Flores
+Cada elemento tem 20 bytes
+</code></pre>
+<hr>
+<p><strong>Exercício P0613</strong> · ★★☆ · O filtro do extrato do Pix</p>
+<p>O extrato do mês tem estes valores (positivo é entrada, negativo é saída):</p>
+<pre><code class="language-text">int pix[10] = {1500, -89, -230, 45, -12, 3200, -1450, -75, 300, -640};
+</code></pre>
+<p>Escreva int filtrar(const int *v, int n, int *saida, bool (*passa)(int)),
+que copia para saida, na ordem, só os valores para os quais passa devolve
+true, e devolve quantos copiou. Escreva três critérios e mostre o
+resultado de cada um com a soma:</p>
+<ul>
+<li>entrada: o valor é positivo;</li>
+<li>saida_grande: é uma saída de mais de R$ 100;</li>
+<li>miudo: o valor, com ou sem sinal, é menor que R$ 100.</li>
+</ul>
+<pre><code class="language-text">Saída esperada:
+Entradas: 1500 45 3200 300 (4 itens, soma 5045)
+Saídas grandes: -230 -1450 -640 (3 itens, soma -2320)
+Miúdos: -89 45 -12 -75 (4 itens, soma -131)
+</code></pre>
+<hr>
+<p><strong>Exercício P0614</strong> · ★★☆ · A extensão do arquivo</p>
+<p>O sistema de upload precisa da extensão de cada arquivo. Escreva</p>
+<pre><code class="language-text">const char *extensao(const char *nome);
+</code></pre>
+<p>que devolve um ponteiro para o texto DEPOIS do último ponto do nome (dentro
+da própria string, sem copiar nada). Se não houver ponto, ou se o único
+ponto for o primeiro caractere (arquivo oculto, como &quot;.bashrc&quot;), devolve um
+ponteiro para o &#39;\0&#39; do fim (string vazia). Teste:</p>
+<pre><code class="language-text">const char *arquivos[5] = {&quot;relatorio.final.pdf&quot;, &quot;foto.JPG&quot;, &quot;LEIAME&quot;,
+                           &quot;.bashrc&quot;, &quot;backup.tar.gz&quot;};
+</code></pre>
+<p>Mostre cada nome, a extensão entre colchetes e em que posição do nome ela
+começa (diferença de ponteiros):</p>
+<pre><code class="language-text">Saída esperada:
+relatorio.final.pdf  [pdf] posição 16
+foto.JPG             [JPG] posição 5
+LEIAME               [] posição 6
+.bashrc              [] posição 7
+backup.tar.gz        [gz] posição 11
+</code></pre>
+<hr>
+<p><strong>Exercício P0615</strong> · ★★☆ · Troque o prato do cardápio</p>
+<p>O cardápio do dia é um vetor de ponteiros para string:</p>
+<pre><code class="language-text">const char *cardapio[5] = {&quot;Tacacá&quot;, &quot;Pato no tucupi&quot;, &quot;Tambaqui assado&quot;,
+                           &quot;Vatapá&quot;, &quot;Maniçoba&quot;};
+</code></pre>
+<p>Escreva const char **achar(const char **itens, int n, const char *prato),
+que devolve o ENDEREÇO da gaveta do vetor onde está o prato (ou NULL). Com
+esse endereço, o main troca o prato sem saber o índice: *gaveta = &quot;novo&quot;.
+Escreva também void mostrar(const char **itens, int n). Troque &quot;Vatapá&quot; por
+&quot;Caldeirada&quot;, tente trocar &quot;Feijoada&quot; e mostre o cardápio:</p>
+<pre><code class="language-text">Saída esperada:
+Vatapá trocado por Caldeirada (gaveta 3)
+Feijoada não está no cardápio
+1. Tacacá
+2. Pato no tucupi
+3. Tambaqui assado
+4. Caldeirada
+5. Maniçoba
+</code></pre>
+<hr>
+<p><strong>Exercício P0616</strong> · ★★☆ · Ordem alfabética sem ligar para maiúsculas</p>
+<p>A lista de convidados foi digitada de qualquer jeito:</p>
+<pre><code class="language-text">const char *convidados[6] = {&quot;bruna&quot;, &quot;Ademir&quot;, &quot;carlos&quot;, &quot;Beatriz&quot;,
+                             &quot;ana&quot;, &quot;Caio&quot;};
+</code></pre>
+<p>Com strcmp, as maiúsculas vêm antes de todas as minúsculas (&#39;Z&#39; é 90 e &#39;a&#39;
+é 97). Escreva int compara_sem_caixa(const char *a, const char *b), que
+compara letra a letra com tolower, andando com os dois ponteiros, e use-a
+numa função de comparação para o qsort. Mostre a lista nas duas ordens:</p>
+<pre><code class="language-text">Saída esperada:
+strcmp: Ademir Beatriz Caio ana bruna carlos
+sem caixa: Ademir ana Beatriz bruna Caio carlos
+</code></pre>
+<hr>
+<p><strong>Exercício P0617</strong> · ★★☆ · Conserte o reajuste dos preços</p>
+<p>A cantina vai subir R$ 1 em todos os preços. O programa abaixo tem DOIS
+erros de propósito na parte dos ponteiros. O gcc avisa de um (leia o
+warning); o outro, o AddressSanitizer acusa quando roda. Conserte os dois.
+O programa deve mostrar:</p>
+<pre><code class="language-text">Saída esperada:
+5 8 4 11 7
+Total: R$ 35
+</code></pre>
+<hr>
+<p><strong>Exercício P0618</strong> · ★★☆ · Ponteiro para uma linha inteira</p>
+<p>Numa matriz int m[3][4], o nome m vira um ponteiro para a primeira LINHA:
+o tipo é int (*)[4], e m + 1 pula 4 int de uma vez. Com as notas de 3
+alunos em 4 provas,</p>
+<pre><code class="language-text">int notas[3][4] = {{7, 8, 6, 9}, {5, 6, 7, 4}, {10, 9, 9, 8}};
+</code></pre>
+<p>escreva void medias(int (*linha)[4], int n, double *saida), que anda com
+o ponteiro linha (linha++) pelas n linhas e calcula a média de cada uma em
+saida[i]. Mostre as médias e, para ver o salto, sizeof *linha e a
+distância em bytes entre notas e notas + 1:</p>
+<pre><code class="language-text">Saída esperada:
+Aluno 1: 7.50
+Aluno 2: 5.50
+Aluno 3: 9.00
+sizeof *p = 16 bytes
+notas + 1 fica 16 bytes depois de notas
+</code></pre>
+<hr>
+<p><strong>Exercício P0619</strong> · ★★☆ · Média e desvio de uma vez</p>
+<p>Uma corredora anotou os tempos (em minutos) dos seus treinos de 5 km:</p>
+<pre><code class="language-text">double tempos[6] = {28.5, 27.9, 30.2, 26.8, 29.1, 27.5};
+</code></pre>
+<p>Escreva bool estatisticas(const double *v, int n, double *media,
+double *desvio), que devolve false se n &lt; 1 e, senão, entrega a média e o
+desvio padrão (populacional) pelos ponteiros. Mostre os dois e quais
+treinos ficaram abaixo da média:</p>
+<pre><code class="language-text">Saída esperada:
+Média: 28.33 min
+Desvio: 1.11 min
+Abaixo da média: treino 2 (27.9) treino 4 (26.8) treino 6 (27.5)
+</code></pre>
+<p><strong>Resposta esperada:</strong> a saída acima (média 28.33, desvio 1.11).</p>
+<pre><code class="language-bash">gcc ~/LPEDC/material/P0619.c -o ~/LPEDC/material/P0619 -lm &amp;&amp; ~/LPEDC/material/P0619
+</code></pre>
+<hr>
+<p><strong>Exercício P0620</strong> · ★★☆ · Três ordens para o mesmo vetor</p>
+<p>O sorteio de uma rifa tirou estes números:</p>
+<pre><code class="language-text">int sorteados[8] = {47, 12, 85, 30, 9, 66, 21, 58};
+</code></pre>
+<p>Escreva void ordenar_e_mostrar(const char *nome, const int *orig, int n,
+int (*cmp)(const void *, const void *)), que copia orig para um vetor
+local, ordena a cópia com qsort usando a comparação recebida e mostra o
+resultado. Escreva três comparações:</p>
+<ul>
+<li>crescente;</li>
+<li>decrescente;</li>
+<li>pares_primeiro: pares antes dos ímpares; dentro de cada grupo, crescente.</li>
+</ul>
+<pre><code class="language-text">Saída esperada:
+Crescente:       9 12 21 30 47 58 66 85
+Decrescente:    85 66 58 47 30 21 12  9
+Pares primeiro: 12 30 58 66  9 21 47 85
+</code></pre>
+<h3>★★★ Desafio</h3>
+<p><strong>Exercício P0621</strong> · ★★★ · O ranking do processo seletivo</p>
+<p>No resultado de um processo seletivo, cada candidato é uma linha de uma
+matriz de int com {inscrição, nota (de 0 a 100), idade}:</p>
+<pre><code class="language-text">int cand[7][3] = {{1043, 82, 29}, {1007, 91, 33}, {1120, 82, 41},
+                  {1088, 75, 26}, {1015, 91, 33}, {1102, 82, 41},
+                  {1061, 68, 52}};
+</code></pre>
+<p>Ordene com qsort, e cada ELEMENTO é uma linha inteira (int[3]). A ordem é:
+nota maior primeiro; no empate, o mais velho primeiro (como no edital do
+mestrado); persistindo o empate, a menor inscrição. Mostre a classificação:</p>
+<pre><code class="language-text">Saída esperada:
+Pos Inscr Nota Idade
+ 1º  1007   91    33
+ 2º  1015   91    33
+ 3º  1102   82    41
+ 4º  1120   82    41
+ 5º  1043   82    29
+ 6º  1088   75    26
+ 7º  1061   68    52
+</code></pre>
+<hr>
+<p><strong>Exercício P0622</strong> · ★★★ · O meu qsort de qualquer tipo</p>
+<p>Escreva a sua versão genérica de ordenação, com a mesma assinatura do
+qsort:</p>
+<pre><code class="language-text">void ordenar(void *base, size_t n, size_t tam,
+             int (*cmp)(const void *, const void *));
+</code></pre>
+<p>Use o método de inserção: para cada i de 1 a n - 1, enquanto o elemento
+j - 1 for maior que o j (segundo cmp), troque os dois e recue j. Como você
+não sabe o tipo, trabalhe com bytes: o elemento i começa em
+(unsigned char *) base + i * tam, e a troca é byte a byte (escreva void
+troca_bytes(void *a, void *b, size_t tam)). Teste com os três vetores:</p>
+<pre><code class="language-text">int idades[6] = {34, 19, 52, 27, 19, 40};
+double precos[5] = {9.90, 2.49, 15.00, 4.75, 2.10};
+char cidades[5][12] = {&quot;Tefe&quot;, &quot;Coari&quot;, &quot;Borba&quot;, &quot;Manaus&quot;, &quot;Autazes&quot;};
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Idades: 19 19 27 34 40 52
+Preços: 2.10 2.49 4.75 9.90 15.00
+Cidades: Autazes Borba Coari Manaus Tefe
+</code></pre>
+<hr>
+<p><strong>Exercício P0623</strong> · ★★★ · Separar a linha do CSV no lugar</p>
+<p>Uma linha de CSV da agenda do mestrado tem campos separados por &#39;;&#39;, e
+alguns podem estar vazios:</p>
+<pre><code class="language-text">char linha[] = &quot;27/11/2026;Prova de Conhecimentos;;08:00;Manaus&quot;;
+</code></pre>
+<p>Escreva int separar(char *linha, char sep, char *campos[], int max), que
+NÃO copia nada: troca cada separador por &#39;\0&#39; dentro da própria linha e
+guarda em campos[i] o endereço do começo de cada campo. Devolve quantos
+campos achou (no máximo max). Campo vazio vira uma string vazia, e não
+some (diferente do strtok, que pula separadores seguidos). Mostre os
+campos e a posição de cada um dentro da linha:</p>
+<pre><code class="language-text">Saída esperada:
+5 campos
+[0] posição  0: &quot;27/11/2026&quot;
+[1] posição 11: &quot;Prova de Conhecimentos&quot;
+[2] posição 34: &quot;&quot;
+[3] posição 35: &quot;08:00&quot;
+[4] posição 41: &quot;Manaus&quot;
+A linha agora: &quot;27/11/2026&quot;
+</code></pre>
+<hr>
+<p><strong>Exercício P0624</strong> · ★★★ · Números romanos nos dois sentidos</p>
+<p>Os capítulos de um livro antigo vêm em algarismos romanos. Escreva:</p>
+<pre><code class="language-text">int romano_para_int(const char *s);
+void int_para_romano(int n, char *saida);
+</code></pre>
+<p>A primeira anda com um ponteiro pela string: cada símbolo soma seu valor,
+mas se o próximo for MAIOR, ele subtrai (IV = 4, XC = 90). A segunda
+escreve o romano em saida, avançando um ponteiro de escrita. Converta os
+romanos &quot;XIV&quot;, &quot;XCIX&quot;, &quot;MMXXVI&quot; e &quot;CDXLIV&quot; para int, e 1987, 3999 e 49
+para romano:</p>
+<pre><code class="language-text">Saída esperada:
+XIV = 14
+XCIX = 99
+MMXXVI = 2026
+CDXLIV = 444
+1987 = MCMLXXXVII
+3999 = MMMCMXCIX
+49 = XLIX
+</code></pre>
+<hr>
+<p><strong>Exercício P0625</strong> · ★★★ · Conserte a escala de folgas</p>
+<p>O programa da escala de folgas tem TRÊS erros de propósito, e o gcc não
+avisa de nenhum. Ele deveria: trocar o primeiro e o último da equipe de
+lugar, ordenar a equipe em ordem alfabética e montar o crachá do primeiro
+da lista. Rode com o rodar e compare com a saída esperada: a troca não
+troca e a ordem sai errada. Conserte esses dois; aí o AddressSanitizer
+passa a acusar o terceiro (é comum um erro esconder o outro). No fim, o
+programa mostra:</p>
+<pre><code class="language-text">Saída esperada:
+Trocados: Wellington Rui Mirela Edson Joana
+Em ordem: Edson Joana Mirela Rui Wellington
+Crachá do último: Wellington
+</code></pre>
+<hr>
+<p><strong>Exercício P0626</strong> · ★★★ · O ponto de equilíbrio pela bisseção</p>
+<p>Uma fábrica de açaí em pó tem lucro, em milhares de reais, de
+lucro(x) = -0.5x² + 12x - 40 quando produz x toneladas. Ela quer saber a
+partir de quantas toneladas o lucro deixa de ser negativo: a RAIZ de lucro
+entre 0 e 10. Escreva o método da bisseção, que serve para QUALQUER
+função:</p>
+<pre><code class="language-text">double bissecao(double (*f)(double), double a, double b, double tol,
+                int *voltas);
+</code></pre>
+<p>Se f(a) e f(b) têm sinais opostos, existe raiz entre eles. Olhe o meio m:
+se f(a) e f(m) têm sinais opostos, a raiz está em [a, m]; senão, em [m, b].
+Repita até o intervalo ficar menor que tol e devolva o meio. Use tol =
+0.0001 e resolva também x³ - x - 2 = 0 entre 1 e 2:</p>
+<pre><code class="language-text">Saída esperada:
+lucro: raiz 4.0000 em 17 voltas (f = -0.00018)
+x³ - x - 2: raiz 1.5214 em 14 voltas (f = 0.00008)
+lucro: sem troca de sinal em [5.0, 10.0]
+</code></pre>
+<hr>
+<p><strong>Exercício P0627</strong> · ★★★ · Multiplicar matrizes guardadas em fila</p>
+<p>Quando as dimensões mudam, é comum guardar a matriz num vetor simples:
+o elemento (i, j) de uma matriz com C colunas fica em v[i * C + j].
+Escreva</p>
+<pre><code class="language-text">void multiplicar(const int *a, const int *b, int *c, int l, int m, int n);
+</code></pre>
+<p>que calcula c = a x b, com a de l x m, b de m x n e c de l x n, todas
+nesse formato. Escreva também void mostrar(const int *v, int l, int c) e
+bool identidade(const int *v, int n). Calcule a x b para as matrizes
+abaixo e confira que a x I = a, com I a identidade 3x3:</p>
+<pre><code class="language-text">int a[2 * 3] = {1, 2, 3,
+                4, 5, 6};
+int b[3 * 4] = {2, 0, 1, 3,
+                1, 4, 0, 2,
+                0, 1, 5, 1};
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+a x b (2x4):
+   4  11  16  10
+  13  26  34  28
+id é identidade? sim
+a x I == a? sim
+</code></pre>
+<hr>
+<p><strong>Exercício P0628</strong> · ★★★ · Todas as vezes que a palavra aparece</p>
+<p>Um revisor quer achar todas as vezes que &quot;boi&quot; aparece na letra da toada:</p>
+<pre><code class="language-text">const char *letra = &quot;O boi bumbá, o boi Garantido, o boizinho do povo, boi!&quot;;
+</code></pre>
+<p>Escreva int achar_todas(const char *texto, const char *palavra,
+const char *pos[], int max), que usa strstr para guardar em pos o endereço
+de cada ocorrência (no máximo max) e devolve quantas achou. Depois mostre
+a posição de cada uma (diferença de ponteiros) e o texto com cada
+ocorrência entre colchetes, imprimindo caractere a caractere:</p>
+<pre><code class="language-text">Saída esperada:
+4 ocorrências: 2 16 33 51
+O [boi] bumbá, o [boi] Garantido, o [boi]zinho do povo, [boi]!
+</code></pre>
+<p><strong>Resposta esperada:</strong> a saída acima (4 ocorrências).</p>
+<hr>
+<p><strong>Exercício P0629</strong> · ★★★ · Embaralhar qualquer vetor</p>
+<p>O app do bingo da igreja precisa embaralhar vetores de vários tipos, e o
+resultado tem que ser repetível para a auditoria. Escreva:</p>
+<pre><code class="language-text">unsigned sorteio(unsigned *semente, unsigned n);
+void embaralhar(void *v, size_t n, size_t tam, unsigned *semente);
+</code></pre>
+<p>sorteio atualiza a semente com *semente = *semente * 1103515245u + 12345u
+e devolve (*semente / 65536) % n (um número de 0 a n - 1). embaralhar usa o
+algoritmo de Fisher-Yates: para i de n - 1 até 1, sorteia j entre 0 e i
+e troca o elemento i com o j, byte a byte. Com a semente 2026, embaralhe
+as 10 bolas e depois, com a mesma semente continuando, os 4 nomes:</p>
+<pre><code class="language-text">int bolas[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+char nomes[4][12] = {&quot;Dona Lia&quot;, &quot;Seu Ze&quot;, &quot;Rita&quot;, &quot;Padre Joao&quot;};
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Bolas: 3 2 8 6 1 10 5 4 7 9
+Ordem de chamada: Seu Ze, Dona Lia, Padre Joao, Rita
+Semente final: 3469224078
+</code></pre>
+<hr>
+<p><strong>Exercício P0630</strong> · ★★★ · O caça-palavras com ponteiros</p>
+<p>Um caça-palavras de 5 linhas e 6 colunas está no esqueleto, numa matriz
+char g[5][7] (cada linha tem 6 letras + &#39;\0&#39;). Escreva</p>
+<pre><code class="language-text">bool achar(char g[5][7], const char *palavra, int *lin, int *col,
+           int *dir, const int *dl, const int *dc);
+</code></pre>
+<p>que procura a palavra nas 8 direções a partir de cada casa e,
+se achar, entrega a casa inicial e o número da direção (0 a 7). Use os
+vetores dl e dc do esqueleto: andar na direção d é somar dl[d] à linha e
+dc[d] à coluna. Procure as cinco palavras do esqueleto:</p>
+<pre><code class="language-text">Saída esperada:
+BURITI linha 4, coluna 0, -&gt;
+ACAI   linha 0, coluna 3, &lt;-
+PEQUI  linha 0, coluna 5, desce
+TUPI   linha 4, coluna 4, sobe &lt;-
+CUPU   não está na grade
+</code></pre>
+<hr>
+<h2>Desafios do módulo</h2>
+<p>Problemas extras que misturam os assuntos do módulo. Resolva num arquivo seu e
+compile com as flags de estudo.</p>
+<p><strong>1. O gaveteiro de três níveis.</strong> Ponha num <code>main</code> as linhas
+<code>int x = 7; int *p = &amp;x; int **pp = &amp;p; **pp = 9; *pp = NULL;</code> e, depois
+delas, mostre o valor de <code>x</code>, o resultado de <code>p == NULL</code> e o de <code>pp == &amp;p</code>.
+Acrescente então <code>printf(&quot;%d\n&quot;, *p);</code>, rode com as flags de estudo e veja o que
+acontece. Por fim, conserte: só mostre <code>*p</code> se <code>p</code> não for <code>NULL</code>; senão,
+mostre <code>p não aponta para nada</code>.</p>
+<details><summary>Resposta</summary><p>Com o <code>printf</code> de <code>*p</code> solto, o AddressSanitizer derruba o programa:
+<code>AddressSanitizer: SEGV on unknown address 0x000000000000</code>. Depois do
+conserto:</p>
+<pre><code class="language-text">x = 9
+p == NULL: 1
+pp == &amp;p: 1
+p não aponta para nada
+</code></pre>
+<p><code>**pp = 9</code> atravessa dois <code>*</code> e chega no <code>x</code>; <code>*pp = NULL</code> atravessa um só e
+muda o ponteiro <code>p</code>, não o <code>x</code>. O <code>pp</code> continua guardando o endereço de <code>p</code>.
+Desenhe sempre o que cada <code>*</code> atravessa.</p>
+</details><p><strong>2. Minutos de academia.</strong> Escreva
+<code>void resumo(const int *min, int n, int *total, int *dias_acima, double *media)</code>
+que recebe os minutos de treino da semana <code>{45, 0, 60, 30, 75, 0, 50}</code> e
+devolve o total, quantos dias passaram de 40 minutos e a média dos dias em
+que houve treino.</p>
+<details><summary>Resposta</summary><p>Total <strong>260</strong>, <strong>4</strong> dias acima de 40 (45, 60, 75, 50) e média <strong>52.0</strong> (260
+em 5 dias com treino). Caminho: um laço só, três ponteiros de saída; cuidado
+para não dividir por zero se a semana inteira for zero.</p>
+</details><p><strong>3. Rotação da escala.</strong> A escala de plantão <code>{&quot;ana&quot;, &quot;bia&quot;, &quot;caio&quot;, &quot;davi&quot;, &quot;eva&quot;}</code> está num <code>const char *escala[5]</code>. Escreva <code>void gira(const char **v, int n)</code> que move todo mundo uma posição para a esquerda (o primeiro vai para
+o fim), trocando só ponteiros. Gire duas vezes.</p>
+<details><summary>Resposta</summary><p>Depois de duas rotações: <strong>caio davi eva ana bia</strong>. Guarde <code>v[0]</code> num <code>const char *tmp</code>, ande de <code>i = 0</code> a <code>n - 2</code> fazendo <code>v[i] = v[i + 1]</code> e termine
+com <code>v[n - 1] = tmp</code>. Nenhum caractere é copiado: só endereços.</p>
+</details><p><strong>4. O meu strcat.</strong> Escreva <code>char *junta(char *destino, const char *origem)</code> só com ponteiros: ande até o <code>&#39;\0&#39;</code> do destino e copie a origem dali
+em diante. Devolva <code>destino</code>. Teste com <code>char cidade[30] = &quot;Campina&quot;;</code> e
+<code>&quot; Grande&quot;</code>. Depois troque para <code>char cidade[10]</code>, rode de novo com as flags de estudo e veja o erro que ele mostra.</p>
+<details><summary>Resposta</summary><p>Mostra <strong>&quot;Campina Grande&quot;</strong> (14 letras + <code>&#39;\0&#39;</code> = 15 bytes). Com <code>char cidade[10]</code>, a cópia passa do fim e o AddressSanitizer acusa
+<code>stack-buffer-overflow</code>. A função não tem como saber o tamanho do destino:
+é por isso que existe <code>strncat</code>, e por isso quem chama precisa garantir o
+espaço.</p>
+</details><p><strong>5. Palavras de uma frase.</strong> Escreva <code>int conta_palavras(const char *s)</code>
+andando com ponteiro: uma palavra começa quando o caractere atual não é
+espaço e o anterior era espaço (ou é o começo). Teste com
+<code>&quot;  pix   caiu na   conta &quot;</code>.</p>
+<details><summary>Resposta</summary><p><strong>4</strong> palavras. Guarde um &quot;estava em espaço?&quot; (começando verdadeiro); a cada
+caractere não espaço com a marca ligada, conte e desligue a marca; a cada
+espaço, ligue de novo. Espaços repetidos e nas pontas não atrapalham.</p>
+</details><p><strong>6. O laço que se encontra no meio.</strong> Rode o trecho abaixo dentro de um
+<code>main</code> e acrescente, dentro do laço, um <code>printf</code> que mostre a cada volta os
+índices de <code>p</code> e <code>q</code> (<code>p - v</code> e <code>q - v</code>, com <code>%td</code>) e o vetor inteiro.
+Depois troque a condição para <code>p &lt;= q</code> e veja o que muda no <code>v[2]</code>.</p>
+<pre><code class="language-c">int v[5] = {1, 2, 3, 4, 5};
+int *p = v, *q = v + 4;
+while (p &lt; q) {
+    *p += *q;
+    p++;
+    q--;
+}
+printf(&quot;%d %d %d %d %d\n&quot;, v[0], v[1], v[2], v[3], v[4]);
+</code></pre>
+<details><summary>Resposta</summary><p>Duas voltas: <code>p=0 q=4</code> (vira <strong>6</strong> 2 3 4 5) e <code>p=1 q=3</code> (vira 6 <strong>6</strong> 3 4 5);
+aí <code>p</code> e <code>q</code> se encontram em <code>v[2]</code> e o laço para: <strong>6 6 3 4 5</strong>. Com
+<code>p &lt;= q</code> há uma terceira volta com os dois em <code>v[2]</code>, que soma o elemento
+com ele mesmo: <strong>6 6 6 4 5</strong>.</p>
+</details><p><strong>7. Menu sem switch.</strong> Monte um menu de conversões com um vetor de
+ponteiros para função <code>double (*conv[3])(double)</code>: km para milhas (÷ 1.609),
+kg para libras (× 2.205) e °C para °F. Leia a opção (0, 1 ou 2) e o valor
+com <code>scanf</code>, valide a opção e chame <code>conv[op](valor)</code>. Teste com opção 0 e
+10 km.</p>
+<details><summary>Resposta</summary><p>10 km ≈ <strong>6.21 milhas</strong>. O índice lido vira direto a posição no vetor de
+funções. Valide <code>0 &lt;= op &amp;&amp; op &lt; 3</code> antes de chamar: um índice fora do vetor
+&quot;chama&quot; um endereço qualquer, e aí nem o AddressSanitizer salva.</p>
+</details><p><strong>8. qsort em dupla.</strong> Os pedidos do restaurante estão em dois vetores
+paralelos: <code>int mesa[6] = {4, 2, 7, 2, 4, 1}</code> e <code>int minuto[6] = {12, 5, 3, 9, 1, 20}</code> (minuto em que o pedido chegou). Mostre os pedidos ordenados por
+mesa e, dentro da mesma mesa, por minuto, sem mexer nos vetores originais.</p>
+<details><summary>Resposta</summary><p>Ordem: mesa 1 (min 20), mesa 2 (min 5), mesa 2 (min 9), mesa 4 (min 1),
+mesa 4 (min 12), mesa 7 (min 3). Caminho: um vetor de índices <code>int ordem[6] = {0, ..., 5}</code> e uma comparação que lê os vetores paralelos (que
+podem ser <code>static</code> globais), ou um vetor de <code>const int *</code> para <code>mesa</code>, como
+no assunto 0052, usando <code>p - mesa</code> para achar o minuto.</p>
+</details><p><strong>9. Endianness na prática.</strong> Escreva <code>bool little_endian(void)</code> que
+descobre a ordem dos bytes da máquina olhando o primeiro byte de um <code>int</code>
+que vale 1 (por meio de um <code>unsigned char *</code>). Depois escreva
+<code>unsigned int inverte_bytes(unsigned int x)</code> que troca a ordem dos 4 bytes
+usando a <code>troca_generica</code> do assunto 0051 nos bytes certos.</p>
+<details><summary>Resposta</summary><p>No seu PC, <code>little_endian()</code> dá <strong>verdadeiro</strong>: o primeiro byte do 1 é
+<code>01</code>. <code>inverte_bytes(0x0A0B0C0D)</code> dá <strong>0x0D0C0B0A</strong>: troque o byte 0 com o 3
+e o 1 com o 2 (<code>troca_generica(&amp;b[0], &amp;b[3], 1)</code> e assim por diante, com <code>b</code>
+sendo um <code>unsigned char *</code> para <code>x</code>). É o que as funções de rede (<code>htonl</code>)
+fazem.</p>
+</details><p><strong>10. Busca binária genérica.</strong> Escreva <code>void *busca_bin(const void *chave, void *v, size_t n, size_t tam, int (*cmp)(const void *, const void *))</code> que
+faz busca binária num vetor já ordenado de qualquer tipo e devolve o endereço
+do elemento ou <code>NULL</code>. Teste com <code>int cods[8] = {3, 8, 15, 21, 30, 42, 57, 60}</code> procurando 42 e 10, e compare com o <code>bsearch</code> da <code>stdlib.h</code>, que tem
+exatamente essa assinatura.</p>
+<details><summary>Resposta</summary><p>42 está no <strong>índice 5</strong> (subtraia o ponteiro devolvido de <code>cods</code>); 10 dá
+<strong>NULL</strong>. O meio fica em <code>(unsigned char *)v + meio * tam</code>. Compare
+<code>cmp(chave, meio)</code>: negativo, procure à esquerda; positivo, à direita; zero,
+achou. A busca binária em si é o assunto 0090.</p>
+</details><h2>Questões do POSCOMP</h2>
+<p>Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.</p>
+<table>
+<thead>
+<tr>
+<th>Ano</th>
+<th>Questão</th>
+<th>Assunto</th>
+<th>Gabarito</th>
+<th>Prova</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2023</td>
+<td>33</td>
+<td>Saída de código C com ponteiros e printf</td>
+<td>E</td>
+<td><a href="https://www.sbc.org.br/wp-content/uploads/2025/02/0761.001_Exame_POSCOMP_2023.pdf">caderno</a></td>
+</tr>
+</tbody></table>
+<p>O gabarito de 2023 vem de um blog de terceiros que reproduz o gabarito definitivo; confira no PDF oficial da SBC.</p>
+<h2>Questões no estilo da prova</h2>
+<p>Questões no formato da prova do PPGI/UFAM. Resolva no papel, marque uma letra e
+só então abra o gabarito. Os trechos foram compilados com
+<code>gcc -std=c17 -Wall -Wextra</code>.</p>
+<p><strong>Questão 1.</strong> O que o programa imprime?</p>
+<pre><code class="language-c">int v[5] = {10, 20, 30, 40, 50};
+int *p = v + 1;
+printf(&quot;%d %d %d\n&quot;, *(p + 2), p[-1], *p + 2);
+</code></pre>
+<ul>
+<li>(A) <code>30 20 22</code></li>
+<li>(B) <code>40 10 22</code></li>
+<li>(C) <code>40 20 32</code></li>
+<li>(D) <code>30 10 12</code></li>
+<li>(E) <code>40 10 32</code></li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(B)</strong>. <code>p</code> aponta para <code>v[1]</code> (20). <code>*(p + 2)</code> anda duas gavetas e lê
+<code>v[3]</code> = 40; <code>p[-1]</code> é <code>*(p - 1)</code> = <code>v[0]</code> = 10; em <code>*p + 2</code> o <code>*</code> vem
+antes do <code>+</code>: 20 + 2 = 22. Veja 0047.</p>
+</details><p><strong>Questão 2.</strong> O que o programa imprime?</p>
+<pre><code class="language-c">int v[3] = {5, 8, 2};
+int *p = v;
+int a = *p++;
+int b = (*p)++;
+printf(&quot;%d %d %d %d\n&quot;, a, b, v[0], v[1]);
+</code></pre>
+<ul>
+<li>(A) <code>5 8 6 8</code></li>
+<li>(B) <code>5 9 5 9</code></li>
+<li>(C) <code>8 8 5 9</code></li>
+<li>(D) <code>5 8 5 9</code></li>
+<li>(E) <code>5 8 6 9</code></li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(D)</strong>. Em <code>*p++</code> o <code>++</code> vale para o ponteiro: lê <code>v[0]</code> (5) e depois <code>p</code>
+passa para <code>v[1]</code>. Em <code>(*p)++</code> o <code>++</code> vale para o valor: <code>b</code> recebe 8 (o
+pós-incremento devolve o valor antigo) e <code>v[1]</code> vira 9. <code>v[0]</code> nunca muda.
+Veja 0047.</p>
+</details><p><strong>Questão 3.</strong> Sobre ponteiros em C, considere as afirmações e marque a alternativa CORRETA.</p>
+<ul>
+<li><p><strong>I.</strong> Se <code>p</code> é um <code>int *</code>, <code>p + 1</code> aponta para o <code>int</code> seguinte, <code>sizeof(int)</code> bytes adiante.</p>
+</li>
+<li><p><strong>II.</strong> <code>*p++</code> incrementa o valor apontado por <code>p</code>.</p>
+</li>
+<li><p><strong>III.</strong> Desreferenciar um ponteiro <code>NULL</code> é seguro: o programa só devolve 0.</p>
+</li>
+<li><p><strong>IV.</strong> Se <code>v</code> é um vetor, <code>v[i]</code> equivale a <code>*(v + i)</code>.</p>
+</li>
+<li><p>(A) Apenas I e IV</p>
+</li>
+<li><p>(B) Apenas I e II</p>
+</li>
+<li><p>(C) Apenas II e III</p>
+</li>
+<li><p>(D) Apenas III e IV</p>
+</li>
+<li><p>(E) Apenas I, II e IV</p>
+</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A).</strong> I é verdadeira: a aritmética de ponteiros anda em unidades do tipo apontado. II é falsa: o <code>++</code> vale para o ponteiro, e o valor lido é o antigo (para incrementar o valor, é <code>(*p)++</code>). III é falsa: é comportamento indefinido, e na prática costuma derrubar o programa. IV é verdadeira. Veja 0047.</p>
+</details><p><strong>Questão 4.</strong> Qual o valor final de <code>x</code>?</p>
+<pre><code class="language-c">int x = 4;
+int *p = &amp;x;
+int **pp = &amp;p;
+**pp += 3;
+*p *= 2;
+</code></pre>
+<ul>
+<li>(A) 14</li>
+<li>(B) 11</li>
+<li>(C) 8</li>
+<li>(D) 10</li>
+<li>(E) 7</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A)</strong>. <code>**pp</code> atravessa dois <code>*</code> e chega em <code>x</code>: 4 + 3 = 7. <code>*p</code> também é
+<code>x</code>: 7 × 2 = 14. Veja 0049.</p>
+</details><p><strong>Questão 5.</strong> Com <code>double v[10]; double *p = &amp;v[2], *q = &amp;v[7];</code>, os
+valores de <code>q - p</code> e de <code>(char *)q - (char *)p</code> são, respectivamente:</p>
+<ul>
+<li>(A) 5 e 5</li>
+<li>(B) 40 e 40</li>
+<li>(C) 5 e 40</li>
+<li>(D) 6 e 48</li>
+<li>(E) 5 e 20</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(C)</strong>. A diferença de dois ponteiros do mesmo vetor conta <strong>elementos</strong>:
+7 − 2 = 5. Convertidos para <code>char *</code>, eles contam <strong>bytes</strong>: 5 × 8 = 40
+(<code>sizeof(double)</code> é 8). Veja 0047.</p>
+</details><p><strong>Questão 6.</strong> Em uma plataforma de 64 bits típica, o que o trecho imprime?</p>
+<pre><code class="language-c">char s[] = &quot;banana&quot;;
+char *t = &quot;banana&quot;;
+printf(&quot;%zu %zu %zu %zu\n&quot;, sizeof s, strlen(s), sizeof t, strlen(t));
+</code></pre>
+<ul>
+<li>(A) <code>6 6 6 6</code></li>
+<li>(B) <code>7 6 7 6</code></li>
+<li>(C) <code>6 6 8 6</code></li>
+<li>(D) <code>7 7 8 7</code></li>
+<li>(E) <code>7 6 8 6</code></li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(E)</strong>. <code>s</code> é um vetor: <code>sizeof</code> conta os 6 caracteres mais o <code>&#39;\0&#39;</code> (7).
+<code>t</code> é um ponteiro: <code>sizeof t</code> é o tamanho de um endereço (8). O <code>strlen</code> não
+conta o <code>&#39;\0&#39;</code> nos dois casos (6). Veja 0048.</p>
+</details><p><strong>Questão 7.</strong> Em uma plataforma com <code>int</code> de 4 bytes, o que o trecho
+imprime?</p>
+<pre><code class="language-c">int m[3][4] = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};
+printf(&quot;%td %td %d\n&quot;, (char *)(m + 1) - (char *)m,
+       (char *)(m[0] + 1) - (char *)m[0], *(*(m + 2) + 1));
+</code></pre>
+<ul>
+<li>(A) <code>4 4 10</code></li>
+<li>(B) <code>16 16 6</code></li>
+<li>(C) <code>4 16 10</code></li>
+<li>(D) <code>16 4 10</code></li>
+<li>(E) <code>16 4 6</code></li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(D)</strong>. O elemento de <code>m</code> é uma linha inteira (4 <code>int</code>), então <code>m + 1</code>
+anda 16 bytes. <code>m[0]</code> é o endereço do primeiro <code>int</code> da linha 0, e
+<code>m[0] + 1</code> anda 4. <code>*(*(m + 2) + 1)</code> é <code>m[2][1]</code> = 10. Veja 0047 e 0039.</p>
+</details><p><strong>Questão 8.</strong> O que o programa imprime?</p>
+<pre><code class="language-c">int dobro(int x) { return 2 * x; }
+int quadrado(int x) { return x * x; }
+
+int main(void) {
+    int (*f[2])(int) = {dobro, quadrado};
+    printf(&quot;%d\n&quot;, f[1](f[0](3)));
+    return 0;
+}
+</code></pre>
+<ul>
+<li>(A) 18</li>
+<li>(B) 12</li>
+<li>(C) 36</li>
+<li>(D) 9</li>
+<li>(E) 6</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(C)</strong>. <code>f</code> é um vetor de dois ponteiros para função. <code>f[0](3)</code> chama
+<code>dobro(3)</code> = 6; <code>f[1](6)</code> chama <code>quadrado(6)</code> = 36. A resposta (A) troca a
+ordem das chamadas. Veja 0050.</p>
+</details><p><strong>Questão 9.</strong> Com <code>int x = 1, y = 2; const int *p = &amp;x; int *const q = &amp;x;</code>,
+quais das linhas abaixo <strong>compilam</strong>?</p>
+<pre><code class="language-c">p = &amp;y;   /* I   */
+*q = 5;   /* II  */
+*p = 9;   /* III */
+q = &amp;y;   /* IV  */
+</code></pre>
+<ul>
+<li>(A) apenas I</li>
+<li>(B) apenas I e II</li>
+<li>(C) apenas I e III</li>
+<li>(D) apenas II e IV</li>
+<li>(E) todas</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(B)</strong>. Leia da direita para a esquerda. <code>const int *p</code>: ponteiro para
+<code>int</code> constante; o ponteiro pode andar (I), mas <code>*p</code> não pode ser escrito
+(III dá <code>assignment of read-only location</code>). <code>int *const q</code>: ponteiro
+constante para <code>int</code>; <code>*q</code> pode ser escrito (II), mas <code>q</code> não pode mudar
+(IV dá <code>assignment of read-only variable</code>). Veja 0046 e 0047.</p>
+</details><h2>Para ler mais</h2>
+<ul>
+<li>BACKES, A. <em>Linguagem C: completa e descomplicada</em>. Rio de Janeiro: Elsevier, 2013. Cap. 10: ponteiros; cap. 13: ponteiro para função.</li>
+<li>BACKES, A. R. <em>Linguagem C: descomplicada</em>. Apostila. Uberlândia: FACOM/UFU. Capítulos de ponteiros e de recursos avançados.</li>
+<li>DEITEL, P. J.; DEITEL, H. M. <em>C: como programar</em>. 6. ed. São Paulo: Pearson Prentice Hall, 2011. Cap. 7: ponteiros em C.</li>
+<li>CELES, W.; RANGEL, J. L. <em>Apostila de estruturas de dados</em>. Rio de Janeiro: PUC-Rio, 2002. Ponteiros, vetores e ordenação genérica.</li>
+<li>FEOFILOFF, P. <em>Algoritmos em linguagem C</em>. Rio de Janeiro: Elsevier, 2009. Apêndice D: endereços e ponteiros.</li>
+<li>CELES, W.; CERQUEIRA, R.; RANGEL, J. L. <em>Introdução a estruturas de dados: com técnicas de programação em C</em>. 2. ed. Rio de Janeiro: Elsevier, 2016. Ponteiros, vetores e ponteiros para função.</li>
+<li>TENENBAUM, A. M.; LANGSAM, Y.; AUGENSTEIN, M. J. <em>Estruturas de dados usando C</em>. São Paulo: Makron Books, 1995. Cap. 1: vetores, ponteiros e estruturas em C.</li>
+<li>ZIVIANI, N. <em>Projeto de algoritmos: com implementações em Pascal e C</em>. 3. ed. rev. e ampl. São Paulo: Cengage Learning, 2010. Usa o nome <strong>apontador</strong> e o aplica em listas, pilhas e filas.</li>
+<li>LAUREANO, M. <em>Estrutura de dados com algoritmos e C</em>. Rio de Janeiro: Brasport, 2008. Cap. 1 e 2: ponteiros e uso de memória.</li>
+<li>ROCHA, A. M. A.; BORGES, A. R. O. S. <em>Programação, estruturas de dados e algoritmos em C</em>. Aveiro: Universidade de Aveiro, DETI. Ponteiros e ponteiro para função.</li>
+<li>HARA, C.; ZOLA, W. <em>Linguagem C: notas de aula</em>. Curitiba: UFPR, 2008. Ponteiros e passagem por referência.</li>
+<li>KERNIGHAN, B. W.; RITCHIE, D. M. <em>C: a linguagem de programação padrão ANSI</em>. Rio de Janeiro: Campus, 1989. Cap. 5: apontadores e vetores.</li>
+<li>CPPREFERENCE. <em>Pointer declaration</em>. Disponível em: <a href="https://en.cppreference.com/w/c/language/pointer">https://en.cppreference.com/w/c/language/pointer</a>.</li>
+<li>CPPREFERENCE. <em>qsort, qsort_s</em>. Disponível em: <a href="https://en.cppreference.com/w/c/algorithm/qsort">https://en.cppreference.com/w/c/algorithm/qsort</a>.</li>
+<li>KERRISK, M. <em>qsort(3)</em>: Linux manual page. Disponível em: <a href="https://man7.org/linux/man-pages/man3/qsort.3.html">https://man7.org/linux/man-pages/man3/qsort.3.html</a>.</li>
+</ul>

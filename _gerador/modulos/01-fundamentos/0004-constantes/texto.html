@@ -1,0 +1,125 @@
+<h2>0004 · Constantes</h2>
+<p>Imagine a tarifa do ônibus escrita à mão em dez lugares do sistema: no
+letreiro, no cálculo de ida e volta, no recibo, no relatório. Em janeiro ela
+sobe de R$ 4,40 para R$ 4,90, e alguém precisa caçar os dez lugares. Se
+esquecer um, o recibo mostra um preço e o relatório outro. O jeito certo é
+escrever o valor <strong>uma vez só</strong>, com um nome, e usar o nome no resto do
+código.</p>
+<p>Antes de dar nome a um valor, repare em como você o escreve. Todo valor
+escrito direto no código é um <strong>literal</strong>, e o jeito de escrever decide o
+tipo dele: <code>101</code> é <code>int</code>, <code>4.90</code> é <code>double</code> e <code>4.90f</code> é <code>float</code>
+(BACKES, 2013, cap. 2). Isso importa porque o tipo do literal entra nas
+contas. Sem nenhuma marca, todo número com ponto é <code>double</code>; o sufixo <code>f</code>
+pede um <code>float</code>.</p>
+<p>Os inteiros também aceitam marcas. Os sufixos <code>L</code>, <code>LL</code> e <code>U</code> pedem <code>long</code>,
+<code>long long</code> e <code>unsigned</code>, e o prefixo muda a base: <code>0x1F</code> é hexadecimal e
+vale 31; <code>017</code>, com zero à esquerda, é <strong>octal</strong>, base 8, e vale 15. Já
+<code>1.5e3</code> é notação científica, 1,5 × 10³ = 1500 (KERNIGHAN; RITCHIE, 1988,
+cap. 2). O zero à esquerda é uma armadilha: quem escreve <code>017</code> pensando em
+dezessete leva quinze.</p>
+<p>Aspas simples e duplas também não são a mesma coisa. <code>&#39;A&#39;</code> é um caractere,
+e no C ele vale o seu código numérico, 65. <code>&quot;A&quot;</code> é um texto: a letra
+seguida de um byte zero, que marca o fim do texto (DEITEL; DEITEL, 2011).
+Por isso <code>sizeof(&quot;A&quot;)</code> vale 2 e <code>sizeof(&#39;A&#39;)</code> vale 4, o tamanho de um <code>int</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Literal</th>
+<th>Tipo</th>
+<th>Observação</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>101</code></td>
+<td><code>int</code></td>
+<td>inteiro sem ponto</td>
+</tr>
+<tr>
+<td><code>4.90</code></td>
+<td><code>double</code></td>
+<td>todo real é <code>double</code>, a não ser que...</td>
+</tr>
+<tr>
+<td><code>4.90f</code></td>
+<td><code>float</code></td>
+<td>...tenha o sufixo <code>f</code></td>
+</tr>
+<tr>
+<td><code>5000000000LL</code></td>
+<td><code>long long</code></td>
+<td>sufixos <code>L</code>, <code>LL</code>, <code>U</code></td>
+</tr>
+<tr>
+<td><code>0x1F</code>, <code>017</code></td>
+<td><code>int</code></td>
+<td>hexadecimal (31) e <strong>octal</strong> (15): zero à esquerda muda a base!</td>
+</tr>
+<tr>
+<td><code>1.5e3</code></td>
+<td><code>double</code></td>
+<td>notação científica: 1,5 × 10³ = 1500</td>
+</tr>
+<tr>
+<td><code>&#39;A&#39;</code></td>
+<td><code>int</code></td>
+<td>um caractere: vale o código, 65</td>
+</tr>
+<tr>
+<td><code>&quot;A&quot;</code></td>
+<td>texto</td>
+<td>aspas duplas: <code>&#39;A&#39;</code> seguido do byte zero</td>
+</tr>
+</tbody></table>
+<p>O C tem dois jeitos de dar nome a um valor fixo. O primeiro é o
+<strong><code>#define</code></strong>, uma ordem para o pré-processador, a etapa que roda antes da
+compilação (0001). Ele faz um &quot;localizar e substituir&quot; no texto do código:
+com <code>#define TARIFA 4.90</code>, cada <code>TARIFA</code> vira <code>4.90</code>, e o compilador nem
+chega a ver o nome (BACKES, 2013, cap. 2). Como é só troca de texto, o
+<code>#define</code> não tem tipo e não ocupa memória. Por convenção o nome vai em
+MAIÚSCULAS, e a linha não leva <code>=</code> nem <code>;</code>.</p>
+<p>O segundo é o <strong><code>const</code></strong>. Ele cria uma variável de verdade, com tipo,
+endereço e tamanho, mas <strong>só de leitura</strong>: <code>const int linha = 101;</code>. Você
+pode ver o endereço com <code>&amp;linha</code>, e <code>sizeof linha</code> vale 4. Qualquer tentativa
+de mudar o valor depois é erro de compilação, e por isso o valor tem de vir
+na própria declaração (BACKES, 2013, cap. 2).</p>
+<p>Por fim, dentro das aspas a barra invertida tem papel especial: ela inicia
+uma <strong>sequência de escape</strong>, um jeito de escrever um caractere que não dá
+para digitar direto no texto. O <code>\n</code> pula linha, o <code>\t</code> é uma tabulação, o
+<code>\&quot;</code> põe aspas dentro do texto, o <code>\\</code> é a própria barra e o <code>\0</code> é o byte
+zero. O <code>%</code> não é escape; para mostrá-lo no <code>printf</code>, escreva <code>%%</code>
+(DEITEL; DEITEL, 2011, cap. 9).</p>
+<blockquote>
+<p>[!WARNING]
+O <code>#define</code> cola <strong>exatamente</strong> o texto que vem depois do nome. Com
+<code>#define TARIFA 4.90;</code>, <code>2 * TARIFA</code> vira <code>2 * 4.90;</code> e não compila; com
+<code>#define TARIFA = 4.90</code>, vira <code>2 * = 4.90</code>. O erro aparece na linha em que
+o nome é <strong>usado</strong>, não na do <code>#define</code>.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>A tarifa do ônibus aparece em vários lugares do sistema e muda todo ano: fica
+escrita uma vez só, com nome. O pré-processador troca <code>TARIFA</code> e <code>EMPRESA</code>
+pelos valores; a <code>linha</code> é uma caixinha com cadeado:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+#define TARIFA 4.90          // muda aqui, muda no programa todo
+#define EMPRESA &quot;Viação Sol&quot;
+
+int main(void) {
+    const int linha = 101;   // variável só de leitura
+
+    printf(&quot;%s\n&quot;, EMPRESA);
+    printf(&quot;Linha %d \&quot;Centro - Bairro\&quot;\n&quot;, linha);
+    printf(&quot;Tarifa: R$ %.2f\n&quot;, TARIFA);
+    printf(&quot;Ida e volta: R$ %.2f\n&quot;, 2 * TARIFA); // o compilador vê 2 * 4.90
+    return 0;
+}
+// Saída:
+// Viação Sol
+// Linha 101 &quot;Centro - Bairro&quot;
+// Tarifa: R$ 4.90
+// Ida e volta: R$ 9.80
+</code></pre>
+<p>A troca de texto acontece na compilação; o executável já nasce só com os
+números:</p>
+<p>{{fluxograma}}</p>

@@ -8,13 +8,14 @@
 //
 //   node quiz.mjs            gera tudo
 //   node quiz.mjs --check    só confere: alternativas com porquê, letra igual à do
-//                            PROVAS.md, figura citada existe
+//                            PROVAS.html, figura citada existe
 import { readFileSync, writeFileSync, readdirSync, mkdirSync, existsSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createHash } from 'node:crypto'
 import { novoQuadro, CORES } from './quadro.mjs'
 import { ICONES } from './tipos/icones.mjs'
+import { textoHtml } from './html.mjs'
 
 const AQUI = dirname(fileURLToPath(import.meta.url))
 const RAIZ = join(AQUI, '..')
@@ -22,19 +23,18 @@ const PROVAS = join(AQUI, 'provas')
 const SAIDA = join(RAIZ, 'quiz')
 const SO_CONFERIR = process.argv.includes('--check')
 
-// letra de cada questão no PROVAS.md: { '2016-032': { 1: 'anulada', 2: 'C', ... } }
+// letra de cada questão no PROVAS.html: { '2016-032': { 1: 'anulada', 2: 'C', ... } }
 const letrasDoGuia = () => {
   const guia = {}
   let slug = null
-  for (const linha of readFileSync(join(RAIZ, 'PROVAS.md'), 'utf8').split('\n')) {
-    const edital = linha.match(/^#{2,3} Edital (\d{3})\/(\d{4})/)
-    if (edital) {
-      slug = `${edital[2]}-${edital[1]}`
+  const guiaHtml = readFileSync(join(RAIZ, 'PROVAS.html'), 'utf8')
+  for (const [, numero, ano, questao, letra] of guiaHtml.matchAll(/<h[23]>Edital (\d{3})\/(\d{4})[^<]*<\/h[23]>|<tr>\s*<td>(\d{2})<\/td>\s*<td>(.*?)<\/td>/gs)) {
+    if (numero) {
+      slug = `${ano}-${numero}`
       guia[slug] = {}
       continue
     }
-    const linhaTabela = slug && linha.match(/^\| (\d{2}) \| ([^|]*) \|/)
-    if (linhaTabela) guia[slug][Number(linhaTabela[1])] = linhaTabela[2].trim()
+    if (slug) guia[slug][Number(questao)] = textoHtml(letra).trim()
   }
   return guia
 }
@@ -56,16 +56,17 @@ const ancora = (titulo) =>
     .replaceAll(' ', '-')
 const mapaAssuntos = () => {
   const mapa = {}
-  for (const modulo of readdirSync(RAIZ).filter((a) => /^\d{2}-.*\.md$/.test(a)).sort()) {
-    for (const linha of readFileSync(join(RAIZ, modulo), 'utf8').split('\n')) {
-      // o assunto aparece nas três partes do módulo; o link vai para a primeira (o conceito)
-      const m = linha.match(/^#{2,3} (\d{4}) · (.+)$/)
-      if (!m || mapa[m[1]]) continue
-      mapa[m[1]] = {
-        titulo: m[2].trim(),
-        modulo,
-        ancora: ancora(linha.replace(/^#+ /, '')),
-        ideia: existsSync(join(RAIZ, 'material', `${m[1]}-ideia.svg`)),
+  for (const modulo of readdirSync(RAIZ).filter((a) => /^\d{2}-.*\.html$/.test(a)).sort()) {
+    const html = readFileSync(join(RAIZ, modulo), 'utf8')
+    for (const [, numero, corpo] of html.matchAll(/<h[23]>(\d{4}) · (.+?)<\/h[23]>/g)) {
+      if (mapa[numero]) continue
+      const titulo = textoHtml(corpo).trim()
+      mapa[numero] = {
+        titulo,
+        // O identificador dos módulos nos dados do quiz é legado.
+        modulo: modulo.replace(/\.html$/, '.md'),
+        ancora: ancora(`${numero} · ${titulo}`),
+        ideia: existsSync(join(RAIZ, 'material', `${numero}-ideia.svg`)),
       }
     }
   }
@@ -116,14 +117,14 @@ function conferir(provas, figuras) {
   const erros = []
   for (const p of provas) {
     const letras = guia[p.slug]
-    if (!letras) erros.push(`${p.slug}: edital não está no PROVAS.md`)
+    if (!letras) erros.push(`${p.slug}: edital não está no PROVAS.html`)
     const numeros = p.questoes.map((q) => q.numero)
     if (letras && numeros.length !== Object.keys(letras).length)
-      erros.push(`${p.slug}: ${numeros.length} questões, PROVAS.md tem ${Object.keys(letras).length}`)
+      erros.push(`${p.slug}: ${numeros.length} questões, PROVAS.html tem ${Object.keys(letras).length}`)
     for (const q of p.questoes) {
       const id = `${p.slug} Q${String(q.numero).padStart(2, '0')}`
       const esperado = letras && normalizar(letras[q.numero] ?? '')
-      if (letras && (q.gabarito ?? null) !== esperado) erros.push(`${id}: gabarito ${q.gabarito}, PROVAS.md diz ${letras[q.numero]}`)
+      if (letras && (q.gabarito ?? null) !== esperado) erros.push(`${id}: gabarito ${q.gabarito}, PROVAS.html diz ${letras[q.numero]}`)
       if (!q.enunciado?.trim()) erros.push(`${id}: sem enunciado`)
       if (!q.resumo?.trim()) erros.push(`${id}: sem resumo`)
       if (!q.dica?.trim()) erros.push(`${id}: sem dica (conceito e exemplo)`)
@@ -153,7 +154,7 @@ function conferir(provas, figuras) {
         if (a.figura && !figuras[a.figura]) erros.push(`${id} ${a.letra}: figura ${a.figura} não descrita`)
       }
       for (const f of q.figuras ?? []) if (!figuras[f]) erros.push(`${id}: figura ${f} não descrita`)
-      for (const s of q.assuntos ?? []) if (!existsSync(join(RAIZ, s.modulo))) erros.push(`${id}: módulo ${s.modulo} não existe`)
+      for (const s of q.assuntos ?? []) if (!existsSync(join(RAIZ, s.modulo.replace(/\.md$/, '.html')))) erros.push(`${id}: módulo ${s.modulo} não existe`)
     }
   }
   return erros

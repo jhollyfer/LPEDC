@@ -1,0 +1,199 @@
+<h2>0036 · Juntando tudo: o caixa da lanchonete</h2>
+<p>Sexta à noite, fila no food truck. O caixa lança os pedidos pelo código,
+soma, põe 10% de serviço, recebe uma nota de R$ 50 e devolve o troco com o
+menor número de notas e moedas. Parece um programa só, mas cabe nele quase
+tudo o que o módulo 04 ensinou: um <strong>módulo</strong> separado com o cardápio, funções pequenas com
+<strong>parâmetros</strong> e retorno, um contador <strong><code>static</code></strong> escondido, uma constante
+do pré-processador para a taxa e uma função <strong>recursiva</strong> para o troco.</p>
+<p>Antes de escrever uma linha, divida o trabalho. Cada tarefa vira uma função
+com um nome que diz o que ela faz (DEITEL; DEITEL, 2011, cap. 5). Pense na
+lanchonete de verdade: o gerente não frita, não cobra e não conta troco; ele
+pede a cada um e junta os resultados. No programa, o <code>main</code> faz o papel do
+gerente. Ele chama <code>ler_codigo</code>, <code>preco_centavos</code> e <code>dar_troco</code>, e cada uma
+resolve a sua parte sem saber como as outras trabalham. Quando algo dá
+errado, o nome da função já diz onde procurar.</p>
+<p>O cardápio fica num módulo próprio, o par <code>cardapio.h</code> e <code>cardapio.c</code> do
+assunto 0034 (BACKES, 2013, cap. 13). O <code>.h</code> promete as funções de
+consulta; o <code>.c</code> guarda os preços e o contador <code>vendidos</code>, uma global
+<code>static</code> que só o módulo pode alterar. Quem está em <code>caixa.c</code> lê o contador
+pela função <code>itens_vendidos()</code>, mas não consegue mudá-lo por engano.</p>
+<p>Uma decisão vem antes de qualquer código: dinheiro em <strong>centavos</strong>, num
+<code>int</code>. R$ 7,90 vira <code>790</code>. O motivo é a precisão. Um <code>double</code> guarda os
+números em binário, e valores como 0,1 não têm representação exata; por isso
+<code>0.1 + 0.2</code> não dá exatamente <code>0.3</code> (assunto 0012), e um troco calculado
+assim pode errar um centavo. Com inteiros, toda conta é exata. Para mostrar,
+<code>%d.%02d</code> com <code>total / 100</code> e <code>total % 100</code> monta o texto &quot;42.24&quot;. O único
+<code>double</code> do programa é o valor pago, que chega do teclado e é convertido de
+imediato com <code>lround(pago * 100)</code>, que arredonda para o inteiro mais
+próximo.</p>
+<p>O troco recursivo se lê como uma frase (FEOFILOFF, 2009, cap. 5). &quot;Se o troco
+zerou, acabou. Se a nota atual cabe no troco, dê essa nota e resolva o resto.
+Se não cabe, tente a nota seguinte.&quot; O caso base é o troco zerado. Os dois
+casos recursivos diminuem alguma coisa: o primeiro diminui o troco, o segundo
+passa para uma nota menor. Como a menor moeda é de 1 centavo, que cabe em
+qualquer troco positivo, toda chamada chega mais perto do fim. A função
+<code>proxima_nota</code> diz qual é a nota seguinte; ela é uma <strong>função pura</strong>, que só
+depende do que recebe e não muda nada fora dela.</p>
+<p>Com as peças separadas, dá para testar cada uma sozinha, sem digitar pedidos
+no teclado. O exemplo A072 usa uma macro <code>CONFERIR</code> para comparar o preço, o
+contador e as notas com o valor esperado. A tabela mostra onde cada peça mora
+e o que ela usa do módulo:</p>
+<table>
+<thead>
+<tr>
+<th>Peça</th>
+<th>Onde</th>
+<th>O que usa do módulo</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>mostrar_cardapio</code>, <code>preco_centavos</code>, <code>mostrar_item</code></td>
+<td><code>cardapio.c</code></td>
+<td>módulo <code>.h</code>/<code>.c</code>, <code>switch</code></td>
+</tr>
+<tr>
+<td><code>vendidos</code></td>
+<td><code>cardapio.c</code></td>
+<td>global <code>static</code>: só o módulo mexe</td>
+</tr>
+<tr>
+<td><code>ler_codigo</code></td>
+<td><code>caixa.c</code></td>
+<td>validação com <code>do...while</code> e retorno do <code>scanf</code></td>
+</tr>
+<tr>
+<td><code>proxima_nota</code></td>
+<td><code>caixa.c</code></td>
+<td>função pura: entra uma nota, sai a seguinte</td>
+</tr>
+<tr>
+<td><code>dar_troco</code></td>
+<td><code>caixa.c</code></td>
+<td>recursão: caso base &quot;troco zerado&quot;</td>
+</tr>
+<tr>
+<td><code>TAXA_SERVICO</code></td>
+<td><code>caixa.c</code></td>
+<td><code>#define</code></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>[!WARNING]
+Efeito colateral escondido: <code>preco_centavos</code> parece só consultar um preço,
+mas também soma 1 no contador de vendidos. Chamá-la duas vezes para o mesmo
+pedido conta o item em dobro. Quando a função muda estado, diga no nome
+(<code>registrar_pedido</code>) ou separe em duas.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>Os pedidos 1, 2 e 3 somam R$ 38,40; com 10% de serviço, R$ 42,24. Pagando
+R$ 50, o troco de R$ 7,76 sai da recursão como 5 + 2 + 0,50 + 0,25 + 0,01:</p>
+<p>{{ideia}}</p>
+<p>O <code>caixa.c</code> usa o módulo do cardápio (o <code>cardapio.h</code> e o <code>cardapio.c</code> estão na
+pasta do assunto):</p>
+<pre><code class="language-c">#include &lt;math.h&gt;
+#include &lt;stdio.h&gt;
+
+#include &quot;cardapio.h&quot;
+
+#define TAXA_SERVICO 10 // por cento
+
+// lê um código de 0 a 4; insiste até vir um válido
+int ler_codigo(void) {
+    int codigo;
+    int lidos;
+    do {
+        printf(&quot;Código (0 fecha): &quot;);
+        lidos = scanf(&quot;%d&quot;, &amp;codigo);
+        if (lidos != 1) {
+            return 0; // entrada acabou ou não é número: fecha a conta
+        }
+    } while (codigo &lt; 0 || codigo &gt; 4);
+    return codigo;
+}
+
+// a nota seguinte, da maior para a menor (em centavos)
+int proxima_nota(int nota) {
+    switch (nota) {
+    case 10000: return 5000;
+    case 5000: return 2000;
+    case 2000: return 1000;
+    case 1000: return 500;
+    case 500: return 200;
+    case 200: return 100;
+    case 100: return 50;
+    case 50: return 25;
+    case 25: return 10;
+    case 10: return 5;
+    default: return 1;
+    }
+}
+
+// recursão: dá uma nota e resolve o troco que sobrou
+void dar_troco(int centavos, int nota) {
+    if (centavos == 0) {
+        return; // caso base: troco completo
+    }
+    if (centavos &gt;= nota) {
+        printf(&quot;  %d.%02d\n&quot;, nota / 100, nota % 100);
+        dar_troco(centavos - nota, nota);
+    } else {
+        dar_troco(centavos, proxima_nota(nota));
+    }
+}
+
+int main(void) {
+    int total = 0;
+
+    mostrar_cardapio();
+    for (int codigo = ler_codigo(); codigo != 0; codigo = ler_codigo()) {
+        total += preco_centavos(codigo);
+        mostrar_item(codigo);
+        printf(&quot; adicionado\n&quot;);
+    }
+
+    int servico = total * TAXA_SERVICO / 100;
+    int conta = total + servico;
+    printf(&quot;%d itens, conta com serviço: R$ %d.%02d\n&quot;,
+           itens_vendidos(), conta / 100, conta % 100);
+
+    double pago;
+    printf(&quot;Valor pago: &quot;);
+    if (scanf(&quot;%lf&quot;, &amp;pago) != 1) {
+        return 0;
+    }
+    int troco = (int)lround(pago * 100) - conta;
+    if (troco &lt; 0) {
+        printf(&quot;Faltam R$ %d.%02d\n&quot;, -troco / 100, -troco % 100);
+        return 0;
+    }
+    printf(&quot;Troco: R$ %d.%02d\n&quot;, troco / 100, troco % 100);
+    dar_troco(troco, 10000);
+    return 0;
+}
+// Exemplo de uso (o que você digita vem depois dos dois-pontos):
+// 1 X-salada   R$ 18.50
+// 2 Batata     R$ 12.00
+// 3 Suco       R$  7.90
+// 4 Açaí       R$ 15.00
+// Código (0 fecha): 1
+// X-salada adicionado
+// Código (0 fecha): 2
+// Batata adicionado
+// Código (0 fecha): 3
+// Suco adicionado
+// Código (0 fecha): 9
+// Código (0 fecha): 0
+// 3 itens, conta com serviço: R$ 42.24
+// Valor pago: 50
+// Troco: R$ 7.76
+//   5.00
+//   2.00
+//   0.50
+//   0.25
+//   0.01
+// Para testar sem digitar, salve como caixa.c numa pasta sua, com cópias do
+// cardapio.h e do cardapio.c, e rode: printf &#39;1\n2\n3\n9\n0\n50\n&#39; | ./caixa
+</code></pre>
+<p>O laço dos pedidos termina com o código 0; depois vêm a conta, o pagamento e o
+troco, que é a recursão de <code>dar_troco</code>:</p>
+<p>{{fluxograma}}</p>

@@ -1,0 +1,1024 @@
+<h1>Fichamento (Tenenbaum, Langsam, Augenstein): &quot;Estruturas de Dados Usando C&quot; (parte 2)</h1>
+<ul>
+<li><strong>Título:</strong> Estruturas de Dados Usando C (tradução brasileira, Makron Books).</li>
+<li><strong>Autores:</strong> Aaron M. Tenenbaum, Yedidyah Langsam, Moshe J. Augenstein.</li>
+<li><strong>Arquivo lido:</strong> <code>0aea0b0f-ebookEstruturas_de_Dados_Usando_C_Tenenbaum.md</code>, linhas 9590 a 17802
+(lidas por completo): cap. 6 (classificação), cap. 7 (busca), cap. 8 (grafos), cap. 9 (gerenciamento de
+armazenamento), mais bibliografia e índice analítico (só referências, sem conteúdo didático).</li>
+<li><strong>Avaliação geral:</strong> obra de referência densa e rigorosa, muito mais profunda que o necessário para um
+curso introdutório: analisa cada algoritmo com contagem de comparações, casos melhor/pior/médio e
+variantes pouco conhecidas (Bsort, Cook-Kim, Brent, LH2P, Schorr-Waite, sistema buddy). Os exemplos
+numéricos recorrentes (o vetor <code>25 57 48 37 12 92 86 33</code> atravessa todo o cap. 6) são ótimos para
+comparar algoritmos lado a lado. Pontos fracos para o LPEDC: C pré-ANSI (parâmetros no estilo K&amp;R,
+<code>TRUE/FALSE</code> por macro, &quot;pools&quot; de nós em vetor com <code>getnode/freenode</code> em vez de <code>malloc</code>), muito
+pseudocódigo misturado com C, tradução com jargão estranho (&quot;classificação&quot; = ordenação,
+&quot;espalhamento&quot; = hashing, &quot;reespalhamento&quot; = endereçamento aberto, &quot;provas&quot; = sondagens,
+&quot;sistema em turma&quot; = buddy system, &quot;hiperpaginação&quot; = thrashing) e o OCR introduziu muitos erros
+nos códigos e fórmulas. Há também bugs reais em alguns códigos (listados em &quot;Obsoleto / evitar&quot;).
+Use como fonte de ideias, análises e exercícios; nunca copie código daqui sem revisar.</li>
+</ul>
+<hr>
+<h2>Glossário de tradução (útil para o curso inteiro)</h2>
+<table>
+<thead>
+<tr>
+<th>Termo no livro</th>
+<th>Termo que o LPEDC deve usar</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>classificação / classificar</td>
+<td>ordenação / ordenar (sort)</td>
+</tr>
+<tr>
+<td>classificação por bolha, seleção direta, inserção simples, intercalação</td>
+<td>bubble, selection, insertion, merge sort</td>
+</tr>
+<tr>
+<td>classificação por troca de partição</td>
+<td>quicksort</td>
+</tr>
+<tr>
+<td>classificação de raízes</td>
+<td>radix sort</td>
+</tr>
+<tr>
+<td>classificação de Shell / incremento decrescente</td>
+<td>shell sort</td>
+</tr>
+<tr>
+<td>classificação in loco</td>
+<td>ordenação in-place</td>
+</tr>
+<tr>
+<td>espalhamento, função de espalhamento</td>
+<td>hashing, função hash</td>
+</tr>
+<tr>
+<td>reespalhamento, teste linear</td>
+<td>endereçamento aberto, sondagem linear</td>
+</tr>
+<tr>
+<td>provas</td>
+<td>sondagens (probes)</td>
+</tr>
+<tr>
+<td>espalhamento combinado</td>
+<td>coalesced hashing</td>
+</tr>
+<tr>
+<td>encadeamento separado</td>
+<td>encadeamento (separate chaining)</td>
+</tr>
+<tr>
+<td>fator de carga (lf)</td>
+<td>fator de carga (α = n / m)</td>
+</tr>
+<tr>
+<td>arco / nó de grafo</td>
+<td>aresta / vértice</td>
+</tr>
+<tr>
+<td>dígrafo, dag</td>
+<td>grafo dirigido, grafo acíclico dirigido</td>
+</tr>
+<tr>
+<td>percurso em profundidade / em largura</td>
+<td>DFS / BFS</td>
+</tr>
+<tr>
+<td>floresta geradora, árvore geradora mínima</td>
+<td>floresta de busca, árvore geradora mínima (MST)</td>
+</tr>
+<tr>
+<td>sistema em turma, companheiro</td>
+<td>buddy system, buddy</td>
+</tr>
+<tr>
+<td>marca limítrofe</td>
+<td>boundary tag</td>
+</tr>
+<tr>
+<td>hiperpaginação</td>
+<td>thrashing</td>
+</tr>
+<tr>
+<td>primeira/melhor/pior escolha</td>
+<td>first fit / best fit / worst fit</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>0071-eficiencia</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> três custos competem: tempo do programador, tempo de máquina e espaço. Para
+arquivos pequenos ou programas rodados uma única vez, o método simples basta, mas &quot;ineficiente&quot; é
+aceitável, &quot;incorreto&quot; nunca. Mede-se o tempo não em segundos (dependem da máquina), mas pelo número
+de <strong>operações críticas</strong>: comparações de chaves, trocas, movimentações. Duas formas de estimar:
+análise matemática (melhor/pior/médio) ou medição empírica com vários arquivos de teste.</li>
+<li><strong>Boa explicação:</strong> a tabela de <code>f(n) = 0,01n² + 10n</code>. Para n pequeno o termo <code>10n</code> domina (dobrar n
+~dobra o tempo); em n = 1000 os dois termos empatam (10.000 cada); depois o <code>n²</code> domina e dobrar n
+~quadruplica o tempo. Mostra visualmente por que só o termo de maior ordem importa &quot;no limite&quot; e por
+que para n pequeno as constantes podem inverter a escolha.</li>
+<li><strong>Ideia didática forte:</strong> &quot;ordenar ou não ordenar?&quot;: se vou buscar UMA vez, uma busca sequencial
+custa menos que ordenar; se vou buscar milhares de vezes, ordenar uma vez e usar busca binária
+compensa. Não há resposta universal; depende do uso.</li>
+<li><strong>Pegadinhas:</strong> escolher um algoritmo &quot;porque é O(n log n)&quot; sem olhar constantes e tamanho real da
+entrada; contar <code>j++</code> do laço como operação crítica (não é: o custo dominante é a comparação/troca).</li>
+<li><strong>Ideias de exercícios:</strong><ul>
+<li>Instrumentar bubble, selection e insertion com contadores globais de comparações e trocas; rodar
+com vetores de 10, 100 e 1000 elementos aleatórios (0–999), ordenados e invertidos; tabular.
+(Resp. esperada: insertion ≈ n comparações no ordenado e ≈ n²/2 no invertido; selection sempre
+n(n−1)/2 comparações e n−1 trocas.)</li>
+<li>Dada <code>T(n) = a·n² + b·n·log₂n</code>, para que n os dois termos se igualam? (Resp.: <code>a·n = b·log₂n</code>;
+resolver numericamente para a = 1, b = 100: n ≈ 997.)</li>
+<li>Ordenar as condições de <code>if (c1 &amp;&amp; c2 &amp;&amp; c3)</code>: sabendo o custo de avaliar cada uma e a
+probabilidade de ser falsa, qual ordem minimiza o tempo médio? (Resp.: avaliar primeiro as baratas
+e com alta chance de serem falsas, razão custo / P(falsa) crescente; bom gancho com curto-circuito.)</li>
+</ul>
+</li>
+</ul>
+<h3>0072-big-o</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> definição formal: f(n) é O(g(n)) se existem constantes positivas a e b tais que
+f(n) ≤ a·g(n) para todo n ≥ b. Exemplo do livro: n² + 100n ≤ 2n² para n ≥ 100 (a = 2, b = 100).
+Propriedades: transitividade; constantes são O(1); polinômio de grau k é O(nᵏ); todos os logaritmos
+são da mesma ordem (log_m n = log_m k · log_k n), por isso se omite a base. Hierarquia:
+1 &lt; log n &lt; (log n)ᵏ &lt; n &lt; n log n &lt; n² &lt; nᵏ &lt; dⁿ. Polinomial × exponencial: 2¹⁰ = 1024, mas 2¹⁰⁰ tem
+31 dígitos: problemas exponenciais são &quot;intratáveis&quot;.</li>
+<li><strong>Analogia boa:</strong> multiplicar a entrada por 100 multiplica o tempo por menos de 200 num algoritmo
+O(n log n), mas por 10.000 num O(n²).</li>
+<li><strong>Resultado bonito para bônus:</strong> qualquer ordenação baseada em comparações precisa de pelo menos
+log₂(n!) ≈ n log n comparações no pior caso (árvore de decisão com n! folhas; uma árvore binária com
+n! folhas tem altura ≥ log₂ n!). Para n = 3: 6 permutações → pelo menos 3 comparações.</li>
+<li><strong>Pegadinhas:</strong> O(·) é limite superior: n² também é O(n³), mas se pede o limite mais justo, com
+coeficiente 1; achar que O(n log n) é sempre mais rápido que O(n²) para qualquer n.</li>
+<li><strong>Exercícios:</strong><ul>
+<li>Mostrar a, b para provar que 10n² + 37n + 153 é O(n²). (Ex.: a = 11, b = 41.)</li>
+<li>Quantas comparações para achar máximo e mínimo de n elementos? (Resp.: ingênuo 2n−2; em pares,
+⌈3n/2⌉−2.) Para achar o maior e o segundo maior? (Resp.: n + ⌈log₂n⌉ − 2, via &quot;torneio&quot;.)</li>
+<li>Provar que f(1)=1, f(n)=f(n−1)+1/n é O(log n) (série harmônica).</li>
+</ul>
+</li>
+</ul>
+<h3>0073-invariantes</h3>
+<ul>
+<li><strong>Gancho do livro:</strong> o particionamento do quicksort mantém o invariante &quot;tudo acima de <code>up</code> é ≥ pivô,
+tudo abaixo de <code>down</code> é ≤ pivô&quot;; ótimo exemplo de invariante de laço que prova corretude.</li>
+<li><strong>Outro:</strong> após a passada i do bubble sort, <code>x[n−i..n−1]</code> estão na posição final; após a iteração k do
+insertion sort, <code>x[0..k]</code> está ordenado (não necessariamente na posição final).</li>
+<li><strong>Exercício:</strong> provar que, se o pivô a fica na posição j com tudo à esquerda ≤ a e tudo à direita ≥ a,
+então a é o (j+1)-ésimo menor e não sai mais dali.</li>
+</ul>
+<h3>0074-tad</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> o livro especifica o <strong>dicionário</strong> (tabela de busca) como TAD definido sobre um
+<em>conjunto</em> (não sequência): <code>member(tbl, k)</code>, <code>search(tbl, k)</code> (devolve registro ou &quot;registro nulo&quot;),
+<code>insert(tbl, r)</code> com pré-condição &quot;chave ainda não existe&quot;, <code>delete(tbl, k)</code>. Distingue <strong>tabela
+desordenada</strong> (só busca por chave) de <strong>tabela ordenada</strong> (tem primeiro, último, sucessor).</li>
+<li><strong>Ideia:</strong> usar o dicionário como fio condutor dos módulos 13–15: a mesma interface <code>.h</code> implementada
+com vetor desordenado, vetor ordenado + busca binária, BST e tabela hash, comparando custos.</li>
+<li><strong>Terminologia útil:</strong> chave interna (dentro do registro) × externa (tabela à parte); chave primária
+(única) × secundária (pode repetir, ex.: &quot;estado&quot; num cadastro); busca interna (memória) × externa
+(disco); &quot;busca e inserção&quot; (insere se não achar).</li>
+</ul>
+<h3>0075-vetor-dinamico / 0078-lista-ordenada (ganchos)</h3>
+<ul>
+<li>Remover de um vetor <strong>desordenado</strong>: copiar o último elemento para o buraco e decrementar n: O(1).
+Num vetor que precisa manter ordem, remover move metade dos elementos em média. Em lista ligada,
+remover é barato em qualquer caso.</li>
+<li>&quot;Inserção de lista&quot;: insertion sort sobre um vetor auxiliar <code>link[]</code>: insere ajustando índices, sem
+deslocar dados (comparações continuam O(n²), mas movimentações caem para O(n)). Bom exercício de
+lista ordenada em vetor.</li>
+</ul>
+<h3>0089-busca-sequencial</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> percorre até achar; sucesso custa em média (n+1)/2 comparações, fracasso custa n.
+Versão &quot;busca e inserção&quot;: se não achar, insere no fim (exige espaço reservado). <strong>Sentinela:</strong> colocar
+a própria chave em <code>k[n]</code> antes de buscar elimina o teste <code>i &lt; n</code> do laço (cada iteração faz uma
+comparação em vez de duas). Em lista ligada, a sentinela exige ponteiro para o último nó.</li>
+<li><strong>Ideias boas:</strong><ul>
+<li>Se as probabilidades de acesso forem desiguais, ordenar por probabilidade decrescente minimiza
+p(0)·1 + p(1)·2 + … Exemplo do livro: registros de calouros e formandos são consultados mais.</li>
+<li><strong>Mover-para-frente</strong> (achou → move para o início) × <strong>transposição</strong> (achou → troca com o anterior).
+Transposição é melhor a longo prazo com distribuição fixa; mover-para-frente reage mais rápido a
+mudanças e tem melhor pior caso. Transposição funciona bem em vetor; mover-para-frente só em lista.</li>
+<li>Tabela ordenada: busca sem sucesso para assim que acha chave maior (n/2 em média). Muitas consultas
+acumuladas e ordenadas podem ser respondidas numa única passada paralela (&quot;arquivo mestre&quot; +
+&quot;arquivo de transações&quot;).</li>
+<li><strong>Busca sequencial indexada:</strong> índice com cada k-ésima chave; busca no índice e depois num trecho
+pequeno da tabela. Índice secundário = índice do índice (precursor da árvore B+).</li>
+</ul>
+</li>
+<li><strong>Pegadinhas:</strong> esquecer de verificar capacidade na busca-e-inserção (estouro do vetor); com chaves
+repetidas, a busca indexada pode não devolver a primeira ocorrência.</li>
+<li><strong>Exemplos:</strong> vetor <code>{7, 3, 9, 3, 5}</code> buscando 3 (acha na posição 1 com 2 comparações) e 8 (5
+comparações); depois a versão com sentinela contando comparações.</li>
+<li><strong>Exercícios:</strong><ul>
+<li>Implementar busca sequencial com e sem sentinela e contar comparações para 10⁶ buscas.</li>
+<li>Implementar mover-para-frente numa lista ligada e simular acessos com 80% concentrados em 20% das
+chaves; medir o comprimento médio percorrido antes e depois.</li>
+<li>Busca que começa no último elemento encontrado e pode ir para frente ou para trás (lista dupla).</li>
+</ul>
+</li>
+</ul>
+<h3>0090-busca-binaria</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> versão iterativa com <code>low</code>, <code>hi</code>, <code>mid = (low+hi)/2</code>; ~log₂ n iterações. Em C cada
+iteração faz duas comparações de chave (<code>==</code> e <code>&lt;</code>), então são ~2 log₂ n comparações. Só funciona em
+vetor (precisa de índice consecutivo); inútil se há muitas inserções/remoções.</li>
+<li><strong>Visão bonita:</strong> um vetor ordenado é uma BST implícita: o meio é a raiz, as metades são as subárvores.</li>
+<li><strong>Variações (bônus):</strong><ul>
+<li><strong>Busca por interpolação:</strong> estima a posição por regra de três:
+<code>mid = low + (high−low)·(key−k[low])/(k[high]−k[low])</code>. Com chaves uniformes: ~log₂(log₂ n)
+comparações; com chaves aglomeradas degenera para O(n). Dado real do livro: lista de ~40.000 nomes,
+binária ~16 comparações, interpolação 134 (nomes não são uniformes: muitos &quot;Silva&quot;, poucos &quot;Quiroga&quot;),
+interpolação robusta 12,5.</li>
+<li>&quot;Lista preenchida&quot;: vetor ordenado com buracos marcados por flag, para permitir inserções sem
+deslocar tudo.</li>
+<li>Busca de Fibonacci (divide pelos números de Fibonacci em vez de pela metade).</li>
+</ul>
+</li>
+<li><strong>Pegadinhas:</strong> <code>mid = (low + hi)/2</code> pode estourar <code>int</code> para vetores gigantes (usar
+<code>low + (hi−low)/2</code>; o livro não menciona); laço <code>while (low &lt;= hi)</code> vs <code>&lt;</code> (erro de um).</li>
+<li><strong>Exercícios:</strong><ul>
+<li>Modificar a busca binária para, em caso de falha, devolver o índice i tal que k[i] &lt; key &lt; k[i+1]
+(ponto de inserção; −1 se key &lt; k[0]).</li>
+<li>Contar comparações da binária vs. interpolação em vetor uniforme (0, 10, 20, …) e em vetor
+exponencial (1, 2, 4, 8, …). (Resp.: interpolação ganha no uniforme e perde feio no exponencial.)</li>
+</ul>
+</li>
+</ul>
+<h3>0091-bubble-sort</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> compara vizinhos e troca os fora de ordem; após a passada i o i-ésimo maior está
+no lugar (&quot;borbulha&quot;). Duas melhorias: (1) a passada i não precisa olhar os últimos i elementos;
+(2) flag <code>switched</code>: se uma passada não trocou nada, acabou. Com isso é O(n) no vetor já ordenado,
+mas continua O(n²) no médio/pior. Espaço O(1). É, segundo o livro, provavelmente o menos eficiente
+de todos; o custo real está mais nas trocas que nas comparações.</li>
+<li><strong>Exemplo pronto (vetor do livro):</strong> <code>25 57 48 37 12 92 86 33</code><ul>
+<li>passada 1 → <code>25 48 37 12 57 86 33 92</code> (92 chegou ao fim)</li>
+<li>passada 2 → <code>25 37 12 48 57 33 86 92</code></li>
+<li>passada 3 → <code>25 12 37 48 33 57 86 92</code></li>
+<li>passada 4 → <code>12 25 37 33 48 57 86 92</code></li>
+<li>passada 5 → <code>12 25 33 37 48 57 86 92</code> (ordenado; passada 6 não troca e encerra)</li>
+</ul>
+</li>
+<li><strong>Observação interessante:</strong> o número de passadas necessárias é a maior distância que um elemento
+precisa andar &quot;para a esquerda&quot; (o 33 sai da posição 7 para a 2: 5 passadas). Elementos pequenos no
+fim são &quot;tartarugas&quot;. Daí o <strong>cocktail/shaker sort</strong> (passadas alternando direção).</li>
+<li><strong>Pegadinhas:</strong> laço interno indo até <code>n−1</code> e acessando <code>x[j+1]</code> fora do vetor; esquecer de zerar a
+flag a cada passada.</li>
+<li><strong>Exercícios:</strong><ul>
+<li>Implementar o shaker sort e contar passadas no vetor acima (resp.: menos que o bubble).</li>
+<li><strong>Odd-even transposition sort:</strong> passadas alternadas comparando pares (ímpar, ímpar+1) e
+(par, par+1). Qual a condição de parada? (Resp.: duas passadas seguidas sem trocas.)</li>
+<li>Contar trocas do bubble num vetor invertido de n elementos. (Resp.: n(n−1)/2.)</li>
+</ul>
+</li>
+</ul>
+<h3>0092-selection-sort</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> o livro apresenta toda ordenação por seleção como &quot;fila de prioridade genérica&quot;:
+insere todos numa fila de prioridade e retira sempre o máximo, preenchendo o vetor de trás para frente.
+O selection sort é o caso em que a fila é o próprio vetor desordenado: a cada passo acha o maior entre
+<code>x[0..i]</code> e troca com <code>x[i]</code>. Sempre n(n−1)/2 comparações e exatamente n−1 trocas,
+independentemente da entrada (não melhora com vetor ordenado).</li>
+<li><strong>Analogia/insight:</strong> heapsort = mesma ideia com a fila de prioridade implementada por heap;
+insertion sort = fila de prioridade como vetor ordenado (a &quot;seleção&quot; fica trivial).</li>
+<li><strong>Quando usar:</strong> registros grandes (trocas caras) e chaves baratas de comparar: selection faz bem
+menos movimentações que insertion.</li>
+<li><strong>Pegadinhas:</strong> no código do livro há <code>x[ind]</code> em vez de <code>x[indx]</code> (erro); selection <strong>não é estável</strong>
+na forma clássica de troca.</li>
+<li><strong>Exercícios:</strong><ul>
+<li>Ordenar <code>25 57 48 37 12 92 86 33</code> mostrando o vetor após cada troca (versão &quot;maior vai para o fim&quot;).</li>
+<li>Mostrar um vetor com chaves repetidas em que a selection troca a ordem relativa de iguais
+(ex.: <code>(3,a) (3,b) (1,c)</code> → <code>(1,c) (3,b) (3,a)</code>).</li>
+</ul>
+</li>
+</ul>
+<h3>0093-insertion-sort</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> insere <code>x[k]</code> no trecho já ordenado <code>x[0..k−1]</code> deslocando os maiores uma casa.
+Ordenado: n−1 comparações (O(n)); invertido: n(n−1)/2; médio O(n²). Espaço O(1). Quanto mais perto
+de ordenado, mais rápido; é o melhor algoritmo simples para entradas quase ordenadas.</li>
+<li><strong>Insight importante:</strong> usar busca binária para achar a posição reduz as comparações para O(n log n),
+mas o deslocamento continua O(n²); portanto não melhora a ordem global. Ótima pegadinha conceitual.</li>
+<li><strong>Número prático do livro:</strong> o ponto de equilíbrio com o quicksort fica em torno de 20–30 elementos
+(com o heapsort, 60–70). Otimização clássica: quicksort que passa a usar insertion em subvetores
+pequenos.</li>
+<li><strong>Shell sort (bônus dentro do tópico):</strong> ordena por inserção os subvetores de elementos separados por
+um incremento k (5, depois 3, depois 1). Exemplo do livro com <code>25 57 48 37 12 92 86 33</code> e incrementos
+(5, 3, 1):<ul>
+<li>inc 5 → <code>25 57 33 37 12 92 86 48</code></li>
+<li>inc 3 → <code>25 12 33 37 48 92 86 57</code></li>
+<li>inc 1 → <code>12 25 33 37 48 57 86 92</code>
+Por que funciona: cada passada deixa o vetor &quot;mais ordenado&quot; e a passada final com incremento 1 é um
+insertion sort sobre vetor quase ordenado. Uma ordenação parcial por k não é desfeita pelas passadas
+seguintes. Os incrementos não devem ter divisores comuns; custo empírico ~n^1,25, O(n^1,5) para
+certas sequências. Recomendado para algumas centenas de elementos.</li>
+</ul>
+</li>
+<li><strong>Pegadinhas:</strong> no laço <code>for (i = k−1; i &gt;= 0 &amp;&amp; y &lt; x[i]; i--)</code> inverter a ordem das condições acessa
+<code>x[−1]</code> (o curto-circuito protege!); ótimo gancho com 0013-logicos.</li>
+<li><strong>Exercícios:</strong><ul>
+<li>Rastrear o insertion sort em <code>5 2 4 6 1 3</code> mostrando o vetor após cada k. (Resp.: <code>2 5 4 6 1 3</code>,
+<code>2 4 5 6 1 3</code>, <code>2 4 5 6 1 3</code>, <code>1 2 4 5 6 3</code>, <code>1 2 3 4 5 6</code>.)</li>
+<li>Contar comparações e deslocamentos do insertion e da insertion com busca binária em vetores de
+1000 elementos invertidos.</li>
+<li>Implementar shell sort com incrementos (5,3,1) e com a sequência de Knuth (1, 4, 13, 40, …) e
+comparar.</li>
+</ul>
+</li>
+</ul>
+<h3>0094-merge-sort</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> intercalar (merge) dois vetores ordenados em um terceiro: compara as frentes,
+copia o menor, e no fim despeja o que sobrou. O livro apresenta primeiro a versão <strong>iterativa de baixo
+para cima</strong>: intercala blocos de tamanho 1, depois 2, 4, 8… até n. No máximo log₂ n passadas de até n
+comparações → nunca mais que n log₂ n comparações (média ainda menor: ≈ n log₂ n − n + 1, contra
+1,386 n log₂ n do quicksort). Custos: vetor auxiliar O(n) e cerca do dobro de atribuições do quicksort.</li>
+<li><strong>Exemplo pronto:</strong> <code>[25] [57] [48] [37] [12] [92] [86] [33]</code> → <code>[25 57] [37 48] [12 92] [33 86]</code> →
+<code>[25 37 48 57] [12 33 86 92]</code> → <code>[12 25 33 37 48 57 86 92]</code>.</li>
+<li><strong>Comparação conceitual excelente:</strong> merge sort = dividir fácil (pela metade), juntar difícil
+(intercalar); quicksort = dividir difícil (particionar), juntar fácil (já está no lugar). Insertion é
+um merge &quot;desequilibrado&quot; (1 elemento + resto); selection é um quick &quot;desequilibrado&quot; (maior + resto).</li>
+<li><strong>Variações:</strong> alternar x→aux e aux→x para evitar cópia de volta; <strong>merge natural</strong> (aproveita trechos
+já crescentes); merge sort em <strong>lista ligada</strong> dispensa o vetor auxiliar e só mexe em ponteiros;
+ideal para registros grandes.</li>
+<li><strong>Pegadinhas:</strong> último bloco de tamanho menor quando n não é potência de 2; usar <code>&lt;</code> em vez de <code>&lt;=</code>
+na comparação quebra a estabilidade.</li>
+<li><strong>Exercícios:</strong><ul>
+<li>Escrever <code>merge(x, lb, mid, ub)</code> e a versão recursiva <code>msort(x, lb, ub)</code>; depois a versão iterativa.</li>
+<li>Intercalar k arquivos ordenados usando um min-heap com (valor, nº do arquivo).</li>
+<li>Número médio de comparações para intercalar vetores de tamanhos 2 e 1 (resp. pela fórmula do livro
+a(l1,l2) = l1·l2·(l1+l2+2)/((l1+1)(l2+1)) = 2·1·5/(3·2) = 5/3).</li>
+</ul>
+</li>
+</ul>
+<h3>0095-quick-sort</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> escolhe pivô, particiona (≤ pivô à esquerda, ≥ à direita, pivô na posição final)
+e ordena recursivamente as duas partes. Particionamento do livro com dois índices: <code>down</code> sobe até
+achar elemento &gt; pivô, <code>up</code> desce até achar ≤ pivô, troca se <code>down &lt; up</code>; no fim troca o pivô com
+<code>x[up]</code>. Exemplo: <code>25 57 48 37 12 92 86 33</code> com pivô 25 vira <code>12 25 48 37 57 92 86 33</code>.</li>
+<li><strong>Análise:</strong> pivô sempre no meio → n log₂ n; vetor <strong>já ordenado</strong> (ou invertido) com pivô = primeiro
+elemento → partições 0 e n−1 → O(n²). &quot;O quicksort funciona melhor no caos e pior na ordem&quot;; o oposto
+do bubble. Média ~1,386 n log₂ n; na prática costuma ser o mais rápido.</li>
+<li><strong>Escolha de pivô:</strong> mediana-de-três (primeiro, meio, último) evita o pior caso em vetor ordenado;
+pivô aleatório; &quot;meansort&quot; (média do subvetor); Bsort (pivô do meio + pequenas trocas que detectam
+subvetores já ordenados).</li>
+<li><strong>Versão não recursiva:</strong> pilha explícita com pares (lb, ub); sempre empilhar o subvetor <strong>maior</strong> e
+processar o menor primeiro → pilha de no máximo O(log n). Outra vantagem: localidade de referência
+(bom para cache/memória virtual).</li>
+<li><strong>Pegadinhas:</strong> laço de <code>down</code> sem o limite <code>down &lt; ub</code> sai do vetor quando o pivô é o maior;
+recursão em vetor ordenado de 10⁵ elementos estoura a pilha de chamadas (gancho com 0031); quicksort
+não é estável.</li>
+<li><strong>Exercícios:</strong><ul>
+<li>Rastrear a partição em <code>25 57 48 37 12 92 86 33</code> mostrando cada troca.</li>
+<li>Medir tempo do quicksort (pivô = primeiro) em vetor aleatório vs. ordenado de 20.000 elementos;
+repetir com mediana-de-três.</li>
+<li>Quicksort híbrido: insertion para subvetores com menos de s elementos; achar o melhor s
+experimentalmente (resp. típica: 10–20).</li>
+<li>Contar a profundidade máxima de recursão com e sem a regra &quot;processar o menor primeiro&quot;.</li>
+</ul>
+</li>
+</ul>
+<h3>0096-comparando</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <strong>estável</strong> = mantém a ordem relativa de chaves iguais; <strong>in loco</strong> = espaço extra
+O(1); interna (memória) × externa (disco). Ordenar ponteiros/índices em vez dos registros
+(&quot;classificação por endereço&quot;) quando os registros são grandes. Não existe &quot;melhor&quot; ordenação geral.</li>
+<li><strong>Quadro-resumo extraível do livro:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Algoritmo</th>
+<th>Melhor</th>
+<th>Médio</th>
+<th>Pior</th>
+<th>Espaço extra</th>
+<th>Estável</th>
+<th>Observação do livro</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>bubble (com flag)</td>
+<td>n</td>
+<td>n²</td>
+<td>n²</td>
+<td>1</td>
+<td>sim</td>
+<td>o mais lento; bom só p/ quase ordenado</td>
+</tr>
+<tr>
+<td>selection</td>
+<td>n²</td>
+<td>n²</td>
+<td>n²</td>
+<td>1</td>
+<td>não</td>
+<td>poucas trocas (n−1)</td>
+</tr>
+<tr>
+<td>insertion</td>
+<td>n</td>
+<td>n²</td>
+<td>n²</td>
+<td>1</td>
+<td>sim</td>
+<td>melhor simples p/ quase ordenado e n &lt; ~25</td>
+</tr>
+<tr>
+<td>shell</td>
+<td>—</td>
+<td>~n^1,25</td>
+<td>n^1,5</td>
+<td>1</td>
+<td>não</td>
+<td>bom p/ centenas de elementos</td>
+</tr>
+<tr>
+<td>merge</td>
+<td>n log n</td>
+<td>n log n</td>
+<td>n log n</td>
+<td>n</td>
+<td>sim</td>
+<td>menos comparações; o dobro de atribuições</td>
+</tr>
+<tr>
+<td>quick</td>
+<td>n log n</td>
+<td>1,39 n log n</td>
+<td>n²</td>
+<td>log n (pilha)</td>
+<td>não</td>
+<td>o mais rápido na média</td>
+</tr>
+<tr>
+<td>heap</td>
+<td>n log n</td>
+<td>n log n</td>
+<td>n log n</td>
+<td>1</td>
+<td>não</td>
+<td>~2× mais lento que quick na média</td>
+</tr>
+<tr>
+<td>radix</td>
+<td>m·n</td>
+<td>m·n</td>
+<td>m·n</td>
+<td>n + filas</td>
+<td>sim</td>
+<td>sem comparações de chaves</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>Recomendações práticas do livro:</strong> quase ordenado e pequeno → insertion; grande e aleatório →
+quicksort (pivô do meio); precisa de garantia de pior caso → heapsort ou merge; lista ligada → merge
+ou inserção de lista; registros enormes → ordenar índices.</li>
+<li><strong>Exercício:</strong> dados 5 cenários (ex.: &quot;10 milhões de inteiros aleatórios&quot;, &quot;planilha de 50 linhas
+quase ordenada&quot;, &quot;registros de 2 KB&quot;, &quot;precisa ser estável&quot;), escolher o algoritmo e justificar.</li>
+<li><strong>Exercício bônus:</strong> ordenação por <strong>contagem</strong> (count[i] = nº de elementos menores que x[i]) e por
+<strong>distribuição</strong> (histograma de inteiros entre a e b): O(n + faixa), sem comparações.</li>
+</ul>
+<h3>0097-arvores / 0099-bst-busca-insercao</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> BST: à esquerda chaves menores, à direita maiores ou iguais; percurso em ordem
+devolve a sequência ordenada (&quot;tree sort&quot;). Busca e inserção descem um caminho; a forma da árvore
+depende da ordem de inserção. Sentinela em árvore: todos os ponteiros nulos apontam para um nó
+sentinela onde se grava a chave antes de buscar (laço <code>while (key != k(p))</code> sem teste de nulo).</li>
+<li><strong>Exemplo do livro (ótimo para aula):</strong> inserir <code>4 8 12 17 26</code> (ordenado) gera um &quot;pau&quot; com 14
+comparações; inserir <code>12 8 17 4 26</code> gera árvore balanceada com 10 comparações. Mesmo conjunto,
+custos diferentes.</li>
+<li><strong>Medidas:</strong> comprimento interno de caminhos i (soma dos níveis); busca com sucesso média = (i + n)/n.
+Estendendo a árvore com &quot;nós externos&quot; nos n+1 ponteiros nulos, o comprimento externo e satisfaz
+<strong>e = i + 2n</strong>, e a busca sem sucesso média = e/(n+1). Em BST aleatória, busca média ≈ 2 ln n ≈
+1,386 log₂ n, só ~39% pior que a árvore perfeitamente balanceada.</li>
+<li><strong>Pegadinhas:</strong> toda BST com n nós tem n+1 ponteiros nulos; inserir dados já ordenados degenera em
+lista (O(n)); chave repetida vai sempre para a direita.</li>
+<li><strong>Exercícios:</strong><ul>
+<li>Inserir <code>50 30 70 20 40 60 80</code> e depois <code>20 30 40 50 60 70 80</code> numa BST vazia; desenhar e calcular a
+altura e o comprimento interno de cada uma. (Resp.: altura 2 e i = 10; altura 6 e i = 21.)</li>
+<li>Quantas permutações de 1..3 geram cada uma das 5 BSTs possíveis? (Resp.: a balanceada (raiz 2) é
+gerada por 2 permutações; as outras 4 por 1 cada.)</li>
+<li>Implementar <code>sinsert(tree, key, rec)</code> em C com <code>malloc</code>.</li>
+</ul>
+</li>
+</ul>
+<h3>0100-bst-remocao</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> três casos: folha (remove), um filho (o filho sobe), dois filhos (o <strong>sucessor em
+ordem</strong>, mais à esquerda da subárvore direita, ocupa o lugar; o filho direito do sucessor sobe para
+o lugar dele, pois o sucessor nunca tem filho esquerdo).</li>
+<li><strong>Exemplo do livro:</strong> árvore com raiz 8; nível 1: 3, 11; nível 2: 1, 5, 9, 14; nível 3: 6, 10, 12, 15;
+nível 4: 7, 13 (6 é filho direito de 5, 7 filho direito de 6, 12 filho esquerdo de 14, 13 filho
+direito de 12). Remover 15 (folha); remover 5 (um filho: 6 sobe com 7); remover 11 (dois filhos: 12
+assume o lugar e 13 sobe para onde 12 estava). Comprimento interno i = 30, n = 13, e = 56 = 30 + 2·13.</li>
+<li><strong>Curiosidade (bônus):</strong> remoções sempre pelo sucessor tendem, após muitas inserções/remoções, a
+piorar a árvore; alternar sucessor/predecessor (&quot;eliminação simétrica&quot;) mantém a árvore melhor que a
+aleatória.</li>
+<li><strong>Pegadinhas:</strong> esquecer de atualizar o ponteiro do pai (ou a raiz, quando o nó removido é a raiz);
+vazar memória por não dar <code>free</code>; tratar o caso &quot;o sucessor é o próprio filho direito&quot;.</li>
+<li><strong>Exercícios:</strong><ul>
+<li>Na árvore acima, remover 8 (raiz) e desenhar. (Resp.: 9 sobe para a raiz; 10 vira filho esquerdo
+de 11.)</li>
+<li>Escrever a remoção usando o predecessor em ordem.</li>
+<li>Remover todas as chaves entre k1 e k2 (inclusive).</li>
+</ul>
+</li>
+</ul>
+<h3>0101-avl</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> altura da árvore vazia = −1; balanceamento de um nó = altura(esq) − altura(dir);
+AVL exige |bal| ≤ 1 em todos os nós. Após inserção, só desbalanceia se o novo nó entra do lado
+&quot;pesado&quot; de um ancestral; o mais jovem ancestral desbalanceado (ya) é o único a consertar. Dois casos:
+mesmo lado (rotação simples) e lados opostos (rotação dupla: primeiro no filho, depois no ancestral).
+Rotação esquerda em p: <code>q = right(p); hold = left(q); left(q) = p; right(p) = hold;</code>; preserva a ordem
+do percurso em ordem.</li>
+<li><strong>Números úteis:</strong> altura máxima ≈ 1,44 log₂ n (nunca mais que 44% pior que a perfeita); na prática
+~log₂ n + 0,25. Rotação em ~46,5% das inserções; inserção precisa de no máximo uma rotação (simples
+ou dupla), remoção pode precisar de O(log n) (média 0,214 por remoção). Árvore de Fibonacci = AVL com
+o menor número de nós para dada altura.</li>
+<li><strong>Outras árvores balanceadas citadas (bônus):</strong> balanceada por peso (wb[α]) e a de Tarjan
+(caminho mais longo até nó externo ≤ 2× o mais curto: é a ideia da rubro-negra; no máximo uma
+rotação por inserção ou remoção).</li>
+<li><strong>Pegadinhas:</strong> atualizar os campos <code>bal</code> errado após rotação dupla (três subcasos); esquecer de
+religar a subárvore rotacionada ao pai.</li>
+<li><strong>Exercícios:</strong><ul>
+<li>Inserir 1..7 em ordem numa AVL vazia, desenhando cada rotação. (Resp.: termina perfeitamente
+balanceada com raiz 4.)</li>
+<li>Inserir <code>30 10 20</code> (caso esquerda-direita → rotação dupla, raiz final 20).</li>
+</ul>
+</li>
+</ul>
+<h3>0102-heap</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> max-heap (o livro: &quot;heap descendente&quot;) = árvore binária quase completa em que
+cada nó ≤ pai; guardada em vetor: filhos de i em 2i+1 e 2i+2, pai em (i−1)/2. Inserção: coloca no fim e
+sobe trocando com o pai menor (O(log n)). Remoção do máximo: tira a raiz, pega o último elemento e
+desce trocando com o <strong>maior</strong> filho (O(log n)). Qualquer caminho raiz→folha é decrescente.</li>
+<li><strong>Por que heap e não outra coisa (comparação do livro):</strong> fila de prioridade em lista ordenada →
+inserir O(n); em BST → O(log n) médio mas O(n) pior; heap → O(log n) sempre, sem ponteiros.</li>
+<li><strong>Exemplo pronto:</strong> inserir <code>25 57 48 37 12 92 86 33</code> num max-heap vazio dá o vetor
+<code>92 37 86 33 12 48 57 25</code>.</li>
+<li><strong>Aplicações do livro:</strong> intercalar k arquivos ordenados (min-heap de (valor, arquivo)); achar os k
+maiores de um arquivo enorme com um min-heap de tamanho k; Huffman; Dijkstra e Prim eficientes;
+<strong>torneio</strong> (árvore em que cada nó interno guarda o maior dos dois filhos).</li>
+<li><strong>Pegadinhas:</strong> confundir heap com BST (heap não permite busca eficiente por chave); escolher o filho
+errado na descida (tem que ser o maior); índice do pai com vetor começando em 1 vs. 0.</li>
+<li><strong>Exercícios:</strong><ul>
+<li>Mostrar o vetor do heap acima após 3 remoções do máximo.</li>
+<li>k maiores de 10⁶ números com heap de tamanho k (resp.: O(n log k)).</li>
+<li>Heap ternário (filhos 3i+1, 3i+2, 3i+3).</li>
+</ul>
+</li>
+</ul>
+<h3>0103-heapsort</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> fase 1 constrói o heap no próprio vetor (inserções sucessivas); fase 2 troca a
+raiz com o último elemento do heap, encolhe o heap e desce o novo topo. In loco, O(n log n) mesmo no
+pior caso. O livro dá o código com todas as sub-rotinas &quot;em linha&quot; (inlined), hoje desnecessário.</li>
+<li><strong>Comparação:</strong> ~2× mais lento que o quicksort na média, mas sem o pior caso O(n²); ruim para n
+pequeno (sobrecarga).</li>
+<li><strong>Exercício:</strong> rastrear o heapsort completo em <code>25 57 48 37 12 92 86 33</code> desenhando a árvore após
+cada remoção.</li>
+</ul>
+<h3>0105-hashing</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> endereçamento direto (chave = índice) é perfeito para 100 itens de código de 2
+dígitos (<code>part[100]</code>), mas inviável para códigos de 7 dígitos (10 milhões de posições para alguns
+milhares de itens). Função hash reduz a chave a um índice; <strong>colisão</strong> quando h(k1) = h(k2). Exemplo:
+<code>h(k) = k % 1000</code> (últimos 3 dígitos): 4618396 e 4618996 ficam longe; 0000991 e 9846995 ficam perto;
+0596397 colide com 4957397.</li>
+<li><strong>Boa função hash:</strong> depende de todos os bits da chave; anagramas/permutações devem dar valores
+diferentes; distribui uniformemente; barata de calcular.<ul>
+<li><strong>Divisão:</strong> <code>k % m</code> com m primo. Armadilha: m = 1000 com chaves que terminam igual; e m tal que
+256 % m == 1 (ex.: m = 17) faz o resto ser a soma dos bytes mod m → &quot;steam&quot; e &quot;mates&quot; colidem.
+Ex.: 37956 = 148·256 + 68 e 37956 % 17 = 12 = (148 + 68) % 17.</li>
+<li><strong>Multiplicação:</strong> h(k) = ⌊m · frac(k·c)⌋ com c ≈ 0,6180339887 ((√5−1)/2).</li>
+<li><strong>Meio do quadrado:</strong> eleva ao quadrado e pega dígitos do meio (fraca, não uniforme).</li>
+<li><strong>Dobramento (folding):</strong> quebra a chave em pedaços e soma/XOR. Ex.: <code>010111001010110</code> →
+<code>01011 ⊕ 10010 ⊕ 10110 = 01111</code> = 15.</li>
+<li><strong>Strings:</strong> tratar cada letra como dígito em base 26 (ou 31/256): &quot;hello&quot; =
+8·26⁴ + 5·26³ + 12·26² + 12·26 + 15.</li>
+</ul>
+</li>
+<li><strong>Pegadinhas:</strong> hash não preserva ordem → não dá para listar em ordem de chave; funções que
+preservam ordem (<code>k / c</code>) costumam ser não uniformes; tabela um pouco maior que o número de itens
+(troca espaço por tempo).</li>
+<li><strong>Exercícios:</strong><ul>
+<li>Simular 0,8·m chaves aleatórias e medir % de posições vazias, % com colisão e maior número de
+chaves numa posição, para <code>k % m</code> com m primo, m potência de 2, folding com XOR e meio do quadrado.</li>
+<li>Mostrar duas strings que colidem com &quot;soma dos códigos ASCII % m&quot; e não colidem com base 31.</li>
+<li>Provar que <code>(i + c) % m</code> percorre todas as posições se e só se mdc(c, m) = 1.</li>
+</ul>
+</li>
+</ul>
+<h3>0106-encadeamento</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> <strong>encadeamento separado:</strong> vetor de cabeças de lista (<code>bucket[i]</code>) e cada lista
+guarda as chaves com o mesmo hash; busca percorre a lista; inserção no fim (ou no início). Vantagens:
+não &quot;enche&quot;, remoção trivial, nós não precisam ser contíguos. Custo médio: sucesso ≈ 1 + α/2;
+fracasso ≈ e^(−α) + α (listas desordenadas). Com α = 1: 1,5 e 1,27 sondagens.</li>
+<li><strong>Exemplo do livro:</strong> m = 10, h = k % 10, inserindo <code>75 66 42 192 91 40 49 87 67 16 417 130 372 227</code>
+→ lista 0: 40, 130; lista 1: 91; lista 2: 42, 192, 372; lista 5: 75; lista 6: 66, 16; lista 7: 87, 67,
+417, 227; lista 9: 49.</li>
+<li><strong>Insights:</strong> o fator de carga &quot;engana&quot; no encadeamento (α pode passar de 1 e o espaço dos nós não
+entra na conta); manter cada lista ordenada reduz o custo de busca sem sucesso; truque de guardar só
+o quociente <code>k / m</code> no nó (a chave se reconstrói com o índice); só funciona no encadeamento.</li>
+<li><strong>Espalhamento combinado (coalesced, bônus):</strong> a lista fica dentro da própria tabela, com campo
+<code>next</code> e alocação de posições livres de baixo para cima. Exemplo do livro: m = 10, inserindo
+<code>14 29 34 28 42 39 84 38</code> → as cadeias de 4 e 8 se fundem (4→8→7→5→3). Com &quot;porão&quot; (área extra só
+para colisões) ~15% da tabela, tabela cheia com ~1,69 sondagens por busca bem-sucedida.</li>
+<li><strong>Pegadinhas:</strong> esquecer de liberar todas as listas ao destruir a tabela; hash ruim transforma a
+tabela numa lista única.</li>
+<li><strong>Exercícios:</strong><ul>
+<li>Desenhar a tabela do exemplo acima e calcular o nº médio de comparações para buscas bem-sucedidas.
+(Resp.: (1·7 + 2·4 + 3·2 + 4·1)/14 = 25/14 ≈ 1,79.)</li>
+<li>Implementar dicionário de palavras (contagem de frequência de um texto) com encadeamento.</li>
+</ul>
+</li>
+</ul>
+<h3>0107-enderecamento-aberto</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> em caso de colisão, tenta-se outra posição da própria tabela por uma função de
+&quot;reespalhamento&quot;. <strong>Sondagem linear:</strong> <code>i = (i + 1) % m</code>. Ex. do livro: 0596397 cai em 397 (ocupada)
+e vai para 398; depois 8764397 e 2194398 vão ambos parar em 400.</li>
+<li><strong>Laço infinito (ótimo exemplo):</strong> com <code>rh(i) = (i + 2) % 1000</code>, chave que cai em posição ímpar só
+visita ímpares; se as ímpares encherem, não insere mesmo com metade vazia; com <code>(i + 200) % 1000</code>
+cada chave só tem 5 posições possíveis. Regra: passo c com mdc(c, m) = 1, e contar elementos para
+detectar tabela cheia.</li>
+<li><strong>Agrupamento primário:</strong> na linear, uma sequência de ocupadas &quot;atrai&quot; mais chaves (no exemplo, a
+posição 994 é 5× mais provável que a 401). Soluções: sondagem <strong>quadrática</strong> (h + j²), passo
+dependente da chave, <strong>hash duplo</strong>: <code>h1 = k % m</code>, <code>h2 = 1 + k % (m − 1)</code> com m primo (elimina também o
+agrupamento secundário, de chaves com o mesmo h1).</li>
+<li><strong>Tabela de custos do livro (sondagens médias):</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>α</th>
+<th>linear (sucesso)</th>
+<th>duplo (sucesso)</th>
+<th>linear (fracasso)</th>
+<th>duplo (fracasso)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>25%</td>
+<td>1,17</td>
+<td>1,15</td>
+<td>1,39</td>
+<td>1,33</td>
+</tr>
+<tr>
+<td>50%</td>
+<td>1,50</td>
+<td>1,39</td>
+<td>2,50</td>
+<td>2,00</td>
+</tr>
+<tr>
+<td>75%</td>
+<td>2,50</td>
+<td>1,85</td>
+<td>7,50</td>
+<td>4,00</td>
+</tr>
+<tr>
+<td>90%</td>
+<td>5,50</td>
+<td>2,56</td>
+<td>50,50</td>
+<td>10,00</td>
+</tr>
+<tr>
+<td>95%</td>
+<td>10,50</td>
+<td>3,15</td>
+<td>200,50</td>
+<td>20,00</td>
+</tr>
+</tbody></table>
+<p>  Fórmulas da linear: sucesso ≈ 0,5/(1−α) + 0,5; fracasso ≈ 0,5/(1−α)² + 0,5. Conclusão do livro:
+  evitar sondagem linear acima de ~75% de ocupação. Para disco, porém, a linear acessa blocos vizinhos
+  (menos movimento da cabeça).</p>
+<ul>
+<li><strong>Remoção (pegadinha central):</strong> não se pode simplesmente esvaziar a posição: uma chave que tinha
+&quot;pulado&quot; por ela deixaria de ser encontrada. Solução: marcar como &quot;removido&quot; (lápide/tombstone) e
+continuar a busca ao passar por ela; com muitas remoções, buscas sem sucesso percorrem a tabela toda.</li>
+<li><strong>Melhorias (bônus):</strong> tabela ordenada de Amble-Knuth (busca sem sucesso para cedo), método de Brent e
+hash em árvore binária (reorganizam na inserção para encurtar buscas), &quot;bit de passagem&quot;, preditores.</li>
+<li><strong>Exercícios:</strong><ul>
+<li>m = 11, h(k) = k % 11, sondagem linear, inserir <code>22 1 13 11 24 33 18 42 31</code>; desenhar a tabela e
+contar sondagens de cada inserção. (Resp.: posições 22→0, 1→1, 13→2, 11→3, 24→4, 33→5, 18→7,
+42→9, 31→10.)</li>
+<li>Mesmas chaves com hash duplo h2(k) = 1 + k % 10; comparar o total de sondagens.</li>
+<li>Implementar remoção com lápide e mostrar o bug da remoção ingênua: com m = 11, inserir 22, 33, 44 (hash 0;
+vão para 0, 1, 2), remover 33 &quot;esvaziando&quot; e buscar 44 (não acha).</li>
+</ul>
+</li>
+</ul>
+<h3>0109-grafos</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> grafo = vértices + arestas; dirigido (pares ordenados) ou não; grau, grau de
+entrada/saída; adjacente, sucessor, predecessor; grafo ponderado (rede); caminho de comprimento k;
+ciclo; dag. Uma <strong>relação</strong> sobre um conjunto vira grafo (ex.: x→y se x &lt; y e y % x é ímpar, sobre
+{3,5,6,8,10,17}). Um grafo não precisa ser árvore, mas toda árvore é grafo.</li>
+<li><strong>Representações:</strong> matriz de adjacência (<code>int adj[N][N]</code>, O(n²) espaço, testar aresta O(1), percorrer
+sucessores O(n)) × listas de adjacência (espaço O(n + e), sucessores em O(grau)); o livro também mostra
+a versão &quot;multiligada&quot; com lista de nós-cabeçalho + listas de arcos. Na lista, achar quem <strong>chega</strong> num
+vértice é difícil (precisa de lista de entrada também). Não dirigido = matriz simétrica / aresta
+guardada nas duas listas.</li>
+<li><strong>Fecho transitivo:</strong> <code>adj2 = adj ⊗ adj</code> (produto booleano: &amp;&amp; no lugar de ×, || no lugar de +) diz
+se há caminho de comprimento 2; path = adj ∨ adj2 ∨ … ∨ adjⁿ, O(n⁴). <strong>Warshall</strong> faz em O(n³):
+<code>for k, for i, if path[i][k], for j: path[i][j] |= path[k][j]</code>.</li>
+<li><strong>Exemplo do livro (problema motivador):</strong> &quot;existe caminho de A a B usando exatamente nr estradas?&quot;
+com <code>findpath(k, a, b)</code> recursivo (caminho de 1 = adjacente; senão existe c adjacente a a com caminho
+k−1 de c a b). Defeitos discutidos: recomputa caminhos, não diz qual é o caminho.</li>
+<li><strong>Pegadinhas:</strong> confundir <code>adj[i][j]</code> &quot;de i para j&quot; com &quot;de j para i&quot;; matriz para grafo esparso de
+10⁵ vértices (10¹⁰ células!); esquecer de pôr a aresta nos dois sentidos em grafo não dirigido.</li>
+<li><strong>Exercícios:</strong><ul>
+<li>Grafo dirigido A→C, A→D, B→C, C→D, C→E, D→E, E→D: montar matriz, calcular adj², o fecho transitivo
+por potências e por Warshall. (Resp.: A e B alcançam {C, D, E}; C alcança {D, E}; D e E alcançam {D, E},
+inclusive a si mesmos, pelo ciclo D↔E.)</li>
+<li>Decidir se uma relação é simétrica / transitiva olhando a matriz.</li>
+<li>Contar quantos caminhos de comprimento k existem entre dois vértices (produto de matrizes inteiras).</li>
+</ul>
+</li>
+</ul>
+<h3>0110-bfs</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> visita todos os sucessores de um vértice antes dos sucessores deles, usando
+<strong>fila</strong>; marca visitado ao enfileirar. Gera árvores largas e baixas. Num grafo não ponderado, o
+caminho na árvore BFS da origem ao alvo é o <strong>menor caminho em número de arestas</strong>. Custo O(n²) com
+matriz, O(n + e) com listas. Árvore BFS não tem arestas &quot;para frente&quot;.</li>
+<li><strong>Três dificuldades de percorrer grafos (boa explicação do livro):</strong> não há primeiro vértice natural
+(e nem todos são alcançáveis; precisa de <code>select()</code> para recomeçar de um não visitado); não há ordem
+natural entre sucessores; um vértice pode ser alcançado por vários caminhos (precisa de flag
+<code>visited</code>).</li>
+<li><strong>Exemplo:</strong> grafo não dirigido A–B, A–C, B–D, C–D, D–E, vizinhos em ordem alfabética. BFS de A:
+A, B, C, D, E (níveis: {A}, {B, C}, {D}, {E}); distância A→E = 3.</li>
+<li><strong>Pegadinhas:</strong> marcar visitado só ao desenfileirar (o vértice entra várias vezes na fila); esquecer
+do laço externo para grafos desconexos.</li>
+<li><strong>Exercícios:</strong><ul>
+<li>Labirinto em matriz de caracteres: menor número de passos da entrada à saída com BFS.</li>
+<li>Contar componentes conexos de um grafo não dirigido.</li>
+<li>Imprimir o caminho mínimo guardando o vetor <code>pai[]</code>.</li>
+</ul>
+</li>
+</ul>
+<h3>0111-dfs</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> vai fundo por um caminho até não ter sucessor novo, depois volta (backtracking);
+recursivo ou com pilha explícita (o livro empilha o par (vértice, posição na lista de sucessores)).
+Em árvore, DFS = pré-ordem. Floresta geradora: cada recomeço via <code>select()</code> inicia uma nova árvore.
+Classificação das arestas: de árvore, para frente (para descendente não filho), para trás (para
+ancestral) e cruzadas. Em grafo não dirigido, DFS só gera arestas de árvore e para trás.</li>
+<li><strong>Aplicações:</strong> componentes conexos; <strong>detecção de ciclo</strong> (existe ciclo ⇔ existe aresta para trás;
+em não dirigido, ignorar a aresta para o pai); <strong>ordenação topológica</strong> (a ordem de término, pós-ordem, é a ordem topológica invertida); pontos de articulação (bônus).</li>
+<li><strong>Exemplo:</strong> mesmo grafo do BFS (A–B, A–C, B–D, C–D, D–E). DFS de A: A, B, D, C, E.</li>
+<li><strong>Exemplo do livro de escalonamento (topológica por contagem, ótimo para aula):</strong> fritar um ovo com
+subtarefas e precedências (&quot;pegar o ovo&quot; antes de &quot;quebrar o ovo&quot;, &quot;esquentar o óleo&quot; antes de &quot;pôr o
+ovo na frigideira&quot;…). Guardar em cada vértice o nº de predecessores; a cada &quot;período&quot; executar todos
+com contagem 0 e decrementar os sucessores. Resultado: 6 períodos com no máximo 2 ajudantes. Se
+sobrarem vértices, há ciclo. (É o algoritmo de Kahn.)</li>
+<li><strong>Pegadinhas:</strong> recursão profunda em grafo grande estoura a pilha; em dirigido, <code>visited[nd] == true</code>
+não basta para dizer que há ciclo (pode ser aresta cruzada); precisa do estado &quot;em andamento&quot; (cinza).</li>
+<li><strong>Exercícios:</strong><ul>
+<li>Implementar DFS recursiva e iterativa e comparar as ordens de visita (podem diferir!).</li>
+<li>Ordenação topológica das disciplinas de um curso com pré-requisitos.</li>
+<li>Detectar ciclo em grafo dirigido com três cores (branco/cinza/preto).</li>
+<li>Exercício do livro: algoritmo de DFS que empilha todos os sucessores de uma vez: gera a mesma
+ordem da recursiva? (Resp.: não necessariamente; a ordem dos sucessores fica invertida.)</li>
+</ul>
+</li>
+</ul>
+<h3>0112-dijkstra</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> menor caminho com pesos <strong>não negativos</strong>. <code>distance[s] = 0</code>, demais ∞; conjunto
+<code>perm</code> dos vértices com distância definitiva; a cada passo relaxa os sucessores do vértice atual
+(<code>distance[current] + w &lt; distance[i]</code> → atualiza e grava <code>precede[i]</code>) e escolhe o não permanente de
+menor distância. Com matriz: O(n²). Com listas de adjacência + heap (fila de prioridade com ajuste de
+chave): O((n + e) log n), muito melhor em grafos esparsos.</li>
+<li><strong>Exemplo próprio:</strong> dirigido A→B 4, A→C 1, C→B 2, B→D 1, C→D 5, D→E 3. A partir de A: C = 1,
+B = 3 (via C, melhor que 4 direto), D = 4 (via B), E = 7. Caminho A→C→B→D→E.</li>
+<li><strong>Pegadinhas (várias no próprio código do livro):</strong> usar <code>INT_MAX</code> como ∞ e somar peso → overflow;
+se o destino é inalcançável, o <code>k</code> do mínimo nunca é atribuído (lixo/laço infinito); pesos
+negativos quebram o algoritmo.</li>
+<li><strong>Exercícios:</strong><ul>
+<li>Rastrear o exemplo acima em tabela (iteração × distâncias).</li>
+<li>Mapa de cidades com distâncias em km: imprimir rota e total.</li>
+<li>Mostrar um grafo com aresta negativa em que Dijkstra erra. (Ex.: A→B 2, A→C 3, C→B −2: Dijkstra
+fixa B = 2, mas o certo é 1.)</li>
+</ul>
+</li>
+</ul>
+<h3>0113-juntando-tudo (ideias de projeto)</h3>
+<ul>
+<li><strong>Árvore geradora mínima (bônus forte):</strong> Prim (cresce uma árvore, sempre a aresta mais barata que sai
+dela; O(n²) com matriz, O((n+e) log n) com heap) e Kruskal (ordena arestas, junta árvores diferentes;
+usa campo <code>father</code>: union-find; O(e log e)). O livro prova o Prim pela troca de arestas. Projeto:
+&quot;ligar todas as cidades com o menor custo de cabo&quot;.</li>
+<li><strong>Escalonamento PERT/caminho crítico:</strong> tempo mais cedo (máximo sobre predecessores) e mais tarde
+(mínimo sobre sucessores); caminho crítico onde os dois coincidem.</li>
+</ul>
+<h3>0050-ponteiro-para-funcao / 0051-void-generico (ganchos)</h3>
+<ul>
+<li>O livro trabalha com <code>KEYTYPE</code>/<code>RECTYPE</code> genéricos via <code>typedef</code> e notação algorítmica <code>k(i)</code>, <code>r(p)</code>.
+Bom contraste para mostrar como em C moderno se faz o genérico com <code>void *</code> + função de comparação
+(estilo <code>qsort</code>/<code>bsearch</code>).</li>
+</ul>
+<h3>0053-pilha-e-heap / 0054-malloc-free (cap. 9.3: o que há por trás do <code>malloc</code>)</h3>
+<ul>
+<li><strong>Conceitos-chave:</strong> quando os blocos têm tamanho variável, o gerenciador precisa (1) achar um bloco
+livre grande o bastante e (2) juntar blocos livres vizinhos ao liberar. Exemplo do livro: memória de
+1024 palavras, alocam-se blocos de 348, 110 e 212; liberado o de 110 há 464 palavras livres, mas um
+pedido de 400 falha (livre não contíguo); liberado também o de 212, os livres vizinhos se fundem em
+um de 676.</li>
+<li><strong>Estratégias:</strong> first fit (primeiro que serve), best fit (menor que serve), worst fit (maior). Na
+prática, first fit é o preferido. Aloca-se a <strong>parte final</strong> do bloco livre para não mexer em ponteiros
+da lista. Não deixar &quot;migalhas&quot; menores que um mínimo (vira fragmentação interna em vez de externa).
+Lista livre circular com início rotativo evita acumular blocos pequenos no começo.</li>
+<li><strong>Exemplos prontos (ótimos para exercício):</strong><ul>
+<li>Livres 110 e 54; pedidos 25, 70, 50. First fit: 110→85→15, depois 54→4: atende todos. Best fit:
+54→29, 110→40, e o pedido de 50 <strong>falha</strong> (restam 40 e 29).</li>
+<li>Livres 200, 300, 100; pedidos 150, 100, 125, 100, 100. Worst fit atende todos; first fit falha no
+último (sobram 50 e 75).</li>
+<li>Livres 110 e 354; pedidos 300, 25, 100: best fit atende, first fit falha no 100.</li>
+</ul>
+</li>
+<li><strong>Liberação e fusão:</strong> lista livre ordenada por endereço (percorre metade em média) ou <strong>boundary tag</strong>
+(flag + tamanho no início E no fim de cada bloco, lista duplamente ligada → fusão em O(1));
+é exatamente o que os <code>malloc</code> reais fazem com os cabeçalhos.</li>
+<li><strong>Pegadinhas para o curso:</strong> fragmentação externa × interna; por que <code>free(p)</code> não precisa do tamanho
+(está no cabeçalho escondido antes de p); por que escrever antes do início ou depois do fim de um bloco
+corrompe o heap (estraga as tags do vizinho); gancho direto com 0057.</li>
+<li><strong>Exercícios:</strong><ul>
+<li>Simulador: vetor <code>memory[1024]</code>, entrada com &quot;A tamanho id&quot; e &quot;L id&quot;; implementar first fit e best
+fit com fusão na liberação; imprimir o mapa da memória.</li>
+<li>Refazer os três exemplos acima à mão.</li>
+</ul>
+</li>
+</ul>
+<h3>0057-erros-de-memoria (cap. 9.1–9.2)</h3>
+<ul>
+<li><strong>Listas compartilhadas:</strong> com o &quot;método do ponteiro&quot;, uma sublista pode pertencer a várias listas;
+liberar ou alterar uma afeta as outras (o livro mostra <code>addone2</code> somando 1 duas vezes ao mesmo nó
+compartilhado). O &quot;método da cópia&quot; evita isso, mas custa caro. É a origem de <strong>ponteiro solto</strong> e
+<strong>double free</strong>: quem é o dono do nó?</li>
+<li><strong>Contagem de referências:</strong> cada nó conta quantos ponteiros apontam para ele; chega a 0 → libera
+(recursivamente). Problemas: custo a cada atribuição, campo extra e <strong>ciclos nunca chegam a 0</strong>
+(vazamento). Truque: liberar &quot;preguiçosamente&quot; na hora de reaproveitar o nó.</li>
+<li><strong>Coleta de lixo (mark &amp; sweep):</strong> marca tudo que é alcançável a partir dos ponteiros externos (DFS
+com pilha, ou Schorr-Waite, que inverte ponteiros para não precisar de pilha) e depois varre a
+memória devolvendo os não marcados. Pausa o programa (ruim em tempo real; &quot;nave espacial esperando o
+coletor&quot;); se quase tudo está em uso, o coletor roda sem parar (<strong>thrashing</strong>). Compactação move os
+blocos vivos para um lado e corrige os ponteiros (duas passadas, O(n)).</li>
+<li><strong>Ideia para o curso:</strong> contrastar C (o programador é o &quot;coletor&quot;) com linguagens com GC; explicar
+vazamento como &quot;nó inalcançável que ninguém liberou&quot;, exatamente o que valgrind reporta como
+&quot;definitely lost&quot;.</li>
+<li><strong>Exercícios:</strong><ul>
+<li>Desenhar as listas <code>l1 = (3,4,7)</code> e <code>l2 = addon(l1, 5)</code> pelo método do ponteiro e da cópia; depois
+<code>sethead(l1, 7)</code>: o que muda em l2 em cada caso? (Resp.: no do ponteiro l2 vira (5,7,4,7); na cópia
+l2 não muda.)</li>
+<li>Implementar <code>freelist</code> recursiva e iterativa para listas gerais (com sublistas), supondo que não há
+compartilhamento.</li>
+<li>Detectar se uma lista é circular/recursiva (gancho com o algoritmo da lebre e da tartaruga).</li>
+</ul>
+</li>
+</ul>
+<h3>0064-union (gancho)</h3>
+<ul>
+<li>O livro implementa <strong>listas gerais</strong> (elementos inteiros, caracteres ou sublistas) com
+<code>struct { int utype; union { int i; char c; struct node *lst; } info; struct node *next; }</code>.
+Exemplo de lista: <code>(5, (3, 2, (14, 9, 3), (), 4), 2, (6, 3, 10))</code>; <code>head</code> = 5; <code>head(tail(·))</code> =
+<code>(3, 2, (14,9,3), (), 4)</code>. Excelente exemplo de union com &quot;tag&quot; de tipo e de por que union evita
+<code>switch</code> sobre dez tipos de nós atômicos.</li>
+<li><strong>Exercício:</strong> imprimir uma lista geral na notação com parênteses (recursão sobre <code>utype</code>).</li>
+</ul>
+<hr>
+<h2>Obsoleto / evitar</h2>
+<ul>
+<li><strong>C pré-ANSI (K&amp;R):</strong> <code>bubble(x, n) int x[], n; { … }</code>: declarar parâmetros entre o cabeçalho e a
+chave. Usar protótipos modernos <code>void bubble(int x[], int n)</code>.</li>
+<li><code>#define TRUE 1 / FALSE 0</code> → <code>stdbool.h</code>. <code>exit(1)</code> dentro de funções de biblioteca (<code>tail</code>, <code>head</code>)
+→ devolver código de erro.</li>
+<li><strong>Pool de nós em vetor</strong> (<code>node[MAXNODES]</code>, <code>getnode()</code>, <code>freenode()</code>, ponteiros como índices <code>int</code>):
+era o jeito de simular memória dinâmica; no LPEDC usar <code>malloc/free</code> (o pool pode virar bônus de
+&quot;alocador próprio&quot;).</li>
+<li><strong>Inline manual</strong> (&quot;remova chamadas de função dos laços internos&quot;), <code>%</code> trocado por comparação e
+subtração, &quot;algumas versões de C não deixam função retornar struct&quot;: tudo isso o compilador moderno
+resolve ou é padrão desde C89. Não ensinar como regra.</li>
+<li><strong><code>goto again</code></strong> no Schorr-Waite. Comentários sobre FORTRAN (IF aritmético), PL/I, fitas e cilindros de
+disco: contexto histórico.</li>
+<li><strong>Bugs/erros a NÃO copiar (do texto ou do OCR):</strong><ul>
+<li><code>selectsort</code>: usa <code>x[ind]</code> em vez de <code>x[indx]</code>.</li>
+<li><code>quicksort</code> não recursivo: <code>newbnds.up</code> em vez de <code>newbnds.ub</code>.</li>
+<li>Hash linear: diz <code>rh(i) = (i + 1) % 100</code> onde deveria ser <code>% 1000</code>.</li>
+<li><code>maxflow</code>: grava <code>forward[nd]</code> em vez de <code>forward[i]</code> e depois lê <code>forward[pred]</code>: inconsistente.</li>
+<li><code>shortpath</code> (Dijkstra): <code>dc + weight[current][i]</code> com <code>weight = INFINITY</code> estoura <code>int</code>; se t não é
+alcançável, <code>k</code> fica sem valor.</li>
+<li>Prim: usa <code>distance = INFINITY</code> tanto para &quot;já está na árvore&quot; quanto para &quot;ainda não alcançado&quot; e
+só atualiza se <code>distance[nd] &lt; INFINITY</code>: vértices não adjacentes à raiz nunca seriam atualizados.
+Usar um vetor <code>naarvore[]</code> separado.</li>
+<li>&quot;Sistema Decimal de Davey&quot; (é Dewey); &quot;aproximadamente 31 comparações&quot; na BST (é ≈ 3,3); muitas
+fórmulas com sobrescritos perdidos (ler com desconfiança).</li>
+</ul>
+</li>
+<li><strong>Recomendação de &quot;classificação por média&quot; e Bsort:</strong> curiosidades; hoje o padrão é quicksort com
+mediana-de-três/introsort ou o <code>qsort</code> da biblioteca.</li>
+</ul>
+<hr>
+<h2>Extras que não cabem no sumário (candidatos a bônus)</h2>
+<h3>Radix sort (classificação de raízes)</h3>
+<ul>
+<li>Distribui os números em 10 filas pelo dígito <strong>menos</strong> significativo, concatena as filas em ordem
+0..9, e repete para o próximo dígito. Funciona porque cada passada é <strong>estável</strong>: a ordem obtida pelos
+dígitos menos significativos é preservada entre números com o mesmo dígito mais significativo.</li>
+<li>Exemplo: <code>25 57 48 37 12 92 86 33</code> → pelas unidades: <code>12 92 33 25 86 57 37 48</code> → pelas dezenas:
+<code>12 25 33 37 48 57 86 92</code>.</li>
+<li>Custo O(m·n) (m = nº de dígitos); filas implementadas como listas ligadas (front/rear) para
+concatenar em O(1). Variante MSD (&quot;troca de raízes&quot;) lembra o particionamento do quicksort. Ótimo
+exercício integrador de <strong>filas</strong> (módulo 12).</li>
+<li><strong>Classificação por cálculo de endereço (bucket sort):</strong> função que preserva ordem manda cada chave
+para um balde (ex.: primeiro dígito); cada balde é lista ordenada; concatena. Quase O(n) se a
+distribuição for uniforme e houver ~1 chave por balde.</li>
+</ul>
+<h3>Árvores B, B*, B+, tries</h3>
+<ul>
+<li><strong>Árvore de busca multidirecional de ordem n:</strong> nó com até n filhos e n−1 chaves ordenadas. Motivação:
+disco: ler um bloco grande custa quase o mesmo que um pequeno; minimizar nº de nós lidos. Exemplo do
+livro: 4000 chaves → ordem 5 precisa de profundidade ≥ 5; ordem 11, só 3; ordem 100 guarda &gt; 1 milhão
+de chaves com profundidade 2.</li>
+<li><strong>Árvore B de ordem n:</strong> balanceada (todas as folhas no mesmo nível) e todo nó não raiz tem pelo menos
+n/2 chaves. Inserção na folha; se encher, <strong>divide</strong> em duas e <strong>promove a chave do meio</strong> ao pai (que
+pode dividir também, até a raiz; é assim que a árvore cresce em altura). Remoção: empréstimo do
+irmão ou fusão (concatenação) com o irmão + chave separadora do pai. Árvore 2-3 = B de ordem 3.
+Utilização média ~69% (pior 50%). Atenção: autores diferentes definem &quot;ordem&quot; de jeitos diferentes.</li>
+<li><strong>B*:</strong> redistribui com o irmão antes de dividir; divide 2 nós cheios em 3 → utilização ≥ 67%.</li>
+<li><strong>B+:</strong> todas as chaves nas folhas, folhas encadeadas (&quot;conjunto de sequência&quot;) → acesso sequencial em
+O(1) por registro; é a estrutura dos índices de bancos de dados e sistemas de arquivos. Compressão de
+prefixo/sufixo das chaves (ex.: anchor, andrew, antoin).</li>
+<li><strong>Trie / árvore digital:</strong> cada nível decide por um símbolo da chave (10 ou 26 ponteiros por nó, ou
+representação filho/irmão); fim de chave marcado com <code>eok</code>. Bônus: autocompletar palavras.</li>
+</ul>
+<h3>Fluxo em redes (Ford-Fulkerson)</h3>
+<ul>
+<li>Rede de canos com capacidade por aresta; fonte S e sumidouro T; fluxo respeita capacidade e
+conservação (entra = sai em todo nó intermediário). Melhora-se o fluxo por <strong>caminhos aumentantes</strong>
+(semicaminhos): arestas para frente com folga ou arestas para trás com fluxo positivo (desviar fluxo).
+Repete até não haver caminho → fluxo máximo. Ligação com corte mínimo (exercício do livro). Aplicações:
+redes elétricas, tráfego, comunicação. Projeto bônus: &quot;quantos litros/minuto chegam ao bairro?&quot;.</li>
+</ul>
+<h3>Hashing avançado</h3>
+<ul>
+<li><strong>Hash em disco com buckets</strong> (blocos de 10–100 registros); tabela do livro mostra que buckets
+maiores tornam até a sondagem linear eficiente.</li>
+<li><strong>Hash dinâmico (Larson) e extensível (Fagin et al.):</strong> o diretório usa os primeiros d bits do hash; um
+balde cheio se divide pelo próximo bit; se o balde já usava d bits, o diretório dobra. Um acesso a
+disco por busca, crescimento e encolhimento suaves, utilização ~69%.</li>
+<li><strong>Hash linear (Litwin, LH2P):</strong> cresce um balde por vez, sem diretório.</li>
+<li><strong>Hash perfeito:</strong> sem colisões para um conjunto fixo (palavras reservadas de um compilador!).
+Cichelli: h = val(1ª letra) + val(última letra) + comprimento, com valores das letras achados por
+backtracking, ótimo desafio. Sprugnoli: <code>(k + s) / d</code> (ex.: <code>(k + 25)/64</code> para
+17, 138, 173, 294, 306, 472, 540, 551, 618). Jaeschke: <code>(c / k) % n</code> (para 3, 5, 11, 14, c = 11).</li>
+<li><strong>Hashing universal (Carter-Wegman):</strong> escolher aleatoriamente <code>h(k) = ((s·k + t) % p) % m</code> com p primo<blockquote>
+<p>maior chave; garante bom desempenho esperado para qualquer conjunto de entrada (defesa contra
+entradas maliciosas).</p>
+</blockquote>
+</li>
+</ul>
+<h3>Coleta de lixo e alocadores</h3>
+<ul>
+<li>Contagem de referências × mark &amp; sweep × compactação; Schorr-Waite (marcar sem pilha invertendo
+ponteiros); coleta incremental/concorrente; coleta geracional (objetos jovens morrem cedo).</li>
+<li><strong>Buddy system (&quot;sistema em turma&quot;):</strong> memória de 2^m; pedidos arredondados para potência de 2;
+divide blocos ao meio até o tamanho certo; ao liberar, funde com o &quot;companheiro&quot; se ele estiver livre
+e com o mesmo tamanho. Endereço do companheiro de um bloco de tamanho 2^i em p:
+<code>p % 2^(i+1) == 0 ? p + 2^i : p − 2^i</code> (ex.: i = 6, p = 704 → 640). Exemplo do livro: memória de 1024,
+pedido de 100 vira bloco de 128 em 896. Variantes: Fibonacci, ponderado (2^k → 2^(k−2) + 3·2^(k−2)),
+recombinação adiada. Excelente exercício de bits (módulo 08, 0065) e recursão.</li>
+<li><strong>Boundary tags</strong> e listas livres por tamanho: base para entender <code>malloc</code> de verdade.</li>
+</ul>
+<h3>Busca: outras ideias</h3>
+<ul>
+<li>Árvores de busca ótimas (chaves com probabilidades diferentes; O(n²) exato, métodos gulosos ou de
+balanceamento quase ótimos em O(n)); &quot;árvore dividida mediana&quot;.</li>
+<li>Cook-Kim: retira pares fora de ordem de um vetor quase ordenado, ordena-os à parte e intercala.</li>
+</ul>
+<hr>
+<h2>Achados mais valiosos para o LPEDC</h2>
+<ol>
+<li>O vetor-padrão <code>25 57 48 37 12 92 86 33</code> com o estado após cada passo de bubble, quick, shell, heap
+(vetor do heap: <code>92 37 86 33 12 48 57 25</code>), merge e radix, permite um quadro comparativo único.</li>
+<li>Exemplos-armadilha prontos: inserção binária não melhora o insertion sort (deslocamentos continuam
+O(n²)); passo de sondagem com divisor comum causa laço infinito com tabela meio vazia; remoção
+ingênua em endereçamento aberto &quot;perde&quot; chaves; 256 % 17 == 1 faz anagramas colidirem; first fit ×
+best fit × worst fit com sequências em que cada um vence.</li>
+<li>Tabelas numéricas de custo (sondagens por fator de carga; BST aleatória 1,386 log₂ n; AVL 1,44 log₂ n;
+interpolação 134 vs. binária 16 em nomes reais) que dão concretude ao Big-O.</li>
+</ol>

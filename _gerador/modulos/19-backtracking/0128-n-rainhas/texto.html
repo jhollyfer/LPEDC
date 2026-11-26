@@ -1,0 +1,167 @@
+<h2>0128 · N-rainhas</h2>
+<p>O backtracking do assunto 0127 mostra a força real num quebra-cabeça antigo.
+No xadrez, a rainha ataca qualquer peça na mesma linha, na mesma coluna ou na
+mesma diagonal, a qualquer distância. O desafio é pôr <code>N</code> rainhas num
+tabuleiro <code>N × N</code> sem que nenhuma ataque outra. Esse é o <strong>problema das
+N-rainhas</strong>, o exemplo clássico de tentativa e erro (WIRTH, 1989).</p>
+<p>Comece pelo tamanho do problema. Num tabuleiro 4 × 4, a força bruta escolheria
+4 das 16 casas, sem olhar mais nada: são 1820 jeitos. A primeira observação
+corta isso. Duas rainhas na mesma linha se atacam, e há <code>N</code> rainhas para <code>N</code>
+linhas, então cada linha tem <strong>exatamente uma</strong> rainha. A solução deixa de ser
+&quot;quais casas&quot; e vira &quot;em que coluna fica a rainha de cada linha&quot;, um vetor
+<code>pos</code> em que <code>pos[l]</code> é a coluna da rainha da linha <code>l</code> (TENENBAUM; LANGSAM;
+AUGENSTEIN, 1995, cap. 3).</p>
+<p>A busca segue o esqueleto do assunto 0127, uma linha por chamada. A função
+<code>rainha(l)</code> tenta cada coluna <code>c</code> da linha <code>l</code>. Se a casa <code>(l, c)</code> é atacada
+por alguma rainha já posta nas linhas de cima, a busca <strong>poda</strong> e passa para a
+próxima coluna. Se a casa está livre, ela marca a rainha ali, desce para
+<code>rainha(l + 1)</code> e, na volta, desmarca, para a casa estar limpa quando a
+próxima coluna for tentada (FEOFILOFF, 2009). Quando <code>l</code> chega a <code>N</code>, todas as
+linhas têm rainha, e a solução é mostrada.</p>
+<p>Falta testar o ataque. O jeito óbvio é um laço pelas rainhas anteriores,
+conferindo coluna e diagonais de cada uma. Há um jeito melhor, que depende de
+uma propriedade das diagonais. Na diagonal que sobe para a direita, ↗, a
+soma <code>l + c</code> é a mesma em todas as casas: andar uma casa na diagonal diminui a
+linha em 1 e aumenta a coluna em 1. Essa soma vai de 0 a <code>2N - 2</code>, e serve
+direto de índice. Na diagonal que desce para a direita, ↘, o que se mantém é a
+diferença <code>l - c</code>, que vai de <code>-(N - 1)</code> a <code>N - 1</code>. Como índice de vetor não
+pode ser negativo, some <code>N - 1</code>, e a faixa vira 0 a <code>2N - 2</code> (WIRTH, 1989).
+Num 4 × 4, a casa da linha 1, coluna 3, está na ↗ de número 4 e na ↘ de número
+<code>1 - 3 + 3 = 1</code>.</p>
+<p>Com esses números, três vetores de <code>bool</code> guardam o que está ocupado:
+<code>coluna[N]</code>, <code>diag1[2N - 1]</code> para as ↗ e <code>diag2[2N - 1]</code> para as ↘. A casa
+<code>(l, c)</code> está livre se <code>coluna[c]</code>, <code>diag1[l + c]</code> e <code>diag2[l - c + N - 1]</code>
+estão todos falsos. O laço pelas rainhas anteriores vira três leituras, em
+O(1) (WIRTH, 1989). Com isso, o 8-rainhas acha as 92 soluções com 2057
+chamadas.</p>
+<p>Para marcar a rainha, o código usa uma <strong>atribuição em cadeia</strong>:
+<code>coluna[c] = diag1[l + c] = diag2[l - c + N - 1] = true</code>. Ela funciona porque,
+em C, a atribuição é uma expressão que devolve o valor atribuído, e o
+operador agrupa da direita para a esquerda: a atribuição mais à direita
+acontece primeiro, e o valor dela alimenta a seguinte (KERNIGHAN; RITCHIE,
+1989). Na volta, a mesma linha com <code>false</code> desmarca as três.</p>
+<blockquote>
+<p>[!WARNING]
+O índice da ↘ é <code>l - c + N - 1</code>, não <code>l - c</code>: para (0, 3), <code>diag2[-3]</code>
+escreve <strong>fora</strong> do vetor. Desmarcar só a coluna e esquecer as diagonais faz
+o programa achar menos soluções.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>Quatro rainhas num tabuleiro 4 × 4. À esquerda do desenho, a primeira solução;
+no meio, <code>l + c</code> de cada casa; à direita, <code>l - c + 3</code>. A rainha da linha 1,
+coluna 3, ocupa a ↗ 4 e a ↘ 1:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdbool.h&gt;
+#include &lt;stdio.h&gt;
+
+#define N 4
+
+int pos[N];               // pos[l] = coluna da rainha da linha l
+bool coluna[N];           // coluna[c]: já tem rainha na coluna c?
+bool diag1[2 * N - 1];    // diagonal ↗, índice l + c
+bool diag2[2 * N - 1];    // diagonal ↘, índice l - c + N - 1
+int solucoes = 0, chamadas = 0;
+
+void mostra(void) {
+    printf(&quot;Solução %d:\n&quot;, solucoes);
+    for (int l = 0; l &lt; N; l++) {
+        for (int c = 0; c &lt; N; c++) {
+            printf(c == 0 ? &quot;%c&quot; : &quot; %c&quot;, pos[l] == c ? &#39;R&#39; : &#39;.&#39;);
+        }
+        printf(&quot;\n&quot;);
+    }
+}
+
+// as linhas 0..l-1 já têm rainha; põe a da linha l
+void rainha(int l) {
+    chamadas++;
+    if (l == N) {
+        solucoes++;
+        mostra();
+        return;
+    }
+    for (int c = 0; c &lt; N; c++) {
+        if (coluna[c] || diag1[l + c] || diag2[l - c + N - 1]) {
+            continue;                   // poda: a casa (l, c) está atacada
+        }
+        pos[l] = c;                     // escolhe
+        coluna[c] = diag1[l + c] = diag2[l - c + N - 1] = true;
+        rainha(l + 1);                  // desce
+        coluna[c] = diag1[l + c] = diag2[l - c + N - 1] = false; // desfaz
+    }
+}
+
+int main(void) {
+    rainha(0);
+    printf(&quot;%d soluções, %d chamadas\n&quot;, solucoes, chamadas);
+    return 0;
+}
+// Saída:
+// Solução 1:
+// . R . .
+// . . . R
+// R . . .
+// . . R .
+// Solução 2:
+// . . R .
+// R . . .
+// . . . R
+// . R . .
+// 2 soluções, 17 chamadas
+</code></pre>
+<p>A rainha em (0, 0) nunca dá certo: a busca gasta 4 chamadas para descobrir e
+esquece o galho. O fluxograma é o do assunto anterior, com um laço pelas
+colunas:</p>
+<p>{{fluxograma}}</p>
+<h3>Passo a passo</h3>
+<p>O começo da busca, até a primeira solução. &quot;Atacada&quot; quer dizer que a poda
+cortou a casa antes de qualquer chamada:</p>
+<table>
+<thead>
+<tr>
+<th>linha</th>
+<th>tenta</th>
+<th>o que acontece</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>coluna 0</td>
+<td>livre: marca e desce</td>
+</tr>
+<tr>
+<td>1</td>
+<td>colunas 0 e 1</td>
+<td>atacadas (coluna 0; diagonal ↘ da rainha (0, 0))</td>
+</tr>
+<tr>
+<td>1</td>
+<td>coluna 2</td>
+<td>livre: marca e desce</td>
+</tr>
+<tr>
+<td>2</td>
+<td>colunas 0 a 3</td>
+<td>todas atacadas: volta, desmarca (1, 2)</td>
+</tr>
+<tr>
+<td>1</td>
+<td>coluna 3</td>
+<td>livre: marca e desce</td>
+</tr>
+<tr>
+<td>2</td>
+<td>coluna 1</td>
+<td>livre: marca e desce</td>
+</tr>
+<tr>
+<td>3</td>
+<td>colunas 0 a 3</td>
+<td>todas atacadas: volta; na linha 2, as colunas 2 e 3 também estão atacadas, e a linha 1 já tentou tudo: volta à linha 0</td>
+</tr>
+<tr>
+<td>0</td>
+<td>coluna 1</td>
+<td>livre: desce, e o caminho 3, 0, 2 fecha a solução 1</td>
+</tr>
+</tbody></table>

@@ -1,0 +1,122 @@
+<h2>0082 · Pilha</h2>
+<p>Você monta um pedido no app de delivery: pizza, refrigerante, pudim. Toca em
+&quot;desfazer&quot; e sai o pudim, o último que entrou. Toca de novo e sai o
+refrigerante. O app nunca desfaz a pizza antes do pudim, porque ele só mexe
+no item mais recente. Para guardar dados com essa regra, você precisa de uma
+estrutura que lembre a ordem de chegada e só entregue o último.</p>
+<p>A imagem é uma pilha de pratos na pia. Você põe um prato em cima dos outros e,
+para lavar, tira o de cima; o prato do fundo só aparece quando todos os de
+cima saíram. Essa estrutura é a <strong>pilha</strong> (<em>stack</em>): uma sequência que só
+deixa mexer numa ponta, o <strong>topo</strong>, e por isso o último a entrar é o primeiro
+a sair. A sigla é <strong>LIFO</strong>, do inglês <em>last in, first out</em> (FEOFILOFF, 2009).
+A pilha de chamadas do assunto 0031 segue a mesma regra: a função chamada por
+último é a primeira a terminar.</p>
+<p>Quatro operações dão conta de tudo. <strong>Empilhar</strong> (<em>push</em>) põe um item no
+topo. <strong>Desempilhar</strong> (<em>pop</em>) tira o item do topo e devolve o valor dele.
+<strong>Olhar o topo</strong> (<em>peek</em>) lê o topo sem tirar nada. E a pergunta <strong>está
+vazia?</strong> diz se ainda resta algum item. No Cormen elas se chamam PUSH, POP e
+STACK-EMPTY (CORMEN et al., 2024, cap. 10). Repare que não existe operação
+para ler o terceiro item de baixo para cima: se a pilha deixasse, deixaria de
+ser pilha.</p>
+<p>O C não traz pilha pronta. Você monta uma como <strong>TAD</strong>, o tipo abstrato de
+dados do assunto 0074: o <code>pilha.h</code> diz <strong>o que</strong> a pilha faz e o <code>pilha.c</code>
+decide <strong>como</strong> faz. Quem usa só inclui o <code>.h</code> e nunca enxerga os campos. Como
+a função de desempilhar precisa devolver duas informações (o valor e se deu
+certo), o valor sai por um ponteiro e o retorno <code>bool</code> avisa o sucesso
+(CELES; RANGEL, 2002):</p>
+<pre><code class="language-c">typedef struct pilha Pilha; // tipo opaco: os campos ficam no pilha.c
+
+Pilha *pilha_cria(void);                     // pilha vazia (NULL se faltar memória)
+void pilha_libera(Pilha *p);                 // devolve toda a memória da pilha
+bool pilha_vazia(const Pilha *p);            // true se não tem nada
+int pilha_tamanho(const Pilha *p);           // quantos itens tem
+bool pilha_empilha(Pilha *p, int valor);     // push: false se não coube
+bool pilha_desempilha(Pilha *p, int *valor); // pop: false se estava vazia
+bool pilha_topo(const Pilha *p, int *valor); // peek: olha o topo sem tirar
+</code></pre>
+<p>Duas coisas podem dar errado. Tirar de uma pilha vazia é <strong>underflow</strong>
+(estouro para baixo): não há item para devolver. Empilhar numa pilha cheia é
+<strong>overflow</strong> (estouro para cima), e ele só acontece porque esta versão guarda
+os itens num vetor de tamanho fixo (TENENBAUM; LANGSAM; AUGENSTEIN, 1995,
+cap. 2). As duas funções testam o caso antes de agir e devolvem <code>false</code>, em
+vez de ler ou escrever fora do vetor.</p>
+<p>Por dentro, a pilha em vetor usa um contador <code>n</code>, que guarda quantos itens
+existem. O fundo fica em <code>itens[0]</code>, o topo em <code>itens[n - 1]</code>, e <code>n</code> aponta a
+próxima vaga livre (FEOFILOFF, 2009). Com pizza, refrigerante e pudim
+empilhados, <code>n</code> vale 3 e o pudim está em <code>itens[2]</code>. Empilhar escreve em
+<code>itens[n]</code> e soma 1 em <code>n</code>; desempilhar subtrai 1 de <code>n</code> e lê <code>itens[n]</code>. O
+Cormen conta posições a partir de 1, então nele a pilha vazia tem <code>S.top</code>
+igual a 0 (CORMEN et al., 2024, cap. 10).</p>
+<p>Desempilhar não apaga nada. O pudim continua escrito em <code>itens[2]</code>; ele só
+saiu da pilha porque <code>n</code> voltou a 2, e o próximo <code>push</code> escreve por cima.
+Por isso as duas operações custam <strong>O(1)</strong>: cada uma faz um teste, uma
+atribuição e uma conta, não importa quantos itens a pilha tenha (CELES;
+RANGEL, 2002).</p>
+<blockquote>
+<p>[!WARNING]
+Ler <code>itens[n]</code> antes de diminuir <code>n</code> pega a gaveta <strong>vazia</strong> acima do topo.
+Aqui <code>n</code> é a próxima vaga: empilha em <code>itens[n]</code> e depois <code>n++</code>; desempilha
+com <code>n--</code> e depois lê. Muito livro usa <code>topo = -1</code>: não misture convenções.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>No app de delivery, os preços entram em centavos (2590, 800 e 1200) nas
+gavetas 0, 1 e 2, com <code>n</code> igual a 3. O &quot;desfazer&quot; tira o 1200, o último:</p>
+<p>{{ideia}}</p>
+<p>Trecho do <code>pilha.c</code>:</p>
+<pre><code class="language-c">struct pilha {
+    int itens[CAPACIDADE]; // CAPACIDADE = 100
+    int n;                 // quantos itens estão na pilha
+};
+
+bool pilha_empilha(Pilha *p, int valor) {
+    if (p-&gt;n == CAPACIDADE) {
+        return false; // cheia: estouro (overflow)
+    }
+    p-&gt;itens[p-&gt;n] = valor;
+    p-&gt;n++;
+    return true;
+}
+
+bool pilha_desempilha(Pilha *p, int *valor) {
+    if (p-&gt;n == 0) {
+        return false; // vazia: nada para tirar (underflow)
+    }
+    p-&gt;n--;
+    *valor = p-&gt;itens[p-&gt;n]; // o valor continua no vetor, mas saiu da pilha
+    return true;
+}
+</code></pre>
+<p>O programa só usa as funções do <code>pilha.h</code>:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;pilha.h&quot;
+
+int main(void) {
+    Pilha *pedido = pilha_cria();
+    if (pedido == NULL) {
+        return 1;
+    }
+
+    // preços em centavos: inteiro não tem erro de arredondamento
+    pilha_empilha(pedido, 2590); // pizza: R$ 25,90
+    pilha_empilha(pedido, 800);  // refrigerante: R$ 8,00
+    pilha_empilha(pedido, 1200); // pudim: R$ 12,00
+
+    int preco;
+    if (pilha_desempilha(pedido, &amp;preco)) { // &quot;desfazer&quot;: sai o último que entrou
+        printf(&quot;Desfeito: R$ %d,%02d\n&quot;, preco / 100, preco % 100);
+    }
+    if (pilha_topo(pedido, &amp;preco)) { // só olha, não tira
+        printf(&quot;Agora no topo: R$ %d,%02d\n&quot;, preco / 100, preco % 100);
+    }
+    printf(&quot;Itens no pedido: %d\n&quot;, pilha_tamanho(pedido));
+
+    pilha_libera(pedido);
+    return 0;
+}
+// Saída:
+// Desfeito: R$ 12,00
+// Agora no topo: R$ 8,00
+// Itens no pedido: 2
+</code></pre>
+<p>O desfazer testa se a pilha está vazia antes de diminuir <code>n</code>:</p>
+<p>{{fluxograma}}</p>

@@ -1,0 +1,134 @@
+<h2>0107 · Endereçamento aberto</h2>
+<p>O encadeamento resolve a colisão com listas, e cada item custa um <code>malloc</code>.
+Existe outro caminho: guardar tudo dentro do próprio vetor e, quando o balde
+está ocupado, procurar outro.</p>
+<p>Pense no estacionamento de um condomínio com 11 vagas. A vaga de cada carro é o
+número do apartamento com resto por 11. Se a vaga está ocupada, o motorista
+tenta a seguinte, e assim por diante. Na saída, o porteiro refaz o mesmo
+caminho para achar o carro. Esse é o <strong>endereçamento aberto</strong>: não há lista, os
+itens moram <strong>dentro do vetor</strong>, e quem colide tenta outras posições numa
+sequência fixa. Cada tentativa se chama <strong>sondagem</strong> (CORMEN et al., 2024, cap. 11).</p>
+<p>A sequência mais simples é a <strong>sondagem linear</strong>. Ela começa em
+<code>i = chave % m</code> e anda uma casa por vez; ao passar da última posição, volta para
+a primeira, e por isso o passo é <code>i = (i + 1) % m</code>. Na notação do Cormen, a
+tentativa número <code>i</code>, contada a partir de 0, olha a posição
+<code>h(k, i) = (h&#39;(k) + i) mod m</code>, sendo <code>h&#39;</code> a função hash comum (CORMEN et al.,
+2024, cap. 11). Com <code>m = 11</code>, a chave 301 começa na posição 4; se a 4 está
+ocupada, tenta a 5, depois a 6.</p>
+<p>Trocando o passo, nascem outras sondagens. A <strong>sondagem quadrática</strong> pula
+distâncias que crescem com o quadrado da tentativa,
+<code>(h&#39;(k) + c₁i + c₂i²) mod m</code>, com <code>c₁</code> e <code>c₂</code> constantes. A <strong>dispersão dupla</strong>
+usa uma segunda função hash para decidir o tamanho do pulo,
+<code>(h₁(k) + i · h₂(k)) mod m</code>, e fica para o assunto 0179 (TENENBAUM; LANGSAM;
+AUGENSTEIN, 1995, cap. 7).</p>
+<p>As operações seguem a sequência de sondagens. <strong>Inserir</strong> sonda até achar uma
+posição livre e grava ali. <strong>Buscar</strong> sonda até achar a chave ou até cair numa
+posição <strong>livre</strong>. Parar na livre é seguro: se a chave existisse, a inserção
+teria parado nessa vaga ou antes dela (ZIVIANI, 2010, cap. 5).</p>
+<p><strong>Remover</strong> é onde mora a pegadinha. Se você esvazia a vaga, quebra a
+sequência de quem passou por ela para chegar mais longe. A solução é uma
+terceira marca, além de livre e ocupada: <strong>removida</strong>, chamada de <strong>lápide</strong>
+(<em>tombstone</em>; no Cormen, <code>DELETED</code>). A busca passa reto pela lápide, como se a
+vaga estivesse ocupada, e a inserção pode reaproveitá-la (CORMEN et al., 2024,
+cap. 11). Com muitas lápides, as buscas sem sucesso ficam longas até a tabela
+ser reconstruída.</p>
+<p>Ao contrário do encadeamento, aqui a tabela <strong>enche</strong>: <code>α = n / m</code> nunca passa
+de 1, e ela fica lenta bem antes disso. As posições ocupadas formam blocos
+contínuos, e toda chave que cai num bloco vai parar no fim dele, aumentando o
+bloco. É o <strong>agrupamento primário</strong>, e ele piora rápido. Com sondagem linear e
+α = 0,5, uma busca sem sucesso olha em média 2,5 posições; com α = 0,9, cerca
+de 50 (KNUTH, 1998, seção 6.4).</p>
+<p>Por isso, quando a ocupação passa de 70% a 75%, crie uma tabela maior e
+reinsira tudo nela (exemplo A213). Mesmo com esse cuidado, o endereçamento
+aberto costuma ganhar do encadeamento na prática: as vagas formam um bloco só
+de memória, sem <code>malloc</code> por item, e andar para a vaga seguinte aproveita a
+cache do processador, a memória rápida que guarda os bytes vizinhos do que
+você acabou de ler (TENENBAUM; LANGSAM; AUGENSTEIN, 1995, cap. 7).</p>
+<blockquote>
+<p>[!WARNING]
+Remover <strong>não</strong> é marcar a posição como livre. Se a vaga 5 (do 301) volta a
+<code>LIVRE</code>, a busca pelo 1104 começa na 4, vê a 5 livre e conclui &quot;não está&quot;,
+embora ele esteja na 6. Use a lápide (exemplo A214).</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>O estacionamento do condomínio tem 11 vagas, e a vaga é o apartamento com
+resto por 11. O 301 dá 4, ocupada, e para na 5; o 1104 tenta 4, 5 e para na
+6. Buscar o 1104 custa 3 sondagens:</p>
+<p>{{ideia}}</p>
+<p>O TAD é <code>aberta.h</code> (interface) e <code>aberta.c</code> (vetor de vagas, cada uma com
+<strong>estado</strong> <code>LIVRE</code>, <code>OCUPADA</code> ou <code>REMOVIDA</code>). A busca é este laço:</p>
+<pre><code class="language-c">// anda a partir de chave % m até achar a chave ou uma posição LIVRE;
+// passa reto pelas REMOVIDAS. Devolve a posição da chave ou -1.
+static int procura(const Aberta *t, int chave, int *sondagens) {
+    int i = chave % t-&gt;m;
+    int olhadas = 0;
+    for (int passo = 0; passo &lt; t-&gt;m; passo++) {
+        olhadas++;
+        if (t-&gt;v[i].estado == LIVRE) {
+            break; // a corrente de tentativas acaba aqui
+        }
+        if (t-&gt;v[i].estado == OCUPADA &amp;&amp; t-&gt;v[i].chave == chave) {
+            if (sondagens != NULL) {
+                *sondagens = olhadas;
+            }
+            return i;
+        }
+        i = (i + 1) % t-&gt;m; // a próxima, dando a volta no fim
+    }
+    if (sondagens != NULL) {
+        *sondagens = olhadas;
+    }
+    return -1;
+}
+</code></pre>
+<p>O programa do condomínio:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &quot;aberta.h&quot;
+
+int main(void) {
+    Aberta *vagas = aberta_cria(11);
+    if (vagas == NULL) {
+        return 1;
+    }
+    int aptos[] = {101, 202, 301, 1104, 504};
+    int horas[] = {7, 8, 8, 9, 10};
+    for (int i = 0; i &lt; 5; i++) {
+        int s;
+        int vaga = aberta_insere(vagas, aptos[i], horas[i], &amp;s);
+        printf(&quot;apto %4d: hash %d -&gt; vaga %d, sondagens: %d\n&quot;, aptos[i], aptos[i] % 11, vaga, s);
+    }
+    aberta_mostra(vagas);
+
+    int hora, s;
+    if (aberta_busca(vagas, 1104, &amp;hora, &amp;s)) {
+        printf(&quot;1104 entrou às %dh, sondagens: %d\n&quot;, hora, s);
+    }
+    if (!aberta_busca(vagas, 303, &amp;hora, &amp;s)) {
+        printf(&quot;303 não está, sondagens: %d\n&quot;, s);
+    }
+    aberta_libera(vagas);
+    return 0;
+}
+// Saída:
+// apto  101: hash 2 -&gt; vaga 2, sondagens: 1
+// apto  202: hash 4 -&gt; vaga 4, sondagens: 1
+// apto  301: hash 4 -&gt; vaga 5, sondagens: 2
+// apto 1104: hash 4 -&gt; vaga 6, sondagens: 3
+// apto  504: hash 9 -&gt; vaga 9, sondagens: 1
+// [ 0] -
+// [ 1] -
+// [ 2] 101
+// [ 3] -
+// [ 4] 202
+// [ 5] 301
+// [ 6] 1104
+// [ 7] -
+// [ 8] -
+// [ 9] 504
+// [10] -
+// 1104 entrou às 9h, sondagens: 3
+// 303 não está, sondagens: 2
+</code></pre>
+<p>No fluxograma, &quot;está livre?&quot; encerra sem sucesso e &quot;é o carro?&quot; encerra com
+sucesso; senão, anda uma vaga. O 1104 é achado na 6; o 303 para na 7, livre:</p>
+<p>{{fluxograma}}</p>

@@ -1,0 +1,302 @@
+<h1>Módulo 27 · Detalhes de C que caem em prova</h1>
+<p>Regras do C que a prova explora com código curto: precedência e ordem de
+avaliação, mistura de inteiros com e sem sinal (por que <code>-1 &gt; 0u</code> é
+verdadeiro) e o vetor de tamanho variável (VLA). Relê os módulos 01 a 08 com
+mais rigor.</p>
+<h2>O que você vai aprender</h2>
+<ul>
+<li>ler expressões pela <strong>tabela de precedência e associatividade</strong></li>
+<li>separar <strong>agrupamento</strong> de <strong>ordem de avaliação</strong>, e reconhecer <strong>efeito colateral</strong> e o comportamento indefinido de <code>i = i++</code></li>
+<li>prever a mistura de <strong>com sinal e sem sinal</strong>: promoção inteira, conversão aritmética usual, <code>-1 &gt; 0u</code></li>
+<li>usar <code>&gt;&gt;</code>, máscaras e <code>size_t</code> sem cair no negativo e no laço que desce</li>
+<li>criar e passar <strong>VLAs</strong> (<code>void f(int l, int c, int m[l][c])</code>) e conhecer o risco da pilha</li>
+<li>juntar tudo num controle de acesso com struct, enum, máscaras e VLA</li>
+</ul>
+<h2>Antes de começar</h2>
+<p>Usa os operadores dos módulos 01 e 02, os bits e máscaras do 0065, struct e
+enum do módulo 08 e <code>malloc</code>/<code>free</code> do módulo 07. Prepara os módulos 28 e 29,
+que reusam máscaras e inteiros sem sinal.</p>
+<p>Os valores dos comentários são de um PC de 64 bits com Linux e gcc: <code>int</code> e
+<code>unsigned</code> com 4 bytes, <code>long</code> e <code>size_t</code> com 8. Compile com <code>-Wall -Wextra</code>:
+os avisos pegam vários erros do módulo.</p>
+<p>{{indice}}</p>
+<hr>
+<p>{{assuntos}}</p>
+<hr>
+<h2>Desafios do módulo</h2>
+<p>Problemas para resolver num arquivo seu, misturando os assuntos do módulo. Do
+médio ao difícil.</p>
+<p><strong>1. A tabela na prática.</strong> Escreva um programa que mostre o valor de cada
+expressão abaixo e, ao lado, a mesma expressão com todos os parênteses do
+jeito que o C agrupa: <code>2 + 3 * 4 % 5</code>, <code>1 &lt;&lt; (2 + 1)</code>, <code>(5 &amp; 3) | 8</code>,
+<code>10 - 2 - 3</code>, <code>!0 + 1</code>, <code>-3 % 2</code>, <code>(7 &gt; 3) &gt; 1</code> e <code>~0u &gt;&gt; 28</code>.</p>
+<details><summary>Resposta</summary><p>4, 8, 9, 5, 2, -1, 0 e 15. Os que mais enganam: <code>%</code> está no nível do <code>*</code>,
+então <code>3 * 4 % 5</code> é <code>(3 * 4) % 5</code> = 2; <code>7 &gt; 3 &gt; 1</code> compara o <strong>resultado</strong>
+de <code>7 &gt; 3</code> (que é 1) com 1, e dá 0; <code>-3 % 2</code> é -1, porque o resto tem o sinal
+do dividendo; e <code>~0u &gt;&gt; 28</code> desloca 32 bits ligados e sobram 4: 15.
+Algumas dessas, sem os parênteses, fazem o gcc avisar: deixe os parênteses.</p>
+</details><p><strong>2. Ano bissexto numa linha.</strong> Escreva <code>bool bissexto(int a)</code> com uma
+expressão só e teste com 1900, 2000, 2024 e 2026.</p>
+<details><summary>Resposta</summary><p><code>(a % 4 == 0 &amp;&amp; a % 100 != 0) || a % 400 == 0</code>. Sem os parênteses o valor é
+o mesmo, porque <code>&amp;&amp;</code> vem antes de <code>||</code>, mas o gcc avisa (&quot;suggest parentheses
+around &#39;&amp;&amp;&#39; within &#39;||&#39;&quot;), e com razão: quem lê não precisa lembrar da
+tabela. Resultado: 1900 não, 2000 sim, 2024 sim, 2026 não.</p>
+</details><p><strong>3. Contar bits ligados.</strong> Escreva <code>int contar_bits(unsigned x)</code> com o
+truque <code>x &amp;= x - 1</code> e teste com <code>0xF0F0</code>. Por que o parâmetro precisa ser
+<code>unsigned</code>?</p>
+<details><summary>Resposta</summary><p><code>x - 1</code> apaga o bit 1 mais baixo e liga os zeros à direita dele; o <code>&amp;</code> com
+<code>x</code> apaga exatamente esse bit. O laço roda uma vez por bit ligado: <code>0xF0F0</code>
+dá <strong>8</strong>. Com <code>int</code>, um <code>x</code> negativo faria <code>x - 1</code> estourar em <code>INT_MIN - 1</code>,
+comportamento indefinido; com <code>unsigned</code>, a conta dá a volta e está definida.</p>
+</details><p><strong>4. Girar bits.</strong> Escreva <code>unsigned girar(unsigned x, unsigned n)</code>, que
+empurra os bits <code>n</code> casas para a esquerda e traz de volta, pela direita, os
+que caíram. Teste <code>girar(0x80000001, 1)</code> e <code>girar(x, 0)</code>.</p>
+<details><summary>Resposta</summary><p><code>(x &lt;&lt; n) | (x &gt;&gt; (32 - n))</code>, mas com cuidado: com <code>n = 0</code>, o <code>x &gt;&gt; 32</code>
+desloca pela largura inteira do tipo, o que é comportamento indefinido (o
+UBSan acusa). Faça <code>n &amp;= 31;</code> e, se <code>n == 0</code>, devolva <code>x</code>. <code>girar(0x80000001, 1)</code> dá <strong>0x00000003</strong>: o bit 31 voltou como bit 0.</p>
+</details><p><strong>5. O valor absoluto que não cabe.</strong> <code>abs(INT_MIN)</code> é comportamento
+indefinido, porque 2147483648 não cabe num <code>int</code>. Escreva <code>unsigned modulo(int x)</code> que funcione para qualquer <code>int</code>, inclusive <code>INT_MIN</code>.</p>
+<details><summary>Resposta</summary><p><code>x &lt; 0 ? 0u - (unsigned)x : (unsigned)x</code>. A conversão <code>(unsigned)x</code> é sempre
+definida (soma 2³² ao negativo), e a subtração sem sinal também. Para
+<code>INT_MIN</code>, <code>(unsigned)x</code> é 2147483648, e <code>0u - 2147483648u</code> dá <strong>2147483648</strong>,
+o valor certo, agora num tipo que comporta.</p>
+</details><p><strong>6. A média que não estoura.</strong> Com <code>unsigned a = 4000000000u, b = 4000000002u;</code>, <code>(a + b) / 2</code> dá um valor absurdo. Escreva duas versões
+corretas da média.</p>
+<details><summary>Resposta</summary><p><code>a + b</code> passa de <code>UINT_MAX</code> e dá a volta. Versão 1: <code>a + (b - a) / 2</code>, com
+<code>a &lt;= b</code> (a diferença nunca estoura). Versão 2, sem exigir ordem:
+<code>(a &amp; b) + ((a ^ b) &gt;&gt; 1)</code>: os bits comuns contam inteiros, os diferentes
+contam pela metade. As duas dão <strong>4000000001</strong>. É o mesmo erro clássico do
+<code>meio = (ini + fim) / 2</code> da busca binária.</p>
+</details><p><strong>7. Espiral numa matriz VLA.</strong> Leia <code>l</code> e <code>c</code>, crie <code>int m[l][c]</code> e preencha
+de 1 até <code>l * c</code> em espiral, no sentido horário, começando no canto de cima à
+esquerda. Mostre o resultado para 3 x 4.</p>
+<details><summary>Resposta</summary><p>Guarde quatro limites (cima, baixo, esquerda, direita) e ande: a linha de
+cima para a direita, a coluna da direita para baixo, a linha de baixo para a
+esquerda, a coluna da esquerda para cima, fechando um limite a cada lado.
+Pare quando o contador passar de <code>l * c</code>. Para 3 x 4: <code>1 2 3 4</code> / <code>10 11 12 5</code> / <code>9 8 7 6</code>. Confira <code>l</code> e <code>c</code> antes de criar o VLA.</p>
+</details><p><strong>8. Triângulo de Pascal.</strong> Leia <code>n</code> (até 30), crie <code>long long t[n][n]</code> e
+mostre a linha 10 do triângulo de Pascal.</p>
+<details><summary>Resposta</summary><p><code>t[i][0] = t[i][i] = 1</code> e, no meio, <code>t[i][j] = t[i - 1][j - 1] + t[i - 1][j]</code>. A linha 10 (contando a primeira como 0) é <strong>1 10 45 120 210 252 210
+120 45 10 1</strong>. Com <code>n = 30</code>, o VLA tem 30 × 30 × 8 = 7200 bytes, tranquilo
+na pilha. Use <code>long long</code>: os valores do meio passam de <code>INT_MAX</code> perto da
+linha 34.</p>
+</details><p><strong>9. O byte com dois nomes.</strong> Mostre os 8 bits de <code>signed char s = -5</code> e o
+valor dos mesmos bits lidos como <code>unsigned char</code>. Depois calcule <code>~5 + 1</code> e
+compare.</p>
+<details><summary>Resposta</summary><p>Os bits são <code>11111011</code>. Como <code>unsigned char</code>, valem <strong>251</strong> (= 256 - 5). E
+<code>~5 + 1</code> dá -5: é o complemento de dois, a regra que o processador usa para
+negativos. Para mostrar os bits sem armadilha, converta antes:
+<code>unsigned char u = (unsigned char)s;</code> e desloque <code>u</code>, nunca o negativo.</p>
+</details><p><strong>10. Soma com aviso de estouro.</strong> Escreva <code>bool somar(int a, int b, int *r)</code>, que guarda <code>a + b</code> em <code>*r</code> e devolve <code>true</code>, ou devolve <code>false</code> sem
+somar quando o resultado não caberia num <code>int</code>. Teste com <code>INT_MAX</code> e 1, e
+com -5 e 3.</p>
+<details><summary>Resposta</summary><p>Não dá para somar e conferir depois: o estouro com sinal já é comportamento
+indefinido. Teste antes: se <code>b &gt; 0 &amp;&amp; a &gt; INT_MAX - b</code>, estoura para cima; se
+<code>b &lt; 0 &amp;&amp; a &lt; INT_MIN - b</code>, para baixo. Nenhuma dessas subtrações estoura.
+<code>somar(INT_MAX, 1, &amp;r)</code> devolve <code>false</code>; <code>somar(-5, 3, &amp;r)</code> devolve <code>true</code>
+com <code>r = -2</code>.</p>
+</details><h2>Questões do POSCOMP</h2>
+<p>Questões reais do POSCOMP (SBC) sobre este módulo. O enunciado está no caderno oficial: abra o link, resolva e confira o gabarito.</p>
+<table>
+<thead>
+<tr>
+<th>Ano</th>
+<th>Questão</th>
+<th>Assunto</th>
+<th>Gabarito</th>
+<th>Prova</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2019</td>
+<td>27</td>
+<td>Saída de código em linguagem C</td>
+<td>A</td>
+<td><a href="https://www.sbc.org.br/wp-content/uploads/2025/02/0518.002_Exame_POSCOMP_2019.pdf">caderno</a></td>
+</tr>
+<tr>
+<td>2024</td>
+<td>33</td>
+<td>Saída de código C com deslocamento de bits</td>
+<td>C</td>
+<td><a href="https://www2.uesb.br/curso/cienciadacomputacao/wp-content/uploads/2026/05/caderno_2024.pdf">caderno</a></td>
+</tr>
+</tbody></table>
+<h2>Questões no estilo da prova</h2>
+<p>Questões de múltipla escolha, como as da prova do PPGI. Resolva no papel,
+marque a letra e só então abra o gabarito. Os trechos de código estão dentro
+de um <code>main</code> com <code>#include &lt;stdio.h&gt;</code>; foram compilados e rodados no gcc (os
+que geram aviso, também: o aviso não impede de rodar).</p>
+<p><strong>1.</strong> O que o trecho abaixo mostra?</p>
+<pre><code class="language-c">int a = 5, b = 10;
+int r = a + b &gt; 12 ? 1 : 0 + 100;
+printf(&quot;%d&quot;, r);
+</code></pre>
+<ul>
+<li>(A) 1</li>
+<li>(B) 101</li>
+<li>(C) 100</li>
+<li>(D) 16</li>
+<li>(E) 0</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A).</strong> O <code>?:</code> tem precedência menor que <code>+</code> e <code>&gt;</code>: a expressão é
+<code>((a + b) &gt; 12) ? 1 : (0 + 100)</code>. Como 15 &gt; 12, vale 1. O <code>+ 100</code> faz parte
+só do ramo do &quot;senão&quot;. Veja 0170.</p>
+</details><p><strong>2.</strong> Qual a saída?</p>
+<pre><code class="language-c">int x = 6;
+if (x &amp; 1 == 0) printf(&quot;par&quot;);
+else printf(&quot;impar&quot;);
+</code></pre>
+<ul>
+<li>(A) par</li>
+<li>(B) impar</li>
+<li>(C) erro de compilação</li>
+<li>(D) comportamento indefinido</li>
+<li>(E) nada é impresso</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(B).</strong> O <code>==</code> vem antes do <code>&amp;</code>: a condição é <code>x &amp; (1 == 0)</code>, isto é,
+<code>6 &amp; 0</code>, que é 0. Cai no <code>else</code>, mesmo com 6 sendo par. Compila (com um
+aviso do gcc). O certo é <code>(x &amp; 1) == 0</code>. Veja 0170 e 0065.</p>
+</details><p><strong>3.</strong> Qual a saída?</p>
+<pre><code class="language-c">unsigned int u = 1;
+int i = -1;
+printf(&quot;%s&quot;, i &lt; u ? &quot;menor&quot; : &quot;maior&quot;);
+</code></pre>
+<ul>
+<li>(A) menor</li>
+<li>(B) erro de compilação</li>
+<li>(C) maior</li>
+<li>(D) depende do valor de lixo de <code>i</code></li>
+<li>(E) comportamento indefinido</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(C).</strong> Pela conversão aritmética usual, o <code>int</code> vira <code>unsigned</code>: -1 vira
+4294967295, que é maior que 1. A conversão é definida pelo padrão; o gcc
+avisa com <code>-Wsign-compare</code>. Veja 0171.</p>
+</details><p><strong>4.</strong> Sobre o laço abaixo, é correto afirmar:</p>
+<pre><code class="language-c">for (unsigned i = 3; i &gt;= 0; i--)
+    printf(&quot;%u &quot;, i);
+</code></pre>
+<ul>
+<li>(A) mostra <code>3 2 1 0</code> e termina.</li>
+<li>(B) mostra <code>3 2 1</code> e termina.</li>
+<li>(C) não mostra nada.</li>
+<li>(D) nunca termina: depois do 0, <code>i</code> vira 4294967295.</li>
+<li>(E) não compila, porque <code>i</code> é <code>unsigned</code>.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(D).</strong> Um <code>unsigned</code> é sempre <code>&gt;= 0</code>, então a condição nunca é falsa. Ao
+descer de 0, <code>i</code> dá a volta para <code>UINT_MAX</code>. O certo é
+<code>for (unsigned i = 4; i-- &gt; 0;)</code>. Veja 0171.</p>
+</details><p><strong>5.</strong> Qual a saída?</p>
+<pre><code class="language-c">unsigned char c = 250;
+int s = c + 10;
+c = c + 10;
+printf(&quot;%d %d&quot;, s, c);
+</code></pre>
+<ul>
+<li>(A) comportamento indefinido</li>
+<li>(B) 4 4</li>
+<li>(C) 260 260</li>
+<li>(D) 4 260</li>
+<li>(E) 260 4</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(E).</strong> Na soma, <code>c</code> sofre promoção inteira e vira <code>int</code>: 250 + 10 = 260,
+guardado em <code>s</code>, um <code>int</code>. Ao guardar de volta em <code>c</code>, sobra o resto da
+divisão por 256: 4. Conversão para sem sinal é sempre definida. Veja 0171.</p>
+</details><p><strong>6.</strong> Sobre <code>switch</code>, operadores bit a bit, <code>union</code> e <code>enum</code>, num sistema com
+<code>int</code> de 32 bits, analise as afirmações.</p>
+<ul>
+<li>I. Com <code>unsigned char c = 0xF0;</code>, a expressão <code>~c</code> vale -241, porque <code>c</code> é
+promovido a <code>int</code> antes do <code>~</code>.</li>
+<li>II. Num <code>switch</code>, um <code>case</code> sem <code>break</code> no fim deixa a execução seguir para
+o <code>case</code> seguinte.</li>
+<li>III. Numa <code>union</code> com um <code>int</code> e um <code>char[8]</code>, o tamanho é a soma dos
+tamanhos dos membros, 12 bytes.</li>
+<li>IV. Num <code>enum</code> sem valores explícitos, o primeiro enumerador vale 0 e os
+seguintes crescem de 1 em 1.</li>
+</ul>
+<p>Marque a alternativa <strong>CORRETA</strong>.</p>
+<ul>
+<li>(A) I, II e IV, apenas.</li>
+<li>(B) I e III, apenas.</li>
+<li>(C) II e III, apenas.</li>
+<li>(D) II, III e IV, apenas.</li>
+<li>(E) I, II, III e IV.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A).</strong> I: <code>~0x000000F0</code> é <code>0xFFFFFF0F</code>, que como <code>int</code> vale -241. Só ao
+guardar de volta num <code>unsigned char</code> sobraria o byte <code>0x0F</code>. II: é o &quot;cair para o
+próximo caso&quot; do <code>switch</code> (fall-through). III é falsa: os membros da <code>union</code>
+<strong>compartilham</strong> o mesmo espaço, e o tamanho é o do maior membro (arredondado
+pelo alinhamento): 8 bytes. IV: é a regra do <code>enum</code>. Veja 0170, 0171 e 0172.</p>
+</details><p><strong>7.</strong> Sobre os vetores de tamanho variável (VLA) no C17, analise as
+afirmações.</p>
+<ul>
+<li>I. <code>int v[n] = {0};</code>, com <code>n</code> variável, é válido sempre que <code>n &gt; 0</code>.</li>
+<li>II. O <code>sizeof</code> de um VLA é calculado em tempo de execução.</li>
+<li>III. Desde o C11 o suporte a VLA é opcional, e o compilador que não o aceita
+define <code>__STDC_NO_VLA__</code>.</li>
+<li>IV. Se faltar memória, a declaração do VLA devolve <code>NULL</code>.</li>
+</ul>
+<p>Marque a alternativa <strong>CORRETA</strong>.</p>
+<ul>
+<li>(A) I e II, apenas.</li>
+<li>(B) II e III, apenas.</li>
+<li>(C) I e IV, apenas.</li>
+<li>(D) III e IV, apenas.</li>
+<li>(E) II, III e IV, apenas.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(B).</strong> II: como o tamanho só é conhecido na execução, o <code>sizeof</code> também é.
+III: é o que o padrão diz. I é falsa: VLA não aceita inicializador no C17
+(um <code>memset</code> ou um laço faz o serviço). IV é falsa: VLA não é ponteiro e não
+avisa falha; quem devolve <code>NULL</code> é o <code>malloc</code>. Veja 0172.</p>
+</details><p><strong>8.</strong> Qual protótipo recebe corretamente uma matriz de <code>l</code> linhas e <code>c</code>
+colunas, com <code>l</code> e <code>c</code> conhecidos só na execução?</p>
+<ul>
+<li>(A) <code>void f(int m[l][c], int l, int c);</code></li>
+<li>(B) <code>void f(int l, int c, int m[][]);</code></li>
+<li>(C) <code>void f(int l, int c, int m[l][c]);</code></li>
+<li>(D) <code>void f(int m[][], int l, int c);</code></li>
+<li>(E) <code>void f(int l, int c, int m[l][]);</code></li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(C).</strong> Num parâmetro VLA, as dimensões precisam ser declaradas <strong>antes</strong> da
+matriz, porque o tipo <code>m[l][c]</code> usa os dois nomes. Em (A), <code>l</code> e <code>c</code> ainda
+não existem quando <code>m</code> é lida. Em (B), (D) e (E), falta o número de colunas,
+e o compilador precisa dele para calcular <code>m[i][j]</code>. Veja 0172.</p>
+</details><p><strong>9.</strong> Qual a saída?</p>
+<pre><code class="language-c">int i = 0, j = 0;
+if (i++ || ++j) i += 10;
+printf(&quot;%d %d&quot;, i, j);
+</code></pre>
+<ul>
+<li>(A) 1 1</li>
+<li>(B) 10 1</li>
+<li>(C) 11 0</li>
+<li>(D) 11 1</li>
+<li>(E) 10 0</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(D).</strong> <code>i++</code> vale 0 (o valor antigo) e deixa <code>i</code> = 1. Como o lado esquerdo
+do <code>||</code> deu falso, o direito roda: <code>++j</code> deixa <code>j</code> = 1 e vale 1. A condição
+é verdadeira e <code>i += 10</code> dá 11. O <code>||</code> garante que o lado esquerdo termina,
+<code>++</code> incluído, antes do direito. Veja 0170.</p>
+</details><p><strong>10.</strong> Qual a saída?</p>
+<pre><code class="language-c">#define QUAD(x) x * x
+printf(&quot;%d&quot;, QUAD(2 + 3));
+</code></pre>
+<ul>
+<li>(A) 25</li>
+<li>(B) erro de compilação</li>
+<li>(C) 13</li>
+<li>(D) 10</li>
+<li>(E) 11</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(E).</strong> O <code>#define</code> só troca texto: <code>QUAD(2 + 3)</code> vira <code>2 + 3 * 2 + 3</code>, que
+pela precedência é 2 + 6 + 3 = 11. Para dar 25, a macro precisa de
+parênteses: <code>#define QUAD(x) ((x) * (x))</code>. Veja 0170 e 0004.</p>
+</details><h2>Para ler mais</h2>
+<ul>
+<li>DEITEL, P.; DEITEL, H. <em>C: como programar</em>. 6. ed. São Paulo: Pearson, 2011. Cap. 2 a 4: operadores, precedência, associatividade e ordem de avaliação; cap. 10: manipulação de bits; apêndice D: sistemas de numeração e complemento de dois.</li>
+<li>KERNIGHAN, B. W.; RITCHIE, D. M. <em>The C programming language</em>. 2. ed. Englewood Cliffs: Prentice Hall, 1988. Cap. 2: tipos, operadores e expressões (seção 2.7, conversões de tipo; 2.12, precedência e ordem de avaliação).</li>
+<li>BACKES, A. <em>Linguagem C: completa e descomplicada</em>. Rio de Janeiro: Elsevier, 2013. Cap. 2 e 3: tipos, modificadores <code>signed</code>/<code>unsigned</code> e operadores.</li>
+<li>ISO/IEC. <em>ISO/IEC 9899:2018: Information technology: programming languages: C</em>. Genebra: ISO, 2018. Seções 6.3.1 (conversões aritméticas), 6.5 (expressões) e 6.7.6.2 (declaradores de vetor, VLA).</li>
+<li>CPPREFERENCE. <em>C operator precedence</em>; <em>Order of evaluation</em>; <em>Implicit conversions</em>; <em>Array declaration</em> (VLA). Disponível em: <a href="https://en.cppreference.com/w/c/language">https://en.cppreference.com/w/c/language</a>.</li>
+<li>GNU. <em>Using the GNU Compiler Collection (GCC)</em>: <em>Warning options</em> (<code>-Wparentheses</code>, <code>-Wsign-compare</code>, <code>-Wsequence-point</code>, <code>-Wtype-limits</code>). Disponível em: <a href="https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html">https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html</a>.</li>
+</ul>

@@ -1,0 +1,100 @@
+<h1>Arquitetura do curso</h1>
+<p><strong>LPEDC</strong> · como o material está montado e como o texto vira <code>.html</code></p>
+<h2>1. Peças</h2>
+<pre><code>LPEDC/
+├── README.html                  o sumário do livro (o sumário é gerado; o resto, à mão)
+├── PPGI.html  TRILHA.html  PROVAS.html  SIMULADOS.html   guias (escritos à mão)
+├── 01-fundamentos.html ...      gerados: um por módulo; cada assunto é um capítulo (conceito, exemplos, exercícios)
+├── material/                  a única pasta de conteúdo: tudo o que se roda ou se vê
+│   ├── A003.c  A004.c ...     exemplos resolvidos
+│   ├── E007.c ...             exercícios (esqueleto vazio; a resposta vai dentro do arquivo)
+│   ├── P0101.c ...            lista prática (P + número do módulo + número na lista)
+│   ├── 0002-ideia.svg  0002-fluxograma.svg   desenhos do assunto (gerados)
+│   ├── 0076-lista.c  0076-lista.h ...        apoio (TAD) do assunto, com o número dele no nome
+│   └── legenda.svg            formas e cores (gerado)
+├── _respostas/&lt;modulo&gt;/       uma resolução de cada exercício (e os apoios das respostas)
+├── _gerador/modulos/&lt;modulo&gt;/ FONTE dos .html: modulo.html, e por assunto texto.html e desenhos.mjs
+├── _gerador/arquivos.json     quais A, E e apoios pertencem a cada assunto
+├── _gerador/fases.json        a rota do jogo: ordem das etapas, mundo e missão de cada módulo
+├── _fontes/                   sumário, fichamentos dos livros e provas do PPGI
+├── docs/  AGENTS.html  rodar    documentação viva, instruções de agentes e auxiliar do conferir.sh
+├── index.html  .nojekyll      quiz das provas e leitura do curso (GitHub Pages, raiz da main)
+├── conteudo/                  leitor, estilos, sumário, índice do acervo e bibliotecas locais
+├── quiz/                      gerado: questoes.js e figuras/*.svg do quiz
+├── _gerador/trilha/           FONTE da trilha: requer, porquê e &quot;saia sabendo&quot; de cada assunto
+├── _gerador/provas/           FONTE do quiz: &lt;slug&gt;.json (questões e porquês) e &lt;slug&gt;.figuras.json
+├── provas-ppgi-ufam/          provas de 2016 a 2019 com os recortes das figuras
+</code></pre>
+<p>Gerar: <code>cd _gerador &amp;&amp; npm run gerar -- 01-</code> (só o módulo 01). Nunca edite o
+<code>01-fundamentos.html</code> (ou outro <code>.html</code> de módulo na raiz) à mão: ele é
+sobrescrito. <strong>Todo arquivo do curso fica numa só pasta, <code>material/</code></strong> (<code>DECISIONS.html</code> #9): exemplos,
+exercícios, lista, desenhos e apoios. Escreva os links do texto a partir da raiz (<code>material/0002-ideia.svg</code>).
+Ao criar assunto ou exercício novo, acrescente os nomes em <code>_gerador/arquivos.json</code>.</p>
+<p>Ferramentas: <code>gcc</code> (C17) com as flags de estudo (AddressSanitizer e UBSan), Node para o gerador
+(<code>_gerador/gerar.mjs</code>, com <code>roughjs</code> e <code>dagre</code> para os desenhos) e Python 3 para
+<code>_gerador/conferir-texto.py</code>. O quiz sai de <code>cd _gerador &amp;&amp; node quiz.mjs</code> (<code>--check</code> confere letra contra o <code>PROVAS.html</code>, porquê de toda alternativa e figura citada). O GitHub Pages publica a raiz da <code>main</code>, sem build, servidor de aplicação ou banco.</p>
+<p>O prefácio abre em <code>#conteudo</code>. A ordem das oito partes e dos módulos vem de <code>_gerador/fases.json</code>.
+A rota <code>#conteudo/01-fundamentos#0005--printf</code> abre o capítulo de <code>printf</code>.
+O leitor carrega o HTML do módulo uma vez enquanto você passa por suas páginas. Também reconhece
+as rotas antigas do livro. Os documentos de apoio estão em <code>#conteudo/arquivos</code>.</p>
+<p>Ao adicionar, renomear ou remover um documento HTML, ou mudar seus títulos, rode
+<code>node _gerador/conteudo.mjs</code> e inclua <code>conteudo/arquivos.json</code> no commit.
+O navegador usa DOMPurify 3.5.0 e github-slugger 2.0.0. O gerador usa Marked 18.3.0 para formatar os
+enunciados dos exercícios e os trechos que monta a partir do código C.</p>
+<h2>2. Numeração</h2>
+<p>Assunto <code>N</code> (ex.: 0002 → N = 2):</p>
+<ul>
+<li>exemplos: <code>A(2N-1)</code> e <code>A(2N)</code> → 0002 tem <code>A003.c</code> e <code>A004.c</code></li>
+<li>exercícios: 4 por assunto, escolhidos do bloco original <code>E(6N-5)</code> a <code>E(6N)</code> → 0002 manteve 4 dos 6 (<code>E007.c</code> a <code>E012.c</code>)</li>
+</ul>
+<p>Sempre 3 dígitos (4 a partir de 1000: <code>E1000.c</code>). Sempre 2 exemplos e 4 exercícios por assunto; a numeração dos exercícios tem buracos.</p>
+<h2>3. Do texto ao <code>.html</code></h2>
+<ol>
+<li>A fonte de cada módulo é <code>_gerador/modulos/&lt;modulo&gt;/modulo.html</code> mais um <code>texto.html</code> e um
+<code>desenhos.mjs</code> por assunto.</li>
+<li>Os enunciados dos exercícios e da lista saem do bloco de comentários do topo dos <code>.c</code>
+(<code>RULES.html</code> §5 e §6).</li>
+<li>O gerador (§1) monta o <code>.html</code> na raiz e os SVGs <code>NNNN-ideia.svg</code> e <code>NNNN-fluxograma.svg</code> em
+<code>material/</code>. Cada assunto vira <code>&lt;h2&gt;NNNN · Título&lt;/h2&gt;</code> com <strong>Conceito</strong> (o que vem antes de
+<code>{{exemplo}}</code> no <code>texto.html</code>), <strong>Exemplos de uso</strong> (o que vem depois, mais os exemplos A) e
+<strong>Exercícios</strong> (os E). Depois do último assunto vêm a lista, os desafios e as questões.</li>
+<li>O gerador também reescreve o sumário do <code>README.html</code>, entre <code>&lt;!-- sumario:inicio --&gt;</code> e
+<code>&lt;!-- sumario:fim --&gt;</code>: a rota de <code>fases.json</code>, com link para cada assunto.</li>
+</ol>
+<h2>4. Linguagem do domínio</h2>
+<table>
+<thead>
+<tr>
+<th>Termo</th>
+<th>Significa</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>módulo</td>
+<td>o <code>.html</code> numerado da raiz (<code>01-fundamentos.html</code>)</td>
+</tr>
+<tr>
+<td>assunto</td>
+<td><code>&lt;h2&gt;NNNN · Título&lt;/h2&gt;</code>, um capítulo: conceito, exemplos de uso (ideia, código e fluxograma, exemplos A) e exercícios</td>
+</tr>
+<tr>
+<td>conceito</td>
+<td>a explicação do assunto em texto corrido, como livro, com a obra citada <code>(AUTOR, ano)</code> em cada definição; a referência completa fica em &quot;Para ler mais&quot;</td>
+</tr>
+<tr>
+<td>exemplo (A)</td>
+<td>programa resolvido que mostra outra faceta do assunto</td>
+</tr>
+<tr>
+<td>exercício (E)</td>
+<td>esqueleto vazio para a pessoa codificar, com enunciado e saída esperada</td>
+</tr>
+<tr>
+<td>lista prática (P)</td>
+<td>30 exercícios por módulo no estilo da prova</td>
+</tr>
+<tr>
+<td>prova</td>
+<td>Prova de Conhecimentos do Mestrado do PPGI/UFAM (<code>PRD.html</code>)</td>
+</tr>
+</tbody></table>

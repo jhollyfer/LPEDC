@@ -1,0 +1,150 @@
+<h2>0155 · Floyd-Warshall: todos os pares</h2>
+<p>Um aplicativo de corrida precisa do tempo de viagem de cada bairro para
+cada outro, para estimar o preço antes de chamar o motorista. A cidade tem
+cinco bairros ligados por ruas de <strong>mão única</strong>: Centro, Porto, Vila, Alto e
+Feira. A pergunta não é mais &quot;da origem para todo mundo&quot;, como no Dijkstra
+(0112). É &quot;<strong>de todo mundo para todo mundo</strong>&quot;.</p>
+<p>Esse é o problema dos <strong>caminhos mínimos entre todos os pares</strong>: achar a
+menor distância de cada vértice a cada outro e guardar tudo numa matriz
+<code>d</code>, em que <code>d[i][j]</code> é a distância de <code>i</code> até <code>j</code> (CORMEN et al., 2024, cap.
+23). Dá para rodar o Dijkstra uma vez a partir de cada bairro. O
+<strong>algoritmo de Floyd-Warshall</strong> faz diferente: monta a matriz inteira com
+três laços aninhados e quase nenhum código (FLOYD, 1962).</p>
+<p>A ideia vem da programação dinâmica (módulo 21), e o truque está em qual
+subproblema escolher. Em vez de pensar em caminhos inteiros, pense nos
+bairros que um caminho tem permissão de usar <strong>como passagem</strong>, isto é, por
+onde ele pode passar no meio, sem ser origem nem destino. No começo, nenhum
+bairro pode ser passagem, e <code>d[i][j]</code> é só o tempo da rua direta de <code>i</code> para
+<code>j</code>: INFINITO se a rua não existe e 0 na diagonal, porque ir de um bairro a
+ele mesmo não custa nada (FLOYD, 1962).</p>
+<p>Agora libere o Centro como passagem. Para cada par <code>i</code>, <code>j</code>, pergunte: ir
+de <code>i</code> ao Centro e do Centro a <code>j</code> sai mais barato que o melhor que eu
+conhecia? Se sim, atualize. Depois libere o Porto, fazendo a mesma pergunta
+com o Porto no meio, e depois a Vila, o Alto e a Feira. Cada bairro liberado
+é uma rodada:</p>
+<pre><code class="language-text">para cada k:            (o bairro que passa a valer como passagem)
+    para cada i, j:
+        d[i][j] = mínimo(d[i][j], d[i][k] + d[k][j])
+</code></pre>
+<p>O que garante que isso funciona é a afirmação que vale depois de cada
+rodada: terminada a rodada <code>k</code>, <code>d[i][j]</code> é o melhor tempo de <code>i</code> a <code>j</code> que
+usa como passagem só os bairros de 0 a <code>k</code>. Na rodada seguinte, o melhor
+caminho com o bairro <code>k + 1</code> liberado ou não passa por ele, e já está em
+<code>d[i][j]</code>, ou passa uma vez, e é a soma do trecho até ele com o trecho a
+partir dele, dois valores já prontos. Por isso o <code>k</code> <strong>tem</strong> de ser o laço
+de fora: ele é a rodada, e os laços de <code>i</code> e <code>j</code> só fazem sentido com a
+rodada anterior completa.</p>
+<p>Veja a casa <code>d[Centro][Alto]</code> evoluir. Não há rua direta, então ela começa
+em INFINITO. Com o Porto liberado, vira 10 (Centro, Porto, Alto). Com a Vila,
+cai para 9, porque Centro, Vila, Porto custa menos que Centro, Porto. Com a
+Feira, cai para 8. Cada rodada aproveita o que as anteriores já acharam.</p>
+<p>O custo é fácil de contar: três laços de V voltas, <strong>O(V³)</strong> de tempo, e a
+matriz de V × V, O(V²) de memória. São 125 passos para 5 bairros e 64
+milhões para 400. Para grafos grandes e esparsos, como um mapa com 100 mil
+esquinas e poucas ruas por esquina, o Dijkstra com heap a partir de cada
+origem sai muito mais barato (CORMEN et al., 2024, cap. 23).</p>
+<p>O Floyd-Warshall aceita pesos negativos, desde que não haja ciclo negativo.
+Se houver, ele avisa sozinho: no fim, algum <code>d[i][i]</code> fica menor que zero,
+porque sair de <code>i</code> e voltar a <code>i</code> pelo ciclo &quot;custa&quot; menos que ficar
+parado.</p>
+<p>A mesma estrutura de três laços responde outra pergunta. Troque os números
+por verdadeiro ou falso, o <code>+</code> por <code>&amp;&amp;</code> e o <code>mínimo</code> por <code>||</code>. Agora
+<code>d[i][j]</code> diz se <strong>existe caminho</strong> de <code>i</code> a <code>j</code>. Essa matriz é o <strong>fecho
+transitivo</strong> do grafo, e essa versão é o algoritmo de Warshall (TENENBAUM;
+LANGSAM; AUGENSTEIN, 1995, cap. 8).</p>
+<blockquote>
+<p>[!WARNING]
+Pôr o <code>k</code> no laço de <strong>dentro</strong> compila, roda e erra sem aviso: <code>d[i][k]</code> e
+<code>d[k][j]</code> ainda não estão prontos. E <code>d[i][k] + d[k][j]</code> precisa do teste de
+INFINITO: com <code>INT_MAX</code>, estoura.</p>
+</blockquote>
+<p>{{exemplo}}</p>
+<p>Um aplicativo de corrida quer o tempo de cada bairro a cada outro, com ruas de
+<strong>mão única</strong>. As setas são as ruas em minutos, e o melhor caminho de Centro
+até Alto, em verde, passa por três bairros. Embaixo, a tabela final:</p>
+<p>{{ideia}}</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+#define V 5
+#define INFINITO 1000000000
+
+int main(void) {
+    const char *bairros[V] = {&quot;Centro&quot;, &quot;Porto&quot;, &quot;Vila&quot;, &quot;Alto&quot;, &quot;Feira&quot;};
+    int d[V][V];
+    for (int i = 0; i &lt; V; i++)
+        for (int j = 0; j &lt; V; j++) d[i][j] = (i == j) ? 0 : INFINITO; // sem rua: infinito
+
+    int ruas[][3] = {{0, 2, 2}, {2, 1, 3}, {0, 1, 6}, {1, 3, 4},
+                     {3, 0, 5}, {2, 4, 7}, {4, 3, 1}, {1, 4, 2}};
+    for (int r = 0; r &lt; 8; r++) d[ruas[r][0]][ruas[r][1]] = ruas[r][2]; // mão única
+
+    for (int k = 0; k &lt; V; k++)         // k: o bairro que pode servir de passagem
+        for (int i = 0; i &lt; V; i++)     // de i
+            for (int j = 0; j &lt; V; j++) // para j
+                if (d[i][k] != INFINITO &amp;&amp; d[k][j] != INFINITO &amp;&amp; d[i][k] + d[k][j] &lt; d[i][j])
+                    d[i][j] = d[i][k] + d[k][j]; // passar por k é mais rápido
+
+    printf(&quot;%-8s&quot;, &quot;de\\para&quot;);
+    for (int j = 0; j &lt; V; j++) printf(&quot;%7s&quot;, bairros[j]);
+    printf(&quot;\n&quot;);
+    for (int i = 0; i &lt; V; i++) {
+        printf(&quot;%-8s&quot;, bairros[i]);
+        for (int j = 0; j &lt; V; j++) printf(&quot;%7d&quot;, d[i][j]);
+        printf(&quot;\n&quot;);
+    }
+    return 0;
+}
+// Saída:
+// de\para  Centro  Porto   Vila   Alto  Feira
+// Centro        0      5      2      8      7
+// Porto         8      0     10      3      2
+// Vila         11      3      0      6      5
+// Alto          5     10      7      0     12
+// Feira         6     11      8      1      0
+</code></pre>
+<p>O fluxograma tem três contadores e uma comparação no miolo, repetida V³
+vezes:</p>
+<p>{{fluxograma}}</p>
+<h3>Passo a passo</h3>
+<p>A casa <code>d[Centro][Alto]</code>, rodada a rodada:</p>
+<table>
+<thead>
+<tr>
+<th>Rodada (passagem liberada)</th>
+<th><code>d[Centro][Alto]</code></th>
+<th>Caminho por trás do número</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>início</td>
+<td>∞</td>
+<td>(nenhuma rua direta)</td>
+</tr>
+<tr>
+<td>k = Centro</td>
+<td>∞</td>
+<td>ninguém chega ao Alto pelo Centro ainda</td>
+</tr>
+<tr>
+<td>k = Porto</td>
+<td>10</td>
+<td>Centro → Porto → Alto: 6 + 4</td>
+</tr>
+<tr>
+<td>k = Vila</td>
+<td>9</td>
+<td>Centro → Vila → Porto → Alto: 2 + 3 + 4</td>
+</tr>
+<tr>
+<td>k = Alto</td>
+<td>9</td>
+<td>passar pelo próprio destino não ajuda</td>
+</tr>
+<tr>
+<td>k = Feira</td>
+<td>8</td>
+<td>Centro → Vila → Porto → Feira → Alto: 2 + 3 + 2 + 1</td>
+</tr>
+</tbody></table>
+<p>Cada rodada aproveita as anteriores: na da Vila, <code>d[Vila][Alto]</code> já vale 7,
+calculado na rodada do Porto.</p>

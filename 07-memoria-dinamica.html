@@ -1,0 +1,2759 @@
+<!-- Gerado por _gerador. Para mudar este arquivo, edite _gerador/modulos/07-memoria-dinamica/ e rode: cd _gerador && npm run gerar --><h1>Módulo 07 · Memória dinâmica</h1>
+<blockquote>
+<p>[!IMPORTANT]
+<strong>Mundo 2 · Memória e dados · Rota do jogo: etapa 7 de 29</strong></p>
+<p><strong>Missão:</strong> pedir e devolver memória durante a execução, sem vazar.</p>
+<p><strong>Vem de:</strong> <a href="06-ponteiros.html">Módulo 06 · Ponteiros</a>. <strong>Segue para:</strong> <a href="08-structs.html">Módulo 08 · Tipos compostos</a>.</p>
+<p><strong>Checkpoints desta fase:</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> Ler os assuntos 0053 a 0058 e refazer os exemplos</li>
+<li><input disabled="" type="checkbox"> Resolver os 4 exercícios de cada assunto, escrevendo o código sozinho</li>
+<li><input disabled="" type="checkbox"> Fechar a lista prática (P0701 a P0730)</li>
+<li><input disabled="" type="checkbox"> Enfrentar os desafios do módulo</li>
+<li><input disabled="" type="checkbox"> Chefão: resolver as questões de prova do módulo sem consultar</li>
+</ul>
+</blockquote>
+<p>Como pedir memória <strong>enquanto o programa roda</strong>, do tamanho exato, e
+devolvê-la ao acabar: heap, <code>malloc</code>, <code>free</code>, <code>calloc</code>, <code>realloc</code>, matrizes
+dinâmicas e os erros de memória. Depende dos ponteiros do módulo 06 e prepara
+listas, pilhas, filas, árvores e o módulo 08 (structs).</p>
+<h2>O que você vai aprender</h2>
+<ul>
+<li>as quatro regiões da memória: <strong>código, dados, heap e pilha</strong>, e quanto tempo vive cada coisa</li>
+<li><strong><code>malloc</code></strong> e <strong><code>free</code></strong>, sempre conferindo o <code>NULL</code></li>
+<li><strong><code>calloc</code></strong> (memória zerada) e <strong><code>realloc</code></strong>, para o vetor crescer conforme os dados chegam</li>
+<li><strong>matrizes dinâmicas</strong>: bloco único com <code>i * colunas + j</code> ou vetor de ponteiros com <code>m[i][j]</code></li>
+<li><strong>vazamento, ponteiro solto, free duplo e estouro</strong>, caçados com o <strong>AddressSanitizer</strong> e o <strong>valgrind</strong></li>
+<li>um programa com vetores que crescem e strings de tamanho exato, sem deixar nada para trás</li>
+</ul>
+<h2>Antes de começar</h2>
+<p>Domine ponteiros (módulo 06): <code>&amp;</code>, <code>*</code>, <code>NULL</code>, <code>a[i] == *(a + i)</code>, <code>char *</code> e
+<code>**</code>. Se <code>int **m</code> assusta, releia 0047 e 0049. Nos diagramas, o verde é o bloco
+do heap. Escreva cada exercício do zero, compile com as flags de estudo e leia
+o relatório do AddressSanitizer se algo estourar.</p>
+<p>O gcc com as flags de estudo já compila com o <strong>AddressSanitizer</strong>, que avisa
+de vazamentos no fim. Para o assunto 0057, instale também o <strong>valgrind</strong>:</p>
+<pre><code class="language-bash">sudo pacman -S valgrind        # Arch Linux
+sudo apt install valgrind      # Debian / Ubuntu
+</code></pre>
+<p>Rode qualquer arquivo com ele assim (sem AddressSanitizer):</p>
+<pre><code class="language-bash">gcc -g ~/LPEDC/material/A114.c -o ~/LPEDC/material/A114 &amp;&amp; valgrind ~/LPEDC/material/A114
+</code></pre>
+<p>A regra do módulo: <strong>todo <code>malloc</code> tem um <code>free</code>, e nenhum ponteiro é usado
+depois dele</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Assunto</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="#0053--pilha-e-heap">0053</a></td>
+<td>Pilha e heap</td>
+</tr>
+<tr>
+<td><a href="#0054--malloc-e-free">0054</a></td>
+<td>malloc e free</td>
+</tr>
+<tr>
+<td><a href="#0055--calloc-e-realloc">0055</a></td>
+<td>calloc e realloc</td>
+</tr>
+<tr>
+<td><a href="#0056--matriz-din%C3%A2mica">0056</a></td>
+<td>Matriz dinâmica</td>
+</tr>
+<tr>
+<td><a href="#0057--erros-de-mem%C3%B3ria">0057</a></td>
+<td>Erros de memória</td>
+</tr>
+<tr>
+<td><a href="#0058--juntando-tudo">0058</a></td>
+<td>Juntando tudo</td>
+</tr>
+</tbody></table>
+<hr>
+<blockquote>
+<p>[!NOTE]
+Cada assunto é um capítulo: <strong>Conceito</strong> (a explicação), <strong>Exemplos de uso</strong> (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e <strong>Exercícios</strong> (cada um é um arquivo em <code>material/</code> com o esqueleto, as dicas e o espaço para a resposta; resoluções em <code>_respostas/07-memoria-dinamica/</code>).</p>
+</blockquote>
+<h2>0053 · Pilha e heap</h2>
+<h3>Conceito</h3>
+<p>Sexta à noite, restaurante cheio. O garçom anota o pedido da mesa 4 num
+bloquinho, arranca a folha e prende a comanda no balcão da cozinha. O
+bloquinho volta limpo para o bolso; a comanda fica no balcão até alguém
+pagar a conta e jogá-la fora. Um programa lida com a memória do mesmo jeito:
+há rascunho que só dura enquanto uma função trabalha, e há dado que precisa
+sobreviver a ela. Até aqui você só usou o primeiro tipo. Este módulo trata do
+segundo.</p>
+<p>Para entender a diferença, olhe o mapa. Quando o programa começa, o sistema
+operacional lhe entrega uma faixa de endereços dividida em <strong>regiões</strong>, e
+cada uma tem um dono e um tempo de vida próprios (CELES; RANGEL, 2002). A
+região de <strong>código</strong> guarda as instruções e os literais de string, como
+<code>&quot;bom dia&quot;</code> (assunto 0048), e é só de leitura. A região de <strong>dados</strong> guarda
+as variáveis globais e as <code>static</code>. As outras duas, a pilha e o heap, são as
+que interessam aqui.</p>
+<p>A <strong>pilha</strong> (<em>stack</em>) você conhece do assunto 0031. A cada chamada de função,
+ela empilha um <strong>frame</strong>, o espaço com as variáveis locais e os parâmetros
+daquela chamada; no <code>return</code>, o frame é desempilhado. É o bloquinho do
+garçom: automática, porque ninguém precisa pedir nem devolver, e rápida. Mas
+tem dois limites. O frame some no <code>return</code>, então nada que mora nele
+sobrevive à função. E a pilha é pequena: no Linux, 8 MiB por padrão; o
+comando <code>ulimit -s</code> mostra <code>8192</code>, em KiB (CELES; RANGEL, 2002). Um vetor
+local de 20 MB não cabe nela.</p>
+<p>O <strong>heap</strong> é o balcão da cozinha. É um depósito do tamanho da memória livre
+da máquina, e nele você pede, com o programa já rodando, um bloco de N
+bytes. Em troca, recebe o <strong>endereço</strong> desse bloco, que você guarda num
+ponteiro e usa como vetor. O bloco não pertence a função nenhuma: ele fica
+vivo até você devolvê-lo com <code>free</code> (BACKES, 2013, cap. 11). Por isso dá para
+criar um dado numa função e usá-lo em outra, depois que a primeira já
+retornou. O assunto 0054 mostra como pedir e devolver.</p>
+<p>Os livros dão nomes a esses três jeitos de conseguir memória. A alocação
+<strong>estática</strong> acontece na região de dados, com tamanho e endereço fixos desde
+a compilação. A <strong>automática</strong> acontece na pilha, a cada chamada. A
+<strong>dinâmica</strong> acontece no heap, quando você pede (CELES; RANGEL, 2002). A
+tabela resume o mapa:</p>
+<table>
+<thead>
+<tr>
+<th>Região</th>
+<th>O que guarda</th>
+<th>Quem cria e quem apaga</th>
+<th>Dura</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>código</strong></td>
+<td>as instruções e os literais (<code>&quot;bom dia&quot;</code>)</td>
+<td>o compilador</td>
+<td>o programa todo, só leitura</td>
+</tr>
+<tr>
+<td><strong>dados</strong></td>
+<td>globais e <code>static</code></td>
+<td>o compilador</td>
+<td>o programa todo</td>
+</tr>
+<tr>
+<td><strong>heap</strong></td>
+<td>blocos pedidos com <code>malloc</code></td>
+<td><strong>você</strong> pede e <strong>você</strong> devolve</td>
+<td>até o <code>free</code></td>
+</tr>
+<tr>
+<td><strong>pilha</strong></td>
+<td>locais e parâmetros (os frames)</td>
+<td>a chamada e o <code>return</code></td>
+<td>enquanto a função roda</td>
+</tr>
+</tbody></table>
+<p>A coluna do meio guarda a responsabilidade nova. O C não tem <strong>coletor de
+lixo</strong> (<em>garbage collector</em>), o mecanismo que apaga sozinho o que ninguém
+mais usa. Tudo o que você tira do heap, você devolve com <code>free</code>; o que fica
+esquecido continua ocupado até o programa acabar (FEOFILOFF, 2009, ap. F).</p>
+<blockquote>
+<p>[!WARNING]
+Nunca devolva o endereço de uma variável local: <code>char senha[8]; ... return senha;</code> aponta para um frame que deixa de existir no <code>return</code>. O gcc avisa
+(<code>function returns address of local variable</code>) e devolve <code>NULL</code> no lugar.
+Saídas: quem chama empresta o vetor, a variável vira <code>static</code> ou o bloco
+vem do heap.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>A função <code>abrir_comanda</code> monta a comanda da mesa 4 com três itens (R$ 18, 25
+e 7). A variável <code>itens</code> mora na pilha, os valores vão para um bloco no heap e
+o contador <code>pedidos_do_dia</code> mora nos dados:</p>
+<p align="center"><img src="material/0053-ideia.svg" alt="Diagrama da ideia: Pilha e heap" width="998"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int pedidos_do_dia = 0; // DADOS: existe do começo ao fim do programa
+
+int *abrir_comanda(int mesa) {
+    int itens = 3; // PILHA: some quando a função retorna
+    int *comanda = malloc(itens * sizeof(int)); // o bloco fica no HEAP
+    if (comanda == NULL) {
+        return NULL;
+    }
+    comanda[0] = 18; // suco
+    comanda[1] = 25; // prato feito
+    comanda[2] = 7;  // pudim
+    pedidos_do_dia++;
+    printf(&quot;Mesa %d: comanda com %d itens\n&quot;, mesa, itens);
+    return comanda; // o endereço volta; o bloco continua vivo no heap
+}
+
+int main(void) {
+    int *comanda = abrir_comanda(4); // PILHA: o ponteiro mora no frame de main
+    if (comanda == NULL) {
+        printf(&quot;Sem memória\n&quot;);
+        return 1;
+    }
+    int total = comanda[0] + comanda[1] + comanda[2];
+    printf(&quot;Total: R$ %d\n&quot;, total);
+    printf(&quot;Pedidos do dia: %d\n&quot;, pedidos_do_dia);
+    free(comanda); // devolve o bloco ao heap
+    return 0;
+}
+// Saída:
+// Mesa 4: comanda com 3 itens
+// Total: R$ 50
+// Pedidos do dia: 1
+</code></pre>
+<p>O frame de <code>abrir_comanda</code> nasce e morre no meio do caminho; o bloco do heap
+atravessa o <code>return</code> e só termina no <code>free</code>:</p>
+<p align="center"><img src="material/0053-fluxograma.svg" alt="Fluxograma: Pilha e heap" width="429"></p>
+<p><strong>Exemplo A105 · Um bloco, três funções</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int blocos_abertos = 0; // DADOS: conta os blocos do heap ainda não devolvidos
+
+// Cria o bolão no heap. O tamanho só aparece na hora de rodar.
+int *criar_bolao(int participantes) {
+    int *palpites = malloc(participantes * sizeof *palpites); // HEAP
+    if (palpites != NULL) {
+        blocos_abertos++;
+    }
+    return palpites; // o frame de criar_bolao some aqui; o bloco, não
+}
+
+// Outra função, outro frame: mexe no MESMO bloco só pelo endereço.
+void anotar_palpites(int *palpites, int participantes) {
+    for (int i = 0; i &lt; participantes; i++) { // i mora na PILHA deste frame
+        palpites[i] = (i * 3) % 5; // quantos gols cada um aposta
+    }
+}
+
+// Uma terceira função decide a hora de devolver o bloco.
+void encerrar_bolao(int *palpites) {
+    free(palpites);
+    blocos_abertos--;
+}
+
+int main(void) {
+    int participantes = 4;
+    int *bolao = criar_bolao(participantes);
+    if (bolao == NULL) {
+        printf(&quot;Sem memória\n&quot;);
+        return 1;
+    }
+    printf(&quot;Blocos abertos: %d\n&quot;, blocos_abertos);
+
+    anotar_palpites(bolao, participantes);
+    for (int i = 0; i &lt; participantes; i++) {
+        printf(&quot;Participante %d: palpite %d\n&quot;, i + 1, bolao[i]);
+    }
+
+    encerrar_bolao(bolao);
+    bolao = NULL; // o endereço guardado não vale mais nada
+    printf(&quot;Blocos abertos: %d\n&quot;, blocos_abertos);
+    return 0;
+}
+// Saída:
+// Blocos abertos: 1
+// Participante 1: palpite 0
+// Participante 2: palpite 3
+// Participante 3: palpite 1
+// Participante 4: palpite 4
+// Blocos abertos: 0
+//
+// O bloco nasceu em criar_bolao, foi preenchido em anotar_palpites e morreu
+// em encerrar_bolao. Nenhuma das três precisou estar viva ao mesmo tempo que
+// as outras: quem manda no tempo de vida de um bloco do heap é você.
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A105.c -o ~/LPEDC/material/A105 &amp;&amp; ~/LPEDC/material/A105
+</code></pre>
+<p><strong>Exemplo A106 · O mapa da memória</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int global = 10;     // DADOS (inicializada)
+static int contador; // DADOS (zerada, numa parte chamada .bss)
+
+void mostrar_local_da_funcao(void) {
+    int fundo = 0; // PILHA: um frame acima do de main
+    printf(&quot;pilha (função): %p\n&quot;, (void *)&amp;fundo);
+}
+
+int main(void) {
+    const char *frase = &quot;bom dia&quot;; // o texto fica numa área só de leitura
+    int local = 20;                // PILHA
+    int *bloco = malloc(sizeof(int)); // HEAP
+    if (bloco == NULL) {
+        return 1;
+    }
+
+    printf(&quot;literal:        %p\n&quot;, (void *)frase);
+    printf(&quot;global:         %p\n&quot;, (void *)&amp;global);
+    printf(&quot;static:         %p\n&quot;, (void *)&amp;contador);
+    printf(&quot;heap:           %p\n&quot;, (void *)bloco);
+    printf(&quot;pilha (main):   %p\n&quot;, (void *)&amp;local);
+    mostrar_local_da_funcao();
+
+    free(bloco);
+    return 0;
+}
+// Saída com gcc puro (gcc A106.c -o mapa &amp;&amp; ./mapa). Os endereços mudam a
+// cada execução; repare na ordem:
+// literal:        0x563b12ef101a   &lt;- perto do código, endereços baixos
+// global:         0x563b12ef3010
+// static:         0x563b12ef3018
+// heap:           0x563b3719d2a0   &lt;- logo acima dos dados
+// pilha (main):   0x7ffe9c6f2914   &lt;- lá no alto
+// pilha (função): 0x7ffe9c6f28f4   &lt;- frame novo, endereço MENOR
+//
+// Com o rodar, o heap aparece em 0x5020... e as locais em 0x7f...: o
+// AddressSanitizer troca o heap e a pilha por versões próprias, vigiadas.
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A106.c -o ~/LPEDC/material/A106 &amp;&amp; ~/LPEDC/material/A106
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E313</strong> · ★☆☆</p>
+<p>Complete o programa do placar do campeonato. Ele já tem a global recorde
+e o protótipo de ler_placar. Escreva ler_placar(int jogos) assim:</p>
+<ul>
+<li>uma static int chamadas, que soma 1 a cada chamada;</li>
+<li>um bloco no heap com jogos ints (confira o NULL);</li>
+<li>placar[i] = i * 2 para cada jogo i;</li>
+<li>mostra &quot;Chamada N:&quot; e os gols, e devolve o ponteiro.</li>
+</ul>
+<p>No main, chame ler_placar(3), atualize recorde com o maior gol do bloco e
+libere o bloco; depois faça o mesmo com ler_placar(2). No fim, mostre o
+recorde. Ao lado de cada declaração, escreva num comentário a região onde
+ela mora: código, dados, pilha ou heap.</p>
+<pre><code class="language-text">Saída esperada:
+Chamada 1: 0 2 4
+Chamada 2: 0 2
+Recorde: 4
+</code></pre>
+<p><strong>Exercício E315</strong> · ★★☆</p>
+<p>No Linux, &quot;ulimit -s&quot; mostra o tamanho da pilha em KiB (em geral, 8192,
+ou seja, 8 MiB). Uma função recursiva guarda o histórico de preços de uma
+ação num vetor local: int historico[2000]; e chama a si mesma.</p>
+<p>Escreva um programa que calcule e mostre quantos bytes esse vetor ocupa em
+cada chamada e quantas chamadas, no máximo, cabem numa pilha de 8 MiB.
+Depois faça a mesma conta para o vetor double historico[2000]; e mostre
+também. Use sizeof para o tamanho de cada tipo e divisão inteira.</p>
+<pre><code class="language-text">Saída esperada:
+int: cada chamada usa pelo menos 8000 bytes
+int: cabem no máximo 1048 chamadas
+double: cada chamada usa pelo menos 16000 bytes
+double: cabem no máximo 524 chamadas
+</code></pre>
+<p><strong>Exercício E316</strong> · ★★☆</p>
+<p>Um sensor de vibração de uma ponte grava 5.000.000 de leituras por dia.
+Simule as leituras com leitura[i] = i % 7 e mostre a soma de todas.</p>
+<p>Faça em três passos:</p>
+<ol>
+<li>declare o vetor int leituras[5000000]; como LOCAL de main e rode com o</li>
+</ol>
+<pre><code class="language-text"> rodar. Leia o que acontece.
+</code></pre>
+<ol start="2">
+<li>mude o vetor para os DADOS (global ou static) e rode de novo.</li>
+<li>acrescente uma linha que mostre quantos bytes o vetor ocupa, com</li>
+</ol>
+<pre><code class="language-text"> sizeof aplicado ao próprio vetor.
+</code></pre>
+<pre><code class="language-text">Saída esperada (depois do passo 3):
+O vetor ocupa 20000000 bytes
+Soma das leituras: 14999995
+</code></pre>
+<p><strong>Exercício E317</strong> · ★★★</p>
+<p>O programa abaixo mistura uma global, uma static e uma local numa função
+recursiva. Estenda o programa (sem mudar as contas) para ele mostrar o que
+acontece em cada frame:</p>
+<ul>
+<li>logo depois de contador--, um printf com n, chamadas, local e contador;</li>
+<li>logo antes do return, um printf com n e o valor que o frame devolve.</li>
+</ul>
+<p>Use os formatos da saída esperada. Rode e confira cada número com o lugar
+onde mora cada variável.</p>
+<pre><code class="language-text">Saída esperada:
+entra n=3: chamadas=1 local=1 contador=99
+entra n=2: chamadas=2 local=1 contador=98
+entra n=1: chamadas=3 local=1 contador=97
+entra n=0: chamadas=4 local=1 contador=96
+sai n=0: devolve 41
+sai n=1: devolve 41
+sai n=2: devolve 41
+sai n=3: devolve 41
+41
+entra n=0: chamadas=5 local=1 contador=95
+sai n=0: devolve 51
+51
+95
+</code></pre>
+<hr>
+<h2>0054 · malloc e free</h2>
+<h3>Conceito</h3>
+<p>Fim do mês, hora de somar as corridas de aplicativo. Teve mês com 4 corridas
+e teve mês com 60. Se você declarar <code>double corridas[100];</code>, desperdiça
+espaço nos meses fracos e estoura no mês em que passar de 100. O tamanho
+certo só aparece quando o programa já está rodando e pergunta quantas
+corridas foram. Falta um jeito de pedir memória nessa hora, do tamanho exato.</p>
+<p>Quem atende o pedido é o <strong><code>malloc</code></strong> (<em>memory allocation</em>, alocação de
+memória), da biblioteca <code>&lt;stdlib.h&gt;</code>. Você diz <strong>quantos bytes</strong> quer, e ele
+separa um bloco desse tamanho no heap (assunto 0053) e devolve o
+<strong>endereço</strong> do começo. Esse endereço vai para um ponteiro, e o ponteiro age
+como vetor: <code>corridas[i]</code> funciona como em qualquer vetor, pela regra
+<code>v[i] == *(v + i)</code> do assunto 0047 (BACKES, 2013, cap. 11).</p>
+<pre><code class="language-c">double *corridas = malloc(n * sizeof(double)); // n * 8 bytes
+</code></pre>
+<p>Leia a linha devagar, porque cada parte tem um motivo. O <code>malloc</code> conta em
+<strong>bytes</strong>, não em elementos: <code>malloc(4)</code> dá 4 bytes, e não 4 <code>double</code>. Por
+isso o pedido é <code>n * sizeof(double)</code>, o número de itens vezes o tamanho de
+cada um; com <code>n</code> igual a 4, são 32 bytes (CELES; RANGEL, 2002).</p>
+<p>O retorno do <code>malloc</code> é um <code>void *</code> (assunto 0051), porque ele não sabe o
+que você vai guardar. Em C, esse <code>void *</code> vira <code>double *</code> sozinho na
+atribuição, então o cast <code>(double *)</code> na frente do <code>malloc</code> é dispensável
+(BACKES, 2013, cap. 11).</p>
+<p>O pedido pode falhar. Se não houver memória livre suficiente, o <code>malloc</code>
+devolve <strong><code>NULL</code></strong> em vez de um endereço. Confira sempre, com <code>if (corridas == NULL)</code>, antes de usar o bloco; escrever num <code>NULL</code> derruba o programa
+(FEOFILOFF, 2009, ap. F).</p>
+<p>O bloco também não vem limpo. O <code>malloc</code> não zera nada, e os bytes guardam o
+<strong>lixo</strong> que estava ali antes. Preencha cada posição antes de ler (BACKES,
+2013, cap. 11). O assunto 0055 mostra o <code>calloc</code>, que entrega o bloco
+zerado.</p>
+<p>Quando não precisar mais do bloco, devolva-o com <strong><code>free(corridas)</code></strong>,
+passando exatamente o endereço que o <code>malloc</code> deu. O <code>free</code> não pergunta o
+tamanho porque o <code>malloc</code> anotou esse número num cabeçalho escondido, logo
+antes do bloco. É por isso que <code>free(p + 1)</code> dá errado: o <code>free</code> procuraria o
+cabeçalho no lugar errado (KERNIGHAN; RITCHIE, 1989, seção 8.7).</p>
+<p>Depois do <code>free</code>, o ponteiro continua guardando o endereço antigo, que já
+não é seu. Ele aponta para um lugar devolvido, e usá-lo é um erro. O hábito
+que evita isso é anular o ponteiro logo em seguida: <code>corridas = NULL;</code>
+(FEOFILOFF, 2009, ap. F).</p>
+<p>A regra que resume tudo: <strong>todo <code>malloc</code> tem um <code>free</code></strong>. O bloco esquecido
+fica ocupado até o programa acabar, e se o pedido se repete num laço a
+memória vai sumindo aos poucos. Esse erro se chama <strong>vazamento de memória</strong>
+(<em>memory leak</em>) (DEITEL; DEITEL, 2011, cap. 12), e o assunto 0057 mostra como
+encontrá-lo.</p>
+<blockquote>
+<p>[!WARNING]
+O erro mais comum é contar elementos em vez de bytes: <code>malloc(n)</code> para <code>n</code>
+inteiros reserva um quarto do necessário. Tire o tipo do próprio ponteiro:
+<code>int *v = malloc(n * sizeof *v);</code>. Se <code>v</code> virar <code>double *</code>, a conta
+acompanha.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>O programa pergunta quantas corridas de aplicativo houve no mês (4), pede ao
+heap <code>4 * 8 = 32</code> bytes, guarda os valores, soma e devolve o bloco:</p>
+<p align="center"><img src="material/0054-ideia.svg" alt="Diagrama da ideia: malloc e free" width="870"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(void) {
+    int n;
+    printf(&quot;Quantas corridas? &quot;);
+    if (scanf(&quot;%d&quot;, &amp;n) != 1 || n &lt;= 0) {
+        printf(&quot;Quantidade inválida\n&quot;);
+        return 1;
+    }
+
+    // pede n * 8 bytes ao heap; o tamanho só é conhecido agora
+    double *corridas = malloc(n * sizeof(double));
+    if (corridas == NULL) {
+        printf(&quot;Sem memória\n&quot;);
+        return 1;
+    }
+
+    for (int i = 0; i &lt; n; i++) {
+        printf(&quot;Valor da corrida %d: &quot;, i + 1);
+        if (scanf(&quot;%lf&quot;, &amp;corridas[i]) != 1) { // usa como um vetor comum
+            printf(&quot;Valor inválido\n&quot;);
+            free(corridas);
+            return 1;
+        }
+    }
+
+    double total = 0;
+    for (int i = 0; i &lt; n; i++) {
+        total += corridas[i];
+    }
+    printf(&quot;Total: R$ %.2f\n&quot;, total);
+    printf(&quot;Média: R$ %.2f\n&quot;, total / n);
+
+    free(corridas);  // devolve os bytes ao heap
+    corridas = NULL; // o ponteiro não aponta mais para lugar nenhum
+    return 0;
+}
+// Exemplo de uso:
+// Quantas corridas? 4
+// Valor da corrida 1: 12.50
+// Valor da corrida 2: 18
+// Valor da corrida 3: 25.90
+// Valor da corrida 4: 9.60
+// Total: R$ 66.00
+// Média: R$ 16.50
+</code></pre>
+<p>Toda saída depois do <code>malloc</code> passa por um <code>free</code>, até a de erro no meio da
+leitura, a mais fácil de esquecer:</p>
+<p align="center"><img src="material/0054-fluxograma.svg" alt="Fluxograma: malloc e free" width="472"></p>
+<p><strong>Exemplo A107 · A foto que não cabe na pilha</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(void) {
+    int largura = 4000;
+    int altura = 3000; // uma foto de 12 megapixels, em tons de cinza
+
+    // 12.000.000 de bytes: como vetor local, estouraria a pilha de 8 MiB.
+    // No heap, o limite é a memória livre da máquina.
+    size_t total = (size_t)largura * altura;
+    unsigned char *brilho = malloc(total * sizeof *brilho);
+    if (brilho == NULL) { // pedido grande: o NULL é possível de verdade
+        printf(&quot;Sem memória para a foto\n&quot;);
+        return 1;
+    }
+    printf(&quot;Pedi %zu bytes ao heap\n&quot;, total * sizeof *brilho);
+
+    // simula a foto: um degradê que vai de 0 (preto) a 255 (branco)
+    for (size_t i = 0; i &lt; total; i++) {
+        brilho[i] = (unsigned char)(i % 256);
+    }
+
+    long soma = 0;
+    int claros = 0;
+    for (size_t i = 0; i &lt; total; i++) {
+        soma += brilho[i];
+        if (brilho[i] &gt;= 200) {
+            claros++;
+        }
+    }
+    printf(&quot;Brilho médio: %.2f\n&quot;, (double)soma / total);
+    printf(&quot;Pixels claros: %d\n&quot;, claros);
+
+    free(brilho); // 12 MB de volta ao heap de uma vez
+    brilho = NULL;
+    return 0;
+}
+// Saída:
+// Pedi 12000000 bytes ao heap
+// Brilho médio: 127.50
+// Pixels claros: 2625000
+//
+// Troque o malloc por unsigned char brilho[12000000]; dentro do main e rode:
+// o AddressSanitizer acusa stack-overflow antes da primeira linha.
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A107.c -o ~/LPEDC/material/A107 &amp;&amp; ~/LPEDC/material/A107
+</code></pre>
+<p><strong>Exemplo A108 · Quem cria e quem libera</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+// Divide um valor em n parcelas, em centavos. Os centavos que sobram vão
+// para as primeiras parcelas. Devolve um bloco novo no heap: quem chama
+// fica responsável pelo free.
+int *parcelar(int total_centavos, int n) {
+    int *parcelas = malloc(n * sizeof *parcelas); // sizeof *p: o tipo vem do ponteiro
+    if (parcelas == NULL) {
+        return NULL;
+    }
+    int base = total_centavos / n;
+    int sobra = total_centavos % n;
+    for (int i = 0; i &lt; n; i++) {
+        parcelas[i] = base + (i &lt; sobra ? 1 : 0);
+    }
+    return parcelas; // o bloco sobrevive ao return
+}
+
+int main(void) {
+    int n = 3;
+    int *parcelas = parcelar(10000, n); // R$ 100,00 em 3 vezes
+    if (parcelas == NULL) {
+        printf(&quot;Sem memória\n&quot;);
+        return 1;
+    }
+
+    printf(&quot;Bloco de %zu bytes no heap\n&quot;, n * sizeof *parcelas);
+    for (int i = 0; i &lt; n; i++) {
+        printf(&quot;Parcela %d: R$ %d.%02d\n&quot;, i + 1, parcelas[i] / 100, parcelas[i] % 100);
+    }
+
+    free(parcelas);  // quem recebeu o bloco, libera
+    parcelas = NULL;
+    free(parcelas);  // free(NULL) não faz nada: é seguro
+    return 0;
+}
+// Saída:
+// Bloco de 12 bytes no heap
+// Parcela 1: R$ 33.34
+// Parcela 2: R$ 33.33
+// Parcela 3: R$ 33.33
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A108.c -o ~/LPEDC/material/A108 &amp;&amp; ~/LPEDC/material/A108
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E320</strong> · ★☆☆</p>
+<p>Complete a função duplicar: ela recebe uma string e devolve uma CÓPIA dela
+num bloco novo do heap, do tamanho exato. O main já está pronto: ele
+passa a cópia para maiúsculas e mostra que a original não mudou.</p>
+<pre><code class="language-text">Saída esperada:
+Original: coxinha
+Cópia: COXINHA
+</code></pre>
+<p><strong>Exercício E321</strong> · ★★☆</p>
+<p>Escreva a função</p>
+<pre><code class="language-text">int *filtrar_pares(const int *v, int n, int *qtd);
+</code></pre>
+<p>que devolve um vetor NOVO, no heap, só com os números pares de v, do
+tamanho exato. A quantidade de pares volta por *qtd. Teste com os números
+sorteados 7, 4, 10, 3, 8, 1, 6.</p>
+<pre><code class="language-text">Saída esperada:
+4 pares: 4 10 8 6
+</code></pre>
+<p><strong>Exercício E322</strong> · ★★☆</p>
+<p>Escreva um programa que faça de verdade as cinco alocações abaixo. Antes
+de cada malloc, guarde numa variável size_t quantos bytes ele vai pedir
+(ex.: size_t ta = 5 * sizeof(int);) e passe essa variável para o malloc.
+Confira o NULL de cada uma, mostre os cinco tamanhos, mostre quantos int
+cabem inteiros no bloco e) e libere os cinco blocos no fim.</p>
+<pre><code class="language-text">a) int *a = malloc(5 * sizeof(int));
+b) double *b = malloc(5 * sizeof(double));
+c) int **c = malloc(3 * sizeof(int *));
+d) char *d = malloc(strlen(&quot;Recife&quot;) + 1);
+e) int *e = malloc(5);
+</code></pre>
+<pre><code class="language-text">Saída esperada (num PC de 64 bits):
+a) 20 bytes
+b) 40 bytes
+c) 24 bytes
+d) 7 bytes
+e) 5 bytes: cabe 1 int
+</code></pre>
+<p><strong>Exercício E324</strong> · ★★★</p>
+<p>Escreva a função</p>
+<pre><code class="language-text">char *juntar(const char *a, const char *b);
+</code></pre>
+<p>que devolve uma string NOVA, no heap, com a, um espaço e b. Depois, em
+main, monte o nome do crachá &quot;Maria Clara Fonseca&quot; chamando juntar duas
+vezes: primeiro &quot;Maria&quot; com &quot;Clara&quot;, depois o resultado com &quot;Fonseca&quot;.
+Mostre o nome e o tamanho, e não deixe nenhum bloco para trás.</p>
+<pre><code class="language-text">Saída esperada:
+Crachá: Maria Clara Fonseca (19 caracteres)
+</code></pre>
+<hr>
+<h2>0055 · calloc e realloc</h2>
+<h3>Conceito</h3>
+<p>Você abriu uma vaquinha para o churrasco e os Pix vão chegando: R$ 50,
+R$ 120, R$ 35. Você não sabe quantos serão. O <code>malloc</code> do assunto 0054 pede
+um bloco de tamanho certo, mas o tamanho precisa ser conhecido na hora do
+pedido. Aqui ele só se descobre no fim. O bloco não cresce sozinho; quem o
+faz crescer é você, com o <code>realloc</code>. Antes dele, vale conhecer um parente do
+<code>malloc</code> que resolve outro incômodo.</p>
+<p>O <strong><code>calloc</code></strong> recebe a quantidade de itens e o tamanho de cada um em
+argumentos separados, e entrega o bloco <strong>zerado</strong> (BACKES, 2013, cap. 11):</p>
+<pre><code class="language-c">int *contagem = calloc(5, sizeof(int)); // 5 ints, todos valendo 0
+</code></pre>
+<p>Use o <code>calloc</code> quando o zero inicial importa: contadores, placares, tabelas
+de frequência. Com o <code>malloc</code>, o bloco viria com lixo e você precisaria de um
+laço só para zerá-lo. Como o <code>malloc</code>, ele devolve <code>NULL</code> se faltar memória.</p>
+<p>Agora o crescimento. O <strong><code>realloc(p, novo_tamanho)</code></strong> muda o tamanho de um
+bloco que já está no heap e <strong>preserva o conteúdo</strong> até o menor dos dois
+tamanhos. Se o bloco cresceu, a parte nova vem com lixo; se encolheu, o que
+passava do novo tamanho se perde (BACKES, 2013, cap. 11).</p>
+<p>Para crescer, o <code>realloc</code> tenta primeiro esticar o bloco no próprio lugar,
+se o espaço logo depois dele estiver livre. Quando não está, ele faz uma
+mudança completa: aloca um bloco novo em outro lugar, copia o conteúdo,
+libera o antigo e devolve o <strong>endereço novo</strong> (BACKES, 2013, cap. 11). É
+como trocar de casa quando a família cresce: os móveis vão junto, mas o
+endereço muda. Daí a regra que mais pega: depois de um <code>realloc</code>, o endereço
+antigo pode não valer mais. Todo ponteiro que apontava para dentro do bloco
+velho virou um <strong>ponteiro solto</strong>, que aponta para memória devolvida.</p>
+<p>O <code>realloc</code> também pode falhar. Se faltar memória, ele devolve <code>NULL</code> e <strong>não
+mexe no bloco antigo</strong>, que continua inteiro e ocupado. Isso cria uma
+armadilha: se você escrever o resultado direto no único ponteiro que tinha o
+endereço do bloco, perde esse endereço. A saída é guardar o resultado num
+ponteiro <strong>temporário</strong>, conferir se não é <code>NULL</code> e só então trocar (CELES;
+RANGEL, 2002).</p>
+<p>Resta decidir quanto crescer. Chamar o <code>realloc</code> a cada Pix funciona, mas
+cada mudança de lugar copia o vetor inteiro. Para evitar isso, guarde dois
+números: a <strong>quantidade</strong>, quantos elementos você já usou, e a
+<strong>capacidade</strong>, quantos cabem no bloco. Enquanto a quantidade for menor que
+a capacidade, o novo Pix entra sem <code>realloc</code>. Quando encher, <strong>dobre</strong> a
+capacidade. Os <code>realloc</code> ficam raros: para guardar 1000 elementos começando
+com capacidade 1, bastam 10 dobras (1, 2, 4, até 1024).</p>
+<blockquote>
+<p>[!WARNING]
+<code>v = realloc(v, n)</code> é o erro clássico: se falhar, <code>v</code> vira <code>NULL</code> e o bloco
+antigo fica no heap sem dono, com os dados perdidos. Use um temporário. E
+não guarde <code>&amp;v[3]</code> antes de um <code>realloc</code>: o bloco pode ter mudado de lugar.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>Os Pix de uma vaquinha vão chegando: R$ 50, 120, 35, 80 e 15. O vetor nasce
+com capacidade 2, dobra para 4 no terceiro Pix e para 8 no quinto:</p>
+<p align="center"><img src="material/0055-ideia.svg" alt="Diagrama da ideia: calloc e realloc" width="870"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(void) {
+    int chegando[] = {50, 120, 35, 80, 15}; // os Pix do dia, em R$
+    int capacidade = 2;                      // cabem 2 por enquanto
+    int quantidade = 0;                      // quantos já guardei
+    int *pix = malloc(capacidade * sizeof *pix);
+    if (pix == NULL) {
+        return 1;
+    }
+
+    for (int i = 0; i &lt; 5; i++) {
+        if (quantidade == capacidade) { // encheu: dobra a capacidade
+            int nova = capacidade * 2;
+            int *maior = realloc(pix, nova * sizeof *pix); // temporário!
+            if (maior == NULL) {
+                free(pix); // o bloco antigo continua valendo: libera
+                return 1;
+            }
+            printf(&quot;Capacidade: %d -&gt; %d\n&quot;, capacidade, nova);
+            pix = maior;
+            capacidade = nova;
+        }
+        pix[quantidade] = chegando[i]; // o &quot;push&quot;
+        quantidade++;
+    }
+
+    int total = 0;
+    for (int i = 0; i &lt; quantidade; i++) {
+        total += pix[i];
+    }
+    printf(&quot;%d Pix, total R$ %d\n&quot;, quantidade, total);
+    printf(&quot;Sobram %d posições livres\n&quot;, capacidade - quantidade);
+    free(pix);
+    return 0;
+}
+// Saída:
+// Capacidade: 2 -&gt; 4
+// Capacidade: 4 -&gt; 8
+// 5 Pix, total R$ 300
+// Sobram 3 posições livres
+</code></pre>
+<p>A pergunta &quot;encheu?&quot; vem a cada Pix, mas o desvio para o <code>realloc</code> só acontece
+duas vezes:</p>
+<p align="center"><img src="material/0055-fluxograma.svg" alt="Fluxograma: calloc e realloc" width="641"></p>
+<p><strong>Exemplo A109 · A lista que nasce do NULL</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+int main(void) {
+    const char *itens[] = {&quot;arroz&quot;, &quot;leite&quot;, &quot;banana&quot;, &quot;ovos&quot;};
+    char *lista = NULL; // ainda não existe bloco nenhum
+    size_t tamanho = 0; // bytes do bloco atual
+
+    for (int i = 0; i &lt; 4; i++) {
+        // + 2 para o &quot;, &quot; entre os itens (só a partir do segundo);
+        // + 1 para o &#39;\0&#39; entra só no primeiro, quando tamanho ainda é 0
+        size_t extra = strlen(itens[i]) + (i == 0 ? 1 : 2);
+
+        // realloc(NULL, n) funciona como malloc(n): a primeira volta cria o
+        // bloco; as outras aumentam e PRESERVAM o que já estava escrito.
+        char *maior = realloc(lista, tamanho + extra);
+        if (maior == NULL) {
+            free(lista);
+            return 1;
+        }
+        lista = maior;
+        if (i == 0) {
+            lista[0] = &#39;\0&#39;; // bloco novo vem com lixo: vira string vazia
+        } else {
+            strcat(lista, &quot;, &quot;);
+        }
+        strcat(lista, itens[i]);
+        tamanho += extra;
+        printf(&quot;%2zu bytes: %s\n&quot;, tamanho, lista);
+    }
+
+    free(lista);
+    return 0;
+}
+// Saída:
+//  6 bytes: arroz
+// 13 bytes: arroz, leite
+// 21 bytes: arroz, leite, banana
+// 27 bytes: arroz, leite, banana, ovos
+//
+// Cada linha tem strlen + 1 bytes, nem um a mais: o bloco cresce no tamanho
+// exato de cada item. Começar com o ponteiro em NULL evita um malloc separado
+// antes do laço.
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A109.c -o ~/LPEDC/material/A109 &amp;&amp; ~/LPEDC/material/A109
+</code></pre>
+<p><strong>Exemplo A110 · A enquete com calloc</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(void) {
+    int votos[] = {2, 3, 2, 1, 4, 2, 3, 2, 1, 2}; // opção escolhida por voto
+    int total_votos = 10;
+    int opcoes = 4;
+
+    // um contador por opção (1 a 4); a posição 0 fica sem uso.
+    // calloc(quantidade, tamanho) entrega tudo zerado: os contadores já
+    // começam em 0. Com malloc, começariam com lixo.
+    int *contagem = calloc(opcoes + 1, sizeof *contagem);
+    if (contagem == NULL) {
+        return 1;
+    }
+
+    for (int i = 0; i &lt; total_votos; i++) {
+        contagem[votos[i]]++;
+    }
+
+    for (int op = 1; op &lt;= opcoes; op++) {
+        printf(&quot;Opção %d: %d &quot;, op, contagem[op]);
+        for (int k = 0; k &lt; contagem[op]; k++) {
+            printf(&quot;#&quot;);
+        }
+        printf(&quot;\n&quot;);
+    }
+    free(contagem);
+    return 0;
+}
+// Saída:
+// Opção 1: 2 ##
+// Opção 2: 5 #####
+// Opção 3: 2 ##
+// Opção 4: 1 #
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A110.c -o ~/LPEDC/material/A110 &amp;&amp; ~/LPEDC/material/A110
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E325</strong> · ★☆☆</p>
+<p>Num jogo de tabuleiro, o dado saiu assim em 12 jogadas:
+3, 6, 1, 6, 2, 5, 6, 3, 4, 6, 1, 2. Use calloc para criar os contadores
+das faces (zerados) e mostre quantas vezes cada face saiu, com um # por
+vez.</p>
+<pre><code class="language-text">Saída esperada:
+1: 2 ##
+2: 2 ##
+3: 2 ##
+4: 1 #
+5: 1 #
+6: 4 ####
+</code></pre>
+<p><strong>Exercício E327</strong> · ★★☆</p>
+<p>Leia números inteiros do teclado até aparecer 0 (o 0 não entra). Guarde num
+vetor dinâmico que começa com capacidade 2 e dobra (realloc) quando enche.
+No fim, mostre os números na ordem contrária e a capacidade final.</p>
+<pre><code class="language-text">Entrada:
+5 8 2 9 4 0
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Ao contrário: 4 9 2 8 5
+Capacidade final: 8
+</code></pre>
+<p><strong>Exercício E328</strong> · ★★☆</p>
+<p>Um sensor de umidade mandou 10 leituras, mas -1 significa &quot;falha na
+leitura&quot;: 12, -1, 15, 14, -1, -1, 13, 16, -1, 11. Copie as leituras para
+um bloco do heap, remova as falhas puxando as válidas para a frente (no
+mesmo bloco) e depois ENCOLHA o bloco com realloc para o tamanho exato.</p>
+<pre><code class="language-text">Saída esperada:
+6 leituras válidas: 12 15 14 13 16 11
+Bloco encolheu de 40 para 24 bytes
+</code></pre>
+<p><strong>Exercício E329</strong> · ★★★</p>
+<p>Compare duas estratégias de crescimento para guardar 1000 números, com
+capacidade inicial 1:</p>
+<pre><code class="language-text">A) crescer de 1 em 1 (capacidade + 1) sempre que encher;
+B) dobrar a capacidade sempre que encher.
+</code></pre>
+<p>Escreva um programa que faça os dois vetores de verdade (com realloc) e
+conte, para cada estratégia, quantos realloc foram feitos e quantos
+elementos o realloc precisou copiar no pior caso (a quantidade guardada
+na hora de cada realloc).</p>
+<pre><code class="language-text">Saída esperada:
++1:     999 realocações, 499500 cópias
+dobrar: 10 realocações, 1023 cópias
+</code></pre>
+<hr>
+<h2>0056 · Matriz dinâmica</h2>
+<h3>Conceito</h3>
+<p>Uma rede de lojas quer a planilha de vendas: uma linha por loja, uma coluna
+por semana. Este mês são 3 lojas e 4 semanas. No mês que vem abre a quarta
+loja, e o relatório do trimestre tem 13 semanas. Uma matriz fixa como <code>int vendas[3][4]</code> (assunto 0039) não serve, porque as dimensões só aparecem com
+o programa rodando. Você precisa de uma matriz pedida ao heap.</p>
+<p>O problema é que o <code>malloc</code> só entrega blocos de <strong>uma dimensão</strong>: uma fila
+de bytes, sem linhas nem colunas. A matriz dinâmica é montada a partir de
+vetores, e há dois jeitos clássicos de montá-la (CELES; RANGEL, 2002).</p>
+<p>O primeiro é o <strong>bloco único</strong>. Você aloca <code>linhas * colunas</code> elementos de
+uma vez, uma fila só, e calcula a posição de cada célula: o elemento da linha
+<code>i</code> e coluna <code>j</code> fica em <code>v[i * colunas + j]</code>. É a mesma conta que o
+compilador faz por você numa matriz fixa, guardada linha após linha. A
+vantagem é a simplicidade: um <code>malloc</code>, um <code>free</code> e tudo colado na memória.
+O preço é a escrita: <code>v[i][j]</code> não funciona, porque <code>v</code> é um vetor simples
+(BACKES, 2013, cap. 11).</p>
+<p>O segundo é o <strong>vetor de ponteiros</strong>. Primeiro você aloca um vetor com
+<code>linhas</code> ponteiros, guardado num <code>int **m</code>; depois faz um <code>malloc</code> por linha,
+cada um com <code>colunas</code> inteiros, e guarda o endereço em <code>m[i]</code>. Agora
+<code>m[i][j]</code> funciona: <code>m[i]</code> é o endereço da linha <code>i</code>, e o <code>[j]</code> anda dentro
+dela, os dois saltos do assunto 0049. Pense num fichário: a primeira folha é
+um índice que diz em que página começa cada loja, e cada página é uma linha.
+Como cada linha é pedida em separado, elas podem ter <strong>tamanhos diferentes</strong>;
+no triângulo de Pascal, a linha <code>i</code> tem <code>i + 1</code> elementos (FEOFILOFF, 2009,
+ap. F).</p>
+<p>Na hora de pedir, o <code>sizeof</code> confunde. A regra é: <strong>o que você aloca tem um
+<code>*</code> a menos que o ponteiro que recebe</strong>. <code>int **m</code> recebe um vetor de
+<code>int *</code>, então o primeiro pedido usa o tamanho de um <code>int *</code>. <code>m[i]</code>, que é
+um <code>int *</code>, recebe um vetor de <code>int</code>. Escrever <code>sizeof *m</code> e <code>sizeof *m[i]</code>
+deixa o compilador fazer essa conta por você (BACKES, 2013, cap. 11).</p>
+<p>Liberar também tem ordem: <strong>primeiro cada linha, depois o vetor de
+ponteiros</strong>. Se você fizer <code>free(m)</code> antes, perde os endereços das linhas, e
+elas ficam presas no heap. O mesmo cuidado vale na criação: se o <code>malloc</code> da
+terceira linha falhar, as duas primeiras já foram alocadas, e a função
+precisa liberá-las antes de devolver <code>NULL</code> (CELES; RANGEL, 2002).</p>
+<p>O C99 oferece um atalho, o <strong>VLA</strong>: <code>int vendas[lojas][semanas];</code>, com as
+dimensões vindas de variáveis. Ele mora na <strong>pilha</strong>, que é pequena e não
+avisa quando estoura (BACKES, 2013). O assunto 0172 mostra quando ele vale a
+pena.</p>
+<p>Os dois jeitos têm custos diferentes. Com <code>int **</code>, cada <code>m[i][j]</code> faz
+<strong>dois</strong> acessos à memória, um para buscar o ponteiro <code>m[i]</code> e outro para o
+inteiro. No bloco único, ou numa matriz fixa, é um acesso só (CELES; RANGEL,
+2002). Em troca, o vetor de ponteiros dá a escrita <code>m[i][j]</code> e as linhas de
+tamanhos diferentes.</p>
+<blockquote>
+<p>[!WARNING]
+<code>int **m = malloc(linhas * sizeof(int));</code> é bug: num PC de 64 bits, <code>int</code>
+tem 4 bytes e <code>int *</code> tem 8. Você aloca metade do necessário e as últimas
+linhas são gravadas fora do bloco. Escreva <code>sizeof *m</code>.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>A planilha de vendas de 3 lojas por 4 semanas (em R$ mil) vira um vetor de 3
+ponteiros, cada um para uma linha de 4 inteiros, em qualquer lugar do heap:</p>
+<p align="center"><img src="material/0056-ideia.svg" alt="Diagrama da ideia: Matriz dinâmica" width="858"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+void liberar_matriz(int **m, int linhas) {
+    if (m == NULL) {
+        return;
+    }
+    for (int i = 0; i &lt; linhas; i++) {
+        free(m[i]); // primeiro cada linha...
+    }
+    free(m);        // ...depois o vetor de ponteiros
+}
+
+int **criar_matriz(int linhas, int colunas) {
+    int **m = malloc(linhas * sizeof *m); // vetor de int *: uma por linha
+    if (m == NULL) {
+        return NULL;
+    }
+    for (int i = 0; i &lt; linhas; i++) {
+        m[i] = malloc(colunas * sizeof *m[i]); // cada linha: colunas ints
+        if (m[i] == NULL) {
+            liberar_matriz(m, i); // desfaz as linhas que já deram certo
+            return NULL;
+        }
+    }
+    return m;
+}
+
+int main(void) {
+    int lojas = 3;
+    int semanas = 4;
+    int vendas[3][4] = {{12, 15, 11, 18}, {9, 10, 14, 13}, {20, 17, 19, 22}}; // R$ mil
+
+    int **m = criar_matriz(lojas, semanas);
+    if (m == NULL) {
+        printf(&quot;Sem memória\n&quot;);
+        return 1;
+    }
+    for (int i = 0; i &lt; lojas; i++) {
+        for (int j = 0; j &lt; semanas; j++) {
+            m[i][j] = vendas[i][j]; // a notação de sempre
+        }
+    }
+
+    for (int i = 0; i &lt; lojas; i++) {
+        int total = 0;
+        for (int j = 0; j &lt; semanas; j++) {
+            total += m[i][j];
+        }
+        printf(&quot;Loja %d: R$ %d mil\n&quot;, i + 1, total);
+    }
+
+    liberar_matriz(m, lojas);
+    return 0;
+}
+// Saída:
+// Loja 1: R$ 56 mil
+// Loja 2: R$ 46 mil
+// Loja 3: R$ 78 mil
+</code></pre>
+<p>A criação é um laço com saída de emergência: se uma linha falhar, o caminho de
+erro libera o que já existe:</p>
+<p align="center"><img src="material/0056-fluxograma.svg" alt="Fluxograma: Matriz dinâmica" width="623"></p>
+<p><strong>Exemplo A111 · Trocar linhas sem copiar</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int total_da_linha(const int *linha, int colunas) {
+    int total = 0;
+    for (int j = 0; j &lt; colunas; j++) {
+        total += linha[j];
+    }
+    return total;
+}
+
+int main(void) {
+    int times = 4;
+    int rodadas = 5;
+    int pontos[4][5] = {{1, 0, 3, 1, 0},  // Time A
+                        {3, 3, 1, 0, 3},  // Time B
+                        {0, 1, 1, 1, 1},  // Time C
+                        {3, 0, 3, 3, 1}}; // Time D
+
+    int **tabela = malloc(times * sizeof *tabela);
+    if (tabela == NULL) {
+        return 1;
+    }
+    for (int i = 0; i &lt; times; i++) {
+        tabela[i] = malloc(rodadas * sizeof *tabela[i]);
+        if (tabela[i] == NULL) {
+            for (int k = 0; k &lt; i; k++) {
+                free(tabela[k]);
+            }
+            free(tabela);
+            return 1;
+        }
+        for (int j = 0; j &lt; rodadas; j++) {
+            tabela[i][j] = pontos[i][j];
+        }
+    }
+    char nome[4] = {&#39;A&#39;, &#39;B&#39;, &#39;C&#39;, &#39;D&#39;};
+
+    // Ordena do mais pontuado ao menos (seleção). Trocar duas linhas é
+    // trocar dois PONTEIROS: 8 bytes cada, não importa quantas rodadas.
+    for (int i = 0; i &lt; times - 1; i++) {
+        int melhor = i;
+        for (int k = i + 1; k &lt; times; k++) {
+            if (total_da_linha(tabela[k], rodadas) &gt; total_da_linha(tabela[melhor], rodadas)) {
+                melhor = k;
+            }
+        }
+        int *linha = tabela[i]; // só o endereço da linha muda de gaveta
+        tabela[i] = tabela[melhor];
+        tabela[melhor] = linha;
+        char letra = nome[i];
+        nome[i] = nome[melhor];
+        nome[melhor] = letra;
+    }
+
+    for (int i = 0; i &lt; times; i++) {
+        printf(&quot;%dº Time %c: %2d pts |&quot;, i + 1, nome[i], total_da_linha(tabela[i], rodadas));
+        for (int j = 0; j &lt; rodadas; j++) {
+            printf(&quot; %d&quot;, tabela[i][j]);
+        }
+        printf(&quot;\n&quot;);
+    }
+
+    for (int i = 0; i &lt; times; i++) {
+        free(tabela[i]); // a ordem das linhas mudou, mas cada bloco é o mesmo
+    }
+    free(tabela);
+    return 0;
+}
+// Saída:
+// 1º Time B: 10 pts | 3 3 1 0 3
+// 2º Time D: 10 pts | 3 0 3 3 1
+// 3º Time A:  5 pts | 1 0 3 1 0
+// 4º Time C:  4 pts | 0 1 1 1 1
+//
+// Numa matriz fixa int [4][5], trocar duas linhas exigiria copiar os 5
+// números de cada uma. Com int **, as linhas nem saem do lugar no heap.
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A111.c -o ~/LPEDC/material/A111 &amp;&amp; ~/LPEDC/material/A111
+</code></pre>
+<p><strong>Exemplo A112 · O mapa do cinema num bloco só</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(void) {
+    int fileiras = 4;
+    int poltronas = 6;
+
+    // um bloco só com fileiras * poltronas chars; a posição (i, j) fica em
+    // i * poltronas + j: a mesma conta que o compilador faz numa matriz fixa
+    char *sala = malloc(fileiras * poltronas * sizeof *sala);
+    if (sala == NULL) {
+        return 1;
+    }
+    for (int k = 0; k &lt; fileiras * poltronas; k++) {
+        sala[k] = &#39;L&#39;; // livre
+    }
+
+    sala[1 * poltronas + 2] = &#39;X&#39;; // fileira B, poltrona 3
+    sala[1 * poltronas + 3] = &#39;X&#39;; // fileira B, poltrona 4
+    sala[3 * poltronas + 0] = &#39;X&#39;; // fileira D, poltrona 1
+
+    printf(&quot;   1 2 3 4 5 6\n&quot;);
+    for (int i = 0; i &lt; fileiras; i++) {
+        printf(&quot;%c &quot;, &#39;A&#39; + i);
+        for (int j = 0; j &lt; poltronas; j++) {
+            printf(&quot; %c&quot;, sala[i * poltronas + j]);
+        }
+        printf(&quot;\n&quot;);
+    }
+    printf(&quot;Um malloc, um free, %d bytes seguidos\n&quot;, fileiras * poltronas);
+    free(sala);
+    return 0;
+}
+// Saída:
+//    1 2 3 4 5 6
+// A  L L L L L L
+// B  L L X X L L
+// C  L L L L L L
+// D  X L L L L L
+// Um malloc, um free, 24 bytes seguidos
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A112.c -o ~/LPEDC/material/A112 &amp;&amp; ~/LPEDC/material/A112
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E332</strong> · ★☆☆</p>
+<p>Uma matriz de 5 linhas e 8 colunas vai morar num bloco único:
+int *v = malloc(5 * 8 * sizeof *v); e o elemento (i, j) fica em
+v[i * 8 + j]. Escreva as duas funções de conversão:</p>
+<pre><code class="language-text">int indice(int i, int j, int colunas);             // (i, j) -&gt; k
+void posicao(int k, int colunas, int *i, int *j);  // k -&gt; (i, j)
+</code></pre>
+<p>No main, aloque o bloco, guarde em cada (i, j) o valor i * 10 + j (usando
+indice) e mostre os quatro casos abaixo. O valor guardado confere a conta:
+o 23 só pode estar na linha 2, coluna 3. Libere o bloco no fim.</p>
+<pre><code class="language-text">Saída esperada:
+(2, 3) -&gt; índice 19, valor 23
+(4, 7) -&gt; índice 39, valor 47
+(0, 5) -&gt; índice 5, valor 5
+índice 26 -&gt; (3, 2), valor 32
+</code></pre>
+<p><strong>Exercício E333</strong> · ★★☆</p>
+<p>Escreva a função</p>
+<pre><code class="language-text">int **transpor(int **m, int linhas, int colunas);
+</code></pre>
+<p>que devolve uma matriz NOVA, com colunas linhas e linhas colunas, em que
+t[j][i] = m[i][j]. Teste com a matriz 2 x 3 de horas de estudo por
+semana (linhas = semanas, colunas = matérias):</p>
+<pre><code class="language-text">2 5 1
+3 4 0
+</code></pre>
+<pre><code class="language-text">Saída esperada (a transposta, 3 x 2):
+2 3
+5 4
+1 0
+</code></pre>
+<p><strong>Exercício E334</strong> · ★★☆</p>
+<p>Monte o triângulo de Pascal com 6 linhas usando um vetor de ponteiros em
+que a linha i tem exatamente i + 1 elementos (nada de matriz quadrada com
+metade desperdiçada). As pontas de cada linha valem 1 e cada número de
+dentro é a soma dos dois de cima: p[i][j] = p[i-1][j-1] + p[i-1][j].</p>
+<pre><code class="language-text">Saída esperada:
+1
+1 1
+1 2 1
+1 3 3 1
+1 4 6 4 1
+1 5 10 10 5 1
+Elementos guardados: 21
+</code></pre>
+<p><strong>Exercício E336</strong> · ★★★</p>
+<p>Escreva a função</p>
+<pre><code class="language-text">int **multiplicar(int **a, int la, int ca, int **b, int lb, int cb);
+</code></pre>
+<p>que devolve uma matriz NOVA la x cb com o produto a * b, ou NULL se as
+dimensões não combinarem (ca precisa ser igual a lb). Teste com</p>
+<pre><code class="language-text">A (2 x 3)    B (3 x 2)
+1 2 3        7  8
+4 5 6        9 10
+             11 12
+</code></pre>
+<p>e depois tente A * A (2 x 3 vezes 2 x 3).</p>
+<pre><code class="language-text">Saída esperada:
+58 64
+139 154
+A * A: dimensões incompatíveis
+</code></pre>
+<hr>
+<h2>0057 · Erros de memória</h2>
+<h3>Conceito</h3>
+<p>O sistema do caixa da padaria funciona de manhã. Às seis da tarde está
+lento, e no sábado trava. Ninguém mexeu no código. A cada venda, um
+pedacinho de memória ficava para trás, e depois de milhares de vendas o heap
+acabou. Com o heap nas mãos, você ganhou poder e uma responsabilidade nova:
+no C, quem cria esse tipo de erro e quem o corrige é você.</p>
+<p>O que torna esses erros perigosos é que o programa costuma <strong>funcionar</strong>.
+Ele mostra a saída certa, termina sem reclamar e quebra só na máquina do
+cliente, dias depois. Por isso existem ferramentas que vigiam a memória
+durante a execução. Antes delas, vale conhecer os quatro erros clássicos, um
+de cada vez.</p>
+<p>O primeiro é o da padaria, o <strong>vazamento de memória</strong> (<em>memory leak</em>): um
+bloco que ninguém liberou e cujo endereço ninguém mais guarda. Ele fica
+ocupado até o programa acabar. Uma vez só não faz falta; repetido a cada
+venda, deixa o programa lento e o derruba depois de horas (DEITEL; DEITEL,
+2011, cap. 12). Acontece, por exemplo, quando uma função faz <code>malloc</code> num
+ponteiro local e retorna sem <code>free</code>: o endereço morre com o frame, e o bloco
+fica.</p>
+<p>O segundo nasce do <strong>ponteiro solto</strong> (<em>dangling pointer</em>). Depois de
+<code>free(p)</code>, a variável <code>p</code> continua guardando o mesmo endereço; o <code>free</code>
+devolve o bloco, mas não apaga o ponteiro. Usar <code>p</code> depois disso é o <strong>uso
+depois do free</strong>. O pior é que pode até ler o valor antigo, porque ninguém
+apagou os bytes. Funciona por sorte, até o <code>malloc</code> entregar aquele pedaço a
+outra parte do programa, que passa a dividir a memória com você sem saber
+(BACKES, 2013, cap. 11).</p>
+<p>O terceiro é o <strong>free duplo</strong>: liberar o mesmo bloco duas vezes, em geral
+por dois ponteiros que apontavam para ele ou por um ponteiro solto que
+ninguém anulou (GOOGLE, s.d.). O hábito <code>free(p); p = NULL;</code> do assunto 0054
+ajuda, porque <code>free(NULL)</code> não faz nada.</p>
+<p>O quarto é o <strong>estouro</strong> no heap: ler ou escrever além do fim (ou antes do
+começo) de um bloco. Ele é traiçoeiro porque, logo depois do bloco, costuma
+morar o cabeçalho escondido do bloco vizinho (assunto 0054). Um byte a mais
+estraga a contabilidade do <code>malloc</code>, e o programa quebra depois, num <code>free</code>
+que não tem culpa nenhuma (KERNIGHAN; RITCHIE, 1989, seção 8.7).</p>
+<p>A primeira ferramenta é o <strong>AddressSanitizer</strong> (ASan), que vem no <code>gcc</code>.
+Compile com <code>-fsanitize=address -g</code>. O compilador põe vigias em volta de
+cada bloco e confere cada acesso; no primeiro erro, o programa para e mostra
+a linha do erro, a linha em que o bloco foi alocado e a linha em que foi
+liberado. No fim da execução, uma parte dele, o <strong>LeakSanitizer</strong>, lista o
+que vazou (GOOGLE, s.d.). As flags de estudo do curso já o ligam.</p>
+<p>A segunda é o <strong>valgrind</strong>. Ele roda o executável normal, sem recompilar,
+numa máquina virtual que vigia cada byte. Fica de 20 a 50 vezes mais lento,
+mas pega uma coisa que o ASan não pega: ler memória que nunca recebeu valor.
+Instale com <code>sudo pacman -S valgrind</code> (Arch) ou <code>sudo apt install valgrind</code>
+(Debian/Ubuntu) e rode <code>valgrind ./programa</code> (VALGRIND DEVELOPERS, s.d.). A
+tabela junta os quatro erros e a mensagem do ASan para cada um:</p>
+<table>
+<thead>
+<tr>
+<th>Erro</th>
+<th>O que é</th>
+<th>O AddressSanitizer diz</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>vazamento</strong></td>
+<td>um bloco que ninguém libera e ninguém mais acha</td>
+<td><code>detected memory leaks</code></td>
+</tr>
+<tr>
+<td><strong>uso depois do free</strong></td>
+<td>ler ou escrever num bloco já devolvido (ponteiro solto)</td>
+<td><code>heap-use-after-free</code></td>
+</tr>
+<tr>
+<td><strong>free duplo</strong></td>
+<td>liberar o mesmo bloco duas vezes</td>
+<td><code>attempting double-free</code></td>
+</tr>
+<tr>
+<td><strong>estouro</strong></td>
+<td>passar do fim (ou do começo) de um bloco</td>
+<td><code>heap-buffer-overflow</code></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>[!WARNING]
+&quot;Rodou e deu a saída certa&quot; não prova nada em C. Uso depois do <code>free</code>,
+estouro de um byte e leitura de lixo são <strong>comportamento indefinido</strong>: o
+programa pode funcionar hoje e quebrar com outro compilador. Rode com o
+ASan (flags de estudo) e, na dúvida, com <code>valgrind ./programa</code>.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>A função <code>total_do_pedido</code> copia os 4 preços de um pedido para um bloco de 16
+bytes e soma. A primeira versão esquecia o <code>free</code>: cada um dos 3 pedidos
+deixava 16 bytes perdidos, e o ASan mostra isso no fim:</p>
+<p align="center"><img src="material/0057-ideia.svg" alt="Diagrama da ideia: Erros de memória" width="858"></p>
+<p>O relatório da versão sem o <code>free</code> (salva como <code>pedido.c</code>): o tipo do erro,
+quanto vazou e a pilha de chamadas do <code>malloc</code>:</p>
+<pre><code class="language-text">==12072==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 48 byte(s) in 3 object(s) allocated from:
+    #0 0x7f1503afd9c7 in malloc
+    #1 0x55bff3c602ef in total_do_pedido pedido.c:5
+    #2 0x55bff3c6071c in main pedido.c:20
+
+SUMMARY: AddressSanitizer: 48 byte(s) leaked in 3 allocation(s).
+</code></pre>
+<p>A versão corrigida tem uma linha a mais:</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int total_do_pedido(const int *precos, int itens) {
+    int *copia = malloc(itens * sizeof *copia);
+    if (copia == NULL) {
+        return -1;
+    }
+    int total = 0;
+    for (int i = 0; i &lt; itens; i++) {
+        copia[i] = precos[i];
+        total += copia[i];
+    }
+    free(copia); // sem esta linha, cada pedido deixaria 16 bytes para trás
+    return total;
+}
+
+int main(void) {
+    int pedido[] = {30, 12, 45, 8};
+    for (int p = 1; p &lt;= 3; p++) {
+        printf(&quot;Pedido %d: R$ %d\n&quot;, p, total_do_pedido(pedido, 4));
+    }
+    return 0;
+}
+// Saída:
+// Pedido 1: R$ 95
+// Pedido 2: R$ 95
+// Pedido 3: R$ 95
+</code></pre>
+<p>O <code>free</code> precisa vir antes do <code>return</code>, que destrói a única variável que sabia
+onde o bloco estava:</p>
+<p align="center"><img src="material/0057-fluxograma.svg" alt="Fluxograma: Erros de memória" width="610"></p>
+<p><strong>Exemplo A113 · Todo caminho de saída libera</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+// Copia as notas de um aluno e calcula a média. Uma nota fora de 0 a 10
+// cancela tudo, e a função sai mais cedo: esse return também precisa do free.
+// Devolve -1 se a lista for inválida ou faltar memória.
+double media_valida(const double *notas, int n) {
+    double *copia = malloc(n * sizeof *copia);
+    if (copia == NULL) {
+        return -1; // nada foi alocado: nada a liberar
+    }
+    double soma = 0;
+    for (int i = 0; i &lt; n; i++) {
+        if (notas[i] &lt; 0 || notas[i] &gt; 10) {
+            printf(&quot;  nota %d inválida: %.1f\n&quot;, i + 1, notas[i]);
+            free(copia); // a saída de erro é a que mais esquece
+            return -1;
+        }
+        copia[i] = notas[i];
+        soma += copia[i];
+    }
+    free(copia); // a saída normal
+    return soma / n;
+}
+
+int main(void) {
+    double ana[] = {7.5, 8.0, 9.0};
+    double beto[] = {6.0, 11.0, 7.0}; // alguém digitou 11
+    double caio[] = {5.0, 7.0, 6.0};
+
+    const double *turma[] = {ana, beto, caio};
+    const char *nomes[] = {&quot;Ana&quot;, &quot;Beto&quot;, &quot;Caio&quot;};
+    for (int a = 0; a &lt; 3; a++) {
+        printf(&quot;%s:\n&quot;, nomes[a]);
+        double m = media_valida(turma[a], 3);
+        if (m &lt; 0) {
+            printf(&quot;  sem média\n&quot;);
+        } else {
+            printf(&quot;  média %.1f\n&quot;, m);
+        }
+    }
+    return 0;
+}
+// Saída:
+// Ana:
+//   média 8.2
+// Beto:
+//   nota 2 inválida: 11.0
+//   sem média
+// Caio:
+//   média 6.0
+//
+// Apague o free(copia) de dentro do if e rode de novo: Ana e Caio continuam
+// certos, mas no fim o LeakSanitizer acusa 24 bytes em 1 bloco, o do Beto.
+// Vazamento em caminho de erro é traiçoeiro: só aparece quando o erro
+// acontece. Antes de cada return, pergunte: o que já foi alocado aqui?
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A113.c -o ~/LPEDC/material/A113 &amp;&amp; ~/LPEDC/material/A113
+</code></pre>
+<p><strong>Exemplo A114 · Free, NULL e valgrind</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(void) {
+    int noites = 3;
+    int *diarias = malloc(noites * sizeof *diarias); // reserva do hotel
+    if (diarias == NULL) {
+        return 1;
+    }
+    diarias[0] = 220;
+    diarias[1] = 220;
+    diarias[2] = 310; // sábado é mais caro
+
+    int total = 0;
+    for (int i = 0; i &lt; noites; i++) {
+        total += diarias[i];
+    }
+    printf(&quot;Reserva: %d noites, R$ %d\n&quot;, noites, total);
+
+    // o hóspede cancelou
+    free(diarias);
+    diarias = NULL; // hábito: o ponteiro solto vira um ponteiro vazio
+
+    free(diarias); // por engano, de novo: free(NULL) não faz nada
+    if (diarias == NULL) { // dá para perguntar antes de usar
+        printf(&quot;Reserva cancelada: nada a mostrar\n&quot;);
+    }
+    return 0;
+}
+// Saída:
+// Reserva: 3 noites, R$ 750
+// Reserva cancelada: nada a mostrar
+//
+// Rode também com o valgrind: ~/LPEDC/rodar --valgrind 07-memoria-dinamica/0057-erros-de-memoria/A114.c
+// O fim da saída mostra o balanço do heap (o número entre == muda):
+//   ==4242== HEAP SUMMARY:
+//   ==4242==     in use at exit: 0 bytes in 0 blocks
+//   ==4242==   total heap usage: 2 allocs, 2 frees, 4,108 bytes allocated
+//   ==4242== All heap blocks were freed -- no leaks are possible
+//   ==4242== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+// São 2 allocs: o seu e o buffer que o printf pediu para ele mesmo.
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A114.c -o ~/LPEDC/material/A114 &amp;&amp; ~/LPEDC/material/A114
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E337</strong> · ★☆☆</p>
+<p>O painel da rodoviária monta 4 avisos, um de cada vez, a partir dos vetores</p>
+<pre><code class="language-text">const char *destinos[] = {&quot;Belém&quot;, &quot;Macapá&quot;, &quot;Santarém&quot;, &quot;Manaus&quot;};
+const char *horas[] = {&quot;08h&quot;, &quot;09h&quot;, &quot;11h&quot;, &quot;14h&quot;};
+</code></pre>
+<p>Para cada aviso, aloque 64 bytes com malloc, monte &quot;Ônibus para <destino> às
+<hora>&quot;, mostre e libere o bloco antes de passar ao próximo. Use um contador
+somado a cada malloc e outro a cada free, e mostre os dois no fim: têm que
+bater.</p>
+<pre><code class="language-text">Saída esperada:
+Aviso: Ônibus para Belém às 08h
+Aviso: Ônibus para Macapá às 09h
+Aviso: Ônibus para Santarém às 11h
+Aviso: Ônibus para Manaus às 14h
+malloc: 4 | free: 4
+</code></pre>
+<p><strong>Exercício E339</strong> · ★★☆</p>
+<p>O placar do campeonato de futsal da firma guarda os gols dos 3 times num
+vetor alocado com malloc: 4, 2 e 7. Faça um backup em OUTRO bloco, também
+alocado com malloc, copiando os valores um a um. Para provar que o backup é
+independente, zere placar[0] (o jogo foi anulado) e mostre os dois vetores.
+Libere o placar, mostre &quot;Placar encerrado&quot; e libere o backup.</p>
+<pre><code class="language-text">Saída esperada:
+Placar: 0 2 7
+Backup: 4 2 7
+Placar encerrado
+</code></pre>
+<p><strong>Exercício E340</strong> · ★★☆</p>
+<p>O sistema do estacionamento guarda a placa &quot;QTX3E21&quot; numa string alocada
+com malloc (copie com strcpy) e os km rodados nos últimos 5 dias (42, 55,
+38, 61 e 42) num vetor de int, também alocado. Mostre a placa e a soma dos
+km da semana. Libere os dois blocos.</p>
+<pre><code class="language-text">Saída esperada:
+Placa: QTX3E21
+Km da semana: 238
+</code></pre>
+<p><strong>Exercício E341</strong> · ★★★</p>
+<p>A lista de presença de uma aula de yoga começa com 2 vagas e dobra quando
+enche. Escreva a função</p>
+<pre><code class="language-text">int adicionar(int **v, int *qtd, int *cap, int matricula)
+</code></pre>
+<p>que acrescenta a matrícula ao vetor, dobrando a capacidade com realloc
+quando qtd == cap, e atualiza o ponteiro do chamador. Devolve 1 se deu
+certo e 0 se faltou memória. No main, aloque o vetor com capacidade 2,
+adicione as matrículas 11, 27, 35 e 48, mostre a lista e libere.</p>
+<pre><code class="language-text">Saída esperada:
+Presentes: 11 27 35 48
+</code></pre>
+<hr>
+<h2>0058 · Juntando tudo</h2>
+<h3>Conceito</h3>
+<p>O mercadinho anota o fiado num caderno: o nome do cliente e quanto ele deve.
+Cliente novo ganha uma linha, cliente antigo soma na conta e quem paga fica
+zerado. O caderno não tem número fixo de páginas, e cada nome tem um
+tamanho. Os dois problemas, quantidade desconhecida e tamanhos diferentes,
+são exatamente o que o módulo ensinou a resolver.</p>
+<p>Comece por onde o caderno mora. Ele precisa durar o programa todo e crescer
+conforme chegam clientes, então não cabe num frame da pilha; mora no <strong>heap</strong>
+(assunto 0053). Quem decide quando ele some é o próprio programa, no fim
+(CELES; RANGEL, 2002).</p>
+<p>Cada nome digitado chega numa variável temporária, que vai ser reaproveitada
+na próxima leitura. Para guardá-lo de vez, a função <code>duplicar</code> pede ao
+<code>malloc</code> (assunto 0054) um bloco do tamanho exato, <code>strlen(nome) + 1</code> bytes,
+e copia o texto para lá. O <code>+ 1</code> é o lugar do <code>&#39;\0&#39;</code> (BACKES, 2013, cap. 11).
+&quot;Bia&quot; ocupa 4 bytes e &quot;Dona Cida&quot;, 10; nenhum espaço é desperdiçado.</p>
+<p>O caderno em si são <strong>dois vetores paralelos</strong>: <code>nomes</code>, com o endereço do
+nome de cada cliente, e <code>centavos</code>, com o quanto cada um deve, na mesma
+posição. Quando os dois enchem, a função <code>crescer</code> dobra a capacidade dos
+dois juntos com <code>realloc</code> (assunto 0055), sempre por um ponteiro temporário,
+para não perder o bloco se o pedido falhar (CELES; RANGEL, 2002).</p>
+<p>O vetor <code>nomes</code> tem tipo <code>char **</code>: é um vetor de <code>char *</code>, e cada item
+aponta para um bloco de tamanho próprio. É a mesma forma da matriz dinâmica
+com linhas de tamanhos diferentes (assunto 0056) (BACKES, 2013, cap. 11).</p>
+<p>A novidade do programa está no parâmetro de <code>crescer</code>. O <code>realloc</code> pode
+mudar o bloco de lugar, então a função precisa <strong>mudar</strong> o ponteiro <code>nomes</code>
+do <code>main</code>. Pela regra do assunto 0049, ela recebe o endereço desse ponteiro.
+Como <code>nomes</code> é <code>char **</code>, o endereço dele é um <code>char ***</code>: três estrelas,
+uma para cada salto até a letra (FEOFILOFF, 2009, ap. F). O mesmo raciocínio
+dá <code>int **</code> para o vetor <code>centavos</code>.</p>
+<p>Os valores ficam em <strong>centavos</strong>, guardados em <code>int</code>. Um <code>double</code> não
+representa 0,10 com exatidão, e somas de muitos valores acumulam erro de
+arredondamento; inteiros não têm esse problema. R$ 12,50 vira <code>1250</code>, e a
+conversão para reais acontece só na hora de mostrar.</p>
+<p>Por fim, a limpeza segue a ordem do assunto 0056: primeiro cada nome, depois
+os dois vetores. Os dois vetores paralelos funcionam, mas são um remendo. A
+<code>struct</code> do módulo 08 junta &quot;nome e saldo&quot; numa coisa só, e um vetor de
+<code>struct cliente</code> precisa de um <code>realloc</code> só.</p>
+<blockquote>
+<p>[!WARNING]
+Liberar só <code>nomes</code> vaza todos os nomes: cada <code>nomes[i]</code> tem seu <code>malloc</code>,
+dentro de <code>duplicar</code>. São 2 <code>malloc</code> no começo e 5 nomes (os <code>realloc</code> só
+trocam um bloco por outro), então <code>liberar</code> faz 5 + 2 <code>free</code>. Confira com
+<code>valgrind ./programa</code> a linha <code>All heap blocks were freed</code>.</p>
+</blockquote>
+<h3>Exemplos de uso</h3>
+<p>Chegam seis anotações: Dona Cida (R$ 12,50), Seu Jorge (R$ 8,30), Dona Cida de
+novo (R$ 4,70), Bia (R$ 20,00), Tonho (R$ 3,15) e Rosa (R$ 5,60). São 5
+clientes, então o caderno cresce de 2 para 4 e de 4 para 8. Depois Seu Jorge
+paga tudo:</p>
+<p align="center"><img src="material/0058-ideia.svg" alt="Diagrama da ideia: Juntando tudo" width="858"></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+// Cópia de uma string num bloco do tamanho exato.
+char *duplicar(const char *texto) {
+    char *copia = malloc(strlen(texto) + 1);
+    if (copia != NULL) {
+        strcpy(copia, texto);
+    }
+    return copia;
+}
+
+// Dobra a capacidade dos dois vetores paralelos. Recebe o ENDEREÇO dos
+// ponteiros do main (char *** e int **) porque o realloc pode mudá-los.
+int crescer(char ***nomes, int **centavos, int *cap) {
+    int nova = *cap * 2;
+    char **mais_nomes = realloc(*nomes, nova * sizeof **nomes);
+    if (mais_nomes == NULL) {
+        return 0;
+    }
+    *nomes = mais_nomes;
+    int *mais_centavos = realloc(*centavos, nova * sizeof **centavos);
+    if (mais_centavos == NULL) {
+        return 0;
+    }
+    *centavos = mais_centavos;
+    printf(&quot;(caderno cresceu: %d -&gt; %d clientes)\n&quot;, *cap, nova);
+    *cap = nova;
+    return 1;
+}
+
+int buscar(char **nomes, int qtd, const char *nome) {
+    for (int i = 0; i &lt; qtd; i++) {
+        if (strcmp(nomes[i], nome) == 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+// Soma uma compra na conta do cliente; cria a conta se ela não existe.
+int anotar(char ***nomes, int **centavos, int *qtd, int *cap, const char *nome, int valor) {
+    int i = buscar(*nomes, *qtd, nome);
+    if (i &gt;= 0) {
+        (*centavos)[i] += valor;
+        return 1;
+    }
+    if (*qtd == *cap &amp;&amp; !crescer(nomes, centavos, cap)) {
+        return 0;
+    }
+    char *copia = duplicar(nome);
+    if (copia == NULL) {
+        return 0;
+    }
+    (*nomes)[*qtd] = copia;
+    (*centavos)[*qtd] = valor;
+    (*qtd)++;
+    return 1;
+}
+
+void liberar(char **nomes, int *centavos, int qtd) {
+    for (int i = 0; i &lt; qtd; i++) {
+        free(nomes[i]); // cada nome é um bloco
+    }
+    free(nomes);        // depois o vetor de ponteiros
+    free(centavos);
+}
+
+int main(void) {
+    int qtd = 0;
+    int cap = 2;
+    char **nomes = malloc(cap * sizeof *nomes);
+    int *centavos = malloc(cap * sizeof *centavos);
+    if (nomes == NULL || centavos == NULL) {
+        free(nomes);
+        free(centavos);
+        return 1;
+    }
+
+    const char *quem[] = {&quot;Dona Cida&quot;, &quot;Seu Jorge&quot;, &quot;Dona Cida&quot;, &quot;Bia&quot;, &quot;Tonho&quot;, &quot;Rosa&quot;};
+    int valor[] = {1250, 830, 470, 2000, 315, 560}; // em centavos
+    for (int k = 0; k &lt; 6; k++) {
+        if (!anotar(&amp;nomes, &amp;centavos, &amp;qtd, &amp;cap, quem[k], valor[k])) {
+            liberar(nomes, centavos, qtd);
+            return 1;
+        }
+    }
+
+    int i = buscar(nomes, qtd, &quot;Seu Jorge&quot;); // Seu Jorge pagou tudo
+    if (i &gt;= 0) {
+        centavos[i] = 0;
+    }
+
+    int total = 0;
+    for (int k = 0; k &lt; qtd; k++) {
+        printf(&quot;%-10s R$ %3d.%02d\n&quot;, nomes[k], centavos[k] / 100, centavos[k] % 100);
+        total += centavos[k];
+    }
+    printf(&quot;Total na rua: R$ %d.%02d\n&quot;, total / 100, total % 100);
+
+    liberar(nomes, centavos, qtd);
+    return 0;
+}
+// Saída:
+// (caderno cresceu: 2 -&gt; 4 clientes)
+// (caderno cresceu: 4 -&gt; 8 clientes)
+// Dona Cida  R$  17.20
+// Seu Jorge  R$   0.00
+// Bia        R$  20.00
+// Tonho      R$   3.15
+// Rosa       R$   5.60
+// Total na rua: R$ 45.95
+</code></pre>
+<p>Cada anotação passa por uma busca. Achou, soma; não achou, talvez cresça e cria
+a linha. Todo caminho de erro termina em <code>liberar</code>:</p>
+<p align="center"><img src="material/0058-fluxograma.svg" alt="Fluxograma: Juntando tudo" width="861"></p>
+<p><strong>Exemplo A115 · A agenda em que cada linha cresce sozinha</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+// Cópia de uma string num bloco do tamanho exato.
+char *duplicar(const char *texto) {
+    char *copia = malloc(strlen(texto) + 1);
+    if (copia != NULL) {
+        strcpy(copia, texto);
+    }
+    return copia;
+}
+
+// Põe um horário na linha do barbeiro b. Só ESSA linha cresce: as outras
+// nem ficam sabendo. Devolve 0 se faltar memória.
+int agendar(int **horarios, int *qtd, int *cap, int b, int hora) {
+    if (qtd[b] == cap[b]) {
+        int nova = cap[b] == 0 ? 1 : cap[b] * 2;
+        int *maior = realloc(horarios[b], nova * sizeof *maior); // NULL na 1ª vez
+        if (maior == NULL) {
+            return 0;
+        }
+        horarios[b] = maior;
+        cap[b] = nova;
+    }
+    horarios[b][qtd[b]] = hora;
+    qtd[b]++;
+    return 1;
+}
+
+void liberar(char **nomes, int **horarios, int *qtd, int *cap, int n) {
+    for (int b = 0; b &lt; n; b++) {
+        free(nomes[b]);    // cada nome é um bloco
+        free(horarios[b]); // cada linha também (free(NULL) não faz nada)
+    }
+    free(nomes);
+    free(horarios);
+    free(qtd);
+    free(cap);
+}
+
+int main(void) {
+    const char *equipe[] = {&quot;Juca&quot;, &quot;Neide&quot;, &quot;Rafa&quot;};
+    int n = 3;
+
+    // calloc: linhas começam NULL e contadores começam em 0
+    char **nomes = calloc(n, sizeof *nomes);
+    int **horarios = calloc(n, sizeof *horarios);
+    int *qtd = calloc(n, sizeof *qtd);
+    int *cap = calloc(n, sizeof *cap);
+    if (nomes == NULL || horarios == NULL || qtd == NULL || cap == NULL) {
+        liberar(nomes, horarios, qtd, cap, 0);
+        return 1;
+    }
+    for (int b = 0; b &lt; n; b++) {
+        nomes[b] = duplicar(equipe[b]);
+        if (nomes[b] == NULL) {
+            liberar(nomes, horarios, qtd, cap, n);
+            return 1;
+        }
+    }
+
+    // pedidos do dia: barbeiro escolhido e horário
+    int quem[] = {1, 0, 1, 1, 2, 1, 0};
+    int hora[] = {9, 10, 11, 13, 14, 15, 16};
+    for (int k = 0; k &lt; 7; k++) {
+        if (!agendar(horarios, qtd, cap, quem[k], hora[k])) {
+            liberar(nomes, horarios, qtd, cap, n);
+            return 1;
+        }
+    }
+
+    for (int b = 0; b &lt; n; b++) {
+        printf(&quot;%-6s (%d de %d):&quot;, nomes[b], qtd[b], cap[b]);
+        for (int j = 0; j &lt; qtd[b]; j++) {
+            printf(&quot; %dh&quot;, horarios[b][j]);
+        }
+        printf(&quot;\n&quot;);
+    }
+
+    liberar(nomes, horarios, qtd, cap, n);
+    return 0;
+}
+// Saída:
+// Juca   (2 de 2): 10h 16h
+// Neide  (4 de 4): 9h 11h 13h 15h
+// Rafa   (1 de 1): 14h
+//
+// É uma matriz irregular que muda de forma enquanto o programa roda: a linha
+// da Neide cresceu 1 -&gt; 2 -&gt; 4 e a do Rafa ficou com 1. No fim existem 10
+// blocos (4 de controle, 3 nomes e 3 linhas), e liberar faz 10 free.
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A115.c -o ~/LPEDC/material/A115 &amp;&amp; ~/LPEDC/material/A115
+</code></pre>
+<p><strong>Exemplo A116 · Uma linha de qualquer tamanho</strong></p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+// Lê uma linha inteira, de qualquer tamanho, num bloco que cresce.
+// Devolve NULL no fim da entrada (ou se faltar memória). Quem chama libera.
+char *ler_linha(void) {
+    int cap = 4;
+    int qtd = 0;
+    char *linha = malloc(cap);
+    if (linha == NULL) {
+        return NULL;
+    }
+    int c;
+    while ((c = getchar()) != EOF &amp;&amp; c != &#39;\n&#39;) {
+        if (qtd + 1 == cap) { // + 1: sempre sobra lugar para o &#39;\0&#39;
+            char *maior = realloc(linha, cap * 2);
+            if (maior == NULL) {
+                free(linha);
+                return NULL;
+            }
+            linha = maior;
+            cap *= 2;
+        }
+        linha[qtd++] = (char)c;
+    }
+    if (c == EOF &amp;&amp; qtd == 0) { // acabou a entrada
+        free(linha);
+        return NULL;
+    }
+    linha[qtd] = &#39;\0&#39;;
+    return linha;
+}
+
+int main(void) {
+    char *nome;
+    int n = 0;
+    while ((nome = ler_linha()) != NULL) {
+        n++;
+        int tamanho = 0;
+        while (nome[tamanho] != &#39;\0&#39;) {
+            tamanho++;
+        }
+        printf(&quot;Nome %d (%d bytes): %s\n&quot;, n, tamanho, nome);
+        free(nome); // cada linha é um bloco novo
+    }
+    return 0;
+}
+// Exemplo de uso (os nomes vêm do teclado; Ctrl+D encerra):
+// Ana
+// Nome 1 (3 bytes): Ana
+// Maria Eduarda dos Santos
+// Nome 2 (24 bytes): Maria Eduarda dos Santos
+//
+// Para testar: printf &#39;Ana\nMaria Eduarda dos Santos\n&#39; | ~/LPEDC/rodar 07-memoria-dinamica/0058-juntando-tudo/A116.c
+// Nenhum fgets com tamanho fixo: o bloco cresce 4 -&gt; 8 -&gt; 16 -&gt; 32.
+</code></pre>
+<pre><code class="language-bash">gcc ~/LPEDC/material/A116.c -o ~/LPEDC/material/A116 &amp;&amp; ~/LPEDC/material/A116
+</code></pre>
+<h3>Exercícios</h3>
+<p><strong>Exercício E344</strong> · ★☆☆</p>
+<p>Escreva duas funções para a lista de compras:</p>
+<pre><code class="language-text">char **criar_lista(const char *itens[], int n);
+void liberar_lista(char **lista, int n);
+</code></pre>
+<p>criar_lista aloca um vetor de n ponteiros e uma cópia de cada item. Teste
+com &quot;pao&quot;, &quot;leite&quot;, &quot;cafe&quot; e &quot;manteiga&quot;, mostre a lista e calcule quantos
+blocos e quantos bytes foram pedidos ao heap (num PC de 64 bits).</p>
+<pre><code class="language-text">Saída esperada:
+- pao
+- leite
+- cafe
+- manteiga
+5 blocos, 56 bytes
+</code></pre>
+<p><strong>Exercício E345</strong> · ★★☆</p>
+<p>Leia frutas, uma por linha, até aparecer a palavra fim. Guarde cada uma
+num vetor de strings (char **) que começa com capacidade 1 e dobra quando
+enche. Mostre as frutas na ordem contrária e quantas vezes o vetor
+cresceu. Libere tudo no fim.</p>
+<pre><code class="language-text">Entrada:
+uva
+manga
+caju
+acerola
+fim
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Ao contrário: acerola caju manga uva
+O vetor cresceu 2 vezes
+</code></pre>
+<p><strong>Exercício E346</strong> · ★★☆</p>
+<p>Leia a quantidade de alunos e de provas e depois as notas, linha por
+linha. Guarde numa matriz dinâmica de double (vetor de ponteiros) e
+mostre a média de cada aluno e a da turma, com uma casa decimal. As médias
+de cada aluno também vão para um vetor alocado. Libere tudo no fim.</p>
+<pre><code class="language-text">Entrada:
+3 2
+7 8
+5 6
+9 10
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Aluno 1: 7.5
+Aluno 2: 5.5
+Aluno 3: 9.5
+Turma: 7.5
+</code></pre>
+<p><strong>Exercício E348</strong> · ★★★</p>
+<p>Escreva a função</p>
+<pre><code class="language-text">char **dividir(const char *texto, char separador, int *qtd);
+</code></pre>
+<p>que quebra o texto em pedaços pelo separador e devolve um vetor NOVO de
+strings NOVAS, cada uma do tamanho exato.
+A quantidade volta por *qtd. Teste com a lista do mercado
+&quot;arroz;feijao;cafe;oleo de soja&quot; e com &quot;;;&quot;, que tem 3 pedaços vazios.</p>
+<pre><code class="language-text">Saída esperada:
+4 itens: [arroz] [feijao] [cafe] [oleo de soja]
+3 itens: [] [] []
+</code></pre>
+<hr>
+<h2>Lista do módulo</h2>
+<p>30 exercícios que misturam os assuntos do módulo, no ritmo da prova. Arquivos P0701.c a P0730.c, em <code>material/</code>; resoluções em <code>_respostas/07-memoria-dinamica/lista/</code>.</p>
+<h3>★☆☆ Aquecimento</h3>
+<p><strong>Exercício P0701</strong> · ★☆☆ · Uma cópia no heap</p>
+<p>O motorista de aplicativo anotou os km rodados nas corridas de hoje:</p>
+<pre><code class="language-text">double km[6] = {12.4, 3.8, 25.1, 7.6, 18.0, 5.3};
+</code></pre>
+<p>Escreva double *copiar(const double *v, int n), que reserva com malloc um
+bloco novo do tamanho exato, copia os n valores e devolve o endereço (ou
+NULL se faltar memória). No main, faça a cópia, aplique na CÓPIA um
+desconto de 10% em cada corrida e mostre os dois vetores e o total de cada
+um. No fim, libere a cópia:</p>
+<pre><code class="language-text">Saída esperada:
+Original: 12.40  3.80 25.10  7.60 18.00  5.30 | total 72.20
+Desconto: 11.16  3.42 22.59  6.84 16.20  4.77 | total 64.98
+</code></pre>
+<hr>
+<p><strong>Exercício P0702</strong> · ★☆☆ · Juntar nome e sobrenome no heap</p>
+<p>Escreva</p>
+<pre><code class="language-text">char *juntar(const char *a, const char *sep, const char *b, size_t *bytes);
+</code></pre>
+<p>que devolve uma string NOVA no heap com a, sep e b em sequência, do tamanho
+exato (nem um byte a mais), e guarda em *bytes quanto pediu ao malloc. Junte
+&quot;Francisca&quot; e &quot;Pereira&quot; com &quot; &quot; e
+&quot;Manaus&quot; e &quot;AM&quot; com &quot; - &quot;. Mostre cada resultado, o strlen e quantos bytes
+foram pedidos ao malloc, e libere as duas:</p>
+<pre><code class="language-text">Saída esperada:
+&quot;Francisca Pereira&quot;: strlen 17, malloc de 18 bytes
+&quot;Manaus - AM&quot;: strlen 11, malloc de 12 bytes
+</code></pre>
+<hr>
+<p><strong>Exercício P0703</strong> · ★☆☆ · A lista de espera que cresce de 3 em 3</p>
+<p>O posto de vacinação registra as senhas que chegam num vetor dinâmico de
+int que começa com capacidade 3 e, quando enche, ganha mais 3 posições com
+realloc. Chegaram estas 8 senhas:</p>
+<pre><code class="language-text">int chegada[8] = {501, 502, 503, 504, 505, 506, 507, 508};
+</code></pre>
+<p>Adicione uma de cada vez e mostre uma linha toda vez que a capacidade
+mudar. No fim, mostre o vetor e libere:</p>
+<pre><code class="language-text">Saída esperada:
+Capacidade inicial: 3
+Senha 504 não cabia: capacidade agora 6
+Senha 507 não cabia: capacidade agora 9
+Fila (8 de 9): 501 502 503 504 505 506 507 508
+</code></pre>
+<p><strong>Resposta esperada:</strong> a saída acima (3 -&gt; 6 -&gt; 9).</p>
+<hr>
+<p><strong>Exercício P0704</strong> · ★☆☆ · A identidade do tamanho que pedirem</p>
+<p>Escreva int **identidade(int n), que monta no heap uma matriz n x n (um
+vetor de n ponteiros, cada um apontando para uma linha alocada com calloc)
+com 1 na diagonal e 0 no resto, e void liberar(int **m, int n). No main,
+monte e mostre as identidades de tamanho 2 e 4 e libere as duas:</p>
+<pre><code class="language-text">Saída esperada:
+Identidade 2x2:
+1 0
+0 1
+Identidade 4x4:
+1 0 0 0
+0 1 0 0
+0 0 1 0
+0 0 0 1
+</code></pre>
+<hr>
+<p><strong>Exercício P0705</strong> · ★☆☆ · Conserte os dois free</p>
+<p>O programa da padaria guarda as encomendas do dia no heap. Ele tem DOIS
+erros de propósito. O gcc já desconfia dos dois (leia os warnings), e o
+AddressSanitizer confirma, um de cada vez: rode, leia o relatório (a
+primeira linha diz o tipo do erro e a linha do programa), conserte e rode
+de novo. Ele deve mostrar:</p>
+<pre><code class="language-text">Saída esperada:
+Maior encomenda: 50
+Total: 100 pães
+</code></pre>
+<hr>
+<p><strong>Exercício P0706</strong> · ★☆☆ · O cartão mascarado</p>
+<p>O comprovante da maquininha mostra só os 4 últimos dígitos do cartão.
+Escreva char *mascarar(const char <em>num), que devolve uma string NOVA no
+heap, do mesmo tamanho de num, com cada dígito trocado por &#39;</em>&#39;, menos os 4
+últimos dígitos (espaços continuam espaços). O original não muda. Teste:</p>
+<pre><code class="language-text">const char *cartoes[3] = {&quot;4539 1488 0343 6467&quot;, &quot;5162 3001 9925&quot;, &quot;1234&quot;};
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+4539 1488 0343 6467  -&gt; **** **** **** 6467
+5162 3001 9925       -&gt; **** **** 9925
+1234                 -&gt; 1234
+</code></pre>
+<hr>
+<p><strong>Exercício P0707</strong> · ★☆☆ · Faixas de idade do tamanho certo</p>
+<p>A campanha de vacinação registrou as idades abaixo e quer contar quantas
+pessoas há em cada faixa de 10 anos (0-9, 10-19, ...). O número de faixas
+depende da maior idade, então o vetor de contadores é criado com calloc
+DEPOIS de achar a maior:</p>
+<pre><code class="language-text">int idades[12] = {67, 8, 34, 71, 15, 42, 88, 3, 59, 64, 27, 80};
+</code></pre>
+<p>Mostre quantas faixas foram criadas e a contagem de cada uma (inclusive as
+vazias), e libere o vetor:</p>
+<pre><code class="language-text">Saída esperada:
+9 faixas
+ 0- 9: 2
+10-19: 1
+20-29: 1
+30-39: 1
+40-49: 1
+50-59: 1
+60-69: 2
+70-79: 1
+80-89: 2
+</code></pre>
+<hr>
+<p><strong>Exercício P0708</strong> · ★☆☆ · A transposta numa matriz nova</p>
+<p>Escreva int **transposta(int **m, int l, int c), que devolve uma matriz
+NOVA no heap, c x l, com t[j][i] = m[i][j]. A original continua inteira.
+Use funções criar(l, c) e liberar(m, l), como no texto do assunto 0056. No
+main, crie a matriz 2x3 de horas extras abaixo (linhas: Ana e Davi; colunas:
+semana 1 a 3), monte a transposta, mostre as duas e libere as duas:</p>
+<pre><code class="language-text">2 5 1
+4 0 3
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Original (2x3):
+2 5 1
+4 0 3
+Transposta (3x2):
+2 4
+5 0
+1 3
+</code></pre>
+<hr>
+<p><strong>Exercício P0709</strong> · ★☆☆ · O realloc não zera</p>
+<p>O calloc entrega o bloco zerado, mas, quando o realloc aumenta o bloco, a
+parte nova vem com o que estiver lá (lixo). Escreva</p>
+<pre><code class="language-text">int *crescer_zerado(int *v, int n_velho, int n_novo);
+</code></pre>
+<p>que aumenta o bloco com realloc e zera SÓ as posições novas (de n_velho a
+n_novo - 1), devolvendo o novo endereço (ou NULL, deixando v intacto). No
+main, crie com calloc os pontos de 3 jogadores de um torneio de dominó,
+anote algumas vitórias, cresça para 5 jogadores e anote mais. Mostre o
+placar nas duas etapas:</p>
+<pre><code class="language-text">Saída esperada:
+Placar (3 jogadores): 2 0 1
+Placar (5 jogadores): 3 0 1 0 3
+</code></pre>
+<hr>
+<p><strong>Exercício P0710</strong> · ★☆☆ · Somar duas matrizes dinâmicas</p>
+<p>Duas filiais de uma loja de celulares anotaram as vendas de 3 modelos
+(linhas) em 2 meses (colunas). As matrizes foram criadas no heap, com o
+tamanho que só se sabe na hora de rodar:</p>
+<pre><code class="language-text">filial A: 14 9 / 6 11 / 20 17
+filial B: 8 12 / 3 5 / 15 22
+</code></pre>
+<p>Escreva int **somar(int **a, int **b, int l, int c), que devolve uma
+matriz NOVA com a soma. Use criar e liberar (do P0708). Mostre a soma e
+libere as três matrizes:</p>
+<pre><code class="language-text">Saída esperada:
+Total das filiais:
+Modelo 1:  22  21
+Modelo 2:   9  16
+Modelo 3:  35  39
+</code></pre>
+<h3>★★☆ Para pensar</h3>
+<p><strong>Exercício P0711</strong> · ★★☆ · Juntar a lista com um malloc só</p>
+<p>O app da feira monta a lista de compras numa linha só para mandar por
+mensagem. Escreva</p>
+<pre><code class="language-text">char *juntar_todas(const char **itens, int n, const char *sep);
+</code></pre>
+<p>que devolve uma string nova no heap com os itens separados por sep (sem
+sep depois do último), fazendo UM malloc só, do tamanho exato. Teste com a
+lista abaixo e os separadores &quot;, &quot; e &quot; | &quot;, e com uma lista vazia (n = 0,
+que devolve &quot;&quot;):</p>
+<pre><code class="language-text">const char *feira[5] = {&quot;farinha&quot;, &quot;tucumã&quot;, &quot;jambu&quot;,
+                        &quot;cheiro-verde&quot;, &quot;pupunha&quot;};
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+&quot;farinha, tucumã, jambu, cheiro-verde, pupunha&quot; -&gt; malloc(47)
+&quot;farinha | tucumã | jambu | cheiro-verde | pupunha&quot; -&gt; malloc(51)
+&quot;&quot; -&gt; malloc(1)
+</code></pre>
+<hr>
+<p><strong>Exercício P0712</strong> · ★★☆ · Turmas de tamanhos diferentes</p>
+<p>O cursinho tem três turmas, cada uma com um número diferente de alunos:</p>
+<pre><code class="language-text">turma A: 7.5 8.0 6.0
+turma B: 9.0 5.5 7.0 8.5 6.5
+turma C: 4.0 10.0
+</code></pre>
+<p>Em vez de uma matriz retangular (que desperdiça casas), monte no heap um
+vetor de 3 ponteiros, em que a linha i tem EXATAMENTE tam[i] notas:
+double **notas e int tam[3] = {3, 5, 2}. Calcule a média de cada turma, a
+média geral (de todos os alunos) e mostre quantos bytes de notas foram
+alocados contra os de uma matriz 3x5:</p>
+<pre><code class="language-text">Saída esperada:
+Turma A (3 alunos): média 7.17
+Turma B (5 alunos): média 7.30
+Turma C (2 alunos): média 7.00
+Média geral: 7.20
+Bytes das notas: 80 (matriz 3x5 usaria 120)
+</code></pre>
+<hr>
+<p><strong>Exercício P0713</strong> · ★★☆ · Ler uma linha de qualquer tamanho</p>
+<p>O fgets precisa de um vetor de tamanho fixo. Escreva char *ler_linha(void),
+que lê uma linha inteira do teclado, de QUALQUER tamanho, com getchar: o
+buffer começa com capacidade 8 e dobra com realloc sempre que enche. O
+&#39;\n&#39; não entra. Devolve a linha no heap (quem chama faz o free), ou NULL se
+a entrada já tiver acabado. Para mostrar o crescimento, a função imprime
+uma linha a cada realloc. No main, leia uma linha e mostre o tamanho:</p>
+<pre><code class="language-text">Exemplo de execução:
+Rua Ramos Ferreira, 1200, Centro, Manaus
+(cresceu para 16)
+(cresceu para 32)
+(cresceu para 64)
+Lido: &quot;Rua Ramos Ferreira, 1200, Centro, Manaus&quot; (40 caracteres)
+</code></pre>
+<pre><code class="language-text">(a primeira linha é a que você digita)
+</code></pre>
+<p><strong>Resposta esperada:</strong> a execução acima.</p>
+<hr>
+<p><strong>Exercício P0714</strong> · ★★☆ · Inserir em ordem num vetor que cresce</p>
+<p>A loja guarda os preços dos produtos em ordem crescente num vetor dinâmico
+que começa com capacidade 2 e dobra quando enche. Escreva</p>
+<pre><code class="language-text">bool inserir(int **v, int *n, int *cap, int valor);
+</code></pre>
+<p>que garante espaço (com realloc, dentro da função) e encaixa o valor no
+lugar certo, empurrando os maiores. Insira os preços abaixo, um por vez,
+mostrando a capacidade sempre que ela mudar, e mostre o vetor no fim:</p>
+<pre><code class="language-text">int novos[7] = {45, 12, 89, 30, 12, 70, 5};
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+(capacidade 2)
+(capacidade 4)
+(capacidade 8)
+Preços (7 de 8): 5 12 12 30 45 70 89
+</code></pre>
+<hr>
+<p><strong>Exercício P0715</strong> · ★★☆ · Conserte o diário de bordo</p>
+<p>O diário de bordo de um barco de linha guarda o nome do barco numa cópia
+no heap e as paradas num vetor que cresce. O programa tem TRÊS erros de
+propósito. Dois o AddressSanitizer acusa (um de cada vez); o terceiro não
+aparece nos testes, porque só dá problema no dia em que faltar memória.
+Conserte os três. O programa deve mostrar:</p>
+<pre><code class="language-text">Saída esperada:
+Barco: Comandante Paiva
+Paradas (h): 0 6 14 20 31
+Viagem total: 31 horas
+</code></pre>
+<hr>
+<p><strong>Exercício P0716</strong> · ★★☆ · Recortar a imagem</p>
+<p>Uma imagem em preto e branco está num vetor de strings, uma por linha
+(&#39;#&#39; é pixel aceso):</p>
+<pre><code class="language-text">const char *img[6] = {&quot;..........&quot;,
+                      &quot;..####....&quot;,
+                      &quot;.#....#...&quot;,
+                      &quot;.#.##.#...&quot;,
+                      &quot;..####....&quot;,
+                      &quot;..........&quot;};
+</code></pre>
+<p>Escreva char **recortar(const char **img, int l0, int c0, int alt,
+int larg), que devolve uma imagem NOVA no heap com alt linhas, cada uma uma
+string de larg caracteres (+ &#39;\0&#39;), copiada a partir da linha l0, coluna
+c0. Escreva também void liberar(char **m, int alt). Recorte o desenho
+(linhas 1 a 4, colunas 1 a 6) e, do recorte, só o miolo 2x4 (linhas 1 e 2,
+colunas 1 a 4 do recorte):</p>
+<pre><code class="language-text">Saída esperada:
+Recorte 4x6:
+  .####.
+  #....#
+  #.##.#
+  .####.
+Miolo 2x4:
+  ....
+  .##.
+</code></pre>
+<hr>
+<p><strong>Exercício P0717</strong> · ★★☆ · A média móvel do sensor</p>
+<p>Um sensor de temperatura de uma câmara fria manda uma leitura por minuto, e
+o painel mostra a média das K últimas. Guarde as últimas K leituras num
+bloco de K double alocado com malloc, usado em roda (buffer circular): a
+leitura nova entra na posição pos, que avança e volta a 0 depois da
+última. Com K = 4 e as leituras abaixo, mostre, a cada minuto, a média do
+que já está guardado (no começo, menos de K):</p>
+<pre><code class="language-text">double leituras[9] = {4.0, 4.5, 5.0, 6.5, 8.0, 7.5, 5.0, 4.0, 3.5};
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+Min 1: leitura 4.0, média das últimas 1 = 4.00
+Min 2: leitura 4.5, média das últimas 2 = 4.25
+Min 3: leitura 5.0, média das últimas 3 = 4.50
+Min 4: leitura 6.5, média das últimas 4 = 5.00
+Min 5: leitura 8.0, média das últimas 4 = 6.00
+Min 6: leitura 7.5, média das últimas 4 = 6.75
+Min 7: leitura 5.0, média das últimas 4 = 6.75
+Min 8: leitura 4.0, média das últimas 4 = 6.12
+Min 9: leitura 3.5, média das últimas 4 = 5.00
+</code></pre>
+<hr>
+<p><strong>Exercício P0718</strong> · ★★☆ · Cópia rasa e cópia profunda</p>
+<p>A agenda da semana de um consultório é uma matriz dinâmica 2x3 (linhas:
+manhã e tarde; colunas: seg, ter, qua) com o número de consultas. Faça
+DUAS cópias dela:</p>
+<ul>
+<li>rasa: um vetor novo de 2 ponteiros que recebe os MESMOS endereços das</li>
+</ul>
+<pre><code class="language-text">linhas (m_rasa[i] = m[i]);
+</code></pre>
+<ul>
+<li>profunda: linhas novas, com os valores copiados.</li>
+</ul>
+<p>Depois mude m[0][1] (terça de manhã) de 4 para 9 e mostre as três. Mostre
+também se a linha 0 de cada cópia mora no mesmo endereço que a de m.
+Cuidado na hora de liberar: as linhas da rasa são as de m.</p>
+<pre><code class="language-text">Saída esperada:
+Original: manhã 3 9 2 | tarde 5 1 6
+Rasa:     manhã 3 9 2 | tarde 5 1 6
+Profunda: manhã 3 4 2 | tarde 5 1 6
+Linha 0 da rasa é a de m? sim
+Linha 0 da profunda é a de m? não
+</code></pre>
+<hr>
+<p><strong>Exercício P0719</strong> · ★★☆ · União e interseção do tamanho exato</p>
+<p>Dois grupos de WhatsApp de um condomínio têm os números dos apartamentos de
+quem participa, em ordem crescente:</p>
+<pre><code class="language-text">int a[6] = {101, 103, 202, 204, 301, 402};
+int b[5] = {103, 104, 204, 302, 402};
+</code></pre>
+<p>Escreva int *uniao(const int *a, int na, const int *b, int nb, int *n) e
+int *intersecao(...) com a mesma assinatura. Cada uma reserva o pior caso
+(na + nb para a união; o menor dos dois para a interseção), preenche
+andando nos dois vetores ao mesmo tempo e, no fim, ENCOLHE o bloco com
+realloc para o tamanho exato. Mostre os resultados e o tamanho de cada um:</p>
+<pre><code class="language-text">Saída esperada:
+Nos dois grupos ou em um (8): 101 103 104 202 204 301 302 402
+Nos dois grupos (3): 103 204 402
+</code></pre>
+<hr>
+<p><strong>Exercício P0720</strong> · ★★☆ · A borda e o miolo do terreno</p>
+<p>Um terreno foi dividido num quadriculado, e cada casa tem a altura do solo
+em centímetros. Leia do teclado o número de linhas e de colunas e depois as
+alturas, linha por linha. Guarde numa matriz dinâmica (vetor de ponteiros)
+e mostre a soma das casas da BORDA (primeira e última linha, primeira e
+última coluna, sem contar canto duas vezes) e a do MIOLO (o resto):</p>
+<pre><code class="language-text">Exemplo de execução:
+Linhas e colunas: 3 4
+Alturas:
+5 2 7 1
+3 9 8 4
+6 0 2 5
+Borda: 35
+Miolo: 17
+</code></pre>
+<p>(as alturas são digitadas; o programa mostra só as outras linhas)</p>
+<p><strong>Resposta esperada:</strong> Borda 35 e Miolo 17.</p>
+<h3>★★★ Desafio</h3>
+<p><strong>Exercício P0721</strong> · ★★★ · Um vetor que cresce para qualquer tipo</p>
+<p>Escreva um vetor dinâmico genérico, que serve para int, double ou qualquer
+outro tipo. Sem struct (só no módulo 08), o estado fica em três variáveis
+do main (void *v, size_t n, size_t cap), passadas por endereço:</p>
+<pre><code class="language-text">bool empurrar(void **v, size_t *n, size_t *cap, size_t tam, const void *item);
+</code></pre>
+<p>A função dobra a capacidade quando enche (começando em 1), copia os tam
+bytes de item para o fim com memcpy e devolve false se faltar memória.
+Use-a para guardar os gols por rodada de um time (int) e as médias de
+público (double):</p>
+<pre><code class="language-text">int gols[7] = {2, 0, 1, 3, 1, 1, 4};
+double publico[3] = {18450.5, 22010.0, 9875.25};
+</code></pre>
+<p>Mostre cada vetor, n e cap, e libere os dois:</p>
+<pre><code class="language-text">Saída esperada:
+Gols (n = 7, cap = 8): 2 0 1 3 1 1 4
+Público (n = 3, cap = 4): 18450.50 22010.00 9875.25
+</code></pre>
+<hr>
+<p><strong>Exercício P0722</strong> · ★★★ · Somar duas matrizes esparsas</p>
+<p>Duas fiscalizações anotaram as multas por quarteirão de um bairro (grade de
+100 x 100), e quase todos os quarteirões têm zero. Cada matriz é guardada
+como triplas (linha, coluna, valor) em ordem de linha e coluna, num vetor
+de int no heap (3 int por tripla):</p>
+<pre><code class="language-text">int a[] = {0, 4, 2,   3, 7, 1,   3, 9, 5,   42, 0, 3};   // 4 triplas
+int b[] = {3, 7, 4,   10, 10, 1,   42, 0, 2,   99, 99, 6}; // 4 triplas
+</code></pre>
+<p>Escreva int *somar(const int *a, int na, const int *b, int nb, int *n),
+que devolve a soma também em triplas ordenadas, sem montar a grade de
+10.000 casas: ande nas duas listas ao mesmo tempo (como na união do
+P0719), somando os valores quando a posição for a mesma. O resultado começa
+com capacidade 2 triplas e dobra com realloc. Mostre as triplas e quantos
+bytes a soma ocupa contra a grade cheia:</p>
+<pre><code class="language-text">Saída esperada:
+Soma (6 triplas): (0,4,2) (3,7,5) (3,9,5) (10,10,1) (42,0,5) (99,99,6)
+Esparsa: 72 bytes; grade cheia: 40000 bytes
+</code></pre>
+<hr>
+<p><strong>Exercício P0723</strong> · ★★★ · Quebrar o texto em linhas</p>
+<p>O visor da máquina de cartão tem 16 colunas. Escreva</p>
+<pre><code class="language-text">char **quebrar(const char *texto, int largura, int *n_linhas);
+</code></pre>
+<p>que divide o texto em linhas de no máximo largura caracteres, quebrando
+nos espaços (uma palavra nunca é cortada, a não ser que sozinha passe da
+largura: aí ela é partida). Cada linha é uma string nova no heap, sem
+espaço no começo nem no fim, e o vetor de linhas cresce com realloc.
+Mostre as linhas entre barras, para ver o tamanho, e libere tudo:</p>
+<pre><code class="language-text">const char *msg = &quot;Pagamento aprovado no credito em 3x sem juros. &quot;
+                  &quot;Obrigado pela preferencia, volte sempre!&quot;;
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+|Pagamento       |  9
+|aprovado no     | 11
+|credito em 3x   | 13
+|sem juros.      | 10
+|Obrigado pela   | 13
+|preferencia,    | 12
+|volte sempre!   | 13
+7 linhas
+</code></pre>
+<p><strong>Resposta esperada:</strong> a saída acima (7 linhas).</p>
+<hr>
+<p><strong>Exercício P0724</strong> · ★★★ · Multiplicar números que não cabem em nenhum tipo</p>
+<p>Escreva char *multiplicar(const char *a, const char *b), que recebe dois
+números naturais como strings de dígitos, de qualquer tamanho, e devolve o
+produto numa string nova no heap, sem zeros à esquerda. Faça como na conta
+à mão: o dígito i de a (contado da direita) vezes o dígito j de b vai para
+a casa i + j de um vetor de int alocado com calloc, e depois se acertam os
+&quot;vai um&quot;. Teste:</p>
+<pre><code class="language-text">&quot;12&quot; x &quot;34&quot;
+&quot;99999999999&quot; x &quot;99999999999&quot;
+&quot;123456789012345678901234567890&quot; x &quot;987654321&quot;
+&quot;2026&quot; x &quot;0&quot;
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+12 x 34 =
+  408 (tamanho 3)
+99999999999 x 99999999999 =
+  9999999999800000000001 (tamanho 22)
+123456789012345678901234567890 x 987654321 =
+  121932631124828532112482853211126352690 (tamanho 39)
+2026 x 0 =
+  0 (tamanho 1)
+</code></pre>
+<hr>
+<p><strong>Exercício P0725</strong> · ★★★ · Conserte a lista de convidados</p>
+<p>O programa da festa junina guarda os nomes dos convidados em cópias no
+heap e um vetor de ponteiros, também no heap. Ele tem TRÊS erros de
+propósito. O gcc desconfia de dois (leia os warnings) e o AddressSanitizer
+acusa o terceiro assim que o programa roda. Conserte os três sem mudar a
+ideia
+do programa. Ele deve mostrar:</p>
+<pre><code class="language-text">Saída esperada:
+1. Zefinha
+2. Tião
+3. Mariazinha
+4. Chico Bento
+4 convidados
+</code></pre>
+<hr>
+<p><strong>Exercício P0726</strong> · ★★★ · Multiplicar polinômios</p>
+<p>Um polinômio de grau g pode ser guardado como g + 1 coeficientes, do termo
+independente para o de maior grau: 3 - 2x + x² vira {3, -2, 1}. Escreva:</p>
+<pre><code class="language-text">int *mult_poli(const int *p, int gp, const int *q, int gq, int *gr);
+long long valor(const int *p, int g, int x);
+void mostrar(const int *p, int g);
+</code></pre>
+<p>mult_poli devolve um vetor novo (calloc) com o produto, de grau gp + gq:
+o coeficiente k soma p[i] * q[j] para todo i + j = k. valor calcula p(x)
+pelo método de Horner (de dentro para fora: ((a3 x + a2) x + a1) x + a0).
+Com p = 3 - 2x + x² e q = 1 + 4x, mostre p, q, o produto, e confira que
+r(2) = p(2) * q(2). Depois eleve (1 + x) à quinta potência multiplicando
+cinco vezes:</p>
+<pre><code class="language-text">Saída esperada:
+p(x) = 3 - 2x + x^2
+q(x) = 1 + 4x
+r(x) = 3 + 10x - 7x^2 + 4x^3
+r(2) = 27; p(2) * q(2) = 27
+(1 + x)^5 = 1 + 5x + 10x^2 + 10x^3 + 5x^4 + x^5
+</code></pre>
+<hr>
+<p><strong>Exercício P0727</strong> · ★★★ · O determinante por Laplace</p>
+<p>O determinante de uma matriz n x n pode ser calculado pela expansão de
+Laplace na primeira linha: det(M) = soma, para j de 0 a n - 1, de
+(-1)^j * M[0][j] * det(menor(M, j)), em que menor(M, j) é a matriz
+(n - 1) x (n - 1) que sobra tirando a linha 0 e a coluna j. Para n = 1, o
+determinante é o próprio número.</p>
+<p>Escreva a função recursiva double det(double **m, int n), que monta cada
+menor no heap (matriz dinâmica), calcula e libera. Conte num contador
+global quantas matrizes menores foram alocadas. Calcule o determinante das
+matrizes abaixo (uma 3x3 e uma 4x4) e da identidade 4x4:</p>
+<pre><code class="language-text">A = | 2 -1  0 |      B = | 1 0 2 -1 |
+    | 1  3  2 |          | 3 0 0  5 |
+    | 0  1  4 |          | 2 1 4 -3 |
+                         | 1 0 5  0 |
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+det A (3x3) = 24, com 6 menores alocados
+det B (4x4) = 30, com 15 menores alocados
+det I (4x4) = 1, com 3 menores alocados
+</code></pre>
+<p><strong>Resposta esperada:</strong> a saída acima (det A = 24, det B = 30, det I = 1).</p>
+<hr>
+<p><strong>Exercício P0728</strong> · ★★★ · As palavras mais usadas do discurso</p>
+<p>Conte as palavras de um discurso de formatura e mostre as 3 mais usadas.
+Não se sabe quantas palavras distintas virão, então guarde-as em dois
+vetores dinâmicos que crescem JUNTOS (dobrando): char **palavras (cada uma
+uma cópia no heap, em minúsculas) e int *cont. Palavras com menos de 3
+letras não contam (&quot;de&quot;, &quot;a&quot;, &quot;o&quot;...). No empate, vale a que apareceu
+primeiro. Mostre também quantas distintas foram guardadas e a capacidade
+final:</p>
+<pre><code class="language-text">const char *discurso = &quot;Hoje a turma celebra. A turma estudou, a turma &quot;
+    &quot;errou, a turma aprendeu. Hoje celebramos o estudo e o futuro; &quot;
+    &quot;o futuro da turma comeca hoje!&quot;;
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+10 palavras distintas (capacidade 16)
+1º turma (5)
+2º hoje (3)
+3º futuro (2)
+</code></pre>
+<hr>
+<p><strong>Exercício P0729</strong> · ★★★ · Quantas ilhas tem o mapa do rio</p>
+<p>Num mapa de satélite do Anavilhanas, &#39;#&#39; é terra e &#39;.&#39; é água. Uma ILHA é
+um grupo de &#39;#&#39; ligados na horizontal ou na vertical (diagonal não liga).
+O mapa vem como um vetor de strings:</p>
+<pre><code class="language-text">const char *mapa[6] = {&quot;##....#...&quot;,
+                       &quot;##...###..&quot;,
+                       &quot;......#...&quot;,
+                       &quot;..#.......&quot;,
+                       &quot;.###..##.#&quot;,
+                       &quot;..#...##.#&quot;};
+</code></pre>
+<p>Conte as ilhas e o tamanho de cada uma. Use uma matriz dinâmica de bool
+visitado (alocada com calloc, já tudo false) e uma função recursiva
+int inundar(const char **mapa, bool **vis, int l, int c, int i, int j),
+que marca a casa (i, j) e as vizinhas de terra ainda não visitadas, e
+devolve quantas casas marcou:</p>
+<pre><code class="language-text">Saída esperada:
+Ilha 1: começa em (0, 0), 4 casas
+Ilha 2: começa em (0, 6), 5 casas
+Ilha 3: começa em (3, 2), 5 casas
+Ilha 4: começa em (4, 6), 4 casas
+Ilha 5: começa em (4, 9), 2 casas
+Total: 5 ilhas
+</code></pre>
+<p><strong>Resposta esperada:</strong> a saída acima (5 ilhas).</p>
+<hr>
+<p><strong>Exercício P0730</strong> · ★★★ · O editor de linhas</p>
+<p>Escreva um editor de texto mínimo: o documento é um vetor dinâmico de
+linhas (char **, cada linha uma cópia no heap) com n e cap. Escreva:</p>
+<pre><code class="language-text">bool inserir(char ***doc, int *n, int *cap, int pos, const char *texto);
+void apagar(char **doc, int *n, int pos);
+</code></pre>
+<p>inserir abre espaço na posição pos (0 &lt;= pos &lt;= n) empurrando as linhas
+seguintes uma casa para frente com memmove; apagar libera a linha pos e
+puxa as seguintes com memmove. O vetor dobra quando enche (começando em
+2). Execute os comandos abaixo e mostre o documento no fim:</p>
+<pre><code class="language-text">inserir 0 &quot;Ata da reunião do condomínio&quot;
+inserir 1 &quot;Pauta: portão da garagem&quot;
+inserir 2 &quot;Encerrada às 21h&quot;
+inserir 2 &quot;Aprovado o conserto por R$ 850&quot;
+inserir 1 &quot;Presentes: 14 moradores&quot;
+apagar 3
+inserir 3 &quot;Aprovado o conserto por R$ 790&quot;
+</code></pre>
+<pre><code class="language-text">Saída esperada:
+(capacidade 2)
+(capacidade 4)
+(capacidade 8)
+1 | Ata da reunião do condomínio
+2 | Presentes: 14 moradores
+3 | Pauta: portão da garagem
+4 | Aprovado o conserto por R$ 790
+5 | Encerrada às 21h
+5 linhas, capacidade 8
+</code></pre>
+<hr>
+<h2>Desafios do módulo</h2>
+<p>Resolva num arquivo seu, com as flags de estudo (e <code>valgrind ./programa</code> como
+segunda opinião). A versão final não pode gerar relatório de erro.</p>
+<p><strong>1. Apagar do caderno.</strong> No caderninho de fiado do texto do assunto 0058,
+escreva <code>int remover(char **nomes, int *centavos, int *qtd, const char *nome)</code>,
+que apaga a linha do cliente e puxa as de baixo para cima. Teste removendo
+&quot;Seu Jorge&quot; e mostre o caderno.</p>
+<details><summary>Resposta</summary><p>Ficam Dona Cida (17.20), Bia (20.00), Tonho (3.15) e Rosa (5.60), total
+R$ 45.95. O caminho: ache o índice <code>i</code>, faça <code>free(nomes[i])</code> (o nome é um
+bloco), depois copie <code>nomes[k] = nomes[k + 1]</code> e <code>centavos[k] = centavos[k + 1]</code>
+para <code>k</code> de <code>i</code> até <code>qtd - 2</code> e faça <code>(*qtd)--</code>. Um <code>free</code> só: os ponteiros
+puxados continuam apontando para os mesmos blocos.</p>
+</details><p><strong>2. A matriz de dois mallocs.</strong> Escreva <code>int **criar_matriz(int l, int c)</code>
+que usa só dois <code>malloc</code>: um bloco com os <code>l * c</code> inteiros e um vetor de <code>l</code>
+ponteiros com <code>m[i] = bloco + i * c</code>. Escreva também o <code>liberar</code>. Teste com
+uma matriz 3 x 4 preenchida com <code>i * 4 + j</code> e mostre <code>m[2][3]</code>.</p>
+<details><summary>Resposta</summary><p><code>m[2][3]</code> vale <strong>11</strong>. Para liberar: <code>free(m[0])</code> (é o endereço do bloco de
+dados) e <code>free(m)</code>. Dois <code>malloc</code>, dois <code>free</code>, dados contíguos e a notação
+<code>m[i][j]</code> preservada. Cuidado: <code>free(m[1])</code> seria um erro, porque <code>m[1]</code> não
+veio de um <code>malloc</code>.</p>
+</details><p><strong>3. Matriz simétrica econômica.</strong> Numa tabela de distâncias entre 4
+cidades, <code>d[i][j] == d[j][i]</code> e a diagonal é 0. Guarde só o triângulo de baixo
+(com a diagonal) num vetor alocado com <code>malloc</code> de <code>n * (n + 1) / 2</code>
+posições, com o elemento <code>(i, j)</code>, <code>i &gt;= j</code>, em <code>i * (i + 1) / 2 + j</code>.
+Escreva <code>int indice(int i, int j)</code>, que troca <code>i</code> e <code>j</code> quando <code>i &lt; j</code>.
+Preencha o vetor com a tabela <code>{{0, 12, 30, 25}, {12, 0, 18, 40}, {30, 18, 0, 22}, {25, 40, 22, 0}}</code> (só o triângulo de baixo), imprima quantas
+posições o vetor tem, os índices de <code>(3, 1)</code> e de <code>(1, 3)</code> e, por fim, a
+tabela 4 x 4 inteira lida só do vetor, com <code>%4d</code>.</p>
+<details><summary>Resposta</summary><pre><code>posicoes: 10 (matriz cheia: 16)
+(3,1) -&gt; 7   (1,3) -&gt; 7
+   0  12  30  25
+  12   0  18  40
+  30  18   0  22
+  25  40  22   0
+</code></pre>
+<p>Dica: preencha com dois laços, <code>j</code> indo só até <code>i</code>, gravando
+<code>d[indice(i, j)] = dist[i][j]</code>. Na hora de imprimir, os dois laços vão até
+<code>n</code> e o <code>indice</code> cuida da metade de cima: <code>(1, 3)</code> vira <code>(3, 1)</code>, índice
+3 * 4 / 2 + 1 = 7. Com n = 1000, a economia passa de 499 mil posições.</p>
+</details><p><strong>4. O gerente do heap.</strong> O heap tem dois blocos livres, de 120 e de 60 bytes
+(<code>int livre[2] = {120, 60}</code>), e chegam três pedidos: 30, 80 e 55. Escreva
+<code>void simula(const char *nome, int best)</code> que atende os pedidos na ordem,
+descontando do bloco escolhido, e imprime a cada pedido o bloco usado e o que
+sobrou nos dois (ou &quot;falhou&quot;). Com <code>best == 0</code> é <strong>first fit</strong> (o primeiro
+bloco que serve, olhando o 0 antes); com <code>best == 1</code> é <strong>best fit</strong> (o menor
+bloco que serve). Chame as duas.</p>
+<details><summary>Resposta</summary><pre><code>first fit:
+  30: bloco 0, livres 90 e 60
+  80: bloco 0, livres 10 e 60
+  55: bloco 1, livres 10 e 5
+best fit:
+  30: bloco 1, livres 120 e 30
+  80: bloco 0, livres 40 e 30
+  55: falhou (livres 40 e 30)
+</code></pre>
+<p>Dica: para cada pedido, percorra os dois blocos guardando o índice escolhido
+(começando em -1); no first fit pare no primeiro que serve, no best fit troque
+a escolha quando achar um bloco que serve e é menor. Escolher &quot;o mais justo&quot;
+nem sempre é o melhor: deixa sobras pequenas demais. Os <code>malloc</code> reais usam
+variações de first fit com listas por tamanho.</p>
+</details><p><strong>5. Tem memória, mas não cabe.</strong> Simule um heap de 1000 bytes com um
+<code>char heap[1000]</code>, todo preenchido com <code>&#39;.&#39;</code> (livre). Escreva
+<code>int aloca(char dono, int tam)</code>, que procura <code>tam</code> posições livres
+<strong>seguidas</strong> a partir do começo, marca com a letra do dono e devolve o índice em que o
+bloco começa (ou -1), e <code>void libera(char dono)</code>. Escreva também um
+<code>relatorio</code> que imprime o total livre e o maior pedaço livre contíguo. Aloque
+A = 300, B = 200 e C = 400, libere B, mostre o relatório e tente alocar
+D = 250. Depois libere C, mostre o relatório e tente D de novo.</p>
+<details><summary>Resposta</summary><pre><code>A em 0
+B em 300
+C em 500
+livres: 300, maior pedaco contiguo: 200
+D (250) em -1
+livres: 700, maior pedaco contiguo: 700
+D (250) em 300
+</code></pre>
+<p>Dica: no <code>aloca</code>, conte uma &quot;corrida&quot; de livres (zere ao achar uma posição
+ocupada); quando ela chegar a <code>tam</code>, o bloco começa em <code>i - tam + 1</code>. Há 300
+bytes livres, mas em dois pedaços (200 onde era B e 100 no fim), e um bloco
+precisa ser contíguo: é a <strong>fragmentação externa</strong>. Liberando C, os pedaços
+se juntam num de 700.</p>
+</details><p><strong>6. Repetir texto.</strong> Escreva <code>char *repetir(const char *s, int n)</code> que
+devolve uma string nova com <code>s</code> repetida <code>n</code> vezes. Quantos bytes
+<code>repetir(&quot;ab&quot;, 3)</code> pede? E <code>repetir(&quot;ab&quot;, 0)</code>?</p>
+<details><summary>Resposta</summary><p><code>&quot;ababab&quot;</code> precisa de 2 * 3 + 1 = <strong>7</strong> bytes. Com n = 0, 1 byte só com o
+<code>&#39;\0&#39;</code>: uma string vazia válida, que quem chama também precisa liberar.
+Monte com <code>strcpy</code> no primeiro e <code>strcat</code> nos seguintes, ou copiando com um
+índice.</p>
+</details><p><strong>7. O vetor que encolhe.</strong> Escreva um vetor dinâmico de <code>int</code> que começa
+com capacidade 1, dobra com <code>realloc</code> quando enche e <strong>corta pela metade</strong>
+quando a quantidade fica menor que um quarto da capacidade. Use
+<code>int insere(int **v, int *qtd, int *cap, int x)</code> e
+<code>void remove_fim(int **v, int *qtd, int *cap)</code>. Insira 10, 20, ..., 90 e
+depois remova 6 vezes, imprimindo <code>qtd</code> e <code>cap</code> depois de cada operação.</p>
+<details><summary>Resposta</summary><pre><code>insere 10: qtd 1 cap 1
+insere 20: qtd 2 cap 2
+insere 30: qtd 3 cap 4
+insere 40: qtd 4 cap 4
+insere 50: qtd 5 cap 8
+insere 60: qtd 6 cap 8
+insere 70: qtd 7 cap 8
+insere 80: qtd 8 cap 8
+insere 90: qtd 9 cap 16
+remove: qtd 8 cap 16
+remove: qtd 7 cap 16
+remove: qtd 6 cap 16
+remove: qtd 5 cap 16
+remove: qtd 4 cap 16
+remove: qtd 3 cap 8
+</code></pre>
+<p>Dica: a função recebe <code>int **v</code> porque o <code>realloc</code> pode mudar o endereço do
+bloco; use um ponteiro temporário e só troque <code>*v</code> se ele não for <code>NULL</code>. No
+<code>remove_fim</code>, depois de <code>(*qtd)--</code>, teste <code>*cap &gt; 1 &amp;&amp; *qtd &lt; *cap / 4</code>. O
+&quot;um quarto&quot; (e não &quot;metade&quot;) evita o vai e vem: com metade, um insere e um
+remove alternados na fronteira fariam um <code>realloc</code> a cada operação.</p>
+</details><p><strong>8. Dois nomes, um bloco.</strong> Monte um programa com o trecho abaixo e rode
+com as flags de estudo:</p>
+<pre><code class="language-c">int *a = malloc(3 * sizeof *a);
+int *b = a;
+b[0] = 5;
+free(a);
+a = NULL;
+printf(&quot;%d\n&quot;, b == NULL);
+printf(&quot;%d\n&quot;, b[0]);
+</code></pre>
+<p>Anote o que aparece. Depois conserte: guarde o valor de <code>b[0]</code> numa variável
+<strong>antes</strong> do <code>free</code>, zere os dois ponteiros e imprima
+<code>guardado = ...</code> e <code>a == NULL: ..., b == NULL: ...</code>.</p>
+<details><summary>Resposta</summary><p>A primeira versão mostra <code>0</code> e cai no <code>b[0]</code>: o compilador já avisa
+<code>pointer &#39;b&#39; used after &#39;free&#39;</code> e o ASan acusa
+<code>ERROR: AddressSanitizer: heap-use-after-free</code>. A consertada mostra:</p>
+<pre><code>guardado = 5
+a == NULL: 1, b == NULL: 1
+</code></pre>
+<p>Dica: <code>a = NULL</code> muda só a variável <code>a</code>; <code>b</code> continua com o endereço do bloco
+liberado (um ponteiro solto). Zerar o ponteiro ajuda, mas não substitui saber
+<strong>quem é o dono</strong> do bloco.</p>
+</details><p><strong>9. O vazamento a conta-gotas.</strong> Escreva <code>void tarefa(int chamada)</code>, que faz
+um <code>malloc</code> de 24 bytes, escreve um caractere no bloco e só dá <code>free</code> quando
+<code>chamada</code> é par; nas ímpares, soma 24 numa variável global <code>vazou</code>. Chame
+<code>tarefa</code> de 1 a 1000, imprima <code>bytes sem free: ...</code> e rode com as flags de estudo.
+Depois conserte a função e rode de novo.</p>
+<details><summary>Resposta</summary><pre><code>bytes sem free: 12000
+
+==...==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 12000 byte(s) in 500 object(s) allocated from:
+    #0 ... in malloc ...
+    #1 ... in tarefa ...
+</code></pre>
+<p>O seu contador e o LeakSanitizer batem: 500 chamadas ímpares × 24 = 12000
+bytes em 500 blocos, com a linha do <code>malloc</code> apontada. Consertado (<code>free</code>
+sempre), sai só <code>bytes sem free: 0</code>, sem relatório. Dica: num servidor que
+roda essa função 1 milhão de vezes por dia, são 12 MB por dia.</p>
+</details><p><strong>10. Frase ao contrário.</strong> Use o <code>dividir</code> do E348 e uma função de juntar
+para inverter a ordem das palavras: &quot;o rato roeu a roupa&quot; vira
+&quot;roupa a roeu rato o&quot;. A frase resultante deve ser um bloco novo, do tamanho
+exato.</p>
+<details><summary>Resposta</summary><p><code>dividir</code> com <code>&#39; &#39;</code> dá 5 pedaços. O tamanho final é a soma dos <code>strlen</code> (15)
+mais 4 espaços mais o <code>&#39;\0&#39;</code>: <strong>20 bytes</strong>, o mesmo tamanho da frase original.
+Monte percorrendo os pedaços do último para o primeiro. No fim, libere os 5
+pedaços, o vetor deles e a frase nova.</p>
+</details><h2>Questões no estilo da prova</h2>
+<p>Formato da prova do mestrado do PPGI/UFAM. Resolva no papel, marque uma letra
+e só então abra o gabarito. Os trechos foram compilados com
+<code>gcc -std=c17 -Wall -Wextra</code> (e rodados com o AddressSanitizer nos casos de
+vazamento).</p>
+<p><strong>Questão 1.</strong> No programa abaixo, em que região da memória fica cada coisa:
+<code>total</code>, <code>chamadas</code>, <code>n</code> e o bloco apontado por <code>v</code>?</p>
+<pre><code class="language-c">int total = 0;
+
+void registra(int n) {
+    static int chamadas = 0;
+    int *v = malloc(n * sizeof *v);
+    chamadas++;
+    free(v);
+}
+</code></pre>
+<ul>
+<li>(A) pilha, pilha, pilha, heap</li>
+<li>(B) dados, pilha, pilha, heap</li>
+<li>(C) dados, dados, pilha, heap</li>
+<li>(D) heap, dados, pilha, heap</li>
+<li>(E) dados, dados, heap, pilha</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(C)</strong>. Global e <code>static</code> moram nos <strong>dados</strong> (alocação estática) e duram o
+programa todo. Parâmetro e local moram na <strong>pilha</strong> (alocação automática).
+O bloco do <code>malloc</code> mora no <strong>heap</strong> (alocação dinâmica). A variável
+<code>v</code> está na pilha; o bloco para onde ela aponta, no heap. Veja 0053.</p>
+</details><p><strong>Questão 2.</strong> Sobre alocação dinâmica em C, considere as afirmações e marque a alternativa CORRETA.</p>
+<ul>
+<li><p><strong>I.</strong> <code>calloc(n, tam)</code> zera o bloco reservado, e <code>malloc</code> não.</p>
+</li>
+<li><p><strong>II.</strong> Depois de <code>free(p)</code>, o ponteiro <code>p</code> passa a valer <code>NULL</code> automaticamente.</p>
+</li>
+<li><p><strong>III.</strong> Se <code>realloc</code> falha, ele devolve <code>NULL</code> e o bloco antigo continua válido.</p>
+</li>
+<li><p><strong>IV.</strong> <code>malloc</code> pode devolver <code>NULL</code>, e o resultado deve ser conferido antes do uso.</p>
+</li>
+<li><p>(A) Apenas I e III</p>
+</li>
+<li><p>(B) Apenas I, III e IV</p>
+</li>
+<li><p>(C) Apenas II e III</p>
+</li>
+<li><p>(D) Apenas II e IV</p>
+</li>
+<li><p>(E) Apenas I, II e IV</p>
+</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(B).</strong> I é verdadeira: só o <code>calloc</code> inicializa com zeros. II é falsa: o <code>free</code> não altera <code>p</code>, que passa a apontar para memória devolvida (ponteiro pendurado). III e IV são verdadeiras. Por isso o <code>realloc</code> usa um ponteiro auxiliar: <code>v = realloc(v, ...)</code> perde o bloco antigo se falhar. Veja 0055.</p>
+</details><p><strong>Questão 3.</strong> <code>v</code> aponta para um bloco do <code>malloc</code> que precisa crescer para
+<code>n</code> inteiros. Qual forma é a correta?</p>
+<ul>
+<li>(A) <code>v = realloc(v, n);</code></li>
+<li>(B) <code>v = realloc(v, n * sizeof *v); if (v == NULL) return 1;</code></li>
+<li>(C) <code>free(v); v = realloc(v, n * sizeof *v);</code></li>
+<li>(D) <code>realloc(v, n * sizeof *v);</code> e continuar usando <code>v</code></li>
+<li>(E) <code>int *novo = realloc(v, n * sizeof *v); if (novo == NULL) { free(v); return 1; } v = novo;</code></li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(E)</strong>. Se o <code>realloc</code> falha, devolve <code>NULL</code> e <strong>o bloco antigo continua
+vivo</strong>. Em (B), <code>v = NULL</code> apaga o único endereço dele: vazamento. (A)
+esquece o <code>sizeof</code>. (C) usa o ponteiro depois do <code>free</code>. (D) ignora que o
+bloco pode ter mudado de endereço. Veja 0055.</p>
+</details><p><strong>Questão 4.</strong> Rodado com o AddressSanitizer, o que o relatório de
+vazamento acusa ao final?</p>
+<pre><code class="language-c">char *p = NULL;
+for (int i = 0; i &lt; 3; i++) {
+    p = malloc(10);
+    if (p == NULL) return 1;
+}
+free(p);
+</code></pre>
+<ul>
+<li>(A) nada: houve um <code>free</code></li>
+<li>(B) 30 bytes em 3 blocos</li>
+<li>(C) 10 bytes em 1 bloco</li>
+<li>(D) 20 bytes em 2 blocos</li>
+<li>(E) <em>double free</em></li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(D)</strong>. Cada volta sobrescreve <code>p</code> com um endereço novo, e os dois blocos
+anteriores ficam sem ninguém que os aponte. O <code>free</code> final libera só o
+terceiro. O ASan mostra <code>20 byte(s) leaked in 2 allocation(s)</code>. Veja 0057.</p>
+</details><p><strong>Questão 5.</strong> Um vetor dinâmico começa com capacidade 1 e <strong>dobra</strong> a
+capacidade (com <code>realloc</code>) sempre que enche. Depois de inserir 100
+elementos, quantos <code>realloc</code> foram feitos e qual é a capacidade final?</p>
+<ul>
+<li>(A) 7 e 128</li>
+<li>(B) 100 e 100</li>
+<li>(C) 6 e 64</li>
+<li>(D) 99 e 100</li>
+<li>(E) 50 e 128</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A)</strong>. A capacidade passa por 1, 2, 4, 8, 16, 32, 64, 128: sete
+dobras. As cópias somam 1 + 2 + ... + 64 = 127 &lt; 2 · 100, então o custo total
+das inserções é O(n) e o custo <strong>amortizado</strong> de cada uma é O(1). Crescer
+de 1 em 1 faria 99 <code>realloc</code> e custo total O(n²). Veja 0055.</p>
+</details><p><strong>Questão 6.</strong> Uma matriz de 3 linhas e 4 colunas foi alocada como um bloco
+único: <code>int *v = malloc(3 * 4 * sizeof *v);</code>. Em que índice de <code>v</code> fica o
+elemento da linha 2, coluna 3 (contando de 0)?</p>
+<ul>
+<li>(A) 9</li>
+<li>(B) 14</li>
+<li>(C) 11</li>
+<li>(D) 6</li>
+<li>(E) 12</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(C)</strong>. Linha após linha (<em>row-major</em>): <code>i * colunas + j</code> = 2 · 4 + 3 = 11.
+O 12 já está fora do bloco, que vai de 0 a 11. Veja 0056.</p>
+</details><p><strong>Questão 7.</strong> Uma matriz dinâmica de <code>L</code> linhas foi montada como vetor de ponteiros: <code>int **m</code>, com um <code>malloc</code> para o vetor de ponteiros e um para cada linha. Considere as afirmações e marque a alternativa CORRETA.</p>
+<ul>
+<li><p><strong>I.</strong> São <code>L + 1</code> chamadas de <code>malloc</code>.</p>
+</li>
+<li><p><strong>II.</strong> Para liberar, primeiro se libera cada <code>m[i]</code> e só depois <code>m</code>.</p>
+</li>
+<li><p><strong>III.</strong> As linhas ficam garantidamente vizinhas na memória.</p>
+</li>
+<li><p><strong>IV.</strong> Alocar tudo num bloco único, com <code>malloc(L * C * sizeof *v)</code>, precisa de um só <code>free</code>.</p>
+</li>
+<li><p>(A) Apenas I e II</p>
+</li>
+<li><p>(B) Apenas II e III</p>
+</li>
+<li><p>(C) Apenas I e III</p>
+</li>
+<li><p>(D) Apenas III e IV</p>
+</li>
+<li><p>(E) Apenas I, II e IV</p>
+</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(E).</strong> I é verdadeira: uma chamada para o vetor de ponteiros e uma por linha. II é verdadeira: se <code>m</code> for liberado antes, os endereços das linhas se perdem e elas vazam. III é falsa: cada <code>malloc</code> pode cair num lugar diferente do heap. IV é verdadeira: é a variante de bloco único, indexada por <code>i * C + j</code>. Veja 0056.</p>
+</details><p><strong>Questão 8.</strong> Em uma plataforma de 64 bits típica (<code>int</code> de 4 bytes,
+ponteiro de 8), o que há de errado em
+<code>int **m = malloc(3 * sizeof(int));</code> para guardar 3 linhas?</p>
+<ul>
+<li>(A) Reserva 12 bytes, mas 3 ponteiros precisam de 24.</li>
+<li>(B) Nada: <code>int</code> e <code>int *</code> têm o mesmo tamanho.</li>
+<li>(C) Reserva 24 bytes, mas 3 ponteiros precisam de 12.</li>
+<li>(D) Não compila: <code>malloc</code> devolve <code>void *</code>.</li>
+<li>(E) Só dá errado se as linhas tiverem mais de 3 colunas.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(A)</strong>. O vetor guarda <code>int *</code>, de 8 bytes. Com <code>sizeof(int)</code> o bloco tem
+metade do tamanho certo, e gravar <code>m[1]</code> já passa do fim. Escrever
+<code>malloc(3 * sizeof *m)</code> evita o erro. (D) é falsa: <code>void *</code> converte sozinho
+para qualquer ponteiro de dado. Veja 0056.</p>
+</details><p><strong>Questão 9.</strong> O que acontece com o programa abaixo?</p>
+<pre><code class="language-c">int *cria(void) {
+    int v[3] = {1, 2, 3};
+    return v;
+}
+
+int main(void) {
+    int *p = cria();
+    printf(&quot;%d\n&quot;, p[0]);
+    return 0;
+}
+</code></pre>
+<ul>
+<li>(A) Imprime 1, porque o vetor foi inicializado.</li>
+<li>(B) Não compila: função não pode devolver ponteiro.</li>
+<li>(C) Imprime 1, porque o <code>return</code> copia o vetor para o <code>main</code>.</li>
+<li>(D) Comportamento indefinido: <code>v</code> morre no <code>return</code> e <code>p</code> aponta para um frame que já não existe.</li>
+<li>(E) Imprime 0, porque o frame é zerado no <code>return</code>.</li>
+</ul>
+<details><summary>Gabarito</summary><p><strong>(D)</strong>. <code>v</code> mora no frame de <code>cria</code>, na pilha, e o frame some no <code>return</code>.
+O gcc avisa (<code>function returns address of local variable</code>) e, na prática,
+devolve <code>NULL</code> de propósito. O conserto é alocar com <code>malloc</code> (e o <code>main</code>
+dar <code>free</code>) ou receber o vetor como parâmetro. Veja 0053.</p>
+</details><h2>Para ler mais</h2>
+<ul>
+<li>BACKES, A. <em>Linguagem C: completa e descomplicada</em>. Rio de Janeiro: Elsevier, 2013. Cap. 11: alocação dinâmica.</li>
+<li>BACKES, A. <em>Linguagem C descomplicada</em>. Apostila. Uberlândia: FACOM/UFU. Capítulo de alocação dinâmica.</li>
+<li>CELES, W.; RANGEL, J. L. <em>Apostila de estruturas de dados</em>. Rio de Janeiro: PUC-Rio, 2002. Alocação dinâmica e matrizes dinâmicas.</li>
+<li>DEITEL, P.; DEITEL, H. <em>C: como programar</em>. 6. ed. São Paulo: Pearson, 2011. Cap. 12: estruturas de dados (alocação dinâmica).</li>
+<li>CELES, W.; CERQUEIRA, R.; RANGEL, J. L. <em>Introdução a estruturas de dados: com técnicas de programação em C</em>. 2. ed. Rio de Janeiro: Elsevier, 2016. Alocação dinâmica, vetores e matrizes dinâmicas.</li>
+<li>ZIVIANI, N. <em>Projeto de algoritmos: com implementações em Pascal e C</em>. 3. ed. rev. e ampl. São Paulo: Cengage Learning, 2010. Alocação dinâmica com apontadores nas estruturas de dados.</li>
+<li>FEOFILOFF, P. <em>Algoritmos em linguagem C</em>. Rio de Janeiro: Elsevier, 2009. Apêndice F: alocação dinâmica de memória.</li>
+<li>LAUREANO, M. <em>Estrutura de dados com algoritmos e C</em>. Rio de Janeiro: Brasport, 2008. Cap. 2: uso de memória.</li>
+<li>ROCHA, A. M. A.; BORGES, A. R. O. S. <em>Programação, estruturas de dados e algoritmos em C</em>. Aveiro: Universidade de Aveiro. Apostila da disciplina Programação II.</li>
+<li>TENENBAUM, A. M.; LANGSAM, Y.; AUGENSTEIN, M. J. <em>Estruturas de dados usando C</em>. São Paulo: Makron Books, 1995. Cap. 9: gerenciamento de armazenamento.</li>
+<li>KERNIGHAN, B. W.; RITCHIE, D. M. <em>C: a linguagem de programação padrão ANSI</em>. Rio de Janeiro: Campus, 1989. Seção 8.7: um alocador de memória.</li>
+<li>CPPREFERENCE. <em>Dynamic memory management</em>. Disponível em: <a href="https://en.cppreference.com/w/c/memory">https://en.cppreference.com/w/c/memory</a>.</li>
+<li>LINUX MAN-PAGES. <em>malloc(3)</em>. Disponível em: <a href="https://man7.org/linux/man-pages/man3/malloc.3.html">https://man7.org/linux/man-pages/man3/malloc.3.html</a>.</li>
+<li>GOOGLE. <em>AddressSanitizer</em>. Disponível em: <a href="https://github.com/google/sanitizers/wiki/AddressSanitizer">https://github.com/google/sanitizers/wiki/AddressSanitizer</a>.</li>
+<li>VALGRIND DEVELOPERS. <em>Valgrind user manual: Memcheck</em>. Disponível em: <a href="https://valgrind.org/docs/manual/mc-manual.html">https://valgrind.org/docs/manual/mc-manual.html</a>.</li>
+</ul>
