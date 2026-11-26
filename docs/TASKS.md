@@ -4,7 +4,7 @@
 
 > Atualiza no mesmo commit em que a tarefa começa ou termina.
 
-**Resumo:** 27 tarefas feitas · 1 substituída · 0 em andamento · 0 a fazer · atualizado 2026-11-26
+**Resumo:** 28 tarefas feitas · 1 substituída · 0 em andamento · 2 a fazer · atualizado 2026-11-26
 
 Status: `A fazer` · `Em andamento` · `Feita` · `Bloqueada` (com motivo nas notas).
 Prioridade: `Alta` · `Média` · `Baixa`.
@@ -73,6 +73,14 @@ Provas recebidas: 11 cadernos de 2016 a 2023 em `_fontes/provas-ppgi.md`; só a 
 |---|---|---|---|---|
 | 7.1 | Organizar o leitor como livro, com páginas por capítulo | Alta | Feita | Oito partes, 29 módulos e 189 capítulos |
 | 7.2 | Restaurar Markdown como fonte do livro | Alta | Feita | 304 arquivos `.md` nos caminhos originais |
+
+## Fase 8 · Painel do quiz que ensina (1/3)
+
+| # | Tarefa | Prioridade | Status | Notas |
+|---|---|---|---|---|
+| 8.1 | Piloto: aula por assunto, contraponto por afirmação e o porquê em bloco único no painel da direita | Alta | Feita | 4 aulas (0076, 0090, 0099, 0101) e 4 questões; aguarda o aceite do dono |
+| 8.2 | Aula dos outros 62 assuntos citados nas dicas | Alta | A fazer | depende do aceite do piloto |
+| 8.3 | Contraponto nas outras 52 questões de afirmações | Alta | A fazer | depende do aceite do piloto |
 
 ---
 

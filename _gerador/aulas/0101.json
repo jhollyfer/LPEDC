@@ -1,0 +1,25 @@
+{
+ "num": "0101",
+ "oque": "A AVL é uma árvore binária de busca que **se conserta sozinha**: depois de cada inserção ou remoção, ela confere as alturas e, se algum nó ficou torto, gira nós para voltar ao equilíbrio.",
+ "como": "Cada nó tem um **fator de balanceamento**: altura da subárvore esquerda menos altura da direita. Na AVL esse fator só pode ser -1, 0 ou +1, em **todos** os nós.\n\nA inserção começa igual à da BST: desce e põe a folha. Depois sobe de volta pelo mesmo caminho recalculando as alturas. O primeiro nó que aparecer com fator +2 ou -2 é consertado com uma **rotação**. O caso depende de onde a chave nova entrou em relação a esse nó:\n\n| Caso | Onde a chave entrou | Conserto |\n|---|---|---|\n| Esquerda-Esquerda | à esquerda do filho esquerdo | rotação simples à direita |\n| Direita-Direita | à direita do filho direito | rotação simples à esquerda |\n| Esquerda-Direita | à direita do filho esquerdo | rotação dupla: esquerda no filho, direita no nó |\n| Direita-Esquerda | à esquerda do filho direito | rotação dupla: direita no filho, esquerda no nó |\n\nA rotação troca três ponteiros e **mantém a ordem da BST**: o percurso em ordem dá o mesmo resultado antes e depois.",
+ "caracteristicas": [
+  "É uma BST com uma regra a mais: diferença de altura de no máximo 1 em **cada** nó, não só na raiz.",
+  "A altura fica sempre em `O(log n)`, no máximo cerca de `1,44 · log₂ n`.",
+  "Na **inserção**, uma rotação (simples ou dupla) resolve a árvore toda.",
+  "Na **remoção**, o conserto de um nó pode encurtar a subárvore e desequilibrar o de cima: as rotações podem se repetir até a raiz, até `O(log n)` delas.",
+  "Cada nó guarda a altura (ou o fator) para não recalcular tudo."
+ ],
+ "vantagens": [
+  "Busca, inserção e remoção são `O(log n)` no **pior caso**. Ela nunca degenera.",
+  "É mais rigidamente equilibrada que a rubro-negra, então a busca tende a ser um pouco mais curta.",
+  "Mantém as chaves em ordem, como toda BST."
+ ],
+ "desvantagens": [
+  "O código é mais longo: altura em cada nó e quatro casos de rotação.",
+  "Inserir e remover fazem trabalho extra para conferir e rotacionar.",
+  "Um campo a mais de memória por nó."
+ ],
+ "exemplo": "**Inserir 10, 20, 30** (caso Direita-Direita).\n\nDepois do 30, a árvore é uma cadeia. O nó 10 tem esquerda de altura 0 e direita de altura 2: fator -2.\n\n```\n10                 20\n  \\               /  \\\n   20     =>    10    30\n     \\\n      30\n```\n\nRotação simples à esquerda no 10: o 20 sobe, o 10 desce para a esquerda dele.\n\n**Inserir 30, 10, 20** (caso Esquerda-Direita).\n\nO 30 fica com fator +2, mas a chave entrou à **direita** do filho esquerdo. Uma rotação simples não resolve; são duas.\n\n```\n  30            30           20\n /             /            /  \\\n10      =>    20     =>   10    30\n  \\          /\n   20       10\n```\n\nPrimeiro rotação à esquerda no 10, depois rotação à direita no 30.\n\n**Continuando o primeiro exemplo: inserir 40 e 50.** O 40 entra à direita do 30 e nada desequilibra. O 50 entra à direita do 40, e o nó 30 fica com fator -2 (Direita-Direita). Rotação à esquerda no 30:\n\n```\n    20                 20\n   /  \\               /  \\\n 10    30     =>    10    40\n         \\               /  \\\n          40           30    50\n            \\\n             50\n```\n\nEm uma BST comum, 10, 20, 30, 40, 50 dariam uma cadeia de altura 5. Na AVL a altura ficou 3.",
+ "custos": "| Operação | AVL | BST sem balanceamento (pior caso) |\n|---|---|---|\n| Buscar | `O(log n)` | `O(n)` |\n| Inserir | `O(log n)`, no máximo 1 rotação simples ou dupla | `O(n)` |\n| Remover | `O(log n)`, até `O(log n)` rotações | `O(n)` |",
+ "naprova": "A banca mostra árvores e pergunta quais são AVL (calcule o fator em todos os nós), pede a árvore depois de inserir uma sequência (identifique o caso da rotação) e cobra a diferença entre inserção e remoção quanto ao número de rotações."
+}

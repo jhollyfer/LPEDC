@@ -213,7 +213,21 @@
           "modulo": "15-hash.md"
         }
       ],
-      "dica": "**Cobra:** Julgar afirmações sobre lista encadeada: busca, ordenação e hash.\n\n- **Busca na lista** [0076]: percorre os nós em sequência, então o pior caso olha todos os `n`. Ex.: lista de 1000 nós: até 1000 comparações.\n- **Busca binária** [0090]: exige vetor ordenado com acesso por índice e custa no máximo `⌊log₂ n⌋ + 1` comparações. Ex.: `n = 1000`: no máximo 10.\n- **Endereçamento aberto** [0107]: guarda as chaves num vetor e resolve colisão sondando outras posições, sem listas. Ex.: `M = 5`: a chave 12 vai à posição 3 se a 2 está ocupada.\n\n**Como atacar:** compare o pior caso de cada estrutura e veja em que base cada técnica se apoia."
+      "dica": "**Cobra:** Julgar afirmações sobre lista encadeada: busca, ordenação e hash.\n\n- **Busca na lista** [0076]: percorre os nós em sequência, então o pior caso olha todos os `n`. Ex.: lista de 1000 nós: até 1000 comparações.\n- **Busca binária** [0090]: exige vetor ordenado com acesso por índice e custa no máximo `⌊log₂ n⌋ + 1` comparações. Ex.: `n = 1000`: no máximo 10.\n- **Endereçamento aberto** [0107]: guarda as chaves num vetor e resolve colisão sondando outras posições, sem listas. Ex.: `M = 5`: a chave 12 vai à posição 3 se a 2 está ocupada.\n\n**Como atacar:** compare o pior caso de cada estrutura e veja em que base cada técnica se apoia.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Pior caso da lista: a chave está no último nó, e você passou por quantos? Pior caso do vetor ordenado com busca binária: em 1.000 elementos, quantas comparações?"
+        },
+        {
+          "item": "II",
+          "texto": "Lista encadeada é um jeito de **guardar** dados; heapsort é um jeito de **ordenar**. Dá para comparar a eficiência de uma estrutura com a de um algoritmo? E o que a lista faz, sozinha, para pôr chaves em ordem?"
+        },
+        {
+          "item": "III",
+          "texto": "No endereçamento aberto, quando duas chaves caem na mesma posição, para onde a segunda vai: para outra casa do próprio vetor ou para um nó pendurado? Qual dos dois tipos de hash usa lista?"
+        }
+      ]
     },
     {
       "numero": 5,
@@ -577,7 +591,21 @@
           "modulo": "13-busca-e-ordenacao.md"
         }
       ],
-      "dica": "**Cobra:** Julgar afirmações sobre busca sequencial, busca em vetor ordenado e maior elemento.\n\n- **Busca sequencial** [0089]: compara a chave com cada posição e funciona em qualquer vetor, ordenado ou não. Ex.: `4 9 2`: achar o 2 passa por 3 posições.\n- **Busca binária** [0090]: em vetor ordenado custa `O(log n)`, bem menos que `n`, mas continua dependendo de `n`. Ex.: `n = 1024`: no máximo 11 comparações.\n- **Custo constante** [0072]: `O(1)` é o custo que não muda conforme o tamanho `n` do vetor. Ex.: ler `v[0]` custa o mesmo em 10 ou 1 000 000 de elementos.\n- **Maior elemento** [0089]: num vetor sem ordem, é preciso olhar cada posição uma vez; custo proporcional a `n`. Ex.: maior de `3 8 1 6 5`: 4 comparações para 5 elementos.\n\n**Como atacar:** julgue cada afirmação pelo custo e pelo requisito de ordenação."
+      "dica": "**Cobra:** Julgar afirmações sobre busca sequencial, busca em vetor ordenado e maior elemento.\n\n- **Busca sequencial** [0089]: compara a chave com cada posição e funciona em qualquer vetor, ordenado ou não. Ex.: `4 9 2`: achar o 2 passa por 3 posições.\n- **Busca binária** [0090]: em vetor ordenado custa `O(log n)`, bem menos que `n`, mas continua dependendo de `n`. Ex.: `n = 1024`: no máximo 11 comparações.\n- **Custo constante** [0072]: `O(1)` é o custo que não muda conforme o tamanho `n` do vetor. Ex.: ler `v[0]` custa o mesmo em 10 ou 1 000 000 de elementos.\n- **Maior elemento** [0089]: num vetor sem ordem, é preciso olhar cada posição uma vez; custo proporcional a `n`. Ex.: maior de `3 8 1 6 5`: 4 comparações para 5 elementos.\n\n**Como atacar:** julgue cada afirmação pelo custo e pelo requisito de ordenação.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "A busca sequencial olha posição por posição sem supor nada sobre a ordem. Se o vetor estiver ordenado, ela deixa de achar a chave ou só deixa de ser a opção mais rápida?"
+        },
+        {
+          "item": "II",
+          "texto": "Com o vetor ordenado você descarta metade a cada passo. Em 8 elementos são até 4 comparações; em 1.000, até 10. Esse número fica parado quando `n` cresce?"
+        },
+        {
+          "item": "III",
+          "texto": "Sem ordem, o maior pode estar em qualquer posição: dá para pular alguma sem risco? Compare com o vetor ordenado, em que o maior está sempre na última posição e basta um acesso, `O(1)`."
+        }
+      ]
     },
     {
       "numero": 13,

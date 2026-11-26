@@ -8,6 +8,13 @@ Mudanças do LPEDC que quem estuda percebe. Formato
 
 ### Mudado
 
+- No quiz, o painel da direita passou a ensinar o assunto: o que é, como funciona, características,
+  vantagens, desvantagens e um exemplo passo a passo. Em piloto para lista encadeada, busca binária,
+  árvore binária de busca e AVL.
+- Questão de verdadeiro ou falso ganhou **Para pensar em cada afirmação**: um contraponto por
+  afirmação, sem dizer a resposta. Em piloto em quatro questões.
+- Depois de responder, o porquê do acerto ou do erro aparece num bloco só, no topo do painel da
+  direita. O porquê das outras alternativas fica recolhido.
 - O curso abre como livro, com prefácio, sumário por partes, um assunto por página e navegação entre capítulos.
 - Os documentos em Markdown voltaram a ser a fonte do livro e do acervo.
 - No quiz, o tópico 3 do edital saiu separado: **3.1 Lista**, **3.2 Fila**, **3.3 Pilha** e

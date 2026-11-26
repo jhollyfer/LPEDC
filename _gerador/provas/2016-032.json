@@ -596,7 +596,21 @@
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** Julgar três afirmações sobre uma ABB sem balanceamento: custo, ordem e memória.\n\n- **ABB degenerada** [0099]: busca e inserção custam a altura da árvore; chaves inseridas em ordem formam uma cadeia de altura `n`, e o custo vira `O(n)`. Ex.: inserir `1, 2, 3, 4`: cada chave vai à direita da anterior, e achar o 4 passa por 4 nós.\n- **Percurso em ordem** [0098]: visita esquerda, raiz, direita, e numa ABB entrega as chaves em ordem crescente. Ex.: raiz 6 com filhos 2 e 9: em ordem `2 6 9`.\n- **Nó da árvore** [0097]: cada nó guarda a chave e um ponteiro para cada filho, além dos dados. Ex.: `struct No { int chave; struct No *esq, *dir; };` tem 2 ponteiros por nó.\n\n**Como atacar:** decida cada afirmação sozinha e só depois procure a combinação nas letras."
+      "dica": "**Cobra:** Julgar três afirmações sobre uma ABB sem balanceamento: custo, ordem e memória.\n\n- **ABB degenerada** [0099]: busca e inserção custam a altura da árvore; chaves inseridas em ordem formam uma cadeia de altura `n`, e o custo vira `O(n)`. Ex.: inserir `1, 2, 3, 4`: cada chave vai à direita da anterior, e achar o 4 passa por 4 nós.\n- **Percurso em ordem** [0098]: visita esquerda, raiz, direita, e numa ABB entrega as chaves em ordem crescente. Ex.: raiz 6 com filhos 2 e 9: em ordem `2 6 9`.\n- **Nó da árvore** [0097]: cada nó guarda a chave e um ponteiro para cada filho, além dos dados. Ex.: `struct No { int chave; struct No *esq, *dir; };` tem 2 ponteiros por nó.\n\n**Como atacar:** decida cada afirmação sozinha e só depois procure a combinação nas letras.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Insira `1, 2, 3, 4, 5` nessa ordem e desenhe. Por quantos nós o 5 passou até achar o lugar dele? E se fossem `n` chaves em ordem?"
+        },
+        {
+          "item": "II",
+          "texto": "Monte a árvore de `6, 2, 9` e visite esquerda, raiz, direita. Em que ordem as chaves saem?"
+        },
+        {
+          "item": "III",
+          "texto": "Olhe a `struct` do nó: além da chave, o que mais cada nó carrega? Compare com um vetor, que guarda só as chaves."
+        }
+      ]
     },
     {
       "numero": 14,

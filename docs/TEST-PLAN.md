@@ -30,7 +30,7 @@ resposta é conferida). Passa com `<modulo>: 0 com problema`.
 
 | O quê | Como | Passa quando |
 |---|---|---|
-| dados do quiz | `cd _gerador && node quiz.mjs --check` (letra igual ao `PROVAS.md`, porquê de toda alternativa, dica no formato com 2 a 4 conceitos, cada um com definição e `Ex.:`, assunto `[NNNN]` que existe, cerca de código na própria linha) | `0 erros` |
+| dados do quiz | `cd _gerador && node quiz.mjs --check` (letra igual ao `PROVAS.md`, porquê de toda alternativa, dica no formato com 2 a 4 conceitos, cada um com definição e `Ex.:`, assunto `[NNNN]` que existe, cerca de código na própria linha, aula com os campos obrigatórios, contraponto que não entrega a resposta) | `0 erros` |
 | quiz no navegador | `cd _gerador && node quiz-navegador.mjs` (as 210 questões a 390px e a 1440px) | `0 com problema, 0 erros de script` nas duas larguras |
 
 ## 3.2 Leitor do curso

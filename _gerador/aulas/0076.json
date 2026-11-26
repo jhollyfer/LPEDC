@@ -1,0 +1,26 @@
+{
+ "num": "0076",
+ "oque": "Uma sequência de nós soltos na memória. Cada nó guarda um dado e o endereço do próximo nó. A lista em si é só um ponteiro para o primeiro nó; o último aponta para `NULL`.",
+ "como": "Para chegar a um nó, você parte do primeiro e segue os ponteiros, um por um. Não existe `lista[3]`: o quarto nó só é alcançado passando pelos três anteriores.\n\nInserir é criar um nó com `malloc` e religar ponteiros. Remover é fazer o nó anterior apontar para o seguinte e dar `free` no que saiu. Nada é deslocado.\n\n```c\nstruct No { int dado; struct No *prox; };\n\nfor (struct No *p = inicio; p != NULL; p = p->prox)\n    printf(\"%d \", p->dado);\n```",
+ "caracteristicas": [
+  "Os nós **não são vizinhos** na memória; quem dá a ordem são os ponteiros.",
+  "O acesso é **sequencial**: para ler o k-ésimo nó, passa-se por k nós.",
+  "O tamanho **cresce e encolhe** em tempo de execução, um nó por vez.",
+  "Na lista simples só se anda para a frente. A duplamente encadeada tem também o ponteiro `ant` e anda nos dois sentidos."
+ ],
+ "vantagens": [
+  "Inserir ou remover no início custa `O(1)`, sem deslocar ninguém.",
+  "Inserir ou remover no meio também é `O(1)` **depois** que você já tem o ponteiro do nó anterior.",
+  "Não precisa saber o tamanho antes nem reservar espaço que talvez não use.",
+  "É a base de pilha, fila e do hash por encadeamento."
+ ],
+ "desvantagens": [
+  "Não tem acesso por índice: chegar à posição k custa `O(k)`.",
+  "A busca é sempre sequencial, `O(n)`, **mesmo com os dados em ordem**. Busca binária não serve, porque não dá para pular para o meio.",
+  "Cada nó gasta um ponteiro a mais de memória (dois na dupla).",
+  "Sem ponteiro para o fim, inserir no fim custa `O(n)`. Na lista simples, remover o último custa `O(n)` mesmo com ponteiro para o fim, porque é preciso achar o penúltimo."
+ ],
+ "exemplo": "A lista começa assim:\n\n```\ninicio -> [4] -> [8] -> [2] -> NULL\n```\n\n**Inserir 7 no início:** o novo nó aponta para o `[4]` e `inicio` passa a apontar para o novo. Dois ponteiros mexidos, `O(1)`.\n\n```\ninicio -> [7] -> [4] -> [8] -> [2] -> NULL\n```\n\n**Buscar o 2:** compara com 7, 4, 8 e 2. Foram 4 comparações, e ele era o último: esse é o pior caso, `n` comparações.\n\n**Remover o 8:** anda até o `[4]`, que é o anterior; faz `[4]` apontar para `[2]` e libera o `[8]`.\n\n```\ninicio -> [7] -> [4] -> [2] -> NULL\n```\n\nAchar o anterior custou `O(n)`; a religação em si custou `O(1)`.",
+ "custos": "| Operação | Lista simples | Vetor |\n|---|---|---|\n| Ler a posição k | `O(k)` | `O(1)` |\n| Buscar um valor | `O(n)` | `O(n)`, ou `O(log n)` se ordenado |\n| Inserir no início | `O(1)` | `O(n)` |\n| Inserir no fim | `O(n)`, ou `O(1)` com ponteiro `fim` | `O(1)` se há espaço |\n| Remover do início | `O(1)` | `O(n)` |",
+ "naprova": "A banca costuma comparar lista com vetor (acesso, busca, inserção), perguntar o custo de operações nas pontas da lista simples e da dupla, e mostrar código que percorre lista com índice, como `aux[x]`, no lugar de `aux = aux->prox`."
+}

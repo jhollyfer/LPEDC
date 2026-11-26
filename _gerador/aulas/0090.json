@@ -1,0 +1,24 @@
+{
+ "num": "0090",
+ "oque": "Um jeito de procurar uma chave num **vetor ordenado** descartando metade do que resta a cada comparação.",
+ "como": "Guarde dois índices, `ini` e `fim`, que marcam o trecho onde a chave ainda pode estar. Olhe o elemento do meio:\n\n- se é a chave, achou;\n- se a chave é menor, ela só pode estar à esquerda: `fim = meio - 1`;\n- se a chave é maior, só pode estar à direita: `ini = meio + 1`.\n\nRepita até achar ou até `ini` passar de `fim`, que significa que a chave não está no vetor.\n\n```c\nint ini = 0, fim = n - 1;\nwhile (ini <= fim) {\n    int meio = ini + (fim - ini) / 2;\n    if (v[meio] == chave) return meio;\n    if (chave < v[meio]) fim = meio - 1;\n    else                 ini = meio + 1;\n}\nreturn -1;\n```",
+ "caracteristicas": [
+  "Só funciona se o vetor estiver **ordenado**. É a ordem que permite jogar metade fora sem olhar.",
+  "Precisa de **acesso direto por índice** para ir ao meio em `O(1)`. Por isso serve em vetor e não em lista encadeada.",
+  "A cada passo o trecho cai pela metade: `n`, `n/2`, `n/4`, ... até 1.",
+  "No pior caso faz `⌊log₂ n⌋ + 1` comparações de posição."
+ ],
+ "vantagens": [
+  "`O(log n)`: em 1.000 elementos, no máximo 10 passos; em 1 milhão, no máximo 20.",
+  "Não usa memória extra.",
+  "Além de dizer se a chave existe, o ponto onde o laço para mostra onde ela entraria."
+ ],
+ "desvantagens": [
+  "Em vetor fora de ordem ela dá resposta errada: pode dizer que a chave não existe quando existe.",
+  "Ordenar antes custa `O(n log n)`. Para uma busca só, a sequencial `O(n)` sai mais barata.",
+  "Manter o vetor ordenado encarece a inserção e a remoção: `O(n)` por causa do deslocamento."
+ ],
+ "exemplo": "Procurar o **23** em 9 elementos:\n\n```\níndice: 0  1  2  3   4   5   6   7   8\nvalor:  2  5  8  12  16  23  38  56  72\n```\n\n| Passo | ini | fim | meio | v[meio] | Decisão |\n|---|---|---|---|---|---|\n| 1 | 0 | 8 | 4 | 16 | 23 > 16: vai para a direita |\n| 2 | 5 | 8 | 6 | 38 | 23 < 38: vai para a esquerda |\n| 3 | 5 | 5 | 5 | 23 | achou no índice 5 |\n\nForam 3 comparações. A sequencial faria 6.\n\nAgora procure o **7**, que não está: meio 4 (16, esquerda), meio 1 (5, direita), meio 2 (8, esquerda). Sobra `ini = 2` e `fim = 1`: o laço acaba e a resposta é \"não está\", com 3 comparações.",
+ "custos": "| Caso | Busca binária | Busca sequencial |\n|---|---|---|\n| Melhor | `O(1)` (está no meio) | `O(1)` (está na primeira posição) |\n| Pior | `O(log n)` | `O(n)` |\n| Exige ordem? | sim | não |",
+ "naprova": "Caem três coisas: a exigência de vetor ordenado, o número máximo de comparações (`⌊log₂ n⌋ + 1`) e a simulação, em que a banca pede a sequência de elementos visitados. Confira sempre como o meio é arredondado no código da questão."
+}

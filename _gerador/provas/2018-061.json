@@ -863,7 +863,21 @@
           "modulo": "28-estruturas-complementos.md"
         }
       ],
-      "dica": "**Cobra:** o que a AVL garante e quando as rotações podem se propagar até a raiz.\n\n- **Regra da AVL** [0101]: o equilíbrio é checado em todo nó: a diferença de altura das subárvores é no máximo 1. Ex.: fator 2 ou -2 em qualquer nó é desequilíbrio.\n- **Rotação como conserto** [0101]: quando um nó chega a fator ±2, uma rotação (simples ou dupla) restaura o equilíbrio, sem quebrar a ordem da BST. Ex.: inserir 10, 20, 30 pede uma rotação à esquerda no 10.\n- **Inserção × remoção** [0176]: a remoção pode deixar a subárvore mais baixa depois da rotação e passar o desequilíbrio ao avô, e a inserção não propaga assim. Ex.: numa AVL de 16 nós, uma remoção rotaciona o 28 e depois a raiz.\n\n**Como atacar:** relacione cada afirmação à regra do equilíbrio, e a última à diferença entre inserir e remover."
+      "dica": "**Cobra:** o que a AVL garante e quando as rotações podem se propagar até a raiz.\n\n- **Regra da AVL** [0101]: o equilíbrio é checado em todo nó: a diferença de altura das subárvores é no máximo 1. Ex.: fator 2 ou -2 em qualquer nó é desequilíbrio.\n- **Rotação como conserto** [0101]: quando um nó chega a fator ±2, uma rotação (simples ou dupla) restaura o equilíbrio, sem quebrar a ordem da BST. Ex.: inserir 10, 20, 30 pede uma rotação à esquerda no 10.\n- **Inserção × remoção** [0176]: a remoção pode deixar a subárvore mais baixa depois da rotação e passar o desequilíbrio ao avô, e a inserção não propaga assim. Ex.: numa AVL de 16 nós, uma remoção rotaciona o 28 e depois a raiz.\n\n**Como atacar:** relacione cada afirmação à regra do equilíbrio, e a última à diferença entre inserir e remover.",
+      "contrapontos": [
+        {
+          "item": "1ª",
+          "texto": "Lembre a definição do fator de balanceamento e os valores que ele pode ter. A regra é conferida só na raiz ou em cada nó?"
+        },
+        {
+          "item": "2ª",
+          "texto": "Um nó chegou a fator +2 ou -2. Que operação a AVL usa para trazer o fator de volta sem quebrar a ordem da BST?"
+        },
+        {
+          "item": "3ª",
+          "texto": "Na inserção, depois da rotação a subárvore volta à altura que tinha antes de a chave entrar: o nó de cima percebe alguma mudança? Compare com a remoção, em que a subárvore pode ficar mais baixa depois do conserto."
+        }
+      ]
     },
     {
       "numero": 20,

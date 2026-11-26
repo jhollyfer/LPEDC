@@ -1,0 +1,25 @@
+{
+ "num": "0099",
+ "oque": "A árvore binária de busca (BST, ou árvore binária de pesquisa) é uma árvore binária com uma regra de ordem: em **todo** nó, as chaves da subárvore esquerda são menores que a dele e as da direita são maiores.",
+ "como": "**Buscar:** comece na raiz e compare. Chave igual, achou. Chave menor, desça para a esquerda. Chave maior, desça para a direita. Chegou em `NULL`, a chave não está.\n\n**Inserir:** faça a mesma descida da busca. O lugar onde você cairia em `NULL` é o lugar do novo nó. Todo nó novo entra como **folha**; nada que já estava muda de lugar.\n\n```c\nstruct No *inserir(struct No *r, int chave) {\n    if (r == NULL) return novoNo(chave);\n    if (chave < r->chave) r->esq = inserir(r->esq, chave);\n    else if (chave > r->chave) r->dir = inserir(r->dir, chave);\n    return r;\n}\n```\n\nO custo das duas operações é o número de nós no caminho, ou seja, a **altura** da árvore.",
+ "caracteristicas": [
+  "A regra de ordem vale para a subárvore inteira, não só para os filhos diretos.",
+  "O percurso **em ordem** (esquerda, raiz, direita) entrega as chaves em ordem crescente.",
+  "O menor fica no fim do caminho só à esquerda; o maior, no fim do caminho só à direita.",
+  "O formato depende da **ordem de inserção**: as mesmas chaves em outra ordem dão outra árvore.",
+  "Ela **não se rebalanceia** sozinha. Quem faz isso é a AVL ou a rubro-negra."
+ ],
+ "vantagens": [
+  "Com a árvore equilibrada, busca, inserção e remoção custam `O(log n)`.",
+  "Mantém os dados ordenados sem deslocar elementos, ao contrário do vetor ordenado.",
+  "Responde bem a menor, maior, sucessor e listagem em ordem, coisas que o hash não faz."
+ ],
+ "desvantagens": [
+  "Chaves inseridas já em ordem (crescente ou decrescente) formam uma cadeia: a árvore **degenera** em lista e tudo vira `O(n)`.",
+  "Cada nó gasta dois ponteiros além da chave.",
+  "Não tem acesso por índice."
+ ],
+ "exemplo": "**Inserir 50, 30, 70, 20, 40, 60 nessa ordem.**\n\n- 50: árvore vazia, vira a raiz.\n- 30: menor que 50, vai à esquerda do 50.\n- 70: maior que 50, vai à direita do 50.\n- 20: menor que 50, menor que 30: esquerda do 30.\n- 40: menor que 50, maior que 30: direita do 30.\n- 60: maior que 50, menor que 70: esquerda do 70.\n\n```\n        50\n       /  \\\n     30    70\n    /  \\   /\n  20   40 60\n```\n\n**Buscar o 40:** 50 (menor, esquerda), 30 (maior, direita), 40. Três comparações.\n\n**Em ordem:** `20 30 40 50 60 70`.\n\n**Agora insira 10, 20, 30, 40 em ordem crescente:** cada chave é maior que todas as anteriores e vai sempre à direita.\n\n```\n10\n  \\\n   20\n     \\\n      30\n        \\\n         40\n```\n\nAltura 4 para 4 chaves. Achar o 40 passa por todos os nós.",
+ "custos": "| Operação | Árvore equilibrada | Árvore degenerada |\n|---|---|---|\n| Buscar | `O(log n)` | `O(n)` |\n| Inserir | `O(log n)` | `O(n)` |\n| Remover | `O(log n)` | `O(n)` |\n| Listar em ordem | `O(n)` | `O(n)` |",
+ "naprova": "A banca dá uma sequência de chaves e pede a árvore final ou um percurso, pergunta o custo no pior caso (a árvore degenerada) e compara a BST com vetor ordenado, lista e hash."
+}

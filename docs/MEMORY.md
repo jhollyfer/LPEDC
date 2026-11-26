@@ -7,7 +7,7 @@
 
 | Atualizado | Fase atual | Progresso | Status |
 |---|---|---|---|
-| 2026-11-26 | 7 · Livro digital (concluída) | 27/27 tarefas | curso pronto para a prova de 2026-11-27 |
+| 2026-11-26 | 8 · Painel do quiz que ensina | 28/30 tarefas | piloto no ar, aguardando o aceite do dono |
 
 ## Parou em
 
@@ -22,7 +22,18 @@ de `fases.json`, com link para cada assunto. O `conferir-texto.py` dá 0 problem
 No quiz, o tópico 3 virou quatro subtópicos (3.1 Lista, 3.2 Fila, 3.3 Pilha, 3.4 Vetor e matriz),
 marcados à mão nas 54 questões; `quiz-navegador.mjs` passou nas 210.
 
+O painel da direita do quiz está em piloto (fase 8). Cada assunto citado pode ter uma aula em
+`_gerador/aulas/NNNN.json` (o que é, como funciona, características, vantagens, desvantagens,
+exemplo passo a passo, custos, como a prova cobra). Questão de afirmações pode ter `contrapontos`,
+um por afirmação, que provocam sem dizer se é verdadeira ou falsa (o `quiz.mjs --check` barra as
+palavras que entregam). Depois de responder, o porquê aparece num bloco só no topo do painel, e não
+mais embaixo de cada alternativa. Prontas: aulas 0076, 0090, 0099 e 0101; contrapontos em 2016-032
+Q13, 2017-024 Q04 e Q12, 2018-061 Q19.
+
 ## Próximos passos
+
+0. Com o aceite do piloto, escrever as outras 62 aulas e os contrapontos das outras 52 questões de
+   afirmações (tarefas 8.2 e 8.3).
 
 Ao mudar a lista de arquivos Markdown ou seus títulos, atualize o índice com
 `node _gerador/conteudo.mjs`.

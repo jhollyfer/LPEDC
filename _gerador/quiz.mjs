@@ -197,11 +197,51 @@ function conferirTrilha() {
   return e
 }
 
-const erros = [...conferir(provas, figuras), ...conferirTrilha()]
+// aulas: a explicação longa de cada assunto (aulas/NNNN.json), mostrada no painel
+// "Antes de responder" de toda questão que cita o assunto
+const PASTA_AULAS = join(AQUI, 'aulas')
+const AULAS = {}
+if (existsSync(PASTA_AULAS))
+  for (const a of readdirSync(PASTA_AULAS).filter((x) => x.endsWith('.json')).sort()) {
+    const aula = JSON.parse(readFileSync(join(PASTA_AULAS, a), 'utf8'))
+    AULAS[aula.num] = aula
+  }
+
+const cercaOk = (t) => (t.match(/```/g) ?? []).length % 2 === 0 && !t.split('\n').some((l) => l.includes('```') && !l.trim().startsWith('```'))
+function conferirAulas() {
+  const e = []
+  for (const [num, a] of Object.entries(AULAS)) {
+    if (!ASSUNTOS[num]) e.push(`aula ${num}: não é assunto do curso`)
+    for (const campo of ['oque', 'como', 'exemplo']) {
+      if (!a[campo]?.trim()) e.push(`aula ${num}: sem "${campo}"`)
+      else if (!cercaOk(a[campo])) e.push(`aula ${num}: "${campo}" com cerca de código quebrada`)
+    }
+    if (!Array.isArray(a.caracteristicas) || a.caracteristicas.length < 2) e.push(`aula ${num}: menos de 2 características`)
+    for (const campo of ['vantagens', 'desvantagens']) if (a[campo] && !Array.isArray(a[campo])) e.push(`aula ${num}: "${campo}" não é lista`)
+  }
+  return e
+}
+
+// contrapontos: nas questões de afirmações, uma provocação por afirmação, sem dizer V ou F
+function conferirContrapontos() {
+  const e = []
+  for (const p of provas)
+    for (const q of p.questoes) {
+      if (!q.contrapontos) continue
+      const id = `${p.slug} Q${String(q.numero).padStart(2, '0')}`
+      for (const c of q.contrapontos) {
+        if (!c.item?.trim() || !c.texto?.trim()) e.push(`${id}: contraponto sem item ou sem texto`)
+        if (/\b(verdadeir|fals|corret|incorret|errad)[oa]s?\b/i.test(c.texto ?? '')) e.push(`${id} ${c.item}: o contraponto entrega a resposta ("${c.texto.match(/\b(verdadeir|fals|corret|incorret|errad)[oa]s?\b/i)[0]}")`)
+      }
+    }
+  return e
+}
+
+const erros = [...conferir(provas, figuras), ...conferirTrilha(), ...conferirAulas(), ...conferirContrapontos()]
 for (const e of erros) console.error(`erro: ${e}`)
 if (SO_CONFERIR) {
   const total = provas.reduce((t, p) => t + p.questoes.length, 0)
-  console.log(`${provas.length} provas, ${total} questões, ${Object.keys(figuras).length} figuras, ${TRILHA.length} degraus na trilha, ${erros.length} erros`)
+  console.log(`${provas.length} provas, ${total} questões, ${Object.keys(figuras).length} figuras, ${TRILHA.length} degraus na trilha, ${Object.keys(AULAS).length} aulas, ${erros.length} erros`)
   process.exit(erros.length ? 1 : 0)
 }
 
@@ -228,7 +268,7 @@ const dados = provas.map((p) => ({
 }))
 writeFileSync(
   join(SAIDA, 'questoes.js'),
-  `// Gerado por _gerador/quiz.mjs a partir de _gerador/provas/. Não edite à mão.\nwindow.ASSUNTOS = ${JSON.stringify(ASSUNTOS)}\nwindow.TRILHA = ${JSON.stringify(TRILHA)}\nwindow.PROVAS = ${JSON.stringify(dados, null, 1)}\n`,
+  `// Gerado por _gerador/quiz.mjs a partir de _gerador/provas/. Não edite à mão.\nwindow.ASSUNTOS = ${JSON.stringify(ASSUNTOS)}\nwindow.TRILHA = ${JSON.stringify(TRILHA)}\nwindow.AULAS = ${JSON.stringify(AULAS)}\nwindow.PROVAS = ${JSON.stringify(dados, null, 1)}\n`,
 )
 // versão do questoes.js no index.html, para o navegador não misturar dados novos com cache velho
 const versao = createHash('sha1').update(readFileSync(join(SAIDA, 'questoes.js'))).digest('hex').slice(0, 8)
