@@ -1,0 +1,148 @@
+{
+ "num": "0114",
+ "oque": "Uma **recorrência** é uma equação que dá o custo T(n) de uma função recursiva em termos do custo dela para entradas menores, mais um caso base. A **árvore de recursão** resolve a recorrência desenhando cada chamada como um nó com o trabalho que ela faz sozinha e somando nível por nível.",
+ "como": "Para escrever a recorrência a partir do código, faça três perguntas:\n\n- **Quantas chamadas, e com que tamanho?** Duas com metade viram `2 T(n/2)`; uma com n − 1 vira `T(n-1)`.\n- **Quanto trabalho fora das chamadas?** Um laço sobre os n elementos vira `+ n`; umas poucas contas viram `+ 1`.\n- **Qual o caso base?** Por exemplo, `T(1) = 1`.\n\n```c\nvoid audita(int ini, int fim) {\n    int n = fim - ini;\n    /* confere as n notas: + n */\n    if (n == 1) return;     /* T(1) */\n    int meio = ini + n / 2;\n    audita(ini, meio);      /* T(n/2) */\n    audita(meio, fim);      /* T(n/2) */\n}\n```\n\nIsso dá `T(n) = 2 T(n/2) + n`. Para resolver pela árvore:\n\n- desenhe a raiz com o trabalho n e, abaixo, uma filha por chamada;\n- some cada nível;\n- conte os níveis (quantas vezes o tamanho cai até o caso base);\n- **total = soma de todos os níveis**.\n\nA árvore mostra também a memória: só um caminho da raiz até uma folha fica na pilha ao mesmo tempo, então o espaço é a **altura**.",
+ "caracteristicas": [
+  "\"Duas chamadas\" não decide nada sozinho: o **tamanho** de cada chamada decide. `2T(n/2) + 1` é Θ(n); `2T(n-1) + 1` é Θ(2ⁿ).",
+  "Tamanho que cai pela metade dá log₂ n + 1 níveis; tamanho que cai de 1 em 1 dá n níveis.",
+  "O tempo é a soma de todos os nós; a memória (pilha) é a altura da árvore.",
+  "A árvore serve para chutar a resposta; o método da substituição prova o chute por indução.",
+  "O teorema mestre (0115) resolve direto as recorrências da forma `a T(n/b) + f(n)`."
+ ],
+ "exemplo": "A chefe da contabilidade confere um lote de n notas, divide em dois lotes iguais e entrega cada metade a um auditor, que faz o mesmo. Com uma nota só, confere e para:\n\n```\nT(1) = 1\nT(n) = 2 T(n/2) + n\n```\n\nVamos montar a árvore para n = 8 e depois conferir abrindo a conta:\n\n| T(n) | conta | valor |\n|---|---|---|\n| T(1) | caso base | 1 |\n| T(2) | 2 · 1 + 2 | 4 |\n| T(4) | 2 · 4 + 4 | 12 |\n| T(8) | 2 · 12 + 8 | **32** |",
+ "passos": [
+  {
+   "titulo": "Nível 0: a raiz",
+   "texto": "A primeira chamada recebe 8 notas e faz 8 de trabalho sozinha (conferir o lote). O resto do custo está nas duas filhas, cada uma com 4 notas.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "nível 0:         8        = 8",
+     "              /     \\",
+     "            T(4)   T(4)"
+    ],
+    "titulo": "T(8) = 2T(4) + 8"
+   }
+  },
+  {
+   "titulo": "Nível 1: duas chamadas de 4",
+   "texto": "Cada filha faz 4 de trabalho e chama duas de 2. O nível soma 4 + 4 = 8: o mesmo que a raiz, porque o número de nós dobrou e o tamanho caiu pela metade.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "nível 0:         8        = 8",
+     "nível 1:     4       4    = 8",
+     "            / \\     / \\",
+     "          T(2)T(2) T(2)T(2)"
+    ],
+    "titulo": "dobra o número de nós"
+   }
+  },
+  {
+   "titulo": "Níveis 2 e 3: até o caso base",
+   "texto": "O nível 2 tem 4 chamadas de 2 (soma 8). O nível 3 tem 8 chamadas de 1, o caso base, que custam 1 cada (soma 8). Ali a árvore para.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "nível 0:         8        = 8",
+     "nível 1:     4       4    = 8",
+     "nível 2:   2   2   2   2  = 8",
+     "nível 3:  1 1 1 1 1 1 1 1 = 8"
+    ],
+    "titulo": "árvore completa, n = 8"
+   }
+  },
+  {
+   "titulo": "Somar os níveis",
+   "texto": "Cada nível soma n. Os tamanhos 8, 4, 2, 1 dão log₂ 8 + 1 = 4 níveis. Total: 4 · 8 = **32**, igual à conta aberta. Em geral, n · (log₂ n + 1) = n log n + n, ou **Θ(n log n)**. É o custo do merge sort. A pilha guarda no máximo 4 chamadas, a altura.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "níveis: log2 n + 1 = 4",
+     "cada nível: n = 8",
+     "",
+     "total = 8 · 4 = 32",
+     "      = n log n + n",
+     "      = Θ(n log n)"
+    ],
+    "titulo": "T(n) = 2T(n/2) + n"
+   }
+  },
+  {
+   "titulo": "Mesma árvore, trabalho 1 por nó",
+   "texto": "Troque o `+ n` por `+ 1` (por exemplo, achar o máximo dividindo o vetor). A árvore tem a mesma forma, mas cada nó custa 1. Os níveis somam 1, 2, 4, 8: total 15 = 2n − 1. Agora é **Θ(n)**, e não n log n.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "nível 0:         1        = 1",
+     "nível 1:     1       1    = 2",
+     "nível 2:   1   1   1   1  = 4",
+     "nível 3:  1 1 1 1 1 1 1 1 = 8",
+     "",
+     "total = 15 = 2n - 1: Θ(n)"
+    ],
+    "titulo": "T(n) = 2T(n/2) + 1"
+   }
+  },
+  {
+   "titulo": "A questão do teste(5)",
+   "texto": "`teste(i)` chama `teste(i/2)` duas vezes se i > 1 e sempre imprime um `#`. Em C, 5/2 = 2 e 2/2 = 1. A árvore de chamadas tem 1 + 2 + 4 = 7 nós, e cada nó imprime um `#`: **7**.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "teste(5)            #",
+     "  teste(2)          #",
+     "    teste(1)        #",
+     "    teste(1)        #",
+     "  teste(2)          #",
+     "    teste(1)        #",
+     "    teste(1)        #",
+     "",
+     "7 chamadas, 7 '#'"
+    ],
+    "titulo": "árvore de chamadas"
+   }
+  },
+  {
+   "titulo": "Duas chamadas de n − 1: explode",
+   "texto": "Hanói: `T(n) = 2T(n−1) + 1`, `T(1) = 1`. O tamanho cai só de 1 em 1, então são n níveis, e cada nível tem o dobro de nós. Para n = 3: 1 + 2 + 4 = 7 = 2³ − 1. Em geral 2ⁿ − 1, **Θ(2ⁿ)**. Com n = 30, mais de um bilhão de movimentos.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "nível 0:  T(3)          = 1",
+     "nível 1:  T(2) T(2)     = 2",
+     "nível 2:  T(1) x 4      = 4",
+     "",
+     "total = 2^n - 1 = 7",
+     "n níveis que dobram: Θ(2ⁿ)"
+    ],
+    "titulo": "T(n) = 2T(n-1) + 1"
+   }
+  },
+  {
+   "titulo": "Uma chamada que encolhe de 1 em 1",
+   "texto": "`T(n) = T(n−1) + n` (selection sort recursivo: acha o menor em n passos e recursa no resto). A árvore é uma linha de n nós com custos n, n − 1, ..., 1. Para n = 4: 4 + 3 + 2 + 1 = 10. Em geral n(n + 1)/2, **Θ(n²)**. Com `+ 1` no lugar de `+ n`, a linha somaria n: Θ(n).",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "T(4)  -> 4",
+     " T(3) -> 3",
+     "  T(2) -> 2",
+     "   T(1) -> 1",
+     "",
+     "total = 10 = n(n+1)/2",
+     "Θ(n²)"
+    ],
+    "titulo": "T(n) = T(n-1) + n"
+   }
+  }
+ ],
+ "custos": "| Recorrência | Árvore | Resultado | Exemplo |\n|---|---|---|---|\n| `T(n) = T(n-1) + 1` | linha de n nós | Θ(n) | percorrer lista recursivamente |\n| `T(n) = T(n/2) + 1` | linha de log n nós | Θ(log n) | busca binária |\n| `T(n) = T(n-1) + n` | linha, nós encolhendo | Θ(n²) | selection sort recursivo |\n| `T(n) = 2T(n/2) + 1` | binária, níveis que dobram | Θ(n) | máximo dividindo o vetor |\n| `T(n) = 2T(n/2) + n` | binária, log n níveis de custo n | Θ(n log n) | merge sort |\n| `T(n) = 2T(n-1) + 1` | binária, n níveis que dobram | Θ(2ⁿ) | Hanói |",
+ "naprova": "A banca mostra uma função recursiva e pergunta quantas vezes algo é impresso ou chamado (desenhe a árvore e conte os nós, lembrando que a divisão inteira trunca: 5/2 = 2), ou pede a complexidade de um algoritmo recursivo como o merge sort. Pegadinha: achar que duas chamadas sempre dão 2ⁿ.",
+ "fontes": [
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 4 (recorrências: substituição, árvore de recursão e teorema mestre).",
+  "Ziviani, *Projeto de algoritmos*, 3. ed., cap. 2 (recursividade e divisão e conquista).",
+  "Lintzmayer e Mota, *Análise de algoritmos e de estruturas de dados* (UFABC/IME-USP), partes sobre recorrências.",
+  "Feofiloff, *Algoritmos em linguagem C*, capítulos de recursão e mergesort."
+ ]
+}

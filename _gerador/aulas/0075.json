@@ -1,0 +1,153 @@
+{
+ "num": "0075",
+ "oque": "A **lista sequencial** (ou lista em vetor) guarda os itens lado a lado num vetor, na ordem da lista. Quando esse vetor mora no heap e cresce sob demanda, ele é um **vetor dinâmico**.",
+ "como": "Três campos controlam a lista: `itens` (o vetor no heap), `tam` (quantos estão em uso) e `cap` (quantos cabem). Os itens ocupam as posições 0 a `tam - 1`, e a primeira vaga é `itens[tam]`.\n\nInserir no fim: se `tam < cap`, escreve em `itens[tam]` e soma 1. Se `tam == cap`, o `realloc` pede um bloco com o **dobro** da capacidade, copia os itens e libera o antigo.\n\n```c\nif (l->tam == l->cap) {\n    int nc = 2 * l->cap;\n    int *novo = realloc(l->itens,\n                        nc * sizeof(int));\n    if (novo == NULL) return false;\n    l->itens = novo; // o antigo continua\n    l->cap = nc;     // válido se der NULL\n}\nl->itens[l->tam++] = valor;\n```\n\nPor que dobrar e não crescer de 1 em 1? Crescendo de 1 em 1, cada inserção copia todos os anteriores: 1 + 2 + ... + n, cerca de n²/2 cópias. Dobrando, só há cópia quando a lista chega a 1, 2, 4, 8... itens, e a soma 1 + 2 + 4 + ... fica **abaixo de 2n**. Dividido pelas n inserções, dá `O(1)` por inserção. Esse custo médio sobre a sequência inteira é o **custo amortizado**: uma inserção ou outra sai cara, mas a soma fica barata.",
+ "caracteristicas": [
+  "Memória **contígua**: os itens ficam vizinhos, como em todo vetor.",
+  "Ler a posição `i` custa `O(1)`: `itens[i]` sai de uma conta de endereço.",
+  "Inserir no fim custa `O(1)` **amortizado**. A inserção que dobra, sozinha, custa `O(n)`.",
+  "Inserir ou remover no início ou no meio custa `O(n)`: todos os seguintes andam uma casa.",
+  "Logo depois de dobrar, até metade da capacidade fica sem uso."
+ ],
+ "vantagens": [
+  "Acesso por índice em `O(1)`, que a lista encadeada não tem.",
+  "Não precisa saber o tamanho antes, como no vetor fixo.",
+  "Não gasta ponteiro por item, e os itens vizinhos aproveitam melhor a memória cache.",
+  "Se estiver ordenado, aceita busca binária, `O(log n)`."
+ ],
+ "desvantagens": [
+  "Inserir ou remover longe do fim desloca até `n` itens.",
+  "A inserção que dobra para tudo e copia o vetor inteiro de uma vez.",
+  "O `realloc` pode mudar o bloco de lugar: um ponteiro guardado para um item pode ficar apontando para memória liberada. Guarde o índice."
+ ],
+ "exemplo": "As despesas de uma viagem, em reais: 12, 35, 8, 50 e 27, numa lista que começa com `cap = 2`. Nas figuras, a casa vazia é folga; amarelo é item copiado pelo `realloc` e azul é o item que acabou de entrar.",
+ "passos": [
+  {
+   "titulo": "Inserir 12 e 35",
+   "texto": "A lista nasce com espaço para 2. O 12 vai para `itens[0]` e o 35 para `itens[1]`; `tam` passa a 2. Nenhuma cópia. Agora `tam == cap`: a próxima inserção vai encontrar a lista cheia.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     12,
+     35
+    ],
+    "estados": {
+     "1": "azul"
+    },
+    "nome": "itens"
+   }
+  },
+  {
+   "titulo": "Inserir 8: dobra para 4",
+   "texto": "`tam == cap == 2`. O `realloc` pede 4 posições e copia o 12 e o 35 (2 cópias). Depois o 8 entra em `itens[2]`. `tam = 3`, `cap = 4`.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     12,
+     35,
+     8,
+     null
+    ],
+    "estados": {
+     "0": "amarelo",
+     "1": "amarelo",
+     "2": "azul"
+    },
+    "nome": "itens"
+   }
+  },
+  {
+   "titulo": "Inserir 50",
+   "texto": "`tam = 3 < cap = 4`: o 50 vai direto para `itens[3]`, sem cópia. `O(1)` de verdade. A lista encheu de novo.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     12,
+     35,
+     8,
+     50
+    ],
+    "estados": {
+     "3": "azul"
+    },
+    "nome": "itens"
+   }
+  },
+  {
+   "titulo": "Inserir 27: dobra para 8",
+   "texto": "Cheia outra vez. O `realloc` pede 8 posições e copia os 4 itens (4 cópias). O 27 entra em `itens[4]`, e sobram três vagas: as próximas três inserções saem sem cópia.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     12,
+     35,
+     8,
+     50,
+     27,
+     null,
+     null,
+     null
+    ],
+    "estados": {
+     "0": "amarelo",
+     "1": "amarelo",
+     "2": "amarelo",
+     "3": "amarelo",
+     "4": "azul"
+    },
+    "nome": "itens"
+   }
+  },
+  {
+   "titulo": "A conta das cópias",
+   "texto": "Dobrando, as 5 inserções fizeram 2 + 4 = 6 cópias. Crescendo de 1 em 1 a partir de 2, seriam 2 + 3 + 4 = 9. A diferença cresce com n: para 1024 itens, dobrar copia menos de 2048 vezes; de 1 em 1, cerca de meio milhão.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "insere  tam  cap  copias",
+     "  12     1    2     0",
+     "  35     2    2     0",
+     "   8     3    4     2",
+     "  50     4    4     0",
+     "  27     5    8     4",
+     "",
+     "total de copias: 6"
+    ]
+   }
+  },
+  {
+   "titulo": "Inserir 99 no início",
+   "texto": "Para abrir a posição 0, os 5 itens andam uma casa para a direita, do último para o primeiro, e só então o 99 entra. Cinco deslocamentos: `O(n)`. Na lista encadeada, inserir no início seria `O(1)`.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     99,
+     12,
+     35,
+     8,
+     50,
+     27,
+     null,
+     null
+    ],
+    "estados": {
+     "0": "azul",
+     "1": "amarelo",
+     "2": "amarelo",
+     "3": "amarelo",
+     "4": "amarelo",
+     "5": "amarelo"
+    },
+    "nome": "itens"
+   }
+  }
+ ],
+ "custos": "| Operação | Vetor dinâmico | Lista encadeada |\n|---|---|---|\n| ler a posição `i` | `O(1)` | `O(i)` |\n| inserir no fim | `O(1)` amortizado (`O(n)` na que dobra) | `O(1)` com ponteiro `fim` |\n| inserir ou remover no início | `O(n)` | `O(1)` |\n| remover pelo índice | `O(n)` | `O(n)` |\n| buscar sem ordem | `O(n)` | `O(n)` |\n| buscar com ordem | `O(log n)` | `O(n)` |\n| memória | até `2n` posições, sem ponteiros | `n` nós, um ponteiro em cada |",
+ "naprova": "A banca dá as operações de uma lista em vetor (busca, acesso por índice, inserir no início, inserir no fim, remover por índice) e pede os custos no pior caso, ou compara vetor ordenado com árvore balanceada. Pegadinha: vetor ordenado busca em `O(log n)`, mas insere e remove em `O(n)`; não alocar nó não deixa a inserção mais barata.",
+ "fontes": [
+  "Ziviani, *Projeto de algoritmos*, 3. ed., cap. 3 (listas lineares: implementação por arranjos).",
+  "Feofiloff, *Algoritmos em linguagem C*, cap. 3 (vetores).",
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 16 (análise amortizada: tabelas dinâmicas).",
+  "Celes, Cerqueira e Rangel, *Introdução a estruturas de dados*, 2. ed. (tipos abstratos de dados)."
+ ]
+}

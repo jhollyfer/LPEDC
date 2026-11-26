@@ -1,0 +1,153 @@
+{
+ "num": "0079",
+ "oque": "Na **lista duplamente encadeada** (no Cormen, **duplamente ligada**, com `next` e `prev`), cada nó guarda dois ponteiros: `prox`, para o seguinte, e `ant`, para o anterior. Com isso a lista anda nos dois sentidos.",
+ "como": "O nó tem três campos, e a lista guarda as duas pontas:\n\n```c\ntypedef struct no {\n    int valor;\n    struct no *ant, *prox;\n} No;\ntypedef struct {\n    No *inicio, *fim;\n} Lista;\n```\n\nA regra que nunca pode quebrar: para todo nó `p` que não é o último, `p->prox->ant == p`. Por isso as setas mudam **aos pares**. Quem mexe na seta de ida de um nó mexe também na de volta.\n\n- **Remover** o nó `p`: duas setas chegam nele. O anterior pula o `p` pela frente (`p->ant->prox = p->prox`) e o seguinte pula o `p` por trás (`p->prox->ant = p->ant`). Se `p` é o primeiro, muda o `inicio`; se é o último, muda o `fim`.\n- **Inserir** o `novo` depois de `p`: quatro setas. `novo->ant = p`, `novo->prox = p->prox`, `p->prox->ant = novo` e, **por último**, `p->prox = novo`. Se `p->prox` mudasse antes, o antigo seguinte se perderia.\n\nNão precisa achar o anterior percorrendo a lista: ele está em `p->ant`.",
+ "caracteristicas": [
+  "O que faz a lista ser dupla é o **par** `prox` e `ant` em cada nó. Ela não é, por isso, circular, ordenada nem contígua.",
+  "Com ponteiros para o início e o fim, inserir e remover nas **duas pontas** custa `O(1)`.",
+  "Remover um nó que você já tem em mãos custa `O(1)`, porque o anterior está em `p->ant`.",
+  "Buscar um valor continua `O(n)`: andar para trás não cria atalho.",
+  "Em 64 bits, o nó com um `int` passa de 16 para 24 bytes: um ponteiro a mais por nó."
+ ],
+ "vantagens": [
+  "Percorre nos dois sentidos: imprimir de trás para a frente é um laço com `p = p->ant`.",
+  "Remove o último e qualquer nó conhecido em `O(1)`, coisa que a lista simples não faz.",
+  "Base natural do deque, que entra e sai pelas duas pontas."
+ ],
+ "desvantagens": [
+  "Gasta um ponteiro a mais por nó (50% a mais num nó de `int` em 64 bits).",
+  "Cada inserção e remoção atualiza o dobro de setas, com mais chance de esquecer uma.",
+  "Com uma seta de volta faltando, a lista parece certa para a frente e só a volta sai errada: é preciso testar os dois sentidos."
+ ],
+ "exemplo": "Um trem de minério com vagões de 98, 105, 87 e 110 toneladas, numa lista dupla com `inicio` no 98 e `fim` no 110.\n\nVamos remover o 87 (que já temos em mãos), inserir e remover no fim, inserir no início e encaixar um vagão no meio, contando as setas de cada operação.",
+ "passos": [
+  {
+   "titulo": "O trem de partida",
+   "texto": "Cada nó tem três partes: `ant`, valor e `prox`. A seta de cima vai para a frente; a de baixo volta. O `ant` do 98 e o `prox` do 110 valem `NULL`. A struct `Lista` guarda `inicio` no 98 e `fim` no 110.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "98",
+     "105",
+     "87",
+     "110"
+    ],
+    "dupla": true
+   }
+  },
+  {
+   "titulo": "Remover o 87, que já está em p",
+   "texto": "A busca deixou `p` no 87 (vermelho). Não é preciso percorrer nada para achar o anterior: é `p->ant`, o 105. O seguinte é `p->prox`, o 110. São esses dois (amarelo) que vão mudar.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "98",
+     "105",
+     "87",
+     "110"
+    ],
+    "dupla": true,
+    "estados": {
+     "1": "amarelo",
+     "2": "vermelho",
+     "3": "amarelo"
+    }
+   }
+  },
+  {
+   "titulo": "Religar os dois lados",
+   "texto": "`p->ant->prox = p->prox`: o 105 aponta para o 110. `p->prox->ant = p->ant`: o 110 aponta de volta para o 105. Duas setas, uma de cada sentido, e `free(p)`. Custo `O(1)`. Na lista simples, achar o 105 custaria percorrer desde o início.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "98",
+     "105",
+     "110"
+    ],
+    "dupla": true,
+    "estados": {
+     "1": "verde",
+     "2": "verde"
+    }
+   }
+  },
+  {
+   "titulo": "Inserir 120 no fim",
+   "texto": "`novo->ant = fim` (o 110), `fim->prox = novo` e `fim = novo`. Ninguém foi percorrido: `O(1)`. A lista simples também faz isso em `O(1)`, desde que guarde o `fim`.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "98",
+     "105",
+     "110",
+     "120"
+    ],
+    "dupla": true,
+    "estados": {
+     "3": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "Remover do fim",
+   "texto": "Aqui a dupla ganha. O novo último é `fim->ant`, o 110: `fim = fim->ant`, `fim->prox = NULL` e `free` no 120. `O(1)`. Na lista simples, mesmo com ponteiro `fim`, seria preciso percorrer a lista para achar o penúltimo: `O(n)`.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "98",
+     "105",
+     "110"
+    ],
+    "dupla": true,
+    "estados": {
+     "2": "verde"
+    }
+   }
+  },
+  {
+   "titulo": "Inserir 50 no início",
+   "texto": "`novo->prox = inicio` (o 98), `inicio->ant = novo` e `inicio = novo`. O `ant` do 50 fica `NULL`. Três atribuições, `O(1)`.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "50",
+     "98",
+     "105",
+     "110"
+    ],
+    "dupla": true,
+    "estados": {
+     "0": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "Inserir 100 depois do 98",
+   "texto": "Com `p` no 98, quatro setas: `novo->ant = p`; `novo->prox = p->prox` (o 105); `p->prox->ant = novo` (o 105 volta para o 100); e por último `p->prox = novo`. Se `p->prox = novo` viesse primeiro, `p->prox` já não levaria ao 105.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "50",
+     "98",
+     "100",
+     "105",
+     "110"
+    ],
+    "dupla": true,
+    "estados": {
+     "1": "amarelo",
+     "2": "azul",
+     "3": "amarelo"
+    }
+   }
+  }
+ ],
+ "custos": "| Operação | Lista simples com `inicio` e `fim` | Lista dupla com `inicio` e `fim` |\n|---|---|---|\n| inserir no início | `O(1)` | `O(1)` |\n| inserir no fim | `O(1)` | `O(1)` |\n| remover do início | `O(1)` | `O(1)` |\n| remover do fim | `O(n)`: acha o penúltimo | `O(1)`: `fim->ant` |\n| remover um nó `p` já conhecido | `O(n)`: acha o anterior | `O(1)`: `p->ant` |\n| buscar um valor | `O(n)` | `O(n)` |\n| ponteiros por nó | 1 | 2 |",
+ "naprova": "Caem três coisas: a definição (o que caracteriza a lista dupla é ter `prox` e `ant`, não ser circular nem contígua), um trecho de seis atribuições que insere dois nós depois de um terceiro (desenhe as caixinhas e siga as setas) e o custo nas pontas. Pegadinha: na dupla com início e fim tudo nas pontas é `O(1)`; na simples, só remover o último é `O(n)`.",
+ "fontes": [
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 10 (listas duplamente ligadas).",
+  "Tenenbaum, Langsam e Augenstein, *Estruturas de dados usando C*, cap. 4 (filas e listas).",
+  "Celes e Rangel, *Apostila de estruturas de dados* (PUC-Rio), cap. 10 (listas encadeadas).",
+  "Feofiloff, *Algoritmos em linguagem C*, cap. 4 (listas encadeadas)."
+ ]
+}

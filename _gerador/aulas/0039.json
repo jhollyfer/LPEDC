@@ -1,0 +1,144 @@
+{
+ "num": "0039",
+ "oque": "A matriz é um **vetor de vetores**, também chamada de vetor bidimensional. Em `int m[L][C]` há `L` linhas, e cada linha é um vetor de `C` itens. Uma célula é escolhida por dois índices, **primeiro a linha, depois a coluna**, os dois a partir de 0.",
+ "como": "A memória não tem linhas nem colunas. O C guarda a matriz num **bloco contínuo, linha após linha** (*row-major*): a linha 0 inteira, depois a linha 1, e assim por diante. A célula `m[i][j]` é o item `i × C + j` desse bloco.\n\nDois índices pedem **dois laços aninhados**: o de fora escolhe a linha, o de dentro anda pelas colunas dela. Para somar por coluna, inverta: coluna por fora, linha por dentro.\n\nO **produto** `A (m × n) · B (n × p)` só existe se as colunas de `A` forem iguais às linhas de `B`, e dá uma matriz `m × p`. Cada célula é a linha `i` de `A` vezes a coluna `j` de `B`, somando os produtos:\n\n```c\nfor (int i = 0; i < m; i++)\n    for (int j = 0; j < p; j++) {\n        c[i][j] = 0;\n        for (int k = 0; k < n; k++)\n            c[i][j] += a[i][k] * b[k][j];\n    }\n```\n\nA **soma** é célula a célula e exige as duas matrizes do mesmo tamanho; o resultado tem esse mesmo tamanho.",
+ "caracteristicas": [
+  "Índices de 0 a `L - 1` (linha) e de 0 a `C - 1` (coluna).",
+  "Guardada linha após linha: `m[i][j]` está na posição `i × C + j` do bloco.",
+  "Na declaração e no parâmetro, só a **primeira** dimensão pode ficar vazia: `int m[][4]`. A função precisa das colunas para fazer a conta.",
+  "Percorrer por linha lê bytes vizinhos e aproveita o cache; por coluna dá o mesmo resultado, mais devagar.",
+  "Produto `(m × n) · (n × p) = m × p`; soma só entre matrizes do mesmo tamanho."
+ ],
+ "vantagens": [
+  "Acesso a qualquer célula em `O(1)`, como no vetor.",
+  "Representa tabelas, imagens e grafos (matriz de adjacência) de forma direta.",
+  "O percurso por dois laços é simples de escrever e de rastrear."
+ ],
+ "desvantagens": [
+  "Tamanho fixo nas duas dimensões.",
+  "Ocupa `L × C` células mesmo quando quase todas valem 0.",
+  "`m[i, j]` compila e vira `m[j]`: a vírgula descarta o `i`."
+ ],
+ "exemplo": "Vamos guardar `int m[2][3] = {{1, 2, 3}, {4, 5, 6}}`, ver onde cada célula mora, somar só a diagonal e acima numa 3 × 3 e multiplicar `A (2 × 3)` por `B (3 × 2)`:\n\n```\nA = | 1 2 0 |     B = | 2 1 |\n    | 0 1 3 |         | 0 1 |\n                      | 1 0 |\n```",
+ "passos": [
+  {
+   "titulo": "A matriz como tabela",
+   "texto": "`int m[2][3]`: 2 linhas, 3 colunas. `m[1][2]` é a linha 1, coluna 2: o 6. `m[0][1]` é o 2.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "       col0  col1  col2",
+     "lin0     1     2     3",
+     "lin1     4     5     6"
+    ],
+    "titulo": "m[2][3]"
+   }
+  },
+  {
+   "titulo": "A matriz na memória",
+   "texto": "As 6 células ficam enfileiradas: a linha 0 (posições 0 a 2) e logo depois a linha 1 (3 a 5). `m[1][2]` está na posição `1 × 3 + 2 = 5`. Com `int` de 4 bytes, no endereço início + 5 × 4 = início + 20.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ],
+    "estados": {
+     "0": "roxo",
+     "1": "roxo",
+     "2": "roxo",
+     "3": "verde",
+     "4": "verde",
+     "5": "verde"
+    },
+    "nome": "m (linha 0 | linha 1)"
+   }
+  },
+  {
+   "titulo": "Percurso com j começando em i",
+   "texto": "Matriz 3 × 3 de 1 a 9, laço `for (j = i; j < 3; j++)`. Com i = 0, j vai de 0 a 2: 1 + 2 + 3. Com i = 1, j vai de 1 a 2: 5 + 6. Com i = 2, só j = 2: 9. Soma: 6 + 11 + 9 = 26. As células entre colchetes são a **diagonal e acima**. Com `j` de 0 até `i`, seriam a diagonal e abaixo.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "[1]  [2]  [3]    i=0: 6",
+     " 4   [5]  [6]    i=1: 11",
+     " 7    8   [9]    i=2: 9",
+     "",
+     "soma = 26"
+    ],
+    "titulo": "j de i até 2"
+   }
+  },
+  {
+   "titulo": "Produto: primeiro o tamanho",
+   "texto": "`A` é 2 × 3 e `B` é 3 × 2. As colunas de `A` (3) batem com as linhas de `B` (3), então o produto existe. O resultado tem as linhas de `A` e as colunas de `B`: 2 × 2. Antes de qualquer conta, isso já descarta toda resposta com outro formato.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "A (2 x 3) . B (3 x 2)",
+     "       ^       ^",
+     "       iguais: 3",
+     "",
+     "C = 2 x 2"
+    ],
+    "titulo": "forma do produto"
+   }
+  },
+  {
+   "titulo": "c[0][0]: linha 0 de A, coluna 0 de B",
+   "texto": "Linha 0 de `A` = (1, 2, 0); coluna 0 de `B` = (2, 0, 1). Produtos: 1 × 2 + 2 × 0 + 0 × 1 = 2 + 0 + 0 = 2. O `k` do laço de dentro é quem anda junto pelas duas.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "k=0: a[0][0]*b[0][0] = 1*2 = 2",
+     "k=1: a[0][1]*b[1][0] = 2*0 = 0",
+     "k=2: a[0][2]*b[2][0] = 0*1 = 0",
+     "",
+     "c[0][0] = 2"
+    ],
+    "titulo": "c[0][0]"
+   }
+  },
+  {
+   "titulo": "c[0][1]: linha 0 de A, coluna 1 de B",
+   "texto": "Linha 0 de `A` = (1, 2, 0); coluna 1 de `B` = (1, 1, 0). Produtos: 1 × 1 + 2 × 1 + 0 × 0 = 3.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "k=0: 1*1 = 1",
+     "k=1: 2*1 = 2",
+     "k=2: 0*0 = 0",
+     "",
+     "c[0][1] = 3"
+    ],
+    "titulo": "c[0][1]"
+   }
+  },
+  {
+   "titulo": "A linha 1 e o resultado",
+   "texto": "Linha 1 de `A` = (0, 1, 3). Com a coluna 0 de `B`: 0 × 2 + 1 × 0 + 3 × 1 = 3. Com a coluna 1: 0 × 1 + 1 × 1 + 3 × 0 = 1. O laço de dentro rodou `m × p × n = 2 × 2 × 3 = 12` vezes.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "c[1][0] = 0*2 + 1*0 + 3*1 = 3",
+     "c[1][1] = 0*1 + 1*1 + 3*0 = 1",
+     "",
+     "C = | 2  3 |",
+     "    | 3  1 |"
+    ],
+    "titulo": "C = A . B"
+   }
+  }
+ ],
+ "custos": "| Operação | Custo |\n|---|---|\n| Ler ou escrever `m[i][j]` | `O(1)` |\n| Percorrer `L × C` | `O(L · C)`; `O(n²)` se quadrada |\n| Somar duas `n × n` | `O(n²)` |\n| Multiplicar duas `n × n` (três laços) | `O(n³)` |\n| Memória | `L × C × sizeof(item)` |",
+ "naprova": "A banca pede a INCORRETA entre afirmações sobre soma e produto (tamanho do resultado, quando o produto existe), a saída de um laço triplo de produto em C, Java ou Python e o que soma um laço duplo com `j` começando em `i` (a diagonal e acima). A pegadinha é o formato: `(m × n) · (n × p)` dá `m × p`; descarte pelo tamanho antes de calcular.",
+ "fontes": [
+  "Backes, *Linguagem C: completa e descomplicada*, cap. 6 (vetores e matrizes).",
+  "Deitel e Deitel, *C: como programar*, 6. ed., cap. 6 (arrays multidimensionais).",
+  "Kernighan e Ritchie, *C: a linguagem de programação padrão ANSI*, cap. 5 (vetores multidimensionais)."
+ ]
+}

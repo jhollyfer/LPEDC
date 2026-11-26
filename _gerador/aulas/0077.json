@@ -1,0 +1,137 @@
+{
+ "num": "0077",
+ "oque": "**Buscar** numa lista encadeada é percorrer os nós desde o início, comparando um por um, até achar o valor ou chegar ao `NULL`. **Remover** é fazer o nó anterior apontar para o seguinte do removido e devolver o nó ao heap com `free`.",
+ "como": "A lista simples só tem setas para a frente. Parado no nó que vai sair, você não consegue voltar ao anterior. Por isso o percurso usa **dois ponteiros**: `ant` anda sempre um passo atrás de `p`.\n\nQuando o laço para, o valor de `ant` diz qual é o caso:\n\n| Caso | Onde o laço para | O que muda |\n|---|---|---|\n| primeiro nó | `ant == NULL` | `*inicio = p->prox` |\n| nó do meio | `ant` no nó de antes | `ant->prox = p->prox` |\n| último nó | `ant` no penúltimo | `ant->prox = p->prox`, que é `NULL` |\n| não achou | `p == NULL` | nada; devolve `false` |\n\nComo o primeiro caso muda o início da lista, a função recebe o **endereço** do início, `No **inicio`, e quem chama passa `&lista`.\n\n```c\nbool remove(No **inicio, int v) {\n    No *ant = NULL, *p = *inicio;\n    while (p != NULL && p->valor != v) {\n        ant = p;\n        p = p->prox;\n    }\n    if (p == NULL) return false;\n    if (ant == NULL) *inicio = p->prox;\n    else ant->prox = p->prox;\n    free(p); // só depois de religar\n    return true;\n}\n```\n\nUm **nó-cabeça** (no Cormen, a **sentinela**) no começo da lista elimina o caso do primeiro: todo nó de verdade passa a ter um anterior.",
+ "caracteristicas": [
+  "A busca é sequencial: `O(n)` no pior caso, mesmo com a lista em ordem. Busca binária não serve em lista.",
+  "Religar as setas custa `O(1)`. O que custa é **achar** o nó e o anterior dele.",
+  "Na condição do laço, `p != NULL` vem **antes** de `p->valor`: o curto-circuito do `&&` evita ler um nó que não existe.",
+  "O `free(p)` vem depois de `ant->prox = p->prox` (ou de `*inicio = p->prox`), porque é preciso ler `p->prox` antes de devolver o nó.",
+  "Nenhum nó muda de lugar na memória. Quem fala em deslocar elementos está descrevendo vetor."
+ ],
+ "vantagens": [
+  "Tirar do meio não desloca ninguém: são dois ponteiros, não `n` cópias como no vetor.",
+  "Se você já tem o ponteiro do anterior em mãos, remover sai em `O(1)`.",
+  "A busca devolve o endereço do nó, e você lê ou altera o valor direto nele."
+ ],
+ "desvantagens": [
+  "Achar o valor custa `O(n)`, e não há atalho.",
+  "Na lista simples é preciso carregar o `ant`, porque não há seta para trás.",
+  "O primeiro nó é um caso à parte, que muda o início de quem chamou: exige `No **` ou devolver o início novo."
+ ],
+ "exemplo": "Na barbearia, as senhas esperam numa lista: `inicio -> 31 -> 17 -> 42 -> 8 -> NULL`.\n\nVamos remover, nesta ordem, o **42** (meio), o **31** (primeiro), o **99** (não está na lista) e o **8** (último). Nas figuras, roxo é o `ant`, vermelho é o `p` que vai sair e apagado é nó já comparado.",
+ "passos": [
+  {
+   "titulo": "Remover 42: o percurso",
+   "texto": "Começa com `ant = NULL` e `p` no 31. 31 != 42: `ant` vai para o 31 e `p` para o 17. 17 != 42: `ant` vai para o 17 e `p` para o 42. 42 == 42: o laço para. Foram 3 comparações; `ant` está no 17, que não é `NULL`.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "31",
+     "17",
+     "42",
+     "8"
+    ],
+    "estados": {
+     "0": "apagado",
+     "1": "roxo",
+     "2": "vermelho"
+    }
+   }
+  },
+  {
+   "titulo": "Remover 42: religar",
+   "texto": "Como `ant` não é `NULL`, o caso é o do meio: `ant->prox = p->prox` faz o 17 apontar para o 8. Depois `free(p)` devolve o nó do 42. O 31 e o 8 não foram tocados.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "31",
+     "17",
+     "8"
+    ],
+    "estados": {
+     "1": "verde"
+    }
+   }
+  },
+  {
+   "titulo": "Remover 31: é o primeiro",
+   "texto": "`p` começa no 31 e a primeira comparação já acerta. O laço não rodou nenhuma vez, então `ant` continua `NULL`. Não existe nó anterior para religar: quem precisa mudar é o próprio início.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "31",
+     "17",
+     "8"
+    ],
+    "estados": {
+     "0": "vermelho"
+    }
+   }
+  },
+  {
+   "titulo": "Remover 31: o início anda",
+   "texto": "`*inicio = p->prox`: o início da lista, lá no `main`, passa a apontar para o 17. Só funciona porque a função recebeu `&lista`; com uma cópia do ponteiro, o `main` continuaria apontando para o nó liberado. Depois, `free(p)`.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "17",
+     "8"
+    ],
+    "estados": {
+     "0": "verde"
+    }
+   }
+  },
+  {
+   "titulo": "Remover 99: não achou",
+   "texto": "17 != 99 e 8 != 99. Depois do 8, `p = p->prox` vale `NULL`, e o laço para pelo **primeiro** teste, sem ler `p->valor`. Foram 2 comparações para 2 nós: valor ausente é sempre o pior caso. A função devolve `false` e a lista fica como estava.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "17",
+     "8"
+    ],
+    "estados": {
+     "0": "apagado",
+     "1": "apagado"
+    }
+   }
+  },
+  {
+   "titulo": "Remover 8: é o último",
+   "texto": "17 != 8: `ant` vai para o 17 e `p` para o 8. 8 == 8: para. `ant` não é `NULL`, então é o mesmo caminho do meio.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "17",
+     "8"
+    ],
+    "estados": {
+     "0": "roxo",
+     "1": "vermelho"
+    }
+   }
+  },
+  {
+   "titulo": "Remover 8: o penúltimo vira o último",
+   "texto": "`ant->prox = p->prox`, e `p->prox` era `NULL`: o 17 passa a apontar para `NULL` e vira o último. `free(p)`. O último não precisou de código próprio; o que dá trabalho é chegar até o penúltimo, `O(n)`.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "17"
+    ],
+    "estados": {
+     "0": "verde"
+    }
+   }
+  }
+ ],
+ "custos": "| Caso | Comparações | Religação |\n|---|---|---|\n| remover o primeiro | 1 | `O(1)` |\n| remover o k-ésimo | k | `O(1)` |\n| remover o último | n | `O(1)` |\n| valor ausente | n | nenhuma |\n| **pior caso total** | `O(n)` | `O(1)` |\n\nMemória extra: só os ponteiros `ant` e `p`, `O(1)`.",
+ "naprova": "A banca mostra código de remover o primeiro nó com o `free` no lugar errado (libera o segundo e deixa o início pendurado), código de busca com `malloc` sobrando ou que testa `p->prox` no lugar de `p`, e pergunta o que acontece ao remover do meio. Pegadinha: alternativa que fala em mover ou deslocar nós descreve vetor, não lista.",
+ "fontes": [
+  "Feofiloff, *Algoritmos em linguagem C*, cap. 4 (listas encadeadas: busca e remoção).",
+  "Celes e Rangel, *Apostila de estruturas de dados* (PUC-Rio), cap. 10 (listas encadeadas).",
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 10 (listas ligadas e sentinelas)."
+ ]
+}

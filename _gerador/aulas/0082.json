@@ -1,0 +1,133 @@
+{
+ "num": "0082",
+ "oque": "A **pilha** (*stack*) é uma sequência que só deixa inserir e remover numa ponta, o **topo**. O último a entrar é o primeiro a sair: política **LIFO**, *last in, first out*.",
+ "como": "Quatro operações dão conta de tudo:\n\n- **empilhar** (*push*): põe um item no topo;\n- **desempilhar** (*pop*): tira o item do topo e devolve o valor;\n- **olhar o topo** (*peek*): lê sem tirar;\n- **está vazia?**\n\nNão existe operação para ler o terceiro item de baixo para cima. Se a pilha deixasse, deixaria de ser pilha.\n\nEm vetor, um contador `n` diz quantos itens há. O fundo fica em `itens[0]`, o topo em `itens[n - 1]`, e `n` é a próxima vaga:\n\n```c\nbool push(Pilha *p, int v) {\n    if (p->n == CAP) return false; // overflow\n    p->itens[p->n++] = v;\n    return true;\n}\nbool pop(Pilha *p, int *v) {\n    if (p->n == 0) return false; // underflow\n    *v = p->itens[--p->n];\n    return true;\n}\n```\n\nOnde a pilha aparece: a **pilha de chamadas** (a função chamada por último é a primeira a terminar), o **desfazer** dos programas, a conferência de parênteses e a avaliação de **expressões** pós-fixas, e a busca em profundidade.",
+ "caracteristicas": [
+  "Política **LIFO**: sai sempre o mais recente. A fila é o contrário, FIFO.",
+  "Só o topo é acessível. Remover um item do meio não é operação de pilha.",
+  "É uma estrutura **linear**, como fila e lista.",
+  "Empilhar e desempilhar custam `O(1)`.",
+  "Tirar de pilha vazia é **underflow**; empilhar na cheia é **overflow**, que só existe na versão em vetor.",
+  "Empilhar tudo e depois desempilhar tudo devolve os itens em **ordem inversa**."
+ ],
+ "vantagens": [
+  "Todas as operações são `O(1)`, sem percorrer nada.",
+  "Inverte uma sequência de graça e guarda o caminho de volta, o que resolve desfazer, recursão e parênteses.",
+  "Implementação curta, em vetor ou em lista."
+ ],
+ "desvantagens": [
+  "Não dá para buscar nem ler um item do meio sem desempilhar os de cima.",
+  "Em vetor, tem capacidade fixa e pode dar overflow.",
+  "Desempilhar não apaga o valor do vetor; ler `itens[n]` antes de diminuir `n` pega a vaga errada."
+ ],
+ "exemplo": "Uma sequência no estilo da prova, com a pilha começando vazia:\n\n`push(3) push(4) push(6) push(8) push(9) pop pop pop push(1) pop pop pop pop`\n\nNas figuras, o topo é a caixa de cima e o azul é o que acabou de entrar.\n\n**Pilha e fila juntas.** Empilhe 1, 2, 3; desempilhe tudo enfileirando numa fila: a fila fica `3 2 1` (3 na frente). Desenfileire tudo empilhando de novo: entra 3, depois 2, depois 1, e o **topo é o 1**. Duas inversões voltam à ordem de entrada.",
+ "passos": [
+  {
+   "titulo": "push(3), push(4)",
+   "texto": "O 3 entra na pilha vazia e é o fundo. O 4 vai em cima dele e vira o topo. `n = 2`.",
+   "figura": {
+    "tipo": "pilha",
+    "itens": [
+     "3",
+     "4"
+    ],
+    "estados": {
+     "1": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "push(6), push(8), push(9)",
+   "texto": "Cada um vai em cima do anterior. O 9, o último a entrar, é o topo. `n = 5`.",
+   "figura": {
+    "tipo": "pilha",
+    "itens": [
+     "3",
+     "4",
+     "6",
+     "8",
+     "9"
+    ],
+    "estados": {
+     "4": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "pop: sai o 9",
+   "texto": "Sai o topo, que é o último que entrou. O 8 passa a ser o topo. Saída até aqui: `9`.",
+   "figura": {
+    "tipo": "pilha",
+    "itens": [
+     "3",
+     "4",
+     "6",
+     "8"
+    ],
+    "estados": {
+     "3": "amarelo"
+    }
+   }
+  },
+  {
+   "titulo": "pop, pop: saem 8 e 6",
+   "texto": "Sai o 8, e depois o 6. Saída até aqui: `9 8 6`. É a ordem inversa da entrada desses três (6, 8, 9). A alternativa com `6 8 9` é a pegadinha.",
+   "figura": {
+    "tipo": "pilha",
+    "itens": [
+     "3",
+     "4"
+    ],
+    "estados": {
+     "1": "amarelo"
+    }
+   }
+  },
+  {
+   "titulo": "push(1)",
+   "texto": "O 1 entra em cima do 4. Entrou por último, então é o próximo a sair, mesmo tendo chegado depois de todos os outros.",
+   "figura": {
+    "tipo": "pilha",
+    "itens": [
+     "3",
+     "4",
+     "1"
+    ],
+    "estados": {
+     "2": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "pop: sai o 1",
+   "texto": "Sai o 1. Saída até aqui: `9 8 6 1`. Conta de conferência: 6 pushes menos 4 pops dá 2 itens, o 3 e o 4, com o 4 no topo.",
+   "figura": {
+    "tipo": "pilha",
+    "itens": [
+     "3",
+     "4"
+    ],
+    "estados": {
+     "1": "amarelo"
+    }
+   }
+  },
+  {
+   "titulo": "pop, pop, pop: underflow",
+   "texto": "Saem o 4 e o 3. Saída final: `9 8 6 1 4 3`. O terceiro `pop` encontra `n == 0`: é underflow, e a função devolve `false` sem ler nada.",
+   "figura": {
+    "tipo": "pilha",
+    "itens": [],
+    "titulo": "pilha vazia"
+   }
+  }
+ ],
+ "custos": "| Operação | Custo |\n|---|---|\n| `push` | `O(1)` |\n| `pop` | `O(1)` |\n| olhar o topo | `O(1)` |\n| está vazia? | `O(1)` |\n| memória (em vetor) | `CAP` posições, fixas |",
+ "naprova": "A banca cobra a definição (\"recuperar em ordem reversa à de inserção\" é pilha), a sequência de push e pop com a saída ou o que sobra, e afirmações que trocam LIFO com FIFO ou dizem que a pilha remove qualquer elemento. Pegadinha: uma alternativa com os mesmos números na ordem de entrada; confira de que lado está o topo.",
+ "fontes": [
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 10 (pilhas e filas).",
+  "Tenenbaum, Langsam e Augenstein, *Estruturas de dados usando C*, cap. 2 (a pilha).",
+  "Celes e Rangel, *Apostila de estruturas de dados* (PUC-Rio), pilhas e filas.",
+  "Laureano, *Estrutura de dados com algoritmos e C*, cap. 3 (pilha)."
+ ]
+}

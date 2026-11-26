@@ -1,0 +1,311 @@
+{
+ "num": "0146",
+ "oque": "A árvore B é uma árvore de busca **balanceada** feita para disco: cada nó guarda **várias chaves em ordem** e tem um filho a mais do que chaves, e **todas as folhas ficam no mesmo nível**. Com nós gordos, a árvore fica baixa e cada busca lê poucos blocos do disco.",
+ "como": "O tamanho dos nós é fixado pelo **grau mínimo** `t` (Cormen):\n\n- todo nó, menos a raiz, tem de `t - 1` a `2t - 1` chaves;\n- a raiz não vazia tem pelo menos 1 chave;\n- nó interno com `k` chaves tem `k + 1` filhos;\n- todas as folhas estão na mesma profundidade.\n\nOutros livros usam a **ordem `m`** (Knuth): no máximo `m` filhos e, fora a raiz e as folhas, pelo menos `⌈m/2⌉`. A árvore com `t = 2` (de 1 a 3 chaves) é a de ordem 4, também chamada **2-3-4**.\n\n**Buscar:** no nó, ande pelas chaves até a primeira `≥ k`. Igual, achou; senão desça pelo filho daquela posição.\n\n```c\nbool busca(NoB *x, int k) {\n    while (x != NULL) {\n        int i = 0;\n        while (i < x->n && k > x->chave[i])\n            i++;\n        if (i < x->n && k == x->chave[i])\n            return true;\n        if (x->folha)\n            return false;\n        x = x->filho[i];\n    }\n    return false;\n}\n```\n\n**Inserir:** a chave sempre entra numa **folha**, em ordem. Na descida, todo nó **cheio** (`2t - 1` chaves) encontrado é **dividido**: a chave do meio sobe para o pai e o resto vira dois nós de `t - 1` chaves. Se a raiz está cheia, a do meio vira uma raiz nova: a árvore só cresce **por cima**.",
+ "caracteristicas": [
+  "Todas as folhas no mesmo nível, sempre. Ela nunca degenera.",
+  "Altura `h ≤ log_t((n + 1) / 2)`: com `t` na casa das centenas, um bilhão de chaves cabe em altura 3.",
+  "Nó interno com `k` chaves tem `k + 1` filhos (ou: com `k` filhos, `k - 1` chaves).",
+  "O balanceamento é **local**: a divisão só mexe no nó cheio e no pai, e acontece só quando um nó enche.",
+  "Na remoção, um nó abaixo do mínimo pega uma chave emprestada do irmão (**redistribuição**) ou se junta a ele (**concatenação**, ou fusão). A divisão é da inserção.",
+  "\"Ordem\" muda de livro para livro: `t` no Cormen, `m` filhos no Knuth, de `m` a `2m` registros por página no Ziviani."
+ ],
+ "vantagens": [
+  "Poucos acessos a disco: um nó por nível, `O(log_t n)` blocos por busca.",
+  "Busca, inserção e remoção em `O(log n)` no **pior caso**.",
+  "Mantém as chaves em ordem, como toda árvore de busca."
+ ],
+ "desvantagens": [
+  "Código mais longo que o da BST: chaves e filhos em vetores, divisão, redistribuição e fusão.",
+  "Os nós podem ficar até quase metade vazios, o que gasta espaço.",
+  "Em memória principal, com poucos dados, uma árvore binária balanceada é mais simples."
+ ],
+ "exemplo": "Árvore B com `t = 2`: cada nó tem de 1 a 3 chaves. Vamos inserir **40, 10, 70, 20, 50, 80, 30, 60, 90, 25, 85**, dividindo na descida todo nó cheio.",
+ "custos": "| Operação | Nós lidos (acessos a disco) | Trabalho de CPU |\n|---|---|---|\n| Buscar | `O(h) = O(log_t n)` | `O(t · log_t n)` |\n| Inserir | `O(log_t n)` | `O(t · log_t n)` |\n| Remover | `O(log_t n)` | `O(t · log_t n)` |",
+ "naprova": "A banca usa **ordem m**: no máximo `m` filhos, pelo menos `m/2` (fora raiz e folhas), nó com `k` filhos tem `k - 1` chaves, folhas todas no mesmo nível. Pegadinhas: \"folhas em níveis diferentes\", \"todo nó tem mais de dois filhos\" (a raiz pode ter 2), \"precisa ser rebalanceada com frequência\" e \"balanceamento muito custoso para disco\" (ela foi feita para disco). Na remoção abaixo do mínimo, a resposta é redistribuir ou concatenar, não dividir.",
+ "passos": [
+  {
+   "titulo": "Inserir 40, 10, 70",
+   "texto": "A árvore é uma folha só, a raiz. As chaves entram em ordem dentro do nó: `[10 40 70]`. Com `t = 2`, o máximo é `2t - 1 = 3` chaves: a raiz está **cheia**.",
+   "figura": {
+    "tipo": "arvoreB",
+    "raiz": {
+     "chaves": [
+      10,
+      40,
+      70
+     ]
+    }
+   }
+  },
+  {
+   "titulo": "Inserir 20: divide a raiz",
+   "texto": "A raiz está cheia, então divide antes de descer: a chave do meio, 40, sobe e vira uma **raiz nova**; 10 e 70 ficam em dois nós separados. A árvore cresceu por cima. Agora o 20 desce: 20 < 40, filho 0, e entra em ordem: `[10 20]`.",
+   "figura": {
+    "tipo": "arvoreB",
+    "raiz": {
+     "chaves": [
+      40
+     ],
+     "filhos": [
+      {
+       "chaves": [
+        10,
+        20
+       ]
+      },
+      {
+       "chaves": [
+        70
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "titulo": "Inserir 50, 80, 30",
+   "texto": "50 > 40: filho 1, `[50 70]`. 80 > 40: `[50 70 80]`. 30 < 40: filho 0, `[10 20 30]`. Nenhum nó cheio no caminho, nenhuma divisão. Os dois filhos ficaram cheios.",
+   "figura": {
+    "tipo": "arvoreB",
+    "raiz": {
+     "chaves": [
+      40
+     ],
+     "filhos": [
+      {
+       "chaves": [
+        10,
+        20,
+        30
+       ]
+      },
+      {
+       "chaves": [
+        50,
+        70,
+        80
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "titulo": "Inserir 60: divide o filho",
+   "texto": "60 > 40: o caminho vai ao filho 1, `[50 70 80]`, cheio. Divide: o 70 sobe para a raiz, que fica `[40 70]`, e o filho vira `[50]` e `[80]`. Agora 60 > 40 e 60 < 70: desce ao filho do meio e fica `[50 60]`.",
+   "figura": {
+    "tipo": "arvoreB",
+    "raiz": {
+     "chaves": [
+      40,
+      70
+     ],
+     "filhos": [
+      {
+       "chaves": [
+        10,
+        20,
+        30
+       ]
+      },
+      {
+       "chaves": [
+        50,
+        60
+       ]
+      },
+      {
+       "chaves": [
+        80
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "titulo": "Inserir 90",
+   "texto": "90 > 70: último filho, `[80 90]`. Sem divisão.",
+   "figura": {
+    "tipo": "arvoreB",
+    "raiz": {
+     "chaves": [
+      40,
+      70
+     ],
+     "filhos": [
+      {
+       "chaves": [
+        10,
+        20,
+        30
+       ]
+      },
+      {
+       "chaves": [
+        50,
+        60
+       ]
+      },
+      {
+       "chaves": [
+        80,
+        90
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "titulo": "Inserir 25: divide e escolhe a metade",
+   "texto": "25 < 40: filho 0, `[10 20 30]`, cheio. Divide: o 20 sobe, a raiz fica `[20 40 70]`, e o filho vira `[10]` e `[30]`. Compara de novo com a chave que subiu: 25 > 20, então vai para a metade da direita: `[25 30]`.",
+   "figura": {
+    "tipo": "arvoreB",
+    "raiz": {
+     "chaves": [
+      20,
+      40,
+      70
+     ],
+     "filhos": [
+      {
+       "chaves": [
+        10
+       ]
+      },
+      {
+       "chaves": [
+        25,
+        30
+       ]
+      },
+      {
+       "chaves": [
+        50,
+        60
+       ]
+      },
+      {
+       "chaves": [
+        80,
+        90
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "titulo": "Inserir 85: a raiz divide de novo",
+   "texto": "A raiz `[20 40 70]` está cheia: divide. O 40 vira a raiz nova, com `[20]` e `[70]` embaixo, cada um com seus dois filhos. Agora o 85 desce: 85 > 40, 85 > 70, folha `[80 90]`, que tem espaço: `[80 85 90]`. Altura 2, 4 divisões no total, e as quatro folhas continuam no mesmo nível.",
+   "figura": {
+    "tipo": "arvoreB",
+    "raiz": {
+     "chaves": [
+      40
+     ],
+     "filhos": [
+      {
+       "chaves": [
+        20
+       ],
+       "filhos": [
+        {
+         "chaves": [
+          10
+         ]
+        },
+        {
+         "chaves": [
+          25,
+          30
+         ]
+        }
+       ]
+      },
+      {
+       "chaves": [
+        70
+       ],
+       "filhos": [
+        {
+         "chaves": [
+          50,
+          60
+         ]
+        },
+        {
+         "chaves": [
+          80,
+          85,
+          90
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "titulo": "Buscar 60",
+   "texto": "Nó `[40]`: 60 > 40, desce pelo filho 1. Nó `[70]`: 60 < 70, desce pelo filho 0. Nó `[50 60]`: 60 > 50, 60 = 60, achou. **3 nós lidos**, um por nível: altura + 1. Buscar 65 lê os mesmos 3 nós e para na folha sem achar.",
+   "figura": {
+    "tipo": "arvoreB",
+    "raiz": {
+     "chaves": [
+      40
+     ],
+     "filhos": [
+      {
+       "chaves": [
+        20
+       ],
+       "filhos": [
+        {
+         "chaves": [
+          10
+         ]
+        },
+        {
+         "chaves": [
+          25,
+          30
+         ]
+        }
+       ]
+      },
+      {
+       "chaves": [
+        70
+       ],
+       "filhos": [
+        {
+         "chaves": [
+          50,
+          60
+         ]
+        },
+        {
+         "chaves": [
+          80,
+          85,
+          90
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   }
+  }
+ ],
+ "fontes": [
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 18 (árvores B: definição, altura, busca, divisão e inserção).",
+  "Ziviani, *Projeto de algoritmos*, 3. ed., cap. 6 (pesquisa em memória secundária: árvores B e B*).",
+  "Szwarcfiter e Markenzon, *Estruturas de dados e seus algoritmos*, 3. ed. (árvores B).",
+  "Tenenbaum, Langsam e Augenstein, *Estruturas de dados usando C*, cap. 7 (árvores B)."
+ ]
+}

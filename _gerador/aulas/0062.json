@@ -1,0 +1,134 @@
+{
+ "num": "0062",
+ "oque": "Um ponteiro para struct guarda o endereço de uma struct. Para chegar a um campo por ele, usa-se a **seta**: `p->campo` quer dizer exatamente `(*p).campo`.",
+ "como": "- Variável struct usa ponto: `cartao.saldo`. Ponteiro para struct usa seta: `c->saldo`.\n- `(*c).saldo` precisa dos parênteses: o ponto tem prioridade maior que o `*`, e `*c.saldo` não compila.\n- Struct passada **por valor** vai como cópia de todos os bytes; para a função mudar a original, passe o endereço (`Cartao *c`).\n\nUma struct pode ter um campo que aponta para **outra struct do mesmo tipo**. É o nó de lista:\n\n```c\nstruct No {\n    int dado;\n    struct No *prox; /* outro No */\n};\nstruct No *n = malloc(sizeof *n);\nn->dado = 7;   /* (*n).dado = 7 */\nn->prox = NULL;\n```\n\nSetas se encadeiam da esquerda para a direita: `a->prox->dado` é o `dado` do nó seguinte ao `a`.",
+ "caracteristicas": [
+  "`p->x` é atalho de `(*p).x`; serve só para ponteiro.",
+  "A struct não pode conter a si mesma, mas pode conter um **ponteiro** para o próprio tipo.",
+  "`sizeof *p` mede a struct apontada; `sizeof p` mede o ponteiro (8).",
+  "`const No *p` deixa ler pela seta e barra a escrita.",
+  "Devolver `&local` de uma struct local entrega um endereço que morre no `return`."
+ ],
+ "vantagens": [
+  "A função muda a struct original, como o validador que desconta do cartão de verdade.",
+  "Passa 8 bytes no lugar da struct inteira.",
+  "Com `malloc`, cria nós que sobrevivem à função e se ligam em listas e árvores."
+ ],
+ "desvantagens": [
+  "`p->x` com `p == NULL` derruba o programa; em `a->prox->prox`, nenhum dos do meio pode ser `NULL`.",
+  "Struct no heap pede `free`.",
+  "Ponto e seta trocados não compilam, e a mensagem confunde quem está começando."
+ ],
+ "exemplo": "Vamos montar a lista 7, 4, 8 com `malloc` e setas, percorrê-la, comparar struct por valor com struct por ponteiro e inserir um nó numa lista dupla.",
+ "passos": [
+  {
+   "titulo": "O primeiro nó",
+   "texto": "`struct No *a = malloc(sizeof *a); a->dado = 7; a->prox = NULL;`. O `a` mora na pilha; o nó, no heap. `a->dado` vai ao endereço guardado em `a` e escreve no campo `dado`.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "7"
+    ],
+    "cabeca": "a",
+    "estados": {
+     "0": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "Ligar o segundo",
+   "texto": "`b = malloc(...); b->dado = 4; b->prox = NULL; a->prox = b;`. O campo `prox` do nó 7 passa a guardar o endereço do nó 4.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "7",
+     "4"
+    ],
+    "cabeca": "a",
+    "estados": {
+     "1": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "Ligar o terceiro pela corrente",
+   "texto": "`c->dado = 8; c->prox = NULL; a->prox->prox = c;`. Leia da esquerda para a direita: `a->prox` é o nó 4; `(nó 4)->prox` recebe `c`.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "7",
+     "4",
+     "8"
+    ],
+    "cabeca": "a",
+    "estados": {
+     "2": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "Percorrer com p = p->prox",
+   "texto": "O laço `for (p = a; p != NULL; p = p->prox)` visita cada nó. Nunca `p[i]`: os nós não são vizinhos na memória, então índice não leva ao próximo.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "p = a          p->dado = 7",
+     "p = p->prox    p->dado = 4",
+     "p = p->prox    p->dado = 8",
+     "p = p->prox    p == NULL: para"
+    ],
+    "titulo": "percurso"
+   }
+  },
+  {
+   "titulo": "Struct por valor: muda a cópia",
+   "texto": "`void cobrar(Cartao c) { c.saldo -= 4.40; }`. A função recebe uma cópia dos bytes do cartão. O saldo da cópia cai para 5.60; o do `main` continua 10.00.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "main    cartao.saldo = 10.00",
+     "cobrar  c.saldo      =  5.60",
+     "        (cópia, some no return)"
+    ],
+    "titulo": "Cartao c"
+   }
+  },
+  {
+   "titulo": "Struct por ponteiro: muda a original",
+   "texto": "`void cobrar(Cartao *c) { c->saldo -= 4.40; }`, chamada com `cobrar(&cartao)`. A cópia agora é do endereço, que ainda aponta para o mesmo cartão: o saldo do `main` cai para 5.60.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "main    cartao.saldo = 5.60  <-+",
+     "cobrar  c = &cartao  ----------+"
+    ],
+    "titulo": "Cartao *c"
+   }
+  },
+  {
+   "titulo": "Inserir N depois de Z numa lista dupla",
+   "texto": "Nó com `prox` e `ant`; Z vem antes de W. Ordem: `N->prox = Z->prox;` (W), `N->ant = Z;`, `Z->prox->ant = N;` (o `ant` do W), `Z->prox = N;`. O `Z->prox` muda por último porque as linhas anteriores ainda precisam dele para chegar ao W.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "Z",
+     "N",
+     "W"
+    ],
+    "cabeca": "Z",
+    "estados": {
+     "1": "azul"
+    },
+    "dupla": true
+   }
+  }
+ ],
+ "custos": "| Passagem | O que é copiado | Muda a original? |\n|---|---|---|\n| `f(Cartao c)` | `sizeof(Cartao)` bytes, a cada chamada | não |\n| `f(Cartao *c)` | 8 bytes (o endereço) | sim |\n| `f(const Cartao *c)` | 8 bytes | não (o compilador barra) |",
+ "naprova": "A banca escreve código de lista com `->` e pede para seguir as setas: inserção em lista dupla em seis atribuições (quem fica logo depois de quem), busca e contagem. A pegadinha é o percurso por índice, `aux[x]`, no lugar de `aux = aux->prox`, e mudar `PZ->próximo` antes de usá-lo.",
+ "fontes": [
+  "Deitel e Deitel, *C: como programar*, 6. ed., cap. 10 (estruturas e ponteiros para estruturas).",
+  "Backes, *Linguagem C: completa e descomplicada*, cap. 8 (struct).",
+  "Feofiloff, *Algoritmos em linguagem C*, ap. E (estruturas).",
+  "Celes e Rangel, *Apostila de estruturas de dados* (PUC-Rio), estruturas e listas encadeadas."
+ ]
+}

@@ -1,0 +1,119 @@
+{
+ "num": "0109",
+ "oque": "Um **grafo** G = (V, E) é um conjunto de **vértices** (os pontos) e um conjunto de **arestas** (as ligações entre pares de vértices). Diferente da árvore, ele pode ter ciclos e pedaços soltos.",
+ "como": "O vocabulário que a banca usa:\n\n- **Adjacentes** (vizinhos): dois vértices ligados por uma aresta.\n- **Grau**: quantas arestas tocam o vértice. No grafo **dirigido**, separa-se grau de **saída** e de **entrada**.\n- **Caminho**: sequência de vértices em que cada um é vizinho do seguinte. **Ciclo**: caminho que volta ao início.\n- **Conexo**: dá para ir de qualquer vértice a qualquer outro.\n- **Ponderado**: cada aresta tem um **peso** (minutos, km, reais).\n- **Denso**: muitas arestas, perto do máximo V(V − 1)/2. **Esparso**: poucas.\n\nNo C, os vértices são números de 0 a V − 1. Há duas formas de guardar as arestas:\n\n| | Matriz `adj[V][V]` | Lista de adjacência |\n|---|---|---|\n| Espaço | O(V²) | O(V + E) |\n| \"i e j são vizinhos?\" | O(1) | grau de i |\n| Listar vizinhos de i | O(V), a linha toda | grau de i |\n| Bom para | grafo pequeno ou denso | grafo grande e esparso |\n\n```c\nint adj[V][V] = {0};\nadj[a][b] = 1;\nadj[b][a] = 1;  /* não dirigido: os dois */\n```",
+ "caracteristicas": [
+  "A soma dos graus de todos os vértices é **2E**: cada aresta soma 1 no grau de cada ponta.",
+  "No grafo não dirigido, a matriz de adjacência é **simétrica**.",
+  "Toda árvore é grafo: conexo, sem ciclos, com exatamente V − 1 arestas e um único caminho entre dois vértices. Nem todo grafo é árvore.",
+  "Um grafo não dirigido simples tem no máximo V(V − 1)/2 arestas.",
+  "A representação muda o custo dos algoritmos: BFS e DFS custam O(V²) com matriz e O(V + E) com lista."
+ ],
+ "vantagens": [
+  "Matriz: testar se existe a aresta (i, j) é uma leitura só, O(1).",
+  "Matriz: simples de programar e de guardar peso (`peso[i][j]`).",
+  "Lista: ocupa O(V + E), só o que existe; é a escolha para grafo esparso.",
+  "Lista: percorre os vizinhos de i no tempo do grau dele, e o grafo todo em O(V + E)."
+ ],
+ "desvantagens": [
+  "Matriz: gasta O(V²) mesmo com poucas arestas. Com 100 mil vértices seriam 10¹⁰ casas, cerca de 40 GB, quase todas zero.",
+  "Matriz: listar vizinhos varre a linha inteira, O(V), mesmo se o vértice tem 1 vizinho.",
+  "Lista: saber se i e j são vizinhos exige percorrer a lista de i.",
+  "Lista: cada aresta gasta um nó com ponteiro (duas, no não dirigido)."
+ ],
+ "exemplo": "Ciclovias ligam 5 pontos da cidade, nos dois sentidos e sem peso: 0 Centro, 1 Praia, 2 Feira, 3 Parque, 4 Estádio. As arestas são {0,1}, {0,2}, {1,2}, {2,3}, {3,4}. V = 5 e E = 5.",
+ "passos": [
+  {
+   "titulo": "O grafo desenhado",
+   "texto": "Centro, Praia e Feira formam um triângulo: um **ciclo** Centro, Praia, Feira, Centro. A Feira liga no Parque, que liga no Estádio. Todo ponto alcança todo outro: o grafo é **conexo**.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "Praia(1) ---- Centro(0)",
+     "     \\          /",
+     "      \\        /",
+     "       Feira(2)",
+     "          |",
+     "       Parque(3)",
+     "          |",
+     "      Estadio(4)"
+    ],
+    "titulo": "V = 5, E = 5"
+   }
+  },
+  {
+   "titulo": "Matriz de adjacência",
+   "texto": "Cada aresta {a, b} marca `adj[a][b]` **e** `adj[b][a]`, por isso a matriz é simétrica em relação à diagonal. A linha 2 (Feira) tem três 1: vizinhos 0, 1 e 3. São 25 casas para 10 uns.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "     0 1 2 3 4",
+     "  0  0 1 1 0 0",
+     "  1  1 0 1 0 0",
+     "  2  1 1 0 1 0",
+     "  3  0 0 1 0 1",
+     "  4  0 0 0 1 0"
+    ],
+    "titulo": "adj[5][5]"
+   }
+  },
+  {
+   "titulo": "Lista de adjacência",
+   "texto": "Um vetor de 5 listas; a lista de i guarda só os vizinhos de i. São 10 nós no total (2E), contra as 25 casas da matriz. A ordem dentro de cada lista não importa.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "0 Centro : 1 -> 2",
+     "1 Praia  : 0 -> 2",
+     "2 Feira  : 0 -> 1 -> 3",
+     "3 Parque : 2 -> 4",
+     "4 Estadio: 3"
+    ],
+    "titulo": "V listas, 2E nós"
+   }
+  },
+  {
+   "titulo": "Graus e a soma 2E",
+   "texto": "O grau é a soma da linha da matriz ou o tamanho da lista. Feira tem grau 3; Estádio, 1. A soma é 2 + 2 + 3 + 2 + 1 = 10 = 2 · 5 arestas. Soma ímpar indicaria uma aresta gravada num sentido só.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "Centro  grau 2",
+     "Praia   grau 2",
+     "Feira   grau 3",
+     "Parque  grau 2",
+     "Estadio grau 1",
+     "",
+     "soma = 10 = 2 x E"
+    ],
+    "titulo": "grau"
+   }
+  },
+  {
+   "titulo": "Tirando uma aresta: virou árvore",
+   "texto": "Remova a ciclovia {1,2} (Praia–Feira). O triângulo some, o grafo continua conexo e agora tem 4 arestas = V − 1. Conexo e sem ciclo: é uma **árvore**. Remova mais uma e ele fica desconexo; acrescente qualquer uma e aparece um ciclo.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "Praia(1) ---- Centro(0)",
+     "                /",
+     "               /",
+     "       Feira(2)",
+     "          |",
+     "       Parque(3)",
+     "          |",
+     "      Estadio(4)"
+    ],
+    "titulo": "E = 4 = V - 1"
+   }
+  }
+ ],
+ "custos": "| Operação | Matriz | Lista de adjacência |\n|---|---|---|\n| Memória | O(V²) | O(V + E) |\n| Existe a aresta (i, j)? | O(1) | O(grau de i) |\n| Listar vizinhos de i | O(V) | O(grau de i) |\n| Inserir aresta | O(1) | O(1) no início da lista |\n| Percorrer o grafo (BFS, DFS) | O(V²) | O(V + E) |",
+ "naprova": "A banca cobra a definição de árvore como grafo (\"conexo e sem ciclos\"; a pegadinha é \"admite ciclos\" ou esquecer o \"conexo\") e a escolha da representação: em grafo esparso, a matriz gasta mais memória que a lista de adjacência.",
+ "fontes": [
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 20 (representações de grafos).",
+  "Ziviani, *Projeto de algoritmos*, 3. ed., cap. 7 (algoritmos em grafos).",
+  "Tenenbaum, Langsam e Augenstein, *Estruturas de dados usando C*, cap. 8 (grafos e suas aplicações).",
+  "Feofiloff, *Algoritmos para grafos* (IME-USP)."
+ ]
+}

@@ -1,0 +1,133 @@
+{
+ "num": "0054",
+ "oque": "O `malloc` (*memory allocation*, de `<stdlib.h>`) reserva no **heap** um bloco com o número de **bytes** pedido e devolve o endereço do começo, ou `NULL` se não houver memória. O `free` devolve o bloco. Entre um e outro, o bloco é seu, mesmo depois que a função que o pediu retornar.",
+ "como": "1. Peça em bytes: `n * sizeof *v` (itens vezes o tamanho de cada um).\n2. Confira se voltou `NULL` antes de usar.\n3. Use o ponteiro como vetor: `v[i]` vale `*(v + i)`.\n4. Quando terminar, `free(v)` com **o mesmo endereço** que o `malloc` deu.\n5. Anule o ponteiro: `v = NULL;`.\n\n```c\nint *v = malloc(n * sizeof *v);\nif (v == NULL) return 1;\nfor (int i = 0; i < n; i++)\n    v[i] = 10 * (i + 1);\nfree(v);\nv = NULL;\n```\n\nO retorno é `void *` e vira `int *` sozinho na atribuição; o cast `(int *)` é dispensável em C. O `malloc` anota o tamanho num cabeçalho escondido antes do bloco: é por isso que o `free` não pergunta o tamanho e que `free(v + 1)` dá errado.",
+ "caracteristicas": [
+  "Conta em **bytes**, não em itens: `malloc(4)` dá 4 bytes, não 4 `int`.",
+  "O bloco vem com **lixo**; quem entrega zerado é o `calloc`.",
+  "Em falha, devolve `NULL`.",
+  "O bloco vive até o `free`, não até o fim da função.",
+  "O `free` não muda o ponteiro: ele continua com o endereço antigo (ponteiro solto). `free(NULL)` não faz nada."
+ ],
+ "vantagens": [
+  "O tamanho é decidido em execução, do tamanho exato.",
+  "O bloco sobrevive à função: é assim que se criam nós de lista e árvore.",
+  "O heap comporta blocos muito maiores que a pilha."
+ ],
+ "desvantagens": [
+  "Todo `malloc` pede um `free`; esquecer vaza memória.",
+  "Cada bloco gasta um cabeçalho e o pedido é mais lento que uma variável local.",
+  "Erros de uso (fora do bloco, depois do `free`) só aparecem em execução."
+ ],
+ "exemplo": "`int n = 3;` e um vetor de `n` inteiros pedido ao heap. Endereços fictícios. No fim, o erro de uma questão de busca em lista: um `malloc` que não devia existir.",
+ "passos": [
+  {
+   "titulo": "Antes do malloc",
+   "texto": "`int n = 3; int *v;`. As duas moram na pilha. O `v` ainda tem lixo.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "PILHA",
+     "  n = 3",
+     "  v = ????  (lixo)",
+     "HEAP",
+     "  (nada reservado)"
+    ],
+    "titulo": "início"
+   }
+  },
+  {
+   "titulo": "v = malloc(n * sizeof *v);",
+   "texto": "`sizeof *v` é 4, então o pedido é 3 × 4 = 12 bytes. O heap reserva o bloco em 0x5000 e o endereço vai para `v`. Os 12 bytes vêm com lixo.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "PILHA",
+     "  n = 3",
+     "  v = 0x5000 --+",
+     "HEAP           v",
+     "  0x5000: [ ? ][ ? ][ ? ]"
+    ],
+    "titulo": "12 bytes no heap"
+   }
+  },
+  {
+   "titulo": "if (v == NULL) e o laço",
+   "texto": "Voltou um endereço, então segue. O laço grava `v[i] = 10 * (i + 1)`: `v[0]` em 0x5000, `v[1]` em 0x5004, `v[2]` em 0x5008.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "PILHA",
+     "  v = 0x5000 --+",
+     "HEAP           v",
+     "  0x5000: [10][20][30]"
+    ],
+    "titulo": "bloco preenchido"
+   }
+  },
+  {
+   "titulo": "free(v);",
+   "texto": "O bloco volta ao heap. Mas o `v` **continua** guardando 0x5000: o `free` recebeu uma cópia do endereço e não tem como mudar a variável. Ler `v[0]` agora é uso depois do `free`.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "PILHA",
+     "  v = 0x5000 --+   (solto)",
+     "HEAP           v",
+     "  0x5000: devolvido"
+    ],
+    "titulo": "depois do free"
+   }
+  },
+  {
+   "titulo": "v = NULL;",
+   "texto": "Agora o `v` diz \"lugar nenhum\". Um uso por engano derruba na hora, em vez de ler lixo em silêncio, e um segundo `free(v)` não faz nada.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "PILHA",
+     "  v = NULL",
+     "HEAP",
+     "  (nada reservado)"
+    ],
+    "titulo": "ponteiro anulado"
+   }
+  },
+  {
+   "titulo": "O erro de contar itens: malloc(n)",
+   "texto": "`int *w = malloc(3);` reserva 3 **bytes**, não 3 `int`. Nem o `w[0]` cabe inteiro (precisa de 4); `w[1]` e `w[2]` escrevem fora do bloco (o AddressSanitizer acusa `heap-buffer-overflow`). Pedia 12, recebeu 3.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "pedido:  malloc(3)       3 bytes",
+     "preciso: 3 * sizeof(int)  12 bytes",
+     "",
+     "0x6000: [ w[0]? ] | fora..."
+    ],
+    "titulo": "bytes, não itens"
+   }
+  },
+  {
+   "titulo": "malloc que sobra: busca em lista",
+   "texto": "`No *aux = malloc(sizeof(No)); aux = prim;`. A segunda linha troca o endereço do bloco novo pelo de `prim`. Ninguém mais sabe onde o bloco está: **vazamento**, a cada busca. Para percorrer, basta `No *aux = prim;`. `malloc` só se faz para criar nó novo.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "aux = malloc(...)  -> bloco 0x7000",
+     "aux = prim         -> 1º nó",
+     "",
+     "bloco 0x7000: sem dono (vazou)"
+    ],
+    "titulo": "o bloco perdido"
+   }
+  }
+ ],
+ "custos": "| | Variável local (pilha) | `malloc` (heap) |\n|---|---|---|\n| Tamanho | na compilação (ou VLA) | em execução |\n| Liberação | automática no `return` | manual, com `free` |\n| Conteúdo inicial | lixo | lixo (`calloc`: zeros) |\n| Falta de espaço | estouro da pilha | devolve `NULL` |\n| Custo do pedido | quase nada | chamada de função, cabeçalho por bloco |",
+ "naprova": "A banca mostra funções de lista e pergunta se há problema de alocação: uma busca que faz `malloc` e depois sobrescreve o ponteiro (vazamento), uma inserção que aloca o nó, uma remoção que dá `free` antes de guardar o endereço. A pegadinha é o `malloc` sobrando: quem só percorre não aloca nada.",
+ "fontes": [
+  "Backes, *Linguagem C: completa e descomplicada*, cap. 11 (alocação dinâmica).",
+  "Feofiloff, *Algoritmos em linguagem C*, ap. F (alocação dinâmica de memória).",
+  "Kernighan e Ritchie, *C: a linguagem de programação padrão ANSI*, seção 8.7 (um alocador de memória).",
+  "Deitel e Deitel, *C: como programar*, 6. ed., cap. 12 (alocação dinâmica)."
+ ]
+}

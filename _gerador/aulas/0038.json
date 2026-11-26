@@ -1,0 +1,145 @@
+{
+ "num": "0038",
+ "oque": "Quando um vetor vai para uma função, o C **não copia os itens**: entrega o endereço do primeiro. A função trabalha nas mesmas gavetas de quem chamou, e o que ela escreve aparece fora dela.",
+ "como": "Um `int` passado como argumento vai **por valor**: a função recebe uma cópia, e mudar a cópia não muda o original. Um vetor vai como **endereço**: o parâmetro `int v[]` é, para o compilador, um `int *`. Por isso `v[0] = ...` dentro da função escreve no vetor do `main`.\n\n- Na chamada vai só o nome: `inverte(w, 5)`, sem colchetes.\n- `int v[]`, `int v[10]` e `int *v` no parâmetro são a mesma coisa; o número é ignorado.\n- O tamanho **não viaja** junto. Passe `n` à parte.\n- Se a função só lê, escreva `const int v[]`: o compilador barra qualquer escrita.\n\n```c\nvoid inverte(int v[], int n) {\n    for (int i = 0; i < n / 2; i++) {\n        int t = v[i];\n        v[i] = v[n - 1 - i];\n        v[n - 1 - i] = t;\n    }\n}\n```\n\nA função é `void` e não devolve nada, mas quem chamou vê o vetor invertido.",
+ "caracteristicas": [
+  "Escalar vai por valor (cópia); vetor vai pelo endereço do primeiro item.",
+  "Um item sozinho, como `f(v[0])`, vai por valor: é só um `int`.",
+  "Passar um vetor de 4 ou de um milhão de itens custa o mesmo: um endereço de 8 bytes.",
+  "Dentro da função, `sizeof(v)` dá 8 (o endereço), não o tamanho do vetor.",
+  "Matriz como parâmetro exige as colunas: `int m[][4]`."
+ ],
+ "vantagens": [
+  "A função pode preencher, ordenar ou inverter o vetor sem devolver nada.",
+  "Não há cópia: o custo da passagem é constante.",
+  "Uma função serve para vetores de qualquer tamanho, com `n` no parâmetro."
+ ],
+ "desvantagens": [
+  "A função pode estragar o vetor sem querer; o `const` protege.",
+  "A função não sabe o tamanho; um `n` errado leva a acesso fora do vetor.",
+  "Devolver um vetor **local** (`return v;`) entrega o endereço de gavetas que somem no `return`."
+ ],
+ "exemplo": "Duas funções parecidas, uma com escalar e outra com vetor:\n\n```c\nvoid triplica(int x)   { x = 3 * x; }\nvoid triplicaV(int v[]) { v[0] = 3 * v[0]; }\n```\n\nNo `main`: `x = 5`, `v[0] = 7`, `v[1] = 4`. Os endereços são fictícios. Depois, `inverte` num vetor de 5 itens.",
+ "passos": [
+  {
+   "titulo": "Antes das chamadas",
+   "texto": "O `main` tem `x` e o vetor `v` de 2 itens. Cada um mora no frame do `main`.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "main",
+     "  x    = 5    em 0x200",
+     "  v[0] = 7    em 0x100",
+     "  v[1] = 4    em 0x104"
+    ],
+    "titulo": "frame do main"
+   }
+  },
+  {
+   "titulo": "triplica(x): a função recebe uma cópia",
+   "texto": "O parâmetro `x` de `triplica` é outra variável, em outro endereço, que nasce valendo 5. `x = 3 * x` muda **essa** variável para 15. O `x` do `main` nem foi tocado.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "main",
+     "  x = 5      em 0x200",
+     "triplica",
+     "  x = 15     em 0x300  (cópia)"
+    ],
+    "titulo": "durante triplica(x)"
+   }
+  },
+  {
+   "titulo": "Volta ao main: x continua 5",
+   "texto": "No `return`, o frame de `triplica` some, e o 15 vai junto. `printf(\"%d\", x)` mostra 5.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "main",
+     "  x    = 5",
+     "  v[0] = 7",
+     "  v[1] = 4"
+    ],
+    "titulo": "depois de triplica"
+   }
+  },
+  {
+   "titulo": "triplicaV(v): a função recebe o endereço",
+   "texto": "Na chamada vai `v`, que vale o endereço 0x100. O parâmetro `v` da função guarda 0x100. `v[0]` lá dentro é a gaveta 0x100, a mesma do `main`: `v[0] = 3 * 7 = 21`.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "main",
+     "  v[0] = 21   em 0x100  <--+",
+     "  v[1] = 4    em 0x104     |",
+     "triplicaV                  |",
+     "  v = 0x100  --------------+"
+    ],
+    "titulo": "durante triplicaV(v)"
+   }
+  },
+  {
+   "titulo": "Volta ao main: v[0] virou 21",
+   "texto": "O frame de `triplicaV` some, mas ele não guardava o vetor, só o endereço. A escrita foi feita no vetor do `main`. Saída: `x: 5` e `v[0]: 21`.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     21,
+     4
+    ],
+    "estados": {
+     "0": "verde"
+    },
+    "nome": "v no main"
+   }
+  },
+  {
+   "titulo": "inverte(w, 5): troca i = 0",
+   "texto": "Vetor `w = 1 2 3 4 5`, `n = 5`. O laço vai enquanto `i < n / 2 = 2`. Com i = 0, troca `w[0]` com `w[n - 1 - 0] = w[4]`: o 1 e o 5 trocam de lugar.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     5,
+     2,
+     3,
+     4,
+     1
+    ],
+    "estados": {
+     "0": "amarelo",
+     "4": "amarelo"
+    },
+    "nome": "w"
+   }
+  },
+  {
+   "titulo": "Troca i = 1 e para",
+   "texto": "Com i = 1, troca `w[1]` com `w[3]`: o 2 e o 4. Com i = 2, o teste `2 < 2` falha e o laço acaba: o 3 está no meio e não precisa sair do lugar. Foram `5 / 2 = 2` trocas, sem vetor auxiliar, e o `main` vê `5 4 3 2 1`.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     5,
+     4,
+     3,
+     2,
+     1
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "verde",
+     "2": "verde",
+     "3": "verde",
+     "4": "verde"
+    },
+    "nome": "w"
+   }
+  }
+ ],
+ "custos": "| O que vai na chamada | O que a função recebe | Custo da passagem | A mudança aparece fora? |\n|---|---|---|---|\n| `x` (um `int`) | cópia do valor | 4 bytes | não |\n| `v[0]` (um item) | cópia do valor | 4 bytes | não |\n| `v` (o vetor) | endereço do 1º item | 8 bytes, qualquer `n` | sim |\n| `&x` | endereço de `x` | 8 bytes | sim, por `*p` |",
+ "naprova": "A banca mostra uma função que muda um escalar e outra que muda `v[0]` e pergunta a saída: o escalar fica como estava e o vetor muda. Também cobra o vetor ordenado em funções: o maior em custo constante e a inversão com metade do tamanho em trocas, sem cópia. A pegadinha é achar que `void` impede o efeito fora: com vetor, não impede.",
+ "fontes": [
+  "Deitel e Deitel, *C: como programar*, 6. ed., cap. 6 (passando arrays para funções).",
+  "Backes, *Linguagem C: completa e descomplicada*, cap. 9 (passagem de vetores para funções).",
+  "Kernighan e Ritchie, *C: a linguagem de programação padrão ANSI*, cap. 5 (apontadores e vetores)."
+ ]
+}

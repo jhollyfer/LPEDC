@@ -1,0 +1,128 @@
+{
+ "num": "0057",
+ "oque": "Erros de memória são usos errados do heap e dos ponteiros que o C não impede: **vazamento**, **uso depois do free** (pelo ponteiro solto, ou pendente), **free duplo** e **estouro** (acesso fora do bloco). Todos, menos o vazamento, são comportamento indefinido: o programa pode até dar a saída certa.",
+ "como": "| Erro | O que acontece | O AddressSanitizer diz |\n|---|---|---|\n| vazamento | o bloco não foi liberado e ninguém mais guarda o endereço | `detected memory leaks` |\n| uso depois do free | ler ou escrever por um ponteiro solto | `heap-use-after-free` |\n| free duplo | liberar o mesmo bloco duas vezes | `attempting double-free` |\n| estouro | passar do fim (ou do começo) de um bloco | `heap-buffer-overflow` |\n\nComo evitar:\n\n- todo `malloc` tem um `free`, antes do `return` que perde o endereço;\n- guarde o endereço **antes** de mudar quem aponta para o bloco, e só então libere;\n- depois de `free(p)`, faça `p = NULL;`;\n- confira os limites: `i < n`, não `i <= n`.\n\n```c\nvoid remove_ini(No **prim) {\n    if (*prim == NULL) return;\n    No *aux = *prim;   /* guarda o 1º */\n    *prim = aux->prox; /* avança      */\n    free(aux);         /* só agora    */\n}\n```\n\nPara achar os erros: compile com `-fsanitize=address -g` (ASan) ou rode `valgrind ./programa`.",
+ "caracteristicas": [
+  "\"Rodou e deu certo\" não prova nada: uso depois do `free` pode ler o valor antigo por sorte.",
+  "O `free` devolve o bloco, mas não apaga os bytes nem muda o ponteiro.",
+  "Vazamento não derruba na hora; repetido num laço, esgota o heap.",
+  "Estouro no heap costuma estragar o cabeçalho do bloco vizinho e quebrar depois, num `free` inocente.",
+  "O ASan para no primeiro erro e mostra a linha; o valgrind pega ainda a leitura de memória nunca preenchida, que o ASan não vê."
+ ],
+ "exemplo": "A lista `prim -> [5] -> [8] -> [3] -> NULL` e a remoção do primeiro nó com as linhas na ordem errada:\n\n```c\n3. if (*prim) { aux = *prim;\n4.     *prim = aux->prox;\n5.     free(*prim);\n6.     *prim = aux;\n```",
+ "passos": [
+  {
+   "titulo": "A lista antes",
+   "texto": "`*prim` (o início da lista de quem chamou) aponta para o nó 5. O objetivo é remover o 5.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "5",
+     "8",
+     "3"
+    ],
+    "cabeca": "*prim"
+   }
+  },
+  {
+   "titulo": "Linha 3: aux = *prim",
+   "texto": "`aux` guarda o endereço do nó 5. Até aqui, certo: é o endereço que vai precisar do `free`.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "5",
+     "8",
+     "3"
+    ],
+    "cabeca": "aux",
+    "estados": {
+     "0": "amarelo"
+    }
+   }
+  },
+  {
+   "titulo": "Linha 4: *prim = aux->prox",
+   "texto": "O início avança para o 8. O nó 5 fica fora da lista, mas o `aux` ainda sabe onde ele está.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "8",
+     "3"
+    ],
+    "cabeca": "*prim",
+    "estados": {
+     "0": "amarelo"
+    }
+   }
+  },
+  {
+   "titulo": "Linha 5: free(*prim)",
+   "texto": "`*prim` agora é o nó 8, e é **ele** que é liberado. O nó que devia sair (5) continua vivo, e o `prox` dele aponta para um bloco devolvido.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "8",
+     "3"
+    ],
+    "cabeca": "*prim",
+    "estados": {
+     "0": "vermelho"
+    }
+   }
+  },
+  {
+   "titulo": "Linha 6: *prim = aux",
+   "texto": "O início volta para o 5, cujo `prox` aponta para o 8 já liberado. Percorrer a lista lê o nó 8: **uso depois do free**. O nó 3 só era alcançado pelo `prox` do 8, que foi devolvido: ficou sem dono, um **vazamento**. A lista não perdeu o 5, que era o pedido.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "5",
+     "8",
+     "3"
+    ],
+    "cabeca": "*prim",
+    "estados": {
+     "1": "vermelho",
+     "2": "apagado"
+    }
+   }
+  },
+  {
+   "titulo": "Versão certa: free(aux)",
+   "texto": "Guardar (`aux = *prim`), avançar (`*prim = aux->prox`) e liberar o guardado (`free(aux)`), nessa ordem. O 5 sai, o 8 vira o primeiro, e nenhum ponteiro da lista aponta para bloco devolvido.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "8",
+     "3"
+    ],
+    "cabeca": "*prim",
+    "estados": {
+     "0": "verde"
+    }
+   }
+  },
+  {
+   "titulo": "Dois ponteiros, um bloco",
+   "texto": "`int *a = malloc(16); int *b = a; free(a); a = NULL;`. O `a` ficou seguro, mas o `b` continua com o endereço antigo: um `b[0] = 1` é uso depois do `free`, e um `free(b)` é free duplo. Anular um ponteiro não anula as cópias dele.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "a = NULL",
+     "b = 0x5000  -> bloco devolvido",
+     "",
+     "b[0] = 1   heap-use-after-free",
+     "free(b)    attempting double-free"
+    ],
+    "titulo": "a cópia esquecida"
+   }
+  }
+ ],
+ "naprova": "A banca dá código de lista (remoção do primeiro nó com `free` antes da hora, busca com `malloc` sobrando, contagem que trata a lista como vetor) e pergunta se há vazamento, falha de segmentação ou se o código está certo. Siga cada ponteiro numa caixinha, linha a linha. A pegadinha é o código que roda e dá a saída esperada mesmo lendo memória já liberada.",
+ "fontes": [
+  "Backes, *Linguagem C: completa e descomplicada*, cap. 11 (alocação dinâmica).",
+  "Deitel e Deitel, *C: como programar*, 6. ed., cap. 12 (alocação dinâmica e vazamento).",
+  "Kernighan e Ritchie, *C: a linguagem de programação padrão ANSI*, seção 8.7 (um alocador de memória).",
+  "Google, *AddressSanitizer* (documentação do projeto sanitizers)."
+ ]
+}

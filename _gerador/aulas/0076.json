@@ -1,7 +1,7 @@
 {
  "num": "0076",
  "oque": "Uma sequência de nós soltos na memória. Cada nó guarda um dado e o endereço do próximo nó. A lista em si é só um ponteiro para o primeiro nó; o último aponta para `NULL`.",
- "como": "Para chegar a um nó, você parte do primeiro e segue os ponteiros, um por um. Não existe `lista[3]`: o quarto nó só é alcançado passando pelos três anteriores.\n\nInserir é criar um nó com `malloc` e religar ponteiros. Remover é fazer o nó anterior apontar para o seguinte e dar `free` no que saiu. Nada é deslocado.\n\n```c\nstruct No { int dado; struct No *prox; };\n\nfor (struct No *p = inicio; p != NULL; p = p->prox)\n    printf(\"%d \", p->dado);\n```",
+ "como": "Para chegar a um nó, você parte do primeiro e segue os ponteiros, um por um. Não existe `lista[3]`: o quarto nó só é alcançado passando pelos três anteriores.\n\nInserir é criar um nó com `malloc` e religar ponteiros. Remover é fazer o nó anterior apontar para o seguinte e dar `free` no que saiu. Nada é deslocado.\n\n```c\nstruct No { int dado; struct No *prox; };\n\nfor (struct No *p = inicio; p != NULL;\n     p = p->prox)\n    printf(\"%d \", p->dado);\n```",
  "caracteristicas": [
   "Os nós **não são vizinhos** na memória; quem dá a ordem são os ponteiros.",
   "O acesso é **sequencial**: para ler o k-ésimo nó, passa-se por k nós.",
@@ -20,7 +20,7 @@
   "Cada nó gasta um ponteiro a mais de memória (dois na dupla).",
   "Sem ponteiro para o fim, inserir no fim custa `O(n)`. Na lista simples, remover o último custa `O(n)` mesmo com ponteiro para o fim, porque é preciso achar o penúltimo."
  ],
- "exemplo": "A lista começa assim:\n\n```\ninicio -> [4] -> [8] -> [2] -> NULL\n```\n\n**Inserir 7 no início:** o novo nó aponta para o `[4]` e `inicio` passa a apontar para o novo. Dois ponteiros mexidos, `O(1)`.\n\n```\ninicio -> [7] -> [4] -> [8] -> [2] -> NULL\n```\n\n**Buscar o 2:** compara com 7, 4, 8 e 2. Foram 4 comparações, e ele era o último: esse é o pior caso, `n` comparações.\n\n**Remover o 8:** anda até o `[4]`, que é o anterior; faz `[4]` apontar para `[2]` e libera o `[8]`.\n\n```\ninicio -> [7] -> [4] -> [2] -> NULL\n```\n\nAchar o anterior custou `O(n)`; a religação em si custou `O(1)`.",
+ "exemplo": "A lista começa com três nós: `inicio -> [4] -> [8] -> [2] -> NULL`.\n\nVamos fazer três operações e contar o trabalho de cada uma: **inserir 7 no início**, **buscar o 2** e **remover o 8**.\n\nResumo da conta: inserir no início mexeu em dois ponteiros, `O(1)`. A busca comparou 4 nós, `O(n)`. A remoção gastou `O(n)` para achar o anterior e `O(1)` para religar.",
  "custos": "| Operação | Lista simples | Vetor |\n|---|---|---|\n| Ler a posição k | `O(k)` | `O(1)` |\n| Buscar um valor | `O(n)` | `O(n)`, ou `O(log n)` se ordenado |\n| Inserir no início | `O(1)` | `O(n)` |\n| Inserir no fim | `O(n)`, ou `O(1)` com ponteiro `fim` | `O(1)` se há espaço |\n| Remover do início | `O(1)` | `O(n)` |",
  "naprova": "A banca costuma comparar lista com vetor (acesso, busca, inserção), perguntar o custo de operações nas pontas da lista simples e da dupla, e mostrar código que percorre lista com índice, como `aux[x]`, no lugar de `aux = aux->prox`.",
  "fontes": [
@@ -28,5 +28,86 @@
   "Ziviani, *Projeto de algoritmos*, 3. ed., cap. 3 (listas lineares).",
   "Celes e Rangel, *Apostila de estruturas de dados* (PUC-Rio), cap. 10 (listas encadeadas).",
   "Tenenbaum, Langsam e Augenstein, *Estruturas de dados usando C*, cap. 4 (filas e listas)."
+ ],
+ "passos": [
+  {
+   "titulo": "A lista de partida",
+   "texto": "O ponteiro `inicio` guarda o endereço do nó 4. O 4 aponta para o 8, o 8 para o 2, e o 2 para `NULL`. Os três nós podem estar em qualquer lugar do heap: quem dá a ordem são as setas.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "4",
+     "8",
+     "2"
+    ]
+   }
+  },
+  {
+   "titulo": "Inserir 7 no início",
+   "texto": "O `malloc` cria o nó 7. Primeiro `novo->prox = inicio`: o 7 passa a apontar para o 4. Depois `inicio = novo`. Nenhum nó andou de lugar; foram dois ponteiros, `O(1)`. Se a ordem fosse trocada, o 7 apontaria para ele mesmo e o resto da lista se perderia.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "7",
+     "4",
+     "8",
+     "2"
+    ],
+    "estados": {
+     "0": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "Buscar o 2",
+   "texto": "O `p` começa em `inicio` e compara: 7 não, 4 não, 8 não, 2 sim. Quatro comparações para quatro nós: o valor era o último, o pior caso da busca, `n` comparações. Não dá para pular para o meio, porque só se chega a um nó pelo anterior.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "7",
+     "4",
+     "8",
+     "2"
+    ],
+    "estados": {
+     "0": "apagado",
+     "1": "apagado",
+     "2": "apagado",
+     "3": "verde"
+    }
+   }
+  },
+  {
+   "titulo": "Remover o 8: achar o anterior",
+   "texto": "Para tirar o 8, quem precisa mudar é o nó **anterior** a ele, o 4. A lista simples só anda para a frente, então o percurso leva dois ponteiros: `ant` (o 4, em amarelo) e `p` (o 8, em vermelho).",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "7",
+     "4",
+     "8",
+     "2"
+    ],
+    "estados": {
+     "1": "amarelo",
+     "2": "vermelho"
+    }
+   }
+  },
+  {
+   "titulo": "Remover o 8: religar e liberar",
+   "texto": "`ant->prox = p->prox`: o 4 passa a apontar para o 2, e o 8 fica de fora. Só então `free(p)`, porque antes era preciso ler `p->prox`. O 7 e o 2 nem foram tocados. No vetor, tirar do meio obrigaria a deslocar todos os seguintes.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "7",
+     "4",
+     "2"
+    ],
+    "estados": {
+     "1": "verde"
+    }
+   }
+  }
  ]
 }

@@ -1,0 +1,153 @@
+{
+ "num": "0080",
+ "oque": "A **lista circular** é uma lista encadeada em que o último nó aponta para o **primeiro**, e não para `NULL`. Os nós formam um anel, sem ponta solta.",
+ "como": "Guarde o ponteiro para o **último** nó. O primeiro está a uma seta: é `ultimo->prox`. Assim você alcança as duas pontas sem percorrer nada.\n\n- **Inserir no início**: encaixe o novo entre o último e o primeiro (`novo->prox = ultimo->prox; ultimo->prox = novo`).\n- **Inserir no fim**: o mesmo encaixe e, depois, `ultimo = novo`.\n- **Girar** (o primeiro vira o último): `ultimo = ultimo->prox`. Nenhum nó muda.\n\nNão existe `NULL` para parar o laço. Ele para quando **volta ao ponto de partida**. Como começa justamente no ponto de partida, o laço certo é o `do-while`, que roda o corpo antes de testar. A lista vazia (`ultimo == NULL`) é tratada antes:\n\n```c\nif (ultimo != NULL) {\n    No *p = ultimo->prox; // o primeiro\n    do {\n        printf(\"%d \", p->valor);\n        p = p->prox;\n    } while (p != ultimo->prox);\n}\n```",
+ "caracteristicas": [
+  "Nenhum nó aponta para `NULL`. Com um nó só, ele aponta para si mesmo.",
+  "A busca precisa de outra condição de parada: voltar ao nó de onde saiu. Com `p != NULL`, o laço nunca termina quando o valor não está lá.",
+  "Com o ponteiro no último, inserir no início **e** no fim custa `O(1)`.",
+  "Circular é independente de dupla: existe circular simples e circular dupla. O Cormen usa a dupla circular com uma sentinela."
+ ],
+ "vantagens": [
+  "Modela rodízio de forma natural: a vez dos jogadores, a divisão do tempo da CPU entre os programas.",
+  "Um único ponteiro dá acesso às duas pontas.",
+  "Girar a roda e juntar duas listas circulares custam `O(1)`."
+ ],
+ "desvantagens": [
+  "Laço com `p != NULL` vira laço infinito; todo percurso precisa lembrar o ponto de partida.",
+  "Para liberar, é preciso cortar o anel antes (`ultimo->prox = NULL`), senão o `free` alcança o primeiro já liberado.",
+  "Remover o último continua `O(n)` na circular simples: é preciso achar o penúltimo."
+ ],
+ "exemplo": "O garçom do rodízio serve as mesas 3, 7, 12 e 15 e, depois da 15, volta à 3. O ponteiro da lista, `ultimo`, fica na mesa 15 (roxo nas figuras); a seta de entrada desenhada é `ultimo->prox`, o primeiro.\n\nVamos inserir no início e no fim, percorrer, buscar um valor ausente e girar.",
+ "passos": [
+  {
+   "titulo": "O anel de partida",
+   "texto": "`ultimo` aponta para o 15, e `ultimo->prox` é o 3. A seta que sai do 15 volta ao 3: não há `NULL` em lugar nenhum.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "3",
+     "7",
+     "12",
+     "15"
+    ],
+    "cabeca": "ultimo->prox",
+    "circular": true,
+    "estados": {
+     "3": "roxo"
+    }
+   }
+  },
+  {
+   "titulo": "Inserir 1 no início",
+   "texto": "`novo->prox = ultimo->prox`: o 1 aponta para o 3. `ultimo->prox = novo`: o 15 passa a apontar para o 1. O `ultimo` continua no 15. Duas setas, `O(1)`, sem percorrer o anel.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "1",
+     "3",
+     "7",
+     "12",
+     "15"
+    ],
+    "cabeca": "ultimo->prox",
+    "circular": true,
+    "estados": {
+     "0": "azul",
+     "4": "roxo"
+    }
+   }
+  },
+  {
+   "titulo": "Inserir 20 no fim",
+   "texto": "O mesmo encaixe entre o 15 e o 1: `novo->prox = ultimo->prox` (o 1) e `ultimo->prox = novo`. Depois, `ultimo = novo`: o 20 vira o último. No anel, início e fim são vizinhos; só o ponteiro `ultimo` diz quem é quem.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "1",
+     "3",
+     "7",
+     "12",
+     "15",
+     "20"
+    ],
+    "cabeca": "ultimo->prox",
+    "circular": true,
+    "estados": {
+     "5": "roxo"
+    }
+   }
+  },
+  {
+   "titulo": "Percorrer com do-while",
+   "texto": "O `p` sai do primeiro e imprime antes de testar. Depois do 20, `p` volta ao 1, que é `ultimo->prox`, e o laço para. Com `while` comum, o teste falharia logo de cara e nada seria impresso.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "p = 1   imprime 1",
+     "p = 3   imprime 3",
+     "p = 7   imprime 7",
+     "p = 12  imprime 12",
+     "p = 15  imprime 15",
+     "p = 20  imprime 20",
+     "p = 1   voltou: para",
+     "",
+     "saída: 1 3 7 12 15 20"
+    ]
+   }
+  },
+  {
+   "titulo": "Buscar 9, que não está lá",
+   "texto": "Compara 1, 3, 7, 12, 15 e 20: nenhum é 9. O próximo seria o 1 de novo, e é aí que a busca precisa parar e responder que não achou. Seis comparações para seis nós. Sem esse teste, ela daria voltas para sempre.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "1",
+     "3",
+     "7",
+     "12",
+     "15",
+     "20"
+    ],
+    "cabeca": "ultimo->prox",
+    "circular": true,
+    "estados": {
+     "0": "apagado",
+     "1": "apagado",
+     "2": "apagado",
+     "3": "apagado",
+     "4": "apagado",
+     "5": "apagado"
+    }
+   }
+  },
+  {
+   "titulo": "Girar a roda",
+   "texto": "`ultimo = ultimo->prox`: o `ultimo` anda para o 1. Agora o primeiro é o 3, e o 1 foi para o fim da vez. Nenhum nó mudou de seta; só a referência andou uma casa.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "3",
+     "7",
+     "12",
+     "15",
+     "20",
+     "1"
+    ],
+    "cabeca": "ultimo->prox",
+    "circular": true,
+    "estados": {
+     "5": "roxo"
+    }
+   }
+  }
+ ],
+ "custos": "| Operação | Circular com ponteiro `ultimo` | Simples com só `inicio` |\n|---|---|---|\n| inserir no início | `O(1)` | `O(1)` |\n| inserir no fim | `O(1)` | `O(n)` |\n| remover o primeiro | `O(1)` | `O(1)` |\n| remover o último | `O(n)` | `O(n)` |\n| buscar | `O(n)`, para ao voltar ao início | `O(n)`, para no `NULL` |\n| girar ou juntar duas listas | `O(1)` | não se aplica |",
+ "naprova": "A banca pergunta o que a busca em lista circular precisa resolver (a condição de parada, já que não há `NULL`) e mostra código de busca que para em `temp != head`. Pegadinha: alternativas que misturam circular com dupla, ordenada ou memória contígua.",
+ "fontes": [
+  "Feofiloff, *Algoritmos em linguagem C*, cap. 4 (listas encadeadas).",
+  "Tenenbaum, Langsam e Augenstein, *Estruturas de dados usando C*, cap. 4 (filas e listas).",
+  "Celes e Rangel, *Apostila de estruturas de dados* (PUC-Rio), cap. 10 (listas encadeadas).",
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 10 (lista duplamente ligada circular com sentinela)."
+ ]
+}

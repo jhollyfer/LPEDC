@@ -1,0 +1,183 @@
+{
+ "num": "0037",
+ "oque": "O vetor (*array*, também chamado de arranjo) é um conjunto de variáveis do **mesmo tipo**, com um nome só, guardadas **lado a lado** na memória. Cada item é escolhido pelo **índice**, que vai de `0` a `n - 1`.",
+ "como": "O nome do vetor marca o começo do bloco. O índice diz quantos itens pular: `v[i]` fica em `início + i × sizeof(item)`. É uma multiplicação e uma soma, por isso ler `v[0]` ou `v[999]` custa o mesmo, `O(1)`.\n\nO tamanho é fixo. Para ter espaço de manobra, você reserva uma **capacidade** maior e guarda numa variável `n` quantos itens estão em uso.\n\n- **Inserir na posição k:** empurre uma casa para a direita tudo o que está de `k` até `n - 1`, começando pelo **último**, grave o novo em `v[k]` e faça `n++`.\n- **Remover a posição k:** puxe uma casa para a esquerda tudo o que está de `k + 1` até `n - 1`, começando pelo **primeiro**, e faça `n--`.\n\n```c\n/* insere x na posição k (cabe mais um) */\nfor (int i = n; i > k; i--)\n    v[i] = v[i - 1];  /* empurra à direita */\nv[k] = x;\nn++;\n```\n\nNo vetor **ordenado**, o lugar do novo item é decidido pela ordem, e a busca pode ser binária. No **não ordenado**, o novo item entra no fim e a busca é sequencial.",
+ "caracteristicas": [
+  "É **homogêneo**: todos os itens são do mesmo tipo. A struct é o caso heterogêneo.",
+  "O acesso é **direto** (aleatório) pelo índice, em `O(1)`. Não existe política FIFO ou LIFO: isso é de fila e pilha.",
+  "Os itens ocupam um **bloco contínuo**; `v[i]` e `v[i + 1]` são vizinhos na memória.",
+  "O tamanho é decidido na declaração e **não cresce** depois.",
+  "O C **não confere o índice**: `v[n]` compila e mexe na memória vizinha.",
+  "Inserir ou remover no meio exige **deslocar** os itens seguintes."
+ ],
+ "vantagens": [
+  "Ler ou escrever qualquer posição custa `O(1)`.",
+  "Não gasta ponteiro por item, ao contrário da lista encadeada.",
+  "Ordenado, permite busca binária (`O(log n)`) e dá o menor e o maior em `O(1)`: `v[0]` e `v[n - 1]`.",
+  "Itens vizinhos na memória aproveitam o cache do processador."
+ ],
+ "desvantagens": [
+  "Tamanho fixo: ou sobra espaço, ou falta.",
+  "Inserir ou remover no meio custa `O(n)` pelo deslocamento.",
+  "Manter a ordem custa: cada inserção no vetor ordenado desloca, em média, metade dos itens.",
+  "Índice fora do limite não dá erro de compilação; é comportamento indefinido."
+ ],
+ "exemplo": "Vetor `v` com capacidade 8 e `n = 5` itens em ordem crescente: `10 20 30 40 50`. Vamos inserir o 25 mantendo a ordem e depois remover o 20. No fim, um vetor **não ordenado**, para comparar a remoção.",
+ "passos": [
+  {
+   "titulo": "O vetor de partida",
+   "texto": "Capacidade 8, `n = 5`. As gavetas 5 a 7 existem, mas não estão em uso. Com `int` de 4 bytes, `v[3]` fica em início + 3 × 4 = início + 12: o 40 é lido sem passar pelos outros. Como está ordenado, o maior é `v[n - 1] = v[4] = 50`, em `O(1)`.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     10,
+     20,
+     30,
+     40,
+     50,
+     "",
+     "",
+     ""
+    ],
+    "estados": {
+     "4": "verde"
+    },
+    "nome": "v  (n = 5)"
+   }
+  },
+  {
+   "titulo": "Achar o lugar do 25",
+   "texto": "25 > 10, 25 > 20, 25 < 30: o 25 entra na posição 2, no lugar do 30. Com o vetor ordenado, essa busca também pode ser binária.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     10,
+     20,
+     30,
+     40,
+     50,
+     "",
+     "",
+     ""
+    ],
+    "estados": {
+     "2": "amarelo"
+    },
+    "nome": "v  (n = 5)"
+   }
+  },
+  {
+   "titulo": "Empurrar à direita, do último para trás",
+   "texto": "`v[5] = v[4]` (50), `v[4] = v[3]` (40), `v[3] = v[2]` (30). Foram `n - k = 5 - 2 = 3` movimentos. A gaveta 2 ainda tem o 30 antigo, que vai ser sobrescrito. Se você empurrasse da esquerda para a direita, `v[3] = v[2]` apagaria o 40 antes de ele andar, e o 30 se espalharia até o fim.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     10,
+     20,
+     30,
+     30,
+     40,
+     50,
+     "",
+     ""
+    ],
+    "estados": {
+     "2": "vermelho",
+     "3": "amarelo",
+     "4": "amarelo",
+     "5": "amarelo"
+    },
+    "nome": "v  (n = 5)"
+   }
+  },
+  {
+   "titulo": "Gravar o 25",
+   "texto": "`v[2] = 25` e `n++`. O vetor continua em ordem, agora com `n = 6`.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     10,
+     20,
+     25,
+     30,
+     40,
+     50,
+     "",
+     ""
+    ],
+    "estados": {
+     "2": "azul"
+    },
+    "nome": "v  (n = 6)"
+   }
+  },
+  {
+   "titulo": "Remover o 20 (posição 1)",
+   "texto": "Remover é o caminho inverso: quem está depois da posição 1 anda uma casa para a esquerda, do primeiro para o último.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     10,
+     20,
+     25,
+     30,
+     40,
+     50,
+     "",
+     ""
+    ],
+    "estados": {
+     "1": "vermelho"
+    },
+    "nome": "v  (n = 6)"
+   }
+  },
+  {
+   "titulo": "Puxar à esquerda, do primeiro para a frente",
+   "texto": "`v[1] = v[2]`, `v[2] = v[3]`, `v[3] = v[4]`, `v[4] = v[5]`: `n - 1 - k = 6 - 1 - 1 = 4` movimentos. Depois, `n--`. O 50 ainda está na gaveta 5, mas ficou fora dos `n = 5` em uso: é lixo, e ninguém precisa apagá-lo.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     10,
+     25,
+     30,
+     40,
+     50,
+     50,
+     "",
+     ""
+    ],
+    "estados": {
+     "5": "apagado"
+    },
+    "nome": "v  (n = 5)"
+   }
+  },
+  {
+   "titulo": "No vetor não ordenado, o último tapa o buraco",
+   "texto": "Vetor sem ordem `7 3 9 4 6`. Para remover o 3 (posição 1), basta `v[1] = v[n - 1]` e `n--`: um movimento, `O(1)`, porque a ordem não importa. Achar o 3 é que custou a busca sequencial, `O(n)`. No vetor ordenado esse atalho estragaria a ordem.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     7,
+     6,
+     9,
+     4,
+     6
+    ],
+    "estados": {
+     "1": "verde",
+     "4": "apagado"
+    },
+    "nome": "v  (n = 4)"
+   }
+  }
+ ],
+ "custos": "| Operação | Não ordenado | Ordenado |\n|---|---|---|\n| Ler `v[i]` | `O(1)` | `O(1)` |\n| Buscar um valor | `O(n)`, sequencial | `O(log n)`, binária |\n| Inserir | `O(1)`, no fim | `O(n)`: acha o lugar e desloca |\n| Remover (posição conhecida) | `O(1)`: o último tapa o buraco | `O(n)`: desloca |\n| Menor e maior | `O(n)` | `O(1)`: `v[0]` e `v[n - 1]` |\n| Memória | `n × sizeof(item)`, sem ponteiros | igual |",
+ "naprova": "A banca pede a característica do vetor (homogêneo, acesso direto por índice; FIFO e LIFO são de fila e pilha), compara vetor com lista na inserção e remoção e cobra o vetor ordenado: o maior está no último, a inversão sai com `n/2` trocas e a busca binária começa no meio, `(0 + 8) / 2 = 4`. A pegadinha é o índice: o último é `n - 1`, e `v[n]` já está fora.",
+ "fontes": [
+  "Deitel e Deitel, *C: como programar*, 6. ed., cap. 6 (arrays).",
+  "Backes, *Linguagem C: completa e descomplicada*, cap. 6 (vetores e matrizes).",
+  "Tenenbaum, Langsam e Augenstein, *Estruturas de dados usando C*, cap. 1 (vetores em C)."
+ ]
+}

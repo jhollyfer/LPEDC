@@ -1,0 +1,116 @@
+{
+ "num": "0086",
+ "oque": "A **fila encadeada** é uma fila montada sobre uma lista encadeada, com dois ponteiros: **início**, o próximo a sair, e **fim**, o último que entrou. Insere depois do fim e retira do início.",
+ "como": "Com os dois ponteiros, as duas operações são `O(1)`:\n\n- **inserir**: o nó novo tem `prox = NULL`; `fim->prox = novo` e `fim = novo`;\n- **retirar**: guarda o primeiro, `inicio = inicio->prox` e `free` no velho.\n\nOs cuidados ficam nas bordas:\n\n```c\n/* inserir */\nif (f->fim == NULL) f->inicio = novo;\nelse f->fim->prox = novo;\nf->fim = novo;\n\n/* retirar */\nNo *velho = f->inicio;\n*v = velho->valor;\nf->inicio = velho->prox;\nif (f->inicio == NULL) f->fim = NULL;\nfree(velho);\n```\n\nPor que sair pelo início e entrar pelo fim, e não o contrário? Na lista simples, cada nó conhece o seguinte, mas não o anterior. Remover o último exige achar o penúltimo, `O(n)`. Inserir depois do último e remover o primeiro não precisam de ninguém para trás.",
+ "caracteristicas": [
+  "Continua FIFO, com as mesmas operações da fila em vetor; só o `fila.c` muda.",
+  "Precisa de **dois** ponteiros; a pilha encadeada se vira com um.",
+  "Na fila vazia, `inicio` e `fim` valem `NULL`.",
+  "Inserir na fila vazia atualiza também o `inicio`; retirar o último atualiza também o `fim`.",
+  "Não tem capacidade fixa: só recusa quando o `malloc` falha."
+ ],
+ "vantagens": [
+  "Cresce enquanto houver memória.",
+  "Inserir e retirar continuam `O(1)`, sem conta de resto nem volta circular.",
+  "Não reserva espaço que talvez não use."
+ ],
+ "desvantagens": [
+  "Um ponteiro por item e uma chamada de `malloc` ou `free` por operação: mais lenta que a fila circular.",
+  "Sem o ponteiro `fim`, inserir custa `O(n)`, porque é preciso andar até o último.",
+  "Esquecer de zerar o `fim` ao retirar o último deixa um ponteiro para memória liberada."
+ ],
+ "exemplo": "Na pizzaria, os pedidos 501, 502 e 503 chegam pelo app. A cozinha pega o 501, chega o 504, e depois a cozinha esvazia a fila. A seta de entrada das figuras é o `inicio`; o `fim` é sempre o último nó, o que aponta para `NULL`.",
+ "passos": [
+  {
+   "titulo": "Inserir 501 na fila vazia",
+   "texto": "`fim == NULL`: a fila estava vazia. O nó novo é ao mesmo tempo o primeiro e o último, então `inicio = novo` e `fim = novo`. Se o `inicio` não fosse atualizado, a fila pareceria vazia para sempre.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "501"
+    ],
+    "estados": {
+     "0": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "Inserir 502 e 503",
+   "texto": "Agora `fim` não é `NULL`. Para cada um: `fim->prox = novo` pendura o nó atrás do último, e `fim = novo`. Ninguém foi percorrido. `fim` está no 503.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "501",
+     "502",
+     "503"
+    ],
+    "estados": {
+     "2": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "Retirar: sai o 501",
+   "texto": "`velho = inicio` (o 501); lê o valor; `inicio = velho->prox` (o 502); `free(velho)`. O `inicio` não ficou `NULL`, então o `fim` continua no 503.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "502",
+     "503"
+    ],
+    "estados": {
+     "0": "amarelo"
+    }
+   }
+  },
+  {
+   "titulo": "Inserir 504",
+   "texto": "`fim->prox = novo`: o 503 passa a apontar para o 504. `fim = novo`. A fila é `502 503 504`, com o 502 na frente: quem chegou antes sai antes.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "502",
+     "503",
+     "504"
+    ],
+    "estados": {
+     "0": "amarelo",
+     "2": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "Retirar 502 e 503",
+   "texto": "Duas retiradas pelo início. Sobra o 504, que agora é o primeiro e o último: `inicio` e `fim` apontam para o mesmo nó.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "504"
+    ],
+    "estados": {
+     "0": "amarelo"
+    }
+   }
+  },
+  {
+   "titulo": "Retirar o 504: a fila esvazia",
+   "texto": "`inicio = velho->prox` vale `NULL`. Por isso o `fim` também recebe `NULL` antes do `free`. Sem isso, o `fim` apontaria para o nó liberado, e a próxima inserção escreveria `fim->prox` em memória que não é mais da fila.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "inicio -> NULL",
+     "fim    -> NULL",
+     "",
+     "saída: 501 502 503 504"
+    ]
+   }
+  }
+ ],
+ "custos": "| Como a fila usa a lista simples | Inserir | Retirar |\n|---|---|---|\n| entra no fim, sai do início, com `inicio` e `fim` | `O(1)` | `O(1)` |\n| entra no início, sai do fim | `O(1)` | `O(n)`: acha o penúltimo |\n| só com `inicio`, entra no fim | `O(n)`: anda até o último | `O(1)` |\n\nMemória: um nó por item, com um ponteiro em cada (16 bytes por `int` em 64 bits).",
+ "naprova": "A banca pede o estado da fila depois de uma sequência de inserções e retiradas, pergunta aplicações típicas de fila e mostra uma função de inserir no início para perguntar se serve para fila. Pegadinha: inserir no início serve para pilha, não para fila; fila `O(1)` em lista simples precisa do ponteiro para o fim.",
+ "fontes": [
+  "Celes e Rangel, *Apostila de estruturas de dados* (PUC-Rio), pilhas e filas.",
+  "Deitel e Deitel, *C: como programar*, 6. ed., cap. 12 (estruturas de dados: filas).",
+  "Tenenbaum, Langsam e Augenstein, *Estruturas de dados usando C*, cap. 4 (filas e listas)."
+ ]
+}

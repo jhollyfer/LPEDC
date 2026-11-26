@@ -1,0 +1,130 @@
+{
+ "num": "0045",
+ "oque": "O ponteiro (também chamado de apontador) é uma variável que guarda um **endereço** em vez de um valor comum. O tipo antes do `*` diz o que mora no endereço apontado e, com isso, quantos bytes ler lá.",
+ "como": "Dois operadores fazem todo o trabalho:\n\n- `&x` dá o endereço de `x`. É o que se guarda no ponteiro: `p = &x;`.\n- `*p` vai ao endereço guardado em `p` e mexe no que está lá: ler `*p` dá o valor de `x`; `*p = 5;` muda `x`. Isso se chama **desreferenciar**.\n\nO `*` tem três papéis: em `a * b` é multiplicação; em `int *p` (declaração) diz que `p` é ponteiro; em `*p = 5` é a desreferência.\n\n```c\nint a = 10, b = 20;\nint *p = &a;   /* p aponta para a  */\n*p = 15;       /* a = 15           */\np = &b;        /* agora aponta b   */\n*p = *p + a;   /* b = 20 + 15 = 35 */\nint *q = p;    /* q e p: o mesmo b */\n*q = 0;        /* b = 0            */\n```\n\nO **rastreio** é uma tabela com uma linha por variável: nome, endereço e valor. Para cada linha do código, atualize só a variável que mudou. Em `*p = ...`, quem muda é a variável **apontada**, não `p`.",
+ "caracteristicas": [
+  "Guarda um endereço; também mora numa gaveta e tem endereço próprio (`&p`).",
+  "Todo ponteiro para dado tem o mesmo tamanho, 8 bytes em 64 bits. O tipo muda a leitura, não o tamanho.",
+  "`NULL` quer dizer \"lugar nenhum\"; desreferenciar `NULL` derruba o programa (*segmentation fault*).",
+  "Ponteiro sem valor inicial guarda lixo; `*p = 10` escreveria numa gaveta qualquer.",
+  "Em `int *a, b;` só `a` é ponteiro; `b` é `int`."
+ ],
+ "vantagens": [
+  "Uma função pode mudar uma variável de quem chamou, recebendo o endereço dela.",
+  "É o único jeito de usar a memória do `malloc` e de ligar nós de lista e árvore.",
+  "Passa coisas grandes a uma função copiando só 8 bytes."
+ ],
+ "desvantagens": [
+  "Com dois ponteiros para o mesmo lugar, uma escrita por um muda o que o outro lê, e o rastreio fica difícil.",
+  "Ponteiro com lixo, `NULL` ou endereço já liberado só dá problema em execução.",
+  "A sintaxe confunde: o `*` da declaração não é o `*` da desreferência."
+ ],
+ "exemplo": "Vamos rastrear o código do bloco acima, linha a linha. Os endereços são fictícios: `a` em 0x100, `b` em 0x104, `p` em 0x108 e `q` em 0x110.",
+ "passos": [
+  {
+   "titulo": "int a = 10, b = 20;",
+   "texto": "Duas variáveis comuns. Nenhum ponteiro ainda.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "nome  endereço  valor",
+     "a     0x100     10",
+     "b     0x104     20"
+    ],
+    "titulo": "linha 1"
+   }
+  },
+  {
+   "titulo": "int *p = &a;",
+   "texto": "`&a` vale 0x100, e esse número vai para `p`. Agora `*p` é o próprio `a`: ler `*p` dá 10.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "nome  endereço  valor",
+     "a     0x100     10",
+     "b     0x104     20",
+     "p     0x108     0x100  -> a"
+    ],
+    "titulo": "linha 2"
+   }
+  },
+  {
+   "titulo": "*p = 15;",
+   "texto": "Vá ao endereço guardado em `p` (0x100) e escreva 15 lá. Quem muda é `a`. O `p` continua 0x100, e o nome `a` nem apareceu na linha.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "nome  endereço  valor",
+     "a     0x100     15     <- mudou",
+     "b     0x104     20",
+     "p     0x108     0x100  -> a"
+    ],
+    "titulo": "linha 3"
+   }
+  },
+  {
+   "titulo": "p = &b;",
+   "texto": "Sem `*`, quem muda é o próprio `p`: passa a guardar 0x104. O `a` fica com 15; ele não depende de `p`.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "nome  endereço  valor",
+     "a     0x100     15",
+     "b     0x104     20",
+     "p     0x108     0x104  -> b"
+    ],
+    "titulo": "linha 4"
+   }
+  },
+  {
+   "titulo": "*p = *p + a;",
+   "texto": "Do lado direito, `*p` lê o `b` (20) e `a` vale 15: 35. Do lado esquerdo, `*p` é o `b`. Então `b = 35`.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "nome  endereço  valor",
+     "a     0x100     15",
+     "b     0x104     35     <- mudou",
+     "p     0x108     0x104  -> b"
+    ],
+    "titulo": "linha 5"
+   }
+  },
+  {
+   "titulo": "int *q = p;",
+   "texto": "Copiar um ponteiro copia o **endereço**, não o `b`. Agora `p` e `q` guardam 0x104: dois caminhos para a mesma gaveta.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "nome  endereço  valor",
+     "a     0x100     15",
+     "b     0x104     35",
+     "p     0x108     0x104  -> b",
+     "q     0x110     0x104  -> b"
+    ],
+    "titulo": "linha 6"
+   }
+  },
+  {
+   "titulo": "*q = 0;",
+   "texto": "Escrever por `q` muda o `b`, e quem ler por `p` também vê 0: `*p == 0`. Final: `a = 15`, `b = 0`. É o mesmo efeito de duas variáveis ligadas ao mesmo bloco.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "nome  endereço  valor",
+     "a     0x100     15",
+     "b     0x104     0      <- mudou",
+     "p     0x108     0x104  -> b",
+     "q     0x110     0x104  -> b"
+    ],
+    "titulo": "linha 7"
+   }
+  }
+ ],
+ "naprova": "A banca cobra o rastreio: dado um trecho com `&`, `*` e atribuições entre ponteiros, qual é a saída. Na 2022-057 (Q6) isso aparece em Python, com dois nomes ligados à mesma lista. A pegadinha é achar que `q = p` copia o valor apontado: copia só o endereço, e as duas variáveis passam a mexer no mesmo lugar.",
+ "fontes": [
+  "Deitel e Deitel, *C: como programar*, 6. ed., cap. 7 (ponteiros em C).",
+  "Backes, *Linguagem C: completa e descomplicada*, cap. 10 (ponteiros).",
+  "Kernighan e Ritchie, *C: a linguagem de programação padrão ANSI*, cap. 5 (apontadores e vetores)."
+ ]
+}

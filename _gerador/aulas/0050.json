@@ -1,0 +1,155 @@
+{
+ "num": "0050",
+ "oque": "O código de uma função também mora na memória, então a função tem endereço. O **ponteiro para função** guarda esse endereço e permite chamar a função por ele. O nome da função sem parênteses já é o endereço.",
+ "como": "Declaração, lida de dentro para fora:\n\n```c\nint (*f)(int);   /* f: ponteiro para função */\n                 /* que recebe int e dá int */\nint dobro(int x) { return 2 * x; }\n\nf = dobro;       /* sem & e sem ()          */\nint r = f(5);    /* chama dobro(5): r = 10  */\n```\n\n- Os parênteses em `(*f)` são obrigatórios: `int *f(int);` declara uma **função** que devolve `int *`.\n- O tipo inclui a **assinatura**: `f` só aceita funções que recebem `int` e devolvem `int`.\n- `f(5)` e `(*f)(5)` fazem a mesma chamada.\n\nO uso típico é o **callback**: uma função genérica recebe outra por parâmetro e a chama na hora certa. O `qsort` do `<stdlib.h>` ordena qualquer vetor assim, recebendo a função que compara dois itens.",
+ "caracteristicas": [
+  "`dobro` (sem parênteses) é o endereço; `dobro(5)` é a chamada.",
+  "A assinatura (parâmetros e retorno) faz parte do tipo do ponteiro.",
+  "A chamada por ponteiro é **indireta**: o processador lê o endereço e salta para ele.",
+  "O C padrão não tem função dentro de função nem *closure*: a função apontada não carrega variáveis locais de quem a escolheu."
+ ],
+ "vantagens": [
+  "Uma rotina só (contar, ordenar, filtrar) serve para vários critérios.",
+  "O comportamento é escolhido em execução, por exemplo numa tabela de funções de um menu."
+ ],
+ "desvantagens": [
+  "A chamada indireta impede o compilador de pôr o corpo da função no lugar da chamada (*inline*).",
+  "A declaração é difícil de ler, e um parêntese a menos muda o significado."
+ ],
+ "exemplo": "Máximas da semana em `temps = {31, 27, 33, 18, 16, 29, 34}`. Uma função só conta os dias que passam num critério que ela não conhece:\n\n```c\nint eh_calor(int t) { return t >= 30; }\nint eh_frio(int t)  { return t <= 18; }\n\nint conta_se(const int *v, int n,\n             int (*crit)(int)) {\n    int cont = 0;\n    for (int i = 0; i < n; i++)\n        if (crit(v[i])) cont++;\n    return cont;\n}\n```",
+ "passos": [
+  {
+   "titulo": "int (*regra)(int) = eh_calor;",
+   "texto": "`eh_calor` sem parênteses é o endereço do código dela, que mora na área de código. Esse endereço vai para `regra`. Nada foi executado ainda.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "área de código",
+     "  0x4010  eh_calor",
+     "  0x4030  eh_frio",
+     "",
+     "regra = 0x4010  -> eh_calor"
+    ],
+    "titulo": "guardar o endereço"
+   }
+  },
+  {
+   "titulo": "conta_se(temps, 7, regra): i = 0 e 1",
+   "texto": "Dentro de `conta_se`, `crit` vale 0x4010. `crit(31)` chama `eh_calor(31)`: 31 >= 30, devolve 1, `cont = 1`. `crit(27)`: 27 >= 30 é falso, devolve 0.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     31,
+     27,
+     33,
+     18,
+     16,
+     29,
+     34
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "apagado"
+    },
+    "nome": "temps  (cont = 1)"
+   }
+  },
+  {
+   "titulo": "i = 2, 3 e 4",
+   "texto": "33 >= 30: `cont = 2`. 18 e 16 não passam.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     31,
+     27,
+     33,
+     18,
+     16,
+     29,
+     34
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "apagado",
+     "2": "verde",
+     "3": "apagado",
+     "4": "apagado"
+    },
+    "nome": "temps  (cont = 2)"
+   }
+  },
+  {
+   "titulo": "i = 5 e 6: resultado 3",
+   "texto": "29 >= 30 é falso; 34 passa: `cont = 3`. `conta_se` devolve 3 dias de calor: 31, 33 e 34.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     31,
+     27,
+     33,
+     18,
+     16,
+     29,
+     34
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "apagado",
+     "2": "verde",
+     "3": "apagado",
+     "4": "apagado",
+     "5": "apagado",
+     "6": "verde"
+    },
+    "nome": "temps  (cont = 3)"
+   }
+  },
+  {
+   "titulo": "Mesma rotina, outro critério",
+   "texto": "`conta_se(temps, 7, eh_frio)`: agora `crit` vale 0x4030, e o teste é `t <= 18`. Passam o 18 (igual conta) e o 16: 2 dias de frio. O laço não mudou uma linha.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     31,
+     27,
+     33,
+     18,
+     16,
+     29,
+     34
+    ],
+    "estados": {
+     "0": "apagado",
+     "1": "apagado",
+     "2": "apagado",
+     "3": "verde",
+     "4": "verde",
+     "5": "apagado",
+     "6": "apagado"
+    },
+    "nome": "temps  (cont = 2)"
+   }
+  },
+  {
+   "titulo": "Endereço ou chamada?",
+   "texto": "Na chamada de `conta_se`, vai `eh_frio`, sem parênteses: o endereço. Escrever `eh_frio(18)` ali chamaria a função antes e passaria o resultado, um `int`, onde se espera um ponteiro.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "conta_se(temps, 7, eh_frio)",
+     "                   ^ endereço",
+     "",
+     "conta_se(temps, 7, eh_frio(18))",
+     "                   ^ int: erro"
+    ],
+    "titulo": "com ou sem ()"
+   }
+  }
+ ],
+ "naprova": "A banca cobrou o tema em Python (2023-071, Q20): uma função que devolve outra função, que guarda o fator do lugar onde foi criada (*closure*). Leia na ordem: a chamada externa devolve a função, e só a segunda chamada calcula. Em C, o equivalente é devolver ou passar um ponteiro para função, sem a parte de guardar variáveis.",
+ "fontes": [
+  "Backes, *Linguagem C: completa e descomplicada*, cap. 13 (ponteiro para função).",
+  "Deitel e Deitel, *C: como programar*, 6. ed., cap. 7 (ponteiros para funções).",
+  "Celes e Rangel, *Apostila de estruturas de dados* (PUC-Rio), ponteiros e ordenação genérica."
+ ]
+}

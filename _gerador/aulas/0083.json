@@ -1,0 +1,122 @@
+{
+ "num": "0083",
+ "oque": "A **pilha encadeada** é uma pilha montada sobre uma lista encadeada. O topo é o **primeiro nó**: empilhar é inserir no início e desempilhar é remover do início.",
+ "como": "O topo fica no **começo** da lista porque inserir e remover o primeiro nó custa `O(1)`. Se o topo ficasse no fim, desempilhar exigiria achar o penúltimo, `O(n)`.\n\n```c\nbool push(Pilha *p, int v) {\n    No *novo = malloc(sizeof *novo);\n    if (novo == NULL) return false;\n    novo->valor = v;\n    novo->prox = p->topo; // 1º\n    p->topo = novo;       // 2º\n    return true;\n}\nbool pop(Pilha *p, int *v) {\n    if (p->topo == NULL) return false;\n    No *velho = p->topo;\n    *v = velho->valor; // lê antes do free\n    p->topo = velho->prox;\n    free(velho);\n    return true;\n}\n```\n\nA função recebe `Pilha *` (ou `No **`) para poder mudar o topo de quem chamou. Uma função que recebe `No *topo` e faz `topo = novo` muda só a cópia local: quem chamou continua com o topo antigo e o nó novo vaza.",
+ "caracteristicas": [
+  "Continua LIFO, com as mesmas operações da pilha em vetor; só o `pilha.c` muda.",
+  "A pilha está vazia quando `topo == NULL`: esse é o teste de underflow.",
+  "Não tem overflow por capacidade: só falha quando o `malloc` devolve `NULL`.",
+  "Push e pop custam `O(1)`, porque mexem só no primeiro nó.",
+  "Em 64 bits, cada item (`int` mais ponteiro, com alinhamento) ocupa 16 bytes, contra 4 no vetor."
+ ],
+ "vantagens": [
+  "Cresce enquanto houver memória, sem teto fixo.",
+  "Não reserva espaço que talvez não use.",
+  "Quem usa a pilha não percebe a troca de implementação: o `.h` é o mesmo."
+ ],
+ "desvantagens": [
+  "Gasta um ponteiro por item.",
+  "Cada push chama `malloc` e cada pop chama `free`, mais caros que escrever numa posição de vetor.",
+  "Trocar a ordem das duas atribuições do push faz o nó apontar para si mesmo e perde a pilha."
+ ],
+ "exemplo": "O Ctrl+Z de uma planilha. A célula B2 vale 1500 e é editada para 1800, 2100 e 2500. Antes de cada edição, o valor antigo é empilhado: entram 1500, 1800 e 2100. Depois, dois Ctrl+Z.",
+ "passos": [
+  {
+   "titulo": "push(1500)",
+   "texto": "A pilha estava vazia, `topo == NULL`. O nó novo recebe `prox = topo`, que é `NULL`, e o `topo` passa a apontar para ele.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "1500"
+    ],
+    "cabeca": "topo",
+    "estados": {
+     "0": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "push(1800)",
+   "texto": "1º: `novo->prox = topo`, o 1800 segura o 1500. 2º: `topo = novo`. O nó novo entra na **frente** da lista, não no fim.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "1800",
+     "1500"
+    ],
+    "cabeca": "topo",
+    "estados": {
+     "0": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "push(2100)",
+   "texto": "Mesmos dois passos. A lista agora é `topo -> 2100 -> 1800 -> 1500 -> NULL`: o topo é o primeiro nó, e o fundo é o que aponta para `NULL`.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "2100",
+     "1800",
+     "1500"
+    ],
+    "cabeca": "topo",
+    "estados": {
+     "0": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "pop: Ctrl+Z devolve 2100",
+   "texto": "`velho = topo` (o 2100); lê `velho->valor`; `topo = velho->prox` (o 1800); só então `free(velho)`. A B2 volta a valer 2100. `O(1)`.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "1800",
+     "1500"
+    ],
+    "cabeca": "topo",
+    "estados": {
+     "0": "verde"
+    }
+   }
+  },
+  {
+   "titulo": "pop: Ctrl+Z devolve 1800",
+   "texto": "O topo anda para o 1500 e o nó do 1800 é liberado. Resta um item: ainda dá para desfazer uma vez.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "1500"
+    ],
+    "cabeca": "topo",
+    "estados": {
+     "0": "verde"
+    }
+   }
+  },
+  {
+   "titulo": "O erro da ordem trocada",
+   "texto": "Volte ao push do 2100. Se ele fizer `topo = novo` **antes** de `novo->prox = topo`, a segunda linha lê o `topo` que já é o novo: o nó aponta para **ele mesmo**. O 1800 e o 1500 ficam sem ninguém apontando para eles e vazam.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "2100"
+    ],
+    "cabeca": "topo",
+    "circular": true,
+    "estados": {
+     "0": "vermelho"
+    },
+    "titulo": "ordem trocada"
+   }
+  }
+ ],
+ "custos": "| | Pilha em vetor | Pilha encadeada |\n|---|---|---|\n| push | `O(1)`, falha se cheia | `O(1)`, falha só sem memória |\n| pop | `O(1)` | `O(1)`, mais um `free` |\n| memória por `int` (64 bits) | 4 bytes | 16 bytes |\n| limite | `CAP` fixa | a memória livre |",
+ "naprova": "A banca mostra duas funções de inserir no início, uma com `No *prim` e outra com `No **prim`, e pergunta qual altera de fato a lista e para que estrutura serve (pilha, sim; fila, não, porque fila insere no fim). Também pergunta em que ponta da lista simples a pilha faz push e pop: na cabeça, em `O(1)`.",
+ "fontes": [
+  "Celes e Rangel, *Apostila de estruturas de dados* (PUC-Rio), pilhas e filas.",
+  "Deitel e Deitel, *C: como programar*, 6. ed., cap. 12 (estruturas de dados: pilhas).",
+  "Tenenbaum, Langsam e Augenstein, *Estruturas de dados usando C*, cap. 4 (filas e listas)."
+ ]
+}

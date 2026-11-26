@@ -1,0 +1,125 @@
+{
+ "num": "0049",
+ "oque": "Ponteiro para ponteiro é uma variável que guarda **o endereço de um ponteiro**. Declara-se com dois asteriscos: `int **pp;` lê-se \"pp aponta para um `int *`\".",
+ "como": "Conte as estrelas. Com `int **pp = &p;` e `int *p = &x;`:\n\n- `pp` é o endereço de `p`;\n- `*pp` é o próprio `p` (que guarda o endereço de `x`);\n- `**pp` é o `x`.\n\nO uso que a banca cobra: **uma função que muda o ponteiro de quem chamou**. Para mudar um `int` do `main`, a função recebe `int *`. Para mudar um `No *` do `main`, como o início de uma lista, ela recebe `No **` e escreve em `*prim`.\n\n```c\nvoid insere(No **prim, int d) {\n    No *novo = malloc(sizeof *novo);\n    if (novo == NULL) return;\n    novo->dado = d;\n    novo->prox = *prim; /* antigo 1º */\n    *prim = novo;       /* muda o main */\n}\n/* chamada: insere(&lista, 9); */\n```\n\nA outra saída é devolver o novo início (`lista = insere(lista, 9);`), sem `**`.",
+ "caracteristicas": [
+  "Cada `*` da declaração é um nível; para chegar ao dado, use o mesmo número de `*`.",
+  "`*pp = 38;` com estrela a menos guarda 38 em `p` como se fosse endereço.",
+  "A função que muda um ponteiro do chamador recebe o endereço dele: `&lista`, não `lista`.",
+  "Vetor de ponteiros decai para ponteiro para ponteiro: `char *argv[]` é `char **argv`.",
+  "Cada nível é uma leitura de memória a mais."
+ ],
+ "vantagens": [
+  "A função insere ou remove no início da lista sem precisar de `return`.",
+  "Permite vetor de strings, `argv` e matriz alocada linha a linha."
+ ],
+ "desvantagens": [
+  "Fica difícil de ler acima de dois níveis.",
+  "Esquecer o `&` na chamada, ou uma estrela, passa a cópia ou o nível errado; o erro só aparece em execução."
+ ],
+ "exemplo": "Primeiro, os dois níveis com `vagas = 40`. Depois, a lista `lista -> [7] -> [4] -> NULL` no `main`, e duas funções que tentam pôr o 9 no início: `insereI(No *prim, ...)` e `insere(No **prim, ...)`, a do bloco acima. Endereços fictícios.",
+ "passos": [
+  {
+   "titulo": "Montar a corrente",
+   "texto": "`int vagas = 40; int *p = &vagas; int **pp = &p;`. O `p` guarda o endereço de `vagas`; o `pp` guarda o endereço de `p`.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "nome   endereço  valor",
+     "vagas  0x100     40",
+     "p      0x108     0x100  -> vagas",
+     "pp     0x110     0x108  -> p"
+    ],
+    "titulo": "dois níveis"
+   }
+  },
+  {
+   "titulo": "Seguir os saltos",
+   "texto": "`*pp` vai a 0x108 e dá o `p`, ou seja, 0x100. `**pp` vai a 0x108, pega 0x100, vai a 0x100 e dá 40. Então `**pp = **pp - 2;` faz `vagas = 38`. Com uma estrela só, `*pp = 38` estragaria o `p`.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "pp     = 0x108",
+     "*pp    = 0x100   (o p)",
+     "**pp   = 40      (o vagas)",
+     "",
+     "**pp = **pp - 2  ->  vagas = 38"
+    ],
+    "titulo": "contar as estrelas"
+   }
+  },
+  {
+   "titulo": "A lista no main",
+   "texto": "`lista` é um `No *` do `main`, em 0x200, e guarda o endereço do nó 7 (0xA0). É esse `lista` que precisa mudar para o 9 entrar no início.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "7",
+     "4"
+    ],
+    "cabeca": "lista"
+   }
+  },
+  {
+   "titulo": "insereI(lista, 9): prim é cópia",
+   "texto": "`prim` nasce com uma cópia de 0xA0. O novo nó (em 0xC0) aponta para o 7, e `prim = novo` muda só a cópia: `prim` passa a 0xC0. O `lista` do `main`, em 0x200, continua 0xA0.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "main      lista = 0xA0  -> [7]",
+     "insereI   prim  = 0xC0  -> [9]",
+     "          [9]->prox = 0xA0"
+    ],
+    "titulo": "durante insereI"
+   }
+  },
+  {
+   "titulo": "Volta de insereI: nada mudou",
+   "texto": "O frame de `insereI` some com o `prim`, o único que sabia onde estava o 9. A lista continua começando no 7, e o nó 9 ficou perdido no heap: **vazamento**.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "7",
+     "4"
+    ],
+    "cabeca": "lista"
+   }
+  },
+  {
+   "titulo": "insere(&lista, 9): prim aponta para lista",
+   "texto": "Agora vai `&lista`, ou seja, 0x200. `*prim` é o próprio `lista`. `novo->prox = *prim` copia 0xA0 para o nó 9, que passa a apontar para o 7.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "main    lista = 0xA0   em 0x200",
+     "insere  prim  = 0x200  -> lista",
+     "        *prim = 0xA0   -> [7]",
+     "        [9]->prox = 0xA0"
+    ],
+    "titulo": "durante insere"
+   }
+  },
+  {
+   "titulo": "*prim = novo: o main mudou",
+   "texto": "A escrita vai para 0x200, que é o `lista` do `main`: ele passa a guardar 0xC0. Na volta, `lista -> [9] -> [7] -> [4] -> NULL`.",
+   "figura": {
+    "tipo": "lista",
+    "itens": [
+     "9",
+     "7",
+     "4"
+    ],
+    "cabeca": "lista",
+    "estados": {
+     "0": "azul"
+    }
+   }
+  }
+ ],
+ "naprova": "A banca mostra duas versões de inserção no início, uma com `No *prim` e outra com `No **prim`, e pergunta qual altera a lista; também mostra um `remove(tipoNo **prim)` com as linhas fora de ordem. A pegadinha é a versão com `No *`: ela compila, roda e não muda o início da lista de quem chamou, e ainda vaza o nó novo.",
+ "fontes": [
+  "Backes, *Linguagem C: completa e descomplicada*, cap. 10 (ponteiro para ponteiro).",
+  "Deitel e Deitel, *C: como programar*, 6. ed., cap. 7 (ponteiros em C).",
+  "Kernighan e Ritchie, *C: a linguagem de programação padrão ANSI*, cap. 5 (vetores de apontadores)."
+ ]
+}

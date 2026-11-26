@@ -1,0 +1,185 @@
+{
+ "num": "0085",
+ "oque": "A **fila** (*queue*) é uma sequência em que o item novo entra pelo **fim** e o próximo a sair está no **início**. O primeiro a entrar é o primeiro a sair: política **FIFO**, *first in, first out*.",
+ "como": "Operações: **inserir** no fim (*enqueue*), **retirar** do início (*dequeue*), olhar o primeiro e perguntar se está vazia.\n\nEm vetor, a fila mexe nas duas pontas. Se o início ficar sempre em `itens[0]`, cada retirada empurra todo mundo uma casa, `O(n)`. A saída é a **fila circular**: os índices dão a volta com o resto da divisão.\n\nEste curso guarda `inicio` (a posição do próximo a sair) e `n` (quantos há):\n\n```c\nbool insere(Fila *f, int v) {\n    if (f->n == CAP) return false;\n    f->itens[(f->inicio + f->n) % CAP] = v;\n    f->n++;\n    return true;\n}\nbool retira(Fila *f, int *v) {\n    if (f->n == 0) return false;\n    *v = f->itens[f->inicio];\n    f->inicio = (f->inicio + 1) % CAP;\n    f->n--;\n    return true;\n}\n```\n\nA outra forma, a do Cormen, guarda `inicio` e `fim` (a próxima vaga) e **sacrifica uma posição**: vazia é `inicio == fim`; cheia é `(fim + 1) % CAP == inicio`. Num vetor de `CAP` posições cabem `CAP - 1` itens.\n\nOnde a fila aparece: fila de impressão, buffer de teclado e de rede, escalonador de processos, busca em largura.",
+ "caracteristicas": [
+  "Política **FIFO**: sai sempre o mais antigo. A pilha é o contrário, LIFO.",
+  "Insere numa ponta (fim) e retira na outra (início).",
+  "Na fila circular, `(i + 1) % CAP` faz o índice voltar a 0 depois da última posição.",
+  "Só com `inicio` e `fim`, vazia e cheia ficam iguais; a solução é guardar `n` ou deixar uma posição sempre livre.",
+  "Retirar não apaga o valor: ele fica na posição até ser sobrescrito.",
+  "É uma estrutura **linear**, como pilha e lista."
+ ],
+ "vantagens": [
+  "Inserir e retirar custam `O(1)` na fila circular.",
+  "Preserva a ordem de chegada, o que é justo para quem espera a vez.",
+  "Em vetor, não gasta ponteiro nem chama `malloc` a cada operação."
+ ],
+ "desvantagens": [
+  "Em vetor, a capacidade é fixa e a fila pode encher.",
+  "Fila em vetor sem a volta circular desperdiça as primeiras posições ou paga `O(n)` deslocando.",
+  "Calcular o tamanho como `fim - inicio` dá negativo depois da volta."
+ ],
+ "exemplo": "A sequência de uma questão da banca, numa fila circular de `CAP = 4`, começando vazia (`inicio = 0`, `n = 0`):\n\n`INSERE(2) INSERE(3) RETIRA INSERE(1) RETIRA INSERE(4) INSERE(5) RETIRA RETIRA`\n\nNas figuras: amarelo é a frente (`inicio`, o próximo a sair), azul é o que acabou de entrar e apagado é valor que já saiu, mas continua escrito na posição.",
+ "passos": [
+  {
+   "titulo": "INSERE(2), INSERE(3)",
+   "texto": "O 2 vai para `(0 + 0) % 4 = 0`; o 3 para `(0 + 1) % 4 = 1`. `inicio = 0`, `n = 2`. Fila: `2 3`, com o 2 na frente.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     2,
+     3,
+     null,
+     null
+    ],
+    "estados": {
+     "0": "amarelo",
+     "1": "azul"
+    },
+    "nome": "itens"
+   }
+  },
+  {
+   "titulo": "RETIRA: sai o 2",
+   "texto": "Lê `itens[0]`, que é o 2, o mais antigo. `inicio = (0 + 1) % 4 = 1`, `n = 1`. O 2 continua escrito na posição 0, mas não faz mais parte da fila. Fila: `3`.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     2,
+     3,
+     null,
+     null
+    ],
+    "estados": {
+     "0": "apagado",
+     "1": "amarelo"
+    },
+    "nome": "itens"
+   }
+  },
+  {
+   "titulo": "INSERE(1)",
+   "texto": "Vaga: `(1 + 1) % 4 = 2`. `n = 2`. Fila: `3 1`.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     2,
+     3,
+     1,
+     null
+    ],
+    "estados": {
+     "0": "apagado",
+     "1": "amarelo",
+     "2": "azul"
+    },
+    "nome": "itens"
+   }
+  },
+  {
+   "titulo": "RETIRA: sai o 3",
+   "texto": "Sai o da frente, o 3. `inicio = 2`, `n = 1`. Fila: `1`.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     2,
+     3,
+     1,
+     null
+    ],
+    "estados": {
+     "0": "apagado",
+     "1": "apagado",
+     "2": "amarelo"
+    },
+    "nome": "itens"
+   }
+  },
+  {
+   "titulo": "INSERE(4)",
+   "texto": "Vaga: `(2 + 1) % 4 = 3`, a última posição do vetor. `n = 2`. Fila: `1 4`.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     2,
+     3,
+     1,
+     4
+    ],
+    "estados": {
+     "0": "apagado",
+     "1": "apagado",
+     "2": "amarelo",
+     "3": "azul"
+    },
+    "nome": "itens"
+   }
+  },
+  {
+   "titulo": "INSERE(5): dá a volta",
+   "texto": "Vaga: `(2 + 2) % 4 = 0`. O índice voltou ao começo e o 5 escreve por cima do 2 velho. `n = 3`. Fila: `1 4 5`. Sem a volta circular, a fila teria batido no fim do vetor com as posições 0 e 1 livres.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     5,
+     3,
+     1,
+     4
+    ],
+    "estados": {
+     "0": "azul",
+     "1": "apagado",
+     "2": "amarelo"
+    },
+    "nome": "itens"
+   }
+  },
+  {
+   "titulo": "RETIRA, RETIRA: saem 1 e 4",
+   "texto": "Sai o 1 (`inicio` vai para 3) e sai o 4 (`inicio = (3 + 1) % 4 = 0`). `n = 1`. Sobra só o **5**. Ordem de saída: `2 3 1 4`, a mesma ordem em que entraram.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     5,
+     3,
+     1,
+     4
+    ],
+    "estados": {
+     "0": "amarelo",
+     "1": "apagado",
+     "2": "apagado",
+     "3": "apagado"
+    },
+    "nome": "itens"
+   }
+  },
+  {
+   "titulo": "A versão com início e fim",
+   "texto": "Sem o contador `n`, a fila guarda `inicio` e `fim` (a próxima vaga). Com `inicio = 0` e 7, 8, 9 inseridos, `fim = 3`. Inserir mais um faria `fim` voltar a 0, igual ao `inicio`, e a fila cheia ficaria com a cara da vazia. Por isso ela já é dada como cheia: `(3 + 1) % 4 == 0 == inicio`. Cabem 3 itens em 4 posições.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     7,
+     8,
+     9,
+     null
+    ],
+    "estados": {
+     "0": "amarelo"
+    },
+    "nome": "itens",
+    "titulo": "cheia com CAP - 1"
+   }
+  }
+ ],
+ "custos": "| Operação | Fila circular em vetor | Vetor com início fixo em 0 |\n|---|---|---|\n| inserir no fim | `O(1)` | `O(1)` |\n| retirar do início | `O(1)` | `O(n)`: desloca todos |\n| olhar o primeiro | `O(1)` | `O(1)` |\n| memória | `CAP` posições fixas | `CAP` posições fixas |",
+ "naprova": "A banca dá uma sequência de INSERE e RETIRA e pede o estado final, troca as definições (fila como LIFO, pilha como FIFO), pergunta aplicações típicas (impressora, buffer, escalonador; hierarquia é árvore) e cobra a fila circular: `REAR == FRONT` é vazia e cabem `n - 1` itens. Pegadinha: pular uma operação na simulação; escreva o estado depois de cada uma.",
+ "fontes": [
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 10 (pilhas e filas).",
+  "Tenenbaum, Langsam e Augenstein, *Estruturas de dados usando C*, cap. 4 (filas e listas).",
+  "Celes e Rangel, *Apostila de estruturas de dados* (PUC-Rio), pilhas e filas.",
+  "Laureano, *Estrutura de dados com algoritmos e C*, cap. 4 (fila)."
+ ]
+}
