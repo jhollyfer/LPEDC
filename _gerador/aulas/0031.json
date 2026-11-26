@@ -1,6 +1,6 @@
 {
  "num": "0031",
- "oque": "A pilha de chamadas guarda um **quadro** (registro de ativação, ou *stack frame*) para cada função em andamento. Chamar uma função empilha um quadro; retornar desempilha. A última a começar é a primeira a terminar: **LIFO**.",
+ "oque": "A pilha de chamadas guarda um **quadro** (também chamado de registro de ativação ou *stack frame*) para cada função em andamento. Chamar uma função empilha um quadro; retornar desempilha. A última a começar é a primeira a terminar: **LIFO**.",
  "como": "Cada quadro guarda três coisas:\n\n- os **parâmetros**, com as cópias dos argumentos;\n- as **variáveis locais**;\n- o **endereço de retorno**: o ponto, em quem chamou, onde o programa continua quando a função acabar.\n\nSó a função do **topo** está rodando; as de baixo estão paradas esperando um retorno. Quando o topo retorna, seu quadro sai e o de baixo continua de onde parou.\n\n```c\nint fatorial(int n) {\n    if (n <= 1) return 1;\n    return n * fatorial(n - 1);\n}\n\nint main(void) {\n    int x = fatorial(3);   // 6\n    return 0;\n}\n```\n\nA recursão não tem nada de especial: cada chamada de `fatorial` é uma chamada comum e ganha **seu próprio quadro**, com seu próprio `n`.",
  "caracteristicas": [
   "Política **LIFO** (*last in, first out*): o último quadro empilhado é o primeiro a sair.",
@@ -15,7 +15,7 @@
   "O endereço de retorno garante que o programa volte ao ponto exato de onde saiu."
  ],
  "desvantagens": [
-  "Recursão muito funda estoura a pilha, mesmo quando a conta está certa.",
+  "Recursão muito profunda estoura a pilha, mesmo quando a conta está certa.",
   "Devolver o endereço de uma variável local é erro: o quadro dela já saiu da pilha.",
   "Local sem inicializar pega o lixo deixado por um quadro antigo na mesma memória."
  ],
@@ -167,7 +167,7 @@
    }
   }
  ],
- "custos": "| Função | Quadros ao mesmo tempo (memória) |\n|---|---|\n| `fatorial(n)` recursivo | `n`, ou seja `O(n)` |\n| `fatorial(n)` com laço | 1, ou seja `O(1)` |\n| `fib(n)` recursivo | até `n`: a altura da árvore, não o número de nós |\n| busca binária recursiva | cerca de `log₂ n` |",
+ "custos": "| Função | Quadros ao mesmo tempo (memória) |\n|---|---|\n| `fatorial(n)` recursivo | `n`: `O(n)` |\n| `fatorial(n)` com laço | 1: `O(1)` |\n| `fib(n)` recursivo | até `n`: os níveis da árvore de chamadas, não o número de nós |\n| busca binária recursiva | cerca de `log₂ n` |",
  "naprova": "A pergunta direta é \"qual estrutura de dados implementa a recursão?\": a **pilha**, não a fila nem a árvore. A banca também pede a saída de uma recursão, como o maior de `[11, 2, 13, 5, 7, 3]`, em que os valores sobem na volta: 3, 7, 7, 13, 13, 13. Escreva a pilha de baixo para cima.",
  "fontes": [
   "Backes, *Linguagem C: completa e descomplicada*, cap. 9 (funções, pilha e recursão).",

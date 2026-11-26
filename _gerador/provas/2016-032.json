@@ -154,7 +154,25 @@
           "modulo": "11-listas.md"
         }
       ],
-      "dica": "**Cobra:** Saber o que acontece com os outros nós ao remover um nó do meio de uma lista encadeada.\n\n- **Lista encadeada** [0076]: cada nó guarda o endereço do próximo e os nós ficam espalhados no heap, sem posições vizinhas na memória. Ex.: `4 -> 7 -> 9`: o 7 só sabe onde o 9 está pelo ponteiro `prox`.\n- **Remoção em lista** [0077]: acha o nó anterior ao removido, faz o `prox` dele apontar para o seguinte e libera o removido. Nenhum outro nó muda de lugar. Ex.: tirar o 9 de `4 -> 7 -> 9 -> 2`: `ant->prox = rem->prox; free(rem);` e fica `4 -> 7 -> 2`.\n- **Remoção em vetor** [0037]: as posições são contíguas, então apagar do meio obriga a deslocar uma casa todos os elementos seguintes. Ex.: tirar o 7 de `4 7 9 2` exige mover 9 e 2: `4 9 2`.\n\n**Como atacar:** pergunte se cada alternativa descreve mexer em ponteiros ou deslocar elementos."
+      "dica": "**Cobra:** Saber o que acontece com os outros nós ao remover um nó do meio de uma lista encadeada.\n\n- **Lista encadeada** [0076]: cada nó guarda o endereço do próximo e os nós ficam espalhados no heap, sem posições vizinhas na memória. Ex.: `4 -> 7 -> 9`: o 7 só sabe onde o 9 está pelo ponteiro `prox`.\n- **Remoção em lista** [0077]: acha o nó anterior ao removido, faz o `prox` dele apontar para o seguinte e libera o removido. Nenhum outro nó muda de lugar. Ex.: tirar o 9 de `4 -> 7 -> 9 -> 2`: `ant->prox = rem->prox; free(rem);` e fica `4 -> 7 -> 2`.\n- **Remoção em vetor** [0037]: as posições são contíguas, então apagar do meio obriga a deslocar uma casa todos os elementos seguintes. Ex.: tirar o 7 de `4 7 9 2` exige mover 9 e 2: `4 9 2`.\n\n**Como atacar:** pergunte se cada alternativa descreve mexer em ponteiros ou deslocar elementos.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "No vetor `[7, 4, 8, 5]`, remover o 4 obriga a puxar 8 e 5 uma casa. Na lista `7 -> 4 -> 8 -> 5`, para tirar o 4, o 8 e o 5 mudam de endereço na memória ou só o `prox` do 7 muda?"
+        },
+        {
+          "item": "B",
+          "texto": "Para tirar o 4 de `7 -> 4 -> 8`, o que acontece com o 7: ele sai do lugar na memória ou só tem o campo `prox` reescrito para apontar o 8?"
+        },
+        {
+          "item": "C",
+          "texto": "Em `7 -> 4 -> 8 -> 5`, remover o 4 envolve o 5 de algum jeito? Liste os nós que têm algum campo alterado: algum troca de endereço?"
+        },
+        {
+          "item": "D",
+          "texto": "Remover o 4 de `7 -> 4 -> 8 -> 5` mexe no `inicio`? Liste os ponteiros que mudam e veja se algum nó é copiado para outro lugar."
+        }
+      ]
     },
     {
       "numero": 4,
@@ -246,7 +264,25 @@
           "modulo": "28-estruturas-complementos.md"
         }
       ],
-      "dica": "**Cobra:** Concluir o que se pode afirmar de uma árvore binária de pesquisa que tem um nó com diferença de altura maior que 1.\n\n- **Fator de balanceamento** [0101]: altura da subárvore esquerda menos a da direita; na AVL tem de ficar entre -1 e 1 em todos os nós. Ex.: nó com esquerda de altura 3 e direita de altura 1: fator 2, a AVL rotacionaria.\n- **ABB sem balanceamento** [0099]: a regra da ABB só ordena as chaves (menores à esquerda, maiores à direita) e não limita a altura. Ex.: inserir `1, 2, 3` em ordem numa ABB comum dá uma cadeia, e nada a corrige.\n- **Rubro-negra** [0177]: equilibra por cores dos nós, não pela diferença de altura; por isso aceita diferenças que a AVL não aceita. Ex.: numa rubro-negra, um caminho de 2 nós e outro de 4 podem coexistir.\n\n**Como atacar:** veja o que a premissa elimina e o que ela deixa possível."
+      "dica": "**Cobra:** Concluir o que se pode afirmar de uma árvore binária de pesquisa que tem um nó com diferença de altura maior que 1.\n\n- **Fator de balanceamento** [0101]: altura da subárvore esquerda menos a da direita; na AVL tem de ficar entre -1 e 1 em todos os nós. Ex.: nó com esquerda de altura 3 e direita de altura 1: fator 2, a AVL rotacionaria.\n- **ABB sem balanceamento** [0099]: a regra da ABB só ordena as chaves (menores à esquerda, maiores à direita) e não limita a altura. Ex.: inserir `1, 2, 3` em ordem numa ABB comum dá uma cadeia, e nada a corrige.\n- **Rubro-negra** [0177]: equilibra por cores dos nós, não pela diferença de altura; por isso aceita diferenças que a AVL não aceita. Ex.: numa rubro-negra, um caminho de 2 nós e outro de 4 podem coexistir.\n\n**Como atacar:** veja o que a premissa elimina e o que ela deixa possível.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "A regra da AVL vale para todo nó: |altura(esq) − altura(dir)| ≤ 1. Um nó com diferença 2 cabe nessa regra?"
+        },
+        {
+          "item": "B",
+          "texto": "A rubro-negra não limita a diferença entre subárvores; ela garante que o caminho mais longo não passe do dobro do mais curto. Uma rubro-negra pode ter um nó com subárvores de alturas 1 e 3? Se pode, o \"com certeza\" se sustenta?"
+        },
+        {
+          "item": "C",
+          "texto": "Insira 1, 2, 3 nessa ordem numa ABB comum: o nó 1 fica com a esquerda vazia e a direita de altura 2. Alguma regra de cor entrou na montagem dessa árvore?"
+        },
+        {
+          "item": "D",
+          "texto": "A ABB só exige esquerda < nó < direita. Insira 1, 2, 3 numa ABB vazia: a ordem das chaves é respeitada? Qual é a diferença de altura na raiz?"
+        }
+      ]
     },
     {
       "numero": 6,
@@ -530,7 +566,25 @@
           "modulo": "07-memoria-dinamica.md"
         }
       ],
-      "dica": "**Cobra:** Achar o erro em dois códigos: busca em vetor e contagem de ocorrências em lista.\n\n- **Índices do vetor** [0037]: um vetor de tamanho `tm` tem índices de 0 a `tm-1`; ler `v[tm]` já é fora do vetor. Ex.: `int v[3]`: `v[0]`, `v[1]` e `v[2]` existem; `v[3]` não.\n- **Busca sequencial** [0089]: o laço para ao achar a chave ou ao sair do vetor, e o resultado depende de qual das duas paradas aconteceu. Ex.: em `4 8 2`, a chave 8 para o laço no índice 1; a chave 5 leva o índice a -1.\n- **Percurso de lista** [0076]: anda-se por ponteiro, `p = p->prox`, até `NULL`; `p[i]` trata o ponteiro como vetor, mas os nós não são contíguos. Ex.: `for (p = prim; p != NULL; p = p->prox) cont++;` conta os nós.\n\n**Como atacar:** teste cada quadro com 3 elementos, incluindo o caso de a chave não existir."
+      "dica": "**Cobra:** Achar o erro em dois códigos: busca em vetor e contagem de ocorrências em lista.\n\n- **Índices do vetor** [0037]: um vetor de tamanho `tm` tem índices de 0 a `tm-1`; ler `v[tm]` já é fora do vetor. Ex.: `int v[3]`: `v[0]`, `v[1]` e `v[2]` existem; `v[3]` não.\n- **Busca sequencial** [0089]: o laço para ao achar a chave ou ao sair do vetor, e o resultado depende de qual das duas paradas aconteceu. Ex.: em `4 8 2`, a chave 8 para o laço no índice 1; a chave 5 leva o índice a -1.\n- **Percurso de lista** [0076]: anda-se por ponteiro, `p = p->prox`, até `NULL`; `p[i]` trata o ponteiro como vetor, mas os nós não são contíguos. Ex.: `for (p = prim; p != NULL; p = p->prox) cont++;` conta os nós.\n\n**Como atacar:** teste cada quadro com 3 elementos, incluindo o caso de a chave não existir.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "No II, `aux` aponta para um nó só. O que existe em `aux[1]`, se o segundo nó foi alocado em outro ponto da memória? E `aux[x]` é ponteiro ou struct, para ser comparado com `NULL`?"
+        },
+        {
+          "item": "B",
+          "texto": "Simule o I com `v = {2, 5, 9}`, `chave = 5` e `tm = 2` (último índice): em que valor de `tm` o laço para, e o que a função devolve? Repita com `chave = 4`."
+        },
+        {
+          "item": "C",
+          "texto": "Numa lista encadeada, ir de um nó ao seguinte é `aux = aux->prox`. O II faz isso em algum ponto?"
+        },
+        {
+          "item": "D",
+          "texto": "Vazamento exige um `malloc` cujo bloco se perde: algum dos dois códigos chama `malloc`? E, lendo `tm` como último índice, o I chega a ler fora do vetor?"
+        }
+      ]
     },
     {
       "numero": 11,

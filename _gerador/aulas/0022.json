@@ -1,7 +1,7 @@
 {
  "num": "0022",
  "oque": "O `for` é o laço com contador: junta numa linha o **início**, a **condição** e o **passo**. É a escolha natural quando você sabe, antes de começar, quantas voltas serão.",
- "como": "A ordem de execução não é a ordem em que você lê a linha:\n\n- o **início** roda uma vez, antes de tudo;\n- a **condição** é testada antes de cada volta; deu falso, o laço acaba;\n- deu verdadeiro, roda o **corpo**;\n- depois roda o **passo**, e o fluxo volta à condição.\n\nO `for` é um `while` reorganizado; o compilador trata os dois do mesmo jeito:\n\n```c\nfor (int i = 1; i <= 3; i++)\n    printf(\"%d \", i);   // 1 2 3\n\nint k = 1;            // o mesmo laço\nwhile (k <= 3) {      // com while\n    printf(\"%d \", k);\n    k++;\n}\n```\n\n**Quantas voltas?** Em `for (i = a; i < b; i++)` o contador vai de `a` a `b - 1`: são `b - a` voltas. Com `<=`, vai até `b`: `b - a + 1` voltas.",
+ "como": "A ordem de execução não é a ordem em que você lê a linha:\n\n- o **início** roda uma vez, antes de tudo;\n- a **condição** é testada antes de cada volta; deu falso, o laço acaba;\n- deu verdadeiro, roda o **corpo**;\n- depois roda o **passo**, e o fluxo volta à condição.\n\nO `for` é um `while` reorganizado. Os dois laços abaixo fazem a mesma coisa (a única diferença aparece no `continue`; veja a aula Break e continue):\n\n```c\nfor (int i = 1; i <= 3; i++)\n    printf(\"%d \", i);   // 1 2 3\n\nint k = 1;            // o mesmo laço\nwhile (k <= 3) {      // com while\n    printf(\"%d \", k);\n    k++;\n}\n```\n\n**Quantas voltas?** Em `for (i = a; i < b; i++)` o contador vai de `a` a `b - 1`: são `b - a` voltas. Com `<=`, vai até `b`: `b - a + 1` voltas.",
  "caracteristicas": [
   "O início roda **uma vez**. A condição é testada **antes** de cada volta, então o corpo pode rodar zero vezes.",
   "O passo é escrito no meio do cabeçalho, mas roda **depois** do corpo.",
@@ -11,7 +11,7 @@
  ],
  "vantagens": [
   "Começo, fim e passo ficam juntos numa linha: dá para contar as voltas sem ler o corpo.",
-  "O passo não se perde no fim de um corpo longo, como acontece no `while`, onde esquecer o `i++` dá laço infinito."
+  "O passo não se perde no fim de um corpo longo. No `while`, ele fica lá embaixo, e esquecer o `i++` dá laço infinito."
  ],
  "desvantagens": [
   "O **erro por um** (*off-by-one*): `i < n` ou `i <= n`, `i = 0` ou `i = 1`. Uma volta a mais lê fora do vetor.",

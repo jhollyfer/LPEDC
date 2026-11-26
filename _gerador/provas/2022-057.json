@@ -209,6 +209,24 @@
       "formato": "conceito",
       "enunciado": "Para a implementação eficiente (O(1)) de uma pilha usando lista simplesmente encadeada, onde os push's e pop's são executados?",
       "dica": "**Cobra:** em que ponta da lista simplesmente encadeada ficam o push e o pop para custar O(1).\n\n- **Pilha (LIFO)** [0082]: push e pop acontecem na mesma ponta, o topo; o último a entrar é o primeiro a sair. Ex.: push 1, push 2, pop devolve o 2.\n- **Lista simplesmente encadeada** [0076]: cada nó só aponta para o próximo; o início é alcançado em O(1) pela cabeça, e o último nó exige percorrer a lista, O(n), se não há ponteiro para o fim. Ex.: em 4 → 7 → 9, inserir antes do 4 mexe só na cabeça; chegar ao 9 custa dois saltos.\n\n**Como atacar:** veja qual ponta a lista alcança sem percorrer nada.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Lista `3 -> 7 -> 9` com ponteiro só para o início. Para tirar o 9, alguém precisa passar a apontar `NULL`: quem é, e quantos nós você percorre para chegar nele?"
+        },
+        {
+          "item": "B",
+          "texto": "Push no início: `novo->prox = topo; topo = novo`. Pop no início: `topo = topo->prox`. Algum dos dois percorre a lista? O último a entrar é o primeiro a sair?"
+        },
+        {
+          "item": "C",
+          "texto": "Empilhe 1, 2, 3 pondo cada um no início e retire pelo fim. Qual sai primeiro? Isso é LIFO? E quanto custa achar o penúltimo para tirar o último?"
+        },
+        {
+          "item": "D",
+          "texto": "Insira 1, 2, 3 pelo fim e retire pelo início. Qual sai primeiro, o 1 ou o 3? Que estrutura se comporta assim?"
+        }
+      ],
       "alternativas": [
         {
           "letra": "A",
@@ -287,6 +305,24 @@
       "formato": "conceito",
       "enunciado": "Considere as funções f(n)=(n+1)(n−1) e g(n)=8log2(n)+1, sendo n>0. Podemos afirmar que:",
       "dica": "**Cobra:** classificar duas funções pelo crescimento e compará-las com O e Ω.\n\n- **Ordem de crescimento** [0072]: vale o termo dominante: grau 2 é quadrática, `log n` cresce mais devagar que qualquer potência, e exponencial tem `n` no expoente. Ex.: `(n+3)(n-3) = n² - 9` é quadrática; `5 log₂ n + 2` é logarítmica.\n- **O e Ω** [0166]: `f` é O(g) se, a partir de algum n₀, `f ≤ c·g` (teto); é Ω(g) se `f ≥ c·g` (piso). Ex.: `3n + 5` é O(n²), mas não é Ω(n²), pois n² acaba passando qualquer `c·(3n+5)`.\n\n**Como atacar:** expanda o produto e compare quem cresce mais depressa.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Expanda: (n+1)(n−1) = n² − 1. Em n = 20, isso dá 399, e 2ⁿ dá cerca de 1 milhão. E g(1024) = 8·10 + 1 = 81: cresce como exponencial?"
+        },
+        {
+          "item": "B",
+          "texto": "Calcule g(1024) = 81 e g(2048) = 89. Dobrar n dobra g? E f, quando n dobra, fica multiplicada por quanto, mais ou menos?"
+        },
+        {
+          "item": "C",
+          "texto": "Ω diz que g cresce pelo menos como f. Em n = 1024, g vale 81 e f vale 1.048.575. Para n maior, essa distância aumenta ou diminui?"
+        },
+        {
+          "item": "D",
+          "texto": "O diz que g cresce no máximo como f, a menos de uma constante. Em n = 1024, g = 81 e f = 1.048.575. Existe c > 0 com g(n) ≤ c·f(n) para todo n grande?"
+        }
+      ],
       "alternativas": [
         {
           "letra": "A",
@@ -369,6 +405,24 @@
       "formato": "conceito",
       "enunciado": "Um grafo é uma árvore se e somente se:",
       "dica": "**Cobra:** a definição de árvore como tipo de grafo.\n\n- **Grafo conexo e não direcionado** [0109]: conexo é haver caminho entre quaisquer dois vértices; não direcionado é ter arestas sem sentido. Ex.: 1–2 e 2–3 é conexo; 1–2 e 3–4 não é, pois nada liga o 1 ao 3.\n- **Ciclo** [0150]: caminho que volta ao vértice de partida; uma árvore é conexa e sem ciclos, por isso tem V - 1 arestas. Ex.: 4 vértices em fila têm 3 arestas, e ligar o último ao primeiro cria um ciclo.\n\n**Como atacar:** teste cada opção com um grafo de 3 ou 4 vértices.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "O quadrado A-B-C-D-A se desenha sem cruzar arestas. Ele tem ciclo? E uma árvore, pode ter o desenho sem cruzamento?"
+        },
+        {
+          "item": "B",
+          "texto": "Pegue A-B, B-C: conexo, sem direção, sem ciclo. Tire uma aresta: continua conexo? Ponha A-C: continua sem ciclo?"
+        },
+        {
+          "item": "C",
+          "texto": "O grafo completo com 3 vértices é o triângulo A-B-C-A. Há ciclo? Quantas arestas tem, contra as n − 1 de uma árvore?"
+        },
+        {
+          "item": "D",
+          "texto": "Desenhe dois vértices sem aresta nenhuma. É grafo? Dá para ir de um ao outro?"
+        }
+      ],
       "alternativas": [
         {
           "letra": "A",
@@ -410,6 +464,24 @@
       "formato": "conceito",
       "enunciado": "Matrizes são estruturas de dados de n-dimensões que podem ser implementadas utilizando arrays (vetores). Por simplicidade, chamaremos de matrizes as matrizes bidimensionais numéricas (que armazenam números inteiros). Sendo assim, marque a alternativa INCORRETA.",
       "dica": "**Cobra:** achar a afirmação errada sobre matrizes bidimensionais.\n\n- **Produto de matrizes** [0039]: `A` (m×n) vezes `B` (n×p) só existe se as colunas de `A` forem as linhas de `B`, e o resultado tem as linhas de `A` e as colunas de `B`. Ex.: (2×3) · (3×4) dá uma matriz 2×4.\n- **Matriz m×n e dois laços** [0039]: tem m·n elementos, e um laço de linhas por fora e um de colunas por dentro, com um acumulador, visita todos. Ex.: uma 3×4 tem 12 posições e a soma faz 12 voltas.\n\n**Como atacar:** confira cada alternativa com uma matriz pequena e fique com a que falha.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Teste com A de 2×3 e B de 3×4. Cada elemento do produto é uma linha de A vezes uma coluna de B. Quantas linhas A tem? Quantas colunas B tem? O resultado sai de quanto por quanto?"
+        },
+        {
+          "item": "B",
+          "texto": "Para `int m[2][3]`, escreva `for i` nas linhas, `for j` nas colunas e `s += m[i][j]`. Quantas parcelas o acumulador recebe? Algum elemento fica de fora?"
+        },
+        {
+          "item": "C",
+          "texto": "Matriz 1.000×1.000 com só 10 valores não nulos: guardar cada um como nó com linha, coluna, valor e ponteiro ocupa quanto, contra 1 milhão de `int` no vetor?"
+        },
+        {
+          "item": "D",
+          "texto": "`int m[3][4]`: 3 linhas de 4 colunas. Quantas posições de `int` o compilador reserva? Confira com `sizeof(m) / sizeof(int)`."
+        }
+      ],
       "alternativas": [
         {
           "letra": "A",
@@ -539,6 +611,24 @@
       "formato": "código",
       "enunciado": "O que faz o código C abaixo?\n\n```c\n#include <stdio.h>\n#define MAX 50\n\nint main() {\n    int m, soma=0;\n    int mat[MAX][MAX];\n    scanf(\"%d\", &m);\n    for (int i=0; i<m; i++)\n        for (int j=0; j<m; j++)\n             scanf(\"%d\", &mat[i][j]);\n    for (int i=0; i<m; i++)\n        for (int j=i; j<m; j++)\n             soma += mat[i][j];\n    printf(\"%d\\n\", soma);\n}\n```",
       "dica": "**Cobra:** reconhecer que parte da matriz o laço duplo percorre.\n\n- **Laços aninhados** [0024]: o laço de dentro roda completo a cada passo do de fora, e seu início pode depender do `i`. Ex.: `i < 3` com `j = i` visita (0,0) (0,1) (0,2) (1,1) (1,2) (2,2): 6 pares.\n- **Diagonal principal** [0039]: elementos com `i == j`; acima dela `j > i` e abaixo `j < i`. Ex.: em 3×3, `mat[0][2]` está acima, `mat[2][0]` abaixo e `mat[1][1]` na diagonal.\n\n**Como atacar:** liste os pares (i, j) visitados numa matriz 3×3 e marque na grade.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Pegue m = 2 e a matriz {{1, 2}, {3, 4}}. Para i = 0, j vai de 0 a 1; para i = 1, j vai só de 1 a 1. Quais elementos entram na soma, e onde estão em relação à diagonal?"
+        },
+        {
+          "item": "B",
+          "texto": "Na mesma {{1, 2}, {3, 4}}, a soma de todos dá 10. Siga os laços: o `mat[1][0]` (o 3) entra alguma vez?"
+        },
+        {
+          "item": "C",
+          "texto": "O `soma +=` roda várias vezes ou uma só? E, com m = 2, os índices lidos vão até qual valor: `mat[2][2]` foi preenchido?"
+        },
+        {
+          "item": "D",
+          "texto": "Abaixo da diagonal fica o elemento com linha maior que coluna, como `mat[1][0]`. O laço interno começa em `j = i`: ele chega a ter j < i?"
+        }
+      ],
       "alternativas": [
         {
           "letra": "A",
@@ -621,6 +711,24 @@
       "formato": "código",
       "enunciado": "O que faz o seguinte código em C?\n\n```c\nLista* abracadabra (Lista* l, int v) {\n  Lista* novo = (Lista*) malloc(sizeof(Lista));\n  novo->info = v;\n  novo->prox = l;\n  novo->ant = NULL;\n  if (l) { l->ant = novo };\n  return novo;\n}\n```",
       "dica": "**Cobra:** ler uma função que cria um nó e descobrir onde ele entra numa lista duplamente encadeada.\n\n- **Lista duplamente encadeada** [0079]: cada nó aponta para o próximo (`prox`) e para o anterior (`ant`). Ex.: na lista 3 ⇄ 8, o nó 3 tem `ant = NULL` e `prox` apontando para o 8.\n- **Inserir no início × no fim** [0076]: no início o novo nó aponta para a antiga cabeça e vira a cabeça, em O(1); no fim é preciso andar até o último antes de ligar, em O(n). Ex.: inserir 9 no fim de 3 ⇄ 8 exige parar no 8.\n- **malloc e o retorno** [0054]: `malloc` reserva o nó no heap, e a função devolve o ponteiro que o chamador usa como lista. Ex.: `l = cria(l, 5);` troca a cabeça só se a função devolver o novo nó.\n\n**Como atacar:** marque quem aponta para quem depois de cada linha e veja qual nó a função devolve.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Lista dupla `8 <-> 4` e a chamada `l = abracadabra(l, 5)`. O `prox` do novo aponta para quem? O `ant` do 8 passa a ser quem? Quem é a cabeça devolvida?"
+        },
+        {
+          "item": "B",
+          "texto": "Se o nó novo entrasse no fim, o `prox` dele seria o quê? No código, `novo->prox` recebe `l`. Quem é `l`?"
+        },
+        {
+          "item": "C",
+          "texto": "O nó de lista simples tem `info` e `prox`. O código escreve em `novo->ant` e `l->ant`. Que tipo de nó tem esse campo?"
+        },
+        {
+          "item": "D",
+          "texto": "A função devolve `novo` e quem chama faz `l = ...`. Depois disso, o nó novo fica na frente ou atrás de todos? E o campo `ant`, existe em lista simples?"
+        }
+      ],
       "alternativas": [
         {
           "letra": "A",

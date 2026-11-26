@@ -4,7 +4,7 @@
  "como": "- **Fibonacci**: dois casos base, `fib(0) = 0` e `fib(1) = 1`. Cada termo é a soma dos dois anteriores: 0, 1, 1, 2, 3, 5, 8, 13...\n- **Hanói**: para levar `n` discos de A para C, leve `n - 1` de A para B (usando C), mova o maior de A para C, leve os `n - 1` de B para C (usando A). Caso base: zero discos, nada a fazer.\n- **Euclides**: o MDC de `a` e `b` é o MDC de `b` e `a % b`; quando o segundo chega a 0, o primeiro é a resposta.\n\n```c\nint fib(int n) {\n    if (n < 2) return n;\n    return fib(n - 1) + fib(n - 2);\n}\n\nvoid hanoi(int n, char o, char d, char a) {\n    if (n == 0) return;\n    hanoi(n - 1, o, a, d);\n    printf(\"%c -> %c\\n\", o, d);\n    hanoi(n - 1, a, d, o);\n}\n\nint mdc(int a, int b) {\n    return b == 0 ? a : mdc(b, a % b);\n}\n```",
  "caracteristicas": [
   "No Fibonacci recursivo, as duas chamadas não se comunicam: `fib(5)` calcula `fib(3)` duas vezes e `fib(2)` três vezes. São 15 chamadas.",
-  "O número de chamadas de `fib(n)` cresce como 1,618ⁿ (exponencial); a memória acompanha só a altura da árvore, no máximo `n`.",
+  "O número de chamadas de `fib(n)` cresce como 1,618ⁿ (exponencial); a memória acompanha só os níveis da árvore, no máximo `n` quadros.",
   "Hanói com `n` discos faz `2ⁿ - 1` movimentos, e não existe solução mais curta.",
   "No MDC, a cada duas chamadas o primeiro número cai pelo menos à metade: poucas chamadas até para números enormes.",
   "Cuidado com os casos base do enunciado: com `f(1) = 0` e `f(2) = 1`, a sequência anda uma casa em relação ao `fib` usual."
@@ -40,7 +40,7 @@
   },
   {
    "titulo": "Os casos base respondem",
-   "texto": "`fib(1)` devolve 1 e `fib(0)` devolve 0, sem chamar ninguém. Com os dois, o `fib(2)` mais fundo devolve 1 + 0 = 1.",
+   "texto": "`fib(1)` devolve 1 e `fib(0)` devolve 0, sem chamar ninguém. Com os dois, o `fib(2)` mais profundo devolve 1 + 0 = 1.",
    "figura": {
     "tipo": "texto",
     "linhas": [

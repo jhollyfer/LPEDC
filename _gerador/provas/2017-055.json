@@ -94,7 +94,29 @@
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** saber para que serve uma fila e reconhecer o que ela não representa bem.\n\n- **Fila (FIFO)** [0085]: o primeiro a entrar é o primeiro a sair; serve para atender pedidos na ordem de chegada. Ex.: documentos A, B e C enviados à impressora saem impressos como A, B e C.\n- **Árvore** [0097]: cada nó pode ter vários filhos, o que representa hierarquia (um em cima, vários embaixo); fila e pilha são sequências sem esse ramificar. Ex.: o organograma de uma empresa: um diretor com três gerentes embaixo.\n\n**Como atacar:** para cada alternativa, pergunte se há ordem de chegada ou hierarquia, e escolha a que não é de fila."
+      "dica": "**Cobra:** saber para que serve uma fila e reconhecer o que ela não representa bem.\n\n- **Fila (FIFO)** [0085]: o primeiro a entrar é o primeiro a sair; serve para atender pedidos na ordem de chegada. Ex.: documentos A, B e C enviados à impressora saem impressos como A, B e C.\n- **Árvore** [0097]: cada nó pode ter vários filhos, o que representa hierarquia (um em cima, vários embaixo); fila e pilha são sequências sem esse ramificar. Ex.: o organograma de uma empresa: um diretor com três gerentes embaixo.\n\n**Como atacar:** para cada alternativa, pergunte se há ordem de chegada ou hierarquia, e escolha a que não é de fila.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Três trabalhos chegam à impressora: A, B, C. Em que ordem saem? Que política é essa, FIFO ou LIFO?"
+        },
+        {
+          "item": "B",
+          "texto": "Num roteador, os pacotes chegam mais rápido do que saem e esperam. Quem sai primeiro: o que chegou antes ou o que chegou depois?"
+        },
+        {
+          "item": "C",
+          "texto": "Desenhe `/`, com `home` e `etc` dentro, e `ana` dentro de `home`. Cada pasta tem um pai e pode ter vários filhos. Que estrutura do curso tem exatamente esse formato?"
+        },
+        {
+          "item": "D",
+          "texto": "O programa manda os blocos 1, 2, 3 para o disco mais rápido do que ele grava. Em que ordem os blocos precisam chegar à mídia?"
+        },
+        {
+          "item": "E",
+          "texto": "Processos prontos esperam a CPU. No escalonamento por ordem de chegada (FCFS), quem ganha a CPU primeiro?"
+        }
+      ]
     },
     {
       "numero": 3,
@@ -431,7 +453,29 @@
           "modulo": "22-arvores-avancadas.md"
         }
       ],
-      "dica": "**Cobra:** o que fazer quando a remoção deixa uma página da árvore B abaixo do mínimo.\n\n- **Grau mínimo t** [0146]: todo nó, menos a raiz, tem de `t - 1` a `2t - 1` chaves, e as folhas ficam no mesmo nível. Ex.: com `t = 2`, um nó tem de 1 a 3 chaves.\n- **Divisão (split)** [0146]: nó cheio vira dois nós e a chave do meio sobe para o pai; é a operação da inserção. Ex.: `[10 20 30]` com `t = 2` vira `[10]` e `[30]`, e o 20 sobe.\n- **Redistribuir ou concatenar** [0146]: nó abaixo do mínimo pega uma chave do irmão, passando pelo pai, ou se junta ao irmão se este também está no mínimo. Ex.: remover o 10 de `[10]`, com pai `20` e irmão `[30 40]`: o 20 desce e o 30 sobe.\n\n**Como atacar:** separe o que é da inserção do que é da remoção e confira o que cada alternativa exige."
+      "dica": "**Cobra:** o que fazer quando a remoção deixa uma página da árvore B abaixo do mínimo.\n\n- **Grau mínimo t** [0146]: todo nó, menos a raiz, tem de `t - 1` a `2t - 1` chaves, e as folhas ficam no mesmo nível. Ex.: com `t = 2`, um nó tem de 1 a 3 chaves.\n- **Divisão (split)** [0146]: nó cheio vira dois nós e a chave do meio sobe para o pai; é a operação da inserção. Ex.: `[10 20 30]` com `t = 2` vira `[10]` e `[30]`, e o 20 sobe.\n- **Redistribuir ou concatenar** [0146]: nó abaixo do mínimo pega uma chave do irmão, passando pelo pai, ou se junta ao irmão se este também está no mínimo. Ex.: remover o 10 de `[10]`, com pai `20` e irmão `[30 40]`: o 20 desce e o 30 sobe.\n\n**Como atacar:** separe o que é da inserção do que é da remoção e confira o que cada alternativa exige.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Split acontece quando uma página passa do máximo de chaves. Na remoção, a página fica com mais ou com menos chaves do que tinha?"
+        },
+        {
+          "item": "B",
+          "texto": "Fora da raiz, uma página que perde uma chave e fica abaixo do mínimo precisa ganhar chaves ou se dividir em duas?"
+        },
+        {
+          "item": "C",
+          "texto": "Para tirar uma chave de página interna, o procedimento usual troca a chave pela sucessora, que está numa folha. Em que página aparece a falta de chaves: na interna ou na folha de onde saiu a sucessora?"
+        },
+        {
+          "item": "D",
+          "texto": "Na redistribuição, as chaves do irmão são todas maiores (ou menores) que a chave do pai que separa os dois. Se uma chave do irmão entrar direto no lugar da removida, a ordem entre pai e filhos se mantém? Por onde a chave passa?"
+        },
+        {
+          "item": "E",
+          "texto": "O mínimo de chaves por página vale para todas, menos a raiz. Se a árvore tem uma página só, ela é a raiz: existe mínimo a respeitar?"
+        }
+      ]
     },
     {
       "numero": 10,
@@ -944,7 +988,29 @@
           "modulo": "06-ponteiros.md"
         }
       ],
-      "dica": "**Cobra:** ver qual função altera de verdade a lista do chamador ao inserir um nó no início.\n\n- **Passagem por valor** [0029]: a função recebe uma cópia do argumento; mudar a cópia não muda a variável de quem chamou, nem quando o argumento é um ponteiro. Ex.: `void zera(int x) { x = 0; }` não altera o x de fora.\n- **Ponteiro para ponteiro** [0049]: receber `No **` permite escrever no ponteiro do chamador por meio de `*prim`. Ex.: `void aponta(int **p) { *p = &b; }` faz o `p` de fora apontar para `b`.\n- **Fila encadeada** [0086]: insere no fim, ligando o novo nó depois do último, com um ponteiro para o fim. Ex.: na fila `1 → 2`, inserir o 3 faz `fim->prox = novo`.\n\n**Como atacar:** siga o ponteiro `prim` do chamador depois da função e veja se ele aponta para o nó novo."
+      "dica": "**Cobra:** ver qual função altera de verdade a lista do chamador ao inserir um nó no início.\n\n- **Passagem por valor** [0029]: a função recebe uma cópia do argumento; mudar a cópia não muda a variável de quem chamou, nem quando o argumento é um ponteiro. Ex.: `void zera(int x) { x = 0; }` não altera o x de fora.\n- **Ponteiro para ponteiro** [0049]: receber `No **` permite escrever no ponteiro do chamador por meio de `*prim`. Ex.: `void aponta(int **p) { *p = &b; }` faz o `p` de fora apontar para `b`.\n- **Fila encadeada** [0086]: insere no fim, ligando o novo nó depois do último, com um ponteiro para o fim. Ex.: na fila `1 → 2`, inserir o 3 faz `fim->prox = novo`.\n\n**Como atacar:** siga o ponteiro `prim` do chamador depois da função e veja se ele aponta para o nó novo.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Chame `funcaoI(inicio, 5)` com `inicio = NULL`. Depois do retorno, `inicio` ainda vale `NULL`? E, numa fila, o elemento novo entra na frente ou no fim?"
+        },
+        {
+          "item": "B",
+          "texto": "A funcaoII faz o nó novo apontar para o antigo primeiro e vira o novo `*prim`: ele entra em que ponta? Numa fila 1, 2, 3 (frente no 1), onde o 4 deve entrar?"
+        },
+        {
+          "item": "C",
+          "texto": "Insira 5 e depois 7 com cada função, partindo de `inicio = NULL`. Retirando pelo `inicio`, quem sai primeiro? A fila exige que saia primeiro quem?"
+        },
+        {
+          "item": "D",
+          "texto": "Com `inicio = NULL`, chame `funcaoI(inicio, 5)`. Depois, `inicio` aponta para o nó novo? O bloco alocado fica guardado em algum ponteiro de quem chamou?"
+        },
+        {
+          "item": "E",
+          "texto": "A funcaoII recebe `&inicio` e escreve `*prim = aux`: o nó novo entra no início. Numa lista, inserir no início é uma operação válida? E numa fila, a inserção acontece em que ponta?"
+        }
+      ]
     },
     {
       "numero": 19,
@@ -986,7 +1052,29 @@
           "modulo": "13-busca-e-ordenacao.md"
         }
       ],
-      "dica": "**Cobra:** deduzir o que a partição do quick sort pode ter feito, numa ordenação decrescente.\n\n- **Partição** [0095]: o pivô vai para a posição final, com um lado só de elementos que devem vir antes dele e o outro só dos que vêm depois. Ex.: com pivô 20 em `35 12 48 7 29 20`, a partição deixa `12 7 20 35 29 48`.\n- **Ordem decrescente** [0095]: inverte a comparação: maiores ou iguais ao pivô vão para a esquerda, menores para a direita. Ex.: pivô 20 em `9 25 14 31 20` deixa `25 31 20 9 14`.\n\n**Como atacar:** para cada candidato a pivô, confira se tudo à esquerda dele é maior e tudo à direita é menor."
+      "dica": "**Cobra:** deduzir o que a partição do quick sort pode ter feito, numa ordenação decrescente.\n\n- **Partição** [0095]: o pivô vai para a posição final, com um lado só de elementos que devem vir antes dele e o outro só dos que vêm depois. Ex.: com pivô 20 em `35 12 48 7 29 20`, a partição deixa `12 7 20 35 29 48`.\n- **Ordem decrescente** [0095]: inverte a comparação: maiores ou iguais ao pivô vão para a esquerda, menores para a direita. Ex.: pivô 20 em `9 25 14 31 20` deixa `25 31 20 9 14`.\n\n**Como atacar:** para cada candidato a pivô, confira se tudo à esquerda dele é maior e tudo à direita é menor.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Para ordem decrescente, o pivô precisa ter à esquerda só valores maiores ou iguais e à direita só menores ou iguais. Teste o 18 (índice 3) e o 13 (índice 4), cada um por vez."
+        },
+        {
+          "item": "B",
+          "texto": "Teste o 18: à esquerda estão 20, 22, 24; à direita, 13, 9, 3, 10. Todo valor da esquerda é ≥ 18 e todo da direita é ≤ 18?"
+        },
+        {
+          "item": "C",
+          "texto": "Teste o 13: à esquerda 20, 22, 24, 18; à direita 9, 3, 10. Algum valor está do lado trocado?"
+        },
+        {
+          "item": "D",
+          "texto": "Tome cada valor do vetor como candidato e confira a regra do pivô. O 24, por exemplo, tem 20 e 22 à esquerda: passa? E o 18 e o 13?"
+        },
+        {
+          "item": "E",
+          "texto": "A partição não ordena os lados, só separa em torno do pivô. Basta um valor cumprir a regra para o vetor poder ser resultado de uma partição. Existe algum?"
+        }
+      ]
     },
     {
       "numero": 20,

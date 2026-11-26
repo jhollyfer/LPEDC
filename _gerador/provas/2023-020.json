@@ -47,6 +47,24 @@
       "formato": "conceito",
       "enunciado": "Sobre o algoritmo de ordenação por inserção (Insertion Sort), marque a alternativa **correta**.",
       "dica": "**Cobra:** como o tempo do insertion sort depende da ordem inicial.\n\n- **Insertion sort** [0093]: pega cada elemento e o desloca para trás até o lugar certo no prefixo ordenado, parando quando o vizinho não é maior. Ex.: em 2, 3, 1 o 1 passa pelo 3 e pelo 2; em 1, 2, 3 ninguém se move.\n- **Melhor e pior caso** [0093]: já ordenado custa O(n), com uma comparação por elemento; invertido custa O(n²). Ex.: com n = 5, ordenado faz 4 comparações e invertido faz 4 + 3 + 2 + 1 = 10.\n\n**Como atacar:** teste cada afirmação com um vetor ordenado e outro invertido.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Insertion em `1 2 3 5 4`: quantas comparações e deslocamentos no total? Agora em `5 4 3 2 1`: o 1 anda quantas casas?"
+        },
+        {
+          "item": "B",
+          "texto": "Conte as comparações do insertion em `1 2 3 4` (já ordenado) e em `4 3 2 1` (invertido). Deu o mesmo número?"
+        },
+        {
+          "item": "C",
+          "texto": "No vetor invertido `4 3 2 1`, o 1 é comparado com 4, 3 e 2. Some as comparações de todos. Com n = 1.000 invertido, o total cresce como n ou como n²?"
+        },
+        {
+          "item": "D",
+          "texto": "O insertion só usa `v[j] > chave` para decidir se desloca, e os índices vão de 0 a n−1. Com `-3 5 -7`, em que ponto aparece um índice negativo?"
+        }
+      ],
       "alternativas": [
         {
           "letra": "A",
@@ -231,6 +249,24 @@
       "formato": "conceito",
       "enunciado": "Considere a figura abaixo, que ilustra uma árvore com três nós contendo chaves inteiras, sendo que a raiz da árvore (marcada com \"x\") contém a chave 5, e marque a alternativa **correta**.\n\nNa figura, a raiz 5 tem o 7 como filho esquerdo e o 6 como filho direito.",
       "dica": "**Cobra:** dizer a que tipos de árvore uma árvore de 3 nós pode pertencer.\n\n- **Regra da BST** [0099]: o filho esquerdo é menor que o pai e o direito é maior. Ex.: raiz 8 com filhos 3 e 10 serve; com 10 à esquerda e 3 à direita não serve.\n- **Heap mínimo** [0102]: árvore completa em que cada pai é menor ou igual aos filhos, sem relação entre irmãos. Ex.: raiz 2 com filhos 9 e 4 é um heap mínimo válido.\n- **AVL e rubro-negra** [0101]: ambas são BSTs, então exigem a regra da BST além do equilíbrio. Ex.: raiz 4 com filhos 9 (esquerda) e 1 (direita) é equilibrada, mas não é BST, logo não é AVL.\n\n**Como atacar:** teste a regra de cada estrutura contra as três chaves da figura.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Rubro-negra é uma ABB com regras de cor. Antes da cor, teste a ordem: o 7 está à esquerda do 5. A regra esquerda < raiz vale aqui?"
+        },
+        {
+          "item": "B",
+          "texto": "Na ABB, todo o lado esquerdo é menor que a raiz e todo o direito, maior. Compare 7 com 5 e 6 com 5. Com ou sem balanceamento, essa regra muda?"
+        },
+        {
+          "item": "C",
+          "texto": "Na heap mínima, cada pai é menor ou igual aos filhos, e não há regra entre irmãos. Compare 5 com 7 e 5 com 6. A árvore está completa?"
+        },
+        {
+          "item": "D",
+          "texto": "AVL é ABB com fator de balanceamento em −1, 0 ou 1. O fator aqui é 0. E a parte de ABB: o 7 à esquerda do 5 passa?"
+        }
+      ],
       "alternativas": [
         {
           "letra": "A",
@@ -279,6 +315,24 @@
       "formato": "conceito",
       "enunciado": "Sobre a complexidade de algoritmos, marque a alternativa **correta**:",
       "dica": "**Cobra:** custos de inserção e busca em lista encadeada, vetor e árvore.\n\n- **Inserção em lista encadeada** [0076]: com o lugar já conhecido, basta religar ponteiros, sem deslocar nada. Ex.: inserir após o nó 4 em 4 → 9 é `novo->prox = n->prox; n->prox = novo;`.\n- **Vetor: deslocamento** [0075]: inserir no início exige mover todos os elementos uma casa, então custa O(n). Ex.: inserir no início de `[1, 2, 3]` desloca 3 elementos.\n- **Notação O ignora constantes** [0072]: O(n/2) é O(n), e a busca binária é O(log n). Ex.: 5n + 3 e n/2 são ambos O(n).\n\n**Como atacar:** para cada alternativa, escreva o custo exato do pior caso e simplifique.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Quantos cortes ao meio levam 1.024 a 1? E N/2 = 512 fica mais perto desse número ou de N? O(N/2) e O(N) são classes diferentes?"
+        },
+        {
+          "item": "B",
+          "texto": "Inserir na cabeça: `novo->prox = inicio; inicio = novo`. São duas atribuições. Esse número muda se a lista tiver 10 ou 10 milhões de nós?"
+        },
+        {
+          "item": "C",
+          "texto": "Vetor `[4, 8, 9]` com espaço sobrando. Para pôr o 1 em `v[0]`, o que acontece com 4, 8 e 9? E com 1 milhão de elementos?"
+        },
+        {
+          "item": "D",
+          "texto": "Insira 1, 2, 3, 4, 5 numa ABB comum. Para pôr o 6, quantas comparações? E se a árvore já tivesse 1.000 nós em cadeia?"
+        }
+      ],
       "alternativas": [
         {
           "letra": "A",
@@ -320,6 +374,24 @@
       "formato": "código",
       "enunciado": "Considere o pseudo-código abaixo e escolha a opção **correta**:\n\n```c\nvoid par ( int v[], int inicio, int meio, int fim, int vaux[]) {\n    unsigned i=inicio, j=meio+1, k=inicio;\n    while((i <= meio) && (j <= fim) ) {\n        if ( v[i] < v[j]) { vaux[k] = v[i]; i++; }\n        else { vaux[k] = v[j]; j++; }\n        k++;\n    }\n    while(i <= meio) { vaux[k] = v[i]; i++; k++; }\n    while(j <= fim) { vaux[k] = v[j]; j++; k++; }\n    for(i = inicio; i <= fim ; i++) { v[i] = vaux[i]; }\n}\n\nvoid sortR (int v[], int inicio, int fim, int vaux[]) {\n    int meio;\n    if(inicio < fim) {\n        meio = (inicio+fim)/2;\n        sortR(v, inicio, meio, vaux);\n        sortR(v, meio+1, fim, vaux);\n        par (v, inicio, meio, fim, vaux);\n    }\n}\n\nvoid sort (int v[], int tam) {\n    int * vaux;\n    vaux = (int*) malloc (sizeof(int) * tam);\n    sortR( v, 0, tam -1 , vaux);\n    free(vaux);\n}\n```",
       "dica": "**Cobra:** reconhecer que algoritmo de ordenação o código implementa.\n\n- **Merge sort** [0094]: divide o vetor ao meio, ordena cada metade recursivamente e intercala as duas num vetor auxiliar. Ex.: 4, 1 | 3, 2 vira 1, 4 | 2, 3 e depois 1, 2, 3, 4.\n- **Intercalação** [0094]: dois índices avançam sobre as metades ordenadas, copiando sempre o menor para o auxiliar; depois vêm as sobras e a cópia de volta. Ex.: de 1, 4 e 2, 3 saem 1, 2, 3 e depois sobra o 4.\n- **Quick sort** [0095]: escolhe um pivô e particiona antes das chamadas recursivas, sem intercalar depois. Ex.: pivô 5 em 7, 2, 9, 1 separa menores e maiores antes de descer.\n\n**Como atacar:** veja se o trabalho vem antes das chamadas recursivas (partição) ou depois (intercalação).",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "No Quick Sort, a partição em torno de um pivô vem antes das chamadas recursivas. Aqui, o que vem antes: `par` ou as duas chamadas de `sortR`? Que linha escolhe pivô?"
+        },
+        {
+          "item": "B",
+          "texto": "O Radix ordena dígito por dígito, sem comparar dois elementos entre si. Procure no código uma comparação `v[i] < v[j]` e uma conta de dígito como `% 10`."
+        },
+        {
+          "item": "C",
+          "texto": "`sortR` calcula `meio = (inicio+fim)/2`, chama a si mesma nas duas metades e depois `par` junta. Que algoritmo do curso divide ao meio, ordena as metades e intercala?"
+        },
+        {
+          "item": "D",
+          "texto": "Rode na mão com `v = {3, 1}`: `sortR(v, 0, 1, vaux)` divide em [3] e [1], e `par` intercala. O que fica em `v` no fim?"
+        }
+      ],
       "alternativas": [
         {
           "letra": "A",

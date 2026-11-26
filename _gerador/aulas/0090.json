@@ -1,6 +1,6 @@
 {
  "num": "0090",
- "oque": "Um jeito de procurar uma chave num **vetor ordenado** descartando metade do que resta a cada comparação.",
+ "oque": "A **busca binária** procura uma chave num **vetor ordenado** e descarta metade do que resta a cada comparação.",
  "como": "Guarde dois índices, `ini` e `fim`, que marcam o trecho onde a chave ainda pode estar. Olhe o elemento do meio:\n\n- se é a chave, achou;\n- se a chave é menor, ela só pode estar à esquerda: `fim = meio - 1`;\n- se a chave é maior, só pode estar à direita: `ini = meio + 1`.\n\nRepita até achar ou até `ini` passar de `fim`, que significa que a chave não está no vetor.\n\n```c\nint ini = 0, fim = n - 1;\nwhile (ini <= fim) {\n    int meio = ini + (fim - ini) / 2;\n    if (v[meio] == chave) return meio;\n    if (chave < v[meio]) fim = meio - 1;\n    else                 ini = meio + 1;\n}\nreturn -1;\n```",
  "caracteristicas": [
   "Só funciona se o vetor estiver **ordenado**. É a ordem que permite jogar metade fora sem olhar.",

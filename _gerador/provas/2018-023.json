@@ -51,7 +51,29 @@
           "modulo": "10-analise.md"
         }
       ],
-      "dica": "**Cobra:** o custo de juntar dois vetores ordenados num só, também ordenado, no melhor caso.\n\n- **Intercalação** [0094]: compara os elementos da frente dos dois vetores, copia o menor e avança só naquele vetor; cada elemento é copiado uma vez. Ex.: com `[1 4]` e `[2 3]`: 1, 2, 3 e a sobra 4, resultando em `1 2 3 4`.\n- **Laços em sequência** [0072]: o custo vem de quantas vezes cada elemento é visitado: laços um depois do outro somam, e só laços aninhados multiplicam. Ex.: dois laços de `n` passos em sequência custam `2n`, que é O(n).\n\n**Como atacar:** conte quantas vezes cada elemento é visitado, e lembre que a intercalação nunca busca nem aninha laços."
+      "dica": "**Cobra:** o custo de juntar dois vetores ordenados num só, também ordenado, no melhor caso.\n\n- **Intercalação** [0094]: compara os elementos da frente dos dois vetores, copia o menor e avança só naquele vetor; cada elemento é copiado uma vez. Ex.: com `[1 4]` e `[2 3]`: 1, 2, 3 e a sobra 4, resultando em `1 2 3 4`.\n- **Laços em sequência** [0072]: o custo vem de quantas vezes cada elemento é visitado: laços um depois do outro somam, e só laços aninhados multiplicam. Ex.: dois laços de `n` passos em sequência custam `2n`, que é O(n).\n\n**Como atacar:** conte quantas vezes cada elemento é visitado, e lembre que a intercalação nunca busca nem aninha laços.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Com N = 4, o vetor destino tem 8 posições. Quantas escritas, no mínimo, ele recebe? Esse número fica parado quando N vira 1.000?"
+        },
+        {
+          "item": "B",
+          "texto": "A intercalação compara `a[i]` com `b[j]` e copia o menor. Onde entraria uma busca binária nisso? E dá para preencher 2N posições com menos de 2N escritas?"
+        },
+        {
+          "item": "C",
+          "texto": "Melhor caso: todo `a` menor que todo `b`, como `a = {1, 2}` e `b = {3, 4}`. Mesmo assim, quantos elementos vão para o destino? Isso cresce como N, como log N ou como N²?"
+        },
+        {
+          "item": "D",
+          "texto": "A cada passo o algoritmo procura algo ou só olha a frente de cada vetor? Conte as comparações com `a = {1, 3}` e `b = {2, 4}`."
+        },
+        {
+          "item": "E",
+          "texto": "No merge, cada volta do laço avança `i` ou `j`, e nenhum dos dois volta atrás. Com N = 3, quantas voltas no total? Com dois laços aninhados seriam 9."
+        }
+      ]
     },
     {
       "numero": 2,
@@ -687,7 +709,29 @@
           "modulo": "05-vetores-e-strings.md"
         }
       ],
-      "dica": "**Cobra:** as características de um vetor: tipo dos elementos e forma de acesso.\n\n- **Vetor homogêneo** [0037]: guarda elementos do mesmo tipo em posições contíguas da memória. Ex.: `int v[4]` guarda 4 inteiros, nunca um `int` e um `char`.\n- **Acesso por índice** [0037]: `v[i]` vai direto à posição `i`, em O(1), sem percorrer as anteriores (acesso aleatório). Ex.: `v[3]` salta direto ao 4º elemento.\n- **FIFO e LIFO** [0085]: são regras de remoção da fila (primeiro a entrar, primeiro a sair) e da pilha (último a entrar, primeiro a sair), não do vetor. Ex.: fila `A, B, C` entrega o A primeiro; pilha `A, B, C` entrega o C.\n\n**Como atacar:** descarte as alternativas que descrevem pilha ou fila e fique com a que fala de índice."
+      "dica": "**Cobra:** as características de um vetor: tipo dos elementos e forma de acesso.\n\n- **Vetor homogêneo** [0037]: guarda elementos do mesmo tipo em posições contíguas da memória. Ex.: `int v[4]` guarda 4 inteiros, nunca um `int` e um `char`.\n- **Acesso por índice** [0037]: `v[i]` vai direto à posição `i`, em O(1), sem percorrer as anteriores (acesso aleatório). Ex.: `v[3]` salta direto ao 4º elemento.\n- **FIFO e LIFO** [0085]: são regras de remoção da fila (primeiro a entrar, primeiro a sair) e da pilha (último a entrar, primeiro a sair), não do vetor. Ex.: fila `A, B, C` entrega o A primeiro; pilha `A, B, C` entrega o C.\n\n**Como atacar:** descarte as alternativas que descrevem pilha ou fila e fique com a que fala de índice.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "`int v[5]` guarda cinco `int`. Dá para pôr um texto em `v[2]`? E, para ler `v[4]`, é preciso tirar antes de `v[0]` a `v[3]`?"
+        },
+        {
+          "item": "B",
+          "texto": "Num vetor você pode ler `v[0]` logo depois de escrever `v[4]`? Quem impõe a regra de só mexer no último inserido? E os elementos de `int v[5]` podem ter tipos diferentes?"
+        },
+        {
+          "item": "C",
+          "texto": "Qual construção de C junta campos de tipos diferentes, como `int idade` e `char nome[30]`? Num `int v[5]`, todos são do mesmo tipo?"
+        },
+        {
+          "item": "D",
+          "texto": "Escreva `v[3] = 7;`. O que é o `3` nesse comando?"
+        },
+        {
+          "item": "E",
+          "texto": "O endereço de `v[i]` é o início de `v` mais `i * sizeof(int)`. Para chegar em `v[999]` partindo de `v[0]`, é uma conta ou são 999 saltos?"
+        }
+      ]
     },
     {
       "numero": 14,

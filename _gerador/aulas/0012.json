@@ -1,6 +1,6 @@
 {
  "num": "0012",
- "oque": "Os operadores relacionais (`>`, `<`, `>=`, `<=`, `==`, `!=`) comparam dois valores e produzem um `int`: **1** quando a comparação vale e **0** quando não vale. No caminho de volta, quando o C testa uma condição, **0 é falso e qualquer outro valor é verdadeiro**.",
+ "oque": "Os operadores relacionais (`>`, `<`, `>=`, `<=`, `==`, `!=`) comparam dois valores e produzem um `int`: **1** quando a comparação vale e **0** quando não vale. No sentido contrário, quando o C testa uma condição, **0 é falso e qualquer outro valor é verdadeiro**.",
  "como": "| Operador | Pergunta | `7` com `3` |\n|---|---|---|\n| `>` | maior? | `7 > 3` vale 1 |\n| `<` | menor? | `7 < 3` vale 0 |\n| `>=` | maior ou igual? | `7 >= 3` vale 1 |\n| `<=` | menor ou igual? | `7 <= 3` vale 0 |\n| `==` | igual? (dois sinais) | `7 == 3` vale 0 |\n| `!=` | diferente? | `7 != 3` vale 1 |\n\nComo a resposta é um número, dá para mostrar com `%d`, somar e guardar. E como o teste aceita qualquer número, `if (n)` é o mesmo que `if (n != 0)`.\n\n```c\nint a = 7, b = 3;\nprintf(\"%d\\n\", a > b);      // 1\nprintf(\"%d\\n\", a == b);     // 0\nprintf(\"%d\\n\", 7 > 3 > 1);  // 0 (!)\nif (a - 7) printf(\"nunca\"); // 0: falso\n```\n\nOs relacionais agem **depois** dos aritméticos: `a + 1 > b` é `(a + 1) > b`.",
  "caracteristicas": [
   "O resultado é sempre `int` 0 ou 1, e entra em contas: `3 * (gm > gv) + (gm == gv)` dá os pontos do jogo.",
@@ -16,7 +16,7 @@
  "desvantagens": [
   "`if (x = 5)` compila: atribui 5 a `x` e testa 5, que é verdadeiro. O `if` sempre entra, e só o `-Wall` avisa.",
   "`0.1 + 0.2 == 0.3` vale 0, porque 0,1 não é exato em binário. Não compare `double` com `==`; use `fabs(a - b) < 1e-9`.",
-  "`a < b < c` compila e não testa intervalo. O certo é `a < b && b < c` (assunto 0013)."
+  "`a < b < c` compila e não testa intervalo. O certo é `a < b && b < c` (veja a aula Lógicos: E, OU, NÃO)."
  ],
  "exemplo": "Com `int x = 4;`:\n\n| Expressão | Valor | Por quê |\n|---|---|---|\n| `x > 5` | `0` | 4 não é maior que 5 |\n| `x >= 4` | `1` | 4 é igual a 4 |\n| `x != 4` | `0` | é igual |\n| `(x > 2) + (x == 4)` | `2` | 1 + 1 |\n| `1 < x < 3` | `1` | `(1 < 4)` vale 1, e `1 < 3` vale 1 |\n| `!x` | `0` | 4 é verdade; a negação é 0 |\n\nA penúltima linha engana: 4 não está entre 1 e 3, mas a expressão vale 1.",
  "passos": [

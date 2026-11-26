@@ -491,7 +491,29 @@
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** seguir os dados por fila, BST, percurso e pilha, e ver o que sobra da ordem original.\n\n- **Fila (FIFO)** [0085]: preserva a ordem de entrada: o que entra primeiro sai primeiro, como numa fila de banco. Ex.: entra 1, 2, 3 e sai 1, 2, 3.\n- **Pilha (LIFO)** [0082]: inverte a ordem de entrada: o último elemento a entrar é o primeiro a sair. Ex.: entra 1, 2, 3 e sai 3, 2, 1.\n- **Percurso em ordem** [0098]: visita esquerda, raiz e direita, o que numa BST dá as chaves em ordem crescente, seja qual for a ordem de inserção. Ex.: a BST com 5, 2 e 8 é lida como 2, 5, 8.\n\n**Como atacar:** escreva o conteúdo depois de cada etapa e confira o que mudou na ordem."
+      "dica": "**Cobra:** seguir os dados por fila, BST, percurso e pilha, e ver o que sobra da ordem original.\n\n- **Fila (FIFO)** [0085]: preserva a ordem de entrada: o que entra primeiro sai primeiro, como numa fila de banco. Ex.: entra 1, 2, 3 e sai 1, 2, 3.\n- **Pilha (LIFO)** [0082]: inverte a ordem de entrada: o último elemento a entrar é o primeiro a sair. Ex.: entra 1, 2, 3 e sai 3, 2, 1.\n- **Percurso em ordem** [0098]: visita esquerda, raiz e direita, o que numa BST dá as chaves em ordem crescente, seja qual for a ordem de inserção. Ex.: a BST com 5, 2 e 8 é lida como 2, 5, 8.\n\n**Como atacar:** escreva o conteúdo depois de cada etapa e confira o que mudou na ordem.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Faça N = 2, `v1 = [1, 2]`, `v2 = [3, 4]` e siga cada estrutura: fila, ABB em ordem simétrica, pilha, distribuição alternada. No fim, compare `v1[0]` com `v2[0]` e `v1[1]` com `v2[1]`."
+        },
+        {
+          "item": "B",
+          "texto": "A ordem simétrica da ABB entrega os valores crescentes. A pilha devolve na ordem inversa da que recebeu. Que ordem sai da pilha, e quem recebe o primeiro valor que sai, v1 ou v2?"
+        },
+        {
+          "item": "C",
+          "texto": "Na distribuição alternada, v1 recebe o 1º, o 3º, o 5º... que sai da pilha, e `v1[N-1]` fica com um dos últimos. Os últimos a sair da pilha são os maiores ou os menores? E `v2[0]`, recebe qual?"
+        },
+        {
+          "item": "D",
+          "texto": "Ordenado não quer dizer só crescente. Depois da distribuição, olhe v1 no exemplo N = 2: os valores seguem alguma ordem?"
+        },
+        {
+          "item": "E",
+          "texto": "No exemplo N = 2 com `v1 = [1, 2]` e `v2 = [3, 4]`, em que vetor o 1 termina? E o 3?"
+        }
+      ]
     },
     {
       "numero": 11,
@@ -597,7 +619,29 @@
           "modulo": "11-listas.md"
         }
       ],
-      "dica": "**Cobra:** como a busca numa lista circular sabe que deve parar quando a chave não existe.\n\n- **Lista circular** [0080]: o último nó aponta de volta para o primeiro, então não há `NULL` no fim e um laço `p != NULL` nunca termina. Ex.: `3 → 7 → 9` e volta ao 3.\n- **Parada da busca** [0080]: a busca anda a partir de um nó de partida e para ao voltar a ele; sem isso, procurar uma chave ausente dá um laço infinito. Ex.: `do { ...; p = p->prox; } while (p != inicio);`.\n\n**Como atacar:** pergunte como a busca termina numa lista sem `NULL`."
+      "dica": "**Cobra:** como a busca numa lista circular sabe que deve parar quando a chave não existe.\n\n- **Lista circular** [0080]: o último nó aponta de volta para o primeiro, então não há `NULL` no fim e um laço `p != NULL` nunca termina. Ex.: `3 → 7 → 9` e volta ao 3.\n- **Parada da busca** [0080]: a busca anda a partir de um nó de partida e para ao voltar a ele; sem isso, procurar uma chave ausente dá um laço infinito. Ex.: `do { ...; p = p->prox; } while (p != inicio);`.\n\n**Como atacar:** pergunte como a busca termina numa lista sem `NULL`.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Na lista circular `3 -> 7 -> 9`, o 9 aponta de volta para o 3. Procure o 5 com `while (p != NULL)`: quando o laço para?"
+        },
+        {
+          "item": "B",
+          "texto": "A busca recebe uma chave e diz se ela está lá. Em que operação devolver o anterior ajuda de verdade: na busca ou na remoção?"
+        },
+        {
+          "item": "C",
+          "texto": "Contar nós percorre a lista inteira. Para achar o 7 em `3 -> 7 -> 9`, a busca precisa saber antes quantos nós existem?"
+        },
+        {
+          "item": "D",
+          "texto": "Na lista circular `3 -> 7 -> 9`, qual é o `prox` do 9? Em algum nó o `prox` vale `NULL`?"
+        },
+        {
+          "item": "E",
+          "texto": "Uma busca altera o ponteiro de início da lista? Depois de procurar o 7 em `3 -> 7 -> 9`, a lista começa onde?"
+        }
+      ]
     },
     {
       "numero": 13,
@@ -749,7 +793,25 @@
           "modulo": "22-arvores-avancadas.md"
         }
       ],
-      "dica": "**Cobra:** o que a diferença de altura maior que 1 entre as subárvores de um nó permite concluir.\n\n- **Regra da AVL** [0101]: a AVL exige diferença de altura de no máximo 1 em todos os nós. Ex.: um nó com subárvores de altura 0 e 2 já tira a árvore da AVL.\n- **BST sem balanceamento** [0099]: a BST comum aceita qualquer forma, desde que menores fiquem à esquerda e maiores à direita. Ex.: inserir 1, 2, 3 sem rotação dá `fb = -2` e continua sendo uma BST válida.\n- **Rubro-negra** [0145]: balanceia por cores e deixa o caminho mais longo ser até o dobro do mais curto, então não tem a regra de diferença 1. Ex.: uma árvore rubro-negra pode ter subárvores com alturas diferentes em mais de 1.\n\n**Como atacar:** ache a propriedade que a diferença maior que 1 elimina e o que continua possível."
+      "dica": "**Cobra:** o que a diferença de altura maior que 1 entre as subárvores de um nó permite concluir.\n\n- **Regra da AVL** [0101]: a AVL exige diferença de altura de no máximo 1 em todos os nós. Ex.: um nó com subárvores de altura 0 e 2 já tira a árvore da AVL.\n- **BST sem balanceamento** [0099]: a BST comum aceita qualquer forma, desde que menores fiquem à esquerda e maiores à direita. Ex.: inserir 1, 2, 3 sem rotação dá `fb = -2` e continua sendo uma BST válida.\n- **Rubro-negra** [0145]: balanceia por cores e deixa o caminho mais longo ser até o dobro do mais curto, então não tem a regra de diferença 1. Ex.: uma árvore rubro-negra pode ter subárvores com alturas diferentes em mais de 1.\n\n**Como atacar:** ache a propriedade que a diferença maior que 1 elimina e o que continua possível.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "A regra da AVL vale para todo nó: |altura(esq) − altura(dir)| ≤ 1. Um nó com diferença 2 cabe nessa regra?"
+        },
+        {
+          "item": "B",
+          "texto": "A rubro-negra não limita a diferença entre subárvores; ela garante que o caminho mais longo não passe do dobro do mais curto. Uma rubro-negra pode ter um nó com subárvores de alturas 1 e 3? Se pode, o \"com certeza\" se sustenta?"
+        },
+        {
+          "item": "C",
+          "texto": "Insira 1, 2, 3 nessa ordem numa ABB comum: o nó 1 fica com a esquerda vazia e a direita de altura 2. Alguma regra de cor entrou na montagem dessa árvore?"
+        },
+        {
+          "item": "D",
+          "texto": "A ABB só exige esquerda < nó < direita. Insira 1, 2, 3 numa ABB vazia: a ordem das chaves é respeitada? Qual é a diferença de altura na raiz?"
+        }
+      ]
     },
     {
       "numero": 16,

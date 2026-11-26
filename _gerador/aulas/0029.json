@@ -11,7 +11,7 @@
  ],
  "vantagens": [
   "A função não estraga sem querer as variáveis de quem chamou.",
-  "O argumento pode ser qualquer expressão: `f(a)`, `f(120.0)` e `f(100 + 20)` são iguais para a função."
+  "O argumento pode ser qualquer expressão: com `a = 120`, `f(a)`, `f(120)` e `f(100 + 20)` são iguais para a função, que só vê a cópia do valor."
  ],
  "desvantagens": [
   "Para alterar uma variável de fora, ou devolver mais de um resultado, a função precisa receber o endereço.",

@@ -11,7 +11,7 @@
  ],
  "vantagens": [
   "Acesso a qualquer célula em `O(1)`, como no vetor.",
-  "Representa tabelas, imagens e grafos (matriz de adjacência) de forma direta.",
+  "Representa direto tabelas, imagens e grafos (matriz de adjacência).",
   "O percurso por dois laços é simples de escrever e de rastrear."
  ],
  "desvantagens": [

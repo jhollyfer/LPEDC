@@ -295,7 +295,25 @@
           "modulo": "07-memoria-dinamica.md"
         }
       ],
-      "dica": "**Cobra:** Escolher a versão correta da busca em lista encadeada, sem erro de memória.\n\n- **Percurso da lista** [0076]: teste `p != NULL` e avance o mesmo ponteiro que testou, com `p = p->prox`; testar `p->prox` deixa o último nó sem verificar. Ex.: `while (p->prox != NULL)` numa lista de 1 nó nem entra no laço.\n- **Busca não aloca** [0054]: `malloc` serve para criar nó novo; numa busca só lê, e alocar sem usar vira vazamento. Ex.: `aux = malloc(...); aux = prim;` perde o bloco alocado.\n- **Seta e ponteiro nulo** [0062]: `->` acessa o campo; `>` sozinho é comparação, e `p->dado` com `p` nulo derruba o programa. Ex.: `aux>prox` compara `aux` com uma variável `prox` que não existe.\n\n**Como atacar:** confira em cada versão: ordem das condições, avanço do ponteiro, retorno e alocação."
+      "dica": "**Cobra:** Escolher a versão correta da busca em lista encadeada, sem erro de memória.\n\n- **Percurso da lista** [0076]: teste `p != NULL` e avance o mesmo ponteiro que testou, com `p = p->prox`; testar `p->prox` deixa o último nó sem verificar. Ex.: `while (p->prox != NULL)` numa lista de 1 nó nem entra no laço.\n- **Busca não aloca** [0054]: `malloc` serve para criar nó novo; numa busca só lê, e alocar sem usar vira vazamento. Ex.: `aux = malloc(...); aux = prim;` perde o bloco alocado.\n- **Seta e ponteiro nulo** [0062]: `->` acessa o campo; `>` sozinho é comparação, e `p->dado` com `p` nulo derruba o programa. Ex.: `aux>prox` compara `aux` com uma variável `prox` que não existe.\n\n**Como atacar:** confira em cada versão: ordem das condições, avanço do ponteiro, retorno e alocação.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Na I, `aux` recebe um bloco de `malloc` e, na linha seguinte, `aux = prim`. Quem guarda agora o endereço do bloco alocado? Compare também `aux>prox` com `aux->prox`."
+        },
+        {
+          "item": "B",
+          "texto": "A II altera `prim` dentro do laço. Em C o parâmetro é cópia: o `inicio` de quem chamou muda? Simule com `3 -> 7` e chave 9: quando o laço para, e o que volta?"
+        },
+        {
+          "item": "C",
+          "texto": "Na III, o teste do `while` usa `prim`, mas quem avança é `aux`. Com `3 -> 7` e chave 9, `prim->prox` muda em alguma volta? O último nó chega a ser comparado?"
+        },
+        {
+          "item": "D",
+          "texto": "Na IV, `aux` aponta para um nó recém-alocado, que não foi ligado à lista. O que há em `aux->prox` e `aux->dado`? Em algum momento `aux` passa por `prim`?"
+        }
+      ]
     },
     {
       "numero": 6,
@@ -613,7 +631,25 @@
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** Reconstruir uma árvore a partir dos percursos pós-ordem e em ordem.\n\n- **Pós-ordem** [0098]: esquerda, direita, raiz: o último elemento do percurso é a raiz. Ex.: pós `2 4 3 5`: a raiz é `5`.\n- **Em ordem** [0098]: esquerda, raiz, direita: a raiz separa o que é subárvore esquerda do que é direita. Ex.: em ordem `2 3 4 5`: tudo antes do 5 está à esquerda dele.\n- **Reconstrução recursiva** [0098]: ache a raiz no pós, separe os lados no em ordem e repita em cada lado com os pedaços do pós. Ex.: no lado `2 3 4`, o pós `2 4 3` dá raiz 3, com 2 e 4 como filhos.\n\n**Como atacar:** ache a raiz no pós, separe os lados no em ordem e repita em cada lado."
+      "dica": "**Cobra:** Reconstruir uma árvore a partir dos percursos pós-ordem e em ordem.\n\n- **Pós-ordem** [0098]: esquerda, direita, raiz: o último elemento do percurso é a raiz. Ex.: pós `2 4 3 5`: a raiz é `5`.\n- **Em ordem** [0098]: esquerda, raiz, direita: a raiz separa o que é subárvore esquerda do que é direita. Ex.: em ordem `2 3 4 5`: tudo antes do 5 está à esquerda dele.\n- **Reconstrução recursiva** [0098]: ache a raiz no pós, separe os lados no em ordem e repita em cada lado com os pedaços do pós. Ex.: no lado `2 3 4`, o pós `2 4 3` dá raiz 3, com 2 e 4 como filhos.\n\n**Como atacar:** ache a raiz no pós, separe os lados no em ordem e repita em cada lado.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Na pós-ordem a raiz é visitada por último. Qual é a última letra de S T Q R P?"
+        },
+        {
+          "item": "B",
+          "texto": "Corte a in-ordem S Q T P R na raiz: à esquerda ficam S Q T. Na pós-ordem desse pedaço (S T Q), quem é a raiz? Ela tem letra à esquerda e à direita na in-ordem?"
+        },
+        {
+          "item": "C",
+          "texto": "Na subárvore S Q T, a raiz é Q. Na in-ordem, sobra alguma letra entre o começo e o S, ou entre S e Q, para ser filha do S?"
+        },
+        {
+          "item": "D",
+          "texto": "Na in-ordem S Q T, o S e o T ficam em lados opostos do Q. Um filho do S apareceria colado a ele na in-ordem, de que lado?"
+        }
+      ]
     },
     {
       "numero": 12,
@@ -726,7 +762,29 @@
           "modulo": "08-structs.md"
         }
       ],
-      "dica": "**Cobra:** Comparar duas funções de inserção no início da lista e a pilha encadeada.\n\n- **Passagem por valor** [0029]: a função recebe uma cópia do parâmetro, e mudar a cópia não muda o original. Ex.: `void zera(int x) { x = 0; }` não altera a variável do chamador.\n- **Ponteiro para ponteiro** [0049]: `**prim` dá o endereço do ponteiro de início, e `*prim = novo;` altera o ponteiro do chamador. Ex.: `void zera(int *x) { *x = 0; }` altera o original.\n- **Pilha encadeada** [0083]: empilhar é inserir no início da lista, e o topo é o primeiro nó. Ex.: pilha `5 -> 8` (topo 5): empilhar 2 dá `2 -> 5 -> 8`.\n\n**Como atacar:** veja qual versão altera o `prim` de quem chamou e o que sobra do nó alocado na outra."
+      "dica": "**Cobra:** Comparar duas funções de inserção no início da lista e a pilha encadeada.\n\n- **Passagem por valor** [0029]: a função recebe uma cópia do parâmetro, e mudar a cópia não muda o original. Ex.: `void zera(int x) { x = 0; }` não altera a variável do chamador.\n- **Ponteiro para ponteiro** [0049]: `**prim` dá o endereço do ponteiro de início, e `*prim = novo;` altera o ponteiro do chamador. Ex.: `void zera(int *x) { *x = 0; }` altera o original.\n- **Pilha encadeada** [0083]: empilhar é inserir no início da lista, e o topo é o primeiro nó. Ex.: pilha `5 -> 8` (topo 5): empilhar 2 dá `2 -> 5 -> 8`.\n\n**Como atacar:** veja qual versão altera o `prim` de quem chamou e o que sobra do nó alocado na outra.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Em C o argumento é copiado. Na I, `prim = aux` muda a cópia local. Depois do retorno, o `topo` de quem chamou aponta para o nó novo? E o bloco do `malloc` fica guardado em quê?"
+        },
+        {
+          "item": "B",
+          "texto": "Na II, quem chama passa `&topo`, e a função escreve `*prim = aux`. Simule com `topo = NULL` e a chamada com 5: para onde `topo` aponta depois?"
+        },
+        {
+          "item": "C",
+          "texto": "Faça `topo = NULL` e chame cada função com 5. Depois de cada chamada, `topo` continua `NULL` ou aponta para o nó com 5?"
+        },
+        {
+          "item": "D",
+          "texto": "Push numa pilha encadeada é inserir no início da lista. Há alguma diferença entre o que a função I precisa fazer num caso e no outro?"
+        },
+        {
+          "item": "E",
+          "texto": "A II insere no início. Push numa pilha encadeada insere em que ponta? Existe algo que a lista exige e a pilha não, ou o contrário?"
+        }
+      ]
     },
     {
       "numero": 14,
@@ -896,7 +954,29 @@
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** Achar a afirmação correta sobre uma heap mínima guardada em vetor.\n\n- **Heap mínima** [0102]: árvore completa em que todo pai é menor ou igual aos filhos; só a raiz é garantidamente o menor. Ex.: `2 5 3 9 6`: o 2 é o menor, e o 5 e o 3 não têm ordem entre si.\n- **Índices** [0102]: com índice a partir de 0, os filhos de `i` ficam em `2i+1` e `2i+2`, e o pai em `(i-1)/2`. Ex.: os filhos da posição 1 são as posições 3 e 4.\n- **Corrigir depois de alterar** [0102]: valor menor que o pai sobe trocando com ele; valor maior que um filho desce. Ex.: em `2 5 3 9 6`, trocar o 9 por 1 dá `1 2 3 5 6` com 2 trocas.\n\n**Como atacar:** confira com a fórmula de pai e filhos e a regra do mínimo, valor a valor."
+      "dica": "**Cobra:** Achar a afirmação correta sobre uma heap mínima guardada em vetor.\n\n- **Heap mínima** [0102]: árvore completa em que todo pai é menor ou igual aos filhos; só a raiz é garantidamente o menor. Ex.: `2 5 3 9 6`: o 2 é o menor, e o 5 e o 3 não têm ordem entre si.\n- **Índices** [0102]: com índice a partir de 0, os filhos de `i` ficam em `2i+1` e `2i+2`, e o pai em `(i-1)/2`. Ex.: os filhos da posição 1 são as posições 3 e 4.\n- **Corrigir depois de alterar** [0102]: valor menor que o pai sobe trocando com ele; valor maior que um filho desce. Ex.: em `2 5 3 9 6`, trocar o 9 por 1 dá `1 2 3 5 6` com 2 trocas.\n\n**Como atacar:** confira com a fórmula de pai e filhos e a regra do mínimo, valor a valor.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Desenhe por níveis: índice 0 no nível 0; 1 e 2 no nível 1; 3 a 6 no nível 2; e o índice 7? Quais índices são folhas, e em que nível cada uma está?"
+        },
+        {
+          "item": "B",
+          "texto": "Ponha 6 no índice 7. O pai de i é (i-1)/2: índice 3, valor 10. Troque se precisar e repita com o novo pai. Quantas trocas até parar?"
+        },
+        {
+          "item": "C",
+          "texto": "Na heap mínima a regra só liga pai e filho. O índice 7 desce de qual índice? E o 4? Um é ancestral do outro?"
+        },
+        {
+          "item": "D",
+          "texto": "Suba do índice 6 até a raiz pelos pais: 6 -> 2 -> 0. O índice 1 aparece nesse caminho?"
+        },
+        {
+          "item": "E",
+          "texto": "O 13 está no índice 4. Os filhos dele seriam os índices 9 e 10: existem nesse vetor? Quanto vale o pai, no índice 1, e como o 8 fica diante dele?"
+        }
+      ]
     },
     {
       "numero": 17,
@@ -996,7 +1076,25 @@
           "modulo": "11-listas.md"
         }
       ],
-      "dica": "**Cobra:** Achar o erro e dizer o que acontece numa função que conta ocorrências na lista.\n\n- **Percurso de lista** [0076]: anda por ponteiro, `p = p->prox`, até `NULL`; `p[i]` trata a lista como vetor. Ex.: `while (p != NULL) { s += p->dado; p = p->prox; }`.\n- **Struct não é ponteiro** [0062]: `p[i]` é um nó inteiro, não um endereço, então compará-lo com `NULL` não compila; só ponteiro se compara com `NULL`. Ex.: `No x; if (x != NULL)` não compila.\n- **Retorno do contador** [0025]: devolva o contador, e não a variável do laço, que anda mesmo sem acerto. Ex.: contar os `7` de `7 3 7`: o contador vale 2, o índice vai a 3.\n\n**Como atacar:** confira percurso, comparação e retorno, e teste com 3 nós."
+      "dica": "**Cobra:** Achar o erro e dizer o que acontece numa função que conta ocorrências na lista.\n\n- **Percurso de lista** [0076]: anda por ponteiro, `p = p->prox`, até `NULL`; `p[i]` trata a lista como vetor. Ex.: `while (p != NULL) { s += p->dado; p = p->prox; }`.\n- **Struct não é ponteiro** [0062]: `p[i]` é um nó inteiro, não um endereço, então compará-lo com `NULL` não compila; só ponteiro se compara com `NULL`. Ex.: `No x; if (x != NULL)` não compila.\n- **Retorno do contador** [0025]: devolva o contador, e não a variável do laço, que anda mesmo sem acerto. Ex.: contar os `7` de `7 3 7`: o contador vale 2, o índice vai a 3.\n\n**Como atacar:** confira percurso, comparação e retorno, e teste com 3 nós.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Olhe o `return`: a função devolve `cont` ou `x`? Numa lista de 3 nós em que a chave aparece uma vez, que número você espera receber?"
+        },
+        {
+          "item": "B",
+          "texto": "`aux[x]` é do tipo `tipoNo` (uma struct), e `NULL` é ponteiro. O C deixa comparar struct com ponteiro usando `!=`? Teste no gcc."
+        },
+        {
+          "item": "C",
+          "texto": "Para chegar ao segundo nó, o código precisaria de `aux->prox`. `aux[1]` lê o que fica logo depois do primeiro nó na memória: isso é o segundo nó?"
+        },
+        {
+          "item": "D",
+          "texto": "`aux[x]` com x = 1, 2, 3... lê memória depois do primeiro nó, que não pertence à lista. O que garante que o laço pare antes de sair da área do programa?"
+        }
+      ]
     },
     {
       "numero": 19,
@@ -1038,7 +1136,29 @@
           "modulo": "11-listas.md"
         }
       ],
-      "dica": "**Cobra:** Achar a afirmação correta sobre a lista encadeada simples.\n\n- **Lista encadeada** [0076]: cada nó guarda o endereço do sucessor, e os nós podem estar em qualquer lugar do heap. Ex.: `3 -> 5 -> 8`: o 3 aponta para o 5.\n- **Ponteiros de ponta** [0076]: guardar `prim` e `ult` dá acesso direto às duas pontas da lista, sem percorrer. Ex.: inserir no fim de `3 -> 5`: `ult->prox = novo; ult = novo;`.\n- **Memória contígua** [0037]: só o vetor exige bloco contíguo de memória; os nós da lista ficam espalhados. Ex.: `v[2]` calcula o endereço; na lista, `prox` o guarda.\n\n**Como atacar:** compare cada alternativa com o papel dos ponteiros e com o que exige memória contígua."
+      "dica": "**Cobra:** Achar a afirmação correta sobre a lista encadeada simples.\n\n- **Lista encadeada** [0076]: cada nó guarda o endereço do sucessor, e os nós podem estar em qualquer lugar do heap. Ex.: `3 -> 5 -> 8`: o 3 aponta para o 5.\n- **Ponteiros de ponta** [0076]: guardar `prim` e `ult` dá acesso direto às duas pontas da lista, sem percorrer. Ex.: inserir no fim de `3 -> 5`: `ult->prox = novo; ult = novo;`.\n- **Memória contígua** [0037]: só o vetor exige bloco contíguo de memória; os nós da lista ficam espalhados. Ex.: `v[2]` calcula o endereço; na lista, `prox` o guarda.\n\n**Como atacar:** compare cada alternativa com o papel dos ponteiros e com o que exige memória contígua.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Com `ini` e `fim`, inserir no fim é `fim->prox = novo; fim = novo`, sem percorrer. E remover o último: quem vira o novo `fim`, e como você chega nele numa lista simples?"
+        },
+        {
+          "item": "B",
+          "texto": "Pense no nó `dado | prox`. Ele tem algum campo que aponte para o fim da lista? O que marca o fim numa lista simples?"
+        },
+        {
+          "item": "C",
+          "texto": "Cada nó vem de um `malloc` diferente. Há garantia de que fiquem lado a lado? A busca numa lista consegue pular para o meio, como a binária faz no vetor?"
+        },
+        {
+          "item": "D",
+          "texto": "Nós alocados um a um com `malloc` ficam contíguos? Quem exige área contígua de memória, o vetor ou a lista encadeada?"
+        },
+        {
+          "item": "E",
+          "texto": "Para pôr `novo` depois de `p`: `novo->prox = p->prox; p->prox = novo;`. A frase cobre as duas linhas? E se `p->prox` for `NULL` (p é o último), a inserção funciona?"
+        }
+      ]
     },
     {
       "numero": 20,
@@ -1080,7 +1200,29 @@
           "modulo": "11-listas.md"
         }
       ],
-      "dica": "**Cobra:** Reconhecer a característica da lista duplamente encadeada.\n\n- **Lista duplamente encadeada** [0079]: cada nó guarda, além da chave, um ponteiro para o próximo (`prox`) e outro para o anterior (`ant`), e daí se anda nos dois sentidos. Ex.: `struct No { int dado; struct No *ant, *prox; };`.\n- **Lista encadeada simples** [0076]: cada nó tem só o ponteiro para o sucessor, e só se anda para a frente. Ex.: `3 -> 8 -> 5`: do 8 não se chega ao 3.\n- **Lista circular** [0080]: o último nó aponta de volta para o primeiro, então a lista não tem `NULL` no fim. Ex.: `3 -> 8 -> 5 -> 3 ...`.\n- **Vetor** [0037]: elementos em posições contíguas de memória, acessados por índice; lista encadeada não é assim. Ex.: `v[2]` é acesso direto; numa lista, 2 saltos de `prox`.\n\n**Como atacar:** descarte as alternativas que descrevem a lista simples, a circular ou o vetor."
+      "dica": "**Cobra:** Reconhecer a característica da lista duplamente encadeada.\n\n- **Lista duplamente encadeada** [0079]: cada nó guarda, além da chave, um ponteiro para o próximo (`prox`) e outro para o anterior (`ant`), e daí se anda nos dois sentidos. Ex.: `struct No { int dado; struct No *ant, *prox; };`.\n- **Lista encadeada simples** [0076]: cada nó tem só o ponteiro para o sucessor, e só se anda para a frente. Ex.: `3 -> 8 -> 5`: do 8 não se chega ao 3.\n- **Lista circular** [0080]: o último nó aponta de volta para o primeiro, então a lista não tem `NULL` no fim. Ex.: `3 -> 8 -> 5 -> 3 ...`.\n- **Vetor** [0037]: elementos em posições contíguas de memória, acessados por índice; lista encadeada não é assim. Ex.: `v[2]` é acesso direto; numa lista, 2 saltos de `prox`.\n\n**Como atacar:** descarte as alternativas que descrevem a lista simples, a circular ou o vetor.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Ser circular fala de para onde aponta o último nó; ser dupla fala de quantos ponteiros cada nó tem. Uma lista simples pode ser circular? Uma dupla pode terminar em `NULL`?"
+        },
+        {
+          "item": "B",
+          "texto": "Conte os ponteiros por nó: um só, o `prox`. Com ele, dá para ir do nó atual ao anterior sem voltar ao início?"
+        },
+        {
+          "item": "C",
+          "texto": "A lista `3 -> 5 -> 9`, só com `prox`, está em ordem. A ordem das chaves diz quantos ponteiros cada nó tem? Dá para voltar do 9 ao 5?"
+        },
+        {
+          "item": "D",
+          "texto": "Desenhe o nó: `ant | chave | prox`. Com esses campos, você chega a um vizinho por quantos lados? Qual desses campos o nó da lista simples não tem?"
+        },
+        {
+          "item": "E",
+          "texto": "`v[i]` funciona porque os elementos ficam lado a lado na memória e o endereço sai de uma conta. Os nós de uma lista vêm de `malloc` separados: há garantia de que fiquem lado a lado?"
+        }
+      ]
     }
   ]
 }

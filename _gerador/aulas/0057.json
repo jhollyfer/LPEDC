@@ -72,7 +72,7 @@
   },
   {
    "titulo": "Linha 6: *prim = aux",
-   "texto": "O início volta para o 5, cujo `prox` aponta para o 8 já liberado. Percorrer a lista lê o nó 8: **uso depois do free**. O nó 3 só era alcançado pelo `prox` do 8, que foi devolvido: ficou sem dono, um **vazamento**. A lista não perdeu o 5, que era o pedido.",
+   "texto": "O início volta para o 5, cujo `prox` aponta para o 8 já liberado. Percorrer a lista lê o nó 8: **uso depois do free**. O nó 3 só era alcançado pelo `prox` do 8, que foi devolvido: ficou sem dono, um **vazamento**. E o 5, que devia sair, continua no começo da lista.",
    "figura": {
     "tipo": "lista",
     "itens": [

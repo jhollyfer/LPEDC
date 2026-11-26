@@ -53,7 +53,7 @@
   },
   {
    "titulo": "As três perguntas",
-   "texto": "Para cada variável: o que tem dentro (o nome), onde mora (`&`) e quanto ocupa (`sizeof`). Num computador de 64 bits, um endereço ocupa 8 bytes.",
+   "texto": "Para cada variável: o valor (lido pelo nome), onde mora (`&`) e quanto ocupa (`sizeof`). Num computador de 64 bits, um endereço ocupa 8 bytes.",
    "figura": {
     "tipo": "texto",
     "linhas": [
@@ -82,7 +82,7 @@
   },
   {
    "titulo": "Dois nomes, o mesmo endereço",
-   "texto": "Uma variável que guarde o número 0x2000 chega ao mesmo bloco que `v`. É o ponteiro do assunto 0045. Mudar `v[1]` por esse outro caminho muda o que `v` vê, porque não há cópia: há um bloco só e dois caminhos até ele.",
+   "texto": "Uma variável que guarde o número 0x2000 chega ao mesmo bloco que `v`. É o ponteiro (veja a aula Ponteiros). Mudar `v[1]` por esse outro caminho muda o que `v` vê, porque não há cópia: há um bloco só e dois caminhos até ele.",
    "figura": {
     "tipo": "texto",
     "linhas": [
@@ -95,7 +95,7 @@
   }
  ],
  "custos": "| Tipo | `sizeof` típico (64 bits) |\n|---|---|\n| `char` | 1 |\n| `int`, `float` | 4 |\n| `double`, `long` (Linux) | 8 |\n| qualquer ponteiro | 8 |",
- "naprova": "A banca não pergunta endereço direto; cobra o efeito dele. Na 2022-057 (Q6, em Python), dois nomes ficam ligados ao mesmo bloco e mudar por um aparece no outro, o mesmo que dois ponteiros para o mesmo vetor em C. A pegadinha é achar que atribuir o nome copia o conteúdo.",
+ "naprova": "A banca não pergunta endereço direto; cobra o efeito dele. Na 2022-057 (Q6, em Python), dois nomes ficam ligados ao mesmo bloco, como dois ponteiros para o mesmo vetor: o que muda por um aparece no outro. A pegadinha é achar que atribuir o nome copia o conteúdo.",
  "fontes": [
   "Feofiloff, *Algoritmos em linguagem C*, ap. D (endereços e ponteiros).",
   "Backes, *Linguagem C: completa e descomplicada*, cap. 10 (ponteiros).",

@@ -4,7 +4,7 @@
  "como": "Para chegar a um nó, você parte do primeiro e segue os ponteiros, um por um. Não existe `lista[3]`: o quarto nó só é alcançado passando pelos três anteriores.\n\nInserir é criar um nó com `malloc` e religar ponteiros. Remover é fazer o nó anterior apontar para o seguinte e dar `free` no que saiu. Nada é deslocado.\n\n```c\nstruct No { int dado; struct No *prox; };\n\nfor (struct No *p = inicio; p != NULL;\n     p = p->prox)\n    printf(\"%d \", p->dado);\n```",
  "caracteristicas": [
   "Os nós **não são vizinhos** na memória; quem dá a ordem são os ponteiros.",
-  "O acesso é **sequencial**: para ler o k-ésimo nó, passa-se por k nós.",
+  "O acesso é **sequencial**: para ler o k-ésimo nó, você passa por k nós.",
   "O tamanho **cresce e encolhe** em tempo de execução, um nó por vez.",
   "Na lista simples só se anda para a frente. A duplamente encadeada tem também o ponteiro `ant` e anda nos dois sentidos."
  ],

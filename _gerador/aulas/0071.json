@@ -1,16 +1,16 @@
 {
  "num": "0071",
- "oque": "A eficiência de um algoritmo se mede pelo **número de passos** que ele dá em função do tamanho da entrada, n, e não pelo relógio. Escrita como fórmula de n, essa contagem é a **função de custo** (no Ziviani, **função de complexidade**).",
- "como": "Segundos mudam de máquina para máquina; o número de passos não. Para contar sem enlouquecer:\n\n- Escolha a **operação dominante**: a que mais se repete e resume o trabalho. Numa busca, é a comparação `v[i] == alvo`. O `i++` acontece junto com ela e só mudaria o total por um fator fixo.\n- Conte quantas vezes ela acontece em função de n. Um laço de 0 a n − 1 executa o corpo n vezes; dois laços aninhados até n, n · n vezes.\n- Veja **qual entrada** chegou. Para o mesmo n, a contagem muda: o **melhor caso** é a entrada mais favorável, o **pior caso** a mais desfavorável e o **caso médio** a média sobre todas as entradas possíveis.\n\n```c\nint passos = 0;\nint busca(int v[], int n, int alvo) {\n    for (int i = 0; i < n; i++) {\n        passos++;  /* antes do if */\n        if (v[i] == alvo) return i;\n    }\n    return -1;\n}\n```\n\nO contador entra **antes** do `if`: depois dele, a comparação que acerta não seria contada. E zere o contador entre uma busca e outra.",
+ "oque": "A eficiência de um algoritmo se mede pelo **número de passos** que ele dá em função do tamanho da entrada, n, e não pelo relógio. Escrita como fórmula de n, essa contagem é a **função de custo** (também chamada de **função de complexidade**, no Ziviani).",
+ "como": "Segundos mudam de máquina para máquina; o número de passos não. Para contar:\n\n- Escolha a **operação dominante**: a que mais se repete e resume o trabalho. Numa busca, é a comparação `v[i] == alvo`. O `i++` acontece junto com ela e só mudaria o total por um fator fixo.\n- Conte quantas vezes ela acontece em função de n. Um laço de 0 a n − 1 executa o corpo n vezes; dois laços aninhados até n, n · n vezes.\n- Veja **qual entrada** chegou. Para o mesmo n, a contagem muda: o **melhor caso** é a entrada mais favorável, o **pior caso** a mais desfavorável e o **caso médio** a média sobre todas as entradas possíveis.\n\n```c\nint passos = 0;\nint busca(int v[], int n, int alvo) {\n    for (int i = 0; i < n; i++) {\n        passos++;  /* antes do if */\n        if (v[i] == alvo) return i;\n    }\n    return -1;\n}\n```\n\nO contador entra **antes** do `if`: depois dele, a comparação que acerta não seria contada. E zere o contador entre uma busca e outra.",
  "caracteristicas": [
   "Mede passos, não segundos: o mesmo código dá o mesmo número em qualquer computador.",
   "Conta-se a operação dominante, não cada instrução.",
   "A contagem depende do tamanho n **e** de qual entrada chegou: por isso existem melhor, médio e pior caso.",
   "A análise costuma olhar o pior caso, porque só ele vira promessa: \"nunca passa de n comparações\".",
-  "Contar passos dá a **complexidade temporal**; contar memória extra dá a **complexidade espacial** (0168).",
-  "O próximo passo é olhar o formato da fórmula quando n cresce: `f(n) = n` é linear, `f(n) = n²` é quadrática (0072)."
+  "Contar passos dá a **complexidade temporal**; contar memória extra dá a **complexidade espacial** (veja a aula Complexidade espacial).",
+  "O próximo passo é olhar o formato da fórmula quando n cresce: `f(n) = n` é linear, `f(n) = n²` é quadrática (veja a aula Notação O)."
  ],
- "exemplo": "O bolo da padaria tem 8 comandas:\n\n```\npos:  0   1   2   3   4   5  6   7\n     41  17  88  23  56  9  70  35\n```\n\nVamos procurar a 41 (está em cima), a 70 (posição 6) e a 99 (não está), contando uma comparação por posição olhada.\n\n| n | melhor caso | caso médio | pior caso |\n|---|---|---|---|\n| 8 | 1 | 4,5 | 8 |\n| 800 | 1 | 400,5 | 800 |\n| 80.000 | 1 | 40.000,5 | 80.000 |\n\nMultiplicou n por 100, o pior caso também multiplicou por 100: isso é crescimento **linear**.",
+ "exemplo": "A padaria guarda 8 comandas num vetor:\n\n```\npos:  0   1   2   3   4   5  6   7\n     41  17  88  23  56  9  70  35\n```\n\nVamos procurar a 41 (está em cima), a 70 (posição 6) e a 99 (não está), contando uma comparação por posição olhada.\n\n| n | melhor caso | caso médio | pior caso |\n|---|---|---|---|\n| 8 | 1 | 4,5 | 8 |\n| 800 | 1 | 400,5 | 800 |\n| 80.000 | 1 | 40.000,5 | 80.000 |\n\nMultiplicou n por 100, o pior caso também multiplicou por 100: isso é crescimento **linear**.",
  "passos": [
   {
    "titulo": "Buscar 41: melhor caso",
@@ -64,7 +64,7 @@
   },
   {
    "titulo": "Buscar 99: pior caso",
-   "texto": "Nenhuma posição bate. A busca só desiste depois de olhar as 8: **8 passos**, ou seja, n. O pior caso é a chave na última posição ou fora do vetor. A função de custo do pior caso é `f(n) = n`.",
+   "texto": "Nenhuma posição bate. A busca só desiste depois de olhar as 8: **8 passos**, que é n. O pior caso é a chave na última posição ou fora do vetor. A função de custo do pior caso é `f(n) = n`.",
    "figura": {
     "tipo": "vetor",
     "itens": [

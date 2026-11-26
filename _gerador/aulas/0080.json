@@ -9,7 +9,7 @@
   "Circular é independente de dupla: existe circular simples e circular dupla. O Cormen usa a dupla circular com uma sentinela."
  ],
  "vantagens": [
-  "Modela rodízio de forma natural: a vez dos jogadores, a divisão do tempo da CPU entre os programas.",
+  "Modela rodízio sem código extra: a vez dos jogadores, a divisão do tempo da CPU entre os programas.",
   "Um único ponteiro dá acesso às duas pontas.",
   "Girar a roda e juntar duas listas circulares custam `O(1)`."
  ],

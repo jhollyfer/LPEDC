@@ -85,7 +85,7 @@
   },
   {
    "titulo": "push(1)",
-   "texto": "O 1 entra em cima do 4. Entrou por último, então é o próximo a sair, mesmo tendo chegado depois de todos os outros.",
+   "texto": "O 1 entra em cima do 4 e vira o topo. Foi o último a entrar, então é o próximo a sair.",
    "figura": {
     "tipo": "pilha",
     "itens": [

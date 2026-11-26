@@ -233,7 +233,25 @@
           "modulo": "04-funcoes.md"
         }
       ],
-      "dica": "**Cobra:** dizer o que uma função recursiva que imprime depois da chamada faz com uma lista.\n\n- **Imprimir na volta** [0032]: o `printf` depois da chamada recursiva só roda quando as chamadas seguintes terminam, então os valores saem na ordem inversa das chamadas. Ex.: `g(n)` chama `g(n-1)` e depois imprime n: `g(3)` escreve 1 2 3.\n- **Recursão na lista** [0076]: o caso base é `head == NULL`, e cada chamada recebe `head->next`, descendo um nó por vez até o fim. Ex.: em `4 → 5`, `f(4)` chama `f(5)`, que chama `f(NULL)` e retorna.\n\n**Como atacar:** anote a ordem das chamadas e a ordem das impressões na volta."
+      "dica": "**Cobra:** dizer o que uma função recursiva que imprime depois da chamada faz com uma lista.\n\n- **Imprimir na volta** [0032]: o `printf` depois da chamada recursiva só roda quando as chamadas seguintes terminam, então os valores saem na ordem inversa das chamadas. Ex.: `g(n)` chama `g(n-1)` e depois imprime n: `g(3)` escreve 1 2 3.\n- **Recursão na lista** [0076]: o caso base é `head == NULL`, e cada chamada recebe `head->next`, descendo um nó por vez até o fim. Ex.: em `4 → 5`, `f(4)` chama `f(5)`, que chama `f(NULL)` e retorna.\n\n**Como atacar:** anote a ordem das chamadas e a ordem das impressões na volta.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Simule com `1 -> 2 -> 3`: `fun1(1)` chama `fun1(2)` antes de imprimir. Qual `printf` roda primeiro, o do 1 ou o do 3?"
+        },
+        {
+          "item": "B",
+          "texto": "Na mesma `1 -> 2 -> 3`, a chamada que chega ao `NULL` retorna sem imprimir. Na volta, quem imprime primeiro? Monte a pilha de chamadas."
+        },
+        {
+          "item": "C",
+          "texto": "Cada chamada passa `head->next`, um nó adiante. Algum nó é pulado? Compare com `fun(start->next->next)`, que anda de dois em dois."
+        },
+        {
+          "item": "D",
+          "texto": "Conte os `printf` para `1 -> 2 -> 3 -> 4`: quantas chamadas recebem `head` não nulo? Cada uma imprime?"
+        }
+      ]
     },
     {
       "numero": 6,
@@ -275,7 +293,25 @@
           "modulo": "15-hash.md"
         }
       ],
-      "dica": "**Cobra:** dizer como a busca cresce num hash com encadeamento de tabela de tamanho fixo.\n\n- **Encadeamento** [0106]: cada balde guarda uma lista; a busca vai ao balde e percorre só a lista dele, com custo médio Θ(1 + α), onde α = n/m. Ex.: m = 5 e n = 10: α = 2, e cada lista tem 2 nós em média.\n- **Tabela de tamanho fixo** [0106]: com m fixo e n crescendo, α cresce junto com n, e as listas viram proporcionais a n; o custo só é constante se m cresce junto com n. Ex.: m = 100: n = 1000 dá α = 10 e n = 100000 dá α = 1000.\n\n**Como atacar:** troque m e n por números concretos e veja o que acontece com o tamanho médio da lista."
+      "dica": "**Cobra:** dizer como a busca cresce num hash com encadeamento de tabela de tamanho fixo.\n\n- **Encadeamento** [0106]: cada balde guarda uma lista; a busca vai ao balde e percorre só a lista dele, com custo médio Θ(1 + α), onde α = n/m. Ex.: m = 5 e n = 10: α = 2, e cada lista tem 2 nós em média.\n- **Tabela de tamanho fixo** [0106]: com m fixo e n crescendo, α cresce junto com n, e as listas viram proporcionais a n; o custo só é constante se m cresce junto com n. Ex.: m = 100: n = 1000 dá α = 10 e n = 100000 dá α = 1000.\n\n**Como atacar:** troque m e n por números concretos e veja o que acontece com o tamanho médio da lista.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Com 100 baldes e 1.000.000 de chaves bem espalhadas, cada lista tem em média quantos nós? Se n dobra e a tabela não cresce, esse número dobra também?"
+        },
+        {
+          "item": "B",
+          "texto": "Se todas as chaves forem múltiplas de 100 e a função for `k mod 100`, em que balde elas caem? Quantos nós a busca percorre nessa lista?"
+        },
+        {
+          "item": "C",
+          "texto": "O custo médio no encadeamento é cerca de 1 + n/m. Com m = 100 fixo, n/100 cresce como? Uma constante dividindo n muda a classe?"
+        },
+        {
+          "item": "D",
+          "texto": "Cada balde guarda uma lista encadeada. Busca em lista pode descartar metade a cada passo, como a binária, ou anda nó por nó?"
+        }
+      ]
     },
     {
       "numero": 7,
@@ -401,7 +437,25 @@
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** escolher a afirmação verdadeira sobre as propriedades da árvore rubro-negra.\n\n- **Regras das cores** [0177]: a raiz é preta, os filhos de um nó vermelho são pretos e todos os caminhos de um nó às folhas têm o mesmo número de nós pretos; o que não se exige dos filhos de um nó preto é a cor. Ex.: um nó vermelho sob um nó preto é permitido; vermelho sob vermelho, não.\n- **Caminho mais longo e mais curto** [0177]: como os pretos são iguais em todos os caminhos e não há dois vermelhos seguidos, o caminho mais longo tem no máximo o dobro dos nós do mais curto, e h ≤ 2 log₂(n + 1). Ex.: altura negra 3: o caminho mais curto tem 3 nós e o mais longo, no máximo 6.\n\n**Como atacar:** confira cada alternativa contra as cinco propriedades."
+      "dica": "**Cobra:** escolher a afirmação verdadeira sobre as propriedades da árvore rubro-negra.\n\n- **Regras das cores** [0177]: a raiz é preta, os filhos de um nó vermelho são pretos e todos os caminhos de um nó às folhas têm o mesmo número de nós pretos; o que não se exige dos filhos de um nó preto é a cor. Ex.: um nó vermelho sob um nó preto é permitido; vermelho sob vermelho, não.\n- **Caminho mais longo e mais curto** [0177]: como os pretos são iguais em todos os caminhos e não há dois vermelhos seguidos, o caminho mais longo tem no máximo o dobro dos nós do mais curto, e h ≤ 2 log₂(n + 1). Ex.: altura negra 3: o caminho mais curto tem 3 nós e o mais longo, no máximo 6.\n\n**Como atacar:** confira cada alternativa contra as cinco propriedades.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Todo caminho tem o mesmo número de pretos, e vermelho não tem filho vermelho. Se o caminho mais curto tem 3 pretos, quantos nós cabem, no máximo, no mais longo, intercalando vermelhos?"
+        },
+        {
+          "item": "B",
+          "texto": "A regra conta só uma das cores em todos os caminhos. Pense numa rubro-negra de 3 nós, todos pretos: cada caminho tem quantos vermelhos?"
+        },
+        {
+          "item": "C",
+          "texto": "Uma das regras fala da raiz em particular. Depois de cada inserção, o algoritmo pinta a raiz de que cor?"
+        },
+        {
+          "item": "D",
+          "texto": "Uma regra proíbe vermelho com filho vermelho. Existe regra que proíba preto com filho preto? Pense na rubro-negra de 3 nós toda preta."
+        }
+      ]
     },
     {
       "numero": 10,
@@ -489,7 +543,29 @@
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** achar a afirmação falsa sobre árvores B e B+.\n\n- **Nó da árvore B** [0146]: um nó com k chaves tem k + 1 filhos; todo nó, exceto a raiz, tem de t - 1 a 2t - 1 chaves, e todas as folhas ficam no mesmo nível. Ex.: com t = 2, `[40 70]` tem 3 filhos.\n- **Crescimento por cima** [0146]: quando a raiz está cheia, ela se divide e a chave do meio vira a nova raiz, então a árvore B cresce por cima e as folhas seguem no mesmo nível. Ex.: raiz `[10 20 30]` recebe 40: o 20 sobe e a altura aumenta em 1.\n- **BST cresce por baixo** [0099]: a BST pendura o nó novo como folha, aumentando a altura por baixo, sem criar uma nova raiz. Ex.: em `50 → 30`, inserir 20 pendura o 20 abaixo do 30.\n\n**Como atacar:** confira cada alternativa contra a regra dos nós e a do crescimento."
+      "dica": "**Cobra:** achar a afirmação falsa sobre árvores B e B+.\n\n- **Nó da árvore B** [0146]: um nó com k chaves tem k + 1 filhos; todo nó, exceto a raiz, tem de t - 1 a 2t - 1 chaves, e todas as folhas ficam no mesmo nível. Ex.: com t = 2, `[40 70]` tem 3 filhos.\n- **Crescimento por cima** [0146]: quando a raiz está cheia, ela se divide e a chave do meio vira a nova raiz, então a árvore B cresce por cima e as folhas seguem no mesmo nível. Ex.: raiz `[10 20 30]` recebe 40: o 20 sobe e a altura aumenta em 1.\n- **BST cresce por baixo** [0099]: a BST pendura o nó novo como folha, aumentando a altura por baixo, sem criar uma nova raiz. Ex.: em `50 → 30`, inserir 20 pendura o 20 abaixo do 30.\n\n**Como atacar:** confira cada alternativa contra a regra dos nós e a do crescimento.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Na árvore B, quando a raiz cheia recebe chave, ela se divide e a chave do meio sobe para uma raiz nova. Na ABB, onde entra o nó novo?"
+        },
+        {
+          "item": "B",
+          "texto": "Busca na árvore B: altura O(log n) e, em cada nó, até m chaves para olhar. Na rubro-negra, altura até 2 log n. As duas classes de custo no pior caso diferem?"
+        },
+        {
+          "item": "C",
+          "texto": "Um nó interno com chaves 10 e 20 tem filhos para < 10, entre 10 e 20 e > 20: quantos? E uma folha com essas mesmas duas chaves, tem quantos filhos?"
+        },
+        {
+          "item": "D",
+          "texto": "Na B+, os nós internos guardam cópias de chaves só para guiar a descida, e as folhas ficam todas no mesmo nível, encadeadas. Onde ficam as chaves com os dados?"
+        },
+        {
+          "item": "E",
+          "texto": "Na definição do Cormen com grau mínimo t, todo nó que não é raiz tem entre t-1 e 2t-1 chaves, e a raiz até 2t-1. Troque t por n: os limites da frase batem?"
+        }
+      ]
     },
     {
       "numero": 12,
@@ -692,7 +768,25 @@
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** comparar a altura e as rotações das árvores AVL e rubro-negra.\n\n- **AVL** [0101]: exige diferença de altura de no máximo 1 em todo nó, o que a mantém mais baixa, com h ≤ 1,44 · log₂ n, mas pode rotacionar mais. Ex.: 1 milhão de chaves: até uns 29 níveis.\n- **Rubro-negra** [0177]: as regras de cor são mais folgadas (h ≤ 2 log₂(n + 1)), então a árvore pode ser mais alta, com poucas rotações (no máximo 2 na inserção). Ex.: 1 milhão de chaves: até uns 39 níveis.\n\n**Como atacar:** relacione regra mais rígida com altura menor e mais consertos."
+      "dica": "**Cobra:** comparar a altura e as rotações das árvores AVL e rubro-negra.\n\n- **AVL** [0101]: exige diferença de altura de no máximo 1 em todo nó, o que a mantém mais baixa, com h ≤ 1,44 · log₂ n, mas pode rotacionar mais. Ex.: 1 milhão de chaves: até uns 29 níveis.\n- **Rubro-negra** [0177]: as regras de cor são mais folgadas (h ≤ 2 log₂(n + 1)), então a árvore pode ser mais alta, com poucas rotações (no máximo 2 na inserção). Ex.: 1 milhão de chaves: até uns 39 níveis.\n\n**Como atacar:** relacione regra mais rígida com altura menor e mais consertos.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "A AVL limita a diferença de altura a 1 em todo nó; a rubro-negra só exige que o maior caminho não passe do dobro do menor. Qual regra deixa a árvore mais alta? E qual obriga a ajustar com mais frequência?"
+        },
+        {
+          "item": "B",
+          "texto": "Altura máxima: AVL perto de 1,44 log n, rubro-negra até 2 log n. Para n = 1.000.000 (log n ≈ 20), quanto dá cada uma?"
+        },
+        {
+          "item": "C",
+          "texto": "Na inserção, a rubro-negra resolve muitos casos só recolorindo e faz no máximo 2 rotações. A AVL rotaciona sempre que um fator sai de -1, 0, 1. Qual das duas regras é mais frouxa, e o que isso faz com a altura?"
+        },
+        {
+          "item": "D",
+          "texto": "Para n = 1.000.000, a AVL não passa de uns 29 níveis e a rubro-negra pode chegar a 40. As alturas coincidem? E quantas rotações, no máximo, a rubro-negra faz por inserção?"
+        }
+      ]
     },
     {
       "numero": 16,

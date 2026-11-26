@@ -1,7 +1,7 @@
 {
  "num": "0089",
  "oque": "A busca sequencial, também chamada de busca linear, compara a chave com cada posição do vetor, da primeira à última, até achar ou acabar o vetor. Ela **não exige ordem**.",
- "como": "A função recebe o vetor, o tamanho `n` e a chave `x`. Ela olha `v[0]`, depois `v[1]`, e segue:\n\n- se `v[i] == x`, devolve `i` na hora;\n- se não, passa para a próxima posição;\n- se o laço acabou, a chave não está: devolve `-1`.\n\n```c\nint busca(int v[], int n, int x) {\n    for (int i = 0; i < n; i++)\n        if (v[i] == x) return i;\n    return -1;\n}\n```\n\nO `return -1` fica **depois** do laço. Só dá para dizer \"não está\" depois de olhar todo mundo.\n\nA **sentinela** economiza um teste por volta: copie `x` para uma gaveta extra `v[n]`. O laço sempre para, no pior caso nessa gaveta, e não precisa mais perguntar `i < n`. Se parou em `n`, a chave não estava.",
+ "como": "A função recebe o vetor, o tamanho `n` e a chave `x`. Ela olha `v[0]`, depois `v[1]`, e segue:\n\n- se `v[i] == x`, devolve `i` na hora;\n- se não, passa para a próxima posição;\n- se o laço acabou, a chave não está: devolve `-1`.\n\n```c\nint busca(int v[], int n, int x) {\n    for (int i = 0; i < n; i++)\n        if (v[i] == x) return i;\n    return -1;\n}\n```\n\nO `return -1` fica **depois** do laço. Só dá para dizer \"não está\" depois de olhar todo mundo.\n\nA **sentinela** economiza um teste por volta: copie `x` para uma posição extra, `v[n]`. O laço sempre para, no pior caso nessa posição, e não precisa mais perguntar `i < n`. Se parou em `n`, a chave não estava.",
  "caracteristicas": [
   "Funciona em vetor fora de ordem. A ordem não ajuda nem atrapalha.",
   "Melhor caso: a chave na posição 0, 1 comparação. Pior caso: a chave na última posição ou ausente, `n` comparações.",
@@ -42,7 +42,7 @@
   },
   {
    "titulo": "i = 1 e i = 2",
-   "texto": "3305 não é 1290, 8821 também não. As gavetas já olhadas ficam descartadas. Três comparações até aqui.",
+   "texto": "3305 não é 1290, 8821 também não. As posições já olhadas ficam descartadas. Três comparações até aqui.",
    "figura": {
     "tipo": "vetor",
     "itens": [
@@ -63,7 +63,7 @@
   },
   {
    "titulo": "i = 3: achou",
-   "texto": "`v[3] == 1290`. A função devolve 3 na hora, com **4 comparações**. As gavetas 4 e 5 nem são olhadas.",
+   "texto": "`v[3] == 1290`. A função devolve 3 na hora, com **4 comparações**. As posições 4 e 5 nem são olhadas.",
    "figura": {
     "tipo": "vetor",
     "itens": [
@@ -85,7 +85,7 @@
   },
   {
    "titulo": "Procurar 9999",
-   "texto": "Nenhuma gaveta bate. O laço chega a `i = 6`, `i < n` fica falso e só então sai o `return -1`. Foram **6 comparações**: a ausência é o pior caso.",
+   "texto": "Nenhuma posição bate. O laço chega a `i = 6`, `i < n` fica falso e só então sai o `return -1`. Foram **6 comparações**: a ausência é o pior caso.",
    "figura": {
     "tipo": "vetor",
     "itens": [
@@ -109,7 +109,7 @@
   },
   {
    "titulo": "Com sentinela",
-   "texto": "Copie 9999 para a gaveta extra `v[6]`. O laço vira `while (v[i] != x) i++;`, sem o teste `i < n`. Ele para em `i = 6`, a sentinela, e como 6 é igual a `n`, a resposta é \"não está\". O custo continua `O(n)`, com uma pergunta a menos por volta.",
+   "texto": "Copie 9999 para a posição extra `v[6]`. O laço vira `while (v[i] != x) i++;`, sem o teste `i < n`. Ele para em `i = 6`, a sentinela, e como 6 é igual a `n`, a resposta é \"não está\". O custo continua `O(n)`, com uma pergunta a menos por volta.",
    "figura": {
     "tipo": "vetor",
     "itens": [

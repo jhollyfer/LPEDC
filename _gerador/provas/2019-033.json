@@ -504,7 +504,25 @@
           "modulo": "11-listas.md"
         }
       ],
-      "dica": "**Cobra:** ler o que o código faz de verdade com a lista circular, o laço, o break e a flag.\n\n- **Lista circular** [0080]: o último nó aponta para o primeiro, sem NULL, então percorrer termina quando se volta ao ponto de partida. Ex.: na lista `3 → 7 → 12 → (3)`, o laço para ao voltar ao 3.\n- **break dentro do laço** [0023]: o break encerra o laço na hora; um comando escrito antes dele no corpo roda no máximo uma vez. Ex.: `while (c) { x = 1; break; }` faz `x = 1` uma vez só.\n- **Condição com inteiro** [0012]: `if (flag)` é falso só quando flag vale 0 e verdadeiro para qualquer outro valor; vale o valor da flag no fim, não a intenção do código. Ex.: `flag = 0` cai no else; `flag = 1` entra no if.\n\n**Como atacar:** execute o código à mão numa lista de 3 nós e veja que valor a flag tem quando o laço termina."
+      "dica": "**Cobra:** ler o que o código faz de verdade com a lista circular, o laço, o break e a flag.\n\n- **Lista circular** [0080]: o último nó aponta para o primeiro, sem NULL, então percorrer termina quando se volta ao ponto de partida. Ex.: na lista `3 → 7 → 12 → (3)`, o laço para ao voltar ao 3.\n- **break dentro do laço** [0023]: o break encerra o laço na hora; um comando escrito antes dele no corpo roda no máximo uma vez. Ex.: `while (c) { x = 1; break; }` faz `x = 1` uma vez só.\n- **Condição com inteiro** [0012]: `if (flag)` é falso só quando flag vale 0 e verdadeiro para qualquer outro valor; vale o valor da flag no fim, não a intenção do código. Ex.: `flag = 0` cai no else; `flag = 1` entra no if.\n\n**Como atacar:** execute o código à mão numa lista de 3 nós e veja que valor a flag tem quando o laço termina.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "O nome `flag` e as mensagens sugerem uma busca: `success` para quando acha, `fail` para quando não acha. A frase casa `success` com qual desses dois desfechos?"
+        },
+        {
+          "item": "B",
+          "texto": "Pense na intenção do trecho: andar pela lista circular até voltar à `head` ou achar `data`. Se der a volta inteira sem achar, que mensagem uma busca dessas deveria imprimir?"
+        },
+        {
+          "item": "C",
+          "texto": "No código, o `1` aparece onde: comparado com `data` ou atribuído à `flag`?"
+        },
+        {
+          "item": "D",
+          "texto": "Com `head == null`, o `if` pula tudo e `flag` fica 0. Com a lista cheia, `flag` vira 1 sempre, ou depende do dado procurado?"
+        }
+      ]
     },
     {
       "numero": 12,
@@ -690,7 +708,29 @@
           "modulo": "13-busca-e-ordenacao.md"
         }
       ],
-      "dica": "**Cobra:** dizer qual é a vantagem do bubble sort sobre os outros algoritmos de ordenação.\n\n- **Bandeira no bubble sort** [0091]: uma passada sem nenhuma troca prova que o vetor está ordenado, então o laço para e o melhor caso custa uma passada, O(n). Ex.: `1 2 3 4` faz 3 comparações, nenhuma troca, e termina.\n- **Comparar algoritmos** [0096]: merge e quick custam O(n log n) contra O(n²) do bubble, mas o merge precisa de memória extra e o bubble troca no próprio vetor. Ex.: merge sort de n itens usa um rascunho de n posições.\n\n**Como atacar:** compare velocidade, memória e complexidade de código de cada alternativa antes de escolher."
+      "dica": "**Cobra:** dizer qual é a vantagem do bubble sort sobre os outros algoritmos de ordenação.\n\n- **Bandeira no bubble sort** [0091]: uma passada sem nenhuma troca prova que o vetor está ordenado, então o laço para e o melhor caso custa uma passada, O(n). Ex.: `1 2 3 4` faz 3 comparações, nenhuma troca, e termina.\n- **Comparar algoritmos** [0096]: merge e quick custam O(n log n) contra O(n²) do bubble, mas o merge precisa de memória extra e o bubble troca no próprio vetor. Ex.: merge sort de n itens usa um rascunho de n posições.\n\n**Como atacar:** compare velocidade, memória e complexidade de código de cada alternativa antes de escolher.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "No vetor invertido de 1.000 elementos, o bubble faz cerca de 500 mil comparações; o merge sort faz por volta de 10 mil. Qual cresce mais rápido com n?"
+        },
+        {
+          "item": "B",
+          "texto": "O bubble usa O(1) de memória extra. Insertion, selection e heapsort usam quanto? Uma qualidade que outros também têm conta como vantagem sobre eles?"
+        },
+        {
+          "item": "C",
+          "texto": "Na versão com flag, se uma passada inteira não fizer troca, o laço para. Em `1 2 3 4 5`, quantas passadas e comparações? O selection, no mesmo vetor, para antes?"
+        },
+        {
+          "item": "D",
+          "texto": "O bubble é dois `for` e uma troca; o merge sort pede vetor auxiliar e recursão. E ser difícil de implementar seria qualidade de um algoritmo?"
+        },
+        {
+          "item": "E",
+          "texto": "Duas coisas a pesar: o código do bubble cabe em poucas linhas, e a versão com flag para cedo em vetor já ordenado. Isso conta como vantagem de algum tipo?"
+        }
+      ]
     },
     {
       "numero": 16,
@@ -826,7 +866,25 @@
           "modulo": "13-busca-e-ordenacao.md"
         }
       ],
-      "dica": "**Cobra:** escolher a afirmação correta sobre o custo do insertion sort.\n\n- **Custo do insertion sort** [0093]: no melhor caso (vetor já ordenado) faz n - 1 comparações e nenhum deslocamento, O(n); no pior (invertido), n(n - 1)/2. Ex.: n = 5: 4 comparações se ordenado e 10 se invertido.\n- **Notação Θ** [0072]: Θ é teto e piso juntos: o custo cresce exatamente nessa classe; a pergunta pede se EXISTE alguma entrada com esse custo, não se toda entrada tem. Ex.: a busca sequencial é Θ(1) se a chave é a primeira e Θ(n) se é a última.\n\n**Como atacar:** para cada Θ, procure uma entrada de tamanho n que dê esse custo."
+      "dica": "**Cobra:** escolher a afirmação correta sobre o custo do insertion sort.\n\n- **Custo do insertion sort** [0093]: no melhor caso (vetor já ordenado) faz n - 1 comparações e nenhum deslocamento, O(n); no pior (invertido), n(n - 1)/2. Ex.: n = 5: 4 comparações se ordenado e 10 se invertido.\n- **Notação Θ** [0072]: Θ é teto e piso juntos: o custo cresce exatamente nessa classe; a pergunta pede se EXISTE alguma entrada com esse custo, não se toda entrada tem. Ex.: a busca sequencial é Θ(1) se a chave é a primeira e Θ(n) se é a última.\n\n**Como atacar:** para cada Θ, procure uma entrada de tamanho n que dê esse custo.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Rode o insertion em `1 2 3 4 5`: cada elemento novo é comparado com o anterior e já para. Quantas comparações no total? E com N = 1.000?"
+        },
+        {
+          "item": "B",
+          "texto": "Qualquer ordenação precisa olhar cada elemento ao menos uma vez para saber se está no lugar. Com N = 1.000, dá para fazer isso num número fixo de passos?"
+        },
+        {
+          "item": "C",
+          "texto": "O pior caso do insertion é o vetor invertido: o k-ésimo elemento anda até k-1 casas. Some 1 + 2 + ... + (N-1). Que potência de N aparece?"
+        },
+        {
+          "item": "D",
+          "texto": "O total de deslocamentos do insertion nunca passa de N(N-1)/2, um por par fora de ordem. Para N = 30, compare esse teto (435) com 2^30 (cerca de 1 bilhão)."
+        }
+      ]
     },
     {
       "numero": 19,

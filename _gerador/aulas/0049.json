@@ -35,7 +35,7 @@
   },
   {
    "titulo": "Seguir os saltos",
-   "texto": "`*pp` vai a 0x108 e dá o `p`, ou seja, 0x100. `**pp` vai a 0x108, pega 0x100, vai a 0x100 e dá 40. Então `**pp = **pp - 2;` faz `vagas = 38`. Com uma estrela só, `*pp = 38` estragaria o `p`.",
+   "texto": "`*pp` vai a 0x108 e dá o `p`, que vale 0x100. `**pp` vai a 0x108, pega 0x100, vai a 0x100 e dá 40. Então `**pp = **pp - 2;` faz `vagas = 38`. Com uma estrela só, `*pp = 38` estragaria o `p`.",
    "figura": {
     "tipo": "texto",
     "linhas": [
@@ -87,7 +87,7 @@
   },
   {
    "titulo": "insere(&lista, 9): prim aponta para lista",
-   "texto": "Agora vai `&lista`, ou seja, 0x200. `*prim` é o próprio `lista`. `novo->prox = *prim` copia 0xA0 para o nó 9, que passa a apontar para o 7.",
+   "texto": "Agora vai `&lista`, que é 0x200. `*prim` é o próprio `lista`. `novo->prox = *prim` copia 0xA0 para o nó 9, que passa a apontar para o 7.",
    "figura": {
     "tipo": "texto",
     "linhas": [

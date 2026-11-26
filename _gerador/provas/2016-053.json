@@ -90,7 +90,29 @@
           "modulo": "04-funcoes.md"
         }
       ],
-      "dica": "**Cobra:** Achar o defeito em duas funções de fatorial.\n\n- **Recursão** [0032]: uma função recursiva chama a si mesma e precisa de um caso base e de uma chamada que se aproxime dele. Ex.: `int f(int n) { return n * f(n - 1); }` não tem caso base e nunca para.\n- **Retorno em todos os caminhos** [0028]: função com tipo de retorno deve devolver um valor em todos os caminhos de execução, não só em alguns. Ex.: `int sinal(int x) { if (x > 0) return 1; }` não devolve nada quando `x <= 0`.\n- **Laço sem condição** [0022]: um `for` com a condição vazia só termina por `break` ou `return`, senão roda sem parar. Ex.: `for (j = 1; ; j++)` não tem parada própria.\n\n**Como atacar:** procure em cada função o caso base, o retorno em todo caminho e a parada do laço."
+      "dica": "**Cobra:** Achar o defeito em duas funções de fatorial.\n\n- **Recursão** [0032]: uma função recursiva chama a si mesma e precisa de um caso base e de uma chamada que se aproxime dele. Ex.: `int f(int n) { return n * f(n - 1); }` não tem caso base e nunca para.\n- **Retorno em todos os caminhos** [0028]: função com tipo de retorno deve devolver um valor em todos os caminhos de execução, não só em alguns. Ex.: `int sinal(int x) { if (x > 0) return 1; }` não devolve nada quando `x <= 0`.\n- **Laço sem condição** [0022]: um `for` com a condição vazia só termina por `break` ou `return`, senão roda sem parar. Ex.: `for (j = 1; ; j++)` não tem parada própria.\n\n**Como atacar:** procure em cada função o caso base, o retorno em todo caminho e a parada do laço.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Recursão é a função chamar a si mesma. Procure, no corpo da I, uma chamada a `fatorial`. Faltar o `return` no `else` muda o fato de ela se chamar?"
+        },
+        {
+          "item": "B",
+          "texto": "Procure na II uma linha em que `fatorial` chame `fatorial`. O que ela usa para repetir a conta: uma chamada ou um `for`?"
+        },
+        {
+          "item": "C",
+          "texto": "A II repete a conta com `for (j=1; ; j++)`. Laço e recursão são o mesmo mecanismo? Qual das duas funções tem uma chamada a si mesma?"
+        },
+        {
+          "item": "D",
+          "texto": "C tem classe, objeto ou método? E a I, dentro do `else`, chama quem?"
+        },
+        {
+          "item": "E",
+          "texto": "Uma função que chama a si mesma, mesmo devolvendo lixo, é recursiva? Olhe o `else` da I."
+        }
+      ]
     },
     {
       "numero": 3,
@@ -140,7 +162,29 @@
           "modulo": "23-grafos-avancados.md"
         }
       ],
-      "dica": "**Cobra:** Achar a afirmação falsa sobre árvores.\n\n- **Árvore** [0097]: estrutura hierárquica com uma raiz, em que todo nó, menos a raiz, tem exatamente um pai. Ex.: raiz 1 com filhos 2 e 3: 3 nós.\n- **Árvore como grafo** [0150]: grafo conexo e sem ciclos; tem `n - 1` arestas e um único caminho entre dois vértices quaisquer. Ex.: 4 vértices em cadeia: 3 arestas; ligar o 4º ao 1º cria um ciclo e a figura deixa de ser árvore.\n- **Floresta** [0150]: conjunto de árvores disjuntas, cada uma um componente do grafo. Ex.: duas árvores com 3 e 2 nós: 5 vértices, 3 arestas, 2 componentes.\n\n**Como atacar:** julgue cada afirmação contra a definição; a pedida é a que não vale."
+      "dica": "**Cobra:** Achar a afirmação falsa sobre árvores.\n\n- **Árvore** [0097]: estrutura hierárquica com uma raiz, em que todo nó, menos a raiz, tem exatamente um pai. Ex.: raiz 1 com filhos 2 e 3: 3 nós.\n- **Árvore como grafo** [0150]: grafo conexo e sem ciclos; tem `n - 1` arestas e um único caminho entre dois vértices quaisquer. Ex.: 4 vértices em cadeia: 3 arestas; ligar o 4º ao 1º cria um ciclo e a figura deixa de ser árvore.\n- **Floresta** [0150]: conjunto de árvores disjuntas, cada uma um componente do grafo. Ex.: duas árvores com 3 e 2 nós: 5 vértices, 3 arestas, 2 componentes.\n\n**Como atacar:** julgue cada afirmação contra a definição; a pedida é a que não vale.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Pegue o triângulo A-B, B-C, C-A: é conexo e tem ciclo. Com 3 vértices, quantas arestas ele tem, e quantos caminhos ligam A a C? Bate com as propriedades das outras letras?"
+        },
+        {
+          "item": "B",
+          "texto": "Na árvore A-B, B-C, de A até C dá para ir por mais de uma rota? Acrescente a aresta A-C: o que surge, e ainda é árvore?"
+        },
+        {
+          "item": "C",
+          "texto": "Teste pequeno: 1 vértice, 0 arestas; 2 vértices, 1 aresta; uma estrela com centro ligado a outros 3 vértices tem quantas? Que fórmula aparece?"
+        },
+        {
+          "item": "D",
+          "texto": "Grafo é um conjunto de vértices e arestas. O triângulo A-B-C é grafo e tem ciclo. Uma árvore deixa de ser um conjunto de vértices e arestas?"
+        },
+        {
+          "item": "E",
+          "texto": "Floresta é o grafo sem ciclos que pode ter várias partes. Junte a árvore A-B com a árvore C-D, sem ligar as duas: o resultado tem ciclo? É conexo?"
+        }
+      ]
     },
     {
       "numero": 4,
@@ -270,7 +314,29 @@
           "modulo": "11-listas.md"
         }
       ],
-      "dica": "**Cobra:** Reconhecer a característica da lista duplamente encadeada.\n\n- **Lista duplamente encadeada** [0079]: cada nó guarda, além da chave, um ponteiro para o próximo (`prox`) e outro para o anterior (`ant`), e daí se anda nos dois sentidos. Ex.: `struct No { int dado; struct No *ant, *prox; };`.\n- **Lista encadeada simples** [0076]: cada nó tem só o ponteiro para o sucessor, e só se anda para a frente. Ex.: `3 -> 8 -> 5`: do 8 não se chega ao 3.\n- **Lista circular** [0080]: o último nó aponta de volta para o primeiro, então a lista não tem `NULL` no fim. Ex.: `3 -> 8 -> 5 -> 3 ...`.\n- **Vetor** [0037]: elementos em posições contíguas de memória, acessados por índice; lista encadeada não é assim. Ex.: `v[2]` é acesso direto; numa lista, 2 saltos de `prox`.\n\n**Como atacar:** descarte as alternativas que descrevem a lista simples, a circular ou o vetor."
+      "dica": "**Cobra:** Reconhecer a característica da lista duplamente encadeada.\n\n- **Lista duplamente encadeada** [0079]: cada nó guarda, além da chave, um ponteiro para o próximo (`prox`) e outro para o anterior (`ant`), e daí se anda nos dois sentidos. Ex.: `struct No { int dado; struct No *ant, *prox; };`.\n- **Lista encadeada simples** [0076]: cada nó tem só o ponteiro para o sucessor, e só se anda para a frente. Ex.: `3 -> 8 -> 5`: do 8 não se chega ao 3.\n- **Lista circular** [0080]: o último nó aponta de volta para o primeiro, então a lista não tem `NULL` no fim. Ex.: `3 -> 8 -> 5 -> 3 ...`.\n- **Vetor** [0037]: elementos em posições contíguas de memória, acessados por índice; lista encadeada não é assim. Ex.: `v[2]` é acesso direto; numa lista, 2 saltos de `prox`.\n\n**Como atacar:** descarte as alternativas que descrevem a lista simples, a circular ou o vetor.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Ser circular fala de para onde aponta o último nó; ser dupla fala de quantos ponteiros cada nó tem. Uma lista simples pode ser circular? Uma dupla pode terminar em `NULL`?"
+        },
+        {
+          "item": "B",
+          "texto": "Conte os ponteiros por nó: um só, o `prox`. Com ele, dá para ir do nó atual ao anterior sem voltar ao início?"
+        },
+        {
+          "item": "C",
+          "texto": "A lista `3 -> 5 -> 9`, só com `prox`, está em ordem. A ordem das chaves diz quantos ponteiros cada nó tem? Dá para voltar do 9 ao 5?"
+        },
+        {
+          "item": "D",
+          "texto": "Desenhe o nó: `ant | chave | prox`. Com esses campos, você chega a um vizinho por quantos lados? Qual desses campos o nó da lista simples não tem?"
+        },
+        {
+          "item": "E",
+          "texto": "`v[i]` funciona porque os elementos ficam lado a lado na memória e o endereço sai de uma conta. Os nós de uma lista vêm de `malloc` separados: há garantia de que fiquem lado a lado?"
+        }
+      ]
     },
     {
       "numero": 7,
@@ -690,7 +756,29 @@
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** Achar a afirmação correta sobre a ABB e suas aplicações.\n\n- **Árvore binária** [0097]: conjunto finito de nós com uma raiz da qual partem duas árvores binárias: a esquerda e a direita. Ex.: raiz 6 com subárvore esquerda `2` e direita `9`.\n- **Em ordem na ABB** [0098]: o percurso em ordem visita as chaves em ordem crescente, então serve para listar ordenado. Ex.: inserir `6, 2, 9`: em ordem `2 6 9`.\n- **Altura e inserção ordenada** [0099]: o custo segue a altura; chaves inseridas em ordem formam uma cadeia, e a ABB comum não se rearranja. Ex.: inserir `1, 2, 3, 4`: cadeia de altura 4.\n\n**Como atacar:** julgue cada alternativa pela definição, pela altura da árvore e pelo percurso em ordem."
+      "dica": "**Cobra:** Achar a afirmação correta sobre a ABB e suas aplicações.\n\n- **Árvore binária** [0097]: conjunto finito de nós com uma raiz da qual partem duas árvores binárias: a esquerda e a direita. Ex.: raiz 6 com subárvore esquerda `2` e direita `9`.\n- **Em ordem na ABB** [0098]: o percurso em ordem visita as chaves em ordem crescente, então serve para listar ordenado. Ex.: inserir `6, 2, 9`: em ordem `2 6 9`.\n- **Altura e inserção ordenada** [0099]: o custo segue a altura; chaves inseridas em ordem formam uma cadeia, e a ABB comum não se rearranja. Ex.: inserir `1, 2, 3, 4`: cadeia de altura 4.\n\n**Como atacar:** julgue cada alternativa pela definição, pela altura da árvore e pelo percurso em ordem.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "A definição recursiva diz: árvore binária é vazia ou é uma raiz com uma subárvore esquerda e uma direita, ambas árvores binárias. A frase descreve essa estrutura? Toda ABB tem essa forma?"
+        },
+        {
+          "item": "B",
+          "texto": "Insira 1, 2, 3, 4 em ordem numa ABB vazia e desenhe: qual é a altura? Agora insira 2, 1, 3, 4. Qual das duas ficou mais baixa?"
+        },
+        {
+          "item": "C",
+          "texto": "Monte a ABB com 50, 30, 70, 20, 40 e percorra em ordem (esquerda, raiz, direita): que sequência sai? Quanto custa montar a árvore antes de percorrer?"
+        },
+        {
+          "item": "D",
+          "texto": "Insira 1, 2, 3 numa ABB comum. Algum passo da inserção gira ou reposiciona nós? Qual árvore do curso faz rotação?"
+        },
+        {
+          "item": "E",
+          "texto": "Nó de lista tem um sucessor; nó de ABB tem dois filhos e uma regra de ordem entre eles. Uma lista ramifica? E uma ABB só com filhos à direita se parece com o quê?"
+        }
+      ]
     },
     {
       "numero": 15,
@@ -816,7 +904,29 @@
           "modulo": "28-estruturas-complementos.md"
         }
       ],
-      "dica": "**Cobra:** Achar a estrutura que não pode representar uma AVL.\n\n- **AVL** [0101]: ABB em que, em todo nó, as alturas das duas subárvores diferem em no máximo 1. Ex.: raiz 10 com filho 5 e neto 2: alturas 2 e 0 na raiz, não é AVL.\n- **Altura** [0175]: aqui a folha vale 1 e a árvore vazia vale 0; a de um pai é a maior das filhas mais 1. Ex.: raiz com um filho folha: altura 2.\n- **Nós por altura** [0101]: altura `h` comporta no máximo `2^h - 1` nós, e a AVL exige um mínimo `N(h) = N(h-1) + N(h-2) + 1`, porque uma subárvore pode ser mais baixa em 1. Ex.: altura 2 (folha = 1): de 2 a 3 nós.\n\n**Como atacar:** calcule a altura dos dois lados de cada nó, de baixo para cima, e o mínimo de nós da altura pedida."
+      "dica": "**Cobra:** Achar a estrutura que não pode representar uma AVL.\n\n- **AVL** [0101]: ABB em que, em todo nó, as alturas das duas subárvores diferem em no máximo 1. Ex.: raiz 10 com filho 5 e neto 2: alturas 2 e 0 na raiz, não é AVL.\n- **Altura** [0175]: aqui a folha vale 1 e a árvore vazia vale 0; a de um pai é a maior das filhas mais 1. Ex.: raiz com um filho folha: altura 2.\n- **Nós por altura** [0101]: altura `h` comporta no máximo `2^h - 1` nós, e a AVL exige um mínimo `N(h) = N(h-1) + N(h-2) + 1`, porque uma subárvore pode ser mais baixa em 1. Ex.: altura 2 (folha = 1): de 2 a 3 nós.\n\n**Como atacar:** calcule a altura dos dois lados de cada nó, de baixo para cima, e o mínimo de nós da altura pedida.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Com 3 nós e altura 3, cada nível tem um nó: 1 -> 2 -> 3. Calcule a altura das duas subárvores da raiz. Qual é a diferença?"
+        },
+        {
+          "item": "B",
+          "texto": "Tente montar: raiz 4, à esquerda 2 com filhos 1 e 3, à direita 5 com filho direito 6. Quantos nós, que altura, e qual o fator de cada nó?"
+        },
+        {
+          "item": "C",
+          "texto": "Raiz com dois filhos: cada subárvore tem altura 1. Qual é o fator de balanceamento da raiz?"
+        },
+        {
+          "item": "D",
+          "texto": "A regra da AVL vale para todo nó da árvore. Numa árvore sem nó nenhum, existe algum nó que quebre a regra?"
+        },
+        {
+          "item": "E",
+          "texto": "Raiz com um único filho: subárvores de alturas 1 e 0. A diferença passa de 1?"
+        }
+      ]
     },
     {
       "numero": 17,
@@ -866,7 +976,25 @@
           "modulo": "07-memoria-dinamica.md"
         }
       ],
-      "dica": "**Cobra:** Achar o erro de lógica em uma busca em vetor e uma contagem em lista.\n\n- **Busca sequencial** [0089]: confira o índice de partida, a condição do laço e o valor devolvido: 1 deve significar achou e 0, não achou. Ex.: `for (i = 0; i < n; i++) if (v[i] == c) return 1; return 0;`.\n- **Percurso de lista** [0076]: anda-se por ponteiro, `p = p->prox`, até `NULL`; `p[i]` trata a lista como vetor contíguo. Ex.: `while (p != NULL) { cont++; p = p->prox; }`.\n- **Resultado devolvido** [0025]: num contador, o retorno deve ser o contador e não a variável do laço, que também anda quando não há acerto. Ex.: contar apenas os `7` de `7 3 7`: o contador vale 2, o índice do laço chega a 3.\n\n**Como atacar:** teste cada quadro com 3 elementos, incluindo o caso de a chave não existir."
+      "dica": "**Cobra:** Achar o erro de lógica em uma busca em vetor e uma contagem em lista.\n\n- **Busca sequencial** [0089]: confira o índice de partida, a condição do laço e o valor devolvido: 1 deve significar achou e 0, não achou. Ex.: `for (i = 0; i < n; i++) if (v[i] == c) return 1; return 0;`.\n- **Percurso de lista** [0076]: anda-se por ponteiro, `p = p->prox`, até `NULL`; `p[i]` trata a lista como vetor contíguo. Ex.: `while (p != NULL) { cont++; p = p->prox; }`.\n- **Resultado devolvido** [0025]: num contador, o retorno deve ser o contador e não a variável do laço, que também anda quando não há acerto. Ex.: contar apenas os `7` de `7 3 7`: o contador vale 2, o índice do laço chega a 3.\n\n**Como atacar:** teste cada quadro com 3 elementos, incluindo o caso de a chave não existir.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Simule o I com `v = {2, 5, 9}`, `chave = 5` e `tm = 2`: em que `tm` o laço para, e qual é o retorno? O comentário pede 1 quando a chave ocorre."
+        },
+        {
+          "item": "B",
+          "texto": "Rode o I com `v = {2, 5, 9}` e `chave = 4`: o laço vai até `tm = -1`. O que volta? E com `chave = 5`?"
+        },
+        {
+          "item": "C",
+          "texto": "Olhe a última linha do II: devolve `cont` ou `x`? E o laço anda pela lista com `aux[x]` ou com `aux->prox`?"
+        },
+        {
+          "item": "D",
+          "texto": "Vazamento exige um `malloc` cujo bloco se perde: algum dos dois chama `malloc`? Falha de segmentação exige acesso a memória que não é do programa: onde isso poderia acontecer em cada código?"
+        }
+      ]
     },
     {
       "numero": 18,

@@ -10,6 +10,24 @@
       "formato": "código",
       "enunciado": "Considere o código abaixo cujo objetivo é ordenar um vetor de inteiros com n elementos de maneira crescente:\n\n```c\nvoid algoritmo(int v[], int n) {\n  int i,j,k, tmp;\n\n for(i = 0; i < n-1; i++) {\n  k = i;\n    for(j = 0; j < n; j++) {\n        if(v[k] > v[j]) {  k = j  }\n    }\n    tmp = v[k];\n    v[k] = v[i];\n    v[i] = tmp;\n}\n```",
       "dica": "**Cobra:** conferir se o código implementa corretamente o selection sort crescente.\n\n- **Selection sort** [0092]: a cada volta `i` procura o menor do restante, guarda a posição em `k` e troca com a posição `i`. Ex.: em 3, 1, 2, o `i = 0` acha o 1 em `k = 1` e troca: 1, 3, 2.\n- **Limites dos laços** [0022]: o laço interno deve olhar só o que ainda não está fixo (de `i+1` em diante); começar antes reexamina o prefixo. Ex.: em 1, 2, 9, 5 com `i = 2`, se `j` começar em 0 o mínimo achado é o 1 e a troca desfaz o prefixo.\n\n**Como atacar:** rode o código à mão num vetor de 3 ou 4 elementos e veja se o prefixo se mantém.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Rode com `{5, 3, 4, 1, 2}`, já pondo o `;` e a `}` que faltam. O laço interno começa em `j = 0`: na passada i = 1, qual mínimo ele encontra, e para onde esse valor vai?"
+        },
+        {
+          "item": "B",
+          "texto": "Conte as linhas a mexer: o início do laço interno, o `;` depois de `k = j` e a `}` que fecha a função. Ficam todas na mesma linha?"
+        },
+        {
+          "item": "C",
+          "texto": "Troque `j = 0` por `j = i + 1` e refaça `{5, 3, 4, 1, 2}`. O defeito de lógica some? E os de sintaxe, ficam em que linhas?"
+        },
+        {
+          "item": "D",
+          "texto": "Procurar o menor e trocar com a posição `i` é a ideia de qual algoritmo? E, rodando com `{5, 3, 4, 1, 2}`, a saída vem em ordem?"
+        }
+      ],
       "alternativas": [
         {
           "letra": "A",
@@ -515,6 +533,24 @@
       "formato": "simulação",
       "enunciado": "Considere que um vetor de 8 elementos está sendo ordenado de forma crescente pelo algoritmo quicksort, e que após a escolha do pivot (elemento usado como chave para o particionamento) e ao final do primeiro particionamento, o vetor tenha ficado com os seguintes valores:\n\n| 2 | 5 | 9 | 1 | 7 | 2 | 1 | 9 |\n|---|---|---|---|---|---|---|---|\n\nDado o resultado, pode-se afirmar que:",
       "dica": "**Cobra:** quais valores podem ter sido o pivô, dado o vetor depois do primeiro particionamento.\n\n- **Particionamento** [0095]: depois dele, o pivô está na posição final, com tudo à esquerda menor ou igual e tudo à direita maior ou igual. Ex.: o pivô 5 em 7, 2, 5, 9, 1 pode terminar como 2, 1, 5, 9, 7.\n- **Testar um candidato** [0095]: o candidato só serve se nada à esquerda dele for maior e nada à direita for menor. Ex.: em 2, 1, 5, 9, 7, só o 5 passa; o 2 falha porque o 1 está à direita.\n\n**Como atacar:** teste cada valor da lista, olhando os dois lados dele no vetor.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Pivô na posição 0, o 2: na partição crescente, tudo à direita tem de ser ≥ 2. Há valor menor à direita? E o outro 2, na posição 5, passa no teste?"
+        },
+        {
+          "item": "B",
+          "texto": "Teste o 9 da posição 7: tudo à esquerda é ≤ 9? E o 9 da posição 2: tudo à direita é ≥ 9?"
+        },
+        {
+          "item": "C",
+          "texto": "O 1 aparece nas posições 3 e 6. Para cada uma, olhe o lado esquerdo: só há valores ≤ 1?"
+        },
+        {
+          "item": "D",
+          "texto": "O 7 está na posição 4. À esquerda dele há 2, 5, 9, 1; à direita, 2, 1, 9. Cada lado cumpre a regra?"
+        }
+      ],
       "alternativas": [
         {
           "letra": "A",

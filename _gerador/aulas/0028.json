@@ -15,7 +15,7 @@
   "O nome documenta a tarefa: `preco_corrida(km)` se lê melhor que a conta solta."
  ],
  "desvantagens": [
-  "Cada chamada tem um custo pequeno: um quadro novo na pilha (assunto 0031).",
+  "Cada chamada tem um custo pequeno: um quadro novo na pilha (veja a aula A pilha de chamadas).",
   "A função só devolve **um** valor pelo `return`. Para mais de um, é preciso ponteiro ou `struct`.",
   "Função que lê do teclado ou imprime dentro do cálculo fica difícil de reaproveitar."
  ],
@@ -75,7 +75,7 @@
    }
   }
  ],
- "naprova": "A banca usa funções como pano de fundo: pergunta se uma função é recursiva (ela é se chama a si mesma, mesmo sem `return` no `else`) e mostra código com defeito de retorno. Não deixe o erro do código desviar você do que a pergunta quer.",
+ "naprova": "A banca põe funções dentro de outras questões: pergunta se uma função é recursiva (ela é se chama a si mesma, mesmo sem `return` no `else`) e mostra código com defeito de retorno. Não deixe o erro do código desviar você do que a pergunta quer.",
  "fontes": [
   "Deitel e Deitel, *C: como programar*, 6. ed., cap. 5 (funções).",
   "Backes, *Linguagem C: completa e descomplicada*, cap. 9 (funções).",
