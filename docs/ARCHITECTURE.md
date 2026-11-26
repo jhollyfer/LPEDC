@@ -1,0 +1,84 @@
+# Arquitetura do curso
+
+**LPEDC** · como o material está montado e como o texto vira `.md`
+
+## 1. Peças
+
+```
+LPEDC/
+├── README.md                  o sumário do livro (o sumário é gerado; o resto, à mão)
+├── PPGI.md  TRILHA.md  PROVAS.md  SIMULADOS.md   guias (escritos à mão)
+├── 01-fundamentos.md ...      gerados: um por módulo; cada assunto é um capítulo (conceito, exemplos, exercícios)
+├── material/                  a única pasta de conteúdo: tudo o que se roda ou se vê
+│   ├── A003.c  A004.c ...     exemplos resolvidos
+│   ├── E007.c ...             exercícios (esqueleto vazio; a resposta vai dentro do arquivo)
+│   ├── P0101.c ...            lista prática (P + número do módulo + número na lista)
+│   ├── 0002-ideia.svg  0002-fluxograma.svg   desenhos do assunto (gerados)
+│   ├── 0076-lista.c  0076-lista.h ...        apoio (TAD) do assunto, com o número dele no nome
+│   └── legenda.svg            formas e cores (gerado)
+├── _respostas/<modulo>/       uma resolução de cada exercício (e os apoios das respostas)
+├── _gerador/modulos/<modulo>/ FONTE dos .md: modulo.md, e por assunto texto.md e desenhos.mjs
+├── _gerador/arquivos.json     quais A, E e apoios pertencem a cada assunto
+├── _gerador/fases.json        a rota do jogo: ordem das etapas, mundo e missão de cada módulo
+├── _fontes/                   sumário, fichamentos dos livros e provas do PPGI
+├── docs/  AGENTS.md  rodar    documentação viva, instruções de agentes e auxiliar do conferir.sh
+├── index.html  .nojekyll      quiz das provas e leitura do curso (GitHub Pages, raiz da main)
+├── conteudo/                  leitor, estilos, sumário, índice do acervo e bibliotecas locais
+├── quiz/                      gerado: questoes.js e figuras/*.svg do quiz
+├── _gerador/trilha/           FONTE da trilha: requer, porquê e "saia sabendo" de cada assunto
+├── _gerador/provas/           FONTE do quiz: <slug>.json (questões e porquês) e <slug>.figuras.json
+├── provas-ppgi-ufam/          provas de 2016 a 2019 com os recortes das figuras
+```
+
+Gerar: `cd _gerador && npm run gerar -- 01-` (só o módulo 01). Nunca edite o
+`01-fundamentos.md` (ou outro `.md` de módulo na raiz) à mão: ele é
+sobrescrito. **Todo arquivo do curso fica numa só pasta, `material/`** (`DECISIONS.md` #9): exemplos,
+exercícios, lista, desenhos e apoios. Escreva os links do texto a partir da raiz (`material/0002-ideia.svg`).
+Ao criar assunto ou exercício novo, acrescente os nomes em `_gerador/arquivos.json`.
+
+Ferramentas: `gcc` (C17) com as flags de estudo (AddressSanitizer e UBSan), Node para o gerador
+(`_gerador/gerar.mjs`, com `roughjs` e `dagre` para os desenhos) e Python 3 para
+`_gerador/conferir-texto.py`. O quiz sai de `cd _gerador && node quiz.mjs` (`--check` confere letra contra o `PROVAS.md`, porquê de toda alternativa e figura citada). O GitHub Pages publica a raiz da `main`, sem build, servidor de aplicação ou banco.
+
+O prefácio abre em `#conteudo`. A ordem das oito partes e dos módulos vem de `_gerador/fases.json`.
+O leitor carrega o Markdown do módulo enquanto você passa por capítulos como
+`#conteudo/01-fundamentos#0005--printf`. O acervo fica em `#conteudo/arquivos`.
+Os Markdown são a fonte do livro atual e poderão ser usados como base em um aplicativo React.
+Ao mudar arquivos ou títulos, rode `node _gerador/conteudo.mjs` e inclua `conteudo/arquivos.json` no commit.
+
+O leitor usa Marked 18.3.0 para converter o Markdown, DOMPurify 3.5.0 para sanitizar o HTML e
+github-slugger 2.0.0 para montar as âncoras. As bibliotecas e licenças ficam em `conteudo/vendor/`.
+
+## 2. Numeração
+
+Assunto `N` (ex.: 0002 → N = 2):
+
+- exemplos: `A(2N-1)` e `A(2N)` → 0002 tem `A003.c` e `A004.c`
+- exercícios: 4 por assunto, escolhidos do bloco original `E(6N-5)` a `E(6N)` → 0002 manteve 4 dos 6 (`E007.c` a `E012.c`)
+
+Sempre 3 dígitos (4 a partir de 1000: `E1000.c`). Sempre 2 exemplos e 4 exercícios por assunto; a numeração dos exercícios tem buracos.
+
+## 3. Do texto ao `.md`
+
+1. A fonte de cada módulo é `_gerador/modulos/<modulo>/modulo.md` mais um `texto.md` e um
+   `desenhos.mjs` por assunto.
+2. Os enunciados dos exercícios e da lista saem do bloco de comentários do topo dos `.c`
+   (`RULES.md` §5 e §6).
+3. O gerador (§1) monta o `.md` na raiz e os SVGs `NNNN-ideia.svg` e `NNNN-fluxograma.svg` em
+   `material/`. Cada assunto vira `## NNNN · Título` com `### Conceito` (o que vem antes de
+   `{{exemplo}}` no `texto.md`), `### Exemplos de uso` (o que vem depois, mais os exemplos A) e
+   `### Exercícios` (os E). Depois do último assunto vêm a lista, os desafios e as questões.
+4. O gerador também reescreve o sumário do `README.md`, entre `<!-- sumario:inicio -->` e
+   `<!-- sumario:fim -->`: a rota de `fases.json`, com link para cada assunto.
+
+## 4. Linguagem do domínio
+
+| Termo | Significa |
+|---|---|
+| módulo | o `.md` numerado da raiz (`01-fundamentos.md`) |
+| assunto | `## NNNN · Título`, um capítulo: conceito, exemplos de uso (ideia, código e fluxograma, exemplos A) e exercícios |
+| conceito | a explicação do assunto em texto corrido, como livro, com a obra citada `(AUTOR, ano)` em cada definição; a referência completa fica em "Para ler mais" |
+| exemplo (A) | programa resolvido que mostra outra faceta do assunto |
+| exercício (E) | esqueleto vazio para a pessoa codificar, com enunciado e saída esperada |
+| lista prática (P) | 30 exercícios por módulo no estilo da prova |
+| prova | Prova de Conhecimentos do Mestrado do PPGI/UFAM (`PRD.md`) |

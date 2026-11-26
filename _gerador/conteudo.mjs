@@ -1,14 +1,15 @@
 import { execFileSync } from 'node:child_process'
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import Slugger from '../conteudo/vendor/github-slugger/index.js'
+import { marked } from '../conteudo/vendor/marked/lib/marked.esm.js'
 import { textoHtml } from './html.mjs'
 
 const raiz = new URL('../', import.meta.url)
 const destino = new URL('conteudo/arquivos.json', raiz)
 const fases = JSON.parse(readFileSync(new URL('fases.json', import.meta.url), 'utf8'))
-const caminhos = execFileSync('git', ['ls-files', '-z', '--cached', '--others', '--exclude-standard', '--', '*.html'], {
+const caminhos = execFileSync('git', ['ls-files', '-z', '--cached', '--others', '--exclude-standard', '--', '*.md'], {
   cwd: raiz, encoding: 'utf8',
-}).split('\0').filter((caminho) => caminho && caminho !== 'index.html')
+}).split('\0').filter(Boolean)
 const arquivos = {}
 const secoes = new Map()
 const modulos = new Set(fases.map((fase) => fase.modulo))
@@ -16,8 +17,8 @@ const modulos = new Set(fases.map((fase) => fase.modulo))
 for (const caminho of [...new Set(caminhos)].sort()) {
   const fonte = new URL(caminho.split('/').map(encodeURIComponent).join('/'), raiz)
   if (!existsSync(fonte)) continue
-  const html = readFileSync(fonte, 'utf8')
-  const rota = caminho.slice(0, -5)
+  const html = marked.parse(readFileSync(fonte, 'utf8'))
+  const rota = caminho.slice(0, -3)
   const titulos = [...html.matchAll(/<h([1-6])>(.*?)<\/h\1>/gs)]
   arquivos[rota] = titulos.length ? textoHtml(titulos[0][2]) : rota
   if (!modulos.has(rota)) continue

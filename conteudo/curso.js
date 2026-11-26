@@ -244,15 +244,16 @@
     }
 
     async carregar(caminho, signal) {
-      const url = `${this.codificar(caminho)}.html`
-      const [resposta, { default: purify }, { default: Slugger }] = await Promise.all([
+      const url = `${this.codificar(caminho)}.md`
+      const [resposta, { marked }, { default: purify }, { default: Slugger }] = await Promise.all([
         this.obter(url, signal),
+        import('./vendor/marked/lib/marked.esm.js'),
         import('./vendor/dompurify/dist/purify.es.js'),
         import('./vendor/github-slugger/index.js'),
       ])
-      const html = await resposta.text()
+      const markdown = await resposta.text()
       if (signal.aborted) return
-      const conteudo = purify.sanitize(html, {
+      const conteudo = purify.sanitize(marked.parse(markdown), {
         USE_PROFILES: { html: true },
         FORBID_ATTR: ['id', 'name', 'style'],
         RETURN_DOM_FRAGMENT: true,
@@ -281,7 +282,9 @@
         const destino = new URL(link.getAttribute('href'), base)
         const interno = destino.origin === RAIZ.origin && destino.pathname.startsWith(RAIZ.pathname)
         if (interno) {
-          const arquivo = decodeURIComponent(destino.pathname.slice(RAIZ.pathname.length)).replace(/\.(html|md)$/i, '')
+          let arquivo = decodeURIComponent(destino.pathname.slice(RAIZ.pathname.length))
+          if (arquivo.endsWith('/')) arquivo += 'README'
+          arquivo = arquivo.replace(/\.(html|md)$/i, '')
           if (Object.hasOwn(this.arquivos, arquivo)) {
             link.href = this.rota(arquivo, decodeURIComponent(destino.hash.slice(1)))
             continue

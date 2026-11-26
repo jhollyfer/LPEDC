@@ -1,0 +1,184 @@
+## 0156 · Juntando tudo: o assistente do calouro
+
+O calouro tem duas dúvidas. A primeira é de calendário: com os
+pré-requisitos do curso, em quantos semestres ele se forma, e o que cursa
+em cada um? A segunda é de geografia: qual o caminho mais rápido a pé entre
+os prédios do campus? As duas viram grafos, mas grafos diferentes, e cada
+uma pede um algoritmo diferente do módulo.
+
+Essa é a habilidade que o projeto treina: olhar para um problema e
+reconhecer qual técnica ele pede. A escolha depende de duas coisas. Uma é o
+tipo do grafo: dirigido ou não, com peso nas arestas ou sem. A outra é a
+pergunta: ligar, ordenar, achar ciclo, achar caminho de uma origem ou entre
+todos os pares (ZIVIANI, 2010, cap. 7). A tabela no fim desta seção reúne o
+módulo nesse formato.
+
+A grade de disciplinas é um grafo **dirigido**: cada seta `a -> b` diz "a
+vem antes de b". Não há peso, porque um pré-requisito não custa mais que
+outro. E não pode haver ciclo, ou nenhuma das disciplinas do ciclo poderia
+ser cursada. É um **DAG**, e a pergunta "em que ordem cursar" é a ordenação
+topológica do assunto 0151 (CORMEN et al., 2024, cap. 20).
+
+"Quantos semestres" pede uma variação: o Kahn **por rodadas**, do exemplo
+A302. Em vez de tirar um vértice por vez da fila, cada rodada tira todos os
+que estão livres naquele momento, porque o calouro cursa em paralelo tudo o
+que já foi liberado. Cada rodada é um semestre. Se sobrarem disciplinas que
+nunca ficam livres, há um pré-requisito circular, e o programa avisa em vez
+de inventar uma grade.
+
+O campus é outro tipo de grafo: **não dirigido**, porque a trilha entre dois
+prédios se anda nos dois sentidos, e **ponderado**, com o tempo a pé em
+minutos. A pergunta é de caminho mínimo, e o calouro vai perguntar várias
+rotas diferentes ao longo do semestre. Nesse caso, compensa pagar uma vez o
+Floyd-Warshall (0155), que calcula a tabela de todos os pares, e depois só
+consultar a matriz (CORMEN et al., 2024, cap. 23).
+
+A matriz de distâncias diz quantos minutos, mas não por onde ir. Para
+reconstruir a rota, o programa guarda uma segunda matriz, a do **próximo
+passo**: `prox[i][j]` é o primeiro prédio depois de `i` no melhor caminho
+até `j`. Toda vez que o Floyd-Warshall melhora `d[i][j]` passando por `k`, o
+próximo passo de `i` para `j` passa a ser o mesmo de `i` para `k`. Para
+imprimir a rota, basta seguir `prox` a partir da origem até chegar ao
+destino, como no exemplo A309.
+
+Um único tipo `Grafo` serve aos dois mapas: o número de vértices, os nomes e
+a matriz de pesos. Na grade, o peso 1 só marca que a seta existe; no campus,
+o peso é o tempo em minutos. A struct inteira passa de 300 bytes, então as
+funções a recebem como `const Grafo *`: o ponteiro evita copiar tudo a cada
+chamada, e o `const` promete que a função só lê.
+
+| Pergunta | Algoritmo | Custo |
+| --- | --- | --- |
+| Quais pedaços são independentes? | componentes (DFS + laço externo) | O(V + E) |
+| Tem ciclo num grafo dirigido? | DFS com três cores | O(V + E) |
+| Em que ordem fazer, respeitando as setas? | ordenação topológica (Kahn ou DFS) | O(V + E) |
+| Ligar todos pelo menor custo total | Kruskal ou Prim (árvore geradora mínima) | O(E log E) ou O(E log V) |
+| Menor caminho de uma origem, pesos >= 0 | Dijkstra (assunto 0112) | O((V + E) log V) |
+| Menor caminho de uma origem, com pesos negativos | Bellman-Ford | O(V · E) |
+| Menor caminho entre todos os pares | Floyd-Warshall | O(V³) |
+
+> [!WARNING]
+> Na matriz com "0 = sem aresta", uma aresta de peso **zero** some. Não misture
+> as perguntas: Floyd-Warshall com 100 mil vértices é inviável (10¹⁵ passos), e
+> a árvore mínima não dá caminho mínimo (21 m contra 18 m no 0153).
+
+{{exemplo}}
+
+O calouro quer saber em quantos semestres se forma e qual o caminho mais rápido
+entre os prédios do campus. O desenho mostra a grade, com o semestre de cada
+disciplina, e o campus, com as duas rotas em verde:
+
+{{ideia}}
+
+```c
+#include <stdio.h>
+
+#define MAX 8
+#define INFINITO 1000000000
+
+typedef struct {
+    int n;
+    const char *nomes[MAX];
+    int peso[MAX][MAX]; // 0 = sem aresta
+} Grafo;
+
+void liga(Grafo *g, int a, int b, int peso, int mao_dupla) {
+    g->peso[a][b] = peso;
+    if (mao_dupla) g->peso[b][a] = peso;
+}
+
+// pré-requisitos: Kahn por rodadas; devolve quantos semestres (ou -1 se houver ciclo)
+int semestres(const Grafo *g) {
+    int grau[MAX] = {0}, atual[MAX], n_atual = 0, feitas = 0, s = 0;
+    for (int a = 0; a < g->n; a++)
+        for (int b = 0; b < g->n; b++) grau[b] += g->peso[a][b] != 0;
+    for (int v = 0; v < g->n; v++)
+        if (grau[v] == 0) atual[n_atual++] = v;
+    while (n_atual > 0) {
+        int prox[MAX], n_prox = 0;
+        printf("  %dº semestre:", ++s);
+        for (int i = 0; i < n_atual; i++) {
+            int u = atual[i];
+            printf(" %s", g->nomes[u]);
+            feitas++;
+            for (int v = 0; v < g->n; v++)
+                if (g->peso[u][v] && --grau[v] == 0) prox[n_prox++] = v;
+        }
+        printf("\n");
+        for (int i = 0; i < n_prox; i++) atual[i] = prox[i];
+        n_atual = n_prox;
+    }
+    return feitas == g->n ? s : -1;
+}
+
+// rotas: Floyd-Warshall com a matriz de próximo passo
+void todas_as_rotas(const Grafo *g, int d[][MAX], int prox[][MAX]) {
+    for (int i = 0; i < g->n; i++)
+        for (int j = 0; j < g->n; j++) {
+            d[i][j] = (i == j) ? 0 : (g->peso[i][j] ? g->peso[i][j] : INFINITO);
+            prox[i][j] = (i == j || g->peso[i][j]) ? j : -1;
+        }
+    for (int k = 0; k < g->n; k++)
+        for (int i = 0; i < g->n; i++)
+            for (int j = 0; j < g->n; j++)
+                if (d[i][k] + d[k][j] < d[i][j]) {
+                    d[i][j] = d[i][k] + d[k][j];
+                    prox[i][j] = prox[i][k];
+                }
+}
+
+void mostra_rota(const Grafo *g, int d[][MAX], int prox[][MAX], int a, int b) {
+    printf("  %d min: %s", d[a][b], g->nomes[a]);
+    for (int v = a; v != b;) {
+        v = prox[v][b]; // um passo rumo a b
+        printf(" -> %s", g->nomes[v]);
+    }
+    printf("\n");
+}
+
+int main(void) {
+    Grafo grade = {.n = 7, .nomes = {"Lógica", "Cálculo", "C", "Estruturas", "Arquivos", "Grafos", "Projeto"}};
+    liga(&grade, 0, 2, 1, 0); // Lógica antes de C (dirigido; o peso só marca a seta)
+    liga(&grade, 2, 3, 1, 0);
+    liga(&grade, 2, 4, 1, 0);
+    liga(&grade, 1, 5, 1, 0);
+    liga(&grade, 3, 5, 1, 0);
+    liga(&grade, 4, 6, 1, 0);
+    liga(&grade, 5, 6, 1, 0);
+    printf("Grade:\n");
+    int s = semestres(&grade);
+    if (s < 0) printf("  pré-requisito circular!\n");
+    else printf("  formatura em %d semestres\n", s);
+
+    Grafo campus = {.n = 6, .nomes = {"Portaria", "Biblioteca", "Lab", "Bandejão", "Ginásio", "Reitoria"}};
+    liga(&campus, 0, 1, 4, 1); // minutos a pé, mão dupla
+    liga(&campus, 0, 3, 7, 1);
+    liga(&campus, 1, 2, 3, 1);
+    liga(&campus, 1, 3, 2, 1);
+    liga(&campus, 3, 4, 5, 1);
+    liga(&campus, 2, 5, 6, 1);
+    liga(&campus, 4, 5, 2, 1);
+    int d[MAX][MAX], prox[MAX][MAX];
+    todas_as_rotas(&campus, d, prox);
+    printf("Campus:\n");
+    mostra_rota(&campus, d, prox, 0, 2); // da Portaria até o Lab
+    mostra_rota(&campus, d, prox, 2, 4); // do Lab até o Ginásio
+    return 0;
+}
+// Saída:
+// Grade:
+//   1º semestre: Lógica Cálculo
+//   2º semestre: C
+//   3º semestre: Estruturas Arquivos
+//   4º semestre: Grafos
+//   5º semestre: Projeto
+//   formatura em 5 semestres
+// Campus:
+//   7 min: Portaria -> Biblioteca -> Lab
+//   8 min: Lab -> Reitoria -> Ginásio
+```
+
+O fluxograma é o `main`: a grade passa pelo Kahn, e o campus passa uma vez
+pelo Floyd-Warshall e depois só consulta a tabela:
+
+{{fluxograma}}

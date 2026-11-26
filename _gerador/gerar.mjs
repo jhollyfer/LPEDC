@@ -1,17 +1,29 @@
-// Monta os módulos HTML e os desenhos a partir de modulos/<NN-nome>/.
-// Em modulo.html, {{indice}} e {{assuntos}} recebem o índice e os capítulos.
-// Cada texto.html guarda o conceito e o exemplo, separados por {{exemplo}}.
-//   npm run gerar         livro inteiro
-//   npm run gerar -- 03-  só o módulo 03
-//   npm run gerar -- 0016 módulo do assunto 0016, redesenhando só a 0016
+// Gera o arquivo de cada módulo (na raiz: 01-fundamentos.md, ...) e os desenhos
+// de cada assunto, tudo a partir de modulos/<NN-nome>/:
+//
+//   modulos/01-fundamentos/modulo.md                 começo e fim do .md do módulo
+//   modulos/01-fundamentos/0007-.../texto.md         o texto do assunto
+//   modulos/01-fundamentos/0007-.../desenhos.mjs     o diagrama da ideia e o fluxograma
+//
+// Saída: 01-fundamentos.md e legenda.svg (na raiz) e, em cada pasta de assunto,
+// ideia.svg e fluxograma.svg. Nenhum markdown fica em subdiretório: o .md do
+// módulo traz o módulo inteiro, com a lista prática (<modulo>/lista/P????.c).
+//
+//   npm run gerar            tudo
+//   npm run gerar -- 03-     só o módulo 03 (o .md e os desenhos)
+//   npm run gerar -- 0016    só o módulo do assunto 0016, redesenhando só a 0016
+//
+// Cada assunto sai inteiro, como um capítulo: ### Conceito, ### Exemplos de uso e
+// ### Exercícios, um depois do outro. No texto.md, o que vem antes de {{exemplo}}
+// é o conceito e o que vem depois é o exemplo trabalhado; {{ideia}} e
+// {{fluxograma}} viram as imagens. No modulo.md, {{indice}} vira a tabela de
+// assuntos e {{assuntos}} vira os assuntos em ordem, com a lista prática no fim.
 import { readFileSync, writeFileSync, readdirSync, existsSync } from 'node:fs'
 import { join, dirname, posix } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { desenharIdeia } from './tipos/ideia.mjs'
 import { desenharFluxograma } from './tipos/fluxograma.mjs'
 import { desenharLegenda } from './tipos/legenda.mjs'
-import { marked } from '../conteudo/vendor/marked/lib/marked.esm.js'
-import { textoHtml } from './html.mjs'
 
 const AQUI = dirname(fileURLToPath(import.meta.url))
 const RAIZ = join(AQUI, '..')
@@ -139,12 +151,12 @@ const pastaModulos = join(AQUI, 'modulos')
 
 // Rota do jogo: a ordem de estudo, com os módulos bônus (★) no ponto em que destravam
 const FASES = JSON.parse(readFileSync(join(AQUI, 'fases.json'), 'utf8'))
-const tituloDoModulo = (m) => textoHtml(readFileSync(join(pastaModulos, m, 'modulo.html'), 'utf8').match(/<h1>(.*?)<\/h1>/)[1])
+const tituloDoModulo = (m) => readFileSync(join(pastaModulos, m, 'modulo.md'), 'utf8').match(/^# (.+)$/m)[1]
 const mapaDaFase = (modulo, assuntos, qtdLista) => {
   const i = FASES.findIndex((f) => f.modulo === modulo)
   if (i < 0) return ''
   const f = FASES[i]
-  const link = (x) => `[${tituloDoModulo(x.modulo)}](${x.modulo}.html)`
+  const link = (x) => `[${tituloDoModulo(x.modulo)}](${x.modulo}.md)`
   const ordem = `Rota do jogo: etapa ${i + 1} de ${FASES.length}${f.bonus ? ' · módulo bônus ★' : ''}`
   const numeros = assuntos.map((a) => a.slice(0, 4))
   const lista = qtdLista ? `${modulo.slice(0, 2).padStart(2, '0')}01 a ${modulo.slice(0, 2)}${String(qtdLista).padStart(2, '0')}` : null
@@ -181,10 +193,9 @@ for (const modulo of readdirSync(pastaModulos).filter((n) => /^\d{2}-/.test(n)).
 
   for (const pasta of assuntos) {
     if (!ARQUIVOS[pasta.slice(0, 4)]) throw new Error(`assunto ${pasta} não está em arquivos.json`)
-    const texto = readFileSync(join(origem, pasta, 'texto.html'), 'utf8').trim()
-    const cabecalho = texto.match(/^<h2>(.*?)<\/h2>/)
-    if (!cabecalho) throw new Error(`${pasta}/texto.html precisa começar pelo título do assunto`)
-    const titulo = textoHtml(cabecalho[1])
+    const texto = readFileSync(join(origem, pasta, 'texto.md'), 'utf8').trim()
+    const titulo = texto.match(/^## (.+)$/m)?.[1]
+    if (!titulo) throw new Error(`${pasta}/texto.md precisa começar com "## título"`)
     const [numero, assunto] = titulo.split(' · ')
     const { ideia, fluxograma } = await import(pathToFileURL(join(origem, pasta, 'desenhos.mjs')))
 
@@ -197,38 +208,45 @@ for (const modulo of readdirSync(pastaModulos).filter((n) => /^\d{2}-/.test(n)).
     }
 
     indice.push(`| [${numero}](#${ancora(titulo)}) | ${assunto.replaceAll('|', '\\|')} |`)
-    const divisor = '<p>{{exemplo}}</p>'
-    if (!texto.includes(divisor)) throw new Error(`${pasta}/texto.html precisa do marcador {{exemplo}}`)
-    const corpo = texto.slice(cabecalho[0].length)
-      .replace(/<h3>(Passo a passo.*?)<\/h3>/g, '<h4>$1</h4>')
-      .replace('<p>{{pratique}}</p>', '')
-      .replace('<p>{{ideia}}</p>', () => imagem(`material/${numero}-ideia.svg`, `Diagrama da ideia: ${assunto}`, svgIdeia))
-      .replace('<p>{{fluxograma}}</p>', () => imagem(`material/${numero}-fluxograma.svg`, `Fluxograma: ${assunto}`, svgFluxo))
-    const [conceito, trabalhado] = corpo.split(divisor).map((parte) => parte.trim())
+    if (!texto.includes('{{exemplo}}')) throw new Error(`${pasta}/texto.md precisa do marcador {{exemplo}} entre o conceito e o exemplo`)
+    // o passo a passo desce para dentro do Conceito (###)
+    const corpo = texto
+      .replace(/^### Passo a passo/gm, '#### Passo a passo')
+      .replace('{{pratique}}', '')
+      .replace('{{ideia}}', () => imagem(`material/${pasta.slice(0, 4)}-ideia.svg`, `Diagrama da ideia: ${assunto}`, svgIdeia))
+      .replace('{{fluxograma}}', () => imagem(`material/${pasta.slice(0, 4)}-fluxograma.svg`, `Fluxograma: ${assunto}`, svgFluxo))
+      .replace(/^## \d{4} · .+$/m, '')
+    const [conceito, trabalhado] = corpo.split('{{exemplo}}').map((t) => t.trim())
     capitulos.push([
-      cabecalho[0],
-      '<h3>Conceito</h3>', conceito,
-      '<h3>Exemplos de uso</h3>', trabalhado, marked.parse(exemplosDoAssunto(pasta)).trimEnd(),
-      '<h3>Exercícios</h3>', marked.parse(exerciciosDoAssunto(pasta)).trimEnd(),
+      `## ${titulo}`, '',
+      '### Conceito', '', conceito, '',
+      '### Exemplos de uso', '', trabalhado, '', exemplosDoAssunto(pasta), '',
+      '### Exercícios', '', exerciciosDoAssunto(pasta),
     ].join('\n'))
   }
 
+  let texto = readFileSync(join(origem, 'modulo.md'), 'utf8')
   const secaoLista = lista(modulo)
-  const nota = '> [!NOTE]\n> Cada assunto é um capítulo: **Conceito** (a explicação), **Exemplos de uso** (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e **Exercícios** (cada um é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta; resoluções em `_respostas/' + modulo + '/`).'
-  const partes = [marked.parse(nota).trimEnd(), capitulos.join('\n<hr>\n')]
-  if (secaoLista) partes.push('<hr>', marked.parse(secaoLista).trimEnd())
-  const qtdLista = Number(secaoLista?.match(/^(\d+) exercícios/m)?.[1] ?? 0)
-  const texto = readFileSync(join(origem, 'modulo.html'), 'utf8')
-    .replace('<p>{{indice}}</p>', () => marked.parse(['| # | Assunto |', '| --- | --- |', ...indice].join('\n')).trimEnd())
-    .replace('<p>{{assuntos}}</p>', () => partes.join('\n'))
-    .replace(/^(<h1>.*?<\/h1>\n)/, (titulo) => titulo + marked.parse(mapaDaFase(modulo, assuntos, qtdLista)))
-  const aviso = `<!-- Gerado por _gerador. Para mudar este arquivo, edite _gerador/modulos/${modulo}/ e rode: cd _gerador && npm run gerar -->`
-  writeFileSync(join(RAIZ, `${modulo}.html`), aviso + texto)
-  console.log(`ok  ${modulo}.html`)
+  const assuntosMd = [
+    '> [!NOTE]',
+    '> Cada assunto é um capítulo: **Conceito** (a explicação), **Exemplos de uso** (programas que compilam sozinhos: rode com o comando abaixo de cada um e compare com a saída no fim do código) e **Exercícios** (cada um é um arquivo em `material/` com o esqueleto, as dicas e o espaço para a resposta; resoluções em `_respostas/' + modulo + '/`).',
+    '',
+    capitulos.join('\n\n---\n\n'),
+    ...(secaoLista ? ['', '---', '', secaoLista.trimEnd()] : []),
+  ].join('\n')
+  texto = texto
+    .replace('{{indice}}', () => ['| # | Assunto |', '| --- | --- |', ...indice].join('\n'))
+    .replace('{{assuntos}}', () => assuntosMd)
+  texto = texto.replace(/^(# .+\n)/, (t) => `${t}\n${mapaDaFase(modulo, assuntos, secaoLista ? (secaoLista.match(/^(\d+) exercícios/m)?.[1] ?? 0) : 0)}`)
+  const aviso = `<!-- Gerado por _gerador. Para mudar este arquivo, edite _gerador/modulos/${modulo}/ e rode: cd _gerador && npm run gerar -->\n\n`
+  // linhas em branco repetidas fora dos blocos de código viram uma só
+  const limpo = texto.split(/(^```[\s\S]*?^```)/m).map((t, i) => (i % 2 ? t : t.replace(/\n{3,}/g, '\n\n'))).join('')
+  writeFileSync(join(RAIZ, `${modulo}.md`), aviso + limpo)
+  console.log(`ok  ${modulo}.md`)
 }
 writeFileSync(join(MAT, 'legenda.svg'), desenharLegenda())
 
-// Sumário do livro: a rota do jogo (fases.json), mundo por mundo, cada módulo
+// Sumário do README: a rota do jogo (fases.json), mundo por mundo, cada módulo
 // com seus assuntos e o link direto para o capítulo. Fica entre os marcadores
 // <!-- sumario:inicio --> e <!-- sumario:fim -->.
 const sumario = () => {
@@ -240,18 +258,18 @@ const sumario = () => {
       linhas.push(`### ${mundo}`, '')
     }
     const pasta = join(pastaModulos, f.modulo)
-    linhas.push(`**${i + 1}. [${tituloDoModulo(f.modulo)}](${f.modulo}.html)**${f.bonus ? ' ★' : ''}: ${f.missao}.`, '')
+    linhas.push(`**${i + 1}. [${tituloDoModulo(f.modulo)}](${f.modulo}.md)**${f.bonus ? ' ★' : ''}: ${f.missao}.`, '')
     for (const a of readdirSync(pasta).filter((n) => /^\d{4}-/.test(n)).sort()) {
-      const titulo = textoHtml(readFileSync(join(pasta, a, 'texto.html'), 'utf8').match(/<h2>(.*?)<\/h2>/)[1])
-      linhas.push(`- [${titulo}](${f.modulo}.html#${ancora(titulo)})`)
+      const titulo = readFileSync(join(pasta, a, 'texto.md'), 'utf8').match(/^## (.+)$/m)[1]
+      linhas.push(`- [${titulo}](${f.modulo}.md#${ancora(titulo)})`)
     }
     linhas.push('')
   })
   return linhas.join('\n').trimEnd()
 }
-const readme = join(RAIZ, 'README.html')
+const readme = join(RAIZ, 'README.md')
 const textoReadme = readFileSync(readme, 'utf8')
 if (textoReadme.includes('<!-- sumario:inicio -->')) {
-  writeFileSync(readme, textoReadme.replace(/<!-- sumario:inicio -->[\s\S]*<!-- sumario:fim -->/, () => `<!-- sumario:inicio -->\n${marked.parse(sumario())}<!-- sumario:fim -->`))
-  console.log('ok  README.html (sumário)')
+  writeFileSync(readme, textoReadme.replace(/<!-- sumario:inicio -->[\s\S]*<!-- sumario:fim -->/, () => `<!-- sumario:inicio -->\n\n${sumario()}\n\n<!-- sumario:fim -->`))
+  console.log('ok  README.md (sumário)')
 }
