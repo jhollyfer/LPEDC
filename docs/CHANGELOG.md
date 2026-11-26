@@ -6,6 +6,12 @@ Mudanças do LPEDC que quem estuda percebe. Formato
 
 ## [Não lançado]
 
+### Corrigido
+
+- Varredura das 210 questões do quiz: porquês e resumos com conta ou fato errado, dicas que
+  entregavam a resposta e questões que abriam na aula do assunto errado. Altura de árvore passa a
+  ser contada sempre em arestas.
+
 ### Mudado
 
 - No quiz, o painel da direita passou a ensinar. Tem três abas: **Aula**, **Resumo** e
@@ -14,6 +20,7 @@ Mudanças do LPEDC que quem estuda percebe. Formato
   vantagens, desvantagens, um passo a passo desenhado (árvore, heap, hash, lista, pilha, vetor),
   custos, como a prova cobra e os livros de onde o conceito vem.
 - **Para pensar:** nas questões de afirmações, um contraponto por afirmação, sem dizer a resposta.
+- Questão que se repete em outra prova mostra o link para ela, e as duas têm a mesma explicação.
 - Depois de responder, o porquê do acerto ou do erro aparece num bloco só, no topo do painel da
   direita. O porquê das outras alternativas fica recolhido.
 - O curso abre como livro, com prefácio, sumário por partes, um assunto por página e navegação entre capítulos.

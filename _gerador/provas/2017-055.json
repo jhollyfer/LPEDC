@@ -442,7 +442,7 @@
         }
       ],
       "gabarito": "anulada",
-      "resumo": "Remoção em árvore B: tirar a chave; se a página cair abaixo do mínimo, redistribua com um irmão ou concatene; split é coisa da inserção; a raiz pode ter menos que o mínimo. A banca anulou, então não conte com ela, mas a E é a que a teoria sustenta. A mesma questão volta na 061/2018 (Q11) com gabarito E.",
+      "resumo": "Anulada pela banca, então não conte com ela. Remoção em árvore B: tire a chave; se a página cair abaixo do mínimo, redistribua com um irmão (passando pelo pai) ou concatene; split é coisa da inserção. A raiz é a única página que pode ter menos que o mínimo, e por isso a E é a que a teoria sustenta. O texto é o mesmo da Edital 061/2018 Q11; a diferença está na banca, que lá deu E.",
       "assuntos": [
         {
           "num": "0146",
@@ -461,11 +461,11 @@
         },
         {
           "item": "C",
-          "texto": "Para tirar uma chave de página interna, o procedimento usual troca a chave pela sucessora, que está numa folha. Em que página aparece a falta de chaves: na interna ou na folha de onde saiu a sucessora?"
+          "texto": "Para tirar uma chave de página interna, o procedimento usual troca a chave pela sucessora (ou antecessora), que está numa folha. Em que página aparece a falta de chaves: na interna ou na folha de onde ela saiu?"
         },
         {
           "item": "D",
-          "texto": "Na redistribuição, as chaves do irmão são todas maiores (ou menores) que a chave do pai que separa os dois. Se uma chave do irmão entrar direto no lugar da removida, a ordem entre pai e filhos se mantém? Por onde a chave passa?"
+          "texto": "Na redistribuição, as chaves do irmão são todas maiores (ou menores) que a chave do pai que separa os dois. Se uma chave do irmão entrar direto no lugar da removida, a ordem entre pai e filhos se mantém? E se o irmão também estiver no mínimo?"
         },
         {
           "item": "E",
@@ -864,18 +864,18 @@
         }
       ],
       "gabarito": "B",
-      "resumo": "Para testar AVL, calcule a altura de cada subárvore e confira se a diferença é no máximo 1 em todos os nós, não só na raiz. I: AVL. II: alturas 2 e 2 sob a raiz 50, contando arestas, e todos os nós com diferença até 1, é AVL. III: não, o nó 10 tem diferença 2. IV: AVL.",
+      "resumo": "Para testar AVL, calcule a altura de cada subárvore e confira se a diferença é no máximo 1 em todos os nós, não só na raiz. I: AVL. II: alturas 2 e 2 sob a raiz 50, contando arestas, e todos os nós com diferença até 1, é AVL. III: não, o nó 10 tem diferença 2. IV: AVL. As árvores I, III e IV são as mesmas da Edital 024/2017 Q08; lá a árvore II tem letras fora da ordem da BST, e por isso lá a resposta é E (só I e IV são AVL).",
       "assuntos": [
         {
           "num": "0101",
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** decidir, olhando cada árvore pronta, se ela pode ser uma AVL.\n\n- **Regra da AVL** [0101]: em todo nó, as alturas das subárvores esquerda e direita diferem de no máximo 1; olhar só a raiz não basta. Ex.: raiz com filho esquerdo e um neto à esquerda, sem filho direito, tem diferença 2 e não é AVL.\n- **AVL é uma BST** [0099]: a ordem também precisa valer: menores à esquerda, maiores à direita, em todos os nós. Ex.: raiz 10 com filho direito 7 viola a ordem, então não é AVL.\n\n**Como atacar:** em cada quadro, confira a ordem da BST e depois o fator de balanceamento de todos os nós.",
+      "dica": "**Cobra:** decidir, em cada árvore pronta, se ela pode ser uma AVL.\n\n- **Fator de balanceamento** [0101]: altura da subárvore esquerda menos a da direita, contando arestas (subárvore vazia vale -1); numa AVL fica entre -1 e 1 em todos os nós, não só na raiz. Ex.: raiz 30, filho direito 40, neto 50 à direita: fator -2 na raiz.\n- **AVL é uma BST** [0099]: a ordem também precisa valer em toda a subárvore: menores à esquerda de cada nó, maiores à direita. Ex.: `10(15, 20)` não serve: o 15 está à esquerda do 10 e é maior.\n\n**Como atacar:** em cada quadro, confira a ordem da BST e depois o fator de balanceamento de todos os nós.",
       "contrapontos": [
         {
           "item": "I",
-          "texto": "Calcule a altura das subárvores em todos os nós, das folhas para cima, e o fator de cada um. Confira também a ordem: 8 e 12 à esquerda do 15, 16 e 25 à direita."
+          "texto": "Calcule a altura das subárvores em todos os nós, das folhas para cima, e o fator de cada um (esquerda menos direita). Confira também a ordem da BST: 8 e 12 à esquerda do 15, 16 e 25 à direita."
         },
         {
           "item": "II",
@@ -900,7 +900,7 @@
         {
           "letra": "A",
           "texto": "10, 1 e 3 nessa ordem",
-          "porque": "Seria o resultado de uma fila (primeiro a entrar, primeiro a sair). Pilha é LIFO."
+          "porque": "Seria a saída de uma fila (FIFO): o primeiro a entrar sai primeiro. Pilha tira o último que entrou."
         },
         {
           "letra": "B",
@@ -910,7 +910,7 @@
         {
           "letra": "C",
           "texto": "6, 8 e 9 nessa ordem",
-          "porque": "São os três últimos, mas em ordem inversa à de saída: o 9 sai primeiro."
+          "porque": "São os três últimos, mas na ordem inversa da saída: o 9 sai primeiro."
         },
         {
           "letra": "D",
@@ -924,14 +924,14 @@
         }
       ],
       "gabarito": "E",
-      "resumo": "Pilha: sai o topo, que é o último inserido. A sequência de saída é 9, 8, 6. A pegadinha é que a C tem os mesmos números em ordem invertida, e é o que faz a E ser a resposta.",
+      "resumo": "Pilha é LIFO: sai o topo, que é o último inserido. A sequência de saída é 9, 8, 6. A pegadinha é que a C tem os mesmos números em ordem invertida, e é o que faz a E ser a resposta. Difere da Edital 024/2017 Q06, que empilha 3, 4, 6, 8 e 9 e traz 9, 8 e 6 na letra D; por isso lá a resposta é D.",
       "assuntos": [
         {
           "num": "0082",
           "modulo": "12-pilhas-e-filas.md"
         }
       ],
-      "dica": "**Cobra:** o que sai de uma pilha em três remoções seguidas.\n\n- **Pilha (LIFO)** [0082]: o último a entrar fica no topo, e só o topo é removido; o que entrou primeiro sai por último. Ex.: empilhar 5, 2, 9 e remover duas vezes dá 9 e depois 2.\n- **Remoções sucessivas** [0082]: cada remoção expõe o elemento de baixo, então a sequência retirada é a de entrada lida de trás para frente. Ex.: entrada 1, 2, 3, 4 e três remoções dão 4, 3, 2.\n\n**Como atacar:** escreva a pilha com o topo marcado e remova de lá, uma vez por vez."
+      "dica": "**Cobra:** dizer o que sai de uma pilha em três remoções seguidas.\n\n- **Pilha (LIFO)** [0082]: o último a entrar fica no topo, e só o topo é removido; o que entrou primeiro sai por último. Ex.: empilhar `5, 2, 9` e remover duas vezes dá `9` e depois `2`.\n- **Remoções sucessivas** [0082]: cada remoção expõe o elemento de baixo, então a sequência retirada é a de entrada lida de trás para frente. Ex.: entrada `1, 2, 3, 4` e três remoções dão `4, 3, 2`.\n\n**Como atacar:** escreva a pilha com o topo marcado e remova de lá, uma vez por vez."
     },
     {
       "numero": 18,

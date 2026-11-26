@@ -7,7 +7,7 @@
 
 | Atualizado | Fase atual | Progresso | Status |
 |---|---|---|---|
-| 2026-11-26 | 8 · Painel do quiz que ensina (concluída) | 31/31 tarefas | quiz com aula em toda questão para a prova de 2026-11-27 |
+| 2026-11-26 | 8 · Painel do quiz que ensina (concluída) | 33/33 tarefas | quiz com aula em toda questão para a prova de 2026-11-27 |
 
 ## Parou em
 
@@ -29,16 +29,20 @@ exemplo, `passos` com figura, custos, como a prova cobra, fontes). As figuras do
 ícones do curso (`arvore`, `vetor`, `lista`, `pilha`, `hash`, `arvoreB`, `texto`) e saem em
 `quiz/figuras/aula-NNNN-k.svg`. Questão de afirmações tem `contrapontos`, um por afirmação, que
 provocam sem dizer se é verdadeira ou falsa (o `quiz.mjs --check` barra as palavras que entregam).
-Depois de responder, o porquê aparece num bloco só no topo do painel.
+Depois de responder, o porquê aparece num bloco só no topo do painel. As questões repetidas entre
+provas estão em `_gerador/parecidas.json` (13 grupos): o Resumo mostra o link e o conteúdo comum
+é igual nas duas. Convenções das aulas e das questões: altura em arestas (ou "níveis" dito na
+frase), "BST" como nome, uma comparação de chave por volta na busca binária.
 
 ## Próximos passos
 
 Ao mudar a lista de arquivos Markdown ou seus títulos, atualize o índice com
 `node _gerador/conteudo.mjs`.
 
-0. As aulas e os contrapontos foram escritos por agentes a partir do `texto.md` de cada assunto e
-   não passaram pelo `humanizer-pt` nem por leitura completa do dono. Conferidas na tela: AVL,
-   heap, hash por encadeamento e recursão.
+0. As aulas, os contrapontos e a varredura das 210 questões foram feitos por agentes e conferidos
+   por `quiz.mjs --check` e `quiz-navegador.mjs`; o dono ainda não leu tudo. A skill `humanizer-pt`
+   não estava instalada: a passada de texto foi feita à mão pela regra de `RULES.md` §3. Rodar a
+   skill quando houver.
 1. Passar o `humanizer-pt` nos 189 conceitos reescritos (não estava disponível na sessão).
 2. Conferir à mão citações sem capítulo ou sem fonte apontadas na reescrita: 0018 (tabela de
    saltos), 0019 (Deitel cap. 4), 0058 (centavos), 0095 (Hoare 1960 no Cormen cap. 7), 0146

@@ -4,7 +4,7 @@
 
 > Atualiza no mesmo commit em que a tarefa começa ou termina.
 
-**Resumo:** 31 tarefas feitas · 1 substituída · 0 em andamento · 0 a fazer · atualizado 2026-11-26
+**Resumo:** 33 tarefas feitas · 1 substituída · 0 em andamento · 0 a fazer · atualizado 2026-11-26
 
 Status: `A fazer` · `Em andamento` · `Feita` · `Bloqueada` (com motivo nas notas).
 Prioridade: `Alta` · `Média` · `Baixa`.
@@ -74,7 +74,7 @@ Provas recebidas: 11 cadernos de 2016 a 2023 em `_fontes/provas-ppgi.md`; só a 
 | 7.1 | Organizar o leitor como livro, com páginas por capítulo | Alta | Feita | Oito partes, 29 módulos e 189 capítulos |
 | 7.2 | Restaurar Markdown como fonte do livro | Alta | Feita | 304 arquivos `.md` nos caminhos originais |
 
-## Fase 8 · Painel do quiz que ensina (4/4)
+## Fase 8 · Painel do quiz que ensina (6/6)
 
 | # | Tarefa | Prioridade | Status | Notas |
 |---|---|---|---|---|
@@ -82,6 +82,8 @@ Provas recebidas: 11 cadernos de 2016 a 2023 em `_fontes/provas-ppgi.md`; só a 
 | 8.2 | Aula dos 67 assuntos citados nas questões, com passo a passo desenhado e fontes | Alta | Feita | `_gerador/aulas/NNNN.json`; figuras em `quiz/figuras/aula-NNNN-k.svg` |
 | 8.3 | Contraponto nas questões de afirmações das 11 provas | Alta | Feita | campo `contrapontos` em `_gerador/provas/*.json` |
 | 8.4 | Painel em abas (Aula, Resumo, Para pensar) com visual limpo | Alta | Feita | referência: `adacaibs` |
+| 8.5 | Passada de texto nas 67 aulas e varredura das 210 questões (coerência, aula que abre, dica que entregava a resposta) | Alta | Feita | 124 questões ajustadas; nenhum gabarito ou enunciado mudou |
+| 8.6 | Questões repetidas entre provas com conteúdo igual e link | Média | Feita | `_gerador/parecidas.json`, 13 grupos |
 
 ---
 

@@ -172,7 +172,7 @@
         }
       ],
       "gabarito": "D",
-      "resumo": "Numa AVL, em todo nó a diferença de altura entre as subárvores é no máximo 1. Altura 3 com só 3 nós obriga uma cadeia, então não existe AVL assim. Uma AVL de altura h precisa de um número mínimo de nós (h=3 pede pelo menos 4).",
+      "resumo": "Numa AVL, em todo nó a diferença de altura entre as subárvores é no máximo 1. Altura 3 (contando nós, como o enunciado manda) com só 3 nós obriga uma cadeia, então não existe AVL assim: é a D. Uma AVL de altura h precisa de um número mínimo de nós (h = 3, contando nós, pede pelo menos 4). A Q05 deste caderno repete o mesmo texto e foi anulada por ser repetição; aqui vale a D.",
       "assuntos": [
         {
           "num": "0101",
@@ -272,31 +272,31 @@
         {
           "letra": "A",
           "texto": "Uma árvore vazia",
-          "porque": "É AVL: sem nós, nada viola a regra."
+          "porque": "A árvore vazia é AVL (não há nó para violar a regra)."
         },
         {
           "letra": "B",
           "texto": "Uma árvore com dois nós",
-          "porque": "É AVL: raiz com um filho, diferença 1."
+          "porque": "Raiz com um filho: alturas 0 e 1, diferença 1. É AVL."
         },
         {
           "letra": "C",
           "texto": "Uma árvore com três nós e altura igual a dois",
-          "porque": "É AVL: raiz com dois filhos, diferença 0."
+          "porque": "Raiz com dois filhos: diferença 0. É AVL."
         },
         {
           "letra": "D",
           "texto": "Uma árvore com três nós e altura igual a três",
-          "porque": "É a que não pode ser AVL (é uma cadeia, com diferença 2 na raiz), por isso seria a resposta. A banca anulou por ser repetição da questão 3."
+          "porque": "Com três nós e altura 3 a árvore é uma cadeia: a raiz tem uma subárvore de altura 2 e outra vazia (altura 0), diferença 2. Seria a resposta, mas a banca anulou esta por ser repetição da Q03."
         },
         {
           "letra": "E",
           "texto": "Uma árvore com seis nós e altura igual a três",
-          "porque": "É possível e balanceada: é AVL."
+          "porque": "É possível montar: por exemplo, raiz com dois filhos e mais três nós distribuídos nos netos. Todos os nós ficam com diferença até 1. É AVL."
         }
       ],
       "gabarito": "anulada",
-      "resumo": "É a mesma questão da 3, repetida no caderno, e a resposta continua sendo a D (cadeia de três nós, diferença 2). A banca anulou.",
+      "resumo": "Anulada pela banca por ser repetição da Q03 deste caderno, que tem o mesmo texto e gabarito D. Numa AVL, em todo nó a diferença de altura entre as subárvores é no máximo 1. Altura 3 (contando nós, como o enunciado manda) com só 3 nós obriga uma cadeia, então não existe AVL assim: é a D. Uma AVL de altura h precisa de um número mínimo de nós (h = 3, contando nós, pede pelo menos 4).",
       "assuntos": [
         {
           "num": "0101",
@@ -742,50 +742,54 @@
         {
           "letra": "A",
           "texto": "Apenas as afirmações II e III estão corretas",
-          "porque": "A I também é verdadeira: a busca binária só funciona com o vetor ordenado."
+          "porque": "Deixa I de fora, mas I é verdadeira: a busca binária só funciona em vetor ordenado."
         },
         {
           "letra": "B",
           "texto": "Apenas as afirmações I e II estão corretas",
-          "porque": "A III também é verdadeira."
+          "porque": "Deixa III de fora, mas III é verdadeira: com mais de mil elementos ordenados, cerca de 10 comparações contra até 1000 na sequencial."
         },
         {
           "letra": "C",
           "texto": "Apenas as afirmações I e III estão corretas",
-          "porque": "A II também é verdadeira."
+          "porque": "Deixa II de fora. Contando uma comparação de chave por volta, II vale para n ≥ 3: a busca binária faz no máximo ⌊log2 n⌋ + 1 comparações, abaixo de 2·log2 n."
         },
         {
           "letra": "D",
           "texto": "Todas as afirmações estão corretas",
-          "porque": "Correta. I: exige ordem. II: contando uma comparação por volta, o máximo é cerca de log2 n + 1 comparações, que fica abaixo de 2 log2 n quando n cresce. III: com mais de mil elementos ordenados, cerca de 10 comparações contra até mil."
+          "porque": "Correta. I: exige ordem. II: contando uma comparação de chave por volta, o máximo é ⌊log2 n⌋ + 1 comparações, abaixo de 2·log2 n para n ≥ 3. III: com mais de mil elementos ordenados, cerca de 10 comparações contra até mil."
         },
         {
           "letra": "E",
           "texto": "Nenhuma das alternativas anteriores",
-          "porque": "As três afirmações são verdadeiras, então D vale."
+          "porque": "As três afirmações são verdadeiras, então 'nenhuma' não serve."
         }
       ],
       "gabarito": "D",
-      "resumo": "Valores: I V, II V, III V. A busca binária exige vetor ordenado e ganha da sequencial em vetores grandes. Na II, a conta usa uma comparação por volta: cada volta compara a chave com o elemento do meio e decide se achou, se vai à esquerda ou à direita. Contando assim, o máximo é `⌊log₂ n⌋ + 1` comparações, abaixo de `2·log₂ n` para n ≥ 3 (com n = 1.024, 11 contra 20). Se você contar duas comparações por volta (uma de igualdade e outra de menor), o pior caso vira `2·(⌊log₂ n⌋ + 1)` e passa de `2·log₂ n` (22 contra 20). A banca seguiu a contagem usual, de uma por volta, que é a do curso. Quando todas as afirmações parecem boas, desconfie dos exageros (aqui nenhum falha).",
+      "resumo": "Valores: I V, II V, III V. I (precisa estar ordenado) e III (muito mais rápida que a sequencial em vetor grande ordenado) valem. II depende de como se conta. Contando uma comparação de chave por volta, o pior caso é `⌊log₂ n⌋ + 1` comparações, abaixo de `2·log₂ n` para n ≥ 3 (com n = 1.024, 11 contra 20). Se cada volta fizer duas comparações (`==` e depois `<`), o pior caso sobe para `2·(⌊log₂ n⌋ + 1)` e passa do limite (22 contra 20); com n = 1 ou 2 a conta também falha. Na prova, guarde: vetor ordenado, O(log n), pior caso `⌊log₂ n⌋ + 1` voltas. A banca seguiu a contagem usual, de uma comparação por volta, que é a do curso. O texto é o mesmo da Edital 032/2016 Q07; a diferença está na banca, que lá anulou a questão.",
       "assuntos": [
         {
           "num": "0090",
           "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0089",
+          "modulo": "13-busca-e-ordenacao.md"
         }
       ],
-      "dica": "**Cobra:** a pré-condição e o custo da busca binária, comparada à sequencial.\n\n- **Pré-condição: vetor ordenado** [0090]: descartar metade só é correto se o vetor está em ordem; fora de ordem, a busca pode perder uma chave que existe. Ex.: buscando o 4 em `9 2 7 4`, o meio 2 manda ir à direita, depois o 7 manda ir à esquerda, e a busca termina sem achar o 4.\n- **Custo O(log n)** [0090]: cada passo descarta metade, então o máximo é `⌊log₂ n⌋ + 1` comparações. Ex.: com 1000 elementos, no máximo 10.\n- **Busca sequencial** [0089]: no pior caso olha os `n` elementos, e por isso perde para a binária em vetores grandes e ordenados. Ex.: com 1.000.000 de elementos, até 1.000.000 contra 20.\n\n**Como atacar:** confira cada afirmação com a pré-condição da ordem e com o `log₂ n`.",
+      "dica": "**Cobra:** julgar três afirmações sobre busca binária: a pré-condição, o número de comparações e quando ela compensa.\n\n- **Busca binária** [0090]: compara a chave com o elemento do meio e descarta metade do intervalo; só funciona com o vetor ordenado e acesso por índice. Ex.: em `2 5 8 11 14`, buscar 11: meio 8, vai à direita; meio 11, achou.\n- **Pior caso da busca binária** [0090]: no máximo `⌊log₂ n⌋ + 1` voltas, porque cada volta corta o intervalo ao meio; com uma comparação de chave por volta, é esse o total de comparações. Ex.: `n = 32`: `5 + 1 = 6` voltas no máximo.\n- **Busca sequencial** [0089]: no pior caso olha os `n` elementos, e a distância para o `log₂ n` da binária cresce com o tamanho do vetor. Ex.: com 1.000.000 de elementos, até 1.000.000 de comparações contra 20.\n\n**Como atacar:** calcule `⌊log₂ n⌋ + 1` para um `n` pequeno e compare com o limite de cada afirmação.",
       "contrapontos": [
         {
           "item": "I",
-          "texto": "Rode a busca binária pelo 4 em `9 2 7 4`: o meio é o 2, que manda para a direita; o meio seguinte é o 7, que manda para a esquerda. A busca encontra o 4, que está no vetor?"
+          "texto": "Teste em `5 9 1`, buscando 1: o meio é 9, a busca vai para a esquerda e só vê o 5. Ela acha o 1? O que a busca binária supõe sobre a metade que descarta?"
         },
         {
           "item": "II",
-          "texto": "Com `n = 1.024`, quantas vezes dá para cortar o vetor ao meio até sobrar um elemento? Compare esse número com `2·log₂ n = 20`."
+          "texto": "Contando uma comparação de chave por volta, o pior caso da busca binária é `⌊log₂ n⌋ + 1`. Para `n = 16`, quanto dá essa conta, e quanto vale `2·log₂ 16`? E se cada volta fizer duas comparações, `==` e depois `<`?"
         },
         {
           "item": "III",
-          "texto": "Num vetor ordenado de 1.000 elementos, a busca sequencial pode chegar a 1.000 comparações e a binária a 10. E num vetor de 1.000.000?"
+          "texto": "Com `n = 1000` ordenado, a sequencial pode fazer até 1000 comparações; a binária, até `⌊log₂ 1000⌋ + 1 = 10`. E com `n = 1.000.000`? Cada passo da binária custa quanto a mais que um passo da sequencial?"
         }
       ]
     },
@@ -798,17 +802,17 @@
         {
           "letra": "A",
           "texto": "I–X, IV–Z, II–Y",
-          "porque": "IV–Z é falsa: uma BST comum não é completa."
+          "porque": "IV – Z não se sustenta: a BST comum pode degenerar e não é sempre completa."
         },
         {
           "letra": "B",
           "texto": "I–Z, IV–X, III–W",
-          "porque": "IV–X é falsa (BST não é balanceada) e III–W é falsa (AVL não degenera)."
+          "porque": "IV – X e III – W estão trocadas: a BST é quem degenera (W), e a AVL é balanceada."
         },
         {
           "letra": "C",
           "texto": "I–Z, IV–X, III–Y",
-          "porque": "IV–X é falsa: a BST simples não garante balanceamento."
+          "porque": "IV – X não se sustenta: a BST sem balanceamento não garante ser balanceada."
         },
         {
           "letra": "D",
@@ -818,12 +822,16 @@
         {
           "letra": "E",
           "texto": "I–X, IV–W, II–Y",
-          "porque": "Também é defensável: heap é balanceado, BST degenera, rubro-negra tem altura O(log n). A banca marcou D."
+          "porque": "Também defensável: heap é balanceada, BST degenera, rubro-negra tem altura O(log n). A banca marcou D."
         }
       ],
       "gabarito": "D",
-      "resumo": "Heap: sempre completa (Z) e altura O(log n). BST comum: pode degenerar (W). AVL e rubro-negra: balanceadas, altura O(log n). Aqui D e E se sustentam, e nenhuma alternativa usa o 'sempre completa' do heap. O curso teria ficado com o heap em Z, mas na prova vale a letra D da banca. Em questão de associar, marque as certezas e descarte alternativas com um erro.",
+      "resumo": "W é da BST (degenera com chaves em ordem), Z é da heap (árvore completa), e X e Y servem para AVL e rubro-negra; a heap, por ser completa, também tem altura O(log n). Nenhuma alternativa traz I – Z junto com IV – W, e as letras D e E se sustentam. A banca marcou D; o curso ficaria com a heap em Z, mas na prova vale a letra da banca. O texto é o mesmo da Edital 024/2017 Q17; a diferença está na banca, que lá anulou a questão.",
       "assuntos": [
+        {
+          "num": "0099",
+          "modulo": "14-arvores.md"
+        },
         {
           "num": "0101",
           "modulo": "14-arvores.md"
@@ -837,7 +845,7 @@
           "modulo": "28-estruturas-complementos.md"
         }
       ],
-      "dica": "**Cobra:** associar cada tipo de árvore à sua característica de forma e de altura.\n\n- **Heap** [0102]: árvore binária completa, guardada em vetor, em que o pai é maior ou igual aos filhos; não é uma BST. Ex.: `9 5 7`: cada nível se enche da esquerda para a direita.\n- **AVL e rubro-negra** [0101]: ambas são balanceadas e garantem altura O(log n), cada uma com a sua regra de equilíbrio. Ex.: numa AVL com 1000 nós, a altura é de no máximo cerca de 14.\n- **BST comum** [0099]: não balanceia: chaves inseridas em ordem formam uma lista e a altura vai a `n - 1`. Ex.: inserir 1, 2, 3, 4 gera uma cadeia de altura 3.\n\n**Como atacar:** para cada tipo, fixe a propriedade que o define e leia só as linhas que a citam."
+      "dica": "**Cobra:** associar cada tipo de árvore à sua característica de forma e de altura.\n\n- **BST** [0099]: não se balanceia sozinha, e chaves inseridas em ordem formam uma cadeia. Ex.: inserir `1, 2, 3, 4`: cadeia de 4 níveis (altura 3).\n- **AVL** [0101]: balanceia com rotações, e a altura fica perto de `log₂ n`. Ex.: inserir `1, 2, 3, 4`: 3 níveis (altura 2).\n- **Heap** [0102]: árvore binária completa guardada em vetor, com ordem entre pai e filho, mas sem ordem total; não é uma BST. Ex.: `9 5 7`: cada nível se enche da esquerda para a direita.\n- **Rubro-negra** [0177]: balanceada pelas cores dos nós, com altura `O(log n)` em qualquer ordem de inserção. Ex.: o caminho mais longo tem no máximo o dobro do mais curto.\n\n**Como atacar:** liste as propriedades de cada árvore e cruze com as características."
     },
     {
       "numero": 16,

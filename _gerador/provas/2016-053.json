@@ -200,7 +200,7 @@
         {
           "letra": "B",
           "texto": "Posição 0 e posição 7",
-          "porque": "O 22 é o maior valor, e a seleção leva o menor para a frente."
+          "porque": "O 22 é o maior valor, e a seleção crescente leva o menor para a frente."
         },
         {
           "letra": "C",
@@ -219,14 +219,14 @@
         }
       ],
       "gabarito": "C",
-      "resumo": "Simule passada por passada: a seleção acha o menor de v[i..n-1] e troca com v[i]. Passada 0: o menor é 1 (posição 6). Passada 1: o menor de 5 5 3 17 2 4 22 é o 2, na posição 5. Conferido em C: trocas (0,6) e (1,5).",
+      "resumo": "Simule passada por passada: a seleção acha o menor de v[i..n-1] e troca com v[i]. Passada 0: o menor é 1 (posição 6). Passada 1: o menor de 5 5 3 17 2 4 22 é o 2, na posição 5. Conferido em C: trocas (0,6) e (1,5). Difere da Edital 032/2016 Q18, que usa o vetor `4 5 2 3 17 2 1 22` e pede a primeira troca; por isso lá a resposta é posição 0 e posição 6.",
       "assuntos": [
         {
           "num": "0092",
           "modulo": "13-busca-e-ordenacao.md"
         }
       ],
-      "dica": "**Cobra:** Descobrir entre quais posições ocorre a segunda troca da ordenação por seleção.\n\n- **Seleção** [0092]: na passada `i`, troca `v[i]` com o menor valor de `v[i..n-1]`; a segunda passada começa na posição 1. Ex.: `9 4 4 7 1 3`: a 1ª troca é 0 e 4, e dá `1 4 4 7 9 3`; a 2ª olha da posição 1 e troca 1 e 5.\n- **Vetor já alterado** [0092]: a segunda passada trabalha com o vetor depois da primeira troca, não com o original. Ex.: depois de trocar, o valor que estava na posição 0 passou a ocupar a posição do menor.\n- **Empate entre menores** [0092]: se o menor valor se repete, vale a primeira ocorrência dele no vetor. Ex.: em `5 2 8 2`, o menor é o 2 da posição 1.\n\n**Como atacar:** aplique a primeira troca, reescreva o vetor e ache o menor do resto."
+      "dica": "**Cobra:** descobrir entre quais posições ocorre a segunda troca da ordenação por seleção.\n\n- **Seleção** [0092]: na passada `i`, acha o menor valor de `v[i..n-1]` e troca com `v[i]`; a 1ª passada olha o vetor inteiro e a 2ª começa na posição 1. Ex.: `8 6 3 7 5`: a 1ª troca é 0 e 2, e dá `3 6 8 7 5`; a 2ª olha da posição 1 e troca 1 e 4.\n- **Vetor já alterado** [0092]: a segunda passada trabalha com o vetor depois da primeira troca, não com o original. Ex.: o valor que estava na posição 0 foi para a posição do menor.\n- **Empate entre menores** [0092]: se o menor valor aparece mais de uma vez, vale a primeira ocorrência, porque a comparação usa `<` e não `<=`. Ex.: em `5 2 8 2`, o menor é o 2 da posição 1: troca entre 0 e 1.\n\n**Como atacar:** aplique a primeira troca, reescreva o vetor e ache o menor do resto."
     },
     {
       "numero": 5,
@@ -307,7 +307,7 @@
         }
       ],
       "gabarito": "D",
-      "resumo": "O que faz a lista ser dupla é o par de ponteiros `prox` e `ant` em cada nó. Circular, ordenada e contígua são outras características, que podem ou não aparecer junto.",
+      "resumo": "O que faz a lista ser dupla é o par de ponteiros `prox` e `ant` em cada nó. Circular, ordenada e contígua são outras características, que podem ou não aparecer junto. A mesma questão, com o mesmo gabarito, cai na Edital 024/2017 Q20.",
       "assuntos": [
         {
           "num": "0079",

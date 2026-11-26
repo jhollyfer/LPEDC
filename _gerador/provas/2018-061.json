@@ -524,31 +524,31 @@
         {
           "letra": "A",
           "texto": "Deve-se fazer o processo de SPLIT sempre na página onde se encontrar a chave.",
-          "porque": "Split é da inserção (página cheia), não da remoção."
+          "porque": "Split é da inserção (página cheia que se divide). Na remoção o processo é de redistribuição ou concatenação."
         },
         {
           "letra": "B",
           "texto": "Deve-se fazer o processo de SPLIT na página onde se encontrar a chave, exceto quanto é um elemento da raiz da árvore.",
-          "porque": "Mesmo erro: remoção não usa split."
+          "porque": "Mesmo erro da A: remoção não usa split, nem fora da raiz."
         },
         {
           "letra": "C",
           "texto": "Se a página onde se encontrar a chave não é folha, deve-se fazer procedimento de concatenação ou redistribuição, considerando os irmãos.",
-          "porque": "Impreciso: em nó interno a chave é substituída pela sucessora ou antecessora da folha, e a redistribuição ou concatenação ocorre depois, na folha."
+          "porque": "Em nó interno, a chave é trocada pela sucessora (ou antecessora) de uma folha, e a redistribuição ou concatenação acontece depois, na folha que ficou abaixo do mínimo. Dizer que o procedimento é feito na página não folha é impreciso."
         },
         {
           "letra": "D",
           "texto": "Remove-se a chave, e a substitui por uma chave do nó irmão.",
-          "porque": "A redistribuição passa pelo pai: a chave do pai desce e a do irmão sobe. Trocar direto com o irmão quebra a ordem."
+          "porque": "A redistribuição passa pelo nó pai: a chave do pai desce e uma chave do irmão sobe. Trocar direto pela do irmão quebra a ordem das chaves."
         },
         {
           "letra": "E",
           "texto": "No caso de só haver uma única página, a remoção não causa a necessidade de balanceamento.",
-          "porque": "Correta. Com uma única página (a raiz, que é folha) não há mínimo a respeitar, então a remoção não exige redistribuir nem concatenar."
+          "porque": "Correta. A raiz é a única página que pode ter menos que o mínimo de chaves; com uma única página (a raiz, que é folha), a remoção não exige redistribuir nem concatenar."
         }
       ],
       "gabarito": "E",
-      "resumo": "Remoção em árvore B: se a página fica abaixo do mínimo, redistribua com o irmão ou concatene; split é da inserção; a raiz é a exceção ao mínimo. Aqui a questão não foi anulada e a letra é E (na 055/2017 a mesma questão foi anulada).",
+      "resumo": "Remoção em árvore B: tire a chave; se a página cair abaixo do mínimo, redistribua com um irmão (passando pelo pai) ou concatene; split é coisa da inserção. A raiz é a única página que pode ter menos que o mínimo, e por isso a E é a que a teoria sustenta. O texto é o mesmo da Edital 055/2017 Q09; a diferença está na banca, que lá anulou a questão.",
       "assuntos": [
         {
           "num": "0146",
@@ -559,23 +559,23 @@
       "contrapontos": [
         {
           "item": "A",
-          "texto": "O split divide uma página cheia que recebe mais uma chave. Remover de uma página que já está no mínimo deixa ela acima do máximo ou abaixo do mínimo?"
+          "texto": "Split acontece quando uma página passa do máximo de chaves. Na remoção, a página fica com mais ou com menos chaves do que tinha?"
         },
         {
           "item": "B",
-          "texto": "O split na raiz faz a árvore ganhar um nível; a remoção pode fazer a raiz esvaziar e a árvore perder um nível. Qual das duas situações aparece numa remoção?"
+          "texto": "Fora da raiz, uma página que perde uma chave e fica abaixo do mínimo precisa ganhar chaves ou se dividir em duas?"
         },
         {
           "item": "C",
-          "texto": "Quando a chave está num nó interno, o primeiro passo é trocá-la pela antecessora ou pela sucessora, que mora numa folha. Depois dessa troca, em qual página aparece a falta de chaves: na interna ou na folha?"
+          "texto": "Para tirar uma chave de página interna, o procedimento usual troca a chave pela sucessora (ou antecessora), que está numa folha. Em que página aparece a falta de chaves: na interna ou na folha de onde ela saiu?"
         },
         {
           "item": "D",
-          "texto": "Se o irmão também está no mínimo, tirar uma chave dele deixa o irmão abaixo do mínimo. E a chave emprestada pode ir direto do irmão para a página, ou precisa passar pelo pai para manter a ordem?"
+          "texto": "Na redistribuição, as chaves do irmão são todas maiores (ou menores) que a chave do pai que separa os dois. Se uma chave do irmão entrar direto no lugar da removida, a ordem entre pai e filhos se mantém? E se o irmão também estiver no mínimo?"
         },
         {
           "item": "E",
-          "texto": "Com uma única página, ela é a raiz, e a raiz está dispensada do mínimo de chaves dos outros nós. Depois de remover uma chave dela, sobra algum nó abaixo do mínimo exigido?"
+          "texto": "O mínimo de chaves por página vale para todas, menos a raiz. Se a árvore tem uma página só, ela é a raiz: existe mínimo a respeitar?"
         }
       ]
     },
@@ -758,31 +758,31 @@
         {
           "letra": "A",
           "texto": "A árvore é uma árvore AVL.",
-          "porque": "É o contrário: diferença maior que 1 num nó viola a regra, então não é AVL."
+          "porque": "Na AVL a diferença de altura entre as subárvores de todo nó é no máximo 1. Diferença maior que 1 em algum nó é exatamente o que a AVL proíbe."
         },
         {
           "letra": "B",
           "texto": "Trata-se com certeza de uma árvore binária sem balanceamento.",
-          "porque": "Não há certeza: a rubro-negra é uma árvore balanceada e admite essa diferença em alguns nós. Só dá para dizer que não é AVL."
+          "porque": "A árvore pode ser de outro tipo balanceado, como a rubro-negra, que tolera diferença maior que 1 e mesmo assim mantém altura O(log n). Por isso o 'com certeza' falha."
         },
         {
           "letra": "C",
           "texto": "Trata-se com certeza de uma árvore vermelho e preto.",
-          "porque": "Também sem certeza: pode ser uma BST comum."
+          "porque": "Também não há certeza. Pode ser uma BST comum, sem nenhum balanceamento."
         },
         {
           "letra": "D",
           "texto": "Tal árvore não pode existir por não se tratar de uma árvore binária de pesquisa.",
-          "porque": "Pode existir: BST não restringe as alturas."
+          "porque": "Pode existir. A BST comum não impõe limite de diferença de altura."
         },
         {
           "letra": "E",
           "texto": "Nenhuma das alternativas anteriores está correta.",
-          "porque": "Correta. Com a informação dada você só descarta a AVL; não dá para afirmar com certeza se é rubro-negra ou BST sem balanceamento."
+          "porque": "Correta. Da diferença maior que 1 só se conclui que a árvore não é AVL; não dá para afirmar com certeza se é rubro-negra ou BST sem balanceamento."
         }
       ],
       "gabarito": "E",
-      "resumo": "Diferença de altura maior que 1 num nó exclui AVL, mas nada mais. A rubro-negra é balanceada de outro jeito e admite essa diferença, e uma BST comum também. Cuidado com as palavras 'com certeza'.",
+      "resumo": "Diferença de altura maior que 1 num nó exclui a AVL, e nada mais: a rubro-negra é balanceada de outro jeito e admite essa diferença, e uma BST comum também. Por isso B e C, que dizem 'com certeza', não se sustentam, e a E é a única que fica de pé. Difere da Edital 032/2016 Q05 só no texto da E, que lá não tinha 'está correta'; lá a banca anulou a questão.",
       "assuntos": [
         {
           "num": "0101",
@@ -793,7 +793,7 @@
           "modulo": "28-estruturas-complementos.md"
         }
       ],
-      "dica": "**Cobra:** o que a diferença de altura maior que 1 entre as subárvores de um nó permite concluir.\n\n- **Regra da AVL** [0101]: a AVL exige diferença de altura de no máximo 1 em todos os nós. Ex.: um nó com subárvores de altura 0 e 2 já tira a árvore da AVL.\n- **BST sem balanceamento** [0099]: a BST comum aceita qualquer forma, desde que menores fiquem à esquerda e maiores à direita. Ex.: inserir 1, 2, 3 sem rotação dá `fb = -2` e continua sendo uma BST válida.\n- **Rubro-negra** [0177]: balanceia por cores e deixa o caminho mais longo ser até o dobro do mais curto, então não tem a regra de diferença 1. Ex.: uma árvore rubro-negra pode ter subárvores com alturas diferentes em mais de 1.\n\n**Como atacar:** ache a propriedade que a diferença maior que 1 elimina e o que continua possível.",
+      "dica": "**Cobra:** o que a diferença de altura maior que 1 entre as subárvores de um nó permite concluir sobre uma BST.\n\n- **Fator de balanceamento** [0101]: altura da subárvore esquerda menos a da direita; a AVL exige que ele fique entre -1 e 1 em todos os nós. Ex.: nó com esquerda de altura 3 e direita de altura 1: fator 2, a AVL rotacionaria.\n- **BST sem balanceamento** [0099]: a regra da BST só ordena as chaves (menores à esquerda, maiores à direita) e não limita a altura. Ex.: inserir `1, 2, 3` em ordem numa BST comum dá uma cadeia, e nada a corrige.\n- **Rubro-negra** [0177]: equilibra pelas cores dos nós e deixa o caminho mais longo ser até o dobro do mais curto, sem a regra de diferença 1. Ex.: numa rubro-negra, um caminho de 2 nós e outro de 4 podem coexistir.\n\n**Como atacar:** veja o que a premissa elimina e o que ela deixa possível.",
       "contrapontos": [
         {
           "item": "A",
@@ -827,12 +827,12 @@
         {
           "letra": "B",
           "texto": "Apenas a afirmação II é verdadeira",
-          "porque": "A II é falsa: no pior caso todas as n chaves caem numa só lista e a busca faz n comparações, mais que log n."
+          "porque": "II é falsa: no pior caso todas as n chaves caem numa só lista e a busca faz n comparações, mais que log n."
         },
         {
           "letra": "C",
           "texto": "Apenas a afirmação III é verdadeira",
-          "porque": "A III é falsa: 'sempre' e 'qualquer' são exagero, e com poucas chaves e tabela esparsa o endereçamento aberto pode fazer menos."
+          "porque": "III é falsa: com tabela folgada, o endereçamento aberto pode fazer menos comparações que o encadeamento. 'Sempre' e 'qualquer' denunciam o exagero."
         },
         {
           "letra": "D",
@@ -842,18 +842,22 @@
         {
           "letra": "E",
           "texto": "Nenhuma das alternativas anteriores está correta",
-          "porque": "A A está correta."
+          "porque": "I é verdadeira, então A está certa."
         }
       ],
       "gabarito": "A",
-      "resumo": "Valores: I V, II F, III F. Palavras absolutas ('nunca', 'jamais', 'sempre') pedem um contraexemplo: na II, a lista única com n chaves; na III, uma tabela aberta pouco ocupada. A I é verdadeira porque colisão secundária é conceito de endereçamento aberto.",
+      "resumo": "Valores: I V, II F, III F. A I vale porque colisão secundária é conceito de endereçamento aberto. Palavras absolutas ('nunca', 'jamais', 'sempre', 'qualquer') pedem um contraexemplo: na II, a lista única com n chaves (n comparações, não log n); na III, uma tabela aberta pouco ocupada. A mesma questão, com o mesmo gabarito, cai na Edital 024/2017 Q07.",
       "assuntos": [
         {
           "num": "0106",
           "modulo": "15-hash.md"
+        },
+        {
+          "num": "0107",
+          "modulo": "15-hash.md"
         }
       ],
-      "dica": "**Cobra:** o custo da busca e o tipo de colisão no hash por encadeamento, comparado ao endereçamento aberto.\n\n- **Encadeamento** [0106]: cada balde guarda uma lista; a busca percorre só ela, em média `α = n / m` nós, e no pior caso (tudo num balde), `n`. Ex.: 4 chaves no mesmo balde: achar a última custa 4 comparações.\n- **Colisão secundária** [0107]: no endereçamento aberto, chaves de hashes diferentes disputam as mesmas posições de sondagem; no encadeamento só dividem lista as de mesmo hash. Ex.: com `k % 11` e a posição 4 ocupada, a chave 15 vai para o 5; depois a chave 5 acha a vaga ocupada.\n- **Pior caso** [0106]: depende da função hash; uma função ruim joga tudo num balde e a busca vira O(n). Ex.: a função `k % 10` com chaves 10, 20, 30, 40 manda todas para o balde 0.\n\n**Como atacar:** desconfie de \"sempre\" e \"nunca\" e pense no pior caso de cada método.",
+      "dica": "**Cobra:** julgar afirmações sobre colisões e comparações no hash encadeado, comparado ao endereçamento aberto.\n\n- **Encadeamento** [0106]: chaves da mesma posição ficam numa lista, e a colisão só aumenta essa lista. Ex.: `M = 3`: as chaves 3, 6, 9 e 12 caem na posição 0.\n- **Colisão secundária** [0107]: aglomerado em que chaves de hashes diferentes disputam as mesmas posições da sondagem; é problema do endereçamento aberto. Ex.: `M = 5`, `k % 5`: com o 7 na 2, o 12 vai à 3; o 3 chega à 3 já ocupada.\n- **Pior caso da busca** [0106]: depende da função hash; com todas as chaves numa posição, a busca percorre a lista toda: custo `n`. Ex.: no exemplo da posição 0, achar o 12 custa 4 comparações.\n\n**Como atacar:** procure o pior caso e compare as duas técnicas antes de aceitar \"nunca\" e \"sempre\".",
       "contrapontos": [
         {
           "item": "I",
@@ -861,7 +865,7 @@
         },
         {
           "item": "II",
-          "texto": "Use a pior função possível, `h(k) = 0` para toda chave. Com 16 chaves, quantas comparações para achar a última da lista? Compare com `log₂ 16 = 4`."
+          "texto": "Com `M = 3`, as chaves 3, 6, 9 e 12 caem todas na posição 0, numa lista de 4 nós. Buscar o 12 custa quantas comparações? E quanto vale log₂ 4?"
         },
         {
           "item": "III",
@@ -878,50 +882,54 @@
         {
           "letra": "A",
           "texto": "Apenas a afirmação I é verdadeira",
-          "porque": "A III também é verdadeira (vetor auxiliar de tamanho n)."
+          "porque": "Deixa III de fora, mas III é verdadeira: cada passada grava a saída num vetor auxiliar de tamanho n."
         },
         {
           "letra": "B",
           "texto": "Apenas a afirmação II é verdadeira",
-          "porque": "A II não é a única, e é falsa como escrita: o número de passadas é o de dígitos da maior chave, não a média."
+          "porque": "II é imprecisa: o número de passadas é o número de dígitos da maior chave, não a média. E I e III ficam de fora."
         },
         {
           "letra": "C",
           "texto": "Apenas a afirmação III é verdadeira",
-          "porque": "A I também é verdadeira."
+          "porque": "Deixa I de fora, mas I é verdadeira: o Radix distribui por dígito, sem comparar chaves."
         },
         {
           "letra": "D",
           "texto": "Apenas as afirmações II e III são verdadeiras",
-          "porque": "A I é verdadeira e a II, como escrita, é falsa."
+          "porque": "Inclui II, que é imprecisa, e deixa I de fora."
         },
         {
           "letra": "E",
           "texto": "Nenhuma das afirmações é verdadeira",
-          "porque": "I e III são verdadeiras, então não é o caso."
+          "porque": "Diz que nenhuma afirmação vale, mas I e III são verdadeiras. Sem letra que traga 'I e III', a banca anulou."
         }
       ],
       "gabarito": "anulada",
-      "resumo": "Valores: I V (radix distribui por dígito, sem comparar chaves), II F (as passadas seguem os dígitos da maior chave, não a média), III V (vetor auxiliar proporcional a n). Como I e III são verdadeiras, nenhuma alternativa serve, e a banca anulou. Para radix: O(d·(n+b)) tempo e O(n+b) espaço, com b a base.",
+      "resumo": "Anulada pela banca. I verdadeira (o Radix distribui por dígito, sem comparar chaves). II imprecisa (as passadas seguem os dígitos da maior chave, não a média). III verdadeira (vetor auxiliar proporcional a n). Para o Radix: O(d·(n + b)) de tempo e O(n + b) de espaço, com b a base. Como I e III valem, nenhuma letra serve: a E diz que nenhuma afirmação é verdadeira. Difere da Edital 032/2016 Q17 só na E, que lá diz 'nenhuma das alternativas anteriores' e seria a saída; lá a questão também foi anulada.",
       "assuntos": [
         {
           "num": "0121",
           "modulo": "18-ordenacao-linear.md"
+        },
+        {
+          "num": "0120",
+          "modulo": "18-ordenacao-linear.md"
         }
       ],
-      "dica": "**Cobra:** as propriedades do radix sort: comparações, número de passadas e espaço extra.\n\n- **Radix sort** [0121]: ordena dígito a dígito, do menos significativo para o mais, cada passada um counting sort estável; não compara chaves entre si. Ex.: `170 45 75 90` vira `170 90 45 75`, depois `45 170 75 90` e por fim `45 75 90 170`.\n- **Custo por dígitos** [0121]: faz uma passada por dígito, e o custo é O(d · (n + b)): d passadas sobre os n elementos. Ex.: números de 3 dígitos fazem 3 passadas.\n- **Espaço do counting sort** [0120]: cada passada grava a saída num vetor auxiliar de `n` posições, mais o vetor de contagem de `b` posições. Ex.: ordenar 1000 elementos pede uma saída de 1000 posições.\n\n**Como atacar:** julgue cada afirmação com a ideia de dígitos, passadas e vetor auxiliar.",
+      "dica": "**Cobra:** julgar afirmações sobre comparações, passadas e espaço extra do Radix sort.\n\n- **Radix sort** [0121]: ordena dígito a dígito, do menos significativo ao mais, com uma ordenação estável por dígito, sem comparar uma chave com outra. Ex.: `53 21 47`: unidades dão `21 53 47`; dezenas dão `21 47 53`.\n- **Passadas** [0121]: o Radix faz uma passada por posição de dígito, e o custo total é O(d · (n + b)), com `d` o número de dígitos e `b` a base. Ex.: em base 10, chaves entre 100 e 999 têm `d = 3`: 3 passadas.\n- **Counting sort** [0120]: conta quantas vezes cada dígito aparece e grava a saída num vetor auxiliar do tamanho do vetor, mais os `b` contadores. Ex.: `n = 1000`, base 10: 1000 posições de saída e 10 contadores.\n\n**Como atacar:** por afirmação: compara chaves? de que dependem as passadas? precisa de espaço extra?",
       "contrapontos": [
         {
           "item": "I",
-          "texto": "No radix, a chave vai para o balde do seu dígito: na primeira passada, o 37 vai para o balde 7 sem olhar as outras chaves. Em que momento duas chaves são comparadas entre si?"
+          "texto": "Em base 10, cada passada do Radix distribui os números pelo dígito da vez, contando quantos caem em cada um dos 10 dígitos. Em algum momento ele pergunta se `53 < 47`?"
         },
         {
           "item": "II",
-          "texto": "Ordene 5, 3 e 1000 em base 10. A média de dígitos é 2 e a maior chave tem 4 dígitos: quantas passadas o radix precisa para pôr o 1000 no lugar?"
+          "texto": "Vetor `5 7 830 2`: a média de dígitos é `(1+1+3+1)/4 = 1,5`. Quantas passadas o Radix precisa para que o 830 seja ordenado pelo dígito das centenas?"
         },
         {
           "item": "III",
-          "texto": "Cada passada usa um counting sort estável, que escreve num vetor de saída do tamanho da entrada, mais `b` contadores, um por dígito da base. Para `n = 1.000` em base 10, quanta memória extra é isso?"
+          "texto": "Cada passada usa uma contagem estável que grava a saída num vetor auxiliar. Com `n = 1000` em base 10, quantas posições tem esse vetor, além dos 10 contadores?"
         }
       ]
     },
@@ -934,50 +942,54 @@
         {
           "letra": "A",
           "texto": "Todas as afirmações são verdadeiras",
-          "porque": "A III é discutível, e a banca não a aceitou como verdadeira."
+          "porque": "A III é discutível: a árvore B também gasta ponteiros e páginas semicheias, então não dá para afirmar que o hash ocupa sempre mais."
         },
         {
           "letra": "B",
           "texto": "Todas as afirmações são falsas",
-          "porque": "I e II são verdadeiras."
+          "porque": "I e II são verdadeiras: o hash não guarda ordem e a busca média é O(1 + α)."
         },
         {
           "letra": "C",
           "texto": "Apenas as afirmações I e III são verdadeiras",
-          "porque": "A II também é verdadeira e a III é discutível."
+          "porque": "Deixa II de fora, mas II é verdadeira, e a III é discutível."
         },
         {
           "letra": "D",
           "texto": "Apenas a afirmação III é verdadeira",
-          "porque": "I e II são verdadeiras."
+          "porque": "Nega I e II, que são verdadeiras."
         },
         {
           "letra": "E",
           "texto": "Apenas as afirmações I e II são verdadeiras",
-          "porque": "Correta pela banca. I: hash não mantém ordem. II: com boa função e fator de carga controlado a busca média é O(1). III é duvidosa: depende da comparação de espaço entre ponteiros de listas e páginas parcialmente vazias da árvore B."
+          "porque": "Correta pela banca. I: hash não mantém ordem. II: com boa função e fator de carga controlado, a busca média é O(1). III é discutível: depende da comparação entre os ponteiros das listas e as páginas semicheias da árvore B, e a banca a tratou como falsa."
         }
       ],
       "gabarito": "E",
-      "resumo": "Hash: busca média O(1) se bem projetado, mas sem ordem entre as chaves (sem percurso ordenado, sem busca por intervalo). A III é discutível e a banca a tratou como falsa; fique com E nesta questão.",
+      "resumo": "I: o hash não mantém ordem (sem percurso ordenado, sem busca por intervalo). II: com boa função e fator de carga controlado, a busca esperada é O(1 + α), constante. III é a duvidosa: a árvore B também usa ponteiros e páginas semicheias, então 'ocupa mais espaço' não vale sempre. A banca tratou a III como falsa; fique com E nesta questão. Difere da Edital 032/2016 Q11 só na II, que lá acrescenta 'quando computado em função do tamanho da tabela'; lá a banca anulou a questão.",
       "assuntos": [
         {
           "num": "0106",
           "modulo": "15-hash.md"
+        },
+        {
+          "num": "0146",
+          "modulo": "22-arvores-avancadas.md"
         }
       ],
-      "dica": "**Cobra:** o custo médio do hash por encadeamento, a falta de ordem e o espaço extra, comparado à árvore B.\n\n- **Custo médio** [0106]: com hash bem projetado e `m` crescendo com `n`, o fator de carga `α` fica constante e a busca é O(1) em média. Ex.: 1000 chaves em 1000 baldes: `α = 1`, cerca de 2 comparações.\n- **Hash não ordena** [0105]: a posição vem do cálculo da chave, então varrer a tabela não entrega as chaves em ordem. Ex.: com `k % 5`, as chaves 8, 11 e 5 ficam na ordem 5, 11, 8.\n- **Espaço do encadeamento** [0106]: cada nó guarda um ponteiro além da chave, e o vetor de baldes ocupa espaço próprio. Ex.: 1000 chaves de 4 bytes mais 1000 ponteiros de 8 bytes dão 8000 bytes extras.\n\n**Como atacar:** julgue cada afirmação por vez, e compare o espaço com o de uma árvore B.",
+      "dica": "**Cobra:** ordem das chaves, busca esperada e espaço extra do hash encadeado, comparado à árvore B.\n\n- **Hash e ordem** [0105]: a posição vem da função hash, então varrer a tabela não entrega as chaves em ordem. Ex.: `m = 3`, `k % 3`, inserir `8, 4, 6`: lida da posição 0 à 2, a tabela dá `6 4 8`.\n- **Busca esperada no encadeamento** [0106]: com boa função hash e `m` crescendo junto com `n`, o fator de carga `α = n/m` fica constante e a busca esperada custa O(1). Ex.: `n = 1000` e `m = 1000`: lista média de 1 nó.\n- **Espaço da árvore B** [0146]: cada página reserva lugar para `2t - 1` chaves e `2t` filhos e pode estar pela metade; o encadeamento gasta baldes e um `prox` por chave. Ex.: com grau mínimo 2, cada página tem de 1 a 3 chaves.\n\n**Como atacar:** separe o que vale sempre do que depende da implementação.",
       "contrapontos": [
         {
           "item": "I",
-          "texto": "Insira 30, 10 e 20 numa tabela de tamanho 7 com `h(k) = k mod 7` e percorra os baldes do 0 ao 6. Em que ordem as chaves saem? Compare com o percurso em ordem de uma BST com as mesmas chaves."
+          "texto": "`m = 3`, `k % 3`, inserir `8, 4, 6`. Lendo os baldes de 0 a 2, sai `6 4 8`. Para listar as chaves em ordem crescente, a tabela basta ou você precisa ordenar depois? Compare com o percurso em ordem de uma BST."
         },
         {
           "item": "II",
-          "texto": "Com `n` chaves em `m` baldes e uma boa função, a lista média tem `α = n/m` chaves. Se a tabela cresce junto com `n`, mantendo `α` perto de 1, o que acontece com a busca média quando `n` dobra?"
+          "texto": "A busca esperada no encadeamento custa `O(1 + α)`, com `α = n/m`. Com `n = 1000` chaves e `m = 1000` baldes, quantos nós tem a lista média? Se a tabela cresce junto com `n`, o que acontece com a busca quando `n` dobra?"
         },
         {
           "item": "III",
-          "texto": "O encadeamento gasta um vetor de `m` ponteiros e um `prox` por chave. A árvore B reserva, por página, lugar para até `2t - 1` chaves e `2t` ponteiros, e as páginas podem estar só pela metade. Qual das duas sobras é maior depende de quê?"
+          "texto": "Hash encadeado com `n` chaves: `m` ponteiros de balde e um `prox` por nó. Árvore B de grau mínimo `t`: cada página reserva `2t - 1` chaves e `2t` filhos e pode estar só pela metade. Qual sobra mais depende de quê: de `m`, de `t`, da ocupação?"
         }
       ]
     },
