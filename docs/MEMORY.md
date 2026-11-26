@@ -7,9 +7,13 @@
 
 | Atualizado | Fase atual | Progresso | Status |
 |---|---|---|---|
-| 2026-11-22 | 5 · Quiz e guia de estudo (concluída) | 25/25 tarefas | curso pronto para a prova de 2026-11-27 |
+| 2026-11-26 | 6 · Leitura no site (concluída) | 25/25 tarefas | curso pronto para a prova de 2026-11-27 |
 
 ## Parou em
+
+O link **Curso** abre o sumário no GitHub Pages. Em **Todos os arquivos**, os 304 Markdown têm
+rotas no mesmo `index.html`. O teste no Chromium passou nas 210 questões e na trilha, a 390 px e
+1.440 px.
 
 O curso lê como livro (`DECISIONS.md` #13). Cada assunto é um capítulo no `.md` do módulo, com
 Conceito, Exemplos de uso e Exercícios juntos. Os 189 conceitos estão em texto corrido, com a fonte
@@ -20,6 +24,9 @@ No quiz, o tópico 3 virou quatro subtópicos (3.1 Lista, 3.2 Fila, 3.3 Pilha, 3
 marcados à mão nas 54 questões; `quiz-navegador.mjs` passou nas 210.
 
 ## Próximos passos
+
+Ao mudar a lista de arquivos Markdown ou seus títulos, atualize o índice com
+`node _gerador/conteudo.mjs`.
 
 1. Passar o `humanizer-pt` nos 189 conceitos reescritos (não estava disponível na sessão).
 2. Conferir à mão citações sem capítulo ou sem fonte apontadas na reescrita: 0018 (tabela de

@@ -1,0 +1,180 @@
+#curso[hidden],
+.link-curso[hidden] {
+  display: none;
+}
+
+.link-curso[aria-current] {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+@media (max-width: 460px) {
+  .cabeca:has(.link-curso:not([hidden])) {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+}
+
+.curso-navegacao,
+.curso-leitura {
+  max-width: 78ch;
+  margin-inline: auto;
+}
+
+.curso-navegacao {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin-bottom: 32px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--accent);
+}
+
+.curso-navegacao [aria-current] {
+  color: var(--text);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.curso-leitura {
+  overflow-wrap: anywhere;
+  line-height: 1.65;
+}
+
+.curso-leitura h1,
+.curso-leitura h2 {
+  font-family: var(--serif);
+  font-weight: 400;
+  line-height: 1.12;
+}
+
+.curso-leitura h1 {
+  margin: 0 0 24px;
+  font-size: clamp(2.25rem, 6vw, 3.75rem);
+}
+
+.curso-leitura h2 {
+  margin: 1.5em 0 0.45em;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+}
+
+.curso-leitura h3,
+.curso-leitura h4 {
+  margin: 1.6em 0 0.35em;
+}
+
+.curso-leitura [id] {
+  scroll-margin-top: 20px;
+}
+
+.curso-leitura p {
+  margin: 0 0 1em;
+}
+
+.curso-leitura a {
+  color: var(--accent);
+  text-decoration-color: currentColor;
+}
+
+.curso-leitura img {
+  max-width: 100%;
+  height: auto;
+}
+
+.curso-leitura img[src$=".svg"] {
+  padding: 8px;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.curso-leitura code {
+  padding: 0.1em 0.25em;
+  border-radius: 4px;
+  background: var(--code-bg);
+  font: 0.9em var(--mono);
+}
+
+.curso-leitura pre,
+.curso-tabela {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 1em 0;
+}
+
+.curso-leitura pre {
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-inner);
+  background: var(--code-bg);
+}
+
+.curso-leitura pre code {
+  padding: 0;
+}
+
+.curso-leitura table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow-wrap: normal;
+}
+
+.curso-leitura th,
+.curso-leitura td {
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  vertical-align: top;
+}
+
+.curso-leitura th {
+  background: var(--surface);
+}
+
+.curso-leitura blockquote {
+  margin: 1em 0;
+  padding: 12px 16px;
+  border-inline-start: 3px solid var(--accent);
+  background: var(--surface);
+}
+
+.curso-leitura blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+.curso-aviso > strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--accent);
+}
+
+.curso-leitura details {
+  margin: 1em 0;
+  padding: 10px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-inner);
+}
+
+.curso-leitura summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.curso-leitura details[open] > summary {
+  margin-bottom: 0.75em;
+}
+
+.curso-leitura hr {
+  margin: 2em 0;
+  border: 0;
+  border-top: 1px solid var(--border);
+}
+
+.curso-grupo li {
+  margin-block: 0.65em;
+}
+
+.curso-grupo small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.875rem;
+}

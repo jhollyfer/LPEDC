@@ -23,6 +23,7 @@ Mudanças do LPEDC que quem estuda percebe. Formato
 
 ### Adicionado
 
+- Link **Curso** no site para abrir o sumário, os módulos e os demais Markdown, com links diretos para as seções.
 - Trilha de conceitos (`#trilha` no quiz): os 189 assuntos do curso numa escada em que cada degrau
   usa só o que veio antes, com o que saber de cabeça, o link para o curso, as questões das provas que
   cobram o assunto e o "Dominei". Abre no modo "só o que cai" (106 degraus) com o ranking do que

@@ -1,0 +1,1218 @@
+[
+  [
+    "01-fundamentos.md",
+    "Módulo 01 · Fundamentos de C"
+  ],
+  [
+    "02-condicionais.md",
+    "Módulo 02 · Decisões"
+  ],
+  [
+    "03-repeticoes.md",
+    "Módulo 03 · Laços"
+  ],
+  [
+    "04-funcoes.md",
+    "Módulo 04 · Funções e modularização"
+  ],
+  [
+    "05-vetores-e-strings.md",
+    "Módulo 05 · Vetores, matrizes e strings"
+  ],
+  [
+    "06-ponteiros.md",
+    "Módulo 06 · Ponteiros"
+  ],
+  [
+    "07-memoria-dinamica.md",
+    "Módulo 07 · Memória dinâmica"
+  ],
+  [
+    "08-structs.md",
+    "Módulo 08 · Tipos compostos"
+  ],
+  [
+    "09-arquivos.md",
+    "Módulo 09 · Arquivos e linha de comando"
+  ],
+  [
+    "10-analise.md",
+    "Módulo 10 · Pensar como cientista da computação"
+  ],
+  [
+    "11-listas.md",
+    "Módulo 11 · Listas"
+  ],
+  [
+    "12-pilhas-e-filas.md",
+    "Módulo 12 · Pilhas e filas"
+  ],
+  [
+    "13-busca-e-ordenacao.md",
+    "Módulo 13 · Busca e ordenação"
+  ],
+  [
+    "14-arvores.md",
+    "Módulo 14 · Árvores"
+  ],
+  [
+    "15-hash.md",
+    "Módulo 15 · Tabelas hash"
+  ],
+  [
+    "16-grafos.md",
+    "Módulo 16 · Grafos"
+  ],
+  [
+    "17-analise-avancada.md",
+    "Módulo 17 · Medindo algoritmos recursivos"
+  ],
+  [
+    "18-ordenacao-linear.md",
+    "Módulo 18 · Ordenação além da comparação e seleção"
+  ],
+  [
+    "19-backtracking.md",
+    "Módulo 19 · Enumeração e backtracking"
+  ],
+  [
+    "20-dc-e-gulosos.md",
+    "Módulo 20 · Divisão e conquista e algoritmos gulosos"
+  ],
+  [
+    "21-programacao-dinamica.md",
+    "Módulo 21 · Programação dinâmica"
+  ],
+  [
+    "22-arvores-avancadas.md",
+    "Módulo 22 · Árvores e conjuntos avançados"
+  ],
+  [
+    "23-grafos-avancados.md",
+    "Módulo 23 · Grafos: estrutura e caminhos"
+  ],
+  [
+    "24-busca-de-padroes.md",
+    "Módulo 24 · Busca de padrões em texto"
+  ],
+  [
+    "25-estruturas-extras.md",
+    "Módulo 25 · Estruturas especiais"
+  ],
+  [
+    "26-analise-formal.md",
+    "Módulo 26 · Notação assintótica, somatórios e espaço"
+  ],
+  [
+    "27-c-detalhes.md",
+    "Módulo 27 · Detalhes de C que caem em prova"
+  ],
+  [
+    "28-estruturas-complementos.md",
+    "Módulo 28 · Estruturas: o que faltava"
+  ],
+  [
+    "29-grafos-e-np.md",
+    "Módulo 29 · Grafos: ciclos e cortes; problemas difíceis"
+  ],
+  [
+    "AGENTS.md",
+    "LPEDC · instruções para agentes"
+  ],
+  [
+    "CLAUDE.md",
+    "CLAUDE.md"
+  ],
+  [
+    "PPGI.md",
+    "Rumo ao PPGI/UFAM · o curso alinhado ao edital"
+  ],
+  [
+    "PROVAS.md",
+    "Provas anteriores do PPGI/UFAM · gabarito comentado"
+  ],
+  [
+    "README.md",
+    "LPEDC · Lógica de Programação, Estrutura de Dados e C"
+  ],
+  [
+    "SIMULADOS.md",
+    "Simulados da prova do PPGI"
+  ],
+  [
+    "TRILHA.md",
+    "Trilha de estudo para a prova do PPGI"
+  ],
+  [
+    "_fontes/aaed.md",
+    "Fichamento: Lintzmayer & Mota, *Análise de Algoritmos e de Estruturas de Dados*"
+  ],
+  [
+    "_fontes/antonello.md",
+    "Fichamento: Linguagem C (Ricardo Antonello)"
+  ],
+  [
+    "_fontes/aveiro.md",
+    "Fichamento: Programação, Estruturas de Dados e Algoritmos em C (Aveiro)"
+  ],
+  [
+    "_fontes/backes-apostila.md",
+    "Fichamento: \"Linguagem C: Descomplicada\" (apostila)"
+  ],
+  [
+    "_fontes/backes-livro.md",
+    "Fichamento: *Linguagem C Completa e Descomplicada*"
+  ],
+  [
+    "_fontes/cortes.md",
+    "Fichamento: Estrutura de Dados (Mariela Inés Cortés)"
+  ],
+  [
+    "_fontes/deitel-6ed.md",
+    "Fichamento: Deitel & Deitel, *C: Como Programar* (\"6ª edição\" no nome do arquivo)"
+  ],
+  [
+    "_fontes/deitel-7ed-parte1.md",
+    "Fichamento: Deitel & Deitel, *C: Como Programar* (parte 1: caps. 1 a 6)"
+  ],
+  [
+    "_fontes/deitel-7ed-parte2.md",
+    "Fichamento: Deitel & Deitel, *C: Como Programar* (parte 2)"
+  ],
+  [
+    "_fontes/estrutura-conta.md",
+    "Fichamento: Estrutura de Dados com Algoritmos e C (Laureano)"
+  ],
+  [
+    "_fontes/feofiloff.md",
+    "Fichamento: Feofiloff, *Algoritmos em linguagem C*"
+  ],
+  [
+    "_fontes/ifes-logica.md",
+    "Fichamento: Lógica de Programação (IFES / e-Tec Brasil)"
+  ],
+  [
+    "_fontes/manual-sintaxe.md",
+    "Fichamento: \"Manual de Sintaxe da Linguagem C\" (Apêndice D)"
+  ],
+  [
+    "_fontes/notas-de-aula.md",
+    "Fichamento: \"Linguagem C — Notas de Aula\" (UFPR)"
+  ],
+  [
+    "_fontes/pesquisa-web.md",
+    "Pesquisa web: o que falta no sumário do LPEDC (Estrutura de Dados e Algoritmos)"
+  ],
+  [
+    "_fontes/provas-ppgi.md",
+    "Provas anteriores do PPGI/UFAM (Prova de Conhecimento)"
+  ],
+  [
+    "_fontes/puc-rio.md",
+    "Fichamento: Celes & Rangel, *Apostila de Estruturas de Dados* (PUC-Rio)"
+  ],
+  [
+    "_fontes/rovai.md",
+    "Fichamento: Algoritmos e Estrutura de Dados (Kleber Ricardi Rovai)"
+  ],
+  [
+    "_fontes/senai.md",
+    "Fichamento: SENAI-RS, \"Fundamentos de Linguagem C\""
+  ],
+  [
+    "_fontes/slago.md",
+    "Fichamento: Apostila \"slago\" de Linguagem C (Turbo C)"
+  ],
+  [
+    "_fontes/sumario.md",
+    "Sumário do LPEDC"
+  ],
+  [
+    "_fontes/szwarcfiter.md",
+    "Fichamento: Szwarcfiter & Markenzon, *Estruturas de Dados e Seus Algoritmos*, 3ª ed. (LTC, 2010)"
+  ],
+  [
+    "_fontes/tenenbaum-parte1.md",
+    "Fichamento: Tenenbaum, Langsam, Augenstein, *Estruturas de Dados Usando C* (parte 1)"
+  ],
+  [
+    "_fontes/tenenbaum-parte2.md",
+    "Fichamento (Tenenbaum, Langsam, Augenstein): \"Estruturas de Dados Usando C\" (parte 2)"
+  ],
+  [
+    "_fontes/ufpr-alg1.md",
+    "Fichamento: Algoritmos e Estruturas de Dados 1 (Castilho, Silva, Weingaertner, UFPR)"
+  ],
+  [
+    "_fontes/ufu.md",
+    "Fichamento: UFU, \"Apostila de Linguagem C (Conceitos Básicos)\""
+  ],
+  [
+    "_fontes/unicamp-aed.md",
+    "Fichamento de *Algoritmos e Estruturas de Dados: conceitos e aplicações* (Hélio Pedrini, Editora da Unicamp)"
+  ],
+  [
+    "_fontes/unicamp-intro-c.md",
+    "Fichamento: \"Introdução à Linguagem C\" (versão 2.0)"
+  ],
+  [
+    "_fontes/unicesumar.md",
+    "Fichamento: Algoritmos e Lógica de Programação II (Unicesumar)"
+  ],
+  [
+    "_gerador/modulos/01-fundamentos/0001-primeiro-programa/texto.md",
+    "0001 · O primeiro programa"
+  ],
+  [
+    "_gerador/modulos/01-fundamentos/0002-variaveis/texto.md",
+    "0002 · Variáveis"
+  ],
+  [
+    "_gerador/modulos/01-fundamentos/0003-tipos-e-limites/texto.md",
+    "0003 · Tipos e limites"
+  ],
+  [
+    "_gerador/modulos/01-fundamentos/0004-constantes/texto.md",
+    "0004 · Constantes"
+  ],
+  [
+    "_gerador/modulos/01-fundamentos/0005-printf/texto.md",
+    "0005 · printf"
+  ],
+  [
+    "_gerador/modulos/01-fundamentos/0006-scanf/texto.md",
+    "0006 · scanf"
+  ],
+  [
+    "_gerador/modulos/01-fundamentos/0007-aritmetica/texto.md",
+    "0007 · Aritmética"
+  ],
+  [
+    "_gerador/modulos/01-fundamentos/0008-conversao/texto.md",
+    "0008 · Conversão e cast"
+  ],
+  [
+    "_gerador/modulos/01-fundamentos/0009-atribuicao/texto.md",
+    "0009 · Atribuição, ++ e --"
+  ],
+  [
+    "_gerador/modulos/01-fundamentos/0010-math/texto.md",
+    "0010 · math.h"
+  ],
+  [
+    "_gerador/modulos/01-fundamentos/0011-juntando-tudo/texto.md",
+    "0011 · Juntando tudo"
+  ],
+  [
+    "_gerador/modulos/01-fundamentos/modulo.md",
+    "Módulo 01 · Fundamentos de C"
+  ],
+  [
+    "_gerador/modulos/02-condicionais/0012-relacionais/texto.md",
+    "0012 · Relacionais e a verdade em C"
+  ],
+  [
+    "_gerador/modulos/02-condicionais/0013-logicos/texto.md",
+    "0013 · Lógicos: E, OU, NÃO"
+  ],
+  [
+    "_gerador/modulos/02-condicionais/0014-if/texto.md",
+    "0014 · if"
+  ],
+  [
+    "_gerador/modulos/02-condicionais/0015-if-else/texto.md",
+    "0015 · if/else e o = no lugar do =="
+  ],
+  [
+    "_gerador/modulos/02-condicionais/0016-else-if/texto.md",
+    "0016 · else if, if aninhado e o else pendurado"
+  ],
+  [
+    "_gerador/modulos/02-condicionais/0017-ternario/texto.md",
+    "0017 · Ternário: condição ? a : b"
+  ],
+  [
+    "_gerador/modulos/02-condicionais/0018-switch/texto.md",
+    "0018 · switch, case, break e fall-through"
+  ],
+  [
+    "_gerador/modulos/02-condicionais/0019-juntando-tudo/texto.md",
+    "0019 · Juntando tudo: a conta de luz"
+  ],
+  [
+    "_gerador/modulos/02-condicionais/modulo.md",
+    "Módulo 02 · Decisões"
+  ],
+  [
+    "_gerador/modulos/03-repeticoes/0020-while/texto.md",
+    "0020 · While"
+  ],
+  [
+    "_gerador/modulos/03-repeticoes/0021-do-while/texto.md",
+    "0021 · Do-while"
+  ],
+  [
+    "_gerador/modulos/03-repeticoes/0022-for/texto.md",
+    "0022 · For"
+  ],
+  [
+    "_gerador/modulos/03-repeticoes/0023-break-continue/texto.md",
+    "0023 · Break e continue"
+  ],
+  [
+    "_gerador/modulos/03-repeticoes/0024-lacos-aninhados/texto.md",
+    "0024 · Laços aninhados"
+  ],
+  [
+    "_gerador/modulos/03-repeticoes/0025-padroes-de-laco/texto.md",
+    "0025 · Padrões de laço"
+  ],
+  [
+    "_gerador/modulos/03-repeticoes/0026-aleatorios/texto.md",
+    "0026 · Aleatórios"
+  ],
+  [
+    "_gerador/modulos/03-repeticoes/0027-juntando-tudo/texto.md",
+    "0027 · Juntando tudo"
+  ],
+  [
+    "_gerador/modulos/03-repeticoes/modulo.md",
+    "Módulo 03 · Laços"
+  ],
+  [
+    "_gerador/modulos/04-funcoes/0028-funcoes/texto.md",
+    "0028 · Funções"
+  ],
+  [
+    "_gerador/modulos/04-funcoes/0029-parametros/texto.md",
+    "0029 · Parâmetros e passagem por valor"
+  ],
+  [
+    "_gerador/modulos/04-funcoes/0030-escopo/texto.md",
+    "0030 · Escopo e tempo de vida"
+  ],
+  [
+    "_gerador/modulos/04-funcoes/0031-pilha-de-chamadas/texto.md",
+    "0031 · A pilha de chamadas"
+  ],
+  [
+    "_gerador/modulos/04-funcoes/0032-recursao/texto.md",
+    "0032 · Recursão"
+  ],
+  [
+    "_gerador/modulos/04-funcoes/0033-recursao-na-pratica/texto.md",
+    "0033 · Recursão na prática: Fibonacci, Hanói e Euclides"
+  ],
+  [
+    "_gerador/modulos/04-funcoes/0034-modulos/texto.md",
+    "0034 · Módulos: .h, .c e compilação separada"
+  ],
+  [
+    "_gerador/modulos/04-funcoes/0035-preprocessador/texto.md",
+    "0035 · Pré-processador: macros e #ifdef"
+  ],
+  [
+    "_gerador/modulos/04-funcoes/0036-juntando-tudo/texto.md",
+    "0036 · Juntando tudo: o caixa da lanchonete"
+  ],
+  [
+    "_gerador/modulos/04-funcoes/modulo.md",
+    "Módulo 04 · Funções e modularização"
+  ],
+  [
+    "_gerador/modulos/05-vetores-e-strings/0037-vetores/texto.md",
+    "0037 · Vetores"
+  ],
+  [
+    "_gerador/modulos/05-vetores-e-strings/0038-vetores-e-funcoes/texto.md",
+    "0038 · Vetores e funções"
+  ],
+  [
+    "_gerador/modulos/05-vetores-e-strings/0039-matrizes/texto.md",
+    "0039 · Matrizes"
+  ],
+  [
+    "_gerador/modulos/05-vetores-e-strings/0040-caracteres/texto.md",
+    "0040 · Caracteres"
+  ],
+  [
+    "_gerador/modulos/05-vetores-e-strings/0041-strings/texto.md",
+    "0041 · Strings"
+  ],
+  [
+    "_gerador/modulos/05-vetores-e-strings/0042-lendo-strings/texto.md",
+    "0042 · Lendo strings"
+  ],
+  [
+    "_gerador/modulos/05-vetores-e-strings/0043-juntando-tudo/texto.md",
+    "0043 · Juntando tudo"
+  ],
+  [
+    "_gerador/modulos/05-vetores-e-strings/modulo.md",
+    "Módulo 05 · Vetores, matrizes e strings"
+  ],
+  [
+    "_gerador/modulos/06-ponteiros/0044-memoria/texto.md",
+    "0044 · Memória e endereços"
+  ],
+  [
+    "_gerador/modulos/06-ponteiros/0045-ponteiros/texto.md",
+    "0045 · Ponteiros"
+  ],
+  [
+    "_gerador/modulos/06-ponteiros/0046-passagem-por-referencia/texto.md",
+    "0046 · Passagem por referência"
+  ],
+  [
+    "_gerador/modulos/06-ponteiros/0047-ponteiros-e-vetores/texto.md",
+    "0047 · Ponteiros e vetores"
+  ],
+  [
+    "_gerador/modulos/06-ponteiros/0048-ponteiros-e-strings/texto.md",
+    "0048 · Ponteiros e strings"
+  ],
+  [
+    "_gerador/modulos/06-ponteiros/0049-ponteiro-para-ponteiro/texto.md",
+    "0049 · Ponteiro para ponteiro"
+  ],
+  [
+    "_gerador/modulos/06-ponteiros/0050-ponteiro-para-funcao/texto.md",
+    "0050 · Ponteiro para função"
+  ],
+  [
+    "_gerador/modulos/06-ponteiros/0051-void-generico/texto.md",
+    "0051 · void * e cast"
+  ],
+  [
+    "_gerador/modulos/06-ponteiros/0052-juntando-tudo/texto.md",
+    "0052 · Juntando tudo: o ranking da feira"
+  ],
+  [
+    "_gerador/modulos/06-ponteiros/modulo.md",
+    "Módulo 06 · Ponteiros"
+  ],
+  [
+    "_gerador/modulos/07-memoria-dinamica/0053-pilha-e-heap/texto.md",
+    "0053 · Pilha e heap"
+  ],
+  [
+    "_gerador/modulos/07-memoria-dinamica/0054-malloc-free/texto.md",
+    "0054 · malloc e free"
+  ],
+  [
+    "_gerador/modulos/07-memoria-dinamica/0055-calloc-realloc/texto.md",
+    "0055 · calloc e realloc"
+  ],
+  [
+    "_gerador/modulos/07-memoria-dinamica/0056-matriz-dinamica/texto.md",
+    "0056 · Matriz dinâmica"
+  ],
+  [
+    "_gerador/modulos/07-memoria-dinamica/0057-erros-de-memoria/texto.md",
+    "0057 · Erros de memória"
+  ],
+  [
+    "_gerador/modulos/07-memoria-dinamica/0058-juntando-tudo/texto.md",
+    "0058 · Juntando tudo"
+  ],
+  [
+    "_gerador/modulos/07-memoria-dinamica/modulo.md",
+    "Módulo 07 · Memória dinâmica"
+  ],
+  [
+    "_gerador/modulos/08-structs/0059-struct/texto.md",
+    "0059 · Struct"
+  ],
+  [
+    "_gerador/modulos/08-structs/0060-typedef/texto.md",
+    "0060 · Typedef"
+  ],
+  [
+    "_gerador/modulos/08-structs/0061-vetor-de-structs/texto.md",
+    "0061 · Vetor de structs"
+  ],
+  [
+    "_gerador/modulos/08-structs/0062-ponteiro-para-struct/texto.md",
+    "0062 · Ponteiro para struct"
+  ],
+  [
+    "_gerador/modulos/08-structs/0063-enum/texto.md",
+    "0063 · Enum"
+  ],
+  [
+    "_gerador/modulos/08-structs/0064-union/texto.md",
+    "0064 · Union"
+  ],
+  [
+    "_gerador/modulos/08-structs/0065-bits/texto.md",
+    "0065 · Bits, máscaras e flags"
+  ],
+  [
+    "_gerador/modulos/08-structs/0066-juntando-tudo/texto.md",
+    "0066 · Juntando tudo: o cardápio"
+  ],
+  [
+    "_gerador/modulos/08-structs/modulo.md",
+    "Módulo 08 · Tipos compostos"
+  ],
+  [
+    "_gerador/modulos/09-arquivos/0067-arquivos-texto/texto.md",
+    "0067 · Arquivos texto"
+  ],
+  [
+    "_gerador/modulos/09-arquivos/0068-arquivos-binarios/texto.md",
+    "0068 · Arquivos binários"
+  ],
+  [
+    "_gerador/modulos/09-arquivos/0069-argumentos/texto.md",
+    "0069 · Argumentos da linha de comando"
+  ],
+  [
+    "_gerador/modulos/09-arquivos/0070-juntando-tudo/texto.md",
+    "0070 · Juntando tudo: a caderneta de gastos"
+  ],
+  [
+    "_gerador/modulos/09-arquivos/modulo.md",
+    "Módulo 09 · Arquivos e linha de comando"
+  ],
+  [
+    "_gerador/modulos/10-analise/0071-eficiencia/texto.md",
+    "0071 · Eficiência: contar passos"
+  ],
+  [
+    "_gerador/modulos/10-analise/0072-big-o/texto.md",
+    "0072 · Notação O: como o custo cresce"
+  ],
+  [
+    "_gerador/modulos/10-analise/0073-invariantes/texto.md",
+    "0073 · Invariantes de laço e corretude"
+  ],
+  [
+    "_gerador/modulos/10-analise/0074-tad/texto.md",
+    "0074 · TAD: interface (.h) e implementação (.c)"
+  ],
+  [
+    "_gerador/modulos/10-analise/modulo.md",
+    "Módulo 10 · Pensar como cientista da computação"
+  ],
+  [
+    "_gerador/modulos/11-listas/0075-vetor-dinamico/texto.md",
+    "0075 · Vetor dinâmico"
+  ],
+  [
+    "_gerador/modulos/11-listas/0076-lista-encadeada/texto.md",
+    "0076 · Lista encadeada"
+  ],
+  [
+    "_gerador/modulos/11-listas/0077-lista-busca-remocao/texto.md",
+    "0077 · Busca e remoção"
+  ],
+  [
+    "_gerador/modulos/11-listas/0078-lista-ordenada/texto.md",
+    "0078 · Lista ordenada"
+  ],
+  [
+    "_gerador/modulos/11-listas/0079-lista-dupla/texto.md",
+    "0079 · Lista dupla"
+  ],
+  [
+    "_gerador/modulos/11-listas/0080-lista-circular/texto.md",
+    "0080 · Lista circular"
+  ],
+  [
+    "_gerador/modulos/11-listas/0081-juntando-tudo/texto.md",
+    "0081 · Juntando tudo"
+  ],
+  [
+    "_gerador/modulos/11-listas/modulo.md",
+    "Módulo 11 · Listas"
+  ],
+  [
+    "_gerador/modulos/12-pilhas-e-filas/0082-pilha/texto.md",
+    "0082 · Pilha"
+  ],
+  [
+    "_gerador/modulos/12-pilhas-e-filas/0083-pilha-encadeada/texto.md",
+    "0083 · Pilha encadeada"
+  ],
+  [
+    "_gerador/modulos/12-pilhas-e-filas/0084-pilha-aplicacoes/texto.md",
+    "0084 · Pilha na prática: parênteses e notação pós-fixa"
+  ],
+  [
+    "_gerador/modulos/12-pilhas-e-filas/0085-fila/texto.md",
+    "0085 · Fila"
+  ],
+  [
+    "_gerador/modulos/12-pilhas-e-filas/0086-fila-encadeada/texto.md",
+    "0086 · Fila encadeada"
+  ],
+  [
+    "_gerador/modulos/12-pilhas-e-filas/0087-deque/texto.md",
+    "0087 · Deque"
+  ],
+  [
+    "_gerador/modulos/12-pilhas-e-filas/0088-juntando-tudo/texto.md",
+    "0088 · Juntando tudo: a calculadora de expressões"
+  ],
+  [
+    "_gerador/modulos/12-pilhas-e-filas/modulo.md",
+    "Módulo 12 · Pilhas e filas"
+  ],
+  [
+    "_gerador/modulos/13-busca-e-ordenacao/0089-busca-sequencial/texto.md",
+    "0089 · Busca sequencial"
+  ],
+  [
+    "_gerador/modulos/13-busca-e-ordenacao/0090-busca-binaria/texto.md",
+    "0090 · Busca binária"
+  ],
+  [
+    "_gerador/modulos/13-busca-e-ordenacao/0091-bubble-sort/texto.md",
+    "0091 · Bubble sort"
+  ],
+  [
+    "_gerador/modulos/13-busca-e-ordenacao/0092-selection-sort/texto.md",
+    "0092 · Selection sort"
+  ],
+  [
+    "_gerador/modulos/13-busca-e-ordenacao/0093-insertion-sort/texto.md",
+    "0093 · Insertion sort"
+  ],
+  [
+    "_gerador/modulos/13-busca-e-ordenacao/0094-merge-sort/texto.md",
+    "0094 · Merge sort"
+  ],
+  [
+    "_gerador/modulos/13-busca-e-ordenacao/0095-quick-sort/texto.md",
+    "0095 · Quick sort"
+  ],
+  [
+    "_gerador/modulos/13-busca-e-ordenacao/0096-comparando/texto.md",
+    "0096 · Comparando: estabilidade, custo e qsort"
+  ],
+  [
+    "_gerador/modulos/13-busca-e-ordenacao/modulo.md",
+    "Módulo 13 · Busca e ordenação"
+  ],
+  [
+    "_gerador/modulos/14-arvores/0097-arvores/texto.md",
+    "0097 · Árvores"
+  ],
+  [
+    "_gerador/modulos/14-arvores/0098-arvore-binaria/texto.md",
+    "0098 · Árvore binária e percursos"
+  ],
+  [
+    "_gerador/modulos/14-arvores/0099-bst-busca-insercao/texto.md",
+    "0099 · BST: busca e inserção"
+  ],
+  [
+    "_gerador/modulos/14-arvores/0100-bst-remocao/texto.md",
+    "0100 · BST: remoção"
+  ],
+  [
+    "_gerador/modulos/14-arvores/0101-avl/texto.md",
+    "0101 · AVL: balanceamento e rotações"
+  ],
+  [
+    "_gerador/modulos/14-arvores/0102-heap/texto.md",
+    "0102 · Heap e fila de prioridade"
+  ],
+  [
+    "_gerador/modulos/14-arvores/0103-heapsort/texto.md",
+    "0103 · Heapsort"
+  ],
+  [
+    "_gerador/modulos/14-arvores/0104-juntando-tudo/texto.md",
+    "0104 · Juntando tudo"
+  ],
+  [
+    "_gerador/modulos/14-arvores/modulo.md",
+    "Módulo 14 · Árvores"
+  ],
+  [
+    "_gerador/modulos/15-hash/0105-hashing/texto.md",
+    "0105 · A ideia e a função hash"
+  ],
+  [
+    "_gerador/modulos/15-hash/0106-encadeamento/texto.md",
+    "0106 · Encadeamento"
+  ],
+  [
+    "_gerador/modulos/15-hash/0107-enderecamento-aberto/texto.md",
+    "0107 · Endereçamento aberto"
+  ],
+  [
+    "_gerador/modulos/15-hash/0108-juntando-tudo/texto.md",
+    "0108 · Juntando tudo: o contador de palavras"
+  ],
+  [
+    "_gerador/modulos/15-hash/modulo.md",
+    "Módulo 15 · Tabelas hash"
+  ],
+  [
+    "_gerador/modulos/16-grafos/0109-grafos/texto.md",
+    "0109 · Grafos"
+  ],
+  [
+    "_gerador/modulos/16-grafos/0110-bfs/texto.md",
+    "0110 · BFS: busca em largura"
+  ],
+  [
+    "_gerador/modulos/16-grafos/0111-dfs/texto.md",
+    "0111 · DFS: busca em profundidade"
+  ],
+  [
+    "_gerador/modulos/16-grafos/0112-dijkstra/texto.md",
+    "0112 · Dijkstra: caminho mínimo"
+  ],
+  [
+    "_gerador/modulos/16-grafos/0113-juntando-tudo/texto.md",
+    "0113 · Juntando tudo: a central de entregas"
+  ],
+  [
+    "_gerador/modulos/16-grafos/modulo.md",
+    "Módulo 16 · Grafos"
+  ],
+  [
+    "_gerador/modulos/17-analise-avancada/0114-recorrencias/texto.md",
+    "0114 · Recorrências e árvore de recursão"
+  ],
+  [
+    "_gerador/modulos/17-analise-avancada/0115-teorema-mestre/texto.md",
+    "0115 · Teorema mestre"
+  ],
+  [
+    "_gerador/modulos/17-analise-avancada/0116-amortizada/texto.md",
+    "0116 · Análise amortizada"
+  ],
+  [
+    "_gerador/modulos/17-analise-avancada/0117-limite-inferior/texto.md",
+    "0117 · Limite inferior da ordenação"
+  ],
+  [
+    "_gerador/modulos/17-analise-avancada/0118-juntando-tudo/texto.md",
+    "0118 · Juntando tudo"
+  ],
+  [
+    "_gerador/modulos/17-analise-avancada/modulo.md",
+    "Módulo 17 · Medindo algoritmos recursivos"
+  ],
+  [
+    "_gerador/modulos/18-ordenacao-linear/0119-shell-sort/texto.md",
+    "0119 · Shell sort"
+  ],
+  [
+    "_gerador/modulos/18-ordenacao-linear/0120-counting-sort/texto.md",
+    "0120 · Counting sort"
+  ],
+  [
+    "_gerador/modulos/18-ordenacao-linear/0121-radix-sort/texto.md",
+    "0121 · Radix sort"
+  ],
+  [
+    "_gerador/modulos/18-ordenacao-linear/0122-bucket-sort/texto.md",
+    "0122 · Bucket sort"
+  ],
+  [
+    "_gerador/modulos/18-ordenacao-linear/0123-quickselect/texto.md",
+    "0123 · Quickselect"
+  ],
+  [
+    "_gerador/modulos/18-ordenacao-linear/0124-juntando-tudo/texto.md",
+    "0124 · Juntando tudo"
+  ],
+  [
+    "_gerador/modulos/18-ordenacao-linear/modulo.md",
+    "Módulo 18 · Ordenação além da comparação e seleção"
+  ],
+  [
+    "_gerador/modulos/19-backtracking/0125-subconjuntos/texto.md",
+    "0125 · Subconjuntos"
+  ],
+  [
+    "_gerador/modulos/19-backtracking/0126-permutacoes/texto.md",
+    "0126 · Permutações"
+  ],
+  [
+    "_gerador/modulos/19-backtracking/0127-backtracking/texto.md",
+    "0127 · Backtracking"
+  ],
+  [
+    "_gerador/modulos/19-backtracking/0128-n-rainhas/texto.md",
+    "0128 · N-rainhas"
+  ],
+  [
+    "_gerador/modulos/19-backtracking/0129-labirinto/texto.md",
+    "0129 · Labirinto"
+  ],
+  [
+    "_gerador/modulos/19-backtracking/0130-juntando-tudo/texto.md",
+    "0130 · Juntando tudo"
+  ],
+  [
+    "_gerador/modulos/19-backtracking/modulo.md",
+    "Módulo 19 · Enumeração e backtracking"
+  ],
+  [
+    "_gerador/modulos/20-dc-e-gulosos/0131-divisao-e-conquista/texto.md",
+    "0131 · Divisão e conquista"
+  ],
+  [
+    "_gerador/modulos/20-dc-e-gulosos/0132-inversoes-e-subvetor/texto.md",
+    "0132 · Inversões e subvetor de soma máxima"
+  ],
+  [
+    "_gerador/modulos/20-dc-e-gulosos/0133-gulosos/texto.md",
+    "0133 · Algoritmos gulosos"
+  ],
+  [
+    "_gerador/modulos/20-dc-e-gulosos/0134-intervalos/texto.md",
+    "0134 · Seleção de intervalos"
+  ],
+  [
+    "_gerador/modulos/20-dc-e-gulosos/0135-mochila-fracionaria/texto.md",
+    "0135 · Mochila fracionária"
+  ],
+  [
+    "_gerador/modulos/20-dc-e-gulosos/0136-huffman/texto.md",
+    "0136 · Código de Huffman"
+  ],
+  [
+    "_gerador/modulos/20-dc-e-gulosos/0137-juntando-tudo/texto.md",
+    "0137 · Juntando tudo"
+  ],
+  [
+    "_gerador/modulos/20-dc-e-gulosos/modulo.md",
+    "Módulo 20 · Divisão e conquista e algoritmos gulosos"
+  ],
+  [
+    "_gerador/modulos/21-programacao-dinamica/0138-memoizacao/texto.md",
+    "0138 · Memoização"
+  ],
+  [
+    "_gerador/modulos/21-programacao-dinamica/0139-troco-pd/texto.md",
+    "0139 · Troco com programação dinâmica"
+  ],
+  [
+    "_gerador/modulos/21-programacao-dinamica/0140-mochila-01/texto.md",
+    "0140 · Mochila 0/1"
+  ],
+  [
+    "_gerador/modulos/21-programacao-dinamica/0141-lcs/texto.md",
+    "0141 · Maior subsequência comum (LCS)"
+  ],
+  [
+    "_gerador/modulos/21-programacao-dinamica/0142-distancia-de-edicao/texto.md",
+    "0142 · Distância de edição"
+  ],
+  [
+    "_gerador/modulos/21-programacao-dinamica/0143-juntando-tudo/texto.md",
+    "0143 · Juntando tudo: um mini-diff"
+  ],
+  [
+    "_gerador/modulos/21-programacao-dinamica/modulo.md",
+    "Módulo 21 · Programação dinâmica"
+  ],
+  [
+    "_gerador/modulos/22-arvores-avancadas/0144-arvores-gerais/texto.md",
+    "0144 · Árvores gerais: primeiro filho, próximo irmão"
+  ],
+  [
+    "_gerador/modulos/22-arvores-avancadas/0145-rubro-negra/texto.md",
+    "0145 · Rubro-negra esquerdista (LLRB): inserção"
+  ],
+  [
+    "_gerador/modulos/22-arvores-avancadas/0146-arvore-b/texto.md",
+    "0146 · Árvore B: busca, divisão e inserção"
+  ],
+  [
+    "_gerador/modulos/22-arvores-avancadas/0147-trie/texto.md",
+    "0147 · Trie: árvore de prefixos e autocompletar"
+  ],
+  [
+    "_gerador/modulos/22-arvores-avancadas/0148-union-find/texto.md",
+    "0148 · Union-find: conjuntos disjuntos"
+  ],
+  [
+    "_gerador/modulos/22-arvores-avancadas/0149-juntando-tudo/texto.md",
+    "0149 · Juntando tudo: corretor ortográfico"
+  ],
+  [
+    "_gerador/modulos/22-arvores-avancadas/modulo.md",
+    "Módulo 22 · Árvores e conjuntos avançados"
+  ],
+  [
+    "_gerador/modulos/23-grafos-avancados/0150-componentes-e-ciclos/texto.md",
+    "0150 · Componentes e ciclos"
+  ],
+  [
+    "_gerador/modulos/23-grafos-avancados/0151-ordenacao-topologica/texto.md",
+    "0151 · Ordenação topológica"
+  ],
+  [
+    "_gerador/modulos/23-grafos-avancados/0152-kruskal/texto.md",
+    "0152 · Kruskal: árvore geradora mínima"
+  ],
+  [
+    "_gerador/modulos/23-grafos-avancados/0153-prim/texto.md",
+    "0153 · Prim: a árvore que cresce"
+  ],
+  [
+    "_gerador/modulos/23-grafos-avancados/0154-bellman-ford/texto.md",
+    "0154 · Bellman-Ford: pesos negativos"
+  ],
+  [
+    "_gerador/modulos/23-grafos-avancados/0155-floyd-warshall/texto.md",
+    "0155 · Floyd-Warshall: todos os pares"
+  ],
+  [
+    "_gerador/modulos/23-grafos-avancados/0156-juntando-tudo/texto.md",
+    "0156 · Juntando tudo: o assistente do calouro"
+  ],
+  [
+    "_gerador/modulos/23-grafos-avancados/modulo.md",
+    "Módulo 23 · Grafos: estrutura e caminhos"
+  ],
+  [
+    "_gerador/modulos/24-busca-de-padroes/0157-forca-bruta/texto.md",
+    "0157 · Força bruta"
+  ],
+  [
+    "_gerador/modulos/24-busca-de-padroes/0158-kmp/texto.md",
+    "0158 · KMP"
+  ],
+  [
+    "_gerador/modulos/24-busca-de-padroes/0159-horspool/texto.md",
+    "0159 · Horspool"
+  ],
+  [
+    "_gerador/modulos/24-busca-de-padroes/0160-rabin-karp/texto.md",
+    "0160 · Rabin-Karp"
+  ],
+  [
+    "_gerador/modulos/24-busca-de-padroes/0161-juntando-tudo/texto.md",
+    "0161 · Juntando tudo"
+  ],
+  [
+    "_gerador/modulos/24-busca-de-padroes/modulo.md",
+    "Módulo 24 · Busca de padrões em texto"
+  ],
+  [
+    "_gerador/modulos/25-estruturas-extras/0162-matriz-esparsa/texto.md",
+    "0162 · Matriz esparsa"
+  ],
+  [
+    "_gerador/modulos/25-estruturas-extras/0163-skip-list/texto.md",
+    "0163 · Skip list"
+  ],
+  [
+    "_gerador/modulos/25-estruturas-extras/0164-listas-autoajustaveis/texto.md",
+    "0164 · Listas autoajustáveis"
+  ],
+  [
+    "_gerador/modulos/25-estruturas-extras/0165-juntando-tudo/texto.md",
+    "0165 · Juntando tudo"
+  ],
+  [
+    "_gerador/modulos/25-estruturas-extras/modulo.md",
+    "Módulo 25 · Estruturas especiais"
+  ],
+  [
+    "_gerador/modulos/26-analise-formal/0166-o-omega-theta/texto.md",
+    "0166 · O, Ω e Θ de verdade"
+  ],
+  [
+    "_gerador/modulos/26-analise-formal/0167-somatorios/texto.md",
+    "0167 · Somatórios que saem de laços"
+  ],
+  [
+    "_gerador/modulos/26-analise-formal/0168-complexidade-espacial/texto.md",
+    "0168 · Complexidade espacial"
+  ],
+  [
+    "_gerador/modulos/26-analise-formal/0169-juntando-tudo/texto.md",
+    "0169 · Juntando tudo: passos e bytes conferidos"
+  ],
+  [
+    "_gerador/modulos/26-analise-formal/modulo.md",
+    "Módulo 26 · Notação assintótica, somatórios e espaço"
+  ],
+  [
+    "_gerador/modulos/27-c-detalhes/0170-precedencia-e-avaliacao/texto.md",
+    "0170 · Precedência e ordem de avaliação"
+  ],
+  [
+    "_gerador/modulos/27-c-detalhes/0171-com-e-sem-sinal/texto.md",
+    "0171 · Com sinal e sem sinal"
+  ],
+  [
+    "_gerador/modulos/27-c-detalhes/0172-vla/texto.md",
+    "0172 · Vetor de tamanho variável (VLA)"
+  ],
+  [
+    "_gerador/modulos/27-c-detalhes/0173-juntando-tudo/texto.md",
+    "0173 · Juntando tudo: o controle de acesso"
+  ],
+  [
+    "_gerador/modulos/27-c-detalhes/modulo.md",
+    "Módulo 27 · Detalhes de C que caem em prova"
+  ],
+  [
+    "_gerador/modulos/28-estruturas-complementos/0174-lista-com-sentinela/texto.md",
+    "0174 · Lista com sentinela"
+  ],
+  [
+    "_gerador/modulos/28-estruturas-complementos/0175-conceitos-e-sucessor/texto.md",
+    "0175 · Conceitos e sucessor"
+  ],
+  [
+    "_gerador/modulos/28-estruturas-complementos/0176-avl-remocao/texto.md",
+    "0176 · AVL: remoção"
+  ],
+  [
+    "_gerador/modulos/28-estruturas-complementos/0177-rubro-negra-classica/texto.md",
+    "0177 · Rubro-negra clássica"
+  ],
+  [
+    "_gerador/modulos/28-estruturas-complementos/0178-hash-multiplicacao/texto.md",
+    "0178 · Hash: divisão e multiplicação"
+  ],
+  [
+    "_gerador/modulos/28-estruturas-complementos/0179-sondagem-quadratica-e-dupla/texto.md",
+    "0179 · Sondagem quadrática e dupla"
+  ],
+  [
+    "_gerador/modulos/28-estruturas-complementos/0180-pigeonhole-e-chave-composta/texto.md",
+    "0180 · Pigeonhole e chave composta"
+  ],
+  [
+    "_gerador/modulos/28-estruturas-complementos/0181-juntando-tudo/texto.md",
+    "0181 · Juntando tudo"
+  ],
+  [
+    "_gerador/modulos/28-estruturas-complementos/modulo.md",
+    "Módulo 28 · Estruturas: o que faltava"
+  ],
+  [
+    "_gerador/modulos/29-grafos-e-np/0182-caminhos-e-ciclos/texto.md",
+    "0182 · Caminhos e ciclos"
+  ],
+  [
+    "_gerador/modulos/29-grafos-e-np/0183-hamiltoniano/texto.md",
+    "0183 · Hamiltoniano"
+  ],
+  [
+    "_gerador/modulos/29-grafos-e-np/0184-pontes-e-articulacoes/texto.md",
+    "0184 · Pontes e articulações"
+  ],
+  [
+    "_gerador/modulos/29-grafos-e-np/0185-cadeia-de-matrizes/texto.md",
+    "0185 · Cadeia de matrizes"
+  ],
+  [
+    "_gerador/modulos/29-grafos-e-np/0186-p-e-np/texto.md",
+    "0186 · P e NP"
+  ],
+  [
+    "_gerador/modulos/29-grafos-e-np/0187-reducoes/texto.md",
+    "0187 · Reduções"
+  ],
+  [
+    "_gerador/modulos/29-grafos-e-np/0188-aproximacao/texto.md",
+    "0188 · Aproximação"
+  ],
+  [
+    "_gerador/modulos/29-grafos-e-np/0189-juntando-tudo/texto.md",
+    "0189 · Juntando tudo"
+  ],
+  [
+    "_gerador/modulos/29-grafos-e-np/modulo.md",
+    "Módulo 29 · Grafos: ciclos e cortes; problemas difíceis"
+  ],
+  [
+    "docs/ARCHITECTURE.md",
+    "Arquitetura do curso"
+  ],
+  [
+    "docs/CHANGELOG.md",
+    "Changelog"
+  ],
+  [
+    "docs/DECISIONS.md",
+    "Decisões"
+  ],
+  [
+    "docs/DESIGN.md",
+    "Desenhos do curso"
+  ],
+  [
+    "docs/MEMORY.md",
+    "Memória do curso"
+  ],
+  [
+    "docs/PRD.md",
+    "Documento de requisitos"
+  ],
+  [
+    "docs/RULES.md",
+    "Regras de escrita do curso"
+  ],
+  [
+    "docs/TASKS.md",
+    "Tarefas do curso"
+  ],
+  [
+    "docs/TEST-PLAN.md",
+    "Plano de testes"
+  ],
+  [
+    "provas-ppgi-ufam/2016-032-prova-conhecimento.md",
+    "PPGI/UFAM - Edital 032/2016 PROPESP/UFAM - Prova de Conhecimento"
+  ],
+  [
+    "provas-ppgi-ufam/2016-053-prova-conhecimento.md",
+    "PPGI/UFAM - Edital 053/2016 PROPESP/UFAM - Prova de Conhecimento"
+  ],
+  [
+    "provas-ppgi-ufam/2017-024-prova-conhecimento.md",
+    "PPGI/UFAM - Edital 024/2017 PROPESP/UFAM - Prova de Conhecimento"
+  ],
+  [
+    "provas-ppgi-ufam/2017-055-prova-conhecimento.md",
+    "PPGI/UFAM - Edital 055/2017 PROPESP/UFAM - Prova de Conhecimento"
+  ],
+  [
+    "provas-ppgi-ufam/2018-023-prova-conhecimento.md",
+    "PPGI/UFAM - Edital 023/2018 PROPESP/UFAM - Prova de Conhecimento"
+  ],
+  [
+    "provas-ppgi-ufam/2018-061-prova-conhecimento.md",
+    "PPGI/UFAM - Edital 061/2018 PROPESP/UFAM - Prova de Conhecimento"
+  ],
+  [
+    "provas-ppgi-ufam/2019-033-prova-conhecimento.md",
+    "PPGI/UFAM - Edital 033/2019 PROPESP/UFAM - Prova de Conhecimento"
+  ],
+  [
+    "provas-ppgi-ufam/2019-060-prova-conhecimento.md",
+    "PPGI/UFAM - Edital 060/2019 PROPESP/UFAM - Prova de Conhecimento"
+  ],
+  [
+    "provas-ppgi-ufam/2022-057-prova-conhecimento.md",
+    "PPGI/UFAM - Edital 057/2022 PROPESP/UFAM - Prova de Conhecimento"
+  ],
+  [
+    "provas-ppgi-ufam/2023-020-prova-conhecimento.md",
+    "PPGI/UFAM - Edital 020/2023 PROPESP/UFAM - Prova de Conhecimento"
+  ],
+  [
+    "provas-ppgi-ufam/2023-071-prova-conhecimento.md",
+    "PPGI/UFAM - Edital 071/2023 PROPESP/UFAM - Prova de Conhecimento"
+  ],
+  [
+    "provas-ppgi-ufam/README.md",
+    "Provas de seleção PPGI/UFAM (2016 a 2023)"
+  ]
+]

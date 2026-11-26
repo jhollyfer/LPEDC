@@ -22,7 +22,8 @@ LPEDC/
 ├── _gerador/fases.json        a rota do jogo: ordem das etapas, mundo e missão de cada módulo
 ├── _fontes/                   sumário, fichamentos dos livros e provas do PPGI
 ├── docs/  AGENTS.md  rodar    documentação viva, instruções de agentes e auxiliar do conferir.sh
-├── index.html  .nojekyll      quiz das provas (GitHub Pages, raiz da main)
+├── index.html  .nojekyll      quiz das provas e leitura do curso (GitHub Pages, raiz da main)
+├── conteudo/                  leitor, estilos, índice dos Markdown e bibliotecas locais
 ├── quiz/                      gerado: questoes.js e figuras/*.svg do quiz
 ├── _gerador/trilha/           FONTE da trilha: requer, porquê e "saia sabendo" de cada assunto
 ├── _gerador/provas/           FONTE do quiz: <slug>.json (questões e porquês) e <slug>.figuras.json
@@ -37,8 +38,15 @@ Ao criar assunto ou exercício novo, acrescente os nomes em `_gerador/arquivos.j
 
 Ferramentas: `gcc` (C17) com as flags de estudo (AddressSanitizer e UBSan), Node para o gerador
 (`_gerador/gerar.mjs`, com `roughjs` e `dagre` para os desenhos) e Python 3 para
-`_gerador/conferir-texto.py`. O quiz sai de `cd _gerador && node quiz.mjs` (`--check` confere letra contra o `PROVAS.md`, porquê de toda alternativa e figura citada); `index.html` e `quiz/` vão para o GitHub Pages pela `main`, sem build. Não há servidor nem banco: o curso é lido no GitHub ou
-num editor de markdown.
+`_gerador/conferir-texto.py`. O quiz sai de `cd _gerador && node quiz.mjs` (`--check` confere letra contra o `PROVAS.md`, porquê de toda alternativa e figura citada). O GitHub Pages publica a raiz da `main`, sem build, servidor de aplicação ou banco.
+
+O leitor abre o `README.md` em `#conteudo` e os demais Markdown pela rota do arquivo. Por exemplo,
+`#conteudo/01-fundamentos#0005--printf` abre direto no capítulo de `printf`. O navegador carrega o
+Markdown original sob demanda. Depois de adicionar, renomear ou remover um `.md` no Git, ou alterar
+seu título, rode `node _gerador/conteudo.mjs` e inclua `conteudo/arquivos.json` no commit.
+
+O leitor usa Marked 18.3.0 para converter o Markdown, DOMPurify 3.5.0 para sanitizar o HTML e
+github-slugger 2.0.0 para montar as âncoras. As bibliotecas e licenças ficam em `conteudo/vendor/`.
 
 ## 2. Numeração
 

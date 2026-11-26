@@ -4,7 +4,7 @@
 
 > Atualiza no mesmo commit em que a tarefa começa ou termina.
 
-**Resumo:** 23 tarefas · 23 feitas · 0 em andamento · 0 a fazer · atualizado 2026-11-13
+**Resumo:** 25 tarefas feitas · 1 substituída · 0 em andamento · 0 a fazer · atualizado 2026-11-26
 
 Status: `A fazer` · `Em andamento` · `Feita` · `Bloqueada` (com motivo nas notas).
 Prioridade: `Alta` · `Média` · `Baixa`.
@@ -60,6 +60,12 @@ Provas recebidas: 11 cadernos de 2016 a 2023 em `_fontes/provas-ppgi.md`; só a 
 | 5.6 | Guia de estudo em três partes (conceitos com fonte, exemplos, exercícios) nos 29 módulos e nos guias da raiz | Alta | Substituída por 5.7 | `DECISIONS.md` #12; `conferir-texto.py` exige a forma e a fonte; humanizer ainda não passou |
 | 5.7 | Curso como livro: cada assunto é um capítulo (conceito, exemplos, exercícios juntos), conceito em texto corrido com fonte nos 189 assuntos, README como sumário gerado | Alta | Feita | `DECISIONS.md` #13; `conferir-texto.py` reprova glossário; humanizer-pt ainda não passou |
 | 5.8 | Quiz: tópico 3 do edital separado em Lista, Fila, Pilha e Vetor e matriz, no painel e no filtro | Média | Feita | subtópicos 3.1 a 3.4 no `topico` de `_gerador/provas/*.json`; questão de mais de uma estrutura entra em todas; `PPGI.md` segue a mesma divisão |
+
+## Fase 6 · Leitura no site (1/1)
+
+| # | Tarefa | Prioridade | Status | Notas |
+|---|---|---|---|---|
+| 6.1 | Abrir os Markdown em sub-rotas do `index.html` | Alta | Feita | 304 arquivos em `#conteudo/arquivos`, com imagens e âncoras conferidas |
 
 ---
 
