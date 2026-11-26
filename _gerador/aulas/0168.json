@@ -1,0 +1,153 @@
+{
+ "num": "0168",
+ "oque": "A complexidade espacial mede quanta **memória** um algoritmo usa em função de n, com as mesmas notações O, Ω e Θ do tempo. Quase sempre o que interessa é o **espaço extra** (ou auxiliar): o que ele usa **além da entrada** que recebeu.",
+ "como": "Procure memória extra em três lugares:\n\n- **Vetores e `malloc`:** um vetor auxiliar de n posições é Θ(n); uma matriz n × n é Θ(n²).\n- **Pilha de chamadas:** cada chamada que ainda não terminou ocupa um frame. O espaço da recursão é a **profundidade máxima** (o maior número de chamadas abertas ao mesmo tempo), não o total de chamadas.\n- **Tabelas para ganhar tempo:** memoização, vetor de contagem, tabela hash. Gasta-se memória para economizar passos.\n\nUm algoritmo que usa só um número fixo de variáveis e mexe na própria entrada é **in-place** (no lugar): espaço extra Θ(1).\n\n```c\nfor (int i = 0, j = n - 1; i < j; i++, j--) {\n    int tmp = rota[i];   /* só isso de extra */\n    rota[i] = rota[j];\n    rota[j] = tmp;\n}\n```",
+ "caracteristicas": [
+  "A entrada não conta: conta o que o algoritmo pede a mais.",
+  "Recursão custa espaço mesmo sem vetor: a soma recursiva de n elementos empilha n frames, Θ(n).",
+  "Mede-se a profundidade máxima da recursão: o merge sort faz cerca de 2n chamadas, mas só log n ficam abertas juntas.",
+  "Heapsort, insertion sort e selection sort são in-place, Θ(1) extra. Merge sort pede Θ(n); quicksort usa pilha, Θ(log n) em média e Θ(n) no pior caso.",
+  "Variáveis locais ficam na pilha (pequena, cerca de 8 MB no Linux); o `malloc` usa o heap, que pode crescer até a RAM."
+ ],
+ "exemplo": "O motorista quer a rota do dia ao contrário: paradas 12, 7, 30, 5, 18, 9. Copiar numa rota nova pede 6 posições a mais (24 bytes com `int`). Trocar as pontas na própria rota pede só a variável `tmp` (4 bytes), seja a rota de 6 ou de 1 milhão de paradas.",
+ "passos": [
+  {
+   "titulo": "Começo: i na ponta esquerda, j na direita",
+   "texto": "`i = 0` aponta o 12 e `j = 5` aponta o 9. Nenhum vetor novo foi criado: só `i`, `j` e `tmp`.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     12,
+     7,
+     30,
+     5,
+     18,
+     9
+    ],
+    "estados": {
+     "0": "amarelo",
+     "5": "amarelo"
+    },
+    "nome": "rota",
+    "titulo": "i = 0, j = 5"
+   }
+  },
+  {
+   "titulo": "Troca 1: posições 0 e 5",
+   "texto": "`tmp = 12`, `rota[0] = 9`, `rota[5] = 12`. Depois `i` sobe para 1 e `j` desce para 4.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     9,
+     7,
+     30,
+     5,
+     18,
+     12
+    ],
+    "estados": {
+     "0": "verde",
+     "5": "verde",
+     "1": "amarelo",
+     "4": "amarelo"
+    },
+    "nome": "rota",
+    "titulo": "i = 1, j = 4"
+   }
+  },
+  {
+   "titulo": "Troca 2: posições 1 e 4",
+   "texto": "Troca o 7 com o 18. Agora `i = 2` e `j = 3`.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     9,
+     18,
+     30,
+     5,
+     7,
+     12
+    ],
+    "estados": {
+     "0": "verde",
+     "5": "verde",
+     "1": "verde",
+     "4": "verde",
+     "2": "amarelo",
+     "3": "amarelo"
+    },
+    "nome": "rota",
+    "titulo": "i = 2, j = 3"
+   }
+  },
+  {
+   "titulo": "Troca 3 e fim",
+   "texto": "Troca o 30 com o 5. Agora `i = 3` e `j = 2`: `i < j` falhou e o laço para. Foram 3 trocas (n/2): tempo Θ(n), espaço extra **Θ(1)**, porque o `tmp` é o mesmo para qualquer n.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     9,
+     18,
+     5,
+     30,
+     7,
+     12
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "verde",
+     "2": "verde",
+     "3": "verde",
+     "4": "verde",
+     "5": "verde"
+    },
+    "nome": "rota",
+    "titulo": "invertida, no lugar"
+   }
+  },
+  {
+   "titulo": "Recursão: a pilha cresce com n",
+   "texto": "`soma(v, n) = v[n-1] + soma(v, n-1)`. Para n = 4, `soma(v,4)` espera `soma(v,3)`, que espera `soma(v,2)`, e assim até `soma(v,0)`. No fundo há **5 frames abertos ao mesmo tempo**: n + 1. Espaço extra Θ(n), sem nenhum vetor novo. Com 1 milhão de elementos, a pilha de 8 MB estoura; o laço faria o mesmo com Θ(1).",
+   "figura": {
+    "tipo": "pilha",
+    "itens": [
+     "soma(v,4)",
+     "soma(v,3)",
+     "soma(v,2)",
+     "soma(v,1)",
+     "soma(v,0)"
+    ],
+    "estados": {
+     "4": "amarelo"
+    },
+    "titulo": "profundidade n + 1"
+   }
+  },
+  {
+   "titulo": "Busca binária recursiva: pilha de log n",
+   "texto": "Cada chamada corta o trecho ao meio e faz **uma** chamada só. Com 16 elementos, a pilha chega a 16, 8, 4, 2, 1: cerca de log₂ n + 1 frames. Espaço Θ(log n). A versão com `while` faz o mesmo trabalho com Θ(1).",
+   "figura": {
+    "tipo": "pilha",
+    "itens": [
+     "busca(16)",
+     "busca(8)",
+     "busca(4)",
+     "busca(2)",
+     "busca(1)"
+    ],
+    "estados": {
+     "4": "amarelo"
+    },
+    "titulo": "profundidade log n + 1"
+   }
+  }
+ ],
+ "custos": "| Algoritmo | Tempo | Espaço extra |\n|---|---|---|\n| Inverter trocando as pontas | Θ(n) | Θ(1) |\n| Busca binária com laço | Θ(log n) | Θ(1) |\n| Busca binária recursiva | Θ(log n) | Θ(log n), da pilha |\n| Soma recursiva de n elementos | Θ(n) | Θ(n), da pilha |\n| Selection, insertion | O(n²) | Θ(1) |\n| Heapsort | O(n log n) | Θ(1) |\n| Merge sort | Θ(n log n) | Θ(n), vetor auxiliar |\n| Quicksort | Θ(n log n) em média, O(n²) no pior | Θ(log n) em média, Θ(n) no pior, da pilha |\n| Counting sort (valores de 0 a k) | Θ(n + k) | Θ(n + k) |",
+ "naprova": "A banca pergunta quais ordenações usam espaço extra constante (seleção, inserção, heapsort), julga afirmações como \"heapsort usa espaço n²\" (não: é in-place) e cobra que o quicksort gasta pilha. Pegadinha: esquecer que recursão ocupa memória, e contar o total de chamadas em vez da profundidade.",
+ "fontes": [
+  "Ziviani, *Projeto de algoritmos*, 3. ed., cap. 1 (complexidade de tempo e de espaço).",
+  "Tenenbaum, Langsam e Augenstein, *Estruturas de dados usando C*, cap. 3 (recursão e o custo da pilha) e cap. 6 (eficiência da classificação).",
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 2 (análise do insertion sort e do merge sort).",
+  "Lintzmayer e Mota, *Análise de algoritmos e de estruturas de dados* (UFABC/IME-USP), notação assintótica."
+ ]
+}
