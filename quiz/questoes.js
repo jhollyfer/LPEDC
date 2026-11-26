@@ -2462,7 +2462,7 @@ window.PROVAS = [
       "modulo": "13-busca-e-ordenacao.md"
      }
     ],
-    "dica": "**Cobra:** Achar o algoritmo de menor número de comparações no pior caso, para vetor enorme.\n\n- **Pior caso** [0072]: a disposição de entrada que mais custa a cada algoritmo; compare cada um no seu pior caso. Ex.: inserção: vetor invertido; Quick sort: pivô que sempre fica numa ponta.\n- **Heapsort** [0103]: monta uma heap e retira a raiz `n` vezes; cada retirada desce por uma árvore de altura perto de `log₂ n`. Ex.: `n = 1 000 000`: a heap tem altura perto de 20.\n- **Quick sort e o pivô** [0095]: pivô que deixa um lado vazio gera partições de `n - 1`, `n - 2`, ... elementos, e as comparações somam perto de `n²/2`. Ex.: `1 2 3 4` com pivô no último: partes de 3, 2 e 1.\n- **Ordem de grandeza** [0096]: para `n` grande, `n²` e `n log₂ n` ficam muito longe. Ex.: `n = 1 000 000`: `n² = 10^12`, e `n log₂ n` fica perto de `2 · 10^7`.\n\n**Como atacar:** ponha o pior caso de cada algoritmo em `n²` ou `n log n` e escolha o menor.",
+    "dica": "**Cobra:** Achar o algoritmo de menor número de comparações no pior caso, para vetor enorme.\n\n- **Pior caso** [0072]: a disposição da entrada que mais custa a cada um dos algoritmos comparados. Ex.: inserção: vetor invertido; Quick sort: pivô sempre numa ponta.\n- **Heapsort** [0103]: monta uma heap e retira a raiz `n` vezes; cada retirada desce por uma árvore de altura perto de `log₂ n`. Ex.: `n = 1 000 000`: altura perto de 20.\n- **Quick sort e o pivô** [0095]: pivô que deixa um lado vazio gera partições de `n - 1`, `n - 2`, ... elementos. Ex.: `1 2 3 4` com pivô no último: partes de 3, 2 e 1.\n- **Ordem de grandeza** [0096]: para `n` grande, `n²` fica muito acima de `n log₂ n`. Ex.: `n = 1 000 000`: `n² = 10^12`, e `n log₂ n` fica perto de `2 · 10^7`.\n\n**Como atacar:** ponha o pior caso de cada algoritmo em `n²` ou `n log n` e escolha o menor.",
     "originais": []
    },
    {
@@ -4122,7 +4122,7 @@ window.PROVAS = [
       "modulo": "22-arvores-avancadas.md"
      }
     ],
-    "dica": "**Cobra:** as diferenças entre árvore B e árvore binária: filhos por nó, nível das folhas e custo do balanceamento.\n\n- **Grau mínimo t** [0146]: todo nó, menos a raiz, tem de `t - 1` a `2t - 1` chaves; um nó com `k` chaves tem `k + 1` filhos. Ex.: com `t = 2`, cada nó interno que não é raiz tem de 2 a 4 filhos, e a raiz pode ter só 1 chave.\n- **Folhas no mesmo nível** [0146]: a divisão e a junção de nós mantêm todas as folhas à mesma profundidade. Ex.: dividir a raiz cheia cria uma raiz nova e todas as folhas descem um nível.\n- **Nós gordos e disco** [0146]: cada nó ocupa um bloco do disco, e a altura `h ≤ log_t((n + 1) / 2)` pequena significa poucas leituras. Ex.: com `t = 100` e 1 milhão de chaves, a altura é no máximo 2, contando arestas: até 3 níveis de nós.\n\n**Como atacar:** compare cada afirmação com a regra do grau mínimo e com o que a divisão faz.",
+    "dica": "**Cobra:** as diferenças entre árvore B e árvore binária: filhos por nó, nível das folhas e custo do balanceamento.\n\n- **Grau mínimo t** [0146]: todo nó, menos a raiz, tem de `t - 1` a `2t - 1` chaves; um nó com `k` chaves tem `k + 1` filhos. Ex.: com `t = 2`, cada nó interno fora a raiz tem de 2 a 4 filhos.\n- **Folhas no mesmo nível** [0146]: a divisão e a junção de nós mantêm todas as folhas à mesma profundidade. Ex.: dividir a raiz cheia cria uma raiz nova e todas as folhas descem um nível.\n- **Nós gordos e disco** [0146]: cada nó ocupa um bloco do disco, e a altura `h ≤ log_t((n + 1) / 2)` pequena significa poucas leituras. Ex.: `t = 100` e 1 milhão de chaves: altura no máximo 2, contando arestas (3 níveis).\n\n**Como atacar:** compare cada afirmação com a regra do grau mínimo e com o que a divisão faz.",
     "contrapontos": [
      {
       "item": "I",
@@ -4252,7 +4252,7 @@ window.PROVAS = [
       "modulo": "13-busca-e-ordenacao.md"
      }
     ],
-    "dica": "**Cobra:** escolher o algoritmo de ordenação que faz menos comparações num vetor quase ordenado.\n\n- **Insertion sort** [0093]: encaixa cada elemento na parte já ordenada, comparando com os anteriores até achar um menor ou igual. Ex.: em `1 2 4 3 5`, o 3 compara com o 4 e com o 2 e para.\n- **Selection sort** [0092]: a cada passo varre todo o resto para achar o mínimo, então faz o mesmo número de comparações em qualquer entrada, O(n²). Ex.: 4 elementos, mesmo ordenados, custam 3 + 2 + 1 = 6 comparações.\n- **Quick sort e o pivô** [0095]: com o pivô sempre no extremo, um lado fica vazio e o custo vai a O(n²). Ex.: pivô no fim em vetor ordenado: cada partição separa só 1 elemento.\n- **Heapsort** [0103]: monta a heap e retira a raiz `n` vezes, descendo a árvore a cada retirada, sem aproveitar a ordem que o vetor já tinha. Ex.: um vetor crescente vira primeiro uma heap máxima, e a ordem se desfaz.\n\n**Como atacar:** veja o custo de cada algoritmo no vetor quase ordenado e escolha o menor.",
+    "dica": "**Cobra:** escolher o algoritmo de ordenação que faz menos comparações num vetor quase ordenado.\n\n- **Insertion sort** [0093]: encaixa cada elemento na parte já ordenada, comparando com os anteriores até achar um menor ou igual. Ex.: em `1 2 4 3 5`, o 3 compara com o 4 e com o 2 e para.\n- **Selection sort** [0092]: a cada passo varre todo o resto para achar o mínimo, em qualquer entrada. Ex.: 4 elementos, mesmo ordenados, custam 3 + 2 + 1 = 6 comparações.\n- **Quick sort e o pivô** [0095]: com o pivô sempre no extremo, um lado fica vazio e o custo vai a O(n²). Ex.: pivô no fim em vetor ordenado: cada partição separa só 1 elemento.\n- **Heapsort** [0103]: monta a heap e retira a raiz `n` vezes, sem aproveitar a ordem que o vetor já tinha. Ex.: vetor crescente vira heap máxima, e a ordem se desfaz.\n\n**Como atacar:** veja o custo de cada algoritmo no vetor quase ordenado e escolha o menor.",
     "originais": []
    },
    {
@@ -7052,7 +7052,7 @@ window.PROVAS = [
      {
       "letra": "D",
       "texto": "13 52 25 58 10 22 17",
-      "porque": "O pivô 13 deixa só o 10 à esquerda, mas o resto se divide de forma desigual sem chegar à degeneração total. Dá 13 comparações."
+      "porque": "O pivô 13 deixa só o 10 à esquerda, mas o resto se divide mal, sem chegar à degeneração total. Dá 13 comparações."
      },
      {
       "letra": "E",
@@ -7192,7 +7192,7 @@ window.PROVAS = [
      {
       "letra": "D",
       "texto": "árvore da figura d)",
-      "porque": "Tem o 110 repetido (na raiz e na folha) e o 140 aparece na raiz sem ser separador de nada coerente. Chave duplicada não existe em árvore B.",
+      "porque": "Tem o 110 repetido (na raiz e na folha), e a folha `110` fica com 1 chave, abaixo do mínimo de 2. Chave duplicada não existe em árvore B.",
       "figura": "2019-033-q04-d"
      },
      {
@@ -7202,14 +7202,14 @@ window.PROVAS = [
      }
     ],
     "gabarito": "C",
-    "resumo": "Na remoção em árvore B: se a folha fica abaixo do mínimo, tente emprestar de um irmão que tenha mais que o mínimo (rotação pelo pai). Se os irmãos estão no mínimo, funda com um irmão e desça o separador do pai. Na ordem 5 o mínimo é 2 chaves e o máximo 4. O enunciado original tem as figuras desalinhadas, e b) também é um B-tree válido, mas só c) sai da fusão padrão.",
+    "resumo": "Na remoção em árvore B: se a folha fica abaixo do mínimo, tente emprestar de um irmão que tenha mais que o mínimo (rotação pelo pai). Se os irmãos estão no mínimo, funda com um irmão e desça o separador do pai. Na ordem 5 o mínimo é 2 chaves e o máximo 4. O enunciado original tem as figuras desalinhadas, e b) também é uma árvore B válida, mas só c) sai da fusão padrão.",
     "assuntos": [
      {
-      "num": "0097",
-      "modulo": "14-arvores.md"
+      "num": "0146",
+      "modulo": "22-arvores-avancadas.md"
      }
     ],
-    "dica": "**Cobra:** aplicar a remoção de uma chave numa árvore B e escolher o desenho resultante.\n\n- **Nó da árvore B** [0146]: cada nó tem várias chaves em ordem e um filho a mais que chaves; fora a raiz, tem no mínimo t - 1 chaves, e todas as folhas ficam no mesmo nível. Ex.: com t = 2, um nó tem de 1 a 3 chaves, e `[40 70]` tem 3 filhos.\n- **Remoção e conserto** [0146]: tirar de folha com chaves acima do mínimo é direto; se a folha fica abaixo do mínimo, ela empresta do irmão (passando pelo pai) ou funde com ele. A remoção é o caminho inverso da divisão. Ex.: pai `[15]`, folhas `[10]` e `[20 30]`: remover 10 puxa o 15 para a folha e sobe o 20, ficando `[20]` com `[15]` e `[30]`.\n\n**Como atacar:** ache a chave, veja se a folha fica abaixo do mínimo e só então empreste ou funda, conferindo se as folhas seguem no mesmo nível.",
+    "dica": "**Cobra:** aplicar a remoção de uma chave numa árvore B e escolher o desenho resultante.\n\n- **Nó da árvore B** [0146]: cada nó tem chaves em ordem e um filho a mais que chaves, e todas as folhas ficam no mesmo nível. Na ordem m (até m filhos), um nó fora a raiz tem de ⌈m/2⌉ - 1 a m - 1 chaves. Ex.: ordem 3: de 1 a 2 chaves, e `[40 70]` tem 3 filhos.\n- **Remoção e conserto** [0146]: tirar de folha com chaves acima do mínimo é direto; se a folha fica abaixo do mínimo, ela empresta do irmão (passando pelo pai) ou funde com ele. Ex.: pai `[15]`, folhas `[10]` e `[20 30]`: remover 10 puxa o 15 para a folha e sobe o 20, ficando `[20]` com `[15]` e `[30]`.\n\n**Como atacar:** ache a chave, veja se a folha fica abaixo do mínimo e só então empreste ou funda, conferindo se as folhas seguem no mesmo nível.",
     "originais": [
      "provas-ppgi-ufam/2019-033/figuras/q04-arvore-b.png",
      "provas-ppgi-ufam/2019-033/figuras/q04-opcoes-ab.png",
@@ -7252,11 +7252,11 @@ window.PROVAS = [
     "resumo": "A banca anulou. Conceitualmente, a busca sequencial em lista simplesmente encadeada faz n comparações no pior caso, Θ(n), e n/2 em média. Lista não permite busca binária.",
     "assuntos": [
      {
-      "num": "0076",
+      "num": "0077",
       "modulo": "11-listas.md"
      },
      {
-      "num": "0077",
+      "num": "0076",
       "modulo": "11-listas.md"
      }
     ],
@@ -7299,12 +7299,12 @@ window.PROVAS = [
     "resumo": "Recursão com print antes e depois da chamada produz um espelho: ida na ordem, volta ao contrário. Aqui o passo é de 2 em 2 nós, e o 5 ainda imprime duas vezes porque seu `next` (o 6) não é nulo. Rodei em C para conferir.",
     "assuntos": [
      {
-      "num": "0076",
-      "modulo": "11-listas.md"
-     },
-     {
       "num": "0032",
       "modulo": "04-funcoes.md"
+     },
+     {
+      "num": "0076",
+      "modulo": "11-listas.md"
      }
     ],
     "dica": "**Cobra:** seguir a recursão que imprime antes e depois da chamada e anda de dois em dois nós.\n\n- **Impressão na ida e na volta** [0032]: o que vem antes da chamada recursiva roda na descida, na ordem das chamadas; o que vem depois roda na subida, na ordem inversa, porque cada chamada espera a seguinte terminar. Ex.: `g(n)` imprime n, chama `g(n-1)` e imprime n de novo; `g(2)` escreve 2 1 1 2.\n- **Pular um nó na lista** [0076]: `p->next->next` salta um nó; o teste `p->next != NULL` evita ler um ponteiro nulo antes do salto, então a chamada só ocorre se houver ao menos mais um nó. Ex.: em `1 → 2 → 3 → 4`, de 1 o salto chega ao 3.\n\n**Como atacar:** anote cada chamada com o nó que ela recebe e escreva a saída da ida e da volta em colunas.",
@@ -7371,7 +7371,7 @@ window.PROVAS = [
      {
       "letra": "B",
       "texto": "O(logn), O(logn)",
-      "porque": "O pior caso não é O(log n): inserir chaves em ordem crescente faz a árvore virar uma lista, com altura n."
+      "porque": "O pior caso não é O(log n): inserir chaves em ordem crescente faz a árvore virar uma lista, com altura n - 1."
      },
      {
       "letra": "C",
@@ -7381,7 +7381,7 @@ window.PROVAS = [
      {
       "letra": "D",
       "texto": "O(n), O(logn)",
-      "porque": "Correta. Sem balanceamento, chaves ordenadas degeneram a árvore em lista (altura n, pior caso O(n)). Com chaves aleatórias a altura esperada é O(log n)."
+      "porque": "Correta. Sem balanceamento, chaves ordenadas degeneram a árvore em lista (altura n - 1, pior caso O(n)). Com chaves aleatórias a altura esperada é O(log n)."
      },
      {
       "letra": "E",
@@ -7390,14 +7390,14 @@ window.PROVAS = [
      }
     ],
     "gabarito": "D",
-    "resumo": "ABB comum: pior caso O(n) (árvore degenerada), médio O(log n). Para garantir O(log n) no pior caso você precisa de balanceamento (AVL, rubro-negra).",
+    "resumo": "BST comum: pior caso O(n) (árvore degenerada), médio O(log n). Para garantir O(log n) no pior caso você precisa de balanceamento (AVL, rubro-negra).",
     "assuntos": [
      {
       "num": "0099",
       "modulo": "14-arvores.md"
      }
     ],
-    "dica": "**Cobra:** trocar o pior caso e o caso médio da árvore binária de busca pelas suas complexidades.\n\n- **Custo igual à altura** [0099]: buscar e inserir descem um caminho da raiz até uma folha, então o custo máximo é a altura da árvore mais um. Ex.: 7 chaves em `4 2 6 1 3 5 7` dão altura 2: no máximo 3 comparações.\n- **Árvore degenerada** [0099]: sem balanceamento, chaves inseridas em ordem crescente viram sempre filho direito e a árvore vira uma lista de altura n - 1; em chaves misturadas ela fica perto de log n. Ex.: inserir 1, 2, 3, 4 dá altura 3, e achar o 4 custa 4 comparações.\n\n**Como atacar:** ligue o pior caso à entrada em ordem e o caso médio à entrada embaralhada.",
+    "dica": "**Cobra:** ligar o pior caso e o caso médio da árvore binária de busca às suas complexidades.\n\n- **Custo igual à altura** [0099]: buscar e inserir descem um caminho da raiz até uma folha, então o custo máximo é a altura da árvore mais um. Ex.: 7 chaves em `4 2 6 1 3 5 7` dão altura 2: no máximo 3 comparações.\n- **Árvore degenerada** [0099]: sem balanceamento, chaves inseridas em ordem crescente viram sempre filho direito e a árvore vira uma lista de altura n - 1; em chaves misturadas ela fica mais baixa e mais cheia. Ex.: inserir 1, 2, 3, 4 dá altura 3, e achar o 4 custa 4 comparações.\n\n**Como atacar:** ligue o pior caso à entrada em ordem e o caso médio à entrada embaralhada.",
     "originais": []
    },
    {
@@ -7436,11 +7436,11 @@ window.PROVAS = [
     "resumo": "Máximo de chaves = (nós de uma árvore completa) × (ordem - 1). Com ordem m e altura h em arestas, os nós são (m^(h+1) - 1)/(m - 1). Aqui (4^4 - 1)/3 = 85. Se a banca contasse altura em níveis, a resposta seria a B (63); o gabarito oficial é a A, que bate com a convenção das arestas.",
     "assuntos": [
      {
-      "num": "0097",
-      "modulo": "14-arvores.md"
+      "num": "0146",
+      "modulo": "22-arvores-avancadas.md"
      }
     ],
-    "dica": "**Cobra:** calcular o máximo de chaves de uma árvore B dada a ordem e a altura.\n\n- **Chaves por nó** [0146]: numa árvore B de ordem m (no máximo m filhos), um nó guarda no máximo m - 1 chaves, sempre uma a menos que seus filhos. Ex.: m = 3: no máximo 2 chaves por nó.\n- **Nós por nível** [0146]: a árvore está cheia quando todo nó interno tem m filhos: 1 nó na raiz, m no nível seguinte, m² no outro, e assim por diante; confira se a raiz conta como altura 0 ou 1. Ex.: m = 3 com 3 níveis: 1 + 3 + 9 = 13 nós, 26 chaves.\n\n**Como atacar:** some os nós de todos os níveis e multiplique pelas chaves de cada nó.",
+    "dica": "**Cobra:** calcular o máximo de chaves de uma árvore B dada a ordem e a altura.\n\n- **Chaves por nó** [0146]: numa árvore B de ordem m (no máximo m filhos), um nó guarda no máximo m - 1 chaves, sempre uma a menos que seus filhos. Ex.: m = 3: no máximo 2 chaves por nó.\n- **Nós por nível** [0146]: a árvore está cheia quando todo nó interno tem m filhos: 1 nó na raiz, m no nível seguinte, m² no outro, e assim por diante. A raiz fica no nível 0, e altura h contando arestas dá h + 1 níveis. Ex.: m = 3 e altura 2 (3 níveis): 1 + 3 + 9 = 13 nós, 26 chaves.\n\n**Como atacar:** some os nós de todos os níveis e multiplique pelas chaves de cada nó.",
     "originais": []
    },
    {
@@ -7479,15 +7479,15 @@ window.PROVAS = [
     "resumo": "Valores: I depende de como contar (3 colisões se cada passo em posição ocupada conta; 2 se contar chaves que colidiram). II é falsa, porque a 1ª posição do hash duplo é a mesma do linear. III é verdadeira. Contando eventos, a resposta é C; contando chaves, é D. Essa ambiguidade é o provável motivo da anulação.",
     "assuntos": [
      {
-      "num": "0105",
+      "num": "0107",
       "modulo": "15-hash.md"
      },
      {
-      "num": "0107",
+      "num": "0105",
       "modulo": "15-hash.md"
      }
     ],
-    "dica": "**Cobra:** simular inserções numa tabela de 17 posições e julgar três afirmações sobre colisões.\n\n- **Método da divisão** [0105]: a posição é `k mod m`; só cabem sem colisão chaves de restos diferentes; mesmo resto disputa o mesmo balde. Ex.: m = 7: 45 mod 7 = 3.\n- **Sondagem linear** [0107]: com a posição ocupada, a chave tenta a seguinte, dando a volta no fim da tabela; cada posição ocupada encontrada conta como uma colisão. Ex.: m = 7: 10 vai para 3 e 17 também dá 3, então tenta o 4: 1 colisão.\n- **Dispersão dupla** [0179]: o passo da tentativa vem de uma segunda função, `(h1 + i·h2) mod m`, e muda de chave para chave. Ex.: m = 7, h1 = 3 e h2 = 3: a segunda tentativa cai em (3 + 3) mod 7 = 6.\n\n**Como atacar:** calcule o resto de cada chave e some as colisões; para a dupla, calcule o passo de cada chave.",
+    "dica": "**Cobra:** simular inserções numa tabela de 17 posições e julgar três afirmações sobre colisões.\n\n- **Método da divisão** [0105]: a posição é `k mod m`; só cabem sem colisão chaves de restos diferentes; mesmo resto disputa o mesmo balde. Ex.: m = 7: 45 mod 7 = 3.\n- **Sondagem linear** [0107]: com a posição ocupada, a chave tenta a seguinte, dando a volta no fim da tabela; conte cada posição ocupada que ela encontra (há quem conte só as chaves que colidiram). Ex.: m = 7: 10 vai para 3 e 17 também dá 3, então tenta o 4: 1 colisão.\n- **Dispersão dupla** [0179]: o passo da tentativa vem de uma segunda função, `(h1 + i·h2) mod m`, e muda de chave para chave. Ex.: m = 7, h1 = 3 e h2 = 3: a segunda tentativa cai em (3 + 3) mod 7 = 6.\n\n**Como atacar:** calcule o resto de cada chave e some as colisões; para a dupla, calcule o passo de cada chave.",
     "contrapontos": [
      {
       "item": "I",
@@ -7513,7 +7513,7 @@ window.PROVAS = [
      {
       "letra": "A",
       "texto": "Imprimir sucess se um determinado elemento não for encontrado",
-      "porque": "O código imprime success quando `flag` vale 1, e isso acontece quando o laço entra uma vez, sem relação direta com 'não encontrado'."
+      "porque": "Pela intenção do trecho, success sai quando a busca acha o dado. A frase liga success ao desfecho oposto."
      },
      {
       "letra": "B",
@@ -7533,7 +7533,7 @@ window.PROVAS = [
      {
       "letra": "E",
       "texto": "Nenhuma das respostas anteriores.",
-      "porque": "Era a leitura do curso: o `break` incondicional faz o laço rodar no máximo uma vez, então o código não busca de forma coerente. A banca preferiu a B."
+      "porque": "Era a leitura do curso: o `break` incondicional faz o laço rodar no máximo uma vez, então o código não chega a buscar. A banca preferiu a B."
      }
     ],
     "gabarito": "B",
@@ -7544,7 +7544,7 @@ window.PROVAS = [
       "modulo": "11-listas.md"
      }
     ],
-    "dica": "**Cobra:** ler o que o código faz de verdade com a lista circular, o laço, o break e a flag.\n\n- **Lista circular** [0080]: o último nó aponta para o primeiro, sem NULL, então percorrer termina quando se volta ao ponto de partida. Ex.: na lista `3 → 7 → 12 → (3)`, o laço para ao voltar ao 3.\n- **break dentro do laço** [0023]: o break encerra o laço na hora; um comando escrito antes dele no corpo roda no máximo uma vez. Ex.: `while (c) { x = 1; break; }` faz `x = 1` uma vez só.\n- **Condição com inteiro** [0012]: `if (flag)` é falso só quando flag vale 0 e verdadeiro para qualquer outro valor; vale o valor da flag no fim, não a intenção do código. Ex.: `flag = 0` cai no else; `flag = 1` entra no if.\n\n**Como atacar:** execute o código à mão numa lista de 3 nós e veja que valor a flag tem quando o laço termina.",
+    "dica": "**Cobra:** reconhecer o que o trecho tenta fazer numa lista circular, mesmo com o código torto.\n\n- **Lista circular** [0080]: o último nó aponta para o primeiro, sem NULL, então percorrer termina quando se volta ao ponto de partida. Ex.: na lista `3 → 7 → 12 → (3)`, o laço para ao voltar ao 3.\n- **break dentro do laço** [0023]: o break encerra o laço na hora; um comando escrito antes dele no corpo roda no máximo uma vez. Ex.: `while (c) { x = 1; break; }` faz `x = 1` uma vez só.\n- **Condição com inteiro** [0012]: `if (flag)` é falso só quando flag vale 0 e verdadeiro para qualquer outro valor. Ex.: `flag = 0` cai no else; `flag = 1` entra no if.\n\n**Como atacar:** com o `break` sem condição e o `if (flag)` que Java nem compila, não leia ao pé da letra: responda pelo que imprime a busca pretendida, que anda até achar `data` ou voltar à `head`.",
     "contrapontos": [
      {
       "item": "A",
@@ -7605,7 +7605,7 @@ window.PROVAS = [
       "modulo": "14-arvores.md"
      }
     ],
-    "dica": "**Cobra:** achar a maior altura possível de uma árvore AVL com 7 nós.\n\n- **Regra da AVL** [0101]: em todo nó, as alturas das duas subárvores diferem de no máximo 1; para ter a árvore mais alta, cada nó deve ficar o mais desequilibrado que a regra permite. Ex.: uma raiz com um filho esquerdo e nenhum direito é AVL; com neto também no filho, não.\n- **Menos nós para uma altura h** [0101]: N(h) = N(h-1) + N(h-2) + 1, com N(0) = 1 e N(1) = 2: uma subárvore de altura h-1, uma de h-2 e a raiz. A altura máxima com n nós é o maior h com N(h) ≤ n; a folha tem altura 0. Ex.: N(2) = 2 + 1 + 1 = 4.\n\n**Como atacar:** calcule N(h) para h crescente até passar de 7.",
+    "dica": "**Cobra:** achar a maior altura possível de uma árvore AVL com 7 nós.\n\n- **Regra da AVL** [0101]: em todo nó, as alturas das duas subárvores diferem de no máximo 1; para ter a árvore mais alta, cada nó deve ficar o mais desequilibrado que a regra permite. Ex.: uma raiz com só um filho esquerdo é AVL; se esse filho também tiver um filho, não é.\n- **Menos nós para uma altura h** [0101]: N(h) = N(h-1) + N(h-2) + 1, com N(0) = 1 e N(1) = 2: uma subárvore de altura h-1, uma de h-2 e a raiz. A altura máxima com n nós é o maior h com N(h) ≤ n; a folha tem altura 0. Ex.: N(2) = 2 + 1 + 1 = 4.\n\n**Como atacar:** calcule N(h) para h crescente até passar de 7.",
     "originais": []
    },
    {
@@ -7652,7 +7652,7 @@ window.PROVAS = [
       "modulo": "14-arvores.md"
      }
     ],
-    "dica": "**Cobra:** julgar três afirmações sobre heap, rebalanceamento da AVL e a complexidade da árvore B.\n\n- **Ordem do heap** [0102]: num heap de máximo, todo pai é maior ou igual aos filhos; os dois filhos não se comparam entre si. Ex.: `9` acima de `5` e `7`, em qualquer ordem.\n- **Rebalancear a AVL** [0101]: a inserção pendura uma folha e, na volta da recursão, cada ancestral atualiza a altura e confere o fator, rotacionando se achar 2 ou -2. Ex.: inserir 30 sob `10 → 20` confere o 20 e depois o 10.\n- **Custo de AVL e B** [0146]: as duas são árvores equilibradas, e cada operação segue um caminho da raiz até uma folha, então o custo é limitado pela altura. Ex.: com 1 milhão de chaves, uma AVL tem no máximo uns 29 níveis, e uma B com t = 100 tem uns 3.\n\n**Como atacar:** julgue cada afirmação separadamente e descarte as alternativas que a contradizem.",
+    "dica": "**Cobra:** julgar três afirmações sobre heap, rebalanceamento da AVL e a complexidade da árvore B.\n\n- **Ordem do heap** [0102]: num heap de máximo, todo pai é maior ou igual aos filhos; os dois filhos não se comparam entre si. Ex.: `9` acima de `5` e `7`, em qualquer ordem.\n- **Rebalancear a AVL** [0101]: a inserção pendura uma folha e, na volta da recursão, cada ancestral atualiza a altura e confere o fator, rotacionando se achar 2 ou -2. Ex.: inserir 30 sob `10 → 20` confere o 20 e depois o 10.\n- **Custo de AVL e B** [0146]: as duas são árvores equilibradas, e cada operação segue um caminho da raiz até uma folha, então o custo é limitado pela altura. Ex.: com 1 milhão de chaves, uma AVL tem no máximo uns 29 níveis, e uma B com t = 100, no máximo 3 níveis (altura 2, contando arestas).\n\n**Como atacar:** julgue cada afirmação separadamente e descarte as alternativas que a contradizem.",
     "contrapontos": [
      {
       "item": "I",
@@ -7678,12 +7678,12 @@ window.PROVAS = [
      {
       "letra": "A",
       "texto": "8, 21, 32, 34, 51, 64",
-      "porque": "É o vetor final, depois de todas as rodadas. Após a segunda, só os dois ou três primeiros elementos foram tratados."
+      "porque": "É o vetor final, depois de todas as rodadas. Após a segunda, só os três primeiros estão em ordem."
      },
      {
       "letra": "B",
       "texto": "8, 32, 34, 51, 64, 21",
-      "porque": "Não é produzido por insertion sort: o 32 ainda nem foi processado nesse ponto."
+      "porque": "É o vetor depois da quarta rodada, quando o 32 já foi encaixado. Na segunda, o 32 ainda nem foi processado."
      },
      {
       "letra": "C",
@@ -7709,7 +7709,7 @@ window.PROVAS = [
       "modulo": "13-busca-e-ordenacao.md"
      }
     ],
-    "dica": "**Cobra:** simular as duas primeiras rodadas do insertion sort e escrever o vetor.\n\n- **Rodada do insertion sort** [0093]: a parte da esquerda fica ordenada, e a cada rodada o próximo elemento é encaixado nela; o resto do vetor não é tocado. Ex.: em `7 4 9 2`, a rodada 1 encaixa o 4 (`4 7 9 2`) e a 2 deixa o 9 onde está.\n- **Deslocamento** [0093]: guarda-se o elemento, empurram-se para a direita os maiores que ele e só então ele é escrito no buraco. Ex.: encaixar 5 em `3 7 9` desloca 9 e 7 e dá `3 5 7 9`.\n\n**Como atacar:** conte as rodadas com cuidado: a primeira encaixa o segundo elemento do vetor.",
+    "dica": "**Cobra:** simular as duas primeiras rodadas do insertion sort e escrever o vetor.\n\n- **Rodada do insertion sort** [0093]: a parte da esquerda fica ordenada, e a cada rodada o próximo elemento é encaixado nela; o resto do vetor não é tocado. Ex.: em `7 4 2 9`, a rodada 1 encaixa o 4 (`4 7 2 9`) e a 2 encaixa o 2 (`2 4 7 9`).\n- **Deslocamento** [0093]: guarda-se o elemento, empurram-se para a direita os maiores que ele e só então ele é escrito no buraco. Ex.: encaixar 5 em `3 7 9` desloca 9 e 7 e dá `3 5 7 9`.\n\n**Como atacar:** conte as rodadas com cuidado: a primeira encaixa o segundo elemento do vetor.",
     "originais": []
    },
    {
@@ -7726,7 +7726,7 @@ window.PROVAS = [
      {
       "letra": "B",
       "texto": "Consome menos memória",
-      "porque": "Consome O(1) extra, mas insertion e selection sort também, e o heap sort é in-place também. Não é uma vantagem exclusiva."
+      "porque": "Consome O(1) extra, mas insertion, selection e heap sort também. Não é uma vantagem exclusiva."
      },
      {
       "letra": "C",
@@ -7847,7 +7847,7 @@ window.PROVAS = [
      {
       "letra": "C",
       "texto": "2",
-      "porque": "Correta. Uma pilha de entrada recebe os enfileirar. Ao desenfileirar, se a de saída estiver vazia, você move tudo da entrada para a saída (invertendo a ordem) e desempilha dela. A inversão dupla restaura a ordem FIFO."
+      "porque": "Correta. Uma pilha de entrada recebe os elementos enfileirados. Ao desenfileirar, se a de saída estiver vazia, você move tudo da entrada para a saída (invertendo a ordem) e desempilha dela. A inversão dupla restaura a ordem FIFO."
      },
      {
       "letra": "D",
@@ -7951,19 +7951,19 @@ window.PROVAS = [
      {
       "letra": "B",
       "texto": "árvore da figura b)",
-      "porque": "Não é uma ABB: a raiz 2 tem o 3 à esquerda, e 3 > 2. Qualquer filho esquerdo precisa ser menor que o pai.",
+      "porque": "Não é uma BST: a raiz 2 tem o 3 à esquerda, e 3 > 2. Qualquer filho esquerdo precisa ser menor que o pai.",
       "figura": "2019-033-q19-b"
      },
      {
       "letra": "C",
       "texto": "árvore da figura c)",
-      "porque": "Não é uma ABB: a raiz 9 tem o 7 à direita, e 7 < 9. Parece uma árvore espelhada.",
+      "porque": "Não é uma BST: a raiz 9 tem o 7 à direita, e 7 < 9. Parece uma árvore espelhada.",
       "figura": "2019-033-q19-c"
      },
      {
       "letra": "D",
       "texto": "árvore da figura d)",
-      "porque": "Não é uma ABB: o 6 está na subárvore esquerda da raiz 5, mas 6 > 5. Os fatores de balanceamento até estão dentro do limite, então o defeito é só a ordem das chaves.",
+      "porque": "Não é uma BST: o 6 está na subárvore esquerda da raiz 5, mas 6 > 5. Os fatores de balanceamento até estão dentro do limite, então o defeito é só a ordem das chaves.",
       "figura": "2019-033-q19-d"
      },
      {
@@ -7973,7 +7973,7 @@ window.PROVAS = [
      }
     ],
     "gabarito": "A",
-    "resumo": "Para AVL passo a passo: insira como numa ABB, suba atualizando fatores de balanceamento e, no primeiro nó com fator 2 ou -2, aplique a rotação (simples ou dupla) conforme o caso. Antes de simular, elimine as figuras que nem são ABB (esquerdo maior ou direito menor que o pai): sobra só a a).",
+    "resumo": "Para AVL passo a passo: insira como numa BST, suba atualizando fatores de balanceamento e, no primeiro nó com fator 2 ou -2, aplique a rotação (simples ou dupla) conforme o caso. Antes de simular, elimine as figuras que nem são BST (esquerdo maior ou direito menor que o pai): sobra só a a).",
     "assuntos": [
      {
       "num": "0101",
@@ -8021,11 +8021,15 @@ window.PROVAS = [
     "resumo": "I é falsa (subárvore com raiz vermelha não é rubro-negra, pois a raiz precisa ser preta). II é verdadeira pela igualdade de altura negra. III é verdadeira. Em afirmações sobre rubro-negra, desconfie de 'sempre' e de regras que mencionam a raiz.",
     "assuntos": [
      {
+      "num": "0177",
+      "modulo": "28-estruturas-complementos.md"
+     },
+     {
       "num": "0101",
       "modulo": "14-arvores.md"
      }
     ],
-    "dica": "**Cobra:** julgar três afirmações sobre árvores rubro-negras e AVL.\n\n- **Propriedades da rubro-negra** [0177]: a raiz é preta, vermelho só tem filhos pretos e todos os caminhos de um nó às folhas têm o mesmo número de pretos; as folhas são sentinelas `nil` pretas. Ex.: raiz preta com dois filhos pretos: cada caminho tem 2 pretos.\n- **Folha nil** [0177]: as folhas da rubro-negra são o nó sentinela `nil`, preto e sem chave, que ocupa o lugar de todo NULL; ele conta na altura negra de cada caminho. Ex.: nó preto com dois filhos `nil`: os dois caminhos têm 1 preto.\n- **Inserção na AVL** [0101]: a altura é limitada a cerca de 1,44 · log₂ n, então a inserção custa O(log n) no pior caso. Ex.: 1 milhão de chaves: no máximo uns 29 níveis.\n\n**Como atacar:** julgue cada afirmação isolada, citando a propriedade que a sustenta ou quebra.",
+    "dica": "**Cobra:** julgar três afirmações sobre árvores rubro-negras e AVL.\n\n- **Propriedades da rubro-negra** [0177]: a raiz é preta, vermelho só tem filhos pretos e todos os caminhos de um nó às folhas têm o mesmo número de pretos. Ex.: raiz preta com dois filhos pretos: cada caminho tem 2 pretos.\n- **Folha nil** [0177]: as folhas da rubro-negra são o nó sentinela `nil`, preto e sem chave, que ocupa o lugar de todo NULL; ele conta na altura negra de cada caminho. Ex.: nó preto com dois filhos `nil`: os dois caminhos têm 1 preto.\n- **Inserção na AVL** [0101]: a altura é limitada a cerca de 1,44 · log₂ n, então a inserção custa O(log n) no pior caso. Ex.: 1 milhão de chaves: no máximo uns 29 níveis.\n\n**Como atacar:** julgue cada afirmação isolada, citando a propriedade que a sustenta ou quebra.",
     "contrapontos": [
      {
       "item": "I",
@@ -8086,7 +8090,7 @@ window.PROVAS = [
      }
     ],
     "gabarito": "C",
-    "resumo": "Em hash com sondagem linear, quem chega primeiro fica na posição própria e quem chega depois anda para a frente. Daí, pares com mesmo hash (9 e 18; 3, 12, 21) fixam a ordem relativa: 9 antes de 18; 12 antes de 3 antes de 4 antes de 21 na ordem de chegada ao grupo. Rodei as cinco ordens em código e só a C dá a tabela da figura (12 está na posição 3).",
+    "resumo": "Em hash com sondagem linear, quem chega primeiro fica na posição própria e quem chega depois anda para a frente. Daí, as chaves de um mesmo bloco fixam a ordem relativa: 9 antes de 18; 12 antes de 3, 3 antes de 4 e 4 antes de 21. Rodei as cinco ordens em código e só a C dá a tabela da figura (12 está na posição 3).",
     "assuntos": [
      {
       "num": "0107",
@@ -8119,19 +8123,19 @@ window.PROVAS = [
      {
       "letra": "B",
       "texto": "2",
-      "porque": "Não é nem ABB: o 15 está na subárvore direita do 18 (sob o 16), mas 15 < 18, e o 25 está à esquerda do 20, mas 25 > 20.",
+      "porque": "Não é nem BST: o 15 está na subárvore direita do 18 (sob o 16), mas 15 < 18, e o 25 está à esquerda do 20, mas 25 > 20.",
       "figura": "2019-060-q02-2"
      },
      {
       "letra": "C",
       "texto": "3",
-      "porque": "Não é ABB: o 25 está à esquerda do 20, mas 25 > 20. Também não é AVL: o 18 tem só o filho esquerdo 15, que tem dois filhos, então a subárvore esquerda tem altura 2 e a direita é vazia.",
+      "porque": "Não é BST: o 25 está à esquerda do 20, mas 25 > 20. Também não é AVL: o 18 tem só o filho esquerdo 15, que tem dois filhos, então a subárvore esquerda tem altura 1 e a direita, vazia, -1: diferença 2.",
       "figura": "2019-060-q02-3"
      },
      {
       "letra": "D",
       "texto": "4",
-      "porque": "Não é ABB: o 15 está à direita do 16, mas 15 < 16. O balanceamento até fica dentro do limite, então o defeito é só a ordem das chaves.",
+      "porque": "Não é BST: o 15 está à direita do 16, mas 15 < 16. O balanceamento até fica dentro do limite, então o defeito é só a ordem das chaves.",
       "figura": "2019-060-q02-4"
      },
      {
@@ -8141,7 +8145,7 @@ window.PROVAS = [
      }
     ],
     "gabarito": "A",
-    "resumo": "Simule inserindo uma a uma, calculando o fator de balanceamento no caminho de volta e rotacionando no primeiro nó com fator ±2. O gabarito oficial é A, e o programa que escrevi confirma: raiz 20; 15 e 25; 10, 18, 30; 16 e 19 (filhos do 18). Dica: antes de simular tudo, descarte figuras desbalanceadas.",
+    "resumo": "Simule inserindo uma a uma, calculando o fator de balanceamento no caminho de volta e rotacionando no primeiro nó com fator ±2. O gabarito oficial é A, e o programa que escrevi confirma: raiz 20; 15 e 25; 10, 18, 30; 16 e 19 (filhos do 18). Dica: antes de simular tudo, descarte as figuras que nem são BST ou que têm nó com fator 2 ou -2.",
     "assuntos": [
      {
       "num": "0101",
@@ -8189,15 +8193,15 @@ window.PROVAS = [
     "resumo": "Para classificar, olhe o termo de maior grau e ignore coeficientes e constantes: 2n + 1 → n. Polinômio de grau 1 é linear.",
     "assuntos": [
      {
-      "num": "0071",
+      "num": "0072",
       "modulo": "10-analise.md"
      },
      {
-      "num": "0072",
+      "num": "0071",
       "modulo": "10-analise.md"
      }
     ],
-    "dica": "**Cobra:** identificar a expressão que cresce de modo linear com a entrada.\n\n- **Notação O** [0072]: ignora constantes multiplicativas e termos menores, que perdem peso quando n cresce, e fica só com o termo dominante. Ex.: `3n + 5` é O(n); `n² + 50n` é O(n²).\n- **Contar passos** [0071]: a função de complexidade conta as operações em função de n; se não depende de n, é constante, e se cresce na mesma proporção que n, é linear. Ex.: uma conta fixa de 100 passos é O(1) para qualquer n.\n\n**Como atacar:** olhe o termo de maior expoente de n em cada alternativa.",
+    "dica": "**Cobra:** identificar a expressão que cresce na mesma proporção que a entrada.\n\n- **Notação O** [0072]: ignora constantes multiplicativas e termos menores, que perdem peso quando n cresce, e fica só com o termo dominante. Ex.: `3n + 5` é O(n); `n² + 50n` é O(n²).\n- **Contar passos** [0071]: a função de complexidade conta as operações em função de n; se não depende de n, é constante, e se cresce na mesma proporção que n, é linear. Ex.: uma conta fixa de 100 passos é O(1) para qualquer n.\n\n**Como atacar:** olhe o termo de maior expoente de n em cada alternativa.",
     "originais": []
    },
    {
@@ -8233,7 +8237,7 @@ window.PROVAS = [
      }
     ],
     "gabarito": "C",
-    "resumo": "Busca binária faz no máximo ⌊log2 n⌋ + 1 comparações: com 25 elementos, 5. Aqui o 52 é ausente, então ela usa o máximo. Conte cada posição do meio, inclusive a última que esvazia o intervalo.",
+    "resumo": "Busca binária faz no máximo ⌊log2 n⌋ + 1 exames: com 25 elementos, 5. Uma chave ausente faz 4 ou 5, conforme o caminho; o 52 faz 5. Conte cada posição do meio, inclusive a última que esvazia o intervalo.",
     "assuntos": [
      {
       "num": "0090",
@@ -8279,12 +8283,12 @@ window.PROVAS = [
     "resumo": "Printf depois da chamada recursiva imprime na ordem inversa (na volta); printf antes imprime na ordem direta (na ida). Padrão clássico para imprimir lista ao contrário.",
     "assuntos": [
      {
-      "num": "0076",
-      "modulo": "11-listas.md"
-     },
-     {
       "num": "0032",
       "modulo": "04-funcoes.md"
+     },
+     {
+      "num": "0076",
+      "modulo": "11-listas.md"
      }
     ],
     "dica": "**Cobra:** dizer o que uma função recursiva que imprime depois da chamada faz com uma lista.\n\n- **Imprimir na volta** [0032]: o `printf` depois da chamada recursiva só roda quando as chamadas seguintes terminam, então os valores saem na ordem inversa das chamadas. Ex.: `g(n)` chama `g(n-1)` e depois imprime n: `g(3)` escreve 1 2 3.\n- **Recursão na lista** [0076]: o caso base é `head == NULL`, e cada chamada recebe `head->next`, descendo um nó por vez até o fim. Ex.: em `4 → 5`, `f(4)` chama `f(5)`, que chama `f(NULL)` e retorna.\n\n**Como atacar:** anote a ordem das chamadas e a ordem das impressões na volta.",
@@ -8348,7 +8352,7 @@ window.PROVAS = [
       "modulo": "15-hash.md"
      }
     ],
-    "dica": "**Cobra:** dizer como a busca cresce num hash com encadeamento de tabela de tamanho fixo.\n\n- **Encadeamento** [0106]: cada balde guarda uma lista; a busca vai ao balde e percorre só a lista dele, com custo médio Θ(1 + α), onde α = n/m. Ex.: m = 5 e n = 10: α = 2, e cada lista tem 2 nós em média.\n- **Tabela de tamanho fixo** [0106]: com m fixo e n crescendo, α cresce junto com n, e as listas viram proporcionais a n; o custo só é constante se m cresce junto com n. Ex.: m = 100: n = 1000 dá α = 10 e n = 100000 dá α = 1000.\n\n**Como atacar:** troque m e n por números concretos e veja o que acontece com o tamanho médio da lista.",
+    "dica": "**Cobra:** dizer como a busca cresce num hash com encadeamento de tabela de tamanho fixo.\n\n- **Encadeamento** [0106]: cada balde guarda uma lista; a busca vai ao balde e percorre só a lista dele, com custo médio Θ(1 + α), com α = n/m. Ex.: m = 5 e n = 10: α = 2, e cada lista tem 2 nós em média.\n- **Tabela de tamanho fixo** [0106]: com m fixo e n crescendo, α cresce junto com n, e as listas viram proporcionais a n; o custo só é constante se m cresce junto com n. Ex.: m = 100: n = 1000 dá α = 10 e n = 100000 dá α = 1000.\n\n**Como atacar:** troque m e n por números concretos e veja o que acontece com o tamanho médio da lista.",
     "contrapontos": [
      {
       "item": "A",
@@ -8409,7 +8413,7 @@ window.PROVAS = [
       "modulo": "11-listas.md"
      }
     ],
-    "dica": "**Cobra:** completar o trecho que move o último nó da lista simples para a frente.\n\n- **Ponteiros p e q** [0076]: o laço deixa `p` no último nó e `q` no penúltimo, que anda um passo atrás de `p`. Ex.: em `1 → 2 → 3`, `p` termina no 3 e `q` no 2.\n- **Anterior aponta para o seguinte** [0077]: para tirar um nó, o anterior passa a apontar para o seguinte dele; o último tem seguinte NULL. Ex.: tirar o 5 de `4 → 5 → 6` faz `q->prox = p->prox`.\n- **Ordem das ligações** [0076]: guarde o endereço de um nó antes de sobrescrever o ponteiro que o guarda, senão a lista antiga se perde ou aponta para si mesma. Ex.: `head = p;` antes de `p->next = head;` faria `p` apontar para ele mesmo.\n\n**Como atacar:** desenhe a lista com p e q e refaça cada alternativa, uma seta por vez.",
+    "dica": "**Cobra:** completar o trecho que move o último nó da lista simples para a frente.\n\n- **Ponteiros p e q** [0076]: o laço deixa `p` no último nó e `q` no penúltimo, que anda um passo atrás de `p`. Ex.: em `1 → 2 → 3`, `p` termina no 3 e `q` no 2.\n- **Anterior aponta para o seguinte** [0077]: para tirar um nó, o anterior passa a apontar para o seguinte dele; o último tem seguinte NULL. Ex.: tirar o 5 de `4 → 5 → 6` faz `q->next = p->next`.\n- **Ordem das ligações** [0076]: guarde o endereço de um nó antes de sobrescrever o ponteiro que o guarda, senão a lista antiga se perde ou aponta para si mesma. Ex.: `head = p;` antes de `p->next = head;` faria `p` apontar para ele mesmo.\n\n**Como atacar:** desenhe a lista com p e q e refaça cada alternativa, uma seta por vez.",
     "originais": []
    },
    {
@@ -8452,7 +8456,7 @@ window.PROVAS = [
       "modulo": "13-busca-e-ordenacao.md"
      }
     ],
-    "dica": "**Cobra:** achar o algoritmo que ordena n elementos idênticos em O(n).\n\n- **Insertion sort no melhor caso** [0093]: encaixa cada elemento parando ao achar um menor ou igual; com valores iguais, ele para na primeira comparação, sem deslocar nada. Ex.: `7 7 7 7`: 3 comparações e 0 deslocamentos.\n- **Merge sort** [0094]: divide ao meio e intercala em todos os casos, com log₂ n níveis de n elementos, então custa O(n log n) mesmo com o vetor já ordenado. Ex.: 8 elementos: 3 níveis de 8, ou 24.\n- **Quick sort com iguais** [0095]: na separação com `<=`, todos os iguais ao pivô vão para o mesmo lado, o outro fica vazio e o custo vira O(n²). Ex.: `7 7 7` com pivô 7: sobram 2 elementos, depois 1.\n\n**Como atacar:** descubra qual algoritmo tem um melhor caso O(n) e confira se a entrada igual o provoca.",
+    "dica": "**Cobra:** achar o algoritmo que ordena n elementos idênticos em O(n).\n\n- **Insertion sort no melhor caso** [0093]: encaixa cada elemento parando ao achar um menor ou igual; com o vetor já em ordem, cada encaixe para na primeira comparação, sem deslocar nada. Ex.: `1 2 3 4`: 3 comparações e 0 deslocamentos.\n- **Merge sort** [0094]: divide ao meio e intercala em todos os casos, com log₂ n níveis de n elementos, então custa O(n log n) mesmo com o vetor já ordenado. Ex.: 8 elementos: 3 níveis de 8, ou 24.\n- **Quick sort com iguais** [0095]: na separação com `<=`, todos os iguais ao pivô vão para o mesmo lado, o outro fica vazio e o custo vira O(n²). Ex.: `7 7 7` com pivô 7: sobram 2 elementos, depois 1.\n\n**Como atacar:** descubra qual algoritmo tem um melhor caso O(n) e confira se a entrada igual o provoca.",
     "originais": []
    },
    {
@@ -8491,11 +8495,11 @@ window.PROVAS = [
     "resumo": "As cinco regras da rubro-negra: nó vermelho ou preto; raiz preta; folhas (nulos) pretas; vermelho tem filhos pretos; todo caminho tem a mesma quantidade de pretos. Disso sai que o maior caminho é no máximo 2 vezes o menor.",
     "assuntos": [
      {
-      "num": "0101",
-      "modulo": "14-arvores.md"
+      "num": "0177",
+      "modulo": "28-estruturas-complementos.md"
      }
     ],
-    "dica": "**Cobra:** escolher a afirmação verdadeira sobre as propriedades da árvore rubro-negra.\n\n- **Regras das cores** [0177]: a raiz é preta, os filhos de um nó vermelho são pretos e todos os caminhos de um nó às folhas têm o mesmo número de nós pretos; o que não se exige dos filhos de um nó preto é a cor. Ex.: um nó vermelho sob um nó preto é permitido; vermelho sob vermelho, não.\n- **Caminho mais longo e mais curto** [0177]: como os pretos são iguais em todos os caminhos e não há dois vermelhos seguidos, o caminho mais longo tem no máximo o dobro dos nós do mais curto, e h ≤ 2 log₂(n + 1). Ex.: altura negra 3: o caminho mais curto tem 3 nós e o mais longo, no máximo 6.\n\n**Como atacar:** confira cada alternativa contra as cinco propriedades.",
+    "dica": "**Cobra:** escolher a afirmação verdadeira sobre as propriedades da árvore rubro-negra.\n\n- **Regras das cores** [0177]: a raiz é preta, os filhos de um nó vermelho são pretos e todos os caminhos de um nó às folhas têm o mesmo número de nós pretos. Ex.: um nó vermelho sob um nó preto é permitido; vermelho sob vermelho, não.\n- **Altura negra** [0177]: é o número de nós pretos num caminho de um nó até as folhas, o mesmo em todos os caminhos; os vermelhos só entram intercalados com pretos, nunca dois seguidos. Ex.: preto, vermelho, preto é um caminho válido; preto, vermelho, vermelho, não.\n\n**Como atacar:** confira cada alternativa contra as cinco propriedades.",
     "contrapontos": [
      {
       "item": "A",
@@ -8572,7 +8576,7 @@ window.PROVAS = [
      {
       "letra": "A",
       "texto": "Árvores B e B+ criando um novo nível raiz (crescem para cima) sempre que sua altura muda, enquanto as árvores de pesquisa binária crescem adicionando novos nós folhas (para baixo) sempre que sua altura muda.",
-      "porque": "Verdadeira: a altura da árvore B só aumenta quando a raiz se divide, criando uma nova raiz acima; a ABB cresce por baixo."
+      "porque": "Verdadeira: a altura da árvore B só aumenta quando a raiz se divide, criando uma nova raiz acima; a BST cresce por baixo."
      },
      {
       "letra": "B",
@@ -8599,19 +8603,19 @@ window.PROVAS = [
     "resumo": "A banca anulou. B é a mais provável de ser a 'falsa' (a busca em B e em rubro-negra é O(log n) nos dois casos), mas C também se contesta: folhas não têm filhos. Em questões de 'FALSA', leia cada alternativa e marque a única com erro claro.",
     "assuntos": [
      {
-      "num": "0097",
-      "modulo": "14-arvores.md"
+      "num": "0146",
+      "modulo": "22-arvores-avancadas.md"
      }
     ],
     "dica": "**Cobra:** achar a afirmação falsa sobre árvores B e B+.\n\n- **Nó da árvore B** [0146]: um nó com k chaves tem k + 1 filhos; todo nó, exceto a raiz, tem de t - 1 a 2t - 1 chaves, e todas as folhas ficam no mesmo nível. Ex.: com t = 2, `[40 70]` tem 3 filhos.\n- **Crescimento por cima** [0146]: quando a raiz está cheia, ela se divide e a chave do meio vira a nova raiz, então a árvore B cresce por cima e as folhas seguem no mesmo nível. Ex.: raiz `[10 20 30]` recebe 40: o 20 sobe e a altura aumenta em 1.\n- **BST cresce por baixo** [0099]: a BST pendura o nó novo como folha, aumentando a altura por baixo, sem criar uma nova raiz. Ex.: em `50 → 30`, inserir 20 pendura o 20 abaixo do 30.\n\n**Como atacar:** confira cada alternativa contra a regra dos nós e a do crescimento.",
     "contrapontos": [
      {
       "item": "A",
-      "texto": "Na árvore B, quando a raiz cheia recebe chave, ela se divide e a chave do meio sobe para uma raiz nova. Na ABB, onde entra o nó novo?"
+      "texto": "Na árvore B, quando a raiz cheia recebe chave, ela se divide e a chave do meio sobe para uma raiz nova. Na BST, onde entra o nó novo?"
      },
      {
       "item": "B",
-      "texto": "Busca na árvore B: altura O(log n) e, em cada nó, até m chaves para olhar. Na rubro-negra, altura até 2 log n. As duas classes de custo no pior caso diferem?"
+      "texto": "Busca na árvore B: altura O(log n) e, em cada nó, até 2t - 1 chaves para olhar. Na rubro-negra, altura até 2 log n. As duas classes de custo no pior caso diferem?"
      },
      {
       "item": "C",
@@ -8642,7 +8646,7 @@ window.PROVAS = [
      {
       "letra": "A",
       "texto": "Somente B",
-      "porque": "Em B, o 50 tem subárvore esquerda de altura 2 (10 → 5) e direita vazia (altura 0): diferença 2, desbalanceada. B não é AVL."
+      "porque": "Em B, o 50 tem subárvore esquerda de altura 1 (10 → 5) e direita vazia (altura -1): diferença 2, desbalanceada. B não é AVL."
      },
      {
       "letra": "B",
@@ -8657,7 +8661,7 @@ window.PROVAS = [
      {
       "letra": "D",
       "texto": "A e C",
-      "porque": "Correta. Em A, todos os nós têm diferença de alturas até 1 (o 50 com esquerda 10 e direita vazia: diferença 1; o 200 com só o 300: diferença 1). Em C, a raiz tem alturas 3 e 3, o 50 tem 2 e 1, o 200 tem 2 e 2, o 10 tem 1 e vazio, o 150 e o 300 têm 1 e vazio, tudo dentro de 1."
+      "porque": "Correta. Em A, todos os nós têm diferença de alturas até 1 (o 50 com esquerda 10 e direita vazia: diferença 1; o 200 com só o 300: diferença 1). Em C (altura em arestas, vazia = -1), a raiz tem subárvores de altura 2 e 2, o 50 tem 1 e 0, o 200 tem 1 e 1, e o 10, o 150 e o 300 têm 0 e -1: tudo dentro de 1."
      },
      {
       "letra": "E",
@@ -8666,7 +8670,7 @@ window.PROVAS = [
      }
     ],
     "gabarito": "D",
-    "resumo": "AVL exige que, em todo nó, as alturas das duas subárvores difiram em no máximo 1. Procure o nó mais alto onde isso falha: em B é o 50, com esquerda de altura 2 (10 → 5) e direita vazia. Basta achar um nó violando e eliminar a árvore.",
+    "resumo": "AVL exige que, em todo nó, as alturas das duas subárvores difiram em no máximo 1. Procure o nó mais alto em que isso falha: em B é o 50, com esquerda de altura 1 (10 → 5) e direita vazia (-1). Basta achar um nó violando e eliminar a árvore.",
     "assuntos": [
      {
       "num": "0101",
@@ -8711,7 +8715,7 @@ window.PROVAS = [
      }
     ],
     "gabarito": "anulada",
-    "resumo": "A única alternativa claramente incorreta é a D (ABB sem balanceamento tem pior caso O(n)). A banca anulou assim mesmo. Em perguntas com 'INCORRETA', troque o sinal: ache a que contradiz a teoria.",
+    "resumo": "A única alternativa claramente incorreta é a D (BST sem balanceamento tem pior caso O(n)). A banca anulou assim mesmo. Em perguntas com 'INCORRETA', troque o sinal: ache a que contradiz a teoria.",
     "assuntos": [
      {
       "num": "0099",
@@ -8722,7 +8726,7 @@ window.PROVAS = [
       "modulo": "14-arvores.md"
      }
     ],
-    "dica": "**Cobra:** achar a afirmação incorreta sobre árvores de busca, AVL, rubro-negra e B.\n\n- **Pior caso da BST** [0099]: sem balanceamento, chaves em ordem crescente formam uma lista de altura n - 1, e a busca no pior caso custa O(n). Ex.: inserir 1, 2, 3, 4 e buscar o 4 faz 4 comparações.\n- **Altura da AVL** [0101]: a altura é no máximo cerca de 1,44 · log₂ n, então a busca custa O(log n) no pior caso. Ex.: 1 milhão de chaves: no máximo uns 29 níveis.\n- **Rotações na rubro-negra** [0177]: a inserção faz no máximo duas rotações: o caso do tio vermelho só recolore e sobe, e os outros dois rotacionam e acabam. Ex.: tio vermelho: pinta pai e tio de preto, o avô de vermelho, sem rotação.\n\n**Como atacar:** procure a afirmação que troca o custo do pior caso de uma estrutura por outro.",
+    "dica": "**Cobra:** achar a afirmação incorreta sobre árvores de busca, AVL, rubro-negra e B.\n\n- **Pior caso da BST** [0099]: sem balanceamento, chaves em ordem crescente formam uma lista de altura n - 1. Ex.: inserir 1, 2, 3, 4 e buscar o 4 faz 4 comparações.\n- **Altura da AVL** [0101]: a altura é no máximo cerca de 1,44 · log₂ n, então a busca custa O(log n) no pior caso. Ex.: 1 milhão de chaves: no máximo uns 29 níveis.\n- **Rotações na rubro-negra** [0177]: a inserção faz no máximo duas rotações: o caso do tio vermelho só recolore e sobe, e os outros dois rotacionam e acabam. Ex.: tio vermelho: pinta pai e tio de preto, o avô de vermelho, sem rotação.\n\n**Como atacar:** procure a afirmação que troca o custo do pior caso de uma estrutura por outro.",
     "contrapontos": [
      {
       "item": "A",
@@ -8738,7 +8742,7 @@ window.PROVAS = [
      },
      {
       "item": "D",
-      "texto": "Insira 1, 2, 3, 4 nessa ordem numa ABB sem balanceamento e busque o 4. Quantas comparações? E com `n` chaves inseridas em ordem crescente?"
+      "texto": "Insira 1, 2, 3, 4 nessa ordem numa BST sem balanceamento e busque o 4. Quantas comparações? E com `n` chaves inseridas em ordem crescente?"
      },
      {
       "item": "E",
@@ -8834,7 +8838,7 @@ window.PROVAS = [
       "modulo": "14-arvores.md"
      }
     ],
-    "dica": "**Cobra:** comparar a altura e as rotações das árvores AVL e rubro-negra.\n\n- **AVL** [0101]: exige diferença de altura de no máximo 1 em todo nó, o que a mantém mais baixa, com h ≤ 1,44 · log₂ n, mas pode rotacionar mais. Ex.: 1 milhão de chaves: até uns 29 níveis.\n- **Rubro-negra** [0177]: as regras de cor são mais folgadas (h ≤ 2 log₂(n + 1)), então a árvore pode ser mais alta, com poucas rotações (no máximo 2 na inserção). Ex.: 1 milhão de chaves: até uns 39 níveis.\n\n**Como atacar:** relacione regra mais rígida com altura menor e mais consertos.",
+    "dica": "**Cobra:** comparar a altura e as rotações das árvores AVL e rubro-negra.\n\n- **AVL** [0101]: exige diferença de altura de no máximo 1 em todo nó, e h ≤ 1,44 · log₂ n; na remoção, as rotações podem se repetir até a raiz. Ex.: 1 milhão de chaves: até uns 29 níveis.\n- **Rubro-negra** [0177]: as regras de cor só impedem que um caminho passe do dobro de outro, e h ≤ 2 log₂(n + 1); a inserção faz no máximo 2 rotações e a remoção, 3. Ex.: 1 milhão de chaves: até uns 40 níveis.\n\n**Como atacar:** compare as alturas máximas e as rotações das duas e confira as duas metades de cada alternativa.",
     "contrapontos": [
      {
       "item": "A",
@@ -8850,7 +8854,7 @@ window.PROVAS = [
      },
      {
       "item": "D",
-      "texto": "Para n = 1.000.000, a AVL não passa de uns 29 níveis e a rubro-negra pode chegar a 40. As alturas coincidem? E quantas rotações, no máximo, a rubro-negra faz por inserção?"
+      "texto": "Para n = 1.000.000, a AVL não passa de uns 29 níveis e a rubro-negra pode chegar a uns 40 níveis. As alturas coincidem? E quantas rotações, no máximo, a rubro-negra faz por inserção?"
      }
     ],
     "originais": []
@@ -8891,7 +8895,7 @@ window.PROVAS = [
     "resumo": "Sem a figura, dá para resolver por exclusão: as operações tiram o 9 e o 23 e põem o 5 e o 17, então só a E tem essa combinação de nós. A banca anulou, provavelmente por causa da figura ausente. Pré-ordem: raiz, esquerda, direita. Pós-ordem: esquerda, direita, raiz.",
     "assuntos": [
      {
-      "num": "0099",
+      "num": "0098",
       "modulo": "14-arvores.md"
      },
      {
@@ -8899,7 +8903,7 @@ window.PROVAS = [
       "modulo": "14-arvores.md"
      },
      {
-      "num": "0098",
+      "num": "0099",
       "modulo": "14-arvores.md"
      }
     ],
@@ -9015,7 +9019,7 @@ window.PROVAS = [
      {
       "letra": "C",
       "texto": "I, II e III",
-      "porque": "Faltam a IV, que também é O(1)."
+      "porque": "Falta a IV, que também é O(1)."
      },
      {
       "letra": "D",
@@ -9029,14 +9033,14 @@ window.PROVAS = [
      }
     ],
     "gabarito": "E",
-    "resumo": "Numa lista duplamente encadeada com início e fim, todas as inserções e exclusões nas pontas são O(1). Em lista simples, só a exclusão do último nó é O(n), porque precisa achar o penúltimo.",
+    "resumo": "Numa lista duplamente encadeada com início e fim, todas as inserções e exclusões nas pontas são O(1). Em lista simples, mesmo com ponteiro para o fim, a exclusão do último nó é O(n), porque precisa achar o penúltimo.",
     "assuntos": [
      {
       "num": "0079",
       "modulo": "11-listas.md"
      }
     ],
-    "dica": "**Cobra:** dizer quais operações numa lista duplamente encadeada com ponteiros para as duas pontas custam O(1).\n\n- **Lista duplamente encadeada** [0079]: cada nó tem `prox` e `ant`, e a lista guarda as duas pontas; remover um nó conhecido só mexe nos vizinhos, sem percorrer. Ex.: remover o último nó faz `fim = fim->ant; fim->prox = NULL`.\n- **Inserir nas pontas** [0079]: com ponteiro para as duas pontas, não é preciso andar: o nó novo liga-se ao vizinho e a ponta da lista é atualizada. Ex.: inserir 9 antes do primeiro: `9->prox = inicio` e `inicio->ant = 9`.\n- **Acesso por posição** [0076]: chegar ao k-ésimo nó exige seguir k - 1 setas, então só mexer nas pontas é O(1). Ex.: o 5º nó exige 4 setas.\n\n**Como atacar:** para cada operação, veja se precisa andar pela lista ou só mexer nas pontas.",
+    "dica": "**Cobra:** dizer quais operações numa lista duplamente encadeada com ponteiros para as duas pontas custam O(1).\n\n- **Lista duplamente encadeada** [0079]: cada nó tem `prox` e `ant`, e a lista guarda as duas pontas; remover um nó conhecido só mexe nos vizinhos, sem percorrer. Ex.: remover o último nó faz `fim = fim->ant; fim->prox = NULL`.\n- **Inserir nas pontas** [0079]: com ponteiro para as duas pontas, não é preciso andar: o nó novo liga-se ao vizinho e a ponta da lista é atualizada. Ex.: inserir antes do primeiro: `novo->prox = inicio` e `inicio->ant = novo`.\n- **Acesso por posição** [0076]: chegar ao k-ésimo nó exige seguir k - 1 setas, então só mexer nas pontas é O(1). Ex.: o 5º nó exige 4 setas.\n\n**Como atacar:** para cada operação, veja se precisa andar pela lista ou só mexer nas pontas.",
     "contrapontos": [
      {
       "item": "I",
@@ -9118,7 +9122,7 @@ window.PROVAS = [
      {
       "letra": "A",
       "texto": "15",
-      "porque": "Seria o resultado se alguém somasse os elementos de um só vetor (0+2+0+0+5 = 7) ou trocasse o produto por soma. O método multiplica posição a posição e depois soma, e nenhum par dá 15."
+      "porque": "É a soma de todos os elementos dos dois vetores (7 + 8 = 15), como se o produto virasse soma. O método multiplica posição a posição e só depois soma."
      },
      {
       "letra": "B",
@@ -9140,8 +9144,12 @@ window.PROVAS = [
     "resumo": "Produto escalar é a soma dos produtos posição a posição. Quando os zeros de um vetor caem onde o outro tem valor, tudo se anula. Na prova, monte a tabela de parcelas antes de somar, em vez de adivinhar pelo formato.",
     "assuntos": [
      {
-      "num": "0039",
+      "num": "0037",
       "modulo": "05-vetores-e-strings.md"
+     },
+     {
+      "num": "0025",
+      "modulo": "03-repeticoes.md"
      }
     ],
     "originais": []
@@ -9151,7 +9159,7 @@ window.PROVAS = [
     "topico": 4,
     "formato": "afirmações",
     "enunciado": "Sobre as características das árvores de pesquisa binária, considere as afirmações:\n\n1. TODOS os nós da subárvore à esquerda são menores que o pai\n2. O nó mais à esquerda é o menor de TODOS os nós, enquanto que o nó mais à direita é o maior de TODOS\n3. O sucessor de um nó x é o nó com a menor chave maior que a chave de x, e este sucessor estará SEMPRE em um nível (altura) acima de x, ou seja, mais próximo da raiz.\n\nQuais são verdadeiras?",
-    "dica": "**Cobra:** propriedades da árvore de pesquisa binária e do sucessor de uma chave.\n\n- **Propriedade da BST** [0099]: em cada nó, toda chave da subárvore esquerda é menor e toda da direita é maior, não só as dos filhos diretos; o mínimo está descendo sempre à esquerda e o máximo à direita. Ex.: na raiz 5 com filho 3, o 4 entra à direita do 3, abaixo da raiz e ainda menor que 5.\n- **Sucessor** [0175]: a menor chave maior que `x`; com subárvore direita é o mínimo dela, e sem ela é o primeiro ancestral alcançado por um filho esquerdo. Ex.: na raiz 6 com esquerdo 2 (e o 4 à direita do 2), o sucessor do 2 é o 4 e o do 4 é o 6.\n\n**Como atacar:** teste cada afirmação num desenho pequeno, procurando um contraexemplo.",
+    "dica": "**Cobra:** propriedades da árvore de pesquisa binária e do sucessor de uma chave.\n\n- **Propriedade da BST** [0099]: em cada nó, as chaves menores que a dele ficam na subárvore esquerda e as maiores, na direita. Ex.: inserindo 5, 3 e 4, o 4 desce à esquerda do 5 e depois à direita do 3.\n- **Sucessor** [0175]: a menor chave maior que `x`, ou seja, o próximo valor no percurso em ordem da BST. Ex.: numa BST com as chaves 2, 4 e 6, o sucessor do 2 é o 4 e o do 4 é o 6.\n\n**Como atacar:** teste cada afirmação num desenho pequeno, procurando um contraexemplo.",
     "contrapontos": [
      {
       "item": "1",
@@ -9207,7 +9215,7 @@ window.PROVAS = [
     "topico": 7,
     "formato": "afirmações",
     "enunciado": "Sobre ordenação, considere as afirmações:\n\n1. O Quicksort é um dos algoritmos mais conhecidos, pois possui complexidade, no pior caso, de O(n log n)\n2. O Quicksort e Mergesort usam a técnica de divisão e conquista\n3. O Mergesort possui complexidade assintótica Θ(n log n) no caso médio.\n4. Caso a lista já esteja ordenada, o Selectionsort têm complexidade de O(n).\n\nTais afirmações são, respectivamente:",
-    "dica": "**Cobra:** custo e técnica dos algoritmos de ordenação.\n\n- **Quick sort** [0095]: particiona em torno de um pivô e ordena cada lado; se o pivô cai sempre numa ponta, as partições têm 0 e n-1 elementos e o custo vira quadrático, enquanto n log n é o caso médio. Ex.: pivô no primeiro de 1, 2, 3, 4 gera partições de 0 e 3, depois 0 e 2.\n- **Merge sort** [0094]: divide ao meio, ordena as metades e intercala; são log n níveis de n passos cada, em qualquer entrada. Ex.: 8 elementos dão 3 níveis × 8 = 24 passos.\n- **Selection sort** [0092]: toda volta procura o mínimo em todo o resto do vetor, ordenado ou não. Ex.: em 1, 2, 3 ainda faz 2 + 1 = 3 comparações.\n\n**Como atacar:** para cada algoritmo, separe pior caso, caso médio e melhor caso.",
+    "dica": "**Cobra:** custo e técnica dos algoritmos de ordenação.\n\n- **Quick sort** [0095]: particiona em torno de um pivô e ordena cada lado; o custo depende do tamanho das partições, e elas dependem de onde o pivô cai. Ex.: pivô no primeiro de 1, 2, 3, 4 gera partições de 0 e 3, depois 0 e 2.\n- **Merge sort** [0094]: divide ao meio, ordena as metades e intercala; cada nível da recursão intercala os n elementos. Ex.: 8 elementos dão 3 níveis × 8 = 24 passos.\n- **Selection sort** [0092]: toda volta procura o mínimo no resto do vetor, comparando com cada elemento que ainda sobrou. Ex.: em 3, 1, 2 faz 2 + 1 = 3 comparações.\n\n**Como atacar:** para cada algoritmo, separe pior caso, caso médio e melhor caso.",
     "contrapontos": [
      {
       "item": "1",
@@ -9252,7 +9260,7 @@ window.PROVAS = [
     "resumo": "Decore a tabela: Quicksort O(n log n) médio e O(n²) pior; Mergesort Θ(n log n) sempre; seleção Θ(n²) sempre; inserção O(n) no melhor caso (quase ordenada). A seleção é o algoritmo que não ganha nada com entrada ordenada, e a pegadinha da 4 é confundi-la com a inserção.",
     "assuntos": [
      {
-      "num": "0094",
+      "num": "0096",
       "modulo": "13-busca-e-ordenacao.md"
      },
      {
@@ -9260,11 +9268,11 @@ window.PROVAS = [
       "modulo": "13-busca-e-ordenacao.md"
      },
      {
-      "num": "0092",
+      "num": "0094",
       "modulo": "13-busca-e-ordenacao.md"
      },
      {
-      "num": "0096",
+      "num": "0092",
       "modulo": "13-busca-e-ordenacao.md"
      }
     ],
@@ -9275,7 +9283,7 @@ window.PROVAS = [
     "topico": 4,
     "formato": "simulação",
     "enunciado": "Os seguintes itens são inseridos em uma árvore binária de busca: 8, 3, 4, 9, 5, 6, 2, 1, 7. Qual item é colocado na raiz?",
-    "dica": "**Cobra:** descobrir qual chave fica na raiz da árvore binária de busca pela ordem de inserção.\n\n- **Inserção na BST** [0099]: a chave nova desce comparando (menor à esquerda, maior à direita) até um lugar vazio, onde vira folha, e nunca muda de lugar depois. Ex.: inserindo 4, 2, 6, o 2 vai à esquerda do 4 e o 6 à direita.\n- **Ordem de inserção** [0099]: sem balanceamento a forma da árvore depende da ordem, e a primeira chave inserida na árvore vazia é a raiz. Ex.: 1, 2, 3 forma uma fila inclinada à direita; 2, 1, 3 forma uma árvore cheia.\n\n**Como atacar:** pergunte qual chave entrou primeiro, sem rotações.",
+    "dica": "**Cobra:** descobrir qual chave fica na raiz da árvore binária de busca pela ordem de inserção.\n\n- **Inserção na BST** [0099]: a chave nova desce comparando (menor à esquerda, maior à direita) até um lugar vazio, onde vira folha, e nunca muda de lugar depois. Ex.: inserindo 4, 2, 6, o 2 vai à esquerda do 4 e o 6 à direita.\n- **Ordem de inserção** [0099]: sem balanceamento, a forma da árvore depende só da ordem em que as chaves chegam. Ex.: 1, 2, 3 forma uma fila inclinada à direita; 2, 1, 3 forma uma árvore cheia.\n\n**Como atacar:** insira as chaves uma a uma e veja qual ocupa o topo.",
     "alternativas": [
      {
       "letra": "A",
@@ -9299,7 +9307,7 @@ window.PROVAS = [
      }
     ],
     "gabarito": "C",
-    "resumo": "Em ABB sem balanceamento, a raiz é sempre o primeiro valor inserido. Não precisa desenhar a árvore inteira. Isso muda em AVL ou rubro-negra, onde rotações podem trocar a raiz.",
+    "resumo": "Em ABB sem balanceamento, a raiz é sempre o primeiro valor inserido. Não precisa desenhar a árvore inteira. Isso muda em AVL ou rubro-negra: nelas, rotações podem trocar a raiz.",
     "assuntos": [
      {
       "num": "0099",
@@ -9377,7 +9385,7 @@ window.PROVAS = [
      {
       "letra": "A",
       "texto": "[ 2 15 4 5]",
-      "porque": "Faltam o 1 e o formato de lista com vírgulas. Nada remove elementos: a atribuição só troca o valor da posição 2."
+      "porque": "Falta o 1. Nada remove elementos: a atribuição só troca o valor da posição 2."
      },
      {
       "letra": "B",
@@ -9392,14 +9400,14 @@ window.PROVAS = [
      {
       "letra": "D",
       "texto": "[ 1 2 15 4 5]",
-      "porque": "`vec_2 = vec_1` não copia: as duas variáveis apontam para o mesmo objeto. Mudar `row[2]` por uma aparece na outra. A posição 2 (o 3) vira 15 e o resto fica igual."
+      "porque": "`vec_2 = vec_1` não copia: as duas variáveis apontam para o mesmo objeto. Mudar `row[2]` por uma aparece na outra. A posição 2 (o 3) vira 15 e o resto fica igual. O Python imprime `[1, 2, 15, 4, 5]`, com vírgulas; a D é a mesma lista."
      }
     ],
     "gabarito": "D",
     "resumo": "Atribuição de objeto em Python copia a referência, não o conteúdo. É o mesmo efeito de dois ponteiros para o mesmo bloco em C. Para ter cópia independente, use `list(...)` ou `copy`.",
     "assuntos": [
      {
-      "num": "0044",
+      "num": "0045",
       "modulo": "06-ponteiros.md"
      },
      {
@@ -9479,12 +9487,12 @@ window.PROVAS = [
      {
       "letra": "A",
       "texto": "13",
-      "porque": "É o oitavo termo (0, 1, 1, 2, 3, 5, 8, 13). Aqui a sequência começa com f(1) = 0, então f(7) é o sétimo."
+      "porque": "É o oitavo termo de 0, 1, 1, 2, 3, 5, 8, 13, ou o sétimo de quem começa a sequência em 1, 1. Com f(1) = 0, o sétimo termo é 8."
      },
      {
       "letra": "B",
       "texto": "5",
-      "porque": "É f(6). Quem conta a partir do 1 como primeiro termo, em vez do 0, erra por uma posição."
+      "porque": "É f(6), o termo anterior. Sai de quem para uma posição antes ao listar a sequência."
      },
      {
       "letra": "C",
@@ -9516,7 +9524,7 @@ window.PROVAS = [
     "topico": 8,
     "formato": "conceito",
     "enunciado": "Um grafo é uma árvore se e somente se:",
-    "dica": "**Cobra:** a definição de árvore como tipo de grafo.\n\n- **Grafo conexo e não direcionado** [0109]: conexo é haver caminho entre quaisquer dois vértices; não direcionado é ter arestas sem sentido. Ex.: 1–2 e 2–3 é conexo; 1–2 e 3–4 não é, pois nada liga o 1 ao 3.\n- **Ciclo** [0150]: caminho que volta ao vértice de partida; uma árvore é conexa e sem ciclos, por isso tem V - 1 arestas. Ex.: 4 vértices em fila têm 3 arestas, e ligar o último ao primeiro cria um ciclo.\n\n**Como atacar:** teste cada opção com um grafo de 3 ou 4 vértices.",
+    "dica": "**Cobra:** a definição de árvore como tipo de grafo.\n\n- **Grafo conexo e não direcionado** [0109]: conexo é haver caminho entre quaisquer dois vértices; não direcionado é ter arestas sem sentido. Ex.: 1–2 e 2–3 é conexo; 1–2 e 3–4 não é, pois nada liga o 1 ao 3.\n- **Ciclo** [0150]: caminho que sai de um vértice e volta a ele sem repetir aresta, uma volta fechada no desenho. Ex.: 1–2, 2–3 e 3–1 formam um ciclo; sem a aresta 3–1, o ciclo some.\n\n**Como atacar:** teste cada opção com um grafo de 3 ou 4 vértices.",
     "contrapontos": [
      {
       "item": "A",
@@ -9576,7 +9584,7 @@ window.PROVAS = [
     "topico": "3.4",
     "formato": "conceito",
     "enunciado": "Matrizes são estruturas de dados de n-dimensões que podem ser implementadas utilizando arrays (vetores). Por simplicidade, chamaremos de matrizes as matrizes bidimensionais numéricas (que armazenam números inteiros). Sendo assim, marque a alternativa INCORRETA.",
-    "dica": "**Cobra:** achar a afirmação errada sobre matrizes bidimensionais.\n\n- **Produto de matrizes** [0039]: `A` (m×n) vezes `B` (n×p) só existe se as colunas de `A` forem as linhas de `B`, e o resultado tem as linhas de `A` e as colunas de `B`. Ex.: (2×3) · (3×4) dá uma matriz 2×4.\n- **Matriz m×n e dois laços** [0039]: tem m·n elementos, e um laço de linhas por fora e um de colunas por dentro, com um acumulador, visita todos. Ex.: uma 3×4 tem 12 posições e a soma faz 12 voltas.\n\n**Como atacar:** confira cada alternativa com uma matriz pequena e fique com a que falha.",
+    "dica": "**Cobra:** achar a afirmação errada sobre matrizes bidimensionais.\n\n- **Produto de matrizes** [0039]: cada elemento do resultado é uma linha da primeira vezes uma coluna da segunda, então as colunas da primeira têm de casar com as linhas da segunda. Ex.: em (2×3) · (3×4), cada linha da primeira e cada coluna da segunda têm 3 números.\n- **Matriz m×n e dois laços** [0039]: tem m·n elementos, e um laço de linhas por fora e um de colunas por dentro, com um acumulador, visita todos. Ex.: uma 3×4 tem 12 posições e a soma faz 12 voltas.\n\n**Como atacar:** confira cada alternativa com uma matriz pequena e fique com a que falha.",
     "contrapontos": [
      {
       "item": "A",
@@ -9764,7 +9772,7 @@ window.PROVAS = [
      {
       "letra": "D",
       "texto": "Calcula e imprime a soma dos elementos iguais ou abaixo da diagonal principal da matriz.",
-      "porque": "Para somar a parte de baixo, o laço interno iria de 0 até `i`. Aqui `j` parte de `i` e vai até `m`, a parte de cima."
+      "porque": "Para somar a parte de baixo, o laço interno iria de 0 até `i`. Aqui `j` parte de `i` e vai até `m − 1`, a parte de cima."
      }
     ],
     "gabarito": "A",
@@ -9922,7 +9930,7 @@ window.PROVAS = [
     "topico": 4,
     "formato": "conceito",
     "enunciado": "Sobre árvores vermelho-preto, considere as afirmações:\n\n1. A raiz é preta\n2. Toda subárvore nula é preta,\n3. Se um nó é vermelho, então os filhos são pretos.\n\nQual são verdadeiras:",
-    "dica": "**Cobra:** as propriedades da árvore rubro-negra.\n\n- **Propriedades rubro-negras** [0177]: a raiz é preta, as folhas nulas (`T.nil`) são pretas, nó vermelho só tem filhos pretos, e todo caminho até as folhas tem o mesmo número de nós pretos. Ex.: um nó vermelho com filho vermelho viola a regra e obriga a recolorir ou girar.\n- **Altura negra** [0177]: número de nós pretos de um nó até as folhas, igual em todos os caminhos, o que limita a altura a 2 log₂(n+1). Ex.: se um caminho da raiz tem 2 nós pretos até a folha, todos os outros também têm 2.\n\n**Como atacar:** confira cada afirmação contra a lista das cinco propriedades.",
+    "dica": "**Cobra:** as propriedades da árvore rubro-negra.\n\n- **Propriedades rubro-negras** [0177]: cinco regras de cor, sobre cada nó, a raiz, as folhas nulas (`T.nil`), os filhos de nó vermelho e a contagem de pretos, mantêm a altura em O(log n). Ex.: a chave nova entra vermelha, e a inserção recolore ou gira até as regras voltarem a valer.\n- **Altura negra** [0177]: número de nós pretos de um nó até as folhas, igual em todos os caminhos, o que limita a altura a 2 log₂(n+1). Ex.: se um caminho da raiz tem 2 nós pretos até a folha, todos os outros também têm 2.\n\n**Como atacar:** confira cada afirmação contra a lista das cinco propriedades.",
     "contrapontos": [
      {
       "item": "1",
@@ -9974,7 +9982,7 @@ window.PROVAS = [
     "topico": 8,
     "formato": "afirmações",
     "enunciado": "Sobre os grafos, considere as afirmações:\n\n1. O algoritmo de Dijkstra é conhecido por descobrir o menor caminho entre dois vértices, mas só funciona para casos pequenos ou médios, por possuir complexidade exponencial.\n2. Na implementação da busca em largura, uma fila é normalmente utilizada.\n3. Em grafos esparsos, a implementação por matriz de adjacências consome mais memória do que a implementação por lista de adjacências.\n\nQuais são verdadeiras?",
-    "dica": "**Cobra:** custo do Dijkstra, uso da fila na busca em largura e memória das representações de grafo.\n\n- **Dijkstra** [0112]: caminho mínimo de uma origem com pesos não negativos, fixando sempre o vértice de menor distância; custa O(V²) com vetor ou O((V+E) log V) com heap. Ex.: com 1.000 vértices, V² = 1 milhão de passos, nada exponencial.\n- **BFS e fila** [0110]: visita por camadas (distância 1, depois 2...), e a fila (primeiro a entrar, primeiro a sair) garante essa ordem. Ex.: de A com vizinhos B e C, a fila A → B, C visita B e C antes dos vizinhos de B.\n- **Matriz × lista de adjacências** [0109]: a matriz gasta V² células mesmo com poucas arestas; a lista gasta V + E. Ex.: 1.000 vértices e 2.000 arestas: 1.000.000 células contra cerca de 5.000 entradas.\n\n**Como atacar:** avalie cada afirmação sozinha com os números de um grafo pequeno.",
+    "dica": "**Cobra:** custo do Dijkstra, uso da fila na busca em largura e memória das representações de grafo.\n\n- **Dijkstra** [0112]: caminho mínimo de uma origem com pesos não negativos, fixando a cada passo o vértice de menor distância provisória. Ex.: de A, com A–B de peso 2 e A–C de peso 5, o B é fixado antes do C.\n- **BFS** [0110]: visita por camadas (distância 1, depois 2...), atendendo os vértices na ordem em que foram descobertos. Ex.: de A com vizinhos B e C, a busca visita B e C antes dos vizinhos de B.\n- **Matriz × lista de adjacências** [0109]: a matriz reserva uma célula para cada par de vértices; a lista guarda, para cada vértice, só as arestas que existem. Ex.: 4 vértices dão 4 × 4 = 16 células na matriz.\n\n**Como atacar:** avalie cada afirmação sozinha com os números de um grafo pequeno.",
     "contrapontos": [
      {
       "item": "1",
@@ -10039,12 +10047,12 @@ window.PROVAS = [
      {
       "letra": "A",
       "texto": "O(log n), O(log n)",
-      "porque": "Supõe que o melhor caso também gasta log n. Mas se a remoção não desbalanceia nenhum nó, o trabalho é constante."
+      "porque": "Supõe que o melhor caso também gasta log n. Se a altura do pai não muda, a subida para ali e o trabalho é constante; é essa a leitura da banca."
      },
      {
       "letra": "B",
       "texto": "O(1), O(log n)",
-      "porque": "No melhor caso, remover um nó sem filhos não desbalanceia nada: O(1). No pior caso, o rebalanceamento sobe até a raiz com rotações, e a altura é O(log n)."
+      "porque": "No melhor caso, a remoção não muda a altura de nenhum ancestral (por exemplo, uma folha cujo irmão existe), e o ajuste para logo: O(1). No pior caso, o rebalanceamento sobe até a raiz com rotações, e a altura é O(log n)."
      },
      {
       "letra": "C",
@@ -10076,7 +10084,7 @@ window.PROVAS = [
     "topico": "3.1",
     "formato": "cálculo",
     "enunciado": "Considere as seguintes operações em uma lista implementada usando vetores: busca por um elemento, acesso por índice, inserção no início da lista, inserção no final da lista, remoção por índice. As complexidades do pior caso dessas operações, na ordem mencionada, são:",
-    "dica": "**Cobra:** o pior caso de cada operação em uma lista implementada com vetor.\n\n- **Vetor: acesso e deslocamento** [0075]: o índice vai direto à posição, O(1); inserir ou remover no meio ou no início desloca os elementos seguintes, O(n). Ex.: inserir 9 no início de `[1, 2, 3]` move os três para a direita antes de gravar.\n- **Pior caso** [0072]: é o custo da entrada mais cara possível para aquela operação. Ex.: achar um valor ausente em 5 elementos custa 5 comparações.\n\n**Como atacar:** para cada operação, imagine quantos elementos precisam se mexer ou ser visitados.",
+    "dica": "**Cobra:** o pior caso de cada operação em uma lista implementada com vetor.\n\n- **Vetor: acesso e deslocamento** [0075]: o índice vai direto à posição; inserir ou remover no meio ou no início desloca os elementos seguintes. Ex.: inserir 9 no início de `[1, 2, 3]` move os três para a direita antes de gravar.\n- **Pior caso** [0072]: é o custo da entrada mais cara possível para aquela operação. Ex.: achar um valor ausente em 5 elementos custa 5 comparações.\n\n**Como atacar:** para cada operação, imagine quantos elementos precisam se mexer ou ser visitados.",
     "alternativas": [
      {
       "letra": "A",
@@ -10164,7 +10172,7 @@ window.PROVAS = [
     "topico": 7,
     "formato": "conceito",
     "enunciado": "Sobre o algoritmo de ordenação por inserção (Insertion Sort), marque a alternativa **correta**.",
-    "dica": "**Cobra:** como o tempo do insertion sort depende da ordem inicial.\n\n- **Insertion sort** [0093]: pega cada elemento e o desloca para trás até o lugar certo no prefixo ordenado, parando quando o vizinho não é maior. Ex.: em 2, 3, 1 o 1 passa pelo 3 e pelo 2; em 1, 2, 3 ninguém se move.\n- **Melhor e pior caso** [0093]: já ordenado custa O(n), com uma comparação por elemento; invertido custa O(n²). Ex.: com n = 5, ordenado faz 4 comparações e invertido faz 4 + 3 + 2 + 1 = 10.\n\n**Como atacar:** teste cada afirmação com um vetor ordenado e outro invertido.",
+    "dica": "**Cobra:** como o tempo do insertion sort depende da ordem inicial.\n\n- **Insertion sort** [0093]: pega cada elemento e o desloca para trás até o lugar certo no prefixo ordenado, parando quando o vizinho não é maior. Ex.: em 2, 3, 1 o 1 passa pelo 3 e pelo 2; em 1, 2, 3 ninguém se move.\n- **Inversões** [0093]: pares de posições em que o maior vem antes do menor; cada inversão custa um deslocamento ao insertion sort. Ex.: 2, 3, 1 tem duas inversões, (2, 1) e (3, 1), e o 1 anda duas casas.\n\n**Como atacar:** teste cada afirmação com um vetor ordenado e outro invertido.",
     "contrapontos": [
      {
       "item": "A",
@@ -10258,7 +10266,7 @@ window.PROVAS = [
     "topico": 5,
     "formato": "afirmações",
     "enunciado": "Sobre um Hash por Encadeamento, pode-se afirmar que:\n\nI. Ele não gera colisões secundárias\nII. Ele tem custo temporal O(n) no pior caso, sendo n o número de elementos na tabela\nIII. Ao contrário do endereçamento aberto, o encadeamento permite trabalhar com quantidade de chaves superior ao tamanho da tabela\n\n(No caderno os itens vêm rotulados a, b, c, mas as alternativas os chamam de I, II e III.)",
-    "dica": "**Cobra:** propriedades do hash com encadeamento.\n\n- **Encadeamento** [0106]: cada posição guarda uma lista, e chaves com o mesmo hash entram na mesma lista, então cabem mais chaves que posições. Ex.: com m = 3, as chaves 1, 4 e 7 ficam todas na lista 1 (`k mod 3`).\n- **Pior caso do hash** [0106]: se todas as chaves caem na mesma posição, a lista tem n nós e a busca os percorre todos. Ex.: com m = 4 e chaves 4, 8, 12, 16, tudo cai na posição 0 e achar o 16 passa por 4 nós.\n- **Agrupamento no endereçamento aberto** [0107]: a chave que ocupa a vaga de outro hash faz a seguinte colidir com ela. Ex.: com m = 5, o 6 (hash 1) vai para a posição 2 e a chave 2 já nasce colidindo.\n\n**Como atacar:** teste cada afirmação com uma tabela pequena.",
+    "dica": "**Cobra:** propriedades do hash com encadeamento.\n\n- **Encadeamento** [0106]: cada posição guarda uma lista encadeada, e chaves com o mesmo hash entram na mesma lista. Ex.: com m = 3, as chaves 1 e 4 ficam na lista 1 (`k mod 3`).\n- **Custo da busca** [0106]: a busca percorre a lista da posição em que a chave caiu, então o custo é o tamanho dessa lista. Ex.: com m = 4 e chaves 5 e 9, a lista 1 tem 2 nós e achar o 9 passa pelos dois.\n- **Agrupamento primário** [0107]: na sondagem linear, a chave que colide ocupa a vaga de outro hash, e a chave desse hash passa a colidir também. Ex.: com m = 7, o 10 (hash 3) acha o 3 na casa 3, vai para a 4, e a chave 4 já nasce colidindo.\n\n**Como atacar:** teste cada afirmação com uma tabela pequena.",
     "contrapontos": [
      {
       "item": "I",
@@ -10314,7 +10322,7 @@ window.PROVAS = [
     "topico": 4,
     "formato": "afirmações",
     "enunciado": "Considerando-se as operações com um vetor, mantido ordenado a cada inserção de chave, e uma árvore binária de pesquisa balanceada, pode-se dizer que:\n\nI. O vetor ordenado apresenta custo de inserção e de remoção menores que o da árvore, pois não exigir alocação dinâmica de nós\nII. No pior caso, o custo da operação de busca por uma chave é assintoticamente igual tanto no vetor ordenado quanto na árvore\n\n(No caderno os itens vêm rotulados a e b, mas as alternativas os chamam de I e II.)",
-    "dica": "**Cobra:** comparar vetor ordenado e árvore binária de busca balanceada em custo de inserção, remoção e busca.\n\n- **Vetor ordenado** [0075]: a busca binária custa O(log n), mas inserir ou remover desloca elementos, O(n). Ex.: inserir 4 em `[1, 3, 5, 7]` empurra o 5 e o 7 uma casa à direita.\n- **BST balanceada** [0101]: a altura é O(log n), então busca, inserção e remoção custam O(log n), com um nó alocado por chave. Ex.: com 1.000 chaves, cerca de 10 níveis.\n- **Igualdade assintótica** [0072]: duas operações têm o mesmo custo se crescem na mesma ordem, ignorando constantes. Ex.: 3 log n e 10 log n são ambos O(log n).\n\n**Como atacar:** escreva o O de cada operação nas duas estruturas e compare lado a lado.",
+    "dica": "**Cobra:** comparar vetor ordenado e árvore binária de busca balanceada em custo de inserção, remoção e busca.\n\n- **Vetor ordenado** [0075]: a busca binária descarta metade a cada passo; inserir ou remover mantendo a ordem desloca os elementos depois da posição. Ex.: inserir 4 em `[1, 3, 5, 7]` empurra o 5 e o 7 uma casa à direita.\n- **BST balanceada** [0101]: a altura cresce com log n, e busca, inserção e remoção descem um só caminho da raiz; cada chave ocupa um nó alocado. Ex.: com 1.000 chaves, cerca de 10 níveis.\n- **Igualdade assintótica** [0072]: duas operações têm o mesmo custo se crescem na mesma ordem, ignorando constantes. Ex.: 3 log n e 10 log n são ambos O(log n).\n\n**Como atacar:** escreva o O de cada operação nas duas estruturas e compare lado a lado.",
     "contrapontos": [
      {
       "item": "I",
@@ -10370,7 +10378,7 @@ window.PROVAS = [
     "topico": 4,
     "formato": "conceito",
     "enunciado": "Considere a figura abaixo, que ilustra uma árvore com três nós contendo chaves inteiras, sendo que a raiz da árvore (marcada com \"x\") contém a chave 5, e marque a alternativa **correta**.\n\nNa figura, a raiz 5 tem o 7 como filho esquerdo e o 6 como filho direito.",
-    "dica": "**Cobra:** dizer a que tipos de árvore uma árvore de 3 nós pode pertencer.\n\n- **Regra da BST** [0099]: o filho esquerdo é menor que o pai e o direito é maior. Ex.: raiz 8 com filhos 3 e 10 serve; com 10 à esquerda e 3 à direita não serve.\n- **Heap mínimo** [0102]: árvore completa em que cada pai é menor ou igual aos filhos, sem relação entre irmãos. Ex.: raiz 2 com filhos 9 e 4 é um heap mínimo válido.\n- **AVL e rubro-negra** [0101]: ambas são BSTs, então exigem a regra da BST além do equilíbrio. Ex.: raiz 4 com filhos 9 (esquerda) e 1 (direita) é equilibrada, mas não é BST, logo não é AVL.\n\n**Como atacar:** teste a regra de cada estrutura contra as três chaves da figura.",
+    "dica": "**Cobra:** dizer a que tipos de árvore uma árvore de 3 nós pode pertencer.\n\n- **Regra da BST** [0099]: o filho esquerdo é menor que o pai e o direito é maior. Ex.: raiz 8 com filhos 3 e 10 serve; com 10 à esquerda e 3 à direita não serve.\n- **Heap de mínimo** [0102]: árvore completa em que cada pai é menor ou igual aos filhos, sem relação entre irmãos. Ex.: raiz 3 com filhos 1 e 8 não serve, porque o 1 é menor que o pai.\n- **AVL e rubro-negra** [0101]: as duas são BSTs com uma regra extra de equilíbrio, o fator de balanceamento na AVL e as cores na rubro-negra. Ex.: raiz 4 com filhos 2 e 6 é BST e tem fator de balanceamento 0.\n\n**Como atacar:** teste a regra de cada estrutura contra as três chaves da figura.",
     "contrapontos": [
      {
       "item": "A",
@@ -10439,7 +10447,7 @@ window.PROVAS = [
     "topico": 2,
     "formato": "conceito",
     "enunciado": "Sobre a complexidade de algoritmos, marque a alternativa **correta**:",
-    "dica": "**Cobra:** custos de inserção e busca em lista encadeada, vetor e árvore.\n\n- **Inserção em lista encadeada** [0076]: com o lugar já conhecido, basta religar ponteiros, sem deslocar nada. Ex.: inserir após o nó 4 em 4 → 9 é `novo->prox = n->prox; n->prox = novo;`.\n- **Vetor: deslocamento** [0075]: inserir no início exige mover todos os elementos uma casa, então custa O(n). Ex.: inserir no início de `[1, 2, 3]` desloca 3 elementos.\n- **Notação O ignora constantes** [0072]: O(n/2) é O(n), e a busca binária é O(log n). Ex.: 5n + 3 e n/2 são ambos O(n).\n\n**Como atacar:** para cada alternativa, escreva o custo exato do pior caso e simplifique.",
+    "dica": "**Cobra:** custos de inserção e busca em lista encadeada, vetor e árvore.\n\n- **Inserção em lista encadeada** [0076]: com o lugar já conhecido, basta religar ponteiros, sem deslocar nada. Ex.: inserir após o nó 4 em 4 → 9 é `novo->prox = n->prox; n->prox = novo;`.\n- **Vetor: deslocamento** [0075]: inserir numa posição exige abrir espaço, movendo uma casa cada elemento dali em diante. Ex.: inserir na posição 1 de `[1, 2, 3]` move o 2 e o 3.\n- **Notação O ignora constantes** [0072]: constantes que multiplicam ou somam somem, e só a ordem de crescimento fica. Ex.: 5n + 3 e 7n são ambos O(n).\n\n**Como atacar:** para cada alternativa, escreva o custo exato do pior caso e simplifique.",
     "contrapontos": [
      {
       "item": "A",
@@ -10639,7 +10647,7 @@ window.PROVAS = [
     "topico": 7,
     "formato": "código",
     "enunciado": "Considere o código abaixo cujo objetivo é ordenar um vetor de inteiros com n elementos de maneira crescente:\n\n```c\nvoid algoritmo(int v[], int n) {\n  int i,j,k, tmp;\n\n for(i = 0; i < n-1; i++) {\n  k = i;\n    for(j = 0; j < n; j++) {\n        if(v[k] > v[j]) {  k = j  }\n    }\n    tmp = v[k];\n    v[k] = v[i];\n    v[i] = tmp;\n}\n```",
-    "dica": "**Cobra:** conferir se o código implementa corretamente o selection sort crescente.\n\n- **Selection sort** [0092]: a cada volta `i` procura o menor do restante, guarda a posição em `k` e troca com a posição `i`. Ex.: em 3, 1, 2, o `i = 0` acha o 1 em `k = 1` e troca: 1, 3, 2.\n- **Limites dos laços** [0022]: o laço interno deve olhar só o que ainda não está fixo (de `i+1` em diante); começar antes reexamina o prefixo. Ex.: em 1, 2, 9, 5 com `i = 2`, se `j` começar em 0 o mínimo achado é o 1 e a troca desfaz o prefixo.\n\n**Como atacar:** rode o código à mão num vetor de 3 ou 4 elementos e veja se o prefixo se mantém.",
+    "dica": "**Cobra:** conferir se o código implementa corretamente o selection sort crescente.\n\n- **Selection sort** [0092]: a cada volta `i` procura o menor do restante, guarda a posição em `k` e troca com a posição `i`. Ex.: em 3, 1, 2, o `i = 0` acha o 1 em `k = 1` e troca: 1, 3, 2.\n- **Limites dos laços** [0022]: o início e a condição de parada do laço interno decidem que parte do vetor ele examina a cada volta. Ex.: `for (j = i + 1; j < n; j++)` com `i = 2` e `n = 5` olha só as posições 3 e 4.\n\n**Como atacar:** rode o código à mão num vetor de 3 ou 4 elementos e veja se o prefixo se mantém.",
     "contrapontos": [
      {
       "item": "A",
@@ -10695,7 +10703,7 @@ window.PROVAS = [
     "topico": 7,
     "formato": "afirmações",
     "enunciado": "Sobre o heapsort, é correto afirmar que:\n\nI) Seu custo no pior caso é O(n log n), onde n é o tamanho do vetor\nII) O algoritmo pode ser dividido em duas etapas, sendo a primeira usada para construir um heap e a segunda para usar o heap como forma eficiente de executar uma estratégia de ordenação por seleção\nIII) Tem custo máximo quadrático no pior caso",
-    "dica": "**Cobra:** custo e estrutura do heapsort.\n\n- **Heapsort** [0103]: constrói um heap no vetor e depois repete: troca a raiz com o último, diminui o heap e conserta a raiz; é seleção usando o heap em vez de varrer o vetor. Ex.: heap máximo 9, 5, 7: troca 9 com 7, fica 7, 5, 9, o 9 está no lugar final e a raiz é consertada.\n- **Custo do heap** [0102]: consertar a raiz desce no máximo a altura, O(log n), e são n extrações. Ex.: com n = 1.024, a altura é 10, cerca de 10 passos por extração.\n\n**Como atacar:** some o custo de construir e o de extrair e veja qual domina.",
+    "dica": "**Cobra:** custo e estrutura do heapsort.\n\n- **Heapsort** [0103]: constrói um heap no vetor e depois repete: troca a raiz com o último, diminui o heap e conserta a raiz. Ex.: no heap de máximo 9, 5, 7, troca 9 com 7 e fica 7, 5, 9; o 9 está no lugar final e a raiz é consertada.\n- **Altura do heap** [0102]: o heap é uma árvore completa, com altura ⌊log₂ n⌋ em arestas, e consertar a raiz desce no máximo essa altura. Ex.: com n = 1.024, a altura é 10.\n\n**Como atacar:** some o custo de construir e o de extrair e veja qual domina.",
     "contrapontos": [
      {
       "item": "I",
@@ -10747,7 +10755,7 @@ window.PROVAS = [
     "topico": 4,
     "formato": "cálculo",
     "enunciado": "Em um heap binário de mínimo contendo N elementos e implementado em um vetor, sabendo-se que o elemento mínimo está na posição zero do vetor, a operação de remover o elemento da raiz (o da posição zero) e deixar a estrutura do heap correta ao final, com o restante das chaves formando um heap, pode ser implementada, na melhor maneira possível, a custo:",
-    "dica": "**Cobra:** o custo de remover a raiz de um heap mínimo guardado em vetor.\n\n- **Heap em vetor** [0102]: árvore completa guardada por posição; com a raiz em 0, os filhos de `i` ficam em `2i+1` e `2i+2`, e o pai em `(i-1)/2`. Ex.: o nó da posição 3 tem pai na 1 e filhos nas posições 7 e 8.\n- **Remover a raiz** [0102]: o último elemento vai para a raiz e desce, trocando com o menor filho, até a ordem voltar; desce no máximo a altura. Ex.: em 1, 3, 2, tira o 1, o 2 sobe para a raiz e compara com o 3: fica 2, 3.\n\n**Como atacar:** conte quantos níveis o elemento pode descer, sem deslocar o vetor.",
+    "dica": "**Cobra:** o custo de remover a raiz de um heap de mínimo guardado em vetor.\n\n- **Heap em vetor** [0102]: árvore completa guardada por posição; com a raiz em 0, os filhos de `i` ficam em `2i+1` e `2i+2`, e o pai em `(i-1)/2`. Ex.: o nó da posição 3 tem pai na 1 e filhos nas posições 7 e 8.\n- **Remover a raiz** [0102]: o último elemento vai para a raiz e desce, trocando com o menor filho, até a ordem voltar; desce no máximo a altura. Ex.: em 1, 3, 2, tira o 1, o 2 sobe para a raiz e compara com o 3: fica 2, 3.\n\n**Como atacar:** conte quantos níveis o elemento pode descer, sem deslocar o vetor.",
     "alternativas": [
      {
       "letra": "A",
@@ -10827,7 +10835,7 @@ window.PROVAS = [
     "topico": 2,
     "formato": "afirmações",
     "enunciado": "Sobre as afirmativas abaixo:\n\nI) Todo algoritmo que não seja vazio tem custo Ω(1)\nII) Todo algoritmo tem custo O(nⁿ)\nIII) Nenhum algoritmo que não seja vazio tem custo o(2) – \"ó pequeno de 2\"",
-    "dica": "**Cobra:** o sentido de Ω, O e o pequeno.\n\n- **Ω (piso)** [0166]: `f` é Ω(g) se `f ≥ c·g` a partir de algum n₀; um algoritmo que faz ao menos uma operação gasta pelo menos uma quantidade constante. Ex.: `3n + 2` é Ω(1) e também Ω(n).\n- **O (teto)** [0166]: `f` é O(g) se `f ≤ c·g` a partir de n₀, e qualquer função que cresce mais depressa também serve de teto. Ex.: n² é O(n³) e O(2ⁿ).\n- **o pequeno** [0166]: `f` é o(g) se `f/g` tende a 0, isto é, `f` cresce estritamente mais devagar que `g`. Ex.: n é o(n²), mas n não é o(n).\n\n**Como atacar:** traduza cada afirmação para uma desigualdade com c e n₀.",
+    "dica": "**Cobra:** o sentido de Ω, O e o pequeno.\n\n- **Ω (piso)** [0166]: `f` é Ω(g) se existem `c > 0` e n₀ com `f ≥ c·g` para todo n a partir de n₀. Ex.: `3n + 2` é Ω(1) e também Ω(n).\n- **O (teto)** [0166]: `f` é O(g) se `f ≤ c·g` a partir de n₀, e qualquer função que cresce mais depressa também serve de teto. Ex.: n² é O(n³) e O(2ⁿ).\n- **o pequeno** [0166]: `f` é o(g) se `f/g` tende a 0, isto é, `f` cresce estritamente mais devagar que `g`. Ex.: n é o(n²), mas n não é o(n).\n\n**Como atacar:** traduza cada afirmação para uma desigualdade com c e n₀.",
     "contrapontos": [
      {
       "item": "I",
@@ -10917,7 +10925,7 @@ window.PROVAS = [
     "topico": 4,
     "formato": "afirmações",
     "enunciado": "Sobre o custo das operações de busca por uma chave em árvores vermelho e preto, sabe-se que:\n\nI) Uma árvore vermelho e preto tem altura máxima log n, onde n é o número de chaves, pois a mesma é balanceada\nII) Uma árvore vermelho e preto tem altura máxima inferior a 3 log n, onde n é o número de chaves, pois a mesma é balanceada\nIII) Uma árvore vermelho e preto pode ser degenerada no pior caso, tendo custo de busca crescendo linearmente com o número de elementos, mas em situações muito raras, pois a mesma é balanceada",
-    "dica": "**Cobra:** a altura da árvore rubro-negra e o custo da busca.\n\n- **Altura da rubro-negra** [0177]: sem dois vermelhos seguidos e com o mesmo número de pretos em todo caminho, a altura fica limitada a 2 log₂(n+1). Ex.: com n = 1.023, h ≤ 2 · 10 = 20.\n- **Árvore balanceada** [0101]: AVL e rubro-negra garantem O(log n) no pior caso, sempre; uma BST comum pode degenerar em O(n). Ex.: inserir 1 a 1.000 em ordem numa BST simples dá altura 999; numa rubro-negra fica em cerca de 20.\n\n**Como atacar:** compare cada limite dado com 2 log₂(n+1) e com o pior caso possível.",
+    "dica": "**Cobra:** a altura da árvore rubro-negra e o custo da busca.\n\n- **Altura da rubro-negra** [0177]: sem dois vermelhos seguidos e com o mesmo número de pretos em todo caminho, a altura fica limitada a 2 log₂(n+1). Ex.: com n = 1.023, h ≤ 2 · 10 = 20.\n- **Árvore balanceada** [0101]: AVL e rubro-negra usam rotações para manter a altura perto de log₂ n; a BST comum não faz isso. Ex.: inserir 1 a 1.000 em ordem numa BST simples dá uma cadeia de altura 999.\n\n**Como atacar:** compare cada limite dado com 2 log₂(n+1) e com o pior caso possível.",
     "contrapontos": [
      {
       "item": "I",
@@ -10941,7 +10949,7 @@ window.PROVAS = [
      {
       "letra": "B",
       "texto": "Apenas II é verdadeira",
-      "porque": "Tecnicamente 2·log2(n+1) fica abaixo de 3 log n para n razoável, então II é defensável. A banca anulou a questão por ambiguidade."
+      "porque": "Tecnicamente 2·log2(n+1) fica abaixo de 3·log2 n para n ≥ 3, então II é defensável. A banca anulou a questão por ambiguidade."
      },
      {
       "letra": "C",
@@ -10973,7 +10981,7 @@ window.PROVAS = [
     "topico": "3.3",
     "formato": "afirmações",
     "enunciado": "Considere uma pilha que inicialmente estava vazia e na qual inseriu-se as chaves 2, 4 e 6, 8 e 10 nessa ordem. Sobre uma operação de remoção de elemento da mesma (retirada padrão de uma pilha), considerando-se que a estrutura de dados usada é uma lista encadeada, pode-se afirmar que:\n\nI) A remoção retira a chave 2\nII) A remoção da chave 10\nIII) Custo computacional proporcional ao tamanho da pilha\nIV) Custo computacional constante, não importando o tamanho da pilha",
-    "dica": "**Cobra:** qual chave sai e qual o custo do pop numa pilha feita com lista encadeada.\n\n- **Pilha encadeada** [0083]: o topo é a cabeça da lista; push e pop mexem só na cabeça, em O(1). Ex.: com topo → 6 → 4, o pop devolve o 6 e `topo` passa a apontar para o 4.\n- **Pilha (LIFO)** [0082]: o último elemento inserido é o primeiro a ser removido, e não o mais antigo. Ex.: push 1, 2, 3 e pop tira o 3.\n\n**Como atacar:** descubra qual chave está no topo e qual é o custo de mexer na cabeça.",
+    "dica": "**Cobra:** qual chave sai e qual o custo do pop numa pilha feita com lista encadeada.\n\n- **Pilha encadeada** [0083]: o topo é a cabeça da lista, e push e pop mexem só no ponteiro `topo` e no nó da frente. Ex.: com topo → 6 → 4, o pop devolve o 6 e `topo` passa a apontar para o 4.\n- **Pilha (LIFO)** [0082]: o último elemento inserido é o primeiro a ser removido, e não o mais antigo. Ex.: push 1, 2, 3 e pop tira o 3.\n\n**Como atacar:** descubra qual chave está no topo e qual é o custo de mexer na cabeça.",
     "contrapontos": [
      {
       "item": "I",
@@ -11029,7 +11037,7 @@ window.PROVAS = [
     "topico": 6,
     "formato": "conceito",
     "enunciado": "Sobre um vetor que se mantém de forma ordenada a cada inserção, remoção ou alteração feita, qual a alternativa verdadeira ao usarmos os algoritmos mais eficientes para cada operação:",
-    "dica": "**Cobra:** os custos de inserção, remoção e busca num vetor mantido ordenado.\n\n- **Inserção e remoção em vetor ordenado** [0075]: achar o lugar pode ser rápido, mas abrir ou fechar a vaga desloca os elementos seguintes, O(n) no pior caso. Ex.: remover o 2 de `[1, 2, 3, 4]` puxa o 3 e o 4 para a esquerda.\n- **Busca binária** [0090]: aproveita a ordem e descarta metade por passo, O(log n). Ex.: com 1.000.000 de elementos, no máximo 20 comparações.\n\n**Como atacar:** para cada operação, pergunte se o que custa é achar o lugar ou mexer nos elementos.",
+    "dica": "**Cobra:** os custos de inserção, remoção e busca num vetor mantido ordenado.\n\n- **Inserção e remoção em vetor ordenado** [0075]: achar o lugar pode ser rápido, mas abrir ou fechar a vaga desloca os elementos seguintes. Ex.: remover o 2 de `[1, 2, 3, 4]` puxa o 3 e o 4 para a esquerda.\n- **Busca binária** [0090]: aproveita a ordem e descarta metade do trecho a cada passo. Ex.: com 1.000.000 de elementos, no máximo 20 comparações.\n\n**Como atacar:** para cada operação, pergunte se o que custa é achar o lugar ou mexer nos elementos.",
     "alternativas": [
      {
       "letra": "A",
@@ -11071,7 +11079,7 @@ window.PROVAS = [
     "topico": 7,
     "formato": "afirmações",
     "enunciado": "Sobre os algoritmos de ordenação quicksort, mergesort e inserção, é correto afirmar que:\n\nI) O quicksort é o que apresenta melhor desempenho no pior caso dentre os três algoritmos, sendo por isso o algoritmo mais usado\nII) A ordenação por inserção tende a ser a mais rápida em casos de ordenação de um vetor onde o número de elementos fora de ordem é menor que um décimo de log N, sendo N o número de elementos do vetor e N um valor grande\nIII) O mergesort é o que tem menor custo assintótico no pior caso quando comparamos os três algoritmos",
-    "dica": "**Cobra:** comparar quick sort, merge sort e inserção pelo custo.\n\n- **Pior caso de cada um** [0096]: merge sort é O(n log n) sempre; quick sort e inserção são O(n²) no pior caso. Ex.: com n = 1.000, n log n é cerca de 10.000 e n² é 1.000.000.\n- **Insertion sort em vetor quase ordenado** [0093]: o custo é n mais o número de inversões (pares fora de ordem), então poucos elementos fora do lugar saem rápido. Ex.: em 1, 2, 4, 3, 5 há uma só inversão e um só deslocamento.\n\n**Como atacar:** compare o pior caso de cada algoritmo e depois o caso de vetor quase ordenado.",
+    "dica": "**Cobra:** comparar quick sort, merge sort e inserção pelo custo.\n\n- **Pior caso de cada um** [0096]: o do quick sort vem do pivô sempre numa ponta, o da inserção vem do vetor invertido, e o merge sort divide ao meio em qualquer entrada. Ex.: com n = 1.000, n log n é cerca de 10.000 e n² é 1.000.000.\n- **Insertion sort em vetor quase ordenado** [0093]: o custo é n mais o número de inversões (pares fora de ordem), então poucos elementos fora do lugar saem rápido. Ex.: em 1, 2, 4, 3, 5 há uma só inversão e um só deslocamento.\n\n**Como atacar:** compare o pior caso de cada algoritmo e depois o caso de vetor quase ordenado.",
     "contrapontos": [
      {
       "item": "I",
@@ -11112,6 +11120,10 @@ window.PROVAS = [
     "resumo": "Anulada. I falsa (quicksort é O(n²) no pior caso). III parece verdadeira (mergesort é o único O(n log n) dos três). II usa 'um décimo de log N', redação duvidosa. O motivo da anulação é conjectura: a redação confusa de II e III.",
     "assuntos": [
      {
+      "num": "0096",
+      "modulo": "13-busca-e-ordenacao.md"
+     },
+     {
       "num": "0093",
       "modulo": "13-busca-e-ordenacao.md"
      },
@@ -11131,7 +11143,7 @@ window.PROVAS = [
     "topico": "3.4",
     "formato": "cálculo",
     "enunciado": "Marque a alternativa correta sobre os custos, no pior caso, dos melhores algoritmos conhecidos para inserir um elemento, remover um elemento e pesquisar por uma chave em um vetor que contenha n elementos, sendo a busca feita pelo campo usado para ordenar o vetor. Considere que o vetor sempre esteja ordenado antes da operação e permaneça ordenado após a operação. Pode-se dizer que as operações de inserção, remoção e busca nesse cenário têm, respectivamente, custo no pior caso:",
-    "dica": "**Cobra:** o custo de inserir, remover e buscar num vetor que fica sempre ordenado.\n\n- **Inserir em vetor ordenado** [0075]: achar o lugar custa pouco, mas abrir a vaga desloca até n elementos, e isso domina. Ex.: inserir 0 em `[1, 2, 3, 4]` desloca os 4.\n- **Busca binária** [0090]: funciona porque a busca é pelo campo de ordenação, e custa O(log n). Ex.: com 8 elementos, até 4 comparações.\n- **Soma de custos** [0072]: quando duas etapas acontecem em sequência, o custo total é o da etapa maior. Ex.: n + log n ≤ 2n, logo O(n).\n\n**Como atacar:** some os custos de achar e de deslocar e fique com o maior.",
+    "dica": "**Cobra:** o custo de inserir, remover e buscar num vetor que fica sempre ordenado.\n\n- **Inserir em vetor ordenado** [0075]: achar o lugar custa pouco, mas abrir a vaga desloca até n elementos. Ex.: inserir 0 em `[1, 2, 3, 4]` desloca os 4.\n- **Busca binária** [0090]: funciona porque a busca é pelo campo de ordenação, e descarta metade do trecho a cada passo. Ex.: com 8 elementos, até 4 comparações.\n- **Soma de custos** [0072]: quando duas etapas acontecem em sequência, o custo total é o da etapa maior. Ex.: n + log n ≤ 2n, logo O(n).\n\n**Como atacar:** some os custos de achar e de deslocar e fique com o maior.",
     "alternativas": [
      {
       "letra": "A",
@@ -11196,7 +11208,7 @@ window.PROVAS = [
      {
       "letra": "A",
       "texto": "O valor 2 pode ter sido o pivô que gerou a partição",
-      "porque": "Um pivô 2 na posição 0 exigiria tudo à direita maior ou igual a 2, mas há 1 depois dele."
+      "porque": "Um pivô 2 na posição 0 exigiria tudo à direita maior ou igual a 2, mas há 1 depois dele. O outro 2, na posição 5, tem 5, 9 e 7 à esquerda."
      },
      {
       "letra": "B",
@@ -11206,7 +11218,7 @@ window.PROVAS = [
      {
       "letra": "C",
       "texto": "O valor 1 pode ter sido o pivô que gerou a partição",
-      "porque": "Um pivô 1 na posição 3 exigiria esquerda menor ou igual a 1, mas há 2, 5 e 9 antes."
+      "porque": "Um pivô 1 na posição 3 exigiria esquerda menor ou igual a 1, mas há 2, 5 e 9 antes. O 1 da posição 6 também tem maiores à esquerda."
      },
      {
       "letra": "D",
@@ -11267,7 +11279,7 @@ window.PROVAS = [
     "topico": 4,
     "formato": "simulação",
     "enunciado": "Considere uma árvore binária de pesquisa sem balanceamento contendo como dado números inteiros, que começou vazia, e onde foram inseridos posteriormente, nesta ordem, os valores 10, 5, 20, 1, 30, 7 e 15. Uma chave de busca nessa árvore sem balanceamento terá que comparar a chave de busca, na pior das hipóteses, com:",
-    "dica": "**Cobra:** o máximo de comparações da busca numa árvore binária de pesquisa sem balanceamento.\n\n- **Inserção e forma da BST** [0099]: a forma depende da ordem de inserção; desenhe passo a passo antes de contar. Ex.: inserir 4, 2, 6, 1 põe o 2 à esquerda do 4, o 6 à direita e o 1 à esquerda do 2.\n- **Altura × comparações** [0099]: a busca desce um caminho só, comparando em cada nó, então o pior caso é o número de nós do caminho mais longo. Ex.: na árvore acima, 4 → 2 → 1 são 3 nós e 3 comparações.\n\n**Como atacar:** desenhe a árvore e conte os nós do caminho mais longo da raiz a uma folha.",
+    "dica": "**Cobra:** o máximo de comparações da busca numa árvore binária de pesquisa sem balanceamento.\n\n- **Inserção e forma da BST** [0099]: a forma depende da ordem de inserção; desenhe passo a passo antes de contar. Ex.: inserir 4, 2, 6, 1 põe o 2 à esquerda do 4, o 6 à direita e o 1 à esquerda do 2.\n- **Caminho mais longo × comparações** [0099]: a busca desce um caminho só, comparando em cada nó, então o pior caso é o número de nós do caminho mais longo. Ex.: na árvore acima, 4 → 2 → 1 são 3 nós e 3 comparações.\n\n**Como atacar:** desenhe a árvore e conte os nós do caminho mais longo da raiz a uma folha.",
     "alternativas": [
      {
       "letra": "A",
@@ -11287,11 +11299,11 @@ window.PROVAS = [
      {
       "letra": "D",
       "texto": "3 nós da árvore",
-      "porque": "A raiz é 10, com 5 e 20. Os caminhos mais longos são 10-5-7 e 10-20-30, com 3 nós. A altura é 3."
+      "porque": "A raiz é 10, com 5 e 20. Os caminhos mais longos, como 10-5-7 e 10-20-30, têm 3 nós: a árvore tem 3 níveis (altura 2, contando arestas)."
      }
     ],
     "gabarito": "D",
-    "resumo": "Pior caso de busca = altura da árvore (em nós no caminho). Monte a árvore com as inserções na ordem dada e conte o caminho mais longo. Rodado em Python: altura 3.",
+    "resumo": "Pior caso de busca = número de nós do caminho mais longo, ou seja, a altura (em arestas) mais 1. Monte a árvore com as inserções na ordem dada e conte o caminho mais longo. Rodado em Python: 3 níveis.",
     "assuntos": [
      {
       "num": "0099",
@@ -11343,7 +11355,7 @@ window.PROVAS = [
     "topico": 5,
     "formato": "cálculo",
     "enunciado": "Considere a seguinte afirmação:\n\nConsiderando o pior caso no custo das operações, em uma tabela hash com encadeamento na qual uma lista encadeada é usada para tratamento de colisões e uma chave no hash não pode se repetir, uma inserção tem custo de __, enquanto que uma busca tem custo de __. Entretanto, se tirarmos a lista encadeada e usarmos uma árvore rubro-negra para o tratamento de colisões, o custo de inserção na tabela hash passa a ser __ e o custo de busca passa a ser __.\n\nAssinale a opção que preenche corretamente os campos em branco:",
-    "dica": "**Cobra:** custo de inserção e busca no hash com encadeamento, com lista e com árvore rubro-negra.\n\n- **Hash com encadeamento, pior caso** [0106]: se a chave não pode repetir, inserir exige procurar na lista antes, e no pior caso todas as chaves caíram na mesma posição. Ex.: com 4 chaves na mesma posição, inserir a 5ª compara com as 4.\n- **Árvore balanceada no lugar da lista** [0101]: com altura O(log n), busca e inserção sem repetição custam O(log n) no mesmo cenário. Ex.: com 1.000 chaves na mesma posição, a lista pede até 1.000 comparações e a árvore, cerca de 10 a 20.\n\n**Como atacar:** imagine todas as chaves na mesma posição e conte as comparações.",
+    "dica": "**Cobra:** custo de inserção e busca no hash com encadeamento, com lista e com árvore rubro-negra.\n\n- **Hash com encadeamento, pior caso** [0106]: se a chave não pode repetir, inserir exige procurar na lista antes, e no pior caso todas as chaves caíram na mesma posição. Ex.: com 4 chaves na mesma posição, inserir a 5ª compara com as 4.\n- **Rubro-negra no lugar da lista** [0177]: a altura fica limitada a 2 log₂(n+1), e busca e inserção descem um só caminho da raiz. Ex.: com 1.023 chaves no mesmo balde, a árvore tem altura de no máximo 20.\n\n**Como atacar:** imagine todas as chaves na mesma posição e conte as comparações.",
     "alternativas": [
      {
       "letra": "A",
@@ -11374,8 +11386,8 @@ window.PROVAS = [
       "modulo": "15-hash.md"
      },
      {
-      "num": "0101",
-      "modulo": "14-arvores.md"
+      "num": "0177",
+      "modulo": "28-estruturas-complementos.md"
      }
     ],
     "originais": []
@@ -11409,7 +11421,7 @@ window.PROVAS = [
      }
     ],
     "gabarito": "C",
-    "resumo": "Conte as chamadas, a inicial incluída, com os extremos de cada uma: (0,7), (4,7), (6,7) e (7,7), onde acha o 70 na posição 7. São 4 chamadas. Código conferido contra o caderno e rodado em Python.",
+    "resumo": "Conte as chamadas, a inicial incluída, com os extremos de cada uma: (0,7), (4,7), (6,7) e (7,7); nesta última acha o 70 na posição 7. São 4 chamadas. Código conferido contra o caderno e rodado em Python.",
     "assuntos": [
      {
       "num": "0090",
@@ -11438,7 +11450,7 @@ window.PROVAS = [
      {
       "letra": "C",
       "texto": "```\n[[ 7.  0.]\n [11. 20.]]\n```",
-      "porque": "Linhas trocadas e valores errados. Linha 0 = [0·7+2·0+1·11, 0·0+2·10+1·0] = [11, 20]."
+      "porque": "Tem as linhas trocadas: [7, 0] é a linha 1 do produto, e a linha 0 é [0·7+2·0+1·11, 0·0+2·10+1·0] = [11, 20]."
      },
      {
       "letra": "D",
@@ -11526,12 +11538,12 @@ window.PROVAS = [
     "resumo": "Isso é um fechamento (closure): a função interna guarda o valor `fator` do escopo externo, mesmo depois de func1 terminar. func1(3) devolve func2, e funcao(5) dá 5 * 3 = 15. Em C, o equivalente é ponteiro para função, mas sem closure. Rodado em Python.",
     "assuntos": [
      {
-      "num": "0029",
-      "modulo": "04-funcoes.md"
-     },
-     {
       "num": "0050",
       "modulo": "06-ponteiros.md"
+     },
+     {
+      "num": "0029",
+      "modulo": "04-funcoes.md"
      }
     ],
     "originais": []
