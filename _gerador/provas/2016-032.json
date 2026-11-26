@@ -44,7 +44,25 @@
           "modulo": "13-busca-e-ordenacao.md"
         }
       ],
-      "dica": "**Cobra:** Dizer se cada estado do vetor pode ser o resultado da partição do Quick sort com pivô 4.\n\n- **Partição** [0095]: separa menores e maiores em torno do pivô; dentro de cada lado a ordem depende do esquema. Ex.: pivô 5 em `5 9 2 7 1` pode dar `2 1 5 9 7` ou `1 2 5 7 9`.\n- **Pivô na posição final** [0095]: ao fim da partição o pivô ocupa o índice que terá no vetor ordenado, com menores antes e maiores depois. Ex.: em `2 1 5 9 7`, o 5 já está no índice 2, onde ficará no vetor ordenado.\n- **Valores iguais ao pivô** [0095]: o teste `<` ou `<=` decide de que lado cai um valor igual ao pivô. Ex.: com pivô 5, outro 5 pode ficar antes ou depois dele.\n\n**Como atacar:** para cada estado, veja se todo menor está de um lado e todo maior do outro."
+      "dica": "**Cobra:** Dizer se cada estado do vetor pode ser o resultado da partição do Quick sort com pivô 4.\n\n- **Partição** [0095]: separa menores e maiores em torno do pivô; dentro de cada lado a ordem depende do esquema. Ex.: pivô 5 em `5 9 2 7 1` pode dar `2 1 5 9 7` ou `1 2 5 7 9`.\n- **Pivô na posição final** [0095]: ao fim da partição o pivô ocupa o índice que terá no vetor ordenado, com menores antes e maiores depois. Ex.: em `2 1 5 9 7`, o 5 já está no índice 2, onde ficará no vetor ordenado.\n- **Valores iguais ao pivô** [0095]: o teste `<` ou `<=` decide de que lado cai um valor igual ao pivô. Ex.: com pivô 5, outro 5 pode ficar antes ou depois dele.\n\n**Como atacar:** para cada estado, veja se todo menor está de um lado e todo maior do outro.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "No esquema de Lomuto o pivô fica na última posição durante toda a varredura e só sai de lá na troca final. Nesse estado, os cinco valores menores que 4 estão juntos à esquerda e os maiores logo depois deles? Que passo ainda faltaria?"
+        },
+        {
+          "item": "II",
+          "texto": "O 4 ocupa a posição 0 do vetor. As implementações comuns pegam como pivô o primeiro, o último, o do meio ou um aleatório: alguma dessas regras impede o 4?"
+        },
+        {
+          "item": "III",
+          "texto": "Conte os valores menores que 4: `1, 2, 3, 2, 3`, cinco ao todo. No vetor ordenado, em que índice o 4 fica? Compare com o índice que ele ocupa nesse estado."
+        },
+        {
+          "item": "IV",
+          "texto": "Há versões que deixam o pivô parado no índice 0 enquanto separam os outros e só o levam ao lugar dele no último passo. Atrás do 4, os menores vêm antes dos maiores nesse estado?"
+        }
+      ]
     },
     {
       "numero": 2,
@@ -316,7 +334,21 @@
           "modulo": "10-analise.md"
         }
       ],
-      "dica": "**Cobra:** Julgar três afirmações sobre busca binária: requisito, número de comparações e quando compensa.\n\n- **Busca binária** [0090]: compara a chave com o elemento do meio e descarta metade do intervalo; só funciona se o vetor está ordenado e se há acesso por índice. Ex.: em `2 5 8 11 14`, buscar 11: meio 8, vai à direita; meio 11, achou.\n- **Pior caso da busca binária** [0090]: no máximo `⌊log₂ n⌋ + 1` comparações, porque cada volta corta o intervalo ao meio. Ex.: `n = 32`: `5 + 1 = 6` comparações no máximo.\n- **Crescimento do custo** [0072]: `log n` cresce muito mais devagar que `n`, então a vantagem sobre a busca sequencial aumenta com o tamanho do vetor. Ex.: `n = 1000`: cerca de 10 passos contra até 1000.\n\n**Como atacar:** calcule `⌊log₂ n⌋ + 1` para um `n` pequeno e compare com o limite de cada afirmação."
+      "dica": "**Cobra:** Julgar três afirmações sobre busca binária: requisito, número de comparações e quando compensa.\n\n- **Busca binária** [0090]: compara a chave com o elemento do meio e descarta metade do intervalo; só funciona se o vetor está ordenado e se há acesso por índice. Ex.: em `2 5 8 11 14`, buscar 11: meio 8, vai à direita; meio 11, achou.\n- **Pior caso da busca binária** [0090]: no máximo `⌊log₂ n⌋ + 1` comparações, porque cada volta corta o intervalo ao meio. Ex.: `n = 32`: `5 + 1 = 6` comparações no máximo.\n- **Crescimento do custo** [0072]: `log n` cresce muito mais devagar que `n`, então a vantagem sobre a busca sequencial aumenta com o tamanho do vetor. Ex.: `n = 1000`: cerca de 10 passos contra até 1000.\n\n**Como atacar:** calcule `⌊log₂ n⌋ + 1` para um `n` pequeno e compare com o limite de cada afirmação.",
+      "contrapontos": [
+        {
+          "item": "i",
+          "texto": "Teste em `5 9 1`, buscando 1: o meio é 9, a busca vai para a esquerda e só vê o 5. Ela acha o 1? O que a busca binária supõe sobre a metade que descarta?"
+        },
+        {
+          "item": "ii",
+          "texto": "O pior caso da busca binária é `⌊log₂ n⌋ + 1` comparações de chave. Para `n = 16`, quanto dá essa conta, e quanto vale `2·log₂ 16`?"
+        },
+        {
+          "item": "iii",
+          "texto": "Com `n = 1000` ordenado, a sequencial pode fazer até 1000 comparações; a binária, até `⌊log₂ 1000⌋ + 1 = 10`. Cada passo da binária custa quanto a mais que um passo da sequencial?"
+        }
+      ]
     },
     {
       "numero": 8,
@@ -366,7 +398,29 @@
           "modulo": "07-memoria-dinamica.md"
         }
       ],
-      "dica": "**Cobra:** Achar erro de lógica ou de memória em inserção e remoção no início de uma lista encadeada.\n\n- **Ponteiro para ponteiro** [0049]: `**prim` permite à função alterar o ponteiro de início de quem chamou, algo que a passagem por valor não faz. Ex.: `*prim = novo;` troca a cabeça da lista do chamador.\n- **Remoção do primeiro nó** [0077]: guarde o endereço do nó, avance o início para o seguinte e só então libere o nó guardado. Ex.: em `4 -> 7`, guarde o 4 em `aux`, deixe a cabeça apontar o 7 e libere `aux`.\n- **Erros de memória** [0057]: usar um bloco depois de `free`, ou perder o endereço de um bloco alocado, causa comportamento indefinido ou vazamento. Ex.: `free(p); p->dado = 1;` escreve em memória já liberada.\n\n**Como atacar:** desenhe a lista e acompanhe `*prim` e o `free` linha a linha, nos dois quadros."
+      "dica": "**Cobra:** Achar erro de lógica ou de memória em inserção e remoção no início de uma lista encadeada.\n\n- **Ponteiro para ponteiro** [0049]: `**prim` permite à função alterar o ponteiro de início de quem chamou, algo que a passagem por valor não faz. Ex.: `*prim = novo;` troca a cabeça da lista do chamador.\n- **Remoção do primeiro nó** [0077]: guarde o endereço do nó, avance o início para o seguinte e só então libere o nó guardado. Ex.: em `4 -> 7`, guarde o 4 em `aux`, deixe a cabeça apontar o 7 e libere `aux`.\n- **Erros de memória** [0057]: usar um bloco depois de `free`, ou perder o endereço de um bloco alocado, causa comportamento indefinido ou vazamento. Ex.: `free(p); p->dado = 1;` escreve em memória já liberada.\n\n**Como atacar:** desenhe a lista e acompanhe `*prim` e o `free` linha a linha, nos dois quadros.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Rode o quadro II na lista `4 -> 7`: qual nó a linha 5 libera? Depois da linha 6, para quem `*prim` aponta, e o `prox` desse nó aponta para memória viva?"
+        },
+        {
+          "item": "B",
+          "texto": "Siga o quadro I com `insere(&prim, 9)` numa lista vazia: `aux->prox` recebe o quê, e quem passa a ser o primeiro? Se o `malloc` devolver `NULL`, o `if` deixa algo pela metade?"
+        },
+        {
+          "item": "C",
+          "texto": "Uma remoção do primeiro nó guarda o nó em `aux`, avança `*prim` e libera `aux`. Compare com as linhas 4 a 6 do quadro II: qual ponteiro vai ao `free`, e onde `*prim` termina?"
+        },
+        {
+          "item": "D",
+          "texto": "Vazamento é bloco alocado que ninguém mais aponta e que nunca vai ao `free`. No quadro II, com a lista `4 -> 7 -> 9`, o 9 continua alcançável a partir de `*prim` depois da chamada?"
+        },
+        {
+          "item": "E",
+          "texto": "No quadro I, todo bloco que o `malloc` entrega fica ligado à lista por `*prim`? E no quadro II, depois da chamada, quantos nós a lista mostra a partir do início?"
+        }
+      ]
     },
     {
       "numero": 9,
@@ -412,7 +466,21 @@
           "modulo": "15-hash.md"
         }
       ],
-      "dica": "**Cobra:** Julgar afirmações sobre colisões, capacidade e custo do hash por encadeamento.\n\n- **Encadeamento** [0106]: cada posição da tabela guarda uma lista de chaves, então cabem mais chaves que posições; o custo médio depende do fator de carga `α = n/m`. Ex.: `m = 4` e 10 chaves: `α = 2,5`, listas de uns 2,5 nós.\n- **Colisão secundária** [0107]: no endereçamento aberto, uma chave ocupa a posição que seria de outro hash, e chaves de hashes diferentes passam a disputar o mesmo percurso. Ex.: `m = 5`, `k % 5`: 7 vai à 2; 12 vai à 3; o 3 chega à posição 3 e a acha ocupada, sem ter hash 2.\n- **Função hash bem projetada** [0105]: espalha as chaves de modo uniforme; com `α` limitado, listas curtas e custo médio constante por operação. Ex.: `n = 100` chaves em `m = 100` posições: listas de tamanho médio 1.\n\n**Como atacar:** para cada afirmação, pergunte se ela descreve o encadeamento ou o endereçamento aberto."
+      "dica": "**Cobra:** Julgar afirmações sobre colisões, capacidade e custo do hash por encadeamento.\n\n- **Encadeamento** [0106]: cada posição da tabela guarda uma lista de chaves, então cabem mais chaves que posições; o custo médio depende do fator de carga `α = n/m`. Ex.: `m = 4` e 10 chaves: `α = 2,5`, listas de uns 2,5 nós.\n- **Colisão secundária** [0107]: no endereçamento aberto, uma chave ocupa a posição que seria de outro hash, e chaves de hashes diferentes passam a disputar o mesmo percurso. Ex.: `m = 5`, `k % 5`: 7 vai à 2; 12 vai à 3; o 3 chega à posição 3 e a acha ocupada, sem ter hash 2.\n- **Função hash bem projetada** [0105]: espalha as chaves de modo uniforme; com `α` limitado, listas curtas e custo médio constante por operação. Ex.: `n = 100` chaves em `m = 100` posições: listas de tamanho médio 1.\n\n**Como atacar:** para cada afirmação, pergunte se ela descreve o encadeamento ou o endereçamento aberto.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Colisão secundária é o nome que o endereçamento aberto dá a chaves de hashes diferentes disputando o mesmo percurso de sondagem. No encadeamento, a chave que colide sai alguma vez da lista do seu próprio balde?"
+        },
+        {
+          "item": "II",
+          "texto": "Tabela de `m = 4` posições, `k % 4`, encadeamento, e chegam 10 chaves. A 5ª, a 6ª e as seguintes vão para onde: para outra posição da tabela ou para um nó a mais na lista de algum balde?"
+        },
+        {
+          "item": "III",
+          "texto": "Com boa função hash e `α = n/m` limitado, cada lista tem em média uns `α` nós. Inserir no início de uma lista custa quantos passos, seja `m` igual a 10 ou a 1 milhão?"
+        }
+      ]
     },
     {
       "numero": 10,
@@ -508,7 +576,21 @@
           "modulo": "22-arvores-avancadas.md"
         }
       ],
-      "dica": "**Cobra:** Julgar afirmações sobre ordem das chaves, busca esperada e espaço do hash encadeado.\n\n- **Hash e ordem** [0105]: a posição vem da função hash, não do valor, então a tabela não guarda as chaves em ordem de valor nem de chegada. Ex.: `m = 3`, `k % 3`, inserir `8, 4, 6`: lida da posição 0 à 2, a tabela dá `6 4 8`.\n- **Busca esperada no encadeamento** [0106]: com boa função hash e tabela proporcional ao número de chaves, cada lista é curta e a busca esperada custa `O(1)`. Ex.: `n = 1000` e `m = 1000`: lista média de 1 nó.\n- **Árvore B** [0146]: cada nó guarda várias chaves ordenadas e seus filhos, com ocupação mínima de metade; a busca custa `O(log n)`. Ex.: com grau mínimo 2, cada nó tem de 1 a 3 chaves.\n\n**Como atacar:** separe o que vale sempre do que depende da implementação, e compare o espaço de cada estrutura."
+      "dica": "**Cobra:** Julgar afirmações sobre ordem das chaves, busca esperada e espaço do hash encadeado.\n\n- **Hash e ordem** [0105]: a posição vem da função hash, não do valor, então a tabela não guarda as chaves em ordem de valor nem de chegada. Ex.: `m = 3`, `k % 3`, inserir `8, 4, 6`: lida da posição 0 à 2, a tabela dá `6 4 8`.\n- **Busca esperada no encadeamento** [0106]: com boa função hash e tabela proporcional ao número de chaves, cada lista é curta e a busca esperada custa `O(1)`. Ex.: `n = 1000` e `m = 1000`: lista média de 1 nó.\n- **Árvore B** [0146]: cada nó guarda várias chaves ordenadas e seus filhos, com ocupação mínima de metade; a busca custa `O(log n)`. Ex.: com grau mínimo 2, cada nó tem de 1 a 3 chaves.\n\n**Como atacar:** separe o que vale sempre do que depende da implementação, e compare o espaço de cada estrutura.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "`m = 3`, `k % 3`, inserir `8, 4, 6`. Lendo os baldes de 0 a 2, sai `6 4 8`. Para listar as chaves em ordem crescente, a tabela basta ou você precisa ordenar depois? Compare com o percurso em ordem de uma árvore de busca."
+        },
+        {
+          "item": "II",
+          "texto": "A busca esperada no encadeamento custa `O(1 + α)`, com `α = n/m`. Com `n = 1000` chaves e `m = 1000` baldes, quantos nós tem a lista média que você percorre?"
+        },
+        {
+          "item": "III",
+          "texto": "Hash encadeado com `n` chaves: `m` ponteiros de balde e um `prox` por nó. Árvore B de grau mínimo `t`: cada nó reserva `2t-1` chaves e `2t` filhos e pode estar só pela metade. Qual sobra mais depende de quê: de `m`, de `t`, da ocupação?"
+        }
+      ]
     },
     {
       "numero": 12,
@@ -652,7 +734,21 @@
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** Julgar se busca e inserção em ABB precisam ser recursivas e qual o custo da busca.\n\n- **Definição recursiva da árvore** [0097]: uma árvore binária é uma raiz com duas subárvores que também são árvores binárias, mas isso não obriga o código a usar recursão. Ex.: uma subárvore vazia é `NULL`, o caso base.\n- **Busca e inserção na ABB** [0099]: descem comparando a chave com cada nó, e um laço com um ponteiro `p` que desce faz o mesmo trabalho que a recursão. Ex.: `while (p && p->chave != k) p = k < p->chave ? p->esq : p->dir;`.\n- **Altura e custo** [0072]: o custo é a altura: `O(log n)` se a árvore está equilibrada, `O(n)` se degenerada. Ex.: ABB equilibrada com 1 023 nós tem altura 10; em cadeia, 1 023.\n\n**Como atacar:** desconfie de \"impossível\": pergunte se existe versão com laço e quando a altura é `log n`."
+      "dica": "**Cobra:** Julgar se busca e inserção em ABB precisam ser recursivas e qual o custo da busca.\n\n- **Definição recursiva da árvore** [0097]: uma árvore binária é uma raiz com duas subárvores que também são árvores binárias, mas isso não obriga o código a usar recursão. Ex.: uma subárvore vazia é `NULL`, o caso base.\n- **Busca e inserção na ABB** [0099]: descem comparando a chave com cada nó, e um laço com um ponteiro `p` que desce faz o mesmo trabalho que a recursão. Ex.: `while (p && p->chave != k) p = k < p->chave ? p->esq : p->dir;`.\n- **Altura e custo** [0072]: o custo é a altura: `O(log n)` se a árvore está equilibrada, `O(n)` se degenerada. Ex.: ABB equilibrada com 1 023 nós tem altura 10; em cadeia, 1 023.\n\n**Como atacar:** desconfie de \"impossível\": pergunte se existe versão com laço e quando a altura é `log n`.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "A busca desce um único caminho, da raiz até achar a chave ou chegar em `NULL`. Um ponteiro `p` e um `while` que troca `p` por `p->esq` ou `p->dir` fazem esse percurso sem chamar a função de novo?"
+        },
+        {
+          "item": "II",
+          "texto": "Na inserção você desce como na busca, guardando o pai de `p`. Ao chegar em `NULL`, o que falta além de pendurar o nó novo como `esq` ou `dir` desse pai? Algum desses passos exige a pilha de chamadas?"
+        },
+        {
+          "item": "III",
+          "texto": "Inserir `50 30 70 20 40 60 80` dá altura 3; inserir `10 20 30 40 50 60 70` dá uma cadeia de altura 7. Com chaves chegando em ordem aleatória, qual dos dois desenhos costuma aparecer?"
+        }
+      ]
     },
     {
       "numero": 15,
@@ -744,7 +840,21 @@
           "modulo": "13-busca-e-ordenacao.md"
         }
       ],
-      "dica": "**Cobra:** Julgar afirmações sobre busca num vetor não ordenado de chaves únicas.\n\n- **Busca binária** [0090]: só dá resposta certa em vetor ordenado, porque descartar metade do intervalo pressupõe que a metade descartada não tem a chave. Ex.: em `5 9 1`, buscar 1: o meio é 9, vai à esquerda e só vê o 5: conclui que não existe.\n- **Busca sequencial** [0089]: funciona em qualquer vetor, e no pior caso compara a chave com as `n` posições. Ex.: vetor de 1000 posições: até 1000 comparações.\n- **Custo de ordenar antes** [0072]: ordenar custa em torno de `n log n`; para uma única busca, isso supera o custo de varrer o vetor. Ex.: `n = 1000`: ordenar custa cerca de 10 000 passos; varrer, até 1 000.\n\n**Como atacar:** teste cada afirmação com um vetor pequeno e desordenado."
+      "dica": "**Cobra:** Julgar afirmações sobre busca num vetor não ordenado de chaves únicas.\n\n- **Busca binária** [0090]: só dá resposta certa em vetor ordenado, porque descartar metade do intervalo pressupõe que a metade descartada não tem a chave. Ex.: em `5 9 1`, buscar 1: o meio é 9, vai à esquerda e só vê o 5: conclui que não existe.\n- **Busca sequencial** [0089]: funciona em qualquer vetor, e no pior caso compara a chave com as `n` posições. Ex.: vetor de 1000 posições: até 1000 comparações.\n- **Custo de ordenar antes** [0072]: ordenar custa em torno de `n log n`; para uma única busca, isso supera o custo de varrer o vetor. Ex.: `n = 1000`: ordenar custa cerca de 10 000 passos; varrer, até 1 000.\n\n**Como atacar:** teste cada afirmação com um vetor pequeno e desordenado.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Para usar a binária num vetor não ordenado, você teria de ordenar antes, uns `n log n` passos. Para uma única busca em 1000 elementos, compare cerca de 10 000 passos de ordenação com até 1000 comparações da sequencial."
+        },
+        {
+          "item": "II",
+          "texto": "Em `5 9 1`, busque o 1 com a busca binária: o meio é 9, `1 < 9`, ela vai à esquerda e só sobra o 5. O que ela responde? E se buscar o 5?"
+        },
+        {
+          "item": "III",
+          "texto": "A sequencial olha uma posição por vez, sem supor nada da ordem. Se a chave não está num vetor de 1000 posições, quantas comparações ela faz até responder?"
+        }
+      ]
     },
     {
       "numero": 17,
@@ -790,7 +900,21 @@
           "modulo": "18-ordenacao-linear.md"
         }
       ],
-      "dica": "**Cobra:** Julgar afirmações sobre comparações, passadas e espaço extra do Radix sort.\n\n- **Radix sort** [0121]: ordena dígito a dígito, do menos significativo ao mais, usando uma ordenação estável por dígito, sem comparar uma chave com outra. Ex.: `53 21 47`: unidades dão `21 53 47`; dezenas dão `21 47 53`.\n- **Passadas** [0121]: uma por dígito do maior valor na base escolhida; o número de passadas vem dos dígitos, não de `n`. Ex.: o maior valor é 830: 3 passadas, em base 10.\n- **Counting sort** [0120]: conta quantas vezes cada dígito aparece e usa um vetor de saída do tamanho do vetor mais os contadores. Ex.: `n = 1000`, base 10: 1000 posições de saída e 10 contadores.\n\n**Como atacar:** por afirmação: compara chaves? de que dependem as passadas? precisa de espaço extra?"
+      "dica": "**Cobra:** Julgar afirmações sobre comparações, passadas e espaço extra do Radix sort.\n\n- **Radix sort** [0121]: ordena dígito a dígito, do menos significativo ao mais, usando uma ordenação estável por dígito, sem comparar uma chave com outra. Ex.: `53 21 47`: unidades dão `21 53 47`; dezenas dão `21 47 53`.\n- **Passadas** [0121]: uma por dígito do maior valor na base escolhida; o número de passadas vem dos dígitos, não de `n`. Ex.: o maior valor é 830: 3 passadas, em base 10.\n- **Counting sort** [0120]: conta quantas vezes cada dígito aparece e usa um vetor de saída do tamanho do vetor mais os contadores. Ex.: `n = 1000`, base 10: 1000 posições de saída e 10 contadores.\n\n**Como atacar:** por afirmação: compara chaves? de que dependem as passadas? precisa de espaço extra?",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Em base 10, cada passada do Radix distribui os números pelo dígito da vez, contando quantos caem em cada um dos 10 dígitos. Em algum momento ele pergunta se `53 < 47`?"
+        },
+        {
+          "item": "II",
+          "texto": "Vetor `5 7 830 2`: a média de dígitos é `(1+1+3+1)/4 = 1,5`. Quantas passadas o Radix precisa para que o 830 seja ordenado pelo dígito das centenas?"
+        },
+        {
+          "item": "III",
+          "texto": "Cada passada usa uma contagem estável que grava a saída num vetor auxiliar. Com `n = 1000` em base 10, quantas posições tem esse vetor, além dos 10 contadores?"
+        }
+      ]
     },
     {
       "numero": 18,
@@ -886,7 +1010,21 @@
           "modulo": "13-busca-e-ordenacao.md"
         }
       ],
-      "dica": "**Cobra:** Comparar o custo de inserção, seleção, Radix e merge sort em dois vetores de ordens diferentes.\n\n- **Seleção** [0092]: sempre faz `n(n-1)/2` comparações, seja qual for a ordem da entrada. Ex.: `n = 8`: 28 comparações, em qualquer vetor.\n- **Inserção** [0093]: o custo depende de quanto o vetor está fora de ordem: perto de `n` comparações se quase ordenado, perto de `n²/2` se invertido. Ex.: `1 2 3 4 5`: 4 comparações; `5 4 3 2 1`: 10.\n- **Radix sort** [0121]: o custo vem de `d · (n + b)`, dígitos e base, e a ordem inicial não conta. Ex.: `n = 8` números de 2 dígitos em base 10: 2 passadas sobre os 8.\n- **Merge sort** [0094]: divide ao meio e intercala, com custo `n log n` em qualquer ordem. Ex.: `n = 8`: ordem de `8 · 3 = 24` operações.\n\n**Como atacar:** conte as operações de cada algoritmo em cada vetor e veja se dependem da ordem."
+      "dica": "**Cobra:** Comparar o custo de inserção, seleção, Radix e merge sort em dois vetores de ordens diferentes.\n\n- **Seleção** [0092]: sempre faz `n(n-1)/2` comparações, seja qual for a ordem da entrada. Ex.: `n = 8`: 28 comparações, em qualquer vetor.\n- **Inserção** [0093]: o custo depende de quanto o vetor está fora de ordem: perto de `n` comparações se quase ordenado, perto de `n²/2` se invertido. Ex.: `1 2 3 4 5`: 4 comparações; `5 4 3 2 1`: 10.\n- **Radix sort** [0121]: o custo vem de `d · (n + b)`, dígitos e base, e a ordem inicial não conta. Ex.: `n = 8` números de 2 dígitos em base 10: 2 passadas sobre os 8.\n- **Merge sort** [0094]: divide ao meio e intercala, com custo `n log n` em qualquer ordem. Ex.: `n = 8`: ordem de `8 · 3 = 24` operações.\n\n**Como atacar:** conte as operações de cada algoritmo em cada vetor e veja se dependem da ordem.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "VetI tem `n = 8`. A seleção faz `n(n-1)/2 = 28` comparações em qualquer vetor. Na inserção, cada elemento compara com o vizinho da esquerda e para; só o 7 anda uma casa. Conte as comparações da inserção em VetI."
+        },
+        {
+          "item": "II",
+          "texto": "Todos os valores dos dois vetores têm um dígito em base 10. Quantas passadas o Radix faz? E quantos níveis de intercalação o merge sort tem com `n = 8`?"
+        },
+        {
+          "item": "III",
+          "texto": "O Radix olha só os dígitos, nunca compara uma chave com outra. Se você embaralhar VetI, o número de passadas e de movimentos do Radix muda? E o merge sort deixa de fazer seus três níveis de intercalação em algum dos dois vetores?"
+        }
+      ]
     },
     {
       "numero": 20,
@@ -936,7 +1074,21 @@
           "modulo": "13-busca-e-ordenacao.md"
         }
       ],
-      "dica": "**Cobra:** Julgar afirmações sobre maior elemento, inversão de vetor e a fama do Quick sort.\n\n- **Acesso por índice** [0038]: `v[i]` custa o mesmo em qualquer posição, porque o endereço sai de uma conta direta a partir do início do vetor. Ex.: `v[0]` e `v[999]` custam o mesmo número de operações.\n- **Troca no próprio vetor** [0038]: trocar dois elementos usa só uma variável auxiliar, sem copiar o vetor inteiro. Ex.: `t = v[i]; v[i] = v[j]; v[j] = t;`.\n- **Quick sort** [0095]: é muito rápido em média, mas o pior caso é `n²` com pivô ruim. Ex.: pivô sempre o menor elemento: partições de tamanho 0 e `n-1`.\n- **Escolha do algoritmo** [0096]: nenhum algoritmo vence em todos os tamanhos e ordens; em vetores pequenos ou quase ordenados a inserção pode ganhar. Ex.: vetor quase ordenado de 1 000 elementos: a inserção faz cerca de 1 000 comparações.\n\n**Como atacar:** procure contraexemplo para cada afirmação; \"sempre\" e \"qualquer\" costumam quebrar."
+      "dica": "**Cobra:** Julgar afirmações sobre maior elemento, inversão de vetor e a fama do Quick sort.\n\n- **Acesso por índice** [0038]: `v[i]` custa o mesmo em qualquer posição, porque o endereço sai de uma conta direta a partir do início do vetor. Ex.: `v[0]` e `v[999]` custam o mesmo número de operações.\n- **Troca no próprio vetor** [0038]: trocar dois elementos usa só uma variável auxiliar, sem copiar o vetor inteiro. Ex.: `t = v[i]; v[i] = v[j]; v[j] = t;`.\n- **Quick sort** [0095]: é muito rápido em média, mas o pior caso é `n²` com pivô ruim. Ex.: pivô sempre o menor elemento: partições de tamanho 0 e `n-1`.\n- **Escolha do algoritmo** [0096]: nenhum algoritmo vence em todos os tamanhos e ordens; em vetores pequenos ou quase ordenados a inserção pode ganhar. Ex.: vetor quase ordenado de 1 000 elementos: a inserção faz cerca de 1 000 comparações.\n\n**Como atacar:** procure contraexemplo para cada afirmação; \"sempre\" e \"qualquer\" costumam quebrar.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Num vetor crescente de `n` posições, onde está o maior? Acessar `v[n-1]` custa mais quando `n` é 10 ou quando é 1 milhão?"
+        },
+        {
+          "item": "II",
+          "texto": "Inverta `1 2 3 4 5 6`: troque `v[0]` com `v[5]`, `v[1]` com `v[4]`, `v[2]` com `v[3]`. Quantas trocas foram, e você usou algo além de uma variável auxiliar?"
+        },
+        {
+          "item": "III",
+          "texto": "Vetor quase ordenado de 1000 elementos: a inserção faz perto de 1000 comparações. O Quicksort com pivô no primeiro elemento, num vetor já ordenado, cai em partições de tamanho 0 e `n-1`: quantas comparações, mais ou menos?"
+        }
+      ]
     }
   ]
 }

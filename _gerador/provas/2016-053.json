@@ -369,7 +369,29 @@
           "modulo": "12-pilhas-e-filas.md"
         }
       ],
-      "dica": "**Cobra:** Acompanhar dados passando de uma pilha para uma fila e de volta.\n\n- **Pilha** [0082]: LIFO: o último a entrar é o primeiro a sair, sempre pelo topo. Ex.: empilhar `a, b` e desempilhar devolve `b`.\n- **Fila** [0085]: FIFO: o primeiro a entrar é o primeiro a sair, e o começo da fila é o mais antigo. Ex.: enfileirar `a, b` e retirar devolve `a`.\n\n**Como atacar:** simule cada passo no papel, sem pular retirada, e compare com cada listagem."
+      "dica": "**Cobra:** Acompanhar dados passando de uma pilha para uma fila e de volta.\n\n- **Pilha** [0082]: LIFO: o último a entrar é o primeiro a sair, sempre pelo topo. Ex.: empilhar `a, b` e desempilhar devolve `b`.\n- **Fila** [0085]: FIFO: o primeiro a entrar é o primeiro a sair, e o começo da fila é o mais antigo. Ex.: enfileirar `a, b` e retirar devolve `a`.\n\n**Como atacar:** simule cada passo no papel, sem pular retirada, e compare com cada listagem.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "No passo 2, a primeira retirada da pilha leva o topo, o último dado empilhado no passo 1. Ele entra na fila antes ou depois dos outros? Quem fica no começo da fila?"
+        },
+        {
+          "item": "II",
+          "texto": "No passo 4, quem sai primeiro da fila vai para o fundo da pilha, e o último a sair fica no topo. Qual valor estava no fim da fila do passo 3?"
+        },
+        {
+          "item": "III",
+          "texto": "O topo da pilha final é o último elemento empilhado no passo 4, ou seja, o último que saiu da fila. Esse valor é o 10 ou o 11?"
+        },
+        {
+          "item": "IV",
+          "texto": "A fila do passo 3 recebe os elementos na ordem em que saem da pilha. Qual sai primeiro de uma pilha em que o 11 entrou primeiro e o 10 por último?"
+        },
+        {
+          "item": "V",
+          "texto": "Leia a pilha final do topo para baixo e compare com a sequência de entrada `11, 12, 23, ..., 10`. Esvaziar uma pilha numa fila inverte a ordem uma vez; esvaziar a fila de volta numa pilha faz o quê?"
+        }
+      ]
     },
     {
       "numero": 9,
@@ -457,7 +479,21 @@
           "modulo": "15-hash.md"
         }
       ],
-      "dica": "**Cobra:** Julgar afirmações sobre hash linear, sem encadeamento.\n\n- **Endereçamento aberto** [0107]: tudo fica dentro da tabela: na colisão, procura outra posição livre por sondagem, sem tirar a chave que já estava. Ex.: `M = 4`, `k % 4`: o 5 vai à 1; o 9 acha a 1 ocupada e vai à 2.\n- **Uma função hash** [0105]: uma função dá a posição inicial; as seguintes, na sondagem linear, são a vizinha de cada tentativa. Ex.: posições `h(k)`, `h(k)+1`, `h(k)+2`, todas módulo `M`.\n- **Tabela cheia** [0107]: a tabela tem `M` posições e cada uma guarda uma chave, então não cabem mais que `M` chaves. Ex.: `M = 4` com 4 chaves: a 5ª não entra.\n\n**Como atacar:** julgue cada afirmação sozinha e confira o que acontece com a chave na colisão."
+      "dica": "**Cobra:** Julgar afirmações sobre hash linear, sem encadeamento.\n\n- **Endereçamento aberto** [0107]: tudo fica dentro da tabela: na colisão, procura outra posição livre por sondagem, sem tirar a chave que já estava. Ex.: `M = 4`, `k % 4`: o 5 vai à 1; o 9 acha a 1 ocupada e vai à 2.\n- **Uma função hash** [0105]: uma função dá a posição inicial; as seguintes, na sondagem linear, são a vizinha de cada tentativa. Ex.: posições `h(k)`, `h(k)+1`, `h(k)+2`, todas módulo `M`.\n- **Tabela cheia** [0107]: a tabela tem `M` posições e cada uma guarda uma chave, então não cabem mais que `M` chaves. Ex.: `M = 4` com 4 chaves: a 5ª não entra.\n\n**Como atacar:** julgue cada afirmação sozinha e confira o que acontece com a chave na colisão.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Na sondagem linear as tentativas são `h(k)`, `h(k)+1`, `h(k)+2`, todas módulo `M`. Quantas funções de hash diferentes aparecem aí? Compare com o hash duplo, que usa uma segunda função para o tamanho do salto."
+        },
+        {
+          "item": "II",
+          "texto": "`M = 4`, sem lista nenhuma: cada posição do vetor guarda uma chave. Depois de 4 inserções, para onde vai a 5ª?"
+        },
+        {
+          "item": "III",
+          "texto": "`M = 4`, `k % 4`: o 5 está na posição 1 e chega o 9. Se o 9 tomasse o lugar do 5, uma busca pelo 5 depois encontraria o quê?"
+        }
+      ]
     },
     {
       "numero": 11,
@@ -548,7 +584,21 @@
           "modulo": "15-hash.md"
         }
       ],
-      "dica": "**Cobra:** Julgar afirmações sobre hash linear e hash encadeado.\n\n- **Hash encadeado** [0106]: cada posição guarda uma lista; na colisão a chave entra na lista da própria posição, e cabem mais chaves que posições. Ex.: `M = 5` e 8 chaves: `α = 1,6`, com listas nas posições.\n- **Hash linear** [0107]: é endereçamento aberto: na colisão a chave vai à posição livre mais próxima, e o total de chaves não passa de `M`. Ex.: `M = 5`: a 6ª chave não tem onde entrar.\n- **Fator de carga** [0105]: `α = n / m` mede o aperto da tabela e decide o custo médio. Ex.: 5 chaves em 7 posições: `α ≈ 0,71`.\n\n**Como atacar:** para cada afirmação, pergunte de qual das duas técnicas ela fala."
+      "dica": "**Cobra:** Julgar afirmações sobre hash linear e hash encadeado.\n\n- **Hash encadeado** [0106]: cada posição guarda uma lista; na colisão a chave entra na lista da própria posição, e cabem mais chaves que posições. Ex.: `M = 5` e 8 chaves: `α = 1,6`, com listas nas posições.\n- **Hash linear** [0107]: é endereçamento aberto: na colisão a chave vai à posição livre mais próxima, e o total de chaves não passa de `M`. Ex.: `M = 5`: a 6ª chave não tem onde entrar.\n- **Fator de carga** [0105]: `α = n / m` mede o aperto da tabela e decide o custo médio. Ex.: 5 chaves em 7 posições: `α ≈ 0,71`.\n\n**Como atacar:** para cada afirmação, pergunte de qual das duas técnicas ela fala.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Em disco, ler blocos vizinhos é barato e saltar para outro bloco é caro. No hash encadeado, os nós de uma lista ficam lado a lado ou onde houver espaço livre quando cada um foi alocado? E na sondagem linear, onde fica a chave que colidiu?"
+        },
+        {
+          "item": "II",
+          "texto": "`M = 5` e 8 chaves. No encadeamento os baldes viram listas. No linear, cada posição do vetor guarda uma chave só: onde entraria a 6ª?"
+        },
+        {
+          "item": "III",
+          "texto": "Encadeamento, `M = 5`, `k % 5`: o 7 está no balde 2 e chega o 12. Ele vai para a lista do balde 2 ou para o balde 3, que está vazio? Qual das duas técnicas procura a posição livre mais próxima?"
+        }
+      ]
     },
     {
       "numero": 13,
@@ -702,7 +752,25 @@
           "modulo": "26-analise-formal.md"
         }
       ],
-      "dica": "**Cobra:** Apontar as afirmações incorretas sobre estabilidade, pior caso, espaço extra e sensibilidade à entrada.\n\n- **Estabilidade** [0096]: um algoritmo é estável quando elementos de chave igual mantêm a ordem relativa que tinham. Ex.: `2a 2b 1`: estável dá `1 2a 2b`; instável pode dar `1 2b 2a`.\n- **Pior caso** [0095]: inserção e Quick sort chegam a `n²` (entrada invertida; pivô ruim); merge sort e heapsort ficam em `n log n`. Ex.: inserção em `5 4 3 2 1`: 10 comparações, perto de `n²/2`.\n- **Espaço extra** [0168]: memória usada além do vetor: merge sort usa um vetor auxiliar de `n`; os que ordenam no lugar usam `O(1)`. Ex.: `n = 1000`: merge sort, 1000 posições extras.\n- **Sensibilidade à entrada** [0093]: o custo do algoritmo muda ou não com a ordem inicial dos dados. Ex.: inserção: 4 comparações em `1 2 3 4 5`, 10 em `5 4 3 2 1`.\n\n**Como atacar:** monte uma tabela de estável, pior caso, espaço e sensibilidade à ordem."
+      "dica": "**Cobra:** Apontar as afirmações incorretas sobre estabilidade, pior caso, espaço extra e sensibilidade à entrada.\n\n- **Estabilidade** [0096]: um algoritmo é estável quando elementos de chave igual mantêm a ordem relativa que tinham. Ex.: `2a 2b 1`: estável dá `1 2a 2b`; instável pode dar `1 2b 2a`.\n- **Pior caso** [0095]: inserção e Quick sort chegam a `n²` (entrada invertida; pivô ruim); merge sort e heapsort ficam em `n log n`. Ex.: inserção em `5 4 3 2 1`: 10 comparações, perto de `n²/2`.\n- **Espaço extra** [0168]: memória usada além do vetor: merge sort usa um vetor auxiliar de `n`; os que ordenam no lugar usam `O(1)`. Ex.: `n = 1000`: merge sort, 1000 posições extras.\n- **Sensibilidade à entrada** [0093]: o custo do algoritmo muda ou não com a ordem inicial dos dados. Ex.: inserção: 4 comparações em `1 2 3 4 5`, 10 em `5 4 3 2 1`.\n\n**Como atacar:** monte uma tabela de estável, pior caso, espaço e sensibilidade à ordem.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Simule a partição de Lomuto em `2a 2b 1`, com pivô o último (o 1): nenhum 2 é menor que 1, e a troca final leva o 1 para a posição 0. Em que ordem ficaram os dois 2?"
+        },
+        {
+          "item": "II",
+          "texto": "Conte as comparações da inserção em `5 4 3 2 1`. E no Quicksort com pivô sempre o menor elemento, as partições têm tamanho 0 e `n-1`: quantos níveis de recursão isso dá?"
+        },
+        {
+          "item": "III",
+          "texto": "O heapsort monta o heap dentro do próprio vetor e troca a raiz com a última posição ainda não ordenada. Além de uma variável para a troca, ele aloca alguma estrutura? Com `n = 1000`, `n²` seriam 1 000 000 posições."
+        },
+        {
+          "item": "IV",
+          "texto": "Conte as comparações da inserção em `1 2 3 4 5` e em `5 4 3 2 1`. O merge sort divide ao meio e intercala do mesmo jeito nos dois vetores?"
+        }
+      ]
     },
     {
       "numero": 16,

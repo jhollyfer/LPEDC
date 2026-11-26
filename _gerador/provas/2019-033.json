@@ -448,7 +448,21 @@
           "modulo": "15-hash.md"
         }
       ],
-      "dica": "**Cobra:** simular inserções numa tabela de 17 posições e julgar três afirmações sobre colisões.\n\n- **Método da divisão** [0105]: a posição é `k mod m`; só cabem sem colisão chaves de restos diferentes; mesmo resto disputa o mesmo balde. Ex.: m = 7: 45 mod 7 = 3.\n- **Sondagem linear** [0107]: com a posição ocupada, a chave tenta a seguinte, dando a volta no fim da tabela; cada posição ocupada encontrada conta como uma colisão. Ex.: m = 7: 10 vai para 3 e 17 também dá 3, então tenta o 4: 1 colisão.\n- **Dispersão dupla** [0179]: o passo da tentativa vem de uma segunda função, `(h1 + i·h2) mod m`, e muda de chave para chave. Ex.: m = 7, h1 = 3 e h2 = 3: a segunda tentativa cai em (3 + 3) mod 7 = 6.\n\n**Como atacar:** calcule o resto de cada chave e some as colisões; para a dupla, calcule o passo de cada chave."
+      "dica": "**Cobra:** simular inserções numa tabela de 17 posições e julgar três afirmações sobre colisões.\n\n- **Método da divisão** [0105]: a posição é `k mod m`; só cabem sem colisão chaves de restos diferentes; mesmo resto disputa o mesmo balde. Ex.: m = 7: 45 mod 7 = 3.\n- **Sondagem linear** [0107]: com a posição ocupada, a chave tenta a seguinte, dando a volta no fim da tabela; cada posição ocupada encontrada conta como uma colisão. Ex.: m = 7: 10 vai para 3 e 17 também dá 3, então tenta o 4: 1 colisão.\n- **Dispersão dupla** [0179]: o passo da tentativa vem de uma segunda função, `(h1 + i·h2) mod m`, e muda de chave para chave. Ex.: m = 7, h1 = 3 e h2 = 3: a segunda tentativa cai em (3 + 3) mod 7 = 6.\n\n**Como atacar:** calcule o resto de cada chave e some as colisões; para a dupla, calcule o passo de cada chave.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Simule a sondagem linear: calcule `k mod 17` de cada chave e veja onde o 22 e o 39 param. Conte cada casa ocupada que encontraram e, separado, quantas chaves encontraram alguma ocupada. Os dois números batem?"
+        },
+        {
+          "item": "II",
+          "texto": "No hash duplo, a primeira tentativa é `h1(k) = k mod 17`, e a segunda função só entra depois de uma colisão. Quanto dá 5 mod 17 e 22 mod 17?"
+        },
+        {
+          "item": "III",
+          "texto": "A sentença diz \"é possível\", não \"sempre\". Basta existir um conjunto de 17 chaves com restos todos diferentes na divisão por 17. Você consegue montar um?"
+        }
+      ]
     },
     {
       "numero": 11,
@@ -578,7 +592,21 @@
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** julgar três afirmações sobre heap, rebalanceamento da AVL e a complexidade da árvore B.\n\n- **Ordem do heap** [0102]: num heap de máximo, todo pai é maior ou igual aos filhos; os dois filhos não se comparam entre si. Ex.: `9` acima de `5` e `7`, em qualquer ordem.\n- **Rebalancear a AVL** [0101]: a inserção pendura uma folha e, na volta da recursão, cada ancestral atualiza a altura e confere o fator, rotacionando se achar 2 ou -2. Ex.: inserir 30 sob `10 → 20` confere o 20 e depois o 10.\n- **Custo de AVL e B** [0146]: as duas são árvores equilibradas, e cada operação segue um caminho da raiz até uma folha, então o custo é limitado pela altura. Ex.: com 1 milhão de chaves, uma AVL tem no máximo uns 29 níveis, e uma B com t = 100 tem uns 3.\n\n**Como atacar:** julgue cada afirmação separadamente e descarte as alternativas que a contradizem."
+      "dica": "**Cobra:** julgar três afirmações sobre heap, rebalanceamento da AVL e a complexidade da árvore B.\n\n- **Ordem do heap** [0102]: num heap de máximo, todo pai é maior ou igual aos filhos; os dois filhos não se comparam entre si. Ex.: `9` acima de `5` e `7`, em qualquer ordem.\n- **Rebalancear a AVL** [0101]: a inserção pendura uma folha e, na volta da recursão, cada ancestral atualiza a altura e confere o fator, rotacionando se achar 2 ou -2. Ex.: inserir 30 sob `10 → 20` confere o 20 e depois o 10.\n- **Custo de AVL e B** [0146]: as duas são árvores equilibradas, e cada operação segue um caminho da raiz até uma folha, então o custo é limitado pela altura. Ex.: com 1 milhão de chaves, uma AVL tem no máximo uns 29 níveis, e uma B com t = 100 tem uns 3.\n\n**Como atacar:** julgue cada afirmação separadamente e descarte as alternativas que a contradizem.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Num heap de máximo, a raiz é o maior; num heap de mínimo, o menor. O enunciado diz qual dos dois? E com chave repetida, `9` sobre `9`, a raiz do filho é menor que a do pai?"
+        },
+        {
+          "item": "II",
+          "texto": "Insira 30 na AVL com raiz 10 e filho direito 20. Que nó você confere primeiro, o 20 ou o 10? O desequilíbrio aparece no caminho entre a folha nova e a raiz?"
+        },
+        {
+          "item": "III",
+          "texto": "As duas são balanceadas, e inserir ou excluir segue um caminho da raiz a uma folha com trabalho limitado em cada nó. A AVL tem altura de cerca de 1,44 · log₂ n e a B, `O(log_t n)`. Em notação O, essas alturas diferem?"
+        }
+      ]
     },
     {
       "numero": 14,
@@ -886,7 +914,21 @@
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** julgar três afirmações sobre árvores rubro-negras e AVL.\n\n- **Propriedades da rubro-negra** [0177]: a raiz é preta, vermelho só tem filhos pretos e todos os caminhos de um nó às folhas têm o mesmo número de pretos; as folhas são sentinelas `nil` pretas. Ex.: raiz preta com dois filhos pretos: cada caminho tem 2 pretos.\n- **Folha nil** [0177]: as folhas da rubro-negra são o nó sentinela `nil`, preto e sem chave, que ocupa o lugar de todo NULL; ele conta na altura negra de cada caminho. Ex.: nó preto com dois filhos `nil`: os dois caminhos têm 1 preto.\n- **Inserção na AVL** [0101]: a altura é limitada a cerca de 1,44 · log₂ n, então a inserção custa O(log n) no pior caso. Ex.: 1 milhão de chaves: no máximo uns 29 níveis.\n\n**Como atacar:** julgue cada afirmação isolada, citando a propriedade que a sustenta ou quebra."
+      "dica": "**Cobra:** julgar três afirmações sobre árvores rubro-negras e AVL.\n\n- **Propriedades da rubro-negra** [0177]: a raiz é preta, vermelho só tem filhos pretos e todos os caminhos de um nó às folhas têm o mesmo número de pretos; as folhas são sentinelas `nil` pretas. Ex.: raiz preta com dois filhos pretos: cada caminho tem 2 pretos.\n- **Folha nil** [0177]: as folhas da rubro-negra são o nó sentinela `nil`, preto e sem chave, que ocupa o lugar de todo NULL; ele conta na altura negra de cada caminho. Ex.: nó preto com dois filhos `nil`: os dois caminhos têm 1 preto.\n- **Inserção na AVL** [0101]: a altura é limitada a cerca de 1,44 · log₂ n, então a inserção custa O(log n) no pior caso. Ex.: 1 milhão de chaves: no máximo uns 29 níveis.\n\n**Como atacar:** julgue cada afirmação isolada, citando a propriedade que a sustenta ou quebra.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "A raiz da rubro-negra é preta, mas o filho dela pode ser vermelho. Pegue a subárvore cuja raiz é esse filho vermelho: ela cumpre a regra da raiz preta?"
+        },
+        {
+          "item": "II",
+          "texto": "Teste um nó com um filho `nil` e o outro filho preto de verdade, com dois `nil` embaixo. Conte os pretos de cada caminho até um `nil`: os dois lados dão o mesmo número? E se esse filho fosse vermelho?"
+        },
+        {
+          "item": "III",
+          "texto": "A AVL tem altura de no máximo cerca de 1,44 · log₂ n. A inserção desce até uma folha, volta atualizando alturas e faz no máximo uma rotação, simples ou dupla. Quanto custa cada parte?"
+        }
+      ]
     }
   ]
 }

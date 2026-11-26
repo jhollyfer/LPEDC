@@ -582,7 +582,29 @@
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** achar a afirmação incorreta sobre árvores de busca, AVL, rubro-negra e B.\n\n- **Pior caso da BST** [0099]: sem balanceamento, chaves em ordem crescente formam uma lista de altura n - 1, e a busca no pior caso custa O(n). Ex.: inserir 1, 2, 3, 4 e buscar o 4 faz 4 comparações.\n- **Altura da AVL** [0101]: a altura é no máximo cerca de 1,44 · log₂ n, então a busca custa O(log n) no pior caso. Ex.: 1 milhão de chaves: no máximo uns 29 níveis.\n- **Rotações na rubro-negra** [0177]: a inserção faz no máximo duas rotações: o caso do tio vermelho só recolore e sobe, e os outros dois rotacionam e acabam. Ex.: tio vermelho: pinta pai e tio de preto, o avô de vermelho, sem rotação.\n\n**Como atacar:** procure a afirmação que troca o custo do pior caso de uma estrutura por outro."
+      "dica": "**Cobra:** achar a afirmação incorreta sobre árvores de busca, AVL, rubro-negra e B.\n\n- **Pior caso da BST** [0099]: sem balanceamento, chaves em ordem crescente formam uma lista de altura n - 1, e a busca no pior caso custa O(n). Ex.: inserir 1, 2, 3, 4 e buscar o 4 faz 4 comparações.\n- **Altura da AVL** [0101]: a altura é no máximo cerca de 1,44 · log₂ n, então a busca custa O(log n) no pior caso. Ex.: 1 milhão de chaves: no máximo uns 29 níveis.\n- **Rotações na rubro-negra** [0177]: a inserção faz no máximo duas rotações: o caso do tio vermelho só recolore e sobe, e os outros dois rotacionam e acabam. Ex.: tio vermelho: pinta pai e tio de preto, o avô de vermelho, sem rotação.\n\n**Como atacar:** procure a afirmação que troca o custo do pior caso de uma estrutura por outro.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "A altura da AVL é de no máximo cerca de 1,44 · log₂ n: com 1 milhão de chaves, uns 29 níveis. Quantos nós a busca visita no pior caso?"
+        },
+        {
+          "item": "B",
+          "texto": "Na inserção rubro-negra, o caso do tio vermelho só recolore e sobe; os outros dois rotacionam, uma ou duas vezes, e encerram. Quantas rotações isso dá, no máximo, por inserção? Esse teto depende de `n`?"
+        },
+        {
+          "item": "C",
+          "texto": "Na B+, os nós internos guardam só cópias de chaves para guiar a descida, e os registros ficam nas folhas, ligadas em sequência. Toda chave aparece em alguma folha?"
+        },
+        {
+          "item": "D",
+          "texto": "Insira 1, 2, 3, 4 nessa ordem numa ABB sem balanceamento e busque o 4. Quantas comparações? E com `n` chaves inseridas em ordem crescente?"
+        },
+        {
+          "item": "E",
+          "texto": "Na árvore B, todas as folhas ficam no mesmo nível, e cada nó tem um mínimo de chaves. Uma árvore com essas duas regras pode virar uma cadeia comprida?"
+        }
+      ]
     },
     {
       "numero": 14,
@@ -850,7 +872,25 @@
           "modulo": "11-listas.md"
         }
       ],
-      "dica": "**Cobra:** dizer quais operações numa lista duplamente encadeada com ponteiros para as duas pontas custam O(1).\n\n- **Lista duplamente encadeada** [0079]: cada nó tem `prox` e `ant`, e a lista guarda as duas pontas; remover um nó conhecido só mexe nos vizinhos, sem percorrer. Ex.: remover o último nó faz `fim = fim->ant; fim->prox = NULL`.\n- **Inserir nas pontas** [0079]: com ponteiro para as duas pontas, não é preciso andar: o nó novo liga-se ao vizinho e a ponta da lista é atualizada. Ex.: inserir 9 antes do primeiro: `9->prox = inicio` e `inicio->ant = 9`.\n- **Acesso por posição** [0076]: chegar ao k-ésimo nó exige seguir k - 1 setas, então só mexer nas pontas é O(1). Ex.: o 5º nó exige 4 setas.\n\n**Como atacar:** para cada operação, veja se precisa andar pela lista ou só mexer nas pontas."
+      "dica": "**Cobra:** dizer quais operações numa lista duplamente encadeada com ponteiros para as duas pontas custam O(1).\n\n- **Lista duplamente encadeada** [0079]: cada nó tem `prox` e `ant`, e a lista guarda as duas pontas; remover um nó conhecido só mexe nos vizinhos, sem percorrer. Ex.: remover o último nó faz `fim = fim->ant; fim->prox = NULL`.\n- **Inserir nas pontas** [0079]: com ponteiro para as duas pontas, não é preciso andar: o nó novo liga-se ao vizinho e a ponta da lista é atualizada. Ex.: inserir 9 antes do primeiro: `9->prox = inicio` e `inicio->ant = 9`.\n- **Acesso por posição** [0076]: chegar ao k-ésimo nó exige seguir k - 1 setas, então só mexer nas pontas é O(1). Ex.: o 5º nó exige 4 setas.\n\n**Como atacar:** para cada operação, veja se precisa andar pela lista ou só mexer nas pontas.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Com o ponteiro `inicio`, inserir na frente é `novo->prox = inicio; inicio->ant = novo; inicio = novo`. Algum desses passos percorre a lista?"
+        },
+        {
+          "item": "II",
+          "texto": "Com o ponteiro `fim`, é o espelho da inserção na frente: `novo->ant = fim; fim->prox = novo; fim = novo`. Quantos nós você visita?"
+        },
+        {
+          "item": "III",
+          "texto": "Para remover o primeiro: `inicio = inicio->prox; inicio->ant = NULL`, e libera o antigo. O número de passos muda com o tamanho da lista?"
+        },
+        {
+          "item": "IV",
+          "texto": "Na lista simples, remover o último exige achar o penúltimo, andando desde o início. Na dupla, `fim->ant` já aponta para ele. Quantos passos isso custa?"
+        }
+      ]
     },
     {
       "numero": 20,

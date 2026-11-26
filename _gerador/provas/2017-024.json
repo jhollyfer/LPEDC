@@ -59,7 +59,25 @@
           "modulo": "15-hash.md"
         }
       ],
-      "dica": "**Cobra:** Julgar quatro sentenças sobre AVL, pilha, array versus lista e hash.\n\n- **AVL** [0101]: é uma ABB que se rebalancia sozinha com rotações depois de inserções e remoções. Ex.: inserir `1, 2, 3` numa ABB dá cadeia; numa AVL, `2(1, 3)`.\n- **Pilha** [0082]: LIFO: o acesso conceitual é só pelo topo, e o último que entrou é o primeiro que sai. Ex.: pilha `1 2 3` com 3 no topo: só o 3 pode sair agora.\n- **Lista encadeada × vetor** [0076]: vetor ocupa bloco contíguo e dá `v[i]` direto; lista usa nós ligados por ponteiros e exige percorrer até o `k`-ésimo. Ex.: o 4º elemento: `v[3]` direto; na lista, 3 saltos de `prox`.\n- **Encadeamento** [0106]: chaves com a mesma posição na tabela ficam numa mesma lista encadeada. Ex.: `M = 4`: as chaves 5 e 9 vão à posição 1.\n\n**Como atacar:** julgue cada sentença sozinha contra a definição da estrutura."
+      "dica": "**Cobra:** Julgar quatro sentenças sobre AVL, pilha, array versus lista e hash.\n\n- **AVL** [0101]: é uma ABB que se rebalancia sozinha com rotações depois de inserções e remoções. Ex.: inserir `1, 2, 3` numa ABB dá cadeia; numa AVL, `2(1, 3)`.\n- **Pilha** [0082]: LIFO: o acesso conceitual é só pelo topo, e o último que entrou é o primeiro que sai. Ex.: pilha `1 2 3` com 3 no topo: só o 3 pode sair agora.\n- **Lista encadeada × vetor** [0076]: vetor ocupa bloco contíguo e dá `v[i]` direto; lista usa nós ligados por ponteiros e exige percorrer até o `k`-ésimo. Ex.: o 4º elemento: `v[3]` direto; na lista, 3 saltos de `prox`.\n- **Encadeamento** [0106]: chaves com a mesma posição na tabela ficam numa mesma lista encadeada. Ex.: `M = 4`: as chaves 5 e 9 vão à posição 1.\n\n**Como atacar:** julgue cada sentença sozinha contra a definição da estrutura.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Insira `1, 2, 3` nessa ordem numa ABB comum e depois numa AVL. Que formato cada uma fica? Qual das duas mexeu na própria estrutura depois de inserir?"
+        },
+        {
+          "item": "II",
+          "texto": "Na pilha `1 2 3`, com o 3 no topo, as operações da definição são `push` e `pop`, e as duas agem no topo. Que operação da pilha tiraria o 2 sem tirar o 3 antes?"
+        },
+        {
+          "item": "III",
+          "texto": "Para ler o 4º elemento, o vetor faz `v[3]` direto; a lista segue 3 ponteiros `prox` a partir da cabeça. Os nós de uma lista ficam lado a lado na memória, como as casas do vetor?"
+        },
+        {
+          "item": "IV",
+          "texto": "Com `M = 4` e `k % 4`, as chaves 5 e 9 caem as duas na posição 1. No hash por encadeamento, onde a segunda chave fica guardada?"
+        }
+      ]
     },
     {
       "numero": 2,
@@ -365,7 +383,21 @@
           "modulo": "15-hash.md"
         }
       ],
-      "dica": "**Cobra:** Julgar afirmações sobre colisões e comparações no hash encadeado.\n\n- **Encadeamento** [0106]: chaves da mesma posição ficam numa lista, e a colisão só aumenta essa lista. Ex.: `M = 3`: as chaves 3, 6, 9 e 12 caem na posição 0.\n- **Colisão secundária** [0107]: aglomerado em que chaves de hashes diferentes disputam as mesmas posições; é problema do endereçamento aberto. Ex.: `M = 5`, `k % 5`: com o 7 na 2, o 12 vai à 3; o 3 chega à 3 já ocupada.\n- **Pior caso da busca** [0072]: com todas as chaves numa posição, a busca percorre a lista toda: custo `n`. Ex.: no exemplo da posição 0, achar o 12 custa 4 comparações.\n\n**Como atacar:** procure o pior caso e compare as duas técnicas antes de aceitar \"nunca\" e \"sempre\"."
+      "dica": "**Cobra:** Julgar afirmações sobre colisões e comparações no hash encadeado.\n\n- **Encadeamento** [0106]: chaves da mesma posição ficam numa lista, e a colisão só aumenta essa lista. Ex.: `M = 3`: as chaves 3, 6, 9 e 12 caem na posição 0.\n- **Colisão secundária** [0107]: aglomerado em que chaves de hashes diferentes disputam as mesmas posições; é problema do endereçamento aberto. Ex.: `M = 5`, `k % 5`: com o 7 na 2, o 12 vai à 3; o 3 chega à 3 já ocupada.\n- **Pior caso da busca** [0072]: com todas as chaves numa posição, a busca percorre a lista toda: custo `n`. Ex.: no exemplo da posição 0, achar o 12 custa 4 comparações.\n\n**Como atacar:** procure o pior caso e compare as duas técnicas antes de aceitar \"nunca\" e \"sempre\".",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Colisão secundária acontece quando uma chave ocupa a vaga de outro hash e chaves de hashes diferentes passam a disputar a mesma casa. No encadeamento, uma chave de hash 2 pode acabar na lista da posição 3?"
+        },
+        {
+          "item": "II",
+          "texto": "Com `M = 3`, as chaves 3, 6, 9 e 12 caem todas na posição 0, numa lista de 4 nós. Buscar o 12 custa quantas comparações? E quanto vale log₂ 4?"
+        },
+        {
+          "item": "III",
+          "texto": "Monte um caso: sondagem linear numa tabela grande e quase vazia, em que cada chave acha a casa livre de primeira, contra um encadeamento com função ruim que joga tudo numa lista só. Quem compara menos nesse caso?"
+        }
+      ]
     },
     {
       "numero": 8,
@@ -413,7 +445,25 @@
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** Dizer quais das árvores mostradas são AVL válidas.\n\n- **Fator de balanceamento** [0101]: diferença entre as alturas das subárvores de cada nó, que numa AVL fica entre -1 e 1 em todos os nós. Ex.: raiz 30, filho direito 40, neto 50 à direita: fator -2 na raiz.\n- **ABB válida** [0099]: a AVL também é ABB, então os menores ficam à esquerda de cada nó e os maiores à direita, em toda a subárvore. Ex.: `10(15, 20)` não serve: o 15 está à esquerda do 10 e é maior.\n\n**Como atacar:** em cada árvore, verifique a ordem das chaves e o fator de cada nó."
+      "dica": "**Cobra:** Dizer quais das árvores mostradas são AVL válidas.\n\n- **Fator de balanceamento** [0101]: diferença entre as alturas das subárvores de cada nó, que numa AVL fica entre -1 e 1 em todos os nós. Ex.: raiz 30, filho direito 40, neto 50 à direita: fator -2 na raiz.\n- **ABB válida** [0099]: a AVL também é ABB, então os menores ficam à esquerda de cada nó e os maiores à direita, em toda a subárvore. Ex.: `10(15, 20)` não serve: o 15 está à esquerda do 10 e é maior.\n\n**Como atacar:** em cada árvore, verifique a ordem das chaves e o fator de cada nó.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Calcule a altura das subárvores em todos os nós, das folhas para cima, e o fator de cada um (esquerda menos direita). Confira também a ordem de ABB: 8 e 12 à esquerda do 15, 16 e 25 à direita."
+        },
+        {
+          "item": "II",
+          "texto": "As chaves são letras, então olhe o formato. B e E têm um filho só: esse filho tem neto embaixo? Calcule o fator de B, E, C e da raiz A."
+        },
+        {
+          "item": "III",
+          "texto": "Os nós com um filho só pedem atenção: o 10 tem apenas o filho direito. Quanto mede a subárvore de cada lado do 10? Depois calcule o fator do 6, do 3 e da raiz 8."
+        },
+        {
+          "item": "IV",
+          "texto": "Há três nós com um filho só: 2, 5 e 9. Calcule o fator de cada um, depois o de 4 e 12, e por fim o do 8, comparando a altura das duas metades."
+        }
+      ]
     },
     {
       "numero": 9,
@@ -503,7 +553,25 @@
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** Dizer quais das árvores mostradas são árvores binárias de pesquisa.\n\n- **ABB** [0099]: todo nó da subárvore esquerda é menor que a raiz dela, e todo nó da direita é maior. Ex.: `6(2, 9)` é ABB.\n- **Subárvore inteira** [0099]: olhar só pai e filho não basta: cada nó precisa respeitar todos os ancestrais. Ex.: `20(10(5, 25), 30)`: o 25 está à esquerda do 20 e é maior que ele.\n\n**Como atacar:** em cada árvore, confira cada nó contra todos os seus ancestrais."
+      "dica": "**Cobra:** Dizer quais das árvores mostradas são árvores binárias de pesquisa.\n\n- **ABB** [0099]: todo nó da subárvore esquerda é menor que a raiz dela, e todo nó da direita é maior. Ex.: `6(2, 9)` é ABB.\n- **Subárvore inteira** [0099]: olhar só pai e filho não basta: cada nó precisa respeitar todos os ancestrais. Ex.: `20(10(5, 25), 30)`: o 25 está à esquerda do 20 e é maior que ele.\n\n**Como atacar:** em cada árvore, confira cada nó contra todos os seus ancestrais.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Confira cada nó contra todos os ancestrais, não só contra o pai: o 12 está à esquerda do 15 e à direita do 10; o 16 está à direita do 15 e à esquerda do 20. Os dois respeitam as duas regras?"
+        },
+        {
+          "item": "II",
+          "texto": "Use a ordem alfabética e teste cada letra contra todos os ancestrais. O filho esquerdo da raiz vem antes ou depois de A no alfabeto? E o D, que está na subárvore esquerda de A?"
+        },
+        {
+          "item": "III",
+          "texto": "O nó mais fundo da direita é o 13: ele está à direita do 8, à direita do 10 e à esquerda do 14. Compare-o com os três. Faça o mesmo com o 7, que está à esquerda do 8 e à direita do 3 e do 6."
+        },
+        {
+          "item": "IV",
+          "texto": "Teste os nós mais fundos: o 7 (sob o 4 e o 5) diante do 8; o 10 (sob o 12 e o 9) diante do 8, do 12 e do 9; o 3 diante do 2, do 4 e do 8. Cada um fica do lado certo de todos?"
+        }
+      ]
     },
     {
       "numero": 11,
@@ -700,7 +768,25 @@
           "modulo": "15-hash.md"
         }
       ],
-      "dica": "**Cobra:** Julgar afirmações sobre hash linear, sem encadeamento.\n\n- **Endereçamento aberto** [0107]: na colisão, procura outra posição livre da própria tabela por sondagem, em vez de guardar listas. Ex.: `M = 7`, `k % 7`: o 9 vai à 2; o 16 acha a 2 ocupada e vai à 3.\n- **Busca no hash** [0105]: recalcula a posição da chave e repete a sondagem até achar a chave ou uma posição vazia; não usa busca binária. Ex.: buscar 16 acima: posição 2 (é o 9), posição 3 (é o 16), achou.\n- **Tabela de tamanho fixo** [0107]: a tabela é um vetor com `M` posições, definido de antemão. Ex.: `M = 7`: no máximo 7 chaves.\n\n**Como atacar:** julgue cada afirmação sozinha e confira o tratamento da colisão."
+      "dica": "**Cobra:** Julgar afirmações sobre hash linear, sem encadeamento.\n\n- **Endereçamento aberto** [0107]: na colisão, procura outra posição livre da própria tabela por sondagem, em vez de guardar listas. Ex.: `M = 7`, `k % 7`: o 9 vai à 2; o 16 acha a 2 ocupada e vai à 3.\n- **Busca no hash** [0105]: recalcula a posição da chave e repete a sondagem até achar a chave ou uma posição vazia; não usa busca binária. Ex.: buscar 16 acima: posição 2 (é o 9), posição 3 (é o 16), achou.\n- **Tabela de tamanho fixo** [0107]: a tabela é um vetor com `M` posições, definido de antemão. Ex.: `M = 7`: no máximo 7 chaves.\n\n**Como atacar:** julgue cada afirmação sozinha e confira o tratamento da colisão.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Com `M = 7` e `k % 7`, o 9 está na posição 2 e o 16 também cai na 2. Na sondagem linear, qual a próxima posição que o 16 tenta: a 0 ou a 3?"
+        },
+        {
+          "item": "II",
+          "texto": "Busca binária exige vetor ordenado. Numa tabela com 9 na posição 2, 16 na 3 e 4 na 4, as chaves estão em ordem? E para achar o 16, a busca começa pelo meio da tabela ou pela posição `16 % 7`?"
+        },
+        {
+          "item": "III",
+          "texto": "Inserir, buscar e remover precisam chegar à mesma casa: calculam `h(k)` e sondam do mesmo jeito. Se a remoção usasse outra função, ela acharia a chave onde a inserção a pôs? Uma única `h(k) = k % M` dá conta das três operações?"
+        },
+        {
+          "item": "IV",
+          "texto": "No endereçamento aberto, todas as chaves moram nas `M` casas do próprio vetor, sem lista pendurada. Com `M = 7`, onde ficaria a 8ª chave?"
+        }
+      ]
     },
     {
       "numero": 15,
@@ -750,7 +836,25 @@
           "modulo": "28-estruturas-complementos.md"
         }
       ],
-      "dica": "**Cobra:** Julgar afirmações sobre hash linear versus hash encadeado.\n\n- **Encadeamento** [0106]: colisão acrescenta a chave à lista da própria posição, e a tabela aceita mais chaves que posições. Ex.: `M = 5`, 8 chaves: `α = 1,6`.\n- **Endereçamento aberto** [0107]: colisão leva a chave para outra posição livre da tabela, e o total de chaves não passa de `M`. Ex.: o 8 colide com o 3 na posição 3 e vai à 4.\n- **Hash duplo** [0179]: segunda função define o passo da sondagem, e só existe no endereçamento aberto. Ex.: `M = 7`, `h1 = k % 7`, `h2 = 1 + k % 5`, `k = 22`: tenta as posições 1, 4, 0.\n\n**Como atacar:** para cada afirmação, pergunte a qual técnica ela se refere."
+      "dica": "**Cobra:** Julgar afirmações sobre hash linear versus hash encadeado.\n\n- **Encadeamento** [0106]: colisão acrescenta a chave à lista da própria posição, e a tabela aceita mais chaves que posições. Ex.: `M = 5`, 8 chaves: `α = 1,6`.\n- **Endereçamento aberto** [0107]: colisão leva a chave para outra posição livre da tabela, e o total de chaves não passa de `M`. Ex.: o 8 colide com o 3 na posição 3 e vai à 4.\n- **Hash duplo** [0179]: segunda função define o passo da sondagem, e só existe no endereçamento aberto. Ex.: `M = 7`, `h1 = k % 7`, `h2 = 1 + k % 5`, `k = 22`: tenta as posições 1, 4, 0.\n\n**Como atacar:** para cada afirmação, pergunte a qual técnica ela se refere.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Com `M = 5`, tente guardar 8 chaves nas duas técnicas. No encadeamento, as listas crescem. No linear, cada chave ocupa uma casa do vetor: onde fica a 6ª?"
+        },
+        {
+          "item": "II",
+          "texto": "No encadeamento, a chave que colide na posição 3 entra na lista da posição 3. A técnica que procura a posição livre mais próxima guarda as chaves em listas ou nas casas do próprio vetor?"
+        },
+        {
+          "item": "III",
+          "texto": "No hash linear, as chaves ficam no mesmo vetor, e a sondagem anda de uma casa para a vizinha. Isso é guardar em espaços separados de memória? Qual técnica espalha nós por endereços diferentes, alocados um a um?"
+        },
+        {
+          "item": "IV",
+          "texto": "A segunda função de hash define o passo da sondagem: com `M = 7`, `h1 = k % 7` e `h2 = 1 + k % 5`, o 22 tenta as posições 1, 4 e 0. Sondar outra casa faz sentido na técnica com uma lista em cada posição ou na que guarda tudo no vetor?"
+        }
+      ]
     },
     {
       "numero": 16,

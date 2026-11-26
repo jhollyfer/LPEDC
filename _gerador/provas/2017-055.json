@@ -181,7 +181,25 @@
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** ler uma árvore binária de busca e dizer quem é irmão, quem é raiz e onde um valor novo entraria.\n\n- **Irmãos e raiz** [0097]: irmãos são nós com o mesmo pai; a raiz é o único nó sem pai, então só existe uma. Ex.: na árvore 5 com filhos 3 e 8, o 3 e o 8 são irmãos e o 5 é a única raiz.\n- **Inserção na BST** [0099]: o valor novo desce comparando como numa busca e vira folha na primeira posição vazia em que a busca terminaria. Ex.: inserir 4 em 5 (filhos 3 e 8): 4 < 5, 4 > 3, vira filho direito do 3.\n\n**Como atacar:** simule a descida de cada valor novo a partir da raiz e confira quem é pai de quem."
+      "dica": "**Cobra:** ler uma árvore binária de busca e dizer quem é irmão, quem é raiz e onde um valor novo entraria.\n\n- **Irmãos e raiz** [0097]: irmãos são nós com o mesmo pai; a raiz é o único nó sem pai, então só existe uma. Ex.: na árvore 5 com filhos 3 e 8, o 3 e o 8 são irmãos e o 5 é a única raiz.\n- **Inserção na BST** [0099]: o valor novo desce comparando como numa busca e vira folha na primeira posição vazia em que a busca terminaria. Ex.: inserir 4 em 5 (filhos 3 e 8): 4 < 5, 4 > 3, vira filho direito do 3.\n\n**Como atacar:** simule a descida de cada valor novo a partir da raiz e confira quem é pai de quem.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Irmãos são nós com o mesmo pai. Quem é o pai do 6? E o pai do 8?"
+        },
+        {
+          "item": "II",
+          "texto": "A raiz é o nó sem pai. O 4 tem pai? Quantos nós dessa árvore não têm pai?"
+        },
+        {
+          "item": "III",
+          "texto": "Desça com o 3 comparando a cada nó: 3 contra 5, depois contra 2, depois contra 4. Em qual posição vazia a descida termina?"
+        },
+        {
+          "item": "IV",
+          "texto": "Desça com o 1: compare com o 5 e depois com o 2. Que lado ele toma em cada nó, e onde para?"
+        }
+      ]
     },
     {
       "numero": 5,
@@ -265,7 +283,25 @@
           "modulo": "15-hash.md"
         }
       ],
-      "dica": "**Cobra:** calcular a posição de cada chave numa tabela hash com encadeamento e conferir quem colidiu onde.\n\n- **Método da divisão** [0105]: `h(k) = k mod m` devolve o resto da divisão da chave pelo tamanho da tabela. Ex.: com `m = 11`, a chave de posição 14 vai para o índice 3 e a de posição 11, para o 0.\n- **Encadeamento** [0106]: cada balde guarda uma lista; chaves com o mesmo índice ficam na mesma lista, e a tabela nunca enche. Ex.: com `m = 5`, as chaves 7 e 12 (índice 2) ficam juntas na lista do balde 2.\n\n**Como atacar:** calcule posição mod 11 de cada letra e agrupe por índice, sem esquecer a letra de posição 11 ou 22."
+      "dica": "**Cobra:** calcular a posição de cada chave numa tabela hash com encadeamento e conferir quem colidiu onde.\n\n- **Método da divisão** [0105]: `h(k) = k mod m` devolve o resto da divisão da chave pelo tamanho da tabela. Ex.: com `m = 11`, a chave de posição 14 vai para o índice 3 e a de posição 11, para o 0.\n- **Encadeamento** [0106]: cada balde guarda uma lista; chaves com o mesmo índice ficam na mesma lista, e a tabela nunca enche. Ex.: com `m = 5`, as chaves 7 e 12 (índice 2) ficam juntas na lista do balde 2.\n\n**Como atacar:** calcule posição mod 11 de cada letra e agrupe por índice, sem esquecer a letra de posição 11 ou 22.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Tabele `posição mod 11` das 15 letras. Para cair no índice 6, a letra precisa ter posição 6 ou 17 no alfabeto (F ou Q). Alguma das duas está na lista de chaves?"
+        },
+        {
+          "item": "II",
+          "texto": "K é a 11ª letra do alfabeto. Quanto dá 11 mod 11?"
+        },
+        {
+          "item": "III",
+          "texto": "Calcule as duas: B é a 2ª letra e N é a 14ª. Que índice cada uma recebe? Colidir é cair no mesmo índice."
+        },
+        {
+          "item": "IV",
+          "texto": "Vão ao índice 9 as letras de posição 9 ou 20 no alfabeto, I e T. Quais delas estão na lista de chaves?"
+        }
+      ]
     },
     {
       "numero": 7,
@@ -437,7 +473,25 @@
           "modulo": "22-arvores-avancadas.md"
         }
       ],
-      "dica": "**Cobra:** as diferenças entre árvore B e árvore binária: filhos por nó, nível das folhas e custo do balanceamento.\n\n- **Grau mínimo t** [0146]: todo nó, menos a raiz, tem de `t - 1` a `2t - 1` chaves; um nó com `k` chaves tem `k + 1` filhos. Ex.: com `t = 2`, cada nó tem de 2 a 4 filhos, e a raiz pode ter só 1 chave.\n- **Folhas no mesmo nível** [0146]: a divisão e a junção de nós mantêm todas as folhas à mesma profundidade. Ex.: dividir a raiz cheia cria uma raiz nova e todas as folhas descem um nível.\n- **Nós gordos e disco** [0146]: cada nó ocupa um bloco do disco, e a altura `h ≤ log_t((n + 1) / 2)` pequena significa poucas leituras. Ex.: com `t = 100` e 1 milhão de chaves, a altura é no máximo 2.\n\n**Como atacar:** compare cada afirmação com a regra do grau mínimo e com o que a divisão faz."
+      "dica": "**Cobra:** as diferenças entre árvore B e árvore binária: filhos por nó, nível das folhas e custo do balanceamento.\n\n- **Grau mínimo t** [0146]: todo nó, menos a raiz, tem de `t - 1` a `2t - 1` chaves; um nó com `k` chaves tem `k + 1` filhos. Ex.: com `t = 2`, cada nó tem de 2 a 4 filhos, e a raiz pode ter só 1 chave.\n- **Folhas no mesmo nível** [0146]: a divisão e a junção de nós mantêm todas as folhas à mesma profundidade. Ex.: dividir a raiz cheia cria uma raiz nova e todas as folhas descem um nível.\n- **Nós gordos e disco** [0146]: cada nó ocupa um bloco do disco, e a altura `h ≤ log_t((n + 1) / 2)` pequena significa poucas leituras. Ex.: com `t = 100` e 1 milhão de chaves, a altura é no máximo 2.\n\n**Como atacar:** compare cada afirmação com a regra do grau mínimo e com o que a divisão faz.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Com grau mínimo `t = 2`, um nó que não é raiz tem de 1 a 3 chaves, ou seja, de 2 a 4 filhos, e a raiz pode ter uma chave só. Quantos filhos tem essa raiz? E uma folha, quantos filhos tem?"
+        },
+        {
+          "item": "II",
+          "texto": "O nó da árvore B costuma ter um campo `folha`, porque ela guarda muitos ponteiros por nó. O nó de uma AVL tem chave, dois ponteiros e a altura: onde estaria um campo desses nele?"
+        },
+        {
+          "item": "III",
+          "texto": "Na árvore B, quando a raiz cheia se divide, nasce uma raiz nova e todas as folhas descem um nível juntas. Depois disso, pode haver uma folha no nível 1 e outra no nível 3?"
+        },
+        {
+          "item": "IV",
+          "texto": "Dividir um nó cheio mexe só nele e no pai, e com `t = 100` e 1 milhão de chaves a altura fica em no máximo 2. Para que tipo de memória a árvore B foi pensada: a que lê dado a dado ou a que lê bloco a bloco?"
+        }
+      ]
     },
     {
       "numero": 11,
@@ -487,7 +541,21 @@
           "modulo": "15-hash.md"
         }
       ],
-      "dica": "**Cobra:** comparar a lista encadeada com o vetor ordenado na busca e saber onde ela é usada.\n\n- **Busca em lista encadeada** [0076]: só dá para andar nó a nó a partir da cabeça, então a busca é O(n), mesmo com a lista ordenada. Ex.: achar o 9 em `2 → 4 → 9` exige passar pelo 2 e pelo 4.\n- **Busca binária no vetor** [0090]: acessa o meio por índice e descarta metade, em O(log n) no pior caso. Ex.: com 1000 elementos, cerca de 10 comparações, contra até 1000 na lista.\n- **Lista dentro do hash** [0106]: o encadeamento usa uma lista por balde para guardar as chaves que colidem. Ex.: o balde 3 de `k % 10` guarda `13 → 23 → 33`.\n\n**Como atacar:** compare o pior caso de cada estrutura e desconfie de \"unicamente\"."
+      "dica": "**Cobra:** comparar a lista encadeada com o vetor ordenado na busca e saber onde ela é usada.\n\n- **Busca em lista encadeada** [0076]: só dá para andar nó a nó a partir da cabeça, então a busca é O(n), mesmo com a lista ordenada. Ex.: achar o 9 em `2 → 4 → 9` exige passar pelo 2 e pelo 4.\n- **Busca binária no vetor** [0090]: acessa o meio por índice e descarta metade, em O(log n) no pior caso. Ex.: com 1000 elementos, cerca de 10 comparações, contra até 1000 na lista.\n- **Lista dentro do hash** [0106]: o encadeamento usa uma lista por balde para guardar as chaves que colidem. Ex.: o balde 3 de `k % 10` guarda `13 → 23 → 33`.\n\n**Como atacar:** compare o pior caso de cada estrutura e desconfie de \"unicamente\".",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Pior caso na lista: a chave está no último nó, e você compara com os `n`. Pior caso no vetor ordenado com busca binária: com 1.000 elementos, cerca de 10 comparações. Qual número é menor?"
+        },
+        {
+          "item": "II",
+          "texto": "A lista também implementa pilha, fila e lista de adjacência de grafo. E buscar nela custa `O(n)`, contra `O(log n)` numa ABB balanceada. Qual das duas busca mais rápido?"
+        },
+        {
+          "item": "III",
+          "texto": "No hash por encadeamento, o balde 3 de `k % 10` guarda `13 → 23 → 33`. Que estrutura é essa pendurada no balde?"
+        }
+      ]
     },
     {
       "numero": 12,
@@ -641,7 +709,21 @@
           "modulo": "13-busca-e-ordenacao.md"
         }
       ],
-      "dica": "**Cobra:** o custo da busca sequencial e da binária, e se a lista encadeada muda o número de comparações.\n\n- **Busca sequencial** [0089]: percorre da primeira posição em diante; no pior caso olha os `n` elementos, e a posição da chave decide o custo. Ex.: achar o 2 em `5 7 9 2` custa 4 comparações.\n- **Busca binária** [0090]: exige vetor ordenado e custa O(log₂ n), pois cada passo descarta metade. Ex.: com 8 elementos, no máximo 4 comparações.\n- **Lista encadeada** [0076]: só se anda nó a nó, na ordem em que foram ligados, então a busca sequencial nela percorre os elementos na ordem da inserção. Ex.: em `4 → 9 → 1`, achar o 1 passa pelo 4 e pelo 9.\n\n**Como atacar:** calcule o pior e o melhor caso de cada busca e confira se a afirmação diz \"sempre\"."
+      "dica": "**Cobra:** o custo da busca sequencial e da binária, e se a lista encadeada muda o número de comparações.\n\n- **Busca sequencial** [0089]: percorre da primeira posição em diante; no pior caso olha os `n` elementos, e a posição da chave decide o custo. Ex.: achar o 2 em `5 7 9 2` custa 4 comparações.\n- **Busca binária** [0090]: exige vetor ordenado e custa O(log₂ n), pois cada passo descarta metade. Ex.: com 8 elementos, no máximo 4 comparações.\n- **Lista encadeada** [0076]: só se anda nó a nó, na ordem em que foram ligados, então a busca sequencial nela percorre os elementos na ordem da inserção. Ex.: em `4 → 9 → 1`, achar o 1 passa pelo 4 e pelo 9.\n\n**Como atacar:** calcule o pior e o melhor caso de cada busca e confira se a afirmação diz \"sempre\".",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Sem ordem, a chave pode estar na última posição. Com `n = 10`, `n/2 = 5`: se a chave está na posição 9, quantas posições você olhou até achá-la? Dá para pular alguma sem saber nada da ordem?"
+        },
+        {
+          "item": "II",
+          "texto": "Com o vetor ordenado, a busca binária descarta metade a cada passo: 8 elementos, até 4 comparações; 1.024, até 11. Quanto esse número cresce quando `n` dobra?"
+        },
+        {
+          "item": "III",
+          "texto": "Ponha `4, 9, 1` num vetor e numa lista `4 → 9 → 1`, na mesma ordem, e busque o 1 sequencialmente nas duas. Quantas comparações cada uma faz?"
+        }
+      ]
     },
     {
       "numero": 15,
@@ -687,7 +769,21 @@
           "modulo": "15-hash.md"
         }
       ],
-      "dica": "**Cobra:** o custo da busca e o tipo de colisão no hash por encadeamento, comparado ao endereçamento aberto.\n\n- **Encadeamento** [0106]: cada balde guarda uma lista; a busca percorre só ela, em média `α = n / m` nós, e no pior caso (tudo num balde), `n`. Ex.: 4 chaves no mesmo balde: achar a última custa 4 comparações.\n- **Colisão secundária** [0107]: no endereçamento aberto, chaves de hashes diferentes disputam as mesmas posições de sondagem; no encadeamento só dividem lista as de mesmo hash. Ex.: com `k % 11`, a chave 15 cai no 4 e vai para o 5; depois a chave 5 acha a vaga ocupada.\n- **Pior caso** [0106]: depende da função hash; uma função ruim joga tudo num balde e a busca vira O(n). Ex.: a função `k % 10` com chaves 10, 20, 30, 40 manda todas para o balde 0.\n\n**Como atacar:** desconfie de \"sempre\" e \"nunca\" e pense no pior caso de cada método."
+      "dica": "**Cobra:** o custo da busca e o tipo de colisão no hash por encadeamento, comparado ao endereçamento aberto.\n\n- **Encadeamento** [0106]: cada balde guarda uma lista; a busca percorre só ela, em média `α = n / m` nós, e no pior caso (tudo num balde), `n`. Ex.: 4 chaves no mesmo balde: achar a última custa 4 comparações.\n- **Colisão secundária** [0107]: no endereçamento aberto, chaves de hashes diferentes disputam as mesmas posições de sondagem; no encadeamento só dividem lista as de mesmo hash. Ex.: com `k % 11`, a chave 15 cai no 4 e vai para o 5; depois a chave 5 acha a vaga ocupada.\n- **Pior caso** [0106]: depende da função hash; uma função ruim joga tudo num balde e a busca vira O(n). Ex.: a função `k % 10` com chaves 10, 20, 30, 40 manda todas para o balde 0.\n\n**Como atacar:** desconfie de \"sempre\" e \"nunca\" e pense no pior caso de cada método.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Colisão secundária é chave de hash diferente disputando uma casa porque outra chave ocupou a vaga dela na sondagem. No encadeamento, uma chave de hash 4 pode ir parar na lista do balde 5?"
+        },
+        {
+          "item": "II",
+          "texto": "Com `k % 10` e as chaves 10, 20, ..., 100, as `n = 10` chaves caem todas no balde 0. Buscar o 100 custa quantas comparações? E quanto vale √10?"
+        },
+        {
+          "item": "III",
+          "texto": "Monte um caso: endereçamento aberto com a tabela quase cheia, sondando várias casas ocupadas, contra encadeamento com função boa e listas de 1 ou 2 nós. Quem compara menos nesse cenário?"
+        }
+      ]
     },
     {
       "numero": 16,
@@ -735,7 +831,25 @@
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** decidir, olhando cada árvore pronta, se ela pode ser uma AVL.\n\n- **Regra da AVL** [0101]: em todo nó, as alturas das subárvores esquerda e direita diferem de no máximo 1; olhar só a raiz não basta. Ex.: raiz com filho esquerdo e um neto à esquerda, sem filho direito, tem diferença 2 e não é AVL.\n- **AVL é uma BST** [0099]: a ordem também precisa valer: menores à esquerda, maiores à direita, em todos os nós. Ex.: raiz 10 com filho direito 7 viola a ordem, então não é AVL.\n\n**Como atacar:** em cada quadro, confira a ordem da BST e depois o fator de balanceamento de todos os nós."
+      "dica": "**Cobra:** decidir, olhando cada árvore pronta, se ela pode ser uma AVL.\n\n- **Regra da AVL** [0101]: em todo nó, as alturas das subárvores esquerda e direita diferem de no máximo 1; olhar só a raiz não basta. Ex.: raiz com filho esquerdo e um neto à esquerda, sem filho direito, tem diferença 2 e não é AVL.\n- **AVL é uma BST** [0099]: a ordem também precisa valer: menores à esquerda, maiores à direita, em todos os nós. Ex.: raiz 10 com filho direito 7 viola a ordem, então não é AVL.\n\n**Como atacar:** em cada quadro, confira a ordem da BST e depois o fator de balanceamento de todos os nós.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Calcule a altura das subárvores em todos os nós, das folhas para cima, e o fator de cada um. Confira também a ordem: 8 e 12 à esquerda do 15, 16 e 25 à direita."
+        },
+        {
+          "item": "II",
+          "texto": "Os nós com um filho só são o 23 e o 54. Calcule o fator deles, depois o do 17 e do 72, e por fim o da raiz 50. Confira também a ordem: o 67 está à direita do 54 e à esquerda do 72."
+        },
+        {
+          "item": "III",
+          "texto": "O 10 tem apenas o filho direito. Quanto mede a subárvore de cada lado dele? Depois calcule o fator do 6, do 3 e da raiz 8."
+        },
+        {
+          "item": "IV",
+          "texto": "Há três nós com um filho só: 2, 5 e 9. Calcule o fator de cada um, depois o de 4 e 12, e por fim o do 8, comparando a altura das duas metades."
+        }
+      ]
     },
     {
       "numero": 17,

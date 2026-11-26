@@ -50,6 +50,24 @@ window.PROVAS = [
      }
     ],
     "dica": "**Cobra:** Dizer se cada estado do vetor pode ser o resultado da partição do Quick sort com pivô 4.\n\n- **Partição** [0095]: separa menores e maiores em torno do pivô; dentro de cada lado a ordem depende do esquema. Ex.: pivô 5 em `5 9 2 7 1` pode dar `2 1 5 9 7` ou `1 2 5 7 9`.\n- **Pivô na posição final** [0095]: ao fim da partição o pivô ocupa o índice que terá no vetor ordenado, com menores antes e maiores depois. Ex.: em `2 1 5 9 7`, o 5 já está no índice 2, onde ficará no vetor ordenado.\n- **Valores iguais ao pivô** [0095]: o teste `<` ou `<=` decide de que lado cai um valor igual ao pivô. Ex.: com pivô 5, outro 5 pode ficar antes ou depois dele.\n\n**Como atacar:** para cada estado, veja se todo menor está de um lado e todo maior do outro.",
+    "contrapontos": [
+     {
+      "item": "I",
+      "texto": "No esquema de Lomuto o pivô fica na última posição durante toda a varredura e só sai de lá na troca final. Nesse estado, os cinco valores menores que 4 estão juntos à esquerda e os maiores logo depois deles? Que passo ainda faltaria?"
+     },
+     {
+      "item": "II",
+      "texto": "O 4 ocupa a posição 0 do vetor. As implementações comuns pegam como pivô o primeiro, o último, o do meio ou um aleatório: alguma dessas regras impede o 4?"
+     },
+     {
+      "item": "III",
+      "texto": "Conte os valores menores que 4: `1, 2, 3, 2, 3`, cinco ao todo. No vetor ordenado, em que índice o 4 fica? Compare com o índice que ele ocupa nesse estado."
+     },
+     {
+      "item": "IV",
+      "texto": "Há versões que deixam o pivô parado no índice 0 enquanto separam os outros e só o levam ao lugar dele no último passo. Atrás do 4, os menores vêm antes dos maiores nesse estado?"
+     }
+    ],
     "originais": []
    },
    {
@@ -328,6 +346,20 @@ window.PROVAS = [
      }
     ],
     "dica": "**Cobra:** Julgar três afirmações sobre busca binária: requisito, número de comparações e quando compensa.\n\n- **Busca binária** [0090]: compara a chave com o elemento do meio e descarta metade do intervalo; só funciona se o vetor está ordenado e se há acesso por índice. Ex.: em `2 5 8 11 14`, buscar 11: meio 8, vai à direita; meio 11, achou.\n- **Pior caso da busca binária** [0090]: no máximo `⌊log₂ n⌋ + 1` comparações, porque cada volta corta o intervalo ao meio. Ex.: `n = 32`: `5 + 1 = 6` comparações no máximo.\n- **Crescimento do custo** [0072]: `log n` cresce muito mais devagar que `n`, então a vantagem sobre a busca sequencial aumenta com o tamanho do vetor. Ex.: `n = 1000`: cerca de 10 passos contra até 1000.\n\n**Como atacar:** calcule `⌊log₂ n⌋ + 1` para um `n` pequeno e compare com o limite de cada afirmação.",
+    "contrapontos": [
+     {
+      "item": "i",
+      "texto": "Teste em `5 9 1`, buscando 1: o meio é 9, a busca vai para a esquerda e só vê o 5. Ela acha o 1? O que a busca binária supõe sobre a metade que descarta?"
+     },
+     {
+      "item": "ii",
+      "texto": "O pior caso da busca binária é `⌊log₂ n⌋ + 1` comparações de chave. Para `n = 16`, quanto dá essa conta, e quanto vale `2·log₂ 16`?"
+     },
+     {
+      "item": "iii",
+      "texto": "Com `n = 1000` ordenado, a sequencial pode fazer até 1000 comparações; a binária, até `⌊log₂ 1000⌋ + 1 = 10`. Cada passo da binária custa quanto a mais que um passo da sequencial?"
+     }
+    ],
     "originais": []
    },
    {
@@ -379,6 +411,28 @@ window.PROVAS = [
      }
     ],
     "dica": "**Cobra:** Achar erro de lógica ou de memória em inserção e remoção no início de uma lista encadeada.\n\n- **Ponteiro para ponteiro** [0049]: `**prim` permite à função alterar o ponteiro de início de quem chamou, algo que a passagem por valor não faz. Ex.: `*prim = novo;` troca a cabeça da lista do chamador.\n- **Remoção do primeiro nó** [0077]: guarde o endereço do nó, avance o início para o seguinte e só então libere o nó guardado. Ex.: em `4 -> 7`, guarde o 4 em `aux`, deixe a cabeça apontar o 7 e libere `aux`.\n- **Erros de memória** [0057]: usar um bloco depois de `free`, ou perder o endereço de um bloco alocado, causa comportamento indefinido ou vazamento. Ex.: `free(p); p->dado = 1;` escreve em memória já liberada.\n\n**Como atacar:** desenhe a lista e acompanhe `*prim` e o `free` linha a linha, nos dois quadros.",
+    "contrapontos": [
+     {
+      "item": "A",
+      "texto": "Rode o quadro II na lista `4 -> 7`: qual nó a linha 5 libera? Depois da linha 6, para quem `*prim` aponta, e o `prox` desse nó aponta para memória viva?"
+     },
+     {
+      "item": "B",
+      "texto": "Siga o quadro I com `insere(&prim, 9)` numa lista vazia: `aux->prox` recebe o quê, e quem passa a ser o primeiro? Se o `malloc` devolver `NULL`, o `if` deixa algo pela metade?"
+     },
+     {
+      "item": "C",
+      "texto": "Uma remoção do primeiro nó guarda o nó em `aux`, avança `*prim` e libera `aux`. Compare com as linhas 4 a 6 do quadro II: qual ponteiro vai ao `free`, e onde `*prim` termina?"
+     },
+     {
+      "item": "D",
+      "texto": "Vazamento é bloco alocado que ninguém mais aponta e que nunca vai ao `free`. No quadro II, com a lista `4 -> 7 -> 9`, o 9 continua alcançável a partir de `*prim` depois da chamada?"
+     },
+     {
+      "item": "E",
+      "texto": "No quadro I, todo bloco que o `malloc` entrega fica ligado à lista por `*prim`? E no quadro II, depois da chamada, quantos nós a lista mostra a partir do início?"
+     }
+    ],
     "originais": []
    },
    {
@@ -426,6 +480,20 @@ window.PROVAS = [
      }
     ],
     "dica": "**Cobra:** Julgar afirmações sobre colisões, capacidade e custo do hash por encadeamento.\n\n- **Encadeamento** [0106]: cada posição da tabela guarda uma lista de chaves, então cabem mais chaves que posições; o custo médio depende do fator de carga `α = n/m`. Ex.: `m = 4` e 10 chaves: `α = 2,5`, listas de uns 2,5 nós.\n- **Colisão secundária** [0107]: no endereçamento aberto, uma chave ocupa a posição que seria de outro hash, e chaves de hashes diferentes passam a disputar o mesmo percurso. Ex.: `m = 5`, `k % 5`: 7 vai à 2; 12 vai à 3; o 3 chega à posição 3 e a acha ocupada, sem ter hash 2.\n- **Função hash bem projetada** [0105]: espalha as chaves de modo uniforme; com `α` limitado, listas curtas e custo médio constante por operação. Ex.: `n = 100` chaves em `m = 100` posições: listas de tamanho médio 1.\n\n**Como atacar:** para cada afirmação, pergunte se ela descreve o encadeamento ou o endereçamento aberto.",
+    "contrapontos": [
+     {
+      "item": "I",
+      "texto": "Colisão secundária é o nome que o endereçamento aberto dá a chaves de hashes diferentes disputando o mesmo percurso de sondagem. No encadeamento, a chave que colide sai alguma vez da lista do seu próprio balde?"
+     },
+     {
+      "item": "II",
+      "texto": "Tabela de `m = 4` posições, `k % 4`, encadeamento, e chegam 10 chaves. A 5ª, a 6ª e as seguintes vão para onde: para outra posição da tabela ou para um nó a mais na lista de algum balde?"
+     },
+     {
+      "item": "III",
+      "texto": "Com boa função hash e `α = n/m` limitado, cada lista tem em média uns `α` nós. Inserir no início de uma lista custa quantos passos, seja `m` igual a 10 ou a 1 milhão?"
+     }
+    ],
     "originais": []
    },
    {
@@ -524,6 +592,20 @@ window.PROVAS = [
      }
     ],
     "dica": "**Cobra:** Julgar afirmações sobre ordem das chaves, busca esperada e espaço do hash encadeado.\n\n- **Hash e ordem** [0105]: a posição vem da função hash, não do valor, então a tabela não guarda as chaves em ordem de valor nem de chegada. Ex.: `m = 3`, `k % 3`, inserir `8, 4, 6`: lida da posição 0 à 2, a tabela dá `6 4 8`.\n- **Busca esperada no encadeamento** [0106]: com boa função hash e tabela proporcional ao número de chaves, cada lista é curta e a busca esperada custa `O(1)`. Ex.: `n = 1000` e `m = 1000`: lista média de 1 nó.\n- **Árvore B** [0146]: cada nó guarda várias chaves ordenadas e seus filhos, com ocupação mínima de metade; a busca custa `O(log n)`. Ex.: com grau mínimo 2, cada nó tem de 1 a 3 chaves.\n\n**Como atacar:** separe o que vale sempre do que depende da implementação, e compare o espaço de cada estrutura.",
+    "contrapontos": [
+     {
+      "item": "I",
+      "texto": "`m = 3`, `k % 3`, inserir `8, 4, 6`. Lendo os baldes de 0 a 2, sai `6 4 8`. Para listar as chaves em ordem crescente, a tabela basta ou você precisa ordenar depois? Compare com o percurso em ordem de uma árvore de busca."
+     },
+     {
+      "item": "II",
+      "texto": "A busca esperada no encadeamento custa `O(1 + α)`, com `α = n/m`. Com `n = 1000` chaves e `m = 1000` baldes, quantos nós tem a lista média que você percorre?"
+     },
+     {
+      "item": "III",
+      "texto": "Hash encadeado com `n` chaves: `m` ponteiros de balde e um `prox` por nó. Árvore B de grau mínimo `t`: cada nó reserva `2t-1` chaves e `2t` filhos e pode estar só pela metade. Qual sobra mais depende de quê: de `m`, de `t`, da ocupação?"
+     }
+    ],
     "originais": []
    },
    {
@@ -671,6 +753,20 @@ window.PROVAS = [
      }
     ],
     "dica": "**Cobra:** Julgar se busca e inserção em ABB precisam ser recursivas e qual o custo da busca.\n\n- **Definição recursiva da árvore** [0097]: uma árvore binária é uma raiz com duas subárvores que também são árvores binárias, mas isso não obriga o código a usar recursão. Ex.: uma subárvore vazia é `NULL`, o caso base.\n- **Busca e inserção na ABB** [0099]: descem comparando a chave com cada nó, e um laço com um ponteiro `p` que desce faz o mesmo trabalho que a recursão. Ex.: `while (p && p->chave != k) p = k < p->chave ? p->esq : p->dir;`.\n- **Altura e custo** [0072]: o custo é a altura: `O(log n)` se a árvore está equilibrada, `O(n)` se degenerada. Ex.: ABB equilibrada com 1 023 nós tem altura 10; em cadeia, 1 023.\n\n**Como atacar:** desconfie de \"impossível\": pergunte se existe versão com laço e quando a altura é `log n`.",
+    "contrapontos": [
+     {
+      "item": "I",
+      "texto": "A busca desce um único caminho, da raiz até achar a chave ou chegar em `NULL`. Um ponteiro `p` e um `while` que troca `p` por `p->esq` ou `p->dir` fazem esse percurso sem chamar a função de novo?"
+     },
+     {
+      "item": "II",
+      "texto": "Na inserção você desce como na busca, guardando o pai de `p`. Ao chegar em `NULL`, o que falta além de pendurar o nó novo como `esq` ou `dir` desse pai? Algum desses passos exige a pilha de chamadas?"
+     },
+     {
+      "item": "III",
+      "texto": "Inserir `50 30 70 20 40 60 80` dá altura 3; inserir `10 20 30 40 50 60 70` dá uma cadeia de altura 7. Com chaves chegando em ordem aleatória, qual dos dois desenhos costuma aparecer?"
+     }
+    ],
     "originais": []
    },
    {
@@ -765,6 +861,20 @@ window.PROVAS = [
      }
     ],
     "dica": "**Cobra:** Julgar afirmações sobre busca num vetor não ordenado de chaves únicas.\n\n- **Busca binária** [0090]: só dá resposta certa em vetor ordenado, porque descartar metade do intervalo pressupõe que a metade descartada não tem a chave. Ex.: em `5 9 1`, buscar 1: o meio é 9, vai à esquerda e só vê o 5: conclui que não existe.\n- **Busca sequencial** [0089]: funciona em qualquer vetor, e no pior caso compara a chave com as `n` posições. Ex.: vetor de 1000 posições: até 1000 comparações.\n- **Custo de ordenar antes** [0072]: ordenar custa em torno de `n log n`; para uma única busca, isso supera o custo de varrer o vetor. Ex.: `n = 1000`: ordenar custa cerca de 10 000 passos; varrer, até 1 000.\n\n**Como atacar:** teste cada afirmação com um vetor pequeno e desordenado.",
+    "contrapontos": [
+     {
+      "item": "I",
+      "texto": "Para usar a binária num vetor não ordenado, você teria de ordenar antes, uns `n log n` passos. Para uma única busca em 1000 elementos, compare cerca de 10 000 passos de ordenação com até 1000 comparações da sequencial."
+     },
+     {
+      "item": "II",
+      "texto": "Em `5 9 1`, busque o 1 com a busca binária: o meio é 9, `1 < 9`, ela vai à esquerda e só sobra o 5. O que ela responde? E se buscar o 5?"
+     },
+     {
+      "item": "III",
+      "texto": "A sequencial olha uma posição por vez, sem supor nada da ordem. Se a chave não está num vetor de 1000 posições, quantas comparações ela faz até responder?"
+     }
+    ],
     "originais": []
    },
    {
@@ -812,6 +922,20 @@ window.PROVAS = [
      }
     ],
     "dica": "**Cobra:** Julgar afirmações sobre comparações, passadas e espaço extra do Radix sort.\n\n- **Radix sort** [0121]: ordena dígito a dígito, do menos significativo ao mais, usando uma ordenação estável por dígito, sem comparar uma chave com outra. Ex.: `53 21 47`: unidades dão `21 53 47`; dezenas dão `21 47 53`.\n- **Passadas** [0121]: uma por dígito do maior valor na base escolhida; o número de passadas vem dos dígitos, não de `n`. Ex.: o maior valor é 830: 3 passadas, em base 10.\n- **Counting sort** [0120]: conta quantas vezes cada dígito aparece e usa um vetor de saída do tamanho do vetor mais os contadores. Ex.: `n = 1000`, base 10: 1000 posições de saída e 10 contadores.\n\n**Como atacar:** por afirmação: compara chaves? de que dependem as passadas? precisa de espaço extra?",
+    "contrapontos": [
+     {
+      "item": "I",
+      "texto": "Em base 10, cada passada do Radix distribui os números pelo dígito da vez, contando quantos caem em cada um dos 10 dígitos. Em algum momento ele pergunta se `53 < 47`?"
+     },
+     {
+      "item": "II",
+      "texto": "Vetor `5 7 830 2`: a média de dígitos é `(1+1+3+1)/4 = 1,5`. Quantas passadas o Radix precisa para que o 830 seja ordenado pelo dígito das centenas?"
+     },
+     {
+      "item": "III",
+      "texto": "Cada passada usa uma contagem estável que grava a saída num vetor auxiliar. Com `n = 1000` em base 10, quantas posições tem esse vetor, além dos 10 contadores?"
+     }
+    ],
     "originais": []
    },
    {
@@ -910,6 +1034,20 @@ window.PROVAS = [
      }
     ],
     "dica": "**Cobra:** Comparar o custo de inserção, seleção, Radix e merge sort em dois vetores de ordens diferentes.\n\n- **Seleção** [0092]: sempre faz `n(n-1)/2` comparações, seja qual for a ordem da entrada. Ex.: `n = 8`: 28 comparações, em qualquer vetor.\n- **Inserção** [0093]: o custo depende de quanto o vetor está fora de ordem: perto de `n` comparações se quase ordenado, perto de `n²/2` se invertido. Ex.: `1 2 3 4 5`: 4 comparações; `5 4 3 2 1`: 10.\n- **Radix sort** [0121]: o custo vem de `d · (n + b)`, dígitos e base, e a ordem inicial não conta. Ex.: `n = 8` números de 2 dígitos em base 10: 2 passadas sobre os 8.\n- **Merge sort** [0094]: divide ao meio e intercala, com custo `n log n` em qualquer ordem. Ex.: `n = 8`: ordem de `8 · 3 = 24` operações.\n\n**Como atacar:** conte as operações de cada algoritmo em cada vetor e veja se dependem da ordem.",
+    "contrapontos": [
+     {
+      "item": "I",
+      "texto": "VetI tem `n = 8`. A seleção faz `n(n-1)/2 = 28` comparações em qualquer vetor. Na inserção, cada elemento compara com o vizinho da esquerda e para; só o 7 anda uma casa. Conte as comparações da inserção em VetI."
+     },
+     {
+      "item": "II",
+      "texto": "Todos os valores dos dois vetores têm um dígito em base 10. Quantas passadas o Radix faz? E quantos níveis de intercalação o merge sort tem com `n = 8`?"
+     },
+     {
+      "item": "III",
+      "texto": "O Radix olha só os dígitos, nunca compara uma chave com outra. Se você embaralhar VetI, o número de passadas e de movimentos do Radix muda? E o merge sort deixa de fazer seus três níveis de intercalação em algum dos dois vetores?"
+     }
+    ],
     "originais": []
    },
    {
@@ -961,6 +1099,20 @@ window.PROVAS = [
      }
     ],
     "dica": "**Cobra:** Julgar afirmações sobre maior elemento, inversão de vetor e a fama do Quick sort.\n\n- **Acesso por índice** [0038]: `v[i]` custa o mesmo em qualquer posição, porque o endereço sai de uma conta direta a partir do início do vetor. Ex.: `v[0]` e `v[999]` custam o mesmo número de operações.\n- **Troca no próprio vetor** [0038]: trocar dois elementos usa só uma variável auxiliar, sem copiar o vetor inteiro. Ex.: `t = v[i]; v[i] = v[j]; v[j] = t;`.\n- **Quick sort** [0095]: é muito rápido em média, mas o pior caso é `n²` com pivô ruim. Ex.: pivô sempre o menor elemento: partições de tamanho 0 e `n-1`.\n- **Escolha do algoritmo** [0096]: nenhum algoritmo vence em todos os tamanhos e ordens; em vetores pequenos ou quase ordenados a inserção pode ganhar. Ex.: vetor quase ordenado de 1 000 elementos: a inserção faz cerca de 1 000 comparações.\n\n**Como atacar:** procure contraexemplo para cada afirmação; \"sempre\" e \"qualquer\" costumam quebrar.",
+    "contrapontos": [
+     {
+      "item": "I",
+      "texto": "Num vetor crescente de `n` posições, onde está o maior? Acessar `v[n-1]` custa mais quando `n` é 10 ou quando é 1 milhão?"
+     },
+     {
+      "item": "II",
+      "texto": "Inverta `1 2 3 4 5 6`: troque `v[0]` com `v[5]`, `v[1]` com `v[4]`, `v[2]` com `v[3]`. Quantas trocas foram, e você usou algo além de uma variável auxiliar?"
+     },
+     {
+      "item": "III",
+      "texto": "Vetor quase ordenado de 1000 elementos: a inserção faz perto de 1000 comparações. O Quicksort com pivô no primeiro elemento, num vetor já ordenado, cai em partições de tamanho 0 e `n-1`: quantas comparações, mais ou menos?"
+     }
+    ],
     "originais": []
    }
   ]
@@ -1344,6 +1496,28 @@ window.PROVAS = [
      }
     ],
     "dica": "**Cobra:** Acompanhar dados passando de uma pilha para uma fila e de volta.\n\n- **Pilha** [0082]: LIFO: o último a entrar é o primeiro a sair, sempre pelo topo. Ex.: empilhar `a, b` e desempilhar devolve `b`.\n- **Fila** [0085]: FIFO: o primeiro a entrar é o primeiro a sair, e o começo da fila é o mais antigo. Ex.: enfileirar `a, b` e retirar devolve `a`.\n\n**Como atacar:** simule cada passo no papel, sem pular retirada, e compare com cada listagem.",
+    "contrapontos": [
+     {
+      "item": "I",
+      "texto": "No passo 2, a primeira retirada da pilha leva o topo, o último dado empilhado no passo 1. Ele entra na fila antes ou depois dos outros? Quem fica no começo da fila?"
+     },
+     {
+      "item": "II",
+      "texto": "No passo 4, quem sai primeiro da fila vai para o fundo da pilha, e o último a sair fica no topo. Qual valor estava no fim da fila do passo 3?"
+     },
+     {
+      "item": "III",
+      "texto": "O topo da pilha final é o último elemento empilhado no passo 4, ou seja, o último que saiu da fila. Esse valor é o 10 ou o 11?"
+     },
+     {
+      "item": "IV",
+      "texto": "A fila do passo 3 recebe os elementos na ordem em que saem da pilha. Qual sai primeiro de uma pilha em que o 11 entrou primeiro e o 10 por último?"
+     },
+     {
+      "item": "V",
+      "texto": "Leia a pilha final do topo para baixo e compare com a sequência de entrada `11, 12, 23, ..., 10`. Esvaziar uma pilha numa fila inverte a ordem uma vez; esvaziar a fila de volta numa pilha faz o quê?"
+     }
+    ],
     "originais": []
    },
    {
@@ -1434,6 +1608,20 @@ window.PROVAS = [
      }
     ],
     "dica": "**Cobra:** Julgar afirmações sobre hash linear, sem encadeamento.\n\n- **Endereçamento aberto** [0107]: tudo fica dentro da tabela: na colisão, procura outra posição livre por sondagem, sem tirar a chave que já estava. Ex.: `M = 4`, `k % 4`: o 5 vai à 1; o 9 acha a 1 ocupada e vai à 2.\n- **Uma função hash** [0105]: uma função dá a posição inicial; as seguintes, na sondagem linear, são a vizinha de cada tentativa. Ex.: posições `h(k)`, `h(k)+1`, `h(k)+2`, todas módulo `M`.\n- **Tabela cheia** [0107]: a tabela tem `M` posições e cada uma guarda uma chave, então não cabem mais que `M` chaves. Ex.: `M = 4` com 4 chaves: a 5ª não entra.\n\n**Como atacar:** julgue cada afirmação sozinha e confira o que acontece com a chave na colisão.",
+    "contrapontos": [
+     {
+      "item": "I",
+      "texto": "Na sondagem linear as tentativas são `h(k)`, `h(k)+1`, `h(k)+2`, todas módulo `M`. Quantas funções de hash diferentes aparecem aí? Compare com o hash duplo, que usa uma segunda função para o tamanho do salto."
+     },
+     {
+      "item": "II",
+      "texto": "`M = 4`, sem lista nenhuma: cada posição do vetor guarda uma chave. Depois de 4 inserções, para onde vai a 5ª?"
+     },
+     {
+      "item": "III",
+      "texto": "`M = 4`, `k % 4`: o 5 está na posição 1 e chega o 9. Se o 9 tomasse o lugar do 5, uma busca pelo 5 depois encontraria o quê?"
+     }
+    ],
     "originais": []
    },
    {
@@ -1529,6 +1717,20 @@ window.PROVAS = [
      }
     ],
     "dica": "**Cobra:** Julgar afirmações sobre hash linear e hash encadeado.\n\n- **Hash encadeado** [0106]: cada posição guarda uma lista; na colisão a chave entra na lista da própria posição, e cabem mais chaves que posições. Ex.: `M = 5` e 8 chaves: `α = 1,6`, com listas nas posições.\n- **Hash linear** [0107]: é endereçamento aberto: na colisão a chave vai à posição livre mais próxima, e o total de chaves não passa de `M`. Ex.: `M = 5`: a 6ª chave não tem onde entrar.\n- **Fator de carga** [0105]: `α = n / m` mede o aperto da tabela e decide o custo médio. Ex.: 5 chaves em 7 posições: `α ≈ 0,71`.\n\n**Como atacar:** para cada afirmação, pergunte de qual das duas técnicas ela fala.",
+    "contrapontos": [
+     {
+      "item": "I",
+      "texto": "Em disco, ler blocos vizinhos é barato e saltar para outro bloco é caro. No hash encadeado, os nós de uma lista ficam lado a lado ou onde houver espaço livre quando cada um foi alocado? E na sondagem linear, onde fica a chave que colidiu?"
+     },
+     {
+      "item": "II",
+      "texto": "`M = 5` e 8 chaves. No encadeamento os baldes viram listas. No linear, cada posição do vetor guarda uma chave só: onde entraria a 6ª?"
+     },
+     {
+      "item": "III",
+      "texto": "Encadeamento, `M = 5`, `k % 5`: o 7 está no balde 2 e chega o 12. Ele vai para a lista do balde 2 ou para o balde 3, que está vazio? Qual das duas técnicas procura a posição livre mais próxima?"
+     }
+    ],
     "originais": []
    },
    {
@@ -1686,6 +1888,24 @@ window.PROVAS = [
      }
     ],
     "dica": "**Cobra:** Apontar as afirmações incorretas sobre estabilidade, pior caso, espaço extra e sensibilidade à entrada.\n\n- **Estabilidade** [0096]: um algoritmo é estável quando elementos de chave igual mantêm a ordem relativa que tinham. Ex.: `2a 2b 1`: estável dá `1 2a 2b`; instável pode dar `1 2b 2a`.\n- **Pior caso** [0095]: inserção e Quick sort chegam a `n²` (entrada invertida; pivô ruim); merge sort e heapsort ficam em `n log n`. Ex.: inserção em `5 4 3 2 1`: 10 comparações, perto de `n²/2`.\n- **Espaço extra** [0168]: memória usada além do vetor: merge sort usa um vetor auxiliar de `n`; os que ordenam no lugar usam `O(1)`. Ex.: `n = 1000`: merge sort, 1000 posições extras.\n- **Sensibilidade à entrada** [0093]: o custo do algoritmo muda ou não com a ordem inicial dos dados. Ex.: inserção: 4 comparações em `1 2 3 4 5`, 10 em `5 4 3 2 1`.\n\n**Como atacar:** monte uma tabela de estável, pior caso, espaço e sensibilidade à ordem.",
+    "contrapontos": [
+     {
+      "item": "I",
+      "texto": "Simule a partição de Lomuto em `2a 2b 1`, com pivô o último (o 1): nenhum 2 é menor que 1, e a troca final leva o 1 para a posição 0. Em que ordem ficaram os dois 2?"
+     },
+     {
+      "item": "II",
+      "texto": "Conte as comparações da inserção em `5 4 3 2 1`. E no Quicksort com pivô sempre o menor elemento, as partições têm tamanho 0 e `n-1`: quantos níveis de recursão isso dá?"
+     },
+     {
+      "item": "III",
+      "texto": "O heapsort monta o heap dentro do próprio vetor e troca a raiz com a última posição ainda não ordenada. Além de uma variável para a troca, ele aloca alguma estrutura? Com `n = 1000`, `n²` seriam 1 000 000 posições."
+     },
+     {
+      "item": "IV",
+      "texto": "Conte as comparações da inserção em `1 2 3 4 5` e em `5 4 3 2 1`. O merge sort divide ao meio e intercala do mesmo jeito nos dois vetores?"
+     }
+    ],
     "originais": []
    },
    {
@@ -1983,6 +2203,24 @@ window.PROVAS = [
      }
     ],
     "dica": "**Cobra:** Julgar quatro sentenças sobre AVL, pilha, array versus lista e hash.\n\n- **AVL** [0101]: é uma ABB que se rebalancia sozinha com rotações depois de inserções e remoções. Ex.: inserir `1, 2, 3` numa ABB dá cadeia; numa AVL, `2(1, 3)`.\n- **Pilha** [0082]: LIFO: o acesso conceitual é só pelo topo, e o último que entrou é o primeiro que sai. Ex.: pilha `1 2 3` com 3 no topo: só o 3 pode sair agora.\n- **Lista encadeada × vetor** [0076]: vetor ocupa bloco contíguo e dá `v[i]` direto; lista usa nós ligados por ponteiros e exige percorrer até o `k`-ésimo. Ex.: o 4º elemento: `v[3]` direto; na lista, 3 saltos de `prox`.\n- **Encadeamento** [0106]: chaves com a mesma posição na tabela ficam numa mesma lista encadeada. Ex.: `M = 4`: as chaves 5 e 9 vão à posição 1.\n\n**Como atacar:** julgue cada sentença sozinha contra a definição da estrutura.",
+    "contrapontos": [
+     {
+      "item": "I",
+      "texto": "Insira `1, 2, 3` nessa ordem numa ABB comum e depois numa AVL. Que formato cada uma fica? Qual das duas mexeu na própria estrutura depois de inserir?"
+     },
+     {
+      "item": "II",
+      "texto": "Na pilha `1 2 3`, com o 3 no topo, as operações da definição são `push` e `pop`, e as duas agem no topo. Que operação da pilha tiraria o 2 sem tirar o 3 antes?"
+     },
+     {
+      "item": "III",
+      "texto": "Para ler o 4º elemento, o vetor faz `v[3]` direto; a lista segue 3 ponteiros `prox` a partir da cabeça. Os nós de uma lista ficam lado a lado na memória, como as casas do vetor?"
+     },
+     {
+      "item": "IV",
+      "texto": "Com `M = 4` e `k % 4`, as chaves 5 e 9 caem as duas na posição 1. No hash por encadeamento, onde a segunda chave fica guardada?"
+     }
+    ],
     "originais": []
    },
    {
@@ -2295,6 +2533,20 @@ window.PROVAS = [
      }
     ],
     "dica": "**Cobra:** Julgar afirmações sobre colisões e comparações no hash encadeado.\n\n- **Encadeamento** [0106]: chaves da mesma posição ficam numa lista, e a colisão só aumenta essa lista. Ex.: `M = 3`: as chaves 3, 6, 9 e 12 caem na posição 0.\n- **Colisão secundária** [0107]: aglomerado em que chaves de hashes diferentes disputam as mesmas posições; é problema do endereçamento aberto. Ex.: `M = 5`, `k % 5`: com o 7 na 2, o 12 vai à 3; o 3 chega à 3 já ocupada.\n- **Pior caso da busca** [0072]: com todas as chaves numa posição, a busca percorre a lista toda: custo `n`. Ex.: no exemplo da posição 0, achar o 12 custa 4 comparações.\n\n**Como atacar:** procure o pior caso e compare as duas técnicas antes de aceitar \"nunca\" e \"sempre\".",
+    "contrapontos": [
+     {
+      "item": "I",
+      "texto": "Colisão secundária acontece quando uma chave ocupa a vaga de outro hash e chaves de hashes diferentes passam a disputar a mesma casa. No encadeamento, uma chave de hash 2 pode acabar na lista da posição 3?"
+     },
+     {
+      "item": "II",
+      "texto": "Com `M = 3`, as chaves 3, 6, 9 e 12 caem todas na posição 0, numa lista de 4 nós. Buscar o 12 custa quantas comparações? E quanto vale log₂ 4?"
+     },
+     {
+      "item": "III",
+      "texto": "Monte um caso: sondagem linear numa tabela grande e quase vazia, em que cada chave acha a casa livre de primeira, contra um encadeamento com função ruim que joga tudo numa lista só. Quem compara menos nesse caso?"
+     }
+    ],
     "originais": []
    },
    {
@@ -2344,6 +2596,24 @@ window.PROVAS = [
      }
     ],
     "dica": "**Cobra:** Dizer quais das árvores mostradas são AVL válidas.\n\n- **Fator de balanceamento** [0101]: diferença entre as alturas das subárvores de cada nó, que numa AVL fica entre -1 e 1 em todos os nós. Ex.: raiz 30, filho direito 40, neto 50 à direita: fator -2 na raiz.\n- **ABB válida** [0099]: a AVL também é ABB, então os menores ficam à esquerda de cada nó e os maiores à direita, em toda a subárvore. Ex.: `10(15, 20)` não serve: o 15 está à esquerda do 10 e é maior.\n\n**Como atacar:** em cada árvore, verifique a ordem das chaves e o fator de cada nó.",
+    "contrapontos": [
+     {
+      "item": "I",
+      "texto": "Calcule a altura das subárvores em todos os nós, das folhas para cima, e o fator de cada um (esquerda menos direita). Confira também a ordem de ABB: 8 e 12 à esquerda do 15, 16 e 25 à direita."
+     },
+     {
+      "item": "II",
+      "texto": "As chaves são letras, então olhe o formato. B e E têm um filho só: esse filho tem neto embaixo? Calcule o fator de B, E, C e da raiz A."
+     },
+     {
+      "item": "III",
+      "texto": "Os nós com um filho só pedem atenção: o 10 tem apenas o filho direito. Quanto mede a subárvore de cada lado do 10? Depois calcule o fator do 6, do 3 e da raiz 8."
+     },
+     {
+      "item": "IV",
+      "texto": "Há três nós com um filho só: 2, 5 e 9. Calcule o fator de cada um, depois o de 4 e 12, e por fim o do 8, comparando a altura das duas metades."
+     }
+    ],
     "originais": [
      "provas-ppgi-ufam/2017-024/figuras/q08-arvores.png"
     ]
@@ -2438,6 +2708,24 @@ window.PROVAS = [
      }
     ],
     "dica": "**Cobra:** Dizer quais das árvores mostradas são árvores binárias de pesquisa.\n\n- **ABB** [0099]: todo nó da subárvore esquerda é menor que a raiz dela, e todo nó da direita é maior. Ex.: `6(2, 9)` é ABB.\n- **Subárvore inteira** [0099]: olhar só pai e filho não basta: cada nó precisa respeitar todos os ancestrais. Ex.: `20(10(5, 25), 30)`: o 25 está à esquerda do 20 e é maior que ele.\n\n**Como atacar:** em cada árvore, confira cada nó contra todos os seus ancestrais.",
+    "contrapontos": [
+     {
+      "item": "I",
+      "texto": "Confira cada nó contra todos os ancestrais, não só contra o pai: o 12 está à esquerda do 15 e à direita do 10; o 16 está à direita do 15 e à esquerda do 20. Os dois respeitam as duas regras?"
+     },
+     {
+      "item": "II",
+      "texto": "Use a ordem alfabética e teste cada letra contra todos os ancestrais. O filho esquerdo da raiz vem antes ou depois de A no alfabeto? E o D, que está na subárvore esquerda de A?"
+     },
+     {
+      "item": "III",
+      "texto": "O nó mais fundo da direita é o 13: ele está à direita do 8, à direita do 10 e à esquerda do 14. Compare-o com os três. Faça o mesmo com o 7, que está à esquerda do 8 e à direita do 3 e do 6."
+     },
+     {
+      "item": "IV",
+      "texto": "Teste os nós mais fundos: o 7 (sob o 4 e o 5) diante do 8; o 10 (sob o 12 e o 9) diante do 8, do 12 e do 9; o 3 diante do 2, do 4 e do 8. Cada um fica do lado certo de todos?"
+     }
+    ],
     "originais": [
      "provas-ppgi-ufam/2017-024/figuras/q10-arvores.png"
     ]
@@ -2641,6 +2929,24 @@ window.PROVAS = [
      }
     ],
     "dica": "**Cobra:** Julgar afirmações sobre hash linear, sem encadeamento.\n\n- **Endereçamento aberto** [0107]: na colisão, procura outra posição livre da própria tabela por sondagem, em vez de guardar listas. Ex.: `M = 7`, `k % 7`: o 9 vai à 2; o 16 acha a 2 ocupada e vai à 3.\n- **Busca no hash** [0105]: recalcula a posição da chave e repete a sondagem até achar a chave ou uma posição vazia; não usa busca binária. Ex.: buscar 16 acima: posição 2 (é o 9), posição 3 (é o 16), achou.\n- **Tabela de tamanho fixo** [0107]: a tabela é um vetor com `M` posições, definido de antemão. Ex.: `M = 7`: no máximo 7 chaves.\n\n**Como atacar:** julgue cada afirmação sozinha e confira o tratamento da colisão.",
+    "contrapontos": [
+     {
+      "item": "I",
+      "texto": "Com `M = 7` e `k % 7`, o 9 está na posição 2 e o 16 também cai na 2. Na sondagem linear, qual a próxima posição que o 16 tenta: a 0 ou a 3?"
+     },
+     {
+      "item": "II",
+      "texto": "Busca binária exige vetor ordenado. Numa tabela com 9 na posição 2, 16 na 3 e 4 na 4, as chaves estão em ordem? E para achar o 16, a busca começa pelo meio da tabela ou pela posição `16 % 7`?"
+     },
+     {
+      "item": "III",
+      "texto": "Inserir, buscar e remover precisam chegar à mesma casa: calculam `h(k)` e sondam do mesmo jeito. Se a remoção usasse outra função, ela acharia a chave onde a inserção a pôs? Uma única `h(k) = k % M` dá conta das três operações?"
+     },
+     {
+      "item": "IV",
+      "texto": "No endereçamento aberto, todas as chaves moram nas `M` casas do próprio vetor, sem lista pendurada. Com `M = 7`, onde ficaria a 8ª chave?"
+     }
+    ],
     "originais": []
    },
    {
@@ -2692,6 +2998,24 @@ window.PROVAS = [
      }
     ],
     "dica": "**Cobra:** Julgar afirmações sobre hash linear versus hash encadeado.\n\n- **Encadeamento** [0106]: colisão acrescenta a chave à lista da própria posição, e a tabela aceita mais chaves que posições. Ex.: `M = 5`, 8 chaves: `α = 1,6`.\n- **Endereçamento aberto** [0107]: colisão leva a chave para outra posição livre da tabela, e o total de chaves não passa de `M`. Ex.: o 8 colide com o 3 na posição 3 e vai à 4.\n- **Hash duplo** [0179]: segunda função define o passo da sondagem, e só existe no endereçamento aberto. Ex.: `M = 7`, `h1 = k % 7`, `h2 = 1 + k % 5`, `k = 22`: tenta as posições 1, 4, 0.\n\n**Como atacar:** para cada afirmação, pergunte a qual técnica ela se refere.",
+    "contrapontos": [
+     {
+      "item": "I",
+      "texto": "Com `M = 5`, tente guardar 8 chaves nas duas técnicas. No encadeamento, as listas crescem. No linear, cada chave ocupa uma casa do vetor: onde fica a 6ª?"
+     },
+     {
+      "item": "II",
+      "texto": "No encadeamento, a chave que colide na posição 3 entra na lista da posição 3. A técnica que procura a posição livre mais próxima guarda as chaves em listas ou nas casas do próprio vetor?"
+     },
+     {
+      "item": "III",
+      "texto": "No hash linear, as chaves ficam no mesmo vetor, e a sondagem anda de uma casa para a vizinha. Isso é guardar em espaços separados de memória? Qual técnica espalha nós por endereços diferentes, alocados um a um?"
+     },
+     {
+      "item": "IV",
+      "texto": "A segunda função de hash define o passo da sondagem: com `M = 7`, `h1 = k % 7` e `h2 = 1 + k % 5`, o 22 tenta as posições 1, 4 e 0. Sondar outra casa faz sentido na técnica com uma lista em cada posição ou na que guarda tudo no vetor?"
+     }
+    ],
     "originais": []
    },
    {
@@ -3118,6 +3442,24 @@ window.PROVAS = [
      }
     ],
     "dica": "**Cobra:** ler uma árvore binária de busca e dizer quem é irmão, quem é raiz e onde um valor novo entraria.\n\n- **Irmãos e raiz** [0097]: irmãos são nós com o mesmo pai; a raiz é o único nó sem pai, então só existe uma. Ex.: na árvore 5 com filhos 3 e 8, o 3 e o 8 são irmãos e o 5 é a única raiz.\n- **Inserção na BST** [0099]: o valor novo desce comparando como numa busca e vira folha na primeira posição vazia em que a busca terminaria. Ex.: inserir 4 em 5 (filhos 3 e 8): 4 < 5, 4 > 3, vira filho direito do 3.\n\n**Como atacar:** simule a descida de cada valor novo a partir da raiz e confira quem é pai de quem.",
+    "contrapontos": [
+     {
+      "item": "I",
+      "texto": "Irmãos são nós com o mesmo pai. Quem é o pai do 6? E o pai do 8?"
+     },
+     {
+      "item": "II",
+      "texto": "A raiz é o nó sem pai. O 4 tem pai? Quantos nós dessa árvore não têm pai?"
+     },
+     {
+      "item": "III",
+      "texto": "Desça com o 3 comparando a cada nó: 3 contra 5, depois contra 2, depois contra 4. Em qual posição vazia a descida termina?"
+     },
+     {
+      "item": "IV",
+      "texto": "Desça com o 1: compare com o 5 e depois com o 2. Que lado ele toma em cada nó, e onde para?"
+     }
+    ],
     "originais": [
      "provas-ppgi-ufam/2017-055/figuras/q04-arvore.png"
     ]
@@ -3206,6 +3548,24 @@ window.PROVAS = [
      }
     ],
     "dica": "**Cobra:** calcular a posição de cada chave numa tabela hash com encadeamento e conferir quem colidiu onde.\n\n- **Método da divisão** [0105]: `h(k) = k mod m` devolve o resto da divisão da chave pelo tamanho da tabela. Ex.: com `m = 11`, a chave de posição 14 vai para o índice 3 e a de posição 11, para o 0.\n- **Encadeamento** [0106]: cada balde guarda uma lista; chaves com o mesmo índice ficam na mesma lista, e a tabela nunca enche. Ex.: com `m = 5`, as chaves 7 e 12 (índice 2) ficam juntas na lista do balde 2.\n\n**Como atacar:** calcule posição mod 11 de cada letra e agrupe por índice, sem esquecer a letra de posição 11 ou 22.",
+    "contrapontos": [
+     {
+      "item": "I",
+      "texto": "Tabele `posição mod 11` das 15 letras. Para cair no índice 6, a letra precisa ter posição 6 ou 17 no alfabeto (F ou Q). Alguma das duas está na lista de chaves?"
+     },
+     {
+      "item": "II",
+      "texto": "K é a 11ª letra do alfabeto. Quanto dá 11 mod 11?"
+     },
+     {
+      "item": "III",
+      "texto": "Calcule as duas: B é a 2ª letra e N é a 14ª. Que índice cada uma recebe? Colidir é cair no mesmo índice."
+     },
+     {
+      "item": "IV",
+      "texto": "Vão ao índice 9 as letras de posição 9 ou 20 no alfabeto, I e T. Quais delas estão na lista de chaves?"
+     }
+    ],
     "originais": []
    },
    {
@@ -3382,6 +3742,24 @@ window.PROVAS = [
      }
     ],
     "dica": "**Cobra:** as diferenças entre árvore B e árvore binária: filhos por nó, nível das folhas e custo do balanceamento.\n\n- **Grau mínimo t** [0146]: todo nó, menos a raiz, tem de `t - 1` a `2t - 1` chaves; um nó com `k` chaves tem `k + 1` filhos. Ex.: com `t = 2`, cada nó tem de 2 a 4 filhos, e a raiz pode ter só 1 chave.\n- **Folhas no mesmo nível** [0146]: a divisão e a junção de nós mantêm todas as folhas à mesma profundidade. Ex.: dividir a raiz cheia cria uma raiz nova e todas as folhas descem um nível.\n- **Nós gordos e disco** [0146]: cada nó ocupa um bloco do disco, e a altura `h ≤ log_t((n + 1) / 2)` pequena significa poucas leituras. Ex.: com `t = 100` e 1 milhão de chaves, a altura é no máximo 2.\n\n**Como atacar:** compare cada afirmação com a regra do grau mínimo e com o que a divisão faz.",
+    "contrapontos": [
+     {
+      "item": "I",
+      "texto": "Com grau mínimo `t = 2`, um nó que não é raiz tem de 1 a 3 chaves, ou seja, de 2 a 4 filhos, e a raiz pode ter uma chave só. Quantos filhos tem essa raiz? E uma folha, quantos filhos tem?"
+     },
+     {
+      "item": "II",
+      "texto": "O nó da árvore B costuma ter um campo `folha`, porque ela guarda muitos ponteiros por nó. O nó de uma AVL tem chave, dois ponteiros e a altura: onde estaria um campo desses nele?"
+     },
+     {
+      "item": "III",
+      "texto": "Na árvore B, quando a raiz cheia se divide, nasce uma raiz nova e todas as folhas descem um nível juntas. Depois disso, pode haver uma folha no nível 1 e outra no nível 3?"
+     },
+     {
+      "item": "IV",
+      "texto": "Dividir um nó cheio mexe só nele e no pai, e com `t = 100` e 1 milhão de chaves a altura fica em no máximo 2. Para que tipo de memória a árvore B foi pensada: a que lê dado a dado ou a que lê bloco a bloco?"
+     }
+    ],
     "originais": []
    },
    {
@@ -3433,6 +3811,20 @@ window.PROVAS = [
      }
     ],
     "dica": "**Cobra:** comparar a lista encadeada com o vetor ordenado na busca e saber onde ela é usada.\n\n- **Busca em lista encadeada** [0076]: só dá para andar nó a nó a partir da cabeça, então a busca é O(n), mesmo com a lista ordenada. Ex.: achar o 9 em `2 → 4 → 9` exige passar pelo 2 e pelo 4.\n- **Busca binária no vetor** [0090]: acessa o meio por índice e descarta metade, em O(log n) no pior caso. Ex.: com 1000 elementos, cerca de 10 comparações, contra até 1000 na lista.\n- **Lista dentro do hash** [0106]: o encadeamento usa uma lista por balde para guardar as chaves que colidem. Ex.: o balde 3 de `k % 10` guarda `13 → 23 → 33`.\n\n**Como atacar:** compare o pior caso de cada estrutura e desconfie de \"unicamente\".",
+    "contrapontos": [
+     {
+      "item": "I",
+      "texto": "Pior caso na lista: a chave está no último nó, e você compara com os `n`. Pior caso no vetor ordenado com busca binária: com 1.000 elementos, cerca de 10 comparações. Qual número é menor?"
+     },
+     {
+      "item": "II",
+      "texto": "A lista também implementa pilha, fila e lista de adjacência de grafo. E buscar nela custa `O(n)`, contra `O(log n)` numa ABB balanceada. Qual das duas busca mais rápido?"
+     },
+     {
+      "item": "III",
+      "texto": "No hash por encadeamento, o balde 3 de `k % 10` guarda `13 → 23 → 33`. Que estrutura é essa pendurada no balde?"
+     }
+    ],
     "originais": []
    },
    {
@@ -3590,6 +3982,20 @@ window.PROVAS = [
      }
     ],
     "dica": "**Cobra:** o custo da busca sequencial e da binária, e se a lista encadeada muda o número de comparações.\n\n- **Busca sequencial** [0089]: percorre da primeira posição em diante; no pior caso olha os `n` elementos, e a posição da chave decide o custo. Ex.: achar o 2 em `5 7 9 2` custa 4 comparações.\n- **Busca binária** [0090]: exige vetor ordenado e custa O(log₂ n), pois cada passo descarta metade. Ex.: com 8 elementos, no máximo 4 comparações.\n- **Lista encadeada** [0076]: só se anda nó a nó, na ordem em que foram ligados, então a busca sequencial nela percorre os elementos na ordem da inserção. Ex.: em `4 → 9 → 1`, achar o 1 passa pelo 4 e pelo 9.\n\n**Como atacar:** calcule o pior e o melhor caso de cada busca e confira se a afirmação diz \"sempre\".",
+    "contrapontos": [
+     {
+      "item": "I",
+      "texto": "Sem ordem, a chave pode estar na última posição. Com `n = 10`, `n/2 = 5`: se a chave está na posição 9, quantas posições você olhou até achá-la? Dá para pular alguma sem saber nada da ordem?"
+     },
+     {
+      "item": "II",
+      "texto": "Com o vetor ordenado, a busca binária descarta metade a cada passo: 8 elementos, até 4 comparações; 1.024, até 11. Quanto esse número cresce quando `n` dobra?"
+     },
+     {
+      "item": "III",
+      "texto": "Ponha `4, 9, 1` num vetor e numa lista `4 → 9 → 1`, na mesma ordem, e busque o 1 sequencialmente nas duas. Quantas comparações cada uma faz?"
+     }
+    ],
     "originais": []
    },
    {
@@ -3637,6 +4043,20 @@ window.PROVAS = [
      }
     ],
     "dica": "**Cobra:** o custo da busca e o tipo de colisão no hash por encadeamento, comparado ao endereçamento aberto.\n\n- **Encadeamento** [0106]: cada balde guarda uma lista; a busca percorre só ela, em média `α = n / m` nós, e no pior caso (tudo num balde), `n`. Ex.: 4 chaves no mesmo balde: achar a última custa 4 comparações.\n- **Colisão secundária** [0107]: no endereçamento aberto, chaves de hashes diferentes disputam as mesmas posições de sondagem; no encadeamento só dividem lista as de mesmo hash. Ex.: com `k % 11`, a chave 15 cai no 4 e vai para o 5; depois a chave 5 acha a vaga ocupada.\n- **Pior caso** [0106]: depende da função hash; uma função ruim joga tudo num balde e a busca vira O(n). Ex.: a função `k % 10` com chaves 10, 20, 30, 40 manda todas para o balde 0.\n\n**Como atacar:** desconfie de \"sempre\" e \"nunca\" e pense no pior caso de cada método.",
+    "contrapontos": [
+     {
+      "item": "I",
+      "texto": "Colisão secundária é chave de hash diferente disputando uma casa porque outra chave ocupou a vaga dela na sondagem. No encadeamento, uma chave de hash 4 pode ir parar na lista do balde 5?"
+     },
+     {
+      "item": "II",
+      "texto": "Com `k % 10` e as chaves 10, 20, ..., 100, as `n = 10` chaves caem todas no balde 0. Buscar o 100 custa quantas comparações? E quanto vale √10?"
+     },
+     {
+      "item": "III",
+      "texto": "Monte um caso: endereçamento aberto com a tabela quase cheia, sondando várias casas ocupadas, contra encadeamento com função boa e listas de 1 ou 2 nós. Quem compara menos nesse cenário?"
+     }
+    ],
     "originais": []
    },
    {
@@ -3686,6 +4106,24 @@ window.PROVAS = [
      }
     ],
     "dica": "**Cobra:** decidir, olhando cada árvore pronta, se ela pode ser uma AVL.\n\n- **Regra da AVL** [0101]: em todo nó, as alturas das subárvores esquerda e direita diferem de no máximo 1; olhar só a raiz não basta. Ex.: raiz com filho esquerdo e um neto à esquerda, sem filho direito, tem diferença 2 e não é AVL.\n- **AVL é uma BST** [0099]: a ordem também precisa valer: menores à esquerda, maiores à direita, em todos os nós. Ex.: raiz 10 com filho direito 7 viola a ordem, então não é AVL.\n\n**Como atacar:** em cada quadro, confira a ordem da BST e depois o fator de balanceamento de todos os nós.",
+    "contrapontos": [
+     {
+      "item": "I",
+      "texto": "Calcule a altura das subárvores em todos os nós, das folhas para cima, e o fator de cada um. Confira também a ordem: 8 e 12 à esquerda do 15, 16 e 25 à direita."
+     },
+     {
+      "item": "II",
+      "texto": "Os nós com um filho só são o 23 e o 54. Calcule o fator deles, depois o do 17 e do 72, e por fim o da raiz 50. Confira também a ordem: o 67 está à direita do 54 e à esquerda do 72."
+     },
+     {
+      "item": "III",
+      "texto": "O 10 tem apenas o filho direito. Quanto mede a subárvore de cada lado dele? Depois calcule o fator do 6, do 3 e da raiz 8."
+     },
+     {
+      "item": "IV",
+      "texto": "Há três nós com um filho só: 2, 5 e 9. Calcule o fator de cada um, depois o de 4 e 12, e por fim o do 8, comparando a altura das duas metades."
+     }
+    ],
     "originais": [
      "provas-ppgi-ufam/2017-055/figuras/q16-arvores.png"
     ]
@@ -6245,6 +6683,20 @@ window.PROVAS = [
      }
     ],
     "dica": "**Cobra:** simular inserções numa tabela de 17 posições e julgar três afirmações sobre colisões.\n\n- **Método da divisão** [0105]: a posição é `k mod m`; só cabem sem colisão chaves de restos diferentes; mesmo resto disputa o mesmo balde. Ex.: m = 7: 45 mod 7 = 3.\n- **Sondagem linear** [0107]: com a posição ocupada, a chave tenta a seguinte, dando a volta no fim da tabela; cada posição ocupada encontrada conta como uma colisão. Ex.: m = 7: 10 vai para 3 e 17 também dá 3, então tenta o 4: 1 colisão.\n- **Dispersão dupla** [0179]: o passo da tentativa vem de uma segunda função, `(h1 + i·h2) mod m`, e muda de chave para chave. Ex.: m = 7, h1 = 3 e h2 = 3: a segunda tentativa cai em (3 + 3) mod 7 = 6.\n\n**Como atacar:** calcule o resto de cada chave e some as colisões; para a dupla, calcule o passo de cada chave.",
+    "contrapontos": [
+     {
+      "item": "I",
+      "texto": "Simule a sondagem linear: calcule `k mod 17` de cada chave e veja onde o 22 e o 39 param. Conte cada casa ocupada que encontraram e, separado, quantas chaves encontraram alguma ocupada. Os dois números batem?"
+     },
+     {
+      "item": "II",
+      "texto": "No hash duplo, a primeira tentativa é `h1(k) = k mod 17`, e a segunda função só entra depois de uma colisão. Quanto dá 5 mod 17 e 22 mod 17?"
+     },
+     {
+      "item": "III",
+      "texto": "A sentença diz \"é possível\", não \"sempre\". Basta existir um conjunto de 17 chaves com restos todos diferentes na divisão por 17. Você consegue montar um?"
+     }
+    ],
     "originais": []
    },
    {
@@ -6378,6 +6830,20 @@ window.PROVAS = [
      }
     ],
     "dica": "**Cobra:** julgar três afirmações sobre heap, rebalanceamento da AVL e a complexidade da árvore B.\n\n- **Ordem do heap** [0102]: num heap de máximo, todo pai é maior ou igual aos filhos; os dois filhos não se comparam entre si. Ex.: `9` acima de `5` e `7`, em qualquer ordem.\n- **Rebalancear a AVL** [0101]: a inserção pendura uma folha e, na volta da recursão, cada ancestral atualiza a altura e confere o fator, rotacionando se achar 2 ou -2. Ex.: inserir 30 sob `10 → 20` confere o 20 e depois o 10.\n- **Custo de AVL e B** [0146]: as duas são árvores equilibradas, e cada operação segue um caminho da raiz até uma folha, então o custo é limitado pela altura. Ex.: com 1 milhão de chaves, uma AVL tem no máximo uns 29 níveis, e uma B com t = 100 tem uns 3.\n\n**Como atacar:** julgue cada afirmação separadamente e descarte as alternativas que a contradizem.",
+    "contrapontos": [
+     {
+      "item": "I",
+      "texto": "Num heap de máximo, a raiz é o maior; num heap de mínimo, o menor. O enunciado diz qual dos dois? E com chave repetida, `9` sobre `9`, a raiz do filho é menor que a do pai?"
+     },
+     {
+      "item": "II",
+      "texto": "Insira 30 na AVL com raiz 10 e filho direito 20. Que nó você confere primeiro, o 20 ou o 10? O desequilíbrio aparece no caminho entre a folha nova e a raiz?"
+     },
+     {
+      "item": "III",
+      "texto": "As duas são balanceadas, e inserir ou excluir segue um caminho da raiz a uma folha com trabalho limitado em cada nó. A AVL tem altura de cerca de 1,44 · log₂ n e a B, `O(log_t n)`. Em notação O, essas alturas diferem?"
+     }
+    ],
     "originais": []
    },
    {
@@ -6697,6 +7163,20 @@ window.PROVAS = [
      }
     ],
     "dica": "**Cobra:** julgar três afirmações sobre árvores rubro-negras e AVL.\n\n- **Propriedades da rubro-negra** [0177]: a raiz é preta, vermelho só tem filhos pretos e todos os caminhos de um nó às folhas têm o mesmo número de pretos; as folhas são sentinelas `nil` pretas. Ex.: raiz preta com dois filhos pretos: cada caminho tem 2 pretos.\n- **Folha nil** [0177]: as folhas da rubro-negra são o nó sentinela `nil`, preto e sem chave, que ocupa o lugar de todo NULL; ele conta na altura negra de cada caminho. Ex.: nó preto com dois filhos `nil`: os dois caminhos têm 1 preto.\n- **Inserção na AVL** [0101]: a altura é limitada a cerca de 1,44 · log₂ n, então a inserção custa O(log n) no pior caso. Ex.: 1 milhão de chaves: no máximo uns 29 níveis.\n\n**Como atacar:** julgue cada afirmação isolada, citando a propriedade que a sustenta ou quebra.",
+    "contrapontos": [
+     {
+      "item": "I",
+      "texto": "A raiz da rubro-negra é preta, mas o filho dela pode ser vermelho. Pegue a subárvore cuja raiz é esse filho vermelho: ela cumpre a regra da raiz preta?"
+     },
+     {
+      "item": "II",
+      "texto": "Teste um nó com um filho `nil` e o outro filho preto de verdade, com dois `nil` embaixo. Conte os pretos de cada caminho até um `nil`: os dois lados dão o mesmo número? E se esse filho fosse vermelho?"
+     },
+     {
+      "item": "III",
+      "texto": "A AVL tem altura de no máximo cerca de 1,44 · log₂ n. A inserção desce até uma folha, volta atualizando alturas e faz no máximo uma rotação, simples ou dupla. Quanto custa cada parte?"
+     }
+    ],
     "originais": []
    }
   ]
@@ -7304,6 +7784,28 @@ window.PROVAS = [
      }
     ],
     "dica": "**Cobra:** achar a afirmação incorreta sobre árvores de busca, AVL, rubro-negra e B.\n\n- **Pior caso da BST** [0099]: sem balanceamento, chaves em ordem crescente formam uma lista de altura n - 1, e a busca no pior caso custa O(n). Ex.: inserir 1, 2, 3, 4 e buscar o 4 faz 4 comparações.\n- **Altura da AVL** [0101]: a altura é no máximo cerca de 1,44 · log₂ n, então a busca custa O(log n) no pior caso. Ex.: 1 milhão de chaves: no máximo uns 29 níveis.\n- **Rotações na rubro-negra** [0177]: a inserção faz no máximo duas rotações: o caso do tio vermelho só recolore e sobe, e os outros dois rotacionam e acabam. Ex.: tio vermelho: pinta pai e tio de preto, o avô de vermelho, sem rotação.\n\n**Como atacar:** procure a afirmação que troca o custo do pior caso de uma estrutura por outro.",
+    "contrapontos": [
+     {
+      "item": "A",
+      "texto": "A altura da AVL é de no máximo cerca de 1,44 · log₂ n: com 1 milhão de chaves, uns 29 níveis. Quantos nós a busca visita no pior caso?"
+     },
+     {
+      "item": "B",
+      "texto": "Na inserção rubro-negra, o caso do tio vermelho só recolore e sobe; os outros dois rotacionam, uma ou duas vezes, e encerram. Quantas rotações isso dá, no máximo, por inserção? Esse teto depende de `n`?"
+     },
+     {
+      "item": "C",
+      "texto": "Na B+, os nós internos guardam só cópias de chaves para guiar a descida, e os registros ficam nas folhas, ligadas em sequência. Toda chave aparece em alguma folha?"
+     },
+     {
+      "item": "D",
+      "texto": "Insira 1, 2, 3, 4 nessa ordem numa ABB sem balanceamento e busque o 4. Quantas comparações? E com `n` chaves inseridas em ordem crescente?"
+     },
+     {
+      "item": "E",
+      "texto": "Na árvore B, todas as folhas ficam no mesmo nível, e cada nó tem um mínimo de chaves. Uma árvore com essas duas regras pode virar uma cadeia comprida?"
+     }
+    ],
     "originais": []
    },
    {
@@ -7578,6 +8080,24 @@ window.PROVAS = [
      }
     ],
     "dica": "**Cobra:** dizer quais operações numa lista duplamente encadeada com ponteiros para as duas pontas custam O(1).\n\n- **Lista duplamente encadeada** [0079]: cada nó tem `prox` e `ant`, e a lista guarda as duas pontas; remover um nó conhecido só mexe nos vizinhos, sem percorrer. Ex.: remover o último nó faz `fim = fim->ant; fim->prox = NULL`.\n- **Inserir nas pontas** [0079]: com ponteiro para as duas pontas, não é preciso andar: o nó novo liga-se ao vizinho e a ponta da lista é atualizada. Ex.: inserir 9 antes do primeiro: `9->prox = inicio` e `inicio->ant = 9`.\n- **Acesso por posição** [0076]: chegar ao k-ésimo nó exige seguir k - 1 setas, então só mexer nas pontas é O(1). Ex.: o 5º nó exige 4 setas.\n\n**Como atacar:** para cada operação, veja se precisa andar pela lista ou só mexer nas pontas.",
+    "contrapontos": [
+     {
+      "item": "I",
+      "texto": "Com o ponteiro `inicio`, inserir na frente é `novo->prox = inicio; inicio->ant = novo; inicio = novo`. Algum desses passos percorre a lista?"
+     },
+     {
+      "item": "II",
+      "texto": "Com o ponteiro `fim`, é o espelho da inserção na frente: `novo->ant = fim; fim->prox = novo; fim = novo`. Quantos nós você visita?"
+     },
+     {
+      "item": "III",
+      "texto": "Para remover o primeiro: `inicio = inicio->prox; inicio->ant = NULL`, e libera o antigo. O número de passos muda com o tamanho da lista?"
+     },
+     {
+      "item": "IV",
+      "texto": "Na lista simples, remover o último exige achar o penúltimo, andando desde o início. Na dupla, `fim->ant` já aponta para ele. Quantos passos isso custa?"
+     }
+    ],
     "originais": []
    },
    {
@@ -8582,6 +9102,20 @@ window.PROVAS = [
     "formato": "afirmações",
     "enunciado": "Sobre um Hash por Encadeamento, pode-se afirmar que:\n\nI. Ele não gera colisões secundárias\nII. Ele tem custo temporal O(n) no pior caso, sendo n o número de elementos na tabela\nIII. Ao contrário do endereçamento aberto, o encadeamento permite trabalhar com quantidade de chaves superior ao tamanho da tabela\n\n(No caderno os itens vêm rotulados a, b, c, mas as alternativas os chamam de I, II e III.)",
     "dica": "**Cobra:** propriedades do hash com encadeamento.\n\n- **Encadeamento** [0106]: cada posição guarda uma lista, e chaves com o mesmo hash entram na mesma lista, então cabem mais chaves que posições. Ex.: com m = 3, as chaves 1, 4 e 7 ficam todas na lista 1 (`k mod 3`).\n- **Pior caso do hash** [0106]: se todas as chaves caem na mesma posição, a lista tem n nós e a busca os percorre todos. Ex.: com m = 4 e chaves 4, 8, 12, 16, tudo cai na posição 0 e achar o 16 passa por 4 nós.\n- **Agrupamento no endereçamento aberto** [0107]: a chave que ocupa a vaga de outro hash faz a seguinte colidir com ela. Ex.: com m = 5, o 6 (hash 1) vai para a posição 2 e a chave 2 já nasce colidindo.\n\n**Como atacar:** teste cada afirmação com uma tabela pequena.",
+    "contrapontos": [
+     {
+      "item": "I",
+      "texto": "Com `m = 5`, `k % 5` e o 1 na casa 1, no endereçamento aberto o 6 (hash 1) vai para a casa 2, e a chave 2 já nasce colidindo. No encadeamento, onde ficam o 6 e o 2?"
+     },
+     {
+      "item": "II",
+      "texto": "Com `m = 4` e as chaves 4, 8, 12 e 16, tudo cai na posição 0. Buscar o 16 passa por quantos nós? E com `n` chaves nessa situação?"
+     },
+     {
+      "item": "III",
+      "texto": "Com `m = 3`, tente guardar 1, 4, 7 e 10, que dão todas resto 1. No encadeamento, a lista 1 cresce. No endereçamento aberto, onde fica a 4ª chave depois que as 3 casas se ocupam?"
+     }
+    ],
     "alternativas": [
      {
       "letra": "A",
@@ -8624,6 +9158,16 @@ window.PROVAS = [
     "formato": "afirmações",
     "enunciado": "Considerando-se as operações com um vetor, mantido ordenado a cada inserção de chave, e uma árvore binária de pesquisa balanceada, pode-se dizer que:\n\nI. O vetor ordenado apresenta custo de inserção e de remoção menores que o da árvore, pois não exigir alocação dinâmica de nós\nII. No pior caso, o custo da operação de busca por uma chave é assintoticamente igual tanto no vetor ordenado quanto na árvore\n\n(No caderno os itens vêm rotulados a e b, mas as alternativas os chamam de I e II.)",
     "dica": "**Cobra:** comparar vetor ordenado e árvore binária de busca balanceada em custo de inserção, remoção e busca.\n\n- **Vetor ordenado** [0075]: a busca binária custa O(log n), mas inserir ou remover desloca elementos, O(n). Ex.: inserir 4 em `[1, 3, 5, 7]` empurra o 5 e o 7 uma casa à direita.\n- **BST balanceada** [0101]: a altura é O(log n), então busca, inserção e remoção custam O(log n), com um nó alocado por chave. Ex.: com 1.000 chaves, cerca de 10 níveis.\n- **Igualdade assintótica** [0072]: duas operações têm o mesmo custo se crescem na mesma ordem, ignorando constantes. Ex.: 3 log n e 10 log n são ambos O(log n).\n\n**Como atacar:** escreva o O de cada operação nas duas estruturas e compare lado a lado.",
+    "contrapontos": [
+     {
+      "item": "I",
+      "texto": "Inserir 4 em `[1, 3, 5, 7]` empurra o 5 e o 7 uma casa; com `n` elementos, até `n` deslocamentos. Na ABB balanceada, a inserção desce `O(log n)` níveis e aloca um nó. Qual dos dois custos cresce mais rápido com `n`?"
+     },
+     {
+      "item": "II",
+      "texto": "Vetor ordenado: busca binária, descartando metade a cada passo. ABB balanceada: descida da raiz até uma folha, limitada pela altura. Escreva o `O` do pior caso de cada uma e compare."
+     }
+    ],
     "alternativas": [
      {
       "letra": "A",

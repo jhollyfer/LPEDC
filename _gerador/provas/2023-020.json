@@ -121,6 +121,20 @@
       "formato": "afirmações",
       "enunciado": "Sobre um Hash por Encadeamento, pode-se afirmar que:\n\nI. Ele não gera colisões secundárias\nII. Ele tem custo temporal O(n) no pior caso, sendo n o número de elementos na tabela\nIII. Ao contrário do endereçamento aberto, o encadeamento permite trabalhar com quantidade de chaves superior ao tamanho da tabela\n\n(No caderno os itens vêm rotulados a, b, c, mas as alternativas os chamam de I, II e III.)",
       "dica": "**Cobra:** propriedades do hash com encadeamento.\n\n- **Encadeamento** [0106]: cada posição guarda uma lista, e chaves com o mesmo hash entram na mesma lista, então cabem mais chaves que posições. Ex.: com m = 3, as chaves 1, 4 e 7 ficam todas na lista 1 (`k mod 3`).\n- **Pior caso do hash** [0106]: se todas as chaves caem na mesma posição, a lista tem n nós e a busca os percorre todos. Ex.: com m = 4 e chaves 4, 8, 12, 16, tudo cai na posição 0 e achar o 16 passa por 4 nós.\n- **Agrupamento no endereçamento aberto** [0107]: a chave que ocupa a vaga de outro hash faz a seguinte colidir com ela. Ex.: com m = 5, o 6 (hash 1) vai para a posição 2 e a chave 2 já nasce colidindo.\n\n**Como atacar:** teste cada afirmação com uma tabela pequena.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Com `m = 5`, `k % 5` e o 1 na casa 1, no endereçamento aberto o 6 (hash 1) vai para a casa 2, e a chave 2 já nasce colidindo. No encadeamento, onde ficam o 6 e o 2?"
+        },
+        {
+          "item": "II",
+          "texto": "Com `m = 4` e as chaves 4, 8, 12 e 16, tudo cai na posição 0. Buscar o 16 passa por quantos nós? E com `n` chaves nessa situação?"
+        },
+        {
+          "item": "III",
+          "texto": "Com `m = 3`, tente guardar 1, 4, 7 e 10, que dão todas resto 1. No encadeamento, a lista 1 cresce. No endereçamento aberto, onde fica a 4ª chave depois que as 3 casas se ocupam?"
+        }
+      ],
       "alternativas": [
         {
           "letra": "A",
@@ -162,6 +176,16 @@
       "formato": "afirmações",
       "enunciado": "Considerando-se as operações com um vetor, mantido ordenado a cada inserção de chave, e uma árvore binária de pesquisa balanceada, pode-se dizer que:\n\nI. O vetor ordenado apresenta custo de inserção e de remoção menores que o da árvore, pois não exigir alocação dinâmica de nós\nII. No pior caso, o custo da operação de busca por uma chave é assintoticamente igual tanto no vetor ordenado quanto na árvore\n\n(No caderno os itens vêm rotulados a e b, mas as alternativas os chamam de I e II.)",
       "dica": "**Cobra:** comparar vetor ordenado e árvore binária de busca balanceada em custo de inserção, remoção e busca.\n\n- **Vetor ordenado** [0075]: a busca binária custa O(log n), mas inserir ou remover desloca elementos, O(n). Ex.: inserir 4 em `[1, 3, 5, 7]` empurra o 5 e o 7 uma casa à direita.\n- **BST balanceada** [0101]: a altura é O(log n), então busca, inserção e remoção custam O(log n), com um nó alocado por chave. Ex.: com 1.000 chaves, cerca de 10 níveis.\n- **Igualdade assintótica** [0072]: duas operações têm o mesmo custo se crescem na mesma ordem, ignorando constantes. Ex.: 3 log n e 10 log n são ambos O(log n).\n\n**Como atacar:** escreva o O de cada operação nas duas estruturas e compare lado a lado.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Inserir 4 em `[1, 3, 5, 7]` empurra o 5 e o 7 uma casa; com `n` elementos, até `n` deslocamentos. Na ABB balanceada, a inserção desce `O(log n)` níveis e aloca um nó. Qual dos dois custos cresce mais rápido com `n`?"
+        },
+        {
+          "item": "II",
+          "texto": "Vetor ordenado: busca binária, descartando metade a cada passo. ABB balanceada: descida da raiz até uma folha, limitada pela altura. Escreva o `O` do pior caso de cada uma e compare."
+        }
+      ],
       "alternativas": [
         {
           "letra": "A",
