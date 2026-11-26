@@ -192,7 +192,7 @@
   },
   {
    "titulo": "Pior caso",
-   "texto": "Agora com a função ruim: chaves 5, 10, 15, 20, 25 em `m = 5`. Todas dão resto 0 e caem no balde 0. A tabela virou uma lista de 5 nós, e buscar o 5 (o último) compara com todas: `O(n)`. Quem decide se o hash é rápido é a função, não a estrutura.",
+   "texto": "Agora com a função ruim: chaves 5, 10, 15, 20, 25 em `m = 5`. Todas dão resto 0 e caem no balde 0. A tabela virou uma lista de 5 nós, e buscar o 5 (o último) compara com todas: `O(n)`. O encadeamento não salva uma função que não espalha.",
    "figura": {
     "tipo": "hash",
     "baldes": [

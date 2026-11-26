@@ -1,13 +1,13 @@
 {
  "num": "0114",
  "oque": "Uma **recorrência** é uma equação que dá o custo T(n) de uma função recursiva em termos do custo dela para entradas menores, mais um caso base. A **árvore de recursão** resolve a recorrência desenhando cada chamada como um nó com o trabalho que ela faz sozinha e somando nível por nível.",
- "como": "Para escrever a recorrência a partir do código, faça três perguntas:\n\n- **Quantas chamadas, e com que tamanho?** Duas com metade viram `2 T(n/2)`; uma com n − 1 vira `T(n-1)`.\n- **Quanto trabalho fora das chamadas?** Um laço sobre os n elementos vira `+ n`; umas poucas contas viram `+ 1`.\n- **Qual o caso base?** Por exemplo, `T(1) = 1`.\n\n```c\nvoid audita(int ini, int fim) {\n    int n = fim - ini;\n    /* confere as n notas: + n */\n    if (n == 1) return;     /* T(1) */\n    int meio = ini + n / 2;\n    audita(ini, meio);      /* T(n/2) */\n    audita(meio, fim);      /* T(n/2) */\n}\n```\n\nIsso dá `T(n) = 2 T(n/2) + n`. Para resolver pela árvore:\n\n- desenhe a raiz com o trabalho n e, abaixo, uma filha por chamada;\n- some cada nível;\n- conte os níveis (quantas vezes o tamanho cai até o caso base);\n- **total = soma de todos os níveis**.\n\nA árvore mostra também a memória: só um caminho da raiz até uma folha fica na pilha ao mesmo tempo, então o espaço é a **altura**.",
+ "como": "Para escrever a recorrência a partir do código, faça três perguntas:\n\n- **Quantas chamadas, e com que tamanho?** Duas com metade viram `2 T(n/2)`; uma com n − 1 vira `T(n-1)`.\n- **Quanto trabalho fora das chamadas?** Um laço sobre os n elementos vira `+ n`; umas poucas contas viram `+ 1`.\n- **Qual o caso base?** Por exemplo, `T(1) = 1`.\n\n```c\nvoid audita(int ini, int fim) {\n    int n = fim - ini;\n    /* confere as n notas: + n */\n    if (n == 1) return;     /* T(1) */\n    int meio = ini + n / 2;\n    audita(ini, meio);      /* T(n/2) */\n    audita(meio, fim);      /* T(n/2) */\n}\n```\n\nIsso dá `T(n) = 2 T(n/2) + n`. Para resolver pela árvore:\n\n- desenhe a raiz com o trabalho n e, abaixo, uma filha por chamada;\n- some cada nível;\n- conte os níveis (quantas vezes o tamanho cai até o caso base);\n- **total = soma de todos os níveis**.\n\nA árvore mostra também a memória: só um caminho da raiz até uma folha fica na pilha ao mesmo tempo, então o espaço acompanha a **altura**: uma chamada aberta por nível do caminho.",
  "caracteristicas": [
   "\"Duas chamadas\" não decide nada sozinho: o **tamanho** de cada chamada decide. `2T(n/2) + 1` é Θ(n); `2T(n-1) + 1` é Θ(2ⁿ).",
   "Tamanho que cai pela metade dá log₂ n + 1 níveis; tamanho que cai de 1 em 1 dá n níveis.",
-  "O tempo é a soma de todos os nós; a memória (pilha) é a altura da árvore.",
+  "O tempo é a soma de todos os nós. A memória (pilha) acompanha a altura: no pior momento ficam abertas altura + 1 chamadas, uma por nível.",
   "A árvore serve para chutar a resposta; o método da substituição prova o chute por indução.",
-  "O teorema mestre (0115) resolve direto as recorrências da forma `a T(n/b) + f(n)`."
+  "O teorema mestre (veja a aula Teorema mestre) resolve direto as recorrências da forma `a T(n/b) + f(n)`."
  ],
  "exemplo": "A chefe da contabilidade confere um lote de n notas, divide em dois lotes iguais e entrega cada metade a um auditor, que faz o mesmo. Com uma nota só, confere e para:\n\n```\nT(1) = 1\nT(n) = 2 T(n/2) + n\n```\n\nVamos montar a árvore para n = 8 e depois conferir abrindo a conta:\n\n| T(n) | conta | valor |\n|---|---|---|\n| T(1) | caso base | 1 |\n| T(2) | 2 · 1 + 2 | 4 |\n| T(4) | 2 · 4 + 4 | 12 |\n| T(8) | 2 · 12 + 8 | **32** |",
  "passos": [
@@ -54,7 +54,7 @@
   },
   {
    "titulo": "Somar os níveis",
-   "texto": "Cada nível soma n. Os tamanhos 8, 4, 2, 1 dão log₂ 8 + 1 = 4 níveis. Total: 4 · 8 = **32**, igual à conta aberta. Em geral, n · (log₂ n + 1) = n log n + n, ou **Θ(n log n)**. É o custo do merge sort. A pilha guarda no máximo 4 chamadas, a altura.",
+   "texto": "Cada nível soma n. Os tamanhos 8, 4, 2, 1 dão log₂ 8 + 1 = 4 níveis. Total: 4 · 8 = **32**, igual à conta aberta. Em geral, n · (log₂ n + 1) = n log n + n, ou **Θ(n log n)**. É o custo do merge sort. A pilha guarda no máximo 4 chamadas, uma por nível (a altura é 3, contando arestas).",
    "figura": {
     "tipo": "texto",
     "linhas": [

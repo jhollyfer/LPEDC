@@ -38,7 +38,7 @@
   },
   {
    "titulo": "O motivo em binário",
-   "texto": "Com `m = 2^4 = 16`, o resto é formado pelos **4 bits de baixo** de `k`. Múltiplos de 16 têm esses 4 bits sempre zero. O resto da chave, onde está a diferença, é ignorado.",
+   "texto": "Com `m = 2^4 = 16`, o resto é formado pelos **4 bits de baixo** de `k`. Múltiplos de 16 têm esses 4 bits sempre zero. Os bits de cima, que são os que diferenciam as quatro chaves, ficam de fora.",
    "figura": {
     "tipo": "texto",
     "linhas": [

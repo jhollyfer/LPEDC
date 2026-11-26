@@ -19,7 +19,7 @@
   "Matriz: gasta O(V²) mesmo com poucas arestas. Com 100 mil vértices seriam 10¹⁰ casas, cerca de 40 GB, quase todas zero.",
   "Matriz: listar vizinhos varre a linha inteira, O(V), mesmo se o vértice tem 1 vizinho.",
   "Lista: saber se i e j são vizinhos exige percorrer a lista de i.",
-  "Lista: cada aresta gasta um nó com ponteiro (duas, no não dirigido)."
+  "Lista: cada aresta gasta um nó com ponteiro (dois nós, no não dirigido)."
  ],
  "exemplo": "Ciclovias ligam 5 pontos da cidade, nos dois sentidos e sem peso: 0 Centro, 1 Praia, 2 Feira, 3 Parque, 4 Estádio. As arestas são {0,1}, {0,2}, {1,2}, {2,3}, {3,4}. V = 5 e E = 5.",
  "passos": [
@@ -91,7 +91,7 @@
   },
   {
    "titulo": "Tirando uma aresta: virou árvore",
-   "texto": "Remova a ciclovia {1,2} (Praia–Feira). O triângulo some, o grafo continua conexo e agora tem 4 arestas = V − 1. Conexo e sem ciclo: é uma **árvore**. Remova mais uma e ele fica desconexo; acrescente qualquer uma e aparece um ciclo.",
+   "texto": "Remova a ciclovia {1,2}, entre Praia e Feira. O triângulo some, o grafo continua conexo e agora tem 4 arestas = V − 1. Conexo e sem ciclo: é uma **árvore**. Remova mais uma e ele fica desconexo; acrescente qualquer uma e aparece um ciclo.",
    "figura": {
     "tipo": "texto",
     "linhas": [

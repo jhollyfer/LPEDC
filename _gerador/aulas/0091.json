@@ -1,13 +1,13 @@
 {
  "num": "0091",
- "oque": "O bubble sort (ordenação por bolha) compara cada par de vizinhos e troca os dois quando o da esquerda é maior. Cada varredura, chamada **passada**, leva o maior que sobrou até o fim do vetor.",
+ "oque": "O bubble sort (ordenação por bolha) compara cada par de vizinhos e troca os dois quando o da esquerda é maior. Cada varredura do vetor se chama **passada** e leva o maior que sobrou até o fim.",
  "como": "- A passada compara `v[j]` com `v[j + 1]` para `j` de 0 até o fim da parte não pronta, trocando quando `v[j] > v[j + 1]`.\n- Depois da passada `p`, os `p` maiores já estão no lugar final, no fim do vetor. A passada seguinte para antes deles.\n- Bastam `n - 1` passadas.\n- Com a **bandeira** `trocou`: se uma passada inteira não troca nada, o vetor já está ordenado e o laço para.\n\n```c\nfor (int p = 1; p < n; p++) {\n    bool trocou = false;\n    for (int j = 0; j < n - p; j++)\n        if (v[j] > v[j + 1]) {\n            int aux = v[j];\n            v[j] = v[j + 1];\n            v[j + 1] = aux;\n            trocou = true;\n        }\n    if (!trocou) break;\n}\n```",
  "caracteristicas": [
   "**Estável**: só troca com `>` estrito, então dois iguais vizinhos nunca trocam de lugar.",
   "**In-place**: só usa `aux` e os índices, memória extra `O(1)`.",
   "Cada troca de vizinhos desfaz exatamente uma **inversão** (par fora de ordem). O total de trocas é o número de inversões do vetor.",
   "Com bandeira, o melhor caso (vetor ordenado) é uma passada: `n - 1` comparações, `O(n)`. Sem bandeira, faz sempre `n(n - 1)/2` comparações.",
-  "Um valor grande corre para o fim numa passada só; um valor pequeno no fim anda só uma casa para a esquerda por passada."
+  "Um valor grande chega ao fim numa passada só. Um valor pequeno que está no fim anda só uma casa para a esquerda por passada."
  ],
  "vantagens": [
   "É o método mais simples de entender e de escrever.",
@@ -23,7 +23,7 @@
  "passos": [
   {
    "titulo": "Passada 1, j = 0 e j = 1",
-   "texto": "42 > 17: troca. 42 > 35: troca. O 42 vem sendo carregado para a direita, porque ganha toda comparação.",
+   "texto": "42 > 17: troca. 42 > 35: troca. O 42 vai sendo levado para a direita, porque é maior que cada vizinho.",
    "figura": {
     "tipo": "vetor",
     "itens": [
@@ -41,7 +41,7 @@
   },
   {
    "titulo": "Passada 1, j = 2 e j = 3",
-   "texto": "42 > 8: troca. 42 > 23: troca. O maior chegou à última gaveta e não sai mais dali. Passada 1: 4 comparações, 4 trocas.",
+   "texto": "42 > 8: troca. 42 > 23: troca. O maior chegou à última gaveta e não sai mais de lá. Passada 1: 4 comparações, 4 trocas.",
    "figura": {
     "tipo": "vetor",
     "itens": [

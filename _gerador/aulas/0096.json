@@ -1,7 +1,7 @@
 {
  "num": "0096",
  "oque": "Não existe um método de ordenação melhor em tudo. A escolha se faz por quatro critérios: **custo** (melhor, médio e pior caso), **memória extra**, **estabilidade** e se o método é **adaptativo**. Num programa real, a `qsort` da `stdlib.h` já faz o serviço.",
- "como": "- **Estável**: chaves iguais saem na ordem em que entraram. Só importa quando o elemento tem outros dados além da chave (um `struct`).\n- **In-place**: ordena no próprio vetor, com `O(1)` de memória extra.\n- **Adaptativo**: fica mais rápido com o vetor quase ordenado.\n- **Por comparação** ou não: counting e radix usam o valor como índice e escapam do limite `Ω(n log n)` (assunto 0117).\n\nA `qsort` ordena qualquer tipo. Você passa o vetor, o número de elementos, o tamanho de cada um e uma função que devolve negativo, zero ou positivo:\n\n```c\nint compara(const void *a, const void *b) {\n    int x = *(const int *) a;\n    int y = *(const int *) b;\n    return (x > y) - (x < y);\n}\n\nqsort(v, n, sizeof v[0], compara);\n```\n\nA norma do C não diz qual algoritmo a `qsort` usa nem promete estabilidade. Se a ordem dos empates importa, desempate dentro da `compara`.",
+ "como": "- **Estável**: chaves iguais saem na ordem em que entraram. Só importa quando o elemento tem outros dados além da chave (um `struct`).\n- **In-place**: ordena no próprio vetor, com `O(1)` de memória extra.\n- **Adaptativo**: fica mais rápido com o vetor quase ordenado.\n- **Por comparação** ou não: counting e radix usam o valor como índice e escapam do limite `Ω(n log n)` (veja a aula Limite inferior da ordenação).\n\nA `qsort` ordena qualquer tipo. Você passa o vetor, o número de elementos, o tamanho de cada um e uma função que devolve negativo, zero ou positivo:\n\n```c\nint compara(const void *a, const void *b) {\n    int x = *(const int *) a;\n    int y = *(const int *) b;\n    return (x > y) - (x < y);\n}\n\nqsort(v, n, sizeof v[0], compara);\n```\n\nA norma do C não diz qual algoritmo a `qsort` usa nem promete estabilidade. Se a ordem dos empates importa, desempate dentro da `compara`.",
  "caracteristicas": [
   "Estáveis: bubble, insertion, merge, counting e radix. Não estáveis: selection, quick, heap e shell.",
   "Memória extra `O(1)`: bubble, selection, insertion, heap e shell. O merge usa `O(n)`; o quick usa pilha de `O(log n)` a `O(n)`.",
@@ -136,7 +136,7 @@
   },
   {
    "titulo": "Com a qsort",
-   "texto": "A `qsort` não promete estabilidade. A saída é pôr a chegada como desempate na `compara`: compare a cidade e, se empatar, compare o número. Com chave composta, nenhum par empata, e qualquer algoritmo devolve a ordem certa.",
+   "texto": "A `qsort` não promete estabilidade. A solução é pôr a chegada como desempate na `compara`: compare a cidade e, se empatar, compare o número. Com chave composta, nenhum par empata, e qualquer algoritmo devolve a ordem certa.",
    "figura": {
     "tipo": "texto",
     "linhas": [

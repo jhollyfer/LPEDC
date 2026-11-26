@@ -1,13 +1,13 @@
 {
  "num": "0117",
  "oque": "Um **limite inferior** diz que nenhum algoritmo resolve o problema gastando menos do que certa quantidade. Para ordenar **só comparando** chaves, qualquer algoritmo faz `Ω(n log n)` comparações no pior caso.",
- "como": "O argumento usa a **árvore de decisão**: cada nó interno é uma pergunta (\"A > B?\"), cada aresta é a resposta e cada folha é uma ordem final. Rodar o algoritmo é descer da raiz a uma folha; o pior caso é a **altura** `h`.\n\n- Com `n` elementos distintos há `n!` ordens, e cada uma precisa de uma folha só dela.\n- Uma árvore binária de altura `h` tem no máximo `2^h` folhas.\n- Então `2^h ≥ n!`, ou seja, `h ≥ log₂(n!)`.\n- Metade dos fatores de `n!` é pelo menos `n/2`, então `n! ≥ (n/2)^(n/2)` e `log₂(n!) ≥ (n/2) · log₂(n/2)`, que cresce como `n log n`.\n\nConclusão: `h = Ω(n log n)`. O **Ω** é o piso, o oposto do teto `O`.",
+ "como": "O argumento usa a **árvore de decisão**: cada nó interno é uma pergunta (\"A > B?\"), cada aresta é a resposta e cada folha é uma ordem final. Rodar o algoritmo é descer da raiz a uma folha; o pior caso é a **altura** `h`, contada em arestas: cada aresta do caminho é uma comparação.\n\n- Com `n` elementos distintos há `n!` ordens, e cada uma precisa de uma folha só dela.\n- Uma árvore binária de altura `h` tem no máximo `2^h` folhas.\n- Então `2^h ≥ n!`, ou seja, `h ≥ log₂(n!)`.\n- Metade dos fatores de `n!` é pelo menos `n/2`, então `n! ≥ (n/2)^(n/2)` e `log₂(n!) ≥ (n/2) · log₂(n/2)`, que cresce como `n log n`.\n\nLogo `h = Ω(n log n)`. O **Ω** dá um piso, assim como o `O` dá um teto (veja a aula O, Ω e Θ de verdade).",
  "caracteristicas": [
-  "Vale para **todo** algoritmo que só compara: insertion, merge, quick, heap e a `qsort`, inclusive os que ninguém inventou.",
+  "Vale para **todo** algoritmo que só compara: insertion, merge, quick, heap e a `qsort`, inclusive os que ainda não foram inventados.",
   "Fala do **pior caso**. O insertion sort ordena um vetor já ordenado com `n - 1` comparações sem violar nada.",
   "Merge sort e heapsort fazem `O(n log n)` no pior caso e encostam no piso: são **assintoticamente ótimos**.",
   "Counting, radix e bucket sort escapam porque usam o **valor** como índice em vez de comparar.",
-  "Para 3 elementos: `3! = 6` ordens, e altura 2 só tem 4 folhas, então são precisas 3 comparações."
+  "Para 3 elementos: `3! = 6` ordens, e altura 2 só tem 4 folhas, então são necessárias 3 comparações."
  ],
  "exemplo": "Três encomendas A, B e C e uma balança de dois pratos, que só diz qual pesa mais. Uma ordem como `C A B` quer dizer: C é a mais leve, B a mais pesada. O algoritmo é o insertion sort de 3 elementos.",
  "passos": [
@@ -59,7 +59,7 @@
   },
   {
    "titulo": "Altura mínima para 3",
-   "texto": "A altura dessa árvore é 3. Dá para fazer com 2? Uma árvore de altura 2 tem no máximo `2² = 4` folhas, e são precisas 6. Então nenhum método garante a ordem de 3 elementos com menos de 3 comparações: aqui o insertion sort é ótimo.",
+   "texto": "A altura dessa árvore é 3. Dá para fazer com 2? Uma árvore de altura 2 tem no máximo `2² = 4` folhas, e são necessárias 6. Então nenhum método garante a ordem de 3 elementos com menos de 3 comparações: aqui o insertion sort é ótimo.",
    "figura": {
     "tipo": "texto",
     "linhas": [

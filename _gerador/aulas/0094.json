@@ -17,13 +17,13 @@
  "desvantagens": [
   "Memória extra `O(n)` para o rascunho.",
   "Não ganha nada com o vetor já ordenado: faz a divisão e as intercalações do mesmo jeito.",
-  "Copiar para o rascunho e de volta pesa em vetores pequenos, onde o insertion sort ganha."
+  "Copiar para o rascunho e de volta pesa em vetor pequeno: ali o insertion sort ganha."
  ],
  "exemplo": "Oito notas de prova: **52 18 33 7 41 26 60 12**. O código termina a metade esquerda antes de começar a direita; aqui as intercalações estão agrupadas por nível.",
  "passos": [
   {
    "titulo": "Dividir até pedaços de 1",
-   "texto": "8 vira 4 + 4, cada 4 vira 2 + 2, cada 2 vira 1 + 1. São 3 níveis, `log₂ 8 = 3`. Pedaço de 1 elemento é caso base: já está ordenado, e a recursão volta.",
+   "texto": "8 vira 4 + 4, cada 4 vira 2 + 2, cada 2 vira 1 + 1. São 3 níveis de divisão, `log₂ 8 = 3`. Pedaço de 1 elemento é caso base: já está ordenado, e a recursão volta.",
    "figura": {
     "tipo": "texto",
     "linhas": [
@@ -120,7 +120,7 @@
    }
   },
   {
-   "titulo": "Última intercalação, no meio",
+   "titulo": "Última intercalação: a metade",
    "texto": "No rascunho `w`: 7 contra 12 vai o 7; 18 contra 12 vai o 12; 18 contra 26 vai o 18; 33 contra 26 vai o 26. Agora `i` aponta para o 33 e `j` para o 41.",
    "figura": {
     "tipo": "vetor",

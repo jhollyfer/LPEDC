@@ -239,6 +239,14 @@ function conferirAulas() {
 }
 
 // contrapontos: nas questões de afirmações, uma provocação por afirmação, sem dizer V ou F
+// questões repetidas ou quase repetidas entre provas: [{ questoes: ['2016-032-q07', ...], igual }]
+const ARQ_PARECIDAS = join(AQUI, 'parecidas.json')
+const PARECIDAS = existsSync(ARQ_PARECIDAS) ? JSON.parse(readFileSync(ARQ_PARECIDAS, 'utf8')) : []
+function conferirParecidas() {
+  const ids = new Set(provas.flatMap((p) => p.questoes.map((q) => `${p.slug}-q${String(q.numero).padStart(2, '0')}`)))
+  return PARECIDAS.flatMap((g) => g.questoes.filter((id) => !ids.has(id)).map((id) => `parecidas: ${id} não existe`))
+}
+
 function conferirContrapontos() {
   const e = []
   for (const p of provas)
@@ -253,7 +261,7 @@ function conferirContrapontos() {
   return e
 }
 
-const erros = [...conferir(provas, figuras), ...conferirTrilha(), ...conferirAulas(), ...conferirContrapontos()]
+const erros = [...conferir(provas, figuras), ...conferirTrilha(), ...conferirAulas(), ...conferirContrapontos(), ...conferirParecidas()]
 for (const e of erros) console.error(`erro: ${e}`)
 if (SO_CONFERIR) {
   const total = provas.reduce((t, p) => t + p.questoes.length, 0)
@@ -294,7 +302,7 @@ const dados = provas.map((p) => ({
 }))
 writeFileSync(
   join(SAIDA, 'questoes.js'),
-  `// Gerado por _gerador/quiz.mjs a partir de _gerador/provas/. Não edite à mão.\nwindow.ASSUNTOS = ${JSON.stringify(ASSUNTOS)}\nwindow.TRILHA = ${JSON.stringify(TRILHA)}\nwindow.AULAS = ${JSON.stringify(AULAS, (k, v) => (k === 'figura' ? undefined : v))}\nwindow.PROVAS = ${JSON.stringify(dados, null, 1)}\n`,
+  `// Gerado por _gerador/quiz.mjs a partir de _gerador/provas/. Não edite à mão.\nwindow.ASSUNTOS = ${JSON.stringify(ASSUNTOS)}\nwindow.TRILHA = ${JSON.stringify(TRILHA)}\nwindow.AULAS = ${JSON.stringify(AULAS, (k, v) => (k === 'figura' ? undefined : v))}\nwindow.PARECIDAS = ${JSON.stringify(PARECIDAS)}\nwindow.PROVAS = ${JSON.stringify(dados, null, 1)}\n`,
 )
 // versão do questoes.js no index.html, para o navegador não misturar dados novos com cache velho
 const versao = createHash('sha1').update(readFileSync(join(SAIDA, 'questoes.js'))).digest('hex').slice(0, 8)

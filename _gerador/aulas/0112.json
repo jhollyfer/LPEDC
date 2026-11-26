@@ -1,7 +1,7 @@
 {
  "num": "0112",
  "oque": "O algoritmo de **Dijkstra** acha o caminho de **menor custo** (soma dos pesos) de uma origem até todos os outros vértices de um grafo ponderado, desde que **nenhum peso seja negativo**. É um algoritmo **guloso**: a cada passo fixa o vértice mais próximo ainda não fixado e nunca volta atrás.",
- "como": "Três vetores: `dist[v]` (melhor custo conhecido até agora, começa em 0 na origem e ∞ no resto), `fixo[v]` (se o custo já é definitivo) e `anterior[v]` (de onde se chega em v).\n\nRepita até fixar todos:\n\n- entre os **não fixos**, pegue o u de menor `dist` e marque como fixo;\n- **relaxe** cada aresta (u, v): se `dist[u] + peso(u, v) < dist[v]`, troque `dist[v]` pela soma e faça `anterior[v] = u`.\n\n```c\n/* relaxar a aresta u -> v */\nif (dist[u] + peso[u][v] < dist[v]) {\n    dist[v] = dist[u] + peso[u][v];\n    anterior[v] = u;\n}\n```\n\nFixar o menor é seguro porque qualquer outro caminho até ele teria de passar por um vértice não fixo, que já custa pelo menos o mesmo. Sem pesos negativos, andar mais só soma.",
+ "como": "Três vetores: `dist[v]` (melhor custo conhecido até agora, começa em 0 na origem e ∞ no resto), `fixo[v]` (se o custo já é definitivo) e `anterior[v]` (de onde se chega em v).\n\nRepita até fixar todos:\n\n- entre os **não fixos**, pegue o u de menor `dist` e marque como fixo;\n- **relaxe** cada aresta (u, v) com v ainda não fixo: se `dist[u] + peso(u, v) < dist[v]`, troque `dist[v]` pela soma e faça `anterior[v] = u`.\n\n```c\n/* relaxar a aresta u -> v */\nif (dist[u] + peso[u][v] < dist[v]) {\n    dist[v] = dist[u] + peso[u][v];\n    anterior[v] = u;\n}\n```\n\nFixar o menor é seguro porque qualquer outro caminho até ele teria de passar por um vértice não fixo, que já custa pelo menos o mesmo. Sem pesos negativos, andar mais só soma.",
  "caracteristicas": [
   "Origem única: dá a distância de uma origem a **todos** os vértices.",
   "Exige pesos **não negativos**. Com peso negativo, ele erra sem avisar; aí se usa Bellman-Ford.",
@@ -154,7 +154,7 @@
   },
   {
    "titulo": "Por que peso negativo quebra",
-   "texto": "Grafo dirigido: A→B peso 2, A→C peso 3, C→B peso −2. Saindo de A, B (2) é fixado antes de C (3). Quando C é fixado, a aresta C→B daria 3 − 2 = 1, melhor que 2, mas B já está fixo e não muda. O Dijkstra responde 2; o certo é 1.",
+   "texto": "Grafo dirigido: A→B peso 2, A→C peso 3, C→B peso −2. Saindo de A, B (2) é fixado antes de C (3). Quando C é fixado, a aresta C→B daria 3 − 2 = 1, melhor que 2, mas B já está fixo, e o algoritmo não relaxa mais aresta que chega nele. O Dijkstra responde 2; o certo é 1.",
    "figura": {
     "tipo": "texto",
     "titulo": "peso negativo",

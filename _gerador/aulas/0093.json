@@ -1,6 +1,6 @@
 {
  "num": "0093",
- "oque": "O insertion sort (ordenação por inserção) pega cada elemento e o **encaixa** no lugar certo da parte já ordenada à esquerda, como quem arruma as cartas na mão à medida que as recebe.",
+ "oque": "O insertion sort (ordenação por inserção) pega cada elemento e o **encaixa** no lugar certo da parte já ordenada à esquerda, como você arruma as cartas na mão à medida que as recebe.",
  "como": "Para `j` de 1 a `n - 1`:\n\n- guarde `x = v[j]`;\n- ande para a esquerda a partir de `i = j - 1` e, enquanto `v[i] > x`, **desloque** `v[i]` uma casa para a direita;\n- quando achar alguém `<= x`, ou passar do começo, ponha `x` em `v[i + 1]`.\n\n```c\nfor (int j = 1; j < n; j++) {\n    int x = v[j];\n    int i = j - 1;\n    while (i >= 0 && v[i] > x) {\n        v[i + 1] = v[i];\n        i--;\n    }\n    v[i + 1] = x;\n}\n```\n\nO deslocamento é uma escrita só, não uma troca. A cópia em `x` é obrigatória: o primeiro deslocamento escreve em cima de `v[j]`.",
  "caracteristicas": [
   "**Estável**: o laço para no primeiro elemento que **não** é maior que `x`, e `x` entra depois dos iguais.",
@@ -145,7 +145,7 @@
   },
   {
    "titulo": "Melhor caso: já ordenado",
-   "texto": "Com `2 4 5 7 9` na entrada, cada `x` compara uma vez com o vizinho da esquerda, que não é maior, e fica. São 4 comparações e nenhum deslocamento: `n - 1`, ou seja, `O(n)`. Com duas chaves vizinhas trocadas, é só um deslocamento a mais.",
+   "texto": "Com `2 4 5 7 9` na entrada, cada `x` compara uma vez com o vizinho da esquerda, que não é maior, e fica. São 4 comparações e nenhum deslocamento: `n - 1` comparações, `O(n)`. Com duas chaves vizinhas trocadas, é só um deslocamento a mais.",
    "figura": {
     "tipo": "vetor",
     "itens": [

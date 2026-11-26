@@ -4,7 +4,7 @@
  "como": "Na passada `i` (de 0 a `n - 2`):\n\n- procure o **índice** do menor em `v[i..n-1]`, começando com `menor = i`;\n- troque `v[i]` com `v[menor]`, uma troca só, **fora** do laço de busca;\n- a gaveta `i` fica pronta e nunca mais muda.\n\n```c\nfor (int i = 0; i < n - 1; i++) {\n    int menor = i;\n    for (int j = i + 1; j < n; j++)\n        if (v[j] < v[menor]) menor = j;\n    if (menor != i) {\n        int aux = v[i];\n        v[i] = v[menor];\n        v[menor] = aux;\n    }\n}\n```\n\nCom `<` estrito, um empate não troca o `menor`: fica o primeiro que apareceu.",
  "caracteristicas": [
   "Faz `n(n - 1)/2` comparações em **todos** os casos, mesmo com o vetor já ordenado. Não é adaptativo.",
-  "Faz **no máximo `n - 1` trocas**, uma por passada. É o método simples que menos move elementos.",
+  "Faz **no máximo `n - 1` trocas**, uma por passada. Entre os métodos simples, é o que menos move elementos.",
   "**Não é estável**: a troca é de longa distância e pode pular por cima de um elemento igual.",
   "**In-place**: memória extra `O(1)`.",
   "Depois da passada `i`, as gavetas `0..i` têm os menores do vetor inteiro, já na posição final."

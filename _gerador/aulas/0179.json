@@ -1,7 +1,7 @@
 {
  "num": "0179",
- "oque": "São duas sequências de sondagem do endereçamento aberto que pulam mais longe que a linear. A **quadrática** anda distâncias que crescem com o quadrado da tentativa; a **dispersão dupla** (*double hashing*) usa uma segunda função hash para decidir o tamanho do passo.",
- "como": "A tentativa número `i` (contando de 0) olha:\n\n| Sondagem | Posição `h(k, i)` |\n|---|---|\n| linear | `(h'(k) + i) mod m` |\n| quadrática | `(h'(k) + c₁·i + c₂·i²) mod m` |\n| dupla | `(h₁(k) + i·h₂(k)) mod m` |\n\nCom `c₁ = 0` e `c₂ = 1`, a quadrática tenta `h'(k)` e depois 1, 4, 9, 16 posições adiante.\n\nNa dupla, o passo `h₂(k)` tem duas exigências: **nunca ser 0** e ser **primo com `m`**, para a sequência visitar todas as posições. Com `m` primo, a receita do Cormen é `h₁(k) = k mod m` e `h₂(k) = 1 + (k mod (m - 1))`.\n\n```c\nint pos(int k, int i, int m, int modo) {\n    int h1 = k % m;\n    if (modo == LINEAR)\n        return (h1 + i) % m;\n    if (modo == QUADRATICA)\n        return (h1 + i * i) % m;\n    int h2 = 1 + k % (m - 1); // nunca 0\n    return (h1 + i * h2) % m;\n}\n```\n\nInserir, buscar e remover (com lápide) seguem a mesma sequência, como no 0107.",
+ "oque": "São duas sequências de sondagem do endereçamento aberto que pulam mais longe que a linear. A **quadrática** anda distâncias que crescem com o quadrado da tentativa; a **dispersão dupla** (também chamada de hash duplo) usa uma segunda função hash para decidir o tamanho do passo.",
+ "como": "A tentativa número `i` (contando de 0) olha:\n\n| Sondagem | Posição `h(k, i)` |\n|---|---|\n| linear | `(h'(k) + i) mod m` |\n| quadrática | `(h'(k) + c₁·i + c₂·i²) mod m` |\n| dupla | `(h₁(k) + i·h₂(k)) mod m` |\n\nCom `c₁ = 0` e `c₂ = 1`, a quadrática tenta `h'(k)` e depois 1, 4, 9, 16 posições adiante.\n\nNa dupla, o passo `h₂(k)` tem duas exigências: **nunca ser 0** e ser **primo com `m`**, para a sequência visitar todas as posições. Com `m` primo, a receita do Cormen é `h₁(k) = k mod m` e `h₂(k) = 1 + (k mod (m - 1))`.\n\n```c\nint pos(int k, int i, int m, int modo) {\n    int h1 = k % m;\n    if (modo == LINEAR)\n        return (h1 + i) % m;\n    if (modo == QUADRATICA)\n        return (h1 + i * i) % m;\n    int h2 = 1 + k % (m - 1); // nunca 0\n    return (h1 + i * h2) % m;\n}\n```\n\nInserir, buscar e remover (com lápide) seguem a mesma sequência, como na 0107.",
  "caracteristicas": [
   "**Agrupamento primário** é o da linear: blocos contínuos que crescem.",
   "A quadrática acaba com o primário, mas tem **agrupamento secundário**: chaves com a mesma posição inicial seguem exatamente a mesma trilha.",
@@ -213,7 +213,7 @@
   },
   {
    "titulo": "Passo com fator comum",
-   "texto": "Por que o passo precisa ser primo com `m`: com `m = 12`, início 0 e passo 4, a sequência é 0, 4, 8, 12 mod 12 = 0 e repete. Só 3 das 12 posições são visitadas; a inserção falha com 9 livres. Com `m` primo e `h₂` de 1 a `m - 1`, isso não acontece.",
+   "texto": "Por que o passo precisa ser primo com `m`: com `m = 12`, início 0 e passo 4, a sequência é 0, 4, 8, 12 mod 12 = 0 e repete. Só 3 das 12 posições são visitadas: se as três estiverem ocupadas, a inserção falha com 9 livres. Com `m` primo e `h₂` de 1 a `m - 1`, isso não acontece.",
    "figura": {
     "tipo": "texto",
     "linhas": [

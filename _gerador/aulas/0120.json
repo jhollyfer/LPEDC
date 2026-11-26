@@ -23,7 +23,7 @@
  "passos": [
   {
    "titulo": "Entrada",
-   "texto": "A chave é o número; a letra é o resto do registro. Os pedidos de 3 estrelas estão em amarelo.",
+   "texto": "A chave é o número; a letra é o resto do registro. As avaliações de 3 estrelas estão em amarelo.",
    "figura": {
     "tipo": "vetor",
     "itens": [

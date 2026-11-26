@@ -408,7 +408,7 @@ kbd { font: 12px var(--font); border: 1px solid var(--control); border-radius: 4
   </main>
 </div>
 
-<script src="quiz/questoes.js?v=975b08b4"></script>
+<script src="quiz/questoes.js?v=515229c2"></script>
 <script>
 'use strict'
 const CHAVE = 'lpedc-quiz-v1'
@@ -421,6 +421,8 @@ const TOPICOS = {
 const PROVAS = window.PROVAS ?? []
 const ASSUNTOS = window.ASSUNTOS ?? {}
 const AULAS = window.AULAS ?? {}
+const PARECIDAS = new Map()
+for (const g of window.PARECIDAS ?? []) for (const id of g.questoes) PARECIDAS.set(id, g)
 const QUESTOES = PROVAS.flatMap((p) =>
   p.questoes.map((q) => ({
     ...q,
@@ -789,6 +791,13 @@ function aulaDoAssunto(num, visivel) {
 }
 // o painel tem três abas: a aula do assunto, o resumo da questão e os contrapontos
 let abaPainel = ler('lpedc-aba', 'aula')
+function linhaParecidas(q) {
+  const g = PARECIDAS.get(q.id)
+  if (!g) return ''
+  const outras = g.questoes.filter((id) => id !== q.id && porId.has(id))
+  if (!outras.length) return ''
+  return `<p class="na-trilha">${g.igual ? 'Mesma questão em' : 'Questão parecida em'}: ${outras.map((id) => { const o = porId.get(id); return `<a href="#q/${id}">Edital ${esc(o.edital)}, Q${doisDigitos(o.numero)}</a>` }).join(' · ')}</p>`
+}
 function painelAntes(q, respondida) {
   if (!q.dica) return ''
   const nums = [...new Set([...(q.dica.matchAll(/\[(\d{4})\]/g))].map((m) => m[1]))]
@@ -810,6 +819,7 @@ function painelAntes(q, respondida) {
         ${comAula.length > 1 ? `<div class="assuntos-aula">${comAula.map((n, i) => `<button data-ver-aula="${esc(n)}" aria-pressed="${i === 0}">${esc(ASSUNTOS[n]?.titulo ?? n)}</button>`).join('')}</div>` : `<p class="aula-titulo">${esc(ASSUNTOS[comAula[0]]?.titulo ?? '')}</p>`}
         ${comAula.map((n, i) => aulaDoAssunto(n, i === 0)).join('')}`) : ''}
       ${secao('resumo', `<div class="resumo-q">${md(q.dica)}</div>
+        ${linhaParecidas(q)}
         ${linhaNaTrilha(nums)}
         ${comDesenho ? `<details class="desenho"><summary>Ver o desenho do assunto ${esc(comDesenho)}</summary><img src="material/${comDesenho}-ideia.svg" alt="Diagrama da ideia do assunto ${esc(comDesenho)}: ${esc(ASSUNTOS[comDesenho].titulo)}" loading="lazy"></details>` : ''}`)}
       ${q.contrapontos?.length ? secao('pensar', `<p class="nota">Um contraponto por afirmação. Não diz se é verdadeira ou falsa: mostra o outro lado para você decidir.</p><ol class="contrapontos">${q.contrapontos.map((c) => `<li><span class="item">${esc(c.item)}</span><span>${emLinha(c.texto)}</span></li>`).join('')}</ol>`) : ''}

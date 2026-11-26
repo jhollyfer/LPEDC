@@ -1,13 +1,13 @@
 {
  "num": "0107",
  "oque": "No endereçamento aberto, todas as chaves moram **dentro do próprio vetor**, sem listas. Quando o balde calculado está ocupado, a chave tenta outras posições numa sequência fixa, chamada **sequência de sondagem**, até achar uma livre.",
- "como": "Na **sondagem linear**, a tentativa número `i` (contando de 0) olha a posição\n\n`h(k, i) = (h'(k) + i) mod m`\n\nou seja: começa em `h'(k)` e anda uma casa por vez, voltando ao 0 depois da última.\n\n- **Inserir:** sonda até achar posição livre (ou lápide) e grava ali.\n- **Buscar:** sonda até achar a chave (sucesso) ou uma posição **livre** (não está). Parar na livre é seguro: se a chave existisse, a inserção teria parado ali ou antes.\n- **Remover:** não esvazia a posição; grava uma **lápide** (`DELETED` no Cormen). A busca passa reto por ela; a inserção pode reaproveitá-la.\n\n```c\nint insere(int t[], int m, int k) {\n    int i = k % m;\n    for (int s = 0; s < m; s++) {\n        if (t[i] == LIVRE || t[i] == LAPIDE) {\n            t[i] = k;\n            return i;\n        }\n        i = (i + 1) % m; // vizinha, com volta\n    }\n    return -1; // tabela cheia\n}\n```",
+ "como": "Na **sondagem linear**, a tentativa número `i` (contando de 0) olha a posição\n\n`h(k, i) = (h'(k) + i) mod m`\n\nA sondagem começa em `h'(k)` e anda uma casa por vez, voltando ao 0 depois da última.\n\n- **Inserir:** sonda até achar posição livre (ou lápide) e grava ali.\n- **Buscar:** sonda até achar a chave (sucesso) ou uma posição **livre** (não está). Parar na livre é seguro: se a chave existisse, a inserção teria parado ali ou antes.\n- **Remover:** não esvazia a posição; grava uma **lápide** (`DELETED` no Cormen). A busca passa reto por ela; a inserção pode reaproveitá-la. Antes, porém, a inserção segue a sondagem até uma posição nunca usada, para garantir que a chave não está mais adiante (o código abaixo pula essa checagem e aceita repetida).\n\n```c\nint insere(int t[], int m, int k) {\n    int i = k % m;\n    for (int s = 0; s < m; s++) {\n        if (t[i] == LIVRE || t[i] == LAPIDE) {\n            t[i] = k;\n            return i;\n        }\n        i = (i + 1) % m; // vizinha, com volta\n    }\n    return -1; // tabela cheia\n}\n```",
  "caracteristicas": [
   "A tabela tem tamanho fixo `m` e guarda **no máximo `m` chaves**: `α = n / m` nunca passa de 1.",
-  "Uma função hash só basta; a sondagem muda a posição, não a função.",
+  "Basta uma função hash: a sondagem muda a posição, não a função.",
   "**Agrupamento primário** (sondagem linear): posições ocupadas formam blocos contínuos, e toda chave que cai num bloco vai para o fim dele e o aumenta.",
   "Remover exige **lápide**. Esvaziar a posição quebra a busca de quem passou por ela.",
-  "Com α perto de 1 fica muito lenta: na linear, busca sem sucesso olha em média uns 2,5 baldes com α = 0,5 e uns 50 com α = 0,9. Por isso se aumenta a tabela antes de 70% a 75% de ocupação."
+  "Com α perto de 1 fica muito lenta: na linear, busca sem sucesso olha em média uns 2,5 baldes com α = 0,5 e uns 50 com α = 0,9. Por isso, aumente a tabela antes de chegar a 70% ou 75% de ocupação."
  ],
  "vantagens": [
   "Sem `malloc` e sem ponteiros: um vetor só, memória contígua.",
@@ -168,7 +168,7 @@
   },
   {
    "titulo": "Inserir 31 na lápide",
-   "texto": "`31 mod 7 = 3`: ocupada. 4: lápide, que vale como vaga para a inserção. O 31 fica na 4. 2 sondagens.",
+   "texto": "`31 mod 7 = 3`: ocupada. 4: lápide, que vale como vaga para a inserção. Antes de gravar, a inserção segue a sondagem (5, 6, 0) até a 1, a primeira posição nunca usada, e confirma que o 31 não está mais adiante. Aí volta e grava o 31 na 4, a primeira vaga da trilha: 2 sondagens até a vaga.",
    "figura": {
     "tipo": "hash",
     "baldes": [
