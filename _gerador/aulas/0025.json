@@ -1,7 +1,7 @@
 {
  "num": "0025",
  "oque": "Padrões de laço são jeitos consagrados de usar uma variável numa repetição: **contador**, **acumulador**, **maior/menor**, **flag** e **sentinela**. Todos seguem três tempos: a variável ganha um valor antes do laço, é atualizada dentro e é usada depois.",
- "como": "| Padrão | Antes do laço | Dentro do laço | Depois |\n|---|---|---|---|\n| contador | `cont = 0` | `cont++` | quantos foram |\n| acumulador | `soma = 0` (produto: `= 1`) | `soma += x` | total, média |\n| maior/menor | o **primeiro** valor | `if (x > maior) maior = x` | o recorde |\n| flag | `achou = 0` | `if (...) achou = 1` | aconteceu? |\n| sentinela | ler o primeiro valor | ler o próximo, no fim | o laço para nela |\n\n```c\nint v[] = {28, 31, 36, 25, 30}, n = 5;\nint soma = 0, maior = v[0], cont = 0;\nfor (int i = 0; i < n; i++) {\n    soma += v[i];                 // acumulador\n    if (v[i] > maior) maior = v[i];\n    if (v[i] >= 30) cont++;       // contador\n}\n// média: (double) soma / n\n```",
+ "como": "| Padrão | Antes do laço | Dentro do laço | Depois |\n|---|---|---|---|\n| contador | `cont = 0` | `cont++` | quantos foram |\n| acumulador | `soma = 0` (produto: `= 1`) | `soma += x` | total, média |\n| maior/menor | o **primeiro** valor | `if (x > maior) maior = x` | o recorde |\n| flag | `achou = 0` | `if (...) achou = 1` | aconteceu? |\n| sentinela | ler o primeiro valor | ler o próximo, no fim | o laço para nela |\n\n```c\nint v[] = {28, 31, 36, 25, 30}, n = 5;\nint soma = 0, maior = v[0], cont = 0;\nfor (int i = 0; i < n; i++) {\n    soma += v[i];             // acumulador\n    if (v[i] > maior) maior = v[i];\n    if (v[i] >= 30) cont++;   // contador\n}\n// média: (double) soma / n\n```",
  "caracteristicas": [
   "Acumulador de soma começa em 0; de **produto**, em 1. Começar o produto em 0 zera tudo na primeira volta.",
   "Maior e menor começam com o **primeiro valor**, ou com `INT_MIN` e `INT_MAX`, nunca com um número inventado como 0.",
@@ -112,6 +112,6 @@
  "fontes": [
   "Deitel e Deitel, *C: como programar*, 6. ed., cap. 3 (repetição controlada por contador e por sentinela).",
   "Backes, *Linguagem C: completa e descomplicada*, cap. 5 (comandos de repetição).",
-  "Leal, *Algoritmos e lógica de programação II*, unidade de estruturas de repetição."
+  "Celes, Cerqueira e Rangel, *Introdução a estruturas de dados*, 2. ed., capítulo de controle de fluxo."
  ]
 }

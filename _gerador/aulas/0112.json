@@ -1,0 +1,183 @@
+{
+ "num": "0112",
+ "oque": "O algoritmo de **Dijkstra** acha o caminho de **menor custo** (soma dos pesos) de uma origem até todos os outros vértices de um grafo ponderado, desde que **nenhum peso seja negativo**. É um algoritmo **guloso**: a cada passo fixa o vértice mais próximo ainda não fixado e nunca volta atrás.",
+ "como": "Três vetores: `dist[v]` (melhor custo conhecido até agora, começa em 0 na origem e ∞ no resto), `fixo[v]` (se o custo já é definitivo) e `anterior[v]` (de onde se chega em v).\n\nRepita até fixar todos:\n\n- entre os **não fixos**, pegue o u de menor `dist` e marque como fixo;\n- **relaxe** cada aresta (u, v): se `dist[u] + peso(u, v) < dist[v]`, troque `dist[v]` pela soma e faça `anterior[v] = u`.\n\n```c\n/* relaxar a aresta u -> v */\nif (dist[u] + peso[u][v] < dist[v]) {\n    dist[v] = dist[u] + peso[u][v];\n    anterior[v] = u;\n}\n```\n\nFixar o menor é seguro porque qualquer outro caminho até ele teria de passar por um vértice não fixo, que já custa pelo menos o mesmo. Sem pesos negativos, andar mais só soma.",
+ "caracteristicas": [
+  "Origem única: dá a distância de uma origem a **todos** os vértices.",
+  "Exige pesos **não negativos**. Com peso negativo, ele erra sem avisar; aí se usa Bellman-Ford.",
+  "É guloso: cada vértice é fixado uma vez e sua distância não muda mais.",
+  "É **polinomial**, e não exponencial: O(V²) com vetor, O((V + E) log V) com heap.",
+  "Com todos os pesos iguais a 1, dá as mesmas distâncias que a BFS."
+ ],
+ "vantagens": [
+  "Acha o caminho mais barato, não só o de menos arestas como a BFS.",
+  "Eficiente: O(V²) com matriz, ótimo para grafo denso; com heap, bom para grafo esparso.",
+  "Reconstrói a rota pelo vetor `anterior[]`."
+ ],
+ "desvantagens": [
+  "Não funciona com pesos negativos.",
+  "Calcula de uma origem só; para todos os pares, roda V vezes ou usa Floyd-Warshall.",
+  "Para ficar abaixo de O(V²) precisa de heap e lista de adjacência, o que complica o código."
+ ],
+ "exemplo": "Rumo à praia, os vértices são 0 Casa, 1 Escola, 2 Padaria, 3 Mercado, 4 Praia. Ruas de mão dupla, peso em minutos:\n\n```\nCasa-Escola 1     Casa-Padaria 4\nEscola-Padaria 2  Escola-Mercado 8\nPadaria-Mercado 5 Padaria-Praia 10\nMercado-Praia 3\n```\n\nOrigem: Casa. Na figura, o vetor é `dist[]` (índices 0 a 4): verde = fixo, amarelo = mudou neste passo.\n\n| Fixa | Casa | Escola | Padaria | Mercado | Praia |\n|---|---|---|---|---|---|\n| (início) | 0 | ∞ | ∞ | ∞ | ∞ |\n| Casa (0) | **0** | 1 | 4 | ∞ | ∞ |\n| Escola (1) | | **1** | 3 | 9 | ∞ |\n| Padaria (3) | | | **3** | 8 | 13 |\n| Mercado (8) | | | | **8** | 11 |\n| Praia (11) | | | | | **11** |",
+ "passos": [
+  {
+   "titulo": "Início",
+   "texto": "`dist[Casa] = 0`; o resto é ∞ (ainda não sei chegar). Ninguém está fixo.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     0,
+     "∞",
+     "∞",
+     "∞",
+     "∞"
+    ],
+    "estados": {
+     "0": "amarelo"
+    },
+    "nome": "dist",
+    "titulo": "início"
+   }
+  },
+  {
+   "titulo": "Fixa Casa (0)",
+   "texto": "O menor não fixo é Casa, com 0. Relaxa as ruas de Casa: Escola 0 + 1 = 1 < ∞, vira 1; Padaria 0 + 4 = 4 < ∞, vira 4.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     0,
+     1,
+     4,
+     "∞",
+     "∞"
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "amarelo",
+     "2": "amarelo"
+    },
+    "nome": "dist",
+    "titulo": "fixou Casa"
+   }
+  },
+  {
+   "titulo": "Fixa Escola (1)",
+   "texto": "Menor não fixo: Escola, 1. Relaxa: Padaria 1 + 2 = **3 < 4**, cai de 4 para 3 (passar pela Escola é melhor que a rua direta). Mercado 1 + 8 = 9 < ∞, vira 9.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     0,
+     1,
+     3,
+     9,
+     "∞"
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "verde",
+     "2": "amarelo",
+     "3": "amarelo"
+    },
+    "nome": "dist",
+    "titulo": "fixou Escola"
+   }
+  },
+  {
+   "titulo": "Fixa Padaria (3)",
+   "texto": "Menor não fixo: Padaria, 3. Relaxa: Mercado 3 + 5 = **8 < 9**, cai para 8. Praia 3 + 10 = 13 < ∞, vira 13.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     0,
+     1,
+     3,
+     8,
+     13
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "verde",
+     "2": "verde",
+     "3": "amarelo",
+     "4": "amarelo"
+    },
+    "nome": "dist",
+    "titulo": "fixou Padaria"
+   }
+  },
+  {
+   "titulo": "Fixa Mercado (8)",
+   "texto": "Menor não fixo: Mercado, 8 (a Praia tem 13). Relaxa: Praia 8 + 3 = **11 < 13**, cai para 11.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     0,
+     1,
+     3,
+     8,
+     11
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "verde",
+     "2": "verde",
+     "3": "verde",
+     "4": "amarelo"
+    },
+    "nome": "dist",
+    "titulo": "fixou Mercado"
+   }
+  },
+  {
+   "titulo": "Fixa Praia (11) e monta a rota",
+   "texto": "Último não fixo: Praia, 11. Pelo `anterior[]`: Praia ← Mercado ← Padaria ← Escola ← Casa. Rota: **Casa → Escola → Padaria → Mercado → Praia**, 1 + 2 + 5 + 3 = 11 min. A BFS daria Casa → Padaria → Praia, só 2 ruas, mas 4 + 10 = 14 min.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     0,
+     1,
+     3,
+     8,
+     11
+    ],
+    "estados": {
+     "0": "verde",
+     "1": "verde",
+     "2": "verde",
+     "3": "verde",
+     "4": "verde"
+    },
+    "nome": "dist",
+    "titulo": "tudo fixo"
+   }
+  },
+  {
+   "titulo": "Por que peso negativo quebra",
+   "texto": "Grafo dirigido: A→B peso 2, A→C peso 3, C→B peso −2. Saindo de A, B (2) é fixado antes de C (3). Quando C é fixado, a aresta C→B daria 3 − 2 = 1, melhor que 2, mas B já está fixo e não muda. O Dijkstra responde 2; o certo é 1.",
+   "figura": {
+    "tipo": "texto",
+    "titulo": "peso negativo",
+    "linhas": [
+     "A -> B  2",
+     "A -> C  3",
+     "C -> B -2",
+     "",
+     "fixa A: B = 2, C = 3",
+     "fixa B (2)   <- cedo demais",
+     "fixa C: 3 - 2 = 1 < 2,",
+     "        mas B já é fixo",
+     "Dijkstra: 2   certo: 1"
+    ]
+   }
+  }
+ ],
+ "custos": "| Implementação | Tempo | Memória extra |\n|---|---|---|\n| Matriz + busca linear do menor | O(V²) | O(V) |\n| Lista de adjacência + heap de mínimo | O((V + E) log V) | O(V) |",
+ "naprova": "A banca julga afirmações como \"Dijkstra tem complexidade exponencial\" (não: é polinomial, O(V²)) e cobra a restrição a pesos não negativos. Também pode pedir a tabela de distâncias passo a passo. Pegadinha: confundir o limite do algoritmo (peso negativo) com tamanho do grafo.",
+ "fontes": [
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 22 (caminhos mínimos de fonte única, RELAX e Dijkstra).",
+  "Ziviani, *Projeto de algoritmos*, 3. ed., cap. 7 (caminhos mais curtos).",
+  "Dijkstra, \"A note on two problems in connexion with graphs\", *Numerische Mathematik*, v. 1, 1959.",
+  "Feofiloff, *Algoritmos para grafos* (IME-USP)."
+ ]
+}
