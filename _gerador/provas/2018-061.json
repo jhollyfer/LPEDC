@@ -184,7 +184,7 @@
           "modulo": "13-busca-e-ordenacao.md"
         }
       ],
-      "dica": "**Cobra:** achar a afirmação falsa sobre os métodos de ordenação, de custo e de funcionamento.\n\n- **Selection sort** [0092]: a cada passo varre o resto do vetor para achar o mínimo, então faz o mesmo número de comparações em qualquer entrada, O(n²). Ex.: 4 elementos, mesmo ordenados, custam 3 + 2 + 1 = 6 comparações.\n- **Quick sort** [0095]: escolhe um pivô, separa menores de um lado e maiores do outro e repete nos dois lados; é divisão e conquista. Ex.: pivô 20 em `35 12 48 7 29` deixa `12 7 20 35 29 48`.\n- **Pior caso** [0096]: é o maior custo entre as entradas de tamanho `n`, e cresce quando `n` cresce. Ex.: bubble sort faz 45 comparações com 10 chaves e 4950 com 100.\n\n**Como atacar:** leia o melhor, o médio e o pior caso de cada algoritmo e procure a afirmação que contradiz a tabela."
+      "dica": "**Cobra:** achar a afirmação falsa sobre os métodos de ordenação, de custo e de funcionamento.\n\n- **Selection sort** [0092]: a cada passo varre o resto do vetor para achar o mínimo, então faz o mesmo número de comparações em qualquer entrada, O(n²). Ex.: 4 elementos, mesmo ordenados, custam 3 + 2 + 1 = 6 comparações.\n- **Quick sort** [0095]: escolhe um pivô, separa menores de um lado e maiores do outro e repete nos dois lados; é divisão e conquista. Ex.: pivô 20 em `35 12 48 7 29 20` deixa `12 7 20 35 29 48`.\n- **Pior caso** [0096]: é o maior custo entre as entradas de tamanho `n`, e cresce quando `n` cresce. Ex.: bubble sort faz 45 comparações com 10 chaves e 4950 com 100.\n\n**Como atacar:** leia o melhor, o médio e o pior caso de cada algoritmo e procure a afirmação que contradiz a tabela."
     },
     {
       "numero": 5,
@@ -272,7 +272,7 @@
           "modulo": "26-analise-formal.md"
         }
       ],
-      "dica": "**Cobra:** reconhecer o quick sort entre descrições de vários algoritmos e saber quanto espaço ele usa.\n\n- **Quick sort** [0095]: escolhe um pivô, separa menores e maiores dele e ordena cada lado recursivamente, sem vetor auxiliar. Ex.: pivô 20 em `35 12 48 7 29` deixa `12 7 20 35 29 48`.\n- **Espaço da recursão** [0168]: troca no próprio vetor, mas a recursão usa pilha: Θ(log n) em média e Θ(n) no pior caso, com o pivô sempre no extremo. Ex.: pivô sempre o maior de 1000 elementos pode empilhar cerca de 1000 chamadas.\n- **Insertion e selection** [0093]: o insertion sort encaixa um elemento na parte ordenada; o selection escolhe o menor do resto e o põe na frente. Ex.: em `4 2 7`, o insertion encaixa o 2 antes do 4 e o selection troca o 2 com o 4.\n\n**Como atacar:** associe cada alternativa a um algoritmo pelo seu passo característico."
+      "dica": "**Cobra:** reconhecer o quick sort entre descrições de vários algoritmos e saber quanto espaço ele usa.\n\n- **Quick sort** [0095]: escolhe um pivô, separa menores e maiores dele e ordena cada lado recursivamente, sem vetor auxiliar. Ex.: pivô 20 em `35 12 48 7 29 20` deixa `12 7 20 35 29 48`.\n- **Espaço da recursão** [0168]: troca no próprio vetor, mas cada chamada recursiva ocupa a pilha, e a profundidade depende do equilíbrio das partições. Ex.: pivô sempre o maior de 1000 elementos pode empilhar cerca de 1000 chamadas.\n- **Insertion e selection** [0093]: o insertion sort encaixa um elemento na parte ordenada; o selection escolhe o menor do resto e o põe na frente. Ex.: em `4 2 7`, o insertion encaixa o 2 antes do 4 e o selection troca o 2 com o 4.\n\n**Como atacar:** associe cada alternativa a um algoritmo pelo seu passo característico."
     },
     {
       "numero": 7,
@@ -395,7 +395,7 @@
           "modulo": "07-memoria-dinamica.md"
         }
       ],
-      "dica": "**Cobra:** achar a afirmação falsa sobre estruturas lineares, hash e vetor dinâmico.\n\n- **Estruturas lineares** [0082]: pilha, fila, lista e fila de prioridade guardam elementos em sequência; a árvore é a não linear. Ex.: pilha `A, B, C` é uma sequência acessada só pelo topo.\n- **malloc e vetor** [0054]: `malloc` reserva um bloco contíguo no heap, que continua sendo um vetor, e não vira lista ligada. Ex.: `int *v = malloc(5 * sizeof(int));` é um vetor de 5 posições contíguas.\n- **Hash** [0105]: a função transforma a chave em índice inteiro, que é usado para acessar o dado. Ex.: `23 % 11` leva a chave 23 ao índice 1.\n\n**Como atacar:** para cada afirmação, relembre a definição e procure a que a contradiz."
+      "dica": "**Cobra:** achar a afirmação falsa sobre estruturas lineares, hash e vetor dinâmico.\n\n- **Estruturas lineares** [0082]: pilha, fila e lista guardam elementos em sequência; árvore e grafo são não lineares. Ex.: pilha `A, B, C` é uma sequência acessada só pelo topo.\n- **malloc e vetor** [0054]: `malloc` reserva um bloco contíguo no heap, que continua sendo um vetor, e não vira lista ligada. Ex.: `int *v = malloc(5 * sizeof(int));` é um vetor de 5 posições contíguas.\n- **Hash** [0105]: a função transforma a chave em índice inteiro, que é usado para acessar o dado. Ex.: `23 % 11` leva a chave 23 ao índice 1.\n\n**Como atacar:** para cada afirmação, relembre a definição e procure a que a contradiz."
     },
     {
       "numero": 9,
@@ -437,7 +437,7 @@
           "modulo": "22-arvores-avancadas.md"
         }
       ],
-      "dica": "**Cobra:** o número mínimo de descendentes por nível numa árvore B, dado o grau mínimo.\n\n- **Grau mínimo t** [0146]: todo nó, menos a raiz, tem pelo menos `t` filhos (a raiz tem pelo menos 2); numa \"ordem m\", isso é `⌈m / 2⌉`. Ex.: com `t = 3`, cada nó tem de 3 a 6 filhos.\n- **Crescimento por nível** [0146]: se cada nó tem pelo menos `t` filhos, cada nível tem pelo menos `t` vezes mais nós que o anterior, começando com 2 filhos da raiz. Ex.: com `t = 3`, os níveis 1, 2 e 3 têm pelo menos 2, 6 e 18 nós.\n\n**Como atacar:** confira como o nível `d` é contado e teste cada fórmula com `d = 1` e `d = 2`."
+      "dica": "**Cobra:** o número mínimo de descendentes por nível numa árvore B, dado o grau mínimo.\n\n- **Grau mínimo t** [0146]: todo nó, menos a raiz, tem pelo menos `t` filhos (a raiz tem pelo menos 2); numa \"ordem m\", isso é `⌈m / 2⌉`. Ex.: com `t = 3`, cada nó interno que não é raiz tem de 3 a 6 filhos.\n- **Crescimento por nível** [0146]: se cada nó tem pelo menos `t` filhos, cada nível tem pelo menos `t` vezes mais nós que o anterior, começando com 2 filhos da raiz. Ex.: com `t = 3`, os níveis 1, 2 e 3 têm pelo menos 2, 6 e 18 nós.\n\n**Como atacar:** confira como o nível `d` é contado e teste cada fórmula com `d = 1` e `d = 2`."
     },
     {
       "numero": 10,
@@ -452,7 +452,7 @@
         {
           "letra": "A",
           "texto": "v1[i] ≥ v2[i], ∀ i = 0,1,...,N-1",
-          "porque": "Correta. A ordem simétrica da ABB devolve tudo crescente: v1 inteiro e depois v2 inteiro. Empilhar e desempilhar inverte: sai decrescente. Alternando começando por v1, v1[i] recebe a posição 2i e v2[i] a posição 2i+1 dessa sequência decrescente, logo v1[i] > v2[i]."
+          "porque": "Correta. A ordem simétrica da BST devolve tudo crescente: v1 inteiro e depois v2 inteiro. Empilhar e desempilhar inverte: sai decrescente. Alternando começando por v1, v1[i] recebe a posição 2i e v2[i] a posição 2i+1 dessa sequência decrescente, logo v1[i] > v2[i]."
         },
         {
           "letra": "B",
@@ -476,7 +476,7 @@
         }
       ],
       "gabarito": "A",
-      "resumo": "Acompanhe cada estrutura: a fila preserva a ordem de entrada; a ABB percorrida em ordem simétrica devolve tudo crescente; a pilha inverte, ficando decrescente; ao distribuir alternando, v1 pega as posições pares e v2 as ímpares. Logo cada v1[i] vem imediatamente antes de v2[i] numa sequência decrescente, então v1[i] ≥ v2[i]. Dica: transforme em exemplo com N = 2.",
+      "resumo": "Acompanhe cada estrutura: a fila preserva a ordem de entrada; a BST percorrida em ordem simétrica devolve tudo crescente; a pilha inverte, ficando decrescente; ao distribuir alternando, v1 pega as posições pares e v2 as ímpares. Logo cada v1[i] vem imediatamente antes de v2[i] numa sequência decrescente, então v1[i] ≥ v2[i]. Dica: transforme em exemplo com N = 2.",
       "assuntos": [
         {
           "num": "0082",
@@ -495,11 +495,11 @@
       "contrapontos": [
         {
           "item": "A",
-          "texto": "Faça N = 2, `v1 = [1, 2]`, `v2 = [3, 4]` e siga cada estrutura: fila, ABB em ordem simétrica, pilha, distribuição alternada. No fim, compare `v1[0]` com `v2[0]` e `v1[1]` com `v2[1]`."
+          "texto": "Faça N = 2, `v1 = [1, 2]`, `v2 = [3, 4]` e siga cada estrutura: fila, BST em ordem simétrica, pilha, distribuição alternada. No fim, compare `v1[0]` com `v2[0]` e `v1[1]` com `v2[1]`."
         },
         {
           "item": "B",
-          "texto": "A ordem simétrica da ABB entrega os valores crescentes. A pilha devolve na ordem inversa da que recebeu. Que ordem sai da pilha, e quem recebe o primeiro valor que sai, v1 ou v2?"
+          "texto": "A ordem simétrica da BST entrega os valores crescentes. A pilha devolve na ordem inversa da que recebeu. Que ordem sai da pilha, e quem recebe o primeiro valor que sai, v1 ou v2?"
         },
         {
           "item": "C",
@@ -714,11 +714,11 @@
         {
           "letra": "E",
           "texto": "Todas as afirmativas estão incorretas",
-          "porque": "Correta. I falsa: um nó pode ter só 2 filhos (a raiz sempre pode). II falsa: a AVL não tem campo de folha. III falsa: todas as folhas ficam no mesmo nível. IV falsa: o balanceamento é barato e a árvore B foi feita para armazenamento secundário."
+          "porque": "Correta. I falsa: um nó interno pode ter só 2 filhos (a raiz sempre pode), e a folha não tem filho. II falsa: a AVL não tem campo de folha. III falsa: todas as folhas ficam no mesmo nível. IV falsa: o balanceamento é barato e a árvore B foi feita para armazenamento secundário."
         }
       ],
       "gabarito": "E",
-      "resumo": "Valores: I F, II F, III F, IV F. Árvore B: folhas todas no mesmo nível, nós com entre ⌈m/2⌉ e m filhos (raiz com pelo menos 2) e balanceamento local por split e concatenação. É a estrutura típica de disco.",
+      "resumo": "Valores: I F, II F, III F, IV F. Árvore B: folhas todas no mesmo nível, nós internos com entre ⌈m/2⌉ e m filhos (a raiz com pelo menos 2, as folhas sem filhos) e balanceamento local por split e concatenação. É a estrutura típica de disco.",
       "assuntos": [
         {
           "num": "0146",
@@ -729,7 +729,7 @@
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** as diferenças entre árvore B e árvore binária: filhos por nó, nível das folhas e custo do balanceamento.\n\n- **Grau mínimo t** [0146]: todo nó, menos a raiz, tem de `t - 1` a `2t - 1` chaves; um nó com `k` chaves tem `k + 1` filhos. Ex.: com `t = 2`, cada nó tem de 2 a 4 filhos, e a raiz pode ter só 1 chave.\n- **Folhas no mesmo nível** [0146]: a divisão e a junção de nós mantêm todas as folhas à mesma profundidade. Ex.: dividir a raiz cheia cria uma raiz nova e todas as folhas descem um nível.\n- **Nós gordos e disco** [0146]: cada nó ocupa um bloco do disco, e a altura `h ≤ log_t((n + 1) / 2)` pequena significa poucas leituras. Ex.: com `t = 100` e 1 milhão de chaves, a altura é no máximo 2.\n\n**Como atacar:** compare cada afirmação com a regra do grau mínimo e com o que a divisão faz.",
+      "dica": "**Cobra:** as diferenças entre árvore B e árvore binária: filhos por nó, nível das folhas e custo do balanceamento.\n\n- **Grau mínimo t** [0146]: todo nó, menos a raiz, tem de `t - 1` a `2t - 1` chaves; um nó com `k` chaves tem `k + 1` filhos. Ex.: com `t = 2`, um nó interno fora da raiz tem de 2 a 4 filhos; a raiz pode ter 1 chave.\n- **Folhas no mesmo nível** [0146]: a divisão e a junção de nós mantêm todas as folhas à mesma profundidade. Ex.: dividir a raiz cheia cria uma raiz nova e todas as folhas descem um nível.\n- **Nós gordos e disco** [0146]: cada nó ocupa um bloco do disco, e a altura `h ≤ log_t((n + 1) / 2)` pequena significa poucas leituras. Ex.: com `t = 100` e 1 milhão de chaves, a altura é no máximo 2.\n\n**Como atacar:** compare cada afirmação com a regra do grau mínimo e com o que a divisão faz.",
       "contrapontos": [
         {
           "item": "I",
@@ -745,7 +745,7 @@
         },
         {
           "item": "IV",
-          "texto": "Com `t = 1.000` e 1 bilhão de chaves, a árvore B tem altura perto de 3, e split e concatenação mexem em poucas páginas por nível. Uma AVL com as mesmas chaves tem pelo menos 30 níveis: quantas leituras de disco cada uma pede numa busca?"
+          "texto": "Com `t = 1.000` e 1 bilhão de chaves, a árvore B tem no máximo 3 níveis, e split e concatenação mexem em poucas páginas por nível. Uma AVL com as mesmas chaves tem pelo menos 30 níveis: quantas leituras de disco cada uma pede numa busca?"
         }
       ]
     },
@@ -768,32 +768,32 @@
         {
           "letra": "C",
           "texto": "Trata-se com certeza de uma árvore vermelho e preto.",
-          "porque": "Também sem certeza: pode ser uma ABB comum."
+          "porque": "Também sem certeza: pode ser uma BST comum."
         },
         {
           "letra": "D",
           "texto": "Tal árvore não pode existir por não se tratar de uma árvore binária de pesquisa.",
-          "porque": "Pode existir: ABB não restringe as alturas."
+          "porque": "Pode existir: BST não restringe as alturas."
         },
         {
           "letra": "E",
           "texto": "Nenhuma das alternativas anteriores está correta.",
-          "porque": "Correta. Com a informação dada você só descarta a AVL; não dá para afirmar com certeza se é rubro-negra ou ABB sem balanceamento."
+          "porque": "Correta. Com a informação dada você só descarta a AVL; não dá para afirmar com certeza se é rubro-negra ou BST sem balanceamento."
         }
       ],
       "gabarito": "E",
-      "resumo": "Diferença de altura maior que 1 num nó exclui AVL, mas nada mais. A rubro-negra é balanceada de outro jeito e admite essa diferença, e uma ABB comum também. Cuidado com as palavras 'com certeza'.",
+      "resumo": "Diferença de altura maior que 1 num nó exclui AVL, mas nada mais. A rubro-negra é balanceada de outro jeito e admite essa diferença, e uma BST comum também. Cuidado com as palavras 'com certeza'.",
       "assuntos": [
         {
           "num": "0101",
           "modulo": "14-arvores.md"
         },
         {
-          "num": "0145",
-          "modulo": "22-arvores-avancadas.md"
+          "num": "0177",
+          "modulo": "28-estruturas-complementos.md"
         }
       ],
-      "dica": "**Cobra:** o que a diferença de altura maior que 1 entre as subárvores de um nó permite concluir.\n\n- **Regra da AVL** [0101]: a AVL exige diferença de altura de no máximo 1 em todos os nós. Ex.: um nó com subárvores de altura 0 e 2 já tira a árvore da AVL.\n- **BST sem balanceamento** [0099]: a BST comum aceita qualquer forma, desde que menores fiquem à esquerda e maiores à direita. Ex.: inserir 1, 2, 3 sem rotação dá `fb = -2` e continua sendo uma BST válida.\n- **Rubro-negra** [0145]: balanceia por cores e deixa o caminho mais longo ser até o dobro do mais curto, então não tem a regra de diferença 1. Ex.: uma árvore rubro-negra pode ter subárvores com alturas diferentes em mais de 1.\n\n**Como atacar:** ache a propriedade que a diferença maior que 1 elimina e o que continua possível.",
+      "dica": "**Cobra:** o que a diferença de altura maior que 1 entre as subárvores de um nó permite concluir.\n\n- **Regra da AVL** [0101]: a AVL exige diferença de altura de no máximo 1 em todos os nós. Ex.: um nó com subárvores de altura 0 e 2 já tira a árvore da AVL.\n- **BST sem balanceamento** [0099]: a BST comum aceita qualquer forma, desde que menores fiquem à esquerda e maiores à direita. Ex.: inserir 1, 2, 3 sem rotação dá `fb = -2` e continua sendo uma BST válida.\n- **Rubro-negra** [0177]: balanceia por cores e deixa o caminho mais longo ser até o dobro do mais curto, então não tem a regra de diferença 1. Ex.: uma árvore rubro-negra pode ter subárvores com alturas diferentes em mais de 1.\n\n**Como atacar:** ache a propriedade que a diferença maior que 1 elimina e o que continua possível.",
       "contrapontos": [
         {
           "item": "A",
@@ -805,11 +805,11 @@
         },
         {
           "item": "C",
-          "texto": "Insira 1, 2, 3 nessa ordem numa ABB comum: o nó 1 fica com a esquerda vazia e a direita de altura 2. Alguma regra de cor entrou na montagem dessa árvore?"
+          "texto": "Insira 1, 2, 3 nessa ordem numa BST comum: o nó 1 fica com a esquerda vazia e a direita formada pela cadeia 2 → 3. Alguma regra de cor entrou na montagem dessa árvore?"
         },
         {
           "item": "D",
-          "texto": "A ABB só exige esquerda < nó < direita. Insira 1, 2, 3 numa ABB vazia: a ordem das chaves é respeitada? Qual é a diferença de altura na raiz?"
+          "texto": "A BST só exige esquerda < nó < direita. Insira 1, 2, 3 numa BST vazia: a ordem das chaves é respeitada? Qual é a diferença de altura na raiz?"
         }
       ]
     },
@@ -853,7 +853,7 @@
           "modulo": "15-hash.md"
         }
       ],
-      "dica": "**Cobra:** o custo da busca e o tipo de colisão no hash por encadeamento, comparado ao endereçamento aberto.\n\n- **Encadeamento** [0106]: cada balde guarda uma lista; a busca percorre só ela, em média `α = n / m` nós, e no pior caso (tudo num balde), `n`. Ex.: 4 chaves no mesmo balde: achar a última custa 4 comparações.\n- **Colisão secundária** [0107]: no endereçamento aberto, chaves de hashes diferentes disputam as mesmas posições de sondagem; no encadeamento só dividem lista as de mesmo hash. Ex.: com `k % 11`, a chave 15 cai no 4 e vai para o 5; depois a chave 5 acha a vaga ocupada.\n- **Pior caso** [0106]: depende da função hash; uma função ruim joga tudo num balde e a busca vira O(n). Ex.: a função `k % 10` com chaves 10, 20, 30, 40 manda todas para o balde 0.\n\n**Como atacar:** desconfie de \"sempre\" e \"nunca\" e pense no pior caso de cada método.",
+      "dica": "**Cobra:** o custo da busca e o tipo de colisão no hash por encadeamento, comparado ao endereçamento aberto.\n\n- **Encadeamento** [0106]: cada balde guarda uma lista; a busca percorre só ela, em média `α = n / m` nós, e no pior caso (tudo num balde), `n`. Ex.: 4 chaves no mesmo balde: achar a última custa 4 comparações.\n- **Colisão secundária** [0107]: no endereçamento aberto, chaves de hashes diferentes disputam as mesmas posições de sondagem; no encadeamento só dividem lista as de mesmo hash. Ex.: com `k % 11` e a posição 4 ocupada, a chave 15 vai para o 5; depois a chave 5 acha a vaga ocupada.\n- **Pior caso** [0106]: depende da função hash; uma função ruim joga tudo num balde e a busca vira O(n). Ex.: a função `k % 10` com chaves 10, 20, 30, 40 manda todas para o balde 0.\n\n**Como atacar:** desconfie de \"sempre\" e \"nunca\" e pense no pior caso de cada método.",
       "contrapontos": [
         {
           "item": "I",
@@ -902,7 +902,7 @@
         }
       ],
       "gabarito": "anulada",
-      "resumo": "Valores: I V (radix distribui por dígito, sem comparar chaves), II F (as passadas seguem os dígitos da maior chave, não a média), III V (vetor auxiliar proporcional a n). Como I e III são verdadeiras, nenhuma alternativa serve, e a banca anulou. Para radix: O(d·(n+k)) tempo e O(n+k) espaço.",
+      "resumo": "Valores: I V (radix distribui por dígito, sem comparar chaves), II F (as passadas seguem os dígitos da maior chave, não a média), III V (vetor auxiliar proporcional a n). Como I e III são verdadeiras, nenhuma alternativa serve, e a banca anulou. Para radix: O(d·(n+b)) tempo e O(n+b) espaço, com b a base.",
       "assuntos": [
         {
           "num": "0121",
@@ -921,7 +921,7 @@
         },
         {
           "item": "III",
-          "texto": "Cada passada usa um counting sort estável, que escreve num vetor de saída do tamanho da entrada, mais `k` contadores. Para `n = 1.000` em base 10, quanta memória extra é isso?"
+          "texto": "Cada passada usa um counting sort estável, que escreve num vetor de saída do tamanho da entrada, mais `b` contadores, um por dígito da base. Para `n = 1.000` em base 10, quanta memória extra é isso?"
         }
       ]
     },
@@ -1025,7 +1025,7 @@
           "modulo": "28-estruturas-complementos.md"
         }
       ],
-      "dica": "**Cobra:** o que a AVL garante e quando as rotações podem se propagar até a raiz.\n\n- **Regra da AVL** [0101]: o equilíbrio é checado em todo nó: a diferença de altura das subárvores é no máximo 1. Ex.: fator 2 ou -2 em qualquer nó é desequilíbrio.\n- **Rotação como conserto** [0101]: quando um nó chega a fator ±2, uma rotação (simples ou dupla) restaura o equilíbrio, sem quebrar a ordem da BST. Ex.: inserir 10, 20, 30 pede uma rotação à esquerda no 10.\n- **Inserção × remoção** [0176]: a remoção pode deixar a subárvore mais baixa depois da rotação e passar o desequilíbrio ao avô, e a inserção não propaga assim. Ex.: numa AVL de 16 nós, uma remoção rotaciona o 28 e depois a raiz.\n\n**Como atacar:** relacione cada afirmação à regra do equilíbrio, e a última à diferença entre inserir e remover.",
+      "dica": "**Cobra:** o que a AVL garante e quando as rotações podem se propagar até a raiz.\n\n- **Regra da AVL** [0101]: o equilíbrio é checado em todo nó: a diferença de altura das subárvores é no máximo 1. Ex.: fator 2 ou -2 em qualquer nó é desequilíbrio.\n- **Rotação como conserto** [0101]: quando um nó chega a fator ±2, uma rotação (simples ou dupla) restaura o equilíbrio, sem quebrar a ordem da BST. Ex.: inserir 10, 20, 30 pede uma rotação à esquerda no 10.\n- **Remoção na AVL** [0176]: a rotação pode deixar a subárvore mais baixa e passar o desequilíbrio ao avô, e o conserto pode subir até a raiz. Ex.: numa AVL de 16 nós, uma remoção rotaciona o 28 e depois a raiz.\n\n**Como atacar:** relacione cada afirmação à regra do equilíbrio, e a última à diferença entre inserir e remover.",
       "contrapontos": [
         {
           "item": "1ª",

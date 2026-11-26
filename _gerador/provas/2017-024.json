@@ -59,11 +59,11 @@
           "modulo": "15-hash.md"
         }
       ],
-      "dica": "**Cobra:** Julgar quatro sentenças sobre AVL, pilha, array versus lista e hash.\n\n- **AVL** [0101]: é uma ABB que se rebalancia sozinha com rotações depois de inserções e remoções. Ex.: inserir `1, 2, 3` numa ABB dá cadeia; numa AVL, `2(1, 3)`.\n- **Pilha** [0082]: LIFO: o acesso conceitual é só pelo topo, e o último que entrou é o primeiro que sai. Ex.: pilha `1 2 3` com 3 no topo: só o 3 pode sair agora.\n- **Lista encadeada × vetor** [0076]: vetor ocupa bloco contíguo e dá `v[i]` direto; lista usa nós ligados por ponteiros e exige percorrer até o `k`-ésimo. Ex.: o 4º elemento: `v[3]` direto; na lista, 3 saltos de `prox`.\n- **Encadeamento** [0106]: chaves com a mesma posição na tabela ficam numa mesma lista encadeada. Ex.: `M = 4`: as chaves 5 e 9 vão à posição 1.\n\n**Como atacar:** julgue cada sentença sozinha contra a definição da estrutura.",
+      "dica": "**Cobra:** Julgar quatro sentenças sobre AVL, pilha, array versus lista e hash.\n\n- **AVL** [0101]: é uma BST que se rebalancia sozinha com rotações depois de inserções e remoções. Ex.: inserir `1, 2, 3` numa BST dá cadeia; numa AVL, `2(1, 3)`.\n- **Pilha** [0082]: LIFO: o acesso conceitual é só pelo topo, e o último que entrou é o primeiro que sai. Ex.: pilha `1 2 3` com 3 no topo: só o 3 pode sair agora.\n- **Lista encadeada × vetor** [0076]: vetor ocupa bloco contíguo e dá `v[i]` direto; lista usa nós ligados por ponteiros e exige percorrer até o `k`-ésimo. Ex.: o 4º elemento: `v[3]` direto; na lista, 3 saltos de `prox`.\n- **Encadeamento** [0106]: chaves com a mesma posição na tabela ficam numa mesma lista encadeada. Ex.: `M = 4`: as chaves 5 e 9 vão à posição 1.\n\n**Como atacar:** julgue cada sentença sozinha contra a definição da estrutura.",
       "contrapontos": [
         {
           "item": "I",
-          "texto": "Insira `1, 2, 3` nessa ordem numa ABB comum e depois numa AVL. Que formato cada uma fica? Qual das duas mexeu na própria estrutura depois de inserir?"
+          "texto": "Insira `1, 2, 3` nessa ordem numa BST comum e depois numa AVL. Que formato cada uma fica? Qual das duas mexeu na própria estrutura depois de inserir?"
         },
         {
           "item": "II",
@@ -115,6 +115,10 @@
       "resumo": "A pergunta é pelo pior caso, não pelo caso médio. Dos quatro, só o Heapsort mantém O(n log n) nessa situação. O Quicksort é o que mais confunde, porque na média costuma ganhar.",
       "assuntos": [
         {
+          "num": "0096",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
           "num": "0103",
           "modulo": "14-arvores.md"
         },
@@ -129,13 +133,9 @@
         {
           "num": "0092",
           "modulo": "13-busca-e-ordenacao.md"
-        },
-        {
-          "num": "0096",
-          "modulo": "13-busca-e-ordenacao.md"
         }
       ],
-      "dica": "**Cobra:** Achar o algoritmo de menor número de comparações no pior caso, para vetor enorme.\n\n- **Pior caso** [0072]: a disposição de entrada que mais custa; compare algoritmos pelo pior caso de cada um. Ex.: inserção: vetor invertido; Quick sort: pivô ruim.\n- **Heapsort** [0103]: monta uma heap e retira a raiz `n` vezes, com `O(n log n)` até no pior caso. Ex.: `n = 1 000 000`: cerca de `2 · 10^7`.\n- **Quick, inserção e seleção** [0095]: os três chegam a `n²` comparações no pior caso, em alguma entrada. Ex.: `n = 1 000 000`: `n² = 10^12`.\n\n**Como atacar:** ponha o pior caso de cada algoritmo em `n²` ou `n log n` e escolha o menor."
+      "dica": "**Cobra:** Achar o algoritmo de menor número de comparações no pior caso, para vetor enorme.\n\n- **Pior caso** [0072]: a disposição da entrada que mais custa a cada um dos algoritmos comparados. Ex.: inserção: vetor invertido; Quick sort: pivô sempre numa ponta.\n- **Heapsort** [0103]: monta uma heap e retira a raiz `n` vezes; cada retirada desce por uma árvore de altura perto de `log₂ n`. Ex.: `n = 1 000 000`: a heap tem altura perto de 20.\n- **Quick sort e o pivô** [0095]: pivô que deixa um lado vazio gera partições de `n - 1`, `n - 2`, ... elementos. Ex.: `1 2 3 4` com pivô no último: partes de 3, 2 e 1.\n- **Ordem de grandeza** [0096]: para `n` grande, `n²` fica muito acima de `n log₂ n`. Ex.: `n = 1 000 000`: `n² = 10^12`, e `n log₂ n` fica perto de `2 · 10^7`.\n\n**Como atacar:** ponha o pior caso de cada algoritmo em `n²` ou `n log n` e escolha o menor."
     },
     {
       "numero": 3,
@@ -173,15 +173,31 @@
       "resumo": "Aqui a conta é de movimentações, não de comparações. A seleção compara muito (n²/2), mas troca pouco: no máximo n-1 vezes. É o algoritmo indicado quando mover registro é caro.",
       "assuntos": [
         {
+          "num": "0096",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
           "num": "0092",
           "modulo": "13-busca-e-ordenacao.md"
         },
         {
-          "num": "0096",
+          "num": "0093",
           "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0095",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0094",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0103",
+          "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** Achar o algoritmo de menor número de movimentações no pior caso, para vetor enorme.\n\n- **Seleção** [0092]: faz uma troca por passada, no máximo `n - 1` trocas no total, qualquer que seja a entrada. Ex.: `n = 6`: no máximo 5 trocas.\n- **Inserção** [0093]: cada elemento desloca os maiores à sua esquerda; no pior caso (invertido) chega a `n(n-1)/2` deslocamentos. Ex.: vetor invertido de 6: `5 + 4 + 3 + 2 + 1 = 15` deslocamentos.\n- **Ordenações de `n log n`** [0096]: merge sort e heapsort movem em torno de `n log n` elementos; o Quick sort chega a `n²` no pior caso. Ex.: `n = 1 000 000`: `n log n` fica perto de `2 · 10^7`.\n\n**Como atacar:** conte movimentações, não comparações, no pior caso de cada algoritmo."
+      "dica": "**Cobra:** Achar o algoritmo de menor número de movimentações no pior caso, para vetor enorme.\n\n- **Seleção** [0092]: em cada passada acha o menor do trecho que falta e o põe no lugar com uma troca. Ex.: em `5 3 1`, a 1ª passada troca o 5 com o 1.\n- **Inserção** [0093]: cada elemento desloca os maiores à sua esquerda; no pior caso (invertido) chega a `n(n-1)/2` deslocamentos. Ex.: vetor invertido de 6: `5 + 4 + 3 + 2 + 1 = 15` deslocamentos.\n- **Merge sort e heapsort** [0096]: o merge copia os elementos para o vetor auxiliar em cada um dos `log₂ n` níveis; o heapsort troca elementos a cada descida na heap. Ex.: `n = 8`: o merge faz 3 níveis de cópia de 8 elementos.\n\n**Como atacar:** conte movimentações, não comparações, no pior caso de cada algoritmo."
     },
     {
       "numero": 4,
@@ -207,7 +223,7 @@
         {
           "letra": "D",
           "texto": "Apenas a afirmação II é verdadeira",
-          "porque": "Lista encadeada é estrutura de armazenamento, não de ordenação. Ordenar uma lista custa pelo menos O(n log n)."
+          "porque": "Lista encadeada é estrutura de armazenamento, não de ordenação. Ordenar uma lista por comparações custa pelo menos da ordem de n log n."
         },
         {
           "letra": "E",
@@ -283,11 +299,11 @@
       "resumo": "Busca em lista sem nó cabeça: percorra com o ponteiro recebido (`while (p != NULL) { ...; p = p->prox; }`). Não precisa de `malloc`: alocar só serve para criar nó novo. Dica: procure `malloc` sobrando, laço que não avança e teste de `->prox` no lugar do próprio nó.",
       "assuntos": [
         {
-          "num": "0076",
+          "num": "0077",
           "modulo": "11-listas.md"
         },
         {
-          "num": "0077",
+          "num": "0076",
           "modulo": "11-listas.md"
         },
         {
@@ -401,7 +417,7 @@
           "modulo": "15-hash.md"
         }
       ],
-      "dica": "**Cobra:** Julgar afirmações sobre colisões e comparações no hash encadeado.\n\n- **Encadeamento** [0106]: chaves da mesma posição ficam numa lista, e a colisão só aumenta essa lista. Ex.: `M = 3`: as chaves 3, 6, 9 e 12 caem na posição 0.\n- **Colisão secundária** [0107]: aglomerado em que chaves de hashes diferentes disputam as mesmas posições; é problema do endereçamento aberto. Ex.: `M = 5`, `k % 5`: com o 7 na 2, o 12 vai à 3; o 3 chega à 3 já ocupada.\n- **Pior caso da busca** [0072]: com todas as chaves numa posição, a busca percorre a lista toda: custo `n`. Ex.: no exemplo da posição 0, achar o 12 custa 4 comparações.\n\n**Como atacar:** procure o pior caso e compare as duas técnicas antes de aceitar \"nunca\" e \"sempre\".",
+      "dica": "**Cobra:** Julgar afirmações sobre colisões e comparações no hash encadeado.\n\n- **Encadeamento** [0106]: chaves da mesma posição ficam numa lista, e a colisão só aumenta essa lista. Ex.: `M = 3`: as chaves 3, 6, 9 e 12 caem na posição 0.\n- **Colisão secundária** [0107]: aglomerado em que chaves de hashes diferentes disputam as mesmas posições; é problema do endereçamento aberto. Ex.: `M = 5`, `k % 5`: com o 7 na 2, o 12 vai à 3; o 3 chega à 3 já ocupada.\n- **Pior caso da busca** [0106]: com todas as chaves numa posição, a busca percorre a lista toda: custo `n`. Ex.: no exemplo da posição 0, achar o 12 custa 4 comparações.\n\n**Como atacar:** procure o pior caso e compare as duas técnicas antes de aceitar \"nunca\" e \"sempre\".",
       "contrapontos": [
         {
           "item": "I",
@@ -432,46 +448,46 @@
         {
           "letra": "A",
           "texto": "Apenas a árvore do quadro I poderia ser uma árvore AVL",
-          "porque": "Não só a I. A II (pelo formato) e a IV também são AVL: em todos os nós a diferença de altura é no máximo 1."
+          "porque": "Não só a I. A IV também é AVL: em todos os nós a diferença de altura é no máximo 1. A II tem formato balanceado, mas, com as letras em ordem alfabética, não é BST (o B e o D, à esquerda do A, vêm depois dele), e toda AVL é BST."
         },
         {
           "letra": "B",
           "texto": "Todas as opções apresentadas nos quadros de I a IV podem ser exemplos de árvores AVL",
-          "porque": "A III não é AVL: o nó 10 tem subárvore esquerda vazia (altura 0) e subárvore direita com altura 2, diferença 2."
+          "porque": "A III não é AVL: contando arestas, o nó 10 tem subárvore esquerda vazia (altura -1) e subárvore direita com altura 1, diferença 2. A II também falha, na ordem das letras."
         },
         {
           "letra": "C",
           "texto": "Nenhuma das 4 opções apresentadas podem ser exemplos de árvores AVL",
-          "porque": "I, II e IV podem ser AVL."
+          "porque": "A I e a IV são AVL."
         },
         {
           "letra": "D",
           "texto": "Apenas as opções I e III podem ser exemplos de árvores AVL",
-          "porque": "A III não pode, por causa do nó 10, e a IV pode. Falta incluir II e IV e tirar a III."
+          "porque": "A III não pode, por causa do nó 10, e a IV pode. A combinação não confere."
         },
         {
           "letra": "E",
           "texto": "Nenhuma das alternativas anteriores (de A até D) está correta",
-          "porque": "Correta. Os quadros I, II e IV podem ser AVL, e só o III não pode. Nenhuma das letras A a D diz isso."
+          "porque": "Correta. I e IV são AVL. A III quebra o balanceamento no nó 10. A II tem formato balanceado, mas as letras em ordem alfabética não respeitam a regra da BST. Nenhuma das letras A a D descreve esse resultado."
         }
       ],
       "gabarito": "E",
-      "resumo": "Confira o fator de balanceamento (altura da esquerda menos a da direita) de cada nó. I: árvore cheia, tudo 0. II: B tem só filho direito e E só filho esquerdo, mas as diferenças são 1; A tem alturas 2 e 3. IV: 4 (2 e 2), 12 (2 e 1), 8 (3 e 3). III: o nó 10 tem esquerda vazia e direita de altura 2, então quebra a AVL. Resultado: I, II e IV podem ser AVL.",
+      "resumo": "Confira duas coisas em cada nó: a ordem da BST e o fator de balanceamento (altura da esquerda menos a da direita, contando arestas, com subárvore vazia valendo -1). I: árvore cheia, fator 0 em todos. IV: 4 (1 e 1), 12 (1 e 0), 8 (2 e 2), e os nós de um filho só têm fator -1. III: o nó 10 tem esquerda vazia (-1) e direita de altura 1, diferença 2. II: o formato é balanceado, mas em ordem alfabética o B e o D, maiores que A, estão na subárvore esquerda do A, então não é BST. Só I e IV são AVL, e nenhuma letra de A a D diz isso. A mesma árvore II é julgada na Q10.",
       "assuntos": [
         {
           "num": "0101",
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** Dizer quais das árvores mostradas são AVL válidas.\n\n- **Fator de balanceamento** [0101]: diferença entre as alturas das subárvores de cada nó, que numa AVL fica entre -1 e 1 em todos os nós. Ex.: raiz 30, filho direito 40, neto 50 à direita: fator -2 na raiz.\n- **ABB válida** [0099]: a AVL também é ABB, então os menores ficam à esquerda de cada nó e os maiores à direita, em toda a subárvore. Ex.: `10(15, 20)` não serve: o 15 está à esquerda do 10 e é maior.\n\n**Como atacar:** em cada árvore, verifique a ordem das chaves e o fator de cada nó.",
+      "dica": "**Cobra:** Dizer quais das árvores mostradas são AVL válidas.\n\n- **Fator de balanceamento** [0101]: diferença entre as alturas das subárvores de cada nó, que numa AVL fica entre -1 e 1 em todos os nós. Ex.: raiz 30, filho direito 40, neto 50 à direita: fator -2 na raiz.\n- **BST válida** [0099]: a AVL também é BST, então os menores ficam à esquerda de cada nó e os maiores à direita, em toda a subárvore. Ex.: `10(15, 20)` não serve: o 15 está à esquerda do 10 e é maior.\n\n**Como atacar:** em cada árvore, verifique a ordem das chaves e o fator de cada nó.",
       "contrapontos": [
         {
           "item": "I",
-          "texto": "Calcule a altura das subárvores em todos os nós, das folhas para cima, e o fator de cada um (esquerda menos direita). Confira também a ordem de ABB: 8 e 12 à esquerda do 15, 16 e 25 à direita."
+          "texto": "Calcule a altura das subárvores em todos os nós, das folhas para cima, e o fator de cada um (esquerda menos direita). Confira também a ordem de BST: 8 e 12 à esquerda do 15, 16 e 25 à direita."
         },
         {
           "item": "II",
-          "texto": "As chaves são letras, então olhe o formato. B e E têm um filho só: esse filho tem neto embaixo? Calcule o fator de B, E, C e da raiz A."
+          "texto": "As chaves são letras: use a ordem alfabética. Primeiro confira a regra da BST: o B e o D, à esquerda do A, vêm antes dele no alfabeto? Depois calcule o fator de B, E, C e da raiz A."
         },
         {
           "item": "III",
@@ -540,38 +556,38 @@
         {
           "letra": "A",
           "texto": "Apenas a árvore do quadro I poderia ser uma árvore binária de pesquisa sem balanceamento",
-          "porque": "Não só a I. A III e a IV também respeitam a regra da ABB em todos os nós (esquerda menor, direita maior)."
+          "porque": "Não só a I. A III e a IV também respeitam a regra da BST em todos os nós (esquerda menor, direita maior)."
         },
         {
           "letra": "B",
           "texto": "Todas as 4 opções podem ser exemplos de árvores binárias de pesquisa sem balanceamento",
-          "porque": "A II não é ABB: com as letras em ordem alfabética, B está à esquerda de A, mas o D (filho direito de B) fica na subárvore esquerda e D > A. O E, na subárvore esquerda de C, também é maior que C."
+          "porque": "A II não é BST: com as letras em ordem alfabética, o B, filho esquerdo do A, vem depois dele, e o D, também na subárvore esquerda, é maior que A. O E, na subárvore esquerda de C, também é maior que C."
         },
         {
           "letra": "C",
           "texto": "Nenhuma das 4 opções pode ser uma árvore binária de pesquisa sem balanceamento",
-          "porque": "I, III e IV são ABB válidas."
+          "porque": "I, III e IV são BST válidas."
         },
         {
           "letra": "D",
           "texto": "Apenas as opções II e III podem de árvores binárias de pesquisa sem balanceamento",
-          "porque": "A II não é ABB e a I e a IV são. A combinação está trocada."
+          "porque": "A II não é BST e a I e a IV são. A combinação está trocada."
         },
         {
           "letra": "E",
           "texto": "Nenhuma das alternativas anteriores (de A até D) está correta",
-          "porque": "Correta. I, III e IV são ABB, e a II (letras fora de ordem) não é. Isso não coincide com nenhuma das letras A a D."
+          "porque": "Correta. I, III e IV são BST, e a II (letras fora de ordem) não é. Isso não coincide com nenhuma das letras A a D."
         }
       ],
       "gabarito": "E",
-      "resumo": "Gabarito oficial E. Teste a regra em todos os nós: tudo à esquerda é menor e tudo à direita é maior. I, III (o 13 fica à direita do 10 e à esquerda do 14) e IV passam. Na II, a árvore só seria ABB se as letras estivessem em ordem de percurso; com ordem alfabética, D (filho de B, à esquerda de A) é maior que A. Dica: verifique a subárvore inteira, não só pai e filho.",
+      "resumo": "Gabarito oficial E. Teste a regra em todos os nós: tudo à esquerda é menor e tudo à direita é maior. I, III (o 13 fica à direita do 10 e à esquerda do 14) e IV passam. Na II, com ordem alfabética, o B (filho esquerdo de A) e o D (filho de B) são maiores que A e estão à esquerda dele. Dica: verifique a subárvore inteira, não só pai e filho.",
       "assuntos": [
         {
           "num": "0099",
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** Dizer quais das árvores mostradas são árvores binárias de pesquisa.\n\n- **ABB** [0099]: todo nó da subárvore esquerda é menor que a raiz dela, e todo nó da direita é maior. Ex.: `6(2, 9)` é ABB.\n- **Subárvore inteira** [0099]: olhar só pai e filho não basta: cada nó precisa respeitar todos os ancestrais. Ex.: `20(10(5, 25), 30)`: o 25 está à esquerda do 20 e é maior que ele.\n\n**Como atacar:** em cada árvore, confira cada nó contra todos os seus ancestrais.",
+      "dica": "**Cobra:** Dizer quais das árvores mostradas são árvores binárias de pesquisa.\n\n- **BST** [0099]: todo nó da subárvore esquerda é menor que a raiz dela, e todo nó da direita é maior. Ex.: `6(2, 9)` é BST.\n- **Subárvore inteira** [0099]: olhar só pai e filho não basta: cada nó precisa respeitar todos os ancestrais. Ex.: `20(10(5, 25), 30)`: o 25 está à esquerda do 20 e é maior que ele.\n\n**Como atacar:** em cada árvore, confira cada nó contra todos os seus ancestrais.",
       "contrapontos": [
         {
           "item": "I",
@@ -762,7 +778,7 @@
           "modulo": "08-structs.md"
         }
       ],
-      "dica": "**Cobra:** Comparar duas funções de inserção no início da lista e a pilha encadeada.\n\n- **Passagem por valor** [0029]: a função recebe uma cópia do parâmetro, e mudar a cópia não muda o original. Ex.: `void zera(int x) { x = 0; }` não altera a variável do chamador.\n- **Ponteiro para ponteiro** [0049]: `**prim` dá o endereço do ponteiro de início, e `*prim = novo;` altera o ponteiro do chamador. Ex.: `void zera(int *x) { *x = 0; }` altera o original.\n- **Pilha encadeada** [0083]: empilhar é inserir no início da lista, e o topo é o primeiro nó. Ex.: pilha `5 -> 8` (topo 5): empilhar 2 dá `2 -> 5 -> 8`.\n\n**Como atacar:** veja qual versão altera o `prim` de quem chamou e o que sobra do nó alocado na outra.",
+      "dica": "**Cobra:** Comparar duas funções de inserção no início da lista e a pilha encadeada.\n\n- **Passagem por valor** [0029]: a função recebe uma cópia do parâmetro, e mudar a cópia não muda o original. Ex.: `void zera(int x) { x = 0; }` não altera a variável do chamador.\n- **Ponteiro para ponteiro** [0049]: o parâmetro `No **prim` recebe o endereço do ponteiro de início, e `*prim = novo;` altera o ponteiro do chamador. Ex.: `void anula(No **p) { *p = NULL; }`, chamada como `anula(&topo)`, zera o `topo` de fora.\n- **Pilha encadeada** [0083]: empilhar é inserir no início da lista, e o topo é o primeiro nó. Ex.: pilha `5 -> 8` (topo 5): empilhar 2 dá `2 -> 5 -> 8`.\n\n**Como atacar:** veja qual versão altera o `prim` de quem chamou e o que sobra do nó alocado na outra.",
       "contrapontos": [
         {
           "item": "A",
@@ -894,7 +910,7 @@
           "modulo": "28-estruturas-complementos.md"
         }
       ],
-      "dica": "**Cobra:** Julgar afirmações sobre hash linear versus hash encadeado.\n\n- **Encadeamento** [0106]: colisão acrescenta a chave à lista da própria posição, e a tabela aceita mais chaves que posições. Ex.: `M = 5`, 8 chaves: `α = 1,6`.\n- **Endereçamento aberto** [0107]: colisão leva a chave para outra posição livre da tabela, e o total de chaves não passa de `M`. Ex.: o 8 colide com o 3 na posição 3 e vai à 4.\n- **Hash duplo** [0179]: segunda função define o passo da sondagem, e só existe no endereçamento aberto. Ex.: `M = 7`, `h1 = k % 7`, `h2 = 1 + k % 5`, `k = 22`: tenta as posições 1, 4, 0.\n\n**Como atacar:** para cada afirmação, pergunte a qual técnica ela se refere.",
+      "dica": "**Cobra:** Julgar afirmações sobre hash linear versus hash encadeado.\n\n- **Encadeamento** [0106]: colisão acrescenta a chave à lista da própria posição, e a tabela aceita mais chaves que posições. Ex.: `M = 5`, 8 chaves: `α = 1,6`.\n- **Endereçamento aberto** [0107]: colisão leva a chave para outra posição livre da tabela, e o total de chaves não passa de `M`. Ex.: `M = 5`: o 8 colide com o 3 na posição 3 e vai à 4.\n- **Hash duplo** [0179]: segunda função define o passo da sondagem, e só existe no endereçamento aberto. Ex.: `M = 7`, `h1 = k % 7`, `h2 = 1 + k % 5`, `k = 22`: tenta as posições 1, 4, 0.\n\n**Como atacar:** para cada afirmação, pergunte a qual técnica ela se refere.",
       "contrapontos": [
         {
           "item": "I",
@@ -987,31 +1003,31 @@
         {
           "letra": "A",
           "texto": "I –X, IV – Z , II – Y",
-          "porque": "IV (ABB) – Z está errada: a ABB comum pode degenerar e não é sempre completa."
+          "porque": "IV (BST) – Z está errada: a BST comum pode degenerar e não é sempre completa."
         },
         {
           "letra": "B",
           "texto": "I – Z , IV– X , III – W",
-          "porque": "IV – X e III – W estão trocadas: a ABB é quem degenera (W), e a AVL é balanceada."
+          "porque": "IV – X e III – W estão trocadas: a BST é quem degenera (W), e a AVL é balanceada."
         },
         {
           "letra": "C",
           "texto": "I – Z , IV– X , III – Y",
-          "porque": "IV – X está errada: a ABB sem balanceamento não é balanceada."
+          "porque": "IV – X está errada: a BST sem balanceamento não é balanceada."
         },
         {
           "letra": "D",
           "texto": "I –Y , IV– W , III – X",
-          "porque": "Defensável: heap tem altura O(log n), ABB degenera e AVL é balanceada. Falta só o par canônico I – Z (heap é completa)."
+          "porque": "Defensável: heap tem altura O(log n), BST degenera e AVL é balanceada. Falta só o par canônico I – Z (heap é completa)."
         },
         {
           "letra": "E",
           "texto": "I –X , IV– W , II – Y",
-          "porque": "Também defensável: heap é balanceada, ABB degenera, rubro-negra tem altura O(log n). Como D e E se sustentam, a banca anulou."
+          "porque": "Também defensável: heap é balanceada, BST degenera, rubro-negra tem altura O(log n). Como D e E se sustentam, a banca anulou."
         }
       ],
       "gabarito": "anulada",
-      "resumo": "Anulada pela banca. W é da ABB (degenera com chaves em ordem), Z é da heap (árvore completa), e X e Y servem para AVL e rubro-negra. Como o par canônico I – Z não aparece junto com IV – W, as letras D e E ficam ambas defensáveis.",
+      "resumo": "Anulada pela banca. W é da BST (degenera com chaves em ordem), Z é da heap (árvore completa), e X e Y servem para AVL e rubro-negra. Como o par canônico I – Z não aparece junto com IV – W, as letras D e E ficam ambas defensáveis.",
       "assuntos": [
         {
           "num": "0099",
@@ -1030,7 +1046,7 @@
           "modulo": "28-estruturas-complementos.md"
         }
       ],
-      "dica": "**Cobra:** Associar cada tipo de árvore à sua característica.\n\n- **ABB** [0099]: não se balanceia sozinha, e chaves em ordem formam uma cadeia. Ex.: inserir `1, 2, 3, 4`: altura 4.\n- **AVL** [0101]: balanceia com rotações, e a altura fica perto de `log₂ n`. Ex.: inserir `1, 2, 3, 4`: altura 3.\n- **Heap** [0102]: árvore completa guardada em vetor, com ordem pai-filho, mas sem ordem total. Ex.: `1 3 2`: filhos do 1 são 3 e 2.\n- **Rubro-negra** [0177]: balanceada por cores dos nós, com altura `O(log n)` em qualquer ordem de inserção. Ex.: o caminho mais longo tem no máximo o dobro do mais curto.\n\n**Como atacar:** liste as propriedades de cada árvore e cruze com as características."
+      "dica": "**Cobra:** Associar cada tipo de árvore à sua característica.\n\n- **BST** [0099]: não se balanceia sozinha, e chaves em ordem formam uma cadeia. Ex.: inserir `1, 2, 3, 4`: cadeia de 4 níveis (altura 3).\n- **AVL** [0101]: balanceia com rotações, e a altura fica perto de `log₂ n`. Ex.: inserir `1, 2, 3, 4`: 3 níveis (altura 2).\n- **Heap** [0102]: árvore completa guardada em vetor, com ordem pai-filho, mas sem ordem total. Ex.: `1 3 2`: filhos do 1 são 3 e 2.\n- **Rubro-negra** [0177]: balanceada por cores dos nós, com altura `O(log n)` em qualquer ordem de inserção. Ex.: o caminho mais longo tem no máximo o dobro do mais curto.\n\n**Como atacar:** liste as propriedades de cada árvore e cruze com as características."
     },
     {
       "numero": 18,
@@ -1061,7 +1077,7 @@
         {
           "letra": "E",
           "texto": "Nenhuma das alternativas anteriores",
-          "porque": "Correta pelo gabarito: nenhuma das letras A a D descreve o código de forma aceita pela banca."
+          "porque": "Correta pelo gabarito: nenhuma das letras A a D descreve o código de um jeito aceito pela banca."
         }
       ],
       "gabarito": "E",

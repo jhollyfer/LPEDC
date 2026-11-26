@@ -37,7 +37,7 @@
         }
       ],
       "gabarito": "E",
-      "resumo": "Em recursão aninhada, resolva os argumentos de dentro para fora e anote cada impressão na ordem em que a função é chamada, porque o `Imprimir k` vem antes do teste. Rodei a função e a saída é 1, 0, 3, 2, 1. A figura do caderno não veio no texto extraído, mas o PNG confirma o pseudocódigo.",
+      "resumo": "Em recursão aninhada, resolva os argumentos de dentro para fora e anote cada impressão na ordem em que a função é chamada, porque o `Imprimir k` vem antes do teste. Rodei a função e a saída é 1, 0, 3, 2, 1.",
       "assuntos": [
         {
           "num": "0032",
@@ -83,10 +83,6 @@
       "assuntos": [
         {
           "num": "0085",
-          "modulo": "12-pilhas-e-filas.md"
-        },
-        {
-          "num": "0086",
           "modulo": "12-pilhas-e-filas.md"
         },
         {
@@ -151,7 +147,7 @@
         }
       ],
       "gabarito": "anulada",
-      "resumo": "Para validar um caminho de busca em ABB, mantenha o intervalo (mínimo, máximo) que cada decisão impõe: ao ir à esquerda de x, o máximo vira x, e ao ir à direita, o mínimo vira x. Um nó fora do intervalo invalida a sequência. A banca anulou porque C e E são ambas impossíveis (é o exercício 12.2-1 do Cormen, que também tem as duas). Na 061/2018 a questão volta com a E corrigida e a resposta é C.",
+      "resumo": "Para validar um caminho de busca em BST, mantenha o intervalo (mínimo, máximo) que cada decisão impõe: ao ir à esquerda de x, o máximo vira x, e ao ir à direita, o mínimo vira x. Um nó fora do intervalo invalida a sequência. A banca anulou porque C e E são ambas impossíveis (é o exercício 12.2-1 do Cormen, que também tem as duas). Na 061/2018 a questão volta com a E corrigida e a resposta é C.",
       "assuntos": [
         {
           "num": "0099",
@@ -263,7 +259,7 @@
           "modulo": "15-hash.md"
         }
       ],
-      "dica": "**Cobra:** o nome do que acontece quando a função hash manda uma chave para um endereço já ocupado.\n\n- **Função hash** [0105]: recebe a chave e devolve um índice entre 0 e `m - 1`; a mesma chave sempre dá o mesmo índice. Ex.: com `k % 7`, a chave 23 vai sempre para o índice 2.\n- **Colisão** [0105]: duas chaves diferentes que a função manda para o mesmo índice; é inevitável, porque há mais chaves possíveis do que posições. Ex.: com `k % 7`, as chaves 10 e 17 caem ambas no índice 3.\n\n**Como atacar:** procure o termo que nomeia o encontro de duas chaves no mesmo endereço."
+      "dica": "**Cobra:** o nome do que acontece quando a função hash manda uma chave para um endereço já ocupado.\n\n- **Função hash** [0105]: recebe a chave e devolve um índice entre 0 e `m - 1`; a mesma chave sempre dá o mesmo índice. Ex.: com `k % 7`, a chave 23 vai sempre para o índice 2.\n- **Mesmo índice** [0105]: há mais chaves possíveis do que posições, então chaves diferentes acabam no mesmo índice; essas chaves se chamam sinônimos. Ex.: com `k % 7`, as chaves 10 e 17 vão ambas ao índice 3.\n- **Tratamento** [0107]: o endereçamento aberto procura outra posição livre por sondagem (prospecção), e o encadeamento guarda a chave numa lista do balde. Ex.: com `k % 7`, o 17 acha o 3 ocupado e a sondagem linear tenta o 4.\n\n**Como atacar:** separe o nome dado às chaves, o nome do evento e o nome do tratamento."
     },
     {
       "numero": 6,
@@ -305,7 +301,7 @@
           "modulo": "15-hash.md"
         }
       ],
-      "dica": "**Cobra:** calcular a posição de cada chave numa tabela hash com encadeamento e conferir quem colidiu onde.\n\n- **Método da divisão** [0105]: `h(k) = k mod m` devolve o resto da divisão da chave pelo tamanho da tabela. Ex.: com `m = 11`, a chave de posição 14 vai para o índice 3 e a de posição 11, para o 0.\n- **Encadeamento** [0106]: cada balde guarda uma lista; chaves com o mesmo índice ficam na mesma lista, e a tabela nunca enche. Ex.: com `m = 5`, as chaves 7 e 12 (índice 2) ficam juntas na lista do balde 2.\n\n**Como atacar:** calcule posição mod 11 de cada letra e agrupe por índice, sem esquecer a letra de posição 11 ou 22.",
+      "dica": "**Cobra:** calcular a posição de cada chave numa tabela hash com encadeamento e conferir quem colidiu onde.\n\n- **Método da divisão** [0178]: `h(k) = k mod m` devolve o resto da divisão da chave pelo tamanho da tabela. Ex.: com `m = 11`, a chave de posição 14 vai para o índice 3 e a de posição 11, para o 0.\n- **Encadeamento** [0106]: cada balde guarda uma lista; chaves com o mesmo índice ficam na mesma lista, e a tabela nunca enche. Ex.: com `m = 5`, as chaves 7 e 12 (índice 2) ficam juntas na lista do balde 2.\n\n**Como atacar:** calcule posição mod 11 de cada letra e agrupe por índice, sem esquecer a letra de posição 11 ou 22.",
       "contrapontos": [
         {
           "item": "I",
@@ -411,7 +407,7 @@
           "modulo": "13-busca-e-ordenacao.md"
         }
       ],
-      "dica": "**Cobra:** quantas posições de um vetor ordenado a busca binária acessa, no máximo.\n\n- **Busca binária** [0090]: em vetor ordenado, compara com o elemento do meio e descarta metade a cada passo; custa O(log₂ n). Ex.: com 16 elementos, os tamanhos caem 16, 8, 4, 2, 1.\n- **Pior caso** [0090]: o máximo de acessos é quantas vezes dá para dividir `n` por 2, mais o acesso final: `⌊log₂ n⌋ + 1`. Ex.: com `n = 100`, são 7 acessos, e com `n = 1000`, são 10.\n\n**Como atacar:** ache a potência de 2 logo acima de n e some o acesso final."
+      "dica": "**Cobra:** quantas posições de um vetor ordenado a busca binária acessa, no máximo.\n\n- **Busca binária** [0090]: em vetor ordenado, compara com o elemento do meio e descarta metade a cada passo; custa O(log₂ n). Ex.: com 16 elementos, os tamanhos caem 16, 8, 4, 2, 1.\n- **Pior caso** [0090]: o máximo de acessos é quantas vezes dá para dividir `n` por 2, mais o acesso final: `⌊log₂ n⌋ + 1`. Ex.: com `n = 100`, são 7 acessos, e com `n = 1000`, são 10.\n\n**Como atacar:** ache a maior potência de 2 que não passa de n e some 1 ao expoente."
     },
     {
       "numero": 9,
@@ -510,18 +506,18 @@
         }
       ],
       "gabarito": "anulada",
-      "resumo": "Valores: I falsa, II falsa, III falsa, IV falsa. A ideia: árvore B tem folhas todas no mesmo nível, nós com entre ⌈m/2⌉ e m filhos (a raiz pode ter 2) e balanceamento local; foi feita para armazenamento secundário. A banca anulou, e na 061/2018 (Q14) a mesma questão tem gabarito E, 'todas incorretas'.",
+      "resumo": "Valores: I falsa, II falsa, III falsa, IV falsa. A ideia: árvore B tem folhas todas no mesmo nível, nós internos com entre ⌈m/2⌉ e m filhos (a raiz pode ter 2) e balanceamento local; foi feita para armazenamento secundário. A banca anulou, e na 061/2018 (Q14) a mesma questão tem gabarito E, 'todas incorretas'.",
       "assuntos": [
         {
           "num": "0146",
           "modulo": "22-arvores-avancadas.md"
         }
       ],
-      "dica": "**Cobra:** as diferenças entre árvore B e árvore binária: filhos por nó, nível das folhas e custo do balanceamento.\n\n- **Grau mínimo t** [0146]: todo nó, menos a raiz, tem de `t - 1` a `2t - 1` chaves; um nó com `k` chaves tem `k + 1` filhos. Ex.: com `t = 2`, cada nó tem de 2 a 4 filhos, e a raiz pode ter só 1 chave.\n- **Folhas no mesmo nível** [0146]: a divisão e a junção de nós mantêm todas as folhas à mesma profundidade. Ex.: dividir a raiz cheia cria uma raiz nova e todas as folhas descem um nível.\n- **Nós gordos e disco** [0146]: cada nó ocupa um bloco do disco, e a altura `h ≤ log_t((n + 1) / 2)` pequena significa poucas leituras. Ex.: com `t = 100` e 1 milhão de chaves, a altura é no máximo 2.\n\n**Como atacar:** compare cada afirmação com a regra do grau mínimo e com o que a divisão faz.",
+      "dica": "**Cobra:** as diferenças entre árvore B e árvore binária: filhos por nó, nível das folhas e custo do balanceamento.\n\n- **Grau mínimo t** [0146]: todo nó, menos a raiz, tem de `t - 1` a `2t - 1` chaves; um nó com `k` chaves tem `k + 1` filhos. Ex.: com `t = 2`, cada nó interno fora a raiz tem de 2 a 4 filhos.\n- **Folhas no mesmo nível** [0146]: a divisão e a junção de nós mantêm todas as folhas à mesma profundidade. Ex.: dividir a raiz cheia cria uma raiz nova e todas as folhas descem um nível.\n- **Nós gordos e disco** [0146]: cada nó ocupa um bloco do disco, e a altura `h ≤ log_t((n + 1) / 2)` pequena significa poucas leituras. Ex.: `t = 100` e 1 milhão de chaves: altura no máximo 2, contando arestas (3 níveis).\n\n**Como atacar:** compare cada afirmação com a regra do grau mínimo e com o que a divisão faz.",
       "contrapontos": [
         {
           "item": "I",
-          "texto": "Com grau mínimo `t = 2`, um nó que não é raiz tem de 1 a 3 chaves, ou seja, de 2 a 4 filhos, e a raiz pode ter uma chave só. Quantos filhos tem essa raiz? E uma folha, quantos filhos tem?"
+          "texto": "Com grau mínimo `t = 2`, um nó interno que não é raiz tem de 1 a 3 chaves, logo de 2 a 4 filhos, e a raiz pode ter uma chave só. Quantos filhos tem essa raiz? E uma folha, quantos filhos tem?"
         },
         {
           "item": "II",
@@ -533,7 +529,7 @@
         },
         {
           "item": "IV",
-          "texto": "Dividir um nó cheio mexe só nele e no pai, e com `t = 100` e 1 milhão de chaves a altura fica em no máximo 2. Para que tipo de memória a árvore B foi pensada: a que lê dado a dado ou a que lê bloco a bloco?"
+          "texto": "Dividir um nó cheio mexe só nele e no pai, e com `t = 100` e 1 milhão de chaves a altura fica em no máximo 2, contando arestas (até 3 níveis). Para que tipo de memória a árvore B foi pensada: a que lê dado a dado ou a que lê bloco a bloco?"
         }
       ]
     },
@@ -593,7 +589,7 @@
         },
         {
           "item": "II",
-          "texto": "A lista também implementa pilha, fila e lista de adjacência de grafo. E buscar nela custa `O(n)`, contra `O(log n)` numa ABB balanceada. Qual das duas busca mais rápido?"
+          "texto": "A lista também implementa pilha, fila e lista de adjacência de grafo. E buscar nela custa `O(n)`, contra `O(log n)` numa BST balanceada. Qual das duas busca mais rápido?"
         },
         {
           "item": "III",
@@ -645,7 +641,7 @@
           "modulo": "13-busca-e-ordenacao.md"
         }
       ],
-      "dica": "**Cobra:** escolher o algoritmo de ordenação que faz menos comparações num vetor quase ordenado.\n\n- **Insertion sort** [0093]: encaixa cada elemento na parte já ordenada; no melhor caso, cada um só é comparado com o anterior, O(n). Ex.: em `1 2 4 3 5`, só o 3 anda uma casa.\n- **Selection sort** [0092]: a cada passo varre todo o resto para achar o mínimo, então faz o mesmo número de comparações em qualquer entrada, O(n²). Ex.: 4 elementos, mesmo ordenados, custam 3 + 2 + 1 = 6 comparações.\n- **Quick sort e o pivô** [0095]: com o pivô sempre no extremo, um lado fica vazio e o custo vai a O(n²). Ex.: pivô no fim em vetor ordenado: cada partição separa só 1 elemento.\n\n**Como atacar:** veja o custo de cada algoritmo no vetor quase ordenado e escolha o menor."
+      "dica": "**Cobra:** escolher o algoritmo de ordenação que faz menos comparações num vetor quase ordenado.\n\n- **Insertion sort** [0093]: encaixa cada elemento na parte já ordenada, comparando com os anteriores até achar um menor ou igual. Ex.: em `1 2 4 3 5`, o 3 compara com o 4 e com o 2 e para.\n- **Selection sort** [0092]: a cada passo varre todo o resto para achar o mínimo, em qualquer entrada. Ex.: 4 elementos, mesmo ordenados, custam 3 + 2 + 1 = 6 comparações.\n- **Quick sort e o pivô** [0095]: com o pivô sempre no extremo, um lado fica vazio e o custo vai a O(n²). Ex.: pivô no fim em vetor ordenado: cada partição separa só 1 elemento.\n- **Heapsort** [0103]: monta a heap e retira a raiz `n` vezes, sem aproveitar a ordem que o vetor já tinha. Ex.: vetor crescente vira heap máxima, e a ordem se desfaz.\n\n**Como atacar:** veja o custo de cada algoritmo no vetor quase ordenado e escolha o menor."
     },
     {
       "numero": 13,
@@ -813,7 +809,7 @@
           "modulo": "15-hash.md"
         }
       ],
-      "dica": "**Cobra:** o custo da busca e o tipo de colisão no hash por encadeamento, comparado ao endereçamento aberto.\n\n- **Encadeamento** [0106]: cada balde guarda uma lista; a busca percorre só ela, em média `α = n / m` nós, e no pior caso (tudo num balde), `n`. Ex.: 4 chaves no mesmo balde: achar a última custa 4 comparações.\n- **Colisão secundária** [0107]: no endereçamento aberto, chaves de hashes diferentes disputam as mesmas posições de sondagem; no encadeamento só dividem lista as de mesmo hash. Ex.: com `k % 11`, a chave 15 cai no 4 e vai para o 5; depois a chave 5 acha a vaga ocupada.\n- **Pior caso** [0106]: depende da função hash; uma função ruim joga tudo num balde e a busca vira O(n). Ex.: a função `k % 10` com chaves 10, 20, 30, 40 manda todas para o balde 0.\n\n**Como atacar:** desconfie de \"sempre\" e \"nunca\" e pense no pior caso de cada método.",
+      "dica": "**Cobra:** o custo da busca e o tipo de colisão no hash por encadeamento, comparado ao endereçamento aberto.\n\n- **Encadeamento** [0106]: cada balde guarda uma lista; a busca percorre só ela, em média `α = n / m` nós, e no pior caso (tudo num balde), `n`. Ex.: 4 chaves no mesmo balde: achar a última custa 4 comparações.\n- **Colisão secundária** [0107]: no endereçamento aberto, chaves de hashes diferentes disputam as mesmas posições de sondagem; no encadeamento só dividem lista as de mesmo hash. Ex.: com `k % 11` e o 4 ocupado, a chave 15 cai no 4 e vai para o 5; depois a chave 5 acha a vaga ocupada.\n- **Pior caso** [0106]: depende da função hash; uma função ruim joga tudo num balde e a busca vira O(n). Ex.: a função `k % 10` com chaves 10, 20, 30, 40 manda todas para o balde 0.\n\n**Como atacar:** desconfie de \"sempre\" e \"nunca\" e pense no pior caso de cada método.",
       "contrapontos": [
         {
           "item": "I",
@@ -849,7 +845,7 @@
         {
           "letra": "B",
           "texto": "Apenas a árvore III não poderia ser uma árvore AVL.",
-          "porque": "Correta. No nó 10 da árvore III, a subárvore esquerda é vazia (altura 0) e a direita (14 com filho 13) tem altura 2: diferença 2. As outras três têm diferença máxima 1 em todos os nós."
+          "porque": "Correta. No nó 10 da árvore III, contando arestas, a subárvore esquerda é vazia (altura -1) e a direita (14 com filho 13) tem altura 1: diferença 2. As outras três têm diferença máxima 1 em todos os nós."
         },
         {
           "letra": "C",
@@ -859,7 +855,7 @@
         {
           "letra": "D",
           "texto": "Apenas as opções I e II podem ser exemplos de árvores AVL.",
-          "porque": "Deixa de fora a IV, que também é AVL (alturas 3 e 3 na raiz, e cada nó com diferença de no máximo 1)."
+          "porque": "Deixa de fora a IV, que também é AVL (alturas 2 e 2 na raiz, contando arestas, e cada nó com diferença de no máximo 1)."
         },
         {
           "letra": "E",
@@ -868,7 +864,7 @@
         }
       ],
       "gabarito": "B",
-      "resumo": "Para testar AVL, calcule a altura de cada subárvore e confira se a diferença é no máximo 1 em todos os nós, não só na raiz. I: AVL. II: alturas 3 e 3 sob a raiz 50, e todos os nós com diferença até 1, é AVL. III: não, o nó 10 tem diferença 2. IV: AVL.",
+      "resumo": "Para testar AVL, calcule a altura de cada subárvore e confira se a diferença é no máximo 1 em todos os nós, não só na raiz. I: AVL. II: alturas 2 e 2 sob a raiz 50, contando arestas, e todos os nós com diferença até 1, é AVL. III: não, o nó 10 tem diferença 2. IV: AVL.",
       "assuntos": [
         {
           "num": "0101",
@@ -988,7 +984,7 @@
           "modulo": "06-ponteiros.md"
         }
       ],
-      "dica": "**Cobra:** ver qual função altera de verdade a lista do chamador ao inserir um nó no início.\n\n- **Passagem por valor** [0029]: a função recebe uma cópia do argumento; mudar a cópia não muda a variável de quem chamou, nem quando o argumento é um ponteiro. Ex.: `void zera(int x) { x = 0; }` não altera o x de fora.\n- **Ponteiro para ponteiro** [0049]: receber `No **` permite escrever no ponteiro do chamador por meio de `*prim`. Ex.: `void aponta(int **p) { *p = &b; }` faz o `p` de fora apontar para `b`.\n- **Fila encadeada** [0086]: insere no fim, ligando o novo nó depois do último, com um ponteiro para o fim. Ex.: na fila `1 → 2`, inserir o 3 faz `fim->prox = novo`.\n\n**Como atacar:** siga o ponteiro `prim` do chamador depois da função e veja se ele aponta para o nó novo.",
+      "dica": "**Cobra:** ver qual função altera de verdade a lista do chamador ao inserir um nó no início.\n\n- **Passagem por valor** [0029]: a função recebe uma cópia do argumento; mudar a cópia não muda a variável de quem chamou, nem quando o argumento é um ponteiro. Ex.: `void zera(int x) { x = 0; }` não altera o x de fora.\n- **Ponteiro para ponteiro** [0049]: receber `No **` permite escrever no ponteiro do chamador por meio de `*prim`. Ex.: `void aponta(int **p) { *p = &b; }`, chamada como `aponta(&q)`, faz o `q` de fora apontar para `b`.\n- **Fila encadeada** [0086]: insere no fim, ligando o novo nó depois do último, com um ponteiro para o fim. Ex.: na fila `1 → 2`, inserir o 3 faz `fim->prox = novo`.\n\n**Como atacar:** siga o ponteiro `prim` do chamador depois da função e veja se ele aponta para o nó novo.",
       "contrapontos": [
         {
           "item": "A",
@@ -1085,7 +1081,7 @@
         {
           "letra": "A",
           "texto": "0.",
-          "porque": "Correta. Passo a passo: o 6 dispara rotação e a árvore fica 4(2, 6); o 8 e o 10 levam a nova rotação e dão 4(2, 8(6, 10)); o 12 desbalanceia o 4 e uma rotação à esquerda dá raiz 8, esquerda 4 (2, 6), direita 10 (12). As duas subárvores têm altura 2: diferença 0."
+          "porque": "Correta. Passo a passo: o 6 dispara rotação e a árvore fica 4(2, 6); o 8 entra sem rotação, e o 10 provoca outra, que dá 4(2, 8(6, 10)); o 12 desbalanceia o 4 e uma rotação à esquerda dá raiz 8, esquerda 4 (2, 6), direita 10 (12). As duas subárvores têm altura 1, contando arestas: diferença 0."
         },
         {
           "letra": "B",
@@ -1109,7 +1105,7 @@
         }
       ],
       "gabarito": "A",
-      "resumo": "Em AVL a diferença de alturas de qualquer nó fica em {-1, 0, 1}, então B, C, D e E caem sem conta. Simulei as inserções em Python: raiz 8, esquerda 4 (2, 6), direita 10 (com 12), alturas 2 e 2. Inserção em ordem crescente é o caso clássico de rotações simples à esquerda.",
+      "resumo": "Em AVL a diferença de alturas de qualquer nó fica em {-1, 0, 1}, então B, C, D e E caem sem conta. Simulei as inserções em Python: raiz 8, esquerda 4 (2, 6), direita 10 (com 12), alturas 1 e 1, contando arestas. Inserção em ordem crescente é o caso clássico de rotações simples à esquerda.",
       "assuntos": [
         {
           "num": "0101",

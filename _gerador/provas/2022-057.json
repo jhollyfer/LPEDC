@@ -14,7 +14,7 @@
         {
           "letra": "A",
           "texto": "15",
-          "porque": "Seria o resultado se alguém somasse os elementos de um só vetor (0+2+0+0+5 = 7) ou trocasse o produto por soma. O método multiplica posição a posição e depois soma, e nenhum par dá 15."
+          "porque": "É a soma de todos os elementos dos dois vetores (7 + 8 = 15), como se o produto virasse soma. O método multiplica posição a posição e só depois soma."
         },
         {
           "letra": "B",
@@ -36,8 +36,12 @@
       "resumo": "Produto escalar é a soma dos produtos posição a posição. Quando os zeros de um vetor caem onde o outro tem valor, tudo se anula. Na prova, monte a tabela de parcelas antes de somar, em vez de adivinhar pelo formato.",
       "assuntos": [
         {
-          "num": "0039",
+          "num": "0037",
           "modulo": "05-vetores-e-strings.md"
+        },
+        {
+          "num": "0025",
+          "modulo": "03-repeticoes.md"
         }
       ]
     },
@@ -46,7 +50,7 @@
       "topico": 4,
       "formato": "afirmações",
       "enunciado": "Sobre as características das árvores de pesquisa binária, considere as afirmações:\n\n1. TODOS os nós da subárvore à esquerda são menores que o pai\n2. O nó mais à esquerda é o menor de TODOS os nós, enquanto que o nó mais à direita é o maior de TODOS\n3. O sucessor de um nó x é o nó com a menor chave maior que a chave de x, e este sucessor estará SEMPRE em um nível (altura) acima de x, ou seja, mais próximo da raiz.\n\nQuais são verdadeiras?",
-      "dica": "**Cobra:** propriedades da árvore de pesquisa binária e do sucessor de uma chave.\n\n- **Propriedade da BST** [0099]: em cada nó, toda chave da subárvore esquerda é menor e toda da direita é maior, não só as dos filhos diretos; o mínimo está descendo sempre à esquerda e o máximo à direita. Ex.: na raiz 5 com filho 3, o 4 entra à direita do 3, abaixo da raiz e ainda menor que 5.\n- **Sucessor** [0175]: a menor chave maior que `x`; com subárvore direita é o mínimo dela, e sem ela é o primeiro ancestral alcançado por um filho esquerdo. Ex.: na raiz 6 com esquerdo 2 (e o 4 à direita do 2), o sucessor do 2 é o 4 e o do 4 é o 6.\n\n**Como atacar:** teste cada afirmação num desenho pequeno, procurando um contraexemplo.",
+      "dica": "**Cobra:** propriedades da árvore de pesquisa binária e do sucessor de uma chave.\n\n- **Propriedade da BST** [0099]: em cada nó, as chaves menores que a dele ficam na subárvore esquerda e as maiores, na direita. Ex.: inserindo 5, 3 e 4, o 4 desce à esquerda do 5 e depois à direita do 3.\n- **Sucessor** [0175]: a menor chave maior que `x`, ou seja, o próximo valor no percurso em ordem da BST. Ex.: numa BST com as chaves 2, 4 e 6, o sucessor do 2 é o 4 e o do 4 é o 6.\n\n**Como atacar:** teste cada afirmação num desenho pequeno, procurando um contraexemplo.",
       "contrapontos": [
         {
           "item": "1",
@@ -101,7 +105,7 @@
       "topico": 7,
       "formato": "afirmações",
       "enunciado": "Sobre ordenação, considere as afirmações:\n\n1. O Quicksort é um dos algoritmos mais conhecidos, pois possui complexidade, no pior caso, de O(n log n)\n2. O Quicksort e Mergesort usam a técnica de divisão e conquista\n3. O Mergesort possui complexidade assintótica Θ(n log n) no caso médio.\n4. Caso a lista já esteja ordenada, o Selectionsort têm complexidade de O(n).\n\nTais afirmações são, respectivamente:",
-      "dica": "**Cobra:** custo e técnica dos algoritmos de ordenação.\n\n- **Quick sort** [0095]: particiona em torno de um pivô e ordena cada lado; se o pivô cai sempre numa ponta, as partições têm 0 e n-1 elementos e o custo vira quadrático, enquanto n log n é o caso médio. Ex.: pivô no primeiro de 1, 2, 3, 4 gera partições de 0 e 3, depois 0 e 2.\n- **Merge sort** [0094]: divide ao meio, ordena as metades e intercala; são log n níveis de n passos cada, em qualquer entrada. Ex.: 8 elementos dão 3 níveis × 8 = 24 passos.\n- **Selection sort** [0092]: toda volta procura o mínimo em todo o resto do vetor, ordenado ou não. Ex.: em 1, 2, 3 ainda faz 2 + 1 = 3 comparações.\n\n**Como atacar:** para cada algoritmo, separe pior caso, caso médio e melhor caso.",
+      "dica": "**Cobra:** custo e técnica dos algoritmos de ordenação.\n\n- **Quick sort** [0095]: particiona em torno de um pivô e ordena cada lado; o custo depende do tamanho das partições, e elas dependem de onde o pivô cai. Ex.: pivô no primeiro de 1, 2, 3, 4 gera partições de 0 e 3, depois 0 e 2.\n- **Merge sort** [0094]: divide ao meio, ordena as metades e intercala; cada nível da recursão intercala os n elementos. Ex.: 8 elementos dão 3 níveis × 8 = 24 passos.\n- **Selection sort** [0092]: toda volta procura o mínimo no resto do vetor, comparando com cada elemento que ainda sobrou. Ex.: em 3, 1, 2 faz 2 + 1 = 3 comparações.\n\n**Como atacar:** para cada algoritmo, separe pior caso, caso médio e melhor caso.",
       "contrapontos": [
         {
           "item": "1",
@@ -146,7 +150,7 @@
       "resumo": "Decore a tabela: Quicksort O(n log n) médio e O(n²) pior; Mergesort Θ(n log n) sempre; seleção Θ(n²) sempre; inserção O(n) no melhor caso (quase ordenada). A seleção é o algoritmo que não ganha nada com entrada ordenada, e a pegadinha da 4 é confundi-la com a inserção.",
       "assuntos": [
         {
-          "num": "0094",
+          "num": "0096",
           "modulo": "13-busca-e-ordenacao.md"
         },
         {
@@ -154,11 +158,11 @@
           "modulo": "13-busca-e-ordenacao.md"
         },
         {
-          "num": "0092",
+          "num": "0094",
           "modulo": "13-busca-e-ordenacao.md"
         },
         {
-          "num": "0096",
+          "num": "0092",
           "modulo": "13-busca-e-ordenacao.md"
         }
       ]
@@ -168,7 +172,7 @@
       "topico": 4,
       "formato": "simulação",
       "enunciado": "Os seguintes itens são inseridos em uma árvore binária de busca: 8, 3, 4, 9, 5, 6, 2, 1, 7. Qual item é colocado na raiz?",
-      "dica": "**Cobra:** descobrir qual chave fica na raiz da árvore binária de busca pela ordem de inserção.\n\n- **Inserção na BST** [0099]: a chave nova desce comparando (menor à esquerda, maior à direita) até um lugar vazio, onde vira folha, e nunca muda de lugar depois. Ex.: inserindo 4, 2, 6, o 2 vai à esquerda do 4 e o 6 à direita.\n- **Ordem de inserção** [0099]: sem balanceamento a forma da árvore depende da ordem, e a primeira chave inserida na árvore vazia é a raiz. Ex.: 1, 2, 3 forma uma fila inclinada à direita; 2, 1, 3 forma uma árvore cheia.\n\n**Como atacar:** pergunte qual chave entrou primeiro, sem rotações.",
+      "dica": "**Cobra:** descobrir qual chave fica na raiz da árvore binária de busca pela ordem de inserção.\n\n- **Inserção na BST** [0099]: a chave nova desce comparando (menor à esquerda, maior à direita) até um lugar vazio, onde vira folha, e nunca muda de lugar depois. Ex.: inserindo 4, 2, 6, o 2 vai à esquerda do 4 e o 6 à direita.\n- **Ordem de inserção** [0099]: sem balanceamento, a forma da árvore depende só da ordem em que as chaves chegam. Ex.: 1, 2, 3 forma uma fila inclinada à direita; 2, 1, 3 forma uma árvore cheia.\n\n**Como atacar:** insira as chaves uma a uma e veja qual ocupa o topo.",
       "alternativas": [
         {
           "letra": "A",
@@ -192,7 +196,7 @@
         }
       ],
       "gabarito": "C",
-      "resumo": "Em ABB sem balanceamento, a raiz é sempre o primeiro valor inserido. Não precisa desenhar a árvore inteira. Isso muda em AVL ou rubro-negra, onde rotações podem trocar a raiz.",
+      "resumo": "Em ABB sem balanceamento, a raiz é sempre o primeiro valor inserido. Não precisa desenhar a árvore inteira. Isso muda em AVL ou rubro-negra: nelas, rotações podem trocar a raiz.",
       "assuntos": [
         {
           "num": "0099",
@@ -268,7 +272,7 @@
         {
           "letra": "A",
           "texto": "[ 2 15 4 5]",
-          "porque": "Faltam o 1 e o formato de lista com vírgulas. Nada remove elementos: a atribuição só troca o valor da posição 2."
+          "porque": "Falta o 1. Nada remove elementos: a atribuição só troca o valor da posição 2."
         },
         {
           "letra": "B",
@@ -283,14 +287,14 @@
         {
           "letra": "D",
           "texto": "[ 1 2 15 4 5]",
-          "porque": "`vec_2 = vec_1` não copia: as duas variáveis apontam para o mesmo objeto. Mudar `row[2]` por uma aparece na outra. A posição 2 (o 3) vira 15 e o resto fica igual."
+          "porque": "`vec_2 = vec_1` não copia: as duas variáveis apontam para o mesmo objeto. Mudar `row[2]` por uma aparece na outra. A posição 2 (o 3) vira 15 e o resto fica igual. O Python imprime `[1, 2, 15, 4, 5]`, com vírgulas; a D é a mesma lista."
         }
       ],
       "gabarito": "D",
       "resumo": "Atribuição de objeto em Python copia a referência, não o conteúdo. É o mesmo efeito de dois ponteiros para o mesmo bloco em C. Para ter cópia independente, use `list(...)` ou `copy`.",
       "assuntos": [
         {
-          "num": "0044",
+          "num": "0045",
           "modulo": "06-ponteiros.md"
         },
         {
@@ -368,12 +372,12 @@
         {
           "letra": "A",
           "texto": "13",
-          "porque": "É o oitavo termo (0, 1, 1, 2, 3, 5, 8, 13). Aqui a sequência começa com f(1) = 0, então f(7) é o sétimo."
+          "porque": "É o oitavo termo de 0, 1, 1, 2, 3, 5, 8, 13, ou o sétimo de quem começa a sequência em 1, 1. Com f(1) = 0, o sétimo termo é 8."
         },
         {
           "letra": "B",
           "texto": "5",
-          "porque": "É f(6). Quem conta a partir do 1 como primeiro termo, em vez do 0, erra por uma posição."
+          "porque": "É f(6), o termo anterior. Sai de quem para uma posição antes ao listar a sequência."
         },
         {
           "letra": "C",
@@ -404,7 +408,7 @@
       "topico": 8,
       "formato": "conceito",
       "enunciado": "Um grafo é uma árvore se e somente se:",
-      "dica": "**Cobra:** a definição de árvore como tipo de grafo.\n\n- **Grafo conexo e não direcionado** [0109]: conexo é haver caminho entre quaisquer dois vértices; não direcionado é ter arestas sem sentido. Ex.: 1–2 e 2–3 é conexo; 1–2 e 3–4 não é, pois nada liga o 1 ao 3.\n- **Ciclo** [0150]: caminho que volta ao vértice de partida; uma árvore é conexa e sem ciclos, por isso tem V - 1 arestas. Ex.: 4 vértices em fila têm 3 arestas, e ligar o último ao primeiro cria um ciclo.\n\n**Como atacar:** teste cada opção com um grafo de 3 ou 4 vértices.",
+      "dica": "**Cobra:** a definição de árvore como tipo de grafo.\n\n- **Grafo conexo e não direcionado** [0109]: conexo é haver caminho entre quaisquer dois vértices; não direcionado é ter arestas sem sentido. Ex.: 1–2 e 2–3 é conexo; 1–2 e 3–4 não é, pois nada liga o 1 ao 3.\n- **Ciclo** [0150]: caminho que sai de um vértice e volta a ele sem repetir aresta, uma volta fechada no desenho. Ex.: 1–2, 2–3 e 3–1 formam um ciclo; sem a aresta 3–1, o ciclo some.\n\n**Como atacar:** teste cada opção com um grafo de 3 ou 4 vértices.",
       "contrapontos": [
         {
           "item": "A",
@@ -463,7 +467,7 @@
       "topico": "3.4",
       "formato": "conceito",
       "enunciado": "Matrizes são estruturas de dados de n-dimensões que podem ser implementadas utilizando arrays (vetores). Por simplicidade, chamaremos de matrizes as matrizes bidimensionais numéricas (que armazenam números inteiros). Sendo assim, marque a alternativa INCORRETA.",
-      "dica": "**Cobra:** achar a afirmação errada sobre matrizes bidimensionais.\n\n- **Produto de matrizes** [0039]: `A` (m×n) vezes `B` (n×p) só existe se as colunas de `A` forem as linhas de `B`, e o resultado tem as linhas de `A` e as colunas de `B`. Ex.: (2×3) · (3×4) dá uma matriz 2×4.\n- **Matriz m×n e dois laços** [0039]: tem m·n elementos, e um laço de linhas por fora e um de colunas por dentro, com um acumulador, visita todos. Ex.: uma 3×4 tem 12 posições e a soma faz 12 voltas.\n\n**Como atacar:** confira cada alternativa com uma matriz pequena e fique com a que falha.",
+      "dica": "**Cobra:** achar a afirmação errada sobre matrizes bidimensionais.\n\n- **Produto de matrizes** [0039]: cada elemento do resultado é uma linha da primeira vezes uma coluna da segunda, então as colunas da primeira têm de casar com as linhas da segunda. Ex.: em (2×3) · (3×4), cada linha da primeira e cada coluna da segunda têm 3 números.\n- **Matriz m×n e dois laços** [0039]: tem m·n elementos, e um laço de linhas por fora e um de colunas por dentro, com um acumulador, visita todos. Ex.: uma 3×4 tem 12 posições e a soma faz 12 voltas.\n\n**Como atacar:** confira cada alternativa com uma matriz pequena e fique com a que falha.",
       "contrapontos": [
         {
           "item": "A",
@@ -648,7 +652,7 @@
         {
           "letra": "D",
           "texto": "Calcula e imprime a soma dos elementos iguais ou abaixo da diagonal principal da matriz.",
-          "porque": "Para somar a parte de baixo, o laço interno iria de 0 até `i`. Aqui `j` parte de `i` e vai até `m`, a parte de cima."
+          "porque": "Para somar a parte de baixo, o laço interno iria de 0 até `i`. Aqui `j` parte de `i` e vai até `m − 1`, a parte de cima."
         }
       ],
       "gabarito": "A",
@@ -802,7 +806,7 @@
       "topico": 4,
       "formato": "conceito",
       "enunciado": "Sobre árvores vermelho-preto, considere as afirmações:\n\n1. A raiz é preta\n2. Toda subárvore nula é preta,\n3. Se um nó é vermelho, então os filhos são pretos.\n\nQual são verdadeiras:",
-      "dica": "**Cobra:** as propriedades da árvore rubro-negra.\n\n- **Propriedades rubro-negras** [0177]: a raiz é preta, as folhas nulas (`T.nil`) são pretas, nó vermelho só tem filhos pretos, e todo caminho até as folhas tem o mesmo número de nós pretos. Ex.: um nó vermelho com filho vermelho viola a regra e obriga a recolorir ou girar.\n- **Altura negra** [0177]: número de nós pretos de um nó até as folhas, igual em todos os caminhos, o que limita a altura a 2 log₂(n+1). Ex.: se um caminho da raiz tem 2 nós pretos até a folha, todos os outros também têm 2.\n\n**Como atacar:** confira cada afirmação contra a lista das cinco propriedades.",
+      "dica": "**Cobra:** as propriedades da árvore rubro-negra.\n\n- **Propriedades rubro-negras** [0177]: cinco regras de cor, sobre cada nó, a raiz, as folhas nulas (`T.nil`), os filhos de nó vermelho e a contagem de pretos, mantêm a altura em O(log n). Ex.: a chave nova entra vermelha, e a inserção recolore ou gira até as regras voltarem a valer.\n- **Altura negra** [0177]: número de nós pretos de um nó até as folhas, igual em todos os caminhos, o que limita a altura a 2 log₂(n+1). Ex.: se um caminho da raiz tem 2 nós pretos até a folha, todos os outros também têm 2.\n\n**Como atacar:** confira cada afirmação contra a lista das cinco propriedades.",
       "contrapontos": [
         {
           "item": "1",
@@ -853,7 +857,7 @@
       "topico": 8,
       "formato": "afirmações",
       "enunciado": "Sobre os grafos, considere as afirmações:\n\n1. O algoritmo de Dijkstra é conhecido por descobrir o menor caminho entre dois vértices, mas só funciona para casos pequenos ou médios, por possuir complexidade exponencial.\n2. Na implementação da busca em largura, uma fila é normalmente utilizada.\n3. Em grafos esparsos, a implementação por matriz de adjacências consome mais memória do que a implementação por lista de adjacências.\n\nQuais são verdadeiras?",
-      "dica": "**Cobra:** custo do Dijkstra, uso da fila na busca em largura e memória das representações de grafo.\n\n- **Dijkstra** [0112]: caminho mínimo de uma origem com pesos não negativos, fixando sempre o vértice de menor distância; custa O(V²) com vetor ou O((V+E) log V) com heap. Ex.: com 1.000 vértices, V² = 1 milhão de passos, nada exponencial.\n- **BFS e fila** [0110]: visita por camadas (distância 1, depois 2...), e a fila (primeiro a entrar, primeiro a sair) garante essa ordem. Ex.: de A com vizinhos B e C, a fila A → B, C visita B e C antes dos vizinhos de B.\n- **Matriz × lista de adjacências** [0109]: a matriz gasta V² células mesmo com poucas arestas; a lista gasta V + E. Ex.: 1.000 vértices e 2.000 arestas: 1.000.000 células contra cerca de 5.000 entradas.\n\n**Como atacar:** avalie cada afirmação sozinha com os números de um grafo pequeno.",
+      "dica": "**Cobra:** custo do Dijkstra, uso da fila na busca em largura e memória das representações de grafo.\n\n- **Dijkstra** [0112]: caminho mínimo de uma origem com pesos não negativos, fixando a cada passo o vértice de menor distância provisória. Ex.: de A, com A–B de peso 2 e A–C de peso 5, o B é fixado antes do C.\n- **BFS** [0110]: visita por camadas (distância 1, depois 2...), atendendo os vértices na ordem em que foram descobertos. Ex.: de A com vizinhos B e C, a busca visita B e C antes dos vizinhos de B.\n- **Matriz × lista de adjacências** [0109]: a matriz reserva uma célula para cada par de vértices; a lista guarda, para cada vértice, só as arestas que existem. Ex.: 4 vértices dão 4 × 4 = 16 células na matriz.\n\n**Como atacar:** avalie cada afirmação sozinha com os números de um grafo pequeno.",
       "contrapontos": [
         {
           "item": "1",
@@ -917,12 +921,12 @@
         {
           "letra": "A",
           "texto": "O(log n), O(log n)",
-          "porque": "Supõe que o melhor caso também gasta log n. Mas se a remoção não desbalanceia nenhum nó, o trabalho é constante."
+          "porque": "Supõe que o melhor caso também gasta log n. Se a altura do pai não muda, a subida para ali e o trabalho é constante; é essa a leitura da banca."
         },
         {
           "letra": "B",
           "texto": "O(1), O(log n)",
-          "porque": "No melhor caso, remover um nó sem filhos não desbalanceia nada: O(1). No pior caso, o rebalanceamento sobe até a raiz com rotações, e a altura é O(log n)."
+          "porque": "No melhor caso, a remoção não muda a altura de nenhum ancestral (por exemplo, uma folha cujo irmão existe), e o ajuste para logo: O(1). No pior caso, o rebalanceamento sobe até a raiz com rotações, e a altura é O(log n)."
         },
         {
           "letra": "C",
@@ -953,7 +957,7 @@
       "topico": "3.1",
       "formato": "cálculo",
       "enunciado": "Considere as seguintes operações em uma lista implementada usando vetores: busca por um elemento, acesso por índice, inserção no início da lista, inserção no final da lista, remoção por índice. As complexidades do pior caso dessas operações, na ordem mencionada, são:",
-      "dica": "**Cobra:** o pior caso de cada operação em uma lista implementada com vetor.\n\n- **Vetor: acesso e deslocamento** [0075]: o índice vai direto à posição, O(1); inserir ou remover no meio ou no início desloca os elementos seguintes, O(n). Ex.: inserir 9 no início de `[1, 2, 3]` move os três para a direita antes de gravar.\n- **Pior caso** [0072]: é o custo da entrada mais cara possível para aquela operação. Ex.: achar um valor ausente em 5 elementos custa 5 comparações.\n\n**Como atacar:** para cada operação, imagine quantos elementos precisam se mexer ou ser visitados.",
+      "dica": "**Cobra:** o pior caso de cada operação em uma lista implementada com vetor.\n\n- **Vetor: acesso e deslocamento** [0075]: o índice vai direto à posição; inserir ou remover no meio ou no início desloca os elementos seguintes. Ex.: inserir 9 no início de `[1, 2, 3]` move os três para a direita antes de gravar.\n- **Pior caso** [0072]: é o custo da entrada mais cara possível para aquela operação. Ex.: achar um valor ausente em 5 elementos custa 5 comparações.\n\n**Como atacar:** para cada operação, imagine quantos elementos precisam se mexer ou ser visitados.",
       "alternativas": [
         {
           "letra": "A",
