@@ -408,7 +408,7 @@ kbd { font: 12px var(--font); border: 1px solid var(--control); border-radius: 4
   </main>
 </div>
 
-<script src="quiz/questoes.js?v=39adda6e"></script>
+<script src="quiz/questoes.js?v=774745be"></script>
 <script>
 'use strict'
 const CHAVE = 'lpedc-quiz-v1'
@@ -496,7 +496,7 @@ function realcar(codigo) {
 }
 const emLinha = (s) => esc(s)
   .replace(/`([^`]+)`/g, '<code>$1</code>')
-  .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+  .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
   .replace(/\[(\d{4})\]/g, (_, n) => linkAssunto(n))
 function md(texto) {
   if (!texto) return ''
