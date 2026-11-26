@@ -1,0 +1,171 @@
+{
+ "num": "0072",
+ "oque": "A notação O (\"ó grande\") diz **como o número de passos cresce quando n cresce**, sem se prender a constantes nem a termos menores. Formalmente, f(n) é O(g(n)) se existem c > 0 e n₀ tais que f(n) ≤ c · g(n) para todo n ≥ n₀: a partir de certo tamanho, f nunca passa de um múltiplo de g. É um **teto**.",
+ "como": "Para achar o O de um código, não conte tudo: olhe o **formato dos laços**. O receituário:\n\n| Formato do código | Classe | Exemplos |\n|---|---|---|\n| nenhum laço depende de n | `O(1)` | `v[i]`, push, pop |\n| um laço que anda de 1 em 1 até n | `O(n)` | busca sequencial, achar o maior, percorrer lista |\n| a variável dobra ou cai pela metade a cada volta (`i *= 2`, `n /= 2`) | `O(log n)` | busca binária, descer árvore balanceada |\n| laço de n com trabalho `log n` dentro, ou duas metades + n para juntar | `O(n log n)` | merge sort, heapsort, n inserções na AVL ou no heap |\n| dois laços aninhados até n, inclusive `j = i+1..n` | `O(n²)` | bubble, selection, insertion no pior caso |\n| duas chamadas recursivas de `n-1` | `O(2ⁿ)` | Hanói |\n\nAs regras para juntar pedaços:\n\n- **Em sequência, soma e fica o maior:** `O(n) + O(n²)` = `O(n²)`.\n- **Aninhado, multiplica:** laço de n dentro de laço de n = `O(n · n)`.\n- **Descarte constante e termo menor:** `3n² + 50n + 7` é `O(n²)`; `n/2` é `O(n)`.\n- **Recursão:** conte as chamadas e o tamanho de cada uma. Duas chamadas de `n/2` com trabalho `O(1)` dão `O(n)`; duas de `n/2` com trabalho `n` dão `O(n log n)`; duas de `n-1` dão `O(2ⁿ)`.\n\nO teste rápido é **dobrar n** e ver o que acontece com as voltas: igual (1), ganha 1 (log n), dobra (n), pouco mais que dobra (n log n), quadruplica (n²).\n\n**Melhor, médio e pior caso** são entradas diferentes do mesmo tamanho. Na busca sequencial: achar na 1ª posição é o melhor caso (1 passo); não achar é o pior (n passos); a média, com a chave presente, é (n + 1)/2. Cada caso tem o seu O. Quando a questão não diz qual, ela quer o **pior**.",
+ "caracteristicas": [
+  "Constantes somem: `3n` e `100n` são ambos `O(n)`. Por isso `n/2` é `O(n)`, e não `O(log n)`.",
+  "Termos menores somem: em `n² + 50n + 7`, com n = 1000, o `n²` vale 1.000.000 e o `50n` só 50.000.",
+  "A base do logaritmo não importa: `log₂ n` e `log₁₀ n` diferem só por uma constante.",
+  "O é teto: `2n` também é `O(n²)`, mas a banca quer o teto mais justo, que é `O(n)`.",
+  "Um laço `O(n)` que chama uma função `O(n)` a cada volta dá `O(n²)`, como `strlen(s)` na condição do `for`.",
+  "Quando n dobra, o custo `2ⁿ` não dobra: ele **eleva ao quadrado**, porque 2²ⁿ = (2ⁿ)²."
+ ],
+ "vantagens": [
+  "Sai do código, no papel, sem rodar o programa e sem depender da máquina.",
+  "Compara algoritmos pelo que importa quando n fica grande.",
+  "Prevê o tempo para outro n: num `Θ(n³)`, triplicar n multiplica o tempo por 27."
+ ],
+ "desvantagens": [
+  "Esconde constantes: `100n` perde de `n²` enquanto n < 100.",
+  "Não dá o tempo em segundos, só o formato do crescimento.",
+  "O pior caso pode ser raro: o quicksort é `O(n²)` no pior caso e ainda assim é rápido na média."
+ ],
+ "exemplo": "**A tabela que você precisa ter na cabeça** (log na base 2):\n\n| n | log n | n | n log n | n² | 2ⁿ |\n|---|---|---|---|---|---|\n| 8 | 3 | 8 | 24 | 64 | 256 |\n| 16 | 4 | 16 | 64 | 256 | 65.536 |\n| 1024 | 10 | 1024 | 10.240 | 1.048.576 | número de 309 dígitos |\n\nDe 8 para 1024, n cresceu 128 vezes. O log ganhou 7 passos; o n² cresceu 16.384 vezes.\n\n**Prever o tempo.** Um programa `Θ(n³)` leva 1 minuto com n = 100. Com n = 300, n foi multiplicado por 3, e o tempo por 3³ = **27**: 27 minutos.\n\n**Mesmo raciocínio com n log n.** Um merge sort leva 30 s com n = 64. O custo é c · 64 · log 64 = c · 384, então c = 30/384. Em 6 minutos (360 s): n log n = 360 · 384 / 30 = 4608. Teste potências de 2: 512 · 9 = 4608, logo **n = 512**.\n\n**Classificar uma função.** f(n) = (n + 1)(n − 1) = n² − 1 é `O(n²)`; g(n) = 8 log₂ n + 1 é `O(log n)`. Então g é `O(f)`, mas f **não** é `O(g)`.\n\nNos passos abaixo, cada trecho tem as voltas contadas para n = 8 e n = 16. Veja o que acontece quando n dobra.",
+ "passos": [
+  {
+   "titulo": "O(1): nenhum laço depende de n",
+   "texto": "Ler `v[i]` é uma conta de endereço só; o pop tira do topo sem olhar o resto. Com 8 ou com 16 elementos, é 1 passo. Um laço com número **fixo** de voltas (`for (k = 0; k < 10; k++)`) também é `O(1)`: 10 voltas sempre, qualquer que seja n.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "x = v[i];       // 1 passo",
+     "topo = p[--t];  // pop: 1 passo",
+     "",
+     "n = 8   -> 1 passo",
+     "n = 16  -> 1 passo",
+     "n dobrou: o custo ficou igual"
+    ],
+    "titulo": "O(1)"
+   }
+  },
+  {
+   "titulo": "O(n): um laço de 1 em 1 até n",
+   "texto": "Achar o maior obriga a olhar cada elemento uma vez: `i` anda de 1 em 1 até `n`. São n − 1 voltas. A constante `-1` some, e a classe é `O(n)`. A busca sequencial e percorrer uma lista encadeada têm o mesmo formato.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "maior = v[0];",
+     "for (i = 1; i < n; i++)",
+     "  if (v[i] > maior)",
+     "    maior = v[i];",
+     "",
+     "n = 8   -> 7 voltas",
+     "n = 16  -> 15 voltas",
+     "n dobrou: as voltas dobraram"
+    ],
+    "titulo": "O(n)"
+   }
+  },
+  {
+   "titulo": "O(log n): a variável dobra a cada volta",
+   "texto": "O `i` não anda de 1 em 1: ele **dobra**. Para n = 8, `i` vale 1, 2, 4 e para no 8: 3 voltas, e 2³ = 8. Para n = 16, uma volta a mais. O mesmo vale para `n /= 2` num `while (n > 1)` e para a busca binária, que joga fora metade do vetor a cada comparação. **Pista no código: `*= 2` ou `/= 2`.**",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "c = 0;",
+     "for (i = 1; i < n; i *= 2)",
+     "  c++;",
+     "",
+     "n = 8   -> i = 1,2,4: 3 voltas",
+     "n = 16  -> i = 1,2,4,8: 4 voltas",
+     "n dobrou: ganhou 1 volta"
+    ],
+    "titulo": "O(log n)"
+   }
+  },
+  {
+   "titulo": "O(n log n): laço de n com log n dentro",
+   "texto": "O laço de fora dá n voltas; o de dentro dobra o `j`, então dá log n voltas. Aninhado multiplica: n · log n. Para n = 8, 8 · 3 = 24; para n = 16, 16 · 4 = 64, pouco mais que o dobro. O merge sort tem o mesmo custo por outro caminho: divide em duas metades, log n níveis, e gasta n em cada nível para intercalar. Fazer n inserções numa AVL ou num heap, cada uma `O(log n)`, também dá `O(n log n)`.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "for (i = 0; i < n; i++)",
+     "  for (j = 1; j < n; j *= 2)",
+     "    c++;",
+     "",
+     "n = 8   -> 8 x 3  = 24 voltas",
+     "n = 16  -> 16 x 4 = 64 voltas",
+     "n dobrou: um pouco mais que x2"
+    ],
+    "titulo": "O(n log n)"
+   }
+  },
+  {
+   "titulo": "O(n²): dois laços aninhados até n",
+   "texto": "Para cada uma das n voltas de fora, o de dentro dá n voltas: n · n. Com n = 8, 64; com n = 16, 256. Dobrou n, **quadruplicou** o custo. Esse é o sinal de `O(n²)`.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "for (i = 0; i < n; i++)",
+     "  for (j = 0; j < n; j++)",
+     "    c++;",
+     "",
+     "n = 8   -> 8 x 8   = 64",
+     "n = 16  -> 16 x 16 = 256",
+     "n dobrou: as voltas x4"
+    ],
+    "titulo": "O(n²)"
+   }
+  },
+  {
+   "titulo": "O(n²) disfarçado: o laço triangular",
+   "texto": "Aqui o de dentro começa em `i + 1` e dá cada vez menos voltas: n − 1, n − 2, ..., 1. A soma é n(n − 1)/2: 28 para n = 8 e 120 para n = 16. Parece menos que n², mas n(n − 1)/2 = n²/2 − n/2, e sem a constante e o termo menor fica **`O(n²)`**. É o formato do bubble, do selection e do insertion no pior caso.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "for (i = 0; i < n; i++)",
+     "  for (j = i+1; j < n; j++)",
+     "    c++;",
+     "",
+     "n = 8   -> 7+6+...+1  = 28",
+     "n = 16  -> 15+14+...+1 = 120",
+     "n(n-1)/2 continua O(n²)"
+    ],
+    "titulo": "O(n²) triangular"
+   }
+  },
+  {
+   "titulo": "Laços em sequência: soma e fica o maior",
+   "texto": "Primeiro um laço de n, depois um aninhado de n². O total é n + n²: 72 para n = 8 e 272 para n = 16. O termo n vira nada perto de n², então o trecho todo é `O(n²)`. Se os dois laços fossem `O(n)`, a soma seria 2n, ainda `O(n)`.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "for (i = 0; i < n; i++) c++;",
+     "for (i = 0; i < n; i++)",
+     "  for (j = 0; j < n; j++) c++;",
+     "",
+     "n = 8   -> 8 + 64   = 72",
+     "n = 16  -> 16 + 256 = 272",
+     "O(n) + O(n²) = O(n²)"
+    ],
+    "titulo": "sequência"
+   }
+  },
+  {
+   "titulo": "Recursão: conte as chamadas",
+   "texto": "Sem laço, conte a árvore de chamadas. `f(8)` chama `f(4)` duas vezes, cada uma chama `f(2)` duas vezes, e assim até `f(1)`: 1 + 2 + 4 + 8 = 15 chamadas, cerca de 2n. Cada chamada faz trabalho `O(1)`, então o total é **`O(n)`**, mesmo com duas chamadas. Agora troque `f(n/2)` por `f(n-1)` duas vezes: as chamadas dobram a cada nível e **não** param em log n níveis. Com caso base `n == 0`, são 2ⁿ⁺¹ − 1 chamadas: 511 para n = 8 e 131.071 para n = 16. Isso é `O(2ⁿ)`, o custo de Hanói. A questão do `teste(i/2)` chamado duas vezes tem o formato de cima: `teste(5)` faz 1 + 2 + 4 = 7 chamadas.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "void f(int n) {",
+     "  if (n <= 1) return;",
+     "  f(n/2); f(n/2);  // + O(1)",
+     "}",
+     "",
+     "n = 8   -> 1+2+4+8    = 15",
+     "n = 16  -> 1+2+4+8+16 = 31",
+     "cerca de 2n chamadas: O(n)"
+    ],
+    "titulo": "duas chamadas de n/2"
+   }
+  }
+ ],
+ "custos": "Custos que caem na prova:\n\n| Estrutura ou algoritmo | Melhor | Médio | Pior |\n|---|---|---|---|\n| Busca sequencial | `O(1)` | `O(n)` | `O(n)` |\n| Busca binária (vetor ordenado) | `O(1)` | `O(log n)` | `O(log n)` |\n| Vetor: acesso `v[i]` | `O(1)` | `O(1)` | `O(1)` |\n| Vetor ordenado: inserir ou remover | `O(1)` no fim | `O(n)` | `O(n)` |\n| Lista encadeada: inserir no início | `O(1)` | `O(1)` | `O(1)` |\n| BST: buscar, inserir | `O(1)` | `O(log n)` | `O(n)` (degenerada) |\n| AVL: buscar, inserir, remover | `O(1)` na busca | `O(log n)` | `O(log n)` |\n| Hash: buscar, inserir | `O(1)` | `O(1)` | `O(n)` (tudo colide) |\n| Heap: ver o topo | `O(1)` | `O(1)` | `O(1)` |\n| Heap: inserir, remover o topo | `O(1)` | `O(log n)` | `O(log n)` |\n| Bubble sort (com bandeira) | `O(n)` | `O(n²)` | `O(n²)` |\n| Selection sort | `O(n²)` | `O(n²)` | `O(n²)` |\n| Insertion sort | `O(n)` | `O(n²)` | `O(n²)` |\n| Merge sort | `O(n log n)` | `O(n log n)` | `O(n log n)` |\n| Quicksort | `O(n log n)` | `O(n log n)` | `O(n²)` |\n| Heapsort | `O(n log n)` | `O(n log n)` | `O(n log n)` |\n\nMemória extra das ordenações: merge sort `O(n)`; quicksort `O(log n)` em média e `O(n)` no pior caso, da pilha; heapsort, insertion e selection `O(1)`.",
+ "naprova": "É o assunto que mais cai. A banca pergunta de três jeitos: o custo de um trecho de código (reconheça o formato do laço), o pior caso de operações em estruturas (vetor ordenado, BST, hash, quicksort) e contas de escala (\"Θ(n³) leva 1 min com n = 100; e com 300?\"). Pegadinhas típicas: `n/2` parece logarítmico e é linear; o quicksort é `O(n²)` no pior caso; \"n operações\" com `2n + 1` é linear.",
+ "fontes": [
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 2 (análise de algoritmos) e cap. 3 (notação O, Ω e Θ).",
+  "Ziviani, *Projeto de algoritmos*, 3. ed., cap. 1 (função de complexidade, melhor, pior e caso médio, notação O).",
+  "Feofiloff, *Algoritmos em linguagem C*, partes sobre análise de algoritmos.",
+  "Tenenbaum, Langsam e Augenstein, *Estruturas de dados usando C*, seção 6.1 (eficiência e notação O)."
+ ]
+}

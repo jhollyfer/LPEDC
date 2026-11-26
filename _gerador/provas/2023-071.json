@@ -47,6 +47,20 @@
       "formato": "afirmações",
       "enunciado": "Sobre o heapsort, é correto afirmar que:\n\nI) Seu custo no pior caso é O(n log n), onde n é o tamanho do vetor\nII) O algoritmo pode ser dividido em duas etapas, sendo a primeira usada para construir um heap e a segunda para usar o heap como forma eficiente de executar uma estratégia de ordenação por seleção\nIII) Tem custo máximo quadrático no pior caso",
       "dica": "**Cobra:** custo e estrutura do heapsort.\n\n- **Heapsort** [0103]: constrói um heap no vetor e depois repete: troca a raiz com o último, diminui o heap e conserta a raiz; é seleção usando o heap em vez de varrer o vetor. Ex.: heap máximo 9, 5, 7: troca 9 com 7, fica 7, 5, 9, o 9 está no lugar final e a raiz é consertada.\n- **Custo do heap** [0102]: consertar a raiz desce no máximo a altura, O(log n), e são n extrações. Ex.: com n = 1.024, a altura é 10, cerca de 10 passos por extração.\n\n**Como atacar:** some o custo de construir e o de extrair e veja qual domina.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Construir o heap custa `O(n)`. Depois vêm `n - 1` extrações, cada uma descendo no máximo `⌊log₂ n⌋` níveis. Esse total depende da ordem da entrada?"
+        },
+        {
+          "item": "II",
+          "texto": "A seleção acha o maior do restante varrendo tudo, `O(n)` por passo. No heapsort, onde está sempre o maior do restante, e quanto custa levá-lo para o fim e consertar o heap?"
+        },
+        {
+          "item": "III",
+          "texto": "Cada extração desce no máximo `⌊log₂ n⌋` níveis: com `n = 1.024`, até 10 trocas por extração. Compare `n · 10` com `n²` para esse `n`."
+        }
+      ],
       "alternativas": [
         {
           "letra": "A",
@@ -162,6 +176,20 @@
       "formato": "afirmações",
       "enunciado": "Sobre as afirmativas abaixo:\n\nI) Todo algoritmo que não seja vazio tem custo Ω(1)\nII) Todo algoritmo tem custo O(nⁿ)\nIII) Nenhum algoritmo que não seja vazio tem custo o(2) – \"ó pequeno de 2\"",
       "dica": "**Cobra:** o sentido de Ω, O e o pequeno.\n\n- **Ω (piso)** [0166]: `f` é Ω(g) se `f ≥ c·g` a partir de algum n₀; um algoritmo que faz ao menos uma operação gasta pelo menos uma quantidade constante. Ex.: `3n + 2` é Ω(1) e também Ω(n).\n- **O (teto)** [0166]: `f` é O(g) se `f ≤ c·g` a partir de n₀, e qualquer função que cresce mais depressa também serve de teto. Ex.: n² é O(n³) e O(2ⁿ).\n- **o pequeno** [0166]: `f` é o(g) se `f/g` tende a 0, isto é, `f` cresce estritamente mais devagar que `g`. Ex.: n é o(n²), mas n não é o(n).\n\n**Como atacar:** traduza cada afirmação para uma desigualdade com c e n₀.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Um algoritmo não vazio executa pelo menos uma instrução para qualquer entrada. Ω(1) pede uma constante `c > 0` com `T(n) ≥ c` para `n` grande: dá para achar essa constante?"
+        },
+        {
+          "item": "II",
+          "texto": "Pense num laço que conta até `2` elevado a `nⁿ`. Existe constante `c` com `T(n) ≤ c · nⁿ` para todo `n` grande?"
+        },
+        {
+          "item": "III",
+          "texto": "o(2) pede que `T(n)/2` tenda a zero quando `n` cresce, o mesmo que o(1). Se o algoritmo faz pelo menos 1 passo, `T(n) ≥ 1`: a razão `T(n)/2` chega perto de zero?"
+        }
+      ],
       "alternativas": [
         {
           "letra": "A",
@@ -236,6 +264,20 @@
       "formato": "afirmações",
       "enunciado": "Sobre o custo das operações de busca por uma chave em árvores vermelho e preto, sabe-se que:\n\nI) Uma árvore vermelho e preto tem altura máxima log n, onde n é o número de chaves, pois a mesma é balanceada\nII) Uma árvore vermelho e preto tem altura máxima inferior a 3 log n, onde n é o número de chaves, pois a mesma é balanceada\nIII) Uma árvore vermelho e preto pode ser degenerada no pior caso, tendo custo de busca crescendo linearmente com o número de elementos, mas em situações muito raras, pois a mesma é balanceada",
       "dica": "**Cobra:** a altura da árvore rubro-negra e o custo da busca.\n\n- **Altura da rubro-negra** [0177]: sem dois vermelhos seguidos e com o mesmo número de pretos em todo caminho, a altura fica limitada a 2 log₂(n+1). Ex.: com n = 1.023, h ≤ 2 · 10 = 20.\n- **Árvore balanceada** [0101]: AVL e rubro-negra garantem O(log n) no pior caso, sempre; uma BST comum pode degenerar em O(n). Ex.: inserir 1 a 1.000 em ordem numa BST simples dá altura 999; numa rubro-negra fica em cerca de 20.\n\n**Como atacar:** compare cada limite dado com 2 log₂(n+1) e com o pior caso possível.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Insira 1, 2, 3, 4, 5 e 6 numa rubro-negra: a raiz fica o 2, e o caminho 2, 4, 5, 6 tem 3 arestas. Compare com `log₂ 6 ≈ 2,58`. O limite do Cormen é `2·log₂(n + 1)`."
+        },
+        {
+          "item": "II",
+          "texto": "O Cormen limita a altura da rubro-negra a `2·log₂(n + 1)`. Para `n = 1.000`, quanto dá esse limite, e quanto dá `3·log₂ n`?"
+        },
+        {
+          "item": "III",
+          "texto": "Insira 1, 2, 3, ..., 1.000 em ordem numa BST comum e numa rubro-negra. A BST vira cadeia de altura 999; a rubro-negra, com as rotações da inserção, pode passar de `2·log₂ 1.001 ≈ 20`?"
+        }
+      ],
       "alternativas": [
         {
           "letra": "A",
@@ -277,6 +319,24 @@
       "formato": "afirmações",
       "enunciado": "Considere uma pilha que inicialmente estava vazia e na qual inseriu-se as chaves 2, 4 e 6, 8 e 10 nessa ordem. Sobre uma operação de remoção de elemento da mesma (retirada padrão de uma pilha), considerando-se que a estrutura de dados usada é uma lista encadeada, pode-se afirmar que:\n\nI) A remoção retira a chave 2\nII) A remoção da chave 10\nIII) Custo computacional proporcional ao tamanho da pilha\nIV) Custo computacional constante, não importando o tamanho da pilha",
       "dica": "**Cobra:** qual chave sai e qual o custo do pop numa pilha feita com lista encadeada.\n\n- **Pilha encadeada** [0083]: o topo é a cabeça da lista; push e pop mexem só na cabeça, em O(1). Ex.: com topo → 6 → 4, o pop devolve o 6 e `topo` passa a apontar para o 4.\n- **Pilha (LIFO)** [0082]: o último elemento inserido é o primeiro a ser removido, e não o mais antigo. Ex.: push 1, 2, 3 e pop tira o 3.\n\n**Como atacar:** descubra qual chave está no topo e qual é o custo de mexer na cabeça.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Pilha é LIFO. Das chaves 2, 4, 6, 8 e 10, qual foi a última a entrar?"
+        },
+        {
+          "item": "II",
+          "texto": "Na lista encadeada, o `push` põe o nó novo na cabeça. Depois das cinco inserções, qual chave está na cabeça, e é de lá que o `pop` tira?"
+        },
+        {
+          "item": "III",
+          "texto": "O `pop` na lista guarda a cabeça, faz `topo = topo->prox` e libera o nó. Com 5 ou com 5 milhões de chaves, quantos nós ele visita?"
+        },
+        {
+          "item": "IV",
+          "texto": "Se o topo ficasse na cauda de uma lista simples, o `pop` teria de percorrer tudo para achar o penúltimo. Em que ponta a implementação padrão põe o topo, e quantos passos o `pop` dá lá?"
+        }
+      ],
       "alternativas": [
         {
           "letra": "A",
@@ -355,6 +415,20 @@
       "formato": "afirmações",
       "enunciado": "Sobre os algoritmos de ordenação quicksort, mergesort e inserção, é correto afirmar que:\n\nI) O quicksort é o que apresenta melhor desempenho no pior caso dentre os três algoritmos, sendo por isso o algoritmo mais usado\nII) A ordenação por inserção tende a ser a mais rápida em casos de ordenação de um vetor onde o número de elementos fora de ordem é menor que um décimo de log N, sendo N o número de elementos do vetor e N um valor grande\nIII) O mergesort é o que tem menor custo assintótico no pior caso quando comparamos os três algoritmos",
       "dica": "**Cobra:** comparar quick sort, merge sort e inserção pelo custo.\n\n- **Pior caso de cada um** [0096]: merge sort é O(n log n) sempre; quick sort e inserção são O(n²) no pior caso. Ex.: com n = 1.000, n log n é cerca de 10.000 e n² é 1.000.000.\n- **Insertion sort em vetor quase ordenado** [0093]: o custo é n mais o número de inversões (pares fora de ordem), então poucos elementos fora do lugar saem rápido. Ex.: em 1, 2, 4, 3, 5 há uma só inversão e um só deslocamento.\n\n**Como atacar:** compare o pior caso de cada algoritmo e depois o caso de vetor quase ordenado.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Rode o quicksort com o pivô no último elemento sobre um vetor já ordenado de `n` elementos: são cerca de `n²/2` comparações. Compare com o mergesort no mesmo vetor, cerca de `n·log₂ n`. E a fama do quicksort vem de qual caso?"
+        },
+        {
+          "item": "II",
+          "texto": "A inserção custa `O(n + I)`, com `I` o número de inversões. Um único elemento fora do lugar pode gerar até `n - 1` inversões (o menor no fim do vetor). Com `k` elementos fora do lugar, até quanto `I` pode chegar?"
+        },
+        {
+          "item": "III",
+          "texto": "No pior caso, o mergesort faz cerca de `n·log₂ n` comparações; quicksort e inserção chegam a cerca de `n²/2`. Com `n = 1.000`, compare cerca de 10.000 com cerca de 500.000."
+        }
+      ],
       "alternativas": [
         {
           "letra": "A",

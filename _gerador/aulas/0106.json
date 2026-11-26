@@ -1,0 +1,223 @@
+{
+ "num": "0106",
+ "oque": "No encadeamento (também chamado de encadeamento separado), cada balde da tabela hash guarda a **cabeça de uma lista encadeada** com todas as chaves que caíram nele. A colisão não é problema: a chave nova só entra na lista do seu balde.",
+ "como": "A tabela é um vetor de `m` ponteiros, `No *t[m]`, e balde vazio é `NULL`. Toda operação começa calculando `i = h(k)`; daí em diante é lista encadeada.\n\n- **Inserir:** cria o nó e põe **no início** da lista de `t[i]`, em `O(1)`. Se a chave pode repetir, busque antes e só troque o valor.\n- **Buscar:** percorre só a lista de `t[i]`, comparando chave por chave.\n- **Remover:** acha o nó na lista de `t[i]` e religa o `prox` do anterior, como na remoção de lista.\n\n```c\nNo *busca(No *t[], int m, int k) {\n    No *p = t[k % m];\n    while (p != NULL && p->chave != k)\n        p = p->prox;\n    return p; // NULL: não está\n}\n\nvoid insere(No *t[], int m, No *x) {\n    int i = x->chave % m;\n    x->prox = t[i]; // entra no início\n    t[i] = x;\n}\n```\n\nCom a função espalhando bem, cada lista tem em média `α = n / m` nós. A busca custa 1 passo para achar o balde mais α para andar na lista: `Θ(1 + α)`.",
+ "caracteristicas": [
+  "A tabela **nunca enche**: as listas crescem o quanto for preciso, e α pode passar de 1 (mais chaves que baldes).",
+  "Custo médio da busca `Θ(1 + α)`. Se `m` cresce junto com `n`, α fica constante e a busca é `O(1)` em média.",
+  "Pior caso `Θ(n)`: todas as chaves no mesmo balde viram uma lista só.",
+  "Só colidem chaves com o **mesmo** `h(k)`. Não existe agrupamento primário nem secundário, que são problemas da sondagem do endereçamento aberto.",
+  "Remover é simples: tira o nó da lista, sem lápide."
+ ],
+ "vantagens": [
+  "Aceita qualquer número de chaves, mesmo com α > 1; fica mais lenta, mas não para.",
+  "Remoção direta, sem marcas especiais.",
+  "Degrada devagar quando α sobe, ao contrário da sondagem linear."
+ ],
+ "desvantagens": [
+  "Um `malloc` e um ponteiro `prox` a mais por chave.",
+  "Os nós ficam espalhados na memória: andar na lista aproveita mal a cache e é ruim em disco.",
+  "Pior caso `O(n)` com função ruim, e continua sem ordem entre as chaves."
+ ],
+ "exemplo": "Tabela com `m = 5` e `h(k) = k mod 5`. Vamos inserir **12, 7, 15, 3, 22, 10**, nessa ordem, cada chave nova no **início** da lista do seu balde. São 6 chaves em 5 baldes.",
+ "custos": "| Operação | Caso médio | Pior caso |\n|---|---|---|\n| Inserir no início (sem checar repetida) | `O(1)` | `O(1)` |\n| Buscar (com ou sem sucesso) | `Θ(1 + α)` | `Θ(n)` |\n| Remover (precisa achar o nó) | `Θ(1 + α)` | `Θ(n)` |\n| Memória | `m` ponteiros + `n` nós, cada um com um `prox` | igual |",
+ "naprova": "É o assunto de hash que mais cai. A banca afirma que o encadeamento \"não funciona com mais chaves que posições\" (funciona: as listas crescem), que tem \"colisões secundárias\" (termo do endereçamento aberto) ou que a busca \"nunca passa de log n\" (o pior caso é `n`). Também troca as técnicas: \"posição livre mais próxima\" e \"segunda função hash\" são do endereçamento aberto, não do encadeamento.",
+ "passos": [
+  {
+   "titulo": "Inserir 12",
+   "texto": "`12 mod 5 = 2`. O balde 2 é `NULL`; o 12 vira a lista inteira dele.",
+   "figura": {
+    "tipo": "hash",
+    "baldes": [
+     [],
+     [],
+     [
+      "12"
+     ],
+     [],
+     []
+    ],
+    "estados": {
+     "2": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "Inserir 7: colisão",
+   "texto": "`7 mod 5 = 2`, o mesmo balde do 12. Colidiu, mas não tem problema: o 7 entra **no início** da lista do balde 2 e aponta para o 12. Uma escrita, sem andar na lista.",
+   "figura": {
+    "tipo": "hash",
+    "baldes": [
+     [],
+     [],
+     [
+      "7",
+      "12"
+     ],
+     [],
+     []
+    ],
+    "estados": {
+     "2": "amarelo"
+    }
+   }
+  },
+  {
+   "titulo": "Inserir 15 e 3",
+   "texto": "`15 mod 5 = 0`: balde 0. `3 mod 5 = 3`: balde 3. Os dois estavam vazios.",
+   "figura": {
+    "tipo": "hash",
+    "baldes": [
+     [
+      "15"
+     ],
+     [],
+     [
+      "7",
+      "12"
+     ],
+     [
+      "3"
+     ],
+     []
+    ],
+    "estados": {
+     "0": "azul",
+     "3": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "Inserir 22",
+   "texto": "`22 mod 5 = 2`. Terceira chave no balde 2: o 22 vira a cabeça, e a lista fica 22, 7, 12.",
+   "figura": {
+    "tipo": "hash",
+    "baldes": [
+     [
+      "15"
+     ],
+     [],
+     [
+      "22",
+      "7",
+      "12"
+     ],
+     [
+      "3"
+     ],
+     []
+    ],
+    "estados": {
+     "2": "amarelo"
+    }
+   }
+  },
+  {
+   "titulo": "Inserir 10: mais chaves que baldes",
+   "texto": "`10 mod 5 = 0`: entra antes do 15. Agora são 6 chaves em 5 baldes, `α = 6 / 5 = 1,2`. No encadeamento isso é normal: a tabela nunca enche. No endereçamento aberto seria impossível.",
+   "figura": {
+    "tipo": "hash",
+    "baldes": [
+     [
+      "10",
+      "15"
+     ],
+     [],
+     [
+      "22",
+      "7",
+      "12"
+     ],
+     [
+      "3"
+     ],
+     []
+    ],
+    "estados": {
+     "0": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "Buscar 12 e 8",
+   "texto": "Buscar 12: `12 mod 5 = 2`; compara com 22 (não), 7 (não), 12 (achou). **3 comparações**, só no balde 2; as chaves dos outros baldes nem são olhadas. Buscar 8: `8 mod 5 = 3`; compara com 3 (não) e chega em `NULL`. 1 comparação e a resposta é \"não está\".",
+   "figura": {
+    "tipo": "hash",
+    "baldes": [
+     [
+      "10",
+      "15"
+     ],
+     [],
+     [
+      "22",
+      "7",
+      "12"
+     ],
+     [
+      "3"
+     ],
+     []
+    ],
+    "estados": {
+     "2": "verde",
+     "3": "amarelo"
+    }
+   }
+  },
+  {
+   "titulo": "Remover 7",
+   "texto": "`7 mod 5 = 2`. Anda na lista guardando o anterior: 22 (não), 7 (achou, anterior = 22). Religa `22->prox` para o 12 e dá `free` no nó do 7. Nenhuma marca fica para trás.",
+   "figura": {
+    "tipo": "hash",
+    "baldes": [
+     [
+      "10",
+      "15"
+     ],
+     [],
+     [
+      "22",
+      "12"
+     ],
+     [
+      "3"
+     ],
+     []
+    ],
+    "estados": {
+     "2": "verde"
+    }
+   }
+  },
+  {
+   "titulo": "Pior caso",
+   "texto": "Agora com a função ruim: chaves 5, 10, 15, 20, 25 em `m = 5`. Todas dão resto 0 e caem no balde 0. A tabela virou uma lista de 5 nós, e buscar o 5 (o último) compara com todas: `O(n)`. Quem decide se o hash é rápido é a função, não a estrutura.",
+   "figura": {
+    "tipo": "hash",
+    "baldes": [
+     [
+      "25",
+      "20",
+      "15",
+      "10",
+      "5"
+     ],
+     [],
+     [],
+     [],
+     []
+    ],
+    "estados": {
+     "0": "vermelho"
+    }
+   }
+  }
+ ],
+ "fontes": [
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 11 (resolução de colisões por encadeamento, análise `Θ(1 + α)`).",
+  "Tenenbaum, Langsam e Augenstein, *Estruturas de dados usando C*, cap. 7 (espalhamento: encadeamento separado).",
+  "Celes e Rangel, *Apostila de estruturas de dados*, PUC-Rio, 2002 (tabelas de dispersão).",
+  "Ziviani, *Projeto de algoritmos*, 3. ed., cap. 5 (transformação de chave: listas encadeadas)."
+ ]
+}

@@ -1,0 +1,235 @@
+{
+ "num": "0179",
+ "oque": "São duas sequências de sondagem do endereçamento aberto que pulam mais longe que a linear. A **quadrática** anda distâncias que crescem com o quadrado da tentativa; a **dispersão dupla** (*double hashing*) usa uma segunda função hash para decidir o tamanho do passo.",
+ "como": "A tentativa número `i` (contando de 0) olha:\n\n| Sondagem | Posição `h(k, i)` |\n|---|---|\n| linear | `(h'(k) + i) mod m` |\n| quadrática | `(h'(k) + c₁·i + c₂·i²) mod m` |\n| dupla | `(h₁(k) + i·h₂(k)) mod m` |\n\nCom `c₁ = 0` e `c₂ = 1`, a quadrática tenta `h'(k)` e depois 1, 4, 9, 16 posições adiante.\n\nNa dupla, o passo `h₂(k)` tem duas exigências: **nunca ser 0** e ser **primo com `m`**, para a sequência visitar todas as posições. Com `m` primo, a receita do Cormen é `h₁(k) = k mod m` e `h₂(k) = 1 + (k mod (m - 1))`.\n\n```c\nint pos(int k, int i, int m, int modo) {\n    int h1 = k % m;\n    if (modo == LINEAR)\n        return (h1 + i) % m;\n    if (modo == QUADRATICA)\n        return (h1 + i * i) % m;\n    int h2 = 1 + k % (m - 1); // nunca 0\n    return (h1 + i * h2) % m;\n}\n```\n\nInserir, buscar e remover (com lápide) seguem a mesma sequência, como no 0107.",
+ "caracteristicas": [
+  "**Agrupamento primário** é o da linear: blocos contínuos que crescem.",
+  "A quadrática acaba com o primário, mas tem **agrupamento secundário**: chaves com a mesma posição inicial seguem exatamente a mesma trilha.",
+  "A dupla evita os dois: chaves com o mesmo `h₁` quase sempre têm `h₂` diferente e se separam na segunda tentativa.",
+  "Com `m` primo, a quadrática (`c₂ = 1`) só visita cerca de metade das posições: com a tabela mais que meio cheia, a inserção pode falhar com posições livres.",
+  "As três usam uma lápide na remoção, e em todas `α ≤ 1`."
+ ],
+ "vantagens": [
+  "Quadrática: tão simples quanto a linear e sem agrupamento primário.",
+  "Dupla: a mais próxima do hash uniforme ideal, com menos sondagens quando α sobe."
+ ],
+ "desvantagens": [
+  "Quadrática: agrupamento secundário e garantia de vaga só abaixo de metade da carga.",
+  "Dupla: calcula duas funções, e `h₂` mal escolhido (0 ou com fator comum com `m`) visita poucas posições.",
+  "As duas pulam pela memória e aproveitam menos a cache que a linear."
+ ],
+ "exemplo": "Guarda-volumes com `m = 13` e `h'(k) = h₁(k) = k mod 13`. Cartões **18, 31, 44, 20, 57**: quatro deles começam no armário 5 (18 = 13 + 5, 31 = 26 + 5, 44 = 39 + 5, 57 = 52 + 5) e o 20 começa no 7. Na dupla, `h₂(k) = 1 + (k mod 12)`.",
+ "custos": "Hash uniforme (o ideal de que a dupla mais se aproxima), número médio de sondagens:\n\n| α | Busca com sucesso, no máximo | Busca sem sucesso, no máximo |\n|---|---|---|\n| 0,5 | 1,4 | 2 |\n| 0,9 | 2,6 | 10 |\n\nFórmulas (Cormen): com sucesso `(1/α) · ln(1/(1 - α))`; sem sucesso `1 / (1 - α)`. A linear fica bem acima disso com α alto (50,5 sem sucesso com α = 0,9).\n\n| No exemplo | Linear | Quadrática | Dupla |\n|---|---|---|---|\n| Sondagens para guardar os 5 | 13 | 11 | 8 |\n| Sondagens para achar o 57 | 5 | 4 | 2 |",
+ "naprova": "A banca afirma que \"a segunda função hash\" é do encadeamento (é da dispersão dupla, endereçamento aberto) e pergunta se uma sequência de chaves entraria **sem colisão** com dispersão dupla. Pegadinha: a **primeira** tentativa da dupla é `h₁(k)`, a mesma da linear, então duas chaves com o mesmo `h₁` colidem em qualquer sondagem. Conte com calma o que a questão chama de colisão: cada posição ocupada visitada ou cada chave que colidiu.",
+ "passos": [
+  {
+   "titulo": "Linear: o bloco",
+   "texto": "Para comparar. 18 vai à 5. 31 tenta 5 e 6. 44 tenta 5, 6, 7. O 20 começa na 7, que o bloco já tomou, e vai à 8. O 57 tenta 5, 6, 7, 8, 9. Um bloco de 5 a 9: agrupamento primário. 13 sondagens no total.",
+   "figura": {
+    "tipo": "hash",
+    "baldes": [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "18",
+     "31",
+     "44",
+     "20",
+     "57",
+     "",
+     "",
+     ""
+    ],
+    "estados": {
+     "9": "vermelho"
+    },
+    "titulo": "linear"
+   }
+  },
+  {
+   "titulo": "Quadrática: 18 e 31",
+   "texto": "Posições `5 + i²`: 5, 6, 9, 14 mod 13 = 1, 21 mod 13 = 8... O 18 fica na 5. O 31 tenta 5 (ocupada) e `5 + 1 = 6`, livre.",
+   "figura": {
+    "tipo": "hash",
+    "baldes": [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "18",
+     "31",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    "estados": {
+     "6": "azul"
+    },
+    "titulo": "quadrática"
+   }
+  },
+  {
+   "titulo": "Quadrática: 44",
+   "texto": "O 44 tenta 5 (`i = 0`), 6 (`i = 1`), ambas ocupadas, e `5 + 4 = 9` (`i = 2`), livre. Pulou a 7 e a 8: não grudou no bloco.",
+   "figura": {
+    "tipo": "hash",
+    "baldes": [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "18",
+     "31",
+     "",
+     "",
+     "44",
+     "",
+     "",
+     ""
+    ],
+    "estados": {
+     "5": "amarelo",
+     "6": "amarelo",
+     "9": "azul"
+    },
+    "titulo": "quadrática"
+   }
+  },
+  {
+   "titulo": "Quadrática: 20 e 57",
+   "texto": "O 20 começa na 7, livre (na linear ela estava tomada pelo bloco). O 57 tenta 5, 6, 9 e `(5 + 9) mod 13 = 1`. É a **mesma trilha** do 31 e do 44, porque todos começam no 5: agrupamento secundário. 11 sondagens no total.",
+   "figura": {
+    "tipo": "hash",
+    "baldes": [
+     "",
+     "57",
+     "",
+     "",
+     "",
+     "18",
+     "31",
+     "20",
+     "",
+     "44",
+     "",
+     "",
+     ""
+    ],
+    "estados": {
+     "5": "amarelo",
+     "6": "amarelo",
+     "9": "amarelo",
+     "1": "azul"
+    },
+    "titulo": "quadrática"
+   }
+  },
+  {
+   "titulo": "Dupla: 18 e 31",
+   "texto": "`h₂(18) = 1 + 6 = 7`, mas o 18 acha a 5 livre e nem usa o passo. `h₂(31) = 1 + (31 mod 12) = 1 + 7 = 8`: o 31 tenta 5 e `(5 + 8) mod 13 = 0`, livre.",
+   "figura": {
+    "tipo": "hash",
+    "baldes": [
+     "31",
+     "",
+     "",
+     "",
+     "",
+     "18",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    "estados": {
+     "0": "azul"
+    },
+    "titulo": "dupla"
+   }
+  },
+  {
+   "titulo": "Dupla: 44 e 20",
+   "texto": "`h₂(44) = 1 + 8 = 9`: tenta 5 e `(5 + 9) mod 13 = 1`, livre. Mesmo início do 31, outro passo, outro lugar. O 20 vai à 7, livre.",
+   "figura": {
+    "tipo": "hash",
+    "baldes": [
+     "31",
+     "44",
+     "",
+     "",
+     "",
+     "18",
+     "",
+     "20",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    "estados": {
+     "1": "azul",
+     "7": "azul"
+    },
+    "titulo": "dupla"
+   }
+  },
+  {
+   "titulo": "Dupla: 57",
+   "texto": "`h₂(57) = 1 + (57 mod 12) = 1 + 9 = 10`: tenta 5 e `(5 + 10) mod 13 = 2`, livre. Os três que começavam no 5 foram para 0, 1 e 2, cada um com seu passo. 8 sondagens no total, e achar o 57 custa 2.",
+   "figura": {
+    "tipo": "hash",
+    "baldes": [
+     "31",
+     "44",
+     "57",
+     "",
+     "",
+     "18",
+     "",
+     "20",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    "estados": {
+     "5": "amarelo",
+     "2": "verde"
+    },
+    "titulo": "dupla"
+   }
+  },
+  {
+   "titulo": "Passo com fator comum",
+   "texto": "Por que o passo precisa ser primo com `m`: com `m = 12`, início 0 e passo 4, a sequência é 0, 4, 8, 12 mod 12 = 0 e repete. Só 3 das 12 posições são visitadas; a inserção falha com 9 livres. Com `m` primo e `h₂` de 1 a `m - 1`, isso não acontece.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "m = 12, passo 4:",
+     "i:   0  1  2  3  4",
+     "pos: 0  4  8  0  4",
+     "",
+     "m = 13, passo 4:",
+     "pos: 0  4  8 12  3  7 ..."
+    ]
+   }
+  }
+ ],
+ "fontes": [
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 11 (endereçamento aberto: sondagem linear, quadrática e hash duplo; análise).",
+  "Tenenbaum, Langsam e Augenstein, *Estruturas de dados usando C*, cap. 7 (métodos de hashing: sondagem e dispersão dupla).",
+  "Knuth, *The art of computer programming*, v. 3, 2. ed., seção 6.4 (hashing)."
+ ]
+}

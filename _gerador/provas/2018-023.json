@@ -93,7 +93,29 @@
           "modulo": "22-arvores-avancadas.md"
         }
       ],
-      "dica": "**Cobra:** as regras de uma árvore B: filhos e chaves por nó, nível das folhas e frequência de rebalanceamento.\n\n- **Grau mínimo t** [0146]: nó que não é raiz tem de `t - 1` a `2t - 1` chaves, e um nó interno com `k` chaves tem `k + 1` filhos; na \"ordem m\" (máximo de filhos), `m = 2t`. Ex.: com `t = 3`, de 2 a 5 chaves e de 3 a 6 filhos.\n- **Folhas no mesmo nível** [0146]: todas as folhas ficam à mesma profundidade, e a chave do meio sobe na divisão. Ex.: a árvore cresce por cima.\n- **Rebalanceamento raro** [0146]: só há divisão quando um nó cheio recebe chave, ou junção abaixo do mínimo. Ex.: com `t = 2`, a folha `[10 20]` aceita o 30 sem dividir; só a próxima chave, com a folha cheia, divide.\n\n**Como atacar:** compare cada afirmação com `t - 1` a `2t - 1` chaves e com `k + 1` filhos."
+      "dica": "**Cobra:** as regras de uma árvore B: filhos e chaves por nó, nível das folhas e frequência de rebalanceamento.\n\n- **Grau mínimo t** [0146]: nó que não é raiz tem de `t - 1` a `2t - 1` chaves, e um nó interno com `k` chaves tem `k + 1` filhos; na \"ordem m\" (máximo de filhos), `m = 2t`. Ex.: com `t = 3`, de 2 a 5 chaves e de 3 a 6 filhos.\n- **Folhas no mesmo nível** [0146]: todas as folhas ficam à mesma profundidade, e a chave do meio sobe na divisão. Ex.: a árvore cresce por cima.\n- **Rebalanceamento raro** [0146]: só há divisão quando um nó cheio recebe chave, ou junção abaixo do mínimo. Ex.: com `t = 2`, a folha `[10 20]` aceita o 30 sem dividir; só a próxima chave, com a folha cheia, divide.\n\n**Como atacar:** compare cada afirmação com `t - 1` a `2t - 1` chaves e com `k + 1` filhos.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Na contagem de Knuth, a ordem `m` é o número máximo de filhos de um nó. Com `m = 4`, um nó com 3 chaves tem quantos filhos? Cabe mais uma chave nele sem dividir?"
+        },
+        {
+          "item": "II",
+          "texto": "No Cormen, com grau mínimo `t`, um nó interno que não é raiz tem pelo menos `t` filhos, e a ordem é `m = 2t`. Com `m = 6`, quanto dá `t` e quanto dá `m/2`?"
+        },
+        {
+          "item": "III",
+          "texto": "A divisão só acontece quando a chave chega a um nó cheio. Com `t = 3`, a folha guarda até 5 chaves: começando com 2, quantas inserções seguidas nessa folha até a primeira divisão? Compare com a AVL, que pode rotacionar já na terceira chave."
+        },
+        {
+          "item": "IV",
+          "texto": "Pegue o nó `[10 20]`: as duas chaves cortam os valores em faixas (menor que 10, entre 10 e 20, maior que 20). Quantas faixas, e portanto quantos filhos?"
+        },
+        {
+          "item": "V",
+          "texto": "Quando a raiz divide, a chave do meio sobe e a árvore ganha um nível por cima, para todas as folhas de uma vez. E na árvore B (não a B+), as chaves com seus dados ficam só nos nós internos ou também nas folhas?"
+        }
+      ]
     },
     {
       "numero": 3,
@@ -139,7 +161,29 @@
           "modulo": "28-estruturas-complementos.md"
         }
       ],
-      "dica": "**Cobra:** reconhecer se uma forma de árvore (nós e altura) pode ser uma AVL, contando a altura como o enunciado manda.\n\n- **Altura** [0175]: é o maior caminho do nó até uma folha; o curso conta arestas (folha 0), mas esta questão conta nós (folha 1), então leia a convenção. Ex.: raiz com um único filho tem altura 2 contando nós e 1 contando arestas.\n- **Regra da AVL** [0101]: em todo nó, as alturas das duas subárvores diferem de no máximo 1; basta um nó violar para a árvore não ser AVL. Ex.: uma cadeia reta de 4 nós tem diferença 3 no topo, logo não é AVL.\n\n**Como atacar:** desenhe a forma de menor desequilíbrio possível com aquele número de nós e confira os fatores."
+      "dica": "**Cobra:** reconhecer se uma forma de árvore (nós e altura) pode ser uma AVL, contando a altura como o enunciado manda.\n\n- **Altura** [0175]: é o maior caminho do nó até uma folha; o curso conta arestas (folha 0), mas esta questão conta nós (folha 1), então leia a convenção. Ex.: raiz com um único filho tem altura 2 contando nós e 1 contando arestas.\n- **Regra da AVL** [0101]: em todo nó, as alturas das duas subárvores diferem de no máximo 1; basta um nó violar para a árvore não ser AVL. Ex.: uma cadeia reta de 4 nós tem diferença 3 no topo, logo não é AVL.\n\n**Como atacar:** desenhe a forma de menor desequilíbrio possível com aquele número de nós e confira os fatores.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Na definição recursiva, a árvore vazia é o caso base da BST e da AVL. Ela tem algum nó em que dê para medir uma diferença de alturas?"
+        },
+        {
+          "item": "B",
+          "texto": "Com dois nós, a raiz tem um filho só. Contando a folha como 1 e a subárvore vazia como 0, quanto dá a diferença de alturas na raiz?"
+        },
+        {
+          "item": "C",
+          "texto": "Três nós com altura 2 (contando nós) só cabem de um jeito: raiz com um filho de cada lado. Calcule a diferença de alturas em cada nó."
+        },
+        {
+          "item": "D",
+          "texto": "Três nós com altura 3 (contando nós) obrigam uma forma só. Qual é ela, e quanto dá a diferença de alturas na raiz, com um lado de altura 2 e o outro vazio?"
+        },
+        {
+          "item": "E",
+          "texto": "Monte seis nós com altura 3: raiz, à esquerda uma subárvore cheia de 3 nós, à direita um nó com um filho. Confira a diferença de alturas em cada nó."
+        }
+      ]
     },
     {
       "numero": 4,
@@ -181,7 +225,21 @@
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** ler um vetor como heap e simular a inserção e a remoção do topo.\n\n- **Heap de máximo** [0102]: árvore binária completa guardada em vetor, em que todo pai é maior ou igual aos filhos; os filhos de `i` estão em `2i + 1` e `2i + 2`. Ex.: em `9 5 7 1`, 9 ≥ 5 e 7, e 5 ≥ 1.\n- **Inserção sobe** [0102]: o novo elemento entra no fim do vetor e troca com o pai enquanto for maior que ele. Ex.: em `9 5 7`, inserir 8: `9 5 7 8` vira `9 8 7 5`.\n- **Remoção do topo desce** [0102]: o último elemento vai para a raiz e desce, trocando com o maior filho enquanto for menor que ele. Ex.: `9 8 7 5` sem o 9: `5 8 7` vira `8 5 7`.\n\n**Como atacar:** confira a regra pai ≥ filhos em cada afirmação e refaça os passos de subida e de descida."
+      "dica": "**Cobra:** ler um vetor como heap e simular a inserção e a remoção do topo.\n\n- **Heap de máximo** [0102]: árvore binária completa guardada em vetor, em que todo pai é maior ou igual aos filhos; os filhos de `i` estão em `2i + 1` e `2i + 2`. Ex.: em `9 5 7 1`, 9 ≥ 5 e 7, e 5 ≥ 1.\n- **Inserção sobe** [0102]: o novo elemento entra no fim do vetor e troca com o pai enquanto for maior que ele. Ex.: em `9 5 7`, inserir 8: `9 5 7 8` vira `9 8 7 5`.\n- **Remoção do topo desce** [0102]: o último elemento vai para a raiz e desce, trocando com o maior filho enquanto for menor que ele. Ex.: `9 8 7 5` sem o 9: `5 8 7` vira `8 5 7`.\n\n**Como atacar:** confira a regra pai ≥ filhos em cada afirmação e refaça os passos de subida e de descida.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "No vetor `50 40 49 39 45 46`, os filhos do índice 1 (o 40) ficam nos índices 3 e 4. Quais valores estão lá, e algum deles passa do pai?"
+        },
+        {
+          "item": "II",
+          "texto": "Refaça a subida: o 12 entra no índice 5, cujo pai é o índice 2 (o 10). Troca? Depois disso, o pai do índice 2 é o 21: troca de novo?"
+        },
+        {
+          "item": "III",
+          "texto": "Sem o 21, sobram 14, 10, 9 e 5. O 5 vai para a raiz e desce trocando com o maior filho: entre 14 e 10, quem sobe? Confira também se cada vetor dos passos guarda exatamente esses quatro valores."
+        }
+      ]
     },
     {
       "numero": 5,
@@ -227,7 +285,29 @@
           "modulo": "28-estruturas-complementos.md"
         }
       ],
-      "dica": "**Cobra:** reconhecer se uma forma de árvore (nós e altura) pode ser uma AVL, contando a altura como o enunciado manda.\n\n- **Altura** [0175]: é o maior caminho do nó até uma folha; o curso conta arestas (folha 0), mas esta questão conta nós (folha 1), então leia a convenção. Ex.: raiz com um único filho tem altura 2 contando nós e 1 contando arestas.\n- **Regra da AVL** [0101]: em todo nó, as alturas das duas subárvores diferem de no máximo 1; basta um nó violar para a árvore não ser AVL. Ex.: uma cadeia reta de 4 nós tem diferença 3 no topo, logo não é AVL.\n\n**Como atacar:** desenhe a forma de menor desequilíbrio possível com aquele número de nós e confira os fatores."
+      "dica": "**Cobra:** reconhecer se uma forma de árvore (nós e altura) pode ser uma AVL, contando a altura como o enunciado manda.\n\n- **Altura** [0175]: é o maior caminho do nó até uma folha; o curso conta arestas (folha 0), mas esta questão conta nós (folha 1), então leia a convenção. Ex.: raiz com um único filho tem altura 2 contando nós e 1 contando arestas.\n- **Regra da AVL** [0101]: em todo nó, as alturas das duas subárvores diferem de no máximo 1; basta um nó violar para a árvore não ser AVL. Ex.: uma cadeia reta de 4 nós tem diferença 3 no topo, logo não é AVL.\n\n**Como atacar:** desenhe a forma de menor desequilíbrio possível com aquele número de nós e confira os fatores.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Na definição recursiva, a árvore vazia é o caso base da BST e da AVL. Ela tem algum nó em que dê para medir uma diferença de alturas?"
+        },
+        {
+          "item": "B",
+          "texto": "Com dois nós, a raiz tem um filho só. Contando a folha como 1 e a subárvore vazia como 0, quanto dá a diferença de alturas na raiz?"
+        },
+        {
+          "item": "C",
+          "texto": "Três nós com altura 2 (contando nós) só cabem de um jeito: raiz com um filho de cada lado. Calcule a diferença de alturas em cada nó."
+        },
+        {
+          "item": "D",
+          "texto": "Três nós com altura 3 (contando nós) obrigam uma forma só. Qual é ela, e quanto dá a diferença de alturas na raiz, com um lado de altura 2 e o outro vazio?"
+        },
+        {
+          "item": "E",
+          "texto": "Monte seis nós com altura 3: raiz, à esquerda uma subárvore cheia de 3 nós, à direita um nó com um filho. Confira a diferença de alturas em cada nó."
+        }
+      ]
     },
     {
       "numero": 6,
@@ -322,7 +402,29 @@
           "modulo": "28-estruturas-complementos.md"
         }
       ],
-      "dica": "**Cobra:** as propriedades da AVL: regra do balanceamento, altura e custo de rebalancear.\n\n- **Regra da AVL** [0101]: em todo nó, as alturas das duas subárvores diferem de no máximo 1; não vale \"em pelo menos uma\". Ex.: raiz com subárvores de altura 0 e 2, mesmo com cada lado equilibrado, desequilibra na raiz.\n- **Altura O(log n)** [0101]: a altura de uma AVL não passa de cerca de `1,44 · log₂ n`; é isso que garante busca O(log n). Ex.: com 1000 nós, altura no máximo cerca de 14, contra 999 numa BST degenerada.\n- **Custo do balanceamento** [0176]: cada rotação custa O(1) e o caminho tem altura O(log n), então o balanceamento custa O(log n) no pior caso. Ex.: numa AVL de 1000 nós, a remoção confere no máximo cerca de 14 ancestrais.\n\n**Como atacar:** confira cada afirmação contra a regra \"em todo nó\" e contra a altura O(log n)."
+      "dica": "**Cobra:** as propriedades da AVL: regra do balanceamento, altura e custo de rebalancear.\n\n- **Regra da AVL** [0101]: em todo nó, as alturas das duas subárvores diferem de no máximo 1; não vale \"em pelo menos uma\". Ex.: raiz com subárvores de altura 0 e 2, mesmo com cada lado equilibrado, desequilibra na raiz.\n- **Altura O(log n)** [0101]: a altura de uma AVL não passa de cerca de `1,44 · log₂ n`; é isso que garante busca O(log n). Ex.: com 1000 nós, altura no máximo cerca de 14, contra 999 numa BST degenerada.\n- **Custo do balanceamento** [0176]: cada rotação custa O(1) e o caminho tem altura O(log n), então o balanceamento custa O(log n) no pior caso. Ex.: numa AVL de 1000 nós, a remoção confere no máximo cerca de 14 ancestrais.\n\n**Como atacar:** confira cada afirmação contra a regra \"em todo nó\" e contra a altura O(log n).",
+      "contrapontos": [
+        {
+          "item": "1ª",
+          "texto": "Monte uma raiz com a esquerda vazia e, à direita, uma subárvore cheia de 3 nós. Os dois lados são AVL; qual é a diferença de alturas na própria raiz?"
+        },
+        {
+          "item": "2ª",
+          "texto": "Numa árvore cheia, todos os níveis estão completos. Em qualquer nó, quanto diferem as alturas das duas subárvores?"
+        },
+        {
+          "item": "3ª",
+          "texto": "Com 1.000 nós, a altura de uma AVL não passa de cerca de 14; numa BST degenerada chega a 999. Que função de `n` dá cerca de 14 para `n = 1.000`?"
+        },
+        {
+          "item": "4ª",
+          "texto": "Há árvores balanceadas pelo peso, que comparam o número de nós de cada lado, e árvores balanceadas pela altura. O fator de balanceamento da AVL é calculado com qual das duas medidas?"
+        },
+        {
+          "item": "5ª",
+          "texto": "Cada rotação mexe em poucos ponteiros, `O(1)`, e o conserto só sobe pelo caminho da chave até a raiz. Numa AVL de 1.000 nós, esse caminho tem quantos nós no máximo, e quanto dá `n/2`?"
+        }
+      ]
     },
     {
       "numero": 8,
@@ -627,7 +729,21 @@
           "modulo": "13-busca-e-ordenacao.md"
         }
       ],
-      "dica": "**Cobra:** a pré-condição e o custo da busca binária, comparada à sequencial.\n\n- **Pré-condição: vetor ordenado** [0090]: descartar metade só é correto se o vetor está em ordem; fora de ordem, a busca pode perder uma chave que existe. Ex.: buscando o 4 em `9 2 7 4`, o meio 2 manda ir à direita, depois o 7 manda ir à esquerda, e a busca termina sem achar o 4.\n- **Custo O(log n)** [0090]: cada passo descarta metade, então o máximo é `⌊log₂ n⌋ + 1` comparações. Ex.: com 1000 elementos, no máximo 10.\n- **Busca sequencial** [0089]: no pior caso olha os `n` elementos, e por isso perde para a binária em vetores grandes e ordenados. Ex.: com 1.000.000 de elementos, até 1.000.000 contra 20.\n\n**Como atacar:** confira cada afirmação com a pré-condição da ordem e com o `log₂ n`."
+      "dica": "**Cobra:** a pré-condição e o custo da busca binária, comparada à sequencial.\n\n- **Pré-condição: vetor ordenado** [0090]: descartar metade só é correto se o vetor está em ordem; fora de ordem, a busca pode perder uma chave que existe. Ex.: buscando o 4 em `9 2 7 4`, o meio 2 manda ir à direita, depois o 7 manda ir à esquerda, e a busca termina sem achar o 4.\n- **Custo O(log n)** [0090]: cada passo descarta metade, então o máximo é `⌊log₂ n⌋ + 1` comparações. Ex.: com 1000 elementos, no máximo 10.\n- **Busca sequencial** [0089]: no pior caso olha os `n` elementos, e por isso perde para a binária em vetores grandes e ordenados. Ex.: com 1.000.000 de elementos, até 1.000.000 contra 20.\n\n**Como atacar:** confira cada afirmação com a pré-condição da ordem e com o `log₂ n`.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Rode a busca binária pelo 4 em `9 2 7 4`: o meio é o 2, que manda para a direita; o meio seguinte é o 7, que manda para a esquerda. A busca encontra o 4, que está no vetor?"
+        },
+        {
+          "item": "II",
+          "texto": "Com `n = 1.024`, quantas vezes dá para cortar o vetor ao meio até sobrar um elemento? Compare esse número com `2·log₂ n = 20`."
+        },
+        {
+          "item": "III",
+          "texto": "Num vetor ordenado de 1.000 elementos, a busca sequencial pode chegar a 1.000 comparações e a binária a 10. E num vetor de 1.000.000?"
+        }
+      ]
     },
     {
       "numero": 15,
@@ -769,7 +885,29 @@
           "modulo": "13-busca-e-ordenacao.md"
         }
       ],
-      "dica": "**Cobra:** estabilidade, uso de espaço e sensibilidade à ordem de entrada nos algoritmos de ordenação.\n\n- **Estabilidade** [0096]: o algoritmo é estável quando chaves iguais saem na mesma ordem relativa em que entraram. Ex.: ordenando `(A,2) (B,1) (C,2)` pelo número, o estável dá B, A, C; o instável pode dar B, C, A.\n- **Espaço extra** [0168]: é a memória além da entrada: `O(1)` se in-place, `O(n)` se há vetor auxiliar; `O(n²)` nunca é o caso. Ex.: inverter trocando as pontas gasta O(1); copiar para outro vetor gasta O(n).\n- **Melhor caso e ordem** [0093]: o insertion sort faz O(n) no vetor já ordenado, então a ordem da entrada muda o custo; o merge sort faz sempre O(n log n). Ex.: insertion em `1 2 3 4` faz 3 comparações.\n\n**Como atacar:** monte uma tabela de estável, espaço e melhor caso por algoritmo e confira afirmação por afirmação."
+      "dica": "**Cobra:** estabilidade, uso de espaço e sensibilidade à ordem de entrada nos algoritmos de ordenação.\n\n- **Estabilidade** [0096]: o algoritmo é estável quando chaves iguais saem na mesma ordem relativa em que entraram. Ex.: ordenando `(A,2) (B,1) (C,2)` pelo número, o estável dá B, A, C; o instável pode dar B, C, A.\n- **Espaço extra** [0168]: é a memória além da entrada: `O(1)` se in-place, `O(n)` se há vetor auxiliar; `O(n²)` nunca é o caso. Ex.: inverter trocando as pontas gasta O(1); copiar para outro vetor gasta O(n).\n- **Melhor caso e ordem** [0093]: o insertion sort faz O(n) no vetor já ordenado, então a ordem da entrada muda o custo; o merge sort faz sempre O(n log n). Ex.: insertion em `1 2 3 4` faz 3 comparações.\n\n**Como atacar:** monte uma tabela de estável, espaço e melhor caso por algoritmo e confira afirmação por afirmação.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Ordene `(A,2) (B,1) (C,2)` pelo número. O heapsort e a partição do quicksort trocam elementos distantes: dá para garantir que A sai antes de C? E o mergesort, que no empate pega primeiro da metade esquerda?"
+        },
+        {
+          "item": "II",
+          "texto": "O heapsort trabalha dentro do próprio vetor, trocando a raiz com o último. Além do vetor, de quanta memória ele precisa: um vetor auxiliar, uma matriz `n × n` ou só uma variável de troca?"
+        },
+        {
+          "item": "III",
+          "texto": "O insertion sort faz 3 comparações em `1 2 3 4` e 6 em `4 3 2 1`. E o mergesort, muda de ordem de grandeza entre essas duas entradas?"
+        },
+        {
+          "item": "IV",
+          "texto": "Com o vetor já ordenado, o insertion sort compara cada elemento só com o vizinho da esquerda. Quantas comparações para `n` elementos, e que função de `n` é essa?"
+        },
+        {
+          "item": "V",
+          "texto": "Na intercalação, o mergesort copia as metades para um vetor auxiliar antes de juntar. Na última intercalação, com `n` elementos, qual o tamanho desse vetor?"
+        }
+      ]
     },
     {
       "numero": 18,
@@ -920,7 +1058,25 @@
           "modulo": "14-arvores.md"
         }
       ],
-      "dica": "**Cobra:** casar o nome de cada estrutura com a sua definição.\n\n- **Pilha e fila** [0082]: a pilha é LIFO (último a entrar, primeiro a sair) e a fila é FIFO (primeiro a entrar, primeiro a sair). Ex.: empilhar A, B, C e retirar dá C; enfileirar A, B, C e retirar dá A.\n- **Árvore** [0097]: cada nó pode ter vários filhos, formando uma hierarquia; não é uma sequência. Ex.: a pasta `casa` com 3 subpastas.\n- **Lista encadeada** [0076]: estrutura linear de nós em que cada um aponta para o próximo e o último aponta para `NULL`. Ex.: `4 → 9 → NULL`.\n\n**Como atacar:** escreva a definição correta de cada estrutura e compare com cada afirmação."
+      "dica": "**Cobra:** casar o nome de cada estrutura com a sua definição.\n\n- **Pilha e fila** [0082]: a pilha é LIFO (último a entrar, primeiro a sair) e a fila é FIFO (primeiro a entrar, primeiro a sair). Ex.: empilhar A, B, C e retirar dá C; enfileirar A, B, C e retirar dá A.\n- **Árvore** [0097]: cada nó pode ter vários filhos, formando uma hierarquia; não é uma sequência. Ex.: a pasta `casa` com 3 subpastas.\n- **Lista encadeada** [0076]: estrutura linear de nós em que cada um aponta para o próximo e o último aponta para `NULL`. Ex.: `4 → 9 → NULL`.\n\n**Como atacar:** escreva a definição correta de cada estrutura e compare com cada afirmação.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Na fila, cada elemento tem um único sucessor e a saída é pela frente (FIFO). Qual estrutura liga um elemento a vários outros abaixo dele, como uma pasta com subpastas?"
+        },
+        {
+          "item": "II",
+          "texto": "Numa árvore binária de busca, você remove qualquer chave, não só a última que entrou. Em qual estrutura a remoção é sempre do último inserido?"
+        },
+        {
+          "item": "III",
+          "texto": "Desenhe `4 → 9 → 7`: cada nó guarda o dado e o endereço do próximo. O que fica no campo `prox` do 7?"
+        },
+        {
+          "item": "IV",
+          "texto": "Empilhe A, B e C e faça um `pop`: sai A ou C? Agora enfileire A, B e C e retire um."
+        }
+      ]
     }
   ]
 }

@@ -47,6 +47,20 @@
       "formato": "afirmações",
       "enunciado": "Sobre as características das árvores de pesquisa binária, considere as afirmações:\n\n1. TODOS os nós da subárvore à esquerda são menores que o pai\n2. O nó mais à esquerda é o menor de TODOS os nós, enquanto que o nó mais à direita é o maior de TODOS\n3. O sucessor de um nó x é o nó com a menor chave maior que a chave de x, e este sucessor estará SEMPRE em um nível (altura) acima de x, ou seja, mais próximo da raiz.\n\nQuais são verdadeiras?",
       "dica": "**Cobra:** propriedades da árvore de pesquisa binária e do sucessor de uma chave.\n\n- **Propriedade da BST** [0099]: em cada nó, toda chave da subárvore esquerda é menor e toda da direita é maior, não só as dos filhos diretos; o mínimo está descendo sempre à esquerda e o máximo à direita. Ex.: na raiz 5 com filho 3, o 4 entra à direita do 3, abaixo da raiz e ainda menor que 5.\n- **Sucessor** [0175]: a menor chave maior que `x`; com subárvore direita é o mínimo dela, e sem ela é o primeiro ancestral alcançado por um filho esquerdo. Ex.: na raiz 6 com esquerdo 2 (e o 4 à direita do 2), o sucessor do 2 é o 4 e o do 4 é o 6.\n\n**Como atacar:** teste cada afirmação num desenho pequeno, procurando um contraexemplo.",
+      "contrapontos": [
+        {
+          "item": "1",
+          "texto": "Insira 50, 30 e 40. O 40 vai para a esquerda do 50 e depois para a direita do 30. Compare o 40 com o 50: a regra da BST olha só o filho direto ou toda a subárvore?"
+        },
+        {
+          "item": "2",
+          "texto": "Insira 50, 30, 70, 20 e 80 e siga sempre o ponteiro `esq` a partir da raiz. Onde você para? Existe alguma chave menor que essa em outro ponto da árvore?"
+        },
+        {
+          "item": "3",
+          "texto": "Na árvore 50, 30, 70, 60, 80, quem é o sucessor do 50 e ele fica acima ou abaixo do 50? E o sucessor do 30?"
+        }
+      ],
       "alternativas": [
         {
           "letra": "A",
@@ -88,6 +102,24 @@
       "formato": "afirmações",
       "enunciado": "Sobre ordenação, considere as afirmações:\n\n1. O Quicksort é um dos algoritmos mais conhecidos, pois possui complexidade, no pior caso, de O(n log n)\n2. O Quicksort e Mergesort usam a técnica de divisão e conquista\n3. O Mergesort possui complexidade assintótica Θ(n log n) no caso médio.\n4. Caso a lista já esteja ordenada, o Selectionsort têm complexidade de O(n).\n\nTais afirmações são, respectivamente:",
       "dica": "**Cobra:** custo e técnica dos algoritmos de ordenação.\n\n- **Quick sort** [0095]: particiona em torno de um pivô e ordena cada lado; se o pivô cai sempre numa ponta, as partições têm 0 e n-1 elementos e o custo vira quadrático, enquanto n log n é o caso médio. Ex.: pivô no primeiro de 1, 2, 3, 4 gera partições de 0 e 3, depois 0 e 2.\n- **Merge sort** [0094]: divide ao meio, ordena as metades e intercala; são log n níveis de n passos cada, em qualquer entrada. Ex.: 8 elementos dão 3 níveis × 8 = 24 passos.\n- **Selection sort** [0092]: toda volta procura o mínimo em todo o resto do vetor, ordenado ou não. Ex.: em 1, 2, 3 ainda faz 2 + 1 = 3 comparações.\n\n**Como atacar:** para cada algoritmo, separe pior caso, caso médio e melhor caso.",
+      "contrapontos": [
+        {
+          "item": "1",
+          "texto": "Rode o quicksort com o pivô no último elemento sobre `1 2 3 4 5`. Quantos elementos sobram de cada lado em cada partição, e quantas comparações dá no total?"
+        },
+        {
+          "item": "2",
+          "texto": "O quicksort parte o vetor em torno do pivô e resolve cada lado; o mergesort corta ao meio, ordena cada metade e intercala. Os passos dividir, resolver e combinar aparecem em qual dos dois?"
+        },
+        {
+          "item": "3",
+          "texto": "O mergesort corta ao meio seja qual for a entrada: são `log₂ n` níveis, e cada nível intercala `n` elementos. Essa conta muda quando a entrada é aleatória?"
+        },
+        {
+          "item": "4",
+          "texto": "A seleção procura o menor do restante varrendo tudo a cada passo. Em `1 2 3 4 5`, quantas comparações ela faz até o fim? Compare com o insertion sort no mesmo vetor, que faz 4."
+        }
+      ],
       "alternativas": [
         {
           "letra": "A",
@@ -415,6 +447,20 @@
       "formato": "afirmações",
       "enunciado": "Considere o pseudo algoritmo abaixo:\n\n```c\nvoid Inserir(int vetor[], int N, int novo) {\n   /* tamanho do vetor N+1*/\n   i = 1;\n   j = N; /* ocupação do vetor */\n   while (i <= j){\n     meio = (int) floor((i+j)/2); /* função piso, exemplo: (int) floor(2.6) retorna 2 */\n     if (vetor[meio] > novo) { j = meio-1; }\n     else { i = meio + 1; }\n   }\n   vetor[N+1] = novo;\n   for (k=N+1; k == i; k--) {\n     trocar(vetor,k,k-1); /* Função que inverte a ordem dos elementos da posição k, k-1 */\n   }\n}\n```\n\nConsidere as afirmações:\n\n1. Realiza a inserção do novo elemento com menos comparações que o algoritmo da ordenação por inserção.\n2. Realiza a inserção com o mesmo número de comparações que o algoritmo da ordenação por inserção.\n3. Realiza a inserção do novo elemento com o mesmo número de movimentações que o algoritmo da ordenação por inserção.\n\nSobre as afirmações anteriores, é correto dizer que:",
       "dica": "**Cobra:** comparar a inserção com busca binária e a do insertion sort em comparações e movimentações.\n\n- **Busca binária** [0090]: compara com o meio e descarta metade, no máximo ⌊log₂ n⌋ + 1 comparações. Ex.: com 16 elementos, até 5 comparações.\n- **Insertion sort** [0093]: insere o elemento no prefixo ordenado, comparando e deslocando um a um da direita para a esquerda; no pior caso são n comparações e n deslocamentos. Ex.: inserir 1 em 3, 5, 8 compara com 8, 5 e 3 e desloca os três.\n\n**Como atacar:** conte comparações e movimentações separadas, para o mesmo vetor.",
+      "contrapontos": [
+        {
+          "item": "1",
+          "texto": "Com 1.000 posições ocupadas, a busca binária acha o lugar do `novo` com até 10 comparações. Quantas a inserção sequencial pode fazer, andando da direita para a esquerda?"
+        },
+        {
+          "item": "2",
+          "texto": "Teste com `1 3 5 7` (índices 1 a 4) e `novo = 0`: a busca binária compara com o 3 e depois com o 1. Quantas comparações faz a inserção sequencial, que compara com 7, 5, 3 e 1?"
+        },
+        {
+          "item": "3",
+          "texto": "Achado o lugar, os maiores que `novo` ainda precisam andar uma casa para a direita. Com `1 3 5 7` e `novo = 4`, quantos elementos andam aqui e quantos andam no insertion sort?"
+        }
+      ],
       "alternativas": [
         {
           "letra": "A",
@@ -649,6 +695,20 @@
       "formato": "conceito",
       "enunciado": "Sobre árvores vermelho-preto, considere as afirmações:\n\n1. A raiz é preta\n2. Toda subárvore nula é preta,\n3. Se um nó é vermelho, então os filhos são pretos.\n\nQual são verdadeiras:",
       "dica": "**Cobra:** as propriedades da árvore rubro-negra.\n\n- **Propriedades rubro-negras** [0177]: a raiz é preta, as folhas nulas (`T.nil`) são pretas, nó vermelho só tem filhos pretos, e todo caminho até as folhas tem o mesmo número de nós pretos. Ex.: um nó vermelho com filho vermelho viola a regra e obriga a recolorir ou girar.\n- **Altura negra** [0177]: número de nós pretos de um nó até as folhas, igual em todos os caminhos, o que limita a altura a 2 log₂(n+1). Ex.: se um caminho da raiz tem 2 nós pretos até a folha, todos os outros também têm 2.\n\n**Como atacar:** confira cada afirmação contra a lista das cinco propriedades.",
+      "contrapontos": [
+        {
+          "item": "1",
+          "texto": "As cinco propriedades do Cormen falam da cor de cada nó, da cor da raiz, da cor das folhas `NIL`, dos filhos de nó vermelho e da altura negra. A raiz aparece em qual delas?"
+        },
+        {
+          "item": "2",
+          "texto": "No Cormen, toda subárvore vazia vira o sentinela `T.nil`. Que cor ele recebe, e por que isso facilita contar os nós pretos de cada caminho?"
+        },
+        {
+          "item": "3",
+          "texto": "Na sequência 10 (preto) → 5 (vermelho) → 3 (vermelho), a inserção da rubro-negra deixa ficar assim ou recolore e rotaciona?"
+        }
+      ],
       "alternativas": [
         {
           "letra": "A",
@@ -686,6 +746,20 @@
       "formato": "afirmações",
       "enunciado": "Sobre os grafos, considere as afirmações:\n\n1. O algoritmo de Dijkstra é conhecido por descobrir o menor caminho entre dois vértices, mas só funciona para casos pequenos ou médios, por possuir complexidade exponencial.\n2. Na implementação da busca em largura, uma fila é normalmente utilizada.\n3. Em grafos esparsos, a implementação por matriz de adjacências consome mais memória do que a implementação por lista de adjacências.\n\nQuais são verdadeiras?",
       "dica": "**Cobra:** custo do Dijkstra, uso da fila na busca em largura e memória das representações de grafo.\n\n- **Dijkstra** [0112]: caminho mínimo de uma origem com pesos não negativos, fixando sempre o vértice de menor distância; custa O(V²) com vetor ou O((V+E) log V) com heap. Ex.: com 1.000 vértices, V² = 1 milhão de passos, nada exponencial.\n- **BFS e fila** [0110]: visita por camadas (distância 1, depois 2...), e a fila (primeiro a entrar, primeiro a sair) garante essa ordem. Ex.: de A com vizinhos B e C, a fila A → B, C visita B e C antes dos vizinhos de B.\n- **Matriz × lista de adjacências** [0109]: a matriz gasta V² células mesmo com poucas arestas; a lista gasta V + E. Ex.: 1.000 vértices e 2.000 arestas: 1.000.000 células contra cerca de 5.000 entradas.\n\n**Como atacar:** avalie cada afirmação sozinha com os números de um grafo pequeno.",
+      "contrapontos": [
+        {
+          "item": "1",
+          "texto": "Dijkstra com heap binário custa `O((V + E) log V)`. Com `V = 1.000` e `E = 10.000`, isso dá cerca de 11.000 × 10 = 110.000 passos. Compare com `2^1.000`. E qual é a restrição conhecida do Dijkstra sobre os pesos?"
+        },
+        {
+          "item": "2",
+          "texto": "A BFS visita todos os vizinhos de `s` antes dos vizinhos dos vizinhos, atendendo primeiro quem foi descoberto primeiro. Isso é política FIFO ou LIFO? Compare com a DFS, que usa pilha ou recursão."
+        },
+        {
+          "item": "3",
+          "texto": "Grafo não dirigido com 1.000 vértices e 2.000 arestas: a matriz tem 1.000 × 1.000 = 1.000.000 de casas; a lista tem cerca de `V + 2E = 5.000` entradas. Qual das duas cresce com as arestas que existem?"
+        }
+      ],
       "alternativas": [
         {
           "letra": "A",

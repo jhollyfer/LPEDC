@@ -167,7 +167,7 @@ h1.titulo-questao { font: 400 32px/1.15 var(--serif); margin: 20px 0 0; }
 }
 .questao > * { min-width: 0; }
 .enunciado { grid-area: enun; font-size: 17px; }
-.antes { grid-area: antes; position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow-y: auto; border-radius: var(--radius-card); }
+.antes { grid-area: antes; position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow-y: auto; scrollbar-width: thin; }
 .alternativas { grid-area: alts; list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
 .resultado { grid-area: res; }
 .enunciado p { margin: 0 0 14px; }
@@ -190,78 +190,74 @@ code { font-family: var(--mono); font-size: .9em; }
 .original { font-size: 13px; color: var(--muted); margin: 0 0 14px; }
 .aviso-q { background: var(--pill-warning-bg); color: var(--pill-warning-ink); border-radius: var(--radius-inner); padding: 10px 14px; font-size: 14px; margin: 0 0 14px; }
 
-/* antes de responder */
-.antes details { background: var(--surface); border-radius: var(--radius-card); }
-.antes summary {
-  list-style: none; cursor: pointer; padding: 18px var(--pad); display: flex; align-items: baseline; gap: 8px;
-  font-weight: 600; font-size: 15px;
-}
+/* antes de responder: um cartão só, abas, linhas em vez de caixas dentro de caixas */
+.antes details.painel { background: var(--raised); border: 1px solid var(--border); border-radius: var(--radius-inner); }
+.antes summary { list-style: none; cursor: pointer; }
 .antes summary::-webkit-details-marker { display: none; }
-.antes summary .estado { margin-left: auto; font-weight: 400; font-size: 13px; color: var(--muted); }
-.antes .corpo { padding: 0 var(--pad) var(--pad); font-size: 15px; }
-.antes .corpo p { margin: 0 0 12px; }
-.antes .corpo ul { margin: 0 0 14px; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
-.antes .corpo li { background: var(--raised); border-radius: var(--radius-inner); padding: 10px 12px; border: 1px solid var(--border); }
-.antes pre { background: var(--raised); white-space: pre-wrap; overflow-wrap: anywhere; }
-.ref {
-  display: inline-flex; align-items: baseline; gap: 6px; font-size: 13px; color: var(--accent);
-  text-decoration: none; white-space: nowrap; font-weight: 500;
-}
+.antes details.painel > summary { padding: 14px 18px; display: flex; align-items: baseline; gap: 8px; font-weight: 600; font-size: 14px; }
+.antes summary .estado { margin-left: auto; font-weight: 400; font-size: 12px; color: var(--muted); }
+.antes .corpo { padding: 0 18px 18px; font-size: 15px; line-height: 1.55; }
+.antes .corpo p { margin: 0 0 10px; }
+.abas { display: flex; gap: 20px; border-bottom: 1px solid var(--border); margin: 0 -18px 16px; padding: 0 18px; }
+.abas button { border: 0; background: none; padding: 8px 0 10px; font: inherit; font-size: 14px; font-weight: 500; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.abas button:hover { color: var(--text); }
+.abas button[aria-selected="true"] { color: var(--text); border-bottom-color: var(--accent); }
+.assuntos-aula { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 14px; }
+.assuntos-aula button { border: 1px solid var(--border); background: none; border-radius: 999px; padding: 4px 11px; font: inherit; font-size: 13px; color: var(--muted); cursor: pointer; }
+.assuntos-aula button[aria-pressed="true"] { background: var(--text); border-color: var(--text); color: var(--ground); }
+.aula-titulo { font-weight: 600; font-size: 16px; }
+.antes pre { background: var(--code-bg); white-space: pre; overflow-x: auto; font-size: 12.5px; line-height: 1.45; padding: 10px 12px; border-radius: 8px; margin: 0 0 10px; }
+.ref { display: inline-flex; align-items: baseline; gap: 6px; font-size: 13px; color: var(--accent); text-decoration: none; white-space: nowrap; font-weight: 500; }
 .ref:hover { text-decoration: underline; }
 .ref .n { font-variant-numeric: tabular-nums; }
-.conceito { display: flex; flex-direction: column; gap: 2px; }
-.conceito .def { line-height: 1.5; }
-.conceito .ex { margin-top: 6px; padding: 8px 10px; border-radius: 10px; background: var(--surface); font-size: 14px; line-height: 1.5; }
+/* resumo: conceitos em linhas */
+.resumo-q ul { margin: 0 0 12px; padding: 0; list-style: none; }
+.resumo-q li { padding: 12px 0; border-top: 1px solid var(--border); }
+.conceito { display: flex; flex-direction: column; gap: 3px; }
+.conceito .ex { margin-top: 4px; font-size: 14px; color: var(--muted); }
 .conceito .ex-rot { font-weight: 600; color: var(--accent); margin-right: 4px; }
 .conceito .refs { display: flex; flex-direction: column; gap: 2px; margin-top: 4px; }
 .conceito .ref { white-space: normal; }
 .conceito .ref::before { content: "Estude: "; color: var(--muted); font-weight: 400; }
-.antes h3 { font-size: 15px; font-weight: 600; margin: 18px 0 8px; }
-.contrapontos .nota { font-size: 13px; color: var(--muted); margin: 0 0 10px; }
-.antes .contrapontos ol { list-style: none; margin: 0 0 14px; padding: 0; display: flex; flex-direction: column; gap: 8px; }
-.antes .contrapontos li { display: flex; gap: 10px; background: var(--raised); border: 1px solid var(--border); border-radius: var(--radius-inner); padding: 10px 12px; line-height: 1.5; }
-.contrapontos .item { font-weight: 600; color: var(--accent); min-width: 22px; font-variant-numeric: tabular-nums; }
-.antes details.aula { background: var(--raised); border: 1px solid var(--border); border-radius: var(--radius-inner); margin-bottom: 8px; }
-.antes details.aula > summary { padding: 10px 12px; font-size: 14px; }
-.antes details.aula > summary::after { content: "abrir"; margin-left: auto; font-weight: 400; font-size: 13px; color: var(--muted); }
-.antes details.aula[open] > summary::after { content: "fechar"; }
-.aula summary .n { color: var(--accent); font-variant-numeric: tabular-nums; }
-.aula-corpo { padding: 0 12px 12px; font-size: 14.5px; line-height: 1.55; }
-.aula-corpo h4 { font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); margin: 14px 0 6px; }
-.aula-corpo h4:first-child { margin-top: 2px; }
-.aula-corpo p { margin: 0 0 8px; }
-.antes .aula-corpo ul { list-style: disc; display: block; padding-left: 18px; margin: 0 0 8px; }
-.antes .aula-corpo li { background: none; border: 0; border-radius: 0; padding: 0; margin: 0 0 4px; }
-.antes .aula-corpo pre { background: var(--surface); font-size: 12.5px; line-height: 1.45; padding: 10px; border-radius: 10px; margin: 0 0 8px; white-space: pre; overflow-x: auto; }
-.aula-corpo table { font-size: 13px; }
-.aula-corpo th, .aula-corpo td { padding: 4px 8px 4px 0; vertical-align: top; text-align: left; }
-.aula-corpo table { width: 100%; }
-.antes .aula-corpo ol.passos { list-style: none; margin: 0 0 8px; padding: 0; display: flex; flex-direction: column; gap: 10px; }
-.antes .aula-corpo ol.passos > li { display: flex; gap: 10px; background: var(--surface); border-radius: 10px; padding: 10px; margin: 0; }
-.passos .passo-n { flex: none; width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 12px; font-weight: 600; display: grid; place-items: center; margin-top: 1px; }
+/* para pensar */
+.antes .nota { font-size: 13px; color: var(--muted); }
+ol.contrapontos { list-style: none; margin: 0; padding: 0; }
+ol.contrapontos li { display: flex; gap: 12px; padding: 12px 0; border-top: 1px solid var(--border); }
+ol.contrapontos .item { flex: none; min-width: 24px; font-weight: 600; color: var(--accent); font-variant-numeric: tabular-nums; }
+/* aula */
+.aula h4 { font-size: 11.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 20px 0 6px; padding-top: 14px; border-top: 1px solid var(--border); }
+.aula h4:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.aula ul { margin: 0 0 10px; padding-left: 18px; }
+.aula li { margin: 0 0 4px; }
+.aula .pros-contras h4 + ul { margin-bottom: 0; }
+.aula table { font-size: 13px; width: 100%; }
+.aula th, .aula td { padding: 4px 10px 4px 0; vertical-align: top; text-align: left; }
+.aula ol.passos { list-style: none; margin: 0 0 10px; padding: 0; }
+.aula ol.passos > li { display: flex; gap: 10px; padding: 0 0 16px; margin: 0; position: relative; }
+.aula ol.passos > li:not(:last-child)::before { content: ""; position: absolute; left: 10px; top: 24px; bottom: 2px; width: 1px; background: var(--border); }
+.passos .passo-n { flex: none; width: 21px; height: 21px; border-radius: 50%; border: 1px solid var(--accent); color: var(--accent); background: var(--raised); font-size: 12px; font-weight: 600; display: grid; place-items: center; margin-top: 2px; }
 .passos li > div { min-width: 0; flex: 1; }
 .passos li > div > strong { display: block; margin-bottom: 2px; }
 .passos img { display: block; max-width: 100%; height: auto; background: #fff; border-radius: 8px; border: 1px solid var(--border); margin-top: 6px; }
-.aula-corpo .fontes { font-size: 13px; color: var(--muted); }
-.aula-fim { margin: 10px 0 0; }
+.aula .fontes { font-size: 13px; color: var(--muted); }
+.aula-fim { margin: 14px 0 0; }
 .aula-fim .ref::before { content: "Capítulo completo: "; color: var(--muted); font-weight: 400; }
+/* o porquê, depois de responder */
 #porque-lado { scroll-margin-top: 12px; }
-.bloco-porque { background: var(--surface); border-radius: var(--radius-card); padding: 18px var(--pad); margin-bottom: 12px; font-size: 15px; line-height: 1.55; border-left: 4px solid var(--border); }
-.bloco-porque.certo { border-left-color: var(--positive); }
-.bloco-porque.errado { border-left-color: var(--negative); }
-.bloco-porque.neutro { border-left-color: var(--pill-warning-ink); }
-.bloco-porque h2 { font: 400 22px/1.25 var(--serif); margin: 0 0 10px; }
-.bloco-porque.certo h2 { color: var(--positive); }
-.bloco-porque.errado h2 { color: var(--negative); }
-.bloco-porque.neutro h2 { color: var(--pill-warning-ink); }
-.antes .bloco-porque h3 { font-size: 14px; margin: 12px 0 4px; }
+.bloco-porque { background: var(--raised); border: 1px solid var(--border); border-radius: var(--radius-inner); padding: 16px 18px; margin-bottom: 12px; font-size: 15px; line-height: 1.55; }
+.bloco-porque h2 { font-size: 16px; font-weight: 600; margin: 0 0 10px; display: flex; gap: 8px; align-items: baseline; }
+.bloco-porque h2::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--muted); transform: translateY(-1px); }
+.bloco-porque.certo h2 { color: var(--positive); } .bloco-porque.certo h2::before { background: var(--positive); }
+.bloco-porque.errado h2 { color: var(--negative); } .bloco-porque.errado h2::before { background: var(--negative); }
+.bloco-porque.neutro h2 { color: var(--pill-warning-ink); } .bloco-porque.neutro h2::before { background: var(--pill-warning-ink); }
+.bloco-porque h3 { font-size: 13px; font-weight: 600; color: var(--muted); margin: 12px 0 4px; }
 .bloco-porque p { margin: 0 0 8px; }
-.antes .bloco-porque details.outras { background: none; border-radius: 0; margin-top: 10px; }
-.antes .bloco-porque details.outras > summary { padding: 0; font-size: 14px; font-weight: 500; color: var(--muted); }
+.bloco-porque details.outras { margin-top: 10px; border-top: 1px solid var(--border); padding-top: 10px; }
+.bloco-porque details.outras > summary { font-size: 13px; font-weight: 500; color: var(--muted); }
 .bloco-porque .outra { margin: 10px 0 2px; color: var(--accent); }
-.desenho { margin-top: 4px; }
-.desenho summary { padding: 0; font-size: 14px; font-weight: 500; color: var(--muted); }
-.desenho img { display: block; width: 100%; height: auto; background: #fff; border-radius: var(--radius-inner); margin-top: 10px; border: 1px solid var(--border); }
+.desenho { margin-top: 8px; }
+.desenho summary { font-size: 13px; font-weight: 500; color: var(--muted); }
+.desenho img { display: block; width: 100%; height: auto; background: #fff; border-radius: 8px; margin-top: 10px; border: 1px solid var(--border); }
 
 /* alternativas */
 .alt { border: 1px solid var(--border); border-radius: var(--radius-inner); background: var(--ground); }
@@ -412,7 +408,7 @@ kbd { font: 12px var(--font); border: 1px solid var(--control); border-radius: 4
   </main>
 </div>
 
-<script src="quiz/questoes.js?v=e6070ad6"></script>
+<script src="quiz/questoes.js?v=39adda6e"></script>
 <script>
 'use strict'
 const CHAVE = 'lpedc-quiz-v1'
@@ -774,44 +770,69 @@ function telaTrilha(alvo) {
 
 // ---------- questão ----------
 // a aula do assunto: como funciona, características, prós e contras e um exemplo passo a passo
-function aulaDoAssunto(num, aberta) {
+function aulaDoAssunto(num, visivel) {
   const a = AULAS[num]
   if (!a) return ''
-  const lista = (rotulo, itens, classe = '') => itens?.length ? `<h4 class="${classe}">${rotulo}</h4><ul class="pontos ${classe}">${itens.map((t) => `<li>${emLinha(t)}</li>`).join('')}</ul>` : ''
-  return `<details class="aula" ${aberta ? 'open' : ''}>
-    <summary><span class="n">${esc(num)}</span> ${esc(ASSUNTOS[num]?.titulo ?? '')}</summary>
-    <div class="aula-corpo">
+  const lista = (rotulo, itens) => itens?.length ? `<h4>${rotulo}</h4><ul class="pontos">${itens.map((t) => `<li>${emLinha(t)}</li>`).join('')}</ul>` : ''
+  return `<article class="aula" data-aula="${esc(num)}" ${visivel ? '' : 'hidden'}>
       <h4>O que é</h4>${md(a.oque)}
       <h4>Como funciona</h4>${md(a.como)}
       ${lista('Características', a.caracteristicas)}
-      ${lista('Vantagens', a.vantagens, 'pro')}
-      ${lista('Desvantagens', a.desvantagens, 'contra')}
+      ${a.vantagens?.length || a.desvantagens?.length ? `<div class="pros-contras">${lista('Vantagens', a.vantagens)}${lista('Desvantagens', a.desvantagens)}</div>` : ''}
       <h4>Exemplo</h4>${md(a.exemplo)}
       ${a.passos?.length ? `<h4>Passo a passo</h4><ol class="passos">${a.passos.map((p, k) => `<li><span class="passo-n">${k + 1}</span><div>${p.titulo ? `<strong>${emLinha(p.titulo)}</strong>` : ''}${md(p.texto)}${p.svg ? `<img src="quiz/figuras/${p.svg}.svg" alt="${esc(p.alt ?? p.titulo ?? `passo ${k + 1}`)}" loading="lazy" onload="this.style.width=Math.round(this.naturalWidth*0.42)+'px'">` : ''}</div></li>`).join('')}</ol>` : ''}
       ${a.custos ? `<h4>Custos</h4>${md(a.custos)}` : ''}
       ${a.naprova ? `<h4>Como a prova cobra</h4>${md(a.naprova)}` : ''}
       ${a.fontes?.length ? `<h4>Na literatura</h4><ul class="pontos fontes">${a.fontes.map((t) => `<li>${emLinha(t)}</li>`).join('')}</ul>` : ''}
       <p class="aula-fim">${linkAssunto(num)}</p>
-    </div>
-  </details>`
+  </article>`
 }
+// o painel tem três abas: a aula do assunto, o resumo da questão e os contrapontos
+let abaPainel = ler('lpedc-aba', 'aula')
 function painelAntes(q, respondida) {
   if (!q.dica) return ''
   const nums = [...new Set([...(q.dica.matchAll(/\[(\d{4})\]/g))].map((m) => m[1]))]
   const comDesenho = nums.find((n) => ASSUNTOS[n]?.ideia)
   const comAula = [...new Set([...(q.assuntos ?? []).map((x) => x.num), ...nums])].filter((n) => AULAS[n])
   const aberto = respondida || !modoProva
+  const abas = [
+    comAula.length && ['aula', 'Aula'],
+    ['resumo', 'Resumo'],
+    q.contrapontos?.length && ['pensar', 'Para pensar'],
+  ].filter(Boolean)
+  const ativa = abas.some(([id]) => id === abaPainel) ? abaPainel : abas[0][0]
+  const secao = (id, html) => `<section data-painel="${id}" role="tabpanel" ${id === ativa ? '' : 'hidden'}>${html}</section>`
   return `<details class="painel" ${aberto ? 'open' : ''} ${respondida ? 'data-respondida="1"' : ''}>
     <summary>Antes de responder <span class="estado">${modoProva && !respondida ? 'modo prova · H abre' : 'H fecha'}</span></summary>
     <div class="corpo">
-      ${md(q.dica)}
-      ${q.contrapontos?.length ? `<section class="contrapontos"><h3>Para pensar em cada afirmação</h3><p class="nota">Não diz se é verdadeira ou falsa: mostra o outro lado para você decidir.</p><ol>${q.contrapontos.map((c) => `<li><span class="item">${esc(c.item)}</span><span>${emLinha(c.texto)}</span></li>`).join('')}</ol></section>` : ''}
-      ${comAula.length ? `<section class="aulas"><h3>Entenda o assunto</h3>${comAula.map((n, i) => aulaDoAssunto(n, i === 0)).join('')}</section>` : ''}
-      ${linhaNaTrilha(nums)}
-      ${comDesenho ? `<details class="desenho"><summary>Ver o desenho do assunto ${esc(comDesenho)}</summary><img src="material/${comDesenho}-ideia.svg" alt="Diagrama da ideia do assunto ${esc(comDesenho)}: ${esc(ASSUNTOS[comDesenho].titulo)}" loading="lazy"></details>` : ''}
+      ${abas.length > 1 ? `<div class="abas" role="tablist">${abas.map(([id, nome]) => `<button role="tab" data-aba="${id}" aria-selected="${id === ativa}">${nome}</button>`).join('')}</div>` : ''}
+      ${comAula.length ? secao('aula', `
+        ${comAula.length > 1 ? `<div class="assuntos-aula">${comAula.map((n, i) => `<button data-ver-aula="${esc(n)}" aria-pressed="${i === 0}">${esc(ASSUNTOS[n]?.titulo ?? n)}</button>`).join('')}</div>` : `<p class="aula-titulo">${esc(ASSUNTOS[comAula[0]]?.titulo ?? '')}</p>`}
+        ${comAula.map((n, i) => aulaDoAssunto(n, i === 0)).join('')}`) : ''}
+      ${secao('resumo', `<div class="resumo-q">${md(q.dica)}</div>
+        ${linhaNaTrilha(nums)}
+        ${comDesenho ? `<details class="desenho"><summary>Ver o desenho do assunto ${esc(comDesenho)}</summary><img src="material/${comDesenho}-ideia.svg" alt="Diagrama da ideia do assunto ${esc(comDesenho)}: ${esc(ASSUNTOS[comDesenho].titulo)}" loading="lazy"></details>` : ''}`)}
+      ${q.contrapontos?.length ? secao('pensar', `<p class="nota">Um contraponto por afirmação. Não diz se é verdadeira ou falsa: mostra o outro lado para você decidir.</p><ol class="contrapontos">${q.contrapontos.map((c) => `<li><span class="item">${esc(c.item)}</span><span>${emLinha(c.texto)}</span></li>`).join('')}</ol>`) : ''}
     </div>
   </details>`
 }
+document.addEventListener('click', (e) => {
+  const aba = e.target.closest('[data-aba]')
+  if (aba) {
+    abaPainel = aba.dataset.aba
+    gravar('lpedc-aba', abaPainel)
+    const corpo = aba.closest('.corpo')
+    corpo.querySelectorAll('[data-aba]').forEach((b) => b.setAttribute('aria-selected', b === aba))
+    corpo.querySelectorAll('[data-painel]').forEach((s) => { s.hidden = s.dataset.painel !== abaPainel })
+    return
+  }
+  const ver = e.target.closest('[data-ver-aula]')
+  if (ver) {
+    const sec = ver.closest('[data-painel]')
+    sec.querySelectorAll('[data-ver-aula]').forEach((b) => b.setAttribute('aria-pressed', b === ver))
+    sec.querySelectorAll('[data-aula]').forEach((x) => { x.hidden = x.dataset.aula !== ver.dataset.verAula })
+  }
+})
 
 function telaQuestao(id) {
   const q = porId.get(id)

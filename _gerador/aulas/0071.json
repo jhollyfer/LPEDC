@@ -1,0 +1,153 @@
+{
+ "num": "0071",
+ "oque": "A eficiência de um algoritmo se mede pelo **número de passos** que ele dá em função do tamanho da entrada, n, e não pelo relógio. Escrita como fórmula de n, essa contagem é a **função de custo** (no Ziviani, **função de complexidade**).",
+ "como": "Segundos mudam de máquina para máquina; o número de passos não. Para contar sem enlouquecer:\n\n- Escolha a **operação dominante**: a que mais se repete e resume o trabalho. Numa busca, é a comparação `v[i] == alvo`. O `i++` acontece junto com ela e só mudaria o total por um fator fixo.\n- Conte quantas vezes ela acontece em função de n. Um laço de 0 a n − 1 executa o corpo n vezes; dois laços aninhados até n, n · n vezes.\n- Veja **qual entrada** chegou. Para o mesmo n, a contagem muda: o **melhor caso** é a entrada mais favorável, o **pior caso** a mais desfavorável e o **caso médio** a média sobre todas as entradas possíveis.\n\n```c\nint passos = 0;\nint busca(int v[], int n, int alvo) {\n    for (int i = 0; i < n; i++) {\n        passos++;  /* antes do if */\n        if (v[i] == alvo) return i;\n    }\n    return -1;\n}\n```\n\nO contador entra **antes** do `if`: depois dele, a comparação que acerta não seria contada. E zere o contador entre uma busca e outra.",
+ "caracteristicas": [
+  "Mede passos, não segundos: o mesmo código dá o mesmo número em qualquer computador.",
+  "Conta-se a operação dominante, não cada instrução.",
+  "A contagem depende do tamanho n **e** de qual entrada chegou: por isso existem melhor, médio e pior caso.",
+  "A análise costuma olhar o pior caso, porque só ele vira promessa: \"nunca passa de n comparações\".",
+  "Contar passos dá a **complexidade temporal**; contar memória extra dá a **complexidade espacial** (0168).",
+  "O próximo passo é olhar o formato da fórmula quando n cresce: `f(n) = n` é linear, `f(n) = n²` é quadrática (0072)."
+ ],
+ "exemplo": "O bolo da padaria tem 8 comandas:\n\n```\npos:  0   1   2   3   4   5  6   7\n     41  17  88  23  56  9  70  35\n```\n\nVamos procurar a 41 (está em cima), a 70 (posição 6) e a 99 (não está), contando uma comparação por posição olhada.\n\n| n | melhor caso | caso médio | pior caso |\n|---|---|---|---|\n| 8 | 1 | 4,5 | 8 |\n| 800 | 1 | 400,5 | 800 |\n| 80.000 | 1 | 40.000,5 | 80.000 |\n\nMultiplicou n por 100, o pior caso também multiplicou por 100: isso é crescimento **linear**.",
+ "passos": [
+  {
+   "titulo": "Buscar 41: melhor caso",
+   "texto": "Compara a posição 0: 41 == 41, achou. **1 passo.** É o melhor caso: a chave na primeira posição. Ele não depende de n: com 8 ou 80.000 comandas, continua 1.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     41,
+     17,
+     88,
+     23,
+     56,
+     9,
+     70,
+     35
+    ],
+    "estados": {
+     "0": "verde"
+    },
+    "nome": "comandas",
+    "titulo": "alvo 41: 1 passo"
+   }
+  },
+  {
+   "titulo": "Buscar 70: os erros contam",
+   "texto": "Compara 41, 17, 88, 23, 56 e 9: seis erros, cada um é um passo. Na posição 6, 70 == 70. **7 passos.** Em geral, achar na posição p custa p + 1 comparações.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     41,
+     17,
+     88,
+     23,
+     56,
+     9,
+     70,
+     35
+    ],
+    "estados": {
+     "0": "apagado",
+     "1": "apagado",
+     "2": "apagado",
+     "3": "apagado",
+     "4": "apagado",
+     "5": "apagado",
+     "6": "verde"
+    },
+    "nome": "comandas",
+    "titulo": "alvo 70: 7 passos"
+   }
+  },
+  {
+   "titulo": "Buscar 99: pior caso",
+   "texto": "Nenhuma posição bate. A busca só desiste depois de olhar as 8: **8 passos**, ou seja, n. O pior caso é a chave na última posição ou fora do vetor. A função de custo do pior caso é `f(n) = n`.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     41,
+     17,
+     88,
+     23,
+     56,
+     9,
+     70,
+     35
+    ],
+    "estados": {
+     "0": "vermelho",
+     "1": "vermelho",
+     "2": "vermelho",
+     "3": "vermelho",
+     "4": "vermelho",
+     "5": "vermelho",
+     "6": "vermelho",
+     "7": "vermelho"
+    },
+    "nome": "comandas",
+    "titulo": "alvo 99: 8 passos"
+   }
+  },
+  {
+   "titulo": "Caso médio",
+   "texto": "Se a chave está no vetor e qualquer posição é igualmente provável, some o custo de cada posição e divida por n: (1 + 2 + ... + 8)/8 = 36/8 = **4,5**. Em geral, (n + 1)/2. É mais ou menos metade do pior caso, e cresce no mesmo ritmo que ele.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "pos:    0 1 2 3 4 5 6 7",
+     "passos: 1 2 3 4 5 6 7 8",
+     "",
+     "soma = 36",
+     "média = 36 / 8 = 4,5",
+     "fórmula: (n + 1) / 2"
+    ],
+    "titulo": "caso médio"
+   }
+  },
+  {
+   "titulo": "Contar voltas de laço aninhado",
+   "texto": "Procurar comandas repetidas compara cada par uma vez: `j` começa em `i + 1`. Para n = 8, o `i = 0` faz 7 comparações, o `i = 1` faz 6, até 1. Soma 28 = 8 · 7/2. Para n = 16, 120. A função de custo é `f(n) = n(n − 1)/2`: dobrar n quase **quadruplica** o custo.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "for (i = 0; i < n; i++)",
+     "  for (j = i+1; j < n; j++)",
+     "    passos++;",
+     "",
+     "n = 8  -> 7+6+5+4+3+2+1 = 28",
+     "n = 16 -> 15+14+...+1  = 120",
+     "f(n) = n(n-1)/2"
+    ],
+    "titulo": "pares"
+   }
+  },
+  {
+   "titulo": "Da contagem à classe",
+   "texto": "Duas funções de custo, dois formatos. A busca: `f(n) = n`, que dobra quando n dobra (**linear**). Os pares: `f(n) = n(n − 1)/2`, que quadruplica (**quadrática**). Se a banca diz que um algoritmo faz `2n + 1` operações, ele é linear: o termo de maior grau é n.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "  n   busca  pares",
+     "  8      8     28",
+     " 16     16    120",
+     " 32     32    496",
+     "",
+     "busca: n dobra -> x2",
+     "pares: n dobra -> ~x4"
+    ],
+    "titulo": "pior caso"
+   }
+  }
+ ],
+ "custos": "| Caso | Busca sequencial (comparações) |\n|---|---|\n| Melhor | 1 |\n| Médio (chave presente) | (n + 1)/2 |\n| Pior (última ou ausente) | n |\n| Memória extra | 1 variável (`i`) |",
+ "naprova": "A banca cobra a ideia de crescimento a partir da contagem: \"um algoritmo com número de operações ___ é linear\" (resposta: algo como `2n + 1`, polinômio de grau 1). Pegadinha: confundir melhor caso com garantia; o melhor caso de 1 passo não diz nada sobre entradas ruins.",
+ "fontes": [
+  "Feofiloff, *Algoritmos em linguagem C*, partes sobre análise de algoritmos.",
+  "Ziviani, *Projeto de algoritmos*, 3. ed., cap. 1 (função de complexidade, melhor, pior e caso médio).",
+  "Celes, Cerqueira e Rangel, *Introdução a estruturas de dados*, 2. ed. (tipos abstratos de dados e eficiência).",
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 2 (análise de algoritmos)."
+ ]
+}

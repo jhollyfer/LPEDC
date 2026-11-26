@@ -1,0 +1,216 @@
+{
+ "num": "0107",
+ "oque": "No endereçamento aberto, todas as chaves moram **dentro do próprio vetor**, sem listas. Quando o balde calculado está ocupado, a chave tenta outras posições numa sequência fixa, chamada **sequência de sondagem**, até achar uma livre.",
+ "como": "Na **sondagem linear**, a tentativa número `i` (contando de 0) olha a posição\n\n`h(k, i) = (h'(k) + i) mod m`\n\nou seja: começa em `h'(k)` e anda uma casa por vez, voltando ao 0 depois da última.\n\n- **Inserir:** sonda até achar posição livre (ou lápide) e grava ali.\n- **Buscar:** sonda até achar a chave (sucesso) ou uma posição **livre** (não está). Parar na livre é seguro: se a chave existisse, a inserção teria parado ali ou antes.\n- **Remover:** não esvazia a posição; grava uma **lápide** (`DELETED` no Cormen). A busca passa reto por ela; a inserção pode reaproveitá-la.\n\n```c\nint insere(int t[], int m, int k) {\n    int i = k % m;\n    for (int s = 0; s < m; s++) {\n        if (t[i] == LIVRE || t[i] == LAPIDE) {\n            t[i] = k;\n            return i;\n        }\n        i = (i + 1) % m; // vizinha, dá a volta\n    }\n    return -1; // tabela cheia\n}\n```",
+ "caracteristicas": [
+  "A tabela tem tamanho fixo `m` e guarda **no máximo `m` chaves**: `α = n / m` nunca passa de 1.",
+  "Uma função hash só basta; a sondagem muda a posição, não a função.",
+  "**Agrupamento primário** (sondagem linear): posições ocupadas formam blocos contínuos, e toda chave que cai num bloco vai para o fim dele e o aumenta.",
+  "Remover exige **lápide**. Esvaziar a posição quebra a busca de quem passou por ela.",
+  "Com α perto de 1 fica muito lenta: na linear, busca sem sucesso olha em média uns 2,5 baldes com α = 0,5 e uns 50 com α = 0,9. Por isso se aumenta a tabela antes de 70% a 75% de ocupação."
+ ],
+ "vantagens": [
+  "Sem `malloc` e sem ponteiros: um vetor só, memória contígua.",
+  "A sondagem linear lê posições vizinhas, o que aproveita a cache do processador.",
+  "Com α baixo, é muito rápida."
+ ],
+ "desvantagens": [
+  "**Enche**: não cabe mais chave que posição, e com α alto o desempenho despenca.",
+  "Agrupamento primário na linear.",
+  "Remoção mais chata (lápides), e muitas lápides alongam as buscas até reconstruir a tabela."
+ ],
+ "exemplo": "Tabela com `m = 7`, `h'(k) = k mod 7` e sondagem linear. Vamos inserir **10, 17, 24, 5, 12**, depois buscar, remover com lápide e encher a tabela. Uma posição vazia aparece em branco; a lápide aparece como `lápide`, em cinza.",
+ "custos": "Sondagem linear, número médio de posições olhadas (Knuth):\n\n| α | Busca com sucesso | Busca sem sucesso ou inserção |\n|---|---|---|\n| 0,5 | 1,5 | 2,5 |\n| 0,9 | 5,5 | 50,5 |\n\nFórmulas: com sucesso `½ (1 + 1/(1 - α))`; sem sucesso `½ (1 + 1/(1 - α)²)`.\n\n| Operação | Caso médio (α constante < 1) | Pior caso |\n|---|---|---|\n| Buscar, inserir, remover | `O(1)` | `O(m)`: anda na tabela inteira |\n| Memória | `m` posições, sem ponteiros | igual |",
+ "naprova": "A banca chama de **hash linear** ou \"sem encadeamento\". Cobra que ele não aceita mais chaves que o tamanho da tabela (verdade), e tenta pegar com \"a colisão põe a chave no início do array\", \"substitui a que já estava\", \"a busca é binária\" ou \"é obrigatório usar várias funções hash\". Na colisão, a chave vai para a **próxima posição livre**; a busca recalcula o hash e sonda do mesmo jeito.",
+ "passos": [
+  {
+   "titulo": "Inserir 10",
+   "texto": "`10 mod 7 = 3`. A posição 3 está livre: o 10 fica ali. 1 sondagem.",
+   "figura": {
+    "tipo": "hash",
+    "baldes": [
+     "",
+     "",
+     "",
+     "10",
+     "",
+     "",
+     ""
+    ],
+    "estados": {
+     "3": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "Inserir 17: colisão",
+   "texto": "`17 mod 7 = 3`, ocupada pelo 10. Colisão: tenta a próxima, `(3 + 1) mod 7 = 4`, livre. O 17 fica na 4. 2 sondagens.",
+   "figura": {
+    "tipo": "hash",
+    "baldes": [
+     "",
+     "",
+     "",
+     "10",
+     "17",
+     "",
+     ""
+    ],
+    "estados": {
+     "3": "amarelo",
+     "4": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "Inserir 24",
+   "texto": "`24 mod 7 = 3`: ocupada. 4: ocupada. 5: livre. 3 sondagens. As posições 3, 4 e 5 já formam um bloco contínuo.",
+   "figura": {
+    "tipo": "hash",
+    "baldes": [
+     "",
+     "",
+     "",
+     "10",
+     "17",
+     "24",
+     ""
+    ],
+    "estados": {
+     "3": "amarelo",
+     "4": "amarelo",
+     "5": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "Inserir 5: agrupamento primário",
+   "texto": "`5 mod 7 = 5`. O 5 não colide com nenhuma chave que tenha o mesmo hash dele; colide com o 24, que estava ali só porque o bloco cresceu. Vai para a 6. Isso é o **agrupamento primário**: o bloco 3 a 6 atrai chaves de outros baldes e cresce cada vez mais depressa.",
+   "figura": {
+    "tipo": "hash",
+    "baldes": [
+     "",
+     "",
+     "",
+     "10",
+     "17",
+     "24",
+     "5"
+    ],
+    "estados": {
+     "5": "amarelo",
+     "6": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "Inserir 12: dá a volta",
+   "texto": "`12 mod 7 = 5`: ocupada. 6: ocupada. `(6 + 1) mod 7 = 0`: livre. A sondagem passou do fim e voltou ao começo do vetor. 3 sondagens. Agora `α = 5 / 7 ≈ 0,71`.",
+   "figura": {
+    "tipo": "hash",
+    "baldes": [
+     "12",
+     "",
+     "",
+     "10",
+     "17",
+     "24",
+     "5"
+    ],
+    "estados": {
+     "5": "amarelo",
+     "6": "amarelo",
+     "0": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "Buscar 19 (não está)",
+   "texto": "`19 mod 7 = 5`. Compara: 5 tem 24 (não), 6 tem 5 (não), 0 tem 12 (não), 1 está **livre**. Para e responde \"não está\": se o 19 existisse, teria sido gravado na 1 ou antes. 4 sondagens.",
+   "figura": {
+    "tipo": "hash",
+    "baldes": [
+     "12",
+     "",
+     "",
+     "10",
+     "17",
+     "24",
+     "5"
+    ],
+    "estados": {
+     "5": "amarelo",
+     "6": "amarelo",
+     "0": "amarelo",
+     "1": "vermelho"
+    }
+   }
+  },
+  {
+   "titulo": "Remover 17 com lápide",
+   "texto": "`17 mod 7 = 3`: 10 (não), 4: 17 (achou). Se a 4 voltasse a ficar livre, a busca pelo 24 começaria na 3, veria a 4 livre e diria \"não está\", com o 24 ali na 5. Por isso a 4 recebe uma **lápide**. Buscar 24 agora: 3 (10, não), 4 (lápide, passa reto), 5 (achou). 3 sondagens.",
+   "figura": {
+    "tipo": "hash",
+    "baldes": [
+     "12",
+     "",
+     "",
+     "10",
+     "lápide",
+     "24",
+     "5"
+    ],
+    "estados": {
+     "4": "cinza",
+     "5": "verde"
+    }
+   }
+  },
+  {
+   "titulo": "Inserir 31 na lápide",
+   "texto": "`31 mod 7 = 3`: ocupada. 4: lápide, que vale como vaga para a inserção. O 31 fica na 4. 2 sondagens.",
+   "figura": {
+    "tipo": "hash",
+    "baldes": [
+     "12",
+     "",
+     "",
+     "10",
+     "31",
+     "24",
+     "5"
+    ],
+    "estados": {
+     "3": "amarelo",
+     "4": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "Tabela cheia",
+   "texto": "Inserir 1 (`1 mod 7 = 1`) e 2 (`2 mod 7 = 2`): as duas livres. Agora `α = 7 / 7 = 1`. Inserir 9: `9 mod 7 = 2` e a sondagem passa por 2, 3, 4, 5, 6, 0, 1, todas ocupadas. 7 sondagens e a inserção **falha**. No endereçamento aberto, a tabela enche.",
+   "figura": {
+    "tipo": "hash",
+    "baldes": [
+     "12",
+     "1",
+     "2",
+     "10",
+     "31",
+     "24",
+     "5"
+    ],
+    "estados": {
+     "1": "azul",
+     "2": "vermelho"
+    }
+   }
+  }
+ ],
+ "fontes": [
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 11 (endereçamento aberto, sondagem linear, `DELETED`).",
+  "Knuth, *The art of computer programming*, v. 3, 2. ed., seção 6.4 (hashing: análise da sondagem linear).",
+  "Tenenbaum, Langsam e Augenstein, *Estruturas de dados usando C*, cap. 7 (espalhamento: endereçamento aberto).",
+  "Ziviani, *Projeto de algoritmos*, 3. ed., cap. 5 (transformação de chave: endereçamento aberto)."
+ ]
+}

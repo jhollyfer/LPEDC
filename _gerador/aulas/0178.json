@@ -1,0 +1,115 @@
+{
+ "num": "0178",
+ "oque": "São os dois métodos clássicos de função hash para chave inteira. Na **divisão**, `h(k) = k mod m`. Na **multiplicação**, `h(k) = ⌊m · (k·A mod 1)⌋`, com `0 < A < 1`: multiplica a chave por `A`, fica com a parte fracionária e escala para `0..m-1`.",
+ "como": "**Divisão:** `h(k) = k mod m`. Uma conta só, mas o resultado depende muito de `m`:\n\n| `m` | Problema |\n|---|---|\n| `2^p` | só os `p` bits de baixo de `k` contam |\n| `10^d` | só os `d` últimos dígitos contam |\n| `2^p - 1` | em texto, trocar duas letras de lugar não muda o balde |\n| primo longe de potência de 2 | **boa escolha** |\n\n**Multiplicação:** `h(k) = ⌊m · (k·A mod 1)⌋`, em que `k·A mod 1` é a parte depois da vírgula de `k·A`. Ela depende de todos os dígitos de `k`, então `m` pode ser qualquer valor, até potência de 2. Knuth sugere `A ≈ (√5 - 1) / 2 ≈ 0,6180339887`.\n\nNa prática, com `m = 2^p` e 32 bits, a conta é só com inteiros: multiplica por `s = ⌊A · 2^32⌋ = 2654435769` e pega os `p` bits **de cima** dos 32 de baixo.\n\n```c\n// m = 2^p; o unsigned faz a conta mod 2^32\nuint32_t h_mult(uint32_t k, int p) {\n    uint32_t prod = k * 2654435769u;\n    return prod >> (32 - p);\n}\n```",
+ "caracteristicas": [
+  "A divisão é a mais rápida de escrever, mas exige escolher `m` com cuidado: **primo** e longe de potência de 2.",
+  "`m = 2^p` na divisão é ruim: `k % 16` é igual a `k & 15`, os 4 bits de baixo.",
+  "Na multiplicação, o valor de `m` não é crítico; costuma ser potência de 2 para trocar a divisão por deslocamento.",
+  "O `A` de Knuth, o inverso da razão áurea, espalha bem chaves seguidas.",
+  "As duas devolvem sempre um índice de `0` a `m - 1`."
+ ],
+ "vantagens": [
+  "Divisão: uma operação, fácil de conferir à mão na prova.",
+  "Multiplicação: independe de `m` e, na versão inteira, troca a divisão por uma multiplicação e um deslocamento, mais rápidos."
+ ],
+ "desvantagens": [
+  "Divisão: `m` ruim (potência de 2 ou de 10) faz chaves com o mesmo final colidirem todas.",
+  "Multiplicação: a conta é mais longa à mão, e em `double` sofre arredondamento; a versão inteira exige `unsigned` para não estourar."
+ ],
+ "exemplo": "Um atacadão registra fardos de 16 em 16: chaves **16, 32, 48, 64**. Vamos espalhar com divisão por 16, divisão por 13 e multiplicação com `m = 16`.",
+ "custos": "| Método | Custo de `h(k)` | Exige de `m` |\n|---|---|---|\n| Divisão | `O(1)`: um resto | primo longe de potência de 2 |\n| Multiplicação | `O(1)`: uma multiplicação e um deslocamento | nada; em geral `2^p` |",
+ "naprova": "A banca pede a função adequada para endereços de 0 a 11.999: `x mod 12000`, porque o resto por `m` cai sempre de 0 a `m - 1`. Divisão inteira `x / k` não serve: chaves vizinhas caem juntas e a faixa não fecha. Em projeto, prefira `m` primo, mas na questão vale a faixa pedida.",
+ "passos": [
+  {
+   "titulo": "Divisão por 16",
+   "texto": "Cada fardo dividido por 16 dá resto zero. As quatro chaves caem no balde 0, e a busca vira uma lista: `O(n)`.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     " k   k = 16·q + r    r",
+     "16   16·1  + 0       0",
+     "32   16·2  + 0       0",
+     "48   16·3  + 0       0",
+     "64   16·4  + 0       0"
+    ],
+    "titulo": "k mod 16"
+   }
+  },
+  {
+   "titulo": "O motivo em binário",
+   "texto": "Com `m = 2^4 = 16`, o resto é formado pelos **4 bits de baixo** de `k`. Múltiplos de 16 têm esses 4 bits sempre zero. O resto da chave, onde está a diferença, é ignorado.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "16 = 0001 0000",
+     "32 = 0010 0000",
+     "48 = 0011 0000",
+     "64 = 0100 0000",
+     "          ^^^^",
+     "  k % 16 = 0000"
+    ]
+   }
+  },
+  {
+   "titulo": "Divisão por 13 (primo)",
+   "texto": "Com `m = 13`, primo, a conta usa a chave inteira. As quatro chaves caem em baldes diferentes.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     " k   k = 13·q + r    r",
+     "16   13·1  + 3       3",
+     "32   13·2  + 6       6",
+     "48   13·3  + 9       9",
+     "64   13·4  + 12     12"
+    ],
+    "titulo": "k mod 13"
+   }
+  },
+  {
+   "titulo": "Multiplicação: k = 10",
+   "texto": "`A = 0,6180339887`, `m = 16`. Primeiro `k · A`, depois só a parte depois da vírgula, depois vezes `m`, e descarta a fração.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "10 · A   = 6,180339...",
+     "fração   = 0,180339...",
+     "16 · 0,18 = 2,885...",
+     "h(10)    = 2"
+    ]
+   }
+  },
+  {
+   "titulo": "Multiplicação: os fardos",
+   "texto": "A mesma conta para 16, 32, 48 e 64, ainda com `m = 16`, potência de 2. Os quatro caem em baldes diferentes: a multiplicação não depende de `m` ser primo.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     " k    k·A    fração  ·16    h",
+     "16   9,889   0,889  14,22  14",
+     "32  19,777   0,777  12,43  12",
+     "48  29,666   0,666  10,65  10",
+     "64  39,554   0,554   8,87   8"
+    ]
+   }
+  },
+  {
+   "titulo": "Versão inteira",
+   "texto": "Com `m = 2^4`: `10 · 2654435769 = 26544357690`. O `uint32_t` guarda só os 32 bits de baixo, `774553914` (hexa `2E2AC13A`). Os 4 bits de cima são o primeiro dígito hexa, `2`. Bate com a conta em `double`.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "k · s = 26544357690",
+     "mod 2^32 = 0x2E2AC13A",
+     "     >> 28 = 0x2",
+     "h(10) = 2"
+    ]
+   }
+  }
+ ],
+ "fontes": [
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 11 (funções hash: método da divisão e da multiplicação).",
+  "Knuth, *The art of computer programming*, v. 3, 2. ed., seção 6.4 (hashing: o método da multiplicação e a razão áurea).",
+  "Ziviani, *Projeto de algoritmos*, 3. ed., cap. 5 (transformação de chave)."
+ ]
+}

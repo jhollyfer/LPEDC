@@ -1,0 +1,156 @@
+{
+ "num": "0105",
+ "oque": "A tabela hash (tabela de dispersão, ou de espalhamento) é um vetor em que a posição de cada item é **calculada** a partir da chave por uma **função hash** `h(k)`, que devolve um índice entre `0` e `m - 1`. Em vez de comparar a chave com vários itens, você calcula onde ela deveria estar e vai direto lá.",
+ "como": "Cada posição do vetor é um **balde**, e `m` é o número de baldes. Para chave inteira, a função mais usada é o **método da divisão**:\n\n`h(k) = k mod m` (em C, `k % m`)\n\nO resto da divisão por `m` sempre fica entre `0` e `m - 1`, que é exatamente a faixa dos índices.\n\n```c\nunsigned h(unsigned k, unsigned m) {\n    return k % m; // de 0 a m - 1\n}\n\n// texto: polinômio, usa todas as letras\nunsigned h_texto(const char *s, unsigned m) {\n    unsigned v = 0;\n    for (; *s != '\\0'; s++)\n        v = v * 31 + (unsigned char)*s;\n    return v % m;\n}\n```\n\nUma boa função hash tem três qualidades:\n\n- **determinística**: a mesma chave dá sempre o mesmo balde;\n- **rápida**: roda a cada busca e a cada inserção;\n- **espalha**: chaves diferentes caem em baldes diferentes o máximo possível, e para isso usa a chave inteira.\n\nComo há muito mais chaves possíveis do que baldes, duas chaves diferentes vão cair no mesmo balde. Isso é a **colisão**. Ela não se evita, se trata: por **encadeamento** (0106) ou por **endereçamento aberto** (0107).\n\nO **fator de carga** mede o aperto da tabela: `α = n / m`, itens divididos por baldes.",
+ "caracteristicas": [
+  "O acesso é por **cálculo**, não por comparação: com boa função e α constante, buscar, inserir e remover custam `O(1)` em média.",
+  "**Colisão** é quando `h(k1) = h(k2)` com `k1 ≠ k2`. É inevitável quando há mais chaves possíveis que baldes.",
+  "Fator de carga `α = n / m`. Quanto maior, mais colisões e mais lenta a tabela.",
+  "A tabela **não mantém ordem**: chaves vizinhas caem em baldes espalhados, e percorrer o vetor não dá as chaves em ordem crescente.",
+  "No método da divisão, prefira `m` **primo** e longe de potência de 2. Com `m = 2^p`, só os `p` bits de baixo da chave contam.",
+  "Quando a chave já é um número pequeno, ela pode ser o próprio índice: é o **endereçamento direto**, sem função e sem colisão."
+ ],
+ "vantagens": [
+  "Busca, inserção e remoção em `O(1)` no caso médio, mais rápido que a busca binária (`O(log n)`) e que a árvore balanceada.",
+  "Funciona para qualquer tipo de chave que vire número: inteiro, texto, CPF.",
+  "A função de divisão é uma conta só."
+ ],
+ "desvantagens": [
+  "**Pior caso** `O(n)`: uma função ruim joga tudo no mesmo balde.",
+  "Não responde bem a menor, maior, sucessor nem listagem em ordem: para isso, use árvore de busca.",
+  "Precisa escolher `m` e a função com cuidado, e a tabela pode precisar crescer quando α sobe."
+ ],
+ "exemplo": "Tabela com `m = 7` e `h(k) = k mod 7`. Vamos guardar 50, 21, 13 e 36, nessa ordem, um item por balde.\n\n| k | conta | h(k) |\n|---|---|---|\n| 50 | 50 = 7 · 7 + **1** | 1 |\n| 21 | 21 = 3 · 7 + **0** | 0 |\n| 13 | 13 = 1 · 7 + **6** | 6 |\n| 36 | 36 = 5 · 7 + **1** | 1 (colisão com o 50) |",
+ "custos": "| Operação | Caso médio (boa função, α constante) | Pior caso (tudo num balde) |\n|---|---|---|\n| Calcular `h(k)` | `O(1)` para inteiro; `O(L)` para texto de `L` letras | igual |\n| Buscar | `O(1)` | `O(n)` |\n| Inserir | `O(1)` | `O(n)` |\n| Remover | `O(1)` | `O(n)` |\n| Listar em ordem | não tem: percorre `m + n` e ainda precisa ordenar, `O(n log n)` | igual |",
+ "naprova": "A banca cobra vocabulário (\"o endereço já ocupado se chama **colisão**\"), faz você calcular `posição mod 11` para várias letras e contar quem colidiu, e afirma que o hash \"não ordena as chaves\" (isso é verdade e é desvantagem). Pegadinha: confundir colisão (o evento) com o tratamento dela (encadeamento ou sondagem).",
+ "passos": [
+  {
+   "titulo": "Tabela vazia",
+   "texto": "Sete baldes, de 0 a 6, todos vazios. A regra é `h(k) = k mod 7`: o resto da divisão por 7, que só pode dar de 0 a 6. Fator de carga `α = 0 / 7 = 0`.",
+   "figura": {
+    "tipo": "hash",
+    "baldes": [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ]
+   }
+  },
+  {
+   "titulo": "Inserir 50",
+   "texto": "50 dividido por 7 dá 7 e sobra **1** (7 · 7 = 49). O 50 vai direto ao balde 1, sem olhar os outros.",
+   "figura": {
+    "tipo": "hash",
+    "baldes": [
+     "",
+     "50",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    "estados": {
+     "1": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "Inserir 21 e 13",
+   "texto": "21 = 3 · 7 + **0**: balde 0. 13 = 1 · 7 + **6**: balde 6. Cada chave fez uma conta e uma escrita. Agora `α = 3 / 7 ≈ 0,43`.",
+   "figura": {
+    "tipo": "hash",
+    "baldes": [
+     "21",
+     "50",
+     "",
+     "",
+     "",
+     "",
+     "13"
+    ],
+    "estados": {
+     "0": "azul",
+     "6": "azul"
+    }
+   }
+  },
+  {
+   "titulo": "Inserir 36: colisão",
+   "texto": "36 = 5 · 7 + **1**: balde 1, que já guarda o 50. Duas chaves diferentes com o mesmo `h(k)`: isso é uma **colisão**. Com um item por balde, o 36 não tem onde ficar. O encadeamento (0106) e o endereçamento aberto (0107) são as duas saídas.",
+   "figura": {
+    "tipo": "hash",
+    "baldes": [
+     "21",
+     "50",
+     "",
+     "",
+     "",
+     "",
+     "13"
+    ],
+    "estados": {
+     "1": "vermelho"
+    }
+   }
+  },
+  {
+   "titulo": "Buscar 13 e 15",
+   "texto": "Buscar 13: `13 mod 7 = 6`, vai ao balde 6 e acha. Uma conta e **uma** comparação, não importa quantos itens a tabela tem. Buscar 15: `15 mod 7 = 1`, o balde 1 tem 50, que não é 15. Nesta tabela, que guarda um item por balde e não trata colisão, o 15 só poderia estar no balde 1: ele não está.",
+   "figura": {
+    "tipo": "hash",
+    "baldes": [
+     "21",
+     "50",
+     "",
+     "",
+     "",
+     "",
+     "13"
+    ],
+    "estados": {
+     "6": "verde",
+     "1": "amarelo"
+    }
+   }
+  },
+  {
+   "titulo": "A ordem se perde",
+   "texto": "Percorrer os baldes de 0 a 6 dá 21, 50, 13. Não é ordem crescente: o 13, menor de todos, ficou no último balde. A função espalha de propósito, e por isso o hash não serve para listar em ordem, achar o menor ou o sucessor.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "balde:  0   1   6",
+     "chave: 21  50  13",
+     "",
+     "crescente seria:",
+     "       13  21  50"
+    ]
+   }
+  },
+  {
+   "titulo": "Por que m primo",
+   "texto": "Com `m = 8`, uma potência de 2, o resto só olha os 3 bits de baixo da chave. Chaves múltiplas de 8 caem todas no balde 0. Com `m = 7`, primo, as mesmas chaves se espalham.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "  k   k mod 8   k mod 7",
+     "  8      0         1",
+     " 16      0         2",
+     " 24      0         3",
+     " 32      0         4"
+    ]
+   }
+  }
+ ],
+ "fontes": [
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 11 (tabelas de espalhamento: função hash, colisão, fator de carga).",
+  "Tenenbaum, Langsam e Augenstein, *Estruturas de dados usando C*, cap. 7 (busca: espalhamento).",
+  "Ziviani, *Projeto de algoritmos*, 3. ed., cap. 5 (transformação de chave).",
+  "Knuth, *The art of computer programming*, v. 3, 2. ed., seção 6.4 (hashing)."
+ ]
+}
