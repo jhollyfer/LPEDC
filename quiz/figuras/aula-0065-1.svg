@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="469" height="466" viewBox="0 0 469 466">
+<title>aula-0065-1</title>
+<style>text{font-family:ui-monospace,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace;white-space:pre}</style>
+<rect x="0" y="0" width="469" height="466" fill="#ffffff"/>
+<text x="30" y="60" font-size="24" fill="#1e1e1e" text-anchor="start">x    = 01100011</text>
+<text x="30" y="96" font-size="24" fill="#1e1e1e" text-anchor="start"></text>
+<text x="30" y="132" font-size="24" fill="#1e1e1e" text-anchor="start">mask       x &amp; mask  imprime</text>
+<text x="30" y="168" font-size="24" fill="#1e1e1e" text-anchor="start">10000000   00000000  0</text>
+<text x="30" y="204" font-size="24" fill="#1e1e1e" text-anchor="start">01000000   01000000  1</text>
+<text x="30" y="240" font-size="24" fill="#1e1e1e" text-anchor="start">00100000   00100000  1</text>
+<text x="30" y="276" font-size="24" fill="#1e1e1e" text-anchor="start">00010000   00000000  0</text>
+<text x="30" y="312" font-size="24" fill="#1e1e1e" text-anchor="start">00001000   00000000  0</text>
+<text x="30" y="348" font-size="24" fill="#1e1e1e" text-anchor="start">00000100   00000000  0</text>
+<text x="30" y="384" font-size="24" fill="#1e1e1e" text-anchor="start">00000010   00000010  1</text>
+<text x="30" y="420" font-size="24" fill="#1e1e1e" text-anchor="start">00000001   00000001  1</text>
+</svg>

@@ -207,7 +207,7 @@ Marque cada bloco quando fechar o treino dele (questões dos módulos e provas e
 2. Rode os três simulados de [`SIMULADOS.md`](SIMULADOS.md), cronometrando 3 minutos por questão.
 3. Para cada erro, volte ao bloco que ensina o assunto, não só ao assunto.
 4. Resolva as provas antigas em [`PROVAS.md`](PROVAS.md), das mais antigas às mais recentes, e
-   releia o [formato de cada questão](PPGI.md#o-que-caiu-de-2016-a-2023).
+   releia o [formato de cada questão](PPGI.md#o-que-caiu-de-2016-a-2026).
 
 Se faltar tempo, mantenha os blocos 3, 4, 5 e 6, que juntos somam mais de 80% das questões, e
 corte o treino antes de cortar o assunto.

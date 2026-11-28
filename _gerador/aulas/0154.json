@@ -1,0 +1,60 @@
+{
+ "num": "0154",
+ "oque": "O **algoritmo de Bellman-Ford** acha os caminhos mínimos de uma origem a todos os vértices **mesmo com pesos negativos**, e detecta quando existe um **ciclo negativo** alcançável, caso em que o caminho mínimo não existe.",
+ "como": "Começa com `dist[origem] = 0` e infinito no resto. Faz **V - 1 rodadas**, e em cada uma **relaxa todas as arestas**: para cada `u -> v` de peso `c`, se `dist[u] + c < dist[v]`, troca `dist[v]` e anota `anterior[v] = u`.\n\n```c\nfor (int r = 1; r <= V - 1; r++)\n    for (int k = 0; k < E; k++) {\n        int u = a[k].u, v = a[k].v, c = a[k].peso;\n        if (dist[u] != INFINITO && dist[u] + c < dist[v]) {\n            dist[v] = dist[u] + c;\n            anterior[v] = u;\n        }\n    }\n```\n\nV - 1 rodadas bastam porque um caminho mínimo sem repetir vértice tem no máximo V - 1 arestas, e cada rodada acerta pelo menos mais uma delas. Uma **rodada extra** que ainda melhore alguma distância denuncia ciclo negativo.\n\nO contraste com o **Dijkstra** (0112): ele fixa o vértice que sai da fila e nunca o revisa. Isso só é seguro sem peso negativo; com uma aresta negativa, um caminho por um vértice mais distante pode voltar mais barato depois.",
+ "caracteristicas": [
+  "Aceita pesos negativos; o Dijkstra clássico não.",
+  "Não fixa vértice nenhum cedo: uma distância pode cair de uma rodada para a seguinte.",
+  "Detecta ciclo negativo com uma rodada a mais.",
+  "Custa `O(V · E)`, mais que o Dijkstra.",
+  "Somar uma constante a todas as arestas **não** resolve o peso negativo: caminhos com mais arestas ficam mais caros que os outros."
+ ],
+ "vantagens": [
+  "Funciona com qualquer peso, inclusive negativo.",
+  "Avisa quando o problema não tem resposta (ciclo negativo).",
+  "O código é curto: dois laços e o teste de relaxamento."
+ ],
+ "desvantagens": [
+  "`O(V · E)`: lento em grafos grandes, comparado ao Dijkstra com heap.",
+  "Sem o teste `dist[u] != INFINITO`, um vértice inalcançável pode produzir distâncias falsas.",
+  "Em grafo não dirigido, uma aresta negativa já forma um ciclo negativo (ir e voltar)."
+ ],
+ "exemplo": "Grafo dirigido: `s -> a` (2), `s -> b` (5), `b -> a` (-4). O caminho mínimo até `a` é `s -> b -> a`, com custo 1.",
+ "passos": [
+  {
+   "titulo": "o Dijkstra erra",
+   "texto": "O `a` sai primeiro da fila, com 2, e fica fixo. Quando o `b` sai, com 5, a aresta `b -> a` daria 1, mas o `a` já está fechado.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "fila: s(0)",
+     "sai s: a=2, b=5",
+     "sai a: a=2 fica fixo",
+     "sai b: b->a daria 1, mas a já saiu",
+     "resposta: a=2 (o certo é 1)"
+    ]
+   }
+  },
+  {
+   "titulo": "o Bellman-Ford acerta",
+   "texto": "Na primeira rodada, relaxando as três arestas, `a` vira 2, `b` vira 5 e depois `a` cai para 1. A segunda rodada não muda nada.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "rodada 1: s->a  a=2",
+     "          s->b  b=5",
+     "          b->a  a=1",
+     "rodada 2: nada muda",
+     "resposta: a=1, b=5"
+    ]
+   }
+  }
+ ],
+ "custos": "| Algoritmo | Pesos negativos | Custo |\n|---|---|---|\n| Dijkstra com heap | não | `O((V + E) log V)` |\n| Bellman-Ford | sim, e detecta ciclo negativo | `O(V · E)` |\n| caminhos em DAG (ordem topológica) | sim | `O(V + E)` |",
+ "naprova": "A banca pergunta o que acontece com o Dijkstra quando há arestas negativas: ele pode errar, porque considera definitiva a distância do vértice que sai da fila. As alternativas que enganam dizem que basta somar uma constante às arestas ou que ele só falha com ciclo negativo; a primeira muda os caminhos, a segunda é o limite do Bellman-Ford.",
+ "fontes": [
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 22 (caminhos mínimos de fonte única).",
+  "Bellman, \"On a routing problem\", *Quarterly of Applied Mathematics*, 1958.",
+  "Sedgewick e Wayne, *Algorithms*, 4. ed., seção 4.4 (shortest paths)."
+ ]
+}

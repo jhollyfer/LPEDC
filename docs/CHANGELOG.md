@@ -6,6 +6,15 @@ Mudanças do LPEDC que quem estuda percebe. Formato
 
 ## [Não lançado]
 
+### Adicionado
+
+- Prova do edital 070/2026 (seleção 2027/1, aplicada em 27/11/2026) no quiz e em `PROVAS.md`, com
+  o gabarito preliminar da banca. São 20 questões com conceito antes de responder, porquê de cada
+  alternativa, contraponto e a árvore B da Q09 redesenhada. O caderno está em
+  `provas-ppgi-ufam/2026-070-prova-conhecimento.md`.
+- Aulas novas no painel do quiz: deque (0087), bits e máscaras (0065) e Bellman-Ford (0154).
+- `PPGI.md`: "O que caiu" passa a contar as 12 provas (230 questões).
+
 ### Corrigido
 
 - Varredura das 210 questões do quiz: porquês e resumos com conta ou fato errado, dicas que

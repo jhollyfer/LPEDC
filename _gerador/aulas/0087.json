@@ -1,0 +1,120 @@
+{
+ "num": "0087",
+ "oque": "O **deque** (*double-ended queue*, fila dupla) é uma sequência que aceita **inserir e retirar nas duas pontas**: pela frente e pelo fundo. Só usando o fundo, ele se comporta como pilha; inserindo no fundo e retirando na frente, como fila.",
+ "como": "Quatro operações: inserir no início, retirar do início, inserir no fim e retirar do fim.\n\nEm vetor, o deque reaproveita a **fila circular** do 0085: guarda `inicio` (posição física do primeiro) e `n` (quantos há). A posição lógica `k` fica na posição física `(inicio + k) % CAP`, e as quatro operações são contas com esses dois campos:\n\n```c\n/* inserir no início: o início recua uma posição, dando a volta */\nd->inicio = (d->inicio - 1 + CAP) % CAP;\nd->itens[d->inicio] = valor;\nd->n++;\n\n/* retirar do fim: o último está em (inicio + n - 1) % CAP */\n*valor = d->itens[(d->inicio + d->n - 1) % CAP];\nd->n--;\n```\n\nO `+ CAP` antes do `%` importa: em C, `-1 % 8` vale `-1`, e não 7.\n\nEm lista encadeada, retirar do fim exige que o último nó conheça o penúltimo, então o deque encadeado usa **lista dupla** (0079).",
+ "caracteristicas": [
+  "Insere e retira nas **duas** pontas; a pilha e a fila são casos particulares.",
+  "No vetor circular, as quatro operações custam `Θ(1)`: só mudam `inicio` e `n`.",
+  "Acesso à posição lógica `k` também é `Θ(1)`: `itens[(inicio + k) % CAP]`, sem percorrer nada.",
+  "A **aritmética modular** faz os índices darem a volta nas duas direções.",
+  "Encadeado, pede lista dupla para retirar do fim em `O(1)`."
+ ],
+ "vantagens": [
+  "Uma estrutura só serve de pilha, de fila ou das duas coisas.",
+  "Em vetor circular, tudo em `Θ(1)` e sem `malloc` a cada operação.",
+  "Permite acesso direto por posição, o que a lista encadeada não dá."
+ ],
+ "desvantagens": [
+  "Em vetor, a capacidade é fixa (ou é preciso realocar e copiar).",
+  "Recuar o início com `(inicio - 1) % CAP` dá índice negativo em C se faltar o `+ CAP`.",
+  "Inserir ou remover no **meio** continua custando `O(n)`."
+ ],
+ "exemplo": "Um deque de `CAP = 8`, vazio, com `inicio = 0`. Inserem-se 5, 8 e 3 no fim e depois 11 no início. Nas figuras, amarelo é a frente (`inicio`) e azul é o que acabou de entrar.",
+ "passos": [
+  {
+   "titulo": "5, 8, 3 no fim",
+   "texto": "Cada um vai para `(inicio + n) % 8`: posições 0, 1 e 2. `inicio = 0`, `n = 3`.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     5,
+     8,
+     3,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "estados": {
+     "0": "amarelo",
+     "2": "azul"
+    },
+    "nome": "itens"
+   }
+  },
+  {
+   "titulo": "11 no início: o índice dá a volta",
+   "texto": "`inicio = (0 - 1 + 8) % 8 = 7`, e o 11 entra na posição 7. `n = 4`. A ordem lógica é 11, 5, 8, 3, embora no vetor o 11 esteja no fim.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     5,
+     8,
+     3,
+     null,
+     null,
+     null,
+     null,
+     11
+    ],
+    "estados": {
+     "7": "amarelo",
+     "0": "azul"
+    },
+    "nome": "itens"
+   }
+  },
+  {
+   "titulo": "posição lógica 2",
+   "texto": "A posição lógica 2 (o 8) está em `(7 + 2) % 8 = 1`. Uma conta, sem visitar o 11 e o 5.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     5,
+     8,
+     3,
+     null,
+     null,
+     null,
+     null,
+     11
+    ],
+    "estados": {
+     "7": "amarelo",
+     "1": "verde"
+    },
+    "nome": "itens"
+   }
+  },
+  {
+   "titulo": "retirar do fim",
+   "texto": "O último está em `(7 + 4 - 1) % 8 = 2`: sai o 3, e `n` vira 3. Nenhum elemento muda de lugar.",
+   "figura": {
+    "tipo": "vetor",
+    "itens": [
+     5,
+     8,
+     3,
+     null,
+     null,
+     null,
+     null,
+     11
+    ],
+    "estados": {
+     "7": "amarelo",
+     "2": "apagado"
+    },
+    "nome": "itens"
+   }
+  }
+ ],
+ "custos": "| Operação | Vetor circular | Lista dupla |\n|---|---|---|\n| inserir no início | `Θ(1)` | `Θ(1)` |\n| retirar do início | `Θ(1)` | `Θ(1)` |\n| inserir no fim | `Θ(1)` | `Θ(1)` |\n| retirar do fim | `Θ(1)` | `Θ(1)` |\n| acessar a posição k | `Θ(1)` | `Θ(k)` |\n| inserir no meio | `O(n)` | `O(1)` com o nó em mãos, `O(n)` para achá-lo |",
+ "naprova": "A banca dá afirmações sobre o deque em vetor circular: custo de inserir e retirar em cada ponta, uso de aritmética modular e acesso à posição k. A pegadinha é dizer que o acesso à posição k exige percorrer k elementos, o que vale para lista encadeada, não para vetor.",
+ "fontes": [
+  "Celes e Rangel, *Apostila de estruturas de dados* (PUC-Rio), filas e deque.",
+  "Tenenbaum, Langsam e Augenstein, *Estruturas de dados usando C*, cap. 4 (filas e listas).",
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 10 (pilhas, filas e o exercício do deque)."
+ ]
+}

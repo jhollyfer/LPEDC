@@ -6,7 +6,7 @@ Três simulados originais de 20 questões, no formato das provas recentes do PPG
 
 - **Formato**: 4 alternativas (a a d); questões de conceito, de afirmações I, II e III combinadas,
   de simulação, de cálculo e de código C com erro.
-- **Peso dos temas**: segue [o que caiu de 2016 a 2023](PPGI.md#o-que-caiu-de-2016-a-2023).
+- **Peso dos temas**: segue [o que caiu de 2016 a 2026](PPGI.md#o-que-caiu-de-2016-a-2026).
 - **Tempo**: 3 minutos por questão, 1 hora por simulado. Pontuação e nota mínima no
   [resumo do edital](PPGI.md#o-que-o-edital-pede).
 - **Gabarito**: no fim do arquivo, com o porquê e a coluna **Estude**, que leva ao assunto.

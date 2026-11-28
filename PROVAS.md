@@ -1,14 +1,14 @@
 # Provas anteriores do PPGI/UFAM · gabarito comentado
 
-As 11 provas de conhecimento de 2016 a 2023, resolvidas questão por questão. Os cadernos estão em
+As 12 provas de conhecimento de 2016 a 2026, resolvidas questão por questão. Os cadernos estão em
 [`provas-ppgi-ufam/`](provas-ppgi-ufam/); o quiz, com o porquê de cada alternativa, em
 [jhollyfer.github.io/LPEDC](https://jhollyfer.github.io/LPEDC/).
 
 ## 1. Conceitos gerais
 
-- **Gabarito oficial**: as letras das 11 provas são da banca. As de 2016 a 2019 vêm das folhas de
+- **Gabarito oficial**: as letras das 12 provas são da banca. As de 2016 a 2019 vêm das folhas de
   resposta, a 071/2023 do gabarito definitivo, a 057/2022 e a 020/2023 da marcação do caderno de
-  respostas. Onde o curso chegou a outra letra, a coluna "Por quê" avisa.
+  respostas, a 070/2026 do gabarito preliminar. Onde o curso chegou a outra letra, a coluna "Por quê" avisa.
 - **Formato**: até 2019, 5 alternativas; desde 2022, **4 alternativas** e trechos em Python (cada
   trecho aponta para o assunto de C com a mesma ideia).
 - **Colunas da tabela**:
@@ -19,7 +19,7 @@ As 11 provas de conhecimento de 2016 a 2023, resolvidas questão por questão. O
   - **Assuntos**: o link leva ao módulo onde aquilo se estuda;
   - **Por quê**: a justificativa em uma ou duas frases. Questões de código e simulação foram
     conferidas rodando o programa.
-- O resumo do que mais cai está em [`PPGI.md`](PPGI.md#o-que-caiu-de-2016-a-2023).
+- O resumo do que mais cai está em [`PPGI.md`](PPGI.md#o-que-caiu-de-2016-a-2026).
 
 ## 2. Exemplos de uso
 
@@ -370,3 +370,33 @@ Resolva cada prova inteira no caderno e só depois confira a tabela.
 - Q07 e Q10: motivos de anulação são conjectura minha.
 - Q12: concordo com B; confere com as quatro alternativas.
 - Q15, Q17 a Q20 rodadas com `python3 -I`; todas batem com o gabarito oficial. Sem discordância das letras oficiais.
+
+### Edital 070/2026 (gabarito preliminar)
+| Q | Letra | Formato | Tópico | Assuntos | Por quê |
+|---|---|---|---|---|---|
+| 01 | C | simulação | 4 | [0098](14-arvores.md), [0100](14-arvores.md) | Em-ordem de BST é a lista crescente das chaves; sem o 13: 2, 3, 7, 8, 12, 17, 19, 20, 21. |
+| 02 | B | simulação | 4 | [0176](28-estruturas-complementos.md), [0101](14-arvores.md) | Sem o 1, a raiz 3 fica com fator -2 e o filho 5 com -1: rotação simples à esquerda, 5 vira raiz. |
+| 03 | C | simulação | 5 | [0107](15-hash.md), [0105](15-hash.md) | Só o 2 está na posição inicial; 23 colidiu com o 2, o 1 com o 23 e o 3 com o 1: 2, 23, 1, 3. |
+| 04 | A | afirmações | 7 | [0092](13-busca-e-ordenacao.md), [0095](13-busca-e-ordenacao.md), [0103](14-arvores.md) | Seleção faz no máximo n - 1 trocas (I vale); no pior caso o Quicksort é n² e o Heapsort n log n (II falsa). |
+| 05 | B | afirmações | 5 | [0106](15-hash.md), [0105](15-hash.md) | Pior caso do encadeamento é O(n) (I falsa); fator de carga pode passar de 1; função ruim degenera a busca. |
+| 06 | A | afirmações | 4 | [0099](14-arvores.md), [0101](14-arvores.md) | BST degenerada pede n comparações; AVL mantém fator em -1, 0 ou 1; 1..n em ordem dá altura n - 1 (III falsa). |
+| 07 | B | código | 1 | [0007](01-fundamentos.md), [0012](02-condicionais.md) | (Python) 25 - abs(ano - 2739): 0 em 2714, 25 em 2739, 24 em 2740, 0 em 2764; rodado ano a ano. |
+| 08 | C | código | 1 | [0007](01-fundamentos.md) | (Python) minutos × 13 // 720; B divide cedo e zera, D arredonda e chega a 13; rodado nos 720 horários. |
+| 09 | A | simulação | 4 | [0146](22-arvores-avancadas.md) | Top-down, t = 2: o [P] pega emprestado do [B D] pela raiz, depois o [M] pega do [R S]; fica D / B / J R. |
+| 10 | A | simulação | 4 | [0101](14-arvores.md) | O 22 deixa o 30 com +2 e o 20 com -1: rotação dupla, o 25 vira raiz. |
+| 11 | C | conceito | 8 | [0112](16-grafos.md), [0154](23-grafos-avancados.md) | Dijkstra fecha a distância quando o vértice sai da fila; com aresta negativa ela pode melhorar depois. |
+| 12 | C | afirmações | 3.1, 4 | [0076](11-listas.md), [0101](14-arvores.md) | Lista encadeada não tem busca binária (II falsa); chaves crescentes degeneram a BST sem balanceamento (IV falsa). |
+| 13 | D | simulação | 4 | [0102](14-arvores.md) | Floyd de i = 5 até 0; o empate no índice 2 vai para a posição 5 e o 3 da raiz desce até a 9; rodado. |
+| 14 | D | simulação | 3.2, 4 | [0102](14-arvores.md), [0103](14-arvores.md) | A Esmeralda vai para a raiz quando o Dourado sai e o Ciano só empata: heap não é estável; rodado. |
+| 15 | A | afirmações | 3.2 | [0087](12-pilhas-e-filas.md), [0085](12-pilhas-e-filas.md) | No vetor circular as pontas mudam em Θ(1) e a posição k está em (início + k) % CAP (III falsa). |
+| 16 | D | código | 3.2 | [0086](12-pilhas-e-filas.md), [0076](11-listas.md) | Se ini ficou NULL a fila esvaziou; fim apontaria para o nó liberado. |
+| 17 | B | código | 3.3 | [0082](12-pilhas-e-filas.md), [0045](06-ponteiros.md) | n é a quantidade e a próxima posição livre; o topo está em n - 1. |
+| 18 | C | código | 1 | [0065](08-structs.md) | sizeof(x)*8 voltas, teste com x & mask e mask >> 1; imprime 0b01100011, compilado com gcc. |
+| 19 | D | código | 1 | [0045](06-ponteiros.md) | pti guarda o endereço de i; quem vale 10 é *pti. |
+| 20 | B | código | 1 | [0032](04-funcoes.md), [0007](01-fundamentos.md) | conta soma 1 por dígito zero: 2040 e 20 terminam em 0; compilado com gcc. |
+
+#### Observações
+- Letras do gabarito preliminar de 27/11/2026. O curso resolveu as 20 antes de recebê-lo e chegou às mesmas letras.
+- O mesmo caderno vale para o edital 071/2026, do doutorado.
+- Q09: "grau mínimo 2 e máximo 4" conta filhos (t = 2, de 1 a 3 chaves). C e D passariam por um nó de 4 chaves; B deixa o [P] com um filho só.
+- Q17: A ("o vetor começa no zero") é parte da explicação, mas a B é a que justifica a ordem das linhas.

@@ -7,9 +7,14 @@
 
 | Atualizado | Fase atual | Progresso | Status |
 |---|---|---|---|
-| 2026-11-26 | 8 · Painel do quiz que ensina (concluída) | 33/33 tarefas | quiz com aula em toda questão para a prova de 2026-11-27 |
+| 2026-11-28 | 9 · Prova de 2026 (concluída) | 34/34 tarefas | prova 070/2026 no quiz com gabarito preliminar |
 
 ## Parou em
+
+A prova de 27/11/2026 (edital 070/2026, seleção 2027/1; o caderno vale também para o 071/2026, do
+doutorado) entrou no acervo, no `PROVAS.md` e no quiz: 12 provas, 230 questões. O gabarito é o
+preliminar da banca e bateu com a resolução do curso nas 20 questões. Os assuntos 0065, 0087 e
+0154 ganharam aula (agora são 70).
 
 O link **Curso** abre o prefácio. O livro tem oito partes, 29 módulos e 189 capítulos. Os 304 arquivos
 Markdown abastecem o leitor e o acervo no mesmo `index.html`. O quiz abre na página inicial.
@@ -35,6 +40,11 @@ provas estão em `_gerador/parecidas.json` (13 grupos): o Resumo mostra o link e
 frase), "BST" como nome, uma comparação de chave por volta na busca binária.
 
 ## Próximos passos
+
+- Quando sair o gabarito definitivo da 070/2026, conferir as letras e anuladas em `PROVAS.md`,
+  `provas-ppgi-ufam/2026-070-prova-conhecimento.md` e `_gerador/provas/2026-070.json`.
+- O plano de estudo do `PPGI.md` ("Comece aqui") ainda é o de 09/11 a 27/11; decidir com o dono se
+  vira plano para a próxima seleção.
 
 Ao mudar a lista de arquivos Markdown ou seus títulos, atualize o índice com
 `node _gerador/conteudo.mjs`.

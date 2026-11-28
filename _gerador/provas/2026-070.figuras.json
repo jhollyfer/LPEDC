@@ -1,0 +1,41 @@
+{
+  "2026-070-q09": {
+    "tipo": "arvoreB",
+    "titulo": "árvore B da questão 9 (grau mínimo 2)",
+    "raiz": {"chaves": ["J"], "filhos": [
+      {"chaves": ["B", "D"], "filhos": [{"chaves": ["A"]}, {"chaves": ["C"]}, {"chaves": ["F", "G", "H"]}]},
+      {"chaves": ["P"], "filhos": [{"chaves": ["M"]}, {"chaves": ["R", "S"]}]}
+    ]}
+  },
+  "2026-070-q09-a": {
+    "tipo": "arvoreB",
+    "titulo": "A)",
+    "raiz": {"chaves": ["D"], "filhos": [
+      {"chaves": ["B"], "filhos": [{"chaves": ["A"]}, {"chaves": ["C"]}]},
+      {"chaves": ["J", "R"], "filhos": [{"chaves": ["F", "G", "H"]}, {"chaves": ["P"]}, {"chaves": ["S"]}]}
+    ]}
+  },
+  "2026-070-q09-b": {
+    "tipo": "arvoreB",
+    "titulo": "B)",
+    "raiz": {"chaves": ["J"], "filhos": [
+      {"chaves": ["B", "D"], "filhos": [{"chaves": ["A"]}, {"chaves": ["C"]}, {"chaves": ["F", "G", "H"]}]},
+      {"chaves": ["P"], "filhos": [{"chaves": ["R", "S"]}]}
+    ]}
+  },
+  "2026-070-q09-c": {
+    "tipo": "arvoreB",
+    "titulo": "C)",
+    "raiz": {"chaves": ["D"], "filhos": [
+      {"chaves": ["B"], "filhos": [{"chaves": ["A"]}, {"chaves": ["C"]}]},
+      {"chaves": ["J"], "filhos": [{"chaves": ["F", "G", "H"]}, {"chaves": ["P", "R", "S"]}]}
+    ]}
+  },
+  "2026-070-q09-d": {
+    "tipo": "arvoreB",
+    "titulo": "D)",
+    "raiz": {"chaves": ["B", "D", "J"], "filhos": [
+      {"chaves": ["A"]}, {"chaves": ["C"]}, {"chaves": ["F", "G", "H"]}, {"chaves": ["P", "R", "S"]}
+    ]}
+  }
+}

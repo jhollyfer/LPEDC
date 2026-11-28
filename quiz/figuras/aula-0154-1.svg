@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="557" height="250" viewBox="0 0 557 250">
+<title>aula-0154-1</title>
+<style>text{font-family:ui-monospace,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace;white-space:pre}</style>
+<rect x="0" y="0" width="557" height="250" fill="#ffffff"/>
+<text x="30" y="60" font-size="24" fill="#1e1e1e" text-anchor="start">fila: s(0)</text>
+<text x="30" y="96" font-size="24" fill="#1e1e1e" text-anchor="start">sai s: a=2, b=5</text>
+<text x="30" y="132" font-size="24" fill="#1e1e1e" text-anchor="start">sai a: a=2 fica fixo</text>
+<text x="30" y="168" font-size="24" fill="#1e1e1e" text-anchor="start">sai b: b-&gt;a daria 1, mas a já saiu</text>
+<text x="30" y="204" font-size="24" fill="#1e1e1e" text-anchor="start">resposta: a=2 (o certo é 1)</text>
+</svg>

@@ -1,0 +1,65 @@
+{
+ "num": "0065",
+ "oque": "Um inteiro é uma fileira de **bits**. Os **operadores bit a bit** (`&`, `|`, `^`, `~`, `<<`, `>>`) agem casa por casa, e uma **máscara** é um número que escolhe quais bits testar, ligar ou desligar.",
+ "como": "Cada casa vale o dobro da casa à direita: 1, 2, 4, 8, 16, 32, 64, 128. Num `unsigned char` de 8 bits, `128` é `10000000`, só o bit mais alto ligado.\n\n- `a & b`: 1 só onde os dois têm 1. Com uma máscara de um bit, `x & mask` é diferente de zero se aquele bit de `x` está ligado.\n- `a | b`: 1 onde algum tem 1. `x | mask` **liga** o bit, então nunca dá zero.\n- `a >> 1`: empurra tudo uma casa para a direita. Com a máscara, passa a testar o bit seguinte.\n\nPara imprimir os bits de um caractere, do mais alto ao mais baixo:\n\n```c\nunsigned char x = 'c', mask = 128;\nfor (int i = 0; i < sizeof(x) * 8; i++) {\n    if (x & mask) printf(\"1\");\n    else printf(\"0\");\n    mask = mask >> 1;\n}\n```\n\n`sizeof` dá o tamanho em **bytes**; vezes 8, dá o número de bits.",
+ "caracteristicas": [
+  "Os bits se numeram da direita para a esquerda, a partir do bit 0, que vale 1.",
+  "`1u << n` é o número com só o bit `n` ligado.",
+  "As quatro receitas: `p |= m` liga, `p &= ~m` desliga, `p & m` testa, `p ^= m` inverte.",
+  "`sizeof(x)` conta bytes, não bits.",
+  "Nas casas em que a máscara tem 0, `&` com máscara apaga e `|` com máscara preserva."
+ ],
+ "vantagens": [
+  "Guarda muitas flags num só inteiro: 32 num `unsigned` de 4 bytes.",
+  "As operações são instruções únicas do processador.",
+  "É a linguagem das permissões de arquivo, protocolos e registradores."
+ ],
+ "desvantagens": [
+  "Fácil confundir `&` com `&&` e `|` com `||`.",
+  "Deslocar inteiro com sinal tem comportamento que depende da implementação; prefira `unsigned`.",
+  "Código com máscaras é menos legível sem nomes (`#define LER 4`)."
+ ],
+ "exemplo": "O caractere `'c'` vale 99 na tabela ASCII. Em binário: 99 = 64 + 32 + 2 + 1 = `01100011`. A máscara começa em 128 e anda para a direita a cada volta.",
+ "passos": [
+  {
+   "titulo": "as oito voltas",
+   "texto": "Em cada volta, `x & mask` dá zero ou não, e a máscara anda uma casa. O resultado lido de cima para baixo é `01100011`.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "x    = 01100011",
+     "",
+     "mask       x & mask  imprime",
+     "10000000   00000000  0",
+     "01000000   01000000  1",
+     "00100000   00100000  1",
+     "00010000   00000000  0",
+     "00001000   00000000  0",
+     "00000100   00000000  0",
+     "00000010   00000010  1",
+     "00000001   00000001  1"
+    ]
+   }
+  },
+  {
+   "titulo": "o que muda com | no lugar de &",
+   "texto": "`x | mask` sempre tem o bit da máscara ligado, então nunca é zero, e o programa imprimiria `11111111` para qualquer caractere.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "x        = 01100011",
+     "mask     = 10000000",
+     "x | mask = 11100011  (diferente de 0)",
+     "x & mask = 00000000  (0)"
+    ]
+   }
+  }
+ ],
+ "custos": "| Operação | Custo |\n|---|---|\n| `&`, `\\|`, `^`, `~`, `<<`, `>>` | `O(1)`, uma instrução |\n| varrer os `b` bits de um valor | `O(b)` |",
+ "naprova": "A banca dá um laço que imprime os bits de um valor com lacunas para preencher: o limite do laço (`sizeof(x) * 8`, não `sizeof(x)`), o teste (`x & mask`, não `x | mask`) e o deslocamento (`mask >> 1`, não `x >> 1`). Simule as duas ou três primeiras voltas.",
+ "fontes": [
+  "Deitel e Deitel, *C: como programar*, 6. ed., cap. 10 (manipulação de bits).",
+  "Kernighan e Ritchie, *C: a linguagem de programação*, 2. ed., seção 2.9 (operadores bit a bit).",
+  "Backes, *Linguagem C: completa e descomplicada*, operadores bit a bit."
+ ]
+}

@@ -1,4 +1,4 @@
-# Provas de seleção PPGI/UFAM (2016 a 2023)
+# Provas de seleção PPGI/UFAM (2016 a 2026)
 
 Cada prova tem um arquivo Markdown com o gabarito e as questões na ordem do caderno. As figuras ficam em `AAAA-NNN/figuras/` e são chamadas por caminho relativo dentro do `.md`.
 
@@ -15,11 +15,12 @@ Cada prova tem um arquivo Markdown com o gabarito e as questões na ordem do cad
 | 057/2022 | `2022-057-prova-conhecimento.md` | nenhuma | nenhuma |
 | 020/2023 | `2023-020-prova-conhecimento.md` | nenhuma | Q06 |
 | 071/2023 | `2023-071-prova-conhecimento.md` | 1, 7, 10 | nenhuma |
+| 070/2026 | `2026-070-prova-conhecimento.md` | nenhuma (gabarito preliminar) | Q09 |
 
 ## Como foi extraído
 
 - O texto veio direto dos PDFs. Os enunciados estão como no original, inclusive erros de digitação da banca.
-- Os gabaritos de 2016 a 2019 são marcações desenhadas nas folhas de resposta, então li cada folha visualmente. Os de 057/2022 e 020/2023 são a alternativa em negrito do caderno de respostas; o de 071/2023 é o gabarito definitivo.
+- Os gabaritos de 2016 a 2019 são marcações desenhadas nas folhas de resposta, então li cada folha visualmente. Os de 057/2022 e 020/2023 são a alternativa em negrito do caderno de respostas; o de 071/2023 é o gabarito definitivo; o de 070/2026 é o gabarito preliminar de 27/11/2026.
 - As figuras são recortes renderizados das páginas dos PDFs.
 
 ## Pontos de atenção

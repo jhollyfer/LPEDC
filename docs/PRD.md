@@ -61,7 +61,7 @@ C faz na memória.
 
 ## 8. Perguntas em aberto
 
-- [x] Provas anteriores como referência de formato e frequência: as 11 de 2016 a 2023 entraram (`TASKS.md` fase 4).
+- [x] Provas anteriores como referência de formato e frequência: as 11 de 2016 a 2023 entraram (`TASKS.md` fase 4), e a de 2026 (edital 070/2026) na fase 9.
 
 ## Histórico
 

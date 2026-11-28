@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="601" height="214" viewBox="0 0 601 214">
+<title>aula-0065-2</title>
+<style>text{font-family:ui-monospace,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace;white-space:pre}</style>
+<rect x="0" y="0" width="601" height="214" fill="#ffffff"/>
+<text x="30" y="60" font-size="24" fill="#1e1e1e" text-anchor="start">x        = 01100011</text>
+<text x="30" y="96" font-size="24" fill="#1e1e1e" text-anchor="start">mask     = 10000000</text>
+<text x="30" y="132" font-size="24" fill="#1e1e1e" text-anchor="start">x | mask = 11100011  (diferente de 0)</text>
+<text x="30" y="168" font-size="24" fill="#1e1e1e" text-anchor="start">x &amp; mask = 00000000  (0)</text>
+</svg>

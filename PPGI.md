@@ -174,43 +174,44 @@ As vídeo-aulas de AED (partes 1 e 2) seguem, quase na mesma ordem, os módulos 
 
 ## 2. Exemplos de uso
 
-O que as provas de 2016 a 2023 cobraram, por tópico e por formato.
+O que as provas de 2016 a 2026 cobraram, por tópico e por formato.
 
-### O que caiu de 2016 a 2023
+### O que caiu de 2016 a 2026
 
-As 11 provas de 2016 a 2023 somam 210 questões. O gabarito comentado de cada uma, com o link
-para o módulo, está em [`PROVAS.md`](PROVAS.md); só a de 2023 (edital 071/2023) tem gabarito
-oficial. Uma questão pode tocar dois tópicos, por isso a soma passa de 210. No tópico 3, a questão que
-cobra pilha e fila conta nas duas linhas, e as quatro partes somam mais que 54.
+As 12 provas de 2016 a 2026 somam 230 questões. O gabarito comentado de cada uma, com o link
+para o módulo, está em [`PROVAS.md`](PROVAS.md); a mais recente é a do edital 070/2026 (seleção
+2027/1), com gabarito preliminar. Uma questão pode tocar dois tópicos, por isso a soma passa de 230.
+No tópico 3, a questão que cobra pilha e fila conta nas duas linhas, e as quatro partes somam mais
+que 59.
 
 | Tópico do edital | Questões | Parte da prova |
 | --- | --- | --- |
-| 4 · Árvores (ABB, AVL, heap, árvore B, rubro-negra) | 70 | 33% |
-| 3 · Estruturas elementares, no total | 54 | 26% |
-| 3.1 · Lista | 28 | 13% |
-| 3.3 · Pilha | 19 | 9% |
-| 3.2 · Fila | 11 | 5% |
+| 4 · Árvores (ABB, AVL, heap, árvore B, rubro-negra) | 78 | 34% |
+| 3 · Estruturas elementares, no total | 59 | 26% |
+| 3.1 · Lista | 29 | 13% |
+| 3.3 · Pilha | 20 | 9% |
+| 3.2 · Fila | 14 | 6% |
 | 3.4 · Vetor e matriz | 9 | 4% |
-| 7 · Ordenação | 34 | 16% |
-| 5 · Hash | 22 | 10% |
-| 6 · Busca | 19 | 9% |
-| 1, 2 e 8 · Fundamentos, eficiência e grafos | 18 | 9% |
+| 7 · Ordenação | 35 | 15% |
+| 5 · Hash | 24 | 10% |
+| 6 · Busca | 19 | 8% |
+| 1, 2 e 8 · Fundamentos, eficiência e grafos | 24 | 10% |
 
-Os assuntos que mais aparecem: AVL (0101, em 33 questões), busca e inserção em ABB (0099, 22),
-busca binária (0090, 20), lista encadeada (0076, 17), hash por encadeamento (0106, 16), pilha
-(0082, 15), insertion sort (0093, 13) e quick sort (0095, 12).
+Os assuntos que mais aparecem: AVL (0101, em 37 questões), busca e inserção em ABB (0099, 23),
+busca binária (0090, 20), lista encadeada (0076, 19), hash por encadeamento (0106, 17), pilha
+(0082, 16), insertion sort (0093, 13) e quick sort (0095, 13).
 
-O formato mudou em 2022. Até 2019 eram 5 alternativas; em 2022 e 2023 são 4, com trechos em
+O formato mudou em 2022. Até 2019 eram 5 alternativas; de 2022 em diante são 4, com trechos em
 Python e mais questões de custo (pior caso de inserir, remover e buscar em vetor ordenado, lista,
 árvore balanceada e hash) e de grafos (BFS com fila, Dijkstra, matriz x lista de adjacência).
 Grafo, que quase não caía, voltou: não pule o módulo 16.
 
 | Formato | Questões | Como treinar |
 | --- | --- | --- |
-| conceito (definição direta) | 57 | os `[!WARNING]` de cada assunto |
-| afirmações I, II, III combinadas | 55 | julgue cada afirmação sozinha antes de olhar as letras |
-| simulação (pilha, fila, hash, ABB, AVL, heap, ordenação passo a passo) | 48 | refaça no papel o fluxograma e o `### Passo a passo` |
-| código (ler, achar o erro, prever a saída; em C ou Python) | 26 | a lista prática de 11, 12 e 14 |
+| conceito (definição direta) | 58 | os `[!WARNING]` de cada assunto |
+| afirmações I, II, III combinadas | 60 | julgue cada afirmação sozinha antes de olhar as letras |
+| simulação (pilha, fila, hash, ABB, AVL, heap, ordenação passo a passo) | 55 | refaça no papel o fluxograma e o `### Passo a passo` |
+| código (ler, achar o erro, prever a saída; em C ou Python) | 33 | a lista prática de 11, 12 e 14 |
 | cálculo (altura, comparações da busca binária, complexidade) | 24 | conte à mão e confira rodando o exemplo |
 
 Várias questões voltam quase iguais em anos diferentes: a pilha que vira fila e volta a ser
@@ -223,7 +224,7 @@ e a busca binária contando comparações.
 ### Comece aqui
 
 Plano de 09/11 até a prova, em 27/11. A ordem de dependência entre os assuntos está em [`TRILHA.md`](TRILHA.md). A ordem segue o peso de cada tópico nas provas de
-2016 a 2023 ([o que caiu](#o-que-caiu-de-2016-a-2023)): árvores primeiro, depois listas,
+2016 a 2023 ([o que caiu](#o-que-caiu-de-2016-a-2026)): árvores primeiro, depois listas,
 pilhas e filas, busca, ordenação e hash. Se começar depois de 09/11, faça o diagnóstico no
 primeiro dia e junte dois dias de assunto num só até alcançar a data da tabela.
 

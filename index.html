@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Quiz das provas PPGI</title>
-<meta name="description" content="As provas de conhecimento do PPGI/UFAM de 2016 a 2023 em formato de quiz: o conceito antes de responder, o porquê de cada alternativa depois e o assunto do LPEDC onde estudar.">
+<meta name="description" content="As provas de conhecimento do PPGI/UFAM de 2016 a 2026 em formato de quiz: o conceito antes de responder, o porquê de cada alternativa depois e o assunto do LPEDC onde estudar.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="conteudo/curso.css">
@@ -408,7 +408,7 @@ kbd { font: 12px var(--font); border: 1px solid var(--control); border-radius: 4
   </main>
 </div>
 
-<script src="quiz/questoes.js?v=e1a6e821"></script>
+<script src="quiz/questoes.js?v=e99cdfd0"></script>
 <script>
 'use strict'
 const CHAVE = 'lpedc-quiz-v1'
@@ -602,7 +602,7 @@ function telaInicial() {
 
   app.innerHTML = `
     <h1 class="saudacao">${saudacao}</h1>
-    <p class="linha-cinza">${QUESTOES.length} questões das 11 provas de 2016 a 2023, com gabarito oficial. Leia o conceito, responda e veja o porquê de cada alternativa.</p>
+    <p class="linha-cinza">${QUESTOES.length} questões das 12 provas de 2016 a 2026, com gabarito oficial. Leia o conceito, responda e veja o porquê de cada alternativa.</p>
 
     <section class="grade" aria-label="Seu andamento">
       <div class="contador s3 ct"><span class="rotulo">Respondidas</span><span class="valor num">${feitas.length} <small>de ${contam.length}</small></span><span class="legenda">${contam.length - feitas.length} ainda por fazer</span></div>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="338" height="250" viewBox="0 0 338 250">
+<title>aula-0154-2</title>
+<style>text{font-family:ui-monospace,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace;white-space:pre}</style>
+<rect x="0" y="0" width="338" height="250" fill="#ffffff"/>
+<text x="30" y="60" font-size="24" fill="#1e1e1e" text-anchor="start">rodada 1: s-&gt;a  a=2</text>
+<text x="30" y="96" font-size="24" fill="#1e1e1e" text-anchor="start">          s-&gt;b  b=5</text>
+<text x="30" y="132" font-size="24" fill="#1e1e1e" text-anchor="start">          b-&gt;a  a=1</text>
+<text x="30" y="168" font-size="24" fill="#1e1e1e" text-anchor="start">rodada 2: nada muda</text>
+<text x="30" y="204" font-size="24" fill="#1e1e1e" text-anchor="start">resposta: a=1, b=5</text>
+</svg>

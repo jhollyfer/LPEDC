@@ -1,0 +1,1165 @@
+{
+  "edital": "070/2026",
+  "slug": "2026-070",
+  "ano": 2026,
+  "oficial": true,
+  "questoes": [
+    {
+      "numero": 1,
+      "topico": 4,
+      "formato": "simulação",
+      "enunciado": "Existe uma única árvore binária de busca que possui a seguinte pré-ordem: 7, 3, 2, 13, 8, 12, 19, 17, 21, 20. Qual será o percurso in-ordem dessa mesma árvore se removermos a chave 13?",
+      "dica": "**Cobra:** saber o que o percurso em ordem de uma BST devolve, com ou sem a chave removida.\n\n- **Percurso em ordem** [0098]: visita a subárvore esquerda, depois o nó, depois a subárvore direita; numa BST isso lista as chaves em ordem crescente. Ex.: na BST com raiz 5, filhos 3 e 8, a em-ordem é 3, 5, 8.\n- **Remoção na BST** [0100]: tirar um nó com dois filhos põe no lugar dele o sucessor (o menor da subárvore direita), e a árvore continua sendo BST. Ex.: removendo o 5 de 3, 5, 8, o 8 sobe e a em-ordem fica 3, 8.\n\n**Como atacar:** antes de desenhar a árvore, pergunte o que a em-ordem de uma BST precisa ser.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Esta sequência começa pelo 7, que é a raiz. Qual dos três percursos visita a raiz antes de todo o resto?"
+        },
+        {
+          "item": "B",
+          "texto": "O 17 aparece logo depois do 2. Numa listagem de BST em ordem crescente, o que deveria vir depois do 2?"
+        },
+        {
+          "item": "C",
+          "texto": "Monte a BST sem o 13 de qualquer jeito válido. A em-ordem muda conforme quem subiu no lugar dele?"
+        },
+        {
+          "item": "D",
+          "texto": "A sequência termina no 7, a raiz. Qual percurso deixa a raiz por último?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "7, 3, 2, 8, 12, 19, 17, 21, 20.",
+          "porque": "É a pré-ordem dada sem o 13. A pré-ordem começa pela raiz; a em-ordem de uma BST sai em ordem crescente, e esta sequência não está ordenada."
+        },
+        {
+          "letra": "B",
+          "texto": "7, 3, 2, 17, 8, 12, 19, 21, 20.",
+          "porque": "Parece a pré-ordem depois de pôr o 17 (sucessor do 13) no lugar dele, e a pré-ordem real seria 7, 3, 2, 17, 8, 12, 19, 21, 20. Só que a pergunta pede a em-ordem."
+        },
+        {
+          "letra": "C",
+          "texto": "2, 3, 7, 8, 12, 17, 19, 20, 21.",
+          "porque": "Qualquer remoção certa deixa uma BST, e a em-ordem de uma BST é a lista das chaves em ordem crescente. Sem o 13, sobram 2, 3, 7, 8, 12, 17, 19, 20, 21."
+        },
+        {
+          "letra": "D",
+          "texto": "2, 3, 12, 8, 20, 21, 19, 17, 7.",
+          "porque": "É a pós-ordem da árvore depois da remoção (esquerda, direita, nó), e não a em-ordem."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Em-ordem de BST é sempre a lista crescente das chaves. Removida a 13, sobra 2, 3, 7, 8, 12, 17, 19, 20, 21, sem precisar montar a árvore. A e B são pré-ordens, D é pós-ordem.",
+      "assuntos": [
+        {
+          "num": "0098",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0100",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 2,
+      "topico": 4,
+      "formato": "simulação",
+      "enunciado": "Existe uma única árvore AVL que possui o seguinte percurso pré-ordem: 3, 1, 2, 5, 4, 7, 6, 8. Se removermos a chave 1 dessa árvore, qual será o percurso pré-ordem da árvore AVL resultante?",
+      "dica": "**Cobra:** remontar a AVL pela pré-ordem, remover uma folha e aplicar a rotação que a remoção pedir.\n\n- **Remoção na AVL** [0176]: remove como na BST e, voltando pelo caminho até a raiz, recalcula o fator de cada nó; onde ele chega a +2 ou -2, aplica a rotação. Ex.: tirar a folha da esquerda de 10, com 5 e 20 (20 com filho 30), deixa o 10 com fator -2.\n- **Rotações da AVL** [0101]: com o nó em -2 e o filho da direita em 0 ou -1, basta uma rotação simples à esquerda; com o filho em +1, a rotação é dupla. Ex.: 10 com filho 20 e neto 30, todos à direita: rotaciona à esquerda e o 20 vira raiz.\n\n**Como atacar:** desenhe a árvore pela pré-ordem, remova o 1 e calcule o fator da raiz.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "A sequência está em ordem crescente. Que percurso de uma BST dá sempre essa ordem, e por qual nó a pré-ordem começa?"
+        },
+        {
+          "item": "B",
+          "texto": "Depois da remoção, calcule as alturas das subárvores do 3. A diferença cabe no que a AVL aceita?"
+        },
+        {
+          "item": "C",
+          "texto": "Aqui a raiz continua 3. Com a esquerda só com o 2 e a direita com três níveis, qual é o fator do 3?"
+        },
+        {
+          "item": "D",
+          "texto": "Para o 4 ir à raiz, precisaria de rotação dupla. O filho 5 pende para qual lado?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "2, 3, 4, 5, 6, 7, 8.",
+          "porque": "É a lista crescente das chaves que sobram, ou seja, a em-ordem. A pré-ordem começa pela raiz, que não é a menor chave."
+        },
+        {
+          "letra": "B",
+          "texto": "5, 3, 2, 4, 7, 6, 8.",
+          "porque": "A árvore é 3 com esquerda 1 (filho direito 2) e direita 5 (filhos 4 e 7; 7 com 6 e 8). Removido o 1, o 2 sobe. A esquerda da raiz fica com altura 0 e a direita com altura 2: fator -2. O filho 5 tem fator -1, então vai uma rotação simples à esquerda, e o 5 vira raiz com 3 (2, 4) e 7 (6, 8)."
+        },
+        {
+          "letra": "C",
+          "texto": "3, 2, 5, 4, 7, 6, 8.",
+          "porque": "É a árvore logo depois de trocar o 1 pelo 2, antes de rebalancear. A raiz 3 fica com fator -2, fora do que a AVL permite."
+        },
+        {
+          "letra": "D",
+          "texto": "4, 2, 3, 6, 5, 7, 8.",
+          "porque": "Põe o 4 na raiz, como se fosse uma rotação dupla, e ainda deixa o 3 como filho direito do 2 e o 6 acima do 5 e do 7. A rotação dupla só vale com o filho da direita pendendo para a esquerda; aqui o 5 tem fator -1."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Árvore: 3 (1 → 2) (5 (4) (7 (6) (8))). Tirando o 1, o 2 sobe e a raiz fica com fator -2; o filho 5 tem fator -1, então vai uma rotação simples à esquerda. Pré-ordem final: 5, 3, 2, 4, 7, 6, 8.",
+      "assuntos": [
+        {
+          "num": "0176",
+          "modulo": "28-estruturas-complementos.md"
+        },
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 3,
+      "topico": 5,
+      "formato": "simulação",
+      "enunciado": "Em uma tabela de espalhamento com tamanho m = 7, foram inseridas 4 chaves. A função de dispersão utilizada foi o método da divisão, conforme a equação a seguir.\n\nh(k) = k mod m.\n\nPara tratar as colisões, foi empregada uma técnica de endereçamento aberto, de modo que as chaves foram armazenadas no próprio vetor. Não é necessário conhecer a equação para a resolução da questão.\n\nO conteúdo final da tabela imediatamente após a inserção das chaves foi o seguinte (o símbolo Ø representa posições vazias):\n\n```\níndices:     0   1   2   3   4   5   6\nelementos: [ 3, 23,  2,  1,  Ø,  Ø,  Ø]\n```\n\nSabendo que nenhuma outra operação de inserção ou remoção foi realizada e que nenhuma chave foi deslocada após a inserção inicial, selecione a alternativa que representa a ordem na qual as chaves foram inseridas na tabela.",
+      "dica": "**Cobra:** deduzir a ordem de inserção a partir de onde cada chave ficou na tabela.\n\n- **Função de divisão** [0105]: a posição inicial de cada chave é o resto da divisão pelo tamanho da tabela, `h(k) = k mod m`. Ex.: com m = 7, a chave 23 vai para 23 mod 7 = 2.\n- **Endereçamento aberto** [0107]: se a posição inicial estiver ocupada, a chave sonda outras posições e fica na primeira livre; se estiver livre, ela fica ali mesmo. Ex.: com o 2 já na posição 2, o 23 também quer a 2 e tem de ir para outra.\n\n**Como atacar:** para cada chave, veja se ela está na posição inicial. Quem está fora dela chegou depois de quem ocupa essa posição.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Se o 1 entra com a tabela vazia, o que impede que ele fique na posição 1 mod 7?"
+        },
+        {
+          "item": "B",
+          "texto": "Depois do 2, quem ocupa a posição 1 quando o 1 chega?"
+        },
+        {
+          "item": "C",
+          "texto": "Siga cada inserção e pergunte: a posição inicial desta chave já tinha dono? Quem era?"
+        },
+        {
+          "item": "D",
+          "texto": "Quando o 3 chega, nesta ordem, a posição 3 já está ocupada?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "1, 2, 3, 23.",
+          "porque": "O 1 entraria primeiro com a tabela vazia e ficaria na posição 1 mod 7 = 1. Na tabela final ele está na 3."
+        },
+        {
+          "letra": "B",
+          "texto": "2, 1, 3, 23.",
+          "porque": "Com só o 2 na tabela, a posição 1 está livre, e o 1 ficaria nela. Mas a posição 1 é do 23."
+        },
+        {
+          "letra": "C",
+          "texto": "2, 23, 1, 3.",
+          "porque": "O 2 vai para a 2, livre. O 23 quer a 2, que está ocupada, e fica na 1. O 1 quer a 1, ocupada pelo 23, e fica na 3. O 3 quer a 3, ocupada pelo 1, e vai para a 0. Tudo bate com a tabela final."
+        },
+        {
+          "letra": "D",
+          "texto": "2, 23, 3, 1.",
+          "porque": "O 3 entraria antes do 1, com a posição 3 livre, e ficaria nela. Na tabela final o 3 está na 0."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Posições iniciais: 3 → 3, 23 → 2, 2 → 2, 1 → 1. Só o 2 está na sua; o 23 está fora porque o 2 chegou antes, o 1 porque o 23 chegou antes, e o 3 porque o 1 chegou antes. Ordem: 2, 23, 1, 3. Não precisa saber qual sondagem foi usada.",
+      "assuntos": [
+        {
+          "num": "0107",
+          "modulo": "15-hash.md"
+        },
+        {
+          "num": "0105",
+          "modulo": "15-hash.md"
+        }
+      ]
+    },
+    {
+      "numero": 4,
+      "topico": 7,
+      "formato": "afirmações",
+      "enunciado": "Sobre algoritmos de ordenação, pode-se dizer que:\n\nI. O algoritmo Quicksort pode realizar um número maior de trocas de valores entre posições do vetor durante o processo de ordenação quando comparado ao algoritmo de ordenação por seleção, mesmo em casos onde o Quicksort é mais rápido e termina a ordenação em menos tempo.\nII. O algoritmo Heapsort sempre é mais lento que o algoritmo Quicksort, não importando o tamanho do vetor ou seu conteúdo.",
+      "dica": "**Cobra:** separar número de trocas de tempo de execução, e caso médio de pior caso.\n\n- **Selection sort** [0092]: a cada volta acha o menor do restante e faz no máximo uma troca, então o total de trocas nunca passa de n - 1, mesmo com n²/2 comparações. Ex.: para ordenar 5 elementos ele faz no máximo 4 trocas.\n- **Quick sort** [0095]: particiona em torno de um pivô, trocando elementos durante a partição; o caso médio é `O(n log n)`, mas o pior caso é `O(n²)`. Ex.: com o último como pivô, um vetor já ordenado cai no pior caso.\n- **Heapsort** [0103]: constrói um heap e extrai o máximo n vezes, sempre em `O(n log n)`, qualquer que seja a entrada. Ex.: com 1.024 elementos, cada extração desce no máximo 10 níveis.\n\n**Como atacar:** procure um contraexemplo para cada \"sempre\" e \"pode\".",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Quantas trocas a seleção faz por volta do laço externo? E a partição do Quicksort, quantas pode fazer numa única passada?"
+        },
+        {
+          "item": "II",
+          "texto": "Existe entrada em que o Quicksort clássico gasta `n²` passos? Nessa entrada, quanto gasta o Heapsort?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas a afirmação I é correta.",
+          "porque": "I vale: a seleção faz no máximo n - 1 trocas, e a partição do Quicksort pode trocar bem mais vezes, mesmo terminando antes por fazer muito menos comparações. II é falsa: no pior caso o Quicksort é `O(n²)` e o Heapsort continua `O(n log n)`."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas a afirmação II é correta.",
+          "porque": "II é falsa por causa do \"sempre\": num vetor que leva o Quicksort ao pior caso, `O(n²)`, o Heapsort ganha. E I é verdadeira."
+        },
+        {
+          "letra": "C",
+          "texto": "As duas afirmações (I e II) são corretas.",
+          "porque": "II é falsa: o Heapsort é mais lento que o Quicksort na média, mas não em toda entrada."
+        },
+        {
+          "letra": "D",
+          "texto": "Nenhuma das afirmações (I e II) é correta.",
+          "porque": "I é verdadeira: a seleção é o algoritmo que menos troca, no máximo n - 1 trocas, e o Quicksort pode trocar mais."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "I verdadeira: seleção faz no máximo n - 1 trocas, e o Quicksort pode trocar mais e mesmo assim acabar antes. II falsa: no pior caso o Quicksort é quadrático e o Heapsort continua n log n.",
+      "assuntos": [
+        {
+          "num": "0092",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0095",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0103",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 5,
+      "topico": 5,
+      "formato": "afirmações",
+      "enunciado": "Sobre uma tabela hash com tratamento de colisões por encadeamento, considere as afirmações:\n\nI. A busca por uma chave em uma tabela hash com encadeamento tem custo constante com número de operações máximo que independe da quantidade de elementos inseridos no hash ao se considerar o pior caso, garantindo desempenho de tempo constante independentemente da quantidade de elementos armazenados na tabela.\nII. Em uma tabela hash com encadeamento, é possível que o fator de carga (número de elementos dividido pelo número de posições da tabela) seja maior que 1, ou seja, é possível haver mais elementos armazenados do que posições na tabela.\nIII. A qualidade da função hash escolhida influencia o desempenho das operações da tabela: uma função que distribui mal as chaves pode fazer com que a busca degenere para tempo proporcional ao número de elementos armazenados.",
+      "dica": "**Cobra:** custo da busca no hash com encadeamento e o papel do fator de carga e da função hash.\n\n- **Encadeamento** [0106]: cada posição da tabela guarda uma lista com as chaves que caíram ali, então cabem mais chaves que posições; a busca percorre só a lista da posição calculada. Ex.: com 7 posições e 10 chaves, o fator de carga é 10/7, maior que 1.\n- **Função hash** [0105]: transforma a chave numa posição da tabela; se espalha mal, muitas chaves caem na mesma lista e a busca fica longa. Ex.: `h(k) = k mod 10` com chaves todas terminadas em 0 põe tudo na posição 0.\n\n**Como atacar:** pergunte o que acontece no pior caso, com todas as chaves numa lista só.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Se todas as n chaves caírem na mesma posição, quantas comparações custa procurar a última da lista?"
+        },
+        {
+          "item": "II",
+          "texto": "No encadeamento, cada posição guarda uma lista. Alguma coisa limita o tamanho dessa lista?"
+        },
+        {
+          "item": "III",
+          "texto": "Com `h(k) = k mod 10` e chaves 10, 20, 30, ..., quantas listas ficam com elementos?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas as afirmações I e II estão corretas.",
+          "porque": "I é falsa: no pior caso todas as chaves caem na mesma lista e a busca é `O(n)`. O tempo constante é do caso médio, com boa função e fator de carga limitado."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas as afirmações II e III estão corretas.",
+          "porque": "I é falsa: o pior caso do encadeamento é `Θ(n)`, com todas as chaves na mesma lista. II é verdadeira, pois as listas crescem sem limite e o fator de carga pode passar de 1. III é verdadeira: uma função que espalha mal leva justamente a esse pior caso."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas as afirmações I e III estão corretas.",
+          "porque": "I e III não podem valer juntas: a III diz que a busca pode virar proporcional a n, a I diz que ela é constante no pior caso. A I é a falsa, e a II, que fica de fora, é verdadeira."
+        },
+        {
+          "letra": "D",
+          "texto": "Todas as afirmações (I, II e III) estão corretas.",
+          "porque": "I é falsa: com todas as chaves na mesma lista, a busca percorre as n."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "I falsa: o pior caso do encadeamento é O(n), com tudo numa lista só; O(1) é a média. II verdadeira: as listas deixam o fator de carga passar de 1. III verdadeira: função ruim concentra as chaves e degenera a busca.",
+      "assuntos": [
+        {
+          "num": "0106",
+          "modulo": "15-hash.md"
+        },
+        {
+          "num": "0105",
+          "modulo": "15-hash.md"
+        }
+      ]
+    },
+    {
+      "numero": 6,
+      "topico": 4,
+      "formato": "afirmações",
+      "enunciado": "Sobre árvores binárias de pesquisa (ABP) e árvores AVL, considere as afirmações:\n\nI. Em uma árvore binária de pesquisa contendo n chaves, a busca por uma chave pode requerer até n comparações no pior caso, dependendo da ordem em que os elementos foram inseridos.\nII. Em uma árvore AVL, o fator de balanceamento de qualquer nó — definido como a diferença entre as alturas das subárvores esquerda e direita — é sempre −1, 0 ou 1 ao final de qualquer operação de inserção ou remoção.\nIII. Inserir, em uma árvore binária de pesquisa sem balanceamento inicialmente vazia, os valores consecutivos de 1 a n (1, 2, 3, ..., n), nessa ordem crescente, produz uma árvore com altura proporcional a log n.",
+      "dica": "**Cobra:** pior caso da BST sem balanceamento e a regra do fator de balanceamento da AVL.\n\n- **BST** [0099]: a busca desce da raiz comparando a chave com cada nó do caminho, então custa no máximo a altura mais 1 comparações; a altura depende da ordem de inserção. Ex.: inserir 1, 2, 3, 4 forma uma linha só para a direita, com altura 3.\n- **AVL** [0101]: guarda em cada nó a diferença de altura entre as subárvores esquerda e direita e, depois de cada inserção ou remoção, rotaciona até ela voltar a -1, 0 ou 1. Ex.: inserir 1, 2, 3 deixa o 1 com fator -2, e a rotação põe o 2 na raiz.\n\n**Como atacar:** desenhe a BST para n = 4 com as chaves em ordem crescente e conte a altura.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Insira 1, 2, 3, 4 numa BST vazia e procure o 4. Com quantos nós ele compara?"
+        },
+        {
+          "item": "II",
+          "texto": "Depois de inserir ou remover numa AVL, as rotações param em que situação?"
+        },
+        {
+          "item": "III",
+          "texto": "Inserindo 1, 2, 3, ..., n em ordem, de que lado cada nova chave fica, e quantos níveis a árvore ganha a cada inserção?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas as afirmações I e II estão corretas.",
+          "porque": "I vale: inserindo em ordem, a BST vira uma lista e a busca pela última chave compara com os n nós. II vale: é a definição da AVL, garantida pelas rotações ao fim de cada operação. III é falsa: 1, 2, ..., n em ordem forma uma linha com altura n - 1."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas as afirmações II e III estão corretas.",
+          "porque": "III é falsa: com as chaves em ordem crescente, cada nova chave vira filho direito da anterior, e a altura fica n - 1, não log n. E I, deixada de fora, é verdadeira."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas as afirmações I e III estão corretas.",
+          "porque": "I e III se contradizem: a inserção em ordem crescente é justamente o caso que faz a busca da I chegar a n comparações. A III é a falsa, e a II, que fica de fora, é verdadeira."
+        },
+        {
+          "letra": "D",
+          "texto": "Todas as afirmações (I, II e III) estão corretas.",
+          "porque": "III é falsa: a BST sem balanceamento não tem como evitar a degeneração com chaves em ordem."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "I verdadeira: BST degenerada exige n comparações. II verdadeira: é a regra da AVL, restaurada pelas rotações. III falsa: 1, 2, ..., n em ordem dá uma linha de altura n - 1.",
+      "assuntos": [
+        {
+          "num": "0099",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 7,
+      "topico": 1,
+      "formato": "código",
+      "enunciado": "Considere o seguinte cenário fictício: a arqueóloga Rachel Weintraub, nascida no ano 2714, teve sua vida mudada quando, em 2739, aos 25 anos, visitou as Tumbas do Tempo, no planeta Hyperion, e contraiu a \"doença de Merlin\". A partir dali, sua idade física e aparente passou a regredir: a cada ano que passa, Rachel fica um ano mais jovem, até chegar à idade 0 (zero).\n\nQual das implementações em Python abaixo calcula corretamente a idade aparente de Rachel para qualquer ano informado? Considere que:\n\n- A variável `ano` contém o ano informado, sendo 2714 ≤ ano ≤ 2764.\n- A idade é calculada apenas pela diferença entre anos, ignorando os meses.\n- Em 2740, Rachel tem 24 anos.",
+      "dica": "**Cobra:** transformar uma regra que muda no meio (cresce até 2739, depois decresce) numa só expressão.\n\n- **Aritmética** [0007]: uma conta com subtração e valor absoluto descreve uma função que sobe e depois desce, com o pico no ponto onde o absoluto vale zero. Ex.: `5 - abs(x - 5)` vale 0 em x = 0, 5 em x = 5 e 0 de novo em x = 10.\n- **Relacionais e casos de teste** [0012]: para conferir uma fórmula, compare o resultado com o esperado nos pontos onde a regra muda e nas pontas do intervalo. Ex.: aqui, os anos 2714 (idade 0), 2739 (25), 2740 (24) e 2764 (0).\n\n**Como atacar:** teste cada alternativa nos anos 2714, 2739 e 2740.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Calcule para o ano em que Rachel nasceu, 2714. A idade bate?"
+        },
+        {
+          "item": "B",
+          "texto": "Calcule para 2714, 2739 e 2740. Os três valores batem com o enunciado?"
+        },
+        {
+          "item": "C",
+          "texto": "Calcule para 2740. Uma idade pode sair menor que zero?"
+        },
+        {
+          "item": "D",
+          "texto": "Calcule para 2714 e para 2764. A fórmula acerta as duas pontas?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "`idade_aparente = 2739 - ano`",
+          "porque": "Só descreve a parte da regressão, e ainda com o sinal trocado: em 2740 dá -1 e em 2714 dá 25, quando Rachel tinha 0."
+        },
+        {
+          "letra": "B",
+          "texto": "`idade_aparente = (2739 - 2714) - abs(ano - 2739)`",
+          "porque": "É 25 - |ano - 2739|. Em 2714 dá 0; em 2739 dá 25; em 2740 dá 24; em 2764 dá 0. Antes de 2739 a conta vira ano - 2714 e depois vira 2764 - ano, as duas partes da história. Conferido para os 51 anos."
+        },
+        {
+          "letra": "C",
+          "texto": "`idade_aparente = min(ano - 2714, 2739 - ano)`",
+          "porque": "Depois de 2739 o segundo termo fica negativo: em 2740, min(26, -1) dá -1. Mesmo antes, em 2730, dá min(16, 9) = 9 em vez de 16."
+        },
+        {
+          "letra": "D",
+          "texto": "`idade_aparente = 2 * 2739 - 2714 - ano`",
+          "porque": "É 2764 - ano, que só acerta a parte da regressão. Em 2714 dá 50, quando Rachel tinha 0."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Idade = ano - 2714 até 2739 e 2764 - ano depois. Isso é 25 - |ano - 2739|: 0 em 2714, 25 em 2739, 24 em 2740 e 0 em 2764. Conferido em Python ano a ano.",
+      "assuntos": [
+        {
+          "num": "0007",
+          "modulo": "01-fundamentos.md"
+        },
+        {
+          "num": "0012",
+          "modulo": "02-condicionais.md"
+        }
+      ]
+    },
+    {
+      "numero": 8,
+      "topico": 1,
+      "formato": "código",
+      "enunciado": "Considere o seguinte cenário fictício: o Relógio do Dragão do Tempo tem um mostrador com 13 horas, em vez de 12. Uma volta completa do seu ponteiro das horas leva exatamente o mesmo tempo que no relógio comum, ou seja, 12 horas comuns (720 minutos). Assim, cada hora do Relógio do Dragão dura 720/13 (aproximadamente 55,4) minutos comuns.\n\nQual das implementações em Python abaixo converte corretamente um horário do relógio comum para a hora marcada no Relógio do Dragão do Tempo? Assuma que:\n\n- As variáveis `h` e `m` contêm, respectivamente, a hora e os minutos do relógio comum, sendo 0 ≤ h ≤ 11 e 0 ≤ m ≤ 59 (o valor 0 de h representa 12 horas).\n- Às 0h00 do relógio comum, o Relógio do Dragão marca 0 hora, e os dois passam a avançar juntos.\n- A variável `hora_dragao` deve conter apenas o número de horas completas do Relógio do Dragão, desprezando-se a parte fracionária, sendo um inteiro entre 0 e 12 (inclusive).",
+      "dica": "**Cobra:** converter uma medida em outra com divisão inteira, cuidando da ordem das operações.\n\n- **Divisão inteira** [0007]: entre inteiros, a divisão joga fora a parte fracionária (`//` em Python, `/` em C), então dividir antes de multiplicar perde informação. Ex.: `100 // 720 * 13` dá 0, mas `100 * 13 // 720` dá 1.\n- **Regra de três** [0007]: para mudar de unidade, conta-se tudo na unidade menor e multiplica-se pela razão entre as unidades. Ex.: em minutos comuns, `t = h * 60 + m`, e cada hora do dragão dura 720/13 minutos, então são `t * 13 / 720` horas do dragão.\n\n**Como atacar:** teste 0h00, 11h59 e um horário no meio, como 6h00.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Às 11h59 o ponteiro do dragão está quase completando a volta. Quanto esta fórmula dá?"
+        },
+        {
+          "item": "B",
+          "texto": "Qual é o maior valor de `h * 60 + m`? Quanto ele vale depois de `// 720`?"
+        },
+        {
+          "item": "C",
+          "texto": "Calcule para 6h00 e para 11h59. Os resultados ficam entre 0 e 12 e desprezam a fração?"
+        },
+        {
+          "item": "D",
+          "texto": "O enunciado pede horas completas. `round` despreza a fração ou arredonda?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "`hora_dragao = (h * 60 + m) * 12 // (13 * 60)`",
+          "porque": "Inverte a razão: multiplica por 12/13, como se cada hora do dragão fosse mais longa que 60 minutos. Às 11h59 dá 11, e o certo é 12."
+        },
+        {
+          "letra": "B",
+          "texto": "`hora_dragao = (h * 60 + m) // 720 * 13`",
+          "porque": "Divide antes de multiplicar. Como `h * 60 + m` não passa de 719, `// 720` dá sempre 0, e o resultado é 0 para qualquer horário."
+        },
+        {
+          "letra": "C",
+          "texto": "`hora_dragao = (h * 60 + m) * 13 // 720`",
+          "porque": "Conta os minutos desde 0h00, divide pela duração de uma hora do dragão (720/13) e trunca com `//`. Às 6h00 dá 360 · 13 // 720 = 6; às 11h59 dá 12. Conferido em Python para os 720 horários."
+        },
+        {
+          "letra": "D",
+          "texto": "`hora_dragao = round((h * 60 + m) * 13 / 720)`",
+          "porque": "Arredonda em vez de truncar. Às 11h59 dá 12,98, que `round` leva a 13, fora do intervalo de 0 a 12. A hora completa é a parte inteira."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Minutos t = 60h + m; horas do dragão = t / (720/13) = 13t/720, truncado. C faz isso com `//`. A inverte a razão, B divide cedo e zera tudo, D arredonda e chega a 13.",
+      "assuntos": [
+        {
+          "num": "0007",
+          "modulo": "01-fundamentos.md"
+        }
+      ]
+    },
+    {
+      "numero": 9,
+      "topico": 4,
+      "formato": "simulação",
+      "enunciado": "Considere uma árvore B descrita da seguinte forma:\n\n- O grau mínimo de cada nó interno é 2 e o máximo é 4;\n- Cada chave é uma única letra e não pode haver chaves repetidas;\n- Para a remoção, use o algoritmo *top-down*, que efetua o rebalanceamento na descida (também chamado rebalanceamento preventivo).\n\nDadas essas especificações, remova a chave M da árvore abaixo.\n\nIdentifique a alternativa que mostra uma possível árvore resultante dessa operação.",
+      "figuras": [
+        "2026-070-q09"
+      ],
+      "dica": "**Cobra:** remover uma chave de árvore B pelo método preventivo, que conserta cada nó antes de descer nele.\n\n- **Nó da árvore B** [0146]: com grau mínimo t = 2, cada nó fora da raiz tem de 1 a 3 chaves (de 2 a 4 filhos), e todas as folhas ficam no mesmo nível. Ex.: `[B D]` tem 2 chaves e 3 filhos.\n- **Remoção preventiva** [0146]: antes de descer para um filho com só t - 1 chaves, o algoritmo empresta uma chave de um irmão vizinho com t ou mais, girando pelo pai; se os dois irmãos estão no mínimo, funde o filho com um deles. Ex.: pai `[20]`, filhos `[10]` e `[30 40]`: antes de descer no `[10]`, o 20 desce e o 30 sobe.\n\n**Como atacar:** na raiz, veja quantas chaves tem o `[P]`; depois, quantas tem o `[M]`.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Ao sair da raiz, o filho `[P]` tem quantas chaves? E o irmão `[B D]`, pode ceder uma?"
+        },
+        {
+          "item": "B",
+          "texto": "Conte as chaves e os filhos do `[P]` nesta figura. A regra de k chaves e k + 1 filhos se mantém?"
+        },
+        {
+          "item": "C",
+          "texto": "De onde viria a folha `[P R S]`? Quantas chaves teria o nó antes de o M sair?"
+        },
+        {
+          "item": "D",
+          "texto": "Fundir a raiz com os filhos é o que se faz quando os dois filhos estão no mínimo. O `[B D]` está?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "árvore da figura A)",
+          "porque": "Para descer até o M, a raiz olha o filho `[P]`, que tem só 1 chave (t - 1). O irmão `[B D]` tem 2, então empresta: o J desce, o D sobe e o `[F G H]` passa para o lado direito. A raiz vira `[D]` e o filho `[J P]`. Agora o `[M]` tem 1 chave; o irmão `[R S]` tem 2 e empresta: o P desce, o R sobe, e a folha `[M P]` perde o M. Fica D / B (A, C) / J R (F G H, P, S).",
+          "figura": "2026-070-q09-a"
+        },
+        {
+          "letra": "B",
+          "texto": "árvore da figura B)",
+          "porque": "Só apagou o M, deixando o `[P]` com 2 chaves de espaço e 1 filho. Em árvore B, um nó interno com k chaves tem k + 1 filhos, e todas as folhas ficam no mesmo nível.",
+          "figura": "2026-070-q09-b"
+        },
+        {
+          "letra": "C",
+          "texto": "árvore da figura C)",
+          "porque": "Para sair a folha `[P R S]`, o M teria de se fundir com o P e o `[R S]`, formando `[M P R S]`, com 4 chaves, acima do máximo de 3. A fusão só se usa quando os dois irmãos estão no mínimo, e o `[R S]` tem 2 chaves e pode emprestar.",
+          "figura": "2026-070-q09-c"
+        },
+        {
+          "letra": "D",
+          "texto": "árvore da figura D)",
+          "porque": "Funde a raiz com os dois filhos, o que só acontece quando os dois estão no mínimo; o `[B D]` tem 2 chaves e empresta. Além disso, a folha `[P R S]` sai da mesma fusão de 4 chaves da alternativa C.",
+          "figura": "2026-070-q09-d"
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "t = 2: nós com 1 a 3 chaves. Descendo para o M, o `[P]` está no mínimo e pega emprestado do `[B D]` pela raiz (D sobe, J desce). Depois o `[M]` está no mínimo e pega emprestado do `[R S]` (R sobe, P desce). Tira o M: D / B (A, C) / J R (F G H, P, S).",
+      "assuntos": [
+        {
+          "num": "0146",
+          "modulo": "22-arvores-avancadas.md"
+        }
+      ]
+    },
+    {
+      "numero": 10,
+      "topico": 4,
+      "formato": "simulação",
+      "enunciado": "Considere uma árvore AVL, inicialmente vazia, em que as chaves são inteiros comparados pela ordem numérica usual. As chaves abaixo são inseridas nesta ordem, e após cada inserção são aplicadas as rotações necessárias para restaurar o balanceamento:\n\n30, 20, 40, 10, 25, 22\n\nAssinale a alternativa que apresenta o percurso em pré-ordem da árvore resultante.",
+      "dica": "**Cobra:** inserir chaves numa AVL e reconhecer quando a rotação é dupla.\n\n- **Fator de balanceamento** [0101]: é a altura da subárvore esquerda menos a da direita, e a AVL exige -1, 0 ou 1 em todo nó; depois de cada inserção, sobe-se pelo caminho até achar o primeiro nó com +2 ou -2. Ex.: 30 com filho 20 e neto 10, tudo à esquerda: o 30 fica com +2.\n- **Rotação dupla** [0101]: quando o nó pende para um lado e o filho desse lado pende para o outro (zigue-zague), gira-se primeiro o filho e depois o nó. Ex.: 30, filho esquerdo 10, neto direito 20: rotaciona o 10 à esquerda e o 30 à direita, e o 20 vira raiz.\n\n**Como atacar:** desenhe depois do 25 e veja onde entra o 22.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Depois do 22, qual nó fica com fator +2 ou -2? E o filho dele pende para que lado?"
+        },
+        {
+          "item": "B",
+          "texto": "Faça a rotação simples à direita no 30 e calcule de novo o fator do 30. Fica entre -1 e 1?"
+        },
+        {
+          "item": "C",
+          "texto": "Nesta árvore, quais são as alturas das subárvores do 30?"
+        },
+        {
+          "item": "D",
+          "texto": "A rotação dupla tem dois giros. Quantos foram feitos nesta árvore?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "25, 20, 10, 22, 30, 40",
+          "porque": "Até o 25 a árvore é 30 (20 (10, 25), 40), balanceada. O 22 entra à esquerda do 25. O 30 fica com +2 e o filho 20 com -1: zigue-zague, rotação dupla. Gira o 20 à esquerda e o 30 à direita; o 25 sobe: 25 (20 (10, 22), 30 (-, 40))."
+        },
+        {
+          "letra": "B",
+          "texto": "20, 10, 30, 25, 22, 40",
+          "porque": "Faz uma rotação simples à direita no 30, que só serve quando o filho 20 pende para a esquerda. Aqui ele pende para a direita, e a árvore resultante ainda deixa o 30 com fator +2."
+        },
+        {
+          "letra": "C",
+          "texto": "30, 20, 10, 25, 22, 40",
+          "porque": "É a árvore depois de inserir o 22, sem rotação nenhuma. O 30 fica com subárvore esquerda de altura 2 e direita de altura 0."
+        },
+        {
+          "letra": "D",
+          "texto": "30, 25, 20, 10, 22, 40",
+          "porque": "Rotaciona só o 20 à esquerda e para no meio da rotação dupla. O 30 continua com fator +2."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Antes do 22: 30 (20 (10, 25), 40). O 22 vai para a esquerda do 25; o 30 fica com +2 e o 20 com -1, caso esquerda-direita. Rotação dupla: o 25 vira raiz. Pré-ordem 25, 20, 10, 22, 30, 40.",
+      "assuntos": [
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 11,
+      "topico": 8,
+      "formato": "conceito",
+      "enunciado": "O *Guia do Mochileiro das Galáxias* calcula rotas interestelares com o algoritmo de Dijkstra, sobre um grafo direcionado em que o peso de cada aresta é o tempo do salto. Entretanto, na nave *Coração de Ouro*, o Gerador de Improbabilidade Infinita faz alguns saltos terminarem antes de começar, o que equivale a arestas de peso negativo. Sobre o algoritmo de Dijkstra, em sua versão clássica, aplicado a esse novo grafo, é correto afirmar:",
+      "dica": "**Cobra:** por que o Dijkstra clássico pede pesos não negativos, e qual algoritmo trata pesos negativos.\n\n- **Dijkstra** [0112]: tira da fila de prioridade o vértice de menor distância e a dá por definitiva, sem nunca revisá-la; isso só é seguro se nenhum caminho que passa por outros vértices puder ficar mais curto depois. Ex.: s → a custa 2, s → b custa 5 e b → a custa -4: o a sai com 2, mas o caminho por b custa 1.\n- **Bellman-Ford** [0154]: relaxa todas as arestas n - 1 vezes e aceita pesos negativos; uma n-ésima rodada que ainda melhora alguma distância denuncia ciclo negativo. Ex.: no grafo acima, ele acha a distância 1 até o a.\n\n**Como atacar:** teste cada alternativa num grafo de três vértices com uma aresta negativa.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Em s → a (2), s → b (5), b → a (-4), quem sai primeiro da fila, e o Dijkstra volta a mexer na distância dele depois?"
+        },
+        {
+          "item": "B",
+          "texto": "Some 3 em todas as arestas de s → a (1) e s → b → a (3, -3). Os dois caminhos ganham o mesmo acréscimo?"
+        },
+        {
+          "item": "C",
+          "texto": "Que hipótese garante que, ao sair da fila, a distância de um vértice não vai mais melhorar? Ela vale com peso negativo?"
+        },
+        {
+          "item": "D",
+          "texto": "O grafo s → a (2), s → b (5), b → a (-4) tem ciclo? O Dijkstra acerta a distância até o a?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Funciona normalmente. A cada passo ele escolhe o vértice com a menor distância, e um peso negativo só torna essa distância menor.",
+          "porque": "Justamente por tornar a distância menor depois, o peso negativo quebra o algoritmo: um vértice já fechado pode ganhar um caminho mais curto que passa por outro, e o Dijkstra não o revisa."
+        },
+        {
+          "letra": "B",
+          "texto": "Somar a todas as arestas uma constante igual ao módulo do menor peso negativo e depois executar o Dijkstra produz os mesmos caminhos mínimos do grafo original.",
+          "porque": "Somar a mesma constante a cada aresta pune mais os caminhos com mais arestas. Ex.: s → a com 1 e s → b → a com 3 e -3 (total 0). Somando 3, o direto vira 4 e o outro 6, 0 e 6: o caminho mínimo mudou."
+        },
+        {
+          "letra": "C",
+          "texto": "Pode devolver uma distância errada, porque considera definitiva a distância de um vértice no momento em que ele sai da fila de prioridade.",
+          "porque": "É a hipótese que a prova do Dijkstra usa: quando um vértice sai da fila, nenhum caminho por vértices ainda abertos pode ser mais barato, pois os pesos só somam. Com aresta negativa isso falha, e a distância fechada pode estar errada."
+        },
+        {
+          "letra": "D",
+          "texto": "Só falha quando o grafo tem um ciclo de peso total negativo. Sem esse tipo de ciclo, ele sempre devolve as distâncias corretas.",
+          "porque": "Esse é o limite do Bellman-Ford, não do Dijkstra. Uma única aresta negativa, sem ciclo nenhum, já basta para o Dijkstra errar, como em s → a (2), s → b (5), b → a (-4)."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "O Dijkstra fecha a distância de um vértice quando ele sai da fila e nunca revisa. Com aresta negativa, um caminho mais longo em arestas pode ficar mais barato depois. Somar constante não conserta, e uma aresta negativa sem ciclo já basta para errar.",
+      "assuntos": [
+        {
+          "num": "0112",
+          "modulo": "16-grafos.md"
+        },
+        {
+          "num": "0154",
+          "modulo": "23-grafos-avancados.md"
+        }
+      ]
+    },
+    {
+      "numero": 12,
+      "topico": [
+        "3.1",
+        4
+      ],
+      "formato": "afirmações",
+      "enunciado": "Quando segmentos TCP chegam fora de ordem na placa de rede, o receptor precisa guardá-los até os segmentos que faltam chegarem, mantendo tudo ordenado pelo número de sequência. Até 2016, o kernel Linux guardava esses segmentos numa lista encadeada ordenada. Naquele ano, uma alteração proposta por engenheiros do Google trocou essa lista por uma árvore binária de busca balanceada. Considerando n o número de segmentos armazenados, analise as afirmações a seguir.\n\nI. No pior caso, encontrar o ponto de inserção de um novo segmento custa O(n) na lista encadeada ordenada e O(log n) na árvore binária de busca balanceada.\nII. Como a lista encadeada está ordenada, o ponto de inserção pode ser localizado por busca binária em tempo O(log n).\nIII. Percorrer todos os segmentos em ordem crescente de número de sequência custa O(n) tanto na lista quanto na árvore.\nIV. Na maior parte do tempo, os segmentos chegam com número de sequência maior que o de todos os já armazenados. Por isso, uma árvore binária de busca sem balanceamento também manteria altura O(log n), e o balanceamento só é necessário em casos raros.\n\nAssinale a alternativa correta.",
+      "dica": "**Cobra:** comparar lista encadeada ordenada e árvore balanceada em inserção e percurso, e lembrar o que a falta de balanceamento causa.\n\n- **Lista encadeada** [0076]: cada nó guarda o endereço do próximo, então chegar ao k-ésimo exige passar pelos k - 1 anteriores; não há acesso direto ao meio. Ex.: para achar o meio de uma lista de 1.000 nós, é preciso andar 500 vezes.\n- **Árvore balanceada** [0101]: mantém a altura em `O(log n)` com rotações, de modo que achar o lugar de uma chave custa `O(log n)`; o percurso em ordem visita cada nó uma vez. Ex.: inserir 1, 2, 3, ... numa BST comum forma uma linha; numa AVL, a altura fica perto de log₂ n.\n\n**Como atacar:** para cada afirmação, pense no pior caso e na sequência de chaves que chega crescente.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Para inserir no lugar certo de uma lista ordenada com n nós, quantos nós você pode precisar visitar? E descendo uma árvore de altura log n?"
+        },
+        {
+          "item": "II",
+          "texto": "A busca binária começa olhando o elemento do meio. Quanto custa chegar ao meio de uma lista encadeada?"
+        },
+        {
+          "item": "III",
+          "texto": "Um percurso em ordem visita cada nó quantas vezes? E andar do início ao fim da lista?"
+        },
+        {
+          "item": "IV",
+          "texto": "Insira 1, 2, 3, 4, 5 numa BST sem balanceamento. Que forma ela tem, e qual a altura?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas as afirmações I e II estão corretas.",
+          "porque": "II é falsa: busca binária precisa ir direto ao elemento do meio, e numa lista encadeada chegar ao meio já custa `O(n)`."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas as afirmações II e IV estão corretas.",
+          "porque": "As duas são falsas. A II supõe acesso direto ao meio, que a lista não tem. A IV inverte o efeito: chaves sempre crescentes numa BST sem balanceamento formam uma linha, de altura `O(n)`."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas as afirmações I e III estão corretas.",
+          "porque": "I vale: a lista é varrida até o ponto de inserção, `O(n)`, e a árvore balanceada desce `O(log n)` níveis. III vale: percorrer em ordem visita cada nó uma vez nas duas estruturas. II e IV são falsas."
+        },
+        {
+          "letra": "D",
+          "texto": "Apenas as afirmações I, III e IV estão corretas.",
+          "porque": "IV é falsa: segmentos chegando sempre com número maior viram filhos à direita, um atrás do outro, e a árvore degenera em lista. É exatamente por isso que o kernel usa árvore balanceada (rubro-negra)."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "I verdadeira (lista O(n), árvore balanceada O(log n)). II falsa: lista não permite busca binária. III verdadeira: percurso em ordem é O(n) nas duas. IV falsa: chaves crescentes degeneram a BST sem balanceamento.",
+      "assuntos": [
+        {
+          "num": "0076",
+          "modulo": "11-listas.md"
+        },
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 13,
+      "topico": 4,
+      "formato": "simulação",
+      "enunciado": "Aplique o algoritmo de Floyd (também conhecido como \"Build-Max-Heap\" ou \"Constrói\") no vetor abaixo para transformá-lo em uma heap binária máxima. Na realização das trocas, em caso de empate, favoreça o elemento de menor índice.\n\n3, 4, 1, 4, 6, 8, 8, 2, 8, 4, 1, 2\n\nSelecione a alternativa que representa a heap resultante.",
+      "dica": "**Cobra:** executar a construção do heap de máximo, de baixo para cima, com a regra de empate.\n\n- **Heap no vetor** [0102]: num vetor indexado a partir de 0, os filhos de i estão em 2i + 1 e 2i + 2, e no heap de máximo cada pai é maior ou igual aos filhos. Ex.: em 8, 6, 8, os filhos do 8 da posição 0 são o 6 e o 8.\n- **Construção de Floyd** [0102]: para i do último pai (n/2 - 1) até 0, desce o elemento de i trocando com o maior filho enquanto ele for menor que esse filho; o custo total é `O(n)`. Ex.: em 1, 8, 8, o 1 troca com o 8 da posição 1, pelo empate a favor do menor índice.\n\n**Como atacar:** com n = 12, comece no índice 5 e escreva o vetor depois de cada descida.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "No índice 2, o 1 tem dois filhos iguais a 8. Com qual deles a regra de empate manda trocar?"
+        },
+        {
+          "item": "B",
+          "texto": "Siga o 3 que começa na raiz. Em que posição ele termina?"
+        },
+        {
+          "item": "C",
+          "texto": "Olhe a posição 5 nesta resposta. Quem estava ali antes do índice 2 ser processado, e para onde ele foi?"
+        },
+        {
+          "item": "D",
+          "texto": "Escreva o vetor depois de cada i, de 5 até 0. O último vetor coincide com este?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "8, 6, 8, 4, 4, 8, 1, 2, 3, 4, 1, 2.",
+          "porque": "No índice 2, o 1 tem dois filhos 8 (posições 5 e 6); o empate manda trocar com o da posição 5, e não com o da 6. Esta resposta também deixa o 3 na posição 8, mas no índice 3 o 4 já tinha trocado com o 8 dali."
+        },
+        {
+          "letra": "B",
+          "texto": "8, 6, 8, 4, 4, 2, 8, 2, 3, 4, 1, 1.",
+          "porque": "Acerta o empate no índice 2, mas erra as posições 8 e 9: o 4 desce para a 8 quando o índice 3 troca com o 8, e o 3 da raiz termina na posição 9, ao trocar com o 4 de lá."
+        },
+        {
+          "letra": "C",
+          "texto": "8, 6, 8, 4, 4, 8, 1, 2, 4, 3, 1, 2.",
+          "porque": "Acerta o fim do vetor, mas troca o 1 do índice 2 com o 8 da posição 6. O empate pede o filho de menor índice, a posição 5; aí o 1 ainda desce até a 11 e o 2 sobe para a 5."
+        },
+        {
+          "letra": "D",
+          "texto": "8, 6, 8, 4, 4, 2, 8, 2, 4, 3, 1, 1.",
+          "porque": "i = 5 e i = 4 não trocam. i = 3: 4 troca com o 8 (posição 8). i = 2: 1 troca com o 8 da posição 5 (empate) e depois com o 2 da 11. i = 1: 4 troca com o 8 da 3 e para (o filho 4 não é maior). i = 0: 3 troca com o 8 da 1, com o 6 da 4 e com o 4 da 9. Conferido em Python."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "Floyd de i = 5 até 0, descendo cada pai. Pontos que decidem: no índice 2, o empate 8 e 8 vai para a posição 5, e o 1 desce até a 11; o 3 da raiz desce até a posição 9. Resultado: 8, 6, 8, 4, 4, 2, 8, 2, 4, 3, 1, 1.",
+      "assuntos": [
+        {
+          "num": "0102",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 14,
+      "topico": [
+        "3.2",
+        4
+      ],
+      "formato": "simulação",
+      "enunciado": "Vetórea inseriu 5 tuplas no formato (string, inteiro), referentes a suas cores preferidas, em uma fila de prioridades. A ordem de inserção foi a seguinte:\n\n1. Azul, 7;\n2. Branco, 7;\n3. Ciano, 9;\n4. Dourado, 10;\n5. Esmeralda, 9.\n\nDepois, ela removeu as cores, uma por uma, e anotou a ordem de saída. Em que ordem as cores saíram da fila? Considere que:\n\n- A fila de prioridades é uma heap binária, inicialmente vazia, na qual apenas o valor numérico da tupla é chave e valores maiores têm maior prioridade;\n- A manutenção da heap é feita com os algoritmos usuais, que promovem trocas sempre e somente quando necessário preservar a propriedade de heap e favorecem o elemento de menor índice em caso de empate.",
+      "dica": "**Cobra:** simular inserções e remoções num heap de máximo com chaves repetidas, trocando só quando necessário.\n\n- **Fila de prioridade em heap** [0102]: inserir põe o item no fim e sobe enquanto ele for maior que o pai; remover tira a raiz, põe o último no lugar e desce enquanto algum filho for maior. Ex.: no heap 10, 9, 7, inserir 9 no fim não troca com o pai 9, porque não é maior.\n- **Heap não é estável** [0103]: chaves iguais podem sair em ordem diferente da de chegada, porque o último elemento vai para a raiz e passa à frente de quem estava esperando. Ex.: aqui, Esmeralda (9) entra depois de Ciano (9) e sai antes.\n\n**Como atacar:** escreva o vetor do heap depois de cada inserção e de cada remoção.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Quando o Dourado sai, quem é o último elemento do vetor e vai para a raiz? Ele troca com o Ciano?"
+        },
+        {
+          "item": "B",
+          "texto": "Quando sobram só Azul e Branco, quem está na raiz? O Branco é maior que ele?"
+        },
+        {
+          "item": "C",
+          "texto": "Num heap de máximo, pode sair uma chave 7 antes de uma 9?"
+        },
+        {
+          "item": "D",
+          "texto": "Escreva o vetor depois de cada remoção. As saídas coincidem com esta ordem?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Dourado, Ciano, Esmeralda, Azul, Branco.",
+          "porque": "É a ordem de uma fila de prioridade estável, que desempata pela chegada. O heap não garante isso: depois de sair o Dourado, a Esmeralda (último elemento) vai para a raiz e o Ciano, também 9, não é maior que ela, então não troca."
+        },
+        {
+          "letra": "B",
+          "texto": "Dourado, Esmeralda, Ciano, Branco, Azul.",
+          "porque": "Acerta as três primeiras saídas. No fim sobra o heap Azul, Branco, os dois com 7; o Azul está na raiz e o Branco não é maior, então sai o Azul primeiro."
+        },
+        {
+          "letra": "C",
+          "texto": "Dourado, Ciano, Azul, Branco, Esmeralda.",
+          "porque": "Põe a Esmeralda (9) depois de chaves 7. Uma fila de prioridade de máximo nunca tira um 7 enquanto houver um 9."
+        },
+        {
+          "letra": "D",
+          "texto": "Dourado, Esmeralda, Ciano, Azul, Branco.",
+          "porque": "Depois das inserções o vetor é Dourado 10, Ciano 9, Azul 7, Branco 7, Esmeralda 9. Sai o Dourado e a Esmeralda vai para a raiz; o Ciano empata e não troca. Sai a Esmeralda, o Branco sobe e troca com o Ciano. Sai o Ciano, o Azul vai à raiz e o Branco não é maior. Saem Azul e Branco. Conferido em Python."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "Heap depois das inserções: D10, C9, A7, B7, E9. A Esmeralda sobe para a raiz quando o Dourado sai e, como o Ciano só empata, não troca. Ordem: Dourado, Esmeralda, Ciano, Azul, Branco. Heap não preserva a ordem de chegada entre chaves iguais.",
+      "assuntos": [
+        {
+          "num": "0102",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0103",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 15,
+      "topico": "3.2",
+      "formato": "afirmações",
+      "enunciado": "Um deque é uma estrutura de dados que permite inserção e remoção nas duas extremidades. Considere uma implementação de deque usando vetor circular com capacidade suficiente para todos os elementos armazenados. Analise as afirmações:\n\nI. A operação de inserção no início pode ser implementada em tempo Θ(1).\nII. A operação de remoção no fim pode ser implementada em tempo Θ(1).\nIII. Para acessar o elemento na posição lógica k, a partir do início do deque, é sempre necessário percorrer Θ(k) elementos.\nIV. Em uma implementação com vetor circular, pode ser necessário usar aritmética modular para mapear posições lógicas para posições físicas do vetor.\n\nQuais afirmações são verdadeiras?",
+      "dica": "**Cobra:** custo das operações do deque em vetor circular e o papel do resto da divisão.\n\n- **Deque** [0087]: sequência que aceita inserir e remover nas duas pontas; em vetor circular, guarda o índice do início e a quantidade, e as duas pontas andam com `% CAP`. Ex.: com CAP = 8 e início 0, inserir no início leva o início para (0 - 1 + 8) % 8 = 7.\n- **Fila circular** [0085]: a posição lógica k fica na posição física `(inicio + k) % CAP`, então o acesso a qualquer posição é uma conta, sem percorrer nada. Ex.: com início 6 e CAP = 8, a posição lógica 3 está na física (6 + 3) % 8 = 1.\n\n**Como atacar:** escreva a conta de cada operação e veja se ela depende de k ou de n.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Para inserir no início, que índice muda e qual é a conta? Ela depende de quantos elementos há?"
+        },
+        {
+          "item": "II",
+          "texto": "Para remover no fim, o que basta alterar? Algum elemento precisa sair do lugar?"
+        },
+        {
+          "item": "III",
+          "texto": "Com início 6 e CAP = 8, onde está a posição lógica 3? Foi preciso olhar as posições 0, 1 e 2 para saber?"
+        },
+        {
+          "item": "IV",
+          "texto": "Se o início está na última posição do vetor e você avança uma casa, para onde ele vai, e com que operação?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas I, II e IV",
+          "porque": "I e II valem: inserir no início e remover no fim só mexem num índice e na quantidade, `Θ(1)`. IV vale: o início e o fim dão a volta com `% CAP`. III é falsa: a posição lógica k está em `(inicio + k) % CAP`, acesso direto em `Θ(1)`."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas I, III e IV",
+          "porque": "III é falsa: em vetor, a posição lógica k sai de uma conta, sem percorrer os anteriores. E II, que fica de fora, é verdadeira: remover no fim só diminui a quantidade."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas II, III e IV",
+          "porque": "III é falsa: percorrer k elementos é coisa de lista encadeada, não de vetor. E I, deixada de fora, é verdadeira."
+        },
+        {
+          "letra": "D",
+          "texto": "Todas as afirmações são verdadeiras",
+          "porque": "III é falsa: o vetor circular dá acesso direto à posição lógica k com `(inicio + k) % CAP`."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Deque em vetor circular: inserir ou remover em qualquer ponta é Θ(1) e a posição lógica k está em (início + k) % CAP, acesso Θ(1). Então I, II e IV valem e III é falsa.",
+      "assuntos": [
+        {
+          "num": "0087",
+          "modulo": "12-pilhas-e-filas.md"
+        },
+        {
+          "num": "0085",
+          "modulo": "12-pilhas-e-filas.md"
+        }
+      ]
+    },
+    {
+      "numero": 16,
+      "topico": "3.2",
+      "formato": "código",
+      "enunciado": "Considere o pseudocódigo a seguir no qual a função realiza remoção de um elemento de uma fila não vazia implementada com listas simplesmente encadeadas:\n\n```c\nstruct nodo {\n    float info;\n    struct nodo *prox;\n};\n\nstruct fila {\n    struct nodo *ini; // início da fila\n    struct nodo *fim; // fim da fila\n};\n\nfloat fila_retira(struct fila* f) {\n    struct nodo* t = f->ini;\n    float v = t->info;\n    f->ini = t->prox;\n\n    if (f->ini == NULL)\n        f->fim = f->ini;\n\n    free(t);\n    return v;\n}\n```\n\nPor que é necessário atribuir `f->fim = f->ini` na função de remoção quando se verifica que `f->ini == NULL`?",
+      "dica": "**Cobra:** entender por que a fila encadeada precisa mexer no ponteiro do fim quando o último nó sai.\n\n- **Fila encadeada** [0086]: guarda um ponteiro para o primeiro nó (de onde se retira) e outro para o último (onde se insere); com a fila vazia, os dois valem `NULL`. Ex.: com um só nó, `ini` e `fim` apontam para ele.\n- **Lista encadeada** [0076]: cada nó tem o dado e o endereço do próximo, e o último aponta para `NULL`; depois de `free`, o nó não pode mais ser acessado. Ex.: `t->prox` de um nó liberado é lixo de memória.\n\n**Como atacar:** rode a função numa fila de um só nó e veja para onde `fim` aponta sem aquela linha.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Numa fila com três nós, para onde `fim` aponta, e o que a função de inserção faz com ele?"
+        },
+        {
+          "item": "B",
+          "texto": "Na `struct fila` deste código, o último nó aponta para onde? Há alguma volta para o início?"
+        },
+        {
+          "item": "C",
+          "texto": "Depois de `free(t)`, o que se pode fazer com a memória de `t`?"
+        },
+        {
+          "item": "D",
+          "texto": "Com um só nó na fila, para onde `fim` apontaria depois do `free` se a linha não existisse?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Porque toda fila f precisa ter f->fim == NULL, mesmo quando ela não está vazia.",
+          "porque": "Numa fila com elementos, `fim` aponta para o último nó, onde a próxima inserção será feita. Só fica `NULL` com a fila vazia."
+        },
+        {
+          "letra": "B",
+          "texto": "Porque, em uma lista circular, o último nó sempre deve apontar de volta para o início da fila.",
+          "porque": "A fila do código é simplesmente encadeada, não circular: o último nó tem `prox` igual a `NULL`, e a linha nem mexe em `prox`."
+        },
+        {
+          "letra": "C",
+          "texto": "Porque o nó removido ainda precisa ser acessado depois da execução da linha free(t).",
+          "porque": "É o contrário: depois de `free(t)` o nó não pode ser acessado. A linha existe para que `fim` não continue apontando para ele."
+        },
+        {
+          "letra": "D",
+          "texto": "Porque isso indica que, após a remoção, a fila ficou vazia.",
+          "porque": "`f->ini == NULL` quer dizer que o nó removido era o único. Sem a linha, `fim` ficaria apontando para o nó liberado, e a próxima inserção faria `f->fim->prox = novo` em memória já devolvida. Igualar `fim` a `NULL` deixa a fila no estado de vazia, com os dois ponteiros nulos."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "Se `ini` ficou `NULL`, a fila esvaziou; `fim` ainda apontaria para o nó que vai ser liberado. A linha põe `fim` em `NULL` para a fila vazia ficar coerente e a próxima inserção não usar memória liberada.",
+      "assuntos": [
+        {
+          "num": "0086",
+          "modulo": "12-pilhas-e-filas.md"
+        },
+        {
+          "num": "0076",
+          "modulo": "11-listas.md"
+        }
+      ]
+    },
+    {
+      "numero": 17,
+      "topico": "3.3",
+      "formato": "código",
+      "enunciado": "Considere o pseudocódigo a seguir, no qual a função retira um elemento de uma pilha na qual os elementos são armazenados em vetor—a função tem como pré-requisito a pilha não estar vazia.\n\nConsidere que `p->vet` é um ponteiro para o primeiro elemento de um vetor dinamicamente alocado que armazena os elementos da pilha e que `p->n` é uma variável do tipo int que é manipulada pelas funções de inserção e remoção.\n\n```c\nfloat pilha_pop(struct pilha *p) {\n    p->n = p->n - 1;\n    float v = p->vet[p->n];\n    return v;\n}\n```\n\nPor que o valor de `p->n` é decrementado antes do acesso ao elemento `p->vet[p->n]`?",
+      "dica": "**Cobra:** o que o campo `n` da pilha em vetor representa e por que isso decide a ordem entre decrementar e ler.\n\n- **Pilha em vetor** [0082]: o campo `n` conta os elementos, e o topo fica em `vet[n - 1]`; empilhar escreve em `vet[n]` e depois soma 1, desempilhar subtrai 1 e depois lê. Ex.: com 3, 5, 9 empilhados, `n = 3`, o topo 9 está em `vet[2]` e o próximo vai para `vet[3]`.\n- **Vetor em C** [0045]: os índices vão de 0 a n - 1, e ler `vet[n]` acessa uma posição que não guarda elemento da pilha. Ex.: num vetor com 3 elementos válidos, `vet[3]` é a primeira posição livre.\n\n**Como atacar:** simule um push e um pop numa pilha vazia e anote `n`.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Se `n` fosse o índice do topo, o vetor deixaria de começar em zero? A ordem das duas linhas seria a mesma?"
+        },
+        {
+          "item": "B",
+          "texto": "Numa pilha vazia, `n = 0`. Onde o primeiro push escreve, e quanto vale `n` depois?"
+        },
+        {
+          "item": "C",
+          "texto": "Com `n` como índice do topo, o que o pop leria depois de decrementar?"
+        },
+        {
+          "item": "D",
+          "texto": "Há alguma chamada de `free` ou `realloc` nesta função?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Porque o vetor começa no índice zero.",
+          "porque": "É parte da história, mas não explica sozinha: se `n` guardasse o índice do topo, o vetor também começaria em 0 e seria preciso ler antes de decrementar. O que decide é o que `n` significa."
+        },
+        {
+          "letra": "B",
+          "texto": "Porque p->n representa o índice no qual o próximo elemento será empilhado.",
+          "porque": "O push escreve em `vet[n]` e depois incrementa, então `n` é ao mesmo tempo a quantidade e a primeira posição livre. O topo está uma posição antes, em `n - 1`: por isso o pop decrementa e depois lê."
+        },
+        {
+          "letra": "C",
+          "texto": "Porque p->n representa o índice do elemento que está no topo.",
+          "porque": "Se fosse o índice do topo, o certo seria ler `vet[n]` primeiro e só depois decrementar. Decrementando antes, o pop leria o elemento de baixo."
+        },
+        {
+          "letra": "D",
+          "texto": "Porque a pilha precisa liberar memória antes de remover o valor.",
+          "porque": "A função não libera memória: o vetor continua alocado, e só a contagem diminui."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "`n` é a quantidade de elementos e também a posição onde entra o próximo; o topo fica em `n - 1`. Por isso o pop decrementa antes de ler.",
+      "assuntos": [
+        {
+          "num": "0082",
+          "modulo": "12-pilhas-e-filas.md"
+        },
+        {
+          "num": "0045",
+          "modulo": "06-ponteiros.md"
+        }
+      ]
+    },
+    {
+      "numero": 18,
+      "topico": 1,
+      "formato": "código",
+      "enunciado": "Selecione a alternativa que preenche corretamente os espaços vazios do código abaixo para que o programa imprima os bits de um caractere. Considere uma arquitetura na qual 1 byte possui 8 bits.\n\n```c\n#include <stdio.h>\nint main(void) {\n    unsigned char x = 'c';\n    unsigned char mask = 128; // em binário: 10000000\n    printf(\"0b\");\n    for (int i = 0; i <    I    ; i++) {\n        if (   II   ) printf(\"1\");\n        else printf(\"0\");\n        mask =    III    >> 1;\n    }\n}\n```",
+      "dica": "**Cobra:** varrer os bits de um byte com uma máscara que anda para a direita.\n\n- **Máscara de bits** [0065]: `x & mask` é diferente de zero só se o bit ligado em `mask` também estiver ligado em `x`; deslocar a máscara com `>> 1` passa a testar o bit seguinte. Ex.: 'c' é 99, ou 01100011; com `mask = 128` (10000000), `x & mask` dá 0, e o primeiro bit impresso é 0.\n- **sizeof e bits** [0065]: `sizeof` devolve o tamanho em bytes, então o número de bits de `x` é `sizeof(x) * 8`. Ex.: para `unsigned char`, `sizeof` dá 1 e são 8 bits.\n\n**Como atacar:** conte quantas voltas o laço dá e o que acontece com `mask` a cada uma.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Depois da primeira volta, quanto vale `mask` se ela recebe `x >> 1`? Quantos bits estão ligados nela?"
+        },
+        {
+          "item": "B",
+          "texto": "Quanto vale `sizeof(x)` para um `unsigned char`? Quantas voltas o laço dá?"
+        },
+        {
+          "item": "C",
+          "texto": "Simule as três primeiras voltas com x = 01100011. Os bits impressos batem com os de x?"
+        },
+        {
+          "item": "D",
+          "texto": "Se `mask` tem um bit ligado, `x | mask` pode dar zero?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "I: `sizeof(x)*8` · II: `x & mask` · III: `x`",
+          "porque": "Com `mask = x >> 1`, a máscara vira o próprio caractere deslocado, e não o próximo bit. Os testes seguintes não olham um bit só."
+        },
+        {
+          "letra": "B",
+          "texto": "I: `sizeof(x)` · II: `x & mask` · III: `mask`",
+          "porque": "`sizeof(x)` é 1, em bytes: o laço dá uma volta só e imprime só o primeiro bit."
+        },
+        {
+          "letra": "C",
+          "texto": "I: `sizeof(x)*8` · II: `x & mask` · III: `mask`",
+          "porque": "Oito voltas; em cada uma, `x & mask` testa um bit e `mask >> 1` passa para o seguinte. Para 'c' imprime `0b01100011`. Conferido compilando com gcc."
+        },
+        {
+          "letra": "D",
+          "texto": "I: `sizeof(x)*8` · II: `x | mask` · III: `mask`",
+          "porque": "`x | mask` liga o bit da máscara, então nunca dá zero: imprime oito 1."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "8 voltas (`sizeof(x)*8`), teste com `x & mask` e máscara andando com `mask >> 1`. Saída para 'c': 0b01100011.",
+      "assuntos": [
+        {
+          "num": "0065",
+          "modulo": "08-structs.md"
+        }
+      ]
+    },
+    {
+      "numero": 19,
+      "topico": 1,
+      "formato": "código",
+      "enunciado": "Considere a seguinte sequência de instruções em um programa em C. O espaço reservado com o marcador ??? deve ser completado conforme as alternativas da questão.\n\n```c\nint *pti;\nint i = 10;\npti = &i;\n???   ;\n```\n\nConsiderando-se os valores de pti e i após a execução das quatro instruções, qual afirmativa é falsa?",
+      "dica": "**Cobra:** distinguir o valor de um ponteiro (um endereço) do valor que ele aponta.\n\n- **Ponteiro** [0045]: uma variável que guarda o endereço de outra; `pti` é o endereço, e `*pti` é o valor guardado nesse endereço, que pode ser lido ou alterado. Ex.: depois de `pti = &i`, `*pti = 20` muda o próprio `i`.\n- **Memória e endereços** [0045]: cada variável ocupa uma posição de memória com um endereço, e `&i` devolve esse endereço, um número que nada tem a ver com o valor de `i`. Ex.: `i` pode valer 10 e estar no endereço 0x7ffc1234.\n\n**Como atacar:** a pergunta pede a falsa; para cada alternativa, diga se ela fala do endereço ou do valor apontado.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Depois de `pti = &i`, o que `*pti` lê?"
+        },
+        {
+          "item": "B",
+          "texto": "Escrever em `*pti` altera qual variável?"
+        },
+        {
+          "item": "C",
+          "texto": "`*pti` e `i` ocupam lugares diferentes da memória?"
+        },
+        {
+          "item": "D",
+          "texto": "O que `pti` guarda: o conteúdo de `i` ou outra coisa?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Se o espaço reservado for trocado por um comando vazio, *pti valerá 10.",
+          "porque": "É verdade: `pti` aponta para `i`, e `*pti` lê o valor de `i`, que é 10. Como a questão pede a falsa, esta não serve."
+        },
+        {
+          "letra": "B",
+          "texto": "Se o espaço reservado for trocado por *pti = 20, então o valor de i será 20.",
+          "porque": "É verdade: escrever em `*pti` escreve na variável apontada, que é o `i`."
+        },
+        {
+          "letra": "C",
+          "texto": "Se o espaço reservado for trocado por i++, então o valor de *pti será igualmente modificado.",
+          "porque": "É verdade: `*pti` e `i` são o mesmo espaço de memória, então `*pti` passa a valer 11."
+        },
+        {
+          "letra": "D",
+          "texto": "Se o espaço reservado for trocado por um comando vazio, pti valerá 10.",
+          "porque": "É a falsa: `pti` guarda o endereço de `i`, e não o valor 10. Quem vale 10 é `*pti`."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "`pti` é o endereço de `i`; `*pti` é o valor de `i`. A, B e C falam do valor apontado e são verdadeiras. D confunde endereço com valor e é a falsa.",
+      "assuntos": [
+        {
+          "num": "0045",
+          "modulo": "06-ponteiros.md"
+        }
+      ]
+    },
+    {
+      "numero": 20,
+      "topico": 1,
+      "formato": "código",
+      "enunciado": "A função conta recebe um inteiro não negativo. Qual é o valor retornado por conta(2040)?\n\n```c\nint conta(int n) {\n    if (n == 0)\n        return 0;\n    if (n % 10 == 0)\n        return 1 + conta(n / 10);\n    return conta(n / 10);\n}\n```",
+      "dica": "**Cobra:** acompanhar uma recursão que examina um dígito por chamada.\n\n- **Recursão** [0032]: a função resolve o caso base direto e, nos outros casos, chama a si mesma com um problema menor, somando o que cada chamada devolve. Ex.: `conta(20)` vê o 0 do fim, soma 1 e chama `conta(2)`.\n- **Resto e divisão por 10** [0007]: `n % 10` é o último dígito de n, e `n / 10` (entre inteiros) tira esse dígito. Ex.: 204 % 10 é 4 e 204 / 10 é 20.\n\n**Como atacar:** escreva a cadeia de chamadas, de 2040 até 0, marcando quando o último dígito é zero.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Depois de 2040 e 204, a chamada chega a `conta(20)`. Qual é o último dígito de 20?"
+        },
+        {
+          "item": "B",
+          "texto": "Escreva a cadeia 2040, 204, 20, 2, 0. Em quais delas o último dígito é zero?"
+        },
+        {
+          "item": "C",
+          "texto": "Quando n chega a 0, a função soma 1 ou devolve direto?"
+        },
+        {
+          "item": "D",
+          "texto": "Quando o último dígito é 2 ou 4, a função soma alguma coisa?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "1",
+          "porque": "Conta só o zero do fim de 2040. O zero do meio também é visto, quando a chamada chega a `conta(20)`."
+        },
+        {
+          "letra": "B",
+          "texto": "2",
+          "porque": "A função conta os dígitos zero. 2040 termina em 0: soma 1 e vai para 204. 204 termina em 4: vai para 20. 20 termina em 0: soma 1 e vai para 2. 2 vai para 0, que devolve 0. Total 2. Conferido compilando com gcc."
+        },
+        {
+          "letra": "C",
+          "texto": "3",
+          "porque": "Contaria três zeros, ou um a mais. 2040 tem dois dígitos zero, e `conta(0)` é o caso base, que devolve 0 sem somar."
+        },
+        {
+          "letra": "D",
+          "texto": "4",
+          "porque": "É a quantidade de dígitos de 2040, não de zeros. Os dígitos 2 e 4 passam pela última linha, que não soma nada."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "`conta` soma 1 a cada dígito zero: 2040 → 204 → 20 → 2 → 0, com zero no fim em 2040 e em 20. Resposta 2.",
+      "assuntos": [
+        {
+          "num": "0032",
+          "modulo": "04-funcoes.md"
+        },
+        {
+          "num": "0007",
+          "modulo": "01-fundamentos.md"
+        }
+      ]
+    }
+  ]
+}

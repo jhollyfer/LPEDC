@@ -4,7 +4,7 @@
 
 > Atualiza no mesmo commit em que a tarefa começa ou termina.
 
-**Resumo:** 33 tarefas feitas · 1 substituída · 0 em andamento · 0 a fazer · atualizado 2026-11-26
+**Resumo:** 34 tarefas feitas · 1 substituída · 0 em andamento · 0 a fazer · atualizado 2026-11-28
 
 Status: `A fazer` · `Em andamento` · `Feita` · `Bloqueada` (com motivo nas notas).
 Prioridade: `Alta` · `Média` · `Baixa`.
@@ -84,6 +84,12 @@ Provas recebidas: 11 cadernos de 2016 a 2023 em `_fontes/provas-ppgi.md`; só a 
 | 8.4 | Painel em abas (Aula, Resumo, Para pensar) com visual limpo | Alta | Feita | referência: `adacaibs` |
 | 8.5 | Passada de texto nas 67 aulas e varredura das 210 questões (coerência, aula que abre, dica que entregava a resposta) | Alta | Feita | 124 questões ajustadas; nenhum gabarito ou enunciado mudou |
 | 8.6 | Questões repetidas entre provas com conteúdo igual e link | Média | Feita | `_gerador/parecidas.json`, 13 grupos |
+
+## Fase 9 · Prova de 2026 (1/1)
+
+| # | Tarefa | Prioridade | Status | Notas |
+|---|---|---|---|---|
+| 9.1 | Prova do edital 070/2026 (seleção 2027/1) no acervo, no `PROVAS.md` e no quiz, com aula, contraponto e figura | Alta | Feita | gabarito preliminar de 27/11/2026 bate com a resolução do curso nas 20; aulas novas 0065, 0087 e 0154 |
 
 ---
 
