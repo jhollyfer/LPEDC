@@ -197,9 +197,9 @@ que 59.
 | 6 · Busca | 19 | 8% |
 | 1, 2 e 8 · Fundamentos, eficiência e grafos | 24 | 10% |
 
-Os assuntos que mais aparecem: AVL (0101, em 37 questões), busca e inserção em ABB (0099, 23),
+Os assuntos que mais aparecem: AVL (0101, em 35 questões), busca e inserção em ABB (0099, 24),
 busca binária (0090, 20), lista encadeada (0076, 19), hash por encadeamento (0106, 17), pilha
-(0082, 16), insertion sort (0093, 13) e quick sort (0095, 13).
+(0082, 16), quick sort (0095, 14) e insertion sort (0093, 14).
 
 O formato mudou em 2022. Até 2019 eram 5 alternativas; de 2022 em diante são 4, com trechos em
 Python e mais questões de custo (pior caso de inserir, remover e buscar em vetor ordenado, lista,
@@ -208,8 +208,8 @@ Grafo, que quase não caía, voltou: não pule o módulo 16.
 
 | Formato | Questões | Como treinar |
 | --- | --- | --- |
-| conceito (definição direta) | 58 | os `[!WARNING]` de cada assunto |
-| afirmações I, II, III combinadas | 60 | julgue cada afirmação sozinha antes de olhar as letras |
+| afirmações I, II, III combinadas | 61 | julgue cada afirmação sozinha antes de olhar as letras |
+| conceito (definição direta) | 57 | os `[!WARNING]` de cada assunto |
 | simulação (pilha, fila, hash, ABB, AVL, heap, ordenação passo a passo) | 55 | refaça no papel o fluxograma e o `### Passo a passo` |
 | código (ler, achar o erro, prever a saída; em C ou Python) | 33 | a lista prática de 11, 12 e 14 |
 | cálculo (altura, comparações da busca binária, complexidade) | 24 | conte à mão e confira rodando o exemplo |

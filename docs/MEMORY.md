@@ -86,6 +86,7 @@ Ao mudar a lista de arquivos Markdown ou seus títulos, atualize o índice com
 | 2026-11-12 | Dica do quiz encurtada até virar tautologia, e bloco de código colado no texto quebrou o exemplo no celular; testei uma questão só | Cada conceito tem definição de 10+ palavras e `Ex.:`, conferido pelo `quiz.mjs --check`; toda mudança no quiz roda `quiz-navegador.mjs` nas 210 questões | quiz das provas |
 | 2026-11-13 | Conceito virou glossário em tópicos e o módulo foi partido em três blocos; o dono não conseguia estudar | Conceito é texto de livro (problema, intuição, definição com fonte, peça por peça) e o assunto fica inteiro; mudança de formato em lote começa por um piloto mostrado ao dono | todo texto de estudo |
 | 2026-11-26 | Painel do quiz só com definições curtas e o porquê embaixo de cada alternativa | No quiz o dono quer aprender na própria questão: aula com conceito da literatura, passo a passo desenhado, contraponto que não entrega a resposta e o porquê num bloco só à direita; tela limpa, sem caixa dentro de caixa | quiz das provas |
+| 2026-11-28 | Contagem do "O que caiu" (`PPGI.md`) atualizada somando a prova nova aos números antigos, que já estavam errados | Toda contagem por tópico, formato e assunto sai de recontagem em `_gerador/provas/*.json`, nunca de soma sobre o número anterior | `PPGI.md` e qualquer estatística das provas |
 | 2026-11-09 | Commits com agente como autor e coautor | Autor único Jhollyfer, sem linha de coautoria | todo commit |
 
 ## Problemas conhecidos
