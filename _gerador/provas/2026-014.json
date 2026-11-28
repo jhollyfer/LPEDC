@@ -1,0 +1,1154 @@
+{
+  "edital": "014/2026",
+  "slug": "2026-014",
+  "ano": 2026,
+  "oficial": true,
+  "questoes": [
+    {
+      "numero": 1,
+      "topico": 2,
+      "formato": "cálculo",
+      "enunciado": "Considere o pseudocódigo a seguir, no qual `conta(A, n)` recebe um vetor `A` de tamanho `n`. Suponha que as operações aritméticas, comparações e acessos a vetores têm custo constante.\n\n```c\nint conta(int A[], int n) {\n    int s = 0;\n    int i, j;\n\n    for (i = 1; i <= n; i = i * 2) {\n        for (j = 0; j < i && j < n; j++) {\n            s = s + A[j];\n        }\n    }\n\n    return s;\n}\n```\n\nQuais as complexidades de tempo e espaço auxiliar do algoritmo em função de *n*?",
+      "dica": "**Cobra:** somar o custo de dois laços aninhados em que o externo dobra a cada volta.\n\n- **Contar passos** [0071]: o custo de laços aninhados é a soma, volta a volta do externo, de quantas vezes o interno roda; quando o externo dobra, a soma vira uma progressão geométrica. Ex.: 1 + 2 + 4 + 8 = 15, menos que 2 · 8.\n- **Notação Θ** [0072]: descreve como o custo cresce com n, desprezando constantes; espaço auxiliar conta só a memória extra, sem a entrada. Ex.: duas variáveis inteiras são espaço Θ(1), qualquer que seja n.\n\n**Como atacar:** escreva quantas vezes o interno roda para i = 1, 2, 4, ... e some.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Em cada volta do externo, o interno roda n vezes ou i vezes?"
+        },
+        {
+          "item": "B",
+          "texto": "Some 1 + 2 + 4 + 8 + 16 para n = 16. O total fica perto de n, de n log n ou de n²?"
+        },
+        {
+          "item": "C",
+          "texto": "O externo faz `i = i * 2`. Quantas voltas ele dá até passar de n?"
+        },
+        {
+          "item": "D",
+          "texto": "A função cria algum vetor ou estrutura que cresce com n?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Tempo Θ(n log n) e espaço auxiliar Θ(1).",
+          "porque": "Seria o caso se o laço interno rodasse n vezes em cada uma das log n voltas do externo. Mas ele roda só i vezes, e 1 + 2 + 4 + ... + n não passa de 2n."
+        },
+        {
+          "letra": "B",
+          "texto": "Tempo Θ(n) e espaço auxiliar Θ(1).",
+          "porque": "O externo dá ⌊log₂ n⌋ + 1 voltas (i = 1, 2, 4, ...), e o interno roda min(i, n) vezes em cada uma. A soma 1 + 2 + 4 + ... fica entre n e 2n: Θ(n). Só há variáveis simples, então o espaço extra é Θ(1). Rodado: com n = 1.000 são 1.023 passos."
+        },
+        {
+          "letra": "C",
+          "texto": "Tempo Θ(n^2) e espaço auxiliar Θ(1).",
+          "porque": "Daria n² se o externo andasse de 1 em 1. Ele dobra, então só há log n voltas."
+        },
+        {
+          "letra": "D",
+          "texto": "Tempo Θ(log n) e espaço auxiliar Θ(n).",
+          "porque": "Log n é só o número de voltas do externo, sem o trabalho do interno. E a função não aloca nada proporcional a n; o vetor é entrada, não espaço auxiliar."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "O externo dobra i; o interno roda i vezes. 1 + 2 + 4 + ... ≤ 2n, então o tempo é Θ(n). Só variáveis simples: espaço auxiliar Θ(1).",
+      "assuntos": [
+        {
+          "num": "0071",
+          "modulo": "10-analise.md"
+        },
+        {
+          "num": "0072",
+          "modulo": "10-analise.md"
+        }
+      ]
+    },
+    {
+      "numero": 2,
+      "topico": 4,
+      "formato": "afirmações",
+      "enunciado": "Com relação à estrutura de *heap* implementada como uma árvore binária, quais afirmações são verdadeiras?\n\nI. O maior valor em um *heap* máximo está no elemento raiz da árvore;\nII. O menor valor no *heap* máximo está no elemento raiz da árvore;\nIII. O *heap* pode ser utilizado como base para o método de ordenação *Heap Sort*;\nIV. O *heap* pode ser utilizado como uma fila de prioridades.",
+      "dica": "**Cobra:** onde fica o maior e o menor no heap de máximo e para que o heap serve.\n\n- **Heap e fila de prioridade** [0102]: no heap de máximo, cada pai é maior ou igual aos filhos, então o maior de todos fica na raiz; o menor está em alguma folha. Ex.: no heap 9, 5, 7, 1, a raiz é 9 e o 1 é folha.\n- **Heapsort** [0103]: ordena montando um heap e retirando a raiz repetidas vezes, sempre em `O(n log n)`. Ex.: do heap 9, 5, 7 saem 9, 7, 5, que no vetor ficam 5, 7, 9.\n\n**Como atacar:** desenhe um heap de máximo pequeno e olhe onde está cada extremo.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "No heap de máximo, cada pai é maior ou igual aos filhos. Quem pode estar acima de todo mundo?"
+        },
+        {
+          "item": "II",
+          "texto": "No heap 9, 5, 7, 1, onde está o 1?"
+        },
+        {
+          "item": "III",
+          "texto": "O Heapsort retira repetidamente o quê, e de qual estrutura?"
+        },
+        {
+          "item": "IV",
+          "texto": "Uma fila de prioridade precisa entregar sempre o maior. Qual estrutura faz isso em O(log n)?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas I, II e III.",
+          "porque": "Inclui a II, que é falsa: no heap de máximo a raiz guarda o maior, não o menor. E deixa de fora a IV, que é verdadeira."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas I, III e IV.",
+          "porque": "I vale: a raiz do heap de máximo é o maior. III vale: o Heapsort é construído sobre o heap. IV vale: a fila de prioridade clássica é um heap. II é falsa: o menor fica numa folha."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas II, III e IV.",
+          "porque": "Troca a I pela II. No heap de máximo, quem está na raiz é o maior."
+        },
+        {
+          "letra": "D",
+          "texto": "Todas as afirmações são verdadeiras.",
+          "porque": "I e II não podem valer juntas, a não ser com um elemento só: a raiz não é ao mesmo tempo o maior e o menor."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Heap de máximo: maior na raiz (I), menor numa folha (II falsa). Serve de base ao Heapsort (III) e à fila de prioridade (IV).",
+      "assuntos": [
+        {
+          "num": "0102",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0103",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 3,
+      "topico": 2,
+      "formato": "cálculo",
+      "enunciado": "O pseudocódigo seguinte é uma função recursiva para calcular a potência `b^e`, com o pré-requisito de que o parâmetro `e` seja um inteiro maior ou igual a 1.\n\n```python\ndef pot(b, e):\n    if e <= 1:\n        return b\n\n    if e % 2 == 1:\n        fator = b\n        e -= 1\n    else:\n        fator = 1\n\n    return fator * pot(b, e//2) * pot(b, e//2)\n```\n\nQual é a complexidade temporal do algoritmo, respectivamente, no melhor e no pior caso? Considere que a operação de multiplicação tem complexidade constante.",
+      "dica": "**Cobra:** custo de uma recursão que se chama duas vezes com metade do expoente.\n\n- **Recorrência** [0114]: o custo de uma função recursiva se escreve em termos do custo das chamadas menores; T(e) = 2T(e/2) + c dá uma árvore com cerca de 2e nós, então Θ(e). Ex.: com e = 16, a árvore de chamadas tem 31 nós.\n- **Recursão** [0032]: cada chamada só termina depois que as que ela fez terminam; chamar duas vezes a mesma coisa dobra o trabalho mesmo que o resultado seja igual. Ex.: `pot(b, 8)` chama `pot(b, 4)` duas vezes, e cada uma chama `pot(b, 2)` duas vezes.\n\n**Como atacar:** conte as chamadas para e = 8 e para e = 15 e compare.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "O resultado de `pot(b, e//2)` é guardado ou a função é chamada de novo?"
+        },
+        {
+          "item": "B",
+          "texto": "Existe algum e para o qual a função faz só log e chamadas?"
+        },
+        {
+          "item": "C",
+          "texto": "Conte as chamadas para e = 8 e e = 16. Quanto cresce quando e dobra?"
+        },
+        {
+          "item": "D",
+          "texto": "Quanto trabalho cada chamada faz, fora as chamadas recursivas?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Θ(1) e Θ(log(e)).",
+          "porque": "Log e seria o custo se o resultado de `pot(b, e//2)` fosse guardado numa variável e usado duas vezes. Aqui a função é chamada duas vezes, e a árvore de chamadas dobra a cada nível."
+        },
+        {
+          "letra": "B",
+          "texto": "Θ(log(e)) e Θ(e).",
+          "porque": "Não há melhor caso em log e: para qualquer e, a árvore de chamadas tem cerca de e folhas, porque as duas chamadas são feitas sempre."
+        },
+        {
+          "letra": "C",
+          "texto": "Θ(e) e Θ(e).",
+          "porque": "T(e) = 2T(e/2) + Θ(1), que dá Θ(e) pelo teorema mestre. O número de chamadas não depende da paridade de e, só do seu tamanho, então melhor e pior caso coincidem. Rodado: e = 16 faz 31 chamadas, e = 1.024 faz 2.047."
+        },
+        {
+          "letra": "D",
+          "texto": "Θ(e) e Θ(e·log(e)).",
+          "porque": "O fator log e apareceria se cada nível custasse Θ(e) de trabalho próprio. Cada chamada faz só uma ou duas multiplicações, Θ(1)."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Duas chamadas com e/2: T(e) = 2T(e/2) + Θ(1) = Θ(e), em qualquer caso. Guardar `pot(b, e//2)` numa variável baixaria para Θ(log e).",
+      "assuntos": [
+        {
+          "num": "0114",
+          "modulo": "17-analise-avancada.md"
+        },
+        {
+          "num": "0032",
+          "modulo": "04-funcoes.md"
+        }
+      ]
+    },
+    {
+      "numero": 4,
+      "topico": 7,
+      "formato": "afirmações",
+      "enunciado": "Sejam x[i] e x[j] dois elementos de iguais chaves armazenados em um vetor. Um algoritmo de ordenação é dito estável se ao final da ordenação x[i] e x[j] mantêm suas posições relativas inalteradas. Considere as seguintes afirmações:\n\nI. A implementação clássica do algoritmo Quick Sort não é estável;\nII. A implementação clássica do algoritmo Merge Sort é sempre estável, independentemente do critério de desempate adotado na fase de intercalação;\nIII. A implementação clássica do algoritmo *Heap* Sort não é estável.\n\nConsidere que, por implementação clássica, a questão refere-se à versão usual dos algoritmos, na qual o algoritmo apenas realiza comparações de chaves, sem fazer uso de mecanismos auxiliares para garantir a estabilidade.\n\nQuais afirmações são verdadeiras?",
+      "dica": "**Cobra:** quais algoritmos clássicos são estáveis e do que a estabilidade do Merge Sort depende.\n\n- **Estabilidade** [0096]: um algoritmo é estável quando chaves iguais saem na mesma ordem em que entraram; trocas de longa distância costumam quebrar isso. Ex.: com (5, a) e (5, b), um estável devolve a antes de b.\n- **Merge Sort** [0094]: divide ao meio, ordena cada metade e intercala; na intercalação, em caso de empate, tirar primeiro da metade esquerda (`<=`) preserva a ordem, e tirar da direita (`<`) quebra. Ex.: intercalando [5a] e [5b] com `<=`, sai 5a, 5b.\n\n**Como atacar:** para cada afirmação, procure um vetor pequeno com chaves repetidas que a derrube.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Na partição do Quicksort, um elemento pode pular por cima de outro com a mesma chave?"
+        },
+        {
+          "item": "II",
+          "texto": "Intercale [5a] com [5b] tirando da direita quando houver empate. Em que ordem saem?"
+        },
+        {
+          "item": "III",
+          "texto": "No Heapsort, a raiz é trocada com o último do vetor. O que isso faz com duas chaves iguais?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas I.",
+          "porque": "I vale, mas a III também: o Heapsort troca a raiz com o último elemento e embaralha chaves iguais."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas I e III.",
+          "porque": "I vale: a partição do Quicksort troca elementos distantes e inverte chaves iguais. III vale: o Heapsort também troca à distância. II é falsa: o Merge Sort só é estável se o empate tirar da metade esquerda; com `<` estrito, fica instável."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas II e III.",
+          "porque": "II é falsa por causa do \"independentemente do critério de desempate\": a estabilidade do Merge Sort depende justamente desse critério. E I é verdadeira."
+        },
+        {
+          "letra": "D",
+          "texto": "Todas as afirmações são verdadeiras.",
+          "porque": "II é falsa: com empate resolvido a favor da metade direita, o Merge Sort troca a ordem de chaves iguais."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Quicksort e Heapsort clássicos não são estáveis (I e III). O Merge Sort só é estável se, no empate, tirar da esquerda; a II diz \"independentemente\" e é falsa.",
+      "assuntos": [
+        {
+          "num": "0096",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0094",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 5,
+      "topico": 7,
+      "formato": "afirmações",
+      "enunciado": "Seja um vetor semi-ordenado que contém 16 elementos indexados de 1 a 16 com a seguinte propriedade: cada elemento `a[i]` contém a chave `i`, mas a subsequência em que `i` é múltiplo de 3 contém uma permutação aleatória das chaves 3, 6, 9, 12 e 15. Por exemplo, o conteúdo do vetor pode ser o seguinte (as chaves em negrito são múltiplos de 3):\n\n1, 2, **6**, 4, 5, **12**, 7, 8, **9**, 10, 11, **15**, 13, 14, **3**, 16\n\nConsidere a situação em que **algum** vetor respeitando essa propriedade (não necessariamente o exemplo mostrado acima) foi usado como entrada para uma implementação clássica do algoritmo Merge Sort—isto é, aquele que divide o vetor em duas metades de tamanhos iguais, ordena recursivamente cada metade de maneira **crescente** e depois as intercala.\n\nIdentifique as afirmativas verdadeiras.\n\nI. As chaves 2 e 10 jamais serão comparadas entre si;\nII. Sempre que as chaves 2 e 6 forem comparadas entre si, as chaves 4 e 6 também serão comparadas entre si;\nIII. As chaves 1 e 3 necessariamente serão comparadas entre si.",
+      "dica": "**Cobra:** saber quais pares de chaves o Merge Sort chega a comparar, olhando em que metade cada uma está.\n\n- **Merge Sort** [0094]: divide o vetor ao meio até sobrar um elemento e depois intercala; duas chaves só são comparadas durante a intercalação de dois blocos, uma em cada bloco, quando as duas estão na frente. Ex.: em 16 posições, a posição 2 e a 10 só se encontram na intercalação final.\n- **Intercalação** [0094]: compara sempre as duas frentes e tira a menor; uma chave só é comparada com a frente do outro bloco enquanto é a menor do seu. Ex.: intercalando [1, 2] com [3, 4], o 2 é comparado com o 3, nunca com o 4.\n\n**Como atacar:** para cada par, ache o menor bloco que contém as duas e pergunte quem é a frente do outro lado.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Na intercalação final, quando o 2 é a frente da esquerda, a direita ainda tem três múltiplos de 3. Quem está na frente dela?"
+        },
+        {
+          "item": "II",
+          "texto": "Em que posições o 6 pode estar para chegar a ser comparado com o 2? Nesses casos, o 4 está no caminho?"
+        },
+        {
+          "item": "III",
+          "texto": "O 3 é menor que tudo, menos 1 e 2. Quando o bloco do 3 encontra o bloco do 1, quem está na frente?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas I e II são verdadeiras.",
+          "porque": "Deixa de fora a III, que também vale: o 1 é sempre comparado com o 3, porque o 3 é sempre a frente do bloco que o encontra."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas I e III são verdadeiras.",
+          "porque": "Deixa de fora a II. Rodando as 120 permutações, sempre que o 2 é comparado com o 6, o 4 também é."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas II e III são verdadeiras.",
+          "porque": "Deixa de fora a I: 2 e 10 só se encontram na intercalação final, e ali a frente da metade direita é o menor múltiplo de 3 dela, nunca o 10."
+        },
+        {
+          "letra": "D",
+          "texto": "Todas as afirmativas são verdadeiras.",
+          "porque": "I: na intercalação final, quando o 2 está na frente da esquerda, a frente da direita é um múltiplo de 3 menor que 10. II: o 6 só encontra o 2 quando é a frente de um bloco que também chega ao 4. III: o 3 é a menor chave depois de 1 e 2 e está sempre na frente do bloco que encontra o 1. Conferido simulando as 120 permutações."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "I, II e III valem. A conclusão vem de olhar as frentes de cada intercalação e foi conferida simulando o Merge Sort nas 120 posições possíveis dos múltiplos de 3.",
+      "assuntos": [
+        {
+          "num": "0094",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 6,
+      "topico": 6,
+      "formato": "afirmações",
+      "enunciado": "Considere um vetor com *n* elementos no qual apenas um está fora de ordem (contém um único elemento a[i] < a[i - 1]) e não sei em que posição está esse elemento. Finalmente, considere como \"busca binária\" apenas o algoritmo clássico apresentado na bibliografia do presente edital de seleção, sem alterações.\n\nI. Posso descobrir onde está o elemento fora de ordem usando busca binária, que o identificaria em no máximo log₂(*n*)+1 comparações entre chaves, mesmo para *n* > 20;\nII. Posso fazer uma busca binária por qualquer chave no vetor com garantia de corretude da busca caso o valor de *n*, que indica o número de elementos do vetor, seja menor ou igual a 20;\nIII. Posso fazer uma busca sequencial no vetor, seja qual for o valor de *n*, e ela encontrará o elemento buscado, ou indicará se o elemento não existe, ao comparar a chave com, no máximo *n*, elementos do vetor.",
+      "dica": "**Cobra:** o que a busca binária exige do vetor e quanto custa a busca sequencial.\n\n- **Busca binária** [0090]: compara com o elemento do meio e descarta a metade onde a chave não pode estar; isso só vale se o vetor estiver ordenado, e um único elemento fora do lugar já pode mandá-la para o lado errado. Ex.: em 1, 2, 3, 9, 4, 5, 6, procurar o 4 compara com 9 e vai para a esquerda.\n- **Busca sequencial** [0089]: compara a chave com cada elemento, do primeiro ao último, sem exigir ordem; acha o elemento ou conclui que não existe em no máximo n comparações. Ex.: num vetor de 7 elementos, no máximo 7 comparações.\n\n**Como atacar:** monte um vetor de 7 elementos com um só fora de ordem e rode a busca binária por ele.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "A busca binária clássica recebe uma chave e procura por ela. Ela tem algum passo que detecta \"este elemento está fora de ordem\"?"
+        },
+        {
+          "item": "II",
+          "texto": "Em 1, 2, 3, 9, 4, 5, 6, com n = 7, rode a busca binária pelo 4. Ela acha?"
+        },
+        {
+          "item": "III",
+          "texto": "A busca sequencial depende de o vetor estar ordenado? Quantas comparações faz, no máximo?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas as afirmações I e III estão corretas.",
+          "porque": "I é falsa: a busca binária procura uma chave dada; ela não foi feita para achar o elemento fora de ordem, e o descarte de metades não garante passar por ele."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas as afirmações II e III estão corretas.",
+          "porque": "II é falsa: n ≤ 20 não muda nada. Em 1, 2, 3, 9, 4, 5, 6 (n = 7), a busca binária pelo 4 compara com o 9, vai para a esquerda e não acha."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas as afirmações I e II estão corretas.",
+          "porque": "As duas falham pelo mesmo motivo: a busca binária pressupõe vetor ordenado, e um só elemento fora do lugar quebra a garantia, qualquer que seja n."
+        },
+        {
+          "letra": "D",
+          "texto": "Nenhuma das opções anteriores, A, B ou C, está certa.",
+          "porque": "Só a III vale: a busca sequencial não depende de ordem e para em no máximo n comparações. I e II são falsas, porque a busca binária clássica erra com um elemento fora do lugar. Como nenhuma alternativa diz \"apenas III\", fica a D. Rodado: em 1, 2, 3, 9, 4, 5, 6, a busca binária não acha 4, 5 nem 6."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "Busca binária exige vetor ordenado; com um elemento fora do lugar ela pode errar para qualquer n (I e II falsas). A sequencial sempre funciona em até n comparações (III). Sem alternativa \"só III\", a resposta é D.",
+      "assuntos": [
+        {
+          "num": "0090",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0089",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 7,
+      "topico": 7,
+      "formato": "código",
+      "enunciado": "Considere o pseudocódigo a seguir, no qual uma linha do algoritmo foi substituída pela string `???`\n\n```c\nvoid f(int v[], int n) {\n    int tmp1, tmp2, x, y;\n\n    for (x = 0; x < n; x++) {\n        tmp1 = v[x];\n        tmp2 = x;\n\n        for (y = x + 1; y < n; y++) {\n            ???\n        }\n\n        tmp1 = v[tmp2];\n        v[tmp2] = v[x];\n        v[x] = tmp1;\n    }\n}\n```\n\nConsidere ainda as opções:\n\nI. `if (v[y] < v[tmp2]) { tmp2 = y; }`\nII. `if (v[y] > v[tmp2]) { tmp2 = y; }`\nIII. `if (v[y] > v[tmp2]) { v[y] = v[y+1]; }`\n\nAssinale a alternativa **correta**.",
+      "dica": "**Cobra:** reconhecer o selection sort e qual comparação deixa o vetor crescente.\n\n- **Selection sort** [0092]: para cada posição x, procura no restante o índice do menor elemento, guarda em `tmp2` e no fim troca `v[x]` com `v[tmp2]`. Ex.: em 3, 1, 2, com x = 0, acha o 1 na posição 1 e troca: 1, 3, 2.\n- **Insertion sort** [0093]: pega cada elemento e o empurra para a esquerda até achar o lugar, deslocando os maiores uma casa; não faz uma troca única por volta. Ex.: em 1, 3, 2, o 2 passa por cima do 3 e fica 1, 2, 3.\n\n**Como atacar:** olhe o que o código faz depois do laço interno: uma troca só, entre `x` e `tmp2`.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Depois do laço interno o código faz uma troca única. Inserção funciona assim?"
+        },
+        {
+          "item": "B",
+          "texto": "Com a opção II, `tmp2` guarda o índice do maior. Que algoritmo procura o maior e troca uma vez?"
+        },
+        {
+          "item": "C",
+          "texto": "Com a opção I, o que `tmp2` contém ao fim do laço interno?"
+        },
+        {
+          "item": "D",
+          "texto": "Com a opção III, `tmp2` muda alguma vez? E o que acontece em `v[y+1]` com y = n - 1?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Se ??? for trocado pela opção I, então a função ordena o vetor v em ordem crescente usando ordenação por inserção.",
+          "porque": "Com a opção I o vetor fica mesmo crescente, mas o algoritmo é de seleção: acha o índice do menor e faz uma troca por volta. Inserção desloca elementos até achar o lugar."
+        },
+        {
+          "letra": "B",
+          "texto": "Se ??? for trocado pela opção II, então a função ordena o vetor v em ordem decrescente usando ordenação por inserção.",
+          "porque": "Com a opção II o vetor fica decrescente, mas de novo por seleção (do maior), não por inserção."
+        },
+        {
+          "letra": "C",
+          "texto": "Se ??? for trocado por I, então a função ordena o vetor por seleção em ordem crescente.",
+          "porque": "Com `if (v[y] < v[tmp2]) tmp2 = y;`, o laço interno acha o índice do menor do restante, e as três linhas depois dele trocam esse menor com `v[x]`. É o selection sort crescente."
+        },
+        {
+          "letra": "D",
+          "texto": "Se ??? for trocado pela opção III, então a função ordena o vetor v em ordem crescente usando ordenação por seleção.",
+          "porque": "A opção III nunca muda `tmp2` e ainda sobrescreve elementos com `v[y+1]`, lendo fora do vetor quando y = n - 1. A troca do fim vira troca de `v[x]` consigo mesmo."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Laço interno guardando o índice do menor e uma troca por volta: selection sort. A opção I deixa crescente (C); a II deixaria decrescente, mas também por seleção.",
+      "assuntos": [
+        {
+          "num": "0092",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0093",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 8,
+      "topico": 4,
+      "formato": "afirmações",
+      "enunciado": "Considere uma árvore AVL inicialmente vazia na qual serão inseridos os valores **30, 20, 10, 40, 50 e 25**, exatamente nessa ordem, com aplicação imediata das rotações necessárias após cada inserção que causar desbalanceamento.\n\nI. Após a inserção dos **três primeiros** valores (30, 20 e 10), o nó **20** torna-se raiz da árvore em decorrência de uma **rotação simples** aplicada no nó 30;\nII. Após a inserção dos **cinco primeiros** valores (30, 20, 10, 40 e 50), é necessária **exatamente uma rotação simples** no nó **30** para restaurar o balanceamento da árvore;\nIII. Após a inserção do **sexto** valor (25), uma **rotação simples** no nó **20** é suficiente para restaurar o balanceamento da árvore.",
+      "dica": "**Cobra:** acompanhar as rotações de uma AVL e saber quando a simples não basta.\n\n- **Fator de balanceamento** [0101]: é a altura da subárvore esquerda menos a da direita; a AVL exige -1, 0 ou 1 em todo nó, e o primeiro nó acima da inserção com +2 ou -2 é o que se rotaciona. Ex.: 30, 20, 10 deixam o 30 com +2.\n- **Rotação simples ou dupla** [0101]: se o nó desbalanceado e o filho pendem para o mesmo lado, basta uma rotação simples; se pendem para lados opostos (zigue-zague), são duas. Ex.: 20 com -2 e o filho direito 40 com +1 pede rotação dupla.\n\n**Como atacar:** desenhe a árvore depois de cada inserção e calcule os fatores no caminho.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Com 30, 20, 10, que nó fica com fator +2, e para que lado ele e o filho pendem?"
+        },
+        {
+          "item": "II",
+          "texto": "Depois de 40 e 50, qual é o primeiro nó com fator -2 subindo a partir do 50?"
+        },
+        {
+          "item": "III",
+          "texto": "O 25 entra em qual subárvore do 40? O 40 passa a pender para que lado, e o 20?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas as afirmações I e II estão corretas.",
+          "porque": "I vale: 30, 20, 10 deixam o 30 com +2, e a rotação simples à direita põe o 20 na raiz. II vale: depois do 40 e do 50, o 30 fica com -2 e o filho 40 com -1; uma rotação simples à esquerda no 30 resolve. III é falsa: com o 25, o 20 fica com -2 e o filho 40 com +1, caso direita-esquerda, que pede rotação dupla."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas as afirmações II e III estão corretas.",
+          "porque": "III é falsa: o 25 entra à esquerda do 30, filho esquerdo do 40, e forma um zigue-zague. Uma rotação simples no 20 deixaria a árvore desbalanceada."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas as afirmações I e III estão corretas.",
+          "porque": "Deixa de fora a II, que vale, e inclui a III, que não vale."
+        },
+        {
+          "letra": "D",
+          "texto": "Todas as afirmações (I, II e III) estão corretas.",
+          "porque": "III é falsa: o caso do 25 é direita-esquerda e pede rotação dupla."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "30, 20, 10: rotação simples no 30, 20 na raiz (I). 40, 50: rotação simples no 30 (II). 25: o 20 fica com -2 e o 40 com +1, zigue-zague, rotação dupla; a raiz vira 30 (III falsa).",
+      "assuntos": [
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 9,
+      "topico": 1,
+      "formato": "código",
+      "enunciado": "Considere o programa em C abaixo. Qual será o valor impresso?\n\n```c\n#include <stdio.h>\n\nint main(void) {\n    unsigned v1 = 16;\n    unsigned *v2 = &v1;\n    int cont = 0;\n\n    while (*v2 > 0) {\n        v1 >>= 1;\n        cont++;\n    }\n\n    printf(\"%d\\n\", cont);\n    return 0;\n}\n```",
+      "dica": "**Cobra:** contar quantas vezes um valor pode ser deslocado para a direita até zerar, lendo por um ponteiro.\n\n- **Deslocamento de bits** [0065]: `v >>= 1` empurra os bits uma casa para a direita, o que divide por 2 com divisão inteira; um valor com o bit mais alto na posição k zera depois de k + 1 deslocamentos. Ex.: 16 é `10000`: 8, 4, 2, 1, 0.\n- **Ponteiro** [0045]: `*v2` lê o valor guardado no endereço que `v2` contém; se `v2 = &v1`, mudar `v1` muda o que `*v2` enxerga. Ex.: depois de `v1 >>= 1`, `*v2` passa a valer 8.\n\n**Como atacar:** escreva v1 depois de cada volta e conte as voltas até o teste falhar.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Depois de duas voltas, v1 vale quanto? O teste `*v2 > 0` já falha?"
+        },
+        {
+          "item": "B",
+          "texto": "Depois de três voltas, v1 vale 2. O laço para?"
+        },
+        {
+          "item": "C",
+          "texto": "Com v1 = 1, o teste passa? Quanto vale `1 >> 1`?"
+        },
+        {
+          "item": "D",
+          "texto": "Escreva v1 depois de cada volta. Quantas até chegar a 0?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "2.",
+          "porque": "Contaria só até 4. O laço continua enquanto `*v2 > 0`, e 4, 2 e 1 ainda são maiores que zero."
+        },
+        {
+          "letra": "B",
+          "texto": "3.",
+          "porque": "Para em 2, mas o laço ainda roda com 2 e com 1."
+        },
+        {
+          "letra": "C",
+          "texto": "4.",
+          "porque": "Para em 1: é o número de divisões até chegar a 1 (log₂ 16), mas o laço só termina quando o valor vira 0, uma volta depois."
+        },
+        {
+          "letra": "D",
+          "texto": "5.",
+          "porque": "`v2` aponta para `v1`, então o teste olha o próprio `v1`. 16 → 8 → 4 → 2 → 1 → 0: cinco deslocamentos até zerar. Compilado com gcc: imprime 5."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "`*v2` é o próprio v1. 16, 8, 4, 2, 1, 0: cinco voltas até o teste `> 0` falhar.",
+      "assuntos": [
+        {
+          "num": "0065",
+          "modulo": "08-structs.md"
+        },
+        {
+          "num": "0045",
+          "modulo": "06-ponteiros.md"
+        }
+      ]
+    },
+    {
+      "numero": 10,
+      "topico": [
+        "3.1",
+        4
+      ],
+      "formato": "conceito",
+      "enunciado": "Em uma estrutura de dados, cada item é armazenado em um registro que possui três campos: uma chave numérica e exatamente dois ponteiros para registros do mesmo tipo.\n\nAssinale a alternativa que contém apenas estruturas de dados que são adequadamente descritos por esse tipo de item.",
+      "dica": "**Cobra:** quais estruturas usam nó com uma chave e exatamente dois ponteiros.\n\n- **Lista dupla** [0079]: cada nó guarda o dado e dois ponteiros, um para o anterior e outro para o próximo; na versão circular, o último aponta para o primeiro, e o nó continua com dois ponteiros. Ex.: `struct No { int chave; struct No *ant, *prox; }`.\n- **Nó de árvore binária** [0099]: cada nó da BST tem a chave e dois ponteiros, para o filho esquerdo e para o direito. Ex.: `struct No { int chave; struct No *esq, *dir; }`.\n\n**Como atacar:** para cada estrutura citada, escreva a `struct` do nó e conte os ponteiros.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Quantos ponteiros tem o nó de uma lista simplesmente encadeada?"
+        },
+        {
+          "item": "B",
+          "texto": "Um nó de árvore B de ordem 5 guarda quantas chaves e quantos ponteiros?"
+        },
+        {
+          "item": "C",
+          "texto": "Escreva a `struct` do nó da lista dupla circular e a da BST. Quantos ponteiros cada uma tem?"
+        },
+        {
+          "item": "D",
+          "texto": "O nó da lista simples tem um ponteiro ou dois?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Lista simplesmente encadeada e árvore binária de busca.",
+          "porque": "A lista simples tem só um ponteiro por nó, o `prox`."
+        },
+        {
+          "letra": "B",
+          "texto": "Lista duplamente encadeada, árvore binária de busca e árvore B.",
+          "porque": "O nó da árvore B guarda várias chaves e até m ponteiros para filhos, não uma chave e dois ponteiros."
+        },
+        {
+          "letra": "C",
+          "texto": "Lista duplamente encadeada circular e árvore binária de busca.",
+          "porque": "Nas duas, o nó tem uma chave e dois ponteiros: anterior e próximo na lista dupla circular, esquerdo e direito na BST."
+        },
+        {
+          "letra": "D",
+          "texto": "Lista simplesmente encadeada.",
+          "porque": "A lista simples tem um ponteiro só por nó."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Uma chave e dois ponteiros: lista dupla (circular ou não) e árvore binária. Lista simples tem um ponteiro; árvore B tem várias chaves e vários filhos.",
+      "assuntos": [
+        {
+          "num": "0079",
+          "modulo": "11-listas.md"
+        },
+        {
+          "num": "0099",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 11,
+      "topico": 7,
+      "formato": "afirmações",
+      "enunciado": "Deseja-se ordenar um vetor A com *n* ≥ 2 inteiros não negativos, todos menores que *n*³. Considere as seguintes afirmações sobre o uso de Radix Sort com Counting Sort como sub-rotina.\n\nI. Se for usada base *n*, cada número terá no máximo 3 dígitos, e cada chamada ao Counting Sort custará Θ(*n*). Portanto, o tempo total será Θ(*n*);\nII. Para que o Radix Sort funcione corretamente ordenando do dígito menos significativo para o mais significativo, o algoritmo usado para ordenar por cada dígito deve ser estável;\nIII. Se for usado Counting Sort diretamente sobre os valores inteiros completos, sem decomposição em dígitos, o tempo será Θ(*n*), pois há apenas *n* elementos no vetor;\nIV. Se for usada base 10, cada valor terá no máximo log(*n*) dígitos e, como cada chamada ao Counting Sort tem custo temporal Θ(*n*), o tempo total do Radix Sort será Θ(n log(*n*)).\n\nQuais afirmações são verdadeiras?",
+      "dica": "**Cobra:** custo do Radix Sort conforme a base e por que a sub-rotina precisa ser estável.\n\n- **Radix Sort** [0121]: ordena dígito a dígito, do menos significativo para o mais, com uma ordenação estável por dígito; com d dígitos em base b, custa Θ(d (n + b)). Ex.: valores menores que n³ em base n têm 3 dígitos: Θ(3 (n + n)) = Θ(n).\n- **Counting Sort** [0120]: conta quantas vezes aparece cada valor de 0 a k - 1 e custa Θ(n + k); é estável quando percorre a entrada de trás para frente. Ex.: com valores até n³, k = n³ e o custo vira Θ(n³).\n\n**Como atacar:** em cada afirmação, escreva d, b e k e calcule Θ(d (n + b)) ou Θ(n + k).",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Valores menores que n³ escritos em base n têm quantos dígitos? Quanto custa cada passada do Counting Sort com b = n?"
+        },
+        {
+          "item": "II",
+          "texto": "Se a ordenação por um dígito trocar a ordem de dois números com o mesmo dígito, o que acontece com o trabalho das passadas anteriores?"
+        },
+        {
+          "item": "III",
+          "texto": "O Counting Sort custa Θ(n + k). Quanto vale k aqui?"
+        },
+        {
+          "item": "IV",
+          "texto": "Um número menor que n³ tem quantos dígitos em base 10? É log n ou um múltiplo dele?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas I, II e IV.",
+          "porque": "É a combinação que a análise dá: I (base n, 3 dígitos, Θ(n)), II (estabilidade obrigatória) e IV (base 10, Θ(log n) dígitos, Θ(n log n)). III é falsa: Counting Sort direto custa Θ(n + n³). A banca anulou a questão; a IV fala em \"no máximo log(n) dígitos\", quando são cerca de 3 log₁₀ n, o que deixa a frase imprecisa."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas I, II e III.",
+          "porque": "III é falsa: Counting Sort sobre os valores completos custa Θ(n + k), com k = n³, e não Θ(n)."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas II, III e IV.",
+          "porque": "Inclui a III, que é falsa, e deixa de fora a I, que vale."
+        },
+        {
+          "letra": "D",
+          "texto": "Todas as afirmações são verdadeiras.",
+          "porque": "A III é falsa: o custo do Counting Sort depende do intervalo dos valores, não só de n."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "Anulada pela banca. Pela análise: I, II e IV valem (letra A) e III é falsa, porque Counting Sort direto custa Θ(n + n³). Provável motivo da anulação: a IV diz \"no máximo log(n) dígitos\", quando em base 10 são cerca de 3 log₁₀ n.",
+      "assuntos": [
+        {
+          "num": "0121",
+          "modulo": "18-ordenacao-linear.md"
+        },
+        {
+          "num": "0120",
+          "modulo": "18-ordenacao-linear.md"
+        }
+      ]
+    },
+    {
+      "numero": 12,
+      "topico": 5,
+      "formato": "simulação",
+      "enunciado": "Em uma tabela de espalhamento com tamanho *m* = 7, foram inseridas 6 chaves. A função de dispersão utilizada foi\n\nh'(k) = k mod m.\n\nA ordem exata de inserção das chaves é desconhecida, mas a chave k₆ = 9 foi a última. O conteúdo final da tabela imediatamente após a inserção das chaves k₆ = 9 foi o seguinte (o símbolo Ø representa uma posição vazia):\n\n```\níndices:     0,  1,  2,  3,  4,   5,  6\nelementos: [70,  9,  2,  Ø,  4, 705, 27]\n```\n\nSabendo que as colisões foram tratadas por endereçamento aberto e que nenhuma outra operação de inserção ou remoção foi realizada, selecione a alternativa que representa uma possível função de sondagem empregada na elaboração dessa tabela.",
+      "dica": "**Cobra:** testar cada função de sondagem e ver qual leva a chave 9 até a posição 1.\n\n- **Endereçamento aberto** [0107]: quando a posição h'(k) está ocupada, a chave tenta as posições h(k, 1), h(k, 2), ... até achar uma livre. Ex.: com m = 7, a chave 9 começa em 9 mod 7 = 2, ocupada pelo 2.\n- **Sondagem quadrática e outras** [0179]: a sequência de tentativas muda com a fórmula: `+ i` anda de uma em uma, `+ i²` pula 1, 4, 9, e `+ 3i` pula de três em três. Ex.: com h' = 2 e m = 7, `+ 3i` tenta 5 e depois 1.\n\n**Como atacar:** confira que as outras chaves estão nas posições iniciais e calcule as tentativas do 9.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Com `+ i`, a primeira tentativa do 9 é a posição 3. Ela estava ocupada?"
+        },
+        {
+          "item": "B",
+          "texto": "Com `+ i²` e i = 1, para onde vai o 9?"
+        },
+        {
+          "item": "C",
+          "texto": "Calcule i = 1 e i = 2 para o 9. Alguma delas cai numa posição vazia antes da 1?"
+        },
+        {
+          "item": "D",
+          "texto": "Calcule i = 1 e i = 2 com `+ 3i`. Onde o 9 para?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "h(k, i) = (h'(k) + i) mod *m*.",
+          "porque": "Para o 9, i = 1 dá a posição 3, que está vazia: ele teria ficado na 3, não na 1."
+        },
+        {
+          "letra": "B",
+          "texto": "h(k, i) = (h'(k) + i²) mod *m*.",
+          "porque": "Para o 9, i = 1 dá 2 + 1 = 3, vazia. Ele ficaria na 3."
+        },
+        {
+          "letra": "C",
+          "texto": "h(k, i) = (h'(k) + 2i + i²) mod *m*.",
+          "porque": "Para o 9, i = 1 dá 2 + 3 = 5 (ocupada pelo 705) e i = 2 dá 2 + 8 = 10 mod 7 = 3, vazia. Ele ficaria na 3."
+        },
+        {
+          "letra": "D",
+          "texto": "h(k, i) = (h'(k) + 3i) mod *m*.",
+          "porque": "70, 2, 4, 705 e 27 estão nas posições iniciais (0, 2, 4, 5, 6), então só o 9 colidiu. Ele começa em 2 (ocupada), tenta 2 + 3 = 5 (ocupada) e 2 + 6 = 8 mod 7 = 1, livre. É onde ele está."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "Só o 9 saiu da posição inicial (2). Com `+ 3i`, tenta 5 (ocupada) e 1 (livre). As outras fórmulas passam pela posição 3, vazia, antes de chegar à 1.",
+      "assuntos": [
+        {
+          "num": "0107",
+          "modulo": "15-hash.md"
+        },
+        {
+          "num": "0179",
+          "modulo": "28-estruturas-complementos.md"
+        }
+      ]
+    },
+    {
+      "numero": 13,
+      "topico": 7,
+      "formato": "simulação",
+      "enunciado": "Considere uma implementação do algoritmo Quick Sort para ordenar vetores em ordem crescente que emprega a estratégia de particionamento de Lomuto **ou** a estratégia de Hoare.\n\nSuponha que essa implementação foi utilizada para ordenar o vetor\n\n`[2, 8, 3, 10, 5, 1, 7, 6, 4]`\n\nSuponha ainda que, imediatamente após o primeiro particionamento e antes de qualquer chamada recursiva ser realizada, o conteúdo do vetor era\n\n`[2, 3, 1, 4, 5, 8, 7, 6, 10]`\n\nCom base nisso, analise as afirmativas e assinale a alternativa correta.\n\nI. Tanto a chave 4 quanto a chave 5 podem ter sido escolhidas como pivô para particionar esse vetor;\nII. Foi empregado o algoritmo de Hoare para particionar esse vetor;\nIII. Foi empregado o algoritmo de Lomuto para particionar esse vetor.",
+      "dica": "**Cobra:** reconhecer qual partição do Quicksort gerou o vetor e com qual pivô.\n\n- **Partição de Lomuto** [0095]: usa o último elemento como pivô, varre da esquerda guardando os menores ou iguais no começo e no fim põe o pivô logo depois deles, já na posição final. Ex.: em 3, 1, 2, o pivô 2 termina entre o 1 e o 3: 1, 2, 3.\n- **Partição de Hoare** [0095]: usa o primeiro elemento como pivô, anda com dois índices das pontas para o meio trocando os pares fora do lugar, e o pivô não necessariamente fica na posição final. Ex.: em 2, 8, 1, os índices trocam 8 e 1 e o vetor fica 1, 8, 2, com o pivô 2 fora do meio.\n\n**Como atacar:** rode a partição de Lomuto com pivô 4 e a de Hoare com pivô 2 e compare com o vetor dado.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Rode a partição de Lomuto: qual é o pivô dela? O 5 poderia ter sido escolhido por alguma das duas versões clássicas?"
+        },
+        {
+          "item": "II",
+          "texto": "Rode a partição de Hoare com o pivô 2. O vetor resultante é igual ao dado?"
+        },
+        {
+          "item": "III",
+          "texto": "Rode a partição de Lomuto com pivô 4, anotando o vetor a cada troca. Onde o 4 termina?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas a afirmativa I é verdadeira.",
+          "porque": "I não vale: só o 4, o último elemento, gera exatamente esse vetor com a partição de Lomuto. O 5 também está numa posição final, mas nenhuma das duas partições clássicas o usaria como pivô aqui."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas a afirmativa II é verdadeira.",
+          "porque": "A partição de Hoare com o primeiro elemento (2) como pivô dá 1, 8, 3, 10, 5, 2, 7, 6, 4, bem diferente do vetor dado."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas as afirmativas I e II são verdadeiras.",
+          "porque": "Nem I nem II valem; o vetor dado sai da partição de Lomuto com pivô 4."
+        },
+        {
+          "letra": "D",
+          "texto": "Apenas as afirmativas I e III são verdadeiras.",
+          "porque": "III vale: Lomuto com pivô 4 produz exatamente 2, 3, 1, 4, 5, 8, 7, 6, 10 (rodado). Mas I não vale, porque o 5 não teria sido pivô. Como só a III vale e nenhuma alternativa diz isso, a banca anulou a questão."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "Anulada pela banca. Rodando as duas partições: Lomuto com pivô 4 (o último) gera exatamente o vetor dado, e Hoare com pivô 2 não. Só a III vale, e nenhuma alternativa diz \"apenas III\".",
+      "assuntos": [
+        {
+          "num": "0095",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 14,
+      "topico": "3.3",
+      "formato": "código",
+      "enunciado": "Considere a seguinte definição de tipo de dados para pilha com vetor na linguagem de programação C:\n\n```c\nstruct TipoPilha {\n  int n;      /* número de elementos armazenados */\n  int dim;    /* tamanho do vetor */\n  float* vet; /* vetor dos elementos */\n} pilha;\n```\n\nConsidere que\n\n- `struct TipoPilha` é o nome do tipo de dados;\n- `pilha` é uma variável global desse tipo de dados;\n- `pilha.vet` é um vetor usado para armazenar os elementos da pilha;\n- `pilha.dim` é a capacidade máxima da pilha (número de elementos do vetor);\n- `pilha.n` é o número de elementos armazenados na pilha.\n\nSupondo que desejamos uma implementação eficiente, em qual elemento deve ser encontrado o topo da pilha não vazia?",
+      "dica": "**Cobra:** onde fica o topo de uma pilha em vetor para que empilhar e desempilhar custem O(1).\n\n- **Pilha em vetor** [0082]: os elementos ocupam `vet[0]` a `vet[n - 1]`, na ordem em que entraram; o topo é o último, `vet[n - 1]`, e empilhar escreve em `vet[n]` e soma 1 a n. Ex.: com 3, 5, 9 empilhados, n = 3 e o topo 9 está em `vet[2]`.\n- **Custo das operações** [0082]: mexendo só no fim do vetor, nenhum elemento sai do lugar, e push e pop custam O(1); com o topo em `vet[0]`, cada operação deslocaria todos. Ex.: empilhar com o topo em `vet[0]` move os n elementos uma casa.\n\n**Como atacar:** empilhe três valores numa pilha vazia e anote onde cada um cai.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Se o topo fosse `vet[0]`, o que aconteceria com os outros elementos a cada push?"
+        },
+        {
+          "item": "B",
+          "texto": "Numa pilha com 3 elementos, o que há em `vet[3]`?"
+        },
+        {
+          "item": "C",
+          "texto": "Empilhe 3, 5 e 9 numa pilha vazia. Em que índice está o 9, e quanto vale n?"
+        },
+        {
+          "item": "D",
+          "texto": "Com dim = 100 e dois elementos empilhados, o que há em `vet[99]`?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "`pilha.vet[0]`.",
+          "porque": "Com o topo em `vet[0]`, cada push e cada pop teria de deslocar todos os elementos: O(n) por operação. `vet[0]` é a base."
+        },
+        {
+          "letra": "B",
+          "texto": "`pilha.vet[pilha.n]`.",
+          "porque": "`vet[n]` é a primeira posição livre, onde o próximo elemento vai entrar. Ali não há elemento da pilha."
+        },
+        {
+          "letra": "C",
+          "texto": "`pilha.vet[pilha.n - 1]`.",
+          "porque": "Com n elementos em `vet[0]` a `vet[n - 1]`, o último que entrou está em `vet[n - 1]`. Push escreve em `vet[n]`, pop lê `vet[n - 1]`, os dois em O(1)."
+        },
+        {
+          "letra": "D",
+          "texto": "`pilha.vet[pilha.dim - 1]`.",
+          "porque": "`dim - 1` é a última posição do vetor, que só guarda o topo quando a pilha está cheia."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Elementos em vet[0..n-1]; o topo é vet[n - 1]. vet[n] é a próxima vaga, vet[0] é a base e vet[dim - 1] só é o topo com a pilha cheia.",
+      "assuntos": [
+        {
+          "num": "0082",
+          "modulo": "12-pilhas-e-filas.md"
+        }
+      ]
+    },
+    {
+      "numero": 15,
+      "topico": 1,
+      "formato": "código",
+      "enunciado": "Qual será a saída da função a seguir se os parâmetros de entrada forem `a=200` e `b=-50`?\n\n```python\ndef fun(a, b):\n  if (a < 0 and b < 0) or (a > 0 and b > 0):\n    passo = 1\n  else:\n    passo = -1\n\n  res = 0\n  for i in range(abs(a)):\n    for j in range(abs(b)):\n      res += passo\n\n  return res\n```",
+      "dica": "**Cobra:** ler uma condição com `and` e `or` e contar as voltas de dois laços aninhados.\n\n- **Operadores lógicos** [0012]: `(a < 0 and b < 0) or (a > 0 and b > 0)` é verdadeiro só quando a e b têm o mesmo sinal; com sinais opostos, cai no `else`. Ex.: com a = 200 e b = -50, os dois parênteses dão falso e `passo` vale -1.\n- **Laços aninhados** [0024]: o corpo do laço interno roda o número de voltas do externo vezes o número de voltas do interno. Ex.: `range(200)` com `range(50)` dentro roda o corpo 10.000 vezes.\n\n**Como atacar:** decida o sinal de `passo` e depois multiplique as voltas.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Os dois `for` estão um dentro do outro ou um depois do outro?"
+        },
+        {
+          "item": "B",
+          "texto": "Em que linha a função subtrai b de a?"
+        },
+        {
+          "item": "C",
+          "texto": "Com a = 200 e b = -50, qual ramo do `if` é executado?"
+        },
+        {
+          "item": "D",
+          "texto": "Quanto vale `passo`, e quantas vezes `res += passo` roda?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "250.",
+          "porque": "É a soma 200 + 50 (com o sinal de b ignorado). Os laços são aninhados, então as voltas se multiplicam."
+        },
+        {
+          "letra": "B",
+          "texto": "150.",
+          "porque": "É 200 - 50. A função não soma nem subtrai a e b; ela conta voltas."
+        },
+        {
+          "letra": "C",
+          "texto": "10.000.",
+          "porque": "O número de voltas está certo, 200 · 50, mas o sinal não: a e b têm sinais opostos, e `passo` vale -1."
+        },
+        {
+          "letra": "D",
+          "texto": "-10.000.",
+          "porque": "Sinais opostos fazem `passo = -1`. O corpo roda |a| · |b| = 200 · 50 = 10.000 vezes, somando -1 em cada uma: -10.000. Rodado em Python."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "Sinais opostos: passo = -1. Laços aninhados: 200 · 50 = 10.000 voltas. Resultado -10.000.",
+      "assuntos": [
+        {
+          "num": "0012",
+          "modulo": "02-condicionais.md"
+        },
+        {
+          "num": "0024",
+          "modulo": "03-repeticoes.md"
+        }
+      ]
+    },
+    {
+      "numero": 16,
+      "topico": "3.2",
+      "formato": "código",
+      "enunciado": "Considere a inserção de um elemento `v` em uma fila implementada com lista simplesmente encadeada em C:\n\n```c\nstruct No\n{\n  float info;      // valor da chave\n  struct No *prox; // próximo nó da lista\n};\n\nstruct Fila\n{\n    struct No* ini;  // início da lista\n    struct No* fim;  // fim da lista\n};\n\nvoid fila_insere(struct Fila* f, float v)\n{\n    struct No* n = malloc(sizeof (struct No));\n    if (n == NULL)\n      return;\n\n    n->info = v;\n    n->prox = NULL;\n\n    if (f->fim != NULL) { f->fim->prox = n; }\n    else { f->ini = n; }\n\n    f->fim = n;\n}\n```\n\nO que acontece quando a fila está vazia antes da inserção?",
+      "dica": "**Cobra:** o que muda nos ponteiros `ini` e `fim` quando se insere numa fila vazia.\n\n- **Fila encadeada** [0086]: guarda `ini` (de onde se retira) e `fim` (onde se insere); com a fila vazia os dois são `NULL`, e com um só nó os dois apontam para ele. Ex.: depois de inserir 7 numa fila vazia, `ini` e `fim` apontam para o nó do 7.\n- **Inserção no fim** [0086]: o nó novo recebe `prox = NULL`, o antigo último passa a apontar para ele e `fim` é atualizado; se não havia último, quem recebe o nó é `ini`. Ex.: com 7 na fila, inserir 8 faz `7->prox` apontar para o 8 e `fim` também.\n\n**Como atacar:** siga o código com `f->ini == NULL` e `f->fim == NULL`.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Com `f->fim == NULL`, qual ramo do `if` roda? E a última linha roda em que casos?"
+        },
+        {
+          "item": "B",
+          "texto": "A linha `f->fim = n` está dentro do `if` ou depois dele?"
+        },
+        {
+          "item": "C",
+          "texto": "Com a fila vazia, o `else` é executado? O que ele faz?"
+        },
+        {
+          "item": "D",
+          "texto": "Em que situação a função retorna sem inserir?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "`ini` e `fim` passam a apontar para o novo nó.",
+          "porque": "Com a fila vazia, `f->fim` é `NULL`, então entra o `else` e `f->ini = n`. A linha seguinte, `f->fim = n`, roda sempre. Os dois ficam apontando para o novo nó, o único da fila."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas `ini` aponta para o novo nó.",
+          "porque": "Esquece a última linha, `f->fim = n`, que está fora do `if` e roda em todo caso."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas `fim` aponta para o novo nó.",
+          "porque": "Esquece o `else { f->ini = n; }`, que é exatamente o caso da fila vazia."
+        },
+        {
+          "letra": "D",
+          "texto": "O novo nó é descartado, pois a fila está vazia.",
+          "porque": "A função só retorna sem inserir se o `malloc` falhar. Fila vazia é o caso normal da primeira inserção."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Fila vazia: `fim == NULL`, então `ini = n`; depois `fim = n` sempre. Os dois apontam para o único nó.",
+      "assuntos": [
+        {
+          "num": "0086",
+          "modulo": "12-pilhas-e-filas.md"
+        }
+      ]
+    },
+    {
+      "numero": 17,
+      "topico": 4,
+      "formato": "simulação",
+      "enunciado": "Considere a árvore de busca binária a seguir. Observe que algumas chaves foram substituídas por incógnitas.\n\nConsidere que as chaves dessa árvore devem necessariamente ser **valores inteiros** e que a árvore **não admite** inserção de chaves repetidas.\n\nConsidere que os valores de *x*, *y*, *z*, *s* e *t* são tais que é possível inserir a chave 10 nessa árvore.\n\nQual será o percurso pré-ordem da árvore após a inserção da chave 10?",
+      "figuras": [
+        "2026-014-q17"
+      ],
+      "dica": "**Cobra:** deduzir onde a chave 10 pode entrar numa BST com incógnitas e escrever a pré-ordem.\n\n- **BST** [0099]: tudo à esquerda de um nó é menor que ele e tudo à direita é maior; inserir desce comparando até achar um lugar vazio. Ex.: se 9 está na subárvore esquerda de x, então x > 9.\n- **Pré-ordem** [0098]: visita o nó, depois a subárvore esquerda inteira, depois a direita. Ex.: na árvore 5 com filhos 3 e 8, a pré-ordem é 5, 3, 8.\n\n**Como atacar:** use as desigualdades para limitar x e s e veja de que lado do x o 10 vai.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "O 9 está na subárvore esquerda de x. O que isso diz sobre x? E o 10, vai para que lado de x?"
+        },
+        {
+          "item": "B",
+          "texto": "Para o 10 ir à direita de x, x teria de ser menor que 10. Isso é possível com o 9 à esquerda?"
+        },
+        {
+          "item": "C",
+          "texto": "A sequência termina em x, a raiz. Qual percurso deixa a raiz por último?"
+        },
+        {
+          "item": "D",
+          "texto": "Em que percurso a raiz vem primeiro?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "*x*, *y*, *z*, 1, 7, *t*, 9, 10, 13, *s*, 15.",
+          "porque": "O 9 está à esquerda de x, então x ≥ 10; x não pode ser 10 (10 seria repetido), logo x ≥ 11. Então 10 < x e vai para a esquerda: passa por y (< 7), vai à direita para o 7, de novo à direita para o 9, e vira filho direito do 9. Na pré-ordem, o 10 aparece logo depois do 9."
+        },
+        {
+          "letra": "B",
+          "texto": "*x*, *y*, *z*, 1, 7, *t*, 9, 13, *s*, 10, 15.",
+          "porque": "Põe o 10 na subárvore direita, entre s e 15. Isso exigiria 10 > x, mas x > 9 e não pode ser 10, então x ≥ 11."
+        },
+        {
+          "letra": "C",
+          "texto": "1, *z*, *t*, 10, 9, 7, *y*, *s*, 15, 13, *x*.",
+          "porque": "É uma pós-ordem (termina na raiz x), não a pré-ordem."
+        },
+        {
+          "letra": "D",
+          "texto": "1, *z*, *t*, 9, 7, *y*, 10, *s*, 15, 13, *x*.",
+          "porque": "Também é pós-ordem, e ainda com o 10 do lado direito."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "x > 9 e x ≠ 10, então 10 < x: o 10 desce pela esquerda e vira filho direito do 9. Pré-ordem: x, y, z, 1, 7, t, 9, 10, 13, s, 15.",
+      "assuntos": [
+        {
+          "num": "0099",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0098",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 18,
+      "topico": 8,
+      "formato": "conceito",
+      "enunciado": "Considere um grafo ponderado e direcionado que possui um número finito de vértices e de arestas. Assinale a alternativa **incorreta**.",
+      "dica": "**Cobra:** o alcance de DFS, BFS, Dijkstra e Floyd-Warshall em grafo dirigido e ponderado.\n\n- **Floyd-Warshall** [0155]: calcula a distância entre todos os pares com três laços; aceita pesos negativos, mas com ciclo negativo o caminho mínimo não existe e as distâncias não valem. Ex.: um ciclo de peso -1 deixa `d[i][i]` negativo.\n- **Dijkstra** [0112]: acha as distâncias de uma origem a todos os vértices, desde que nenhum peso seja negativo. Ex.: com pesos 2, 5 e 1, ele acerta; com uma aresta -4, pode errar.\n- **BFS** [0110]: visita a partir de uma origem todos os vértices alcançáveis, camada por camada. Ex.: rodando a BFS de v no grafo e no grafo com as arestas invertidas, dá para saber se ele é fortemente conexo.\n\n**Como atacar:** procure a palavra que exagera: \"quaisquer pesos\".",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "A DFS a partir de u visita quais vértices? Dá para reconstruir o caminho até v?"
+        },
+        {
+          "item": "B",
+          "texto": "Se de v se chega a todos e de todos se chega a v, o grafo é fortemente conexo? Como a BFS testa a segunda parte?"
+        },
+        {
+          "item": "C",
+          "texto": "Qual é a única exigência do Dijkstra sobre os pesos?"
+        },
+        {
+          "item": "D",
+          "texto": "Com um ciclo de peso -1, qual seria o caminho mínimo entre dois vértices desse ciclo?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Se houver algum caminho entre dois vértices ***u*** e ***v***, é possível encontrá-lo com uma busca em profundidade a partir de ***u***.",
+          "porque": "Vale: a DFS a partir de u visita todo vértice alcançável de u e, guardando o pai de cada um, reconstrói o caminho até v."
+        },
+        {
+          "letra": "B",
+          "texto": "É possível utilizar a busca em largura para verificar se o grafo é fortemente conexo.",
+          "porque": "Vale: o grafo é fortemente conexo se a BFS a partir de um vértice v alcança todos, e a BFS a partir de v no grafo transposto também."
+        },
+        {
+          "letra": "C",
+          "texto": "Se houver pelo menos um caminho entre dois vértices, o algoritmo de Dijkstra encontrará o valor do caminho mínimo, contanto que todos os pesos sejam não negativos.",
+          "porque": "Vale: é exatamente a hipótese do Dijkstra."
+        },
+        {
+          "letra": "D",
+          "texto": "O algoritmo de Floyd-Warshall encontra o valor do caminho mínimo entre cada par de vértices e identifica os vértices que não são alcançáveis uns a partir dos outros para quaisquer pesos.",
+          "porque": "É a incorreta: com um ciclo de peso negativo, o caminho mínimo não existe, e o Floyd-Warshall não devolve distâncias válidas. Ele aceita pesos negativos, mas não \"quaisquer pesos\"."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "A, B e C valem. D exagera: o Floyd-Warshall aceita pesos negativos, mas não ciclos negativos, em que o caminho mínimo nem existe.",
+      "assuntos": [
+        {
+          "num": "0155",
+          "modulo": "23-grafos-avancados.md"
+        },
+        {
+          "num": "0112",
+          "modulo": "16-grafos.md"
+        },
+        {
+          "num": "0110",
+          "modulo": "16-grafos.md"
+        }
+      ]
+    },
+    {
+      "numero": 19,
+      "topico": 8,
+      "formato": "simulação",
+      "enunciado": "A figura a seguir representa um grafo ponderado e não direcionado com 4 vértices e 5 arestas.\n\nQual das alternativas é um subgrafo encontrado pelo algoritmo de Prim durante o processamento do grafo acima?",
+      "dica": "**Cobra:** reconhecer um estado intermediário do Prim: uma árvore só, conexa, com as arestas mais leves.\n\n- **Prim** [0153]: parte de um vértice e, a cada passo, acrescenta a aresta mais leve entre um vértice da árvore e um de fora; o que já foi escolhido é sempre uma árvore conexa, e o resultado final é uma árvore geradora mínima. Ex.: aqui a árvore mínima pesa 3: A-C, C-D e B-D, todas de peso 1.\n- **Kruskal, para comparar** [0153]: pega a aresta mais leve do grafo inteiro, e por isso pode ter pedaços soltos no meio do caminho; o Prim nunca tem. Ex.: escolher A-C e depois B-D deixa dois pedaços.\n\n**Como atacar:** elimine o que for desconexo e o que tiver soma maior que 3.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Qual é a soma desta árvore? Existe outra com soma menor?"
+        },
+        {
+          "item": "B",
+          "texto": "Os dois pedaços estão ligados? O Prim pode ter pedaços soltos?"
+        },
+        {
+          "item": "C",
+          "texto": "Rode o Prim a partir do A. Que aresta entra em cada passo?"
+        },
+        {
+          "item": "D",
+          "texto": "Com a árvore {A, C}, quais arestas saem dela, e qual é a mais leve?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Subgrafo da figura A): arestas A-C (1), C-D (1) e A-B (2).",
+          "porque": "É uma árvore geradora, mas pesa 4. Partindo de qualquer vértice, o Prim alcança o B pela aresta B-D (1), mais leve que A-B (2), antes de precisar da A-B."
+        },
+        {
+          "letra": "B",
+          "texto": "Subgrafo da figura B): arestas A-C (1) e B-D (1).",
+          "porque": "São dois pedaços soltos. O Prim mantém uma árvore só, conexa; pedaços soltos são coisa do Kruskal."
+        },
+        {
+          "letra": "C",
+          "texto": "Subgrafo da figura C): arestas A-C (1), C-D (1) e B-D (1).",
+          "porque": "É a árvore geradora mínima, de peso 3, e é o que o Prim monta. Começando em A: A-C (1), depois C-D (1), depois B-D (1); a cada passo, o escolhido é conexo."
+        },
+        {
+          "letra": "D",
+          "texto": "Subgrafo da figura D): arestas A-C (1), A-B (2) e B-D (1).",
+          "porque": "Também pesa 4. Com a árvore {A, C}, a aresta mais leve que sai dela é C-D (1), não A-B (2)."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Árvore mínima: A-C, C-D, B-D, peso 3. O Prim só tem pedaços conexos (B é do Kruskal) e não escolheria A-B (2) com arestas de peso 1 disponíveis (A e D).",
+      "assuntos": [
+        {
+          "num": "0153",
+          "modulo": "23-grafos-avancados.md"
+        }
+      ]
+    },
+    {
+      "numero": 20,
+      "topico": 8,
+      "formato": "conceito",
+      "enunciado": "Seja G = (V, E) um dígrafo no qual V é um conjunto de vértices e E é um conjunto de arestas. Construímos um grafo Gᵀ a partir de G com os seguintes passos:\n\n1. Gᵀ é inicialmente vazio;\n2. Cada vértice vᵢ ∈ V é inserido em Gᵀ;\n3. Para cada aresta (u, v) ∈ E, inserimos uma aresta (v, u) em Gᵀ.\n\nAssinale a alternativa correta.",
+      "dica": "**Cobra:** o que é o grafo transposto e para que ele serve.\n\n- **Grafo transposto** [0150]: tem os mesmos vértices de G e cada aresta (u, v) invertida para (v, u); um caminho de u a v em G vira um caminho de v a u no transposto. Ex.: G com 1 → 2 → 3 tem transposto 3 → 2 → 1.\n- **Grafos** [0109]: um grafo dirigido é fortemente conexo quando de todo vértice se chega a todos os outros; isso se testa com uma busca em G e outra no transposto, a partir do mesmo vértice. Ex.: 1 → 2 → 3 → 1 é fortemente conexo; 1 → 2 → 3, não.\n\n**Como atacar:** dê nome à construção e pense em que algoritmo ela aparece.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Se de v se chega a todos em G, o que uma busca a partir de v em Gᵀ informa?"
+        },
+        {
+          "item": "B",
+          "texto": "Ao inverter uma aresta de peso -3, que peso ela tem no transposto?"
+        },
+        {
+          "item": "C",
+          "texto": "Que nome se dá a um grafo em que toda aresta (u, v) tem a aresta (v, u)? É isso que o enunciado constrói?"
+        },
+        {
+          "item": "D",
+          "texto": "Num grafo não dirigido, inverter as arestas muda alguma coisa?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "O grafo Gᵀ é chamado grafo transposto de G e pode ser usado, por exemplo, para verificar se G é fortemente conexo.",
+          "porque": "É a descrição usual: inverter todas as arestas dá o grafo transposto, e uma busca em G mais uma em Gᵀ, do mesmo vértice, decidem se G é fortemente conexo (também é a base do algoritmo de Kosaraju). A banca anulou a questão; o gabarito final não diz o motivo."
+        },
+        {
+          "letra": "B",
+          "texto": "O grafo Gᵀ é chamado grafo transposto de G e pode ser usado, por exemplo, para encontrar distâncias mínimas em grafos com pesos negativos usando algoritmos que não são capazes de lidar com pesos negativos em G.",
+          "porque": "Inverter as arestas não muda os pesos: as arestas negativas continuam negativas no transposto."
+        },
+        {
+          "letra": "C",
+          "texto": "O grafo Gᵀ é chamado grafo simétrico e pode ser usado para identificar se os vértices de G possuem vizinhança simétrica entre si.",
+          "porque": "O nome está trocado: grafo simétrico é aquele em que toda aresta (u, v) tem a volta (v, u). A construção do enunciado é o transposto."
+        },
+        {
+          "letra": "D",
+          "texto": "O grafo Gᵀ é chamado grafo simétrico e só pode ser calculado para grafos não direcionados.",
+          "porque": "Nome trocado, e a construção faz sentido justamente para grafos dirigidos; num grafo não dirigido, o transposto é o próprio grafo."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "Anulada pela banca. A construção é o grafo transposto, e a alternativa A descreve o uso clássico dele (testar conexidade forte). O gabarito final não diz o motivo da anulação.",
+      "assuntos": [
+        {
+          "num": "0150",
+          "modulo": "23-grafos-avancados.md"
+        },
+        {
+          "num": "0109",
+          "modulo": "16-grafos.md"
+        }
+      ]
+    }
+  ]
+}

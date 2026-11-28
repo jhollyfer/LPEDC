@@ -1,0 +1,1169 @@
+{
+  "edital": "031/2024",
+  "slug": "2024-031",
+  "ano": 2024,
+  "oficial": true,
+  "questoes": [
+    {
+      "numero": 1,
+      "topico": 7,
+      "formato": "código",
+      "enunciado": "Considere a função abaixo escrita em linguagem C e com o objetivo de ordenar um vetor de inteiros com n elementos de maneira crescente:\n\n```c\nvoid ordena(int v[], unsigned tamanhoDoVetor) {\n   int i,j,k;\n   for(i = 1; i < tamanhoDoVetor; i++) {\n      k = v[i];\n      for(j=i-1; ((j>=0) && (v[j]>k)); j--) {\n         v[j+1] = v[j];\n      }\n      v[j]= k;\n   }\n}\n```\n\nAssinale a alternativa correta:",
+      "dica": "**Cobra:** reconhecer o insertion sort e achar a linha que o estraga.\n\n- **Insertion sort** [0093]: para cada `i`, guarda `v[i]` em `k`, empurra uma casa para a direita os anteriores maiores que `k` e põe `k` no buraco que sobrou, em `v[j + 1]`. Ex.: em 2, 5, 3, o 3 empurra o 5 e entra na posição 1: 2, 3, 5.\n- **Selection sort** [0092]: a cada volta procura o menor elemento do restante e troca com a posição `i`, sem empurrar ninguém. Ex.: em 3, 1, 2, o `i = 0` acha o 1 e troca: 1, 3, 2.\n\n**Como atacar:** pare o laço interno e pergunte em que índice está o buraco quando ele termina.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Quando o laço interno termina, qual posição ficou livre para o `k`: a `j` ou a `j + 1`?"
+        },
+        {
+          "item": "B",
+          "texto": "O código procura o menor elemento do restante em algum momento?"
+        },
+        {
+          "item": "C",
+          "texto": "Troque só a linha `v[j]= k;` e rode com {5, 3, 4, 1, 2}. A saída fica em ordem?"
+        },
+        {
+          "item": "D",
+          "texto": "Quantas linhas mudariam para o laço interno passar a procurar o mínimo?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "O código ordena o vetor por inserção de maneira crescente",
+          "porque": "Não ordena: quando o laço interno para, o buraco está em `j + 1`, e o código escreve `k` em `v[j]`, por cima de um elemento que não saiu do lugar. Com `j = -1`, ainda escreve fora do vetor. Rodando {5, 3, 4, 1, 2}, a saída não sai em ordem."
+        },
+        {
+          "letra": "B",
+          "texto": "O código ordena o vetor de maneira crescente por seleção",
+          "porque": "A estrutura é de inserção (guardar `k` e empurrar os maiores), não de seleção, que procuraria o menor e trocaria."
+        },
+        {
+          "letra": "C",
+          "texto": "É possível alterar o código em uma única linha para ordenar o vetor de maneira crescente por inserção",
+          "porque": "É a leitura mais direta: trocar `v[j] = k` por `v[j+1] = k` dá o insertion sort crescente, e rodado assim {5, 3, 4, 1, 2} sai 1 2 3 4 5. A banca anulou a questão; o motivo não foi publicado."
+        },
+        {
+          "letra": "D",
+          "texto": "É possível alterar o código em uma única linha para ordenar o vetor de maneira crescente por seleção",
+          "porque": "Para virar seleção seria preciso reescrever o laço interno (procurar o mínimo e trocar), não uma linha só."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "Anulada pela banca. O código é um insertion sort com `v[j] = k` no lugar de `v[j+1] = k`; com essa troca de uma linha ele ordena (rodado em C). A C parece a resposta pretendida; o motivo da anulação não foi publicado.",
+      "assuntos": [
+        {
+          "num": "0093",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0092",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 2,
+      "topico": 2,
+      "formato": "cálculo",
+      "enunciado": "Se um programador fez testes para avaliar o tempo de execução para entradas de tamanho 1000 em um programa O(n²) e obteve tempo de 1 minuto, quanto tempo demoraria para uma entrada de tamanho 2000? (considere que 1000 é suficientemente grande para desprezar fatores menores na função de custo e que o custo unitário por operação não variou com o tamanho do problema entre os dois experimentos)",
+      "dica": "**Cobra:** prever o tempo de um algoritmo quadrático quando a entrada dobra.\n\n- **Notação O** [0072]: para n grande, o termo dominante decide o tempo, e as constantes se cancelam na razão entre dois tamanhos. Ex.: num custo `c · n²`, a razão entre n = 2000 e n = 1000 é (2000/1000)² = 4.\n- **Crescimento quadrático** [0072]: multiplicar a entrada por k multiplica o tempo por k², porque cada elemento é comparado com todos os outros. Ex.: triplicar a entrada de um O(n²) faz o tempo crescer 9 vezes.\n\n**Como atacar:** escreva a razão (n₂/n₁)² e multiplique pelo tempo medido.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Num algoritmo quadrático, dobrar n multiplica o tempo por quanto?"
+        },
+        {
+          "item": "B",
+          "texto": "Qual expoente transforma 2 em 3?"
+        },
+        {
+          "item": "C",
+          "texto": "Calcule (2000/1000)². O resultado bate?"
+        },
+        {
+          "item": "D",
+          "texto": "Para dar 9, qual teria de ser a razão entre os tamanhos?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "2 minutos",
+          "porque": "Seria o crescimento de um algoritmo linear, em que dobrar a entrada dobra o tempo."
+        },
+        {
+          "letra": "B",
+          "texto": "3 minutos",
+          "porque": "Não corresponde a nenhuma potência de 2: 2¹ = 2 e 2² = 4."
+        },
+        {
+          "letra": "C",
+          "texto": "4 minutos",
+          "porque": "(2000/1000)² = 4, então 4 minutos."
+        },
+        {
+          "letra": "D",
+          "texto": "9 minutos",
+          "porque": "Seria a conta com a entrada triplicada, 3² = 9."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "O(n²): dobrar n multiplica o tempo por 2² = 4. De 1 minuto vai a 4 minutos.",
+      "assuntos": [
+        {
+          "num": "0072",
+          "modulo": "10-analise.md"
+        }
+      ]
+    },
+    {
+      "numero": 3,
+      "topico": 2,
+      "formato": "afirmações",
+      "enunciado": "Sobre as afirmativas abaixo:\n\nI) Se f(n)=log2(n) então f(n) é O(log10(n))\nII) Se um algoritmo tem função de custo T(n) = 3n então é correto afirmar que o algoritmo é O(n²)\nIII) Se um algoritmo A tem função de custo T1(n) na classe de complexidade Ω(n) e um algoritmo B tem função de custo T2(n) na classe de complexidade Ω(n²) então sabe-se com certeza que T1(n) está na classe O(T2(n)).",
+      "dica": "**Cobra:** o que O e Ω garantem e o que não garantem.\n\n- **O, Ω e Θ** [0166]: `f` é O(g) se, a partir de algum n, `f(n) ≤ c · g(n)`; `f` é Ω(g) se `f(n) ≥ c · g(n)`. O é teto, Ω é piso, e um teto alto também vale. Ex.: 3n é O(n), O(n²) e O(2ⁿ).\n- **Base do logaritmo** [0072]: logaritmos em bases diferentes diferem por um fator constante, então a base não muda a classe O. Ex.: log₂ n = log₁₀ n / log₁₀ 2 ≈ 3,32 · log₁₀ n.\n\n**Como atacar:** para a III, procure duas funções que respeitem os pisos e quebrem a conclusão.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Quanto vale log₂ n dividido por log₁₀ n? Depende de n?"
+        },
+        {
+          "item": "II",
+          "texto": "O exige que T(n) fique abaixo de c · n² a partir de algum n. 3n fica?"
+        },
+        {
+          "item": "III",
+          "texto": "Escolha T1 = n³ e T2 = n². Os dois pisos valem? E n³ fica abaixo de c · n²?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas I e II estão corretas",
+          "porque": "I vale: log₂ n é uma constante vezes log₁₀ n. II vale: O é um teto, e n² está acima de 3n. III é falsa: Ω só dá piso; T1 = n³ é Ω(n), T2 = n² é Ω(n²), e n³ não é O(n²)."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas I e III estão corretas",
+          "porque": "III é falsa: saber só os pisos dos dois custos não diz nada sobre quem fica abaixo de quem. E a II, deixada de fora, é verdadeira."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas II e III estão corretas",
+          "porque": "Inclui a III, que é falsa, e deixa de fora a I, que é verdadeira."
+        },
+        {
+          "letra": "D",
+          "texto": "Todas estão corretas",
+          "porque": "A III é falsa: com T1 = n³ e T2 = n², os pisos valem e T1 não é O(T2)."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "I verdadeira (a base do log é constante), II verdadeira (O é teto), III falsa (Ω é só piso: T1 = n³, T2 = n²).",
+      "assuntos": [
+        {
+          "num": "0166",
+          "modulo": "26-analise-formal.md"
+        },
+        {
+          "num": "0072",
+          "modulo": "10-analise.md"
+        }
+      ]
+    },
+    {
+      "numero": 4,
+      "topico": 6,
+      "formato": "simulação",
+      "enunciado": "Dado o vetor abaixo, o qual é apresentado em uma tabela onde a primeira linha indica a posição dos elementos e a segunda linha os valores armazenados.\n\n| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |\n|---|---|---|---|---|---|---|---|---|\n| 2 | 4 | 6 | 8 | 10 | 12 | 14 | 16 | 18 |\n\nUma busca binária no mesmo compararia a chave 13 com os seguintes valores do vetor:",
+      "figuras": [
+        "2024-031-q04"
+      ],
+      "dica": "**Cobra:** listar as comparações da busca binária para uma chave ausente.\n\n- **Busca binária** [0090]: compara a chave com o elemento do meio, `meio = (inicio + fim) / 2`, e descarta a metade onde ela não pode estar; termina quando acha ou quando `inicio > fim`. Ex.: em 2, 4, 6, procurando 5, compara com o 4 e depois com o 6.\n- **Busca sequencial** [0089]: compara a chave com cada elemento, do primeiro ao último, e não precisa de vetor ordenado. Ex.: procurar 13 em 2, 4, ..., 18 compara com os 9 elementos.\n\n**Como atacar:** anote `inicio`, `fim` e `meio` a cada passo, com divisão inteira.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Por qual posição a busca binária começa num vetor de 9 elementos?"
+        },
+        {
+          "item": "B",
+          "texto": "Depois de comparar 13 com 14, a busca vai para que lado?"
+        },
+        {
+          "item": "C",
+          "texto": "Como a busca descobre que a chave não está lá sem olhar nenhum elemento?"
+        },
+        {
+          "item": "D",
+          "texto": "Anote inicio, fim e meio a cada passo. Os três valores comparados batem?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "2, 6, 10, 14 e 18",
+          "porque": "São as posições pares 0, 2, 4, 6 e 8, uma varredura salteada, não as escolhas da busca binária, que sempre começa pelo meio."
+        },
+        {
+          "letra": "B",
+          "texto": "10, 14 e 18",
+          "porque": "Depois do 14, a chave 13 é menor e a busca vai para a esquerda (posição 5, valor 12), não para o 18."
+        },
+        {
+          "letra": "C",
+          "texto": "Nenhuma porque a chave não existe no vetor",
+          "porque": "A chave não existe, mas a busca só descobre isso comparando: ela compara com 10, 14 e 12 antes de desistir."
+        },
+        {
+          "letra": "D",
+          "texto": "10, 14 e 12",
+          "porque": "inicio 0, fim 8: meio 4 (10), 13 > 10. inicio 5: meio 6 (14), 13 < 14. fim 5: meio 5 (12), 13 > 12. inicio 6 > fim 5: para. Comparou com 10, 14 e 12; rodado em Python."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "Meios 4, 6 e 5: compara com 10, 14 e 12 e para sem achar.",
+      "assuntos": [
+        {
+          "num": "0090",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0089",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 5,
+      "topico": 4,
+      "formato": "simulação",
+      "enunciado": "Considere a árvore binária a seguir:\n\n![Árvore binária da questão 5](2024-031/figuras/q05-arvore.png)\n\nSe ela for percorrida em-ordem (*inorder*), a sequência de nós visitados será:",
+      "figuras": [
+        "2024-031-q05"
+      ],
+      "dica": "**Cobra:** aplicar o percurso em ordem numa árvore binária desenhada.\n\n- **Percurso em ordem** [0098]: visita a subárvore esquerda inteira, depois o nó, depois a subárvore direita; numa BST isso dá as chaves em ordem crescente, mas esta árvore não é BST. Ex.: na árvore 2 com filhos 1 e 3, a em-ordem é 1, 2, 3.\n- **Pré-ordem** [0098]: visita o nó antes das subárvores, então a raiz aparece primeiro. Ex.: na mesma árvore, a pré-ordem é 2, 1, 3.\n\n**Como atacar:** comece descendo sempre à esquerda até o 4, sem pular a subárvore esquerda de ninguém.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Faça a em-ordem da subárvore do 15 primeiro. O que vem logo depois dela?"
+        },
+        {
+          "item": "B",
+          "texto": "Esta árvore é uma BST? O 23 à direita do 42 é maior que ele?"
+        },
+        {
+          "item": "C",
+          "texto": "Esta sequência começa pela raiz. Qual percurso faz isso?"
+        },
+        {
+          "item": "D",
+          "texto": "Esta sequência lê a árvore nível por nível. Qual percurso é esse?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "4 15 8 42 23 16",
+          "porque": "Esquerda do 42: em-ordem do 15 dá 4, 15, 8. Depois o 42. Direita: o 23 não tem filho esquerdo, então vem o 23 e depois o 16. Resultado: 4 15 8 42 23 16."
+        },
+        {
+          "letra": "B",
+          "texto": "4 8 15 16 23 42",
+          "porque": "É a lista das chaves em ordem crescente, o que a em-ordem só daria se a árvore fosse BST. Aqui o 15 e o 23 estão abaixo do 42 dos dois lados."
+        },
+        {
+          "letra": "C",
+          "texto": "42 15 4 8 23 16",
+          "porque": "É a pré-ordem: raiz, esquerda, direita."
+        },
+        {
+          "letra": "D",
+          "texto": "42 15 23 4 8 16",
+          "porque": "É o percurso por níveis (em largura): 42, depois 15 e 23, depois 4, 8 e 16."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Em-ordem: (4 15 8) 42 (23 16). A árvore não é BST, então a sequência não sai crescente.",
+      "assuntos": [
+        {
+          "num": "0098",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 6,
+      "topico": 4,
+      "formato": "afirmações",
+      "enunciado": "Sobre árvores vermelho e preto contento pelo menos 128 elementos, sabe-se que:\n\nI) Uma árvore vermelho e preto tem altura máxima inferior a 3 log2(n), onde n é o número de chaves, pois ela é balanceada\nII) No pior caso, uma árvore vermelho e preto tem altura pior do que o pior caso de uma árvore binária de pesquisa\nIII) O balanceamento na árvore falha apenas para os casos de inserção em ordem crescente, situação em que a altura esperada da árvore pode chegar a passar da raiz quadrada do número de elementos quando o número de elementos for muito grande.",
+      "dica": "**Cobra:** limite de altura da rubro-negra e o que o balanceamento garante.\n\n- **Rubro-negra** [0177]: BST com nós vermelhos e pretos, raiz preta, sem dois vermelhos seguidos e com o mesmo número de pretos em todo caminho até as folhas nulas; isso limita a altura a 2 · log₂(n + 1). Ex.: com n = 127, a altura é no máximo 14.\n- **BST sem balanceamento** [0099]: a altura depende da ordem de inserção e pode chegar a n - 1 quando as chaves vêm em ordem. Ex.: inserir 1, 2, ..., 128 dá altura 127.\n\n**Como atacar:** compare 2 · log₂(n + 1) com 3 · log₂ n para n = 128.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Calcule 2 · log₂(129) e 3 · log₂(128). Qual é maior?"
+        },
+        {
+          "item": "II",
+          "texto": "Qual é a altura de uma BST comum com 128 chaves inseridas em ordem? E a de uma rubro-negra?"
+        },
+        {
+          "item": "III",
+          "texto": "As regras de cor e as rotações dependem da ordem em que as chaves chegam?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas I é verdadeira",
+          "porque": "I vale: 2 · log₂(n + 1) fica abaixo de 3 · log₂ n para n ≥ 128 (com 128: cerca de 14 contra 21). II é falsa: o pior caso da BST é n - 1, muito pior. III é falsa: a rubro-negra garante a altura para qualquer ordem de inserção, inclusive a crescente."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas II é verdadeira",
+          "porque": "II inverte a comparação: a rubro-negra existe justamente para evitar o pior caso da BST, de altura n - 1."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas III é verdadeira",
+          "porque": "III descreve a BST sem balanceamento. A rubro-negra mantém altura O(log n) mesmo com inserção em ordem crescente."
+        },
+        {
+          "letra": "D",
+          "texto": "Apenas I e II são verdadeiras",
+          "porque": "I vale, mas a II é falsa: a altura da rubro-negra é O(log n), e o pior caso da BST é n - 1."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "I verdadeira (2 log₂(n+1) < 3 log₂ n para n ≥ 128), II e III falsas: o balanceamento vale para qualquer ordem de inserção.",
+      "assuntos": [
+        {
+          "num": "0177",
+          "modulo": "28-estruturas-complementos.md"
+        },
+        {
+          "num": "0099",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 7,
+      "topico": 6,
+      "formato": "afirmações",
+      "enunciado": "Considere as seguintes afirmações sobre a tarefa de pesquisa por chaves em uma coleção de elementos.\n\nI) A busca binária permite encontrar chaves eficientemente, mas não funciona se houver chaves repetidas na coleção\nII) Uma estrutura de dados pode ser usada para organizar os elementos, sacrificando custo espacial (memória) e ao mesmo tempo favorecendo o custo temporal\nIII) Se for necessário fazer muitas alterações na coleção (inserção, remoção e alteração de chaves), então a busca sequencial poderá ser melhor do que a busca binária no caso médio.",
+      "dica": "**Cobra:** quando vale a pena ordenar ou montar uma estrutura para buscar.\n\n- **Busca binária** [0090]: exige vetor ordenado e acesso direto ao meio; com chaves repetidas ela continua achando uma das ocorrências, só não garante qual. Ex.: em 1, 3, 3, 3, 7, procurar 3 cai logo no meio, posição 2.\n- **Busca sequencial** [0089]: percorre os elementos um a um e funciona sem ordem, então inserir é só pôr no fim; o custo da busca é O(n). Ex.: inserir num vetor desordenado custa O(1), num ordenado custa O(n).\n\n**Como atacar:** para a III, some o custo de manter o vetor ordenado ao custo das buscas.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Em 1, 3, 3, 3, 7, procure o 3 por busca binária. Ela acha?"
+        },
+        {
+          "item": "II",
+          "texto": "Uma tabela hash gasta memória a mais. O que ela ganha em troca?"
+        },
+        {
+          "item": "III",
+          "texto": "Se cada inserção num vetor ordenado custa O(n), quanto custam muitas inserções somadas às buscas?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Todas as afirmações são verdadeiras",
+          "porque": "I é falsa: chaves repetidas não impedem a busca binária de achar a chave."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas I e II são verdadeiras",
+          "porque": "I é falsa (a busca binária funciona com repetidas) e a III, deixada de fora, é defensável."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas I e III são verdadeiras",
+          "porque": "I é falsa: repetição de chaves não quebra a busca binária."
+        },
+        {
+          "letra": "D",
+          "texto": "Apenas II e III são verdadeiras",
+          "porque": "É a leitura mais provável: II é a troca clássica de espaço por tempo (índice, hash, árvore) e III vale quando o custo de manter a coleção ordenada supera o ganho nas buscas. A banca anulou a questão; o motivo não foi publicado."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "Anulada pela banca. I é falsa (a busca binária funciona com chaves repetidas), II verdadeira; a III é discutível (\"caso médio\" de quê, busca ou total?), o que pode explicar a anulação. A D seria a resposta mais provável.",
+      "assuntos": [
+        {
+          "num": "0090",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0089",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 8,
+      "topico": 4,
+      "formato": "conceito",
+      "enunciado": "Dentro das árvores AVL, considera-se uma árvore balanceada somente quando:",
+      "dica": "**Cobra:** a definição de árvore balanceada na AVL.\n\n- **AVL** [0101]: BST em que, em todo nó, as alturas das subárvores esquerda e direita diferem no máximo de 1; a regra vale para cada nó, ou seja, as subárvores também são AVL. Ex.: raiz com subárvore esquerda de altura 2 e direita de altura 1 está balanceada na raiz.\n- **BST** [0099]: em todo nó, as chaves menores ficam à esquerda e as maiores à direita; isso é ordem, não balanceamento. Ex.: 1, 2, 3 inseridos em ordem formam uma BST em linha, desbalanceada.\n\n**Como atacar:** separe o que é regra de ordem (BST) do que é regra de altura (AVL).",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "A regra de altura vale só na raiz ou em todos os nós?"
+        },
+        {
+          "item": "B",
+          "texto": "Uma árvore com 0 ou 2 filhos em todo nó pode ter um lado muito mais fundo que o outro?"
+        },
+        {
+          "item": "C",
+          "texto": "Com 4 nós, é possível ter diferença zero em todo nó?"
+        },
+        {
+          "item": "D",
+          "texto": "Essa frase fala de ordem das chaves ou de altura?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "A diferença de altura da subárvore esquerda para a subárvore direita não exceda de 1, e as subárvores esquerda e direita também são balanceadas.",
+          "porque": "É a definição de AVL: diferença de altura de no máximo 1 entre as subárvores, valendo recursivamente para cada subárvore."
+        },
+        {
+          "letra": "B",
+          "texto": "Todos os nós da árvore têm 0 ou 2 subárvores, e a altura mínima da raiz é 2.",
+          "porque": "Descreve uma árvore estritamente binária (0 ou 2 filhos), que pode ser bem desbalanceada."
+        },
+        {
+          "letra": "C",
+          "texto": "Não existe diferença entre as alturas das subárvores dos nós.",
+          "porque": "Exigir diferença zero em todo nó só é possível em árvores cheias (1, 3, 7, ... nós). A AVL aceita diferença de 1."
+        },
+        {
+          "letra": "D",
+          "texto": "Todos os nós com chaves de busca menores que a chave da raiz encontram-se na subárvore esquerda.",
+          "porque": "É a propriedade de ordem da BST, que não diz nada sobre altura."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "AVL: em todo nó, |altura esq. - altura dir.| ≤ 1, e as subárvores também são AVL.",
+      "assuntos": [
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0099",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 9,
+      "topico": "3.1",
+      "formato": "código",
+      "enunciado": "Considere uma lista ligada na qual cada nó contém um campo info (um valor inteiro) e um campo prox (um ponteiro para o próximo nó). O início da lista é indicado simplesmente por um ponteiro para o primeiro elemento. A declaração a seguir especifica o tipo da lista e declara uma lista inicialmente vazia.\n\n```c\ntypedef struct lista Lista;\nstruct lista {\n      int info;\n      Lista *prox;\n} *uma_lista = NULL;\n```\n\nQual das alternativas a seguir contém um código que insere corretamente um novo nó no início da lista?",
+      "dica": "**Cobra:** por que inserir no início de uma lista exige ponteiro para ponteiro.\n\n- **Ponteiro para ponteiro** [0049]: para uma função mudar a variável `uma_lista` de quem chamou, ela precisa receber o endereço dessa variável, um `Lista **`, e escrever em `*lista`. Ex.: `insere(&uma_lista, 5)` faz `uma_lista` apontar para o nó novo.\n- **Inserir no início** [0076]: o nó novo aponta para o antigo primeiro (`novo->prox = *lista`) e passa a ser o primeiro (`*lista = novo`), em O(1). Ex.: lista 3 → 7; inserindo 5, fica 5 → 3 → 7.\n\n**Como atacar:** confira o tipo de `lista` em cada alternativa e o que `*lista` significa nele.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Se `lista` é `Lista *`, de que tipo é `*lista`? Dá para guardar isso em `novo->prox`?"
+        },
+        {
+          "item": "B",
+          "texto": "Com a lista vazia, `lista` vale NULL. O que acontece em `lista->prox`?"
+        },
+        {
+          "item": "C",
+          "texto": "Simule com a lista vazia e depois com um nó. `uma_lista` muda nos dois casos?"
+        },
+        {
+          "item": "D",
+          "texto": "Com a lista 3 → 7, onde o novo nó fica, e o que acontece com o 7?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "```c\nvoid insere(Lista *lista, int info) {\n     Lista *novo = malloc(sizeof (Lista));\n     novo->info = info;\n     novo->prox = *lista;\n     *lista = novo;\n}\n```",
+          "porque": "Com `Lista *lista`, `*lista` é uma `struct lista`, não um ponteiro: `novo->prox = *lista` e `*lista = novo` nem compilam. E mudar a cópia do ponteiro não mudaria `uma_lista`."
+        },
+        {
+          "letra": "B",
+          "texto": "```c\nvoid insere(Lista *lista, int info) {\n     Lista *novo = malloc(sizeof (Lista));\n     novo->info = info;\n     novo->prox = lista->prox;\n     *lista = novo;\n}\n```",
+          "porque": "Também recebe `Lista *`: `lista->prox` é o segundo nó (ou falha com lista vazia, `NULL`), e `*lista = novo` atribui ponteiro a struct."
+        },
+        {
+          "letra": "C",
+          "texto": "```c\nvoid insere(Lista **lista, int info) {\n     Lista *novo = malloc(sizeof (Lista));\n     novo->info = info;\n     novo->prox = *lista;\n     *lista = novo;\n}\n```",
+          "porque": "Recebe o endereço do ponteiro do início: o novo aponta para o antigo primeiro e `*lista` passa a apontar para o novo. Funciona também com a lista vazia; chama-se `insere(&uma_lista, x)`."
+        },
+        {
+          "letra": "D",
+          "texto": "```c\nvoid insere(Lista **lista, int info) {\n     Lista *novo = malloc(sizeof (Lista));\n     novo->info = info;\n     novo->prox = NULL;\n     if (*lista == NULL) { *lista = novo; }\n     else { *lista->prox = novo; }\n}\n```",
+          "porque": "Põe o novo com `prox = NULL` e, se a lista não está vazia, liga-o depois do primeiro, perdendo o resto da lista. Além disso, `*lista->prox` se lê `*(lista->prox)`; o certo seria `(*lista)->prox`."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Inserir no início: `novo->prox = *lista; *lista = novo;` com `Lista **lista`, para alterar o ponteiro de quem chamou.",
+      "assuntos": [
+        {
+          "num": "0049",
+          "modulo": "06-ponteiros.md"
+        },
+        {
+          "num": "0076",
+          "modulo": "11-listas.md"
+        }
+      ]
+    },
+    {
+      "numero": 10,
+      "topico": 7,
+      "formato": "afirmações",
+      "enunciado": "Considere as seguintes afirmações sobre algoritmos de ordenação.\n\nI) O método da inserção (insertion sort) pode ser mais eficiente do que o quick sort se o vetor for pequeno e tiver poucos elementos fora de ordem.\nII) O quick sort é o melhor algoritmo de ordenação em situações típicas e, para vetores muito grandes, ele é sempre aconselhável em detrimento de outros algoritmos de ordenação.\nIII) O método da intercalação (merge sort) é eficiente, mas normalmente requer memória adicional para realizar a intercalação. É possível intercalar os elementos no próprio vetor, mas isso exige passos adicionais.",
+      "dica": "**Cobra:** quando cada algoritmo de ordenação é a melhor escolha.\n\n- **Insertion sort** [0093]: custa O(n²) no pior caso, mas O(n + inversões) em geral, então é muito rápido em vetor pequeno ou quase ordenado. Ex.: em 1, 2, 4, 3, 5 faz uma troca só.\n- **Quick sort** [0095]: em média O(n log n) e rápido na prática, mas o pior caso é O(n²) e ele não é estável. Ex.: com pivô no último, um vetor já ordenado dá n²/2 comparações.\n- **Merge sort** [0094]: sempre O(n log n), mas a intercalação usa um vetor auxiliar de n posições. Ex.: intercalar 1, 4 com 2, 3 escreve 1, 2, 3, 4 no auxiliar.\n\n**Como atacar:** desconfie de \"sempre\" em afirmação sobre ordenação.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Quantas trocas o insertion sort faz num vetor com só dois elementos fora do lugar?"
+        },
+        {
+          "item": "II",
+          "texto": "Existe entrada em que o quick sort gasta n² passos? E situação em que estabilidade importa?"
+        },
+        {
+          "item": "III",
+          "texto": "Onde o merge sort escreve o resultado da intercalação de duas metades?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Todas as afirmações são verdadeiras",
+          "porque": "II é falsa pelo \"sempre\": no pior caso o quick sort é O(n²), e quando se precisa de estabilidade ou de garantia de tempo, merge sort ou heapsort são preferíveis."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas I e II são verdadeiras",
+          "porque": "Inclui a II, que é falsa, e deixa de fora a III, que é verdadeira."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas I e III são verdadeiras",
+          "porque": "I vale: vetor pequeno e quase ordenado é o melhor caso do insertion sort. III vale: o merge sort usa memória auxiliar, e intercalar no próprio vetor é possível com mais trabalho. II é falsa pelo \"sempre\"."
+        },
+        {
+          "letra": "D",
+          "texto": "Apenas II e III são verdadeiras",
+          "porque": "Inclui a II, que é falsa, e deixa de fora a I, que é verdadeira."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "I e III verdadeiras; II falsa: o quick sort não é sempre a melhor escolha (pior caso O(n²), não estável).",
+      "assuntos": [
+        {
+          "num": "0093",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0095",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0094",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 11,
+      "topico": 1,
+      "formato": "código",
+      "enunciado": "Considere a função em Python a seguir.\n\n```python\ndef chamada(n):\n     print(\"PPGI\")\n     if n <= 1:\n          return n\n     else:\n          return (chamada(n-1) + chamada(n-2))\n```\n\nQuantas vezes a palavra PPGI é impressa na tela ao executar chamada(4)?",
+      "dica": "**Cobra:** contar as chamadas de uma recursão dupla.\n\n- **Recursão** [0032]: cada chamada que não é caso base gera novas chamadas, e todas executam a primeira linha da função antes de testar o caso base. Ex.: `chamada(2)` imprime uma vez e chama `chamada(1)` e `chamada(0)`, que imprimem mais duas.\n- **Fibonacci recursivo** [0033]: `fib(n) = fib(n - 1) + fib(n - 2)` recalcula os mesmos valores várias vezes, e o número de chamadas cresce exponencialmente. Ex.: `fib(3)` chama `fib(1)` duas vezes.\n\n**Como atacar:** desenhe a árvore de chamadas de `chamada(4)` e conte os nós.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "O número de impressões é o valor que a função devolve ou a quantidade de vezes que ela é chamada?"
+        },
+        {
+          "item": "B",
+          "texto": "Quantas chamadas tem `chamada(3)`? E `chamada(4)` faz o quê além dela?"
+        },
+        {
+          "item": "C",
+          "texto": "Desenhe a árvore de chamadas. Quantos nós ela tem?"
+        },
+        {
+          "item": "D",
+          "texto": "Conte os nós da árvore de chamadas. Chegam a 15?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "3",
+          "porque": "É o valor retornado por `chamada(4)`, não o número de chamadas."
+        },
+        {
+          "letra": "B",
+          "texto": "5",
+          "porque": "É o número de chamadas de `chamada(3)`, um nível a menos."
+        },
+        {
+          "letra": "C",
+          "texto": "9",
+          "porque": "C(n) = 1 + C(n - 1) + C(n - 2), com C(0) = C(1) = 1: C(2) = 3, C(3) = 5, C(4) = 9. Cada chamada imprime uma vez: 9 vezes. Rodado em Python."
+        },
+        {
+          "letra": "D",
+          "texto": "15",
+          "porque": "É mais do que a árvore de chamadas tem: ela tem 9 nós."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Chamadas: C(4) = 1 + C(3) + C(2) = 1 + 5 + 3 = 9 impressões.",
+      "assuntos": [
+        {
+          "num": "0032",
+          "modulo": "04-funcoes.md"
+        },
+        {
+          "num": "0033",
+          "modulo": "04-funcoes.md"
+        }
+      ]
+    },
+    {
+      "numero": 12,
+      "topico": 1,
+      "formato": "código",
+      "enunciado": "Considere a função em Python a seguir.\n\n```python\ndef chamada(n):\n     print(\"PPGI\")\n     if n <= 1:\n          return n\n     else:\n          return (chamada(n-1) + chamada(n-2))\n```\n\nQual o retorno da execução chamada(4)?",
+      "dica": "**Cobra:** calcular o valor de um Fibonacci recursivo.\n\n- **Fibonacci recursivo** [0033]: com casos base `fib(0) = 0` e `fib(1) = 1`, cada valor é a soma dos dois anteriores: 0, 1, 1, 2, 3, 5, 8. Ex.: `fib(5) = fib(4) + fib(3) = 3 + 2 = 5`.\n- **Recursão** [0032]: o valor final se monta de baixo para cima, somando o que cada chamada devolve, e o `print` não muda o retorno. Ex.: `chamada(2)` devolve `chamada(1) + chamada(0) = 1 + 0 = 1`.\n\n**Como atacar:** calcule de baixo para cima: n = 0, 1, 2, 3, 4.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Monte a tabela n = 0 a 4 somando os dois anteriores. Qual é o último valor?"
+        },
+        {
+          "item": "B",
+          "texto": "Quanto vale chamada(1)? E chamada(0)? A sequência começa por onde?"
+        },
+        {
+          "item": "C",
+          "texto": "Quantos termos você somou até chegar a 8?"
+        },
+        {
+          "item": "D",
+          "texto": "Quantos termos você somou até chegar a 13?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "3",
+          "porque": "chamada(0) = 0, chamada(1) = 1, chamada(2) = 1, chamada(3) = 2, chamada(4) = 3. Rodado em Python."
+        },
+        {
+          "letra": "B",
+          "texto": "5",
+          "porque": "É fib(5), um passo adiante."
+        },
+        {
+          "letra": "C",
+          "texto": "8",
+          "porque": "É fib(6)."
+        },
+        {
+          "letra": "D",
+          "texto": "13",
+          "porque": "É fib(7)."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "chamada é Fibonacci com fib(0) = 0 e fib(1) = 1: chamada(4) = 3.",
+      "assuntos": [
+        {
+          "num": "0033",
+          "modulo": "04-funcoes.md"
+        },
+        {
+          "num": "0032",
+          "modulo": "04-funcoes.md"
+        }
+      ]
+    },
+    {
+      "numero": 13,
+      "topico": 4,
+      "formato": "afirmações",
+      "enunciado": "Sobre árvores vermelho-preto, considere as afirmações:\n\nI) A raiz é preta\nII) Toda subárvore nula é preta\nIII) Se um nó é preto, então os filhos são vermelhos\n\nSão verdadeiras:",
+      "dica": "**Cobra:** as regras de cor da rubro-negra.\n\n- **Regras da rubro-negra** [0177]: todo nó é vermelho ou preto, a raiz é preta, as folhas nulas são pretas, um nó vermelho só tem filhos pretos e todo caminho até as folhas nulas tem o mesmo número de pretos. Ex.: raiz preta 10 com filhos 5 e 15 pretos é válida.\n- **LLRB** [0145]: variante em que os links vermelhos só pendem para a esquerda, mas as regras sobre a raiz e os nulos pretos são as mesmas. Ex.: na LLRB, inserir 1, 2, 3 termina com o 2 na raiz, preta.\n\n**Como atacar:** procure uma árvore válida com um nó preto de filho preto.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "De que cor é a raiz depois de qualquer inserção?"
+        },
+        {
+          "item": "II",
+          "texto": "De que cor as regras dizem que são os ponteiros nulos?"
+        },
+        {
+          "item": "III",
+          "texto": "Uma árvore com raiz 10 e filhos 5 e 15, todos pretos, respeita as regras?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas a afirmação I",
+          "porque": "Falta a II: as folhas nulas (NIL) são pretas por definição."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas as afirmações I e II",
+          "porque": "I e II são regras da definição. III é falsa: a regra é que vermelho não tem filho vermelho; preto pode ter filhos pretos, como numa árvore toda preta e cheia."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas as afirmações II e III",
+          "porque": "Inclui a III, que é falsa, e deixa de fora a I, que é verdadeira."
+        },
+        {
+          "letra": "D",
+          "texto": "Todas as afirmações",
+          "porque": "A III é falsa: um nó preto pode ter filhos pretos."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "I e II são regras; III é falsa: a regra é \"vermelho não tem filho vermelho\", e preto pode ter filho preto.",
+      "assuntos": [
+        {
+          "num": "0177",
+          "modulo": "28-estruturas-complementos.md"
+        },
+        {
+          "num": "0145",
+          "modulo": "22-arvores-avancadas.md"
+        }
+      ]
+    },
+    {
+      "numero": 14,
+      "topico": 4,
+      "formato": "conceito",
+      "enunciado": "As árvores rubro-negras têm como uma de suas características",
+      "dica": "**Cobra:** reconhecer uma propriedade da rubro-negra entre outras de outras árvores.\n\n- **Regras da rubro-negra** [0177]: nó vermelho não tem filho vermelho, as folhas nulas são pretas e todo caminho tem o mesmo número de pretos; o balanceamento vem das cores, não das alturas. Ex.: um nó vermelho com um filho 8 e um nulo tem dois filhos pretos.\n- **AVL** [0101]: o balanceamento vem da diferença de altura das subárvores, no máximo 1 em todo nó. Ex.: subárvores de altura 3 e 1 violam a AVL.\n\n**Como atacar:** para cada alternativa, pergunte se ela fala de cor (rubro-negra) ou de altura (AVL).",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Se um nó vermelho não pode ter filho vermelho e os nulos são pretos, de que cor são seus dois filhos?"
+        },
+        {
+          "item": "B",
+          "texto": "Essa regra fala de cor ou de altura? De qual árvore ela é?"
+        },
+        {
+          "item": "C",
+          "texto": "Uma árvore toda preta e cheia viola alguma regra?"
+        },
+        {
+          "item": "D",
+          "texto": "A rubro-negra compara alturas de subárvores para decidir rotações?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Todo nó vermelho (rubro) tem dois filhos pretos",
+          "porque": "Como nó vermelho não pode ter filho vermelho e os nulos são pretos, os dois filhos de um vermelho são sempre pretos."
+        },
+        {
+          "letra": "B",
+          "texto": "A diferença de altura da subárvore esquerda para a subárvore direita não exceda de 1, e as subárvores esquerda e direita também são balanceadas",
+          "porque": "É a definição de AVL, que balanceia por altura."
+        },
+        {
+          "letra": "C",
+          "texto": "Todo nó preto (negro) tem, pelo menos, uma subárvore cuja raiz é vermelha (rubra)",
+          "porque": "Não é regra: um nó preto pode ter dois filhos pretos."
+        },
+        {
+          "letra": "D",
+          "texto": "A altura das subárvores é o fator usado para determinar o balanceamento, e pode exceder em 50% a diferença entre elas.",
+          "porque": "A rubro-negra não usa a altura das subárvores para balancear; usa as cores e a altura preta."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Na rubro-negra, vermelho não tem filho vermelho e nulos são pretos, logo todo vermelho tem dois filhos pretos.",
+      "assuntos": [
+        {
+          "num": "0177",
+          "modulo": "28-estruturas-complementos.md"
+        },
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 15,
+      "topico": 4,
+      "formato": "conceito",
+      "enunciado": "A altura de uma árvore rubro negra com n nós é:",
+      "dica": "**Cobra:** o limite de altura da rubro-negra.\n\n- **Rubro-negra** [0177]: como todo caminho tem o mesmo número de pretos e não há dois vermelhos seguidos, o caminho mais longo tem no máximo o dobro do mais curto, e a altura fica no máximo 2 · log₂(n + 1). Ex.: com 1.023 nós, altura no máximo 20.\n- **Notação O** [0072]: uma altura O(log n) torna busca, inserção e remoção O(log n). Ex.: com 1 milhão de chaves, log₂ n é cerca de 20.\n\n**Como atacar:** elimine as alternativas que não são logarítmicas e confira a constante.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Uma árvore com n nós pode ter altura maior que n?"
+        },
+        {
+          "item": "B",
+          "texto": "Se o caminho mais longo tem no máximo o dobro do mais curto, qual é o fator na frente do log?"
+        },
+        {
+          "item": "C",
+          "texto": "Com 10 nós, faz sentido falar em altura 100?"
+        },
+        {
+          "item": "D",
+          "texto": "Uma rubro-negra pode ter um caminho com o dobro de nós de outro. O limite log(n - 1) aguenta isso?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "de, no máximo, n * log(n)",
+          "porque": "n · log n é maior que n, o número de nós, e nenhuma árvore tem altura maior que n - 1."
+        },
+        {
+          "letra": "B",
+          "texto": "de, no máximo, 2 * log(n+1)",
+          "porque": "É o limite clássico do Cormen: altura ≤ 2 · log₂(n + 1), porque o caminho mais longo tem no máximo o dobro de nós do mais curto."
+        },
+        {
+          "letra": "C",
+          "texto": "no pior caso, n*n",
+          "porque": "n² também passa de n - 1, a altura máxima de qualquer árvore com n nós."
+        },
+        {
+          "letra": "D",
+          "texto": "de, no máximo, log(n-1)",
+          "porque": "log(n - 1) é menor que a altura de muitas rubro-negras válidas; a árvore pode ter até o dobro da altura mínima."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Altura da rubro-negra ≤ 2 · log₂(n + 1).",
+      "assuntos": [
+        {
+          "num": "0177",
+          "modulo": "28-estruturas-complementos.md"
+        },
+        {
+          "num": "0072",
+          "modulo": "10-analise.md"
+        }
+      ]
+    },
+    {
+      "numero": 16,
+      "topico": 1,
+      "formato": "código",
+      "enunciado": "Considere o seguinte trecho de código em C:\n\n```c\nint main() {\n     int *ptr;\n     ptr = (int *)malloc(sizeof(int));\n     *ptr = 10;\n     printf(\"O valor armazenado em ptr é: %d\", *ptr);\n     free(ptr);\n     return 0;\n}\n```\n\nO que o trecho de código faz?",
+      "dica": "**Cobra:** distinguir o ponteiro da memória para onde ele aponta.\n\n- **malloc e free** [0054]: `malloc(sizeof(int))` reserva no heap espaço para um `int` e devolve o endereço; `free` devolve esse espaço. Ex.: `int *p = malloc(sizeof(int)); *p = 7; free(p);`.\n- **Ponteiro** [0045]: `ptr` guarda um endereço, e `*ptr` é o inteiro que está nesse endereço. Ex.: `*ptr = 10` escreve 10 no inteiro alocado, não no ponteiro.\n\n**Como atacar:** separe o que é `ptr` e o que é `*ptr` em cada linha.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Há alguma variável `int` declarada no trecho, além do ponteiro?"
+        },
+        {
+          "item": "B",
+          "texto": "O `sizeof` dentro do `malloc` é de um `int` ou de um `int *`?"
+        },
+        {
+          "item": "C",
+          "texto": "Siga as linhas: onde fica o 10, e o que o `free` devolve?"
+        },
+        {
+          "item": "D",
+          "texto": "O `printf` recebe `ptr` ou `*ptr`?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Atribui o valor 10 a uma variável inteira, imprime o valor e depois libera a memória alocada.",
+          "porque": "Não há variável inteira declarada: o inteiro é criado com `malloc`, no heap."
+        },
+        {
+          "letra": "B",
+          "texto": "Aloca memória para um ponteiro, atribui o valor 10 a ele, imprime o valor e depois libera a memória alocada.",
+          "porque": "A memória alocada é para um inteiro (`sizeof(int)`), não para o ponteiro, que já existe na pilha; e o 10 vai para o inteiro apontado."
+        },
+        {
+          "letra": "C",
+          "texto": "Aloca dinamicamente memória para um inteiro, atribui o valor 10 a ele, imprime o valor e depois libera a memória alocada.",
+          "porque": "É a descrição exata: aloca um `int` no heap, escreve 10 nele por `*ptr`, imprime e libera. A banca anulou a questão; o motivo não foi publicado, talvez a falta de `#include <stdio.h>` e `<stdlib.h>` ou a proximidade com a B."
+        },
+        {
+          "letra": "D",
+          "texto": "Aloca memória para um ponteiro, imprime o endereço de memória alocado e depois libera a memória alocada.",
+          "porque": "O `printf` imprime `*ptr`, o valor 10, e não o endereço."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "Anulada pela banca. O código aloca um int no heap, grava 10, imprime e libera (alternativa C). O trecho não tem os `#include`, e a B é quase igual à C, o que pode explicar a anulação.",
+      "assuntos": [
+        {
+          "num": "0054",
+          "modulo": "07-memoria-dinamica.md"
+        },
+        {
+          "num": "0045",
+          "modulo": "06-ponteiros.md"
+        }
+      ]
+    },
+    {
+      "numero": 17,
+      "topico": [
+        "3.2",
+        "3.3"
+      ],
+      "formato": "conceito",
+      "enunciado": "Qual é a principal diferença entre uma pilha e uma fila?",
+      "dica": "**Cobra:** a política de saída de pilha e fila.\n\n- **Pilha** [0082]: o último a entrar é o primeiro a sair, política LIFO; insere e retira na mesma ponta, o topo. Ex.: empilhando 1, 2, 3, o primeiro a sair é o 3.\n- **Fila** [0085]: o primeiro a entrar é o primeiro a sair, política FIFO; insere no fim e retira do início. Ex.: enfileirando 1, 2, 3, o primeiro a sair é o 1.\n\n**Como atacar:** pense numa pilha de pratos e numa fila de banco.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Empilhe 1, 2, 3 e retire um. Sai o primeiro ou o último?"
+        },
+        {
+          "item": "B",
+          "texto": "Numa fila de banco, quem é atendido primeiro?"
+        },
+        {
+          "item": "C",
+          "texto": "Insira 1, 2, 3 nas duas e retire um de cada. Sai o mesmo?"
+        },
+        {
+          "item": "D",
+          "texto": "Onde a pilha de chamadas de funções aparece num programa em C?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Uma pilha segue o princípio FIFO (First In, First Out), enquanto uma fila segue o princípio LIFO (Last In, First Out).",
+          "porque": "Inverte as duas: a pilha é LIFO e a fila é FIFO."
+        },
+        {
+          "letra": "B",
+          "texto": "Uma pilha segue o princípio LIFO (Last In, First Out), enquanto uma fila segue o princípio FIFO (First In, First Out).",
+          "porque": "Pilha: LIFO, sai o último que entrou. Fila: FIFO, sai o primeiro que entrou."
+        },
+        {
+          "letra": "C",
+          "texto": "Pilhas e filas funcionam da mesma forma, não há diferença entre elas.",
+          "porque": "Elas diferem justamente na ordem de saída."
+        },
+        {
+          "letra": "D",
+          "texto": "Pilhas e filas não são estruturas de dados comuns na programação.",
+          "porque": "São das estruturas mais usadas: pilha de chamadas, desfazer, fila de impressão, BFS."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Pilha LIFO, fila FIFO.",
+      "assuntos": [
+        {
+          "num": "0082",
+          "modulo": "12-pilhas-e-filas.md"
+        },
+        {
+          "num": "0085",
+          "modulo": "12-pilhas-e-filas.md"
+        }
+      ]
+    },
+    {
+      "numero": 18,
+      "topico": "3.4",
+      "formato": "conceito",
+      "enunciado": "Na linguagem de programação C, quando um vetor é passado para uma sub-rotina/função como argumento, o que realmente é passado:",
+      "dica": "**Cobra:** o que o C passa quando um vetor é argumento de função.\n\n- **Vetores e funções** [0038]: ao passar um vetor, o C passa o endereço do primeiro elemento; a função não recebe cópia nem o tamanho, que precisa vir num parâmetro à parte. Ex.: `soma(v, n)` com `int soma(int v[], int n)`.\n- **Ponteiro** [0045]: um parâmetro `int v[]` é, na verdade, um `int *v`, e `v[i]` é `*(v + i)`. Ex.: dentro da função, `sizeof(v)` dá o tamanho do ponteiro, não do vetor.\n\n**Como atacar:** pense no que acontece com o vetor original quando a função altera `v[0]`.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Se a função faz `v[0] = 99`, o vetor de quem chamou muda?"
+        },
+        {
+          "item": "B",
+          "texto": "Como a função descobriria onde o vetor termina, se não recebe o tamanho?"
+        },
+        {
+          "item": "C",
+          "texto": "Se os valores fossem copiados, a alteração dentro da função apareceria fora?"
+        },
+        {
+          "item": "D",
+          "texto": "Por que quase toda função de vetor em C tem um parâmetro `n`?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "O endereço de memória do primeiro elemento do vetor",
+          "porque": "O nome do vetor vira o endereço do primeiro elemento; por isso a função consegue alterar o vetor original."
+        },
+        {
+          "letra": "B",
+          "texto": "O endereço de memória do primeiro e do último elemento do vetor",
+          "porque": "Só um endereço é passado; o fim do vetor não é informado, e por isso se passa o tamanho à parte."
+        },
+        {
+          "letra": "C",
+          "texto": "Os valores dos elementos do vetor",
+          "porque": "Vetor não é copiado: se fosse, alterar `v[0]` na função não mudaria o original, e muda."
+        },
+        {
+          "letra": "D",
+          "texto": "O número de elementos na memória do vetor",
+          "porque": "O tamanho não vai junto; é preciso passá-lo num parâmetro extra."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Vetor como argumento vira o endereço do primeiro elemento; o tamanho vai à parte.",
+      "assuntos": [
+        {
+          "num": "0038",
+          "modulo": "05-vetores-e-strings.md"
+        },
+        {
+          "num": "0045",
+          "modulo": "06-ponteiros.md"
+        }
+      ]
+    },
+    {
+      "numero": 19,
+      "topico": 1,
+      "formato": "código",
+      "enunciado": "Analise o código a seguir:\n\n```c\nint subrotina(int x){\n     int i,z=0;\n     for(i=1;i<x;i++)\n       z += i;\n     return z;\n}\n\nint main(){\n     int z, i, x;\n     for(i=1;i<5;i++){\n          printf(\"Informe um numero: \");\n          scanf(\"%d\",&z);\n          x=subrotina(z);\n          printf(\"%d\\n\",x);\n     }\n     return 0;\n}\n```\n\nQual o resultado impresso na tela, considerando que o usuário informou os respectivos valores de entrada (9, 7, 6, 10)?",
+      "dica": "**Cobra:** rodar à mão uma função que soma de 1 até x - 1.\n\n- **Laço for** [0022]: `for (i = 1; i < x; i++)` repete com i = 1, 2, ..., x - 1, sem incluir o x. Ex.: com x = 4, roda com i = 1, 2 e 3.\n- **Funções** [0028]: a função recebe uma cópia do argumento e devolve o valor com `return`; o `z` e o `i` de dentro não são os mesmos da `main`. Ex.: `subrotina(4)` devolve 1 + 2 + 3 = 6.\n\n**Como atacar:** a soma de 1 a x - 1 é x · (x - 1) / 2.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Calcule subrotina(9). Dá 15?"
+        },
+        {
+          "item": "B",
+          "texto": "Para a entrada 9, o laço vai de 1 até quanto?"
+        },
+        {
+          "item": "C",
+          "texto": "Use x(x - 1)/2 nas quatro entradas. Os valores batem?"
+        },
+        {
+          "item": "D",
+          "texto": "Calcule subrotina(7). Dá 55?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "15, 105, 28, 3",
+          "porque": "Não corresponde a nenhuma regra simples: 15 é a saída para 6, não para 9."
+        },
+        {
+          "letra": "B",
+          "texto": "28, 45, 91, 21",
+          "porque": "28 seria a soma até 7 (entrada 8) e 45 a soma até 9; não batem com 9 e 7."
+        },
+        {
+          "letra": "C",
+          "texto": "36, 21, 15, 45",
+          "porque": "9 → 1 + ... + 8 = 36; 7 → 21; 6 → 15; 10 → 45. Rodado."
+        },
+        {
+          "letra": "D",
+          "texto": "36, 55, 78, 45",
+          "porque": "Começa certo com 36, mas 55 e 78 são somas até 10 e 12, que não correspondem às entradas 7 e 6."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "subrotina(x) = 1 + ... + (x - 1) = x(x - 1)/2: 36, 21, 15, 45.",
+      "assuntos": [
+        {
+          "num": "0022",
+          "modulo": "03-repeticoes.md"
+        },
+        {
+          "num": "0028",
+          "modulo": "04-funcoes.md"
+        }
+      ]
+    },
+    {
+      "numero": 20,
+      "topico": 1,
+      "formato": "código",
+      "enunciado": "Marque a alternativa CORRETA do programa em C que atende o seguinte enunciado: \"Alguns restaurantes nos EUA cobram gorjeta de 18% para o garçom. Faça um programa em C que leia o valor gasto com as despesas realizadas em um restaurante e imprima o valor total com a gorjeta\":",
+      "dica": "**Cobra:** traduzir \"valor com gorjeta de 18%\" numa expressão.\n\n- **Aritmética** [0007]: somar 18% a um valor é `x + x * 0.18`, ou `x * 1.18`; a precedência faz a multiplicação antes da soma. Ex.: 100 + 100 * 0.18 = 118.\n- **Porcentagem** [0007]: 18% é 18/100 = 0,18; multiplicar por 1,18 já inclui o valor original. Ex.: 50 * 1.18 = 59.\n\n**Como atacar:** teste cada fórmula com 100 reais; o total certo é 118.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Calcule com 100 reais. O resultado é o total com 18% de gorjeta?"
+        },
+        {
+          "item": "B",
+          "texto": "Com 100 reais, o que esta fórmula imprime: o total ou só a gorjeta?"
+        },
+        {
+          "item": "C",
+          "texto": "Calcule com 100 reais. Dá 118?"
+        },
+        {
+          "item": "D",
+          "texto": "Com 100 reais, quanto dá `E * E`?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "```c\n#include<stdio.h>\nint main(void){\n  float PT, E;\n  printf(\"Informe o valor\");\n  scanf(\"%f\",&E);\n  PT = E + E * 1.18;\n  printf(\"Valor Total: %.2f\", PT);\n  return 0;\n}\n```",
+          "porque": "`E + E * 1.18` soma o valor duas vezes: com 100, dá 218."
+        },
+        {
+          "letra": "B",
+          "texto": "```c\n#include<stdio.h>\nint main(void){\n  float X, TG;\n  printf(\"Informe o valor\");\n  scanf(\"%f\",&X);\n  TG = X * 0.18;\n  printf(\"Valor Total: %.2f\", TG);\n  return 0;\n}\n```",
+          "porque": "`X * 0.18` é só a gorjeta: com 100, imprime 18, não o total."
+        },
+        {
+          "letra": "C",
+          "texto": "```c\n#include<stdio.h>\nint main(void){\n  float K, W;\n  printf(\"Informe o valor\");\n  scanf(\"%f\",&K);\n  W = K + K * 0.18;\n  printf(\"Valor Total: %.2f\", W);\n  return 0;\n}\n```",
+          "porque": "`K + K * 0.18`: com 100, dá 118, o valor mais a gorjeta."
+        },
+        {
+          "letra": "D",
+          "texto": "```c\n#include<stdio.h>\nint main(void){\n  float PT, E;\n  printf(\"Informe o valor\");\n  scanf(\"%f\",&E);\n  PT = E * E * 18/100;\n  printf(\"Valor Total: %.2f\", PT);\n  return 0;\n}\n```",
+          "porque": "`E * E * 18/100` eleva o valor ao quadrado: com 100, dá 1800."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Total = valor + valor * 0,18. Com 100 reais: 118.",
+      "assuntos": [
+        {
+          "num": "0007",
+          "modulo": "01-fundamentos.md"
+        }
+      ]
+    }
+  ]
+}

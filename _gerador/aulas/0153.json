@@ -1,0 +1,57 @@
+{
+ "num": "0153",
+ "oque": "O **algoritmo de Prim** monta uma **árvore geradora mínima** de um grafo não dirigido e ponderado: o conjunto de arestas que liga todos os vértices com a menor soma de pesos. Ele parte de um vértice e faz **uma árvore só** crescer, uma aresta por vez.",
+ "como": "Começa com a árvore contendo só a origem. Repita até todos os vértices entrarem:\n\n- entre as arestas que ligam um vértice **da árvore** a um vértice **de fora**, escolha a de menor peso;\n- ponha essa aresta e o vértice novo na árvore.\n\nPara achar a menor aresta sem varrer a lista toda, os candidatos ficam num **heap de mínimo** (0102). Quando um vértice entra, as arestas que saem dele para fora entram no heap; um item cujo vértice já está na árvore é descartado ao sair.\n\nO Prim é guloso e acerta pela **propriedade do corte**: a aresta mais leve que cruza o corte (árvore de um lado, resto do outro) sempre cabe numa árvore mínima.\n\nA diferença para o **Kruskal** (0152) aparece no meio do caminho: o Kruskal pega a aresta mais leve do grafo inteiro e junta pedaços soltos (uma floresta); o Prim mantém sempre uma árvore **conexa**.",
+ "caracteristicas": [
+  "Funciona em grafo não dirigido, conexo e ponderado.",
+  "Em todo momento, o que já foi escolhido é uma árvore conexa que contém a origem.",
+  "É guloso: cada aresta escolhida nunca sai.",
+  "É o mesmo laço do Dijkstra; muda só a chave (o peso da aresta, não a distância acumulada).",
+  "Com pesos repetidos, pode haver mais de uma árvore mínima, todas com a mesma soma."
+ ],
+ "vantagens": [
+  "Acha a árvore de custo mínimo em `O(E log V)` com heap binário.",
+  "Bom para grafo denso: com matriz de adjacência e vetor, `O(V²)`.",
+  "Não precisa ordenar todas as arestas antes, como o Kruskal."
+ ],
+ "desvantagens": [
+  "Exige grafo conexo; num grafo desconexo, cobre só a componente da origem.",
+  "A versão com heap precisa descartar itens velhos ou usar `DECREASE-KEY`.",
+  "Não serve para grafo dirigido (lá o problema é outro, a arborescência mínima)."
+ ],
+ "exemplo": "Grafo com A, B, C, D e arestas A-C (1), C-D (1), B-D (1), A-B (2), A-D (2). Origem A.",
+ "passos": [
+  {
+   "titulo": "o Prim cresce uma árvore só",
+   "texto": "A cada passo, a menor aresta entre a árvore e o resto. Depois de cada passo, o que está escolhido é conexo.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "árvore {A}:        candidatas A-C 1, A-B 2, A-D 2  -> A-C",
+     "árvore {A,C}:      candidatas C-D 1, A-B 2, A-D 2  -> C-D",
+     "árvore {A,C,D}:    candidatas B-D 1, A-B 2          -> B-D",
+     "árvore {A,B,C,D}:  soma 1 + 1 + 1 = 3"
+    ]
+   }
+  },
+  {
+   "titulo": "o Kruskal passa por uma floresta",
+   "texto": "O Kruskal pega a menor aresta do grafo inteiro. Se começar por A-C e depois B-D, fica com dois pedaços soltos, algo que o Prim nunca tem.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "Kruskal: A-C 1  -> {A,C} {B} {D}",
+     "         B-D 1  -> {A,C} {B,D}   (dois pedaços)",
+     "         C-D 1  -> {A,B,C,D}     soma 3"
+    ]
+   }
+  }
+ ],
+ "custos": "| Versão | Custo |\n|---|---|\n| matriz de adjacência e vetor de chaves | `O(V²)` |\n| lista de adjacência e heap binário | `O(E log V)` |\n| Kruskal, para comparar | `O(E log E)` |",
+ "naprova": "A banca mostra um grafo pequeno e pergunta qual subgrafo o Prim pode ter montado no meio do caminho. Elimine o que for desconexo (isso é coisa do Kruskal) e o que tiver soma maior que a árvore mínima.",
+ "fontes": [
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 21 (árvores geradoras mínimas).",
+  "Prim, \"Shortest connection networks and some generalizations\", *Bell System Technical Journal*, 1957.",
+  "Sedgewick e Wayne, *Algorithms*, 4. ed., seção 4.3 (minimum spanning trees)."
+ ]
+}

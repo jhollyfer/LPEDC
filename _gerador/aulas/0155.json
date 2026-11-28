@@ -1,0 +1,45 @@
+{
+ "num": "0155",
+ "oque": "O **algoritmo de Floyd-Warshall** calcula a menor distância entre **todos os pares** de vértices de um grafo dirigido e ponderado, numa matriz `d` em que `d[i][j]` é a distância de `i` até `j`. Aceita pesos negativos, mas **não** ciclos negativos.",
+ "como": "A matriz começa com o peso da aresta direta, infinito onde não há aresta e 0 na diagonal. Depois, para cada vértice `k`, libera `k` como **passagem** e testa todos os pares:\n\n```c\nfor (k = 0; k < V; k++)\n    for (i = 0; i < V; i++)\n        for (j = 0; j < V; j++)\n            if (d[i][k] + d[k][j] < d[i][j])\n                d[i][j] = d[i][k] + d[k][j];\n```\n\nDepois da rodada `k`, `d[i][j]` é o melhor caminho de `i` a `j` que só passa por vértices de 0 a `k`. Por isso o `k` tem de ser o laço de fora.\n\nNo fim, `d[i][j]` ainda infinito quer dizer que `j` **não é alcançável** a partir de `i`. Se algum `d[i][i]` ficar **negativo**, há um ciclo negativo passando por `i`: aí não existe caminho mínimo, e as distâncias que passam por ele não valem.",
+ "caracteristicas": [
+  "Resolve todos os pares de uma vez, com três laços aninhados.",
+  "Aceita arestas negativas; ciclo negativo deixa a diagonal negativa.",
+  "Infinito na matriz final indica par sem caminho.",
+  "É programação dinâmica: cada rodada reaproveita a anterior.",
+  "O laço do `k` precisa ser o de fora."
+ ],
+ "vantagens": [
+  "Código curtíssimo e sem estrutura auxiliar.",
+  "Responde qualquer par em `O(1)` depois de montado.",
+  "Funciona com pesos negativos (sem ciclo negativo)."
+ ],
+ "desvantagens": [
+  "`O(V³)` de tempo e `O(V²)` de memória: pesado para grafo grande e esparso.",
+  "Com ciclo negativo, as distâncias não têm sentido; é preciso checar a diagonal.",
+  "Sem o teste de infinito, `INFINITO + peso` pode estourar em C."
+ ],
+ "exemplo": "Três vértices: 0 → 1 (4), 0 → 2 (1), 2 → 1 (2). Não há aresta saindo do 1.",
+ "passos": [
+  {
+   "titulo": "matriz inicial e rodadas",
+   "texto": "Liberando o 2 como passagem, `d[0][1]` cai de 4 para 1 + 2 = 3. A linha do 1 fica toda infinita: do 1 não se alcança ninguém.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "início       k=0,1        k=2",
+     "0  4  1      0  4  1      0  3  1",
+     "∞  0  ∞      ∞  0  ∞      ∞  0  ∞",
+     "∞  2  0      ∞  2  0      ∞  2  0"
+    ]
+   }
+  }
+ ],
+ "custos": "| Algoritmo | Pares | Pesos negativos | Custo |\n|---|---|---|---|\n| Floyd-Warshall | todos | sim, sem ciclo negativo | `O(V³)` |\n| Dijkstra V vezes, com heap | todos | não | `O(V (V + E) log V)` |\n| Bellman-Ford | uma origem | sim, detecta ciclo negativo | `O(V · E)` |",
+ "naprova": "A banca julga frases sobre Floyd-Warshall, Dijkstra, BFS e DFS. A pegadinha é dizer que o Floyd-Warshall funciona \"para quaisquer pesos\": com ciclo negativo não existe caminho mínimo, e o algoritmo não devolve distâncias válidas.",
+ "fontes": [
+  "Cormen et al., *Algoritmos: teoria e prática*, 4. ed., cap. 23 (caminhos mínimos entre todos os pares).",
+  "Floyd, \"Algorithm 97: Shortest path\", *Communications of the ACM*, 1962.",
+  "Sedgewick e Wayne, *Algorithms*, 4. ed., seção 4.4."
+ ]
+}

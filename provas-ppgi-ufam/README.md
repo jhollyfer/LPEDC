@@ -15,12 +15,17 @@ Cada prova tem um arquivo Markdown com o gabarito e as questões na ordem do cad
 | 057/2022 | `2022-057-prova-conhecimento.md` | nenhuma | nenhuma |
 | 020/2023 | `2023-020-prova-conhecimento.md` | nenhuma | Q06 |
 | 071/2023 | `2023-071-prova-conhecimento.md` | 1, 7, 10 | nenhuma |
+| 031/2024 | `2024-031-prova-conhecimento.md` | 1, 7, 16 | Q05 |
+| 092/2024 | `2024-092-prova-conhecimento.md` | 2, 5, 6, 15 | Q06, Q15, Q19 |
+| 048/2025 | `2025-048-prova-conhecimento.md` | 5, 6, 19 | Q17 |
+| 098/2025 | `2025-098-prova-conhecimento.md` | 5, 7, 9, 10, 11, 12, 15 | Q03, Q04, Q11, Q16 a Q19 |
+| 014/2026 | `2026-014-prova-conhecimento.md` | 11, 13, 20 (caderno escaneado, transcrito) | Q17, Q19 |
 | 070/2026 | `2026-070-prova-conhecimento.md` | nenhuma (gabarito preliminar) | Q09 |
 
 ## Como foi extraído
 
 - O texto veio direto dos PDFs. Os enunciados estão como no original, inclusive erros de digitação da banca.
-- Os gabaritos de 2016 a 2019 são marcações desenhadas nas folhas de resposta, então li cada folha visualmente. Os de 057/2022 e 020/2023 são a alternativa em negrito do caderno de respostas; o de 071/2023 é o gabarito definitivo; o de 070/2026 é o gabarito preliminar de 27/11/2026.
+- Os gabaritos de 2016 a 2019 são marcações desenhadas nas folhas de resposta, então li cada folha visualmente. Os de 057/2022 e 020/2023 são a alternativa em negrito do caderno de respostas; o de 071/2023 é o gabarito definitivo; os de 031/2024 a 014/2026 são os gabaritos finais publicados no site do PPGI; o de 070/2026 é o gabarito preliminar de 27/11/2026.
 - As figuras são recortes renderizados das páginas dos PDFs.
 
 ## Pontos de atenção

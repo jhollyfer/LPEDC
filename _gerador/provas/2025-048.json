@@ -1,0 +1,1143 @@
+{
+  "edital": "048/2025",
+  "slug": "2025-048",
+  "ano": 2025,
+  "oficial": true,
+  "questoes": [
+    {
+      "numero": 1,
+      "topico": "3.3",
+      "formato": "simulação",
+      "enunciado": "Um navegador mantém um histórico ativo de páginas visitadas usando uma pilha:\n\n- Visitar(\"Página\") → adiciona a página informada no topo da pilha.\n- Voltar() → remove a página que está no topo da pilha, voltando para a anterior.\n\nConsidere a seguinte sequência de comandos:\n\n```\nVisitar(\"UFAM\")\nVisitar(\"PPGI\")\nVisitar(\"Edital\")\nVoltar()\nVisitar(\"Biblioteca\")\nVoltar()\n```\n\nAo final dessa sequência, quantas páginas permanecem no histórico ativo do navegador?",
+      "dica": "**Cobra:** simular uma pilha com empilhar e desempilhar e contar o que sobra.\n\n- **Pilha** [0082]: estrutura em que o último a entrar é o primeiro a sair (LIFO); empilhar põe no topo e desempilhar tira o topo. Ex.: empilhando 1, 2, 3 e desempilhando uma vez, sobram 1 e 2.\n- **Pilha na prática** [0082]: o botão Voltar do navegador e o Desfazer do editor são pilhas, porque sempre retornam à ação mais recente. Ex.: visitar A, B e voltar deixa só A no histórico.\n\n**Como atacar:** escreva a pilha depois de cada comando.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Quantos Visitar e quantos Voltar há na sequência? Quanto dá a diferença?"
+        },
+        {
+          "item": "B",
+          "texto": "Escreva a pilha depois de cada comando. O que está nela no fim?"
+        },
+        {
+          "item": "C",
+          "texto": "O último Voltar tira qual página?"
+        },
+        {
+          "item": "D",
+          "texto": "Os comandos Voltar mudam o histórico?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "1",
+          "porque": "Desempilha uma vez a mais. São quatro Visitar e dois Voltar: 4 - 2 = 2 páginas, UFAM e PPGI."
+        },
+        {
+          "letra": "B",
+          "texto": "2",
+          "porque": "Visitar UFAM, PPGI e Edital deixa três; Voltar tira o Edital; Biblioteca entra e Voltar a tira. Sobram UFAM e PPGI: 2 páginas."
+        },
+        {
+          "letra": "C",
+          "texto": "3",
+          "porque": "Conta só um dos dois Voltar. O segundo tira a Biblioteca, e ficam 2."
+        },
+        {
+          "letra": "D",
+          "texto": "4",
+          "porque": "É o total de páginas visitadas, ignorando os dois Voltar."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Quatro Visitar e dois Voltar: sobram UFAM e PPGI, 2 páginas.",
+      "assuntos": [
+        {
+          "num": "0082",
+          "modulo": "12-pilhas-e-filas.md"
+        }
+      ]
+    },
+    {
+      "numero": 2,
+      "topico": "3.1",
+      "formato": "simulação",
+      "enunciado": "Um consultório mantém a lista de espera de pacientes usando uma lista encadeada simples, qual:\n\n- Inserir no fim → adiciona um novo paciente após o último da fila.\n- Remover no início → remove o paciente que está no início da fila (próximo a ser atendido).\n\nInicialmente, a lista está vazia. Então ocorre a seguinte sequência de eventos:\n\nChegam: Ana, João, Maria, Pedro (nesta ordem).\nDois pacientes são atendidos.\nChegam: Carla e Lucas (nesta ordem).\n\nQual é a ordem da lista neste momento? Considere que o primeiro nome é o que está no início da lista encadeada.",
+      "dica": "**Cobra:** inserir no fim e remover no início de uma lista encadeada, que funciona como fila.\n\n- **Lista encadeada** [0076]: cada nó guarda o dado e o endereço do próximo; com ponteiros para o primeiro e o último, inserir no fim e remover do início custam `O(1)`. Ex.: na lista A → B, inserir C no fim dá A → B → C.\n- **Fila** [0085]: inserir num extremo e remover no outro dá a política FIFO, em que sai sempre o mais antigo. Ex.: chegam 1, 2, 3; o primeiro atendido é o 1.\n\n**Como atacar:** escreva a lista depois de cada grupo de eventos.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Quem está no início da lista quando os dois pacientes são atendidos?"
+        },
+        {
+          "item": "B",
+          "texto": "A remoção é feita em qual ponta da lista?"
+        },
+        {
+          "item": "C",
+          "texto": "Inserir no fim põe Carla antes ou depois de Maria?"
+        },
+        {
+          "item": "D",
+          "texto": "Em alguma operação a ordem de quem já estava na lista muda?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Maria, Pedro, Carla, Lucas",
+          "porque": "Chegam Ana, João, Maria e Pedro; os dois atendidos são os do início, Ana e João; Carla e Lucas entram no fim. Fica Maria, Pedro, Carla, Lucas."
+        },
+        {
+          "letra": "B",
+          "texto": "Ana, João, Carla, Lucas",
+          "porque": "Remove do fim, Maria e Pedro, quando a remoção é no início. Ana e João seriam os primeiros atendidos."
+        },
+        {
+          "letra": "C",
+          "texto": "Carla, Lucas, Maria, Pedro",
+          "porque": "Põe os novos no início. Inserir no fim deixa Carla e Lucas depois de Maria e Pedro."
+        },
+        {
+          "letra": "D",
+          "texto": "Lucas, Carla, Pedro, Maria",
+          "porque": "Inverte a lista inteira, como se fosse uma pilha."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Remover no início tira Ana e João; inserir no fim põe Carla e Lucas depois de Maria e Pedro.",
+      "assuntos": [
+        {
+          "num": "0076",
+          "modulo": "11-listas.md"
+        },
+        {
+          "num": "0085",
+          "modulo": "12-pilhas-e-filas.md"
+        }
+      ]
+    },
+    {
+      "numero": 3,
+      "topico": "3.2",
+      "formato": "simulação",
+      "enunciado": "Um call center processa pedidos em uma fila, na qual:\n\n- Novo(código) → insere o pedido no fim da fila.\n- Atender() → remove o pedido que está no início da fila (o mais antigo).\n\nA fila inicialmente contém:\n\n[101, 102, 103]\n\nDurante o expediente, as seguintes ações ocorrem:\n\n```\nAtender()\nNovo(104)\nNovo(105)\nAtender()\nNovo(106)\n```\n\nQual será o conteúdo final da fila? Considere que o primeiro elemento representa o início da fila",
+      "dica": "**Cobra:** simular uma fila com inserções no fim e remoções no início.\n\n- **Fila** [0085]: o item novo entra pelo fim e o próximo a sair está no início, então sai sempre o mais antigo (FIFO). Ex.: em [1, 2], inserir 3 dá [1, 2, 3] e retirar dá [2, 3].\n- **Fila encadeada** [0086]: guarda ponteiros para o primeiro e o último nó, e as duas operações mexem cada uma numa ponta. Ex.: retirar mexe só no `ini`; inserir mexe só no `fim`.\n\n**Como atacar:** escreva a fila depois de cada ação.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Escreva a fila depois de cada ação. Bate com esta?"
+        },
+        {
+          "item": "B",
+          "texto": "Quantos Atender há na sequência?"
+        },
+        {
+          "item": "C",
+          "texto": "O segundo Atender tira o elemento de qual ponta?"
+        },
+        {
+          "item": "D",
+          "texto": "Quantos elementos entram e quantos saem ao todo?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "[103, 104, 105, 106]",
+          "porque": "[101, 102, 103]: Atender tira o 101; entram 104 e 105; Atender tira o 102; entra o 106. Fica [103, 104, 105, 106]."
+        },
+        {
+          "letra": "B",
+          "texto": "[104, 105, 106]",
+          "porque": "Tira o 103 também, como se houvesse três Atender. São só dois."
+        },
+        {
+          "letra": "C",
+          "texto": "[103, 104, 106]",
+          "porque": "Some com o 105 e mantém o resto, como se o segundo Atender tirasse do fim."
+        },
+        {
+          "letra": "D",
+          "texto": "[104, 106]",
+          "porque": "Tira três elementos e ainda perde o 105."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Dois Atender tiram 101 e 102; entram 104, 105 e 106 no fim: [103, 104, 105, 106].",
+      "assuntos": [
+        {
+          "num": "0085",
+          "modulo": "12-pilhas-e-filas.md"
+        },
+        {
+          "num": "0086",
+          "modulo": "12-pilhas-e-filas.md"
+        }
+      ]
+    },
+    {
+      "numero": 4,
+      "topico": 4,
+      "formato": "simulação",
+      "enunciado": "Um sistema de biblioteca armazena livros em uma árvore binária de busca não balanceada. A inserção dos livros ocorre sempre de acordo com o código numérico\n\nA sequência de inserção é:\n\n50, 30, 70, 20, 40, 60, 80\n\nSe a árvore for visitada em um percurso pré-ordem, qual será a sequência em que os códigos numéricos dos livros serão encontrados?",
+      "dica": "**Cobra:** montar a BST pela ordem de inserção e listar a pré-ordem.\n\n- **BST** [0099]: cada chave nova desce da raiz indo para a esquerda se for menor e para a direita se for maior, até achar uma vaga. Ex.: inserir 50 e depois 30 põe o 30 à esquerda do 50.\n- **Pré-ordem** [0098]: visita o nó, depois a subárvore esquerda inteira, depois a direita. Ex.: na árvore 2 (1, 3), a pré-ordem é 2, 1, 3; a em-ordem seria 1, 2, 3.\n\n**Como atacar:** desenhe a árvore e percorra raiz, esquerda, direita.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Esta sequência está em ordem crescente. Qual percurso de BST dá isso?"
+        },
+        {
+          "item": "B",
+          "texto": "A pré-ordem começa por qual nó?"
+        },
+        {
+          "item": "C",
+          "texto": "Desenhe a árvore e faça raiz, esquerda, direita. Sai esta sequência?"
+        },
+        {
+          "item": "D",
+          "texto": "Quem é a raiz da árvore, e por qual nó a pré-ordem começa?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "20, 30, 40, 50, 60, 70, 80",
+          "porque": "É a em-ordem, que numa BST sai em ordem crescente."
+        },
+        {
+          "letra": "B",
+          "texto": "80, 70, 60, 50, 40, 30, 20",
+          "porque": "É a em-ordem ao contrário (direita, nó, esquerda)."
+        },
+        {
+          "letra": "C",
+          "texto": "50, 30, 20, 40, 70, 60, 80",
+          "porque": "A árvore é 50 (30 (20, 40), 70 (60, 80)). Pré-ordem: 50, depois a subárvore 30 inteira (30, 20, 40), depois a 70 (70, 60, 80)."
+        },
+        {
+          "letra": "D",
+          "texto": "30, 20, 40, 50, 60, 70, 80",
+          "porque": "Começa pelo 30, mas a pré-ordem começa pela raiz, que é o 50."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Árvore 50 (30 (20, 40), 70 (60, 80)); pré-ordem 50, 30, 20, 40, 70, 60, 80.",
+      "assuntos": [
+        {
+          "num": "0099",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0098",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 5,
+      "topico": 5,
+      "formato": "simulação",
+      "enunciado": "Um sistema armazena identificadores de acesso em uma tabela hash com tamanho 7 (índices de 0 a 6).\n\n- A função de hash utilizada é h(x) = x % 7 (resto da divisão por 7).\n- O método de tratamento de colisões é a sondagem linear.\n- A função da sondagem linear é h'(x, i) = (h(x) + i) % 7.\n- Considere que a tabela começa vazia.\n\nInsira, nessa ordem, os valores:\n\n10, 21, 4, 18, 25\n\nQuantas colisões ocorrem durante essas inserções?",
+      "dica": "**Cobra:** inserir chaves numa tabela com sondagem linear e contar as colisões.\n\n- **Função de divisão** [0105]: a posição inicial da chave é o resto da divisão pelo tamanho da tabela, `h(k) = k % m`. Ex.: com m = 7, a chave 18 vai para 18 % 7 = 4.\n- **Sondagem linear** [0107]: se a posição está ocupada, tenta a seguinte, `(h(k) + i) % m`, até achar vaga; cada posição ocupada encontrada no caminho é uma colisão. Ex.: se 4 e 5 estão ocupadas, a chave com h = 4 testa 4, 5 e fica na 6.\n\n**Como atacar:** anote a tabela depois de cada inserção e o que \"colisão\" está contando.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Quais chaves encontram a posição inicial ocupada?"
+        },
+        {
+          "item": "B",
+          "texto": "Você está contando chaves que colidiram ou posições ocupadas testadas?"
+        },
+        {
+          "item": "C",
+          "texto": "O 25 encontra quantas posições ocupadas antes de achar vaga?"
+        },
+        {
+          "item": "D",
+          "texto": "O 10, o 21 e o 4 encontram alguma posição ocupada?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "1",
+          "porque": "Conta só uma colisão, mas o 18 e o 25 batem em posições ocupadas."
+        },
+        {
+          "letra": "B",
+          "texto": "2",
+          "porque": "Conta as chaves que colidiram: o 18 (posição 4 ocupada pelo 4) e o 25 (4 e 5 ocupadas). Por esse critério são 2."
+        },
+        {
+          "letra": "C",
+          "texto": "3",
+          "porque": "Conta cada posição ocupada testada: o 18 bate uma vez (4) e o 25 bate duas (4 e 5). Por esse critério são 3. Como B e C dependem do que se chama de colisão, a questão foi anulada (conjectura)."
+        },
+        {
+          "letra": "D",
+          "texto": "4",
+          "porque": "Nenhum critério chega a 4: o 10, o 21 e o 4 entram direto."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "Anulada. 10 → 3, 21 → 0, 4 → 4, 18 → 4 (ocupada) → 5, 25 → 4 e 5 (ocupadas) → 6. São 2 chaves que colidiram ou 3 sondagens em posição ocupada; o enunciado não diz qual contar (conjectura sobre o motivo).",
+      "assuntos": [
+        {
+          "num": "0107",
+          "modulo": "15-hash.md"
+        },
+        {
+          "num": "0105",
+          "modulo": "15-hash.md"
+        }
+      ]
+    },
+    {
+      "numero": 6,
+      "topico": 7,
+      "formato": "simulação",
+      "enunciado": "Considere que desejamos ordenar em ordem crescente um vetor de preços usando Quicksort. Considere ainda que o conteúdo do vetor, após o primeiro particionamento e antes da primeira divisão, é o seguinte:\n\n12, 8, 7, 10, 14, 15, 18\n\nConhecendo o funcionamento do algoritmo Quick Sort, qual das seguintes opções pode pode ter sido o valor do pivô?",
+      "dica": "**Cobra:** reconhecer, pelo vetor depois da partição, que valores podem ter sido o pivô.\n\n- **Partição de Lomuto** [0095]: põe o pivô na posição final, com todos os menores ou iguais à esquerda e os maiores à direita. Ex.: particionando 3, 1, 2 com pivô 2, sai 1, 2, 3.\n- **Partição de Hoare** [0095]: divide o vetor em duas partes, a esquerda com elementos menores ou iguais ao pivô e a direita com maiores ou iguais, mas o pivô não fica necessariamente entre elas. Ex.: com pivô 5, o vetor pode ficar 3, 5, 4 | 7, 9.\n\n**Como atacar:** para cada alternativa, veja se existe um corte em que tudo à esquerda é menor e tudo à direita é maior.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Com pivô 10, todos os elementos à esquerda do corte seriam menores ou iguais a 10?"
+        },
+        {
+          "item": "B",
+          "texto": "Os elementos antes do 14 são todos menores? E os depois, todos maiores?"
+        },
+        {
+          "item": "C",
+          "texto": "Na partição de Hoare, o pivô precisa ficar na posição que separa as partes?"
+        },
+        {
+          "item": "D",
+          "texto": "Com pivô 8, onde estaria o 12 depois da partição?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "10",
+          "porque": "Com 10 como pivô, o 12 à esquerda dele teria de ir para a direita. Não há corte que separe os menores que 10 dos maiores."
+        },
+        {
+          "letra": "B",
+          "texto": "14",
+          "porque": "Na partição de Lomuto, o pivô fica na posição final: 14 tem 12, 8, 7, 10 à esquerda (menores) e 15, 18 à direita (maiores). É o único das alternativas nessa situação."
+        },
+        {
+          "letra": "C",
+          "texto": "12",
+          "porque": "Na partição de Hoare, o pivô não precisa estar na posição final: com pivô 12, o corte 12, 8, 7, 10 | 14, 15, 18 deixa tudo menor ou igual a 12 à esquerda e tudo maior à direita. Por isso a questão admite duas respostas conforme a partição, e foi anulada (conjectura)."
+        },
+        {
+          "letra": "D",
+          "texto": "8",
+          "porque": "Com 8 como pivô, o 12 antes dele teria de estar à direita. Não há corte válido."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "Anulada. Pela partição de Lomuto, que põe o pivô no lugar final, só o 14 serve. Pela de Hoare, que só separa em duas partes, o 12 também serve (corte entre 10 e 14). O caderno ainda traz \"pode pode\" (conjectura sobre o motivo).",
+      "assuntos": [
+        {
+          "num": "0095",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 7,
+      "topico": 7,
+      "formato": "simulação",
+      "enunciado": "Considere o vetor abaixo, que será ordenado em ordem crescente usando o algoritmo Merge Sort:\n\n[42, 17, 8, 99, 23, 4, 16, 50, 31]\n\nO Merge Sort será implementado sem otimizações (sempre divide o vetor exatamente ao meio e intercala as metades), seguindo estas regras:\n\n1. Divide recursivamente até obter sublistas de tamanho 1.\n2. Durante a intercalação, se dois elementos são iguais, mantém primeiro o que veio da sublista da esquerda (estabilidade).\n3. Cada intercalação é feita totalmente, produzindo uma sublista ordenada, antes de passar à próxima.\n\nA execução é acompanhada passo a passo. Queremos saber o estado exato do vetor imediatamente após concluir a intercalação da sublista que originalmente ocupava as posições 0 a 4 do vetor inicial.\n\nAtenção:\n\n- Esse momento ocorre antes de começar a intercalação da parte direita (posições 5 a 8).\n- As posições 0 a 4 estarão ordenadas entre si, mas o restante do vetor (posições 5 a 8) ainda estará na mesma ordem original.\n\nQual será o vetor nesse momento?",
+      "dica": "**Cobra:** seguir o merge sort recursivo e parar no momento pedido.\n\n- **Merge sort** [0094]: divide o vetor ao meio, ordena cada metade recursivamente e intercala as duas; a metade esquerda é toda resolvida antes de a direita começar. Ex.: em [4, 3, 2, 1], primeiro [4, 3] vira [3, 4], depois [2, 1] vira [1, 2] e só então intercala.\n- **Meio do vetor** [0094]: com índices de 0 a 8, o meio é (0 + 8) / 2 = 4, então a esquerda vai de 0 a 4 (cinco elementos) e a direita de 5 a 8. Ex.: com 9 elementos, as metades têm 5 e 4.\n\n**Como atacar:** ordene só as posições 0 a 4 e copie o resto como está.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "As posições 0 a 4 estão em ordem crescente e as 5 a 8 como no vetor inicial?"
+        },
+        {
+          "item": "B",
+          "texto": "Neste momento, a parte direita já foi mexida?"
+        },
+        {
+          "item": "C",
+          "texto": "A parte esquerda está toda em ordem?"
+        },
+        {
+          "item": "D",
+          "texto": "Compare as duas primeiras posições. Estão em ordem?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "[8, 17, 23, 42, 99, 4, 16, 50, 31]",
+          "porque": "A metade esquerda 42, 17, 8, 99, 23 ordenada dá 8, 17, 23, 42, 99, e a direita 4, 16, 50, 31 ainda não foi tocada."
+        },
+        {
+          "letra": "B",
+          "texto": "[8, 17, 23, 42, 99, 16, 4, 50, 31]",
+          "porque": "Troca o 4 e o 16 da parte direita, que ainda não começou a ser ordenada."
+        },
+        {
+          "letra": "C",
+          "texto": "[8, 17, 42, 23, 99, 4, 16, 31, 50]",
+          "porque": "Deixa 42 antes de 23 na parte esquerda, que já está intercalada, e mexe no 50 e no 31 da direita."
+        },
+        {
+          "letra": "D",
+          "texto": "[17, 8, 23, 42, 99, 4, 16, 50, 31]",
+          "porque": "Deixa 17 antes de 8 na parte esquerda, que deveria estar ordenada."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Metade esquerda (0 a 4) ordenada: 8, 17, 23, 42, 99; direita intacta: 4, 16, 50, 31.",
+      "assuntos": [
+        {
+          "num": "0094",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 8,
+      "topico": 4,
+      "formato": "simulação",
+      "enunciado": "Você vai inserir, nesta ordem, as chaves abaixo em uma árvore rubro-negra inicialmente vazia, usando as regras padrão (novo nó nasce vermelho; raiz sempre preta; rotações e recolorações conforme os casos de violação do vermelho-vermelho; árvore é binária de busca):\n\n41, 38, 31, 12, 19, 8\n\nApós todas as inserções e correções, quais nós ficam vermelhos no estado final?",
+      "dica": "**Cobra:** inserir chaves numa rubro-negra aplicando recoloração e rotações.\n\n- **Rubro-negra** [0177]: BST em que cada nó é vermelho ou preto, a raiz é preta, nó vermelho não tem filho vermelho e todo caminho até as folhas tem o mesmo número de pretos. Ex.: raiz 10 preta com filhos 5 e 15 vermelhos é válida.\n- **Casos da inserção** [0177]: o novo nó entra vermelho; se o pai é vermelho e o tio também, recolore pai e tio de preto e o avô de vermelho; se o tio é preto, rotaciona (simples ou dupla) e troca as cores. Ex.: inserir 3, 2, 1 em linha pede rotação à direita, e o 2 vira raiz preta.\n\n**Como atacar:** desenhe a árvore com as cores depois de cada chave.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Na inserção do 8, o tio dele é vermelho ou preto? O que acontece com as cores?"
+        },
+        {
+          "item": "B",
+          "texto": "Quando o 8 entra, o pai 12 e o tio 31 terminam de que cor?"
+        },
+        {
+          "item": "C",
+          "texto": "Quem é a raiz ao final, e de que cor a raiz sempre fica?"
+        },
+        {
+          "item": "D",
+          "texto": "A raiz pode ser vermelha?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "{8, 19}",
+          "porque": "41; 38; 31 pede rotação à direita (38 raiz preta, 31 e 41 vermelhos). 12: tio 41 vermelho, recolore (31 e 41 pretos). 19: zigue-zague sob o 31, rotação dupla, o 19 sobe preto com 12 e 31 vermelhos. 8: tio 31 vermelho, recolore (12 e 31 pretos, 19 vermelho). Vermelhos: 8 e 19. Conferido em Python."
+        },
+        {
+          "letra": "B",
+          "texto": "{12, 31}",
+          "porque": "O 12 e o 31 ficam pretos na última recoloração, quando o 8 entra com o tio 31 vermelho."
+        },
+        {
+          "letra": "C",
+          "texto": "{31, 38}",
+          "porque": "O 38 é a raiz, que é sempre preta."
+        },
+        {
+          "letra": "D",
+          "texto": "{38, 41}",
+          "porque": "O 38 é a raiz e o 41 fica preto na recoloração da inserção do 12."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Raiz 38 preta; 19 vermelho (filhos 12 e 31 pretos); 41 preto; 8 vermelho, filho do 12. Vermelhos: {8, 19}.",
+      "assuntos": [
+        {
+          "num": "0177",
+          "modulo": "28-estruturas-complementos.md"
+        }
+      ]
+    },
+    {
+      "numero": 9,
+      "topico": 5,
+      "formato": "simulação",
+      "enunciado": "Uma tabela hash tem tamanho m = 11 (índices 0 a 10).\n\n- A função de hash primária é h(k) = k % 11.\n- A resolução de colisões usa sondagem quadrática com: h'(k, i) = (h(k) + i²) % 11\n- A tabela inicia vazia.\n\nInsira, nessa ordem, as chaves:\n\n22, 1, 13, 11, 24, 33\n\nEm qual índice a chave 33 ficará armazenada ao final?",
+      "dica": "**Cobra:** inserir chaves com sondagem quadrática e achar onde a última fica.\n\n- **Sondagem quadrática** [0179]: em vez de andar uma casa por vez, a i-ésima tentativa vai para `(h(k) + i²) % m`, ou seja, saltos de 0, 1, 4, 9 casas a partir da posição inicial. Ex.: com h = 0 e m = 11, testa 0, 1, 4, 9.\n- **Função de divisão** [0105]: a posição inicial é o resto da divisão pelo tamanho da tabela. Ex.: 33 % 11 = 0 e 24 % 11 = 2.\n\n**Como atacar:** escreva a tabela depois de cada chave e siga as tentativas do 33.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Quando o 33 chega, quem está na posição 4?"
+        },
+        {
+          "item": "B",
+          "texto": "Quais posições o 33 testa, com saltos de 0, 1, 4 e 9?"
+        },
+        {
+          "item": "C",
+          "texto": "Escreva a tabela depois de cada inserção. A 9 é a primeira livre para o 33?"
+        },
+        {
+          "item": "D",
+          "texto": "Na sondagem quadrática, as tentativas avançam uma casa por vez?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "4",
+          "porque": "A posição 4 já está ocupada pelo 11 quando o 33 chega (11: 0 e 1 ocupadas, 0 + 4 = 4)."
+        },
+        {
+          "letra": "B",
+          "texto": "7",
+          "porque": "O 33 nunca testa a posição 7: os saltos a partir de 0 são 0, 1, 4 e 9."
+        },
+        {
+          "letra": "C",
+          "texto": "9",
+          "porque": "22 → 0, 1 → 1, 13 → 2, 11 → 0 e 1 ocupadas → 4, 24 → 2 ocupada → 3. O 33 testa 0, 1 e 4 (ocupadas) e fica em 0 + 9 = 9. Conferido em Python."
+        },
+        {
+          "letra": "D",
+          "texto": "10",
+          "porque": "Seria a sondagem linear depois de várias tentativas; na quadrática o terceiro salto já cai na 9, que está livre."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "22 → 0, 1 → 1, 13 → 2, 11 → 4, 24 → 3; o 33 testa 0, 1, 4 e fica na 9.",
+      "assuntos": [
+        {
+          "num": "0179",
+          "modulo": "28-estruturas-complementos.md"
+        },
+        {
+          "num": "0105",
+          "modulo": "15-hash.md"
+        }
+      ]
+    },
+    {
+      "numero": 10,
+      "topico": 4,
+      "formato": "simulação",
+      "enunciado": "Uma árvore AVL armazena inteiros e faz rebalanceamentos automáticos após cada inserção.\n\nRegras usadas:\n\n- Inserção segue a ordem da árvore binária de busca.\n- Se o fator de balanceamento (altura esquerda − altura direita) de algum nó ficar fora de {−1, 0, 1}, aplica-se a rotação necessária (incluindo casos LL, RR, LR, RL).\n\nConsidere as inserções, nesta ordem:\n\n30, 5, 10, 42, 15, 20\n\nQual será a chave na raiz da árvore após todas as inserções e rebalanceamentos?",
+      "dica": "**Cobra:** inserir chaves numa AVL e identificar as rotações duplas.\n\n- **Fator de balanceamento** [0101]: altura da esquerda menos a da direita; a AVL exige -1, 0 ou 1 e, depois de cada inserção, conserta o primeiro nó fora disso subindo pelo caminho. Ex.: 30 com filho esquerdo 5 e neto 10 deixa o 30 com +2.\n- **Rotação dupla** [0101]: no zigue-zague (pai pende para um lado e filho para o outro), gira-se o filho e depois o nó. Ex.: 30, 5, 10 forma zigue-zague, e o 10 vira raiz com 5 e 30.\n\n**Como atacar:** desenhe a árvore depois de cada chave e marque os fatores.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Depois de inserir 30, 5 e 10, quem é a raiz?"
+        },
+        {
+          "item": "B",
+          "texto": "Depois do 20, qual nó fica com fator -2, e para que lado pende o filho dele?"
+        },
+        {
+          "item": "C",
+          "texto": "O último inserido costuma ir para a raiz numa AVL?"
+        },
+        {
+          "item": "D",
+          "texto": "Depois do terceiro elemento, o 30 continua na raiz?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "5",
+          "porque": "O 5 nunca chega à raiz: depois de 30, 5, 10 a raiz já é o 10."
+        },
+        {
+          "letra": "B",
+          "texto": "15",
+          "porque": "30, 5, 10: rotação dupla, raiz 10. 42 e 15 entram sob o 30. O 20 entra à direita do 15: o 10 fica com -2 e o filho 30 com +1, rotação dupla. O 15 vira raiz com 10 (5) e 30 (20, 42). Conferido em Python."
+        },
+        {
+          "letra": "C",
+          "texto": "20",
+          "porque": "O 20 é o último inserido e fica como filho do 30 depois da rotação dupla."
+        },
+        {
+          "letra": "D",
+          "texto": "30",
+          "porque": "O 30 é a primeira chave, mas a rotação dupla de 30, 5, 10 já o tira da raiz."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "30, 5, 10 dá raiz 10 (rotação dupla). Com 42, 15 e 20, o 10 fica com -2 e o 30 com +1: outra dupla, e o 15 vira raiz.",
+      "assuntos": [
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 11,
+      "topico": "3.3",
+      "formato": "simulação",
+      "enunciado": "Um editor de imagens mantém um histórico de ações usando uma pilha para implementar a função Desfazer.\n\n- Aplicar(filtro) → coloca o filtro no topo da pilha.\n- Desfazer() → remove o filtro no topo da pilha, voltando para o estado anterior.\n\nUm designer está editando uma foto e executa a seguinte sequência:\n\n```\nAplicar(\"Brilho+10\")\nAplicar(\"Saturação+20\")\nAplicar(\"Desfoque\")\nDesfazer()\nAplicar(\"Contraste-15\")\nDesfazer()\nDesfazer()\n```\n\nQual é o conteúdo final da pilha de filtros?",
+      "dica": "**Cobra:** simular uma pilha de desfazer e dizer o que sobra.\n\n- **Pilha** [0082]: o último a entrar é o primeiro a sair (LIFO); empilhar põe no topo e desempilhar tira o topo. Ex.: empilhando A, B e desempilhando, sobra A.\n- **Desfazer** [0082]: o editor guarda cada ação numa pilha, e desfazer remove a mais recente, que está no topo. Ex.: aplicar X, Y e desfazer volta ao estado só com X.\n\n**Como atacar:** escreva a pilha depois de cada comando.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Quantos Aplicar e quantos Desfazer há na sequência?"
+        },
+        {
+          "item": "B",
+          "texto": "Escreva a pilha depois de cada comando. O que fica no fim?"
+        },
+        {
+          "item": "C",
+          "texto": "O último Desfazer tira qual filtro?"
+        },
+        {
+          "item": "D",
+          "texto": "O Desfazer remove o filtro do topo ou da base?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "[] (nenhum filtro aplicado)",
+          "porque": "Desfaz uma ação a mais: são quatro Aplicar e três Desfazer, então sobra uma."
+        },
+        {
+          "letra": "B",
+          "texto": "[\"Brilho+10\"]",
+          "porque": "Brilho, Saturação, Desfoque; Desfazer tira o Desfoque; Contraste entra; Desfazer tira o Contraste; Desfazer tira a Saturação. Sobra só o Brilho+10."
+        },
+        {
+          "letra": "C",
+          "texto": "[\"Brilho+10\", \"Saturação+20\"]",
+          "porque": "Conta só dois Desfazer. O terceiro tira a Saturação+20."
+        },
+        {
+          "letra": "D",
+          "texto": "[\"Saturação+20\"]",
+          "porque": "Tira o Brilho+10, que está na base. O desfazer remove sempre o topo."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Quatro Aplicar, três Desfazer: sobra só o Brilho+10, a base da pilha.",
+      "assuntos": [
+        {
+          "num": "0082",
+          "modulo": "12-pilhas-e-filas.md"
+        }
+      ]
+    },
+    {
+      "numero": 12,
+      "topico": 6,
+      "formato": "simulação",
+      "enunciado": "Um serviço de streaming mantém um catálogo de filmes ordenado alfabeticamente pelo título. Para encontrar rapidamente um filme, o sistema usa busca binária.\n\nO catálogo (ordenado) é:\n\n[\"Avatar\", \"Duna\", \"Gladiador\", \"Interestelar\", \"Matrix\", \"Oppenheimer\", \"Titanic\"]\n\nO usuário procura pelo filme \"Matrix\".\n\nNa busca binária, qual é a sequência de títulos verificados até encontrar o filme?",
+      "dica": "**Cobra:** executar a busca binária num vetor de títulos e listar os elementos examinados.\n\n- **Busca binária** [0090]: num vetor ordenado, compara com o elemento do meio e descarta a metade em que a chave não pode estar, até achar ou esvaziar o intervalo. Ex.: em 7 elementos, o primeiro examinado é o de índice 3.\n- **Comparação de textos** [0090]: a ordem alfabética funciona como a numérica para a busca: \"Matrix\" vem depois de \"Interestelar\" e antes de \"Oppenheimer\". Ex.: em C, `strcmp(\"Matrix\", \"Oppenheimer\")` dá negativo.\n\n**Como atacar:** anote esq, dir e meio a cada passo.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Depois de Interestelar, qual é o intervalo que sobra e qual é o meio dele?"
+        },
+        {
+          "item": "B",
+          "texto": "A busca binária examina os elementos a partir do primeiro?"
+        },
+        {
+          "item": "C",
+          "texto": "Em que passo a busca binária olha as pontas do vetor?"
+        },
+        {
+          "item": "D",
+          "texto": "Anote esq, dir e meio em cada passo. Os títulos examinados batem?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Interestelar → Matrix",
+          "porque": "Pula um passo: depois de Interestelar (meio 3), o intervalo é 4 a 6 e o meio é 5, Oppenheimer, não o Matrix."
+        },
+        {
+          "letra": "B",
+          "texto": "Avatar → Duna →Gladiador → Interestelar → Matrix",
+          "porque": "É a busca sequencial, que passa por todos desde o início."
+        },
+        {
+          "letra": "C",
+          "texto": "Avatar → Titanic → Interestelar → Matrix",
+          "porque": "Examina as pontas, o que a busca binária não faz."
+        },
+        {
+          "letra": "D",
+          "texto": "Interestelar → Oppenheimer → Matrix",
+          "porque": "Intervalo 0 a 6, meio 3: Interestelar; Matrix vem depois, vai para 4 a 6, meio 5: Oppenheimer; Matrix vem antes, vai para 4 a 4: Matrix."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "Meios 3 (Interestelar), 5 (Oppenheimer) e 4 (Matrix).",
+      "assuntos": [
+        {
+          "num": "0090",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 13,
+      "topico": 4,
+      "formato": "simulação",
+      "enunciado": "Considere uma árvore binária de busca não balanceada inicialmente vazia. Insira as seguintes chaves, na ordem dada:\n\n50, 30, 70, 20, 40, 60, 80, 35, 45\n\nEm seguida, remova a chave 30. Qual das alternativas representa uma das possíveis ordens de caminhamento pré-ordem da árvore resultante?",
+      "dica": "**Cobra:** remover de uma BST um nó com dois filhos e ler a pré-ordem.\n\n- **Remoção na BST** [0100]: nó com dois filhos é trocado pelo sucessor (menor da subárvore direita) ou pelo predecessor (maior da esquerda), que sai do lugar antigo. Ex.: em 30 (20, 40 (35, 45)), o sucessor do 30 é o 35.\n- **Pré-ordem** [0098]: visita o nó, a subárvore esquerda e depois a direita, então começa sempre pela raiz. Ex.: em 2 (1, 3), a pré-ordem é 2, 1, 3.\n\n**Como atacar:** desenhe a árvore, troque o 30 pelo sucessor e percorra.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "A pré-ordem começa por qual nó? Esta sequência termina nele."
+        },
+        {
+          "item": "B",
+          "texto": "Esta sequência está em ordem crescente. Que percurso é esse?"
+        },
+        {
+          "item": "C",
+          "texto": "Quem é o menor da subárvore direita do 30? Ele sobe para onde?"
+        },
+        {
+          "item": "D",
+          "texto": "Na remoção padrão, quem ocupa o lugar do 30: o filho direito ou o sucessor?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "35, 45, 40, 20, 60, 80, 70, 50",
+          "porque": "É uma pós-ordem (esquerda, direita, nó), que termina na raiz 50."
+        },
+        {
+          "letra": "B",
+          "texto": "20, 35, 40, 45, 50, 60, 70, 80",
+          "porque": "É a em-ordem, que sai em ordem crescente."
+        },
+        {
+          "letra": "C",
+          "texto": "50, 35, 20, 40, 45, 70, 60, 80",
+          "porque": "O 30 tem dois filhos; o sucessor é o 35 (menor da subárvore 40). O 35 sobe para o lugar do 30, e o 40 fica só com o 45. Pré-ordem: 50, 35, 20, 40, 45, 70, 60, 80."
+        },
+        {
+          "letra": "D",
+          "texto": "50, 40, 35, 20, 45, 70, 60, 80",
+          "porque": "Põe o 40 no lugar do 30 e pendura o 20 embaixo do 35. A árvore continua sendo BST, mas não sai da remoção padrão por sucessor ou predecessor."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "O sucessor do 30 é o 35; ele sobe e o 40 fica com o 45. Pré-ordem 50, 35, 20, 40, 45, 70, 60, 80.",
+      "assuntos": [
+        {
+          "num": "0100",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0098",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 14,
+      "topico": 5,
+      "formato": "simulação",
+      "enunciado": "Uma biblioteca digital armazena IDs de livros em uma tabela hash de tamanho m = 7 usando:\n\n- Função hash: h(k) = k % 7\n- Sondagem linear: hi(k) = (h(k) + i) mod 7\n- Remoção: quando um livro é excluído, o índice recebe uma marca de tombstone (vaga especial que pode ser reutilizada, mas não interrompe buscas).\n\nA tabela começa vazia e recebe as seguintes operações, nesta ordem:\n\n```\nInserir 10\nInserir 24\nInserir 31\nInserir 18\nRemover 24\nInserir 38\nBuscar 24\n```\n\nSabendo que a operação Buscar 24 retorna \"não encontrado\", em qual índice o 38 está armazenado ao final?",
+      "dica": "**Cobra:** sondagem linear com remoção por marca (tombstone) e reaproveitamento da vaga.\n\n- **Sondagem linear** [0107]: com a posição inicial ocupada, a chave tenta a seguinte, `(h(k) + i) % m`, até achar vaga. Ex.: com m = 7 e posição 3 ocupada, a chave com h = 3 vai para 4.\n- **Remoção com marca** [0107]: apagar de verdade quebraria a busca de quem passou por ali; por isso a remoção deixa uma marca, que a busca atravessa e a inserção pode reaproveitar. Ex.: com marca na 4, uma inserção com h = 3 e a 3 ocupada fica na 4.\n\n**Como atacar:** escreva a tabela depois de cada operação, com a marca.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Quem ocupa a posição 3 quando o 38 chega?"
+        },
+        {
+          "item": "B",
+          "texto": "Escreva a tabela depois de cada operação. Qual é a primeira posição reaproveitável a partir de 3?"
+        },
+        {
+          "item": "C",
+          "texto": "A posição 5 está livre quando o 38 chega?"
+        },
+        {
+          "item": "D",
+          "texto": "O 38 passa por alguma vaga reaproveitável antes da 6?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "3",
+          "porque": "A posição 3 está ocupada pelo 10 desde a primeira inserção."
+        },
+        {
+          "letra": "B",
+          "texto": "4",
+          "porque": "10 → 3; 24 → 3 ocupada → 4; 31 → 3, 4 ocupadas → 5; 18 → 4, 5 ocupadas → 6. Remover 24 deixa marca na 4. O 38 (h = 3) acha a 3 ocupada e reaproveita a marca na 4."
+        },
+        {
+          "letra": "C",
+          "texto": "5",
+          "porque": "A 5 é do 31. O 38 para na primeira vaga reaproveitável, que é a marca na 4."
+        },
+        {
+          "letra": "D",
+          "texto": "6",
+          "porque": "A 6 é do 18. O 38 nem chega lá, porque a 4 está marcada e pode ser reaproveitada."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "10 → 3, 24 → 4, 31 → 5, 18 → 6; tirar o 24 marca a 4, e o 38 (h = 3) reaproveita a 4.",
+      "assuntos": [
+        {
+          "num": "0107",
+          "modulo": "15-hash.md"
+        }
+      ]
+    },
+    {
+      "numero": 15,
+      "topico": 1,
+      "formato": "código",
+      "enunciado": "Qual alternativa a seguir é uma implementação correta de um algoritmo recursivo para encontrar o maior elemento de uma lista?",
+      "dica": "**Cobra:** reconhecer uma recursão correta para o maior elemento.\n\n- **Recursão** [0032]: a função resolve o caso base direto e, nos outros casos, chama a si mesma com um problema menor e combina o resultado. Ex.: o maior de [3, 9, 2] é o maior entre 3 e o maior de [9, 2].\n- **Caso base** [0032]: é o caso pequeno resolvido sem nova chamada, e cada chamada precisa se aproximar dele. Ex.: lista de um elemento, cujo maior é ele mesmo.\n\n**Como atacar:** rode cada versão à mão com [3, 9, 2, 7] e veja se há chamada recursiva.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Há alguma chamada à própria função nesta versão?"
+        },
+        {
+          "item": "B",
+          "texto": "O segundo argumento de `max` é um número ou uma lista?"
+        },
+        {
+          "item": "C",
+          "texto": "O que Python faz ao comparar `3 > [9, 2, 7]`?"
+        },
+        {
+          "item": "D",
+          "texto": "Rode com [3, 9, 2, 7]. Cada chamada fica mais perto do caso base?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "```python\ndef maior(lista):\n    res = list[0]\n    for i in range(1, len(lista)):\n        if lista[i] > res:\n            res = lista[i]\n    return res\n```",
+          "porque": "Não é recursiva, é um laço. E ainda usa `list[0]` (o tipo `list`) no lugar de `lista[0]`, o que dá erro."
+        },
+        {
+          "letra": "B",
+          "texto": "```python\ndef maior(lista):\n    if len(lista) == 1:\n        return lista[0]\n    primeiro = lista[0]\n    resto = lista[1:]\n    return max(primeiro, resto)\n```",
+          "porque": "Não chama `maior` de novo e compara um número com uma lista: `max(3, [9, 2, 7])` dá `TypeError` em Python 3."
+        },
+        {
+          "letra": "C",
+          "texto": "```python\ndef maior(lista):\n    if len(lista) == 1:\n        return lista[0]\n    primeiro = lista[0]\n    resto = lista[1:]\n    if primeiro > resto:\n        return primeiro\n    else:\n        return maior(resto)\n```",
+          "porque": "`primeiro > resto` compara um número com uma lista e dá `TypeError`. Mesmo comparando direito, devolveria o primeiro sem olhar o resto."
+        },
+        {
+          "letra": "D",
+          "texto": "```python\ndef maior(lista):\n    if len(lista) == 1:\n        return lista[0]\n    primeiro = lista[0]\n    resto = lista[1:]\n    return max(primeiro, maior(resto))\n```",
+          "porque": "Caso base com um elemento; senão, o maior é o maior entre o primeiro e o maior do resto, calculado pela própria função. Com [3, 9, 2, 7] devolve 9. Conferido em Python."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "Só a D é recursiva e correta: max(primeiro, maior(resto)). A é laço com `list[0]`; B e C comparam número com lista.",
+      "assuntos": [
+        {
+          "num": "0032",
+          "modulo": "04-funcoes.md"
+        }
+      ]
+    },
+    {
+      "numero": 16,
+      "topico": 6,
+      "formato": "simulação",
+      "enunciado": "Um sistema de aeroporto mantém os horários de decolagem (em minutos após 00:00) em um vetor ordenado. A busca por um voo específico usa busca binária iterativa com limites inclusivos esq e dir e cálculo do meio meio = (esq + dir) // 2.\n\nVetor de horários:\n\n[510, 540, 555, 600, 615, 660, 705, 720, 735, 780]\n\nO passageiro procura o voo que decola às 12:15 (ou seja, 735 minutos).\n\nNa execução da busca binária, qual é a sequência de valores comparados, o número de iterações até encontrar, e o índice retornado?",
+      "dica": "**Cobra:** executar a busca binária iterativa contando comparações e o índice.\n\n- **Busca binária** [0090]: com limites `esq` e `dir` inclusivos, calcula `meio = (esq + dir) // 2`, compara e descarta uma metade; termina ao achar ou quando `esq > dir`. Ex.: com 10 elementos, o primeiro meio é (0 + 9) // 2 = 4.\n- **Divisão inteira** [0090]: o `//` despreza a fração, então o meio de um intervalo com tamanho par fica à esquerda do centro. Ex.: (8 + 9) // 2 = 8.\n\n**Como atacar:** anote esq, dir, meio e o valor comparado a cada iteração.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Anote esq, dir e meio em cada iteração. Os valores batem?"
+        },
+        {
+          "item": "B",
+          "texto": "Quanto vale (0 + 9) // 2?"
+        },
+        {
+          "item": "C",
+          "texto": "O `//` arredonda para cima ou para baixo?"
+        },
+        {
+          "item": "D",
+          "texto": "Em que índice está o 735?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "615 → 720 → 735; 3 iterações; índice 8",
+          "porque": "esq 0, dir 9: meio 4 (615), 735 é maior. esq 5: meio 7 (720), maior. esq 8: meio 8 (735), achou. Três iterações, índice 8. Conferido em Python."
+        },
+        {
+          "letra": "B",
+          "texto": "600 → 660 → 705 → 735; 4 iterações; índice 8",
+          "porque": "Começa no índice 3 (600), mas (0 + 9) // 2 = 4."
+        },
+        {
+          "letra": "C",
+          "texto": "660 → 705 → 720 → 735; 4 iterações; índice 8",
+          "porque": "Começa no índice 5 (660), como se arredondasse o meio para cima."
+        },
+        {
+          "letra": "D",
+          "texto": "615 → 705 → 735; 3 iterações; índice 7",
+          "porque": "O 705 está no índice 6 e não é examinado; e o 735 está no índice 8, não no 7."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Meios 4 (615), 7 (720) e 8 (735): 3 iterações, índice 8.",
+      "assuntos": [
+        {
+          "num": "0090",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 17,
+      "topico": 4,
+      "formato": "conceito",
+      "enunciado": "Considere a árvore de busca binária a seguir. Observe que algumas chaves foram substituídas por incógnitas.\n\nAssinale a alternativa verdadeira. Considere que todas as chaves **devem** ser inteiras e que a árvore **não admite** chaves repetidas.",
+      "figuras": [
+        "2025-048-q17"
+      ],
+      "dica": "**Cobra:** usar a propriedade da BST para limitar os valores das incógnitas.\n\n- **BST** [0099]: toda chave da subárvore esquerda de um nó é menor que ele e toda chave da direita é maior, valendo para todos os ancestrais, não só o pai. Ex.: num nó 13 que é filho direito de x, um filho esquerdo s precisa ficar entre x e 13.\n- **Chaves inteiras sem repetição** [0099]: os limites são estritos, então entre 5 e 7 só cabe o 6. Ex.: se 9 < x < 13, x pode ser 10, 11 ou 12.\n\n**Como atacar:** escreva o intervalo de cada incógnita a partir dos ancestrais.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "s é filho esquerdo do 13. Pode ser maior que 13?"
+        },
+        {
+          "item": "B",
+          "texto": "O 9 está em qual subárvore da raiz x? O que isso diz sobre x?"
+        },
+        {
+          "item": "C",
+          "texto": "Se y = 3, quais valores t pode ter?"
+        },
+        {
+          "item": "D",
+          "texto": "Com y = 5, quais inteiros ficam entre y e 7?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Um possível valor de s é 14.",
+          "porque": "O s é filho esquerdo do 13, então s < 13; não pode ser 14."
+        },
+        {
+          "letra": "B",
+          "texto": "Se y=5, então um possível valor de x é 8.",
+          "porque": "O x é a raiz e o 9 está na subárvore esquerda dela, então x > 9; não pode ser 8."
+        },
+        {
+          "letra": "C",
+          "texto": "O único valor possível de t é 6.",
+          "porque": "t fica entre y e 7. Como z > 1 e y > z, y pode ser 3, e aí t pode ser 4, 5 ou 6."
+        },
+        {
+          "letra": "D",
+          "texto": "Se y=5, então necessariamente t=6.",
+          "porque": "t está à esquerda do 7 e na subárvore direita do y, então y < t < 7. Com y = 5, só sobra t = 6."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "x entre 9 e 13; s entre x e 13; t entre y e 7. Com y = 5, t = 6 necessariamente.",
+      "assuntos": [
+        {
+          "num": "0099",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 18,
+      "topico": 7,
+      "formato": "conceito",
+      "enunciado": "Um sistema de controle de estoque ordena códigos de produtos usando um algoritmo que funciona assim:\n\n1. Percorre o vetor da **esquerda para a direita**, mantendo a parte inicial sempre **ordenada**.\n2. Para ordenar o próximo elemento, **desloca para a direita** todos os elementos **maiores** até encontrar a posição correta.\n3. Insere o elemento na posição encontrada, mantendo a ordenação.\n4. É **eficiente para listas pequenas** ou **quase ordenadas**, mas lento para listas grandes desordenadas.\n5. O algoritmo é **estável**, **in-place** e **não usa pivôs**.\n\nQual é o algoritmo de ordenação descrito?",
+      "dica": "**Cobra:** reconhecer um algoritmo de ordenação pela descrição.\n\n- **Insertion sort** [0093]: mantém o início do vetor ordenado e, a cada passo, desloca para a direita os maiores que o próximo elemento e o insere na vaga. Ex.: em 2, 5, 3, o 3 faz o 5 andar uma casa e entra entre 2 e 5.\n- **Comparando algoritmos** [0096]: estabilidade, uso de memória extra e pivô distinguem os algoritmos: o merge usa vetor auxiliar, o quick usa pivô, o heap não é estável. Ex.: só o insertion é estável, in-place e rápido em vetor quase ordenado.\n\n**Como atacar:** procure a característica que exclui cada alternativa.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "O merge sort precisa de memória extra para intercalar?"
+        },
+        {
+          "item": "B",
+          "texto": "O quick sort usa pivô?"
+        },
+        {
+          "item": "C",
+          "texto": "O heap sort mantém a parte inicial do vetor ordenada?"
+        },
+        {
+          "item": "D",
+          "texto": "Qual algoritmo desloca os maiores para abrir vaga ao próximo elemento?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Merge Sort",
+          "porque": "O merge sort não é in-place: intercala usando um vetor auxiliar."
+        },
+        {
+          "letra": "B",
+          "texto": "Quick Sort",
+          "porque": "O quick sort usa pivô e não é estável."
+        },
+        {
+          "letra": "C",
+          "texto": "Heap Sort",
+          "porque": "O heap sort não é estável e não mantém a parte inicial ordenada; ele monta um heap."
+        },
+        {
+          "letra": "D",
+          "texto": "Insertion Sort",
+          "porque": "Parte inicial ordenada, deslocamento dos maiores e inserção na vaga: é a descrição do insertion sort, estável, in-place e O(n) em vetor quase ordenado."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "Parte ordenada à esquerda, deslocar os maiores e inserir: insertion sort.",
+      "assuntos": [
+        {
+          "num": "0093",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0096",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 19,
+      "topico": 4,
+      "formato": "código",
+      "enunciado": "Um sistema de autenticação mantém registros de usuários em uma Árvore Rubro-Negra (ARN).\n\nDurante a inserção do valor 40, a árvore passou a ter a seguinte configuração (apenas os nós relevantes mostrados, N representa nó nulo/preto):\n\n```\n             (50, preto)\n            /           \\\n     (30, vermelho)   (70, preto)\n      /         \\\n(20, preto) (40, vermelho)\n```\n\nProblema detectado: o nó (30, vermelho) tem um filho (40, vermelho), violando a regra de que um nó vermelho não pode ter filho vermelho.\n\nO desenvolvedor implementou quatro possíveis funções de correção.\n\nQual delas corrige o problema seguindo o algoritmo de inserção da ARN?",
+      "dica": "**Cobra:** escolher o caso da inserção rubro-negra que corrige a violação vermelho-vermelho.\n\n- **Casos da inserção** [0177]: com pai vermelho, se o tio é vermelho recolore; se o tio é preto e o nó é filho interno (zigue-zague), rotaciona o pai para cair no caso externo; no caso externo, rotaciona o avô e troca as cores do pai e do avô. Ex.: avô 50, pai 30 à esquerda, nó 40 à direita do 30 é caso interno.\n- **Altura negra** [0177]: todo caminho de um nó até as folhas nulas passa pelo mesmo número de nós pretos. Ex.: um nó vermelho com um filho preto e o outro nulo viola essa regra.\n\n**Como atacar:** identifique pai, tio e se o 40 é filho interno ou externo.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "O tio do 40 é o 70. Qual é a cor dele?"
+        },
+        {
+          "item": "B",
+          "texto": "Depois da rotação à esquerda no 30, ainda há dois vermelhos seguidos?"
+        },
+        {
+          "item": "C",
+          "texto": "O 40 é filho esquerdo ou direito do 30?"
+        },
+        {
+          "item": "D",
+          "texto": "Se o pai fosse preto, haveria violação?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "```c\nif (pai->cor == VERMELHO && tio->cor == VERMELHO) {\n    pai->cor = PRETO;\n    tio->cor = PRETO;\n    avo->cor = VERMELHO;\n}\n```",
+          "porque": "É o caso de tio vermelho, mas o tio aqui é o 70, que é preto."
+        },
+        {
+          "letra": "B",
+          "texto": "```c\nif (pai->cor == VERMELHO && tio->cor == PRETO && no == pai->dir) {\n    rotacaoEsquerda(pai);\n    no = pai;\n}\n```",
+          "porque": "Pai 30 vermelho, tio 70 preto e o 40 é filho direito de um pai que é filho esquerdo: caso interno, que começa com a rotação à esquerda no pai. Só que esse passo sozinho não corrige a violação (falta o caso externo), e a árvore do enunciado já tinha altura negra desigual (20 preto de um lado do 30, 40 vermelho do outro). Questão anulada (conjectura sobre o motivo)."
+        },
+        {
+          "letra": "C",
+          "texto": "```c\nif (pai->cor == VERMELHO && tio->cor == PRETO && no == pai->esq) {\n    rotacaoDireita(avo);\n    trocarCores(pai, avo);\n}\n```",
+          "porque": "É o caso externo, que exige o nó ser filho esquerdo do pai; o 40 é filho direito."
+        },
+        {
+          "letra": "D",
+          "texto": "```c\nif (pai->cor == PRETO && tio->cor == PRETO) {\n    rotacaoEsquerda(avo);\n}\n```",
+          "porque": "Com o pai preto não há violação a corrigir."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "Anulada. O caso é o interno (tio preto, 40 à direita do 30), que pede rotação à esquerda no pai e depois o caso externo. A alternativa B traz só o primeiro passo, e a árvore do enunciado já desrespeitava a altura negra (conjectura sobre o motivo).",
+      "assuntos": [
+        {
+          "num": "0177",
+          "modulo": "28-estruturas-complementos.md"
+        }
+      ]
+    },
+    {
+      "numero": 20,
+      "topico": "3.1",
+      "formato": "código",
+      "enunciado": "Um sistema de listas de músicas mantém as faixas em uma lista duplamente encadeada.\n\nDurante a implementação da função removerMusica(No *musica), o desenvolvedor identificou que, ao remover um nó que não é nem o primeiro nem o último, a lista ficava corrompida (links quebrados).\n\nConsidere a estrutura:\n\n```c\ntypedef struct No {\n    char titulo[50];\n    struct No *prev;\n    struct No *next;\n} No;\n```\n\nQual dos trechos de código abaixo corrige corretamente o problema ao remover um nó intermediário?",
+      "dica": "**Cobra:** religar os vizinhos antes de liberar o nó numa lista dupla.\n\n- **Lista dupla** [0079]: cada nó aponta para o anterior (`prev`) e o próximo (`next`); para tirar um nó, o anterior passa a apontar para o próximo e o próximo passa a apontar para o anterior. Ex.: em A ⇄ B ⇄ C, tirar B faz `A->next = C` e `C->prev = A`.\n- **Erros de memória** [0057]: liberar um nó que outros ainda usam, ou perder o endereço dos vizinhos, corrompe a lista. Ex.: `free(musica->prev)` apaga um nó que continua na lista.\n\n**Como atacar:** desenhe A ⇄ B ⇄ C e aplique cada trecho para remover B.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Em A ⇄ B ⇄ C, depois deste trecho, para onde apontam `A->next` e `C->prev`?"
+        },
+        {
+          "item": "B",
+          "texto": "Depois deste trecho, dá para ir de A até C?"
+        },
+        {
+          "item": "C",
+          "texto": "Quais campos este trecho altera: os de A e C que apontam para B, ou outros?"
+        },
+        {
+          "item": "D",
+          "texto": "Os nós liberados aqui ainda fazem parte da lista?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "```c\nif (musica->prev != NULL)\n    musica->prev->next = musica->next;\nif (musica->next != NULL)\n    musica->next->prev = musica->prev;\nfree(musica);\n```",
+          "porque": "Religa os dois vizinhos (`prev->next = next` e `next->prev = prev`) e só depois libera o nó. Os testes de `NULL` ainda protegem a remoção do primeiro e do último."
+        },
+        {
+          "letra": "B",
+          "texto": "```c\nmusica->prev->next = NULL;\nmusica->next->prev = NULL;\nfree(musica);\n```",
+          "porque": "Corta a lista em duas: o anterior fica sem próximo e o próximo fica sem anterior."
+        },
+        {
+          "letra": "C",
+          "texto": "```c\nif (musica->next != NULL)\n    musica->next->next = musica->prev;\nif (musica->prev != NULL)\n    musica->prev->prev = musica->next;\nfree(musica);\n```",
+          "porque": "Mexe no campo errado: escreve em `next->next` e `prev->prev`, pulando nós e deixando a lista corrompida."
+        },
+        {
+          "letra": "D",
+          "texto": "```c\nfree(musica->prev);\nfree(musica->next);\nfree(musica);\n```",
+          "porque": "Libera os vizinhos, que continuam na lista, e não religa nada."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Remover nó do meio da lista dupla: `prev->next = next`, `next->prev = prev`, depois `free`.",
+      "assuntos": [
+        {
+          "num": "0079",
+          "modulo": "11-listas.md"
+        },
+        {
+          "num": "0057",
+          "modulo": "07-memoria-dinamica.md"
+        }
+      ]
+    }
+  ]
+}

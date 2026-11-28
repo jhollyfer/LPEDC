@@ -8,6 +8,10 @@ Mudanças do LPEDC que quem estuda percebe. Formato
 
 ### Adicionado
 
+- As cinco provas que faltavam no quiz e em `PROVAS.md`: 031/2024 (2024/2), 092/2024 (2025/1),
+  048/2025 (2025/2), 098/2025 (2026/1) e 014/2026 (2026/2), com o gabarito final da banca. O quiz
+  passa a ter 17 provas e 330 questões. Aulas novas de While (0020), Prim (0153) e
+  Floyd-Warshall (0155); cinco pares de questões parecidas entre provas ligados no Resumo.
 - Prova do edital 070/2026 (seleção 2027/1, aplicada em 27/11/2026) no quiz e em `PROVAS.md`, com
   o gabarito preliminar da banca. São 20 questões com conceito antes de responder, porquê de cada
   alternativa, contraponto e a árvore B da Q09 redesenhada. O caderno está em

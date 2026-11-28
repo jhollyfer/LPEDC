@@ -1,0 +1,1329 @@
+{
+  "edital": "092/2024",
+  "slug": "2024-092",
+  "ano": 2025,
+  "oficial": true,
+  "questoes": [
+    {
+      "numero": 1,
+      "topico": 1,
+      "formato": "código",
+      "enunciado": "Ao compilar e executar o programa a seguir escrito em linguagem de programação C, quantas vezes será impressa a string Teste?\n\n```c\n#include <stdio.h>\n\nint main(void) {\n    int i, j;\n\n    for (i = 2; i <= 4; i++) {\n        for(j = 1; j < 3; j++) {\n            printf(\"Teste\\n\");\n        }\n    }\n}\n```",
+      "dica": "**Cobra:** contar quantas vezes o corpo de dois laços aninhados roda.\n\n- **Laço for** [0022]: repete o corpo enquanto a condição vale; o número de voltas sai do valor inicial, da condição de parada e do passo. Ex.: `for (i = 2; i <= 4; i++)` roda com i = 2, 3 e 4, três voltas.\n- **Laços aninhados** [0024]: o laço de dentro roda inteiro a cada volta do de fora, então o total é o produto das voltas dos dois. Ex.: 3 voltas fora e 2 dentro dão 3 × 2 = 6 execuções do corpo.\n\n**Como atacar:** conte as voltas de cada laço separado e multiplique.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Liste os valores de `i` e, para cada um, os de `j`. Quantos pares saem?"
+        },
+        {
+          "item": "B",
+          "texto": "Para cada valor de `i`, quantas vezes o `printf` de dentro roda?"
+        },
+        {
+          "item": "C",
+          "texto": "Quais valores de `i` satisfazem `i <= 4` começando em 2?"
+        },
+        {
+          "item": "D",
+          "texto": "O total de impressões é uma soma ou um produto das voltas?"
+        },
+        {
+          "item": "E",
+          "texto": "De 2 a 4, contando as duas pontas, são quantos números?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "6",
+          "porque": "O laço de fora roda com i = 2, 3 e 4 (3 voltas) e o de dentro com j = 1 e 2 (2 voltas, porque é `j < 3`). São 3 × 2 = 6 impressões. Conferido compilando com gcc."
+        },
+        {
+          "letra": "B",
+          "texto": "3",
+          "porque": "É só o número de voltas do laço de fora. A cada uma delas o de dentro imprime duas vezes."
+        },
+        {
+          "letra": "C",
+          "texto": "4",
+          "porque": "Conta 2 voltas no laço de fora, como se ele começasse em 3 ou parasse antes do 4. Com `i = 2` e `i <= 4` são três voltas."
+        },
+        {
+          "letra": "D",
+          "texto": "5",
+          "porque": "Não sai de nenhuma conta de voltas: o total é o produto das voltas de fora pelas de dentro."
+        },
+        {
+          "letra": "E",
+          "texto": "8",
+          "porque": "Daria 4 × 2, com quatro voltas fora. De 2 a 4 inclusive são três valores."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Fora: i = 2, 3, 4 (3 voltas). Dentro: j = 1, 2 (2 voltas). Total 3 × 2 = 6.",
+      "assuntos": [
+        {
+          "num": "0022",
+          "modulo": "03-repeticoes.md"
+        },
+        {
+          "num": "0024",
+          "modulo": "03-repeticoes.md"
+        }
+      ]
+    },
+    {
+      "numero": 2,
+      "topico": 7,
+      "formato": "afirmações",
+      "enunciado": "Considere que o algoritmo de ordenação Insertion Sort foi empregado para ordenar, de maneira crescente, o vetor (4, 3, 2, 1). Analise as afirmativas abaixo.\n\nI. A configuração (4, 4, 2, 1) jamais pode ocorrer durante os passos da ordenação;\nII. A configuração (2, 3, 4, 1) necessariamente ocorre durante os passos da ordenação;\nIII. A configuração (1, 4, 3, 2) jamais ocorre durante os passos da ordenação.\n\nAssinale a alternativa correta.",
+      "dica": "**Cobra:** saber quais estados intermediários aparecem no vetor durante o insertion sort.\n\n- **Insertion sort** [0093]: a cada volta pega o próximo elemento e o encaixa no prefixo já ordenado, deslocando para a direita os maiores; depois da volta i, as i + 1 primeiras posições estão em ordem. Ex.: em 3, 1, 2, a volta 1 dá 1, 3, 2 e a volta 2 dá 1, 2, 3.\n- **Deslocar ou trocar** [0093]: a versão do livro guarda a chave e copia os maiores uma casa para a direita, o que deixa um valor repetido no meio do caminho; a versão por trocas não repete valor. Ex.: em 4, 3, a cópia gera 4, 4 antes de escrever o 3.\n\n**Como atacar:** escreva o vetor depois de cada passo nas duas versões e compare.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Na versão que guarda a chave e desloca os maiores, o que fica escrito no vetor logo depois de copiar o 4 para a posição 1?"
+        },
+        {
+          "item": "II",
+          "texto": "Depois de encaixar o 3 e o 2, como está o prefixo das três primeiras posições? E a última?"
+        },
+        {
+          "item": "III",
+          "texto": "Em que volta o 1 sai da última posição, e como fica o resto do vetor nesse momento?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas as afirmativas I e II são verdadeiras.",
+          "porque": "Vale para a versão por trocas, em que (4, 4, 2, 1) não aparece. Mas nela a III também vale, e nenhuma alternativa traz as três."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas as afirmativas II e III são verdadeiras.",
+          "porque": "Vale para a versão por deslocamento, a do Cormen: a primeira cópia gera (4, 4, 2, 1), então a I é falsa. A II vale nas duas versões, e o (1, 4, 3, 2) nunca aparece, porque o 1 só chega à frente na última volta. É a leitura mais provável, mas depende da implementação."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas as afirmativas I e III são verdadeiras.",
+          "porque": "Deixa a II de fora, e o prefixo 2, 3, 4 com o 1 no fim sempre aparece antes da última volta, nas duas versões."
+        },
+        {
+          "letra": "D",
+          "texto": "Apenas a afirmativa I é verdadeira.",
+          "porque": "A II e a III valem nas duas versões do algoritmo."
+        },
+        {
+          "letra": "E",
+          "texto": "Apenas a afirmativa II é verdadeira.",
+          "porque": "A III também vale: o 1 só sai da última posição na última volta, e então o vetor já fica todo ordenado."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "Anulada pela banca. A I depende da implementação: deslocando, aparece (4, 4, 2, 1); trocando, não. A II e a III valem nas duas. Com deslocamento a resposta seria B; com trocas, nenhuma alternativa serve. Rodado em Python nas duas versões.",
+      "assuntos": [
+        {
+          "num": "0093",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 3,
+      "topico": 1,
+      "formato": "código",
+      "enunciado": "Ao compilar e executar o programa a seguir escrito em linguagem de programação C, o que será impresso?\n\n```c\n#include <stdio.h>\nint main(void) {\n    int x, i, cont = 0;\n    x = 18;\n    for(i = 1; i <= x; i++) {\n        if ((x % i) == 0) {\n            cont = cont + 1;\n        }\n    }\n    printf(\"%d\", cont);\n}\n```",
+      "dica": "**Cobra:** contar quantos divisores tem um número com um laço e o operador de resto.\n\n- **Resto da divisão** [0007]: `a % b` dá o que sobra da divisão inteira de a por b; vale 0 exatamente quando b divide a. Ex.: `18 % 4` é 2, e `18 % 6` é 0.\n- **Padrão de contagem** [0025]: um contador começa em 0 e soma 1 cada vez que a condição do laço vale, contando quantos elementos passam no teste. Ex.: contar os pares de 1 a 10 dá 5.\n\n**Como atacar:** liste os i de 1 a 18 que dividem 18 sem resto.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Escreva os i de 1 a 18 para os quais `18 % i` vale 0. Quantos são?"
+        },
+        {
+          "item": "B",
+          "texto": "Quanto vale `18 % 4`? E `18 % 12`?"
+        },
+        {
+          "item": "C",
+          "texto": "O laço testa `i = 18`? O que `18 % 18` dá?"
+        },
+        {
+          "item": "D",
+          "texto": "Separe 18 em fatores, 2 · 3². Quantas combinações de fatores existem?"
+        },
+        {
+          "item": "E",
+          "texto": "O laço começa em 1 e vai até 18. Essas duas pontas passam no teste?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "6",
+          "porque": "Os divisores de 18 são 1, 2, 3, 6, 9 e 18: seis. Conferido compilando com gcc."
+        },
+        {
+          "letra": "B",
+          "texto": "7",
+          "porque": "Um a mais que o certo. Talvez contando o 4 ou o 12, mas 18 % 4 e 18 % 12 não dão 0."
+        },
+        {
+          "letra": "C",
+          "texto": "5",
+          "porque": "Esquece um divisor, provavelmente o próprio 18: o laço vai até `i <= x`, então ele entra."
+        },
+        {
+          "letra": "D",
+          "texto": "8",
+          "porque": "Não há 8 divisores de 18; os que dividem sem resto são seis."
+        },
+        {
+          "letra": "E",
+          "texto": "4",
+          "porque": "Deixaria de fora as pontas 1 e 18, que o laço também testa."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "O programa conta os divisores de 18: 1, 2, 3, 6, 9, 18. Imprime 6.",
+      "assuntos": [
+        {
+          "num": "0007",
+          "modulo": "01-fundamentos.md"
+        },
+        {
+          "num": "0025",
+          "modulo": "03-repeticoes.md"
+        }
+      ]
+    },
+    {
+      "numero": 4,
+      "topico": "3.3",
+      "formato": "simulação",
+      "enunciado": "Considere a seguinte sequência de operações em uma pilha inicialmente vazia, considerando que Push implementa a operação de empilhar um elemento e Pop a operação de desempilhar um elemento:\n\nPush(4); Pop(); Push(2); Push(3); Pop(); Push(1); Pop(); Pop(); Push(6); Push(7).\n\nApós todas as operações serem realizadas, qual será o número de elementos na pilha?",
+      "dica": "**Cobra:** simular uma sequência de push e pop e contar o que sobra.\n\n- **Pilha** [0082]: estrutura em que o último a entrar é o primeiro a sair (LIFO); push põe no topo e pop tira do topo. Ex.: push(1), push(2), pop deixa só o 1.\n- **Tamanho da pilha** [0082]: cada push soma 1 e cada pop subtrai 1, então o tamanho final é o número de pushes menos o de pops, desde que nenhum pop ocorra com a pilha vazia. Ex.: 3 pushes e 2 pops deixam 1 elemento.\n\n**Como atacar:** conte os pushes e os pops, ou escreva a pilha depois de cada operação.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Quantos Push e quantos Pop há na sequência?"
+        },
+        {
+          "item": "B",
+          "texto": "Depois do quarto Pop a pilha esvazia. Que operações vêm em seguida?"
+        },
+        {
+          "item": "C",
+          "texto": "O tamanho final depende só dos Pop?"
+        },
+        {
+          "item": "D",
+          "texto": "Dez é a contagem de quê nesta sequência?"
+        },
+        {
+          "item": "E",
+          "texto": "Escreva a pilha depois de cada operação. Algum Pop ocorre com ela vazia?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "3",
+          "porque": "Um a mais que o certo. São 6 pushes e 4 pops: sobram 2."
+        },
+        {
+          "letra": "B",
+          "texto": "1",
+          "porque": "Para depois do último pop, antes de Push(6) e Push(7). Esses dois ainda entram."
+        },
+        {
+          "letra": "C",
+          "texto": "4",
+          "porque": "Conta só os pops. O que importa é pushes menos pops."
+        },
+        {
+          "letra": "D",
+          "texto": "10",
+          "porque": "É o número total de operações, não de elementos na pilha."
+        },
+        {
+          "letra": "E",
+          "texto": "2",
+          "porque": "6 pushes (4, 2, 3, 1, 6, 7) e 4 pops: sobram 2. Na ordem: [4] → [] → [2] → [2, 3] → [2] → [2, 1] → [2] → [] → [6] → [6, 7]."
+        }
+      ],
+      "gabarito": "E",
+      "resumo": "6 pushes − 4 pops = 2. A pilha termina com 6 e 7, e o 7 no topo.",
+      "assuntos": [
+        {
+          "num": "0082",
+          "modulo": "12-pilhas-e-filas.md"
+        }
+      ]
+    },
+    {
+      "numero": 5,
+      "topico": [
+        "3.2",
+        "3.3"
+      ],
+      "formato": "afirmações",
+      "enunciado": "Considere as seguintes afirmações sobre pilhas e filas:\n\nI. Uma forma de implementar pilhas é usando um vetor alocado dinamicamente. Sempre que a pilha ficar cheia, o vetor pode ser redimensionado (realocado).\nII. Se a fila for armazenada em uma lista simplesmente ligada, então uma forma eficiente de implementar é realizando inserções no final e remoções no início da lista, guardando sempre um ponteiro para o primeiro nó e um ponteiro para o último nó.\nIII. Se a pilha for armazenada em uma lista duplamente encadeada, então as operações de inserção e remoção serão eficientes tanto se elas forem realizadas no início quanto no final da lista.\n\nAssinale a alternativa correta.",
+      "dica": "**Cobra:** custo de pilha e fila em vetor dinâmico, lista simples e lista dupla.\n\n- **Vetor dinâmico** [0075]: vetor alocado com `malloc` que, quando enche, é realocado para um tamanho maior (em geral o dobro) com `realloc`. Ex.: pilha com capacidade 4 cheia: realoca para 8 e segue empilhando.\n- **Fila encadeada** [0086]: guarda ponteiros para o primeiro e o último nó; insere no fim e retira do início, os dois em O(1). Ex.: inserir 5 numa fila 1 → 2 faz `fim->prox = novo` e `fim = novo`.\n- **Lista dupla** [0079]: cada nó aponta para o anterior e o próximo, o que permite remover no fim em O(1), desde que haja ponteiro para o último nó. Ex.: com `fim`, remover o último faz `fim = fim->ant`.\n\n**Como atacar:** em cada afirmação, pergunte que ponteiros a estrutura guarda.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Quando a pilha em vetor dinâmico enche, o que `realloc` permite fazer com a capacidade?"
+        },
+        {
+          "item": "II",
+          "texto": "Com ponteiros para o primeiro e o último nó, quanto custa inserir no fim? E retirar do início?"
+        },
+        {
+          "item": "III",
+          "texto": "Para remover o último nó de uma lista dupla em O(1), que ponteiro a estrutura precisa guardar? O enunciado diz que ela guarda?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas as afirmativas I e II são verdadeiras.",
+          "porque": "I e II valem. A III depende de a lista dupla guardar ponteiro para o fim; sem ele, mexer no fim custa O(n)."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas as afirmativas II e III são verdadeiras.",
+          "porque": "Deixa de fora a I, e realocar o vetor quando a pilha enche é a forma usual de pilha em vetor dinâmico."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas as afirmativas I e III são verdadeiras.",
+          "porque": "Deixa de fora a II, que descreve justamente a fila encadeada eficiente: insere no fim, retira no início, com ponteiros para os dois."
+        },
+        {
+          "letra": "D",
+          "texto": "Todas as afirmativas são verdadeiras.",
+          "porque": "Seria a resposta se a lista dupla da III tiver ponteiro para o último nó, como em geral se implementa. O enunciado não diz isso."
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma afirmativa é verdadeira.",
+          "porque": "Ao menos I e II valem sem discussão."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "Anulada pela banca. I e II valem. A III só vale se a lista dupla guardar ponteiro para o fim, o que o enunciado não diz; com ele a resposta seria D, sem ele seria A.",
+      "assuntos": [
+        {
+          "num": "0075",
+          "modulo": "11-listas.md"
+        },
+        {
+          "num": "0086",
+          "modulo": "12-pilhas-e-filas.md"
+        },
+        {
+          "num": "0079",
+          "modulo": "11-listas.md"
+        }
+      ]
+    },
+    {
+      "numero": 6,
+      "topico": 4,
+      "formato": "afirmações",
+      "enunciado": "A seguir é apresentada uma árvore AVL com 9 nós.\n\nConsidere as seguintes afirmativas acerca dessa árvore e de árvores AVL em geral.\n\nI. Esta árvore é incorreta, pois o nó que contém a chave 8 está desbalanceado.\nII. É possível inserir ao menos uma chave nessa árvore sem que seja necessário realizar rotações.\nIII. Se a chave 4 for inserida na árvore, será necessário realizar uma rotação simples que altera a raiz da árvore, a qual contém atualmente o nó com valor 6, para que ela permaneça balanceada.\n\nAssinale a alternativa correta.",
+      "figuras": [
+        "2024-092-q06"
+      ],
+      "dica": "**Cobra:** conferir o fator de balanceamento de cada nó e prever onde uma inserção desbalanceia a AVL.\n\n- **Fator de balanceamento** [0101]: altura da subárvore esquerda menos a da direita; na AVL todo nó tem -1, 0 ou 1, e uma subárvore vazia tem altura -1. Ex.: o nó 8 desta árvore tem esquerda vazia (-1) e direita com o 9 (0): fator -1.\n- **Primeiro nó desbalanceado** [0101]: depois de inserir, sobe-se da folha nova até a raiz, e a rotação é feita no primeiro nó com fator +2 ou -2, que pode estar longe da raiz. Ex.: inserir 4 aqui desce 6, 2, 5, 3 e vira filho direito do 3.\n\n**Como atacar:** calcule o fator de cada nó, insira o 4 e suba da folha até achar o primeiro nó fora de -1 a 1.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Qual é a altura da subárvore esquerda do 8? E da direita? Qual é a diferença?"
+        },
+        {
+          "item": "II",
+          "texto": "Onde entraria a chave 7? Que fator o 8 teria depois disso?"
+        },
+        {
+          "item": "III",
+          "texto": "Insira o 4 e suba da folha nova até a raiz. Qual é o primeiro nó com fator +2 ou -2?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "As afirmativas I e II são verdadeiras.",
+          "porque": "I é falsa: o nó 8 tem fator -1, que a AVL aceita. A árvore toda está balanceada."
+        },
+        {
+          "letra": "B",
+          "texto": "As afirmativas II e III são verdadeiras.",
+          "porque": "III é falsa: o 4 desbalanceia primeiro o nó 5 (esquerda com altura 1, direita vazia: +2). A rotação, dupla, é feita ali, e a raiz continua 6."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas a afirmativa I é verdadeira.",
+          "porque": "A I é falsa (o 8 tem fator -1) e a II é verdadeira: inserir o 7, por exemplo, não pede rotação."
+        },
+        {
+          "letra": "D",
+          "texto": "Apenas a afirmativa II é verdadeira.",
+          "porque": "I falsa: todos os fatores estão entre -1 e 1. II verdadeira: o 7 entra à esquerda do 8, que passa a ter fator 0, sem rotação. III falsa: o 4 vira filho direito do 3 e deixa o nó 5 com fator +2; a rotação dupla é feita ali (o 4 sobe com 3 e 5 como filhos) e a raiz continua 6."
+        },
+        {
+          "letra": "E",
+          "texto": "Apenas a afirmativa III é verdadeira.",
+          "porque": "A III é falsa e a II, que fica de fora, é verdadeira."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "Anulada pela banca. Pela análise do curso a resposta seria D: a árvore é AVL válida (I falsa), inserir 7 não pede rotação (II vale) e o 4 desbalanceia o nó 5, com rotação dupla ali e raiz intacta (III falsa).",
+      "assuntos": [
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 7,
+      "topico": 4,
+      "formato": "cálculo",
+      "enunciado": "Qual é a altura máxima de qualquer árvore AVL com 9 nós, considerando aqui que a altura de uma árvore com um único nó é zero e com dois nós é 1 ?",
+      "dica": "**Cobra:** a maior altura possível de uma AVL com um dado número de nós.\n\n- **Altura da AVL** [0101]: a AVL mais alta com n nós é a mais desequilibrada que a regra permite, e o mínimo de nós para altura h segue N(h) = N(h-1) + N(h-2) + 1, com N(0) = 1 e N(1) = 2. Ex.: N(2) = 4 e N(3) = 7.\n- **Altura em arestas** [0098]: a altura conta arestas do caminho mais longo da raiz até uma folha; uma árvore com um nó tem altura 0. Ex.: raiz com um filho tem altura 1.\n\n**Como atacar:** calcule N(h) até passar de 9 e veja qual é o maior h com N(h) ≤ 9.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Quantos nós, no mínimo, uma AVL de altura 4 precisa ter?"
+        },
+        {
+          "item": "B",
+          "texto": "Siga a conta N(h) = N(h-1) + N(h-2) + 1 até h = 5. Quanto dá?"
+        },
+        {
+          "item": "C",
+          "texto": "Calcule N(3) e N(4). Entre quais dois valores está o 9?"
+        },
+        {
+          "item": "D",
+          "texto": "Se a altura 4 já não cabe em 9 nós, cabe a 6?"
+        },
+        {
+          "item": "E",
+          "texto": "Que tipo de árvore com 9 ou 10 nós tem altura 9? A AVL permite essa forma?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "4",
+          "porque": "Altura 4 pede no mínimo N(4) = N(3) + N(2) + 1 = 7 + 4 + 1 = 12 nós. Com 9 não dá."
+        },
+        {
+          "letra": "B",
+          "texto": "5",
+          "porque": "Altura 5 pede no mínimo 20 nós."
+        },
+        {
+          "letra": "C",
+          "texto": "3",
+          "porque": "N(3) = 7 ≤ 9 e N(4) = 12 > 9, então a maior altura possível é 3."
+        },
+        {
+          "letra": "D",
+          "texto": "6",
+          "porque": "Altura 6 pede no mínimo 33 nós."
+        },
+        {
+          "letra": "E",
+          "texto": "9",
+          "porque": "Seria a altura de uma lista de 10 nós sem balanceamento. A AVL não deixa a árvore degenerar."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Mínimo de nós por altura: 1, 2, 4, 7, 12. Com 9 nós cabe altura 3, mas não 4.",
+      "assuntos": [
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0098",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 8,
+      "topico": 7,
+      "formato": "simulação",
+      "enunciado": "Considere que o particionamento realizado em um vetor pelo algoritmo Quicksort deve garantir que ao final o vetor esteja corretamente ordenado e considere uma implementação na qual a escolha do pivô é feita de forma aleatória a partir de um dos elementos do vetor. O vetor abaixo apresenta o resultado do primeiro particionamento do Quicksort em um processo de ordenação de forma crescente, feito portanto considerando o vetor completo como intervalo. Selecione a alternativa correta.\n\n```\n3   7   2   5   4   7   8   8\n```",
+      "dica": "**Cobra:** reconhecer, num vetor já particionado, quais posições podem ser o pivô.\n\n- **Partição do Quick sort** [0095]: ao fim da partição o pivô está na posição final dele, com todos os elementos à esquerda menores ou iguais e todos à direita maiores ou iguais. Ex.: em 2, 1, 5, 7, 6, o 5 pode ter sido o pivô.\n- **Teste por posição** [0095]: um elemento só pode ter sido o pivô se for maior ou igual a tudo antes dele e menor ou igual a tudo depois dele. Ex.: em 3, 7, 2, o 7 falha porque o 2 vem depois.\n\n**Como atacar:** para cada posição, olhe o maior à esquerda e o menor à direita.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Há algum elemento menor que 3 à direita dele?"
+        },
+        {
+          "item": "B",
+          "texto": "Olhe o que está à esquerda do 4 e do 5. Tudo ali é menor ou igual a eles?"
+        },
+        {
+          "item": "C",
+          "texto": "Para o 7 da posição 5, qual é o maior à esquerda e o menor à direita?"
+        },
+        {
+          "item": "D",
+          "texto": "O segundo 7 do vetor tem algo menor depois dele?"
+        },
+        {
+          "item": "E",
+          "texto": "Teste as oito posições. A lista de candidatas coincide com alguma alternativa?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "O valor do pivô que gerou a partição pode ter sido apenas 3 ou 8, não podendo ter sido 2, 4, 5 e nem 7.",
+          "porque": "O 3 não serve: o 2 está à direita dele. E o 7 da posição 5 serve."
+        },
+        {
+          "letra": "B",
+          "texto": "O valor do pivô que gerou a partição pode ter sido apenas 4 ou 5, não podendo ter sido 2, 3, 7 e nem 8.",
+          "porque": "O 5 tem o 7 à esquerda e o 4 à direita; o 4 tem o 7 e o 5 à esquerda. Nenhum dos dois serve."
+        },
+        {
+          "letra": "C",
+          "texto": "O valor do pivô que gerou a partição pode ter sido apenas 7 ou 8, não podendo ter sido 2, 3, 4 e nem 5.",
+          "porque": "O 7 da posição 5 tem 3, 7, 2, 5, 4 à esquerda (todos ≤ 7) e 8, 8 à direita. Os dois 8 também passam. Nenhum dos outros passa. Conferido em Python posição por posição."
+        },
+        {
+          "letra": "D",
+          "texto": "O valor do pivô que gerou a partição pode ter sido apenas o 8, não podendo ter sido 2, 3, 4, 5 e nem 7",
+          "porque": "Esquece o 7 da posição 5, que também cumpre a regra."
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma das alternativas anteriores está correta",
+          "porque": "A alternativa C descreve exatamente as posições possíveis."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Só passam no teste (tudo antes ≤, tudo depois ≥) o 7 da posição 5 e os dois 8. Logo o pivô foi 7 ou 8.",
+      "assuntos": [
+        {
+          "num": "0095",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 9,
+      "topico": [
+        7,
+        2
+      ],
+      "formato": "conceito",
+      "enunciado": "Considerando que você está ordenando um vetor com 1 bilhão de posições e considerando o pior dos cenários em termos de número de comparações envolvendo chaves para cada algoritmo, ao considerarmos apenas QuickSort, MergeSort, Ordenação por Inserção e Ordenação por Seleção",
+      "dica": "**Cobra:** comparar o pior caso, em comparações de chave, de quatro algoritmos de ordenação.\n\n- **Merge sort** [0094]: divide o vetor ao meio, ordena as metades e intercala; faz no máximo cerca de n log₂ n comparações em qualquer entrada. Ex.: com n = 1.024, no máximo uns 10 mil.\n- **Quick sort** [0095]: tem caso médio n log n, mas no pior caso, com pivôs sempre extremos, faz cerca de n²/2 comparações. Ex.: com o último como pivô e o vetor já ordenado.\n- **Notação O** [0072]: descreve como o custo cresce com n; para n grande, n log n fica muito abaixo de n². Ex.: com n = 10⁹, n log₂ n ≈ 3 · 10¹⁰ e n² = 10¹⁸.\n\n**Como atacar:** escreva o pior caso de cada um e compare para n = 10⁹.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Que entrada leva o Quicksort ao pior caso, e quantas comparações ele faz nela?"
+        },
+        {
+          "item": "B",
+          "texto": "O número de comparações do Mergesort muda com a ordem da entrada? Até quanto chega?"
+        },
+        {
+          "item": "C",
+          "texto": "Com o vetor em ordem decrescente, quantas comparações a inserção faz?"
+        },
+        {
+          "item": "D",
+          "texto": "A seleção compara menos se o vetor já estiver ordenado?"
+        },
+        {
+          "item": "E",
+          "texto": "O empate entre Quicksort e Mergesort vale em que caso, médio ou pior?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "O quicksort faz menos comparações de valores envolvendo valores das chaves de ordenação dos elementos que os outros três citados nas opções",
+          "porque": "O pior caso do Quicksort é quadrático, como o da inserção e o da seleção."
+        },
+        {
+          "letra": "B",
+          "texto": "O Mergesort faz menos comparações envolvendo valores das chaves de ordenação dos elementos que os outros três citados nas opções",
+          "porque": "O Mergesort é o único dos quatro com pior caso O(n log n); os outros três chegam a cerca de n²/2 comparações."
+        },
+        {
+          "letra": "C",
+          "texto": "Ordenação por Inserção faz menos comparações envolvendo valores das chaves de ordenação dos elementos que os outros três citados nas opções",
+          "porque": "O pior caso da inserção (vetor invertido) faz n(n-1)/2 comparações."
+        },
+        {
+          "letra": "D",
+          "texto": "Ordenação por seleção faz menos comparações envolvendo valores das chaves de ordenação dos elementos que os outros três citados nas opções",
+          "porque": "A seleção faz sempre n(n-1)/2 comparações, em qualquer entrada."
+        },
+        {
+          "letra": "E",
+          "texto": "Há um empate entre os algoritmos Quicksort e Mergesort no número de comparações envolvendo valores das chaves de ordenação dos elementos, sendo os dois melhores que Ordenação por Inserção e Ordenação por seleção",
+          "porque": "O empate só acontece no caso médio. No pior caso o Quicksort é quadrático."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "No pior caso: Mergesort n log n; Quicksort, inserção e seleção cerca de n²/2. Só o Mergesort fica abaixo.",
+      "assuntos": [
+        {
+          "num": "0094",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0095",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0072",
+          "modulo": "10-analise.md"
+        }
+      ]
+    },
+    {
+      "numero": 10,
+      "topico": "3.1",
+      "formato": "código",
+      "enunciado": "Considere o seguinte programa (pseudocódigo) e indique qual das alternativas é a verdadeira.\n\n```c\n#include <stdio.h>\n#include <stdlib.h>\ntypedef struct No { int dado; struct No* prox; } No;\nNo* criarNo(int valor) {\n    No* novo = malloc(sizeof (No));\n    novo->dado = valor;\n    novo->prox = NULL;\n    return novo;\n}\nvoid inserirNo(No** cabeca, int valor) {\n    No* novo = criarNo(valor);\n    novo->prox = *cabeca;\n    *cabeca = novo;\n}\nint main() {\n    No* lista = NULL;\n    inserirNo(&lista, 10);\n    inserirNo(&lista, 20);\n    inserirNo(&lista, 30);\n    printf(\"Lista criada com os elementos!\\n\");\n    return 0;\n}\n```",
+      "dica": "**Cobra:** ler um código de lista encadeada e dizer como os nós são criados, onde entram e se a memória é liberada.\n\n- **malloc e free** [0054]: `malloc` reserva memória no heap durante a execução e devolve o endereço; essa memória só volta ao sistema com `free`. Ex.: `No* n = malloc(sizeof(No));` cria um nó que existe até alguém chamar `free(n)`.\n- **Inserir no início** [0076]: o nó novo aponta para a cabeça atual e passa a ser a cabeça; por isso a função recebe `No**`, o endereço do ponteiro da lista. Ex.: inserir 10, 20, 30 assim deixa a lista 30 → 20 → 10.\n\n**Como atacar:** procure `malloc`, veja o que `inserirNo` faz com `*cabeca` e procure `free`.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "O que `criarNo` chama para obter memória para o nó?"
+        },
+        {
+          "item": "B",
+          "texto": "Depois de `inserirNo(&lista, 20)`, quem é o primeiro nó da lista?"
+        },
+        {
+          "item": "C",
+          "texto": "Procure `free` no código. Onde aparece?"
+        },
+        {
+          "item": "D",
+          "texto": "Confira as quatro partes da frase: alocação, posição de inserção, representação e liberação."
+        },
+        {
+          "item": "E",
+          "texto": "Alguma das quatro primeiras descreve o código sem erro?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "O programa não utiliza alocação dinâmica de memória para criar o nós da lista encadeada. Os elementos são inseridos no início da lista. A lista é representada por um ponteiro para o primeiro nó. Não há liberação explícita da memória alocada para os nós.",
+          "porque": "`criarNo` chama `malloc`, então a alocação é dinâmica."
+        },
+        {
+          "letra": "B",
+          "texto": "O programa utiliza alocação dinâmica de memória para criar o nós da lista encadeada. Os elementos são inseridos no fim da lista. A lista é representada por um ponteiro para o primeiro nó. Não há liberação explícita da memória alocada para os nós.",
+          "porque": "`novo->prox = *cabeca; *cabeca = novo;` põe o nó novo na frente, não no fim."
+        },
+        {
+          "letra": "C",
+          "texto": "O programa utiliza alocação dinâmica de memória para criar o nós da lista encadeada. Os elementos são inseridos no início da lista. A lista é representada por um ponteiro para o primeiro nó. Há liberação explícita da memória alocada para os nós.",
+          "porque": "Não há nenhum `free` no programa."
+        },
+        {
+          "letra": "D",
+          "texto": "O programa utiliza alocação dinâmica de memória para criar o nós da lista encadeada. Os elementos são inseridos no início da lista. A lista é representada por um ponteiro para o primeiro nó. Não há liberação explícita da memória alocada para os nós.",
+          "porque": "Usa `malloc`, insere na frente (a lista termina 30 → 20 → 10), guarda só o ponteiro `lista` para o primeiro nó e não chama `free`."
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma das opções anteriores é verdadeira.",
+          "porque": "A D descreve o programa sem erro."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "malloc em criarNo; inserirNo põe o novo na cabeça; lista é um No*; nenhum free. A lista fica 30 → 20 → 10.",
+      "assuntos": [
+        {
+          "num": "0054",
+          "modulo": "07-memoria-dinamica.md"
+        },
+        {
+          "num": "0076",
+          "modulo": "11-listas.md"
+        }
+      ]
+    },
+    {
+      "numero": 11,
+      "topico": "3.1",
+      "formato": "código",
+      "enunciado": "Considerando o seguinte programa (pseudocódigo) indique qual das afirmações é a verdadeira.\n\n```c\n#include <stdio.h>\n#include <stdlib.h>\ntypedef struct No { int dado; struct No* prox;} No;\nNo* criarNo(int valor) {\n    No* novo = malloc(sizeof (No));\n    novo->dado = valor;\n    novo->prox = NULL;\n    return novo;\n}\nvoid inserirNo(No** cabeca, int valor) {\n    No* novo = criarNo(valor);\n    if (*cabeca == NULL) {\n        *cabeca = novo;\n    } else {\n        No* atual = *cabeca;\n        while (atual->prox != NULL) {   // linha em negrito no caderno\n            atual = atual->prox;\n        }\n        atual->prox = novo;\n    }\n}\nint main() {\n    No* lista = NULL;\n    inserirNo(&lista, 10);\n    inserirNo(&lista, 20);\n    inserirNo(&lista, 30);\n    return 0;\n}\n```",
+      "dica": "**Cobra:** contar quantas vezes a condição de um while é testada ao percorrer uma lista até o último nó.\n\n- **While** [0020]: testa a condição antes de cada volta e mais uma vez no fim, quando ela falha; com k voltas, a condição é avaliada k + 1 vezes. Ex.: um while que roda 1 vez testa a condição 2 vezes.\n- **Inserir no fim** [0076]: sem ponteiro para o último nó, é preciso andar da cabeça até o nó cujo `prox` é `NULL`, o que custa proporcional ao tamanho da lista. Ex.: com 10 e 20 na lista, anda do 10 para o 20 e para.\n\n**Como atacar:** antes de inserir o 30, a lista tem 10 → 20; conte os testes do while.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Quantos nós a lista tem quando o 30 vai ser inserido? Em quantos deles o teste é feito?"
+        },
+        {
+          "item": "B",
+          "texto": "Com `atual` no 20, o que `atual->prox != NULL` dá?"
+        },
+        {
+          "item": "C",
+          "texto": "Se a lista tivesse mil nós, o while rodaria o mesmo número de vezes?"
+        },
+        {
+          "item": "D",
+          "texto": "Na terceira chamada, `*cabeca` é NULL?"
+        },
+        {
+          "item": "E",
+          "texto": "O corpo roda 1 vez. Quantas vezes a condição é testada para isso?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Ao inserir o elemento 30 na lista, na terceira chamada da função inserirNo feita na função main, a linha de comando destacada em negrito, com o comando while, é executada 3 vezes. De forma geral, a quantidade de vezes que esta linha é executada depende da quantidade de elementos na lista.",
+          "porque": "Com dois nós, o while testa a condição duas vezes: no 10 (verdadeira) e no 20 (falsa). Três seria com três nós."
+        },
+        {
+          "letra": "B",
+          "texto": "Ao inserir o elemento 30 na lista, na terceira chamada da função inserirNo feita na função main, a linha de comando destacada em negrito, com o comando while, é executada 2 vezes. De forma geral, a quantidade de vezes que esta linha é executada depende da quantidade de elementos na lista.",
+          "porque": "A lista é 10 → 20. O teste roda com `atual` no 10 (`prox` não é NULL, anda) e no 20 (`prox` é NULL, sai): 2 vezes. Com mais nós, mais testes. Conferido em C contando as avaliações."
+        },
+        {
+          "letra": "C",
+          "texto": "Ao inserir o elemento 30 na lista, na terceira chamada da função inserirNo feita na função main, a linha de comando destacada em negrito, com o comando while, é executada 3 vezes. Ao inserir o elemento 30 na lista o loop while executa 3 vezes. De forma geral, a quantidade de vezes que este loop executa não depende da quantidade de elementos já inseridos na lista.",
+          "porque": "Erra a contagem e ainda diz que não depende do tamanho, quando o while percorre a lista inteira."
+        },
+        {
+          "letra": "D",
+          "texto": "Ao inserir o elemento 30 na lista, na terceira chamada da função inserirNo feita na função main, a linha de comando destacada em negrito, com o comando while, é executada 0 vezes.",
+          "porque": "Zero seria com a lista vazia, que cai no `if` e nem chega ao while."
+        },
+        {
+          "letra": "E",
+          "texto": "Ao inserir o elemento 30 na lista, na terceira chamada da função inserirNo feita na função main, a linha de comando destacada em negrito, com o comando while, é executada 1 vez.",
+          "porque": "É o número de voltas do corpo, mas a linha do while é testada uma vez a mais, quando a condição falha."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Lista 10 → 20 antes do 30: o while testa no 10 (anda) e no 20 (para), 2 avaliações, e o corpo roda 1 vez. Cresce com o tamanho da lista.",
+      "assuntos": [
+        {
+          "num": "0020",
+          "modulo": "03-repeticoes.md"
+        },
+        {
+          "num": "0076",
+          "modulo": "11-listas.md"
+        }
+      ]
+    },
+    {
+      "numero": 12,
+      "topico": 6,
+      "formato": "código",
+      "enunciado": "Considerando o seguinte programa (pseudocódigo) indique qual das afirmações é a verdadeira.\n\n```c\n#include <stdio.h>\nint buscaBinaria(int vetor[], int tamanho, int valor) {\n    int inicio = 0;\n    int fim = tamanho - 1;\n    while (inicio <= fim) {   // linha em negrito no caderno\n        int meio = (inicio + fim) / 2;\n        if (vetor[meio] == valor) {\n            return meio;\n        }\n        if (vetor[meio] < valor) {\n            inicio = meio + 1;\n        } else {\n            fim = meio - 1;\n        }\n    }\n    return -1;\n}\nint main() {\n    int vetor[] = {1, 3, 5, 7, 9, 11, 13, 15, 17, 19};\n    int tamanho = sizeof(vetor) / sizeof(vetor[0]);\n    int valor = 15;\n    int resultado = buscaBinaria(vetor, tamanho, valor);\n    printf(\"%d\\n\", resultado);\n    return 0;\n}\n```",
+      "dica": "**Cobra:** simular a busca binária, contando os testes do while e o índice devolvido.\n\n- **Busca binária** [0090]: num vetor ordenado, compara com o elemento do meio e descarta a metade onde o valor não pode estar, até achar ou o intervalo ficar vazio. Ex.: em 1, 3, 5, 7, 9 procurando 9: meio 2 (5), depois meio 3 (7), depois meio 4 (9).\n- **Índice e valor** [0037]: a função devolve a posição onde o valor está, contada a partir de 0, e não o próprio valor. Ex.: em {1, 3, 5}, o 5 está no índice 2.\n\n**Como atacar:** anote inicio, fim e meio a cada volta até `vetor[meio] == 15`.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "O `return meio` devolve a posição ou o conteúdo?"
+        },
+        {
+          "item": "B",
+          "texto": "Em que volta `vetor[meio]` vale 15? A condição do while é testada de novo depois do return?"
+        },
+        {
+          "item": "C",
+          "texto": "Escreva inicio, fim e meio nas duas voltas. Batem com esta alternativa?"
+        },
+        {
+          "item": "D",
+          "texto": "O 15 está no vetor? Em que posição?"
+        },
+        {
+          "item": "E",
+          "texto": "Alguma das quatro primeiras bate com a sua simulação?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "A linha em negrito, loop while, será executada 2 vezes e o programa imprime 15.",
+          "porque": "Acerta as voltas, mas a função devolve o índice (7), não o valor procurado."
+        },
+        {
+          "letra": "B",
+          "texto": "A linha em negrito, loop while, será executada 3 vezes e o programa imprime 7.",
+          "porque": "Acerta o índice, mas o 15 é achado na segunda volta, e a função retorna de dentro do laço sem testar a condição de novo."
+        },
+        {
+          "letra": "C",
+          "texto": "A linha em negrito, loop while, será executada 2 vezes e o programa imprime 7.",
+          "porque": "Volta 1: inicio 0, fim 9, meio 4 (9 < 15), inicio vira 5. Volta 2: meio 7, `vetor[7] == 15`, retorna 7. O while foi testado 2 vezes. Conferido em C."
+        },
+        {
+          "letra": "D",
+          "texto": "A linha em negrito, loop while, 3 vezes e o programa imprime -1.",
+          "porque": "O 15 está no vetor, então a função não devolve -1."
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma das afirmações anteriores é verdadeira",
+          "porque": "A alternativa C descreve a execução."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "meio 4 (valor 9) → inicio 5; meio 7 (valor 15) → retorna 7. Dois testes do while, imprime 7.",
+      "assuntos": [
+        {
+          "num": "0090",
+          "modulo": "13-busca-e-ordenacao.md"
+        },
+        {
+          "num": "0037",
+          "modulo": "05-vetores-e-strings.md"
+        }
+      ]
+    },
+    {
+      "numero": 13,
+      "topico": 1,
+      "formato": "código",
+      "enunciado": "Considere a função em Python a seguir.\n\n```python\ndef funcao(n):\n    if n == 0:\n        return 0\n    return n % 10 + funcao(n // 10)\n```\n\nQual o valor retornado pela função quando chamada da seguinte forma: `funcao(42)`?",
+      "dica": "**Cobra:** seguir uma recursão que separa os dígitos de um número.\n\n- **Recursão** [0032]: a função resolve o caso base direto e, nos outros casos, chama a si mesma com um problema menor, combinando o resultado. Ex.: `funcao(7)` devolve 7 + `funcao(0)` = 7.\n- **Último dígito** [0007]: `n % 10` é o último dígito de n, e `n // 10` (divisão inteira em Python) tira esse dígito. Ex.: 42 % 10 é 2 e 42 // 10 é 4.\n\n**Como atacar:** escreva as chamadas de 42 até 0 e some na volta.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Quanto vale `42 % 10`? Esse valor entra na resposta?"
+        },
+        {
+          "item": "B",
+          "texto": "Escreva 42 → 4 → 0 e o que cada chamada soma."
+        },
+        {
+          "item": "C",
+          "texto": "O operador entre `n % 10` e a chamada é soma ou produto?"
+        },
+        {
+          "item": "D",
+          "texto": "Alguma parte desta função multiplica por 10?"
+        },
+        {
+          "item": "E",
+          "texto": "Que contas levariam a 40? Elas aparecem no código?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "4",
+          "porque": "É só o primeiro dígito. A função soma também o 2."
+        },
+        {
+          "letra": "B",
+          "texto": "6",
+          "porque": "`funcao(42)` = 2 + `funcao(4)` = 2 + (4 + `funcao(0)`) = 2 + 4 + 0 = 6: a soma dos dígitos. Rodado em Python."
+        },
+        {
+          "letra": "C",
+          "texto": "8",
+          "porque": "Seria o produto dos dígitos, 4 × 2. A função soma."
+        },
+        {
+          "letra": "D",
+          "texto": "24",
+          "porque": "É o número invertido, o que a função da questão 14 calcula."
+        },
+        {
+          "letra": "E",
+          "texto": "40",
+          "porque": "Não sai da soma de dígitos; seria 42 sem o último dígito vezes 10."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Soma dos dígitos: 2 + 4 + 0 = 6.",
+      "assuntos": [
+        {
+          "num": "0032",
+          "modulo": "04-funcoes.md"
+        },
+        {
+          "num": "0007",
+          "modulo": "01-fundamentos.md"
+        }
+      ]
+    },
+    {
+      "numero": 14,
+      "topico": 1,
+      "formato": "código",
+      "enunciado": "Considere a função em Python a seguir.\n\n```python\ndef funcao(n, r=0):\n    if n == 0:\n        return r\n    return funcao(n // 10, r * 10 + n % 10)\n```\n\nQual o retorno da função quando chamada da seguinte forma: `funcao(42)`?",
+      "dica": "**Cobra:** seguir uma recursão com acumulador que monta outro número.\n\n- **Recursão com acumulador** [0033]: o resultado parcial viaja como parâmetro e o caso base só o devolve, sem conta na volta. Ex.: somar 1..3 com `s(n, r) = s(n-1, r+n)` faz s(3,0) → s(2,3) → s(1,5) → s(0,6) = 6.\n- **Montar número dígito a dígito** [0007]: `r * 10 + d` acrescenta o dígito d à direita de r. Ex.: com r = 2 e d = 4, dá 24.\n\n**Como atacar:** escreva os pares (n, r) de chamada em chamada.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Qual dígito entra primeiro em r: o 2 ou o 4?"
+        },
+        {
+          "item": "B",
+          "texto": "Na chamada recursiva, r recebe `r + n % 10` ou `r * 10 + n % 10`?"
+        },
+        {
+          "item": "C",
+          "texto": "Há multiplicação entre dígitos neste código?"
+        },
+        {
+          "item": "D",
+          "texto": "Escreva os pares (n, r). Qual é o r quando n chega a 0?"
+        },
+        {
+          "item": "E",
+          "texto": "De onde viria o 0 no fim do resultado?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "4",
+          "porque": "É o valor de r depois de olhar só o 4, mas o 4 é o segundo dígito tratado: primeiro entra o 2."
+        },
+        {
+          "letra": "B",
+          "texto": "6",
+          "porque": "É a soma dos dígitos, da questão 13. Aqui o acumulador multiplica por 10 antes de somar."
+        },
+        {
+          "letra": "C",
+          "texto": "8",
+          "porque": "Seria o produto dos dígitos."
+        },
+        {
+          "letra": "D",
+          "texto": "24",
+          "porque": "(42, 0) → (4, 0·10 + 2 = 2) → (0, 2·10 + 4 = 24) → devolve 24: o número invertido. Rodado em Python."
+        },
+        {
+          "letra": "E",
+          "texto": "40",
+          "porque": "Inverteria só o 4 e trocaria o 2 por 0."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "(42, 0) → (4, 2) → (0, 24): devolve 42 invertido, 24.",
+      "assuntos": [
+        {
+          "num": "0033",
+          "modulo": "04-funcoes.md"
+        },
+        {
+          "num": "0007",
+          "modulo": "01-fundamentos.md"
+        }
+      ]
+    },
+    {
+      "numero": 15,
+      "topico": 8,
+      "formato": "simulação",
+      "enunciado": "Considere o grafo a seguir:\n\nAo executar o algoritmo de Dijkstra para calcular o caminho mínimo entre os vértices A e D, qual das alternativas abaixo representa uma possível ordem em que os vértices são visitados (i.e., o vértice é retirado da fila de vértices a visitar)?",
+      "dica": "**Cobra:** a ordem em que o Dijkstra tira os vértices da fila de prioridade.\n\n- **Dijkstra** [0112]: a cada passo tira da fila o vértice de menor distância conhecida, marca como definitivo e relaxa as arestas dele; a ordem de saída é a ordem crescente das distâncias finais. Ex.: com A–B 2 e A–G 6, depois do A sai o B.\n- **Grafo ponderado** [0109]: as arestas têm peso, e aqui são não dirigidas, valendo nos dois sentidos. Ex.: a aresta E–G de peso 1 permite ir de E a G e de G a E.\n\n**Como atacar:** monte a tabela de distâncias e escreva quem sai a cada passo.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Depois de tirar o A, quais distâncias conhecidas o B e o G têm?"
+        },
+        {
+          "item": "B",
+          "texto": "Esta sequência visita o B? Algum caminho mínimo passa por ele?"
+        },
+        {
+          "item": "C",
+          "texto": "Qual é a distância final do G, passando por B e E? Ela é menor que a do F?"
+        },
+        {
+          "item": "D",
+          "texto": "O F, com distância 6, sai antes ou depois do H, com 8?"
+        },
+        {
+          "item": "E",
+          "texto": "Calcule a distância final de cada vértice e ordene. A sequência coincide?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "A-G-E-B-C-F-H-D",
+          "porque": "Depois do A, o B (2) tem distância menor que o G (6), então o B sai antes."
+        },
+        {
+          "letra": "B",
+          "texto": "A-G-E-F-H-D",
+          "porque": "Começa pelo G, com 6, quando o B tem 2. E deixa de fora o B e o C."
+        },
+        {
+          "letra": "C",
+          "texto": "A-B-E-F-H-D",
+          "porque": "Pula o G, que sai com 5 (A-B-E-G) antes do F (6), e o C, que sai com 9 antes do D (10)."
+        },
+        {
+          "letra": "D",
+          "texto": "A-B-E-G-H-D",
+          "porque": "Pula o F (6), que sai antes do H (8), e o C (9)."
+        },
+        {
+          "letra": "E",
+          "texto": "A-B-E-G-F-H-C-D",
+          "porque": "Distâncias finais: A 0, B 2, E 4, G 5, F 6, H 8, C 9, D 10. Em ordem crescente, é esta sequência. Rodado em Python com heap."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "Anulada pela banca. Pela simulação do curso, as distâncias finais são A 0, B 2, E 4, G 5, F 6, H 8, C 9, D 10, e a ordem de saída é a da alternativa E. O motivo da anulação não foi publicado.",
+      "assuntos": [
+        {
+          "num": "0112",
+          "modulo": "16-grafos.md"
+        },
+        {
+          "num": "0109",
+          "modulo": "16-grafos.md"
+        }
+      ]
+    },
+    {
+      "numero": 16,
+      "topico": 1,
+      "formato": "código",
+      "enunciado": "Assinale a opção que contém uma implementação correta, em C, de uma função que realiza a seguinte tarefa: \"escreva uma função que recebe como entrada o valor de uma compra, aplicando desconto de 15% ao total se o valor inicial da compra for superior a 100 reais\".",
+      "dica": "**Cobra:** transformar uma regra de desconto em expressão C válida.\n\n- **Aritmética com porcentagem** [0007]: tirar 15% de um valor é o mesmo que multiplicá-lo por 0,85, e em C a porcentagem se escreve como fração decimal, porque `%` é o operador de resto. Ex.: 200 × 0.85 = 170.\n- **Condição com if** [0012]: o teste `valor_compra > 100` decide se a linha do desconto roda; se for falso, o valor volta sem mudança. Ex.: com 80, a função devolve 80.\n\n**Como atacar:** aplique cada fórmula a 200 e veja qual dá 170.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Em C, o que o operador `%` faz? `15%` sozinho é uma expressão completa?"
+        },
+        {
+          "item": "B",
+          "texto": "Com 200, quanto esta linha devolve? Quanto deveria ser?"
+        },
+        {
+          "item": "C",
+          "texto": "Subtrair 1,15 vezes o valor do próprio valor dá um número positivo?"
+        },
+        {
+          "item": "D",
+          "texto": "200 / 1.15 dá quanto? É o mesmo que 15% de desconto?"
+        },
+        {
+          "item": "E",
+          "texto": "Com 200 e com 80, quanto a função devolve?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "```c\nfloat calcula_preco(float valor_compra) {\n    if (valor_compra > 100)\n        valor_compra = valor_compra - (valor_compra * 15%);\n    return valor_compra;\n}\n```",
+          "porque": "`15%` não compila: em C, `%` é o resto da divisão e precisa de um segundo operando inteiro."
+        },
+        {
+          "letra": "B",
+          "texto": "```c\nfloat calcula_preco(float valor_compra) {\n    if (valor_compra > 100)\n        valor_compra = valor_compra - (valor_compra * 0.85);\n    return valor_compra;\n}\n```",
+          "porque": "Tira 85% em vez de 15%: com 200, devolve 30."
+        },
+        {
+          "letra": "C",
+          "texto": "```c\nfloat calcula_preco(float valor_compra) {\n    if (valor_compra > 100)\n        valor_compra = valor_compra - valor_compra * 1.15;\n    return valor_compra;\n}\n```",
+          "porque": "Dá negativo: 200 - 230 = -30."
+        },
+        {
+          "letra": "D",
+          "texto": "```c\nfloat calcula_preco(float valor_compra) {\n    if (valor_compra > 100)\n        valor_compra = valor_compra / 1.15;\n    return valor_compra;\n}\n```",
+          "porque": "Dividir por 1,15 tira cerca de 13%: 200 vira 173,91."
+        },
+        {
+          "letra": "E",
+          "texto": "```c\nfloat calcula_preco(float valor_compra) {\n    if (valor_compra > 100)\n        valor_compra = valor_compra * 0.85;\n    return valor_compra;\n}\n```",
+          "porque": "Multiplicar por 0,85 tira 15%: 200 vira 170. Só aplica acima de 100. Conferido em C."
+        }
+      ],
+      "gabarito": "E",
+      "resumo": "Desconto de 15% = multiplicar por 0,85. Com 200: E dá 170; B dá 30, C dá -30, D dá 173,91 e A nem compila.",
+      "assuntos": [
+        {
+          "num": "0007",
+          "modulo": "01-fundamentos.md"
+        },
+        {
+          "num": "0012",
+          "modulo": "02-condicionais.md"
+        }
+      ]
+    },
+    {
+      "numero": 17,
+      "topico": 5,
+      "formato": "afirmações",
+      "enunciado": "Analise as afirmações a seguir sobre tabelas de espalhamento (hash).\n\nI. A sondagem linear (linear probing) pode causar aglomeração de chaves devido ao excesso de colisões em regiões muito próximas da posição de inserção original de uma chave qualquer.\nII. Uma estratégia importante para evitar que o algoritmo entre em loop infinito é sempre manter ao menos uma posição vazia na tabela. Assim, sempre será possível inserir uma chave na sua posição correta, independentemente da estratégia de resolução de colisão adotada.\nIII. Na sondagem quadrática (quadratic probing), é possível que a sondagem entre em loop infinito mesmo que a tabela ainda tenha várias posições vazias.\n\nAssinale a alternativa correta.",
+      "dica": "**Cobra:** aglomeração na sondagem linear e quando a sondagem quadrática pode não achar vaga.\n\n- **Endereçamento aberto** [0107]: a chave fica no próprio vetor; na colisão, sonda outras posições numa sequência fixa. Na sondagem linear a sequência é h, h+1, h+2, ..., o que junta chaves em blocos contíguos. Ex.: chaves com h = 3, 3, 4 ocupam 3, 4 e 5.\n- **Sondagem quadrática e dupla** [0179]: a quadrática testa h, h+1², h+2², ...; essa sequência pode visitar só parte das posições e repetir as mesmas para sempre. Ex.: com m = 8 e h = 0, os saltos i² mod 8 dão só 0, 1 e 4.\n\n**Como atacar:** para a II, procure uma estratégia que não visite todas as posições.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Insira chaves com h = 3, 3, 4, 5 na sondagem linear. Que forma as posições ocupadas tomam?"
+        },
+        {
+          "item": "II",
+          "texto": "Toda estratégia de sondagem visita todas as posições da tabela antes de repetir?"
+        },
+        {
+          "item": "III",
+          "texto": "Com m = 8, calcule i² mod 8 para i = 0 a 7. Quais posições aparecem?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas as afirmações I e II são verdadeiras.",
+          "porque": "A II diz \"independentemente da estratégia\", e a própria III mostra uma estratégia que não acha a vaga."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas as afirmações II e III são verdadeiras.",
+          "porque": "II e III se contradizem: se a quadrática pode ficar em laço com várias vagas, uma vaga só não garante a inserção."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas as afirmações I e III são verdadeiras.",
+          "porque": "I vale: na sondagem linear as colisões formam blocos que crescem (aglomeração primária). III vale: com m = 8, i² mod 8 só gera 0, 1 e 4, então a sondagem pode girar nessas posições com outras livres. II é falsa por causa do \"independentemente da estratégia\"."
+        },
+        {
+          "letra": "D",
+          "texto": "Todas as afirmações são verdadeiras.",
+          "porque": "A II é falsa: deixar uma vaga só garante a inserção na sondagem linear, que visita todas as posições."
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma das afirmações é verdadeira.",
+          "porque": "A I e a III valem."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "I verdadeira (aglomeração primária). II falsa: uma vaga só garante inserção na sondagem linear. III verdadeira: a quadrática pode repetir um subconjunto das posições.",
+      "assuntos": [
+        {
+          "num": "0107",
+          "modulo": "15-hash.md"
+        },
+        {
+          "num": "0179",
+          "modulo": "28-estruturas-complementos.md"
+        }
+      ]
+    },
+    {
+      "numero": 18,
+      "topico": "3.1",
+      "formato": "código",
+      "enunciado": "O código abaixo imprime como resultado:\n\n```c\n#include <stdio.h>\n#include <stdlib.h>\ntypedef struct tipoNo {\n  int d;\n  struct tipoNo *prox;\n} tipoNo;\ntypedef struct tipoLista {\n  tipoNo * ea;\n  tipoNo * eb;\n} tipoLista;\nvoid funcao(tipoLista *p, int num) {\n  tipoNo *aux;\n  aux = (tipoNo *) malloc(sizeof(tipoNo));\n  aux -> d = num;\n  aux -> prox = p->ea;\n  p->ea = aux;   p->eb = p->ea->prox;\n}\n\nvoid mostra(tipoLista *p) {\n  tipoNo *temp = p->eb;\n  while(temp) {   printf(\"%d \", temp->d);   temp = temp->prox;\n  }\n}\n\nint main() {\n  tipoLista l;\n  l.ea = NULL;\n  l.eb = NULL;\n  funcao(&l,2);\n  funcao(&l,4);\n  funcao(&l,6);\n  funcao(&l,8);\n  mostra(&l);\n}\n```",
+      "dica": "**Cobra:** simular inserções no início de uma lista e ver de onde a impressão começa.\n\n- **Inserir no início** [0076]: o nó novo aponta para a cabeça atual e vira a cabeça, então a lista fica na ordem inversa da inserção. Ex.: inserir 2, 4, 6, 8 deixa 8 → 6 → 4 → 2.\n- **Ponteiro para struct** [0062]: `p->ea` acessa o campo `ea` da struct apontada por `p`, e `p->ea->prox` é o segundo nó. Ex.: com a lista 8 → 6 → 4 → 2, `p->ea->prox` aponta para o 6.\n\n**Como atacar:** depois da última chamada, veja para onde `ea` e `eb` apontam.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Cada `funcao` põe o nó novo antes ou depois dos que já estão?"
+        },
+        {
+          "item": "B",
+          "texto": "De qual ponteiro `mostra` começa a percorrer?"
+        },
+        {
+          "item": "C",
+          "texto": "Depois de `funcao(&l, 8)`, para quem `ea` e `eb` apontam?"
+        },
+        {
+          "item": "D",
+          "texto": "Em que ordem os nós ficam na lista?"
+        },
+        {
+          "item": "E",
+          "texto": "Sua simulação bate com alguma das quatro primeiras?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "2 4 6 8",
+          "porque": "É a ordem de inserção, mas cada nó entra na frente, então a lista fica invertida."
+        },
+        {
+          "letra": "B",
+          "texto": "8 6 4 2",
+          "porque": "É a lista inteira, a partir de `ea`. A impressão começa em `eb`, o segundo nó."
+        },
+        {
+          "letra": "C",
+          "texto": "6 4 2",
+          "porque": "`ea` aponta para o 8, o último inserido, e `eb = ea->prox` para o 6. `mostra` parte de `eb`: imprime 6 4 2. Conferido compilando com gcc."
+        },
+        {
+          "letra": "D",
+          "texto": "2 4 6",
+          "porque": "Pula o 8, mas na ordem de inserção; a lista está invertida."
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma das alternativas anteriores",
+          "porque": "A C é a saída do programa."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Inserções na frente: 8 → 6 → 4 → 2. eb é o segundo nó, então imprime 6 4 2.",
+      "assuntos": [
+        {
+          "num": "0076",
+          "modulo": "11-listas.md"
+        },
+        {
+          "num": "0062",
+          "modulo": "08-structs.md"
+        }
+      ]
+    },
+    {
+      "numero": 19,
+      "topico": 1,
+      "formato": "código",
+      "enunciado": "Para gerar a sequência de Fibonacci usamos a relação de recorrência abaixo (I). Complete o pseudo-código (II) para que o cálculo da sequência de Fibonacci esteja correto utilizando uma das opções abaixo:\n\n```\n(I)  f(0) = 0\n     f(1) = 1\n     f(n) = f(n-1) + f(n-2)\n\n(II) f(n)\n         if(_______)\n             return n\n         return f(n-1) + f(n-2)\n```",
+      "dica": "**Cobra:** escolher o caso base que faz a recursão de Fibonacci terminar e dar os valores certos.\n\n- **Caso base** [0032]: é o caso que a função resolve sem chamar a si mesma; toda chamada recursiva precisa chegar a ele, senão a recursão não termina. Ex.: no fatorial, `if (n == 0) return 1`.\n- **Fibonacci recursivo** [0033]: `f(n) = f(n-1) + f(n-2)` com f(0) = 0 e f(1) = 1; como a chamada desce de 1 e de 2, o caso base precisa cobrir o 0 e o 1. Ex.: f(2) = f(1) + f(0) = 1.\n\n**Como atacar:** teste cada condição com n = 1 e n = 2.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Calcule f(1) com esta condição. A chamada f(-1) chega a 0 em algum momento?"
+        },
+        {
+          "item": "B",
+          "texto": "Com `n <= 0`, quanto f(1) devolve?"
+        },
+        {
+          "item": "C",
+          "texto": "Com `n == 1`, o que acontece em f(2) quando chama f(0)?"
+        },
+        {
+          "item": "D",
+          "texto": "Com `n <= 2`, quanto vale f(2)? E quanto deveria valer?"
+        },
+        {
+          "item": "E",
+          "texto": "Com esta condição, calcule f(0) a f(6). A sequência bate?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "n==0",
+          "porque": "f(1) chama f(0) e f(-1), e f(-1) nunca chega a 0: a recursão não termina."
+        },
+        {
+          "letra": "B",
+          "texto": "n<=0",
+          "porque": "Termina, mas f(1) = f(0) + f(-1) = 0 + (-1) = -1. Os valores saem negativos."
+        },
+        {
+          "letra": "C",
+          "texto": "n==1",
+          "porque": "f(2) chama f(0), que chama f(-1), f(-2), ... sem parar."
+        },
+        {
+          "letra": "D",
+          "texto": "n<=2",
+          "porque": "f(2) devolveria 2, mas f(2) = 1. A sequência sai 0, 1, 2, 3, 5, ..."
+        },
+        {
+          "letra": "E",
+          "texto": "n<=1",
+          "porque": "Devolve 0 para n = 0 e 1 para n = 1, exatamente os casos base da recorrência; a partir daí soma. Sai 0, 1, 1, 2, 3, 5, 8. Rodado em Python."
+        }
+      ],
+      "gabarito": "E",
+      "resumo": "Os casos base são f(0) = 0 e f(1) = 1, os dois iguais a n: `if (n <= 1) return n`.",
+      "assuntos": [
+        {
+          "num": "0032",
+          "modulo": "04-funcoes.md"
+        },
+        {
+          "num": "0033",
+          "modulo": "04-funcoes.md"
+        }
+      ]
+    },
+    {
+      "numero": 20,
+      "topico": 4,
+      "formato": "afirmações",
+      "enunciado": "Considere as afirmações abaixo sobre diferentes tipos de árvores binárias de pesquisa e marque uma das alternativas\n\nI) Os algoritmos de busca tanto em árvores sem balanceamento, quanto em árvores com balanceamento, têm o número máximo de comparações da chave de busca com valores na árvore, na pior das hipóteses, proporcional a altura da árvore, não importando se a árvore é sem balanceamento ou com balanceamento.\nII) Dependendo da ordem de inserção dos elementos, é possível que a altura de uma árvore sem balanceamento seja menor ou igual que a de uma árvore com balanceamento, mesmo que as duas contenham os mesmos elementos, todos inseridos na mesma ordem\nIII) O mesmo algoritmo de busca pode ser usado tanto para árvores com balanceamento quanto para árvores sem balanceamento",
+      "dica": "**Cobra:** o que muda e o que não muda entre BST comum e BST balanceada.\n\n- **Busca na BST** [0099]: desce da raiz comparando a chave com cada nó do caminho e vai para a esquerda ou a direita; no pior caso faz altura + 1 comparações, em qualquer BST. Ex.: numa BST de altura 3, no máximo 4 comparações.\n- **AVL** [0101]: é uma BST que, depois de cada inserção ou remoção, rotaciona para manter a altura O(log n); a busca é a mesma da BST comum. Ex.: inserir 2, 1, 3 dá a mesma árvore com ou sem balanceamento.\n\n**Como atacar:** para a II, procure uma ordem de inserção em que as duas árvores saem iguais.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Numa BST qualquer, por quantos nós a busca passa no pior caso? Isso muda se a árvore for AVL?"
+        },
+        {
+          "item": "II",
+          "texto": "Insira 2, 1, 3 numa BST comum e numa AVL. As alturas diferem?"
+        },
+        {
+          "item": "III",
+          "texto": "O código da busca na AVL faz algo além de comparar e descer?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas as afirmações I e II estão corretas",
+          "porque": "Deixa de fora a III, e a busca da AVL é a mesma da BST: o balanceamento só mexe na inserção e na remoção."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas as afirmações II e III estão corretas",
+          "porque": "Deixa de fora a I: em qualquer BST o pior caso da busca é proporcional à altura."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas as afirmações I e III estão corretas",
+          "porque": "Deixa de fora a II: inserindo 2, 1, 3, a BST comum já sai balanceada e com a mesma altura da AVL."
+        },
+        {
+          "letra": "D",
+          "texto": "Todas as afirmações estão corretas",
+          "porque": "I: a busca compara ao longo de um caminho, então o pior caso é a altura mais 1, com ou sem balanceamento. II: há ordens em que a BST comum já sai balanceada, com altura igual ou até menor. III: a busca não depende do balanceamento."
+        },
+        {
+          "letra": "E",
+          "texto": "Nenhuma das alternativas anteriores (a,b,c ou d) está certa.",
+          "porque": "A D está certa."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "I, II e III verdadeiras: a busca custa a altura em qualquer BST, a BST comum pode sair tão baixa quanto a AVL dependendo da ordem, e o algoritmo de busca é o mesmo.",
+      "assuntos": [
+        {
+          "num": "0099",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    }
+  ]
+}

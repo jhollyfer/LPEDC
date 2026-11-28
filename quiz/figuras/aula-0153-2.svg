@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="747" height="178" viewBox="0 0 747 178">
+<title>aula-0153-2</title>
+<style>text{font-family:ui-monospace,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace;white-space:pre}</style>
+<rect x="0" y="0" width="747" height="178" fill="#ffffff"/>
+<text x="30" y="60" font-size="24" fill="#1e1e1e" text-anchor="start">Kruskal: A-C 1  -&gt; {A,C} {B} {D}</text>
+<text x="30" y="96" font-size="24" fill="#1e1e1e" text-anchor="start">         B-D 1  -&gt; {A,C} {B,D}   (dois pedaços)</text>
+<text x="30" y="132" font-size="24" fill="#1e1e1e" text-anchor="start">         C-D 1  -&gt; {A,B,C,D}     soma 3</text>
+</svg>

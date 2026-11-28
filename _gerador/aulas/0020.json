@@ -1,0 +1,47 @@
+{
+ "num": "0020",
+ "oque": "O **`while`** (\"enquanto\") repete um trecho de código enquanto uma condição for verdadeira. Ele testa a condição **antes** de cada volta, então o corpo pode rodar zero vezes.",
+ "como": "```c\nwhile (condição) {\n    // corpo: roda enquanto a condição for verdadeira\n}\n```\n\nO ciclo é sempre o mesmo: testa a condição; se vale, roda o corpo inteiro e volta ao teste; se não vale, pula para a linha depois da `}`.\n\nTrês peças fazem o laço terminar, todas ligadas à mesma variável: ela tem valor **antes** do laço, a condição a usa, e o corpo a **muda** na direção de parar.\n\n```c\nint saldo = 0, meses = 0;\nwhile (saldo < 1000) {\n    saldo = saldo + 150;\n    meses++;\n}\n/* meses = 7 */\n```\n\n**Contar testes:** se o corpo roda k vezes, a condição é avaliada **k + 1** vezes, porque a última avaliação é a que dá falso e encerra o laço. Se um `return` sai de dentro do corpo, essa última avaliação não acontece.",
+ "caracteristicas": [
+  "Laço com teste no **início** (pré-teste): o corpo pode rodar zero vezes.",
+  "Serve quando não se sabe quantas voltas vão acontecer, mas se sabe quando parar.",
+  "Com k voltas do corpo, a condição é testada k + 1 vezes (ou k, se o laço termina por `return` ou `break`).",
+  "Toda condição diferente de zero conta como verdadeira, como no `if`.",
+  "Esquecer de mudar a variável da condição gera laço infinito."
+ ],
+ "vantagens": [
+  "Expressa bem repetições com fim decidido por uma condição: percorrer lista até `NULL`, ler até o fim do arquivo.",
+  "Não roda o corpo quando não há nada a fazer.",
+  "É a forma mais geral de laço: o `for` é um `while` com as três peças numa linha."
+ ],
+ "desvantagens": [
+  "As três peças ficam espalhadas, e é fácil esquecer uma.",
+  "Laço infinito por esquecer de atualizar a variável.",
+  "Contar voltas e contar testes da condição dão números diferentes, o que confunde em questão de prova."
+ ],
+ "exemplo": "Percorrer uma lista até o último nó, como na inserção no fim sem ponteiro para o último: com a lista 10 → 20, `atual` começa no 10.",
+ "passos": [
+  {
+   "titulo": "testes e voltas",
+   "texto": "O teste roda duas vezes e o corpo, uma. Com n nós, são n testes e n - 1 voltas.",
+   "figura": {
+    "tipo": "texto",
+    "linhas": [
+     "while (atual->prox != NULL)",
+     "",
+     "teste 1: atual = 10, prox = 20   -> verdadeiro, anda",
+     "teste 2: atual = 20, prox = NULL -> falso, sai",
+     "",
+     "testes: 2    voltas do corpo: 1"
+    ]
+   }
+  }
+ ],
+ "custos": "| Situação | Testes da condição | Voltas do corpo |\n|---|---|---|\n| termina pela condição | k + 1 | k |\n| termina por `return` ou `break` dentro do corpo | k | k |\n| condição falsa já no início | 1 | 0 |",
+ "naprova": "A banca pergunta quantas vezes a \"linha do while\" executa num trecho de lista ou de busca binária. Conte as avaliações da condição, e não só as voltas, e veja se o laço termina por `return` lá dentro.",
+ "fontes": [
+  "Deitel e Deitel, *C: como programar*, 6. ed., cap. 3 (estruturas de repetição).",
+  "Backes, *Linguagem C: completa e descomplicada*, cap. 5 (comandos de repetição).",
+  "Kernighan e Ritchie, *C: a linguagem de programação*, 2. ed., seção 3.5 (while e for)."
+ ]
+}

@@ -1,0 +1,13 @@
+{
+  "2024-031-q04": {
+    "tipo": "vetor",
+    "titulo": "vetor da questão 4",
+    "itens": [2, 4, 6, 8, 10, 12, 14, 16, 18],
+    "nome": "v"
+  },
+  "2024-031-q05": {
+    "tipo": "arvore",
+    "titulo": "árvore da questão 5",
+    "raiz": {"v": 42, "e": {"v": 15, "e": {"v": 4}, "d": {"v": 8}}, "d": {"v": 23, "d": {"v": 16}}}
+  }
+}

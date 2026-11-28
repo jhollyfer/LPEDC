@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="286" viewBox="0 0 820 286">
+<title>aula-0020-1</title>
+<style>text{font-family:ui-monospace,'SF Mono',Menlo,Consolas,'DejaVu Sans Mono',monospace;white-space:pre}</style>
+<rect x="0" y="0" width="820" height="286" fill="#ffffff"/>
+<text x="30" y="60" font-size="24" fill="#1e1e1e" text-anchor="start">while (atual-&gt;prox != NULL)</text>
+<text x="30" y="96" font-size="24" fill="#1e1e1e" text-anchor="start"></text>
+<text x="30" y="132" font-size="24" fill="#1e1e1e" text-anchor="start">teste 1: atual = 10, prox = 20   -&gt; verdadeiro, anda</text>
+<text x="30" y="168" font-size="24" fill="#1e1e1e" text-anchor="start">teste 2: atual = 20, prox = NULL -&gt; falso, sai</text>
+<text x="30" y="204" font-size="24" fill="#1e1e1e" text-anchor="start"></text>
+<text x="30" y="240" font-size="24" fill="#1e1e1e" text-anchor="start">testes: 2    voltas do corpo: 1</text>
+</svg>

@@ -7,9 +7,15 @@
 
 | Atualizado | Fase atual | Progresso | Status |
 |---|---|---|---|
-| 2026-11-28 | 9 · Prova de 2026 (concluída) | 34/34 tarefas | prova 070/2026 no quiz com gabarito preliminar |
+| 2026-11-28 | 9 · Provas de 2024 a 2026 (concluída) | 35/35 tarefas | 17 provas e 330 questões no quiz |
 
 ## Parou em
+
+O acervo tem as 17 provas de mestrado com prova escrita de 2016 a 2026 (330 questões, 47 anuladas).
+As cinco de 031/2024 a 014/2026 vieram das páginas de seleções encerradas do site do PPGI
+(`ppgi.ufam.edu.br/encerrados.html`), com gabarito final. De 2020/2 a 2022 a seleção foi só por
+projeto e títulos; o doutorado de 2026 não publicou prova. O caderno da 014/2026 é escaneado e foi
+transcrito à mão. São 73 aulas e 18 grupos de questões parecidas.
 
 A prova de 27/11/2026 (edital 070/2026, seleção 2027/1; o caderno vale também para o 071/2026, do
 doutorado) entrou no acervo, no `PROVAS.md` e no quiz: 12 provas, 230 questões. O gabarito é o

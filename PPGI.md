@@ -178,41 +178,44 @@ O que as provas de 2016 a 2026 cobraram, por tópico e por formato.
 
 ### O que caiu de 2016 a 2026
 
-As 12 provas de 2016 a 2026 somam 230 questões. O gabarito comentado de cada uma, com o link
-para o módulo, está em [`PROVAS.md`](PROVAS.md); a mais recente é a do edital 070/2026 (seleção
-2027/1), com gabarito preliminar. Uma questão pode tocar dois tópicos, por isso a soma passa de 230.
+As 17 provas de 2016 a 2026 somam 330 questões, das quais 47 foram anuladas. O gabarito comentado
+de cada uma, com o link para o módulo, está em [`PROVAS.md`](PROVAS.md); a mais recente é a do
+edital 070/2026 (seleção 2027/1), com gabarito preliminar. De 2020 a 2022 houve seleções só por
+projeto e títulos, sem prova. Uma questão pode tocar dois tópicos, por isso a soma passa de 330.
 No tópico 3, a questão que cobra pilha e fila conta nas duas linhas, e as quatro partes somam mais
-que 59.
+que 82.
 
 | Tópico do edital | Questões | Parte da prova |
 | --- | --- | --- |
-| 4 · Árvores (ABB, AVL, heap, árvore B, rubro-negra) | 78 | 34% |
-| 3 · Estruturas elementares, no total | 59 | 26% |
-| 3.1 · Lista | 29 | 13% |
-| 3.3 · Pilha | 20 | 9% |
-| 3.2 · Fila | 14 | 6% |
-| 3.4 · Vetor e matriz | 9 | 4% |
-| 7 · Ordenação | 35 | 15% |
-| 5 · Hash | 24 | 10% |
-| 6 · Busca | 19 | 8% |
-| 1, 2 e 8 · Fundamentos, eficiência e grafos | 24 | 10% |
+| 4 · Árvores (ABB, AVL, heap, árvore B, rubro-negra) | 102 | 31% |
+| 3 · Estruturas elementares, no total | 82 | 25% |
+| 3.1 · Lista | 39 | 12% |
+| 3.3 · Pilha | 29 | 9% |
+| 3.2 · Fila | 21 | 6% |
+| 3.4 · Vetor e matriz | 11 | 3% |
+| 1, 2 e 8 · Fundamentos, eficiência e grafos | 52 | 16% |
+| 7 · Ordenação | 49 | 15% |
+| 5 · Hash | 32 | 10% |
+| 6 · Busca | 27 | 8% |
 
-Os assuntos que mais aparecem: AVL (0101, em 35 questões), busca e inserção em ABB (0099, 24),
-busca binária (0090, 20), lista encadeada (0076, 19), hash por encadeamento (0106, 17), pilha
-(0082, 16), quick sort (0095, 14) e insertion sort (0093, 14).
+Os assuntos que mais aparecem: AVL (0101, em 44 questões), busca e inserção em ABB (0099, 34),
+busca binária (0090, 27), lista encadeada (0076, 26), pilha (0082, 24), quick sort (0095, 20),
+recursão (0032, 19), hash por encadeamento (0106, 19) e insertion sort (0093, 19).
 
-O formato mudou em 2022. Até 2019 eram 5 alternativas; de 2022 em diante são 4, com trechos em
-Python e mais questões de custo (pior caso de inserir, remover e buscar em vetor ordenado, lista,
-árvore balanceada e hash) e de grafos (BFS com fila, Dijkstra, matriz x lista de adjacência).
-Grafo, que quase não caía, voltou: não pule o módulo 16.
+O formato mudou em 2022. Até 2019 eram 5 alternativas; de 2022 em diante são 4 (a 092/2024, de
+2025/1, voltou a ter 5), com trechos em Python ou C e mais questões de custo (pior caso de inserir,
+remover e buscar em vetor ordenado, lista, árvore balanceada e hash), de código para completar ou
+corrigir e de grafos (BFS com fila, Dijkstra, Prim, Floyd-Warshall, matriz x lista de adjacência).
+Fundamentos e grafos, que quase não caíam, passaram de 9% para 16% das questões: não pule os
+módulos 01 a 06 nem o 16.
 
 | Formato | Questões | Como treinar |
 | --- | --- | --- |
-| afirmações I, II, III combinadas | 61 | julgue cada afirmação sozinha antes de olhar as letras |
-| conceito (definição direta) | 57 | os `[!WARNING]` de cada assunto |
-| simulação (pilha, fila, hash, ABB, AVL, heap, ordenação passo a passo) | 55 | refaça no papel o fluxograma e o `### Passo a passo` |
-| código (ler, achar o erro, prever a saída; em C ou Python) | 33 | a lista prática de 11, 12 e 14 |
-| cálculo (altura, comparações da busca binária, complexidade) | 24 | conte à mão e confira rodando o exemplo |
+| simulação (pilha, fila, hash, ABB, AVL, heap, ordenação passo a passo) | 86 | refaça no papel o fluxograma e o `### Passo a passo` |
+| afirmações I, II, III combinadas | 79 | julgue cada afirmação sozinha antes de olhar as letras |
+| conceito (definição direta) | 72 | os `[!WARNING]` de cada assunto |
+| código (ler, achar o erro, prever a saída; em C ou Python) | 64 | a lista prática de 11, 12 e 14 |
+| cálculo (altura, comparações da busca binária, complexidade) | 29 | conte à mão e confira rodando o exemplo |
 
 Várias questões voltam quase iguais em anos diferentes: a pilha que vira fila e volta a ser
 pilha, a inserção de X e Y numa lista dupla, as afirmações sobre hash por encadeamento, o

@@ -1,14 +1,14 @@
 # Provas anteriores do PPGI/UFAM · gabarito comentado
 
-As 12 provas de conhecimento de 2016 a 2026, resolvidas questão por questão. Os cadernos estão em
+As 17 provas de conhecimento de 2016 a 2026, resolvidas questão por questão. Os cadernos estão em
 [`provas-ppgi-ufam/`](provas-ppgi-ufam/); o quiz, com o porquê de cada alternativa, em
 [jhollyfer.github.io/LPEDC](https://jhollyfer.github.io/LPEDC/).
 
 ## 1. Conceitos gerais
 
-- **Gabarito oficial**: as letras das 12 provas são da banca. As de 2016 a 2019 vêm das folhas de
+- **Gabarito oficial**: as letras das 17 provas são da banca. As de 2016 a 2019 vêm das folhas de
   resposta, a 071/2023 do gabarito definitivo, a 057/2022 e a 020/2023 da marcação do caderno de
-  respostas, a 070/2026 do gabarito preliminar. Onde o curso chegou a outra letra, a coluna "Por quê" avisa.
+  respostas, as de 031/2024 a 014/2026 dos gabaritos finais e a 070/2026 do gabarito preliminar. Onde o curso chegou a outra letra, a coluna "Por quê" avisa.
 - **Formato**: até 2019, 5 alternativas; desde 2022, **4 alternativas** e trechos em Python (cada
   trecho aponta para o assunto de C com a mesma ideia).
 - **Colunas da tabela**:
@@ -370,6 +370,156 @@ Resolva cada prova inteira no caderno e só depois confira a tabela.
 - Q07 e Q10: motivos de anulação são conjectura minha.
 - Q12: concordo com B; confere com as quatro alternativas.
 - Q15, Q17 a Q20 rodadas com `python3 -I`; todas batem com o gabarito oficial. Sem discordância das letras oficiais.
+
+### Edital 031/2024 (gabarito oficial)
+| Q | Letra | Formato | Tópico | Assuntos | Por quê |
+|---|---|---|---|---|---|
+| 01 | anulada | código | 7 | [0093](13-busca-e-ordenacao.md), [0092](13-busca-e-ordenacao.md) | Insertion sort com `v[j] = k` no lugar de `v[j+1] = k`; trocando essa linha ordena (rodado em C). A C parece a pretendida. |
+| 02 | C | cálculo | 2 | [0072](10-analise.md) | O(n²): (2000/1000)² = 4, logo 4 minutos. |
+| 03 | A | afirmações | 2 | [0166](26-analise-formal.md), [0072](10-analise.md) | Base do log é constante (I) e O é teto (II); Ω só dá piso, T1 = n³ e T2 = n² quebram a III. |
+| 04 | D | simulação | 6 | [0090](13-busca-e-ordenacao.md), [0089](13-busca-e-ordenacao.md) | Meios 4, 6 e 5: compara com 10, 14 e 12 e para; rodado. |
+| 05 | A | simulação | 4 | [0098](14-arvores.md) | Em-ordem (4 15 8) 42 (23 16); a árvore não é BST. |
+| 06 | A | afirmações | 4 | [0177](28-estruturas-complementos.md), [0099](14-arvores.md) | 2 log₂(n+1) < 3 log₂ n para n ≥ 128; II e III descrevem a BST sem balanceamento. |
+| 07 | anulada | afirmações | 6 | [0090](13-busca-e-ordenacao.md), [0089](13-busca-e-ordenacao.md) | I falsa (busca binária funciona com repetidas), II verdadeira, III discutível; D seria a mais provável. |
+| 08 | A | conceito | 4 | [0101](14-arvores.md), [0099](14-arvores.md) | Definição de AVL: diferença de altura até 1, valendo em toda subárvore. |
+| 09 | C | código | 3.1 | [0049](06-ponteiros.md), [0076](11-listas.md) | Inserir no início pede `Lista **`: `novo->prox = *lista; *lista = novo;`. |
+| 10 | C | afirmações | 7 | [0093](13-busca-e-ordenacao.md), [0095](13-busca-e-ordenacao.md), [0094](13-busca-e-ordenacao.md) | I e III valem; II é falsa pelo "sempre" (pior caso O(n²) do quick sort). |
+| 11 | C | código | 1 | [0032](04-funcoes.md), [0033](04-funcoes.md) | (Python) C(4) = 1 + C(3) + C(2) = 9 chamadas, cada uma imprime; rodado. |
+| 12 | A | código | 1 | [0033](04-funcoes.md), [0032](04-funcoes.md) | (Python) Fibonacci com fib(0) = 0: chamada(4) = 3; rodado. |
+| 13 | B | afirmações | 4 | [0177](28-estruturas-complementos.md), [0145](22-arvores-avancadas.md) | Raiz e nulos pretos são regras; preto pode ter filho preto (III falsa). |
+| 14 | A | conceito | 4 | [0177](28-estruturas-complementos.md), [0101](14-arvores.md) | Vermelho não tem filho vermelho e nulos são pretos: todo vermelho tem dois filhos pretos. |
+| 15 | B | conceito | 4 | [0177](28-estruturas-complementos.md), [0072](10-analise.md) | Altura da rubro-negra ≤ 2 log₂(n + 1). |
+| 16 | anulada | código | 1 | [0054](07-memoria-dinamica.md), [0045](06-ponteiros.md) | Aloca um int no heap, grava 10, imprime e libera (C). Faltam os `#include` e a B é quase igual. |
+| 17 | B | conceito | 3.2, 3.3 | [0082](12-pilhas-e-filas.md), [0085](12-pilhas-e-filas.md) | Pilha LIFO, fila FIFO. |
+| 18 | A | conceito | 3.4 | [0038](05-vetores-e-strings.md), [0045](06-ponteiros.md) | Vetor como argumento vira o endereço do primeiro elemento. |
+| 19 | C | código | 1 | [0022](03-repeticoes.md), [0028](04-funcoes.md) | subrotina(x) = x(x - 1)/2: 36, 21, 15, 45; rodado. |
+| 20 | C | código | 1 | [0007](01-fundamentos.md) | Total = valor + valor · 0,18; com 100 dá 118. |
+
+#### Observações
+- Letras do gabarito final da banca (folha marcada com X). O curso resolveu as 17 não anuladas antes de ver o gabarito e chegou às mesmas letras.
+- Q01, Q07 e Q16 anuladas; os motivos não foram publicados, e os sugeridos na tabela são conjectura minha.
+- Q11 e Q12 usam a mesma função; Q12 é o valor, Q11 o número de chamadas.
+- Q20: no caderno as aspas dos `printf` e `scanf` são tipográficas (“ ”) nas quatro alternativas; no `.md` foram trocadas por aspas retas.
+
+### Edital 092/2024 (gabarito oficial)
+| Q | Letra | Formato | Tópico | Assuntos | Por quê |
+|---|---|---|---|---|---|
+| 01 | A | código | 1 | [0022](03-repeticoes.md), [0024](03-repeticoes.md) | 3 voltas fora (i = 2, 3, 4) × 2 dentro (j = 1, 2) = 6; compilado com gcc. |
+| 02 | anulada | afirmações | 7 | [0093](13-busca-e-ordenacao.md) | Anulada pela banca. A I depende da versão: deslocando aparece (4, 4, 2, 1), trocando não; II e III valem nas duas. Com deslocamento seria B. |
+| 03 | A | código | 1 | [0007](01-fundamentos.md), [0025](03-repeticoes.md) | Conta os divisores de 18: 1, 2, 3, 6, 9, 18; compilado com gcc. |
+| 04 | E | simulação | 3.3 | [0082](12-pilhas-e-filas.md) | 6 pushes − 4 pops = 2 (sobram 6 e 7). |
+| 05 | anulada | afirmações | 3.2, 3.3 | [0075](11-listas.md), [0086](12-pilhas-e-filas.md), [0079](11-listas.md) | Anulada pela banca. I e II valem; a III só vale se a lista dupla guardar ponteiro para o fim, o que o enunciado não diz. |
+| 06 | anulada | afirmações | 4 | [0101](14-arvores.md) | Anulada pela banca. Pela análise do curso seria D: árvore válida (I falsa), inserir 7 sem rotação (II vale), o 4 desbalanceia o nó 5 e não a raiz (III falsa). |
+| 07 | C | cálculo | 4 | [0101](14-arvores.md), [0098](14-arvores.md) | Mínimo de nós por altura 1, 2, 4, 7, 12: com 9 nós cabe altura 3. |
+| 08 | C | simulação | 7 | [0095](13-busca-e-ordenacao.md) | Só o 7 da posição 5 e os dois 8 têm tudo antes ≤ e tudo depois ≥; rodado. |
+| 09 | B | conceito | 7, 2 | [0094](13-busca-e-ordenacao.md), [0095](13-busca-e-ordenacao.md), [0072](10-analise.md) | No pior caso só o Mergesort é n log n; Quicksort, inserção e seleção são quadráticos. |
+| 10 | D | código | 3.1 | [0054](07-memoria-dinamica.md), [0076](11-listas.md) | malloc, inserção na cabeça, lista como ponteiro para o primeiro nó e nenhum free. |
+| 11 | B | código | 3.1 | [0020](03-repeticoes.md), [0076](11-listas.md) | Com 10 → 20, o while testa no 10 e no 20: 2 avaliações; contado em C. |
+| 12 | C | código | 6 | [0090](13-busca-e-ordenacao.md), [0037](05-vetores-e-strings.md) | meio 4 (9) e meio 7 (15): 2 testes do while, imprime o índice 7; rodado. |
+| 13 | B | código | 1 | [0032](04-funcoes.md), [0007](01-fundamentos.md) | (Python) soma dos dígitos: 2 + 4 = 6; rodado. |
+| 14 | D | código | 1 | [0033](04-funcoes.md), [0007](01-fundamentos.md) | (Python) acumulador inverte o número: 24; rodado. |
+| 15 | anulada | simulação | 8 | [0112](16-grafos.md), [0109](16-grafos.md) | Anulada pela banca. Distâncias A 0, B 2, E 4, G 5, F 6, H 8, C 9, D 10 dão a ordem da E; rodado com heap. |
+| 16 | E | código | 1 | [0007](01-fundamentos.md), [0012](02-condicionais.md) | 15% de desconto é multiplicar por 0,85; A não compila, B tira 85%, C dá negativo, D tira ~13%. |
+| 17 | C | afirmações | 5 | [0107](15-hash.md), [0179](28-estruturas-complementos.md) | I aglomeração primária; II falsa (uma vaga só basta na linear); III quadrática com m = 8 só gera 0, 1, 4. |
+| 18 | C | código | 3.1 | [0076](11-listas.md), [0062](08-structs.md) | Lista 8 → 6 → 4 → 2 e eb é o segundo nó: imprime 6 4 2; compilado com gcc. |
+| 19 | E | código | 1 | [0032](04-funcoes.md), [0033](04-funcoes.md) | `n <= 1` devolve f(0) = 0 e f(1) = 1; as outras não terminam ou erram valores; rodado. |
+| 20 | D | afirmações | 4 | [0099](14-arvores.md), [0101](14-arvores.md) | Busca custa a altura em qualquer BST, a BST comum pode sair tão baixa quanto a AVL, e a busca é a mesma. |
+
+#### Observações
+- Gabarito final de 30/01/2025, publicado na página da Seleção 2025/01. As letras das 16 questões não anuladas batem com a resolução do curso.
+- Prova com 5 alternativas (a a e), como as de 2016 a 2019.
+- Q02, Q05, Q06 e Q15 anuladas; os motivos não foram publicados. Q02 e Q05 têm ambiguidade de enunciado; na Q06 e na Q15 o curso chega a D e E.
+- Q11 e Q12: "a linha em negrito" é a do `while`; o curso conta avaliações da condição.
+
+### Edital 048/2025 (gabarito oficial)
+| Q | Letra | Formato | Tópico | Assuntos | Por quê |
+|---|---|---|---|---|---|
+| 01 | B | simulação | 3.3 | [0082](12-pilhas-e-filas.md) | Quatro Visitar e dois Voltar: sobram UFAM e PPGI. |
+| 02 | A | simulação | 3.1 | [0076](11-listas.md), [0085](12-pilhas-e-filas.md) | Remover no início tira Ana e João; Carla e Lucas entram no fim. |
+| 03 | A | simulação | 3.2 | [0085](12-pilhas-e-filas.md), [0086](12-pilhas-e-filas.md) | Dois Atender tiram 101 e 102: [103, 104, 105, 106]. |
+| 04 | C | simulação | 4 | [0099](14-arvores.md), [0098](14-arvores.md) | Árvore 50 (30 (20, 40), 70 (60, 80)); pré-ordem 50, 30, 20, 40, 70, 60, 80. |
+| 05 | anulada | simulação | 5 | [0107](15-hash.md), [0105](15-hash.md) | 18 e 25 colidem; são 2 chaves ou 3 sondagens ocupadas, conforme o que se conta. Provavelmente anulada pela ambiguidade. |
+| 06 | anulada | simulação | 7 | [0095](13-busca-e-ordenacao.md) | Com Lomuto só o 14 serve; com Hoare o 12 também (corte entre 10 e 14). Provavelmente anulada por isso. |
+| 07 | A | simulação | 7 | [0094](13-busca-e-ordenacao.md) | Meio (0 + 8) / 2 = 4: posições 0 a 4 ordenadas, 5 a 8 intactas. |
+| 08 | A | simulação | 4 | [0177](28-estruturas-complementos.md) | Raiz 38 preta, 19 vermelho com 12 e 31 pretos, 8 vermelho; rodado em Python. |
+| 09 | C | simulação | 5 | [0179](28-estruturas-complementos.md), [0105](15-hash.md) | 11 → 4 e 24 → 3; o 33 testa 0, 1, 4 e fica na 9; rodado. |
+| 10 | B | simulação | 4 | [0101](14-arvores.md) | Duas rotações duplas: raiz 10 depois do 10, raiz 15 depois do 20; rodado. |
+| 11 | B | simulação | 3.3 | [0082](12-pilhas-e-filas.md) | Quatro Aplicar e três Desfazer: sobra o Brilho+10. |
+| 12 | D | simulação | 6 | [0090](13-busca-e-ordenacao.md) | Meios 3, 5 e 4: Interestelar, Oppenheimer, Matrix. |
+| 13 | C | simulação | 4 | [0100](14-arvores.md), [0098](14-arvores.md) | O sucessor 35 sobe no lugar do 30. |
+| 14 | B | simulação | 5 | [0107](15-hash.md) | Remover 24 deixa marca na 4; o 38 (h = 3) a reaproveita. |
+| 15 | D | código | 1 | [0032](04-funcoes.md) | (Python) só a D é recursiva e correta; B e C comparam número com lista (TypeError, rodado). |
+| 16 | A | simulação | 6 | [0090](13-busca-e-ordenacao.md) | Meios 4, 7 e 8: 615, 720, 735; índice 8; rodado. |
+| 17 | D | conceito | 4 | [0099](14-arvores.md) | t fica entre y e 7; com y = 5, só t = 6. |
+| 18 | D | conceito | 7 | [0093](13-busca-e-ordenacao.md), [0096](13-busca-e-ordenacao.md) | Parte inicial ordenada e deslocamento dos maiores: insertion sort. |
+| 19 | anulada | código | 4 | [0177](28-estruturas-complementos.md) | Caso interno (tio preto): a B é só o primeiro passo, e a árvore dada já tinha altura negra desigual. Provavelmente anulada por isso. |
+| 20 | A | código | 3.1 | [0079](11-listas.md), [0057](07-memoria-dinamica.md) | Religa prev->next e next->prev antes do free. |
+
+#### Observações
+- Caderno da seleção 2025/2, aplicado em 15/08/2025; letras do gabarito final. O curso chegou às mesmas letras nas 17 questões válidas.
+- Q05, Q06 e Q19: os motivos de anulação são conjectura minha.
+- Q13: a D também é uma BST válida (o 40 sobe e o 20 desce para baixo do 35), mas não sai da remoção por sucessor ou predecessor; concordo com a C.
+- Q06: o caderno traz "pode pode ter sido".
+
+### Edital 098/2025 (gabarito oficial)
+| Q | Letra | Formato | Tópico | Assuntos | Por quê |
+|---|---|---|---|---|---|
+| 01 | C | cálculo | 2 | [0071](10-analise.md), [0024](03-repeticoes.md) | 10 · n · n incrementos; conferido em C. |
+| 02 | D | simulação | 5 | [0106](15-hash.md), [0105](15-hash.md) | k mod 10 é o último dígito: 22, 42, 52, 62 e 72 caem na posição 2. |
+| 03 | A | simulação | 8 | [0112](16-grafos.md), [0102](14-arvores.md) | Distâncias A 0, C 15, B 25, E 30, D 55; saem nessa ordem. Rodado em Python. |
+| 04 | C | simulação | 4 | [0099](14-arvores.md), [0098](14-arvores.md) | 37 à esquerda de 41, 67 à esquerda de 73; pós-ordem 19, 37, 47, 41, 31, 67, 89, 73, 53. |
+| 05 | anulada | afirmações | 3.1, 4, 5, 6 | [0076](11-listas.md), [0106](15-hash.md), [0099](14-arvores.md), [0101](14-arvores.md) | Pelo curso, B (II, III e IV): lista encadeada não tem busca binária. A II ("mais memória") é a provável causa da anulação. |
+| 06 | B | conceito | 3.1, 3.2, 3.3 | [0082](12-pilhas-e-filas.md), [0085](12-pilhas-e-filas.md), [0076](11-listas.md) | Desfazer é pilha, impressora é fila, inserir e remover no meio é lista encadeada. |
+| 07 | anulada | simulação | 7 | [0095](13-busca-e-ordenacao.md) | Hoare com pivô central 42 dá D (16, 18, 23, 42, 54, 67, 42, 45, 58), rodado nas versões do Cormen e de Ziviani. Motivo da anulação não publicado. |
+| 08 | C | código | 6 | [0090](13-busca-e-ordenacao.md) | Intervalo fechado: j = tamanho - 1, j >= i, i = meio + 1, j = meio - 1. A entra em laço, B lê fora, D anda ao contrário. |
+| 09 | anulada | simulação | 5 | [0179](28-estruturas-complementos.md), [0105](15-hash.md) | Com h(k) + i² dá A; com c₁ = c₂ = 1/2 (Cormen) dá outra tabela, e D se defende. Coeficientes não fixados no enunciado. |
+| 10 | anulada | código | 1 | [0065](08-structs.md) | ~42 + 1 = -42 em complemento de dois (A), compilado com gcc. Até o C17 o padrão admitia outras representações de negativos. |
+| 11 | anulada | simulação | 4 | [0146](22-arvores-avancadas.md) | Ordem 3, divisão pela mediana: 4 / 2 (1, 3) / 6 (5, 7), a C. "Ordem" tem mais de uma definição nos livros. |
+| 12 | anulada | código | 1 | [0032](04-funcoes.md), [0007](01-fundamentos.md) | Para B > 0 é a divisão inteira (C); com B = 0 a recursão não termina, o que sustenta D. |
+| 13 | C | código | 3.2 | [0085](12-pilhas-e-filas.md), [0075](11-listas.md) | (Python) append no fim e pop(0) no início: FIFO. A e D dão erro, B insere antes do último. |
+| 14 | C | código | 3.4 | [0039](05-vetores-e-strings.md), [0024](03-repeticoes.md) | Só a C testa a diagonal e os dois lados fora dela sem desfazer o flag; as quatro rodadas em C. |
+| 15 | anulada | afirmações | 3.2, 3.3 | [0082](12-pilhas-e-filas.md), [0083](12-pilhas-e-filas.md), [0086](12-pilhas-e-filas.md), [0080](11-listas.md) | Pelo curso, as quatro valem (D). A IV pede ponteiro para o fim, que o enunciado não menciona. |
+| 16 | B | conceito | 3.1 | [0079](11-listas.md), [0054](07-memoria-dinamica.md) | Tirar B de A ⇄ B ⇄ C: A->prox = C e C->ant = A. |
+| 17 | B | conceito | 3.3 | [0082](12-pilhas-e-filas.md), [0085](12-pilhas-e-filas.md) | Insere no fim e remove o último: a mesma ponta, pilha. |
+| 18 | A | conceito | 4 | [0099](14-arvores.md), [0098](14-arvores.md) | Em-ordem 1, z, y, t, 7, 9, x, s, 13, 15: x ∈ {10, 11}; s ≥ 11; t ∈ {4, 5, 6}. |
+| 19 | B | simulação | 4 | [0176](28-estruturas-complementos.md), [0101](14-arvores.md) | Sem o 9, rotação à esquerda no 10 (sobe o 11); o 8 fica +2 com o 3 em -1: rotação dupla, o 5 vira raiz. |
+| 20 | C | código | 1 | [0032](04-funcoes.md), [0031](04-funcoes.md) | Fatorial: 4 · 3 · 2 · 1 = 24; compilado com gcc. |
+
+#### Observações
+- Prova aplicada em 05/02/2026 (seleção de mestrado 2026/1). Letras do gabarito final; sete questões anuladas (05, 07, 09, 10, 11, 12 e 15), sem motivo publicado. As letras que o curso indica para as anuladas e os motivos são conjectura.
+- Nas 13 questões válidas, a resolução do curso bate com o gabarito final.
+- Q07: as duas variantes clássicas do Hoare (Cormen e Ziviani) dão a alternativa D; não há defeito visível no enunciado.
+- Q03 tem grafo, que o quiz mostra só no recorte original (o gerador não desenha grafo).
+
+### Edital 014/2026 (gabarito oficial)
+| Q | Letra | Formato | Tópico | Assuntos | Por quê |
+|---|---|---|---|---|---|
+| 01 | B | cálculo | 2 | [0071](10-analise.md), [0072](10-analise.md) | Externo dobra i, interno roda i vezes: 1 + 2 + 4 + ... ≤ 2n, tempo Θ(n); só variáveis simples, espaço Θ(1). Rodado. |
+| 02 | B | afirmações | 4 | [0102](14-arvores.md), [0103](14-arvores.md) | Heap de máximo: maior na raiz, menor numa folha (II falsa); base do Heapsort e da fila de prioridade. |
+| 03 | C | cálculo | 2 | [0114](17-analise-avancada.md), [0032](04-funcoes.md) | Duas chamadas com e/2: T(e) = 2T(e/2) + Θ(1) = Θ(e) em qualquer caso. Rodado: e = 16 faz 31 chamadas. |
+| 04 | B | afirmações | 7 | [0096](13-busca-e-ordenacao.md), [0094](13-busca-e-ordenacao.md) | Quicksort e Heapsort não são estáveis; o Merge Sort depende do desempate na intercalação (II falsa). |
+| 05 | D | afirmações | 7 | [0094](13-busca-e-ordenacao.md) | Olhando as frentes de cada intercalação, I, II e III valem; conferido simulando as 120 permutações. |
+| 06 | D | afirmações | 6 | [0090](13-busca-e-ordenacao.md), [0089](13-busca-e-ordenacao.md) | Busca binária falha com um elemento fora do lugar para qualquer n (I e II falsas); só a III vale, e não há "apenas III". |
+| 07 | C | código | 7 | [0092](13-busca-e-ordenacao.md), [0093](13-busca-e-ordenacao.md) | Índice do menor e uma troca por volta: selection sort; a opção I deixa crescente. |
+| 08 | A | afirmações | 4 | [0101](14-arvores.md) | I e II são rotações simples no 30; com o 25, o 20 fica -2 e o 40 +1, rotação dupla (III falsa). |
+| 09 | D | código | 1 | [0065](08-structs.md), [0045](06-ponteiros.md) | *v2 é o próprio v1: 16, 8, 4, 2, 1, 0, cinco voltas; compilado com gcc. |
+| 10 | C | conceito | 3.1, 4 | [0079](11-listas.md), [0099](14-arvores.md) | Uma chave e dois ponteiros: lista dupla (circular) e BST; lista simples tem um ponteiro, árvore B tem vários. |
+| 11 | anulada | afirmações | 7 | [0121](18-ordenacao-linear.md), [0120](18-ordenacao-linear.md) | Pela análise, I, II e IV valem (A); III falsa (Counting Sort direto é Θ(n + n³)). Provável motivo: a IV diz "no máximo log(n) dígitos", quando são cerca de 3 log₁₀ n. |
+| 12 | D | simulação | 5 | [0107](15-hash.md), [0179](28-estruturas-complementos.md) | Só o 9 colidiu (início 2); com + 3i tenta 5 e cai em 1. As outras fórmulas passam pela posição 3, vazia. |
+| 13 | anulada | simulação | 7 | [0095](13-busca-e-ordenacao.md) | Rodado: Lomuto com pivô 4 gera o vetor dado; Hoare com pivô 2 não. Só a III vale, e nenhuma alternativa diz "apenas III". |
+| 14 | C | código | 3.3 | [0082](12-pilhas-e-filas.md) | Elementos em vet[0..n-1]; o topo é vet[n - 1], com push e pop em O(1). |
+| 15 | D | código | 1 | [0012](02-condicionais.md), [0024](03-repeticoes.md) | (Python) sinais opostos dão passo = -1; 200 · 50 voltas: -10.000. Rodado. |
+| 16 | A | código | 3.2 | [0086](12-pilhas-e-filas.md) | Fila vazia: fim == NULL, então ini = n; depois fim = n sempre. |
+| 17 | A | simulação | 4 | [0099](14-arvores.md), [0098](14-arvores.md) | x > 9 e x ≠ 10, então o 10 desce pela esquerda e vira filho direito do 9. C e D são pós-ordens. |
+| 18 | D | conceito | 8 | [0155](23-grafos-avancados.md), [0112](16-grafos.md), [0110](16-grafos.md) | A incorreta é a D: Floyd-Warshall não vale com ciclo negativo, então não funciona "para quaisquer pesos". |
+| 19 | C | simulação | 8 | [0153](23-grafos-avancados.md) | Árvore mínima A-C, C-D, B-D (peso 3); o Prim nunca tem pedaços soltos (B) e não usaria A-B (A e D). |
+| 20 | anulada | conceito | 8 | [0150](23-grafos-avancados.md), [0109](16-grafos.md) | A construção é o grafo transposto, e a A descreve o uso clássico (conexidade forte). O gabarito final não diz o motivo da anulação. |
+
+#### Observações
+- O caderno publicado é escaneado; o texto foi transcrito à mão das imagens das páginas, sem trecho ilegível.
+- Letras do gabarito final de 05/06/2026. O curso resolveu as 17 não anuladas e chegou às mesmas letras.
+- Q11, Q13 e Q20: os motivos das anulações são conjectura minha; nas três, a análise indica A, só a III e A, respectivamente.
+- Q05: conferida simulando o Merge Sort (intercalação com `<=`) nas 120 permutações dos múltiplos de 3.
 
 ### Edital 070/2026 (gabarito preliminar)
 | Q | Letra | Formato | Tópico | Assuntos | Por quê |

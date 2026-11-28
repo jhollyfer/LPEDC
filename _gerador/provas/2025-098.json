@@ -1,0 +1,1217 @@
+{
+  "edital": "098/2025",
+  "slug": "2025-098",
+  "ano": 2026,
+  "oficial": true,
+  "questoes": [
+    {
+      "numero": 1,
+      "topico": 2,
+      "formato": "cálculo",
+      "enunciado": "Considere a função seguinte, desenvolvida na linguagem C:\n\n```c\nint f(int n) {\n    int count = 0;\n    for (int i = 0; i < 10; i++) {\n          for (int j = 1; j <= n; j++) {\n               for (int k = 0; k < n; k++) {\n                    count++;\n               }\n          }\n    }\n    return count;\n}\n```\n\nQual será o valor retornado por f para qualquer n ≥ 0?",
+      "dica": "**Cobra:** contar quantas vezes o corpo de laços aninhados executa.\n\n- **Contar passos** [0071]: o custo de um trecho é o número de vezes que a operação mais interna roda, e com laços independentes basta multiplicar as voltas de cada um. Ex.: um laço de 3 voltas dentro de outro de 4 executa o corpo 12 vezes.\n- **Laços aninhados** [0024]: o laço de dentro recomeça inteiro a cada volta do de fora, então os limites de cada um importam, inclusive onde começa e onde para. Ex.: `for (j = 1; j <= n; j++)` dá n voltas, como `for (k = 0; k < n; k++)`.\n\n**Como atacar:** conte as voltas de cada laço e multiplique.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Quantas voltas dá o laço de `i`, e o que acontece com os laços de dentro a cada uma delas?"
+        },
+        {
+          "item": "B",
+          "texto": "O limite do laço de `i` depende de n?"
+        },
+        {
+          "item": "C",
+          "texto": "Calcule com n = 2: quantas vezes o `count++` roda?"
+        },
+        {
+          "item": "D",
+          "texto": "Com n = 2, esta fórmula dá 14. Rodando o código, quanto dá?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "n²",
+          "porque": "Esquece o laço de fora, que dá 10 voltas. Os dois laços internos sozinhos dariam n · n."
+        },
+        {
+          "letra": "B",
+          "texto": "n³",
+          "porque": "Trata o laço de fora como se dependesse de n. Ele vai de 0 a 9, sempre 10 voltas, qualquer que seja n."
+        },
+        {
+          "letra": "C",
+          "texto": "10n²",
+          "porque": "O laço de `i` dá 10 voltas; o de `j`, de 1 a n, dá n; o de `k`, de 0 a n - 1, dá n. O `count++` roda 10 · n · n vezes. Com n = 0 dá 0, que também bate. Conferido em C."
+        },
+        {
+          "letra": "D",
+          "texto": "n² + 10",
+          "porque": "Soma o 10 em vez de multiplicar. Cada uma das 10 voltas de fora repete os n² incrementos de dentro."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Três laços aninhados e independentes: 10 · n · n = 10n². O 10 é constante, mas multiplica; na notação O isso seria Θ(n²), mas a pergunta é o valor exato.",
+      "assuntos": [
+        {
+          "num": "0071",
+          "modulo": "10-analise.md"
+        },
+        {
+          "num": "0024",
+          "modulo": "03-repeticoes.md"
+        }
+      ]
+    },
+    {
+      "numero": 2,
+      "topico": 5,
+      "formato": "simulação",
+      "enunciado": "Considere uma tabela hash de tamanho m = 10, que utiliza encadeamento separado para tratar colisões.\n\nA função hash usada é:\n\nh(k) = k mod 10\n\nSuponha que as seguintes chaves inteiras sejam inseridas nesta ordem:\n\n22, 42, 31, 52, 62, 14, 72\n\nApós todas as inserções, qual será o tamanho da maior lista encadeada presente na tabela?",
+      "dica": "**Cobra:** calcular a posição de cada chave e contar o tamanho da maior lista.\n\n- **Função de divisão** [0105]: a posição de cada chave é o resto da divisão pelo tamanho da tabela, `h(k) = k mod m`. Ex.: com m = 10, a chave 52 vai para a posição 2, porque o resto de 52 por 10 é 2.\n- **Encadeamento** [0106]: cada posição guarda uma lista com todas as chaves que caíram nela, então uma colisão só aumenta a lista daquela posição. Ex.: 22 e 42 vão as duas para a lista da posição 2.\n\n**Como atacar:** escreva o último dígito de cada chave e conte as repetições.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Qual é o último dígito de 52, 62 e 72?"
+        },
+        {
+          "item": "B",
+          "texto": "Liste as chaves que terminam em 2. Quantas são?"
+        },
+        {
+          "item": "C",
+          "texto": "Releia a sequência de chaves. Alguma terminada em 2 ficou de fora da conta?"
+        },
+        {
+          "item": "D",
+          "texto": "Para cada chave, qual é o resto da divisão por 10? Quantas caem na mesma posição?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "2",
+          "porque": "Conta só as duas primeiras chaves da posição 2. Ela recebe todas as chaves terminadas em 2."
+        },
+        {
+          "letra": "B",
+          "texto": "3",
+          "porque": "Fica no meio da contagem. 22, 42, 52, 62 e 72 caem todas na posição 2."
+        },
+        {
+          "letra": "C",
+          "texto": "4",
+          "porque": "Deixa de fora uma das chaves terminadas em 2. São cinco: 22, 42, 52, 62 e 72."
+        },
+        {
+          "letra": "D",
+          "texto": "5",
+          "porque": "Com `k mod 10`, a posição é o último dígito. 31 vai para a 1, 14 para a 4, e 22, 42, 52, 62 e 72 para a 2: uma lista de 5."
+        }
+      ],
+      "gabarito": "D",
+      "resumo": "h(k) = k mod 10 é o último dígito. Cinco chaves terminam em 2 (22, 42, 52, 62, 72): a maior lista tem 5. As outras duas (31 e 14) ficam sozinhas.",
+      "assuntos": [
+        {
+          "num": "0106",
+          "modulo": "15-hash.md"
+        },
+        {
+          "num": "0105",
+          "modulo": "15-hash.md"
+        }
+      ]
+    },
+    {
+      "numero": 3,
+      "topico": 8,
+      "formato": "simulação",
+      "enunciado": "Considere o grafo ponderado e direcionado abaixo, com pesos não negativos:\n\nAplicando o algoritmo de Dijkstra a partir do vértice A, utilizando uma fila de prioridades (min-heap) para selecionar o próximo vértice, qual será a ordem em que os vértices são removidos da fila de prioridades (do primeiro ao último)?",
+      "dica": "**Cobra:** executar o Dijkstra e anotar a ordem em que os vértices saem da fila.\n\n- **Dijkstra** [0112]: tira da fila o vértice de menor distância, fixa essa distância e relaxa as arestas que saem dele: se passar por ele fica mais barato, a distância do vizinho diminui. Ex.: com B em 30, sair C em 15 com a aresta C → B de peso 10 baixa B para 25.\n- **Fila de prioridade** [0102]: estrutura que sempre entrega o item de menor chave, aqui a menor distância conhecida; num heap mínimo, isso custa `O(log n)` por remoção. Ex.: com B em 25 e E em 35 na fila, sai B.\n\n**Como atacar:** monte uma tabela de distâncias e atualize depois de cada vértice que sai.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Faça a tabela de distâncias depois de cada vértice que sai. A ordem de saída coincide com esta?"
+        },
+        {
+          "item": "B",
+          "texto": "Depois que C sai, qual é a distância de B e qual a de E?"
+        },
+        {
+          "item": "C",
+          "texto": "Depois que A sai, qual é a menor distância na fila: a de B ou a de C?"
+        },
+        {
+          "item": "D",
+          "texto": "Depois que B sai, quanto vale a distância de D e quanto vale a de E?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "A, C, B, E, D",
+          "porque": "Sai A (0): B = 30, C = 15. Sai C (15): B cai para 25 e E vira 35. Sai B (25): D = 65 e E cai para 30. Sai E (30): D cai para 55. Sai D (55). Conferido em Python."
+        },
+        {
+          "letra": "B",
+          "texto": "A, C, E, B, D",
+          "porque": "Tira o E antes do B. Depois de C, B está em 25 e E em 35, então B sai primeiro; e B ainda baixa E para 30."
+        },
+        {
+          "letra": "C",
+          "texto": "A, B, C, E, D",
+          "porque": "Tira o B logo depois do A, mas C está em 15 e B em 30. Sai sempre o de menor distância."
+        },
+        {
+          "letra": "D",
+          "texto": "A, C, B, D, E",
+          "porque": "Tira o D antes do E. Depois de B, D está em 65 e E em 30: sai o E."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Distâncias finais: A 0, C 15, B 25 (por C), E 30 (por B), D 55 (por E). Os vértices saem em ordem crescente de distância: A, C, B, E, D.",
+      "assuntos": [
+        {
+          "num": "0112",
+          "modulo": "16-grafos.md"
+        },
+        {
+          "num": "0102",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 4,
+      "topico": 4,
+      "formato": "simulação",
+      "enunciado": "Considere a árvore binária de busca (BST) a seguir, em que cada nó armazena um número inteiro:\n\nDois novos nós com chaves 37 e 67 são inseridos nesta ordem (primeiro 37, depois 67), seguindo as regras de inserção de uma BST.\n\nApós as duas inserções, qual é a sequência resultante do caminhamento em pós-ordem?",
+      "figuras": [
+        "2025-098-q04"
+      ],
+      "dica": "**Cobra:** inserir chaves numa BST e escrever o percurso em pós-ordem.\n\n- **Inserção na BST** [0099]: a chave desce da raiz, indo para a esquerda se for menor que o nó e para a direita se for maior, até achar um lugar vazio, onde vira folha. Ex.: 37 desce 53 (esquerda), 31 (direita), 41 (esquerda) e vira filho esquerdo de 41.\n- **Pós-ordem** [0098]: visita a subárvore esquerda, depois a direita e só então o nó, de modo que a raiz é a última da lista. Ex.: na árvore 2 com filhos 1 e 3, a pós-ordem é 1, 3, 2.\n\n**Como atacar:** desenhe a árvore com as duas chaves novas e percorra sem pular subárvore.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Em que posição a raiz aparece numa pós-ordem?"
+        },
+        {
+          "item": "B",
+          "texto": "Na subárvore do 41, quem é o filho esquerdo e quem é o direito? Qual a pós-ordem visita primeiro?"
+        },
+        {
+          "item": "C",
+          "texto": "Desenhe a árvore com 37 e 67. Percorrendo esquerda, direita e nó, a sequência coincide?"
+        },
+        {
+          "item": "D",
+          "texto": "O 67 fica à esquerda ou à direita do 73?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "19, 31, 41, 37, 47, 53, 73, 67, 89",
+          "porque": "É a pré-ordem lida de outro jeito, misturando raízes com folhas: o 31 vem antes de seus filhos, e a raiz 53 aparece no meio. Na pós-ordem a raiz é sempre a última."
+        },
+        {
+          "letra": "B",
+          "texto": "19, 47, 37, 41, 31, 67, 89, 73, 53",
+          "porque": "Na subárvore do 41, visita o filho direito 47 antes do esquerdo 37. A pós-ordem faz esquerda antes de direita: 37, 47, 41."
+        },
+        {
+          "letra": "C",
+          "texto": "19, 37, 47, 41, 31, 67, 89, 73, 53",
+          "porque": "O 37 vira filho esquerdo de 41, e o 67 filho esquerdo de 73. Pós-ordem: subárvore do 31 (19, 37, 47, 41, 31), subárvore do 73 (67, 89, 73) e a raiz 53."
+        },
+        {
+          "letra": "D",
+          "texto": "19, 37, 47, 41, 31, 89, 67, 73, 53",
+          "porque": "Na subárvore do 73, põe o 89 antes do 67. O 67 é filho esquerdo, então vem antes."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "37 entra à esquerda de 41 e 67 à esquerda de 73. Pós-ordem (esquerda, direita, nó): 19, 37, 47, 41, 31, 67, 89, 73, 53.",
+      "assuntos": [
+        {
+          "num": "0099",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0098",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 5,
+      "topico": [
+        "3.1",
+        4,
+        5,
+        6
+      ],
+      "formato": "afirmações",
+      "enunciado": "Considere as afirmações abaixo sobre a eficiência de operações em diferentes estruturas de dados:\n\nI. Se uma lista encadeada estiver ordenada, o acesso aos elementos tem a mesma eficiência de uma árvore balanceada, pois pode-se usar busca binária para a pesquisa.\nII. Uma tabela hash com encadeamento separado requer mais memória do que uma tabela hash com sondagem linear ou quadrática de igual tamanho, mesmo quando os elementos armazenados nas duas são idênticos.\nIII. Se a árvore de busca binária não for balanceada, a pesquisa pode ser tão ineficiente (em número de acessos) quanto a pesquisa linear em um vetor não ordenado.\nIV. Uma árvore AVL pode ser tão eficiente (em número de acessos) quanto a pesquisa binária em um vetor ordenado e ainda tem a vantagem de permitir inserção e remoção eficientes.\n\nQuais afirmações são verdadeiras?",
+      "dica": "**Cobra:** comparar o custo de busca e o uso de memória de lista, hash, BST e AVL.\n\n- **Lista encadeada** [0076]: chegar ao k-ésimo nó exige passar pelos anteriores, porque cada nó só sabe o endereço do próximo; não há acesso direto ao meio. Ex.: para olhar o meio de 1.000 nós, anda-se 500 vezes.\n- **Encadeamento** [0106]: cada posição da tabela aponta para uma lista, e cada chave guardada leva um ponteiro extra para o próximo nó. Ex.: com 10 chaves, são 10 ponteiros a mais que no endereçamento aberto.\n- **BST e AVL** [0099], [0101]: a busca custa a altura da árvore; sem balanceamento a altura pode chegar a n - 1, e a AVL a mantém em `O(log n)`. Ex.: 1, 2, 3, 4 em ordem formam uma linha.\n\n**Como atacar:** julgue cada afirmação no pior caso.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "A busca binária olha primeiro o elemento do meio. Quanto custa chegar ao meio de uma lista encadeada?"
+        },
+        {
+          "item": "II",
+          "texto": "O que cada nó da lista do encadeamento guarda além da chave? E uma posição da tabela aberta?"
+        },
+        {
+          "item": "III",
+          "texto": "Insira 1, 2, 3, 4, 5 numa BST sem balanceamento. Quantos nós a busca do 5 visita?"
+        },
+        {
+          "item": "IV",
+          "texto": "Qual é a altura de uma AVL com n chaves, e quanto custa inserir nela? E num vetor ordenado?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas I, II e III",
+          "porque": "I é a afirmação que não se sustenta: a busca binária precisa ir direto ao meio, e numa lista encadeada isso já custa `O(n)`."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas II, III e IV",
+          "porque": "É a resolução do curso. I não vale (lista não permite busca binária). II vale no sentido usual: os nós do encadeamento guardam ponteiros que o endereçamento aberto não tem. III vale: BST degenerada é uma lista. IV vale: a AVL faz `O(log n)` como a busca binária e insere e remove em `O(log n)`. Anulada pela banca, provavelmente pela II, que depende do que se conta como memória."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas I, II e IV",
+          "porque": "Inclui a I, que supõe busca binária em lista encadeada, e deixa de fora a III."
+        },
+        {
+          "letra": "D",
+          "texto": "Todas as afirmações são verdadeiras",
+          "porque": "A I não se sustenta: sem acesso direto ao meio, a lista ordenada continua com busca `O(n)`."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "Anulada pela banca. Pela resolução do curso, II, III e IV valem e I não (lista encadeada não tem busca binária), o que dá B. O motivo provável da anulação é a II: \"requer mais memória\" depende de contar ponteiros e de a tabela aberta ter o mesmo tamanho, o que o enunciado não fixa bem.",
+      "assuntos": [
+        {
+          "num": "0076",
+          "modulo": "11-listas.md"
+        },
+        {
+          "num": "0106",
+          "modulo": "15-hash.md"
+        },
+        {
+          "num": "0099",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 6,
+      "topico": [
+        "3.1",
+        "3.2",
+        "3.3"
+      ],
+      "formato": "conceito",
+      "enunciado": "Considere os seguintes cenários:\n\nI. Desfazer/refazer operações em um editor de texto.\nII. Gerenciamento de requisições em uma impressora compartilhada.\nIII. Inserção e remoção frequente de elementos em posições arbitrárias.\n\nA alternativa que melhor representa a associação correta entre cenário e estrutura de dados é:",
+      "dica": "**Cobra:** associar cada situação à estrutura que a resolve com a política certa.\n\n- **Pilha** [0082]: o último a entrar é o primeiro a sair (LIFO), então ela guarda a ordem inversa das ações. Ex.: no desfazer, a última edição feita é a primeira a ser desfeita.\n- **Fila** [0085]: o primeiro a entrar é o primeiro a sair (FIFO), e por isso preserva a ordem de chegada. Ex.: os documentos enviados à impressora saem na ordem em que chegaram.\n- **Lista encadeada** [0076]: inserir ou remover num ponto qualquer só religa ponteiros, sem deslocar os outros elementos como faria um vetor. Ex.: tirar o 3º de 1.000 nós mexe em um ponteiro só.\n\n**Como atacar:** para cada cenário, pergunte quem precisa sair primeiro.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Ao desfazer, sai a ação mais antiga ou a mais recente?"
+        },
+        {
+          "item": "B",
+          "texto": "Para cada cenário, quem sai primeiro: o mais novo, o mais velho ou qualquer um?"
+        },
+        {
+          "item": "C",
+          "texto": "Se a impressora fosse uma pilha, qual documento sairia primeiro?"
+        },
+        {
+          "item": "D",
+          "texto": "Uma fila deixa inserir no meio dela?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "I – Fila, II – Pilha, III – Vetor",
+          "porque": "Troca pilha e fila: o desfazer volta a última ação (LIFO) e a impressora atende por ordem de chegada (FIFO). E o vetor desloca elementos para inserir no meio."
+        },
+        {
+          "letra": "B",
+          "texto": "I – Pilha, II – Fila, III – Lista encadeada",
+          "porque": "Desfazer é LIFO, pilha; impressora é FIFO, fila; inserir e remover em posição arbitrária pede lista encadeada, que só religa ponteiros."
+        },
+        {
+          "letra": "C",
+          "texto": "I – Lista, II – Pilha, III – Fila",
+          "porque": "A impressora com pilha imprimiria o último documento enviado primeiro. E fila só mexe nas pontas, não em posições arbitrárias."
+        },
+        {
+          "letra": "D",
+          "texto": "I – Pilha, II – Lista, III – Fila",
+          "porque": "Acerta o I, mas a fila não insere nem remove no meio, e a impressora pede a ordem de chegada da fila."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Desfazer = pilha (LIFO), impressora = fila (FIFO), inserir/remover em posição qualquer = lista encadeada.",
+      "assuntos": [
+        {
+          "num": "0082",
+          "modulo": "12-pilhas-e-filas.md"
+        },
+        {
+          "num": "0085",
+          "modulo": "12-pilhas-e-filas.md"
+        },
+        {
+          "num": "0076",
+          "modulo": "11-listas.md"
+        }
+      ]
+    },
+    {
+      "numero": 7,
+      "topico": 7,
+      "formato": "simulação",
+      "enunciado": "Qual será o resultado do primeiro particionamento obtido pelo algoritmo de ordenação Quick Sort ao ordenar de maneira crescente o vetor abaixo se a estratégia de particionamento adotada for o algoritmo de Hoare e o pivô for escolhido a partir do elemento central?\n\n42, 67, 23, 54, 42, 18, 16, 45, 58",
+      "dica": "**Cobra:** executar uma passada da partição de Hoare com o pivô do meio.\n\n- **Quick sort** [0095]: escolhe um pivô e reorganiza o vetor para que tudo à esquerda de um ponto fique menor ou igual a ele e tudo à direita maior ou igual; depois ordena cada lado. Ex.: com pivô 5, o vetor 7, 2, 5 vira algo como 2, 5, 7.\n- **Partição de Hoare** [0095]: dois índices andam um contra o outro; o da esquerda para no primeiro elemento maior ou igual ao pivô, o da direita no primeiro menor ou igual, e os dois trocam até se cruzarem. Ex.: em 9, 1 com pivô 5, os índices param no 9 e no 1 e trocam.\n\n**Como atacar:** pivô 42 (posição 4) e escreva o vetor depois de cada troca.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Na partição de Hoare, um elemento igual ao pivô é obrigado a ir para o centro?"
+        },
+        {
+          "item": "B",
+          "texto": "Com pivô 42, onde o índice da esquerda para na primeira vez? E o da direita?"
+        },
+        {
+          "item": "C",
+          "texto": "Uma única partição deixa cada lado ordenado?"
+        },
+        {
+          "item": "D",
+          "texto": "Faça as trocas uma a uma. Onde os índices se cruzam, e como fica o vetor?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "16, 18, 23, 42, 42, 54, 67, 45, 58",
+          "porque": "Os dois 42 ficam juntos no meio, como numa partição que põe todos os iguais ao pivô no centro. A de Hoare não faz isso: o segundo 42 fica na posição 6."
+        },
+        {
+          "letra": "B",
+          "texto": "42, 16, 23, 18, 42, 54, 67, 45, 58",
+          "porque": "Mantém o 42 na posição 0, mas a primeira troca de Hoare é justamente a do 42 da esquerda com o 16."
+        },
+        {
+          "letra": "C",
+          "texto": "42, 23, 18, 16, 42, 45, 54, 58, 67",
+          "porque": "O lado direito já sai ordenado, o que uma partição não faz numa passada só."
+        },
+        {
+          "letra": "D",
+          "texto": "16, 18, 23, 42, 54, 67, 42, 45, 58",
+          "porque": "Pivô 42. Trocas: 42 (pos. 0) com 16 (pos. 6), 67 (pos. 1) com 18 (pos. 5), 54 (pos. 3) com 42 (pos. 4). Os índices se cruzam em 3 e 4: à esquerda 16, 18, 23, 42 e à direita 54, 67, 42, 45, 58. Conferido em Python com o Hoare do Cormen e com a versão de Ziviani."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "Anulada pela banca. A simulação do Hoare com pivô central (42) dá D: trocas 42↔16, 67↔18, 54↔42, cruzamento entre as posições 3 e 4. O gabarito não diz o motivo; como as duas variantes clássicas dão D, é provável que a letra preliminar fosse outra.",
+      "assuntos": [
+        {
+          "num": "0095",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 8,
+      "topico": 6,
+      "formato": "código",
+      "enunciado": "Selecione a alternativa que preenche corretamente o espaços vazios do código abaixo para que a função buscaBin seja uma implementação correta do algoritmo de busca binária.\n\n```c\nint buscaBin(int vetor[], int tamanho, int chave) {\n    int i = 0;\n    int j =     I   ;\n    while (   II    ) {\n        int meio = (i + j) / 2;\n        if (vetor[meio] == chave) return meio;\n        if (vetor[meio] < chave)    III ;\n        else     IV    ;\n    }\n    return -1;\n}\n```",
+      "dica": "**Cobra:** acertar os limites da busca binária para ela não pular posição nem entrar em laço infinito.\n\n- **Busca binária** [0090]: num vetor ordenado, compara a chave com o elemento do meio do intervalo `[i, j]` e descarta a metade onde ela não pode estar, até o intervalo ficar vazio. Ex.: buscando 7 em 1, 3, 5, 7, 9, o meio é 5; como 5 < 7, o intervalo vira as posições 3 e 4.\n- **Limites do intervalo** [0090]: com `j` começando em `tamanho - 1`, o intervalo inclui as duas pontas, o laço roda enquanto `i <= j`, e o meio já testado sai do intervalo com `meio + 1` ou `meio - 1`. Ex.: com `i = j = 2` e chave ausente, `j = meio - 1` esvazia o intervalo.\n\n**Como atacar:** teste cada alternativa buscando uma chave ausente num vetor de 2 elementos.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Busque 0 em `{1, 3}`. Depois de `j = meio`, o intervalo diminuiu?"
+        },
+        {
+          "item": "B",
+          "texto": "Busque 9 em `{1, 3}`. Qual posição o código chega a ler?"
+        },
+        {
+          "item": "C",
+          "texto": "Busque 3 e depois 0 em `{1, 3}`. O código acha um e para no outro?"
+        },
+        {
+          "item": "D",
+          "texto": "Se o meio é menor que a chave, de que lado a chave está? Para onde `i = meio - 1` leva?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "I: `tamanho - 1` · II: `j >= i` · III: `i = meio + 1` · IV: `j = meio`",
+          "porque": "Com `j = meio`, o meio já testado continua no intervalo. Em `{1, 3}` buscando 0: meio 0, `j = 0`; meio 0 de novo, `j = 0`; o laço nunca termina."
+        },
+        {
+          "letra": "B",
+          "texto": "I: `tamanho` · II: `j >= i` · III: `i = meio + 1` · IV: `j = meio - 1`",
+          "porque": "Com `j = tamanho`, o intervalo inclui uma posição depois do fim: buscando uma chave maior que todas, o código lê `vetor[tamanho]`, fora do vetor."
+        },
+        {
+          "letra": "C",
+          "texto": "I: `tamanho - 1` · II: `j >= i` · III: `i = meio + 1` · IV: `j = meio - 1`",
+          "porque": "Intervalo fechado `[0, tamanho - 1]`, laço enquanto houver posição, e o meio descartado dos dois lados. É a busca binária clássica."
+        },
+        {
+          "letra": "D",
+          "texto": "I: `tamanho - 1` · II: `i <= j` · III: `i = meio - 1` · IV: `j = meio + 1`",
+          "porque": "Troca os sentidos: se o meio é menor que a chave, a chave está à direita, e `i = meio - 1` volta para a esquerda. O intervalo cresce em vez de diminuir."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Busca binária em intervalo fechado: `j = tamanho - 1`, laço com `j >= i`, `i = meio + 1` e `j = meio - 1`. A entra em laço infinito, B lê fora do vetor e D anda no sentido errado.",
+      "assuntos": [
+        {
+          "num": "0090",
+          "modulo": "13-busca-e-ordenacao.md"
+        }
+      ]
+    },
+    {
+      "numero": 9,
+      "topico": 5,
+      "formato": "simulação",
+      "enunciado": "Insira as chaves 4, 8, 15, 22, 5 e 12 (nessa ordem) em uma tabela de espalhamento com tamanho m = 7, utilizando endereçamento aberto pelo método da divisão (também conhecido como congruência linear ou hashing by division) e sondagem quadrática (também conhecido como quadratic probing).\n\nAssinale a alternativa que mostra o conteúdo final da tabela.",
+      "dica": "**Cobra:** inserir chaves com sondagem quadrática e ver onde cada uma termina.\n\n- **Função de divisão** [0105]: a posição inicial é o resto da divisão da chave pelo tamanho da tabela, `h(k) = k mod m`. Ex.: com m = 7, a chave 22 começa na posição 1.\n- **Sondagem quadrática** [0179]: se a posição está ocupada, tenta `h(k) + c₁·i + c₂·i²` para i = 1, 2, 3..., em geral com a forma simples `h(k) + i²`; os saltos crescem e espalham as colisões. Ex.: com m = 7 e h = 5, as tentativas são 5, 6, 2 e 0.\n\n**Como atacar:** use `h(k) + i²` e escreva a tabela depois de cada chave.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Com `h(k) + i²`, o 22 tenta 1, 2 e depois qual posição? E o 12?"
+        },
+        {
+          "item": "B",
+          "texto": "Na sondagem quadrática, depois de 1 e 2, qual é a terceira tentativa do 22?"
+        },
+        {
+          "item": "C",
+          "texto": "Sondagem linear e quadrática fazem os mesmos saltos?"
+        },
+        {
+          "item": "D",
+          "texto": "O enunciado diz quais coeficientes a sondagem quadrática usa? Com c₁ = c₂ = 1/2, a tabela muda?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "12, 8, 15, vazio, 4, 22, 5",
+          "porque": "Com `h(k) + i²`: 4 → 4; 8 → 1; 15 → 1, 2; 22 → 1, 2, 5; 5 → 5, 6; 12 → 5, 6, 2, 0. Resultado: 12, 8, 15, vazio, 4, 22, 5. Conferido em Python."
+        },
+        {
+          "letra": "B",
+          "texto": "vazio, 8, 15, 22, 5, 4, 12",
+          "porque": "É o que daria uma sondagem linear com outra função. Com sondagem quadrática, 22 salta de 1 para 2 e depois para 5, não para 3."
+        },
+        {
+          "letra": "C",
+          "texto": "vazio, 8, 15, 22, 4, 5, 12",
+          "porque": "Põe o 4 na posição 4 e o 22 na 3, como na sondagem linear, que anda de uma em uma casa."
+        },
+        {
+          "letra": "D",
+          "texto": "Nenhuma das anteriores",
+          "porque": "Com a forma `h(k) + i²`, a alternativa A sai certa. Com os coeficientes do Cormen c₁ = c₂ = 1/2, a tabela sai 22, 8, 15, vazio, 4, 5, 12, que não está entre as opções."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "Anulada pela banca. Com a sondagem quadrática na forma h(k) + i², a tabela é 12, 8, 15, vazio, 4, 22, 5 (A). Com h(k) + i/2 + i²/2 (c₁ = c₂ = 1/2, como no Cormen), sai outra tabela, e D também se defende. O enunciado não fixa os coeficientes, o que provavelmente motivou a anulação.",
+      "assuntos": [
+        {
+          "num": "0179",
+          "modulo": "28-estruturas-complementos.md"
+        },
+        {
+          "num": "0105",
+          "modulo": "15-hash.md"
+        }
+      ]
+    },
+    {
+      "numero": 10,
+      "topico": 1,
+      "formato": "código",
+      "enunciado": "Sabendo que o operador ~, denominado operador de complemento bit-a-bit (bitwise NOT), \"inverte\" todos os bits de um número inteiro em C, o que o programa a seguir imprime?\n\n```c\n#include <stdio.h>\nint main(void) {\n        int d = 42;\n        printf(\"%d\\n\", ~d + 1);\n}\n```",
+      "dica": "**Cobra:** entender o que `~d + 1` faz com um inteiro com sinal.\n\n- **Operador ~** [0065]: inverte cada bit do número, trocando 0 por 1 e 1 por 0, sem mexer no tamanho do tipo. Ex.: em 8 bits, `~00101010` (42) é `11010101`.\n- **Complemento de dois** [0065]: é a forma usual de guardar negativos; nela, `-x` é exatamente `~x + 1`, inverter os bits e somar 1. Ex.: em 8 bits, `11010101 + 1 = 11010110`, que é -42.\n\n**Como atacar:** faça a conta em 8 bits e leia o resultado em complemento de dois.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Escreva 42 em 8 bits, inverta tudo e some 1. Que número esse padrão representa em complemento de dois?"
+        },
+        {
+          "item": "B",
+          "texto": "Quantas vezes o sinal é trocado nesta expressão?"
+        },
+        {
+          "item": "C",
+          "texto": "Quanto vale `~42` sozinho, antes do `+ 1`?"
+        },
+        {
+          "item": "D",
+          "texto": "Que representação de negativos o enunciado supõe? O padrão C obriga alguma?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "-42",
+          "porque": "Em complemento de dois, `~d + 1` é a definição de `-d`. Compilado com gcc, imprime -42."
+        },
+        {
+          "letra": "B",
+          "texto": "42",
+          "porque": "Seria o caso de aplicar a negação duas vezes. Aqui ela é aplicada uma vez só."
+        },
+        {
+          "letra": "C",
+          "texto": "43",
+          "porque": "Soma 1 ao 42, como se `~` não fizesse nada. O `~d` já é um número negativo, -43 em complemento de dois."
+        },
+        {
+          "letra": "D",
+          "texto": "Nenhuma das anteriores",
+          "porque": "Nas máquinas atuais, com complemento de dois, A é o resultado. D só valeria numa representação de negativos diferente, que o padrão C anterior ao C23 ainda permitia."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "Anulada pela banca. Em complemento de dois, ~d + 1 = -d, e o programa imprime -42 (A), conferido com gcc. Até o C17 o padrão também admitia sinal-magnitude e complemento de um; é provável que a anulação venha daí, ou do `~` aplicado a `int` com sinal.",
+      "assuntos": [
+        {
+          "num": "0065",
+          "modulo": "08-structs.md"
+        }
+      ]
+    },
+    {
+      "numero": 11,
+      "topico": 4,
+      "formato": "simulação",
+      "enunciado": "Insira as chaves 4, 3, 6, 2, 5, 7 e 1 (nessa ordem) em uma árvore B de ordem m = 3 (grau máximo da página/nó). Qual das alternativas é um desenho que corresponde à árvore resultante?",
+      "dica": "**Cobra:** inserir chaves numa árvore B de ordem 3, dividindo nós que estouram.\n\n- **Nó da árvore B** [0146]: na ordem m = 3 (até 3 filhos), cada nó guarda no máximo 2 chaves, e todas as folhas ficam no mesmo nível. Ex.: `[3 5]` tem 3 filhos.\n- **Divisão** [0146]: a chave entra na folha certa; se a folha fica com 3 chaves, a do meio sobe para o pai e as outras viram dois nós; se o pai estoura, divide também, até a raiz. Ex.: `[2 3 4]` vira `[3]` no pai e folhas `[2]` e `[4]`.\n\n**Como atacar:** escreva a árvore depois de cada chave e divida na hora em que um nó passar de 2 chaves.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Depois de inserir 4, 3 e 6, quem está na raiz? Alguma inserção seguinte tira essa chave de lá?"
+        },
+        {
+          "item": "B",
+          "texto": "Numa árvore B, todas as folhas ficam no mesmo nível. Isso vale nesta figura?"
+        },
+        {
+          "item": "C",
+          "texto": "Faça as divisões uma a uma. Quando o 1 entra, quantas vezes a árvore divide?"
+        },
+        {
+          "item": "D",
+          "texto": "Com ordem 3, quantas chaves cabem num nó?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "árvore da figura A)",
+          "porque": "É uma árvore B válida de ordem 3 com essas chaves, mas não sai desta ordem de inserção: o 4 sobe para a raiz já na terceira chave e não sai mais de lá.",
+          "figura": "2025-098-q11-a"
+        },
+        {
+          "letra": "B",
+          "texto": "árvore da figura B)",
+          "porque": "É uma BST, não uma árvore B: as folhas estão em níveis diferentes (o 1 está um nível abaixo do 5 e do 7).",
+          "figura": "2025-098-q11-b"
+        },
+        {
+          "letra": "C",
+          "texto": "árvore da figura C)",
+          "porque": "4, 3, 6 dão `[3 4 6]`, que divide: raiz `[4]`. 2 e 5 entram nas folhas. 7 estoura `[5 6 7]`: o 6 sobe e a raiz fica `[4 6]`. 1 estoura `[1 2 3]`: o 2 sobe, a raiz `[2 4 6]` estoura e o 4 sobe. Fica 4 / 2 (1, 3) / 6 (5, 7).",
+          "figura": "2025-098-q11-c"
+        },
+        {
+          "letra": "D",
+          "texto": "árvore da figura D)",
+          "porque": "As folhas `[1 2 3]` e `[5 6 7]` têm 3 chaves, acima do máximo de 2 da ordem 3.",
+          "figura": "2025-098-q11-d"
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "Anulada pela banca. Com ordem 3 (máximo 2 chaves) e divisão pela mediana quando o nó estoura, a árvore final é 4 / 2 (1, 3) / 6 (5, 7), a C. O motivo provável é a palavra \"ordem\", que em alguns livros é o grau mínimo e muda as contas, e a figura B, que também desenha uma árvore com as chaves certas.",
+      "assuntos": [
+        {
+          "num": "0146",
+          "modulo": "22-arvores-avancadas.md"
+        }
+      ]
+    },
+    {
+      "numero": 12,
+      "topico": 1,
+      "formato": "código",
+      "enunciado": "O que a função em C a seguir faz? Considere que unsigned é o tipo de dados para armazenar números inteiros sem sinal.\n\n```c\nunsigned f(unsigned A, unsigned B) {\n        if (A < B)\n                return 0;\n        else\n                return 1 + f(A - B, B);\n}\n```",
+      "dica": "**Cobra:** descobrir o que a recursão calcula e checar se ela sempre termina.\n\n- **Recursão** [0032]: a função resolve um caso base direto e, nos outros, chama a si mesma com um problema menor; se o problema não diminuir, a recursão não termina. Ex.: `f(7, 2)` chama `f(5, 2)`, `f(3, 2)`, `f(1, 2)`, que devolve 0.\n- **Divisão inteira** [0007]: o quociente de A por B é quantas vezes B cabe em A, e pode ser contado subtraindo B até sobrar menos que B. Ex.: 17 / 5 = 3, porque 17 - 5 - 5 - 5 = 2 < 5.\n\n**Como atacar:** rode `f(17, 5)` à mão e depois pense em `f(5, 0)`.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Calcule `f(12, 8)` e o mdc de 12 e 8. Dão o mesmo número?"
+        },
+        {
+          "item": "B",
+          "texto": "Quanto vale `f(17, 5)`? É só sim ou não?"
+        },
+        {
+          "item": "C",
+          "texto": "Rode `f(17, 5)` à mão. E se B for 0, a função termina?"
+        },
+        {
+          "item": "D",
+          "texto": "Para B = 3, a função devolve resposta? E para B = 0?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Verifica o máximo divisor comum (mdc) entre A e B",
+          "porque": "O mdc de Euclides troca os papéis e usa o resto; aqui B fica fixo e a função conta quantas subtrações faz. `f(12, 8)` dá 1, e o mdc é 4."
+        },
+        {
+          "letra": "B",
+          "texto": "Verifica se B é maior que A",
+          "porque": "Esse é só o caso base. Para A ≥ B a função devolve números maiores que 1, como `f(17, 5) = 3`."
+        },
+        {
+          "letra": "C",
+          "texto": "Calcula a divisão inteira de A por B",
+          "porque": "Conta quantas vezes B cabe em A: `f(17, 5)` subtrai 5 três vezes e devolve 3. Vale para B > 0; com B = 0 a recursão não termina."
+        },
+        {
+          "letra": "D",
+          "texto": "Nada, pois o código tem um erro",
+          "porque": "O código compila e funciona para B > 0. Só com B = 0 ele entra em recursão sem fim, porque `A < 0` nunca vale para `unsigned`."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "Anulada pela banca. Para B > 0, f(A, B) conta quantas vezes B cabe em A: é a divisão inteira (C). Com B = 0 a recursão não termina, e isso dá argumento para D; é o motivo provável da anulação.",
+      "assuntos": [
+        {
+          "num": "0032",
+          "modulo": "04-funcoes.md"
+        },
+        {
+          "num": "0007",
+          "modulo": "01-fundamentos.md"
+        }
+      ]
+    },
+    {
+      "numero": 13,
+      "topico": "3.2",
+      "formato": "código",
+      "enunciado": "Qual alternativa a seguir implementa corretamente as operações de inserção e remoção de elementos em uma lista para que ela funcione como uma fila?",
+      "dica": "**Cobra:** usar uma lista do Python como fila, entrando numa ponta e saindo na outra.\n\n- **Fila** [0085]: o primeiro a entrar é o primeiro a sair (FIFO): insere-se no fim e retira-se do início. Ex.: inserindo 1, 2, 3, a primeira retirada devolve 1.\n- **Vetor dinâmico** [0075]: a lista do Python é um vetor que cresce; `append(x)` põe no fim, `pop()` tira do fim e `pop(0)` tira do início, deslocando os outros. Ex.: em `[1, 2, 3]`, `pop(0)` devolve 1 e deixa `[2, 3]`.\n\n**Como atacar:** insira 1, 2, 3 com cada alternativa e veja quem sai primeiro.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Quantos argumentos `list.insert` recebe? E `pop()` sem argumento tira qual elemento?"
+        },
+        {
+          "item": "B",
+          "texto": "Em `[1, 2]`, onde `insert(-1, 3)` coloca o 3?"
+        },
+        {
+          "item": "C",
+          "texto": "Insira 1, 2, 3 e retire uma vez. Qual sai?"
+        },
+        {
+          "item": "D",
+          "texto": "`remove(0)` procura uma posição ou um valor?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "```python\ndef insere(lista, elemento):\n    lista.insert(elemento)\n\ndef remove(lista, elemento):\n    lista.pop()\n```",
+          "porque": "`insert` precisa de dois argumentos, a posição e o elemento; `lista.insert(elemento)` dá erro. E `pop()` tira o último, o que seria pilha."
+        },
+        {
+          "letra": "B",
+          "texto": "```python\ndef insere(lista, elemento):\n    lista.insert(-1, elemento)\n\ndef remove(lista, elemento):\n    lista.pop()\n```",
+          "porque": "`insert(-1, x)` põe antes do último, não no fim, e `pop()` tira do fim: o comportamento nem é de fila nem de pilha."
+        },
+        {
+          "letra": "C",
+          "texto": "```python\ndef insere(lista, elemento):\n    lista.append(elemento)\n\ndef remove(lista, elemento):\n    lista.pop(0)\n```",
+          "porque": "`append` insere no fim e `pop(0)` retira do início: o primeiro a entrar é o primeiro a sair."
+        },
+        {
+          "letra": "D",
+          "texto": "```python\ndef insere(lista, elemento):\n    lista.append(elemento, 0)\n\ndef remove(lista, elemento):\n    lista.remove(0)\n```",
+          "porque": "`append` só aceita um argumento, e `remove(0)` apaga o primeiro elemento igual a 0, não o da posição 0."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "Fila = entra no fim (`append`), sai do início (`pop(0)`). A e D dão erro ou fazem outra coisa; B insere antes do último.",
+      "assuntos": [
+        {
+          "num": "0085",
+          "modulo": "12-pilhas-e-filas.md"
+        },
+        {
+          "num": "0075",
+          "modulo": "11-listas.md"
+        }
+      ]
+    },
+    {
+      "numero": 14,
+      "topico": "3.4",
+      "formato": "código",
+      "enunciado": "Qual alternativa a seguir implementa corretamente uma função que recebe como entrada uma matriz quadrada de tamanho N×N e verifica se ela é a matriz identidade?",
+      "dica": "**Cobra:** ler quatro funções sobre matriz e achar a que testa todas as posições.\n\n- **Matriz** [0039]: `mat[i][j]` é o elemento da linha i e coluna j; a identidade tem 1 em toda a diagonal (`i == j`) e 0 em todo o resto. Ex.: em 3×3, `mat[1][1]` é 1 e `mat[0][2]` é 0.\n- **Laços aninhados** [0024]: o laço de dentro recomeça a cada volta do de fora, e o ponto de partida dele decide quais posições são vistas. Ex.: `for (j = i + 1; ...)` só passa acima da diagonal, nunca por `j == i`.\n\n**Como atacar:** teste cada função com a identidade 2×2 e com `{{1, 1}, {0, 1}}`.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Com a matriz toda de 1, o que a função devolve?"
+        },
+        {
+          "item": "B",
+          "texto": "Com `j` começando em `i + 1`, a condição `i == j` chega a valer alguma vez?"
+        },
+        {
+          "item": "C",
+          "texto": "Teste com a identidade 2×2 e com `{{1, 1}, {0, 1}}`. As respostas saem diferentes?"
+        },
+        {
+          "item": "D",
+          "texto": "Se a primeira posição testada zerar `flag` e a seguinte for boa, o que acontece com `flag`?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "```c\nint ident(int N, int mat[][N]) {\n    int flag = 0;\n\n    for (int i = 0; i < N; i++) {\n        if (mat[i][i] == 1)\n            flag = 1;\n\n        for (int j = i + 1; j < N; j++)\n            if (mat[i][j] == 0 || mat[j][i] == 0)\n                flag = 1;\n     }\n\n     return flag;\n}\n```",
+          "porque": "A lógica está invertida: começa com 0 e põe 1 quando acha um 1 na diagonal ou um 0 fora dela. A identidade sai 1 e quase qualquer matriz também."
+        },
+        {
+          "letra": "B",
+          "texto": "```c\nint ident(int N, int mat[][N]) {\n    int flag = 0;\n\n    for (int i = 0; i < N; i++) {\n        for (int j = i + 1; j < N; j++)\n            if (i == j && mat[i][j] == 1)\n                flag = 1;\n            else if (mat[i][j] == 0)\n                flag = 1;\n     }\n\n     return flag;\n}\n```",
+          "porque": "Com `j` começando em `i + 1`, `i == j` nunca acontece, a diagonal não é testada e só a parte de cima é vista. Além disso, um 0 fora da diagonal liga `flag`, o contrário do que se quer."
+        },
+        {
+          "letra": "C",
+          "texto": "```c\nint ident(int N, int mat[][N]) {\n    int flag = 1;\n\n    for (int i = 0; i < N; i++) {\n        if (mat[i][i] != 1)\n            flag = 0;\n\n        for (int j = i + 1; j < N; j++)\n            if (mat[i][j] != 0 || mat[j][i] != 0)\n                flag = 0;\n     }\n\n     return flag;\n}\n```",
+          "porque": "Começa supondo que é identidade (`flag = 1`) e põe 0 se algum elemento da diagonal for diferente de 1 ou se algum par acima e abaixo da diagonal não for 0. Assim cobre a matriz inteira."
+        },
+        {
+          "letra": "D",
+          "texto": "```c\nint ident(int N, int mat[][N]) {\n    int flag = 1;\n\n    for (int i = 0; i < N; i++) {\n        for (int j = i + 1; j < N; j++)\n            if (i == j && mat[i][j] == 0)\n                flag = 0;\n            else if (i != j && mat[i][j] != 0)\n                flag = 0;\n            else\n                flag = 1;\n     }\n\n     return flag;\n}\n```",
+          "porque": "O laço de `j` nunca passa pela diagonal, então `{{0, 0}, {0, 1}}` devolve 1. E o `else flag = 1` desfaz um 0 encontrado antes: em 3×3, uma posição boa depois de uma ruim volta `flag` para 1."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "C começa em 1 e zera ao achar diagonal diferente de 1 ou elemento fora da diagonal diferente de 0, olhando `mat[i][j]` e `mat[j][i]`. A e B têm a lógica invertida, B e D não olham a diagonal, e D ainda restaura o `flag`.",
+      "assuntos": [
+        {
+          "num": "0039",
+          "modulo": "05-vetores-e-strings.md"
+        },
+        {
+          "num": "0024",
+          "modulo": "03-repeticoes.md"
+        }
+      ]
+    },
+    {
+      "numero": 15,
+      "topico": [
+        "3.2",
+        "3.3"
+      ],
+      "formato": "afirmações",
+      "enunciado": "Considere as afirmações abaixo sobre implementações eficientes para pilhas e filas.\n\nI. Se uma pilha for implementada com uma lista armazenada em vetor, o topo da pilha deve estar no fim da lista.\nII. Se uma lista simplesmente encadeada for usada, então o topo da pilha deve estar no início da lista.\nIII. Ao implementar filas, se uma lista duplamente encadeada circular for usada, então o início/a frente da fila pode ser tanto o primeiro nó quanto o último nó da lista.\nIV. Ao implementar filas, se uma lista simplesmente encadeada for usada, então o primeiro nó deve ser considerado o início/a frente da fila e o último nó deve ser considerado o fim.\n\nQuais afirmações são verdadeiras?",
+      "dica": "**Cobra:** em que ponta de cada implementação ficam o topo da pilha e a frente da fila para tudo custar `O(1)`.\n\n- **Pilha** [0082], [0083]: em vetor, o topo fica no fim, onde empilhar e desempilhar não deslocam nada; em lista encadeada, o topo fica no início, onde inserir e remover mexem só na cabeça. Ex.: com o topo no início do vetor, cada push empurra todos os elementos.\n- **Fila encadeada** [0086]: na lista simples, retira-se do primeiro nó e insere-se depois do último, com um ponteiro para o fim; remover do último exigiria achar o penúltimo, `O(n)`. Ex.: com `ini` e `fim`, as duas operações são `O(1)`.\n- **Lista dupla circular** [0080], [0079]: cada nó conhece o anterior e o próximo, e o último aponta para o primeiro, então as duas pontas são simétricas. Ex.: a partir da cabeça, o último é `cabeca->ant`.\n\n**Como atacar:** para cada afirmação, calcule o custo de inserir e remover na ponta escolhida.",
+      "contrapontos": [
+        {
+          "item": "I",
+          "texto": "Com o topo no início do vetor, quantos elementos andam a cada push?"
+        },
+        {
+          "item": "II",
+          "texto": "Numa lista simples, quanto custa remover o primeiro nó? E o último?"
+        },
+        {
+          "item": "III",
+          "texto": "Na lista dupla circular, a partir de um nó, quanto custa chegar ao anterior e ao próximo?"
+        },
+        {
+          "item": "IV",
+          "texto": "Se a frente fosse o último nó da lista simples, quanto custaria retirar? E o que é preciso para inserir no fim em `O(1)`?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Apenas I, II e IV",
+          "porque": "Deixa de fora a III: na lista dupla circular as duas pontas custam o mesmo, e a frente pode ser qualquer uma delas."
+        },
+        {
+          "letra": "B",
+          "texto": "Apenas II, III e IV",
+          "porque": "Deixa de fora a I: com o topo no início do vetor, cada operação desloca todos os elementos."
+        },
+        {
+          "letra": "C",
+          "texto": "Apenas I e II",
+          "porque": "Deixa de fora III e IV, que também valem para implementações eficientes."
+        },
+        {
+          "letra": "D",
+          "texto": "Todas as afirmações são verdadeiras",
+          "porque": "É a resolução do curso: I (topo no fim do vetor), II (topo no início da lista simples), III (na lista dupla circular as duas pontas são simétricas) e IV (frente no primeiro nó, fim no último, com ponteiro para o fim). Anulada pela banca, provavelmente pela IV, que só vale com ponteiro para o último nó, e pelo \"deve\" das afirmações."
+        }
+      ],
+      "gabarito": "anulada",
+      "resumo": "Anulada pela banca. Pela resolução do curso as quatro valem (D): topo no fim do vetor, topo no início da lista simples, frente em qualquer ponta da lista dupla circular, e frente no primeiro nó da lista simples. A IV depende de guardar um ponteiro para o fim, o que o enunciado não diz; é o motivo provável da anulação.",
+      "assuntos": [
+        {
+          "num": "0082",
+          "modulo": "12-pilhas-e-filas.md"
+        },
+        {
+          "num": "0083",
+          "modulo": "12-pilhas-e-filas.md"
+        },
+        {
+          "num": "0086",
+          "modulo": "12-pilhas-e-filas.md"
+        },
+        {
+          "num": "0080",
+          "modulo": "11-listas.md"
+        }
+      ]
+    },
+    {
+      "numero": 16,
+      "topico": "3.1",
+      "formato": "conceito",
+      "enunciado": "Você está programando o motor de um aplicativo de *streaming* de música. A fila de reprodução atual é uma lista duplamente encadeada, na qual cada música é um nó que possui os ponteiros \"próxima\" e \"anterior\".\n\nConsidere a seguinte sequência de músicas na fila:\n\nO usuário decide remover a [Música B] da lista. Para que a lista continue funcionando corretamente (permitindo que o usuário mude da Música A diretamente para a C, e volte da C para a A) quais alterações de ponteiros são estritamente necessárias?",
+      "dica": "**Cobra:** quais ponteiros mudam ao tirar um nó do meio de uma lista dupla.\n\n- **Lista dupla** [0079]: cada nó tem um ponteiro para o próximo e outro para o anterior; para tirar um nó do meio, o vizinho de trás passa a apontar para o da frente, e o da frente para o de trás. Ex.: em A ⇄ B ⇄ C, tirar o B faz `A->prox = C` e `C->ant = A`.\n- **Memória em C** [0054]: liberar um nó com `free` não altera nenhum ponteiro que apontava para ele; quem apontava continua com o endereço antigo. Ex.: depois de `free(b)`, `a->prox` ainda guarda o endereço do B.\n\n**Como atacar:** desenhe as setas de A, B e C e veja quais apontam para o B.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Depois desta mudança, `C->ant` aponta para quem?"
+        },
+        {
+          "item": "B",
+          "texto": "Quais ponteiros apontavam para o B antes da remoção?"
+        },
+        {
+          "item": "C",
+          "texto": "Depois desta mudança, `A->prox` aponta para quem? E o que vinha depois da C?"
+        },
+        {
+          "item": "D",
+          "texto": "Quando um nó é liberado com `free`, o que acontece com os ponteiros que apontavam para ele?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Alterar o ponteiro \"próxima\" da Música A para apontar para a Música C e alterar o ponteiro \"anterior\" da Música B para apontar para NULL.",
+          "porque": "Mexe no B, que vai sair, e esquece o C: `C->ant` continua apontando para o B, e voltar da C para a A cai no nó removido."
+        },
+        {
+          "letra": "B",
+          "texto": "Alterar o ponteiro \"próxima\" da Música A para apontar para a Música C e alterar o ponteiro \"anterior\" da Música C para apontar para a Música A.",
+          "porque": "São os dois ponteiros que apontavam para o B: `A->prox` e `C->ant`. Religados, a lista fica A ⇄ C nos dois sentidos."
+        },
+        {
+          "letra": "C",
+          "texto": "Alterar o ponteiro \"anterior\" da Música C para apontar para a Música A e o ponteiro \"próxima\" da Música C para apontar para NULL.",
+          "porque": "Esquece `A->prox`, que ainda aponta para o B, e ainda corta o que vinha depois da C."
+        },
+        {
+          "letra": "D",
+          "texto": "Nenhuma: basta excluir o objeto Música B da memória e os ponteiros da Música A e da Música C se ajustarão automaticamente por estarem em uma lista duplamente encadeada.",
+          "porque": "Nenhum ponteiro se ajusta sozinho. A e C ficariam apontando para memória liberada."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Tirar B de A ⇄ B ⇄ C: `A->prox = C` e `C->ant = A`. Os ponteiros do próprio B não importam, e nada se ajusta sozinho.",
+      "assuntos": [
+        {
+          "num": "0079",
+          "modulo": "11-listas.md"
+        },
+        {
+          "num": "0054",
+          "modulo": "07-memoria-dinamica.md"
+        }
+      ]
+    },
+    {
+      "numero": 17,
+      "topico": "3.3",
+      "formato": "conceito",
+      "enunciado": "Um editor de imagens possui uma funcionalidade \"balde\" que preenche uma região de pixels com uma nova cor, como mostrado na figura abaixo. Todos os pixels que tinham cor branca sob o ponteiro do mouse foram coloridos de cinza.\n\nEssa funcionalidade é implementada com os seguintes passos:\n\n1. Uma lista inicialmente vazia é criada\n2. As coordenadas do pixel inicial são inseridas na lista\n3. Enquanto a lista não estiver vazia…\n   - 3a. O último elemento da lista é removido\n   - 3b. O pixel nas coordenadas desse último elemento é colorido com a cor de preenchimento do \"balde\"\n   - 3c. As coordenadas dos quatro pixels adjacentes ao pixel que foi colorido que tiverem cor igual à cor do pixel inicial são inseridas no fim da lista\n\nA forma como a lista é utilizada nesse algoritmo descreve uma estrutura de dados clássica. Que estrutura de dados é essa?",
+      "dica": "**Cobra:** reconhecer a estrutura pela ponta em que se insere e de onde se retira.\n\n- **Pilha** [0082]: insere e retira pela mesma ponta, o topo, então sai sempre o último que entrou (LIFO). Ex.: inserindo 1, 2, 3 no fim e retirando do fim, sai o 3.\n- **Fila** [0085]: insere numa ponta e retira na outra, então sai o mais antigo (FIFO). Ex.: inserindo 1, 2, 3 no fim e retirando do início, sai o 1.\n\n**Como atacar:** compare a ponta da remoção (passo 3a) com a da inserção (passo 3c).",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "O passo 3a retira do início ou do fim da lista?"
+        },
+        {
+          "item": "B",
+          "texto": "Inserção e remoção acontecem na mesma ponta?"
+        },
+        {
+          "item": "C",
+          "texto": "O algoritmo usa a lista de forma hierárquica ou linear?"
+        },
+        {
+          "item": "D",
+          "texto": "Algum passo escolhe o elemento pela prioridade?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Fila",
+          "porque": "A fila retira do início. Aqui a remoção é do último elemento, o mesmo lado em que se insere."
+        },
+        {
+          "letra": "B",
+          "texto": "Pilha",
+          "porque": "Insere no fim (3c) e remove o último (3a): a mesma ponta, o último que entrou é o primeiro a sair. É o preenchimento por busca em profundidade."
+        },
+        {
+          "letra": "C",
+          "texto": "Árvore",
+          "porque": "Árvore não é uma política de inserir e retirar de uma lista. O algoritmo usa a lista de um jeito linear."
+        },
+        {
+          "letra": "D",
+          "texto": "Heap",
+          "porque": "O heap retira pela prioridade, não pela posição. Aqui não há prioridade, só a ordem de chegada invertida."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Remover o último e inserir no fim é usar a mesma ponta: pilha (LIFO). Retirar do início faria fila e o preenchimento em largura.",
+      "assuntos": [
+        {
+          "num": "0082",
+          "modulo": "12-pilhas-e-filas.md"
+        },
+        {
+          "num": "0085",
+          "modulo": "12-pilhas-e-filas.md"
+        }
+      ]
+    },
+    {
+      "numero": 18,
+      "topico": 4,
+      "formato": "conceito",
+      "enunciado": "Considere a árvore de busca binária a seguir. Observe que algumas chaves foram substituídas por incógnitas.\n\nAssinale a alternativa **verdadeira**. Considere que todas as chaves **devem** ser inteiras e que a árvore **não admite** chaves repetidas.",
+      "figuras": [
+        "2025-098-q18"
+      ],
+      "dica": "**Cobra:** usar a ordem da BST para limitar os valores possíveis das incógnitas.\n\n- **Propriedade da BST** [0099]: toda chave da subárvore esquerda de um nó é menor que ele, e toda chave da direita é maior; isso vale para todos os ancestrais, não só o pai. Ex.: o 9, à direita do 7 e na esquerda de x, obriga 7 < 9 < x.\n- **Percurso em ordem** [0098]: lista as chaves de uma BST em ordem crescente, então as incógnitas ficam entre vizinhos conhecidos. Ex.: aqui a em-ordem é 1, z, y, t, 7, 9, x, s, 13, 15.\n\n**Como atacar:** escreva a em-ordem e trate cada incógnita como um número inteiro entre os vizinhos.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Entre 9 e 13 cabem x e s, nessa ordem e distintos. Quais pares de inteiros servem?"
+        },
+        {
+          "item": "B",
+          "texto": "s está em qual subárvore de x? Ele precisa ser maior ou menor que x?"
+        },
+        {
+          "item": "C",
+          "texto": "Entre 1 e 7 há z, y e t, nessa ordem. Quais valores sobram para t?"
+        },
+        {
+          "item": "D",
+          "texto": "Escreva a em-ordem com as incógnitas. Ela não limita nada?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "Existem apenas dois valores possíveis para a chave x.",
+          "porque": "Pela em-ordem, 9 < x < s < 13, com inteiros distintos. x = 10 (s = 11 ou 12) ou x = 11 (s = 12). x = 12 não deixa espaço para s. Então x tem exatamente dois valores."
+        },
+        {
+          "letra": "B",
+          "texto": "Um possível valor de s é 10.",
+          "porque": "s está à direita de x, que é maior que 9: x ≥ 10, logo s ≥ 11."
+        },
+        {
+          "letra": "C",
+          "texto": "O único valor possível de t é 6.",
+          "porque": "Pela em-ordem, 1 < z < y < t < 7: z ≥ 2, y ≥ 3, então t pode ser 4, 5 ou 6."
+        },
+        {
+          "letra": "D",
+          "texto": "É impossível afirmar qualquer coisa sobre os valores das chaves desconhecidas.",
+          "porque": "A ordem da BST e o fato de as chaves serem inteiras limitam todas as incógnitas a poucos valores."
+        }
+      ],
+      "gabarito": "A",
+      "resumo": "Em-ordem: 1, z, y, t, 7, 9, x, s, 13, 15. Então 9 < x < s < 13: x ∈ {10, 11}, dois valores. s ≥ 11, e t ∈ {4, 5, 6}.",
+      "assuntos": [
+        {
+          "num": "0099",
+          "modulo": "14-arvores.md"
+        },
+        {
+          "num": "0098",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 19,
+      "topico": 4,
+      "formato": "simulação",
+      "enunciado": "Considere a árvore AVL balanceada a seguir.\n\nApós remover a chave 9 e aplicar as rotações necessárias, qual será a chave localizada na raiz da árvore?",
+      "figuras": [
+        "2025-098-q19"
+      ],
+      "dica": "**Cobra:** remover uma folha da AVL e seguir as rotações até a raiz.\n\n- **Remoção na AVL** [0176]: remove como na BST e sobe pelo caminho recalculando o fator de cada nó; diferente da inserção, a remoção pode exigir rotação em mais de um nível. Ex.: aqui, uma rotação no 10 e outra no 8.\n- **Rotações** [0101]: com o nó em +2 e o filho da esquerda em -1, a rotação é dupla (esquerda no filho, direita no nó), e o neto sobe; com o filho no mesmo sinal, basta uma simples. Ex.: 8 em +2 com filho 3 em -1: o 5 sobe.\n\n**Como atacar:** remova o 9, conserte o 10 e só então calcule o fator do 8.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "Depois de consertar o 10, qual é o fator do 3, filho esquerdo do 8? Rotação simples resolve esse caso?"
+        },
+        {
+          "item": "B",
+          "texto": "Conserte o 10 primeiro. Qual fica o fator do 8, e qual o do 3?"
+        },
+        {
+          "item": "C",
+          "texto": "Depois de consertar o 10, quais são as alturas das subárvores do 8?"
+        },
+        {
+          "item": "D",
+          "texto": "Na rotação que conserta o 10, ele sobe ou desce?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "3",
+          "porque": "Sairia de uma rotação simples à direita no 8. Mas o filho 3 pende para a direita (fator -1), e o caso pede rotação dupla."
+        },
+        {
+          "letra": "B",
+          "texto": "5",
+          "porque": "Sem o 9, o 10 fica com fator -2 e uma rotação à esquerda põe o 11 no lugar dele. A direita do 8 fica com altura 1 e a esquerda com 3: fator +2, com o filho 3 em -1. Rotação dupla: o 5 sobe para a raiz, com 3 (2, 4) e 8 (6, 11)."
+        },
+        {
+          "letra": "C",
+          "texto": "8",
+          "porque": "Para ao consertar o 10. Depois disso o 8 fica com fator +2 e também precisa de rotação."
+        },
+        {
+          "letra": "D",
+          "texto": "10",
+          "porque": "O 10 desce na rotação que conserta a subárvore direita; o 11 é que sobe ali, e a raiz sai de outra rotação."
+        }
+      ],
+      "gabarito": "B",
+      "resumo": "Tira 9: o 10 vira -2 e rotaciona à esquerda (sobe o 11). O 8 fica +2 com o filho 3 em -1: rotação dupla, e o 5 vira raiz. Remoção em AVL pode pedir rotação em mais de um nível.",
+      "assuntos": [
+        {
+          "num": "0176",
+          "modulo": "28-estruturas-complementos.md"
+        },
+        {
+          "num": "0101",
+          "modulo": "14-arvores.md"
+        }
+      ]
+    },
+    {
+      "numero": 20,
+      "topico": 1,
+      "formato": "código",
+      "enunciado": "Analise o código a seguir e responda o que se pede:\n\n```c\nint f(int n) {\n\n     if (n == 0) return 1;\n\n     return n * f(n - 1);\n\n}\n```\n\nQual valor é retornado por f(4)?",
+      "dica": "**Cobra:** acompanhar a recursão do fatorial até o caso base.\n\n- **Recursão** [0032]: a função resolve o caso base direto e, nos outros, chama a si mesma com um problema menor, combinando o resultado na volta. Ex.: `f(2)` vale `2 · f(1)`, que vale `2 · 1 · f(0)`.\n- **Pilha de chamadas** [0031]: cada chamada fica esperando a de baixo devolver, e as multiplicações acontecem na volta, da mais funda para a primeira. Ex.: `f(0)` devolve 1, depois `f(1)` devolve 1 e `f(2)` devolve 2.\n\n**Como atacar:** escreva a cadeia de f(4) até f(0) e multiplique na volta.",
+      "contrapontos": [
+        {
+          "item": "A",
+          "texto": "A última linha soma ou multiplica?"
+        },
+        {
+          "item": "B",
+          "texto": "f(3) vale quanto? E 4 vezes esse valor?"
+        },
+        {
+          "item": "C",
+          "texto": "Escreva f(4), f(3), f(2), f(1), f(0). Quanto cada uma devolve?"
+        },
+        {
+          "item": "D",
+          "texto": "Qual é o maior número que aparece multiplicando em f(4)?"
+        }
+      ],
+      "alternativas": [
+        {
+          "letra": "A",
+          "texto": "10",
+          "porque": "É 4 + 3 + 2 + 1: soma em vez de multiplicar."
+        },
+        {
+          "letra": "B",
+          "texto": "16",
+          "porque": "É 4 · 4 ou 4²; a função multiplica n pelos menores, não por ele mesmo."
+        },
+        {
+          "letra": "C",
+          "texto": "24",
+          "porque": "É o fatorial: f(4) = 4 · 3 · 2 · 1 · f(0) = 24, com f(0) = 1. Conferido compilando com gcc."
+        },
+        {
+          "letra": "D",
+          "texto": "120",
+          "porque": "É 5!, uma multiplicação a mais. f(4) para no 4."
+        }
+      ],
+      "gabarito": "C",
+      "resumo": "f é o fatorial: f(4) = 4 · 3 · 2 · 1 · 1 = 24.",
+      "assuntos": [
+        {
+          "num": "0032",
+          "modulo": "04-funcoes.md"
+        },
+        {
+          "num": "0031",
+          "modulo": "04-funcoes.md"
+        }
+      ]
+    }
+  ]
+}

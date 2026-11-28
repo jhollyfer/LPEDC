@@ -1,0 +1,39 @@
+{
+  "2025-098-q04": {
+    "tipo": "arvore",
+    "titulo": "BST da questão 4 (antes das inserções)",
+    "raiz": {"v": 53, "e": {"v": 31, "e": {"v": 19}, "d": {"v": 41, "d": {"v": 47}}}, "d": {"v": 73, "d": {"v": 89}}}
+  },
+  "2025-098-q11-a": {
+    "tipo": "arvoreB", "titulo": "A)",
+    "raiz": {"chaves": [3, 5], "filhos": [{"chaves": [1, 2]}, {"chaves": [4]}, {"chaves": [6, 7]}]}
+  },
+  "2025-098-q11-b": {
+    "tipo": "arvoreB", "titulo": "B)",
+    "raiz": {"chaves": [4], "filhos": [
+      {"chaves": [3], "filhos": [{"chaves": [2], "filhos": [{"chaves": [1]}]}]},
+      {"chaves": [6], "filhos": [{"chaves": [5]}, {"chaves": [7]}]}
+    ]}
+  },
+  "2025-098-q11-c": {
+    "tipo": "arvoreB", "titulo": "C)",
+    "raiz": {"chaves": [4], "filhos": [
+      {"chaves": [2], "filhos": [{"chaves": [1]}, {"chaves": [3]}]},
+      {"chaves": [6], "filhos": [{"chaves": [5]}, {"chaves": [7]}]}
+    ]}
+  },
+  "2025-098-q11-d": {
+    "tipo": "arvoreB", "titulo": "D)",
+    "raiz": {"chaves": [4], "filhos": [{"chaves": [1, 2, 3]}, {"chaves": [5, 6, 7]}]}
+  },
+  "2025-098-q18": {
+    "tipo": "arvore",
+    "titulo": "BST com incógnitas (questão 18)",
+    "raiz": {"v": "x", "e": {"v": "y", "e": {"v": "z", "e": {"v": 1}}, "d": {"v": 7, "e": {"v": "t"}, "d": {"v": 9}}}, "d": {"v": 13, "e": {"v": "s"}, "d": {"v": 15}}}
+  },
+  "2025-098-q19": {
+    "tipo": "arvore",
+    "titulo": "AVL da questão 19",
+    "raiz": {"v": 8, "e": {"v": 3, "e": {"v": 2, "e": {"v": 1}}, "d": {"v": 5, "e": {"v": 4}, "d": {"v": 6, "d": {"v": 7}}}}, "d": {"v": 10, "e": {"v": 9}, "d": {"v": 11, "d": {"v": 12}}}}
+  }
+}

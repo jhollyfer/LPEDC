@@ -327,7 +327,7 @@ A ordem do sumário é a ordem de estudo: os módulos com ★ são bônus e entr
 Para treinar no ritmo da prova:
 
 - Três [simulados](SIMULADOS.md) de 20 questões no formato atual.
-- As 12 [provas comentadas](PROVAS.md) de 2016 a 2026.
+- As 17 [provas comentadas](PROVAS.md) de 2016 a 2026.
 - quiz das provas, com o porquê de cada alternativa: **[jhollyfer.github.io/LPEDC](https://jhollyfer.github.io/LPEDC/)**.
 
 ## Preparar o computador
