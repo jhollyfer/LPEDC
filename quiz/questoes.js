@@ -8,6 +8,7 @@ window.PROVAS = [
   "edital": "032/2016",
   "slug": "2016-032",
   "ano": 2016,
+  "selecao": "2016/2",
   "oficial": true,
   "questoes": [
    {
@@ -1176,6 +1177,7 @@ window.PROVAS = [
   "edital": "053/2016",
   "slug": "2016-053",
   "ano": 2016,
+  "selecao": "2017/1",
   "oficial": true,
   "questoes": [
    {
@@ -2328,6 +2330,7 @@ window.PROVAS = [
   "edital": "024/2017",
   "slug": "2017-024",
   "ano": 2017,
+  "selecao": "2017/2",
   "oficial": true,
   "questoes": [
    {
@@ -3598,6 +3601,7 @@ window.PROVAS = [
   "edital": "055/2017",
   "slug": "2017-055",
   "ano": 2017,
+  "selecao": "2018/1",
   "oficial": true,
   "questoes": [
    {
@@ -4742,6 +4746,7 @@ window.PROVAS = [
   "edital": "023/2018",
   "slug": "2018-023",
   "ano": 2018,
+  "selecao": "2018/2",
   "oficial": true,
   "questoes": [
    {
@@ -5900,6 +5905,7 @@ window.PROVAS = [
   "edital": "061/2018",
   "slug": "2018-061",
   "ano": 2018,
+  "selecao": "2019/1",
   "oficial": true,
   "questoes": [
    {
@@ -7046,6 +7052,7 @@ window.PROVAS = [
   "edital": "033/2019",
   "slug": "2019-033",
   "ano": 2019,
+  "selecao": "2019/2",
   "oficial": true,
   "questoes": [
    {
@@ -8072,6 +8079,7 @@ window.PROVAS = [
   "edital": "060/2019",
   "slug": "2019-060",
   "ano": 2019,
+  "selecao": "2020/1",
   "oficial": true,
   "questoes": [
    {
@@ -9130,6 +9138,7 @@ window.PROVAS = [
   "edital": "057/2022",
   "slug": "2022-057",
   "ano": 2022,
+  "selecao": "2023/1",
   "oficial": true,
   "questoes": [
    {
@@ -10147,6 +10156,7 @@ window.PROVAS = [
   "edital": "020/2023",
   "slug": "2023-020",
   "ano": 2023,
+  "selecao": "2023/2",
   "oficial": true,
   "questoes": [
    {
@@ -10660,6 +10670,7 @@ window.PROVAS = [
   "edital": "071/2023",
   "slug": "2023-071",
   "ano": 2023,
+  "selecao": "2024/1",
   "oficial": true,
   "questoes": [
    {
@@ -11574,6 +11585,7 @@ window.PROVAS = [
   "edital": "031/2024",
   "slug": "2024-031",
   "ano": 2024,
+  "selecao": "2024/2",
   "oficial": true,
   "questoes": [
    {
@@ -12765,6 +12777,7 @@ window.PROVAS = [
   "edital": "092/2024",
   "slug": "2024-092",
   "ano": 2025,
+  "selecao": "2025/1",
   "oficial": true,
   "questoes": [
    {
@@ -14120,6 +14133,7 @@ window.PROVAS = [
   "edital": "048/2025",
   "slug": "2025-048",
   "ano": 2025,
+  "selecao": "2025/2",
   "oficial": true,
   "questoes": [
    {
@@ -15285,6 +15299,7 @@ window.PROVAS = [
   "edital": "098/2025",
   "slug": "2025-098",
   "ano": 2026,
+  "selecao": "2026/1",
   "oficial": true,
   "questoes": [
    {
@@ -16536,6 +16551,7 @@ window.PROVAS = [
   "edital": "014/2026",
   "slug": "2026-014",
   "ano": 2026,
+  "selecao": "2026/2",
   "oficial": true,
   "questoes": [
    {
@@ -17716,6 +17732,7 @@ window.PROVAS = [
   "edital": "070/2026",
   "slug": "2026-070",
   "ano": 2026,
+  "selecao": "2027/1",
   "oficial": true,
   "questoes": [
    {

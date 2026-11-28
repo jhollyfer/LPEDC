@@ -408,7 +408,7 @@ kbd { font: 12px var(--font); border: 1px solid var(--control); border-radius: 4
   </main>
 </div>
 
-<script src="quiz/questoes.js?v=a4857938"></script>
+<script src="quiz/questoes.js?v=1298195a"></script>
 <script>
 'use strict'
 const CHAVE = 'lpedc-quiz-v1'
@@ -619,7 +619,7 @@ function telaInicial() {
             const f = val.filter((q) => respostas[q.id])
             const c = f.filter((q) => respostas[q.id].certo).length
             return `<li><button class="linha-prova" data-slug="${p.slug}">
-              <span class="nome">Edital ${esc(p.edital)}<span class="sub">${qs.length} questões · ${qs[0]?.alternativas.length ?? 0} alternativas</span></span>
+              <span class="nome">Edital ${esc(p.edital)}<span class="sub">${qs.length} questões · ${qs[0]?.alternativas.length ?? 0} alternativas ${p.selecao ? ` · Mestrado ${esc(p.selecao)}` : ''}</span></span>
               <span class="placar-prova num">${f.length ? `${c} de ${f.length} certas` : 'não começada'}</span>
               <span class="trilho" aria-hidden="true"><span style="width:${pct(c, val.length)}%"></span></span>
             </button></li>`

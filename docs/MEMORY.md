@@ -17,6 +17,11 @@ As cinco de 031/2024 a 014/2026 vieram das páginas de seleções encerradas do 
 projeto e títulos; o doutorado de 2026 não publicou prova. O caderno da 014/2026 é escaneado e foi
 transcrito à mão. São 73 aulas e 18 grupos de questões parecidas.
 
+Cada prova tem o campo `selecao` (semestre, ex.: `2026/1`), exigido pelo `quiz.mjs --check` e
+mostrado na lista do quiz. De 2019/2 em diante o semestre está no caderno, no gabarito ou na página
+do PPGI; de 2016/2 a 2019/1 foi deduzido pela regra que vale para todos os outros (edital do
+1º semestre do ano N é a seleção N/2; do 2º semestre, a seleção N+1/1).
+
 A prova de 27/11/2026 (edital 070/2026, seleção 2027/1; o caderno vale também para o 071/2026, do
 doutorado) entrou no acervo, no `PROVAS.md` e no quiz: 12 provas, 230 questões. O gabarito é o
 preliminar da banca e bateu com a resolução do curso nas 20 questões. Os assuntos 0065, 0087 e

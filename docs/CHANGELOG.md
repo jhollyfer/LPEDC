@@ -6,6 +6,11 @@ Mudanças do LPEDC que quem estuda percebe. Formato
 
 ## [Não lançado]
 
+### Mudado
+
+- Na lista de provas do quiz, cada edital mostra o semestre da seleção ao lado de questões e
+  alternativas ("Mestrado 2026/1"), porque o número do edital é do ano anterior ao da seleção.
+
 ### Adicionado
 
 - As cinco provas que faltavam no quiz e em `PROVAS.md`: 031/2024 (2024/2), 092/2024 (2025/1),

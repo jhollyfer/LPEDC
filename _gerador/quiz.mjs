@@ -126,6 +126,7 @@ function conferir(provas, figuras) {
   for (const p of provas) {
     const letras = guia[p.slug]
     if (!letras) erros.push(`${p.slug}: edital não está no PROVAS.md`)
+    if (!/^\d{4}\/[12]$/.test(p.selecao ?? '')) erros.push(`${p.slug}: sem "selecao" (semestre, ex.: 2026/1)`)
     const numeros = p.questoes.map((q) => q.numero)
     if (letras && numeros.length !== Object.keys(letras).length)
       erros.push(`${p.slug}: ${numeros.length} questões, PROVAS.md tem ${Object.keys(letras).length}`)
@@ -297,6 +298,7 @@ const dados = provas.map((p) => ({
   edital: p.edital,
   slug: p.slug,
   ano: p.ano,
+  selecao: p.selecao,
   oficial: p.oficial,
   questoes: p.questoes.map((q) => ({ ...q, originais: originais(p.slug, q.numero) })),
 }))
